@@ -203,7 +203,15 @@ theorem maxVar_bound
     dist x y <= diam (univ : Set (X oplus Y)) :=
       dist_le_diam_of_mem isBounded_of_compactSpace (mem_univ _) (mem_univ _)
     _ = diam (range inl union range inr : Set (X oplus Y)) := by rw [range_inl_union_range_inr]
-    _ <= diam (range inl : Set (X oplus Y)) + dist (inl default) (inr de
+    _ <= diam (range inl : Set (X oplus Y)) + dist (inl default) (inr default) +
+        diam (range inr : Set (X oplus Y)) :=
+      (diam_union (mem_range_self _) (mem_range_self _))
+    _ = diam (univ : Set X) + (dist (α := X) default default + 1 + dist (α := Y) default default) +
+        diam (univ : Set Y) := by
+      rw [isometry_inl.diam_range]; rw [isometry_inr.diam_range]
+      rfl
+    _ = 1 * diam (univ : Set X) + 1 + 1 * diam (univ : Set Y) := by simp
+    _ <= 2 * diam (univ : Set X) + 1 + 2 * diam (univ : Set Y) := by gcongr <;> norm_num
 
 中文:
 定理 maxVar_bound
@@ -212,7 +220,15 @@ theorem maxVar_bound
     dist x y <= diam (univ : Set (X oplus Y)) :=
       dist_le_diam_of_mem isBounded_of_compactSpace (mem_univ _) (mem_univ _)
     _ = diam (range inl union range inr : Set (X oplus Y)) := by rw [range_inl_union_range_inr]
-    _ <= diam (range inl : Set (X oplus Y)) + dist (inl default) (inr de
+    _ <= diam (range inl : Set (X oplus Y)) + dist (inl default) (inr default) +
+        diam (range inr : Set (X oplus Y)) :=
+      (diam_union (mem_range_self _) (mem_range_self _))
+    _ = diam (univ : Set X) + (dist (α := X) default default + 1 + dist (α := Y) default default) +
+        diam (univ : Set Y) := by
+      rw [isometry_inl.diam_range]; rw [isometry_inr.diam_range]
+      rfl
+    _ = 1 * diam (univ : Set X) + 1 + 1 * diam (univ : Set Y) := by simp
+    _ <= 2 * diam (univ : Set X) + 1 + 2 * diam (univ : Set Y) := by gcongr <;> norm_num
 -/
 private theorem maxVar_bound [CompactSpace X] [Nonempty X] [CompactSpace Y] [Nonempty Y] :
     dist x y <= maxVar X Y :=
@@ -378,7 +394,22 @@ theorem candidates_dist_bound
       _ <= maxVar X Y * dist (inl x) (inl y) := by gcongr; exact one_le_maxVar X Y
   | inl x, inr y =>
     calc
-  
+      f (inl x, inr y) <= maxVar X Y := candidates_le_maxVar fA
+      _ = maxVar X Y * 1 := by simp
+      _ <= maxVar X Y * dist (inl x) (inr y) := by gcongr; apply Sum.one_le_dist_inl_inr
+  | inr x, inl y =>
+    calc
+      f (inr x, inl y) <= maxVar X Y := candidates_le_maxVar fA
+      _ = maxVar X Y * 1 := by simp
+      _ <= maxVar X Y * dist (inl x) (inr y) := by gcongr; apply Sum.one_le_dist_inl_inr
+  | inr x, inr y =>
+    calc
+      f (inr x, inr y) = dist x y := candidates_dist_inr fA x y
+      _ = dist (α := X oplus Y) (inr x) (inr y) := by
+        rw [@Sum.dist_eq X Y]
+        rfl
+      _ = 1 * dist (α := X oplus Y) (inr x) (inr y) := by ring
+      _ <= maxVar X Y * dist (inr x) (inr y) := by gcongr; exact one_le_maxVar X Y
 
 中文:
 定理 candidates_dist_bound
@@ -391,7 +422,22 @@ theorem candidates_dist_bound
       _ <= maxVar X Y * dist (inl x) (inl y) := by gcongr; exact one_le_maxVar X Y
   | inl x, inr y =>
     calc
-  
+      f (inl x, inr y) <= maxVar X Y := candidates_le_maxVar fA
+      _ = maxVar X Y * 1 := by simp
+      _ <= maxVar X Y * dist (inl x) (inr y) := by gcongr; apply Sum.one_le_dist_inl_inr
+  | inr x, inl y =>
+    calc
+      f (inr x, inl y) <= maxVar X Y := candidates_le_maxVar fA
+      _ = maxVar X Y * 1 := by simp
+      _ <= maxVar X Y * dist (inl x) (inr y) := by gcongr; apply Sum.one_le_dist_inl_inr
+  | inr x, inr y =>
+    calc
+      f (inr x, inr y) = dist x y := candidates_dist_inr fA x y
+      _ = dist (α := X oplus Y) (inr x) (inr y) := by
+        rw [@Sum.dist_eq X Y]
+        rfl
+      _ = 1 * dist (α := X oplus Y) (inr x) (inr y) := by ring
+      _ <= maxVar X Y * dist (inr x) (inr y) := by gcongr; exact one_le_maxVar X Y
 -/
 private theorem candidates_dist_bound (fA : f in candidates X Y) :
     forall {x y : X oplus Y}, f (x, y) <= maxVar X Y * dist x y
@@ -435,7 +481,14 @@ theorem candidates_lipschitz_aux
     _ = f (x, z) + f (t, y) := by simp [sub_eq_add_neg, add_assoc]
     _ <= maxVar X Y * dist x z + maxVar X Y * dist t y := by
       gcongr <;> apply candidates_dist_bound fA
-    _ <= m
+    _ <= maxVar X Y * max (dist x z) (dist t y) + maxVar X Y * max (dist x z) (dist t y) := by
+      gcongr
+      · apply le_max_left
+      · apply le_max_right
+    _ = 2 * maxVar X Y * max (dist x z) (dist y t) := by
+      rw [dist_comm t y]
+      ring
+    _ = 2 * maxVar X Y * dist (x, y) (z, t) := rfl
 
 中文:
 定理 candidates_lipschitz_aux
@@ -446,7 +499,14 @@ theorem candidates_lipschitz_aux
     _ = f (x, z) + f (t, y) := by simp [sub_eq_add_neg, add_assoc]
     _ <= maxVar X Y * dist x z + maxVar X Y * dist t y := by
       gcongr <;> apply candidates_dist_bound fA
-    _ <= m
+    _ <= maxVar X Y * max (dist x z) (dist t y) + maxVar X Y * max (dist x z) (dist t y) := by
+      gcongr
+      · apply le_max_left
+      · apply le_max_right
+    _ = 2 * maxVar X Y * max (dist x z) (dist y t) := by
+      rw [dist_comm t y]
+      ring
+    _ = 2 * maxVar X Y * dist (x, y) (z, t) := rfl
 -/
 private theorem candidates_lipschitz_aux (fA : f in candidates X Y) :
     f (x, y) - f (z, t) <= 2 * maxVar X Y * dist (x, y) (z, t) :=
@@ -510,7 +570,30 @@ theorem closed_candidatesB
   have I1 : forall x y, IsClosed { f : Cb X Y | f (inl x, inl y) = dist x y } := fun x y =>
     isClosed_eq (continuous_eval_const _) continuous_const
   have I2 : forall x y, IsClosed { f : Cb X Y | f (inr x, inr y) = dist x y } := fun x y =>
-    isClosed_eq (continuous_eval_const _) continuous_c
+    isClosed_eq (continuous_eval_const _) continuous_const
+  have I3 : forall x y, IsClosed { f : Cb X Y | f (x, y) = f (y, x) } := fun x y =>
+    isClosed_eq (continuous_eval_const _) (continuous_eval_const _)
+  have I4 : forall x y z, IsClosed { f : Cb X Y | f (x, z) <= f (x, y) + f (y, z) } := fun x y z =>
+    isClosed_le (continuous_eval_const _) ((continuous_eval_const _).add (continuous_eval_const _))
+  have I5 : forall x, IsClosed { f : Cb X Y | f (x, x) = 0 } := fun x =>
+    isClosed_eq (continuous_eval_const _) continuous_const
+  have I6 : forall x y, IsClosed { f : Cb X Y | f (x, y) <= maxVar X Y } := fun x y =>
+    isClosed_le (continuous_eval_const _) continuous_const
+  have : candidatesB X Y = (((((⋂ (x) (y), { f : Cb X Y | f (@inl X Y x, @inl X Y y) = dist x y }) inter
+      ⋂ (x) (y), { f : Cb X Y | f (@inr X Y x, @inr X Y y) = dist x y }) inter
+      ⋂ (x) (y), { f : Cb X Y | f (x, y) = f (y, x) }) inter
+      ⋂ (x) (y) (z), { f : Cb X Y | f (x, z) <= f (x, y) + f (y, z) }) inter
+      ⋂ x, { f : Cb X Y | f (x, x) = 0 }) inter
+      ⋂ (x) (y), { f : Cb X Y | f (x, y) <= maxVar X Y } := by
+    ext
+    simp only [candidatesB, candidates, mem_inter_iff, mem_iInter, mem_ofPred_eq]
+  rw [this]
+  repeat'
+    first
+      | apply IsClosed.inter _ _
+      | apply isClosed_iInter _
+      | apply I1 _ _ | apply I2 _ _ | apply I3 _ _ | apply I4 _ _ _ | apply I5 _ | apply I6 _ _
+      | intro x
 
 中文:
 定理 closed_candidatesB
@@ -519,7 +602,30 @@ theorem closed_candidatesB
   have I1 : forall x y, IsClosed { f : Cb X Y | f (inl x, inl y) = dist x y } := fun x y =>
     isClosed_eq (continuous_eval_const _) continuous_const
   have I2 : forall x y, IsClosed { f : Cb X Y | f (inr x, inr y) = dist x y } := fun x y =>
-    isClosed_eq (continuous_eval_const _) continuous_c
+    isClosed_eq (continuous_eval_const _) continuous_const
+  have I3 : forall x y, IsClosed { f : Cb X Y | f (x, y) = f (y, x) } := fun x y =>
+    isClosed_eq (continuous_eval_const _) (continuous_eval_const _)
+  have I4 : forall x y z, IsClosed { f : Cb X Y | f (x, z) <= f (x, y) + f (y, z) } := fun x y z =>
+    isClosed_le (continuous_eval_const _) ((continuous_eval_const _).add (continuous_eval_const _))
+  have I5 : forall x, IsClosed { f : Cb X Y | f (x, x) = 0 } := fun x =>
+    isClosed_eq (continuous_eval_const _) continuous_const
+  have I6 : forall x y, IsClosed { f : Cb X Y | f (x, y) <= maxVar X Y } := fun x y =>
+    isClosed_le (continuous_eval_const _) continuous_const
+  have : candidatesB X Y = (((((⋂ (x) (y), { f : Cb X Y | f (@inl X Y x, @inl X Y y) = dist x y }) inter
+      ⋂ (x) (y), { f : Cb X Y | f (@inr X Y x, @inr X Y y) = dist x y }) inter
+      ⋂ (x) (y), { f : Cb X Y | f (x, y) = f (y, x) }) inter
+      ⋂ (x) (y) (z), { f : Cb X Y | f (x, z) <= f (x, y) + f (y, z) }) inter
+      ⋂ x, { f : Cb X Y | f (x, x) = 0 }) inter
+      ⋂ (x) (y), { f : Cb X Y | f (x, y) <= maxVar X Y } := by
+    ext
+    simp only [candidatesB, candidates, mem_inter_iff, mem_iInter, mem_ofPred_eq]
+  rw [this]
+  repeat'
+    first
+      | apply IsClosed.inter _ _
+      | apply isClosed_iInter _
+      | apply I1 _ _ | apply I2 _ _ | apply I3 _ _ | apply I4 _ _ _ | apply I5 _ | apply I6 _ _
+      | intro x
 -/
 private theorem closed_candidatesB : IsClosed (candidatesB X Y) := by
   have I1 : forall x y, IsClosed { f : Cb X Y | f (inl x, inl y) = dist x y } := fun x y =>
@@ -692,7 +798,27 @@ theorem HD_lipschitz_aux1
   have Hcg : forall x, cg <= g x := fun x => hcg (mem_range_self x)
   obtain ⟨cf, hcf⟩ := f.isBounded_range.bddBelow
   have Hcf : forall x, cf <= f x := fun x => hcf (mem_range_self x)
-  -- prove the inequality but with `dist f g` inside, by using 
+  -- prove the inequality but with `dist f g` inside, by using inequalities comparing
+  -- iSup to iSup and iInf to iInf
+  have Z : (⨆ x, ⨅ y, f (inl x, inr y)) <= ⨆ x, ⨅ y, g (inl x, inr y) + dist f g :=
+    ciSup_mono (HD_bound_aux1 _ (dist f g)) fun x =>
+      ciInf_mono ⟨cf, forall_mem_range.2 fun i => Hcf _⟩ fun y => coe_le_coe_add_dist
+  -- move the `dist f g` out of the infimum and the supremum, arguing that continuous monotone maps
+  -- (here the addition of `dist f g`) preserve infimum and supremum
+  have E1 : forall x, (⨅ y, g (inl x, inr y)) + dist f g = ⨅ y, g (inl x, inr y) + dist f g := by
+    intro x
+    refine Monotone.map_ciInf_of_continuousAt (continuousAt_id.add continuousAt_const) ?_ ?_
+    · intro x y hx
+      simpa
+    · change BddBelow (range fun y : Y => g (inl x, inr y))
+      exact ⟨cg, forall_mem_range.2 fun i => Hcg _⟩
+  have E2 : (⨆ x, ⨅ y, g (inl x, inr y)) + dist f g = ⨆ x, (⨅ y, g (inl x, inr y)) + dist f g := by
+    refine Monotone.map_ciSup_of_continuousAt (continuousAt_id.add continuousAt_const) ?_ ?_
+    · intro x y hx
+      simpa
+    · simpa using HD_bound_aux1 _ 0
+  -- deduce the result from the above two steps
+  simpa [E2, E1, Function.comp]
 
 中文:
 定理 HD_lipschitz_aux1
@@ -702,7 +828,27 @@ theorem HD_lipschitz_aux1
   have Hcg : forall x, cg <= g x := fun x => hcg (mem_range_self x)
   obtain ⟨cf, hcf⟩ := f.isBounded_range.bddBelow
   have Hcf : forall x, cf <= f x := fun x => hcf (mem_range_self x)
-  -- prove the inequality but with `dist f g` inside, by using 
+  -- prove the inequality but with `dist f g` inside, by using inequalities comparing
+  -- iSup to iSup and iInf to iInf
+  have Z : (⨆ x, ⨅ y, f (inl x, inr y)) <= ⨆ x, ⨅ y, g (inl x, inr y) + dist f g :=
+    ciSup_mono (HD_bound_aux1 _ (dist f g)) fun x =>
+      ciInf_mono ⟨cf, forall_mem_range.2 fun i => Hcf _⟩ fun y => coe_le_coe_add_dist
+  -- move the `dist f g` out of the infimum and the supremum, arguing that continuous monotone maps
+  -- (here the addition of `dist f g`) preserve infimum and supremum
+  have E1 : forall x, (⨅ y, g (inl x, inr y)) + dist f g = ⨅ y, g (inl x, inr y) + dist f g := by
+    intro x
+    refine Monotone.map_ciInf_of_continuousAt (continuousAt_id.add continuousAt_const) ?_ ?_
+    · intro x y hx
+      simpa
+    · change BddBelow (range fun y : Y => g (inl x, inr y))
+      exact ⟨cg, forall_mem_range.2 fun i => Hcg _⟩
+  have E2 : (⨆ x, ⨅ y, g (inl x, inr y)) + dist f g = ⨆ x, (⨅ y, g (inl x, inr y)) + dist f g := by
+    refine Monotone.map_ciSup_of_continuousAt (continuousAt_id.add continuousAt_const) ?_ ?_
+    · intro x y hx
+      simpa
+    · simpa using HD_bound_aux1 _ 0
+  -- deduce the result from the above two steps
+  simpa [E2, E1, Function.comp]
 -/
 private theorem HD_lipschitz_aux1 (f g : Cb X Y) :
     (⨆ x, ⨅ y, f (inl x, inr y)) <= (⨆ x, ⨅ y, g (inl x, inr y)) + dist f g := by
@@ -743,7 +889,27 @@ theorem HD_lipschitz_aux2
   have Hcg : forall x, cg <= g x := fun x => hcg (mem_range_self x)
   obtain ⟨cf, hcf⟩ := f.isBounded_range.bddBelow
   have Hcf : forall x, cf <= f x := fun x => hcf (mem_range_self x)
-  -- prove the inequality but with `dist f g` inside, by using 
+  -- prove the inequality but with `dist f g` inside, by using inequalities comparing
+  -- iSup to iSup and iInf to iInf
+  have Z : (⨆ y, ⨅ x, f (inl x, inr y)) <= ⨆ y, ⨅ x, g (inl x, inr y) + dist f g :=
+    ciSup_mono (HD_bound_aux2 _ (dist f g)) fun y =>
+      ciInf_mono ⟨cf, forall_mem_range.2 fun i => Hcf _⟩ fun y => coe_le_coe_add_dist
+  -- move the `dist f g` out of the infimum and the supremum, arguing that continuous monotone maps
+  -- (here the addition of `dist f g`) preserve infimum and supremum
+  have E1 : forall y, (⨅ x, g (inl x, inr y)) + dist f g = ⨅ x, g (inl x, inr y) + dist f g := by
+    intro y
+    refine Monotone.map_ciInf_of_continuousAt (continuousAt_id.add continuousAt_const) ?_ ?_
+    · intro x y hx
+      simpa
+    · change BddBelow (range fun x : X => g (inl x, inr y))
+      exact ⟨cg, forall_mem_range.2 fun i => Hcg _⟩
+  have E2 : (⨆ y, ⨅ x, g (inl x, inr y)) + dist f g = ⨆ y, (⨅ x, g (inl x, inr y)) + dist f g := by
+    refine Monotone.map_ciSup_of_continuousAt (continuousAt_id.add continuousAt_const) ?_ ?_
+    · intro x y hx
+      simpa
+    · simpa using HD_bound_aux2 _ 0
+  -- deduce the result from the above two steps
+  simpa [E2, E1]
 
 中文:
 定理 HD_lipschitz_aux2
@@ -753,7 +919,27 @@ theorem HD_lipschitz_aux2
   have Hcg : forall x, cg <= g x := fun x => hcg (mem_range_self x)
   obtain ⟨cf, hcf⟩ := f.isBounded_range.bddBelow
   have Hcf : forall x, cf <= f x := fun x => hcf (mem_range_self x)
-  -- prove the inequality but with `dist f g` inside, by using 
+  -- prove the inequality but with `dist f g` inside, by using inequalities comparing
+  -- iSup to iSup and iInf to iInf
+  have Z : (⨆ y, ⨅ x, f (inl x, inr y)) <= ⨆ y, ⨅ x, g (inl x, inr y) + dist f g :=
+    ciSup_mono (HD_bound_aux2 _ (dist f g)) fun y =>
+      ciInf_mono ⟨cf, forall_mem_range.2 fun i => Hcf _⟩ fun y => coe_le_coe_add_dist
+  -- move the `dist f g` out of the infimum and the supremum, arguing that continuous monotone maps
+  -- (here the addition of `dist f g`) preserve infimum and supremum
+  have E1 : forall y, (⨅ x, g (inl x, inr y)) + dist f g = ⨅ x, g (inl x, inr y) + dist f g := by
+    intro y
+    refine Monotone.map_ciInf_of_continuousAt (continuousAt_id.add continuousAt_const) ?_ ?_
+    · intro x y hx
+      simpa
+    · change BddBelow (range fun x : X => g (inl x, inr y))
+      exact ⟨cg, forall_mem_range.2 fun i => Hcg _⟩
+  have E2 : (⨆ y, ⨅ x, g (inl x, inr y)) + dist f g = ⨆ y, (⨅ x, g (inl x, inr y)) + dist f g := by
+    refine Monotone.map_ciSup_of_continuousAt (continuousAt_id.add continuousAt_const) ?_ ?_
+    · intro x y hx
+      simpa
+    · simpa using HD_bound_aux2 _ 0
+  -- deduce the result from the above two steps
+  simpa [E2, E1]
 -/
 private theorem HD_lipschitz_aux2 (f g : Cb X Y) :
     (⨆ y, ⨅ x, f (inl x, inr y)) <= (⨆ y, ⨅ x, g (inl x, inr y)) + dist f g := by
@@ -835,7 +1021,12 @@ theorem isCompact_candidatesB
   · rintro f ⟨x1, x2⟩ hf
     simp only [Set.mem_Icc]
     exact ⟨candidates_nonneg hf, candidates_le_maxVar hf⟩
-  · refine equicontinuous_of_continuity_modulus (fun t => 2 * maxVa
+  · refine equicontinuous_of_continuity_modulus (fun t => 2 * maxVar X Y * t) ?_ _ ?_
+    · have : Tendsto (fun t : Real => 2 * (maxVar X Y : Real) * t) (𝓝 0) (𝓝 (2 * maxVar X Y * 0)) :=
+        tendsto_const_nhds.mul tendsto_id
+      simpa using this
+    · rintro x y ⟨f, hf⟩
+      exact (candidates_lipschitz hf).dist_le_mul _ _
 
 中文:
 定理 isCompact_candidatesB
@@ -846,7 +1037,12 @@ theorem isCompact_candidatesB
   · rintro f ⟨x1, x2⟩ hf
     simp only [Set.mem_Icc]
     exact ⟨candidates_nonneg hf, candidates_le_maxVar hf⟩
-  · refine equicontinuous_of_continuity_modulus (fun t => 2 * maxVa
+  · refine equicontinuous_of_continuity_modulus (fun t => 2 * maxVar X Y * t) ?_ _ ?_
+    · have : Tendsto (fun t : Real => 2 * (maxVar X Y : Real) * t) (𝓝 0) (𝓝 (2 * maxVar X Y * 0)) :=
+        tendsto_const_nhds.mul tendsto_id
+      simpa using this
+    · rintro x y ⟨f, hf⟩
+      exact (candidates_lipschitz hf).dist_le_mul _ _
 -/
 private theorem isCompact_candidatesB : IsCompact (candidatesB X Y) := by
   refine arzela_ascoli₂
@@ -991,7 +1187,22 @@ theorem HD_candidatesBDist_le
   refine max_le (ciSup_le fun x => ?_) (ciSup_le fun y => ?_)
   · have A : ⨅ y, candidatesBDist X Y (inl x, inr y) <= candidatesBDist X Y (inl x, inr default) :=
       ciInf_le (by simpa using HD_below_aux1 0) default
-    have B : dist (inl x) (inr default) <= diam (univ : Set X) + 1 + diam (univ
+    have B : dist (inl x) (inr default) <= diam (univ : Set X) + 1 + diam (univ : Set Y) :=
+      calc
+        dist (inl x) (inr (default : Y)) = dist x (default : X) + 1 + dist default default := rfl
+        _ <= diam (univ : Set X) + 1 + diam (univ : Set Y) := by
+          gcongr <;>
+            exact dist_le_diam_of_mem isBounded_of_compactSpace (mem_univ _) (mem_univ _)
+    exact le_trans A B
+  · have A : ⨅ x, candidatesBDist X Y (inl x, inr y) <= candidatesBDist X Y (inl default, inr y) :=
+      ciInf_le (by simpa using HD_below_aux2 0) default
+    have B : dist (inl default) (inr y) <= diam (univ : Set X) + 1 + diam (univ : Set Y) :=
+      calc
+        dist (inl (default : X)) (inr y) = dist default default + 1 + dist default y := rfl
+        _ <= diam (univ : Set X) + 1 + diam (univ : Set Y) := by
+          gcongr <;>
+            exact dist_le_diam_of_mem isBounded_of_compactSpace (mem_univ _) (mem_univ _)
+    exact le_trans A B
 
 中文:
 定理 HD_candidatesBDist_le
@@ -999,7 +1210,22 @@ theorem HD_candidatesBDist_le
   refine max_le (ciSup_le fun x => ?_) (ciSup_le fun y => ?_)
   · have A : ⨅ y, candidatesBDist X Y (inl x, inr y) <= candidatesBDist X Y (inl x, inr default) :=
       ciInf_le (by simpa using HD_below_aux1 0) default
-    have B : dist (inl x) (inr default) <= diam (univ : Set X) + 1 + diam (univ
+    have B : dist (inl x) (inr default) <= diam (univ : Set X) + 1 + diam (univ : Set Y) :=
+      calc
+        dist (inl x) (inr (default : Y)) = dist x (default : X) + 1 + dist default default := rfl
+        _ <= diam (univ : Set X) + 1 + diam (univ : Set Y) := by
+          gcongr <;>
+            exact dist_le_diam_of_mem isBounded_of_compactSpace (mem_univ _) (mem_univ _)
+    exact le_trans A B
+  · have A : ⨅ x, candidatesBDist X Y (inl x, inr y) <= candidatesBDist X Y (inl default, inr y) :=
+      ciInf_le (by simpa using HD_below_aux2 0) default
+    have B : dist (inl default) (inr y) <= diam (univ : Set X) + 1 + diam (univ : Set Y) :=
+      calc
+        dist (inl (default : X)) (inr y) = dist default default + 1 + dist default y := rfl
+        _ <= diam (univ : Set X) + 1 + diam (univ : Set Y) := by
+          gcongr <;>
+            exact dist_le_diam_of_mem isBounded_of_compactSpace (mem_univ _) (mem_univ _)
+    exact le_trans A B
 
 Depends on / 依赖: HD_below_aux1, candidatesBDist, ciInf_le, ciSup_le, dist_le_diam_of_mem, isBounded_of, max_le
 -/
@@ -1275,7 +1501,27 @@ theorem hausdorffDist_optimal_le_HD
   have A : forall x in range (optimalGHInjl X Y), exists y in range (optimalGHInjr X Y), dist x y <= r := by
     rintro _ ⟨z, rfl⟩
     have I1 : (⨆ x, ⨅ y, optimalGHDist X Y (inl x, inr y)) < r :=
-   
+      lt_of_le_of_lt (le_max_left _ _) hr
+    have I2 :
+        ⨅ y, optimalGHDist X Y (inl z, inr y) <= ⨆ x, ⨅ y, optimalGHDist X Y (inl x, inr y) :=
+      le_csSup (by simpa using HD_bound_aux1 _ 0) (mem_range_self _)
+    have I : ⨅ y, optimalGHDist X Y (inl z, inr y) < r := lt_of_le_of_lt I2 I1
+    rcases exists_lt_of_csInf_lt (range_nonempty _) I with ⟨r', ⟨z', rfl⟩, hr'⟩
+    exact ⟨optimalGHInjr X Y z', mem_range_self _, le_of_lt hr'⟩
+  refine hausdorffDist_le_of_mem_dist ?_ A ?_
+  · inhabit X
+    rcases A _ (mem_range_self default) with ⟨y, -, hy⟩
+    exact le_trans dist_nonneg hy
+  · rintro _ ⟨z, rfl⟩
+    have I1 : (⨆ y, ⨅ x, optimalGHDist X Y (inl x, inr y)) < r :=
+      lt_of_le_of_lt (le_max_right _ _) hr
+    have I2 :
+        ⨅ x, optimalGHDist X Y (inl x, inr z) <= ⨆ y, ⨅ x, optimalGHDist X Y (inl x, inr y) :=
+      le_csSup (by simpa using HD_bound_aux2 _ 0) (mem_range_self _)
+    have I : ⨅ x, optimalGHDist X Y (inl x, inr z) < r := lt_of_le_of_lt I2 I1
+    rcases exists_lt_of_csInf_lt (range_nonempty _) I with ⟨r', ⟨z', rfl⟩, hr'⟩
+    refine ⟨optimalGHInjl X Y z', mem_range_self _, le_of_lt ?_⟩
+    rwa [dist_comm]
 
 中文:
 定理 hausdorffDist_optimal_le_HD
@@ -1285,7 +1531,27 @@ theorem hausdorffDist_optimal_le_HD
   have A : forall x in range (optimalGHInjl X Y), exists y in range (optimalGHInjr X Y), dist x y <= r := by
     rintro _ ⟨z, rfl⟩
     have I1 : (⨆ x, ⨅ y, optimalGHDist X Y (inl x, inr y)) < r :=
-   
+      lt_of_le_of_lt (le_max_left _ _) hr
+    have I2 :
+        ⨅ y, optimalGHDist X Y (inl z, inr y) <= ⨆ x, ⨅ y, optimalGHDist X Y (inl x, inr y) :=
+      le_csSup (by simpa using HD_bound_aux1 _ 0) (mem_range_self _)
+    have I : ⨅ y, optimalGHDist X Y (inl z, inr y) < r := lt_of_le_of_lt I2 I1
+    rcases exists_lt_of_csInf_lt (range_nonempty _) I with ⟨r', ⟨z', rfl⟩, hr'⟩
+    exact ⟨optimalGHInjr X Y z', mem_range_self _, le_of_lt hr'⟩
+  refine hausdorffDist_le_of_mem_dist ?_ A ?_
+  · inhabit X
+    rcases A _ (mem_range_self default) with ⟨y, -, hy⟩
+    exact le_trans dist_nonneg hy
+  · rintro _ ⟨z, rfl⟩
+    have I1 : (⨆ y, ⨅ x, optimalGHDist X Y (inl x, inr y)) < r :=
+      lt_of_le_of_lt (le_max_right _ _) hr
+    have I2 :
+        ⨅ x, optimalGHDist X Y (inl x, inr z) <= ⨆ y, ⨅ x, optimalGHDist X Y (inl x, inr y) :=
+      le_csSup (by simpa using HD_bound_aux2 _ 0) (mem_range_self _)
+    have I : ⨅ x, optimalGHDist X Y (inl x, inr z) < r := lt_of_le_of_lt I2 I1
+    rcases exists_lt_of_csInf_lt (range_nonempty _) I with ⟨r', ⟨z', rfl⟩, hr'⟩
+    refine ⟨optimalGHInjl X Y z', mem_range_self _, le_of_lt ?_⟩
+    rwa [dist_comm]
 
 Depends on / 依赖: HD_bound_aux1, HD_optimalGHDist_le, le_csSup, le_max_left, le_of_forall_gt_imp_ge_of_dense, le_trans, lt_of_le_of_lt, mem_range_self, optimalGHDist, optimalGHInjl, optimalGHInjr
 -/

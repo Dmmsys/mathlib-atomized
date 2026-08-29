@@ -1078,7 +1078,9 @@ instance relative_isStableUnderComposition
     refine comp_mem _ _ _ (hf.property (hg.1.fst p) fst _
       (IsPullback.of_bot ?_ ?_ (hg.1.isPullback p))) (hg.property_snd p)
     · rw [← Functor.map_comp, lift_snd]
- 
+      exact h
+    · symm
+      apply hg.1.lift_fst
 
 中文:
 实例 relative_isStableUnderComposition
@@ -1089,7 +1091,9 @@ instance relative_isStableUnderComposition
     refine comp_mem _ _ _ (hf.property (hg.1.fst p) fst _
       (IsPullback.of_bot ?_ ?_ (hg.1.isPullback p))) (hg.property_snd p)
     · rw [← Functor.map_comp, lift_snd]
- 
+      exact h
+    · symm
+      apply hg.1.lift_fst
 
 Depends on / 依赖: Functor, Functor.map_comp, IsPullback, IsPullback.of_bot, comp_mem, hf.property, hg.property_snd, isPullback, lift_fst, lift_snd, map_comp, of_bot, property, property_snd
 -/
@@ -1160,7 +1164,13 @@ lemma presheaf_monomorphisms_le_monomorphisms
     ⟨fun _ _ h => hom_ext_yoneda (fun _ _ => this (by simp only [assoc, h]))⟩
   intro X a b h
   /- It suffices to show that the lifts of `a` and `b` to morphisms
-  `X ⟶ hf.rep.pullback g` are equal, wh
+  `X ⟶ hf.rep.pullback g` are equal, where `g = a ≫ f = a ≫ f`. -/
+  suffices hf.rep.lift (g := a ≫ f) a (𝟙 X) (by simp) =
+      hf.rep.lift b (𝟙 X) (by simp [← h]) by
+    simpa using yoneda.congr_map this =≫ (hf.rep.fst (a ≫ f))
+  -- This follows from the fact that the induced maps `hf.rep.pullback g ⟶ X` are mono.
+  have : Mono (hf.rep.snd (a ≫ f)) := hf.property_snd (a ≫ f)
+  simp only [← cancel_mono (hf.rep.snd (a ≫ f)), lift_snd]
 
 中文:
 引理 presheaf_monomorphisms_le_monomorphisms
@@ -1169,7 +1179,13 @@ lemma presheaf_monomorphisms_le_monomorphisms
     ⟨fun _ _ h => hom_ext_yoneda (fun _ _ => this (by simp only [assoc, h]))⟩
   intro X a b h
   /- It suffices to show that the lifts of `a` and `b` to morphisms
-  `X ⟶ hf.rep.pullback g` are equal, wh
+  `X ⟶ hf.rep.pullback g` are equal, where `g = a ≫ f = a ≫ f`. -/
+  suffices hf.rep.lift (g := a ≫ f) a (𝟙 X) (by simp) =
+      hf.rep.lift b (𝟙 X) (by simp [← h]) by
+    simpa using yoneda.congr_map this =≫ (hf.rep.fst (a ≫ f))
+  -- This follows from the fact that the induced maps `hf.rep.pullback g ⟶ X` are mono.
+  have : Mono (hf.rep.snd (a ≫ f)) := hf.property_snd (a ≫ f)
+  simp only [← cancel_mono (hf.rep.snd (a ≫ f)), lift_snd]
 
 Depends on / 依赖: hom_ext_yoneda, yoneda, yoneda.obj
 -/
@@ -1651,7 +1667,16 @@ lemma of_diag
   intro a' g'
   obtain ⟨_, ⟨left⟩⟩ := pullback_map_diagonal_isPullback g g' (terminal.from X)
   let prodMap : F.obj (a ⨯ a') ⟶ X ⨯ X :=
-    (preservesLimitIso _ (pair _ _) ≪≫ HasLimit.isoOfNatIso (p
+    (preservesLimitIso _ (pair _ _) ≪≫ HasLimit.isoOfNatIso (pairComp _ _ _)).hom ≫ prod.map g g'
+  let pbRepr :=
+(h prodMap).choose_spec.choose_spec.choose_spec.isLimit'.some.conePointUniqueUpToIso
+    pasteHorizIsPullback rfl (IsPullback.of_vert_isIso_mono (snd := pullback.congrHom
+      (terminal.comp_from g) (terminal.comp_from g') ≪≫ (prodIsoPullback _ _).symm ≪≫
+.hom) (HasLimit.isoOfNatIso (pairComp _ _ _)).symm ≪≫ (preservesLimitIso _ (pair _ _)).symm
+    ⟨by cat_disch⟩).isLimit'.some left
+  exact ⟨_, ⟨_, ⟨_, IsPullback.of_iso_pullback (fst := pbRepr.hom ≫ pullback.fst g g')
+    (snd := F.map (Functor.preimage F (pbRepr.hom ≫ pullback.snd g g')))
+    ⟨by simp [pullback.condition]⟩ pbRepr (by cat_disch) (by cat_disch)⟩⟩⟩
 
 中文:
 引理 of_diag
@@ -1661,7 +1686,16 @@ lemma of_diag
   intro a' g'
   obtain ⟨_, ⟨left⟩⟩ := pullback_map_diagonal_isPullback g g' (terminal.from X)
   let prodMap : F.obj (a ⨯ a') ⟶ X ⨯ X :=
-    (preservesLimitIso _ (pair _ _) ≪≫ HasLimit.isoOfNatIso (p
+    (preservesLimitIso _ (pair _ _) ≪≫ HasLimit.isoOfNatIso (pairComp _ _ _)).hom ≫ prod.map g g'
+  let pbRepr :=
+(h prodMap).choose_spec.choose_spec.choose_spec.isLimit'.some.conePointUniqueUpToIso
+    pasteHorizIsPullback rfl (IsPullback.of_vert_isIso_mono (snd := pullback.congrHom
+      (terminal.comp_from g) (terminal.comp_from g') ≪≫ (prodIsoPullback _ _).symm ≪≫
+.hom) (HasLimit.isoOfNatIso (pairComp _ _ _)).symm ≪≫ (preservesLimitIso _ (pair _ _)).symm
+    ⟨by cat_disch⟩).isLimit'.some left
+  exact ⟨_, ⟨_, ⟨_, IsPullback.of_iso_pullback (fst := pbRepr.hom ≫ pullback.fst g g')
+    (snd := F.map (Functor.preimage F (pbRepr.hom ≫ pullback.snd g g')))
+    ⟨by simp [pullback.condition]⟩ pbRepr (by cat_disch) (by cat_disch)⟩⟩⟩
 
 Depends on / 依赖: F.obj, HasLimit, HasLimit.isoOfNatIso, IsPullback, IsPullback.of_vert_isIso_mono, Limits, Limits.diag, cat_disch, choose_spec, choose_spec.choose_spec.choose_spec.isLimit, conePointUniqueUpToIso, isLimit, isoOfNatIso, of_vert_isIso_mono, pairComp, pasteHorizIsPullback, pbRepr, preservesLimitIso, prod.map, prodIsoPullback
 -/
@@ -1693,7 +1727,10 @@ lemma toPullbackTerminal
     (terminal.comp_from _ : (g ≫ pullback.fst _ _) ≫ terminal.from X = terminal.from _)
     (terminal.comp_from _ : (g ≫ pullback.snd _ _) ≫ terminal.from X = terminal.from _) ≪≫
     (prodIsoPullback _ _).symm ≪≫ (HasLimit.isoOfNatIso (pairComp _ _ _)).symm ≪≫
-   
+    (preservesLimitIso _ (pair _ _)).symm
+  rw [← comp_id (pullback.lift _ _)]; rw [← pbIso.hom_inv_id]; rw [← Category.assoc]
+  apply (respectsIso F).toRespectsRight.postcomp _ (inferInstance : IsIso _) _
+  exact map_preimage F (_ ≫ pbIso.hom) ▸ map F (F.preimage _)
 
 中文:
 引理 toPullbackTerminal
@@ -1703,7 +1740,10 @@ lemma toPullbackTerminal
     (terminal.comp_from _ : (g ≫ pullback.fst _ _) ≫ terminal.from X = terminal.from _)
     (terminal.comp_from _ : (g ≫ pullback.snd _ _) ≫ terminal.from X = terminal.from _) ≪≫
     (prodIsoPullback _ _).symm ≪≫ (HasLimit.isoOfNatIso (pairComp _ _ _)).symm ≪≫
-   
+    (preservesLimitIso _ (pair _ _)).symm
+  rw [← comp_id (pullback.lift _ _)]; rw [← pbIso.hom_inv_id]; rw [← Category.assoc]
+  apply (respectsIso F).toRespectsRight.postcomp _ (inferInstance : IsIso _) _
+  exact map_preimage F (_ ≫ pbIso.hom) ▸ map F (F.preimage _)
 
 Depends on / 依赖: pullback, pullback.fst, terminal, terminal.from
 -/
@@ -1734,7 +1774,21 @@ lemma diag_of_map_from_obj
   suffices F.relativelyRepresentable (pullback.lift (𝟙 _) (𝟙 _)) from
     (respectsIso F).toRespectsRight.postcomp _ (inferInstance : IsIso _) _ this
   intro a g
-  obtain ⟨_, ⟨_, ⟨_, pbRepr⟩⟩⟩ := h (g ≫ 
+  obtain ⟨_, ⟨_, ⟨_, pbRepr⟩⟩⟩ := h (g ≫ pullback.fst _ _) (g ≫ pullback.snd _ _)
+  obtain ⟨_, ⟨bot⟩⟩ := IsPullback.of_iso_pullback ⟨by rw [assoc]; simp [pullback.condition]⟩
+    (pbRepr.isoPullback ≪≫ (pullbackDiagonalMapIdIso (g ≫ pullback.fst _ _) (g ≫ pullback.snd _ _)
+      (terminal.from X)).symm) rfl rfl
+obtain ⟨_, ⟨_, ⟨topMap, top⟩⟩⟩ := (toPullbackTerminal g)
+    (pbRepr.isoPullback ≪≫ (pullbackDiagonalMapIdIso (g ≫ pullback.fst _ _) (g ≫ pullback.snd _ _)
+      (terminal.from X)).symm).hom ≫ pullback.snd
+        (pullback.diagonal (terminal.from X))
+        (pullback.map _ _ _ _ _ _ (𝟙 _) (by cat_disch) (by cat_disch))
+  have hg : g = pullback.lift (𝟙 _) (𝟙 _) (by cat_disch) ≫ pullback.map
+    ((g ≫ pullback.fst _ _) ≫ terminal.from X) ((g ≫ pullback.snd _ _) ≫ terminal.from X) _ _
+      (g ≫ pullback.fst _ _) (g ≫ pullback.snd _ _) (𝟙 _) (by cat_disch) (by cat_disch) := by
+    apply Limits.pullback.hom_ext <;> simp
+exact hg ▸ ⟨_, ⟨_, ⟨_, IsPullback.of_isLimit pasteVertIsPullback rfl bot
+    (map_preimage F topMap ▸ top).flip.isLimit'.some⟩⟩⟩
 
 中文:
 引理 diag_of_map_from_obj
@@ -1744,7 +1798,21 @@ lemma diag_of_map_from_obj
   suffices F.relativelyRepresentable (pullback.lift (𝟙 _) (𝟙 _)) from
     (respectsIso F).toRespectsRight.postcomp _ (inferInstance : IsIso _) _ this
   intro a g
-  obtain ⟨_, ⟨_, ⟨_, pbRepr⟩⟩⟩ := h (g ≫ 
+  obtain ⟨_, ⟨_, ⟨_, pbRepr⟩⟩⟩ := h (g ≫ pullback.fst _ _) (g ≫ pullback.snd _ _)
+  obtain ⟨_, ⟨bot⟩⟩ := IsPullback.of_iso_pullback ⟨by rw [assoc]; simp [pullback.condition]⟩
+    (pbRepr.isoPullback ≪≫ (pullbackDiagonalMapIdIso (g ≫ pullback.fst _ _) (g ≫ pullback.snd _ _)
+      (terminal.from X)).symm) rfl rfl
+obtain ⟨_, ⟨_, ⟨topMap, top⟩⟩⟩ := (toPullbackTerminal g)
+    (pbRepr.isoPullback ≪≫ (pullbackDiagonalMapIdIso (g ≫ pullback.fst _ _) (g ≫ pullback.snd _ _)
+      (terminal.from X)).symm).hom ≫ pullback.snd
+        (pullback.diagonal (terminal.from X))
+        (pullback.map _ _ _ _ _ _ (𝟙 _) (by cat_disch) (by cat_disch))
+  have hg : g = pullback.lift (𝟙 _) (𝟙 _) (by cat_disch) ≫ pullback.map
+    ((g ≫ pullback.fst _ _) ≫ terminal.from X) ((g ≫ pullback.snd _ _) ≫ terminal.from X) _ _
+      (g ≫ pullback.fst _ _) (g ≫ pullback.snd _ _) (𝟙 _) (by cat_disch) (by cat_disch) := by
+    apply Limits.pullback.hom_ext <;> simp
+exact hg ▸ ⟨_, ⟨_, ⟨_, IsPullback.of_isLimit pasteVertIsPullback rfl bot
+    (map_preimage F topMap ▸ top).flip.isLimit'.some⟩⟩⟩
 
 Depends on / 依赖: F.relativelyRepresentable, IsPullback, IsPullback.of_iso_pullback, Limits, Limits.diag, cat_disch, condition, isoPullback, of_iso_pullback, pbRepr, pbRepr.isoPullback, postcomp, prodIsoPullback, pullback, pullback.condition, pullback.fst, pullback.lift, pullback.snd, pullbackDiagonalMapIdIso, relativelyRepresentable
 -/

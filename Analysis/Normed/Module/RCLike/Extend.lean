@@ -33,7 +33,10 @@ theorem Module.Dual.norm_extendRCLike_le_seminorm
   have hsq : ‖fr.extendRCLike (𝕜 := 𝕜) x‖ ^ 2 <= ‖fr.extendRCLike (𝕜 := 𝕜) x‖ * p x := calc
     _ = fr (conj (fr.extendRCLike x) • x) := fr.norm_extendRCLike_apply_sq x
     _ <= |fr (conj (fr.extendRCLike x) • x)| := le_abs_self _
-    _
+    _ <= p (conj (fr.extendRCLike x) • x) := hp _
+    _ = ‖conj (fr.extendRCLike x)‖ * p x := map_smul_eq_mul _ _ _
+    _ = ‖(fr.extendRCLike x)‖ * p x := by rw [norm_conj]
+exact (mul_le_mul_iff_left₀ (norm_pos_iff.2 hx)).1 by simpa [pow_two, mul_comm] using hsq
 
 中文:
 定理 模.对偶.norm_extendRCLike_le_seminorm
@@ -44,7 +47,10 @@ theorem Module.Dual.norm_extendRCLike_le_seminorm
   have hsq : ‖fr.extendRCLike (𝕜 := 𝕜) x‖ ^ 2 <= ‖fr.extendRCLike (𝕜 := 𝕜) x‖ * p x := calc
     _ = fr (conj (fr.extendRCLike x) • x) := fr.norm_extendRCLike_apply_sq x
     _ <= |fr (conj (fr.extendRCLike x) • x)| := le_abs_self _
-    _
+    _ <= p (conj (fr.extendRCLike x) • x) := hp _
+    _ = ‖conj (fr.extendRCLike x)‖ * p x := map_smul_eq_mul _ _ _
+    _ = ‖(fr.extendRCLike x)‖ * p x := by rw [norm_conj]
+exact (mul_le_mul_iff_left₀ (norm_pos_iff.2 hx)).1 by simpa [pow_two, mul_comm] using hsq
 
 Depends on / 依赖: extendRCLike, fr.extendRCLike, fr.norm_extendRCLike_apply_sq, le_abs_self, map_smul_eq_mul, norm_conj, norm_extendRCLike_apply_sq, norm_pos_iff
 -/
@@ -77,7 +83,12 @@ definition extendRCLikeL
     rw [(ContinuousLinearMap.isEmbedding_restrictScalars Real).continuous_iff]
 .restrictScalars Real let smulI : F ->L[Real] F := (I : 𝕜) • ContinuousLinearMap.id 𝕜 F
     let mulI : 𝕜 ->L[Real] 𝕜 := ContinuousLinearMap.mul Real 𝕜 (I : 𝕜)
-    exact ofRealCLM.pos
+    exact ofRealCLM.postcomp F - mulI.postcomp F ∘L smulI.precomp 𝕜 ∘L ofRealCLM.postcomp F
+.continuous
+.continuous.comp continuous_invFun := reCLM.postcomp F
+    (ContinuousLinearMap.isEmbedding_restrictScalars Real).continuous
+
+@[simp]
 
 中文:
 定义 extendRCLikeL
@@ -87,7 +98,12 @@ definition extendRCLikeL
     rw [(ContinuousLinearMap.isEmbedding_restrictScalars Real).continuous_iff]
 .restrictScalars Real let smulI : F ->L[Real] F := (I : 𝕜) • ContinuousLinearMap.id 𝕜 F
     let mulI : 𝕜 ->L[Real] 𝕜 := ContinuousLinearMap.mul Real 𝕜 (I : 𝕜)
-    exact ofRealCLM.pos
+    exact ofRealCLM.postcomp F - mulI.postcomp F ∘L smulI.precomp 𝕜 ∘L ofRealCLM.postcomp F
+.continuous
+.continuous.comp continuous_invFun := reCLM.postcomp F
+    (ContinuousLinearMap.isEmbedding_restrictScalars Real).continuous
+
+@[simp]
 -/
 noncomputable def extendRCLikeL {𝕜 F : Type*} [RCLike 𝕜] [TopologicalSpace F]
     [AddCommGroup F] [Module 𝕜 F] [ContinuousSMul 𝕜 F] [Module Real F] [IsScalarTower Real 𝕜 F] :
@@ -190,7 +206,7 @@ theorem norm_extendRCLike
       calc
         ‖fr x‖ = ‖re (fr.extendRCLike x : 𝕜)‖ := by simp
         _ <= ‖(fr.extendRCLike x : 𝕜)‖ := abs_re_le_norm _
-        _ <= ‖(fr.extendRCLike 
+        _ <= ‖(fr.extendRCLike : StrongDual 𝕜 F)‖ * ‖x‖ := le_opNorm _ _
 
 中文:
 定理 norm_extendRCLike
@@ -201,7 +217,7 @@ theorem norm_extendRCLike
       calc
         ‖fr x‖ = ‖re (fr.extendRCLike x : 𝕜)‖ := by simp
         _ <= ‖(fr.extendRCLike x : 𝕜)‖ := abs_re_le_norm _
-        _ <= ‖(fr.extendRCLike 
+        _ <= ‖(fr.extendRCLike : StrongDual 𝕜 F)‖ * ‖x‖ := le_opNorm _ _
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.opNorm_le_bound, StrongDual, abs_re_le_norm, extendRCLike, fr.extendRCLike, fr.norm_extendRCLike_bound, le_antisymm, le_opNorm, norm_extendRCLike_bound, norm_nonneg, opNorm_le_bound
 -/

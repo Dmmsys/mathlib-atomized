@@ -33,7 +33,14 @@ theorem MvRatFunc.rank_eq_max_lift
   refine ((rank_le_card _ _).trans ?_).antisymm ?_
   · rw [FractionRing.cardinalMk, MvPolynomial.cardinalMk_eq_max_lift]
   have hinj := IsFractionRing.injective R K
-  have h1 := (IsScalarTower.toAlgHom F R K).toLinearMap.rank_le_of_injective h
+  have h1 := (IsScalarTower.toAlgHom F R K).toLinearMap.rank_le_of_injective hinj
+  rw [MvPolynomial.rank_eq_lift]; rw [mk_finsupp_nat]; rw [lift_max]; rw [lift_aleph0]; rw [max_le_iff] at h1
+  obtain ⟨i⟩ := ‹Nonempty σ›
+  have hx : Transcendental F (algebraMap R K (MvPolynomial.X i)) :=
+    (transcendental_algebraMap_iff hinj).2 (MvPolynomial.transcendental_X F i)
+  have h2 := hx.linearIndependent_sub_inv.cardinal_lift_le_rank
+  rw [lift_id'.{v]; rw [u}]; rw [lift_umax.{v]; rw [u}] at h2
+  exact max_le (max_le h2 h1.1) h1.2
 
 中文:
 定理 MvRatFunc.rank_eq_max_lift
@@ -43,7 +50,14 @@ theorem MvRatFunc.rank_eq_max_lift
   refine ((rank_le_card _ _).trans ?_).antisymm ?_
   · rw [FractionRing.cardinalMk, MvPolynomial.cardinalMk_eq_max_lift]
   have hinj := IsFractionRing.injective R K
-  have h1 := (IsScalarTower.toAlgHom F R K).toLinearMap.rank_le_of_injective h
+  have h1 := (IsScalarTower.toAlgHom F R K).toLinearMap.rank_le_of_injective hinj
+  rw [MvPolynomial.rank_eq_lift]; rw [mk_finsupp_nat]; rw [lift_max]; rw [lift_aleph0]; rw [max_le_iff] at h1
+  obtain ⟨i⟩ := ‹Nonempty σ›
+  have hx : Transcendental F (algebraMap R K (MvPolynomial.X i)) :=
+    (transcendental_algebraMap_iff hinj).2 (MvPolynomial.transcendental_X F i)
+  have h2 := hx.linearIndependent_sub_inv.cardinal_lift_le_rank
+  rw [lift_id'.{v]; rw [u}]; rw [lift_umax.{v]; rw [u}] at h2
+  exact max_le (max_le h2 h1.1) h1.2
 
 Depends on / 依赖: FractionRing, FractionRing.cardinalMk, IsFractionRing, IsFractionRing.injective, IsScalarTower, IsScalarTower.toAlgHom, MvPolynomial, MvPolynomial.X, MvPolynomial.cardinalMk_eq_max_lift, MvPolynomial.rank_eq_lift, Nonempty, Transcendental, algebraMap, antisymm, cardinalMk, cardinalMk_eq_max_lift, injective, lift_aleph0, lift_max, max_le_iff
 -/

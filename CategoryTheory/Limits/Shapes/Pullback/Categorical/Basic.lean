@@ -794,6 +794,7 @@ definition toCatCommSqOver
     { fst := whiskerRight F (π₁ _ _)
       snd := whiskerRight F (π₂ _ _) }
   map_id := by intros; ext <;> simp
+  map_comp := by intros; ext <;> simp
 
 中文:
 定义 toCatCommSqOver
@@ -808,6 +809,7 @@ definition toCatCommSqOver
     { fst := whiskerRight F (π₁ _ _)
       snd := whiskerRight F (π₂ _ _) }
   map_id := by intros; ext <;> simp
+  map_comp := by intros; ext <;> simp
 
 Depends on / 依赖: associator, catCommSq, intros, isoWhiskerLeft, map_comp, map_id, whiskerRight
 -/
@@ -844,7 +846,8 @@ definition CatCommSqOver.toFunctorToCategoricalPullback
     { app x :=
         { fst := φ.fst.app x
           snd := φ.snd.app x } }
-  map_id := by intros;
+  map_id := by intros; ext <;> simp
+  map_comp := by intros; ext <;> simp
 
 中文:
 定义 CatCommSqOver.toFunctorToCategoricalPullback
@@ -860,7 +863,8 @@ definition CatCommSqOver.toFunctorToCategoricalPullback
     { app x :=
         { fst := φ.fst.app x
           snd := φ.snd.app x } }
-  map_id := by intros;
+  map_id := by intros; ext <;> simp
+  map_comp := by intros; ext <;> simp
 
 Depends on / 依赖: S.fst.map, S.fst.obj, S.iso.app, S.snd.map, S.snd.obj, fst.app, intros, map_comp, map_id, snd.app
 -/
@@ -901,7 +905,13 @@ definition functorEquiv
         (by simp))) (by intros; ext <;> simp)
   counitIso :=
     NatIso.ofComponents
-
+      (fun _ => CatCommSqOver.mkIso
+        (NatIso.ofComponents
+          (fun _ => .refl _) (by intros; simp))
+        (NatIso.ofComponents
+          (fun _ => .refl _) (by intros; simp))
+        (by ext; simp))
+  functor_unitIso_comp := by intros; ext <;> simp
 
 中文:
 定义 functorEquiv
@@ -914,7 +924,13 @@ definition functorEquiv
         (by simp))) (by intros; ext <;> simp)
   counitIso :=
     NatIso.ofComponents
-
+      (fun _ => CatCommSqOver.mkIso
+        (NatIso.ofComponents
+          (fun _ => .refl _) (by intros; simp))
+        (NatIso.ofComponents
+          (fun _ => .refl _) (by intros; simp))
+        (by ext; simp))
+  functor_unitIso_comp := by intros; ext <;> simp
 
 Depends on / 依赖: toCatCommSqOver
 -/
@@ -1128,7 +1144,31 @@ definition transform
             isoWhiskerLeft S.fst ψ.squareLeft.iso.symm ≪≫
             (Functor.associator ..).symm ≪≫
             isoWhiskerRight S.iso ψ.base ≪≫
-            (Functor.associato
+            (Functor.associator ..) ≪≫
+            isoWhiskerLeft S.snd ψ.squareRight.iso ≪≫
+            (Functor.associator ..).symm }
+      map {x y} f :=
+        { fst := whiskerRight f.fst ψ.left
+          snd := whiskerRight f.snd ψ.right
+          w := by
+            ext x
+            simp [← Functor.map_comp_assoc] }
+      map_id := by intros; ext <;> simp
+      map_comp := by intros; ext <;> simp }
+  map {ψ ψ'} η :=
+    { app S :=
+      { fst.app y := η.left.app (S.fst.obj y)
+        fst.naturality {x y} f := by simp
+        snd.app y := η.right.app (S.snd.obj y)
+        snd.naturality {x y} f := by simp
+        w := by
+          ext t
+          have := ψ.squareLeft.iso.inv.app (S.fst.obj t) ≫=
+            η.left_coherence_app (S.fst.obj t)
+          simp only [Iso.inv_hom_id_app_assoc] at this
+          simp [this] } }
+  map_id := by intros; ext <;> simp
+  map_comp := by intros; ext <;> simp
 
 中文:
 定义 transform
@@ -1141,7 +1181,31 @@ definition transform
             isoWhiskerLeft S.fst ψ.squareLeft.iso.symm ≪≫
             (Functor.associator ..).symm ≪≫
             isoWhiskerRight S.iso ψ.base ≪≫
-            (Functor.associato
+            (Functor.associator ..) ≪≫
+            isoWhiskerLeft S.snd ψ.squareRight.iso ≪≫
+            (Functor.associator ..).symm }
+      map {x y} f :=
+        { fst := whiskerRight f.fst ψ.left
+          snd := whiskerRight f.snd ψ.right
+          w := by
+            ext x
+            simp [← Functor.map_comp_assoc] }
+      map_id := by intros; ext <;> simp
+      map_comp := by intros; ext <;> simp }
+  map {ψ ψ'} η :=
+    { app S :=
+      { fst.app y := η.left.app (S.fst.obj y)
+        fst.naturality {x y} f := by simp
+        snd.app y := η.right.app (S.snd.obj y)
+        snd.naturality {x y} f := by simp
+        w := by
+          ext t
+          have := ψ.squareLeft.iso.inv.app (S.fst.obj t) ≫=
+            η.left_coherence_app (S.fst.obj t)
+          simp only [Iso.inv_hom_id_app_assoc] at this
+          simp [this] } }
+  map_id := by intros; ext <;> simp
+  map_comp := by intros; ext <;> simp
 
 Depends on / 依赖: Functor, Functor.associator, Functor.map_comp_assoc, S.fst, S.iso, S.snd, associator, f.fst, f.snd, intros, isoWhiskerLeft, isoWhiskerRight, map_comp, map_comp_assoc, map_id, squareLeft, squareLeft.iso.symm, squareRight, squareRight.iso, whiskerRight
 -/
@@ -1416,7 +1480,15 @@ definition precompose
               (Functor.associator _ _ _).symm }
       map {S S'} φ :=
         { fst := whiskerLeft U φ.fst
-          snd := whiskerLeft 
+          snd := whiskerLeft U φ.snd }
+      map_id := by intros; ext <;> simp
+      map_comp := by intros; ext <;> simp }
+  map {U V} α :=
+    { app x :=
+      { fst := whiskerRight α x.fst
+        snd := whiskerRight α x.snd } }
+  map_id := by intros; ext <;> simp
+  map_comp := by intros; ext <;> simp
 
 中文:
 定义 precompose
@@ -1430,7 +1502,15 @@ definition precompose
               (Functor.associator _ _ _).symm }
       map {S S'} φ :=
         { fst := whiskerLeft U φ.fst
-          snd := whiskerLeft 
+          snd := whiskerLeft U φ.snd }
+      map_id := by intros; ext <;> simp
+      map_comp := by intros; ext <;> simp }
+  map {U V} α :=
+    { app x :=
+      { fst := whiskerRight α x.fst
+        snd := whiskerRight α x.snd } }
+  map_id := by intros; ext <;> simp
+  map_comp := by intros; ext <;> simp
 
 Depends on / 依赖: Functor, Functor.associator, S.fst, S.iso, S.snd, associator, intros, isoWhiskerLeft, map_comp, map_id, whiskerLeft, whiskerRight, x.fst, x.snd
 -/

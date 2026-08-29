@@ -715,7 +715,8 @@ theorem continuousSMul
   have : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
   let φ : (E ->SLᵤ[σ, 𝔖] F) ->ₗ[𝕜₂] E -> F :=
     ⟨⟨DFunLike.coe, fun _ _ => rfl⟩, fun _ _ => rfl⟩
-  exact UniformOnFun.continuousSMul_induced_of_image_bounded 𝕜₂ 
+  exact UniformOnFun.continuousSMul_induced_of_image_bounded 𝕜₂ E F (E ->SLᵤ[σ, 𝔖] F) φ
+    ⟨rfl⟩ fun u s hs => (h𝔖₃ s hs).image u
 
 中文:
 定理 continuousSMul
@@ -725,7 +726,8 @@ theorem continuousSMul
   have : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
   let φ : (E ->SLᵤ[σ, 𝔖] F) ->ₗ[𝕜₂] E -> F :=
     ⟨⟨DFunLike.coe, fun _ _ => rfl⟩, fun _ _ => rfl⟩
-  exact UniformOnFun.continuousSMul_induced_of_image_bounded 𝕜₂ 
+  exact UniformOnFun.continuousSMul_induced_of_image_bounded 𝕜₂ E F (E ->SLᵤ[σ, 𝔖] F) φ
+    ⟨rfl⟩ fun u s hs => (h𝔖₃ s hs).image u
 
 Depends on / 依赖: DFunLike, DFunLike.coe, IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsUniformAddGroup, UniformOnFun, UniformOnFun.continuousSMul_induced_of_image_bounded, UniformSpace, continuousSMul_induced_of_image_bounded, isUniformAddGroup_of_addCommGroup, rightUniformSpace
 -/
@@ -929,7 +931,9 @@ theorem isVonNBounded_iff
   intro s hs U hU
   rw [Filter.mem_absorbing]; rw [Absorbs]
   filter_upwards [h s hs hU, eventually_ne_cobounded 0] with c hc hc₀ f hf
-  
+  rw [mem_smul_set_iff_inv_smul_mem₀ hc₀]
+  intro x hx
+  simpa only [mem_smul_set_iff_inv_smul_mem₀ hc₀] using! hc (mem_image2_of_mem hf hx)
 
 中文:
 定理 isVonNBounded_iff
@@ -940,7 +944,9 @@ theorem isVonNBounded_iff
   intro s hs U hU
   rw [Filter.mem_absorbing]; rw [Absorbs]
   filter_upwards [h s hs hU, eventually_ne_cobounded 0] with c hc hc₀ f hf
-  
+  rw [mem_smul_set_iff_inv_smul_mem₀ hc₀]
+  intro x hx
+  simpa only [mem_smul_set_iff_inv_smul_mem₀ hc₀] using! hc (mem_image2_of_mem hf hx)
 
 Depends on / 依赖: Absorbs, Filter, Filter.mem_absorbing, eventually_ne_cobounded, filter_upwards, isVonNBounded_iff_absorbing_le, isVonNBounded_image2_apply, le_iInf_iff, le_principal_iff, mem_absorbing, mem_image2_of_mem, nhds_zero_eq, simp_rw
 -/
@@ -1094,7 +1100,15 @@ theorem completeSpace
   · rw [(isUniformInducing_postcomp σ (SeparationQuotient.mkCLM 𝕜₂ F)
       SeparationQuotient.isUniformInducing_mk _).completeSpace_congr]
     exacts [this _ inferInstance, SeparationQuotient.postcomp_mkCLM_surjective F σ E]
-  rw [completeSpace_iff_isComplete
+  rw [completeSpace_iff_isComplete_range (isUniformInducing_coeFn _ _ _)]
+  apply IsClosed.isComplete
+  have H₁ : IsClosed {f : E ->ᵤ[𝔖] F | Continuous ((UniformOnFun.toFun 𝔖) f)} :=
+    UniformOnFun.isClosed_setOfPred_continuous h𝔖
+  convert!
+H₁.inter
+      (LinearMap.isClosed_range_coe E F σ).preimage
+        (UniformOnFun.uniformContinuous_toFun h𝔖U).continuous
+  exact ContinuousLinearMap.range_coeFn_eq
 
 中文:
 定理 completeSpace
@@ -1104,7 +1118,15 @@ theorem completeSpace
   · rw [(isUniformInducing_postcomp σ (SeparationQuotient.mkCLM 𝕜₂ F)
       SeparationQuotient.isUniformInducing_mk _).completeSpace_congr]
     exacts [this _ inferInstance, SeparationQuotient.postcomp_mkCLM_surjective F σ E]
-  rw [completeSpace_iff_isComplete
+  rw [completeSpace_iff_isComplete_range (isUniformInducing_coeFn _ _ _)]
+  apply IsClosed.isComplete
+  have H₁ : IsClosed {f : E ->ᵤ[𝔖] F | Continuous ((UniformOnFun.toFun 𝔖) f)} :=
+    UniformOnFun.isClosed_setOfPred_continuous h𝔖
+  convert!
+H₁.inter
+      (LinearMap.isClosed_range_coe E F σ).preimage
+        (UniformOnFun.uniformContinuous_toFun h𝔖U).continuous
+  exact ContinuousLinearMap.range_coeFn_eq
 
 Depends on / 依赖: Continuous, IsClosed, IsClosed.isComplete, Linear, SeparationQuotient, SeparationQuotient.isUniformInducing_mk, SeparationQuotient.mkCLM, SeparationQuotient.postcomp_mkCLM_surjective, T2Space, UniformOnFun, UniformOnFun.isClosed_setOfPred_continuous, UniformOnFun.toFun, completeSpace_congr, completeSpace_iff_isComplete_range, convert, exacts, generalizing, isClosed_setOfPred_continuous, isComplete, isUniformInducing_coeFn
 -/
@@ -1195,7 +1217,15 @@ theorem continuous_of_continuous_uncurry
     simpa [UniformConvergenceCLM.nhds_zero_eq, MapsTo]
   intro S hS U hU
 rcases mem_nhds_prod_iff.mp hB.tendsto' (0 : G × E) 0 (by simp) hU
-    with ⟨V, hV, W, h
+    with ⟨V, hV, W, hW, hVW⟩
+.exists with .eventually_nhdsNE_zero.and eventually_mem_nhdsWithin rcases (h𝔖 S hS) hW
+    ⟨c, hc, c_ne : c != 0⟩
+  rcases RingHom.surjective τ (σ c) with ⟨d, hd⟩
+  have d_ne : d != 0 := by rwa [← map_ne_zero τ, hd, map_ne_zero σ]
+  filter_upwards [(set_smul_mem_nhds_zero_iff d_ne).mpr hV]
+  rintro _ ⟨a, ha, rfl⟩ x hx
+  rw [map_smulₛₗ]; rw [hd]; rw [smul_apply]; rw [← map_smulₛₗ]
+  exact @hVW ⟨_, _⟩ ⟨ha, hc hx⟩
 
 中文:
 定理 continuous_of_continuous_uncurry
@@ -1206,7 +1236,15 @@ rcases mem_nhds_prod_iff.mp hB.tendsto' (0 : G × E) 0 (by simp) hU
     simpa [UniformConvergenceCLM.nhds_zero_eq, MapsTo]
   intro S hS U hU
 rcases mem_nhds_prod_iff.mp hB.tendsto' (0 : G × E) 0 (by simp) hU
-    with ⟨V, hV, W, h
+    with ⟨V, hV, W, hW, hVW⟩
+.exists with .eventually_nhdsNE_zero.and eventually_mem_nhdsWithin rcases (h𝔖 S hS) hW
+    ⟨c, hc, c_ne : c != 0⟩
+  rcases RingHom.surjective τ (σ c) with ⟨d, hd⟩
+  have d_ne : d != 0 := by rwa [← map_ne_zero τ, hd, map_ne_zero σ]
+  filter_upwards [(set_smul_mem_nhds_zero_iff d_ne).mpr hV]
+  rintro _ ⟨a, ha, rfl⟩ x hx
+  rw [map_smulₛₗ]; rw [hd]; rw [smul_apply]; rw [← map_smulₛₗ]
+  exact @hVW ⟨_, _⟩ ⟨ha, hc hx⟩
 -/
 protected theorem continuous_of_continuous_uncurry [AddCommGroup G]
     {𝕜₃ : Type*} [NormedField 𝕜₃] [Module 𝕜₃ G]
@@ -1327,7 +1365,14 @@ definition precompUniformConvergenceCLM
     let : UniformSpace G := IsTopologicalAddGroup.rightUniformSpace G
     have : IsUniformAddGroup G := isUniformAddGroup_of_addCommGroup
     rw [(UniformConvergenceCLM.isEmbedding_coeFn _ _ _).continuous_iff]
+    exact (UniformOnFun.precomp_uniformContinuous hL).continuous.comp
+        (UniformConvergenceCLM.isEmbedding_coeFn _ _ _).continuous
 
+@[deprecated (since := "2026-01-27")]
+alias precomp_uniformConvergenceCLM := precompUniformConvergenceCLM
+
+@[deprecated (since := "2026-01-27")]
+alias precomp_uniformConvergenceCLM_apply := precompUniformConvergenceCLM_apply
 
 中文:
 定义 precompUniformConvergenceCLM
@@ -1339,7 +1384,14 @@ definition precompUniformConvergenceCLM
     let : UniformSpace G := IsTopologicalAddGroup.rightUniformSpace G
     have : IsUniformAddGroup G := isUniformAddGroup_of_addCommGroup
     rw [(UniformConvergenceCLM.isEmbedding_coeFn _ _ _).continuous_iff]
+    exact (UniformOnFun.precomp_uniformContinuous hL).continuous.comp
+        (UniformConvergenceCLM.isEmbedding_coeFn _ _ _).continuous
 
+@[deprecated (since := "2026-01-27")]
+alias precomp_uniformConvergenceCLM := precompUniformConvergenceCLM
+
+@[deprecated (since := "2026-01-27")]
+alias precomp_uniformConvergenceCLM_apply := precompUniformConvergenceCLM_apply
 
 Depends on / 依赖: f.comp
 -/
@@ -1379,7 +1431,17 @@ definition postcompUniformConvergenceCLM
     let : UniformSpace G := IsTopologicalAddGroup.rightUniformSpace G
     have : IsUniformAddGroup G := isUniformAddGroup_of_addCommGroup
     let : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
-    have : IsUni
+    have : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
+    rw [(UniformConvergenceCLM.isEmbedding_coeFn _ _ _).continuous_iff]
+    exact
+      (UniformOnFun.postcomp_uniformContinuous L.uniformContinuous).continuous.comp
+        (UniformConvergenceCLM.isEmbedding_coeFn _ _ _).continuous
+
+@[deprecated (since := "2026-01-27")]
+alias postcomp_uniformConvergenceCLM := postcompUniformConvergenceCLM
+
+@[deprecated (since := "2026-01-27")]
+alias postcomp_uniformConvergenceCLM_apply := postcompUniformConvergenceCLM_apply
 
 中文:
 定义 postcompUniformConvergenceCLM
@@ -1391,7 +1453,17 @@ definition postcompUniformConvergenceCLM
     let : UniformSpace G := IsTopologicalAddGroup.rightUniformSpace G
     have : IsUniformAddGroup G := isUniformAddGroup_of_addCommGroup
     let : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
-    have : IsUni
+    have : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
+    rw [(UniformConvergenceCLM.isEmbedding_coeFn _ _ _).continuous_iff]
+    exact
+      (UniformOnFun.postcomp_uniformContinuous L.uniformContinuous).continuous.comp
+        (UniformConvergenceCLM.isEmbedding_coeFn _ _ _).continuous
+
+@[deprecated (since := "2026-01-27")]
+alias postcomp_uniformConvergenceCLM := postcompUniformConvergenceCLM
+
+@[deprecated (since := "2026-01-27")]
+alias postcomp_uniformConvergenceCLM_apply := postcompUniformConvergenceCLM_apply
 
 Depends on / 依赖: L.comp
 -/
@@ -1441,7 +1513,21 @@ definition UniformConvergenceCLM.piEquivL
   haveI : forall i, IsUniformAddGroup (F i) := fun i => isUniformAddGroup_of_addCommGroup
   { toFun F := ContinuousLinearMap.pi F
     invFun f i := (ContinuousLinearMap.proj i).comp f
-    map_add' _ _ := by
+    map_add' _ _ := by ext; rfl
+    map_smul' _ _ := by ext; rfl
+    left_inv _ := by ext; rfl
+    right_inv _ := by ext; rfl
+    continuous_toFun := by
+      rw [UniformConvergenceCLM.isEmbedding_coeFn _ _ _ |>.continuous_iff]
+      rw [UniformOnFun.uniformEquivPiComm _ _ |>.isUniformEmbedding.isEmbedding.continuous_iff]
+      refine continuous_pi fun i => ?_
+.continuous.comp (continuous_apply i) exact UniformConvergenceCLM.isEmbedding_coeFn _ _ _
+    continuous_invFun := by
+      apply continuous_pi (A := fun i => E ->Lᵤ[𝕜, 𝔖] F i) fun i => ?_
+      exact (ContinuousLinearMap.proj i : (Π j, F j) ->L[𝕜] F i).postcompUniformConvergenceCLM 𝔖
+.continuous}
+
+@[simp]
 
 中文:
 定义 UniformConvergenceCLM.piEquivL
@@ -1450,7 +1536,21 @@ definition UniformConvergenceCLM.piEquivL
   haveI : forall i, IsUniformAddGroup (F i) := fun i => isUniformAddGroup_of_addCommGroup
   { toFun F := ContinuousLinearMap.pi F
     invFun f i := (ContinuousLinearMap.proj i).comp f
-    map_add' _ _ := by
+    map_add' _ _ := by ext; rfl
+    map_smul' _ _ := by ext; rfl
+    left_inv _ := by ext; rfl
+    right_inv _ := by ext; rfl
+    continuous_toFun := by
+      rw [UniformConvergenceCLM.isEmbedding_coeFn _ _ _ |>.continuous_iff]
+      rw [UniformOnFun.uniformEquivPiComm _ _ |>.isUniformEmbedding.isEmbedding.continuous_iff]
+      refine continuous_pi fun i => ?_
+.continuous.comp (continuous_apply i) exact UniformConvergenceCLM.isEmbedding_coeFn _ _ _
+    continuous_invFun := by
+      apply continuous_pi (A := fun i => E ->Lᵤ[𝕜, 𝔖] F i) fun i => ?_
+      exact (ContinuousLinearMap.proj i : (Π j, F j) ->L[𝕜] F i).postcompUniformConvergenceCLM 𝔖
+.continuous}
+
+@[simp]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.pi, ContinuousLinearMap.proj, IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsUniformAddGroup, UniformConvergenceCLM, UniformConvergenceCLM.isEmbedding_coeFn, UniformOnFun, UniformOnFun.uniformEqui, UniformSpace, continuous_iff, continuous_toFun, invFun, isEmbedding_coeFn, isUniformAddGroup_of_addCommGroup, left_inv, map_add, map_smul, rightUniformSpace
 -/
@@ -1549,7 +1649,16 @@ definition uniformConvergenceCLMCongrSL
   haveI mapsto₂ : MapsTo (e₁₂.symm '' ·) 𝔗 𝔖 := fun t => by simp [h, e₁₂.image_symm_eq_preimage]
   { e₁₂.arrowCongrEquivₛₗ e₄₃ with
     -- given explicitly to help `simps`
-    toFun := fun L => (e₄₃ : H 
+    toFun := fun L => (e₄₃ : H ->SL[σ₄₃] G).comp (L.comp (e₁₂.symm : F ->SL[σ₂₁] E))
+    -- given explicitly to help `simps`
+    invFun := fun L => (e₄₃.symm : G ->SL[σ₃₄] H).comp (L.comp (e₁₂ : E ->SL[σ₁₂] F))
+    continuous_toFun := ((postcompUniformConvergenceCLM _ e₄₃.toContinuousLinearMap).comp
+      (precompUniformConvergenceCLM H _ _ e₁₂.symm.toContinuousLinearMap mapsto₂)).continuous
+    continuous_invFun :=
+      ((precompUniformConvergenceCLM H _ _ e₁₂.toContinuousLinearMap mapsto₁).comp
+        (postcompUniformConvergenceCLM _ e₄₃.symm.toContinuousLinearMap)).continuous }
+
+@[simp]
 
 中文:
 定义 uniformConvergenceCLMCongrSL
@@ -1558,7 +1667,16 @@ definition uniformConvergenceCLMCongrSL
   haveI mapsto₂ : MapsTo (e₁₂.symm '' ·) 𝔗 𝔖 := fun t => by simp [h, e₁₂.image_symm_eq_preimage]
   { e₁₂.arrowCongrEquivₛₗ e₄₃ with
     -- given explicitly to help `simps`
-    toFun := fun L => (e₄₃ : H 
+    toFun := fun L => (e₄₃ : H ->SL[σ₄₃] G).comp (L.comp (e₁₂.symm : F ->SL[σ₂₁] E))
+    -- given explicitly to help `simps`
+    invFun := fun L => (e₄₃.symm : G ->SL[σ₃₄] H).comp (L.comp (e₁₂ : E ->SL[σ₁₂] F))
+    continuous_toFun := ((postcompUniformConvergenceCLM _ e₄₃.toContinuousLinearMap).comp
+      (precompUniformConvergenceCLM H _ _ e₁₂.symm.toContinuousLinearMap mapsto₂)).continuous
+    continuous_invFun :=
+      ((precompUniformConvergenceCLM H _ _ e₁₂.toContinuousLinearMap mapsto₁).comp
+        (postcompUniformConvergenceCLM _ e₄₃.symm.toContinuousLinearMap)).continuous }
+
+@[simp]
 
 Depends on / 依赖: MapsTo, image_symm_eq_preimage, injective, preimage_image_eq
 -/

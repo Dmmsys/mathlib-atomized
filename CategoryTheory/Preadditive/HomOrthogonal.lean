@@ -114,7 +114,22 @@ definition matrixDecomposition
             simp)
   invFun z :=
     biproduct.matrix fun j k =>
-      if h : f j = g k then z (f j) ⟨k, by simp [h]⟩ ⟨j, by simp⟩ ≫
+      if h : f j = g k then z (f j) ⟨k, by simp [h]⟩ ⟨j, by simp⟩ ≫ eqToHom (by simp [h]) else 0
+  left_inv z := by
+    ext j k
+    simp only [biproduct.matrix_π, biproduct.ι_desc]
+    split_ifs with h
+    · simp
+      rfl
+    · symm
+      apply o.eq_zero h
+  right_inv z := by
+    ext i ⟨j, w⟩ ⟨k, ⟨⟩⟩
+    simp only [eqToHom_refl, biproduct.matrix_components, Category.id_comp]
+    split_ifs with h
+    · simp
+    · exfalso
+      exact h w.symm
 
 中文:
 定义 matrixDecomposition
@@ -130,7 +145,22 @@ definition matrixDecomposition
             simp)
   invFun z :=
     biproduct.matrix fun j k =>
-      if h : f j = g k then z (f j) ⟨k, by simp [h]⟩ ⟨j, by simp⟩ ≫
+      if h : f j = g k then z (f j) ⟨k, by simp [h]⟩ ⟨j, by simp⟩ ≫ eqToHom (by simp [h]) else 0
+  left_inv z := by
+    ext j k
+    simp only [biproduct.matrix_π, biproduct.ι_desc]
+    split_ifs with h
+    · simp
+      rfl
+    · symm
+      apply o.eq_zero h
+  right_inv z := by
+    ext i ⟨j, w⟩ ⟨k, ⟨⟩⟩
+    simp only [eqToHom_refl, biproduct.matrix_components, Category.id_comp]
+    split_ifs with h
+    · simp
+    · exfalso
+      exact h w.symm
 
 Depends on / 依赖: Category, Category.id_comp, biproduct, biproduct.components, biproduct.matrix, biproduct.matrix_, biproduct.matrix_components, components, eqToHom, eqToHom_refl, eq_zero, id_comp, invFun, left_inv, matrix, matrix_components, o.eq_zero, right_inv, split_ifs
 -/
@@ -226,7 +256,10 @@ theorem matrixDecomposition_id
     Matrix.one_apply, HomOrthogonal.matrixDecomposition_apply, biproduct.components]
   split_ifs with h
   · cases h
-    sim
+    simp
+  · simp only [Subtype.mk.injEq] at h
+    convert! comp_zero
+    simpa using biproduct.ι_π_ne _ (Ne.symm h)
 
 中文:
 定理 matrixDecomposition_id
@@ -238,7 +271,10 @@ theorem matrixDecomposition_id
     Matrix.one_apply, HomOrthogonal.matrixDecomposition_apply, biproduct.components]
   split_ifs with h
   · cases h
-    sim
+    simp
+  · simp only [Subtype.mk.injEq] at h
+    convert! comp_zero
+    simpa using biproduct.ι_π_ne _ (Ne.symm h)
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, End.one_def, HomOrthogonal, HomOrthogonal.matrixDecomposition_apply, Matrix, Matrix.one_apply, Ne.symm, Set.mem_preimage, Set.mem_singleton_iff, Subtype, Subtype.mk.injEq, biproduct, biproduct.components, comp_id, comp_zero, components, convert, eqToHom_refl
 -/
@@ -268,7 +304,19 @@ theorem matrixDecomposition_comp
   simp only [Set.mem_preimage, Set.mem_singleton_iff] at j_property
   simp only [Matrix.mul_apply, Limits.biproduct.components,
     HomOrthogonal.matrixDecomposition_apply, Category.comp_id, Category.id_comp, Category.assoc,
-    End.mul_def, eqToHom_refl, eqToHom_tra
+    End.mul_def, eqToHom_refl, eqToHom_trans_assoc]
+  conv_lhs => rw [← Category.id_comp w, ← biproduct.total]
+  simp only [Preadditive.sum_comp, Preadditive.comp_sum]
+  apply Finset.sum_congr_set
+  · simp
+  · intro b nm
+    simp only [Set.mem_preimage, Set.mem_singleton_iff] at nm
+    simp only [Category.assoc]
+    convert! comp_zero
+    convert! comp_zero
+    convert! comp_zero
+    convert! comp_zero
+    simp only [o.eq_zero nm]
 
 中文:
 定理 matrixDecomposition_comp
@@ -278,7 +326,19 @@ theorem matrixDecomposition_comp
   simp only [Set.mem_preimage, Set.mem_singleton_iff] at j_property
   simp only [Matrix.mul_apply, Limits.biproduct.components,
     HomOrthogonal.matrixDecomposition_apply, Category.comp_id, Category.id_comp, Category.assoc,
-    End.mul_def, eqToHom_refl, eqToHom_tra
+    End.mul_def, eqToHom_refl, eqToHom_trans_assoc]
+  conv_lhs => rw [← Category.id_comp w, ← biproduct.total]
+  simp only [Preadditive.sum_comp, Preadditive.comp_sum]
+  apply Finset.sum_congr_set
+  · simp
+  · intro b nm
+    simp only [Set.mem_preimage, Set.mem_singleton_iff] at nm
+    simp only [Category.assoc]
+    convert! comp_zero
+    convert! comp_zero
+    convert! comp_zero
+    convert! comp_zero
+    simp only [o.eq_zero nm]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, End.mul_def, Finset, Finset.sum_congr_set, HomOrthogonal, HomOrthogonal.matrixDecomposition_apply, Limits, Limits.biproduct.components, Matrix, Matrix.mul_apply, Preadditive, Preadditive.comp_sum, Preadditive.sum_comp, Set.mem_preimage, Set.mem_singleto, Set.mem_singleton_iff, biproduct
 -/
@@ -370,7 +430,13 @@ theorem equiv_of_iso
   cases nonempty_fintype α; cases nonempty_fintype β
   simp only [Cardinal.mk_fintype, Nat.cast_inj]
   exact
-    Matrix.square_of_invertible (o.matrixDecom
+    Matrix.square_of_invertible (o.matrixDecomposition i.inv c) (o.matrixDecomposition i.hom c)
+      (by
+        rw [← o.matrixDecomposition_comp]
+        simp)
+      (by
+        rw [← o.matrixDecomposition_comp]
+        simp)
 
 中文:
 定理 equiv_of_iso
@@ -384,7 +450,13 @@ theorem equiv_of_iso
   cases nonempty_fintype α; cases nonempty_fintype β
   simp only [Cardinal.mk_fintype, Nat.cast_inj]
   exact
-    Matrix.square_of_invertible (o.matrixDecom
+    Matrix.square_of_invertible (o.matrixDecomposition i.inv c) (o.matrixDecomposition i.hom c)
+      (by
+        rw [← o.matrixDecomposition_comp]
+        simp)
+      (by
+        rw [← o.matrixDecomposition_comp]
+        simp)
 
 Depends on / 依赖: Cardinal, Cardinal.eq, Cardinal.mk_fintype, Equiv.ofPreimageEquiv, Equiv.ofPreimageEquiv_map, Matrix, Matrix.square_of_invertible, Nat.cast_inj, Nonempty, Nonempty.some, cast_inj, classical, i.hom, i.inv, matrixDecomposition, matrixDecomposition_comp, mk_fintype, nonempty_fintype, o.matrixDecomposition, o.matrixDecomposition_comp
 -/

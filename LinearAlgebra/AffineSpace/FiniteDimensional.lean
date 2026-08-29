@@ -330,7 +330,13 @@ theorem AffineIndependent.finrank_vectorSpan_image_finset
   have hc' : #(s.image p) = n + 1 := by rwa [s.card_image_of_injective hi.injective]
   have hn : (s.image p).Nonempty := by simp [hc', ← Finset.card_pos]
   rcases hn with ⟨p₁, hp₁⟩
-  have hp₁' : p₁ in p '' s := by simpa using h
+  have hp₁' : p₁ in p '' s := by simpa using hp₁
+  rw [affineIndependent_set_iff_linearIndependent_vsub k hp₁']; rw [← Finset.coe_singleton]; rw [← Finset.coe_image]; rw [← Finset.coe_sdiff]; rw [Finset.sdiff_singleton_eq_erase]; rw [← Finset.coe_image]
+    at hi'
+  have hc : #(((s.image p).erase p₁).image (· -ᵥ p₁)) = n := by
+    rw [Finset.card_image_of_injective _ (vsub_left_injective _)]; rw [Finset.card_erase_of_mem hp₁]
+    exact Nat.pred_eq_of_eq_succ hc'
+  rwa [vectorSpan_eq_span_vsub_finset_right_ne k hp₁, finrank_span_finset_eq_card, hc]
 
 中文:
 定理 AffineIndependent.finrank_vectorSpan_image_finset
@@ -341,7 +347,13 @@ theorem AffineIndependent.finrank_vectorSpan_image_finset
   have hc' : #(s.image p) = n + 1 := by rwa [s.card_image_of_injective hi.injective]
   have hn : (s.image p).Nonempty := by simp [hc', ← Finset.card_pos]
   rcases hn with ⟨p₁, hp₁⟩
-  have hp₁' : p₁ in p '' s := by simpa using h
+  have hp₁' : p₁ in p '' s := by simpa using hp₁
+  rw [affineIndependent_set_iff_linearIndependent_vsub k hp₁']; rw [← Finset.coe_singleton]; rw [← Finset.coe_image]; rw [← Finset.coe_sdiff]; rw [Finset.sdiff_singleton_eq_erase]; rw [← Finset.coe_image]
+    at hi'
+  have hc : #(((s.image p).erase p₁).image (· -ᵥ p₁)) = n := by
+    rw [Finset.card_image_of_injective _ (vsub_left_injective _)]; rw [Finset.card_erase_of_mem hp₁]
+    exact Nat.pred_eq_of_eq_succ hc'
+  rwa [vectorSpan_eq_span_vsub_finset_right_ne k hp₁, finrank_span_finset_eq_card, hc]
 
 Depends on / 依赖: Finset, Finset.card_pos, Finset.coe_image, Finset.coe_sdiff, Finset.coe_singleton, Finset.sdiff_singleton_eq_erase, Nonempty, Set.image_subset_range, affineIndependent_set_iff_linearIndependent_vsub, card_image_of_injective, card_pos, classical, coe_image, coe_sdiff, coe_singleton, hi.injective, hi.range.mono, image_subset_range, injective, s.card_image_of_injective
 -/
@@ -450,7 +462,9 @@ theorem finrank_vectorSpan_image_finset_le
     apply Nat.succ_pos
   rcases hn with ⟨p₁, hp₁⟩
   rw [vectorSpan_eq_span_vsub_finset_right_ne k hp₁]
-  refine le_trans (finrank_span_finset_le_card (((s.image p).erase p₁).image fu
+  refine le_trans (finrank_span_finset_le_card (((s.image p).erase p₁).image fun p => p -ᵥ p₁)) ?_
+  rw [Finset.card_image_of_injective _ (vsub_left_injective p₁)]; rw [Finset.card_erase_of_mem hp₁]; rw [tsub_le_iff_right]; rw [← hc]
+  apply Finset.card_image_le
 
 中文:
 定理 finrank_vectorSpan_image_finset_le
@@ -462,7 +476,9 @@ theorem finrank_vectorSpan_image_finset_le
     apply Nat.succ_pos
   rcases hn with ⟨p₁, hp₁⟩
   rw [vectorSpan_eq_span_vsub_finset_right_ne k hp₁]
-  refine le_trans (finrank_span_finset_le_card (((s.image p).erase p₁).image fu
+  refine le_trans (finrank_span_finset_le_card (((s.image p).erase p₁).image fun p => p -ᵥ p₁)) ?_
+  rw [Finset.card_image_of_injective _ (vsub_left_injective p₁)]; rw [Finset.card_erase_of_mem hp₁]; rw [tsub_le_iff_right]; rw [← hc]
+  apply Finset.card_image_le
 
 Depends on / 依赖: Finset, Finset.card_erase_of_mem, Finset.card_image_le, Finset.card_image_of_injective, Finset.card_pos, Finset.image_nonempty, Nat.succ_pos, Nonempty, card_erase_of_mem, card_image_le, card_image_of_injective, card_pos, classical, finrank_span_finset_le_card, image_nonempty, le_trans, s.image, succ_pos, tsub_le_iff_right, vectorSpan_eq_span_vsub_finset_right_ne
 -/
@@ -541,7 +557,9 @@ theorem affineIndependent_iff_finrank_vectorSpan_eq
   have hn : Nonempty ι := by simp [← Fintype.card_pos_iff, hc]
   obtain ⟨i₁⟩ := hn
   rw [affineIndependent_iff_linearIndependent_vsub _ _ i₁]; rw [linearIndependent_iff_card_eq_finrank_span]; rw [eq_comm]; rw [vectorSpan_range_eq_span_range_vsub_right_ne k p i₁]; rw [Set.finrank]
-  rw
+  rw [← Finset.card_univ] at hc
+  rw [Fintype.subtype_card]
+  simp [Finset.filter_ne', Finset.card_erase_of_mem, hc]
 
 中文:
 定理 affineIndependent_iff_finrank_vectorSpan_eq
@@ -551,7 +569,9 @@ theorem affineIndependent_iff_finrank_vectorSpan_eq
   have hn : Nonempty ι := by simp [← Fintype.card_pos_iff, hc]
   obtain ⟨i₁⟩ := hn
   rw [affineIndependent_iff_linearIndependent_vsub _ _ i₁]; rw [linearIndependent_iff_card_eq_finrank_span]; rw [eq_comm]; rw [vectorSpan_range_eq_span_range_vsub_right_ne k p i₁]; rw [Set.finrank]
-  rw
+  rw [← Finset.card_univ] at hc
+  rw [Fintype.subtype_card]
+  simp [Finset.filter_ne', Finset.card_erase_of_mem, hc]
 
 Depends on / 依赖: Finset, Finset.card_erase_of_mem, Finset.card_univ, Finset.filter_ne, Fintype, Fintype.card_pos_iff, Fintype.subtype_card, Nonempty, Set.finrank, affineIndependent_iff_linearIndependent_vsub, card_erase_of_mem, card_pos_iff, card_univ, classical, eq_comm, filter_ne, finrank, linearIndependent_iff_card_eq_finrank_span, subtype_card, vectorSpan_range_eq_span_range_vsub_right_ne
 -/
@@ -692,7 +712,11 @@ lemma AffineIndependent.card_le_card_of_subset_affineSpan
   have := hs'.to_subtype
   have := ht'.to_set.to_subtype
   have direction_le := AffineSubspace.direction_le (affineSpan_mono k hst)
-  rw [AffineSubspace.af
+  rw [AffineSubspace.affineSpan_coe]; rw [direction_affineSpan]; rw [direction_affineSpan]; rw [← @Subtype.range_coe _ (s : Set V)]; rw [← @Subtype.range_coe _ (t : Set V)] at direction_le
+  have finrank_le := add_le_add_left (Submodule.finrank_mono direction_le) 1
+  -- We use `erw` to elide the difference between `↥s` and `↥(s : Set V)}`
+  erw [hs.finrank_vectorSpan_add_one] at finrank_le
+simpa using finrank_le.trans finrank_vectorSpan_range_add_one_le _ _
 
 中文:
 引理 AffineIndependent.card_le_card_of_subset_affineSpan
@@ -705,7 +729,11 @@ lemma AffineIndependent.card_le_card_of_subset_affineSpan
   have := hs'.to_subtype
   have := ht'.to_set.to_subtype
   have direction_le := AffineSubspace.direction_le (affineSpan_mono k hst)
-  rw [AffineSubspace.af
+  rw [AffineSubspace.affineSpan_coe]; rw [direction_affineSpan]; rw [direction_affineSpan]; rw [← @Subtype.range_coe _ (s : Set V)]; rw [← @Subtype.range_coe _ (t : Set V)] at direction_le
+  have finrank_le := add_le_add_left (Submodule.finrank_mono direction_le) 1
+  -- We use `erw` to elide the difference between `↥s` and `↥(s : Set V)}`
+  erw [hs.finrank_vectorSpan_add_one] at finrank_le
+simpa using finrank_le.trans finrank_vectorSpan_range_add_one_le _ _
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.affineSpan_coe, AffineSubspace.direction_le, Set.subset_empty_iff, Submodule, Submodule.finr, Subtype, Subtype.range_coe, add_le_add_left, affineSpan_coe, affineSpan_mono, direction_affineSpan, direction_le, eq_empty_or_nonempty, finrank_le, range_coe, s.eq_empty_or_nonempty, subset_empty_iff, t.eq_empty_or_nonempty, to_set
 -/
@@ -740,7 +768,11 @@ lemma AffineIndependent.card_lt_card_of_affineSpan_lt_affineSpan
   have := hs'.to_subtype
   have := ht'.to_set.to_subtype
 have dir_lt := AffineSubspace.direction_lt_of_nonempty (k := k) hst hs'.to_set.affineSpan k
-  rw [direc
+  rw [direction_affineSpan]; rw [direction_affineSpan]; rw [← @Subtype.range_coe _ (s : Set V)]; rw [← @Subtype.range_coe _ (t : Set V)] at dir_lt
+  have finrank_lt := add_lt_add_left (Submodule.finrank_lt_finrank_of_lt dir_lt) 1
+  -- We use `erw` to elide the difference between `↥s` and `↥(s : Set V)}`
+  erw [hs.finrank_vectorSpan_add_one] at finrank_lt
+simpa using finrank_lt.trans_le finrank_vectorSpan_range_add_one_le _ _
 
 中文:
 引理 AffineIndependent.card_lt_card_of_affineSpan_lt_affineSpan
@@ -753,7 +785,11 @@ have dir_lt := AffineSubspace.direction_lt_of_nonempty (k := k) hst hs'.to_set.a
   have := hs'.to_subtype
   have := ht'.to_set.to_subtype
 have dir_lt := AffineSubspace.direction_lt_of_nonempty (k := k) hst hs'.to_set.affineSpan k
-  rw [direc
+  rw [direction_affineSpan]; rw [direction_affineSpan]; rw [← @Subtype.range_coe _ (s : Set V)]; rw [← @Subtype.range_coe _ (t : Set V)] at dir_lt
+  have finrank_lt := add_lt_add_left (Submodule.finrank_lt_finrank_of_lt dir_lt) 1
+  -- We use `erw` to elide the difference between `↥s` and `↥(s : Set V)}`
+  erw [hs.finrank_vectorSpan_add_one] at finrank_lt
+simpa using finrank_lt.trans_le finrank_vectorSpan_range_add_one_le _ _
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.direction_lt_of_nonempty, Submodule, Submodule.finrank_lt_finrank_of_lt, Subtype, Subtype.range_coe, add_lt_add_left, affineSpan, card_pos, dir_lt, direction_affineSpan, direction_lt_of_nonempty, eq_empty_or_nonempty, finrank_lt, finrank_lt_finrank_of_lt, range_coe, s.eq_empty_or_nonempty, t.eq_empty_or_nonempty, to_set, to_set.affineSpan
 -/
@@ -826,7 +862,7 @@ theorem AffineIndependent.affineSpan_image_finset_eq_of_le_of_card_eq_finrank_ad
   refine eq_of_direction_eq_of_nonempty_of_le ?_ ((hn.image p).to_set.affineSpan k) hle
   have hd := direction_le hle
   rw [direction_affineSpan] at hd ⊢
-  exact hi.vectorSpan_image_finset_eq_of_le_of_card_eq_
+  exact hi.vectorSpan_image_finset_eq_of_le_of_card_eq_finrank_add_one hd hc
 
 中文:
 定理 AffineIndependent.affineSpan_image_finset_eq_of_le_of_card_eq_finrank_add_one
@@ -837,7 +873,7 @@ theorem AffineIndependent.affineSpan_image_finset_eq_of_le_of_card_eq_finrank_ad
   refine eq_of_direction_eq_of_nonempty_of_le ?_ ((hn.image p).to_set.affineSpan k) hle
   have hd := direction_le hle
   rw [direction_affineSpan] at hd ⊢
-  exact hi.vectorSpan_image_finset_eq_of_le_of_card_eq_
+  exact hi.vectorSpan_image_finset_eq_of_le_of_card_eq_finrank_add_one hd hc
 
 Depends on / 依赖: Finset, Finset.card_pos, Nat.succ_pos, Nonempty, affineSpan, card_pos, direction_affineSpan, direction_le, eq_of_direction_eq_of_nonempty_of_le, hi.vectorSpan_image_finset_eq_of_le_of_card_eq_finrank_add_one, hn.image, s.Nonempty, succ_pos, to_set, to_set.affineSpan, vectorSpan_image_finset_eq_of_le_of_card_eq_finrank_add_one
 -/
@@ -898,7 +934,10 @@ theorem AffineIndependent.affineSpan_eq_top_iff_card_eq_finrank_add_one
     let n := Fintype.card ι - 1
     have hn : Fintype.card ι = n + 1 :=
       (Nat.succ_pred_eq_of_pos (card_pos_of_affineSpan_eq_top k V P h_tot)).symm
-    rw [hn]; rw [← finrank_top]; rw [← (vectorSpan_eq_top_of_affineSpan_eq_top k V P) h_tot]; rw [← hi.finrank_vec
+    rw [hn]; rw [← finrank_top]; rw [← (vectorSpan_eq_top_of_affineSpan_eq_top k V P) h_tot]; rw [← hi.finrank_vectorSpan hn]
+  · intro hc
+    rw [← finrank_top]; rw [← direction_top k V P] at hc
+    exact hi.affineSpan_eq_of_le_of_card_eq_finrank_add_one le_top hc
 
 中文:
 定理 AffineIndependent.affineSpan_eq_top_iff_card_eq_finrank_add_one
@@ -909,7 +948,10 @@ theorem AffineIndependent.affineSpan_eq_top_iff_card_eq_finrank_add_one
     let n := Fintype.card ι - 1
     have hn : Fintype.card ι = n + 1 :=
       (Nat.succ_pred_eq_of_pos (card_pos_of_affineSpan_eq_top k V P h_tot)).symm
-    rw [hn]; rw [← finrank_top]; rw [← (vectorSpan_eq_top_of_affineSpan_eq_top k V P) h_tot]; rw [← hi.finrank_vec
+    rw [hn]; rw [← finrank_top]; rw [← (vectorSpan_eq_top_of_affineSpan_eq_top k V P) h_tot]; rw [← hi.finrank_vectorSpan hn]
+  · intro hc
+    rw [← finrank_top]; rw [← direction_top k V P] at hc
+    exact hi.affineSpan_eq_of_le_of_card_eq_finrank_add_one le_top hc
 
 Depends on / 依赖: Fintype, Fintype.card, Nat.succ_pred_eq_of_pos, affineSpan_eq_of_le_of_card_eq_finrank_add_one, card_pos_of_affineSpan_eq_top, direction_top, finrank_top, finrank_vectorSpan, h_tot, hi.affineSpan_eq_of_le_of_card_eq_finrank_add_one, hi.finrank_vectorSpan, le_top, succ_pred_eq_of_pos, vectorSpan_eq_top_of_affineSpan_eq_top
 -/
@@ -959,7 +1001,8 @@ instance finiteDimensional_vectorSpan_insert
   · rw [coe_eq_bot_iff] at hs
     rw [hs]; rw [bot_coe]; rw [span_empty]; rw [bot_coe]; rw [direction_affineSpan]
     convert! finiteDimensional_bot k V <;> simp
-  · 
+  · rw [affineSpan_coe, direction_affineSpan_insert hp₀]
+    infer_instance
 
 中文:
 实例 finiteDimensional_vectorSpan_insert
@@ -970,7 +1013,8 @@ instance finiteDimensional_vectorSpan_insert
   · rw [coe_eq_bot_iff] at hs
     rw [hs]; rw [bot_coe]; rw [span_empty]; rw [bot_coe]; rw [direction_affineSpan]
     convert! finiteDimensional_bot k V <;> simp
-  · 
+  · rw [affineSpan_coe, direction_affineSpan_insert hp₀]
+    infer_instance
 
 Depends on / 依赖: affineSpan_coe, affineSpan_insert_affineSpan, bot_coe, coe_eq_bot_iff, convert, direction_affineSpan, direction_affineSpan_insert, eq_empty_or_nonempty, finiteDimensional_bot, infer_instance, span_empty
 -/
@@ -1267,7 +1311,20 @@ theorem collinear_iff_of_mem
     use r
     rw [eq_vadd_iff_vsub_eq]
     exact hr.symm
-  · rintro ⟨v, hp
+  · rintro ⟨v, hp₀v⟩
+    use v
+    intro w hw
+    have hs : vectorSpan k s <= k ∙ v := by
+      rw [vectorSpan_eq_span_vsub_set_right k h]; rw [Submodule.span_le]; rw [Set.subset_def]
+      intro x hx
+      rw [SetLike.mem_coe]; rw [Submodule.mem_span_singleton]
+      rw [Set.mem_image] at hx
+      rcases hx with ⟨p, hp, rfl⟩
+      rcases hp₀v p hp with ⟨r, rfl⟩
+      use r
+      simp
+    have hw' := SetLike.le_def.1 hs hw
+    rwa [Submodule.mem_span_singleton] at hw'
 
 中文:
 定理 collinear_iff_of_mem
@@ -1282,7 +1339,20 @@ theorem collinear_iff_of_mem
     use r
     rw [eq_vadd_iff_vsub_eq]
     exact hr.symm
-  · rintro ⟨v, hp
+  · rintro ⟨v, hp₀v⟩
+    use v
+    intro w hw
+    have hs : vectorSpan k s <= k ∙ v := by
+      rw [vectorSpan_eq_span_vsub_set_right k h]; rw [Submodule.span_le]; rw [Set.subset_def]
+      intro x hx
+      rw [SetLike.mem_coe]; rw [Submodule.mem_span_singleton]
+      rw [Set.mem_image] at hx
+      rcases hx with ⟨p, hp, rfl⟩
+      rcases hp₀v p hp with ⟨r, rfl⟩
+      use r
+      simp
+    have hw' := SetLike.le_def.1 hs hw
+    rwa [Submodule.mem_span_singleton] at hw'
 
 Depends on / 依赖: Set.mem_imag, Set.subset_def, SetLike, SetLike.mem_coe, Submodule, Submodule.le_span_singleton_iff, Submodule.mem_span_singleton, Submodule.span_le, collinear_iff_rank_le_one, eq_vadd_iff_vsub_eq, hr.symm, le_span_singleton_iff, mem_coe, mem_imag, mem_span_singleton, rank_submodule_le_one_iff, simp_rw, span_le, subset_def, vectorSpan
 -/
@@ -1329,7 +1399,8 @@ theorem collinear_iff_exists_forall_eq_smul_vadd
       intro p₂ hp₂
       rcases hv p₂ hp₂ with ⟨r, rfl⟩
       rcases hv p₁ hp₁ with ⟨r₁, rfl⟩
-
+      use r - r₁
+      simp [vadd_vadd, ← add_smul]
 
 中文:
 定理 collinear_iff_存在_对任意_eq_smul_vadd
@@ -1345,7 +1416,8 @@ theorem collinear_iff_exists_forall_eq_smul_vadd
       intro p₂ hp₂
       rcases hv p₂ hp₂ with ⟨r, rfl⟩
       rcases hv p₁ hp₁ with ⟨r₁, rfl⟩
-
+      use r - r₁
+      simp [vadd_vadd, ← add_smul]
 
 Depends on / 依赖: Set.eq_empty_or_nonempty, add_smul, collinear_empty, collinear_iff_of_mem, eq_empty_or_nonempty, vadd_vadd
 -/
@@ -1504,14 +1576,14 @@ theorem affineIndependent_iff_not_collinear_of_ne
   statement: {p : Fin 3 -> P} {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂)
   proof: by
   have hu : (Finset.univ : Finset (Fin 3)) = {i₁, i₂, i₃} := by decide +revert
-  rw [affineIndependent_iff_not_collinear]; rw [← Set.image_univ]; rw [← Finset.coe_univ]; rw [hu]; rw [Finset.coe_insert]; rw [Finset.coe_insert]; rw [Finset.coe_singleton]; rw [Set.image_insert_eq]; rw [Set.image_pai
+  rw [affineIndependent_iff_not_collinear]; rw [← Set.image_univ]; rw [← Finset.coe_univ]; rw [hu]; rw [Finset.coe_insert]; rw [Finset.coe_insert]; rw [Finset.coe_singleton]; rw [Set.image_insert_eq]; rw [Set.image_pair]
 
 中文:
 定理 affineIndependent_iff_not_collinear_of_ne
   结论: {p : 有限集 3 -> P} {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂)
   证明: by
   have hu : (Finset.univ : Finset (Fin 3)) = {i₁, i₂, i₃} := by decide +revert
-  rw [affineIndependent_iff_not_collinear]; rw [← Set.image_univ]; rw [← Finset.coe_univ]; rw [hu]; rw [Finset.coe_insert]; rw [Finset.coe_insert]; rw [Finset.coe_singleton]; rw [Set.image_insert_eq]; rw [Set.image_pai
+  rw [affineIndependent_iff_not_collinear]; rw [← Set.image_univ]; rw [← Finset.coe_univ]; rw [hu]; rw [Finset.coe_insert]; rw [Finset.coe_insert]; rw [Finset.coe_singleton]; rw [Set.image_insert_eq]; rw [Set.image_pair]
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.coe_singleton, Finset.coe_univ, Finset.univ, Set.image_insert_eq, Set.image_pair, Set.image_univ, affineIndependent_iff_not_collinear, coe_insert, coe_singleton, coe_univ, image_insert_eq, image_pair, image_univ, revert
 -/
@@ -1693,7 +1765,7 @@ theorem Collinear.collinear_insert_iff_of_ne
   have hv : vectorSpan k (insert p₁ s) = vectorSpan k ({p₁, p₂, p₃} : Set P) := by
     conv_rhs => rw [← direction_affineSpan, ← affineSpan_insert_affineSpan]
     rw [← direction_affineSpan]; rw [← affineSpan_insert_affineSpan]; rw [h.affineSpan_eq_of_ne hp₂ hp₃ hp₂p₃]
-  rw [Collinear]; rw [Colli
+  rw [Collinear]; rw [Collinear]; rw [hv]
 
 中文:
 定理 Collinear.collinear_insert_iff_of_ne
@@ -1702,7 +1774,7 @@ theorem Collinear.collinear_insert_iff_of_ne
   have hv : vectorSpan k (insert p₁ s) = vectorSpan k ({p₁, p₂, p₃} : Set P) := by
     conv_rhs => rw [← direction_affineSpan, ← affineSpan_insert_affineSpan]
     rw [← direction_affineSpan]; rw [← affineSpan_insert_affineSpan]; rw [h.affineSpan_eq_of_ne hp₂ hp₃ hp₂p₃]
-  rw [Collinear]; rw [Colli
+  rw [Collinear]; rw [Collinear]; rw [hv]
 
 Depends on / 依赖: Collinear, affineSpan_eq_of_ne, affineSpan_insert_affineSpan, conv_rhs, direction_affineSpan, h.affineSpan_eq_of_ne, insert, vectorSpan
 -/
@@ -1796,7 +1868,8 @@ theorem collinear_insert_insert_insert_of_mem_affineSpan_pair
   rw [collinear_insert_iff_of_mem_affineSpan
       ((AffineSubspace.le_def' _ _).1
         (affineSpan_mono k ((Set.subset_insert _ _).trans (Set.subset_insert _ _))) _ h₁)]; rw [collinear_insert_iff_of_mem_affineSpan
-      ((AffineSubspace.le_def' _ _).1 (affineSpan_mono k (Set.subset_insert _ _
+      ((AffineSubspace.le_def' _ _).1 (affineSpan_mono k (Set.subset_insert _ _)) _ h₂)]; rw [collinear_insert_iff_of_mem_affineSpan h₃]
+  exact collinear_pair _ _ _
 
 中文:
 定理 collinear_insert_insert_insert_of_mem_affineSpan_pair
@@ -1805,7 +1878,8 @@ theorem collinear_insert_insert_insert_of_mem_affineSpan_pair
   rw [collinear_insert_iff_of_mem_affineSpan
       ((AffineSubspace.le_def' _ _).1
         (affineSpan_mono k ((Set.subset_insert _ _).trans (Set.subset_insert _ _))) _ h₁)]; rw [collinear_insert_iff_of_mem_affineSpan
-      ((AffineSubspace.le_def' _ _).1 (affineSpan_mono k (Set.subset_insert _ _
+      ((AffineSubspace.le_def' _ _).1 (affineSpan_mono k (Set.subset_insert _ _)) _ h₂)]; rw [collinear_insert_iff_of_mem_affineSpan h₃]
+  exact collinear_pair _ _ _
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.le_def, Set.subset_insert, affineSpan_mono, collinear_insert_iff_of_mem_affineSpan, collinear_pair, le_def, subset_insert
 -/
@@ -1880,7 +1954,10 @@ theorem affineIndependent_of_affineIndependent_collinear_ne
   have h1 : Collinear k {p₁, p₃, p₂, p} := by
     apply collinear_insert_insert_of_mem_affineSpan_pair
     · apply Collinear.mem_affineSpan_of_mem_of_ne h (by simp) (by simp) (by simp) hne
-    · apply Collinear.mem_affineSpan_of_mem_of_
+    · apply Collinear.mem_affineSpan_of_mem_of_ne hcol (by simp) (by simp) (by simp) hne
+  have h2 : Collinear k {p₁, p₂, p₃} := h1.subset (by grind)
+  rw [affineIndependent_iff_not_collinear_set] at ha
+  exact ha h2
 
 中文:
 定理 affineIndependent_of_affineIndependent_collinear_ne
@@ -1891,7 +1968,10 @@ theorem affineIndependent_of_affineIndependent_collinear_ne
   have h1 : Collinear k {p₁, p₃, p₂, p} := by
     apply collinear_insert_insert_of_mem_affineSpan_pair
     · apply Collinear.mem_affineSpan_of_mem_of_ne h (by simp) (by simp) (by simp) hne
-    · apply Collinear.mem_affineSpan_of_mem_of_
+    · apply Collinear.mem_affineSpan_of_mem_of_ne hcol (by simp) (by simp) (by simp) hne
+  have h2 : Collinear k {p₁, p₂, p₃} := h1.subset (by grind)
+  rw [affineIndependent_iff_not_collinear_set] at ha
+  exact ha h2
 
 Depends on / 依赖: Collinear, Collinear.mem_affineSpan_of_mem_of_ne, affineIndependent_iff_not_collinear_set, collinear_insert_insert_of_mem_affineSpan_pair, h1.subset, mem_affineSpan_of_mem_of_ne, subset
 -/
@@ -2181,7 +2261,27 @@ theorem finrank_vectorSpan_insert_le
       intro h
       have h' : s.direction <= vectorSpan k (insert p (s : Set P)) := by
         conv_lhs => rw [← affineSpan_coe s, direction_affineSpan]
-        ex
+        exact vectorSpan_mono k (Set.subset_insert _ _)
+      exact hf (Submodule.finiteDimensional_of_le h')
+    rw [finrank_of_infinite_dimensional hf]; rw [finrank_of_infinite_dimensional hf']; rw [zero_add]
+    exact zero_le_one
+  rw [← direction_affineSpan]; rw [← affineSpan_insert_affineSpan]
+  rcases (s : Set P).eq_empty_or_nonempty with (hs | ⟨p₀, hp₀⟩)
+  · rw [coe_eq_bot_iff] at hs
+    rw [hs]; rw [bot_coe]; rw [span_empty]; rw [bot_coe]; rw [direction_affineSpan]; rw [direction_bot]; rw [finrank_bot]; rw [zero_add]
+    convert! zero_le_one' Nat
+    rw [← finrank_bot k V]
+    convert! rfl <;> simp
+  · rw [affineSpan_coe, direction_affineSpan_insert hp₀, add_comm]
+    refine (Submodule.finrank_add_le_finrank_add_finrank _ _).trans ?_
+    gcongr
+    refine finrank_le_one ⟨p -ᵥ p₀, Submodule.mem_span_singleton_self _⟩ fun v => ?_
+    have h := v.property
+    rw [Submodule.mem_span_singleton] at h
+    rcases h with ⟨c, hc⟩
+    refine ⟨c, ?_⟩
+    ext
+    exact hc
 
 中文:
 定理 finrank_vectorSpan_insert_le
@@ -2192,7 +2292,27 @@ theorem finrank_vectorSpan_insert_le
       intro h
       have h' : s.direction <= vectorSpan k (insert p (s : Set P)) := by
         conv_lhs => rw [← affineSpan_coe s, direction_affineSpan]
-        ex
+        exact vectorSpan_mono k (Set.subset_insert _ _)
+      exact hf (Submodule.finiteDimensional_of_le h')
+    rw [finrank_of_infinite_dimensional hf]; rw [finrank_of_infinite_dimensional hf']; rw [zero_add]
+    exact zero_le_one
+  rw [← direction_affineSpan]; rw [← affineSpan_insert_affineSpan]
+  rcases (s : Set P).eq_empty_or_nonempty with (hs | ⟨p₀, hp₀⟩)
+  · rw [coe_eq_bot_iff] at hs
+    rw [hs]; rw [bot_coe]; rw [span_empty]; rw [bot_coe]; rw [direction_affineSpan]; rw [direction_bot]; rw [finrank_bot]; rw [zero_add]
+    convert! zero_le_one' Nat
+    rw [← finrank_bot k V]
+    convert! rfl <;> simp
+  · rw [affineSpan_coe, direction_affineSpan_insert hp₀, add_comm]
+    refine (Submodule.finrank_add_le_finrank_add_finrank _ _).trans ?_
+    gcongr
+    refine finrank_le_one ⟨p -ᵥ p₀, Submodule.mem_span_singleton_self _⟩ fun v => ?_
+    have h := v.property
+    rw [Submodule.mem_span_singleton] at h
+    rcases h with ⟨c, hc⟩
+    refine ⟨c, ?_⟩
+    ext
+    exact hc
 
 Depends on / 依赖: FiniteDimensional, Set.subset_insert, Submodule, Submodule.finiteDimensional_of_le, affineSpan_coe, conv_lhs, direction, direction_affineS, direction_affineSpan, finiteDimensional_of_le, finrank_of_infinite_dimensional, insert, s.direction, subset_insert, vectorSpan, vectorSpan_mono, zero_add, zero_le_one
 -/
@@ -2355,7 +2475,7 @@ theorem Affine.Simplex.collinear_point_centroid_faceOppositeCentroid
   have h : s.points i = (-n : k) • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.centroid := by
     rw [← neg_vsub_eq_vsub_rev]; rw [neg_smul_neg]; rw [← point_vsub_centroid_eq_smul_vsub]; rw [vsub_vadd]
   rw [h]
-  exact smul_vsub_vadd_mem_affineSpa
+  exact smul_vsub_vadd_mem_affineSpan_pair _ _ _
 
 中文:
 定理 仿射.单纯形.collinear_point_centroid_faceOppositeCentroid
@@ -2365,7 +2485,7 @@ theorem Affine.Simplex.collinear_point_centroid_faceOppositeCentroid
   have h : s.points i = (-n : k) • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.centroid := by
     rw [← neg_vsub_eq_vsub_rev]; rw [neg_smul_neg]; rw [← point_vsub_centroid_eq_smul_vsub]; rw [vsub_vadd]
   rw [h]
-  exact smul_vsub_vadd_mem_affineSpa
+  exact smul_vsub_vadd_mem_affineSpan_pair _ _ _
 
 Depends on / 依赖: centroid, collinear_insert_of_mem_affineSpan_pair, faceOppositeCentroid, neg_smul_neg, neg_vsub_eq_vsub_rev, point_vsub_centroid_eq_smul_vsub, points, s.centroid, s.faceOppositeCentroid, s.points, smul_vsub_vadd_mem_affineSpan_pair, vsub_vadd
 -/
@@ -2541,7 +2661,9 @@ theorem finrank_eq
       have ⟨p⟩ : Nonempty P := inferInstance
 .finrank_eq .symm.congrLeftₗ S W AffineEquiv.vaddConst R p
     _ = Module.finrank S (W × (V ->ₗ[R] W)) := (AffineMap.toConstProdLinearMap S).finrank_eq
-    _ = (Module.finrank R V + 1) * Module.finrank S W := 
+    _ = (Module.finrank R V + 1) * Module.finrank S W := by
+      rw [Module.finrank_prod]; rw [Module.finrank_linearMap]
+      ring
 
 中文:
 定理 finrank_eq
@@ -2551,7 +2673,9 @@ theorem finrank_eq
       have ⟨p⟩ : Nonempty P := inferInstance
 .finrank_eq .symm.congrLeftₗ S W AffineEquiv.vaddConst R p
     _ = Module.finrank S (W × (V ->ₗ[R] W)) := (AffineMap.toConstProdLinearMap S).finrank_eq
-    _ = (Module.finrank R V + 1) * Module.finrank S W := 
+    _ = (Module.finrank R V + 1) * Module.finrank S W := by
+      rw [Module.finrank_prod]; rw [Module.finrank_linearMap]
+      ring
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.vaddConst, AffineMap, AffineMap.toConstProdLinearMap, Module, Module.finrank, Module.finrank_linearMap, Module.finrank_prod, Nonempty, finrank, finrank_eq, finrank_linearMap, finrank_prod, symm.congrLeft, toConstProdLinearMap, vaddConst
 -/

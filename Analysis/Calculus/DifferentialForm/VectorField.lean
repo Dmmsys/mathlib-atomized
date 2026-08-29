@@ -57,7 +57,18 @@ theorem extDerivWithin_apply_vectorField
   symm
   simp only [extDerivWithin_apply,
     fderivWithin_continuousAlternatingMap_apply_const_apply,
-    fderivWithin_continuousAlternatingMap_apply_apply hω (H₀ _) hsx, 
+    fderivWithin_continuousAlternatingMap_apply_apply hω (H₀ _) hsx, *,
+    smul_add, sum_add_distrib, add_sub_assoc, add_eq_left, sub_eq_zero, smul_sum]
+  rw [Fin.sum_sum_eq_sum_triangle_add]
+  refine Fintype.sum_congr _ _ fun i => sum_congr rfl fun j hj => ?_
+  rw [mem_Ici] at hj
+  simp only [← Fin.insertNth_removeNth, map_insertNth]
+  rw [Fin.removeNth_removeNth_eq_swap]
+  have H₁ : i.castSucc.succAbove j = j.succ := by simp [Fin.succAbove_of_le_castSucc, hj]
+  have H₂ : j.predAbove i.castSucc = i := by simp [Fin.predAbove_of_le_castSucc, hj]
+  have H₃ : j.succ.succAbove i = i.castSucc := by simp [Fin.succAbove_of_castSucc_lt, hj]
+  simp +unfoldPartialApp [pow_add, lieBracketWithin, mul_smul, smul_comm ((-1) ^ (j : Nat)), smul_sub,
+      ← sub_eq_add_neg, H₁, H₂, H₃, Fin.removeNth]
 
 中文:
 定理 extDerivWithin_apply_vectorField
@@ -67,7 +78,18 @@ theorem extDerivWithin_apply_vectorField
   symm
   simp only [extDerivWithin_apply,
     fderivWithin_continuousAlternatingMap_apply_const_apply,
-    fderivWithin_continuousAlternatingMap_apply_apply hω (H₀ _) hsx, 
+    fderivWithin_continuousAlternatingMap_apply_apply hω (H₀ _) hsx, *,
+    smul_add, sum_add_distrib, add_sub_assoc, add_eq_left, sub_eq_zero, smul_sum]
+  rw [Fin.sum_sum_eq_sum_triangle_add]
+  refine Fintype.sum_congr _ _ fun i => sum_congr rfl fun j hj => ?_
+  rw [mem_Ici] at hj
+  simp only [← Fin.insertNth_removeNth, map_insertNth]
+  rw [Fin.removeNth_removeNth_eq_swap]
+  have H₁ : i.castSucc.succAbove j = j.succ := by simp [Fin.succAbove_of_le_castSucc, hj]
+  have H₂ : j.predAbove i.castSucc = i := by simp [Fin.predAbove_of_le_castSucc, hj]
+  have H₃ : j.succ.succAbove i = i.castSucc := by simp [Fin.succAbove_of_castSucc_lt, hj]
+  simp +unfoldPartialApp [pow_add, lieBracketWithin, mul_smul, smul_comm ((-1) ^ (j : Nat)), smul_sub,
+      ← sub_eq_add_neg, H₁, H₂, H₃, Fin.removeNth]
 
 Depends on / 依赖: DifferentiableWithinAt, Fin.sum_sum_eq_sum_triangle_add, Fintype, Fintype.sum_congr, add_eq_left, add_sub_assoc, extDerivWithin_apply, fderivWithin_continuousAlternatingMap_apply_apply, fderivWithin_continuousAlternatingMap_apply_const_apply, i.removeNth, mem_Ici, removeNth, smul_add, smul_sum, sub_eq_zero, sum_add_distrib, sum_congr, sum_sum_eq_sum_triangle_add
 -/
@@ -144,7 +166,9 @@ theorem extDerivWithin_apply_vectorField_of_pairwise_commute
       fderivWithin_continuousAlternatingMap_apply_apply, *]
   | succ n =>
     rw [extDerivWithin_apply_vectorField hω hV hsx]; rw [sub_eq_self]
-    refine Fintype.sum_eq_zero _ fun 
+    refine Fintype.sum_eq_zero _ fun i => sum_eq_zero fun j hj => ?_
+    rw [hcomm (ne_of_lt <| by simpa using hj)]; rw [(ω x).map_coord_zero 0] <;>
+      simp
 
 中文:
 定理 extDerivWithin_apply_vectorField_of_pairwise_commute
@@ -155,7 +179,9 @@ theorem extDerivWithin_apply_vectorField_of_pairwise_commute
       fderivWithin_continuousAlternatingMap_apply_apply, *]
   | succ n =>
     rw [extDerivWithin_apply_vectorField hω hV hsx]; rw [sub_eq_self]
-    refine Fintype.sum_eq_zero _ fun 
+    refine Fintype.sum_eq_zero _ fun i => sum_eq_zero fun j hj => ?_
+    rw [hcomm (ne_of_lt <| by simpa using hj)]; rw [(ω x).map_coord_zero 0] <;>
+      simp
 
 Depends on / 依赖: Fintype, Fintype.sum_eq_zero, extDerivWithin_apply, extDerivWithin_apply_vectorField, fderivWithin_continuousAlternatingMap_apply_apply, fderivWithin_continuousAlternatingMap_apply_const_apply, map_coord_zero, ne_of_lt, sub_eq_self, sum_eq_zero
 -/

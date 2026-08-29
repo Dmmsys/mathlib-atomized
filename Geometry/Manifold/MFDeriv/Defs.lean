@@ -218,7 +218,44 @@ theorem differentiableWithinAt_localInvariantProp
       intro s x u f u_open xu
       have : I.symm ⁻¹' (s inter u) inter Set.range I = I.symm ⁻¹' s inter Set.range I inter I.symm ⁻¹' u := by
         simp only [Set.inter_right_comm, Set.preimage_inter]
-      rw [DifferentiableWithinAtProp]; rw [DifferentiableWithinAtProp]; rw [this
+      rw [DifferentiableWithinAtProp]; rw [DifferentiableWithinAtProp]; rw [this]
+      symm
+      apply differentiableWithinAt_inter
+      have : u in 𝓝 (I.symm (I x)) := by
+        rw [ModelWithCorners.left_inv]
+        exact u_open.mem_nhds xu
+      apply I.continuous_symm.continuousAt this
+    right_invariance' := by
+      intro s x f e he hx h
+      rw [DifferentiableWithinAtProp] at h ⊢
+      have : I x = (I ∘ e.symm ∘ I.symm) (I (e x)) := by simp only [hx, mfld_simps]
+      rw [this] at h
+      have : I (e x) in I.symm ⁻¹' e.target inter Set.range I := by simp only [hx, mfld_simps]
+      have := (mem_groupoid_of_pregroupoid.2 he).2.contDiffWithinAt this
+      convert! (h.comp' _ (this.differentiableWithinAt one_ne_zero)).mono_of_mem_nhdsWithin _
+        using 1
+      · ext y; simp only [mfld_simps]
+      refine
+        mem_nhdsWithin.mpr
+          ⟨I.symm ⁻¹' e.target, e.open_target.preimage I.continuous_symm, by
+            simp_rw [Set.mem_preimage, I.left_inv, e.mapsTo hx], ?_⟩
+      mfld_set_tac
+    congr_of_forall := by
+      intro s x f g h hx hf
+      apply hf.congr
+      · intro y hy
+        simp only [mfld_simps] at hy
+        simp only [h, hy, mfld_simps]
+      · simp only [hx, mfld_simps]
+    left_invariance' := by
+      intro s x f e' he' hs hx h
+      rw [DifferentiableWithinAtProp] at h ⊢
+      have A : (I' ∘ f ∘ I.symm) (I x) in I'.symm ⁻¹' e'.source inter Set.range I' := by
+        simp only [hx, mfld_simps]
+      have := (mem_groupoid_of_pregroupoid.2 he').1.contDiffWithinAt A
+      convert! (this.differentiableWithinAt one_ne_zero).comp _ h _
+      · ext y; simp only [mfld_simps]
+      · intro y hy; simp only [mfld_simps] at hy; simpa only [hy, mfld_simps] using hs hy.1 }
 
 中文:
 定理 differentiableWithinAt_localInvariantProp
@@ -226,7 +263,44 @@ theorem differentiableWithinAt_localInvariantProp
       intro s x u f u_open xu
       have : I.symm ⁻¹' (s inter u) inter Set.range I = I.symm ⁻¹' s inter Set.range I inter I.symm ⁻¹' u := by
         simp only [Set.inter_right_comm, Set.preimage_inter]
-      rw [DifferentiableWithinAtProp]; rw [DifferentiableWithinAtProp]; rw [this
+      rw [DifferentiableWithinAtProp]; rw [DifferentiableWithinAtProp]; rw [this]
+      symm
+      apply differentiableWithinAt_inter
+      have : u in 𝓝 (I.symm (I x)) := by
+        rw [ModelWithCorners.left_inv]
+        exact u_open.mem_nhds xu
+      apply I.continuous_symm.continuousAt this
+    right_invariance' := by
+      intro s x f e he hx h
+      rw [DifferentiableWithinAtProp] at h ⊢
+      have : I x = (I ∘ e.symm ∘ I.symm) (I (e x)) := by simp only [hx, mfld_simps]
+      rw [this] at h
+      have : I (e x) in I.symm ⁻¹' e.target inter Set.range I := by simp only [hx, mfld_simps]
+      have := (mem_groupoid_of_pregroupoid.2 he).2.contDiffWithinAt this
+      convert! (h.comp' _ (this.differentiableWithinAt one_ne_zero)).mono_of_mem_nhdsWithin _
+        using 1
+      · ext y; simp only [mfld_simps]
+      refine
+        mem_nhdsWithin.mpr
+          ⟨I.symm ⁻¹' e.target, e.open_target.preimage I.continuous_symm, by
+            simp_rw [Set.mem_preimage, I.left_inv, e.mapsTo hx], ?_⟩
+      mfld_set_tac
+    congr_of_forall := by
+      intro s x f g h hx hf
+      apply hf.congr
+      · intro y hy
+        simp only [mfld_simps] at hy
+        simp only [h, hy, mfld_simps]
+      · simp only [hx, mfld_simps]
+    left_invariance' := by
+      intro s x f e' he' hs hx h
+      rw [DifferentiableWithinAtProp] at h ⊢
+      have A : (I' ∘ f ∘ I.symm) (I x) in I'.symm ⁻¹' e'.source inter Set.range I' := by
+        simp only [hx, mfld_simps]
+      have := (mem_groupoid_of_pregroupoid.2 he').1.contDiffWithinAt A
+      convert! (this.differentiableWithinAt one_ne_zero).comp _ h _
+      · ext y; simp only [mfld_simps]
+      · intro y hy; simp only [mfld_simps] at hy; simpa only [hy, mfld_simps] using hs hy.1 }
 
 Depends on / 依赖: DifferentiableWithinAtProp, I.continuous_symm.continuousAt, I.symm, ModelWithCorners, ModelWithCorners.left_inv, Set.inter_right_comm, Set.preimage_inter, Set.range, continuousAt, continuous_symm, differentiableWithinAt_inter, inter_right_comm, is_local, left_inv, mem_nhds, preimage_inter, right_invariance, u_open, u_open.mem_nhds
 -/

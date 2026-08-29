@@ -282,7 +282,8 @@ theorem coordChangeL_prod
   change
     (e₁.prod e₂).coordChangeL 𝕜 (e₁'.prod e₂') b (v₁, v₂) =
       (e₁.coordChangeL 𝕜 e₁' b v₁, e₂.coordChangeL 𝕜 e₂' b v₂)
-  rw [e₁.coordChangeL_apply e₁']; rw [e₂.coordChangeL_apply e₂']; rw [(e₁
+  rw [e₁.coordChangeL_apply e₁']; rw [e₂.coordChangeL_apply e₂']; rw [(e₁.prod e₂).coordChangeL_apply']
+  exacts [rfl, hb, ⟨hb.1.2, hb.2.2⟩, ⟨hb.1.1, hb.2.1⟩]
 
 中文:
 定理 coordChangeL_prod
@@ -293,7 +294,8 @@ theorem coordChangeL_prod
   change
     (e₁.prod e₂).coordChangeL 𝕜 (e₁'.prod e₂') b (v₁, v₂) =
       (e₁.coordChangeL 𝕜 e₁' b v₁, e₂.coordChangeL 𝕜 e₂' b v₂)
-  rw [e₁.coordChangeL_apply e₁']; rw [e₂.coordChangeL_apply e₂']; rw [(e₁
+  rw [e₁.coordChangeL_apply e₁']; rw [e₂.coordChangeL_apply e₂']; rw [(e₁.prod e₂).coordChangeL_apply']
+  exacts [rfl, hb, ⟨hb.1.2, hb.2.2⟩, ⟨hb.1.1, hb.2.1⟩]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_prodMap, ContinuousLinearMap.ext_iff, coe_prodMap, coordChangeL, coordChangeL_apply, exacts, ext_iff
 -/
@@ -353,7 +355,16 @@ instance VectorBundle.prod
     rintro _ _ ⟨e₁, e₂, he₁, he₂, rfl⟩ ⟨e₁', e₂', he₁', he₂', rfl⟩
     refine (((continuousOn_coordChange 𝕜 e₁ e₁').mono ?_).prod_mapL 𝕜
       ((continuousOn_coordChange 𝕜 e₂ e₂').mono ?_)).congr ?_ <;>
-    
+      dsimp only [prod_baseSet, mfld_simps]
+    · mfld_set_tac
+    · mfld_set_tac
+    · rintro b hb
+      rw [ContinuousLinearMap.ext_iff]
+      rintro ⟨v₁, v₂⟩
+      change (e₁.prod e₂).coordChangeL 𝕜 (e₁'.prod e₂') b (v₁, v₂) =
+        (e₁.coordChangeL 𝕜 e₁' b v₁, e₂.coordChangeL 𝕜 e₂' b v₂)
+      rw [e₁.coordChangeL_apply e₁']; rw [e₂.coordChangeL_apply e₂']; rw [(e₁.prod e₂).coordChangeL_apply']
+      exacts [rfl, hb, ⟨hb.1.2, hb.2.2⟩, ⟨hb.1.1, hb.2.1⟩]
 
 中文:
 实例 向量丛.乘积
@@ -365,7 +376,16 @@ instance VectorBundle.prod
     rintro _ _ ⟨e₁, e₂, he₁, he₂, rfl⟩ ⟨e₁', e₂', he₁', he₂', rfl⟩
     refine (((continuousOn_coordChange 𝕜 e₁ e₁').mono ?_).prod_mapL 𝕜
       ((continuousOn_coordChange 𝕜 e₂ e₂').mono ?_)).congr ?_ <;>
-    
+      dsimp only [prod_baseSet, mfld_simps]
+    · mfld_set_tac
+    · mfld_set_tac
+    · rintro b hb
+      rw [ContinuousLinearMap.ext_iff]
+      rintro ⟨v₁, v₂⟩
+      change (e₁.prod e₂).coordChangeL 𝕜 (e₁'.prod e₂') b (v₁, v₂) =
+        (e₁.coordChangeL 𝕜 e₁' b v₁, e₂.coordChangeL 𝕜 e₂' b v₂)
+      rw [e₁.coordChangeL_apply e₁']; rw [e₂.coordChangeL_apply e₂']; rw [(e₁.prod e₂).coordChangeL_apply']
+      exacts [rfl, hb, ⟨hb.1.2, hb.2.2⟩, ⟨hb.1.1, hb.2.1⟩]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.ext_iff, continuousOn_coordChange, coordChangeL, ext_iff, infer_instance, mfld_set_tac, mfld_simps, prod_baseSet, prod_mapL
 -/
@@ -525,7 +545,9 @@ instance VectorBundle.pullback
     refine ((continuousOn_coordChange 𝕜 e e').comp
       (map_continuous f).continuousOn fun b hb => hb).congr ?_
     rintro b (hb : f b in e.baseSet inter e'.baseSet); ext v
-
+    change ((e.pullback f).coordChangeL 𝕜 (e'.pullback f) b) v = (e.coordChangeL 𝕜 e' (f b)) v
+    rw [e.coordChangeL_apply e' hb]; rw [(e.pullback f).coordChangeL_apply' _]
+    exacts [rfl, hb]
 
 中文:
 实例 向量丛.pullback
@@ -538,7 +560,9 @@ instance VectorBundle.pullback
     refine ((continuousOn_coordChange 𝕜 e e').comp
       (map_continuous f).continuousOn fun b hb => hb).congr ?_
     rintro b (hb : f b in e.baseSet inter e'.baseSet); ext v
-
+    change ((e.pullback f).coordChangeL 𝕜 (e'.pullback f) b) v = (e.coordChangeL 𝕜 e' (f b)) v
+    rw [e.coordChangeL_apply e' hb]; rw [(e.pullback f).coordChangeL_apply' _]
+    exacts [rfl, hb]
 
 Depends on / 依赖: baseSet, continuousOn, continuousOn_coordChange, coordChangeL, coordChangeL_apply, e.baseSet, e.coordChangeL, e.coordChangeL_apply, e.pullback, exacts, infer_instance, map_continuous, pullback
 -/

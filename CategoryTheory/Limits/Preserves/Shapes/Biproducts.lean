@@ -368,7 +368,11 @@ lemma preservesBinaryBiproduct_of_preservesBiproduct
           Cone.ext (Iso.refl _) fun j => by
             rcases j with ⟨⟨⟩⟩ <;> simp
       isColimit :=
-
+        IsColimit.ofIsoColimit
+            ((IsColimit.precomposeInvEquiv (diagramIsoPair _) _).symm
+              (isBilimitOfPreserves F (b.toBiconeIsBilimit.symm hb)).isColimit) <|
+          Cocone.ext (Iso.refl _) fun j => by
+            rcases j with ⟨⟨⟩⟩ <;> simp }⟩
 
 中文:
 引理 preservesBinaryBiproduct_of_preservesBiproduct
@@ -381,7 +385,11 @@ lemma preservesBinaryBiproduct_of_preservesBiproduct
           Cone.ext (Iso.refl _) fun j => by
             rcases j with ⟨⟨⟩⟩ <;> simp
       isColimit :=
-
+        IsColimit.ofIsoColimit
+            ((IsColimit.precomposeInvEquiv (diagramIsoPair _) _).symm
+              (isBilimitOfPreserves F (b.toBiconeIsBilimit.symm hb)).isColimit) <|
+          Cocone.ext (Iso.refl _) fun j => by
+            rcases j with ⟨⟨⟩⟩ <;> simp }⟩
 -/
 lemma preservesBinaryBiproduct_of_preservesBiproduct (F : C ⥤ D)
     [PreservesZeroMorphisms F] (X Y : C) [PreservesBiproduct (pairFunction X Y) F] :

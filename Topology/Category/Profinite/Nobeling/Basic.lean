@@ -521,7 +521,11 @@ lemma iso_map_bijective
     · rcases a with ⟨_, c, hc, rfl⟩
       rcases b with ⟨_, d, hd, rfl⟩
       simp only [Proj, if_neg hi]
-  · refine ⟨⟨fun i => if hi : J i then a.val ⟨i, hi⟩ else
+  · refine ⟨⟨fun i => if hi : J i then a.val ⟨i, hi⟩ else false, ?_⟩, ?_⟩
+    · rcases a with ⟨_, y, hy, rfl⟩
+      exact ⟨y, hy, rfl⟩
+    · ext i
+      exact dif_pos i.prop
 
 中文:
 引理 iso_map_bijective
@@ -535,7 +539,11 @@ lemma iso_map_bijective
     · rcases a with ⟨_, c, hc, rfl⟩
       rcases b with ⟨_, d, hd, rfl⟩
       simp only [Proj, if_neg hi]
-  · refine ⟨⟨fun i => if hi : J i then a.val ⟨i, hi⟩ else
+  · refine ⟨⟨fun i => if hi : J i then a.val ⟨i, hi⟩ else false, ?_⟩, ?_⟩
+    · rcases a with ⟨_, y, hy, rfl⟩
+      exact ⟨y, hy, rfl⟩
+    · ext i
+      exact dif_pos i.prop
 
 Depends on / 依赖: Subtype, Subtype.ext_iff, a.val, congr_fun, dif_pos, ext_iff, i.prop, if_neg
 -/
@@ -572,7 +580,8 @@ definition spanFunctor
     (by rw [← isCompact_iff_compactSpace]; exact hC.image (continuous_proj _)) _ _
   map h := @CompHausLike.ofHom _ _ _ (_) (_) (_) (_) (_) (_) (_) (_)
     ⟨(ProjRestricts C (leOfHom h.unop)), continuous_projRestricts _ _⟩
-  map_id J := by simp only [projRestric
+  map_id J := by simp only [projRestricts_eq_id C (· in (unop J))]; rfl
+  map_comp _ _ := by rw [← CompHausLike.ofHom_comp]; congr; dsimp; rw [projRestricts_eq_comp]
 
 中文:
 定义 spanFunctor
@@ -581,7 +590,8 @@ definition spanFunctor
     (by rw [← isCompact_iff_compactSpace]; exact hC.image (continuous_proj _)) _ _
   map h := @CompHausLike.ofHom _ _ _ (_) (_) (_) (_) (_) (_) (_) (_)
     ⟨(ProjRestricts C (leOfHom h.unop)), continuous_projRestricts _ _⟩
-  map_id J := by simp only [projRestric
+  map_id J := by simp only [projRestricts_eq_id C (· in (unop J))]; rfl
+  map_comp _ _ := by rw [← CompHausLike.ofHom_comp]; congr; dsimp; rw [projRestricts_eq_comp]
 
 Depends on / 依赖: Profinite, Profinite.of
 -/
@@ -608,7 +618,8 @@ definition spanCone
     naturality := by
       intro X Y h
       simp only [Functor.const_obj_map,
-        ← projRestricts_comp_projRestrict C (leOfHom h.u
+        ← projRestricts_comp_projRestrict C (leOfHom h.unop)]
+      rfl }
 
 中文:
 定义 spanCone
@@ -619,7 +630,8 @@ definition spanCone
     naturality := by
       intro X Y h
       simp only [Functor.const_obj_map,
-        ← projRestricts_comp_projRestrict C (leOfHom h.u
+        ← projRestricts_comp_projRestrict C (leOfHom h.unop)]
+      rfl }
 
 Depends on / 依赖: Profinite, Profinite.of, isCompact_iff_compactSpace
 -/
@@ -647,7 +659,9 @@ definition spanFunctorIsoIndexFunctor
         rintro ⟨s⟩ ⟨t⟩ ⟨⟨⟨f⟩⟩⟩
         ext x
         have : iso_map C (· in t) ∘ ProjRestricts C f =
-            IndexFunctor.map C f ∘ iso_
+            IndexFunctor.map C f ∘ iso_map C (· in s) := by
+          ext _ i; exact dif_pos i.prop
+        exact congr_fun this x)
 
 中文:
 定义 spanFunctorIsoIndexFunctor
@@ -657,7 +671,9 @@ definition spanFunctorIsoIndexFunctor
         rintro ⟨s⟩ ⟨t⟩ ⟨⟨⟨f⟩⟩⟩
         ext x
         have : iso_map C (· in t) ∘ ProjRestricts C f =
-            IndexFunctor.map C f ∘ iso_
+            IndexFunctor.map C f ∘ iso_map C (· in s) := by
+          ext _ i; exact dif_pos i.prop
+        exact congr_fun this x)
 
 Depends on / 依赖: CompHausLike, CompHausLike.isoOfBijective, ConcreteCategory, ConcreteCategory.ofHom, IndexFunctor, IndexFunctor.map, NatIso, NatIso.ofComponents, ProjRestricts, congr_fun, dif_pos, i.prop, isoOfBijective, iso_map, iso_map_bijective, ofComponents
 -/
@@ -687,7 +703,7 @@ definition spanCone_isLimit
       ext
       have : iso_map C (· in s) ∘ ProjRestrict C (· in s) = IndexFunctor.π_app C (· in s) := by
         ext _ i; exact dif_pos i.prop
-      exa
+      exact congr_fun this.symm _)))
 
 中文:
 定义 spanCone_isLimit
@@ -697,7 +713,7 @@ definition spanCone_isLimit
       ext
       have : iso_map C (· in s) ∘ ProjRestrict C (· in s) = IndexFunctor.π_app C (· in s) := by
         ext _ i; exact dif_pos i.prop
-      exa
+      exact congr_fun this.symm _)))
 
 Depends on / 依赖: Cone.ext, IndexFunctor, IsLimit, IsLimit.ofIsoLimit, IsLimit.postcomposeHomEquiv, Iso.refl, ProjRestrict, congr_fun, dif_pos, i.prop, indexCone_isLimit, iso_map, ofIsoLimit, postcomposeHomEquiv, spanFunctorIsoIndexFunctor, this.symm
 -/
@@ -1106,7 +1122,11 @@ theorem eval_eq
     simp only [List.mem_map, Function.comp_apply]
     rintro _ ⟨i, hi, rfl⟩
     exact if_pos (h i hi)
-  · simp only [List.map_map, Lis
+  · simp only [List.map_map, List.prod_eq_zero_iff, List.mem_map, Function.comp_apply]
+    push Not at h
+    convert! h with i
+    dsimp [LocallyConstant.evalMonoidHom, e]
+    simp only [ite_eq_right_iff, one_ne_zero]
 
 中文:
 定理 eval_eq
@@ -1120,7 +1140,11 @@ theorem eval_eq
     simp only [List.mem_map, Function.comp_apply]
     rintro _ ⟨i, hi, rfl⟩
     exact if_pos (h i hi)
-  · simp only [List.map_map, Lis
+  · simp only [List.map_map, List.prod_eq_zero_iff, List.mem_map, Function.comp_apply]
+    push Not at h
+    convert! h with i
+    dsimp [LocallyConstant.evalMonoidHom, e]
+    simp only [ite_eq_right_iff, one_ne_zero]
 
 Depends on / 依赖: Function, Function.comp_apply, List.map_map, List.mem_map, List.prod_eq_one, List.prod_eq_zero_iff, LocallyConstant, LocallyConstant.evalMonoidHom, comp_apply, convert, evalMonoidHom, if_pos, ite_eq_right_iff, l.eval, map_list_prod, map_map, mem_map, one_ne_zero, prod_eq_one, prod_eq_zero_iff
 -/
@@ -1263,7 +1287,17 @@ theorem GoodProducts.span_iff_products
   rintro f ⟨l, rfl⟩
   let L : Products I -> Prop := fun m => m.eval C in span Int (Set.range (GoodProducts.eval C))
   suffices L l by assumption
-  apply IsWellFounded.induction (· < · 
+  apply IsWellFounded.induction (· < · : Products I -> Products I -> Prop)
+  intro l h
+  by_cases hl : l.isGood C
+  · apply subset_span
+    exact ⟨⟨l, hl⟩, rfl⟩
+  · simp only [Products.isGood, not_not] at hl
+    suffices Products.eval C '' {m | m < l} subseteq span Int (Set.range (GoodProducts.eval C)) by
+      rw [← span_le] at this
+      exact this hl
+    rintro a ⟨m, hm, rfl⟩
+    exact h m hm
 
 中文:
 定理 GoodProducts.span_iff_products
@@ -1274,7 +1308,17 @@ theorem GoodProducts.span_iff_products
   rintro f ⟨l, rfl⟩
   let L : Products I -> Prop := fun m => m.eval C in span Int (Set.range (GoodProducts.eval C))
   suffices L l by assumption
-  apply IsWellFounded.induction (· < · 
+  apply IsWellFounded.induction (· < · : Products I -> Products I -> Prop)
+  intro l h
+  by_cases hl : l.isGood C
+  · apply subset_span
+    exact ⟨⟨l, hl⟩, rfl⟩
+  · simp only [Products.isGood, not_not] at hl
+    suffices Products.eval C '' {m | m < l} subseteq span Int (Set.range (GoodProducts.eval C)) by
+      rw [← span_le] at this
+      exact this hl
+    rintro a ⟨m, hm, rfl⟩
+    exact h m hm
 
 Depends on / 依赖: GoodProducts, GoodProducts.eval, IsWellFounded, IsWellFounded.induction, Products, Products.eval, Products.isGood, Set.range, b.val, isGood, l.isGood, le_trans, m.eval, not_not, span_le, span_mono, subset_span, subseteq
 -/

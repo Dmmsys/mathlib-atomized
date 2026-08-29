@@ -247,7 +247,7 @@ theorem pderivFun_mul
   have h₂ : n + single i 1 < n + single i 1 + single i 1 :=
     lt_def.mpr ⟨self_le_add_right _ _, i, by simp⟩
   have h₃ : n < n + single i 1 + single i 1 := lt_trans h₁ h₂
-  rw [coeff_pderivFun];
+  rw [coeff_pderivFun]; rw [map_add]; rw [← coeff_trunc_mul_trunc_eq_coeff_mul _ _ _ h₂]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [← coeff_trunc_mul_trunc_eq_coeff_mul₂ _ _ g (f.pderivFun i) h₃ h₁]; rw [← coeff_trunc_mul_trunc_eq_coeff_mul₂ _ _ f (g.pderivFun i) h₃ h₁]; rw [trunc_pderivFun]; rw [trunc_pderivFun]; rw [← coeff_coe]; rw [← coeff_coe]; rw [← coeff_coe]; rw [← map_add]; rw [coe_mul]; rw [coe_mul]; rw [coe_mul]; rw [← pderivFun_coe_mul_coe]; rw [coeff_pderivFun]
 
 中文:
 定理 pderivFun_mul
@@ -259,7 +259,7 @@ theorem pderivFun_mul
   have h₂ : n + single i 1 < n + single i 1 + single i 1 :=
     lt_def.mpr ⟨self_le_add_right _ _, i, by simp⟩
   have h₃ : n < n + single i 1 + single i 1 := lt_trans h₁ h₂
-  rw [coeff_pderivFun];
+  rw [coeff_pderivFun]; rw [map_add]; rw [← coeff_trunc_mul_trunc_eq_coeff_mul _ _ _ h₂]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [← coeff_trunc_mul_trunc_eq_coeff_mul₂ _ _ g (f.pderivFun i) h₃ h₁]; rw [← coeff_trunc_mul_trunc_eq_coeff_mul₂ _ _ f (g.pderivFun i) h₃ h₁]; rw [trunc_pderivFun]; rw [trunc_pderivFun]; rw [← coeff_coe]; rw [← coeff_coe]; rw [← coeff_coe]; rw [← map_add]; rw [coe_mul]; rw [coe_mul]; rw [coe_mul]; rw [← pderivFun_coe_mul_coe]; rw [coeff_pderivFun]
 -/
 private theorem pderivFun_mul {i : σ} (f g : MvPowerSeries σ R) :
     pderivFun i (f * g) = f • g.pderivFun i + g • f.pderivFun i := by
@@ -552,7 +552,11 @@ theorem pderiv.ext
   have : single i 1 <= n := fun j => by
     by_cases hj : j = i <;> grind [single_eq_same, single_eq_of_ne]
   have e := congr(coeff (n - single i 1) $(hD i))
-  rwa [coeff_pderiv, co
+  rwa [coeff_pderiv, coeff_pderiv, tsub_add_cancel_of_le this, coe_tsub, Pi.sub_apply,
+    single_eq_same, Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr hi), Nat.cast_one, sub_add_cancel,
+    mul_comm, ← nsmul_eq_mul, mul_comm, ← nsmul_eq_mul, smul_right_inj hi] at e
+
+@[simp]
 
 中文:
 定理 pderiv.ext
@@ -565,7 +569,11 @@ theorem pderiv.ext
   have : single i 1 <= n := fun j => by
     by_cases hj : j = i <;> grind [single_eq_same, single_eq_of_ne]
   have e := congr(coeff (n - single i 1) $(hD i))
-  rwa [coeff_pderiv, co
+  rwa [coeff_pderiv, coeff_pderiv, tsub_add_cancel_of_le this, coe_tsub, Pi.sub_apply,
+    single_eq_same, Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr hi), Nat.cast_one, sub_add_cancel,
+    mul_comm, ← nsmul_eq_mul, mul_comm, ← nsmul_eq_mul, smul_right_inj hi] at e
+
+@[simp]
 
 Depends on / 依赖: Nat.cast_one, Nat.cast_sub, Nat.one_le_iff_ne_zero.mpr, Pi.sub_apply, cast_one, cast_sub, coe_tsub, coeff_pderiv, coeff_zero_eq_constantCoeff, mul_comm, ne_iff, ne_iff.mp, nsmul_eq_mul, one_le_iff_ne_zero, single, single_eq_of_ne, single_eq_same, smul_right, sub_add_cancel, sub_apply
 -/

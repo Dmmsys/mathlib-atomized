@@ -66,7 +66,9 @@ theorem bounded_below
     calc
       C * ‖v‖ * ‖v‖ <= B v v := coercivity v
       _ = ⟪B♯ v, v⟫_Real := (continuousLinearMapOfBilin_apply B v v).symm
-      _ <= ‖B♯ v‖ * ‖v
+      _ <= ‖B♯ v‖ * ‖v‖ := real_inner_le_norm (B♯ v) v
+  · have : v = 0 := by simpa using h
+    simp [this]
 
 中文:
 定理 bounded_below
@@ -81,7 +83,9 @@ theorem bounded_below
     calc
       C * ‖v‖ * ‖v‖ <= B v v := coercivity v
       _ = ⟪B♯ v, v⟫_Real := (continuousLinearMapOfBilin_apply B v v).symm
-      _ <= ‖B♯ v‖ * ‖v
+      _ <= ‖B♯ v‖ * ‖v‖ := real_inner_le_norm (B♯ v) v
+  · have : v = 0 := by simpa using h
+    simp [this]
 
 Depends on / 依赖: C_ge_0, _Real, coercive, coercivity, continuousLinearMapOfBilin_apply, real_inner_le_norm
 -/
@@ -110,7 +114,8 @@ theorem antilipschitz
   refine ⟨C⁻¹.toNNReal, Real.toNNReal_pos.mpr (inv_pos.mpr C_pos), ?_⟩
   refine ContinuousLinearMap.antilipschitz_of_bound B♯ ?_
   simp_rw [Real.coe_toNNReal', max_eq_left_of_lt (inv_pos.mpr C_pos), ←
-    inv_mul_le_iff₀ (inv_pos.mpr C_
+    inv_mul_le_iff₀ (inv_pos.mpr C_pos)]
+  simpa using below_bound
 
 中文:
 定理 antilipschitz
@@ -121,7 +126,8 @@ theorem antilipschitz
   refine ⟨C⁻¹.toNNReal, Real.toNNReal_pos.mpr (inv_pos.mpr C_pos), ?_⟩
   refine ContinuousLinearMap.antilipschitz_of_bound B♯ ?_
   simp_rw [Real.coe_toNNReal', max_eq_left_of_lt (inv_pos.mpr C_pos), ←
-    inv_mul_le_iff₀ (inv_pos.mpr C_
+    inv_mul_le_iff₀ (inv_pos.mpr C_pos)]
+  simpa using below_bound
 
 Depends on / 依赖: C_pos, ContinuousLinearMap, ContinuousLinearMap.antilipschitz_of_bound, Real.coe_toNNReal, Real.toNNReal_pos.mpr, antilipschitz_of_bound, below_bound, bounded_below, coe_toNNReal, coercive, coercive.bounded_below, inv_pos, inv_pos.mpr, max_eq_left_of_lt, simp_rw, toNNReal, toNNReal_pos
 -/
@@ -200,7 +206,15 @@ theorem range_eq_top
   intro v w mem_w_orthogonal
   rcases coercive with ⟨C, C_pos, coercivity⟩
   obtain rfl : w = 0 := by
-    rw [← norm_eq_zero]; rw [← mul_self_eq_zero]; rw [← mul_right_inj' C_p
+    rw [← norm_eq_zero]; rw [← mul_self_eq_zero]; rw [← mul_right_inj' C_pos.ne']; rw [mul_zero]; rw [←
+      mul_assoc]
+    apply le_antisymm
+    · calc
+        C * ‖w‖ * ‖w‖ <= B w w := coercivity w
+        _ = ⟪B♯ w, w⟫_Real := (continuousLinearMapOfBilin_apply B w w).symm
+        _ = 0 := mem_w_orthogonal _ ⟨w, rfl⟩
+    · positivity
+  exact inner_zero_left _
 
 中文:
 定理 range_eq_top
@@ -213,7 +227,15 @@ theorem range_eq_top
   intro v w mem_w_orthogonal
   rcases coercive with ⟨C, C_pos, coercivity⟩
   obtain rfl : w = 0 := by
-    rw [← norm_eq_zero]; rw [← mul_self_eq_zero]; rw [← mul_right_inj' C_p
+    rw [← norm_eq_zero]; rw [← mul_self_eq_zero]; rw [← mul_right_inj' C_pos.ne']; rw [mul_zero]; rw [←
+      mul_assoc]
+    apply le_antisymm
+    · calc
+        C * ‖w‖ * ‖w‖ <= B w w := coercivity w
+        _ = ⟪B♯ w, w⟫_Real := (continuousLinearMapOfBilin_apply B w w).symm
+        _ = 0 := mem_w_orthogonal _ ⟨w, rfl⟩
+    · positivity
+  exact inner_zero_left _
 
 Depends on / 依赖: C_pos, C_pos.ne, Submodule, Submodule.eq_top_iff, _Real, coercive, coercive.isClosed_range.completeSpace_coe, coercivity, completeSpace_coe, continuousLinearMapOfBilin_apply, eq_top_iff, isClosed_range, le_antisymm, mem_w_orthogonal, mul_assoc, mul_right_inj, mul_self_eq_zero, mul_zero, norm_eq_zero, orthogonal_orthogonal
 -/

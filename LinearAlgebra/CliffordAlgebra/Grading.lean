@@ -159,7 +159,8 @@ theorem evenOdd_mul_le
   simp_rw [Set.iUnion_mul, Set.mul_iUnion, Set.iUnion_subset_iff, Set.mul_subset_iff]
   rintro ⟨xi, rfl⟩ ⟨yi, rfl⟩ x hx y hy
   refine Set.mem_iUnion.mpr ⟨⟨xi + yi, Nat.cast_add _ _⟩, ?_⟩
-  simp only [
+  simp only [pow_add]
+  exact Submodule.mul_mem_mul hx hy
 
 中文:
 定理 evenOdd_mul_le
@@ -171,7 +172,8 @@ theorem evenOdd_mul_le
   simp_rw [Set.iUnion_mul, Set.mul_iUnion, Set.iUnion_subset_iff, Set.mul_subset_iff]
   rintro ⟨xi, rfl⟩ ⟨yi, rfl⟩ x hx y hy
   refine Set.mem_iUnion.mpr ⟨⟨xi + yi, Nat.cast_add _ _⟩, ?_⟩
-  simp only [
+  simp only [pow_add]
+  exact Submodule.mul_mem_mul hx hy
 
 Depends on / 依赖: Nat.cast_add, Set.iUnion_mul, Set.iUnion_subset_iff, Set.mem_iUnion.mpr, Set.mul_iUnion, Set.mul_subset_iff, Submodule, Submodule.iSup_eq_span, Submodule.mul_mem_mul, Submodule.span_mono, Submodule.span_mul_span, cast_add, evenOdd, iSup_eq_span, iUnion_mul, iUnion_subset_iff, mem_iUnion, mul_iUnion, mul_mem_mul, mul_subset_iff
 -/
@@ -232,7 +234,7 @@ theorem GradedAlgebra.ι_apply
 nonrec theorem GradedAlgebra.ι_sq_scalar (m : M) :
     GradedAlgebra.ι Q m * GradedAlgebra.ι Q m = algebraMap R _ (Q m) := by
   rw [GradedAlgebra.ι_apply Q]; rw [DirectSum.of_mul_of]; rw [DirectSum.algebraMap_apply]
-  exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext rfl <| ι_sq_scala
+  exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext rfl <| ι_sq_scalar _ _)
 
 中文:
 定理 分次代数.ι_apply
@@ -242,7 +244,7 @@ nonrec theorem GradedAlgebra.ι_sq_scalar (m : M) :
 nonrec theorem GradedAlgebra.ι_sq_scalar (m : M) :
     GradedAlgebra.ι Q m * GradedAlgebra.ι Q m = algebraMap R _ (Q m) := by
   rw [GradedAlgebra.ι_apply Q]; rw [DirectSum.of_mul_of]; rw [DirectSum.algebraMap_apply]
-  exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext rfl <| ι_sq_scala
+  exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext rfl <| ι_sq_scalar _ _)
 -/
 theorem GradedAlgebra.ι_apply (m : M) :
     GradedAlgebra.ι Q m = DirectSum.of (fun i => ↥(evenOdd Q i)) 1 ⟨ι Q m, ι_mem_evenOdd_one Q m⟩ :=
@@ -268,7 +270,23 @@ theorem GradedAlgebra.lift_ι_eq
     dsimp only [Subtype.coe_mk] at hx
     induction hx using Submodule.pow_induction_on_left' with
     | algebraMap r =>
-    
+      rw [AlgHom.commutes]; rw [DirectSum.algebraMap_apply]; rfl
+    | add x y i hx hy ihx ihy =>
+      rw [map_add]; rw [ihx]; rw [ihy]; rw [← map_add]
+      rfl
+    | mem_mul m hm i x hx ih =>
+      obtain ⟨_, rfl⟩ := hm
+      rw [map_mul]; rw [ih]; rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply Q]; rw [DirectSum.of_mul_of]
+      refine DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext ?_ ?_) <;>
+        dsimp only [GradedMonoid.mk, Subtype.coe_mk]
+      · rw [Nat.succ_eq_add_one, add_comm, Nat.cast_add, Nat.cast_one]
+      rfl
+  | zero =>
+    rw [map_zero]
+    apply Eq.symm
+    apply DFinsupp.single_eq_zero.mpr; rfl
+  | add x y hx hy ihx ihy =>
+    rw [map_add]; rw [ihx]; rw [ihy]; rw [← map_add]; rfl
 
 中文:
 定理 分次代数.lift_ι_eq
@@ -282,7 +300,23 @@ theorem GradedAlgebra.lift_ι_eq
     dsimp only [Subtype.coe_mk] at hx
     induction hx using Submodule.pow_induction_on_left' with
     | algebraMap r =>
-    
+      rw [AlgHom.commutes]; rw [DirectSum.algebraMap_apply]; rfl
+    | add x y i hx hy ihx ihy =>
+      rw [map_add]; rw [ihx]; rw [ihy]; rw [← map_add]
+      rfl
+    | mem_mul m hm i x hx ih =>
+      obtain ⟨_, rfl⟩ := hm
+      rw [map_mul]; rw [ih]; rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply Q]; rw [DirectSum.of_mul_of]
+      refine DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext ?_ ?_) <;>
+        dsimp only [GradedMonoid.mk, Subtype.coe_mk]
+      · rw [Nat.succ_eq_add_one, add_comm, Nat.cast_add, Nat.cast_one]
+      rfl
+  | zero =>
+    rw [map_zero]
+    apply Eq.symm
+    apply DFinsupp.single_eq_zero.mpr; rfl
+  | add x y hx hy ihx ihy =>
+    rw [map_add]; rw [ihx]; rw [ihy]; rw [← map_add]; rfl
 
 Depends on / 依赖: AlgHom, AlgHom.commutes, DirectSum, DirectSum.algebraMap_apply, DirectSum.lof_eq_of, Submodule, Submodule.iSup_induction, Submodule.pow_induction_on_left, Subtype, Subtype.coe_mk, algebraMap, algebraMap_apply, coe_mk, commutes, iSup_induction, lof_eq_of, map_add, map_mul, mem_mul, pow_induction_on_left
 -/
@@ -325,7 +359,13 @@ instance gradedAlgebra
     -- while not necessary, the `by apply` makes this elaborate faster
     (lift Q ⟨by apply GradedAlgebra.ι Q, by apply GradedAlgebra.ι_sq_scalar Q⟩)
     -- the proof from here onward is mostly similar to the `TensorAlgebra` case, with some extra
-    -- handling f
+    -- handling for the `iSup` in `evenOdd`.
+    (by
+      ext m
+      dsimp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply, AlgHom.comp_apply,
+        AlgHom.id_apply]
+      rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply Q]; rw [DirectSum.coeAlgHom_of]; rw [Subtype.coe_mk])
+    (by apply GradedAlgebra.lift_ι_eq Q)
 
 中文:
 实例 gradedAlgebra
@@ -334,7 +374,13 @@ instance gradedAlgebra
     -- while not necessary, the `by apply` makes this elaborate faster
     (lift Q ⟨by apply GradedAlgebra.ι Q, by apply GradedAlgebra.ι_sq_scalar Q⟩)
     -- the proof from here onward is mostly similar to the `TensorAlgebra` case, with some extra
-    -- handling f
+    -- handling for the `iSup` in `evenOdd`.
+    (by
+      ext m
+      dsimp only [LinearMap.comp_apply, AlgHom.toLinearMap_apply, AlgHom.comp_apply,
+        AlgHom.id_apply]
+      rw [lift_ι_apply]; rw [GradedAlgebra.ι_apply Q]; rw [DirectSum.coeAlgHom_of]; rw [Subtype.coe_mk])
+    (by apply GradedAlgebra.lift_ι_eq Q)
 
 Depends on / 依赖: GradedAlgebra, GradedAlgebra.ofAlgHom, evenOdd, ofAlgHom
 -/
@@ -363,6 +409,10 @@ theorem iSup_ι_range_eq_top
     -- Porting note: needs extra annotations, no longer unifies against the goal in the face of
     -- ambiguity
     ⨆ (i : ZMod 2) (j : { n : Nat // ↑n = i }), LinearMap.range (ι Q) ^ (j : Nat) =
+        ⨆ i : Σ i : ZMod 2, { n : Nat // ↑n = i }, LinearMap.range (ι Q) ^ (i.2 : Nat) := by
+      rw [iSup_sigma]
+    _ = ⨆ i : Nat, LinearMap.range (ι Q) ^ i :=
+      Function.Surjective.iSup_congr (fun i => i.2) (fun i => ⟨⟨_, i, rfl⟩, rfl⟩) fun _ => rfl
 
 中文:
 定理 iSup_ι_range_eq_top
@@ -373,6 +423,10 @@ theorem iSup_ι_range_eq_top
     -- Porting note: needs extra annotations, no longer unifies against the goal in the face of
     -- ambiguity
     ⨆ (i : ZMod 2) (j : { n : Nat // ↑n = i }), LinearMap.range (ι Q) ^ (j : Nat) =
+        ⨆ i : Σ i : ZMod 2, { n : Nat // ↑n = i }, LinearMap.range (ι Q) ^ (i.2 : Nat) := by
+      rw [iSup_sigma]
+    _ = ⨆ i : Nat, LinearMap.range (ι Q) ^ i :=
+      Function.Surjective.iSup_congr (fun i => i.2) (fun i => ⟨⟨_, i, rfl⟩, rfl⟩) fun _ => rfl
 
 Depends on / 依赖: Decomposition, DirectSum, DirectSum.Decomposition.isInternal, eq_comm, evenOdd, isInternal, submodule_iSup_eq_top
 -/
@@ -429,7 +483,29 @@ theorem evenOdd_induction
   simp_rw [pow_add, pow_mul]
   intro hxv
   induction hxv using Submodule.mul_induction_on' with
-  | m
+  | mem_mul_mem a ha b hb =>
+    induction ha using Submodule.pow_induction_on_left' with
+    | algebraMap r =>
+      simp_rw [← Algebra.smul_def]
+      exact range_ι_pow _ (Submodule.smul_mem _ _ hb)
+    | add x y n hx hy ihx ihy =>
+      simp_rw [add_mul]
+      apply add _ _ _ _ ihx ihy
+    | mem_mul x hx n'' y hy ihy =>
+      revert hx
+      simp_rw [pow_two]
+      intro hx2
+      induction hx2 using Submodule.mul_induction_on' with
+      | mem_mul_mem m hm n hn =>
+        simp_rw [LinearMap.mem_range] at hm hn
+        obtain ⟨m₁, rfl⟩ := hm; obtain ⟨m₂, rfl⟩ := hn
+        simp_rw [mul_assoc _ y b]
+        exact ι_mul_ι_mul _ _ _ _ ihy
+      | add x hx y hy ihx ihy =>
+        simp_rw [add_mul]
+        apply add _ _ _ _ ihx ihy
+  | add x y hx hy ihx ihy =>
+    apply add _ _ _ _ ihx ihy
 
 中文:
 定理 evenOdd_induction
@@ -442,7 +518,29 @@ theorem evenOdd_induction
   simp_rw [pow_add, pow_mul]
   intro hxv
   induction hxv using Submodule.mul_induction_on' with
-  | m
+  | mem_mul_mem a ha b hb =>
+    induction ha using Submodule.pow_induction_on_left' with
+    | algebraMap r =>
+      simp_rw [← Algebra.smul_def]
+      exact range_ι_pow _ (Submodule.smul_mem _ _ hb)
+    | add x y n hx hy ihx ihy =>
+      simp_rw [add_mul]
+      apply add _ _ _ _ ihx ihy
+    | mem_mul x hx n'' y hy ihy =>
+      revert hx
+      simp_rw [pow_two]
+      intro hx2
+      induction hx2 using Submodule.mul_induction_on' with
+      | mem_mul_mem m hm n hn =>
+        simp_rw [LinearMap.mem_range] at hm hn
+        obtain ⟨m₁, rfl⟩ := hm; obtain ⟨m₂, rfl⟩ := hn
+        simp_rw [mul_assoc _ y b]
+        exact ι_mul_ι_mul _ _ _ _ ihy
+      | add x hx y hy ihx ihy =>
+        simp_rw [add_mul]
+        apply add _ _ _ _ ihx ihy
+  | add x y hx hy ihx ihy =>
+    apply add _ _ _ _ ihx ihy
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Submodule, Submodule.iSup_induction, Submodule.mul_induction_on, Submodule.pow_induction_on_left, Submodule.smul_mem, Submodule.zero_mem, Subtype, Subtype.rec, ZMod.natCast_eq_iff, add_comm, algebraMap, iSup_induction, mem_mul_mem, motive, mul_induction_on, n.val, natCast_eq_iff, pow_add
 -/

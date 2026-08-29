@@ -611,7 +611,11 @@ definition tensorModelOfHasCoeffsInv
     simp_rw [← RingHom.mem_ker, ← SetLike.le_def]
     rw [← P.span_range_relation_eq_ker]; rw [Ideal.span_le]
     rintro a ⟨i, rfl⟩
-  
+    simp only [SetLike.mem_coe, RingHom.mem_ker, AlgHom.coe_comp,
+      AlgEquiv.coe_toAlgHom, Function.comp_apply, algebraTensorAlgEquiv_symm_relation]
+    simp only [TensorProduct.map_tmul, AlgHom.coe_id, id_eq, Ideal.Quotient.mkₐ_eq_mk,
+      Ideal.Quotient.mk_span_range, tmul_zero]).comp
+    (P.quotientEquiv.restrictScalars R).symm.toAlgHom
 
 中文:
 定义 tensorModelOfHasCoeffsInv
@@ -622,7 +626,11 @@ definition tensorModelOfHasCoeffsInv
     simp_rw [← RingHom.mem_ker, ← SetLike.le_def]
     rw [← P.span_range_relation_eq_ker]; rw [Ideal.span_le]
     rintro a ⟨i, rfl⟩
-  
+    simp only [SetLike.mem_coe, RingHom.mem_ker, AlgHom.coe_comp,
+      AlgEquiv.coe_toAlgHom, Function.comp_apply, algebraTensorAlgEquiv_symm_relation]
+    simp only [TensorProduct.map_tmul, AlgHom.coe_id, id_eq, Ideal.Quotient.mkₐ_eq_mk,
+      Ideal.Quotient.mk_span_range, tmul_zero]).comp
+    (P.quotientEquiv.restrictScalars R).symm.toAlgHom
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom, AlgHom, AlgHom.coe_comp, AlgHom.coe_id, Algebra, Algebra.TensorProduct.map, Function, Function.comp_apply, Ideal.Quotient.lift, Ideal.Quotient.mk, Ideal.span_le, MvPolynomial, MvPolynomial.algebraTensorAlgEquiv, P.span_range_relation_eq_ker, Quotient, RingHom, RingHom.mem_ker, SetLike, SetLike.le_def
 -/
@@ -677,7 +685,9 @@ lemma tensorModelOfHasCoeffsHom_comp
       ((P.quotientEquiv.restrictScalars R).toAlgHom.comp (Ideal.Quotient.mkₐ _ _)) :=
     (P.quotientEquiv.restrictScalars R).surjective.comp Ideal.Quotient.mk_surjective
   simp only [← AlgHom.cancel_right h, tensorModelOfHasCoeffsInv, AlgHom.id_comp]
-  rw [AlgHom.c
+  rw [AlgHom.comp_assoc]; rw [AlgHom.comp_assoc]; rw [← AlgHom.comp_assoc _ _ (Ideal.Quotient.mkₐ R P.ker)]; rw [AlgEquiv.symm_comp]; rw [AlgHom.id_comp]
+  ext x
+  simp
 
 中文:
 引理 tensorModelOfHasCoeffsHom_comp
@@ -686,7 +696,9 @@ lemma tensorModelOfHasCoeffsHom_comp
       ((P.quotientEquiv.restrictScalars R).toAlgHom.comp (Ideal.Quotient.mkₐ _ _)) :=
     (P.quotientEquiv.restrictScalars R).surjective.comp Ideal.Quotient.mk_surjective
   simp only [← AlgHom.cancel_right h, tensorModelOfHasCoeffsInv, AlgHom.id_comp]
-  rw [AlgHom.c
+  rw [AlgHom.comp_assoc]; rw [AlgHom.comp_assoc]; rw [← AlgHom.comp_assoc _ _ (Ideal.Quotient.mkₐ R P.ker)]; rw [AlgEquiv.symm_comp]; rw [AlgHom.id_comp]
+  ext x
+  simp
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.symm_comp, AlgHom, AlgHom.cancel_right, AlgHom.comp_assoc, AlgHom.id_comp, Function, Function.Surjective, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, P.ker, P.quotientEquiv.restrictScalars, Quotient, Surjective, cancel_right, comp_assoc, id_comp, mk_surjective, quotientEquiv, restrictScalars
 -/
@@ -1287,7 +1299,11 @@ definition ofHasCoeffs
     let : Fintype σ := Fintype.ofFinite _
     have := congr((Ideal.Quotient.mk _ : _ ->+* P.ModelOfHasCoeffs R₀)
  (P.sum_jacobianRelationsOfHasCoeffs_mul_relationOfHasCoeffs R₀))
-    simp only [map_sum, map_mul, Ideal
+    simp only [map_sum, map_mul, Ideal.Quotient.mk_span_range, mul_zero, Finset.sum_const_zero,
+      map_sub, map_one, @eq_comm (P.ModelOfHasCoeffs R₀) 0, sub_eq_zero] at this
+    convert! IsUnit.of_mul_eq_one _ this
+    rw [PreSubmersivePresentation.jacobian_eq_jacobiMatrix_det]
+    simp [jacobianOfHasCoeffs]
 
 中文:
 定义 ofHasCoeffs
@@ -1298,7 +1314,11 @@ definition ofHasCoeffs
     let : Fintype σ := Fintype.ofFinite _
     have := congr((Ideal.Quotient.mk _ : _ ->+* P.ModelOfHasCoeffs R₀)
  (P.sum_jacobianRelationsOfHasCoeffs_mul_relationOfHasCoeffs R₀))
-    simp only [map_sum, map_mul, Ideal
+    simp only [map_sum, map_mul, Ideal.Quotient.mk_span_range, mul_zero, Finset.sum_const_zero,
+      map_sub, map_one, @eq_comm (P.ModelOfHasCoeffs R₀) 0, sub_eq_zero] at this
+    convert! IsUnit.of_mul_eq_one _ this
+    rw [PreSubmersivePresentation.jacobian_eq_jacobiMatrix_det]
+    simp [jacobianOfHasCoeffs]
 
 Depends on / 依赖: P.toPreSubmersivePresentation.ofHasCoeffs, ofHasCoeffs, toPreSubmersivePresentation
 -/

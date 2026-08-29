@@ -684,7 +684,10 @@ instance instPreorder
     | lift _ => LE.lift le_rfl
     | comp _ => LE.comp le_rfl
   le_trans
-| lift _, lift _, lift _
+| lift _, lift _, lift _, LE.lift hab, LE.lift hbc => LE.lift hab.trans hbc
+| lift _, lift _, comp _, LE.lift hab, LE.sep hbc => LE.sep hbc.mono_left hab
+| lift _, comp _, comp _, LE.sep hab, LE.comp hcb => LE.sep hab.mono_right hcb
+| comp _, comp _, comp _, LE.comp hba, LE.comp hcb => LE.comp hcb.trans hba
 
 中文:
 实例 instPreorder
@@ -699,7 +702,10 @@ instance instPreorder
     | lift _ => LE.lift le_rfl
     | comp _ => LE.comp le_rfl
   le_trans
-| lift _, lift _, lift _
+| lift _, lift _, lift _, LE.lift hab, LE.lift hbc => LE.lift hab.trans hbc
+| lift _, lift _, comp _, LE.lift hab, LE.sep hbc => LE.sep hbc.mono_left hab
+| lift _, comp _, comp _, LE.sep hab, LE.comp hcb => LE.sep hab.mono_right hcb
+| comp _, comp _, comp _, LE.comp hba, LE.comp hcb => LE.comp hcb.trans hba
 -/
 instance instPreorder : Preorder (Booleanisation α) where
   lt := (· < ·)
@@ -749,7 +755,15 @@ instance instSemilatticeSup
     | comp a, comp b => LE.comp inf_le_left
   le_sup_right
     | lift a, lift b => LE.lift le_sup_right
-    | lift a, comp b => LE.comp 
+    | lift a, comp b => LE.comp sdiff_le
+    | comp a, lift b => LE.sep disjoint_sdiff_self_right
+    | comp a, comp b => LE.comp inf_le_right
+  sup_le
+| lift a, lift b, lift c, LE.lift hac, LE.lift hbc => LE.lift sup_le hac hbc
+| lift a, lift b, comp c, LE.sep hac, LE.sep hbc => LE.sep hac.sup_left hbc
+| lift a, comp b, comp c, LE.sep hac, LE.comp hcb => LE.comp le_sdiff.2 ⟨hcb, hac.symm⟩
+| comp a, lift b, comp c, LE.comp hca, LE.sep hbc => LE.comp le_sdiff.2 ⟨hca, hbc.symm⟩
+| comp a, comp b, comp c, LE.comp hca, LE.comp hcb => LE.comp le_inf hca hcb
 
 中文:
 实例 instSemilatticeSup
@@ -762,7 +776,15 @@ instance instSemilatticeSup
     | comp a, comp b => LE.comp inf_le_left
   le_sup_right
     | lift a, lift b => LE.lift le_sup_right
-    | lift a, comp b => LE.comp 
+    | lift a, comp b => LE.comp sdiff_le
+    | comp a, lift b => LE.sep disjoint_sdiff_self_right
+    | comp a, comp b => LE.comp inf_le_right
+  sup_le
+| lift a, lift b, lift c, LE.lift hac, LE.lift hbc => LE.lift sup_le hac hbc
+| lift a, lift b, comp c, LE.sep hac, LE.sep hbc => LE.sep hac.sup_left hbc
+| lift a, comp b, comp c, LE.sep hac, LE.comp hcb => LE.comp le_sdiff.2 ⟨hcb, hac.symm⟩
+| comp a, lift b, comp c, LE.comp hca, LE.sep hbc => LE.comp le_sdiff.2 ⟨hca, hbc.symm⟩
+| comp a, comp b, comp c, LE.comp hca, LE.comp hcb => LE.comp le_inf hca hcb
 -/
 instance instSemilatticeSup : SemilatticeSup (Booleanisation α) where
   sup x y := max x y
@@ -799,7 +821,15 @@ instance instSemilatticeInf
     | comp a, comp b => LE.comp le_sup_left
   inf_le_right
     | lift a, lift b => LE.lift inf_le_right
-    | lift a, comp b => LE.sep di
+    | lift a, comp b => LE.sep disjoint_sdiff_self_left
+    | comp a, lift b => LE.lift sdiff_le
+    | comp a, comp b => LE.comp le_sup_right
+  le_inf
+| lift a, lift b, lift c, LE.lift hab, LE.lift hac => LE.lift le_inf hab hac
+| lift a, lift b, comp c, LE.lift hab, LE.sep hac => LE.lift le_sdiff.2 ⟨hab, hac⟩
+| lift a, comp b, lift c, LE.sep hab, LE.lift hac => LE.lift le_sdiff.2 ⟨hac, hab⟩
+| lift a, comp b, comp c, LE.sep hab, LE.sep hac => LE.sep hab.sup_right hac
+| comp a, comp b, comp c, LE.comp hba, LE.comp hca => LE.comp sup_le hba hca
 
 中文:
 实例 instSemilatticeInf
@@ -812,7 +842,15 @@ instance instSemilatticeInf
     | comp a, comp b => LE.comp le_sup_left
   inf_le_right
     | lift a, lift b => LE.lift inf_le_right
-    | lift a, comp b => LE.sep di
+    | lift a, comp b => LE.sep disjoint_sdiff_self_left
+    | comp a, lift b => LE.lift sdiff_le
+    | comp a, comp b => LE.comp le_sup_right
+  le_inf
+| lift a, lift b, lift c, LE.lift hab, LE.lift hac => LE.lift le_inf hab hac
+| lift a, lift b, comp c, LE.lift hab, LE.sep hac => LE.lift le_sdiff.2 ⟨hab, hac⟩
+| lift a, comp b, lift c, LE.sep hab, LE.lift hac => LE.lift le_sdiff.2 ⟨hac, hab⟩
+| lift a, comp b, comp c, LE.sep hab, LE.sep hac => LE.sep hab.sup_right hac
+| comp a, comp b, comp c, LE.comp hba, LE.comp hca => LE.comp sup_le hba hca
 -/
 instance instSemilatticeInf : SemilatticeInf (Booleanisation α) where
   inf x y := min x y
@@ -847,7 +885,12 @@ instance instDistribLattice
     | lift _, lift _, lift _ => LE.lift le_sup_inf
 | lift a, lift b, comp c => LE.lift by simp [sup_comm, sup_assoc]
 | lift a, comp b, lift c => LE.lift by
-      simp [sup_left_comm (a := 
+      simp [sup_left_comm (a := b \ a), sup_comm (a := b \ a)]
+| lift a, comp b, comp c => LE.comp by rw [sup_sdiff]
+| comp a, lift b, lift c => LE.comp by rw [sdiff_inf]
+| comp a, lift b, comp c => LE.comp by rw [sdiff_sdiff_right']
+| comp a, comp b, lift c => LE.comp by rw [sdiff_sdiff_right', sup_comm]
+    | comp _, comp _, comp _ => LE.comp (inf_sup_left _ _ _).le
 
 中文:
 实例 instDistribLattice
@@ -860,7 +903,12 @@ instance instDistribLattice
     | lift _, lift _, lift _ => LE.lift le_sup_inf
 | lift a, lift b, comp c => LE.lift by simp [sup_comm, sup_assoc]
 | lift a, comp b, lift c => LE.lift by
-      simp [sup_left_comm (a := 
+      simp [sup_left_comm (a := b \ a), sup_comm (a := b \ a)]
+| lift a, comp b, comp c => LE.comp by rw [sup_sdiff]
+| comp a, lift b, lift c => LE.comp by rw [sdiff_inf]
+| comp a, lift b, comp c => LE.comp by rw [sdiff_sdiff_right']
+| comp a, comp b, lift c => LE.comp by rw [sdiff_sdiff_right', sup_comm]
+    | comp _, comp _, comp _ => LE.comp (inf_sup_left _ _ _).le
 -/
 instance instDistribLattice : DistribLattice (Booleanisation α) where
   inf x y := x ⊓ y

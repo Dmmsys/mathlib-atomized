@@ -253,7 +253,8 @@ theorem trichotomy
       (by
         intro _ ha'
         rcases List.mem_pmap.mp ha' with ⟨p, hp, rfl⟩
-        have : Fact p.Prime := ⟨prime_of_mem
+        have : Fact p.Prime := ⟨prime_of_mem_primeFactorsList hp⟩
+        exact quadraticChar_isQuadratic (ZMod p) a)
 
 中文:
 定理 trichotomy
@@ -265,7 +266,8 @@ theorem trichotomy
       (by
         intro _ ha'
         rcases List.mem_pmap.mp ha' with ⟨p, hp, rfl⟩
-        have : Fact p.Prime := ⟨prime_of_mem
+        have : Fact p.Prime := ⟨prime_of_mem_primeFactorsList hp⟩
+        exact quadraticChar_isQuadratic (ZMod p) a)
 
 Depends on / 依赖: List.mem_pmap.mp, MonoidHom, MonoidHom.mrange, Set.pair_comm, SignType, SignType.castHom, SignType.range_eq, castHom, list_prod_mem, mem_pmap, mrange, p.Prime, pair_comm, prime_of_mem_primeFactorsList, quadraticChar_isQuadratic, range_eq, toMonoidHom
 -/
@@ -350,6 +352,7 @@ theorem eq_zero_iff_not_coprime
       rw [List.mem_pmap]; rw [Int.gcd_eq_natAbs]; rw [Ne]; rw [Prime.not_coprime_iff_dvd]
       simp_rw [legendreSym.eq_zero_iff _ _, intCast_zmod_eq_zero_iff_dvd,
         mem_primeFactorsList (NeZero.ne b), ← Int.natCast_dvd, Int.natCast_dvd_natCast, exists_prop,
+        and_assoc, _root_.and_comm])
 
 中文:
 定理 eq_zero_iff_not_coprime
@@ -360,6 +363,7 @@ theorem eq_zero_iff_not_coprime
       rw [List.mem_pmap]; rw [Int.gcd_eq_natAbs]; rw [Ne]; rw [Prime.not_coprime_iff_dvd]
       simp_rw [legendreSym.eq_zero_iff _ _, intCast_zmod_eq_zero_iff_dvd,
         mem_primeFactorsList (NeZero.ne b), ← Int.natCast_dvd, Int.natCast_dvd_natCast, exists_prop,
+        and_assoc, _root_.and_comm])
 
 Depends on / 依赖: Int.gcd_eq_natAbs, Int.natCast_dvd, Int.natCast_dvd_natCast, List.mem_pmap, List.prod_eq_zero_iff.trans, NeZero, NeZero.ne, Prime.not_coprime_iff_dvd, _root_, _root_.and_comm, and_assoc, and_comm, eq_zero_iff, exists_prop, gcd_eq_natAbs, intCast_zmod_eq_zero_iff_dvd, legendreSym, legendreSym.eq_zero_iff, mem_pmap, mem_primeFactorsList
 -/
@@ -702,7 +706,9 @@ theorem list_prod_right
     -- `n ≠ 0`
     have hl' := List.prod_ne_zero fun hf => hl 0 (List.mem_cons_of_mem _ hf) rfl
     -- `l'.prod ≠ 0`
-    have h := fun m hm => hl m (List.mem
+    have h := fun m hm => hl m (List.mem_cons_of_mem _ hm)
+    -- `∀ (m : ℕ), m ∈ l' → m ≠ 0`
+    rw [List.map]; rw [List.prod_cons]; rw [List.prod_cons]; rw [mul_right' a hn hl']; rw [ih h]
 
 中文:
 定理 list_prod_right
@@ -715,7 +721,9 @@ theorem list_prod_right
     -- `n ≠ 0`
     have hl' := List.prod_ne_zero fun hf => hl 0 (List.mem_cons_of_mem _ hf) rfl
     -- `l'.prod ≠ 0`
-    have h := fun m hm => hl m (List.mem
+    have h := fun m hm => hl m (List.mem_cons_of_mem _ hm)
+    -- `∀ (m : ℕ), m ∈ l' → m ≠ 0`
+    rw [List.map]; rw [List.prod_cons]; rw [List.prod_cons]; rw [mul_right' a hn hl']; rw [ih h]
 
 Depends on / 依赖: List.map_nil, List.mem_cons_self, List.prod_nil, map_nil, mem_cons_self, one_right, prod_nil
 -/
@@ -745,7 +753,8 @@ theorem eq_neg_one_at_prime_divisor_of_eq_neg_one
     exact one_ne_zero h
   have hf₀ (p) (hp : p in n.primeFactorsList) : p != 0 := (Nat.pos_of_mem_primeFactorsList hp).ne.symm
   rw [← Nat.prod_primeFactorsList hn₀]; rw [list_prod_right hf₀] at h
-  o
+  obtain ⟨p, hmem, hj⟩ := List.mem_map.mp (List.neg_one_mem_of_prod_eq_neg_one h)
+  exact ⟨p, Nat.prime_of_mem_primeFactorsList hmem, Nat.dvd_of_mem_primeFactorsList hmem, hj⟩
 
 中文:
 定理 eq_neg_one_at_prime_divisor_of_eq_neg_one
@@ -757,7 +766,8 @@ theorem eq_neg_one_at_prime_divisor_of_eq_neg_one
     exact one_ne_zero h
   have hf₀ (p) (hp : p in n.primeFactorsList) : p != 0 := (Nat.pos_of_mem_primeFactorsList hp).ne.symm
   rw [← Nat.prod_primeFactorsList hn₀]; rw [list_prod_right hf₀] at h
-  o
+  obtain ⟨p, hmem, hj⟩ := List.mem_map.mp (List.neg_one_mem_of_prod_eq_neg_one h)
+  exact ⟨p, Nat.prime_of_mem_primeFactorsList hmem, Nat.dvd_of_mem_primeFactorsList hmem, hj⟩
 
 Depends on / 依赖: CharZero, CharZero.eq_neg_self_iff, List.mem_map.mp, List.neg_one_mem_of_prod_eq_neg_one, Nat.dvd_of_mem_primeFactorsList, Nat.pos_of_mem_primeFactorsList, Nat.prime_of_mem_primeFactorsList, Nat.prod_primeFactorsList, dvd_of_mem_primeFactorsList, eq_neg_self_iff, list_prod_right, mem_map, n.primeFactorsList, ne.symm, neg_one_mem_of_prod_eq_neg_one, one_ne_zero, pos_of_mem_primeFactorsList, primeFactorsList, prime_of_mem_primeFactorsList, prod_primeFactorsList
 -/
@@ -871,7 +881,7 @@ theorem value_at
   rw [jacobiSym]; rw [List.map_map]; rw [← List.pmap_eq_map
     fun _ => prime_of_mem_primeFactorsList]
   congr 1; apply List.pmap_congr_left
-  exact fun p h pp _ => hp p pp (hb.ne_two_of_dvd_nat <| dvd_of_mem_
+  exact fun p h pp _ => hp p pp (hb.ne_two_of_dvd_nat <| dvd_of_mem_primeFactorsList h)
 
 中文:
 定理 value_at
@@ -881,7 +891,7 @@ theorem value_at
   rw [jacobiSym]; rw [List.map_map]; rw [← List.pmap_eq_map
     fun _ => prime_of_mem_primeFactorsList]
   congr 1; apply List.pmap_congr_left
-  exact fun p h pp _ => hp p pp (hb.ne_two_of_dvd_nat <| dvd_of_mem_
+  exact fun p h pp _ => hp p pp (hb.ne_two_of_dvd_nat <| dvd_of_mem_primeFactorsList h)
 
 Depends on / 依赖: List.map_map, List.pmap_congr_left, List.pmap_eq_map, cast_list_prod, conv_rhs, dvd_of_mem_primeFactorsList, hb.ne_two_of_dvd_nat, hb.pos.ne, jacobiSym, map_list_prod, map_map, ne_two_of_dvd_nat, pmap_congr_left, pmap_eq_map, prime_of_mem_primeFactorsList, prod_primeFactorsList
 -/
@@ -988,7 +998,7 @@ theorem div_four_left
   obtain ⟨a, rfl⟩ := Int.dvd_of_emod_eq_zero ha4
   have : Int.gcd (2 : Nat) b = 1 := by
     rw [Int.gcd_natCast_natCast]; rw [← b.mod_add_div 2]; rw [hb2]; rw [Nat.gcd_add_mul_left_right]; rw [Nat.gcd_one_right]
-  rw [Int.mul_ediv_cancel_left _ (by decide)]; rw [jacobiSym.mul_left]; rw [(by decid
+  rw [Int.mul_ediv_cancel_left _ (by decide)]; rw [jacobiSym.mul_left]; rw [(by decide : (4 : Int) = (2 : Nat) ^ 2)]; rw [jacobiSym.sq_one' this]; rw [one_mul]
 
 中文:
 定理 div_four_left
@@ -997,7 +1007,7 @@ theorem div_four_left
   obtain ⟨a, rfl⟩ := Int.dvd_of_emod_eq_zero ha4
   have : Int.gcd (2 : Nat) b = 1 := by
     rw [Int.gcd_natCast_natCast]; rw [← b.mod_add_div 2]; rw [hb2]; rw [Nat.gcd_add_mul_left_right]; rw [Nat.gcd_one_right]
-  rw [Int.mul_ediv_cancel_left _ (by decide)]; rw [jacobiSym.mul_left]; rw [(by decid
+  rw [Int.mul_ediv_cancel_left _ (by decide)]; rw [jacobiSym.mul_left]; rw [(by decide : (4 : Int) = (2 : Nat) ^ 2)]; rw [jacobiSym.sq_one' this]; rw [one_mul]
 
 Depends on / 依赖: Int.dvd_of_emod_eq_zero, Int.gcd, Int.gcd_natCast_natCast, Int.mul_ediv_cancel_left, Nat.gcd_add_mul_left_right, Nat.gcd_one_right, b.mod_add_div, dvd_of_emod_eq_zero, gcd_add_mul_left_right, gcd_natCast_natCast, gcd_one_right, jacobiSym, jacobiSym.mul_left, jacobiSym.sq_one, mod_add_div, mul_ediv_cancel_left, mul_left, one_mul, sq_one
 -/
@@ -1253,7 +1263,14 @@ theorem quadratic_reciprocity'
     { toFun := fun x => qrSign x a * J(x | a)
       map_one' := by convert! ← mul_one (M := Int) _; (on_goal 1 => symm); all_goals apply one_left
       map_mul' := fun x y => by
-        simp_rw 
+        simp_rw [qrSign.mul_left x y a, Nat.cast_mul, mul_left, mul_mul_mul_comm] }
+  have rhs_apply : forall a b : Nat, rhs a b = qrSign b a * J(b | a) := fun a b => rfl
+  refine value_at a (rhs a) (fun p pp hp => Eq.symm ?_) hb
+  have hpo := pp.eq_two_or_odd'.resolve_left hp
+  rw [@legendreSym.to_jacobiSym p ⟨pp⟩]; rw [rhs_apply]; rw [Nat.cast_id]; rw [qrSign.eq_iff_eq hpo ha]; rw [qrSign.symm hpo ha]
+  refine value_at p (rhs p) (fun q pq hq => ?_) ha
+  have hqo := pq.eq_two_or_odd'.resolve_left hq
+  rw [rhs_apply]; rw [Nat.cast_id]; rw [← @legendreSym.to_jacobiSym p ⟨pp⟩]; rw [qrSign.symm hqo hpo]; rw [qrSign.neg_one_pow hpo hqo]; rw [@legendreSym.quadratic_reciprocity' p q ⟨pp⟩ ⟨pq⟩ hp hq]
 
 中文:
 定理 quadratic_reciprocity'
@@ -1264,7 +1281,14 @@ theorem quadratic_reciprocity'
     { toFun := fun x => qrSign x a * J(x | a)
       map_one' := by convert! ← mul_one (M := Int) _; (on_goal 1 => symm); all_goals apply one_left
       map_mul' := fun x y => by
-        simp_rw 
+        simp_rw [qrSign.mul_left x y a, Nat.cast_mul, mul_left, mul_mul_mul_comm] }
+  have rhs_apply : forall a b : Nat, rhs a b = qrSign b a * J(b | a) := fun a b => rfl
+  refine value_at a (rhs a) (fun p pp hp => Eq.symm ?_) hb
+  have hpo := pp.eq_two_or_odd'.resolve_left hp
+  rw [@legendreSym.to_jacobiSym p ⟨pp⟩]; rw [rhs_apply]; rw [Nat.cast_id]; rw [qrSign.eq_iff_eq hpo ha]; rw [qrSign.symm hpo ha]
+  refine value_at p (rhs p) (fun q pq hq => ?_) ha
+  have hqo := pq.eq_two_or_odd'.resolve_left hq
+  rw [rhs_apply]; rw [Nat.cast_id]; rw [← @legendreSym.to_jacobiSym p ⟨pp⟩]; rw [qrSign.symm hqo hpo]; rw [qrSign.neg_one_pow hpo hqo]; rw [@legendreSym.quadratic_reciprocity' p q ⟨pp⟩ ⟨pq⟩ hp hq]
 -/
 theorem quadratic_reciprocity' {a b : Nat} (ha : Odd a) (hb : Odd b) :
     J(a | b) = qrSign b a * J(b | a) := by
@@ -1381,7 +1405,7 @@ theorem quadratic_reciprocity_if
   · simpa [ha1] using jacobiSym.quadratic_reciprocity_one_mod_four' (Nat.odd_iff.mpr hb2) ha1
   rcases Nat.odd_mod_four_iff.mp hb2 with hb1 | hb3
   · simpa [hb1] using jacobiSym.quadratic_reciprocity_one_mod_four hb1 (Nat.odd_iff.mpr ha2)
-  simp
+  simpa [ha3, hb3] using (jacobiSym.quadratic_reciprocity_three_mod_four ha3 hb3).symm
 
 中文:
 定理 quadratic_reciprocity_if
@@ -1391,7 +1415,7 @@ theorem quadratic_reciprocity_if
   · simpa [ha1] using jacobiSym.quadratic_reciprocity_one_mod_four' (Nat.odd_iff.mpr hb2) ha1
   rcases Nat.odd_mod_four_iff.mp hb2 with hb1 | hb3
   · simpa [hb1] using jacobiSym.quadratic_reciprocity_one_mod_four hb1 (Nat.odd_iff.mpr ha2)
-  simp
+  simpa [ha3, hb3] using (jacobiSym.quadratic_reciprocity_three_mod_four ha3 hb3).symm
 
 Depends on / 依赖: Nat.odd_iff.mpr, Nat.odd_mod_four_iff.mp, jacobiSym, jacobiSym.quadratic_reciprocity_one_mod_four, jacobiSym.quadratic_reciprocity_three_mod_four, odd_iff, odd_mod_four_iff, quadratic_reciprocity_one_mod_four, quadratic_reciprocity_three_mod_four
 -/
@@ -1416,7 +1440,18 @@ theorem mod_right'
   have hb' : Odd (b % (4 * a)) := hb.mod_even (Even.mul_right (by decide) _)
   rcases exists_eq_pow_mul_and_not_dvd ha₀ 2 (by simp) with ⟨e, a', ha₁', ha₂⟩
   have ha₁ := odd_iff.mpr (two_dvd_ne_zero.mp ha₁')
-  nth_rw 2 [ha₂]; nth_
+  nth_rw 2 [ha₂]; nth_rw 1 [ha₂]
+  rw [Nat.cast_mul]; rw [mul_left]; rw [mul_left]; rw [quadratic_reciprocity' ha₁ hb]; rw [quadratic_reciprocity' ha₁ hb']; rw [Nat.cast_pow]; rw [pow_left]; rw [pow_left]; rw [Nat.cast_two]; rw [at_two hb]; rw [at_two hb']
+  congr 1; swap
+  · congr 1
+    · simp_rw [qrSign]
+      rw [χ₄_nat_mod_four]; rw [χ₄_nat_mod_four (b % (4 * a))]; rw [mod_mod_of_dvd b (dvd_mul_right 4 a)]
+    · rw [mod_left ↑(b % _), mod_left b, Int.natCast_mod, Int.emod_emod_of_dvd b]
+      simp only [ha₂, Nat.cast_mul, ← mul_assoc]
+      apply dvd_mul_left
+  rcases e with - | e; · simp
+  · rw [χ₈_nat_mod_eight, χ₈_nat_mod_eight (b % (4 * a)), mod_mod_of_dvd b]
+    use 2 ^ e * a'; rw [ha₂, Nat.pow_succ]; ring
 
 中文:
 定理 mod_right'
@@ -1428,7 +1463,18 @@ theorem mod_right'
   have hb' : Odd (b % (4 * a)) := hb.mod_even (Even.mul_right (by decide) _)
   rcases exists_eq_pow_mul_and_not_dvd ha₀ 2 (by simp) with ⟨e, a', ha₁', ha₂⟩
   have ha₁ := odd_iff.mpr (two_dvd_ne_zero.mp ha₁')
-  nth_rw 2 [ha₂]; nth_
+  nth_rw 2 [ha₂]; nth_rw 1 [ha₂]
+  rw [Nat.cast_mul]; rw [mul_left]; rw [mul_left]; rw [quadratic_reciprocity' ha₁ hb]; rw [quadratic_reciprocity' ha₁ hb']; rw [Nat.cast_pow]; rw [pow_left]; rw [pow_left]; rw [Nat.cast_two]; rw [at_two hb]; rw [at_two hb']
+  congr 1; swap
+  · congr 1
+    · simp_rw [qrSign]
+      rw [χ₄_nat_mod_four]; rw [χ₄_nat_mod_four (b % (4 * a))]; rw [mod_mod_of_dvd b (dvd_mul_right 4 a)]
+    · rw [mod_left ↑(b % _), mod_left b, Int.natCast_mod, Int.emod_emod_of_dvd b]
+      simp only [ha₂, Nat.cast_mul, ← mul_assoc]
+      apply dvd_mul_left
+  rcases e with - | e; · simp
+  · rw [χ₈_nat_mod_eight, χ₈_nat_mod_eight (b % (4 * a)), mod_mod_of_dvd b]
+    use 2 ^ e * a'; rw [ha₂, Nat.pow_succ]; ring
 
 Depends on / 依赖: Even.mul_right, Nat.cast_mul, Nat.cast_pow, Nat.cast_two, at_two, cast_mul, cast_pow, cast_two, eq_or_ne, exists_eq_pow_mul_and_not_dvd, hb.mod_even, mod_even, mod_zero, mul_left, mul_right, mul_zero, nth_rw, odd_iff, odd_iff.mpr, pow_left
 -/
@@ -1462,7 +1508,7 @@ theorem mod_right
   rcases Int.natAbs_eq a with ha | ha <;> nth_rw 2 [ha] <;> nth_rw 1 [ha]
   · exact mod_right' a.natAbs hb
   · have hb' : Odd (b % (4 * a.natAbs)) := hb.mod_even (Even.mul_right (by decide) _)
-    rw [jacobiSym.neg _ hb]; rw [jacobiSym.neg _ hb']; rw [mod_right' _ hb]; rw [χ₄_nat_mod_four]; rw [χ
+    rw [jacobiSym.neg _ hb]; rw [jacobiSym.neg _ hb']; rw [mod_right' _ hb]; rw [χ₄_nat_mod_four]; rw [χ₄_nat_mod_four (b % (4 * _))]; rw [mod_mod_of_dvd b (dvd_mul_right 4 _)]
 
 中文:
 定理 mod_right
@@ -1472,7 +1518,7 @@ theorem mod_right
   rcases Int.natAbs_eq a with ha | ha <;> nth_rw 2 [ha] <;> nth_rw 1 [ha]
   · exact mod_right' a.natAbs hb
   · have hb' : Odd (b % (4 * a.natAbs)) := hb.mod_even (Even.mul_right (by decide) _)
-    rw [jacobiSym.neg _ hb]; rw [jacobiSym.neg _ hb']; rw [mod_right' _ hb]; rw [χ₄_nat_mod_four]; rw [χ
+    rw [jacobiSym.neg _ hb]; rw [jacobiSym.neg _ hb']; rw [mod_right' _ hb]; rw [χ₄_nat_mod_four]; rw [χ₄_nat_mod_four (b % (4 * _))]; rw [mod_mod_of_dvd b (dvd_mul_right 4 _)]
 
 Depends on / 依赖: Even.mul_right, Int.natAbs_eq, a.natAbs, dvd_mul_right, hb.mod_even, jacobiSym, jacobiSym.neg, mod_even, mod_mod_of_dvd, mod_right, mul_right, natAbs, natAbs_eq, nth_rw
 -/
@@ -1511,7 +1557,18 @@ definition fastJacobiSymAux
       (Nat.div_pos (Nat.le_of_dvd ha0 (Nat.dvd_of_mod_eq_zero ha4)) (by decide))
   else if ha2 : a % 2 = 0 then
     fastJacobiSymAux (a / 2) b (xor (b % 8 = 3 ∨ b % 8 = 5) flip)
-      (Nat.div_pos (Nat.le_of_dvd ha0 (Nat.dvd_of_mod_eq_zero 
+      (Nat.div_pos (Nat.le_of_dvd ha0 (Nat.dvd_of_mod_eq_zero ha2)) (by decide))
+  else if ha1 : a = 1 then
+    if flip then -1 else 1
+  else if hba : b % a = 0 then
+    0
+  else
+    fastJacobiSymAux (b % a) a (xor (a % 4 = 3 ∧ b % 4 = 3) flip) (Nat.pos_of_ne_zero hba)
+termination_by a
+decreasing_by
+  · exact a.div_lt_self ha0 (by decide)
+  · exact a.div_lt_self ha0 (by decide)
+  · exact b.mod_lt ha0
 
 中文:
 定义 fastJacobiSymAux
@@ -1521,7 +1578,18 @@ definition fastJacobiSymAux
       (Nat.div_pos (Nat.le_of_dvd ha0 (Nat.dvd_of_mod_eq_zero ha4)) (by decide))
   else if ha2 : a % 2 = 0 then
     fastJacobiSymAux (a / 2) b (xor (b % 8 = 3 ∨ b % 8 = 5) flip)
-      (Nat.div_pos (Nat.le_of_dvd ha0 (Nat.dvd_of_mod_eq_zero 
+      (Nat.div_pos (Nat.le_of_dvd ha0 (Nat.dvd_of_mod_eq_zero ha2)) (by decide))
+  else if ha1 : a = 1 then
+    if flip then -1 else 1
+  else if hba : b % a = 0 then
+    0
+  else
+    fastJacobiSymAux (b % a) a (xor (a % 4 = 3 ∧ b % 4 = 3) flip) (Nat.pos_of_ne_zero hba)
+termination_by a
+decreasing_by
+  · exact a.div_lt_self ha0 (by decide)
+  · exact a.div_lt_self ha0 (by decide)
+  · exact b.mod_lt ha0
 -/
 private def fastJacobiSymAux (a b : Nat) (flip : Bool) (ha0 : a > 0) : Int :=
   if ha4 : a % 4 = 0 then
@@ -1554,7 +1622,20 @@ theorem fastJacobiSymAux.eq_jacobiSym
   split <;> rename_i ha4
   · rw [IH (a / 4) (a.div_lt_self ha0 (by decide)) hb2 hb1]
     simp only [Int.natCast_ediv, Nat.cast_ofNat, div_four_left (a := a) (mod_cast ha4) hb2]
-  split <;> rename_
+  split <;> rename_i ha2
+  · rw [IH (a / 2) (a.div_lt_self ha0 (by decide)) hb2 hb1]
+    simp only [Int.natCast_ediv, Nat.cast_ofNat, ← even_odd (a := a) (mod_cast ha2) hb2]
+    by_cases h : b % 8 = 3 ∨ b % 8 = 5 <;> simp [h]; cases flip <;> simp
+  split <;> rename_i ha1
+  · subst ha1; simp
+  split <;> rename_i hba
+  · suffices J(a | b) = 0 by simp [this]
+    refine eq_zero_iff.mpr ⟨fun h => absurd (h ▸ hb1) (by decide), ?_⟩
+    rwa [Int.gcd_natCast_natCast, Nat.gcd_eq_left (Nat.dvd_of_mod_eq_zero hba)]
+  rw [IH (b % a) (b.mod_lt ha0) (Nat.mod_two_ne_zero.mp ha2) (lt_of_le_of_ne ha0 (Ne.symm ha1))]
+  simp only [Int.natCast_mod, ← mod_left]
+  rw [← quadratic_reciprocity_if (Nat.mod_two_ne_zero.mp ha2) hb2]
+  by_cases h : a % 4 = 3 ∧ b % 4 = 3 <;> simp [h]; cases flip <;> simp
 
 中文:
 定理 fastJacobiSymAux.eq_jacobiSym
@@ -1565,7 +1646,20 @@ theorem fastJacobiSymAux.eq_jacobiSym
   split <;> rename_i ha4
   · rw [IH (a / 4) (a.div_lt_self ha0 (by decide)) hb2 hb1]
     simp only [Int.natCast_ediv, Nat.cast_ofNat, div_four_left (a := a) (mod_cast ha4) hb2]
-  split <;> rename_
+  split <;> rename_i ha2
+  · rw [IH (a / 2) (a.div_lt_self ha0 (by decide)) hb2 hb1]
+    simp only [Int.natCast_ediv, Nat.cast_ofNat, ← even_odd (a := a) (mod_cast ha2) hb2]
+    by_cases h : b % 8 = 3 ∨ b % 8 = 5 <;> simp [h]; cases flip <;> simp
+  split <;> rename_i ha1
+  · subst ha1; simp
+  split <;> rename_i hba
+  · suffices J(a | b) = 0 by simp [this]
+    refine eq_zero_iff.mpr ⟨fun h => absurd (h ▸ hb1) (by decide), ?_⟩
+    rwa [Int.gcd_natCast_natCast, Nat.gcd_eq_left (Nat.dvd_of_mod_eq_zero hba)]
+  rw [IH (b % a) (b.mod_lt ha0) (Nat.mod_two_ne_zero.mp ha2) (lt_of_le_of_ne ha0 (Ne.symm ha1))]
+  simp only [Int.natCast_mod, ← mod_left]
+  rw [← quadratic_reciprocity_if (Nat.mod_two_ne_zero.mp ha2) hb2]
+  by_cases h : a % 4 = 3 ∧ b % 4 = 3 <;> simp [h]; cases flip <;> simp
 -/
 private theorem fastJacobiSymAux.eq_jacobiSym {a b : Nat} {flip : Bool} {ha0 : a > 0}
     (hb2 : b % 2 = 1) (hb1 : b > 1) :
@@ -1609,7 +1703,7 @@ definition fastJacobiSym
   else if hab : a % b = 0 then
     0
   else
-    fastJacobiSymAux (a % b).
+    fastJacobiSymAux (a % b).natAbs b false (Int.natAbs_pos.mpr hab)
 
 中文:
 定义 fastJacobiSym
@@ -1627,7 +1721,7 @@ definition fastJacobiSym
   else if hab : a % b = 0 then
     0
   else
-    fastJacobiSymAux (a % b).
+    fastJacobiSymAux (a % b).natAbs b false (Int.natAbs_pos.mpr hab)
 -/
 private def fastJacobiSym (a : Int) (b : Nat) : Int :=
   if hb0 : b = 0 then
@@ -1660,7 +1754,18 @@ theorem fastJacobiSym.eq
   · rw [hb0, zero_right]
   · refine eq_zero_iff.mpr ⟨hb0, ne_of_gt ?_⟩
     refine Nat.le_of_dvd (Int.gcd_pos_iff.mpr (mod_cast .inr hb0)) ?_
-    refine Nat.dvd_gcd (Int.ofN
+    refine Nat.dvd_gcd (Int.ofNat_dvd_left.mp (Int.dvd_of_emod_eq_zero ha2)) ?_
+    exact Int.ofNat_dvd_left.mp (Int.dvd_of_emod_eq_zero (mod_cast hb2))
+  · dsimp only
+    rw [← IH (b / 2) (b.div_lt_self (Nat.pos_of_ne_zero hb0) one_lt_two)]
+    obtain ⟨b, rfl⟩ := Nat.dvd_of_mod_eq_zero hb2
+    rw [mul_right' a (by decide) fun h => hb0 (mul_eq_zero_of_right 2 h)]; rw [b.mul_div_cancel_left (by decide)]; rw [mod_left a 2]; rw [Nat.cast_ofNat]; rw [Int.emod_two_ne_zero.mp ha2]; rw [one_left]; rw [one_mul]
+  · rw [hb1, one_right]
+  · rw [mod_left, hab, zero_left (lt_of_le_of_ne (Nat.pos_of_ne_zero hb0) (Ne.symm hb1))]
+  · rw [fastJacobiSymAux.eq_jacobiSym, if_neg Bool.false_ne_true, mod_left a b,
+      Int.natAbs_of_nonneg (a.emod_nonneg (mod_cast hb0))]
+    · exact Nat.mod_two_ne_zero.mp hb2
+    · exact lt_of_le_of_ne (Nat.one_le_iff_ne_zero.mpr hb0) (Ne.symm hb1)
 
 中文:
 定理 fastJacobiSym.eq
@@ -1673,7 +1778,18 @@ theorem fastJacobiSym.eq
   · rw [hb0, zero_right]
   · refine eq_zero_iff.mpr ⟨hb0, ne_of_gt ?_⟩
     refine Nat.le_of_dvd (Int.gcd_pos_iff.mpr (mod_cast .inr hb0)) ?_
-    refine Nat.dvd_gcd (Int.ofN
+    refine Nat.dvd_gcd (Int.ofNat_dvd_left.mp (Int.dvd_of_emod_eq_zero ha2)) ?_
+    exact Int.ofNat_dvd_left.mp (Int.dvd_of_emod_eq_zero (mod_cast hb2))
+  · dsimp only
+    rw [← IH (b / 2) (b.div_lt_self (Nat.pos_of_ne_zero hb0) one_lt_two)]
+    obtain ⟨b, rfl⟩ := Nat.dvd_of_mod_eq_zero hb2
+    rw [mul_right' a (by decide) fun h => hb0 (mul_eq_zero_of_right 2 h)]; rw [b.mul_div_cancel_left (by decide)]; rw [mod_left a 2]; rw [Nat.cast_ofNat]; rw [Int.emod_two_ne_zero.mp ha2]; rw [one_left]; rw [one_mul]
+  · rw [hb1, one_right]
+  · rw [mod_left, hab, zero_left (lt_of_le_of_ne (Nat.pos_of_ne_zero hb0) (Ne.symm hb1))]
+  · rw [fastJacobiSymAux.eq_jacobiSym, if_neg Bool.false_ne_true, mod_left a b,
+      Int.natAbs_of_nonneg (a.emod_nonneg (mod_cast hb0))]
+    · exact Nat.mod_two_ne_zero.mp hb2
+    · exact lt_of_le_of_ne (Nat.one_le_iff_ne_zero.mpr hb0) (Ne.symm hb1)
 -/
 @[csimp] private theorem fastJacobiSym.eq : jacobiSym = fastJacobiSym := by
   ext a b

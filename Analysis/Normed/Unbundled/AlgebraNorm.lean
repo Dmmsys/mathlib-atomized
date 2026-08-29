@@ -306,7 +306,11 @@ definition isScalarTower_restriction
   neg' x := by simp only [map_neg, map_neg_eq_map]
   mul_le' x y := by simp only [map_mul, map_mul_le_mul]
   eq_zero_of_map_eq_zero' x hx := by
-    rw [← map_eq_zero_iff (algebraMap A 
+    rw [← map_eq_zero_iff (algebraMap A S) hinj]
+    exact eq_zero_of_map_eq_zero f hx
+  smul' r x := by
+    simp only [Algebra.smul_def, map_mul, ← IsScalarTower.algebraMap_apply]
+    simp only [← smul_eq_mul, algebraMap_smul, map_smul_eq_mul]
 
 中文:
 定义 isScalarTower_restriction
@@ -317,7 +321,11 @@ definition isScalarTower_restriction
   neg' x := by simp only [map_neg, map_neg_eq_map]
   mul_le' x y := by simp only [map_mul, map_mul_le_mul]
   eq_zero_of_map_eq_zero' x hx := by
-    rw [← map_eq_zero_iff (algebraMap A 
+    rw [← map_eq_zero_iff (algebraMap A S) hinj]
+    exact eq_zero_of_map_eq_zero f hx
+  smul' r x := by
+    simp only [Algebra.smul_def, map_mul, ← IsScalarTower.algebraMap_apply]
+    simp only [← smul_eq_mul, algebraMap_smul, map_smul_eq_mul]
 
 Depends on / 依赖: algebraMap
 -/

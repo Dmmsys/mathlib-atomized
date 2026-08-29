@@ -1286,7 +1286,10 @@ theorem natTrailingDegree_mul_X_pow
   · rw [natTrailingDegree_eq_support_min' fun h => hp (mul_X_pow_eq_zero h), Finset.le_min'_iff]
     intro y hy
     have key : n <= y := by
-      rw
+      rw [mem_support_iff]; rw [coeff_mul_X_pow'] at hy
+      exact by_contra fun h => hy (if_neg h)
+    rw [mem_support_iff]; rw [coeff_mul_X_pow']; rw [if_pos key] at hy
+    exact (le_tsub_iff_right key).mp (natTrailingDegree_le_of_ne_zero hy)
 
 中文:
 定理 natTrailingDegree_mul_X_pow
@@ -1298,7 +1301,10 @@ theorem natTrailingDegree_mul_X_pow
   · rw [natTrailingDegree_eq_support_min' fun h => hp (mul_X_pow_eq_zero h), Finset.le_min'_iff]
     intro y hy
     have key : n <= y := by
-      rw
+      rw [mem_support_iff]; rw [coeff_mul_X_pow'] at hy
+      exact by_contra fun h => hy (if_neg h)
+    rw [mem_support_iff]; rw [coeff_mul_X_pow']; rw [if_pos key] at hy
+    exact (le_tsub_iff_right key).mp (natTrailingDegree_le_of_ne_zero hy)
 
 Depends on / 依赖: Finset, Finset.le_min, _iff, coeff_mul_X_pow, if_neg, if_pos, le_antisymm, le_min, le_tsub_iff_right, mem_support_iff, mul_X_pow_eq_zero, natTrailingDegree_eq_support_min, natTrailingDegree_le_of_ne_zero, trailingCoeff, trailingCoeff_eq_zero, trailingCoeff_eq_zero.mp
 -/
@@ -1327,7 +1333,8 @@ theorem le_trailingDegree_mul
   obtain ⟨⟨i, j⟩, hij, hpq⟩ := exists_ne_zero_of_sum_ne_zero hn
   refine
     (add_le_add (min_le (mem_support_iff.mpr (left_ne_zero_of_mul hpq)))
-          (min_le (mem_support_iff.mpr (right_ne_zero_of_mul hpq))))
+          (min_le (mem_support_iff.mpr (right_ne_zero_of_mul hpq)))).trans_eq ?_
+  rwa [← WithTop.coe_add, WithTop.coe_eq_coe, ← mem_antidiagonal]
 
 中文:
 定理 le_trailingDegree_mul
@@ -1338,7 +1345,8 @@ theorem le_trailingDegree_mul
   obtain ⟨⟨i, j⟩, hij, hpq⟩ := exists_ne_zero_of_sum_ne_zero hn
   refine
     (add_le_add (min_le (mem_support_iff.mpr (left_ne_zero_of_mul hpq)))
-          (min_le (mem_support_iff.mpr (right_ne_zero_of_mul hpq))))
+          (min_le (mem_support_iff.mpr (right_ne_zero_of_mul hpq)))).trans_eq ?_
+  rwa [← WithTop.coe_add, WithTop.coe_eq_coe, ← mem_antidiagonal]
 
 Depends on / 依赖: Finset, Finset.le_min, WithTop, WithTop.coe_add, WithTop.coe_eq_coe, add_le_add, coe_add, coe_eq_coe, coeff_mul, exists_ne_zero_of_sum_ne_zero, le_min, left_ne_zero_of_mul, mem_antidiagonal, mem_support_iff, mem_support_iff.mpr, min_le, right_ne_zero_of_mul, trans_eq
 -/
@@ -1360,7 +1368,8 @@ theorem le_natTrailingDegree_mul
   proof: by
   have hp : p != 0 := fun hp => h (by rw [hp, zero_mul])
   have hq : q != 0 := fun hq => h (by rw [hq, mul_zero])
-  rw [← ENat.natCast_le_natCast]; rw [ENat.natCast_add]; rw [← trailingDegree_eq_natTrailingDegree hp]; rw [← trailingDegree_eq_natTrailingDegree hq]; rw [← trailingDegree_eq_natTrail
+  rw [← ENat.natCast_le_natCast]; rw [ENat.natCast_add]; rw [← trailingDegree_eq_natTrailingDegree hp]; rw [← trailingDegree_eq_natTrailingDegree hq]; rw [← trailingDegree_eq_natTrailingDegree h]
+  exact le_trailingDegree_mul
 
 中文:
 定理 le_natTrailingDegree_mul
@@ -1368,7 +1377,8 @@ theorem le_natTrailingDegree_mul
   证明: by
   have hp : p != 0 := fun hp => h (by rw [hp, zero_mul])
   have hq : q != 0 := fun hq => h (by rw [hq, mul_zero])
-  rw [← ENat.natCast_le_natCast]; rw [ENat.natCast_add]; rw [← trailingDegree_eq_natTrailingDegree hp]; rw [← trailingDegree_eq_natTrailingDegree hq]; rw [← trailingDegree_eq_natTrail
+  rw [← ENat.natCast_le_natCast]; rw [ENat.natCast_add]; rw [← trailingDegree_eq_natTrailingDegree hp]; rw [← trailingDegree_eq_natTrailingDegree hq]; rw [← trailingDegree_eq_natTrailingDegree h]
+  exact le_trailingDegree_mul
 
 Depends on / 依赖: ENat.natCast_add, ENat.natCast_le_natCast, le_trailingDegree_mul, mul_zero, natCast_add, natCast_le_natCast, trailingDegree_eq_natTrailingDegree, zero_mul
 -/
@@ -1393,7 +1403,11 @@ theorem coeff_mul_natTrailingDegree_add_natTrailingDegree
   rintro ⟨i, j⟩ h₁ h₂
   rw [mem_antidiagonal] at h₁
   by_cases! hi : i < p.natTrailingDegree
-  · rw [coeff_eq_zero_of_lt_natTrailingDegree hi, zero_m
+  · rw [coeff_eq_zero_of_lt_natTrailingDegree hi, zero_mul]
+  by_cases! hj : j < q.natTrailingDegree
+  · rw [coeff_eq_zero_of_lt_natTrailingDegree hj, mul_zero]
+  refine (h₂ (Prod.ext_iff.mpr ?_).symm).elim
+  exact (add_eq_add_iff_eq_and_eq hi hj).mp h₁.symm
 
 中文:
 定理 coeff_mul_natTrailingDegree_add_natTrailingDegree
@@ -1406,7 +1420,11 @@ theorem coeff_mul_natTrailingDegree_add_natTrailingDegree
   rintro ⟨i, j⟩ h₁ h₂
   rw [mem_antidiagonal] at h₁
   by_cases! hi : i < p.natTrailingDegree
-  · rw [coeff_eq_zero_of_lt_natTrailingDegree hi, zero_m
+  · rw [coeff_eq_zero_of_lt_natTrailingDegree hi, zero_mul]
+  by_cases! hj : j < q.natTrailingDegree
+  · rw [coeff_eq_zero_of_lt_natTrailingDegree hj, mul_zero]
+  refine (h₂ (Prod.ext_iff.mpr ?_).symm).elim
+  exact (add_eq_add_iff_eq_and_eq hi hj).mp h₁.symm
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, Prod.ext_iff.mpr, add_eq_add_iff_eq_and_eq, coeff_eq_zero_of_lt_natTrailingDegree, coeff_mul, ext_iff, mem_antidiagonal, mem_antidiagonal.mpr, mul_zero, natTrailingDegree, p.natTrailingDegree, q.natTrailingDegree, sum_eq_single, zero_mul
 -/
@@ -1436,6 +1454,9 @@ theorem trailingDegree_mul'
   have hq : q != 0 := fun hq => h (by rw [hq, trailingCoeff_zero, mul_zero])
   refine le_antisymm ?_ le_trailingDegree_mul
   rw [trailingDegree_eq_natTrailingDegree hp]; rw [trailingDegree_eq_natTrailingDegree hq]; rw [←
+    ENat.natCast_add]
+  apply trailingDegree_le_of_ne_zero
+  rwa [coeff_mul_natTrailingDegree_add_natTrailingDegree]
 
 中文:
 定理 trailingDegree_mul'
@@ -1445,6 +1466,9 @@ theorem trailingDegree_mul'
   have hq : q != 0 := fun hq => h (by rw [hq, trailingCoeff_zero, mul_zero])
   refine le_antisymm ?_ le_trailingDegree_mul
   rw [trailingDegree_eq_natTrailingDegree hp]; rw [trailingDegree_eq_natTrailingDegree hq]; rw [←
+    ENat.natCast_add]
+  apply trailingDegree_le_of_ne_zero
+  rwa [coeff_mul_natTrailingDegree_add_natTrailingDegree]
 
 Depends on / 依赖: ENat.natCast_add, coeff_mul_natTrailingDegree_add_natTrailingDegree, le_antisymm, le_trailingDegree_mul, mul_zero, natCast_add, trailingCoeff_zero, trailingDegree_eq_natTrailingDegree, trailingDegree_le_of_ne_zero, zero_mul
 -/
@@ -1468,7 +1492,7 @@ theorem natTrailingDegree_mul'
   have hp : p != 0 := fun hp => h (by rw [hp, trailingCoeff_zero, zero_mul])
   have hq : q != 0 := fun hq => h (by rw [hq, trailingCoeff_zero, mul_zero])
   apply natTrailingDegree_eq_of_trailingDegree_eq_some
-  rw [trailingDegree_mul' h]; rw [ENat.natCast_add]; rw [← trailingDegree_eq_natTrailing
+  rw [trailingDegree_mul' h]; rw [ENat.natCast_add]; rw [← trailingDegree_eq_natTrailingDegree hp]; rw [← trailingDegree_eq_natTrailingDegree hq]
 
 中文:
 定理 natTrailingDegree_mul'
@@ -1477,7 +1501,7 @@ theorem natTrailingDegree_mul'
   have hp : p != 0 := fun hp => h (by rw [hp, trailingCoeff_zero, zero_mul])
   have hq : q != 0 := fun hq => h (by rw [hq, trailingCoeff_zero, mul_zero])
   apply natTrailingDegree_eq_of_trailingDegree_eq_some
-  rw [trailingDegree_mul' h]; rw [ENat.natCast_add]; rw [← trailingDegree_eq_natTrailing
+  rw [trailingDegree_mul' h]; rw [ENat.natCast_add]; rw [← trailingDegree_eq_natTrailingDegree hp]; rw [← trailingDegree_eq_natTrailingDegree hq]
 
 Depends on / 依赖: ENat.natCast_add, mul_zero, natCast_add, natTrailingDegree_eq_of_trailingDegree_eq_some, trailingCoeff_zero, trailingDegree_eq_natTrailingDegree, trailingDegree_mul, zero_mul
 -/
@@ -1893,7 +1917,8 @@ lemma eq_X_pow_iff_natDegree_le_natTrailingDegree
     rw [coeff_X_pow]
     obtain hn | rfl | hn := lt_trichotomy n p.natDegree
     · rw [if_neg hn.ne, coeff_eq_zero_of_lt_natTrailingDegree (hn.trans_le h)]
-    · simpa only [if_pos
+    · simpa only [if_pos rfl] using! h₁.leadingCoeff
+    · rw [if_neg hn.ne', coeff_eq_zero_of_natDegree_lt hn]
 
 中文:
 引理 eq_X_pow_iff_natDegree_le_natTrailingDegree
@@ -1906,7 +1931,8 @@ lemma eq_X_pow_iff_natDegree_le_natTrailingDegree
     rw [coeff_X_pow]
     obtain hn | rfl | hn := lt_trichotomy n p.natDegree
     · rw [if_neg hn.ne, coeff_eq_zero_of_lt_natTrailingDegree (hn.trans_le h)]
-    · simpa only [if_pos
+    · simpa only [if_pos rfl] using! h₁.leadingCoeff
+    · rw [if_neg hn.ne', coeff_eq_zero_of_natDegree_lt hn]
 
 Depends on / 依赖: coeff_X_pow, coeff_eq_zero_of_lt_natTrailingDegree, coeff_eq_zero_of_natDegree_lt, hn.ne, hn.trans_le, if_neg, if_pos, leadingCoeff, lt_trichotomy, natDegree, natTrailingDegree_X_pow, nontriviality, p.natDegree, trans_le
 -/

@@ -214,7 +214,11 @@ definition mkCLM
     intro f
     obtain ⟨s, C, h⟩ := hbound f
     use s, C
-
+    rw [← Seminorm.finset_sup_smul]
+    intro B
+    obtain ⟨g, h₁, h₂⟩ := h ((toUniformConvergenceCLM _ _ _).symm B)
+    refine le_trans ?_ (Seminorm.le_finset_sup_apply h₁)
+    exact h₂
 
 中文:
 定义 mkCLM
@@ -227,7 +231,11 @@ definition mkCLM
     intro f
     obtain ⟨s, C, h⟩ := hbound f
     use s, C
-
+    rw [← Seminorm.finset_sup_smul]
+    intro B
+    obtain ⟨g, h₁, h₂⟩ := h ((toUniformConvergenceCLM _ _ _).symm B)
+    refine le_trans ?_ (Seminorm.le_finset_sup_apply h₁)
+    exact h₂
 
 Depends on / 依赖: toLinearMap, toLinearMap.comp, toUniformConvergenceCLM
 -/

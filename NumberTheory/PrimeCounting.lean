@@ -1269,7 +1269,15 @@ theorem primeCounting'_add_le
       rw [primeCounting']; rw [count_eq_card_filter_range]; rw [range_eq_Ico]; rw [range_eq_Ico]; rw [←
         Ico_union_Ico_eq_Ico (zero_le k) le_self_add]; rw [filter_union]
       apply card_union_le
-    _ <=
+    _ <= π' k + #{p in Ico k (k + n) | p.Prime} := by
+      rw [primeCounting']; rw [count_eq_card_filter_range]
+    _ <= π' k + #{b in Ico k (k + n) | a.Coprime b} := by
+      gcongr with p hp
+      rw [coprime_comm]
+exact coprime_of_lt_prime h0 h1.trans_le (mem_Ico.1 hp).1
+    _ <= π' k + totient a * (n / a + 1) := by
+      rw [add_le_add_iff_left]
+      exact Ico_filter_coprime_le k n h0
 
 中文:
 定理 primeCounting'_add_le
@@ -1279,7 +1287,15 @@ theorem primeCounting'_add_le
       rw [primeCounting']; rw [count_eq_card_filter_range]; rw [range_eq_Ico]; rw [range_eq_Ico]; rw [←
         Ico_union_Ico_eq_Ico (zero_le k) le_self_add]; rw [filter_union]
       apply card_union_le
-    _ <=
+    _ <= π' k + #{p in Ico k (k + n) | p.Prime} := by
+      rw [primeCounting']; rw [count_eq_card_filter_range]
+    _ <= π' k + #{b in Ico k (k + n) | a.Coprime b} := by
+      gcongr with p hp
+      rw [coprime_comm]
+exact coprime_of_lt_prime h0 h1.trans_le (mem_Ico.1 hp).1
+    _ <= π' k + totient a * (n / a + 1) := by
+      rw [add_le_add_iff_left]
+      exact Ico_filter_coprime_le k n h0
 -/
 theorem primeCounting'_add_le {a k : Nat} (h0 : a != 0) (h1 : a < k) (n : Nat) :
     π' (k + n) <= π' k + Nat.totient a * (n / a + 1) :=

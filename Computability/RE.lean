@@ -37,7 +37,24 @@ have : Nat.Partrec fun n => Nat.rfindOpt fun k => cf.evaln k n > cg.evaln k n :=
     Partrec.nat_iff.1
       (Partrec.rfindOpt <|
         Primrec.option_orElse.to_comp.comp
-          (Code.primrec_evaln.to_com
+          (Code.primrec_evaln.to_comp.comp <| (snd.pair (const cf)).pair fst)
+          (Code.primrec_evaln.to_comp.comp <| (snd.pair (const cg)).pair fst))
+  refine ⟨_, this, fun n => ?_⟩
+have : forall x in rfindOpt fun k => Code.evaln k cf n > Code.evaln k cg n,
+      x in Code.eval cf n ∨ x in Code.eval cg n := by
+    intro x h
+    obtain ⟨k, e⟩ := Nat.rfindOpt_spec h
+    rw [Option.mem_def]; rw [Option.orElse_eq_some]; rw [← Option.mem_def]; rw [← Option.mem_def] at e
+    obtain e | ⟨-, e⟩ := e <;> simp [Code.evaln_sound e]
+  refine ⟨this, fun h => (this _ ⟨h, rfl⟩).imp Exists.fst Exists.fst, fun h => ?_⟩
+  rw [Nat.rfindOpt_dom]
+  simp only [dom_iff_mem, Code.evaln_complete, Option.mem_def] at h
+  obtain ⟨x, k, e⟩ | ⟨x, k, e⟩ := h
+  · exact ⟨k, x, by simp [e]⟩
+  · refine ⟨k, ?_⟩
+    rcases cf.evaln k n with - | y
+    · exact ⟨x, by simp [e]⟩
+    · exact ⟨y, by simp⟩
 
 中文:
 定理 merge'
@@ -49,7 +66,24 @@ have : Nat.Partrec fun n => Nat.rfindOpt fun k => cf.evaln k n > cg.evaln k n :=
     Partrec.nat_iff.1
       (Partrec.rfindOpt <|
         Primrec.option_orElse.to_comp.comp
-          (Code.primrec_evaln.to_com
+          (Code.primrec_evaln.to_comp.comp <| (snd.pair (const cf)).pair fst)
+          (Code.primrec_evaln.to_comp.comp <| (snd.pair (const cg)).pair fst))
+  refine ⟨_, this, fun n => ?_⟩
+have : forall x in rfindOpt fun k => Code.evaln k cf n > Code.evaln k cg n,
+      x in Code.eval cf n ∨ x in Code.eval cg n := by
+    intro x h
+    obtain ⟨k, e⟩ := Nat.rfindOpt_spec h
+    rw [Option.mem_def]; rw [Option.orElse_eq_some]; rw [← Option.mem_def]; rw [← Option.mem_def] at e
+    obtain e | ⟨-, e⟩ := e <;> simp [Code.evaln_sound e]
+  refine ⟨this, fun h => (this _ ⟨h, rfl⟩).imp Exists.fst Exists.fst, fun h => ?_⟩
+  rw [Nat.rfindOpt_dom]
+  simp only [dom_iff_mem, Code.evaln_complete, Option.mem_def] at h
+  obtain ⟨x, k, e⟩ | ⟨x, k, e⟩ := h
+  · exact ⟨k, x, by simp [e]⟩
+  · refine ⟨k, ?_⟩
+    rcases cf.evaln k n with - | y
+    · exact ⟨x, by simp [e]⟩
+    · exact ⟨y, by simp⟩
 
 Depends on / 依赖: Code.eval, Code.evaln, Code.exists_code, Code.primrec_evaln.to_comp.comp, Nat.Partrec, Nat.rfindOpt, Partrec, Partrec.nat_iff, Partrec.rfindOpt, Primrec, Primrec.option_orElse.to_comp.comp, cf.evaln, cg.evaln, exists_code, nat_iff, option_orElse, primrec_evaln, rfindOpt, snd.pair, to_comp
 -/
@@ -106,7 +140,25 @@ theorem merge'
   refine
     ⟨k', ((nat_iff.2 hk).comp Computable.encode).bind (Computable.decode.ofOption.comp snd).to₂,
       fun a => ?_⟩
-  have 
+  have : forall x in k' a, x in f a ∨ x in g a := by
+    intro x h'
+    simp only [k', mem_coe, mem_bind_iff, Option.mem_def] at h'
+    obtain ⟨n, hn, hx⟩ := h'
+    have := (H _).1 _ hn
+    simp only [decode₂_encode, coe_some, bind_some, mem_map_iff] at this
+    obtain ⟨a', ha, rfl⟩ | ⟨a', ha, rfl⟩ := this <;> simp only [encodek, Option.some_inj] at hx <;>
+      rw [hx] at ha
+    · exact Or.inl ha
+    · exact Or.inr ha
+  refine ⟨this, ⟨fun h => (this _ ⟨h, rfl⟩).imp Exists.fst Exists.fst, ?_⟩⟩
+  intro h
+  rw [bind_dom]
+  have hk : (k (encode a)).Dom :=
+    (H _).2.2 (by simpa only [encodek₂, bind_some, coe_some] using! h)
+  exists hk
+  simp only [mem_map_iff, mem_coe, mem_bind_iff, Option.mem_def] at H
+  obtain ⟨a', _, y, _, e⟩ | ⟨a', _, y, _, e⟩ := (H _).1 _ ⟨hk, rfl⟩ <;>
+    simp only [e.symm, encodek, coe_some, some_dom]
 
 中文:
 定理 merge'
@@ -117,7 +169,25 @@ theorem merge'
   refine
     ⟨k', ((nat_iff.2 hk).comp Computable.encode).bind (Computable.decode.ofOption.comp snd).to₂,
       fun a => ?_⟩
-  have 
+  have : forall x in k' a, x in f a ∨ x in g a := by
+    intro x h'
+    simp only [k', mem_coe, mem_bind_iff, Option.mem_def] at h'
+    obtain ⟨n, hn, hx⟩ := h'
+    have := (H _).1 _ hn
+    simp only [decode₂_encode, coe_some, bind_some, mem_map_iff] at this
+    obtain ⟨a', ha, rfl⟩ | ⟨a', ha, rfl⟩ := this <;> simp only [encodek, Option.some_inj] at hx <;>
+      rw [hx] at ha
+    · exact Or.inl ha
+    · exact Or.inr ha
+  refine ⟨this, ⟨fun h => (this _ ⟨h, rfl⟩).imp Exists.fst Exists.fst, ?_⟩⟩
+  intro h
+  rw [bind_dom]
+  have hk : (k (encode a)).Dom :=
+    (H _).2.2 (by simpa only [encodek₂, bind_some, coe_some] using! h)
+  exists hk
+  simp only [mem_map_iff, mem_coe, mem_bind_iff, Option.mem_def] at H
+  obtain ⟨a', _, y, _, e⟩ | ⟨a', _, y, _, e⟩ := (H _).1 _ ⟨hk, rfl⟩ <;>
+    simp only [e.symm, encodek, coe_some, some_dom]
 
 Depends on / 依赖: Computable, Computable.decode.ofOption.comp, Computable.encode, Nat.Partrec.merge, Option.mem_def, Partrec, bind_some, coe_some, decode, encode, mem_bind_iff, mem_coe, mem_def, mem_map, nat_iff, ofOption
 -/
@@ -162,7 +232,9 @@ theorem merge
       refine ⟨this, ?_⟩
       rcases h with h | h <;> rcases (K _).1 _ ⟨this, rfl⟩ with h' | h'
       · exact mem_unique h' h
-      · exact (H _ _ h _ h')
+      · exact (H _ _ h _ h').symm
+      · exact H _ _ h' _ h
+      · exact mem_unique h' h⟩⟩
 
 中文:
 定理 merge
@@ -174,7 +246,9 @@ theorem merge
       refine ⟨this, ?_⟩
       rcases h with h | h <;> rcases (K _).1 _ ⟨this, rfl⟩ with h' | h'
       · exact mem_unique h' h
-      · exact (H _ _ h _ h')
+      · exact (H _ _ h _ h').symm
+      · exact H _ _ h' _ h
+      · exact mem_unique h' h⟩⟩
 
 Depends on / 依赖: Exists, Exists.fst, h.imp, mem_unique
 -/
@@ -204,7 +278,13 @@ theorem cond
     ((@Computable.decode σ _).comp snd).ofOption.to₂).of_eq
     fun a => by cases c a <;> simp [ef, eg, encodek]
 
-nonrec theorem sumCasesOn {f : α
+nonrec theorem sumCasesOn {f : α -> β oplus γ} {g : α -> β ->. σ} {h : α -> γ ->. σ} (hf : Computable f)
+    (hg : Partrec₂ g) (hh : Partrec₂ h) : @Partrec _ σ _ _ fun a => Sum.casesOn (f a) (g a) (h a) :=
+option_some_iff.1
+    (cond (sumCasesOn hf (const true).to₂ (const false).to₂)
+          (sumCasesOn_left hf (option_some_iff.2 hg).to₂ (const Option.none).to₂)
+          (sumCasesOn_right hf (const Option.none).to₂ (option_some_iff.2 hh).to₂)).of_eq
+      fun a => by cases f a <;> simp only [Bool.cond_true, Bool.cond_false]
 
 中文:
 定理 cond
@@ -215,7 +295,13 @@ nonrec theorem sumCasesOn {f : α
     ((@Computable.decode σ _).comp snd).ofOption.to₂).of_eq
     fun a => by cases c a <;> simp [ef, eg, encodek]
 
-nonrec theorem sumCasesOn {f : α
+nonrec theorem sumCasesOn {f : α -> β oplus γ} {g : α -> β ->. σ} {h : α -> γ ->. σ} (hf : Computable f)
+    (hg : Partrec₂ g) (hh : Partrec₂ h) : @Partrec _ σ _ _ fun a => Sum.casesOn (f a) (g a) (h a) :=
+option_some_iff.1
+    (cond (sumCasesOn hf (const true).to₂ (const false).to₂)
+          (sumCasesOn_left hf (option_some_iff.2 hg).to₂ (const Option.none).to₂)
+          (sumCasesOn_right hf (const Option.none).to₂ (option_some_iff.2 hh).to₂)).of_eq
+      fun a => by cases f a <;> simp only [Bool.cond_true, Bool.cond_false]
 
 Depends on / 依赖: Computable, Computable.cond, Computable.decode, Computable.encode, decode, encode, encodek, eval_part, eval_part.comp, exists_code, ofOption, ofOption.to, of_eq
 -/
@@ -568,7 +654,14 @@ theorem computable_iff_re_compl_re
         Partrec.merge (h₁.map (Computable.const true).to₂) (h₂.map (Computable.const false).to₂)
         (by
           intro a x hx y hy
-          simp only [Part.mem_map_iff, Part.mem_assert_iff, Part.mem_som
+          simp only [Part.mem_map_iff, Part.mem_assert_iff, Part.mem_some_iff, exists_prop,
+            and_true, exists_const] at hx hy
+          cases hy.1 hx.1)
+      refine Partrec.of_eq pk fun n => Part.eq_some_iff.2 ?_
+      rw [hk]
+      simp only [Part.mem_map_iff, Part.mem_assert_iff, Part.mem_some_iff, exists_prop, and_true,
+        true_eq_decide_iff, and_self, exists_const, false_eq_decide_iff]
+      apply Decidable.em⟩⟩
 
 中文:
 定理 computable_iff_re_compl_re
@@ -579,7 +672,14 @@ theorem computable_iff_re_compl_re
         Partrec.merge (h₁.map (Computable.const true).to₂) (h₂.map (Computable.const false).to₂)
         (by
           intro a x hx y hy
-          simp only [Part.mem_map_iff, Part.mem_assert_iff, Part.mem_som
+          simp only [Part.mem_map_iff, Part.mem_assert_iff, Part.mem_some_iff, exists_prop,
+            and_true, exists_const] at hx hy
+          cases hy.1 hx.1)
+      refine Partrec.of_eq pk fun n => Part.eq_some_iff.2 ?_
+      rw [hk]
+      simp only [Part.mem_map_iff, Part.mem_assert_iff, Part.mem_some_iff, exists_prop, and_true,
+        true_eq_decide_iff, and_self, exists_const, false_eq_decide_iff]
+      apply Decidable.em⟩⟩
 
 Depends on / 依赖: Computable, Computable.const, Part.eq_some_iff, Part.mem_assert_iff, Part.mem_map_iff, Part.mem_some_iff, Partrec, Partrec.merge, Partrec.of_eq, and_true, eq_some_iff, exists_const, exists_prop, h.not.to_re, h.to_re, mem_assert_iff, mem_map_iff, mem_some_iff, of_eq, to_re
 -/

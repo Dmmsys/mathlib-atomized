@@ -171,7 +171,9 @@ suffices dm₁ = dm₂ from Prod.ext this by
     rwa [this, Nat.mul_right_inj (by simp [·] at h₂)] at hd
   exact dvd_antisymm
     (hmn.coprime_dvd_left h₁.1.1 |>.coprime_dvd_right h₂.2.1
-.dvd_o
+.dvd_of_dvd_mul_right (hd ▸ dm₁.dvd_mul_right dn₁))
+    (hmn.coprime_dvd_left h₂.1.1 |>.coprime_dvd_right h₁.2.1
+.dvd_of_dvd_mul_right (hd ▸ dm₂.dvd_mul_right dn₂))
 
 中文:
 定理 自然数.Coprime.mul_injOn_divisors
@@ -183,7 +185,9 @@ suffices dm₁ = dm₂ from Prod.ext this by
     rwa [this, Nat.mul_right_inj (by simp [·] at h₂)] at hd
   exact dvd_antisymm
     (hmn.coprime_dvd_left h₁.1.1 |>.coprime_dvd_right h₂.2.1
-.dvd_o
+.dvd_of_dvd_mul_right (hd ▸ dm₁.dvd_mul_right dn₁))
+    (hmn.coprime_dvd_left h₂.1.1 |>.coprime_dvd_right h₁.2.1
+.dvd_of_dvd_mul_right (hd ▸ dm₂.dvd_mul_right dn₂))
 
 Depends on / 依赖: Finset, Finset.mem_coe, Finset.mem_product, Nat.mul_right_inj, Prod.ext, coprime_dvd_left, coprime_dvd_right, dvd_antisymm, dvd_mul_right, dvd_of_dvd_mul_right, hmn.coprime_dvd_left, mem_coe, mem_divisors, mem_product, mul_right_inj
 -/

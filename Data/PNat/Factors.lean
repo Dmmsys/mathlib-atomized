@@ -1020,7 +1020,10 @@ theorem factorMultiset_prod
   dsimp [PrimeMultiset.toNatMultiset]
   let l' := l.map ((↑) : Nat.Primes -> Nat)
   have (p : Nat) (hp : p in l') : p.Prime := by
-    simp only [List.map_subtype, List.map_i
+    simp only [List.map_subtype, List.map_id_fun', id_eq, List.mem_unattach, l'] at hp
+    obtain ⟨hp', -⟩ := hp
+    exact hp'
+  exact Multiset.coe_eq_coe.mpr (@Nat.primeFactorsList_unique _ l' rfl this).symm
 
 中文:
 定理 factorMultiset_prod
@@ -1033,7 +1036,10 @@ theorem factorMultiset_prod
   dsimp [PrimeMultiset.toNatMultiset]
   let l' := l.map ((↑) : Nat.Primes -> Nat)
   have (p : Nat) (hp : p in l') : p.Prime := by
-    simp only [List.map_subtype, List.map_i
+    simp only [List.map_subtype, List.map_id_fun', id_eq, List.mem_unattach, l'] at hp
+    obtain ⟨hp', -⟩ := hp
+    exact hp'
+  exact Multiset.coe_eq_coe.mpr (@Nat.primeFactorsList_unique _ l' rfl this).symm
 
 Depends on / 依赖: List.map_id_fun, List.map_subtype, List.mem_unattach, Multiset, Multiset.coe_eq_coe.mpr, Nat.Primes, Nat.primeFactorsList_unique, PrimeMultiset, PrimeMultiset.coeNat_injective, PrimeMultiset.coe_prod, PrimeMultiset.toNatMultiset, Primes, coeNat_factorMultiset, coeNat_injective, coe_eq_coe, coe_prod, id_eq, l.map, map_id_fun, map_subtype
 -/
@@ -1225,7 +1231,11 @@ theorem factorMultiset_le_iff
     apply Dvd.intro (n.factorMultiset - m.factorMultiset).prod
     rw [← PrimeMultiset.prod_add]; rw [PrimeMultiset.factorMultiset_prod]; rw [add_tsub_cancel_of_le h]; rw [prod_factorMultiset]
   · intro h
-   
+    rw [← mul_div_exact h]; rw [factorMultiset_mul]
+    exact le_self_add
+
+@[gcongr]
+alias ⟨_, factorMultiset_mono⟩ := factorMultiset_le_iff
 
 中文:
 定理 factorMultiset_le_iff
@@ -1238,7 +1248,11 @@ theorem factorMultiset_le_iff
     apply Dvd.intro (n.factorMultiset - m.factorMultiset).prod
     rw [← PrimeMultiset.prod_add]; rw [PrimeMultiset.factorMultiset_prod]; rw [add_tsub_cancel_of_le h]; rw [prod_factorMultiset]
   · intro h
-   
+    rw [← mul_div_exact h]; rw [factorMultiset_mul]
+    exact le_self_add
+
+@[gcongr]
+alias ⟨_, factorMultiset_mono⟩ := factorMultiset_le_iff
 
 Depends on / 依赖: Dvd.intro, PrimeMultiset, PrimeMultiset.factorMultiset_prod, PrimeMultiset.prod_add, add_tsub_cancel_of_le, factorMultiset, factorMultiset_mul, factorMultiset_prod, le_self_add, m.factorMultiset, mul_div_exact, n.factorMultiset, prod_add, prod_factorMultiset
 -/
@@ -1367,7 +1381,7 @@ theorem factorMultiset_gcd
   · rw [← PrimeMultiset.prod_dvd_iff, prod_factorMultiset]
     apply dvd_gcd <;> rw [PrimeMultiset.prod_dvd_iff']
     · exact inf_le_left
-    · 
+    · exact inf_le_right
 
 中文:
 定理 factorMultiset_gcd
@@ -1380,7 +1394,7 @@ theorem factorMultiset_gcd
   · rw [← PrimeMultiset.prod_dvd_iff, prod_factorMultiset]
     apply dvd_gcd <;> rw [PrimeMultiset.prod_dvd_iff']
     · exact inf_le_left
-    · 
+    · exact inf_le_right
 
 Depends on / 依赖: PrimeMultiset, PrimeMultiset.prod_dvd_iff, dvd_gcd, factorMultiset_le_iff, factorMultiset_le_iff.mpr, gcd_dvd_left, gcd_dvd_right, inf_le_left, inf_le_right, le_antisymm, le_inf_iff, le_inf_iff.mpr, prod_dvd_iff, prod_factorMultiset
 -/
@@ -1409,7 +1423,7 @@ theorem factorMultiset_lcm
     · exact le_sup_right
   · apply sup_le_iff.mpr; constructor <;> apply factorMultiset_le_iff.mpr
     · exact dvd_lcm_left m n
-    · exact dv
+    · exact dvd_lcm_right m n
 
 中文:
 定理 factorMultiset_lcm
@@ -1422,7 +1436,7 @@ theorem factorMultiset_lcm
     · exact le_sup_right
   · apply sup_le_iff.mpr; constructor <;> apply factorMultiset_le_iff.mpr
     · exact dvd_lcm_left m n
-    · exact dv
+    · exact dvd_lcm_right m n
 
 Depends on / 依赖: PrimeMultiset, PrimeMultiset.prod_dvd_iff, dvd_lcm_left, dvd_lcm_right, factorMultiset_le_iff, factorMultiset_le_iff.mpr, lcm_dvd, le_antisymm, le_sup_left, le_sup_right, prod_dvd_iff, prod_factorMultiset, sup_le_iff, sup_le_iff.mpr
 -/
@@ -1451,7 +1465,8 @@ theorem count_factorMultiset
   constructor
   · rw [Multiset.card_nsmul, PrimeMultiset.card_ofPrime, mul_one]
   · intro q h
-    rw [PrimeMultiset.ofPrime]; 
+    rw [PrimeMultiset.ofPrime]; rw [Multiset.nsmul_singleton _ k] at h
+    exact Multiset.eq_of_mem_replicate h
 
 中文:
 定理 count_factorMultiset
@@ -1463,7 +1478,8 @@ theorem count_factorMultiset
   constructor
   · rw [Multiset.card_nsmul, PrimeMultiset.card_ofPrime, mul_one]
   · intro q h
-    rw [PrimeMultiset.ofPrime]; 
+    rw [PrimeMultiset.ofPrime]; rw [Multiset.nsmul_singleton _ k] at h
+    exact Multiset.eq_of_mem_replicate h
 
 Depends on / 依赖: Multiset, Multiset.card_nsmul, Multiset.eq_of_mem_replicate, Multiset.eq_replicate.mpr, Multiset.le_count_iff_replicate_le, Multiset.nsmul_singleton, PrimeMultiset, PrimeMultiset.card_ofPrime, PrimeMultiset.ofPrime, card_nsmul, card_ofPrime, eq_of_mem_replicate, eq_replicate, factorMultiset_le_iff, factorMultiset_ofPrime, factorMultiset_pow, le_count_iff_replicate_le, mul_one, nsmul_singleton, ofPrime
 -/

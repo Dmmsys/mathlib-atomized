@@ -173,7 +173,13 @@ definition limitπAlgHom
 inferInstanceAs Small.{w} (F ⋙ forget _).sections
   { SemiRingCat.limitπRingHom
       (F ⋙ forget₂ (AlgCat R) RingCat.{w} ⋙ forget₂ RingCat SemiRingCat.{w}) j with
-    toFun := (Types.Small.limi
+    toFun := (Types.Small.limitCone (F ⋙ forget (AlgCat.{w} R))).π.app j
+    commutes' := fun x => by
+      simp only [Functor.comp_obj, Types.Small.limitCone_pt, Functor.const_obj_obj,
+        Types.Small.limitCone_π_app, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
+        ← Shrink.algEquiv_apply R, AlgEquiv.commutes]
+      rfl
+    }
 
 中文:
 定义 limitπAlgHom
@@ -183,7 +189,13 @@ inferInstanceAs Small.{w} (F ⋙ forget _).sections
 inferInstanceAs Small.{w} (F ⋙ forget _).sections
   { SemiRingCat.limitπRingHom
       (F ⋙ forget₂ (AlgCat R) RingCat.{w} ⋙ forget₂ RingCat SemiRingCat.{w}) j with
-    toFun := (Types.Small.limi
+    toFun := (Types.Small.limitCone (F ⋙ forget (AlgCat.{w} R))).π.app j
+    commutes' := fun x => by
+      simp only [Functor.comp_obj, Types.Small.limitCone_pt, Functor.const_obj_obj,
+        Types.Small.limitCone_π_app, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
+        ← Shrink.algEquiv_apply R, AlgEquiv.commutes]
+      rfl
+    }
 
 Depends on / 依赖: AlgCat, ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.comp_obj, Functor.const_obj_obj, Functor.sections, RingCat, SemiRingCat, SemiRingCat.limit, TypeCat, TypeCat.Fun.coe, Types.Small.limitCone, Types.Small.limitCone_, Types.Small.limitCone_pt, commutes, comp_obj, const_obj_obj, forget, hom_ofHom
 -/
@@ -259,7 +271,22 @@ definition limitConeIsLimit
     ext j
     simp
   · intro x y
-   
+    ext j
+    simp
+    rfl
+  · ext j
+    simp
+    rfl
+  · intro x y
+    ext j
+    simp
+    rfl
+  · intro r
+    simp only [Equiv.algebraMap_def, Equiv.symm_symm]
+    apply congrArg
+    apply Subtype.ext
+    ext j
+    exact (s.π.app j).hom.commutes r
 
 中文:
 定义 limitConeIsLimit
@@ -275,7 +302,22 @@ definition limitConeIsLimit
     ext j
     simp
   · intro x y
-   
+    ext j
+    simp
+    rfl
+  · ext j
+    simp
+    rfl
+  · intro x y
+    ext j
+    simp
+    rfl
+  · intro r
+    simp only [Equiv.algebraMap_def, Equiv.symm_symm]
+    apply congrArg
+    apply Subtype.ext
+    ext j
+    exact (s.π.app j).hom.commutes r
 
 Depends on / 依赖: AlgCat, Equiv.algebraMap_def, Equiv.symm_symm, IsLimit, IsLimit.ofFaithful, Subtype, Subtype.ext, Types.Small.limitConeIsLimit, algebraMap_def, commutes, forget, hom.commutes, limitConeIsLimit, map_add, map_mul, map_one, map_zero, ofFaithful, symm_symm
 -/

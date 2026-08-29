@@ -261,7 +261,11 @@ instance category
   comp_id {a b} f := by
     ext
     · simp
-    · simp [F.mapComp_id_right_hom_app, Strict.righ
+    · simp [F.mapComp_id_right_hom_app, Strict.rightUnitor_eqToIso, ← reassoc_of% Cat.Hom₂.comp_app]
+  assoc f g h := by
+    ext
+    · simp
+    · simp [mapComp_assoc_right_hom_app_assoc, Strict.associator_eqToIso]
 
 中文:
 实例 category
@@ -275,7 +279,11 @@ instance category
   comp_id {a b} f := by
     ext
     · simp
-    · simp [F.mapComp_id_right_hom_app, Strict.righ
+    · simp [F.mapComp_id_right_hom_app, Strict.rightUnitor_eqToIso, ← reassoc_of% Cat.Hom₂.comp_app]
+  assoc f g h := by
+    ext
+    · simp
+    · simp [mapComp_assoc_right_hom_app_assoc, Strict.associator_eqToIso]
 
 Depends on / 依赖: Grothendieck, Pseudofunctor, Pseudofunctor.Grothendieck.categoryStruct, categoryStruct
 -/
@@ -349,7 +357,14 @@ definition map
   map_id a := by
     ext
     · dsimp
-    · simp [StrongTrans.naturality_id_inv_a
+    · simp [StrongTrans.naturality_id_inv_app, ← map_comp, ← Cat.Hom₂.comp_app]
+  map_comp {a b c} f g := by
+    ext
+    · dsimp
+    · simp only [Cat.Hom.comp_toFunctor, comp_obj, categoryStruct_comp_base, Quiver.Hom.comp_toLoc,
+        categoryStruct_comp_fiber, eqToHom_refl, map_comp, ← Cat.Hom.comp_map, assoc,
+        NatTrans.naturality_assoc]
+      simp [naturality_comp_inv_app, ← Functor.map_comp, ← reassoc_of% Cat.Hom₂.comp_app]
 
 中文:
 定义 map
@@ -364,7 +379,14 @@ definition map
   map_id a := by
     ext
     · dsimp
-    · simp [StrongTrans.naturality_id_inv_a
+    · simp [StrongTrans.naturality_id_inv_app, ← map_comp, ← Cat.Hom₂.comp_app]
+  map_comp {a b c} f g := by
+    ext
+    · dsimp
+    · simp only [Cat.Hom.comp_toFunctor, comp_obj, categoryStruct_comp_base, Quiver.Hom.comp_toLoc,
+        categoryStruct_comp_fiber, eqToHom_refl, map_comp, ← Cat.Hom.comp_map, assoc,
+        NatTrans.naturality_assoc]
+      simp [naturality_comp_inv_app, ← Functor.map_comp, ← reassoc_of% Cat.Hom₂.comp_app]
 -/
 def map (α : F ⟶ G) : ∫ F ⥤ ∫ G where
   obj a := {
@@ -597,7 +619,7 @@ instance categoryStruct
   comp {_ _ Z} f g := {
     base := f.base ≫ g.base
     fiber := f.fiber ≫ (F.map f.base.op.toLoc).toFunctor.map g.fiber ≫
-      (F.mapComp g.base.op.toLoc f.base.op.toLoc).inv.toNatTrans.app Z.f
+      (F.mapComp g.base.op.toLoc f.base.op.toLoc).inv.toNatTrans.app Z.fiber }
 
 中文:
 实例 categoryStruct
@@ -609,7 +631,7 @@ instance categoryStruct
   comp {_ _ Z} f g := {
     base := f.base ≫ g.base
     fiber := f.fiber ≫ (F.map f.base.op.toLoc).toFunctor.map g.fiber ≫
-      (F.mapComp g.base.op.toLoc f.base.op.toLoc).inv.toNatTrans.app Z.f
+      (F.mapComp g.base.op.toLoc f.base.op.toLoc).inv.toNatTrans.app Z.fiber }
 -/
 instance categoryStruct : CategoryStruct (∫ᶜ F) where
   Hom X Y := Hom X Y
@@ -712,7 +734,12 @@ instance category
   comp_id {a b} f := by
     ext
     · simp
-    · simp [F.mapComp_id_left_inv_app, Stric
+    · simp [F.mapComp_id_left_inv_app, Strict.leftUnitor_eqToIso, ← Functor.map_comp_assoc,
+        ← Cat.Hom₂.comp_app]
+  assoc f g h := by
+    ext
+    · simp
+    · simp [← NatTrans.naturality_assoc, F.mapComp_assoc_right_inv_app, Strict.associator_eqToIso]
 
 中文:
 实例 category
@@ -726,7 +753,12 @@ instance category
   comp_id {a b} f := by
     ext
     · simp
-    · simp [F.mapComp_id_left_inv_app, Stric
+    · simp [F.mapComp_id_left_inv_app, Strict.leftUnitor_eqToIso, ← Functor.map_comp_assoc,
+        ← Cat.Hom₂.comp_app]
+  assoc f g h := by
+    ext
+    · simp
+    · simp [← NatTrans.naturality_assoc, F.mapComp_assoc_right_inv_app, Strict.associator_eqToIso]
 
 Depends on / 依赖: CoGrothendieck, Pseudofunctor, Pseudofunctor.CoGrothendieck.categoryStruct, categoryStruct
 -/
@@ -801,7 +833,18 @@ definition map
   map_id a := by
     ext1
     · dsimp
-    · simp [Cat.Hom.comp_toFuncto
+    · simp [Cat.Hom.comp_toFunctor, naturality_id_hom_app, Cat.Hom.id_toFunctor, ← Category.assoc,
+        ← Functor.map_comp, ← Cat.Hom₂.comp_app]
+  map_comp {a b c} f g := by
+    ext
+    · dsimp
+    · simp only [categoryStruct_comp_base, op_comp, Quiver.Hom.comp_toLoc,
+        categoryStruct_comp_fiber, Cat.Hom.comp_toFunctor, map_comp, naturality_comp_hom_app, assoc,
+        eqToHom_refl, comp_id]
+      slice_lhs 2 4 => simp [← Cat.Hom.toNatIso_inv, Cat.Hom.comp_toFunctor,
+        ← Cat.Hom.toNatIso_hom, ← map_comp, Iso.inv_hom_id_app, comp_obj, map_id, comp_id]
+      simp only [assoc, ← reassoc_of% Cat.Hom.comp_map,
+        Cat.Hom.comp_toFunctor, Functor.comp_obj, NatTrans.naturality_assoc]
 
 中文:
 定义 map
@@ -816,7 +859,18 @@ definition map
   map_id a := by
     ext1
     · dsimp
-    · simp [Cat.Hom.comp_toFuncto
+    · simp [Cat.Hom.comp_toFunctor, naturality_id_hom_app, Cat.Hom.id_toFunctor, ← Category.assoc,
+        ← Functor.map_comp, ← Cat.Hom₂.comp_app]
+  map_comp {a b c} f g := by
+    ext
+    · dsimp
+    · simp only [categoryStruct_comp_base, op_comp, Quiver.Hom.comp_toLoc,
+        categoryStruct_comp_fiber, Cat.Hom.comp_toFunctor, map_comp, naturality_comp_hom_app, assoc,
+        eqToHom_refl, comp_id]
+      slice_lhs 2 4 => simp [← Cat.Hom.toNatIso_inv, Cat.Hom.comp_toFunctor,
+        ← Cat.Hom.toNatIso_hom, ← map_comp, Iso.inv_hom_id_app, comp_obj, map_id, comp_id]
+      simp only [assoc, ← reassoc_of% Cat.Hom.comp_map,
+        Cat.Hom.comp_toFunctor, Functor.comp_obj, NatTrans.naturality_assoc]
 -/
 def map (α : F ⟶ G) : ∫ᶜ F ⥤ ∫ᶜ G where
   obj a := {

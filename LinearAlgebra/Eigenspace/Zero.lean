@@ -113,7 +113,16 @@ lemma charpoly_nilpotent_tfae
     simpa only [h, map_pow, aeval_X] using φ.aeval_self_charpoly
   tfae_have 3 -> 1
   | h => by
-obtain ⟨n, h
+obtain ⟨n, hn⟩ := Filter.eventually_atTop.mp φ.eventually_iSup_ker_pow_eq
+    use n
+    ext x
+    rw [zero_apply]; rw [← mem_ker]; rw [← hn n le_rfl]
+    obtain ⟨k, hk⟩ := h x
+    rw [← mem_ker] at hk
+    exact Submodule.mem_iSup_of_mem _ hk
+  tfae_have 2 ↔ 4 := by
+    rw [← φ.charpoly_natDegree]; rw [φ.charpoly_monic.eq_X_pow_iff_natTrailingDegree_eq_natDegree]
+  tfae_finish
 
 中文:
 引理 charpoly_nilpotent_tfae
@@ -127,7 +136,16 @@ obtain ⟨n, h
     simpa only [h, map_pow, aeval_X] using φ.aeval_self_charpoly
   tfae_have 3 -> 1
   | h => by
-obtain ⟨n, h
+obtain ⟨n, hn⟩ := Filter.eventually_atTop.mp φ.eventually_iSup_ker_pow_eq
+    use n
+    ext x
+    rw [zero_apply]; rw [← mem_ker]; rw [← hn n le_rfl]
+    obtain ⟨k, hk⟩ := h x
+    rw [← mem_ker] at hk
+    exact Submodule.mem_iSup_of_mem _ hk
+  tfae_have 2 ↔ 4 := by
+    rw [← φ.charpoly_natDegree]; rw [φ.charpoly_monic.eq_X_pow_iff_natTrailingDegree_eq_natDegree]
+  tfae_finish
 
 Depends on / 依赖: Filter, Filter.eventually_atTop.mp, IsNilpotent, IsNilpotent.charpoly_eq_X_pow_finrank, LinearMap, LinearMap.zero_apply, Submodule, Submodule.mem_iSup_of_mem, aeval_X, aeval_self_charpoly, charpoly_eq_X_pow_finrank, eventually_atTop, eventually_iSup_ker_pow_eq, finrank, le_rfl, map_pow, mem_iSup_of_mem, mem_ker, tfae_have, zero_apply
 -/
@@ -189,7 +207,21 @@ lemma hasEigenvalue_zero_tfae
     simp only [IsRoot.def, constantCoeff_apply, coeff_zero_eq_eval_zero, hF, eval_mul]
     intro h; rw [h, zero_mul]
   tfae_have 3 -> 4 := by
-    rw [← LinearMap.det_toMa
+    rw [← LinearMap.det_toMatrix (chooseBasis K M)]; rw [Matrix.det_eq_sign_charpoly_coeff]; rw [constantCoeff_apply]; rw [charpoly]
+    intro h; rw [h, mul_zero]
+  tfae_have 4 -> 5 := bot_lt_ker_of_det_eq_zero
+  tfae_have 5 -> 6 := by
+    contrapose!
+    simp only [not_bot_lt_iff, eq_bot_iff]
+    intro h x
+    simp only [mem_ker, Submodule.mem_bot]
+    contrapose!
+    apply h
+  tfae_have 6 -> 1
+  | ⟨x, h1, h2⟩ => by
+    apply Module.End.hasEigenvalue_of_hasEigenvector ⟨_, h1⟩
+    simpa only [Module.End.eigenspace_zero, mem_ker] using h2
+  tfae_finish
 
 中文:
 引理 hasEigenvalue_zero_tfae
@@ -201,7 +233,21 @@ lemma hasEigenvalue_zero_tfae
     simp only [IsRoot.def, constantCoeff_apply, coeff_zero_eq_eval_zero, hF, eval_mul]
     intro h; rw [h, zero_mul]
   tfae_have 3 -> 4 := by
-    rw [← LinearMap.det_toMa
+    rw [← LinearMap.det_toMatrix (chooseBasis K M)]; rw [Matrix.det_eq_sign_charpoly_coeff]; rw [constantCoeff_apply]; rw [charpoly]
+    intro h; rw [h, mul_zero]
+  tfae_have 4 -> 5 := bot_lt_ker_of_det_eq_zero
+  tfae_have 5 -> 6 := by
+    contrapose!
+    simp only [not_bot_lt_iff, eq_bot_iff]
+    intro h x
+    simp only [mem_ker, Submodule.mem_bot]
+    contrapose!
+    apply h
+  tfae_have 6 -> 1
+  | ⟨x, h1, h2⟩ => by
+    apply Module.End.hasEigenvalue_of_hasEigenvector ⟨_, h1⟩
+    simpa only [Module.End.eigenspace_zero, mem_ker] using h2
+  tfae_finish
 
 Depends on / 依赖: IsRoot, IsRoot.def, LinearMap, LinearMap.det_toMatrix, Matrix, Matrix.det_eq_sign_charpoly_coeff, Module, Module.End.hasEigenvalue_iff_isRoot, bot_lt_ker_of_det_eq_zero, charpoly, chooseBasis, coeff_zero_eq_eval_zero, constantCoeff_apply, contrapose, det_eq_sign_charpoly_coeff, det_toMatrix, eval_mul, hasEigenvalue_iff_isRoot, minpoly_dvd_charpoly, mul_zero
 -/
@@ -267,7 +313,7 @@ lemma not_hasEigenvalue_zero_tfae
   push Not at this
   have aux₁ : forall m, (m != 0 -> φ m != 0) ↔ (φ m = 0 -> m = 0) := by intro m; apply not_imp_not
   have aux₂ : ker φ = ⊥ ↔ ¬ ⊥ < ker φ := by rw [bot_lt_iff_ne_bot, not_not]
-  simpa only [aux₁, aux₂] usi
+  simpa only [aux₁, aux₂] using this
 
 中文:
 引理 not_hasEigenvalue_zero_tfae
@@ -278,7 +324,7 @@ lemma not_hasEigenvalue_zero_tfae
   push Not at this
   have aux₁ : forall m, (m != 0 -> φ m != 0) ↔ (φ m = 0 -> m = 0) := by intro m; apply not_imp_not
   have aux₂ : ker φ = ⊥ ↔ ¬ ⊥ < ker φ := by rw [bot_lt_iff_ne_bot, not_not]
-  simpa only [aux₁, aux₂] usi
+  simpa only [aux₁, aux₂] using this
 
 Depends on / 依赖: List.map, bot_lt_iff_ne_bot, hasEigenvalue_zero_tfae, not_imp_not, not_not
 -/
@@ -311,7 +357,57 @@ lemma finrank_maxGenEigenspace_zero_eq
   let W := ⨅ (n : Nat), LinearMap.range (φ ^ n)
   have hVW : IsCompl V W := by
     rw [hV]
-    exact LinearMap.isCompl_iSup_ker_pow_iInf_ra
+    exact LinearMap.isCompl_iSup_ker_pow_iInf_range_pow φ
+  have hφV : forall x in V, φ x in V := by
+    simp only [V, Module.End.mem_maxGenEigenspace, zero_smul, sub_zero,
+      forall_exists_index]
+    intro x n hx
+    use n
+    rw [← Module.End.mul_apply]; rw [← pow_succ]; rw [pow_succ']; rw [Module.End.mul_apply]; rw [hx]; rw [map_zero]
+  have hφW : forall x in W, φ x in W := by
+    simp only [W, Submodule.mem_iInf, mem_range]
+    intro x H n
+    obtain ⟨y, rfl⟩ := H n
+    use φ y
+    rw [← Module.End.mul_apply]; rw [← pow_succ]; rw [pow_succ']; rw [Module.End.mul_apply]
+  let F := φ.restrict hφV
+  let G := φ.restrict hφW
+  let ψ := F.prodMap G
+  let e := Submodule.prodEquivOfIsCompl V W hVW
+  let bV := chooseBasis K V
+  let bW := chooseBasis K W
+  let b := bV.prod bW
+  have hψ : ψ = e.symm.conj φ := by
+    apply b.ext
+    simp only [Basis.prod_apply, coe_inl, coe_inr, prodMap_apply, LinearEquiv.conj_apply,
+      LinearEquiv.symm_symm, Submodule.coe_prodEquivOfIsCompl, coe_comp, LinearEquiv.coe_coe,
+      Function.comp_apply, coprod_apply, Submodule.coe_subtype, map_add, Sum.forall, Sum.elim_inl,
+      map_zero, ZeroMemClass.coe_zero, add_zero, LinearEquiv.eq_symm_apply, and_self,
+      Submodule.coe_prodEquivOfIsCompl', coe_restrict_apply, implies_true, Sum.elim_inr, zero_add,
+      e, V, W, ψ, F, G, b]
+  rw [← e.symm.charpoly_conj φ]; rw [← hψ]; rw [charpoly_prodMap]; rw [natTrailingDegree_mul (charpoly_monic _).ne_zero (charpoly_monic _).ne_zero]
+  have hG : natTrailingDegree (charpoly G) = 0 := by
+    apply Polynomial.natTrailingDegree_eq_zero_of_constantCoeff_ne_zero
+    apply ((not_hasEigenvalue_zero_tfae G).out 2 5).mpr
+    intro x hx
+    apply Subtype.ext
+    suffices x.1 in V ⊓ W by rwa [hVW.inf_eq_bot, Submodule.mem_bot] at this
+    suffices x.1 in V from ⟨this, x.2⟩
+    simp only [Module.End.mem_maxGenEigenspace, zero_smul, sub_zero, V]
+    use 1
+    rw [pow_one]
+    rwa [Subtype.ext_iff] at hx
+  rw [hG]; rw [add_zero]; rw [eq_comm]
+  apply ((charpoly_nilpotent_tfae F).out 2 3).mp
+  simp only [Subtype.forall, Module.End.mem_maxGenEigenspace, zero_smul, sub_zero, V, F]
+  rintro x ⟨n, hx⟩
+  use n
+  apply Subtype.ext
+  rw [ZeroMemClass.coe_zero]
+  refine .trans ?_ hx
+  generalize_proofs h'
+  clear hx
+  induction n <;> simp [pow_succ', *]
 
 中文:
 引理 finrank_maxGenEigenspace_zero_eq
@@ -323,7 +419,57 @@ lemma finrank_maxGenEigenspace_zero_eq
   let W := ⨅ (n : Nat), LinearMap.range (φ ^ n)
   have hVW : IsCompl V W := by
     rw [hV]
-    exact LinearMap.isCompl_iSup_ker_pow_iInf_ra
+    exact LinearMap.isCompl_iSup_ker_pow_iInf_range_pow φ
+  have hφV : forall x in V, φ x in V := by
+    simp only [V, Module.End.mem_maxGenEigenspace, zero_smul, sub_zero,
+      forall_exists_index]
+    intro x n hx
+    use n
+    rw [← Module.End.mul_apply]; rw [← pow_succ]; rw [pow_succ']; rw [Module.End.mul_apply]; rw [hx]; rw [map_zero]
+  have hφW : forall x in W, φ x in W := by
+    simp only [W, Submodule.mem_iInf, mem_range]
+    intro x H n
+    obtain ⟨y, rfl⟩ := H n
+    use φ y
+    rw [← Module.End.mul_apply]; rw [← pow_succ]; rw [pow_succ']; rw [Module.End.mul_apply]
+  let F := φ.restrict hφV
+  let G := φ.restrict hφW
+  let ψ := F.prodMap G
+  let e := Submodule.prodEquivOfIsCompl V W hVW
+  let bV := chooseBasis K V
+  let bW := chooseBasis K W
+  let b := bV.prod bW
+  have hψ : ψ = e.symm.conj φ := by
+    apply b.ext
+    simp only [Basis.prod_apply, coe_inl, coe_inr, prodMap_apply, LinearEquiv.conj_apply,
+      LinearEquiv.symm_symm, Submodule.coe_prodEquivOfIsCompl, coe_comp, LinearEquiv.coe_coe,
+      Function.comp_apply, coprod_apply, Submodule.coe_subtype, map_add, Sum.forall, Sum.elim_inl,
+      map_zero, ZeroMemClass.coe_zero, add_zero, LinearEquiv.eq_symm_apply, and_self,
+      Submodule.coe_prodEquivOfIsCompl', coe_restrict_apply, implies_true, Sum.elim_inr, zero_add,
+      e, V, W, ψ, F, G, b]
+  rw [← e.symm.charpoly_conj φ]; rw [← hψ]; rw [charpoly_prodMap]; rw [natTrailingDegree_mul (charpoly_monic _).ne_zero (charpoly_monic _).ne_zero]
+  have hG : natTrailingDegree (charpoly G) = 0 := by
+    apply Polynomial.natTrailingDegree_eq_zero_of_constantCoeff_ne_zero
+    apply ((not_hasEigenvalue_zero_tfae G).out 2 5).mpr
+    intro x hx
+    apply Subtype.ext
+    suffices x.1 in V ⊓ W by rwa [hVW.inf_eq_bot, Submodule.mem_bot] at this
+    suffices x.1 in V from ⟨this, x.2⟩
+    simp only [Module.End.mem_maxGenEigenspace, zero_smul, sub_zero, V]
+    use 1
+    rw [pow_one]
+    rwa [Subtype.ext_iff] at hx
+  rw [hG]; rw [add_zero]; rw [eq_comm]
+  apply ((charpoly_nilpotent_tfae F).out 2 3).mp
+  simp only [Subtype.forall, Module.End.mem_maxGenEigenspace, zero_smul, sub_zero, V, F]
+  rintro x ⟨n, hx⟩
+  use n
+  apply Subtype.ext
+  rw [ZeroMemClass.coe_zero]
+  refine .trans ?_ hx
+  generalize_proofs h'
+  clear hx
+  induction n <;> simp [pow_succ', *]
 
 Depends on / 依赖: IsCompl, LinearMap, LinearMap.isCompl_iSup_ker_pow_iInf_range_pow, LinearMap.range, Module, Module.End.genEigenspace_nat, Module.End.iSup_genEigenspace_eq, Module.End.mem_maxGenEigenspace, Module.End.mul_apply, forall_exists_index, genEigenspace_nat, iSup_genEigenspace_eq, isCompl_iSup_ker_pow_iInf_range_pow, maxGenEigenspace, mem_maxGenEigenspace, mul_apply, pow_succ, sub_zero, zero_smul
 -/

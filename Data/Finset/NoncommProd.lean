@@ -428,7 +428,14 @@ theorem noncommProd_cons'
   | cons hd tl IH =>
     rw [List.prod_cons]; rw [mul_assoc]; rw [← IH]; rw [← mul_assoc]; rw [← mul_assoc]
     · congr 1
+      apply comm.of_refl <;> simp
+    · intro x hx y hy
+      simp only [quot_mk_to_coe, List.mem_cons, mem_coe, cons_coe] at hx hy
       apply comm
+      · cases hx <;> simp [*]
+      · cases hy <;> simp [*]
+
+@[to_additive]
 
 中文:
 定理 noncommProd_cons'
@@ -441,7 +448,14 @@ theorem noncommProd_cons'
   | cons hd tl IH =>
     rw [List.prod_cons]; rw [mul_assoc]; rw [← IH]; rw [← mul_assoc]; rw [← mul_assoc]
     · congr 1
+      apply comm.of_refl <;> simp
+    · intro x hx y hy
+      simp only [quot_mk_to_coe, List.mem_cons, mem_coe, cons_coe] at hx hy
       apply comm
+      · cases hx <;> simp [*]
+      · cases hy <;> simp [*]
+
+@[to_additive]
 
 Depends on / 依赖: List.mem_cons, List.prod_cons, Quotient, Quotient.inductionOn, comm.of_refl, cons_coe, inductionOn, mem_coe, mem_cons, mul_assoc, noncommProd_coe, of_refl, prod_cons, quot_mk_to_coe
 -/
@@ -685,7 +699,7 @@ theorem mul_noncommProd_erase
   intro x hx y hy
   rcases eq_or_ne x y with rfl | hxy
   · rfl
-  exact co
+  exact comm hx hy hxy
 
 中文:
 定理 mul_noncommProd_erase
@@ -697,7 +711,7 @@ theorem mul_noncommProd_erase
   intro x hx y hy
   rcases eq_or_ne x y with rfl | hxy
   · rfl
-  exact co
+  exact comm hx hy hxy
 
 Depends on / 依赖: mem_of_mem_erase, s.mem_of_mem_erase
 -/
@@ -1325,7 +1339,8 @@ theorem noncommProd_mul_distrib
   | empty => simp
   | cons x s hnotMem ih =>
     rw [Finset.noncommProd_cons]; rw [Finset.noncommProd_cons]; rw [Finset.noncommProd_cons]; rw [Pi.mul_apply]; rw [ih (comm_ff.mono fun _ => mem_cons_of_mem) (comm_gg.mono fun _ => mem_cons_of_mem)
-  
+        (comm_gf.mono fun _ => mem_cons_of_mem)]; rw [(noncommProd_commute _ _ _ _ fun y hy => ?_).mul_mul_mul_comm]
+    exact comm_gf (mem_cons_self x s) (mem_cons_of_mem hy) (ne_of_mem_of_not_mem hy hnotMem).symm
 
 中文:
 定理 noncommProd_mul_distrib
@@ -1335,7 +1350,8 @@ theorem noncommProd_mul_distrib
   | empty => simp
   | cons x s hnotMem ih =>
     rw [Finset.noncommProd_cons]; rw [Finset.noncommProd_cons]; rw [Finset.noncommProd_cons]; rw [Pi.mul_apply]; rw [ih (comm_ff.mono fun _ => mem_cons_of_mem) (comm_gg.mono fun _ => mem_cons_of_mem)
-  
+        (comm_gf.mono fun _ => mem_cons_of_mem)]; rw [(noncommProd_commute _ _ _ _ fun y hy => ?_).mul_mul_mul_comm]
+    exact comm_gf (mem_cons_self x s) (mem_cons_of_mem hy) (ne_of_mem_of_not_mem hy hnotMem).symm
 
 Depends on / 依赖: Finset, Finset.cons_induction_on, Finset.noncommProd_cons, Pi.mul_apply, comm_ff, comm_ff.mono, comm_gf, comm_gf.mono, comm_gg, comm_gg.mono, cons_induction_on, hnotMem, mem_cons_of_mem, mem_cons_self, mul_apply, mul_mul_mul_comm, ne_of_mem_of_not_mem, noncommProd_commute, noncommProd_cons
 -/
@@ -1370,7 +1386,12 @@ theorem noncommProd_mulSingle
     exact Pi.mulSingle_apply_commute x i j
   convert! (noncommProd_congr (insert_erase (mem_univ i)).symm _ _).trans _
   · intro j
-    exact Pi.mulSi
+    exact Pi.mulSingle j (x j) i
+  · intro j _; dsimp
+  · rw [noncommProd_insert_of_notMem _ _ _ _ (notMem_erase _ _),
+      noncommProd_eq_pow_card (univ.erase i), one_pow, mul_one]
+    · simp only [Pi.mulSingle_eq_same]
+    · simpa using fun _ a => Pi.mulSingle_eq_of_ne (a ·.symm) _
 
 中文:
 定理 noncommProd_mulSingle
@@ -1384,7 +1405,12 @@ theorem noncommProd_mulSingle
     exact Pi.mulSingle_apply_commute x i j
   convert! (noncommProd_congr (insert_erase (mem_univ i)).symm _ _).trans _
   · intro j
-    exact Pi.mulSi
+    exact Pi.mulSingle j (x j) i
+  · intro j _; dsimp
+  · rw [noncommProd_insert_of_notMem _ _ _ _ (notMem_erase _ _),
+      noncommProd_eq_pow_card (univ.erase i), one_pow, mul_one]
+    · simp only [Pi.mulSingle_eq_same]
+    · simpa using fun _ a => Pi.mulSingle_eq_of_ne (a ·.symm) _
 
 Depends on / 依赖: MonoidHom, MonoidHom.mulSingle, Pi.evalMonoidHom, Pi.mulSingl, Pi.mulSingle, Pi.mulSingle_apply_commute, Pi.mulSingle_eq_same, convert, evalMonoidHom, insert_erase, map_noncommProd, mem_univ, mulSingl, mulSingle, mulSingle_apply_commute, mulSingle_eq_same, mul_one, noncommProd_congr, noncommProd_eq_pow_card, noncommProd_insert_of_notMem
 -/

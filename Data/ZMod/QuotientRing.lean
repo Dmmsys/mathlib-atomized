@@ -183,7 +183,8 @@ definition ZMod.prodEquivPi
     fun _i _j h => (isCoprime_span_singleton_iff _ _).mpr ((coprime h).cast (R := Int))
 .symm.trans Int.quotientSpanNatEquivZMod _
 .symm.trans quotEquivOfEq (iInf_span_singleton_natCast (R := Int) coprime)
-.trans quoti
+.trans quotientInfRingEquivPiQuotient _ this
+  RingEquiv.piCongrRight fun i => Int.quotientSpanNatEquivZMod (a i)
 
 中文:
 定义 ZMod.prodEquivPi
@@ -192,7 +193,8 @@ definition ZMod.prodEquivPi
     fun _i _j h => (isCoprime_span_singleton_iff _ _).mpr ((coprime h).cast (R := Int))
 .symm.trans Int.quotientSpanNatEquivZMod _
 .symm.trans quotEquivOfEq (iInf_span_singleton_natCast (R := Int) coprime)
-.trans quoti
+.trans quotientInfRingEquivPiQuotient _ this
+  RingEquiv.piCongrRight fun i => Int.quotientSpanNatEquivZMod (a i)
 
 Depends on / 依赖: Int.quotientSpanNatEquivZMod, IsCoprime, Pairwise, RingEquiv, RingEquiv.piCongrRight, coprime, iInf_span_singleton_natCast, isCoprime_span_singleton_iff, piCongrRight, quotEquivOfEq, quotientInfRingEquivPiQuotient, quotientSpanNatEquivZMod, symm.trans
 -/

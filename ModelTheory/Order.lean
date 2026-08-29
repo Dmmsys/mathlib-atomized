@@ -1003,7 +1003,9 @@ theorem realize_denselyOrdered_iff
     BoundedFormula.realize_ex, BoundedFormula.realize_inf]
   refine ⟨fun h => ⟨fun a b ab => h a b ab⟩, ?_⟩
   intro h a b ab
-  exact exists_between 
+  exact exists_between ab
+
+@[simp]
 
 中文:
 定理 realize_denselyOrdered_iff
@@ -1013,7 +1015,9 @@ theorem realize_denselyOrdered_iff
     BoundedFormula.realize_ex, BoundedFormula.realize_inf]
   refine ⟨fun h => ⟨fun a b ab => h a b ab⟩, ?_⟩
   intro h a b ab
-  exact exists_between 
+  exact exists_between ab
+
+@[simp]
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.realize_all, BoundedFormula.realize_ex, BoundedFormula.realize_imp, BoundedFormula.realize_inf, Formula, Formula.Realize, Realize, Sentence, Sentence.Realize, Term.realize_lt, denselyOrderedSentence, exists_between, realize_all, realize_ex, realize_imp, realize_inf, realize_lt
 -/
@@ -1525,7 +1529,26 @@ lemma dlo_isExtensionPair
   let := Language.order.linearOrderOfModels N
   have := Language.order.denselyOrdered_of_dlo N
   have := Language.order.noBotOrder_of_dlo N
-  have := Lang
+  have := Language.order.noTopOrder_of_dlo N
+  have := NoBotOrder.to_noMinOrder N
+  have := NoTopOrder.to_noMaxOrder N
+  have hS : Set.Finite (S : Set M) := (S.fg_iff_structure_fg.1 S_fg).finite
+  obtain ⟨g, hg⟩ := Order.exists_orderEmbedding_insert hS.toFinset
+    ((OrderIso.setCongr hS.toFinset (S : Set M) hS.coe_toFinset).toOrderEmbedding.trans
+      (OrderEmbedding.ofStrictMono f (HomClass.strictMono f))) m
+  let g' :
+    ((Substructure.closure Language.order).toFun {m} ⊔ S : Language.order.Substructure M) ↪o N :=
+    ((OrderIso.setCongr _ _ (by
+      convert!
+        LowerAdjoint.closure_eq_self_of_mem_closed _
+          (Substructure.mem_closed_of_isRelational Language.order
+            ((insert m hS.toFinset : Finset M) : Set M))
+      simp only [Finset.coe_insert, Set.Finite.coe_toFinset, Substructure.closure_insert,
+        Substructure.closure_eq])).toOrderEmbedding.trans g)
+  use StrongHomClass.toEmbedding g'
+  ext ⟨x, xS⟩
+  refine congr_fun hg.symm ⟨x, (?_ : x in hS.toFinset)⟩
+  simp only [Set.Finite.mem_toFinset, SetLike.mem_coe, xS]
 
 中文:
 引理 dlo_isExtensionPair
@@ -1537,7 +1560,26 @@ lemma dlo_isExtensionPair
   let := Language.order.linearOrderOfModels N
   have := Language.order.denselyOrdered_of_dlo N
   have := Language.order.noBotOrder_of_dlo N
-  have := Lang
+  have := Language.order.noTopOrder_of_dlo N
+  have := NoBotOrder.to_noMinOrder N
+  have := NoTopOrder.to_noMaxOrder N
+  have hS : Set.Finite (S : Set M) := (S.fg_iff_structure_fg.1 S_fg).finite
+  obtain ⟨g, hg⟩ := Order.exists_orderEmbedding_insert hS.toFinset
+    ((OrderIso.setCongr hS.toFinset (S : Set M) hS.coe_toFinset).toOrderEmbedding.trans
+      (OrderEmbedding.ofStrictMono f (HomClass.strictMono f))) m
+  let g' :
+    ((Substructure.closure Language.order).toFun {m} ⊔ S : Language.order.Substructure M) ↪o N :=
+    ((OrderIso.setCongr _ _ (by
+      convert!
+        LowerAdjoint.closure_eq_self_of_mem_closed _
+          (Substructure.mem_closed_of_isRelational Language.order
+            ((insert m hS.toFinset : Finset M) : Set M))
+      simp only [Finset.coe_insert, Set.Finite.coe_toFinset, Substructure.closure_insert,
+        Substructure.closure_eq])).toOrderEmbedding.trans g)
+  use StrongHomClass.toEmbedding g'
+  ext ⟨x, xS⟩
+  refine congr_fun hg.symm ⟨x, (?_ : x in hS.toFinset)⟩
+  simp only [Set.Finite.mem_toFinset, SetLike.mem_coe, xS]
 
 Depends on / 依赖: Finite, Language, Language.order.denselyOrdered_of_dlo, Language.order.linearOrderOfModels, Language.order.noBotOrder_of_dlo, Language.order.noTopOrder_of_dlo, NoBotOrder, NoBotOrder.to_noMinOrder, NoTopOrder, NoTopOrder.to_noMaxOrder, Order.exists_orderEmbed, S.fg_iff_structure_fg, S_fg, Set.Finite, classical, denselyOrdered_of_dlo, exists_orderEmbed, fg_iff_structure_fg, finite, isExtensionPair_iff_exists_embedding_closure_singleton_sup
 -/
@@ -1594,7 +1636,7 @@ lemma dlo_age
     fun ⟨hF, h⟩ => ⟨FG.of_finite, ?_⟩⟩
   let := Language.order.linearOrderOfModels M
   let := Language.order.linearOrderOfModels N
-  exact ⟨StrongHomClass.toEmbedding (nonempty_orde
+  exact ⟨StrongHomClass.toEmbedding (nonempty_orderEmbedding_of_finite_infinite N M).some⟩
 
 中文:
 引理 dlo_age
@@ -1607,7 +1649,7 @@ lemma dlo_age
     fun ⟨hF, h⟩ => ⟨FG.of_finite, ?_⟩⟩
   let := Language.order.linearOrderOfModels M
   let := Language.order.linearOrderOfModels N
-  exact ⟨StrongHomClass.toEmbedding (nonempty_orde
+  exact ⟨StrongHomClass.toEmbedding (nonempty_orderEmbedding_of_finite_infinite N M).some⟩
 
 Depends on / 依赖: FG.of_finite, IsUniversal, Language, Language.order.linearOrderOfModels, StrongHomClass, StrongHomClass.toEmbedding, Theory, Theory.IsUniversal.models_of_embedding, classical, finite, h.some, hF.finite, linearOrderOfModels, models_of_embedding, nonempty_orderEmbedding_of_finite_infinite, of_finite, toEmbedding
 -/

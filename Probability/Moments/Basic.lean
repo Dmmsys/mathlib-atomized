@@ -275,7 +275,11 @@ theorem centralMoment_one
     simp
   · simp only [centralMoment, Pi.sub_apply, pow_one]
     have : ¬Integrable (fun x => X x - integral μ X) μ := by
-      refine fun h_sub =>
+      refine fun h_sub => h_int ?_
+      have h_add : X = (fun x => X x - integral μ X) + fun _ => integral μ X := by ext1 x; simp
+      rw [h_add]
+      fun_prop
+    rw [integral_undef this]
 
 中文:
 定理 centralMoment_one
@@ -289,7 +293,11 @@ theorem centralMoment_one
     simp
   · simp only [centralMoment, Pi.sub_apply, pow_one]
     have : ¬Integrable (fun x => X x - integral μ X) μ := by
-      refine fun h_sub =>
+      refine fun h_sub => h_int ?_
+      have h_add : X = (fun x => X x - integral μ X) + fun _ => integral μ X := by ext1 x; simp
+      rw [h_add]
+      fun_prop
+    rw [integral_undef this]
 
 Depends on / 依赖: Integrable, Pi.sub_apply, centralMoment, centralMoment_one, eq_zero_or_isProbabilityMeasure, fun_prop, h_add, h_int, h_sub, integral, integral_undef, pow_one, sub_apply
 -/
@@ -755,7 +763,15 @@ theorem mgf_pos'
   rw [this]; rw [setIntegral_pos_iff_support_of_nonneg_ae _ _]
   · have h_eq_univ : (Function.support fun x : Ω => exp (t * X x)) = Set.univ := by
       ext1 x
-  
+      simp only [Function.mem_support, Set.mem_univ, iff_true]
+      exact (exp_pos _).ne'
+    rw [h_eq_univ]; rw [Set.inter_univ _]
+    refine Ne.bot_lt ?_
+    simp only [hμ, ENNReal.bot_eq_zero, Ne, Measure.measure_univ_eq_zero, not_false_iff]
+  · filter_upwards with x
+    rw [Pi.zero_apply]
+    exact (exp_pos _).le
+  · rwa [integrableOn_univ]
 
 中文:
 定理 mgf_pos'
@@ -767,7 +783,15 @@ theorem mgf_pos'
   rw [this]; rw [setIntegral_pos_iff_support_of_nonneg_ae _ _]
   · have h_eq_univ : (Function.support fun x : Ω => exp (t * X x)) = Set.univ := by
       ext1 x
-  
+      simp only [Function.mem_support, Set.mem_univ, iff_true]
+      exact (exp_pos _).ne'
+    rw [h_eq_univ]; rw [Set.inter_univ _]
+    refine Ne.bot_lt ?_
+    simp only [hμ, ENNReal.bot_eq_zero, Ne, Measure.measure_univ_eq_zero, not_false_iff]
+  · filter_upwards with x
+    rw [Pi.zero_apply]
+    exact (exp_pos _).le
+  · rwa [integrableOn_univ]
 
 Depends on / 依赖: ENNReal, ENNReal.bot_eq_zero, Function, Function.mem_support, Function.support, Measure, Measure.measure_univ_eq_zero, Measure.restrict_univ, Ne.bot_lt, Set.inter_univ, Set.mem_univ, Set.univ, bot_eq_zero, bot_lt, exp_pos, h_eq_univ, iff_true, inter_univ, measure_univ_eq_zero, mem_support
 -/
@@ -1273,7 +1297,8 @@ theorem IndepFun.mgf_add'
   have h'X : AEStronglyMeasurable (fun ω => exp (t * X ω)) μ :=
     A.aestronglyMeasurable.comp_aemeasurable hX.aemeasurable
   have h'Y : AEStronglyMeasurable (fun ω => exp (t * Y ω)) μ :=
-    A.aestronglyMeasurable.comp_aemeasurabl
+    A.aestronglyMeasurable.comp_aemeasurable hY.aemeasurable
+  exact h_indep.mgf_add h'X h'Y
 
 中文:
 定理 IndepFun.mgf_add'
@@ -1283,7 +1308,8 @@ theorem IndepFun.mgf_add'
   have h'X : AEStronglyMeasurable (fun ω => exp (t * X ω)) μ :=
     A.aestronglyMeasurable.comp_aemeasurable hX.aemeasurable
   have h'Y : AEStronglyMeasurable (fun ω => exp (t * Y ω)) μ :=
-    A.aestronglyMeasurable.comp_aemeasurabl
+    A.aestronglyMeasurable.comp_aemeasurable hY.aemeasurable
+  exact h_indep.mgf_add h'X h'Y
 
 Depends on / 依赖: A.aestronglyMeasurable.comp_aemeasurable, AEStronglyMeasurable, Continuous, aemeasurable, aestronglyMeasurable, comp_aemeasurable, fun_prop, hX.aemeasurable, hY.aemeasurable, h_indep, h_indep.mgf_add, mgf_add
 -/
@@ -1367,7 +1393,11 @@ theorem aestronglyMeasurable_exp_mul_sum
     simp only [Finset.sum_apply, sum_empty, mul_zero, exp_zero]
     exact aestronglyMeasurable_const
   | insert i s hi_notin_s h_rec =>
-    have : forall i : ι, i in s -> AEStronglyMeasurable (fun ω : Ω => exp (t * X i ω)) μ :=
+    have : forall i : ι, i in s -> AEStronglyMeasurable (fun ω : Ω => exp (t * X i ω)) μ := fun i hi =>
+      h_int i (mem_insert_of_mem hi)
+    specialize h_rec this
+    rw [sum_insert hi_notin_s]
+    apply aestronglyMeasurable_exp_mul_add (h_int i (mem_insert_self _ _)) h_rec
 
 中文:
 定理 aestronglyMeasurable_exp_mul_sum
@@ -1379,7 +1409,11 @@ theorem aestronglyMeasurable_exp_mul_sum
     simp only [Finset.sum_apply, sum_empty, mul_zero, exp_zero]
     exact aestronglyMeasurable_const
   | insert i s hi_notin_s h_rec =>
-    have : forall i : ι, i in s -> AEStronglyMeasurable (fun ω : Ω => exp (t * X i ω)) μ :=
+    have : forall i : ι, i in s -> AEStronglyMeasurable (fun ω : Ω => exp (t * X i ω)) μ := fun i hi =>
+      h_int i (mem_insert_of_mem hi)
+    specialize h_rec this
+    rw [sum_insert hi_notin_s]
+    apply aestronglyMeasurable_exp_mul_add (h_int i (mem_insert_self _ _)) h_rec
 
 Depends on / 依赖: AEStronglyMeasurable, Finset, Finset.induction_on, Finset.sum_apply, Matrix, Matrix.piRingEquiv, aestronglyMeasurable_const, aestronglyMeasurable_exp_mul_add, classical, e.mapMatrix, exists_ringEquiv_pi_matrix_divisionRing, exp_zero, h_int, h_rec, hi_notin_s, induction_on, insert, isEmpty_or_nonempty, isSemisimpleRing, mapMatrix
 -/
@@ -1438,7 +1472,11 @@ theorem iIndepFun.integrable_exp_mul_sum
     exact integrable_const _
   | insert i s hi_notin_s h_rec =>
     have : forall i : ι, i in s -> Integrable (fun ω : Ω => exp (t * X i ω)) μ := fun i hi =>
-     
+      h_int i (mem_insert_of_mem hi)
+    specialize h_rec this
+    rw [sum_insert hi_notin_s]
+    refine IndepFun.integrable_exp_mul_add ?_ (h_int i (mem_insert_self _ _)) h_rec
+    exact (h_indep.indepFun_finsetSum_of_notMem h_meas hi_notin_s).symm
 
 中文:
 定理 iIndepFun.integrable_exp_mul_sum
@@ -1451,7 +1489,11 @@ theorem iIndepFun.integrable_exp_mul_sum
     exact integrable_const _
   | insert i s hi_notin_s h_rec =>
     have : forall i : ι, i in s -> Integrable (fun ω : Ω => exp (t * X i ω)) μ := fun i hi =>
-     
+      h_int i (mem_insert_of_mem hi)
+    specialize h_rec this
+    rw [sum_insert hi_notin_s]
+    refine IndepFun.integrable_exp_mul_add ?_ (h_int i (mem_insert_self _ _)) h_rec
+    exact (h_indep.indepFun_finsetSum_of_notMem h_meas hi_notin_s).symm
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.sum_apply, IndepFun, IndepFun.integrable_exp_mul_add, Integrable, classical, exp_zero, h_indep, h_indep.indepFun_finsetSum_of_notMem, h_int, h_meas, h_rec, hi_notin_s, indepFun_finsetSum_of_notMem, induction_on, insert, integrable_const, integrable_exp_mul_add, mem_insert_of_mem
 -/
@@ -1485,7 +1527,9 @@ theorem iIndepFun.mgf_sum₀
   | empty => simp
   | insert i s hi_notin_s h_rec =>
     have h_int' : forall i : ι, AEStronglyMeasurable (fun ω : Ω => exp (t * X i ω)) μ := fun i =>
-      ((h_meas i).const_m
+      ((h_meas i).const_mul t).exp.aestronglyMeasurable
+    rw [sum_insert hi_notin_s]; rw [IndepFun.mgf_add (h_indep.indepFun_finsetSum_of_notMem₀ h_meas hi_notin_s).symm (h_int' i)
+        (aestronglyMeasurable_exp_mul_sum fun i _ => h_int' i)]; rw [h_rec]; rw [prod_insert hi_notin_s]
 
 中文:
 定理 iIndepFun.mgf_sum₀
@@ -1497,7 +1541,9 @@ theorem iIndepFun.mgf_sum₀
   | empty => simp
   | insert i s hi_notin_s h_rec =>
     have h_int' : forall i : ι, AEStronglyMeasurable (fun ω : Ω => exp (t * X i ω)) μ := fun i =>
-      ((h_meas i).const_m
+      ((h_meas i).const_mul t).exp.aestronglyMeasurable
+    rw [sum_insert hi_notin_s]; rw [IndepFun.mgf_add (h_indep.indepFun_finsetSum_of_notMem₀ h_meas hi_notin_s).symm (h_int' i)
+        (aestronglyMeasurable_exp_mul_sum fun i _ => h_int' i)]; rw [h_rec]; rw [prod_insert hi_notin_s]
 
 Depends on / 依赖: AEStronglyMeasurable, Finset, Finset.induction_on, IndepFun, IndepFun.mgf_add, IsProbabilityMeasure, aestronglyMeasurable, aestronglyMeasurable_exp_mul_sum, classical, const_mul, exp.aestronglyMeasurable, h_indep, h_indep.indepFun_finsetSum_of_notMem, h_indep.isProbabilityMeasure, h_int, h_meas, h_rec, hi_notin_s, induction_on, insert
 -/
@@ -1678,7 +1724,16 @@ theorem measure_ge_le_exp_mul_mgf
     exacts [measure_ne_top _ _, Set.subset_univ _]
   calc
     μ.real {ω | ε <= X ω} = μ.real {ω | exp (t * ε) <= exp (t * X ω)} := by
-      congr 1 wi
+      congr 1 with ω
+      simp only [Set.mem_ofPred_eq, exp_le_exp]
+      exact ⟨fun h => mul_le_mul_of_nonneg_left h ht_pos.le,
+        fun h => le_of_mul_le_mul_left h ht_pos⟩
+    _ <= (exp (t * ε))⁻¹ * μ[fun ω => exp (t * X ω)] := by
+      have : exp (t * ε) * μ.real {ω | exp (t * ε) <= exp (t * X ω)} <=
+          μ[fun ω => exp (t * X ω)] :=
+        mul_meas_ge_le_integral_of_nonneg (ae_of_all _ fun x => (exp_pos _).le) h_int _
+      rwa [mul_comm (exp (t * ε))⁻¹, ← div_eq_mul_inv, le_div_iff₀' (exp_pos _)]
+    _ = exp (-t * ε) * mgf X μ t := by rw [neg_mul, exp_neg]; rfl
 
 中文:
 定理 measure_ge_le_exp_mul_mgf
@@ -1691,7 +1746,16 @@ theorem measure_ge_le_exp_mul_mgf
     exacts [measure_ne_top _ _, Set.subset_univ _]
   calc
     μ.real {ω | ε <= X ω} = μ.real {ω | exp (t * ε) <= exp (t * X ω)} := by
-      congr 1 wi
+      congr 1 with ω
+      simp only [Set.mem_ofPred_eq, exp_le_exp]
+      exact ⟨fun h => mul_le_mul_of_nonneg_left h ht_pos.le,
+        fun h => le_of_mul_le_mul_left h ht_pos⟩
+    _ <= (exp (t * ε))⁻¹ * μ[fun ω => exp (t * X ω)] := by
+      have : exp (t * ε) * μ.real {ω | exp (t * ε) <= exp (t * X ω)} <=
+          μ[fun ω => exp (t * X ω)] :=
+        mul_meas_ge_le_integral_of_nonneg (ae_of_all _ fun x => (exp_pos _).le) h_int _
+      rwa [mul_comm (exp (t * ε))⁻¹, ← div_eq_mul_inv, le_div_iff₀' (exp_pos _)]
+    _ = exp (-t * ε) * mgf X μ t := by rw [neg_mul, exp_neg]; rfl
 
 Depends on / 依赖: Set.mem_ofPred_eq, Set.subset_univ, eq_or_lt, exacts, exp_le_exp, exp_zero, ht.eq_or_lt, ht_pos, ht_pos.le, ht_zero_eq, ht_zero_eq.symm, le_of_mul_le_mul_left, measure_ne_top, mem_ofPred_eq, mgf_zero, mul_le_mul_of_nonneg_left, neg_zero, one_mul, subset_univ, zero_mul
 -/
@@ -1915,7 +1979,8 @@ lemma integrable_exp_mul_of_mem_Icc
   filter_upwards [hb] with ω ⟨hl, hr⟩
   simp only [Set.mem_Icc, exp_le_exp, inf_le_iff, le_sup_iff]
   by_cases ht : 0 <= t
-  · exact ⟨Or.inl (by nlin
+  · exact ⟨Or.inl (by nlinarith), Or.inr (by nlinarith)⟩
+  · exact ⟨Or.inr (by nlinarith), Or.inl (by nlinarith)⟩
 
 中文:
 引理 integrable_exp_mul_of_mem_Icc
@@ -1926,7 +1991,8 @@ lemma integrable_exp_mul_of_mem_Icc
   filter_upwards [hb] with ω ⟨hl, hr⟩
   simp only [Set.mem_Icc, exp_le_exp, inf_le_iff, le_sup_iff]
   by_cases ht : 0 <= t
-  · exact ⟨Or.inl (by nlin
+  · exact ⟨Or.inl (by nlinarith), Or.inr (by nlinarith)⟩
+  · exact ⟨Or.inr (by nlinarith), Or.inl (by nlinarith)⟩
 
 Depends on / 依赖: Integrable, Integrable.of_mem_Icc, Or.inl, Or.inr, Set.mem_Icc, comp_aemeasurable, const_mul, exp_le_exp, filter_upwards, hm.const_mul, inf_le_iff, le_sup_iff, measurable_exp, measurable_exp.comp_aemeasurable, mem_Icc, of_mem_Icc
 -/

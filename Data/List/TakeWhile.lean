@@ -152,6 +152,11 @@ theorem dropWhile_eq_self_iff
       intro h
       replace h := congrArg length h
       have := length_dropWhile_le p tl
+      simp at h
+      lia
+    · simp [h_p_hd]
+
+@[simp]
 
 中文:
 定理 dropWhile_eq_self_iff
@@ -166,6 +171,11 @@ theorem dropWhile_eq_self_iff
       intro h
       replace h := congrArg length h
       have := length_dropWhile_le p tl
+      simp at h
+      lia
+    · simp [h_p_hd]
+
+@[simp]
 
 Depends on / 依赖: Nat.zero_lt_succ, dropWhile, getElem_cons_zero, h_p_hd, iff_false, imp_false, length, length_cons, length_dropWhile_le, not_true_eq_false, replace, zero_lt_succ
 -/
@@ -355,7 +365,9 @@ lemma find?_eq_head?_dropWhile_not
       rw [find?_cons_of_neg phh']; rw [dropWhile_cons_of_pos]
       · exact hi
       · simpa using phh
-    · rw [find?_c
+    · rw [find?_cons_of_pos phh.symm, dropWhile_cons_of_neg]
+      · simp
+      · simpa using phh
 
 中文:
 引理 find?_eq_head?_dropWhile_not
@@ -369,7 +381,9 @@ lemma find?_eq_head?_dropWhile_not
       rw [find?_cons_of_neg phh']; rw [dropWhile_cons_of_pos]
       · exact hi
       · simpa using phh
-    · rw [find?_c
+    · rw [find?_cons_of_pos phh.symm, dropWhile_cons_of_neg]
+      · simp
+      · simpa using phh
 -/
 lemma find?_eq_head?_dropWhile_not :
     l.find? p = (l.dropWhile (fun x => !(p x))).head? := by

@@ -359,7 +359,16 @@ theorem exists_le_isAssociatedPrime_of_isNoetherianRing
       { P | (⊥ : Submodule R M).colon {x} <= P ∧ P != ⊤ ∧ exists y : M, P = (⊥ : Submodule R M).colon {y} }
       ⟨_, rfl.le, by simpa, x, rfl⟩
   refine ⟨_, ⟨⟨h₁, ?_⟩, y, rfl⟩, l⟩
-  i
+  intro a b hab
+  rw [or_iff_not_imp_left]
+  intro ha
+  rw [mem_colon_singleton] at ha hab
+  have H₁ : (⊥ : Submodule R M).colon {y} <= (⊥ : Submodule R M).colon {a • y} := by
+    intro c hc
+    rw [mem_colon_singleton]; rw [mem_bot] at hc ⊢
+    rw [smul_comm]; rw [hc]; rw [smul_zero]
+  rwa [H₁.eq_of_not_lt (h₃ _ ⟨l.trans H₁, by simpa, _, rfl⟩),
+    mem_colon_singleton, smul_comm, smul_smul]
 
 中文:
 定理 存在_le_isAssociatedPrime_of_isNoetherianRing
@@ -371,7 +380,16 @@ theorem exists_le_isAssociatedPrime_of_isNoetherianRing
       { P | (⊥ : Submodule R M).colon {x} <= P ∧ P != ⊤ ∧ exists y : M, P = (⊥ : Submodule R M).colon {y} }
       ⟨_, rfl.le, by simpa, x, rfl⟩
   refine ⟨_, ⟨⟨h₁, ?_⟩, y, rfl⟩, l⟩
-  i
+  intro a b hab
+  rw [or_iff_not_imp_left]
+  intro ha
+  rw [mem_colon_singleton] at ha hab
+  have H₁ : (⊥ : Submodule R M).colon {y} <= (⊥ : Submodule R M).colon {a • y} := by
+    intro c hc
+    rw [mem_colon_singleton]; rw [mem_bot] at hc ⊢
+    rw [smul_comm]; rw [hc]; rw [smul_zero]
+  rwa [H₁.eq_of_not_lt (h₃ _ ⟨l.trans H₁, by simpa, _, rfl⟩),
+    mem_colon_singleton, smul_comm, smul_smul]
 
 Depends on / 依赖: Submodule, isAssociatedPrime_iff, mem_bot, mem_colon_singleton, or_iff_not_imp_left, rfl.le, set_has_maximal_iff_noetherian, set_has_maximal_iff_noetherian.mpr
 -/
@@ -437,7 +455,26 @@ theorem subset_union_of_exact
     · rw [hx] at hb
       obtain ⟨n, hb⟩ := hb
       use n
-      rw [mem_colon_
+      rw [mem_colon_singleton]; rw [mem_bot] at hb ⊢
+      apply_fun _ using hf
+      rw [map_smul]; rw [h]; rw [smul_comm]; rw [hb]; rw [smul_zero]; rw [map_zero]
+    · rw [mem_colon_singleton, mem_bot] at hb
+      apply_fun f at hb
+      rw [map_smul]; rw [map_zero]; rw [h]; rw [← mul_smul]; rw [← mem_bot R]; rw [← mem_colon_singleton] at hb
+      replace hb := hx.ge (Ideal.le_radical hb)
+      contrapose hb
+      exact p.primeCompl.mul_mem (p.primeCompl.pow_mem hb n) (p.primeCompl.pow_mem ha k)
+  · right
+    refine ⟨‹_›, g x, le_antisymm (fun b hb => ?_) (fun b ⟨n, hb⟩ => ?_)⟩
+    · rw [hx] at hb
+      refine Ideal.radical_mono (fun b hb => ?_) hb
+      rw [mem_colon_singleton]; rw [mem_bot] at hb ⊢
+      rw [← map_smul]; rw [hb]; rw [map_zero]
+    · rw [mem_colon_singleton, mem_bot, ← map_smul, ← LinearMap.mem_ker,
+        hfg.linearMap_ker_eq] at hb
+      obtain ⟨y, hy⟩ := hb
+      by_contra H
+      exact h b H y n hy
 
 中文:
 定理 subset_union_of_exact
@@ -451,7 +488,26 @@ theorem subset_union_of_exact
     · rw [hx] at hb
       obtain ⟨n, hb⟩ := hb
       use n
-      rw [mem_colon_
+      rw [mem_colon_singleton]; rw [mem_bot] at hb ⊢
+      apply_fun _ using hf
+      rw [map_smul]; rw [h]; rw [smul_comm]; rw [hb]; rw [smul_zero]; rw [map_zero]
+    · rw [mem_colon_singleton, mem_bot] at hb
+      apply_fun f at hb
+      rw [map_smul]; rw [map_zero]; rw [h]; rw [← mul_smul]; rw [← mem_bot R]; rw [← mem_colon_singleton] at hb
+      replace hb := hx.ge (Ideal.le_radical hb)
+      contrapose hb
+      exact p.primeCompl.mul_mem (p.primeCompl.pow_mem hb n) (p.primeCompl.pow_mem ha k)
+  · right
+    refine ⟨‹_›, g x, le_antisymm (fun b hb => ?_) (fun b ⟨n, hb⟩ => ?_)⟩
+    · rw [hx] at hb
+      refine Ideal.radical_mono (fun b hb => ?_) hb
+      rw [mem_colon_singleton]; rw [mem_bot] at hb ⊢
+      rw [← map_smul]; rw [hb]; rw [map_zero]
+    · rw [mem_colon_singleton, mem_bot, ← map_smul, ← LinearMap.mem_ker,
+        hfg.linearMap_ker_eq] at hb
+      obtain ⟨y, hy⟩ := hb
+      by_contra H
+      exact h b H y n hy
 
 Depends on / 依赖: Finset, apply_fun, classical, countable_range, dense_iff_inter_open, exists_countable_dense, inhabit, isOpen_pi_iff, le_antisymm, map_smul, map_zero, mem_bot, mem_colon_singleton, nontriviality, p.primeCompl, primeCompl, smul_comm, smul_zero, to_subtype
 -/
@@ -601,7 +657,9 @@ theorem biUnion_associatedPrimes_eq_zero_divisors
   · rintro _ ⟨h, x, ⟨⟩⟩ r h'
     exact ⟨x, by simpa using h.ne_top, by simpa using h'⟩
   · intro r ⟨x, h, h'⟩
-    obtain ⟨P, hP, hx⟩ := exists_le_isAssociatedPrime_of_isNoetherianRing
+    obtain ⟨P, hP, hx⟩ := exists_le_isAssociatedPrime_of_isNoetherianRing R x h
+    rw [isAssociatedPrime_iff] at hP
+    exact Set.mem_iUnion₂_of_mem hP (hx (by rwa [mem_colon_singleton]))
 
 中文:
 定理 biUnion_associatedPrimes_eq_zero_divisors
@@ -612,7 +670,9 @@ theorem biUnion_associatedPrimes_eq_zero_divisors
   · rintro _ ⟨h, x, ⟨⟩⟩ r h'
     exact ⟨x, by simpa using h.ne_top, by simpa using h'⟩
   · intro r ⟨x, h, h'⟩
-    obtain ⟨P, hP, hx⟩ := exists_le_isAssociatedPrime_of_isNoetherianRing
+    obtain ⟨P, hP, hx⟩ := exists_le_isAssociatedPrime_of_isNoetherianRing R x h
+    rw [isAssociatedPrime_iff] at hP
+    exact Set.mem_iUnion₂_of_mem hP (hx (by rwa [mem_colon_singleton]))
 
 Depends on / 依赖: AssociatedPrimes, AssociatedPrimes.mem_iff, Set.iUnion, Set.mem_iUnion, exists_le_isAssociatedPrime_of_isNoetherianRing, h.ne_top, isAssociatedPrime_iff, mem_colon_singleton, mem_iff, ne_top, subset_antisymm
 -/
@@ -693,7 +753,8 @@ theorem isAssociatedPrime_iff_exists_injective_linearMap
   refine fun _ => ⟨fun ⟨x, h⟩ => ?_, fun ⟨f, h⟩ => ⟨(f ∘ₗ mkQ I) 1, ?_⟩⟩
   · replace h : I = ker (toSpanSingleton R M x) := by simp [h, SetLike.ext_iff]
     exact ⟨liftQ _ _ h.le, ker_eq_bot.mp (ker_liftQ_eq_bot' _ _ h)⟩
-  · conv_lhs => rw [←
+  · conv_lhs => rw [← I.ker_mkQ, ← ker_comp_of_ker_eq_bot (mkQ I) (ker_eq_bot_of_injective h)]
+    simp [SetLike.ext_iff, ← Ideal.Quotient.algebraMap_eq, Algebra.algebraMap_eq_smul_one]
 
 中文:
 定理 isAssociatedPrime_iff_存在_injective_linearMap
@@ -703,7 +764,8 @@ theorem isAssociatedPrime_iff_exists_injective_linearMap
   refine fun _ => ⟨fun ⟨x, h⟩ => ?_, fun ⟨f, h⟩ => ⟨(f ∘ₗ mkQ I) 1, ?_⟩⟩
   · replace h : I = ker (toSpanSingleton R M x) := by simp [h, SetLike.ext_iff]
     exact ⟨liftQ _ _ h.le, ker_eq_bot.mp (ker_liftQ_eq_bot' _ _ h)⟩
-  · conv_lhs => rw [←
+  · conv_lhs => rw [← I.ker_mkQ, ← ker_comp_of_ker_eq_bot (mkQ I) (ker_eq_bot_of_injective h)]
+    simp [SetLike.ext_iff, ← Ideal.Quotient.algebraMap_eq, Algebra.algebraMap_eq_smul_one]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, I.ker_mkQ, Ideal.Quotient.algebraMap_eq, Quotient, SetLike, SetLike.ext_iff, algebraMap_eq, algebraMap_eq_smul_one, and_congr_right_iff, conv_lhs, ext_iff, h.le, isAssociatedPrime_iff, ker_comp_of_ker_eq_bot, ker_eq_bot, ker_eq_bot.mp, ker_eq_bot_of_injective, ker_liftQ_eq_bot, ker_mkQ
 -/
@@ -732,7 +794,12 @@ theorem IsAssociatedPrime.eq_radical
     rwa [colon_singleton_zero, Ideal.radical_top] at e
   obtain ⟨x, rfl⟩ := Ideal.Quotient.mkₐ_surjective R _ x
   have h {y} : y in colon ⊥ {(Ideal.Quotient.mk I) x} ↔ Ideal.Quotient.mk I (y * x) = 0 := by
-    rw [mem_co
+    rw [mem_colon_singleton]; rw [Algebra.smul_def]; rw [Ideal.Quotient.algebraMap_eq]; rw [← map_mul]; rw [mem_bot]
+  simp only [e, Ideal.Quotient.mkₐ_eq_mk, ne_eq, Ideal.Quotient.eq_zero_iff_mem] at this h ⊢
+  refine le_antisymm (Ideal.radical_le_radical_iff.mpr fun y hy => ?_)
+    (Ideal.radical_mono fun y => h.mpr ∘ I.mul_mem_right x)
+  rw [← I.colon_univ]; rw [← Set.top_eq_univ]
+  exact (hI.mem_or_mem (h.mp hy)).resolve_left this
 
 中文:
 定理 是AssociatedPrime.eq_radical
@@ -745,7 +812,12 @@ theorem IsAssociatedPrime.eq_radical
     rwa [colon_singleton_zero, Ideal.radical_top] at e
   obtain ⟨x, rfl⟩ := Ideal.Quotient.mkₐ_surjective R _ x
   have h {y} : y in colon ⊥ {(Ideal.Quotient.mk I) x} ↔ Ideal.Quotient.mk I (y * x) = 0 := by
-    rw [mem_co
+    rw [mem_colon_singleton]; rw [Algebra.smul_def]; rw [Ideal.Quotient.algebraMap_eq]; rw [← map_mul]; rw [mem_bot]
+  simp only [e, Ideal.Quotient.mkₐ_eq_mk, ne_eq, Ideal.Quotient.eq_zero_iff_mem] at this h ⊢
+  refine le_antisymm (Ideal.radical_le_radical_iff.mpr fun y hy => ?_)
+    (Ideal.radical_mono fun y => h.mpr ∘ I.mul_mem_right x)
+  rw [← I.colon_univ]; rw [← Set.top_eq_univ]
+  exact (hI.mem_or_mem (h.mp hy)).resolve_left this
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Ideal.Quotient.algebraMap_eq, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk, Ideal.radi, Ideal.radical_top, Quotient, algebraMap_eq, colon_singleton_zero, eq_zero_iff_mem, le_antisymm, map_mul, mem_bot, mem_colon_singleton, ne_eq, radical_top, smul_def
 -/
@@ -780,7 +852,8 @@ theorem associatedPrimes.eq_singleton_of_isPrimary
     refine ⟨(Ideal.Quotient.mk I :) 1, (Ideal.Quotient.mk I :) 0, ?_⟩
     rw [Ne]; rw [Ideal.Quotient.eq]; rw [sub_zero]; rw [← Ideal.eq_top_iff_one]
     exact hI.1
- 
+  obtain ⟨a, ha⟩ := associatedPrimes.nonempty R (R ⧸ I)
+  exact ha.eq_radical hI ▸ ha
 
 中文:
 定理 associatedPrimes.eq_singleton_of_isPrimary
@@ -794,7 +867,8 @@ theorem associatedPrimes.eq_singleton_of_isPrimary
     refine ⟨(Ideal.Quotient.mk I :) 1, (Ideal.Quotient.mk I :) 0, ?_⟩
     rw [Ne]; rw [Ideal.Quotient.eq]; rw [sub_zero]; rw [← Ideal.eq_top_iff_one]
     exact hI.1
- 
+  obtain ⟨a, ha⟩ := associatedPrimes.nonempty R (R ⧸ I)
+  exact ha.eq_radical hI ▸ ha
 
 Depends on / 依赖: Ideal.Quotient.eq, Ideal.Quotient.mk, Ideal.eq_top_iff_one, IsAssociatedPrime, IsAssociatedPrime.eq_radical, Nontrivial, Quotient, Set.mem_singleton_iff, associatedPrimes, associatedPrimes.nonempty, eq_radical, eq_top_iff_one, ha.eq_radical, mem_singleton_iff, nonempty, sub_zero
 -/

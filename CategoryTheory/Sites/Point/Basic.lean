@@ -638,7 +638,13 @@ lemma toPresheafFiber_map_injective
       (hp : f.app _ p₁ = f.app _ p₂), Φ.toPresheafFiber X x P p₁ = Φ.toPresheafFiber X x P p₂ by
     rintro q₁ q₂ h
     obtain ⟨X, x, p₁, p₂, rfl, rfl⟩ := Φ.toPresheafFiber_jointly_surjective₂ q₁ q₂
-    simp only [toPre
+    simp only [toPresheafFiber_naturality_apply, toPresheafFiber_eq_iff'] at h
+    obtain ⟨Y, g, y, rfl, h⟩ := h
+    simp only [← NatTrans.naturality_apply] at h
+    simpa using this _ y _ _ h
+  intro X x p₁ p₂ h
+  obtain ⟨Y, g, hg, y, rfl⟩ := Φ.jointly_surjective _ (Presheaf.equalizerSieve_mem J f _ _ h) x
+  simp_all [← toPresheafFiber_w_apply]
 
 中文:
 引理 toPresheafFiber_map_injective
@@ -648,7 +654,13 @@ lemma toPresheafFiber_map_injective
       (hp : f.app _ p₁ = f.app _ p₂), Φ.toPresheafFiber X x P p₁ = Φ.toPresheafFiber X x P p₂ by
     rintro q₁ q₂ h
     obtain ⟨X, x, p₁, p₂, rfl, rfl⟩ := Φ.toPresheafFiber_jointly_surjective₂ q₁ q₂
-    simp only [toPre
+    simp only [toPresheafFiber_naturality_apply, toPresheafFiber_eq_iff'] at h
+    obtain ⟨Y, g, y, rfl, h⟩ := h
+    simp only [← NatTrans.naturality_apply] at h
+    simpa using this _ y _ _ h
+  intro X x p₁ p₂ h
+  obtain ⟨Y, g, hg, y, rfl⟩ := Φ.jointly_surjective _ (Presheaf.equalizerSieve_mem J f _ _ h) x
+  simp_all [← toPresheafFiber_w_apply]
 
 Depends on / 依赖: NatTrans, NatTrans.naturality_apply, P.obj, ToType, f.app, fiber.obj, jointly_su, naturality_apply, toPresheafFiber, toPresheafFiber_eq_iff, toPresheafFiber_naturality_apply
 -/

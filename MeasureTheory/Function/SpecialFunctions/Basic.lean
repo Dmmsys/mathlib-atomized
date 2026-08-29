@@ -1182,7 +1182,7 @@ instance ENNReal.hasMeasurablePow
     exact Measurable.ite (by measurability) measurable_const (by fun_prop)
   · simp_rw [ENNReal.top_rpow_def]
     refine Measurable.ite measurableSet_Ioi measurable_const ?_
-    exact Measurable.ite (
+    exact Measurable.ite (measurableSet_singleton 0) measurable_const measurable_const
 
 中文:
 实例 广义非负实数.hasMeasurablePow
@@ -1193,7 +1193,7 @@ instance ENNReal.hasMeasurablePow
     exact Measurable.ite (by measurability) measurable_const (by fun_prop)
   · simp_rw [ENNReal.top_rpow_def]
     refine Measurable.ite measurableSet_Ioi measurable_const ?_
-    exact Measurable.ite (
+    exact Measurable.ite (measurableSet_singleton 0) measurable_const measurable_const
 
 Depends on / 依赖: ENNReal, ENNReal.coe_rpow_def, ENNReal.measurable_of_measurable_nnreal_prod, ENNReal.top_rpow_def, Measurable, Measurable.ite, coe_rpow_def, fun_prop, measurability, measurableSet_Ioi, measurableSet_singleton, measurable_const, measurable_of_measurable_nnreal_prod, simp_rw, top_rpow_def
 -/

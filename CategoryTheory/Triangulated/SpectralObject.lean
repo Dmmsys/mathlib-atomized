@@ -197,7 +197,36 @@ definition precomp
       (X.ω₁.map (F.mapComposableArrowsObjMk₁Iso _).inv)⟦1⟧'
   δ'.naturality D₁ D₂ f := by
     have := X.δ'.naturality ((F.mapComposableArrows 2).map f)
-  
+    rw [← cancel_epi (X.ω₁.map (F.mapComposableArrowsObjMk₁Iso _).hom)] at this
+    rw [← cancel_mono ((X.ω₁.map (F.mapComposableArrowsObjMk₁Iso _).hom)⟦(1 : Int)⟧')]
+    dsimp at this ⊢
+    simp only [← Functor.map_comp_assoc, ← Functor.map_comp, Category.assoc,
+      Iso.inv_hom_id, Functor.map_id, Category.comp_id] at this ⊢
+    convert! this using 3
+    · cat_disch
+    · congr 2; cat_disch
+  distinguished' D := by
+    obtain ⟨_, _, _, f, g, rfl⟩ := ComposableArrows.mk₂_surjective D
+    refine isomorphic_distinguished _ (X.triangle_distinguished (F.map f) (F.map g)) _ ?_
+    refine Triangle.isoMk _ _ (X.ω₁.mapIso (ComposableArrows.isoMk₁ (Iso.refl _) (Iso.refl _)))
+      (X.ω₁.mapIso (ComposableArrows.isoMk₁ (Iso.refl _) (Iso.refl _)))
+      (X.ω₁.mapIso (ComposableArrows.isoMk₁ (Iso.refl _) (Iso.refl _))) ?_ ?_ ?_
+    · dsimp
+      simp only [← Functor.map_comp]
+      congr 1
+      cat_disch
+    · dsimp
+      simp only [← Functor.map_comp]
+      congr 1
+      cat_disch
+    · have := X.δ'.naturality (F.mapComposableArrowsObjMk₂Iso f g).hom
+      dsimp at this ⊢
+      rw [← cancel_epi (X.ω₁.map (F.mapComposableArrowsObjMk₁Iso _).inv)]
+      simp only [← Functor.map_comp_assoc, ← Functor.map_comp, Category.assoc,
+        Iso.inv_hom_id, Functor.map_id, Category.id_comp] at this ⊢
+      convert! this.symm using 3
+      · congr; cat_disch
+      · cat_disch
 
 中文:
 定义 precomp
@@ -208,7 +237,36 @@ definition precomp
       (X.ω₁.map (F.mapComposableArrowsObjMk₁Iso _).inv)⟦1⟧'
   δ'.naturality D₁ D₂ f := by
     have := X.δ'.naturality ((F.mapComposableArrows 2).map f)
-  
+    rw [← cancel_epi (X.ω₁.map (F.mapComposableArrowsObjMk₁Iso _).hom)] at this
+    rw [← cancel_mono ((X.ω₁.map (F.mapComposableArrowsObjMk₁Iso _).hom)⟦(1 : Int)⟧')]
+    dsimp at this ⊢
+    simp only [← Functor.map_comp_assoc, ← Functor.map_comp, Category.assoc,
+      Iso.inv_hom_id, Functor.map_id, Category.comp_id] at this ⊢
+    convert! this using 3
+    · cat_disch
+    · congr 2; cat_disch
+  distinguished' D := by
+    obtain ⟨_, _, _, f, g, rfl⟩ := ComposableArrows.mk₂_surjective D
+    refine isomorphic_distinguished _ (X.triangle_distinguished (F.map f) (F.map g)) _ ?_
+    refine Triangle.isoMk _ _ (X.ω₁.mapIso (ComposableArrows.isoMk₁ (Iso.refl _) (Iso.refl _)))
+      (X.ω₁.mapIso (ComposableArrows.isoMk₁ (Iso.refl _) (Iso.refl _)))
+      (X.ω₁.mapIso (ComposableArrows.isoMk₁ (Iso.refl _) (Iso.refl _))) ?_ ?_ ?_
+    · dsimp
+      simp only [← Functor.map_comp]
+      congr 1
+      cat_disch
+    · dsimp
+      simp only [← Functor.map_comp]
+      congr 1
+      cat_disch
+    · have := X.δ'.naturality (F.mapComposableArrowsObjMk₂Iso f g).hom
+      dsimp at this ⊢
+      rw [← cancel_epi (X.ω₁.map (F.mapComposableArrowsObjMk₁Iso _).inv)]
+      simp only [← Functor.map_comp_assoc, ← Functor.map_comp, Category.assoc,
+        Iso.inv_hom_id, Functor.map_id, Category.id_comp] at this ⊢
+      convert! this.symm using 3
+      · congr; cat_disch
+      · cat_disch
 
 Depends on / 依赖: F.mapComposableArrows, mapComposableArrows
 -/
@@ -446,7 +504,7 @@ definition mapTriangulatedSpectralObject
       comm f g := by
         have hf := (F.commShiftIso (1 : Int)).hom.naturality (α.hom.app (mk₁ f))
         dsimp at hf ⊢
-        rw [Category.assoc]; rw [← hf]; rw [← F.map_comp_assoc]; rw [α.comm]; rw [F.map_comp_ass
+        rw [Category.assoc]; rw [← hf]; rw [← F.map_comp_assoc]; rw [α.comm]; rw [F.map_comp_assoc] }
 
 中文:
 定义 mapTriangulatedSpectralObject
@@ -457,7 +515,7 @@ definition mapTriangulatedSpectralObject
       comm f g := by
         have hf := (F.commShiftIso (1 : Int)).hom.naturality (α.hom.app (mk₁ f))
         dsimp at hf ⊢
-        rw [Category.assoc]; rw [← hf]; rw [← F.map_comp_assoc]; rw [α.comm]; rw [F.map_comp_ass
+        rw [Category.assoc]; rw [← hf]; rw [← F.map_comp_assoc]; rw [α.comm]; rw [F.map_comp_assoc] }
 
 Depends on / 依赖: X.mapTriangulatedFunctor, mapTriangulatedFunctor
 -/

@@ -48,7 +48,19 @@ theorem eventually_nhds_zero_forall_closedEBall_subset
     apply mp_mem ((eventually_all_finite (hfin.point_finite x)).2 this)
       (mp_mem (@tendsto_snd Real>=0∞ _ (𝓝 0) _ _ (hfin.iInter_compl_mem_nhds hK x)) _)
     apply univ_mem'
-    rintr
+    rintro ⟨r, y⟩ hxy hyU i hi
+    simp only [mem_iInter, mem_compl_iff, not_imp_not, mem_preimage] at hxy
+    exact hyU _ (hxy _ hi)
+  intro i hi
+  rcases nhds_basis_closedEBall.mem_iff.1 ((hU i).mem_nhds <| hKU i hi) with ⟨R, hR₀, hR⟩
+  rcases ENNReal.lt_iff_exists_nnreal_btwn.mp hR₀ with ⟨r, hr₀, hrR⟩
+  filter_upwards [prod_mem_prod (eventually_lt_nhds hr₀)
+      (closedEBall_mem_nhds x (tsub_pos_iff_lt.2 hrR))] with p hp z hz
+  apply hR
+  calc
+    edist z x <= edist z p.2 + edist p.2 x := edist_triangle _ _ _
+_ <= p.1 + (R - p.1) := add_le_add hz le_trans hp.2 tsub_le_tsub_left hp.1.out.le _
+    _ = R := add_tsub_cancel_of_le (lt_trans (by exact hp.1) hrR).le
 
 中文:
 定理 eventually_nhds_zero_对任意_closedEBall_subset
@@ -58,7 +70,19 @@ theorem eventually_nhds_zero_forall_closedEBall_subset
     apply mp_mem ((eventually_all_finite (hfin.point_finite x)).2 this)
       (mp_mem (@tendsto_snd Real>=0∞ _ (𝓝 0) _ _ (hfin.iInter_compl_mem_nhds hK x)) _)
     apply univ_mem'
-    rintr
+    rintro ⟨r, y⟩ hxy hyU i hi
+    simp only [mem_iInter, mem_compl_iff, not_imp_not, mem_preimage] at hxy
+    exact hyU _ (hxy _ hi)
+  intro i hi
+  rcases nhds_basis_closedEBall.mem_iff.1 ((hU i).mem_nhds <| hKU i hi) with ⟨R, hR₀, hR⟩
+  rcases ENNReal.lt_iff_exists_nnreal_btwn.mp hR₀ with ⟨r, hr₀, hrR⟩
+  filter_upwards [prod_mem_prod (eventually_lt_nhds hr₀)
+      (closedEBall_mem_nhds x (tsub_pos_iff_lt.2 hrR))] with p hp z hz
+  apply hR
+  calc
+    edist z x <= edist z p.2 + edist p.2 x := edist_triangle _ _ _
+_ <= p.1 + (R - p.1) := add_le_add hz le_trans hp.2 tsub_le_tsub_left hp.1.out.le _
+    _ = R := add_tsub_cancel_of_le (lt_trans (by exact hp.1) hrR).le
 
 Depends on / 依赖: closedEBall, eventually_all_finite, hfin.iInter_compl_mem_nhds, hfin.point_finite, iInter_compl_mem_nhds, mem_compl_iff, mem_iInter, mem_iff, mem_nhds, mem_preimage, mp_mem, nhds_basis_closedEBall, nhds_basis_closedEBall.mem_iff, not_imp_not, point_finite, subseteq, tendsto_snd, univ_mem
 -/

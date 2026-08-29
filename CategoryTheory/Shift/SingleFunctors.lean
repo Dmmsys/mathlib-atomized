@@ -432,7 +432,7 @@ definition isoMk
   inv :=
     { hom := fun a => (iso a).inv
       comm := fun n a a' ha' => by
-        rw [← cancel_mono (iso a).hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [comm]; rw [← whiskerRight_comp_assoc]; rw [Iso.inv_hom_id]; rw [whis
+        rw [← cancel_mono (iso a).hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [comm]; rw [← whiskerRight_comp_assoc]; rw [Iso.inv_hom_id]; rw [whiskerRight_id']; rw [id_comp] }
 
 中文:
 定义 isoMk
@@ -442,7 +442,7 @@ definition isoMk
   inv :=
     { hom := fun a => (iso a).inv
       comm := fun n a a' ha' => by
-        rw [← cancel_mono (iso a).hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [comm]; rw [← whiskerRight_comp_assoc]; rw [Iso.inv_hom_id]; rw [whis
+        rw [← cancel_mono (iso a).hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [comm]; rw [← whiskerRight_comp_assoc]; rw [Iso.inv_hom_id]; rw [whiskerRight_id']; rw [id_comp] }
 
 Depends on / 依赖: Iso.inv_hom_id, cancel_mono, comp_id, id_comp, inv_hom_id, whiskerRight_comp_assoc, whiskerRight_id
 -/
@@ -609,7 +609,16 @@ definition postcomp
   shiftIso_zero a := by
     ext X
     dsimp
-    simp only [Functor.commShiftIso_zero, Functor.CommSh
+    simp only [Functor.commShiftIso_zero, Functor.CommShift.isoZero_inv_app,
+      SingleFunctors.shiftIso_zero_hom_app, id_comp, assoc, ← G.map_comp, Iso.inv_hom_id_app,
+      Functor.map_id, Functor.id_obj, comp_id]
+  shiftIso_add n m a a' a'' ha' ha'' := by
+    ext X
+    dsimp
+    simp only [F.shiftIso_add_hom_app n m a a' a'' ha' ha'', Functor.commShiftIso_add,
+      Functor.CommShift.isoAdd_inv_app, Functor.map_comp, id_comp, assoc,
+      Functor.commShiftIso_inv_naturality_assoc]
+    simp only [← G.map_comp, Iso.inv_hom_id_app_assoc]
 
 中文:
 定义 postcomp
@@ -621,7 +630,16 @@ definition postcomp
   shiftIso_zero a := by
     ext X
     dsimp
-    simp only [Functor.commShiftIso_zero, Functor.CommSh
+    simp only [Functor.commShiftIso_zero, Functor.CommShift.isoZero_inv_app,
+      SingleFunctors.shiftIso_zero_hom_app, id_comp, assoc, ← G.map_comp, Iso.inv_hom_id_app,
+      Functor.map_id, Functor.id_obj, comp_id]
+  shiftIso_add n m a a' a'' ha' ha'' := by
+    ext X
+    dsimp
+    simp only [F.shiftIso_add_hom_app n m a a' a'' ha' ha'', Functor.commShiftIso_add,
+      Functor.CommShift.isoAdd_inv_app, Functor.map_comp, id_comp, assoc,
+      Functor.commShiftIso_inv_naturality_assoc]
+    simp only [← G.map_comp, Iso.inv_hom_id_app_assoc]
 
 Depends on / 依赖: F.functor, functor
 -/

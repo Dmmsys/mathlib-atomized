@@ -951,7 +951,11 @@ theorem sup
     fun i j hij => ?_, fun i => Integrable.sup (hf.integrable _) (hg.integrable _)⟩
   refine EventuallyLE.sup_le ?_ ?_
   · exact EventuallyLE.trans (hf.2.1 i j hij)
-      (condExp_mon
+      (condExp_mono (hf.integrable _) (Integrable.sup (hf.integrable j) (hg.integrable j))
+        (Eventually.of_forall fun x => le_sup_left))
+  · exact EventuallyLE.trans (hg.2.1 i j hij)
+      (condExp_mono (hg.integrable _) (Integrable.sup (hf.integrable j) (hg.integrable j))
+        (Eventually.of_forall fun x => le_sup_right))
 
 中文:
 定理 上确界
@@ -962,7 +966,11 @@ theorem sup
     fun i j hij => ?_, fun i => Integrable.sup (hf.integrable _) (hg.integrable _)⟩
   refine EventuallyLE.sup_le ?_ ?_
   · exact EventuallyLE.trans (hf.2.1 i j hij)
-      (condExp_mon
+      (condExp_mono (hf.integrable _) (Integrable.sup (hf.integrable j) (hg.integrable j))
+        (Eventually.of_forall fun x => le_sup_left))
+  · exact EventuallyLE.trans (hg.2.1 i j hij)
+      (condExp_mono (hg.integrable _) (Integrable.sup (hf.integrable j) (hg.integrable j))
+        (Eventually.of_forall fun x => le_sup_right))
 -/
 protected theorem sup [Lattice E] [ContinuousSup E] [HasSolidNorm E] [IsOrderedAddMonoid E]
     [IsOrderedModule Real E] {f g : ι -> Ω -> E} (hf : Submartingale f ℱ μ)
@@ -1014,7 +1022,12 @@ theorem submartingale_of_setIntegral_le
     filter_upwards [this] with x hx
     rwa [← sub_nonneg]
   refine ae_nonneg_of_forall_setIntegral_nonneg
-    ((inte
+    ((integrable_condExp.sub (hint i)).trim _ (stronglyMeasurable_condExp.sub <| hadp i))
+      fun s hs _ => ?_
+  specialize hf i j hij s hs
+  rwa [← setIntegral_trim _ (stronglyMeasurable_condExp.sub <| hadp i) hs,
+    integral_sub' integrable_condExp.integrableOn (hint i).integrableOn, sub_nonneg,
+    setIntegral_condExp (ℱ.le i) (hint j) hs]
 
 中文:
 定理 submartingale_of_set整数egral_le
@@ -1026,7 +1039,12 @@ theorem submartingale_of_setIntegral_le
     filter_upwards [this] with x hx
     rwa [← sub_nonneg]
   refine ae_nonneg_of_forall_setIntegral_nonneg
-    ((inte
+    ((integrable_condExp.sub (hint i)).trim _ (stronglyMeasurable_condExp.sub <| hadp i))
+      fun s hs _ => ?_
+  specialize hf i j hij s hs
+  rwa [← setIntegral_trim _ (stronglyMeasurable_condExp.sub <| hadp i) hs,
+    integral_sub' integrable_condExp.integrableOn (hint i).integrableOn, sub_nonneg,
+    setIntegral_condExp (ℱ.le i) (hint j) hs]
 
 Depends on / 依赖: ae_le_of_ae_le_trim, ae_nonneg_of_forall_setIntegral_nonneg, filter_upwards, integrabl, integrable_condExp, integrable_condExp.sub, integral_sub, setIntegral_trim, specialize, stronglyMeasurable_condExp, stronglyMeasurable_condExp.sub, sub_nonneg
 -/
@@ -1089,7 +1107,8 @@ theorem Submartingale.condExp_sub_nonneg
   by_cases h : SigmaFinite (μ.trim (ℱ.le i))
   swap; · rw [condExp_of_not_sigmaFinite (ℱ.le i) h]
   refine EventuallyLE.trans ?_ (condExp_sub (hf.integrable _) (hf.integrable _) _).symm.le
-  rw [eventually_sub_nonneg]; rw [condExp_of_stronglyMeasurable (ℱ.le _) (hf.stronglyAdapted _) (hf.integrab
+  rw [eventually_sub_nonneg]; rw [condExp_of_stronglyMeasurable (ℱ.le _) (hf.stronglyAdapted _) (hf.integrable _)]
+  exact hf.2.1 i j hij
 
 中文:
 定理 Submartingale.condExp_sub_nonneg
@@ -1098,7 +1117,8 @@ theorem Submartingale.condExp_sub_nonneg
   by_cases h : SigmaFinite (μ.trim (ℱ.le i))
   swap; · rw [condExp_of_not_sigmaFinite (ℱ.le i) h]
   refine EventuallyLE.trans ?_ (condExp_sub (hf.integrable _) (hf.integrable _) _).symm.le
-  rw [eventually_sub_nonneg]; rw [condExp_of_stronglyMeasurable (ℱ.le _) (hf.stronglyAdapted _) (hf.integrab
+  rw [eventually_sub_nonneg]; rw [condExp_of_stronglyMeasurable (ℱ.le _) (hf.stronglyAdapted _) (hf.integrable _)]
+  exact hf.2.1 i j hij
 
 Depends on / 依赖: EventuallyLE, EventuallyLE.trans, SigmaFinite, condExp_of_not_sigmaFinite, condExp_of_stronglyMeasurable, condExp_sub, eventually_sub_nonneg, hf.integrable, hf.stronglyAdapted, integrable, stronglyAdapted, symm.le
 -/
@@ -1389,7 +1409,8 @@ theorem submartingale_nat
     rw [condExp_of_stronglyMeasurable (𝒢.le i) (hadp i) (hint i)]
   | succ k hik hk =>
     filter_upwards [hk, condExp_mono (hint k) integrable_condExp (hf k),
-  
+      𝒢.condExp_condExp (f (k + 1)) hik] with ω hω1 hω2 hω3
+    grw [hω1, hω2, hω3]
 
 中文:
 定理 submartingale_nat
@@ -1402,7 +1423,8 @@ theorem submartingale_nat
     rw [condExp_of_stronglyMeasurable (𝒢.le i) (hadp i) (hint i)]
   | succ k hik hk =>
     filter_upwards [hk, condExp_mono (hint k) integrable_condExp (hf k),
-  
+      𝒢.condExp_condExp (f (k + 1)) hik] with ω hω1 hω2 hω3
+    grw [hω1, hω2, hω3]
 
 Depends on / 依赖: Nat.le_induction, ae_of_all, condExp_condExp, condExp_mono, condExp_of_stronglyMeasurable, filter_upwards, integrable_condExp, le_induction
 -/
@@ -1599,7 +1621,9 @@ theorem martingale_nat
     refine ae_of_all _ fun _ => ?_
     rw [condExp_of_stronglyMeasurable (𝒢.le i) (hadp i) (hint i)]
   | succ k hik hk =>
-    filter_upwards [hk, condExp_congr_ae (hf k), 𝒢.condExp_condExp (f (k + 1)) hi
+    filter_upwards [hk, condExp_congr_ae (hf k), 𝒢.condExp_condExp (f (k + 1)) hik]
+      with ω hω1 hω2 hω3
+    rw [← hω1]; rw [hω2]; rw [hω3]
 
 中文:
 定理 martingale_nat
@@ -1611,7 +1635,9 @@ theorem martingale_nat
     refine ae_of_all _ fun _ => ?_
     rw [condExp_of_stronglyMeasurable (𝒢.le i) (hadp i) (hint i)]
   | succ k hik hk =>
-    filter_upwards [hk, condExp_congr_ae (hf k), 𝒢.condExp_condExp (f (k + 1)) hi
+    filter_upwards [hk, condExp_congr_ae (hf k), 𝒢.condExp_condExp (f (k + 1)) hik]
+      with ω hω1 hω2 hω3
+    rw [← hω1]; rw [hω2]; rw [hω3]
 
 Depends on / 依赖: Nat.le_induction, ae_of_all, condExp_condExp, condExp_congr_ae, condExp_of_stronglyMeasurable, filter_upwards, le_induction
 -/
@@ -1639,7 +1665,7 @@ theorem martingale_of_setIntegral_eq_succ
 refine martingale_nat hadp hint fun n => ae_eq_of_ae_eq_trim
     ((hint n).trim (𝒢.le n) (hadp n)).ae_eq_of_forall_setIntegral_eq _ _
     (integrable_condExp.trim (𝒢.le n) stronglyMeasurable_condExp) fun s ms hs => ?_
-  rw [← setIntegral_trim (𝒢.le n) (hadp n) ms]; rw [← setIntegral_trim (𝒢.le n)
+  rw [← setIntegral_trim (𝒢.le n) (hadp n) ms]; rw [← setIntegral_trim (𝒢.le n) stronglyMeasurable_condExp ms]; rw [setIntegral_condExp (𝒢.le n) (hint (n + 1)) ms]; rw [hf n s ms]
 
 中文:
 定理 martingale_of_set整数egral_eq_succ
@@ -1648,7 +1674,7 @@ refine martingale_nat hadp hint fun n => ae_eq_of_ae_eq_trim
 refine martingale_nat hadp hint fun n => ae_eq_of_ae_eq_trim
     ((hint n).trim (𝒢.le n) (hadp n)).ae_eq_of_forall_setIntegral_eq _ _
     (integrable_condExp.trim (𝒢.le n) stronglyMeasurable_condExp) fun s ms hs => ?_
-  rw [← setIntegral_trim (𝒢.le n) (hadp n) ms]; rw [← setIntegral_trim (𝒢.le n)
+  rw [← setIntegral_trim (𝒢.le n) (hadp n) ms]; rw [← setIntegral_trim (𝒢.le n) stronglyMeasurable_condExp ms]; rw [setIntegral_condExp (𝒢.le n) (hint (n + 1)) ms]; rw [hf n s ms]
 
 Depends on / 依赖: ae_eq_of_ae_eq_trim, ae_eq_of_forall_setIntegral_eq, integrable_condExp, integrable_condExp.trim, martingale_nat, setIntegral_condExp, setIntegral_trim, stronglyMeasurable_condExp
 -/
@@ -1828,7 +1854,28 @@ theorem Submartingale.sum_smul_sub
     ⟨R, fun ω => (abs_of_nonneg (hnonneg i ω)).trans_le (hbdd i ω)⟩
   choose C hC using hξbdd
   have hint : forall m, Integrable (∑ k in Finset.range m, ξ k • (f (k + 1) - f k)) μ := fun m =>
-      integrable_finsetSum' _ fun i
+      integrable_finsetSum' _ fun i _ => Integrable.bdd_smul
+        ((hf.integrable _).sub (hf.integrable _)) (C i)
+        hξ.stronglyMeasurable.aestronglyMeasurable (ae_of_all _ (hC i))
+  have hadp : StronglyAdapted 𝒢 fun n => ∑ k in Finset.range n, ξ k • (f (k + 1) - f k) := by
+    intro m
+    refine Finset.stronglyMeasurable_sum _ fun i hi => ?_
+    rw [Finset.mem_range] at hi
+    exact (hξ.stronglyMeasurable_le hi.le).smul
+      ((hf.stronglyAdapted.stronglyMeasurable_le (Nat.succ_le_of_lt hi)).sub
+        (hf.stronglyAdapted.stronglyMeasurable_le hi.le))
+  refine submartingale_of_condExp_sub_nonneg_nat hadp hint fun i => ?_
+  simp only [← Finset.sum_Ico_eq_sub _ (Nat.le_succ _), Nat.succ_eq_add_one, Nat.Ico_succ_singleton,
+    Finset.sum_singleton]
+  filter_upwards [hf.condExp_sub_nonneg i.le_succ,
+    condExp_smul_of_aestronglyMeasurable_left (hξ i).aestronglyMeasurable
+      (((hf.integrable (i + 1)).sub (hf.integrable i)).bdd_smul
+      (C i) hξ.stronglyMeasurable.aestronglyMeasurable (ae_of_all _ (hC i)))
+      ((hf.integrable _).sub (hf.integrable _))] with ω hω1 hω2
+  simp only [Pi.zero_apply, Nat.succ_eq_add_one, Pi.smul_apply'] at hω1 hω2 ⊢
+  grw [← smul_zero (0 : Real), hnonneg i ω, hω1, hω2]
+  · exact hnonneg i ω
+  · simp
 
 中文:
 定理 Submartingale.sum_smul_sub
@@ -1838,7 +1885,28 @@ theorem Submartingale.sum_smul_sub
     ⟨R, fun ω => (abs_of_nonneg (hnonneg i ω)).trans_le (hbdd i ω)⟩
   choose C hC using hξbdd
   have hint : forall m, Integrable (∑ k in Finset.range m, ξ k • (f (k + 1) - f k)) μ := fun m =>
-      integrable_finsetSum' _ fun i
+      integrable_finsetSum' _ fun i _ => Integrable.bdd_smul
+        ((hf.integrable _).sub (hf.integrable _)) (C i)
+        hξ.stronglyMeasurable.aestronglyMeasurable (ae_of_all _ (hC i))
+  have hadp : StronglyAdapted 𝒢 fun n => ∑ k in Finset.range n, ξ k • (f (k + 1) - f k) := by
+    intro m
+    refine Finset.stronglyMeasurable_sum _ fun i hi => ?_
+    rw [Finset.mem_range] at hi
+    exact (hξ.stronglyMeasurable_le hi.le).smul
+      ((hf.stronglyAdapted.stronglyMeasurable_le (Nat.succ_le_of_lt hi)).sub
+        (hf.stronglyAdapted.stronglyMeasurable_le hi.le))
+  refine submartingale_of_condExp_sub_nonneg_nat hadp hint fun i => ?_
+  simp only [← Finset.sum_Ico_eq_sub _ (Nat.le_succ _), Nat.succ_eq_add_one, Nat.Ico_succ_singleton,
+    Finset.sum_singleton]
+  filter_upwards [hf.condExp_sub_nonneg i.le_succ,
+    condExp_smul_of_aestronglyMeasurable_left (hξ i).aestronglyMeasurable
+      (((hf.integrable (i + 1)).sub (hf.integrable i)).bdd_smul
+      (C i) hξ.stronglyMeasurable.aestronglyMeasurable (ae_of_all _ (hC i)))
+      ((hf.integrable _).sub (hf.integrable _))] with ω hω1 hω2
+  simp only [Pi.zero_apply, Nat.succ_eq_add_one, Pi.smul_apply'] at hω1 hω2 ⊢
+  grw [← smul_zero (0 : Real), hnonneg i ω, hω1, hω2]
+  · exact hnonneg i ω
+  · simp
 
 Depends on / 依赖: Finset, Finset.range, Integrable, Integrable.bdd_smul, StronglyAdapted, abs_of_nonneg, ae_of_all, aestronglyMeasurable, bdd_smul, hf.integrable, hnonneg, integrable, integrable_finsetSum, stronglyMeasurable, stronglyMeasurable.aestronglyMeasurable, trans_le
 -/

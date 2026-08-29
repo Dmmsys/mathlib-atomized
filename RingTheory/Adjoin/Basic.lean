@@ -75,7 +75,17 @@ theorem adjoin_inl_union_inr_eq_prod
       subset_adjoin, -- the rest comes from `squeeze_simp`
       Set.union_subset_iff,
       LinearMap.coe_inl, Set.mk_preimage_prod_right, Set.image_subset_iff, SetLike.mem_coe,
-    
+      Set.mk_preimage_prod_left, LinearMap.coe_inr, and_self_iff, Set.union_singleton,
+      Subalgebra.coe_prod]
+  · rintro ⟨a, b⟩ ⟨ha, hb⟩
+    let P := adjoin R (LinearMap.inl R A B '' (s union {1}) union LinearMap.inr R A B '' (t union {1}))
+    have Ha : (a, (0 : B)) in adjoin R (LinearMap.inl R A B '' (s union {1})) :=
+      mem_adjoin_of_map_mul R LinearMap.inl_map_mul ha
+    have Hb : ((0 : A), b) in adjoin R (LinearMap.inr R A B '' (t union {1})) :=
+      mem_adjoin_of_map_mul R LinearMap.inr_map_mul hb
+    replace Ha : (a, (0 : B)) in P := adjoin_mono Set.subset_union_left Ha
+    replace Hb : ((0 : A), b) in P := adjoin_mono Set.subset_union_right Hb
+    simpa [P] using Subalgebra.add_mem _ Ha Hb
 
 中文:
 定理 adjoin_inl_union_inr_eq_prod
@@ -86,7 +96,17 @@ theorem adjoin_inl_union_inr_eq_prod
       subset_adjoin, -- the rest comes from `squeeze_simp`
       Set.union_subset_iff,
       LinearMap.coe_inl, Set.mk_preimage_prod_right, Set.image_subset_iff, SetLike.mem_coe,
-    
+      Set.mk_preimage_prod_left, LinearMap.coe_inr, and_self_iff, Set.union_singleton,
+      Subalgebra.coe_prod]
+  · rintro ⟨a, b⟩ ⟨ha, hb⟩
+    let P := adjoin R (LinearMap.inl R A B '' (s union {1}) union LinearMap.inr R A B '' (t union {1}))
+    have Ha : (a, (0 : B)) in adjoin R (LinearMap.inl R A B '' (s union {1})) :=
+      mem_adjoin_of_map_mul R LinearMap.inl_map_mul ha
+    have Hb : ((0 : A), b) in adjoin R (LinearMap.inr R A B '' (t union {1})) :=
+      mem_adjoin_of_map_mul R LinearMap.inr_map_mul hb
+    replace Ha : (a, (0 : B)) in P := adjoin_mono Set.subset_union_left Ha
+    replace Hb : ((0 : A), b) in P := adjoin_mono Set.subset_union_right Hb
+    simpa [P] using Subalgebra.add_mem _ Ha Hb
 
 Depends on / 依赖: LinearMap, LinearMap.coe_inl, LinearMap.coe_inr, LinearMap.inl, LinearMap.inr, Set.image_subset_iff, Set.insert_subset_iff, Set.mk_preimage_prod_left, Set.mk_preimage_prod_right, Set.union_singleton, Set.union_subset_iff, SetLike, SetLike.mem_coe, Subalgebra, Subalgebra.coe_prod, Subalgebra.one_mem, Subalgebra.zero_mem, adjoin, adjoin_le_iff, and_self_iff
 -/
@@ -141,7 +161,10 @@ theorem adjoin_algebraMap_image_union_eq_adjoin_adjoin
       Set.union_subset (Set.range_subset_iff.2 fun r => Or.inl ⟨algebraMap R (adjoin R s) r,
         (IsScalarTower.algebraMap_apply _ _ _ _).symm⟩)
         (Set.union_subset_union_left _ fun _ ⟨_x, hx, hxs⟩ => hxs ▸ ⟨⟨_, subset_adjoin hx⟩, rfl⟩))
-    (closure_le.2 <
+    (closure_le.2 <|
+      Set.union_subset (Set.range_subset_iff.2 fun x => adjoin_mono Set.subset_union_left <|
+        Algebra.adjoin_algebraMap R A s ▸ ⟨x, x.prop, rfl⟩)
+        (Set.Subset.trans Set.subset_union_right subset_adjoin))
 
 中文:
 定理 adjoin_algebraMap_image_union_eq_adjoin_adjoin
@@ -151,7 +174,10 @@ theorem adjoin_algebraMap_image_union_eq_adjoin_adjoin
       Set.union_subset (Set.range_subset_iff.2 fun r => Or.inl ⟨algebraMap R (adjoin R s) r,
         (IsScalarTower.algebraMap_apply _ _ _ _).symm⟩)
         (Set.union_subset_union_left _ fun _ ⟨_x, hx, hxs⟩ => hxs ▸ ⟨⟨_, subset_adjoin hx⟩, rfl⟩))
-    (closure_le.2 <
+    (closure_le.2 <|
+      Set.union_subset (Set.range_subset_iff.2 fun x => adjoin_mono Set.subset_union_left <|
+        Algebra.adjoin_algebraMap R A s ▸ ⟨x, x.prop, rfl⟩)
+        (Set.Subset.trans Set.subset_union_right subset_adjoin))
 
 Depends on / 依赖: Algebra, Algebra.adjoin_algebraMap, IsScalarTower, IsScalarTower.algebraMap_apply, Or.inl, Set.Subset.trans, Set.range_subset_iff, Set.subset_union_left, Set.subset_union_right, Set.union_subset, Set.union_subset_union_left, Subset, adjoin, adjoin_algebraMap, adjoin_mono, algebraMap, algebraMap_apply, closure_le, closure_mono, le_antisymm
 -/
@@ -209,7 +235,10 @@ theorem Subalgebra.restrictScalars_adjoin
     (fun x hx => le_sup_right (α := Subalgebra R A) (subset_adjoin hx))
     (fun x => le_sup_left (α := Subalgebra R A) ⟨x, rfl⟩)
 (fun _ _ _ _ => add_mem) (fun _ _ _ _ => mul_mem)
-(Subalgebra.mem_restrictScalars _).mp hx) (sup_le ?_ adjoin_le sub
+(Subalgebra.mem_restrictScalars _).mp hx) (sup_le ?_ adjoin_le subset_adjoin)
+  rintro _ ⟨x, rfl⟩; exact algebraMap_mem (adjoin S s) x
+
+@[simp]
 
 中文:
 定理 子代数.restrictScalars_adjoin
@@ -219,7 +248,10 @@ theorem Subalgebra.restrictScalars_adjoin
     (fun x hx => le_sup_right (α := Subalgebra R A) (subset_adjoin hx))
     (fun x => le_sup_left (α := Subalgebra R A) ⟨x, rfl⟩)
 (fun _ _ _ _ => add_mem) (fun _ _ _ _ => mul_mem)
-(Subalgebra.mem_restrictScalars _).mp hx) (sup_le ?_ adjoin_le sub
+(Subalgebra.mem_restrictScalars _).mp hx) (sup_le ?_ adjoin_le subset_adjoin)
+  rintro _ ⟨x, rfl⟩; exact algebraMap_mem (adjoin S s) x
+
+@[simp]
 
 Depends on / 依赖: Subalgebra, Subalgebra.mem_restrictScalars, add_mem, adjoin, adjoin_induction, adjoin_le, algebraMap_mem, le_antisymm, le_sup_left, le_sup_right, mem_restrictScalars, mul_mem, subset_adjoin, sup_le
 -/
@@ -243,7 +275,12 @@ theorem adjoin_top
     { toFun := fun s => { s with algebraMap_mem' := fun r => s.algebraMap_mem ⟨r, trivial⟩ }
       invFun := fun s => s.restrictScalars _
       left_inv := fun _ => SetLike.coe_injective rfl
-      right_inv := fun _ => SetLike.coe
+      right_inv := fun _ => SetLike.coe_injective rfl
+      map_rel_iff' := @fun _ _ => Iff.rfl }
+  le_antisymm
+    (adjoin_le <| show t subseteq adjoin S t from subset_adjoin)
+    (equivTop.symm_apply_le.mpr <|
+adjoin_le show t subseteq adjoin (⊤ : Subalgebra R S) t from subset_adjoin)
 
 中文:
 定理 adjoin_top
@@ -252,7 +289,12 @@ theorem adjoin_top
     { toFun := fun s => { s with algebraMap_mem' := fun r => s.algebraMap_mem ⟨r, trivial⟩ }
       invFun := fun s => s.restrictScalars _
       left_inv := fun _ => SetLike.coe_injective rfl
-      right_inv := fun _ => SetLike.coe
+      right_inv := fun _ => SetLike.coe_injective rfl
+      map_rel_iff' := @fun _ _ => Iff.rfl }
+  le_antisymm
+    (adjoin_le <| show t subseteq adjoin S t from subset_adjoin)
+    (equivTop.symm_apply_le.mpr <|
+adjoin_le show t subseteq adjoin (⊤ : Subalgebra R S) t from subset_adjoin)
 
 Depends on / 依赖: Iff.rfl, SetLike, SetLike.coe_injective, Subalgebra, adjoin, adjoin_le, algebraMap_mem, coe_injective, equivTop, equivTop.symm_apply_le.mpr, invFun, le_antisymm, left_inv, map_rel_iff, restrictScalars, right_inv, s.algebraMap_mem, s.restrictScalars, subset_adjoin, subseteq
 -/
@@ -336,7 +378,21 @@ theorem pow_smul_mem_of_smul_subset_of_mem_adjoin
   change x in Subalgebra.toSubmodule (adjoin R s) at hx
   rw [adjoin_eq_span]; rw [Finsupp.mem_span_iff_linearCombination] at hx
   rcases hx with ⟨l, rfl : (l.sum fun (i : Submonoid.closure s) (c : R) => c • (i : B)) = x⟩
-  choose n₁ n₂ using fun x : Submonoid.closure s => Submonoid.pow_smul_mem_
+  choose n₁ n₂ using fun x : Submonoid.closure s => Submonoid.pow_smul_mem_closure_smul r s x.prop
+  use l.support.sup n₁
+  intro n hn
+  rw [Finsupp.smul_sum]
+  refine B'.toSubmodule.sum_mem ?_
+  intro a ha
+  have : n >= n₁ a := le_trans (Finset.le_sup ha) hn
+  dsimp only
+  rw [← tsub_add_cancel_of_le this]; rw [pow_add]; rw [← smul_smul]; rw [←
+    IsScalarTower.algebraMap_smul A (l a) (a : B)]; rw [smul_smul (r ^ n₁ a)]; rw [mul_comm]; rw [← smul_smul]; rw [smul_def]; rw [map_pow]; rw [IsScalarTower.algebraMap_smul]
+  apply Subalgebra.mul_mem _ (Subalgebra.pow_mem _ hr _) _
+  refine Subalgebra.smul_mem _ ?_ _
+  change _ in B'.toSubmonoid
+  rw [← Submonoid.closure_eq B'.toSubmonoid]
+  apply Submonoid.closure_mono hs (n₂ a)
 
 中文:
 定理 pow_smul_mem_of_smul_subset_of_mem_adjoin
@@ -345,7 +401,21 @@ theorem pow_smul_mem_of_smul_subset_of_mem_adjoin
   change x in Subalgebra.toSubmodule (adjoin R s) at hx
   rw [adjoin_eq_span]; rw [Finsupp.mem_span_iff_linearCombination] at hx
   rcases hx with ⟨l, rfl : (l.sum fun (i : Submonoid.closure s) (c : R) => c • (i : B)) = x⟩
-  choose n₁ n₂ using fun x : Submonoid.closure s => Submonoid.pow_smul_mem_
+  choose n₁ n₂ using fun x : Submonoid.closure s => Submonoid.pow_smul_mem_closure_smul r s x.prop
+  use l.support.sup n₁
+  intro n hn
+  rw [Finsupp.smul_sum]
+  refine B'.toSubmodule.sum_mem ?_
+  intro a ha
+  have : n >= n₁ a := le_trans (Finset.le_sup ha) hn
+  dsimp only
+  rw [← tsub_add_cancel_of_le this]; rw [pow_add]; rw [← smul_smul]; rw [←
+    IsScalarTower.algebraMap_smul A (l a) (a : B)]; rw [smul_smul (r ^ n₁ a)]; rw [mul_comm]; rw [← smul_smul]; rw [smul_def]; rw [map_pow]; rw [IsScalarTower.algebraMap_smul]
+  apply Subalgebra.mul_mem _ (Subalgebra.pow_mem _ hr _) _
+  refine Subalgebra.smul_mem _ ?_ _
+  change _ in B'.toSubmonoid
+  rw [← Submonoid.closure_eq B'.toSubmonoid]
+  apply Submonoid.closure_mono hs (n₂ a)
 
 Depends on / 依赖: Finset, Finset.le_sup, Finsupp, Finsupp.mem_span_iff_linearCombination, Finsupp.smul_sum, Subalgebra, Subalgebra.toSubmodule, Submonoid, Submonoid.closure, Submonoid.pow_smul_mem_closure_smul, adjoin, adjoin_eq_span, closure, l.sum, l.support.sup, le_sup, le_trans, mem_span_iff_linearCombination, pow_smul_mem_closure_smul, smul_sum
 -/

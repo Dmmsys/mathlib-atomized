@@ -80,7 +80,9 @@ theorem mem_tangentConeAt_of_frequently
     rw [tangentConeAt_def]
     exact ClusterPt.mono (hcd.mono_left inf_le_left).mapClusterPt this
   rw [← map₂_smul]; rw [← map_prod_eq_map₂]
-  refine tendsto_map.co
+  refine tendsto_map.comp (tendsto_top.prodMk (tendsto_nhdsWithin_iff.mpr ⟨?_, ?_⟩))
+  · exact hd₀.mono_left inf_le_left
+  · simp [eventually_inf_principal]
 
 中文:
 定理 mem_tangentConeAt_of_frequently
@@ -91,7 +93,9 @@ theorem mem_tangentConeAt_of_frequently
     rw [tangentConeAt_def]
     exact ClusterPt.mono (hcd.mono_left inf_le_left).mapClusterPt this
   rw [← map₂_smul]; rw [← map_prod_eq_map₂]
-  refine tendsto_map.co
+  refine tendsto_map.comp (tendsto_top.prodMk (tendsto_nhdsWithin_iff.mpr ⟨?_, ?_⟩))
+  · exact hd₀.mono_left inf_le_left
+  · simp [eventually_inf_principal]
 
 Depends on / 依赖: ClusterPt, ClusterPt.mono, Tendsto, eventually_inf_principal, frequently_iff_neBot, hcd.mono_left, inf_le_left, mapClusterPt, mono_left, prodMk, tangentConeAt_def, tendsto_map, tendsto_map.comp, tendsto_nhdsWithin_iff, tendsto_nhdsWithin_iff.mpr, tendsto_top, tendsto_top.prodMk
 -/
@@ -139,7 +143,11 @@ theorem exists_fun_of_mem_tangentConeAt
 · refine (tendsto_snd (f := ⊤)).mono_left inf_le_right.trans ?_
     gcongr
     apply nhdsWithin_le_nhds
-  ·
+  · refine .filter_mono inf_le_right ?_
+    rw [top_prod]; rw [eventually_comap]
+    filter_upwards [eventually_mem_nhdsWithin]
+    simp +contextual
+  · exact tendsto_comap.mono_left inf_le_left
 
 中文:
 定理 存在_fun_of_mem_tangentConeAt
@@ -150,7 +158,11 @@ theorem exists_fun_of_mem_tangentConeAt
 · refine (tendsto_snd (f := ⊤)).mono_left inf_le_right.trans ?_
     gcongr
     apply nhdsWithin_le_nhds
-  ·
+  · refine .filter_mono inf_le_right ?_
+    rw [top_prod]; rw [eventually_comap]
+    filter_upwards [eventually_mem_nhdsWithin]
+    simp +contextual
+  · exact tendsto_comap.mono_left inf_le_left
 
 Depends on / 依赖: ClusterPt, Prod.fst, Prod.snd, contextual, eventually_comap, eventually_mem_nhdsWithin, filter_mono, filter_upwards, inf_le_left, inf_le_right, inf_le_right.trans, mem_ofPred, mono_left, neBot_inf_comap_iff_map, nhdsWithin_le_nhds, tangentConeAt, tendsto_comap, tendsto_comap.mono_left, tendsto_snd, top_prod
 -/

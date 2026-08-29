@@ -650,7 +650,34 @@ lemma sum_inv_height_sq_smul_vsub_eq_zero
       ∑ j, ⟪s.points i -ᵥ s.points 0, (s.height j)⁻¹ ^ 2 • (s.points j -ᵥ s.altitudeFoot j)⟫ = 0 by
     rw [← Submodule.mem_bot Real]; rw [← Submodule.inf_orthogonal_eq_bot (vectorSpan Real (Set.range s.points))]
     refine ⟨Submodule.sum_smul_mem _ _ fun i hi =>
-  
+              vsub_mem_vectorSpan_of_mem_affineSpan_of_mem_affineSpan
+                (mem_affineSpan _ (Set.mem_range_self _))
+                (altitudeFoot_mem_affineSpan _ _),
+            ?_⟩
+    rw [vectorSpan_range_eq_span_range_vsub_right_ne _ _ 0]; rw [Submodule.span_range_eq_iSup]; rw [← Submodule.iInf_orthogonal]; rw [Submodule.coe_iInf]; rw [Set.mem_iInter]
+    intro i
+    rcases i with ⟨i, hi⟩
+    simpa only [SetLike.mem_coe, Submodule.mem_orthogonal_singleton_iff_inner_right, inner_sum]
+      using this i hi
+  intro i hi
+  rw [← Finset.add_sum_erase _ _ (Finset.mem_univ 0)]; rw [← Finset.add_sum_erase _ _ (Finset.mem_erase.2 ⟨hi]; rw [Finset.mem_univ _⟩)]; rw [← add_assoc]
+  convert! add_zero _
+  · convert! Finset.sum_const_zero with j hj
+    rw [real_inner_smul_right]
+    convert! mul_zero _
+    rw [← Submodule.mem_orthogonal_singleton_iff_inner_right]
+    refine SetLike.le_def.1 (Submodule.orthogonal_le ?_)
+      (vsub_orthogonalProjection_mem_direction_orthogonal _ _)
+    rw [Submodule.span_singleton_le_iff_mem]; rw [direction_affineSpan]
+    simp only [Finset.mem_erase, Finset.mem_univ, and_true] at hj
+    refine vsub_mem_vectorSpan _ ?_ ?_ <;>
+      simp only [range_faceOpposite_points, Set.mem_image]
+    · exact ⟨i, hj.1.symm, rfl⟩
+    · exact ⟨0, hj.2.symm, rfl⟩
+  · rw [inner_smul_right, inner_smul_right, inner_vsub_vsub_altitudeFoot_eq_height_sq _ hi,
+      ← neg_vsub_eq_vsub_rev, inner_neg_left, inner_vsub_vsub_altitudeFoot_eq_height_sq _ hi.symm,
+      mul_neg, inv_pow]
+    simp [height]
 
 中文:
 引理 sum_inv_height_sq_smul_vsub_eq_zero
@@ -659,7 +686,34 @@ lemma sum_inv_height_sq_smul_vsub_eq_zero
       ∑ j, ⟪s.points i -ᵥ s.points 0, (s.height j)⁻¹ ^ 2 • (s.points j -ᵥ s.altitudeFoot j)⟫ = 0 by
     rw [← Submodule.mem_bot Real]; rw [← Submodule.inf_orthogonal_eq_bot (vectorSpan Real (Set.range s.points))]
     refine ⟨Submodule.sum_smul_mem _ _ fun i hi =>
-  
+              vsub_mem_vectorSpan_of_mem_affineSpan_of_mem_affineSpan
+                (mem_affineSpan _ (Set.mem_range_self _))
+                (altitudeFoot_mem_affineSpan _ _),
+            ?_⟩
+    rw [vectorSpan_range_eq_span_range_vsub_right_ne _ _ 0]; rw [Submodule.span_range_eq_iSup]; rw [← Submodule.iInf_orthogonal]; rw [Submodule.coe_iInf]; rw [Set.mem_iInter]
+    intro i
+    rcases i with ⟨i, hi⟩
+    simpa only [SetLike.mem_coe, Submodule.mem_orthogonal_singleton_iff_inner_right, inner_sum]
+      using this i hi
+  intro i hi
+  rw [← Finset.add_sum_erase _ _ (Finset.mem_univ 0)]; rw [← Finset.add_sum_erase _ _ (Finset.mem_erase.2 ⟨hi]; rw [Finset.mem_univ _⟩)]; rw [← add_assoc]
+  convert! add_zero _
+  · convert! Finset.sum_const_zero with j hj
+    rw [real_inner_smul_right]
+    convert! mul_zero _
+    rw [← Submodule.mem_orthogonal_singleton_iff_inner_right]
+    refine SetLike.le_def.1 (Submodule.orthogonal_le ?_)
+      (vsub_orthogonalProjection_mem_direction_orthogonal _ _)
+    rw [Submodule.span_singleton_le_iff_mem]; rw [direction_affineSpan]
+    simp only [Finset.mem_erase, Finset.mem_univ, and_true] at hj
+    refine vsub_mem_vectorSpan _ ?_ ?_ <;>
+      simp only [range_faceOpposite_points, Set.mem_image]
+    · exact ⟨i, hj.1.symm, rfl⟩
+    · exact ⟨0, hj.2.symm, rfl⟩
+  · rw [inner_smul_right, inner_smul_right, inner_vsub_vsub_altitudeFoot_eq_height_sq _ hi,
+      ← neg_vsub_eq_vsub_rev, inner_neg_left, inner_vsub_vsub_altitudeFoot_eq_height_sq _ hi.symm,
+      mul_neg, inv_pow]
+    simp [height]
 
 Depends on / 依赖: Set.mem_range_self, Set.range, Submodule, Submodule.inf_orthogonal_eq_bot, Submodule.mem_bot, Submodule.span_range, Submodule.sum_smul_mem, altitudeFoot, altitudeFoot_mem_affineSpan, height, inf_orthogonal_eq_bot, mem_affineSpan, mem_bot, mem_range_self, points, s.altitudeFoot, s.height, s.points, span_range, sum_smul_mem
 -/
@@ -708,7 +762,14 @@ lemma inv_height_eq_sum_mul_inv_dist
   rw [← sub_eq_zero]
   simp_rw [neg_mul]
   rw [Finset.sum_neg_distrib]; rw [sub_neg_eq_add]; rw [Finset.filter_ne']; rw [Finset.sum_erase_eq_sub (Finset.mem_univ _)]; rw [real_inner_self_eq_norm_mul_norm]; rw [← dist_eq_norm_vsub]
-  simp only [height, ne_eq, mul_eq_zero, dist_eq_zero, ne_altitude
+  simp only [height, ne_eq, mul_eq_zero, dist_eq_zero, ne_altitudeFoot, or_self,
+    not_false_eq_true, div_self, one_mul, add_sub_cancel]
+  have h := s.sum_inv_height_sq_smul_vsub_eq_zero
+  apply_fun fun v => (s.height i)⁻¹ * ⟪s.points i -ᵥ s.altitudeFoot i, v⟫ at h
+  rw [inner_sum]; rw [Finset.mul_sum] at h
+  simp only [inner_zero_right, mul_zero, inner_smul_right, height] at h
+  convert! h using 2 with j
+  ring
 
 中文:
 引理 inv_height_eq_sum_mul_inv_dist
@@ -717,7 +778,14 @@ lemma inv_height_eq_sum_mul_inv_dist
   rw [← sub_eq_zero]
   simp_rw [neg_mul]
   rw [Finset.sum_neg_distrib]; rw [sub_neg_eq_add]; rw [Finset.filter_ne']; rw [Finset.sum_erase_eq_sub (Finset.mem_univ _)]; rw [real_inner_self_eq_norm_mul_norm]; rw [← dist_eq_norm_vsub]
-  simp only [height, ne_eq, mul_eq_zero, dist_eq_zero, ne_altitude
+  simp only [height, ne_eq, mul_eq_zero, dist_eq_zero, ne_altitudeFoot, or_self,
+    not_false_eq_true, div_self, one_mul, add_sub_cancel]
+  have h := s.sum_inv_height_sq_smul_vsub_eq_zero
+  apply_fun fun v => (s.height i)⁻¹ * ⟪s.points i -ᵥ s.altitudeFoot i, v⟫ at h
+  rw [inner_sum]; rw [Finset.mul_sum] at h
+  simp only [inner_zero_right, mul_zero, inner_smul_right, height] at h
+  convert! h using 2 with j
+  ring
 
 Depends on / 依赖: Finset, Finset.filter_ne, Finset.mem_univ, Finset.sum_erase_eq_sub, Finset.sum_neg_distrib, add_sub_cancel, altitudeFoot, apply_fun, dist_eq_norm_vsub, dist_eq_zero, div_self, filter_ne, height, inner_sum, mem_univ, mul_eq_zero, ne_altitudeFoot, ne_eq, neg_mul, not_false_eq_true
 -/
@@ -753,7 +821,10 @@ lemma inv_height_lt_sum_inv_height
       add_tsub_cancel_right]
     exact NeZero.ne _
   · rintro j hj
-   
+    refine mul_lt_of_lt_one_left ?_ ?_
+    · simp [height_pos]
+    · rw [neg_lt]
+      exact neg_one_lt_inner_vsub_altitudeFoot_div _ _ _
 
 中文:
 引理 inv_height_lt_sum_inv_height
@@ -766,7 +837,10 @@ lemma inv_height_lt_sum_inv_height
       add_tsub_cancel_right]
     exact NeZero.ne _
   · rintro j hj
-   
+    refine mul_lt_of_lt_one_left ?_ ?_
+    · simp [height_pos]
+    · rw [neg_lt]
+      exact neg_one_lt_inner_vsub_altitudeFoot_div _ _ _
 
 Depends on / 依赖: Finset, Finset.card_erase_of_mem, Finset.card_ne_zero, Finset.card_univ, Finset.filter_ne, Finset.mem_univ, Finset.sum_lt_sum_of_nonempty, Fintype, Fintype.card_fin, NeZero, NeZero.ne, add_tsub_cancel_right, card_erase_of_mem, card_fin, card_ne_zero, card_univ, filter_ne, height_pos, inv_height_eq_sum_mul_inv_dist, mem_univ
 -/
@@ -797,7 +871,8 @@ lemma sum_excenterWeightsUnnorm_singleton_pos
   convert! s.inv_height_lt_sum_inv_height i using 2 with j h
   · ext j
     simp
-  · rw [Finset.mem_
+  · rw [Finset.mem_filter_univ] at h
+    simp [excenterWeightsUnnorm, h]
 
 中文:
 引理 sum_excenterWeightsUnnorm_singleton_pos
@@ -809,7 +884,8 @@ lemma sum_excenterWeightsUnnorm_singleton_pos
   convert! s.inv_height_lt_sum_inv_height i using 2 with j h
   · ext j
     simp
-  · rw [Finset.mem_
+  · rw [Finset.mem_filter_univ] at h
+    simp [excenterWeightsUnnorm, h]
 
 Depends on / 依赖: Finset, Finset.mem_filter_univ, Finset.mem_singleton, Finset.sum_add_sum_compl, Finset.sum_singleton, add_zero, convert, excenterWeightsUnnorm, inv_height_lt_sum_inv_height, lt_neg_add_iff_add_lt, mem_filter_univ, mem_singleton, neg_mul, nth_rw, one_mul, reduceIte, s.inv_height_lt_sum_inv_height, sum_add_sum_compl, sum_singleton
 -/
@@ -921,7 +997,12 @@ lemma excenterWeights_empty_lt_inv_two
   have h : (s.height i)⁻¹ + (s.height i)⁻¹ < (s.height i)⁻¹ + ∑ j in {i}ᶜ, (s.height j)⁻¹ := by
     have := s.inv_height_lt_sum_inv_height i
     rwa [filter_ne', ← compl_singleton, ← add_lt_add_iff_left (s.height i)⁻¹] at this
-  replace h : 2 * (s.height i)⁻¹ < ∑ j in {i}, (s.height j)⁻¹ + ∑ j in
+  replace h : 2 * (s.height i)⁻¹ < ∑ j in {i}, (s.height j)⁻¹ + ∑ j in {i}ᶜ, (s.height j)⁻¹ := by
+    rwa [two_mul, sum_singleton]
+  replace h : (s.height i)⁻¹ / ∑ i, (s.height i)⁻¹ < 2⁻¹ := by
+    rwa [sum_add_sum_compl, ← lt_inv_mul_iff₀ zero_lt_two, ← div_lt_iff₀ (by positivity)] at h
+  convert! h
+  simp [excenterWeights, excenterWeightsUnnorm, div_eq_inv_mul]
 
 中文:
 引理 excenterWeights_empty_lt_inv_two
@@ -930,7 +1011,12 @@ lemma excenterWeights_empty_lt_inv_two
   have h : (s.height i)⁻¹ + (s.height i)⁻¹ < (s.height i)⁻¹ + ∑ j in {i}ᶜ, (s.height j)⁻¹ := by
     have := s.inv_height_lt_sum_inv_height i
     rwa [filter_ne', ← compl_singleton, ← add_lt_add_iff_left (s.height i)⁻¹] at this
-  replace h : 2 * (s.height i)⁻¹ < ∑ j in {i}, (s.height j)⁻¹ + ∑ j in
+  replace h : 2 * (s.height i)⁻¹ < ∑ j in {i}, (s.height j)⁻¹ + ∑ j in {i}ᶜ, (s.height j)⁻¹ := by
+    rwa [two_mul, sum_singleton]
+  replace h : (s.height i)⁻¹ / ∑ i, (s.height i)⁻¹ < 2⁻¹ := by
+    rwa [sum_add_sum_compl, ← lt_inv_mul_iff₀ zero_lt_two, ← div_lt_iff₀ (by positivity)] at h
+  convert! h
+  simp [excenterWeights, excenterWeightsUnnorm, div_eq_inv_mul]
 
 Depends on / 依赖: add_lt_add_iff_left, compl_singleton, filter_ne, height, inv_height_lt_sum_inv_height, replace, s.height, s.inv_height_lt_sum_inv_height, sum_add_sum_compl, sum_singleton, two_mul, zero_lt_two
 -/
@@ -1796,7 +1882,14 @@ lemma incenter_mem_interior
   refine ⟨s.excenterWeights_empty_pos i, ?_⟩
   by_contra! hp
   obtain ⟨j, hj⟩ := exists_ne i
-  rw [← Finset.sum_add_sum_compl {j]; rw [i}]; rw 
+  rw [← Finset.sum_add_sum_compl {j]; rw [i}]; rw [Finset.sum_pair hj] at h
+  revert h
+  apply ne_of_gt
+  nth_rw 2 [add_comm]
+  grw [hp]
+  rw [add_assoc]; rw [lt_add_iff_pos_right]
+  exact add_pos_of_pos_of_nonneg (s.excenterWeights_empty_pos j)
+    (Finset.sum_nonneg fun k _ => (s.excenterWeights_empty_pos k).le)
 
 中文:
 引理 incenter_mem_interior
@@ -1808,7 +1901,14 @@ lemma incenter_mem_interior
   refine ⟨s.excenterWeights_empty_pos i, ?_⟩
   by_contra! hp
   obtain ⟨j, hj⟩ := exists_ne i
-  rw [← Finset.sum_add_sum_compl {j]; rw [i}]; rw 
+  rw [← Finset.sum_add_sum_compl {j]; rw [i}]; rw [Finset.sum_pair hj] at h
+  revert h
+  apply ne_of_gt
+  nth_rw 2 [add_comm]
+  grw [hp]
+  rw [add_assoc]; rw [lt_add_iff_pos_right]
+  exact add_pos_of_pos_of_nonneg (s.excenterWeights_empty_pos j)
+    (Finset.sum_nonneg fun k _ => (s.excenterWeights_empty_pos k).le)
 
 Depends on / 依赖: Finset, Finset.sum_add_sum_compl, Finset.sum_nonneg, Finset.sum_pair, add_assoc, add_comm, add_pos_of_pos_of_nonneg, affineCombination_mem_interior_iff, excenterExists_empty, excenterWeights_empty_pos, exists_ne, incenter_eq_affineCombination, lt_add_iff_pos_right, ne_of_gt, nth_rw, revert, s.affineCombination_mem_interior_iff, s.excenterExists_empty.sum_excenterWeights_eq_one, s.excenterWeights_empty_pos, sum_add_sum_compl
 -/
@@ -1994,7 +2094,13 @@ lemma ExcenterExists.excenter_notMem_affineSpan_face
     have hc : #fs < #(Finset.univ : Finset (Fin (n + 1))) := by
       have : m + 1 <= #fs := hfs.ge
       grw [fs.subset_univ] at this
-      simp only [Finset.
+      simp only [Finset.card_univ, Fintype.card_fin] at *
+      lia
+    obtain ⟨i, -, hi⟩ := Finset.exists_mem_notMem_of_card_lt_card hc
+    exact ⟨i, hi⟩
+  rw [excenter_eq_affineCombination] at hm
+  exact h.excenterWeights_ne_zero i (s.independent.eq_zero_of_affineCombination_mem_affineSpan
+    h.sum_excenterWeights_eq_one hm (Finset.mem_univ i) hi)
 
 中文:
 引理 ExcenterExists.excenter_notMem_affineSpan_face
@@ -2007,7 +2113,13 @@ lemma ExcenterExists.excenter_notMem_affineSpan_face
     have hc : #fs < #(Finset.univ : Finset (Fin (n + 1))) := by
       have : m + 1 <= #fs := hfs.ge
       grw [fs.subset_univ] at this
-      simp only [Finset.
+      simp only [Finset.card_univ, Fintype.card_fin] at *
+      lia
+    obtain ⟨i, -, hi⟩ := Finset.exists_mem_notMem_of_card_lt_card hc
+    exact ⟨i, hi⟩
+  rw [excenter_eq_affineCombination] at hm
+  exact h.excenterWeights_ne_zero i (s.independent.eq_zero_of_affineCombination_mem_affineSpan
+    h.sum_excenterWeights_eq_one hm (Finset.mem_univ i) hi)
 
 Depends on / 依赖: Finset, Finset.card_univ, Finset.exists_mem_notMem_of_card_lt_card, Finset.univ, Fintype, Fintype.card_fin, SetLike, SetLike.mem_coe, card_fin, card_univ, eq_zero_of_affineCombinat, excenterWeights_ne_zero, excenter_eq_affineCombination, exists_mem_notMem_of_card_lt_card, fs.subset_univ, h.excenterWeights_ne_zero, hfs.ge, independent, mem_coe, range_face_points
 -/
@@ -2147,7 +2259,7 @@ lemma ExcenterExists.excenter_notMem_affineSpan_pair
   · convert!
     h.excenter_notMem_affineSpan_face (fs := { i, j }) (m := 1) (by simp_all)
       Nat.AtLeastTwo.ne_one.symm
-    si
+    simp [Set.image_insert_eq]
 
 中文:
 引理 ExcenterExists.excenter_notMem_affineSpan_pair
@@ -2160,7 +2272,7 @@ lemma ExcenterExists.excenter_notMem_affineSpan_pair
   · convert!
     h.excenter_notMem_affineSpan_face (fs := { i, j }) (m := 1) (by simp_all)
       Nat.AtLeastTwo.ne_one.symm
-    si
+    simp [Set.image_insert_eq]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.mem_affineSpan_singleton, AtLeastTwo, Nat.AtLeastTwo.ne_one.symm, Set.image_insert_eq, Set.insert_eq_of_mem, Set.mem_singleton_iff, convert, excenter_ne_point, excenter_notMem_affineSpan_face, h.excenter_ne_point, h.excenter_notMem_affineSpan_face, image_insert_eq, insert_eq_of_mem, mem_affineSpan_singleton, mem_singleton_iff, ne_one
 -/
@@ -2208,7 +2320,25 @@ lemma ExcenterExists.excenterWeights_eq_excenterWeights_iff
         SignType.sign (s.excenterWeights signs₂ i) := by
       simp [h]
     simp_rw [excenterWeights, Pi.smul_apply, smul_eq_mul, sign_mul] at hi
-    have hn₁ : ∑ i, s.excenterWeightsUnnorm si
+    have hn₁ : ∑ i, s.excenterWeightsUnnorm signs₁ i != 0 := h₁
+    have hn₂ : ∑ i, s.excenterWeightsUnnorm signs₂ i != 0 := h₂
+    rcases sign_eq_sign_or_eq_neg (inv_ne_zero hn₁) (inv_ne_zero hn₂) with hs | hs
+    · simp only [hs, mul_eq_mul_left_iff, sign_eq_zero_iff, inv_eq_zero, hn₂, or_false] at hi
+      simp only [excenterWeightsUnnorm, sign_mul, inv_pos, height_pos, sign_pos, mul_one] at hi
+      left
+      ext i
+      replace hi := hi i
+      split_ifs at hi <;> simp_all
+    · simp_rw [hs, neg_mul, ← mul_neg, mul_eq_mul_left_iff] at hi
+      simp only [sign_eq_zero_iff, inv_eq_zero, hn₂, or_false] at hi
+      simp only [excenterWeightsUnnorm, sign_mul, inv_pos, height_pos, sign_pos, mul_one] at hi
+      right
+      ext i
+      replace hi := hi i
+      split_ifs at hi <;> simp_all
+  · rcases h with rfl | rfl
+    · rfl
+    · simp
 
 中文:
 引理 ExcenterExists.excenterWeights_eq_excenterWeights_iff
@@ -2219,7 +2349,25 @@ lemma ExcenterExists.excenterWeights_eq_excenterWeights_iff
         SignType.sign (s.excenterWeights signs₂ i) := by
       simp [h]
     simp_rw [excenterWeights, Pi.smul_apply, smul_eq_mul, sign_mul] at hi
-    have hn₁ : ∑ i, s.excenterWeightsUnnorm si
+    have hn₁ : ∑ i, s.excenterWeightsUnnorm signs₁ i != 0 := h₁
+    have hn₂ : ∑ i, s.excenterWeightsUnnorm signs₂ i != 0 := h₂
+    rcases sign_eq_sign_or_eq_neg (inv_ne_zero hn₁) (inv_ne_zero hn₂) with hs | hs
+    · simp only [hs, mul_eq_mul_left_iff, sign_eq_zero_iff, inv_eq_zero, hn₂, or_false] at hi
+      simp only [excenterWeightsUnnorm, sign_mul, inv_pos, height_pos, sign_pos, mul_one] at hi
+      left
+      ext i
+      replace hi := hi i
+      split_ifs at hi <;> simp_all
+    · simp_rw [hs, neg_mul, ← mul_neg, mul_eq_mul_left_iff] at hi
+      simp only [sign_eq_zero_iff, inv_eq_zero, hn₂, or_false] at hi
+      simp only [excenterWeightsUnnorm, sign_mul, inv_pos, height_pos, sign_pos, mul_one] at hi
+      right
+      ext i
+      replace hi := hi i
+      split_ifs at hi <;> simp_all
+  · rcases h with rfl | rfl
+    · rfl
+    · simp
 
 Depends on / 依赖: Pi.smul_apply, SignType, SignType.sign, excenterWeights, excenterWeightsUnnorm, inv_eq_zero, inv_ne_zero, mul_eq_mul_left_iff, s.excenterWeights, s.excenterWeightsUnnorm, sign_eq_sign_or_eq_neg, sign_eq_zero_iff, sign_mul, simp_rw, smul_apply, smul_eq_mul
 -/
@@ -2343,7 +2491,10 @@ lemma excenter_singleton_injective
   rcases hij with hij | hij
   · simpa using hij
   · have : 2 <= n := Nat.AtLeastTwo.prop
-    obtain ⟨k, hki, hkj⟩ : exists k, k != i ∧ k != j := Fin.exists_ne_a
+    obtain ⟨k, hki, hkj⟩ : exists k, k != i ∧ k != j := Fin.exists_ne_and_ne_of_two_lt i j (by lia)
+    rw [Finset.ext_iff] at hij
+    replace hij := hij k
+    simp_all
 
 中文:
 引理 excenter_singleton_injective
@@ -2355,7 +2506,10 @@ lemma excenter_singleton_injective
   rcases hij with hij | hij
   · simpa using hij
   · have : 2 <= n := Nat.AtLeastTwo.prop
-    obtain ⟨k, hki, hkj⟩ : exists k, k != i ∧ k != j := Fin.exists_ne_a
+    obtain ⟨k, hki, hkj⟩ : exists k, k != i ∧ k != j := Fin.exists_ne_and_ne_of_two_lt i j (by lia)
+    rw [Finset.ext_iff] at hij
+    replace hij := hij k
+    simp_all
 
 Depends on / 依赖: AtLeastTwo, Fin.exists_ne_and_ne_of_two_lt, Finset, Finset.ext_iff, Nat.AtLeastTwo.prop, excenterExists_singleton, excenter_eq_excenter_iff, exists_ne_and_ne_of_two_lt, ext_iff, replace, s.excenterExists_singleton
 -/
@@ -2812,7 +2966,10 @@ lemma ExcenterExists.dist_excenter
   proof: by
   rw [touchpoint]; rw [← abs_signedInfDist_eq_dist_of_mem_affineSpan_range i h.excenter_mem_affineSpan_range]; rw [h.signedInfDist_excenter]; rw [abs_mul]; rw [abs_mul]; rw [abs_of_nonneg (s.exradius_nonneg signs)]
   simp only [abs_ite, abs_neg, abs_one, ite_self, one_mul]
-  rcases lt_trichotomy 
+  rcases lt_trichotomy 0 (∑ i, s.excenterWeightsUnnorm signs i) with h' | h' | h'
+  · simp [h']
+  · simp [h h'.symm]
+  · simp [h']
 
 中文:
 引理 ExcenterExists.dist_excenter
@@ -2820,7 +2977,10 @@ lemma ExcenterExists.dist_excenter
   证明: by
   rw [touchpoint]; rw [← abs_signedInfDist_eq_dist_of_mem_affineSpan_range i h.excenter_mem_affineSpan_range]; rw [h.signedInfDist_excenter]; rw [abs_mul]; rw [abs_mul]; rw [abs_of_nonneg (s.exradius_nonneg signs)]
   simp only [abs_ite, abs_neg, abs_one, ite_self, one_mul]
-  rcases lt_trichotomy 
+  rcases lt_trichotomy 0 (∑ i, s.excenterWeightsUnnorm signs i) with h' | h' | h'
+  · simp [h']
+  · simp [h h'.symm]
+  · simp [h']
 
 Depends on / 依赖: abs_ite, abs_mul, abs_neg, abs_of_nonneg, abs_one, abs_signedInfDist_eq_dist_of_mem_affineSpan_range, excenterWeightsUnnorm, excenter_mem_affineSpan_range, exradius_nonneg, h.excenter_mem_affineSpan_range, h.signedInfDist_excenter, ite_self, lt_trichotomy, one_mul, s.excenterWeightsUnnorm, s.exradius_nonneg, signedInfDist_excenter, touchpoint
 -/
@@ -3119,7 +3279,26 @@ lemma exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excenter
     obtain ⟨w, h1, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hp
     have h' : forall i, w i * ‖s.points i -ᵥ s.altitudeFoot i‖ = (if i in signs then -1 else 1) * r := by
       intro i
-      rw [altitudeFoot]; rw [← s.signedInfDist_affineCombinat
+      rw [altitudeFoot]; rw [← s.signedInfDist_affineCombination i h1]
+      exact h i
+    simp_rw [← dist_eq_norm_vsub] at h'
+    have h'' : forall i, w i = r * s.excenterWeightsUnnorm signs i := by
+      simp_rw [excenterWeightsUnnorm]
+      intro i
+      replace h' := h' i
+      rw [← height]; rw [← eq_div_iff (s.height_pos i).ne'] at h'
+      rw [h']; rw [mul_comm]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [height]; rw [altitudeFoot]; rw [orthogonalProjectionSpan]
+    have hw : w = s.excenterWeights signs := by
+      simp_rw [h'', ← Finset.mul_sum] at h1
+      ext j
+      rw [h'']; rw [eq_inv_of_mul_eq_one_left h1]
+      simp [excenterWeights]
+    subst hw
+    exact ⟨s.sum_excenterWeights_eq_one_iff.1 h1, rfl⟩
+  · rintro ⟨h, rfl⟩
+    refine ⟨SignType.sign (∑ j, s.excenterWeightsUnnorm signs j) * (s.exradius signs), fun i => ?_⟩
+    rw [h.signedInfDist_excenter]
+    simp
 
 中文:
 引理 存在_对任意_signedInfDist_eq_iff_excenterExists_and_eq_excenter
@@ -3130,7 +3309,26 @@ lemma exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excenter
     obtain ⟨w, h1, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hp
     have h' : forall i, w i * ‖s.points i -ᵥ s.altitudeFoot i‖ = (if i in signs then -1 else 1) * r := by
       intro i
-      rw [altitudeFoot]; rw [← s.signedInfDist_affineCombinat
+      rw [altitudeFoot]; rw [← s.signedInfDist_affineCombination i h1]
+      exact h i
+    simp_rw [← dist_eq_norm_vsub] at h'
+    have h'' : forall i, w i = r * s.excenterWeightsUnnorm signs i := by
+      simp_rw [excenterWeightsUnnorm]
+      intro i
+      replace h' := h' i
+      rw [← height]; rw [← eq_div_iff (s.height_pos i).ne'] at h'
+      rw [h']; rw [mul_comm]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [height]; rw [altitudeFoot]; rw [orthogonalProjectionSpan]
+    have hw : w = s.excenterWeights signs := by
+      simp_rw [h'', ← Finset.mul_sum] at h1
+      ext j
+      rw [h'']; rw [eq_inv_of_mul_eq_one_left h1]
+      simp [excenterWeights]
+    subst hw
+    exact ⟨s.sum_excenterWeights_eq_one_iff.1 h1, rfl⟩
+  · rintro ⟨h, rfl⟩
+    refine ⟨SignType.sign (∑ j, s.excenterWeightsUnnorm signs j) * (s.exradius signs), fun i => ?_⟩
+    rw [h.signedInfDist_excenter]
+    simp
 
 Depends on / 依赖: altitudeFoot, dist_eq_norm_vsub, eq_affineCombination_of_mem_affineSpan_of_fintype, eq_div_iff, excenterWeightsUnnorm, height, points, replace, s.altitudeFoot, s.excenterWeightsUnnorm, s.heigh, s.points, s.signedInfDist_affineCombination, signedInfDist_affineCombination, simp_rw
 -/
@@ -3204,7 +3402,15 @@ lemma exists_forall_dist_eq_iff_exists_excenterExists_and_eq_excenter
   · rintro ⟨r, h⟩
     have h' : forall i, s.signedInfDist i p = r ∨ s.signedInfDist i p = -r :=
       fun i => eq_or_eq_neg_of_abs_eq (h i)
-    refine ⟨{i in (Finset.univ : Finset (Fin (n + 1))) | s.signedInfDi
+    refine ⟨{i in (Finset.univ : Finset (Fin (n + 1))) | s.signedInfDist i p = -r}, ?_⟩
+    apply (s.exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excenter hp).1
+    refine ⟨r, ?_⟩
+    grind
+  · rintro ⟨signs, h⟩
+    replace h := (s.exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excenter hp).2 h
+    rcases h with ⟨r, h⟩
+    refine ⟨|r|, ?_⟩
+    simp [h, abs_ite]
 
 中文:
 引理 存在_对任意_dist_eq_iff_存在_excenterExists_and_eq_excenter
@@ -3215,7 +3421,15 @@ lemma exists_forall_dist_eq_iff_exists_excenterExists_and_eq_excenter
   · rintro ⟨r, h⟩
     have h' : forall i, s.signedInfDist i p = r ∨ s.signedInfDist i p = -r :=
       fun i => eq_or_eq_neg_of_abs_eq (h i)
-    refine ⟨{i in (Finset.univ : Finset (Fin (n + 1))) | s.signedInfDi
+    refine ⟨{i in (Finset.univ : Finset (Fin (n + 1))) | s.signedInfDist i p = -r}, ?_⟩
+    apply (s.exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excenter hp).1
+    refine ⟨r, ?_⟩
+    grind
+  · rintro ⟨signs, h⟩
+    replace h := (s.exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excenter hp).2 h
+    rcases h with ⟨r, h⟩
+    refine ⟨|r|, ?_⟩
+    simp [h, abs_ite]
 
 Depends on / 依赖: Finset, Finset.univ, abs_signedInfDist_eq_dist_of_mem_affineSpan_range, eq_or_eq_neg_of_abs_eq, exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excente, exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excenter, replace, s.exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excente, s.exists_forall_signedInfDist_eq_iff_excenterExists_and_eq_excenter, s.signedInfDist, signedInfDist, simp_rw
 -/
@@ -3253,7 +3467,30 @@ lemma ExcenterExists.touchpoint_injective
     rw [s.touchpoint_eq_point_rev signs i]; rw [s.touchpoint_eq_point_rev signs j] at hij
     apply s.independent.injective.ne hne
     convert! hij.symm <;> clear hij <;> decide +revert
-  · suffices s.excenter signs -ᵥ s.touchpo
+  · suffices s.excenter signs -ᵥ s.touchpoint signs i in (vectorSpan Real (Set.range s.points))ᗮ by
+      have h' : s.excenter signs -ᵥ s.touchpoint signs i in (vectorSpan Real (Set.range s.points)) := by
+        rw [← direction_affineSpan]
+        exact AffineSubspace.vsub_mem_direction h.excenter_mem_affineSpan_range
+          (s.touchpoint_mem_affineSpan_simplex _ _)
+      have h0 : s.excenter signs -ᵥ s.touchpoint signs i = 0 := by
+        rw [← Submodule.mem_bot Real]; rw [← Submodule.inf_orthogonal_eq_bot (vectorSpan Real (Set.range s.points))]
+        exact ⟨h', this⟩
+      rw [← norm_eq_zero]; rw [← dist_eq_norm_vsub]; rw [h.dist_excenter] at h0
+      exact h.exradius_pos.ne' h0
+    obtain ⟨k, hki, hkj⟩ : exists k, k != i ∧ k != j := Fin.exists_ne_and_ne_of_two_lt i j (by lia)
+    have hu : Set.range s.points =
+        Set.range (s.faceOpposite i).points union Set.range (s.faceOpposite j).points := by
+      simp only [range_faceOpposite_points, ← Set.image_union, ← Set.compl_inter]
+      convert! Set.image_univ.symm
+      simp [Ne.symm hne]
+    rw [hu]; rw [range_faceOpposite_points]; rw [range_faceOpposite_points]; rw [AffineSubspace.vectorSpan_union_of_mem_of_mem Real (p := s.points k)
+        (Set.mem_image_of_mem _ (by simp [hki])) (Set.mem_image_of_mem _ (by simp [hkj])),
+      ← Submodule.inf_orthogonal]
+    refine ⟨?_, ?_⟩
+    · rw [← direction_affineSpan, ← range_faceOpposite_points]
+      exact vsub_orthogonalProjection_mem_direction_orthogonal _ _
+    · rw [hij, ← direction_affineSpan, ← range_faceOpposite_points]
+      exact vsub_orthogonalProjection_mem_direction_orthogonal _ _
 
 中文:
 引理 ExcenterExists.touchpoint_injective
@@ -3266,7 +3503,30 @@ lemma ExcenterExists.touchpoint_injective
     rw [s.touchpoint_eq_point_rev signs i]; rw [s.touchpoint_eq_point_rev signs j] at hij
     apply s.independent.injective.ne hne
     convert! hij.symm <;> clear hij <;> decide +revert
-  · suffices s.excenter signs -ᵥ s.touchpo
+  · suffices s.excenter signs -ᵥ s.touchpoint signs i in (vectorSpan Real (Set.range s.points))ᗮ by
+      have h' : s.excenter signs -ᵥ s.touchpoint signs i in (vectorSpan Real (Set.range s.points)) := by
+        rw [← direction_affineSpan]
+        exact AffineSubspace.vsub_mem_direction h.excenter_mem_affineSpan_range
+          (s.touchpoint_mem_affineSpan_simplex _ _)
+      have h0 : s.excenter signs -ᵥ s.touchpoint signs i = 0 := by
+        rw [← Submodule.mem_bot Real]; rw [← Submodule.inf_orthogonal_eq_bot (vectorSpan Real (Set.range s.points))]
+        exact ⟨h', this⟩
+      rw [← norm_eq_zero]; rw [← dist_eq_norm_vsub]; rw [h.dist_excenter] at h0
+      exact h.exradius_pos.ne' h0
+    obtain ⟨k, hki, hkj⟩ : exists k, k != i ∧ k != j := Fin.exists_ne_and_ne_of_two_lt i j (by lia)
+    have hu : Set.range s.points =
+        Set.range (s.faceOpposite i).points union Set.range (s.faceOpposite j).points := by
+      simp only [range_faceOpposite_points, ← Set.image_union, ← Set.compl_inter]
+      convert! Set.image_univ.symm
+      simp [Ne.symm hne]
+    rw [hu]; rw [range_faceOpposite_points]; rw [range_faceOpposite_points]; rw [AffineSubspace.vectorSpan_union_of_mem_of_mem Real (p := s.points k)
+        (Set.mem_image_of_mem _ (by simp [hki])) (Set.mem_image_of_mem _ (by simp [hkj])),
+      ← Submodule.inf_orthogonal]
+    refine ⟨?_, ?_⟩
+    · rw [← direction_affineSpan, ← range_faceOpposite_points]
+      exact vsub_orthogonalProjection_mem_direction_orthogonal _ _
+    · rw [hij, ← direction_affineSpan, ← range_faceOpposite_points]
+      exact vsub_orthogonalProjection_mem_direction_orthogonal _ _
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.vsub_mem_directi, Set.range, convert, direction_affineSpan, excenter, hij.symm, independent, injective, points, revert, s.excenter, s.independent.injective.ne, s.points, s.touchpoint, s.touchpoint_eq_point_rev, touchpoint, touchpoint_eq_point_rev, vectorSpan, vsub_mem_directi
 -/
@@ -3379,7 +3639,28 @@ lemma ExcenterExists.sign_signedInfDist_lineMap_excenter_touchpoint
       (Set.Icc 0 1) := by
     refine continuousOn_of_forall_continuousAt
       fun t ht => ((continuousAt_sign_of_ne_zero ?_).comp
-        (((s.sign
+        (((s.signedInfDist j).cont.comp ?_).continuousAt))
+    · intro h0
+      rw [← abs_eq_zero]; rw [abs_signedInfDist_eq_dist_of_mem_affineSpan_range] at h0
+      · rw [orthogonalProjectionSpan, dist_orthogonalProjection_eq_zero_iff] at h0
+        by_cases ht1 : t = 1
+        · subst ht1
+          rw [AffineMap.lineMap_apply_one] at h0
+          exact h.touchpoint_notMem_affineSpan_of_ne hne h0
+        · refine (h.isTangentAt_touchpoint j).isTangent.notMem_of_dist_lt ?_ h0
+          simp only [exsphere_center, dist_lineMap_left, Real.norm_eq_abs, h.dist_excenter,
+            exsphere_radius, h.exradius_pos, mul_lt_iff_lt_one_left]
+          rw [abs_lt]
+          rcases ht with ⟨ht0, ht1'⟩
+          exact ⟨by linarith, ht1'.lt_of_ne ht1⟩
+      · exact AffineMap.lineMap_mem _ h.excenter_mem_affineSpan_range
+          (s.touchpoint_mem_affineSpan_simplex _ _)
+    · rw [← ContinuousAffineMap.lineMap_toAffineMap]
+      exact ContinuousAffineMap.cont _
+  refine ((isConnected_Icc zero_le_one).image _ hc).isPreconnected.subsingleton
+    (Set.mem_image_of_mem _ hr) ?_
+  convert! Set.mem_image_of_mem _ (Set.left_mem_Icc.2 (zero_le_one' Real))
+  simp
 
 中文:
 引理 ExcenterExists.sign_signedInfDist_lineMap_excenter_touchpoint
@@ -3390,7 +3671,28 @@ lemma ExcenterExists.sign_signedInfDist_lineMap_excenter_touchpoint
       (Set.Icc 0 1) := by
     refine continuousOn_of_forall_continuousAt
       fun t ht => ((continuousAt_sign_of_ne_zero ?_).comp
-        (((s.sign
+        (((s.signedInfDist j).cont.comp ?_).continuousAt))
+    · intro h0
+      rw [← abs_eq_zero]; rw [abs_signedInfDist_eq_dist_of_mem_affineSpan_range] at h0
+      · rw [orthogonalProjectionSpan, dist_orthogonalProjection_eq_zero_iff] at h0
+        by_cases ht1 : t = 1
+        · subst ht1
+          rw [AffineMap.lineMap_apply_one] at h0
+          exact h.touchpoint_notMem_affineSpan_of_ne hne h0
+        · refine (h.isTangentAt_touchpoint j).isTangent.notMem_of_dist_lt ?_ h0
+          simp only [exsphere_center, dist_lineMap_left, Real.norm_eq_abs, h.dist_excenter,
+            exsphere_radius, h.exradius_pos, mul_lt_iff_lt_one_left]
+          rw [abs_lt]
+          rcases ht with ⟨ht0, ht1'⟩
+          exact ⟨by linarith, ht1'.lt_of_ne ht1⟩
+      · exact AffineMap.lineMap_mem _ h.excenter_mem_affineSpan_range
+          (s.touchpoint_mem_affineSpan_simplex _ _)
+    · rw [← ContinuousAffineMap.lineMap_toAffineMap]
+      exact ContinuousAffineMap.cont _
+  refine ((isConnected_Icc zero_le_one).image _ hc).isPreconnected.subsingleton
+    (Set.mem_image_of_mem _ hr) ?_
+  convert! Set.mem_image_of_mem _ (Set.left_mem_Icc.2 (zero_le_one' Real))
+  simp
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap, ContinuousOn, Set.Icc, SignType, SignType.sign, abs_eq_zero, abs_signedInfDist_eq_dist_of_mem_affineSpan_range, cont.comp, continuousAt, continuousAt_sign_of_ne_zero, continuousOn_of_forall_continuousAt, dist_orthogonalProjection_eq_zero_iff, excenter, lineMap, orthogonalProjectionSpan, s.excenter, s.signedInfDist, s.touchpoint, signedInfDist
 -/
@@ -3649,7 +3951,8 @@ lemma ExcenterExists.touchpointWeights_map
     ((s.map f.toAffineMap f.injective).sum_touchpointWeights _ _)]
   have hc := (s.map f.toAffineMap f.injective).affineCombination_touchpointWeights signs i
   rwa [h.touchpoint_map, map_points, ← Finset.univ.map_affineCombination _ _
-    ((
+    ((s.map f.toAffineMap f.injective).sum_touchpointWeights _ _), AffineIsometry.coe_toAffineMap,
+    AffineIsometry.map_eq_iff] at hc
 
 中文:
 引理 ExcenterExists.touchpointWeights_map
@@ -3660,7 +3963,8 @@ lemma ExcenterExists.touchpointWeights_map
     ((s.map f.toAffineMap f.injective).sum_touchpointWeights _ _)]
   have hc := (s.map f.toAffineMap f.injective).affineCombination_touchpointWeights signs i
   rwa [h.touchpoint_map, map_points, ← Finset.univ.map_affineCombination _ _
-    ((
+    ((s.map f.toAffineMap f.injective).sum_touchpointWeights _ _), AffineIsometry.coe_toAffineMap,
+    AffineIsometry.map_eq_iff] at hc
 -/
 @[simp] lemma ExcenterExists.touchpointWeights_map {signs : Finset (Fin (n + 1))}
     (h : s.ExcenterExists signs) (f : P ->ᵃⁱ[Real] P₂) :
@@ -3716,7 +4020,8 @@ lemma ExcenterExists.sign_touchpointWeights
   rw [← s.affineCombination_touchpointWeights signs i]; rw [h.sign_signedInfDist_excenter]; rw [s.signedInfDist_affineCombination j (by simp)] at hs
   rw [← hs]; rw [sign_mul]
   convert! (mul_one _).symm
-  rw [sign_eq_one_iff]; rw [← dist_eq_norm_v
+  rw [sign_eq_one_iff]; rw [← dist_eq_norm_vsub]
+  exact s.height_pos _
 
 中文:
 引理 ExcenterExists.sign_touchpointWeights
@@ -3726,7 +4031,8 @@ lemma ExcenterExists.sign_touchpointWeights
   rw [← s.affineCombination_touchpointWeights signs i]; rw [h.sign_signedInfDist_excenter]; rw [s.signedInfDist_affineCombination j (by simp)] at hs
   rw [← hs]; rw [sign_mul]
   convert! (mul_one _).symm
-  rw [sign_eq_one_iff]; rw [← dist_eq_norm_v
+  rw [sign_eq_one_iff]; rw [← dist_eq_norm_vsub]
+  exact s.height_pos _
 
 Depends on / 依赖: affineCombination_touchpointWeights, convert, dist_eq_norm_vsub, h.sign_signedInfDist_excenter, h.sign_signedInfDist_touchpoint, height_pos, mul_one, s.affineCombination_touchpointWeights, s.height_pos, s.signedInfDist_affineCombination, sign_eq_one_iff, sign_mul, sign_signedInfDist_excenter, sign_signedInfDist_touchpoint, signedInfDist_affineCombination
 -/
@@ -3833,7 +4139,7 @@ lemma touchpoint_empty_mem_interior_faceOpposite
   simp only [Finset.mem_compl, Finset.mem_singleton, Decidable.not_not, forall_eq,
     touchpointWeights_eq_zero, and_true]
   intro j hj
-  exact s.to
+  exact s.touchpointWeights_empty_pos (Ne.symm hj)
 
 中文:
 引理 touchpoint_empty_mem_interior_faceOpposite
@@ -3843,7 +4149,7 @@ lemma touchpoint_empty_mem_interior_faceOpposite
   simp only [Finset.mem_compl, Finset.mem_singleton, Decidable.not_not, forall_eq,
     touchpointWeights_eq_zero, and_true]
   intro j hj
-  exact s.to
+  exact s.touchpointWeights_empty_pos (Ne.symm hj)
 
 Depends on / 依赖: Decidable, Decidable.not_not, Finset, Finset.mem_compl, Finset.mem_singleton, Ne.symm, affineCombination_mem_interior_face_iff_pos, affineCombination_touchpointWeights, and_true, faceOpposite, forall_eq, mem_compl, mem_singleton, not_not, s.affineCombination_mem_interior_face_iff_pos, s.sum_touchpointWeights, s.touchpointWeights_empty_pos, sum_touchpointWeights, touchpointWeights_empty_pos, touchpointWeights_eq_zero
 -/
@@ -3908,7 +4214,7 @@ lemma touchpoint_singleton_mem_interior_faceOpposite
   simp only [Finset.mem_compl, Finset.mem_singleton, Decidable.not_not, forall_eq,
     touchpointWeights_eq_zero, and_true]
   intro j hj
-  exact s.to
+  exact s.touchpointWeights_singleton_pos (Ne.symm hj)
 
 中文:
 引理 touchpoint_singleton_mem_interior_faceOpposite
@@ -3918,7 +4224,7 @@ lemma touchpoint_singleton_mem_interior_faceOpposite
   simp only [Finset.mem_compl, Finset.mem_singleton, Decidable.not_not, forall_eq,
     touchpointWeights_eq_zero, and_true]
   intro j hj
-  exact s.to
+  exact s.touchpointWeights_singleton_pos (Ne.symm hj)
 
 Depends on / 依赖: Decidable, Decidable.not_not, Finset, Finset.mem_compl, Finset.mem_singleton, Ne.symm, affineCombination_mem_interior_face_iff_pos, affineCombination_touchpointWeights, and_true, faceOpposite, forall_eq, mem_compl, mem_singleton, not_not, s.affineCombination_mem_interior_face_iff_pos, s.sum_touchpointWeights, s.touchpointWeights_singleton_pos, sum_touchpointWeights, touchpointWeights_eq_zero, touchpointWeights_singleton_pos
 -/
@@ -3983,7 +4289,13 @@ lemma ExcenterExists.touchpoint_ne_point
   intro he
   rw [eq_comm]; rw [← Finset.univ.affineCombination_piSingle Real s.points (Finset.mem_univ _)]; rw [affineCombination_eq_touchpoint_iff (Fintype.sum_pi_single' _ _)] at he
   have : 1 < n := Nat.AtLeastTwo.one_lt
-  obtain ⟨k, hki, hkj⟩ : exists k, k != i ∧ k != j := Fin.exists_ne_and_n
+  obtain ⟨k, hki, hkj⟩ : exists k, k != i ∧ k != j := Fin.exists_ne_and_ne_of_two_lt i j (by lia)
+  have he' := congr(SignType.sign ($he k))
+  rw [Pi.single_eq_of_ne hkj]; rw [sign_zero]; rw [eq_comm]; rw [h.sign_touchpointWeights hki.symm]; rw [sign_eq_zero_iff]; rw [excenterWeights] at he'
+  rw [ExcenterExists] at h
+  simp only [Pi.smul_apply, smul_eq_mul, mul_eq_zero, inv_eq_zero, h, false_or] at he'
+  rw [excenterWeightsUnnorm] at he'
+  by_cases hk : k in signs <;> simp [hk, (s.height_pos k).ne'] at he'
 
 中文:
 引理 ExcenterExists.touchpoint_ne_point
@@ -3992,7 +4304,13 @@ lemma ExcenterExists.touchpoint_ne_point
   intro he
   rw [eq_comm]; rw [← Finset.univ.affineCombination_piSingle Real s.points (Finset.mem_univ _)]; rw [affineCombination_eq_touchpoint_iff (Fintype.sum_pi_single' _ _)] at he
   have : 1 < n := Nat.AtLeastTwo.one_lt
-  obtain ⟨k, hki, hkj⟩ : exists k, k != i ∧ k != j := Fin.exists_ne_and_n
+  obtain ⟨k, hki, hkj⟩ : exists k, k != i ∧ k != j := Fin.exists_ne_and_ne_of_two_lt i j (by lia)
+  have he' := congr(SignType.sign ($he k))
+  rw [Pi.single_eq_of_ne hkj]; rw [sign_zero]; rw [eq_comm]; rw [h.sign_touchpointWeights hki.symm]; rw [sign_eq_zero_iff]; rw [excenterWeights] at he'
+  rw [ExcenterExists] at h
+  simp only [Pi.smul_apply, smul_eq_mul, mul_eq_zero, inv_eq_zero, h, false_or] at he'
+  rw [excenterWeightsUnnorm] at he'
+  by_cases hk : k in signs <;> simp [hk, (s.height_pos k).ne'] at he'
 
 Depends on / 依赖: AtLeastTwo, Fin.exists_ne_and_ne_of_two_lt, Finset, Finset.mem_univ, Finset.univ.affineCombination_piSingle, Fintype, Fintype.sum_pi_single, Nat.AtLeastTwo.one_lt, Pi.single_eq_of_ne, SignType, SignType.sign, affineCombination_eq_touchpoint_iff, affineCombination_piSingle, eq_comm, excenterWeights, exists_ne_and_ne_of_two_lt, h.sign_touchpointWeights, hki.symm, mem_univ, one_lt
 -/
@@ -4048,7 +4366,8 @@ lemma excenterExists
   · rw [Simplex.excenterExists_compl]
     exact t.excenterExists_empty
   · exact t.excenterExists_singleton _
-  · rw [Simplex.e
+  · rw [Simplex.excenterExists_compl]
+    exact t.excenterExists_singleton _
 
 中文:
 引理 excenterExists
@@ -4061,7 +4380,8 @@ lemma excenterExists
   · rw [Simplex.excenterExists_compl]
     exact t.excenterExists_empty
   · exact t.excenterExists_singleton _
-  · rw [Simplex.e
+  · rw [Simplex.excenterExists_compl]
+    exact t.excenterExists_singleton _
 
 Depends on / 依赖: Simplex, Simplex.excenterExists_compl, excenterExists_compl, excenterExists_empty, excenterExists_singleton, revert, t.excenterExists_empty, t.excenterExists_singleton
 -/
@@ -4446,7 +4766,20 @@ lemma touchpoint_singleton_sbtw
   have hw := t.sum_touchpointWeights {i₁} i₂
   rw [(by clear hw; decide +revert : (Finset.univ : Finset (Fin 3)) = {i₁]; rw [i₂]; rw [i₃})] at hw
   simp only [Nat.reduceAdd, Finset.mem_insert, h₁₂, Finset.mem_singleton, h₁₃, or_self,
-   
+    not_false_eq_true, Finset.sum_insert, h₂₃, Simplex.touchpointWeights_eq_zero,
+    Finset.sum_singleton, zero_add] at hw
+  have h : t.touchpointWeights {i₁} i₂ =
+      Finset.affineCombinationLineMapWeights i₁ i₃ (t.touchpointWeights {i₁} i₂ i₃) := by
+    ext i
+    have h : i = i₁ ∨ i = i₂ ∨ i = i₃ := by clear hw; decide +revert
+    rcases h with rfl | rfl | rfl
+    · rw [Finset.affineCombinationLineMapWeights_apply_left h₁₃]
+      simp [← hw]
+    · simp [h₁₂.symm, h₂₃]
+    · simp [h₁₃]
+  rw [h]; rw [Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_univ _)
+    (Finset.mem_univ _)]; rw [sbtw_iff_right_ne_and_left_mem_image_Ioi]
+  simp [t.independent.injective.ne h₁₃, ← hw, t.touchpointWeights_singleton_neg h₁₂]
 
 中文:
 引理 touchpoint_singleton_sbtw
@@ -4456,7 +4789,20 @@ lemma touchpoint_singleton_sbtw
   have hw := t.sum_touchpointWeights {i₁} i₂
   rw [(by clear hw; decide +revert : (Finset.univ : Finset (Fin 3)) = {i₁]; rw [i₂]; rw [i₃})] at hw
   simp only [Nat.reduceAdd, Finset.mem_insert, h₁₂, Finset.mem_singleton, h₁₃, or_self,
-   
+    not_false_eq_true, Finset.sum_insert, h₂₃, Simplex.touchpointWeights_eq_zero,
+    Finset.sum_singleton, zero_add] at hw
+  have h : t.touchpointWeights {i₁} i₂ =
+      Finset.affineCombinationLineMapWeights i₁ i₃ (t.touchpointWeights {i₁} i₂ i₃) := by
+    ext i
+    have h : i = i₁ ∨ i = i₂ ∨ i = i₃ := by clear hw; decide +revert
+    rcases h with rfl | rfl | rfl
+    · rw [Finset.affineCombinationLineMapWeights_apply_left h₁₃]
+      simp [← hw]
+    · simp [h₁₂.symm, h₂₃]
+    · simp [h₁₃]
+  rw [h]; rw [Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_univ _)
+    (Finset.mem_univ _)]; rw [sbtw_iff_right_ne_and_left_mem_image_Ioi]
+  simp [t.independent.injective.ne h₁₃, ← hw, t.touchpointWeights_singleton_neg h₁₂]
 
 Depends on / 依赖: Affine, Affine.Simplex.affineCombination_touchpointWeights, Finset, Finset.affineCombinationLineMapWeights, Finset.mem_insert, Finset.mem_singleton, Finset.sum_insert, Finset.sum_singleton, Finset.univ, Nat.reduceAdd, Simplex, Simplex.touchpointWeights_eq_zero, affineCombinationLineMapWeights, affineCombination_touchpointWeights, mem_insert, mem_singleton, not_false_eq_true, or_self, reduceAdd, revert
 -/

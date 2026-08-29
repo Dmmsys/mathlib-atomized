@@ -55,7 +55,7 @@ theorem domRestrict_ofUnitHom
     MonoidHom.coe_comp, MonoidHom.coe_coe, Function.comp_apply, MonoidHom.domRestrict_apply]
   rw [← Submonoid.val_unitsEquivUnitsType_symm_apply_coe S x]; rw [equivToUnitHom_symm_coe]
 
-@[depre
+@[deprecated (since := "2026-07-19")] alias restrict_ofUnitHom := domRestrict_ofUnitHom
 
 中文:
 定理 domRestrict_ofUnitHom
@@ -67,7 +67,7 @@ theorem domRestrict_ofUnitHom
     MonoidHom.coe_comp, MonoidHom.coe_coe, Function.comp_apply, MonoidHom.domRestrict_apply]
   rw [← Submonoid.val_unitsEquivUnitsType_symm_apply_coe S x]; rw [equivToUnitHom_symm_coe]
 
-@[depre
+@[deprecated (since := "2026-07-19")] alias restrict_ofUnitHom := domRestrict_ofUnitHom
 
 Depends on / 依赖: Function, Function.comp_apply, MonoidHom, MonoidHom.coe_coe, MonoidHom.coe_comp, MonoidHom.domRestrict_apply, Submonoid, Submonoid.val_unitsEquivUnitsType_symm_apply_coe, Units.isUnit, coe_coe, coe_comp, comp_apply, domRestrict_apply, equivToUnitHom_symm_coe, isUnit, ofUnitHom_eq, reduceIte, val_unitsEquivUnitsType_symm_apply_coe
 -/
@@ -320,7 +320,13 @@ definition equiv_rootsOfUnity
       simp only [toUnitHom_eq, mem_rootsOfUnity, ← map_pow, pow_card_eq_one, map_one]⟩
 invFun ζ := ofRootOfUnity ζ.prop Classical.choose_spec inst_cyc.exists_generator
   left_inv χ := by
-    simp only [toUnitHom_eq, eq_iff <| Classical.choo
+    simp only [toUnitHom_eq, eq_iff <| Classical.choose_spec inst_cyc.exists_generator,
+      ofRootOfUnity_spec, coe_equivToUnitHom]
+  right_inv ζ := by
+    ext
+    simp only [toUnitHom_eq, coe_equivToUnitHom, ofRootOfUnity_spec]
+  map_mul' x y := by
+    simp only [toUnitHom_eq, equivToUnitHom_mul_apply, MulMemClass.mk_mul_mk]
 
 中文:
 定义 equiv_rootsOfUnity
@@ -329,7 +335,13 @@ invFun ζ := ofRootOfUnity ζ.prop Classical.choose_spec inst_cyc.exists_generat
       simp only [toUnitHom_eq, mem_rootsOfUnity, ← map_pow, pow_card_eq_one, map_one]⟩
 invFun ζ := ofRootOfUnity ζ.prop Classical.choose_spec inst_cyc.exists_generator
   left_inv χ := by
-    simp only [toUnitHom_eq, eq_iff <| Classical.choo
+    simp only [toUnitHom_eq, eq_iff <| Classical.choose_spec inst_cyc.exists_generator,
+      ofRootOfUnity_spec, coe_equivToUnitHom]
+  right_inv ζ := by
+    ext
+    simp only [toUnitHom_eq, coe_equivToUnitHom, ofRootOfUnity_spec]
+  map_mul' x y := by
+    simp only [toUnitHom_eq, equivToUnitHom_mul_apply, MulMemClass.mk_mul_mk]
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, choose_spec, coe_equivToUnitHom, eq_iff, equivT, exists_generator, inst_cyc, inst_cyc.exists_generator, invFun, left_inv, map_mul, map_one, map_pow, mem_rootsOfUnity, ofRootOfUnity, ofRootOfUnity_spec, pow_card_eq_one, right_inv
 -/
@@ -375,7 +387,17 @@ lemma exists_mulChar_orderOf
     exact (Fintype.one_lt_card.trans_le h).false
   let e := MulChar.equiv_rootsOfUnity F R
   let ζ' : Rˣ := (hζ.isUnit hn₀.ne').unit
-  have h' : ζ' ^ (Fint
+  have h' : ζ' ^ (Fintype.card Fˣ : Nat) = 1 :=
+Units.ext_iff.mpr (hζ.pow_eq_one_iff_dvd _).mpr Fintype.card_units (α := F) ▸ h
+  use e.symm ⟨ζ', (mem_rootsOfUnity (Fintype.card Fˣ) ζ').mpr h'⟩
+  rw [e.symm.orderOf_eq]; rw [orderOf_eq_iff hn₀]
+  refine ⟨?_, fun m hm hm₀ h => ?_⟩
+  · ext
+    push_cast
+    exact hζ.pow_eq_one
+  · rw [Subtype.ext_iff, Units.ext_iff] at h
+    push_cast at h
+    exact ((Nat.le_of_dvd hm₀ <| hζ.dvd_of_pow_eq_one _ h).trans_lt hm).false
 
 中文:
 引理 存在_mulChar_orderOf
@@ -388,7 +410,17 @@ lemma exists_mulChar_orderOf
     exact (Fintype.one_lt_card.trans_le h).false
   let e := MulChar.equiv_rootsOfUnity F R
   let ζ' : Rˣ := (hζ.isUnit hn₀.ne').unit
-  have h' : ζ' ^ (Fint
+  have h' : ζ' ^ (Fintype.card Fˣ : Nat) = 1 :=
+Units.ext_iff.mpr (hζ.pow_eq_one_iff_dvd _).mpr Fintype.card_units (α := F) ▸ h
+  use e.symm ⟨ζ', (mem_rootsOfUnity (Fintype.card Fˣ) ζ').mpr h'⟩
+  rw [e.symm.orderOf_eq]; rw [orderOf_eq_iff hn₀]
+  refine ⟨?_, fun m hm hm₀ h => ?_⟩
+  · ext
+    push_cast
+    exact hζ.pow_eq_one
+  · rw [Subtype.ext_iff, Units.ext_iff] at h
+    push_cast at h
+    exact ((Nat.le_of_dvd hm₀ <| hζ.dvd_of_pow_eq_one _ h).trans_lt hm).false
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.card_units, Fintype.one_lt_card.trans_le, MulChar, MulChar.equiv_rootsOfUnity, Nat.pos_of_ne_zero, Nat.sub_eq_zero_iff_le, Units.ext_iff.mpr, card_units, classical, e.symm, e.symm.orderOf_eq, equiv_rootsOfUnity, ext_iff, isUnit, mem_rootsOfUnity, one_lt_card, orderOf_eq, orderOf_eq_iff
 -/
@@ -476,7 +508,8 @@ lemma apply_mem_rootsOfUnity_orderOf
   proof: by
   have hu : IsUnit (χ a) := ha.isUnit.map χ
   refine ⟨hu.unit, ?_, hu.unit_spec⟩
-  rw [mem_rootsOfUnity]; rw [Units.ext_iff]; rw [Units.val_pow_eq_pow_val]; rw [Units.val_one]; rw [IsUnit.unit_spec]; rw [← χ.pow_apply' χ.orderOf_pos.ne']; rw [pow_orderOf_eq_one]; rw [show a = (isUnit_iff_ne_zero.
+  rw [mem_rootsOfUnity]; rw [Units.ext_iff]; rw [Units.val_pow_eq_pow_val]; rw [Units.val_one]; rw [IsUnit.unit_spec]; rw [← χ.pow_apply' χ.orderOf_pos.ne']; rw [pow_orderOf_eq_one]; rw [show a = (isUnit_iff_ne_zero.mpr ha).unit by simp only [IsUnit.unit_spec],
+    MulChar.one_apply_coe]
 
 中文:
 引理 apply_mem_rootsOfUnity_orderOf
@@ -484,7 +517,8 @@ lemma apply_mem_rootsOfUnity_orderOf
   证明: by
   have hu : IsUnit (χ a) := ha.isUnit.map χ
   refine ⟨hu.unit, ?_, hu.unit_spec⟩
-  rw [mem_rootsOfUnity]; rw [Units.ext_iff]; rw [Units.val_pow_eq_pow_val]; rw [Units.val_one]; rw [IsUnit.unit_spec]; rw [← χ.pow_apply' χ.orderOf_pos.ne']; rw [pow_orderOf_eq_one]; rw [show a = (isUnit_iff_ne_zero.
+  rw [mem_rootsOfUnity]; rw [Units.ext_iff]; rw [Units.val_pow_eq_pow_val]; rw [Units.val_one]; rw [IsUnit.unit_spec]; rw [← χ.pow_apply' χ.orderOf_pos.ne']; rw [pow_orderOf_eq_one]; rw [show a = (isUnit_iff_ne_zero.mpr ha).unit by simp only [IsUnit.unit_spec],
+    MulChar.one_apply_coe]
 
 Depends on / 依赖: IsUnit, IsUnit.unit_spec, MulChar, MulChar.one_apply_coe, Units.ext_iff, Units.val_one, Units.val_pow_eq_pow_val, ext_iff, ha.isUnit.map, hu.unit, hu.unit_spec, isUnit, isUnit_iff_ne_zero, isUnit_iff_ne_zero.mpr, mem_rootsOfUnity, one_apply_coe, orderOf_pos, orderOf_pos.ne, pow_apply, pow_orderOf_eq_one
 -/
@@ -565,7 +599,8 @@ lemma apply_mem_algebraAdjoin_of_pow_eq_one
   · exact χ.map_zero ▸ Subalgebra.zero_mem _
   · obtain ⟨ζ, hζ₁, hζ₂⟩ := apply_mem_rootsOfUnity_of_pow_eq_one hχ h
     rw [mem_rootsOfUnity]; rw [Units.ext_iff]; rw [Units.val_pow_eq_pow_val] at hζ₁
-    obtain ⟨k, _, hk⟩ := IsPrimitiveRoot.eq_pow_of_pow_eq_one h
+    obtain ⟨k, _, hk⟩ := IsPrimitiveRoot.eq_pow_of_pow_eq_one hμ hζ₁
+    exact hζ₂ ▸ hk ▸ Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton Int μ) k
 
 中文:
 引理 apply_mem_algebraAdjoin_of_pow_eq_one
@@ -575,7 +610,8 @@ lemma apply_mem_algebraAdjoin_of_pow_eq_one
   · exact χ.map_zero ▸ Subalgebra.zero_mem _
   · obtain ⟨ζ, hζ₁, hζ₂⟩ := apply_mem_rootsOfUnity_of_pow_eq_one hχ h
     rw [mem_rootsOfUnity]; rw [Units.ext_iff]; rw [Units.val_pow_eq_pow_val] at hζ₁
-    obtain ⟨k, _, hk⟩ := IsPrimitiveRoot.eq_pow_of_pow_eq_one h
+    obtain ⟨k, _, hk⟩ := IsPrimitiveRoot.eq_pow_of_pow_eq_one hμ hζ₁
+    exact hζ₂ ▸ hk ▸ Subalgebra.pow_mem _ (Algebra.self_mem_adjoin_singleton Int μ) k
 
 Depends on / 依赖: Algebra, Algebra.self_mem_adjoin_singleton, IsPrimitiveRoot, IsPrimitiveRoot.eq_pow_of_pow_eq_one, Subalgebra, Subalgebra.pow_mem, Subalgebra.zero_mem, Units.ext_iff, Units.val_pow_eq_pow_val, apply_mem_rootsOfUnity_of_pow_eq_one, eq_or_ne, eq_pow_of_pow_eq_one, ext_iff, map_zero, mem_rootsOfUnity, pow_mem, self_mem_adjoin_singleton, val_pow_eq_pow_val, zero_mem
 -/

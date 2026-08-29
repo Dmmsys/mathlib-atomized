@@ -66,7 +66,55 @@ definition terminalReplacement
     let tac ← newTactic ctxI i stx
     try
       let goalTypes ← ctxI.runTacticCode i goal tac ⟨Expr, MVarId.getType'⟩
-    
+      match goalTypes with
+      | [] => return .success tac
+      | _ => do
+        let goalsMessages := goalTypes.map fun e => m!"⊢ {MessageData.ofExpr e}\n"
+        return .remainingGoals tac goalsMessages
+    catch _e =>
+      let name ← mkAuxDeclName `extracted
+      -- Rerun in the original tactic context, since `omega` changes the state.
+      let ((sig, _, modules, _), _) ← ctxI.runTactic i goal (fun goal =>
+        (Mathlib.Tactic.ExtractGoal.goalSignature name goal).run)
+      let imports := modules.toList.map (s!"import {·}")
+      return .error tac m!"{"\n".intercalate imports}\n\ntheorem {sig} := by\n fail_if_success {tac}\n {stx}"
+  tell stx old oldHeartbeats new newHeartbeats :=
+    -- If the original tactic failed, then we do not need to check the replacement.
+    if !old.isEmpty then
+      return none
+    else match new with
+    | .error _ msg =>
+      if reportFailure then
+        let msg :=
+          m!"`{newTacticName}` failed where `{oldTacticName}` succeeded.\n" ++
+          m!"Original tactic:{indentD stx}\n" ++
+          m!"Counterexample:{indentD msg}"
+        return msg
+      else
+        return none
+    | .remainingGoals newStx goals =>
+      if reportFailure then
+        let msg :=
+          m!"`{newTacticName}` left unsolved goals where `{oldTacticName}` succeeded.\n" ++
+          m!"Original tactic:{indentD stx}\n" ++
+          m!"Replacement tactic:{indentD newStx}\n" ++
+          m!"Unsolved goals:{indentD goals}"
+        return msg
+      else
+        return none
+    | .success newStx => do
+      -- TODO: we should add a "Try this:" suggestion with code action.
+      let msg := if (← liftCoreM <| PrettyPrinter.ppTactic newStx).pretty = newTacticName then
+        m!"`{newTacticName}` can replace `{stx}`"
+      else
+        m!"`{newTacticName}` can replace `{stx}` using `{newStx}`"
+      if reportSlowdown ∧ maxSlowdown * oldHeartbeats.toFloat < newHeartbeats.toFloat then
+        return some m!"{msg}, but is slower: {newHeartbeats / 1000} versus {oldHeartbeats / 1000} heartbeats"
+      else if reportSuccess then
+        return some msg
+      else
+        return none
+    }
 
 中文:
 定义 terminalReplacement
@@ -80,7 +128,55 @@ definition terminalReplacement
     let tac ← newTactic ctxI i stx
     try
       let goalTypes ← ctxI.runTacticCode i goal tac ⟨Expr, MVarId.getType'⟩
-    
+      match goalTypes with
+      | [] => return .success tac
+      | _ => do
+        let goalsMessages := goalTypes.map fun e => m!"⊢ {MessageData.ofExpr e}\n"
+        return .remainingGoals tac goalsMessages
+    catch _e =>
+      let name ← mkAuxDeclName `extracted
+      -- Rerun in the original tactic context, since `omega` changes the state.
+      let ((sig, _, modules, _), _) ← ctxI.runTactic i goal (fun goal =>
+        (Mathlib.Tactic.ExtractGoal.goalSignature name goal).run)
+      let imports := modules.toList.map (s!"import {·}")
+      return .error tac m!"{"\n".intercalate imports}\n\ntheorem {sig} := by\n fail_if_success {tac}\n {stx}"
+  tell stx old oldHeartbeats new newHeartbeats :=
+    -- If the original tactic failed, then we do not need to check the replacement.
+    if !old.isEmpty then
+      return none
+    else match new with
+    | .error _ msg =>
+      if reportFailure then
+        let msg :=
+          m!"`{newTacticName}` failed where `{oldTacticName}` succeeded.\n" ++
+          m!"Original tactic:{indentD stx}\n" ++
+          m!"Counterexample:{indentD msg}"
+        return msg
+      else
+        return none
+    | .remainingGoals newStx goals =>
+      if reportFailure then
+        let msg :=
+          m!"`{newTacticName}` left unsolved goals where `{oldTacticName}` succeeded.\n" ++
+          m!"Original tactic:{indentD stx}\n" ++
+          m!"Replacement tactic:{indentD newStx}\n" ++
+          m!"Unsolved goals:{indentD goals}"
+        return msg
+      else
+        return none
+    | .success newStx => do
+      -- TODO: we should add a "Try this:" suggestion with code action.
+      let msg := if (← liftCoreM <| PrettyPrinter.ppTactic newStx).pretty = newTacticName then
+        m!"`{newTacticName}` can replace `{stx}`"
+      else
+        m!"`{newTacticName}` can replace `{stx}` using `{newStx}`"
+      if reportSlowdown ∧ maxSlowdown * oldHeartbeats.toFloat < newHeartbeats.toFloat then
+        return some m!"{msg}, but is slower: {newHeartbeats / 1000} versus {oldHeartbeats / 1000} heartbeats"
+      else if reportSuccess then
+        return some msg
+      else
+        return none
+    }
 
 Depends on / 依赖: reportSuccess
 -/
@@ -158,7 +254,12 @@ definition termToGrindParam
   -- grindParam := grindErase <|> grindLemmaMin <|> grindLemma <|> anchor
   -- With no modifier, the first child is a null node
   -- If t is a simple identifier, wrap as `(id t)` to force term interpretation
-  let t' : Syntax := if t.isIdent th
+  let t' : Syntax := if t.isIdent then
+      -- Create `id t` application - this ensures grind sees it as a term, not an e-match candidate
+      mkNode ``Lean.Parser.Term.app #[mkIdent `id, mkNullNode #[t]]
+    else t
+  let grindLemma := mkNode ``Lean.Parser.Tactic.grindLemma #[mkNullNode, t']
+  mkNode ``Lean.Parser.Tactic.grindParam #[grindLemma]
 
 中文:
 定义 termToGrindParam
@@ -167,7 +268,12 @@ definition termToGrindParam
   -- grindParam := grindErase <|> grindLemmaMin <|> grindLemma <|> anchor
   -- With no modifier, the first child is a null node
   -- If t is a simple identifier, wrap as `(id t)` to force term interpretation
-  let t' : Syntax := if t.isIdent th
+  let t' : Syntax := if t.isIdent then
+      -- Create `id t` application - this ensures grind sees it as a term, not an e-match candidate
+      mkNode ``Lean.Parser.Term.app #[mkIdent `id, mkNullNode #[t]]
+    else t
+  let grindLemma := mkNode ``Lean.Parser.Tactic.grindLemma #[mkNullNode, t']
+  mkNode ``Lean.Parser.Tactic.grindParam #[grindLemma]
 
 Depends on / 依赖: Limits, Limits.isTerminalTop, homOfLE, isTerminalTop, le_top, subsingleton_fiber_obj
 -/
@@ -195,7 +301,31 @@ definition grindReplacementWith
       | some args =>
         if args.getElems.isEmpty then
           return ← `(tactic| grind)
-        -- Get local hypothesis names from the goal's 
+        -- Get local hypothesis names from the goal's local context
+        let lctxNames : Std.HashSet Name :=
+          match tacI.goalsBefore.head? with
+          | some goal =>
+            let goalDecl := tacI.mctxBefore.decls.find! goal
+            goalDecl.lctx.foldl (init := {}) fun s decl =>
+              if decl.isImplementationDetail then s else s.insert decl.userName
+          | none => {}
+        -- Filter out terms that are simple identifiers matching local hypotheses
+        let filteredElems := args.getElems.filter fun term =>
+          match term.raw with
+          | .ident _ _ name _ => !lctxNames.contains name
+          | _ => true -- Keep non-identifier terms (like `foo.bar x`)
+        if filteredElems.isEmpty then
+          return ← `(tactic| grind)
+        -- Build comma-separated list from filtered elements
+        let grindElemsAndSeps := filteredElems.foldl (init := #[]) fun acc elem =>
+          if acc.isEmpty then #[termToGrindParam elem]
+.push (termToGrindParam elem) else acc.push (mkAtom ",")
+        let grindArgs : Syntax.TSepArray ``Lean.Parser.Tactic.grindParam "," :=
+          ⟨grindElemsAndSeps⟩
+        `(tactic| grind [$grindArgs,*])
+      | none => `(tactic| grind)
+  terminalReplacement tacticName "grind" tacticKind newTactic
+    reportFailure reportSuccess reportSlowdown maxSlowdown
 
 中文:
 定义 grindReplacementWith
@@ -206,7 +336,31 @@ definition grindReplacementWith
       | some args =>
         if args.getElems.isEmpty then
           return ← `(tactic| grind)
-        -- Get local hypothesis names from the goal's 
+        -- Get local hypothesis names from the goal's local context
+        let lctxNames : Std.HashSet Name :=
+          match tacI.goalsBefore.head? with
+          | some goal =>
+            let goalDecl := tacI.mctxBefore.decls.find! goal
+            goalDecl.lctx.foldl (init := {}) fun s decl =>
+              if decl.isImplementationDetail then s else s.insert decl.userName
+          | none => {}
+        -- Filter out terms that are simple identifiers matching local hypotheses
+        let filteredElems := args.getElems.filter fun term =>
+          match term.raw with
+          | .ident _ _ name _ => !lctxNames.contains name
+          | _ => true -- Keep non-identifier terms (like `foo.bar x`)
+        if filteredElems.isEmpty then
+          return ← `(tactic| grind)
+        -- Build comma-separated list from filtered elements
+        let grindElemsAndSeps := filteredElems.foldl (init := #[]) fun acc elem =>
+          if acc.isEmpty then #[termToGrindParam elem]
+.push (termToGrindParam elem) else acc.push (mkAtom ",")
+        let grindArgs : Syntax.TSepArray ``Lean.Parser.Tactic.grindParam "," :=
+          ⟨grindElemsAndSeps⟩
+        `(tactic| grind [$grindArgs,*])
+      | none => `(tactic| grind)
+  terminalReplacement tacticName "grind" tacticKind newTactic
+    reportFailure reportSuccess reportSlowdown maxSlowdown
 -/
 def grindReplacementWith (tacticName : String) (tacticKind : SyntaxNodeKind)
     (extractArgs : Syntax -> Option (Syntax.TSepArray `term ",") := fun _ => none)
@@ -265,7 +419,9 @@ definition linarithToGrindRegressions
       -- linarith syntax: "linarith" "!"? linarithArgsRest
       -- linarithArgsRest := optConfig (&" only")? (" [" term,* "]")?
       let rest := stx[2] -- linarithArgsRest
-      let argsGroup := rest[2] -- t
+      let argsGroup := rest[2] -- the optional bracket group
+      guard (argsGroup.getNumArgs >= 2)
+      return ⟨argsGroup[1].getArgs⟩)
 
 中文:
 定义 linarithToGrindRegressions
@@ -274,7 +430,9 @@ definition linarithToGrindRegressions
       -- linarith syntax: "linarith" "!"? linarithArgsRest
       -- linarithArgsRest := optConfig (&" only")? (" [" term,* "]")?
       let rest := stx[2] -- linarithArgsRest
-      let argsGroup := rest[2] -- t
+      let argsGroup := rest[2] -- the optional bracket group
+      guard (argsGroup.getNumArgs >= 2)
+      return ⟨argsGroup[1].getArgs⟩)
 
 Depends on / 依赖: Mathlib, Mathlib.Tactic.linarith, Tactic, grindReplacementWith
 -/
@@ -377,7 +535,22 @@ definition Mathlib.TacticAnalysis.rwMerge
     match stx with
     | `(tactic| rw [$args,*]) => .continue ((ctx.getD #[]).push args)
     | _ => if let some args := ctx then if args.size > 1 then .accept args else .skip else .skip
-  test ctx
+  test ctxI i ctx goal := do
+    let ctxT : Array (TSyntax `Lean.Parser.Tactic.rwRule) := ctx.flatten.map (⟨·⟩)
+    let tac ← `(tactic| rw [$ctxT,*])
+    let oldMessages := (← get).messages
+    try
+      let goals ← ctxI.runTacticCode i goal tac
+      return (goals, ctxT.map (↑·))
+    catch _e => -- rw throws an error if it fails to pattern-match.
+      return ([goal], ctxT.map (↑·))
+    finally
+      -- Drop any messages, since they will appear as if they are genuine errors.
+      modify fun s => { s with messages := oldMessages }
+tell _stx _old _oldHeartbeats new _newHeartbeats := pure
+    if new.1.isEmpty then
+      m!"Try this: rw {new.2}"
+    else none }
 
 中文:
 定义 Mathlib.TacticAnalysis.rwMerge
@@ -389,7 +562,22 @@ definition Mathlib.TacticAnalysis.rwMerge
     match stx with
     | `(tactic| rw [$args,*]) => .continue ((ctx.getD #[]).push args)
     | _ => if let some args := ctx then if args.size > 1 then .accept args else .skip else .skip
-  test ctx
+  test ctxI i ctx goal := do
+    let ctxT : Array (TSyntax `Lean.Parser.Tactic.rwRule) := ctx.flatten.map (⟨·⟩)
+    let tac ← `(tactic| rw [$ctxT,*])
+    let oldMessages := (← get).messages
+    try
+      let goals ← ctxI.runTacticCode i goal tac
+      return (goals, ctxT.map (↑·))
+    catch _e => -- rw throws an error if it fails to pattern-match.
+      return ([goal], ctxT.map (↑·))
+    finally
+      -- Drop any messages, since they will appear as if they are genuine errors.
+      modify fun s => { s with messages := oldMessages }
+tell _stx _old _oldHeartbeats new _newHeartbeats := pure
+    if new.1.isEmpty then
+      m!"Try this: rw {new.2}"
+    else none }
 
 Depends on / 依赖: ofComplex
 -/
@@ -457,7 +645,17 @@ definition Mathlib.TacticAnalysis.mergeWithGrind
           preI.tacI.stx.getKind ∉ mergeWithGrindAllowed then
         if let [goal] := preI.tacI.goalsBefore then
           let goals ← try
-            preI.runTacticCode g
+            preI.runTacticCode goal postI.tacI.stx
+          catch _e =>
+            pure [goal]
+          if goals.isEmpty then
+            let msg ← addMessageContext m!"'{preI.tacI.stx}; grind' can be replaced with 'grind'"
+            let header := (← msg.toString) ++ "\n\nTry this:"
+            if let some start := preI.tacI.stx.getPos? then
+            if let some stop := postI.tacI.stx.getTailPos? then
+            let synth := Lean.Syntax.setInfo (Lean.SourceInfo.synthetic start stop) preI.tacI.stx
+Elab.Command.liftCoreM
+              Tactic.TryThis.addSuggestion (header := header) synth (← `(tactic | grind))
 
 中文:
 定义 Mathlib.TacticAnalysis.mergeWithGrind
@@ -468,7 +666,17 @@ definition Mathlib.TacticAnalysis.mergeWithGrind
           preI.tacI.stx.getKind ∉ mergeWithGrindAllowed then
         if let [goal] := preI.tacI.goalsBefore then
           let goals ← try
-            preI.runTacticCode g
+            preI.runTacticCode goal postI.tacI.stx
+          catch _e =>
+            pure [goal]
+          if goals.isEmpty then
+            let msg ← addMessageContext m!"'{preI.tacI.stx}; grind' can be replaced with 'grind'"
+            let header := (← msg.toString) ++ "\n\nTry this:"
+            if let some start := preI.tacI.stx.getPos? then
+            if let some stop := postI.tacI.stx.getTailPos? then
+            let synth := Lean.Syntax.setInfo (Lean.SourceInfo.synthetic start stop) preI.tacI.stx
+Elab.Command.liftCoreM
+              Tactic.TryThis.addSuggestion (header := header) synth (← `(tactic | grind))
 -/
 def Mathlib.TacticAnalysis.mergeWithGrind : TacticAnalysis.Config where
   run seq := do
@@ -509,7 +717,50 @@ definition Mathlib.TacticAnalysis.terminalToGrind
     let mut replaced : List (TSyntax `tactic) := []
     let mut success := false
     let mut oldHeartbeats := 0
-    let
+    let mut newHeartbeats := 0
+    -- We iterate through the tactic sequence in reverse, checking at each tactic if the goal is
+    -- already solved by `grind` and if so pushing that tactic onto `replaced`.
+    -- By repeating this until `grind` fails for the first time, we get a terminal sequence
+    -- of replaceable tactics.
+    for i in seq.reverse do
+      if replaced.length >= threshold - 1 && i.tacI.stx.getKind != ``Lean.Parser.Tactic.grind then
+        if let [goal] := i.tacI.goalsBefore then
+          -- Count the heartbeats of the original tactic sequence, verifying that this indeed
+          -- closes the goal like it does in userspace.
+          let suffix := ⟨i.tacI.stx⟩ :: replaced
+          let seq ← `(tactic| $suffix.toArray;*)
+let (oldGoals, heartbeats) ← withHeartbeats
+            try
+              i.runTacticCode goal seq
+            catch _e =>
+              pure [goal]
+          if !oldGoals.isEmpty then
+            logWarningAt i.tacI.stx m!"Original tactics failed to solve the goal: {seq}"
+          oldHeartbeats := heartbeats
+
+          -- To check if `grind` can close the goal, run `grind` on the current goal
+          -- and verify that no goals remain afterwards.
+          let tac ← `(tactic| grind)
+let (newGoals, heartbeats) ← withHeartbeats
+            try
+              i.runTacticCode goal tac
+            catch _e =>
+              pure [goal]
+          newHeartbeats := heartbeats
+          if newGoals.isEmpty then
+            success := true
+          else
+            break
+        else
+          break
+      replaced := ⟨i.tacI.stx⟩ :: replaced
+
+    if h : replaced.length >= threshold ∧ success then
+      let stx := replaced[0]
+      let seq ← `(tactic| $replaced.toArray;*)
+      logWarningAt stx m!"replace the proof with 'grind': {seq}"
+      if oldHeartbeats * 2 < newHeartbeats then
+        logWarningAt stx m!"'grind' is slower than the original: {oldHeartbeats} -> {newHeartbeats}"
 
 中文:
 定义 Mathlib.TacticAnalysis.terminalToGrind
@@ -521,7 +772,50 @@ definition Mathlib.TacticAnalysis.terminalToGrind
     let mut replaced : List (TSyntax `tactic) := []
     let mut success := false
     let mut oldHeartbeats := 0
-    let
+    let mut newHeartbeats := 0
+    -- We iterate through the tactic sequence in reverse, checking at each tactic if the goal is
+    -- already solved by `grind` and if so pushing that tactic onto `replaced`.
+    -- By repeating this until `grind` fails for the first time, we get a terminal sequence
+    -- of replaceable tactics.
+    for i in seq.reverse do
+      if replaced.length >= threshold - 1 && i.tacI.stx.getKind != ``Lean.Parser.Tactic.grind then
+        if let [goal] := i.tacI.goalsBefore then
+          -- Count the heartbeats of the original tactic sequence, verifying that this indeed
+          -- closes the goal like it does in userspace.
+          let suffix := ⟨i.tacI.stx⟩ :: replaced
+          let seq ← `(tactic| $suffix.toArray;*)
+let (oldGoals, heartbeats) ← withHeartbeats
+            try
+              i.runTacticCode goal seq
+            catch _e =>
+              pure [goal]
+          if !oldGoals.isEmpty then
+            logWarningAt i.tacI.stx m!"Original tactics failed to solve the goal: {seq}"
+          oldHeartbeats := heartbeats
+
+          -- To check if `grind` can close the goal, run `grind` on the current goal
+          -- and verify that no goals remain afterwards.
+          let tac ← `(tactic| grind)
+let (newGoals, heartbeats) ← withHeartbeats
+            try
+              i.runTacticCode goal tac
+            catch _e =>
+              pure [goal]
+          newHeartbeats := heartbeats
+          if newGoals.isEmpty then
+            success := true
+          else
+            break
+        else
+          break
+      replaced := ⟨i.tacI.stx⟩ :: replaced
+
+    if h : replaced.length >= threshold ∧ success then
+      let stx := replaced[0]
+      let seq ← `(tactic| $replaced.toArray;*)
+      logWarningAt stx m!"replace the proof with 'grind': {seq}"
+      if oldHeartbeats * 2 < newHeartbeats then
+        logWarningAt stx m!"'grind' is slower than the original: {oldHeartbeats} -> {newHeartbeats}"
 -/
 def Mathlib.TacticAnalysis.terminalToGrind : TacticAnalysis.Config where
   run seq := do
@@ -619,7 +913,42 @@ definition Mathlib.TacticAnalysis.tryAtEachStepCore
     let fraction := linter.tacticAnalysis.tryAtEachStep.fraction.get opts
     let showTiming := linter.tacticAnalysis.tryAtEachStep.showTiming.get opts
     let selfReplacements := linter.tacticAnalysis.tryAtEachStep.selfReplacements.get opts
-    for h : idx in [:seq.size
+    for h : idx in [:seq.size] do
+      let i := seq[idx]
+      if let [goal] := i.tacI.goalsBefore then
+        -- Hash the pretty-printed goal for stability across runs
+        let goalDecl := i.tacI.mctxBefore.decls.find! goal
+        let goalPP ← i.ctxI.runMetaM goalDecl.lctx do
+          withOptions (·.setBool `pp.mvars false) do
+            return toString (← Meta.ppGoal goal)
+        if (hash goalPP) % fraction = 0 then
+          let tac ← tac i.tacI.stx goal
+          let startTime ← IO.monoMsNow
+          let goalsAfter ← try
+            i.runTacticCode goal tac
+          catch _e =>
+            pure [goal]
+          let elapsedMs := (← IO.monoMsNow) - startTime
+          if goalsAfter.isEmpty then
+            -- Extract just the tactic name, ignoring trailing comments/whitespace
+            -- Use try/catch because ppTactic can fail on certain syntax (e.g., `congr($h x)`)
+            let oldTacticPP := (← try
+              pure (((← liftCoreM <| PrettyPrinter.ppTactic ⟨i.tacI.stx⟩).pretty.splitOn "\n")[0]!.trimAscii)
+            catch _ =>
+              pure (i.tacI.stx.reprint.getD "???"))
+            let newTacticPP ← label.getDM (try
+              return ((← liftCoreM <| PrettyPrinter.ppTactic tac).pretty.splitOn "\n")[0]!.trimAscii.copy
+            catch _ =>
+              return tac.raw.reprint.getD "???")
+            -- Check if this is a self-replacement (tactic replacing itself)
+            if !selfReplacements && oldTacticPP == newTacticPP then
+              continue
+            let laterSteps := seq.size - 1 - idx
+            let laterMsg := if laterSteps > 0 then s!" (+{laterSteps} later steps)" else ""
+            if showTiming then
+              logInfoAt i.tacI.stx m!"`{oldTacticPP}`{laterMsg} can be replaced with `{newTacticPP}` ({elapsedMs}ms)"
+            else
+              logInfoAt i.tacI.stx m!"`{oldTacticPP}`{laterMsg} can be replaced with `{newTacticPP}`"
 
 中文:
 定义 Mathlib.TacticAnalysis.tryAtEachStepCore
@@ -628,7 +957,42 @@ definition Mathlib.TacticAnalysis.tryAtEachStepCore
     let fraction := linter.tacticAnalysis.tryAtEachStep.fraction.get opts
     let showTiming := linter.tacticAnalysis.tryAtEachStep.showTiming.get opts
     let selfReplacements := linter.tacticAnalysis.tryAtEachStep.selfReplacements.get opts
-    for h : idx in [:seq.size
+    for h : idx in [:seq.size] do
+      let i := seq[idx]
+      if let [goal] := i.tacI.goalsBefore then
+        -- Hash the pretty-printed goal for stability across runs
+        let goalDecl := i.tacI.mctxBefore.decls.find! goal
+        let goalPP ← i.ctxI.runMetaM goalDecl.lctx do
+          withOptions (·.setBool `pp.mvars false) do
+            return toString (← Meta.ppGoal goal)
+        if (hash goalPP) % fraction = 0 then
+          let tac ← tac i.tacI.stx goal
+          let startTime ← IO.monoMsNow
+          let goalsAfter ← try
+            i.runTacticCode goal tac
+          catch _e =>
+            pure [goal]
+          let elapsedMs := (← IO.monoMsNow) - startTime
+          if goalsAfter.isEmpty then
+            -- Extract just the tactic name, ignoring trailing comments/whitespace
+            -- Use try/catch because ppTactic can fail on certain syntax (e.g., `congr($h x)`)
+            let oldTacticPP := (← try
+              pure (((← liftCoreM <| PrettyPrinter.ppTactic ⟨i.tacI.stx⟩).pretty.splitOn "\n")[0]!.trimAscii)
+            catch _ =>
+              pure (i.tacI.stx.reprint.getD "???"))
+            let newTacticPP ← label.getDM (try
+              return ((← liftCoreM <| PrettyPrinter.ppTactic tac).pretty.splitOn "\n")[0]!.trimAscii.copy
+            catch _ =>
+              return tac.raw.reprint.getD "???")
+            -- Check if this is a self-replacement (tactic replacing itself)
+            if !selfReplacements && oldTacticPP == newTacticPP then
+              continue
+            let laterSteps := seq.size - 1 - idx
+            let laterMsg := if laterSteps > 0 then s!" (+{laterSteps} later steps)" else ""
+            if showTiming then
+              logInfoAt i.tacI.stx m!"`{oldTacticPP}`{laterMsg} can be replaced with `{newTacticPP}` ({elapsedMs}ms)"
+            else
+              logInfoAt i.tacI.stx m!"`{oldTacticPP}`{laterMsg} can be replaced with `{newTacticPP}`"
 
 Depends on / 依赖: Config, TacticAnalysis, TacticAnalysis.Config
 -/
@@ -704,7 +1068,12 @@ definition Mathlib.TacticAnalysis.tryAtEachStepFromStrings
     -- See https://leanprover.zulipchat.com/#narrow/channel/113488-general/topic/piggy.20back.20off.20of.20the.20lean4.20parser
     let tacSeq ← try
 ofExcept
-        Mathlib.GuardExceptions.captureException (← 
+        Mathlib.GuardExceptions.captureException (← getEnv) Parser.Tactic.tacticSeq.fn tacticStr
+    catch _ =>
+      -- Tactic not available (e.g., `aesop` before Aesop is imported) - skip silently
+      return
+    let tac : TSyntax `tactic := ⟨mkNode ``Lean.Parser.Tactic.tacticSeq1Indented #[tacSeq]⟩
+    (tryAtEachStepCore (fun _ _ => pure tac) label).run seq
 
 中文:
 定义 Mathlib.TacticAnalysis.tryAtEachStepFromStrings
@@ -713,7 +1082,12 @@ ofExcept
     -- See https://leanprover.zulipchat.com/#narrow/channel/113488-general/topic/piggy.20back.20off.20of.20the.20lean4.20parser
     let tacSeq ← try
 ofExcept
-        Mathlib.GuardExceptions.captureException (← 
+        Mathlib.GuardExceptions.captureException (← getEnv) Parser.Tactic.tacticSeq.fn tacticStr
+    catch _ =>
+      -- Tactic not available (e.g., `aesop` before Aesop is imported) - skip silently
+      return
+    let tac : TSyntax `tactic := ⟨mkNode ``Lean.Parser.Tactic.tacticSeq1Indented #[tacSeq]⟩
+    (tryAtEachStepCore (fun _ _ => pure tac) label).run seq
 -/
 def Mathlib.TacticAnalysis.tryAtEachStepFromStrings
     (label : String) (tacticStr : String) : TacticAnalysis.Config where
@@ -1005,7 +1379,16 @@ definition Mathlib.TacticAnalysis.introMerge
     match introMergeArgs? ⟨stx⟩ with
     | some args => .continue ((ctx.getD #[]).push args)
     | none => if let some args := ctx then if args.size > 1 then .accept args else .skip else .skip
-  test ctxI
+  test ctxI i ctx goal := do
+    let ctxT := ctx.flatten
+    let tac ← `(tactic| intro $ctxT*)
+    try
+      let _ ← ctxI.runTacticCode i goal tac
+      return some tac
+    catch _e => -- if for whatever reason we can't run `intro` here.
+      return none
+tell _stx _old _oldHeartbeats new _newHeartbeats := pure
+    if let some tac := new then m!"Try this: {tac}" else none}
 
 中文:
 定义 Mathlib.TacticAnalysis.introMerge
@@ -1017,7 +1400,16 @@ definition Mathlib.TacticAnalysis.introMerge
     match introMergeArgs? ⟨stx⟩ with
     | some args => .continue ((ctx.getD #[]).push args)
     | none => if let some args := ctx then if args.size > 1 then .accept args else .skip else .skip
-  test ctxI
+  test ctxI i ctx goal := do
+    let ctxT := ctx.flatten
+    let tac ← `(tactic| intro $ctxT*)
+    try
+      let _ ← ctxI.runTacticCode i goal tac
+      return some tac
+    catch _e => -- if for whatever reason we can't run `intro` here.
+      return none
+tell _stx _old _oldHeartbeats new _newHeartbeats := pure
+    if let some tac := new then m!"Try this: {tac}" else none}
 
 Depends on / 依赖: ofComplex
 -/
@@ -1054,7 +1446,7 @@ definition parseSuggestionToTactic
     match Mathlib.GuardExceptions.parseAsTacticSeq (← getEnv) str with
     | .ok tacSeq =>
       `(tactic| ($tacSeq:tacticSeq))
-    | .error err => throwError "Failed to parse 
+    | .error err => throwError "Failed to parse suggestion: {str}\n{err}"
 
 中文:
 定义 parseSuggestionToTactic
@@ -1068,7 +1460,7 @@ definition parseSuggestionToTactic
     match Mathlib.GuardExceptions.parseAsTacticSeq (← getEnv) str with
     | .ok tacSeq =>
       `(tactic| ($tacSeq:tacticSeq))
-    | .error err => throwError "Failed to parse 
+    | .error err => throwError "Failed to parse suggestion: {str}\n{err}"
 -/
 private def parseSuggestionToTactic (s : Lean.Meta.Tactic.TryThis.Suggestion) :
     CommandElabM (TSyntax `tactic) := do
@@ -1094,7 +1486,66 @@ definition Mathlib.TacticAnalysis.verifyTryThisSuggestions
       if let [goal] := i.tacI.goalsBefore then
         let goalDecl := i.tacI.mctxBefore.decls.find! goal
         let goalPP ← i.ctxI.runMetaM goalDecl.lctx do
-          withOpt
+          withOptions (·.setBool `pp.mvars.anonymous false) do
+            return toString (← Meta.ppGoal goal)
+        if (hash goalPP) % fraction = 0 then
+          if let some tac ← tac i.tacI.stx goal then
+          -- Save message state to suppress "Try this:" info messages from grind?
+          let savedMessages := (← get).messages
+          -- Run tactic and capture InfoTree
+          let (goalsAfter, trees) ← try
+            i.runTacticCodeCapturingInfoTree goal tac
+          catch _e =>
+            continue -- Tactic failed, nothing to verify
+          finally
+            -- Restore messages (discard info messages from grind?)
+            modify fun s => { s with messages := savedMessages }
+
+          -- Only verify if tactic succeeded (closed goal)
+          if !goalsAfter.isEmpty then continue
+
+          -- Extract suggestions from InfoTree
+          let suggestions := Elab.collectTryThisSuggestions trees
+          for s in suggestions do
+            -- Parse suggestion to syntax
+            let suggestedTac ← try
+              parseSuggestionToTactic s
+            catch e =>
+              logWarningAt i.tacI.stx m!"`{label}` produced unparseable suggestion: {e.toMessageData}"
+              continue
+
+            -- Skip empty interactive mode suggestions (just `grind => {}` with no body).
+            -- These are intermediate suggestions that aren't meant to be used standalone.
+            -- Syntax structure: grind[0]="grind" [1]=optConfig [2]=only? [3]=params? [4]=(=> grindSeq)?
+            -- When [4].getNumArgs == 2: [4][0]="=>" [4][1]=grindSeq
+            -- grindSeq[0] is grindSeqBracketed: { content }, empty when content.getNumArgs == 0
+            if suggestedTac.raw.getKind == ``Lean.Parser.Tactic.grind then
+              if suggestedTac.raw[4]!.getNumArgs == 2 then
+                if suggestedTac.raw[4]![1]![0]![1]!.getNumArgs == 0 then
+                  continue
+
+            -- Skip suggestions containing hexcode anchors (e.g., #962a, #8ef1)
+            -- These are proof-context-specific references that aren't valid in a fresh goal
+.isSome then if suggestedTac.raw.find? (·.isOfKind ``Lean.Parser.Tactic.anchor)
+              continue
+
+            -- Skip suggestions containing `approx` - these are incomplete approximations
+            if suggestedTac.raw.find? (fun stx => stx.isOfKind ``Lean.Parser.Tactic.Grind.instantiate &&
+              (stx.find? (·.getAtomVal == "approx")).isSome) |>.isSome
+            then
+              continue
+
+            -- Verify suggestion works (suppress any messages from verification)
+            let savedMessages2 := (← get).messages
+            let verifyGoals ← try
+              i.runTacticCode goal suggestedTac
+            catch _e =>
+              pure [goal] -- Treat exception as failure
+            modify fun s => { s with messages := savedMessages2 }
+
+            if !verifyGoals.isEmpty then
+              logWarningAt i.tacI.stx
+                m!"`{label}` suggestion failed: `{suggestedTac}` did not close the goal"
 
 中文:
 定义 Mathlib.TacticAnalysis.verifyTryThisSuggestions
@@ -1105,7 +1556,66 @@ definition Mathlib.TacticAnalysis.verifyTryThisSuggestions
       if let [goal] := i.tacI.goalsBefore then
         let goalDecl := i.tacI.mctxBefore.decls.find! goal
         let goalPP ← i.ctxI.runMetaM goalDecl.lctx do
-          withOpt
+          withOptions (·.setBool `pp.mvars.anonymous false) do
+            return toString (← Meta.ppGoal goal)
+        if (hash goalPP) % fraction = 0 then
+          if let some tac ← tac i.tacI.stx goal then
+          -- Save message state to suppress "Try this:" info messages from grind?
+          let savedMessages := (← get).messages
+          -- Run tactic and capture InfoTree
+          let (goalsAfter, trees) ← try
+            i.runTacticCodeCapturingInfoTree goal tac
+          catch _e =>
+            continue -- Tactic failed, nothing to verify
+          finally
+            -- Restore messages (discard info messages from grind?)
+            modify fun s => { s with messages := savedMessages }
+
+          -- Only verify if tactic succeeded (closed goal)
+          if !goalsAfter.isEmpty then continue
+
+          -- Extract suggestions from InfoTree
+          let suggestions := Elab.collectTryThisSuggestions trees
+          for s in suggestions do
+            -- Parse suggestion to syntax
+            let suggestedTac ← try
+              parseSuggestionToTactic s
+            catch e =>
+              logWarningAt i.tacI.stx m!"`{label}` produced unparseable suggestion: {e.toMessageData}"
+              continue
+
+            -- Skip empty interactive mode suggestions (just `grind => {}` with no body).
+            -- These are intermediate suggestions that aren't meant to be used standalone.
+            -- Syntax structure: grind[0]="grind" [1]=optConfig [2]=only? [3]=params? [4]=(=> grindSeq)?
+            -- When [4].getNumArgs == 2: [4][0]="=>" [4][1]=grindSeq
+            -- grindSeq[0] is grindSeqBracketed: { content }, empty when content.getNumArgs == 0
+            if suggestedTac.raw.getKind == ``Lean.Parser.Tactic.grind then
+              if suggestedTac.raw[4]!.getNumArgs == 2 then
+                if suggestedTac.raw[4]![1]![0]![1]!.getNumArgs == 0 then
+                  continue
+
+            -- Skip suggestions containing hexcode anchors (e.g., #962a, #8ef1)
+            -- These are proof-context-specific references that aren't valid in a fresh goal
+.isSome then if suggestedTac.raw.find? (·.isOfKind ``Lean.Parser.Tactic.anchor)
+              continue
+
+            -- Skip suggestions containing `approx` - these are incomplete approximations
+            if suggestedTac.raw.find? (fun stx => stx.isOfKind ``Lean.Parser.Tactic.Grind.instantiate &&
+              (stx.find? (·.getAtomVal == "approx")).isSome) |>.isSome
+            then
+              continue
+
+            -- Verify suggestion works (suppress any messages from verification)
+            let savedMessages2 := (← get).messages
+            let verifyGoals ← try
+              i.runTacticCode goal suggestedTac
+            catch _e =>
+              pure [goal] -- Treat exception as failure
+            modify fun s => { s with messages := savedMessages2 }
+
+            if !verifyGoals.isEmpty then
+              logWarningAt i.tacI.stx
+                m!"`{label}` suggestion failed: `{suggestedTac}` did not close the goal"
 -/
 def Mathlib.TacticAnalysis.verifyTryThisSuggestions
     (tac : Syntax -> MVarId -> CommandElabM (Option (TSyntax `tactic)))

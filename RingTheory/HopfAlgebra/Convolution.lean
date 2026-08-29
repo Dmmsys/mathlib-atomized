@@ -49,7 +49,13 @@ lemma antipode_comp_mul_comp_comm
     ext a b
   · simp [((ℛ R a).tmul (ℛ R b)).convMul_apply, ← Bialgebra.counit_mul,
       ← sum_antipode_mul_eq_algebraMap_counit ((ℛ R b).mul (ℛ R a)),
-      ← Fins
+      ← Finset.map_swap_product (ℛ R b).index (ℛ R a).index]
+  · simp [((ℛ R a).tmul (ℛ R b)).convMul_apply,
+      ← Finset.map_swap_product (ℛ R a).index (ℛ R b).index,
+      Finset.sum_product (ℛ R b).index, ← Finset.mul_sum, mul_assoc ((ℛ R b).left _),
+      ← mul_assoc ((ℛ R a).left _), ← Finset.sum_mul, sum_mul_antipode_eq_algebraMap_counit,
+      ← (Algebra.commute_algebraMap_left (ε a) (_ : A)).left_comm,
+      ← (Algebra.commute_algebraMap_left (ε a) (_ : A)).eq]
 
 中文:
 引理 antipode_comp_mul_comp_comm
@@ -59,7 +65,13 @@ lemma antipode_comp_mul_comp_comm
     ext a b
   · simp [((ℛ R a).tmul (ℛ R b)).convMul_apply, ← Bialgebra.counit_mul,
       ← sum_antipode_mul_eq_algebraMap_counit ((ℛ R b).mul (ℛ R a)),
-      ← Fins
+      ← Finset.map_swap_product (ℛ R b).index (ℛ R a).index]
+  · simp [((ℛ R a).tmul (ℛ R b)).convMul_apply,
+      ← Finset.map_swap_product (ℛ R a).index (ℛ R b).index,
+      Finset.sum_product (ℛ R b).index, ← Finset.mul_sum, mul_assoc ((ℛ R b).left _),
+      ← mul_assoc ((ℛ R a).left _), ← Finset.sum_mul, sum_mul_antipode_eq_algebraMap_counit,
+      ← (Algebra.commute_algebraMap_left (ε a) (_ : A)).left_comm,
+      ← (Algebra.commute_algebraMap_left (ε a) (_ : A)).eq]
 
 Depends on / 依赖: Bialgebra, Bialgebra.counit_mul, Finset, Finset.map_swap_product, Finset.mul_sum, Finset.sum_product, LinearMap, LinearMap.mul, TensorProduct, TensorProduct.comm, WithConv, WithConv.toConv_injective, convMul_apply, counit_mul, left_inv_eq_right_inv, map_swap_product, mul_assoc, mul_sum, sum_antipode_mul_eq_algebraMap_counit, sum_product
 -/
@@ -260,7 +272,15 @@ lemma comul_right_inv
   calc μ ∘ₗ map δ (δ ∘ₗ 𝑺) ∘ₗ δ
       = μ ∘ₗ ((δ ∘ₗ id) otimesₘ (δ ∘ₗ 𝑺)) ∘ₗ δ := rfl
     _ = μ ∘ₗ (δ otimesₘ δ) ∘ₗ (id otimesₘ 𝑺) ∘ₗ δ := by
-        simp only [_root_.TensorProduct.map_comp, comp_assoc
+        simp only [_root_.TensorProduct.map_comp, comp_assoc]
+    _ = δ ∘ₗ μ ∘ₗ (id otimesₘ 𝑺) ∘ₗ δ := by
+        have : (μ ∘ₗ (δ otimesₘ δ) : C otimes[R] C ->ₗ[R] C otimes[R] C) = δ ∘ₗ μ := by ext; simp
+        simp [this, ← comp_assoc]
+    _ = δ ∘ₗ (toConv id * toConv 𝑺).ofConv := by simp [LinearMap.convMul_def]
+    _ = δ ∘ₗ (1 : WithConv (C ->ₗ[R] C)).ofConv := by rw [id_mul_antipode]
+    _ = η ∘ₗ ε := by
+        simp [LinearMap.convOne_def, show (δ ∘ₗ η : R ->ₗ[R] C otimes[R] C) = η by ext; simp; rfl,
+          ← comp_assoc]
 
 中文:
 引理 comul_right_inv
@@ -271,7 +291,15 @@ lemma comul_right_inv
   calc μ ∘ₗ map δ (δ ∘ₗ 𝑺) ∘ₗ δ
       = μ ∘ₗ ((δ ∘ₗ id) otimesₘ (δ ∘ₗ 𝑺)) ∘ₗ δ := rfl
     _ = μ ∘ₗ (δ otimesₘ δ) ∘ₗ (id otimesₘ 𝑺) ∘ₗ δ := by
-        simp only [_root_.TensorProduct.map_comp, comp_assoc
+        simp only [_root_.TensorProduct.map_comp, comp_assoc]
+    _ = δ ∘ₗ μ ∘ₗ (id otimesₘ 𝑺) ∘ₗ δ := by
+        have : (μ ∘ₗ (δ otimesₘ δ) : C otimes[R] C ->ₗ[R] C otimes[R] C) = δ ∘ₗ μ := by ext; simp
+        simp [this, ← comp_assoc]
+    _ = δ ∘ₗ (toConv id * toConv 𝑺).ofConv := by simp [LinearMap.convMul_def]
+    _ = δ ∘ₗ (1 : WithConv (C ->ₗ[R] C)).ofConv := by rw [id_mul_antipode]
+    _ = η ∘ₗ ε := by
+        simp [LinearMap.convOne_def, show (δ ∘ₗ η : R ->ₗ[R] C otimes[R] C) = η by ext; simp; rfl,
+          ← comp_assoc]
 
 Depends on / 依赖: LinearMap, LinearMap.convM, LinearMap.convMul_def, LinearMap.convOne_def, TensorProduct, WithConv, WithConv.ext, _root_, _root_.TensorProduct.map_comp, comp_assoc, convMul_def, convOne_def, map_comp, ofConv, ofConv_toConv, otimes, toConv
 -/
@@ -325,7 +353,15 @@ instance convGroup
       f.ofConv.comp (lmul' R) := by ext <;> simp
 trans toConv ((lmul' R).comp (Algebra.TensorProduct.map f.ofConv f.ofConv)).comp
       ((Algebra.TensorProduct.map
-      (HopfAlgebra.antipodeAlgHom R A) (.id _ _)).comp (c
+      (HopfAlgebra.antipodeAlgHom R A) (.id _ _)).comp (comulAlgHom R A))
+    · rw [AlgHom.comp_assoc, ← AlgHom.comp_assoc (Algebra.TensorProduct.map f.ofConv f.ofConv),
+        ← Algebra.TensorProduct.map_comp]; rfl
+    rw [H]; rw [AlgHom.comp_assoc]; rw [WithConv.ext_iff]; rw [← AlgHom.toLinearMap_injective.eq_iff]
+    change f.ofConv.toLinearMap.comp (toConv (antipode R (A := A)) * toConv LinearMap.id).ofConv =
+      ofConv (1 : WithConv <| A ->ₗ[R] C)
+    rw [LinearMap.antipode_mul_id]
+    ext
+    simp
 
 中文:
 实例 convGroup
@@ -335,7 +371,15 @@ trans toConv ((lmul' R).comp (Algebra.TensorProduct.map f.ofConv f.ofConv)).comp
       f.ofConv.comp (lmul' R) := by ext <;> simp
 trans toConv ((lmul' R).comp (Algebra.TensorProduct.map f.ofConv f.ofConv)).comp
       ((Algebra.TensorProduct.map
-      (HopfAlgebra.antipodeAlgHom R A) (.id _ _)).comp (c
+      (HopfAlgebra.antipodeAlgHom R A) (.id _ _)).comp (comulAlgHom R A))
+    · rw [AlgHom.comp_assoc, ← AlgHom.comp_assoc (Algebra.TensorProduct.map f.ofConv f.ofConv),
+        ← Algebra.TensorProduct.map_comp]; rfl
+    rw [H]; rw [AlgHom.comp_assoc]; rw [WithConv.ext_iff]; rw [← AlgHom.toLinearMap_injective.eq_iff]
+    change f.ofConv.toLinearMap.comp (toConv (antipode R (A := A)) * toConv LinearMap.id).ofConv =
+      ofConv (1 : WithConv <| A ->ₗ[R] C)
+    rw [LinearMap.antipode_mul_id]
+    ext
+    simp
 
 Depends on / 依赖: AlgHom, AlgHom.comp_assoc, AlgHom.toLine, Algebra, Algebra.TensorProduct.map, Algebra.TensorProduct.map_comp, HopfAlgebra, HopfAlgebra.antipodeAlgHom, TensorProduct, WithConv, WithConv.ext_iff, antipodeAlgHom, comp_assoc, comulAlgHom, ext_iff, f.ofConv, f.ofConv.comp, map_comp, ofConv, toConv
 -/

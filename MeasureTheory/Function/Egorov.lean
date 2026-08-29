@@ -110,7 +110,8 @@ theorem measure_inter_notConvergentSeq_eq_zero
   push Not
   rintro ⟨hmem, hx⟩
   refine ⟨hmem, (n : Real>=0∞)⁻¹, by simp, fun N => ?_⟩
-  obtain ⟨n, 
+  obtain ⟨n, hn₁, hn₂⟩ := hx N
+  exact ⟨n, hn₁, hn₂.le⟩
 
 中文:
 定理 measure_inter_notConvergentSeq_eq_zero
@@ -123,7 +124,8 @@ theorem measure_inter_notConvergentSeq_eq_zero
   push Not
   rintro ⟨hmem, hx⟩
   refine ⟨hmem, (n : Real>=0∞)⁻¹, by simp, fun N => ?_⟩
-  obtain ⟨n, 
+  obtain ⟨n, hn₁, hn₂⟩ := hx N
+  exact ⟨n, hn₁, hn₂.le⟩
 
 Depends on / 依赖: EMetric, EMetric.tendsto_atTop, Set.mem_iInter, Set.mem_inter_iff, ae_iff, measure_mono, mem_iInter, mem_inter_iff, mem_notConvergentSeq_iff, nonpos_iff_eq_zero, simp_rw, tendsto_atTop
 -/
@@ -176,7 +178,10 @@ theorem measure_notConvergentSeq_tendsto_zero
     rw [this]
     exact tendsto_const_nhds
   rw [← measure_inter_notConvergentSeq_eq_zero hfg n]; rw [Set.inter_iInter]
-  refine te
+  refine tendsto_measure_iInter_atTop
+    (fun n => (hsm.inter <| notConvergentSeq_measurableSet hf).nullMeasurableSet)
+    (fun k l hkl => Set.inter_subset_inter_right _ <| notConvergentSeq_antitone hkl)
+    ⟨h.some, ne_top_of_le_ne_top hs (measure_mono Set.inter_subset_left)⟩
 
 中文:
 定理 measure_notConvergentSeq_tendsto_zero
@@ -188,7 +193,10 @@ theorem measure_notConvergentSeq_tendsto_zero
     rw [this]
     exact tendsto_const_nhds
   rw [← measure_inter_notConvergentSeq_eq_zero hfg n]; rw [Set.inter_iInter]
-  refine te
+  refine tendsto_measure_iInter_atTop
+    (fun n => (hsm.inter <| notConvergentSeq_measurableSet hf).nullMeasurableSet)
+    (fun k l hkl => Set.inter_subset_inter_right _ <| notConvergentSeq_antitone hkl)
+    ⟨h.some, ne_top_of_le_ne_top hs (measure_mono Set.inter_subset_left)⟩
 
 Depends on / 依赖: Set.inter_iInter, Set.inter_subset_inter_right, eq_iff_true_of_subsingleton, h.some, hsm.inter, inter_iInter, inter_subset_inter_right, isEmpty_or_nonempty, measure_inter_notConvergentSeq_eq_zero, ne_top_of_le_ne_top, notConvergentSeq, notConvergentSeq_antitone, notConvergentSeq_measurableSet, nullMeasurableSet, tendsto_const_nhds, tendsto_measure_iInter_atTop
 -/
@@ -342,7 +350,10 @@ theorem measure_iUnionNotConvergentSeq
   refine le_trans (measure_iUnion_le _) (le_trans
     (ENNReal.tsum_le_tsum <| notConvergentSeqLTIndex_spec (half_pos hε) hf hsm hs hfg) ?_)
   simp_rw [ENNReal.ofReal_mul (half_pos hε).le]
-  rw [ENNReal.tsum_mul_left]; rw [← ENNReal.ofReal_tsum_of_nonneg]; rw [inv_eq_one_div]; rw [tsum_geometric_
+  rw [ENNReal.tsum_mul_left]; rw [← ENNReal.ofReal_tsum_of_nonneg]; rw [inv_eq_one_div]; rw [tsum_geometric_two]; rw [← ENNReal.ofReal_mul (half_pos hε).le]; rw [div_mul_cancel₀ ε two_ne_zero]
+  · intro n; positivity
+  · rw [inv_eq_one_div]
+    exact summable_geometric_two
 
 中文:
 定理 measure_iUnionNotConvergentSeq
@@ -351,7 +362,10 @@ theorem measure_iUnionNotConvergentSeq
   refine le_trans (measure_iUnion_le _) (le_trans
     (ENNReal.tsum_le_tsum <| notConvergentSeqLTIndex_spec (half_pos hε) hf hsm hs hfg) ?_)
   simp_rw [ENNReal.ofReal_mul (half_pos hε).le]
-  rw [ENNReal.tsum_mul_left]; rw [← ENNReal.ofReal_tsum_of_nonneg]; rw [inv_eq_one_div]; rw [tsum_geometric_
+  rw [ENNReal.tsum_mul_left]; rw [← ENNReal.ofReal_tsum_of_nonneg]; rw [inv_eq_one_div]; rw [tsum_geometric_two]; rw [← ENNReal.ofReal_mul (half_pos hε).le]; rw [div_mul_cancel₀ ε two_ne_zero]
+  · intro n; positivity
+  · rw [inv_eq_one_div]
+    exact summable_geometric_two
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_mul, ENNReal.ofReal_tsum_of_nonneg, ENNReal.tsum_le_tsum, ENNReal.tsum_mul_left, half_pos, inv_eq_one_div, le_trans, measure_iUnion_le, notConvergentSeqLTIndex_spec, ofReal_mul, ofReal_tsum_of_nonneg, simp_rw, summable_geometric_two, tsum_geometric_two, tsum_le_tsum, tsum_mul_left, two_ne_zero
 -/
@@ -408,7 +422,13 @@ theorem tendstoUniformlyOn_sdiff_iUnionNotConvergentSeq
   rw [eventually_atTop]
   refine ⟨Egorov.notConvergentSeqLTIndex (half_pos hε) hf hsm hs hfg N, fun n hn x hx => ?_⟩
   refine lt_of_le_of_lt ?_ hN
-  have : edist (f n x) (g x) <= (N : Real>=0∞)
+  have : edist (f n x) (g x) <= (N : Real>=0∞)⁻¹ :=
+not_lt.mp fun h => hx.2 Set.mem_iUnion.2 ⟨N, hx.1, mem_notConvergentSeq_iff.2 ⟨n, hn, h⟩⟩
+  simpa [edist_comm]
+
+@[deprecated (since := "2026-06-03")]
+alias tendstoUniformlyOn_diff_iUnionNotConvergentSeq :=
+  tendstoUniformlyOn_sdiff_iUnionNotConvergentSeq
 
 中文:
 定理 tendstoUniformlyOn_sdiff_iUnionNotConvergentSeq
@@ -420,7 +440,13 @@ theorem tendstoUniformlyOn_sdiff_iUnionNotConvergentSeq
   rw [eventually_atTop]
   refine ⟨Egorov.notConvergentSeqLTIndex (half_pos hε) hf hsm hs hfg N, fun n hn x hx => ?_⟩
   refine lt_of_le_of_lt ?_ hN
-  have : edist (f n x) (g x) <= (N : Real>=0∞)
+  have : edist (f n x) (g x) <= (N : Real>=0∞)⁻¹ :=
+not_lt.mp fun h => hx.2 Set.mem_iUnion.2 ⟨N, hx.1, mem_notConvergentSeq_iff.2 ⟨n, hn, h⟩⟩
+  simpa [edist_comm]
+
+@[deprecated (since := "2026-06-03")]
+alias tendstoUniformlyOn_diff_iUnionNotConvergentSeq :=
+  tendstoUniformlyOn_sdiff_iUnionNotConvergentSeq
 
 Depends on / 依赖: EMetric, EMetric.tendstoUniformlyOn_iff, ENNReal, ENNReal.exists_inv_nat_lt, Egorov, Egorov.notConvergentSeqLTIndex, Set.mem_iUnion, edist_comm, eventually_atTop, exists_inv_nat_lt, half_pos, lt_of_le_of_lt, mem_iUnion, mem_notConvergentSeq_iff, notConvergentSeqLTIndex, not_lt, not_lt.mp, tendstoUniformlyOn_iff
 -/
@@ -456,7 +482,7 @@ theorem tendstoUniformlyOn_of_ae_tendsto_of_measurable_edist
     Egorov.iUnionNotConvergentSeq_subset hε hf hsm hs hfg,
     Egorov.iUnionNotConvergentSeq_measurableSet hε hf hsm hs hfg,
     Egorov.measure_iUnionNotConvergentSeq hε hf hsm hs hfg,
-    Egorov.tendstoUniformlyOn_sdiff_iUnionNotConvergentSeq hε hf h
+    Egorov.tendstoUniformlyOn_sdiff_iUnionNotConvergentSeq hε hf hsm hs hfg⟩
 
 中文:
 定理 tendstoUniformlyOn_of_ae_tendsto_of_measurable_edist
@@ -464,7 +490,7 @@ theorem tendstoUniformlyOn_of_ae_tendsto_of_measurable_edist
     Egorov.iUnionNotConvergentSeq_subset hε hf hsm hs hfg,
     Egorov.iUnionNotConvergentSeq_measurableSet hε hf hsm hs hfg,
     Egorov.measure_iUnionNotConvergentSeq hε hf hsm hs hfg,
-    Egorov.tendstoUniformlyOn_sdiff_iUnionNotConvergentSeq hε hf h
+    Egorov.tendstoUniformlyOn_sdiff_iUnionNotConvergentSeq hε hf hsm hs hfg⟩
 
 Depends on / 依赖: Egorov, Egorov.iUnionNotConvergentSeq, Egorov.iUnionNotConvergentSeq_measurableSet, Egorov.iUnionNotConvergentSeq_subset, Egorov.measure_iUnionNotConvergentSeq, Egorov.tendstoUniformlyOn_sdiff_iUnionNotConvergentSeq, iUnionNotConvergentSeq, iUnionNotConvergentSeq_measurableSet, iUnionNotConvergentSeq_subset, measure_iUnionNotConvergentSeq, tendstoUniformlyOn_sdiff_iUnionNotConvergentSeq
 -/

@@ -5099,7 +5099,22 @@ lemma multiplicative_of_symm_of_total
     obtain rab | rba := total_of r a b
     · exact hmul rab rbc pab pbc pac
     rw [← one_mul (f a c)]; rw [← hf_swap pab]; rw [mul_assoc]
-    obtain rac | rca := total_of r 
+    obtain rac | rca := total_of r a c
+    · rw [hmul rba rac (symm pab) pac pbc]
+    · rw [hmul rbc rca pbc (symm pac) (symm pab), mul_assoc, hf_swap (symm pac), mul_one]
+  obtain rbc | rcb := total_of r b c
+  · exact hmul' rbc pab pbc pac
+  · rw [hmul' rcb pac (symm pbc) pab, mul_assoc, hf_swap (symm pbc), mul_one]
+
+@[deprecated (since := "2026-06-10")]
+alias additive_of_symmetric_of_total := additive_of_symm_of_total
+@[to_additive existing additive_of_symmetric_of_total, deprecated (since := "2026-06-10")]
+alias multiplicative_of_symmetric_of_total := multiplicative_of_symm_of_total
+
+@[deprecated (since := "2026-01-09")]
+alias additive_of_symmetric_of_isTotal := additive_of_symm_of_total
+@[to_additive existing additive_of_symmetric_of_isTotal, deprecated (since := "2026-01-09")]
+alias multiplicative_of_symmetric_of_isTotal := multiplicative_of_symm_of_total
 
 中文:
 引理 multiplicative_of_symm_of_total
@@ -5110,7 +5125,22 @@ lemma multiplicative_of_symm_of_total
     obtain rab | rba := total_of r a b
     · exact hmul rab rbc pab pbc pac
     rw [← one_mul (f a c)]; rw [← hf_swap pab]; rw [mul_assoc]
-    obtain rac | rca := total_of r 
+    obtain rac | rca := total_of r a c
+    · rw [hmul rba rac (symm pab) pac pbc]
+    · rw [hmul rbc rca pbc (symm pac) (symm pab), mul_assoc, hf_swap (symm pac), mul_one]
+  obtain rbc | rcb := total_of r b c
+  · exact hmul' rbc pab pbc pac
+  · rw [hmul' rcb pac (symm pbc) pab, mul_assoc, hf_swap (symm pbc), mul_one]
+
+@[deprecated (since := "2026-06-10")]
+alias additive_of_symmetric_of_total := additive_of_symm_of_total
+@[to_additive existing additive_of_symmetric_of_total, deprecated (since := "2026-06-10")]
+alias multiplicative_of_symmetric_of_total := multiplicative_of_symm_of_total
+
+@[deprecated (since := "2026-01-09")]
+alias additive_of_symmetric_of_isTotal := additive_of_symm_of_total
+@[to_additive existing additive_of_symmetric_of_isTotal, deprecated (since := "2026-01-09")]
+alias multiplicative_of_symmetric_of_isTotal := multiplicative_of_symm_of_total
 
 Depends on / 依赖: hf_swap, mul_assoc, mul_one, one_mul, total_of
 -/
@@ -5162,6 +5192,9 @@ theorem multiplicative_of_total
   exacts [⟨pa, pb⟩, ⟨pb, pc⟩, ⟨pa, pc⟩]
 
 @[deprecated (since := "2026-01-09")]
+alias additive_of_isTotal := additive_of_total
+@[to_additive existing additive_of_isTotal, deprecated (since := "2026-01-09")]
+alias multiplicative_of_isTotal := multiplicative_of_total
 
 中文:
 定理 multiplicative_of_total
@@ -5174,6 +5207,9 @@ theorem multiplicative_of_total
   exacts [⟨pa, pb⟩, ⟨pb, pc⟩, ⟨pa, pc⟩]
 
 @[deprecated (since := "2026-01-09")]
+alias additive_of_isTotal := additive_of_total
+@[to_additive existing additive_of_isTotal, deprecated (since := "2026-01-09")]
+alias multiplicative_of_isTotal := multiplicative_of_total
 
 Depends on / 依赖: And.symm, Std.Symm, _pbc, and_imp, exacts, multiplicative_of_symm_of_total, simp_rw
 -/

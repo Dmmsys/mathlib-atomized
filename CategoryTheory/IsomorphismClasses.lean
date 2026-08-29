@@ -84,7 +84,9 @@ definition isomorphismClasses
     apply @Quot.recOn _ _ _ x
     all_goals cat_disch
   map_comp {C D E} f g := by -- Porting note(s): idem
-    ex
+    ext x
+    apply @Quot.recOn _ _ _ x
+    all_goals cat_disch
 
 中文:
 定义 isomorphismClasses
@@ -96,7 +98,9 @@ definition isomorphismClasses
     apply @Quot.recOn _ _ _ x
     all_goals cat_disch
   map_comp {C D E} f g := by -- Porting note(s): idem
-    ex
+    ext x
+    apply @Quot.recOn _ _ _ x
+    all_goals cat_disch
 
 Depends on / 依赖: Quotient, isIsomorphicSetoid
 -/

@@ -133,7 +133,12 @@ definition findImportMatches
   let _ : Inhabited (IO.Ref (Option (RefinedDiscrTree α))) := ⟨← IO.mkRef none⟩
   let ref := EnvExtension.getState ext (← getEnv)
   let importTree ← (← ref.get).getDM do
-profileitM Exception "RefinedDiscrTree import initializ
+profileitM Exception "RefinedDiscrTree import initialization" (← getOptions)
+withTheReader Core.Context withTreeCtx
+        createImportedDiscrTree cNGen (← getEnv) addEntry constantsPerTask capacityPerTask
+  let (importCandidates, importTree) ← getMatch importTree ty false false
+  ref.set (some importTree)
+  return importCandidates
 
 中文:
 定义 findImportMatches
@@ -144,7 +149,12 @@ profileitM Exception "RefinedDiscrTree import initializ
   let _ : Inhabited (IO.Ref (Option (RefinedDiscrTree α))) := ⟨← IO.mkRef none⟩
   let ref := EnvExtension.getState ext (← getEnv)
   let importTree ← (← ref.get).getDM do
-profileitM Exception "RefinedDiscrTree import initializ
+profileitM Exception "RefinedDiscrTree import initialization" (← getOptions)
+withTheReader Core.Context withTreeCtx
+        createImportedDiscrTree cNGen (← getEnv) addEntry constantsPerTask capacityPerTask
+  let (importCandidates, importTree) ← getMatch importTree ty false false
+  ref.set (some importTree)
+  return importCandidates
 
 Depends on / 依赖: MatchResult, capacityPerTask
 -/

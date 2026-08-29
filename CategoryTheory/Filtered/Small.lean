@@ -68,7 +68,7 @@ instance :
   cocone_maps {j j'} f f' :=
     ⟨⟨coeq f.hom f'.hom, filteredClosure.coeq j.2 j'.2 f.hom f'.hom⟩,
       ObjectProperty.homMk (coeqHom f.hom f'.hom),
-      Objec
+      ObjectProperty.hom_ext _ (coeq_condition _ _)⟩
 
 中文:
 实例 :
@@ -78,7 +78,7 @@ instance :
   cocone_maps {j j'} f f' :=
     ⟨⟨coeq f.hom f'.hom, filteredClosure.coeq j.2 j'.2 f.hom f'.hom⟩,
       ObjectProperty.homMk (coeqHom f.hom f'.hom),
-      Objec
+      ObjectProperty.hom_ext _ (coeq_condition _ _)⟩
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.homMk, ObjectProperty.hom_ext, cocone_maps, coeqHom, coeq_condition, f.hom, filteredClosure, filteredClosure.coeq, filteredClosure.max, hom_ext, leftToMax, rightToMax
 -/
@@ -203,7 +203,33 @@ theorem small_fullSubcategory_filteredClosure
   induction h with
   | base x =>
       refine ⟨⟨0, ?_⟩, ?_⟩
-      · simp only [FilteredClosureSmall.bundledAbstractFilteredClosu
+      · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
+        exact ULift.up x
+      · simp only [FilteredClosureSmall.abstractFilteredClosureRealization,
+          FilteredClosureSmall.bundledAbstractFilteredClosure]
+        rfl
+  | max hj₁ hj₂ ih ih' =>
+    rcases ih with ⟨⟨n, x⟩, rfl⟩
+    rcases ih' with ⟨⟨m, y⟩, rfl⟩
+    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
+    · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
+      refine FilteredClosureSmall.InductiveStep.max ?_ ?_ x y
+      all_goals apply Nat.lt_succ_of_le
+      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
+    · simp only [FilteredClosureSmall.abstractFilteredClosureRealization]
+      rw! [FilteredClosureSmall.bundledAbstractFilteredClosure]
+      rfl
+  | coeq hj₁ hj₂ g g' ih ih' =>
+    rcases ih with ⟨⟨n, x⟩, rfl⟩
+    rcases ih' with ⟨⟨m, y⟩, rfl⟩
+    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
+    · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
+      refine FilteredClosureSmall.InductiveStep.coeq ?_ ?_ x y g g'
+      all_goals apply Nat.lt_succ_of_le
+      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
+    · simp only [FilteredClosureSmall.abstractFilteredClosureRealization]
+      rw! [FilteredClosureSmall.bundledAbstractFilteredClosure]
+      rfl
 
 中文:
 定理 small_fullSubcategory_filteredClosure
@@ -214,7 +240,33 @@ theorem small_fullSubcategory_filteredClosure
   induction h with
   | base x =>
       refine ⟨⟨0, ?_⟩, ?_⟩
-      · simp only [FilteredClosureSmall.bundledAbstractFilteredClosu
+      · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
+        exact ULift.up x
+      · simp only [FilteredClosureSmall.abstractFilteredClosureRealization,
+          FilteredClosureSmall.bundledAbstractFilteredClosure]
+        rfl
+  | max hj₁ hj₂ ih ih' =>
+    rcases ih with ⟨⟨n, x⟩, rfl⟩
+    rcases ih' with ⟨⟨m, y⟩, rfl⟩
+    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
+    · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
+      refine FilteredClosureSmall.InductiveStep.max ?_ ?_ x y
+      all_goals apply Nat.lt_succ_of_le
+      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
+    · simp only [FilteredClosureSmall.abstractFilteredClosureRealization]
+      rw! [FilteredClosureSmall.bundledAbstractFilteredClosure]
+      rfl
+  | coeq hj₁ hj₂ g g' ih ih' =>
+    rcases ih with ⟨⟨n, x⟩, rfl⟩
+    rcases ih' with ⟨⟨m, y⟩, rfl⟩
+    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
+    · simp only [FilteredClosureSmall.bundledAbstractFilteredClosure]
+      refine FilteredClosureSmall.InductiveStep.coeq ?_ ?_ x y g g'
+      all_goals apply Nat.lt_succ_of_le
+      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
+    · simp only [FilteredClosureSmall.abstractFilteredClosureRealization]
+      rw! [FilteredClosureSmall.bundledAbstractFilteredClosure]
+      rfl
 
 Depends on / 依赖: FilteredClosureSmall, FilteredClosureSmall.abstractFilteredClosureRealization, FilteredClosureSmall.bundledAbstractFilteredClosure, FullSubcategory, ObjectProperty, ObjectProperty.FullSubcategory.ext, ULift.up, abstractFilteredClosureRealization, bundledAbstractFilteredClosure, small_of_injective_of_exists
 -/
@@ -498,7 +550,7 @@ instance :
     ObjectProperty.homMk (minToLeft _ _), ObjectProperty.homMk (minToRight _ _), trivial⟩
   cone_maps {j j'} f f' :=
     ⟨⟨eq f.hom f'.hom, cofilteredClosure.eq j.2 j'.2 f.hom f'.hom⟩,
-    ObjectProperty.homMk (eqHom f.hom f'.hom), ObjectProperty.hom_
+    ObjectProperty.homMk (eqHom f.hom f'.hom), ObjectProperty.hom_ext _ (eq_condition _ _)⟩
 
 中文:
 实例 :
@@ -507,7 +559,7 @@ instance :
     ObjectProperty.homMk (minToLeft _ _), ObjectProperty.homMk (minToRight _ _), trivial⟩
   cone_maps {j j'} f f' :=
     ⟨⟨eq f.hom f'.hom, cofilteredClosure.eq j.2 j'.2 f.hom f'.hom⟩,
-    ObjectProperty.homMk (eqHom f.hom f'.hom), ObjectProperty.hom_
+    ObjectProperty.homMk (eqHom f.hom f'.hom), ObjectProperty.hom_ext _ (eq_condition _ _)⟩
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.homMk, ObjectProperty.hom_ext, cofilteredClosure, cofilteredClosure.eq, cofilteredClosure.min, cone_maps, eq_condition, f.hom, hom_ext, minToLeft, minToRight
 -/
@@ -618,7 +670,33 @@ theorem small_fullSubcategory_cofilteredClosure
   induction h with
   | base x =>
     refine ⟨⟨0, ?_⟩,?_⟩
-    · simp only [CofilteredClosureSmall.bundledAbstractCofilter
+    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      exact ULift.up x
+    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization,
+        CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      rfl
+  | min hj₁ hj₂ ih ih' =>
+    rcases ih with ⟨⟨n, x⟩, rfl⟩
+    rcases ih' with ⟨⟨m, y⟩, rfl⟩
+    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
+    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      refine CofilteredClosureSmall.InductiveStep.min ?_ ?_ x y
+      all_goals apply Nat.lt_succ_of_le
+      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
+    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization]
+      rw! [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      rfl
+  | eq hj₁ hj₂ g g' ih ih' =>
+    rcases ih with ⟨⟨n, x⟩, rfl⟩
+    rcases ih' with ⟨⟨m, y⟩, rfl⟩
+    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
+    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      refine CofilteredClosureSmall.InductiveStep.eq ?_ ?_ x y g g'
+      all_goals apply Nat.lt_succ_of_le
+      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
+    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization]
+      rw! [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      rfl
 
 中文:
 定理 small_fullSubcategory_cofilteredClosure
@@ -630,7 +708,33 @@ theorem small_fullSubcategory_cofilteredClosure
   induction h with
   | base x =>
     refine ⟨⟨0, ?_⟩,?_⟩
-    · simp only [CofilteredClosureSmall.bundledAbstractCofilter
+    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      exact ULift.up x
+    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization,
+        CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      rfl
+  | min hj₁ hj₂ ih ih' =>
+    rcases ih with ⟨⟨n, x⟩, rfl⟩
+    rcases ih' with ⟨⟨m, y⟩, rfl⟩
+    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
+    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      refine CofilteredClosureSmall.InductiveStep.min ?_ ?_ x y
+      all_goals apply Nat.lt_succ_of_le
+      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
+    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization]
+      rw! [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      rfl
+  | eq hj₁ hj₂ g g' ih ih' =>
+    rcases ih with ⟨⟨n, x⟩, rfl⟩
+    rcases ih' with ⟨⟨m, y⟩, rfl⟩
+    refine ⟨⟨(Max.max n m).succ, ?_⟩, ?_⟩
+    · simp only [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      refine CofilteredClosureSmall.InductiveStep.eq ?_ ?_ x y g g'
+      all_goals apply Nat.lt_succ_of_le
+      exacts [Nat.le_max_left _ _, Nat.le_max_right _ _]
+    · simp only [CofilteredClosureSmall.abstractCofilteredClosureRealization]
+      rw! [CofilteredClosureSmall.bundledAbstractCofilteredClosure]
+      rfl
 
 Depends on / 依赖: CofilteredClosureSmall, CofilteredClosureSmall.abstractCofilteredClosureRealization, CofilteredClosureSmall.bundledAbstractCofilteredClosure, FullSubcategory, ObjectProperty, ObjectProperty.FullSubcategory.ext, ULift.up, abstractCofilteredClosureRealization, bundledAbstractCofilteredClosure, small_of_injective_of_exists
 -/

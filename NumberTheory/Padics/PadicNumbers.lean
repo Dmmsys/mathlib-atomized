@@ -85,7 +85,7 @@ definition Rat.padicValuation
     split_ifs
     any_goals simp_all [-exp_neg]
     rw [← min_le_iff]
-    exact 
+    exact padicValRat.min_le_padicValRat_add ‹_›
 
 中文:
 定义 有理数.padicValuation
@@ -102,7 +102,7 @@ definition Rat.padicValuation
     split_ifs
     any_goals simp_all [-exp_neg]
     rw [← min_le_iff]
-    exact 
+    exact padicValRat.min_le_padicValRat_add ‹_›
 
 Depends on / 依赖: padicValRat
 -/
@@ -357,7 +357,15 @@ lemma Rat.padicValuation_le_one_iff
     Rat.padicValuation_cast, ← Int.cast_natCast, Rat.padicValuation_cast, div_le_one₀]
   · rcases (Int.padicValuation_le_one p x.den).eq_or_lt with h | h
     · simp [h, Int.padicValuation_le_one]
-  
+    · simp only [h.ne, iff_false, not_le]
+      rcases (Int.padicValuation_le_one p x.num).eq_or_lt with h' | h'
+      · simp [h, h']
+      · rw [Int.padicValuation_lt_one_iff] at h h'
+        exfalso
+        rw [Int.natCast_dvd_natCast] at h
+        rw [Int.natCast_dvd] at h'
+        exact Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt Fact.out) h h' x.reduced.symm
+  · simp [zero_lt_iff]
 
 中文:
 引理 有理数.padicValuation_le_one_iff
@@ -367,7 +375,15 @@ lemma Rat.padicValuation_le_one_iff
     Rat.padicValuation_cast, ← Int.cast_natCast, Rat.padicValuation_cast, div_le_one₀]
   · rcases (Int.padicValuation_le_one p x.den).eq_or_lt with h | h
     · simp [h, Int.padicValuation_le_one]
-  
+    · simp only [h.ne, iff_false, not_le]
+      rcases (Int.padicValuation_le_one p x.num).eq_or_lt with h' | h'
+      · simp [h, h']
+      · rw [Int.padicValuation_lt_one_iff] at h h'
+        exfalso
+        rw [Int.natCast_dvd_natCast] at h
+        rw [Int.natCast_dvd] at h'
+        exact Nat.not_coprime_of_dvd_of_dvd (Nat.Prime.one_lt Fact.out) h h' x.reduced.symm
+  · simp [zero_lt_iff]
 
 Depends on / 依赖: Int.cast_natCast, Int.n, Int.natCast_dvd_natCast, Int.padicValuation_eq_one_iff, Int.padicValuation_le_one, Int.padicValuation_lt_one_iff, Rat.padicValuation_cast, cast_natCast, eq_or_lt, h.ne, iff_false, natCast_dvd_natCast, not_le, nth_rw, num_div_den, padicValuation_cast, padicValuation_eq_one_iff, padicValuation_le_one, padicValuation_lt_one_iff, x.den
 -/
@@ -402,7 +418,9 @@ theorem Rat.surjective_padicValuation
     simp_rw [Rat.padicValuation, WithZero.exp, Valuation.coe_mk, MonoidWithZeroHom.coe_mk]
     rcases le_or_gt 0 x with (hx | hx)
     · exact ⟨(p ^ x.natAbs)⁻¹, by simp [hp.out.ne_zero, hx]⟩
-    · exact ⟨p ^
+    · exact ⟨p ^ x.natAbs, by simp [hp.out.ne_zero, padicValRat.pow, abs_eq_neg_self.2 hx.le]⟩
+
+noncomputable section
 
 中文:
 定理 有理数.surjective_padicValuation
@@ -416,7 +434,9 @@ theorem Rat.surjective_padicValuation
     simp_rw [Rat.padicValuation, WithZero.exp, Valuation.coe_mk, MonoidWithZeroHom.coe_mk]
     rcases le_or_gt 0 x with (hx | hx)
     · exact ⟨(p ^ x.natAbs)⁻¹, by simp [hp.out.ne_zero, hx]⟩
-    · exact ⟨p ^
+    · exact ⟨p ^ x.natAbs, by simp [hp.out.ne_zero, padicValRat.pow, abs_eq_neg_self.2 hx.le]⟩
+
+noncomputable section
 
 Depends on / 依赖: MonoidWithZeroHom, MonoidWithZeroHom.coe_mk, Rat.padicValuation, Valuation, Valuation.coe_mk, WithZero, WithZero.exp, abs_eq_neg_self, coe_mk, hp.out.ne_zero, hx.le, le_or_gt, natAbs, ne_zero, padicValRat, padicValRat.pow, padicValuation, simp_rw, x.natAbs
 -/
@@ -471,7 +491,17 @@ CauSeq.abv_pos_of_not_limZero not_limZero_of_not_congr_zero hf
   let ⟨ε, hε, N1, hN1⟩ := this
   let ⟨N2, hN2⟩ := CauSeq.cauchy₂ f hε
   ⟨max N1 N2, fun n m hn hm => by
-    have : padicNorm p (f n - f m) < ε := hN2 _ (max_le_iff
+    have : padicNorm p (f n - f m) < ε := hN2 _ (max_le_iff.1 hn).2 _ (max_le_iff.1 hm).2
+    have : padicNorm p (f n - f m) < padicNorm p (f n) :=
+lt_of_lt_of_le this hN1 _ (max_le_iff.1 hn).1
+    have : padicNorm p (f n - f m) < max (padicNorm p (f n)) (padicNorm p (f m)) :=
+      lt_max_iff.2 (Or.inl this)
+    by_contra hne
+    rw [← padicNorm.neg (f m)] at hne
+    have hnam := add_eq_max_of_ne hne
+    rw [padicNorm.neg]; rw [max_comm] at hnam
+    rw [← hnam]; rw [sub_eq_add_neg]; rw [add_comm] at this
+    apply _root_.lt_irrefl _ this⟩
 
 中文:
 定理 stationary
@@ -481,7 +511,17 @@ CauSeq.abv_pos_of_not_limZero not_limZero_of_not_congr_zero hf
   let ⟨ε, hε, N1, hN1⟩ := this
   let ⟨N2, hN2⟩ := CauSeq.cauchy₂ f hε
   ⟨max N1 N2, fun n m hn hm => by
-    have : padicNorm p (f n - f m) < ε := hN2 _ (max_le_iff
+    have : padicNorm p (f n - f m) < ε := hN2 _ (max_le_iff.1 hn).2 _ (max_le_iff.1 hm).2
+    have : padicNorm p (f n - f m) < padicNorm p (f n) :=
+lt_of_lt_of_le this hN1 _ (max_le_iff.1 hn).1
+    have : padicNorm p (f n - f m) < max (padicNorm p (f n)) (padicNorm p (f m)) :=
+      lt_max_iff.2 (Or.inl this)
+    by_contra hne
+    rw [← padicNorm.neg (f m)] at hne
+    have hnam := add_eq_max_of_ne hne
+    rw [padicNorm.neg]; rw [max_comm] at hnam
+    rw [← hnam]; rw [sub_eq_add_neg]; rw [add_comm] at this
+    apply _root_.lt_irrefl _ this⟩
 
 Depends on / 依赖: CauSeq, CauSeq.abv_pos_of_not_limZero, CauSeq.cauchy, abv_pos_of_not_limZero, lt_of_lt_of_le, max_le_iff, not_limZero_of_not_congr_zero, padicNorm
 -/
@@ -1010,7 +1050,12 @@ theorem norm_mul
       have hf : f * g ≈ 0 := mul_equiv_zero _ hg
       simp only [hf, hg, norm, dif_pos, mul_zero]
     else by
-      unfold no
+      unfold norm
+      have hfg := mul_not_equiv_zero hf hg
+      simp only [hfg, hf, hg, dite_false]
+      -- Porting note: originally `padic_index_simp [hfg, hf, hg]`
+      rw [lift_index_left_left hfg]; rw [lift_index_left hf]; rw [lift_index_right hg]
+      apply padicNorm.mul
 
 中文:
 定理 norm_mul
@@ -1026,7 +1071,12 @@ theorem norm_mul
       have hf : f * g ≈ 0 := mul_equiv_zero _ hg
       simp only [hf, hg, norm, dif_pos, mul_zero]
     else by
-      unfold no
+      unfold norm
+      have hfg := mul_not_equiv_zero hf hg
+      simp only [hfg, hf, hg, dite_false]
+      -- Porting note: originally `padic_index_simp [hfg, hf, hg]`
+      rw [lift_index_left_left hfg]; rw [lift_index_left hf]; rw [lift_index_right hg]
+      apply padicNorm.mul
 
 Depends on / 依赖: classical, dif_pos, dite_false, mul_equiv_zero, mul_not_equiv_zero, mul_zero, zero_mul
 -/
@@ -1176,7 +1226,17 @@ theorem norm_eq_of_equiv_aux
   let i := max N (max (stationaryPoint hf) (stationaryPoint hg))
   have hi : N <= i := le_max_left _ _
   have hN' := hN _ hi
-  -- Porting note: origi
+  -- Porting note: originally `padic_index_simp [N, hf, hg] at hN' h hlt`
+  rw [lift_index_left hf N (stationaryPoint hg)]; rw [lift_index_right hg N (stationaryPoint hf)]
+    at hN' h hlt
+  have hpne : padicNorm p (f i) != padicNorm p (-g i) := by rwa [← padicNorm.neg (g i)] at h
+  rw [CauSeq.sub_apply]; rw [sub_eq_add_neg]; rw [add_eq_max_of_ne hpne]; rw [padicNorm.neg]; rw [max_eq_left_of_lt hlt]
+    at hN'
+  have : padicNorm p (f i) < padicNorm p (f i) := by
+    apply lt_of_lt_of_le hN'
+    apply sub_le_self
+    apply padicNorm.nonneg
+  exact lt_irrefl _ this
 
 中文:
 定理 norm_eq_of_equiv_aux
@@ -1188,7 +1248,17 @@ theorem norm_eq_of_equiv_aux
   let i := max N (max (stationaryPoint hf) (stationaryPoint hg))
   have hi : N <= i := le_max_left _ _
   have hN' := hN _ hi
-  -- Porting note: origi
+  -- Porting note: originally `padic_index_simp [N, hf, hg] at hN' h hlt`
+  rw [lift_index_left hf N (stationaryPoint hg)]; rw [lift_index_right hg N (stationaryPoint hf)]
+    at hN' h hlt
+  have hpne : padicNorm p (f i) != padicNorm p (-g i) := by rwa [← padicNorm.neg (g i)] at h
+  rw [CauSeq.sub_apply]; rw [sub_eq_add_neg]; rw [add_eq_max_of_ne hpne]; rw [padicNorm.neg]; rw [max_eq_left_of_lt hlt]
+    at hN'
+  have : padicNorm p (f i) < padicNorm p (f i) := by
+    apply lt_of_lt_of_le hN'
+    apply sub_le_self
+    apply padicNorm.nonneg
+  exact lt_irrefl _ this
 -/
 private theorem norm_eq_of_equiv_aux {f g : PadicSeq p} (hf : ¬f ≈ 0) (hg : ¬g ≈ 0) (hfg : f ≈ g)
     (h : padicNorm p (f (stationaryPoint hf)) != padicNorm p (g (stationaryPoint hg)))
@@ -1333,7 +1403,21 @@ theorem norm_nonarchimedean
     if hf : f ≈ 0 then by
       have hfg' : f + g ≈ g := by
         change LimZero (f - 0) at hf
-        change LimZero (f + g - g); · simpa only
+        change LimZero (f + g - g); · simpa only [sub_zero, add_sub_cancel_right] using hf
+      have hcfg : (f + g).norm = g.norm := norm_equiv hfg'
+      have hcl : f.norm = 0 := (norm_zero_iff f).2 hf
+      have : max f.norm g.norm = g.norm := by rw [hcl]; exact max_eq_right (norm_nonneg _)
+      rw [this]; rw [hcfg]
+    else
+      if hg : g ≈ 0 then by
+        have hfg' : f + g ≈ f := by
+          change LimZero (g - 0) at hg
+          change LimZero (f + g - f); · simpa only [add_sub_cancel_left, sub_zero] using hg
+        have hcfg : (f + g).norm = f.norm := norm_equiv hfg'
+        have hcl : g.norm = 0 := (norm_zero_iff g).2 hg
+        have : max f.norm g.norm = f.norm := by rw [hcl]; exact max_eq_left (norm_nonneg _)
+        rw [this]; rw [hcfg]
+      else norm_nonarchimedean_aux hfg hf hg
 
 中文:
 定理 norm_nonarchimedean
@@ -1348,7 +1432,21 @@ theorem norm_nonarchimedean
     if hf : f ≈ 0 then by
       have hfg' : f + g ≈ g := by
         change LimZero (f - 0) at hf
-        change LimZero (f + g - g); · simpa only
+        change LimZero (f + g - g); · simpa only [sub_zero, add_sub_cancel_right] using hf
+      have hcfg : (f + g).norm = g.norm := norm_equiv hfg'
+      have hcl : f.norm = 0 := (norm_zero_iff f).2 hf
+      have : max f.norm g.norm = g.norm := by rw [hcl]; exact max_eq_right (norm_nonneg _)
+      rw [this]; rw [hcfg]
+    else
+      if hg : g ≈ 0 then by
+        have hfg' : f + g ≈ f := by
+          change LimZero (g - 0) at hg
+          change LimZero (f + g - f); · simpa only [add_sub_cancel_left, sub_zero] using hg
+        have hcfg : (f + g).norm = f.norm := norm_equiv hfg'
+        have hcl : g.norm = 0 := (norm_zero_iff g).2 hg
+        have : max f.norm g.norm = f.norm := by rw [hcl]; exact max_eq_left (norm_nonneg _)
+        rw [this]; rw [hcfg]
+      else norm_nonarchimedean_aux hfg hf hg
 
 Depends on / 依赖: LimZero, add_sub_cancel_right, classical, f.norm, g.norm, le_max_of_le_left, max_eq_right, norm_equiv, norm_nonneg, norm_zero_iff, sub_zero
 -/
@@ -1391,7 +1489,17 @@ theorem norm_eq
   else by
     have hg : ¬g ≈ 0 := fun hg =>
 hf equiv_zero_of_val_eq_of_equiv_zero (by simp only [h, forall_const]) hg
-    simp only [hg, hf, norm, dif_neg
+    simp only [hg, hf, norm, dif_neg, not_false_iff]
+    let i := max (stationaryPoint hf) (stationaryPoint hg)
+    have hpf : padicNorm p (f (stationaryPoint hf)) = padicNorm p (f i) := by
+      apply stationaryPoint_spec
+      · apply le_max_left
+      · exact le_rfl
+    have hpg : padicNorm p (g (stationaryPoint hg)) = padicNorm p (g i) := by
+      apply stationaryPoint_spec
+      · apply le_max_right
+      · exact le_rfl
+    rw [hpf]; rw [hpg]; rw [h]
 
 中文:
 定理 norm_eq
@@ -1404,7 +1512,17 @@ hf equiv_zero_of_val_eq_of_equiv_zero (by simp only [h, forall_const]) hg
   else by
     have hg : ¬g ≈ 0 := fun hg =>
 hf equiv_zero_of_val_eq_of_equiv_zero (by simp only [h, forall_const]) hg
-    simp only [hg, hf, norm, dif_neg
+    simp only [hg, hf, norm, dif_neg, not_false_iff]
+    let i := max (stationaryPoint hf) (stationaryPoint hg)
+    have hpf : padicNorm p (f (stationaryPoint hf)) = padicNorm p (f i) := by
+      apply stationaryPoint_spec
+      · apply le_max_left
+      · exact le_rfl
+    have hpg : padicNorm p (g (stationaryPoint hg)) = padicNorm p (g i) := by
+      apply stationaryPoint_spec
+      · apply le_max_right
+      · exact le_rfl
+    rw [hpf]; rw [hpg]; rw [h]
 
 Depends on / 依赖: classical, dif_neg, dif_pos, equiv_zero_of_val_eq_of_equiv_zero, forall_const, le_max_left, le_rfl, not_false_iff, padicNorm, stationaryPoint, stationaryPoint_spec
 -/
@@ -1493,7 +1611,21 @@ theorem add_eq_max_of_ne
     have : LimZero (f - 0) := hf
     have : f + g ≈ g := show LimZero (f + g - g) by simpa only [sub_zero, add_sub_cancel_right]
     have h1 : (f + g).norm = g.norm := norm_equiv this
-    have 
+    have h2 : f.norm = 0 := (norm_zero_iff _).2 hf
+    rw [h1]; rw [h2]; rw [max_eq_right (norm_nonneg _)]
+  else
+    if hg : g ≈ 0 then by
+      have : LimZero (g - 0) := hg
+      have : f + g ≈ f := show LimZero (f + g - f) by simpa only [add_sub_cancel_left, sub_zero]
+      have h1 : (f + g).norm = f.norm := norm_equiv this
+      have h2 : g.norm = 0 := (norm_zero_iff _).2 hg
+      rw [h1]; rw [h2]; rw [max_eq_left (norm_nonneg _)]
+    else by
+      unfold norm at hfgne ⊢; split_ifs at hfgne ⊢
+      -- Porting note: originally `padic_index_simp [hfg, hf, hg] at hfgne ⊢`
+      rw [lift_index_left hf]; rw [lift_index_right hg] at hfgne
+      · rw [lift_index_left_left hfg, lift_index_left hf, lift_index_right hg]
+        exact padicNorm.add_eq_max_of_ne hfgne
 
 中文:
 定理 add_eq_max_of_ne
@@ -1505,7 +1637,21 @@ theorem add_eq_max_of_ne
     have : LimZero (f - 0) := hf
     have : f + g ≈ g := show LimZero (f + g - g) by simpa only [sub_zero, add_sub_cancel_right]
     have h1 : (f + g).norm = g.norm := norm_equiv this
-    have 
+    have h2 : f.norm = 0 := (norm_zero_iff _).2 hf
+    rw [h1]; rw [h2]; rw [max_eq_right (norm_nonneg _)]
+  else
+    if hg : g ≈ 0 then by
+      have : LimZero (g - 0) := hg
+      have : f + g ≈ f := show LimZero (f + g - f) by simpa only [add_sub_cancel_left, sub_zero]
+      have h1 : (f + g).norm = f.norm := norm_equiv this
+      have h2 : g.norm = 0 := (norm_zero_iff _).2 hg
+      rw [h1]; rw [h2]; rw [max_eq_left (norm_nonneg _)]
+    else by
+      unfold norm at hfgne ⊢; split_ifs at hfgne ⊢
+      -- Porting note: originally `padic_index_simp [hfg, hf, hg] at hfgne ⊢`
+      rw [lift_index_left hf]; rw [lift_index_right hg] at hfgne
+      · rw [lift_index_left_left hfg, lift_index_left hf, lift_index_right hg]
+        exact padicNorm.add_eq_max_of_ne hfgne
 
 Depends on / 依赖: LimZero, add_sub_canc, add_sub_cancel_right, classical, f.norm, g.norm, max_eq_right, norm_eq_of_add_equiv_zero, norm_equiv, norm_nonneg, norm_zero_iff, sub_zero
 -/
@@ -1870,7 +2016,15 @@ map_mul' q r := Quotient.inductionOn₂ q r PadicSeq.norm_mul
 nonneg' q := Quotient.inductionOn q PadicSeq.norm_nonneg
   eq_zero' q := Quotient.inductionOn q fun r => by
     rw [Padic.zero_def]; rw [Quotient.lift_mk]; rw [PadicSeq.norm_zero_iff r]
- 
+    exact Quotient.eq.symm
+  add_le' q r := by
+    trans
+      max ((Quotient.lift PadicSeq.norm <| @PadicSeq.norm_equiv _ _) q)
+        ((Quotient.lift PadicSeq.norm <| @PadicSeq.norm_equiv _ _) r)
+    · induction q, r using Quotient.inductionOn₂; apply PadicSeq.norm_nonarchimedean
+    · apply max_le_add_of_nonneg
+      · induction q using Quotient.inductionOn; apply PadicSeq.norm_nonneg
+      · induction r using Quotient.inductionOn; apply PadicSeq.norm_nonneg
 
 中文:
 定义 padicNormE
@@ -1880,7 +2034,15 @@ map_mul' q r := Quotient.inductionOn₂ q r PadicSeq.norm_mul
 nonneg' q := Quotient.inductionOn q PadicSeq.norm_nonneg
   eq_zero' q := Quotient.inductionOn q fun r => by
     rw [Padic.zero_def]; rw [Quotient.lift_mk]; rw [PadicSeq.norm_zero_iff r]
- 
+    exact Quotient.eq.symm
+  add_le' q r := by
+    trans
+      max ((Quotient.lift PadicSeq.norm <| @PadicSeq.norm_equiv _ _) q)
+        ((Quotient.lift PadicSeq.norm <| @PadicSeq.norm_equiv _ _) r)
+    · induction q, r using Quotient.inductionOn₂; apply PadicSeq.norm_nonarchimedean
+    · apply max_le_add_of_nonneg
+      · induction q using Quotient.inductionOn; apply PadicSeq.norm_nonneg
+      · induction r using Quotient.inductionOn; apply PadicSeq.norm_nonneg
 
 Depends on / 依赖: PadicSeq, PadicSeq.norm, PadicSeq.norm_equiv, Quotient, Quotient.lift, norm_equiv
 -/
@@ -1921,7 +2083,18 @@ theorem defn
   by_contra! h
   obtain ⟨N, hN⟩ := cauchy₂ f hε
   rcases h N with ⟨i, hi, hge⟩
-  have hne : ¬
+  have hne : ¬f - const (padicNorm p) (f i) ≈ 0 := fun h => by
+    rw [PadicSeq.norm]; rw [dif_pos h] at hge
+    exact not_lt_of_ge hge hε
+  unfold PadicSeq.norm at hge; split_ifs at hge
+  apply not_le_of_gt _ hge
+  cases _root_.le_total N (stationaryPoint hne) with
+  | inl hgen =>
+    exact hN _ hgen _ hi
+  | inr hngen =>
+    have := stationaryPoint_spec hne le_rfl hngen
+    rw [← this]
+    exact hN _ le_rfl _ hi
 
 中文:
 定理 defn
@@ -1933,7 +2106,18 @@ theorem defn
   by_contra! h
   obtain ⟨N, hN⟩ := cauchy₂ f hε
   rcases h N with ⟨i, hi, hge⟩
-  have hne : ¬
+  have hne : ¬f - const (padicNorm p) (f i) ≈ 0 := fun h => by
+    rw [PadicSeq.norm]; rw [dif_pos h] at hge
+    exact not_lt_of_ge hge hε
+  unfold PadicSeq.norm at hge; split_ifs at hge
+  apply not_le_of_gt _ hge
+  cases _root_.le_total N (stationaryPoint hne) with
+  | inl hgen =>
+    exact hN _ hgen _ hi
+  | inr hngen =>
+    have := stationaryPoint_spec hne le_rfl hngen
+    rw [← this]
+    exact hN _ le_rfl _ hi
 
 Depends on / 依赖: padicNormE
 -/
@@ -2071,7 +2255,15 @@ theorem rat_dense'
       classical
       dsimp [padicNormE]
       convert_to! PadicSeq.norm (q' - const _ (q' N)) < ε -- `change` times out here.
-     
+      rcases Decidable.em (q' - const (padicNorm p) (q' N) ≈ 0) with heq | hne'
+      · simpa only [heq, PadicSeq.norm, dif_pos]
+      · simp only [PadicSeq.norm, dif_neg hne']
+        change padicNorm p (q' _ - q' _) < ε
+        rcases Decidable.em (stationaryPoint hne' <= N) with hle | hle
+        · have := (stationaryPoint_spec hne' le_rfl hle).symm
+          simp only [const_apply, CauSeq.sub_apply, padicNorm.zero, sub_self] at this
+          simpa only [this]
+        · exact hN _ (lt_of_not_ge hle).le _ le_rfl⟩
 
 中文:
 定理 rat_dense'
@@ -2084,7 +2276,15 @@ theorem rat_dense'
       classical
       dsimp [padicNormE]
       convert_to! PadicSeq.norm (q' - const _ (q' N)) < ε -- `change` times out here.
-     
+      rcases Decidable.em (q' - const (padicNorm p) (q' N) ≈ 0) with heq | hne'
+      · simpa only [heq, PadicSeq.norm, dif_pos]
+      · simp only [PadicSeq.norm, dif_neg hne']
+        change padicNorm p (q' _ - q' _) < ε
+        rcases Decidable.em (stationaryPoint hne' <= N) with hle | hle
+        · have := (stationaryPoint_spec hne' le_rfl hle).symm
+          simp only [const_apply, CauSeq.sub_apply, padicNorm.zero, sub_self] at this
+          simpa only [this]
+        · exact hN _ (lt_of_not_ge hle).le _ le_rfl⟩
 
 Depends on / 依赖: Decidable, Decidable.em, PadicSeq, PadicSeq.norm, Quotient, Quotient.inductionOn, classical, convert_to, dif_neg, dif_pos, inductionOn, padicNorm, padicNormE, stationaryPoint
 -/
@@ -2157,7 +2357,9 @@ theorem exi_rat_seq_conv
   refine lt_of_lt_of_le h ((div_le_iff₀' <| mod_cast succ_pos _).mpr ?_)
   rw [right_distrib]
   apply le_add_of_le_of_nonneg
-  · exact (div_le_iff₀ hε).mp (le_trans (le_of
+  · exact (div_le_iff₀ hε).mp (le_trans (le_of_lt hN) (mod_cast hi))
+  · apply le_of_lt
+    simpa
 
 中文:
 定理 exi_rat_seq_conv
@@ -2168,7 +2370,9 @@ theorem exi_rat_seq_conv
   refine lt_of_lt_of_le h ((div_le_iff₀' <| mod_cast succ_pos _).mpr ?_)
   rw [right_distrib]
   apply le_add_of_le_of_nonneg
-  · exact (div_le_iff₀ hε).mp (le_trans (le_of
+  · exact (div_le_iff₀ hε).mp (le_trans (le_of_lt hN) (mod_cast hi))
+  · apply le_of_lt
+    simpa
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, div_nat_pos, exists_nat_gt, le_add_of_le_of_nonneg, le_of_lt, le_trans, lt_of_lt_of_le, mod_cast, rat_dense, right_distrib, succ_pos
 -/
@@ -2198,7 +2402,23 @@ theorem exi_rat_seq_conv_cauchy
   suffices
     padicNormE (limSeq f j - f (max N N2) + (f (max N N2) - limSeq f (max N N2)) : Rat_[p]) < ε by
     ring_nf at this
-    
+    rw [← padicNormE.eq_padic_norm']
+    exact mod_cast this
+  apply lt_of_le_of_lt
+  · apply padicNormE.add_le
+  · rw [← add_thirds ε]
+    apply _root_.add_lt_add
+    · suffices padicNormE (limSeq f j - f j + (f j - f (max N N2)) : Rat_[p]) < ε / 3 + ε / 3 by
+        simpa only [sub_add_sub_cancel]
+      apply lt_of_le_of_lt
+      · apply padicNormE.add_le
+      · apply _root_.add_lt_add
+        · rw [padicNormE.map_sub]
+          apply mod_cast hN j
+          exact le_of_max_le_left hj
+        · exact hN2 _ (le_of_max_le_right hj) _ (le_max_right _ _)
+    · apply mod_cast hN (max N N2)
+      apply le_max_left
 
 中文:
 定理 exi_rat_seq_conv_cauchy
@@ -2212,7 +2432,23 @@ theorem exi_rat_seq_conv_cauchy
   suffices
     padicNormE (limSeq f j - f (max N N2) + (f (max N N2) - limSeq f (max N N2)) : Rat_[p]) < ε by
     ring_nf at this
-    
+    rw [← padicNormE.eq_padic_norm']
+    exact mod_cast this
+  apply lt_of_le_of_lt
+  · apply padicNormE.add_le
+  · rw [← add_thirds ε]
+    apply _root_.add_lt_add
+    · suffices padicNormE (limSeq f j - f j + (f j - f (max N N2)) : Rat_[p]) < ε / 3 + ε / 3 by
+        simpa only [sub_add_sub_cancel]
+      apply lt_of_le_of_lt
+      · apply padicNormE.add_le
+      · apply _root_.add_lt_add
+        · rw [padicNormE.map_sub]
+          apply mod_cast hN j
+          exact le_of_max_le_left hj
+        · exact hN2 _ (le_of_max_le_right hj) _ (le_max_right _ _)
+    · apply mod_cast hN (max N N2)
+      apply le_max_left
 
 Depends on / 依赖: Rat_, _root_, _root_.add_lt_add, add_le, add_lt_add, add_thirds, div_pos, eq_padic_norm, exi_rat_seq_conv, f.cauchy, limSeq, lt_of_le_of_lt, mod_cast, padicNormE, padicNormE.add_le, padicNormE.eq_padic_norm, ring_nf
 -/
@@ -2287,7 +2523,11 @@ theorem complete'
     refine ⟨max N N2, fun i hi => ?_⟩
     rw [← sub_add_sub_cancel _ (lim' f i : Rat_[p]) _]
     refine (padicNormE.add_le _ _).trans_lt ?_
-    rw [← add_halve
+    rw [← add_halves ε]
+    apply _root_.add_lt_add
+    · apply hN2 _ (le_of_max_le_right hi)
+    · rw [padicNormE.map_sub]
+      exact hN _ (le_of_max_le_left hi)⟩
 
 中文:
 定理 complete'
@@ -2298,7 +2538,11 @@ theorem complete'
     refine ⟨max N N2, fun i hi => ?_⟩
     rw [← sub_add_sub_cancel _ (lim' f i : Rat_[p]) _]
     refine (padicNormE.add_le _ _).trans_lt ?_
-    rw [← add_halve
+    rw [← add_halves ε]
+    apply _root_.add_lt_add
+    · apply hN2 _ (le_of_max_le_right hi)
+    · rw [padicNormE.map_sub]
+      exact hN _ (le_of_max_le_left hi)⟩
 
 Depends on / 依赖: Rat_, _root_, _root_.add_lt_add, add_halves, add_le, add_lt_add, exi_rat_seq_conv, half_pos, le_of_max_le_left, le_of_max_le_right, map_sub, padicNormE, padicNormE.add_le, padicNormE.defn, padicNormE.map_sub, sub_add_sub_cancel, trans_lt
 -/
@@ -2406,7 +2650,8 @@ instance metricSpace
   eq_of_dist_eq_zero := by
     dsimp [dist]; intro _ _ h
     apply eq_of_sub_eq_zero
-    apply padicNormE.eq
+    apply padicNormE.eq_zero.1
+    exact mod_cast h
 
 中文:
 实例 metricSpace
@@ -2420,7 +2665,8 @@ instance metricSpace
   eq_of_dist_eq_zero := by
     dsimp [dist]; intro _ _ h
     apply eq_of_sub_eq_zero
-    apply padicNormE.eq
+    apply padicNormE.eq_zero.1
+    exact mod_cast h
 
 Depends on / 依赖: Rat_, dist_comm, dist_triangle, eq_of_dist_eq_zero, eq_of_sub_eq_zero, eq_zero, map_neg, mod_cast, padicNormE, padicNormE.eq_zero, padicNormE.map_neg, padicNormE.sub_le, sub_le
 -/
@@ -2948,7 +3194,11 @@ theorem norm_rat_le_one
       rw [eq_padicNorm]
       norm_cast
       -- Porting note: `Nat.cast_zero` instead of another `norm_cast` call
-      rw [padicNorm.eq_zpow_of_nonzero hn
+      rw [padicNorm.eq_zpow_of_nonzero hnz']; rw [padicValRat]; rw [neg_sub]; rw [padicValNat.eq_zero_of_not_dvd hq]; rw [Nat.cast_zero]; rw [zero_sub]; rw [zpow_neg]; rw [zpow_natCast]
+      apply inv_le_one_of_one_le₀
+      norm_cast
+      apply one_le_pow
+      exact hp.1.pos
 
 中文:
 定理 norm_rat_le_one
@@ -2960,7 +3210,11 @@ theorem norm_rat_le_one
       rw [eq_padicNorm]
       norm_cast
       -- Porting note: `Nat.cast_zero` instead of another `norm_cast` call
-      rw [padicNorm.eq_zpow_of_nonzero hn
+      rw [padicNorm.eq_zpow_of_nonzero hnz']; rw [padicValRat]; rw [neg_sub]; rw [padicValNat.eq_zero_of_not_dvd hq]; rw [Nat.cast_zero]; rw [zero_sub]; rw [zpow_neg]; rw [zpow_natCast]
+      apply inv_le_one_of_one_le₀
+      norm_cast
+      apply one_le_pow
+      exact hp.1.pos
 
 Depends on / 依赖: Rat.zero_iff_num_zero.mpr, zero_iff_num_zero
 -/
@@ -3027,7 +3281,15 @@ theorem norm_intCast_lt_one_iff
       _ = 1 := mod_cast (int_eq_one_iff k).mpr h
   · rintro ⟨x, rfl⟩
     push_cast
-    rw [padicNormE.
+    rw [padicNormE.mul]
+    calc
+      _ <= ‖(p : Rat_[p])‖ * 1 :=
+        mul_le_mul le_rfl (by simpa using norm_int_le_one _) (norm_nonneg _) (norm_nonneg _)
+      _ < 1 := by
+        rw [mul_one]; rw [norm_p]
+exact inv_lt_one_of_one_lt₀ mod_cast hp.1.one_lt
+
+@[simp]
 
 中文:
 定理 norm_intCast_lt_one_iff
@@ -3045,7 +3307,15 @@ theorem norm_intCast_lt_one_iff
       _ = 1 := mod_cast (int_eq_one_iff k).mpr h
   · rintro ⟨x, rfl⟩
     push_cast
-    rw [padicNormE.
+    rw [padicNormE.mul]
+    calc
+      _ <= ‖(p : Rat_[p])‖ * 1 :=
+        mul_le_mul le_rfl (by simpa using norm_int_le_one _) (norm_nonneg _) (norm_nonneg _)
+      _ < 1 := by
+        rw [mul_one]; rw [norm_p]
+exact inv_lt_one_of_one_lt₀ mod_cast hp.1.one_lt
+
+@[simp]
 
 Depends on / 依赖: Rat_, contrapose, eq_comm, eq_padicNorm, int_eq_one_iff, le_of_eq, le_rfl, mod_cast, mul_le_mul, mul_one, norm_int_le_one, norm_nonneg, norm_p, one_lt, padicNorm, padicNormE, padicNormE.mul
 -/
@@ -3325,7 +3595,20 @@ instance complete
       dsimp [norm] at h
       exact mod_cast h
     -- Porting note: Padic.complete' works with `f i - q`, but the goal needs `q - f i`,
-    -- using `rewrite [padicNormE.map_sub]` causes t
+    -- using `rewrite [padicNormE.map_sub]` causes time out, so a separate lemma is created
+    obtain ⟨q, hq⟩ := Padic.complete'' ⟨f, cau_seq_norm_e⟩
+    exists q
+    intro ε hε
+    obtain ⟨ε', hε'⟩ := exists_rat_btwn hε
+    norm_cast at hε'
+    obtain ⟨N, hN⟩ := hq ε' hε'.1
+    exists N
+    intro i hi
+    have h := hN i hi
+    change norm (f i - q) < ε
+    refine lt_trans ?_ hε'.2
+    dsimp [norm]
+    exact mod_cast h
 
 中文:
 实例 complete
@@ -3336,7 +3619,20 @@ instance complete
       dsimp [norm] at h
       exact mod_cast h
     -- Porting note: Padic.complete' works with `f i - q`, but the goal needs `q - f i`,
-    -- using `rewrite [padicNormE.map_sub]` causes t
+    -- using `rewrite [padicNormE.map_sub]` causes time out, so a separate lemma is created
+    obtain ⟨q, hq⟩ := Padic.complete'' ⟨f, cau_seq_norm_e⟩
+    exists q
+    intro ε hε
+    obtain ⟨ε', hε'⟩ := exists_rat_btwn hε
+    norm_cast at hε'
+    obtain ⟨N, hN⟩ := hq ε' hε'.1
+    exists N
+    intro i hi
+    have h := hN i hi
+    change norm (f i - q) < ε
+    refine lt_trans ?_ hε'.2
+    dsimp [norm]
+    exact mod_cast h
 
 Depends on / 依赖: IsCauSeq, cau_seq_norm_e, isCauSeq, mod_cast, padicNormE
 -/
@@ -3411,7 +3707,7 @@ instance :
   rcases Metric.mem_nhds_iff.1 h with ⟨ε, ε0, hε⟩
   have := c.equiv_lim ε ε0
   simp only [mem_map, mem_atTop_sets]
-  exact this.imp fun N hN n hn =>
+  exact this.imp fun N hN n hn => hε (hN n hn)
 
 中文:
 实例 :
@@ -3424,7 +3720,7 @@ instance :
   rcases Metric.mem_nhds_iff.1 h with ⟨ε, ε0, hε⟩
   have := c.equiv_lim ε ε0
   simp only [mem_map, mem_atTop_sets]
-  exact this.imp fun N hN n hn =>
+  exact this.imp fun N hN n hn => hε (hN n hn)
 
 Depends on / 依赖: CauSeq, Metric, Metric.cauchySeq_iff, Metric.mem_nhds_iff, Rat_, c.equiv_lim, c.lim, cauchySeq_iff, complete_of_cauchySeq_tendsto, equiv_lim, mem_atTop_sets, mem_map, mem_nhds_iff, this.imp
 -/
@@ -3453,7 +3749,9 @@ definition valuation
       simp [hf, hg, PadicSeq.valuation]
     · have hg : ¬g ≈ 0 := fun hg => hf (Setoid.trans h hg)
       rw [PadicSeq.val_eq_iff_norm_eq hf hg]
-      exact PadicSe
+      exact PadicSeq.norm_equiv h
+
+@[simp]
 
 中文:
 定义 valuation
@@ -3464,7 +3762,9 @@ definition valuation
       simp [hf, hg, PadicSeq.valuation]
     · have hg : ¬g ≈ 0 := fun hg => hf (Setoid.trans h hg)
       rw [PadicSeq.val_eq_iff_norm_eq hf hg]
-      exact PadicSe
+      exact PadicSeq.norm_equiv h
+
+@[simp]
 
 Depends on / 依赖: PadicSeq, PadicSeq.norm_equiv, PadicSeq.val_eq_iff_norm_eq, PadicSeq.valuation, Quotient, Quotient.lift, Setoid, Setoid.symm, Setoid.trans, norm_equiv, val_eq_iff_norm_eq, valuation
 -/
@@ -3511,7 +3811,10 @@ theorem norm_eq_zpow_neg_valuation
   · rw [Rat.cast_zpow, Rat.cast_natCast]
   · apply CauSeq.not_limZero_of_not_congr_zero
     contrapose hf
-    apply Qu
+    apply Quotient.sound
+    simpa using hf
+
+@[simp]
 
 中文:
 定理 norm_eq_zpow_neg_valuation
@@ -3525,7 +3828,10 @@ theorem norm_eq_zpow_neg_valuation
   · rw [Rat.cast_zpow, Rat.cast_natCast]
   · apply CauSeq.not_limZero_of_not_congr_zero
     contrapose hf
-    apply Qu
+    apply Quotient.sound
+    simpa using hf
+
+@[simp]
 
 Depends on / 依赖: CauSeq, CauSeq.not_limZero_of_not_congr_zero, PadicSeq, PadicSeq.norm, PadicSeq.norm_eq_zpow_neg_valuation, PadicSeq.valuation, Quotient, Quotient.inductionOn, Quotient.sound, Rat.cast_natCast, Rat.cast_zpow, cast_natCast, cast_zpow, contrapose, inductionOn, norm_eq_zpow_neg_valuation, not_limZero_of_not_congr_zero, valuation
 -/
@@ -3553,7 +3859,10 @@ lemma valuation_ratCast
   · simp only [Rat.cast_zero, valuation_zero, padicValRat.zero]
   refine neg_injective ((zpow_right_strictMono₀ (mod_cast hp.out.one_lt)).injective
  (norm_eq_zpow_neg_valuation (mod_cast hq)).symm.trans ?_)
-  rw [eq_padicNorm]; rw [← Rat.cast_natCast]; rw [← Ra
+  rw [eq_padicNorm]; rw [← Rat.cast_natCast]; rw [← Rat.cast_zpow]; rw [Rat.cast_inj]
+  exact padicNorm.eq_zpow_of_nonzero hq
+
+@[simp]
 
 中文:
 引理 valuation_ratCast
@@ -3564,7 +3873,10 @@ lemma valuation_ratCast
   · simp only [Rat.cast_zero, valuation_zero, padicValRat.zero]
   refine neg_injective ((zpow_right_strictMono₀ (mod_cast hp.out.one_lt)).injective
  (norm_eq_zpow_neg_valuation (mod_cast hq)).symm.trans ?_)
-  rw [eq_padicNorm]; rw [← Rat.cast_natCast]; rw [← Ra
+  rw [eq_padicNorm]; rw [← Rat.cast_natCast]; rw [← Rat.cast_zpow]; rw [Rat.cast_inj]
+  exact padicNorm.eq_zpow_of_nonzero hq
+
+@[simp]
 
 Depends on / 依赖: Rat.cast_inj, Rat.cast_natCast, Rat.cast_zero, Rat.cast_zpow, cast_inj, cast_natCast, cast_zero, cast_zpow, eq_or_ne, eq_padicNorm, eq_zpow_of_nonzero, hasSum_one_poissonMeasure, hp.out.one_lt, injective, isProbabilityMeasure_sum_dirac, mod_cast, neg_injective, norm_eq_zpow_neg_valuation, one_lt, padicNorm
 -/
@@ -3709,7 +4021,10 @@ theorem le_valuation_add
   · simpa only [hy, add_zero] using min_le_left _ _
   have : ‖x + y‖ <= max ‖x‖ ‖y‖ := nonarchimedean x y
   simpa only [norm_eq_zpow_neg_valuation hxy, norm_eq_zpow_neg_valuation hx,
-    norm_eq_zpow_
+    norm_eq_zpow_neg_valuation hy, le_max_iff,
+    zpow_le_zpow_iff_right₀ (mod_cast hp.out.one_lt : 1 < (p : Real)), neg_le_neg_iff, ← min_le_iff]
+
+@[simp]
 
 中文:
 定理 le_valuation_add
@@ -3721,7 +4036,10 @@ theorem le_valuation_add
   · simpa only [hy, add_zero] using min_le_left _ _
   have : ‖x + y‖ <= max ‖x‖ ‖y‖ := nonarchimedean x y
   simpa only [norm_eq_zpow_neg_valuation hxy, norm_eq_zpow_neg_valuation hx,
-    norm_eq_zpow_
+    norm_eq_zpow_neg_valuation hy, le_max_iff,
+    zpow_le_zpow_iff_right₀ (mod_cast hp.out.one_lt : 1 < (p : Real)), neg_le_neg_iff, ← min_le_iff]
+
+@[simp]
 
 Depends on / 依赖: add_zero, hp.out.one_lt, le_max_iff, min_le_iff, min_le_left, min_le_right, mod_cast, neg_le_neg_iff, nonarchimedean, norm_eq_zpow_neg_valuation, one_lt, zero_add
 -/
@@ -3748,7 +4066,10 @@ lemma valuation_mul
   have hp_ne_one : (p : Real) != 1 := mod_cast (Fact.out : p.Prime).ne_one
   have hp_pos : (0 : Real) < p := mod_cast NeZero.pos _
   rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation hy,
-    norm_eq_zpow_neg_valuation (mul_ne_zero h
+    norm_eq_zpow_neg_valuation (mul_ne_zero hx hy), ← zpow_add₀ hp_pos.ne',
+    zpow_right_inj₀ hp_pos hp_ne_one, ← neg_add, neg_inj] at h_norm
+
+@[simp]
 
 中文:
 引理 valuation_mul
@@ -3758,7 +4079,10 @@ lemma valuation_mul
   have hp_ne_one : (p : Real) != 1 := mod_cast (Fact.out : p.Prime).ne_one
   have hp_pos : (0 : Real) < p := mod_cast NeZero.pos _
   rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation hy,
-    norm_eq_zpow_neg_valuation (mul_ne_zero h
+    norm_eq_zpow_neg_valuation (mul_ne_zero hx hy), ← zpow_add₀ hp_pos.ne',
+    zpow_right_inj₀ hp_pos hp_ne_one, ← neg_add, neg_inj] at h_norm
+
+@[simp]
 
 Depends on / 依赖: Fact.out, NeZero, NeZero.pos, h_norm, hp_ne_one, hp_pos, hp_pos.ne, mod_cast, mul_ne_zero, ne_one, neg_add, neg_inj, norm_eq_zpow_neg_valuation, norm_mul, p.Prime
 -/
@@ -3785,7 +4109,10 @@ lemma valuation_inv
   have h_norm : ‖x⁻¹‖ = ‖x‖⁻¹ := norm_inv x
   have hp_ne_one : (p : Real) != 1 := mod_cast (Fact.out : p.Prime).ne_one
   have hp_pos : (0 : Real) < p := mod_cast NeZero.pos _
-  rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation <| inv_ne_zero
+  rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation <| inv_ne_zero hx,
+    ← zpow_neg, zpow_right_inj₀ hp_pos hp_ne_one, neg_inj] at h_norm
+
+@[simp]
 
 中文:
 引理 valuation_inv
@@ -3797,7 +4124,10 @@ lemma valuation_inv
   have h_norm : ‖x⁻¹‖ = ‖x‖⁻¹ := norm_inv x
   have hp_ne_one : (p : Real) != 1 := mod_cast (Fact.out : p.Prime).ne_one
   have hp_pos : (0 : Real) < p := mod_cast NeZero.pos _
-  rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation <| inv_ne_zero
+  rwa [norm_eq_zpow_neg_valuation hx, norm_eq_zpow_neg_valuation <| inv_ne_zero hx,
+    ← zpow_neg, zpow_right_inj₀ hp_pos hp_ne_one, neg_inj] at h_norm
+
+@[simp]
 
 Depends on / 依赖: Fact.out, NeZero, NeZero.pos, eq_or_ne, h_norm, hp_ne_one, hp_pos, inv_ne_zero, mod_cast, ne_one, neg_inj, norm_eq_zpow_neg_valuation, norm_inv, p.Prime, zpow_neg
 -/
@@ -3942,7 +4272,8 @@ theorem AddValuation.map_mul
   · rw [hx, if_pos rfl, zero_mul, if_pos rfl, WithTop.top_add]
   · by_cases hy : y = 0
     · rw [hy, if_pos rfl, mul_zero, if_pos rfl, WithTop.add_top]
-    · rw [if_neg hx, if_neg hy, if_neg (mul_ne_zero hx hy), ← WithTop.coe_add, WithTop.coe_eq
+    · rw [if_neg hx, if_neg hy, if_neg (mul_ne_zero hx hy), ← WithTop.coe_add, WithTop.coe_eq_coe,
+        valuation_mul hx hy]
 
 中文:
 定理 AddValuation.map_mul
@@ -3953,7 +4284,8 @@ theorem AddValuation.map_mul
   · rw [hx, if_pos rfl, zero_mul, if_pos rfl, WithTop.top_add]
   · by_cases hy : y = 0
     · rw [hy, if_pos rfl, mul_zero, if_pos rfl, WithTop.add_top]
-    · rw [if_neg hx, if_neg hy, if_neg (mul_ne_zero hx hy), ← WithTop.coe_add, WithTop.coe_eq
+    · rw [if_neg hx, if_neg hy, if_neg (mul_ne_zero hx hy), ← WithTop.coe_add, WithTop.coe_eq_coe,
+        valuation_mul hx hy]
 
 Depends on / 依赖: WithTop, WithTop.add_top, WithTop.coe_add, WithTop.coe_eq_coe, WithTop.top_add, addValuationDef, add_top, coe_add, coe_eq_coe, if_neg, if_pos, mul_ne_zero, mul_zero, top_add, valuation_mul, zero_mul
 -/
@@ -3984,7 +4316,8 @@ theorem AddValuation.map_add
     · by_cases hy : y = 0
       · rw [hy, if_pos rfl, min_eq_left, add_zero]
         exact le_top
-      ·
+      · rw [if_neg hx, if_neg hy, if_neg hxy, ← WithTop.coe_min, WithTop.coe_le_coe]
+        exact le_valuation_add hxy
 
 中文:
 定理 AddValuation.map_add
@@ -4000,7 +4333,8 @@ theorem AddValuation.map_add
     · by_cases hy : y = 0
       · rw [hy, if_pos rfl, min_eq_left, add_zero]
         exact le_top
-      ·
+      · rw [if_neg hx, if_neg hy, if_neg hxy, ← WithTop.coe_min, WithTop.coe_le_coe]
+        exact le_valuation_add hxy
 
 Depends on / 依赖: WithTop, WithTop.coe_le_coe, WithTop.coe_min, addValuationDef, add_zero, coe_le_coe, coe_min, if_neg, if_pos, le_top, le_valuation_add, min_eq_left, min_eq_right, zero_add
 -/
@@ -4192,7 +4526,7 @@ theorem norm_le_pow_iff_norm_lt_pow_add_one
   rw [norm_eq_zpow_neg_valuation hx0]
   have h1p : 1 < (p : Real) := mod_cast hp.1.one_lt
   have H := zpow_right_strictMono₀ h1p
-  rw [H.le_iff_le]
+  rw [H.le_iff_le]; rw [H.lt_iff_lt]; rw [Int.lt_add_one_iff]
 
 中文:
 定理 norm_le_pow_iff_norm_lt_pow_add_one
@@ -4204,7 +4538,7 @@ theorem norm_le_pow_iff_norm_lt_pow_add_one
   rw [norm_eq_zpow_neg_valuation hx0]
   have h1p : 1 < (p : Real) := mod_cast hp.1.one_lt
   have H := zpow_right_strictMono₀ h1p
-  rw [H.le_iff_le]
+  rw [H.le_iff_le]; rw [H.lt_iff_lt]; rw [Int.lt_add_one_iff]
 
 Depends on / 依赖: H.le_iff_le, H.lt_iff_lt, Int.lt_add_one_iff, le_iff_le, le_of_lt, lt_add_one_iff, lt_iff_lt, mod_cast, norm_eq_zpow_neg_valuation, norm_zero, one_lt, zpow_pos
 -/

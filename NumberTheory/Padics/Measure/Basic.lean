@@ -490,7 +490,8 @@ definition contractSndCLM
     apply continuous_of_continuous_uncurry
     rw [← (Homeomorph.prodAssoc C(X × Y]; rw [R) X Y).symm.comp_continuous_iff']
     exact ContinuousEval.continuous_eval⟩
-map_add' _ _ := ContinuousLinearMap.coe_inject
+map_add' _ _ := ContinuousLinearMap.coe_injective.eq_iff.mp contractSnd.map_add _ _
+map_smul' _ _ := ContinuousLinearMap.coe_injective.eq_iff.mp contractSnd.map_smul _ _
 
 中文:
 定义 contractSndCLM
@@ -500,7 +501,8 @@ map_add' _ _ := ContinuousLinearMap.coe_inject
     apply continuous_of_continuous_uncurry
     rw [← (Homeomorph.prodAssoc C(X × Y]; rw [R) X Y).symm.comp_continuous_iff']
     exact ContinuousEval.continuous_eval⟩
-map_add' _ _ := ContinuousLinearMap.coe_inject
+map_add' _ _ := ContinuousLinearMap.coe_injective.eq_iff.mp contractSnd.map_add _ _
+map_smul' _ _ := ContinuousLinearMap.coe_injective.eq_iff.mp contractSnd.map_smul _ _
 
 Depends on / 依赖: ContinuousEval, ContinuousEval.continuous_eval, ContinuousLinearMap, ContinuousLinearMap.coe_injective.eq_iff.mp, Homeomorph, Homeomorph.prodAssoc, coe_injective, comp_continuous_iff, continuous, continuous.comp, continuous_eval, continuous_of_continuous_uncurry, contractSnd, contractSnd.map_add, contractSnd.map_smul, eq_iff, map_add, map_smul, prodAssoc, symm.comp_continuous_iff
 -/

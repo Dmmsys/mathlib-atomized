@@ -582,7 +582,8 @@ lemma liftCycles_homologyπ_eq_zero_of_boundary
     exact (K.sc i).liftCycles_homologyπ_eq_zero_of_boundary _ x hx
   · have : liftCycles K k j hj (by rw [hx, assoc, K.d_comp_d, comp_zero]) = 0 := by
       rw [K.shape _ _ h]; rw [comp_zero] at hx
-      rw [← cancel_mono (K.iCycles i)]; rw
+      rw [← cancel_mono (K.iCycles i)]; rw [zero_comp]; rw [liftCycles_i]; rw [hx]
+    rw [this]; rw [zero_comp]
 
 中文:
 引理 liftCycles_homologyπ_eq_zero_of_boundary
@@ -593,7 +594,8 @@ lemma liftCycles_homologyπ_eq_zero_of_boundary
     exact (K.sc i).liftCycles_homologyπ_eq_zero_of_boundary _ x hx
   · have : liftCycles K k j hj (by rw [hx, assoc, K.d_comp_d, comp_zero]) = 0 := by
       rw [K.shape _ _ h]; rw [comp_zero] at hx
-      rw [← cancel_mono (K.iCycles i)]; rw
+      rw [← cancel_mono (K.iCycles i)]; rw [zero_comp]; rw [liftCycles_i]; rw [hx]
+    rw [this]; rw [zero_comp]
 
 Depends on / 依赖: K.d_comp_d, K.iCycles, K.sc, K.shape, c.Rel, c.prev_eq, cancel_mono, comp_zero, d_comp_d, iCycles, liftCycles, liftCycles_i, prev_eq, zero_comp
 -/
@@ -1016,7 +1018,8 @@ lemma homologyι_descOpcycles_eq_zero_of_boundary
     exact (K.sc i).homologyι_descOpcycles_eq_zero_of_boundary _ x hx
   · have : K.descOpcycles k j hj (by rw [hx, K.d_comp_d_assoc, zero_comp]) = 0 := by
       rw [K.shape _ _ h]; rw [zero_comp] at hx
-      rw [← cancel_epi (K.pOpcycles i)]
+      rw [← cancel_epi (K.pOpcycles i)]; rw [comp_zero]; rw [p_descOpcycles]; rw [hx]
+    rw [this]; rw [comp_zero]
 
 中文:
 引理 homologyι_descOpcycles_eq_zero_of_boundary
@@ -1027,7 +1030,8 @@ lemma homologyι_descOpcycles_eq_zero_of_boundary
     exact (K.sc i).homologyι_descOpcycles_eq_zero_of_boundary _ x hx
   · have : K.descOpcycles k j hj (by rw [hx, K.d_comp_d_assoc, zero_comp]) = 0 := by
       rw [K.shape _ _ h]; rw [zero_comp] at hx
-      rw [← cancel_epi (K.pOpcycles i)]
+      rw [← cancel_epi (K.pOpcycles i)]; rw [comp_zero]; rw [p_descOpcycles]; rw [hx]
+    rw [this]; rw [comp_zero]
 
 Depends on / 依赖: K.d_comp_d_assoc, K.descOpcycles, K.pOpcycles, K.sc, K.shape, c.Rel, c.next_eq, cancel_epi, comp_zero, d_comp_d_assoc, descOpcycles, next_eq, pOpcycles, p_descOpcycles, zero_comp
 -/
@@ -2854,7 +2858,11 @@ lemma isIso_liftCycles_iff
       (ShortComplex.mk _ _ hφ).Exact ∧ Mono φ from this 1 (by simp) hφ
   rintro _ rfl hφ
   let α : ShortComplex.mk (0 : X ⟶ X) (0 : X ⟶ X) (by simp) ⟶ K.sc 0 :=
-    { τ
+    { τ₁ := 0
+      τ₂ := φ
+      τ₃ := 0 }
+  exact (ShortComplex.quasiIso_iff_isIso_liftCycles α rfl rfl (by simp)).symm.trans
+    (ShortComplex.quasiIso_iff_of_zeros α rfl rfl (by simp))
 
 中文:
 引理 isIso_liftCycles_iff
@@ -2865,7 +2873,11 @@ lemma isIso_liftCycles_iff
       (ShortComplex.mk _ _ hφ).Exact ∧ Mono φ from this 1 (by simp) hφ
   rintro _ rfl hφ
   let α : ShortComplex.mk (0 : X ⟶ X) (0 : X ⟶ X) (by simp) ⟶ K.sc 0 :=
-    { τ
+    { τ₁ := 0
+      τ₂ := φ
+      τ₃ := 0 }
+  exact (ShortComplex.quasiIso_iff_isIso_liftCycles α rfl rfl (by simp)).symm.trans
+    (ShortComplex.quasiIso_iff_of_zeros α rfl rfl (by simp))
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, K.liftCycles, K.sc, ShortComplex, ShortComplex.mk, ShortComplex.quasiIso_iff_isIso_liftCycles, ShortComplex.quasiIso_iff_of_zeros, liftCycles, quasiIso_iff_isIso_liftCycles, quasiIso_iff_of_zeros, symm.trans
 -/
@@ -2903,7 +2915,11 @@ lemma isIso_descOpcycles_iff
       (ShortComplex.mk _ _ hφ).Exact ∧ Epi φ from this 1 (by simp) hφ
   rintro _ rfl hφ
   let α : K.sc 0 ⟶ ShortComplex.mk (0 : X ⟶ X) (0 : X ⟶ X) (by simp) :=
-    
+    { τ₁ := 0
+      τ₂ := φ
+      τ₃ := 0 }
+  exact (ShortComplex.quasiIso_iff_isIso_descOpcycles α (by simp) rfl rfl).symm.trans
+    (ShortComplex.quasiIso_iff_of_zeros' α (by simp) rfl rfl)
 
 中文:
 引理 isIso_descOpcycles_iff
@@ -2914,7 +2930,11 @@ lemma isIso_descOpcycles_iff
       (ShortComplex.mk _ _ hφ).Exact ∧ Epi φ from this 1 (by simp) hφ
   rintro _ rfl hφ
   let α : K.sc 0 ⟶ ShortComplex.mk (0 : X ⟶ X) (0 : X ⟶ X) (by simp) :=
-    
+    { τ₁ := 0
+      τ₂ := φ
+      τ₃ := 0 }
+  exact (ShortComplex.quasiIso_iff_isIso_descOpcycles α (by simp) rfl rfl).symm.trans
+    (ShortComplex.quasiIso_iff_of_zeros' α (by simp) rfl rfl)
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, K.descOpcycles, K.sc, ShortComplex, ShortComplex.mk, ShortComplex.quasiIso_iff_isIso_descOpcycles, ShortComplex.quasiIso_iff_of_zeros, descOpcycles, quasiIso_iff_isIso_descOpcycles, quasiIso_iff_of_zeros, symm.trans
 -/

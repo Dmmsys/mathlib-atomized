@@ -63,7 +63,7 @@ theorem isAddFundamentalDomain_Ioc
   have : Bijective (codRestrict (fun n : Int => n • T) (AddSubgroup.zmultiples T) _) :=
     (Equiv.ofInjective (fun n : Int => n • T) (zsmul_left_strictMono hT).injective).bijective
   refine this.existsUnique_iff.2 ?_
-  simpa o
+  simpa only [add_comm x] using! existsUnique_add_zsmul_mem_Ioc hT x t
 
 中文:
 定理 isAddFundamentalDomain_Ioc
@@ -73,7 +73,7 @@ theorem isAddFundamentalDomain_Ioc
   have : Bijective (codRestrict (fun n : Int => n • T) (AddSubgroup.zmultiples T) _) :=
     (Equiv.ofInjective (fun n : Int => n • T) (zsmul_left_strictMono hT).injective).bijective
   refine this.existsUnique_iff.2 ?_
-  simpa o
+  simpa only [add_comm x] using! existsUnique_add_zsmul_mem_Ioc hT x t
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.zmultiples, Bijective, Equiv.ofInjective, IsAddFundamentalDomain, IsAddFundamentalDomain.mk, add_comm, bijective, codRestrict, existsUnique_add_zsmul_mem_Ioc, existsUnique_iff, injective, nullMeasurableSet_Ioc, ofInjective, this.existsUnique_iff, volume_tac, zmultiples, zsmul_left_strictMono
 -/
@@ -96,7 +96,8 @@ theorem isAddFundamentalDomain_Ioc'
   refine IsAddFundamentalDomain.mk' nullMeasurableSet_Ioc fun x => ?_
   have : Bijective (codRestrict (fun n : Int => n • T) (AddSubgroup.zmultiples T) _) :=
     (Equiv.ofInjective (fun n : Int => n • T) (zsmul_left_strictMono hT).injective).bijective
-.existsUnique_iff.2 ?_ refine (AddSubgroup.eq
+.existsUnique_iff.2 ?_ refine (AddSubgroup.equivOp _).bijective.comp this
+  simpa using! existsUnique_add_zsmul_mem_Ioc hT x t
 
 中文:
 定理 isAddFundamentalDomain_Ioc'
@@ -105,7 +106,8 @@ theorem isAddFundamentalDomain_Ioc'
   refine IsAddFundamentalDomain.mk' nullMeasurableSet_Ioc fun x => ?_
   have : Bijective (codRestrict (fun n : Int => n • T) (AddSubgroup.zmultiples T) _) :=
     (Equiv.ofInjective (fun n : Int => n • T) (zsmul_left_strictMono hT).injective).bijective
-.existsUnique_iff.2 ?_ refine (AddSubgroup.eq
+.existsUnique_iff.2 ?_ refine (AddSubgroup.equivOp _).bijective.comp this
+  simpa using! existsUnique_add_zsmul_mem_Ioc hT x t
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.equivOp, AddSubgroup.op, AddSubgroup.zmultiples, Bijective, Equiv.ofInjective, IsAddFundamentalDomain, IsAddFundamentalDomain.mk, bijective, bijective.comp, codRestrict, equivOp, existsUnique_add_zsmul_mem_Ioc, existsUnique_iff, injective, nullMeasurableSet_Ioc, ofInjective, volume_tac, zmultiples, zsmul_left_strictMono
 -/
@@ -298,7 +300,17 @@ theorem volume_closedBall
   have h₁ : ε < T / 2 -> Metric.closedBall (0 : Real) ε inter I = Metric.closedBall (0 : Real) ε := by
     intro hε
     rw [inter_eq_left]; rw [Real.closedBall_eq_Icc]; rw [zero_sub]; rw [zero_add]
-    rintro y ⟨h
+    rintro y ⟨hy₁, hy₂⟩; constructor <;> linarith
+  have h₂ : (↑) ⁻¹' Metric.closedBall (0 : AddCircle T) ε inter I =
+      if ε < T / 2 then Metric.closedBall (0 : Real) ε else I := by
+    conv_rhs => rw [← if_ctx_congr (Iff.rfl : ε < T / 2 ↔ ε < T / 2) h₁ fun _ => rfl, ← hT']
+    apply coe_real_preimage_closedBall_inter_eq
+    simpa only [hT', Real.closedBall_eq_Icc, zero_add, zero_sub] using Ioc_subset_Icc_self
+  rw [addHaar_closedBall_center]; rw [add_projection_respects_measure T (-(T / 2))
+    measurableSet_closedBall]; rw [(by linarith : -(T / 2) + T = T / 2)]; rw [h₂]
+  by_cases hε : ε < T / 2
+  · simp [hε, min_eq_right (by linarith : 2 * ε <= T)]
+  · simp [I, hε, min_eq_left (by linarith : T <= 2 * ε)]
 
 中文:
 定理 volume_closedBall
@@ -309,7 +321,17 @@ theorem volume_closedBall
   have h₁ : ε < T / 2 -> Metric.closedBall (0 : Real) ε inter I = Metric.closedBall (0 : Real) ε := by
     intro hε
     rw [inter_eq_left]; rw [Real.closedBall_eq_Icc]; rw [zero_sub]; rw [zero_add]
-    rintro y ⟨h
+    rintro y ⟨hy₁, hy₂⟩; constructor <;> linarith
+  have h₂ : (↑) ⁻¹' Metric.closedBall (0 : AddCircle T) ε inter I =
+      if ε < T / 2 then Metric.closedBall (0 : Real) ε else I := by
+    conv_rhs => rw [← if_ctx_congr (Iff.rfl : ε < T / 2 ↔ ε < T / 2) h₁ fun _ => rfl, ← hT']
+    apply coe_real_preimage_closedBall_inter_eq
+    simpa only [hT', Real.closedBall_eq_Icc, zero_add, zero_sub] using Ioc_subset_Icc_self
+  rw [addHaar_closedBall_center]; rw [add_projection_respects_measure T (-(T / 2))
+    measurableSet_closedBall]; rw [(by linarith : -(T / 2) + T = T / 2)]; rw [h₂]
+  by_cases hε : ε < T / 2
+  · simp [hε, min_eq_right (by linarith : 2 * ε <= T)]
+  · simp [I, hε, min_eq_left (by linarith : T <= 2 * ε)]
 
 Depends on / 依赖: AddCircle, Iff.rfl, Metric, Metric.closedBall, Real.closedBall_eq_Icc, abs_eq_self, abs_eq_self.mpr, closedBall, closedBall_eq_Icc, conv_rhs, hT.out.le, if_ctx_congr, inter_eq_left, zero_add, zero_sub
 -/
@@ -343,7 +365,7 @@ instance :
   rw [volume_closedBall]; rw [volume_closedBall]; rw [ENNReal.ofNNReal_toNNReal 2]; rw [← ENNReal.ofReal_mul zero_le_two]
   apply ENNReal.ofReal_le_ofReal
   rw [mul_min_of_nonneg _ _ (zero_le_two : (0 : Real) <= 2)]
-  exact m
+  exact min_le_min (by linarith [hT.out]) (le_refl _)
 
 中文:
 实例 :
@@ -353,7 +375,7 @@ instance :
   rw [volume_closedBall]; rw [volume_closedBall]; rw [ENNReal.ofNNReal_toNNReal 2]; rw [← ENNReal.ofReal_mul zero_le_two]
   apply ENNReal.ofReal_le_ofReal
   rw [mul_min_of_nonneg _ _ (zero_le_two : (0 : Real) <= 2)]
-  exact m
+  exact min_le_min (by linarith [hT.out]) (le_refl _)
 
 Depends on / 依赖: ENNReal, ENNReal.ofNNReal_toNNReal, ENNReal.ofReal_le_ofReal, ENNReal.ofReal_mul, Eventually, Filter, Filter.Eventually.of_forall, Real.toNNReal, hT.out, le_refl, min_le_min, mul_min_of_nonneg, ofNNReal_toNNReal, ofReal_le_ofReal, ofReal_mul, of_forall, toNNReal, volume_closedBall, zero_le_two
 -/
@@ -374,7 +396,7 @@ definition measurableEquivIoc
   measurable_toFun := measurable_of_measurable_on_compl_singleton _
     (continuousOn_iff_continuous_domRestrict.mp <| continuousOn_of_forall_continuousAt fun _x hx =>
       continuousAt_equivIoc T a hx).measurable
-  measurable_invFun := AddCircle.measurable_mk'.comp measurable_subtype_
+  measurable_invFun := AddCircle.measurable_mk'.comp measurable_subtype_coe
 
 中文:
 定义 measurableEquivIoc
@@ -383,7 +405,7 @@ definition measurableEquivIoc
   measurable_toFun := measurable_of_measurable_on_compl_singleton _
     (continuousOn_iff_continuous_domRestrict.mp <| continuousOn_of_forall_continuousAt fun _x hx =>
       continuousAt_equivIoc T a hx).measurable
-  measurable_invFun := AddCircle.measurable_mk'.comp measurable_subtype_
+  measurable_invFun := AddCircle.measurable_mk'.comp measurable_subtype_coe
 
 Depends on / 依赖: equivIoc
 -/
@@ -404,7 +426,7 @@ definition measurableEquivIco
   measurable_toFun := measurable_of_measurable_on_compl_singleton _
     (continuousOn_iff_continuous_domRestrict.mp <| continuousOn_of_forall_continuousAt fun _x hx =>
       continuousAt_equivIco T a hx).measurable
-  measurable_invFun := AddCircle.measurable_mk'.comp measurable_subtype_
+  measurable_invFun := AddCircle.measurable_mk'.comp measurable_subtype_coe
 
 中文:
 定义 measurableEquivIco
@@ -413,7 +435,7 @@ definition measurableEquivIco
   measurable_toFun := measurable_of_measurable_on_compl_singleton _
     (continuousOn_iff_continuous_domRestrict.mp <| continuousOn_of_forall_continuousAt fun _x hx =>
       continuousAt_equivIco T a hx).measurable
-  measurable_invFun := AddCircle.measurable_mk'.comp measurable_subtype_
+  measurable_invFun := AddCircle.measurable_mk'.comp measurable_subtype_coe
 
 Depends on / 依赖: equivIco
 -/
@@ -437,7 +459,11 @@ lemma measurePreserving_equivIoc
   rw [comap_apply _ Subtype.val_injective (fun _ => measurableSet_Ioc.subtype_image) _ hs]; rw [map_apply (by measurability) hs]; rw [add_projection_respects_measure T a (by exact h hs)]
   congr!
   ext x
-  simp only [mem_
+  simp only [mem_inter_iff, mem_preimage, mem_image, Subtype.exists, exists_and_right,
+    exists_eq_right]
+  rw [and_comm]; rw [← exists_prop]
+  congr! with hx
+  rw [equivIoc_coe_eq hx]
 
 中文:
 引理 measurePreserving_equivIoc
@@ -449,7 +475,11 @@ lemma measurePreserving_equivIoc
   rw [comap_apply _ Subtype.val_injective (fun _ => measurableSet_Ioc.subtype_image) _ hs]; rw [map_apply (by measurability) hs]; rw [add_projection_respects_measure T a (by exact h hs)]
   congr!
   ext x
-  simp only [mem_
+  simp only [mem_inter_iff, mem_preimage, mem_image, Subtype.exists, exists_and_right,
+    exists_eq_right]
+  rw [and_comm]; rw [← exists_prop]
+  congr! with hx
+  rw [equivIoc_coe_eq hx]
 
 Depends on / 依赖: Subtype, Subtype.exists, Subtype.val_injective, add_projection_respects_measure, and_comm, comap_apply, equivIoc_coe_eq, exists_and_right, exists_eq_right, exists_prop, map_apply, measurability, measurable, measurableEquivIoc, measurableSet_Ioc, measurableSet_Ioc.subtype_image, mem_image, mem_inter_iff, mem_preimage, subtype_image
 -/
@@ -480,7 +510,16 @@ theorem lintegral_preimage
   have := lintegral_map_equiv (μ := volume) f (measurableEquivIoc T t).symm
   simp only [measurableEquivIoc, equivIoc, QuotientAddGroup.equivIocMod, MeasurableEquiv.symm_mk,
     MeasurableEquiv.coe_mk, Equiv.coe_fn_symm_mk] at this
-  r
+  rw [← (AddCircle.measurePreserving_mk T t).map_eq]
+  convert! this.symm using 1
+  · rw [← map_comap_subtype_coe m _]
+    exact MeasurableEmbedding.lintegral_map (MeasurableEmbedding.subtype_coe m) _
+  · congr 1
+    have : ((↑) : Ioc t (t + T) -> AddCircle T) = ((↑) : Real -> AddCircle T) ∘ ((↑) : _ -> Real) := by
+      ext1 x; rfl
+    simp_rw [this]
+    rw [← map_map AddCircle.measurable_mk' measurable_subtype_coe]; rw [← map_comap_subtype_coe m]
+    rfl
 
 中文:
 定理 lintegral_preimage
@@ -490,7 +529,16 @@ theorem lintegral_preimage
   have := lintegral_map_equiv (μ := volume) f (measurableEquivIoc T t).symm
   simp only [measurableEquivIoc, equivIoc, QuotientAddGroup.equivIocMod, MeasurableEquiv.symm_mk,
     MeasurableEquiv.coe_mk, Equiv.coe_fn_symm_mk] at this
-  r
+  rw [← (AddCircle.measurePreserving_mk T t).map_eq]
+  convert! this.symm using 1
+  · rw [← map_comap_subtype_coe m _]
+    exact MeasurableEmbedding.lintegral_map (MeasurableEmbedding.subtype_coe m) _
+  · congr 1
+    have : ((↑) : Ioc t (t + T) -> AddCircle T) = ((↑) : Real -> AddCircle T) ∘ ((↑) : _ -> Real) := by
+      ext1 x; rfl
+    simp_rw [this]
+    rw [← map_map AddCircle.measurable_mk' measurable_subtype_coe]; rw [← map_comap_subtype_coe m]
+    rfl
 -/
 protected theorem lintegral_preimage (t : Real) (f : AddCircle T -> Real>=0∞) :
     (∫⁻ a in Ioc t (t + T), f a) = ∫⁻ b : AddCircle T, f b := by
@@ -524,7 +572,12 @@ theorem integral_preimage
   have := integral_map_equiv (μ := volume) (measurableEquivIoc T t).symm f
   simp only [measurableEquivIoc, equivIoc, QuotientAddGroup.equivIocMod, MeasurableEquiv.symm_mk,
     MeasurableEquiv.coe_mk, Equiv.coe_fn_symm_mk] at this
-  rw
+  rw [← (AddCircle.measurePreserving_mk T t).map_eq]; rw [← integral_subtype m]; rw [← this]
+  have : ((↑) : Ioc t (t + T) -> AddCircle T) = ((↑) : Real -> AddCircle T) ∘ ((↑) : _ -> Real) := by
+    ext1 x; rfl
+  simp_rw [this]
+  rw [← map_map AddCircle.measurable_mk' measurable_subtype_coe]; rw [← map_comap_subtype_coe m]
+  rfl
 
 中文:
 定理 integral_preimage
@@ -534,7 +587,12 @@ theorem integral_preimage
   have := integral_map_equiv (μ := volume) (measurableEquivIoc T t).symm f
   simp only [measurableEquivIoc, equivIoc, QuotientAddGroup.equivIocMod, MeasurableEquiv.symm_mk,
     MeasurableEquiv.coe_mk, Equiv.coe_fn_symm_mk] at this
-  rw
+  rw [← (AddCircle.measurePreserving_mk T t).map_eq]; rw [← integral_subtype m]; rw [← this]
+  have : ((↑) : Ioc t (t + T) -> AddCircle T) = ((↑) : Real -> AddCircle T) ∘ ((↑) : _ -> Real) := by
+    ext1 x; rfl
+  simp_rw [this]
+  rw [← map_map AddCircle.measurable_mk' measurable_subtype_coe]; rw [← map_comap_subtype_coe m]
+  rfl
 -/
 protected theorem integral_preimage (t : Real) (f : AddCircle T -> E) :
     (∫ a in Ioc t (t + T), f a) = ∫ b : AddCircle T, f b := by
@@ -751,7 +809,30 @@ theorem intervalIntegrable
     · have hnT : 0 < -T := neg_pos.mpr h
       nth_rw 1 [(by ring : t = (t + T) + (-T))] at h₂f
       apply this h₁f.neg hnT.ne' h₂f.symm _ _ hnT
-  -- Replace [a₁, a₂] by [t - n₁ * T, t + n₂ * T], where n₁ and n₂ are natur
+  -- Replace [a₁, a₂] by [t - n₁ * T, t + n₂ * T], where n₁ and n₂ are natural numbers
+  obtain ⟨n₁, hn₁⟩ := exists_nat_ge ((t - min a₁ a₂) / T)
+  obtain ⟨n₂, hn₂⟩ := exists_nat_ge ((max a₁ a₂ - t) / T)
+  have : Set.uIcc a₁ a₂ subseteq Set.uIcc (t - n₁ * T) (t + n₂ * T) := by
+    rw [Set.uIcc_subset_uIcc_iff_le]
+    constructor
+    · calc min (t - n₁ * T) (t + n₂ * T)
+      _ <= (t - n₁ * T) := by apply min_le_left
+      _ <= min a₁ a₂ := by linarith [(div_le_iff₀ hT).1 hn₁]
+    · calc max a₁ a₂
+      _ <= t + n₂ * T := by linarith [(div_le_iff₀ hT).1 hn₂]
+      _ <= max (t - n₁ * T) (t + n₂ * T) := by apply le_max_right
+  apply IntervalIntegrable.mono_set _ this
+  -- Suffices to show integrability over shifted periods
+  let a : Nat -> Real := fun n => t + (n - n₁) * T
+  rw [(by ring : t - n₁ * T = a 0)]; rw [(by simp [a] : t + n₂ * T = a (n₁ + n₂))]
+  apply IntervalIntegrable.trans_iterate
+  -- Show integrability over a shifted period
+  intro k hk
+  convert! (IntervalIntegrable.comp_sub_right h₂f ((k - n₁) * T) enorm_ne_top) using 1
+  · funext x
+    simpa using (h₁f.sub_int_mul_eq (k - n₁)).symm
+  · simp [a, Nat.cast_add]
+    ring
 
 中文:
 定理 interval整数egrable
@@ -763,7 +844,30 @@ theorem intervalIntegrable
     · have hnT : 0 < -T := neg_pos.mpr h
       nth_rw 1 [(by ring : t = (t + T) + (-T))] at h₂f
       apply this h₁f.neg hnT.ne' h₂f.symm _ _ hnT
-  -- Replace [a₁, a₂] by [t - n₁ * T, t + n₂ * T], where n₁ and n₂ are natur
+  -- Replace [a₁, a₂] by [t - n₁ * T, t + n₂ * T], where n₁ and n₂ are natural numbers
+  obtain ⟨n₁, hn₁⟩ := exists_nat_ge ((t - min a₁ a₂) / T)
+  obtain ⟨n₂, hn₂⟩ := exists_nat_ge ((max a₁ a₂ - t) / T)
+  have : Set.uIcc a₁ a₂ subseteq Set.uIcc (t - n₁ * T) (t + n₂ * T) := by
+    rw [Set.uIcc_subset_uIcc_iff_le]
+    constructor
+    · calc min (t - n₁ * T) (t + n₂ * T)
+      _ <= (t - n₁ * T) := by apply min_le_left
+      _ <= min a₁ a₂ := by linarith [(div_le_iff₀ hT).1 hn₁]
+    · calc max a₁ a₂
+      _ <= t + n₂ * T := by linarith [(div_le_iff₀ hT).1 hn₂]
+      _ <= max (t - n₁ * T) (t + n₂ * T) := by apply le_max_right
+  apply IntervalIntegrable.mono_set _ this
+  -- Suffices to show integrability over shifted periods
+  let a : Nat -> Real := fun n => t + (n - n₁) * T
+  rw [(by ring : t - n₁ * T = a 0)]; rw [(by simp [a] : t + n₂ * T = a (n₁ + n₂))]
+  apply IntervalIntegrable.trans_iterate
+  -- Show integrability over a shifted period
+  intro k hk
+  convert! (IntervalIntegrable.comp_sub_right h₂f ((k - n₁) * T) enorm_ne_top) using 1
+  · funext x
+    simpa using (h₁f.sub_int_mul_eq (k - n₁)).symm
+  · simp [a, Nat.cast_add]
+    ring
 
 Depends on / 依赖: eq_or_lt, f.neg, f.symm, hnT.ne, neg_pos, neg_pos.mpr, not_lt, nth_rw
 -/
@@ -872,7 +976,11 @@ theorem intervalIntegral_add_eq
     · rw [← neg_inj, ← integral_symm, ← integral_symm]
       simpa only [← sub_eq_add_neg, add_sub_cancel_right] using
         this hf.neg (t + T) (s + T) (neg_pos.mpr hT)
-  simp only [integral_of_le, hT.le, le_add_i
+  simp only [integral_of_le, hT.le, le_add_iff_nonneg_right]
+  have : VAddInvariantMeasure (AddSubgroup.zmultiples T) Real volume :=
+    ⟨fun c s _ => measure_preimage_add _ _ _⟩
+  apply IsAddFundamentalDomain.setIntegral_eq (G := AddSubgroup.zmultiples T)
+  exacts [isAddFundamentalDomain_Ioc hT t, isAddFundamentalDomain_Ioc hT s, hf.map_vadd_zmultiples]
 
 中文:
 定理 interval整数egral_add_eq
@@ -884,7 +992,11 @@ theorem intervalIntegral_add_eq
     · rw [← neg_inj, ← integral_symm, ← integral_symm]
       simpa only [← sub_eq_add_neg, add_sub_cancel_right] using
         this hf.neg (t + T) (s + T) (neg_pos.mpr hT)
-  simp only [integral_of_le, hT.le, le_add_i
+  simp only [integral_of_le, hT.le, le_add_iff_nonneg_right]
+  have : VAddInvariantMeasure (AddSubgroup.zmultiples T) Real volume :=
+    ⟨fun c s _ => measure_preimage_add _ _ _⟩
+  apply IsAddFundamentalDomain.setIntegral_eq (G := AddSubgroup.zmultiples T)
+  exacts [isAddFundamentalDomain_Ioc hT t, isAddFundamentalDomain_Ioc hT s, hf.map_vadd_zmultiples]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.zmultiples, IsAddFundamentalDomain, IsAddFundamentalDomain.setIntegral_eq, VAddInvariantMeasure, add_sub_cancel_right, eq_or_lt, exacts, hT.le, hf.neg, integral_of_le, integral_symm, isAddFundamenta, le_add_iff_nonneg_right, measure_preimage_add, neg_inj, neg_pos, neg_pos.mpr, not_lt, setIntegral_eq
 -/
@@ -936,7 +1048,19 @@ theorem intervalIntegral_add_zsmul_eq
     simp only [hf.intervalIntegral_add_eq t 0, (hf.zsmul n).intervalIntegral_add_eq t 0, zero_add,
       this]
   -- First prove it for natural numbers
-  have : forall m : Nat, (∫ x in 0..m • T, f x) = m 
+  have : forall m : Nat, (∫ x in 0..m • T, f x) = m • ∫ x in 0..T, f x := fun m => by
+    induction m with
+    | zero => simp
+    | succ m ih =>
+      simp only [succ_nsmul, hf.intervalIntegral_add_eq_add 0 (m • T) h_int, ih, zero_add]
+  -- Then prove it for all integers
+  rcases n with n | n
+  · simp [← this n]
+  · conv_rhs => rw [negSucc_zsmul]
+    have h₀ : Int.negSucc n • T + (n + 1) • T = 0 := by simp; linarith
+    rw [integral_symm]; rw [← (hf.nsmul (n + 1)).funext]; rw [neg_inj]
+    simp_rw [integral_comp_add_right, h₀, zero_add, this (n + 1), add_comm T,
+      hf.intervalIntegral_add_eq ((n + 1) • T) 0, zero_add]
 
 中文:
 定理 interval整数egral_add_zsmul_eq
@@ -947,7 +1071,19 @@ theorem intervalIntegral_add_zsmul_eq
     simp only [hf.intervalIntegral_add_eq t 0, (hf.zsmul n).intervalIntegral_add_eq t 0, zero_add,
       this]
   -- First prove it for natural numbers
-  have : forall m : Nat, (∫ x in 0..m • T, f x) = m 
+  have : forall m : Nat, (∫ x in 0..m • T, f x) = m • ∫ x in 0..T, f x := fun m => by
+    induction m with
+    | zero => simp
+    | succ m ih =>
+      simp only [succ_nsmul, hf.intervalIntegral_add_eq_add 0 (m • T) h_int, ih, zero_add]
+  -- Then prove it for all integers
+  rcases n with n | n
+  · simp [← this n]
+  · conv_rhs => rw [negSucc_zsmul]
+    have h₀ : Int.negSucc n • T + (n + 1) • T = 0 := by simp; linarith
+    rw [integral_symm]; rw [← (hf.nsmul (n + 1)).funext]; rw [neg_inj]
+    simp_rw [integral_comp_add_right, h₀, zero_add, this (n + 1), add_comm T,
+      hf.intervalIntegral_add_eq ((n + 1) • T) 0, zero_add]
 -/
 theorem intervalIntegral_add_zsmul_eq (hf : Periodic f T) (n : Int) (t : Real)
     (h_int : forall t₁ t₂, IntervalIntegrable f MeasureSpace.volume t₁ t₂) :
@@ -990,7 +1126,9 @@ theorem sInf_add_zsmul_le_integral_of_pos
   let ε := Int.fract (t / T) * T
   conv_rhs =>
     rw [← Int.fract_div_mul_self_add_zsmul_eq T t hT.ne']; rw [← integral_add_adjacent_intervals (h'_int 0 ε) (h'_int _ _)]
-  rw [hg.intervalIntegral_add_zsmul_eq ⌊t / T⌋ ε (hg.intervalIntegrable₀ h
+  rw [hg.intervalIntegral_add_zsmul_eq ⌊t / T⌋ ε (hg.intervalIntegrable₀ hT.ne' h_int)]; rw [hg.intervalIntegral_add_eq ε 0]; rw [zero_add]; rw [add_le_add_iff_right]
+exact (continuous_primitive h'_int 0).continuousOn.sInf_image_Icc_le
+    mem_Icc_of_Ico (Int.fract_div_mul_self_mem_Ico T t hT)
 
 中文:
 定理 sInf_add_zsmul_le_integral_of_pos
@@ -1000,7 +1138,9 @@ theorem sInf_add_zsmul_le_integral_of_pos
   let ε := Int.fract (t / T) * T
   conv_rhs =>
     rw [← Int.fract_div_mul_self_add_zsmul_eq T t hT.ne']; rw [← integral_add_adjacent_intervals (h'_int 0 ε) (h'_int _ _)]
-  rw [hg.intervalIntegral_add_zsmul_eq ⌊t / T⌋ ε (hg.intervalIntegrable₀ h
+  rw [hg.intervalIntegral_add_zsmul_eq ⌊t / T⌋ ε (hg.intervalIntegrable₀ hT.ne' h_int)]; rw [hg.intervalIntegral_add_eq ε 0]; rw [zero_add]; rw [add_le_add_iff_right]
+exact (continuous_primitive h'_int 0).continuousOn.sInf_image_Icc_le
+    mem_Icc_of_Ico (Int.fract_div_mul_self_mem_Ico T t hT)
 
 Depends on / 依赖: Int.fract, Int.fract_div_mul_self_add_zsmul_eq, Int.fract_div_mul_self_mem_Ico, _int, add_le_add_iff_right, continuousOn, continuousOn.sInf_image_Icc_le, continuous_primitive, conv_rhs, fract_div_mul_self_add_zsmul_eq, fract_div_mul_self_mem_Ico, hT.ne, h_int, hg.intervalIntegrable, hg.intervalIntegral_add_eq, hg.intervalIntegral_add_zsmul_eq, integral_add_adjacent_intervals, intervalIntegral_add_eq, intervalIntegral_add_zsmul_eq, mem_Icc_of_Ico
 -/
@@ -1028,7 +1168,9 @@ theorem integral_le_sSup_add_zsmul_of_pos
   conv_lhs =>
     rw [← Int.fract_div_mul_self_add_zsmul_eq T t hT.ne']; rw [←
       integral_add_adjacent_intervals (h'_int 0 ε) (h'_int _ _)]
-  rw [hg.intervalIntegral_add_zsmul_eq ⌊t / T⌋ ε h'_int]; rw [hg.int
+  rw [hg.intervalIntegral_add_zsmul_eq ⌊t / T⌋ ε h'_int]; rw [hg.intervalIntegral_add_eq ε 0]; rw [zero_add]; rw [add_le_add_iff_right]
+  exact (continuous_primitive h'_int 0).continuousOn.le_sSup_image_Icc
+    (mem_Icc_of_Ico (Int.fract_div_mul_self_mem_Ico T t hT))
 
 中文:
 定理 integral_le_sSup_add_zsmul_of_pos
@@ -1039,7 +1181,9 @@ theorem integral_le_sSup_add_zsmul_of_pos
   conv_lhs =>
     rw [← Int.fract_div_mul_self_add_zsmul_eq T t hT.ne']; rw [←
       integral_add_adjacent_intervals (h'_int 0 ε) (h'_int _ _)]
-  rw [hg.intervalIntegral_add_zsmul_eq ⌊t / T⌋ ε h'_int]; rw [hg.int
+  rw [hg.intervalIntegral_add_zsmul_eq ⌊t / T⌋ ε h'_int]; rw [hg.intervalIntegral_add_eq ε 0]; rw [zero_add]; rw [add_le_add_iff_right]
+  exact (continuous_primitive h'_int 0).continuousOn.le_sSup_image_Icc
+    (mem_Icc_of_Ico (Int.fract_div_mul_self_mem_Ico T t hT))
 
 Depends on / 依赖: Int.fract, Int.fract_div_mul_self_add_zsmul_eq, Int.fract_div_mul_self_mem_Ico, _int, add_le_add_iff_right, continuousOn, continuousOn.le_sSup_image_Icc, continuous_primitive, conv_lhs, fract_div_mul_self_add_zsmul_eq, fract_div_mul_self_mem_Ico, hT.ne, h_int, hg.intervalIntegrable, hg.intervalIntegral_add_eq, hg.intervalIntegral_add_zsmul_eq, integral_add_adjacent_intervals, intervalIntegral_add_eq, intervalIntegral_add_zsmul_eq, le_sSup_image_Icc
 -/
@@ -1067,7 +1211,7 @@ theorem tendsto_atTop_intervalIntegral_of_pos
   apply tendsto_atTop_mono (hg.sInf_add_zsmul_le_integral_of_pos h_int hT)
   apply atTop.tendsto_atTop_add_const_left (sInf <| (fun t => ∫ x in 0..t, g x) '' Icc 0 T)
   apply Tendsto.atTop_zsmul_const h₀
-  exact tendsto_floor_atTop.com
+  exact tendsto_floor_atTop.comp (tendsto_id.atTop_mul_const (inv_pos.mpr hT))
 
 中文:
 定理 tendsto_atTop_interval整数egral_of_pos
@@ -1077,7 +1221,7 @@ theorem tendsto_atTop_intervalIntegral_of_pos
   apply tendsto_atTop_mono (hg.sInf_add_zsmul_le_integral_of_pos h_int hT)
   apply atTop.tendsto_atTop_add_const_left (sInf <| (fun t => ∫ x in 0..t, g x) '' Icc 0 T)
   apply Tendsto.atTop_zsmul_const h₀
-  exact tendsto_floor_atTop.com
+  exact tendsto_floor_atTop.comp (tendsto_id.atTop_mul_const (inv_pos.mpr hT))
 
 Depends on / 依赖: Tendsto, Tendsto.atTop_zsmul_const, atTop.tendsto_atTop_add_const_left, atTop_mul_const, atTop_zsmul_const, h_int, hg.sInf_add_zsmul_le_integral_of_pos, intervalIntegrable_of_integral_ne_zero, inv_pos, inv_pos.mpr, sInf_add_zsmul_le_integral_of_pos, tendsto_atTop_add_const_left, tendsto_atTop_mono, tendsto_floor_atTop, tendsto_floor_atTop.comp, tendsto_id, tendsto_id.atTop_mul_const
 -/
@@ -1100,7 +1244,7 @@ theorem tendsto_atBot_intervalIntegral_of_pos
   apply tendsto_atBot_mono (hg.integral_le_sSup_add_zsmul_of_pos h_int hT)
   apply atBot.tendsto_atBot_add_const_left (sSup <| (fun t => ∫ x in 0..t, g x) '' Icc 0 T)
   apply Tendsto.atBot_zsmul_const h₀
-  exact tendsto_floor_atBot.com
+  exact tendsto_floor_atBot.comp (tendsto_id.atBot_mul_const (inv_pos.mpr hT))
 
 中文:
 定理 tendsto_atBot_interval整数egral_of_pos
@@ -1110,7 +1254,7 @@ theorem tendsto_atBot_intervalIntegral_of_pos
   apply tendsto_atBot_mono (hg.integral_le_sSup_add_zsmul_of_pos h_int hT)
   apply atBot.tendsto_atBot_add_const_left (sSup <| (fun t => ∫ x in 0..t, g x) '' Icc 0 T)
   apply Tendsto.atBot_zsmul_const h₀
-  exact tendsto_floor_atBot.com
+  exact tendsto_floor_atBot.comp (tendsto_id.atBot_mul_const (inv_pos.mpr hT))
 
 Depends on / 依赖: Tendsto, Tendsto.atBot_zsmul_const, atBot.tendsto_atBot_add_const_left, atBot_mul_const, atBot_zsmul_const, h_int, hg.integral_le_sSup_add_zsmul_of_pos, integral_le_sSup_add_zsmul_of_pos, intervalIntegrable_of_integral_ne_zero, inv_pos, inv_pos.mpr, tendsto_atBot_add_const_left, tendsto_atBot_mono, tendsto_floor_atBot, tendsto_floor_atBot.comp, tendsto_id, tendsto_id.atBot_mul_const
 -/

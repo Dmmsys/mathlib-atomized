@@ -202,7 +202,8 @@ definition unitAsIsoOfIso
     exact (adj.toMonad.transport i).right_unit X
   inv_hom_id := by
     rw [assoc]; rw [← Iso.eq_inv_comp]; rw [comp_id]; rw [← id_comp i.inv]; rw [Iso.eq_comp_inv]; rw [assoc]; rw [NatTrans.id_comm]
-
+    ext X
+    exact (adj.toMonad.transport i).right_unit X
 
 中文:
 定义 unitAsIsoOfIso
@@ -215,7 +216,8 @@ definition unitAsIsoOfIso
     exact (adj.toMonad.transport i).right_unit X
   inv_hom_id := by
     rw [assoc]; rw [← Iso.eq_inv_comp]; rw [comp_id]; rw [← id_comp i.inv]; rw [Iso.eq_comp_inv]; rw [assoc]; rw [NatTrans.id_comm]
-
+    ext X
+    exact (adj.toMonad.transport i).right_unit X
 
 Depends on / 依赖: adj.unit
 -/
@@ -287,7 +289,9 @@ definition counitAsIsoOfIso
     ext X
     exact (adj.toComonad.transport j).right_counit X
   inv_hom_id := by
-    r
+    rw [assoc]
+    ext X
+    exact (adj.toComonad.transport j).right_counit X
 
 中文:
 定义 counitAsIsoOfIso
@@ -299,7 +303,9 @@ definition counitAsIsoOfIso
     ext X
     exact (adj.toComonad.transport j).right_counit X
   inv_hom_id := by
-    r
+    rw [assoc]
+    ext X
+    exact (adj.toComonad.transport j).right_counit X
 
 Depends on / 依赖: adj.counit, counit
 -/
@@ -833,7 +839,7 @@ instance [Reflective
         dsimp only [Functor.comp_obj, Adjunction.toMonad_coe]
         rw [unit_obj_eq_map_unit]; rw [← Functor.map_comp]; rw [← Functor.map_comp]
         dsimp [X.unit]
-        simpa u
+        simpa using congrArg (fun t => R.map ((reflector R).map t)) X.unit ⟩⟩⟩
 
 中文:
 实例 [反射
@@ -845,7 +851,7 @@ instance [Reflective
         dsimp only [Functor.comp_obj, Adjunction.toMonad_coe]
         rw [unit_obj_eq_map_unit]; rw [← Functor.map_comp]; rw [← Functor.map_comp]
         dsimp [X.unit]
-        simpa u
+        simpa using congrArg (fun t => R.map ((reflector R).map t)) X.unit ⟩⟩⟩
 
 Depends on / 依赖: Adjunction, Adjunction.toMonad_coe, Functor, Functor.comp_obj, Functor.id_obj, Functor.map_comp, R.map, X.unit, comp_obj, id_obj, map_comp, reflector, reflectorAdjunction, toMonad_coe, unit_naturality, unit_obj_eq_map_unit
 -/
@@ -875,7 +881,10 @@ instance comparison_essSurj
   · exact asIso ((reflectorAdjunction R).unit.app X.A)
   dsimp only [Functor.comp_map, Monad.comparison_obj_a, asIso_hom, Functor.comp_obj,
     Monad.comparison_obj_A, Adjunction.toMonad_coe]
-  rw [← cance
+  rw [← cancel_epi ((reflectorAdjunction R).unit.app X.A)]
+  dsimp only [Functor.id_obj, Functor.comp_obj]
+  rw [Adjunction.unit_naturality_assoc]; rw [Adjunction.right_triangle_components]; rw [comp_id]
+  apply (X.unit_assoc _).symm
 
 中文:
 实例 comparison_essSurj
@@ -887,7 +896,10 @@ instance comparison_essSurj
   · exact asIso ((reflectorAdjunction R).unit.app X.A)
   dsimp only [Functor.comp_map, Monad.comparison_obj_a, asIso_hom, Functor.comp_obj,
     Monad.comparison_obj_A, Adjunction.toMonad_coe]
-  rw [← cance
+  rw [← cancel_epi ((reflectorAdjunction R).unit.app X.A)]
+  dsimp only [Functor.id_obj, Functor.comp_obj]
+  rw [Adjunction.unit_naturality_assoc]; rw [Adjunction.right_triangle_components]; rw [comp_id]
+  apply (X.unit_assoc _).symm
 
 Depends on / 依赖: Adjunction, Adjunction.right_triangle_components, Adjunction.toMonad_coe, Adjunction.unit_naturality_assoc, Algebra, Functor, Functor.comp_map, Functor.comp_obj, Functor.id_obj, Monad.Algebra.isoMk, Monad.comparison_obj_A, Monad.comparison_obj_a, X.unit_assoc, asIso_hom, cancel_epi, comp_id, comp_map, comp_obj, comparison_obj_A, comparison_obj_a
 -/
@@ -942,7 +954,7 @@ instance [Coreflective
         rw [← (coreflectorAdjunction R).counit_naturality]
         dsimp only [Functor.comp_obj, Adjunction.toMonad_coe]
         rw [counit_obj_eq_map_counit]; rw [← Functor.map_comp]; rw [← Functor.map_comp]
-        simpa using congrArg (fun t =>
+        simpa using congrArg (fun t => R.map ((coreflector R).map t)) X.counit, X.counit⟩⟩⟩
 
 中文:
 实例 [余反射
@@ -953,7 +965,7 @@ instance [Coreflective
         rw [← (coreflectorAdjunction R).counit_naturality]
         dsimp only [Functor.comp_obj, Adjunction.toMonad_coe]
         rw [counit_obj_eq_map_counit]; rw [← Functor.map_comp]; rw [← Functor.map_comp]
-        simpa using congrArg (fun t =>
+        simpa using congrArg (fun t => R.map ((coreflector R).map t)) X.counit, X.counit⟩⟩⟩
 
 Depends on / 依赖: Adjunction, Adjunction.toMonad_coe, Functor, Functor.comp_obj, Functor.id_obj, Functor.map_comp, R.map, X.counit, comp_obj, coreflector, coreflectorAdjunction, counit, counit_naturality, counit_obj_eq_map_counit, id_obj, map_comp, toMonad_coe
 -/
@@ -982,7 +994,7 @@ instance comparison_essSurj
   rw [← cancel_mono ((coreflectorAdjunction R).counit.app X.A)]
   simp only [Functor.comp_obj, Functor.id_obj,
     assoc]
-  simpa using (coreflec
+  simpa using (coreflectorAdjunction R).counit.app X.A ≫= X.counit.symm
 
 中文:
 实例 comparison_essSurj
@@ -994,7 +1006,7 @@ instance comparison_essSurj
   rw [← cancel_mono ((coreflectorAdjunction R).counit.app X.A)]
   simp only [Functor.comp_obj, Functor.id_obj,
     assoc]
-  simpa using (coreflec
+  simpa using (coreflectorAdjunction R).counit.app X.A ≫= X.counit.symm
 
 Depends on / 依赖: Coalgebra, Comonad, Comonad.Coalgebra.isoMk, Functor, Functor.comp_obj, Functor.id_obj, X.counit.symm, cancel_mono, comp_obj, coreflector, coreflectorAdjunction, counit, counit.app, id_obj
 -/

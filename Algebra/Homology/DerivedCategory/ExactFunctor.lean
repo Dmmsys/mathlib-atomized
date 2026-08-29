@@ -244,7 +244,8 @@ instance :
     F.mapDerivedCategoryFactorsh.hom F.mapDerivedCategoryFactors.hom Int (by
       ext K
       dsimp
-      sim
+      simp only [id_comp, mapDerivedCategoryFactorsh_hom_app, assoc, comp_id,
+        ← Functor.map_comp_assoc, Iso.inv_hom_id_app, map_id, comp_obj])
 
 中文:
 实例 :
@@ -255,7 +256,8 @@ instance :
     F.mapDerivedCategoryFactorsh.hom F.mapDerivedCategoryFactors.hom Int (by
       ext K
       dsimp
-      sim
+      simp only [id_comp, mapDerivedCategoryFactorsh_hom_app, assoc, comp_id,
+        ← Functor.map_comp_assoc, Iso.inv_hom_id_app, map_id, comp_obj])
 
 Depends on / 依赖: CommShift, ComplexShape, ComplexShape.up, DerivedCategory, DerivedCategory.quotientCompQhIso, F.mapDerivedCategoryFactors.hom, F.mapDerivedCategoryFactorsh.hom, F.mapHomotopyCategoryFactors, Functor, Functor.map_comp_assoc, Iso.inv_hom_id_app, NatTrans, NatTrans.CommShift.verticalComposition, comp_id, comp_obj, id_comp, inv_hom_id_app, mapDerivedCategoryFactors, mapDerivedCategoryFactorsh, mapDerivedCategoryFactorsh_hom_app
 -/
@@ -315,7 +317,7 @@ definition mapDerivedCategorySingleFunctor
   body: isoWhiskerRight (DerivedCategory.singleFunctorIsoCompQ C₁ n) _ ≪≫
     associator .. ≪≫ isoWhiskerLeft _ F.mapDerivedCategoryFactors ≪≫ (associator ..).symm ≪≫
       isoWhiskerRight (HomologicalComplex.singleMapHomologicalComplex F (ComplexShape.up Int) n) _ ≪≫
-        associator .. ≪≫ (isoWhiskerLef
+        associator .. ≪≫ (isoWhiskerLeft _ (DerivedCategory.singleFunctorIsoCompQ C₂ n)).symm
 
 中文:
 定义 mapDerivedCategorySingleFunctor
@@ -323,7 +325,7 @@ definition mapDerivedCategorySingleFunctor
   定义体: isoWhiskerRight (DerivedCategory.singleFunctorIsoCompQ C₁ n) _ ≪≫
     associator .. ≪≫ isoWhiskerLeft _ F.mapDerivedCategoryFactors ≪≫ (associator ..).symm ≪≫
       isoWhiskerRight (HomologicalComplex.singleMapHomologicalComplex F (ComplexShape.up Int) n) _ ≪≫
-        associator .. ≪≫ (isoWhiskerLef
+        associator .. ≪≫ (isoWhiskerLeft _ (DerivedCategory.singleFunctorIsoCompQ C₂ n)).symm
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, DerivedCategory, DerivedCategory.singleFunctorIsoCompQ, F.mapDerivedCategoryFactors, HomologicalComplex, HomologicalComplex.singleMapHomologicalComplex, associator, isoWhiskerLeft, isoWhiskerRight, mapDerivedCategoryFactors, singleFunctorIsoCompQ, singleMapHomologicalComplex
 -/

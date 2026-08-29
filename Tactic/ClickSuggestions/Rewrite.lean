@@ -216,7 +216,70 @@ definition RwLemma.try
   let (proof, mvars, binderInfos, eqn) ← lem.name.forallMetaTelescopeReducing
   let mkApp2 _ lhs rhs ← whnf eqn | throwError "Exected an equality or iff, not {eqn}"
   let (lhs, rhs) := if lem.symm then (rhs, lhs) else (lhs, rhs)
-  let lhsOrig := lhs; let mctx
+  let lhsOrig := lhs; let mctxOrig ← getMCtx
+  unless ← isDefEq lhs e do throwError "{lhs} does not unify with {e}"
+  -- just like in `kabstract`, we compare the `HeadIndex` and number of arguments
+  let lhs ← instantiateMVars lhs
+  -- TODO: if the `headIndex` doesn't match, then use `simp_rw` instead of `rw` in the suggestion,
+  -- instead of just not showing the suggestion.
+  if lhs.toHeadIndex != e.toHeadIndex || lhs.headNumArgs != e.headNumArgs then
+    throwError "{lhs} and {e} do not match according to the head-constant indexing"
+  synthAppInstances `click_suggestions default mvars binderInfos false false
+  let mut extraGoals := #[]
+  let mut justLemmaName := true
+  let mut rwKind := i.rwKind
+  for mvar in mvars do
+    unless ← mvar.mvarId!.isAssigned do
+      if ← pure (rwKind matches .valid ..) <&&> isProof mvar <&&> mvar.mvarId!.assumptionCore then
+        justLemmaName := false
+      else
+        extraGoals := extraGoals.push (← instantiateMVars (← inferType mvar))
+
+  let replacement ← instantiateMVars rhs
+  let makesNewMVars :=
+    (replacement.findMVar? (mvars.contains <| .mvar ·)).isSome ||
+    extraGoals.any fun goal => (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
+  let proof ← instantiateMVars proof
+  let isRefl ← isExplicitEq e replacement
+  if let .valid tpCorrect _ := rwKind then
+    if justLemmaName then
+      if ← withMCtx mctxOrig do kabstractFindsPositions i.rootExpr lhsOrig i.pos then
+        rwKind := .valid tpCorrect none
+      else
+        justLemmaName := false
+  let key := {
+    numGoals := extraGoals.size
+    symm := lem.symm
+    nameLength := lem.name.length
+    replacementSize := (← ppExpr replacement).pretty.length
+    name := lem.name.toString
+    replacement := ← abstractMVars replacement
+  }
+  let tactic ← tacticSyntax lem rwKind (← getHypIdent?) proof justLemmaName
+  let isClosing ← (do
+    if extraGoals.isEmpty then
+      if let some rflTarget := i.rflTarget? then
+return ← withoutModifyingMCtx isDefEq replacement rflTarget
+      else if (← read).pos == .root && (← read).hyp?.isNone then
+        return ← succeeds (← mkFreshExprMVar replacement).mvarId!.applyRfl
+    return false)
+  if isClosing then
+    addSolvedSuggestion tactic
+  let mut htmls := #[← exprToHtml replacement]
+  for goal in extraGoals do
+    htmls := htmls.push <div> <strong className="goal-vdash">⊢ </strong> {← exprToHtml goal} </div>
+  let filtered ←
+    if !isRefl && !makesNewMVars then
+some < > mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+    else
+      pure none
+  htmls := htmls.push (<div> {← lem.name.toHtml} </div>)
+  let unfiltered ← mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+  let pattern ← do
+    let (_, _, e) ← forallMetaTelescopeReducing (← lem.name.getType)
+    let mkApp2 _ lhs rhs ← whnf e | throwError "Expected equation, not{indentExpr e}"
+exprToHtml if lem.symm then rhs else lhs
+  return { filtered, unfiltered, key, pattern }
 
 中文:
 定义 RwLemma.try
@@ -226,7 +289,70 @@ definition RwLemma.try
   let (proof, mvars, binderInfos, eqn) ← lem.name.forallMetaTelescopeReducing
   let mkApp2 _ lhs rhs ← whnf eqn | throwError "Exected an equality or iff, not {eqn}"
   let (lhs, rhs) := if lem.symm then (rhs, lhs) else (lhs, rhs)
-  let lhsOrig := lhs; let mctx
+  let lhsOrig := lhs; let mctxOrig ← getMCtx
+  unless ← isDefEq lhs e do throwError "{lhs} does not unify with {e}"
+  -- just like in `kabstract`, we compare the `HeadIndex` and number of arguments
+  let lhs ← instantiateMVars lhs
+  -- TODO: if the `headIndex` doesn't match, then use `simp_rw` instead of `rw` in the suggestion,
+  -- instead of just not showing the suggestion.
+  if lhs.toHeadIndex != e.toHeadIndex || lhs.headNumArgs != e.headNumArgs then
+    throwError "{lhs} and {e} do not match according to the head-constant indexing"
+  synthAppInstances `click_suggestions default mvars binderInfos false false
+  let mut extraGoals := #[]
+  let mut justLemmaName := true
+  let mut rwKind := i.rwKind
+  for mvar in mvars do
+    unless ← mvar.mvarId!.isAssigned do
+      if ← pure (rwKind matches .valid ..) <&&> isProof mvar <&&> mvar.mvarId!.assumptionCore then
+        justLemmaName := false
+      else
+        extraGoals := extraGoals.push (← instantiateMVars (← inferType mvar))
+
+  let replacement ← instantiateMVars rhs
+  let makesNewMVars :=
+    (replacement.findMVar? (mvars.contains <| .mvar ·)).isSome ||
+    extraGoals.any fun goal => (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
+  let proof ← instantiateMVars proof
+  let isRefl ← isExplicitEq e replacement
+  if let .valid tpCorrect _ := rwKind then
+    if justLemmaName then
+      if ← withMCtx mctxOrig do kabstractFindsPositions i.rootExpr lhsOrig i.pos then
+        rwKind := .valid tpCorrect none
+      else
+        justLemmaName := false
+  let key := {
+    numGoals := extraGoals.size
+    symm := lem.symm
+    nameLength := lem.name.length
+    replacementSize := (← ppExpr replacement).pretty.length
+    name := lem.name.toString
+    replacement := ← abstractMVars replacement
+  }
+  let tactic ← tacticSyntax lem rwKind (← getHypIdent?) proof justLemmaName
+  let isClosing ← (do
+    if extraGoals.isEmpty then
+      if let some rflTarget := i.rflTarget? then
+return ← withoutModifyingMCtx isDefEq replacement rflTarget
+      else if (← read).pos == .root && (← read).hyp?.isNone then
+        return ← succeeds (← mkFreshExprMVar replacement).mvarId!.applyRfl
+    return false)
+  if isClosing then
+    addSolvedSuggestion tactic
+  let mut htmls := #[← exprToHtml replacement]
+  for goal in extraGoals do
+    htmls := htmls.push <div> <strong className="goal-vdash">⊢ </strong> {← exprToHtml goal} </div>
+  let filtered ←
+    if !isRefl && !makesNewMVars then
+some < > mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+    else
+      pure none
+  htmls := htmls.push (<div> {← lem.name.toHtml} </div>)
+  let unfiltered ← mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+  let pattern ← do
+    let (_, _, e) ← forallMetaTelescopeReducing (← lem.name.getType)
+    let mkApp2 _ lhs rhs ← whnf e | throwError "Expected equation, not{indentExpr e}"
+exprToHtml if lem.symm then rhs else lhs
+  return { filtered, unfiltered, key, pattern }
 
 Depends on / 依赖: Exected, binderInfos, equality, forallMetaTelescopeReducing, getMCtx, i.subExpr, isDefEq, lem.name.forallMetaTelescopeReducing, lem.symm, lhsOrig, mctxOrig, mkApp2, subExpr, throwError, unless, withNewMCtxDepth
 -/

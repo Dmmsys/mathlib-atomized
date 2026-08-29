@@ -183,7 +183,9 @@ lemma resolutionMap_comp_d
     replace ih := congr($(ih).hom)
     simp only [TopRep.hom_comp, resolutionMap_succ, TopRep.hom_ofHom, hom_d_succ,
       ContIntertwiningMap.restrict_sub, ContIntertwiningMap.sub_comp,
-      ContIntertwiningMap.comp_sub, coind₁Map_
+      ContIntertwiningMap.comp_sub, coind₁Map_comp_coind₁ResMap,
+      coind₁ResMap_comp_coind₁Map_restrict] at ih ⊢
+    rw [ih]; rw [← coind₁ResMap_comp_coind₁ι_restrict]
 
 中文:
 引理 resolutionMap_comp_d
@@ -196,7 +198,9 @@ lemma resolutionMap_comp_d
     replace ih := congr($(ih).hom)
     simp only [TopRep.hom_comp, resolutionMap_succ, TopRep.hom_ofHom, hom_d_succ,
       ContIntertwiningMap.restrict_sub, ContIntertwiningMap.sub_comp,
-      ContIntertwiningMap.comp_sub, coind₁Map_
+      ContIntertwiningMap.comp_sub, coind₁Map_comp_coind₁ResMap,
+      coind₁ResMap_comp_coind₁Map_restrict] at ih ⊢
+    rw [ih]; rw [← coind₁ResMap_comp_coind₁ι_restrict]
 
 Depends on / 依赖: ContIntertwiningMap, ContIntertwiningMap.comp_sub, ContIntertwiningMap.restrict_sub, ContIntertwiningMap.sub_comp, TopRep, TopRep.hom_comp, TopRep.hom_ofHom, comp_sub, hom_comp, hom_d_succ, hom_ofHom, replace, resolutionMap_succ, restrict_sub, sub_comp
 -/

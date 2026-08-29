@@ -45,7 +45,14 @@ theorem Complex.hasSum_cos'
     (expSeries_div_hasSum_exp (-z * Complex.I))).div_const 2
   replace := (Nat.divModEquiv 2).symm.hasSum_iff.mpr this
   dsimp [Function.comp_def] at this
-  simp_rw [← mul_comm 2 _] at th
+  simp_rw [← mul_comm 2 _] at this
+  refine this.prod_fiberwise fun k => ?_
+  dsimp only
+  convert! hasSum_fintype (_ : Fin 2 -> Complex) using 1
+  rw [Fin.sum_univ_two]
+  simp_rw [Fin.val_zero, Fin.val_one, add_zero, pow_succ, pow_mul, mul_pow, neg_sq, ← two_mul,
+    neg_mul, mul_neg, neg_div, add_neg_cancel, zero_div, add_zero,
+    mul_div_cancel_left₀ _ (two_ne_zero : (2 : Complex) != 0)]
 
 中文:
 定理 复形.hasSum_cos'
@@ -56,7 +63,14 @@ theorem Complex.hasSum_cos'
     (expSeries_div_hasSum_exp (-z * Complex.I))).div_const 2
   replace := (Nat.divModEquiv 2).symm.hasSum_iff.mpr this
   dsimp [Function.comp_def] at this
-  simp_rw [← mul_comm 2 _] at th
+  simp_rw [← mul_comm 2 _] at this
+  refine this.prod_fiberwise fun k => ?_
+  dsimp only
+  convert! hasSum_fintype (_ : Fin 2 -> Complex) using 1
+  rw [Fin.sum_univ_two]
+  simp_rw [Fin.val_zero, Fin.val_one, add_zero, pow_succ, pow_mul, mul_pow, neg_sq, ← two_mul,
+    neg_mul, mul_neg, neg_div, add_neg_cancel, zero_div, add_zero,
+    mul_div_cancel_left₀ _ (two_ne_zero : (2 : Complex) != 0)]
 
 Depends on / 依赖: Complex.I, Complex.cos, Complex.exp_eq_exp_Complex, Fin.sum_univ_two, Fin.val_one, Fin.val_zero, Function, Function.comp_def, Nat.divModEquiv, add_zero, comp_def, convert, divModEquiv, div_const, expSeries_div_hasSum_exp, exp_eq_exp_Complex, hasSum_fintype, hasSum_iff, mul_comm, mul_pow
 -/
@@ -89,7 +103,14 @@ theorem Complex.hasSum_sin'
     (expSeries_div_hasSum_exp (z * Complex.I))).mul_right Complex.I).div_const 2
   replace := (Nat.divModEquiv 2).symm.hasSum_iff.mpr this
   dsimp [Function.comp_def] at this
-  simp_rw 
+  simp_rw [← mul_comm 2 _] at this
+  refine this.prod_fiberwise fun k => ?_
+  dsimp only
+  convert! hasSum_fintype (_ : Fin 2 -> Complex) using 1
+  rw [Fin.sum_univ_two]
+  simp_rw [Fin.val_zero, Fin.val_one, add_zero, pow_succ, pow_mul, mul_pow, neg_sq, sub_self,
+    zero_mul, zero_div, zero_add, neg_mul, mul_neg, neg_div, ← neg_add', ← two_mul,
+    neg_mul, neg_div, mul_assoc, mul_div_cancel_left₀ _ (two_ne_zero : (2 : Complex) != 0), Complex.div_I]
 
 中文:
 定理 复形.hasSum_sin'
@@ -100,7 +121,14 @@ theorem Complex.hasSum_sin'
     (expSeries_div_hasSum_exp (z * Complex.I))).mul_right Complex.I).div_const 2
   replace := (Nat.divModEquiv 2).symm.hasSum_iff.mpr this
   dsimp [Function.comp_def] at this
-  simp_rw 
+  simp_rw [← mul_comm 2 _] at this
+  refine this.prod_fiberwise fun k => ?_
+  dsimp only
+  convert! hasSum_fintype (_ : Fin 2 -> Complex) using 1
+  rw [Fin.sum_univ_two]
+  simp_rw [Fin.val_zero, Fin.val_one, add_zero, pow_succ, pow_mul, mul_pow, neg_sq, sub_self,
+    zero_mul, zero_div, zero_add, neg_mul, mul_neg, neg_div, ← neg_add', ← two_mul,
+    neg_mul, neg_div, mul_assoc, mul_div_cancel_left₀ _ (two_ne_zero : (2 : Complex) != 0), Complex.div_I]
 
 Depends on / 依赖: Complex.I, Complex.exp_eq_exp_Complex, Complex.sin, Fin.sum_univ_two, Fin.val_one, Fin.val_zero, Function, Function.comp_def, Nat.divModEquiv, add_zero, comp_def, convert, divModEquiv, div_const, expSeries_div_hasSum_exp, exp_eq_exp_Complex, hasSum_fintype, hasSum_iff, mul_comm, mul_right
 -/
@@ -514,7 +542,7 @@ refine x.hasSum_cosh.summable.tsum_le_tsum (fun i => ?_) expSeries_summable' (x 
   simp only [div_pow, pow_mul, smul_eq_mul, inv_mul_eq_div, div_div]
   gcongr
   norm_cast
-  exact Nat.two_pow_mul_factorial_le_factorial_two_mu
+  exact Nat.two_pow_mul_factorial_le_factorial_two_mul _
 
 中文:
 引理 cosh_le_exp_half_sq
@@ -526,7 +554,7 @@ refine x.hasSum_cosh.summable.tsum_le_tsum (fun i => ?_) expSeries_summable' (x 
   simp only [div_pow, pow_mul, smul_eq_mul, inv_mul_eq_div, div_div]
   gcongr
   norm_cast
-  exact Nat.two_pow_mul_factorial_le_factorial_two_mu
+  exact Nat.two_pow_mul_factorial_le_factorial_two_mul _
 
 Depends on / 依赖: Nat.two_pow_mul_factorial_le_factorial_two_mul, cosh_eq_tsum, div_div, div_pow, expSeries_summable, exp_eq_exp_Real, exp_eq_tsum, hasSum_cosh, inv_mul_eq_div, pow_mul, smul_eq_mul, summable, tsum_le_tsum, two_pow_mul_factorial_le_factorial_two_mul, x.hasSum_cosh.summable.tsum_le_tsum
 -/

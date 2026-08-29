@@ -972,7 +972,11 @@ theorem Topology.IsInducing.joinedIn_image
   have h₀ : x ⤳ γ' 0 := by rw [← hf.specializes_iff, hγ', γ.source]
   have h₁ : γ' 1 ⤳ y := by rw [← hf.specializes_iff, hγ', γ.target]
   have h : JoinedIn F (γ' 0) (γ' 1) := by
-    refine ⟨⟨⟨γ', ?_⟩, rfl, rfl⟩, 
+    refine ⟨⟨⟨γ', ?_⟩, rfl, rfl⟩, hγ'F⟩
+    simpa only [hf.continuous_iff, comp_def, hγ'] using map_continuous γ
+exact (h₀.joinedIn hx (hγ'F _)).trans h.trans h₁.joinedIn (hγ'F _) hy
+
+@[to_additive]
 
 中文:
 定理 拓扑.是Inducing.joinedIn_image
@@ -984,7 +988,11 @@ theorem Topology.IsInducing.joinedIn_image
   have h₀ : x ⤳ γ' 0 := by rw [← hf.specializes_iff, hγ', γ.source]
   have h₁ : γ' 1 ⤳ y := by rw [← hf.specializes_iff, hγ', γ.target]
   have h : JoinedIn F (γ' 0) (γ' 1) := by
-    refine ⟨⟨⟨γ', ?_⟩, rfl, rfl⟩, 
+    refine ⟨⟨⟨γ', ?_⟩, rfl, rfl⟩, hγ'F⟩
+    simpa only [hf.continuous_iff, comp_def, hγ'] using map_continuous γ
+exact (h₀.joinedIn hx (hγ'F _)).trans h.trans h₁.joinedIn (hγ'F _) hy
+
+@[to_additive]
 
 Depends on / 依赖: JoinedIn, comp_def, continuous, continuous_iff, h.trans, hf.continuous, hf.continuous_iff, hf.specializes_iff, joinedIn, map_continuous, source, specializes_iff, target
 -/
@@ -1933,7 +1941,7 @@ theorem isPathConnected_pathComponentIn
     refine ⟨γ, fun t =>
       ⟨(γ.truncateOfLE t.2.1).cast (γ.extend_zero.symm) (γ.extend_extends' t).symm, fun t' => ?_⟩⟩
     dsimp [Path.truncateOfLE, Path.truncate]
-    exact γ.extend_extends' ⟨min (max t'.1 0) t.1, by simp [t.2.1, t.2.2]⟩ ▸ hγ 
+    exact γ.extend_extends' ⟨min (max t'.1 0) t.1, by simp [t.2.1, t.2.2]⟩ ▸ hγ _⟩
 
 中文:
 定理 isPathConnected_pathComponentIn
@@ -1943,7 +1951,7 @@ theorem isPathConnected_pathComponentIn
     refine ⟨γ, fun t =>
       ⟨(γ.truncateOfLE t.2.1).cast (γ.extend_zero.symm) (γ.extend_extends' t).symm, fun t' => ?_⟩⟩
     dsimp [Path.truncateOfLE, Path.truncate]
-    exact γ.extend_extends' ⟨min (max t'.1 0) t.1, by simp [t.2.1, t.2.2]⟩ ▸ hγ 
+    exact γ.extend_extends' ⟨min (max t'.1 0) t.1, by simp [t.2.1, t.2.2]⟩ ▸ hγ _⟩
 
 Depends on / 依赖: Path.truncate, Path.truncateOfLE, extend_extends, extend_zero, extend_zero.symm, mem_pathComponentIn_self, truncate, truncateOfLE
 -/
@@ -2046,7 +2054,19 @@ theorem IsPathConnected.exists_path_through_family
   induction p using snocInduction generalizing x with
   | elim0 =>
     simp only [snoc_zero]
-    use Path.refl 
+    use Path.refl x
+    simp [hx]
+  | @snoc n p y hp₂ =>
+    simp only [forall_fin_succ', snoc_castSucc, snoc_last, snoc_apply_zero, Path.cast_coe] at hp ⊢
+    obtain ⟨hp, hy⟩ := hp
+    specialize hp₂ y hp hy
+    obtain ⟨γ₀, hγ₀s, hγ₀p⟩ := hp₂
+    obtain ⟨γ₁, hγ₁⟩ := h.joinedIn y hy x hx
+    rw [← range_subset_iff] at hγ₁
+    use γ₀.trans γ₁
+    simp only [Path.trans_range, mem_union, Path.source_mem_range, or_true, and_true,
+      union_subset_iff]
+    tauto
 
 中文:
 定理 是道路连通.存在_path_through_family
@@ -2059,7 +2079,19 @@ theorem IsPathConnected.exists_path_through_family
   induction p using snocInduction generalizing x with
   | elim0 =>
     simp only [snoc_zero]
-    use Path.refl 
+    use Path.refl x
+    simp [hx]
+  | @snoc n p y hp₂ =>
+    simp only [forall_fin_succ', snoc_castSucc, snoc_last, snoc_apply_zero, Path.cast_coe] at hp ⊢
+    obtain ⟨hp, hy⟩ := hp
+    specialize hp₂ y hp hy
+    obtain ⟨γ₀, hγ₀s, hγ₀p⟩ := hp₂
+    obtain ⟨γ₁, hγ₁⟩ := h.joinedIn y hy x hx
+    rw [← range_subset_iff] at hγ₁
+    use γ₀.trans γ₁
+    simp only [Path.trans_range, mem_union, Path.source_mem_range, or_true, and_true,
+      union_subset_iff]
+    tauto
 
 Depends on / 依赖: Path.cast_coe, Path.refl, Path.target_mem_range, and_true, cast_coe, forall_fin_succ, generalizing, snocCases, snocInduction, snoc_apply_zero, snoc_castSucc, snoc_last, snoc_zero, specialize, target_mem_range
 -/
@@ -2167,7 +2199,7 @@ theorem pathConnectedSpace_iff_zerothHomotopy
     exact Quotient.sound (PathConnectedSpace.joined x y)
   · unfold ZerothHomotopy
     rintro ⟨h, h'⟩
-exact ⟨(nonempty_quotient_iff _).mp h, fun x y => Quotient.exact Subsinglet
+exact ⟨(nonempty_quotient_iff _).mp h, fun x y => Quotient.exact Subsingleton.elim ⟦x⟧ ⟦y⟧⟩
 
 中文:
 定理 pathConnectedSpace_iff_zerothHomotopy
@@ -2180,7 +2212,7 @@ exact ⟨(nonempty_quotient_iff _).mp h, fun x y => Quotient.exact Subsinglet
     exact Quotient.sound (PathConnectedSpace.joined x y)
   · unfold ZerothHomotopy
     rintro ⟨h, h'⟩
-exact ⟨(nonempty_quotient_iff _).mp h, fun x y => Quotient.exact Subsinglet
+exact ⟨(nonempty_quotient_iff _).mp h, fun x y => Quotient.exact Subsingleton.elim ⟦x⟧ ⟦y⟧⟩
 
 Depends on / 依赖: PathConnectedSpace, PathConnectedSpace.joined, Quotient, Quotient.exact, Quotient.sound, Subsingleton, Subsingleton.elim, ZerothHomotopy, joined, nonempty_quotient_iff, pathSetoid
 -/

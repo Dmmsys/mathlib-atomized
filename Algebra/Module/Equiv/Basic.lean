@@ -128,7 +128,7 @@ Function.bijective_iff_has_inverse.mpr
         Module.End.isUnit_apply_inv_apply_of_isUnit h⟩⟩,
     fun H =>
     let e : M ≃ₗ[R] M := { f, Equiv.ofBijective f H with }
-    ⟨⟨_, e.symm, LinearMap.ext e.right_inv, Lin
+    ⟨⟨_, e.symm, LinearMap.ext e.right_inv, LinearMap.ext e.left_inv⟩, rfl⟩⟩
 
 中文:
 定理 _root_.模.End.isUnit_iff
@@ -140,7 +140,7 @@ Function.bijective_iff_has_inverse.mpr
         Module.End.isUnit_apply_inv_apply_of_isUnit h⟩⟩,
     fun H =>
     let e : M ≃ₗ[R] M := { f, Equiv.ofBijective f H with }
-    ⟨⟨_, e.symm, LinearMap.ext e.right_inv, Lin
+    ⟨⟨_, e.symm, LinearMap.ext e.right_inv, LinearMap.ext e.left_inv⟩, rfl⟩⟩
 
 Depends on / 依赖: Equiv.ofBijective, Function, Function.bijective_iff_has_inverse.mpr, LinearMap, LinearMap.ext, Module, Module.End.isUnit_apply_inv_apply_of_isUnit, Module.End.isUnit_inv_apply_apply_of_isUnit, bijective_iff_has_inverse, e.left_inv, e.right_inv, e.symm, h.unit.inv, isUnit_apply_inv_apply_of_isUnit, isUnit_inv_apply_apply_of_isUnit, left_inv, ofBijective, right_inv
 -/
@@ -1883,7 +1883,9 @@ definition arrowCongrAddEquiv
   right_inv f := by
     ext x
     simp only [Function.comp_apply, apply_symm_apply, coe_comp, coe_coe]
-  map_a
+  map_add' f g := by
+    ext x
+    simp only [map_add, add_apply, Function.comp_apply, coe_comp, coe_coe]
 
 中文:
 定义 arrowCongrAddEquiv
@@ -1896,7 +1898,9 @@ definition arrowCongrAddEquiv
   right_inv f := by
     ext x
     simp only [Function.comp_apply, apply_symm_apply, coe_comp, coe_coe]
-  map_a
+  map_add' f g := by
+    ext x
+    simp only [map_add, add_apply, Function.comp_apply, coe_comp, coe_coe]
 -/
 @[simps] def arrowCongrAddEquiv (e₁ : M₁ ≃ₛₗ[σ₁₂] M₂) (e₂ : M₁' ≃ₛₗ[σ₁'₂'] M₂') :
     (M₁ ->ₛₗ[σ₁₁'] M₁') ≃+ (M₂ ->ₛₗ[σ₂₂'] M₂') where
@@ -2592,7 +2596,9 @@ definition funCongrLeft
     (LinearMap.ext fun x =>
       funext fun i => by rw [id_apply, ← funLeft_comp, Equiv.symm_comp_self, LinearMap.funLeft_id])
     (LinearMap.ext fun x =>
-      funext fun i => by rw [id_apply, ← funLeft_comp, Equiv.self_comp_symm, Linear
+      funext fun i => by rw [id_apply, ← funLeft_comp, Equiv.self_comp_symm, LinearMap.funLeft_id])
+
+@[simp]
 
 中文:
 定义 funCongrLeft
@@ -2601,7 +2607,9 @@ definition funCongrLeft
     (LinearMap.ext fun x =>
       funext fun i => by rw [id_apply, ← funLeft_comp, Equiv.symm_comp_self, LinearMap.funLeft_id])
     (LinearMap.ext fun x =>
-      funext fun i => by rw [id_apply, ← funLeft_comp, Equiv.self_comp_symm, Linear
+      funext fun i => by rw [id_apply, ← funLeft_comp, Equiv.self_comp_symm, LinearMap.funLeft_id])
+
+@[simp]
 
 Depends on / 依赖: Equiv.self_comp_symm, Equiv.symm_comp_self, LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.ext, LinearMap.funLeft_id, e.symm, funLeft, funLeft_comp, funLeft_id, id_apply, ofLinearMap, self_comp_symm, symm_comp_self
 -/

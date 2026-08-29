@@ -40,7 +40,8 @@ definition add
       exact hr _ _ _ _ (Congruence.equivalence.refl f) h₁₂)
     (fun f₁ f₂ g h₁₂ => by
       simp only [HomRel.compClosure_iff_self] at h₁₂
- 
+      erw [functor_map_eq_iff]
+      exact hr _ _ _ _ h₁₂ (Congruence.equivalence.refl g))
 
 中文:
 定义 add
@@ -52,7 +53,8 @@ definition add
       exact hr _ _ _ _ (Congruence.equivalence.refl f) h₁₂)
     (fun f₁ f₂ g h₁₂ => by
       simp only [HomRel.compClosure_iff_self] at h₁₂
- 
+      erw [functor_map_eq_iff]
+      exact hr _ _ _ _ h₁₂ (Congruence.equivalence.refl g))
 
 Depends on / 依赖: Congruence, Congruence.equivalence.refl, HomRel, HomRel.compClosure_iff_self, Quot.liftOn, Quot.mk, compClosure_iff_self, equivalence, functor_map_eq_iff
 -/
@@ -122,7 +124,19 @@ definition preadditive
     let iN : Neg (P ⟶ Q) :=
       { neg := Preadditive.neg r hr }
     { add_assoc := by rintro ⟨_⟩ ⟨_⟩ ⟨_⟩; exact congr_arg (functor r).map (add_assoc _ _ _)
-      zero_add := by 
+      zero_add := by rintro ⟨_⟩; exact congr_arg (functor r).map (zero_add _)
+      add_zero := by rintro ⟨_⟩; exact congr_arg (functor r).map (add_zero _)
+      add_comm := by rintro ⟨_⟩ ⟨_⟩; exact congr_arg (functor r).map (add_comm _ _)
+      neg_add_cancel := by rintro ⟨_⟩; exact congr_arg (functor r).map (neg_add_cancel _)
+      -- todo: use a better defeq
+      nsmul := nsmulRec
+      zsmul := zsmulRec }
+  add_comp := by
+    rintro _ _ _ ⟨_⟩ ⟨_⟩ ⟨_⟩
+    exact congr_arg (functor r).map (by apply Preadditive.add_comp)
+  comp_add := by
+    rintro _ _ _ ⟨_⟩ ⟨_⟩ ⟨_⟩
+    exact congr_arg (functor r).map (by apply Preadditive.comp_add)
 
 中文:
 定义 preadditive
@@ -133,7 +147,19 @@ definition preadditive
     let iN : Neg (P ⟶ Q) :=
       { neg := Preadditive.neg r hr }
     { add_assoc := by rintro ⟨_⟩ ⟨_⟩ ⟨_⟩; exact congr_arg (functor r).map (add_assoc _ _ _)
-      zero_add := by 
+      zero_add := by rintro ⟨_⟩; exact congr_arg (functor r).map (zero_add _)
+      add_zero := by rintro ⟨_⟩; exact congr_arg (functor r).map (add_zero _)
+      add_comm := by rintro ⟨_⟩ ⟨_⟩; exact congr_arg (functor r).map (add_comm _ _)
+      neg_add_cancel := by rintro ⟨_⟩; exact congr_arg (functor r).map (neg_add_cancel _)
+      -- todo: use a better defeq
+      nsmul := nsmulRec
+      zsmul := zsmulRec }
+  add_comp := by
+    rintro _ _ _ ⟨_⟩ ⟨_⟩ ⟨_⟩
+    exact congr_arg (functor r).map (by apply Preadditive.add_comp)
+  comp_add := by
+    rintro _ _ _ ⟨_⟩ ⟨_⟩ ⟨_⟩
+    exact congr_arg (functor r).map (by apply Preadditive.comp_add)
 
 Depends on / 依赖: Preadditive, Preadditive.add, Preadditive.neg, Quot.mk, add_assoc, add_comm, add_zero, congr_arg, functor, neg_add_cancel, zero_add
 -/

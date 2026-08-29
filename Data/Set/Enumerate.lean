@@ -139,7 +139,12 @@ theorem enumerate_inj
     | zero => rfl
     | succ m =>
       have h' : enumerate sel (s \ {a}) m = some a := by
-        simp_all o
+        simp_all only [enumerate, Nat.add_eq, zero_add]; exact h₂
+      have : a in s \ {a} := enumerate_mem sel h_sel h'
+      simp_all
+  | succ k ih =>
+    rw [show k + 1 + m = (k + m) + 1 by lia] at h₂
+    cases h : sel s <;> simp_all [enumerate]; tauto
 
 中文:
 定理 enumerate_inj
@@ -155,7 +160,12 @@ theorem enumerate_inj
     | zero => rfl
     | succ m =>
       have h' : enumerate sel (s \ {a}) m = some a := by
-        simp_all o
+        simp_all only [enumerate, Nat.add_eq, zero_add]; exact h₂
+      have : a in s \ {a} := enumerate_mem sel h_sel h'
+      simp_all
+  | succ k ih =>
+    rw [show k + 1 + m = (k + m) + 1 by lia] at h₂
+    cases h : sel s <;> simp_all [enumerate]; tauto
 
 Depends on / 依赖: Nat.add_eq, Nat.le.dest, add_eq, enumerate, enumerate_mem, generalizing, h_sel, hn.le, zero_add
 -/

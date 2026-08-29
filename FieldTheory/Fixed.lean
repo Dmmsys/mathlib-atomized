@@ -184,7 +184,7 @@ mul_smul m₁ m₂ s := Subtype.ext mul_smul m₁ m₂ s.1
 smul_add m s₁ s₂ := Subtype.ext smul_add m s₁.1 s₂.1
 smul_zero m := Subtype.ext smul_zero m
 smul_one m := Subtype.ext smul_one m
-smul_mul m s₁ s₂ := Subtype.ext s
+smul_mul m s₁ s₂ := Subtype.ext smul_mul' m s₁.1 s₂.1
 
 中文:
 实例 是InvariantSubfield.toMulSemiringAction
@@ -195,7 +195,7 @@ mul_smul m₁ m₂ s := Subtype.ext mul_smul m₁ m₂ s.1
 smul_add m s₁ s₂ := Subtype.ext smul_add m s₁.1 s₂.1
 smul_zero m := Subtype.ext smul_zero m
 smul_one m := Subtype.ext smul_one m
-smul_mul m s₁ s₂ := Subtype.ext s
+smul_mul m s₁ s₂ := Subtype.ext smul_mul' m s₁.1 s₂.1
 
 Depends on / 依赖: IsInvariantSubfield, IsInvariantSubfield.smul_mem, smul_mem
 -/
@@ -405,7 +405,41 @@ theorem linearIndependent_smul_of_linearIndependent
   refine Finset.induction_on s (fun _ => linearIndependent_empty_type) fun a s has ih hs => ?_
   rw [coe_insert] at hs ⊢
   rw [linearIndepOn_insert (mt mem_coe.1 has)] at hs
-  rw [linearIndepOn_insert (mt mem_coe.1 has)]; refine ⟨ih
+  rw [linearIndepOn_insert (mt mem_coe.1 has)]; refine ⟨ih hs.1, fun ha => ?_⟩
+  rw [Finsupp.mem_span_image_iff_linearCombination] at ha; rcases ha with ⟨l, hl, hla⟩
+  rw [Finsupp.linearCombination_apply_of_mem_supported F hl] at hla
+  suffices forall i in s, l i in FixedPoints.subfield G F by
+    replace hla := (sum_apply _ _ fun i => l i • toFun G F i).symm.trans (congr_fun hla 1)
+    simp_rw [Pi.smul_apply, toFun_apply, one_smul] at hla
+    refine hs.2 (hla ▸ Submodule.sum_mem _ fun c hcs => ?_)
+    change (⟨l c, this c hcs⟩ : FixedPoints.subfield G F) • c in _
+exact Submodule.smul_mem _ _ Submodule.subset_span by simpa
+  intro i his g
+  refine
+    eq_of_sub_eq_zero
+      (linearIndependent_iff'.1 (ih hs.1) s.attach (fun i => g • l i - l i) ?_ ⟨i, his⟩
+          (mem_attach _ _) :
+        _)
+  refine (sum_attach s fun i => (g • l i - l i) • MulAction.toFun G F i).trans ?_
+  ext g'
+  conv_lhs =>
+    rw [Finset.sum_apply]
+    congr
+    · skip
+    · ext
+      rw [Pi.smul_apply]; rw [sub_smul]; rw [smul_eq_mul]
+  rw [sum_sub_distrib]; rw [Pi.zero_apply]; rw [sub_eq_zero]
+  conv_lhs =>
+    congr
+    · skip
+    · ext x
+      rw [toFun_apply]; rw [← mul_inv_cancel_left g g']; rw [mul_smul]; rw [← smul_mul']; rw [← toFun_apply _ x]
+  change
+    (∑ x in s, g • (fun y => l y • MulAction.toFun G F y) x (g⁻¹ * g')) =
+      ∑ x in s, (fun y => l y • MulAction.toFun G F y) x g'
+  rw [← smul_sum]; rw [← sum_apply _ _ fun y => l y • toFun G F y]; rw [←
+    sum_apply _ _ fun y => l y • toFun G F y]
+  rw [hla]; rw [toFun_apply]; rw [toFun_apply]; rw [smul_smul]; rw [mul_inv_cancel_left]
 
 中文:
 定理 linearIndependent_smul_of_linearIndependent
@@ -416,7 +450,41 @@ theorem linearIndependent_smul_of_linearIndependent
   refine Finset.induction_on s (fun _ => linearIndependent_empty_type) fun a s has ih hs => ?_
   rw [coe_insert] at hs ⊢
   rw [linearIndepOn_insert (mt mem_coe.1 has)] at hs
-  rw [linearIndepOn_insert (mt mem_coe.1 has)]; refine ⟨ih
+  rw [linearIndepOn_insert (mt mem_coe.1 has)]; refine ⟨ih hs.1, fun ha => ?_⟩
+  rw [Finsupp.mem_span_image_iff_linearCombination] at ha; rcases ha with ⟨l, hl, hla⟩
+  rw [Finsupp.linearCombination_apply_of_mem_supported F hl] at hla
+  suffices forall i in s, l i in FixedPoints.subfield G F by
+    replace hla := (sum_apply _ _ fun i => l i • toFun G F i).symm.trans (congr_fun hla 1)
+    simp_rw [Pi.smul_apply, toFun_apply, one_smul] at hla
+    refine hs.2 (hla ▸ Submodule.sum_mem _ fun c hcs => ?_)
+    change (⟨l c, this c hcs⟩ : FixedPoints.subfield G F) • c in _
+exact Submodule.smul_mem _ _ Submodule.subset_span by simpa
+  intro i his g
+  refine
+    eq_of_sub_eq_zero
+      (linearIndependent_iff'.1 (ih hs.1) s.attach (fun i => g • l i - l i) ?_ ⟨i, his⟩
+          (mem_attach _ _) :
+        _)
+  refine (sum_attach s fun i => (g • l i - l i) • MulAction.toFun G F i).trans ?_
+  ext g'
+  conv_lhs =>
+    rw [Finset.sum_apply]
+    congr
+    · skip
+    · ext
+      rw [Pi.smul_apply]; rw [sub_smul]; rw [smul_eq_mul]
+  rw [sum_sub_distrib]; rw [Pi.zero_apply]; rw [sub_eq_zero]
+  conv_lhs =>
+    congr
+    · skip
+    · ext x
+      rw [toFun_apply]; rw [← mul_inv_cancel_left g g']; rw [mul_smul]; rw [← smul_mul']; rw [← toFun_apply _ x]
+  change
+    (∑ x in s, g • (fun y => l y • MulAction.toFun G F y) x (g⁻¹ * g')) =
+      ∑ x in s, (fun y => l y • MulAction.toFun G F y) x g'
+  rw [← smul_sum]; rw [← sum_apply _ _ fun y => l y • toFun G F y]; rw [←
+    sum_apply _ _ fun y => l y • toFun G F y]
+  rw [hla]; rw [toFun_apply]; rw [toFun_apply]; rw [smul_smul]; rw [mul_inv_cancel_left]
 
 Depends on / 依赖: Finset, Finset.induction_on, Finsupp, Finsupp.linearCombination_apply_of_mem_supported, Finsupp.mem_span_image_iff_linearCombination, FixedPoin, IsEmpty, classical, coe_insert, induction_on, linearCombination_apply_of_mem_supported, linearIndepOn_insert, linearIndependent_empty_type, mem_coe, mem_span_image_iff_linearCombination
 -/
@@ -593,7 +661,9 @@ theorem of_eval₂
   rw [← Polynomial.map_dvd_map' (Subfield.subtype <| FixedPoints.subfield G F)]; rw [minpoly]; rw [← Subfield.toSubring_subtype_eq_subtype]; rw [Polynomial.map_toSubring _ _]; rw [prodXSubSMul]
   refine
     Fintype.prod_dvd_of_coprime
-      (Polynomial.pairwise_coprime_X_sub_C <| MulA
+      (Polynomial.pairwise_coprime_X_sub_C <| MulAction.injective_ofQuotientStabilizer G x) fun y =>
+      QuotientGroup.induction_on y fun g => ?_
+  rw [Polynomial.dvd_iff_isRoot]; rw [Polynomial.IsRoot.def]; rw [MulAction.ofQuotientStabilizer_mk]; rw [Polynomial.eval_smul']; rw [← IsInvariantSubring.coe_subtypeHom' G (FixedPoints.subfield G F).toSubring]; rw [← MulSemiringActionHom.coe_polynomial]; rw [← map_smul]; rw [smul_polynomial]; rw [MulSemiringActionHom.coe_polynomial]; rw [IsInvariantSubring.coe_subtypeHom']; rw [Polynomial.eval_map]; rw [Subfield.toSubring_subtype_eq_subtype]; rw [hf]; rw [smul_zero]
 
 中文:
 定理 of_eval₂
@@ -603,7 +673,9 @@ theorem of_eval₂
   rw [← Polynomial.map_dvd_map' (Subfield.subtype <| FixedPoints.subfield G F)]; rw [minpoly]; rw [← Subfield.toSubring_subtype_eq_subtype]; rw [Polynomial.map_toSubring _ _]; rw [prodXSubSMul]
   refine
     Fintype.prod_dvd_of_coprime
-      (Polynomial.pairwise_coprime_X_sub_C <| MulA
+      (Polynomial.pairwise_coprime_X_sub_C <| MulAction.injective_ofQuotientStabilizer G x) fun y =>
+      QuotientGroup.induction_on y fun g => ?_
+  rw [Polynomial.dvd_iff_isRoot]; rw [Polynomial.IsRoot.def]; rw [MulAction.ofQuotientStabilizer_mk]; rw [Polynomial.eval_smul']; rw [← IsInvariantSubring.coe_subtypeHom' G (FixedPoints.subfield G F).toSubring]; rw [← MulSemiringActionHom.coe_polynomial]; rw [← map_smul]; rw [smul_polynomial]; rw [MulSemiringActionHom.coe_polynomial]; rw [IsInvariantSubring.coe_subtypeHom']; rw [Polynomial.eval_map]; rw [Subfield.toSubring_subtype_eq_subtype]; rw [hf]; rw [smul_zero]
 
 Depends on / 依赖: Fintype, Fintype.prod_dvd_of_coprime, FixedPoints, FixedPoints.subfield, IsRoot, MulAction, MulAction.injective_ofQuotientStabilizer, MulAction.ofQuotientStabilizer_mk, Polynomial, Polynomial.IsRoot.def, Polynomial.dvd_iff_isRoot, Polynomial.eval_smul, Polynomial.map_dvd_map, Polynomial.map_toSubring, Polynomial.pairwise_coprime_X_sub_C, QuotientGroup, QuotientGroup.induction_on, Subfield, Subfield.subtype, Subfield.toSubring_subtype_eq_subtype
 -/
@@ -632,7 +704,15 @@ theorem irreducible_aux
   rw [← hfg]; rw [Polynomial.eval₂_mul]; rw [mul_eq_zero] at this
   rcases this with this | this
   · right
-    have hf3 : f = minp
+    have hf3 : f = minpoly G F x :=
+      Polynomial.eq_of_monic_of_associated hf (monic G F x)
+        (associated_of_dvd_dvd hf2 <| @of_eval₂ G _ F _ _ _ x f this)
+    rwa [← mul_one (minpoly G F x), hf3, mul_right_inj' (monic G F x).ne_zero] at hfg
+  · left
+    have hg3 : g = minpoly G F x :=
+      Polynomial.eq_of_monic_of_associated hg (monic G F x)
+        (associated_of_dvd_dvd hg2 <| @of_eval₂ G _ F _ _ _ x g this)
+    rwa [← one_mul (minpoly G F x), hg3, mul_left_inj' (monic G F x).ne_zero] at hfg
 
 中文:
 定理 irreducible_aux
@@ -644,7 +724,15 @@ theorem irreducible_aux
   rw [← hfg]; rw [Polynomial.eval₂_mul]; rw [mul_eq_zero] at this
   rcases this with this | this
   · right
-    have hf3 : f = minp
+    have hf3 : f = minpoly G F x :=
+      Polynomial.eq_of_monic_of_associated hf (monic G F x)
+        (associated_of_dvd_dvd hf2 <| @of_eval₂ G _ F _ _ _ x f this)
+    rwa [← mul_one (minpoly G F x), hf3, mul_right_inj' (monic G F x).ne_zero] at hfg
+  · left
+    have hg3 : g = minpoly G F x :=
+      Polynomial.eq_of_monic_of_associated hg (monic G F x)
+        (associated_of_dvd_dvd hg2 <| @of_eval₂ G _ F _ _ _ x g this)
+    rwa [← one_mul (minpoly G F x), hg3, mul_left_inj' (monic G F x).ne_zero] at hfg
 
 Depends on / 依赖: Polynomial, Polynomial.eq_of_monic_of_associated, Polynomial.eval, associated_of_dvd_dvd, dvd_mul_left, dvd_mul_right, eq_of_monic_of_associated, minpoly, mul_eq_zero, mul_one, mul_right_inj, ne_zero
 -/
@@ -779,7 +867,7 @@ instance normal
   splits' x := by
     cases nonempty_fintype G
     rw [← minpoly_eq_minpoly]; rw [minpoly]; rw [coe_algebraMap]; rw [← Subfield.toSubring_subtype_eq_subtype]; rw [Polynomial.map_toSubring _ (subfield G F).toSubring]; rw [prodXSubSMul]
-    exact Polynomial.Splits.prod f
+    exact Polynomial.Splits.prod fun _ _ => Polynomial.Splits.X_sub_C _
 
 中文:
 实例 normal
@@ -788,7 +876,7 @@ instance normal
   splits' x := by
     cases nonempty_fintype G
     rw [← minpoly_eq_minpoly]; rw [minpoly]; rw [coe_algebraMap]; rw [← Subfield.toSubring_subtype_eq_subtype]; rw [Polynomial.map_toSubring _ (subfield G F).toSubring]; rw [prodXSubSMul]
-    exact Polynomial.Splits.prod f
+    exact Polynomial.Splits.prod fun _ _ => Polynomial.Splits.X_sub_C _
 
 Depends on / 依赖: isAlgebraic, isIntegral
 -/
@@ -811,7 +899,7 @@ instance isSeparable
   exact ⟨fun x => by
     cases nonempty_fintype G
     rw [IsSeparable]; rw [← minpoly_eq_minpoly]; rw [← Polynomial.separable_map (FixedPoints.subfield G F).subtype]; rw [minpoly]; rw [← Subfield.toSubring_subtype_eq_subtype]; rw [Polynomial.map_toSubring _ (subfield G F).toSubring]
- 
+    exact Polynomial.separable_prod_X_sub_C_iff.2 (injective_ofQuotientStabilizer G x)⟩
 
 中文:
 实例 isSeparable
@@ -821,7 +909,7 @@ instance isSeparable
   exact ⟨fun x => by
     cases nonempty_fintype G
     rw [IsSeparable]; rw [← minpoly_eq_minpoly]; rw [← Polynomial.separable_map (FixedPoints.subfield G F).subtype]; rw [minpoly]; rw [← Subfield.toSubring_subtype_eq_subtype]; rw [Polynomial.map_toSubring _ (subfield G F).toSubring]
- 
+    exact Polynomial.separable_prod_X_sub_C_iff.2 (injective_ofQuotientStabilizer G x)⟩
 
 Depends on / 依赖: FixedPoints, FixedPoints.subfield, IsSeparable, Polynomial, Polynomial.map_toSubring, Polynomial.separable_map, Polynomial.separable_prod_X_sub_C_iff, Subfield, Subfield.toSubring_subtype_eq_subtype, classical, injective_ofQuotientStabilizer, map_toSubring, minpoly, minpoly_eq_minpoly, nonempty_fintype, separable_map, separable_prod_X_sub_C_iff, subfield, subtype, toSubring
 -/
@@ -1032,7 +1120,8 @@ theorem finrank_eq_card
     calc
       Fintype.card G <= Fintype.card (F ->ₐ[FixedPoints.subfield G F] F) :=
         Fintype.card_le_of_injective _ (MulSemiringAction.toAlgHom_injective _ F)
-      _ <= finrank F (F ->ₗ[FixedPoints.subfield G F] F) := finrank_algHom (subfield G 
+      _ <= finrank F (F ->ₗ[FixedPoints.subfield G F] F) := finrank_algHom (subfield G F) F
+      _ = finrank (FixedPoints.subfield G F) F := finrank_linearMap_self _ _ _
 
 中文:
 定理 finrank_eq_card
@@ -1041,7 +1130,8 @@ theorem finrank_eq_card
     calc
       Fintype.card G <= Fintype.card (F ->ₐ[FixedPoints.subfield G F] F) :=
         Fintype.card_le_of_injective _ (MulSemiringAction.toAlgHom_injective _ F)
-      _ <= finrank F (F ->ₗ[FixedPoints.subfield G F] F) := finrank_algHom (subfield G 
+      _ <= finrank F (F ->ₗ[FixedPoints.subfield G F] F) := finrank_algHom (subfield G F) F
+      _ = finrank (FixedPoints.subfield G F) F := finrank_linearMap_self _ _ _
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.card_le_of_injective, FixedPoints, FixedPoints.finrank_le_card, FixedPoints.subfield, MulSemiringAction, MulSemiringAction.toAlgHom_injective, card_le_of_injective, finrank, finrank_algHom, finrank_le_card, finrank_linearMap_self, le_antisymm, subfield, toAlgHom_injective
 -/
@@ -1068,7 +1158,7 @@ theorem toAlgHom_bijective
   · apply le_antisymm
     · exact Fintype.card_le_of_injective _ (MulSemiringAction.toAlgHom_injective _ F)
     · rw [← finrank_eq_card G F]
-      exact LE.l
+      exact LE.le.trans_eq (finrank_algHom _ F) (finrank_linearMap_self _ _ _)
 
 中文:
 定理 toAlgHom_bijective
@@ -1081,7 +1171,7 @@ theorem toAlgHom_bijective
   · apply le_antisymm
     · exact Fintype.card_le_of_injective _ (MulSemiringAction.toAlgHom_injective _ F)
     · rw [← finrank_eq_card G F]
-      exact LE.l
+      exact LE.le.trans_eq (finrank_algHom _ F) (finrank_linearMap_self _ _ _)
 
 Depends on / 依赖: Fintype, Fintype.bijective_iff_injective_and_card, Fintype.card_le_of_injective, LE.le.trans_eq, MulSemiringAction, MulSemiringAction.toAlgHom_injective, bijective_iff_injective_and_card, card_le_of_injective, finrank_algHom, finrank_eq_card, finrank_linearMap_self, le_antisymm, nonempty_fintype, toAlgHom_injective, trans_eq
 -/
@@ -1171,7 +1261,15 @@ theorem toAlgAut_surjective
   let Q := G ⧸ f.ker
   let _ : MulSemiringAction Q F := MulSemiringAction.compHom _ (QuotientGroup.kerLift f)
   have : FaithfulSMul Q F := ⟨fun {q₁ q₂} => by
-    induction q₁, q₂ usin
+    induction q₁, q₂ using Quotient.inductionOn₂ with | _ g₁ g₂
+    intro h
+    rwa [QuotientGroup.eq, MonoidHom.mem_ker, map_mul, map_inv, inv_mul_eq_one, AlgEquiv.ext_iff]⟩
+  intro f
+  obtain ⟨q, hq⟩ := (toAlgAut_bijective Q F).surjective
+    (AlgEquiv.ofRingEquiv (f := f) (fun ⟨x, hx⟩ => f.commutes' ⟨x, fun g => hx g⟩))
+  revert hq
+  refine QuotientGroup.induction_on q (fun g hg => ⟨g, ?_⟩)
+  rwa [AlgEquiv.ext_iff] at hg ⊢
 
 中文:
 定理 toAlgAut_surjective
@@ -1182,7 +1280,15 @@ theorem toAlgAut_surjective
   let Q := G ⧸ f.ker
   let _ : MulSemiringAction Q F := MulSemiringAction.compHom _ (QuotientGroup.kerLift f)
   have : FaithfulSMul Q F := ⟨fun {q₁ q₂} => by
-    induction q₁, q₂ usin
+    induction q₁, q₂ using Quotient.inductionOn₂ with | _ g₁ g₂
+    intro h
+    rwa [QuotientGroup.eq, MonoidHom.mem_ker, map_mul, map_inv, inv_mul_eq_one, AlgEquiv.ext_iff]⟩
+  intro f
+  obtain ⟨q, hq⟩ := (toAlgAut_bijective Q F).surjective
+    (AlgEquiv.ofRingEquiv (f := f) (fun ⟨x, hx⟩ => f.commutes' ⟨x, fun g => hx g⟩))
+  revert hq
+  refine QuotientGroup.induction_on q (fun g hg => ⟨g, ?_⟩)
+  rwa [AlgEquiv.ext_iff] at hg ⊢
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ext_iff, AlgEquiv.of, FaithfulSMul, FixedPoints, FixedPoints.subfield, MonoidHom, MonoidHom.mem_ker, MulSemiringAction, MulSemiringAction.compHom, MulSemiringAction.toAlgAut, Quotient, Quotient.inductionOn, QuotientGroup, QuotientGroup.eq, QuotientGroup.kerLift, compHom, ext_iff, f.ker, inv_mul_eq_one
 -/

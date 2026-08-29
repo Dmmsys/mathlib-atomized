@@ -288,7 +288,16 @@ definition coalgebraEquivalence
     { hom i := φ.f
       comm _ _ := φ.h }
   unitIso :=
- 
+    NatIso.ofComponents
+      (fun D => isoMk (fun i => eqToIso (congr_arg D.obj (by subsingleton)))
+        (fun i₁ i₂ => by
+          obtain rfl := Subsingleton.elim i₁ default
+          obtain rfl := Subsingleton.elim i₂ default
+          simp)) (fun {D₁ D₂} α => by
+      ext i
+      obtain rfl := Subsingleton.elim i default
+      simp)
+  counitIso := Iso.refl _
 
 中文:
 定义 coalgebraEquivalence
@@ -305,7 +314,16 @@ definition coalgebraEquivalence
     { hom i := φ.f
       comm _ _ := φ.h }
   unitIso :=
- 
+    NatIso.ofComponents
+      (fun D => isoMk (fun i => eqToIso (congr_arg D.obj (by subsingleton)))
+        (fun i₁ i₂ => by
+          obtain rfl := Subsingleton.elim i₁ default
+          obtain rfl := Subsingleton.elim i₂ default
+          simp)) (fun {D₁ D₂} α => by
+      ext i
+      obtain rfl := Subsingleton.elim i default
+      simp)
+  counitIso := Iso.refl _
 
 Depends on / 依赖: A.coassoc.symm, A.counit, D.hom, D.obj, NatIso, NatIso.ofComponents, Subsingleton, Subsingleton.elim, coassoc, congr_arg, counit, eqToIso, functor, functor.map, inverse, inverse.map, inverse.obj, ofComponents, subsingleton, unitIso
 -/
@@ -354,7 +372,9 @@ definition toDescentDataAsCoalgebra
           ((F.map (f i₂).op.toLoc).adj.unit.toNatTrans.app _)
       coassoc i₁ i₂ i₃ := by
         rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Adj.unit_naturality] }
-  map
+  map g :=
+    { hom i := (F.map (f i).op.toLoc).l.toFunctor.map g
+      comm i₁ i₂ := by simp [← Functor.map_comp] }
 
 中文:
 定义 toDescentDataAsCoalgebra
@@ -364,7 +384,9 @@ definition toDescentDataAsCoalgebra
           ((F.map (f i₂).op.toLoc).adj.unit.toNatTrans.app _)
       coassoc i₁ i₂ i₃ := by
         rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [Adj.unit_naturality] }
-  map
+  map g :=
+    { hom i := (F.map (f i).op.toLoc).l.toFunctor.map g
+      comm i₁ i₂ := by simp [← Functor.map_comp] }
 
 Depends on / 依赖: Adj.unit_naturality, F.map, Functor, Functor.map_comp, adj.unit.toNatTrans.app, coassoc, l.toFunctor.map, l.toFunctor.obj, map_comp, op.toLoc, toFunctor, toNatTrans, unit_naturality
 -/

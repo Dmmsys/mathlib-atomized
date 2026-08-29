@@ -190,7 +190,9 @@ lemma of_seq
   rcases isClosed_induced_iff.1 (ht _ (h hux)) with ⟨s, hsc, hst⟩
   rw [Subtype.preimage_val_eq_preimage_val_iff]; rw [Set.ext_iff] at hst
   suffices x in s by specialize hst x; simp_all
-refine hsc.mem_of_tendsto hux Even
+refine hsc.mem_of_tendsto hux Eventually.of_forall fun k => ?_
+  specialize hst (u k)
+  simp_all
 
 中文:
 引理 of_seq
@@ -200,7 +202,9 @@ refine hsc.mem_of_tendsto hux Even
   rcases isClosed_induced_iff.1 (ht _ (h hux)) with ⟨s, hsc, hst⟩
   rw [Subtype.preimage_val_eq_preimage_val_iff]; rw [Set.ext_iff] at hst
   suffices x in s by specialize hst x; simp_all
-refine hsc.mem_of_tendsto hux Even
+refine hsc.mem_of_tendsto hux Eventually.of_forall fun k => ?_
+  specialize hst (u k)
+  simp_all
 
 Depends on / 依赖: Eventually, Eventually.of_forall, IsSeqClosed, IsSeqClosed.isClosed, Set.ext_iff, Subtype, Subtype.preimage_val_eq_preimage_val_iff, ext_iff, hsc.mem_of_tendsto, isClosed, isClosed_induced_iff, mem_of_tendsto, of_forall, of_isClosed, preimage_val_eq_preimage_val_iff, specialize
 -/

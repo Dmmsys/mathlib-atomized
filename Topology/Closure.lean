@@ -632,7 +632,10 @@ theorem interior_union_isClosed_of_interior_empty
   proof: have : interior (s union t) subseteq s := fun x ⟨u, ⟨(hu₁ : IsOpen u), (hu₂ : u subseteq s union t)⟩, (hx₁ : x in u)⟩ =>
     by_contradiction fun hx₂ : x ∉ s =>
       have : u \ s subseteq t := fun _ ⟨h₁, h₂⟩ => Or.resolve_left (hu₂ h₁) h₂
-      have : u \ s subseteq interior t := by rwa [(IsOpen.sd
+      have : u \ s subseteq interior t := by rwa [(IsOpen.sdiff hu₁ h₁).subset_interior_iff]
+      have : u \ s subseteq ∅ := by rwa [h₂] at this
+      this ⟨hx₁, hx₂⟩
+  Subset.antisymm (interior_maximal this isOpen_interior) (interior_mono subset_union_left)
 
 中文:
 定理 interior_union_isClosed_of_interior_empty
@@ -640,7 +643,10 @@ theorem interior_union_isClosed_of_interior_empty
   证明: have : interior (s union t) subseteq s := fun x ⟨u, ⟨(hu₁ : IsOpen u), (hu₂ : u subseteq s union t)⟩, (hx₁ : x in u)⟩ =>
     by_contradiction fun hx₂ : x ∉ s =>
       have : u \ s subseteq t := fun _ ⟨h₁, h₂⟩ => Or.resolve_left (hu₂ h₁) h₂
-      have : u \ s subseteq interior t := by rwa [(IsOpen.sd
+      have : u \ s subseteq interior t := by rwa [(IsOpen.sdiff hu₁ h₁).subset_interior_iff]
+      have : u \ s subseteq ∅ := by rwa [h₂] at this
+      this ⟨hx₁, hx₂⟩
+  Subset.antisymm (interior_maximal this isOpen_interior) (interior_mono subset_union_left)
 
 Depends on / 依赖: IsOpen, IsOpen.sdiff, Or.resolve_left, Subset, Subset.antisymm, antisymm, by_contradiction, interior, interior_maximal, interior_mono, isOpen_interior, resolve_left, subset_interior_iff, subset_union_left, subseteq
 -/
@@ -1632,7 +1638,8 @@ theorem interior_union_of_disjoint_closure
   refine subset_antisymm ?_ subset_interior_union
   rw [← (interior _).inter_univ]; rw [← full]; rw [inter_union_distrib_left]
   exact union_subset
-    (interior_union_inter_interior_compl_left_su
+    (interior_union_inter_interior_compl_left_subset.trans subset_union_right)
+    (interior_union_inter_interior_compl_right_subset.trans subset_union_left)
 
 中文:
 定理 interior_union_of_disjoint_closure
@@ -1642,7 +1649,8 @@ theorem interior_union_of_disjoint_closure
   refine subset_antisymm ?_ subset_interior_union
   rw [← (interior _).inter_univ]; rw [← full]; rw [inter_union_distrib_left]
   exact union_subset
-    (interior_union_inter_interior_compl_left_su
+    (interior_union_inter_interior_compl_left_subset.trans subset_union_right)
+    (interior_union_inter_interior_compl_right_subset.trans subset_union_left)
 
 Depends on / 依赖: compl_inter, disjoint_iff, inter_union_distrib_left, inter_univ, interior, interior_union_inter_interior_compl_left_subset, interior_union_inter_interior_compl_left_subset.trans, interior_union_inter_interior_compl_right_subset, interior_union_inter_interior_compl_right_subset.trans, subset_antisymm, subset_interior_union, subset_union_left, subset_union_right, union_subset
 -/
@@ -2108,7 +2116,8 @@ theorem dense_compl_singleton_iff_not_open
   · intro hd ho
     exact (hd.inter_open_nonempty _ ho (singleton_nonempty _)).ne_empty (inter_compl_self _)
   · refine fun ho => dense_iff_inter_open.2 fun U hU hne => inter_compl_nonempty_iff.2 fun hUx => ?_
-    obtain rfl : U = {x} := eq_singleton_iff_nonempty_unique_mem.2 ⟨hne, 
+    obtain rfl : U = {x} := eq_singleton_iff_nonempty_unique_mem.2 ⟨hne, hUx⟩
+    exact ho hU
 
 中文:
 定理 dense_compl_singleton_iff_not_open
@@ -2117,7 +2126,8 @@ theorem dense_compl_singleton_iff_not_open
   · intro hd ho
     exact (hd.inter_open_nonempty _ ho (singleton_nonempty _)).ne_empty (inter_compl_self _)
   · refine fun ho => dense_iff_inter_open.2 fun U hU hne => inter_compl_nonempty_iff.2 fun hUx => ?_
-    obtain rfl : U = {x} := eq_singleton_iff_nonempty_unique_mem.2 ⟨hne, 
+    obtain rfl : U = {x} := eq_singleton_iff_nonempty_unique_mem.2 ⟨hne, hUx⟩
+    exact ho hU
 
 Depends on / 依赖: dense_iff_inter_open, eq_singleton_iff_nonempty_unique_mem, hd.inter_open_nonempty, inter_compl_nonempty_iff, inter_compl_self, inter_open_nonempty, ne_empty, singleton_nonempty
 -/
@@ -2716,7 +2726,9 @@ theorem interior_frontier
   have A : frontier s = s \ interior s := h.frontier_eq
   have B : interior (frontier s) subseteq interior s := by rw [A]; exact interior_mono sdiff_subset
   have C : interior (frontier s) subseteq frontier s := interior_subset
-  have : interior (frontier s) subseteq interior s inter (s \ interio
+  have : interior (frontier s) subseteq interior s inter (s \ interior s) :=
+    subset_inter B (by simpa [A] using C)
+  rwa [inter_sdiff_self, subset_empty_iff] at this
 
 中文:
 定理 interior_frontier
@@ -2726,7 +2738,9 @@ theorem interior_frontier
   have A : frontier s = s \ interior s := h.frontier_eq
   have B : interior (frontier s) subseteq interior s := by rw [A]; exact interior_mono sdiff_subset
   have C : interior (frontier s) subseteq frontier s := interior_subset
-  have : interior (frontier s) subseteq interior s inter (s \ interio
+  have : interior (frontier s) subseteq interior s inter (s \ interior s) :=
+    subset_inter B (by simpa [A] using C)
+  rwa [inter_sdiff_self, subset_empty_iff] at this
 
 Depends on / 依赖: frontier, frontier_eq, h.frontier_eq, inter_sdiff_self, interior, interior_mono, interior_subset, sdiff_subset, subset_empty_iff, subset_inter, subseteq
 -/

@@ -557,7 +557,9 @@ theorem antilipschitzWith_iff_exists_mul_le_norm'
     ⟨.mk c⁻¹ (by positivity), MonoidHomClass.antilipschitz_of_bound f fun x => ?_⟩⟩
   · grw [hK.le_mul_norm' (map_one f), ← mul_assoc]
     exact mul_le_of_le_one_left (norm_nonneg' (f x)) (by simp [field])
-  · g
+  · grw [← hc, NNReal.coe_mk, inv_mul_cancel_left₀ hc0.ne']
+
+@[to_additive AntilipschitzWith.le_mul_nnnorm]
 
 中文:
 定理 antilipschitzWith_iff_存在_mul_le_norm'
@@ -567,7 +569,9 @@ theorem antilipschitzWith_iff_exists_mul_le_norm'
     ⟨.mk c⁻¹ (by positivity), MonoidHomClass.antilipschitz_of_bound f fun x => ?_⟩⟩
   · grw [hK.le_mul_norm' (map_one f), ← mul_assoc]
     exact mul_le_of_le_one_left (norm_nonneg' (f x)) (by simp [field])
-  · g
+  · grw [← hc, NNReal.coe_mk, inv_mul_cancel_left₀ hc0.ne']
+
+@[to_additive AntilipschitzWith.le_mul_nnnorm]
 
 Depends on / 依赖: MonoidHomClass, MonoidHomClass.antilipschitz_of_bound, NNReal, NNReal.coe_mk, antilipschitz_of_bound, coe_mk, hK.le_mul_norm, hc0.ne, le_mul_norm, map_one, mul_assoc, mul_le_of_le_one_left, norm_nonneg
 -/
@@ -1224,7 +1228,12 @@ lemma locallyLipschitzOn_inv_iff
 
 @[to_additive] alias ⟨LipschitzWith.of_inv, LipschitzWith.inv⟩ := lipschitzWith_inv_iff
 @[to_additive] alias ⟨AntilipschitzWith.of_inv, AntilipschitzWith.inv⟩ := antilipschitzWith_inv_iff
-@[to_additive] alias ⟨LipschitzOnWith.of_inv, LipschitzOnWith.inv⟩ := lipschitzO
+@[to_additive] alias ⟨LipschitzOnWith.of_inv, LipschitzOnWith.inv⟩ := lipschitzOnWith_inv_iff
+@[to_additive] alias ⟨LocallyLipschitz.of_inv, LocallyLipschitz.inv⟩ := locallyLipschitz_inv_iff
+@[to_additive]
+alias ⟨LocallyLipschitzOn.of_inv, LocallyLipschitzOn.inv⟩ := locallyLipschitzOn_inv_iff
+
+@[to_additive]
 
 中文:
 引理 locallyLipschitzOn_inv_iff
@@ -1234,7 +1243,12 @@ lemma locallyLipschitzOn_inv_iff
 
 @[to_additive] alias ⟨LipschitzWith.of_inv, LipschitzWith.inv⟩ := lipschitzWith_inv_iff
 @[to_additive] alias ⟨AntilipschitzWith.of_inv, AntilipschitzWith.inv⟩ := antilipschitzWith_inv_iff
-@[to_additive] alias ⟨LipschitzOnWith.of_inv, LipschitzOnWith.inv⟩ := lipschitzO
+@[to_additive] alias ⟨LipschitzOnWith.of_inv, LipschitzOnWith.inv⟩ := lipschitzOnWith_inv_iff
+@[to_additive] alias ⟨LocallyLipschitz.of_inv, LocallyLipschitz.inv⟩ := locallyLipschitz_inv_iff
+@[to_additive]
+alias ⟨LocallyLipschitzOn.of_inv, LocallyLipschitzOn.inv⟩ := locallyLipschitzOn_inv_iff
+
+@[to_additive]
 
 Depends on / 依赖: LocallyLipschitzOn
 -/
@@ -1485,7 +1499,13 @@ theorem mul_lipschitzWith
   refine AntilipschitzWith.of_le_mul_dist fun x y => ?_
   rw [NNReal.coe_inv]; rw [← _root_.div_eq_inv_mul]
   rw [le_div_iff₀ (NNReal.coe_pos.2 <| tsub_pos_iff_lt.2 hK)]
-  rw [mul_comm]; rw [NNReal.coe_sub hK.le
+  rw [mul_comm]; rw [NNReal.coe_sub hK.le]; rw [sub_mul]
+  calc
+    ↑Kf⁻¹ * dist x y - Kg * dist x y <= dist (f x) (f y) - dist (g x) (g y) :=
+      sub_le_sub (hf.mul_le_dist x y) (hg.dist_le_mul x y)
+    _ <= _ := le_trans (le_abs_self _) (abs_dist_sub_le_dist_mul_mul _ _ _ _)
+
+@[to_additive]
 
 中文:
 定理 mul_lipschitzWith
@@ -1495,7 +1515,13 @@ theorem mul_lipschitzWith
   refine AntilipschitzWith.of_le_mul_dist fun x y => ?_
   rw [NNReal.coe_inv]; rw [← _root_.div_eq_inv_mul]
   rw [le_div_iff₀ (NNReal.coe_pos.2 <| tsub_pos_iff_lt.2 hK)]
-  rw [mul_comm]; rw [NNReal.coe_sub hK.le
+  rw [mul_comm]; rw [NNReal.coe_sub hK.le]; rw [sub_mul]
+  calc
+    ↑Kf⁻¹ * dist x y - Kg * dist x y <= dist (f x) (f y) - dist (g x) (g y) :=
+      sub_le_sub (hf.mul_le_dist x y) (hg.dist_le_mul x y)
+    _ <= _ := le_trans (le_abs_self _) (abs_dist_sub_le_dist_mul_mul _ _ _ _)
+
+@[to_additive]
 
 Depends on / 依赖: AntilipschitzWith, AntilipschitzWith.of_le_mul_dist, NNReal, NNReal.coe_inv, NNReal.coe_pos, NNReal.coe_sub, PseudoEMetricSpace, PseudoEMetricSpace.toPseudoMetricSpace, PseudoMetricSpace, _root_, _root_.div_eq_inv_mul, abs_dist_sub_le_dist_mul_, coe_inv, coe_pos, coe_sub, dist_le_mul, div_eq_inv_mul, edist_ne_top, hK.le, hf.edist_ne_top
 -/
@@ -1706,7 +1732,13 @@ theorem cauchySeq_prod_of_eventually_eq
   rw [show (fun n => ∏ k in range (n + 1)]; rw [u k) = d * fun n => ∏ k in range (n + 1)]; rw [v k
       by ext n; simp [d]]
   suffices forall n >= N, d n = d N from (tendsto_atTop_of_eventually_const this).cauchySeq.mul hv
-  intro n 
+  intro n hn
+  dsimp [d]
+  rw [eventually_constant_prod (N := N + 1) _ (by gcongr)]
+  intro m hm
+  simp [huv m (le_of_lt hm)]
+
+@[to_additive CauchySeq.norm_bddAbove]
 
 中文:
 定理 cauchySeq_prod_of_eventually_eq
@@ -1716,7 +1748,13 @@ theorem cauchySeq_prod_of_eventually_eq
   rw [show (fun n => ∏ k in range (n + 1)]; rw [u k) = d * fun n => ∏ k in range (n + 1)]; rw [v k
       by ext n; simp [d]]
   suffices forall n >= N, d n = d N from (tendsto_atTop_of_eventually_const this).cauchySeq.mul hv
-  intro n 
+  intro n hn
+  dsimp [d]
+  rw [eventually_constant_prod (N := N + 1) _ (by gcongr)]
+  intro m hm
+  simp [huv m (le_of_lt hm)]
+
+@[to_additive CauchySeq.norm_bddAbove]
 
 Depends on / 依赖: cauchySeq, cauchySeq.mul, eventually_constant_prod, le_of_lt, tendsto_atTop_of_eventually_const
 -/
@@ -1749,7 +1787,9 @@ lemma CauchySeq.mul_norm_bddAbove
     refine (norm_le_norm_add_norm_inv_mul (u n) (u 0)).trans ?_
     simp [(hC _ _).le]
   rw [bddAbove_def]
-  exact ⟨C + ‖u 0‖, by simpa using
+  exact ⟨C + ‖u 0‖, by simpa using this⟩
+
+@[to_additive]
 
 中文:
 引理 CauchySeq.mul_norm_bddAbove
@@ -1763,7 +1803,9 @@ lemma CauchySeq.mul_norm_bddAbove
     refine (norm_le_norm_add_norm_inv_mul (u n) (u 0)).trans ?_
     simp [(hC _ _).le]
   rw [bddAbove_def]
-  exact ⟨C + ‖u 0‖, by simpa using
+  exact ⟨C + ‖u 0‖, by simpa using this⟩
+
+@[to_additive]
 
 Depends on / 依赖: SeminormedGroup, SeminormedGroup.dist_eq, add_comm, bddAbove_def, cauchySeq_bdd, dist_eq, norm_le_norm_add_norm_inv_mul, simp_rw
 -/

@@ -198,7 +198,13 @@ theorem exp_unique_of_derivative_eq_self
   | succ n ih =>
     have eq1 : coeff n (d⁄dX A f) = coeff n f := congrArg (coeff n) hd
     rw [coeff_derivative] at eq1
-    have eq2 : coeff n (d⁄dX A (exp A)) = coeff n (exp A) := congrA
+    have eq2 : coeff n (d⁄dX A (exp A)) = coeff n (exp A) := congrArg (coeff n) (derivative_exp A)
+    rw [coeff_derivative] at eq2
+    rw [ih] at eq1
+    have h : coeff (n + 1) f * (n + 1) = coeff (n + 1) (exp A) * (n + 1) := by
+      rw [eq1]; rw [eq2]
+    rw [← Nat.cast_succ]; rw [mul_comm]; rw [← nsmul_eq_mul]; rw [mul_comm]; rw [← nsmul_eq_mul] at h
+    exact (smul_right_inj (Nat.succ_ne_zero n)).mp h
 
 中文:
 定理 exp_unique_of_derivative_eq_self
@@ -211,7 +217,13 @@ theorem exp_unique_of_derivative_eq_self
   | succ n ih =>
     have eq1 : coeff n (d⁄dX A f) = coeff n f := congrArg (coeff n) hd
     rw [coeff_derivative] at eq1
-    have eq2 : coeff n (d⁄dX A (exp A)) = coeff n (exp A) := congrA
+    have eq2 : coeff n (d⁄dX A (exp A)) = coeff n (exp A) := congrArg (coeff n) (derivative_exp A)
+    rw [coeff_derivative] at eq2
+    rw [ih] at eq1
+    have h : coeff (n + 1) f * (n + 1) = coeff (n + 1) (exp A) * (n + 1) := by
+      rw [eq1]; rw [eq2]
+    rw [← Nat.cast_succ]; rw [mul_comm]; rw [← nsmul_eq_mul]; rw [mul_comm]; rw [← nsmul_eq_mul] at h
+    exact (smul_right_inj (Nat.succ_ne_zero n)).mp h
 
 Depends on / 依赖: Nat.cast_succ, cast_succ, coeff_derivative, coeff_zero_eq_constantCoeff, constantCoeff_exp, derivative_exp, mul_comm, nsmul_eq_mu
 -/
@@ -300,7 +312,22 @@ theorem exp_mul_exp_eq_exp_add
   rintro x hx
   suffices
     a ^ x * b ^ (n - x) *
-        (algebraMap Rat A (1 / ↑x.factorial) * algebraMap Rat 
+        (algebraMap Rat A (1 / ↑x.factorial) * algebraMap Rat A (1 / ↑(n - x).factorial)) =
+      a ^ x * b ^ (n - x) * (↑(n.choose x) * (algebraMap Rat A) (1 / ↑n.factorial))
+    by convert! this using 1 <;> ring
+  congr 1
+  rw [← map_natCast (algebraMap Rat A) (n.choose x)]; rw [← map_mul]; rw [← map_mul]
+  refine RingHom.congr_arg _ ?_
+  rw [mul_one_div (↑(n.choose x) : Rat)]; rw [one_div_mul_one_div]
+  symm
+  rw [div_eq_iff]; rw [div_mul_eq_mul_div]; rw [one_mul]; rw [choose_eq_factorial_div_factorial]
+  · norm_cast
+    rw [cast_div_charZero]
+    apply factorial_mul_factorial_dvd_factorial (mem_range_succ_iff.1 hx)
+  · apply mem_range_succ_iff.1 hx
+  · rintro h
+    apply factorial_ne_zero n
+    rw [cast_eq_zero.1 h]
 
 中文:
 定理 exp_mul_exp_eq_exp_add
@@ -313,7 +340,22 @@ theorem exp_mul_exp_eq_exp_add
   rintro x hx
   suffices
     a ^ x * b ^ (n - x) *
-        (algebraMap Rat A (1 / ↑x.factorial) * algebraMap Rat 
+        (algebraMap Rat A (1 / ↑x.factorial) * algebraMap Rat A (1 / ↑(n - x).factorial)) =
+      a ^ x * b ^ (n - x) * (↑(n.choose x) * (algebraMap Rat A) (1 / ↑n.factorial))
+    by convert! this using 1 <;> ring
+  congr 1
+  rw [← map_natCast (algebraMap Rat A) (n.choose x)]; rw [← map_mul]; rw [← map_mul]
+  refine RingHom.congr_arg _ ?_
+  rw [mul_one_div (↑(n.choose x) : Rat)]; rw [one_div_mul_one_div]
+  symm
+  rw [div_eq_iff]; rw [div_mul_eq_mul_div]; rw [one_mul]; rw [choose_eq_factorial_div_factorial]
+  · norm_cast
+    rw [cast_div_charZero]
+    apply factorial_mul_factorial_dvd_factorial (mem_range_succ_iff.1 hx)
+  · apply mem_range_succ_iff.1 hx
+  · rintro h
+    apply factorial_ne_zero n
+    rw [cast_eq_zero.1 h]
 
 Depends on / 依赖: MonoidHom, MonoidHom.coe_mk, Nat.sum_antidiagonal_eq_sum_range_succ_mk, OneHom, OneHom.coe_mk, add_pow, algebraMap, coe_mk, coeff_mk, coeff_mul, convert, factorial, map_mul, map_natCast, n.choose, n.factorial, rescale, sum_antidiagonal_eq_sum_range_succ_mk, sum_congr, sum_mul
 -/
@@ -379,7 +421,7 @@ theorem exp_pow_eq_rescale_exp
       pow_zero (exp A), coe_comp]
   | succ k h =>
     simpa only [succ_eq_add_one, cast_add, ← exp_mul_exp_eq_exp_add (k : A), ← h, cast_one,
-      id_apply, rescale_one] using 
+      id_apply, rescale_one] using pow_succ (exp A) k
 
 中文:
 定理 exp_pow_eq_rescale_exp
@@ -392,7 +434,7 @@ theorem exp_pow_eq_rescale_exp
       pow_zero (exp A), coe_comp]
   | succ k h =>
     simpa only [succ_eq_add_one, cast_add, ← exp_mul_exp_eq_exp_add (k : A), ← h, cast_one,
-      id_apply, rescale_one] using 
+      id_apply, rescale_one] using pow_succ (exp A) k
 
 Depends on / 依赖: Function, Function.comp_apply, cast_add, cast_one, cast_zero, coe_comp, comp_apply, constantCoeff_exp, exp_mul_exp_eq_exp_add, id_apply, map_one, pow_succ, pow_zero, rescale_one, rescale_zero, succ_eq_add_one
 -/

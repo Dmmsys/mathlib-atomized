@@ -488,7 +488,20 @@ lemma exists_set_ker_evaluation_subset_of_isOpen
   choose fι ff fc h4 h5 h6 using (fun X : I => has_decomp_connected_components X.val)
   refine ⟨⋃ X, Set.range (ff X), Fintype.ofFinite _, ?_, ?_⟩
   · rintro X ⟨A, ⟨Y, rfl⟩, hA2⟩
-    obtai
+    obtain ⟨i, rfl⟩ := hA2
+    exact h5 Y i
+  · refine fun σ h => ha (fun X XinI => ?_)
+    suffices h : autEmbedding F σ X = 1 by
+      rw [h]
+      exact (ho X XinI).right
+    have h : σ.hom.app X = 𝟙 (F.obj X) := by
+      have : Fintype (fι ⟨X, XinI⟩) := Fintype.ofFinite _
+      ext x
+      obtain ⟨⟨j⟩, a, ha : F.map _ a = x⟩ := Limits.FintypeCat.jointly_surjective
+        (Discrete.functor (ff ⟨X, XinI⟩) ⋙ F) _ (Limits.isColimitOfPreserves F (h4 ⟨X, XinI⟩)) x
+      rw [FintypeCat.id_apply]; rw [← ha]; rw [NatTrans.naturality_apply]
+      simp [h ⟨(ff _) j, ⟨Set.range (ff ⟨X, XinI⟩), ⟨⟨_, rfl⟩, ⟨j, rfl⟩⟩⟩⟩]
+    exact Iso.ext h
 
 中文:
 引理 存在_set_ker_evaluation_subset_of_isOpen
@@ -498,7 +511,20 @@ lemma exists_set_ker_evaluation_subset_of_isOpen
   choose fι ff fc h4 h5 h6 using (fun X : I => has_decomp_connected_components X.val)
   refine ⟨⋃ X, Set.range (ff X), Fintype.ofFinite _, ?_, ?_⟩
   · rintro X ⟨A, ⟨Y, rfl⟩, hA2⟩
-    obtai
+    obtain ⟨i, rfl⟩ := hA2
+    exact h5 Y i
+  · refine fun σ h => ha (fun X XinI => ?_)
+    suffices h : autEmbedding F σ X = 1 by
+      rw [h]
+      exact (ho X XinI).right
+    have h : σ.hom.app X = 𝟙 (F.obj X) := by
+      have : Fintype (fι ⟨X, XinI⟩) := Fintype.ofFinite _
+      ext x
+      obtain ⟨⟨j⟩, a, ha : F.map _ a = x⟩ := Limits.FintypeCat.jointly_surjective
+        (Discrete.functor (ff ⟨X, XinI⟩) ⋙ F) _ (Limits.isColimitOfPreserves F (h4 ⟨X, XinI⟩)) x
+      rw [FintypeCat.id_apply]; rw [← ha]; rw [NatTrans.naturality_apply]
+      simp [h ⟨(ff _) j, ⟨Set.range (ff ⟨X, XinI⟩), ⟨⟨_, rfl⟩, ⟨j, rfl⟩⟩⟩⟩]
+    exact Iso.ext h
 
 Depends on / 依赖: F.obj, Fintype, Fintype.ofFinite, Set.range, X.val, autEmbedding, hUopen, has_decomp_connected_components, hom.app, isOpen_induced_iff, isOpen_induced_iff.mp, isOpen_pi_iff, isOpen_pi_iff.mp, ofFinite
 -/
@@ -541,7 +567,22 @@ lemma nhds_one_has_basis_stabilizers
       obtain ⟨I, _, hc, hmem⟩ := exists_set_ker_evaluation_subset_of_isOpen F hUone hUopen
       let P : C := ∏ᶜ fun X : I => X.val
       obtain ⟨A, a, hgal, hbij⟩ := exists_galois_representative F P
-      refine ⟨⟨A, a,
+      refine ⟨⟨A, a, hgal⟩, trivial, ?_⟩
+      intro t (ht : t.hom.app A a = a)
+      apply hU
+      apply hmem
+      have (X : I) : IsConnected X.val := hc X.val X.property
+      have (X : I) : Nonempty (F.obj X.val) := nonempty_fiber_of_isConnected F X
+      intro X
+      ext x
+      simp only [FintypeCat.id_apply]
+      obtain ⟨z, rfl⟩ :=
+        surjective_of_nonempty_fiber_of_isConnected F (Pi.π (fun X : I => X.val) X) x
+      obtain ⟨f, rfl⟩ := hbij.surjective z
+      rw [NatTrans.naturality_apply]; rw [NatTrans.naturality_apply]; rw [ht]
+    · intro ⟨X, _, h⟩
+      exact ⟨MulAction.stabilizer (Aut F) X.pt, h, stabilizer_isOpen (Aut F) X.pt,
+        Subgroup.one_mem _⟩
 
 中文:
 引理 nhds_one_has_basis_stabilizers
@@ -553,7 +594,22 @@ lemma nhds_one_has_basis_stabilizers
       obtain ⟨I, _, hc, hmem⟩ := exists_set_ker_evaluation_subset_of_isOpen F hUone hUopen
       let P : C := ∏ᶜ fun X : I => X.val
       obtain ⟨A, a, hgal, hbij⟩ := exists_galois_representative F P
-      refine ⟨⟨A, a,
+      refine ⟨⟨A, a, hgal⟩, trivial, ?_⟩
+      intro t (ht : t.hom.app A a = a)
+      apply hU
+      apply hmem
+      have (X : I) : IsConnected X.val := hc X.val X.property
+      have (X : I) : Nonempty (F.obj X.val) := nonempty_fiber_of_isConnected F X
+      intro X
+      ext x
+      simp only [FintypeCat.id_apply]
+      obtain ⟨z, rfl⟩ :=
+        surjective_of_nonempty_fiber_of_isConnected F (Pi.π (fun X : I => X.val) X) x
+      obtain ⟨f, rfl⟩ := hbij.surjective z
+      rw [NatTrans.naturality_apply]; rw [NatTrans.naturality_apply]; rw [ht]
+    · intro ⟨X, _, h⟩
+      exact ⟨MulAction.stabilizer (Aut F) X.pt, h, stabilizer_isOpen (Aut F) X.pt,
+        Subgroup.one_mem _⟩
 
 Depends on / 依赖: F.obj, Fintyp, IsConnected, Nonempty, X.property, X.val, exists_galois_representative, exists_set_ker_evaluation_subset_of_isOpen, hUopen, mem_nhds_iff, nonempty_fiber_of_isConnected, property, t.hom.app
 -/

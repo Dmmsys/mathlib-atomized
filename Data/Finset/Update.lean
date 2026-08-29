@@ -212,7 +212,8 @@ theorem updateFinset_updateFinset
   by_cases his : i in s <;> by_cases hit : i in t <;>
     simp only [updateFinset, his, hit, dif_pos, dif_neg, Finset.mem_union, false_or, not_false_iff]
   · exfalso; exact Finset.disjoint_left.mp hst his hit
-.symm · exact piCongrLeft_sumInl (fun b : 
+.symm · exact piCongrLeft_sumInl (fun b : ↥(s union t) => π b) e y z ⟨i, his⟩
+.symm · exact piCongrLeft_sumInr (fun b : ↥(s union t) => π b) e y z ⟨i, hit⟩
 
 中文:
 定理 updateFinset_updateFinset
@@ -223,7 +224,8 @@ theorem updateFinset_updateFinset
   by_cases his : i in s <;> by_cases hit : i in t <;>
     simp only [updateFinset, his, hit, dif_pos, dif_neg, Finset.mem_union, false_or, not_false_iff]
   · exfalso; exact Finset.disjoint_left.mp hst his hit
-.symm · exact piCongrLeft_sumInl (fun b : 
+.symm · exact piCongrLeft_sumInl (fun b : ↥(s union t) => π b) e y z ⟨i, his⟩
+.symm · exact piCongrLeft_sumInr (fun b : ↥(s union t) => π b) e y z ⟨i, hit⟩
 
 Depends on / 依赖: Equiv.Finset.union, Finset, Finset.disjoint_left.mp, Finset.mem_union, dif_neg, dif_pos, disjoint_left, false_or, mem_union, not_false_iff, piCongrLeft_sumInl, piCongrLeft_sumInr, updateFinset
 -/

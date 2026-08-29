@@ -98,7 +98,15 @@ theorem frobeniusNumber_pair
     apply cop.mul_add_mul_ne_mul (add_one_ne_zero a) (add_one_ne_zero b)
     simp only [Nat.sub_sub, smul_eq_mul] at h
     zify [hmn] at h ⊢
-    rw
+    rw [← sub_eq_zero] at h ⊢
+    rw [← h]
+    ring
+  · intro k hk
+    dsimp at hk
+    contrapose! hk
+    obtain ⟨a, b, h⟩ := exists_add_mul_eq_of_gcd_dvd_of_mul_pred_le m n k
+      (by simp [cop.gcd_eq_one]) (by grind [pred_mul, mul_pred, pred_eq_sub_one])
+    exact ⟨a, b, succ_inj.mp (congrArg succ h)⟩
 
 中文:
 定理 frobeniusNumber_pair
@@ -112,7 +120,15 @@ theorem frobeniusNumber_pair
     apply cop.mul_add_mul_ne_mul (add_one_ne_zero a) (add_one_ne_zero b)
     simp only [Nat.sub_sub, smul_eq_mul] at h
     zify [hmn] at h ⊢
-    rw
+    rw [← sub_eq_zero] at h ⊢
+    rw [← h]
+    ring
+  · intro k hk
+    dsimp at hk
+    contrapose! hk
+    obtain ⟨a, b, h⟩ := exists_add_mul_eq_of_gcd_dvd_of_mul_pred_le m n k
+      (by simp [cop.gcd_eq_one]) (by grind [pred_mul, mul_pred, pred_eq_sub_one])
+    exact ⟨a, b, succ_inj.mp (congrArg succ h)⟩
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_closure_pair, FrobeniusNumber, Nat.sub_sub, add_le_mul, add_one_ne_zero, contrapose, cop.gcd_eq_one, cop.mul_add_mul_ne_mul, exists_add_mul_eq_of_gcd_dvd_of_mul_pred_le, gcd_eq_one, mem_closure_pair, mul_add_mul_ne_mul, mul_pred, pred_eq_sub_one, pred_mul, simp_rw, smul_eq_mul, sub_eq_zero, sub_sub
 -/
@@ -392,7 +408,37 @@ theorem exists_mem_span_nat_finset_of_ge
   · refine ⟨∅, 0, by simp, fun _ _ dvd => by cases zero_dvd_iff.mp (h0 ▸ dvd); exact zero_mem _⟩
   -- Write the gcd of `s` as a ℤ-linear combination of a finite subset `t`.
   have ⟨t, hts, a, eq⟩ := (Submodule.mem_span_image_iff_exists_fun _).mp
-    (span_singleton_se
+    (span_singleton_setGcd s ▸ mem_span_singleton_self _)
+  -- Let `x` be an arbitrary nonzero element in `s`.
+  have ⟨x, hxs, hx⟩ := exists_ne_zero_of_setGcd_ne_zero h0
+  let n := (x / setGcd s) * ∑ i, (-a i).toNat * i
+  refine ⟨insert x t, n, by simpa [Set.insert_subset_iff] using ⟨hxs, hts⟩, fun m ge dvd => ?_⟩
+  -- For `m ≥ n`, write `m = q * x + (r + n)` with 0 ≤ r < x.
+  obtain ⟨c, rfl⟩ := exists_add_of_le ge
+  rw [← c.div_add_mod' x]
+  set q := c / x
+  set r := c % x
+  rw [add_comm]; rw [add_assoc]
+  refine add_mem (mul_mem_left _ q (subset_span (Finset.mem_insert_self ..)))
+    (Submodule.span_mono (s := t) (Finset.subset_insert ..) ?_)
+  -- It suffices to show `r + n` lies in the ℕ-span of `t`.
+obtain ⟨rx, hrx⟩ : setGcd s ∣ r := (dvd_mod_iff (setGcd_dvd_of_mem hxs)).mpr
+    (Nat.dvd_add_right <| dvd_mul_of_dvd_right (Finset.dvd_sum fun i _ =>
+      dvd_mul_of_dvd_right (setGcd_dvd_of_mem (hts i.2)) _) _).mp dvd
+  convert!
+    (sum_mem fun i _ => mul_mem_left _ _ (subset_span i.2) :
+      -- an explicit ℕ-linear combination of elements of `t` that is equal to `r + n`
+       ∑ i : t, (if 0 <= a i then rx else x / setGcd s - rx) * (a i).natAbs * i in span t)
+  simp_rw [← Int.natCast_inj, hrx, n, Finset.mul_sum, mul_comm _ rx, cast_add, cast_sum, cast_mul,
+    ← eq, Finset.mul_sum, smul_eq_mul, ← mul_assoc, ← Finset.sum_add_distrib, ← add_mul]
+  congr! 2 with i
+  split_ifs with hai
+  · rw [Int.toNat_eq_zero.mpr (by lia), cast_zero, mul_zero, add_zero,
+      Int.natCast_natAbs, abs_eq_self.mpr hai]
+  · rw [cast_sub, Int.natCast_natAbs, abs_eq_neg_self.mpr (by lia), sub_mul,
+      ← Int.eq_natCast_toNat.mpr (by lia), mul_neg (rx : Int), sub_neg_eq_add, add_comm]
+    rw [← Nat.mul_le_mul_left_iff (pos_of_ne_zero h0)]; rw [← hrx]; rw [Nat.mul_div_cancel' (setGcd_dvd_of_mem hxs)]
+    exact (c.mod_lt (pos_of_ne_zero hx)).le
 
 中文:
 定理 存在_mem_span_nat_finset_of_ge
@@ -401,7 +447,37 @@ theorem exists_mem_span_nat_finset_of_ge
   · refine ⟨∅, 0, by simp, fun _ _ dvd => by cases zero_dvd_iff.mp (h0 ▸ dvd); exact zero_mem _⟩
   -- Write the gcd of `s` as a ℤ-linear combination of a finite subset `t`.
   have ⟨t, hts, a, eq⟩ := (Submodule.mem_span_image_iff_exists_fun _).mp
-    (span_singleton_se
+    (span_singleton_setGcd s ▸ mem_span_singleton_self _)
+  -- Let `x` be an arbitrary nonzero element in `s`.
+  have ⟨x, hxs, hx⟩ := exists_ne_zero_of_setGcd_ne_zero h0
+  let n := (x / setGcd s) * ∑ i, (-a i).toNat * i
+  refine ⟨insert x t, n, by simpa [Set.insert_subset_iff] using ⟨hxs, hts⟩, fun m ge dvd => ?_⟩
+  -- For `m ≥ n`, write `m = q * x + (r + n)` with 0 ≤ r < x.
+  obtain ⟨c, rfl⟩ := exists_add_of_le ge
+  rw [← c.div_add_mod' x]
+  set q := c / x
+  set r := c % x
+  rw [add_comm]; rw [add_assoc]
+  refine add_mem (mul_mem_left _ q (subset_span (Finset.mem_insert_self ..)))
+    (Submodule.span_mono (s := t) (Finset.subset_insert ..) ?_)
+  -- It suffices to show `r + n` lies in the ℕ-span of `t`.
+obtain ⟨rx, hrx⟩ : setGcd s ∣ r := (dvd_mod_iff (setGcd_dvd_of_mem hxs)).mpr
+    (Nat.dvd_add_right <| dvd_mul_of_dvd_right (Finset.dvd_sum fun i _ =>
+      dvd_mul_of_dvd_right (setGcd_dvd_of_mem (hts i.2)) _) _).mp dvd
+  convert!
+    (sum_mem fun i _ => mul_mem_left _ _ (subset_span i.2) :
+      -- an explicit ℕ-linear combination of elements of `t` that is equal to `r + n`
+       ∑ i : t, (if 0 <= a i then rx else x / setGcd s - rx) * (a i).natAbs * i in span t)
+  simp_rw [← Int.natCast_inj, hrx, n, Finset.mul_sum, mul_comm _ rx, cast_add, cast_sum, cast_mul,
+    ← eq, Finset.mul_sum, smul_eq_mul, ← mul_assoc, ← Finset.sum_add_distrib, ← add_mul]
+  congr! 2 with i
+  split_ifs with hai
+  · rw [Int.toNat_eq_zero.mpr (by lia), cast_zero, mul_zero, add_zero,
+      Int.natCast_natAbs, abs_eq_self.mpr hai]
+  · rw [cast_sub, Int.natCast_natAbs, abs_eq_neg_self.mpr (by lia), sub_mul,
+      ← Int.eq_natCast_toNat.mpr (by lia), mul_neg (rx : Int), sub_neg_eq_add, add_comm]
+    rw [← Nat.mul_le_mul_left_iff (pos_of_ne_zero h0)]; rw [← hrx]; rw [Nat.mul_div_cancel' (setGcd_dvd_of_mem hxs)]
+    exact (c.mod_lt (pos_of_ne_zero hx)).le
 
 Depends on / 依赖: setGcd, zero_dvd_iff, zero_dvd_iff.mp, zero_mem
 -/
@@ -477,7 +553,7 @@ theorem finite_setOfPred_setGcd_dvd_and_mem_span
 lt_of_not_ge fun ge => h.2 (Submodule.span_nat_eq_addSubmonoidClosure s).ge (hn m ge h.1)
 
 @[deprecated (since := "2026-07-09")]
-alias finite_setOf_setGcd_dvd_and_mem_span := finite_setOfP
+alias finite_setOf_setGcd_dvd_and_mem_span := finite_setOfPred_setGcd_dvd_and_mem_span
 
 中文:
 定理 finite_setOfPred_setGcd_dvd_and_mem_span
@@ -486,7 +562,7 @@ alias finite_setOf_setGcd_dvd_and_mem_span := finite_setOfP
 lt_of_not_ge fun ge => h.2 (Submodule.span_nat_eq_addSubmonoidClosure s).ge (hn m ge h.1)
 
 @[deprecated (since := "2026-07-09")]
-alias finite_setOf_setGcd_dvd_and_mem_span := finite_setOfP
+alias finite_setOf_setGcd_dvd_and_mem_span := finite_setOfPred_setGcd_dvd_and_mem_span
 
 Depends on / 依赖: Finset, Finset.mem_range.mpr, Finset.range, Submodule, Submodule.span_nat_eq_addSubmonoidClosure, exists_mem_closure_of_ge, finite_toSet, finite_toSet.subset, lt_of_not_ge, mem_range, span_nat_eq_addSubmonoidClosure, subset
 -/
@@ -511,7 +587,8 @@ instance :
     refine ⟨t union {m in Finset.range n | m in s}, (Submodule.span_le.mpr ?_).antisymm fun m hm => ?_⟩
     · simpa using ⟨hts, fun _ => And.right⟩
     obtain le | gt := le_or_gt n m
-    · exact Submodule.span_mono (by s
+    · exact Submodule.span_mono (by simp) (hn m le (setGcd_dvd_of_mem hm))
+    · exact Submodule.subset_span (by simpa using .inr ⟨gt, hm⟩)
 
 中文:
 实例 :
@@ -522,7 +599,8 @@ instance :
     refine ⟨t union {m in Finset.range n | m in s}, (Submodule.span_le.mpr ?_).antisymm fun m hm => ?_⟩
     · simpa using ⟨hts, fun _ => And.right⟩
     obtain le | gt := le_or_gt n m
-    · exact Submodule.span_mono (by s
+    · exact Submodule.span_mono (by simp) (hn m le (setGcd_dvd_of_mem hm))
+    · exact Submodule.subset_span (by simpa using .inr ⟨gt, hm⟩)
 
 Depends on / 依赖: And.right, Finset, Finset.range, Submodule, Submodule.span_le.mpr, Submodule.span_mono, Submodule.subset_span, antisymm, classical, exists_mem_span_nat_finset_of_ge, le_or_gt, setGcd_dvd_of_mem, span_le, span_mono, subset_span
 -/
@@ -574,7 +652,17 @@ theorem exists_frobeniusNumber_iff
 exact ⟨dvd_one.mp Nat.dvd_add_iff_right (setGcd_dvd_of_mem_closure (hn.2 (n + 1)
       (by lia))) (n := 1) |>.mpr (setGcd_dvd_of_mem_closure (hn.2 (n + 2) (by lia))),
 fun h => hn.1 AddSubmonoid.closure_mono (Set.singleton_subset_iff.mpr h)
-       
+        (addSubmonoidClosure_one.ge ⟨⟩)⟩
+  mpr h := by
+    have ⟨n, hn⟩ := exists_mem_closure_of_ge s
+    let P n := n ∉ AddSubmonoid.closure s
+    have : P 1 := h.2 ∘ one_mem_closure_iff.mp
+    classical
+    refine ⟨findGreatest P n, frobeniusNumber_iff.mpr ⟨findGreatest_spec (P := P) (m := 1)
+      (le_of_not_gt fun lt => this (hn _ lt.le h.1.dvd)) this, fun k gt => ?_⟩⟩
+    obtain le | le := le_total k n
+    · exact of_not_not (findGreatest_is_greatest gt le)
+    · exact hn k le (h.1.dvd.trans <| one_dvd k)
 
 中文:
 定理 存在_frobeniusNumber_iff
@@ -584,7 +672,17 @@ fun h => hn.1 AddSubmonoid.closure_mono (Set.singleton_subset_iff.mpr h)
 exact ⟨dvd_one.mp Nat.dvd_add_iff_right (setGcd_dvd_of_mem_closure (hn.2 (n + 1)
       (by lia))) (n := 1) |>.mpr (setGcd_dvd_of_mem_closure (hn.2 (n + 2) (by lia))),
 fun h => hn.1 AddSubmonoid.closure_mono (Set.singleton_subset_iff.mpr h)
-       
+        (addSubmonoidClosure_one.ge ⟨⟩)⟩
+  mpr h := by
+    have ⟨n, hn⟩ := exists_mem_closure_of_ge s
+    let P n := n ∉ AddSubmonoid.closure s
+    have : P 1 := h.2 ∘ one_mem_closure_iff.mp
+    classical
+    refine ⟨findGreatest P n, frobeniusNumber_iff.mpr ⟨findGreatest_spec (P := P) (m := 1)
+      (le_of_not_gt fun lt => this (hn _ lt.le h.1.dvd)) this, fun k gt => ?_⟩⟩
+    obtain le | le := le_total k n
+    · exact of_not_not (findGreatest_is_greatest gt le)
+    · exact hn k le (h.1.dvd.trans <| one_dvd k)
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure, AddSubmonoid.closure_mono, Nat.dvd_add_iff_right, Set.singleton_subset_iff.mpr, addSubmonoidClosure_one, addSubmonoidClosure_one.ge, classical, closure, closure_mono, dvd_add_iff_right, dvd_one, dvd_one.mp, exists_mem_closure_of_ge, findGreatest, frobeniusNum, frobeniusNumber_iff, one_mem_closure_iff, one_mem_closure_iff.mp, setGcd_dvd_of_mem_closure
 -/

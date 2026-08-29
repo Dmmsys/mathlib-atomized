@@ -40,7 +40,20 @@ lemma nonempty_orderIso_withZeroMul_int_iff
     have hx0 : x != 0 := by simp [x]
     have hx1 : x < 1 := by simp [-exp_neg, x, ← lt_map_inv_iff, ← exp_zero]
     refine ⟨⟨x, hx1, fun y hy => ?_⟩, ⟨x, hx0, hx1.ne⟩, .comap e.toMonoidHom e.strictMono⟩
-    rcases eq_or_ne y 0 with rfl 
+    rcases eq_or_ne y 0 with rfl | hy0
+    · simp
+    · rw [← map_one e.symm, ← map_inv_lt_iff, ← log_lt_log (by simp [hy0]) (by simp)] at hy
+      rw [← map_inv_le_iff]; rw [← log_le_log (by simp [hy0]) (by simp)]
+      simp only [OrderMonoidIso.equivLike_inv_eq_symm, OrderMonoidIso.symm_symm, log_one,
+        log_exp] at hy ⊢
+      linarith
+  · rintro ⟨hD, hN, hM⟩
+    rw [isNontrivial_iff_nontrivial_units] at hN
+    rw [LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered]
+    intro H
+    obtain ⟨x, hx, hx'⟩ := hD.has_maximal_element
+    obtain ⟨y, hy, hy'⟩ := exists_between hx
+    exact hy.not_ge (hx' y hy')
 
 中文:
 引理 nonempty_orderIso_withZeroMul_int_iff
@@ -52,7 +65,20 @@ lemma nonempty_orderIso_withZeroMul_int_iff
     have hx0 : x != 0 := by simp [x]
     have hx1 : x < 1 := by simp [-exp_neg, x, ← lt_map_inv_iff, ← exp_zero]
     refine ⟨⟨x, hx1, fun y hy => ?_⟩, ⟨x, hx0, hx1.ne⟩, .comap e.toMonoidHom e.strictMono⟩
-    rcases eq_or_ne y 0 with rfl 
+    rcases eq_or_ne y 0 with rfl | hy0
+    · simp
+    · rw [← map_one e.symm, ← map_inv_lt_iff, ← log_lt_log (by simp [hy0]) (by simp)] at hy
+      rw [← map_inv_le_iff]; rw [← log_le_log (by simp [hy0]) (by simp)]
+      simp only [OrderMonoidIso.equivLike_inv_eq_symm, OrderMonoidIso.symm_symm, log_one,
+        log_exp] at hy ⊢
+      linarith
+  · rintro ⟨hD, hN, hM⟩
+    rw [isNontrivial_iff_nontrivial_units] at hN
+    rw [LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered]
+    intro H
+    obtain ⟨x, hx, hx'⟩ := hD.has_maximal_element
+    obtain ⟨y, hy, hy'⟩ := exists_between hx
+    exact hy.not_ge (hx' y hy')
 
 Depends on / 依赖: OrderMo, OrderMonoidIso, OrderMonoidIso.equivLike_inv_eq_symm, e.strictMono, e.symm, e.toMonoidHom, eq_or_ne, equivLike_inv_eq_symm, exp_neg, exp_zero, hx1.ne, log_le_log, log_lt_log, lt_map_inv_iff, map_inv_le_iff, map_inv_lt_iff, map_one, strictMono, toMonoidHom
 -/
@@ -93,7 +119,18 @@ lemma IsDiscrete.of_compatible_withZeroMulInt
     · classical
       exfalso
       refine (MonoidWithZeroHom.range_nontrivial
-        (ValueGroupWithZero.orderMonoidIso v).toMonoidWithZeroHom).not_subs
+        (ValueGroupWithZero.orderMonoidIso v).toMonoidWithZeroHom).not_subsingleton ?_
+      rw [← WithZero.denselyOrdered_set_iff_subsingleton]
+      exact (ValueGroupWithZero.embed_strictMono v).denselyOrdered_range
+    · rw [isNontrivial_iff_nontrivial_units] at h
+      rw [← LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered] at H
+      rw [nonempty_orderIso_withZeroMul_int_iff] at H
+      exact H.left
+  · rw [isNontrivial_iff_nontrivial_units] at h; push Not at h
+    refine ⟨⟨0, zero_lt_one, fun y hy => ?_⟩⟩
+    contrapose! hy
+    have : 1 = Units.mk0 y hy.ne' := Subsingleton.elim _ _
+    exact Units.val_le_val.mpr this.le
 
 中文:
 引理 是离散.of_compatible_withZeroMul整数
@@ -105,7 +142,18 @@ lemma IsDiscrete.of_compatible_withZeroMulInt
     · classical
       exfalso
       refine (MonoidWithZeroHom.range_nontrivial
-        (ValueGroupWithZero.orderMonoidIso v).toMonoidWithZeroHom).not_subs
+        (ValueGroupWithZero.orderMonoidIso v).toMonoidWithZeroHom).not_subsingleton ?_
+      rw [← WithZero.denselyOrdered_set_iff_subsingleton]
+      exact (ValueGroupWithZero.embed_strictMono v).denselyOrdered_range
+    · rw [isNontrivial_iff_nontrivial_units] at h
+      rw [← LinearOrderedCommGroupWithZero.discrete_iff_not_denselyOrdered] at H
+      rw [nonempty_orderIso_withZeroMul_int_iff] at H
+      exact H.left
+  · rw [isNontrivial_iff_nontrivial_units] at h; push Not at h
+    refine ⟨⟨0, zero_lt_one, fun y hy => ?_⟩⟩
+    contrapose! hy
+    have : 1 = Units.mk0 y hy.ne' := Subsingleton.elim _ _
+    exact Units.val_le_val.mpr this.le
 
 Depends on / 依赖: DenselyOrdered, IsNontrivial, IsRankLeOne, LinearOrderedCommGroupWithZero, LinearOrderedCommGroupWithZero.discrete_iff_not, MonoidWithZeroHom, MonoidWithZeroHom.range_nontrivial, ValueGroupWithZero, ValueGroupWithZero.embed_strictMono, ValueGroupWithZero.orderMonoidIso, WithZero, WithZero.denselyOrdered_set_iff_subsingleton, classical, denselyOrdered_range, denselyOrdered_set_iff_subsingleton, discrete_iff_not, embed_strictMono, isNontrivial_iff_nontrivial_units, not_subsingleton, of_compatible_mulArchimedean
 -/

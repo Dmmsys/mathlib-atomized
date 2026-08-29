@@ -271,7 +271,9 @@ theorem toFinsupp_append
     rintro ⟨k, rfl : length l₁ + k = n⟩
     lia
   | inr h =>
-    rcases Nat.exists_eq_add_of_le h with ⟨k, 
+    rcases Nat.exists_eq_add_of_le h with ⟨k, rfl⟩
+    rw [getD_append_right _ _ _ _ h]; rw [Nat.add_sub_cancel_left]; rw [getD_eq_default _ _ h]; rw [zero_add]
+    exact Eq.symm (Finsupp.embDomain_apply_self _ _ _)
 
 中文:
 定理 toFinsupp_append
@@ -285,7 +287,9 @@ theorem toFinsupp_append
     rintro ⟨k, rfl : length l₁ + k = n⟩
     lia
   | inr h =>
-    rcases Nat.exists_eq_add_of_le h with ⟨k, 
+    rcases Nat.exists_eq_add_of_le h with ⟨k, rfl⟩
+    rw [getD_append_right _ _ _ _ h]; rw [Nat.add_sub_cancel_left]; rw [getD_eq_default _ _ h]; rw [zero_add]
+    exact Eq.symm (Finsupp.embDomain_apply_self _ _ _)
 
 Depends on / 依赖: Eq.symm, Finsupp, Finsupp.add_apply, Finsupp.embDomain_apply_self, Finsupp.embDomain_of_notMem_range, Nat.add_sub_cancel_left, Nat.exists_eq_add_of_le, add_apply, add_sub_cancel_left, add_zero, embDomain_apply_self, embDomain_of_notMem_range, exists_eq_add_of_le, getD_append, getD_append_right, getD_eq_default, length, lt_or_ge, toFinsupp_apply, zero_add
 -/
@@ -380,7 +384,7 @@ theorem toFinsupp_eq_sum_mapIdx_single
   induction l using List.reverseRecOn with
   | nil => exact toFinsupp_nil
   | append_singleton x xs ih =>
-    classic
+    classical simp [toFinsupp_concat_eq_toFinsupp_add_single, sum_append, ih]
 
 中文:
 定理 toFinsupp_eq_sum_mapIdx_single
@@ -392,7 +396,7 @@ theorem toFinsupp_eq_sum_mapIdx_single
   induction l using List.reverseRecOn with
   | nil => exact toFinsupp_nil
   | append_singleton x xs ih =>
-    classic
+    classical simp [toFinsupp_concat_eq_toFinsupp_add_single, sum_append, ih]
 -/
 theorem toFinsupp_eq_sum_mapIdx_single {R : Type*} [AddMonoid R] (l : List R)
     [DecidablePred (getD l · 0 != 0)] :

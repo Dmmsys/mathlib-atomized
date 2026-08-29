@@ -36,7 +36,8 @@ instance ModuleCat.finite_ext
   | succ n ih =>
     obtain ⟨N, _, _, _, _, f, surjf⟩ := Module.exists_finite_presentation R N
     let exac := LinearMap.shortExact_shortComplexKer surjf
-    exact Module
+    exact Module.Finite.of_surjective (exac.extClass.precompOfLinear R M (add_comm 1 n))
+      (precomp_extClass_surjective_of_projective_X₂ M exac n)
 
 中文:
 实例 模范畴.finite_ext
@@ -47,7 +48,8 @@ instance ModuleCat.finite_ext
   | succ n ih =>
     obtain ⟨N, _, _, _, _, f, surjf⟩ := Module.exists_finite_presentation R N
     let exac := LinearMap.shortExact_shortComplexKer surjf
-    exact Module
+    exact Module.Finite.of_surjective (exac.extClass.precompOfLinear R M (add_comm 1 n))
+      (precomp_extClass_surjective_of_projective_X₂ M exac n)
 
 Depends on / 依赖: Ext.linearEquiv, Finite, LinearMap, LinearMap.shortExact_shortComplexKer, Module, Module.Finite.equiv, Module.Finite.of_surjective, Module.exists_finite_presentation, ModuleCat, ModuleCat.homLinearEquiv, add_comm, exac.extClass.precompOfLinear, exists_finite_presentation, extClass, generalizing, homLinearEquiv, of_surjective, precompOfLinear, shortExact_shortComplexKer
 -/

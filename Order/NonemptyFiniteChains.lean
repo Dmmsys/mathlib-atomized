@@ -127,7 +127,7 @@ definition map
     · exact Or.inl (f.monotone h)
     · exact Or.inr (f.monotone h)
 
-@[simp
+@[simp]
 
 中文:
 定义 map
@@ -142,7 +142,7 @@ definition map
     · exact Or.inl (f.monotone h)
     · exact Or.inr (f.monotone h)
 
-@[simp
+@[simp]
 
 Depends on / 依赖: Finset, Finset.image, finset, s.finset
 -/

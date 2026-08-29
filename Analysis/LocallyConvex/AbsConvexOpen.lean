@@ -281,7 +281,23 @@ theorem with_gaugeSeminormFamily
   refine (nhds_hasBasis_absConvex_open 𝕜 E).to_hasBasis (fun s hs => ?_) fun s hs => ?_
   · refine ⟨s, ⟨?_, rfl.subset⟩⟩
     convert! (gaugeSeminormFamily _ _).basisSets_singleton_mem ⟨s, hs⟩ one_pos
-    rw [gaugeSeminormFamily_ball]; rw [Sub
+    rw [gaugeSeminormFamily_ball]; rw [Subtype.coe_mk]
+  refine ⟨s, ⟨?_, rfl.subset⟩⟩
+  rw [SeminormFamily.basisSets_iff] at hs
+  rcases hs with ⟨t, r, hr, rfl⟩
+  rw [Seminorm.ball_finset_sup_eq_iInter _ _ _ hr]
+  -- We have to show that the intersection contains zero, is open, balanced, and convex
+  refine
+    ⟨mem_iInter₂.mpr fun _ _ => by simp [hr],
+      isOpen_biInter_finset fun S _ => ?_,
+      balanced_iInter₂ fun _ _ => Seminorm.balanced_ball_zero _ _,
+      convex_iInter₂ fun _ _ => (convex_of_nonneg_surjective_algebraMap _
+        (fun _ => RCLike.nonneg_iff_exists_ofReal.mp) (Seminorm.convex_ball _ _ _) ..)⟩
+  -- The only nontrivial part is to show that the ball is open
+  have hr' : r = ‖(r : 𝕜)‖ * 1 := by simp [abs_of_pos hr]
+  have hr'' : (r : 𝕜) != 0 := by simp [hr.ne']
+  rw [hr']; rw [← Seminorm.smul_ball_zero hr'']; rw [gaugeSeminormFamily_ball]
+  exact S.coe_isOpen.smul₀ hr''
 
 中文:
 定理 with_gaugeSeminormFamily
@@ -291,7 +307,23 @@ theorem with_gaugeSeminormFamily
   refine (nhds_hasBasis_absConvex_open 𝕜 E).to_hasBasis (fun s hs => ?_) fun s hs => ?_
   · refine ⟨s, ⟨?_, rfl.subset⟩⟩
     convert! (gaugeSeminormFamily _ _).basisSets_singleton_mem ⟨s, hs⟩ one_pos
-    rw [gaugeSeminormFamily_ball]; rw [Sub
+    rw [gaugeSeminormFamily_ball]; rw [Subtype.coe_mk]
+  refine ⟨s, ⟨?_, rfl.subset⟩⟩
+  rw [SeminormFamily.basisSets_iff] at hs
+  rcases hs with ⟨t, r, hr, rfl⟩
+  rw [Seminorm.ball_finset_sup_eq_iInter _ _ _ hr]
+  -- We have to show that the intersection contains zero, is open, balanced, and convex
+  refine
+    ⟨mem_iInter₂.mpr fun _ _ => by simp [hr],
+      isOpen_biInter_finset fun S _ => ?_,
+      balanced_iInter₂ fun _ _ => Seminorm.balanced_ball_zero _ _,
+      convex_iInter₂ fun _ _ => (convex_of_nonneg_surjective_algebraMap _
+        (fun _ => RCLike.nonneg_iff_exists_ofReal.mp) (Seminorm.convex_ball _ _ _) ..)⟩
+  -- The only nontrivial part is to show that the ball is open
+  have hr' : r = ‖(r : 𝕜)‖ * 1 := by simp [abs_of_pos hr]
+  have hr'' : (r : 𝕜) != 0 := by simp [hr.ne']
+  rw [hr']; rw [← Seminorm.smul_ball_zero hr'']; rw [gaugeSeminormFamily_ball]
+  exact S.coe_isOpen.smul₀ hr''
 
 Depends on / 依赖: Seminorm, Seminorm.ball_finset_sup_eq_iInter, SeminormFamily, SeminormFamily.basisSets_iff, SeminormFamily.withSeminorms_of_hasBasis, Subtype, Subtype.coe_mk, ball_finset_sup_eq_iInter, basisSets_iff, basisSets_singleton_mem, coe_mk, convert, gaugeSeminormFamily, gaugeSeminormFamily_ball, nhds_hasBasis_absConvex_open, one_pos, rfl.subset, subset, to_hasBasis, withSeminorms_of_hasBasis
 -/

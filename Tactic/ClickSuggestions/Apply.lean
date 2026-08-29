@@ -142,7 +142,11 @@ definition tacticSyntax
     else
       `(tactic| apply $id)
   else
-   
+    let proof ← withOptions (pp.mvars.set · false) (PrettyPrinter.delab proof)
+    if isClosing then
+      `(tactic| exact $proof)
+    else
+      `(tactic| refine $proof)
 
 中文:
 定义 tacticSyntax
@@ -156,7 +160,11 @@ definition tacticSyntax
     else
       `(tactic| apply $id)
   else
-   
+    let proof ← withOptions (pp.mvars.set · false) (PrettyPrinter.delab proof)
+    if isClosing then
+      `(tactic| exact $proof)
+    else
+      `(tactic| refine $proof)
 -/
 private def tacticSyntax (lemmaName : Premise) (proof : Expr) (isClosing justLemmaName : Bool) :
     MetaM (TSyntax `tactic) := do
@@ -189,7 +197,44 @@ definition ApplyLemma.try
   let target ← (← read).goal.getType
   unless ← isDefEq e target do throwError "{e} does not unify with {target}"
   synthAppInstances `click_suggestions default mvars binderInfos false false
-  let mut new
+  let mut newGoals := #[]
+  let mut justLemmaName := true
+  for mvar in mvars do
+    unless ← mvar.mvarId!.isAssigned do
+      if ← isProof mvar <&&> mvar.mvarId!.assumptionCore then
+        justLemmaName := false
+      else
+        newGoals := newGoals.push (← instantiateMVars (← inferType mvar))
+  let isClosing := newGoals.isEmpty
+  let makesNewMVars := newGoals.any fun goal =>
+    (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
+  let proof ← instantiateMVars proof
+  let key := {
+    numGoals := newGoals.size
+    nameLength := lem.name.length
+    replacementSize := ← newGoals.foldlM (init := 0) fun s g =>
+      return (← ppExpr g).pretty.length + s
+    name := lem.name.toString
+    newGoals := ← newGoals.mapM (abstractMVars ·)
+  }
+  let tactic ← tacticSyntax lem.name proof (isClosing := isClosing) (justLemmaName := justLemmaName)
+  let mut htmls := #[]
+  for goal in newGoals do
+    htmls := htmls.push <div> <strong className="goal-vdash">⊢ </strong> {← exprToHtml goal} </div>
+  if isClosing then
+    htmls := #[.text "Goal accomplished! 🎉️"]
+    addSolvedSuggestion tactic
+  let filtered ←
+    if !makesNewMVars then
+some < > mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+    else
+      pure none
+  htmls := htmls.push <div> {← lem.name.toHtml} </div>
+  let unfiltered ← mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+  let pattern ← do
+    let (_, _, e) ← forallMetaTelescopeReducing (← lem.name.getType)
+    exprToHtml e
+  return { filtered, unfiltered, key, pattern }
 
 中文:
 定义 ApplyLemma.try
@@ -199,7 +244,44 @@ definition ApplyLemma.try
   let target ← (← read).goal.getType
   unless ← isDefEq e target do throwError "{e} does not unify with {target}"
   synthAppInstances `click_suggestions default mvars binderInfos false false
-  let mut new
+  let mut newGoals := #[]
+  let mut justLemmaName := true
+  for mvar in mvars do
+    unless ← mvar.mvarId!.isAssigned do
+      if ← isProof mvar <&&> mvar.mvarId!.assumptionCore then
+        justLemmaName := false
+      else
+        newGoals := newGoals.push (← instantiateMVars (← inferType mvar))
+  let isClosing := newGoals.isEmpty
+  let makesNewMVars := newGoals.any fun goal =>
+    (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
+  let proof ← instantiateMVars proof
+  let key := {
+    numGoals := newGoals.size
+    nameLength := lem.name.length
+    replacementSize := ← newGoals.foldlM (init := 0) fun s g =>
+      return (← ppExpr g).pretty.length + s
+    name := lem.name.toString
+    newGoals := ← newGoals.mapM (abstractMVars ·)
+  }
+  let tactic ← tacticSyntax lem.name proof (isClosing := isClosing) (justLemmaName := justLemmaName)
+  let mut htmls := #[]
+  for goal in newGoals do
+    htmls := htmls.push <div> <strong className="goal-vdash">⊢ </strong> {← exprToHtml goal} </div>
+  if isClosing then
+    htmls := #[.text "Goal accomplished! 🎉️"]
+    addSolvedSuggestion tactic
+  let filtered ←
+    if !makesNewMVars then
+some < > mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+    else
+      pure none
+  htmls := htmls.push <div> {← lem.name.toHtml} </div>
+  let unfiltered ← mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+  let pattern ← do
+    let (_, _, e) ← forallMetaTelescopeReducing (← lem.name.getType)
+    exprToHtml e
+  return { filtered, unfiltered, key, pattern }
 
 Depends on / 依赖: assumptionCore, binderInfos, click_suggestions, forallMetaTelescopeReducing, getType, goal.getType, isAssigned, isDefEq, isProof, justLemmaName, lem.name.forallMetaTelescopeReducing, mvar.mvarId, mvarId, newGoals, newGoals.push, synthAppInstances, target, throwError, unless, withNewMCtxDepth
 -/

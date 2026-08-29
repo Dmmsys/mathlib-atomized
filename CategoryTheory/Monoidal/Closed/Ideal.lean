@@ -248,7 +248,33 @@ abbreviation CartesianMonoidalCategory.ofReflective
          apply isLimitOfReflects i
          apply isLimitChangeEmptyCone _ isTerminalTensorUnit
          letI : IsIso ((reflectorAdjunction i).unit.app (𝟙_ C)) := by
-           have := reflecti
+           have := reflective_products i
+.trans ?_⟩⟩ refine Functor.essImage.unit_isIso ⟨terminal D, ⟨PreservesTerminal.iso i
+           exact IsLimit.conePointUniqueUpToIso (limit.isLimit _) isTerminalTensorUnit
+         exact asIso ((reflectorAdjunction i).unit.app (𝟙_ C)) })
+  fun X Y =>
+    { cone := BinaryFan.mk
+        ((reflector i).map (fst (i.obj X) (i.obj Y)) ≫ (reflectorAdjunction i).counit.app _)
+        ((reflector i).map (snd (i.obj X) (i.obj Y)) ≫ (reflectorAdjunction i).counit.app _)
+      isLimit := by
+        apply isLimitOfReflects i
+.invFun apply IsLimit.equivOfNatIsoOfIso (pairComp X Y _) _ _ _
+          (tensorProductIsBinaryProduct (i.obj X) (i.obj Y))
+        fapply BinaryFan.ext
+        · change (reflector i ⋙ i).obj (i.obj X otimes i.obj Y) ≅ (𝟭 C).obj (i.obj X otimes i.obj Y)
+          letI : IsIso ((reflectorAdjunction i).unit.app (i.obj X otimes i.obj Y)) := by
+            apply Functor.essImage.unit_isIso
+            have := reflective_products i
+            use Limits.prod X Y
+            constructor
+.trans apply Limits.PreservesLimitPair.iso i _ _
+            refine Limits.IsLimit.conePointUniqueUpToIso (limit.isLimit (pair (i.obj X) (i.obj Y)))
+              (tensorProductIsBinaryProduct _ _)
+.symm exact asIso ((reflectorAdjunction i).unit.app (i.obj X otimes i.obj Y))
+        · simp only [BinaryFan.fst, Cone.postcompose, pairComp]
+          simp [← Functor.comp_map, ← NatTrans.naturality_assoc]
+        · simp only [BinaryFan.snd, Cone.postcompose, pairComp]
+          simp [← Functor.comp_map, ← NatTrans.naturality_assoc] }
 
 中文:
 缩写 CartesianMonoidal范畴.ofReflective
@@ -259,7 +285,33 @@ abbreviation CartesianMonoidalCategory.ofReflective
          apply isLimitOfReflects i
          apply isLimitChangeEmptyCone _ isTerminalTensorUnit
          letI : IsIso ((reflectorAdjunction i).unit.app (𝟙_ C)) := by
-           have := reflecti
+           have := reflective_products i
+.trans ?_⟩⟩ refine Functor.essImage.unit_isIso ⟨terminal D, ⟨PreservesTerminal.iso i
+           exact IsLimit.conePointUniqueUpToIso (limit.isLimit _) isTerminalTensorUnit
+         exact asIso ((reflectorAdjunction i).unit.app (𝟙_ C)) })
+  fun X Y =>
+    { cone := BinaryFan.mk
+        ((reflector i).map (fst (i.obj X) (i.obj Y)) ≫ (reflectorAdjunction i).counit.app _)
+        ((reflector i).map (snd (i.obj X) (i.obj Y)) ≫ (reflectorAdjunction i).counit.app _)
+      isLimit := by
+        apply isLimitOfReflects i
+.invFun apply IsLimit.equivOfNatIsoOfIso (pairComp X Y _) _ _ _
+          (tensorProductIsBinaryProduct (i.obj X) (i.obj Y))
+        fapply BinaryFan.ext
+        · change (reflector i ⋙ i).obj (i.obj X otimes i.obj Y) ≅ (𝟭 C).obj (i.obj X otimes i.obj Y)
+          letI : IsIso ((reflectorAdjunction i).unit.app (i.obj X otimes i.obj Y)) := by
+            apply Functor.essImage.unit_isIso
+            have := reflective_products i
+            use Limits.prod X Y
+            constructor
+.trans apply Limits.PreservesLimitPair.iso i _ _
+            refine Limits.IsLimit.conePointUniqueUpToIso (limit.isLimit (pair (i.obj X) (i.obj Y)))
+              (tensorProductIsBinaryProduct _ _)
+.symm exact asIso ((reflectorAdjunction i).unit.app (i.obj X otimes i.obj Y))
+        · simp only [BinaryFan.fst, Cone.postcompose, pairComp]
+          simp [← Functor.comp_map, ← NatTrans.naturality_assoc]
+        · simp only [BinaryFan.snd, Cone.postcompose, pairComp]
+          simp [← Functor.comp_map, ← NatTrans.naturality_assoc] }
 
 Depends on / 依赖: Functor, Functor.essImage.unit_isIso, IsLimit, IsLimit.conePointUniqueUpToIso, Limits, Limits.asEmptyCone, PreservesTerminal, PreservesTerminal.iso, asEmptyCone, conePointUniqueUpToIso, essImage, isLimit, isLimitChangeEmptyCone, isLimitOfReflects, isTerminalTensorUnit, limit.isLimit, ofChosenFiniteProducts, reflective_products, reflector, reflectorAdjunction
 -/
@@ -352,6 +404,14 @@ definition cartesianClosedOfReflective'
         apply (ihom.adjunction (i.obj B)).restrictFullyFaithful i.fullyFaithfulOfReflective
           i.fullyFaithfulOfReflective
         · symm
+          refine NatIso.ofComponents (fun X => ?_) (fun f => ?_)
+          · haveI :=
+              Adjunction.rightAdjoint_preservesLimits.{0, 0} (reflectorAdjunction i)
+            apply asIso (prodComparison i B X)
+          · dsimp [asIso]
+            rw [prodComparison_natural_whiskerLeft]
+· exact (i.essImage.liftCompιIso _ _).symm.trans
+            (Functor.isoWhiskerLeft _ φ.symm).trans (Functor.associator _ _ _).symm }
 
 中文:
 定义 cartesianClosedOfReflective'
@@ -363,6 +423,14 @@ definition cartesianClosedOfReflective'
         apply (ihom.adjunction (i.obj B)).restrictFullyFaithful i.fullyFaithfulOfReflective
           i.fullyFaithfulOfReflective
         · symm
+          refine NatIso.ofComponents (fun X => ?_) (fun f => ?_)
+          · haveI :=
+              Adjunction.rightAdjoint_preservesLimits.{0, 0} (reflectorAdjunction i)
+            apply asIso (prodComparison i B X)
+          · dsimp [asIso]
+            rw [prodComparison_natural_whiskerLeft]
+· exact (i.essImage.liftCompιIso _ _).symm.trans
+            (Functor.isoWhiskerLeft _ φ.symm).trans (Functor.associator _ _ _).symm }
 -/
 def cartesianClosedOfReflective' (l : i.EssImageSubcategory ⥤ D) (φ : l ⋙ i ≅ i.essImage.ι) :
     MonoidalClosed D where
@@ -431,7 +499,21 @@ definition bijection
     _ ≃ (B otimes A ⟶ i.obj X) := (β_ _ _).homCongr (Iso.refl _)
     _ ≃ (A ⟶ B ⟹ i.obj X) := (ihom.adjunction _).homEquiv _ _
     _ ≃ (i.obj ((reflector i).obj A) ⟶ B ⟹ i.obj X) :=
-      (unitCompPartialBijective _ (Exponen
+      (unitCompPartialBijective _ (ExponentialIdeal.exp_closed (i.obj_mem_essImage _) _))
+    _ ≃ (B otimes i.obj ((reflector i).obj A) ⟶ i.obj X) := ((ihom.adjunction _).homEquiv _ _).symm
+    _ ≃ (i.obj ((reflector i).obj A) otimes B ⟶ i.obj X) :=
+      ((β_ _ _).homCongr (Iso.refl _))
+    _ ≃ (B ⟶ i.obj ((reflector i).obj A) ⟹ i.obj X) := (ihom.adjunction _).homEquiv _ _
+    _ ≃ (i.obj ((reflector i).obj B) ⟶ i.obj ((reflector i).obj A) ⟹ i.obj X) :=
+      (unitCompPartialBijective _ (ExponentialIdeal.exp_closed (i.obj_mem_essImage _) _))
+    _ ≃ (i.obj ((reflector i).obj A) otimes i.obj ((reflector i).obj B) ⟶ i.obj X) :=
+      ((ihom.adjunction _).homEquiv _ _).symm
+    _ ≃ (i.obj ((reflector i).obj A otimes (reflector i).obj B) ⟶ i.obj X) :=
+      haveI : Limits.PreservesLimits i := (reflectorAdjunction i).rightAdjoint_preservesLimits
+      haveI := Limits.preservesSmallestLimits_of_preservesLimits i
+      Iso.homCongr (prodComparisonIso _ _ _).symm (Iso.refl (i.obj X))
+    _ ≃ ((reflector i).obj A otimes (reflector i).obj B ⟶ X) :=
+      i.fullyFaithfulOfReflective.homEquiv.symm
 
 中文:
 定义 bijection
@@ -441,7 +523,21 @@ definition bijection
     _ ≃ (B otimes A ⟶ i.obj X) := (β_ _ _).homCongr (Iso.refl _)
     _ ≃ (A ⟶ B ⟹ i.obj X) := (ihom.adjunction _).homEquiv _ _
     _ ≃ (i.obj ((reflector i).obj A) ⟶ B ⟹ i.obj X) :=
-      (unitCompPartialBijective _ (Exponen
+      (unitCompPartialBijective _ (ExponentialIdeal.exp_closed (i.obj_mem_essImage _) _))
+    _ ≃ (B otimes i.obj ((reflector i).obj A) ⟶ i.obj X) := ((ihom.adjunction _).homEquiv _ _).symm
+    _ ≃ (i.obj ((reflector i).obj A) otimes B ⟶ i.obj X) :=
+      ((β_ _ _).homCongr (Iso.refl _))
+    _ ≃ (B ⟶ i.obj ((reflector i).obj A) ⟹ i.obj X) := (ihom.adjunction _).homEquiv _ _
+    _ ≃ (i.obj ((reflector i).obj B) ⟶ i.obj ((reflector i).obj A) ⟹ i.obj X) :=
+      (unitCompPartialBijective _ (ExponentialIdeal.exp_closed (i.obj_mem_essImage _) _))
+    _ ≃ (i.obj ((reflector i).obj A) otimes i.obj ((reflector i).obj B) ⟶ i.obj X) :=
+      ((ihom.adjunction _).homEquiv _ _).symm
+    _ ≃ (i.obj ((reflector i).obj A otimes (reflector i).obj B) ⟶ i.obj X) :=
+      haveI : Limits.PreservesLimits i := (reflectorAdjunction i).rightAdjoint_preservesLimits
+      haveI := Limits.preservesSmallestLimits_of_preservesLimits i
+      Iso.homCongr (prodComparisonIso _ _ _).symm (Iso.refl (i.obj X))
+    _ ≃ ((reflector i).obj A otimes (reflector i).obj B ⟶ X) :=
+      i.fullyFaithfulOfReflective.homEquiv.symm
 
 Depends on / 依赖: ExponentialIdeal, ExponentialIdeal.exp_closed, Iso.refl, adjunction, exp_closed, homCongr, homEquiv, i.obj, i.obj_mem_essImage, ihom.adjunction, obj_mem_essImage, otimes, reflector, reflectorAdjunction, unitCompPartialBijective
 -/
@@ -479,7 +575,17 @@ theorem bijection_symm_apply_id
   simp only [bijection, Equiv.trans_def, curriedTensor_obj_obj, Equiv.symm_trans_apply,
     Equiv.symm_symm, Functor.FullyFaithful.homEquiv_apply, Functor.map_id, Iso.homCongr_symm,
     Iso.symm_symm_eq, Iso.refl_symm, Iso.homCongr_apply, Iso.refl_hom, Category.comp_id,
-    unitCompPartialBijecti
+    unitCompPartialBijective_symm_apply, Functor.id_obj, Functor.comp_obj, Iso.symm_inv]
+  -- Porting note: added
+  erw [homEquiv_symm_apply_eq, homEquiv_symm_apply_eq, homEquiv_apply_eq, homEquiv_apply_eq]
+  rw [uncurry_natural_left]; rw [uncurry_curry]; rw [uncurry_natural_left]; rw [uncurry_curry]; rw [← BraidedCategory.braiding_naturality_left_assoc]; rw [SymmetricCategory.symmetry_assoc]; rw [← MonoidalCategory.whisker_exchange_assoc]; rw [← tensorHom_def'_assoc]; rw [Adjunction.homEquiv_symm_apply]; rw [← Adjunction.eq_unit_comp_map_iff]; rw [Iso.comp_inv_eq]; rw [Category.assoc]; rw [prodComparisonIso_hom i ((reflector i).obj A) ((reflector i).obj B)]
+  apply hom_ext
+  · rw [tensorHom_fst, Category.assoc, Category.assoc, prodComparison_fst, ← i.map_comp,
+    prodComparison_fst]
+    apply (reflectorAdjunction i).unit.naturality
+  · rw [tensorHom_snd, Category.assoc, Category.assoc, prodComparison_snd, ← i.map_comp,
+    prodComparison_snd]
+    apply (reflectorAdjunction i).unit.naturality
 
 中文:
 定理 bijection_symm_apply_id
@@ -488,7 +594,17 @@ theorem bijection_symm_apply_id
   simp only [bijection, Equiv.trans_def, curriedTensor_obj_obj, Equiv.symm_trans_apply,
     Equiv.symm_symm, Functor.FullyFaithful.homEquiv_apply, Functor.map_id, Iso.homCongr_symm,
     Iso.symm_symm_eq, Iso.refl_symm, Iso.homCongr_apply, Iso.refl_hom, Category.comp_id,
-    unitCompPartialBijecti
+    unitCompPartialBijective_symm_apply, Functor.id_obj, Functor.comp_obj, Iso.symm_inv]
+  -- Porting note: added
+  erw [homEquiv_symm_apply_eq, homEquiv_symm_apply_eq, homEquiv_apply_eq, homEquiv_apply_eq]
+  rw [uncurry_natural_left]; rw [uncurry_curry]; rw [uncurry_natural_left]; rw [uncurry_curry]; rw [← BraidedCategory.braiding_naturality_left_assoc]; rw [SymmetricCategory.symmetry_assoc]; rw [← MonoidalCategory.whisker_exchange_assoc]; rw [← tensorHom_def'_assoc]; rw [Adjunction.homEquiv_symm_apply]; rw [← Adjunction.eq_unit_comp_map_iff]; rw [Iso.comp_inv_eq]; rw [Category.assoc]; rw [prodComparisonIso_hom i ((reflector i).obj A) ((reflector i).obj B)]
+  apply hom_ext
+  · rw [tensorHom_fst, Category.assoc, Category.assoc, prodComparison_fst, ← i.map_comp,
+    prodComparison_fst]
+    apply (reflectorAdjunction i).unit.naturality
+  · rw [tensorHom_snd, Category.assoc, Category.assoc, prodComparison_snd, ← i.map_comp,
+    prodComparison_snd]
+    apply (reflectorAdjunction i).unit.naturality
 
 Depends on / 依赖: Category, Category.comp_id, Equiv.symm_symm, Equiv.symm_trans_apply, Equiv.trans_def, FullyFaithful, Functor, Functor.FullyFaithful.homEquiv_apply, Functor.comp_obj, Functor.id_obj, Functor.map_id, Iso.homCongr_apply, Iso.homCongr_symm, Iso.refl_hom, Iso.refl_symm, Iso.symm_inv, Iso.symm_symm_eq, bijection, comp_id, comp_obj
 -/
@@ -522,7 +638,9 @@ theorem bijection_natural
   erw [homEquiv_symm_apply_eq, homEquiv_symm_apply_eq, homEquiv_apply_eq, homEquiv_apply_eq,
     homEquiv_symm_apply_eq, homEquiv_symm_apply_eq, homEquiv_apply_eq, homEquiv_apply_eq]
   apply i.map_injective
-  rw [Functor.FullyFaithful.map_preimage]; rw
+  rw [Functor.FullyFaithful.map_preimage]; rw [i.map_comp]; rw [Adjunction.homEquiv_unit]; rw [Adjunction.homEquiv_unit]
+  simp only [Category.comp_id, Functor.map_comp, Functor.FullyFaithful.map_preimage, Category.assoc]
+  rw [← Category.assoc]; rw [← Category.assoc]; rw [curry_natural_right _ (i.map g)]; rw [unitCompPartialBijective_natural]; rw [uncurry_natural_right]; rw [← Category.assoc]; rw [curry_natural_right]; rw [unitCompPartialBijective_natural]; rw [uncurry_natural_right]; rw [Category.assoc]
 
 中文:
 定理 bijection_natural
@@ -533,7 +651,9 @@ theorem bijection_natural
   erw [homEquiv_symm_apply_eq, homEquiv_symm_apply_eq, homEquiv_apply_eq, homEquiv_apply_eq,
     homEquiv_symm_apply_eq, homEquiv_symm_apply_eq, homEquiv_apply_eq, homEquiv_apply_eq]
   apply i.map_injective
-  rw [Functor.FullyFaithful.map_preimage]; rw
+  rw [Functor.FullyFaithful.map_preimage]; rw [i.map_comp]; rw [Adjunction.homEquiv_unit]; rw [Adjunction.homEquiv_unit]
+  simp only [Category.comp_id, Functor.map_comp, Functor.FullyFaithful.map_preimage, Category.assoc]
+  rw [← Category.assoc]; rw [← Category.assoc]; rw [curry_natural_right _ (i.map g)]; rw [unitCompPartialBijective_natural]; rw [uncurry_natural_right]; rw [← Category.assoc]; rw [curry_natural_right]; rw [unitCompPartialBijective_natural]; rw [uncurry_natural_right]; rw [Category.assoc]
 
 Depends on / 依赖: bijection
 -/
@@ -558,7 +678,7 @@ theorem prodComparison_iso
   proof: ⟨⟨bijection i _ _ _ (𝟙 _), by
       rw [← (bijection i _ _ _).injective.eq_iff]; rw [bijection_natural]; rw [← bijection_symm_apply_id]; rw [Equiv.apply_symm_apply]; rw [Category.id_comp],
       by rw [← bijection_natural, Category.id_comp, ← bijection_symm_apply_id,
-        Equiv.apply_symm_apply]⟩
+        Equiv.apply_symm_apply]⟩⟩
 
 中文:
 定理 prodComparison_iso
@@ -567,7 +687,7 @@ theorem prodComparison_iso
   证明: ⟨⟨bijection i _ _ _ (𝟙 _), by
       rw [← (bijection i _ _ _).injective.eq_iff]; rw [bijection_natural]; rw [← bijection_symm_apply_id]; rw [Equiv.apply_symm_apply]; rw [Category.id_comp],
       by rw [← bijection_natural, Category.id_comp, ← bijection_symm_apply_id,
-        Equiv.apply_symm_apply]⟩
+        Equiv.apply_symm_apply]⟩⟩
 
 Depends on / 依赖: Category, Category.id_comp, Equiv.apply_symm_apply, apply_symm_apply, bijection, bijection_natural, bijection_symm_apply_id, eq_iff, id_comp, injective, injective.eq_iff
 -/

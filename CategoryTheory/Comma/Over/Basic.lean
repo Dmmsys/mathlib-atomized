@@ -1881,7 +1881,8 @@ definition isLimitLiftCone
     simp [dsimp% hc.fac ((forget X).mapCone t) j]
   uniq t _ hm := by
     ext
-    refine hc.hom_ext (fun j 
+    refine hc.hom_ext (fun j => ?_)
+    simp [dsimp% hc.fac ((forget X).mapCone t) j, ← hm]
 
 中文:
 定义 isLimitLiftCone
@@ -1894,7 +1895,8 @@ definition isLimitLiftCone
     simp [dsimp% hc.fac ((forget X).mapCone t) j]
   uniq t _ hm := by
     ext
-    refine hc.hom_ext (fun j 
+    refine hc.hom_ext (fun j => ?_)
+    simp [dsimp% hc.fac ((forget X).mapCone t) j, ← hm]
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, fac_assoc, forget, hc.fac, hc.fac_assoc, hc.hom_ext, hc.lift, hom_ext, mapCone
 -/
@@ -3493,7 +3495,9 @@ counit.app A := homMk a.counit.app A.right
   left_triangle_components A := by
     ext
     simp [-Functor.id_obj]
- 
+  right_triangle_components A := by
+    ext
+    simp [-Functor.id_obj]
 
 中文:
 定义 postAdjunctionLeft
@@ -3509,7 +3513,9 @@ counit.app A := homMk a.counit.app A.right
   left_triangle_components A := by
     ext
     simp [-Functor.id_obj]
- 
+  right_triangle_components A := by
+    ext
+    simp [-Functor.id_obj]
 
 Depends on / 依赖: A.right, a.unit.app
 -/
@@ -3677,7 +3683,8 @@ definition isColimitLiftCocone
     simp [dsimp% hc.fac ((forget X).mapCocone t) j]
   uniq t _ hm := by
     ext
-    refi
+    refine hc.hom_ext (fun j => ?_)
+    simp [dsimp% hc.fac ((forget X).mapCocone t) j, ← hm]
 
 中文:
 定义 isColimitLiftCocone
@@ -3690,7 +3697,8 @@ definition isColimitLiftCocone
     simp [dsimp% hc.fac ((forget X).mapCocone t) j]
   uniq t _ hm := by
     ext
-    refi
+    refine hc.hom_ext (fun j => ?_)
+    simp [dsimp% hc.fac ((forget X).mapCocone t) j, ← hm]
 
 Depends on / 依赖: Classical, Classical.arbitrary, Under.forget, Under.homMk, arbitrary, forget, hc.desc, hc.fac, hc.hom_ext, hom_ext, mapCocone
 -/

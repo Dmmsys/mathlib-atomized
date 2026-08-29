@@ -41,7 +41,8 @@ theorem natCast_factorial_of_le
   | succ k ih =>
     rw [← add_assoc]; rw [add_right_comm] at hn_fac
     have := ih hn_fac
-    rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [Nat.cast_commute _ _ |>.isUnit_mul_
+    rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [Nat.cast_commute _ _ |>.isUnit_mul_iff] at this
+    exact this.2
 
 中文:
 定理 natCast_factorial_of_le
@@ -54,7 +55,8 @@ theorem natCast_factorial_of_le
   | succ k ih =>
     rw [← add_assoc]; rw [add_right_comm] at hn_fac
     have := ih hn_fac
-    rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [Nat.cast_commute _ _ |>.isUnit_mul_
+    rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [Nat.cast_commute _ _ |>.isUnit_mul_iff] at this
+    exact this.2
 
 Depends on / 依赖: Nat.cast_commute, Nat.cast_mul, Nat.factorial_succ, add_assoc, add_right_comm, cast_commute, cast_mul, exists_add_of_le, factorial_succ, generalizing, hn_fac, isUnit_mul_iff
 -/
@@ -135,7 +137,9 @@ theorem natCast_factorial_iff_of_charP
   | zero => simp [hp.pos]
   | succ n ih =>
     -- TODO: why is `.symm.symm` needed here!?
-    rw [factorial_succ]; rw [cast_mul]; rw [Nat.cast_commute _ _ |>.isUnit_mul_iff]; rw [ih.symm.symm]; rw [← Nat.add_one_le_iff]; rw [CharP.isUnit_natCast_
+    rw [factorial_succ]; rw [cast_mul]; rw [Nat.cast_commute _ _ |>.isUnit_mul_iff]; rw [ih.symm.symm]; rw [← Nat.add_one_le_iff]; rw [CharP.isUnit_natCast_iff hp]
+    exact ⟨fun ⟨h1, h2⟩ => lt_of_le_of_ne h2 (mt (· ▸ dvd_rfl) h1),
+      fun h => ⟨not_dvd_of_pos_of_lt (Nat.succ_pos _) h, h.le⟩⟩
 
 中文:
 定理 natCast_factorial_iff_of_charP
@@ -147,7 +151,9 @@ theorem natCast_factorial_iff_of_charP
   | zero => simp [hp.pos]
   | succ n ih =>
     -- TODO: why is `.symm.symm` needed here!?
-    rw [factorial_succ]; rw [cast_mul]; rw [Nat.cast_commute _ _ |>.isUnit_mul_iff]; rw [ih.symm.symm]; rw [← Nat.add_one_le_iff]; rw [CharP.isUnit_natCast_
+    rw [factorial_succ]; rw [cast_mul]; rw [Nat.cast_commute _ _ |>.isUnit_mul_iff]; rw [ih.symm.symm]; rw [← Nat.add_one_le_iff]; rw [CharP.isUnit_natCast_iff hp]
+    exact ⟨fun ⟨h1, h2⟩ => lt_of_le_of_ne h2 (mt (· ▸ dvd_rfl) h1),
+      fun h => ⟨not_dvd_of_pos_of_lt (Nat.succ_pos _) h, h.le⟩⟩
 
 Depends on / 依赖: Fact.out, hp.pos, p.Prime
 -/
@@ -182,7 +188,7 @@ lemma natCast_of_isNilpotent_of_coprime
     simpa [hm] using h
   refine ⟨(p ^ m).gcdA n, (p ^ m).gcdB n, ?_⟩
   norm_cast
-  rw [← Nat.cast_one]; rw [← Int.cast_natCast 1]; rw [← (h.pow_left m).gcd_eq_one
+  rw [← Nat.cast_one]; rw [← Int.cast_natCast 1]; rw [← (h.pow_left m).gcd_eq_one]; rw [Nat.gcd_eq_gcd_ab]
 
 中文:
 引理 natCast_of_isNilpotent_of_coprime
@@ -195,7 +201,7 @@ lemma natCast_of_isNilpotent_of_coprime
     simpa [hm] using h
   refine ⟨(p ^ m).gcdA n, (p ^ m).gcdB n, ?_⟩
   norm_cast
-  rw [← Nat.cast_one]; rw [← Int.cast_natCast 1]; rw [← (h.pow_left m).gcd_eq_one
+  rw [← Nat.cast_one]; rw [← Int.cast_natCast 1]; rw [← (h.pow_left m).gcd_eq_one]; rw [Nat.gcd_eq_gcd_ab]
 
 Depends on / 依赖: Int.cast_natCast, Nat.cast_one, Nat.gcd_eq_gcd_ab, cast_natCast, cast_one, gcd_eq_gcd_ab, gcd_eq_one, h.pow_left, of_mul_eq_one, pow_left
 -/
@@ -266,7 +272,7 @@ lemma Nat.castChoose_eq
   subst hk
   rw [eq_mul_inverse_iff_mul_eq]; rw [eq_mul_inverse_iff_mul_eq]; rw [← Nat.cast_mul]; rw [← Nat.cast_mul]; rw [add_comm]; rw [Nat.add_choose_mul_factorial_mul_factorial] <;>
     apply hm.natCast_factorial_of_le
-  exacts [Nat.le_add_right k.1 k.2, N
+  exacts [Nat.le_add_right k.1 k.2, Nat.le_add_left k.2 k.1]
 
 中文:
 引理 自然数.castChoose_eq
@@ -276,7 +282,7 @@ lemma Nat.castChoose_eq
   subst hk
   rw [eq_mul_inverse_iff_mul_eq]; rw [eq_mul_inverse_iff_mul_eq]; rw [← Nat.cast_mul]; rw [← Nat.cast_mul]; rw [add_comm]; rw [Nat.add_choose_mul_factorial_mul_factorial] <;>
     apply hm.natCast_factorial_of_le
-  exacts [Nat.le_add_right k.1 k.2, N
+  exacts [Nat.le_add_right k.1 k.2, Nat.le_add_left k.2 k.1]
 
 Depends on / 依赖: Finset, Finset.mem_antidiagonal, Nat.add_choose_mul_factorial_mul_factorial, Nat.cast_mul, Nat.le_add_left, Nat.le_add_right, add_choose_mul_factorial_mul_factorial, add_comm, cast_mul, eq_mul_inverse_iff_mul_eq, exacts, hm.natCast_factorial_of_le, le_add_left, le_add_right, mem_antidiagonal, natCast_factorial_of_le
 -/

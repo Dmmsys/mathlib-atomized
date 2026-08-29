@@ -851,7 +851,8 @@ theorem measure_eq_top_iff_of_symmDiff
   rw [Set.symmDiff_def]; rw [eq_top_iff]
   calc
     ∞ = μ u - μ v := by rw [ENNReal.sub_eq_top_iff.2 ⟨hμu, hμv⟩]
-    _ <= μ (u
+    _ <= μ (u \ v) := le_measure_sdiff
+    _ <= μ (u \ v union v \ u) := measure_mono subset_union_left
 
 中文:
 定理 measure_eq_top_iff_of_symmDiff
@@ -866,7 +867,8 @@ theorem measure_eq_top_iff_of_symmDiff
   rw [Set.symmDiff_def]; rw [eq_top_iff]
   calc
     ∞ = μ u - μ v := by rw [ENNReal.sub_eq_top_iff.2 ⟨hμu, hμv⟩]
-    _ <= μ (u
+    _ <= μ (u \ v) := le_measure_sdiff
+    _ <= μ (u \ v union v \ u) := measure_mono subset_union_left
 
 Depends on / 依赖: ENNReal, ENNReal.sub_eq_top_iff, Set.symmDiff_def, eq_top_iff, le_measure_sdiff, measure_mono, sub_eq_top_iff, subset_union_left, symmDiff_comm, symmDiff_def
 -/
@@ -1005,7 +1007,11 @@ theorem measure_eq_measure_of_between_null_sdiff
     calc
       μ s₃ = μ (s₃ \ s₁ union s₁) := by rw [sdiff_union_of_subset (h12.trans h23)]
       _ <= μ (s₃ \ s₁) + μ s₁ := measure_union_le _ _
-      _ = μ s₁ := by simp on
+      _ = μ s₁ := by simp only [h_nullsdiff, zero_add]
+  exact ⟨le12.antisymm (le23.trans key), le23.antisymm (key.trans le12)⟩
+
+@[deprecated (since := "2026-06-03")]
+alias measure_eq_measure_of_between_null_diff := measure_eq_measure_of_between_null_sdiff
 
 中文:
 定理 measure_eq_measure_of_between_null_sdiff
@@ -1017,7 +1023,11 @@ theorem measure_eq_measure_of_between_null_sdiff
     calc
       μ s₃ = μ (s₃ \ s₁ union s₁) := by rw [sdiff_union_of_subset (h12.trans h23)]
       _ <= μ (s₃ \ s₁) + μ s₁ := measure_union_le _ _
-      _ = μ s₁ := by simp on
+      _ = μ s₁ := by simp only [h_nullsdiff, zero_add]
+  exact ⟨le12.antisymm (le23.trans key), le23.antisymm (key.trans le12)⟩
+
+@[deprecated (since := "2026-06-03")]
+alias measure_eq_measure_of_between_null_diff := measure_eq_measure_of_between_null_sdiff
 
 Depends on / 依赖: antisymm, h12.trans, h_nullsdiff, key.trans, le12.antisymm, le23.antisymm, le23.trans, measure_mono, measure_union_le, sdiff_union_of_subset, zero_add
 -/
@@ -1311,7 +1321,24 @@ theorem measure_iUnion_congr_of_subset
       _ <= μ (s i) := hi ▸ h_le i
 _ <= μ (⋃ i, s i) := measure_mono subset_iUnion _ _
   set M := toMeasurable μ
-  have H : forall b, (M 
+  have H : forall b, (M (t b) inter M (⋃ b, s b) : Set α) =ᵐ[μ] M (t b) := by
+    refine fun b => ae_eq_of_subset_of_measure_ge inter_subset_left ?_ ?_ ?_
+    · calc
+        μ (M (t b)) = μ (t b) := measure_toMeasurable _
+        _ <= μ (s b) := h_le b
+        _ <= μ (M (t b) inter M (⋃ b, s b)) :=
+measure_mono
+            subset_inter ((hsub b).trans <| subset_toMeasurable _ _)
+              ((subset_iUnion _ _).trans <| subset_toMeasurable _ _)
+    · measurability
+    · rw [measure_toMeasurable]
+      exact htop b
+  calc
+    μ (⋃ b, t b) <= μ (⋃ b, M (t b)) := measure_mono (iUnion_mono fun b => subset_toMeasurable _ _)
+    _ = μ (⋃ b, M (t b) inter M (⋃ b, s b)) :=
+      measure_congr (Filter.EventuallyEq.countable_iUnion H).symm
+    _ <= μ (M (⋃ b, s b)) := measure_mono (iUnion_subset fun b => inter_subset_right)
+    _ = μ (⋃ b, s b) := measure_toMeasurable _
 
 中文:
 定理 measure_iUnion_congr_of_subset
@@ -1325,7 +1352,24 @@ _ <= μ (⋃ i, s i) := measure_mono subset_iUnion _ _
       _ <= μ (s i) := hi ▸ h_le i
 _ <= μ (⋃ i, s i) := measure_mono subset_iUnion _ _
   set M := toMeasurable μ
-  have H : forall b, (M 
+  have H : forall b, (M (t b) inter M (⋃ b, s b) : Set α) =ᵐ[μ] M (t b) := by
+    refine fun b => ae_eq_of_subset_of_measure_ge inter_subset_left ?_ ?_ ?_
+    · calc
+        μ (M (t b)) = μ (t b) := measure_toMeasurable _
+        _ <= μ (s b) := h_le b
+        _ <= μ (M (t b) inter M (⋃ b, s b)) :=
+measure_mono
+            subset_inter ((hsub b).trans <| subset_toMeasurable _ _)
+              ((subset_iUnion _ _).trans <| subset_toMeasurable _ _)
+    · measurability
+    · rw [measure_toMeasurable]
+      exact htop b
+  calc
+    μ (⋃ b, t b) <= μ (⋃ b, M (t b)) := measure_mono (iUnion_mono fun b => subset_toMeasurable _ _)
+    _ = μ (⋃ b, M (t b) inter M (⋃ b, s b)) :=
+      measure_congr (Filter.EventuallyEq.countable_iUnion H).symm
+    _ <= μ (M (⋃ b, s b)) := measure_mono (iUnion_subset fun b => inter_subset_right)
+    _ = μ (⋃ b, s b) := measure_toMeasurable _
 
 Depends on / 依赖: ae_eq_of_subset_of_measure_ge, h_le, inter_subset_left, le_antisymm, le_top, measure_mono, measure_toMeasurable, subset_iUnion, toMeasurable
 -/
@@ -1680,7 +1724,29 @@ theorem _root_.Directed.measure_iUnion
   generalize ht : Function.extend e s ⊥ = t
   replace hd : Directed (· subseteq ·) t := ht ▸ hd.extend_bot he
   suffices μ (⋃ n, t n) = ⨆ n, μ (t n) by
-    simp only [← ht, Function.apply_extend μ, ← iSup_eq_iUnion, iSup_ex
+    simp only [← ht, Function.apply_extend μ, ← iSup_eq_iUnion, iSup_extend_bot he,
+      Function.comp_def, Pi.bot_apply, bot_eq_empty, measure_empty] at this
+    exact this.trans (iSup_extend_bot he _)
+  clear! ι
+  -- The `≥` inequality is trivial
+  refine le_antisymm ?_ (iSup_le fun i => measure_mono <| subset_iUnion _ _)
+  -- Choose `T n ⊇ t n` of the same measure, put `Td n = disjointed T`
+  set T : Nat -> Set α := fun n => toMeasurable μ (t n)
+  set Td : Nat -> Set α := disjointed T
+  have hm : forall n, MeasurableSet (Td n) := .disjointed fun n => measurableSet_toMeasurable _ _
+  calc
+    μ (⋃ n, t n) = μ (⋃ n, Td n) := by rw [iUnion_disjointed, measure_iUnion_toMeasurable]
+    _ <= ∑' n, μ (Td n) := measure_iUnion_le _
+    _ = ⨆ I : Finset Nat, ∑ n in I, μ (Td n) := ENNReal.tsum_eq_iSup_sum
+    _ <= ⨆ n, μ (t n) := iSup_le fun I => by
+      rcases hd.finset_le I with ⟨N, hN⟩
+      calc
+        (∑ n in I, μ (Td n)) = μ (⋃ n in I, Td n) :=
+          (measure_biUnion_finset ((disjoint_disjointed T).set_pairwise I) fun n _ => hm n).symm
+        _ <= μ (⋃ n in I, T n) := measure_mono (iUnion₂_mono fun n _hn => disjointed_subset _ _)
+        _ = μ (⋃ n in I, t n) := measure_biUnion_toMeasurable I.countable_toSet _
+        _ <= μ (t N) := measure_mono (iUnion₂_subset hN)
+        _ <= ⨆ n, μ (t n) := le_iSup (μ ∘ t) N
 
 中文:
 定理 _root_.Directed.measure_iUnion
@@ -1691,7 +1757,29 @@ theorem _root_.Directed.measure_iUnion
   generalize ht : Function.extend e s ⊥ = t
   replace hd : Directed (· subseteq ·) t := ht ▸ hd.extend_bot he
   suffices μ (⋃ n, t n) = ⨆ n, μ (t n) by
-    simp only [← ht, Function.apply_extend μ, ← iSup_eq_iUnion, iSup_ex
+    simp only [← ht, Function.apply_extend μ, ← iSup_eq_iUnion, iSup_extend_bot he,
+      Function.comp_def, Pi.bot_apply, bot_eq_empty, measure_empty] at this
+    exact this.trans (iSup_extend_bot he _)
+  clear! ι
+  -- The `≥` inequality is trivial
+  refine le_antisymm ?_ (iSup_le fun i => measure_mono <| subset_iUnion _ _)
+  -- Choose `T n ⊇ t n` of the same measure, put `Td n = disjointed T`
+  set T : Nat -> Set α := fun n => toMeasurable μ (t n)
+  set Td : Nat -> Set α := disjointed T
+  have hm : forall n, MeasurableSet (Td n) := .disjointed fun n => measurableSet_toMeasurable _ _
+  calc
+    μ (⋃ n, t n) = μ (⋃ n, Td n) := by rw [iUnion_disjointed, measure_iUnion_toMeasurable]
+    _ <= ∑' n, μ (Td n) := measure_iUnion_le _
+    _ = ⨆ I : Finset Nat, ∑ n in I, μ (Td n) := ENNReal.tsum_eq_iSup_sum
+    _ <= ⨆ n, μ (t n) := iSup_le fun I => by
+      rcases hd.finset_le I with ⟨N, hN⟩
+      calc
+        (∑ n in I, μ (Td n)) = μ (⋃ n in I, Td n) :=
+          (measure_biUnion_finset ((disjoint_disjointed T).set_pairwise I) fun n _ => hm n).symm
+        _ <= μ (⋃ n in I, T n) := measure_mono (iUnion₂_mono fun n _hn => disjointed_subset _ _)
+        _ = μ (⋃ n in I, t n) := measure_biUnion_toMeasurable I.countable_toSet _
+        _ <= μ (t N) := measure_mono (iUnion₂_subset hN)
+        _ <= ⨆ n, μ (t n) := le_iSup (μ ∘ t) N
 -/
 theorem _root_.Directed.measure_iUnion [Countable ι] {s : ι -> Set α} (hd : Directed (· subseteq ·) s) :
     μ (⋃ i, s i) = ⨆ i, μ (s i) := by
@@ -1736,7 +1824,7 @@ theorem _root_.Monotone.measure_iUnion
   | inr _ =>
     rcases exists_seq_monotone_tendsto_atTop_atTop ι with ⟨x, hxm, hx⟩
     rw [← hs.iUnion_comp_tendsto_atTop hx]; rw [← Monotone.iSup_comp_tendsto_atTop _ hx]
-    exacts [(hs.comp hxm).directed_le.measure_iUnion, fun _ _ h => meas
+    exacts [(hs.comp hxm).directed_le.measure_iUnion, fun _ _ h => measure_mono (hs h)]
 
 中文:
 定理 _root_.递增.measure_iUnion
@@ -1747,7 +1835,7 @@ theorem _root_.Monotone.measure_iUnion
   | inr _ =>
     rcases exists_seq_monotone_tendsto_atTop_atTop ι with ⟨x, hxm, hx⟩
     rw [← hs.iUnion_comp_tendsto_atTop hx]; rw [← Monotone.iSup_comp_tendsto_atTop _ hx]
-    exacts [(hs.comp hxm).directed_le.measure_iUnion, fun _ _ h => meas
+    exacts [(hs.comp hxm).directed_le.measure_iUnion, fun _ _ h => measure_mono (hs h)]
 
 Depends on / 依赖: Monotone, Monotone.iSup_comp_tendsto_atTop, directed_le, directed_le.measure_iUnion, exacts, exists_seq_monotone_tendsto_atTop_atTop, hs.comp, hs.iUnion_comp_tendsto_atTop, iSup_comp_tendsto_atTop, iUnion_comp_tendsto_atTop, isEmpty_or_nonempty, measure_iUnion, measure_mono
 -/
@@ -1841,7 +1929,14 @@ theorem _root_.Directed.measure_iInter
   have : forall t subseteq s k, μ t != ∞ := fun t ht => ne_top_of_le_ne_top hk (measure_mono ht)
   rw [← ENNReal.sub_sub_cancel hk (iInf_le (fun i => μ (s i)) k)]; rw [ENNReal.sub_iInf]; rw [←
     ENNReal.sub_sub_cancel hk (measure_mono (iInter_subset _ k))]; rw [←
-    
+    measure_sdiff (iInter_subset _ k) (.iInter h) (this _ (iInter_subset _ k))]; rw [sdiff_iInter]; rw [Directed.measure_iUnion]
+  · congr 1
+    refine le_antisymm (iSup_mono' fun i => ?_) (iSup_mono fun i => le_measure_sdiff)
+    rcases hd i k with ⟨j, hji, hjk⟩
+    use j
+    rw [← measure_sdiff hjk (h _) (this _ hjk)]
+    gcongr
+  · exact hd.mono_comp _ fun _ _ => sdiff_subset_sdiff_right
 
 中文:
 定理 _root_.Directed.measure_i整数er
@@ -1851,7 +1946,14 @@ theorem _root_.Directed.measure_iInter
   have : forall t subseteq s k, μ t != ∞ := fun t ht => ne_top_of_le_ne_top hk (measure_mono ht)
   rw [← ENNReal.sub_sub_cancel hk (iInf_le (fun i => μ (s i)) k)]; rw [ENNReal.sub_iInf]; rw [←
     ENNReal.sub_sub_cancel hk (measure_mono (iInter_subset _ k))]; rw [←
-    
+    measure_sdiff (iInter_subset _ k) (.iInter h) (this _ (iInter_subset _ k))]; rw [sdiff_iInter]; rw [Directed.measure_iUnion]
+  · congr 1
+    refine le_antisymm (iSup_mono' fun i => ?_) (iSup_mono fun i => le_measure_sdiff)
+    rcases hd i k with ⟨j, hji, hjk⟩
+    use j
+    rw [← measure_sdiff hjk (h _) (this _ hjk)]
+    gcongr
+  · exact hd.mono_comp _ fun _ _ => sdiff_subset_sdiff_right
 
 Depends on / 依赖: Directed, Directed.measure_iUnion, ENNReal, ENNReal.sub_iInf, ENNReal.sub_sub_cancel, iInf_le, iInter, iInter_subset, iSup_mono, le_antisymm, le_measure_sdif, measure_iUnion, measure_mono, measure_sdiff, ne_top_of_le_ne_top, sdiff_iInter, sub_iInf, sub_sub_cancel, subseteq
 -/
@@ -1884,7 +1986,14 @@ theorem _root_.Monotone.measure_iInter
   calc
     ⨅ i, μ (s i) <= ⨅ n, μ (s (x n)) := le_iInf_comp (μ ∘ s) x
     _ = μ (⋂ n, s (x n)) := by
-refine .symm (hs.comp_anti
+refine .symm (hs.comp_antitone hxm).directed_ge.measure_iInter (fun n => hsm _) ?_
+      rcases hfin with ⟨k, hk⟩
+      rcases (hx.eventually_le_atBot k).exists with ⟨n, hn⟩
+exact ⟨n, ne_top_of_le_ne_top hk measure_mono hs hn⟩
+    _ <= μ (⋂ i, s i) := by
+refine measure_mono iInter_mono' fun i => ?_
+      rcases (hx.eventually_le_atBot i).exists with ⟨n, hn⟩
+      exact ⟨n, hs hn⟩
 
 中文:
 定理 _root_.递增.measure_i整数er
@@ -1896,7 +2005,14 @@ refine .symm (hs.comp_anti
   calc
     ⨅ i, μ (s i) <= ⨅ n, μ (s (x n)) := le_iInf_comp (μ ∘ s) x
     _ = μ (⋂ n, s (x n)) := by
-refine .symm (hs.comp_anti
+refine .symm (hs.comp_antitone hxm).directed_ge.measure_iInter (fun n => hsm _) ?_
+      rcases hfin with ⟨k, hk⟩
+      rcases (hx.eventually_le_atBot k).exists with ⟨n, hn⟩
+exact ⟨n, ne_top_of_le_ne_top hk measure_mono hs hn⟩
+    _ <= μ (⋂ i, s i) := by
+refine measure_mono iInter_mono' fun i => ?_
+      rcases (hx.eventually_le_atBot i).exists with ⟨n, hn⟩
+      exact ⟨n, hs hn⟩
 
 Depends on / 依赖: comp_antitone, directed_ge, directed_ge.measure_iInter, eventually_le_atBot, exists_seq_antitone_tendsto_atTop_atBot, hfin.nonempty, hs.comp_antitone, hx.eventually_le_atBot, iInter_subset, le_antisymm, le_iInf, le_iInf_comp, measure_iInter, measure_mono, ne_top_of_le_ne_top, nonempty
 -/
@@ -1933,7 +2049,11 @@ theorem measure_iInter_of_ae_monotone
     filter_upwards [hs] with ω hω
     suffices ω in s i ↔ ω in t i from propext this
     simpa [t] using fun _ => hω
-  have hMono : Mon
+  have hMono : Monotone t := fun i j hij ω hω => ⟨hω.2 hij hω.1, hω.2⟩
+  rw [iInf_congr <| fun i => measure_congr <| hst i]; rw [← hMono.measure_iInter (fun i => (hsm i).congr (hst i)) ⟨i]; rw [by rwa [← measure_congr (hst i)]⟩]
+  refine measure_congr ?_
+  nth_rw 1 [← iInter_inter, ← inter_univ (⋂ i, s i)]
+  exact ae_eq_set_inter (by rfl) (ae_eq_univ.2 hs).symm
 
 中文:
 定理 measure_i整数er_of_ae_monotone
@@ -1946,7 +2066,11 @@ theorem measure_iInter_of_ae_monotone
     filter_upwards [hs] with ω hω
     suffices ω in s i ↔ ω in t i from propext this
     simpa [t] using fun _ => hω
-  have hMono : Mon
+  have hMono : Monotone t := fun i j hij ω hω => ⟨hω.2 hij hω.1, hω.2⟩
+  rw [iInf_congr <| fun i => measure_congr <| hst i]; rw [← hMono.measure_iInter (fun i => (hsm i).congr (hst i)) ⟨i]; rw [by rwa [← measure_congr (hst i)]⟩]
+  refine measure_congr ?_
+  nth_rw 1 [← iInter_inter, ← inter_univ (⋂ i, s i)]
+  exact ae_eq_set_inter (by rfl) (ae_eq_univ.2 hs).symm
 
 Depends on / 依赖: Monotone, Nonempty, filter_upwards, hMono.measure_iInter, iInf_congr, measur, measure_congr, measure_iInter, propext
 -/
@@ -2026,7 +2150,8 @@ theorem measure_iInter_eq_iInf_measure_iInter_le
 exact congrArg μ iInter_congr fun i => (biInf_const nonempty_Ici).symm
   · exact fun i j h => biInter_mono (Iic_subset_Iic.2 h) fun _ _ => Set.Subset.rfl
   · exact fun i => .biInter (to_countable _) fun _ _ => h _
-· refine hfin.imp fun k hk =>
+· refine hfin.imp fun k hk => ne_top_of_le_ne_top hk measure_mono iInter₂_subset k ?_
+    rfl
 
 中文:
 定理 measure_i整数er_eq_iInf_measure_i整数er_le
@@ -2037,7 +2162,8 @@ exact congrArg μ iInter_congr fun i => (biInf_const nonempty_Ici).symm
 exact congrArg μ iInter_congr fun i => (biInf_const nonempty_Ici).symm
   · exact fun i j h => biInter_mono (Iic_subset_Iic.2 h) fun _ _ => Set.Subset.rfl
   · exact fun i => .biInter (to_countable _) fun _ _ => h _
-· refine hfin.imp fun k hk =>
+· refine hfin.imp fun k hk => ne_top_of_le_ne_top hk measure_mono iInter₂_subset k ?_
+    rfl
 
 Depends on / 依赖: Antitone, Antitone.measure_iInter, Iic_subset_Iic, Set.Subset.rfl, Subset, biInf_const, biInter, biInter_mono, hfin.imp, iInter_comm, iInter_congr, measure_iInter, measure_mono, ne_top_of_le_ne_top, nonempty_Ici, to_countable
 -/
@@ -2233,7 +2359,12 @@ theorem exists_measure_iInter_lt
       fun i j hij => measure_mono (biInter_subset_biInter_left fun k hki => le_trans hki hij)
   suffices Filter.Tendsto F Filter.atTop (𝓝 0) by
     let _ := hfin.nonempty
-    rw [ENNReal.tendsto_atTop_zero_iff_lt_of_antitone hFAnti] at 
+    rw [ENNReal.tendsto_atTop_zero_iff_lt_of_antitone hFAnti] at this
+    exact this ε hε
+  have hzero : μ (⋂ n, f n) = 0 := by
+    simp only [hfem, measure_empty]
+  rw [← hzero]
+  exact tendsto_measure_iInter_le hm hfin
 
 中文:
 定理 存在_measure_i整数er_lt
@@ -2244,7 +2375,12 @@ theorem exists_measure_iInter_lt
       fun i j hij => measure_mono (biInter_subset_biInter_left fun k hki => le_trans hki hij)
   suffices Filter.Tendsto F Filter.atTop (𝓝 0) by
     let _ := hfin.nonempty
-    rw [ENNReal.tendsto_atTop_zero_iff_lt_of_antitone hFAnti] at 
+    rw [ENNReal.tendsto_atTop_zero_iff_lt_of_antitone hFAnti] at this
+    exact this ε hε
+  have hzero : μ (⋂ n, f n) = 0 := by
+    simp only [hfem, measure_empty]
+  rw [← hzero]
+  exact tendsto_measure_iInter_le hm hfin
 
 Depends on / 依赖: Antitone, ENNReal, ENNReal.tendsto_atTop_zero_iff_lt_of_antitone, Filter, Filter.Tendsto, Filter.atTop, Tendsto, biInter_subset_biInter_left, hFAnti, hfin.nonempty, le_trans, measure_empty, measure_mono, nonempty, tendsto_atTop_zero_iff_lt_of_antitone, tendsto_measure_iInter_le
 -/
@@ -2277,7 +2413,12 @@ theorem tendsto_measure_biInter_gt
       infer_instance
     simp_rw [← map_coe_Ioi_atBot a ha, tendsto_map'_iff, ← mem_Ioi, biInter_eq_iInter]
     apply tendsto_measure_iInter_atBot
-    · rwa
+    · rwa [Subtype.forall]
+    · exact fun i j h => hm i j i.2 h
+    · simpa only [Subtype.exists, exists_prop]
+  · rw [Order.not_isPredPrelimit_iff] at ha
+    rcases ha with ⟨b, hab⟩
+    simp [hab.nhdsGT]
 
 中文:
 定理 tendsto_measure_bi整数er_gt
@@ -2289,7 +2430,12 @@ theorem tendsto_measure_biInter_gt
       infer_instance
     simp_rw [← map_coe_Ioi_atBot a ha, tendsto_map'_iff, ← mem_Ioi, biInter_eq_iInter]
     apply tendsto_measure_iInter_atBot
-    · rwa
+    · rwa [Subtype.forall]
+    · exact fun i j h => hm i j i.2 h
+    · simpa only [Subtype.exists, exists_prop]
+  · rw [Order.not_isPredPrelimit_iff] at ha
+    rcases ha with ⟨b, hab⟩
+    simp [hab.nhdsGT]
 
 Depends on / 依赖: Filter, IsCountablyGenerated, IsPredPrelimit, Order.IsPredPrelimit, Order.not_isPredPrelimit_iff, Subtype, Subtype.exists, Subtype.forall, _iff, biInter_eq_iInter, comap_coe_Ioi_nhdsGT, exists_prop, hab.nhdsGT, infer_instance, map_coe_Ioi_atBot, mem_Ioi, nhdsGT, not_isPredPrelimit_iff, simp_rw, tendsto_map
 -/
@@ -2344,7 +2490,24 @@ lemma ext_of_measurableAtoms
     · exact mem_of_mem_measurableAtom hy hs hx
   rw [← sUnion_image] at h1
   rw [h1]
-  have
+  have h_count : (measurableAtom '' s).Countable := s.to_countable.image _
+  have h_disj : (measurableAtom '' s).Pairwise Disjoint := by
+    intro t ht t' ht' h_eq
+    obtain ⟨y, hys, hy⟩ := ht
+    obtain ⟨y', hy's, hy'⟩ := ht'
+    rw [← hy]; rw [← hy'] at h_eq ⊢
+    refine disjoint_measurableAtom_of_notMem fun hyy' => h_eq ?_
+    exact measurableAtom_eq_of_mem hyy'
+  have h_meas (t) (ht : t in measurableAtom '' s) : MeasurableSet t := by
+    obtain ⟨x, hxs, hx⟩ := ht
+    rw [← hx]
+    exact MeasurableSet.measurableAtom_of_countable x
+  rw [measure_sUnion h_count h_disj h_meas]; rw [measure_sUnion h_count h_disj h_meas]
+  congr with s'
+  have hs' := s'.2
+  obtain ⟨x, hxs, hx⟩ := hs'
+  rw [← hx]
+  exact h x
 
 中文:
 引理 ext_of_measurableAtoms
@@ -2359,7 +2522,24 @@ lemma ext_of_measurableAtoms
     · exact mem_of_mem_measurableAtom hy hs hx
   rw [← sUnion_image] at h1
   rw [h1]
-  have
+  have h_count : (measurableAtom '' s).Countable := s.to_countable.image _
+  have h_disj : (measurableAtom '' s).Pairwise Disjoint := by
+    intro t ht t' ht' h_eq
+    obtain ⟨y, hys, hy⟩ := ht
+    obtain ⟨y', hy's, hy'⟩ := ht'
+    rw [← hy]; rw [← hy'] at h_eq ⊢
+    refine disjoint_measurableAtom_of_notMem fun hyy' => h_eq ?_
+    exact measurableAtom_eq_of_mem hyy'
+  have h_meas (t) (ht : t in measurableAtom '' s) : MeasurableSet t := by
+    obtain ⟨x, hxs, hx⟩ := ht
+    rw [← hx]
+    exact MeasurableSet.measurableAtom_of_countable x
+  rw [measure_sUnion h_count h_disj h_meas]; rw [measure_sUnion h_count h_disj h_meas]
+  congr with s'
+  have hs' := s'.2
+  obtain ⟨x, hxs, hx⟩ := hs'
+  rw [← hx]
+  exact h x
 
 Depends on / 依赖: Countable, Disjoint, Pairwise, exists_prop, h_count, h_disj, h_eq, measurableAtom, mem_iUnion, mem_measurableAtom_self, mem_of_mem_measurableAtom, s.to_countable.image, sUnion_image, to_countable
 -/
@@ -2611,7 +2791,10 @@ theorem measure_inter_eq_of_measure_eq
     calc
       μ (u inter s) + μ (u \ s) = μ u := measure_inter_add_sdiff _ hs
       _ = μ t := h.symm
-      _ = μ (t inter s) + μ (t \ s) := (measure_inter_add_sdiff _ h
+      _ = μ (t inter s) + μ (t \ s) := (measure_inter_add_sdiff _ hs).symm
+      _ <= μ (t inter s) + μ (u \ s) := by gcongr
+  have B : μ (u \ s) != ∞ := (lt_of_le_of_lt (measure_mono sdiff_subset) ht_ne_top.lt_top).ne
+  exact ENNReal.le_of_add_le_add_right B A
 
 中文:
 定理 measure_inter_eq_of_measure_eq
@@ -2623,7 +2806,10 @@ theorem measure_inter_eq_of_measure_eq
     calc
       μ (u inter s) + μ (u \ s) = μ u := measure_inter_add_sdiff _ hs
       _ = μ t := h.symm
-      _ = μ (t inter s) + μ (t \ s) := (measure_inter_add_sdiff _ h
+      _ = μ (t inter s) + μ (t \ s) := (measure_inter_add_sdiff _ hs).symm
+      _ <= μ (t inter s) + μ (u \ s) := by gcongr
+  have B : μ (u \ s) != ∞ := (lt_of_le_of_lt (measure_mono sdiff_subset) ht_ne_top.lt_top).ne
+  exact ENNReal.le_of_add_le_add_right B A
 
 Depends on / 依赖: ENNReal, ENNReal.le_of_add_le_add_right, h.symm, ht_ne_top, ht_ne_top.lt_top, le_antisymm, le_of_add_le_add_right, lt_of_le_of_lt, lt_top, measure_inter_add_sdiff, measure_mono, sdiff_subset
 -/
@@ -2920,7 +3106,9 @@ instance instAdd
       m_iUnion := fun s hs hd =>
         show μ₁ (⋃ i, s i) + μ₂ (⋃ i, s i) = ∑' i, (μ₁ (s i) + μ₂ (s i)) by
           rw [ENNReal.tsum_add]; rw [measure_iUnion hd hs]; rw [measure_iUnion hd hs]
-      trim_le := by rw [Outer
+      trim_le := by rw [OuterMeasure.trim_add, μ₁.trimmed, μ₂.trimmed] }⟩
+
+@[simp]
 
 中文:
 实例 instAdd
@@ -2930,7 +3118,9 @@ instance instAdd
       m_iUnion := fun s hs hd =>
         show μ₁ (⋃ i, s i) + μ₂ (⋃ i, s i) = ∑' i, (μ₁ (s i) + μ₂ (s i)) by
           rw [ENNReal.tsum_add]; rw [measure_iUnion hd hs]; rw [measure_iUnion hd hs]
-      trim_le := by rw [Outer
+      trim_le := by rw [OuterMeasure.trim_add, μ₁.trimmed, μ₂.trimmed] }⟩
+
+@[simp]
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_add, OuterMeasure, OuterMeasure.trim_add, m_iUnion, measure_iUnion, toOuterMeasure, trim_add, trim_le, trimmed, tsum_add
 -/
@@ -3647,7 +3837,8 @@ theorem measure_toMeasurable_add_inter_left
       measure_eq_left_of_subset_of_measure_add_eq ?_ (subset_toMeasurable _ _)
         (measure_toMeasurable t).symm
     rwa [measure_toMeasurable t]
-  · simp only [not_or, ENNReal.add_eq_top, Pi.add_appl
+  · simp only [not_or, ENNReal.add_eq_top, Pi.add_apply, Ne, coe_add] at ht
+    exact ht.1
 
 中文:
 定理 measure_toMeasurable_add_inter_left
@@ -3658,7 +3849,8 @@ theorem measure_toMeasurable_add_inter_left
       measure_eq_left_of_subset_of_measure_add_eq ?_ (subset_toMeasurable _ _)
         (measure_toMeasurable t).symm
     rwa [measure_toMeasurable t]
-  · simp only [not_or, ENNReal.add_eq_top, Pi.add_appl
+  · simp only [not_or, ENNReal.add_eq_top, Pi.add_apply, Ne, coe_add] at ht
+    exact ht.1
 
 Depends on / 依赖: ENNReal, ENNReal.add_eq_top, Pi.add_apply, add_apply, add_eq_top, coe_add, measure_eq_left_of_subset_of_measure_add_eq, measure_inter_eq_of_measure_eq, measure_toMeasurable, not_or, subset_toMeasurable
 -/
@@ -3993,7 +4185,12 @@ theorem sInf_caratheodory
   simp only [OuterMeasure.sInfGen, le_iInf_iff, forall_mem_image, measure_eq_iInf t,
     coe_toOuterMeasure]
   intro μ hμ u htu _hu
-  have hm : forall {s t}, s subseteq t -> OuterMeasure.sInfGen
+  have hm : forall {s t}, s subseteq t -> OuterMeasure.sInfGen (toOuterMeasure '' m) s <= μ t := by
+    intro s t hst
+    rw [OuterMeasure.sInfGen_def]; rw [iInf_image]
+exact iInf₂_le_of_le μ hμ measure_mono hst
+  rw [← measure_inter_add_sdiff u hs]
+  exact add_le_add (hm <| inter_subset_inter_left _ htu) (hm <| sdiff_subset_sdiff_left htu)
 
 中文:
 定理 sInf_caratheodory
@@ -4004,7 +4201,12 @@ theorem sInf_caratheodory
   simp only [OuterMeasure.sInfGen, le_iInf_iff, forall_mem_image, measure_eq_iInf t,
     coe_toOuterMeasure]
   intro μ hμ u htu _hu
-  have hm : forall {s t}, s subseteq t -> OuterMeasure.sInfGen
+  have hm : forall {s t}, s subseteq t -> OuterMeasure.sInfGen (toOuterMeasure '' m) s <= μ t := by
+    intro s t hst
+    rw [OuterMeasure.sInfGen_def]; rw [iInf_image]
+exact iInf₂_le_of_le μ hμ measure_mono hst
+  rw [← measure_inter_add_sdiff u hs]
+  exact add_le_add (hm <| inter_subset_inter_left _ htu) (hm <| sdiff_subset_sdiff_left htu)
 
 Depends on / 依赖: OuterMeasure, OuterMeasure.boundedBy_caratheodory, OuterMeasure.sInfGen, OuterMeasure.sInfGen_def, OuterMeasure.sInf_eq_boundedBy_sInfGen, add_le_add, boundedBy_caratheodory, coe_toOuterMeasure, forall_mem_image, iInf_image, inter_subset, le_iInf_iff, measure_eq_iInf, measure_inter_add_sdiff, measure_mono, sInfGen, sInfGen_def, sInf_eq_boundedBy_sInfGen, subseteq, toOuterMeasure
 -/
@@ -4123,7 +4325,13 @@ instance instCompleteLattice
           refine (measure_iUnion_le _).antisymm ?_
           if hne : (⋃ i, f i).Nonempty then
             rw [OuterMeasure.top_apply hne]
-            exact
+            exact le_top
+          else
+            simp_all [Set.not_nonempty_iff_eq_empty]
+        trim_le := le_top },
+    le_top := fun _ => toOuterMeasure_le.mp le_top
+    bot := 0
+    bot_le := fun _a _s => bot_le }
 
 中文:
 实例 instCompleteLattice
@@ -4136,7 +4344,13 @@ instance instCompleteLattice
           refine (measure_iUnion_le _).antisymm ?_
           if hne : (⋃ i, f i).Nonempty then
             rw [OuterMeasure.top_apply hne]
-            exact
+            exact le_top
+          else
+            simp_all [Set.not_nonempty_iff_eq_empty]
+        trim_le := le_top },
+    le_top := fun _ => toOuterMeasure_le.mp le_top
+    bot := 0
+    bot_le := fun _a _s => bot_le }
 
 Depends on / 依赖: Measure, Nonempty, OuterMeasure, OuterMeasure.top_apply, Set.not_nonempty_iff_eq_empty, antisymm, bot_le, completeLatticeOfCompleteSemilatticeInf, le_top, m_iUnion, measure_iUnion_le, not_nonempty_iff_eq_empty, toOuterMeasure, toOuterMeasure_le, toOuterMeasure_le.mp, top_apply, trim_le
 -/
@@ -4169,7 +4383,65 @@ lemma inf_apply
   -- `(μ ⊓ ν) s` is defined as `⊓ (t : ℕ → Set α) (ht : s ⊆ ⋃ n, t n), ∑' n, μ (t n) ⊓ ν (t n)`
   rw [← sInf_pair]; rw [Measure.sInf_apply hs]; rw [OuterMeasure.sInf_apply
     (image_nonempty.2 <| insert_nonempty μ {ν})]
-  refine le_antisymm (le_sInf fun m ⟨t, ht₁⟩ => ?_) (le_iInf₂ fun t' ht' => 
+  refine le_antisymm (le_sInf fun m ⟨t, ht₁⟩ => ?_) (le_iInf₂ fun t' ht' => ?_)
+  · subst ht₁
+    -- We first show `(μ ⊓ ν) s ≤ μ (t ∩ s) + ν (tᶜ ∩ s)` for any `t : Set α`
+    -- For this, define the sequence `t' : ℕ → Set α` where `t' 0 = t ∩ s`, `t' 1 = tᶜ ∩ s` and
+    -- `∅` otherwise. Then, we have by construction
+    -- `(μ ⊓ ν) s ≤ ∑' n, μ (t' n) ⊓ ν (t' n) ≤ μ (t' 0) + ν (t' 1) = μ (t ∩ s) + ν (tᶜ ∩ s)`.
+    set t' : Nat -> Set α := fun n => if n = 0 then t inter s else if n = 1 then tᶜ inter s else ∅ with ht'
+    refine (iInf₂_le t' fun x hx => ?_).trans ?_
+    · by_cases hxt : x in t
+      · refine mem_iUnion.2 ⟨0, ?_⟩
+        simp [hx, hxt]
+      · refine mem_iUnion.2 ⟨1, ?_⟩
+        simp [hx, hxt]
+    · simp only [iInf_image, coe_toOuterMeasure, iInf_pair]
+      rw [tsum_eq_add_tsum_ite 0]; rw [tsum_eq_add_tsum_ite 1]; rw [if_neg zero_ne_one.symm]; rw [ENNReal.summable.tsum_eq_zero_iff.2 _]; rw [add_zero]
+      · exact add_le_add (inf_le_left.trans <| by simp [ht']) (inf_le_right.trans <| by simp [ht'])
+      · simp only [ite_eq_left_iff]
+        intro n hn₁ hn₀
+        simp only [ht', if_neg hn₀, if_neg hn₁, measure_empty, le_refl, inf_of_le_left]
+  · simp only [iInf_image, coe_toOuterMeasure, iInf_pair]
+    -- Conversely, fixing `t' : ℕ → Set α` such that `s ⊆ ⋃ n, t' n`, we construct `t : Set α`
+    -- for which `μ (t ∩ s) + ν (tᶜ ∩ s) ≤ ∑' n, μ (t' n) ⊓ ν (t' n)`.
+    -- Denoting `I := {n | μ (t' n) ≤ ν (t' n)}`, we set `t = ⋃ n ∈ I, t' n`.
+    -- Clearly `μ (t ∩ s) ≤ ∑' n ∈ I, μ (t' n)` and `ν (tᶜ ∩ s) ≤ ∑' n ∉ I, ν (t' n)`, so
+    -- `μ (t ∩ s) + ν (tᶜ ∩ s) ≤ ∑' n ∈ I, μ (t' n) + ∑' n ∉ I, ν (t' n)`
+    -- where the RHS equals `∑' n, μ (t' n) ⊓ ν (t' n)` by the choice of `I`.
+    set t := ⋃ n in {k : Nat | μ (t' k) <= ν (t' k)}, t' n with ht
+    suffices hadd : μ (t inter s) + ν (tᶜ inter s) <= ∑' n, μ (t' n) ⊓ ν (t' n) by
+      exact le_trans (sInf_le ⟨t, rfl⟩) hadd
+    have hle₁ : μ (t inter s) <= ∑' (n : {k | μ (t' k) <= ν (t' k)}), μ (t' n) :=
+(measure_mono inter_subset_left).trans measure_biUnion_le _ (to_countable _) _
+    have hcap : tᶜ inter s subseteq ⋃ n in {k | ν (t' k) < μ (t' k)}, t' n := by
+      simp_rw [ht, compl_iUnion]
+      refine fun x ⟨hx₁, hx₂⟩ => mem_iUnion₂.2 ?_
+obtain ⟨i, hi⟩ := mem_iUnion.1 ht' hx₂
+      refine ⟨i, ?_, hi⟩
+      by_contra h
+      simp only [mem_ofPred_eq, not_lt] at h
+      exact mem_iInter₂.1 hx₁ i h hi
+    have hle₂ : ν (tᶜ inter s) <= ∑' (n : {k | ν (t' k) < μ (t' k)}), ν (t' n) :=
+      (measure_mono hcap).trans (measure_biUnion_le ν (to_countable {k | ν (t' k) < μ (t' k)}) _)
+    refine (add_le_add hle₁ hle₂).trans ?_
+    have heq : {k | μ (t' k) <= ν (t' k)} union {k | ν (t' k) < μ (t' k)} = univ := by
+      ext k; simp [le_or_gt]
+    conv in ∑' (n : Nat), μ (t' n) ⊓ ν (t' n) => rw [← tsum_univ, ← heq]
+    rw [ENNReal.summable.tsum_union_disjoint (f := fun n => μ (t' n) ⊓ ν (t' n)) ?_ ENNReal.summable]
+    · refine add_le_add (tsum_congr ?_).le (tsum_congr ?_).le
+      · rw [Subtype.forall]
+        intro n hn; simpa
+      · rw [Subtype.forall]
+        intro n hn
+        rw [mem_ofPred_eq] at hn
+        simp [le_of_lt hn]
+    · rw [Set.disjoint_iff]
+      rintro k ⟨hk₁, hk₂⟩
+      rw [mem_ofPred_eq] at hk₁ hk₂
+exact False.elim hk₂.not_ge hk₁
+
+@[simp]
 
 中文:
 引理 inf_apply
@@ -4178,7 +4450,65 @@ lemma inf_apply
   -- `(μ ⊓ ν) s` is defined as `⊓ (t : ℕ → Set α) (ht : s ⊆ ⋃ n, t n), ∑' n, μ (t n) ⊓ ν (t n)`
   rw [← sInf_pair]; rw [Measure.sInf_apply hs]; rw [OuterMeasure.sInf_apply
     (image_nonempty.2 <| insert_nonempty μ {ν})]
-  refine le_antisymm (le_sInf fun m ⟨t, ht₁⟩ => ?_) (le_iInf₂ fun t' ht' => 
+  refine le_antisymm (le_sInf fun m ⟨t, ht₁⟩ => ?_) (le_iInf₂ fun t' ht' => ?_)
+  · subst ht₁
+    -- We first show `(μ ⊓ ν) s ≤ μ (t ∩ s) + ν (tᶜ ∩ s)` for any `t : Set α`
+    -- For this, define the sequence `t' : ℕ → Set α` where `t' 0 = t ∩ s`, `t' 1 = tᶜ ∩ s` and
+    -- `∅` otherwise. Then, we have by construction
+    -- `(μ ⊓ ν) s ≤ ∑' n, μ (t' n) ⊓ ν (t' n) ≤ μ (t' 0) + ν (t' 1) = μ (t ∩ s) + ν (tᶜ ∩ s)`.
+    set t' : Nat -> Set α := fun n => if n = 0 then t inter s else if n = 1 then tᶜ inter s else ∅ with ht'
+    refine (iInf₂_le t' fun x hx => ?_).trans ?_
+    · by_cases hxt : x in t
+      · refine mem_iUnion.2 ⟨0, ?_⟩
+        simp [hx, hxt]
+      · refine mem_iUnion.2 ⟨1, ?_⟩
+        simp [hx, hxt]
+    · simp only [iInf_image, coe_toOuterMeasure, iInf_pair]
+      rw [tsum_eq_add_tsum_ite 0]; rw [tsum_eq_add_tsum_ite 1]; rw [if_neg zero_ne_one.symm]; rw [ENNReal.summable.tsum_eq_zero_iff.2 _]; rw [add_zero]
+      · exact add_le_add (inf_le_left.trans <| by simp [ht']) (inf_le_right.trans <| by simp [ht'])
+      · simp only [ite_eq_left_iff]
+        intro n hn₁ hn₀
+        simp only [ht', if_neg hn₀, if_neg hn₁, measure_empty, le_refl, inf_of_le_left]
+  · simp only [iInf_image, coe_toOuterMeasure, iInf_pair]
+    -- Conversely, fixing `t' : ℕ → Set α` such that `s ⊆ ⋃ n, t' n`, we construct `t : Set α`
+    -- for which `μ (t ∩ s) + ν (tᶜ ∩ s) ≤ ∑' n, μ (t' n) ⊓ ν (t' n)`.
+    -- Denoting `I := {n | μ (t' n) ≤ ν (t' n)}`, we set `t = ⋃ n ∈ I, t' n`.
+    -- Clearly `μ (t ∩ s) ≤ ∑' n ∈ I, μ (t' n)` and `ν (tᶜ ∩ s) ≤ ∑' n ∉ I, ν (t' n)`, so
+    -- `μ (t ∩ s) + ν (tᶜ ∩ s) ≤ ∑' n ∈ I, μ (t' n) + ∑' n ∉ I, ν (t' n)`
+    -- where the RHS equals `∑' n, μ (t' n) ⊓ ν (t' n)` by the choice of `I`.
+    set t := ⋃ n in {k : Nat | μ (t' k) <= ν (t' k)}, t' n with ht
+    suffices hadd : μ (t inter s) + ν (tᶜ inter s) <= ∑' n, μ (t' n) ⊓ ν (t' n) by
+      exact le_trans (sInf_le ⟨t, rfl⟩) hadd
+    have hle₁ : μ (t inter s) <= ∑' (n : {k | μ (t' k) <= ν (t' k)}), μ (t' n) :=
+(measure_mono inter_subset_left).trans measure_biUnion_le _ (to_countable _) _
+    have hcap : tᶜ inter s subseteq ⋃ n in {k | ν (t' k) < μ (t' k)}, t' n := by
+      simp_rw [ht, compl_iUnion]
+      refine fun x ⟨hx₁, hx₂⟩ => mem_iUnion₂.2 ?_
+obtain ⟨i, hi⟩ := mem_iUnion.1 ht' hx₂
+      refine ⟨i, ?_, hi⟩
+      by_contra h
+      simp only [mem_ofPred_eq, not_lt] at h
+      exact mem_iInter₂.1 hx₁ i h hi
+    have hle₂ : ν (tᶜ inter s) <= ∑' (n : {k | ν (t' k) < μ (t' k)}), ν (t' n) :=
+      (measure_mono hcap).trans (measure_biUnion_le ν (to_countable {k | ν (t' k) < μ (t' k)}) _)
+    refine (add_le_add hle₁ hle₂).trans ?_
+    have heq : {k | μ (t' k) <= ν (t' k)} union {k | ν (t' k) < μ (t' k)} = univ := by
+      ext k; simp [le_or_gt]
+    conv in ∑' (n : Nat), μ (t' n) ⊓ ν (t' n) => rw [← tsum_univ, ← heq]
+    rw [ENNReal.summable.tsum_union_disjoint (f := fun n => μ (t' n) ⊓ ν (t' n)) ?_ ENNReal.summable]
+    · refine add_le_add (tsum_congr ?_).le (tsum_congr ?_).le
+      · rw [Subtype.forall]
+        intro n hn; simpa
+      · rw [Subtype.forall]
+        intro n hn
+        rw [mem_ofPred_eq] at hn
+        simp [le_of_lt hn]
+    · rw [Set.disjoint_iff]
+      rintro k ⟨hk₁, hk₂⟩
+      rw [mem_ofPred_eq] at hk₁ hk₂
+exact False.elim hk₂.not_ge hk₁
+
+@[simp]
 -/
 lemma inf_apply {s : Set α} (hs : MeasurableSet s) :
     (μ ⊓ ν) s = sInf {m | exists t, m = μ (t inter s) + ν (tᶜ inter s)} := by

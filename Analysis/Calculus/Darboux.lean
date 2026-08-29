@@ -38,7 +38,30 @@ theorem exists_hasDerivWithinAt_eq_of_gt_of_lt
   have hg : forall x in Icc a b, HasDerivWithinAt g (f' x - m) (Icc a b) x := by
     intro x hx
     simpa using! (hf x hx).sub ((hasDerivWithinAt_id x _).const_mul m)
-  obtain 
+  obtain ⟨c, cmem, hc⟩ : exists c in Icc a b, IsMinOn g (Icc a b) c :=
+    isCompact_Icc.exists_isMinOn (nonempty_Icc.2 <| hab) fun x hx => (hg x hx).continuousWithinAt
+  have cmem' : c in Ioo a b := by
+    rcases cmem.1.eq_or_lt with (rfl | hac)
+    -- Show that `c` can't be equal to `a`
+    · refine absurd (sub_nonneg.1 <| nonneg_of_mul_nonneg_right ?_ (sub_pos.2 hab'))
+        (not_le_of_gt hma)
+      have : b - a in posTangentConeAt (Icc a b) a :=
+        sub_mem_posTangentConeAt_of_segment_subset (segment_eq_Icc hab ▸ Subset.rfl)
+      simpa only [ContinuousLinearMap.smulRight_apply, one_apply_eq_self]
+        using! hc.localize.hasFDerivWithinAt_nonneg (hg a (left_mem_Icc.2 hab)) this
+    rcases cmem.2.eq_or_lt' with (rfl | hcb)
+    -- Show that `c` can't be equal to `b`
+    · refine absurd (sub_nonpos.1 <| nonpos_of_mul_nonneg_right ?_ (sub_lt_zero.2 hab'))
+        (not_le_of_gt hmb)
+      have : a - b in posTangentConeAt (Icc a b) b :=
+        sub_mem_posTangentConeAt_of_segment_subset (by rw [segment_symm, segment_eq_Icc hab])
+      simpa only [ContinuousLinearMap.smulRight_apply, one_apply_eq_self]
+        using! hc.localize.hasFDerivWithinAt_nonneg (hg b (right_mem_Icc.2 hab)) this
+    exact ⟨hac, hcb⟩
+  use c, cmem'
+  rw [← sub_eq_zero]
+  have : Icc a b in 𝓝 c := by rwa [← mem_interior_iff_mem_nhds, interior_Icc]
+  exact (hc.isLocalMin this).hasDerivAt_eq_zero ((hg c cmem).hasDerivAt this)
 
 中文:
 定理 存在_hasDerivWithinAt_eq_of_gt_of_lt
@@ -50,7 +73,30 @@ theorem exists_hasDerivWithinAt_eq_of_gt_of_lt
   have hg : forall x in Icc a b, HasDerivWithinAt g (f' x - m) (Icc a b) x := by
     intro x hx
     simpa using! (hf x hx).sub ((hasDerivWithinAt_id x _).const_mul m)
-  obtain 
+  obtain ⟨c, cmem, hc⟩ : exists c in Icc a b, IsMinOn g (Icc a b) c :=
+    isCompact_Icc.exists_isMinOn (nonempty_Icc.2 <| hab) fun x hx => (hg x hx).continuousWithinAt
+  have cmem' : c in Ioo a b := by
+    rcases cmem.1.eq_or_lt with (rfl | hac)
+    -- Show that `c` can't be equal to `a`
+    · refine absurd (sub_nonneg.1 <| nonneg_of_mul_nonneg_right ?_ (sub_pos.2 hab'))
+        (not_le_of_gt hma)
+      have : b - a in posTangentConeAt (Icc a b) a :=
+        sub_mem_posTangentConeAt_of_segment_subset (segment_eq_Icc hab ▸ Subset.rfl)
+      simpa only [ContinuousLinearMap.smulRight_apply, one_apply_eq_self]
+        using! hc.localize.hasFDerivWithinAt_nonneg (hg a (left_mem_Icc.2 hab)) this
+    rcases cmem.2.eq_or_lt' with (rfl | hcb)
+    -- Show that `c` can't be equal to `b`
+    · refine absurd (sub_nonpos.1 <| nonpos_of_mul_nonneg_right ?_ (sub_lt_zero.2 hab'))
+        (not_le_of_gt hmb)
+      have : a - b in posTangentConeAt (Icc a b) b :=
+        sub_mem_posTangentConeAt_of_segment_subset (by rw [segment_symm, segment_eq_Icc hab])
+      simpa only [ContinuousLinearMap.smulRight_apply, one_apply_eq_self]
+        using! hc.localize.hasFDerivWithinAt_nonneg (hg b (right_mem_Icc.2 hab)) this
+    exact ⟨hac, hcb⟩
+  use c, cmem'
+  rw [← sub_eq_zero]
+  have : Icc a b in 𝓝 c := by rwa [← mem_interior_iff_mem_nhds, interior_Icc]
+  exact (hc.isLocalMin this).hasDerivAt_eq_zero ((hg c cmem).hasDerivAt this)
 
 Depends on / 依赖: HasDerivWithinAt, IsMinOn, const_mul, continuousWithinAt, eq_or_lt, exists_isMinOn, hab.eq_or_lt, hasDerivWithinAt_id, isCompact_Icc, isCompact_Icc.exists_isMinOn, lt_asymm, nonempty_Icc
 -/
@@ -130,7 +176,13 @@ theorem Set.OrdConnected.image_hasDerivWithinAt
   · have : Icc a b subseteq s := hs.out ha hb
     rcases exists_hasDerivWithinAt_eq_of_gt_of_lt hab (fun x hx => (hf x <| this hx).mono this) hma
         hmb with
-      ⟨c, cmem,
+      ⟨c, cmem, hc⟩
+exact ⟨c, this Ioo_subset_Icc_self cmem, hc⟩
+  · have : Icc b a subseteq s := hs.out hb ha
+    rcases exists_hasDerivWithinAt_eq_of_lt_of_gt hab (fun x hx => (hf x <| this hx).mono this) hmb
+        hma with
+      ⟨c, cmem, hc⟩
+exact ⟨c, this Ioo_subset_Icc_self cmem, hc⟩
 
 中文:
 定理 集合.序连通.image_hasDerivWithinAt
@@ -142,7 +194,13 @@ theorem Set.OrdConnected.image_hasDerivWithinAt
   · have : Icc a b subseteq s := hs.out ha hb
     rcases exists_hasDerivWithinAt_eq_of_gt_of_lt hab (fun x hx => (hf x <| this hx).mono this) hma
         hmb with
-      ⟨c, cmem,
+      ⟨c, cmem, hc⟩
+exact ⟨c, this Ioo_subset_Icc_self cmem, hc⟩
+  · have : Icc b a subseteq s := hs.out hb ha
+    rcases exists_hasDerivWithinAt_eq_of_lt_of_gt hab (fun x hx => (hf x <| this hx).mono this) hmb
+        hma with
+      ⟨c, cmem, hc⟩
+exact ⟨c, this Ioo_subset_Icc_self cmem, hc⟩
 
 Depends on / 依赖: Ioo_subset_Icc_self, exists_hasDerivWithinAt_eq_of_gt_of_lt, exists_hasDerivWithinAt_eq_of_lt_of_gt, hs.out, le_total, ordConnected_of_Ioo, subseteq
 -/

@@ -188,7 +188,10 @@ lemma linear_of_full_essSurj_comp
       exists (X' Y' : C) (eX : F.obj X' ≅ X) (eY : F.obj Y' ≅ Y)
         (f' : X' ⟶ Y'), f = eX.inv ≫ F.map f' ≫ eY.hom := by
     obtain ⟨f', hf'⟩ :=
-      F.map_surjective ((F.objObjPreimageIso X).hom ≫ f ≫ (F.objObjPreimageIso 
+      F.map_surjective ((F.objObjPreimageIso X).hom ≫ f ≫ (F.objObjPreimageIso Y).inv)
+    exact ⟨_, _, F.objObjPreimageIso X, F.objObjPreimageIso Y, f', by cat_disch⟩
+  simpa only [comp_map, map_smul, Linear.smul_comp, Linear.comp_smul, ← G.map_comp]
+    using G.map eX.inv ≫= ((F ⋙ G).map_smul r f') =≫ G.map eY.hom
 
 中文:
 引理 linear_of_full_essSurj_comp
@@ -199,7 +202,10 @@ lemma linear_of_full_essSurj_comp
       exists (X' Y' : C) (eX : F.obj X' ≅ X) (eY : F.obj Y' ≅ Y)
         (f' : X' ⟶ Y'), f = eX.inv ≫ F.map f' ≫ eY.hom := by
     obtain ⟨f', hf'⟩ :=
-      F.map_surjective ((F.objObjPreimageIso X).hom ≫ f ≫ (F.objObjPreimageIso 
+      F.map_surjective ((F.objObjPreimageIso X).hom ≫ f ≫ (F.objObjPreimageIso Y).inv)
+    exact ⟨_, _, F.objObjPreimageIso X, F.objObjPreimageIso Y, f', by cat_disch⟩
+  simpa only [comp_map, map_smul, Linear.smul_comp, Linear.comp_smul, ← G.map_comp]
+    using G.map eX.inv ≫= ((F ⋙ G).map_smul r f') =≫ G.map eY.hom
 
 Depends on / 依赖: F.map, F.map_surjective, F.obj, F.objObjPreimageIso, G.map, G.map_comp, Linear, Linear.comp_smul, Linear.smul_comp, cat_disch, comp_map, comp_smul, eX.inv, eY.hom, map_comp, map_smul, map_surjective, objObjPreimageIso, smul_comp
 -/

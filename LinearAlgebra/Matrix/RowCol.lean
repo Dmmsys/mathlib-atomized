@@ -1254,7 +1254,9 @@ theorem diagonal_updateCol_single
     · rw [updateCol_self, Pi.single_eq_same, Function.update_self]
     · rw [updateCol_ne hji, diagonal_apply_eq, Function.update_of_ne hji]
   · rw [diagonal_apply_ne _ hjk]
-    obtain rfl
+    obtain rfl | hki := eq_or_ne k i
+    · rw [updateCol_self, Pi.single_eq_of_ne hjk]
+    · rw [updateCol_ne hki, diagonal_apply_ne _ hjk]
 
 中文:
 定理 diagonal_updateCol_single
@@ -1267,7 +1269,9 @@ theorem diagonal_updateCol_single
     · rw [updateCol_self, Pi.single_eq_same, Function.update_self]
     · rw [updateCol_ne hji, diagonal_apply_eq, Function.update_of_ne hji]
   · rw [diagonal_apply_ne _ hjk]
-    obtain rfl
+    obtain rfl | hki := eq_or_ne k i
+    · rw [updateCol_self, Pi.single_eq_of_ne hjk]
+    · rw [updateCol_ne hki, diagonal_apply_ne _ hjk]
 
 Depends on / 依赖: Function, Function.update_of_ne, Function.update_self, Pi.single_eq_of_ne, Pi.single_eq_same, diagonal_apply_eq, diagonal_apply_ne, eq_or_ne, single_eq_of_ne, single_eq_same, updateCol_ne, updateCol_self, update_of_ne, update_self
 -/

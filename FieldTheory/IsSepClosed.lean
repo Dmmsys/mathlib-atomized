@@ -166,7 +166,11 @@ theorem exists_root_C_mul_X_pow_add_C_mul_X_add_C
 have hdeg : f.degree != 0 := degree_ne_of_natDegree_ne (n := 0) by
     have : C 0 * X ^ n + C b * X = 0 * X ^ n + C b * X := by grind
     by_cases ha : a = 0
-    · grind [zero_add
+    · grind [zero_add]
+    · grind [natDegree_add_eq_left_of_natDegree_lt]
+  have hsep : f.Separable := separable_C_mul_X_pow_add_C_mul_X_add_C a b c hn hb.isUnit
+  obtain ⟨x, hx⟩ := exists_root f hdeg hsep
+  exact ⟨x, by simpa [f] using hx⟩
 
 中文:
 定理 存在_root_C_mul_X_pow_add_C_mul_X_add_C
@@ -176,7 +180,11 @@ have hdeg : f.degree != 0 := degree_ne_of_natDegree_ne (n := 0) by
 have hdeg : f.degree != 0 := degree_ne_of_natDegree_ne (n := 0) by
     have : C 0 * X ^ n + C b * X = 0 * X ^ n + C b * X := by grind
     by_cases ha : a = 0
-    · grind [zero_add
+    · grind [zero_add]
+    · grind [natDegree_add_eq_left_of_natDegree_lt]
+  have hsep : f.Separable := separable_C_mul_X_pow_add_C_mul_X_add_C a b c hn hb.isUnit
+  obtain ⟨x, hx⟩ := exists_root f hdeg hsep
+  exact ⟨x, by simpa [f] using hx⟩
 -/
 theorem exists_root_C_mul_X_pow_add_C_mul_X_add_C
     [IsSepClosed k] {n : Nat} (a b c : k) (hn : (n : k) = 0) (hn' : 2 <= n) (hb : b != 0) :
@@ -231,7 +239,10 @@ theorem exists_pow_nat_eq
     rw [degree_X_pow_sub_C hn' x]
     exact (WithBot.coe_lt_coe.2 hn').ne'
   by_cases hx : x = 0
-  · exact ⟨0, by rw [hx, pow_eq_zero_iff hn'.ne'
+  · exact ⟨0, by rw [hx, pow_eq_zero_iff hn'.ne']⟩
+· obtain ⟨z, hz⟩ := exists_root _ this separable_X_pow_sub_C x hn.out hx
+    use z
+    simpa [eval_C, eval_X, eval_pow, eval_sub, IsRoot.def, sub_eq_zero] using hz
 
 中文:
 定理 存在_pow_nat_eq
@@ -244,7 +255,10 @@ theorem exists_pow_nat_eq
     rw [degree_X_pow_sub_C hn' x]
     exact (WithBot.coe_lt_coe.2 hn').ne'
   by_cases hx : x = 0
-  · exact ⟨0, by rw [hx, pow_eq_zero_iff hn'.ne'
+  · exact ⟨0, by rw [hx, pow_eq_zero_iff hn'.ne']⟩
+· obtain ⟨z, hz⟩ := exists_root _ this separable_X_pow_sub_C x hn.out hx
+    use z
+    simpa [eval_C, eval_X, eval_pow, eval_sub, IsRoot.def, sub_eq_zero] using hz
 
 Depends on / 依赖: IsRoot, IsRoot.def, Nat.cast_zero, Nat.pos_of_ne_zero, WithBot, WithBot.coe_lt_coe, cast_zero, coe_lt_coe, degree, degree_X_pow_sub_C, eval_C, eval_X, eval_pow, eval_sub, exists_root, hn.out, pos_of_ne_zero, pow_eq_zero_iff, separable_X_pow_sub_C, sub_eq_zero
 -/
@@ -402,7 +416,16 @@ theorem of_exists_root
   replace H (p : k[X]) (hp : Irreducible p) (hs : Separable p) : exists x, p.eval x = 0 := by
     obtain ⟨x, hx⟩ := H (p * C (leadingCoeff p)⁻¹) (monic_mul_leadingCoeff_inv hp.ne_zero)
       (irreducible_mul_leadingCoeff_inv.mpr hp) (hs.mul_unit (by aesop))
-    exact ⟨x, by simpa [hp.ne_zero] usi
+    exact ⟨x, by simpa [hp.ne_zero] using hx⟩
+  refine ⟨fun p hp => ?_⟩
+  by_cases hp0 : p = 0
+  · simp [hp0]
+  obtain ⟨u, hu⟩ := UniqueFactorizationMonoid.factors_prod hp0
+  rw [← hu]
+  refine (Splits.multisetProd fun f hf => ?_).mul u.isUnit.splits
+  let h := UniqueFactorizationMonoid.irreducible_of_factor f hf
+  obtain ⟨x, hx⟩ := H f h (hp.of_dvd (UniqueFactorizationMonoid.dvd_of_mem_factors hf))
+  exact Splits.of_degree_eq_one (degree_eq_one_of_irreducible_of_root h hx)
 
 中文:
 定理 of_存在_root
@@ -411,7 +434,16 @@ theorem of_exists_root
   replace H (p : k[X]) (hp : Irreducible p) (hs : Separable p) : exists x, p.eval x = 0 := by
     obtain ⟨x, hx⟩ := H (p * C (leadingCoeff p)⁻¹) (monic_mul_leadingCoeff_inv hp.ne_zero)
       (irreducible_mul_leadingCoeff_inv.mpr hp) (hs.mul_unit (by aesop))
-    exact ⟨x, by simpa [hp.ne_zero] usi
+    exact ⟨x, by simpa [hp.ne_zero] using hx⟩
+  refine ⟨fun p hp => ?_⟩
+  by_cases hp0 : p = 0
+  · simp [hp0]
+  obtain ⟨u, hu⟩ := UniqueFactorizationMonoid.factors_prod hp0
+  rw [← hu]
+  refine (Splits.multisetProd fun f hf => ?_).mul u.isUnit.splits
+  let h := UniqueFactorizationMonoid.irreducible_of_factor f hf
+  obtain ⟨x, hx⟩ := H f h (hp.of_dvd (UniqueFactorizationMonoid.dvd_of_mem_factors hf))
+  exact Splits.of_degree_eq_one (degree_eq_one_of_irreducible_of_root h hx)
 
 Depends on / 依赖: Irreducible, Separable, Splits, Splits.multisetProd, UniqueF, UniqueFactorizationMonoid, UniqueFactorizationMonoid.factors_prod, factors_prod, hp.ne_zero, hs.mul_unit, irreducible_mul_leadingCoeff_inv, irreducible_mul_leadingCoeff_inv.mpr, isUnit, leadingCoeff, monic_mul_leadingCoeff_inv, mul_unit, multisetProd, ne_zero, p.eval, replace
 -/
@@ -462,7 +494,10 @@ theorem algebraMap_surjective
   have hq : (minpoly k x).leadingCoeff = 1 := minpoly.monic (Algebra.IsSeparable.isIntegral k x)
   have hsep : IsSeparable k x := Algebra.IsSeparable.isSeparable k x
   have h : (minpoly k x).degree = 1 :=
-    degree_eq_one_of_irreducible k (minpoly.i
+    degree_eq_one_of_irreducible k (minpoly.irreducible (Algebra.IsSeparable.isIntegral k x)) hsep
+  have : aeval x (minpoly k x) = 0 := minpoly.aeval k x
+  rw [eq_X_add_C_of_degree_eq_one h]; rw [hq]; rw [C_1]; rw [one_mul]; rw [aeval_add]; rw [aeval_X]; rw [aeval_C]; rw [add_eq_zero_iff_eq_neg] at this
+  exact (map_neg (algebraMap k K) ((minpoly k x).coeff 0)).symm ▸ this.symm
 
 中文:
 定理 algebraMap_surjective
@@ -471,7 +506,10 @@ theorem algebraMap_surjective
   have hq : (minpoly k x).leadingCoeff = 1 := minpoly.monic (Algebra.IsSeparable.isIntegral k x)
   have hsep : IsSeparable k x := Algebra.IsSeparable.isSeparable k x
   have h : (minpoly k x).degree = 1 :=
-    degree_eq_one_of_irreducible k (minpoly.i
+    degree_eq_one_of_irreducible k (minpoly.irreducible (Algebra.IsSeparable.isIntegral k x)) hsep
+  have : aeval x (minpoly k x) = 0 := minpoly.aeval k x
+  rw [eq_X_add_C_of_degree_eq_one h]; rw [hq]; rw [C_1]; rw [one_mul]; rw [aeval_add]; rw [aeval_X]; rw [aeval_C]; rw [add_eq_zero_iff_eq_neg] at this
+  exact (map_neg (algebraMap k K) ((minpoly k x).coeff 0)).symm ▸ this.symm
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isIntegral, Algebra.IsSeparable.isSeparable, IsSeparable, aeval_X, aeval_add, degree, degree_eq_one_of_irreducible, eq_X_add_C_of_degree_eq_one, irreducible, isIntegral, isSeparable, leadingCoeff, minpoly, minpoly.aeval, minpoly.irreducible, minpoly.monic, one_mul
 -/
@@ -657,7 +695,7 @@ theorem surjective_domRestrict_of_isSeparable
 IsSepClosed.splits_codomain _ Algebra.IsSeparable.isSeparable L s⟩
 
 @[deprecated (since := "2026-07-19")]
-alias surjective_restrictDomain_of_isSeparable := surjective_domRestrict_of_isSep
+alias surjective_restrictDomain_of_isSeparable := surjective_domRestrict_of_isSeparable
 
 中文:
 定理 surjective_domRestrict_of_isSeparable
@@ -667,7 +705,7 @@ alias surjective_restrictDomain_of_isSeparable := surjective_domRestrict_of_isSe
 IsSepClosed.splits_codomain _ Algebra.IsSeparable.isSeparable L s⟩
 
 @[deprecated (since := "2026-07-19")]
-alias surjective_restrictDomain_of_isSeparable := surjective_domRestrict_of_isSep
+alias surjective_restrictDomain_of_isSeparable := surjective_domRestrict_of_isSeparable
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isIntegral, Algebra.IsSeparable.isSeparable, IntermediateField, IntermediateField.exists_algHom_of_splits, IsSepClosed, IsSepClosed.splits_codomain, IsSeparable, exists_algHom_of_splits, isIntegral, isSeparable, splits_codomain
 -/
@@ -767,7 +805,8 @@ theorem IsSepClosed.separableClosure_eq_bot_iff
   refine ⟨fun h => IsSepClosed.of_exists_root _ fun p _ hirr hsep => ?_,
     fun _ => IntermediateField.eq_bot_of_isSepClosed_of_isSeparable _⟩
   obtain ⟨x, hx⟩ := IsSepClosed.exists_aeval_eq_zero E p (degree_pos_of_irreducible hirr).ne' hsep
-  obtain ⟨x, rfl⟩ := h ▸ mem_separableClosure_iff.2 (h
+  obtain ⟨x, rfl⟩ := h ▸ mem_separableClosure_iff.2 (hsep.of_dvd <| minpoly.dvd _ x hx)
+  exact ⟨x, by simpa [Algebra.ofId_apply] using hx⟩
 
 中文:
 定理 是SepClosed.separableClosure_eq_bot_iff
@@ -776,7 +815,8 @@ theorem IsSepClosed.separableClosure_eq_bot_iff
   refine ⟨fun h => IsSepClosed.of_exists_root _ fun p _ hirr hsep => ?_,
     fun _ => IntermediateField.eq_bot_of_isSepClosed_of_isSeparable _⟩
   obtain ⟨x, hx⟩ := IsSepClosed.exists_aeval_eq_zero E p (degree_pos_of_irreducible hirr).ne' hsep
-  obtain ⟨x, rfl⟩ := h ▸ mem_separableClosure_iff.2 (h
+  obtain ⟨x, rfl⟩ := h ▸ mem_separableClosure_iff.2 (hsep.of_dvd <| minpoly.dvd _ x hx)
+  exact ⟨x, by simpa [Algebra.ofId_apply] using hx⟩
 
 Depends on / 依赖: Algebra, Algebra.ofId_apply, IntermediateField, IntermediateField.eq_bot_of_isSepClosed_of_isSeparable, IsSepClosed, IsSepClosed.exists_aeval_eq_zero, IsSepClosed.of_exists_root, degree_pos_of_irreducible, eq_bot_of_isSepClosed_of_isSeparable, exists_aeval_eq_zero, hsep.of_dvd, mem_separableClosure_iff, minpoly, minpoly.dvd, ofId_apply, of_dvd, of_exists_root
 -/

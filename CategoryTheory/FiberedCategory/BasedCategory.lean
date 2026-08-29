@@ -809,7 +809,7 @@ instance bicategory
   whiskerRight {_ _ _} _ _ α H := whiskerRight α H
   associator _ _ _ := BasedNatIso.id _
   leftUnitor {_ _} F := BasedNatIso.id F
-  rightUnitor {_ _} F := BasedNatIso.id 
+  rightUnitor {_ _} F := BasedNatIso.id F
 
 中文:
 实例 bicategory
@@ -822,7 +822,7 @@ instance bicategory
   whiskerRight {_ _ _} _ _ α H := whiskerRight α H
   associator _ _ _ := BasedNatIso.id _
   leftUnitor {_ _} F := BasedNatIso.id F
-  rightUnitor {_ _} F := BasedNatIso.id 
+  rightUnitor {_ _} F := BasedNatIso.id F
 -/
 instance bicategory : Bicategory (BasedCategory.{v₂, u₂} 𝒮) where
   Hom 𝒳 𝒴 := 𝒳 ⥤ᵇ 𝒴

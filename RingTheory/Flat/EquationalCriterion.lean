@@ -183,7 +183,39 @@ theorem tfae_equational_criterion
     simp [(TensorProduct.lid R M).injective.eq_iff.symm, isTrivialRelation_iff_vanishesTrivially]
   tfae_have 4 -> 5
   | h₄, l, f, x, hfx => by
-    let 
+    let f' : Fin l -> R := f
+    let x' : Fin l -> M := fun i => x (single i 1)
+    have := calc
+      ∑ i, f' i • x' i
+      _ = ∑ i, f i • x (single i 1) := rfl
+      _ = x (∑ i, f i • Finsupp.single i 1) := by simp_rw [map_sum, map_smul]
+      _ = x f := by simp_rw [smul_single, smul_eq_mul, mul_one, univ_sum_single]
+      _ = 0 := hfx
+    obtain ⟨k, a', y', ⟨ha'y', ha'⟩⟩ := h₄ this
+    use k
+    use Finsupp.linearCombination R (fun i => equivFunOnFinite.symm (a' i))
+    use Finsupp.linearCombination R y'
+    constructor
+    · apply Finsupp.basisSingleOne.ext
+      intro i
+      simpa [linearCombination_apply, sum_fintype, Finsupp.single_apply] using ha'y' i
+    · ext j
+      simp only [linearCombination_apply, zero_smul, implies_true, sum_fintype, finsetSum_apply]
+      exact ha' j
+  tfae_have 5 -> 4
+  | h₅, l, f, x, hfx => by
+    let f' : Fin l ->₀ R := equivFunOnFinite.symm f
+    let x' : (Fin l ->₀ R) ->ₗ[R] M := Finsupp.linearCombination R x
+    have : x' f' = 0 := by simpa [x', f', linearCombination_apply, sum_fintype] using hfx
+    obtain ⟨k, a', y', ha'y', ha'⟩ := h₅ this
+    refine ⟨k, fun i => a' (single i 1), fun j => y' (single j 1), fun i => ?_, fun j => ?_⟩
+    · simpa [x', ← map_smul, ← map_sum, smul_single] using
+        LinearMap.congr_fun ha'y' (Finsupp.single i 1)
+    · simp_rw [← smul_eq_mul, ← Finsupp.smul_apply, ← map_smul, ← finsetSum_apply, ← map_sum,
+        smul_single, smul_eq_mul, mul_one,
+        ← (fun _ => equivFunOnFinite_symm_apply_apply _ _ : forall x, f' x = f x), univ_sum_single]
+      simpa using DFunLike.congr_fun ha' j
+  tfae_finish
 
 中文:
 定理 tfae_equational_criterion
@@ -195,7 +227,39 @@ theorem tfae_equational_criterion
     simp [(TensorProduct.lid R M).injective.eq_iff.symm, isTrivialRelation_iff_vanishesTrivially]
   tfae_have 4 -> 5
   | h₄, l, f, x, hfx => by
-    let 
+    let f' : Fin l -> R := f
+    let x' : Fin l -> M := fun i => x (single i 1)
+    have := calc
+      ∑ i, f' i • x' i
+      _ = ∑ i, f i • x (single i 1) := rfl
+      _ = x (∑ i, f i • Finsupp.single i 1) := by simp_rw [map_sum, map_smul]
+      _ = x f := by simp_rw [smul_single, smul_eq_mul, mul_one, univ_sum_single]
+      _ = 0 := hfx
+    obtain ⟨k, a', y', ⟨ha'y', ha'⟩⟩ := h₄ this
+    use k
+    use Finsupp.linearCombination R (fun i => equivFunOnFinite.symm (a' i))
+    use Finsupp.linearCombination R y'
+    constructor
+    · apply Finsupp.basisSingleOne.ext
+      intro i
+      simpa [linearCombination_apply, sum_fintype, Finsupp.single_apply] using ha'y' i
+    · ext j
+      simp only [linearCombination_apply, zero_smul, implies_true, sum_fintype, finsetSum_apply]
+      exact ha' j
+  tfae_have 5 -> 4
+  | h₅, l, f, x, hfx => by
+    let f' : Fin l ->₀ R := equivFunOnFinite.symm f
+    let x' : (Fin l ->₀ R) ->ₗ[R] M := Finsupp.linearCombination R x
+    have : x' f' = 0 := by simpa [x', f', linearCombination_apply, sum_fintype] using hfx
+    obtain ⟨k, a', y', ha'y', ha'⟩ := h₅ this
+    refine ⟨k, fun i => a' (single i 1), fun j => y' (single j 1), fun i => ?_, fun j => ?_⟩
+    · simpa [x', ← map_smul, ← map_sum, smul_single] using
+        LinearMap.congr_fun ha'y' (Finsupp.single i 1)
+    · simp_rw [← smul_eq_mul, ← Finsupp.smul_apply, ← map_smul, ← finsetSum_apply, ← map_sum,
+        smul_single, smul_eq_mul, mul_one,
+        ← (fun _ => equivFunOnFinite_symm_apply_apply _ _ : forall x, f' x = f x), univ_sum_single]
+      simpa using DFunLike.congr_fun ha' j
+  tfae_finish
 
 Depends on / 依赖: Finsupp, Finsupp.single, TensorProduct, TensorProduct.lid, eq_iff, forall_vanishesTrivially_iff_forall_rTensor_injective, iff_rTensor_injective, injective, injective.eq_iff.symm, isTrivialRelation_iff_vanishesTrivially, map_smul, map_sum, simp_rw, single, tfae_have
 -/
@@ -418,7 +482,17 @@ theorem exists_factorization_of_comp_eq_zero_of_free_aux
       (y : (Fin k ->₀ R) ->ₗ[R] M), x = y ∘ₗ a ∧ K' <= LinearMap.ker (a ∘ₗ f) := by
     induction K', hK' using Submodule.fg_induction generalizing n with
     | singleton k =>
-      have : x (f k
+      have : x (f k) = 0 := by simpa using LinearMap.congr_fun h k
+      simpa using exists_factorization_of_apply_eq_zero_of_free this
+    | sup K₁ K₂ _ _ ih₁ ih₂ =>
+      obtain ⟨k₁, a₁, y₁, rfl, ha₁⟩ := ih₁ h
+      have : y₁ ∘ₗ (a₁ ∘ₗ f) = 0 := by rw [← comp_assoc, h]
+      obtain ⟨k₂, a₂, y₂, rfl, ha₂⟩ := ih₂ this
+      use k₂, a₂ ∘ₗ a₁, y₂
+      simp_rw [comp_assoc]
+      exact ⟨trivial, sup_le (ha₁.trans (ker_le_ker_comp _ _)) ha₂⟩
+  convert! this ⊤ Finite.fg_top
+  simp only [top_le_iff, ker_eq_top]
 
 中文:
 定理 存在_factorization_of_comp_eq_zero_of_free_aux
@@ -428,7 +502,17 @@ theorem exists_factorization_of_comp_eq_zero_of_free_aux
       (y : (Fin k ->₀ R) ->ₗ[R] M), x = y ∘ₗ a ∧ K' <= LinearMap.ker (a ∘ₗ f) := by
     induction K', hK' using Submodule.fg_induction generalizing n with
     | singleton k =>
-      have : x (f k
+      have : x (f k) = 0 := by simpa using LinearMap.congr_fun h k
+      simpa using exists_factorization_of_apply_eq_zero_of_free this
+    | sup K₁ K₂ _ _ ih₁ ih₂ =>
+      obtain ⟨k₁, a₁, y₁, rfl, ha₁⟩ := ih₁ h
+      have : y₁ ∘ₗ (a₁ ∘ₗ f) = 0 := by rw [← comp_assoc, h]
+      obtain ⟨k₂, a₂, y₂, rfl, ha₂⟩ := ih₂ this
+      use k₂, a₂ ∘ₗ a₁, y₂
+      simp_rw [comp_assoc]
+      exact ⟨trivial, sup_le (ha₁.trans (ker_le_ker_comp _ _)) ha₂⟩
+  convert! this ⊤ Finite.fg_top
+  simp only [top_le_iff, ker_eq_top]
 -/
 private theorem exists_factorization_of_comp_eq_zero_of_free_aux [Flat R M] {K : Type*} {n : Nat}
     [AddCommGroup K] [Module R K] [Module.Finite R K] {f : K ->ₗ[R] Fin n ->₀ R}
@@ -466,7 +550,8 @@ theorem exists_factorization_of_comp_eq_zero_of_free
   proof: have e := ((Module.Free.chooseBasis R N).reindex (Fintype.equivFin _)).repr.symm
   have ⟨k, a, y, hya, haf⟩ := exists_factorization_of_comp_eq_zero_of_free_aux
     (f := e.symm ∘ₗ f) (x := x ∘ₗ e.toLinearMap) (by ext; simpa [comp_assoc] using congr($h _))
-  ⟨k, a ∘ₗ e.symm, y, by rwa [← comp_assoc, 
+  ⟨k, a ∘ₗ e.symm, y, by rwa [← comp_assoc, LinearEquiv.eq_comp_toLinearMap_symm], by
+    rwa [comp_assoc]⟩
 
 中文:
 定理 存在_factorization_of_comp_eq_zero_of_free
@@ -474,7 +559,8 @@ theorem exists_factorization_of_comp_eq_zero_of_free
   证明: have e := ((Module.Free.chooseBasis R N).reindex (Fintype.equivFin _)).repr.symm
   have ⟨k, a, y, hya, haf⟩ := exists_factorization_of_comp_eq_zero_of_free_aux
     (f := e.symm ∘ₗ f) (x := x ∘ₗ e.toLinearMap) (by ext; simpa [comp_assoc] using congr($h _))
-  ⟨k, a ∘ₗ e.symm, y, by rwa [← comp_assoc, 
+  ⟨k, a ∘ₗ e.symm, y, by rwa [← comp_assoc, LinearEquiv.eq_comp_toLinearMap_symm], by
+    rwa [comp_assoc]⟩
 
 Depends on / 依赖: Fintype, Fintype.equivFin, LinearEquiv, LinearEquiv.eq_comp_toLinearMap_symm, Module, Module.Free.chooseBasis, chooseBasis, comp_assoc, e.symm, e.toLinearMap, eq_comp_toLinearMap_symm, equivFin, exists_factorization_of_comp_eq_zero_of_free_aux, reindex, repr.symm, toLinearMap
 -/
@@ -503,7 +589,16 @@ theorem exists_factorization_of_finitePresentation
   have : Module.Finite R K := .of_fg hK
   have : (h₁ ∘ₗ ϕ.symm ∘ₗ K.mkQ) ∘ₗ K.subtype = 0 := by
     simp_rw [comp_assoc, (LinearMap.exact_subtype_mkQ K).linearMap_comp_eq_zero, comp_zero]
-  obtain ⟨k, a, y, hay, ha⟩ := exists_factorization
+  obtain ⟨k, a, y, hay, ha⟩ := exists_factorization_of_comp_eq_zero_of_free this
+  use k, (K.liftQ a (by rwa [← range_le_ker_iff, Submodule.range_subtype] at ha)) ∘ₗ ϕ, y
+  apply (cancel_right ϕ.symm.surjective).mp
+  apply (cancel_right K.mkQ_surjective).mp
+  simpa [comp_assoc]
+
+@[deprecated (since := "2026-05-23")]
+alias exists_factorization_of_isFinitelyPresented := exists_factorization_of_finitePresentation
+
+@[stacks 00NX "(1) -> (2)"]
 
 中文:
 定理 存在_factorization_of_finitePresentation
@@ -513,7 +608,16 @@ theorem exists_factorization_of_finitePresentation
   have : Module.Finite R K := .of_fg hK
   have : (h₁ ∘ₗ ϕ.symm ∘ₗ K.mkQ) ∘ₗ K.subtype = 0 := by
     simp_rw [comp_assoc, (LinearMap.exact_subtype_mkQ K).linearMap_comp_eq_zero, comp_zero]
-  obtain ⟨k, a, y, hay, ha⟩ := exists_factorization
+  obtain ⟨k, a, y, hay, ha⟩ := exists_factorization_of_comp_eq_zero_of_free this
+  use k, (K.liftQ a (by rwa [← range_le_ker_iff, Submodule.range_subtype] at ha)) ∘ₗ ϕ, y
+  apply (cancel_right ϕ.symm.surjective).mp
+  apply (cancel_right K.mkQ_surjective).mp
+  simpa [comp_assoc]
+
+@[deprecated (since := "2026-05-23")]
+alias exists_factorization_of_isFinitelyPresented := exists_factorization_of_finitePresentation
+
+@[stacks 00NX "(1) -> (2)"]
 
 Depends on / 依赖: Finite, FinitePresentation, FinitePresentation.exists_fin, K.liftQ, K.mkQ, K.mkQ_surjective, K.subtype, LinearMap, LinearMap.exact_subtype_mkQ, Module, Module.Finite, Submodule, Submodule.range_subtype, cancel_right, comp_assoc, comp_zero, exact_subtype_mkQ, exists_factorization_of_comp_eq_zero_of_free, exists_fin, linearMap_comp_eq_zero
 -/

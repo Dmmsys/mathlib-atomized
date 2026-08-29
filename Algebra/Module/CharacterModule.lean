@@ -337,7 +337,7 @@ definition uncurry
   body: TensorProduct.liftAddHom c.toAddMonoidHom fun r a b => congr($(c.map_smul r a) b)
   map_add' c c' := DFunLike.ext _ _ fun x => by refine x.induction_on ?_ ?_ ?_ <;> aesop
   map_smul' r c := DFunLike.ext _ _ fun x => x.induction_on
-    (by simp_rw [map_zero]) (fun a b => congr($(c.map_smul r a) b).sy
+    (by simp_rw [map_zero]) (fun a b => congr($(c.map_smul r a) b).symm) (by aesop)
 
 中文:
 定义 uncurry
@@ -345,7 +345,7 @@ definition uncurry
   定义体: TensorProduct.liftAddHom c.toAddMonoidHom fun r a b => congr($(c.map_smul r a) b)
   map_add' c c' := DFunLike.ext _ _ fun x => by refine x.induction_on ?_ ?_ ?_ <;> aesop
   map_smul' r c := DFunLike.ext _ _ fun x => x.induction_on
-    (by simp_rw [map_zero]) (fun a b => congr($(c.map_smul r a) b).sy
+    (by simp_rw [map_zero]) (fun a b => congr($(c.map_smul r a) b).symm) (by aesop)
 -/
 @[simps] noncomputable def uncurry :
     (A ->ₗ[R] CharacterModule B) ->ₗ[R] CharacterModule (A otimes[R] B) where
@@ -365,7 +365,7 @@ definition curry
       congr(c <| $(map_add (mk R A B) _ _) b).trans (c.map_add _ _)
     map_smul' := fun r a => by ext; exact congr(c $(TensorProduct.tmul_smul _ _ _)).symm }
   map_add' _ _ := rfl
-  map_smul' r c :=
+  map_smul' r c := by ext; exact congr(c $(TensorProduct.tmul_smul _ _ _)).symm
 
 中文:
 定义 curry
@@ -375,7 +375,7 @@ definition curry
       congr(c <| $(map_add (mk R A B) _ _) b).trans (c.map_add _ _)
     map_smul' := fun r a => by ext; exact congr(c $(TensorProduct.tmul_smul _ _ _)).symm }
   map_add' _ _ := rfl
-  map_smul' r c :=
+  map_smul' r c := by ext; exact congr(c $(TensorProduct.tmul_smul _ _ _)).symm
 -/
 @[simps] noncomputable def curry :
     CharacterModule (A otimes[R] B) ->ₗ[R] (A ->ₗ[R] CharacterModule B) where
@@ -497,7 +497,7 @@ definition intSpanEquivQuotAddOrderOf
   (LinearMap.quotKerEquivRange <| LinearMap.toSpanSingleton Int A a).symm ≪≫ₗ
   Submodule.quotEquivOfEq _ _ (by
     ext1 x
-    rw [Ideal.mem_span_singleton]; rw [addOrderOf_dvd_iff_zsmul_eq_zero]; rw [LinearMap.mem_ker]; rw [Linear
+    rw [Ideal.mem_span_singleton]; rw [addOrderOf_dvd_iff_zsmul_eq_zero]; rw [LinearMap.mem_ker]; rw [LinearMap.toSpanSingleton_apply])
 
 中文:
 定义 intSpanEquivQuotAddOrderOf
@@ -506,7 +506,7 @@ definition intSpanEquivQuotAddOrderOf
   (LinearMap.quotKerEquivRange <| LinearMap.toSpanSingleton Int A a).symm ≪≫ₗ
   Submodule.quotEquivOfEq _ _ (by
     ext1 x
-    rw [Ideal.mem_span_singleton]; rw [addOrderOf_dvd_iff_zsmul_eq_zero]; rw [LinearMap.mem_ker]; rw [Linear
+    rw [Ideal.mem_span_singleton]; rw [addOrderOf_dvd_iff_zsmul_eq_zero]; rw [LinearMap.mem_ker]; rw [LinearMap.toSpanSingleton_apply])
 -/
 @[simps!] noncomputable def intSpanEquivQuotAddOrderOf (a : A) :
     (Int ∙ a) ≃ₗ[Int] Int ⧸ Ideal.span {(addOrderOf a : Int)} :=
@@ -548,7 +548,8 @@ definition ofSpanSingleton
         if addOrderOf a = 0 then 2 else addOrderOf a).toIntLinearMap <| by
         split_ifs with h
         · rw [h, Nat.cast_zero, map_zero]
-    
+        · apply CharacterModule.int.divByNat_self
+.toAddMonoidHom l ∘ₗ intSpanEquivQuotAddOrderOf a
 
 中文:
 定义 ofSpanSingleton
@@ -559,7 +560,8 @@ definition ofSpanSingleton
         if addOrderOf a = 0 then 2 else addOrderOf a).toIntLinearMap <| by
         split_ifs with h
         · rw [h, Nat.cast_zero, map_zero]
-    
+        · apply CharacterModule.int.divByNat_self
+.toAddMonoidHom l ∘ₗ intSpanEquivQuotAddOrderOf a
 
 Depends on / 依赖: AddCircle, CharacterModule, CharacterModule.int.divByNat, CharacterModule.int.divByNat_self, Ideal.span, Nat.cast_zero, Submodule, Submodule.liftQSpanSingleton, addOrderOf, cast_zero, divByNat, divByNat_self, intSpanEquivQuotAddOrderOf, liftQSpanSingleton, map_zero, split_ifs, toAddMonoidHom, toIntLinearMap
 -/
@@ -584,7 +586,13 @@ lemma eq_zero_of_ofSpanSingleton_apply_self
      intSpanEquivQuotAddOrderOf_apply_self, Submodule.liftQSpanSingleton_apply,
     AddMonoidHom.coe_toIntLinearMap, int.divByNat, LinearMap.toSpanSingleton_apply_one,
     AddCircle.coe_eq_zero_iff] at h
-  rcases h with ⟨
+  rcases h with ⟨n, hn⟩
+  apply_fun Rat.den at hn
+  rw [zsmul_one]; rw [Rat.den_intCast]; rw [Rat.inv_natCast_den_of_pos] at hn
+  · split_ifs at hn
+    · cases hn
+    · rwa [eq_comm, AddMonoid.addOrderOf_eq_one_iff] at hn
+  · grind
 
 中文:
 引理 eq_zero_of_ofSpanSingleton_apply_self
@@ -594,7 +602,13 @@ lemma eq_zero_of_ofSpanSingleton_apply_self
      intSpanEquivQuotAddOrderOf_apply_self, Submodule.liftQSpanSingleton_apply,
     AddMonoidHom.coe_toIntLinearMap, int.divByNat, LinearMap.toSpanSingleton_apply_one,
     AddCircle.coe_eq_zero_iff] at h
-  rcases h with ⟨
+  rcases h with ⟨n, hn⟩
+  apply_fun Rat.den at hn
+  rw [zsmul_one]; rw [Rat.den_intCast]; rw [Rat.inv_natCast_den_of_pos] at hn
+  · split_ifs at hn
+    · cases hn
+    · rwa [eq_comm, AddMonoid.addOrderOf_eq_one_iff] at hn
+  · grind
 
 Depends on / 依赖: AddCircle, AddCircle.coe_eq_zero_iff, AddMonoid, AddMonoid.addOrderOf_eq_one_iff, AddMonoidHom, AddMonoidHom.coe_toIntLinearMap, LinearMap, LinearMap.comp_apply, LinearMap.toAddMonoidHom_coe, LinearMap.toSpanSingleton_apply_one, Rat.den, Rat.den_intCast, Rat.inv_natCast_den_of_pos, Submodule, Submodule.liftQSpanSingleton_apply, addOrderOf_eq_one_iff, apply_fun, coe_eq_zero_iff, coe_toIntLinearMap, comp_apply
 -/
@@ -717,7 +731,7 @@ lemma surjective_of_dual_injective
   obtain ⟨b, rfl⟩ := QuotientAddGroup.mk'_surjective _ a
   suffices eq : dual (Submodule.mkQ _) c = 0 from congr($eq b)
   refine hf ?_
-  
+  rw [← LinearMap.comp_apply]; rw [← dual_comp]; rw [LinearMap.range_mkQ_comp]; rw [dual_zero]; rw [LinearMap.zero_apply]; rw [dual_apply]; rw [AddMonoidHom.zero_comp]
 
 中文:
 引理 surjective_of_dual_injective
@@ -728,7 +742,7 @@ lemma surjective_of_dual_injective
   obtain ⟨b, rfl⟩ := QuotientAddGroup.mk'_surjective _ a
   suffices eq : dual (Submodule.mkQ _) c = 0 from congr($eq b)
   refine hf ?_
-  
+  rw [← LinearMap.comp_apply]; rw [← dual_comp]; rw [LinearMap.range_mkQ_comp]; rw [dual_zero]; rw [LinearMap.zero_apply]; rw [dual_apply]; rw [AddMonoidHom.zero_comp]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.zero_comp, LinearMap, LinearMap.comp_apply, LinearMap.range_eq_top, LinearMap.range_mkQ_comp, LinearMap.zero_apply, QuotientAddGroup, QuotientAddGroup.mk, Submodule, Submodule.mkQ, Submodule.unique_quotient_iff_eq_top, Unique, Unique.mk, _surjective, comp_apply, dual_apply, dual_comp, dual_zero, eq_zero_of_character_apply
 -/

@@ -243,7 +243,11 @@ theorem LinearMap.lift_rank_comap_le
   have hk : Module.rank R f'.ker <= Module.rank R f.ker := by
     rw [← rank_map_eq (injective_subtype (comap f p))]
     exact rank_mono fun x hx => by aesop (add simp Subtype.ext_iff)
-  have hr : Module.rank R f'.range <= Module.rank R p := 
+  have hr : Module.rank R f'.range <= Module.rank R p := by grw [Submodule.rank_le f'.range]
+  rw [← f'.lift_rank_range_add_rank_ker]
+  gcongr <;> rwa [lift_le]
+
+omit [HasRankNullity.{u} R] in
 
 中文:
 定理 线性映射.lift_rank_comap_le
@@ -253,7 +257,11 @@ theorem LinearMap.lift_rank_comap_le
   have hk : Module.rank R f'.ker <= Module.rank R f.ker := by
     rw [← rank_map_eq (injective_subtype (comap f p))]
     exact rank_mono fun x hx => by aesop (add simp Subtype.ext_iff)
-  have hr : Module.rank R f'.range <= Module.rank R p := 
+  have hr : Module.rank R f'.range <= Module.rank R p := by grw [Submodule.rank_le f'.range]
+  rw [← f'.lift_rank_range_add_rank_ker]
+  gcongr <;> rwa [lift_le]
+
+omit [HasRankNullity.{u} R] in
 
 Depends on / 依赖: Module, Module.rank, Submodule, Submodule.rank_le, Subtype, Subtype.ext_iff, ext_iff, f.ker, f.restrict, injective_subtype, lift_le, lift_rank_range_add_rank_ker, rank_le, rank_map_eq, rank_mono, restrict
 -/
@@ -280,7 +288,16 @@ lemma LinearMap.rank_quot_submodule_map_eq
   let +nondep e : (f.range ⧸ map f.rangeRestrict p) ≃ₗ[R] f'.ker := by
     let g : f.range ->ₗ[R] f'.ker :=
       (LinearEquiv.ofEq (map (map f p).mkQ f.range) f'.ker) (by rw [ker_mapQ]; rfl) ∘ₗ
-        (map f p).mkQ.submoduleMap 
+        (map f p).mkQ.submoduleMap f.range
+    have g_surj : Surjective g := by simpa [g] using submoduleMap_surjective (map f p).mkQ f.range
+    have g_ker : g.ker = map f.rangeRestrict p := by
+      simp [g, submoduleMap, ker_restrict, map_codRestrict]
+    let e := g.quotKerEquivOfSurjective g_surj
+    rwa [g_ker] at e
+have := f'.rank_eq_of_surjective factor_surjective map_le_range
+  rwa [← e.rank_eq] at this
+
+omit [HasRankNullity.{u} R] in
 
 中文:
 引理 线性映射.rank_quot_submodule_map_eq
@@ -290,7 +307,16 @@ lemma LinearMap.rank_quot_submodule_map_eq
   let +nondep e : (f.range ⧸ map f.rangeRestrict p) ≃ₗ[R] f'.ker := by
     let g : f.range ->ₗ[R] f'.ker :=
       (LinearEquiv.ofEq (map (map f p).mkQ f.range) f'.ker) (by rw [ker_mapQ]; rfl) ∘ₗ
-        (map f p).mkQ.submoduleMap 
+        (map f p).mkQ.submoduleMap f.range
+    have g_surj : Surjective g := by simpa [g] using submoduleMap_surjective (map f p).mkQ f.range
+    have g_ker : g.ker = map f.rangeRestrict p := by
+      simp [g, submoduleMap, ker_restrict, map_codRestrict]
+    let e := g.quotKerEquivOfSurjective g_surj
+    rwa [g_ker] at e
+have := f'.rank_eq_of_surjective factor_surjective map_le_range
+  rwa [← e.rank_eq] at this
+
+omit [HasRankNullity.{u} R] in
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofEq, Surjective, f.range, f.rangeRestrict, factor, fun_prop, g.ker, g.quotK, g_ker, g_surj, ker_mapQ, ker_restrict, map_codRestrict, map_le_range, mkQ.submoduleMap, nondep, rangeRestrict, submoduleMap, submoduleMap_surjective
 -/
@@ -356,7 +382,17 @@ theorem exists_linearIndepOn_of_lt_rank
   have hsec' : (Submodule.mkQ _) ∘ sec = _root_.id := funext hsec
   have hst : Disjoint s (sec '' t) := by
     rw [Set.disjoint_iff]
-    rintro _ 
+    rintro _ ⟨hxs, ⟨x, hxt, rfl⟩⟩
+    apply ht'.ne_zero ⟨x, hxt⟩
+    rw [Subtype.coe_mk]; rw [← hsec x]; rw [mkQ_apply]; rw [Quotient.mk_eq_zero]
+    exact Submodule.subset_span hxs
+  refine ⟨s union sec '' t, subset_union_left, ?_, ?_⟩
+  · rw [Cardinal.mk_union_of_disjoint hst, Cardinal.mk_image_eq, ht,
+      ← rank_quotient_add_rank (Submodule.span R s), add_comm, rank_span_set hs]
+    exact HasLeftInverse.injective ⟨Submodule.Quotient.mk, hsec⟩
+  · apply LinearIndepOn.union_id_of_quotient Submodule.subset_span hs
+    rwa [linearIndepOn_iff_image (hsec'.symm ▸ injective_id).injOn.image_of_comp,
+      ← image_comp, hsec', image_id]
 
 中文:
 定理 存在_linearIndepOn_of_lt_rank
@@ -367,7 +403,17 @@ theorem exists_linearIndepOn_of_lt_rank
   have hsec' : (Submodule.mkQ _) ∘ sec = _root_.id := funext hsec
   have hst : Disjoint s (sec '' t) := by
     rw [Set.disjoint_iff]
-    rintro _ 
+    rintro _ ⟨hxs, ⟨x, hxt, rfl⟩⟩
+    apply ht'.ne_zero ⟨x, hxt⟩
+    rw [Subtype.coe_mk]; rw [← hsec x]; rw [mkQ_apply]; rw [Quotient.mk_eq_zero]
+    exact Submodule.subset_span hxs
+  refine ⟨s union sec '' t, subset_union_left, ?_, ?_⟩
+  · rw [Cardinal.mk_union_of_disjoint hst, Cardinal.mk_image_eq, ht,
+      ← rank_quotient_add_rank (Submodule.span R s), add_comm, rank_span_set hs]
+    exact HasLeftInverse.injective ⟨Submodule.Quotient.mk, hsec⟩
+  · apply LinearIndepOn.union_id_of_quotient Submodule.subset_span hs
+    rwa [linearIndepOn_iff_image (hsec'.symm ▸ injective_id).injOn.image_of_comp,
+      ← image_comp, hsec', image_id]
 
 Depends on / 依赖: Disjoint, Quotient, Quotient.mk_eq_zero, Set.disjoint_iff, Submodule, Submodule.mkQ, Submodule.mkQ_surjective, Submodule.span, Submodule.subset_span, Subtype, Subtype.coe_mk, _root_, _root_.id, coe_mk, disjoint_iff, exists_set_linearIndependent, mkQ_apply, mkQ_surjective, mk_eq_zero, ne_zero
 -/
@@ -402,7 +448,10 @@ theorem exists_linearIndependent_cons_of_lt_rank
   have : range v != t := by
     refine fun e => h.ne ?_
     rw [← e]; rw [← lift_injective.eq_iff]; rw [mk_range_eq_of_injective hv.injective] at h₂
-    simpa only [mk_fintype, Fintype.card_fin, lift_natCast, lift_id'
+    simpa only [mk_fintype, Fintype.card_fin, lift_natCast, lift_id'] using h₂
+  obtain ⟨x, hx, hx'⟩ := nonempty_of_ssubset (h₁.ssubset_of_ne this)
+  exact ⟨x, (linearIndepOn_id_range_iff (Fin.cons_injective_iff.mpr ⟨hx', hv.injective⟩)).mp
+    (h₃.mono (Fin.range_cons x v ▸ insert_subset hx h₁))⟩
 
 中文:
 定理 存在_linearIndependent_cons_of_lt_rank
@@ -412,7 +461,10 @@ theorem exists_linearIndependent_cons_of_lt_rank
   have : range v != t := by
     refine fun e => h.ne ?_
     rw [← e]; rw [← lift_injective.eq_iff]; rw [mk_range_eq_of_injective hv.injective] at h₂
-    simpa only [mk_fintype, Fintype.card_fin, lift_natCast, lift_id'
+    simpa only [mk_fintype, Fintype.card_fin, lift_natCast, lift_id'] using h₂
+  obtain ⟨x, hx, hx'⟩ := nonempty_of_ssubset (h₁.ssubset_of_ne this)
+  exact ⟨x, (linearIndepOn_id_range_iff (Fin.cons_injective_iff.mpr ⟨hx', hv.injective⟩)).mp
+    (h₃.mono (Fin.range_cons x v ▸ insert_subset hx h₁))⟩
 
 Depends on / 依赖: Fin.cons_injective_iff.mpr, Fin.range_cons, Fintype, Fintype.card_fin, card_fin, cons_injective_iff, eq_iff, exists_linearIndepOn_of_lt_rank, h.ne, hv.injective, hv.linearIndepOn_id, injective, insert_subset, lift_id, lift_injective, lift_injective.eq_iff, lift_natCast, linearIndepOn_id, linearIndepOn_id_range_iff, mk_fintype
 -/
@@ -501,7 +553,8 @@ theorem Submodule.exists_smul_notMem_of_rank_lt
     exact h.ne rfl
   rw [ne_eq]; rw [rank_eq_zero_iff]; rw [(Submodule.Quotient.mk_surjective N).forall] at this
   push Not at this
-  simp_rw [← N.mkQ_apply, ← map_smul, N.mkQ_app
+  simp_rw [← N.mkQ_apply, ← map_smul, N.mkQ_apply, ne_eq, Submodule.Quotient.mk_eq_zero] at this
+  exact this
 
 中文:
 定理 子模.存在_smul_notMem_of_rank_lt
@@ -513,7 +566,8 @@ theorem Submodule.exists_smul_notMem_of_rank_lt
     exact h.ne rfl
   rw [ne_eq]; rw [rank_eq_zero_iff]; rw [(Submodule.Quotient.mk_surjective N).forall] at this
   push Not at this
-  simp_rw [← N.mkQ_apply, ← map_smul, N.mkQ_app
+  simp_rw [← N.mkQ_apply, ← map_smul, N.mkQ_apply, ne_eq, Submodule.Quotient.mk_eq_zero] at this
+  exact this
 
 Depends on / 依赖: Module, Module.rank, N.mkQ_apply, Quotient, Submodule, Submodule.Quotient.mk_eq_zero, Submodule.Quotient.mk_surjective, h.ne, map_smul, mkQ_apply, mk_eq_zero, mk_surjective, ne_eq, rank_eq_zero_iff, rank_quotient_add_rank, simp_rw, zero_add
 -/
@@ -538,14 +592,14 @@ theorem Submodule.rank_sup_add_rank_inf_eq
   given: (s t : Submodule R M)
   proof: by
   conv_rhs => enter [2]; rw [show t = (s ⊔ t) ⊓ t by simp]
-  rw [← rank_quotient_add_rank ((s ⊓ t).comap s.subtype)]; rw [← rank_quotient_add_rank (t.comap (s ⊔ t).subtype)]; rw [comap_inf]; rw [(quotientInfEquivSupQuotient s t).rank_eq]; rw [← comap_inf]; rw [(equivSubtypeMap s (comap _ (s ⊓ t))
+  rw [← rank_quotient_add_rank ((s ⊓ t).comap s.subtype)]; rw [← rank_quotient_add_rank (t.comap (s ⊔ t).subtype)]; rw [comap_inf]; rw [(quotientInfEquivSupQuotient s t).rank_eq]; rw [← comap_inf]; rw [(equivSubtypeMap s (comap _ (s ⊓ t))).rank_eq]; rw [Submodule.map_comap_subtype]; rw [(equivSubtypeMap (s ⊔ t) (comap _ t)).rank_eq]; rw [Submodule.map_comap_subtype]; rw [← inf_assoc]; rw [inf_idem]; rw [add_right_comm]
 
 中文:
 定理 子模.rank_sup_add_rank_inf_eq
   条件: (s t : 子模 R M)
   证明: by
   conv_rhs => enter [2]; rw [show t = (s ⊔ t) ⊓ t by simp]
-  rw [← rank_quotient_add_rank ((s ⊓ t).comap s.subtype)]; rw [← rank_quotient_add_rank (t.comap (s ⊔ t).subtype)]; rw [comap_inf]; rw [(quotientInfEquivSupQuotient s t).rank_eq]; rw [← comap_inf]; rw [(equivSubtypeMap s (comap _ (s ⊓ t))
+  rw [← rank_quotient_add_rank ((s ⊓ t).comap s.subtype)]; rw [← rank_quotient_add_rank (t.comap (s ⊔ t).subtype)]; rw [comap_inf]; rw [(quotientInfEquivSupQuotient s t).rank_eq]; rw [← comap_inf]; rw [(equivSubtypeMap s (comap _ (s ⊓ t))).rank_eq]; rw [Submodule.map_comap_subtype]; rw [(equivSubtypeMap (s ⊔ t) (comap _ t)).rank_eq]; rw [Submodule.map_comap_subtype]; rw [← inf_assoc]; rw [inf_idem]; rw [add_right_comm]
 
 Depends on / 依赖: Submodule, Submodule.map_comap_subtype, add_right_comm, comap_inf, conv_rhs, equivSubtypeMap, inf_assoc, inf_idem, map_comap_subtype, quotientInfEquivSupQuotient, rank_eq, rank_quotient_add_rank, s.subtype, subtype, t.comap
 -/
@@ -705,7 +759,8 @@ refine LinearMap.injective_domRestrict_iff.mp LinearMap.ker_eq_bot.mp
   rw [← Submodule.finrank_eq_rank]; rw [Nat.cast_eq_zero]
   rw [← LinearMap.range_domRestrict] at h
   have := (LinearMap.ker (f.domRestrict L)).finrank_quotient_add_finrank
-  rw [LinearEquiv.fin
+  rw [LinearEquiv.finrank_eq (f.domRestrict L).quotKerEquivRange] at this
+  lia
 
 中文:
 引理 子模.disjoint_ker_of_finrank_le
@@ -716,7 +771,8 @@ refine LinearMap.injective_domRestrict_iff.mp LinearMap.ker_eq_bot.mp
   rw [← Submodule.finrank_eq_rank]; rw [Nat.cast_eq_zero]
   rw [← LinearMap.range_domRestrict] at h
   have := (LinearMap.ker (f.domRestrict L)).finrank_quotient_add_finrank
-  rw [LinearEquiv.fin
+  rw [LinearEquiv.finrank_eq (f.domRestrict L).quotKerEquivRange] at this
+  lia
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.finrank_eq, LinearMap, LinearMap.injective_domRestrict_iff.mp, LinearMap.ker, LinearMap.ker_eq_bot.mp, LinearMap.range_domRestrict, Nat.cast_eq_zero, Submodule, Submodule.finrank_eq_rank, Submodule.rank_eq_zero.mp, cast_eq_zero, domRestrict, f.domRestrict, finrank_eq, finrank_eq_rank, finrank_quotient_add_finrank, injective_domRestrict_iff, ker_eq_bot, quotKerEquivRange
 -/
@@ -751,7 +807,11 @@ lemma Submodule.exists_of_finrank_lt
     exists_finset_linearIndependent_of_le_finrank (R := R) (M := M ⧸ N) le_rfl
   obtain ⟨v, hv⟩ : s.Nonempty := by rwa [Finset.nonempty_iff_ne_empty, ne_eq, ← Finset.card_eq_zero,
     hs, finrank_quotient, tsub_eq_zero_iff_le, not_le]
-  obtain ⟨v, rfl⟩ := N.mkQ_surjective
+  obtain ⟨v, rfl⟩ := N.mkQ_surjective v
+  refine ⟨v, fun r hr => mt ?_ hr⟩
+  have := linearIndependent_iff.mp hs' (Finsupp.single ⟨_, hv⟩ r)
+  rwa [Finsupp.linearCombination_single, Finsupp.single_eq_zero, ← map_smul,
+    Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero] at this
 
 中文:
 引理 子模.存在_of_finrank_lt
@@ -761,7 +821,11 @@ lemma Submodule.exists_of_finrank_lt
     exists_finset_linearIndependent_of_le_finrank (R := R) (M := M ⧸ N) le_rfl
   obtain ⟨v, hv⟩ : s.Nonempty := by rwa [Finset.nonempty_iff_ne_empty, ne_eq, ← Finset.card_eq_zero,
     hs, finrank_quotient, tsub_eq_zero_iff_le, not_le]
-  obtain ⟨v, rfl⟩ := N.mkQ_surjective
+  obtain ⟨v, rfl⟩ := N.mkQ_surjective v
+  refine ⟨v, fun r hr => mt ?_ hr⟩
+  have := linearIndependent_iff.mp hs' (Finsupp.single ⟨_, hv⟩ r)
+  rwa [Finsupp.linearCombination_single, Finsupp.single_eq_zero, ← map_smul,
+    Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero] at this
 
 Depends on / 依赖: Finset, Finset.card_eq_zero, Finset.nonempty_iff_ne_empty, Finsupp, Finsupp.linearCombination_single, Finsupp.single, Finsupp.single_eq_zero, N.mkQ_surjective, Nonempty, Quotient, Submodule, Submodule.Quotient, Submodule.mkQ_apply, card_eq_zero, exists_finset_linearIndependent_of_le_finrank, finrank_quotient, le_rfl, linearCombination_single, linearIndependent_iff, linearIndependent_iff.mp
 -/

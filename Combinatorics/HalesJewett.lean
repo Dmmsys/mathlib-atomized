@@ -200,7 +200,13 @@ lemma coe_injective
   | inr e =>
     cases hm : idxFun m i with
     | inl a =>
-  
+      obtain ⟨b, hba⟩ := exists_ne a
+      simpa [hl, hm, hba, coe_apply] using hlm (const _ b) i
+    | inr f =>
+      obtain ⟨a, b, hab⟩ := exists_pair_ne α
+      simp only [Sum.inr.injEq]
+      by_contra! hef
+      simpa [hl, hm, hef, hab, coe_apply] using hlm (Function.update (const _ a) f b) i
 
 中文:
 引理 coe_injective
@@ -218,7 +224,13 @@ lemma coe_injective
   | inr e =>
     cases hm : idxFun m i with
     | inl a =>
-  
+      obtain ⟨b, hba⟩ := exists_ne a
+      simpa [hl, hm, hba, coe_apply] using hlm (const _ b) i
+    | inr f =>
+      obtain ⟨a, b, hab⟩ := exists_pair_ne α
+      simp only [Sum.inr.injEq]
+      by_contra! hef
+      simpa [hl, hm, hef, hab, coe_apply] using hlm (Function.update (const _ a) f b) i
 
 Depends on / 依赖: Function, Sum.inr.injEq, classical, coe_apply, exists_ne, exists_pair_ne, funext_iff, hba.symm, idxFun
 -/
@@ -1208,7 +1220,25 @@ specialize hι fun v => C ∑ i, v i
   obtain ⟨l, c, hl⟩ := hι
   set s : Finset ι := {i | l.idxFun i = none} with hs
   refine ⟨#s, Finset.card_pos.mpr ⟨l.proper.choose, ?_⟩, ∑ i in sᶜ, ((l.idxFun i).map ?_).getD 0,
-    c, 
+    c, ?_⟩
+  · rw [hs, Finset.mem_filter]
+    exact ⟨Finset.mem_univ _, l.proper.choose_spec⟩
+  · exact fun m => m
+  intro x xs
+  rw [← hl ⟨x]; rw [xs⟩]
+  clear hl; congr
+  rw [← Finset.sum_add_sum_compl s]
+  congr 1
+  · rw [← Finset.sum_const]
+    apply Finset.sum_congr rfl
+    intro i hi
+    rw [hs]; rw [Finset.mem_filter] at hi
+    rw [l.apply_none _ _ hi.right]; rw [Subtype.coe_mk]
+  · apply Finset.sum_congr rfl
+    intro i hi
+    rw [hs]; rw [Finset.compl_filter]; rw [Finset.mem_filter] at hi
+    obtain ⟨y, hy⟩ := Option.ne_none_iff_exists.mp hi.right
+    simp [← hy, Option.map_some, Option.getD]
 
 中文:
 定理 存在_mono_homothetic_copy
@@ -1220,7 +1250,25 @@ specialize hι fun v => C ∑ i, v i
   obtain ⟨l, c, hl⟩ := hι
   set s : Finset ι := {i | l.idxFun i = none} with hs
   refine ⟨#s, Finset.card_pos.mpr ⟨l.proper.choose, ?_⟩, ∑ i in sᶜ, ((l.idxFun i).map ?_).getD 0,
-    c, 
+    c, ?_⟩
+  · rw [hs, Finset.mem_filter]
+    exact ⟨Finset.mem_univ _, l.proper.choose_spec⟩
+  · exact fun m => m
+  intro x xs
+  rw [← hl ⟨x]; rw [xs⟩]
+  clear hl; congr
+  rw [← Finset.sum_add_sum_compl s]
+  congr 1
+  · rw [← Finset.sum_const]
+    apply Finset.sum_congr rfl
+    intro i hi
+    rw [hs]; rw [Finset.mem_filter] at hi
+    rw [l.apply_none _ _ hi.right]; rw [Subtype.coe_mk]
+  · apply Finset.sum_congr rfl
+    intro i hi
+    rw [hs]; rw [Finset.compl_filter]; rw [Finset.mem_filter] at hi
+    obtain ⟨y, hy⟩ := Option.ne_none_iff_exists.mp hi.right
+    simp [← hy, Option.map_some, Option.getD]
 
 Depends on / 依赖: Finset, Finset.card_pos.mpr, Finset.mem_filter, Finset.mem_univ, Finset.sum_add_sum_compl, Finset.sum_con, Line.exists_mono_in_high_dimension, _inst, card_pos, choose_spec, classical, exists_mono_in_high_dimension, idxFun, l.idxFun, l.proper.choose, l.proper.choose_spec, mem_filter, mem_univ, proper, specialize
 -/
@@ -1265,7 +1313,9 @@ theorem exists_mono_in_high_dimension
   obtain ⟨ι, _, hι⟩ := Line.exists_mono_in_high_dimension (Shrink.{0} η -> α) κ
   refine ⟨ι × Shrink η, inferInstance, fun C => ?_⟩
   obtain ⟨l, hl⟩ := hι fun x => C fun (i, e) => x i e
-  refine ⟨l.toSubspace.reindex (equivShrink.{0} η).symm (Equiv.refl _) (Equiv.refl _
+  refine ⟨l.toSubspace.reindex (equivShrink.{0} η).symm (Equiv.refl _) (Equiv.refl _), ?_⟩
+  convert! hl.toSubspace.reindex
+  simp
 
 中文:
 定理 存在_mono_in_high_dimension
@@ -1275,7 +1325,9 @@ theorem exists_mono_in_high_dimension
   obtain ⟨ι, _, hι⟩ := Line.exists_mono_in_high_dimension (Shrink.{0} η -> α) κ
   refine ⟨ι × Shrink η, inferInstance, fun C => ?_⟩
   obtain ⟨l, hl⟩ := hι fun x => C fun (i, e) => x i e
-  refine ⟨l.toSubspace.reindex (equivShrink.{0} η).symm (Equiv.refl _) (Equiv.refl _
+  refine ⟨l.toSubspace.reindex (equivShrink.{0} η).symm (Equiv.refl _) (Equiv.refl _), ?_⟩
+  convert! hl.toSubspace.reindex
+  simp
 
 Depends on / 依赖: Equiv.refl, Line.exists_mono_in_high_dimension, Shrink, convert, equivShrink, exists_mono_in_high_dimension, hl.toSubspace.reindex, l.toSubspace.reindex, nonempty_fintype, reindex, toSubspace
 -/
@@ -1302,6 +1354,7 @@ theorem exists_mono_in_high_dimension_fin
   refine ⟨⟨l.idxFun ∘ (Fintype.equivFin _).symm, fun e => ?_⟩, c, cl⟩
   obtain ⟨i, hi⟩ := l.proper e
   use Fintype.equivFin _ i
+  simpa using hi
 
 中文:
 定理 存在_mono_in_high_dimension_fin
@@ -1313,6 +1366,7 @@ theorem exists_mono_in_high_dimension_fin
   refine ⟨⟨l.idxFun ∘ (Fintype.equivFin _).symm, fun e => ?_⟩, c, cl⟩
   obtain ⟨i, hi⟩ := l.proper e
   use Fintype.equivFin _ i
+  simpa using hi
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.equivFin, LawfulMonad, Sum.comp_traverse, Sum.id_traverse, Sum.naturality, Sum.traverse_eq_map_id, comp_traverse, equivFin, exists_mono_in_high_dimension, id_traverse, idxFun, l.idxFun, l.proper, naturality, proper, traverse_eq_map_id
 -/

@@ -136,7 +136,7 @@ instance zariskiTopology
       exact ⟨_, zeroLocus_iUnion _⟩)
     (by
       rintro _ ⟨s, rfl⟩ _ ⟨t, rfl⟩
-      exact
+      exact ⟨_, (union_zeroLocus s t).symm⟩)
 
 中文:
 实例 zariskiTopology
@@ -150,7 +150,7 @@ instance zariskiTopology
       exact ⟨_, zeroLocus_iUnion _⟩)
     (by
       rintro _ ⟨s, rfl⟩ _ ⟨t, rfl⟩
-      exact
+      exact ⟨_, (union_zeroLocus s t).symm⟩)
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.zeroLocus, Set.range, Set.sInter_eq_iInter, Set.univ, TopologicalSpace, TopologicalSpace.ofClosed, i.prop, ofClosed, sInter_eq_iInter, union_zeroLocus, zeroLocus, zeroLocus_iUnion
 -/
@@ -292,7 +292,7 @@ theorem zeroLocus_vanishingIdeal_eq_closure
   proof: by
 .mp isClosed_closure with ⟨I, hI⟩ rcases isClosed_iff_zeroLocus (closure t)
   rw [subset_antisymm_iff]; rw [(isClosed_zeroLocus _).closure_subset_iff]; rw [hI]; rw [subset_zeroLocus_iff_subset_vanishingIdeal]; rw [(gc R).u_l_u_eq_u]; rw [← subset_zeroLocus_iff_subset_vanishingIdeal]; rw [← hI]
-  
+  exact ⟨subset_closure, subset_zeroLocus_vanishingIdeal t⟩
 
 中文:
 定理 zeroLocus_vanishingIdeal_eq_closure
@@ -300,7 +300,7 @@ theorem zeroLocus_vanishingIdeal_eq_closure
   证明: by
 .mp isClosed_closure with ⟨I, hI⟩ rcases isClosed_iff_zeroLocus (closure t)
   rw [subset_antisymm_iff]; rw [(isClosed_zeroLocus _).closure_subset_iff]; rw [hI]; rw [subset_zeroLocus_iff_subset_vanishingIdeal]; rw [(gc R).u_l_u_eq_u]; rw [← subset_zeroLocus_iff_subset_vanishingIdeal]; rw [← hI]
-  
+  exact ⟨subset_closure, subset_zeroLocus_vanishingIdeal t⟩
 
 Depends on / 依赖: closure, closure_subset_iff, isClosed_closure, isClosed_iff_zeroLocus, isClosed_zeroLocus, subset_antisymm_iff, subset_closure, subset_zeroLocus_iff_subset_vanishingIdeal, subset_zeroLocus_vanishingIdeal, u_l_u_eq_u
 -/
@@ -362,7 +362,7 @@ theorem isClosed_singleton_iff_isMaximal
   constructor <;> intro H
   · rcases x.asIdeal.exists_le_maximal x.2.1 with ⟨m, hm, hxm⟩
     exact (congr_arg asIdeal (@H ⟨m, hm.isPrime⟩ hxm)) ▸ hm
-  · exact fun p hp => PrimeSpectrum.
+  · exact fun p hp => PrimeSpectrum.ext (H.eq_of_le p.2.1 hp).symm
 
 中文:
 定理 isClosed_singleton_iff_isMaximal
@@ -372,7 +372,7 @@ theorem isClosed_singleton_iff_isMaximal
   constructor <;> intro H
   · rcases x.asIdeal.exists_le_maximal x.2.1 with ⟨m, hm, hxm⟩
     exact (congr_arg asIdeal (@H ⟨m, hm.isPrime⟩ hxm)) ▸ hm
-  · exact fun p hp => PrimeSpectrum.
+  · exact fun p hp => PrimeSpectrum.ext (H.eq_of_le p.2.1 hp).symm
 
 Depends on / 依赖: H.eq_of_le, PrimeSpectrum, PrimeSpectrum.ext, asIdeal, closure_subset_iff_isClosed, congr_arg, eq_of_le, exists_le_maximal, hm.isPrime, isPrime, vanishingIdeal_singleton, x.asIdeal.exists_le_maximal, zeroLocus_vanishingIdeal_eq_closure
 -/
@@ -520,7 +520,13 @@ theorem t1Space_iff_isField
           (Ring.ne_bot_of_isMaximal_of_not_isField <|
             (isClosed_singleton_iff_isMaximal _).1 (T1Space.t1 ⟨⊥, inferInstance⟩))
           (by simp))
-  · refine ⟨fun x => (isClosed_singleton_iff_isMaxi
+  · refine ⟨fun x => (isClosed_singleton_iff_isMaximal x).2 ?_⟩
+    by_cases hx : x.asIdeal = ⊥
+    · let := h.toSemifield
+      exact hx.symm ▸ Ideal.bot_isMaximal
+    · exact absurd h (Ring.not_isField_iff_exists_prime.2 ⟨x.asIdeal, ⟨hx, x.2⟩⟩)
+
+local notation "Z(" a ")" => zeroLocus (a : Set R)
 
 中文:
 定理 t1Space_iff_isField
@@ -535,7 +541,13 @@ theorem t1Space_iff_isField
           (Ring.ne_bot_of_isMaximal_of_not_isField <|
             (isClosed_singleton_iff_isMaximal _).1 (T1Space.t1 ⟨⊥, inferInstance⟩))
           (by simp))
-  · refine ⟨fun x => (isClosed_singleton_iff_isMaxi
+  · refine ⟨fun x => (isClosed_singleton_iff_isMaximal x).2 ?_⟩
+    by_cases hx : x.asIdeal = ⊥
+    · let := h.toSemifield
+      exact hx.symm ▸ Ideal.bot_isMaximal
+    · exact absurd h (Ring.not_isField_iff_exists_prime.2 ⟨x.asIdeal, ⟨hx, x.2⟩⟩)
+
+local notation "Z(" a ")" => zeroLocus (a : Set R)
 
 Depends on / 依赖: Classical, Classical.not_not, Ideal.bot_isMaximal, Ring.ne_bot_of_isMaximal_of_not_isField, Ring.not_isField_iff_exists_prime, T1Space, T1Space.t1, absurd, asIdeal, bot_isMaximal, h.toSemifield, hx.symm, isClosed_singleton_iff_isMaximal, ne_bot_of_isMaximal_of_not_isField, not_isField_iff_exists_prime, not_not, toSemifield, x.asIdeal
 -/
@@ -567,7 +579,23 @@ theorem isIrreducible_zeroLocus_iff_of_radical
   apply and_congr
   · rw [Set.nonempty_iff_ne_empty, Ne, zeroLocus_empty_iff_eq_top]
   · trans forall x y : Ideal R, Z(I) subseteq Z(x) union Z(y) -> Z(I) subseteq Z(x) ∨ Z(I) subseteq Z(y)
-    · simp_rw [isPreirreducible_iff_isClosed_union_isClosed, i
+    · simp_rw [isPreirreducible_iff_isClosed_union_isClosed, isClosed_iff_zeroLocus_ideal]
+      constructor
+      · rintro h x y
+        exact h _ _ ⟨x, rfl⟩ ⟨y, rfl⟩
+      · rintro h _ _ ⟨x, rfl⟩ ⟨y, rfl⟩
+        exact h x y
+    · simp_rw [← zeroLocus_inf, subset_zeroLocus_iff_le_vanishingIdeal,
+        vanishingIdeal_zeroLocus_eq_radical, hI.radical]
+      constructor
+      · simp_rw [← SetLike.mem_coe, ← Set.singleton_subset_iff, ← Ideal.span_le, ←
+          Ideal.span_singleton_mul_span_singleton]
+        refine fun h x y h' => h _ _ ?_
+        rw [← hI.radical_le_iff] at h' ⊢
+        simpa only [Ideal.radical_inf, Ideal.radical_mul] using h'
+      · simp_rw [or_iff_not_imp_left, SetLike.not_le_iff_exists]
+        rintro h s t h' ⟨x, hx, hx'⟩ y hy
+        exact h (h' ⟨Ideal.mul_mem_right _ _ hx, Ideal.mul_mem_left _ _ hy⟩) hx'
 
 中文:
 定理 isIrreducible_zeroLocus_iff_of_radical
@@ -577,7 +605,23 @@ theorem isIrreducible_zeroLocus_iff_of_radical
   apply and_congr
   · rw [Set.nonempty_iff_ne_empty, Ne, zeroLocus_empty_iff_eq_top]
   · trans forall x y : Ideal R, Z(I) subseteq Z(x) union Z(y) -> Z(I) subseteq Z(x) ∨ Z(I) subseteq Z(y)
-    · simp_rw [isPreirreducible_iff_isClosed_union_isClosed, i
+    · simp_rw [isPreirreducible_iff_isClosed_union_isClosed, isClosed_iff_zeroLocus_ideal]
+      constructor
+      · rintro h x y
+        exact h _ _ ⟨x, rfl⟩ ⟨y, rfl⟩
+      · rintro h _ _ ⟨x, rfl⟩ ⟨y, rfl⟩
+        exact h x y
+    · simp_rw [← zeroLocus_inf, subset_zeroLocus_iff_le_vanishingIdeal,
+        vanishingIdeal_zeroLocus_eq_radical, hI.radical]
+      constructor
+      · simp_rw [← SetLike.mem_coe, ← Set.singleton_subset_iff, ← Ideal.span_le, ←
+          Ideal.span_singleton_mul_span_singleton]
+        refine fun h x y h' => h _ _ ?_
+        rw [← hI.radical_le_iff] at h' ⊢
+        simpa only [Ideal.radical_inf, Ideal.radical_mul] using h'
+      · simp_rw [or_iff_not_imp_left, SetLike.not_le_iff_exists]
+        rintro h s t h' ⟨x, hx, hx'⟩ y hy
+        exact h (h' ⟨Ideal.mul_mem_right _ _ hx, Ideal.mul_mem_left _ _ hy⟩) hx'
 
 Depends on / 依赖: Ideal.isPrime_iff, IsIrreducible, Set.nonempty_iff_ne_empty, and_congr, isClosed_iff_zeroLocus_ideal, isPreirreducible_iff_isClosed_union_isClosed, isPrime_iff, nonempty_iff_ne_empty, simp_rw, subset_zeroLocus_iff_le_vanishingIdeal, subseteq, vanishingIdea, zeroLocus_empty_iff_eq_top, zeroLocus_inf
 -/
@@ -772,7 +816,8 @@ instance compactSpace
   refine compactSpace_of_finite_subfamily_closed fun S S_closed S_empty => ?_
   choose I hI using fun i => (isClosed_iff_zeroLocus_ideal (S i)).mp (S_closed i)
   simp_rw [hI, ← zeroLocus_iSup, zeroLocus_empty_iff_eq_top, ← top_le_iff] at S_empty ⊢
-  exact CompleteLattice.IsCompactElement.exists_f
+  exact CompleteLattice.IsCompactElement.exists_finset_of_le_iSup _
+    Ideal.isCompactElement_top _ S_empty
 
 中文:
 实例 compactSpace
@@ -781,7 +826,8 @@ instance compactSpace
   refine compactSpace_of_finite_subfamily_closed fun S S_closed S_empty => ?_
   choose I hI using fun i => (isClosed_iff_zeroLocus_ideal (S i)).mp (S_closed i)
   simp_rw [hI, ← zeroLocus_iSup, zeroLocus_empty_iff_eq_top, ← top_le_iff] at S_empty ⊢
-  exact CompleteLattice.IsCompactElement.exists_f
+  exact CompleteLattice.IsCompactElement.exists_finset_of_le_iSup _
+    Ideal.isCompactElement_top _ S_empty
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.IsCompactElement.exists_finset_of_le_iSup, Ideal.isCompactElement_top, IsCompactElement, S_closed, S_empty, compactSpace_of_finite_subfamily_closed, exists_finset_of_le_iSup, isClosed_iff_zeroLocus_ideal, isCompactElement_top, simp_rw, top_le_iff, zeroLocus_empty_iff_eq_top, zeroLocus_iSup
 -/
@@ -824,13 +870,31 @@ English:
 theorem discreteTopology_iff_finite_isMaximal_and_sInf_le_nilradical
   proof: {I : Ideal R | I.IsMaximal}
     DiscreteTopology (PrimeSpectrum R) ↔ Finite s ∧ sInf s <= nilradical R := by
-  rw [discreteTopology_iff_finite_and_krullDimLE_zero]; rw [Ring.krullDimLE_zero_iff]; rw [(equivSubtype R).finite_iff]; rw [← Set.coe_ofPred]; rw [Set.finite_coe_iff]; rw [Set.finite_coe_iff
+  rw [discreteTopology_iff_finite_and_krullDimLE_zero]; rw [Ring.krullDimLE_zero_iff]; rw [(equivSubtype R).finite_iff]; rw [← Set.coe_ofPred]; rw [Set.finite_coe_iff]; rw [Set.finite_coe_iff]
+  refine ⟨fun h => ⟨h.1.subset fun _ h => h.isPrime, nilradical_eq_sInf R ▸ sInf_le_sInf h.2⟩,
+    fun ⟨fin, le⟩ => ?_⟩
+  have hpm (I : Ideal R) (hI : I.IsPrime) : I.IsMaximal := by
+    replace le := le.trans (nilradical_le_prime I)
+    rw [← fin.coe_toFinset]; rw [← Finset.inf_id_eq_sInf]; rw [hI.inf_le'] at le
+    have ⟨M, hM, hMI⟩ := le
+    rw [fin.mem_toFinset] at hM
+    rwa [← hM.eq_of_le hI.1 hMI]
+  exact ⟨fin.subset hpm, hpm⟩
 
 中文:
 定理 discreteTopology_iff_finite_isMaximal_and_sInf_le_nilradical
   证明: {I : Ideal R | I.IsMaximal}
     DiscreteTopology (PrimeSpectrum R) ↔ Finite s ∧ sInf s <= nilradical R := by
-  rw [discreteTopology_iff_finite_and_krullDimLE_zero]; rw [Ring.krullDimLE_zero_iff]; rw [(equivSubtype R).finite_iff]; rw [← Set.coe_ofPred]; rw [Set.finite_coe_iff]; rw [Set.finite_coe_iff
+  rw [discreteTopology_iff_finite_and_krullDimLE_zero]; rw [Ring.krullDimLE_zero_iff]; rw [(equivSubtype R).finite_iff]; rw [← Set.coe_ofPred]; rw [Set.finite_coe_iff]; rw [Set.finite_coe_iff]
+  refine ⟨fun h => ⟨h.1.subset fun _ h => h.isPrime, nilradical_eq_sInf R ▸ sInf_le_sInf h.2⟩,
+    fun ⟨fin, le⟩ => ?_⟩
+  have hpm (I : Ideal R) (hI : I.IsPrime) : I.IsMaximal := by
+    replace le := le.trans (nilradical_le_prime I)
+    rw [← fin.coe_toFinset]; rw [← Finset.inf_id_eq_sInf]; rw [hI.inf_le'] at le
+    have ⟨M, hM, hMI⟩ := le
+    rw [fin.mem_toFinset] at hM
+    rwa [← hM.eq_of_le hI.1 hMI]
+  exact ⟨fin.subset hpm, hpm⟩
 
 Depends on / 依赖: I.IsMaximal, IsMaximal
 -/
@@ -954,7 +1018,7 @@ theorem localization_comap_range
     exact ((IsLocalization.isPrime_iff_isPrime_disjoint ..).mp p.2).2
   · use ⟨x.asIdeal.map (algebraMap R S), IsLocalization.isPrime_of_isPrime_disjoint M S _ x.2 h⟩
     ext1
-    exact IsLocalization.under_map_of_isPrime_disjoint M 
+    exact IsLocalization.under_map_of_isPrime_disjoint M S x.2 h
 
 中文:
 定理 localization_comap_range
@@ -965,7 +1029,7 @@ theorem localization_comap_range
     exact ((IsLocalization.isPrime_iff_isPrime_disjoint ..).mp p.2).2
   · use ⟨x.asIdeal.map (algebraMap R S), IsLocalization.isPrime_of_isPrime_disjoint M S _ x.2 h⟩
     ext1
-    exact IsLocalization.under_map_of_isPrime_disjoint M 
+    exact IsLocalization.under_map_of_isPrime_disjoint M S x.2 h
 
 Depends on / 依赖: IsLocalization, IsLocalization.isPrime_iff_isPrime_disjoint, IsLocalization.isPrime_of_isPrime_disjoint, IsLocalization.under_map_of_isPrime_disjoint, Set.ext, algebraMap, asIdeal, isPrime_iff_isPrime_disjoint, isPrime_of_isPrime_disjoint, under_map_of_isPrime_disjoint, x.asIdeal.map
 -/
@@ -991,7 +1055,9 @@ theorem localization_comap_isInducing
   constructor
   · rintro ⟨s, rfl⟩
     refine ⟨(Ideal.span s).comap (algebraMap R S), ?_⟩
-    rw [← zeroLocu
+    rw [← zeroLocus_span]; rw [← zeroLocus_span s]; rw [← Ideal.map]; rw [IsLocalization.map_under M S]
+  · rintro ⟨s, rfl⟩
+    exact ⟨_, rfl⟩
 
 中文:
 定理 localization_comap_isInducing
@@ -1003,7 +1069,9 @@ theorem localization_comap_isInducing
   constructor
   · rintro ⟨s, rfl⟩
     refine ⟨(Ideal.span s).comap (algebraMap R S), ?_⟩
-    rw [← zeroLocu
+    rw [← zeroLocus_span]; rw [← zeroLocus_span s]; rw [← Ideal.map]; rw [IsLocalization.map_under M S]
+  · rintro ⟨s, rfl⟩
+    exact ⟨_, rfl⟩
 
 Depends on / 依赖: Ideal.map, Ideal.span, IsLocalization, IsLocalization.map_under, TopologicalSpace, TopologicalSpace.ext_isClosed, algebraMap, eq_comm, exists_exists_eq_and, ext_isClosed, isClosed_iff_zeroLocus, isClosed_induced_iff, map_under, preimage_comap_zeroLocus, simp_rw, zeroLocus, zeroLocus_span
 -/
@@ -1053,7 +1121,10 @@ theorem comap_isInducing_of_surjective
     refine fun s =>
       ⟨fun ⟨F, hF⟩ =>
         ⟨zeroLocus (f ⁻¹' F), ⟨f ⁻¹' F, rfl⟩, by
-          rw [preimage_comap_zeroLocus]; rw [Function.Surjective.image_preimage hf]; rw [hF
+          rw [preimage_comap_zeroLocus]; rw [Function.Surjective.image_preimage hf]; rw [hF]⟩,
+        ?_⟩
+    rintro ⟨-, ⟨F, rfl⟩, hF⟩
+    exact ⟨f '' F, hF.symm.trans (preimage_comap_zeroLocus f F)⟩
 
 中文:
 定理 comap_isInducing_of_surjective
@@ -1065,7 +1136,10 @@ theorem comap_isInducing_of_surjective
     refine fun s =>
       ⟨fun ⟨F, hF⟩ =>
         ⟨zeroLocus (f ⁻¹' F), ⟨f ⁻¹' F, rfl⟩, by
-          rw [preimage_comap_zeroLocus]; rw [Function.Surjective.image_preimage hf]; rw [hF
+          rw [preimage_comap_zeroLocus]; rw [Function.Surjective.image_preimage hf]; rw [hF]⟩,
+        ?_⟩
+    rintro ⟨-, ⟨F, rfl⟩, hF⟩
+    exact ⟨f '' F, hF.symm.trans (preimage_comap_zeroLocus f F)⟩
 
 Depends on / 依赖: Function, Function.Surjective.image_preimage, Surjective, TopologicalSpace, TopologicalSpace.ext_iff, ext_iff, hF.symm.trans, image_preimage, isClosed_compl_iff, isClosed_iff_zeroLocus, isClosed_induced_iff, preimage_comap_zeroLocus, zeroLocus
 -/
@@ -1319,7 +1393,8 @@ lemma range_comap_fst
   · rintro ⟨I, hI, rfl⟩; exact Ideal.comap_mono bot_le
   obtain ⟨p, hp, eq⟩ | ⟨p, hp, eq⟩ := p.1.ideal_prod_prime.mp p.2
 · exact ⟨⟨p, hp⟩, PrimeSpectrum.ext by simpa [Ideal.prod] using eq.symm⟩
-  · refine (hp.ne_top <| (Ideal.eq_top_iff_one _).mpr ?_).e
+  · refine (hp.ne_top <| (Ideal.eq_top_iff_one _).mpr ?_).elim
+    simpa [eq] using h (show (0, 1) in RingHom.ker (RingHom.fst R S) by simp)
 
 中文:
 引理 range_comap_fst
@@ -1328,7 +1403,8 @@ lemma range_comap_fst
   · rintro ⟨I, hI, rfl⟩; exact Ideal.comap_mono bot_le
   obtain ⟨p, hp, eq⟩ | ⟨p, hp, eq⟩ := p.1.ideal_prod_prime.mp p.2
 · exact ⟨⟨p, hp⟩, PrimeSpectrum.ext by simpa [Ideal.prod] using eq.symm⟩
-  · refine (hp.ne_top <| (Ideal.eq_top_iff_one _).mpr ?_).e
+  · refine (hp.ne_top <| (Ideal.eq_top_iff_one _).mpr ?_).elim
+    simpa [eq] using h (show (0, 1) in RingHom.ker (RingHom.fst R S) by simp)
 
 Depends on / 依赖: Ideal.comap_mono, Ideal.eq_top_iff_one, Ideal.prod, PrimeSpectrum, PrimeSpectrum.ext, RingHom, RingHom.fst, RingHom.ker, Set.ext, bot_le, comap_mono, continuous_id, continuous_prodMk, eq.symm, eq_top_iff_one, hp.ne_top, ideal_prod_prime, ideal_prod_prime.mp, ne_top
 -/
@@ -1351,7 +1427,8 @@ lemma range_comap_snd
   · rintro ⟨I, hI, rfl⟩; exact Ideal.comap_mono bot_le
   obtain ⟨p, hp, eq⟩ | ⟨p, hp, eq⟩ := p.1.ideal_prod_prime.mp p.2
   · refine (hp.ne_top <| (Ideal.eq_top_iff_one _).mpr ?_).elim
-    simpa [eq] using h (show (1, 0) in RingHom.ker (RingHom.snd R S) 
+    simpa [eq] using h (show (1, 0) in RingHom.ker (RingHom.snd R S) by simp)
+· exact ⟨⟨p, hp⟩, PrimeSpectrum.ext by simpa [Ideal.prod] using eq.symm⟩
 
 中文:
 引理 range_comap_snd
@@ -1360,7 +1437,8 @@ lemma range_comap_snd
   · rintro ⟨I, hI, rfl⟩; exact Ideal.comap_mono bot_le
   obtain ⟨p, hp, eq⟩ | ⟨p, hp, eq⟩ := p.1.ideal_prod_prime.mp p.2
   · refine (hp.ne_top <| (Ideal.eq_top_iff_one _).mpr ?_).elim
-    simpa [eq] using h (show (1, 0) in RingHom.ker (RingHom.snd R S) 
+    simpa [eq] using h (show (1, 0) in RingHom.ker (RingHom.snd R S) by simp)
+· exact ⟨⟨p, hp⟩, PrimeSpectrum.ext by simpa [Ideal.prod] using eq.symm⟩
 
 Depends on / 依赖: Ideal.comap_mono, Ideal.eq_top_iff_one, Ideal.prod, PrimeSpectrum, PrimeSpectrum.ext, RingHom, RingHom.ker, RingHom.snd, Set.ext, bot_le, comap_mono, eq.symm, eq_top_iff_one, hp.ne_top, ideal_prod_prime, ideal_prod_prime.mp, ne_top
 -/
@@ -1430,7 +1508,9 @@ definition primeSpectrumProdHomeo
     (Equiv.injective _) ?_).isInducing
   · rw [continuous_sum_dom]
     simp only [Function.comp_def, primeSpectrumProd_symm_inl, primeSpectrumProd_symm_inr]
-
+    exact ⟨continuous_comap _, continuous_comap _⟩
+  · simp_rw [isClosedMap_sum, primeSpectrumProd_symm_inl, primeSpectrumProd_symm_inr]
+    exact ⟨isClosedEmbedding_comap_fst.isClosedMap, isClosedEmbedding_comap_snd.isClosedMap⟩
 
 中文:
 定义 primeSpectrumProdHomeo
@@ -1441,7 +1521,9 @@ definition primeSpectrumProdHomeo
     (Equiv.injective _) ?_).isInducing
   · rw [continuous_sum_dom]
     simp only [Function.comp_def, primeSpectrumProd_symm_inl, primeSpectrumProd_symm_inr]
-
+    exact ⟨continuous_comap _, continuous_comap _⟩
+  · simp_rw [isClosedMap_sum, primeSpectrumProd_symm_inl, primeSpectrumProd_symm_inr]
+    exact ⟨isClosedEmbedding_comap_fst.isClosedMap, isClosedEmbedding_comap_snd.isClosedMap⟩
 
 Depends on / 依赖: Equiv.injective, Function, Function.comp_def, IsClosedEmbedding, IsClosedEmbedding.of_continuous_injective_isClosedMap, comp_def, continuous_comap, continuous_sum_dom, injective, isClose, isClosedEmbedding_comap_fst, isClosedEmbedding_comap_fst.isClosedMap, isClosedEmbedding_comap_snd, isClosedEmbedding_comap_snd.isClose, isClosedMap, isClosedMap_sum, isInducing, of_continuous_injective_isClosedMap, primeSpectrumProd, primeSpectrumProd_symm_inl
 -/
@@ -1776,7 +1858,9 @@ theorem isTopologicalBasis_basic_opens
   · rintro p U hp ⟨s, hs⟩
     rw [← compl_compl U]; rw [Set.mem_compl_iff]; rw [← hs]; rw [mem_zeroLocus]; rw [Set.not_subset] at hp
     obtain ⟨f, hfs, hfp⟩ := hp
-    refine ⟨basicOpen 
+    refine ⟨basicOpen f, ⟨f, rfl⟩, hfp, ?_⟩
+    rw [← Set.compl_subset_compl]; rw [← hs]; rw [basicOpen_eq_zeroLocus_compl]; rw [compl_compl]
+    exact zeroLocus_anti_mono (Set.singleton_subset_iff.mpr hfs)
 
 中文:
 定理 isTopologicalBasis_basic_opens
@@ -1787,7 +1871,9 @@ theorem isTopologicalBasis_basic_opens
   · rintro p U hp ⟨s, hs⟩
     rw [← compl_compl U]; rw [Set.mem_compl_iff]; rw [← hs]; rw [mem_zeroLocus]; rw [Set.not_subset] at hp
     obtain ⟨f, hfs, hfp⟩ := hp
-    refine ⟨basicOpen 
+    refine ⟨basicOpen f, ⟨f, rfl⟩, hfp, ?_⟩
+    rw [← Set.compl_subset_compl]; rw [← hs]; rw [basicOpen_eq_zeroLocus_compl]; rw [compl_compl]
+    exact zeroLocus_anti_mono (Set.singleton_subset_iff.mpr hfs)
 
 Depends on / 依赖: Set.compl_subset_compl, Set.mem_compl_iff, Set.not_subset, Set.singleton_subset_iff.mpr, TopologicalSpace, TopologicalSpace.isTopologicalBasis_of_isOpen_of_nhds, basicOpen, basicOpen_eq_zeroLocus_compl, compl_compl, compl_subset_compl, isOpen_basicOpen, isTopologicalBasis_of_isOpen_of_nhds, mem_compl_iff, mem_zeroLocus, not_subset, singleton_subset_iff, zeroLocus_anti_mono
 -/
@@ -1868,7 +1954,7 @@ theorem basicOpen_eq_bot_iff
   rw [← TopologicalSpace.Opens.coe_inj]; rw [basicOpen_eq_zeroLocus_compl]
   simp only [Set.eq_univ_iff_forall, Set.singleton_subset_iff, TopologicalSpace.Opens.coe_bot,
     nilpotent_iff_mem_prime, Set.compl_empty_iff, mem_zeroLocus, SetLike.mem_coe]
-  exact ⟨fun h I hI => h ⟨I, hI⟩, fun h ⟨I, h
+  exact ⟨fun h I hI => h ⟨I, hI⟩, fun h ⟨I, hI⟩ => h I hI⟩
 
 中文:
 定理 basicOpen_eq_bot_iff
@@ -1878,7 +1964,7 @@ theorem basicOpen_eq_bot_iff
   rw [← TopologicalSpace.Opens.coe_inj]; rw [basicOpen_eq_zeroLocus_compl]
   simp only [Set.eq_univ_iff_forall, Set.singleton_subset_iff, TopologicalSpace.Opens.coe_bot,
     nilpotent_iff_mem_prime, Set.compl_empty_iff, mem_zeroLocus, SetLike.mem_coe]
-  exact ⟨fun h I hI => h ⟨I, hI⟩, fun h ⟨I, h
+  exact ⟨fun h I hI => h ⟨I, hI⟩, fun h ⟨I, hI⟩ => h I hI⟩
 
 Depends on / 依赖: Set.compl_empty_iff, Set.eq_univ_iff_forall, Set.singleton_subset_iff, SetLike, SetLike.mem_coe, TopologicalSpace, TopologicalSpace.Opens.coe_bot, TopologicalSpace.Opens.coe_inj, basicOpen_eq_zeroLocus_compl, coe_bot, coe_inj, compl_empty_iff, eq_univ_iff_forall, mem_coe, mem_zeroLocus, nilpotent_iff_mem_prime, singleton_subset_iff
 -/
@@ -1901,7 +1987,9 @@ theorem localization_away_comap_range
     Set.singleton_subset_iff, Set.mem_compl_iff, disjoint_iff_inf_le]
   constructor
   · intro h₁ h₂
-    exact h₁ ⟨Submonoid.mem_powers r, h₂
+    exact h₁ ⟨Submonoid.mem_powers r, h₂⟩
+  · rintro h₁ _ ⟨⟨n, rfl⟩, h₃⟩
+    exact h₁ (x.2.mem_of_pow_mem _ h₃)
 
 中文:
 定理 localization_away_comap_range
@@ -1913,7 +2001,9 @@ theorem localization_away_comap_range
     Set.singleton_subset_iff, Set.mem_compl_iff, disjoint_iff_inf_le]
   constructor
   · intro h₁ h₂
-    exact h₁ ⟨Submonoid.mem_powers r, h₂
+    exact h₁ ⟨Submonoid.mem_powers r, h₂⟩
+  · rintro h₁ _ ⟨⟨n, rfl⟩, h₃⟩
+    exact h₁ (x.2.mem_of_pow_mem _ h₃)
 
 Depends on / 依赖: Set.mem_compl_iff, Set.mem_ofPred_eq, Set.singleton_subset_iff, SetLike, SetLike.mem_coe, Submonoid, Submonoid.mem_powers, Submonoid.powers, basicOpen_eq_zeroLocus_compl, disjoint_iff_inf_le, localization_comap_range, mem_coe, mem_compl_iff, mem_ofPred_eq, mem_of_pow_mem, mem_powers, mem_zeroLocus, powers, singleton_subset_iff
 -/
@@ -2011,7 +2101,7 @@ lemma iSup_basicOpen_eq_top_iff
   simp only [PrimeSpectrum.basicOpen_eq_zeroLocus_compl, Opens.coe_top, ← Set.compl_iInter,
     ← PrimeSpectrum.zeroLocus_iUnion]
   rw [← PrimeSpectrum.zeroLocus_empty_iff_eq_top]; rw [compl_involutive.eq_iff]
-  simp only [Set.iUnion_singleton_eq_range
+  simp only [Set.iUnion_singleton_eq_range, Set.compl_univ, PrimeSpectrum.zeroLocus_span]
 
 中文:
 引理 iSup_basicOpen_eq_top_iff
@@ -2021,7 +2111,7 @@ lemma iSup_basicOpen_eq_top_iff
   simp only [PrimeSpectrum.basicOpen_eq_zeroLocus_compl, Opens.coe_top, ← Set.compl_iInter,
     ← PrimeSpectrum.zeroLocus_iUnion]
   rw [← PrimeSpectrum.zeroLocus_empty_iff_eq_top]; rw [compl_involutive.eq_iff]
-  simp only [Set.iUnion_singleton_eq_range
+  simp only [Set.iUnion_singleton_eq_range, Set.compl_univ, PrimeSpectrum.zeroLocus_span]
 
 Depends on / 依赖: Opens.coe_iSup, Opens.coe_top, PrimeSpectrum, PrimeSpectrum.basicOpen_eq_zeroLocus_compl, PrimeSpectrum.zeroLocus_empty_iff_eq_top, PrimeSpectrum.zeroLocus_iUnion, PrimeSpectrum.zeroLocus_span, Set.compl_iInter, Set.compl_univ, Set.iUnion_singleton_eq_range, SetLike, SetLike.ext, _iff, basicOpen_eq_zeroLocus_compl, coe_iSup, coe_top, compl_iInter, compl_involutive, compl_involutive.eq_iff, compl_univ
 -/
@@ -2068,7 +2158,13 @@ theorem isLocalization_away_iff_atPrime_of_basicOpen_eq_singleton
       (Submonoid.powers_le.mpr <| by apply h ▸ Set.mem_singleton p) fun r hr => ?_
     contrapose! hr
     simp_rw [← Ideal.mem_span_singleton] at hr
-    have ⟨q, prime, le, disj⟩ := Ideal.exis
+    have ⟨q, prime, le, disj⟩ := Ideal.exists_le_prime_disjoint (Ideal.span {r})
+      (.powers f) (Set.disjoint_right.mpr hr)
+    have : ⟨q, prime⟩ in (basicOpen f).1 := Set.disjoint_right.mp disj (Submonoid.mem_powers f)
+    rw [h]; rw [Set.mem_singleton_iff] at this
+    rw [← this]
+    exact not_not.mpr (q.span_singleton_le_iff_mem.mp le)
+  IsLocalization.isLocalization_iff_of_isLocalization _ _ (Localization.Away f)
 
 中文:
 定理 isLocalization_away_iff_atPrime_of_basicOpen_eq_singleton
@@ -2078,7 +2174,13 @@ theorem isLocalization_away_iff_atPrime_of_basicOpen_eq_singleton
       (Submonoid.powers_le.mpr <| by apply h ▸ Set.mem_singleton p) fun r hr => ?_
     contrapose! hr
     simp_rw [← Ideal.mem_span_singleton] at hr
-    have ⟨q, prime, le, disj⟩ := Ideal.exis
+    have ⟨q, prime, le, disj⟩ := Ideal.exists_le_prime_disjoint (Ideal.span {r})
+      (.powers f) (Set.disjoint_right.mpr hr)
+    have : ⟨q, prime⟩ in (basicOpen f).1 := Set.disjoint_right.mp disj (Submonoid.mem_powers f)
+    rw [h]; rw [Set.mem_singleton_iff] at this
+    rw [← this]
+    exact not_not.mpr (q.span_singleton_le_iff_mem.mp le)
+  IsLocalization.isLocalization_iff_of_isLocalization _ _ (Localization.Away f)
 
 Depends on / 依赖: AtPrime, Ideal.exists_le_prime_disjoint, Ideal.mem_span_singleton, Ideal.span, IsLocalization, IsLocalization.AtPrime, Localization, Localization.Away, Set.disjoint_right.mp, Set.disjoint_right.mpr, Set.mem_singleton, Set.mem_singleton_iff, Submonoid, Submonoid.mem_powers, Submonoid.powers_le.mpr, basicOpen, contrapose, disjoint_right, exists_le_prime_disjoint, mem_powers
 -/
@@ -2109,7 +2211,11 @@ lemma range_comap_algebraMap_localization_compl_eq_range_comap_quotientMk
       = range (comap (mapRingHom (Ideal.Quotient.mk (.span {c})))) := by
   let := (mapRingHom (algebraMap R (Away c))).toAlgebra
   have := Polynomial.isLocalization (.powers c) (Away c)
-  rw [Submonoid.
+  rw [Submonoid.map_powers] at this
+  have surj : Function.Surjective (mapRingHom (Ideal.Quotient.mk (.span {c}))) :=
+    Polynomial.map_surjective _ Ideal.Quotient.mk_surjective
+  rw [range_comap_of_surjective _ _ surj]; rw [localization_away_comap_range _ (C c)]
+  simp [Polynomial.ker_mapRingHom, Ideal.map_span]
 
 中文:
 引理 range_comap_algebraMap_localization_compl_eq_range_comap_quotientMk
@@ -2118,7 +2224,11 @@ lemma range_comap_algebraMap_localization_compl_eq_range_comap_quotientMk
       = range (comap (mapRingHom (Ideal.Quotient.mk (.span {c})))) := by
   let := (mapRingHom (algebraMap R (Away c))).toAlgebra
   have := Polynomial.isLocalization (.powers c) (Away c)
-  rw [Submonoid.
+  rw [Submonoid.map_powers] at this
+  have surj : Function.Surjective (mapRingHom (Ideal.Quotient.mk (.span {c}))) :=
+    Polynomial.map_surjective _ Ideal.Quotient.mk_surjective
+  rw [range_comap_of_surjective _ _ surj]; rw [localization_away_comap_range _ (C c)]
+  simp [Polynomial.ker_mapRingHom, Ideal.map_span]
 
 Depends on / 依赖: algebraMap, mapRingHom, toAlgebra
 -/
@@ -2180,7 +2290,16 @@ lemma comap_evalRingHom_basicOpen
     have : p in Set.range (PrimeSpectrum.comap (Pi.evalRingHom R i)) := by
       rw [range_comap_of_surjective _ _ (RingHom.surjective _)]; rw [mem_zeroLocus]; rw [SetLike.coe_subset_coe]
       intro x hx
-      rw [RingHom.m
+      rw [RingHom.mem_ker]; rw [Pi.evalRingHom_apply] at hx
+      have : Pi.single i f * x = 0 := by
+        ext j
+        by_cases h : i = j
+        · subst h
+          simp [hx]
+        · simp [h]
+      obtain (h | h) := Ideal.IsPrime.mem_or_mem_of_mul_eq_zero p.isPrime this <;> tauto
+    obtain ⟨q, rfl⟩ := this
+    exact ⟨q, by simpa using hp, by ext; simp⟩
 
 中文:
 引理 comap_evalRingHom_basicOpen
@@ -2194,7 +2313,16 @@ lemma comap_evalRingHom_basicOpen
     have : p in Set.range (PrimeSpectrum.comap (Pi.evalRingHom R i)) := by
       rw [range_comap_of_surjective _ _ (RingHom.surjective _)]; rw [mem_zeroLocus]; rw [SetLike.coe_subset_coe]
       intro x hx
-      rw [RingHom.m
+      rw [RingHom.mem_ker]; rw [Pi.evalRingHom_apply] at hx
+      have : Pi.single i f * x = 0 := by
+        ext j
+        by_cases h : i = j
+        · subst h
+          simp [hx]
+        · simp [h]
+      obtain (h | h) := Ideal.IsPrime.mem_or_mem_of_mul_eq_zero p.isPrime this <;> tauto
+    obtain ⟨q, rfl⟩ := this
+    exact ⟨q, by simpa using hp, by ext; simp⟩
 
 Depends on / 依赖: Ideal.IsPrime.mem_or_mem_of_mul_eq_zero, IsPrime, Pi.evalRingHom, Pi.evalRingHom_apply, Pi.single, PrimeSpectrum, PrimeSpectrum.comap, RingHom, RingHom.mem_ker, RingHom.surjective, Set.range, SetLike, SetLike.coe_subset_coe, coe_subset_coe, evalRingHom, evalRingHom_apply, isPrime, mem_ker, mem_or_mem_of_mul_eq_zero, mem_zeroLocus
 -/
@@ -2259,7 +2387,10 @@ lemma isOpenEmbedding_sigmaToPi
   · exact sigmaToPi_injective R
   · rw [isOpenMap_sigma]
     intro i
-    simp only [sigmaToPi_apply, PrimeSpectrum.isTopologicalBasis_basic_op
+    simp only [sigmaToPi_apply, PrimeSpectrum.isTopologicalBasis_basic_opens.isOpenMap_iff]
+    rintro - ⟨f, rfl⟩
+    rw [PrimeSpectrum.comap_evalRingHom_basicOpen]
+    exact isOpen_basicOpen
 
 中文:
 引理 isOpenEmbedding_sigmaToPi
@@ -2273,7 +2404,10 @@ lemma isOpenEmbedding_sigmaToPi
   · exact sigmaToPi_injective R
   · rw [isOpenMap_sigma]
     intro i
-    simp only [sigmaToPi_apply, PrimeSpectrum.isTopologicalBasis_basic_op
+    simp only [sigmaToPi_apply, PrimeSpectrum.isTopologicalBasis_basic_opens.isOpenMap_iff]
+    rintro - ⟨f, rfl⟩
+    rw [PrimeSpectrum.comap_evalRingHom_basicOpen]
+    exact isOpen_basicOpen
 
 Depends on / 依赖: Pi.evalRingHom, PrimeSpectrum, PrimeSpectrum.comap_evalRingHom_basicOpen, PrimeSpectrum.isTopologicalBasis_basic_opens.isOpenMap_iff, classical, comap_evalRingHom_basicOpen, continuous_comap, continuous_sigma_iff, evalRingHom, isOpenMap_iff, isOpenMap_sigma, isOpen_basicOpen, isTopologicalBasis_basic_opens, of_continuous_injective_isOpenMap, sigmaToPi_apply, sigmaToPi_injective
 -/
@@ -2350,7 +2484,26 @@ theorem toPiLocalization_surjective_of_discreteTopology
       (isOpen_discrete {p}) p rfl
 ⟨f, hfp.antisymm Set.singleton_subset_iff.mpr hpf⟩
   choose f hf using this
-  let e := Equiv.ofInject
+  let e := Equiv.ofInjective f fun p q eq => Set.singleton_injective (hf p ▸ eq ▸ hf q)
+  have loc a : IsLocalization.AtPrime (Localization.Away a.1) (e.symm a).1 :=
+(isLocalization_away_iff_atPrime_of_basicOpen_eq_singleton <| hf _).mp by
+      simp_rw [e, Equiv.apply_ofInjective_symm]; infer_instance
+  let algE a := IsLocalization.algEquiv (e.symm a).1.primeCompl
+    (Localization.AtPrime (e.symm a).1) (Localization.Away a.1)
+have span_eq : Ideal.span (Set.range f) = ⊤ := iSup_basicOpen_eq_top_iff.mp top_unique
+    fun p _ => TopologicalSpace.Opens.mem_iSup.mpr ⟨p, (hf p).ge rfl⟩
+  replace hf a : (basicOpen a.1 : Set _) = {e.symm a} := by
+    simp_rw [e, ← hf, Equiv.apply_ofInjective_symm]
+  obtain ⟨r, eq, -⟩ := Localization.existsUnique_algebraMap_eq_of_span_eq_top _ span_eq
+    (fun a => algE a (x _)) fun a b => by
+      obtain rfl | ne := eq_or_ne a b; · rfl
+have nil : IsNilpotent (a * b : R) := (basicOpen_eq_bot_iff _).mp by
+        simp_rw [basicOpen_mul, SetLike.ext'_iff, TopologicalSpace.Opens.coe_inf, hf]
+        exact bot_unique (fun _ ⟨ha, hb⟩ => ne <| e.symm.injective (ha.symm.trans hb))
+      apply (IsLocalization.subsingleton (M := .powers (a * b : R)) nil).elim
+  refine ⟨r, funext fun I => ?_⟩
+  have := eq (e I)
+  rwa [← AlgEquiv.symm_apply_eq, AlgEquiv.commutes, e.symm_apply_apply] at this
 
 中文:
 定理 toPiLocalization_surjective_of_discreteTopology
@@ -2360,7 +2513,26 @@ theorem toPiLocalization_surjective_of_discreteTopology
       (isOpen_discrete {p}) p rfl
 ⟨f, hfp.antisymm Set.singleton_subset_iff.mpr hpf⟩
   choose f hf using this
-  let e := Equiv.ofInject
+  let e := Equiv.ofInjective f fun p q eq => Set.singleton_injective (hf p ▸ eq ▸ hf q)
+  have loc a : IsLocalization.AtPrime (Localization.Away a.1) (e.symm a).1 :=
+(isLocalization_away_iff_atPrime_of_basicOpen_eq_singleton <| hf _).mp by
+      simp_rw [e, Equiv.apply_ofInjective_symm]; infer_instance
+  let algE a := IsLocalization.algEquiv (e.symm a).1.primeCompl
+    (Localization.AtPrime (e.symm a).1) (Localization.Away a.1)
+have span_eq : Ideal.span (Set.range f) = ⊤ := iSup_basicOpen_eq_top_iff.mp top_unique
+    fun p _ => TopologicalSpace.Opens.mem_iSup.mpr ⟨p, (hf p).ge rfl⟩
+  replace hf a : (basicOpen a.1 : Set _) = {e.symm a} := by
+    simp_rw [e, ← hf, Equiv.apply_ofInjective_symm]
+  obtain ⟨r, eq, -⟩ := Localization.existsUnique_algebraMap_eq_of_span_eq_top _ span_eq
+    (fun a => algE a (x _)) fun a b => by
+      obtain rfl | ne := eq_or_ne a b; · rfl
+have nil : IsNilpotent (a * b : R) := (basicOpen_eq_bot_iff _).mp by
+        simp_rw [basicOpen_mul, SetLike.ext'_iff, TopologicalSpace.Opens.coe_inf, hf]
+        exact bot_unique (fun _ ⟨ha, hb⟩ => ne <| e.symm.injective (ha.symm.trans hb))
+      apply (IsLocalization.subsingleton (M := .powers (a * b : R)) nil).elim
+  refine ⟨r, funext fun I => ?_⟩
+  have := eq (e I)
+  rwa [← AlgEquiv.symm_apply_eq, AlgEquiv.commutes, e.symm_apply_apply] at this
 
 Depends on / 依赖: AtPrime, Equiv.ofInjective, IsLocalization, IsLocalization.AtPrime, Localization, Localization.Away, PrimeSpectrum, Set.singleton_injective, Set.singleton_subset_iff.mpr, antisymm, basicOpen, e.symm, hfp.antisymm, isLocalization_away_iff_atPrime_of_basicOpen_eq_singleton, isOpen_discrete, isOpen_iff, isTopologicalBasis_basic_opens, isTopologicalBasis_basic_opens.isOpen_iff.mp, ofInjective, singleton_injective
 -/
@@ -2742,7 +2914,8 @@ definition localizationMapOfSpecializes
       rintro ⟨a, ha⟩
       rw [← PrimeSpectrum.le_iff_specializes]; rw [← asIdeal_le_asIdeal]; rw [← SetLike.coe_subset_coe]; rw [←
         Set.compl_subset_compl] at h
-      
+      exact (IsLocalization.map_units (Localization.AtPrime x.asIdeal)
+        ⟨a, show a in x.asIdeal.primeCompl from h ha⟩ :))
 
 中文:
 定义 localizationMapOfSpecializes
@@ -2753,7 +2926,8 @@ definition localizationMapOfSpecializes
       rintro ⟨a, ha⟩
       rw [← PrimeSpectrum.le_iff_specializes]; rw [← asIdeal_le_asIdeal]; rw [← SetLike.coe_subset_coe]; rw [←
         Set.compl_subset_compl] at h
-      
+      exact (IsLocalization.map_units (Localization.AtPrime x.asIdeal)
+        ⟨a, show a in x.asIdeal.primeCompl from h ha⟩ :))
 
 Depends on / 依赖: AtPrime, IsLocalization, IsLocalization.lift, IsLocalization.map_units, Localization, Localization.AtPrime, Localization.isLocalization, PrimeSpectrum, PrimeSpectrum.le_iff_specializes, Set.compl_subset_compl, SetLike, SetLike.coe_subset_coe, algebraMap, asIdeal, asIdeal_le_asIdeal, coe_subset_coe, compl_subset_compl, isLocalization, le_iff_specializes, map_units
 -/
@@ -2783,7 +2957,9 @@ lemma isClosed_image_of_stableUnderSpecialization
   · rintro _ ⟨q, hq, rfl⟩
     exact Ideal.comap_mono hq
   · obtain ⟨q, hqI, hq, hqle⟩ := p.asIdeal.exists_ideal_comap_le_prime I hp
-    exac
+    exact hf ((le_iff_specializes ⟨q.comap f, inferInstance⟩ p).mp hqle) ⟨⟨q, hq⟩, hqI, rfl⟩
+
+@[stacks 00HY]
 
 中文:
 引理 isClosed_image_of_stableUnderSpecialization
@@ -2793,7 +2969,9 @@ lemma isClosed_image_of_stableUnderSpecialization
   · rintro _ ⟨q, hq, rfl⟩
     exact Ideal.comap_mono hq
   · obtain ⟨q, hqI, hq, hqle⟩ := p.asIdeal.exists_ideal_comap_le_prime I hp
-    exac
+    exact hf ((le_iff_specializes ⟨q.comap f, inferInstance⟩ p).mp hqle) ⟨⟨q, hq⟩, hqI, rfl⟩
+
+@[stacks 00HY]
 
 Depends on / 依赖: I.comap, Ideal.comap_mono, PrimeSpectrum, PrimeSpectrum.isClosed_iff_zeroLocus_ideal, asIdeal, comap_mono, exists_ideal_comap_le_prime, isClosed_iff_zeroLocus, isClosed_iff_zeroLocus_ideal, le_antisymm, le_iff_specializes, p.asIdeal.exists_ideal_comap_le_prime, q.comap
 -/
@@ -2920,6 +3098,8 @@ lemma isQuotientMap_of_generalizingMap
     fun hsc => Set.image_preimage_eq s h₁ ▸ ?_⟩⟩
   apply isClosed_image_of_stableUnderSpecialization _ _ hsc
   rw [Set.image_preimage_eq s h₁]; rw [← stableUnderGeneralization_compl_iff]
+  convert! h₂.stableUnderGeneralization_image hsc.isOpen_compl.stableUnderGeneralization
+  rw [← Set.preimage_compl]; rw [Set.image_preimage_eq _ h₁]
 
 中文:
 引理 isQuotientMap_of_generalizingMap
@@ -2930,6 +3110,8 @@ lemma isQuotientMap_of_generalizingMap
     fun hsc => Set.image_preimage_eq s h₁ ▸ ?_⟩⟩
   apply isClosed_image_of_stableUnderSpecialization _ _ hsc
   rw [Set.image_preimage_eq s h₁]; rw [← stableUnderGeneralization_compl_iff]
+  convert! h₂.stableUnderGeneralization_image hsc.isOpen_compl.stableUnderGeneralization
+  rw [← Set.preimage_compl]; rw [Set.image_preimage_eq _ h₁]
 
 Depends on / 依赖: Set.image_preimage_eq, Set.preimage_compl, Topology, Topology.isQuotientMap_iff_isClosed, continuous_comap, convert, hs.preimage, hsc.isOpen_compl.stableUnderGeneralization, image_preimage_eq, isClosed_image_of_stableUnderSpecialization, isOpen_compl, isQuotientMap_iff_isClosed, preimage, preimage_compl, stableUnderGeneralization, stableUnderGeneralization_compl_iff, stableUnderGeneralization_image
 -/
@@ -2959,7 +3141,7 @@ lemma vanishingIdeal_range_comap
   rw [RingHom.ker_eq_comap_bot]; rw [← Ideal.comap_radical]; rw [Ideal.radical_eq_sInf]
   simp only [mem_vanishingIdeal, Set.mem_range, forall_exists_index, forall_apply_eq_imp_iff,
     comap_asIdeal, Ideal.mem_comap, bot_le, true_and, Submodule.mem_sInf, Set.mem_ofPred_eq]
-  exact ⟨fun H
+  exact ⟨fun H I hI => H ⟨I, hI⟩, fun H I => H I.1 I.2⟩
 
 中文:
 引理 vanishingIdeal_range_comap
@@ -2968,7 +3150,7 @@ lemma vanishingIdeal_range_comap
   rw [RingHom.ker_eq_comap_bot]; rw [← Ideal.comap_radical]; rw [Ideal.radical_eq_sInf]
   simp only [mem_vanishingIdeal, Set.mem_range, forall_exists_index, forall_apply_eq_imp_iff,
     comap_asIdeal, Ideal.mem_comap, bot_le, true_and, Submodule.mem_sInf, Set.mem_ofPred_eq]
-  exact ⟨fun H
+  exact ⟨fun H I hI => H ⟨I, hI⟩, fun H I => H I.1 I.2⟩
 
 Depends on / 依赖: Ideal.comap_radical, Ideal.mem_comap, Ideal.radical_eq_sInf, RingHom, RingHom.ker_eq_comap_bot, Set.mem_ofPred_eq, Set.mem_range, Submodule, Submodule.mem_sInf, bot_le, comap_asIdeal, comap_radical, forall_apply_eq_imp_iff, forall_exists_index, ker_eq_comap_bot, mem_comap, mem_ofPred_eq, mem_range, mem_sInf, mem_vanishingIdeal
 -/
@@ -3035,7 +3217,13 @@ lemma denseRange_comap_iff_minimalPrimes
       rw [denseRange_comap_iff_ker_le_nilRadical] at H
       simp only [Set.mem_ofPred, Ideal.IsMinimalPrime] at hI ⊢
       convert! hI using 2 with p
-      exact ⟨fun h => ⟨h.1, bot_le⟩, fun h => ⟨h.1, H.trans (h.
+      exact ⟨fun h => ⟨h.1, bot_le⟩, fun h => ⟨h.1, H.trans (h.1.radical_le_iff.mpr bot_le)⟩⟩
+    obtain ⟨p, hp, _, rfl⟩ := Ideal.exists_comap_eq_of_mem_minimalPrimes f (I := ⊥) I this
+    exact ⟨⟨p, hp⟩, rfl⟩
+  · intro H p
+    obtain ⟨q, hq, hq'⟩ := Ideal.exists_minimalPrimes_le (J := p.asIdeal) bot_le
+    exact ((le_iff_specializes ⟨q, hq.1.1⟩ p).mp hq').mem_closed isClosed_closure
+      (subset_closure (H q hq))
 
 中文:
 引理 denseRange_comap_iff_minimalPrimes
@@ -3046,7 +3234,13 @@ lemma denseRange_comap_iff_minimalPrimes
       rw [denseRange_comap_iff_ker_le_nilRadical] at H
       simp only [Set.mem_ofPred, Ideal.IsMinimalPrime] at hI ⊢
       convert! hI using 2 with p
-      exact ⟨fun h => ⟨h.1, bot_le⟩, fun h => ⟨h.1, H.trans (h.
+      exact ⟨fun h => ⟨h.1, bot_le⟩, fun h => ⟨h.1, H.trans (h.1.radical_le_iff.mpr bot_le)⟩⟩
+    obtain ⟨p, hp, _, rfl⟩ := Ideal.exists_comap_eq_of_mem_minimalPrimes f (I := ⊥) I this
+    exact ⟨⟨p, hp⟩, rfl⟩
+  · intro H p
+    obtain ⟨q, hq, hq'⟩ := Ideal.exists_minimalPrimes_le (J := p.asIdeal) bot_le
+    exact ((le_iff_specializes ⟨q, hq.1.1⟩ p).mp hq').mem_closed isClosed_closure
+      (subset_closure (H q hq))
 
 Depends on / 依赖: H.trans, Ideal.IsMinimalPrime, Ideal.exists_comap_eq_of_mem_minimalPrimes, Ideal.exists_minimalPrimes_le, IsMinimalPrime, RingHom, RingHom.ker, Set.mem_ofPred, asIdeal, bot_le, convert, denseRange_comap_iff_ker_le_nilRadical, exists_comap_eq_of_mem_minimalPrimes, exists_minimalPrimes_le, mem_ofPred, minimalPrimes, p.asIdeal, radical_le_iff, radical_le_iff.mpr
 -/
@@ -3180,7 +3374,8 @@ lemma isCompact_isOpen_iff
     isTopologicalBasis_basic_opens isCompact_basicOpen]
   simp only [basicOpen_eq_zeroLocus_compl, ← Set.compl_iInter₂, ← zeroLocus_iUnion₂,
     Set.biUnion_of_singleton]
-  exact ⟨fun ⟨s, hs, e⟩ => ⟨hs.toFinset, by simpa using e.sy
+  exact ⟨fun ⟨s, hs, e⟩ => ⟨hs.toFinset, by simpa using e.symm⟩,
+    fun ⟨s, e⟩ => ⟨s, s.finite_toSet, by simpa using e.symm⟩⟩
 
 中文:
 引理 isCompact_isOpen_iff
@@ -3190,7 +3385,8 @@ lemma isCompact_isOpen_iff
     isTopologicalBasis_basic_opens isCompact_basicOpen]
   simp only [basicOpen_eq_zeroLocus_compl, ← Set.compl_iInter₂, ← zeroLocus_iUnion₂,
     Set.biUnion_of_singleton]
-  exact ⟨fun ⟨s, hs, e⟩ => ⟨hs.toFinset, by simpa using e.sy
+  exact ⟨fun ⟨s, hs, e⟩ => ⟨hs.toFinset, by simpa using e.symm⟩,
+    fun ⟨s, e⟩ => ⟨s, s.finite_toSet, by simpa using e.symm⟩⟩
 
 Depends on / 依赖: Set.biUnion_of_singleton, Set.compl_iInter, basicOpen_eq_zeroLocus_compl, biUnion_of_singleton, e.symm, finite_toSet, hs.toFinset, isCompact_basicOpen, isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis, isTopologicalBasis_basic_opens, s.finite_toSet, toFinset
 -/
@@ -3316,7 +3512,9 @@ lemma basicOpen_injOn_isIdempotentElem
 have : x ∉ Ideal.span {y} := fun mem => ne' by
     obtain ⟨r, rfl⟩ := Ideal.mem_span_singleton'.mp mem
     rw [mul_assoc]; rw [hy]
-  have ⟨p, pr
+  have ⟨p, prime, le, notMem⟩ := Ideal.exists_le_prime_notMem_of_isIdempotentElem _ x hx this
+  exact ne_of_mem_of_not_mem' (a := ⟨p, prime⟩) notMem
+    (not_not.mpr <| p.span_singleton_le_iff_mem.mp le) eq
 
 中文:
 引理 basicOpen_injOn_isIdempotentElem
@@ -3328,7 +3526,9 @@ have : x ∉ Ideal.span {y} := fun mem => ne' by
 have : x ∉ Ideal.span {y} := fun mem => ne' by
     obtain ⟨r, rfl⟩ := Ideal.mem_span_singleton'.mp mem
     rw [mul_assoc]; rw [hy]
-  have ⟨p, pr
+  have ⟨p, prime, le, notMem⟩ := Ideal.exists_le_prime_notMem_of_isIdempotentElem _ x hx this
+  exact ne_of_mem_of_not_mem' (a := ⟨p, prime⟩) notMem
+    (not_not.mpr <| p.span_singleton_le_iff_mem.mp le) eq
 
 Depends on / 依赖: Ideal.exists_le_prime_notMem_of_isIdempotentElem, Ideal.mem_span_singleton, Ideal.span, eq.symm, exists_le_prime_notMem_of_isIdempotentElem, generalizing, mem_span_singleton, mul_assoc, mul_comm, ne.symm, ne_of_mem_of_not_mem, notMem, not_not, not_not.mpr, of_not_not, p.span_singleton_le_iff_mem.mp, span_singleton_le_iff_mem
 -/
@@ -3357,7 +3557,31 @@ lemma exists_mul_eq_zero_add_eq_one_basicOpen_eq_of_isClopen
   obtain ⟨I, hI, hI'⟩ := isCompact_isOpen_iff_ideal.mp ⟨hs.1.isCompact, hs.2⟩
   obtain ⟨J, hJ, hJ'⟩ := isCompact_isOpen_iff_ideal.mp
     ⟨hs.2.isClosed_compl.isCompact, hs.1.isOpen_compl⟩
-  simp onl
+  simp only [compl_eq_iff_isCompl, ← eq_compl_iff_isCompl, compl_compl] at hI' hJ'
+  have : I * J <= nilradical R := by
+    refine Ideal.radical_le_radical_iff.mp (le_of_eq ?_)
+    rw [← zeroLocus_eq_iff]; rw [Ideal.zero_eq_bot]; rw [zeroLocus_bot]; rw [zeroLocus_mul]; rw [hI']; rw [hJ']; rw [Set.compl_union_self]
+  obtain ⟨n, hn⟩ := Ideal.exists_pow_le_of_le_radical_of_fg this (Submodule.FG.mul hI hJ)
+  have hnz : n != 0 := by rintro rfl; simp at hn
+  rw [mul_pow]; rw [Ideal.zero_eq_bot] at hn
+  have : I ^ n ⊔ J ^ n = ⊤ := by
+    rw [eq_top_iff]; rw [← Ideal.span_pow_eq_top (I union J : Set R) _ n]; rw [Ideal.span_le]; rw [Set.image_union]; rw [Set.union_subset_iff]
+    constructor
+    · rintro _ ⟨x, hx, rfl⟩; exact Ideal.mem_sup_left (Ideal.pow_mem_pow hx n)
+    · rintro _ ⟨x, hx, rfl⟩; exact Ideal.mem_sup_right (Ideal.pow_mem_pow hx n)
+    · rw [Ideal.span_union, Ideal.span_eq, Ideal.span_eq, ← zeroLocus_empty_iff_eq_top,
+        zeroLocus_sup, hI', hJ', Set.compl_inter_self]
+  rw [Ideal.eq_top_iff_one]; rw [Submodule.mem_sup] at this
+  obtain ⟨x, hx, y, hy, add⟩ := this
+  have mul : x * y = 0 := hn (Ideal.mul_mem_mul hx hy)
+  have : s = basicOpen x := by
+    refine subset_antisymm ?_ ?_
+    · rw [← hJ', basicOpen_eq_zeroLocus_of_mul_add _ _ mul add]
+      exact zeroLocus_anti_mono (Set.singleton_subset_iff.mpr <| Ideal.pow_le_self hnz hy)
+    · rw [basicOpen_eq_zeroLocus_compl, Set.compl_subset_comm, ← hI']
+      exact zeroLocus_anti_mono (Set.singleton_subset_iff.mpr <| Ideal.pow_le_self hnz hx)
+  refine ⟨x, y, mul, add, this, ?_⟩
+  rw [this]; rw [basicOpen_eq_zeroLocus_of_mul_add _ _ mul add]; rw [basicOpen_eq_zeroLocus_compl]
 
 中文:
 引理 存在_mul_eq_zero_add_eq_one_basicOpen_eq_of_isClopen
@@ -3368,7 +3592,31 @@ lemma exists_mul_eq_zero_add_eq_one_basicOpen_eq_of_isClopen
   obtain ⟨I, hI, hI'⟩ := isCompact_isOpen_iff_ideal.mp ⟨hs.1.isCompact, hs.2⟩
   obtain ⟨J, hJ, hJ'⟩ := isCompact_isOpen_iff_ideal.mp
     ⟨hs.2.isClosed_compl.isCompact, hs.1.isOpen_compl⟩
-  simp onl
+  simp only [compl_eq_iff_isCompl, ← eq_compl_iff_isCompl, compl_compl] at hI' hJ'
+  have : I * J <= nilradical R := by
+    refine Ideal.radical_le_radical_iff.mp (le_of_eq ?_)
+    rw [← zeroLocus_eq_iff]; rw [Ideal.zero_eq_bot]; rw [zeroLocus_bot]; rw [zeroLocus_mul]; rw [hI']; rw [hJ']; rw [Set.compl_union_self]
+  obtain ⟨n, hn⟩ := Ideal.exists_pow_le_of_le_radical_of_fg this (Submodule.FG.mul hI hJ)
+  have hnz : n != 0 := by rintro rfl; simp at hn
+  rw [mul_pow]; rw [Ideal.zero_eq_bot] at hn
+  have : I ^ n ⊔ J ^ n = ⊤ := by
+    rw [eq_top_iff]; rw [← Ideal.span_pow_eq_top (I union J : Set R) _ n]; rw [Ideal.span_le]; rw [Set.image_union]; rw [Set.union_subset_iff]
+    constructor
+    · rintro _ ⟨x, hx, rfl⟩; exact Ideal.mem_sup_left (Ideal.pow_mem_pow hx n)
+    · rintro _ ⟨x, hx, rfl⟩; exact Ideal.mem_sup_right (Ideal.pow_mem_pow hx n)
+    · rw [Ideal.span_union, Ideal.span_eq, Ideal.span_eq, ← zeroLocus_empty_iff_eq_top,
+        zeroLocus_sup, hI', hJ', Set.compl_inter_self]
+  rw [Ideal.eq_top_iff_one]; rw [Submodule.mem_sup] at this
+  obtain ⟨x, hx, y, hy, add⟩ := this
+  have mul : x * y = 0 := hn (Ideal.mul_mem_mul hx hy)
+  have : s = basicOpen x := by
+    refine subset_antisymm ?_ ?_
+    · rw [← hJ', basicOpen_eq_zeroLocus_of_mul_add _ _ mul add]
+      exact zeroLocus_anti_mono (Set.singleton_subset_iff.mpr <| Ideal.pow_le_self hnz hy)
+    · rw [basicOpen_eq_zeroLocus_compl, Set.compl_subset_comm, ← hI']
+      exact zeroLocus_anti_mono (Set.singleton_subset_iff.mpr <| Ideal.pow_le_self hnz hx)
+  refine ⟨x, y, mul, add, this, ?_⟩
+  rw [this]; rw [basicOpen_eq_zeroLocus_of_mul_add _ _ mul add]; rw [basicOpen_eq_zeroLocus_compl]
 
 Depends on / 依赖: Ideal.radical_le_radical_iff.mp, Ideal.zero_eq_bot, Subsingleton, Subsingleton.elim, compl_compl, compl_eq_iff_isCompl, eq_compl_iff_isCompl, isClosed_compl, isClosed_compl.isCompact, isCompact, isCompact_isOpen_iff_ideal, isCompact_isOpen_iff_ideal.mp, isOpen_compl, le_of_eq, nilradical, radical_le_radical_iff, subsingleton_or_nontrivial, zeroLocus_eq_iff, zero_eq_bot
 -/
@@ -3538,7 +3786,16 @@ definition mulZeroAddOneEquivClopens
 (fun e => ⟨basicOpen e.1.1, isClopen_iff_mul_add.mpr ⟨_, _, e.2.1, e.2.2, rfl⟩⟩) by
       refine ⟨fun ⟨x, hx⟩ ⟨y, hy⟩ eq => mul_eq_zero_add_eq_one_ext_left ?_, fun s => ?_⟩
       · exact basicOpen_injOn_isIdempotentElem (IsIdempotentElem.of_mul_add hx.1 hx.2).1
-(IsIdempotentElem.of_mul_
+(IsIdempotentElem.of_mul_add hy.1 hy.2).1 SetLike.ext' (congr_arg (·.1) eq)
+      · have ⟨e, f, mul, add, eq⟩ := isClopen_iff_mul_add.mp s.2
+        exact ⟨⟨(e, f), mul, add⟩, SetLike.ext' eq.symm⟩
+  map_rel_iff' {a b} := show basicOpen _ <= basicOpen _ ↔ _ by
+    rw [← inf_eq_left]; rw [← basicOpen_mul]
+    refine ⟨fun h => ?_, (by rw [·])⟩
+    rw [← inf_eq_left]
+    have := (IsIdempotentElem.of_mul_add a.2.1 a.2.2).1
+    exact mul_eq_zero_add_eq_one_ext_left (basicOpen_injOn_isIdempotentElem
+      (this.mul (IsIdempotentElem.of_mul_add b.2.1 b.2.2).1) this h)
 
 中文:
 定义 mulZeroAddOneEquivClopens
@@ -3547,7 +3804,16 @@ definition mulZeroAddOneEquivClopens
 (fun e => ⟨basicOpen e.1.1, isClopen_iff_mul_add.mpr ⟨_, _, e.2.1, e.2.2, rfl⟩⟩) by
       refine ⟨fun ⟨x, hx⟩ ⟨y, hy⟩ eq => mul_eq_zero_add_eq_one_ext_left ?_, fun s => ?_⟩
       · exact basicOpen_injOn_isIdempotentElem (IsIdempotentElem.of_mul_add hx.1 hx.2).1
-(IsIdempotentElem.of_mul_
+(IsIdempotentElem.of_mul_add hy.1 hy.2).1 SetLike.ext' (congr_arg (·.1) eq)
+      · have ⟨e, f, mul, add, eq⟩ := isClopen_iff_mul_add.mp s.2
+        exact ⟨⟨(e, f), mul, add⟩, SetLike.ext' eq.symm⟩
+  map_rel_iff' {a b} := show basicOpen _ <= basicOpen _ ↔ _ by
+    rw [← inf_eq_left]; rw [← basicOpen_mul]
+    refine ⟨fun h => ?_, (by rw [·])⟩
+    rw [← inf_eq_left]
+    have := (IsIdempotentElem.of_mul_add a.2.1 a.2.2).1
+    exact mul_eq_zero_add_eq_one_ext_left (basicOpen_injOn_isIdempotentElem
+      (this.mul (IsIdempotentElem.of_mul_add b.2.1 b.2.2).1) this h)
 
 Depends on / 依赖: ofBijective
 -/
@@ -3675,7 +3941,8 @@ theorem isClosedMap_comap_of_isIntegral
   algebraize [f]
   obtain ⟨q, hq₁, hq₂, hq₃⟩ := Ideal.exists_ideal_over_prime_of_isIntegral y.asIdeal x.asIdeal
     ((le_iff_specializes _ _).mpr e)
-  refine ⟨⟨q, hq₂⟩, ((le_iff_specializes _ ⟨q
+  refine ⟨⟨q, hq₂⟩, ((le_iff_specializes _ ⟨q, hq₂⟩).mp hq₁).mem_closed hs hx,
+    PrimeSpectrum.ext hq₃⟩
 
 中文:
 定理 isClosedMap_comap_of_is整数egral
@@ -3686,7 +3953,8 @@ theorem isClosedMap_comap_of_isIntegral
   algebraize [f]
   obtain ⟨q, hq₁, hq₂, hq₃⟩ := Ideal.exists_ideal_over_prime_of_isIntegral y.asIdeal x.asIdeal
     ((le_iff_specializes _ _).mpr e)
-  refine ⟨⟨q, hq₂⟩, ((le_iff_specializes _ ⟨q
+  refine ⟨⟨q, hq₂⟩, ((le_iff_specializes _ ⟨q, hq₂⟩).mp hq₁).mem_closed hs hx,
+    PrimeSpectrum.ext hq₃⟩
 
 Depends on / 依赖: Ideal.exists_ideal_over_prime_of_isIntegral, PrimeSpectrum, PrimeSpectrum.ext, algebraize, asIdeal, exists_ideal_over_prime_of_isIntegral, isClosed_image_of_stableUnderSpecialization, le_iff_specializes, mem_closed, x.asIdeal, y.asIdeal
 -/
@@ -3734,7 +4002,10 @@ lemma closure_image_comap_zeroLocus
     exact zeroLocus_anti_mono (Set.image_preimage_subset _ _)
   · rintro x (hx : I.comap f <= x.asIdeal)
     obtain ⟨q, hq₁, hq₂⟩ := Ideal.exists_minimalPrimes_le hx
-    obta
+    obtain ⟨p', hp', hp'', rfl⟩ := Ideal.exists_comap_eq_of_mem_minimalPrimes f _ hq₁
+    let p'' : PrimeSpectrum S := ⟨p', hp'⟩
+    apply isClosed_closure.stableUnderSpecialization ((le_iff_specializes
+      (comap f ⟨p', hp'⟩) x).mp hq₂) (subset_closure (by exact ⟨_, hp'', rfl⟩))
 
 中文:
 引理 closure_image_comap_zeroLocus
@@ -3745,7 +4016,10 @@ lemma closure_image_comap_zeroLocus
     exact zeroLocus_anti_mono (Set.image_preimage_subset _ _)
   · rintro x (hx : I.comap f <= x.asIdeal)
     obtain ⟨q, hq₁, hq₂⟩ := Ideal.exists_minimalPrimes_le hx
-    obta
+    obtain ⟨p', hp', hp'', rfl⟩ := Ideal.exists_comap_eq_of_mem_minimalPrimes f _ hq₁
+    let p'' : PrimeSpectrum S := ⟨p', hp'⟩
+    apply isClosed_closure.stableUnderSpecialization ((le_iff_specializes
+      (comap f ⟨p', hp'⟩) x).mp hq₂) (subset_closure (by exact ⟨_, hp'', rfl⟩))
 
 Depends on / 依赖: I.comap, Ideal.exists_comap_eq_of_mem_minimalPrimes, Ideal.exists_minimalPrimes_le, PrimeSpectrum, Set.image_preimage_subset, Set.image_subset_iff, asIdeal, closure_subset_iff, exists_comap_eq_of_mem_minimalPrimes, exists_minimalPrimes_le, image_preimage_subset, image_subset_iff, isClosed_closure, isClosed_closure.stableUnderSpecialization, isClosed_zeroLocus, le_iff_specializes, preimage_comap_zeroLocus, stableUnderSpecialization, subset_antisymm, x.asIdeal
 -/
@@ -3776,7 +4050,24 @@ lemma isIntegral_of_isClosedMap_comap_mapRingHom
   intro r
   let p : S[X] := C r * X - 1
   have : (1 : R[X]) in Ideal.span {X} ⊔ (Ideal.span {p}).comap (mapRingHom f) := by
-    have H := h _ (isClosed_zero
+    have H := h _ (isClosed_zeroLocus {p})
+    rw [← zeroLocus_span]; rw [← closure_eq_iff_isClosed]; rw [closure_image_comap_zeroLocus] at H
+    rw [← Ideal.eq_top_iff_one]; rw [sup_comm]; rw [← zeroLocus_empty_iff_eq_top]; rw [zeroLocus_sup]; rw [H]
+    suffices forall (a : PrimeSpectrum S[X]), p in a.asIdeal -> X ∉ a.asIdeal by
+      simpa [Set.eq_empty_iff_forall_notMem]
+    intro q hpq hXq
+    have : 1 in q.asIdeal := by simpa [p] using! (sub_mem (q.asIdeal.mul_mem_left (C r) hXq) hpq)
+    exact q.2.ne_top (q.asIdeal.eq_top_iff_one.mpr this)
+  obtain ⟨a, b, hb, e⟩ := Ideal.mem_span_singleton_sup.mp this
+  obtain ⟨c, hc : b.map (algebraMap R S) = _⟩ := Ideal.mem_span_singleton.mp hb
+  refine ⟨b.reverse * X ^ (1 + c.natDegree), ?_, ?_⟩
+  · refine Monic.mul ?_ (by simp)
+    have h : b.coeff 0 = 1 := by simpa using! congr(($e).coeff 0)
+    have : b.natTrailingDegree = 0 := by simp [h]
+    rw [Monic.def]; rw [reverse_leadingCoeff]; rw [trailingCoeff]; rw [this]; rw [h]
+  · have : p.natDegree <= 1 := by simpa using! natDegree_linear_le (a := r) (b := -1)
+    rw [eval₂_eq_eval_map]; rw [reverse]; rw [Polynomial.map_mul]; rw [← reflect_map]; rw [Polynomial.map_pow]; rw [map_X]; rw [← revAt_zero (1 + _)]; rw [← reflect_monomial]; rw [← reflect_mul _ _ natDegree_map_le (by simp)]; rw [pow_zero]; rw [mul_one]; rw [hc]; rw [← add_assoc]; rw [reflect_mul _ _ (this.trans (by simp)) le_rfl]; rw [eval_mul]; rw [reflect_sub]; rw [reflect_mul _ _ (by simp) (by simp)]
+    simp [← pow_succ']
 
 中文:
 引理 is整数egral_of_isClosedMap_comap_mapRingHom
@@ -3790,7 +4081,24 @@ lemma isIntegral_of_isClosedMap_comap_mapRingHom
   intro r
   let p : S[X] := C r * X - 1
   have : (1 : R[X]) in Ideal.span {X} ⊔ (Ideal.span {p}).comap (mapRingHom f) := by
-    have H := h _ (isClosed_zero
+    have H := h _ (isClosed_zeroLocus {p})
+    rw [← zeroLocus_span]; rw [← closure_eq_iff_isClosed]; rw [closure_image_comap_zeroLocus] at H
+    rw [← Ideal.eq_top_iff_one]; rw [sup_comm]; rw [← zeroLocus_empty_iff_eq_top]; rw [zeroLocus_sup]; rw [H]
+    suffices forall (a : PrimeSpectrum S[X]), p in a.asIdeal -> X ∉ a.asIdeal by
+      simpa [Set.eq_empty_iff_forall_notMem]
+    intro q hpq hXq
+    have : 1 in q.asIdeal := by simpa [p] using! (sub_mem (q.asIdeal.mul_mem_left (C r) hXq) hpq)
+    exact q.2.ne_top (q.asIdeal.eq_top_iff_one.mpr this)
+  obtain ⟨a, b, hb, e⟩ := Ideal.mem_span_singleton_sup.mp this
+  obtain ⟨c, hc : b.map (algebraMap R S) = _⟩ := Ideal.mem_span_singleton.mp hb
+  refine ⟨b.reverse * X ^ (1 + c.natDegree), ?_, ?_⟩
+  · refine Monic.mul ?_ (by simp)
+    have h : b.coeff 0 = 1 := by simpa using! congr(($e).coeff 0)
+    have : b.natTrailingDegree = 0 := by simp [h]
+    rw [Monic.def]; rw [reverse_leadingCoeff]; rw [trailingCoeff]; rw [this]; rw [h]
+  · have : p.natDegree <= 1 := by simpa using! natDegree_linear_le (a := r) (b := -1)
+    rw [eval₂_eq_eval_map]; rw [reverse]; rw [Polynomial.map_mul]; rw [← reflect_map]; rw [Polynomial.map_pow]; rw [map_X]; rw [← revAt_zero (1 + _)]; rw [← reflect_monomial]; rw [← reflect_mul _ _ natDegree_map_le (by simp)]; rw [pow_zero]; rw [mul_one]; rw [hc]; rw [← add_assoc]; rw [reflect_mul _ _ (this.trans (by simp)) le_rfl]; rw [eval_mul]; rw [reflect_sub]; rw [reflect_mul _ _ (by simp) (by simp)]
+    simp [← pow_succ']
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral, Algebra.isIntegral_def, Ideal.eq_top_iff_one, Ideal.span, IsIntegral, algebraize, closure_eq_iff_isClosed, closure_image_comap_zeroLocus, eq_top_iff_one, isClosed_zeroLocus, isIntegral_def, mapRingHom, nontriviality, sup_comm, zeroLocus_empty_iff_eq_top, zeroLocus_span, zeroLocus_sup
 -/
@@ -3901,7 +4209,8 @@ definition _root_.Ideal.minimalPrimes.equivIrreducibleComponents
     ⟨⟨fun x => ⟨⟨x.1, x.2.1⟩, x.2.2⟩, fun x => ⟨x.1.1, x.1.2, x.2⟩, fun _ => rfl, fun _ => rfl⟩, .rfl⟩
   rw [irreducibleComponents_eq_maximals_closed]
   exact OrderIso.setOfPredMinimalIsoSetOfPredMaximal
-    (e.trans ((Prime
+    (e.trans ((PrimeSpectrum.zeroLocusEquivIrreducibleCloseds (I : Set R)).trans
+    (TopologicalSpace.IrreducibleCloseds.orderIsoSubtype' (zeroLocus (I : Set R))).dual))
 
 中文:
 定义 _root_.理想.minimalPrimes.equivIrreducibleComponents
@@ -3911,7 +4220,8 @@ definition _root_.Ideal.minimalPrimes.equivIrreducibleComponents
     ⟨⟨fun x => ⟨⟨x.1, x.2.1⟩, x.2.2⟩, fun x => ⟨x.1.1, x.1.2, x.2⟩, fun _ => rfl, fun _ => rfl⟩, .rfl⟩
   rw [irreducibleComponents_eq_maximals_closed]
   exact OrderIso.setOfPredMinimalIsoSetOfPredMaximal
-    (e.trans ((Prime
+    (e.trans ((PrimeSpectrum.zeroLocusEquivIrreducibleCloseds (I : Set R)).trans
+    (TopologicalSpace.IrreducibleCloseds.orderIsoSubtype' (zeroLocus (I : Set R))).dual))
 -/
 protected def _root_.Ideal.minimalPrimes.equivIrreducibleComponents (I : Ideal R) :
     I.minimalPrimes ≃o (irreducibleComponents <| (zeroLocus (I : Set R)))ᵒᵈ := by
@@ -3938,7 +4248,8 @@ definition _root_.minimalPrimes.equivIrreducibleComponents
     ⟨⟨fun x => ⟨x.1, x.2.1⟩, fun x => ⟨x.1, x.2, bot_le⟩, fun _ => rfl, fun _ => rfl⟩, Iff.rfl⟩
   rw [irreducibleComponents_eq_maximals_closed]
   exact OrderIso.setOfPredMinimalIsoSetOfPredMaximal
-    (e.trans ((PrimeSpectrum.poin
+    (e.trans ((PrimeSpectrum.pointsEquivIrreducibleCloseds R).trans
+    (TopologicalSpace.IrreducibleCloseds.orderIsoSubtype' (PrimeSpectrum R)).dual))
 
 中文:
 定义 _root_.minimalPrimes.equivIrreducibleComponents
@@ -3948,7 +4259,8 @@ definition _root_.minimalPrimes.equivIrreducibleComponents
     ⟨⟨fun x => ⟨x.1, x.2.1⟩, fun x => ⟨x.1, x.2, bot_le⟩, fun _ => rfl, fun _ => rfl⟩, Iff.rfl⟩
   rw [irreducibleComponents_eq_maximals_closed]
   exact OrderIso.setOfPredMinimalIsoSetOfPredMaximal
-    (e.trans ((PrimeSpectrum.poin
+    (e.trans ((PrimeSpectrum.pointsEquivIrreducibleCloseds R).trans
+    (TopologicalSpace.IrreducibleCloseds.orderIsoSubtype' (PrimeSpectrum R)).dual))
 -/
 protected def _root_.minimalPrimes.equivIrreducibleComponents :
     minimalPrimes R ≃o (irreducibleComponents <| PrimeSpectrum R)ᵒᵈ := by

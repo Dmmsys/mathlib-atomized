@@ -73,7 +73,7 @@ lemma Unitary.two_mul_one_sub_le_norm_sub_one_sq
   simp only [mem_sphere_iff_norm, sub_zero] at this
   rw [← cfc_id' Complex u]; rw [← cfc_one Complex u]; rw [← cfc_sub ..]
   convert! norm_apply_le_norm_cfc (fun z => z - 1) u hz
-  simpa using congr(Real
+  simpa using congr(Real.sqrt $(norm_sub_one_sq_eq_of_norm_eq_one this)).symm
 
 中文:
 引理 酉.two_mul_one_sub_le_norm_sub_one_sq
@@ -84,7 +84,7 @@ lemma Unitary.two_mul_one_sub_le_norm_sub_one_sq
   simp only [mem_sphere_iff_norm, sub_zero] at this
   rw [← cfc_id' Complex u]; rw [← cfc_one Complex u]; rw [← cfc_sub ..]
   convert! norm_apply_le_norm_cfc (fun z => z - 1) u hz
-  simpa using congr(Real
+  simpa using congr(Real.sqrt $(norm_sub_one_sq_eq_of_norm_eq_one this)).symm
 
 Depends on / 依赖: Real.sqrt, Real.sqrt_le_left, cfc_id, cfc_one, cfc_sub, convert, mem_sphere_iff_norm, norm_apply_le_norm_cfc, norm_sub_one_sq_eq_of_norm_eq_one, spectrum, spectrum.subset_circle_of_unitary, sqrt_le_left, sub_zero, subset_circle_of_unitary
 -/
@@ -109,7 +109,14 @@ lemma Unitary.norm_sub_one_sq_eq
   · exfalso; apply hz.nonempty.of_image.ne_empty; simp
   rw [← cfc_id' Complex u]; rw [← cfc_one Complex u]; rw [← cfc_sub ..]
   have h_eqOn : (spectrum Complex u).EqOn (fun z => ‖z - 1‖ ^ 2) (fun z => 2 * (1 - z.re)) :=
-Complex.norm_sub_one_sq_eqO
+Complex.norm_sub_one_sq_eqOn_sphere.mono spectrum.subset_circle_of_unitary (𝕜 := Complex) hu
+  have h₂ : IsGreatest ((fun z => 2 * (1 - z.re)) '' (spectrum Complex u)) (2 * (1 - x)) := by
+    have : Antitone (fun y : Real => 2 * (1 - y)) := by intro _ _ _; simp only; gcongr
+    simpa [Set.image_image] using this.map_isLeast hz
+  have h₃ : IsGreatest ((‖· - 1‖ ^ 2) '' spectrum Complex u) (‖cfc (· - 1 : Complex -> Complex) u‖ ^ 2) := by
+.mono (s₂ := ((‖· - 1‖) '' spectrum Complex u)) (by simp) have := pow_left_monotoneOn (n := 2)
+    simpa [Set.image_image] using this.map_isGreatest (IsGreatest.norm_cfc (fun z : Complex => z - 1) u)
+  exact h₃.unique (h_eqOn.image_eq ▸ h₂)
 
 中文:
 引理 酉.norm_sub_one_sq_eq
@@ -119,7 +126,14 @@ Complex.norm_sub_one_sq_eqO
   · exfalso; apply hz.nonempty.of_image.ne_empty; simp
   rw [← cfc_id' Complex u]; rw [← cfc_one Complex u]; rw [← cfc_sub ..]
   have h_eqOn : (spectrum Complex u).EqOn (fun z => ‖z - 1‖ ^ 2) (fun z => 2 * (1 - z.re)) :=
-Complex.norm_sub_one_sq_eqO
+Complex.norm_sub_one_sq_eqOn_sphere.mono spectrum.subset_circle_of_unitary (𝕜 := Complex) hu
+  have h₂ : IsGreatest ((fun z => 2 * (1 - z.re)) '' (spectrum Complex u)) (2 * (1 - x)) := by
+    have : Antitone (fun y : Real => 2 * (1 - y)) := by intro _ _ _; simp only; gcongr
+    simpa [Set.image_image] using this.map_isLeast hz
+  have h₃ : IsGreatest ((‖· - 1‖ ^ 2) '' spectrum Complex u) (‖cfc (· - 1 : Complex -> Complex) u‖ ^ 2) := by
+.mono (s₂ := ((‖· - 1‖) '' spectrum Complex u)) (by simp) have := pow_left_monotoneOn (n := 2)
+    simpa [Set.image_image] using this.map_isGreatest (IsGreatest.norm_cfc (fun z : Complex => z - 1) u)
+  exact h₃.unique (h_eqOn.image_eq ▸ h₂)
 
 Depends on / 依赖: Antitone, Complex.norm_sub_one_sq_eqOn_sphere.mono, IsGreatest, cfc_id, cfc_one, cfc_sub, h_eqOn, hz.nonempty.of_image.ne_empty, ne_empty, nonempty, norm_sub_one_sq_eqOn_sphere, of_image, spectrum, spectrum.subset_circle_of_unitary, subset_circle_of_unitary, subsingleton_or_nontrivial, z.re
 -/
@@ -154,7 +168,14 @@ lemma Unitary.norm_sub_one_lt_two_iff
     norm_num at this
   · contrapose!
 .exists_isLeast .image continuous_re obtain ⟨x, hx⟩ := spectrum.isCompact (𝕜 := Complex) u
-      (spe
+      (spectrum.nonempty _).image _
+    rw [norm_sub_one_sq_eq hu hx]
+    obtain ⟨z, hz, rfl⟩ := hx.1
+    intro key
+    replace key : z.re <= -1 := by linarith
+    have hz_norm : ‖z‖ = 1 := spectrum.norm_eq_one_of_unitary hu hz
+    rw [← hz_norm]; rw [← RCLike.re_eq_complex_re]; rw [RCLike.re_le_neg_norm_iff_eq_neg_norm]; rw [hz_norm] at key
+    exact key ▸ hz
 
 中文:
 引理 酉.norm_sub_one_lt_two_iff
@@ -168,7 +189,14 @@ lemma Unitary.norm_sub_one_lt_two_iff
     norm_num at this
   · contrapose!
 .exists_isLeast .image continuous_re obtain ⟨x, hx⟩ := spectrum.isCompact (𝕜 := Complex) u
-      (spe
+      (spectrum.nonempty _).image _
+    rw [norm_sub_one_sq_eq hu hx]
+    obtain ⟨z, hz, rfl⟩ := hx.1
+    intro key
+    replace key : z.re <= -1 := by linarith
+    have hz_norm : ‖z‖ = 1 := spectrum.norm_eq_one_of_unitary hu hz
+    rw [← hz_norm]; rw [← RCLike.re_eq_complex_re]; rw [RCLike.re_le_neg_norm_iff_eq_neg_norm]; rw [hz_norm] at key
+    exact key ▸ hz
 
 Depends on / 依赖: continuous_re, contrapose, exists_isLeast, hz_norm, isCompact, nonempty, nontriviality, norm_eq_one_of_unitary, norm_sub_one_sq_eq, replace, spectrum, spectrum.isCompact, spectrum.nonempty, spectrum.norm_eq_one_of_unitary, trans_lt, two_mul_one_sub_le_norm_sub_one_sq, z.re
 -/
@@ -276,7 +304,15 @@ lemma selfAdjoint.norm_sq_expUnitary_sub_one
   apply norm_sub_one_sq_eq (expUnitary x).2
   simp only [expUnitary_coe]
   rw [← CFC.exp_eq_normedSpace_exp (𝕜 := Complex)]; rw [← cfc_comp_smul I _ (x : A)]; rw [cfc_map_spectrum ..]; rw [← x.2.spectrumRestricts.algebraMap_image]
-  simp only [Set.image_image, coe_algebraMap, sm
+  simp only [Set.image_image, coe_algebraMap, smul_eq_mul, mul_comm I, ← exp_eq_exp_Complex,
+    exp_ofReal_mul_I_re]
+  refine ⟨?_, ?_⟩
+  · cases CStarAlgebra.norm_or_neg_norm_mem_spectrum x.2 with
+    | inl h => exact ⟨_, h, rfl⟩
+    | inr h => exact ⟨_, h, by simp⟩
+  · rintro - ⟨y, hy, rfl⟩
+exact Real.cos_abs y ▸ Real.cos_le_cos_of_nonneg_of_le_pi (by positivity) hx
+      spectrum.norm_le_norm_of_mem hy
 
 中文:
 引理 selfAdjoint.norm_sq_expUnitary_sub_one
@@ -286,7 +322,15 @@ lemma selfAdjoint.norm_sq_expUnitary_sub_one
   apply norm_sub_one_sq_eq (expUnitary x).2
   simp only [expUnitary_coe]
   rw [← CFC.exp_eq_normedSpace_exp (𝕜 := Complex)]; rw [← cfc_comp_smul I _ (x : A)]; rw [cfc_map_spectrum ..]; rw [← x.2.spectrumRestricts.algebraMap_image]
-  simp only [Set.image_image, coe_algebraMap, sm
+  simp only [Set.image_image, coe_algebraMap, smul_eq_mul, mul_comm I, ← exp_eq_exp_Complex,
+    exp_ofReal_mul_I_re]
+  refine ⟨?_, ?_⟩
+  · cases CStarAlgebra.norm_or_neg_norm_mem_spectrum x.2 with
+    | inl h => exact ⟨_, h, rfl⟩
+    | inr h => exact ⟨_, h, by simp⟩
+  · rintro - ⟨y, hy, rfl⟩
+exact Real.cos_abs y ▸ Real.cos_le_cos_of_nonneg_of_le_pi (by positivity) hx
+      spectrum.norm_le_norm_of_mem hy
 
 Depends on / 依赖: CFC.exp_eq_normedSpace_exp, CStarAlgebra, CStarAlgebra.norm_or_neg_norm_mem_spectrum, Set.image_image, algebraMap_image, cfc_comp_smul, cfc_map_spectrum, coe_algebraMap, expUnitary, expUnitary_coe, exp_eq_exp_Complex, exp_eq_normedSpace_exp, exp_ofReal_mul_I_re, image_image, mul_comm, nontriviality, norm_or_neg_norm_mem_spectrum, norm_sub_one_sq_eq, smul_eq_mul, spectrumRestricts
 -/
@@ -318,7 +362,24 @@ lemma argSelfAdjoint_expUnitary
   have : spectrum Complex (expUnitary x : A) subseteq slitPlane := by
     rw [spectrum_subset_slitPlane_iff_norm_lt_two (expUnitary x).2]; rw [← sq_lt_sq₀ (by positivity) (by positivity)]; rw [norm_sq_expUnitary_sub_one hx.le]
     calc
-      2 * (1 - Real.cos ‖x‖) < 2 * (1
+      2 * (1 - Real.cos ‖x‖) < 2 * (1 - Real.cos π) := by
+        gcongr
+        exact Real.cos_lt_cos_of_nonneg_of_le_pi (by positivity) le_rfl hx
+      _ = 2 ^ 2 := by norm_num
+  simp only [argSelfAdjoint_coe, expUnitary_coe]
+  rw [← CFC.exp_eq_normedSpace_exp (𝕜 := Complex)]; rw [← cfc_comp_smul ..]; rw [← cfc_comp' (hg := ?hg)]
+  case hg =>
+refine continuous_ofReal.comp_continuousOn continuousOn_arg.mono ?_
+    rwa [expUnitary_coe, ← CFC.exp_eq_normedSpace_exp (𝕜 := Complex), ← cfc_comp_smul ..,
+      cfc_map_spectrum ..] at this
+  conv_rhs => rw [← cfc_id' Complex (x : A)]
+  refine cfc_congr fun y hy => ?_
+  rw [← x.2.spectrumRestricts.algebraMap_image] at hy
+  obtain ⟨y, hy, rfl⟩ := hy
+  simp only [coe_algebraMap, smul_eq_mul, mul_comm I, ← exp_eq_exp_Complex, ofReal_inj]
+.trans_lt hx replace hy : ‖y‖ < π := spectrum.norm_le_norm_of_mem hy
+  simp only [Real.norm_eq_abs, abs_lt] at hy
+  rw [← Circle.coe_exp]; rw [Circle.arg_exp hy.1 hy.2.le]
 
 中文:
 引理 argSelfAdjoint_expUnitary
@@ -329,7 +390,24 @@ lemma argSelfAdjoint_expUnitary
   have : spectrum Complex (expUnitary x : A) subseteq slitPlane := by
     rw [spectrum_subset_slitPlane_iff_norm_lt_two (expUnitary x).2]; rw [← sq_lt_sq₀ (by positivity) (by positivity)]; rw [norm_sq_expUnitary_sub_one hx.le]
     calc
-      2 * (1 - Real.cos ‖x‖) < 2 * (1
+      2 * (1 - Real.cos ‖x‖) < 2 * (1 - Real.cos π) := by
+        gcongr
+        exact Real.cos_lt_cos_of_nonneg_of_le_pi (by positivity) le_rfl hx
+      _ = 2 ^ 2 := by norm_num
+  simp only [argSelfAdjoint_coe, expUnitary_coe]
+  rw [← CFC.exp_eq_normedSpace_exp (𝕜 := Complex)]; rw [← cfc_comp_smul ..]; rw [← cfc_comp' (hg := ?hg)]
+  case hg =>
+refine continuous_ofReal.comp_continuousOn continuousOn_arg.mono ?_
+    rwa [expUnitary_coe, ← CFC.exp_eq_normedSpace_exp (𝕜 := Complex), ← cfc_comp_smul ..,
+      cfc_map_spectrum ..] at this
+  conv_rhs => rw [← cfc_id' Complex (x : A)]
+  refine cfc_congr fun y hy => ?_
+  rw [← x.2.spectrumRestricts.algebraMap_image] at hy
+  obtain ⟨y, hy, rfl⟩ := hy
+  simp only [coe_algebraMap, smul_eq_mul, mul_comm I, ← exp_eq_exp_Complex, ofReal_inj]
+.trans_lt hx replace hy : ‖y‖ < π := spectrum.norm_le_norm_of_mem hy
+  simp only [Real.norm_eq_abs, abs_lt] at hy
+  rw [← Circle.coe_exp]; rw [Circle.arg_exp hy.1 hy.2.le]
 
 Depends on / 依赖: CFC.exp_eq_normedSpace_exp, Real.cos, Real.cos_lt_cos_of_nonneg_of_le_pi, argSelfAdjoint_coe, cos_lt_cos_of_nonneg_of_le_pi, expUnitary, expUnitary_coe, exp_eq_normedSpace_exp, hx.le, le_rfl, nontriviality, norm_sq_expUnitary_sub_one, slitPlane, spectrum, spectrum_subset_slitPlane_iff_norm_lt_two, subseteq
 -/
@@ -370,7 +448,12 @@ lemma expUnitary_argSelfAdjoint
   have : ContinuousOn arg (spectrum Complex (u : A)) :=
 continuousOn_arg.mono (spectrum_subset_slitPlane_iff_norm_lt_two u.2).mpr hu
   rw [expUnitary_coe]; rw [argSelfAdjoint_coe]; rw [← CFC.exp_eq_normedSpace_exp (𝕜 := Complex)]; rw [← cfc_comp_smul ..]; rw [← cfc_comp' ..]
-  conv_rhs => r
+  conv_rhs => rw [← cfc_id' Complex (u : A)]
+  refine cfc_congr fun y hy => ?_
+  have hy₁ : ‖y‖ = 1 := spectrum.norm_eq_one_of_unitary u.2 hy
+  have : I * y.arg = log y :=
+    Complex.ext (by simp [log_re, spectrum.norm_eq_one_of_unitary u.2 hy]) (by simp [log_im])
+  simpa [← exp_eq_exp_Complex, this] using exp_log (by aesop)
 
 中文:
 引理 expUnitary_argSelfAdjoint
@@ -380,7 +463,12 @@ continuousOn_arg.mono (spectrum_subset_slitPlane_iff_norm_lt_two u.2).mpr hu
   have : ContinuousOn arg (spectrum Complex (u : A)) :=
 continuousOn_arg.mono (spectrum_subset_slitPlane_iff_norm_lt_two u.2).mpr hu
   rw [expUnitary_coe]; rw [argSelfAdjoint_coe]; rw [← CFC.exp_eq_normedSpace_exp (𝕜 := Complex)]; rw [← cfc_comp_smul ..]; rw [← cfc_comp' ..]
-  conv_rhs => r
+  conv_rhs => rw [← cfc_id' Complex (u : A)]
+  refine cfc_congr fun y hy => ?_
+  have hy₁ : ‖y‖ = 1 := spectrum.norm_eq_one_of_unitary u.2 hy
+  have : I * y.arg = log y :=
+    Complex.ext (by simp [log_re, spectrum.norm_eq_one_of_unitary u.2 hy]) (by simp [log_im])
+  simpa [← exp_eq_exp_Complex, this] using exp_log (by aesop)
 
 Depends on / 依赖: CFC.exp_eq_normedSpace_exp, Complex.ext, ContinuousOn, argSelfAdjoint_coe, cfc_comp, cfc_comp_smul, cfc_congr, cfc_id, continuousOn_arg, continuousOn_arg.mono, conv_rhs, expUnitary_coe, exp_eq_normedSpace_exp, log_re, norm_eq_one_of_uni, norm_eq_one_of_unitary, spectrum, spectrum.norm_eq_one_of_uni, spectrum.norm_eq_one_of_unitary, spectrum_subset_slitPlane_iff_norm_lt_two
 -/
@@ -478,7 +566,13 @@ lemma Unitary.norm_expUnitary_smul_argSelfAdjoint_sub_one_le
     gcongr
     exact ht.2
   rw [← sq_le_sq₀ (by positivity) (by positivity)]
-  rw [norm_sq_expUn
+  rw [norm_sq_expUnitary_sub_one (key.trans <| norm_argSelfAdjoint_le_pi u)]
+  trans 2 * (1 - Real.cos ‖argSelfAdjoint u‖)
+  · gcongr
+    exact Real.cos_le_cos_of_nonneg_of_le_pi (by positivity) (norm_argSelfAdjoint_le_pi u) key
+  · exact (two_mul_one_sub_cos_norm_argSelfAdjoint hu).le
+
+@[fun_prop]
 
 中文:
 引理 酉.norm_expUnitary_smul_argSelfAdjoint_sub_one_le
@@ -490,7 +584,13 @@ lemma Unitary.norm_expUnitary_smul_argSelfAdjoint_sub_one_le
     gcongr
     exact ht.2
   rw [← sq_le_sq₀ (by positivity) (by positivity)]
-  rw [norm_sq_expUn
+  rw [norm_sq_expUnitary_sub_one (key.trans <| norm_argSelfAdjoint_le_pi u)]
+  trans 2 * (1 - Real.cos ‖argSelfAdjoint u‖)
+  · gcongr
+    exact Real.cos_le_cos_of_nonneg_of_le_pi (by positivity) (norm_argSelfAdjoint_le_pi u) key
+  · exact (two_mul_one_sub_cos_norm_argSelfAdjoint hu).le
+
+@[fun_prop]
 
 Depends on / 依赖: AddSubgroupClass, AddSubgroupClass.coe_norm, Real.cos, Real.cos_le_cos_of_nonneg_of_le_pi, Real.norm_eq_abs, abs_of_nonneg, argSelfAdjoint, coe_norm, cos_le_cos_of_nonneg_of_le_pi, key.trans, norm_argSelfAdjoint_le_pi, norm_eq_abs, norm_smul, norm_sq_expUnitary_sub_one, one_mul, simp_rw, two_mul_one, val_smul
 -/
@@ -521,7 +621,25 @@ lemma Unitary.continuousOn_argSelfAdjoint
   rw [isOpen_ball.continuousOn_iff]
   intro u (hu : dist u 1 < 2)
   obtain ⟨ε, huε, hε2⟩ := exists_between (sq_lt_sq₀ (by positivity) (by positivity) |>.mpr hu)
-  have hε : 0 < ε := lt_of_le
+  have hε : 0 < ε := lt_of_le_of_lt (by positivity) huε
+  have huε' : dist u 1 < √ε := Real.lt_sqrt_of_sq_lt huε
+  apply ContinuousOn.continuousAt ?_ (closedBall_mem_nhds_of_mem huε')
+  apply ContinuousOn.image_comp_continuous ?_ continuous_subtype_val
+.mono apply continuousOn_cfc A (s := sphere 0 1 inter {z | 2 * (1 - z.re) <= ε}) ?_ _ ?_
+  · rintro - ⟨v, hv, rfl⟩
+    simp only [Set.subset_inter_iff, Set.mem_ofPred_eq]
+    refine ⟨inferInstance, spectrum_subset_circle v, ?_⟩
+    intro z hz
+    simp only [Set.mem_ofPred_eq]
+    trans ‖(v - 1 : A)‖ ^ 2
+    · exact two_mul_one_sub_le_norm_sub_one_sq v.2 hz
+.mp ?_ · refine Real.le_sqrt (by positivity) (by positivity)
+      simpa [Subtype.dist_eq, dist_eq_norm] using hv
+.inter_right isClosed_le (by fun_prop) (by fun_prop) · exact isCompact_sphere 0 1
+· refine continuous_ofReal.comp_continuousOn continuousOn_arg.mono ?_
+.mpr apply subset_slitPlane_iff_of_subset_sphere Set.inter_subset_left
+    norm_num at hε2 ⊢
+    exact hε2
 
 中文:
 引理 酉.continuousOn_argSelfAdjoint
@@ -531,7 +649,25 @@ lemma Unitary.continuousOn_argSelfAdjoint
   rw [isOpen_ball.continuousOn_iff]
   intro u (hu : dist u 1 < 2)
   obtain ⟨ε, huε, hε2⟩ := exists_between (sq_lt_sq₀ (by positivity) (by positivity) |>.mpr hu)
-  have hε : 0 < ε := lt_of_le
+  have hε : 0 < ε := lt_of_le_of_lt (by positivity) huε
+  have huε' : dist u 1 < √ε := Real.lt_sqrt_of_sq_lt huε
+  apply ContinuousOn.continuousAt ?_ (closedBall_mem_nhds_of_mem huε')
+  apply ContinuousOn.image_comp_continuous ?_ continuous_subtype_val
+.mono apply continuousOn_cfc A (s := sphere 0 1 inter {z | 2 * (1 - z.re) <= ε}) ?_ _ ?_
+  · rintro - ⟨v, hv, rfl⟩
+    simp only [Set.subset_inter_iff, Set.mem_ofPred_eq]
+    refine ⟨inferInstance, spectrum_subset_circle v, ?_⟩
+    intro z hz
+    simp only [Set.mem_ofPred_eq]
+    trans ‖(v - 1 : A)‖ ^ 2
+    · exact two_mul_one_sub_le_norm_sub_one_sq v.2 hz
+.mp ?_ · refine Real.le_sqrt (by positivity) (by positivity)
+      simpa [Subtype.dist_eq, dist_eq_norm] using hv
+.inter_right isClosed_le (by fun_prop) (by fun_prop) · exact isCompact_sphere 0 1
+· refine continuous_ofReal.comp_continuousOn continuousOn_arg.mono ?_
+.mpr apply subset_slitPlane_iff_of_subset_sphere Set.inter_subset_left
+    norm_num at hε2 ⊢
+    exact hε2
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.continuousAt, ContinuousOn.image_comp_continuous, Function, Function.comp_def, IsInducing, Real.lt_sqrt_of_sq_lt, Topology, Topology.IsInducing.subtypeVal.continuousOn_iff, argSelfAdjoint_coe, closedBall_mem_nhds_of_mem, comp_def, continuousAt, continuousOn_iff, continuous_subtyp, exists_between, image_comp_continuous, isOpen_ball, isOpen_ball.continuousOn_iff, lt_of_le_of_lt
 -/
@@ -580,7 +716,24 @@ definition Unitary.openPartialHomeomorph
     simp only [mem_ball, Subtype.dist_eq, OneMemClass.coe_one, dist_eq_norm, sub_zero] at hu ⊢
     rw [norm_argSelfAdjoint hu]
     calc
-      Real.arccos (1 - ‖(u - 1 : A)‖ ^ 2 / 2) < Real.arccos
+      Real.arccos (1 - ‖(u - 1 : A)‖ ^ 2 / 2) < Real.arccos (1 - 2 ^ 2 / 2) := by
+        apply Real.arccos_lt_arccos (by norm_num) (by gcongr)
+        linarith [(by positivity : 0 <= ‖(u - 1 : A)‖ ^ 2 / 2)]
+      _ = π := by norm_num
+  map_target' x hx := by
+    simp only [mem_ball, Subtype.dist_eq, OneMemClass.coe_one, dist_eq_norm, sub_zero] at hx ⊢
+    rw [← sq_lt_sq₀ (by positivity) (by positivity)]; rw [norm_sq_expUnitary_sub_one hx.le]
+    have : -1 < Real.cos ‖(x : A)‖ :=
+      Real.cos_pi ▸ Real.cos_lt_cos_of_nonneg_of_le_pi (by positivity) le_rfl hx
+    simp only [AddSubgroupClass.coe_norm, mul_sub, mul_one, sq, gt_iff_lt]
+    linarith
+left_inv' u hu := expUnitary_argSelfAdjoint by
+    simpa [Subtype.dist_eq, dist_eq_norm] using hu
+right_inv' x hx := argSelfAdjoint_expUnitary by simpa using hx
+  open_source := isOpen_ball
+  open_target := isOpen_ball
+  continuousOn_toFun := by fun_prop
+  continuousOn_invFun := by fun_prop
 
 中文:
 定义 酉.openPartialHomeomorph
@@ -593,7 +746,24 @@ definition Unitary.openPartialHomeomorph
     simp only [mem_ball, Subtype.dist_eq, OneMemClass.coe_one, dist_eq_norm, sub_zero] at hu ⊢
     rw [norm_argSelfAdjoint hu]
     calc
-      Real.arccos (1 - ‖(u - 1 : A)‖ ^ 2 / 2) < Real.arccos
+      Real.arccos (1 - ‖(u - 1 : A)‖ ^ 2 / 2) < Real.arccos (1 - 2 ^ 2 / 2) := by
+        apply Real.arccos_lt_arccos (by norm_num) (by gcongr)
+        linarith [(by positivity : 0 <= ‖(u - 1 : A)‖ ^ 2 / 2)]
+      _ = π := by norm_num
+  map_target' x hx := by
+    simp only [mem_ball, Subtype.dist_eq, OneMemClass.coe_one, dist_eq_norm, sub_zero] at hx ⊢
+    rw [← sq_lt_sq₀ (by positivity) (by positivity)]; rw [norm_sq_expUnitary_sub_one hx.le]
+    have : -1 < Real.cos ‖(x : A)‖ :=
+      Real.cos_pi ▸ Real.cos_lt_cos_of_nonneg_of_le_pi (by positivity) le_rfl hx
+    simp only [AddSubgroupClass.coe_norm, mul_sub, mul_one, sq, gt_iff_lt]
+    linarith
+left_inv' u hu := expUnitary_argSelfAdjoint by
+    simpa [Subtype.dist_eq, dist_eq_norm] using hu
+right_inv' x hx := argSelfAdjoint_expUnitary by simpa using hx
+  open_source := isOpen_ball
+  open_target := isOpen_ball
+  continuousOn_toFun := by fun_prop
+  continuousOn_invFun := by fun_prop
 
 Depends on / 依赖: argSelfAdjoint
 -/
@@ -783,7 +953,10 @@ lemma Unitary.isPathConnected_ball
     rw [← inv_mul_cancel u]
     simp [-inv_mul_cancel, Subtype.dist_eq, dist_eq_norm, ← mul_sub]
   refine ⟨1, by simpa, fun {u} hu => ?_⟩
-  have hu : ‖(u - 1 : A)‖ < δ := by simpa [S
+  have hu : ‖(u - 1 : A)‖ < δ := by simpa [Subtype.dist_eq, dist_eq_norm] using hu
+  refine ⟨path 1 u (hu.trans hδ₂), fun t => ?_⟩
+  simpa [Subtype.dist_eq, dist_eq_norm] using
+.trans_lt hu norm_expUnitary_smul_argSelfAdjoint_sub_one_le u t.2 (hu.trans hδ₂)
 
 中文:
 引理 酉.isPathConnected_ball
@@ -795,7 +968,10 @@ lemma Unitary.isPathConnected_ball
     rw [← inv_mul_cancel u]
     simp [-inv_mul_cancel, Subtype.dist_eq, dist_eq_norm, ← mul_sub]
   refine ⟨1, by simpa, fun {u} hu => ?_⟩
-  have hu : ‖(u - 1 : A)‖ < δ := by simpa [S
+  have hu : ‖(u - 1 : A)‖ < δ := by simpa [Subtype.dist_eq, dist_eq_norm] using hu
+  refine ⟨path 1 u (hu.trans hδ₂), fun t => ?_⟩
+  simpa [Subtype.dist_eq, dist_eq_norm] using
+.trans_lt hu norm_expUnitary_smul_argSelfAdjoint_sub_one_le u t.2 (hu.trans hδ₂)
 
 Depends on / 依赖: IsPathConnected, Subtype, Subtype.dist_eq, convert, dist_eq, dist_eq_norm, fun_prop, hu.trans, inv_mul_cancel, mul_sub, norm_expUnitary_smul_argSelfAdjoint_sub_one_le, trans_lt, unitary
 -/
@@ -847,7 +1023,14 @@ lemma Unitary.mem_pathComponentOne_iff
     refine .of_thickening_subset_self zero_lt_two ?_
     intro u hu
     rw [mem_thickening_iff] at hu
-    obtain ⟨v, ⟨⟨l, 
+    obtain ⟨v, ⟨⟨l, (hlv : (l.map expUnitary).prod = v)⟩, huv⟩⟩ := hu
+    refine ⟨argSelfAdjoint (u * star v) :: l, ?_⟩
+    simp [hlv, mul_assoc,
+      expUnitary_eq_mul_inv u v (by simpa [Subtype.dist_eq, dist_eq_norm] using! huv)]
+  · rintro ⟨l, rfl⟩
+    induction l with
+    | nil => simp
+    | cons x xs ih => simpa using! (joined_one_expUnitary x).mul ih
 
 中文:
 引理 酉.mem_pathComponentOne_iff
@@ -860,7 +1043,14 @@ lemma Unitary.mem_pathComponentOne_iff
     refine .of_thickening_subset_self zero_lt_two ?_
     intro u hu
     rw [mem_thickening_iff] at hu
-    obtain ⟨v, ⟨⟨l, 
+    obtain ⟨v, ⟨⟨l, (hlv : (l.map expUnitary).prod = v)⟩, huv⟩⟩ := hu
+    refine ⟨argSelfAdjoint (u * star v) :: l, ?_⟩
+    simp [hlv, mul_assoc,
+      expUnitary_eq_mul_inv u v (by simpa [Subtype.dist_eq, dist_eq_norm] using! huv)]
+  · rintro ⟨l, rfl⟩
+    induction l with
+    | nil => simp
+    | cons x xs ih => simpa using! (joined_one_expUnitary x).mul ih
 
 Depends on / 依赖: IsClopen, IsClopen.connectedComponent_subset, Set.mem_range, Set.subset_def, Subtype, Subtype.dist_eq, argSelfAdjoint, connectedComponent_subset, dist_eq, dist_eq_norm, expUnitary, expUnitary_eq_mul_inv, l.map, mem_range, mem_thickening_iff, mul_assoc, of_thickening_subset_self, pathComponent_eq_connectedComponent, revert, simp_rw
 -/

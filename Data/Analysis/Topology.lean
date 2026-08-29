@@ -501,7 +501,10 @@ definition id
       top_mem := mem_univ
       inter := fun ⟨_x, h₁⟩ ⟨_y, h₂⟩ _a _h₃ => ⟨_, h₁.inter h₂⟩
       inter_mem := fun ⟨_x, _h₁⟩ ⟨_y, _h₂⟩ _a => id
-      inter_sub := fun ⟨_x, _h₁⟩ ⟨_y, _h₂⟩ _a _h₃ => Subset.refl 
+      inter_sub := fun ⟨_x, _h₁⟩ ⟨_y, _h₂⟩ _a _h₃ => Subset.refl _ },
+    ext Subtype.property fun _x _s h =>
+      let ⟨t, h, o, m⟩ := mem_nhds_iff.1 h
+      ⟨⟨t, o⟩, m, h⟩⟩
 
 中文:
 定义 id
@@ -512,7 +515,10 @@ definition id
       top_mem := mem_univ
       inter := fun ⟨_x, h₁⟩ ⟨_y, h₂⟩ _a _h₃ => ⟨_, h₁.inter h₂⟩
       inter_mem := fun ⟨_x, _h₁⟩ ⟨_y, _h₂⟩ _a => id
-      inter_sub := fun ⟨_x, _h₁⟩ ⟨_y, _h₂⟩ _a _h₃ => Subset.refl 
+      inter_sub := fun ⟨_x, _h₁⟩ ⟨_y, _h₂⟩ _a _h₃ => Subset.refl _ },
+    ext Subtype.property fun _x _s h =>
+      let ⟨t, h, o, m⟩ := mem_nhds_iff.1 h
+      ⟨⟨t, o⟩, m, h⟩⟩
 -/
 protected def id : Realizer α :=
   ⟨{ x : Set α // IsOpen x },
@@ -613,7 +619,14 @@ definition nhds
       pt := ⟨_, F.F.top_mem a⟩
       inf := fun ⟨x, h₁⟩ ⟨y, h₂⟩ => ⟨_, F.F.inter_mem x y a ⟨h₁, h₂⟩⟩
       inf_le_left := fun ⟨x, h₁⟩ ⟨y, h₂⟩ _z h => (F.F.inter_sub x y a ⟨h₁, h₂⟩ h).1
-      inf_le_right := fun ⟨x, h₁⟩ ⟨y, h₂⟩ _z h => (F.F.inte
+      inf_le_right := fun ⟨x, h₁⟩ ⟨y, h₂⟩ _z h => (F.F.inter_sub x y a ⟨h₁, h₂⟩ h).2 },
+filter_eq
+      Set.ext fun _x =>
+        ⟨fun ⟨⟨_s, as⟩, h⟩ => mem_nhds_iff.2 ⟨_, h, F.isOpen _, as⟩, fun h =>
+          let ⟨s, h, as⟩ := F.mem_nhds.1 h
+          ⟨⟨s, h⟩, as⟩⟩⟩
+
+@[simp]
 
 中文:
 定义 邻域滤子
@@ -623,7 +636,14 @@ definition nhds
       pt := ⟨_, F.F.top_mem a⟩
       inf := fun ⟨x, h₁⟩ ⟨y, h₂⟩ => ⟨_, F.F.inter_mem x y a ⟨h₁, h₂⟩⟩
       inf_le_left := fun ⟨x, h₁⟩ ⟨y, h₂⟩ _z h => (F.F.inter_sub x y a ⟨h₁, h₂⟩ h).1
-      inf_le_right := fun ⟨x, h₁⟩ ⟨y, h₂⟩ _z h => (F.F.inte
+      inf_le_right := fun ⟨x, h₁⟩ ⟨y, h₂⟩ _z h => (F.F.inter_sub x y a ⟨h₁, h₂⟩ h).2 },
+filter_eq
+      Set.ext fun _x =>
+        ⟨fun ⟨⟨_s, as⟩, h⟩ => mem_nhds_iff.2 ⟨_, h, F.isOpen _, as⟩, fun h =>
+          let ⟨s, h, as⟩ := F.mem_nhds.1 h
+          ⟨⟨s, h⟩, as⟩⟩⟩
+
+@[simp]
 -/
 protected def nhds (F : Realizer α) (a : α) : (𝓝 a).Realizer :=
   ⟨{ s : F.σ // a in F.F s },
@@ -754,7 +774,9 @@ theorem locallyFinite_iff_exists_realizer
           F.mem_nhds.1 h
     ⟨⟨fun x => ⟨g₂ x, (h₂ x).1⟩, fun x =>
 Finite.fintype
-   
+          let ⟨_h, h'⟩ := h₁ x
+          h'.subset fun _i hi => hi.mono (inter_subset_inter_right _ (h₂ x).2)⟩⟩,
+    fun ⟨R⟩ => R.to_locallyFinite⟩
 
 中文:
 定理 locallyFinite_iff_存在_realizer
@@ -768,7 +790,9 @@ Finite.fintype
           F.mem_nhds.1 h
     ⟨⟨fun x => ⟨g₂ x, (h₂ x).1⟩, fun x =>
 Finite.fintype
-   
+          let ⟨_h, h'⟩ := h₁ x
+          h'.subset fun _i hi => hi.mono (inter_subset_inter_right _ (h₂ x).2)⟩⟩,
+    fun ⟨R⟩ => R.to_locallyFinite⟩
 
 Depends on / 依赖: Classical, Classical.axiom_of_choice, F.mem_nhds, Finite, Finite.fintype, R.to_locallyFinite, axiom_of_choice, fintype, hi.mono, inter_subset_inter_right, mem_nhds, subset, subseteq, to_locallyFinite
 -/

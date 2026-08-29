@@ -189,7 +189,17 @@ definition stoneCechEquivalence
     { toFun := stoneCechExtend f.hom.2
       continuous_toFun := continuous_stoneCechExtend f.hom.2 }
   left_inv := by
-    rintro ⟨f, hf : Con
+    rintro ⟨f, hf : Continuous f⟩
+    ext x
+    refine congr_fun ?_ x
+    apply Continuous.ext_on denseRange_stoneCechUnit (continuous_stoneCechExtend _) hf
+    · rintro _ ⟨y, rfl⟩
+      apply congr_fun (stoneCechExtend_extends (hf.comp _)) y
+      apply continuous_stoneCechUnit
+  right_inv := by
+    rintro ⟨f, hf : Continuous f⟩
+    ext
+    exact congr_fun (stoneCechExtend_extends hf) _
 
 中文:
 定义 stoneCechEquivalence
@@ -201,7 +211,17 @@ definition stoneCechEquivalence
     { toFun := stoneCechExtend f.hom.2
       continuous_toFun := continuous_stoneCechExtend f.hom.2 }
   left_inv := by
-    rintro ⟨f, hf : Con
+    rintro ⟨f, hf : Continuous f⟩
+    ext x
+    refine congr_fun ?_ x
+    apply Continuous.ext_on denseRange_stoneCechUnit (continuous_stoneCechExtend _) hf
+    · rintro _ ⟨y, rfl⟩
+      apply congr_fun (stoneCechExtend_extends (hf.comp _)) y
+      apply continuous_stoneCechUnit
+  right_inv := by
+    rintro ⟨f, hf : Continuous f⟩
+    ext
+    exact congr_fun (stoneCechExtend_extends hf) _
 
 Depends on / 依赖: TopCat, TopCat.ofHom
 -/
@@ -352,7 +372,32 @@ definition limitCone
         change CompactSpace { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j }
         rw [← isCompact_iff_compactSpace]
         apply IsClosed.isCompact
-
+        have :
+          { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), F.map f (u i) = u j } =
+            ⋂ (i : J) (j : J) (f : i ⟶ j), { u | F.map f (u i) = u j } := by
+          ext1
+          simp only [Set.mem_iInter, Set.mem_ofPred_eq]
+        rw [this]
+        apply isClosed_iInter
+        intro i
+        apply isClosed_iInter
+        intro j
+        apply isClosed_iInter
+        intro f
+        apply isClosed_eq
+        · exact ((F.map f).hom.hom.continuous).comp (continuous_apply i)
+        · exact continuous_apply j
+      is_hausdorff :=
+        show T2Space { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j } from
+          inferInstance
+      prop := trivial }
+    π := {
+      app := fun j => InducedCategory.homMk ((TopCat.limitCone FF).π.app j)
+      naturality := by
+        intro _ _ f
+        ext ⟨x, hx⟩
+        simp only [Functor.const_obj_map]
+        exact (hx f).symm } }
 
 中文:
 定义 limitCone
@@ -364,7 +409,32 @@ definition limitCone
         change CompactSpace { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j }
         rw [← isCompact_iff_compactSpace]
         apply IsClosed.isCompact
-
+        have :
+          { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), F.map f (u i) = u j } =
+            ⋂ (i : J) (j : J) (f : i ⟶ j), { u | F.map f (u i) = u j } := by
+          ext1
+          simp only [Set.mem_iInter, Set.mem_ofPred_eq]
+        rw [this]
+        apply isClosed_iInter
+        intro i
+        apply isClosed_iInter
+        intro j
+        apply isClosed_iInter
+        intro f
+        apply isClosed_eq
+        · exact ((F.map f).hom.hom.continuous).comp (continuous_apply i)
+        · exact continuous_apply j
+      is_hausdorff :=
+        show T2Space { u : forall j, F.obj j | forall {i j : J} (f : i ⟶ j), (F.map f) (u i) = u j } from
+          inferInstance
+      prop := trivial }
+    π := {
+      app := fun j => InducedCategory.homMk ((TopCat.limitCone FF).π.app j)
+      naturality := by
+        intro _ _ f
+        ext ⟨x, hx⟩
+        simp only [Functor.const_obj_map]
+        exact (hx f).symm } }
 
 Depends on / 依赖: CompactSpace, F.map, F.obj, IsClosed, IsClosed.isCompact, Set.mem_iInter, Set.mem_ofPred_eq, TopCat, TopCat.limitCone, compHausToTop, isClosed_iInter, isCompact, isCompact_iff_compactSpace, is_compact, limitCone, mem_iInter, mem_ofPred_eq
 -/
@@ -414,7 +484,8 @@ definition limitConeIsLimit
       ((TopCat.limitConeIsLimit FF).lift (compHausToTop.mapCone S))
     uniq := fun S m hm => InducedCategory.hom_ext
       ((TopCat.limitConeIsLimit FF).uniq (compHausToTop.mapCone S) _ (fun j => by
-        simp [←
+        simp [← hm]
+        rfl)) }
 
 中文:
 定义 limitConeIsLimit
@@ -424,7 +495,8 @@ definition limitConeIsLimit
       ((TopCat.limitConeIsLimit FF).lift (compHausToTop.mapCone S))
     uniq := fun S m hm => InducedCategory.hom_ext
       ((TopCat.limitConeIsLimit FF).uniq (compHausToTop.mapCone S) _ (fun j => by
-        simp [←
+        simp [← hm]
+        rfl)) }
 
 Depends on / 依赖: InducedCategory, InducedCategory.homMk, InducedCategory.hom_ext, TopCat, TopCat.limitConeIsLimit, compHausToTop, compHausToTop.mapCone, hom_ext, limitConeIsLimit, mapCone
 -/
@@ -455,7 +527,28 @@ theorem epi_iff_surjective
     let D := ({y} : Set Y)
     have hD : IsClosed D := isClosed_singleton
     have hCD : Disjoint C D := by
-    
+      rw [Set.disjoint_singleton_right]
+      rintro ⟨y', hy'⟩
+      exact hy y' hy'
+    obtain ⟨φ, hφ0, hφ1, hφ01⟩ := exists_continuous_zero_one_of_isClosed hC hD hCD
+    have : CompactSpace (ULift.{u} <| Set.Icc (0 : Real) 1) := Homeomorph.ulift.symm.compactSpace
+    have : T2Space (ULift.{u} <| Set.Icc (0 : Real) 1) := Homeomorph.ulift.symm.t2Space
+    let Z := of (ULift.{u} <| Set.Icc (0 : Real) 1)
+    let g : Y ⟶ Z := ofHom _
+      ⟨fun y' => ⟨⟨φ y', hφ01 y'⟩⟩,
+        continuous_uliftUp.comp (φ.continuous.subtype_mk fun y' => hφ01 y')⟩
+    let h : Y ⟶ Z := ofHom _
+      ⟨fun _ => ⟨⟨0, Set.left_mem_Icc.mpr zero_le_one⟩⟩, continuous_const⟩
+    have H : h = g := by
+      rw [← cancel_epi f]
+      ext x : 4
+      simp [g, h, Z, hφ0 (Set.mem_range_self x)]
+    apply_fun fun e => (e y).down.1 at H
+    dsimp [g, h, Z] at H
+    simp only [hφ1 (Set.mem_singleton y), Pi.one_apply] at H
+    exact zero_ne_one H
+  · rw [← CategoryTheory.ofHom_epi_iff_surjective]
+    apply (forget CompHaus).epi_of_epi_map
 
 中文:
 定理 epi_iff_surjective
@@ -471,7 +564,28 @@ theorem epi_iff_surjective
     let D := ({y} : Set Y)
     have hD : IsClosed D := isClosed_singleton
     have hCD : Disjoint C D := by
-    
+      rw [Set.disjoint_singleton_right]
+      rintro ⟨y', hy'⟩
+      exact hy y' hy'
+    obtain ⟨φ, hφ0, hφ1, hφ01⟩ := exists_continuous_zero_one_of_isClosed hC hD hCD
+    have : CompactSpace (ULift.{u} <| Set.Icc (0 : Real) 1) := Homeomorph.ulift.symm.compactSpace
+    have : T2Space (ULift.{u} <| Set.Icc (0 : Real) 1) := Homeomorph.ulift.symm.t2Space
+    let Z := of (ULift.{u} <| Set.Icc (0 : Real) 1)
+    let g : Y ⟶ Z := ofHom _
+      ⟨fun y' => ⟨⟨φ y', hφ01 y'⟩⟩,
+        continuous_uliftUp.comp (φ.continuous.subtype_mk fun y' => hφ01 y')⟩
+    let h : Y ⟶ Z := ofHom _
+      ⟨fun _ => ⟨⟨0, Set.left_mem_Icc.mpr zero_le_one⟩⟩, continuous_const⟩
+    have H : h = g := by
+      rw [← cancel_epi f]
+      ext x : 4
+      simp [g, h, Z, hφ0 (Set.mem_range_self x)]
+    apply_fun fun e => (e y).down.1 at H
+    dsimp [g, h, Z] at H
+    simp only [hφ1 (Set.mem_singleton y), Pi.one_apply] at H
+    exact zero_ne_one H
+  · rw [← CategoryTheory.ofHom_epi_iff_surjective]
+    apply (forget CompHaus).epi_of_epi_map
 
 Depends on / 依赖: CompactSpace, Disjoint, Function, Function.Surjective, Homeomorph, Homeomorph.ulift.symm.compactSp, IsClosed, Set.Icc, Set.disjoint_singleton_right, Set.range, Surjective, compactSp, continuous, contrapose, disjoint_singleton_right, exists_continuous_zero_one_of_isClosed, f.hom.hom.continuous, isClosed, isClosed_singleton, isCompact_range
 -/

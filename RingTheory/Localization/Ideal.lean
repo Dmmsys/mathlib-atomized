@@ -105,7 +105,11 @@ theorem mem_map_algebraMap_iff
     map_ideal, Submodule.mem_localized']
   constructor
   · rintro ⟨x, hx, s, rfl⟩
-    exact ⟨⟨⟨x, hx⟩, s⟩, by rw [← Is
+    exact ⟨⟨⟨x, hx⟩, s⟩, by rw [← IsLocalization.mk'_eq_mk', IsLocalization.mk'_spec]⟩
+  · rintro ⟨⟨⟨x, hx⟩, s⟩, h⟩
+    refine ⟨x, hx, s, ?_⟩
+    rw [← IsLocalization.mk'_eq_mk']; rw [eq_comm]; rw [IsLocalization.eq_mk'_iff_mul_eq]
+    exact h
 
 中文:
 定理 mem_map_algebraMap_iff
@@ -117,7 +121,11 @@ theorem mem_map_algebraMap_iff
     map_ideal, Submodule.mem_localized']
   constructor
   · rintro ⟨x, hx, s, rfl⟩
-    exact ⟨⟨⟨x, hx⟩, s⟩, by rw [← Is
+    exact ⟨⟨⟨x, hx⟩, s⟩, by rw [← IsLocalization.mk'_eq_mk', IsLocalization.mk'_spec]⟩
+  · rintro ⟨⟨⟨x, hx⟩, s⟩, h⟩
+    refine ⟨x, hx, s, ?_⟩
+    rw [← IsLocalization.mk'_eq_mk']; rw [eq_comm]; rw [IsLocalization.eq_mk'_iff_mul_eq]
+    exact h
 
 Depends on / 依赖: Algebra, Algebra.coe_linearMap, Ideal.map, Ideal.span, IsLocalization, IsLocalization.eq_mk, IsLocalization.mk, Submodule, Submodule.localized, Submodule.mem_localized, _eq_mk, _eq_span, _iff_mul_eq, _spec, algebraMap, coe_linearMap, eq_comm, eq_mk, localized, map_ideal
 -/
@@ -143,7 +151,8 @@ lemma mk'_mem_map_algebraMap_iff
   proof: by
   rw [← Ideal.unit_mul_mem_iff_mem _ (IsLocalization.map_units S s)]; rw [IsLocalization.mk'_spec']; rw [IsLocalization.mem_map_algebraMap_iff M]
   simp_rw [← map_mul, IsLocalization.eq_iff_exists M, mul_comm x, ← mul_assoc, ← Submonoid.coe_mul]
-  exact ⟨fun ⟨⟨y, t⟩, c, h⟩ => ⟨_, (c * t).2, h ▸ I
+  exact ⟨fun ⟨⟨y, t⟩, c, h⟩ => ⟨_, (c * t).2, h ▸ I.mul_mem_left c.1 y.2⟩, fun ⟨s, hs, h⟩ =>
+    ⟨⟨⟨_, h⟩, ⟨s, hs⟩⟩, 1, by simp⟩⟩
 
 中文:
 引理 mk'_mem_map_algebraMap_iff
@@ -151,7 +160,8 @@ lemma mk'_mem_map_algebraMap_iff
   证明: by
   rw [← Ideal.unit_mul_mem_iff_mem _ (IsLocalization.map_units S s)]; rw [IsLocalization.mk'_spec']; rw [IsLocalization.mem_map_algebraMap_iff M]
   simp_rw [← map_mul, IsLocalization.eq_iff_exists M, mul_comm x, ← mul_assoc, ← Submonoid.coe_mul]
-  exact ⟨fun ⟨⟨y, t⟩, c, h⟩ => ⟨_, (c * t).2, h ▸ I
+  exact ⟨fun ⟨⟨y, t⟩, c, h⟩ => ⟨_, (c * t).2, h ▸ I.mul_mem_left c.1 y.2⟩, fun ⟨s, hs, h⟩ =>
+    ⟨⟨⟨_, h⟩, ⟨s, hs⟩⟩, 1, by simp⟩⟩
 -/
 lemma mk'_mem_map_algebraMap_iff (I : Ideal R) (x : R) (s : M) :
     IsLocalization.mk' S x s in I.map (algebraMap R S) ↔ exists s in M, s * x in I := by
@@ -222,7 +232,10 @@ theorem map_inf
   simp only [Ideal.mem_inf, IsLocalization.mem_map_algebraMap_iff M, Prod.exists] at hx ⊢
   obtain ⟨⟨⟨i, hi⟩, mi, hi'⟩, ⟨j, hj⟩, mj, hj'⟩ := hx
   simp only [← IsLocalization.eq_mk'_iff_mul_eq] at hi' hj'
-  obtain ⟨m, hm⟩ := I
+  obtain ⟨m, hm⟩ := IsLocalization.eq.mp (hi'.symm.trans hj')
+  rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_comm]; rw [← mul_comm (j : R)] at hm
+  refine ⟨⟨i * (m * mj : M), I.mul_mem_right _ hi, hm ▸ J.mul_mem_right _ hj⟩, mi * (m * mj), ?_⟩
+  rwa [← IsLocalization.eq_mk'_iff_mul_eq, Subtype.coe_mk, IsLocalization.mk'_cancel]
 
 中文:
 定理 map_inf
@@ -232,7 +245,10 @@ theorem map_inf
   simp only [Ideal.mem_inf, IsLocalization.mem_map_algebraMap_iff M, Prod.exists] at hx ⊢
   obtain ⟨⟨⟨i, hi⟩, mi, hi'⟩, ⟨j, hj⟩, mj, hj'⟩ := hx
   simp only [← IsLocalization.eq_mk'_iff_mul_eq] at hi' hj'
-  obtain ⟨m, hm⟩ := I
+  obtain ⟨m, hm⟩ := IsLocalization.eq.mp (hi'.symm.trans hj')
+  rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_comm]; rw [← mul_comm (j : R)] at hm
+  refine ⟨⟨i * (m * mj : M), I.mul_mem_right _ hi, hm ▸ J.mul_mem_right _ hj⟩, mi * (m * mj), ?_⟩
+  rwa [← IsLocalization.eq_mk'_iff_mul_eq, Subtype.coe_mk, IsLocalization.mk'_cancel]
 -/
 protected theorem map_inf (I J : Ideal R) :
     (I ⊓ J).map (algebraMap R S) = I.map (algebraMap R S) ⊓ J.map (algebraMap R S) := by
@@ -312,7 +328,9 @@ theorem map_under
       Ideal.mul_mem_right _ _
         (Ideal.mem_map_of_mem _
           (show (algebraMap R S) r in J from
-            mk'_spec S r s ▸ J.mul_mem_right ((algebra
+            mk'_spec S r s ▸ J.mul_mem_right ((algebraMap R S) s) hJ))
+
+@[deprecated (since := "2026-04-09")] alias map_comap := map_under
 
 中文:
 定理 map_under
@@ -324,7 +342,9 @@ theorem map_under
       Ideal.mul_mem_right _ _
         (Ideal.mem_map_of_mem _
           (show (algebraMap R S) r in J from
-            mk'_spec S r s ▸ J.mul_mem_right ((algebra
+            mk'_spec S r s ▸ J.mul_mem_right ((algebraMap R S) s) hJ))
+
+@[deprecated (since := "2026-04-09")] alias map_comap := map_under
 
 Depends on / 依赖: Ideal.map_le_iff_le_comap, Ideal.mem_map_of_mem, Ideal.mul_mem_right, J.mul_mem_right, _spec, algebraMap, exists_mk, le_antisymm, le_rfl, map_le_iff_le_comap, mem_map_of_mem, mul_mem_right
 -/
@@ -353,7 +373,18 @@ theorem under_map_of_isPrimary_disjoint
     obtain ⟨a, ha, k, hk⟩ := hM
     exact ⟨a ^ k, pow_mem ha k, hk⟩
   refine le_antisymm (fun a ha => ?_) Ideal.le_comap_map
-  rw [Ideal.mem_comap]; rw [IsLocalization.mem_map_algebraMap_iff 
+  rw [Ideal.mem_comap]; rw [IsLocalization.mem_map_algebraMap_iff M S] at ha
+  obtain ⟨⟨b, s⟩, h⟩ := ha
+  replace h : algebraMap R S (s * a) = algebraMap R S b := by
+    simpa only [← map_mul, mul_comm] using h
+  obtain ⟨c, hc⟩ := (IsLocalization.eq_iff_exists M S).1 h
+  have : a * (c * s : M) in I := by
+    rw [mul_comm]; rw [Submonoid.coe_mul]; rw [mul_assoc]; rw [hc]
+    exact I.mul_mem_left c b.2
+  exact ((Ideal.isPrimary_iff.mp hI).2 this).resolve_right (Set.disjoint_left.mp key (c * s).2)
+
+@[deprecated (since := "2026-04-09")] alias comap_map_of_isPrimary_disjoint :=
+  under_map_of_isPrimary_disjoint
 
 中文:
 定理 under_map_of_isPrimary_disjoint
@@ -364,7 +395,18 @@ theorem under_map_of_isPrimary_disjoint
     obtain ⟨a, ha, k, hk⟩ := hM
     exact ⟨a ^ k, pow_mem ha k, hk⟩
   refine le_antisymm (fun a ha => ?_) Ideal.le_comap_map
-  rw [Ideal.mem_comap]; rw [IsLocalization.mem_map_algebraMap_iff 
+  rw [Ideal.mem_comap]; rw [IsLocalization.mem_map_algebraMap_iff M S] at ha
+  obtain ⟨⟨b, s⟩, h⟩ := ha
+  replace h : algebraMap R S (s * a) = algebraMap R S b := by
+    simpa only [← map_mul, mul_comm] using h
+  obtain ⟨c, hc⟩ := (IsLocalization.eq_iff_exists M S).1 h
+  have : a * (c * s : M) in I := by
+    rw [mul_comm]; rw [Submonoid.coe_mul]; rw [mul_assoc]; rw [hc]
+    exact I.mul_mem_left c b.2
+  exact ((Ideal.isPrimary_iff.mp hI).2 this).resolve_right (Set.disjoint_left.mp key (c * s).2)
+
+@[deprecated (since := "2026-04-09")] alias comap_map_of_isPrimary_disjoint :=
+  under_map_of_isPrimary_disjoint
 
 Depends on / 依赖: Disjoint, I.radical, Ideal.le_comap_map, Ideal.mem_comap, IsLocalization, IsLocalization.eq_iff_exists, IsLocalization.mem_map_algebraMap_iff, Set.not_disjoint_iff, algebraMap, contrapose, eq_iff_exists, le_antisymm, le_comap_map, map_mul, mem_comap, mem_map_algebraMap_iff, mul_comm, not_disjoint_iff, pow_mem, radical
 -/
@@ -519,7 +561,20 @@ theorem isPrime_iff_isPrime_disjoint
           h.ne_top (Ideal.eq_top_of_isUnit_mem _ hm2 (map_units S ⟨m, hm1⟩))⟩
     · refine fun hJ => h.ne_top ?_
       rw [eq_top_iff]; rw [← (orderEmbedding M S).le_iff_le]
-      exact le_of_eq hJ.s
+      exact le_of_eq hJ.symm
+    · intro x y hxy
+      rw [Ideal.mem_comap]; rw [map_mul] at hxy
+      exact h.mem_or_mem hxy
+  · refine fun h => ⟨fun hJ => h.left.ne_top (eq_top_iff.2 ?_), ?_⟩
+    · rwa [eq_top_iff, ← (orderEmbedding M S).le_iff_le] at hJ
+    · intro x y hxy
+      obtain ⟨a, s, ha⟩ := exists_mk'_eq M x
+      obtain ⟨b, t, hb⟩ := exists_mk'_eq M y
+      have : mk' S (a * b) (s * t) in J := by rwa [mk'_mul, ha, hb]
+      rw [mk'_mem_iff]; rw [← Ideal.mem_comap] at this
+      have this₂ := (h.1).mul_mem_iff_mem_or_mem.1 this
+      rw [Ideal.mem_comap]; rw [Ideal.mem_comap] at this₂
+      rwa [← ha, ← hb, mk'_mem_iff, mk'_mem_iff]
 
 中文:
 定理 isPrime_iff_isPrime_disjoint
@@ -532,7 +587,20 @@ theorem isPrime_iff_isPrime_disjoint
           h.ne_top (Ideal.eq_top_of_isUnit_mem _ hm2 (map_units S ⟨m, hm1⟩))⟩
     · refine fun hJ => h.ne_top ?_
       rw [eq_top_iff]; rw [← (orderEmbedding M S).le_iff_le]
-      exact le_of_eq hJ.s
+      exact le_of_eq hJ.symm
+    · intro x y hxy
+      rw [Ideal.mem_comap]; rw [map_mul] at hxy
+      exact h.mem_or_mem hxy
+  · refine fun h => ⟨fun hJ => h.left.ne_top (eq_top_iff.2 ?_), ?_⟩
+    · rwa [eq_top_iff, ← (orderEmbedding M S).le_iff_le] at hJ
+    · intro x y hxy
+      obtain ⟨a, s, ha⟩ := exists_mk'_eq M x
+      obtain ⟨b, t, hb⟩ := exists_mk'_eq M y
+      have : mk' S (a * b) (s * t) in J := by rwa [mk'_mul, ha, hb]
+      rw [mk'_mem_iff]; rw [← Ideal.mem_comap] at this
+      have this₂ := (h.1).mul_mem_iff_mem_or_mem.1 this
+      rw [Ideal.mem_comap]; rw [Ideal.mem_comap] at this₂
+      rwa [← ha, ← hb, mk'_mem_iff, mk'_mem_iff]
 
 Depends on / 依赖: Ideal.eq_top_of_isUnit_mem, Ideal.mem_comap, Set.disjoint_left.mpr, disjoint_left, eq_top_iff, eq_top_of_isUnit_mem, h.left.ne_top, h.mem_or_mem, h.ne_top, hJ.symm, le_iff_le, le_of_eq, map_mul, map_units, mem_comap, mem_or_mem, ne_top, orderEmbedding
 -/
@@ -636,7 +704,11 @@ definition orderIsoOfPrime
   invFun p := ⟨Ideal.map (algebraMap R S) p.1, isPrime_of_isPrime_disjoint M S p.1 p.2.1 p.2.2⟩
   left_inv J := Subtype.ext (map_under M S J)
   right_inv I := Subtype.ext (under_map_of_isPrime_disjoint M S I.2.1 I.2.2)
-  map_rel_iff' {I I'}
+  map_rel_iff' {I I'} := by
+    constructor
+    · exact fun h => show I.val <= I'.val from map_under M S I.val ▸
+        map_under M S I'.val ▸ Ideal.map_mono h
+    exact fun h x hx => h hx
 
 中文:
 定义 orderIsoOfPrime
@@ -645,7 +717,11 @@ definition orderIsoOfPrime
   invFun p := ⟨Ideal.map (algebraMap R S) p.1, isPrime_of_isPrime_disjoint M S p.1 p.2.1 p.2.2⟩
   left_inv J := Subtype.ext (map_under M S J)
   right_inv I := Subtype.ext (under_map_of_isPrime_disjoint M S I.2.1 I.2.2)
-  map_rel_iff' {I I'}
+  map_rel_iff' {I I'} := by
+    constructor
+    · exact fun h => show I.val <= I'.val from map_under M S I.val ▸
+        map_under M S I'.val ▸ Ideal.map_mono h
+    exact fun h x hx => h hx
 -/
 @[simps] def orderIsoOfPrime :
     { p : Ideal S // p.IsPrime } ≃o { p : Ideal R // p.IsPrime ∧ Disjoint (M : Set R) ↑p } where
@@ -696,7 +772,7 @@ lemma map_radical
   obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq M x
   simp only [← IsLocalization.mk'_pow, IsLocalization.mk'_mem_map_algebraMap_iff M] at hn ⊢
   obtain ⟨s, hs, h⟩ := hn
-  refine ⟨s, hs, n + 1, by convert! I.mul_mem_
+  refine ⟨s, hs, n + 1, by convert! I.mul_mem_left (s ^ n * x) h; ring⟩
 
 中文:
 引理 map_radical
@@ -707,7 +783,7 @@ lemma map_radical
   obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq M x
   simp only [← IsLocalization.mk'_pow, IsLocalization.mk'_mem_map_algebraMap_iff M] at hn ⊢
   obtain ⟨s, hs, h⟩ := hn
-  refine ⟨s, hs, n + 1, by convert! I.mul_mem_
+  refine ⟨s, hs, n + 1, by convert! I.mul_mem_left (s ^ n * x) h; ring⟩
 
 Depends on / 依赖: I.map_radical_le, I.mul_mem_left, IsLocalization, IsLocalization.exists_mk, IsLocalization.mk, _mem_map_algebraMap_iff, _pow, algebraMap, antisymm, convert, exists_mk, map_radical_le, mul_mem_left
 -/
@@ -734,7 +810,17 @@ theorem ideal_eq_iInf_under_map_away
     rintro ⟨s, hs⟩
     simp only [Ideal.mem_iInf, Ideal.mem_comap] at hx
     obtain ⟨⟨y, ⟨_, n, rfl⟩⟩, e⟩ :=
-      (IsL
+      (IsLocalization.mem_map_algebraMap_iff (.powers s) _).mp (hx s hs)
+    dsimp only at e
+    rw [← map_mul]; rw [IsLocalization.eq_iff_exists (.powers s)] at e
+    obtain ⟨⟨_, m, rfl⟩, e⟩ := e
+    use m + n
+    dsimp at e ⊢
+    rw [pow_add]; rw [mul_assoc]; rw [← mul_comm x]; rw [e]
+    exact I.mul_mem_left _ y.2
+
+@[deprecated (since := "2026-04-09")] alias ideal_eq_iInf_comap_map_away :=
+  ideal_eq_iInf_under_map_away
 
 中文:
 定理 ideal_eq_iInf_under_map_away
@@ -747,7 +833,17 @@ theorem ideal_eq_iInf_under_map_away
     rintro ⟨s, hs⟩
     simp only [Ideal.mem_iInf, Ideal.mem_comap] at hx
     obtain ⟨⟨y, ⟨_, n, rfl⟩⟩, e⟩ :=
-      (IsL
+      (IsLocalization.mem_map_algebraMap_iff (.powers s) _).mp (hx s hs)
+    dsimp only at e
+    rw [← map_mul]; rw [IsLocalization.eq_iff_exists (.powers s)] at e
+    obtain ⟨⟨_, m, rfl⟩, e⟩ := e
+    use m + n
+    dsimp at e ⊢
+    rw [pow_add]; rw [mul_assoc]; rw [← mul_comm x]; rw [e]
+    exact I.mul_mem_left _ y.2
+
+@[deprecated (since := "2026-04-09")] alias ideal_eq_iInf_comap_map_away :=
+  ideal_eq_iInf_under_map_away
 -/
 theorem ideal_eq_iInf_under_map_away {S : Finset R} (hS : Ideal.span (α := R) S = ⊤) (I : Ideal R) :
     I = ⨅ f in S, (I.map (algebraMap R (Localization.Away f))).under R := by
@@ -824,7 +920,29 @@ theorem surjective_quotientMap_of_maximal_of_localization
   by_cases hM : (Ideal.Quotient.mk (I.comap (algebraMap R S))) m = 0
   · have : I = ⊤ := by
       rw [Ideal.eq_top_iff_one]
-      rw [Ideal.Quotient.eq_zero_iff_mem]; rw [Ideal.mem_comap]
+      rw [Ideal.Quotient.eq_zero_iff_mem]; rw [Ideal.mem_comap] at hM
+      convert! I.mul_mem_right (mk' S (1 : R) ⟨m, hm⟩) hM
+      rw [← mk'_eq_mul_mk'_one]; rw [mk'_self]
+    exact ⟨0, eq_comm.1 (by simp [Ideal.Quotient.eq_zero_iff_mem, this])⟩
+  · rw [Ideal.Quotient.maximal_ideal_iff_isField_quotient] at hI
+    obtain ⟨n, hn⟩ := hI.3 hM
+    obtain ⟨rn, rfl⟩ := Ideal.Quotient.mk_surjective n
+    refine ⟨(Ideal.Quotient.mk J) (r * rn), ?_⟩
+    -- The rest of the proof is essentially just algebraic manipulations to prove the equality
+    replace hn := congr_arg (Ideal.quotientMap I (algebraMap R S) le_rfl) hn
+    rw [map_one]; rw [map_mul] at hn
+    rw [Ideal.quotientMap_mk]; rw [← sub_eq_zero]; rw [← map_sub]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [←
+      Ideal.Quotient.eq_zero_iff_mem]; rw [map_sub]; rw [sub_eq_zero]; rw [mk'_eq_mul_mk'_one]
+    simp only [mul_eq_mul_left_iff, map_mul]
+    refine
+      Or.inl
+        (mul_left_cancel₀ (M₀ := S ⧸ I)
+          (fun hn =>
+            hM
+              (Ideal.Quotient.eq_zero_iff_mem.2
+                (Ideal.mem_comap.2 (Ideal.Quotient.eq_zero_iff_mem.1 hn))))
+          (_root_.trans hn ?_))
+    rw [← map_mul]; rw [← mk'_eq_mul_mk'_one]; rw [mk'_self]; rw [map_one]
 
 中文:
 定理 surjective_quotientMap_of_maximal_of_localization
@@ -836,7 +954,29 @@ theorem surjective_quotientMap_of_maximal_of_localization
   by_cases hM : (Ideal.Quotient.mk (I.comap (algebraMap R S))) m = 0
   · have : I = ⊤ := by
       rw [Ideal.eq_top_iff_one]
-      rw [Ideal.Quotient.eq_zero_iff_mem]; rw [Ideal.mem_comap]
+      rw [Ideal.Quotient.eq_zero_iff_mem]; rw [Ideal.mem_comap] at hM
+      convert! I.mul_mem_right (mk' S (1 : R) ⟨m, hm⟩) hM
+      rw [← mk'_eq_mul_mk'_one]; rw [mk'_self]
+    exact ⟨0, eq_comm.1 (by simp [Ideal.Quotient.eq_zero_iff_mem, this])⟩
+  · rw [Ideal.Quotient.maximal_ideal_iff_isField_quotient] at hI
+    obtain ⟨n, hn⟩ := hI.3 hM
+    obtain ⟨rn, rfl⟩ := Ideal.Quotient.mk_surjective n
+    refine ⟨(Ideal.Quotient.mk J) (r * rn), ?_⟩
+    -- The rest of the proof is essentially just algebraic manipulations to prove the equality
+    replace hn := congr_arg (Ideal.quotientMap I (algebraMap R S) le_rfl) hn
+    rw [map_one]; rw [map_mul] at hn
+    rw [Ideal.quotientMap_mk]; rw [← sub_eq_zero]; rw [← map_sub]; rw [Ideal.Quotient.eq_zero_iff_mem]; rw [←
+      Ideal.Quotient.eq_zero_iff_mem]; rw [map_sub]; rw [sub_eq_zero]; rw [mk'_eq_mul_mk'_one]
+    simp only [mul_eq_mul_left_iff, map_mul]
+    refine
+      Or.inl
+        (mul_left_cancel₀ (M₀ := S ⧸ I)
+          (fun hn =>
+            hM
+              (Ideal.Quotient.eq_zero_iff_mem.2
+                (Ideal.mem_comap.2 (Ideal.Quotient.eq_zero_iff_mem.1 hn))))
+          (_root_.trans hn ?_))
+    rw [← map_mul]; rw [← mk'_eq_mul_mk'_one]; rw [mk'_self]; rw [map_one]
 
 Depends on / 依赖: I.comap, I.mul_mem_right, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.maximal_ideal_iff_isField_quoti, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.eq_top_iff_one, Ideal.mem_comap, Quotient, _eq_mul_mk, _one, _self, algebraMap, convert, eq_comm, eq_top_iff_one, eq_zero_iff_mem, exists_mk, maximal_ideal_iff_isField_quoti, mem_comap
 -/
@@ -888,7 +1028,7 @@ theorem bot_lt_under_prime
     (orderIsoOfPrime M S).lt_iff_lt.mpr
       (show (⟨⊥, Ideal.isPrime_bot⟩ : { p : Ideal S // p.IsPrime }) < ⟨p, hpp⟩ from hp0.bot_lt)
 
-@[d
+@[deprecated (since := "2026-04-09")] alias bot_lt_comap_prime := bot_lt_under_prime
 
 中文:
 定理 bot_lt_under_prime
@@ -900,7 +1040,7 @@ theorem bot_lt_under_prime
     (orderIsoOfPrime M S).lt_iff_lt.mpr
       (show (⟨⊥, Ideal.isPrime_bot⟩ : { p : Ideal S // p.IsPrime }) < ⟨p, hpp⟩ from hp0.bot_lt)
 
-@[d
+@[deprecated (since := "2026-04-09")] alias bot_lt_comap_prime := bot_lt_under_prime
 
 Depends on / 依赖: Ideal.comap_bot_of_injective, Ideal.isPrime_bot, IsDomain, IsLocalization, IsLocalization.injective, IsPrime, algebraMap, bot_lt, comap_bot_of_injective, convert, hp0.bot_lt, injective, isDomain_of_le_nonZeroDivisors, isPrime_bot, lt_iff_lt, lt_iff_lt.mpr, orderIsoOfPrime, p.IsPrime
 -/
@@ -928,7 +1068,19 @@ Submonoid.map_le_of_le_comap _ hM.trans
       (nonZeroDivisors_le_comap_nonZeroDivisors_of_injective _
         (FaithfulSMul.algebraMap_injective _ _))
   have : IsDomain Sₚ := IsLocalization.isDomain_of_le_nonZeroDivisors _ e
-  have : algebraMap
+  have : algebraMap Rₚ Sₚ = IsLocalization.map (T := Algebra.algebraMapSubmonoid S M) Sₚ
+    (algebraMap R S) (Submonoid.le_comap_map M) := by
+    apply IsLocalization.ringHom_ext M
+    simp only [IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq]
+  rw [Module.isTorsionFree_iff_algebraMap_injective]; rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero]
+  intro x hx
+  obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq M x
+  simp only [IsLocalization.map_mk', IsLocalization.mk'_eq_zero_iff,
+    Subtype.exists, exists_prop, this] at hx ⊢
+  obtain ⟨_, ⟨a, ha, rfl⟩, H⟩ := hx
+  simp only [← map_mul,
+    (injective_iff_map_eq_zero' _).mp (FaithfulSMul.algebraMap_injective R S)] at H
+  exact ⟨a, ha, H⟩
 
 中文:
 引理 _root_.模.是无挠.of_isLocalization
@@ -939,7 +1091,19 @@ Submonoid.map_le_of_le_comap _ hM.trans
       (nonZeroDivisors_le_comap_nonZeroDivisors_of_injective _
         (FaithfulSMul.algebraMap_injective _ _))
   have : IsDomain Sₚ := IsLocalization.isDomain_of_le_nonZeroDivisors _ e
-  have : algebraMap
+  have : algebraMap Rₚ Sₚ = IsLocalization.map (T := Algebra.algebraMapSubmonoid S M) Sₚ
+    (algebraMap R S) (Submonoid.le_comap_map M) := by
+    apply IsLocalization.ringHom_ext M
+    simp only [IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq]
+  rw [Module.isTorsionFree_iff_algebraMap_injective]; rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero]
+  intro x hx
+  obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq M x
+  simp only [IsLocalization.map_mk', IsLocalization.mk'_eq_zero_iff,
+    Subtype.exists, exists_prop, this] at hx ⊢
+  obtain ⟨_, ⟨a, ha, rfl⟩, H⟩ := hx
+  simp only [← map_mul,
+    (injective_iff_map_eq_zero' _).mp (FaithfulSMul.algebraMap_injective R S)] at H
+  exact ⟨a, ha, H⟩
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, FaithfulSMul, FaithfulSMul.algebraMap_injective, IsDomain, IsLocalization, IsLocalization.isDomain_of_le_nonZeroDivisors, IsLocalization.map, IsLocalization.map_comp, IsLocalization.ringHom_ext, IsScalarTower, IsScalarTower.algebraMap_eq, Submonoid, Submonoid.le_comap_map, Submonoid.map_le_of_le_comap, algebraMap, algebraMapSubmonoid, algebraMap_eq, algebraMap_injective, hM.trans
 -/
@@ -981,7 +1145,14 @@ lemma of_surjective
     obtain ⟨z, rfl⟩ := hg z
     obtain ⟨⟨r, s⟩, e⟩ := IsLocalization.surj M z
     refine ⟨⟨f r, _, s.1, s.2, rfl⟩, ?_⟩
-    simpa only [map_mul, ← RingHom.c
+    simpa only [map_mul, ← RingHom.comp_apply, H] using DFunLike.congr_arg g e
+  exists_of_eq := by
+    intro x y e
+    obtain ⟨x, rfl⟩ := hf x
+    obtain ⟨y, rfl⟩ := hf y
+    rw [← sub_eq_zero]; rw [← map_sub]; rw [← map_sub]; rw [← RingHom.comp_apply]; rw [← H]; rw [RingHom.comp_apply]; rw [← IsLocalization.mk'_one (M := M)] at e
+    obtain ⟨r, hr, hr'⟩ := (IsLocalization.mk'_mem_map_algebraMap_iff M _ _ _ _).mp (H' e)
+    exact ⟨⟨_, r, hr, rfl⟩, by simpa [sub_eq_zero, mul_sub] using hr'⟩
 
 中文:
 引理 of_surjective
@@ -994,7 +1165,14 @@ lemma of_surjective
     obtain ⟨z, rfl⟩ := hg z
     obtain ⟨⟨r, s⟩, e⟩ := IsLocalization.surj M z
     refine ⟨⟨f r, _, s.1, s.2, rfl⟩, ?_⟩
-    simpa only [map_mul, ← RingHom.c
+    simpa only [map_mul, ← RingHom.comp_apply, H] using DFunLike.congr_arg g e
+  exists_of_eq := by
+    intro x y e
+    obtain ⟨x, rfl⟩ := hf x
+    obtain ⟨y, rfl⟩ := hf y
+    rw [← sub_eq_zero]; rw [← map_sub]; rw [← map_sub]; rw [← RingHom.comp_apply]; rw [← H]; rw [RingHom.comp_apply]; rw [← IsLocalization.mk'_one (M := M)] at e
+    obtain ⟨r, hr, hr'⟩ := (IsLocalization.mk'_mem_map_algebraMap_iff M _ _ _ _).mp (H' e)
+    exact ⟨⟨_, r, hr, rfl⟩, by simpa [sub_eq_zero, mul_sub] using hr'⟩
 
 Depends on / 依赖: DFunLike, DFunLike.congr_arg, IsLocalization, IsLocalization.map_units, IsLocalization.surj, RingHom, RingHom.comp_ap, RingHom.comp_apply, comp_ap, comp_apply, congr_arg, exists_of_eq, map_mul, map_sub, map_units, sub_eq_zero
 -/

@@ -329,7 +329,7 @@ theorem sl_non_abelian
   intro c
   have c' : A.val * B.val = B.val * A.val := by
     rw [← sub_eq_zero]; rw [← sl_bracket]; rw [c.trivial]; rw [ZeroMemClass.coe_zero]
-  simpa [A, B, Ma
+  simpa [A, B, Matrix.single, Matrix.mul_apply, hij.symm] using congr_fun (congr_fun c' i) i
 
 中文:
 定理 sl_non_abelian
@@ -341,7 +341,7 @@ theorem sl_non_abelian
   intro c
   have c' : A.val * B.val = B.val * A.val := by
     rw [← sub_eq_zero]; rw [← sl_bracket]; rw [c.trivial]; rw [ZeroMemClass.coe_zero]
-  simpa [A, B, Ma
+  simpa [A, B, Matrix.single, Matrix.mul_apply, hij.symm] using congr_fun (congr_fun c' i) i
 
 Depends on / 依赖: A.val, B.val, Fintype, Fintype.exists_pair_of_one_lt_card, Matrix, Matrix.mul_apply, Matrix.single, ZeroMemClass, ZeroMemClass.coe_zero, c.trivial, coe_zero, congr_fun, exists_pair_of_one_lt_card, hij.symm, mul_apply, single, sl_bracket, sub_eq_zero
 -/
@@ -573,7 +573,8 @@ theorem indefiniteDiagonal_transform
   · -- x : q, y : p
     simp [Pso, indefiniteDiagonal]
   · -- x y : q
-    by_cases h :
+    by_cases h : x = y <;>
+    simp [Pso, indefiniteDiagonal, h, hi, one_apply]
 
 中文:
 定理 indefiniteDiagonal_transform
@@ -588,7 +589,8 @@ theorem indefiniteDiagonal_transform
   · -- x : q, y : p
     simp [Pso, indefiniteDiagonal]
   · -- x y : q
-    by_cases h :
+    by_cases h : x = y <;>
+    simp [Pso, indefiniteDiagonal, h, hi, one_apply]
 
 Depends on / 依赖: indefiniteDiagonal, one_apply
 -/
@@ -993,7 +995,11 @@ theorem indefiniteDiagonal_assoc
   ext ⟨⟨i₁ | i₂⟩ | i₃⟩ ⟨⟨j₁ | j₂⟩ | j₃⟩ <;>
     simp only [indefiniteDiagonal, Matrix.diagonal_apply, Equiv.sumAssoc_apply_inl_inl,
       Matrix.reindexLieEquiv_apply, Matrix.submatrix_apply, Equiv.symm_symm, Matrix.reindex_apply,
-      Sum.elim_inl, if_true, Matrix.one_apply_eq, Matrix.fromBlock
+      Sum.elim_inl, if_true, Matrix.one_apply_eq, Matrix.fromBlocks_apply₁₁,
+      Equiv.sumAssoc_apply_inl_inr, if_false, Matrix.fromBlocks_apply₁₂, Matrix.fromBlocks_apply₂₁,
+      Matrix.fromBlocks_apply₂₂, Equiv.sumAssoc_apply_inr, Sum.elim_inr, Sum.inl_injective.eq_iff,
+      Sum.inr_injective.eq_iff, reduceCtorEq] <;>
+    congr 1
 
 中文:
 定理 indefiniteDiagonal_assoc
@@ -1001,7 +1007,11 @@ theorem indefiniteDiagonal_assoc
   ext ⟨⟨i₁ | i₂⟩ | i₃⟩ ⟨⟨j₁ | j₂⟩ | j₃⟩ <;>
     simp only [indefiniteDiagonal, Matrix.diagonal_apply, Equiv.sumAssoc_apply_inl_inl,
       Matrix.reindexLieEquiv_apply, Matrix.submatrix_apply, Equiv.symm_symm, Matrix.reindex_apply,
-      Sum.elim_inl, if_true, Matrix.one_apply_eq, Matrix.fromBlock
+      Sum.elim_inl, if_true, Matrix.one_apply_eq, Matrix.fromBlocks_apply₁₁,
+      Equiv.sumAssoc_apply_inl_inr, if_false, Matrix.fromBlocks_apply₁₂, Matrix.fromBlocks_apply₂₁,
+      Matrix.fromBlocks_apply₂₂, Equiv.sumAssoc_apply_inr, Sum.elim_inr, Sum.inl_injective.eq_iff,
+      Sum.inr_injective.eq_iff, reduceCtorEq] <;>
+    congr 1
 
 Depends on / 依赖: Equiv.sumAssoc_apply_inl_inl, Equiv.sumAssoc_apply_inl_inr, Equiv.sumAssoc_apply_inr, Equiv.symm_symm, Matrix, Matrix.diagonal_apply, Matrix.fromBlocks_apply, Matrix.one_apply_eq, Matrix.reindexLieEquiv_apply, Matrix.reindex_apply, Matrix.submatrix_apply, Sum.elim_inl, Sum.elim_inr, Sum.inl_injective.eq_iff, Sum.inr_injective.eq, diagonal_apply, elim_inl, elim_inr, eq_iff, if_false
 -/
@@ -1030,7 +1040,11 @@ definition typeBEquivSo'
   apply
     (skewAdjointMatricesLieSubalgebraEquivTranspose (indefiniteDiagonal (Sum Unit l) l R)
         (Matrix.reindexAlgEquiv _ _ (Equiv.sumAssoc PUnit l l))
-        (Matrix.transpose_reindex _ 
+        (Matrix.transpose_reindex _ _)).trans
+  apply LieEquiv.ofEq
+  ext A
+  rw [jb_transform]; rw [← val_unitOfInvertible (2 : R)]; rw [← Units.smul_def]; rw [LieSubalgebra.mem_coe]; rw [LieSubalgebra.mem_coe]; rw [mem_skewAdjointMatricesLieSubalgebra_unit_smul]
+  simp [indefiniteDiagonal_assoc, S]
 
 中文:
 定义 typeBEquivSo'
@@ -1041,7 +1055,11 @@ definition typeBEquivSo'
   apply
     (skewAdjointMatricesLieSubalgebraEquivTranspose (indefiniteDiagonal (Sum Unit l) l R)
         (Matrix.reindexAlgEquiv _ _ (Equiv.sumAssoc PUnit l l))
-        (Matrix.transpose_reindex _ 
+        (Matrix.transpose_reindex _ _)).trans
+  apply LieEquiv.ofEq
+  ext A
+  rw [jb_transform]; rw [← val_unitOfInvertible (2 : R)]; rw [← Units.smul_def]; rw [LieSubalgebra.mem_coe]; rw [LieSubalgebra.mem_coe]; rw [mem_skewAdjointMatricesLieSubalgebra_unit_smul]
+  simp [indefiniteDiagonal_assoc, S]
 
 Depends on / 依赖: Equiv.sumAssoc, LieEquiv, LieEquiv.ofEq, LieSubalgebra, LieSubalgebra.mem_coe, Matrix, Matrix.reindexAlgEquiv, Matrix.transpose_reindex, Units.smul_def, indefiniteDiagonal, infer_instance, jb_transform, mem_coe, mem_skewAdjointMatricesLieSubalgebra_unit_smul, reindexAlgEquiv, skewAdjointMatricesLieSubalgebraEquiv, skewAdjointMatricesLieSubalgebraEquivTranspose, smul_def, sumAssoc, transpose_reindex
 -/

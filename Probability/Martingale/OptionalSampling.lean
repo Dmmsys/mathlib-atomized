@@ -92,7 +92,12 @@ theorem condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const
   · refine Filter.EventuallyEq.trans ?_ (ae_restrict_of_ae (h.condExp_ae_eq hin))
     refine condExp_ae_eq_restrict_of_measurableSpace_eq_on (hτ.measurableSpace_le_of_le hτ_le)
       (ℱ.le i) (hτ.measurableSet_eq' i) fun t => ?_
-    rw [Set.inter_comm _ t]; rw [IsStoppingT
+    rw [Set.inter_comm _ t]; rw [IsStoppingTime.measurableSet_inter_eq_iff]
+  · suffices {x : Ω | τ x = i} = ∅ by simp [this]; norm_cast
+    ext1 x
+    simp only [Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false]
+    contrapose hin
+    exact_mod_cast hin ▸ hτ_le x
 
 中文:
 定理 condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const
@@ -102,7 +107,12 @@ theorem condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const
   · refine Filter.EventuallyEq.trans ?_ (ae_restrict_of_ae (h.condExp_ae_eq hin))
     refine condExp_ae_eq_restrict_of_measurableSpace_eq_on (hτ.measurableSpace_le_of_le hτ_le)
       (ℱ.le i) (hτ.measurableSet_eq' i) fun t => ?_
-    rw [Set.inter_comm _ t]; rw [IsStoppingT
+    rw [Set.inter_comm _ t]; rw [IsStoppingTime.measurableSet_inter_eq_iff]
+  · suffices {x : Ω | τ x = i} = ∅ by simp [this]; norm_cast
+    ext1 x
+    simp only [Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false]
+    contrapose hin
+    exact_mod_cast hin ▸ hτ_le x
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.trans, IsStoppingTime, IsStoppingTime.measurableSet_inter_eq_iff, Set.inter_comm, Set.mem_empty_iff_false, Set.mem_ofPred_eq, ae_restrict_of_ae, condExp_ae_eq, condExp_ae_eq_restrict_of_measurableSpace_eq_on, contrapose, h.condExp_ae_eq, iff_false, inter_comm, measurableSet_eq, measurableSet_inter_eq_iff, measurableSpace_le_of_le, mem_empty_iff_false, mem_ofPred_eq
 -/
@@ -135,7 +145,7 @@ theorem stoppedValue_ae_eq_restrict_eq
   rw [Filter.EventuallyEq]; rw [ae_restrict_iff' (ℱ.le _ _ (hτ.measurableSet_eq i))]
   refine Filter.Eventually.of_forall fun x hx => ?_
   rw [Set.mem_ofPred_eq] at hx
-  simp [s
+  simp [stoppedValue, hx]
 
 中文:
 定理 stoppedValue_ae_eq_restrict_eq
@@ -146,7 +156,7 @@ theorem stoppedValue_ae_eq_restrict_eq
   rw [Filter.EventuallyEq]; rw [ae_restrict_iff' (ℱ.le _ _ (hτ.measurableSet_eq i))]
   refine Filter.Eventually.of_forall fun x hx => ?_
   rw [Set.mem_ofPred_eq] at hx
-  simp [s
+  simp [stoppedValue, hx]
 
 Depends on / 依赖: Eventually, EventuallyEq, Filter, Filter.Eventually.of_forall, Filter.EventuallyEq, Filter.EventuallyEq.trans, Set.mem_ofPred_eq, ae_restrict_iff, condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const, measurableSet_eq, mem_ofPred_eq, of_forall, stoppedValue
 -/
@@ -172,7 +182,17 @@ theorem stoppedValue_ae_eq_condExp_of_le_const_of_countable_range
     simp only [Set.mem_univ, Set.mem_range, Set.iUnion_exists, Set.iUnion_iUnion_eq',
       Set.mem_iUnion, Set.mem_ofPred_eq, exists_apply_eq_apply']
   nth_rw 1 [← @Measure.restrict_univ Ω _ μ]
-  rw [this]; rw [ae_eq_restrict
+  rw [this]; rw [ae_eq_restrict_biUnion_iff _ h_countable_range]
+  intro i hi
+  have h_top : i != ⊤ := fun h => by
+    simp only [h, Set.mem_range] at hi
+    obtain ⟨ω, hω⟩ := hi
+    specialize hτ_le ω
+    simp [hω] at hτ_le
+  lift i to ι using h_top with i
+  exact stoppedValue_ae_eq_restrict_eq h _ hτ_le i
+
+omit [FirstCountableTopology ι] in
 
 中文:
 定理 stoppedValue_ae_eq_condExp_of_le_const_of_countable_range
@@ -183,7 +203,17 @@ theorem stoppedValue_ae_eq_condExp_of_le_const_of_countable_range
     simp only [Set.mem_univ, Set.mem_range, Set.iUnion_exists, Set.iUnion_iUnion_eq',
       Set.mem_iUnion, Set.mem_ofPred_eq, exists_apply_eq_apply']
   nth_rw 1 [← @Measure.restrict_univ Ω _ μ]
-  rw [this]; rw [ae_eq_restrict
+  rw [this]; rw [ae_eq_restrict_biUnion_iff _ h_countable_range]
+  intro i hi
+  have h_top : i != ⊤ := fun h => by
+    simp only [h, Set.mem_range] at hi
+    obtain ⟨ω, hω⟩ := hi
+    specialize hτ_le ω
+    simp [hω] at hτ_le
+  lift i to ι using h_top with i
+  exact stoppedValue_ae_eq_restrict_eq h _ hτ_le i
+
+omit [FirstCountableTopology ι] in
 
 Depends on / 依赖: Measure, Measure.restrict_univ, Set.iUnion_exists, Set.iUnion_iUnion_eq, Set.mem_iUnion, Set.mem_ofPred_eq, Set.mem_range, Set.mem_univ, Set.range, Set.univ, ae_eq_restrict_biUnion_iff, exists_apply_eq_apply, h_countable_range, h_top, iUnion_exists, iUnion_iUnion_eq, mem_iUnion, mem_ofPred_eq, mem_range, mem_univ
 -/
@@ -239,7 +269,14 @@ theorem stoppedValue_ae_eq_condExp_of_le_of_countable_range
     sigmaFiniteTrim_mono _ (IsStoppingTime.measurableSpace_mono hσ hτ hσ_le_τ)
   have : μ[stoppedValue f τ | hσ.measurableSpace] =ᵐ[μ]
       μ[μ[f n | hτ.measurableSpace] | hσ.measurableSpace] := condExp_congr_ae
-    (h.stoppedV
+    (h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hτ hτ_le hτ_countable_range)
+  refine (Filter.EventuallyEq.trans ?_
+    (condExp_condExp_of_le ?_ (hτ.measurableSpace_le_of_le hτ_le)).symm).trans this.symm
+  · exact h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hσ
+      (fun x => (hσ_le_τ x).trans (hτ_le x)) hσ_countable_range
+  · exact hσ.measurableSpace_mono hτ hσ_le_τ
+
+omit [FirstCountableTopology ι] in
 
 中文:
 定理 stoppedValue_ae_eq_condExp_of_le_of_countable_range
@@ -249,7 +286,14 @@ theorem stoppedValue_ae_eq_condExp_of_le_of_countable_range
     sigmaFiniteTrim_mono _ (IsStoppingTime.measurableSpace_mono hσ hτ hσ_le_τ)
   have : μ[stoppedValue f τ | hσ.measurableSpace] =ᵐ[μ]
       μ[μ[f n | hτ.measurableSpace] | hσ.measurableSpace] := condExp_congr_ae
-    (h.stoppedV
+    (h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hτ hτ_le hτ_countable_range)
+  refine (Filter.EventuallyEq.trans ?_
+    (condExp_condExp_of_le ?_ (hτ.measurableSpace_le_of_le hτ_le)).symm).trans this.symm
+  · exact h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hσ
+      (fun x => (hσ_le_τ x).trans (hτ_le x)) hσ_countable_range
+  · exact hσ.measurableSpace_mono hτ hσ_le_τ
+
+omit [FirstCountableTopology ι] in
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.trans, IsStoppingTime, IsStoppingTime.measurableSpace_mono, SigmaFinite, condExp_condExp_of_le, condExp_congr_ae, h.stopped, h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range, measurableSpace, measurableSpace_le_of_le, measurableSpace_mono, sigmaFiniteTrim_mono, stopped, stoppedValue, stoppedValue_ae_eq_condExp_of_le_const_of_countable_range, this.symm
 -/
@@ -320,7 +364,24 @@ theorem condExp_stoppedValue_stopping_time_ae_eq_restrict_le
   refine (condExp_indicator (integrable_stoppedValue ι hτ h.integrable hτ_le)
     (hτ.measurableSet_stopping_time_le hσ)).symm.trans ?_
   have h_int :
-      Integrable ({ω : Ω | τ ω <= σ
+      Integrable ({ω : Ω | τ ω <= σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
+    refine (integrable_stoppedValue ι hτ h.integrable hτ_le).indicator ?_
+    exact hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ)
+  have h_meas : AEStronglyMeasurable[hσ.measurableSpace]
+      ({ω : Ω | τ ω <= σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
+    refine StronglyMeasurable.aestronglyMeasurable ?_
+    refine StronglyMeasurable.stronglyMeasurable_of_measurableSpace_le_on
+      (hτ.measurableSet_le_stopping_time hσ) ?_ ?_ ?_
+    · intro t ht
+      rw [Set.inter_comm _ t] at ht ⊢
+      rw [hτ.measurableSet_inter_le_iff hσ]; rw [IsStoppingTime.measurableSet_min_iff hτ hσ] at ht
+      exact ht.2
+    · refine StronglyMeasurable.indicator ?_ (hτ.measurableSet_le_stopping_time hσ)
+      refine Measurable.stronglyMeasurable ?_
+      exact measurable_stoppedValue h.stronglyAdapted.isStronglyProgressive_of_discrete hτ
+    · intro x hx
+      simp only [hx, Set.indicator_of_notMem, not_false_iff]
+  exact condExp_of_aestronglyMeasurable' hσ.measurableSpace_le h_meas h_int
 
 中文:
 定理 condExp_stoppedValue_stopping_time_ae_eq_restrict_le
@@ -331,7 +392,24 @@ theorem condExp_stoppedValue_stopping_time_ae_eq_restrict_le
   refine (condExp_indicator (integrable_stoppedValue ι hτ h.integrable hτ_le)
     (hτ.measurableSet_stopping_time_le hσ)).symm.trans ?_
   have h_int :
-      Integrable ({ω : Ω | τ ω <= σ
+      Integrable ({ω : Ω | τ ω <= σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
+    refine (integrable_stoppedValue ι hτ h.integrable hτ_le).indicator ?_
+    exact hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ)
+  have h_meas : AEStronglyMeasurable[hσ.measurableSpace]
+      ({ω : Ω | τ ω <= σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
+    refine StronglyMeasurable.aestronglyMeasurable ?_
+    refine StronglyMeasurable.stronglyMeasurable_of_measurableSpace_le_on
+      (hτ.measurableSet_le_stopping_time hσ) ?_ ?_ ?_
+    · intro t ht
+      rw [Set.inter_comm _ t] at ht ⊢
+      rw [hτ.measurableSet_inter_le_iff hσ]; rw [IsStoppingTime.measurableSet_min_iff hτ hσ] at ht
+      exact ht.2
+    · refine StronglyMeasurable.indicator ?_ (hτ.measurableSet_le_stopping_time hσ)
+      refine Measurable.stronglyMeasurable ?_
+      exact measurable_stoppedValue h.stronglyAdapted.isStronglyProgressive_of_discrete hτ
+    · intro x hx
+      simp only [hx, Set.indicator_of_notMem, not_false_iff]
+  exact condExp_of_aestronglyMeasurable' hσ.measurableSpace_le h_meas h_int
 
 Depends on / 依赖: AEStrong, Integrable, ae_eq_restrict_iff_indicator_ae_eq, condExp_indicator, h.integrable, h_int, h_meas, indicator, integrable, integrable_stoppedValue, measurableSet_le_stopping_time, measurableSet_stopping_time_le, measurableSpace_le, stoppedValue, symm.trans
 -/
@@ -375,7 +453,25 @@ theorem stoppedValue_min_ae_eq_condExp
     (h.stoppedValue_ae_eq_condExp_of_le hτ (hσ.min hτ) (fun x => min_le_right _ _) hτ_le).trans ?_
   refine ae_of_ae_restrict_of_ae_restrict_compl {x | σ x <= τ x} ?_ ?_
   · exact condExp_min_stopping_time_ae_eq_restrict_le hσ hτ
-  · suffices μ[stoppedValue f τ | (hσ.min hτ).measurableSp
+  · suffices μ[stoppedValue f τ | (hσ.min hτ).measurableSpace] =ᵐ[μ.restrict {x | τ x <= σ x}]
+        μ[stoppedValue f τ | hσ.measurableSpace] by
+      rw [ae_restrict_iff' (hσ.measurableSpace_le _ (hσ.measurableSet_le_stopping_time hτ).compl)]
+      rw [Filter.EventuallyEq]; rw [ae_restrict_iff'] at this
+      swap; · exact hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ)
+      filter_upwards [this] with x hx hx_mem
+      simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_le] at hx_mem
+      exact hx hx_mem.le
+    apply Filter.EventuallyEq.trans _ ((condExp_min_stopping_time_ae_eq_restrict_le hτ hσ).trans _)
+    · exact stoppedValue f τ
+    · rw [IsStoppingTime.measurableSpace_min hσ hτ,
+        IsStoppingTime.measurableSpace_min hτ hσ, inf_comm]
+    · have h1 : μ[stoppedValue f τ | hτ.measurableSpace] = stoppedValue f τ := by
+        apply condExp_of_stronglyMeasurable hτ.measurableSpace_le
+· exact Measurable.stronglyMeasurable
+            measurable_stoppedValue h.stronglyAdapted.isStronglyProgressive_of_discrete hτ
+        · exact integrable_stoppedValue ι hτ h.integrable hτ_le
+      rw [h1]
+      exact (condExp_stoppedValue_stopping_time_ae_eq_restrict_le h hτ hσ hτ_le).symm
 
 中文:
 定理 stoppedValue_min_ae_eq_condExp
@@ -385,7 +481,25 @@ theorem stoppedValue_min_ae_eq_condExp
     (h.stoppedValue_ae_eq_condExp_of_le hτ (hσ.min hτ) (fun x => min_le_right _ _) hτ_le).trans ?_
   refine ae_of_ae_restrict_of_ae_restrict_compl {x | σ x <= τ x} ?_ ?_
   · exact condExp_min_stopping_time_ae_eq_restrict_le hσ hτ
-  · suffices μ[stoppedValue f τ | (hσ.min hτ).measurableSp
+  · suffices μ[stoppedValue f τ | (hσ.min hτ).measurableSpace] =ᵐ[μ.restrict {x | τ x <= σ x}]
+        μ[stoppedValue f τ | hσ.measurableSpace] by
+      rw [ae_restrict_iff' (hσ.measurableSpace_le _ (hσ.measurableSet_le_stopping_time hτ).compl)]
+      rw [Filter.EventuallyEq]; rw [ae_restrict_iff'] at this
+      swap; · exact hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ)
+      filter_upwards [this] with x hx hx_mem
+      simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_le] at hx_mem
+      exact hx hx_mem.le
+    apply Filter.EventuallyEq.trans _ ((condExp_min_stopping_time_ae_eq_restrict_le hτ hσ).trans _)
+    · exact stoppedValue f τ
+    · rw [IsStoppingTime.measurableSpace_min hσ hτ,
+        IsStoppingTime.measurableSpace_min hτ hσ, inf_comm]
+    · have h1 : μ[stoppedValue f τ | hτ.measurableSpace] = stoppedValue f τ := by
+        apply condExp_of_stronglyMeasurable hτ.measurableSpace_le
+· exact Measurable.stronglyMeasurable
+            measurable_stoppedValue h.stronglyAdapted.isStronglyProgressive_of_discrete hτ
+        · exact integrable_stoppedValue ι hτ h.integrable hτ_le
+      rw [h1]
+      exact (condExp_stoppedValue_stopping_time_ae_eq_restrict_le h hτ hσ hτ_le).symm
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq, ae_of_ae_restrict_of_ae_restrict_compl, ae_restr, ae_restrict_iff, condExp_min_stopping_time_ae_eq_restrict_le, h.stoppedValue_ae_eq_condExp_of_le, measurableSet_le_stopping_time, measurableSpace, measurableSpace_le, min_le_right, restrict, stoppedValue, stoppedValue_ae_eq_condExp_of_le
 -/

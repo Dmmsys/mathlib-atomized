@@ -179,7 +179,8 @@ theorem isBigO_iff'
     exact le_max_left _ _
   case mpr =>
     rw [isBigO_iff]
-    ob
+    obtain ⟨c, ⟨_, hc⟩⟩ := h
+    exact ⟨c, hc⟩
 
 中文:
 定理 isBigO_iff'
@@ -196,7 +197,8 @@ theorem isBigO_iff'
     exact le_max_left _ _
   case mpr =>
     rw [isBigO_iff]
-    ob
+    obtain ⟨c, ⟨_, hc⟩⟩ := h
+    exact ⟨c, hc⟩
 
 Depends on / 依赖: filter_upwards, hx.trans, isBigO_iff, le_max_left, le_max_right, trans_le, zero_lt_one, zero_lt_one.trans_le
 -/
@@ -233,7 +235,9 @@ theorem isBigO_iff''
   case mpr =>
     rw [isBigO_iff']
     obtain ⟨c, ⟨hc_pos, hc⟩⟩ := h
-  
+    refine ⟨c⁻¹, ⟨by positivity, ?_⟩⟩
+    filter_upwards [hc] with x hx
+    rwa [← inv_inv c, inv_mul_le_iff₀ (by positivity)] at hx
 
 中文:
 定理 isBigO_iff''
@@ -249,7 +253,9 @@ theorem isBigO_iff''
   case mpr =>
     rw [isBigO_iff']
     obtain ⟨c, ⟨hc_pos, hc⟩⟩ := h
-  
+    refine ⟨c⁻¹, ⟨by positivity, ?_⟩⟩
+    filter_upwards [hc] with x hx
+    rwa [← inv_inv c, inv_mul_le_iff₀ (by positivity)] at hx
 
 Depends on / 依赖: filter_upwards, hc_pos, inv_inv, isBigO_iff
 -/
@@ -918,7 +924,14 @@ theorem isLittleO_iff_nat_mul_le_aux
       refine h₀.elim (fun hf => (hf x).trans ?_) fun hg => hg x
       rwa [one_mul] at h₀'
     · have : (0 : Real) < n.succ := Nat.cast_pos.2 n.succ_pos
-      exact (isBigO
+      exact (isBigOWith_inv this).1 (H.def' <| inv_pos.2 this)
+  · refine fun H => isLittleO_iff.2 fun ε ε0 => ?_
+    rcases exists_nat_gt ε⁻¹ with ⟨n, hn⟩
+    have hn₀ : (0 : Real) < n := (inv_pos.2 ε0).trans hn
+    refine ((isBigOWith_inv hn₀).2 (H n)).bound.mono fun x hfg => ?_
+    refine hfg.trans (mul_le_mul_of_nonneg_right (inv_le_of_inv_le₀ ε0 hn.le) ?_)
+    refine h₀.elim (fun hf => nonneg_of_mul_nonneg_right ((hf x).trans hfg) ?_) fun h => h x
+    exact inv_pos.2 hn₀
 
 中文:
 定理 isLittleO_iff_nat_mul_le_aux
@@ -931,7 +944,14 @@ theorem isLittleO_iff_nat_mul_le_aux
       refine h₀.elim (fun hf => (hf x).trans ?_) fun hg => hg x
       rwa [one_mul] at h₀'
     · have : (0 : Real) < n.succ := Nat.cast_pos.2 n.succ_pos
-      exact (isBigO
+      exact (isBigOWith_inv this).1 (H.def' <| inv_pos.2 this)
+  · refine fun H => isLittleO_iff.2 fun ε ε0 => ?_
+    rcases exists_nat_gt ε⁻¹ with ⟨n, hn⟩
+    have hn₀ : (0 : Real) < n := (inv_pos.2 ε0).trans hn
+    refine ((isBigOWith_inv hn₀).2 (H n)).bound.mono fun x hfg => ?_
+    refine hfg.trans (mul_le_mul_of_nonneg_right (inv_le_of_inv_le₀ ε0 hn.le) ?_)
+    refine h₀.elim (fun hf => nonneg_of_mul_nonneg_right ((hf x).trans hfg) ?_) fun h => h x
+    exact inv_pos.2 hn₀
 
 Depends on / 依赖: H.def, Nat.cast_pos, Nat.cast_zero, bound.mono, cast_pos, cast_zero, exists_nat_gt, inv_pos, isBigOWith_inv, isLittleO_iff, n.succ, n.succ_pos, one_mul, one_pos, succ_pos, zero_mul
 -/
@@ -4235,7 +4255,8 @@ theorem IsBigOWith.add_add
     ‖f₁ x + f₂ x‖ <= c₁ * ‖g₁ x‖ + c₂ * ‖g₂ x‖ := norm_add_le_of_le hx₁ hx₂
     _ <= (max c₁ c₂) * ‖g₁ x‖ + (max c₁ c₂) * ‖g₂ x‖ := by
         gcongr <;> simp [le_max_left _ _, le_max_right _ _]
-    _ = (max c₁ c₂) * ‖‖g₁ 
+    _ = (max c₁ c₂) * ‖‖g₁ x‖ + ‖g₂ x‖‖ := by
+        rw [Real.norm_of_nonneg (add_nonneg (norm_nonneg _) (norm_nonneg _))]; rw [mul_add]
 
 中文:
 定理 IsBigOWith.add_add
@@ -4247,7 +4268,8 @@ theorem IsBigOWith.add_add
     ‖f₁ x + f₂ x‖ <= c₁ * ‖g₁ x‖ + c₂ * ‖g₂ x‖ := norm_add_le_of_le hx₁ hx₂
     _ <= (max c₁ c₂) * ‖g₁ x‖ + (max c₁ c₂) * ‖g₂ x‖ := by
         gcongr <;> simp [le_max_left _ _, le_max_right _ _]
-    _ = (max c₁ c₂) * ‖‖g₁ 
+    _ = (max c₁ c₂) * ‖‖g₁ x‖ + ‖g₂ x‖‖ := by
+        rw [Real.norm_of_nonneg (add_nonneg (norm_nonneg _) (norm_nonneg _))]; rw [mul_add]
 
 Depends on / 依赖: IsBigOWith_def, Real.norm_of_nonneg, add_nonneg, filter_upwards, le_max_left, le_max_right, mul_add, norm_add_le_of_le, norm_nonneg, norm_of_nonneg
 -/
@@ -5895,7 +5917,7 @@ le_of_pow_le_pow_left₀ hn (by positivity)
         ‖f x‖ ^ n = ‖f x ^ n‖ := (norm_pow _ _).symm
         _ <= c' ^ n * ‖g x ^ n‖ := hx
         _ <= c' ^ n * ‖g x‖ ^ n := by gcongr; exact norm_pow_le' _ hn.bot_lt
-        _ = (c' * ‖g x
+        _ = (c' * ‖g x‖) ^ n := (mul_pow _ _ _).symm
 
 中文:
 定理 IsBigOWith.of_pow
@@ -5906,7 +5928,7 @@ le_of_pow_le_pow_left₀ hn (by positivity)
         ‖f x‖ ^ n = ‖f x ^ n‖ := (norm_pow _ _).symm
         _ <= c' ^ n * ‖g x ^ n‖ := hx
         _ <= c' ^ n * ‖g x‖ ^ n := by gcongr; exact norm_pow_le' _ hn.bot_lt
-        _ = (c' * ‖g x
+        _ = (c' * ‖g x‖) ^ n := (mul_pow _ _ _).symm
 
 Depends on / 依赖: IsBigOWith, IsBigOWith.of_bound, bot_lt, bound.mono, h.weaken, hn.bot_lt, mul_pow, norm_pow, norm_pow_le, of_bound, weaken
 -/
@@ -6004,7 +6026,8 @@ theorem IsBigOWith.inv_rev
   rcases eq_or_ne (f x) 0 with hx | hx
   · simp only [hx, h₀ hx, inv_zero, norm_zero, mul_zero, le_rfl]
   · have hc : 0 < c := pos_of_mul_pos_left ((norm_pos_iff.2 hx).trans_le hle) (norm_nonneg _)
-    replace hle := inv_anti₀
+    replace hle := inv_anti₀ (norm_pos_iff.2 hx) hle
+    simpa only [norm_inv, mul_inv, ← div_eq_inv_mul, div_le_iff₀ hc] using! hle
 
 中文:
 定理 IsBigOWith.inv_rev
@@ -6014,7 +6037,8 @@ theorem IsBigOWith.inv_rev
   rcases eq_or_ne (f x) 0 with hx | hx
   · simp only [hx, h₀ hx, inv_zero, norm_zero, mul_zero, le_rfl]
   · have hc : 0 < c := pos_of_mul_pos_left ((norm_pos_iff.2 hx).trans_le hle) (norm_nonneg _)
-    replace hle := inv_anti₀
+    replace hle := inv_anti₀ (norm_pos_iff.2 hx) hle
+    simpa only [norm_inv, mul_inv, ← div_eq_inv_mul, div_le_iff₀ hc] using! hle
 
 Depends on / 依赖: IsBigOWith, IsBigOWith.of_bound, div_eq_inv_mul, eq_or_ne, h.bound.mp, inv_zero, le_rfl, mul_inv, mul_zero, norm_inv, norm_nonneg, norm_pos_iff, norm_zero, of_bound, pos_of_mul_pos_left, replace, trans_le
 -/
@@ -6172,7 +6196,14 @@ theorem IsBigOWith.sum_congr
     with x hx
   calc
     ‖∑ i in s, A i x‖ <= ∑ i in s, ‖A i x‖ := norm_sum_le ..
-    _ <= ∑ i in s, C i * ‖B i x‖ := Finset.sum_le_sum (fu
+    _ <= ∑ i in s, C i * ‖B i x‖ := Finset.sum_le_sum (fun j hj => hx j hj)
+    _ <= ∑ i in s, sSup (C '' s) * ‖B i x‖ := by
+        refine Finset.sum_le_sum ?_
+        intro j hj; gcongr
+        rw [← s.sup'_eq_csSup_image hs]; rw [Finset.le_sup'_iff]; use j
+    _ = sSup (C '' s) * ∑ i in s, ‖B i x‖ := (Finset.mul_sum ..).symm
+    _ = sSup (C '' s) * ‖∑ i in s, ‖B i x‖‖ := by
+      congr; rw [Real.norm_of_nonneg (Finset.sum_nonneg (fun _ _ => norm_nonneg _))]
 
 中文:
 定理 IsBigOWith.sum_congr
@@ -6184,7 +6215,14 @@ theorem IsBigOWith.sum_congr
     with x hx
   calc
     ‖∑ i in s, A i x‖ <= ∑ i in s, ‖A i x‖ := norm_sum_le ..
-    _ <= ∑ i in s, C i * ‖B i x‖ := Finset.sum_le_sum (fu
+    _ <= ∑ i in s, C i * ‖B i x‖ := Finset.sum_le_sum (fun j hj => hx j hj)
+    _ <= ∑ i in s, sSup (C '' s) * ‖B i x‖ := by
+        refine Finset.sum_le_sum ?_
+        intro j hj; gcongr
+        rw [← s.sup'_eq_csSup_image hs]; rw [Finset.le_sup'_iff]; use j
+    _ = sSup (C '' s) * ∑ i in s, ‖B i x‖ := (Finset.mul_sum ..).symm
+    _ = sSup (C '' s) * ‖∑ i in s, ‖B i x‖‖ := by
+      congr; rw [Real.norm_of_nonneg (Finset.sum_nonneg (fun _ _ => norm_nonneg _))]
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.sum_le_sum, IsBigOWith_def, _eq_csSup_image, _iff, eq_empty_or_nonempty, eventually_all_finset, filter_upwards, isBigOWith_zero, le_sup, norm_sum_le, s.eq_empty_or_nonempty, s.sup, sum_le_sum
 -/
@@ -6247,7 +6285,10 @@ theorem IsLittleO.sum_congr
   simp_rw [Finset.sum_cons]
   calc (fun H => A i H + ∑ j in s, A j H)
       =o[l] fun H => ‖B i H‖ + ‖∑ j in s, ‖B j H‖‖ :=
-          (hAB i (by simp)).add_add (h (fun j hj => hAB j (by simp [h
+          (hAB i (by simp)).add_add (h (fun j hj => hAB j (by simp [hj])))
+    _ =ᶠ[l] fun H => ‖B i H‖ + ∑ j in s, ‖B j H‖ := by
+        refine Eventually.of_forall fun H => congr_arg (‖B i H‖ + ·) ?_
+        exact Real.norm_of_nonneg (Finset.sum_nonneg fun _ _ => norm_nonneg _)
 
 中文:
 定理 IsLittleO.sum_congr
@@ -6259,7 +6300,10 @@ theorem IsLittleO.sum_congr
   simp_rw [Finset.sum_cons]
   calc (fun H => A i H + ∑ j in s, A j H)
       =o[l] fun H => ‖B i H‖ + ‖∑ j in s, ‖B j H‖‖ :=
-          (hAB i (by simp)).add_add (h (fun j hj => hAB j (by simp [h
+          (hAB i (by simp)).add_add (h (fun j hj => hAB j (by simp [hj])))
+    _ =ᶠ[l] fun H => ‖B i H‖ + ∑ j in s, ‖B j H‖ := by
+        refine Eventually.of_forall fun H => congr_arg (‖B i H‖ + ·) ?_
+        exact Real.norm_of_nonneg (Finset.sum_nonneg fun _ _ => norm_nonneg _)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Finset, Finset.cons_induction, Finset.sum_cons, Finset.sum_nonneg, Real.norm_of_nonneg, add_add, congr_arg, cons_induction, isLittleO_zero, norm_nonneg, norm_of_nonneg, of_forall, simp_rw, sum_cons, sum_nonneg
 -/
@@ -6289,7 +6333,10 @@ theorem IsBigOWith.sum_congr'
   calc
     ‖∑ j in i H, A j H‖ <= ∑ j in i H, ‖A j H‖ := norm_sum_le ..
     _ <= ∑ j in i H, C * ‖B j H‖ :=
-        Finset.sum_le_sum fun j _ => hbound (Filt
+        Finset.sum_le_sum fun j _ => hbound (Filter.eventually_top.mp hs₁ j) hH
+    _ = C * ∑ j in i H, ‖B j H‖ := (Finset.mul_sum ..).symm
+    _ = C * ‖∑ j in i H, ‖B j H‖‖ := by
+        congr; rw [Real.norm_of_nonneg (Finset.sum_nonneg (fun _ _ => norm_nonneg _))]
 
 中文:
 定理 IsBigOWith.sum_congr'
@@ -6301,7 +6348,10 @@ theorem IsBigOWith.sum_congr'
   calc
     ‖∑ j in i H, A j H‖ <= ∑ j in i H, ‖A j H‖ := norm_sum_le ..
     _ <= ∑ j in i H, C * ‖B j H‖ :=
-        Finset.sum_le_sum fun j _ => hbound (Filt
+        Finset.sum_le_sum fun j _ => hbound (Filter.eventually_top.mp hs₁ j) hH
+    _ = C * ∑ j in i H, ‖B j H‖ := (Finset.mul_sum ..).symm
+    _ = C * ‖∑ j in i H, ‖B j H‖‖ := by
+        congr; rw [Real.norm_of_nonneg (Finset.sum_nonneg (fun _ _ => norm_nonneg _))]
 
 Depends on / 依赖: Filter, Filter.eventually_prod_iff.mp, Filter.eventually_top.mp, Finset, Finset.mul_sum, Finset.sum_le_sum, Finset.sum_nonneg, IsBigOWith_def, Real.norm_of_nonneg, eventually_prod_iff, eventually_top, filter_upwards, hbound, mul_sum, norm_nonneg, norm_of_nonneg, norm_sum_le, sum_le_sum, sum_nonneg
 -/

@@ -175,7 +175,7 @@ definition fullSubcategoryEquiv
   invFun h :=
     { h := P.homMk h.h
       h₀ := by ext; exact h.h₀
-      h₁ := by ext; e
+      h₁ := by ext; exact h.h₁ }
 
 中文:
 定义 fullSubcategoryEquiv
@@ -190,7 +190,7 @@ definition fullSubcategoryEquiv
   invFun h :=
     { h := P.homMk h.h
       h₀ := by ext; exact h.h₀
-      h₁ := by ext; e
+      h₁ := by ext; exact h.h₁ }
 
 Depends on / 依赖: FullSubcategory, ObjectProperty, ObjectProperty.FullSubcategory.comp_hom, P.homMk, comp_hom, h.h.hom, invFun
 -/
@@ -481,7 +481,8 @@ lemma factorsThroughLocalization
     simp only [← h.h₀, ← h.h₁, L.map_comp, this]
   have := Localization.inverts L (weakEquivalences C) P.ι (by
     rw [← weakEquivalence_iff]
-    infer_instanc
+    infer_instance)
+  simp [← cancel_epi (L.map P.ι), ← L.map_comp]
 
 中文:
 引理 factorsThroughLocalization
@@ -494,7 +495,8 @@ lemma factorsThroughLocalization
     simp only [← h.h₀, ← h.h₁, L.map_comp, this]
   have := Localization.inverts L (weakEquivalences C) P.ι (by
     rw [← weakEquivalence_iff]
-    infer_instanc
+    infer_instance)
+  simp [← cancel_epi (L.map P.ι), ← L.map_comp]
 
 Depends on / 依赖: L.map, L.map_comp, Localization, Localization.inverts, areEqualizedByLocalization_iff, cancel_epi, infer_instance, inverts, map_comp, weakEquivalence_iff, weakEquivalences
 -/
@@ -595,7 +597,12 @@ lemma exists_very_good_pathObject
       p₀ := fac.p ≫ P.p₀
       p₁ := fac.p ≫ P.p₁
       ι := fac.i
-      weakEquivalence_ι := weakEquivalence_of_
+      weakEquivalence_ι := weakEquivalence_of_postcomp_of_fac fac.fac }
+  have : Fibration P'.p := by
+    rw [show P'.p = fac.p ≫ P.p by cat_disch]
+    infer_instance
+  have sq : CommSq (initial.to _) (initial.to _) fac.p h.h := { }
+  exact ⟨P', { }, ⟨{ h := sq.lift }⟩⟩
 
 中文:
 引理 存在_very_good_pathObject
@@ -608,7 +615,12 @@ lemma exists_very_good_pathObject
       p₀ := fac.p ≫ P.p₀
       p₁ := fac.p ≫ P.p₁
       ι := fac.i
-      weakEquivalence_ι := weakEquivalence_of_
+      weakEquivalence_ι := weakEquivalence_of_postcomp_of_fac fac.fac }
+  have : Fibration P'.p := by
+    rw [show P'.p = fac.p ≫ P.p by cat_disch]
+    infer_instance
+  have sq : CommSq (initial.to _) (initial.to _) fac.p h.h := { }
+  exact ⟨P', { }, ⟨{ h := sq.lift }⟩⟩
 
 Depends on / 依赖: CommSq, Fibration, MorphismProperty, MorphismProperty.factorizationData, PathObject, cat_disch, cofibrations, exists_good_pathObject, fac.Z, fac.fac, fac.i, fac.p, factorizationData, h.exists_good_pathObject, infer_instance, initial, initial.to, sq.lift, trivialFibrations, weakEquivalence_of_postcomp_of_fac
 -/
@@ -719,7 +731,13 @@ lemma postcomp
    ⟨{ h := h.h ≫ sq.lift
       h₀ := by
         have := sq.fac_right =≫ prod.fst
-        simp only [Cate
+        simp only [Category.assoc, prod.lift_fst, Q.p_fst] at this
+        simp [this]
+      h₁ := by
+        have := sq.fac_right =≫ prod.snd
+        simp only [Category.assoc, prod.lift_snd, Q.p_snd] at this
+        simp [this]
+    }⟩⟩
 
 中文:
 引理 postcomp
@@ -732,7 +750,13 @@ lemma postcomp
    ⟨{ h := h.h ≫ sq.lift
       h₀ := by
         have := sq.fac_right =≫ prod.fst
-        simp only [Cate
+        simp only [Category.assoc, prod.lift_fst, Q.p_fst] at this
+        simp [this]
+      h₁ := by
+        have := sq.fac_right =≫ prod.snd
+        simp only [Category.assoc, prod.lift_snd, Q.p_snd] at this
+        simp [this]
+    }⟩⟩
 
 Depends on / 依赖: Category, Category.assoc, CommSq, PathObject, PathObject.exists_very_good, Q.p_fst, Q.p_snd, exists_very_good, exists_very_good_pathObject, fac_right, h.exists_very_good_pathObject, lift_fst, lift_snd, p_fst, p_snd, prod.fst, prod.lift, prod.lift_fst, prod.lift_snd, prod.snd
 -/

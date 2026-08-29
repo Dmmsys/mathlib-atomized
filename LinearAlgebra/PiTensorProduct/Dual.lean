@@ -206,7 +206,7 @@ theorem dualDistrib_dualDistribInvOfBasis_right_inverse
   classical
   refine (Basis.piTensorProduct (fun i => (b i).dualBasis)).ext (fun p => ?_)
   refine (Basis.piTensorProduct (fun i => (b i).dualBasis)).ext_elem (fun q => ?_)
-  simp [Finsupp.single_apply, Fintype.prod_ite_zero, 
+  simp [Finsupp.single_apply, Fintype.prod_ite_zero, ← funext_iff]
 
 中文:
 定理 dualDistrib_dualDistribInvOfBasis_right_inverse
@@ -217,7 +217,7 @@ theorem dualDistrib_dualDistribInvOfBasis_right_inverse
   classical
   refine (Basis.piTensorProduct (fun i => (b i).dualBasis)).ext (fun p => ?_)
   refine (Basis.piTensorProduct (fun i => (b i).dualBasis)).ext_elem (fun q => ?_)
-  simp [Finsupp.single_apply, Fintype.prod_ite_zero, 
+  simp [Finsupp.single_apply, Fintype.prod_ite_zero, ← funext_iff]
 
 Depends on / 依赖: Basis.piTensorProduct, Finsupp, Finsupp.single_apply, Fintype, Fintype.ofFinite, Fintype.prod_ite_zero, classical, dualBasis, ext_elem, funext_iff, ofFinite, piTensorProduct, prod_ite_zero, single_apply
 -/

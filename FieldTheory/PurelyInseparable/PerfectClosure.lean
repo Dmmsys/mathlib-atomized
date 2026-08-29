@@ -468,7 +468,8 @@ instance perfectClosure.perfectRing
   obtain ⟨n, y, hy⟩ := (mem_perfectClosure_iff_pow_mem p).1 x.2
   rw [frobenius_def] at hx
   rw [← hx]; rw [← pow_mul]; rw [← pow_succ'] at hy
-  exact ⟨⟨x', (mem_p
+  exact ⟨⟨x', (mem_perfectClosure_iff_pow_mem p).2 ⟨n + 1, y, hy⟩⟩, by
+    simp_rw [frobenius_def, SubmonoidClass.mk_pow, hx]⟩
 
 中文:
 实例 perfectClosure.perfectRing
@@ -479,7 +480,8 @@ instance perfectClosure.perfectRing
   obtain ⟨n, y, hy⟩ := (mem_perfectClosure_iff_pow_mem p).1 x.2
   rw [frobenius_def] at hx
   rw [← hx]; rw [← pow_mul]; rw [← pow_succ'] at hy
-  exact ⟨⟨x', (mem_p
+  exact ⟨⟨x', (mem_perfectClosure_iff_pow_mem p).2 ⟨n + 1, y, hy⟩⟩, by
+    simp_rw [frobenius_def, SubmonoidClass.mk_pow, hx]⟩
 
 Depends on / 依赖: RingHom, RingHom.expChar, SubmonoidClass, SubmonoidClass.mk_pow, algebraMap, expChar, frobenius_def, injective, mem_perfectClosure_iff_pow_mem, mk_pow, ofSurjective, pow_mul, pow_succ, simp_rw, strongRankCondition_of_orzechProperty, surjective_frobenius
 -/
@@ -643,7 +645,16 @@ theorem adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable
   refine le_antisymm (adjoin_le_iff.2 fun x hx => ?_) (adjoin_le_iff.2 ?_)
   · have : Algebra.IsSeparable M M⟮x⟯ :=
 (isSeparable_adjoin_simple_iff_isSeparable M E).2
-        ((isSeparable
+        ((isSeparable_adjoin_iff_isSeparable F E).1 inferInstance x hx).tower_top M
+    have : IsPurelyInseparable M M⟮x⟯ :=
+      (isPurelyInseparable_adjoin_simple_iff_pow_mem M E q).2
+        ⟨n, ⟨x ^ q ^ n, subset_adjoin F _ ⟨x, hx, rfl⟩⟩, rfl⟩
+    have hx' := mem_adjoin_simple_self M x
+    rw [M⟮x⟯.eq_bot_of_isPurelyInseparable_of_isSeparable]; rw [mem_bot] at hx'
+    obtain ⟨y, rfl⟩ := hx'
+    exact y.2
+  · rintro _ ⟨y, hy, rfl⟩
+    exact pow_mem (subset_adjoin F S hy) _
 
 中文:
 定理 adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable
@@ -654,7 +665,16 @@ theorem adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable
   refine le_antisymm (adjoin_le_iff.2 fun x hx => ?_) (adjoin_le_iff.2 ?_)
   · have : Algebra.IsSeparable M M⟮x⟯ :=
 (isSeparable_adjoin_simple_iff_isSeparable M E).2
-        ((isSeparable
+        ((isSeparable_adjoin_iff_isSeparable F E).1 inferInstance x hx).tower_top M
+    have : IsPurelyInseparable M M⟮x⟯ :=
+      (isPurelyInseparable_adjoin_simple_iff_pow_mem M E q).2
+        ⟨n, ⟨x ^ q ^ n, subset_adjoin F _ ⟨x, hx, rfl⟩⟩, rfl⟩
+    have hx' := mem_adjoin_simple_self M x
+    rw [M⟮x⟯.eq_bot_of_isPurelyInseparable_of_isSeparable]; rw [mem_bot] at hx'
+    obtain ⟨y, rfl⟩ := hx'
+    exact y.2
+  · rintro _ ⟨y, hy, rfl⟩
+    exact pow_mem (subset_adjoin F S hy) _
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable, IsPurelyInseparable, IsSeparable, StrongRankCondition, adjoin, adjoin_le_iff, algebraMap, expChar_of_injective_algebraMap, injective, isPurelyInseparable_adjoin_simple_iff_pow_mem, isSeparable_adjoin_iff_isSeparable, isSeparable_adjoin_simple_iff_isSeparable, le_antisymm, rankCondition_of_strongRankCondition, subset_adjoin, tower_top
 -/
@@ -837,14 +857,28 @@ theorem Field.span_map_pow_expChar_pow_eq_top_of_isSeparable
   statement: [Algebra.IsSeparable F E]
   proof: by
   rw [← Algebra.top_toSubmodule]; rw [← top_toSubalgebra]; rw [← adjoin_univ]; rw [adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable' F E _ q n]; rw [adjoin_toSubalgebra_of_isAlgebraic fun x _ => Algebra.IsAlgebraic.isAlgebraic x]; rw [Set.image_univ]; rw [Algebra.adjoin_eq_span]
-  have := (MonoidH
+  have := (MonoidHom.mrange (powMonoidHom (α := E) (q ^ n))).closure_eq
+  simp only [MonoidHom.mrange, powMonoidHom, MonoidHom.coe_mk, OneHom.coe_mk,
+    Submonoid.coe_copy] at this
+  rw [this]
+  refine (Submodule.span_mono <| Set.range_comp_subset_range _ _).antisymm (Submodule.span_le.2 ?_)
+  rw [Set.range_comp]; rw [← Set.image_univ]
+  have := expChar_of_injective_algebraMap (algebraMap F E).injective q
+  apply h ▸ Submodule.image_span_subset_span (LinearMap.iterateFrobenius F E q n) _
 
 中文:
 定理 域.span_map_pow_expChar_pow_eq_top_of_isSeparable
   结论: [代数.是可分 F E]
   证明: by
   rw [← Algebra.top_toSubmodule]; rw [← top_toSubalgebra]; rw [← adjoin_univ]; rw [adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable' F E _ q n]; rw [adjoin_toSubalgebra_of_isAlgebraic fun x _ => Algebra.IsAlgebraic.isAlgebraic x]; rw [Set.image_univ]; rw [Algebra.adjoin_eq_span]
-  have := (MonoidH
+  have := (MonoidHom.mrange (powMonoidHom (α := E) (q ^ n))).closure_eq
+  simp only [MonoidHom.mrange, powMonoidHom, MonoidHom.coe_mk, OneHom.coe_mk,
+    Submonoid.coe_copy] at this
+  rw [this]
+  refine (Submodule.span_mono <| Set.range_comp_subset_range _ _).antisymm (Submodule.span_le.2 ?_)
+  rw [Set.range_comp]; rw [← Set.image_univ]
+  have := expChar_of_injective_algebraMap (algebraMap F E).injective q
+  apply h ▸ Submodule.image_span_subset_span (LinearMap.iterateFrobenius F E q n) _
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, Algebra.adjoin_eq_span, Algebra.top_toSubmodule, IsAlgebraic, MonoidHom, MonoidHom.coe_mk, MonoidHom.mrange, OneHom, OneHom.coe_mk, Set.image_univ, Set.r, Submodule, Submodule.span_mono, Submonoid, Submonoid.coe_copy, adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable, adjoin_eq_span, adjoin_toSubalgebra_of_isAlgebraic, adjoin_univ
 -/
@@ -872,7 +906,12 @@ theorem LinearIndependent.map_pow_expChar_pow_of_fd_isSeparable
   let b : Basis ι' F E := Basis.extend h'
   let : Fintype ι' := FiniteDimensional.fintypeBasisIndex b
   have H := linearIndependent_of_top_le_span_of_card_eq_finrank
-    (Field.span_map_pow_expChar_pow_eq_top_of_isSep
+    (Field.span_map_pow_expChar_pow_eq_top_of_isSeparable q n b.span_eq).ge
+    (Module.finrank_eq_card_basis b).symm
+  let f (i : ι) : ι' := ⟨v i, h'.subset_extend _ ⟨i, rfl⟩⟩
+  convert! H.comp f fun _ _ heq => h.injective (by simpa only [f, Subtype.mk.injEq] using heq)
+  simp_rw [Function.comp_apply, b]
+  rw [Basis.extend_apply_self]
 
 中文:
 定理 LinearIndependent.map_pow_expChar_pow_of_fd_isSeparable
@@ -882,7 +921,12 @@ theorem LinearIndependent.map_pow_expChar_pow_of_fd_isSeparable
   let b : Basis ι' F E := Basis.extend h'
   let : Fintype ι' := FiniteDimensional.fintypeBasisIndex b
   have H := linearIndependent_of_top_le_span_of_card_eq_finrank
-    (Field.span_map_pow_expChar_pow_eq_top_of_isSep
+    (Field.span_map_pow_expChar_pow_eq_top_of_isSeparable q n b.span_eq).ge
+    (Module.finrank_eq_card_basis b).symm
+  let f (i : ι) : ι' := ⟨v i, h'.subset_extend _ ⟨i, rfl⟩⟩
+  convert! H.comp f fun _ _ heq => h.injective (by simpa only [f, Subtype.mk.injEq] using heq)
+  simp_rw [Function.comp_apply, b]
+  rw [Basis.extend_apply_self]
 -/
 private theorem LinearIndependent.map_pow_expChar_pow_of_fd_isSeparable
     [FiniteDimensional F E] [Algebra.IsSeparable F E]
@@ -912,7 +956,10 @@ theorem LinearIndependent.map_pow_expChar_pow_of_isSeparable
   let E' := adjoin F (s.image v : Set E)
   have : FiniteDimensional F E' := finiteDimensional_adjoin
     fun x _ => Algebra.IsIntegral.isIntegral x
-  let v' (i : s) : E' := ⟨v i.1, subset_adjoin F _ (Finset.mem_ima
+  let v' (i : s) : E' := ⟨v i.1, subset_adjoin F _ (Finset.mem_image.2 ⟨i.1, i.2, rfl⟩)⟩
+  have h' : LinearIndependent F v' := (h s).of_comp E'.val.toLinearMap
+  exact (h'.map_pow_expChar_pow_of_fd_isSeparable q n).map'
+    E'.val.toLinearMap (LinearMap.ker_eq_bot_of_injective E'.val.injective)
 
 中文:
 定理 LinearIndependent.map_pow_expChar_pow_of_isSeparable
@@ -924,7 +971,10 @@ theorem LinearIndependent.map_pow_expChar_pow_of_isSeparable
   let E' := adjoin F (s.image v : Set E)
   have : FiniteDimensional F E' := finiteDimensional_adjoin
     fun x _ => Algebra.IsIntegral.isIntegral x
-  let v' (i : s) : E' := ⟨v i.1, subset_adjoin F _ (Finset.mem_ima
+  let v' (i : s) : E' := ⟨v i.1, subset_adjoin F _ (Finset.mem_image.2 ⟨i.1, i.2, rfl⟩)⟩
+  have h' : LinearIndependent F v' := (h s).of_comp E'.val.toLinearMap
+  exact (h'.map_pow_expChar_pow_of_fd_isSeparable q n).map'
+    E'.val.toLinearMap (LinearMap.ker_eq_bot_of_injective E'.val.injective)
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, FiniteDimensional, Finset, Finset.mem_image, IsIntegral, LinearIndependent, LinearMap, LinearMap.ker_eq_bot_of_injective, adjoin, classical, finiteDimensional_adjoin, isIntegral, ker_eq_bot_of_injective, linearIndependent_iff_finset_linearIndependent, map_pow_expChar_pow_of_fd_isSeparable, mem_image, of_comp, s.image, subset_adjoin
 -/
@@ -952,7 +1002,8 @@ have : Algebra.IsSeparable F E' := (isSeparable_adjoin_iff_isSeparable F _).2 by
     rintro _ ⟨y, rfl⟩; exact hsep y
   let v' (i : ι) : E' := ⟨v i, subset_adjoin F _ ⟨i, rfl⟩⟩
   have h' : LinearIndependent F v' := h.of_comp E'.val.toLinearMap
-  exact (h'.map_pow
+  exact (h'.map_pow_expChar_pow_of_isSeparable q n).map'
+    E'.val.toLinearMap (LinearMap.ker_eq_bot_of_injective E'.val.injective)
 
 中文:
 定理 LinearIndependent.map_pow_expChar_pow_of_isSeparable'
@@ -962,7 +1013,8 @@ have : Algebra.IsSeparable F E' := (isSeparable_adjoin_iff_isSeparable F _).2 by
     rintro _ ⟨y, rfl⟩; exact hsep y
   let v' (i : ι) : E' := ⟨v i, subset_adjoin F _ ⟨i, rfl⟩⟩
   have h' : LinearIndependent F v' := h.of_comp E'.val.toLinearMap
-  exact (h'.map_pow
+  exact (h'.map_pow_expChar_pow_of_isSeparable q n).map'
+    E'.val.toLinearMap (LinearMap.ker_eq_bot_of_injective E'.val.injective)
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable, IsSeparable, LinearIndependent, LinearMap, LinearMap.ker_eq_bot_of_injective, Set.range, adjoin, h.of_comp, injective, isSeparable_adjoin_iff_isSeparable, ker_eq_bot_of_injective, map_pow_expChar_pow_of_isSeparable, of_comp, subset_adjoin, toLinearMap, val.injective, val.toLinearMap
 -/
@@ -1014,7 +1066,12 @@ theorem minpoly.iterateFrobenius_of_isSeparable
     (minpoly.monic hai |>.map _)
     (minpoly.dvd F (a ^ q ^ n) ?haeval)
     ?hdeg
-· simpa using
+· simpa using! Eq.symm
+      (minpoly F a).map_aeval_eq_aeval_map (RingHom.iterateFrobenius_comm _ q n) a
+  · rw [(minpoly F a).natDegree_map_eq_of_injective (iterateFrobenius F q n).injective,
+      ← IntermediateField.adjoin.finrank hai,
+      IntermediateField.adjoin_simple_eq_adjoin_pow_expChar_pow_of_isSeparable F E hsep q n,
+      ← IntermediateField.adjoin.finrank hapi, iterateFrobenius_def]
 
 中文:
 定理 minpoly.iterateFrobenius_of_isSeparable
@@ -1028,7 +1085,12 @@ theorem minpoly.iterateFrobenius_of_isSeparable
     (minpoly.monic hai |>.map _)
     (minpoly.dvd F (a ^ q ^ n) ?haeval)
     ?hdeg
-· simpa using
+· simpa using! Eq.symm
+      (minpoly F a).map_aeval_eq_aeval_map (RingHom.iterateFrobenius_comm _ q n) a
+  · rw [(minpoly F a).natDegree_map_eq_of_injective (iterateFrobenius F q n).injective,
+      ← IntermediateField.adjoin.finrank hai,
+      IntermediateField.adjoin_simple_eq_adjoin_pow_expChar_pow_of_isSeparable F E hsep q n,
+      ← IntermediateField.adjoin.finrank hapi, iterateFrobenius_def]
 
 Depends on / 依赖: Eq.symm, Intermediat, IntermediateField, IntermediateField.adjoin.finrank, IsIntegral, Polynomial, Polynomial.eq_of_monic_of_dvd_of_natDegree_le, RingHom, RingHom.iterateFrobenius_comm, adjoin, eq_of_monic_of_dvd_of_natDegree_le, finrank, haeval, hai.pow, hsep.isIntegral, injective, isIntegral, iterateFrobenius, iterateFrobenius_comm, map_aeval_eq_aeval_map
 -/
@@ -1084,7 +1146,11 @@ theorem perfectField_of_perfectClosure_eq_bot
   have := expChar_of_injective_algebraMap (algebraMap F E).injective p
   have := PerfectRing.ofSurjective F p fun x => by
     obtain ⟨y, h⟩ := surjective_frobenius E p (algebraMap F E x)
-    have : y in perfectClosure F E := ⟨1, x, by rw [← h, pow_one, frobenius_def, ring
+    have : y in perfectClosure F E := ⟨1, x, by rw [← h, pow_one, frobenius_def, ringExpChar.eq F p]⟩
+    obtain ⟨z, rfl⟩ := eq ▸ this
+    simp only [Algebra.ofId] at h
+    exact ⟨z, (algebraMap F E).injective (by rw [RingHom.map_frobenius]; rw [h])⟩
+  exact PerfectRing.toPerfectField F p
 
 中文:
 定理 perfectField_of_perfectClosure_eq_bot
@@ -1094,7 +1160,11 @@ theorem perfectField_of_perfectClosure_eq_bot
   have := expChar_of_injective_algebraMap (algebraMap F E).injective p
   have := PerfectRing.ofSurjective F p fun x => by
     obtain ⟨y, h⟩ := surjective_frobenius E p (algebraMap F E x)
-    have : y in perfectClosure F E := ⟨1, x, by rw [← h, pow_one, frobenius_def, ring
+    have : y in perfectClosure F E := ⟨1, x, by rw [← h, pow_one, frobenius_def, ringExpChar.eq F p]⟩
+    obtain ⟨z, rfl⟩ := eq ▸ this
+    simp only [Algebra.ofId] at h
+    exact ⟨z, (algebraMap F E).injective (by rw [RingHom.map_frobenius]; rw [h])⟩
+  exact PerfectRing.toPerfectField F p
 
 Depends on / 依赖: Algebra, Algebra.ofId, PerfectRing, PerfectRing.ofSurjective, PerfectRing.toPerfectField, RingHom, RingHom.map_frobenius, algebraMap, expChar_of_injective_algebraMap, frobenius_def, injective, map_frobenius, ofSurjective, perfectClosure, pow_one, ringExpChar, ringExpChar.eq, surjective_frobenius, toPerfectField
 -/

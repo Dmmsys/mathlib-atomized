@@ -750,7 +750,19 @@ theorem cauchySeq_finset_iff_prod_vanishing
     obtain ⟨⟨s₁, s₂⟩, h⟩ := h e he
     use s₁ union s₂
     intro t ht
-    
+    specialize h (s₁ union s₂, s₁ union s₂ union t) ⟨le_sup_left, le_sup_of_le_left le_sup_right⟩
+    simpa only [Finset.prod_union ht.symm, mul_div_cancel_left] using h
+  · rintro h e he
+    rcases exists_nhds_split_inv he with ⟨d, hd, hde⟩
+    rcases h d hd with ⟨s, h⟩
+    use (s, s)
+    rintro ⟨t₁, t₂⟩ ⟨ht₁, ht₂⟩
+    have : ((∏ b in t₂, f b) / ∏ b in t₁, f b) = (∏ b in t₂ \ s, f b) / ∏ b in t₁ \ s, f b := by
+      rw [← Finset.prod_sdiff ht₁]; rw [← Finset.prod_sdiff ht₂]; rw [mul_div_mul_right_eq_div]
+    simp only [this]
+    exact hde _ (h _ Finset.sdiff_disjoint) _ (h _ Finset.sdiff_disjoint)
+
+@[to_additive]
 
 中文:
 定理 cauchySeq_finset_iff_prod_vanishing
@@ -764,7 +776,19 @@ theorem cauchySeq_finset_iff_prod_vanishing
     obtain ⟨⟨s₁, s₂⟩, h⟩ := h e he
     use s₁ union s₂
     intro t ht
-    
+    specialize h (s₁ union s₂, s₁ union s₂ union t) ⟨le_sup_left, le_sup_of_le_left le_sup_right⟩
+    simpa only [Finset.prod_union ht.symm, mul_div_cancel_left] using h
+  · rintro h e he
+    rcases exists_nhds_split_inv he with ⟨d, hd, hde⟩
+    rcases h d hd with ⟨s, h⟩
+    use (s, s)
+    rintro ⟨t₁, t₂⟩ ⟨ht₁, ht₂⟩
+    have : ((∏ b in t₂, f b) / ∏ b in t₁, f b) = (∏ b in t₂ \ s, f b) / ∏ b in t₁ \ s, f b := by
+      rw [← Finset.prod_sdiff ht₁]; rw [← Finset.prod_sdiff ht₂]; rw [mul_div_mul_right_eq_div]
+    simp only [this]
+    exact hde _ (h _ Finset.sdiff_disjoint) _ (h _ Finset.sdiff_disjoint)
+
+@[to_additive]
 
 Depends on / 依赖: CauchySeq, Finset, Finset.prod_union, Function, Function.comp_def, atTop_neBot, cauchy_map_iff, classical, comp_def, exists_nhds_split_inv, ht.symm, le_sup_left, le_sup_of_le_left, le_sup_right, mul_div_cancel_left, prod_atTop_atTop_eq, prod_union, specialize, tendsto_atTop, tendsto_comap_iff
 -/
@@ -804,7 +828,17 @@ theorem cauchySeq_finset_iff_tprod_vanishing
   · obtain ⟨o, ho, o_closed, oe⟩ := exists_mem_nhds_isClosed_subset he
     obtain ⟨s, hs⟩ := vanish o ho
     refine ⟨s, fun t hts => oe ?_⟩
-    by_cases ht : M
+    by_cases ht : Multipliable fun a : t => f a
+    · classical
+      refine o_closed.mem_of_tendsto ht.hasProd (Eventually.of_forall fun t' => ?_)
+      rw [← prod_subtype_map_embedding fun _ _ => by rfl]
+      apply hs
+      simp_rw [Finset.mem_map]
+      rintro _ ⟨b, -, rfl⟩
+      exact hts b.prop
+    · exact tprod_eq_one_of_not_multipliable ht ▸ mem_of_mem_nhds ho
+  · obtain ⟨s, hs⟩ := vanish _ he
+    exact ⟨s, fun t hts => (t.tprod_subtype f).symm ▸ hs _ hts⟩
 
 中文:
 定理 cauchySeq_finset_iff_tprod_vanishing
@@ -814,7 +848,17 @@ theorem cauchySeq_finset_iff_tprod_vanishing
   · obtain ⟨o, ho, o_closed, oe⟩ := exists_mem_nhds_isClosed_subset he
     obtain ⟨s, hs⟩ := vanish o ho
     refine ⟨s, fun t hts => oe ?_⟩
-    by_cases ht : M
+    by_cases ht : Multipliable fun a : t => f a
+    · classical
+      refine o_closed.mem_of_tendsto ht.hasProd (Eventually.of_forall fun t' => ?_)
+      rw [← prod_subtype_map_embedding fun _ _ => by rfl]
+      apply hs
+      simp_rw [Finset.mem_map]
+      rintro _ ⟨b, -, rfl⟩
+      exact hts b.prop
+    · exact tprod_eq_one_of_not_multipliable ht ▸ mem_of_mem_nhds ho
+  · obtain ⟨s, hs⟩ := vanish _ he
+    exact ⟨s, fun t hts => (t.tprod_subtype f).symm ▸ hs _ hts⟩
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Finset, Finset.mem_map, Multipliable, Set.disjoint_left, cauchySeq_finset_iff_prod_vanishing, classical, disjoint_left, exists_mem_nhds_isClosed_subset, hasProd, ht.hasProd, mem_map, mem_of_tendsto, o_closed, o_closed.mem_of_tendsto, of_forall, prod_subtype_map_embedding, simp_rw, vanish
 -/
@@ -903,7 +947,15 @@ theorem Multipliable.multipliable_of_eq_one_or_self
       have eq : ∏ b in t with g b = f b, f b = ∏ b in t, g b :=
         calc
           ∏ b in t with g b = f b, f b = ∏ b in t with g b = f b, g b :=
-          
+            Finset.prod_congr rfl fun b hb => (Finset.mem_filter.1 hb).2.symm
+          _ = ∏ b in t, g b := by
+           {refine Finset.prod_subset (Finset.filter_subset _ _) ?_
+            intro b hbt hb
+            simp only [Finset.mem_filter, and_iff_right hbt] at hb
+            exact (h b).resolve_right hb}
+eq ▸ hs _ Finset.disjoint_of_subset_left (Finset.filter_subset _ _) ht⟩
+
+@[to_additive]
 
 中文:
 定理 Multipliable.multipliable_of_eq_one_or_self
@@ -916,7 +968,15 @@ theorem Multipliable.multipliable_of_eq_one_or_self
       have eq : ∏ b in t with g b = f b, f b = ∏ b in t, g b :=
         calc
           ∏ b in t with g b = f b, f b = ∏ b in t with g b = f b, g b :=
-          
+            Finset.prod_congr rfl fun b hb => (Finset.mem_filter.1 hb).2.symm
+          _ = ∏ b in t, g b := by
+           {refine Finset.prod_subset (Finset.filter_subset _ _) ?_
+            intro b hbt hb
+            simp only [Finset.mem_filter, and_iff_right hbt] at hb
+            exact (h b).resolve_right hb}
+eq ▸ hs _ Finset.disjoint_of_subset_left (Finset.filter_subset _ _) ht⟩
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.filter_subset, Finset.mem_filter, Finset.prod_congr, Finset.prod_subset, and_iff_right, classical, filter_subset, mem_filter, multipliable_iff_vanishing, prod_congr, prod_subset, resolve_right
 -/
@@ -1182,7 +1242,8 @@ theorem tendsto_tprod_compl_atTop_one
     obtain ⟨s, hs⟩ := H.tprod_vanishing he
     simp only [Filter.mem_map, mem_atTop_sets, Set.mem_preimage]
 exact ⟨s, fun t hts => hs tᶜ Set.disjoint_left.mpr fun a ha has => ha (hts has)⟩
-  · refine tendsto_const_nhds.congr fun _ => (tprod_eq_one_of_n
+  · refine tendsto_const_nhds.congr fun _ => (tprod_eq_one_of_not_multipliable ?_).symm
+    rwa [Finset.multipliable_compl_iff]
 
 中文:
 定理 tendsto_tprod_compl_atTop_one
@@ -1193,7 +1254,8 @@ exact ⟨s, fun t hts => hs tᶜ Set.disjoint_left.mpr fun a ha has => ha (hts h
     obtain ⟨s, hs⟩ := H.tprod_vanishing he
     simp only [Filter.mem_map, mem_atTop_sets, Set.mem_preimage]
 exact ⟨s, fun t hts => hs tᶜ Set.disjoint_left.mpr fun a ha has => ha (hts has)⟩
-  · refine tendsto_const_nhds.congr fun _ => (tprod_eq_one_of_n
+  · refine tendsto_const_nhds.congr fun _ => (tprod_eq_one_of_not_multipliable ?_).symm
+    rwa [Finset.multipliable_compl_iff]
 
 Depends on / 依赖: Filter, Filter.mem_map, Finset, Finset.multipliable_compl_iff, H.tprod_vanishing, Multipliable, Set.disjoint_left.mpr, Set.mem_preimage, disjoint_left, mem_atTop_sets, mem_map, mem_preimage, multipliable_compl_iff, tendsto_const_nhds, tendsto_const_nhds.congr, tprod_eq_one_of_not_multipliable, tprod_vanishing
 -/
@@ -1262,7 +1324,11 @@ theorem Multipliable.hasFiniteMulSupport_of_discreteTopology
   Multipliable.finite_mulSupport_of_discreteTopology :=
     Multipliable.hasFiniteMulSupport_of_discreteTopology
 
-@[deprecated (since := "2026-0
+@[deprecated (since := "2026-03-03")] alias
+  Summable.finite_support_of_discreteTopology :=
+    Summable.hasFiniteSupport_of_discreteTopology
+
+@[to_additive]
 
 中文:
 定理 Multipliable.hasFiniteMulSupport_of_discreteTopology
@@ -1273,7 +1339,11 @@ theorem Multipliable.hasFiniteMulSupport_of_discreteTopology
   Multipliable.finite_mulSupport_of_discreteTopology :=
     Multipliable.hasFiniteMulSupport_of_discreteTopology
 
-@[deprecated (since := "2026-0
+@[deprecated (since := "2026-03-03")] alias
+  Summable.finite_support_of_discreteTopology :=
+    Summable.hasFiniteSupport_of_discreteTopology
+
+@[to_additive]
 
 Depends on / 依赖: IsTopologicalGroup, discreteTopology_iff_singleton_mem_nhds, discreteTopology_iff_singleton_mem_nhds.mp, h.tendsto_cofinite_one, tendsto_cofinite_one
 -/
@@ -1334,7 +1404,7 @@ theorem multipliable_const_iff
   · rintro rfl
     exact multipliable_one
 
-@[to_additive (attr := simp
+@[to_additive (attr := simp)]
 
 中文:
 定理 multipliable_const_iff
@@ -1349,7 +1419,7 @@ theorem multipliable_const_iff
   · rintro rfl
     exact multipliable_one
 
-@[to_additive (attr := simp
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Finite, Ne.symm, Set.finite_univ_iff, compl_singleton_mem_nhds, finite_univ_iff, h.tendsto_cofinite_one, multipliable_one, not_finite, tendsto_cofinite_one
 -/
@@ -1378,7 +1448,10 @@ theorem tprod_const
     rw [tprod_eq_prod (s := univ) (fun x hx => (hx (mem_univ x)).elim)]
     simp only [prod_const, Nat.card_eq_fintype_card, Fintype.card]
   · simp only [Nat.card_eq_zero_of_infinite, pow_zero]
-    rcases eq_or_n
+    rcases eq_or_ne a 1 with rfl | ha
+    · simp
+    · apply tprod_eq_one_of_not_multipliable
+      simpa [multipliable_const_iff] using ha
 
 中文:
 定理 tprod_const
@@ -1390,7 +1463,10 @@ theorem tprod_const
     rw [tprod_eq_prod (s := univ) (fun x hx => (hx (mem_univ x)).elim)]
     simp only [prod_const, Nat.card_eq_fintype_card, Fintype.card]
   · simp only [Nat.card_eq_zero_of_infinite, pow_zero]
-    rcases eq_or_n
+    rcases eq_or_ne a 1 with rfl | ha
+    · simp
+    · apply tprod_eq_one_of_not_multipliable
+      simpa [multipliable_const_iff] using ha
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.ofFinite, Nat.card_eq_fintype_card, Nat.card_eq_zero_of_infinite, card_eq_fintype_card, card_eq_zero_of_infinite, eq_or_ne, finite_or_infinite, mem_univ, multipliable_const_iff, ofFinite, pow_zero, prod_const, tprod_eq_one_of_not_multipliable, tprod_eq_prod
 -/
@@ -1436,7 +1512,13 @@ lemma HasProd.congr_cofinite₀
   filter_upwards [eventually_ge_atTop s] with t ht
   calc (∏ i in t, f i) * ((∏ i in s, g i) / ∏ i in s, f i)
   _ = ((∏ i in s, f i) * ∏ i in t \ s, g i) * _ := by
-    conv_lhs => rw [← union_sdiff_of_subset h
+    conv_lhs => rw [← union_sdiff_of_subset ht, prod_union disjoint_sdiff,
+      prod_congr rfl fun i hi => hs' i (mem_sdiff.mp hi).2]
+  _ = (∏ i in s, g i) * ∏ i in t \ s, g i := by
+    rw [← mul_div_assoc]; rw [← div_mul_eq_mul_div]; rw [← div_mul_eq_mul_div]; rw [div_self]; rw [one_mul]; rw [mul_comm]
+    exact prod_ne_zero_iff.mpr hs
+  _ = ∏ i in t, g i := by
+    rw [← prod_union disjoint_sdiff]; rw [union_sdiff_of_subset ht]
 
 中文:
 引理 有积类型.congr_cofinite₀
@@ -1447,7 +1529,13 @@ lemma HasProd.congr_cofinite₀
   filter_upwards [eventually_ge_atTop s] with t ht
   calc (∏ i in t, f i) * ((∏ i in s, g i) / ∏ i in s, f i)
   _ = ((∏ i in s, f i) * ∏ i in t \ s, g i) * _ := by
-    conv_lhs => rw [← union_sdiff_of_subset h
+    conv_lhs => rw [← union_sdiff_of_subset ht, prod_union disjoint_sdiff,
+      prod_congr rfl fun i hi => hs' i (mem_sdiff.mp hi).2]
+  _ = (∏ i in s, g i) * ∏ i in t \ s, g i := by
+    rw [← mul_div_assoc]; rw [← div_mul_eq_mul_div]; rw [← div_mul_eq_mul_div]; rw [div_self]; rw [one_mul]; rw [mul_comm]
+    exact prod_ne_zero_iff.mpr hs
+  _ = ∏ i in t, g i := by
+    rw [← prod_union disjoint_sdiff]; rw [union_sdiff_of_subset ht]
 
 Depends on / 依赖: Tendsto, Tendsto.mul_const, classical, conv_lhs, disjoint_sdiff, div_, div_mul_eq_mul_div, eventually_ge_atTop, filter_upwards, mem_sdiff, mem_sdiff.mp, mul_const, mul_div_assoc, prod_congr, prod_union, union_sdiff_of_subset
 -/

@@ -148,7 +148,7 @@ theorem arith_mean_le_rpow_mean
   all_goals
     apply_rules [sum_nonneg, rpow_nonneg]
     intro i hi
-    positivity [hw i hi,
+    positivity [hw i hi, hz i hi]
 
 中文:
 定理 arith_mean_le_rpow_mean
@@ -160,7 +160,7 @@ theorem arith_mean_le_rpow_mean
   all_goals
     apply_rules [sum_nonneg, rpow_nonneg]
     intro i hi
-    positivity [hw i hi,
+    positivity [hw i hi, hz i hi]
 
 Depends on / 依赖: all_goals, apply_rules, ne_of_gt, one_div_mul_cancel, rpow_arith_mean_le_arith_mean_rpow, rpow_le_rpow_iff, rpow_mul, rpow_nonneg, rpow_one, sum_nonneg
 -/
@@ -268,7 +268,10 @@ theorem rpow_add_le_mul_rpow_add_rpow
   convert!
     rpow_arith_mean_le_arith_mean2_rpow (1 / 2) (1 / 2) (2 * z₁) (2 * z₂) (add_halves 1) hp using 1
   · simp only [one_div, inv_mul_cancel_left₀, Ne, two_ne_zero,
-      not_false_iff
+      not_false_iff]
+  · have A : p - 1 != 0 := ne_of_gt (sub_pos.2 h'p)
+    simp only [mul_rpow, rpow_sub' A, rpow_one]
+    ring
 
 中文:
 定理 rpow_add_le_mul_rpow_add_rpow
@@ -279,7 +282,10 @@ theorem rpow_add_le_mul_rpow_add_rpow
   convert!
     rpow_arith_mean_le_arith_mean2_rpow (1 / 2) (1 / 2) (2 * z₁) (2 * z₂) (add_halves 1) hp using 1
   · simp only [one_div, inv_mul_cancel_left₀, Ne, two_ne_zero,
-      not_false_iff
+      not_false_iff]
+  · have A : p - 1 != 0 := ne_of_gt (sub_pos.2 h'p)
+    simp only [mul_rpow, rpow_sub' A, rpow_one]
+    ring
 
 Depends on / 依赖: add_halves, convert, eq_or_lt_of_le, mul_rpow, ne_of_gt, not_false_iff, one_div, one_mul, rpow_arith_mean_le_arith_mean2_rpow, rpow_one, rpow_sub, rpow_zero, sub_pos, sub_self, two_ne_zero
 -/
@@ -361,7 +367,13 @@ theorem add_rpow_le_rpow_add
   · simp [add_eq_zero.mp h_zero, hp_pos.ne']
   have h_nonzero : ¬(a = 0 ∧ b = 0) := by rwa [add_eq_zero] at h_zero
   have h_add : a / (a + b) + b / (a + b) = 1 := by rw [← add_div, div_self h_zero]
-  have h := add_rpow_le_one_of
+  have h := add_rpow_le_one_of_add_le_one (a / (a + b)) (b / (a + b)) h_add.le hp1
+  rw [div_rpow a (a + b)]; rw [div_rpow b (a + b)] at h
+  have hab_0 : (a + b) ^ p != 0 := by simp [h_nonzero]
+  have h_mul : (a + b) ^ p * (a ^ p / (a + b) ^ p + b ^ p / (a + b) ^ p) <= (a + b) ^ p := by
+    nth_rw 4 [← mul_one ((a + b) ^ p)]; gcongr
+  rwa [div_eq_mul_inv, div_eq_mul_inv, mul_add, mul_comm (a ^ p), mul_comm (b ^ p), ← mul_assoc, ←
+    mul_assoc, mul_inv_cancel₀ hab_0, one_mul, one_mul] at h_mul
 
 中文:
 定理 add_rpow_le_rpow_add
@@ -373,7 +385,13 @@ theorem add_rpow_le_rpow_add
   · simp [add_eq_zero.mp h_zero, hp_pos.ne']
   have h_nonzero : ¬(a = 0 ∧ b = 0) := by rwa [add_eq_zero] at h_zero
   have h_add : a / (a + b) + b / (a + b) = 1 := by rw [← add_div, div_self h_zero]
-  have h := add_rpow_le_one_of
+  have h := add_rpow_le_one_of_add_le_one (a / (a + b)) (b / (a + b)) h_add.le hp1
+  rw [div_rpow a (a + b)]; rw [div_rpow b (a + b)] at h
+  have hab_0 : (a + b) ^ p != 0 := by simp [h_nonzero]
+  have h_mul : (a + b) ^ p * (a ^ p / (a + b) ^ p + b ^ p / (a + b) ^ p) <= (a + b) ^ p := by
+    nth_rw 4 [← mul_one ((a + b) ^ p)]; gcongr
+  rwa [div_eq_mul_inv, div_eq_mul_inv, mul_add, mul_comm (a ^ p), mul_comm (b ^ p), ← mul_assoc, ←
+    mul_assoc, mul_inv_cancel₀ hab_0, one_mul, one_mul] at h_mul
 
 Depends on / 依赖: add_div, add_eq_zero, add_eq_zero.mp, add_rpow_le_one_of_add_le_one, div_rpow, div_self, h_add, h_add.le, h_mul, h_nonzero, h_zero, hab_0, hp_pos, hp_pos.ne
 -/
@@ -425,7 +443,11 @@ theorem rpow_add_rpow_le
   have h_rpow : forall a : Real>=0, a ^ q = (a ^ p) ^ (q / p) := fun a => by
     rw [← NNReal.rpow_mul]; rw [div_eq_inv_mul]; rw [← mul_assoc]; rw [mul_inv_cancel₀ hp_pos.ne.symm]; rw [one_mul]
   have h_rpow_add_rpow_le_add :
-    ((a ^ p) ^ (q / p) + (b ^ p) ^ (q / p)) ^ (1 / (q / p)) <= a ^ p + 
+    ((a ^ p) ^ (q / p) + (b ^ p) ^ (q / p)) ^ (1 / (q / p)) <= a ^ p + b ^ p := by
+    refine rpow_add_rpow_le_add (a ^ p) (b ^ p) ?_
+    rwa [one_le_div hp_pos]
+  rw [h_rpow a]; rw [h_rpow b]; rw [one_div p]; rw [NNReal.le_rpow_inv_iff hp_pos]; rw [← NNReal.rpow_mul]; rw [mul_comm]; rw [mul_one_div]
+  rwa [one_div_div] at h_rpow_add_rpow_le_add
 
 中文:
 定理 rpow_add_rpow_le
@@ -434,7 +456,11 @@ theorem rpow_add_rpow_le
   have h_rpow : forall a : Real>=0, a ^ q = (a ^ p) ^ (q / p) := fun a => by
     rw [← NNReal.rpow_mul]; rw [div_eq_inv_mul]; rw [← mul_assoc]; rw [mul_inv_cancel₀ hp_pos.ne.symm]; rw [one_mul]
   have h_rpow_add_rpow_le_add :
-    ((a ^ p) ^ (q / p) + (b ^ p) ^ (q / p)) ^ (1 / (q / p)) <= a ^ p + 
+    ((a ^ p) ^ (q / p) + (b ^ p) ^ (q / p)) ^ (1 / (q / p)) <= a ^ p + b ^ p := by
+    refine rpow_add_rpow_le_add (a ^ p) (b ^ p) ?_
+    rwa [one_le_div hp_pos]
+  rw [h_rpow a]; rw [h_rpow b]; rw [one_div p]; rw [NNReal.le_rpow_inv_iff hp_pos]; rw [← NNReal.rpow_mul]; rw [mul_comm]; rw [mul_one_div]
+  rwa [one_div_div] at h_rpow_add_rpow_le_add
 
 Depends on / 依赖: NNReal, NNReal.le_rpow_inv_iff, NNReal.rpow_mul, div_eq_inv_mul, h_rpow, h_rpow_add_rpow_le_add, hp_pos, hp_pos.ne.symm, le_rpow_inv_iff, mul_, mul_assoc, mul_comm, one_div, one_le_div, one_mul, rpow_add_rpow_le_add, rpow_mul
 -/
@@ -615,7 +641,39 @@ theorem rpow_arith_mean_le_arith_mean_rpow
   have hp_not_neg : ¬p < 0 := by simp [hp_nonneg]
   have h_top_iff_rpow_top : forall (i : ι), i in s -> (w i * z i = ⊤ ↔ w i * z i ^ p = ⊤) := by
     simp [ENNReal.mul_eq_top, hp_pos, hp_not_neg]
-  refine le_of_top_
+  refine le_of_top_imp_top_of_toNNReal_le ?_ ?_
+  · -- first, prove `(∑ i ∈ s, w i * z i) ^ p = ⊤ → ∑ i ∈ s, (w i * z i ^ p) = ⊤`
+    rw [rpow_eq_top_iff]; rw [sum_eq_top]; rw [sum_eq_top]
+    grind
+  · -- second, suppose both `(∑ i ∈ s, w i * z i) ^ p ≠ ⊤` and `∑ i ∈ s, (w i * z i ^ p) ≠ ⊤`,
+    -- and prove `((∑ i ∈ s, w i * z i) ^ p).toNNReal ≤ (∑ i ∈ s, (w i * z i ^ p)).toNNReal`,
+    -- by using `NNReal.rpow_arith_mean_le_arith_mean_rpow`.
+    intro h_top_rpow_sum _
+    -- show hypotheses needed to put the `.toNNReal` inside the sums.
+    have h_top : forall a : ι, a in s -> w a * z a != ⊤ :=
+      haveI h_top_sum : ∑ i in s, w i * z i != ⊤ := by
+        intro h
+        rw [h]; rw [top_rpow_of_pos hp_pos] at h_top_rpow_sum
+        exact h_top_rpow_sum rfl
+      fun a ha => (lt_top_of_sum_ne_top h_top_sum ha).ne
+    have h_top_rpow : forall a : ι, a in s -> w a * z a ^ p != ⊤ := by
+      intro i hi
+      specialize h_top i hi
+      rwa [Ne, ← h_top_iff_rpow_top i hi]
+    -- put the `.toNNReal` inside the sums.
+    simp_rw [toNNReal_sum h_top_rpow, toNNReal_rpow, toNNReal_sum h_top, toNNReal_mul,
+      toNNReal_rpow]
+    -- use corresponding nnreal result
+    refine
+      NNReal.rpow_arith_mean_le_arith_mean_rpow s (fun i => (w i).toNNReal)
+        (fun i => (z i).toNNReal) ?_ hp
+    -- verify the hypothesis `∑ i ∈ s, (w i).toNNReal = 1`, using `∑ i ∈ s, w i = 1` .
+    have h_sum_nnreal : ∑ i in s, w i = ↑(∑ i in s, (w i).toNNReal) := by
+      push_cast
+      congr! with i hi
+      refine (coe_toNNReal (lt_top_of_sum_ne_top ?_ hi).ne).symm
+      exact hw'.symm ▸ ENNReal.one_ne_top
+    rwa [← coe_inj, ← h_sum_nnreal]
 
 中文:
 定理 rpow_arith_mean_le_arith_mean_rpow
@@ -626,7 +684,39 @@ theorem rpow_arith_mean_le_arith_mean_rpow
   have hp_not_neg : ¬p < 0 := by simp [hp_nonneg]
   have h_top_iff_rpow_top : forall (i : ι), i in s -> (w i * z i = ⊤ ↔ w i * z i ^ p = ⊤) := by
     simp [ENNReal.mul_eq_top, hp_pos, hp_not_neg]
-  refine le_of_top_
+  refine le_of_top_imp_top_of_toNNReal_le ?_ ?_
+  · -- first, prove `(∑ i ∈ s, w i * z i) ^ p = ⊤ → ∑ i ∈ s, (w i * z i ^ p) = ⊤`
+    rw [rpow_eq_top_iff]; rw [sum_eq_top]; rw [sum_eq_top]
+    grind
+  · -- second, suppose both `(∑ i ∈ s, w i * z i) ^ p ≠ ⊤` and `∑ i ∈ s, (w i * z i ^ p) ≠ ⊤`,
+    -- and prove `((∑ i ∈ s, w i * z i) ^ p).toNNReal ≤ (∑ i ∈ s, (w i * z i ^ p)).toNNReal`,
+    -- by using `NNReal.rpow_arith_mean_le_arith_mean_rpow`.
+    intro h_top_rpow_sum _
+    -- show hypotheses needed to put the `.toNNReal` inside the sums.
+    have h_top : forall a : ι, a in s -> w a * z a != ⊤ :=
+      haveI h_top_sum : ∑ i in s, w i * z i != ⊤ := by
+        intro h
+        rw [h]; rw [top_rpow_of_pos hp_pos] at h_top_rpow_sum
+        exact h_top_rpow_sum rfl
+      fun a ha => (lt_top_of_sum_ne_top h_top_sum ha).ne
+    have h_top_rpow : forall a : ι, a in s -> w a * z a ^ p != ⊤ := by
+      intro i hi
+      specialize h_top i hi
+      rwa [Ne, ← h_top_iff_rpow_top i hi]
+    -- put the `.toNNReal` inside the sums.
+    simp_rw [toNNReal_sum h_top_rpow, toNNReal_rpow, toNNReal_sum h_top, toNNReal_mul,
+      toNNReal_rpow]
+    -- use corresponding nnreal result
+    refine
+      NNReal.rpow_arith_mean_le_arith_mean_rpow s (fun i => (w i).toNNReal)
+        (fun i => (z i).toNNReal) ?_ hp
+    -- verify the hypothesis `∑ i ∈ s, (w i).toNNReal = 1`, using `∑ i ∈ s, w i = 1` .
+    have h_sum_nnreal : ∑ i in s, w i = ↑(∑ i in s, (w i).toNNReal) := by
+      push_cast
+      congr! with i hi
+      refine (coe_toNNReal (lt_top_of_sum_ne_top ?_ hi).ne).symm
+      exact hw'.symm ▸ ENNReal.one_ne_top
+    rwa [← coe_inj, ← h_sum_nnreal]
 
 Depends on / 依赖: ENNReal, ENNReal.mul_eq_top, h_top_iff_rpow_top, hp_nonneg, hp_not_neg, hp_pos, le_of_top_imp_top_of_toNNReal_le, mul_eq_top, rpow_eq_top_iff, second, sum_eq_top, suppose
 -/
@@ -710,6 +800,8 @@ theorem rpow_add_le_mul_rpow_add_rpow
       using 1
   · simp [← mul_assoc, ENNReal.inv_mul_cancel two_ne_zero ofNat_ne_top]
   · simp only [mul_rpow_of_nonneg _ _ (zero_le_one.trans hp), rpow_sub _ _ two_ne_zero ofNat_ne_top,
+      ENNReal.div_eq_inv_mul, rpow_one, mul_one]
+    ring
 
 中文:
 定理 rpow_add_le_mul_rpow_add_rpow
@@ -720,6 +812,8 @@ theorem rpow_add_le_mul_rpow_add_rpow
       using 1
   · simp [← mul_assoc, ENNReal.inv_mul_cancel two_ne_zero ofNat_ne_top]
   · simp only [mul_rpow_of_nonneg _ _ (zero_le_one.trans hp), rpow_sub _ _ two_ne_zero ofNat_ne_top,
+      ENNReal.div_eq_inv_mul, rpow_one, mul_one]
+    ring
 
 Depends on / 依赖: ENNReal, ENNReal.add_halves, ENNReal.div_eq_inv_mul, ENNReal.inv_mul_cancel, add_halves, convert, div_eq_inv_mul, inv_mul_cancel, mul_assoc, mul_one, mul_rpow_of_nonneg, ofNat_ne_top, rpow_arith_mean_le_arith_mean2_rpow, rpow_one, rpow_sub, two_ne_zero, zero_le_one, zero_le_one.trans
 -/
@@ -749,7 +843,8 @@ theorem add_rpow_le_rpow_add
   obtain ⟨ha_top, hb_top⟩ := add_ne_top.mp h_top
   lift a to Real>=0 using ha_top
   lift b to Real>=0 using hb_top
-  simpa [ENNR
+  simpa [ENNReal.coe_rpow_of_nonneg _ hp_pos.le] using
+    ENNReal.coe_le_coe.2 (NNReal.add_rpow_le_rpow_add a b hp1)
 
 中文:
 定理 add_rpow_le_rpow_add
@@ -764,7 +859,8 @@ theorem add_rpow_le_rpow_add
   obtain ⟨ha_top, hb_top⟩ := add_ne_top.mp h_top
   lift a to Real>=0 using ha_top
   lift b to Real>=0 using hb_top
-  simpa [ENNR
+  simpa [ENNReal.coe_rpow_of_nonneg _ hp_pos.le] using
+    ENNReal.coe_le_coe.2 (NNReal.add_rpow_le_rpow_add a b hp1)
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, ENNReal.coe_rpow_of_nonneg, ENNReal.rpow_eq_top_iff_of_pos, NNReal, NNReal.add_rpow_le_rpow_add, add_ne_top, add_ne_top.mp, add_rpow_le_rpow_add, coe_le_coe, coe_rpow_of_nonneg, h_top, ha_top, hb_top, hp_pos, hp_pos.le, le_top, rpow_eq_top_iff_of_pos
 -/
@@ -818,7 +914,10 @@ theorem rpow_add_rpow_le
     rw [← ENNReal.rpow_mul]; rw [mul_div_cancel₀ _ hp_pos.ne']
   have h_rpow_add_rpow_le_add :
     ((a ^ p) ^ (q / p) + (b ^ p) ^ (q / p)) ^ (1 / (q / p)) <= a ^ p + b ^ p := by
-    refine rpow_add_rpow_le_add (a ^ p) (
+    refine rpow_add_rpow_le_add (a ^ p) (b ^ p) ?_
+    rwa [one_le_div hp_pos]
+  rw [h_rpow a]; rw [h_rpow b]; rw [one_div p]; rw [ENNReal.le_rpow_inv_iff hp_pos]; rw [← ENNReal.rpow_mul]; rw [mul_comm]; rw [mul_one_div]
+  rwa [one_div_div] at h_rpow_add_rpow_le_add
 
 中文:
 定理 rpow_add_rpow_le
@@ -828,7 +927,10 @@ theorem rpow_add_rpow_le
     rw [← ENNReal.rpow_mul]; rw [mul_div_cancel₀ _ hp_pos.ne']
   have h_rpow_add_rpow_le_add :
     ((a ^ p) ^ (q / p) + (b ^ p) ^ (q / p)) ^ (1 / (q / p)) <= a ^ p + b ^ p := by
-    refine rpow_add_rpow_le_add (a ^ p) (
+    refine rpow_add_rpow_le_add (a ^ p) (b ^ p) ?_
+    rwa [one_le_div hp_pos]
+  rw [h_rpow a]; rw [h_rpow b]; rw [one_div p]; rw [ENNReal.le_rpow_inv_iff hp_pos]; rw [← ENNReal.rpow_mul]; rw [mul_comm]; rw [mul_one_div]
+  rwa [one_div_div] at h_rpow_add_rpow_le_add
 
 Depends on / 依赖: ENNReal, ENNReal.le_rpow_inv_iff, ENNReal.rpow_mul, h_rpow, h_rpow_add_rpow_le_ad, h_rpow_add_rpow_le_add, hp_pos, hp_pos.ne, le_rpow_inv_iff, mul_comm, mul_one_div, one_div, one_div_div, one_le_div, rpow_add_rpow_le_add, rpow_mul
 -/
@@ -962,7 +1064,7 @@ theorem LpAddConst_lt_top
   · apply ENNReal.rpow_lt_top_of_nonneg _ ENNReal.ofNat_ne_top
     rw [one_div]; rw [sub_nonneg]; rw [← ENNReal.toReal_inv]; rw [← ENNReal.toReal_one]
     exact ENNReal.toReal_mono (by simpa using h.1.ne') (ENNReal.one_le_inv.2 h.2.le)
-  · exact ENNReal.one_lt
+  · exact ENNReal.one_lt_top
 
 中文:
 定理 LpAddConst_lt_top
@@ -974,7 +1076,7 @@ theorem LpAddConst_lt_top
   · apply ENNReal.rpow_lt_top_of_nonneg _ ENNReal.ofNat_ne_top
     rw [one_div]; rw [sub_nonneg]; rw [← ENNReal.toReal_inv]; rw [← ENNReal.toReal_one]
     exact ENNReal.toReal_mono (by simpa using h.1.ne') (ENNReal.one_le_inv.2 h.2.le)
-  · exact ENNReal.one_lt
+  · exact ENNReal.one_lt_top
 
 Depends on / 依赖: ENNReal, ENNReal.ofNat_ne_top, ENNReal.one_le_inv, ENNReal.one_lt_top, ENNReal.rpow_lt_top_of_nonneg, ENNReal.toReal_inv, ENNReal.toReal_mono, ENNReal.toReal_one, LpAddConst, ofNat_ne_top, one_div, one_le_inv, one_lt_top, rpow_lt_top_of_nonneg, split_ifs, sub_nonneg, toReal_inv, toReal_mono, toReal_one
 -/
@@ -1000,7 +1102,13 @@ theorem rpow_add_le_mul_rpow_add_rpow'
       · rwa [ENNReal.inv_lt_one, one_lt_ofReal]
     rw [show LpAddConst (ENNReal.ofReal p)⁻¹ =
         (2 : Real>=0∞) ^ (1 / ((ENNReal.ofReal p)⁻¹).toReal - 1) by
-      rw [L
+      rw [LpAddConst]; rw [if_pos hmem]]
+    simp only [ENNReal.toReal_inv, div_inv_eq_mul, one_mul]
+    rw [ENNReal.toReal_ofReal hp]
+    exact rpow_add_le_mul_rpow_add_rpow _ _ h.le
+  · have hp1 : p <= 1 := not_lt.mp h
+    rw [LpAddConst_of_one_le (ENNReal.one_le_inv.mpr (ENNReal.ofReal_le_one.mpr hp1))]; rw [one_mul]
+    exact rpow_add_le_add_rpow _ _ hp hp1
 
 中文:
 定理 rpow_add_le_mul_rpow_add_rpow'
@@ -1013,7 +1121,13 @@ theorem rpow_add_le_mul_rpow_add_rpow'
       · rwa [ENNReal.inv_lt_one, one_lt_ofReal]
     rw [show LpAddConst (ENNReal.ofReal p)⁻¹ =
         (2 : Real>=0∞) ^ (1 / ((ENNReal.ofReal p)⁻¹).toReal - 1) by
-      rw [L
+      rw [LpAddConst]; rw [if_pos hmem]]
+    simp only [ENNReal.toReal_inv, div_inv_eq_mul, one_mul]
+    rw [ENNReal.toReal_ofReal hp]
+    exact rpow_add_le_mul_rpow_add_rpow _ _ h.le
+  · have hp1 : p <= 1 := not_lt.mp h
+    rw [LpAddConst_of_one_le (ENNReal.one_le_inv.mpr (ENNReal.ofReal_le_one.mpr hp1))]; rw [one_mul]
+    exact rpow_add_le_add_rpow _ _ hp hp1
 
 Depends on / 依赖: ENNReal, ENNReal.inv_lt_one, ENNReal.ofReal, ENNReal.one_le_inv, ENNReal.toReal_inv, ENNReal.toReal_ofReal, LpAddConst, LpAddConst_of_one_le, Set.Ioo, div_inv_eq_mul, h.le, if_pos, inv_lt_one, not_lt, not_lt.mp, ofReal, one_le_inv, one_lt_ofReal, one_mul, rpow_add_le_mul_rpow_add_rpow
 -/

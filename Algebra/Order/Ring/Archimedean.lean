@@ -1082,7 +1082,15 @@ theorem mk_le_mk_iff_denselyOrdered
     · simp_all [exists_zero_lt]
     · obtain ⟨q, hq₀, hq⟩ := exists_nsmul_lt_of_pos (one_pos (α := R)) (n + 1)
       refine ⟨q, H.2 hq₀, le_of_mul_le_mul_left ?_ n.cast_add_one_pos⟩
-     
+      simpa [← mul_assoc] using mul_le_mul (hf hq).le hn (abs_nonneg y) (by simp)
+  · rintro ⟨q, hq₀, hq⟩
+    have hq₀' := H.1 hq₀
+    obtain ⟨n, hn⟩ := exists_lt_nsmul hq₀' 1
+    refine ⟨n, le_of_mul_le_mul_left ?_ hq₀⟩
+    have h : 0 <= f (n • q) := by
+      rw [← f.map_zero]
+      exact hf.monotone (nsmul_nonneg hq₀'.le n)
+    simpa [mul_comm, mul_assoc] using mul_le_mul (hf hn).le hq (mul_nonneg hq₀.le (abs_nonneg y)) h
 
 中文:
 定理 mk_le_mk_iff_denselyOrdered
@@ -1094,7 +1102,15 @@ theorem mk_le_mk_iff_denselyOrdered
     · simp_all [exists_zero_lt]
     · obtain ⟨q, hq₀, hq⟩ := exists_nsmul_lt_of_pos (one_pos (α := R)) (n + 1)
       refine ⟨q, H.2 hq₀, le_of_mul_le_mul_left ?_ n.cast_add_one_pos⟩
-     
+      simpa [← mul_assoc] using mul_le_mul (hf hq).le hn (abs_nonneg y) (by simp)
+  · rintro ⟨q, hq₀, hq⟩
+    have hq₀' := H.1 hq₀
+    obtain ⟨n, hn⟩ := exists_lt_nsmul hq₀' 1
+    refine ⟨n, le_of_mul_le_mul_left ?_ hq₀⟩
+    have h : 0 <= f (n • q) := by
+      rw [← f.map_zero]
+      exact hf.monotone (nsmul_nonneg hq₀'.le n)
+    simpa [mul_comm, mul_assoc] using mul_le_mul (hf hn).le hq (mul_nonneg hq₀.le (abs_nonneg y)) h
 
 Depends on / 依赖: abs_nonneg, cast_add_one_pos, exists_lt_nsmul, exists_nsmul_lt_of_pos, exists_zero_lt, hf.lt_iff_lt, le_of_mul_le_mul_left, lt_iff_lt, mul_assoc, mul_le_mul, n.cast_add_one_pos, one_pos
 -/
@@ -1263,7 +1279,12 @@ instance :
     induction x with | mk x
     simp [← mk_inv, ← mk_mul, mul_inv_cancel₀ (mk_eq_top_iff.not.1 h)]
   zsmul_zero' x := by induction x with | mk x => rw [← mk_zpow, zpow_zero, mk_one]
-  zsmul_succ' := by exact zsm
+  zsmul_succ' := by exact zsmul_succ'
+  zsmul_neg' n x := by
+    induction x with | mk x
+    rw [← mk_zpow]; rw [zpow_negSucc]; rw [pow_succ]; rw [zsmul_succ']; rw [mk_inv]; rw [mk_mul]; rw [← zpow_natCast]; rw [mk_zpow]
+
+@[simp]
 
 中文:
 实例 :
@@ -1274,7 +1295,12 @@ instance :
     induction x with | mk x
     simp [← mk_inv, ← mk_mul, mul_inv_cancel₀ (mk_eq_top_iff.not.1 h)]
   zsmul_zero' x := by induction x with | mk x => rw [← mk_zpow, zpow_zero, mk_one]
-  zsmul_succ' := by exact zsm
+  zsmul_succ' := by exact zsmul_succ'
+  zsmul_neg' n x := by
+    induction x with | mk x
+    rw [← mk_zpow]; rw [zpow_negSucc]; rw [pow_succ]; rw [zsmul_succ']; rw [mk_inv]; rw [mk_mul]; rw [← zpow_natCast]; rw [mk_zpow]
+
+@[simp]
 
 Depends on / 依赖: add_neg_cancel_of_ne_top, mk_eq_top_iff, mk_eq_top_iff.not, mk_inv, mk_mul, mk_one, mk_zero, mk_zpow, pow_succ, top_add, zpow_natCast, zpow_negSucc, zpow_zero, zsmul_neg, zsmul_succ, zsmul_zero
 -/

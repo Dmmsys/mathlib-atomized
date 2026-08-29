@@ -236,7 +236,11 @@ definition extractTacticData
           ci := ci
           mctxBefore := i.mctxBefore
           mctxAfter := i.mctxAfter
-          goalsTargetedBy := i.
+          goalsTargetedBy := i.goalsTargetedBy
+          goalsCreatedBy := i.goalsCreatedBy
+        }
+      else acc
+    | _ => acc
 
 中文:
 定义 extractTacticData
@@ -250,7 +254,11 @@ definition extractTacticData
           ci := ci
           mctxBefore := i.mctxBefore
           mctxAfter := i.mctxAfter
-          goalsTargetedBy := i.
+          goalsTargetedBy := i.goalsTargetedBy
+          goalsCreatedBy := i.goalsCreatedBy
+        }
+      else acc
+    | _ => acc
 
 Depends on / 依赖: acc.push, foldInfo, getRange, goalsCreatedBy, goalsTargetedBy, i.goalsCreatedBy, i.goalsTargetedBy, i.mctxAfter, i.mctxBefore, i.stx, i.stx.getRange, isSome, mctxAfter, mctxBefore, ofTacticInfo, tree.foldInfo
 -/
@@ -410,7 +418,32 @@ definition stoppers
   body: { -- "properly stopper tactics": the effect of these tactics is to return a normal form
     -- (or possibly be finishing tactics -- the ultimate normal form!
     -- finishing tactics could equally well be considered as `flexible`, but as there is
-    -- no possibility of a follower anyway, it does n
+    -- no possibility of a follower anyway, it does not make a big difference.)
+    ``Lean.Parser.Tactic.tacticSorry,
+    ``Lean.Parser.Tactic.tacticRepeat_,
+    ``Lean.Parser.Tactic.tacticStop_,
+    `Mathlib.Tactic.Abel.abelNF,
+    `Mathlib.Tactic.Abel.tacticAbel_nf!__,
+    `Mathlib.Tactic.RingNF.ringNF,
+    `Mathlib.Tactic.RingNF.tacticRing_nf!__,
+    `Mathlib.Tactic.Group.group,
+    `Mathlib.Tactic.FieldSimp.fieldSimp,
+    `Mathlib.Tactic.FieldSimp.field,
+    `finiteness_nonterminal,
+    -- "continuators": the *effect* of these tactics is similar the "properly stoppers" above,
+    -- though they typically wrap other tactics inside them.
+    -- The linter ignores the wrapper, but does recurse into the enclosed tactics
+    ``Lean.Parser.Tactic.tacticSeq1Indented,
+    ``Lean.Parser.Tactic.tacticSeq,
+    ``Lean.Parser.Term.byTactic,
+    `by,
+    ``Lean.Parser.Tactic.tacticTry_,
+    `choice, -- involved in `first`
+    ``Lean.Parser.Tactic.allGoals,
+    `Std.Tactic.«tacticOn_goal-_=>_»,
+    ``Lean.Parser.Tactic.«tactic_<;>_»,
+    ``cdotTk,
+    ``cdot }
 
 中文:
 定义 stoppers
@@ -418,7 +451,32 @@ definition stoppers
   定义体: { -- "properly stopper tactics": the effect of these tactics is to return a normal form
     -- (or possibly be finishing tactics -- the ultimate normal form!
     -- finishing tactics could equally well be considered as `flexible`, but as there is
-    -- no possibility of a follower anyway, it does n
+    -- no possibility of a follower anyway, it does not make a big difference.)
+    ``Lean.Parser.Tactic.tacticSorry,
+    ``Lean.Parser.Tactic.tacticRepeat_,
+    ``Lean.Parser.Tactic.tacticStop_,
+    `Mathlib.Tactic.Abel.abelNF,
+    `Mathlib.Tactic.Abel.tacticAbel_nf!__,
+    `Mathlib.Tactic.RingNF.ringNF,
+    `Mathlib.Tactic.RingNF.tacticRing_nf!__,
+    `Mathlib.Tactic.Group.group,
+    `Mathlib.Tactic.FieldSimp.fieldSimp,
+    `Mathlib.Tactic.FieldSimp.field,
+    `finiteness_nonterminal,
+    -- "continuators": the *effect* of these tactics is similar the "properly stoppers" above,
+    -- though they typically wrap other tactics inside them.
+    -- The linter ignores the wrapper, but does recurse into the enclosed tactics
+    ``Lean.Parser.Tactic.tacticSeq1Indented,
+    ``Lean.Parser.Tactic.tacticSeq,
+    ``Lean.Parser.Term.byTactic,
+    `by,
+    ``Lean.Parser.Tactic.tacticTry_,
+    `choice, -- involved in `first`
+    ``Lean.Parser.Tactic.allGoals,
+    `Std.Tactic.«tacticOn_goal-_=>_»,
+    ``Lean.Parser.Tactic.«tactic_<;>_»,
+    ``cdotTk,
+    ``cdot }
 
 Depends on / 依赖: effect, normal, properly, return, stopper, tactics
 -/
@@ -467,7 +525,45 @@ definition flexible
     ``Lean.Parser.Tactic.constructor,
     ``Lean.Parser.Tactic.congr,
     ``Lean.Parser.Tactic.done,
-    ``Lean.Parser.Tactic.tactic
+    ``Lean.Parser.Tactic.tacticRfl,
+    ``Lean.Parser.Tactic.acRfl,
+    ``Lean.Parser.Tactic.omega,
+    `Mathlib.Tactic.Abel.abel,
+    `Mathlib.Tactic.Abel.tacticAbel!,
+    `Mathlib.Tactic.Group.group,
+    `Mathlib.Tactic.RingNF.ring,
+    `Mathlib.Tactic.RingNF.tacticRing!,
+    `Mathlib.Tactic.Ring.ring1,
+    `Mathlib.Tactic.Ring.tacticRing1!,
+    `Mathlib.Tactic.RingNF.ring1NF,
+    `Mathlib.Tactic.RingNF.tacticRing1_nf!_,
+    `Mathlib.Tactic.RingNF.ring1NF!,
+    `Mathlib.Tactic.Module.tacticModule,
+    `Mathlib.Tactic.FieldSimp.fieldSimp,
+    `Mathlib.Tactic.FieldSimp.field,
+    ``Lean.Parser.Tactic.grind,
+    ``Lean.Parser.Tactic.grobner,
+    ``Lean.Parser.Tactic.lia,
+    `Mathlib.Tactic.normNum,
+    `Mathlib.Tactic.linarith,
+    `Mathlib.Tactic.nlinarith,
+    `Mathlib.Tactic.tacticNlinarith!_,
+    `Mathlib.Tactic.LinearCombination.linearCombination,
+    ``Lean.Parser.Tactic.tacticNorm_cast__,
+    `Aesop.Frontend.Parser.aesopTactic,
+    -- `cfc_tac` and `cfc_zero_tac` use `aesop` under the hood,
+    -- `cfc_cont_tactic` uses `fun_prop`: in practice, this should be robust enough.
+    `cfcTac,
+    `cfcZeroTac,
+    `cfcContTac,
+    -- `continuity` and `measurability` also use `aesop` under the hood.
+    `tacticContinuity,
+    `Mathlib.Tactic.measurability,
+    `finiteness,
+    `finiteness?,
+    `Mathlib.Tactic.Tauto.tauto,
+    `Lean.Parser.Tactic.split,
+    `Mathlib.Tactic.splitIfs }
 
 中文:
 定义 flexible
@@ -480,7 +576,45 @@ definition flexible
     ``Lean.Parser.Tactic.constructor,
     ``Lean.Parser.Tactic.congr,
     ``Lean.Parser.Tactic.done,
-    ``Lean.Parser.Tactic.tactic
+    ``Lean.Parser.Tactic.tacticRfl,
+    ``Lean.Parser.Tactic.acRfl,
+    ``Lean.Parser.Tactic.omega,
+    `Mathlib.Tactic.Abel.abel,
+    `Mathlib.Tactic.Abel.tacticAbel!,
+    `Mathlib.Tactic.Group.group,
+    `Mathlib.Tactic.RingNF.ring,
+    `Mathlib.Tactic.RingNF.tacticRing!,
+    `Mathlib.Tactic.Ring.ring1,
+    `Mathlib.Tactic.Ring.tacticRing1!,
+    `Mathlib.Tactic.RingNF.ring1NF,
+    `Mathlib.Tactic.RingNF.tacticRing1_nf!_,
+    `Mathlib.Tactic.RingNF.ring1NF!,
+    `Mathlib.Tactic.Module.tacticModule,
+    `Mathlib.Tactic.FieldSimp.fieldSimp,
+    `Mathlib.Tactic.FieldSimp.field,
+    ``Lean.Parser.Tactic.grind,
+    ``Lean.Parser.Tactic.grobner,
+    ``Lean.Parser.Tactic.lia,
+    `Mathlib.Tactic.normNum,
+    `Mathlib.Tactic.linarith,
+    `Mathlib.Tactic.nlinarith,
+    `Mathlib.Tactic.tacticNlinarith!_,
+    `Mathlib.Tactic.LinearCombination.linearCombination,
+    ``Lean.Parser.Tactic.tacticNorm_cast__,
+    `Aesop.Frontend.Parser.aesopTactic,
+    -- `cfc_tac` and `cfc_zero_tac` use `aesop` under the hood,
+    -- `cfc_cont_tactic` uses `fun_prop`: in practice, this should be robust enough.
+    `cfcTac,
+    `cfcZeroTac,
+    `cfcContTac,
+    -- `continuity` and `measurability` also use `aesop` under the hood.
+    `tacticContinuity,
+    `Mathlib.Tactic.measurability,
+    `finiteness,
+    `finiteness?,
+    `Mathlib.Tactic.Tauto.tauto,
+    `Lean.Parser.Tactic.split,
+    `Mathlib.Tactic.splitIfs }
 
 Depends on / 依赖: Lean.Parser.Tactic.acRfl, Lean.Parser.Tactic.congr, Lean.Parser.Tactic.constructor, Lean.Parser.Tactic.done, Lean.Parser.Tactic.dsimp, Lean.Parser.Tactic.omega, Lean.Parser.Tactic.simp, Lean.Parser.Tactic.simpAll, Lean.Parser.Tactic.simpa, Lean.Parser.Tactic.simpaUsingBang, Lean.Parser.Tactic.tacticRfl, Mathlib, Mathlib.Tactic, Mathlib.Tactic.Abel.abel, Mathlib.Tactic.Abel.tacticAbel, Mathlib.Tactic.Group.group, Mathlib.Tactic.RingNF.ring, Mathlib.Tactic.RingNF.tacticRing, Parser, RingNF
 -/
@@ -618,7 +752,18 @@ definition reallyPersist
   -- `inert` gets copied unchanged, while we transform `active`
   let (active, inert) := fmvars.partition fun (_, mv) => mvs0.contains mv
   let mut new := #[]
-
+  for (fvar, mvar) in active do -- for each `active` pair `(fvar, mvar)`
+    match ctx0.decls.find? mvar with -- check if `mvar` is managed by `ctx0` (it should be)
+      | none => -- the `mvar` is not managed by `ctx0`: no change
+        new := new.push (fvar, mvar)
+      | some mvDecl0 => -- the `mvar` *is* managed by `ctx0`: push the pair `(fvar, mvar)` through
+        for mv1 in mvs1 do -- for each new `MVarId` in `mvs1`
+          match ctx1.decls.find? mv1 with -- check if `mv1` is managed by `ctx1` (it should be)
+            | none => dbg_trace "'really_persist' could this happen?" default -- ??? maybe `.push`?
+            | some mvDecl1 => -- we found a "new" declaration
+              let persisted_fv := persistFVars fvar mvDecl0.lctx mvDecl1.lctx -- persist `fv`
+              new := new.push (persisted_fv, mv1)
+  return inert ++ new
 
 中文:
 定义 reallyPersist
@@ -629,7 +774,18 @@ definition reallyPersist
   -- `inert` gets copied unchanged, while we transform `active`
   let (active, inert) := fmvars.partition fun (_, mv) => mvs0.contains mv
   let mut new := #[]
-
+  for (fvar, mvar) in active do -- for each `active` pair `(fvar, mvar)`
+    match ctx0.decls.find? mvar with -- check if `mvar` is managed by `ctx0` (it should be)
+      | none => -- the `mvar` is not managed by `ctx0`: no change
+        new := new.push (fvar, mvar)
+      | some mvDecl0 => -- the `mvar` *is* managed by `ctx0`: push the pair `(fvar, mvar)` through
+        for mv1 in mvs1 do -- for each new `MVarId` in `mvs1`
+          match ctx1.decls.find? mv1 with -- check if `mv1` is managed by `ctx1` (it should be)
+            | none => dbg_trace "'really_persist' could this happen?" default -- ??? maybe `.push`?
+            | some mvDecl1 => -- we found a "new" declaration
+              let persisted_fv := persistFVars fvar mvDecl0.lctx mvDecl1.lctx -- persist `fv`
+              new := new.push (persisted_fv, mv1)
+  return inert ++ new
 
 Depends on / 依赖: Id.run
 -/
@@ -702,7 +858,16 @@ definition generateSimpSuggestion
     let some mv := stainData.goals[0]? | return none
     let some mvDecl := stainData.mctx.decls.find? mv | return none
     stainData.ci.runMetaM mvDecl.lctx do
-      Lean.Meta.withMCtx stainData.mct
+      Lean.Meta.withMCtx stainData.mctx do
+        let ctx ← Lean.Meta.Simp.Context.mkDefault
+        let simprocs ← Lean.Meta.Simp.getSimprocs
+        let (_, stats) ← Lean.Meta.simpGoal mv ctx #[simprocs]
+        if stats.usedTheorems.map.isEmpty then
+          return none
+        let suggStx ← Lean.Elab.Tactic.mkSimpOnly stainStx stats.usedTheorems
+        return some suggStx
+  catch _ => return none
+  | _ => return none
 
 中文:
 定义 generateSimpSuggestion
@@ -713,7 +878,16 @@ definition generateSimpSuggestion
     let some mv := stainData.goals[0]? | return none
     let some mvDecl := stainData.mctx.decls.find? mv | return none
     stainData.ci.runMetaM mvDecl.lctx do
-      Lean.Meta.withMCtx stainData.mct
+      Lean.Meta.withMCtx stainData.mctx do
+        let ctx ← Lean.Meta.Simp.Context.mkDefault
+        let simprocs ← Lean.Meta.Simp.getSimprocs
+        let (_, stats) ← Lean.Meta.simpGoal mv ctx #[simprocs]
+        if stats.usedTheorems.map.isEmpty then
+          return none
+        let suggStx ← Lean.Elab.Tactic.mkSimpOnly stainStx stats.usedTheorems
+        return some suggStx
+  catch _ => return none
+  | _ => return none
 -/
 def generateSimpSuggestion (stainData : StainData) (stainStx : Syntax) :
     CoreM (Option Syntax) := do
@@ -745,7 +919,96 @@ definition flexibleLinter
   if (← MonadState.get).messages.hasErrors then
     return
   let trees ← getInfoTrees
-  let tacticData := trees.foldl (init := #[]) fun acc tree => acc ++ extractTact
+  let tacticData := trees.foldl (init := #[]) fun acc tree => acc ++ extractTacticData tree
+  -- `stains` records pairs `(location, mvar)`, where
+  -- * `location` is either a hypothesis or the main goal modified by a flexible tactic and
+  -- * `mvar` is the metavariable containing the modified location
+  -- We also track the ContextInfo and MetavarContext for generating suggestions
+  let mut stains : Array ((FVarId × MVarId) × StainData) := #[]
+  let mut msgs : Array (Syntax × StainData) := #[]
+  for td in tacticData do
+    let s := td.stx
+    let ctx0 := td.mctxBefore
+    let ctx1 := td.mctxAfter
+    let mvs0 := td.goalsTargetedBy
+    let mvs1 := td.goalsCreatedBy
+    let skind := s.getKind
+    if stoppers.contains skind then continue
+    let shouldStain? := flexible? s && mvs1.length == mvs0.length
+    for d in getStained! s do
+      if shouldStain? then
+        for currMVar1 in mvs1 do
+          let lctx1 := (ctx1.decls.findD currMVar1 default).lctx
+          let locsAfter := d.toFMVarId currMVar1 lctx1
+          -- Store ContextInfo, mctxBefore, and goals for generating suggestions later
+          let stainData : StainData := {
+            stained := d, stx := s, ci := td.ci, mctx := ctx0, goals := mvs0
+          }
+          stains := stains ++ locsAfter.map (fun l => (l, stainData))
+      else
+        let stained_in_syntax := if usesGoal? skind then (toStained s).insert d else toStained s
+        if !flexible.contains skind then
+          for currMv0 in mvs0 do
+            let lctx0 := (ctx0.decls.findD currMv0 default).lctx
+            let mut foundFvs : Std.HashSet (FVarId × MVarId):= {}
+            for st in stained_in_syntax do
+              for d in st.toFMVarId currMv0 lctx0 do
+                if !foundFvs.contains d then foundFvs := foundFvs.insert d
+            for l in foundFvs do
+              if let some (_stdLoc, stainData) := stains.find? (Prod.fst · == l) then
+                msgs := msgs.push (s, stainData)
+
+      -- tactics often change the name of the current `MVarId`, so we migrate the `FvarId`s
+      -- in the "old" `mvars` to the "same" `FVarId` in the "new" `mvars`
+      let mut new : Array ((FVarId × MVarId) × StainData) := .empty
+      for (fv, stainData) in stains do
+        let psisted := reallyPersist #[fv] mvs0 mvs1 ctx0 ctx1
+        if psisted == #[] && mvs1 != [] then
+          new := new.push (fv, stainData)
+          dbg_trace "lost {((fv.1.name, fv.2.name), stainData.stained, stainData.stx)}"
+        for p in psisted do new := new.push (p, stainData)
+      stains := new
+
+  for (s, stainData) in msgs do
+    let stainStx := stainData.stx
+    let d := stainData.stained
+    let stainStr := (stainStx.reprint.getD s!"{stainStx}").trimAscii
+let suggestion? ← liftCoreM generateSimpSuggestion stainData stainStx
+    -- Emit warning and suggestion
+    let msg := match stainStx.getKind with
+      | ``Lean.Parser.Tactic.simp => match d with
+        | .wildcard => m!"`{stainStr}` is a flexible tactic that potentially modifies all \
+          hypotheses and the current goal with a wildcard `*`. \
+          Try `simp?` and use the suggested `simp only [...]`. \
+          Alternatively, use `suffices` to explicitly state the simplified form."
+        | _ => m!"`{stainStr}` is a flexible tactic modifying `{d}`. \
+          Try `simp?` and use the suggested `simp only [...]`. \
+          Alternatively, use `suffices` to explicitly state the simplified form."
+      | ``Lean.Parser.Tactic.simpAll =>
+        m!"`{stainStr}` is a flexible tactic modifying `{d}`. \
+          Try `simp_all?` and use the suggested `simp_all only [...]`. \
+          Alternatively, use `suffices` to explicitly state the simplified form."
+      | `Aesop.Frontend.Parser.aesopTactic =>
+        m!"`{stainStr}` is a flexible tactic modifying `{d}`. \
+          Try `aesop?` and use the suggested proof."
+      | _ =>
+        m!"`{stainStr}` is a flexible tactic modifying `{d}`."
+    Linter.logLint linter.flexible stainStx msg
+    if let some suggStx := suggestion? then
+liftCoreM Lean.Meta.Tactic.TryThis.addSuggestion stainStx
+        { suggestion := .tsyntax (kind := `tactic) ⟨suggStx⟩ } (origSpan? := stainStx)
+    let fm ← getFileMap
+    let stainLine? := stainStx.getPos?.map (Position.line ∘ fm.toPosition)
+    let lineStr := if let some line := stainLine? then s!" on line {line}" else ""
+    let atomStr := match stainStx[0] with
+      | .atom _ val => "the flexible tactic " ++ m!"`{val}`"
+      | _ => "a flexible tactic"
+logInfoAt s match d with
+    | .name _ => m!"`{.group s}`\nuses `{d}`, which was modified by {atomStr}{lineStr}!"
+    | .goal =>
+      m!"`{.group s}`\nmodifies the current goal, which was modified by {atomStr}{lineStr}!"
+    | .wildcard => m!"`{.group s}`\nuses a rigid tactic. Previously, {atomStr}, which \
+        potentially modified all hypotheses and the goal with a wildcard `*`, was used{lineStr}."
 
 中文:
 定义 flexibleLinter
@@ -756,7 +1019,96 @@ definition flexibleLinter
   if (← MonadState.get).messages.hasErrors then
     return
   let trees ← getInfoTrees
-  let tacticData := trees.foldl (init := #[]) fun acc tree => acc ++ extractTact
+  let tacticData := trees.foldl (init := #[]) fun acc tree => acc ++ extractTacticData tree
+  -- `stains` records pairs `(location, mvar)`, where
+  -- * `location` is either a hypothesis or the main goal modified by a flexible tactic and
+  -- * `mvar` is the metavariable containing the modified location
+  -- We also track the ContextInfo and MetavarContext for generating suggestions
+  let mut stains : Array ((FVarId × MVarId) × StainData) := #[]
+  let mut msgs : Array (Syntax × StainData) := #[]
+  for td in tacticData do
+    let s := td.stx
+    let ctx0 := td.mctxBefore
+    let ctx1 := td.mctxAfter
+    let mvs0 := td.goalsTargetedBy
+    let mvs1 := td.goalsCreatedBy
+    let skind := s.getKind
+    if stoppers.contains skind then continue
+    let shouldStain? := flexible? s && mvs1.length == mvs0.length
+    for d in getStained! s do
+      if shouldStain? then
+        for currMVar1 in mvs1 do
+          let lctx1 := (ctx1.decls.findD currMVar1 default).lctx
+          let locsAfter := d.toFMVarId currMVar1 lctx1
+          -- Store ContextInfo, mctxBefore, and goals for generating suggestions later
+          let stainData : StainData := {
+            stained := d, stx := s, ci := td.ci, mctx := ctx0, goals := mvs0
+          }
+          stains := stains ++ locsAfter.map (fun l => (l, stainData))
+      else
+        let stained_in_syntax := if usesGoal? skind then (toStained s).insert d else toStained s
+        if !flexible.contains skind then
+          for currMv0 in mvs0 do
+            let lctx0 := (ctx0.decls.findD currMv0 default).lctx
+            let mut foundFvs : Std.HashSet (FVarId × MVarId):= {}
+            for st in stained_in_syntax do
+              for d in st.toFMVarId currMv0 lctx0 do
+                if !foundFvs.contains d then foundFvs := foundFvs.insert d
+            for l in foundFvs do
+              if let some (_stdLoc, stainData) := stains.find? (Prod.fst · == l) then
+                msgs := msgs.push (s, stainData)
+
+      -- tactics often change the name of the current `MVarId`, so we migrate the `FvarId`s
+      -- in the "old" `mvars` to the "same" `FVarId` in the "new" `mvars`
+      let mut new : Array ((FVarId × MVarId) × StainData) := .empty
+      for (fv, stainData) in stains do
+        let psisted := reallyPersist #[fv] mvs0 mvs1 ctx0 ctx1
+        if psisted == #[] && mvs1 != [] then
+          new := new.push (fv, stainData)
+          dbg_trace "lost {((fv.1.name, fv.2.name), stainData.stained, stainData.stx)}"
+        for p in psisted do new := new.push (p, stainData)
+      stains := new
+
+  for (s, stainData) in msgs do
+    let stainStx := stainData.stx
+    let d := stainData.stained
+    let stainStr := (stainStx.reprint.getD s!"{stainStx}").trimAscii
+let suggestion? ← liftCoreM generateSimpSuggestion stainData stainStx
+    -- Emit warning and suggestion
+    let msg := match stainStx.getKind with
+      | ``Lean.Parser.Tactic.simp => match d with
+        | .wildcard => m!"`{stainStr}` is a flexible tactic that potentially modifies all \
+          hypotheses and the current goal with a wildcard `*`. \
+          Try `simp?` and use the suggested `simp only [...]`. \
+          Alternatively, use `suffices` to explicitly state the simplified form."
+        | _ => m!"`{stainStr}` is a flexible tactic modifying `{d}`. \
+          Try `simp?` and use the suggested `simp only [...]`. \
+          Alternatively, use `suffices` to explicitly state the simplified form."
+      | ``Lean.Parser.Tactic.simpAll =>
+        m!"`{stainStr}` is a flexible tactic modifying `{d}`. \
+          Try `simp_all?` and use the suggested `simp_all only [...]`. \
+          Alternatively, use `suffices` to explicitly state the simplified form."
+      | `Aesop.Frontend.Parser.aesopTactic =>
+        m!"`{stainStr}` is a flexible tactic modifying `{d}`. \
+          Try `aesop?` and use the suggested proof."
+      | _ =>
+        m!"`{stainStr}` is a flexible tactic modifying `{d}`."
+    Linter.logLint linter.flexible stainStx msg
+    if let some suggStx := suggestion? then
+liftCoreM Lean.Meta.Tactic.TryThis.addSuggestion stainStx
+        { suggestion := .tsyntax (kind := `tactic) ⟨suggStx⟩ } (origSpan? := stainStx)
+    let fm ← getFileMap
+    let stainLine? := stainStx.getPos?.map (Position.line ∘ fm.toPosition)
+    let lineStr := if let some line := stainLine? then s!" on line {line}" else ""
+    let atomStr := match stainStx[0] with
+      | .atom _ val => "the flexible tactic " ++ m!"`{val}`"
+      | _ => "a flexible tactic"
+logInfoAt s match d with
+    | .name _ => m!"`{.group s}`\nuses `{d}`, which was modified by {atomStr}{lineStr}!"
+    | .goal =>
+      m!"`{.group s}`\nmodifies the current goal, which was modified by {atomStr}{lineStr}!"
+    | .wildcard => m!"`{.group s}`\nuses a rigid tactic. Previously, {atomStr}, which \
+        potentially modified all hypotheses and the goal with a wildcard `*`, was used{lineStr}."
 
 Depends on / 依赖: _stx, withSetOptionIn
 -/

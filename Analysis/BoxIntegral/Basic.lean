@@ -162,7 +162,10 @@ theorem integralSum_biUnion_partition
   calc
     (∑ J' in (πi J).boxes, vol J' (f (π.tag <| π.toPrepartition.biUnionIndex πi J'))) =
         ∑ J' in (πi J).boxes, vol J' (f (π.tag J)) :=
-      sum_congr rfl fun J' hJ' => by rw [Prepartition.biUnionIndex_of_mem _ 
+      sum_congr rfl fun J' hJ' => by rw [Prepartition.biUnionIndex_of_mem _ hJ hJ']
+    _ = vol J (f (π.tag J)) :=
+      (vol.map ⟨⟨fun g : E ->L[Real] F => g (f (π.tag J)), rfl⟩, fun _ _ => rfl⟩).sum_partition_boxes
+        le_top (hπi J hJ)
 
 中文:
 定理 integralSum_biUnion_partition
@@ -172,7 +175,10 @@ theorem integralSum_biUnion_partition
   calc
     (∑ J' in (πi J).boxes, vol J' (f (π.tag <| π.toPrepartition.biUnionIndex πi J'))) =
         ∑ J' in (πi J).boxes, vol J' (f (π.tag J)) :=
-      sum_congr rfl fun J' hJ' => by rw [Prepartition.biUnionIndex_of_mem _ 
+      sum_congr rfl fun J' hJ' => by rw [Prepartition.biUnionIndex_of_mem _ hJ hJ']
+    _ = vol J (f (π.tag J)) :=
+      (vol.map ⟨⟨fun g : E ->L[Real] F => g (f (π.tag J)), rfl⟩, fun _ _ => rfl⟩).sum_partition_boxes
+        le_top (hπi J hJ)
 
 Depends on / 依赖: Prepartition, Prepartition.biUnionIndex_of_mem, biUnionIndex, biUnionIndex_of_mem, le_top, sum_biUnion_boxes, sum_congr, sum_partition_boxes, toPrepartition, toPrepartition.biUnionIndex, vol.map
 -/
@@ -573,7 +579,9 @@ theorem integrable_iff_cauchy_basis
   refine forall₂_congr fun ε _ => exists_congr fun r => ?_
   simp only [Prod.forall, exists_imp, prodMk_mem_set_prod_eq, and_imp, mem_ofPred_eq]
   exact
-    an
+    and_congr Iff.rfl
+      ⟨fun H c₁ c₂ π₁ π₂ h₁ hU₁ h₂ hU₂ => H π₁ π₂ c₁ h₁ hU₁ c₂ h₂ hU₂,
+        fun H π₁ π₂ c₁ h₁ hU₁ c₂ h₂ hU₂ => H c₁ c₂ π₁ π₂ h₁ hU₁ h₂ hU₂⟩
 
 中文:
 定理 integrable_iff_cauchy_basis
@@ -584,7 +592,9 @@ theorem integrable_iff_cauchy_basis
   refine forall₂_congr fun ε _ => exists_congr fun r => ?_
   simp only [Prod.forall, exists_imp, prodMk_mem_set_prod_eq, and_imp, mem_ofPred_eq]
   exact
-    an
+    and_congr Iff.rfl
+      ⟨fun H c₁ c₂ π₁ π₂ h₁ hU₁ h₂ hU₂ => H π₁ π₂ c₁ h₁ hU₁ c₂ h₂ hU₂,
+        fun H π₁ π₂ c₁ h₁ hU₁ c₂ h₂ hU₂ => H c₁ c₂ π₁ π₂ h₁ hU₁ h₂ hU₂⟩
 
 Depends on / 依赖: Iff.rfl, Prod.forall, and_congr, and_imp, cauchy_map_iff, exists_congr, exists_imp, hasBasis_toFilteriUnion_top, integrable_iff_cauchy, l.hasBasis_toFilteriUnion_top, mem_ofPred_eq, prodMk_mem_set_prod_eq, prod_self, prod_self.tendsto_iff, tendsto_iff, uniformity_basis_dist_le
 -/
@@ -1171,7 +1181,7 @@ theorem integral_smul
   by_cases hf : Integrable I l f vol
   · exact (hf.hasIntegral.smul c).integral_eq
   · have : ¬Integrable I l (fun x => c • f x) vol := mt (fun h => h.of_smul hc) hf
-    rw [integral]; rw [integral]; rw [dif_neg hf]; rw
+    rw [integral]; rw [integral]; rw [dif_neg hf]; rw [dif_neg this]; rw [smul_zero]
 
 中文:
 定理 integral_smul
@@ -1182,7 +1192,7 @@ theorem integral_smul
   by_cases hf : Integrable I l f vol
   · exact (hf.hasIntegral.smul c).integral_eq
   · have : ¬Integrable I l (fun x => c • f x) vol := mt (fun h => h.of_smul hc) hf
-    rw [integral]; rw [integral]; rw [dif_neg hf]; rw
+    rw [integral]; rw [integral]; rw [dif_neg hf]; rw [dif_neg this]; rw [smul_zero]
 
 Depends on / 依赖: Integrable, dif_neg, eq_or_ne, h.of_smul, hasIntegral, hf.hasIntegral.smul, integral, integral_eq, integral_zero, of_smul, smul_zero, zero_smul
 -/
@@ -1236,7 +1246,11 @@ theorem norm_integral_le_of_norm_le
   · refine le_of_tendsto_of_tendsto' hfi.hasIntegral.norm hg.hasIntegral fun π => ?_
     refine norm_sum_le_of_le _ fun J _ => ?_
     simp only [BoxAdditiveMap.toSMul_apply, norm_smul, smul_eq_mul, Real.norm_eq_abs,
-      μ.toBoxA
+      μ.toBoxAdditive_apply, abs_of_nonneg measureReal_nonneg]
+    gcongr
+exact hle _ π.tag_mem_Icc _
+  · rw [integral, dif_neg hfi, norm_zero]
+    exact integral_nonneg (fun x hx => (norm_nonneg _).trans (hle x hx)) μ
 
 中文:
 定理 norm_integral_le_of_norm_le
@@ -1246,7 +1260,11 @@ theorem norm_integral_le_of_norm_le
   · refine le_of_tendsto_of_tendsto' hfi.hasIntegral.norm hg.hasIntegral fun π => ?_
     refine norm_sum_le_of_le _ fun J _ => ?_
     simp only [BoxAdditiveMap.toSMul_apply, norm_smul, smul_eq_mul, Real.norm_eq_abs,
-      μ.toBoxA
+      μ.toBoxAdditive_apply, abs_of_nonneg measureReal_nonneg]
+    gcongr
+exact hle _ π.tag_mem_Icc _
+  · rw [integral, dif_neg hfi, norm_zero]
+    exact integral_nonneg (fun x hx => (norm_nonneg _).trans (hle x hx)) μ
 
 Depends on / 依赖: BoxAdditiveMap, BoxAdditiveMap.toSMul_apply, Integrable, Real.norm_eq_abs, abs_of_nonneg, dif_neg, hasIntegral, hfi.hasIntegral.norm, hg.hasIntegral, integral, integral_nonneg, le_of_tendsto_of_tendsto, measureReal_nonneg, norm_eq_abs, norm_nonneg, norm_smul, norm_sum_le_of_le, norm_zero, smul_eq_mul, tag_mem_Icc
 -/
@@ -1397,7 +1415,17 @@ theorem dist_integralSum_le_of_memBaseSet
   set r : Realⁿ -> Ioi (0 : Real) := fun x => min (h.convergenceR ε₁ c₁ x) (h.convergenceR ε₂ c₂ x)
   set πr := π.toSubordinate r
   have H₁ :
-    dist (integralSum f vol (π₁.unionComplToSubordinate π hπU r)) (integral I l f vol) <= ε
+    dist (integralSum f vol (π₁.unionComplToSubordinate π hπU r)) (integral I l f vol) <= ε₁ :=
+    h.dist_integralSum_integral_le_of_memBaseSet hpos₁
+      (h₁.unionComplToSubordinate (fun _ _ => min_le_left _ _) hπU hπc₁)
+      (isPartition_unionComplToSubordinate _ _ _ _)
+  rw [HU] at hπU
+  have H₂ :
+    dist (integralSum f vol (π₂.unionComplToSubordinate π hπU r)) (integral I l f vol) <= ε₂ :=
+    h.dist_integralSum_integral_le_of_memBaseSet hpos₂
+      (h₂.unionComplToSubordinate (fun _ _ => min_le_right _ _) hπU hπc₂)
+      (isPartition_unionComplToSubordinate _ _ _ _)
+  simpa [unionComplToSubordinate] using (dist_triangle_right _ _ _).trans (add_le_add H₁ H₂)
 
 中文:
 定理 dist_integralSum_le_of_memBaseSet
@@ -1407,7 +1435,17 @@ theorem dist_integralSum_le_of_memBaseSet
   set r : Realⁿ -> Ioi (0 : Real) := fun x => min (h.convergenceR ε₁ c₁ x) (h.convergenceR ε₂ c₂ x)
   set πr := π.toSubordinate r
   have H₁ :
-    dist (integralSum f vol (π₁.unionComplToSubordinate π hπU r)) (integral I l f vol) <= ε
+    dist (integralSum f vol (π₁.unionComplToSubordinate π hπU r)) (integral I l f vol) <= ε₁ :=
+    h.dist_integralSum_integral_le_of_memBaseSet hpos₁
+      (h₁.unionComplToSubordinate (fun _ _ => min_le_left _ _) hπU hπc₁)
+      (isPartition_unionComplToSubordinate _ _ _ _)
+  rw [HU] at hπU
+  have H₂ :
+    dist (integralSum f vol (π₂.unionComplToSubordinate π hπU r)) (integral I l f vol) <= ε₂ :=
+    h.dist_integralSum_integral_le_of_memBaseSet hpos₂
+      (h₂.unionComplToSubordinate (fun _ _ => min_le_right _ _) hπU hπc₂)
+      (isPartition_unionComplToSubordinate _ _ _ _)
+  simpa [unionComplToSubordinate] using (dist_triangle_right _ _ _).trans (add_le_add H₁ H₂)
 
 Depends on / 依赖: convergenceR, dist_integralSum_integral_le_of_memBaseSet, exists_common_compl, h.convergenceR, h.dist_integralSum_integral_le_of_memBaseSet, integral, integralSum, isPartition_unionComplToSubordinate, min_le_left, toSubordinate, unionComplToSubordinate
 -/
@@ -1443,7 +1481,7 @@ theorem tendsto_integralSum_toFilter_prod_self_inf_iUnion_eq_uniformity
   replace ε0 := half_pos ε0
   use h.convergenceR (ε / 2), h.convergenceR_cond (ε / 2); rintro ⟨π₁, π₂⟩ ⟨⟨h₁, h₂⟩, hU⟩
   rw [← add_halves ε]
-  exact h.dist_integralSum_le_of_mem
+  exact h.dist_integralSum_le_of_memBaseSet ε0 ε0 h₁.choose_spec h₂.choose_spec hU
 
 中文:
 定理 tendsto_integralSum_toFilter_prod_self_inf_iUnion_eq_uniformity
@@ -1454,7 +1492,7 @@ theorem tendsto_integralSum_toFilter_prod_self_inf_iUnion_eq_uniformity
   replace ε0 := half_pos ε0
   use h.convergenceR (ε / 2), h.convergenceR_cond (ε / 2); rintro ⟨π₁, π₂⟩ ⟨⟨h₁, h₂⟩, hU⟩
   rw [← add_halves ε]
-  exact h.dist_integralSum_le_of_mem
+  exact h.dist_integralSum_le_of_memBaseSet ε0 ε0 h₁.choose_spec h₂.choose_spec hU
 
 Depends on / 依赖: add_halves, choose_spec, convergenceR, convergenceR_cond, dist_integralSum_le_of_memBaseSet, h.convergenceR, h.convergenceR_cond, h.dist_integralSum_le_of_memBaseSet, half_pos, hasBasis_toFilter, inf_principal, l.hasBasis_toFilter, prod_self, prod_self.inf_principal, replace, tendsto_iff, uniformity_basis_dist_le
 -/
@@ -1593,7 +1631,41 @@ theorem dist_integralSum_sum_integral_le_of_memBaseSet_of_iUnion_eq
   -- First we choose some constants.
   set δ' : Real := δ / (#π₀.boxes + 1)
   have H0 : 0 < (#π₀.boxes + 1 : Real) := Nat.cast_add_one_pos _
-  have δ'0 : 0 < 
+  have δ'0 : 0 < δ' := div_pos δ0 H0
+  set C := max π₀.distortion π₀.compl.distortion
+  /- Next we choose a tagged partition of each `J ∈ π₀` such that the integral sum of `f` over this
+    partition is `δ'`-close to the integral of `f` over `J`. -/
+  have : forall J in π₀, exists πi : TaggedPrepartition J,
+      πi.IsPartition ∧ dist (integralSum f vol πi) (integral J l f vol) <= δ' ∧
+        l.MemBaseSet J C (h.convergenceR δ' C) πi := by
+    intro J hJ
+    have Hle : J <= I := π₀.le_of_mem hJ
+    have HJi : Integrable J l f vol := h.to_subbox Hle
+    set r := fun x => min (h.convergenceR δ' C x) (HJi.convergenceR δ' C x)
+    have hJd : J.distortion <= C := le_trans (Finset.le_sup hJ) (le_max_left _ _)
+    rcases l.exists_memBaseSet_isPartition J hJd r with ⟨πJ, hC, hp⟩
+    have hC₁ : l.MemBaseSet J C (HJi.convergenceR δ' C) πJ := by
+      refine hC.mono J le_rfl le_rfl fun x _ => ?_; exact min_le_right _ _
+    have hC₂ : l.MemBaseSet J C (h.convergenceR δ' C) πJ := by
+      refine hC.mono J le_rfl le_rfl fun x _ => ?_; exact min_le_left _ _
+    exact ⟨πJ, hp, HJi.dist_integralSum_integral_le_of_memBaseSet δ'0 hC₁ hp, hC₂⟩
+  /- Now we combine these tagged partitions into a tagged prepartition of `I` that covers the
+    same part of `I` as `π₀` and apply `BoxIntegral.dist_integralSum_le_of_memBaseSet` to
+    `π` and this prepartition. -/
+  choose! πi hπip hπiδ' hπiC using this
+  have : l.MemBaseSet I C (h.convergenceR δ' C) (π₀.biUnionTagged πi) :=
+    biUnionTagged_memBaseSet hπiC hπip fun _ => le_max_right _ _
+  have hU' : π.iUnion = (π₀.biUnionTagged πi).iUnion :=
+    hU.trans (Prepartition.iUnion_biUnion_partition _ hπip).symm
+  have := h.dist_integralSum_le_of_memBaseSet h0 δ'0 hπ this hU'
+  rw [integralSum_biUnionTagged] at this
+  calc
+    dist (integralSum f vol π) (∑ J in π₀.boxes, integral J l f vol) <=
+        dist (integralSum f vol π) (∑ J in π₀.boxes, integralSum f vol (πi J)) +
+          dist (∑ J in π₀.boxes, integralSum f vol (πi J)) (∑ J in π₀.boxes, integral J l f vol) :=
+      dist_triangle _ _ _
+    _ <= ε + δ' + ∑ _J in π₀.boxes, δ' := add_le_add this (dist_sum_sum_le_of_le _ hπiδ')
+    _ = ε + δ := by simp [field, δ']; ring
 
 中文:
 定理 dist_integralSum_sum_integral_le_of_memBaseSet_of_iUnion_eq
@@ -1604,7 +1676,41 @@ theorem dist_integralSum_sum_integral_le_of_memBaseSet_of_iUnion_eq
   -- First we choose some constants.
   set δ' : Real := δ / (#π₀.boxes + 1)
   have H0 : 0 < (#π₀.boxes + 1 : Real) := Nat.cast_add_one_pos _
-  have δ'0 : 0 < 
+  have δ'0 : 0 < δ' := div_pos δ0 H0
+  set C := max π₀.distortion π₀.compl.distortion
+  /- Next we choose a tagged partition of each `J ∈ π₀` such that the integral sum of `f` over this
+    partition is `δ'`-close to the integral of `f` over `J`. -/
+  have : forall J in π₀, exists πi : TaggedPrepartition J,
+      πi.IsPartition ∧ dist (integralSum f vol πi) (integral J l f vol) <= δ' ∧
+        l.MemBaseSet J C (h.convergenceR δ' C) πi := by
+    intro J hJ
+    have Hle : J <= I := π₀.le_of_mem hJ
+    have HJi : Integrable J l f vol := h.to_subbox Hle
+    set r := fun x => min (h.convergenceR δ' C x) (HJi.convergenceR δ' C x)
+    have hJd : J.distortion <= C := le_trans (Finset.le_sup hJ) (le_max_left _ _)
+    rcases l.exists_memBaseSet_isPartition J hJd r with ⟨πJ, hC, hp⟩
+    have hC₁ : l.MemBaseSet J C (HJi.convergenceR δ' C) πJ := by
+      refine hC.mono J le_rfl le_rfl fun x _ => ?_; exact min_le_right _ _
+    have hC₂ : l.MemBaseSet J C (h.convergenceR δ' C) πJ := by
+      refine hC.mono J le_rfl le_rfl fun x _ => ?_; exact min_le_left _ _
+    exact ⟨πJ, hp, HJi.dist_integralSum_integral_le_of_memBaseSet δ'0 hC₁ hp, hC₂⟩
+  /- Now we combine these tagged partitions into a tagged prepartition of `I` that covers the
+    same part of `I` as `π₀` and apply `BoxIntegral.dist_integralSum_le_of_memBaseSet` to
+    `π` and this prepartition. -/
+  choose! πi hπip hπiδ' hπiC using this
+  have : l.MemBaseSet I C (h.convergenceR δ' C) (π₀.biUnionTagged πi) :=
+    biUnionTagged_memBaseSet hπiC hπip fun _ => le_max_right _ _
+  have hU' : π.iUnion = (π₀.biUnionTagged πi).iUnion :=
+    hU.trans (Prepartition.iUnion_biUnion_partition _ hπip).symm
+  have := h.dist_integralSum_le_of_memBaseSet h0 δ'0 hπ this hU'
+  rw [integralSum_biUnionTagged] at this
+  calc
+    dist (integralSum f vol π) (∑ J in π₀.boxes, integral J l f vol) <=
+        dist (integralSum f vol π) (∑ J in π₀.boxes, integralSum f vol (πi J)) +
+          dist (∑ J in π₀.boxes, integralSum f vol (πi J)) (∑ J in π₀.boxes, integral J l f vol) :=
+      dist_triangle _ _ _
+    _ <= ε + δ' + ∑ _J in π₀.boxes, δ' := add_le_add this (dist_sum_sum_le_of_le _ hπiδ')
+    _ = ε + δ := by simp [field, δ']; ring
 -/
 theorem dist_integralSum_sum_integral_le_of_memBaseSet_of_iUnion_eq (h : Integrable I l f vol)
     (h0 : 0 < ε) (hπ : l.MemBaseSet I c (h.convergenceR ε c) π) {π₀ : Prepartition I}
@@ -1790,7 +1896,100 @@ theorem integrable_of_bounded_and_ae_continuousWithinAt
      sufficiently fine.
 
      Start by defining some constants C, ε₁, ε₂ that will be useful later. -/
-  refine integra
+  refine integrable_iff_cauchy_basis.2 fun ε ε0 => ?_
+  rcases exists_pos_mul_lt ε0 (2 * μ.toBoxAdditive I) with ⟨ε₁, ε₁0, hε₁⟩
+  rcases hb with ⟨C, hC⟩
+  have C0 : 0 <= C := by
+    obtain ⟨x, hx⟩ := BoxIntegral.Box.nonempty_coe I
+exact le_trans (norm_nonneg (f x)) hC x (I.coe_subset_Icc hx)
+  rcases exists_pos_mul_lt ε0 (4 * C) with ⟨ε₂, ε₂0, hε₂⟩
+have ε₂0' : ENNReal.ofReal ε₂ != 0 := ne_of_gt ofReal_pos.2 ε₂0
+  -- The set of discontinuities of f is contained in an open set U with μ U < ε₂.
+  let D := { x in Box.Icc I | ¬ ContinuousWithinAt f (Box.Icc I) x }
+  let μ' := μ.restrict (Box.Icc I)
+  have μ'D : μ' D = 0 := by
+    rcases eventually_iff_exists_mem.1 hc with ⟨V, ae, hV⟩
+    exact eq_of_le_of_not_lt (mem_ae_iff.1 ae ▸ (μ'.mono <| fun x h xV => h.2 (hV x xV)))
+      _root_.not_lt_zero
+  obtain ⟨U, UD, Uopen, hU⟩ := Set.exists_isOpen_lt_add D (show μ' D != ⊤ by simp [μ'D]) ε₂0'
+  rw [μ'D]; rw [zero_add] at hU
+  /- Box.Icc I \ U is compact and avoids discontinuities of f, so there exists r > 0 such that for
+     every x ∈ Box.Icc I \ U, the oscillation (within Box.Icc I) of f on the ball of radius r
+     centered at x is ≤ ε₁ -/
+  have comp : IsCompact (Box.Icc I \ U) :=
+    I.isCompact_Icc.of_isClosed_subset (I.isCompact_Icc.isClosed.sdiff Uopen) Set.sdiff_subset
+  have : forall x in (Box.Icc I \ U), oscillationWithin f (Box.Icc I) x < (ENNReal.ofReal ε₁) := by
+    intro x hx
+    suffices oscillationWithin f (Box.Icc I) x = 0 by rw [this]; exact ofReal_pos.2 ε₁0
+    simpa [OscillationWithin.eq_zero_iff_continuousWithinAt, D, hx.1] using hx.2 ∘ (fun a => UD a)
+  rcases comp.uniform_oscillationWithin this with ⟨r, r0, hr⟩
+  /- We prove the claim for partitions π₁ and π₂ subordinate to r/2, by writing the difference as
+     an integralSum over π₁ ⊓ π₂ and considering separately the boxes of π₁ ⊓ π₂ which are/aren't
+     fully contained within U. -/
+  refine ⟨fun _ _ => ⟨r / 2, half_pos r0⟩, fun _ _ _ => rfl, fun c₁ c₂ π₁ π₂ h₁ h₁p h₂ h₂p => ?_⟩
+  simp only [dist_eq_norm, integralSum_sub_partitions _ _ h₁p h₂p, toSMul_apply, ← smul_sub]
+  have μI : μ I < ⊤ := lt_of_le_of_lt (μ.mono I.coe_subset_Icc) I.isCompact_Icc.measure_lt_top
+  let t₁ (J : Box ι) : Realⁿ := (π₁.infPrepartition π₂.toPrepartition).tag J
+  let t₂ (J : Box ι) : Realⁿ := (π₂.infPrepartition π₁.toPrepartition).tag J
+  let B := (π₁.toPrepartition ⊓ π₂.toPrepartition).boxes
+  classical
+  let B' := {J in B | J.toSet subseteq U}
+  have hB' : B' subseteq B := B.filter_subset (fun J => J.toSet subseteq U)
+  have μJ_ne_top : forall J in B, μ J != ⊤ :=
+fun J hJ => lt_top_iff_ne_top.1 lt_of_le_of_lt (μ.mono (Prepartition.le_of_mem' _ J hJ)) μI
+  have un : forall S subseteq B, ⋃ J in S, J.toSet subseteq I.toSet :=
+    fun S hS => iUnion_subset_iff.2 (fun J => iUnion_subset_iff.2 fun hJ => le_of_mem' _ J (hS hJ))
+  rw [← sum_sdiff hB']; rw [← add_halves ε]
+  apply le_trans (norm_add_le _ _) (add_le_add ?_ ?_)
+  /- If a box J is not contained within U, then the oscillation of f on J is small, which bounds
+     the contribution of J to the overall sum. -/
+  · have : forall J in B \ B', ‖μ.toBoxAdditive J • (f (t₁ J) - f (t₂ J))‖ <= μ.toBoxAdditive J * ε₁ := by
+      intro J hJ
+      rw [Finset.mem_sdiff]; rw [B.mem_filter]; rw [not_and] at hJ
+      rw [norm_smul]; rw [μ.toBoxAdditive_apply]; rw [Real.norm_of_nonneg measureReal_nonneg]
+      gcongr _ * ?_
+      obtain ⟨x, xJ, xnU⟩ : exists x in J, x ∉ U := Set.not_subset.1 (hJ.2 hJ.1)
+      have hx : x in Box.Icc I \ U := ⟨Box.coe_subset_Icc ((le_of_mem' _ J hJ.1) xJ), xnU⟩
+      have ineq : edist (f (t₁ J)) (f (t₂ J)) <= ediam (f '' (ball x r inter (Box.Icc I))) := by
+        apply edist_le_ediam_of_mem <;>
+          refine Set.mem_image_of_mem f ⟨?_, tag_mem_Icc _ J⟩ <;>
+refine closedBall_subset_ball (div_two_lt_of_pos r0) mem_closedBall_comm.1 ?_
+        · exact h₁.isSubordinate.infPrepartition π₂.toPrepartition J hJ.1 (Box.coe_subset_Icc xJ)
+        · exact h₂.isSubordinate.infPrepartition π₁.toPrepartition J
+            ((π₁.mem_infPrepartition_comm).1 hJ.1) (Box.coe_subset_Icc xJ)
+      rw [← Metric.eball_ofReal] at ineq
+      simpa only [edist_le_ofReal (le_of_lt ε₁0), dist_eq_norm, hJ.1] using ineq.trans (hr x hx)
+refine (norm_sum_le _ _).trans (sum_le_sum this).trans ?_
+    rw [← sum_mul]
+    trans μ.toBoxAdditive I * ε₁; swap
+    · linarith
+    simp_rw [mul_le_mul_iff_left₀ ε₁0, μ.toBoxAdditive_apply]
+refine le_trans ?_ toReal_mono (lt_top_iff_ne_top.1 μI) μ.mono un (B \ B') sdiff_subset
+    simp_rw [measureReal_def]
+    rw [← toReal_sum (fun J hJ => μJ_ne_top J (mem_sdiff.1 hJ).1)]; rw [← Finset.tsum_subtype]
+    refine (toReal_mono <| ne_of_lt <| lt_of_le_of_lt (μ.mono <| un (B \ B') sdiff_subset) μI) ?_
+    refine le_of_eq (measure_biUnion (countable_toSet _) ?_ (fun J _ => J.measurableSet_coe)).symm
+    exact fun J hJ J' hJ' hJJ' => pairwiseDisjoint _ (mem_sdiff.1 hJ).1 (mem_sdiff.1 hJ').1 hJJ'
+  -- The contribution of the boxes contained within U is bounded because f is bounded and μ U < ε₂.
+  · have : forall J in B', ‖μ.toBoxAdditive J • (f (t₁ J) - f (t₂ J))‖ <= μ.toBoxAdditive J * (2 * C) := by
+      intro J _
+      rw [norm_smul]; rw [μ.toBoxAdditive_apply]; rw [Real.norm_of_nonneg measureReal_nonneg]; rw [two_mul]
+      gcongr
+      apply norm_sub_le_of_le <;> exact hC _ (TaggedPrepartition.tag_mem_Icc _ J)
+    apply (norm_sum_le_of_le B' this).trans
+    simp_rw [← sum_mul, μ.toBoxAdditive_apply, measureReal_def,
+      ← toReal_sum (fun J hJ => μJ_ne_top J (hB' hJ))]
+    suffices (∑ J in B', μ J).toReal <= ε₂ by
+      linarith [mul_le_mul_of_nonneg_right this <| (mul_nonneg_iff_of_pos_left two_pos).2 C0]
+    rw [← toReal_ofReal (le_of_lt ε₂0)]
+    refine toReal_mono ofReal_ne_top (le_trans ?_ (le_of_lt hU))
+    trans μ' (⋃ J in B', J)
+    · simp only [μ', μ.restrict_eq_self <| (un _ hB').trans I.coe_subset_Icc]
+exact le_of_eq Eq.symm measure_biUnion_finset
+        (fun J hJ K hK hJK => pairwiseDisjoint _ (hB' hJ) (hB' hK) hJK) fun J _ => J.measurableSet_coe
+    · apply μ'.mono
+      simp_rw [iUnion_subset_iff]
+      exact fun J hJ => (mem_filter.1 hJ).2
 
 中文:
 定理 integrable_of_bounded_and_ae_continuousWithinAt
@@ -1801,7 +2000,100 @@ theorem integrable_of_bounded_and_ae_continuousWithinAt
      sufficiently fine.
 
      Start by defining some constants C, ε₁, ε₂ that will be useful later. -/
-  refine integra
+  refine integrable_iff_cauchy_basis.2 fun ε ε0 => ?_
+  rcases exists_pos_mul_lt ε0 (2 * μ.toBoxAdditive I) with ⟨ε₁, ε₁0, hε₁⟩
+  rcases hb with ⟨C, hC⟩
+  have C0 : 0 <= C := by
+    obtain ⟨x, hx⟩ := BoxIntegral.Box.nonempty_coe I
+exact le_trans (norm_nonneg (f x)) hC x (I.coe_subset_Icc hx)
+  rcases exists_pos_mul_lt ε0 (4 * C) with ⟨ε₂, ε₂0, hε₂⟩
+have ε₂0' : ENNReal.ofReal ε₂ != 0 := ne_of_gt ofReal_pos.2 ε₂0
+  -- The set of discontinuities of f is contained in an open set U with μ U < ε₂.
+  let D := { x in Box.Icc I | ¬ ContinuousWithinAt f (Box.Icc I) x }
+  let μ' := μ.restrict (Box.Icc I)
+  have μ'D : μ' D = 0 := by
+    rcases eventually_iff_exists_mem.1 hc with ⟨V, ae, hV⟩
+    exact eq_of_le_of_not_lt (mem_ae_iff.1 ae ▸ (μ'.mono <| fun x h xV => h.2 (hV x xV)))
+      _root_.not_lt_zero
+  obtain ⟨U, UD, Uopen, hU⟩ := Set.exists_isOpen_lt_add D (show μ' D != ⊤ by simp [μ'D]) ε₂0'
+  rw [μ'D]; rw [zero_add] at hU
+  /- Box.Icc I \ U is compact and avoids discontinuities of f, so there exists r > 0 such that for
+     every x ∈ Box.Icc I \ U, the oscillation (within Box.Icc I) of f on the ball of radius r
+     centered at x is ≤ ε₁ -/
+  have comp : IsCompact (Box.Icc I \ U) :=
+    I.isCompact_Icc.of_isClosed_subset (I.isCompact_Icc.isClosed.sdiff Uopen) Set.sdiff_subset
+  have : forall x in (Box.Icc I \ U), oscillationWithin f (Box.Icc I) x < (ENNReal.ofReal ε₁) := by
+    intro x hx
+    suffices oscillationWithin f (Box.Icc I) x = 0 by rw [this]; exact ofReal_pos.2 ε₁0
+    simpa [OscillationWithin.eq_zero_iff_continuousWithinAt, D, hx.1] using hx.2 ∘ (fun a => UD a)
+  rcases comp.uniform_oscillationWithin this with ⟨r, r0, hr⟩
+  /- We prove the claim for partitions π₁ and π₂ subordinate to r/2, by writing the difference as
+     an integralSum over π₁ ⊓ π₂ and considering separately the boxes of π₁ ⊓ π₂ which are/aren't
+     fully contained within U. -/
+  refine ⟨fun _ _ => ⟨r / 2, half_pos r0⟩, fun _ _ _ => rfl, fun c₁ c₂ π₁ π₂ h₁ h₁p h₂ h₂p => ?_⟩
+  simp only [dist_eq_norm, integralSum_sub_partitions _ _ h₁p h₂p, toSMul_apply, ← smul_sub]
+  have μI : μ I < ⊤ := lt_of_le_of_lt (μ.mono I.coe_subset_Icc) I.isCompact_Icc.measure_lt_top
+  let t₁ (J : Box ι) : Realⁿ := (π₁.infPrepartition π₂.toPrepartition).tag J
+  let t₂ (J : Box ι) : Realⁿ := (π₂.infPrepartition π₁.toPrepartition).tag J
+  let B := (π₁.toPrepartition ⊓ π₂.toPrepartition).boxes
+  classical
+  let B' := {J in B | J.toSet subseteq U}
+  have hB' : B' subseteq B := B.filter_subset (fun J => J.toSet subseteq U)
+  have μJ_ne_top : forall J in B, μ J != ⊤ :=
+fun J hJ => lt_top_iff_ne_top.1 lt_of_le_of_lt (μ.mono (Prepartition.le_of_mem' _ J hJ)) μI
+  have un : forall S subseteq B, ⋃ J in S, J.toSet subseteq I.toSet :=
+    fun S hS => iUnion_subset_iff.2 (fun J => iUnion_subset_iff.2 fun hJ => le_of_mem' _ J (hS hJ))
+  rw [← sum_sdiff hB']; rw [← add_halves ε]
+  apply le_trans (norm_add_le _ _) (add_le_add ?_ ?_)
+  /- If a box J is not contained within U, then the oscillation of f on J is small, which bounds
+     the contribution of J to the overall sum. -/
+  · have : forall J in B \ B', ‖μ.toBoxAdditive J • (f (t₁ J) - f (t₂ J))‖ <= μ.toBoxAdditive J * ε₁ := by
+      intro J hJ
+      rw [Finset.mem_sdiff]; rw [B.mem_filter]; rw [not_and] at hJ
+      rw [norm_smul]; rw [μ.toBoxAdditive_apply]; rw [Real.norm_of_nonneg measureReal_nonneg]
+      gcongr _ * ?_
+      obtain ⟨x, xJ, xnU⟩ : exists x in J, x ∉ U := Set.not_subset.1 (hJ.2 hJ.1)
+      have hx : x in Box.Icc I \ U := ⟨Box.coe_subset_Icc ((le_of_mem' _ J hJ.1) xJ), xnU⟩
+      have ineq : edist (f (t₁ J)) (f (t₂ J)) <= ediam (f '' (ball x r inter (Box.Icc I))) := by
+        apply edist_le_ediam_of_mem <;>
+          refine Set.mem_image_of_mem f ⟨?_, tag_mem_Icc _ J⟩ <;>
+refine closedBall_subset_ball (div_two_lt_of_pos r0) mem_closedBall_comm.1 ?_
+        · exact h₁.isSubordinate.infPrepartition π₂.toPrepartition J hJ.1 (Box.coe_subset_Icc xJ)
+        · exact h₂.isSubordinate.infPrepartition π₁.toPrepartition J
+            ((π₁.mem_infPrepartition_comm).1 hJ.1) (Box.coe_subset_Icc xJ)
+      rw [← Metric.eball_ofReal] at ineq
+      simpa only [edist_le_ofReal (le_of_lt ε₁0), dist_eq_norm, hJ.1] using ineq.trans (hr x hx)
+refine (norm_sum_le _ _).trans (sum_le_sum this).trans ?_
+    rw [← sum_mul]
+    trans μ.toBoxAdditive I * ε₁; swap
+    · linarith
+    simp_rw [mul_le_mul_iff_left₀ ε₁0, μ.toBoxAdditive_apply]
+refine le_trans ?_ toReal_mono (lt_top_iff_ne_top.1 μI) μ.mono un (B \ B') sdiff_subset
+    simp_rw [measureReal_def]
+    rw [← toReal_sum (fun J hJ => μJ_ne_top J (mem_sdiff.1 hJ).1)]; rw [← Finset.tsum_subtype]
+    refine (toReal_mono <| ne_of_lt <| lt_of_le_of_lt (μ.mono <| un (B \ B') sdiff_subset) μI) ?_
+    refine le_of_eq (measure_biUnion (countable_toSet _) ?_ (fun J _ => J.measurableSet_coe)).symm
+    exact fun J hJ J' hJ' hJJ' => pairwiseDisjoint _ (mem_sdiff.1 hJ).1 (mem_sdiff.1 hJ').1 hJJ'
+  -- The contribution of the boxes contained within U is bounded because f is bounded and μ U < ε₂.
+  · have : forall J in B', ‖μ.toBoxAdditive J • (f (t₁ J) - f (t₂ J))‖ <= μ.toBoxAdditive J * (2 * C) := by
+      intro J _
+      rw [norm_smul]; rw [μ.toBoxAdditive_apply]; rw [Real.norm_of_nonneg measureReal_nonneg]; rw [two_mul]
+      gcongr
+      apply norm_sub_le_of_le <;> exact hC _ (TaggedPrepartition.tag_mem_Icc _ J)
+    apply (norm_sum_le_of_le B' this).trans
+    simp_rw [← sum_mul, μ.toBoxAdditive_apply, measureReal_def,
+      ← toReal_sum (fun J hJ => μJ_ne_top J (hB' hJ))]
+    suffices (∑ J in B', μ J).toReal <= ε₂ by
+      linarith [mul_le_mul_of_nonneg_right this <| (mul_nonneg_iff_of_pos_left two_pos).2 C0]
+    rw [← toReal_ofReal (le_of_lt ε₂0)]
+    refine toReal_mono ofReal_ne_top (le_trans ?_ (le_of_lt hU))
+    trans μ' (⋃ J in B', J)
+    · simp only [μ', μ.restrict_eq_self <| (un _ hB').trans I.coe_subset_Icc]
+exact le_of_eq Eq.symm measure_biUnion_finset
+        (fun J hJ K hK hJK => pairwiseDisjoint _ (hB' hJ) (hB' hK) hJK) fun J _ => J.measurableSet_coe
+    · apply μ'.mono
+      simp_rw [iUnion_subset_iff]
+      exact fun J hJ => (mem_filter.1 hJ).2
 -/
 theorem integrable_of_bounded_and_ae_continuousWithinAt [CompleteSpace E] {I : Box ι} {f : Realⁿ -> E}
     (hb : exists C : Real, forall x in Box.Icc I, ‖f x‖ <= C) (μ : Measure Realⁿ) [IsLocallyFiniteMeasure μ]
@@ -1942,7 +2234,9 @@ theorem integrable_of_continuousOn
   · obtain ⟨C, hC⟩ := (NormedSpace.isBounded_iff_subset_smul_closedBall Real).1
                         (I.isCompact_Icc.image_of_continuousOn hc).isBounded
     use ‖C‖, fun x hx => by
-      simpa only [smul_unitClosedBall, mem_closedBall_ze
+      simpa only [smul_unitClosedBall, mem_closedBall_zero_iff] using hC (Set.mem_image_of_mem f hx)
+  · refine eventually_of_mem ?_ (fun x hx => hc.continuousWithinAt hx)
+    rw [mem_ae_iff]; rw [μ.restrict_apply] <;> simp [MeasurableSet.compl_iff.2 I.measurableSet_Icc]
 
 中文:
 定理 integrable_of_continuousOn
@@ -1952,7 +2246,9 @@ theorem integrable_of_continuousOn
   · obtain ⟨C, hC⟩ := (NormedSpace.isBounded_iff_subset_smul_closedBall Real).1
                         (I.isCompact_Icc.image_of_continuousOn hc).isBounded
     use ‖C‖, fun x hx => by
-      simpa only [smul_unitClosedBall, mem_closedBall_ze
+      simpa only [smul_unitClosedBall, mem_closedBall_zero_iff] using hC (Set.mem_image_of_mem f hx)
+  · refine eventually_of_mem ?_ (fun x hx => hc.continuousWithinAt hx)
+    rw [mem_ae_iff]; rw [μ.restrict_apply] <;> simp [MeasurableSet.compl_iff.2 I.measurableSet_Icc]
 
 Depends on / 依赖: I.isCompact_Icc.image_of_continuousOn, I.measurableSet_Icc, MeasurableSet, MeasurableSet.compl_iff, NormedSpace, NormedSpace.isBounded_iff_subset_smul_closedBall, Set.mem_image_of_mem, compl_iff, continuousWithinAt, eventually_of_mem, hc.continuousWithinAt, image_of_continuousOn, integrable_of_bounded_and_ae_continuousWithinAt, isBounded, isBounded_iff_subset_smul_closedBall, isCompact_Icc, measurableSet_Icc, mem_ae_iff, mem_closedBall_zero_iff, mem_image_of_mem
 -/
@@ -1980,7 +2276,64 @@ theorem HasIntegral.of_bRiemann_eq_false_of_forall_isLittleO
 
     For `x ∈ s`, we choose `εs` such that `∑' x : s, εs x < ε / 2 / 2 ^ #ι`, then choose `r x` so
     that `dist (vol J (f x)) (g J) ≤ εs x` for `J` in the `r x`-neighborhood of `x`. This guarantees
-    that the sum of these distances ove
+    that the sum of these distances over boxes `J` such that `π.tag J ∈ s` is less than `ε / 2`. We
+    need an additional multiplier `2 ^ #ι` because different boxes can have the same tag.
+
+    For `x ∉ s`, we choose `r x` so that `dist (vol (J (f x))) (g J) ≤ (ε / 2 / B I) * B J` for a
+    box `J` in the `δ`-neighborhood of `x`. -/
+  refine ((l.hasBasis_toFilteriUnion_top _).tendsto_iff Metric.nhds_basis_closedBall).2 ?_
+  intro ε ε0
+  simp only [← exists_prop, gt_iff_lt, Subtype.exists'] at H₁ H₂
+  choose! δ₁ Hδ₁ using H₁
+  choose! δ₂ Hδ₂ using H₂
+  have ε0' := half_pos ε0; have H0 : 0 < (2 : Real) ^ Fintype.card ι := pow_pos zero_lt_two _
+  rcases hs.exists_pos_forall_sum_le (div_pos ε0' H0) with ⟨εs, hεs0, hεs⟩
+  simp only [le_div_iff₀' H0, mul_sum] at hεs
+  rcases exists_pos_mul_lt ε0' (B I) with ⟨ε', ε'0, hεI⟩
+  classical
+  set δ : Real>=0 -> Realⁿ -> Ioi (0 : Real) := fun c x => if x in s then δ₁ c x (εs x) else (δ₂ c) x ε'
+  refine ⟨δ, fun c => l.rCond_of_bRiemann_eq_false hl, ?_⟩
+  simp only [mem_ofPred_eq]
+  rintro π ⟨c, hπδ, hπp⟩
+  -- Now we split the sum into two parts based on whether `π.tag J` belongs to `s` or not.
+  rw [← g.sum_partition_boxes le_rfl hπp]; rw [Metric.mem_closedBall]; rw [integralSum]; rw [← sum_filter_add_sum_filter_not π.boxes fun J => π.tag J in s]; rw [← sum_filter_add_sum_filter_not π.boxes fun J => π.tag J in s]; rw [← add_halves ε]
+  refine dist_add_add_le_of_le ?_ ?_
+  · rcases s.eq_empty_or_nonempty with (rfl | hsne); · simp [ε0'.le]
+    /- For the boxes such that `π.tag J ∈ s`, we use the fact that at most `2 ^ #ι` boxes have the
+        same tag. -/
+    specialize hlH hsne
+    have : forall J in {J in π.boxes | π.tag J in s},
+        dist (vol J (f <| π.tag J)) (g J) <= εs (π.tag J) := fun J hJ => by
+      rw [Finset.mem_filter] at hJ; obtain ⟨hJ, hJs⟩ := hJ
+      refine Hδ₁ c _ ⟨π.tag_mem_Icc _, hJs⟩ _ (hεs0 _) _ (π.le_of_mem' _ hJ) ?_
+        (hπδ.2 hlH J hJ) fun hD => (Finset.le_sup hJ).trans (hπδ.3 hD)
+      convert! hπδ.1 J hJ using 3; exact (if_pos hJs).symm
+    refine (dist_sum_sum_le_of_le _ this).trans ?_
+    rw [sum_comp]
+    refine (sum_le_sum ?_).trans (hεs _ ?_)
+    · rintro b -
+      rw [← Nat.cast_two]; rw [← Nat.cast_pow]; rw [← nsmul_eq_mul]
+      refine nsmul_le_nsmul_left (hεs0 _).le ?_
+      refine (Finset.card_le_card ?_).trans ((hπδ.isHenstock hlH).card_filter_tag_eq_le b)
+      exact filter_subset_filter _ (filter_subset _ _)
+    · rw [Finset.coe_image, Set.image_subset_iff]
+      exact fun J hJ => (Finset.mem_filter.1 hJ).2
+  /- Now we deal with boxes such that `π.tag J ∉ s`.
+    In this case the estimate is straightforward. -/
+  calc
+    dist (∑ J in π.boxes with tag π J ∉ s, vol J (f (tag π J)))
+      (∑ J in π.boxes with tag π J ∉ s, g J)
+      <= ∑ J in π.boxes with tag π J ∉ s, ε' * B J := dist_sum_sum_le_of_le _ fun J hJ => by
+      rw [Finset.mem_filter] at hJ; obtain ⟨hJ, hJs⟩ := hJ
+      refine Hδ₂ c _ ⟨π.tag_mem_Icc _, hJs⟩ _ ε'0 _ (π.le_of_mem' _ hJ) ?_ (fun hH => hπδ.2 hH J hJ)
+        fun hD => (Finset.le_sup hJ).trans (hπδ.3 hD)
+      convert! hπδ.1 J hJ using 3; exact (if_neg hJs).symm
+    _ <= ∑ J in π.boxes, ε' * B J := by
+      gcongr
+      · exact fun _ _ _ => mul_nonneg ε'0.le (hB0 _)
+      · apply filter_subset
+    _ = B I * ε' := by rw [← mul_sum, B.sum_partition_boxes le_rfl hπp, mul_comm]
+    _ <= ε / 2 := hεI.le
 
 中文:
 定理 Has整数egral.of_bRiemann_eq_false_of_对任意_isLittleO
@@ -1990,7 +2343,64 @@ theorem HasIntegral.of_bRiemann_eq_false_of_forall_isLittleO
 
     For `x ∈ s`, we choose `εs` such that `∑' x : s, εs x < ε / 2 / 2 ^ #ι`, then choose `r x` so
     that `dist (vol J (f x)) (g J) ≤ εs x` for `J` in the `r x`-neighborhood of `x`. This guarantees
-    that the sum of these distances ove
+    that the sum of these distances over boxes `J` such that `π.tag J ∈ s` is less than `ε / 2`. We
+    need an additional multiplier `2 ^ #ι` because different boxes can have the same tag.
+
+    For `x ∉ s`, we choose `r x` so that `dist (vol (J (f x))) (g J) ≤ (ε / 2 / B I) * B J` for a
+    box `J` in the `δ`-neighborhood of `x`. -/
+  refine ((l.hasBasis_toFilteriUnion_top _).tendsto_iff Metric.nhds_basis_closedBall).2 ?_
+  intro ε ε0
+  simp only [← exists_prop, gt_iff_lt, Subtype.exists'] at H₁ H₂
+  choose! δ₁ Hδ₁ using H₁
+  choose! δ₂ Hδ₂ using H₂
+  have ε0' := half_pos ε0; have H0 : 0 < (2 : Real) ^ Fintype.card ι := pow_pos zero_lt_two _
+  rcases hs.exists_pos_forall_sum_le (div_pos ε0' H0) with ⟨εs, hεs0, hεs⟩
+  simp only [le_div_iff₀' H0, mul_sum] at hεs
+  rcases exists_pos_mul_lt ε0' (B I) with ⟨ε', ε'0, hεI⟩
+  classical
+  set δ : Real>=0 -> Realⁿ -> Ioi (0 : Real) := fun c x => if x in s then δ₁ c x (εs x) else (δ₂ c) x ε'
+  refine ⟨δ, fun c => l.rCond_of_bRiemann_eq_false hl, ?_⟩
+  simp only [mem_ofPred_eq]
+  rintro π ⟨c, hπδ, hπp⟩
+  -- Now we split the sum into two parts based on whether `π.tag J` belongs to `s` or not.
+  rw [← g.sum_partition_boxes le_rfl hπp]; rw [Metric.mem_closedBall]; rw [integralSum]; rw [← sum_filter_add_sum_filter_not π.boxes fun J => π.tag J in s]; rw [← sum_filter_add_sum_filter_not π.boxes fun J => π.tag J in s]; rw [← add_halves ε]
+  refine dist_add_add_le_of_le ?_ ?_
+  · rcases s.eq_empty_or_nonempty with (rfl | hsne); · simp [ε0'.le]
+    /- For the boxes such that `π.tag J ∈ s`, we use the fact that at most `2 ^ #ι` boxes have the
+        same tag. -/
+    specialize hlH hsne
+    have : forall J in {J in π.boxes | π.tag J in s},
+        dist (vol J (f <| π.tag J)) (g J) <= εs (π.tag J) := fun J hJ => by
+      rw [Finset.mem_filter] at hJ; obtain ⟨hJ, hJs⟩ := hJ
+      refine Hδ₁ c _ ⟨π.tag_mem_Icc _, hJs⟩ _ (hεs0 _) _ (π.le_of_mem' _ hJ) ?_
+        (hπδ.2 hlH J hJ) fun hD => (Finset.le_sup hJ).trans (hπδ.3 hD)
+      convert! hπδ.1 J hJ using 3; exact (if_pos hJs).symm
+    refine (dist_sum_sum_le_of_le _ this).trans ?_
+    rw [sum_comp]
+    refine (sum_le_sum ?_).trans (hεs _ ?_)
+    · rintro b -
+      rw [← Nat.cast_two]; rw [← Nat.cast_pow]; rw [← nsmul_eq_mul]
+      refine nsmul_le_nsmul_left (hεs0 _).le ?_
+      refine (Finset.card_le_card ?_).trans ((hπδ.isHenstock hlH).card_filter_tag_eq_le b)
+      exact filter_subset_filter _ (filter_subset _ _)
+    · rw [Finset.coe_image, Set.image_subset_iff]
+      exact fun J hJ => (Finset.mem_filter.1 hJ).2
+  /- Now we deal with boxes such that `π.tag J ∉ s`.
+    In this case the estimate is straightforward. -/
+  calc
+    dist (∑ J in π.boxes with tag π J ∉ s, vol J (f (tag π J)))
+      (∑ J in π.boxes with tag π J ∉ s, g J)
+      <= ∑ J in π.boxes with tag π J ∉ s, ε' * B J := dist_sum_sum_le_of_le _ fun J hJ => by
+      rw [Finset.mem_filter] at hJ; obtain ⟨hJ, hJs⟩ := hJ
+      refine Hδ₂ c _ ⟨π.tag_mem_Icc _, hJs⟩ _ ε'0 _ (π.le_of_mem' _ hJ) ?_ (fun hH => hπδ.2 hH J hJ)
+        fun hD => (Finset.le_sup hJ).trans (hπδ.3 hD)
+      convert! hπδ.1 J hJ using 3; exact (if_neg hJs).symm
+    _ <= ∑ J in π.boxes, ε' * B J := by
+      gcongr
+      · exact fun _ _ _ => mul_nonneg ε'0.le (hB0 _)
+      · apply filter_subset
+    _ = B I * ε' := by rw [← mul_sum, B.sum_partition_boxes le_rfl hπp, mul_comm]
+    _ <= ε / 2 := hεI.le
 -/
 theorem HasIntegral.of_bRiemann_eq_false_of_forall_isLittleO (hl : l.bRiemann = false)
     (B : ι ->ᵇᵃ[I] Real) (hB0 : forall J, 0 <= B J) (g : ι ->ᵇᵃ[I] F) (s : Set Realⁿ) (hs : s.Countable)

@@ -266,7 +266,7 @@ theorem maxTensorProduct_comm
   · rintro ⟨w, hw, rfl⟩ ψ hψ φ hφ
     simpa [dualDistrib_apply_comm] using hw φ hφ ψ hψ
   · intro φ hφ ψ hψ
-    simpa [dualDistrib_app
+    simpa [dualDistrib_apply_comm] using hz ψ hψ φ hφ
 
 中文:
 定理 maxTensorProduct_comm
@@ -278,7 +278,7 @@ theorem maxTensorProduct_comm
   · rintro ⟨w, hw, rfl⟩ ψ hψ φ hφ
     simpa [dualDistrib_apply_comm] using hw φ hφ ψ hψ
   · intro φ hφ ψ hψ
-    simpa [dualDistrib_app
+    simpa [dualDistrib_apply_comm] using hz ψ hψ φ hφ
 
 Depends on / 依赖: TensorProduct, TensorProduct.comm, dualDistrib_apply_comm, mem_map, mem_maxTensorProduct, symm_apply_apply
 -/
@@ -374,7 +374,9 @@ theorem maxTensorProduct_map_le
   intro φ hφ ψ hψ
   have h_eq : ((dualDistrib R G' H') (φ otimesₜ[R] ψ)).comp (TensorProduct.map f g) =
       ((dualDistrib R G H) ((φ.comp f) otimesₜ[R] (ψ.comp g))) :=
-    TensorProduct.ext' fun x y => by simp [
+    TensorProduct.ext' fun x y => by simp [map_tmul]
+  convert! hw (φ.comp f) (fun x hx => hφ ⟨x, hx, rfl⟩) (ψ.comp g) (fun y hy => hψ ⟨y, hy, rfl⟩)
+  exact DFunLike.congr_fun h_eq w
 
 中文:
 定理 maxTensorProduct_map_le
@@ -385,7 +387,9 @@ theorem maxTensorProduct_map_le
   intro φ hφ ψ hψ
   have h_eq : ((dualDistrib R G' H') (φ otimesₜ[R] ψ)).comp (TensorProduct.map f g) =
       ((dualDistrib R G H) ((φ.comp f) otimesₜ[R] (ψ.comp g))) :=
-    TensorProduct.ext' fun x y => by simp [
+    TensorProduct.ext' fun x y => by simp [map_tmul]
+  convert! hw (φ.comp f) (fun x hx => hφ ⟨x, hx, rfl⟩) (ψ.comp g) (fun y hy => hψ ⟨y, hy, rfl⟩)
+  exact DFunLike.congr_fun h_eq w
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, SetLike, SetLike.mem_coe, TensorProduct, TensorProduct.ext, TensorProduct.map, congr_fun, convert, dualDistrib, h_eq, map_tmul, mem_coe, mem_maxTensorProduct
 -/

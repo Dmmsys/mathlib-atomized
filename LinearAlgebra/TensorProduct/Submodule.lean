@@ -460,7 +460,7 @@ definition lTensorOne
   change 1 otimesₜ[R] lTensorOne' N _ = r otimesₜ[R] n
   obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
   replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]
+  rw [← h]; rw [lTensorOne'_tmul]; rw [← TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
 
 中文:
 定义 lTensorOne
@@ -470,7 +470,7 @@ definition lTensorOne
   change 1 otimesₜ[R] lTensorOne' N _ = r otimesₜ[R] n
   obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
   replace h : algebraMap R _ x = r := Subtype.val_injective h
-  rw [← h]
+  rw [← h]; rw [lTensorOne'_tmul]; rw [← TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
 
 Depends on / 依赖: Algebra, Algebra.mem_bot, Algebra.smul_def, LinearEquiv, LinearEquiv.ofLinearMap, N.lTensorOne, Subalgebra, Subtype, Subtype.val_injective, TensorProduct, TensorProduct.ext, TensorProduct.mk, TensorProduct.smul_tmul, _tmul, algebraMap, lTensorOne, mem_bot, mul_one, ofLinearMap, replace
 -/
@@ -648,7 +648,8 @@ definition rTensorOne
     TensorProduct.mk R (⊥ : Subalgebra R S) M 1) (by ext; simp) <| TensorProduct.ext' fun n r => by
   change rTensorOne' M _ otimesₜ[R] 1 = n otimesₜ[R] r
   obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
-  replace h : algebraMa
+  replace h : algebraMap R _ x = r := Subtype.val_injective h
+  rw [← h]; rw [rTensorOne'_tmul]; rw [TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
 
 中文:
 定义 rTensorOne
@@ -657,7 +658,8 @@ definition rTensorOne
     TensorProduct.mk R (⊥ : Subalgebra R S) M 1) (by ext; simp) <| TensorProduct.ext' fun n r => by
   change rTensorOne' M _ otimesₜ[R] 1 = n otimesₜ[R] r
   obtain ⟨x, h⟩ := Algebra.mem_bot.1 r.2
-  replace h : algebraMa
+  replace h : algebraMap R _ x = r := Subtype.val_injective h
+  rw [← h]; rw [rTensorOne'_tmul]; rw [TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
 
 Depends on / 依赖: Algebra, Algebra.mem_bot, Algebra.smul_def, LinearEquiv, LinearEquiv.ofLinearMap, M.rTensorOne, Subalgebra, Subtype, Subtype.val_injective, TensorProduct, TensorProduct.comm, TensorProduct.ext, TensorProduct.mk, TensorProduct.smul_tmul, _tmul, algebraMap, mem_bot, mul_one, ofLinearMap, rTensorOne
 -/

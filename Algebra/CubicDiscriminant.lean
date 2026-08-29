@@ -1096,7 +1096,10 @@ definition equiv
     ext n
     obtain hn | hn := le_or_gt n 3
     · interval_cases n <;> simp only <;> ring_nf <;> try simp only [coeffs]
-    · rw [coeff_eq_zero hn
+    · rw [coeff_eq_zero hn, (degree_le_iff_coeff_zero (f : R[X]) 3).mp f.2]
+      simpa using hn
+
+@[simp]
 
 中文:
 定义 equiv
@@ -1108,7 +1111,10 @@ definition equiv
     ext n
     obtain hn | hn := le_or_gt n 3
     · interval_cases n <;> simp only <;> ring_nf <;> try simp only [coeffs]
-    · rw [coeff_eq_zero hn
+    · rw [coeff_eq_zero hn, (degree_le_iff_coeff_zero (f : R[X]) 3).mp f.2]
+      simpa using hn
+
+@[simp]
 
 Depends on / 依赖: P.toPoly, degree_cubic_le, toPoly
 -/
@@ -1995,7 +2001,7 @@ theorem eq_prod_three_roots
   rw [map_toPoly]; rw [Splits.eq_prod_roots
 (splits_iff_roots_eq_three ha).mpr Exists.intro x Exists.intro y Exists.intro z h3]; rw [leadingCoeff_map]; rw [leadingCoeff_of_a_ne_zero ha]; rw [← map_roots]; rw [h3]
   change C (φ P.a) * ((X - C x) ::ₘ (X - C y) ::ₘ {X - C z}).prod = _
-  rw [prod_con
+  rw [prod_cons]; rw [prod_cons]; rw [prod_singleton]; rw [mul_assoc]; rw [mul_assoc]
 
 中文:
 定理 eq_prod_three_roots
@@ -2004,7 +2010,7 @@ theorem eq_prod_three_roots
   rw [map_toPoly]; rw [Splits.eq_prod_roots
 (splits_iff_roots_eq_three ha).mpr Exists.intro x Exists.intro y Exists.intro z h3]; rw [leadingCoeff_map]; rw [leadingCoeff_of_a_ne_zero ha]; rw [← map_roots]; rw [h3]
   change C (φ P.a) * ((X - C x) ::ₘ (X - C y) ::ₘ {X - C z}).prod = _
-  rw [prod_con
+  rw [prod_cons]; rw [prod_cons]; rw [prod_singleton]; rw [mul_assoc]; rw [mul_assoc]
 
 Depends on / 依赖: Exists, Exists.intro, Splits, Splits.eq_prod_roots, eq_prod_roots, leadingCoeff_map, leadingCoeff_of_a_ne_zero, map_roots, map_toPoly, mul_assoc, prod_cons, prod_singleton, splits_iff_roots_eq_three
 -/

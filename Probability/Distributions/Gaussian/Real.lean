@@ -265,7 +265,17 @@ lemma integrable_gaussianPDFReal
   have hg : Integrable g := by
     suffices g = fun x => (√(2 * π * v))⁻¹ * rexp (-(2 * v)⁻¹ * x ^ 2) by
       rw [this]
-      refine (integrable_exp_neg_mu
+      refine (integrable_exp_neg_mul_sq ?_).const_mul (√(2 * π * v))⁻¹
+      simpa [pos_iff_ne_zero]
+    ext x
+    simp only [g, NNReal.zero_le_coe, Real.sqrt_mul',
+      mul_inv_rev, NNReal.coe_mul, NNReal.coe_inv, NNReal.coe_ofNat, neg_mul, mul_eq_mul_left_iff,
+      Real.exp_eq_exp, mul_eq_zero, inv_eq_zero, Real.sqrt_eq_zero, NNReal.coe_eq_zero, hv,
+      false_or]
+    rw [mul_comm]
+    left
+    field
+  exact Integrable.comp_sub_right hg μ
 
 中文:
 引理 integrable_gaussianPDF实数
@@ -278,7 +288,17 @@ lemma integrable_gaussianPDFReal
   have hg : Integrable g := by
     suffices g = fun x => (√(2 * π * v))⁻¹ * rexp (-(2 * v)⁻¹ * x ^ 2) by
       rw [this]
-      refine (integrable_exp_neg_mu
+      refine (integrable_exp_neg_mul_sq ?_).const_mul (√(2 * π * v))⁻¹
+      simpa [pos_iff_ne_zero]
+    ext x
+    simp only [g, NNReal.zero_le_coe, Real.sqrt_mul',
+      mul_inv_rev, NNReal.coe_mul, NNReal.coe_inv, NNReal.coe_ofNat, neg_mul, mul_eq_mul_left_iff,
+      Real.exp_eq_exp, mul_eq_zero, inv_eq_zero, Real.sqrt_eq_zero, NNReal.coe_eq_zero, hv,
+      false_or]
+    rw [mul_comm]
+    left
+    field
+  exact Integrable.comp_sub_right hg μ
 
 Depends on / 依赖: Integrable, NNReal, NNReal.coe_inv, NNReal.coe_mul, NNReal.coe_ofNat, NNReal.zero_le_coe, Real.exp_eq_exp, Real.sqrt_mul, coe_inv, coe_mul, coe_ofNat, const_mul, exp_eq_exp, gaussianPDFReal_def, integrable_exp_neg_mul_sq, mul_eq_mul_left_iff, mul_inv_rev, neg_mul, pos_iff_ne_zero, sqrt_mul
 -/
@@ -315,7 +335,14 @@ lemma lintegral_gaussianPDFReal_eq_one
   have hf : 0 <=ₐₛ gaussianPDFReal μ v := ae_of_all _ (gaussianPDFReal_nonneg μ v)
   rw [← integral_eq_lintegral_of_nonneg_ae hf hfm]
   simp only [gaussianPDFReal,
-    integral_const_m
+    integral_const_mul]
+  rw [integral_sub_right_eq_self (μ := volume) (fun a => rexp (-a ^ 2 / ((2 : Real) * v))) μ]
+  simp only [div_eq_inv_mul, mul_inv_rev,
+    mul_neg]
+  simp_rw [← neg_mul]
+  rw [neg_mul]; rw [integral_gaussian]; rw [← Real.sqrt_inv]; rw [← Real.sqrt_mul]
+  · simp [field]
+  · positivity
 
 中文:
 引理 lintegral_gaussianPDF实数_eq_one
@@ -326,7 +353,14 @@ lemma lintegral_gaussianPDFReal_eq_one
   have hf : 0 <=ₐₛ gaussianPDFReal μ v := ae_of_all _ (gaussianPDFReal_nonneg μ v)
   rw [← integral_eq_lintegral_of_nonneg_ae hf hfm]
   simp only [gaussianPDFReal,
-    integral_const_m
+    integral_const_mul]
+  rw [integral_sub_right_eq_self (μ := volume) (fun a => rexp (-a ^ 2 / ((2 : Real) * v))) μ]
+  simp only [div_eq_inv_mul, mul_inv_rev,
+    mul_neg]
+  simp_rw [← neg_mul]
+  rw [neg_mul]; rw [integral_gaussian]; rw [← Real.sqrt_inv]; rw [← Real.sqrt_mul]
+  · simp [field]
+  · positivity
 
 Depends on / 依赖: AEStronglyMeasurable, ENNReal, ENNReal.toReal_eq_one_iff, ae_of_all, div_eq_inv_mul, fun_prop, gaussianPDFReal, gaussianPDFReal_nonneg, integral_const_mul, integral_eq_lintegral_of_nonneg_ae, integral_gaussian, integral_sub_right_eq_self, mul_inv_rev, mul_neg, neg_mul, simp_rw, toReal_eq_one_iff, volume
 -/
@@ -356,7 +390,7 @@ lemma integral_gaussianPDFReal_eq_one
   have h := lintegral_gaussianPDFReal_eq_one μ hv
   rw [← ofReal_integral_eq_lintegral_ofReal (integrable_gaussianPDFReal _ _)
     (ae_of_all _ (gaussianPDFReal_nonneg _ _))]; rw [← ENNReal.ofReal_one] at h
-  rwa [← ENNReal.ofReal_eq_ofReal_iff (integral_nonneg (gaussianPDFReal_nonneg _ _)) zero_
+  rwa [← ENNReal.ofReal_eq_ofReal_iff (integral_nonneg (gaussianPDFReal_nonneg _ _)) zero_le_one]
 
 中文:
 引理 integral_gaussianPDF实数_eq_one
@@ -365,7 +399,7 @@ lemma integral_gaussianPDFReal_eq_one
   have h := lintegral_gaussianPDFReal_eq_one μ hv
   rw [← ofReal_integral_eq_lintegral_ofReal (integrable_gaussianPDFReal _ _)
     (ae_of_all _ (gaussianPDFReal_nonneg _ _))]; rw [← ENNReal.ofReal_one] at h
-  rwa [← ENNReal.ofReal_eq_ofReal_iff (integral_nonneg (gaussianPDFReal_nonneg _ _)) zero_
+  rwa [← ENNReal.ofReal_eq_ofReal_iff (integral_nonneg (gaussianPDFReal_nonneg _ _)) zero_le_one]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_eq_ofReal_iff, ENNReal.ofReal_one, ae_of_all, gaussianPDFReal_nonneg, integrable_gaussianPDFReal, integral_nonneg, lintegral_gaussianPDFReal_eq_one, ofReal_eq_ofReal_iff, ofReal_integral_eq_lintegral_ofReal, ofReal_one, zero_le_one
 -/
@@ -1017,7 +1051,7 @@ lemma rnDeriv_gaussianReal
     refine (Measure.eq_rnDeriv measurable_zero (mutuallySingular_dirac μ volume) ?_).symm
     rw [withDensity_zero]; rw [add_zero]
   · rw [gaussianReal_of_var_ne_zero _ hv]
-    exact Measure.rnDeriv_withDensity 
+    exact Measure.rnDeriv_withDensity _ (measurable_gaussianPDF μ v)
 
 中文:
 引理 rnDeriv_gaussian实数
@@ -1028,7 +1062,7 @@ lemma rnDeriv_gaussianReal
     refine (Measure.eq_rnDeriv measurable_zero (mutuallySingular_dirac μ volume) ?_).symm
     rw [withDensity_zero]; rw [add_zero]
   · rw [gaussianReal_of_var_ne_zero _ hv]
-    exact Measure.rnDeriv_withDensity 
+    exact Measure.rnDeriv_withDensity _ (measurable_gaussianPDF μ v)
 
 Depends on / 依赖: Measure, Measure.eq_rnDeriv, Measure.rnDeriv_withDensity, add_zero, eq_rnDeriv, gaussianPDF_zero_var, gaussianReal_of_var_ne_zero, gaussianReal_zero_var, measurable_gaussianPDF, measurable_zero, mutuallySingular_dirac, rnDeriv_withDensity, volume, withDensity_zero
 -/
@@ -1166,7 +1200,11 @@ lemma gaussianReal_map_add_const
   let e : Real ≃ᵐ Real := (Homeomorph.addRight y).symm.toMeasurableEquiv
   have he' : forall x, HasDerivAt e ((fun _ => 1) x) x := fun _ => (hasDerivAt_id _).sub_const y
   change (gaussianReal μ v).map e.symm = gaussianReal (μ + y) v
-  ex
+  ext s' hs'
+  rw [MeasurableEquiv.gaussianReal_map_symm_apply hv e he' hs']
+  simp only [abs_one, one_mul]
+  rw [gaussianReal_apply_eq_integral _ hv s']
+  simp [e, gaussianPDFReal_sub _ y, Homeomorph.addRight, ← sub_eq_add_neg]
 
 中文:
 引理 gaussian实数_map_add_const
@@ -1177,7 +1215,11 @@ lemma gaussianReal_map_add_const
   let e : Real ≃ᵐ Real := (Homeomorph.addRight y).symm.toMeasurableEquiv
   have he' : forall x, HasDerivAt e ((fun _ => 1) x) x := fun _ => (hasDerivAt_id _).sub_const y
   change (gaussianReal μ v).map e.symm = gaussianReal (μ + y) v
-  ex
+  ext s' hs'
+  rw [MeasurableEquiv.gaussianReal_map_symm_apply hv e he' hs']
+  simp only [abs_one, one_mul]
+  rw [gaussianReal_apply_eq_integral _ hv s']
+  simp [e, gaussianPDFReal_sub _ y, Homeomorph.addRight, ← sub_eq_add_neg]
 
 Depends on / 依赖: HasDerivAt, Homeomorph, Homeomorph.addRight, MeasurableEquiv, MeasurableEquiv.gaussianReal_map_symm_apply, abs_one, addRight, e.symm, gaussianPDFReal_sub, gaussianReal, gaussianReal_apply_eq_integral, gaussianReal_map_symm_apply, gaussianReal_zero_var, hasDerivAt_id, one_mul, sub_const, sub_eq_add_, symm.toMeasurableEquiv, toMeasurableEquiv
 -/
@@ -1232,7 +1274,22 @@ lemma gaussianReal_map_const_mul
   · simp [hc, zero_mul]
   let e : Real ≃ᵐ Real := (Homeomorph.mulLeft₀ c hc).symm.toMeasurableEquiv
   have he' : forall x, HasDerivAt e ((fun _ => c⁻¹) x) x := by
-    suffices forall x, HasDerivAt (fun x =>
+    suffices forall x, HasDerivAt (fun x => c⁻¹ * x) (c⁻¹ * 1) x by rwa [mul_one] at this
+    exact fun _ => HasDerivAt.const_mul _ (hasDerivAt_id _)
+  change (gaussianReal μ v).map e.symm = gaussianReal (c * μ) (.mk (c ^ 2) (sq_nonneg _) * v)
+  ext s' hs'
+  rw [MeasurableEquiv.gaussianReal_map_symm_apply hv e he' hs']; rw [gaussianReal_apply_eq_integral _ _ s']
+  swap
+  · simp only [ne_eq, mul_eq_zero, hv, or_false]
+    rw [← NNReal.coe_inj]
+    simp [hc]
+  simp only [e, Homeomorph.mulLeft₀,
+    Equiv.mulLeft₀_symm_apply, Homeomorph.toMeasurableEquiv_coe, Homeomorph.homeomorph_mk_coe_symm,
+    gaussianPDFReal_inv_mul hc]
+  congr with x
+  suffices |c⁻¹| * |c| = 1 by rw [← mul_assoc, this, one_mul]
+  rw [abs_inv]; rw [inv_mul_cancel₀]
+  rwa [ne_eq, abs_eq_zero]
 
 中文:
 引理 gaussian实数_map_const_mul
@@ -1244,7 +1301,22 @@ lemma gaussianReal_map_const_mul
   · simp [hc, zero_mul]
   let e : Real ≃ᵐ Real := (Homeomorph.mulLeft₀ c hc).symm.toMeasurableEquiv
   have he' : forall x, HasDerivAt e ((fun _ => c⁻¹) x) x := by
-    suffices forall x, HasDerivAt (fun x =>
+    suffices forall x, HasDerivAt (fun x => c⁻¹ * x) (c⁻¹ * 1) x by rwa [mul_one] at this
+    exact fun _ => HasDerivAt.const_mul _ (hasDerivAt_id _)
+  change (gaussianReal μ v).map e.symm = gaussianReal (c * μ) (.mk (c ^ 2) (sq_nonneg _) * v)
+  ext s' hs'
+  rw [MeasurableEquiv.gaussianReal_map_symm_apply hv e he' hs']; rw [gaussianReal_apply_eq_integral _ _ s']
+  swap
+  · simp only [ne_eq, mul_eq_zero, hv, or_false]
+    rw [← NNReal.coe_inj]
+    simp [hc]
+  simp only [e, Homeomorph.mulLeft₀,
+    Equiv.mulLeft₀_symm_apply, Homeomorph.toMeasurableEquiv_coe, Homeomorph.homeomorph_mk_coe_symm,
+    gaussianPDFReal_inv_mul hc]
+  congr with x
+  suffices |c⁻¹| * |c| = 1 by rw [← mul_assoc, this, one_mul]
+  rw [abs_inv]; rw [inv_mul_cancel₀]
+  rwa [ne_eq, abs_eq_zero]
 
 Depends on / 依赖: HasDerivAt, HasDerivAt.const_mul, Homeomorph, Homeomorph.mulLeft, Measur, const_mul, e.symm, gaussianReal, gaussianReal_zero_var, hasDerivAt_id, mul_one, mul_zero, sq_nonneg, symm.toMeasurableEquiv, toMeasurableEquiv, zero_mul
 -/
@@ -1574,7 +1646,30 @@ theorem complexMGF_id_gaussianReal
     _ = ∫ x, gaussianPDFReal μ v x * cexp (z * x) ∂ℙ := by
       simp_rw [integral_gaussianReal_eq_integral_smul hv, Complex.real_smul]
     _ = (√(2 * π * v))⁻¹
-        * ∫ x : Real, cexp (-(2 * v)⁻¹ * x ^ 
+        * ∫ x : Real, cexp (-(2 * v)⁻¹ * x ^ 2 + (z + μ / v) * x + -μ ^ 2 / (2 * v)) ∂ℙ := by
+      unfold gaussianPDFReal
+      push_cast
+      simp_rw [mul_assoc, integral_const_mul, ← Complex.exp_add]
+      congr with x
+      congr 1
+      ring
+    _ = (√(2 * π * v))⁻¹ * (π / - -(2 * v)⁻¹) ^ (1 / 2 : Complex)
+        * cexp (-μ ^ 2 / (2 * v) - (z + μ / v) ^ 2 / (4 * -(2 * v)⁻¹)) := by
+      rw [integral_cexp_quadratic (by simpa using pos_iff_ne_zero.mpr hv)]; rw [← mul_assoc]
+    _ = 1 * cexp (-μ ^ 2 / (2 * v) - (z + μ / v) ^ 2 / (4 * -(2 * v)⁻¹)) := by
+      congr 1
+      simp only [field, sqrt_eq_rpow, one_div, ofReal_inv, NNReal.coe_inv, NNReal.coe_mul,
+        NNReal.coe_ofNat, ofReal_mul, ofReal_ofNat, neg_neg, div_inv_eq_mul,
+        ne_eq, ofReal_eq_zero, rpow_eq_zero, not_false_eq_true]
+      rw [Complex.ofReal_cpow (by positivity)]
+      push_cast
+      ring_nf
+    _ = cexp (z * μ + v * z ^ 2 / 2) := by
+      rw [one_mul]
+      congr 1
+      have : (v : Complex) != 0 := by simpa
+      simp [field]
+      ring
 
 中文:
 定理 complexMGF_id_gaussian实数
@@ -1586,7 +1681,30 @@ theorem complexMGF_id_gaussianReal
     _ = ∫ x, gaussianPDFReal μ v x * cexp (z * x) ∂ℙ := by
       simp_rw [integral_gaussianReal_eq_integral_smul hv, Complex.real_smul]
     _ = (√(2 * π * v))⁻¹
-        * ∫ x : Real, cexp (-(2 * v)⁻¹ * x ^ 
+        * ∫ x : Real, cexp (-(2 * v)⁻¹ * x ^ 2 + (z + μ / v) * x + -μ ^ 2 / (2 * v)) ∂ℙ := by
+      unfold gaussianPDFReal
+      push_cast
+      simp_rw [mul_assoc, integral_const_mul, ← Complex.exp_add]
+      congr with x
+      congr 1
+      ring
+    _ = (√(2 * π * v))⁻¹ * (π / - -(2 * v)⁻¹) ^ (1 / 2 : Complex)
+        * cexp (-μ ^ 2 / (2 * v) - (z + μ / v) ^ 2 / (4 * -(2 * v)⁻¹)) := by
+      rw [integral_cexp_quadratic (by simpa using pos_iff_ne_zero.mpr hv)]; rw [← mul_assoc]
+    _ = 1 * cexp (-μ ^ 2 / (2 * v) - (z + μ / v) ^ 2 / (4 * -(2 * v)⁻¹)) := by
+      congr 1
+      simp only [field, sqrt_eq_rpow, one_div, ofReal_inv, NNReal.coe_inv, NNReal.coe_mul,
+        NNReal.coe_ofNat, ofReal_mul, ofReal_ofNat, neg_neg, div_inv_eq_mul,
+        ne_eq, ofReal_eq_zero, rpow_eq_zero, not_false_eq_true]
+      rw [Complex.ofReal_cpow (by positivity)]
+      push_cast
+      ring_nf
+    _ = cexp (z * μ + v * z ^ 2 / 2) := by
+      rw [one_mul]
+      congr 1
+      have : (v : Complex) != 0 := by simpa
+      simp [field]
+      ring
 
 Depends on / 依赖: Complex.exp_add, Complex.real_smul, complexMGF, exp_add, gaussianPDFReal, gaussianReal, integral_const_mul, integral_gaussianReal_eq_integral_smul, mul_assoc, real_smul, simp_rw
 -/
@@ -1687,7 +1805,7 @@ theorem mgf_gaussianReal
   suffices (mgf X p t : Complex) = rexp (μ * t + ↑v * t ^ 2 / 2) from mod_cast this
   have hX_meas : AEMeasurable X p := aemeasurable_of_map_neZero (by rw [hX]; infer_instance)
   rw [← mgf_id_map hX_meas]; rw [← complexMGF_ofReal]; rw [hX]; rw [complexMGF_id_gaussianReal]; rw [mul_comm μ]
-  norm_
+  norm_cast
 
 中文:
 定理 mgf_gaussian实数
@@ -1696,7 +1814,7 @@ theorem mgf_gaussianReal
   suffices (mgf X p t : Complex) = rexp (μ * t + ↑v * t ^ 2 / 2) from mod_cast this
   have hX_meas : AEMeasurable X p := aemeasurable_of_map_neZero (by rw [hX]; infer_instance)
   rw [← mgf_id_map hX_meas]; rw [← complexMGF_ofReal]; rw [hX]; rw [complexMGF_id_gaussianReal]; rw [mul_comm μ]
-  norm_
+  norm_cast
 
 Depends on / 依赖: AEMeasurable, aemeasurable_of_map_neZero, complexMGF_id_gaussianReal, complexMGF_ofReal, hX_meas, infer_instance, mgf_id_map, mod_cast, mul_comm
 -/
@@ -1863,7 +1981,8 @@ lemma integral_id_gaussianReal
   rw [← deriv_mgf_zero (by simp)]; rw [mgf_fun_id_gaussianReal]; rw [_root_.deriv_exp (by fun_prop)]
   simp only [mul_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow, zero_div,
     add_zero, Real.exp_zero, one_mul]
-  rw [deriv_fun_add (by fun_prop) (by fun_prop)]; rw [deriv_fun_mul 
+  rw [deriv_fun_add (by fun_prop) (by fun_prop)]; rw [deriv_fun_mul (by fun_prop) (by fun_prop)]
+  simp
 
 中文:
 引理 integral_id_gaussian实数
@@ -1872,7 +1991,8 @@ lemma integral_id_gaussianReal
   rw [← deriv_mgf_zero (by simp)]; rw [mgf_fun_id_gaussianReal]; rw [_root_.deriv_exp (by fun_prop)]
   simp only [mul_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow, zero_div,
     add_zero, Real.exp_zero, one_mul]
-  rw [deriv_fun_add (by fun_prop) (by fun_prop)]; rw [deriv_fun_mul 
+  rw [deriv_fun_add (by fun_prop) (by fun_prop)]; rw [deriv_fun_mul (by fun_prop) (by fun_prop)]
+  simp
 
 Depends on / 依赖: OfNat.ofNat_ne_zero, Real.exp_zero, _root_, _root_.deriv_exp, add_zero, deriv_exp, deriv_fun_add, deriv_fun_mul, deriv_mgf_zero, exp_zero, fun_prop, mgf_fun_id_gaussianReal, mul_zero, ne_eq, not_false_eq_true, ofNat_ne_zero, one_mul, zero_div, zero_pow
 -/
@@ -1898,7 +2018,21 @@ lemma variance_fun_id_gaussianReal
   calc ∫ ω, (ω - μ) ^ 2 ∂gaussianReal μ v
   _ = ∫ ω, ω ^ 2 ∂(gaussianReal μ v).map (fun x => x - μ) := by
     rw [integral_map (by fun_prop) (by fun_prop)]
-  _ = ∫ ω, ω ^ 2 ∂(gaussianReal 0 v) := by sim
+  _ = ∫ ω, ω ^ 2 ∂(gaussianReal 0 v) := by simp [gaussianReal_map_sub_const]
+  _ = iteratedDeriv 2 (mgf (fun x => x) (gaussianReal 0 v)) 0 := by
+    rw [iteratedDeriv_mgf_zero] <;> simp
+  _ = v := by
+    rw [mgf_fun_id_gaussianReal]; rw [iteratedDeriv_succ]; rw [iteratedDeriv_one]
+    simp only [zero_mul, zero_add]
+    have : deriv (fun t => rexp (v * t ^ 2 / 2)) = fun t => v * t * rexp (v * t ^ 2 / 2) := by
+      ext t
+      rw [_root_.deriv_exp (by fun_prop)]
+      simp only [deriv_div_const, differentiableAt_const, differentiableAt_fun_id, Nat.cast_ofNat,
+        DifferentiableAt.fun_pow, deriv_fun_mul, deriv_const', zero_mul, deriv_fun_pow,
+        Nat.add_one_sub_one, pow_one, deriv_id'', mul_one, zero_add]
+      ring
+    rw [this]; rw [deriv_fun_mul (by fun_prop) (by fun_prop)]; rw [deriv_fun_mul (by fun_prop) (by fun_prop)]
+    simp
 
 中文:
 引理 variance_fun_id_gaussian实数
@@ -1909,7 +2043,21 @@ lemma variance_fun_id_gaussianReal
   calc ∫ ω, (ω - μ) ^ 2 ∂gaussianReal μ v
   _ = ∫ ω, ω ^ 2 ∂(gaussianReal μ v).map (fun x => x - μ) := by
     rw [integral_map (by fun_prop) (by fun_prop)]
-  _ = ∫ ω, ω ^ 2 ∂(gaussianReal 0 v) := by sim
+  _ = ∫ ω, ω ^ 2 ∂(gaussianReal 0 v) := by simp [gaussianReal_map_sub_const]
+  _ = iteratedDeriv 2 (mgf (fun x => x) (gaussianReal 0 v)) 0 := by
+    rw [iteratedDeriv_mgf_zero] <;> simp
+  _ = v := by
+    rw [mgf_fun_id_gaussianReal]; rw [iteratedDeriv_succ]; rw [iteratedDeriv_one]
+    simp only [zero_mul, zero_add]
+    have : deriv (fun t => rexp (v * t ^ 2 / 2)) = fun t => v * t * rexp (v * t ^ 2 / 2) := by
+      ext t
+      rw [_root_.deriv_exp (by fun_prop)]
+      simp only [deriv_div_const, differentiableAt_const, differentiableAt_fun_id, Nat.cast_ofNat,
+        DifferentiableAt.fun_pow, deriv_fun_mul, deriv_const', zero_mul, deriv_fun_pow,
+        Nat.add_one_sub_one, pow_one, deriv_id'', mul_one, zero_add]
+      ring
+    rw [this]; rw [deriv_fun_mul (by fun_prop) (by fun_prop)]; rw [deriv_fun_mul (by fun_prop) (by fun_prop)]
+    simp
 
 Depends on / 依赖: aemeasurable, fun_prop, gaussianReal, gaussianReal_map_sub_const, integral_id_gaussianReal, integral_map, iteratedD, iteratedDeriv, iteratedDeriv_mgf_zero, iteratedDeriv_succ, measurable_id, mgf_fun_id_gaussianReal, variance_eq_integral
 -/
@@ -2014,7 +2162,7 @@ lemma gaussianReal_ext_iff
   rw [← integral_id_gaussianReal (μ := μ₁) (v := v₁)]; rw [← integral_id_gaussianReal (μ := μ₂) (v := v₂)]; rw [h]
   simp only [integral_id_gaussianReal, true_and]
   suffices (v₁ : Real) = v₂ by simpa
-  rw [← variance_id_gaussianReal (μ := μ₁) (v 
+  rw [← variance_id_gaussianReal (μ := μ₁) (v := v₁)]; rw [← variance_id_gaussianReal (μ := μ₂) (v := v₂)]; rw [h]
 
 中文:
 引理 gaussian实数_ext_iff
@@ -2024,7 +2172,7 @@ lemma gaussianReal_ext_iff
   rw [← integral_id_gaussianReal (μ := μ₁) (v := v₁)]; rw [← integral_id_gaussianReal (μ := μ₂) (v := v₂)]; rw [h]
   simp only [integral_id_gaussianReal, true_and]
   suffices (v₁ : Real) = v₂ by simpa
-  rw [← variance_id_gaussianReal (μ := μ₁) (v 
+  rw [← variance_id_gaussianReal (μ := μ₁) (v := v₁)]; rw [← variance_id_gaussianReal (μ := μ₂) (v := v₂)]; rw [h]
 
 Depends on / 依赖: integral_id_gaussianReal, true_and, variance_id_gaussianReal
 -/
@@ -2252,7 +2400,7 @@ lemma gaussianReal_add_gaussianReal_of_indepFun
   · apply AEMeasurable.of_map_ne_zero; simp [NeZero.ne, hX]
   · apply AEMeasurable.of_map_ne_zero; simp [NeZero.ne, hY]
   · rw [hX]; apply IsFiniteMeasure.toSigmaFinite
-  · rw [hY]; apply IsFiniteMeasure.t
+  · rw [hY]; apply IsFiniteMeasure.toSigmaFinite
 
 中文:
 引理 gaussian实数_add_gaussian实数_of_indepFun
@@ -2262,7 +2410,7 @@ lemma gaussianReal_add_gaussianReal_of_indepFun
   · apply AEMeasurable.of_map_ne_zero; simp [NeZero.ne, hX]
   · apply AEMeasurable.of_map_ne_zero; simp [NeZero.ne, hY]
   · rw [hX]; apply IsFiniteMeasure.toSigmaFinite
-  · rw [hY]; apply IsFiniteMeasure.t
+  · rw [hY]; apply IsFiniteMeasure.toSigmaFinite
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.of_map_ne_zero, IsFiniteMeasure, IsFiniteMeasure.toSigmaFinite, NeZero, NeZero.ne, gaussianReal_conv_gaussianReal, hXY.map_add_eq_map_conv_map, of_map_ne_zero, toSigmaFinite
 -/

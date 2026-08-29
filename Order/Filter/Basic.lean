@@ -857,7 +857,10 @@ instance instCompleteLatticeFilter
   inf_le_left _ _ _ := mem_inf_of_left
   inf_le_right _ _ _ := mem_inf_of_right
   le_inf := fun _ _ _ h₁ h₂ _s ⟨_a, ha, _b, hb, hs⟩ => hs.symm ▸ inter_mem (h₁ ha) (h₂ hb)
-
+  isLUB_sSup := Filter.isLUB_sSup
+  isGLB_sInf := Filter.isGLB_sInf
+  le_top _ _ := univ_mem'
+  bot_le _ _ _ := trivial
 
 中文:
 实例 instCompleteLatticeFilter
@@ -870,7 +873,10 @@ instance instCompleteLatticeFilter
   inf_le_left _ _ _ := mem_inf_of_left
   inf_le_right _ _ _ := mem_inf_of_right
   le_inf := fun _ _ _ h₁ h₂ _s ⟨_a, ha, _b, hb, hs⟩ => hs.symm ▸ inter_mem (h₁ ha) (h₂ hb)
-
+  isLUB_sSup := Filter.isLUB_sSup
+  isGLB_sInf := Filter.isGLB_sInf
+  le_top _ _ := univ_mem'
+  bot_le _ _ _ := trivial
 -/
 instance instCompleteLatticeFilter : CompleteLattice (Filter α) where
   inf a b := min a b
@@ -1380,7 +1386,32 @@ theorem iInf_sets_induct
   let q : Set α -> Prop := fun t => t in iInf f ∧ forall t', t subseteq t' -> p t'
   have q_mono : Monotone q := fun a b hab ha =>
     ⟨mem_of_superset ha.1 hab, fun t hbt => ha.2 _ (hab.trans hbt)⟩
-  have A
+  have A : forall i, forall s in f i, forall t, q t -> q (s inter t) := fun i s hs t ht => by
+    use inter_mem (mem_iInf_of_mem _ hs) ht.1
+    intro u hu
+    have : u = (u union s) inter (u union t) := by
+      rwa [← union_eq_left, union_inter_distrib_left, eq_comm] at hu
+    rw [this]
+    exact ins (mem_of_superset hs subset_union_right) (ht.2 _ subset_union_right)
+  have B : forall s t, q s -> q t -> q (s inter t) := fun s t hqs hqt => by
+    let 𝓕 : Filter α :=
+    { sets := {s | forall t, q t -> q (s inter t)}
+      univ_sets := by simp
+      sets_of_superset ha hab t ht := q_mono (inter_subset_inter_left _ hab) (ha t ht)
+      inter_sets ha hb t ht := by simpa [inter_assoc] using ha _ (hb _ ht) }
+    exact (le_iInf_iff.mpr A : 𝓕 <= iInf f) hqs.1 _ hqt
+  have C : forall i, forall s in f i, q s := fun i s hs =>
+    ⟨mem_iInf_of_mem _ hs, fun t hst => p_of_f _ _ (mem_of_superset hs hst)⟩
+  let 𝓖 : Filter α :=
+  { sets := {t | q t}
+    univ_sets := by simpa [q] using uni
+    sets_of_superset ha hab :=
+      ⟨mem_of_superset ha.1 hab, fun t hbt => ha.2 _ (hab.trans hbt)⟩
+    inter_sets := B _ _ }
+  have : 𝓖 <= iInf f := le_iInf_iff.mpr C
+  exact (this hs).2 s subset_rfl
+
+@[simp]
 
 中文:
 定理 iInf_sets_induct
@@ -1390,7 +1421,32 @@ theorem iInf_sets_induct
   let q : Set α -> Prop := fun t => t in iInf f ∧ forall t', t subseteq t' -> p t'
   have q_mono : Monotone q := fun a b hab ha =>
     ⟨mem_of_superset ha.1 hab, fun t hbt => ha.2 _ (hab.trans hbt)⟩
-  have A
+  have A : forall i, forall s in f i, forall t, q t -> q (s inter t) := fun i s hs t ht => by
+    use inter_mem (mem_iInf_of_mem _ hs) ht.1
+    intro u hu
+    have : u = (u union s) inter (u union t) := by
+      rwa [← union_eq_left, union_inter_distrib_left, eq_comm] at hu
+    rw [this]
+    exact ins (mem_of_superset hs subset_union_right) (ht.2 _ subset_union_right)
+  have B : forall s t, q s -> q t -> q (s inter t) := fun s t hqs hqt => by
+    let 𝓕 : Filter α :=
+    { sets := {s | forall t, q t -> q (s inter t)}
+      univ_sets := by simp
+      sets_of_superset ha hab t ht := q_mono (inter_subset_inter_left _ hab) (ha t ht)
+      inter_sets ha hb t ht := by simpa [inter_assoc] using ha _ (hb _ ht) }
+    exact (le_iInf_iff.mpr A : 𝓕 <= iInf f) hqs.1 _ hqt
+  have C : forall i, forall s in f i, q s := fun i s hs =>
+    ⟨mem_iInf_of_mem _ hs, fun t hst => p_of_f _ _ (mem_of_superset hs hst)⟩
+  let 𝓖 : Filter α :=
+  { sets := {t | q t}
+    univ_sets := by simpa [q] using uni
+    sets_of_superset ha hab :=
+      ⟨mem_of_superset ha.1 hab, fun t hbt => ha.2 _ (hab.trans hbt)⟩
+    inter_sets := B _ _ }
+  have : 𝓖 <= iInf f := le_iInf_iff.mpr C
+  exact (this hs).2 s subset_rfl
+
+@[simp]
 
 Depends on / 依赖: Monotone, hab.trans, inter_mem, mem_iInf_of_mem, mem_of_superset, p_of_f, q_mono, subseteq, union_eq_left
 -/
@@ -2078,7 +2134,11 @@ theorem iInf_sets_eq
         exact fun i hx hxy => ⟨i, mem_of_superset hx hxy⟩
       inter_sets := by
         simp only [mem_iUnion, exists_imp]
-   
+        intro x y a hx b hy
+        rcases h a b with ⟨c, ha, hb⟩
+        exact ⟨c, inter_mem (ha hx) (hb hy)⟩ }
+  have : u = iInf f := eq_iInf_of_mem_iff_exists_mem mem_iUnion
+  congr_arg Filter.sets this.symm
 
 中文:
 定理 iInf_sets_eq
@@ -2092,7 +2152,11 @@ theorem iInf_sets_eq
         exact fun i hx hxy => ⟨i, mem_of_superset hx hxy⟩
       inter_sets := by
         simp only [mem_iUnion, exists_imp]
-   
+        intro x y a hx b hy
+        rcases h a b with ⟨c, ha, hb⟩
+        exact ⟨c, inter_mem (ha hx) (hb hy)⟩ }
+  have : u = iInf f := eq_iInf_of_mem_iff_exists_mem mem_iUnion
+  congr_arg Filter.sets this.symm
 
 Depends on / 依赖: Filter, Filter.sets, congr_arg, eq_iInf_of_mem_iff_exists_mem, exists_imp, inter_mem, inter_sets, mem_iUnion, mem_of_superset, sets_of_superset, this.symm, univ_mem, univ_sets
 -/
@@ -2239,7 +2303,8 @@ instance instCoframe
   top_sdiff f := by
     ext s
     simp only [mem_sdiff_iff_union, Filter.hnot_def, mem_principal, compl_subset_iff_union,
-      mem_top_iff_forall, eq_univ_iff_forall, ker, mem_union, 
+      mem_top_iff_forall, eq_univ_iff_forall, ker, mem_union, mem_sInter, Filter.mem_sets]
+    grind
 
 中文:
 实例 instCoframe
@@ -2249,7 +2314,8 @@ instance instCoframe
   top_sdiff f := by
     ext s
     simp only [mem_sdiff_iff_union, Filter.hnot_def, mem_principal, compl_subset_iff_union,
-      mem_top_iff_forall, eq_univ_iff_forall, ker, mem_union, 
+      mem_top_iff_forall, eq_univ_iff_forall, ker, mem_union, mem_sInter, Filter.mem_sets]
+    grind
 
 Depends on / 依赖: Filter, Filter.hnot_def, Filter.mem_sets, compl_subset_iff_union, eq_univ_iff_forall, hnot_def, hs.left, hs.right, mem_of_superset, mem_principal, mem_sInter, mem_sdiff_iff_union, mem_sets, mem_top_iff_forall, mem_union, subset_refl, top_sdiff
 -/

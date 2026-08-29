@@ -39,6 +39,26 @@ lemma coeff_linearCombination_X_pow_of_eq
     ← C_eq_coe_nat, coeff_C_mul, smul_eq_C_mul, mul_pow, Finset.prod_mul_distrib, ← map_pow,
     ← map_prod, coeff_prod_X_pow, mul_ite, mul_one, mul_zero]
   rw [Finset.sum_eq_single (s : σ -> Nat)]
+  · simp_rw [eq_indicator_self_iff]
+    split_ifs with hs'
+    · rw [prod_of_support_subset _ hs' _ (by simp), Finsupp.multinomial_of_support_subset hs']
+    · rw [Finset.subset_iff] at hs'
+      simp only [Finsupp.mem_support_iff, ne_eq, not_forall, Decidable.not_not] at hs'
+      obtain ⟨i, hsi, hai⟩ := hs'
+      rw [← mul_prod_erase _ i _ (by simpa)]; rw [hai]; rw [zero_pow hsi]; rw [zero_mul]; rw [mul_zero]
+  · simp only [Finset.mem_piAntidiag, ne_eq, Finsupp.mem_support_iff, ite_eq_right_iff, and_imp]
+    intro _ _ _ _ hed
+    simp [Finsupp.ext_iff] at hed
+    grind
+  · simp_rw [ite_eq_right_iff]
+    intro hs' hs''
+    rw [eq_indicator_self_iff] at hs''
+    exfalso
+    rw [Finset.mem_piAntidiag]; rw [not_and_or] at hs'
+    rcases hs' with hs' | hs'
+    · apply hs'
+      rw [← hs]; rw [sum_of_support_subset _ hs'' _ (by simp)]
+    · grind
 
 中文:
 引理 coeff_linearCombination_X_pow_of_eq
@@ -49,6 +69,26 @@ lemma coeff_linearCombination_X_pow_of_eq
     ← C_eq_coe_nat, coeff_C_mul, smul_eq_C_mul, mul_pow, Finset.prod_mul_distrib, ← map_pow,
     ← map_prod, coeff_prod_X_pow, mul_ite, mul_one, mul_zero]
   rw [Finset.sum_eq_single (s : σ -> Nat)]
+  · simp_rw [eq_indicator_self_iff]
+    split_ifs with hs'
+    · rw [prod_of_support_subset _ hs' _ (by simp), Finsupp.multinomial_of_support_subset hs']
+    · rw [Finset.subset_iff] at hs'
+      simp only [Finsupp.mem_support_iff, ne_eq, not_forall, Decidable.not_not] at hs'
+      obtain ⟨i, hsi, hai⟩ := hs'
+      rw [← mul_prod_erase _ i _ (by simpa)]; rw [hai]; rw [zero_pow hsi]; rw [zero_mul]; rw [mul_zero]
+  · simp only [Finset.mem_piAntidiag, ne_eq, Finsupp.mem_support_iff, ite_eq_right_iff, and_imp]
+    intro _ _ _ _ hed
+    simp [Finsupp.ext_iff] at hed
+    grind
+  · simp_rw [ite_eq_right_iff]
+    intro hs' hs''
+    rw [eq_indicator_self_iff] at hs''
+    exfalso
+    rw [Finset.mem_piAntidiag]; rw [not_and_or] at hs'
+    rcases hs' with hs' | hs'
+    · apply hs'
+      rw [← hs]; rw [sum_of_support_subset _ hs'' _ (by simp)]
+    · grind
 -/
 private lemma coeff_linearCombination_X_pow_of_eq (a : σ ->₀ R) {n : Nat}
     (hs : s.sum (fun _ m => m) = n) :
@@ -91,7 +131,17 @@ lemma coeff_linearCombination_X_pow_of_ne
   simp only [sum, linearCombination_apply, Finset.sum_pow_eq_sum_piAntidiag, coeff_sum, ← map_pow,
     ← C_eq_coe_nat, coeff_C_mul, smul_eq_C_mul, mul_pow, Finset.prod_mul_distrib, ← map_prod,
     coeff_prod_X_pow, mul_ite, mul_one, mul_zero]
-  apply Finset.sum_eq_zero (fun x hx => ?_
+  apply Finset.sum_eq_zero (fun x hx => ?_)
+  rw [if_neg]
+  rintro ⟨rfl⟩
+  apply hs
+  simp only [Finset.mem_piAntidiag] at hx
+  rw [sum_of_support_subset _ (support_indicator_subset a.support _) _ (by simp)]; rw [← hx.1]
+  congr
+  ext i
+  by_cases hi : i in a.support
+  · simp [Finsupp.indicator_of_mem hi]
+  · grind [Finsupp.indicator_of_notMem hi]
 
 中文:
 引理 coeff_linearCombination_X_pow_of_ne
@@ -101,7 +151,17 @@ lemma coeff_linearCombination_X_pow_of_ne
   simp only [sum, linearCombination_apply, Finset.sum_pow_eq_sum_piAntidiag, coeff_sum, ← map_pow,
     ← C_eq_coe_nat, coeff_C_mul, smul_eq_C_mul, mul_pow, Finset.prod_mul_distrib, ← map_prod,
     coeff_prod_X_pow, mul_ite, mul_one, mul_zero]
-  apply Finset.sum_eq_zero (fun x hx => ?_
+  apply Finset.sum_eq_zero (fun x hx => ?_)
+  rw [if_neg]
+  rintro ⟨rfl⟩
+  apply hs
+  simp only [Finset.mem_piAntidiag] at hx
+  rw [sum_of_support_subset _ (support_indicator_subset a.support _) _ (by simp)]; rw [← hx.1]
+  congr
+  ext i
+  by_cases hi : i in a.support
+  · simp [Finsupp.indicator_of_mem hi]
+  · grind [Finsupp.indicator_of_notMem hi]
 -/
 private lemma coeff_linearCombination_X_pow_of_ne (a : σ ->₀ R) {n : Nat}
     (hs : s.sum (fun _ m => m) != n) :
@@ -213,7 +273,9 @@ theorem coeff_add_pow
     simp [Finsupp.sum_of_support_subset d (Finset.subset_univ d.support)]
   simp only [Finset.mem_antidiagonal, this]
   split_ifs with hd
-  · rw [multinomial_eq_of_support_subset (
+  · rw [multinomial_eq_of_support_subset (Finset.subset_univ d.support), Finset.univ_fin2,
+      Nat.binomial_eq_choose Fin.zero_ne_one, hd]
+  · rfl
 
 中文:
 定理 coeff_add_pow
@@ -225,7 +287,9 @@ theorem coeff_add_pow
     simp [Finsupp.sum_of_support_subset d (Finset.subset_univ d.support)]
   simp only [Finset.mem_antidiagonal, this]
   split_ifs with hd
-  · rw [multinomial_eq_of_support_subset (
+  · rw [multinomial_eq_of_support_subset (Finset.subset_univ d.support), Finset.univ_fin2,
+      Nat.binomial_eq_choose Fin.zero_ne_one, hd]
+  · rfl
 
 Depends on / 依赖: Fin.sum_univ_two, Fin.zero_ne_one, Finset, Finset.mem_antidiagonal, Finset.subset_univ, Finset.univ_fin2, Finsupp, Finsupp.sum_of_support_subset, Nat.binomial_eq_choose, binomial_eq_choose, coeff_sum_X_pow_of_fintype, d.sum, d.support, mem_antidiagonal, multinomial_eq_of_support_subset, split_ifs, subset_univ, sum_of_support_subset, sum_univ_two, support
 -/

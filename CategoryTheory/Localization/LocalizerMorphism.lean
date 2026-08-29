@@ -275,7 +275,15 @@ lemma isEquivalence_imp
     calc
       L₁ ⋙ G ⋙ E₂.functor ≅ Φ.functor ⋙ L₂ ⋙ E₂.functor :=
           (associator _ _ _).symm ≪≫
-            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G)
+            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G).symm E₂.functor ≪≫
+            associator _ _ _
+      _ ≅ Φ.functor ⋙ L₂' := isoWhiskerLeft Φ.functor (compUniqFunctor L₂ L₂' W₂)
+      _ ≅ L₁' ⋙ G' := CatCommSq.iso Φ.functor L₁' L₂' G'
+      _ ≅ L₁ ⋙ E₁.functor ⋙ G' :=
+            isoWhiskerRight (compUniqFunctor L₁ L₁' W₁).symm G' ≪≫ associator _ _ _
+  have := Functor.isEquivalence_of_iso
+    (liftNatIso L₁ W₁ _ _ (G ⋙ E₂.functor) (E₁.functor ⋙ G') e)
+  Functor.isEquivalence_of_comp_left E₁.functor G'
 
 中文:
 引理 isEquivalence_imp
@@ -287,7 +295,15 @@ lemma isEquivalence_imp
     calc
       L₁ ⋙ G ⋙ E₂.functor ≅ Φ.functor ⋙ L₂ ⋙ E₂.functor :=
           (associator _ _ _).symm ≪≫
-            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G)
+            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G).symm E₂.functor ≪≫
+            associator _ _ _
+      _ ≅ Φ.functor ⋙ L₂' := isoWhiskerLeft Φ.functor (compUniqFunctor L₂ L₂' W₂)
+      _ ≅ L₁' ⋙ G' := CatCommSq.iso Φ.functor L₁' L₂' G'
+      _ ≅ L₁ ⋙ E₁.functor ⋙ G' :=
+            isoWhiskerRight (compUniqFunctor L₁ L₁' W₁).symm G' ≪≫ associator _ _ _
+  have := Functor.isEquivalence_of_iso
+    (liftNatIso L₁ W₁ _ _ (G ⋙ E₂.functor) (E₁.functor ⋙ G') e)
+  Functor.isEquivalence_of_comp_left E₁.functor G'
 
 Depends on / 依赖: CatCommSq, CatCommSq.iso, Localization, Localization.uniq, associator, compUniqFunctor, functor, isoWhiskerLeft, isoWhiskerRight
 -/
@@ -341,7 +357,15 @@ definition noncomputable
     calc
       L₁ ⋙ G ⋙ E₂.functor ≅ Φ.functor ⋙ L₂ ⋙ E₂.functor :=
           (associator _ _ _).symm ≪≫
-            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G)
+            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G).symm E₂.functor ≪≫
+            associator _ _ _
+      _ ≅ Φ.functor ⋙ L₂' := isoWhiskerLeft Φ.functor (compUniqFunctor L₂ L₂' W₂)
+      _ ≅ L₁' ⋙ G' := CatCommSq.iso Φ.functor L₁' L₂' G'
+      _ ≅ L₁ ⋙ E₁.functor ⋙ G' :=
+            isoWhiskerRight (compUniqFunctor L₁ L₁' W₁).symm G' ≪≫ associator _ _ _
+  (E₁.fullyFaithfulInverse.comp (hG.comp E₂.fullyFaithfulFunctor)).ofIso
+    ((isoWhiskerLeft (E₁.inverse) (liftNatIso L₁ W₁ _ _ (G ⋙ E₂.functor) (E₁.functor ⋙ G') e) ≪≫
+    (associator _ _ _).symm ≪≫ isoWhiskerRight E₁.counitIso G' ≪≫ G'.leftUnitor))
 
 中文:
 定义 noncomputable
@@ -352,7 +376,15 @@ definition noncomputable
     calc
       L₁ ⋙ G ⋙ E₂.functor ≅ Φ.functor ⋙ L₂ ⋙ E₂.functor :=
           (associator _ _ _).symm ≪≫
-            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G)
+            isoWhiskerRight (CatCommSq.iso Φ.functor L₁ L₂ G).symm E₂.functor ≪≫
+            associator _ _ _
+      _ ≅ Φ.functor ⋙ L₂' := isoWhiskerLeft Φ.functor (compUniqFunctor L₂ L₂' W₂)
+      _ ≅ L₁' ⋙ G' := CatCommSq.iso Φ.functor L₁' L₂' G'
+      _ ≅ L₁ ⋙ E₁.functor ⋙ G' :=
+            isoWhiskerRight (compUniqFunctor L₁ L₁' W₁).symm G' ≪≫ associator _ _ _
+  (E₁.fullyFaithfulInverse.comp (hG.comp E₂.fullyFaithfulFunctor)).ofIso
+    ((isoWhiskerLeft (E₁.inverse) (liftNatIso L₁ W₁ _ _ (G ⋙ E₂.functor) (E₁.functor ⋙ G') e) ≪≫
+    (associator _ _ _).symm ≪≫ isoWhiskerRight E₁.counitIso G' ≪≫ G'.leftUnitor))
 -/
 private noncomputable def fullyFaithfulImp (hG : G.FullyFaithful) : G'.FullyFaithful :=
   let E₁ := Localization.uniq L₁ L₁' W₁
@@ -549,7 +581,12 @@ lemma IsLocalizedEquivalence.of_equivalence
   have : Functor.IsLocalization (Φ.functor ⋙ MorphismProperty.Q W₂) W₁ := by
     refine Functor.IsLocalization.of_equivalence_source W₂.Q W₂ (Φ.functor ⋙ W₂.Q) W₁
       (asEquivalence Φ.functor).symm ?_ (Φ.inverts W₂.Q)
-      ((associator _ _ _).symm ≪≫ isoWhiskerRight ((Equivalence.unitIso _).sy
+      ((associator _ _ _).symm ≪≫ isoWhiskerRight ((Equivalence.unitIso _).symm) _ ≪≫
+        leftUnitor _)
+    erw [W₁.isoClosure.inverseImage_equivalence_functor_eq_map_inverse]
+    rw [MorphismProperty.map_isoClosure]
+    exact h
+  exact IsLocalizedEquivalence.of_isLocalization_of_isLocalization Φ W₂.Q
 
 中文:
 引理 是LocalizedEquivalence.of_equivalence
@@ -558,7 +595,12 @@ lemma IsLocalizedEquivalence.of_equivalence
   have : Functor.IsLocalization (Φ.functor ⋙ MorphismProperty.Q W₂) W₁ := by
     refine Functor.IsLocalization.of_equivalence_source W₂.Q W₂ (Φ.functor ⋙ W₂.Q) W₁
       (asEquivalence Φ.functor).symm ?_ (Φ.inverts W₂.Q)
-      ((associator _ _ _).symm ≪≫ isoWhiskerRight ((Equivalence.unitIso _).sy
+      ((associator _ _ _).symm ≪≫ isoWhiskerRight ((Equivalence.unitIso _).symm) _ ≪≫
+        leftUnitor _)
+    erw [W₁.isoClosure.inverseImage_equivalence_functor_eq_map_inverse]
+    rw [MorphismProperty.map_isoClosure]
+    exact h
+  exact IsLocalizedEquivalence.of_isLocalization_of_isLocalization Φ W₂.Q
 
 Depends on / 依赖: Equivalence, Equivalence.unitIso, Functor, Functor.IsLocalization, Functor.IsLocalization.of_equivalence_source, IsLocalization, IsLocalizedEquivalence, IsLocalizedEquivalence.of_isLocalization_of_isLocalization, MorphismProperty, MorphismProperty.Q, MorphismProperty.map_isoClosure, asEquivalence, associator, functor, inverseImage_equivalence_functor_eq_map_inverse, inverts, isoClosure, isoClosure.inverseImage_equivalence_functor_eq_map_inverse, isoWhiskerRight, leftUnitor
 -/
@@ -606,7 +648,17 @@ lemma isLocalizedEquivalence_of_unit_of_unit
     have : IsIso (whiskerRight ε₂ W₂.Q) := by
       rw [NatTrans.isIso_iff_isIso_app]
       exact fun _ => Localization.inverts W₂.Q W₂ _ (hε₂ _)
-    r
+    refine (Localization.equivalence W₁.Q W₁ W₂.Q W₂ (Φ.functor ⋙ W₂.Q)
+      (Φ.localizedFunctor W₁.Q W₂.Q)
+      (Ψ.functor ⋙ W₁.Q) (Ψ.localizedFunctor W₂.Q W₁.Q) ?_ ?_).isEquivalence_functor
+    · exact Functor.associator _ _ _ ≪≫
+        isoWhiskerLeft _ (CatCommSq.iso Ψ.functor W₂.Q W₁.Q _).symm ≪≫
+        (Functor.associator _ _ _).symm ≪≫
+        (asIso (whiskerRight ε₁ W₁.Q)).symm ≪≫ Functor.leftUnitor _
+    · exact Functor.associator _ _ _ ≪≫
+        isoWhiskerLeft _ (CatCommSq.iso Φ.functor W₁.Q W₂.Q _).symm ≪≫
+        (Functor.associator _ _ _).symm ≪≫
+        (asIso (whiskerRight ε₂ W₂.Q)).symm ≪≫ Functor.leftUnitor _
 
 中文:
 引理 isLocalizedEquivalence_of_unit_of_unit
@@ -618,7 +670,17 @@ lemma isLocalizedEquivalence_of_unit_of_unit
     have : IsIso (whiskerRight ε₂ W₂.Q) := by
       rw [NatTrans.isIso_iff_isIso_app]
       exact fun _ => Localization.inverts W₂.Q W₂ _ (hε₂ _)
-    r
+    refine (Localization.equivalence W₁.Q W₁ W₂.Q W₂ (Φ.functor ⋙ W₂.Q)
+      (Φ.localizedFunctor W₁.Q W₂.Q)
+      (Ψ.functor ⋙ W₁.Q) (Ψ.localizedFunctor W₂.Q W₁.Q) ?_ ?_).isEquivalence_functor
+    · exact Functor.associator _ _ _ ≪≫
+        isoWhiskerLeft _ (CatCommSq.iso Ψ.functor W₂.Q W₁.Q _).symm ≪≫
+        (Functor.associator _ _ _).symm ≪≫
+        (asIso (whiskerRight ε₁ W₁.Q)).symm ≪≫ Functor.leftUnitor _
+    · exact Functor.associator _ _ _ ≪≫
+        isoWhiskerLeft _ (CatCommSq.iso Φ.functor W₁.Q W₂.Q _).symm ≪≫
+        (Functor.associator _ _ _).symm ≪≫
+        (asIso (whiskerRight ε₂ W₂.Q)).symm ≪≫ Functor.leftUnitor _
 
 Depends on / 依赖: Functor, Functor.associator, Localization, Localization.equivalence, Localization.inverts, NatTrans, NatTrans.isIso_iff_isIso_app, associator, equivalence, functor, inverts, isEquivalence_functor, isIso_iff_isIso_app, isoWhiskerLeft, localizedFunctor, whiskerRight
 -/
@@ -913,7 +975,17 @@ lemma isLocalization_of_isLocalizedFullyFaithful
     exact ((MorphismProperty.isomorphisms _).arrow_mk_iso_iff
       (Arrow.isoOfNatIso iso f)).1 (Localization.inverts L₂ W₂ _ (Φ.map _ hf))
   let G := Localization.lift L₁ h W₁.Q
-  let e : W₁.Q ⋙ G ≅ L₁ 
+  let e : W₁.Q ⋙ G ≅ L₁ := Localization.fac L₁ h W₁.Q
+  let : CatCommSq Φ.functor W₁.Q L₂ (G ⋙ F) :=
+    ⟨iso ≪≫ isoWhiskerRight e.symm _ ≪≫ associator _ _ _⟩
+  have hG : G.FullyFaithful := Functor.FullyFaithful.ofCompFaithful
+    (Φ.fullyFaithful W₁.Q L₂ (G ⋙ F))
+  have := hG.full
+  have := hG.faithful
+  have : G.EssSurj :=
+    ⟨fun X => ⟨W₁.Q.obj (L₁.objPreimage X), ⟨e.app _ ≪≫ L₁.objObjPreimageIso X⟩⟩⟩
+  have : G.IsEquivalence := { }
+  exact IsLocalization.of_equivalence_target W₁.Q W₁ L₁ G.asEquivalence e
 
 中文:
 引理 isLocalization_of_isLocalizedFullyFaithful
@@ -923,7 +995,17 @@ lemma isLocalization_of_isLocalizedFullyFaithful
     exact ((MorphismProperty.isomorphisms _).arrow_mk_iso_iff
       (Arrow.isoOfNatIso iso f)).1 (Localization.inverts L₂ W₂ _ (Φ.map _ hf))
   let G := Localization.lift L₁ h W₁.Q
-  let e : W₁.Q ⋙ G ≅ L₁ 
+  let e : W₁.Q ⋙ G ≅ L₁ := Localization.fac L₁ h W₁.Q
+  let : CatCommSq Φ.functor W₁.Q L₂ (G ⋙ F) :=
+    ⟨iso ≪≫ isoWhiskerRight e.symm _ ≪≫ associator _ _ _⟩
+  have hG : G.FullyFaithful := Functor.FullyFaithful.ofCompFaithful
+    (Φ.fullyFaithful W₁.Q L₂ (G ⋙ F))
+  have := hG.full
+  have := hG.faithful
+  have : G.EssSurj :=
+    ⟨fun X => ⟨W₁.Q.obj (L₁.objPreimage X), ⟨e.app _ ≪≫ L₁.objObjPreimageIso X⟩⟩⟩
+  have : G.IsEquivalence := { }
+  exact IsLocalization.of_equivalence_target W₁.Q W₁ L₁ G.asEquivalence e
 
 Depends on / 依赖: Arrow.isoOfNatIso, CatCommSq, FullyFaithful, Functor, Functor.FullyFaithful.ofCompFaithful, Functor.map_comp_assoc, G.FullyFaithful, IsInvertedBy, Localization, Localization.fac, Localization.inverts, Localization.lift, MorphismProperty, MorphismProperty.isomorphisms, _add_zero_hom_app, _add_zero_inv_app, arrow_mk_iso_iff, associator, e.symm, fullyFaithful
 -/
@@ -960,7 +1042,7 @@ instance IsLocalizedFullyFaithful.comp
     CatCommSq.hComp _ _ _ W₂.Q _ _ _
   IsLocalizedFullyFaithful.mk' _ W₁.Q W₃.Q _
     ((Φ.fullyFaithfulLocalizedFunctor W₁.Q W₂.Q).comp
-      (Ψ.fullyFaithfulLocalizedFunctor W₂.Q W₃.
+      (Ψ.fullyFaithfulLocalizedFunctor W₂.Q W₃.Q))
 
 中文:
 实例 是LocalizedFullyFaithful.comp
@@ -969,7 +1051,7 @@ instance IsLocalizedFullyFaithful.comp
     CatCommSq.hComp _ _ _ W₂.Q _ _ _
   IsLocalizedFullyFaithful.mk' _ W₁.Q W₃.Q _
     ((Φ.fullyFaithfulLocalizedFunctor W₁.Q W₂.Q).comp
-      (Ψ.fullyFaithfulLocalizedFunctor W₂.Q W₃.
+      (Ψ.fullyFaithfulLocalizedFunctor W₂.Q W₃.Q))
 
 Depends on / 依赖: CatCommSq, CatCommSq.hComp, IsLocalizedFullyFaithful, IsLocalizedFullyFaithful.mk, fullyFaithfulLocalizedFunctor, functor, localizedFunctor
 -/
@@ -1212,7 +1294,9 @@ lemma isLocalizedEquivalence_of_isInduced
       Arrow.mk (Φ.functor.map (Φ.functor.preimage
         ((Φ.functor.objObjPreimageIso X).hom ≫ f ≫ (Φ.functor.objObjPreimageIso Y).inv))) ≅
       Arrow.mk f :=
-    Arrow.isoMk (Φ.functor.objObjPreimageIso X) (Φ.func
+    Arrow.isoMk (Φ.functor.objObjPreimageIso X) (Φ.functor.objObjPreimageIso Y)
+  simp only [← Φ.inverseImage_eq]
+  exact ⟨_, _, _, (W₂.arrow_mk_iso_iff e).2 hf, ⟨e⟩⟩
 
 中文:
 引理 isLocalizedEquivalence_of_isInduced
@@ -1222,7 +1306,9 @@ lemma isLocalizedEquivalence_of_isInduced
       Arrow.mk (Φ.functor.map (Φ.functor.preimage
         ((Φ.functor.objObjPreimageIso X).hom ≫ f ≫ (Φ.functor.objObjPreimageIso Y).inv))) ≅
       Arrow.mk f :=
-    Arrow.isoMk (Φ.functor.objObjPreimageIso X) (Φ.func
+    Arrow.isoMk (Φ.functor.objObjPreimageIso X) (Φ.functor.objObjPreimageIso Y)
+  simp only [← Φ.inverseImage_eq]
+  exact ⟨_, _, _, (W₂.arrow_mk_iso_iff e).2 hf, ⟨e⟩⟩
 
 Depends on / 依赖: Arrow.isoMk, Arrow.mk, IsLocalizedEquivalence, IsLocalizedEquivalence.of_equivalence, arrow_mk_iso_iff, functor, functor.map, functor.objObjPreimageIso, functor.preimage, inverseImage_eq, objObjPreimageIso, of_equivalence, preimage
 -/

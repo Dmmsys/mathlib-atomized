@@ -168,7 +168,7 @@ lemma IsDynNetIn.card_le_card_of_isDynCoverOf
   choose! F s_t using this
   apply Finset.card_le_card_of_injOn F fun x x_s => (s_t x x_s).1
   exact fun x x_s y y_s Fx_Fy =>
-    PairwiseDisjoint.elim_set hs.2 x_s y_s (F x) (s_t 
+    PairwiseDisjoint.elim_set hs.2 x_s y_s (F x) (s_t x x_s).2 (Fx_Fy ▸ (s_t y y_s).2)
 
 中文:
 引理 IsDynNetIn.card_le_card_of_isDynCoverOf
@@ -179,7 +179,7 @@ lemma IsDynNetIn.card_le_card_of_isDynCoverOf
   choose! F s_t using this
   apply Finset.card_le_card_of_injOn F fun x x_s => (s_t x x_s).1
   exact fun x x_s y y_s Fx_Fy =>
-    PairwiseDisjoint.elim_set hs.2 x_s y_s (F x) (s_t 
+    PairwiseDisjoint.elim_set hs.2 x_s y_s (F x) (s_t x x_s).2 (Fx_Fy ▸ (s_t y y_s).2)
 
 Depends on / 依赖: Finset, Finset.card_le_card_of_injOn, Fx_Fy, PairwiseDisjoint, PairwiseDisjoint.elim_set, card_le_card_of_injOn, dynEntourage, elim_set
 -/
@@ -281,7 +281,33 @@ lemma netMaxcard_finite_iff
     simp only [Nat.cast_inj]
     -- The criterion we want to use is `Nat.sSup_mem`. We rewrite `netMaxcard` with an `sSup`,
     -- then check its `BddAbove` and `Nonempty` hypotheses.
-    have :
+    have : netMaxcard T F U n
+      = sSup (WithTop.some '' Finset.card '' {s : Finset X | IsDynNetIn T F U n s}) := by
+      rw [netMaxcard]; rw [← image_comp]; rw [sSup_image]
+      simp only [mem_ofPred_eq, ENat.some_eq_natCast, Function.comp_apply]
+      exact biSup_congr (fun _ _ => rfl)
+    rw [this] at k_max
+    have h_bdda : BddAbove (Finset.card '' {s : Finset X | IsDynNetIn T F U n s}) := by
+      refine ⟨k, mem_upperBounds.2 ?_⟩
+      simp only [mem_image, mem_ofPred_eq, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+      intro s h
+      rw [← ENat.natCast_le_natCast]; rw [k_max]
+      apply le_sSup
+      exact Filter.frequently_principal.mp fun a => a (by simpa using ⟨_, h, rfl⟩) rfl
+    have h_nemp : (Finset.card '' {s : Finset X | IsDynNetIn T F U n s}).Nonempty := by
+      refine ⟨0, ?_⟩
+      simp only [mem_image, mem_ofPred_eq, Finset.card_eq_zero, exists_eq_right, Finset.coe_empty]
+      exact isDynNetIn_empty
+    rw [← WithTop.coe_sSup' h_bdda] at k_max
+    have key := Nat.sSup_mem h_nemp h_bdda
+    rw [← Nat.cast_inj.mp k_max]; rw [mem_image] at key
+    simp only [mem_ofPred_eq] at key
+    exact key
+  · obtain ⟨s, _, s_card⟩ := h
+    rw [← s_card]
+    exact WithTop.coe_lt_top s.card
+
+@[simp]
 
 中文:
 引理 netMaxcard_finite_iff
@@ -293,7 +319,33 @@ lemma netMaxcard_finite_iff
     simp only [Nat.cast_inj]
     -- The criterion we want to use is `Nat.sSup_mem`. We rewrite `netMaxcard` with an `sSup`,
     -- then check its `BddAbove` and `Nonempty` hypotheses.
-    have :
+    have : netMaxcard T F U n
+      = sSup (WithTop.some '' Finset.card '' {s : Finset X | IsDynNetIn T F U n s}) := by
+      rw [netMaxcard]; rw [← image_comp]; rw [sSup_image]
+      simp only [mem_ofPred_eq, ENat.some_eq_natCast, Function.comp_apply]
+      exact biSup_congr (fun _ _ => rfl)
+    rw [this] at k_max
+    have h_bdda : BddAbove (Finset.card '' {s : Finset X | IsDynNetIn T F U n s}) := by
+      refine ⟨k, mem_upperBounds.2 ?_⟩
+      simp only [mem_image, mem_ofPred_eq, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+      intro s h
+      rw [← ENat.natCast_le_natCast]; rw [k_max]
+      apply le_sSup
+      exact Filter.frequently_principal.mp fun a => a (by simpa using ⟨_, h, rfl⟩) rfl
+    have h_nemp : (Finset.card '' {s : Finset X | IsDynNetIn T F U n s}).Nonempty := by
+      refine ⟨0, ?_⟩
+      simp only [mem_image, mem_ofPred_eq, Finset.card_eq_zero, exists_eq_right, Finset.coe_empty]
+      exact isDynNetIn_empty
+    rw [← WithTop.coe_sSup' h_bdda] at k_max
+    have key := Nat.sSup_mem h_nemp h_bdda
+    rw [← Nat.cast_inj.mp k_max]; rw [mem_image] at key
+    simp only [mem_ofPred_eq] at key
+    exact key
+  · obtain ⟨s, _, s_card⟩ := h
+    rw [← s_card]
+    exact WithTop.coe_lt_top s.card
+
+@[simp]
 
 Depends on / 依赖: ENat.ne_top_iff_exists.mp, Iff.intro, Nat.cast_inj, cast_inj, h.ne, k_max, ne_top_iff_exists
 -/
@@ -379,7 +431,7 @@ lemma netMaxcard_eq_zero_iff
   rw [← Finset.coe_singleton] at key
   replace key := key.card_le_netMaxcard
   rw [Finset.card_singleton]; rw [Nat.cast_one]; rw [h] at key
-  e
+  exact key.not_gt zero_lt_one
 
 中文:
 引理 netMaxcard_eq_zero_iff
@@ -392,7 +444,7 @@ lemma netMaxcard_eq_zero_iff
   rw [← Finset.coe_singleton] at key
   replace key := key.card_le_netMaxcard
   rw [Finset.card_singleton]; rw [Nat.cast_one]; rw [h] at key
-  e
+  exact key.not_gt zero_lt_one
 
 Depends on / 依赖: Finset, Finset.card_singleton, Finset.coe_singleton, Nat.cast_one, card_le_netMaxcard, card_singleton, cast_one, coe_singleton, eq_empty_iff_forall_notMem, isDynNetIn_singleton, key.card_le_netMaxcard, key.not_gt, netMaxcard_empty, not_gt, replace, zero_lt_one
 -/
@@ -519,7 +571,12 @@ lemma netMaxcard_infinite_iff
     simp only [Nat.cast_lt, Subtype.exists, exists_prop] at h
     obtain ⟨s, s_net, s_k⟩ := h
     exact ⟨s, s_net, s_k.le⟩
-  · refine ENat.eq_top_iff
+  · refine ENat.eq_top_iff_forall_gt.mpr fun k => ?_
+    specialize h (k + 1)
+    obtain ⟨s, s_net, s_card⟩ := h
+    apply s_net.card_le_netMaxcard.trans_lt'
+    rw [Nat.cast_lt]
+    exact (lt_add_one k).trans_le s_card
 
 中文:
 引理 netMaxcard_infinite_iff
@@ -532,7 +589,12 @@ lemma netMaxcard_infinite_iff
     simp only [Nat.cast_lt, Subtype.exists, exists_prop] at h
     obtain ⟨s, s_net, s_k⟩ := h
     exact ⟨s, s_net, s_k.le⟩
-  · refine ENat.eq_top_iff
+  · refine ENat.eq_top_iff_forall_gt.mpr fun k => ?_
+    specialize h (k + 1)
+    obtain ⟨s, s_net, s_card⟩ := h
+    apply s_net.card_le_netMaxcard.trans_lt'
+    rw [Nat.cast_lt]
+    exact (lt_add_one k).trans_le s_card
 
 Depends on / 依赖: ENat.eq_top_iff_forall_gt.mpr, ENat.natCast_lt_top, Iff.intro, Nat.cast_lt, Subtype, Subtype.exists, card_le_netMaxcard, cast_lt, eq_top_iff_forall_gt, exists_prop, iSup_eq_top, iSup_subtype, lt_add_one, natCast_lt_top, netMaxcard, s_card, s_k.le, s_net, s_net.card_le_netMaxcard.trans_lt, specialize
 -/
@@ -599,7 +661,23 @@ lemma coverMincard_le_netMaxcard
   obtain ⟨s, s_net, s_card⟩ := (netMaxcard_finite_iff T F U n).1 h
   rw [← s_card]
   apply IsDynCoverOf.coverMincard_le_card
-  -- We have to check that `
+  -- We have to check that `s` is a cover for `dynEntourage T F (U ○ U) n`.
+  -- If `s` is not a cover, then we can add to `s` a point `x` which is not covered
+  -- and get a new net. This contradicts the maximality of `s`.
+  rw [IsDynCoverOf]; rw [isCover_iff_subset_iUnion_ball]
+  by_contra h
+  obtain ⟨x, x_F, x_uncov⟩ := not_subset.1 h
+  simp only [Finset.mem_coe, mem_iUnion, exists_prop, not_exists, not_and] at x_uncov
+  have larger_net : IsDynNetIn T F U n (insert x s) := by
+    refine ⟨insert_subset x_F s_net.1, pairwiseDisjoint_insert.2 ⟨s_net.2, ?_⟩⟩
+    refine fun y y_s _ => disjoint_left.2 fun z z_x z_y => x_uncov y y_s ?_
+    exact mem_ball_dynEntourage_comp T n x y (nonempty_of_mem ⟨z_x, z_y⟩)
+  rw [← s.coe_insert x] at larger_net
+  apply larger_net.card_le_netMaxcard.not_gt
+  rw [← s_card]; rw [Nat.cast_lt]
+  refine (lt_add_one s.card).trans_eq (s.card_insert_of_notMem fun x_s => ?_).symm
+  exact x_uncov x x_s (ball_mono (dynEntourage_monotone T n SetRel.left_subset_comp) x <|
+    SetRel.rfl (dynEntourage T U n))
 
 中文:
 引理 coverMincard_le_netMaxcard
@@ -612,7 +690,23 @@ lemma coverMincard_le_netMaxcard
   obtain ⟨s, s_net, s_card⟩ := (netMaxcard_finite_iff T F U n).1 h
   rw [← s_card]
   apply IsDynCoverOf.coverMincard_le_card
-  -- We have to check that `
+  -- We have to check that `s` is a cover for `dynEntourage T F (U ○ U) n`.
+  -- If `s` is not a cover, then we can add to `s` a point `x` which is not covered
+  -- and get a new net. This contradicts the maximality of `s`.
+  rw [IsDynCoverOf]; rw [isCover_iff_subset_iUnion_ball]
+  by_contra h
+  obtain ⟨x, x_F, x_uncov⟩ := not_subset.1 h
+  simp only [Finset.mem_coe, mem_iUnion, exists_prop, not_exists, not_and] at x_uncov
+  have larger_net : IsDynNetIn T F U n (insert x s) := by
+    refine ⟨insert_subset x_F s_net.1, pairwiseDisjoint_insert.2 ⟨s_net.2, ?_⟩⟩
+    refine fun y y_s _ => disjoint_left.2 fun z z_x z_y => x_uncov y y_s ?_
+    exact mem_ball_dynEntourage_comp T n x y (nonempty_of_mem ⟨z_x, z_y⟩)
+  rw [← s.coe_insert x] at larger_net
+  apply larger_net.card_le_netMaxcard.not_gt
+  rw [← s_card]; rw [Nat.cast_lt]
+  refine (lt_add_one s.card).trans_eq (s.card_insert_of_notMem fun x_s => ?_).symm
+  exact x_uncov x x_s (ball_mono (dynEntourage_monotone T n SetRel.left_subset_comp) x <|
+    SetRel.rfl (dynEntourage T U n))
 
 Depends on / 依赖: classical
 -/
@@ -988,7 +1082,10 @@ theorem coverEntropyInf_eq_iSup_netEntropyInfEntourage
   · obtain ⟨V, V_uni, V_symm, V_U⟩ := comp_symm_mem_uniformity_sets U_uni
     have := isRefl_of_mem_uniformity V_uni
     apply (coverEntropyInfEntourage_antitone T F V_U).trans (le_iSup₂_of_le V V_uni _)
-    exact coverEntropyInfEntourage_
+    exact coverEntropyInfEntourage_le_netEntropyInfEntourage T F
+  · apply (netEntropyInfEntourage_antitone T F SetRel.symmetrize_subset_self).trans
+    apply (le_iSup₂ (SetRel.symmetrize U) (symmetrize_mem_uniformity U_uni)).trans'
+    exact netEntropyInfEntourage_le_coverEntropyInfEntourage T F
 
 中文:
 定理 coverEntropyInf_eq_iSup_netEntropyInfEntourage
@@ -997,7 +1094,10 @@ theorem coverEntropyInf_eq_iSup_netEntropyInfEntourage
   · obtain ⟨V, V_uni, V_symm, V_U⟩ := comp_symm_mem_uniformity_sets U_uni
     have := isRefl_of_mem_uniformity V_uni
     apply (coverEntropyInfEntourage_antitone T F V_U).trans (le_iSup₂_of_le V V_uni _)
-    exact coverEntropyInfEntourage_
+    exact coverEntropyInfEntourage_le_netEntropyInfEntourage T F
+  · apply (netEntropyInfEntourage_antitone T F SetRel.symmetrize_subset_self).trans
+    apply (le_iSup₂ (SetRel.symmetrize U) (symmetrize_mem_uniformity U_uni)).trans'
+    exact netEntropyInfEntourage_le_coverEntropyInfEntourage T F
 
 Depends on / 依赖: SetRel, SetRel.symmetrize, SetRel.symmetrize_subset_self, U_uni, V_symm, V_uni, comp_symm_mem_uniformity_sets, coverEntropyInfEntourage_antitone, coverEntropyInfEntourage_le_netEntropyInfEntourage, isRefl_of_mem_uniformity, le_antisymm, netEntropyInfEntou, netEntropyInfEntourage_antitone, symmetrize, symmetrize_mem_uniformity, symmetrize_subset_self
 -/
@@ -1022,7 +1122,10 @@ theorem coverEntropy_eq_iSup_netEntropyEntourage
   · obtain ⟨V, V_uni, V_symm, V_comp_U⟩ := comp_symm_mem_uniformity_sets U_uni
     apply (coverEntropyEntourage_antitone T F V_comp_U).trans (le_iSup₂_of_le V V_uni _)
     have := isRefl_of_mem_uniformity V_uni
-    exact coverEntropyEntour
+    exact coverEntropyEntourage_le_netEntropyEntourage T F
+  · apply (netEntropyEntourage_antitone T F SetRel.symmetrize_subset_self).trans
+    apply (le_iSup₂ (SetRel.symmetrize U) (symmetrize_mem_uniformity U_uni)).trans'
+    exact netEntropyEntourage_le_coverEntropyEntourage T F
 
 中文:
 定理 coverEntropy_eq_iSup_netEntropyEntourage
@@ -1031,7 +1134,10 @@ theorem coverEntropy_eq_iSup_netEntropyEntourage
   · obtain ⟨V, V_uni, V_symm, V_comp_U⟩ := comp_symm_mem_uniformity_sets U_uni
     apply (coverEntropyEntourage_antitone T F V_comp_U).trans (le_iSup₂_of_le V V_uni _)
     have := isRefl_of_mem_uniformity V_uni
-    exact coverEntropyEntour
+    exact coverEntropyEntourage_le_netEntropyEntourage T F
+  · apply (netEntropyEntourage_antitone T F SetRel.symmetrize_subset_self).trans
+    apply (le_iSup₂ (SetRel.symmetrize U) (symmetrize_mem_uniformity U_uni)).trans'
+    exact netEntropyEntourage_le_coverEntropyEntourage T F
 
 Depends on / 依赖: SetRel, SetRel.symmetrize, SetRel.symmetrize_subset_self, U_uni, V_comp_U, V_symm, V_uni, comp_symm_mem_uniformity_sets, coverEntropyEntourage_antitone, coverEntropyEntourage_le_netEntropyEntourage, isRefl_of_mem_uniformity, le_antisymm, netEntropyEntourage_, netEntropyEntourage_antitone, symmetrize, symmetrize_mem_uniformity, symmetrize_subset_self
 -/
@@ -1058,7 +1164,7 @@ lemma coverEntropyInf_eq_iSup_basis_netEntropyInfEntourage
   refine iSup₂_le fun U U_uni => ?_
   obtain ⟨i, h_i, si_U⟩ := (HasBasis.mem_iff h).1 U_uni
   apply (netEntropyInfEntourage_antitone T F si_U).trans
- 
+  exact le_iSup₂ (f := fun (i : ι) (_ : p i) => netEntropyInfEntourage T F (s i)) i h_i
 
 中文:
 引理 coverEntropyInf_eq_iSup_basis_netEntropyInfEntourage
@@ -1069,7 +1175,7 @@ lemma coverEntropyInf_eq_iSup_basis_netEntropyInfEntourage
   refine iSup₂_le fun U U_uni => ?_
   obtain ⟨i, h_i, si_U⟩ := (HasBasis.mem_iff h).1 U_uni
   apply (netEntropyInfEntourage_antitone T F si_U).trans
- 
+  exact le_iSup₂ (f := fun (i : ι) (_ : p i) => netEntropyInfEntourage T F (s i)) i h_i
 
 Depends on / 依赖: HasBasis, HasBasis.mem_iff, HasBasis.mem_of_mem, U_uni, antisymm, coverEntropyInf_eq_iSup_netEntropyInfEntourage, le_refl, mem_iff, mem_of_mem, netEntropyInfEntourage, netEntropyInfEntourage_antitone, si_U
 -/
@@ -1095,7 +1201,7 @@ lemma coverEntropy_eq_iSup_basis_netEntropyEntourage
   refine iSup₂_le fun U U_uni => ?_
   obtain ⟨i, h_i, si_U⟩ := (HasBasis.mem_iff h).1 U_uni
   apply (netEntropyEntourage_antitone T F si_U).trans _
-  exact 
+  exact le_iSup₂ (f := fun (i : ι) (_ : p i) => netEntropyEntourage T F (s i)) i h_i
 
 中文:
 引理 coverEntropy_eq_iSup_basis_netEntropyEntourage
@@ -1106,7 +1212,7 @@ lemma coverEntropy_eq_iSup_basis_netEntropyEntourage
   refine iSup₂_le fun U U_uni => ?_
   obtain ⟨i, h_i, si_U⟩ := (HasBasis.mem_iff h).1 U_uni
   apply (netEntropyEntourage_antitone T F si_U).trans _
-  exact 
+  exact le_iSup₂ (f := fun (i : ι) (_ : p i) => netEntropyEntourage T F (s i)) i h_i
 
 Depends on / 依赖: HasBasis, HasBasis.mem_iff, HasBasis.mem_of_mem, U_uni, antisymm, coverEntropy_eq_iSup_netEntropyEntourage, le_refl, mem_iff, mem_of_mem, netEntropyEntourage, netEntropyEntourage_antitone, si_U
 -/

@@ -697,7 +697,9 @@ theorem prod_option_index
     | add f₁ f₂ h₁ h₂ =>
       rw [Finsupp.prod_add_index]; rw [h₁]; rw [h₂]; rw [some_add]; rw [Finsupp.prod_add_index]
       · simp only [h_add, Pi.add_apply, Finsupp.coe_add]
-        rw [mul_mul_mul_
+        rw [mul_mul_mul_comm]
+      all_goals simp [h_zero, h_add]
+    | single a m => cases a <;> simp [h_zero]
 
 中文:
 定理 prod_option_index
@@ -709,7 +711,9 @@ theorem prod_option_index
     | add f₁ f₂ h₁ h₂ =>
       rw [Finsupp.prod_add_index]; rw [h₁]; rw [h₂]; rw [some_add]; rw [Finsupp.prod_add_index]
       · simp only [h_add, Pi.add_apply, Finsupp.coe_add]
-        rw [mul_mul_mul_
+        rw [mul_mul_mul_comm]
+      all_goals simp [h_zero, h_add]
+    | single a m => cases a <;> simp [h_zero]
 
 Depends on / 依赖: Finsupp, Finsupp.coe_add, Finsupp.prod_add_index, Pi.add_apply, add_apply, all_goals, classical, coe_add, h_add, h_zero, induction_linear, mul_mul_mul_comm, prod_add_index, single, some_add, some_zero
 -/

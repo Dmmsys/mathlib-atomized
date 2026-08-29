@@ -307,7 +307,19 @@ theorem mulAntidiagonal_min_mul_min
       (hs.min_le hns has).eq_of_not_lt fun hlt =>
         (mul_lt_mul_of_lt_of_le hlt <| ht.min_le hnt hat).ne' hst
     exact ⟨rfl, mul_left_cancel hst⟩
-  · rintr
+  · rintro ⟨rfl, rfl⟩
+    exact ⟨hs.min_mem _, ht.min_mem _, rfl⟩
+
+@[deprecated (since := "2026-06-08")] alias addAntidiagonal := antidiagonal
+@[deprecated (since := "2026-06-08")] alias mem_addAntidiagonal := mem_antidiagonal
+@[deprecated (since := "2026-06-08")] alias addAntidiagonal_mono_left := antidiagonal_mono_left
+@[deprecated (since := "2026-06-08")] alias addAntidiagonal_mono_right := antidiagonal_mono_right
+@[deprecated (since := "2026-06-08")] alias swap_mem_addAntidiagonal := swap_mem_antidiagonal
+@[deprecated (since := "2026-06-08")]
+alias support_addAntidiagonal_subset_add := support_antidiagonal_subset_add
+@[deprecated (since := "2026-06-08")]
+alias isPWO_support_addAntidiagonal := isPWO_support_antidiagonal
+@[deprecated (since := "2026-06-08")] alias addAntidiagonal_min_mul_min := antidiagonal_min_add_min
 
 中文:
 定理 mulAntidiagonal_min_mul_min
@@ -321,7 +333,19 @@ theorem mulAntidiagonal_min_mul_min
       (hs.min_le hns has).eq_of_not_lt fun hlt =>
         (mul_lt_mul_of_lt_of_le hlt <| ht.min_le hnt hat).ne' hst
     exact ⟨rfl, mul_left_cancel hst⟩
-  · rintr
+  · rintro ⟨rfl, rfl⟩
+    exact ⟨hs.min_mem _, ht.min_mem _, rfl⟩
+
+@[deprecated (since := "2026-06-08")] alias addAntidiagonal := antidiagonal
+@[deprecated (since := "2026-06-08")] alias mem_addAntidiagonal := mem_antidiagonal
+@[deprecated (since := "2026-06-08")] alias addAntidiagonal_mono_left := antidiagonal_mono_left
+@[deprecated (since := "2026-06-08")] alias addAntidiagonal_mono_right := antidiagonal_mono_right
+@[deprecated (since := "2026-06-08")] alias swap_mem_addAntidiagonal := swap_mem_antidiagonal
+@[deprecated (since := "2026-06-08")]
+alias support_addAntidiagonal_subset_add := support_antidiagonal_subset_add
+@[deprecated (since := "2026-06-08")]
+alias isPWO_support_addAntidiagonal := isPWO_support_antidiagonal
+@[deprecated (since := "2026-06-08")] alias addAntidiagonal_min_mul_min := antidiagonal_min_add_min
 
 Depends on / 依赖: Prod.ext_iff, eq_of_not_lt, ext_iff, hs.min_le, hs.min_mem, ht.min_le, ht.min_mem, mem_mulAntidiagonal, mem_singleton, min_le, min_mem, mul_left_cancel, mul_lt_mul_of_lt_of_le
 -/

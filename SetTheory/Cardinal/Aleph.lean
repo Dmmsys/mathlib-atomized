@@ -640,7 +640,10 @@ theorem isNormal_preOmega
     (preOmega_le_of_forall_lt (isInitial_ord _) fun b hb => ?_).trans (ord_card_le a)⟩
   rw [← (isInitial_ord _).card_lt_card]; rw [card_ord]
   apply lt_of_lt_of_le _ (card_le_card <| ha _ (ho.succ_lt hb))
-  rw [(isInitial_preOme
+  rw [(isInitial_preOmega _).card_lt_card]; rw [preOmega_lt_preOmega]
+  exact lt_succ b
+
+@[simp]
 
 中文:
 定理 isNormal_preOmega
@@ -651,7 +654,10 @@ theorem isNormal_preOmega
     (preOmega_le_of_forall_lt (isInitial_ord _) fun b hb => ?_).trans (ord_card_le a)⟩
   rw [← (isInitial_ord _).card_lt_card]; rw [card_ord]
   apply lt_of_lt_of_le _ (card_le_card <| ha _ (ho.succ_lt hb))
-  rw [(isInitial_preOme
+  rw [(isInitial_preOmega _).card_lt_card]; rw [preOmega_lt_preOmega]
+  exact lt_succ b
+
+@[simp]
 
 Depends on / 依赖: card_le_card, card_lt_card, card_ord, ho.succ_lt, isInitial_ord, isInitial_preOmega, isNormal_iff, lt_of_lt_of_le, lt_succ, ord_card_le, preOmega_le_of_forall_lt, preOmega_lt_preOmega, preOmega_strictMono, succ_lt
 -/
@@ -3316,7 +3322,11 @@ theorem isStrongPrelimit_preBeth
     · rw [preBeth_lt_preBeth, lt_succ_iff]
     · simp
   · rw [preBeth_limit ho] at hx
-    obtain ⟨a, ha⟩ := exists_lt_o
+    obtain ⟨a, ha⟩ := exists_lt_of_lt_ciSup' hx
+    apply (preBeth_strictMono (ho.add_one_lt a.2)).trans_le'
+    simpa using power_le_power_left two_ne_zero ha.le
+
+@[simp]
 
 中文:
 定理 isStrongPrelimit_preBeth
@@ -3330,7 +3340,11 @@ theorem isStrongPrelimit_preBeth
     · rw [preBeth_lt_preBeth, lt_succ_iff]
     · simp
   · rw [preBeth_limit ho] at hx
-    obtain ⟨a, ha⟩ := exists_lt_o
+    obtain ⟨a, ha⟩ := exists_lt_of_lt_ciSup' hx
+    apply (preBeth_strictMono (ho.add_one_lt a.2)).trans_le'
+    simpa using power_le_power_left two_ne_zero ha.le
+
+@[simp]
 
 Depends on / 依赖: add_one_lt, contrapose, exists_lt_of_lt_ciSup, ha.le, ho.add_one_lt, lt_succ_iff, not_isStrongPrelimit_iff, not_isSuccPrelimit_iff_mem_range_succ, power_le_power_left, preBeth, preBeth_limit, preBeth_lt_preBeth, preBeth_strictMono, trans_le, two_ne_zero
 -/
@@ -3391,7 +3405,11 @@ theorem lift_preBeth
     apply congrArg sSup
     ext x
     constructor <;> rintro ⟨⟨i, hi⟩, rfl⟩
-    · 
+    · refine ⟨⟨i.lift, ?_⟩, (IH _ hi).symm⟩
+      simpa
+    · obtain ⟨i, rfl⟩ := Ordinal.mem_range_lift_of_le hi.le
+      rw [mem_Iio]; rw [Ordinal.lift_lt] at hi
+      exact ⟨⟨i, hi⟩, IH _ hi⟩
 
 中文:
 定理 lift_preBeth
@@ -3405,7 +3423,11 @@ theorem lift_preBeth
     apply congrArg sSup
     ext x
     constructor <;> rintro ⟨⟨i, hi⟩, rfl⟩
-    · 
+    · refine ⟨⟨i.lift, ?_⟩, (IH _ hi).symm⟩
+      simpa
+    · obtain ⟨i, rfl⟩ := Ordinal.mem_range_lift_of_le hi.le
+      rw [mem_Iio]; rw [Ordinal.lift_lt] at hi
+      exact ⟨⟨i, hi⟩, IH _ hi⟩
 
 Depends on / 依赖: Ordinal, Ordinal.lift_lt, Ordinal.mem_range_lift_of_le, SuccOrder, SuccOrder.prelimitRecOn, bddAbove_of_small, hi.le, i.lift, isSuccPrelimit, isSuccPrelimit_lift, lift_iSup, lift_lt, mem_Iio, mem_range_lift_of_le, preBeth_limit, prelimitRecOn
 -/

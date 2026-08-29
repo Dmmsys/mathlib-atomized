@@ -238,7 +238,8 @@ lemma triplewise_iff_getElem
     refine ⟨fun ⟨hh, ht⟩ i j k hij hjk hk => ?_,
             fun h => ⟨fun i j hi hj hij => ?_, fun i j k hij hjk hk => ?_⟩⟩
     · grind
-    · simpa using! h 0 (i + 1
+    · simpa using! h 0 (i + 1) (j + 1) (by lia) (by lia) (by lia)
+    · simpa using! h (i + 1) (j + 1) (k + 1) (by lia) (by lia) (by lia)
 
 中文:
 引理 triplewise_iff_getElem
@@ -251,7 +252,8 @@ lemma triplewise_iff_getElem
     refine ⟨fun ⟨hh, ht⟩ i j k hij hjk hk => ?_,
             fun h => ⟨fun i j hi hj hij => ?_, fun i j k hij hjk hk => ?_⟩⟩
     · grind
-    · simpa using! h 0 (i + 1
+    · simpa using! h 0 (i + 1) (j + 1) (by lia) (by lia) (by lia)
+    · simpa using! h (i + 1) (j + 1) (k + 1) (by lia) (by lia) (by lia)
 
 Depends on / 依赖: length_cons, pairwise_iff_getElem, triplewise_cons
 -/

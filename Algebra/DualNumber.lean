@@ -373,7 +373,7 @@ lemma ringHom_ext
   let g' : R[ε] ->ₐ[R] R' :=
     { toRingHom := g
       commutes' r := (DFunLike.congr_fun h₀ r).symm }
-  exact congr_arg
+  exact congr_arg AlgHom.toRingHom (show f' = g' from algHom_ext hε)
 
 中文:
 引理 ringHom_ext
@@ -388,7 +388,7 @@ lemma ringHom_ext
   let g' : R[ε] ->ₐ[R] R' :=
     { toRingHom := g
       commutes' r := (DFunLike.congr_fun h₀ r).symm }
-  exact congr_arg
+  exact congr_arg AlgHom.toRingHom (show f' = g' from algHom_ext hε)
 
 Depends on / 依赖: AlgHom, AlgHom.toRingHom, Algebra, Algebra.compHom, DFunLike, DFunLike.congr_fun, algHom_ext, algebraMap, commutes, compHom, congr_arg, congr_fun, f.toAlgebra, toAlgebra, toRingHom
 -/
@@ -418,7 +418,22 @@ definition lift
     toFun := fun fe => ⟨
       (fe.val.1, MulOpposite.op fe.val.2 • fe.val.1.toLinearMap),
       fun x y => show (fe.val.1 x * fe.val.2) * (fe.val.1 y * fe.val.2) = 0 by
-        rw [(fe.prop.2 _).mul_mul_mul_comm]; rw [fe.prop.1]; rw [mul_
+        rw [(fe.prop.2 _).mul_mul_mul_comm]; rw [fe.prop.1]; rw [mul_zero],
+      fun r x => show fe.val.1 (r * x) * fe.val.2 = fe.val.1 r * (fe.val.1 x * fe.val.2) by
+        rw [map_mul]; rw [mul_assoc],
+      fun r x => show fe.val.1 (x * r) * fe.val.2 = (fe.val.1 x * fe.val.2) * fe.val.1 r by
+        rw [map_mul]; rw [(fe.prop.2 _).right_comm]⟩
+    invFun := fun fg => ⟨
+      (fg.val.1, fg.val.2 1),
+      fg.prop.1 _ _,
+      fun a => show fg.val.2 1 * fg.val.1 a = fg.val.1 a * fg.val.2 1 by
+        rw [← fg.prop.2.1]; rw [← fg.prop.2.2]; rw [smul_eq_mul]; rw [op_smul_eq_mul]; rw [mul_one]; rw [one_mul]⟩
+left_inv := fun fe => Subtype.ext Prod.ext rfl
+      show fe.val.1 1 * fe.val.2 = fe.val.2 by
+        rw [map_one]; rw [one_mul]
+right_inv := fun fg => Subtype.ext Prod.ext rfl LinearMap.ext fun x =>
+      show fg.val.1 x * fg.val.2 1 = fg.val.2 x by
+        rw [← fg.prop.2.1]; rw [smul_eq_mul]; rw [mul_one] }
 
 中文:
 定义 lift
@@ -429,7 +444,22 @@ definition lift
     toFun := fun fe => ⟨
       (fe.val.1, MulOpposite.op fe.val.2 • fe.val.1.toLinearMap),
       fun x y => show (fe.val.1 x * fe.val.2) * (fe.val.1 y * fe.val.2) = 0 by
-        rw [(fe.prop.2 _).mul_mul_mul_comm]; rw [fe.prop.1]; rw [mul_
+        rw [(fe.prop.2 _).mul_mul_mul_comm]; rw [fe.prop.1]; rw [mul_zero],
+      fun r x => show fe.val.1 (r * x) * fe.val.2 = fe.val.1 r * (fe.val.1 x * fe.val.2) by
+        rw [map_mul]; rw [mul_assoc],
+      fun r x => show fe.val.1 (x * r) * fe.val.2 = (fe.val.1 x * fe.val.2) * fe.val.1 r by
+        rw [map_mul]; rw [(fe.prop.2 _).right_comm]⟩
+    invFun := fun fg => ⟨
+      (fg.val.1, fg.val.2 1),
+      fg.prop.1 _ _,
+      fun a => show fg.val.2 1 * fg.val.1 a = fg.val.1 a * fg.val.2 1 by
+        rw [← fg.prop.2.1]; rw [← fg.prop.2.2]; rw [smul_eq_mul]; rw [op_smul_eq_mul]; rw [mul_one]; rw [one_mul]⟩
+left_inv := fun fe => Subtype.ext Prod.ext rfl
+      show fe.val.1 1 * fe.val.2 = fe.val.2 by
+        rw [map_one]; rw [one_mul]
+right_inv := fun fg => Subtype.ext Prod.ext rfl LinearMap.ext fun x =>
+      show fg.val.1 x * fg.val.2 1 = fg.val.2 x by
+        rw [← fg.prop.2.1]; rw [smul_eq_mul]; rw [mul_one] }
 
 Depends on / 依赖: Equiv.trans, MulOpposite, MulOpposite.op, TrivSqZeroExt, TrivSqZeroExt.liftEquiv, fe.prop, fe.val, liftEquiv, map_mul, mul_assoc, mul_mul_mul_comm, mul_zero, toLinearMap
 -/
@@ -616,7 +646,9 @@ theorem range_inlAlgHom_sup_adjoin_eps
   refine add_mem ?_ (mul_mem ?_ ?_)
 · exact le_sup_left (α := Subalgebra R _) Set.mem_range_self x.fst
 · exact le_sup_left (α := Subalgebra R _) Set.mem_range_self x.snd
-· 
+· refine le_sup_right (α := Subalgebra R _) subset_adjoin Set.mem_singleton ε
+
+@[simp]
 
 中文:
 定理 range_inlAlgHom_sup_adjoin_eps
@@ -626,7 +658,9 @@ theorem range_inlAlgHom_sup_adjoin_eps
   refine add_mem ?_ (mul_mem ?_ ?_)
 · exact le_sup_left (α := Subalgebra R _) Set.mem_range_self x.fst
 · exact le_sup_left (α := Subalgebra R _) Set.mem_range_self x.snd
-· 
+· refine le_sup_right (α := Subalgebra R _) subset_adjoin Set.mem_singleton ε
+
+@[simp]
 
 Depends on / 依赖: Set.mem_range_self, Set.mem_singleton, Subalgebra, add_mem, inl_fst_add_inr_snd_eq, inl_mul_eq_smul, inr_eq_smul_eps, le_sup_left, le_sup_right, mem_range_self, mem_singleton, mul_mem, subset_adjoin, top_unique, x.fst, x.inl_fst_add_inr_snd_eq, x.snd
 -/

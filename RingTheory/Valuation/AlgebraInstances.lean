@@ -138,7 +138,9 @@ instance algebra
 Subtype.ext by simp only [Subalgebra.coe_zero, map_zero]
 map_one' := Subtype.ext by simp only [Subalgebra.coe_one, map_one]
       map_add' := fun x y =>
-Subtype.ext by simp only [map_add, Subal
+Subtype.ext by simp only [map_add, Subalgebra.coe_add]
+      map_mul' := fun x y =>
+Subtype.ext by simp only [Subalgebra.coe_mul, map_mul] }
 
 中文:
 实例 algebra
@@ -149,7 +151,9 @@ Subtype.ext by simp only [map_add, Subal
 Subtype.ext by simp only [Subalgebra.coe_zero, map_zero]
 map_one' := Subtype.ext by simp only [Subalgebra.coe_one, map_one]
       map_add' := fun x y =>
-Subtype.ext by simp only [map_add, Subal
+Subtype.ext by simp only [map_add, Subalgebra.coe_add]
+      map_mul' := fun x y =>
+Subtype.ext by simp only [Subalgebra.coe_mul, map_mul] }
 
 Depends on / 依赖: IsIntegral, IsIntegral.algebraMap, RingHom, RingHom.toAlgebra, Subalgebra, Subalgebra.coe_add, Subalgebra.coe_mul, Subalgebra.coe_one, Subalgebra.coe_zero, Subtype, Subtype.ext, algebraMap, coe_add, coe_mul, coe_one, coe_zero, map_add, map_mul, map_one, map_zero
 -/

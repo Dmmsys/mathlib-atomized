@@ -82,7 +82,8 @@ theorem exists_maximal_of_chains_bounded
     have : IsChain r (insert a <| maxChain r) :=
 maxChain_spec.1.insert fun b hb _ => Or.inr trans (hub b hb) ha
 hub a by
-      rw [maxChain_spec.r
+      rw [maxChain_spec.right this (subset_insert _ _)]
+      exact mem_insert _ _⟩
 
 中文:
 定理 存在_maximal_of_chains_bounded
@@ -93,7 +94,8 @@ hub a by
     have : IsChain r (insert a <| maxChain r) :=
 maxChain_spec.1.insert fun b hb _ => Or.inr trans (hub b hb) ha
 hub a by
-      rw [maxChain_spec.r
+      rw [maxChain_spec.right this (subset_insert _ _)]
+      exact mem_insert _ _⟩
 
 Depends on / 依赖: IsChain, Or.inr, insert, maxChain, maxChain_spec, maxChain_spec.left, maxChain_spec.right, mem_insert, subset_insert
 -/
@@ -196,7 +198,8 @@ theorem zorn_le₀
           (by
             rintro _ ⟨p, hpc, rfl⟩ _ ⟨q, hqc, rfl⟩ hpq
             exact hc hpc hqc fun t => hpq (Subtype.ext_iff.1 t))
-      ⟨⟨ub, hubs⟩, fun 
+      ⟨⟨ub, hubs⟩, fun ⟨_, _⟩ hc => hub _ ⟨_, hc, rfl⟩⟩
+  ⟨m, hms, fun z hzs hmz => @h ⟨z, hzs⟩ hmz⟩
 
 中文:
 定理 zorn_le₀
@@ -208,7 +211,8 @@ theorem zorn_le₀
           (by
             rintro _ ⟨p, hpc, rfl⟩ _ ⟨q, hqc, rfl⟩ hpq
             exact hc hpc hqc fun t => hpq (Subtype.ext_iff.1 t))
-      ⟨⟨ub, hubs⟩, fun 
+      ⟨⟨ub, hubs⟩, fun ⟨_, _⟩ hc => hub _ ⟨_, hc, rfl⟩⟩
+  ⟨m, hms, fun z hzs hmz => @h ⟨z, hzs⟩ hmz⟩
 
 Depends on / 依赖: Subtype, Subtype.ext_iff, Subtype.val, ext_iff, zorn_le
 -/
@@ -236,7 +240,8 @@ theorem zorn_le_nonempty₀
     exact ⟨m, hxm, hms, fun z hzs hmz => @hm _ ⟨hzs, hxm.trans hmz⟩ hmz⟩
   · rcases c.eq_empty_or_nonempty with (rfl | ⟨y, hy⟩)
     · exact ⟨x, ⟨hxs, le_rfl⟩, fun z => False.elim⟩
-    · rcases ih c
+    · rcases ih c (fun z hz => (hcs hz).1) hc y hy with ⟨z, hzs, hz⟩
+exact ⟨z, ⟨hzs, (hcs hy).2.trans hz _ hy⟩, hz⟩
 
 中文:
 定理 zorn_le_nonempty₀
@@ -247,7 +252,8 @@ theorem zorn_le_nonempty₀
     exact ⟨m, hxm, hms, fun z hzs hmz => @hm _ ⟨hzs, hxm.trans hmz⟩ hmz⟩
   · rcases c.eq_empty_or_nonempty with (rfl | ⟨y, hy⟩)
     · exact ⟨x, ⟨hxs, le_rfl⟩, fun z => False.elim⟩
-    · rcases ih c
+    · rcases ih c (fun z hz => (hcs hz).1) hc y hy with ⟨z, hzs, hz⟩
+exact ⟨z, ⟨hzs, (hcs hy).2.trans hz _ hy⟩, hz⟩
 
 Depends on / 依赖: False.elim, c.eq_empty_or_nonempty, eq_empty_or_nonempty, hxm.trans, le_rfl
 -/
@@ -382,7 +388,14 @@ theorem IsChain.exists_maxChain
     exact ⟨M, ⟨hM.prop.2, fun d hd hMd => hM.eq_of_subset ⟨hcM.trans hMd, hd⟩ hMd⟩, hcM⟩
   rintro cs hcs₀ hcs₁ ⟨s, hs⟩
   refine
-    ⟨⋃₀cs, ⟨fun _ ha => Set.mem_sUnion_of_mem ((hc
+    ⟨⋃₀cs, ⟨fun _ ha => Set.mem_sUnion_of_mem ((hcs₀ hs).left ha) hs, ?_⟩, fun _ =>
+      Set.subset_sUnion_of_mem⟩
+  rintro y ⟨sy, hsy, hysy⟩ z ⟨sz, hsz, hzsz⟩ hyz
+  obtain rfl | hsseq := eq_or_ne sy sz
+  · exact (hcs₀ hsy).right hysy hzsz hyz
+  rcases hcs₁ hsy hsz hsseq with h | h
+  · exact (hcs₀ hsz).right (h hysy) hzsz hyz
+  · exact (hcs₀ hsy).right hysy (h hzsz) hyz
 
 中文:
 定理 IsChain.存在_maxChain
@@ -394,7 +407,14 @@ theorem IsChain.exists_maxChain
     exact ⟨M, ⟨hM.prop.2, fun d hd hMd => hM.eq_of_subset ⟨hcM.trans hMd, hd⟩ hMd⟩, hcM⟩
   rintro cs hcs₀ hcs₁ ⟨s, hs⟩
   refine
-    ⟨⋃₀cs, ⟨fun _ ha => Set.mem_sUnion_of_mem ((hc
+    ⟨⋃₀cs, ⟨fun _ ha => Set.mem_sUnion_of_mem ((hcs₀ hs).left ha) hs, ?_⟩, fun _ =>
+      Set.subset_sUnion_of_mem⟩
+  rintro y ⟨sy, hsy, hysy⟩ z ⟨sz, hsz, hzsz⟩ hyz
+  obtain rfl | hsseq := eq_or_ne sy sz
+  · exact (hcs₀ hsy).right hysy hzsz hyz
+  rcases hcs₁ hsy hsz hsseq with h | h
+  · exact (hcs₀ hsz).right (h hysy) hzsz hyz
+  · exact (hcs₀ hsy).right hysy (h hzsz) hyz
 
 Depends on / 依赖: IsChain, Set.mem_sUnion_of_mem, Set.subset_sUnion_of_mem, Subset, Subset.rfl, eq_of_subset, eq_or_ne, hM.eq_of_subset, hM.prop, hcM.trans, mem_sUnion_of_mem, subset_sUnion_of_mem, subseteq, zorn_subset_nonempty
 -/

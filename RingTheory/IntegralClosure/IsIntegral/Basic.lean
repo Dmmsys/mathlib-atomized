@@ -237,7 +237,13 @@ theorem Submodule.span_range_natDegree_eq_adjoin
   refine (span_le.mpr fun s hs => ?_).antisymm fun r hr => ?_
   · rcases Finset.mem_image.1 (SetLike.mem_coe.mp hs) with ⟨k, -, rfl⟩
     exact (Algebra.adjoin R {x}).pow_mem (Algebra.subset_adjoin rfl) k
-  rw [Su
+  rw [Subalgebra.mem_toSubmodule]; rw [Algebra.adjoin_singleton_eq_range_aeval] at hr
+  rcases (aeval x).mem_range.mp hr with ⟨p, rfl⟩
+  rw [← modByMonic_add_div p f]; rw [map_add]; rw [map_mul]; rw [hfx]; rw [zero_mul]; rw [add_zero]; rw [← sum_C_mul_X_pow_eq (p %ₘ f)]; rw [aeval_def]; rw [eval₂_sum]; rw [sum_def]
+  refine sum_mem fun k hkq => ?_
+  rw [C_mul_X_pow_eq_monomial]; rw [eval₂_monomial]; rw [← Algebra.smul_def]
+  exact smul_mem _ _ (subset_span <| Finset.mem_image_of_mem _ <| Finset.mem_range.mpr <|
+(le_natDegree_of_mem_supp _ hkq).trans_lt natDegree_modByMonic_lt p hf hf1)
 
 中文:
 定理 子模.span_range_natDegree_eq_adjoin
@@ -248,7 +254,13 @@ theorem Submodule.span_range_natDegree_eq_adjoin
   refine (span_le.mpr fun s hs => ?_).antisymm fun r hr => ?_
   · rcases Finset.mem_image.1 (SetLike.mem_coe.mp hs) with ⟨k, -, rfl⟩
     exact (Algebra.adjoin R {x}).pow_mem (Algebra.subset_adjoin rfl) k
-  rw [Su
+  rw [Subalgebra.mem_toSubmodule]; rw [Algebra.adjoin_singleton_eq_range_aeval] at hr
+  rcases (aeval x).mem_range.mp hr with ⟨p, rfl⟩
+  rw [← modByMonic_add_div p f]; rw [map_add]; rw [map_mul]; rw [hfx]; rw [zero_mul]; rw [add_zero]; rw [← sum_C_mul_X_pow_eq (p %ₘ f)]; rw [aeval_def]; rw [eval₂_sum]; rw [sum_def]
+  refine sum_mem fun k hkq => ?_
+  rw [C_mul_X_pow_eq_monomial]; rw [eval₂_monomial]; rw [← Algebra.smul_def]
+  exact smul_mem _ _ (subset_span <| Finset.mem_image_of_mem _ <| Finset.mem_range.mpr <|
+(le_natDegree_of_mem_supp _ hkq).trans_lt natDegree_modByMonic_lt p hf hf1)
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_singleton_eq_range_aeval, Algebra.subset_adjoin, Finset, Finset.mem_image, SetLike, SetLike.mem_coe.mp, Subalgebra, Subalgebra.mem_toSubmodule, adjoin, adjoin_singleton_eq_range_aeval, antisymm, map_add, map_mul, mem_coe, mem_image, mem_range, mem_range.mp, mem_toSubmodule
 -/
@@ -516,7 +528,13 @@ theorem RingEquiv.isIntegral_iff
     let : IsScalarTower R T S :=
       ⟨fun r t s => by simp only [Algebra.smul_def, map_mul, ← h, mul_assoc]; rfl⟩
     exact IsIntegral.tower_top ha
-  · have h' : (algebraMap T S) = (algebraMap R S).comp φ.symm.toRingHom :
+  · have h' : (algebraMap T S) = (algebraMap R S).comp φ.symm.toRingHom := by
+      have : RingHomInvPair (φ : R ->+* T) φ.symm := RingHomInvPair.of_ringEquiv _
+      simp only [← h, RingHom.comp_assoc, RingEquiv.toRingHom_eq_coe, RingHomCompTriple.comp_eq]
+    let : Algebra T R := φ.symm.toRingHom.toAlgebra
+    let : IsScalarTower T R S :=
+      ⟨fun r t s => by simp only [Algebra.smul_def, map_mul, h', mul_assoc]; rfl⟩
+    exact IsIntegral.tower_top ha
 
 中文:
 定理 环等价.is整数egral_iff
@@ -527,7 +545,13 @@ theorem RingEquiv.isIntegral_iff
     let : IsScalarTower R T S :=
       ⟨fun r t s => by simp only [Algebra.smul_def, map_mul, ← h, mul_assoc]; rfl⟩
     exact IsIntegral.tower_top ha
-  · have h' : (algebraMap T S) = (algebraMap R S).comp φ.symm.toRingHom :
+  · have h' : (algebraMap T S) = (algebraMap R S).comp φ.symm.toRingHom := by
+      have : RingHomInvPair (φ : R ->+* T) φ.symm := RingHomInvPair.of_ringEquiv _
+      simp only [← h, RingHom.comp_assoc, RingEquiv.toRingHom_eq_coe, RingHomCompTriple.comp_eq]
+    let : Algebra T R := φ.symm.toRingHom.toAlgebra
+    let : IsScalarTower T R S :=
+      ⟨fun r t s => by simp only [Algebra.smul_def, map_mul, h', mul_assoc]; rfl⟩
+    exact IsIntegral.tower_top ha
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsIntegral, IsIntegral.tower_top, IsScalarTower, RingEquiv, RingEquiv.toRingHom_eq_coe, RingHom, RingHom.comp_assoc, RingHomCompTriple, RingHomCompTriple.comp_eq, RingHomInvPair, RingHomInvPair.of_ringEquiv, algebraMap, comp_assoc, comp_eq, map_mul, mul_assoc, of_ringEquiv, smul_def
 -/
@@ -645,7 +669,9 @@ theorem isIntegral_iff_isIntegral_closure_finite
     refine ⟨_, Finset.finite_toSet _, p.restriction, monic_restriction.2 hmp, ?_⟩
     rw [← aeval_def]; rw [← aeval_map_algebraMap R r p.restriction]; rw [map_restriction]; rw [aeval_def]; rw [hpr]
   rcases hr with ⟨s, _, hsr⟩
-  exact hs
+  exact hsr.of_subring _
+
+@[stacks 09GH]
 
 中文:
 定理 is整数egral_iff_is整数egral_closure_finite
@@ -656,7 +682,9 @@ theorem isIntegral_iff_isIntegral_closure_finite
     refine ⟨_, Finset.finite_toSet _, p.restriction, monic_restriction.2 hmp, ?_⟩
     rw [← aeval_def]; rw [← aeval_map_algebraMap R r p.restriction]; rw [map_restriction]; rw [aeval_def]; rw [hpr]
   rcases hr with ⟨s, _, hsr⟩
-  exact hs
+  exact hsr.of_subring _
+
+@[stacks 09GH]
 
 Depends on / 依赖: Finset, Finset.finite_toSet, aeval_def, aeval_map_algebraMap, finite_toSet, hsr.of_subring, map_restriction, monic_restriction, of_subring, p.restriction, restriction
 -/
@@ -682,7 +710,10 @@ theorem fg_adjoin_of_finite
     refine ⟨{1}, Submodule.ext fun x => ?_⟩
     rw [Algebra.adjoin_empty]; rw [Finset.coe_singleton]; rw [← one_eq_span]; rw [Algebra.toSubmodule_bot]
   | @insert a s _ _ ih =>
-    rw [← Set.union_singleton]; rw [Algebra.adjoin_un
+    rw [← Set.union_singleton]; rw [Algebra.adjoin_union_coe_submodule]
+    exact FG.mul
+      (ih fun i hi => his i <| Set.mem_insert_of_mem a hi)
+      (his a <| Set.mem_insert a s).fg_adjoin_singleton
 
 中文:
 定理 fg_adjoin_of_finite
@@ -693,7 +724,10 @@ theorem fg_adjoin_of_finite
     refine ⟨{1}, Submodule.ext fun x => ?_⟩
     rw [Algebra.adjoin_empty]; rw [Finset.coe_singleton]; rw [← one_eq_span]; rw [Algebra.toSubmodule_bot]
   | @insert a s _ _ ih =>
-    rw [← Set.union_singleton]; rw [Algebra.adjoin_un
+    rw [← Set.union_singleton]; rw [Algebra.adjoin_union_coe_submodule]
+    exact FG.mul
+      (ih fun i hi => his i <| Set.mem_insert_of_mem a hi)
+      (his a <| Set.mem_insert a s).fg_adjoin_singleton
 
 Depends on / 依赖: Algebra, Algebra.adjoin_empty, Algebra.adjoin_union_coe_submodule, Algebra.toSubmodule_bot, FG.mul, Finite, Finset, Finset.coe_singleton, Set.Finite.induction_on, Set.mem_insert, Set.mem_insert_of_mem, Set.union_singleton, Submodule, Submodule.ext, adjoin_empty, adjoin_union_coe_submodule, coe_singleton, fg_adjoin_singleton, induction_on, insert
 -/

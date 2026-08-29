@@ -316,7 +316,13 @@ theorem ClassGroup.mk_eq_mk_of_coe_ideal
     rw [Units.val_mul]; rw [hI]; rw [coe_toPrincipalIdeal]; rw [mul_comm]; rw [spanSingleton_mul_coeIdeal_eq_coeIdeal] at hJ
     exact ⟨_, _, sec_fst_ne_zero x.ne_zero,
       sec_snd_ne_zero (R := R) le_rfl (x : FractionRing R), hJ⟩
-  ·
+  · rintro ⟨x, y, hx, hy, h⟩
+    have : IsUnit (mk' (FractionRing R) x ⟨y, mem_nonZeroDivisors_of_ne_zero hy⟩) := by
+      simpa only [isUnit_iff_ne_zero, ne_eq, mk'_eq_zero_iff_eq_zero] using hx
+    refine ⟨this.unit, ?_⟩
+    rw [mul_comm]; rw [← Units.val_inj]; rw [Units.val_mul]; rw [coe_toPrincipalIdeal]
+    convert!
+      (mk'_mul_coeIdeal_eq_coeIdeal (FractionRing R) <| mem_nonZeroDivisors_of_ne_zero hy).2 h
 
 中文:
 定理 ClassGroup.mk_eq_mk_of_coe_ideal
@@ -328,7 +334,13 @@ theorem ClassGroup.mk_eq_mk_of_coe_ideal
     rw [Units.val_mul]; rw [hI]; rw [coe_toPrincipalIdeal]; rw [mul_comm]; rw [spanSingleton_mul_coeIdeal_eq_coeIdeal] at hJ
     exact ⟨_, _, sec_fst_ne_zero x.ne_zero,
       sec_snd_ne_zero (R := R) le_rfl (x : FractionRing R), hJ⟩
-  ·
+  · rintro ⟨x, y, hx, hy, h⟩
+    have : IsUnit (mk' (FractionRing R) x ⟨y, mem_nonZeroDivisors_of_ne_zero hy⟩) := by
+      simpa only [isUnit_iff_ne_zero, ne_eq, mk'_eq_zero_iff_eq_zero] using hx
+    refine ⟨this.unit, ?_⟩
+    rw [mul_comm]; rw [← Units.val_inj]; rw [Units.val_mul]; rw [coe_toPrincipalIdeal]
+    convert!
+      (mk'_mul_coeIdeal_eq_coeIdeal (FractionRing R) <| mem_nonZeroDivisors_of_ne_zero hy).2 h
 
 Depends on / 依赖: ClassGroup, ClassGroup.mk_eq_mk, FractionRing, IsUnit, Units.val_mul, _eq_zero_iff_eq_zero, coe_toPrincipalIdeal, isUnit_iff_ne_zero, le_rfl, mem_nonZeroDivisors_of_ne_zero, mk_eq_mk, mul_comm, ne_eq, ne_zero, sec_fst_ne_zero, sec_snd_ne_zero, spanSingleton_mul_coeIdeal_eq_coeIdeal, this.unit, val_mul, x.ne_zero
 -/
@@ -364,7 +376,11 @@ theorem ClassGroup.mk_eq_one_of_coe_ideal
   · rintro ⟨x, y, hx, hy, h⟩
     rw [Ideal.mul_top] at h
     rcases Ideal.mem_span_singleton_mul.mp ((Ideal.span_singleton_le_iff_mem _).mp h.ge) with
-      ⟨i, 
+      ⟨i, _hi, rfl⟩
+    rw [← Ideal.span_singleton_mul_span_singleton]; rw [Ideal.span_singleton_mul_right_inj hx] at h
+    exact ⟨i, by grobner, h⟩
+  · rintro ⟨x, hx, rfl⟩
+    exact ⟨1, x, one_ne_zero, hx, by rw [Ideal.span_singleton_one, Ideal.top_mul, Ideal.mul_top]⟩
 
 中文:
 定理 ClassGroup.mk_eq_one_of_coe_ideal
@@ -376,7 +392,11 @@ theorem ClassGroup.mk_eq_one_of_coe_ideal
   · rintro ⟨x, y, hx, hy, h⟩
     rw [Ideal.mul_top] at h
     rcases Ideal.mem_span_singleton_mul.mp ((Ideal.span_singleton_le_iff_mem _).mp h.ge) with
-      ⟨i, 
+      ⟨i, _hi, rfl⟩
+    rw [← Ideal.span_singleton_mul_span_singleton]; rw [Ideal.span_singleton_mul_right_inj hx] at h
+    exact ⟨i, by grobner, h⟩
+  · rintro ⟨x, hx, rfl⟩
+    exact ⟨1, x, one_ne_zero, hx, by rw [Ideal.span_singleton_one, Ideal.top_mul, Ideal.mul_top]⟩
 
 Depends on / 依赖: ClassGroup, ClassGroup.mk, ClassGroup.mk_eq_mk_of_coe_ideal, FractionRing, Ideal.mem_span_singleton_mul.mp, Ideal.mul_top, Ideal.span_singleton_le_iff_mem, Ideal.span_singleton_mul_right_inj, Ideal.span_singleton_mul_span_singleton, Ideal.span_singleton_one, any_goals, grobner, h.ge, map_one, mem_span_singleton_mul, mk_eq_mk_of_coe_ideal, mul_top, one_ne_zero, span_singleton_le_iff_mem, span_singleton_mul_right_inj
 -/
@@ -411,7 +431,8 @@ theorem ClassGroup.induction
     have : I = (Units.mapEquiv (canonicalEquiv R⁰ K (FractionRing R)).toMulEquiv)
       (Units.mapEquiv (canonicalEquiv R⁰ (FractionRing R) K).toMulEquiv I) := by
       simp [← Units.val_inj]
-    rw [congr_arg (QuotientGroup.mk (s := (toPrincipalIdeal R (Frac
+    rw [congr_arg (QuotientGroup.mk (s := (toPrincipalIdeal R (FractionRing R)).range)) this]
+    exact h _
 
 中文:
 定理 ClassGroup.induction
@@ -420,7 +441,8 @@ theorem ClassGroup.induction
     have : I = (Units.mapEquiv (canonicalEquiv R⁰ K (FractionRing R)).toMulEquiv)
       (Units.mapEquiv (canonicalEquiv R⁰ (FractionRing R) K).toMulEquiv I) := by
       simp [← Units.val_inj]
-    rw [congr_arg (QuotientGroup.mk (s := (toPrincipalIdeal R (Frac
+    rw [congr_arg (QuotientGroup.mk (s := (toPrincipalIdeal R (FractionRing R)).range)) this]
+    exact h _
 
 Depends on / 依赖: FractionRing, QuotientGroup, QuotientGroup.induction_on, QuotientGroup.mk, Units.mapEquiv, Units.val_inj, canonicalEquiv, congr_arg, induction_on, mapEquiv, toMulEquiv, toPrincipalIdeal, val_inj
 -/
@@ -446,7 +468,22 @@ definition ClassGroup.equiv
     ext I
     simp only [Subgroup.mem_map, mem_principal_ideals_iff]
     constructor
-    · rintro ⟨I, ⟨x, 
+    · rintro ⟨I, ⟨x, hx⟩, rfl⟩
+      refine ⟨FractionRing.algEquiv R K x, ?_⟩
+      simp only [RingEquiv.toMulEquiv_eq_coe, MulEquiv.coe_toMonoidHom, coe_mapEquiv, ← hx,
+        RingEquiv.coe_toMulEquiv, canonicalEquiv_spanSingleton]
+      rfl
+    · rintro ⟨x, hx⟩
+      refine ⟨Units.mapEquiv (canonicalEquiv R⁰ K (FractionRing R)).toMulEquiv I,
+        ⟨(FractionRing.algEquiv R K).symm x, ?_⟩, Units.ext ?_⟩
+      · simp only [RingEquiv.toMulEquiv_eq_coe, coe_mapEquiv, ← hx, RingEquiv.coe_toMulEquiv,
+          canonicalEquiv_spanSingleton]
+        rfl
+      · simp only [RingEquiv.toMulEquiv_eq_coe, MulEquiv.coe_toMonoidHom, coe_mapEquiv,
+          RingEquiv.coe_toMulEquiv, canonicalEquiv_canonicalEquiv, canonicalEquiv_self,
+          RingEquiv.refl_apply]
+  exact QuotientGroup.congr (toPrincipalIdeal R (FractionRing R)).range (toPrincipalIdeal R K).range
+    (Units.mapEquiv (FractionalIdeal.canonicalEquiv R⁰ (FractionRing R) K).toMulEquiv) this
 
 中文:
 定义 ClassGroup.equiv
@@ -458,7 +495,22 @@ definition ClassGroup.equiv
     ext I
     simp only [Subgroup.mem_map, mem_principal_ideals_iff]
     constructor
-    · rintro ⟨I, ⟨x, 
+    · rintro ⟨I, ⟨x, hx⟩, rfl⟩
+      refine ⟨FractionRing.algEquiv R K x, ?_⟩
+      simp only [RingEquiv.toMulEquiv_eq_coe, MulEquiv.coe_toMonoidHom, coe_mapEquiv, ← hx,
+        RingEquiv.coe_toMulEquiv, canonicalEquiv_spanSingleton]
+      rfl
+    · rintro ⟨x, hx⟩
+      refine ⟨Units.mapEquiv (canonicalEquiv R⁰ K (FractionRing R)).toMulEquiv I,
+        ⟨(FractionRing.algEquiv R K).symm x, ?_⟩, Units.ext ?_⟩
+      · simp only [RingEquiv.toMulEquiv_eq_coe, coe_mapEquiv, ← hx, RingEquiv.coe_toMulEquiv,
+          canonicalEquiv_spanSingleton]
+        rfl
+      · simp only [RingEquiv.toMulEquiv_eq_coe, MulEquiv.coe_toMonoidHom, coe_mapEquiv,
+          RingEquiv.coe_toMulEquiv, canonicalEquiv_canonicalEquiv, canonicalEquiv_self,
+          RingEquiv.refl_apply]
+  exact QuotientGroup.congr (toPrincipalIdeal R (FractionRing R)).range (toPrincipalIdeal R K).range
+    (Units.mapEquiv (FractionalIdeal.canonicalEquiv R⁰ (FractionRing R) K).toMulEquiv) this
 
 Depends on / 依赖: FractionRing, FractionRing.algEquiv, MulEquiv, MulEquiv.coe_toMonoidHom, RingEquiv, RingEquiv.coe_toMulEquiv, RingEquiv.toMulEquiv_eq_coe, Subgroup, Subgroup.map, Subgroup.mem_map, Units.mapEquiv, algEquiv, canonicalEquiv, canonicalEquiv_spanSingleton, coe_mapEquiv, coe_toMonoidHom, coe_toMulEquiv, mapEquiv, mem_map, mem_principal_ideals_iff
 -/
@@ -501,7 +553,9 @@ theorem ClassGroup.equiv_mk
   simp only [ClassGroup, QuotientGroup.congr_mk']
   congr
   rw [← Units.val_inj]; rw [Units.coe_mapEquiv]; rw [Units.coe_mapEquiv]; rw [Units.coe_map]
-  exact Fractional
+  exact FractionalIdeal.canonicalEquiv_canonicalEquiv _ _ _ _ _
+
+@[simp]
 
 中文:
 定理 ClassGroup.equiv_mk
@@ -512,7 +566,9 @@ theorem ClassGroup.equiv_mk
   simp only [ClassGroup, QuotientGroup.congr_mk']
   congr
   rw [← Units.val_inj]; rw [Units.coe_mapEquiv]; rw [Units.coe_mapEquiv]; rw [Units.coe_map]
-  exact Fractional
+  exact FractionalIdeal.canonicalEquiv_canonicalEquiv _ _ _ _ _
+
+@[simp]
 -/
 theorem ClassGroup.equiv_mk (K' : Type*) [Field K'] [Algebra R K'] [IsFractionRing R K']
     (I : (FractionalIdeal R⁰ K)ˣ) :
@@ -756,7 +812,11 @@ theorem ClassGroup.mk0_eq_mk0_iff_exists_fraction_ring
   constructor
   · rintro ⟨X, ⟨x, hX⟩, hx⟩
     refine ⟨x, ?_, ?_⟩
-    · rintro
+    · rintro rfl; simp [X.ne_zero.symm] at hX
+    simpa only [hX, mul_comm] using! hx
+  · rintro ⟨x, hx, eq_J⟩
+    refine ⟨Units.mk0 _ (spanSingleton_ne_zero_iff.mpr hx), ⟨x, rfl⟩, ?_⟩
+    simpa only [mul_comm] using! eq_J
 
 中文:
 定理 ClassGroup.mk0_eq_mk0_iff_存在_fraction_ring
@@ -768,7 +828,11 @@ theorem ClassGroup.mk0_eq_mk0_iff_exists_fraction_ring
   constructor
   · rintro ⟨X, ⟨x, hX⟩, hx⟩
     refine ⟨x, ?_, ?_⟩
-    · rintro
+    · rintro rfl; simp [X.ne_zero.symm] at hX
+    simpa only [hX, mul_comm] using! hx
+  · rintro ⟨x, hx, eq_J⟩
+    refine ⟨Units.mk0 _ (spanSingleton_ne_zero_iff.mpr hx), ⟨x, rfl⟩, ?_⟩
+    simpa only [mul_comm] using! eq_J
 
 Depends on / 依赖: ClassGroup, ClassGroup.equiv, ClassGroup.equiv_mk0, FractionalIdeal, FractionalIdeal.coe_mk0, QuotientGroup, QuotientGroup.mk, Units.ext_iff, Units.mk0, Units.val_mul, X.ne_zero.symm, _eq_mk, coe_mk0, eq_J, eq_iff, equiv_mk0, exists_prop, ext_iff, injective, injective.eq_iff.symm.trans
 -/
@@ -801,7 +865,15 @@ theorem ClassGroup.mk0_eq_mk0_iff
     obtain ⟨x, ⟨y, hy⟩, rfl⟩ := IsLocalization.exists_mk'_eq R⁰ z
     refine ⟨x, y, ?_, mem_nonZeroDivisors_iff_ne_zero.mp hy, ?_⟩
     · rintro hx; apply hz
-      rw [hx]; rw [IsFractio
+      rw [hx]; rw [IsFractionRing.mk'_eq_div]; rw [map_zero]; rw [zero_div]
+    · exact (FractionalIdeal.mk'_mul_coeIdeal_eq_coeIdeal _ hy).mp h
+  · rintro ⟨x, y, hx, hy, h⟩
+    have hy' : y in R⁰ := mem_nonZeroDivisors_iff_ne_zero.mpr hy
+    refine ⟨IsLocalization.mk' _ x ⟨y, hy'⟩, ?_, ?_⟩
+    · contrapose hx
+      rwa [mk'_eq_iff_eq_mul, zero_mul, ← (algebraMap R (FractionRing R)).map_zero,
+        (IsFractionRing.injective R (FractionRing R)).eq_iff] at hx
+    · exact (FractionalIdeal.mk'_mul_coeIdeal_eq_coeIdeal _ hy').mpr h
 
 中文:
 定理 ClassGroup.mk0_eq_mk0_iff
@@ -812,7 +884,15 @@ theorem ClassGroup.mk0_eq_mk0_iff
     obtain ⟨x, ⟨y, hy⟩, rfl⟩ := IsLocalization.exists_mk'_eq R⁰ z
     refine ⟨x, y, ?_, mem_nonZeroDivisors_iff_ne_zero.mp hy, ?_⟩
     · rintro hx; apply hz
-      rw [hx]; rw [IsFractio
+      rw [hx]; rw [IsFractionRing.mk'_eq_div]; rw [map_zero]; rw [zero_div]
+    · exact (FractionalIdeal.mk'_mul_coeIdeal_eq_coeIdeal _ hy).mp h
+  · rintro ⟨x, y, hx, hy, h⟩
+    have hy' : y in R⁰ := mem_nonZeroDivisors_iff_ne_zero.mpr hy
+    refine ⟨IsLocalization.mk' _ x ⟨y, hy'⟩, ?_, ?_⟩
+    · contrapose hx
+      rwa [mk'_eq_iff_eq_mul, zero_mul, ← (algebraMap R (FractionRing R)).map_zero,
+        (IsFractionRing.injective R (FractionRing R)).eq_iff] at hx
+    · exact (FractionalIdeal.mk'_mul_coeIdeal_eq_coeIdeal _ hy').mpr h
 
 Depends on / 依赖: ClassGroup, ClassGroup.mk0_eq_mk0_iff_exists_fraction_ring, FractionRing, FractionalIdeal, FractionalIdeal.mk, IsFractionRing, IsFractionRing.mk, IsLocalizatio, IsLocalization, IsLocalization.exists_mk, _eq_div, _mul_coeIdeal_eq_coeIdeal, exists_mk, map_zero, mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero.mp, mem_nonZeroDivisors_iff_ne_zero.mpr, mk0_eq_mk0_iff_exists_fraction_ring, zero_div
 -/
@@ -846,7 +926,9 @@ theorem FractionalIdeal.isUnit_num
     IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors I.den.prop
   let u : (FractionRing R)ˣ := Units.mk0 (algebraMap R (FractionRing R) I.den) hden0
   have hdenUnit : IsUnit (spanSingleton R⁰ (algebraMap R (FractionRing R) I.den)) :=
-
+    ⟨toPrincipalIdeal R (FractionRing R) u, by simp [u]⟩
+  obtain ⟨c, hc⟩ := hdenUnit
+  rw [← den_mul_self_eq_num']; rw [← hc]; rw [Units.isUnit_units_mul]
 
 中文:
 定理 FractionalIdeal.isUnit_num
@@ -856,7 +938,9 @@ theorem FractionalIdeal.isUnit_num
     IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors I.den.prop
   let u : (FractionRing R)ˣ := Units.mk0 (algebraMap R (FractionRing R) I.den) hden0
   have hdenUnit : IsUnit (spanSingleton R⁰ (algebraMap R (FractionRing R) I.den)) :=
-
+    ⟨toPrincipalIdeal R (FractionRing R) u, by simp [u]⟩
+  obtain ⟨c, hc⟩ := hdenUnit
+  rw [← den_mul_self_eq_num']; rw [← hc]; rw [Units.isUnit_units_mul]
 
 Depends on / 依赖: FractionRing, I.den, I.den.prop, IsFractionRing, IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors, IsUnit, Units.isUnit_units_mul, Units.mk0, algebraMap, den_mul_self_eq_num, hdenUnit, isUnit_units_mul, spanSingleton, toPrincipalIdeal, to_map_ne_zero_of_mem_nonZeroDivisors
 -/
@@ -918,7 +1002,10 @@ theorem ClassGroup.mk0_integralRep
   rw [← ClassGroup.mk_mk0 (FractionRing R)]; rw [eq_comm]; rw [ClassGroup.mk_eq_mk]
   have fd_ne_zero : (algebraMap R (FractionRing R)) I.1.den != 0 := by
     exact IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors (SetLike.coe_mem _)
-  refine ⟨Units.mk0 (algebraMap R _ I.1.den) fd_ne_zero, ?_
+  refine ⟨Units.mk0 (algebraMap R _ I.1.den) fd_ne_zero, ?_⟩
+  apply Units.ext
+  rw [mul_comm]; rw [val_mul]; rw [coe_toPrincipalIdeal]; rw [val_mk0]
+  exact FractionalIdeal.den_mul_self_eq_num' R⁰ (FractionRing R) I
 
 中文:
 定理 ClassGroup.mk0_integralRep
@@ -927,7 +1014,10 @@ theorem ClassGroup.mk0_integralRep
   rw [← ClassGroup.mk_mk0 (FractionRing R)]; rw [eq_comm]; rw [ClassGroup.mk_eq_mk]
   have fd_ne_zero : (algebraMap R (FractionRing R)) I.1.den != 0 := by
     exact IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors (SetLike.coe_mem _)
-  refine ⟨Units.mk0 (algebraMap R _ I.1.den) fd_ne_zero, ?_
+  refine ⟨Units.mk0 (algebraMap R _ I.1.den) fd_ne_zero, ?_⟩
+  apply Units.ext
+  rw [mul_comm]; rw [val_mul]; rw [coe_toPrincipalIdeal]; rw [val_mk0]
+  exact FractionalIdeal.den_mul_self_eq_num' R⁰ (FractionRing R) I
 
 Depends on / 依赖: ClassGroup, ClassGroup.mk_eq_mk, ClassGroup.mk_mk0, FractionRing, FractionalIdeal, FractionalIdeal.den_mul_self_eq_num, IsFractionRing, IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors, SetLike, SetLike.coe_mem, Units.ext, Units.mk0, algebraMap, coe_mem, coe_toPrincipalIdeal, den_mul_self_eq_num, eq_comm, fd_ne_zero, mk_eq_mk, mk_mk0
 -/
@@ -981,7 +1071,15 @@ theorem ClassGroup.mk_eq_one_iff
   simp only [equiv_mk, canonicalEquiv_self, RingEquiv.coe_mulEquiv_refl, QuotientGroup.mk'_apply,
     map_one, QuotientGroup.eq_one_iff, MonoidHom.mem_range, Units.ext_iff,
     coe_toPrincipalIdeal, coe_mapEquiv, MulEquiv.refl_apply]
-  refine ⟨fun ⟨x
+  refine ⟨fun ⟨x, hx⟩ => ⟨⟨x, by rw [← hx, coe_spanSingleton]⟩⟩, ?_⟩
+  intro hI
+  obtain ⟨x, hx⟩ := @Submodule.IsPrincipal.principal _ _ _ _ _ _ hI
+  have hx' : (I : FractionalIdeal R⁰ K) = spanSingleton R⁰ x := by
+    apply Subtype.coe_injective
+    simp only [val_eq_coe, hx, coe_spanSingleton]
+  refine ⟨Units.mk0 x ?_, ?_⟩
+  · intro x_eq; apply Units.ne_zero I; simp [hx', x_eq]
+  · simp [hx']
 
 中文:
 定理 ClassGroup.mk_eq_one_iff
@@ -991,7 +1089,15 @@ theorem ClassGroup.mk_eq_one_iff
   simp only [equiv_mk, canonicalEquiv_self, RingEquiv.coe_mulEquiv_refl, QuotientGroup.mk'_apply,
     map_one, QuotientGroup.eq_one_iff, MonoidHom.mem_range, Units.ext_iff,
     coe_toPrincipalIdeal, coe_mapEquiv, MulEquiv.refl_apply]
-  refine ⟨fun ⟨x
+  refine ⟨fun ⟨x, hx⟩ => ⟨⟨x, by rw [← hx, coe_spanSingleton]⟩⟩, ?_⟩
+  intro hI
+  obtain ⟨x, hx⟩ := @Submodule.IsPrincipal.principal _ _ _ _ _ _ hI
+  have hx' : (I : FractionalIdeal R⁰ K) = spanSingleton R⁰ x := by
+    apply Subtype.coe_injective
+    simp only [val_eq_coe, hx, coe_spanSingleton]
+  refine ⟨Units.mk0 x ?_, ?_⟩
+  · intro x_eq; apply Units.ne_zero I; simp [hx', x_eq]
+  · simp [hx']
 
 Depends on / 依赖: ClassGroup, ClassGroup.equiv, FractionalIdeal, IsPrincipal, MonoidHom, MonoidHom.mem_range, MulEquiv, MulEquiv.refl_apply, QuotientGroup, QuotientGroup.eq_one_iff, QuotientGroup.mk, RingEquiv, RingEquiv.coe_mulEquiv_refl, Submodule, Submodule.IsPrincipal.principal, Subtype, Subtype.coe_inj, Units.ext_iff, _apply, canonicalEquiv_self
 -/
@@ -1022,7 +1128,8 @@ theorem FractionalIdeal.isPrincipal.of_isPrincipal_pow_of_coprime
   · simp [bot_isPrincipal]
   rw [← ClassGroup.mk_eq_one_iff]; rw [← orderOf_eq_one_iff]; rw [← Nat.dvd_one]; rw [← hn]; rw [Nat.dvd_gcd_iff]
   refine ⟨?_, orderOf_dvd_card⟩
-  rw [orderOf_dvd_iff_pow_eq_one]; rw [← map_pow]; rw [ClassGro
+  rw [orderOf_dvd_iff_pow_eq_one]; rw [← map_pow]; rw [ClassGroup.mk_eq_one_iff]
+  exact_mod_cast hI
 
 中文:
 定理 FractionalIdeal.isPrincipal.of_isPrincipal_pow_of_coprime
@@ -1032,7 +1139,8 @@ theorem FractionalIdeal.isPrincipal.of_isPrincipal_pow_of_coprime
   · simp [bot_isPrincipal]
   rw [← ClassGroup.mk_eq_one_iff]; rw [← orderOf_eq_one_iff]; rw [← Nat.dvd_one]; rw [← hn]; rw [Nat.dvd_gcd_iff]
   refine ⟨?_, orderOf_dvd_card⟩
-  rw [orderOf_dvd_iff_pow_eq_one]; rw [← map_pow]; rw [ClassGro
+  rw [orderOf_dvd_iff_pow_eq_one]; rw [← map_pow]; rw [ClassGroup.mk_eq_one_iff]
+  exact_mod_cast hI
 
 Depends on / 依赖: ClassGroup, ClassGroup.mk_eq_one_iff, GroupWithZero, GroupWithZero.eq_zero_or_unit, Nat.dvd_gcd_iff, Nat.dvd_one, bot_isPrincipal, dvd_gcd_iff, dvd_one, eq_zero_or_unit, map_pow, mk_eq_one_iff, orderOf_dvd_card, orderOf_dvd_iff_pow_eq_one, orderOf_eq_one_iff
 -/
@@ -1136,7 +1244,8 @@ theorem Ideal.IsPrincipal.of_isPrincipal_pow_of_coprime
   · simp [hI0, bot_isPrincipal]
   rw [← ClassGroup.mk0_eq_one_iff (pow_mem (mem_nonZeroDivisors_of_ne_zero hI0) n)] at hI
   rw [← ClassGroup.mk0_eq_one_iff (mem_nonZeroDivisors_of_ne_zero hI0)]; rw [← orderOf_eq_one_iff]; rw [← Nat.dvd_one]; rw [← hn]; rw [Nat.dvd_gcd_iff]
-
+  refine ⟨?_, orderOf_dvd_card⟩
+  rwa [orderOf_dvd_iff_pow_eq_one, ← map_pow, SubmonoidClass.mk_pow]
 
 中文:
 定理 理想.是Principal.of_isPrincipal_pow_of_coprime
@@ -1146,7 +1255,8 @@ theorem Ideal.IsPrincipal.of_isPrincipal_pow_of_coprime
   · simp [hI0, bot_isPrincipal]
   rw [← ClassGroup.mk0_eq_one_iff (pow_mem (mem_nonZeroDivisors_of_ne_zero hI0) n)] at hI
   rw [← ClassGroup.mk0_eq_one_iff (mem_nonZeroDivisors_of_ne_zero hI0)]; rw [← orderOf_eq_one_iff]; rw [← Nat.dvd_one]; rw [← hn]; rw [Nat.dvd_gcd_iff]
-
+  refine ⟨?_, orderOf_dvd_card⟩
+  rwa [orderOf_dvd_iff_pow_eq_one, ← map_pow, SubmonoidClass.mk_pow]
 
 Depends on / 依赖: ClassGroup, ClassGroup.mk0_eq_one_iff, Nat.dvd_gcd_iff, Nat.dvd_one, SubmonoidClass, SubmonoidClass.mk_pow, bot_isPrincipal, dvd_gcd_iff, dvd_one, map_pow, mem_nonZeroDivisors_of_ne_zero, mk0_eq_one_iff, mk_pow, orderOf_dvd_card, orderOf_dvd_iff_pow_eq_one, orderOf_eq_one_iff, pow_mem
 -/
@@ -1171,7 +1281,7 @@ theorem ClassGroup.mk0_eq_mk0_inv_iff
   refine ⟨fun ⟨a, ha⟩ => ⟨a, ?_, ha⟩, fun ⟨a, _, ha⟩ => ⟨a, ha⟩⟩
   by_contra!
   rw [this]; rw [Submodule.span_zero_singleton] at ha
-exact nonZeroDivisors.coe_ne_zer
+exact nonZeroDivisors.coe_ne_zero _ J.prop.2 _ ha
 
 中文:
 定理 ClassGroup.mk0_eq_mk0_inv_iff
@@ -1181,7 +1291,7 @@ exact nonZeroDivisors.coe_ne_zer
   refine ⟨fun ⟨a, ha⟩ => ⟨a, ?_, ha⟩, fun ⟨a, _, ha⟩ => ⟨a, ha⟩⟩
   by_contra!
   rw [this]; rw [Submodule.span_zero_singleton] at ha
-exact nonZeroDivisors.coe_ne_zer
+exact nonZeroDivisors.coe_ne_zero _ J.prop.2 _ ha
 
 Depends on / 依赖: ClassGroup, ClassGroup.mk0_eq_one_iff, J.prop, Submodule, Submodule.isPrincipal_iff, Submodule.span_zero_singleton, Submonoid, Submonoid.coe_mul, coe_mul, coe_ne_zero, eq_inv_iff_mul_eq_one, isPrincipal_iff, map_mul, mk0_eq_one_iff, nonZeroDivisors, nonZeroDivisors.coe_ne_zero, span_zero_singleton
 -/
@@ -1267,7 +1377,7 @@ theorem card_classGroup_eq_one_iff
   refine ⟨fun I => ?_⟩
   by_cases hI : I = ⊥
   · rw [hI]; exact bot_isPrincipal
-  · exact (Cl
+  · exact (ClassGroup.mk0_eq_one_iff (mem_nonZeroDivisors_iff_ne_zero.mpr hI)).mp (eq_one _)
 
 中文:
 定理 card_classGroup_eq_one_iff
@@ -1280,7 +1390,7 @@ theorem card_classGroup_eq_one_iff
   refine ⟨fun I => ?_⟩
   by_cases hI : I = ⊥
   · rw [hI]; exact bot_isPrincipal
-  · exact (Cl
+  · exact (ClassGroup.mk0_eq_one_iff (mem_nonZeroDivisors_iff_ne_zero.mpr hI)).mp (eq_one _)
 
 Depends on / 依赖: ClassGroup, ClassGroup.mk0_eq_one_iff, Fintype, Fintype.card_eq_one_iff, bot_isPrincipal, card_classGroup_eq_one, card_eq_one_iff, convert, eq_one, intros, mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero.mpr, mk0_eq_one_iff
 -/
@@ -1310,7 +1420,21 @@ theorem FractionalIdeal.map_ringEquivOfRingEquiv_toPrincipalIdeal
   refine ⟨fun ⟨u, ⟨v, huv⟩, hu⟩ => ?_, fun ⟨u, hu⟩ => ?_⟩
   · use Units.map (IsFractionRing.ringEquivOfRingEquiv f (K := K)
       (L := L)).toRingHom v
-    rw [
+    rw [← hu]
+    simp only [RingEquiv.toRingHom_eq_coe, Units.coe_map, MonoidHom.coe_coe, RingHom.coe_coe,
+      Units.coe_mapEquiv, ← huv, RingEquiv.coe_toMulEquiv]
+    rw [FractionalIdeal.ringEquivOfRingEquiv_spanSingleton]
+  · use Units.mapEquiv (FractionalIdeal.ringEquivOfRingEquiv _ _ f).symm.toMulEquiv I
+    refine ⟨?_, by simp [← Units.val_inj]⟩
+    · use Units.map (IsFractionRing.ringEquivOfRingEquiv f (K := K)
+        (L := L)).symm.toRingHom u
+      simp only [IsFractionRing.ringEquivOfRingEquiv_symm, RingEquiv.toRingHom_eq_coe,
+        Units.coe_map, MonoidHom.coe_coe, RingHom.coe_coe, RingEquiv.toMulEquiv_eq_coe,
+        RingEquiv.coe_toMulEquiv_symm, Units.coe_mapEquiv]
+      rw [← FractionalIdeal.ringEquivOfRingEquiv_spanSingleton]; rw [← FractionalIdeal.ringEquivOfRingEquiv_symm_eq]; rw [hu]
+      rfl
+
+#adaptation_note
 
 中文:
 定理 FractionalIdeal.map_ringEquivOfRingEquiv_toPrincipalIdeal
@@ -1322,7 +1446,21 @@ theorem FractionalIdeal.map_ringEquivOfRingEquiv_toPrincipalIdeal
   refine ⟨fun ⟨u, ⟨v, huv⟩, hu⟩ => ?_, fun ⟨u, hu⟩ => ?_⟩
   · use Units.map (IsFractionRing.ringEquivOfRingEquiv f (K := K)
       (L := L)).toRingHom v
-    rw [
+    rw [← hu]
+    simp only [RingEquiv.toRingHom_eq_coe, Units.coe_map, MonoidHom.coe_coe, RingHom.coe_coe,
+      Units.coe_mapEquiv, ← huv, RingEquiv.coe_toMulEquiv]
+    rw [FractionalIdeal.ringEquivOfRingEquiv_spanSingleton]
+  · use Units.mapEquiv (FractionalIdeal.ringEquivOfRingEquiv _ _ f).symm.toMulEquiv I
+    refine ⟨?_, by simp [← Units.val_inj]⟩
+    · use Units.map (IsFractionRing.ringEquivOfRingEquiv f (K := K)
+        (L := L)).symm.toRingHom u
+      simp only [IsFractionRing.ringEquivOfRingEquiv_symm, RingEquiv.toRingHom_eq_coe,
+        Units.coe_map, MonoidHom.coe_coe, RingHom.coe_coe, RingEquiv.toMulEquiv_eq_coe,
+        RingEquiv.coe_toMulEquiv_symm, Units.coe_mapEquiv]
+      rw [← FractionalIdeal.ringEquivOfRingEquiv_spanSingleton]; rw [← FractionalIdeal.ringEquivOfRingEquiv_symm_eq]; rw [hu]
+      rfl
+
+#adaptation_note
 
 Depends on / 依赖: FractionalIdeal, FractionalIdeal.ringEquivOfRingEquiv_spanSingleton, IsFractionRing, IsFractionRing.ringEquivOfRingEquiv, MonoidHom, MonoidHom.coe_coe, MonoidHom.mem_range, MulEquiv, MulEquiv.toMonoidHom_eq_coe, RingEquiv, RingEquiv.coe_toMulEquiv, RingEquiv.toRingHom_eq_coe, RingHom, RingHom.coe_coe, Subgroup, Subgroup.mem_map, Units.coe_map, Units.coe_mapEquiv, Units.map, Units.mapEq
 -/
@@ -1365,7 +1503,8 @@ definition ClassGroup.mulEquiv
     ((QuotientGroup.congr (toPrincipalIdeal R (FractionRing R)).range
         (toPrincipalIdeal R' (FractionRing R')).range
         (Units.mapEquiv (FractionalIdeal.ringEquivOfRingEquiv (FractionRing R) (FractionRing R') g))
-        (FractionalIdeal
+        (FractionalIdeal.map_ringEquivOfRingEquiv_toPrincipalIdeal g)).trans
+      (ClassGroup.equiv (FractionRing R')).symm)
 
 中文:
 定义 ClassGroup.mulEquiv
@@ -1374,7 +1513,8 @@ definition ClassGroup.mulEquiv
     ((QuotientGroup.congr (toPrincipalIdeal R (FractionRing R)).range
         (toPrincipalIdeal R' (FractionRing R')).range
         (Units.mapEquiv (FractionalIdeal.ringEquivOfRingEquiv (FractionRing R) (FractionRing R') g))
-        (FractionalIdeal
+        (FractionalIdeal.map_ringEquivOfRingEquiv_toPrincipalIdeal g)).trans
+      (ClassGroup.equiv (FractionRing R')).symm)
 
 Depends on / 依赖: ClassGroup, ClassGroup.equiv, FractionRing, FractionalIdeal, FractionalIdeal.map_ringEquivOfRingEquiv_toPrincipalIdeal, FractionalIdeal.ringEquivOfRingEquiv, QuotientGroup, QuotientGroup.congr, Units.mapEquiv, mapEquiv, map_ringEquivOfRingEquiv_toPrincipalIdeal, ringEquivOfRingEquiv, toPrincipalIdeal
 -/

@@ -629,7 +629,9 @@ lemma valueGroup_eq_range
   constructor
   · rintro ⟨y, hy, rfl⟩
     simp only [Units.ne_zero, not_false_eq_true, and_true, hy]
-  · rintro ⟨⟨y, hy⟩, hx₀
+  · rintro ⟨⟨y, hy⟩, hx₀⟩
+    refine ⟨Units.mk0 x hx₀, ?_, rfl⟩
+    simpa [Units.val_mk0, mem_range] using ⟨y, hy⟩
 
 中文:
 引理 valueGroup_eq_range
@@ -641,7 +643,9 @@ lemma valueGroup_eq_range
   constructor
   · rintro ⟨y, hy, rfl⟩
     simp only [Units.ne_zero, not_false_eq_true, and_true, hy]
-  · rintro ⟨⟨y, hy⟩, hx₀
+  · rintro ⟨⟨y, hy⟩, hx₀⟩
+    refine ⟨Units.mk0 x hx₀, ?_, rfl⟩
+    simpa [Units.val_mk0, mem_range] using ⟨y, hy⟩
 
 Depends on / 依赖: SetLike, SetLike.mem_coe, Units.mk0, Units.ne_zero, Units.val_mk0, and_true, mem_coe, mem_image, mem_preimage, mem_range, mem_sdiff, mem_singleton_iff, mem_valueMonoid_iff, ne_zero, not_false_eq_true, val_mk0, valueMonoid_eq_valueGroup
 -/
@@ -743,7 +747,28 @@ theorem mem_valueGroup_iff_of_comm
     | mem _ h =>
       obtain ⟨a, ha⟩ := h
       exact ⟨a, ha.symm ▸ Units.ne_zero _, ⟨a * a, by simp [← ha]⟩⟩
-    | one => exact ⟨1, by simp, 1, 
+    | one => exact ⟨1, by simp, 1, by simp⟩
+    | mul c d hc hd hcy hdy =>
+      obtain ⟨u, hu, a, ha⟩ := hcy
+      obtain ⟨v, hv, b, hb⟩ := hdy
+      refine ⟨u * v, by simp [hu, hv], a * b, ?_⟩
+      simpa [map_mul, Units.val_mul, ← hb, ← ha] using mul_mul_mul_comm ..
+    | inv c hc hcy =>
+      obtain ⟨u, hu, a, ha⟩ := hcy
+      exact ⟨a, by simp [← ha, hu], u, by simp [← ha]⟩
+  · have hv : f x != 0 := by
+      simp only [← hy, ne_eq, mul_eq_zero, ha, Units.ne_zero, or_self, not_false_eq_true]
+    let v := (Ne.isUnit hv).unit
+    have hv₀ : f x = ↑v := IsUnit.unit_spec (Ne.isUnit hv)
+    let u := (Ne.isUnit ha).unit
+    have ha₀ : f a = ↑u := IsUnit.unit_spec (Ne.isUnit ha)
+    rw_mod_cast [hv₀, ha₀, Eq.comm, ← inv_mul_eq_iff_eq_mul] at hy
+    rw [← hy]
+    apply Subgroup.mul_mem
+    · apply inv_mem_valueGroup
+      use a
+    · apply mem_valueGroup
+      use x
 
 中文:
 定理 mem_valueGroup_iff_of_comm
@@ -755,7 +780,28 @@ theorem mem_valueGroup_iff_of_comm
     | mem _ h =>
       obtain ⟨a, ha⟩ := h
       exact ⟨a, ha.symm ▸ Units.ne_zero _, ⟨a * a, by simp [← ha]⟩⟩
-    | one => exact ⟨1, by simp, 1, 
+    | one => exact ⟨1, by simp, 1, by simp⟩
+    | mul c d hc hd hcy hdy =>
+      obtain ⟨u, hu, a, ha⟩ := hcy
+      obtain ⟨v, hv, b, hb⟩ := hdy
+      refine ⟨u * v, by simp [hu, hv], a * b, ?_⟩
+      simpa [map_mul, Units.val_mul, ← hb, ← ha] using mul_mul_mul_comm ..
+    | inv c hc hcy =>
+      obtain ⟨u, hu, a, ha⟩ := hcy
+      exact ⟨a, by simp [← ha, hu], u, by simp [← ha]⟩
+  · have hv : f x != 0 := by
+      simp only [← hy, ne_eq, mul_eq_zero, ha, Units.ne_zero, or_self, not_false_eq_true]
+    let v := (Ne.isUnit hv).unit
+    have hv₀ : f x = ↑v := IsUnit.unit_spec (Ne.isUnit hv)
+    let u := (Ne.isUnit ha).unit
+    have ha₀ : f a = ↑u := IsUnit.unit_spec (Ne.isUnit ha)
+    rw_mod_cast [hv₀, ha₀, Eq.comm, ← inv_mul_eq_iff_eq_mul] at hy
+    rw [← hy]
+    apply Subgroup.mul_mem
+    · apply inv_mem_valueGroup
+      use a
+    · apply mem_valueGroup
+      use x
 
 Depends on / 依赖: Subgroup, Subgroup.closure_induction, Units.ne_zero, Units.val_mul, closure_induction, ha.symm, map_mul, mul_mul_mul_comm, ne_zero, val_mul, valueGroup, valueMonoid
 -/

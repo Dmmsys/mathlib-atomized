@@ -33,7 +33,8 @@ definition Matrix.matchVecConsPrefixQ
     let some aQ ← checkTypeQ a q($α) | throwError m!"Expected {a} to have type {α}"
     return aQ
   let some vecQ ← checkTypeQ vec q(Fin $m -> $α)
-    | throwError m!"Expected {vec} to have type {q(Fin $m -> 
+    | throwError m!"Expected {vec} to have type {q(Fin $m -> $α)}"
+  return (l, ⟨m, vecQ⟩)
 
 中文:
 定义 矩阵.matchVecConsPrefixQ
@@ -44,7 +45,8 @@ definition Matrix.matchVecConsPrefixQ
     let some aQ ← checkTypeQ a q($α) | throwError m!"Expected {a} to have type {α}"
     return aQ
   let some vecQ ← checkTypeQ vec q(Fin $m -> $α)
-    | throwError m!"Expected {vec} to have type {q(Fin $m -> 
+    | throwError m!"Expected {vec} to have type {q(Fin $m -> $α)}"
+  return (l, ⟨m, vecQ⟩)
 -/
 partial def Matrix.matchVecConsPrefixQ {u : Level} {α : Q(Type u)} {n : Q(Nat)}
     (vec : Q(Fin $n -> $α)) : MetaM (Array Q($α) × (m : Q(Nat)) × Q(Fin $m -> $α)) := do
@@ -104,7 +106,8 @@ definition arrayOfVecFinQ
     let outIdxQ := q(($perm $idxQNew : Nat))
     let outIdxExpr ← Lean.Meta.Simp.dsimp outIdxQ
     let some outIdx ← Lean.Meta.getNatValue? outIdxExpr | return none
-    out := out.
+    out := out.push outIdx
+  return out
 
 中文:
 定义 arrayOfVecFinQ
@@ -117,7 +120,8 @@ definition arrayOfVecFinQ
     let outIdxQ := q(($perm $idxQNew : Nat))
     let outIdxExpr ← Lean.Meta.Simp.dsimp outIdxQ
     let some outIdx ← Lean.Meta.getNatValue? outIdxExpr | return none
-    out := out.
+    out := out.push outIdx
+  return out
 -/
 def arrayOfVecFinQ (n : Q(Nat)) (vn : Nat) (perm : Q(Fin $n -> Fin $n)) :
     SimpM (Option <| Array Nat) := do

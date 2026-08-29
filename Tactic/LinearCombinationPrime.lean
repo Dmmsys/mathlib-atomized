@@ -306,7 +306,48 @@ definition expandLinearCombo
     match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
 | .const c₁, .const c₂ => .const < > ``($c₁ + $c₂)
 | .proof p₁, .const c₂ => .proof < > ``(pf_add_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .pro
+| .const c₁, .proof p₂ => .proof < > ``(c_add_pf $p₂ $c₁)
+| .proof p₁, .proof p₂ => .proof < > ``(add_pf $p₁ $p₂)
+  | `($e₁ - $e₂) => do
+    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
+| .const c₁, .const c₂ => .const < > ``($c₁ - $c₂)
+| .proof p₁, .const c₂ => .proof < > ``(pf_sub_c $p₁ $c₂)
+| .const c₁, .proof p₂ => .proof < > ``(c_sub_pf $p₂ $c₁)
+| .proof p₁, .proof p₂ => .proof < > ``(sub_pf $p₁ $p₂)
+  | `(-$e) => do
+    match ← expandLinearCombo ty e with
+| .const c => .const < > `(-$c)
+| .proof p => .proof < > ``(neg_pf $p)
+  | `(← $e:term) => do
+    match ← expandLinearCombo ty e with
+    | .const c => return .const c
+| .proof p => .proof < > ``(Eq.symm $p)
+  | `($e₁ * $e₂) => do
+    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
+| .const c₁, .const c₂ => .const < > ``($c₁ * $c₂)
+| .proof p₁, .const c₂ => .proof < > ``(pf_mul_c $p₁ $c₂)
+| .const c₁, .proof p₂ => .proof < > ``(c_mul_pf $p₂ $c₁)
+| .proof p₁, .proof p₂ => .proof < > ``(mul_pf $p₁ $p₂)
+  | `($e⁻¹) => do
+    match ← expandLinearCombo ty e with
+| .const c => .const < > `($c⁻¹)
+| .proof p => .proof < > ``(inv_pf $p)
+  | `($e₁ / $e₂) => do
+    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
+| .const c₁, .const c₂ => .const < > ``($c₁ / $c₂)
+| .proof p₁, .const c₂ => .proof < > ``(pf_div_c $p₁ $c₂)
+| .const c₁, .proof p₂ => .proof < > ``(c_div_pf $p₂ $c₁)
+| .proof p₁, .proof p₂ => .proof < > ``(div_pf $p₁ $p₂)
+  | e =>
+    -- We have the expected type from the goal, so we can fully synthesize this leaf node.
+    withSynthesize do
+      -- It is OK to use `ty` as the expected type even if `e` is a proof.
+      -- The expected type is just a hint.
+let c ← withSynthesizeLight Term.elabTerm e ty
+      if (← whnfR (← inferType c)).isEq then
+.proof < > c.toSyntax
+      else
+.const < > c.toSyntax
 
 中文:
 定义 expandLinearCombo
@@ -318,7 +359,48 @@ definition expandLinearCombo
     match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
 | .const c₁, .const c₂ => .const < > ``($c₁ + $c₂)
 | .proof p₁, .const c₂ => .proof < > ``(pf_add_c $p₁ $c₂)
-| .const c₁, .proof p₂ => .pro
+| .const c₁, .proof p₂ => .proof < > ``(c_add_pf $p₂ $c₁)
+| .proof p₁, .proof p₂ => .proof < > ``(add_pf $p₁ $p₂)
+  | `($e₁ - $e₂) => do
+    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
+| .const c₁, .const c₂ => .const < > ``($c₁ - $c₂)
+| .proof p₁, .const c₂ => .proof < > ``(pf_sub_c $p₁ $c₂)
+| .const c₁, .proof p₂ => .proof < > ``(c_sub_pf $p₂ $c₁)
+| .proof p₁, .proof p₂ => .proof < > ``(sub_pf $p₁ $p₂)
+  | `(-$e) => do
+    match ← expandLinearCombo ty e with
+| .const c => .const < > `(-$c)
+| .proof p => .proof < > ``(neg_pf $p)
+  | `(← $e:term) => do
+    match ← expandLinearCombo ty e with
+    | .const c => return .const c
+| .proof p => .proof < > ``(Eq.symm $p)
+  | `($e₁ * $e₂) => do
+    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
+| .const c₁, .const c₂ => .const < > ``($c₁ * $c₂)
+| .proof p₁, .const c₂ => .proof < > ``(pf_mul_c $p₁ $c₂)
+| .const c₁, .proof p₂ => .proof < > ``(c_mul_pf $p₂ $c₁)
+| .proof p₁, .proof p₂ => .proof < > ``(mul_pf $p₁ $p₂)
+  | `($e⁻¹) => do
+    match ← expandLinearCombo ty e with
+| .const c => .const < > `($c⁻¹)
+| .proof p => .proof < > ``(inv_pf $p)
+  | `($e₁ / $e₂) => do
+    match ← expandLinearCombo ty e₁, ← expandLinearCombo ty e₂ with
+| .const c₁, .const c₂ => .const < > ``($c₁ / $c₂)
+| .proof p₁, .const c₂ => .proof < > ``(pf_div_c $p₁ $c₂)
+| .const c₁, .proof p₂ => .proof < > ``(c_div_pf $p₂ $c₁)
+| .proof p₁, .proof p₂ => .proof < > ``(div_pf $p₁ $p₂)
+  | e =>
+    -- We have the expected type from the goal, so we can fully synthesize this leaf node.
+    withSynthesize do
+      -- It is OK to use `ty` as the expected type even if `e` is a proof.
+      -- The expected type is just a hint.
+let c ← withSynthesizeLight Term.elabTerm e ty
+      if (← whnfR (← inferType c)).isEq then
+.proof < > c.toSyntax
+      else
+.const < > c.toSyntax
 -/
 partial def expandLinearCombo (ty : Expr) (stx : Syntax.Term) : TermElabM Expanded := withRef stx do
   match stx with
@@ -444,7 +526,20 @@ definition elabLinearCombination'
   | some e =>
     match ← expandLinearCombo ty e with
     | .const c => `(Eq.refl $c)
-    | .pro
+    | .proof p => pure p
+  let norm := norm?.getD (Unhygienic.run <| withRef tk `(tactic| ring1))
+Term.withoutErrToSorry Tactic.evalTactic ← withFreshMacroScope
+  if twoGoals then
+    `(tactic| (
+refine eq_trans₃ p ?a ?b
+case' a => norm:tactic
+case' b => norm:tactic))
+  else
+    match exp? with
+    | some n =>
+      if n.getNat = 1 then `(tactic| (refine eq_of_add $p ?a; case' a => $norm:tactic))
+      else `(tactic| (refine eq_of_add_pow $n $p ?a; case' a => $norm:tactic))
+    | _ => `(tactic| (refine eq_of_add $p ?a; case' a => $norm:tactic))
 
 中文:
 定义 elabLinearCombination'
@@ -457,7 +552,20 @@ definition elabLinearCombination'
   | some e =>
     match ← expandLinearCombo ty e with
     | .const c => `(Eq.refl $c)
-    | .pro
+    | .proof p => pure p
+  let norm := norm?.getD (Unhygienic.run <| withRef tk `(tactic| ring1))
+Term.withoutErrToSorry Tactic.evalTactic ← withFreshMacroScope
+  if twoGoals then
+    `(tactic| (
+refine eq_trans₃ p ?a ?b
+case' a => norm:tactic
+case' b => norm:tactic))
+  else
+    match exp? with
+    | some n =>
+      if n.getNat = 1 then `(tactic| (refine eq_of_add $p ?a; case' a => $norm:tactic))
+      else `(tactic| (refine eq_of_add_pow $n $p ?a; case' a => $norm:tactic))
+    | _ => `(tactic| (refine eq_of_add $p ?a; case' a => $norm:tactic))
 
 Depends on / 依赖: Tactic, Tactic.TacticM, Tactic.withMainContext, TacticM, withMainContext
 -/

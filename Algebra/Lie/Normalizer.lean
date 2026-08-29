@@ -58,7 +58,7 @@ definition normalizer
   smul_mem' t m hm x := by rw [lie_smul]; exact N.smul_mem' t (hm x)
   lie_mem {x m} hm y := by rw [leibniz_lie]; exact N.add_mem' (hm ⁅y, x⁆) (N.lie_mem (hm y))
 
-@[simp
+@[simp]
 
 中文:
 定义 normalizer
@@ -69,7 +69,7 @@ definition normalizer
   smul_mem' t m hm x := by rw [lie_smul]; exact N.smul_mem' t (hm x)
   lie_mem {x m} hm y := by rw [leibniz_lie]; exact N.add_mem' (hm ⁅y, x⁆) (N.lie_mem (hm y))
 
-@[simp
+@[simp]
 -/
 def normalizer : LieSubmodule R L M where
   carrier := {m | forall x : L, ⁅x, m⁆ in N}
@@ -287,7 +287,9 @@ definition idealizer
   add_mem' := fun {x} {y} hx hy m => by rw [add_lie]; exact N.add_mem (hx m) (hy m)
   zero_mem' := by simp
   smul_mem' := fun t {x} hx m => by rw [smul_lie]; exact N.smul_mem t (hx m)
-  lie_mem := fun {x} {y} hy m => by rw [lie_lie]; exact sub_mem (N.lie_mem (hy m
+  lie_mem := fun {x} {y} hy m => by rw [lie_lie]; exact sub_mem (N.lie_mem (hy m)) (hy ⁅x, m⁆)
+
+@[simp]
 
 中文:
 定义 idealizer
@@ -296,7 +298,9 @@ definition idealizer
   add_mem' := fun {x} {y} hx hy m => by rw [add_lie]; exact N.add_mem (hx m) (hy m)
   zero_mem' := by simp
   smul_mem' := fun t {x} hx m => by rw [smul_lie]; exact N.smul_mem t (hx m)
-  lie_mem := fun {x} {y} hy m => by rw [lie_lie]; exact sub_mem (N.lie_mem (hy m
+  lie_mem := fun {x} {y} hy m => by rw [lie_lie]; exact sub_mem (N.lie_mem (hy m)) (hy ⁅x, m⁆)
+
+@[simp]
 -/
 def idealizer : LieIdeal R L where
   carrier := {x : L | forall m : M, ⁅x, m⁆ in N}
@@ -482,7 +486,10 @@ theorem lie_mem_sup_of_mem_normalizer
   obtain ⟨t, rfl⟩ := Submodule.mem_span_singleton.mp hu₁
   obtain ⟨s, rfl⟩ := Submodule.mem_span_singleton.mp hu₂
   apply Submodule.mem_sup_right
-  simp only [LieSubalgebr
+  simp only [LieSubalgebra.mem_toSubmodule, smul_lie, add_lie, zero_add, lie_add, smul_zero,
+    lie_smul, lie_self]
+  refine H.add_mem (H.smul_mem s ?_) (H.add_mem (H.smul_mem t ?_) (H.lie_mem hv hw))
+  exacts [(H.mem_normalizer_iff' x).mp hx v hv, (H.mem_normalizer_iff x).mp hx w hw]
 
 中文:
 定理 lie_mem_sup_of_mem_normalizer
@@ -494,7 +501,10 @@ theorem lie_mem_sup_of_mem_normalizer
   obtain ⟨t, rfl⟩ := Submodule.mem_span_singleton.mp hu₁
   obtain ⟨s, rfl⟩ := Submodule.mem_span_singleton.mp hu₂
   apply Submodule.mem_sup_right
-  simp only [LieSubalgebr
+  simp only [LieSubalgebra.mem_toSubmodule, smul_lie, add_lie, zero_add, lie_add, smul_zero,
+    lie_smul, lie_self]
+  refine H.add_mem (H.smul_mem s ?_) (H.add_mem (H.smul_mem t ?_) (H.lie_mem hv hw))
+  exacts [(H.mem_normalizer_iff' x).mp hx v hv, (H.mem_normalizer_iff x).mp hx w hw]
 
 Depends on / 依赖: H.add_mem, H.lie_mem, H.mem_normalizer_iff, H.smul_mem, LieSubalgebra, LieSubalgebra.mem_toSubmodule, Submodule, Submodule.mem_span_singleton.mp, Submodule.mem_sup, Submodule.mem_sup_right, add_lie, add_mem, exacts, lie_add, lie_mem, lie_self, lie_smul, mem_normalizer_iff, mem_span_singleton, mem_sup
 -/
@@ -574,7 +584,16 @@ theorem normalizer_eq_self_iff
     suffices x in H by rwa [Submodule.Quotient.quot_mk_eq_mk, Submodule.Quotient.mk_eq_zero,
       coe_toLieSubmodule, mem_toSubmodule]
     rw [← h]; rw [H.mem_normalizer_iff']
-    int
+    intro y hy
+    replace hx : ⁅_, LieSubmodule.Quotient.mk' _ x⁆ = 0 := hx ⟨y, hy⟩
+    rwa [← LieModuleHom.map_lie, LieSubmodule.Quotient.mk_eq_zero] at hx
+  · intro x hx
+    let y := LieSubmodule.Quotient.mk' H.toLieSubmodule x
+    have hy : y in LieModule.maxTrivSubmodule R H (L ⧸ H.toLieSubmodule) := by
+      rintro ⟨z, hz⟩
+      rw [← LieModuleHom.map_lie]; rw [LieSubmodule.Quotient.mk_eq_zero]; rw [coe_bracket_of_module]; rw [Submodule.coe_mk]; rw [mem_toLieSubmodule]
+      exact (H.mem_normalizer_iff' x).mp hx z hz
+    simpa [y] using h y hy
 
 中文:
 定理 normalizer_eq_self_iff
@@ -585,7 +604,16 @@ theorem normalizer_eq_self_iff
     suffices x in H by rwa [Submodule.Quotient.quot_mk_eq_mk, Submodule.Quotient.mk_eq_zero,
       coe_toLieSubmodule, mem_toSubmodule]
     rw [← h]; rw [H.mem_normalizer_iff']
-    int
+    intro y hy
+    replace hx : ⁅_, LieSubmodule.Quotient.mk' _ x⁆ = 0 := hx ⟨y, hy⟩
+    rwa [← LieModuleHom.map_lie, LieSubmodule.Quotient.mk_eq_zero] at hx
+  · intro x hx
+    let y := LieSubmodule.Quotient.mk' H.toLieSubmodule x
+    have hy : y in LieModule.maxTrivSubmodule R H (L ⧸ H.toLieSubmodule) := by
+      rintro ⟨z, hz⟩
+      rw [← LieModuleHom.map_lie]; rw [LieSubmodule.Quotient.mk_eq_zero]; rw [coe_bracket_of_module]; rw [Submodule.coe_mk]; rw [mem_toLieSubmodule]
+      exact (H.mem_normalizer_iff' x).mp hx z hz
+    simpa [y] using h y hy
 
 Depends on / 依赖: H.le_normalizer, H.mem_normalizer_iff, H.toLieSubmodule, LieModuleHom, LieModuleHom.map_lie, LieSubmodule, LieSubmodule.Quotient.mk, LieSubmodule.Quotient.mk_eq_zero, LieSubmodule.eq_bot_iff, Quotient, Submodule, Submodule.Quotient.mk_eq_zero, Submodule.Quotient.quot_mk_eq_mk, coe_toLieSubmodule, eq_bot_iff, le_antisymm, le_normalizer, map_lie, mem_normalizer_iff, mem_toSubmodule
 -/

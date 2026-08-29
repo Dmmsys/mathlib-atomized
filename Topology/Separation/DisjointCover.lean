@@ -48,7 +48,13 @@ lemma exists_finite_clopen_cover
   choose r hr using hU.exists_mem
   -- Choose a clopen neighbourhood `V x` of each `x` contained in `U (r x)`.
   choose V hV hVx hVU using fun x => compact_exists_isClopen_in_isOpen (U _).isOpen (hr x)
-  -- Apply compa
+  -- Apply compactness to extract a finite subset of the `V`s which covers `X`.
+  obtain ⟨t, ht⟩ : exists t, univ subseteq ⋃ i in t, V i :=
+    isCompact_univ.elim_finite_subcover V (fun x => (hV x).2) (fun x _ => mem_iUnion.mpr ⟨x, hVx x⟩)
+  -- Biject it noncanonically with `Fin n` for some `n`.
+  refine ⟨_, fun j => ⟨_, hV (t.equivFin.symm j)⟩, fun j => ⟨_, hVU _⟩, fun x hx => ?_⟩
+  obtain ⟨m, hm, hm'⟩ := mem_iUnion₂.mp (ht hx)
+  exact Set.mem_iUnion_of_mem (t.equivFin ⟨m, hm⟩) (by simpa)
 
 中文:
 引理 存在_finite_clopen_cover
@@ -59,7 +65,13 @@ lemma exists_finite_clopen_cover
   choose r hr using hU.exists_mem
   -- Choose a clopen neighbourhood `V x` of each `x` contained in `U (r x)`.
   choose V hV hVx hVU using fun x => compact_exists_isClopen_in_isOpen (U _).isOpen (hr x)
-  -- Apply compa
+  -- Apply compactness to extract a finite subset of the `V`s which covers `X`.
+  obtain ⟨t, ht⟩ : exists t, univ subseteq ⋃ i in t, V i :=
+    isCompact_univ.elim_finite_subcover V (fun x => (hV x).2) (fun x _ => mem_iUnion.mpr ⟨x, hVx x⟩)
+  -- Biject it noncanonically with `Fin n` for some `n`.
+  refine ⟨_, fun j => ⟨_, hV (t.equivFin.symm j)⟩, fun j => ⟨_, hVU _⟩, fun x hx => ?_⟩
+  obtain ⟨m, hm, hm'⟩ := mem_iUnion₂.mp (ht hx)
+  exact Set.mem_iUnion_of_mem (t.equivFin ⟨m, hm⟩) (by simpa)
 -/
 lemma exists_finite_clopen_cover (hU : IsOpenCover U) : exists (n : Nat) (V : Fin n -> Clopens X),
     (forall j, exists i, (V j : Set X) subseteq U i) ∧ univ subseteq ⋃ j, (V j : Set X) := by
@@ -87,7 +99,13 @@ lemma exists_finite_nonempty_disjoint_clopen_cover
   obtain ⟨W, hWle, hWun, hWd⟩ := Fintype.exists_disjointed_le V
   simp only [← SetLike.coe_set_eq, Clopens.coe_finset_sup, Finset.mem_univ, iUnion_true] at hWun
   let t : Finset (Fin n) := {j | W j != ⊥}
-  refine ⟨#t, fun k 
+  refine ⟨#t, fun k => W (t.equivFin.symm k), fun k => ⟨?_, ?_⟩, fun x hx => ?_, ?_⟩
+  · exact (Finset.mem_filter.mp (t.equivFin.symm k).2).2
+  · exact match hVle (t.equivFin.symm k) with | ⟨i, hi⟩ => ⟨i, subset_trans (hWle _) hi⟩
+· obtain ⟨j, hj⟩ := mem_iUnion.mp (hWun ▸ hVun) hx
+    have : W j != ⊥ := by simpa [← SetLike.coe_ne_coe, ← Set.nonempty_iff_ne_empty] using ⟨x, hj⟩
+    exact mem_iUnion.mpr ⟨t.equivFin ⟨j, Finset.mem_filter.mpr ⟨Finset.mem_univ _, this⟩⟩, by simpa⟩
+· exact hWd.comp_of_injective Subtype.val_injective.comp t.equivFin.symm.injective
 
 中文:
 引理 存在_finite_nonempty_disjoint_clopen_cover
@@ -98,7 +116,13 @@ lemma exists_finite_nonempty_disjoint_clopen_cover
   obtain ⟨W, hWle, hWun, hWd⟩ := Fintype.exists_disjointed_le V
   simp only [← SetLike.coe_set_eq, Clopens.coe_finset_sup, Finset.mem_univ, iUnion_true] at hWun
   let t : Finset (Fin n) := {j | W j != ⊥}
-  refine ⟨#t, fun k 
+  refine ⟨#t, fun k => W (t.equivFin.symm k), fun k => ⟨?_, ?_⟩, fun x hx => ?_, ?_⟩
+  · exact (Finset.mem_filter.mp (t.equivFin.symm k).2).2
+  · exact match hVle (t.equivFin.symm k) with | ⟨i, hi⟩ => ⟨i, subset_trans (hWle _) hi⟩
+· obtain ⟨j, hj⟩ := mem_iUnion.mp (hWun ▸ hVun) hx
+    have : W j != ⊥ := by simpa [← SetLike.coe_ne_coe, ← Set.nonempty_iff_ne_empty] using ⟨x, hj⟩
+    exact mem_iUnion.mpr ⟨t.equivFin ⟨j, Finset.mem_filter.mpr ⟨Finset.mem_univ _, this⟩⟩, by simpa⟩
+· exact hWd.comp_of_injective Subtype.val_injective.comp t.equivFin.symm.injective
 
 Depends on / 依赖: Clopens, Clopens.coe_finset_sup, Finset, Finset.mem_filter.mp, Finset.mem_univ, Fintype, Fintype.exists_disjointed_le, SetLike, SetLike.coe_set_eq, classical, coe_finset_sup, coe_set_eq, equivFin, exists_disjointed_le, exists_finite_clopen_cover, hU.exists_finite_clopen_cover, iUnion_true, mem_filter, mem_univ, subset_trans
 -/
@@ -193,7 +217,7 @@ lemma exists_finite_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal_of_profi
   -- Now refine it to a disjoint covering.
   obtain ⟨n, W, hW₁, hW₂, hW₃⟩ := hUc.exists_finite_nonempty_disjoint_clopen_cover
   refine ⟨n, W, fun j => (hW₁ j).1, fun j y hy z hz => ?_, hW₂, hW₃⟩
- 
+  exact match (hW₁ j).2 with | ⟨i, hi⟩ => hUS i ⟨hi hy, hi hz⟩
 
 中文:
 引理 存在_finite_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal_of_profinite
@@ -202,7 +226,7 @@ lemma exists_finite_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal_of_profi
   -- Now refine it to a disjoint covering.
   obtain ⟨n, W, hW₁, hW₂, hW₃⟩ := hUc.exists_finite_nonempty_disjoint_clopen_cover
   refine ⟨n, W, fun j => (hW₁ j).1, fun j y hy z hz => ?_, hW₂, hW₃⟩
- 
+  exact match (hW₁ j).2 with | ⟨i, hi⟩ => hUS i ⟨hi hy, hi hz⟩
 -/
 private lemma exists_finite_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal_of_profinite
     (hS : S in nhdsSet (diagonal X)) :
@@ -267,7 +291,14 @@ lemma exists_finite_approximation_of_mem_nhds_diagonal
   have h_uniq (x) : exists! i, x in E i := by
     refine match mem_iUnion.mp (hEuniv <| mem_univ x) with
       | ⟨i, hi⟩ => ⟨i, hi, fun j hj => hEdis.eq ?_⟩
-    simpa [← Clopens.coe_di
+    simpa [← Clopens.coe_disjoint, not_disjoint_iff] using! ⟨x, hj, hi⟩
+  choose g hg hg' using h_uniq -- for each `x`, `g x` is the unique `i` such that `x ∈ E i`
+  have h_ex (i) : exists x, x in E i := by
+    simpa [← SetLike.coe_set_eq, ← nonempty_iff_ne_empty] using! hEne i
+  choose r hr using h_ex -- for each `i`, choose an `r i ∈ E i`
+  refine ⟨n, g, f ∘ r, continuous_discrete_rng.mpr fun j => ?_, fun x => (hES _) _ (hg _) _ (hr _)⟩
+  convert! (E j).isOpen
+  exact Set.ext fun x => ⟨fun hj => hj ▸ hg x, fun hx => (hg' _ _ hx).symm⟩
 
 中文:
 引理 存在_finite_approximation_of_mem_nhds_diagonal
@@ -278,7 +309,14 @@ lemma exists_finite_approximation_of_mem_nhds_diagonal
   have h_uniq (x) : exists! i, x in E i := by
     refine match mem_iUnion.mp (hEuniv <| mem_univ x) with
       | ⟨i, hi⟩ => ⟨i, hi, fun j hj => hEdis.eq ?_⟩
-    simpa [← Clopens.coe_di
+    simpa [← Clopens.coe_disjoint, not_disjoint_iff] using! ⟨x, hj, hi⟩
+  choose g hg hg' using h_uniq -- for each `x`, `g x` is the unique `i` such that `x ∈ E i`
+  have h_ex (i) : exists x, x in E i := by
+    simpa [← SetLike.coe_set_eq, ← nonempty_iff_ne_empty] using! hEne i
+  choose r hr using h_ex -- for each `i`, choose an `r i ∈ E i`
+  refine ⟨n, g, f ∘ r, continuous_discrete_rng.mpr fun j => ?_, fun x => (hES _) _ (hg _) _ (hr _)⟩
+  convert! (E j).isOpen
+  exact Set.ext fun x => ⟨fun hj => hj ▸ hg x, fun hx => (hg' _ _ hx).symm⟩
 
 Depends on / 依赖: Clopens, Clopens.coe_disjoint, SetLike, SetLike.coe_set_eq, coe_disjoint, coe_set_eq, exists_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal, hEdis.eq, hEuniv, h_ex, h_uniq, mem_iUnion, mem_iUnion.mp, mem_univ, nonempty_iff_ne, not_disjoint_iff, unique
 -/
@@ -320,7 +358,7 @@ lemma exists_finite_sum_const_mulIndicator_approximation_of_mem_nhds_diagonal
   refine ⟨n, fun i => ⟨_, (isClopen_discrete {i}).preimage hg⟩, h, fun x => ?_⟩
   convert! hgh x
   exact (Fintype.prod_eq_single _ fun i hi => mulIndicator_of_notMem hi.symm _).trans
-    (mulIndicator_of_mem rfl 
+    (mulIndicator_of_mem rfl _)
 
 中文:
 引理 存在_finite_sum_const_mulIndicator_approximation_of_mem_nhds_diagonal
@@ -330,7 +368,7 @@ lemma exists_finite_sum_const_mulIndicator_approximation_of_mem_nhds_diagonal
   refine ⟨n, fun i => ⟨_, (isClopen_discrete {i}).preimage hg⟩, h, fun x => ?_⟩
   convert! hgh x
   exact (Fintype.prod_eq_single _ fun i hi => mulIndicator_of_notMem hi.symm _).trans
-    (mulIndicator_of_mem rfl 
+    (mulIndicator_of_mem rfl _)
 
 Depends on / 依赖: Fintype, Fintype.prod_eq_single, convert, exists_finite_approximation_of_mem_nhds_diagonal, hi.symm, isClopen_discrete, mulIndicator_of_mem, mulIndicator_of_notMem, preimage, prod_eq_single
 -/

@@ -56,7 +56,12 @@ definition tensorDistrib
   body: (TensorProduct.lift.equiv (.id A) (M₁ otimes[R] M₂) (M₁ otimes[R] M₂) (N₁ otimes[R] N₂)).symm.toLinearMap ∘ₗ
   ((LinearMap.llcomp A _ _ _).flip
     (TensorProduct.AlgebraTensorModule.tensorTensorTensorComm R R A A M₁ M₂ M₁ M₂).toLinearMap)
-  ∘ₗ TensorProduct.AlgebraTensorModule.homTensorHomMap R _ _
+  ∘ₗ TensorProduct.AlgebraTensorModule.homTensorHomMap R _ _ _ _ _ _
+  ∘ₗ (TensorProduct.AlgebraTensorModule.congr
+    (TensorProduct.lift.equiv (.id A) M₁ M₁ N₁)
+    (TensorProduct.lift.equiv (.id R) _ _ _)).toLinearMap
+
+@[simp]
 
 中文:
 定义 tensorDistrib
@@ -64,7 +69,12 @@ definition tensorDistrib
   定义体: (TensorProduct.lift.equiv (.id A) (M₁ otimes[R] M₂) (M₁ otimes[R] M₂) (N₁ otimes[R] N₂)).symm.toLinearMap ∘ₗ
   ((LinearMap.llcomp A _ _ _).flip
     (TensorProduct.AlgebraTensorModule.tensorTensorTensorComm R R A A M₁ M₂ M₁ M₂).toLinearMap)
-  ∘ₗ TensorProduct.AlgebraTensorModule.homTensorHomMap R _ _
+  ∘ₗ TensorProduct.AlgebraTensorModule.homTensorHomMap R _ _ _ _ _ _
+  ∘ₗ (TensorProduct.AlgebraTensorModule.congr
+    (TensorProduct.lift.equiv (.id A) M₁ M₁ N₁)
+    (TensorProduct.lift.equiv (.id R) _ _ _)).toLinearMap
+
+@[simp]
 
 Depends on / 依赖: AlgebraTensorModule, LinearMap, LinearMap.llcomp, TensorProduct, TensorProduct.AlgebraTensorModule.congr, TensorProduct.AlgebraTensorModule.homTensorHomMap, TensorProduct.AlgebraTensorModule.tensorTensorTensorComm, TensorProduct.lift.equiv, homTensorHomMap, llcomp, otimes, symm.toLinearMap, tensorTensorTensorComm, toLinearMap
 -/
@@ -421,7 +431,10 @@ definition tensorDistribEquiv
   TensorProduct.congr
     (TensorProduct.lift.equiv (.id R) _ _ _) (TensorProduct.lift.equiv (.id R) _ _ _) ≪≫ₗ
   TensorProduct.dualDistribEquiv R (M₁ otimes M₁) (M₂ otimes M₂) ≪≫ₗ
-  (TensorProduc
+  (TensorProduct.tensorTensorTensorComm R _ _ _ _).dualMap ≪≫ₗ
+  (TensorProduct.lift.equiv (.id R) _ _ _).symm
+
+@[simp]
 
 中文:
 定义 tensorDistribEquiv
@@ -431,7 +444,10 @@ definition tensorDistribEquiv
   TensorProduct.congr
     (TensorProduct.lift.equiv (.id R) _ _ _) (TensorProduct.lift.equiv (.id R) _ _ _) ≪≫ₗ
   TensorProduct.dualDistribEquiv R (M₁ otimes M₁) (M₂ otimes M₂) ≪≫ₗ
-  (TensorProduc
+  (TensorProduct.tensorTensorTensorComm R _ _ _ _).dualMap ≪≫ₗ
+  (TensorProduct.lift.equiv (.id R) _ _ _).symm
+
+@[simp]
 -/
 noncomputable def tensorDistribEquiv :
     BilinForm R M₁ otimes[R] BilinForm R M₂ ≃ₗ[R] BilinForm R (M₁ otimes[R] M₂) :=

@@ -53,7 +53,8 @@ theorem atTop_finset_eq_iInf
     le_iInf fun s =>
 le_principal_iff.2 mem_iInf_of_iInter s.finite_toSet (fun i => mem_principal_self _) ?_
   simp only [subset_def, mem_iInter, SetCoe.forall, mem_Ici,
-    Finset.mem_singleton, 
+    Finset.mem_singleton, Finset.subset_iff, forall_eq]
+  exact fun t => id
 
 中文:
 定理 atTop_finset_eq_iInf
@@ -64,7 +65,8 @@ le_principal_iff.2 mem_iInf_of_iInter s.finite_toSet (fun i => mem_principal_sel
     le_iInf fun s =>
 le_principal_iff.2 mem_iInf_of_iInter s.finite_toSet (fun i => mem_principal_self _) ?_
   simp only [subset_def, mem_iInter, SetCoe.forall, mem_Ici,
-    Finset.mem_singleton, 
+    Finset.mem_singleton, Finset.subset_iff, forall_eq]
+  exact fun t => id
 
 Depends on / 依赖: Finset, Finset.mem_singleton, Finset.subset_iff, SetCoe, SetCoe.forall, finite_toSet, forall_eq, le_antisymm, le_iInf, le_principal_iff, mem_Ici, mem_atTop, mem_iInf_of_iInter, mem_iInter, mem_principal_self, mem_singleton, s.finite_toSet, subset_def, subset_iff
 -/
@@ -252,7 +254,8 @@ theorem tendsto_finset_Iic_atTop_atTop
   · refine tendsto_atTop_atTop.mpr fun s => ?_
     obtain ⟨a, ha⟩ := Finset.exists_le s
     exact ⟨a, fun b hb c hc => by simpa using (ha c hc).trans hb⟩
-  · obtain h := Filter.atTop_neBot_iff.
+  · obtain h := Filter.atTop_neBot_iff.not.mpr (fun h' => h h'.2)
+    simp [not_ne_iff.mp <| Filter.neBot_iff.not.mp h]
 
 中文:
 定理 tendsto_finset_Iic_atTop_atTop
@@ -264,7 +267,8 @@ theorem tendsto_finset_Iic_atTop_atTop
   · refine tendsto_atTop_atTop.mpr fun s => ?_
     obtain ⟨a, ha⟩ := Finset.exists_le s
     exact ⟨a, fun b hb c hc => by simpa using (ha c hc).trans hb⟩
-  · obtain h := Filter.atTop_neBot_iff.
+  · obtain h := Filter.atTop_neBot_iff.not.mpr (fun h' => h h'.2)
+    simp [not_ne_iff.mp <| Filter.neBot_iff.not.mp h]
 
 Depends on / 依赖: Filter, Filter.atTop_neBot_iff.not.mpr, Filter.neBot_iff.not.mp, Finset, Finset.exists_le, IsDirectedOrder, atTop_neBot_iff, exists_le, isEmpty_or_nonempty, neBot_iff, not_ne_iff, not_ne_iff.mp, tendsto_atTop_atTop, tendsto_atTop_atTop.mpr, tendsto_of_isEmpty
 -/

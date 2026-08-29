@@ -123,7 +123,8 @@ theorem poly_eq_of_wittPolynomial_bind_eq'
   rw [← funext_iff] at h
   replace h :=
     congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom Rat) ∘ fam) (xInTermsOfW p Rat n)) h
-  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bi
+  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bind₁_bind₁,
+    bind₁_wittPolynomial_xInTermsOfW, bind₁_X_right] using h
 
 中文:
 定理 poly_eq_of_wittPolynomial_bind_eq'
@@ -134,7 +135,8 @@ theorem poly_eq_of_wittPolynomial_bind_eq'
   rw [← funext_iff] at h
   replace h :=
     congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom Rat) ∘ fam) (xInTermsOfW p Rat n)) h
-  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bi
+  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bind₁_bind₁,
+    bind₁_wittPolynomial_xInTermsOfW, bind₁_X_right] using h
 
 Depends on / 依赖: Function, Function.comp_def, Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map, MvPolynomial.map_injective, castRingHom, cast_injective, comp_def, congr_arg, funext_iff, map_injective, map_wittPolynomial, replace, xInTermsOfW
 -/
@@ -160,7 +162,8 @@ theorem poly_eq_of_wittPolynomial_bind_eq
   rw [← funext_iff] at h
   replace h :=
     congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom Rat) ∘ fam) (xInTermsOfW p Rat n)) h
-  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bi
+  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bind₁_bind₁,
+    bind₁_wittPolynomial_xInTermsOfW, bind₁_X_right] using h
 
 中文:
 定理 poly_eq_of_wittPolynomial_bind_eq
@@ -171,7 +174,8 @@ theorem poly_eq_of_wittPolynomial_bind_eq
   rw [← funext_iff] at h
   replace h :=
     congr_arg (fun fam => bind₁ (MvPolynomial.map (Int.castRingHom Rat) ∘ fam) (xInTermsOfW p Rat n)) h
-  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bi
+  simpa only [Function.comp_def, map_bind₁, map_wittPolynomial, ← bind₁_bind₁,
+    bind₁_wittPolynomial_xInTermsOfW, bind₁_X_right] using h
 
 Depends on / 依赖: ContinuousEval, ContinuousEval.toContinuousMapClass, ContinuousMapClass, Function, Function.comp_def, Int.castRingHom, Int.cast_injective, MvPolynomial, MvPolynomial.map, MvPolynomial.map_injective, castRingHom, cast_injective, comp_def, congr_arg, funext_iff, map_injective, map_wittPolynomial, replace, toContinuousMapClass, xInTermsOfW
 -/
@@ -282,7 +286,16 @@ theorem ext
   intro x
   simp only [hom_bind₁]
   specialize h (ULift Int) (mk p fun i => ⟨x i⟩) k
-  simp only [ghostComponent_apply, aeval_eq_ev
+  simp only [ghostComponent_apply, aeval_eq_eval₂Hom] at h
+  apply (ULift.ringEquiv.symm : Int ≃+* _).injective
+  simp only [← RingEquiv.coe_toRingHom, map_eval₂Hom]
+  convert! h using 1
+  all_goals
+    simp only [hf, hg, MvPolynomial.eval, map_eval₂Hom]
+    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+    ext1
+    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+    simp only [coeff_mk]; rfl
 
 中文:
 定理 ext
@@ -298,7 +311,16 @@ theorem ext
   intro x
   simp only [hom_bind₁]
   specialize h (ULift Int) (mk p fun i => ⟨x i⟩) k
-  simp only [ghostComponent_apply, aeval_eq_ev
+  simp only [ghostComponent_apply, aeval_eq_eval₂Hom] at h
+  apply (ULift.ringEquiv.symm : Int ≃+* _).injective
+  simp only [← RingEquiv.coe_toRingHom, map_eval₂Hom]
+  convert! h using 1
+  all_goals
+    simp only [hf, hg, MvPolynomial.eval, map_eval₂Hom]
+    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+    ext1
+    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+    simp only [coeff_mk]; rfl
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.eval, MvPolynomial.funext, RingEquiv, RingEquiv.coe_toRingHom, ULift.ringEquiv.symm, all_goals, coe_toRingHom, convert, ghostComponent_apply, injective, intros, poly_eq_of_wittPolynomial_bind_eq, ringEquiv, specialize
 -/
@@ -397,7 +419,11 @@ instance IsPoly₂.comp
       fun k => rename (Prod.mk (1 : Fin 2)) (ψ k)]) (χ n), ?_⟩⟩
   intros
   funext n
-  simp +unfoldPartialApp only [peval, aeval_bind₁, hh, 
+  simp +unfoldPartialApp only [peval, aeval_bind₁, hh, hf, hg,
+    uncurry]
+  apply eval₂Hom_congr rfl _ rfl
+  ext ⟨i, n⟩
+  fin_cases i <;> simp [aeval_eq_eval₂Hom, eval₂Hom_rename, Function.comp_def]
 
 中文:
 实例 是Poly₂.comp
@@ -411,7 +437,11 @@ instance IsPoly₂.comp
       fun k => rename (Prod.mk (1 : Fin 2)) (ψ k)]) (χ n), ?_⟩⟩
   intros
   funext n
-  simp +unfoldPartialApp only [peval, aeval_bind₁, hh, 
+  simp +unfoldPartialApp only [peval, aeval_bind₁, hh, hf, hg,
+    uncurry]
+  apply eval₂Hom_congr rfl _ rfl
+  ext ⟨i, n⟩
+  fin_cases i <;> simp [aeval_eq_eval₂Hom, eval₂Hom_rename, Function.comp_def]
 
 Depends on / 依赖: Function, Function.comp_def, Prod.mk, comp_def, fin_cases, intros, uncurry, unfoldPartialApp
 -/
@@ -612,7 +642,8 @@ theorem bind₁_onePoly_wittPolynomial
   · simp only [onePoly, one_pow, one_mul, map_pow, C_1, pow_zero, bind₁_X_right, if_true]
   · intro i _hi hi0
     simp only [onePoly, if_neg hi0, zero_pow (pow_ne_zero _ hp.1.ne_zero), mul_zero, map_pow,
-      bin
+      bind₁_X_right, map_mul]
+  · simp
 
 中文:
 定理 bind₁_onePoly_wittPolynomial
@@ -622,7 +653,8 @@ theorem bind₁_onePoly_wittPolynomial
   · simp only [onePoly, one_pow, one_mul, map_pow, C_1, pow_zero, bind₁_X_right, if_true]
   · intro i _hi hi0
     simp only [onePoly, if_neg hi0, zero_pow (pow_ne_zero _ hp.1.ne_zero), mul_zero, map_pow,
-      bin
+      bind₁_X_right, map_mul]
+  · simp
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, if_neg, if_true, map_mul, map_pow, map_sum, mul_zero, ne_zero, onePoly, one_mul, one_pow, pow_ne_zero, pow_zero, sum_eq_single, wittPolynomial_eq_sum_C_mul_X_pow, zero_pow
 -/
@@ -719,7 +751,8 @@ theorem IsPoly.map
   -- see `IsPoly₂.map` for a slightly more general proof strategy
   obtain ⟨φ, hf⟩ := hf
   ext n
-  simp_rw [map_coeff, hf, map_aeval, funext (map_coef
+  simp_rw [map_coeff, hf, map_aeval, funext (map_coeff g _), RingHom.ext_int _ (algebraMap Int S),
+    aeval_eq_eval₂Hom]
 
 中文:
 定理 是Poly.map
@@ -730,7 +763,8 @@ theorem IsPoly.map
   -- see `IsPoly₂.map` for a slightly more general proof strategy
   obtain ⟨φ, hf⟩ := hf
   ext n
-  simp_rw [map_coeff, hf, map_aeval, funext (map_coef
+  simp_rw [map_coeff, hf, map_aeval, funext (map_coeff g _), RingHom.ext_int _ (algebraMap Int S),
+    aeval_eq_eval₂Hom]
 -/
 theorem IsPoly.map [Fact p.Prime] {f} (hf : IsPoly p f) (g : R ->+* S) (x : 𝕎 R) :
     map g (f x) = f (map g x) := by
@@ -777,7 +811,17 @@ theorem ext
   intro x
   simp only [hom_bind₁]
   specialize h (ULift Int) (mk p fun i => ⟨x (0, i)⟩) (mk p fun i => ⟨x (1, i)⟩) k
-  simp only [
+  simp only [ghostComponent_apply, aeval_eq_eval₂Hom] at h
+  apply (ULift.ringEquiv.symm : Int ≃+* _).injective
+  simp only [← RingEquiv.coe_toRingHom, map_eval₂Hom]
+  convert! h using 1
+  all_goals
+    simp only [hf, hg, MvPolynomial.eval, map_eval₂Hom]
+    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+    ext1
+    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+    ext ⟨b, _⟩
+    fin_cases b <;> simp only [coeff_mk, uncurry] <;> rfl
 
 中文:
 定理 ext
@@ -793,7 +837,17 @@ theorem ext
   intro x
   simp only [hom_bind₁]
   specialize h (ULift Int) (mk p fun i => ⟨x (0, i)⟩) (mk p fun i => ⟨x (1, i)⟩) k
-  simp only [
+  simp only [ghostComponent_apply, aeval_eq_eval₂Hom] at h
+  apply (ULift.ringEquiv.symm : Int ≃+* _).injective
+  simp only [← RingEquiv.coe_toRingHom, map_eval₂Hom]
+  convert! h using 1
+  all_goals
+    simp only [hf, hg, MvPolynomial.eval, map_eval₂Hom]
+    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+    ext1
+    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+    ext ⟨b, _⟩
+    fin_cases b <;> simp only [coeff_mk, uncurry] <;> rfl
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.eval, MvPolynomial.funext, RingEquiv, RingEquiv.coe_toRingHom, ULift.ringEquiv.symm, all_goals, coe_toRingHom, convert, ghostComponent_apply, injective, intros, map_ev, poly_eq_of_wittPolynomial_bind_eq, ringEquiv, specialize
 -/
@@ -836,7 +890,9 @@ theorem map
   obtain ⟨φ, hf⟩ := hf
   ext n
   simp +unfoldPartialApp only [map_coeff, hf, map_aeval, peval, uncurry]
-  apply eval₂Hom_congr (RingHom.ext_int _ _) _
+  apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+  ext ⟨i, k⟩
+  fin_cases i <;> simp
 
 中文:
 定理 map
@@ -847,7 +903,9 @@ theorem map
   obtain ⟨φ, hf⟩ := hf
   ext n
   simp +unfoldPartialApp only [map_coeff, hf, map_aeval, peval, uncurry]
-  apply eval₂Hom_congr (RingHom.ext_int _ _) _
+  apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+  ext ⟨i, k⟩
+  fin_cases i <;> simp
 -/
 theorem map [Fact p.Prime] {f} (hf : IsPoly₂ p f) (g : R ->+* S) (x y : 𝕎 R) :
     map g (f x y) = f (map g x) (map g y) := by

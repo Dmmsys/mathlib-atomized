@@ -58,7 +58,7 @@ definition kernelIsLimit
       LinearMap.codRestrict f.hom.ker (Fork.ι s).hom fun c =>
 LinearMap.mem_ker.2 by simp [← ConcreteCategory.comp_apply])
     (fun _ => hom_ext <| LinearMap.subtype_comp_codRestrict _ _ _) fun s m h =>
-hom_ext LinearMap.ext fun x => Subtype.ext_iff.2 (by sim
+hom_ext LinearMap.ext fun x => Subtype.ext_iff.2 (by simp [← h]; rfl)
 
 中文:
 定义 kernelIsLimit
@@ -68,7 +68,7 @@ hom_ext LinearMap.ext fun x => Subtype.ext_iff.2 (by sim
       LinearMap.codRestrict f.hom.ker (Fork.ι s).hom fun c =>
 LinearMap.mem_ker.2 by simp [← ConcreteCategory.comp_apply])
     (fun _ => hom_ext <| LinearMap.subtype_comp_codRestrict _ _ _) fun s m h =>
-hom_ext LinearMap.ext fun x => Subtype.ext_iff.2 (by sim
+hom_ext LinearMap.ext fun x => Subtype.ext_iff.2 (by simp [← h]; rfl)
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, Fork.IsLimit.mk, IsLimit, LinearMap, LinearMap.codRestrict, LinearMap.ext, LinearMap.mem_ker, LinearMap.subtype_comp_codRestrict, Subtype, Subtype.ext_iff, codRestrict, comp_apply, ext_iff, f.hom.ker, hom_ext, mem_ker, subtype_comp_codRestrict
 -/
@@ -143,7 +143,10 @@ definition cokernelIsColimit
     (fun s => ofHom <| (LinearMap.range f.hom).liftQ (Cofork.π s).hom <|
 LinearMap.range_le_ker_iff.2 ModuleCat.hom_ext_iff.mp CokernelCofork.condition s)
     (fun s => hom_ext <| (LinearMap.range f.hom).liftQ_mkQ (Cofork.π s).hom _) fun s m h => by
-    have : Epi (ofHom f.hom.
+    have : Epi (ofHom f.hom.range.mkQ) :=
+      (epi_iff_range_eq_top _).mpr (Submodule.range_mkQ _)
+    apply (cancel_epi (ofHom f.hom.range.mkQ)).1
+    exact h
 
 中文:
 定义 cokernelIsColimit
@@ -152,7 +155,10 @@ LinearMap.range_le_ker_iff.2 ModuleCat.hom_ext_iff.mp CokernelCofork.condition s
     (fun s => ofHom <| (LinearMap.range f.hom).liftQ (Cofork.π s).hom <|
 LinearMap.range_le_ker_iff.2 ModuleCat.hom_ext_iff.mp CokernelCofork.condition s)
     (fun s => hom_ext <| (LinearMap.range f.hom).liftQ_mkQ (Cofork.π s).hom _) fun s m h => by
-    have : Epi (ofHom f.hom.
+    have : Epi (ofHom f.hom.range.mkQ) :=
+      (epi_iff_range_eq_top _).mpr (Submodule.range_mkQ _)
+    apply (cancel_epi (ofHom f.hom.range.mkQ)).1
+    exact h
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.mk, CokernelCofork, CokernelCofork.condition, IsColimit, LinearMap, LinearMap.range, LinearMap.range_le_ker_iff, ModuleCat, ModuleCat.hom_ext_iff.mp, Submodule, Submodule.range_mkQ, cancel_epi, condition, epi_iff_range_eq_top, f.hom, f.hom.range.mkQ, hom_ext, hom_ext_iff, liftQ_mkQ
 -/
@@ -179,7 +185,8 @@ refine IsColimit.ofIsoColimit (ModuleCat.cokernelIsColimit f)
     Cocone.ext (((Submodule.quotEquivOfEq _ _ (LinearMap.exact_iff.mp H)).toModuleIso).symm
     ≪≫ ((LinearMap.quotKerEquivOfSurjective _ H₂).toModuleIso)) ?_
   · rintro ⟨⟩ <;> ext x
-    · simpa using! (Function.Exact.apply_apply_eq_ze
+    · simpa using! (Function.Exact.apply_apply_eq_zero H x).symm
+    · rfl
 
 中文:
 定义 isColimitCokernelCofork
@@ -189,7 +196,8 @@ refine IsColimit.ofIsoColimit (ModuleCat.cokernelIsColimit f)
     Cocone.ext (((Submodule.quotEquivOfEq _ _ (LinearMap.exact_iff.mp H)).toModuleIso).symm
     ≪≫ ((LinearMap.quotKerEquivOfSurjective _ H₂).toModuleIso)) ?_
   · rintro ⟨⟩ <;> ext x
-    · simpa using! (Function.Exact.apply_apply_eq_ze
+    · simpa using! (Function.Exact.apply_apply_eq_zero H x).symm
+    · rfl
 
 Depends on / 依赖: Cocone, Cocone.ext, Function, Function.Exact.apply_apply_eq_zero, H.apply_apply_eq_zero, IsColimit, IsColimit.ofIsoColimit, LinearMap, LinearMap.exact_iff.mp, LinearMap.quotKerEquivOfSurjective, ModuleCat, ModuleCat.cokernelIsColimit, Submodule, Submodule.quotEquivOfEq, apply_apply_eq_zero, cokernelIsColimit, exact_iff, ofIsoColimit, quotEquivOfEq, quotKerEquivOfSurjective
 -/

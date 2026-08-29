@@ -159,7 +159,20 @@ theorem exists_ideal_in_class_of_norm_le
     exists_ne_zero_mem_ideal_of_norm_le_mul_sqrt_discr K (FractionalIdeal.mk0 K J)
   obtain ⟨I₀, hI⟩ := dvd_iff_le.mpr ((span_singleton_le_iff_mem J).mpr (by exact ha))
   have : I₀ != 0 := by
-    contrapos
+    contrapose h_nz
+    rw [h_nz]; rw [mul_zero]; rw [zero_eq_bot]; rw [span_singleton_eq_bot] at hI
+    rw [Algebra.linearMap_apply]; rw [hI]; rw [map_zero]
+  let I := (⟨I₀, mem_nonZeroDivisors_iff_ne_zero.mpr this⟩ : (Ideal (𝓞 K))⁰)
+  refine ⟨I, ?_, ?_⟩
+  · suffices ClassGroup.mk0 I = (ClassGroup.mk0 J)⁻¹ by rw [this, hJ, inv_inv]
+    exact ClassGroup.mk0_eq_mk0_inv_iff.mpr ⟨a, Subtype.coe_ne_coe.1 h_nz, by rw [mul_comm, hI]⟩
+  · rw [← FractionalIdeal.absNorm_span_singleton (𝓞 K), Algebra.linearMap_apply,
+      ← FractionalIdeal.coeIdeal_span_singleton, FractionalIdeal.coeIdeal_absNorm, hI, map_mul,
+      cast_mul, Rat.cast_mul, absNorm_apply, Rat.cast_natCast, Rat.cast_natCast,
+      FractionalIdeal.coe_mk0, FractionalIdeal.coeIdeal_absNorm, Rat.cast_natCast, mul_div_assoc,
+      mul_assoc, mul_assoc] at h_nm
+    refine le_of_mul_le_mul_of_pos_left h_nm ?_
+exact cast_pos.mpr pos_of_ne_zero absNorm_ne_zero_of_nonZeroDivisors J
 
 中文:
 定理 存在_ideal_in_class_of_norm_le
@@ -170,7 +183,20 @@ theorem exists_ideal_in_class_of_norm_le
     exists_ne_zero_mem_ideal_of_norm_le_mul_sqrt_discr K (FractionalIdeal.mk0 K J)
   obtain ⟨I₀, hI⟩ := dvd_iff_le.mpr ((span_singleton_le_iff_mem J).mpr (by exact ha))
   have : I₀ != 0 := by
-    contrapos
+    contrapose h_nz
+    rw [h_nz]; rw [mul_zero]; rw [zero_eq_bot]; rw [span_singleton_eq_bot] at hI
+    rw [Algebra.linearMap_apply]; rw [hI]; rw [map_zero]
+  let I := (⟨I₀, mem_nonZeroDivisors_iff_ne_zero.mpr this⟩ : (Ideal (𝓞 K))⁰)
+  refine ⟨I, ?_, ?_⟩
+  · suffices ClassGroup.mk0 I = (ClassGroup.mk0 J)⁻¹ by rw [this, hJ, inv_inv]
+    exact ClassGroup.mk0_eq_mk0_inv_iff.mpr ⟨a, Subtype.coe_ne_coe.1 h_nz, by rw [mul_comm, hI]⟩
+  · rw [← FractionalIdeal.absNorm_span_singleton (𝓞 K), Algebra.linearMap_apply,
+      ← FractionalIdeal.coeIdeal_span_singleton, FractionalIdeal.coeIdeal_absNorm, hI, map_mul,
+      cast_mul, Rat.cast_mul, absNorm_apply, Rat.cast_natCast, Rat.cast_natCast,
+      FractionalIdeal.coe_mk0, FractionalIdeal.coeIdeal_absNorm, Rat.cast_natCast, mul_div_assoc,
+      mul_assoc, mul_assoc] at h_nm
+    refine le_of_mul_le_mul_of_pos_left h_nm ?_
+exact cast_pos.mpr pos_of_ne_zero absNorm_ne_zero_of_nonZeroDivisors J
 
 Depends on / 依赖: Algebra, Algebra.linearMap_apply, ClassGroup, ClassGroup.mk0_surjective, FractionalIdeal, FractionalIdeal.mk0, contrapose, dvd_iff_le, dvd_iff_le.mpr, exists_ne_zero_mem_ideal_of_norm_le_mul_sqrt_discr, h_nm, h_nz, linearMap_apply, map_zero, mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero.mpr, mk0_surjective, mul_zero, span_singleton_eq_bot, span_singleton_le_iff_mem
 -/
@@ -243,7 +269,13 @@ theorem isPrincipalIdealRing_of_isPrincipal_of_norm_le_of_isPrime
   refine isPrincipalIdealRing_of_isPrincipal_of_norm_le (fun I hI => ?_)
   rw [← mem_isPrincipalSubmonoid_iff]; rw [← Ideal.prod_normalizedFactors_eq_self (nonZeroDivisors.coe_ne_zero I)]
   refine Submonoid.multiset_prod_mem _ _ (fun J hJ => mem_isPrincipalSubmonoid_iff.mp ?_)
-  by_cases hJ0 : J 
+  by_cases hJ0 : J = 0
+  · simpa [hJ0] using! bot_isPrincipal
+  rw [← Subtype.coe_mk J (mem_nonZeroDivisors_of_ne_zero hJ0)]
+  refine h (((mem_normalizedFactors_iff (nonZeroDivisors.coe_ne_zero I)).mp hJ).1) ?_
+  exact (cast_le.mpr <| le_of_dvd (absNorm_pos_of_nonZeroDivisors I) <|
+absNorm_dvd_absNorm_of_le le_of_dvd
+      UniqueFactorizationMonoid.dvd_of_mem_normalizedFactors hJ).trans hI
 
 中文:
 定理 isPrincipalIdealRing_of_isPrincipal_of_norm_le_of_isPrime
@@ -251,7 +283,13 @@ theorem isPrincipalIdealRing_of_isPrincipal_of_norm_le_of_isPrime
   refine isPrincipalIdealRing_of_isPrincipal_of_norm_le (fun I hI => ?_)
   rw [← mem_isPrincipalSubmonoid_iff]; rw [← Ideal.prod_normalizedFactors_eq_self (nonZeroDivisors.coe_ne_zero I)]
   refine Submonoid.multiset_prod_mem _ _ (fun J hJ => mem_isPrincipalSubmonoid_iff.mp ?_)
-  by_cases hJ0 : J 
+  by_cases hJ0 : J = 0
+  · simpa [hJ0] using! bot_isPrincipal
+  rw [← Subtype.coe_mk J (mem_nonZeroDivisors_of_ne_zero hJ0)]
+  refine h (((mem_normalizedFactors_iff (nonZeroDivisors.coe_ne_zero I)).mp hJ).1) ?_
+  exact (cast_le.mpr <| le_of_dvd (absNorm_pos_of_nonZeroDivisors I) <|
+absNorm_dvd_absNorm_of_le le_of_dvd
+      UniqueFactorizationMonoid.dvd_of_mem_normalizedFactors hJ).trans hI
 
 Depends on / 依赖: Ideal.prod_normalizedFactors_eq_self, Submonoid, Submonoid.multiset_prod_mem, Subtype, Subtype.coe_mk, bot_isPrincipal, cast_le, cast_le.mpr, coe_mk, coe_ne_zero, isPrincipalIdealRing_of_isPrincipal_of_norm_le, mem_isPrincipalSubmonoid_iff, mem_isPrincipalSubmonoid_iff.mp, mem_nonZeroDivisors_of_ne_zero, mem_normalizedFactors_iff, multiset_prod_mem, nonZeroDivisors, nonZeroDivisors.coe_ne_zero, prod_normalizedFactors_eq_self
 -/
@@ -281,7 +319,27 @@ refine isPrincipalIdealRing_of_isPrincipal_of_norm_le_of_isPrime
     fun ⟨P, HP⟩ hP hPN => ?_
 obtain ⟨p, hp⟩ := IsPrincipalIdealRing.principal under Int P
 have hp0 : p != 0 := fun h => nonZeroDivisors.coe_ne_zero ⟨P, HP⟩
-eq_bot_of_comap_eq_bot (R := Int) by simpa only [hp, submodule_span_eq, span
+eq_bot_of_comap_eq_bot (R := Int) by simpa only [hp, submodule_span_eq, span_singleton_eq_bot]
+  have hpprime := (span_singleton_prime hp0).mp
+  simp only [← submodule_span_eq, ← hp] at hpprime
+  have hlies : P.LiesOver (span {p}) := by
+    rcases abs_choice p with h | h <;>
+    simpa [h, span_singleton_neg p, ← submodule_span_eq, ← hp] using over_under P
+  have hspan : span {↑p.natAbs} = span {p} := by
+    rcases abs_choice p with h | h <;> simp [h]
+  have hple : p.natAbs ^ P.inertiaDeg Int <= ⌊(M K)⌋₊ := by
+    refine le_floor ?_
+    have : P.IsMaximal := hP.isMaximal (by simpa using HP.2)
+    have : (span {p}).IsMaximal := (hpprime (.under Int P)).isMaximal_span_singleton
+    simpa only [hspan, ← cast_pow, ← natAbs_pow_inertiaDeg p P] using hPN
+  have hpabsprime := Int.prime_iff_natAbs_prime.mp (hpprime (hP.under _))
+  refine h _ ?_ hpabsprime _ ⟨hP, ?_⟩ hple
+  · suffices 0 < P.inertiaDeg Int by
+      exact Finset.mem_Icc.mpr ⟨hpabsprime.one_le, le_trans (le_pow this) hple⟩
+    have := (isPrime_of_prime (prime_span_singleton_iff.mpr <|
+      hpprime (hP.under _))).isMaximal <| by simp [((hpprime (hP.under _))).ne_zero]
+    exact inertiaDeg_pos ..
+  · exact hspan ▸ hlies
 
 中文:
 定理 isPrincipalIdealRing_of_isPrincipal_of_pow_le_of_mem_primesOver_of_mem_Icc
@@ -290,7 +348,27 @@ refine isPrincipalIdealRing_of_isPrincipal_of_norm_le_of_isPrime
     fun ⟨P, HP⟩ hP hPN => ?_
 obtain ⟨p, hp⟩ := IsPrincipalIdealRing.principal under Int P
 have hp0 : p != 0 := fun h => nonZeroDivisors.coe_ne_zero ⟨P, HP⟩
-eq_bot_of_comap_eq_bot (R := Int) by simpa only [hp, submodule_span_eq, span
+eq_bot_of_comap_eq_bot (R := Int) by simpa only [hp, submodule_span_eq, span_singleton_eq_bot]
+  have hpprime := (span_singleton_prime hp0).mp
+  simp only [← submodule_span_eq, ← hp] at hpprime
+  have hlies : P.LiesOver (span {p}) := by
+    rcases abs_choice p with h | h <;>
+    simpa [h, span_singleton_neg p, ← submodule_span_eq, ← hp] using over_under P
+  have hspan : span {↑p.natAbs} = span {p} := by
+    rcases abs_choice p with h | h <;> simp [h]
+  have hple : p.natAbs ^ P.inertiaDeg Int <= ⌊(M K)⌋₊ := by
+    refine le_floor ?_
+    have : P.IsMaximal := hP.isMaximal (by simpa using HP.2)
+    have : (span {p}).IsMaximal := (hpprime (.under Int P)).isMaximal_span_singleton
+    simpa only [hspan, ← cast_pow, ← natAbs_pow_inertiaDeg p P] using hPN
+  have hpabsprime := Int.prime_iff_natAbs_prime.mp (hpprime (hP.under _))
+  refine h _ ?_ hpabsprime _ ⟨hP, ?_⟩ hple
+  · suffices 0 < P.inertiaDeg Int by
+      exact Finset.mem_Icc.mpr ⟨hpabsprime.one_le, le_trans (le_pow this) hple⟩
+    have := (isPrime_of_prime (prime_span_singleton_iff.mpr <|
+      hpprime (hP.under _))).isMaximal <| by simp [((hpprime (hP.under _))).ne_zero]
+    exact inertiaDeg_pos ..
+  · exact hspan ▸ hlies
 
 Depends on / 依赖: IsPrincipalIdealRing, IsPrincipalIdealRing.principal, LiesOver, P.LiesOver, abs_choice, coe_ne_zero, eq_bot_of_comap_eq_bot, hpprime, isPrincipalIdealRing_of_isPrincipal_of_norm_le_of_isPrime, nonZeroDivisors, nonZeroDivisors.coe_ne_zero, principal, span_singleton_eq_bot, span_singleton_prime, submodule_span_eq
 -/
@@ -335,6 +413,11 @@ theorem isPrincipalIdealRing_of_isPrincipal_of_lt_or_isPrincipal_of_mem_primesOv
   obtain ⟨Q, ⟨hQ1, hQ2⟩, H⟩ := h p hpmem hp
   have := (isPrime_of_prime (prime_span_singleton_iff.mpr (prime_iff_prime_int.mp hp))).isMaximal
     (by simp [hp.ne_zero])
+  by_cases h : ⌊(M K)⌋₊ < p ^ P.inertiaDeg Int
+  · linarith
+  rw [inertiaDeg_eq_of_isGaloisGroup (span {↑p}) Q P (K ≃ₐ[Rat] K)] at H
+  obtain ⟨σ, rfl⟩ := exists_smul_eq_of_isGaloisGroup (span ({↑p} : Set Int)) Q P (K ≃ₐ[Rat] K)
+  exact (H.resolve_left h).map_ringHom (MulSemiringAction.toRingHom (K ≃ₐ[Rat] K) (𝓞 K) σ)
 
 中文:
 定理 isPrincipalIdealRing_of_isPrincipal_of_lt_or_isPrincipal_of_mem_primesOver_of_mem_Icc
@@ -344,6 +427,11 @@ theorem isPrincipalIdealRing_of_isPrincipal_of_lt_or_isPrincipal_of_mem_primesOv
   obtain ⟨Q, ⟨hQ1, hQ2⟩, H⟩ := h p hpmem hp
   have := (isPrime_of_prime (prime_span_singleton_iff.mpr (prime_iff_prime_int.mp hp))).isMaximal
     (by simp [hp.ne_zero])
+  by_cases h : ⌊(M K)⌋₊ < p ^ P.inertiaDeg Int
+  · linarith
+  rw [inertiaDeg_eq_of_isGaloisGroup (span {↑p}) Q P (K ≃ₐ[Rat] K)] at H
+  obtain ⟨σ, rfl⟩ := exists_smul_eq_of_isGaloisGroup (span ({↑p} : Set Int)) Q P (K ≃ₐ[Rat] K)
+  exact (H.resolve_left h).map_ringHom (MulSemiringAction.toRingHom (K ≃ₐ[Rat] K) (𝓞 K) σ)
 
 Depends on / 依赖: P.inertiaDeg, exists_smul_eq_of_isGaloisGroup, hp.ne_zero, inertiaDeg, inertiaDeg_eq_of_isGaloisGroup, isMaximal, isPrime_of_prime, isPrincipalIdealRing_of_isPrincipal_of_pow_le_of_mem_primesOver_of_mem_Icc, ne_zero, prime_iff_prime_int, prime_iff_prime_int.mp, prime_span_singleton_iff, prime_span_singleton_iff.mpr
 -/
@@ -371,13 +459,21 @@ English:
 theorem isPrincipalIdealRing_of_abs_discr_lt
   proof: by
   have : 0 < finrank Rat K := finrank_pos -- Lean needs to know this for `positivity` to succeed
-  rw [← Real.sqrt_lt (by positivity) (by positivity)]; rw [mul_assoc]; rw [← inv_mul_lt_iff₀' (by positivity)]; rw [mul_inv]; rw [← inv_pow]; rw [inv_div]; rw [inv_div]; rw [mul_assoc]; rw [Int.cast_a
+  rw [← Real.sqrt_lt (by positivity) (by positivity)]; rw [mul_assoc]; rw [← inv_mul_lt_iff₀' (by positivity)]; rw [mul_inv]; rw [← inv_pow]; rw [inv_div]; rw [inv_div]; rw [mul_assoc]; rw [Int.cast_abs] at h
+  refine isPrincipalIdealRing_of_isPrincipal_of_norm_le (fun I hI => ?_)
+  rw [absNorm_eq_one_iff.mp <| le_antisymm (Nat.lt_succ_iff.mp (cast_lt.mp
+    (lt_of_le_of_lt hI h))) <| one_le_iff_ne_zero.mpr (absNorm_ne_zero_of_nonZeroDivisors I)]
+  exact top_isPrincipal
 
 中文:
 定理 isPrincipalIdealRing_of_abs_discr_lt
   证明: by
   have : 0 < finrank Rat K := finrank_pos -- Lean needs to know this for `positivity` to succeed
-  rw [← Real.sqrt_lt (by positivity) (by positivity)]; rw [mul_assoc]; rw [← inv_mul_lt_iff₀' (by positivity)]; rw [mul_inv]; rw [← inv_pow]; rw [inv_div]; rw [inv_div]; rw [mul_assoc]; rw [Int.cast_a
+  rw [← Real.sqrt_lt (by positivity) (by positivity)]; rw [mul_assoc]; rw [← inv_mul_lt_iff₀' (by positivity)]; rw [mul_inv]; rw [← inv_pow]; rw [inv_div]; rw [inv_div]; rw [mul_assoc]; rw [Int.cast_abs] at h
+  refine isPrincipalIdealRing_of_isPrincipal_of_norm_le (fun I hI => ?_)
+  rw [absNorm_eq_one_iff.mp <| le_antisymm (Nat.lt_succ_iff.mp (cast_lt.mp
+    (lt_of_le_of_lt hI h))) <| one_le_iff_ne_zero.mpr (absNorm_ne_zero_of_nonZeroDivisors I)]
+  exact top_isPrincipal
 
 Depends on / 依赖: Int.cast_abs, Nat.lt_succ_iff.mp, Real.sqrt_lt, absNorm_eq_one_iff, absNorm_eq_one_iff.mp, cast_abs, cast_lt, cast_lt.mp, finrank, finrank_pos, inv_div, inv_pow, isPrincipalIdealRing_of_isPrincipal_of_norm_le, le_antisymm, lt_of_le_of_lt, lt_succ_iff, mul_assoc, mul_inv, one_le_iff_ne_zero, one_le_iff_ne_zero.mpr
 -/

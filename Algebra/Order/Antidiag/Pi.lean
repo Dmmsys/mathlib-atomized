@@ -75,7 +75,18 @@ definition finAntidiagonal.aux
     { val := (antidiagonal n).disjiUnion
         (fun ab => (aux d ab.2).1.map {
             toFun := Fin.cons (ab.1)
-            inj' := Fin.cons_right_
+            inj' := Fin.cons_right_injective _ }) <| by
+        intro i _ j _ hij
+        simp only [Finset.disjoint_left, Finset.mem_map, Embedding.coeFn_mk]
+        grind [Fin.cons_inj]
+      property := fun f => by
+        simp_rw [mem_disjiUnion, mem_antidiagonal, mem_map, Embedding.coeFn_mk, Prod.exists,
+          (aux d _).prop, Fin.sum_univ_succ]
+        constructor
+        · rintro ⟨a, b, rfl, g, rfl, rfl⟩
+          simp only [Fin.cons_zero, Fin.cons_succ]
+        · intro hf
+          exact ⟨_, _, hf, _, rfl, Fin.cons_self_tail f⟩ }
 
 中文:
 定义 finAntidiagonal.aux
@@ -90,7 +101,18 @@ definition finAntidiagonal.aux
     { val := (antidiagonal n).disjiUnion
         (fun ab => (aux d ab.2).1.map {
             toFun := Fin.cons (ab.1)
-            inj' := Fin.cons_right_
+            inj' := Fin.cons_right_injective _ }) <| by
+        intro i _ j _ hij
+        simp only [Finset.disjoint_left, Finset.mem_map, Embedding.coeFn_mk]
+        grind [Fin.cons_inj]
+      property := fun f => by
+        simp_rw [mem_disjiUnion, mem_antidiagonal, mem_map, Embedding.coeFn_mk, Prod.exists,
+          (aux d _).prop, Fin.sum_univ_succ]
+        constructor
+        · rintro ⟨a, b, rfl, g, rfl, rfl⟩
+          simp only [Fin.cons_zero, Fin.cons_succ]
+        · intro hf
+          exact ⟨_, _, hf, _, rfl, Fin.cons_self_tail f⟩ }
 
 Depends on / 依赖: Embedding, Embedding.coeFn_mk, Fin.cons, Fin.cons_inj, Fin.cons_right_injective, Fin.su, Finset, Finset.disjoint_left, Finset.mem_map, Ne.symm, Prod.exists, Subsingleton, Subsingleton.elim, antidiagonal, coeFn_mk, cons_inj, cons_right_injective, disjiUnion, disjoint_left, mem_antidiagonal
 -/
@@ -174,7 +196,10 @@ definition piAntidiag
     ext i
     simpa using congr_fun hfg (e.symm i)
   · ext f
-    si
+    simp only [mem_map, mem_finAntidiagonal]
+    refine Equiv.exists_congr ((e₁.symm.trans e₂).arrowCongr <| .refl _) fun g => ?_
+    have := Fintype.sum_equiv (e₂.symm.trans e₁) _ g fun _ => rfl
+    simp_all
 
 中文:
 定义 piAntidiag
@@ -188,7 +213,10 @@ definition piAntidiag
     ext i
     simpa using congr_fun hfg (e.symm i)
   · ext f
-    si
+    simp only [mem_map, mem_finAntidiagonal]
+    refine Equiv.exists_congr ((e₁.symm.trans e₂).arrowCongr <| .refl _) fun g => ?_
+    have := Fintype.sum_equiv (e₂.symm.trans e₁) _ g fun _ => rfl
+    simp_all
 
 Depends on / 依赖: Equiv.exists_congr, Fintype, Fintype.card_coe, Fintype.sum_equiv, Fintype.truncEquivFinOfCardEq, Injective, arrowCongr, card_coe, congr_fun, e.symm, exists_congr, finAntidiagonal, mem_finAntidiagonal, mem_map, s.card, sum_equiv, symm.trans, truncEquivFinOfCardEq
 -/
@@ -221,7 +249,11 @@ lemma mem_piAntidiag
   constructor
   · rintro ⟨f, ⟨hf, rfl⟩, rfl⟩
     rw [sum_dite_of_true fun _ => id]
-    exact ⟨Fintype.sum_equiv
+    exact ⟨Fintype.sum_equiv e _ _ (by simp), by simp +contextual⟩
+  · rintro ⟨rfl, hf⟩
+    refine ⟨f ∘ (↑) ∘ e.symm, ?_, by grind⟩
+    rw [← sum_attach s]
+    exact Fintype.sum_equiv e.symm _ _ (by simp)
 
 中文:
 引理 mem_piAntidiag
@@ -233,7 +265,11 @@ lemma mem_piAntidiag
   constructor
   · rintro ⟨f, ⟨hf, rfl⟩, rfl⟩
     rw [sum_dite_of_true fun _ => id]
-    exact ⟨Fintype.sum_equiv
+    exact ⟨Fintype.sum_equiv e _ _ (by simp), by simp +contextual⟩
+  · rintro ⟨rfl, hf⟩
+    refine ⟨f ∘ (↑) ∘ e.symm, ?_, by grind⟩
+    rw [← sum_attach s]
+    exact Fintype.sum_equiv e.symm _ _ (by simp)
 -/
 @[simp] lemma mem_piAntidiag : f in piAntidiag s n ↔ s.sum f = n ∧ forall i, f i != 0 -> i in s := by
   rw [piAntidiag]
@@ -353,7 +389,7 @@ lemma pairwiseDisjoint_piAntidiag_map_addRightEmbedding
   simp only [ne_eq, HasAntidiagonal.antidiagonal_congr' hab hcd, disjoint_left, mem_map,
     mem_piAntidiag, addRightEmbedding_apply, not_exists, not_and, and_imp, forall_exists_index]
   rintro hfg _ f rfl - rfl g rfl - hgf
-exact hfg by simpa [sum_add_distrib, hi] u
+exact hfg by simpa [sum_add_distrib, hi] using congr_arg (∑ j in s, · j) hgf.symm
 
 中文:
 引理 pairwiseDisjoint_piAntidiag_map_addRightEmbedding
@@ -363,7 +399,7 @@ exact hfg by simpa [sum_add_distrib, hi] u
   simp only [ne_eq, HasAntidiagonal.antidiagonal_congr' hab hcd, disjoint_left, mem_map,
     mem_piAntidiag, addRightEmbedding_apply, not_exists, not_and, and_imp, forall_exists_index]
   rintro hfg _ f rfl - rfl g rfl - hgf
-exact hfg by simpa [sum_add_distrib, hi] u
+exact hfg by simpa [sum_add_distrib, hi] using congr_arg (∑ j in s, · j) hgf.symm
 
 Depends on / 依赖: HasAntidiagonal, HasAntidiagonal.antidiagonal_congr, addRightEmbedding_apply, and_imp, antidiagonal_congr, congr_arg, disjoint_left, forall_exists_index, hgf.symm, mem_map, mem_piAntidiag, ne_eq, not_and, not_exists, sum_add_distrib
 -/
@@ -390,7 +426,9 @@ lemma piAntidiag_cons
   · rintro ⟨hn, hf⟩
     refine ⟨_, _, hn, update f i 0, ⟨sum_update_of_notMem hi _ _, fun j => ?_⟩, by aesop⟩
     grind
-  · rintro ⟨a, _, hn, g, ⟨rfl, hg⟩, rfl
+  · rintro ⟨a, _, hn, g, ⟨rfl, hg⟩, rfl⟩
+    have := hg i
+    aesop (add simp [sum_add_distrib])
 
 中文:
 引理 piAntidiag_cons
@@ -403,7 +441,9 @@ lemma piAntidiag_cons
   · rintro ⟨hn, hf⟩
     refine ⟨_, _, hn, update f i 0, ⟨sum_update_of_notMem hi _ _, fun j => ?_⟩, by aesop⟩
     grind
-  · rintro ⟨a, _, hn, g, ⟨rfl, hg⟩, rfl
+  · rintro ⟨a, _, hn, g, ⟨rfl, hg⟩, rfl⟩
+    have := hg i
+    aesop (add simp [sum_add_distrib])
 
 Depends on / 依赖: Prod.exists, mem_antidiagonal, mem_cons, mem_disjiUnion, mem_map, mem_piAntidiag, ne_eq, sum_add_distrib, sum_cons, sum_update_of_notMem, update
 -/
@@ -515,7 +555,11 @@ lemma nsmul_piAntidiag
   have (i : _) : n ∣ f i := by
     by_cases hi : i in s
     · exact hfdvd _ hi
-    · rw [not_i
+    · rw [not_imp_comm.1 (hfsup _) hi]
+      exact dvd_zero _
+  refine ⟨fun i => f i / n, ?_⟩
+  simp [funext_iff, Nat.mul_div_cancel', ← Nat.sum_div, *]
+  grind
 
 中文:
 引理 nsmul_piAntidiag
@@ -531,7 +575,11 @@ lemma nsmul_piAntidiag
   have (i : _) : n ∣ f i := by
     by_cases hi : i in s
     · exact hfdvd _ hi
-    · rw [not_i
+    · rw [not_imp_comm.1 (hfsup _) hi]
+      exact dvd_zero _
+  refine ⟨fun i => f i / n, ?_⟩
+  simp [funext_iff, Nat.mul_div_cancel', ← Nat.sum_div, *]
+  grind
 
 Depends on / 依赖: Nat.mul_div_cancel, Nat.sum_div, and_assoc, dvd_zero, funext_iff, mem_filter, mem_piAntidiag, mem_smul_finset, mem_smul_finset.trans, mul_div_cancel, mul_sum, not_imp_comm, sum_div
 -/
@@ -634,7 +682,9 @@ lemma map_sym_eq_piAntidiag
   · rintro ⟨m, hm, rfl, hf⟩
     simpa [← hf, Multiset.sum_count_eq_card hm]
   · rintro ⟨rfl, hf⟩
-  
+    refine ⟨∑ a in s, f a • {a}, ?_, ?_⟩
+    · simp +contextual
+    · simpa [Multiset.count_sum', Multiset.count_singleton, not_imp_comm, eq_comm (a := 0)] using hf
 
 中文:
 引理 map_sym_eq_piAntidiag
@@ -647,7 +697,9 @@ lemma map_sym_eq_piAntidiag
   · rintro ⟨m, hm, rfl, hf⟩
     simpa [← hf, Multiset.sum_count_eq_card hm]
   · rintro ⟨rfl, hf⟩
-  
+    refine ⟨∑ a in s, f a • {a}, ?_, ?_⟩
+    · simp +contextual
+    · simpa [Multiset.count_sum', Multiset.count_singleton, not_imp_comm, eq_comm (a := 0)] using hf
 
 Depends on / 依赖: Embedding, Embedding.coeFn_mk, Multiset, Multiset.count_singleton, Multiset.count_sum, Multiset.sum_count_eq_card, Sym.coe_mk, Sym.exists, Sym.mem_mk, Sym.val_eq_coe, coeFn_mk, coe_mk, contextual, count_singleton, count_sum, eq_comm, exists_and_left, exists_prop, funext_iff, mem_map
 -/

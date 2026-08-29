@@ -386,7 +386,8 @@ instance :
   · exact tendsto_nhds_top_mono' continuousAt_fst fun p => le_add_right le_rfl
   rcases b with (_ | b)
   · exact tendsto_nhds_top_mono' continuousAt_snd fun p => le_add_left le_rfl
-  simp only [ContinuousAt, some_eq_coe, nhds_coe_coe
+  simp only [ContinuousAt, some_eq_coe, nhds_coe_coe, ← coe_add, tendsto_map'_iff,
+    Function.comp_def, tendsto_coe, tendsto_add]
 
 中文:
 实例 :
@@ -397,7 +398,8 @@ instance :
   · exact tendsto_nhds_top_mono' continuousAt_fst fun p => le_add_right le_rfl
   rcases b with (_ | b)
   · exact tendsto_nhds_top_mono' continuousAt_snd fun p => le_add_left le_rfl
-  simp only [ContinuousAt, some_eq_coe, nhds_coe_coe
+  simp only [ContinuousAt, some_eq_coe, nhds_coe_coe, ← coe_add, tendsto_map'_iff,
+    Function.comp_def, tendsto_coe, tendsto_add]
 
 Depends on / 依赖: ContinuousAt, Function, Function.comp_def, _iff, coe_add, comp_def, continuousAt_fst, continuousAt_snd, continuous_iff_continuousAt, le_add_left, le_add_right, le_rfl, nhds_coe_coe, some_eq_coe, tendsto_add, tendsto_coe, tendsto_map, tendsto_nhds_top_mono
 -/

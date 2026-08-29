@@ -151,7 +151,13 @@ definition mapBifunctorLeftUnitorCofanIsColimit
       by_cases hi : i = 0
       · subst hi
         simp only [Set.mem_preimage, hp, Set.mem_singleton_iff] at h
-        su
+        subst h
+        simp
+      · apply IsInitial.hom_ext
+        exact mapBifunctorObjSingle₀ObjIsInitial _ _ _ _ hi)
+    (fun s m hm => by simp [← hm ⟨⟨0, j⟩, hp j⟩])
+
+include e hp in
 
 中文:
 定义 mapBifunctorLeftUnitorCofanIsColimit
@@ -164,7 +170,13 @@ definition mapBifunctorLeftUnitorCofanIsColimit
       by_cases hi : i = 0
       · subst hi
         simp only [Set.mem_preimage, hp, Set.mem_singleton_iff] at h
-        su
+        subst h
+        simp
+      · apply IsInitial.hom_ext
+        exact mapBifunctorObjSingle₀ObjIsInitial _ _ _ _ hi)
+    (fun s m hm => by simp [← hm ⟨⟨0, j⟩, hp j⟩])
+
+include e hp in
 
 Depends on / 依赖: Cofan.IsColimit.mk, F.map, Hom.id, IsColimit, IsInitial, IsInitial.hom_ext, Set.mem_preimage, Set.mem_singleton_iff, WidePushoutShape, e.inv.app, hom_ext, mem_preimage, mem_singleton_iff, s.inj, singleObjApplyIso
 -/
@@ -463,7 +475,14 @@ definition mapBifunctorRightUnitorCofanIsColimit
       by_cases hi : i = 0
       · subst hi
         simp only [Set.mem_preimage, hp, Set.mem_singleton_iff] at h
-        su
+        subst h
+        rw [mapBifunctorRightUnitorCofan_inj]; rw [assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.hom_inv_id]; rw [Functor.map_id]; rw [id_comp]
+      · apply IsInitial.hom_ext
+        exact mapBifunctorObjObjSingle₀IsInitial _ _ _ _ hi)
+    (fun s m hm => by
+      rw [← hm ⟨⟨j]; rw [0⟩]; rw [hp j⟩]; rw [mapBifunctorRightUnitorCofan_inj]; rw [assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id]; rw [Functor.map_id]; rw [id_comp]; rw [Iso.inv_hom_id_app_assoc])
+
+include e hp in
 
 中文:
 定义 mapBifunctorRightUnitorCofanIsColimit
@@ -476,7 +495,14 @@ definition mapBifunctorRightUnitorCofanIsColimit
       by_cases hi : i = 0
       · subst hi
         simp only [Set.mem_preimage, hp, Set.mem_singleton_iff] at h
-        su
+        subst h
+        rw [mapBifunctorRightUnitorCofan_inj]; rw [assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.hom_inv_id]; rw [Functor.map_id]; rw [id_comp]
+      · apply IsInitial.hom_ext
+        exact mapBifunctorObjObjSingle₀IsInitial _ _ _ _ hi)
+    (fun s m hm => by
+      rw [← hm ⟨⟨j]; rw [0⟩]; rw [hp j⟩]; rw [mapBifunctorRightUnitorCofan_inj]; rw [assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id]; rw [Functor.map_id]; rw [id_comp]; rw [Iso.inv_hom_id_app_assoc])
+
+include e hp in
 
 Depends on / 依赖: Cofan.IsColimit.mk, F.obj, Functor, Functor.map_comp_assoc, Functor.map_id, IsColimit, IsInitial, IsInitial.hom_ext, Iso.hom_inv_id, Iso.hom_inv_id_app_assoc, Set.mem_preimage, Set.mem_singleton_iff, e.inv.app, hom_ext, hom_inv_id, hom_inv_id_app_assoc, id_comp, mapBifunctorRightUnitorCofan_inj, map_comp_assoc, map_id
 -/
@@ -816,7 +842,20 @@ lemma mapBifunctor_triangle
   ext j i₁ i₃ hj
   simp only [categoryOfGradedObjects_comp, ι_mapBifunctorMapMap_assoc,
     mapBifunctorRightUnitor_inv_apply, Functor.id_obj, Functor.map_comp,
-    NatTrans.comp_app, ca
+    NatTrans.comp_app, categoryOfGradedObjects_id, Functor.map_id, id_comp, assoc,
+    ι_mapBifunctorMapMap]
+  congr 2
+  rw [← ιMapBifunctor₁₂BifunctorMapObj_eq_assoc F₁ G τ.ρ₁₂ _ _ _ i₁ 0 i₃ j
+    (by rw [τ.r_zero]; rw [hj]) i₁ (by simp), ι_mapBifunctorAssociator_hom_assoc,
+    ιMapBifunctorBifunctor₂₃MapObj_eq_assoc G F₂ τ.ρ₂₃ _ _ _ i₁ 0 i₃ j
+    (by rw [τ.r_zero, hj]) i₃ (by simp), ι_mapBifunctorMapMap]
+  dsimp
+  rw [Functor.map_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [← Functor.map_comp_assoc]; rw [← NatTrans.comp_app_assoc]; rw [← Functor.map_comp]; rw [ι_mapBifunctorLeftUnitor_hom_apply F₂ X₂ e₂ τ.p₂₃ τ.h₃ X₃ i₃]; rw [ι_mapBifunctorRightUnitor_hom_apply F₁ X₂ e₁ τ.p₁₂ τ.h₁ X₁ i₁]
+  dsimp
+  simp only [Functor.map_comp, NatTrans.comp_app, ← triangle (X₁ i₁) (X₃ i₃), ← assoc]
+  congr 2
+  symm
+  apply NatTrans.naturality_app (associator.hom.app (X₁ i₁))
 
 中文:
 引理 mapBifunctor_triangle
@@ -826,7 +865,20 @@ lemma mapBifunctor_triangle
   ext j i₁ i₃ hj
   simp only [categoryOfGradedObjects_comp, ι_mapBifunctorMapMap_assoc,
     mapBifunctorRightUnitor_inv_apply, Functor.id_obj, Functor.map_comp,
-    NatTrans.comp_app, ca
+    NatTrans.comp_app, categoryOfGradedObjects_id, Functor.map_id, id_comp, assoc,
+    ι_mapBifunctorMapMap]
+  congr 2
+  rw [← ιMapBifunctor₁₂BifunctorMapObj_eq_assoc F₁ G τ.ρ₁₂ _ _ _ i₁ 0 i₃ j
+    (by rw [τ.r_zero]; rw [hj]) i₁ (by simp), ι_mapBifunctorAssociator_hom_assoc,
+    ιMapBifunctorBifunctor₂₃MapObj_eq_assoc G F₂ τ.ρ₂₃ _ _ _ i₁ 0 i₃ j
+    (by rw [τ.r_zero, hj]) i₃ (by simp), ι_mapBifunctorMapMap]
+  dsimp
+  rw [Functor.map_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [← Functor.map_comp_assoc]; rw [← NatTrans.comp_app_assoc]; rw [← Functor.map_comp]; rw [ι_mapBifunctorLeftUnitor_hom_apply F₂ X₂ e₂ τ.p₂₃ τ.h₃ X₃ i₃]; rw [ι_mapBifunctorRightUnitor_hom_apply F₁ X₂ e₁ τ.p₁₂ τ.h₁ X₁ i₁]
+  dsimp
+  simp only [Functor.map_comp, NatTrans.comp_app, ← triangle (X₁ i₁) (X₃ i₃), ← assoc]
+  congr 2
+  symm
+  apply NatTrans.naturality_app (associator.hom.app (X₁ i₁))
 
 Depends on / 依赖: Functor, Functor.id_obj, Functor.map_comp, Functor.map_id, NatTrans, NatTrans.comp_app, cancel_epi, categoryOfGradedObjects_comp, categoryOfGradedObjects_id, comp_app, id_comp, id_obj, mapBifunctorMapMap, mapBifunctorRightUnitor, mapBifunctorRightUnitor_inv_apply, map_comp, map_id, r_zero
 -/

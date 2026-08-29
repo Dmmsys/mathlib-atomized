@@ -397,7 +397,10 @@ definition differentialFiniteDimensional
   have h : F⟮k⟯ = ⊤ := (Field.exists_primitive_element F K).choose_spec
   have : Fact (minpoly F k).Monic := ⟨minpoly.monic (IsAlgebraic.of_finite ..).isIntegral⟩
   have : Fact (Irreducible (minpoly F k)) :=
-    ⟨minpoly.irreducible (IsAlgebraic.o
+    ⟨minpoly.irreducible (IsAlgebraic.of_finite ..).isIntegral⟩
+  Differential.equiv (IntermediateField.adjoinRootEquivAdjoin F
+.trans .trans (IntermediateField.equivOfEq h) (IsAlgebraic.of_finite F k).isIntegral
+    IntermediateField.topEquiv).symm.toRingEquiv
 
 中文:
 定义 differentialFiniteDimensional
@@ -406,7 +409,10 @@ definition differentialFiniteDimensional
   have h : F⟮k⟯ = ⊤ := (Field.exists_primitive_element F K).choose_spec
   have : Fact (minpoly F k).Monic := ⟨minpoly.monic (IsAlgebraic.of_finite ..).isIntegral⟩
   have : Fact (Irreducible (minpoly F k)) :=
-    ⟨minpoly.irreducible (IsAlgebraic.o
+    ⟨minpoly.irreducible (IsAlgebraic.of_finite ..).isIntegral⟩
+  Differential.equiv (IntermediateField.adjoinRootEquivAdjoin F
+.trans .trans (IntermediateField.equivOfEq h) (IsAlgebraic.of_finite F k).isIntegral
+    IntermediateField.topEquiv).symm.toRingEquiv
 
 Depends on / 依赖: Differential, Differential.equiv, Field.exists_primitive_element, IntermediateField, IntermediateField.adjoinRootEquivAdjoin, IntermediateField.equivOfEq, IntermediateField.topEquiv, Irreducible, IsAlgebraic, IsAlgebraic.of_finite, adjoinRootEquivAdjoin, choose_spec, equivOfEq, exists_primitive_element, irreducible, isIntegral, minpoly, minpoly.irreducible, minpoly.monic, of_finite
 -/
@@ -431,7 +437,9 @@ lemma differentialAlgebraFiniteDimensional
   let k := (Field.exists_primitive_element F K).choose
   have h : F⟮k⟯ = ⊤ := (Field.exists_primitive_element F K).choose_spec
   have : Fact (minpoly F k).Monic := ⟨minpoly.monic (IsAlgebraic.of_finite ..).isIntegral⟩
-  have : Fact 
+  have : Fact (Irreducible (minpoly F k)) :=
+    ⟨minpoly.irreducible (IsAlgebraic.of_finite ..).isIntegral⟩
+  apply DifferentialAlgebra.equiv
 
 中文:
 引理 differentialAlgebraFiniteDimensional
@@ -441,7 +449,9 @@ lemma differentialAlgebraFiniteDimensional
   let k := (Field.exists_primitive_element F K).choose
   have h : F⟮k⟯ = ⊤ := (Field.exists_primitive_element F K).choose_spec
   have : Fact (minpoly F k).Monic := ⟨minpoly.monic (IsAlgebraic.of_finite ..).isIntegral⟩
-  have : Fact 
+  have : Fact (Irreducible (minpoly F k)) :=
+    ⟨minpoly.irreducible (IsAlgebraic.of_finite ..).isIntegral⟩
+  apply DifferentialAlgebra.equiv
 
 Depends on / 依赖: differentialFiniteDimensional
 -/
@@ -472,7 +482,19 @@ definition uniqueDifferentialAlgebraFiniteDimensional
   refine ⟨⟨default⟩, fun ⟨a, ha⟩ => ?_⟩
   ext x
   apply_fun (aeval x (mapCoeffs (minpoly F x)) + aeval x (derivative (minpoly F x)) * ·)
-  · conv_lhs
+  · conv_lhs => apply (deriv_aeval_eq ..).symm
+    conv_rhs => apply (@deriv_aeval_eq _ _ _ _ _ default.1 _ default.2 _ _).symm
+    simp
+  · apply (add_right_injective _).comp
+    apply mul_right_injective₀
+    rw [ne_eq]; rw [← minpoly.dvd_iff]
+    have : 0 < (minpoly F x).natDegree := Irreducible.natDegree_pos
+      (minpoly.irreducible (Algebra.IsIntegral.isIntegral _))
+    apply not_dvd_of_natDegree_lt
+    · intro nh
+      simp_all
+    apply natDegree_derivative_lt
+    exact Nat.ne_zero_of_lt this
 
 中文:
 定义 uniqueDifferentialAlgebraFiniteDimensional
@@ -483,7 +505,19 @@ definition uniqueDifferentialAlgebraFiniteDimensional
   refine ⟨⟨default⟩, fun ⟨a, ha⟩ => ?_⟩
   ext x
   apply_fun (aeval x (mapCoeffs (minpoly F x)) + aeval x (derivative (minpoly F x)) * ·)
-  · conv_lhs
+  · conv_lhs => apply (deriv_aeval_eq ..).symm
+    conv_rhs => apply (@deriv_aeval_eq _ _ _ _ _ default.1 _ default.2 _ _).symm
+    simp
+  · apply (add_right_injective _).comp
+    apply mul_right_injective₀
+    rw [ne_eq]; rw [← minpoly.dvd_iff]
+    have : 0 < (minpoly F x).natDegree := Irreducible.natDegree_pos
+      (minpoly.irreducible (Algebra.IsIntegral.isIntegral _))
+    apply not_dvd_of_natDegree_lt
+    · intro nh
+      simp_all
+    apply natDegree_derivative_lt
+    exact Nat.ne_zero_of_lt this
 
 Depends on / 依赖: Differential, DifferentialAlgebra, add_right_injective, apply_fun, conv_lhs, conv_rhs, deriv_aeval_eq, derivative, differentialAlgebraFiniteDimensional, differentialFiniteDimensional, dvd_iff, mapCoeffs, minpoly, minpoly.dvd_iff, ne_eq
 -/

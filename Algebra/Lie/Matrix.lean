@@ -52,7 +52,9 @@ definition lieEquivMatrix'
       let f := @LinearMap.toMatrix' R _ n n _ _
       change f (T.comp S - S.comp T) = f T * f S - f S * f T
       have h : forall T S : Module.End R _, f (T.comp S) = f T * f S := LinearMap.toMatrix'_comp
-      rw [map_sub]; rw [h]; rw [h] 
+      rw [map_sub]; rw [h]; rw [h] }
+
+@[simp]
 
 中文:
 定义 lieEquivMatrix'
@@ -62,7 +64,9 @@ definition lieEquivMatrix'
       let f := @LinearMap.toMatrix' R _ n n _ _
       change f (T.comp S - S.comp T) = f T * f S - f S * f T
       have h : forall T S : Module.End R _, f (T.comp S) = f T * f S := LinearMap.toMatrix'_comp
-      rw [map_sub]; rw [h]; rw [h] 
+      rw [map_sub]; rw [h]; rw [h] }
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, Module, Module.End, S.comp, T.comp, _comp, map_lie, map_sub, toMatrix
 -/

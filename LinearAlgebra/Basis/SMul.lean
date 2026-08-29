@@ -354,7 +354,9 @@ theorem coord_unitsSMul
     · simp [Basis.unitsSMul, ← mul_smul]
     simp only [Basis.coord_apply, LinearMap.smul_apply, Basis.repr_self, Units.smul_def,
       map_smul, Finsupp.single_apply]
-    split_ifs with h <;
+    split_ifs with h <;> simp [h]
+
+@[simp]
 
 中文:
 定理 coord_unitsSMul
@@ -367,7 +369,9 @@ theorem coord_unitsSMul
     · simp [Basis.unitsSMul, ← mul_smul]
     simp only [Basis.coord_apply, LinearMap.smul_apply, Basis.repr_self, Units.smul_def,
       map_smul, Finsupp.single_apply]
-    split_ifs with h <;
+    split_ifs with h <;> simp [h]
+
+@[simp]
 
 Depends on / 依赖: Basis.coord_apply, Basis.repr_self, Basis.unitsSMul, Finsupp, Finsupp.single_apply, LinearMap, LinearMap.smul_apply, Units.smul_def, classical, coord_apply, e.ext, map_smul, mul_smul, repr_self, single_apply, smul_apply, smul_def, split_ifs, unitsSMul
 -/

@@ -50,7 +50,7 @@ theorem tmul_comp_tensorMap
   ext m₁ m₃ m₁' m₃'
   simp [h₁, h₃, associated_tmul]
 
-@[simp
+@[simp]
 
 中文:
 定理 tmul_comp_tensorMap
@@ -61,7 +61,7 @@ theorem tmul_comp_tensorMap
   ext m₁ m₃ m₁' m₃'
   simp [h₁, h₃, associated_tmul]
 
-@[simp
+@[simp]
 
 Depends on / 依赖: QuadraticMap, QuadraticMap.associated_rightInverse, QuadraticMap.ext, associated_rightInverse, associated_tmul, f.map_app, f.toLinearMap, g.map_app, g.toLinearMap, injective, map_app, toLinearMap
 -/

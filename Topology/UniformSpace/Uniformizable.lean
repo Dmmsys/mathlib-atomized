@@ -74,7 +74,37 @@ theorem urysohns_main
   obtain ⟨(ds : SetRel X X), hdsu, hdso, -, hdsd⟩ := comp_open_symm_mem_uniformity_sets hs
   have ho : IsOpen (ds ○ uc ○ ds) := (hdso.relComp huc).relComp hdso
   have hsub := calc ds ○ (ds ○ uc ○ ds) ○ ds
-    _ = (ds ○ ds) ○ uc ○ (ds ○ 
+    _ = (ds ○ ds) ○ uc ○ (ds ○ ds) := by simp [comp_assoc]
+    _ subseteq s ○ uc ○ s := comp_subset_comp (comp_subset_comp_left hdsd) hdsd
+  replace hsub := (ball_mono hsub x).trans hn
+  have : ds.IsRefl := id_subset_iff.1 (refl_le_uniformity hdsu)
+  refine ⟨ball x (ds ○ uc ○ ds), isOpen_ball x ho, ?_, subset_trans ?_ hsub,
+      ⟨x, uc, ds, huc, ucu, rfl, subset_rfl, hdsu⟩,
+      ⟨x, ds ○ uc ○ ds, ds, ho, mem_of_superset ucu (right_subset_comp.trans left_subset_comp),
+        rfl, hsub, hdsu⟩⟩ <;>
+  · refine closure_ball_subset.trans (ball_mono ?_ x)
+    rw [closure_eq_inter_uniformity]
+    exact iInter₂_subset_of_subset ds hdsu (by simp [comp_assoc])
+
+public instance UniformSpace.toCompletelyRegularSpace : CompletelyRegularSpace X where
+  completely_regular x K hK hx :=
+    have ⟨O, hOu, hOo, hbO⟩ := isOpen_iff_isOpen_ball_subset.mp hK.isOpen_compl x hx
+    have ⟨(u3 : SetRel X X), hu3u, _, hu3O⟩ := comp_comp_symm_mem_uniformity_sets hOu
+    have hu3O := ((comp_subset_comp_left (comp_subset_comp_right interior_subset))).trans hu3O
+    let c : Urysohns.CU IsThickening :=
+    { C := closure (ball x (interior u3))
+      U := ball x O
+      closed_C := isClosed_closure
+      open_U := isOpen_ball x hOo
+subset := closure_ball_subset.trans (ball_mono · x) by
+        simp_rw [closure_eq_inter_uniformity, ← comp_assoc]
+        exact (iInter₂_subset u3 hu3u).trans hu3O
+      hP _ IsThickeningcu _ _ := urysohns_main IsThickeningcu
+      P_C_U := ⟨x, interior u3, u3,
+        isOpen_interior, interior_mem_uniformity hu3u, rfl, ball_mono hu3O x, hu3u⟩ }
+    ⟨fun x => ⟨c.lim x, c.lim_mem_Icc x⟩, c.continuous_lim.subtype_mk c.lim_mem_Icc,
+      Subtype.ext (c.lim_of_mem_C x <| subset_closure (refl_mem_uniformity <|
+        interior_mem_uniformity hu3u)), fun y hy => Subtype.ext (c.lim_of_notMem_U y (hbO · hy))⟩
 
 中文:
 定理 urysohns_main
@@ -84,7 +114,37 @@ theorem urysohns_main
   obtain ⟨(ds : SetRel X X), hdsu, hdso, -, hdsd⟩ := comp_open_symm_mem_uniformity_sets hs
   have ho : IsOpen (ds ○ uc ○ ds) := (hdso.relComp huc).relComp hdso
   have hsub := calc ds ○ (ds ○ uc ○ ds) ○ ds
-    _ = (ds ○ ds) ○ uc ○ (ds ○ 
+    _ = (ds ○ ds) ○ uc ○ (ds ○ ds) := by simp [comp_assoc]
+    _ subseteq s ○ uc ○ s := comp_subset_comp (comp_subset_comp_left hdsd) hdsd
+  replace hsub := (ball_mono hsub x).trans hn
+  have : ds.IsRefl := id_subset_iff.1 (refl_le_uniformity hdsu)
+  refine ⟨ball x (ds ○ uc ○ ds), isOpen_ball x ho, ?_, subset_trans ?_ hsub,
+      ⟨x, uc, ds, huc, ucu, rfl, subset_rfl, hdsu⟩,
+      ⟨x, ds ○ uc ○ ds, ds, ho, mem_of_superset ucu (right_subset_comp.trans left_subset_comp),
+        rfl, hsub, hdsu⟩⟩ <;>
+  · refine closure_ball_subset.trans (ball_mono ?_ x)
+    rw [closure_eq_inter_uniformity]
+    exact iInter₂_subset_of_subset ds hdsu (by simp [comp_assoc])
+
+public instance UniformSpace.toCompletelyRegularSpace : CompletelyRegularSpace X where
+  completely_regular x K hK hx :=
+    have ⟨O, hOu, hOo, hbO⟩ := isOpen_iff_isOpen_ball_subset.mp hK.isOpen_compl x hx
+    have ⟨(u3 : SetRel X X), hu3u, _, hu3O⟩ := comp_comp_symm_mem_uniformity_sets hOu
+    have hu3O := ((comp_subset_comp_left (comp_subset_comp_right interior_subset))).trans hu3O
+    let c : Urysohns.CU IsThickening :=
+    { C := closure (ball x (interior u3))
+      U := ball x O
+      closed_C := isClosed_closure
+      open_U := isOpen_ball x hOo
+subset := closure_ball_subset.trans (ball_mono · x) by
+        simp_rw [closure_eq_inter_uniformity, ← comp_assoc]
+        exact (iInter₂_subset u3 hu3u).trans hu3O
+      hP _ IsThickeningcu _ _ := urysohns_main IsThickeningcu
+      P_C_U := ⟨x, interior u3, u3,
+        isOpen_interior, interior_mem_uniformity hu3u, rfl, ball_mono hu3O x, hu3u⟩ }
+    ⟨fun x => ⟨c.lim x, c.lim_mem_Icc x⟩, c.continuous_lim.subtype_mk c.lim_mem_Icc,
+      Subtype.ext (c.lim_of_mem_C x <| subset_closure (refl_mem_uniformity <|
+        interior_mem_uniformity hu3u)), fun y hy => Subtype.ext (c.lim_of_notMem_U y (hbO · hy))⟩
 
 Depends on / 依赖: IsOpen, IsRefl, IsThickeningcu, SetRel, ball_mono, comp_assoc, comp_open_symm_mem_uniformity_sets, comp_subset_comp, comp_subset_comp_left, ds.IsRefl, hdso.relComp, id_subset_iff, refl_le_uniformity, relComp, replace, subseteq
 -/

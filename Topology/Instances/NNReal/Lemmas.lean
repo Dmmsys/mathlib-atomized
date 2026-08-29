@@ -642,7 +642,8 @@ nonrec theorem tsum_mul_left (a : Real>=0) (f : α -> Real>=0) :
 NNReal.eq by simp only [coe_tsum, NNReal.coe_mul, tsum_mul_left]
 
 nonrec theorem tsum_mul_right (f : α -> Real>=0) (a : Real>=0) :
-    ∑
+    ∑'[L] x, f x * a = (∑'[L] x, f x) * a :=
+NNReal.eq by simp only [coe_tsum, NNReal.coe_mul, tsum_mul_right]
 
 中文:
 定理 coe_tsum_of_nonneg
@@ -654,7 +655,8 @@ nonrec theorem tsum_mul_left (a : Real>=0) (f : α -> Real>=0) :
 NNReal.eq by simp only [coe_tsum, NNReal.coe_mul, tsum_mul_left]
 
 nonrec theorem tsum_mul_right (f : α -> Real>=0) (a : Real>=0) :
-    ∑
+    ∑'[L] x, f x * a = (∑'[L] x, f x) * a :=
+NNReal.eq by simp only [coe_tsum, NNReal.coe_mul, tsum_mul_right]
 
 Depends on / 依赖: Eq.symm, NNReal, NNReal.eq, coe_tsum
 -/
@@ -708,7 +710,9 @@ nonrec theorem summable_nat_add_iff {f : Nat -> Real>=0} (k : Nat) :
   rw [← summable_coe]; rw [← summable_coe]
   exact @summable_nat_add_iff Real _ _ _ (fun i => (f i : Real)) k
 
-nonrec theorem has
+nonrec theorem hasSum_nat_add_iff {f : Nat -> Real>=0} (k : Nat) {a : Real>=0} :
+    HasSum (fun n => f (n + k)) a ↔ HasSum f (a + ∑ i in range k, f i) := by
+  rw [← hasSum_coe]; rw [hasSum_nat_add_iff (f := fun n => toReal (f n)) k]; norm_cast
 
 中文:
 定理 summable_nat_add
@@ -721,7 +725,9 @@ nonrec theorem summable_nat_add_iff {f : Nat -> Real>=0} (k : Nat) :
   rw [← summable_coe]; rw [← summable_coe]
   exact @summable_nat_add_iff Real _ _ _ (fun i => (f i : Real)) k
 
-nonrec theorem has
+nonrec theorem hasSum_nat_add_iff {f : Nat -> Real>=0} (k : Nat) {a : Real>=0} :
+    HasSum (fun n => f (n + k)) a ↔ HasSum f (a + ∑ i in range k, f i) := by
+  rw [← hasSum_coe]; rw [hasSum_nat_add_iff (f := fun n => toReal (f n)) k]; norm_cast
 
 Depends on / 依赖: add_left_injective, summable_comp_injective
 -/

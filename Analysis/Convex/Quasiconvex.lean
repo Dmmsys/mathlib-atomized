@@ -254,7 +254,7 @@ theorem QuasiconvexOn.monotone_comp
   · grind
   specialize hf (f y) ⟨hx.1, h⟩ ⟨hy.1, le_rfl⟩ ha hb hab
   simp only [mem_ofPred_eq] at hf
-  exact ⟨hf.1, le_trans (h
+  exact ⟨hf.1, le_trans (hg hf.2) hy.2⟩
 
 中文:
 定理 QuasiconvexOn.monotone_comp
@@ -266,7 +266,7 @@ theorem QuasiconvexOn.monotone_comp
   · grind
   specialize hf (f y) ⟨hx.1, h⟩ ⟨hy.1, le_rfl⟩ ha hb hab
   simp only [mem_ofPred_eq] at hf
-  exact ⟨hf.1, le_trans (h
+  exact ⟨hf.1, le_trans (hg hf.2) hy.2⟩
 
 Depends on / 依赖: Function, Function.comp_apply, comp_apply, le_rfl, le_trans, mem_ofPred_eq, specialize
 -/

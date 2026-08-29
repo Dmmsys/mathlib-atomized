@@ -314,7 +314,11 @@ theorem inter
   · rintro x ⟨⟨hxA, hxB⟩, ⟨-, hxC⟩⟩
     exact ⟨hxA, fun z hz => add_le_add (hxB z hz) (hxC z hz)⟩
   rintro x ⟨hxA, hx⟩
-  refine ⟨⟨hxA, fun y hy => ?_⟩, hxA, fun y h
+  refine ⟨⟨hxA, fun y hy => ?_⟩, hxA, fun y hy => ?_⟩
+  · exact
+      (add_le_add_iff_right (l₂ x)).1 ((add_le_add (hwB.2 y hy) (hwC.2 x hxA)).trans (hx w hwB.1))
+  · exact
+      (add_le_add_iff_left (l₁ x)).1 (le_trans (add_le_add (hwB.2 x hxA) (hwC.2 y hy)) (hx w hwB.1))
 
 中文:
 定理 inter
@@ -327,7 +331,11 @@ theorem inter
   · rintro x ⟨⟨hxA, hxB⟩, ⟨-, hxC⟩⟩
     exact ⟨hxA, fun z hz => add_le_add (hxB z hz) (hxC z hz)⟩
   rintro x ⟨hxA, hx⟩
-  refine ⟨⟨hxA, fun y hy => ?_⟩, hxA, fun y h
+  refine ⟨⟨hxA, fun y hy => ?_⟩, hxA, fun y hy => ?_⟩
+  · exact
+      (add_le_add_iff_right (l₂ x)).1 ((add_le_add (hwB.2 y hy) (hwC.2 x hxA)).trans (hx w hwB.1))
+  · exact
+      (add_le_add_iff_left (l₁ x)).1 (le_trans (add_le_add (hwB.2 x hxA) (hwC.2 y hy)) (hx w hwB.1))
 -/
 protected theorem inter [IsOrderedRing 𝕜] [ContinuousAdd 𝕜] {A B C : Set E} (hB : IsExposed 𝕜 A B)
     (hC : IsExposed 𝕜 A C) : IsExposed 𝕜 A (B inter C) := by
@@ -357,7 +365,9 @@ theorem sInter
     rw [Finset.coe_insert]; rw [sInter_insert]
     obtain rfl | hFnemp := F.eq_empty_or_nonempty
     · rw [Finset.coe_empty, sInter_empty, inter_univ]
-      exact hAF C (Fins
+      exact hAF C (Finset.mem_singleton_self C)
+    · exact (hAF C (Finset.mem_insert_self C F)).inter
+        (hF' hFnemp fun B hB => hAF B (Finset.mem_insert_of_mem hB))
 
 中文:
 定理 集合交集
@@ -369,7 +379,9 @@ theorem sInter
     rw [Finset.coe_insert]; rw [sInter_insert]
     obtain rfl | hFnemp := F.eq_empty_or_nonempty
     · rw [Finset.coe_empty, sInter_empty, inter_univ]
-      exact hAF C (Fins
+      exact hAF C (Finset.mem_singleton_self C)
+    · exact (hAF C (Finset.mem_insert_self C F)).inter
+        (hF' hFnemp fun B hB => hAF B (Finset.mem_insert_of_mem hB))
 
 Depends on / 依赖: F.eq_empty_or_nonempty, Finset, Finset.coe_empty, Finset.coe_insert, Finset.induction, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.mem_singleton_self, Finset.not_nonempty_empty, coe_empty, coe_insert, eq_empty_or_nonempty, hFnemp, insert, inter_univ, mem_insert_of_mem, mem_insert_self, mem_singleton_self, not_nonempty_empty, sInter_empty
 -/
@@ -578,7 +590,8 @@ Eq.symm
   obtain ⟨l, hl⟩ := h ⟨x, mem_singleton _⟩
   rw [eq_comm]; rw [eq_singleton_iff_unique_mem] at hl
   exact
-    ⟨hl.1.1, l
+    ⟨hl.1.1, l, fun y hy =>
+      ⟨hl.1.2 y hy, fun hxy => hl.2 y ⟨hy, fun z hz => (hl.1.2 z hz).trans hxy⟩⟩⟩
 
 中文:
 定理 mem_exposedPoints_iff_exposed_singleton
@@ -593,7 +606,8 @@ Eq.symm
   obtain ⟨l, hl⟩ := h ⟨x, mem_singleton _⟩
   rw [eq_comm]; rw [eq_singleton_iff_unique_mem] at hl
   exact
-    ⟨hl.1.1, l
+    ⟨hl.1.1, l, fun y hy =>
+      ⟨hl.1.2 y hy, fun hxy => hl.2 y ⟨hy, fun z hz => (hl.1.2 z hz).trans hxy⟩⟩⟩
 
 Depends on / 依赖: Eq.symm, eq_comm, eq_singleton_iff_unique_mem, mem_singleton
 -/
@@ -634,7 +648,7 @@ theorem convex
   exact fun x₁ hx₁ x₂ hx₂ a b ha hb hab =>
     ⟨hA hx₁.1 hx₂.1 ha hb hab, fun y hy =>
       ((l.toLinearMap.concaveOn convex_univ).convex_ge _ ⟨mem_univ _, hx₁.2 y hy⟩
-          ⟨mem_univ _, hx₂.2 y hy⟩
+          ⟨mem_univ _, hx₂.2 y hy⟩ ha hb hab).2⟩
 
 中文:
 定理 convex
@@ -647,7 +661,7 @@ theorem convex
   exact fun x₁ hx₁ x₂ hx₂ a b ha hb hab =>
     ⟨hA hx₁.1 hx₂.1 ha hb hab, fun y hy =>
       ((l.toLinearMap.concaveOn convex_univ).convex_ge _ ⟨mem_univ _, hx₁.2 y hy⟩
-          ⟨mem_univ _, hx₂.2 y hy⟩
+          ⟨mem_univ _, hx₂.2 y hy⟩ ha hb hab).2⟩
 -/
 protected theorem convex (hAB : IsExposed 𝕜 A B) (hA : Convex 𝕜 A) : Convex 𝕜 B := by
   obtain rfl | hB := B.eq_empty_or_nonempty
@@ -672,7 +686,8 @@ theorem isExtreme
   have hlx₁ := hxB.2 x₁ hx₁A
   have hlx₂ := hxB.2 x₂ hx₂A
   refine ⟨hx₁A, fun y hy => ?_⟩
-  rw [hlx₁.antisymm (hl.le_left_of_right_le (me
+  rw [hlx₁.antisymm (hl.le_left_of_right_le (mem_univ _) (mem_univ _) hx hlx₂)]
+  exact hxB.2 y hy
 
 中文:
 定理 isExtreme
@@ -685,7 +700,8 @@ theorem isExtreme
   have hlx₁ := hxB.2 x₁ hx₁A
   have hlx₂ := hxB.2 x₂ hx₂A
   refine ⟨hx₁A, fun y hy => ?_⟩
-  rw [hlx₁.antisymm (hl.le_left_of_right_le (me
+  rw [hlx₁.antisymm (hl.le_left_of_right_le (mem_univ _) (mem_univ _) hx hlx₂)]
+  exact hxB.2 y hy
 -/
 protected theorem isExtreme (hAB : IsExposed 𝕜 A B) : IsExtreme 𝕜 A B := by
   refine ⟨hAB.subset, fun x₁ hx₁A x₂ hx₂A x hxB hx => ?_⟩

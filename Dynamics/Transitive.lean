@@ -238,7 +238,11 @@ theorem MulAction.isTopologicallyTransitive_iff_dense_of_preimage_invariant
   refine ⟨fun _ _ h₀ h₁ h₂ => h₀.dense_of_preimage_smul_invariant M h₁ h₂, fun h₄ => ?_⟩
   refine (isTopologicallyTransitive_iff_dense_iUnion_preimage M).mpr ?_
   refine fun hU _ => h₄ (isOpen_iUnion fun a => hU.preimage (h.1 a)) ?_ fun b _ => ?_
-  · exact nonempty_iUnion.mpr ⟨1, by simpa only [o
+  · exact nonempty_iUnion.mpr ⟨1, by simpa only [one_smul]⟩
+  · simp only [preimage_iUnion, mem_iUnion, mem_preimage, smul_smul, forall_exists_index]
+    exact fun c hc => ⟨c * b, hc⟩
+
+@[to_additive]
 
 中文:
 定理 乘法作用.isTopologicallyTransitive_iff_dense_of_preimage_invariant
@@ -246,7 +250,11 @@ theorem MulAction.isTopologicallyTransitive_iff_dense_of_preimage_invariant
   refine ⟨fun _ _ h₀ h₁ h₂ => h₀.dense_of_preimage_smul_invariant M h₁ h₂, fun h₄ => ?_⟩
   refine (isTopologicallyTransitive_iff_dense_iUnion_preimage M).mpr ?_
   refine fun hU _ => h₄ (isOpen_iUnion fun a => hU.preimage (h.1 a)) ?_ fun b _ => ?_
-  · exact nonempty_iUnion.mpr ⟨1, by simpa only [o
+  · exact nonempty_iUnion.mpr ⟨1, by simpa only [one_smul]⟩
+  · simp only [preimage_iUnion, mem_iUnion, mem_preimage, smul_smul, forall_exists_index]
+    exact fun c hc => ⟨c * b, hc⟩
+
+@[to_additive]
 
 Depends on / 依赖: dense_of_preimage_smul_invariant, forall_exists_index, hU.preimage, isOpen_iUnion, isTopologicallyTransitive_iff_dense_iUnion_preimage, mem_iUnion, mem_preimage, nonempty_iUnion, nonempty_iUnion.mpr, one_smul, preimage, preimage_iUnion, smul_smul
 -/

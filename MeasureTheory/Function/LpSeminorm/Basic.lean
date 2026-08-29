@@ -131,7 +131,7 @@ theorem eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top
     have hp' := ENNReal.toReal_pos hp_ne_zero hp_ne_top
     have : 0 < 1 / p.toReal := div_pos zero_lt_one hp'
     simpa [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_ne_zero hp_ne_top] using
-      ENNReal.rpow_lt_top_o
+      ENNReal.rpow_lt_top_of_nonneg (le_of_lt this) (ne_of_lt h)⟩
 
 中文:
 定理 eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top
@@ -141,7 +141,7 @@ theorem eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top
     have hp' := ENNReal.toReal_pos hp_ne_zero hp_ne_top
     have : 0 < 1 / p.toReal := div_pos zero_lt_one hp'
     simpa [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_ne_zero hp_ne_top] using
-      ENNReal.rpow_lt_top_o
+      ENNReal.rpow_lt_top_of_nonneg (le_of_lt this) (ne_of_lt h)⟩
 
 Depends on / 依赖: ENNReal, ENNReal.rpow_lt_top_of_nonneg, ENNReal.toReal_pos, div_pos, eLpNorm_eq_lintegral_rpow_enorm_toReal, hp_ne_top, hp_ne_zero, le_of_lt, lintegral_rpow_enorm_lt_top_of_eLpNorm_lt_top, ne_of_lt, p.toReal, rpow_lt_top_of_nonneg, toReal, toReal_pos, zero_lt_one
 -/
@@ -727,7 +727,7 @@ theorem eLpNorm'_const'
     rw [← ENNReal.rpow_mul]
     suffices hp_cancel : q * (1 / q) = 1 by rw [hp_cancel, ENNReal.rpow_one]
     rw [one_div]; rw [mul_inv_cancel₀ hq_ne_zero]
-  · finiteness [show ‖c‖
+  · finiteness [show ‖c‖ₑ != 0 by simp [hc_ne_zero]]
 
 中文:
 定理 eLpNorm'_const'
@@ -738,7 +738,7 @@ theorem eLpNorm'_const'
     rw [← ENNReal.rpow_mul]
     suffices hp_cancel : q * (1 / q) = 1 by rw [hp_cancel, ENNReal.rpow_one]
     rw [one_div]; rw [mul_inv_cancel₀ hq_ne_zero]
-  · finiteness [show ‖c‖
+  · finiteness [show ‖c‖ₑ != 0 by simp [hc_ne_zero]]
 -/
 theorem eLpNorm'_const' [IsFiniteMeasure μ] (c : F) (hc_ne_zero : c != 0) (hq_ne_zero : q != 0) :
     eLpNorm' (fun _ : α => c) q μ = ‖c‖ₑ * μ Set.univ ^ (1 / q) := by
@@ -849,7 +849,13 @@ theorem eLpNorm_const_lt_top_iff_enorm
   · simp only [hμ, Measure.coe_zero, Pi.zero_apply, or_true, ENNReal.zero_lt_top,
       eLpNorm_measure_zero]
   by_cases hc : ‖c‖ₑ = 0
-  · rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp_ne_zero hp_ne_
+  · rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp_ne_zero hp_ne_top]
+    simp [hc, ENNReal.zero_rpow_of_pos hp]
+  rw [eLpNorm_const' c hp_ne_zero hp_ne_top]
+  obtain hμ_top | hμ_ne_top := eq_or_ne (μ .univ) ∞
+  · simp [hc, hμ_top, hp]
+  rw [ENNReal.mul_lt_top_iff]
+  simpa [hμ, hc, hμ_ne_top, hμ_ne_top.lt_top, hc'.lt_top] using by finiteness
 
 中文:
 定理 eLpNorm_const_lt_top_iff_enorm
@@ -860,7 +866,13 @@ theorem eLpNorm_const_lt_top_iff_enorm
   · simp only [hμ, Measure.coe_zero, Pi.zero_apply, or_true, ENNReal.zero_lt_top,
       eLpNorm_measure_zero]
   by_cases hc : ‖c‖ₑ = 0
-  · rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp_ne_zero hp_ne_
+  · rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp_ne_zero hp_ne_top]
+    simp [hc, ENNReal.zero_rpow_of_pos hp]
+  rw [eLpNorm_const' c hp_ne_zero hp_ne_top]
+  obtain hμ_top | hμ_ne_top := eq_or_ne (μ .univ) ∞
+  · simp [hc, hμ_top, hp]
+  rw [ENNReal.mul_lt_top_iff]
+  simpa [hμ, hc, hμ_ne_top, hμ_ne_top.lt_top, hc'.lt_top] using by finiteness
 
 Depends on / 依赖: ENNReal, ENNReal.mul_lt_top_iff, ENNReal.toReal_pos, ENNReal.zero_lt_top, ENNReal.zero_rpow_of_pos, Measure, Measure.coe_zero, Pi.zero_apply, coe_zero, eLpNorm_const, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top, eLpNorm_measure_zero, eq_or_ne, hp_ne_top, hp_ne_zero, mul_lt_top_iff, or_true, p.toReal, toReal, toReal_pos
 -/
@@ -1547,7 +1559,7 @@ theorem eLpNorm_le_of_ae_enorm_bound
   · simp [hp]
   have : forallᵐ x ∂μ, ‖f x‖ₑ <= ‖C‖ₑ := hfC.mono fun x hx => hx.trans (le_refl C)
   refine (eLpNorm_mono_enorm_ae this).trans_eq ?_
-  rw [eLpNorm_const _ hp (NeZero.ne μ)]; rw [one_div]; rw [enorm_eq_self]; r
+  rw [eLpNorm_const _ hp (NeZero.ne μ)]; rw [one_div]; rw [enorm_eq_self]; rw [smul_eq_mul]
 
 中文:
 定理 eLpNorm_le_of_ae_enorm_bound
@@ -1559,7 +1571,7 @@ theorem eLpNorm_le_of_ae_enorm_bound
   · simp [hp]
   have : forallᵐ x ∂μ, ‖f x‖ₑ <= ‖C‖ₑ := hfC.mono fun x hx => hx.trans (le_refl C)
   refine (eLpNorm_mono_enorm_ae this).trans_eq ?_
-  rw [eLpNorm_const _ hp (NeZero.ne μ)]; rw [one_div]; rw [enorm_eq_self]; r
+  rw [eLpNorm_const _ hp (NeZero.ne μ)]; rw [one_div]; rw [enorm_eq_self]; rw [smul_eq_mul]
 
 Depends on / 依赖: NeZero, NeZero.ne, eLpNorm_const, eLpNorm_mono_enorm_ae, enorm_eq_self, eq_zero_or_neZero, hfC.mono, hx.trans, le_refl, one_div, smul_eq_mul, trans_eq
 -/
@@ -1859,7 +1871,7 @@ theorem eLpNorm'_norm_rpow
   simp_rw [eLpNorm', ← ENNReal.rpow_mul, ← one_div_mul_one_div, one_div,
     mul_assoc, inv_mul_cancel₀ hq_pos.ne.symm, mul_one, ← ofReal_norm,
     Real.norm_eq_abs, abs_eq_self.mpr (Real.rpow_nonneg (norm_nonneg _) _), mul_comm p,
-    ← ENNReal.ofReal_rpow_of_nonneg (norm_nonneg _) hq_pos.le, EN
+    ← ENNReal.ofReal_rpow_of_nonneg (norm_nonneg _) hq_pos.le, ENNReal.rpow_mul]
 
 中文:
 定理 eLpNorm'_norm_rpow
@@ -1868,7 +1880,7 @@ theorem eLpNorm'_norm_rpow
   simp_rw [eLpNorm', ← ENNReal.rpow_mul, ← one_div_mul_one_div, one_div,
     mul_assoc, inv_mul_cancel₀ hq_pos.ne.symm, mul_one, ← ofReal_norm,
     Real.norm_eq_abs, abs_eq_self.mpr (Real.rpow_nonneg (norm_nonneg _) _), mul_comm p,
-    ← ENNReal.ofReal_rpow_of_nonneg (norm_nonneg _) hq_pos.le, EN
+    ← ENNReal.ofReal_rpow_of_nonneg (norm_nonneg _) hq_pos.le, ENNReal.rpow_mul]
 -/
 theorem eLpNorm'_norm_rpow (f : α -> F) (p q : Real) (hq_pos : 0 < q) :
     eLpNorm' (fun x => ‖f x‖ ^ q) p μ = eLpNorm' f (p * q) μ ^ q := by
@@ -1889,7 +1901,18 @@ theorem eLpNorm_enorm_rpow
   by_cases hp_top : p = ∞
   · simp only [hp_top, eLpNorm_exponent_top, ENNReal.top_mul', hq_pos.not_ge,
       ENNReal.ofReal_eq_zero, if_false, eLpNorm_exponent_top, eLpNormEssSup_eq_essSup_enorm]
-    have h_rpow : essSup (‖‖f ·
+    have h_rpow : essSup (‖‖f ·‖ₑ ^ q‖ₑ) μ = essSup (‖f ·‖ₑ ^ q) μ := by congr
+    rw [h_rpow]
+    have h_rpow_mono := ENNReal.strictMono_rpow_of_pos hq_pos
+    have h_rpow_surj := (ENNReal.rpow_left_bijective hq_pos.ne.symm).2
+    let iso := h_rpow_mono.orderIsoOfSurjective _ h_rpow_surj
+    exact (iso.essSup_apply (fun x => ‖f x‖ₑ) μ).symm
+  rw [eLpNorm_eq_eLpNorm' h0 hp_top]; rw [eLpNorm_eq_eLpNorm' _ (by finiteness)]
+  swap
+  · refine mul_ne_zero h0 ?_
+    rwa [Ne, ENNReal.ofReal_eq_zero, not_le]
+  rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_ofReal hq_pos.le]
+  exact eLpNorm'_enorm_rpow f p.toReal q hq_pos
 
 中文:
 定理 eLpNorm_enorm_rpow
@@ -1900,7 +1923,18 @@ theorem eLpNorm_enorm_rpow
   by_cases hp_top : p = ∞
   · simp only [hp_top, eLpNorm_exponent_top, ENNReal.top_mul', hq_pos.not_ge,
       ENNReal.ofReal_eq_zero, if_false, eLpNorm_exponent_top, eLpNormEssSup_eq_essSup_enorm]
-    have h_rpow : essSup (‖‖f ·
+    have h_rpow : essSup (‖‖f ·‖ₑ ^ q‖ₑ) μ = essSup (‖f ·‖ₑ ^ q) μ := by congr
+    rw [h_rpow]
+    have h_rpow_mono := ENNReal.strictMono_rpow_of_pos hq_pos
+    have h_rpow_surj := (ENNReal.rpow_left_bijective hq_pos.ne.symm).2
+    let iso := h_rpow_mono.orderIsoOfSurjective _ h_rpow_surj
+    exact (iso.essSup_apply (fun x => ‖f x‖ₑ) μ).symm
+  rw [eLpNorm_eq_eLpNorm' h0 hp_top]; rw [eLpNorm_eq_eLpNorm' _ (by finiteness)]
+  swap
+  · refine mul_ne_zero h0 ?_
+    rwa [Ne, ENNReal.ofReal_eq_zero, not_le]
+  rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_ofReal hq_pos.le]
+  exact eLpNorm'_enorm_rpow f p.toReal q hq_pos
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_eq_zero, ENNReal.rpow_left_bijective, ENNReal.strictMono_rpow_of_pos, ENNReal.top_mul, ENNReal.zero_rpow_of_pos, eLpNormEssSup_eq_essSup_enorm, eLpNorm_exponent_top, essSup, h_rpow, h_rpow_mono, h_rpow_mono.orderIsoOf, h_rpow_surj, hp_top, hq_pos, hq_pos.ne.symm, hq_pos.not_ge, if_false, not_ge, ofReal_eq_zero
 -/
@@ -2432,7 +2466,11 @@ theorem eLpNorm_restrict_eq_of_support_subset
   by_cases hp_top : p = ∞
   · simp only [hp_top, eLpNorm_exponent_top, eLpNormEssSup_eq_essSup_enorm]
 exact ENNReal.essSup_restrict_eq_of_support_subset fun x hx => hsf enorm_ne_zero.1 hx
-  · simp_rw [eLpNorm_eq_eLpNorm' hp0 hp_top, eLpNorm'_eq_lintegral_enor
+  · simp_rw [eLpNorm_eq_eLpNorm' hp0 hp_top, eLpNorm'_eq_lintegral_enorm]
+    congr 1
+    apply setLIntegral_eq_of_support_subset
+    have : ¬(p.toReal <= 0) := by simpa only [not_le] using ENNReal.toReal_pos hp0 hp_top
+    simpa [this] using hsf
 
 中文:
 定理 eLpNorm_restrict_eq_of_support_subset
@@ -2443,7 +2481,11 @@ exact ENNReal.essSup_restrict_eq_of_support_subset fun x hx => hsf enorm_ne_zero
   by_cases hp_top : p = ∞
   · simp only [hp_top, eLpNorm_exponent_top, eLpNormEssSup_eq_essSup_enorm]
 exact ENNReal.essSup_restrict_eq_of_support_subset fun x hx => hsf enorm_ne_zero.1 hx
-  · simp_rw [eLpNorm_eq_eLpNorm' hp0 hp_top, eLpNorm'_eq_lintegral_enor
+  · simp_rw [eLpNorm_eq_eLpNorm' hp0 hp_top, eLpNorm'_eq_lintegral_enorm]
+    congr 1
+    apply setLIntegral_eq_of_support_subset
+    have : ¬(p.toReal <= 0) := by simpa only [not_le] using ENNReal.toReal_pos hp0 hp_top
+    simpa [this] using hsf
 
 Depends on / 依赖: ENNReal, ENNReal.essSup_restrict_eq_of_support_subset, ENNReal.toReal_pos, _eq_lintegral_enorm, eLpNorm, eLpNormEssSup_eq_essSup_enorm, eLpNorm_eq_eLpNorm, eLpNorm_exponent_top, enorm_ne_zero, essSup_restrict_eq_of_support_subset, hp_top, not_le, p.toReal, setLIntegral_eq_of_support_subset, simp_rw, toReal, toReal_pos
 -/
@@ -3202,7 +3244,10 @@ lemma eLpNorm_lt_top_of_finite
   · simp only [eLpNorm_exponent_top, eLpNormEssSup_lt_top_iff_isBoundedUnder]
     exact .le_of_finite
   rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp₀ hp]
-  refine IsFiniteMeasure.lintegral_lt_top_of_bounded_to_
+  refine IsFiniteMeasure.lintegral_lt_top_of_bounded_to_ennreal μ ?_
+  simp_rw [enorm, ← ENNReal.coe_rpow_of_nonneg _ ENNReal.toReal_nonneg]
+  norm_cast
+  exact Finite.exists_le _
 
 中文:
 引理 eLpNorm_lt_top_of_finite
@@ -3215,7 +3260,10 @@ lemma eLpNorm_lt_top_of_finite
   · simp only [eLpNorm_exponent_top, eLpNormEssSup_lt_top_iff_isBoundedUnder]
     exact .le_of_finite
   rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top hp₀ hp]
-  refine IsFiniteMeasure.lintegral_lt_top_of_bounded_to_
+  refine IsFiniteMeasure.lintegral_lt_top_of_bounded_to_ennreal μ ?_
+  simp_rw [enorm, ← ENNReal.coe_rpow_of_nonneg _ ENNReal.toReal_nonneg]
+  norm_cast
+  exact Finite.exists_le _
 
 Depends on / 依赖: ENNReal, ENNReal.coe_rpow_of_nonneg, ENNReal.toReal_nonneg, Finite, Finite.exists_le, IsFiniteMeasure, IsFiniteMeasure.lintegral_lt_top_of_bounded_to_ennreal, coe_rpow_of_nonneg, eLpNormEssSup_lt_top_iff_isBoundedUnder, eLpNorm_exponent_top, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top, eq_or_ne, exists_le, le_of_finite, lintegral_lt_top_of_bounded_to_ennreal, simp_rw, toReal_nonneg
 -/
@@ -3284,7 +3332,9 @@ theorem ae_eq_zero_of_eLpNorm'_eq_zero
   simp only [eLpNorm'_eq_lintegral_enorm, lintegral_eq_zero_iff' (hf.enorm.pow_const q), one_div,
     ENNReal.rpow_eq_zero_iff, inv_pos, inv_neg'', hq0.not_gt, and_false, or_false] at h
   refine h.left.mono fun x hx => ?_
-  simp only [Pi.ofNat_apply, ENNReal.rpow_eq_zero_iff, enorm_eq_zero, h.2.n
+  simp only [Pi.ofNat_apply, ENNReal.rpow_eq_zero_iff, enorm_eq_zero, h.2.not_gt, and_false,
+    or_false] at hx
+  simp [hx.1]
 
 中文:
 定理 ae_eq_zero_of_eLpNorm'_eq_zero
@@ -3293,7 +3343,9 @@ theorem ae_eq_zero_of_eLpNorm'_eq_zero
   simp only [eLpNorm'_eq_lintegral_enorm, lintegral_eq_zero_iff' (hf.enorm.pow_const q), one_div,
     ENNReal.rpow_eq_zero_iff, inv_pos, inv_neg'', hq0.not_gt, and_false, or_false] at h
   refine h.left.mono fun x hx => ?_
-  simp only [Pi.ofNat_apply, ENNReal.rpow_eq_zero_iff, enorm_eq_zero, h.2.n
+  simp only [Pi.ofNat_apply, ENNReal.rpow_eq_zero_iff, enorm_eq_zero, h.2.not_gt, and_false,
+    or_false] at hx
+  simp [hx.1]
 
 Depends on / 依赖: ENNReal, ENNReal.rpow_eq_zero_iff, Pi.ofNat_apply, _eq_lintegral_enorm, and_false, eLpNorm, enorm_eq_zero, h.left.mono, hf.enorm.pow_const, hq0.not_gt, inv_neg, inv_pos, lintegral_eq_zero_iff, not_gt, ofNat_apply, one_div, or_false, pow_const, rpow_eq_zero_iff
 -/
@@ -3439,7 +3491,7 @@ theorem eLpNorm_map_measure
   · simp_rw [hp_top, eLpNorm_exponent_top]
     exact eLpNormEssSup_map_measure hg hf
   simp_rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_zero hp_top,
-    lintegral_map' (hg.enorm.pow_const p.toRea
+    lintegral_map' (hg.enorm.pow_const p.toReal) hf, Function.comp_apply]
 
 中文:
 定理 eLpNorm_map_measure
@@ -3451,7 +3503,7 @@ theorem eLpNorm_map_measure
   · simp_rw [hp_top, eLpNorm_exponent_top]
     exact eLpNormEssSup_map_measure hg hf
   simp_rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp_zero hp_top,
-    lintegral_map' (hg.enorm.pow_const p.toRea
+    lintegral_map' (hg.enorm.pow_const p.toReal) hf, Function.comp_apply]
 
 Depends on / 依赖: Function, Function.comp_apply, comp_apply, eLpNormEssSup_map_measure, eLpNorm_eq_lintegral_rpow_enorm_toReal, eLpNorm_exponent_top, eLpNorm_exponent_zero, hg.enorm.pow_const, hp_top, hp_zero, lintegral_map, p.toReal, pow_const, simp_rw, toReal
 -/
@@ -3684,7 +3736,15 @@ theorem ae_bdd_liminf_atTop_rpow_of_eLpNorm_bdd
   have hp : p != 0 := fun h => by simp [h] at hp0
   have hp' : p != ∞ := fun h => by simp [h] at hp0
   refine
-    ae_lt_top (.liminf fun
+    ae_lt_top (.liminf fun n => (hfmeas n).nnnorm.coe_nnreal_ennreal.pow_const p.toReal)
+      (lt_of_le_of_lt
+          (lintegral_liminf_le fun n => (hfmeas n).nnnorm.coe_nnreal_ennreal.pow_const p.toReal)
+          (lt_of_le_of_lt ?_ (by finiteness : (R : Real>=0∞) ^ p.toReal < ∞))).ne
+  simp_rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp hp', one_div] at hbdd
+  simp_rw [liminf_eq, eventually_atTop]
+  exact
+    sSup_le fun b ⟨a, ha⟩ =>
+      (ha a le_rfl).trans ((ENNReal.rpow_inv_le_iff (ENNReal.toReal_pos hp hp')).1 (hbdd _))
 
 中文:
 定理 ae_bdd_liminf_atTop_rpow_of_eLpNorm_bdd
@@ -3698,7 +3758,15 @@ theorem ae_bdd_liminf_atTop_rpow_of_eLpNorm_bdd
   have hp : p != 0 := fun h => by simp [h] at hp0
   have hp' : p != ∞ := fun h => by simp [h] at hp0
   refine
-    ae_lt_top (.liminf fun
+    ae_lt_top (.liminf fun n => (hfmeas n).nnnorm.coe_nnreal_ennreal.pow_const p.toReal)
+      (lt_of_le_of_lt
+          (lintegral_liminf_le fun n => (hfmeas n).nnnorm.coe_nnreal_ennreal.pow_const p.toReal)
+          (lt_of_le_of_lt ?_ (by finiteness : (R : Real>=0∞) ^ p.toReal < ∞))).ne
+  simp_rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp hp', one_div] at hbdd
+  simp_rw [liminf_eq, eventually_atTop]
+  exact
+    sSup_le fun b ⟨a, ha⟩ =>
+      (ha a le_rfl).trans ((ENNReal.rpow_inv_le_iff (ENNReal.toReal_pos hp hp')).1 (hbdd _))
 
 Depends on / 依赖: ENNReal, ENNReal.one_lt_top, ENNReal.rpow_zero, ae_lt_top, coe_nnreal_ennreal, filter_upwards, finiteness, hfmeas, liminf, liminf_const, lintegral_liminf_le, lt_of_le_of_lt, nnnorm, nnnorm.coe_nnreal_ennreal.pow_const, one_lt_top, p.toRea, p.toReal, pow_const, rpow_zero, toReal
 -/
@@ -3737,7 +3805,22 @@ theorem ae_bdd_liminf_atTop_of_eLpNorm_bdd
       ae_lt_of_essSup_lt
         (lt_of_le_of_lt (hbdd n) <| ENNReal.lt_add_right ENNReal.coe_ne_top one_ne_zero)
     rw [← ae_all_iff] at this
-    fil
+    filter_upwards [this] with x hx using lt_of_le_of_lt
+        (liminf_le_of_frequently_le' <| Frequently.of_forall fun n => (hx n).le)
+        (ENNReal.add_lt_top.2 ⟨ENNReal.coe_lt_top, ENNReal.one_lt_top⟩)
+  filter_upwards [ae_bdd_liminf_atTop_rpow_of_eLpNorm_bdd hfmeas hbdd] with x hx
+  have hppos : 0 < p.toReal := ENNReal.toReal_pos hp hp'
+  have :
+    liminf (fun n => (‖f n x‖ₑ) ^ p.toReal) atTop =
+      liminf (fun n => (‖f n x‖ₑ)) atTop ^ p.toReal := by
+    change
+      liminf (fun n => ENNReal.orderIsoRpow p.toReal hppos (‖f n x‖ₑ)) atTop =
+        ENNReal.orderIsoRpow p.toReal hppos (liminf (fun n => (‖f n x‖ₑ)) atTop)
+    refine (OrderIso.liminf_apply (ENNReal.orderIsoRpow p.toReal _) ?_ ?_ ?_ ?_).symm <;>
+      isBoundedDefault
+  rw [this] at hx
+  rw [← ENNReal.rpow_one (liminf (‖f · x‖ₑ) atTop)]; rw [← mul_inv_cancel₀ hppos.ne.symm]; rw [ENNReal.rpow_mul]
+  exact ENNReal.rpow_lt_top_of_nonneg (inv_nonneg.2 hppos.le) hx.ne
 
 中文:
 定理 ae_bdd_liminf_atTop_of_eLpNorm_bdd
@@ -3750,7 +3833,22 @@ theorem ae_bdd_liminf_atTop_of_eLpNorm_bdd
       ae_lt_of_essSup_lt
         (lt_of_le_of_lt (hbdd n) <| ENNReal.lt_add_right ENNReal.coe_ne_top one_ne_zero)
     rw [← ae_all_iff] at this
-    fil
+    filter_upwards [this] with x hx using lt_of_le_of_lt
+        (liminf_le_of_frequently_le' <| Frequently.of_forall fun n => (hx n).le)
+        (ENNReal.add_lt_top.2 ⟨ENNReal.coe_lt_top, ENNReal.one_lt_top⟩)
+  filter_upwards [ae_bdd_liminf_atTop_rpow_of_eLpNorm_bdd hfmeas hbdd] with x hx
+  have hppos : 0 < p.toReal := ENNReal.toReal_pos hp hp'
+  have :
+    liminf (fun n => (‖f n x‖ₑ) ^ p.toReal) atTop =
+      liminf (fun n => (‖f n x‖ₑ)) atTop ^ p.toReal := by
+    change
+      liminf (fun n => ENNReal.orderIsoRpow p.toReal hppos (‖f n x‖ₑ)) atTop =
+        ENNReal.orderIsoRpow p.toReal hppos (liminf (fun n => (‖f n x‖ₑ)) atTop)
+    refine (OrderIso.liminf_apply (ENNReal.orderIsoRpow p.toReal _) ?_ ?_ ?_ ?_).symm <;>
+      isBoundedDefault
+  rw [this] at hx
+  rw [← ENNReal.rpow_one (liminf (‖f · x‖ₑ) atTop)]; rw [← mul_inv_cancel₀ hppos.ne.symm]; rw [ENNReal.rpow_mul]
+  exact ENNReal.rpow_lt_top_of_nonneg (inv_nonneg.2 hppos.le) hx.ne
 
 Depends on / 依赖: ENNReal, ENNReal.add_lt_top, ENNReal.coe_lt_top, ENNReal.coe_ne_top, ENNReal.lt_add_right, ENNReal.one_lt_top, Frequently, Frequently.of_forall, add_lt_top, ae_all_iff, ae_bdd_liminf_atTop_rpow_of_eLp, ae_lt_of_essSup_lt, coe_lt_top, coe_ne_top, eLpNorm_exponent_top, filter_upwards, liminf_le_of_frequently_le, lt_add_right, lt_of_le_of_lt, of_forall
 -/

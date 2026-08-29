@@ -659,7 +659,9 @@ theorem ωSup_total
       have : exists i, ¬c i <= x := by simp only [not_forall] at this ⊢; assumption
       let ⟨i, hx⟩ := this
       have : x <= c i := (h i).resolve_left hx
-Or.inr le_ωSup_of_le _ thi
+Or.inr le_ωSup_of_le _ this)
+
+@[gcongr, mono]
 
 中文:
 定理 ωSup_total
@@ -671,7 +673,9 @@ Or.inr le_ωSup_of_le _ thi
       have : exists i, ¬c i <= x := by simp only [not_forall] at this ⊢; assumption
       let ⟨i, hx⟩ := this
       have : x <= c i := (h i).resolve_left hx
-Or.inr le_ωSup_of_le _ thi
+Or.inr le_ωSup_of_le _ this)
+
+@[gcongr, mono]
 
 Depends on / 依赖: Or.inl, Or.inr, not_forall, resolve_left
 -/
@@ -757,7 +761,7 @@ lemma isLUB_range_ωSup
     exact fun a => le_ωSup c a
   · simp only [lowerBounds, upperBounds, Set.mem_range, forall_exists_index,
       forall_apply_eq_imp_iff, Set.mem_ofPred_eq]
-    exact f
+    exact fun ⦃a⦄ a_1 => ωSup_le c a a_1
 
 中文:
 引理 isLUB_range_ωSup
@@ -770,7 +774,7 @@ lemma isLUB_range_ωSup
     exact fun a => le_ωSup c a
   · simp only [lowerBounds, upperBounds, Set.mem_range, forall_exists_index,
       forall_apply_eq_imp_iff, Set.mem_ofPred_eq]
-    exact f
+    exact fun ⦃a⦄ a_1 => ωSup_le c a a_1
 
 Depends on / 依赖: Set.mem_ofPred_eq, Set.mem_range, forall_apply_eq_imp_iff, forall_exists_index, lowerBounds, mem_ofPred_eq, mem_range, upperBounds
 -/
@@ -1001,7 +1005,8 @@ lemma ωScottContinuous_iff_monotone_map_ωSup
   · rw [← hc] at hda
     rw [← hf.2 c]; rw [ωSup_eq_of_isLUB hda]
 
-alias ⟨ωScottContinuous.monotone_map
+alias ⟨ωScottContinuous.monotone_map_ωSup, ωScottContinuous.of_monotone_map_ωSup⟩ :=
+  ωScottContinuous_iff_monotone_map_ωSup
 
 中文:
 引理 ωScottContinuous_iff_monotone_map_ωSup
@@ -1013,7 +1018,8 @@ alias ⟨ωScottContinuous.monotone_map
   · rw [← hc] at hda
     rw [← hf.2 c]; rw [ωSup_eq_of_isLUB hda]
 
-alias ⟨ωScottContinuous.monotone_map
+alias ⟨ωScottContinuous.monotone_map_ωSup, ωScottContinuous.of_monotone_map_ωSup⟩ :=
+  ωScottContinuous_iff_monotone_map_ωSup
 
 Depends on / 依赖: Set.range_comp, c.map, convert, hf.map_, hf.monotone, monotone, range_comp
 -/
@@ -2004,7 +2010,20 @@ theorem ωSup_bind
     simp only [Part.mem_ωSup] at hb
     rcases hb with ⟨j, hb⟩
     replace hb := hb.symm
-    simp only [Part.eq_some_iff, Chain.coe_ma
+    simp only [Part.eq_some_iff, Chain.coe_map, Function.comp_apply] at hy hb
+    replace hb : b in f (c (max i j)) := f.mono (c.mono (le_max_right i j)) _ hb
+    replace hy : y in g (c (max i j)) b := g.mono (c.mono (le_max_left i j)) _ _ hy
+    apply h''' (max i j)
+    simp only [Part.mem_bind_iff, Chain.coe_map,
+      Function.comp_apply, OrderHom.partBind_coe]
+    exact ⟨_, hb, hy⟩
+  · intro i y hy
+    simp only [Part.mem_bind_iff, Chain.coe_map,
+      Function.comp_apply, OrderHom.partBind_coe] at hy
+    rcases hy with ⟨b, hb₀, hb₁⟩
+    apply h''' b _
+    · apply le_ωSup (c.map g) _ _ _ hb₁
+    · apply le_ωSup (c.map f) i _ hb₀
 
 中文:
 定理 ωSup_bind
@@ -2019,7 +2038,20 @@ theorem ωSup_bind
     simp only [Part.mem_ωSup] at hb
     rcases hb with ⟨j, hb⟩
     replace hb := hb.symm
-    simp only [Part.eq_some_iff, Chain.coe_ma
+    simp only [Part.eq_some_iff, Chain.coe_map, Function.comp_apply] at hy hb
+    replace hb : b in f (c (max i j)) := f.mono (c.mono (le_max_right i j)) _ hb
+    replace hy : y in g (c (max i j)) b := g.mono (c.mono (le_max_left i j)) _ _ hy
+    apply h''' (max i j)
+    simp only [Part.mem_bind_iff, Chain.coe_map,
+      Function.comp_apply, OrderHom.partBind_coe]
+    exact ⟨_, hb, hy⟩
+  · intro i y hy
+    simp only [Part.mem_bind_iff, Chain.coe_map,
+      Function.comp_apply, OrderHom.partBind_coe] at hy
+    rcases hy with ⟨b, hb₀, hb₁⟩
+    apply h''' b _
+    · apply le_ωSup (c.map g) _ _ _ hb₁
+    · apply le_ωSup (c.map f) i _ hb₀
 
 Depends on / 依赖: Chain.coe_map, FixedPoints, FixedPoints.subalgebra, Function, Function.comp_apply, Ideal.Quotient.exists_algEquiv_fixedPoint_quotient_under, Ideal.Quotient.mk_s, Ideal.Quotient.stabilizerHom_surjective, IsScalarTower, IsScalarTower.of_algebraMap_eq, Part.bind_le, Part.eq_some_iff, Part.mem_, Part.mem_b, Q.under, Quotient, Quotient.ind, bind_le, c.mono, coe_map
 -/
@@ -2528,7 +2560,19 @@ lemma ωScottContinuous_apply
     · apply ωSup_le
       intro i
       dsimp
-      rw [
+      rw [(f (c i)).continuous]
+      apply ωSup_le
+      intro j
+      apply le_ωSup_of_le (i ⊔ j)
+      apply apply_mono
+      · apply hf.monotone (c.monotone le_sup_left)
+      · apply hg.monotone (c.monotone le_sup_right)
+    · simp only [ωSup_le_iff]
+      intro i
+      apply le_ωSup_of_le i
+      apply (f (c i)).monotone
+      apply le_ωSup_of_le i
+      rfl
 
 中文:
 引理 ωScottContinuous_apply
@@ -2542,7 +2586,19 @@ lemma ωScottContinuous_apply
     · apply ωSup_le
       intro i
       dsimp
-      rw [
+      rw [(f (c i)).continuous]
+      apply ωSup_le
+      intro j
+      apply le_ωSup_of_le (i ⊔ j)
+      apply apply_mono
+      · apply hf.monotone (c.monotone le_sup_left)
+      · apply hg.monotone (c.monotone le_sup_right)
+    · simp only [ωSup_le_iff]
+      intro i
+      apply le_ωSup_of_le i
+      apply (f (c i)).monotone
+      apply le_ωSup_of_le i
+      rfl
 
 Depends on / 依赖: OrderHom, OrderHom.apply_mono, ScottContinuous.of_monotone_map_, apply_mono, c.monotone, continuous, hf.map_, hf.monotone, hg.map_, hg.monotone, le_antisymm, le_sup_left, le_sup_right, monotone
 -/
@@ -2754,7 +2810,16 @@ theorem ωSup_iterate_mem_fixedPoint
     have : iterateChain f x h (n.succ) = f (iterateChain f x h n) :=
       Function.iterate_succ_apply' ..
     rw [← this]
- 
+    apply le_ωSup
+  · apply ωSup_le
+    rintro (_ | n)
+    · apply le_trans h
+      change ((iterateChain f x h).map f) 0 <= ωSup ((iterateChain f x h).map (f : α ->o α))
+      apply le_ωSup
+    · have : iterateChain f x h (n.succ) = (iterateChain f x h).map f n :=
+        Function.iterate_succ_apply' ..
+      rw [this]
+      apply le_ωSup
 
 中文:
 定理 ωSup_iterate_mem_fixedPoint
@@ -2768,7 +2833,16 @@ theorem ωSup_iterate_mem_fixedPoint
     have : iterateChain f x h (n.succ) = f (iterateChain f x h n) :=
       Function.iterate_succ_apply' ..
     rw [← this]
- 
+    apply le_ωSup
+  · apply ωSup_le
+    rintro (_ | n)
+    · apply le_trans h
+      change ((iterateChain f x h).map f) 0 <= ωSup ((iterateChain f x h).map (f : α ->o α))
+      apply le_ωSup
+    · have : iterateChain f x h (n.succ) = (iterateChain f x h).map f n :=
+        Function.iterate_succ_apply' ..
+      rw [this]
+      apply le_ωSup
 
 Depends on / 依赖: Chain.coe_map, Function, Function.iterate_succ_apply, IsFixedPt, OrderHomClass, OrderHomClass.coe_coe, coe_coe, coe_map, comp_apply, continuous, f.continuous, iterateChain, iterate_succ_apply, le_antisymm, le_trans, mem_fixedPoints, n.succ
 -/

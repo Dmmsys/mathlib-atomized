@@ -431,7 +431,12 @@ theorem tendsto_measure_cthickening
     exact
       tendsto_measure_biInter_gt (fun r _ => isClosed_cthickening.nullMeasurableSet)
         (fun i j _ ij => cthickening_mono ij _) hs
-  have B : Tendsto (fun
+  have B : Tendsto (fun r => μ (cthickening r s)) (𝓝[Iic 0] 0) (𝓝 (μ (closure s))) := by
+    apply Tendsto.congr' _ tendsto_const_nhds
+    filter_upwards [self_mem_nhdsWithin (α := Real)] with _ hr
+    rw [cthickening_of_nonpos hr]
+  convert! B.sup A
+  exact (nhdsLE_sup_nhdsGT 0).symm
 
 中文:
 定理 tendsto_measure_cthickening
@@ -442,7 +447,12 @@ theorem tendsto_measure_cthickening
     exact
       tendsto_measure_biInter_gt (fun r _ => isClosed_cthickening.nullMeasurableSet)
         (fun i j _ ij => cthickening_mono ij _) hs
-  have B : Tendsto (fun
+  have B : Tendsto (fun r => μ (cthickening r s)) (𝓝[Iic 0] 0) (𝓝 (μ (closure s))) := by
+    apply Tendsto.congr' _ tendsto_const_nhds
+    filter_upwards [self_mem_nhdsWithin (α := Real)] with _ hr
+    rw [cthickening_of_nonpos hr]
+  convert! B.sup A
+  exact (nhdsLE_sup_nhdsGT 0).symm
 
 Depends on / 依赖: B.sup, Tendsto, Tendsto.congr, closure, closure_eq_iInter_cthickening, convert, cthickening, cthickening_mono, cthickening_of_nonpos, filter_upwards, isClosed_cthickening, isClosed_cthickening.nullMeasurableSet, nullMeasurableSet, self_mem_nhdsWithin, tendsto_const_nhds, tendsto_measure_biInter_gt
 -/

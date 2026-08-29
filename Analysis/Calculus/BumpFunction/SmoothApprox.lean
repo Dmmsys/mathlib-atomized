@@ -123,7 +123,17 @@ theorem ContinuousMap.dense_setOfPred_contDiff
   simp only [Prod.forall, mem_ofPred_eq, and_imp]
   intro K ε hK hε
   have : UniformContinuousOn f (cthickening 1 K) :=
-hK.cthickening.uniformContinuousOn_of_continuous by fu
+hK.cthickening.uniformContinuousOn_of_continuous by fun_prop
+  rcases Metric.uniformContinuousOn_iff.mp this (ε / 2) (half_pos hε) with ⟨δ, hδ, hfδ⟩
+  rcases (map_continuous f).exists_contDiff_dist_le_of_forall_mem_ball_dist_le
+    (lt_min one_pos hδ) with ⟨g, hgc, hg⟩
+  refine ⟨⟨g, hgc.continuous⟩, hgc, fun x hx => (hg _ _ fun y hy => ?_).trans_lt (half_lt_self hε)⟩
+  rw [mem_ball]; rw [lt_min_iff] at hy
+  exact hfδ _ (mem_cthickening_of_dist_le _ x _ _ hx hy.1.le) _
+.le (self_subset_cthickening _ hx) hy.2
+
+@[deprecated (since := "2026-07-09")]
+alias ContinuousMap.dense_setOf_contDiff := ContinuousMap.dense_setOfPred_contDiff
 
 中文:
 定理 连续映射.dense_setOfPred_contDiff
@@ -135,7 +145,17 @@ hK.cthickening.uniformContinuousOn_of_continuous by fu
   simp only [Prod.forall, mem_ofPred_eq, and_imp]
   intro K ε hK hε
   have : UniformContinuousOn f (cthickening 1 K) :=
-hK.cthickening.uniformContinuousOn_of_continuous by fu
+hK.cthickening.uniformContinuousOn_of_continuous by fun_prop
+  rcases Metric.uniformContinuousOn_iff.mp this (ε / 2) (half_pos hε) with ⟨δ, hδ, hfδ⟩
+  rcases (map_continuous f).exists_contDiff_dist_le_of_forall_mem_ball_dist_le
+    (lt_min one_pos hδ) with ⟨g, hgc, hg⟩
+  refine ⟨⟨g, hgc.continuous⟩, hgc, fun x hx => (hg _ _ fun y hy => ?_).trans_lt (half_lt_self hε)⟩
+  rw [mem_ball]; rw [lt_min_iff] at hy
+  exact hfδ _ (mem_cthickening_of_dist_le _ x _ _ hx hy.1.le) _
+.le (self_subset_cthickening _ hx) hy.2
+
+@[deprecated (since := "2026-07-09")]
+alias ContinuousMap.dense_setOf_contDiff := ContinuousMap.dense_setOfPred_contDiff
 
 Depends on / 依赖: Metric, Metric.uniformContinuousOn_iff.mp, Prod.forall, UniformContinuousOn, and_imp, compactConvergenceUniformity, cthickening, exists_contDiff_dist_le_of_forall_mem_ball_dist_le, fun_prop, hK.cthickening.uniformContinuousOn_of_continuous, half_pos, lt_min, map_continuous, mem_closure_iff_nhds_basis, mem_ofPred_eq, nhds_basis_uniformity, one_pos, uniformContinuousOn_iff, uniformContinuousOn_of_continuous, uniformity_basis_dist
 -/

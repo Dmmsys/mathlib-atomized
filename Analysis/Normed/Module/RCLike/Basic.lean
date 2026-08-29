@@ -150,7 +150,15 @@ theorem LinearMap.bound_of_sphere_bound
     apply h
     rw [mem_sphere_zero_iff_norm]
     exact norm_smul_inv_norm' r_pos.le z_zero
-  have r_ne_ze
+  have r_ne_zero : (r : 𝕜) != 0 := RCLike.ofReal_ne_zero.mpr r_pos.ne'
+  have eq : f z = ‖z‖ / r * f z₁ := by
+    rw [hz₁]; rw [map_smul]; rw [smul_eq_mul]
+    rw [← mul_assoc]; rw [← mul_assoc]; rw [div_mul_cancel₀ _ r_ne_zero]; rw [mul_inv_cancel₀]; rw [one_mul]
+    simp only [z_zero, RCLike.ofReal_eq_zero, norm_eq_zero, Ne, not_false_iff]
+  rw [eq]; rw [norm_mul]; rw [norm_div]; rw [RCLike.norm_coe_norm]; rw [RCLike.norm_of_nonneg r_pos.le]; rw [div_mul_eq_mul_div]; rw [div_mul_eq_mul_div]; rw [mul_comm]
+  apply div_le_div₀ _ _ r_pos rfl.ge
+  · exact mul_nonneg ((norm_nonneg _).trans norm_f_z₁) (norm_nonneg z)
+  apply mul_le_mul norm_f_z₁ rfl.le (norm_nonneg z) ((norm_nonneg _).trans norm_f_z₁)
 
 中文:
 定理 线性映射.bound_of_sphere_bound
@@ -165,7 +173,15 @@ theorem LinearMap.bound_of_sphere_bound
     apply h
     rw [mem_sphere_zero_iff_norm]
     exact norm_smul_inv_norm' r_pos.le z_zero
-  have r_ne_ze
+  have r_ne_zero : (r : 𝕜) != 0 := RCLike.ofReal_ne_zero.mpr r_pos.ne'
+  have eq : f z = ‖z‖ / r * f z₁ := by
+    rw [hz₁]; rw [map_smul]; rw [smul_eq_mul]
+    rw [← mul_assoc]; rw [← mul_assoc]; rw [div_mul_cancel₀ _ r_ne_zero]; rw [mul_inv_cancel₀]; rw [one_mul]
+    simp only [z_zero, RCLike.ofReal_eq_zero, norm_eq_zero, Ne, not_false_iff]
+  rw [eq]; rw [norm_mul]; rw [norm_div]; rw [RCLike.norm_coe_norm]; rw [RCLike.norm_of_nonneg r_pos.le]; rw [div_mul_eq_mul_div]; rw [div_mul_eq_mul_div]; rw [mul_comm]
+  apply div_le_div₀ _ _ r_pos rfl.ge
+  · exact mul_nonneg ((norm_nonneg _).trans norm_f_z₁) (norm_nonneg z)
+  apply mul_le_mul norm_f_z₁ rfl.le (norm_nonneg z) ((norm_nonneg _).trans norm_f_z₁)
 
 Depends on / 依赖: RCLike, RCLike.ofReal_ne_zero.mpr, le_rfl, map_smul, map_zero, mem_sphere_zero_iff_norm, mul_assoc, mul_zero, norm_smul_inv_norm, norm_zero, ofReal_ne_zero, r_ne_zero, r_pos, r_pos.le, r_pos.ne, smul_eq_mul, z_zero
 -/

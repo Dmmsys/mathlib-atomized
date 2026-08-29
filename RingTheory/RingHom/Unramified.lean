@@ -268,7 +268,10 @@ lemma ofLocalizationPrime
   let Rₓ := Localization.AtPrime (x.asIdeal.comap f)
   let Sₓ := Localization.AtPrime x.asIdeal
   let : Algebra Rₓ Sₓ := (Localization.localRingHom _ _ _ rfl).toAlgebra
-  have : Is
+  have : IsScalarTower R Rₓ Sₓ := .of_algebraMap_eq
+    fun x => (Localization.localRingHom_to_map _ _ _ rfl x).symm
+  have : Algebra.FormallyUnramified Rₓ Sₓ := H _ _
+  exact Algebra.FormallyUnramified.comp R Rₓ Sₓ
 
 中文:
 引理 ofLocalizationPrime
@@ -280,7 +283,10 @@ lemma ofLocalizationPrime
   let Rₓ := Localization.AtPrime (x.asIdeal.comap f)
   let Sₓ := Localization.AtPrime x.asIdeal
   let : Algebra Rₓ Sₓ := (Localization.localRingHom _ _ _ rfl).toAlgebra
-  have : Is
+  have : IsScalarTower R Rₓ Sₓ := .of_algebraMap_eq
+    fun x => (Localization.localRingHom_to_map _ _ _ rfl x).symm
+  have : Algebra.FormallyUnramified Rₓ Sₓ := H _ _
+  exact Algebra.FormallyUnramified.comp R Rₓ Sₓ
 
 Depends on / 依赖: Algebra, Algebra.FormallyUnramified, Algebra.FormallyUnramified.comp, Algebra.formallyUnramified_iff_forall, AtPrime, FormallyUnramified, IsScalarTower, Localization, Localization.AtPrime, Localization.localRingHom, Localization.localRingHom_to_map, algebraize, asIdeal, formallyUnramified_iff_forall, localRingHom, localRingHom_to_map, of_algebraMap_eq, toAlgebra, x.asIdeal, x.asIdeal.comap
 -/
@@ -310,7 +316,11 @@ lemma ofLocalizationSpanTarget
   intro x
   obtain ⟨r, hr, hrx⟩ : exists r in s, x in PrimeSpectrum.basicOpen r := by
     simpa using (PrimeSpectrum.iSup_basicOpen_eq_top_iff'.mpr hs).ge
-      (TopologicalSpace.Opens.
+      (TopologicalSpace.Opens.mem_top x)
+  refine Algebra.basicOpen_subset_unramifiedLocus_iff.mpr ?_ hrx
+  convert! H ⟨r, hr⟩
+  dsimp
+  rw [← algebraMap_toAlgebra f]; rw [← IsScalarTower.algebraMap_eq]; rw [formallyUnramified_algebraMap]
 
 中文:
 引理 ofLocalizationSpanTarget
@@ -321,7 +331,11 @@ lemma ofLocalizationSpanTarget
   intro x
   obtain ⟨r, hr, hrx⟩ : exists r in s, x in PrimeSpectrum.basicOpen r := by
     simpa using (PrimeSpectrum.iSup_basicOpen_eq_top_iff'.mpr hs).ge
-      (TopologicalSpace.Opens.
+      (TopologicalSpace.Opens.mem_top x)
+  refine Algebra.basicOpen_subset_unramifiedLocus_iff.mpr ?_ hrx
+  convert! H ⟨r, hr⟩
+  dsimp
+  rw [← algebraMap_toAlgebra f]; rw [← IsScalarTower.algebraMap_eq]; rw [formallyUnramified_algebraMap]
 
 Depends on / 依赖: Algebra, Algebra.basicOpen_subset_unramifiedLocus_iff.mpr, Algebra.formallyUnramified_iff_forall, FormallyUnramified, IsScalarTower, IsScalarTower.algebraMap_eq, PrimeSpectrum, PrimeSpectrum.basicOpen, PrimeSpectrum.iSup_basicOpen_eq_top_iff, TopologicalSpace, TopologicalSpace.Opens.mem_top, algebraMap_eq, algebraMap_toAlgebra, algebraize, basicOpen, basicOpen_subset_unramifiedLocus_iff, convert, formallyUnramified_algebraMap, formallyUnramified_iff_forall, iSup_basicOpen_eq_top_iff
 -/
@@ -351,7 +365,8 @@ lemma propertyIsLocal
   · exact ofLocalizationSpanTarget.ofLocalizationSpan
       (stableUnderComposition.stableUnderCompositionWithLocalizationAway
           holdsForLocalizationAway).1
-  · exact (stableUnder
+  · exact (stableUnderComposition.stableUnderCompositionWithLocalizationAway
+        holdsForLocalizationAway).2
 
 中文:
 引理 propertyIsLocal
@@ -362,7 +377,8 @@ lemma propertyIsLocal
   · exact ofLocalizationSpanTarget.ofLocalizationSpan
       (stableUnderComposition.stableUnderCompositionWithLocalizationAway
           holdsForLocalizationAway).1
-  · exact (stableUnder
+  · exact (stableUnderComposition.stableUnderCompositionWithLocalizationAway
+        holdsForLocalizationAway).2
 
 Depends on / 依赖: holdsForLocalizationAway, isStableUnderBaseChange, isStableUnderBaseChange.localizationPreserves.away, localizationPreserves, ofLocalizationSpan, ofLocalizationSpanTarget, ofLocalizationSpanTarget.ofLocalizationSpan, stableUnderComposition, stableUnderComposition.stableUnderCompositionWithLocalizationAway, stableUnderCompositionWithLocalizationAway
 -/

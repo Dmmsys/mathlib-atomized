@@ -141,7 +141,22 @@ lemma of_equivalence_source
   exact
     { inverts := hW₂
       isEquivalence :=
-
+        Localization.isEquivalence W₂.Q W₂ L₁ W₁ L₂ (Construction.lift L₂ hW₂)
+          (E.functor ⋙ W₂.Q) (Localization.lift (E.functor ⋙ W₂.Q) h L₁) (by
+            calc
+              L₂ ⋙ lift (E.functor ⋙ W₂.Q) h L₁ ≅ _ := (leftUnitor _).symm
+              _ ≅ _ := isoWhiskerRight E.counitIso.symm _
+              _ ≅ E.inverse ⋙ E.functor ⋙ L₂ ⋙ lift (E.functor ⋙ W₂.Q) h L₁ :=
+                    Functor.associator _ _ _
+              _ ≅ E.inverse ⋙ L₁ ⋙ lift (E.functor ⋙ W₂.Q) h L₁ :=
+                    isoWhiskerLeft E.inverse ((Functor.associator _ _ _).symm ≪≫
+                      isoWhiskerRight iso _)
+              _ ≅ E.inverse ⋙ E.functor ⋙ W₂.Q :=
+                    isoWhiskerLeft _ (Localization.fac (E.functor ⋙ W₂.Q) h L₁)
+              _ ≅ (E.inverse ⋙ E.functor) ⋙ W₂.Q := (Functor.associator _ _ _).symm
+              _ ≅ 𝟭 C₂ ⋙ W₂.Q := isoWhiskerRight E.counitIso _
+              _ ≅ W₂.Q := leftUnitor _)
+          (Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (Lifting.iso W₂.Q W₂ _ _) ≪≫ iso) }
 
 中文:
 引理 of_equivalence_source
@@ -154,7 +169,22 @@ lemma of_equivalence_source
   exact
     { inverts := hW₂
       isEquivalence :=
-
+        Localization.isEquivalence W₂.Q W₂ L₁ W₁ L₂ (Construction.lift L₂ hW₂)
+          (E.functor ⋙ W₂.Q) (Localization.lift (E.functor ⋙ W₂.Q) h L₁) (by
+            calc
+              L₂ ⋙ lift (E.functor ⋙ W₂.Q) h L₁ ≅ _ := (leftUnitor _).symm
+              _ ≅ _ := isoWhiskerRight E.counitIso.symm _
+              _ ≅ E.inverse ⋙ E.functor ⋙ L₂ ⋙ lift (E.functor ⋙ W₂.Q) h L₁ :=
+                    Functor.associator _ _ _
+              _ ≅ E.inverse ⋙ L₁ ⋙ lift (E.functor ⋙ W₂.Q) h L₁ :=
+                    isoWhiskerLeft E.inverse ((Functor.associator _ _ _).symm ≪≫
+                      isoWhiskerRight iso _)
+              _ ≅ E.inverse ⋙ E.functor ⋙ W₂.Q :=
+                    isoWhiskerLeft _ (Localization.fac (E.functor ⋙ W₂.Q) h L₁)
+              _ ≅ (E.inverse ⋙ E.functor) ⋙ W₂.Q := (Functor.associator _ _ _).symm
+              _ ≅ 𝟭 C₂ ⋙ W₂.Q := isoWhiskerRight E.counitIso _
+              _ ≅ W₂.Q := leftUnitor _)
+          (Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (Lifting.iso W₂.Q W₂ _ _) ≪≫ iso) }
 
 Depends on / 依赖: Construction, Construction.lift, CoreMonoidal, E.functor, Functor, Functor.CoreMonoidal.toMonoidal, Functor.map_comp, IsInvertedBy, Localization, Localization.inverts, Localization.isEquivalence, Localization.lift, MorphismProperty, MorphismProperty.isomorphisms, Q.mapArrow.mapIso, add_zero_inv_app, arrow_mk_iso_iff, assoc_inv_app_assoc, associativity, functor
 -/

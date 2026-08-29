@@ -153,7 +153,10 @@ theorem tendsto_sub_one_mul_dedekindZeta_nhdsGT
   refine ((Ideal.tendsto_norm_le_div_atTop₀ K).comp tendsto_natCast_atTop_atTop).congr fun n => ?_
   simp only [Function.comp_apply, Nat.cast_le, ← Nat.cast_sum]
   congr
-  rw [← add_left_
+  rw [← add_left_inj 1]; rw [← card_norm_le_eq_card_norm_le_add_one]; rw [show Finset.Icc 1 n = Finset.Ioc 0 n from Finset.Icc_succ_left_eq_Ioc _ _]; rw [show 1 = Nat.card {I : Ideal (𝓞 K) // absNorm I = 0} by simp [Ideal.absNorm_eq_zero_iff],
+    Finset.sum_Ioc_add_eq_sum_Icc (n.zero_le),
+    ← Finset.card_preimage_eq_sum_card_image_eq (fun k _ => finite_setOfPred_absNorm_eq k)]
+  simp [Set.coe_eq_subtype]
 
 中文:
 定理 tendsto_sub_one_mul_dedekindZeta_nhdsGT
@@ -163,7 +166,10 @@ theorem tendsto_sub_one_mul_dedekindZeta_nhdsGT
   refine ((Ideal.tendsto_norm_le_div_atTop₀ K).comp tendsto_natCast_atTop_atTop).congr fun n => ?_
   simp only [Function.comp_apply, Nat.cast_le, ← Nat.cast_sum]
   congr
-  rw [← add_left_
+  rw [← add_left_inj 1]; rw [← card_norm_le_eq_card_norm_le_add_one]; rw [show Finset.Icc 1 n = Finset.Ioc 0 n from Finset.Icc_succ_left_eq_Ioc _ _]; rw [show 1 = Nat.card {I : Ideal (𝓞 K) // absNorm I = 0} by simp [Ideal.absNorm_eq_zero_iff],
+    Finset.sum_Ioc_add_eq_sum_Icc (n.zero_le),
+    ← Finset.card_preimage_eq_sum_card_image_eq (fun k _ => finite_setOfPred_absNorm_eq k)]
+  simp [Set.coe_eq_subtype]
 
 Depends on / 依赖: Finset, Finset.Icc, Finset.Icc_succ_left_eq_Ioc, Finset.Ioc, Function, Function.comp_apply, Icc_succ_left_eq_Ioc, Ideal.absNorm_e, Ideal.tendsto_norm_le_div_atTop, LSeries_tendsto_sub_mul_nhds_one_of_tendsto_sum_div_and_nonneg, Nat.card, Nat.cast_le, Nat.cast_nonneg, Nat.cast_sum, absNorm, absNorm_e, add_left_inj, card_norm_le_eq_card_norm_le_add_one, cast_le, cast_nonneg
 -/

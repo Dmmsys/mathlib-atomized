@@ -289,7 +289,7 @@ theorem det_fderivPolarCoordRealSymm
   proof: by
   have : (FDerivPolarCoordRealSymm K x).toLinearMap =
       LinearMap.prodMap (LinearMap.id) (fderivPiPolarCoordSymm x.2).toLinearMap := rfl
-  rw [ContinuousLinearMap.det]; rw [this]; rw [LinearMap.det_prodMap]; rw [LinearMap.det_id]; rw [one_mul]; rw [← ContinuousLinearMap.det]; rw [det_fderivPi
+  rw [ContinuousLinearMap.det]; rw [this]; rw [LinearMap.det_prodMap]; rw [LinearMap.det_id]; rw [one_mul]; rw [← ContinuousLinearMap.det]; rw [det_fderivPiPolarCoordSymm]
 
 中文:
 定理 det_fderivPolarCoord实数Symm
@@ -297,7 +297,7 @@ theorem det_fderivPolarCoordRealSymm
   证明: by
   have : (FDerivPolarCoordRealSymm K x).toLinearMap =
       LinearMap.prodMap (LinearMap.id) (fderivPiPolarCoordSymm x.2).toLinearMap := rfl
-  rw [ContinuousLinearMap.det]; rw [this]; rw [LinearMap.det_prodMap]; rw [LinearMap.det_id]; rw [one_mul]; rw [← ContinuousLinearMap.det]; rw [det_fderivPi
+  rw [ContinuousLinearMap.det]; rw [this]; rw [LinearMap.det_prodMap]; rw [LinearMap.det_id]; rw [one_mul]; rw [← ContinuousLinearMap.det]; rw [det_fderivPiPolarCoordSymm]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.det, FDerivPolarCoordRealSymm, LinearMap, LinearMap.det_id, LinearMap.det_prodMap, LinearMap.id, LinearMap.prodMap, det_fderivPiPolarCoordSymm, det_id, det_prodMap, fderivPiPolarCoordSymm, one_mul, prodMap, toLinearMap
 -/
@@ -341,7 +341,9 @@ theorem integral_comp_polarCoordReal_symm
   rw [← setIntegral_univ (f := f)]; rw [← setIntegral_congr_set (polarCoordReal_symm_target_ae_eq_univ K)]; rw [integral_image_eq_integral_abs_det_fderiv_smul volume
       (polarCoordReal K).open_target.measurableSet
       (fun x _ => (hasFDerivAt_polarCoordReal_symm K x).hasFDerivWithinAt)
-     
+      (polarCoordReal K).symm.injOn f]
+  refine setIntegral_congr_fun (polarCoordReal K).open_target.measurableSet fun x hx => ?_
+  simp_rw [det_fderivPolarCoordRealSymm, Finset.abs_prod, abs_of_mem_polarCoordReal_target K hx]
 
 中文:
 定理 integral_comp_polarCoord实数_symm
@@ -350,7 +352,9 @@ theorem integral_comp_polarCoordReal_symm
   rw [← setIntegral_univ (f := f)]; rw [← setIntegral_congr_set (polarCoordReal_symm_target_ae_eq_univ K)]; rw [integral_image_eq_integral_abs_det_fderiv_smul volume
       (polarCoordReal K).open_target.measurableSet
       (fun x _ => (hasFDerivAt_polarCoordReal_symm K x).hasFDerivWithinAt)
-     
+      (polarCoordReal K).symm.injOn f]
+  refine setIntegral_congr_fun (polarCoordReal K).open_target.measurableSet fun x hx => ?_
+  simp_rw [det_fderivPolarCoordRealSymm, Finset.abs_prod, abs_of_mem_polarCoordReal_target K hx]
 
 Depends on / 依赖: Finset, Finset.abs_prod, abs_of_mem_polarCoordReal_target, abs_prod, det_fderivPolarCoordRealSymm, hasFDerivAt_polarCoordReal_symm, hasFDerivWithinAt, integral_image_eq_integral_abs_det_fderiv_smul, measurableSet, open_target, open_target.measurableSet, polarCoordReal, polarCoordReal_symm_target_ae_eq_univ, setIntegral_congr_fun, setIntegral_congr_set, setIntegral_univ, simp_rw, symm.injOn, volume
 -/
@@ -376,7 +380,10 @@ theorem lintegral_comp_polarCoordReal_symm
   rw [← setLIntegral_univ f]; rw [← setLIntegral_congr (polarCoordReal_symm_target_ae_eq_univ K)]; rw [lintegral_image_eq_lintegral_abs_det_fderiv_mul volume
       (polarCoordReal K).open_target.measurableSet
       (fun x _ => (hasFDerivAt_polarCoordReal_symm K x).hasFDerivWithinAt)
-      (polarC
+      (polarCoordReal K).symm.injOn f]
+  refine setLIntegral_congr_fun (polarCoordReal K).open_target.measurableSet (fun x hx => ?_)
+  simp_rw [det_fderivPolarCoordRealSymm, Finset.abs_prod,
+    ENNReal.ofReal_prod_of_nonneg (fun _ _ => abs_nonneg _), abs_of_mem_polarCoordReal_target K hx]
 
 中文:
 定理 lintegral_comp_polarCoord实数_symm
@@ -385,7 +392,10 @@ theorem lintegral_comp_polarCoordReal_symm
   rw [← setLIntegral_univ f]; rw [← setLIntegral_congr (polarCoordReal_symm_target_ae_eq_univ K)]; rw [lintegral_image_eq_lintegral_abs_det_fderiv_mul volume
       (polarCoordReal K).open_target.measurableSet
       (fun x _ => (hasFDerivAt_polarCoordReal_symm K x).hasFDerivWithinAt)
-      (polarC
+      (polarCoordReal K).symm.injOn f]
+  refine setLIntegral_congr_fun (polarCoordReal K).open_target.measurableSet (fun x hx => ?_)
+  simp_rw [det_fderivPolarCoordRealSymm, Finset.abs_prod,
+    ENNReal.ofReal_prod_of_nonneg (fun _ _ => abs_nonneg _), abs_of_mem_polarCoordReal_target K hx]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_prod_of_nonneg, Finset, Finset.abs_prod, abs_, abs_prod, det_fderivPolarCoordRealSymm, hasFDerivAt_polarCoordReal_symm, hasFDerivWithinAt, lintegral_image_eq_lintegral_abs_det_fderiv_mul, measurableSet, ofReal_prod_of_nonneg, open_target, open_target.measurableSet, polarCoordReal, polarCoordReal_symm_target_ae_eq_univ, setLIntegral_congr, setLIntegral_congr_fun, setLIntegral_univ, simp_rw
 -/
@@ -607,7 +617,8 @@ MeasurableEquiv.trans prodAssoc.symm
       MeasurableEquiv.trans
         (prodCongr (prodCongr (refl _)
           (arrowCongr' (Equiv.subtypeEquivRight (fun _ => not_isReal_iff_isComplex.symm)) (refl _)))
-       
+            (refl _))
+          (prodCongr (piEquivPiSubtypeProd (fun _ => Real) _).symm (refl _))
 
 中文:
 定义 measurableEquiv实数MixedSpacePolarSpace
@@ -618,7 +629,8 @@ MeasurableEquiv.trans prodAssoc.symm
       MeasurableEquiv.trans
         (prodCongr (prodCongr (refl _)
           (arrowCongr' (Equiv.subtypeEquivRight (fun _ => not_isReal_iff_isComplex.symm)) (refl _)))
-       
+            (refl _))
+          (prodCongr (piEquivPiSubtypeProd (fun _ => Real) _).symm (refl _))
 
 Depends on / 依赖: Equiv.subtypeEquivRight, MeasurableEquiv, MeasurableEquiv.trans, arrowCongr, arrowProdEquivProdArrow, not_isReal_iff_isComplex, not_isReal_iff_isComplex.symm, piEquivPiSubtypeProd, prodAssoc, prodAssoc.symm, prodCongr, subtypeEquivRight
 -/
@@ -643,7 +655,12 @@ definition homeoRealMixedSpacePolarSpace
   continuous_toFun := by
     change Continuous fun x : realMixedSpace K => (fun w => if hw : w.IsReal then x.1 ⟨w, hw⟩ else
       (x.2 ⟨w, not_isReal_iff_isComplex.mp hw⟩).1, fun w => (x.2 w).2)
-    refine .prodMk (continuous_pi fun w => ?_) (by fun_p
+    refine .prodMk (continuous_pi fun w => ?_) (by fun_prop)
+    split_ifs <;> fun_prop
+  continuous_invFun := by
+    change Continuous fun x : polarSpace K =>
+      (⟨fun w => x.1 w.val, fun w => ⟨x.1 w.val, x.2 w⟩⟩ : realMixedSpace K)
+    fun_prop }
 
 中文:
 定义 homeo实数MixedSpacePolarSpace
@@ -652,7 +669,12 @@ definition homeoRealMixedSpacePolarSpace
   continuous_toFun := by
     change Continuous fun x : realMixedSpace K => (fun w => if hw : w.IsReal then x.1 ⟨w, hw⟩ else
       (x.2 ⟨w, not_isReal_iff_isComplex.mp hw⟩).1, fun w => (x.2 w).2)
-    refine .prodMk (continuous_pi fun w => ?_) (by fun_p
+    refine .prodMk (continuous_pi fun w => ?_) (by fun_prop)
+    split_ifs <;> fun_prop
+  continuous_invFun := by
+    change Continuous fun x : polarSpace K =>
+      (⟨fun w => x.1 w.val, fun w => ⟨x.1 w.val, x.2 w⟩⟩ : realMixedSpace K)
+    fun_prop }
 
 Depends on / 依赖: Continuous, IsReal, continuous_invFun, continuous_pi, continuous_toFun, fun_prop, measurableEquivRealMixedSpacePolarSpace, not_isReal_iff_isComplex, not_isReal_iff_isComplex.mp, polarSpace, prodMk, realMixedSpace, split_ifs, w.IsReal, w.val
 -/
@@ -779,7 +801,9 @@ theorem volume_preserving_homeoRealMixedSpacePolarSpace
     (volume_measurePreserving_arrowProdEquivProdArrow Real Real _)).trans <|
 (volume_preserving_prodAssoc.symm).trans
         (((MeasurePreserving.id volume).prod (volume_preserving_arrowCongr' _
-          (MeasurableEquiv.refl Real) (.id volume))).prod (.id volum
+          (MeasurableEquiv.refl Real) (.id volume))).prod (.id volume)).trans <|
+            ((volume_preserving_piEquivPiSubtypeProd
+              (fun _ : InfinitePlace K => Real) (fun w => IsReal w)).symm).prod (.id volume)
 
 中文:
 定理 volume_preserving_homeo实数MixedSpacePolarSpace
@@ -788,7 +812,9 @@ theorem volume_preserving_homeoRealMixedSpacePolarSpace
     (volume_measurePreserving_arrowProdEquivProdArrow Real Real _)).trans <|
 (volume_preserving_prodAssoc.symm).trans
         (((MeasurePreserving.id volume).prod (volume_preserving_arrowCongr' _
-          (MeasurableEquiv.refl Real) (.id volume))).prod (.id volum
+          (MeasurableEquiv.refl Real) (.id volume))).prod (.id volume)).trans <|
+            ((volume_preserving_piEquivPiSubtypeProd
+              (fun _ : InfinitePlace K => Real) (fun w => IsReal w)).symm).prod (.id volume)
 
 Depends on / 依赖: InfinitePlace, IsReal, MeasurableEquiv, MeasurableEquiv.refl, MeasurePreserving, MeasurePreserving.id, volume, volume_measurePreserving_arrowProdEquivProdArrow, volume_preserving_arrowCongr, volume_preserving_piEquivPiSubtypeProd, volume_preserving_prodAssoc, volume_preserving_prodAssoc.symm
 -/
@@ -892,14 +918,20 @@ theorem integral_comp_polarSpaceCoord_symm
   statement: [NumberField K] {E : Type*} [NormedAddCommGroup E]
   proof: by
   rw [← (volume_preserving_homeoRealMixedSpacePolarSpace K).setIntegral_preimage_emb
-    (homeoRealMixedSpacePolarSpace K).measurableEmbedding]; rw [← mixedEmbedding.integral_comp_polarCoord_symm]; rw [polarSpaceCoord_target]; rw [← Homeomorph.image_eq_preimage_symm]; rw [Homeomorph.preimage_imag
+    (homeoRealMixedSpacePolarSpace K).measurableEmbedding]; rw [← mixedEmbedding.integral_comp_polarCoord_symm]; rw [polarSpaceCoord_target]; rw [← Homeomorph.image_eq_preimage_symm]; rw [Homeomorph.preimage_image]; rw [mixedEmbedding.polarCoord_target]
+  simp_rw [polarSpaceCoord_symm_apply, mixedEmbedding.polarCoord_symm_apply,
+    homeoRealMixedSpacePolarSpace_apply_fst_ofIsReal,
+    homeoRealMixedSpacePolarSpace_apply_fst_ofIsComplex, homeoRealMixedSpacePolarSpace_apply_snd]
 
 中文:
 定理 integral_comp_polarSpaceCoord_symm
   结论: [数域 K] {E : 类型} [赋范交换加群 E]
   证明: by
   rw [← (volume_preserving_homeoRealMixedSpacePolarSpace K).setIntegral_preimage_emb
-    (homeoRealMixedSpacePolarSpace K).measurableEmbedding]; rw [← mixedEmbedding.integral_comp_polarCoord_symm]; rw [polarSpaceCoord_target]; rw [← Homeomorph.image_eq_preimage_symm]; rw [Homeomorph.preimage_imag
+    (homeoRealMixedSpacePolarSpace K).measurableEmbedding]; rw [← mixedEmbedding.integral_comp_polarCoord_symm]; rw [polarSpaceCoord_target]; rw [← Homeomorph.image_eq_preimage_symm]; rw [Homeomorph.preimage_image]; rw [mixedEmbedding.polarCoord_target]
+  simp_rw [polarSpaceCoord_symm_apply, mixedEmbedding.polarCoord_symm_apply,
+    homeoRealMixedSpacePolarSpace_apply_fst_ofIsReal,
+    homeoRealMixedSpacePolarSpace_apply_fst_ofIsComplex, homeoRealMixedSpacePolarSpace_apply_snd]
 
 Depends on / 依赖: Homeomorph, Homeomorph.image_eq_preimage_symm, Homeomorph.preimage_image, homeoRealMixedSpacePolarSpace, homeoRealMixedSpacePolarSpace_apply_fst, homeoRealMixedSpacePolarSpace_apply_fst_ofIsReal, image_eq_preimage_symm, integral_comp_polarCoord_symm, measurableEmbedding, mixedEmbedding, mixedEmbedding.integral_comp_polarCoord_symm, mixedEmbedding.polarCoord_symm_apply, mixedEmbedding.polarCoord_target, polarCoord_symm_apply, polarCoord_target, polarSpaceCoord_symm_apply, polarSpaceCoord_target, preimage_image, setIntegral_preimage_emb, simp_rw
 -/
@@ -922,14 +954,20 @@ theorem lintegral_comp_polarSpaceCoord_symm
   given: [NumberField K] (f : mixedSpace K -> Real>=0∞)
   proof: by
   rw [← (volume_preserving_homeoRealMixedSpacePolarSpace K).setLIntegral_comp_preimage_emb
-    (homeoRealMixedSpacePolarSpace K).measurableEmbedding]; rw [← mixedEmbedding.lintegral_comp_polarCoord_symm]; rw [polarSpaceCoord_target]; rw [← Homeomorph.image_eq_preimage_symm]; rw [Homeomorph.preima
+    (homeoRealMixedSpacePolarSpace K).measurableEmbedding]; rw [← mixedEmbedding.lintegral_comp_polarCoord_symm]; rw [polarSpaceCoord_target]; rw [← Homeomorph.image_eq_preimage_symm]; rw [Homeomorph.preimage_image]; rw [mixedEmbedding.polarCoord_target]
+  simp_rw [polarSpaceCoord_symm_apply, mixedEmbedding.polarCoord_symm_apply,
+    homeoRealMixedSpacePolarSpace_apply_fst_ofIsReal,
+    homeoRealMixedSpacePolarSpace_apply_fst_ofIsComplex, homeoRealMixedSpacePolarSpace_apply_snd]
 
 中文:
 定理 lintegral_comp_polarSpaceCoord_symm
   条件: [数域 K] (f : mixedSpace K -> 实数>=0∞)
   证明: by
   rw [← (volume_preserving_homeoRealMixedSpacePolarSpace K).setLIntegral_comp_preimage_emb
-    (homeoRealMixedSpacePolarSpace K).measurableEmbedding]; rw [← mixedEmbedding.lintegral_comp_polarCoord_symm]; rw [polarSpaceCoord_target]; rw [← Homeomorph.image_eq_preimage_symm]; rw [Homeomorph.preima
+    (homeoRealMixedSpacePolarSpace K).measurableEmbedding]; rw [← mixedEmbedding.lintegral_comp_polarCoord_symm]; rw [polarSpaceCoord_target]; rw [← Homeomorph.image_eq_preimage_symm]; rw [Homeomorph.preimage_image]; rw [mixedEmbedding.polarCoord_target]
+  simp_rw [polarSpaceCoord_symm_apply, mixedEmbedding.polarCoord_symm_apply,
+    homeoRealMixedSpacePolarSpace_apply_fst_ofIsReal,
+    homeoRealMixedSpacePolarSpace_apply_fst_ofIsComplex, homeoRealMixedSpacePolarSpace_apply_snd]
 
 Depends on / 依赖: Homeomorph, Homeomorph.image_eq_preimage_symm, Homeomorph.preimage_image, homeoRealMixedSpacePolarSpace, homeoRealMixedSpacePolarSpace_ap, homeoRealMixedSpacePolarSpace_apply_fst_ofIsReal, image_eq_preimage_symm, lintegral_comp_polarCoord_symm, measurableEmbedding, mixedEmbedding, mixedEmbedding.lintegral_comp_polarCoord_symm, mixedEmbedding.polarCoord_symm_apply, mixedEmbedding.polarCoord_target, polarCoord_symm_apply, polarCoord_target, polarSpaceCoord_symm_apply, polarSpaceCoord_target, preimage_image, setLIntegral_comp_preimage_emb, simp_rw
 -/
@@ -992,7 +1030,12 @@ theorem volume_eq_two_pi_pow_mul_integral_aux
   ext x
   refine ⟨?_, fun ⟨hx₁, hx₂⟩ => ?_⟩
   · rintro ⟨a, ha, rfl⟩
-    refine ⟨?_, by simpa using h
+    refine ⟨?_, by simpa using h a⟩
+    rw [Set.mem_preimage]; rw [← hA]; rw [Set.mem_preimage]; rw [normAtComplexPlaces_mixedSpaceOfRealSpace (h a)]
+    exact Set.mem_image_of_mem _ ha
+  · rwa [Set.mem_preimage, ← hA, Set.mem_preimage, normAtComplexPlaces_mixedSpaceOfRealSpace] at hx₁
+    intro w hw
+    simpa [if_neg (not_isReal_iff_isComplex.mpr hw)] using hx₂ w (Set.mem_univ w)
 
 中文:
 定理 volume_eq_two_pi_pow_mul_integral_aux
@@ -1004,7 +1047,12 @@ theorem volume_eq_two_pi_pow_mul_integral_aux
   ext x
   refine ⟨?_, fun ⟨hx₁, hx₂⟩ => ?_⟩
   · rintro ⟨a, ha, rfl⟩
-    refine ⟨?_, by simpa using h
+    refine ⟨?_, by simpa using h a⟩
+    rw [Set.mem_preimage]; rw [← hA]; rw [Set.mem_preimage]; rw [normAtComplexPlaces_mixedSpaceOfRealSpace (h a)]
+    exact Set.mem_image_of_mem _ ha
+  · rwa [Set.mem_preimage, ← hA, Set.mem_preimage, normAtComplexPlaces_mixedSpaceOfRealSpace] at hx₁
+    intro w hw
+    simpa [if_neg (not_isReal_iff_isComplex.mpr hw)] using hx₂ w (Set.mem_univ w)
 -/
 private theorem volume_eq_two_pi_pow_mul_integral_aux
     (hA : normAtComplexPlaces ⁻¹' normAtComplexPlaces '' A = A) :
@@ -1036,7 +1084,20 @@ theorem volume_eq_two_pi_pow_mul_integral
   have hA' {x} : (A.indicator 1 x : Real>=0∞) =
       (normAtComplexPlaces '' A).indicator 1 (normAtComplexPlaces x) := by
     simp_rw [← Set.indicator_comp_right, Function.comp_def, Pi.one_def, hA]
-  rw [← lintegral_indicator_one hm]; rw [← lintegral_comp_polarSpaceCoord_symm]; rw [polarSpaceCoo
+  rw [← lintegral_indicator_one hm]; rw [← lintegral_comp_polarSpaceCoord_symm]; rw [polarSpaceCoord_target']; rw [Measure.volume_eq_prod]; rw [setLIntegral_prod]
+  · simp_rw [hA', normAtComplexPlaces_polarSpaceCoord_symm, lintegral_const, restrict_apply
+      MeasurableSet.univ, Set.univ_inter, volume_pi, Measure.pi_pi, volume_Ioo, sub_neg_eq_add,
+      ← two_mul, Finset.prod_const, Finset.card_univ, ← Set.indicator_const_mul,
+      ← Set.indicator_comp_right, Function.comp_def, Pi.one_apply, mul_one]
+    rw [lintegral_mul_const' _ _ (ne_of_beq_false rfl).symm]; rw [mul_comm]
+    erw [setLIntegral_indicator (by convert! hm.preimage mixedSpaceOfRealSpace.measurable)]
+    rw [hA]; rw [volume_eq_two_pi_pow_mul_integral_aux hA]
+    congr 1
+    refine setLIntegral_congr (ae_eq_set_inter (by rfl) (Measure.ae_eq_set_pi fun w _ => ?_))
+    split_ifs
+    exacts [ae_eq_rfl, Ioi_ae_eq_Ici]
+  · exact (Measurable.mul (by fun_prop)
+ measurable_const.indicator hm.preimage (measurable_polarSpaceCoord_symm K)).aemeasurable
 
 中文:
 定理 volume_eq_two_pi_pow_mul_integral
@@ -1045,7 +1106,20 @@ theorem volume_eq_two_pi_pow_mul_integral
   have hA' {x} : (A.indicator 1 x : Real>=0∞) =
       (normAtComplexPlaces '' A).indicator 1 (normAtComplexPlaces x) := by
     simp_rw [← Set.indicator_comp_right, Function.comp_def, Pi.one_def, hA]
-  rw [← lintegral_indicator_one hm]; rw [← lintegral_comp_polarSpaceCoord_symm]; rw [polarSpaceCoo
+  rw [← lintegral_indicator_one hm]; rw [← lintegral_comp_polarSpaceCoord_symm]; rw [polarSpaceCoord_target']; rw [Measure.volume_eq_prod]; rw [setLIntegral_prod]
+  · simp_rw [hA', normAtComplexPlaces_polarSpaceCoord_symm, lintegral_const, restrict_apply
+      MeasurableSet.univ, Set.univ_inter, volume_pi, Measure.pi_pi, volume_Ioo, sub_neg_eq_add,
+      ← two_mul, Finset.prod_const, Finset.card_univ, ← Set.indicator_const_mul,
+      ← Set.indicator_comp_right, Function.comp_def, Pi.one_apply, mul_one]
+    rw [lintegral_mul_const' _ _ (ne_of_beq_false rfl).symm]; rw [mul_comm]
+    erw [setLIntegral_indicator (by convert! hm.preimage mixedSpaceOfRealSpace.measurable)]
+    rw [hA]; rw [volume_eq_two_pi_pow_mul_integral_aux hA]
+    congr 1
+    refine setLIntegral_congr (ae_eq_set_inter (by rfl) (Measure.ae_eq_set_pi fun w _ => ?_))
+    split_ifs
+    exacts [ae_eq_rfl, Ioi_ae_eq_Ici]
+  · exact (Measurable.mul (by fun_prop)
+ measurable_const.indicator hm.preimage (measurable_polarSpaceCoord_symm K)).aemeasurable
 
 Depends on / 依赖: A.indicator, Function, Function.comp_def, MeasurableSet, MeasurableSet.univ, Measure, Measure.pi_p, Measure.volume_eq_prod, Pi.one_def, Set.indicator_comp_right, Set.univ_inter, comp_def, indicator, indicator_comp_right, lintegral_comp_polarSpaceCoord_symm, lintegral_const, lintegral_indicator_one, normAtComplexPlaces, normAtComplexPlaces_polarSpaceCoord_symm, one_def
 -/
@@ -1084,7 +1158,16 @@ theorem volume_eq_two_pow_mul_two_pi_pow_mul_integral_aux
     · rw [← hA, Set.mem_preimage, normAtAllPlaces_normAtAllPlaces]
       exact Set.mem_image_of_mem normAtAllPlaces ha
     · intro w
-      refine lt_of_le_of_ne' (normAtPl
+      refine lt_of_le_of_ne' (normAtPlace_nonneg _ _) (Set.mem_iInter.mp ha₂ w)
+    · rw [normAtComplexPlaces_normAtAllPlaces]
+  · rintro ⟨a, ⟨ha₁, ha₂⟩, rfl⟩
+    refine ⟨⟨a, ha₁, funext fun w => ?_⟩, Set.mem_iInter.mpr fun w => ?_⟩
+    · obtain hw | hw := isReal_or_isComplex w
+      · simpa [normAtComplexPlaces_apply_isReal ⟨w, hw⟩, normAtPlace_apply_of_isReal hw]
+          using (ha₂ ⟨w, hw⟩).le
+      · rw [normAtAllPlaces_apply, normAtPlace_apply_of_isComplex hw,
+          normAtComplexPlaces_apply_isComplex ⟨w, hw⟩]
+    · simpa [Set.mem_ofPred_eq, normAtComplexPlaces_apply_isReal] using (ha₂ w).ne'
 
 中文:
 定理 volume_eq_two_pow_mul_two_pi_pow_mul_integral_aux
@@ -1096,7 +1179,16 @@ theorem volume_eq_two_pow_mul_two_pi_pow_mul_integral_aux
     · rw [← hA, Set.mem_preimage, normAtAllPlaces_normAtAllPlaces]
       exact Set.mem_image_of_mem normAtAllPlaces ha
     · intro w
-      refine lt_of_le_of_ne' (normAtPl
+      refine lt_of_le_of_ne' (normAtPlace_nonneg _ _) (Set.mem_iInter.mp ha₂ w)
+    · rw [normAtComplexPlaces_normAtAllPlaces]
+  · rintro ⟨a, ⟨ha₁, ha₂⟩, rfl⟩
+    refine ⟨⟨a, ha₁, funext fun w => ?_⟩, Set.mem_iInter.mpr fun w => ?_⟩
+    · obtain hw | hw := isReal_or_isComplex w
+      · simpa [normAtComplexPlaces_apply_isReal ⟨w, hw⟩, normAtPlace_apply_of_isReal hw]
+          using (ha₂ ⟨w, hw⟩).le
+      · rw [normAtAllPlaces_apply, normAtPlace_apply_of_isComplex hw,
+          normAtComplexPlaces_apply_isComplex ⟨w, hw⟩]
+    · simpa [Set.mem_ofPred_eq, normAtComplexPlaces_apply_isReal] using (ha₂ w).ne'
 -/
 private theorem volume_eq_two_pow_mul_two_pi_pow_mul_integral_aux
     (hA : normAtAllPlaces ⁻¹' normAtAllPlaces '' A = A) :
@@ -1132,7 +1224,21 @@ theorem volume_eq_two_pow_mul_two_pi_pow_mul_integral
     rw [← hA]
     simp_rw [Set.mem_preimage, Set.mem_image, normAtAllPlaces_norm_at_real_places]
   have hA₃ : normAtComplexPlaces ⁻¹' normAtComplexPlaces '' plusPart A = plusPart A := by
-    refine subset_antisymm (fun x 
+    refine subset_antisymm (fun x ⟨a, ha₁, ha₂⟩ => ⟨?_, fun w => ?_⟩) (Set.subset_preimage_image _ _)
+    · rw [← hA, Set.mem_preimage, ← normAtAllPlaces_eq_of_normAtComplexPlaces_eq ha₂]
+      exact Set.mem_image_of_mem normAtAllPlaces (Set.inter_subset_left ha₁)
+    · have := funext_iff.mp ha₂ w
+      rw [normAtComplexPlaces_apply_isReal]; rw [normAtComplexPlaces_apply_isReal] at this
+      rw [← this]
+      exact ha₁.2 w
+  rw [volume_eq_two_pow_mul_volume_plusPart hA₁ hm]; rw [volume_eq_two_pi_pow_mul_integral hA₃
+    (measurableSet_plusPart hm)]; rw [← mul_assoc]
+refine congr_arg (_ * _ * ·) setLIntegral_congr ?_
+  rw [← volume_eq_two_pow_mul_two_pi_pow_mul_integral_aux hA]
+refine inter_ae_eq_left_of_ae_eq_univ ae_eq_univ.mpr
+ Set.compl_iInter _ ▸ measure_iUnion_null_iff.mpr fun w => ?_
+  rw [show {x : realSpace K | x w.1 != 0}ᶜ = {x | x w.1 = 0} by ext; simp]
+  exact realSpace.volume_eq_zero w.1
 
 中文:
 定理 volume_eq_two_pow_mul_two_pi_pow_mul_integral
@@ -1142,7 +1248,21 @@ theorem volume_eq_two_pow_mul_two_pi_pow_mul_integral
     rw [← hA]
     simp_rw [Set.mem_preimage, Set.mem_image, normAtAllPlaces_norm_at_real_places]
   have hA₃ : normAtComplexPlaces ⁻¹' normAtComplexPlaces '' plusPart A = plusPart A := by
-    refine subset_antisymm (fun x 
+    refine subset_antisymm (fun x ⟨a, ha₁, ha₂⟩ => ⟨?_, fun w => ?_⟩) (Set.subset_preimage_image _ _)
+    · rw [← hA, Set.mem_preimage, ← normAtAllPlaces_eq_of_normAtComplexPlaces_eq ha₂]
+      exact Set.mem_image_of_mem normAtAllPlaces (Set.inter_subset_left ha₁)
+    · have := funext_iff.mp ha₂ w
+      rw [normAtComplexPlaces_apply_isReal]; rw [normAtComplexPlaces_apply_isReal] at this
+      rw [← this]
+      exact ha₁.2 w
+  rw [volume_eq_two_pow_mul_volume_plusPart hA₁ hm]; rw [volume_eq_two_pi_pow_mul_integral hA₃
+    (measurableSet_plusPart hm)]; rw [← mul_assoc]
+refine congr_arg (_ * _ * ·) setLIntegral_congr ?_
+  rw [← volume_eq_two_pow_mul_two_pi_pow_mul_integral_aux hA]
+refine inter_ae_eq_left_of_ae_eq_univ ae_eq_univ.mpr
+ Set.compl_iInter _ ▸ measure_iUnion_null_iff.mpr fun w => ?_
+  rw [show {x : realSpace K | x w.1 != 0}ᶜ = {x | x w.1 = 0} by ext; simp]
+  exact realSpace.volume_eq_zero w.1
 
 Depends on / 依赖: Set.inter_subset_left, Set.mem_image, Set.mem_image_of_mem, Set.mem_preimage, Set.subset_preimage_image, inter_subset_left, mem_image, mem_image_of_mem, mem_preimage, mixedSpace, normAtAllPlaces, normAtAllPlaces_eq_of_normAtComplexPlaces_eq, normAtAllPlaces_norm_at_real_places, normAtComplexPlaces, plusPart, simp_rw, subset_antisymm, subset_preimage_image
 -/

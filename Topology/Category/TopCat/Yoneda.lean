@@ -140,7 +140,9 @@ instance :
   body: { preservesLimit := fun {K} =>
       have : forall {α : Type} (X : α -> TopCat), PreservesLimit (Discrete.functor (fun x => op (X x)))
           (yonedaPresheaf'.{w, w'} Y) := fun X => @PreservesProduct.of_iso_comparison _ _ _ _
-          (yonedaPresheaf' Y) _ (fun x => op (X x)) _ _ (by rw [piCompa
+          (yonedaPresheaf' Y) _ (fun x => op (X x)) _ _ (by rw [piComparison_fac]; infer_instance)
+      let i : K ≅ Discrete.functor (fun i => op (unop (K.obj ⟨i⟩))) := Discrete.natIsoFunctor
+      preservesLimit_of_iso_diagram _ i.symm }
 
 中文:
 实例 :
@@ -148,7 +150,9 @@ instance :
   定义体: { preservesLimit := fun {K} =>
       have : forall {α : Type} (X : α -> TopCat), PreservesLimit (Discrete.functor (fun x => op (X x)))
           (yonedaPresheaf'.{w, w'} Y) := fun X => @PreservesProduct.of_iso_comparison _ _ _ _
-          (yonedaPresheaf' Y) _ (fun x => op (X x)) _ _ (by rw [piCompa
+          (yonedaPresheaf' Y) _ (fun x => op (X x)) _ _ (by rw [piComparison_fac]; infer_instance)
+      let i : K ≅ Discrete.functor (fun i => op (unop (K.obj ⟨i⟩))) := Discrete.natIsoFunctor
+      preservesLimit_of_iso_diagram _ i.symm }
 
 Depends on / 依赖: Discrete, Discrete.functor, Discrete.natIsoFunctor, K.obj, PreservesLimit, PreservesProduct, PreservesProduct.of_iso_comparison, TopCat, functor, i.symm, infer_instance, natIsoFunctor, of_iso_comparison, piComparison_fac, preservesLimit, preservesLimit_of_iso_diagram, yonedaPresheaf
 -/

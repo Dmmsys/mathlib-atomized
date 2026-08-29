@@ -544,7 +544,7 @@ theorem stalkPushforward_iso_of_isInducing
     (Functor.Final.colimitIso (OpenNhds.map f x).op ((OpenNhds.inclusion x).op ⋙ F)).isIso_hom
   refine stalk_hom_ext _ fun U hU => (stalkPushforward_germ _ f F _ x hU).trans ?_
   symm
-  exact colimit.ι_pre ((OpenNhds.inclus
+  exact colimit.ι_pre ((OpenNhds.inclusion x).op ⋙ F) (OpenNhds.map f x).op _
 
 中文:
 定理 stalkPushforward_iso_of_isInducing
@@ -555,7 +555,7 @@ theorem stalkPushforward_iso_of_isInducing
     (Functor.Final.colimitIso (OpenNhds.map f x).op ((OpenNhds.inclusion x).op ⋙ F)).isIso_hom
   refine stalk_hom_ext _ fun U hU => (stalkPushforward_germ _ f F _ x hU).trans ?_
   symm
-  exact colimit.ι_pre ((OpenNhds.inclus
+  exact colimit.ι_pre ((OpenNhds.inclusion x).op ⋙ F) (OpenNhds.map f x).op _
 
 Depends on / 依赖: Functor, Functor.Final.colimitIso, Functor.initial_of_adjunction, OpenNhds, OpenNhds.inclusion, OpenNhds.map, adjunctionNhds, colimit, colimitIso, convert, hf.adjunctionNhds, inclusion, initial_of_adjunction, isIso_hom, stalkPushforward_germ, stalk_hom_ext
 -/
@@ -797,7 +797,11 @@ definition stalkPullbackInv
           naturality := fun U V i => by
             dsimp
             ext W hW
-            dsimp [OpenNhds.inclusi
+            dsimp [OpenNhds.inclusion]
+            rw [Category.comp_id]; rw [← Functor.map_comp_assoc]; rw [pullbackPushforwardAdjunction_unit_pullback_map_germToPullbackStalk]
+            erw [pullbackPushforwardAdjunction_unit_pullback_map_germToPullbackStalk] } }
+
+@[reassoc (attr := simp)]
 
 中文:
 定义 stalkPullbackInv
@@ -809,7 +813,11 @@ definition stalkPullbackInv
           naturality := fun U V i => by
             dsimp
             ext W hW
-            dsimp [OpenNhds.inclusi
+            dsimp [OpenNhds.inclusion]
+            rw [Category.comp_id]; rw [← Functor.map_comp_assoc]; rw [pullbackPushforwardAdjunction_unit_pullback_map_germToPullbackStalk]
+            erw [pullbackPushforwardAdjunction_unit_pullback_map_germToPullbackStalk] } }
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Category, Category.comp_id, F.germToPullbackStalk, F.stalk, Functor, Functor.map_comp_assoc, OpenNhds, OpenNhds.inclusion, Presheaf, Presheaf.pullback, colimit, colimit.desc, comp_id, germToPullbackStalk, inclusion, map_comp_assoc, naturality, pullback, pullbackPushforwardAdjunction_unit_pullback_map_germToPullbackStalk
 -/
@@ -865,7 +873,7 @@ definition stalkPullbackIso
   inv_hom_id := by
     ext V hV
     dsimp
-
+    rw [germ_stalkPullbackInv_assoc]; rw [Category.comp_id]; rw [germToPullbackStalk_stalkPullbackHom]
 
 中文:
 定义 stalkPullbackIso
@@ -879,7 +887,7 @@ definition stalkPullbackIso
   inv_hom_id := by
     ext V hV
     dsimp
-
+    rw [germ_stalkPullbackInv_assoc]; rw [Category.comp_id]; rw [germToPullbackStalk_stalkPullbackHom]
 
 Depends on / 依赖: stalkPullbackHom
 -/
@@ -918,7 +926,11 @@ definition stalkSpecializes
   · intro U V i
     dsimp
     rw [Category.comp_id]
-    let U' : OpenNhds x := ⟨_, (specializes_iff_fora
+    let U' : OpenNhds x := ⟨_, (specializes_iff_forall_open.mp h _ (unop U).1.2 (unop U).2 :)⟩
+    let V' : OpenNhds x := ⟨_, (specializes_iff_forall_open.mp h _ (unop V).1.2 (unop V).2 :)⟩
+    exact colimit.w ((OpenNhds.inclusion x).op ⋙ F) (show V' ⟶ U' from i.unop).op
+
+@[reassoc (attr := simp), elementwise nosimp]
 
 中文:
 定义 stalkSpecializes
@@ -931,7 +943,11 @@ definition stalkSpecializes
   · intro U V i
     dsimp
     rw [Category.comp_id]
-    let U' : OpenNhds x := ⟨_, (specializes_iff_fora
+    let U' : OpenNhds x := ⟨_, (specializes_iff_forall_open.mp h _ (unop U).1.2 (unop U).2 :)⟩
+    let V' : OpenNhds x := ⟨_, (specializes_iff_forall_open.mp h _ (unop V).1.2 (unop V).2 :)⟩
+    exact colimit.w ((OpenNhds.inclusion x).op ⋙ F) (show V' ⟶ U' from i.unop).op
+
+@[reassoc (attr := simp), elementwise nosimp]
 
 Depends on / 依赖: Category, Category.comp_id, OpenNhds, OpenNhds.inclusion, colimit, colimit.desc, colimit.w, comp_id, i.unop, inclusion, specializes_iff_forall_open, specializes_iff_forall_open.mp
 -/
@@ -1239,7 +1255,10 @@ theorem stalkFunctor_map_injective_of_app_injective
   rcases exists_germ_eq F t with ⟨U₂, hxU₂, t, rfl⟩
   rw [stalkFunctor_map_germ_apply]; rw [stalkFunctor_map_germ_apply] at hst
   obtain ⟨W, hxW, iWU₁, iWU₂, heq⟩ := G.germ_eq x hxU₁ hxU₂ _ _ hst
-  rw [← ConcreteCategory.comp_appl
+  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [← f.naturality]; rw [← f.naturality]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply] at heq
+  replace heq := h W heq
+  convert! congr_arg (F.germ _ x hxW) heq using 1
+  exacts [(F.germ_res_apply iWU₁ x hxW s).symm, (F.germ_res_apply iWU₂ x hxW t).symm]
 
 中文:
 定理 stalkFunctor_map_injective_of_app_injective
@@ -1249,7 +1268,10 @@ theorem stalkFunctor_map_injective_of_app_injective
   rcases exists_germ_eq F t with ⟨U₂, hxU₂, t, rfl⟩
   rw [stalkFunctor_map_germ_apply]; rw [stalkFunctor_map_germ_apply] at hst
   obtain ⟨W, hxW, iWU₁, iWU₂, heq⟩ := G.germ_eq x hxU₁ hxU₂ _ _ hst
-  rw [← ConcreteCategory.comp_appl
+  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [← f.naturality]; rw [← f.naturality]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply] at heq
+  replace heq := h W heq
+  convert! congr_arg (F.germ _ x hxW) heq using 1
+  exacts [(F.germ_res_apply iWU₁ x hxW s).symm, (F.germ_res_apply iWU₂ x hxW t).symm]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, F.germ, G.germ_eq, comp_apply, congr_arg, convert, exists_germ_eq, f.naturality, germ_eq, naturality, replace, stalkFunctor_map_germ_apply
 -/
@@ -1311,7 +1333,7 @@ lemma germ_eq_of_isBasis
   obtain ⟨_, ⟨W', hW', rfl⟩, hxW', hW'W⟩ := hB.exists_subset_of_mem_open hxW W.2
   refine ⟨W', hxW', hW', hW'W.trans hWU.le, hW'W.trans hWV.le, ?_⟩
   simpa only [← ConcreteCategory.comp_apply, ← F.map_comp] using!
-    DFunLike.congr_arg (C
+    DFunLike.congr_arg (ConcreteCategory.hom (F.map (homOfLE hW'W).op)) e
 
 中文:
 引理 germ_eq_of_isBasis
@@ -1321,7 +1343,7 @@ lemma germ_eq_of_isBasis
   obtain ⟨_, ⟨W', hW', rfl⟩, hxW', hW'W⟩ := hB.exists_subset_of_mem_open hxW W.2
   refine ⟨W', hxW', hW', hW'W.trans hWU.le, hW'W.trans hWV.le, ?_⟩
   simpa only [← ConcreteCategory.comp_apply, ← F.map_comp] using!
-    DFunLike.congr_arg (C
+    DFunLike.congr_arg (ConcreteCategory.hom (F.map (homOfLE hW'W).op)) e
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, ConcreteCategory.hom, DFunLike, DFunLike.congr_arg, F.germ_eq, F.map, F.map_comp, W.trans, comp_apply, congr_arg, exists_subset_of_mem_open, germ_eq, hB.exists_subset_of_mem_open, hWU.le, hWV.le, homOfLE, map_comp
 -/
@@ -1346,7 +1368,9 @@ lemma stalkFunctor_map_injective_of_isBasis
   obtain ⟨U₁, hxU₁, hU₁, s, rfl⟩ := exists_mem_germ_eq_of_isBasis hB _ x s
   obtain ⟨U₂, hxU₂, hU₂, t, rfl⟩ := exists_mem_germ_eq_of_isBasis hB _ x t
   rw [stalkFunctor_map_germ_apply]; rw [stalkFunctor_map_germ_apply] at hst
-  obtain ⟨W, hxW, hW, iWU₁, iWU₂, heq⟩ := germ_eq_of_is
+  obtain ⟨W, hxW, hW, iWU₁, iWU₂, heq⟩ := germ_eq_of_isBasis hB _ _ hxU₁ hxU₂ hst
+  simp only [← α.naturality_apply, (hα W hW).eq_iff] at heq
+  simpa [germ_res_apply'] using congr(F.germ W x hxW $heq)
 
 中文:
 引理 stalkFunctor_map_injective_of_isBasis
@@ -1355,7 +1379,9 @@ lemma stalkFunctor_map_injective_of_isBasis
   obtain ⟨U₁, hxU₁, hU₁, s, rfl⟩ := exists_mem_germ_eq_of_isBasis hB _ x s
   obtain ⟨U₂, hxU₂, hU₂, t, rfl⟩ := exists_mem_germ_eq_of_isBasis hB _ x t
   rw [stalkFunctor_map_germ_apply]; rw [stalkFunctor_map_germ_apply] at hst
-  obtain ⟨W, hxW, hW, iWU₁, iWU₂, heq⟩ := germ_eq_of_is
+  obtain ⟨W, hxW, hW, iWU₁, iWU₂, heq⟩ := germ_eq_of_isBasis hB _ _ hxU₁ hxU₂ hst
+  simp only [← α.naturality_apply, (hα W hW).eq_iff] at heq
+  simpa [germ_res_apply'] using congr(F.germ W x hxW $heq)
 
 Depends on / 依赖: F.germ, eq_iff, exists_mem_germ_eq_of_isBasis, germ_eq_of_isBasis, germ_res_apply, naturality_apply, stalkFunctor_map_germ_apply
 -/
@@ -1384,7 +1410,14 @@ theorem section_ext
   -- We use `germ_eq` and the axiom of choice, to pick for every point `x` a neighbourhood
   -- `V x`, such that the restrictions of `s` and `t` to `V x` coincide.
   choose V m i₁ i₂ heq using fun x : U => F.presheaf.germ_eq x.1 x.2 x.2 s t (h x.1 x.2)
-  -- Since `F` is a sheaf, we can prove the 
+  -- Since `F` is a sheaf, we can prove the equality locally, if we can show that these
+  -- neighborhoods form a cover of `U`.
+  apply F.eq_of_locally_eq' V U i₁
+  · intro x hxU
+    simp only [Opens.mem_iSup]
+    exact ⟨⟨x, hxU⟩, m ⟨x, hxU⟩⟩
+  · intro x
+    rw [heq]; rw [Subsingleton.elim (i₁ x) (i₂ x)]
 
 中文:
 定理 section_ext
@@ -1393,7 +1426,14 @@ theorem section_ext
   -- We use `germ_eq` and the axiom of choice, to pick for every point `x` a neighbourhood
   -- `V x`, such that the restrictions of `s` and `t` to `V x` coincide.
   choose V m i₁ i₂ heq using fun x : U => F.presheaf.germ_eq x.1 x.2 x.2 s t (h x.1 x.2)
-  -- Since `F` is a sheaf, we can prove the 
+  -- Since `F` is a sheaf, we can prove the equality locally, if we can show that these
+  -- neighborhoods form a cover of `U`.
+  apply F.eq_of_locally_eq' V U i₁
+  · intro x hxU
+    simp only [Opens.mem_iSup]
+    exact ⟨⟨x, hxU⟩, m ⟨x, hxU⟩⟩
+  · intro x
+    rw [heq]; rw [Subsingleton.elim (i₁ x) (i₂ x)]
 -/
 theorem section_ext (F : Sheaf C X) (U : Opens X) (s t : ToType (F.1.obj (op U)))
     (h : forall (x : X) (hx : x in U), F.presheaf.germ U x hx s = F.presheaf.germ U x hx t) : s = t := by
@@ -1475,7 +1515,11 @@ ConcreteCategory.mono_of_injective _
         (fun c =>
           (ConcreteCategory.mono_iff_injective_of_preservesPullback (f.1.app (op c))).mp
             ((NatTrans.mono_iff_mono_app f.1).mp
-(CategoryTheory.presheaf_mo
+(CategoryTheory.presheaf_mono_of_mono ..)
+              op c))
+        x⟩
+
+include instCC in
 
 中文:
 实例 stalkFunctor_preserves_mono
@@ -1486,7 +1530,11 @@ ConcreteCategory.mono_of_injective _
         (fun c =>
           (ConcreteCategory.mono_iff_injective_of_preservesPullback (f.1.app (op c))).mp
             ((NatTrans.mono_iff_mono_app f.1).mp
-(CategoryTheory.presheaf_mo
+(CategoryTheory.presheaf_mono_of_mono ..)
+              op c))
+        x⟩
+
+include instCC in
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.presheaf_mono_of_mono, ConcreteCategory, ConcreteCategory.mono_iff_injective_of_preservesPullback, ConcreteCategory.mono_of_injective, NatTrans, NatTrans.mono_iff_mono_app, app_injective_iff_stalkFunctor_map_injective, mono_iff_injective_of_preservesPullback, mono_iff_mono_app, mono_of_injective, presheaf_mono_of_mono
 -/
@@ -1537,7 +1585,10 @@ theorem mono_of_stalk_mono
     (NatTrans.mono_iff_mono_app _).mpr fun U =>
 (ConcreteCategory.mono_iff_injective_of_preservesPullback _).mpr
         app_injective_of_stalkFunctor_map_injective f.1 U.unop fun _x _hx =>
-          (ConcreteCategory.mono_iff_injective_of_preservesPullba
+          (ConcreteCategory.mono_iff_injective_of_preservesPullback
+            ((stalkFunctor C _).map f.hom)).mp <| inferInstance
+
+include instCC in
 
 中文:
 定理 mono_of_stalk_mono
@@ -1546,7 +1597,10 @@ theorem mono_of_stalk_mono
     (NatTrans.mono_iff_mono_app _).mpr fun U =>
 (ConcreteCategory.mono_iff_injective_of_preservesPullback _).mpr
         app_injective_of_stalkFunctor_map_injective f.1 U.unop fun _x _hx =>
-          (ConcreteCategory.mono_iff_injective_of_preservesPullba
+          (ConcreteCategory.mono_iff_injective_of_preservesPullback
+            ((stalkFunctor C _).map f.hom)).mp <| inferInstance
+
+include instCC in
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.mono_iff_injective_of_preservesPullback, NatTrans, NatTrans.mono_iff_mono_app, Sheaf.Hom.mono_iff_presheaf_mono, U.unop, app_injective_of_stalkFunctor_map_injective, f.hom, mono_iff_injective_of_preservesPullback, mono_iff_mono_app, mono_iff_presheaf_mono, stalkFunctor
 -/
@@ -1594,7 +1648,29 @@ theorem app_surjective_of_injective_of_locally_surjective
   -- We use the axiom of choice to pick around each point `x` an open neighborhood `V` and a
   -- preimage under `f` on `V`.
   choose V mV iVU sf heq using hsurj t
-  -- These neighborhoods clearly cover all of `U`
+  -- These neighborhoods clearly cover all of `U`.
+  have V_cover : U <= iSup V := by
+    intro x hxU
+    simp only [Opens.mem_iSup]
+    exact ⟨⟨x, hxU⟩, mV ⟨x, hxU⟩⟩
+  suffices IsCompatible F.obj V sf by
+    -- Since `F` is a sheaf, we can glue all the local preimages together to get a global preimage.
+    obtain ⟨s, s_spec, -⟩ := F.existsUnique_gluing' V U iVU V_cover sf this
+    · use s
+      apply G.eq_of_locally_eq' V U iVU V_cover
+      intro x
+      rw [← ConcreteCategory.comp_apply]; rw [← f.1.naturality]; rw [ConcreteCategory.comp_apply]; rw [s_spec]; rw [heq]
+  intro x y
+  -- What's left to show here is that the sections `sf` are compatible, i.e. they agree on
+  -- the intersections `V x ⊓ V y`. We prove this by showing that all germs are equal.
+  apply section_ext
+  intro z hz
+  -- Here, we need to use injectivity of the stalk maps.
+  apply hinj z ((iVU x).le ((inf_le_left : V x ⊓ V y <= V x) hz))
+  rw [stalkFunctor_map_germ_apply]; rw [stalkFunctor_map_germ_apply]
+  simp_rw [← ConcreteCategory.comp_apply, f.1.naturality, ConcreteCategory.comp_apply, heq,
+    ← ConcreteCategory.comp_apply, ← G.1.map_comp]
+  rfl
 
 中文:
 定理 app_surjective_of_injective_of_locally_surjective
@@ -1607,7 +1683,29 @@ theorem app_surjective_of_injective_of_locally_surjective
   -- We use the axiom of choice to pick around each point `x` an open neighborhood `V` and a
   -- preimage under `f` on `V`.
   choose V mV iVU sf heq using hsurj t
-  -- These neighborhoods clearly cover all of `U`
+  -- These neighborhoods clearly cover all of `U`.
+  have V_cover : U <= iSup V := by
+    intro x hxU
+    simp only [Opens.mem_iSup]
+    exact ⟨⟨x, hxU⟩, mV ⟨x, hxU⟩⟩
+  suffices IsCompatible F.obj V sf by
+    -- Since `F` is a sheaf, we can glue all the local preimages together to get a global preimage.
+    obtain ⟨s, s_spec, -⟩ := F.existsUnique_gluing' V U iVU V_cover sf this
+    · use s
+      apply G.eq_of_locally_eq' V U iVU V_cover
+      intro x
+      rw [← ConcreteCategory.comp_apply]; rw [← f.1.naturality]; rw [ConcreteCategory.comp_apply]; rw [s_spec]; rw [heq]
+  intro x y
+  -- What's left to show here is that the sections `sf` are compatible, i.e. they agree on
+  -- the intersections `V x ⊓ V y`. We prove this by showing that all germs are equal.
+  apply section_ext
+  intro z hz
+  -- Here, we need to use injectivity of the stalk maps.
+  apply hinj z ((iVU x).le ((inf_le_left : V x ⊓ V y <= V x) hz))
+  rw [stalkFunctor_map_germ_apply]; rw [stalkFunctor_map_germ_apply]
+  simp_rw [← ConcreteCategory.comp_apply, f.1.naturality, ConcreteCategory.comp_apply, heq,
+    ← ConcreteCategory.comp_apply, ← G.1.map_comp]
+  rfl
 
 Depends on / 依赖: Subtype, Subtype.forall
 -/
@@ -1657,7 +1755,17 @@ theorem app_surjective_of_stalkFunctor_map_bijective
   refine app_surjective_of_injective_of_locally_surjective f U (And.left <| h · ·) fun t x hx => ?_
   -- Now we need to prove our initial claim: That we can find preimages of `t` locally.
   -- Since `f` is surjective on stalks, we can find a preimage `s₀` of the germ of `t` at `x`
-  obtain ⟨s₀, h
+  obtain ⟨s₀, hs₀⟩ := (h x hx).2 (G.presheaf.germ U x hx t)
+  -- ... and this preimage must come from some section `s₁` defined on some open neighborhood `V₁`
+  obtain ⟨V₁, hxV₁, s₁, rfl⟩ := F.presheaf.exists_germ_eq s₀
+  rename' hs₀ => hs₁
+  rw [stalkFunctor_map_germ_apply V₁ x hxV₁ f.1 s₁] at hs₁
+  -- Now, the germ of `f.app (op V₁) s₁` equals the germ of `t`, hence they must coincide on
+  -- some open neighborhood `V₂`.
+  obtain ⟨V₂, hxV₂, iV₂V₁, iV₂U, heq⟩ := G.presheaf.germ_eq x hxV₁ hx _ _ hs₁
+  -- The restriction of `s₁` to that neighborhood is our desired local preimage.
+  use V₂, hxV₂, iV₂U, F.1.map iV₂V₁.op s₁
+  rw [← ConcreteCategory.comp_apply]; rw [f.1.naturality]; rw [ConcreteCategory.comp_apply]; rw [heq]
 
 中文:
 定理 app_surjective_of_stalkFunctor_map_bijective
@@ -1666,7 +1774,17 @@ theorem app_surjective_of_stalkFunctor_map_bijective
   refine app_surjective_of_injective_of_locally_surjective f U (And.left <| h · ·) fun t x hx => ?_
   -- Now we need to prove our initial claim: That we can find preimages of `t` locally.
   -- Since `f` is surjective on stalks, we can find a preimage `s₀` of the germ of `t` at `x`
-  obtain ⟨s₀, h
+  obtain ⟨s₀, hs₀⟩ := (h x hx).2 (G.presheaf.germ U x hx t)
+  -- ... and this preimage must come from some section `s₁` defined on some open neighborhood `V₁`
+  obtain ⟨V₁, hxV₁, s₁, rfl⟩ := F.presheaf.exists_germ_eq s₀
+  rename' hs₀ => hs₁
+  rw [stalkFunctor_map_germ_apply V₁ x hxV₁ f.1 s₁] at hs₁
+  -- Now, the germ of `f.app (op V₁) s₁` equals the germ of `t`, hence they must coincide on
+  -- some open neighborhood `V₂`.
+  obtain ⟨V₂, hxV₂, iV₂V₁, iV₂U, heq⟩ := G.presheaf.germ_eq x hxV₁ hx _ _ hs₁
+  -- The restriction of `s₁` to that neighborhood is our desired local preimage.
+  use V₂, hxV₂, iV₂U, F.1.map iV₂V₁.op s₁
+  rw [← ConcreteCategory.comp_apply]; rw [f.1.naturality]; rw [ConcreteCategory.comp_apply]; rw [heq]
 
 Depends on / 依赖: And.left, app_surjective_of_injective_of_locally_surjective
 -/
@@ -1727,7 +1845,13 @@ theorem app_isIso_of_stalkFunctor_map_iso
   -- underlying map between types is an isomorphism, i.e. bijective.
   suffices IsIso ((forget C).map (f.1.app (op U))) by
     exact isIso_of_reflects_iso (f.1.app (op U)) (forget C)
-  rw [isIso_iff_bijecti
+  rw [isIso_iff_bijective]
+  apply app_bijective_of_stalkFunctor_map_bijective
+  intro x hx
+  apply (bijective_iff_isIso_ofHom _).mpr
+  exact Functor.map_isIso (forget C) ((stalkFunctor C (⟨x, hx⟩ : U).1).map f.1)
+
+include instCC in
 
 中文:
 定理 app_isIso_of_stalkFunctor_map_iso
@@ -1737,7 +1861,13 @@ theorem app_isIso_of_stalkFunctor_map_iso
   -- underlying map between types is an isomorphism, i.e. bijective.
   suffices IsIso ((forget C).map (f.1.app (op U))) by
     exact isIso_of_reflects_iso (f.1.app (op U)) (forget C)
-  rw [isIso_iff_bijecti
+  rw [isIso_iff_bijective]
+  apply app_bijective_of_stalkFunctor_map_bijective
+  intro x hx
+  apply (bijective_iff_isIso_ofHom _).mpr
+  exact Functor.map_isIso (forget C) ((stalkFunctor C (⟨x, hx⟩ : U).1).map f.1)
+
+include instCC in
 -/
 theorem app_isIso_of_stalkFunctor_map_iso {F G : Sheaf C X} (f : F ⟶ G) (U : Opens X)
     [forall x : U, IsIso ((stalkFunctor C x.val).map f.1)] : IsIso (f.1.app (op U)) := by
@@ -1763,7 +1893,13 @@ theorem isIso_of_stalkFunctor_map_iso
   -- Since the inclusion functor from sheaves to presheaves is fully faithful, it suffices to
   -- show that `f`, as a morphism between _presheaves_, is an isomorphism.
   suffices IsIso ((Sheaf.forget C X).map f) by exact isIso_of_fully_faithful (Sheaf.forget C X) f
-  -- We show that all componen
+  -- We show that all components of `f` are isomorphisms.
+  suffices forall U : (Opens X)ᵒᵖ, IsIso (f.1.app U) by
+    exact @NatIso.isIso_of_isIso_app _ _ _ _ F.1 G.1 f.1 this
+  intro U; induction U
+  apply app_isIso_of_stalkFunctor_map_iso
+
+include instCC in
 
 中文:
 定理 isIso_of_stalkFunctor_map_iso
@@ -1772,7 +1908,13 @@ theorem isIso_of_stalkFunctor_map_iso
   -- Since the inclusion functor from sheaves to presheaves is fully faithful, it suffices to
   -- show that `f`, as a morphism between _presheaves_, is an isomorphism.
   suffices IsIso ((Sheaf.forget C X).map f) by exact isIso_of_fully_faithful (Sheaf.forget C X) f
-  -- We show that all componen
+  -- We show that all components of `f` are isomorphisms.
+  suffices forall U : (Opens X)ᵒᵖ, IsIso (f.1.app U) by
+    exact @NatIso.isIso_of_isIso_app _ _ _ _ F.1 G.1 f.1 this
+  intro U; induction U
+  apply app_isIso_of_stalkFunctor_map_iso
+
+include instCC in
 -/
 theorem isIso_of_stalkFunctor_map_iso {F G : Sheaf C X} (f : F ⟶ G)
     [forall x : X, IsIso ((stalkFunctor C x).map f.1)] : IsIso f := by

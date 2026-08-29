@@ -466,7 +466,7 @@ definition leftRegularTensorTrivialIsoFree
     finsuppTensorFinsupp' k G α ≪≫ₗ Finsupp.domLCongr (Equiv.prodComm G α) ≪≫ₗ curryLinearEquiv k
       ≪≫ₗ Finsupp.mapRange.linearEquiv (MonoidAlgebra.coeffLinearEquiv _).symm) fun g => by ext; simp
 
-
+@[simp]
 
 中文:
 定义 leftRegularTensorTrivialIsoFree
@@ -475,7 +475,7 @@ definition leftRegularTensorTrivialIsoFree
     finsuppTensorFinsupp' k G α ≪≫ₗ Finsupp.domLCongr (Equiv.prodComm G α) ≪≫ₗ curryLinearEquiv k
       ≪≫ₗ Finsupp.mapRange.linearEquiv (MonoidAlgebra.coeffLinearEquiv _).symm) fun g => by ext; simp
 
-
+@[simp]
 
 Depends on / 依赖: Equiv.prodComm, Finsupp, Finsupp.domLCongr, Finsupp.mapRange.linearEquiv, MonoidAlgebra, MonoidAlgebra.coeffLinearEquiv, TensorProduct, TensorProduct.congr, coeffLinearEquiv, curryLinearEquiv, domLCongr, finsuppTensorFinsupp, linearEquiv, mapRange, prodComm
 -/
@@ -552,7 +552,8 @@ definition leftRegularMapEquiv
   map_smul' _ _ := rfl
   invFun v := ⟨Finsupp.llift _ _ k _ (fun g => σ g v) ∘ₗ
     (MonoidAlgebra.coeffLinearEquiv _).toLinearMap, fun g => by ext g'; simp⟩
-  left_i
+  left_inv x := by ext; simp [← x.isIntertwining]
+  right_inv v := by simp
 
 中文:
 定义 leftRegularMapEquiv
@@ -563,7 +564,8 @@ definition leftRegularMapEquiv
   map_smul' _ _ := rfl
   invFun v := ⟨Finsupp.llift _ _ k _ (fun g => σ g v) ∘ₗ
     (MonoidAlgebra.coeffLinearEquiv _).toLinearMap, fun g => by ext g'; simp⟩
-  left_i
+  left_inv x := by ext; simp [← x.isIntertwining]
+  right_inv v := by simp
 
 Depends on / 依赖: Finsupp, Finsupp.llift
 -/

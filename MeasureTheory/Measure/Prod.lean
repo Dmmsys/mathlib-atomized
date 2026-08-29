@@ -82,7 +82,13 @@ theorem measurable_measure_prodMk_left_finite
     classical simpa only [mk_preimage_prod_right_eq_if, measure_if]
       using measurable_const.indicator hs
   | compl s hs ihs =>
-    si
+    simp_rw [preimage_compl, measure_compl (measurable_prodMk_left hs) (measure_ne_top ν _)]
+    exact ihs.const_sub _
+  | iUnion f hfd hfm ihf =>
+    have (a : α) : ν (Prod.mk a ⁻¹' ⋃ i, f i) = ∑' i, ν (Prod.mk a ⁻¹' f i) := by
+      rw [preimage_iUnion]; rw [measure_iUnion]
+      exacts [hfd.mono fun _ _ => .preimage _, fun i => measurable_prodMk_left (hfm i)]
+    simpa only [this] using Measurable.tsum ihf
 
 中文:
 定理 measurable_measure_prodMk_left_finite
@@ -95,7 +101,13 @@ theorem measurable_measure_prodMk_left_finite
     classical simpa only [mk_preimage_prod_right_eq_if, measure_if]
       using measurable_const.indicator hs
   | compl s hs ihs =>
-    si
+    simp_rw [preimage_compl, measure_compl (measurable_prodMk_left hs) (measure_ne_top ν _)]
+    exact ihs.const_sub _
+  | iUnion f hfd hfm ihf =>
+    have (a : α) : ν (Prod.mk a ⁻¹' ⋃ i, f i) = ∑' i, ν (Prod.mk a ⁻¹' f i) := by
+      rw [preimage_iUnion]; rw [measure_iUnion]
+      exacts [hfd.mono fun _ _ => .preimage _, fun i => measurable_prodMk_left (hfm i)]
+    simpa only [this] using Measurable.tsum ihf
 
 Depends on / 依赖: Prod.mk, classical, const_sub, generateFrom_prod, generateFrom_prod.symm, iUnion, ihs.const_sub, indicator, induction_on_inter, isPiSystem_prod, measurable_const, measurable_const.indicator, measurable_prodMk_left, measure_compl, measure_if, measure_ne_top, mk_preimage_prod_right_eq_if, preimage_, preimage_compl, simp_rw
 -/
@@ -228,7 +240,16 @@ theorem Measurable.lintegral_prod_right'
     ?_ ?_ ?_
   · intro c s hs
     simp only [← indicator_comp_right]
-    suffices Measurable fun x => c * ν (Prod.mk x ⁻¹' s) by simpa [lintegral_indicator (m
+    suffices Measurable fun x => c * ν (Prod.mk x ⁻¹' s) by simpa [lintegral_indicator (m hs)]
+    exact (measurable_measure_prodMk_left hs).const_mul _
+  · rintro f g - hf - h2f h2g
+    simp only [Pi.add_apply]
+    conv => enter [1, x]; erw [lintegral_add_left (hf.comp m)]
+    exact h2f.add h2g
+  · intro f hf h2f h3f
+    have : forall x, Monotone fun n y => f n (x, y) := fun x i j hij y => h2f hij (x, y)
+    conv => enter [1, x]; erw [lintegral_iSup (fun n => (hf n).comp m) (this x)]
+    exact .iSup h3f
 
 中文:
 定理 可测.lintegral_prod_right'
@@ -239,7 +260,16 @@ theorem Measurable.lintegral_prod_right'
     ?_ ?_ ?_
   · intro c s hs
     simp only [← indicator_comp_right]
-    suffices Measurable fun x => c * ν (Prod.mk x ⁻¹' s) by simpa [lintegral_indicator (m
+    suffices Measurable fun x => c * ν (Prod.mk x ⁻¹' s) by simpa [lintegral_indicator (m hs)]
+    exact (measurable_measure_prodMk_left hs).const_mul _
+  · rintro f g - hf - h2f h2g
+    simp only [Pi.add_apply]
+    conv => enter [1, x]; erw [lintegral_add_left (hf.comp m)]
+    exact h2f.add h2g
+  · intro f hf h2f h3f
+    have : forall x, Monotone fun n y => f n (x, y) := fun x i j hij y => h2f hij (x, y)
+    conv => enter [1, x]; erw [lintegral_iSup (fun n => (hf n).comp m) (this x)]
+    exact .iSup h3f
 
 Depends on / 依赖: Measurable, Measurable.ennreal_induction, Pi.add_apply, Prod.mk, add_apply, const_mul, ennreal_induction, h2f.add, hf.comp, indicator_comp_right, lintegral_add_left, lintegral_indicator, measurable_measure_prodMk_left, measurable_prodMk_left, motive
 -/
@@ -408,7 +438,10 @@ theorem prod_prod_le
     _ <= ∫⁻ x, ν (Prod.mk x ⁻¹' (S ×ˢ T)) ∂μ := prod_apply_le (by measurability)
     _ = μ S * ν T := by
       classical
-      simp_rw [S, mk_preima
+      simp_rw [S, mk_preimage_prod_right_eq_if, measure_if,
+        lintegral_indicator (measurableSet_toMeasurable _ _), lintegral_const,
+        restrict_apply_univ, mul_comm]
+    _ = μ s * ν t := by rw [measure_toMeasurable, measure_toMeasurable]
 
 中文:
 定理 prod_prod_le
@@ -422,7 +455,10 @@ theorem prod_prod_le
     _ <= ∫⁻ x, ν (Prod.mk x ⁻¹' (S ×ˢ T)) ∂μ := prod_apply_le (by measurability)
     _ = μ S * ν T := by
       classical
-      simp_rw [S, mk_preima
+      simp_rw [S, mk_preimage_prod_right_eq_if, measure_if,
+        lintegral_indicator (measurableSet_toMeasurable _ _), lintegral_const,
+        restrict_apply_univ, mul_comm]
+    _ = μ s * ν t := by rw [measure_toMeasurable, measure_toMeasurable]
 
 Depends on / 依赖: Prod.mk, classical, lintegral_const, lintegral_indicator, measurability, measurableSet_toMeasurable, measure_if, measure_toMeasurable, mk_preimage_prod_right_eq_if, mul_comm, prod_apply_le, restrict_apply_univ, simp_rw, subset_toMeasurable, toMeasurable
 -/
@@ -535,7 +571,19 @@ theorem prod_prod
   set ST := toMeasurable (μ.prod ν) (s ×ˢ t)
   have hSTm : MeasurableSet ST := measurableSet_toMeasurable _ _
   have hST : s ×ˢ t subseteq ST := subset_toMeasurable _ _
-  set f : α -> Real>
+  set f : α -> Real>=0∞ := fun x => ν (Prod.mk x ⁻¹' ST)
+  have hfm : Measurable f := measurable_measure_prodMk_left hSTm
+  set s' : Set α := { x | ν t <= f x }
+have hss' : s subseteq s' := fun x hx => measure_mono fun y hy => hST mk_mem_prod hx hy
+  calc
+    μ s * ν t <= μ s' * ν t := by gcongr
+    _ = ∫⁻ _ in s', ν t ∂μ := by rw [setLIntegral_const, mul_comm]
+    _ <= ∫⁻ x in s', f x ∂μ := setLIntegral_mono hfm fun x => id
+    _ <= ∫⁻ x, f x ∂μ := lintegral_mono' restrict_le_self le_rfl
+    _ = μ.prod ν ST := (prod_apply hSTm).symm
+    _ = μ.prod ν (s ×ˢ t) := measure_toMeasurable _
+
+@[simp]
 
 中文:
 定理 prod_prod
@@ -547,7 +595,19 @@ theorem prod_prod
   set ST := toMeasurable (μ.prod ν) (s ×ˢ t)
   have hSTm : MeasurableSet ST := measurableSet_toMeasurable _ _
   have hST : s ×ˢ t subseteq ST := subset_toMeasurable _ _
-  set f : α -> Real>
+  set f : α -> Real>=0∞ := fun x => ν (Prod.mk x ⁻¹' ST)
+  have hfm : Measurable f := measurable_measure_prodMk_left hSTm
+  set s' : Set α := { x | ν t <= f x }
+have hss' : s subseteq s' := fun x hx => measure_mono fun y hy => hST mk_mem_prod hx hy
+  calc
+    μ s * ν t <= μ s' * ν t := by gcongr
+    _ = ∫⁻ _ in s', ν t ∂μ := by rw [setLIntegral_const, mul_comm]
+    _ <= ∫⁻ x in s', f x ∂μ := setLIntegral_mono hfm fun x => id
+    _ <= ∫⁻ x, f x ∂μ := lintegral_mono' restrict_le_self le_rfl
+    _ = μ.prod ν ST := (prod_apply hSTm).symm
+    _ = μ.prod ν (s ×ˢ t) := measure_toMeasurable _
+
+@[simp]
 
 Depends on / 依赖: antisymm, prod_prod_le
 -/
@@ -685,7 +745,7 @@ instance prod.instIsOpenPosMeasure
   simp only [prod_prod, CanonicallyOrderedAdd.mul_pos]
   constructor
   · exact u_open.measure_pos μ ⟨x, xu⟩
-  ·
+  · exact v_open.measure_pos ν ⟨y, yv⟩
 
 中文:
 实例 乘积.instIsOpenPosMeasure
@@ -698,7 +758,7 @@ instance prod.instIsOpenPosMeasure
   simp only [prod_prod, CanonicallyOrderedAdd.mul_pos]
   constructor
   · exact u_open.measure_pos μ ⟨x, xu⟩
-  ·
+  · exact v_open.measure_pos ν ⟨y, yv⟩
 
 Depends on / 依赖: CanonicallyOrderedAdd, CanonicallyOrderedAdd.mul_pos, U_open, isOpen_prod_iff, lt_of_lt_of_le, measure_mono, measure_pos, mul_pos, ne_of_gt, prod_prod, u_open, u_open.measure_pos, v_open, v_open.measure_pos
 -/
@@ -893,7 +953,7 @@ instance _root_.IsUnifLocDoublingMeasure.prod
   filter_upwards [eventually_measure_le_doublingConstant_mul μ,
     eventually_measure_le_doublingConstant_mul ν] with r hμr hνr x
   rw [← closedBall_prod_same]; rw [prod_prod]; rw [← closedBall_prod_same]; rw [prod_prod]
-  grw [hμr, hνr
+  grw [hμr, hνr, ENNReal.coe_mul, mul_mul_mul_comm]
 
 中文:
 实例 _root_.是UnifLocDoublingMeasure.乘积
@@ -904,7 +964,7 @@ instance _root_.IsUnifLocDoublingMeasure.prod
   filter_upwards [eventually_measure_le_doublingConstant_mul μ,
     eventually_measure_le_doublingConstant_mul ν] with r hμr hνr x
   rw [← closedBall_prod_same]; rw [prod_prod]; rw [← closedBall_prod_same]; rw [prod_prod]
-  grw [hμr, hνr
+  grw [hμr, hνr, ENNReal.coe_mul, mul_mul_mul_comm]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_mul, closedBall_prod_same, coe_mul, doublingConstant, eventually_measure_le_doublingConstant_mul, filter_upwards, mul_mul_mul_comm, prod_prod
 -/
@@ -1034,7 +1094,7 @@ theorem measure_ae_null_of_prod_null
     ⟨EventuallyLE.trans_eq (Eventually.of_forall fun x => measure_mono (preimage_mono hst)) ht,
       Eventually.of_forall fun x => zero_le⟩
 
-omit [SFinite 
+omit [SFinite ν] in
 
 中文:
 定理 measure_ae_null_of_prod_null
@@ -1047,7 +1107,7 @@ omit [SFinite
     ⟨EventuallyLE.trans_eq (Eventually.of_forall fun x => measure_mono (preimage_mono hst)) ht,
       Eventually.of_forall fun x => zero_le⟩
 
-omit [SFinite 
+omit [SFinite ν] in
 
 Depends on / 依赖: Eventually, Eventually.of_forall, EventuallyLE, EventuallyLE.trans_eq, eventuallyLE_antisymm_iff, exists_measurable_superset_of_null, measure_mono, measure_prod_null, of_forall, preimage_mono, trans_eq, zero_le
 -/
@@ -1391,7 +1451,7 @@ lemma _root_.MeasureTheory.NullMeasurableSet.right_of_prod
   obtain ⟨x, hxs, hx⟩ : exists x in s, (Prod.mk x ⁻¹' (s ×ˢ t)) =ᵐ[ν] (Prod.mk x ⁻¹' u) :=
     ((frequently_ae_iff.2 hs).and_eventually (ae_ae_eq_curry_of_prod hu)).exists
   refine ⟨Prod.mk x ⁻¹' u, measurable_prodMk_left hum, ?_⟩
-  rwa [mk_preimage_prod_right hxs] at
+  rwa [mk_preimage_prod_right hxs] at hx
 
 中文:
 引理 _root_.测度论.NullMeasurableSet.right_of_prod
@@ -1401,7 +1461,7 @@ lemma _root_.MeasureTheory.NullMeasurableSet.right_of_prod
   obtain ⟨x, hxs, hx⟩ : exists x in s, (Prod.mk x ⁻¹' (s ×ˢ t)) =ᵐ[ν] (Prod.mk x ⁻¹' u) :=
     ((frequently_ae_iff.2 hs).and_eventually (ae_ae_eq_curry_of_prod hu)).exists
   refine ⟨Prod.mk x ⁻¹' u, measurable_prodMk_left hum, ?_⟩
-  rwa [mk_preimage_prod_right hxs] at
+  rwa [mk_preimage_prod_right hxs] at hx
 
 Depends on / 依赖: Prod.mk, ae_ae_eq_curry_of_prod, and_eventually, frequently_ae_iff, measurable_prodMk_left, mk_preimage_prod_right
 -/
@@ -1483,7 +1543,7 @@ definition FiniteSpanningSetsIn.prod
       mem_image2_of_mem (hμ.set_mem _) (hν.set_mem _), fun n => ?_, ?_⟩
   · rw [prod_prod]
     exact mul_lt_top (hμ.finite _) (hν.finite _)
-  · simp_rw [iUnion_unpair_prod, hμ.spanning, hν.spanning, 
+  · simp_rw [iUnion_unpair_prod, hμ.spanning, hν.spanning, univ_prod_univ]
 
 中文:
 定义 FiniteSpanningSetsIn.乘积
@@ -1495,7 +1555,7 @@ definition FiniteSpanningSetsIn.prod
       mem_image2_of_mem (hμ.set_mem _) (hν.set_mem _), fun n => ?_, ?_⟩
   · rw [prod_prod]
     exact mul_lt_top (hμ.finite _) (hν.finite _)
-  · simp_rw [iUnion_unpair_prod, hμ.spanning, hν.spanning, 
+  · simp_rw [iUnion_unpair_prod, hμ.spanning, hν.spanning, univ_prod_univ]
 
 Depends on / 依赖: finite, iUnion_unpair_prod, mem_image2_of_mem, mul_lt_top, n.unpair, prod_prod, set_mem, sigmaFinite, simp_rw, spanning, univ_prod_univ, unpair
 -/
@@ -1747,7 +1807,11 @@ lemma ext_prod
   refine MeasurableSpace.induction_on_inter generateFrom_prod.symm isPiSystem_prod (by simp)
     ?_ ?_ ?_ s hs
   · rintro - ⟨s, hs, t, ht, rfl⟩
-   
+    exact h hs ht
+  · intro t ht h
+    simp_rw [measure_compl ht (measure_ne_top _ _), h, h_univ]
+  · intro f h_disj hf h_eq
+    simp_rw [measure_iUnion h_disj hf, h_eq]
 
 中文:
 引理 ext_prod
@@ -1761,7 +1825,11 @@ lemma ext_prod
   refine MeasurableSpace.induction_on_inter generateFrom_prod.symm isPiSystem_prod (by simp)
     ?_ ?_ ?_ s hs
   · rintro - ⟨s, hs, t, ht, rfl⟩
-   
+    exact h hs ht
+  · intro t ht h
+    simp_rw [measure_compl ht (measure_ne_top _ _), h, h_univ]
+  · intro f h_disj hf h_eq
+    simp_rw [measure_iUnion h_disj hf, h_eq]
 
 Depends on / 依赖: IsFiniteMeasure, MeasurableSpace, MeasurableSpace.induction_on_inter, generateFrom_prod, generateFrom_prod.symm, h_disj, h_eq, h_univ, induction_on_inter, isPiSystem_prod, measure_compl, measure_iUnion, measure_ne_top, simp_rw, univ_prod_univ
 -/
@@ -1817,7 +1885,18 @@ lemma ext_prod₃
     exact h .univ .univ .univ
   have : IsFiniteMeasure ν := ⟨by simp [← h_univ]⟩
   let C₂ := image2 (· ×ˢ ·) { t : Set β | MeasurableSet t } { u : Set γ | MeasurableSet u }
-  let C := image2 (· ×ˢ ·) { s : Set α | Mea
+  let C := image2 (· ×ˢ ·) { s : Set α | MeasurableSet s } C₂
+  refine MeasurableSpace.induction_on_inter (s := C) ?_ ?_ (by simp) ?_ ?_ ?_ s hs
+  · refine (generateFrom_eq_prod (C := { s : Set α | MeasurableSet s }) (D := C₂) (by simp)
+      generateFrom_prod isCountablySpanning_measurableSet ?_).symm
+    exact isCountablySpanning_measurableSet.prod isCountablySpanning_measurableSet
+  · exact MeasurableSpace.isPiSystem_measurableSet.prod isPiSystem_prod
+  · rintro - ⟨s, hs, -, ⟨t, ht, u, hu, rfl⟩, rfl⟩
+    exact h hs ht hu
+  · intro t ht h
+    simp_rw [measure_compl ht (measure_ne_top _ _), h, h_univ]
+  · intro f h_disj hf h_eq
+    simp_rw [measure_iUnion h_disj hf, h_eq]
 
 中文:
 引理 ext_prod₃
@@ -1829,7 +1908,18 @@ lemma ext_prod₃
     exact h .univ .univ .univ
   have : IsFiniteMeasure ν := ⟨by simp [← h_univ]⟩
   let C₂ := image2 (· ×ˢ ·) { t : Set β | MeasurableSet t } { u : Set γ | MeasurableSet u }
-  let C := image2 (· ×ˢ ·) { s : Set α | Mea
+  let C := image2 (· ×ˢ ·) { s : Set α | MeasurableSet s } C₂
+  refine MeasurableSpace.induction_on_inter (s := C) ?_ ?_ (by simp) ?_ ?_ ?_ s hs
+  · refine (generateFrom_eq_prod (C := { s : Set α | MeasurableSet s }) (D := C₂) (by simp)
+      generateFrom_prod isCountablySpanning_measurableSet ?_).symm
+    exact isCountablySpanning_measurableSet.prod isCountablySpanning_measurableSet
+  · exact MeasurableSpace.isPiSystem_measurableSet.prod isPiSystem_prod
+  · rintro - ⟨s, hs, -, ⟨t, ht, u, hu, rfl⟩, rfl⟩
+    exact h hs ht hu
+  · intro t ht h
+    simp_rw [measure_compl ht (measure_ne_top _ _), h, h_univ]
+  · intro f h_disj hf h_eq
+    simp_rw [measure_iUnion h_disj hf, h_eq]
 
 Depends on / 依赖: IsFiniteMeasure, MeasurableSet, MeasurableSpace, MeasurableSpace.induction_on_inter, generateFrom_eq_prod, generateFrom_prod, h_univ, image2, induction_on_inter, isCountably, simp_rw, univ_prod_univ
 -/
@@ -1888,7 +1978,13 @@ lemma ext_prod₃_iff'
   rw [← MeasurableEquiv.prodAssoc.map_measurableEquiv_injective.eq_iff]; rw [ext_prod₃_iff]
   have h_eq (ν : Measure ((α × β) × γ)) {s : Set α} {t : Set β} {u : Set γ}
       (hs : MeasurableSet s) (ht : MeasurableSet t) (hu : MeasurableSet u) :
-      ν.map MeasurableEquiv.prodAssoc (s ×ˢ (t ×ˢ u)
+      ν.map MeasurableEquiv.prodAssoc (s ×ˢ (t ×ˢ u)) = ν ((s ×ˢ t) ×ˢ u) := by
+    rw [map_apply (by fun_prop) (hs.prod (ht.prod hu))]
+    congr 1 with x
+    simp [MeasurableEquiv.prodAssoc]
+  refine ⟨fun h s t u hs ht hu => ?_, fun h s t u hs ht hu => ?_⟩ <;> specialize h hs ht hu
+  · rwa [h_eq μ hs ht hu, h_eq ν hs ht hu] at h
+  · rwa [h_eq μ hs ht hu, h_eq ν hs ht hu]
 
 中文:
 引理 ext_prod₃_iff'
@@ -1897,7 +1993,13 @@ lemma ext_prod₃_iff'
   rw [← MeasurableEquiv.prodAssoc.map_measurableEquiv_injective.eq_iff]; rw [ext_prod₃_iff]
   have h_eq (ν : Measure ((α × β) × γ)) {s : Set α} {t : Set β} {u : Set γ}
       (hs : MeasurableSet s) (ht : MeasurableSet t) (hu : MeasurableSet u) :
-      ν.map MeasurableEquiv.prodAssoc (s ×ˢ (t ×ˢ u)
+      ν.map MeasurableEquiv.prodAssoc (s ×ˢ (t ×ˢ u)) = ν ((s ×ˢ t) ×ˢ u) := by
+    rw [map_apply (by fun_prop) (hs.prod (ht.prod hu))]
+    congr 1 with x
+    simp [MeasurableEquiv.prodAssoc]
+  refine ⟨fun h s t u hs ht hu => ?_, fun h s t u hs ht hu => ?_⟩ <;> specialize h hs ht hu
+  · rwa [h_eq μ hs ht hu, h_eq ν hs ht hu] at h
+  · rwa [h_eq μ hs ht hu, h_eq ν hs ht hu]
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.prodAssoc, MeasurableEquiv.prodAssoc.map_measurableEquiv_injective.eq_iff, MeasurableSet, Measure, eq_iff, fun_prop, h_eq, hs.prod, ht.prod, map_apply, map_measurableEquiv_injective, prodAssoc, specialize
 -/
@@ -1934,7 +2036,13 @@ theorem prod_swap
        = sum (fun (i : Nat × Nat) => map Prod.swap ((sfiniteSeq μ i.2).prod (sfiniteSeq ν i.1))) := by
     ext s hs
     rw [sum_apply _ hs]; rw [sum_apply _ hs]
-    exact ((Equiv.prodComm Nat Nat).tsu
+    exact ((Equiv.prodComm Nat Nat).tsum_eq _).symm
+  rw [← sum_sfiniteSeq μ]; rw [← sum_sfiniteSeq ν]; rw [prod_sum]; rw [prod_sum]; rw [map_sum measurable_swap.aemeasurable]; rw [this]
+  congr 1
+  ext1 i
+  refine (prod_eq ?_).symm
+  intro s t hs ht
+  simp_rw [map_apply measurable_swap (hs.prod ht), preimage_swap_prod, prod_prod, mul_comm]
 
 中文:
 定理 prod_swap
@@ -1944,7 +2052,13 @@ theorem prod_swap
        = sum (fun (i : Nat × Nat) => map Prod.swap ((sfiniteSeq μ i.2).prod (sfiniteSeq ν i.1))) := by
     ext s hs
     rw [sum_apply _ hs]; rw [sum_apply _ hs]
-    exact ((Equiv.prodComm Nat Nat).tsu
+    exact ((Equiv.prodComm Nat Nat).tsum_eq _).symm
+  rw [← sum_sfiniteSeq μ]; rw [← sum_sfiniteSeq ν]; rw [prod_sum]; rw [prod_sum]; rw [map_sum measurable_swap.aemeasurable]; rw [this]
+  congr 1
+  ext1 i
+  refine (prod_eq ?_).symm
+  intro s t hs ht
+  simp_rw [map_apply measurable_swap (hs.prod ht), preimage_swap_prod, prod_prod, mul_comm]
 
 Depends on / 依赖: Equiv.prodComm, Prod.swap, aemeasurable, map_apply, map_sum, measurable_swap, measurable_swap.aemeasurable, prodComm, prod_eq, prod_sum, sfiniteSeq, simp_rw, sum_apply, sum_sfiniteSeq, tsum_eq
 -/
@@ -2171,7 +2285,19 @@ theorem prodAssoc_prod
       = sum (fun (p : (Nat × Nat) × Nat) =>
         (sfiniteSeq μ p.1.1).prod ((sfiniteSeq ν p.1.2).prod (sfiniteSeq τ p.2))) := by
     ext s hs
-    rw [sum_apply _ hs]; rw
+    rw [sum_apply _ hs]; rw [sum_apply _ hs]; rw [← (Equiv.prodAssoc _ _ _).tsum_eq]
+    simp only [Equiv.prodAssoc_apply]
+  rw [← sum_sfiniteSeq μ]; rw [← sum_sfiniteSeq ν]; rw [← sum_sfiniteSeq τ]; rw [prod_sum]; rw [prod_sum]; rw [map_sum MeasurableEquiv.prodAssoc.measurable.aemeasurable]; rw [prod_sum]; rw [prod_sum]; rw [this]
+  congr
+  ext1 i
+  refine (prod_eq_generateFrom generateFrom_measurableSet generateFrom_prod
+    isPiSystem_measurableSet isPiSystem_prod ((sfiniteSeq μ i.1.1)).toFiniteSpanningSetsIn
+    ((sfiniteSeq ν i.1.2).toFiniteSpanningSetsIn.prod (sfiniteSeq τ i.2).toFiniteSpanningSetsIn)
+      ?_).symm
+  rintro s hs _ ⟨t, ht, u, hu, rfl⟩; rw [mem_ofPred_eq] at hs ht hu
+  simp_rw [map_apply (MeasurableEquiv.measurable _) (hs.prod (ht.prod hu)),
+    MeasurableEquiv.prodAssoc, MeasurableEquiv.coe_mk, Equiv.prod_assoc_preimage, prod_prod,
+    mul_assoc]
 
 中文:
 定理 prodAssoc_prod
@@ -2182,7 +2308,19 @@ theorem prodAssoc_prod
       = sum (fun (p : (Nat × Nat) × Nat) =>
         (sfiniteSeq μ p.1.1).prod ((sfiniteSeq ν p.1.2).prod (sfiniteSeq τ p.2))) := by
     ext s hs
-    rw [sum_apply _ hs]; rw
+    rw [sum_apply _ hs]; rw [sum_apply _ hs]; rw [← (Equiv.prodAssoc _ _ _).tsum_eq]
+    simp only [Equiv.prodAssoc_apply]
+  rw [← sum_sfiniteSeq μ]; rw [← sum_sfiniteSeq ν]; rw [← sum_sfiniteSeq τ]; rw [prod_sum]; rw [prod_sum]; rw [map_sum MeasurableEquiv.prodAssoc.measurable.aemeasurable]; rw [prod_sum]; rw [prod_sum]; rw [this]
+  congr
+  ext1 i
+  refine (prod_eq_generateFrom generateFrom_measurableSet generateFrom_prod
+    isPiSystem_measurableSet isPiSystem_prod ((sfiniteSeq μ i.1.1)).toFiniteSpanningSetsIn
+    ((sfiniteSeq ν i.1.2).toFiniteSpanningSetsIn.prod (sfiniteSeq τ i.2).toFiniteSpanningSetsIn)
+      ?_).symm
+  rintro s hs _ ⟨t, ht, u, hu, rfl⟩; rw [mem_ofPred_eq] at hs ht hu
+  simp_rw [map_apply (MeasurableEquiv.measurable _) (hs.prod (ht.prod hu)),
+    MeasurableEquiv.prodAssoc, MeasurableEquiv.coe_mk, Equiv.prod_assoc_preimage, prod_prod,
+    mul_assoc]
 
 Depends on / 依赖: Equiv.prodAssoc, Equiv.prodAssoc_apply, MeasurableEquiv, MeasurableEquiv.prodAss, map_sum, prodAss, prodAssoc, prodAssoc_apply, prod_sum, sfiniteSeq, sum_apply, sum_sfiniteSeq, tsum_eq
 -/
@@ -2219,7 +2357,7 @@ theorem prod_restrict
   congr 1
   ext1 i
   refine prod_eq fun s' t' hs' ht' => ?_
-  rw [restrict_apply (hs'.prod ht')]; rw [prod_inter_prod]; 
+  rw [restrict_apply (hs'.prod ht')]; rw [prod_inter_prod]; rw [prod_prod]; rw [restrict_apply hs']; rw [restrict_apply ht']
 
 中文:
 定理 prod_restrict
@@ -2229,7 +2367,7 @@ theorem prod_restrict
   congr 1
   ext1 i
   refine prod_eq fun s' t' hs' ht' => ?_
-  rw [restrict_apply (hs'.prod ht')]; rw [prod_inter_prod]; 
+  rw [restrict_apply (hs'.prod ht')]; rw [prod_inter_prod]; rw [prod_prod]; rw [restrict_apply hs']; rw [restrict_apply ht']
 
 Depends on / 依赖: prod_eq, prod_inter_prod, prod_prod, prod_sum, restrict_apply, restrict_sum_of_countable, sum_sfiniteSeq
 -/
@@ -2279,7 +2417,7 @@ theorem prod_dirac
   ext1 i
   refine prod_eq fun s t hs ht => ?_
   simp_rw [map_apply measurable_prodMk_right (hs.prod ht), mk_preimage_prod_left_eq_if, measure_if,
-    dirac_apply' _ ht, ← indicator
+    dirac_apply' _ ht, ← indicator_mul_right _ fun _ => sfiniteSeq μ i s, Pi.one_apply, mul_one]
 
 中文:
 定理 prod_dirac
@@ -2292,7 +2430,7 @@ theorem prod_dirac
   ext1 i
   refine prod_eq fun s t hs ht => ?_
   simp_rw [map_apply measurable_prodMk_right (hs.prod ht), mk_preimage_prod_left_eq_if, measure_if,
-    dirac_apply' _ ht, ← indicator
+    dirac_apply' _ ht, ← indicator_mul_right _ fun _ => sfiniteSeq μ i s, Pi.one_apply, mul_one]
 
 Depends on / 依赖: Pi.one_apply, aemeasurable, classical, dirac_apply, hs.prod, indicator_mul_right, map_apply, map_sum, measurable_prodMk_right, measurable_prodMk_right.aemeasurable, measure_if, mk_preimage_prod_left_eq_if, mul_one, one_apply, prod_eq, prod_sum_left, sfiniteSeq, simp_rw, sum_sfiniteSeq
 -/
@@ -2319,7 +2457,7 @@ theorem dirac_prod
   ext1 i
   refine prod_eq fun s t hs ht => ?_
   simp_rw [map_apply measurable_prodMk_left (hs.prod ht), mk_preimage_prod_right_eq_if, measure_if,
-    dirac_apply' _ hs, ← indicator
+    dirac_apply' _ hs, ← indicator_mul_left _ _ fun _ => sfiniteSeq ν i t, Pi.one_apply, one_mul]
 
 中文:
 定理 dirac_prod
@@ -2332,7 +2470,7 @@ theorem dirac_prod
   ext1 i
   refine prod_eq fun s t hs ht => ?_
   simp_rw [map_apply measurable_prodMk_left (hs.prod ht), mk_preimage_prod_right_eq_if, measure_if,
-    dirac_apply' _ hs, ← indicator
+    dirac_apply' _ hs, ← indicator_mul_left _ _ fun _ => sfiniteSeq ν i t, Pi.one_apply, one_mul]
 
 Depends on / 依赖: Pi.one_apply, aemeasurable, classical, dirac_apply, hs.prod, indicator_mul_left, map_apply, map_sum, measurable_prodMk_left, measurable_prodMk_left.aemeasurable, measure_if, mk_preimage_prod_right_eq_if, one_apply, one_mul, prod_eq, prod_sum_right, sfiniteSeq, simp_rw, sum_sfiniteSeq
 -/
@@ -2507,7 +2645,8 @@ theorem map_prod_map
   congr
   ext1 i
   refine prod_eq fun s t hs ht => ?_
-  rw [map_apply (hf.prodMap hg) (hs.prod ht)]; rw [map_apply hf hs]; rw [map_apply hg ht
+  rw [map_apply (hf.prodMap hg) (hs.prod ht)]; rw [map_apply hf hs]; rw [map_apply hg ht]
+  exact prod_prod (f ⁻¹' s) (g ⁻¹' t)
 
 中文:
 定理 map_prod_map
@@ -2518,7 +2657,8 @@ theorem map_prod_map
   congr
   ext1 i
   refine prod_eq fun s t hs ht => ?_
-  rw [map_apply (hf.prodMap hg) (hs.prod ht)]; rw [map_apply hf hs]; rw [map_apply hg ht
+  rw [map_apply (hf.prodMap hg) (hs.prod ht)]; rw [map_apply hf hs]; rw [map_apply hg ht]
+  exact prod_prod (f ⁻¹' s) (g ⁻¹' t)
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, hf.prodMap, hg.aemeasurable, hs.prod, map_apply, map_sum, prodMap, prod_eq, prod_prod, prod_sum, simp_rw, sum_sfiniteSeq
 -/
@@ -2584,7 +2724,16 @@ theorem skew_product
     to deduce `SFinite μd`. -/
   rcases eq_zero_or_neZero μa with rfl | _
   · simp [← hf.map_eq]
-  have sf : SFinite μ
+  have sf : SFinite μd := by
+    obtain ⟨a, ha⟩ : exists a, map (g a) μc = μd := hg.exists
+    rw [← ha]
+    infer_instance
+  -- Thus we can use the integral formula for the product measure, and compute things explicitly
+  ext s hs
+  rw [map_apply this hs]; rw [Measure.prod_apply (this hs)]; rw [Measure.prod_apply hs]; rw [← hf.lintegral_comp (measurable_measure_prodMk_left hs)]
+  apply lintegral_congr_ae
+  filter_upwards [hg] with a ha
+  rw [← ha]; rw [map_apply hgm.of_uncurry_left (measurable_prodMk_left hs)]; rw [preimage_preimage]; rw [preimage_preimage]
 
 中文:
 定理 skew_product
@@ -2596,7 +2745,16 @@ theorem skew_product
     to deduce `SFinite μd`. -/
   rcases eq_zero_or_neZero μa with rfl | _
   · simp [← hf.map_eq]
-  have sf : SFinite μ
+  have sf : SFinite μd := by
+    obtain ⟨a, ha⟩ : exists a, map (g a) μc = μd := hg.exists
+    rw [← ha]
+    infer_instance
+  -- Thus we can use the integral formula for the product measure, and compute things explicitly
+  ext s hs
+  rw [map_apply this hs]; rw [Measure.prod_apply (this hs)]; rw [Measure.prod_apply hs]; rw [← hf.lintegral_comp (measurable_measure_prodMk_left hs)]
+  apply lintegral_congr_ae
+  filter_upwards [hg] with a ha
+  rw [← ha]; rw [map_apply hgm.of_uncurry_left (measurable_prodMk_left hs)]; rw [preimage_preimage]; rw [preimage_preimage]
 
 Depends on / 依赖: Measurable, measurable_fst, prodMk
 -/
@@ -3487,7 +3645,10 @@ theorem fst_map_prodMk₀
   by_cases hX : AEMeasurable X μ
   · ext1 s hs
     rw [Measure.fst_apply hs]; rw [Measure.map_apply_of_aemeasurable (hX.prodMk hY) (measurable_fst hs)]; rw [Measure.map_apply_of_aemeasurable hX hs]; rw [← prod_univ]; rw [mk_preimage_prod]; rw [preimage_univ]; rw [inter_univ]
-  · have : ¬AEMeasura
+  · have : ¬AEMeasurable (fun x => (X x, Y x)) μ := by
+      contrapose hX
+      exact measurable_fst.comp_aemeasurable hX
+    simp [map_of_not_aemeasurable, hX, this]
 
 中文:
 定理 fst_map_prodMk₀
@@ -3496,7 +3657,10 @@ theorem fst_map_prodMk₀
   by_cases hX : AEMeasurable X μ
   · ext1 s hs
     rw [Measure.fst_apply hs]; rw [Measure.map_apply_of_aemeasurable (hX.prodMk hY) (measurable_fst hs)]; rw [Measure.map_apply_of_aemeasurable hX hs]; rw [← prod_univ]; rw [mk_preimage_prod]; rw [preimage_univ]; rw [inter_univ]
-  · have : ¬AEMeasura
+  · have : ¬AEMeasurable (fun x => (X x, Y x)) μ := by
+      contrapose hX
+      exact measurable_fst.comp_aemeasurable hX
+    simp [map_of_not_aemeasurable, hX, this]
 
 Depends on / 依赖: AEMeasurable, Measure, Measure.fst_apply, Measure.map_apply_of_aemeasurable, comp_aemeasurable, contrapose, fst_apply, hX.prodMk, inter_univ, map_apply_of_aemeasurable, map_of_not_aemeasurable, measurable_fst, measurable_fst.comp_aemeasurable, mk_preimage_prod, preimage_univ, prodMk, prod_univ
 -/
@@ -3810,7 +3974,10 @@ theorem snd_map_prodMk₀
   by_cases hY : AEMeasurable Y μ
   · ext1 s hs
     rw [Measure.snd_apply hs]; rw [Measure.map_apply_of_aemeasurable (hX.prodMk hY) (measurable_snd hs)]; rw [Measure.map_apply_of_aemeasurable hY hs]; rw [← univ_prod]; rw [mk_preimage_prod]; rw [preimage_univ]; rw [univ_inter]
-  · have : ¬AEMeasura
+  · have : ¬AEMeasurable (fun x => (X x, Y x)) μ := by
+      contrapose hY
+      exact measurable_snd.comp_aemeasurable hY
+    simp [map_of_not_aemeasurable, hY, this]
 
 中文:
 定理 snd_map_prodMk₀
@@ -3819,7 +3986,10 @@ theorem snd_map_prodMk₀
   by_cases hY : AEMeasurable Y μ
   · ext1 s hs
     rw [Measure.snd_apply hs]; rw [Measure.map_apply_of_aemeasurable (hX.prodMk hY) (measurable_snd hs)]; rw [Measure.map_apply_of_aemeasurable hY hs]; rw [← univ_prod]; rw [mk_preimage_prod]; rw [preimage_univ]; rw [univ_inter]
-  · have : ¬AEMeasura
+  · have : ¬AEMeasurable (fun x => (X x, Y x)) μ := by
+      contrapose hY
+      exact measurable_snd.comp_aemeasurable hY
+    simp [map_of_not_aemeasurable, hY, this]
 
 Depends on / 依赖: AEMeasurable, Measure, Measure.map_apply_of_aemeasurable, Measure.snd_apply, comp_aemeasurable, contrapose, hX.prodMk, map_apply_of_aemeasurable, map_of_not_aemeasurable, measurable_snd, measurable_snd.comp_aemeasurable, mk_preimage_prod, preimage_univ, prodMk, snd_apply, univ_inter, univ_prod
 -/
@@ -3982,7 +4152,10 @@ theorem _root_.MeasureTheory.measurePreserving_prodAssoc
     have A (x : α) : MeasurableSet (Prod.mk x ⁻¹' s) := measurable_prodMk_left hs
     have B : MeasurableSet (MeasurableEquiv.prodAssoc ⁻¹' s) :=
       MeasurableEquiv.prodAssoc.measurable hs
-    simp_rw [map_apply MeasurableEquiv.prod
+    simp_rw [map_apply MeasurableEquiv.prodAssoc.measurable hs, Measure.prod_apply hs,
+    Measure.prod_apply (A _), Measure.prod_apply B,
+    lintegral_prod _ (measurable_measure_prodMk_left B).aemeasurable]
+    rfl
 
 中文:
 定理 _root_.测度论.measurePreserving_prodAssoc
@@ -3993,7 +4166,10 @@ theorem _root_.MeasureTheory.measurePreserving_prodAssoc
     have A (x : α) : MeasurableSet (Prod.mk x ⁻¹' s) := measurable_prodMk_left hs
     have B : MeasurableSet (MeasurableEquiv.prodAssoc ⁻¹' s) :=
       MeasurableEquiv.prodAssoc.measurable hs
-    simp_rw [map_apply MeasurableEquiv.prod
+    simp_rw [map_apply MeasurableEquiv.prodAssoc.measurable hs, Measure.prod_apply hs,
+    Measure.prod_apply (A _), Measure.prod_apply B,
+    lintegral_prod _ (measurable_measure_prodMk_left B).aemeasurable]
+    rfl
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.prodAssoc.measurable, measurable, prodAssoc
 -/

@@ -284,7 +284,7 @@ theorem length_inv
     rwa [wordProd_reverse, length_reverse, ← hω] at this
   · rcases cs.exists_isReduced w⁻¹ with ⟨ω, hω, h'ω⟩
     have := cs.length_wordProd_le ω.reverse
-    rwa [wordProd_revers
+    rwa [wordProd_reverse, length_reverse, ← h'ω, ← hω, inv_inv, ← h'ω] at this
 
 中文:
 定理 length_inv
@@ -297,7 +297,7 @@ theorem length_inv
     rwa [wordProd_reverse, length_reverse, ← hω] at this
   · rcases cs.exists_isReduced w⁻¹ with ⟨ω, hω, h'ω⟩
     have := cs.length_wordProd_le ω.reverse
-    rwa [wordProd_revers
+    rwa [wordProd_reverse, length_reverse, ← h'ω, ← hω, inv_inv, ← h'ω] at this
 
 Depends on / 依赖: Nat.le_antisymm, cs.exists_isReduced, cs.length_wordProd_le, exists_isReduced, inv_inv, le_antisymm, length_reverse, length_wordProd_le, reverse, wordProd_reverse
 -/
@@ -591,7 +591,9 @@ theorem length_simple
   · by_contra! length_lt_one
     have : cs.lengthParity (s i) = Multiplicative.ofAdd 0 := by
       rw [lengthParity_eq_ofAdd_length]; rw [Nat.lt_one_iff.mp length_lt_one]; rw [Nat.cast_zero]
-    have : Multiplicative.ofAdd (0 : ZMo
+    have : Multiplicative.ofAdd (0 : ZMod 2) = Multiplicative.ofAdd 1 :=
+      this.symm.trans (cs.lengthParity_simple i)
+    contradiction
 
 中文:
 定理 length_simple
@@ -603,7 +605,9 @@ theorem length_simple
   · by_contra! length_lt_one
     have : cs.lengthParity (s i) = Multiplicative.ofAdd 0 := by
       rw [lengthParity_eq_ofAdd_length]; rw [Nat.lt_one_iff.mp length_lt_one]; rw [Nat.cast_zero]
-    have : Multiplicative.ofAdd (0 : ZMo
+    have : Multiplicative.ofAdd (0 : ZMod 2) = Multiplicative.ofAdd 1 :=
+      this.symm.trans (cs.lengthParity_simple i)
+    contradiction
 
 Depends on / 依赖: Multiplicative, Multiplicative.ofAdd, Nat.cast_zero, Nat.le_antisymm, Nat.lt_one_iff.mp, cast_zero, cs.lengthParity, cs.lengthParity_simple, cs.length_wordProd_le, le_antisymm, lengthParity, lengthParity_eq_ofAdd_length, lengthParity_simple, length_lt_one, length_wordProd_le, lt_one_iff, this.symm.trans
 -/
@@ -828,7 +832,12 @@ theorem isReduced_take_and_drop
   have h₂ : ℓ (π (ω.drop j)) <= (ω.drop j).length := cs.length_wordProd_le (ω.drop j)
   have h₃ := calc
     (ω.take j).length + (ω.drop j).length
-    _ = ω.length := by rw [← List.length_append, ω.take_append_dr
+    _ = ω.length := by rw [← List.length_append, ω.take_append_drop j]
+    _ = ℓ (π ω) := hω.symm
+    _ = ℓ (π (ω.take j) * π (ω.drop j)) := by rw [← cs.wordProd_append, ω.take_append_drop j]
+    _ <= ℓ (π (ω.take j)) + ℓ (π (ω.drop j)) := cs.length_mul_le _ _
+  unfold IsReduced
+  lia
 
 中文:
 定理 isReduced_take_and_drop
@@ -838,7 +847,12 @@ theorem isReduced_take_and_drop
   have h₂ : ℓ (π (ω.drop j)) <= (ω.drop j).length := cs.length_wordProd_le (ω.drop j)
   have h₃ := calc
     (ω.take j).length + (ω.drop j).length
-    _ = ω.length := by rw [← List.length_append, ω.take_append_dr
+    _ = ω.length := by rw [← List.length_append, ω.take_append_drop j]
+    _ = ℓ (π ω) := hω.symm
+    _ = ℓ (π (ω.take j) * π (ω.drop j)) := by rw [← cs.wordProd_append, ω.take_append_drop j]
+    _ <= ℓ (π (ω.take j)) + ℓ (π (ω.drop j)) := cs.length_mul_le _ _
+  unfold IsReduced
+  lia
 -/
 private theorem isReduced_take_and_drop {ω : List B} (hω : cs.IsReduced ω) (j : Nat) :
     cs.IsReduced (ω.take j) ∧ cs.IsReduced (ω.drop j) := by
@@ -904,7 +918,21 @@ theorem not_isReduced_alternatingWord
       unfold IsReduced
       rw [Nat.succ_eq_add_one]; rw [length_alternatingWord]
       lia
-    have : M i i' + 1 <= M i i' * 2 := by linarith [Nat.one_le_iff_n
+    have : M i i' + 1 <= M i i' * 2 := by linarith [Nat.one_le_iff_ne_zero.mpr hM]
+    rw [cs.prod_alternatingWord_eq_prod_alternatingWord_sub i i' _ this]
+    have : M i i' * 2 - (M i i' + 1) = M i i' - 1 := by lia
+    rw [this]
+    calc
+      ℓ (π (alternatingWord i' i (M i i' - 1)))
+      _ <= (alternatingWord i' i (M i i' - 1)).length := cs.length_wordProd_le _
+      _ = M i i' - 1 := length_alternatingWord _ _ _
+      _ <= M i i' := Nat.sub_le _ _
+      _ < M i i' + 1 := Nat.lt_succ_self _
+  | step m ih => -- Inductive step
+    contrapose ih
+    rw [alternatingWord_succ'] at ih
+    apply IsReduced.drop (j := 1) at ih
+    simpa using ih
 
 中文:
 定理 not_isReduced_alternatingWord
@@ -916,7 +944,21 @@ theorem not_isReduced_alternatingWord
       unfold IsReduced
       rw [Nat.succ_eq_add_one]; rw [length_alternatingWord]
       lia
-    have : M i i' + 1 <= M i i' * 2 := by linarith [Nat.one_le_iff_n
+    have : M i i' + 1 <= M i i' * 2 := by linarith [Nat.one_le_iff_ne_zero.mpr hM]
+    rw [cs.prod_alternatingWord_eq_prod_alternatingWord_sub i i' _ this]
+    have : M i i' * 2 - (M i i' + 1) = M i i' - 1 := by lia
+    rw [this]
+    calc
+      ℓ (π (alternatingWord i' i (M i i' - 1)))
+      _ <= (alternatingWord i' i (M i i' - 1)).length := cs.length_wordProd_le _
+      _ = M i i' - 1 := length_alternatingWord _ _ _
+      _ <= M i i' := Nat.sub_le _ _
+      _ < M i i' + 1 := Nat.lt_succ_self _
+  | step m ih => -- Inductive step
+    contrapose ih
+    rw [alternatingWord_succ'] at ih
+    apply IsReduced.drop (j := 1) at ih
+    simpa using ih
 
 Depends on / 依赖: IsReduced, Nat.one_le_iff_ne_zero.mpr, Nat.succ_eq_add_one, alternatingWord, cs.prod_alternatingWord_eq_prod_alternatingWord_sub, length_alternatingWord, one_le_iff_ne_zero, prod_alternatingWord_eq_prod_alternatingWord_sub, succ_eq_add_one
 -/
@@ -1076,7 +1118,8 @@ theorem exists_leftDescent_of_ne_one
   use i
   rw [IsLeftDescent]; rw [h]; rw [wordProd_cons]; rw [simple_mul_simple_cancel_left]
   calc
-    ℓ (π ω') <= ω'.length := cs.length_word
+    ℓ (π ω') <= ω'.length := cs.length_wordProd_le ω'
+    _ < (i :: ω').length := by simp
 
 中文:
 定理 存在_leftDescent_of_ne_one
@@ -1089,7 +1132,8 @@ theorem exists_leftDescent_of_ne_one
   use i
   rw [IsLeftDescent]; rw [h]; rw [wordProd_cons]; rw [simple_mul_simple_cancel_left]
   calc
-    ℓ (π ω') <= ω'.length := cs.length_word
+    ℓ (π ω') <= ω'.length := cs.length_wordProd_le ω'
+    _ < (i :: ω').length := by simp
 
 Depends on / 依赖: IsLeftDescent, List.exists_cons_of_ne_nil, cs.exists_isReduced, cs.length_wordProd_le, exists_cons_of_ne_nil, exists_isReduced, length, length_wordProd_le, simple_mul_simple_cancel_left, wordProd_cons
 -/

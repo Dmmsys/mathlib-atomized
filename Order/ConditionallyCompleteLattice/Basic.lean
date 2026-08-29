@@ -433,7 +433,10 @@ instance ConditionallyCompleteLinearOrder.toLinearOrder
   max_def a b := by
     by_cases hab : a = b
     · simp [hab]
-    · rcases ConditionallyComp
+    · rcases ConditionallyCompleteLinearOrder.le_total a b with (h₁ | h₂)
+      · simp [h₁]
+      · simp [show ¬(a <= b) from fun h => hab (le_antisymm h h₂), h₂]
+  __ := h
 
 中文:
 实例 条件完备线性序.toLinearOrder
@@ -447,7 +450,10 @@ instance ConditionallyCompleteLinearOrder.toLinearOrder
   max_def a b := by
     by_cases hab : a = b
     · simp [hab]
-    · rcases ConditionallyComp
+    · rcases ConditionallyCompleteLinearOrder.le_total a b with (h₁ | h₂)
+      · simp [h₁]
+      · simp [show ¬(a <= b) from fun h => hab (le_antisymm h h₂), h₂]
+  __ := h
 
 Depends on / 依赖: ConditionallyCompleteLinearOrder, ConditionallyCompleteLinearOrder.le_total, le_antisymm, le_total, max_def
 -/
@@ -1152,7 +1158,7 @@ instance Pi.conditionallyCompleteLattice
     exact isLUB_csSup (image_nonempty.mpr hn) ((monotone_eval _).map_bddAbove hb)
   isGLB_csInf _ hn hb := isGLB_pi.mpr fun _ => by
     rw [sInf_apply_eq_sInf_image]
-    exact isGLB_csInf (image_nonempty.mpr hn) ((monotone_eval _).map_bddBel
+    exact isGLB_csInf (image_nonempty.mpr hn) ((monotone_eval _).map_bddBelow hb)
 
 中文:
 实例 依赖函数类型.conditionallyCompleteLattice
@@ -1162,7 +1168,7 @@ instance Pi.conditionallyCompleteLattice
     exact isLUB_csSup (image_nonempty.mpr hn) ((monotone_eval _).map_bddAbove hb)
   isGLB_csInf _ hn hb := isGLB_pi.mpr fun _ => by
     rw [sInf_apply_eq_sInf_image]
-    exact isGLB_csInf (image_nonempty.mpr hn) ((monotone_eval _).map_bddBel
+    exact isGLB_csInf (image_nonempty.mpr hn) ((monotone_eval _).map_bddBelow hb)
 
 Depends on / 依赖: image_nonempty, image_nonempty.mpr, isGLB_csInf, isGLB_pi, isGLB_pi.mpr, isLUB_csSup, isLUB_pi, isLUB_pi.mpr, map_bddAbove, map_bddBelow, monotone_eval, sInf_apply_eq_sInf_image, sSup_apply_eq_sSup_image
 -/
@@ -1360,7 +1366,29 @@ theorem csSup_eq_csSup_of_forall_exists_le
   rcases eq_empty_or_nonempty t with rfl | t_ne
   · have : s = ∅ := eq_empty_of_forall_notMem (fun x xs => by simpa using hs x xs)
     rw [this]
-  by_ca
+  by_cases B : BddAbove s ∨ BddAbove t
+  · have Bs : BddAbove s := by
+      rcases B with hB | ⟨b, hb⟩
+      · exact hB
+      · refine ⟨b, fun x hx => ?_⟩
+        rcases hs x hx with ⟨y, hy, hxy⟩
+        exact hxy.trans (hb hy)
+    have Bt : BddAbove t := by
+      rcases B with ⟨b, hb⟩ | hB
+      · refine ⟨b, fun y hy => ?_⟩
+        rcases ht y hy with ⟨x, hx, hyx⟩
+        exact hyx.trans (hb hx)
+      · exact hB
+    apply le_antisymm
+    · apply csSup_le s_ne (fun x hx => ?_)
+      rcases hs x hx with ⟨y, yt, hxy⟩
+      exact hxy.trans (le_csSup Bt yt)
+    · apply csSup_le t_ne (fun y hy => ?_)
+      rcases ht y hy with ⟨x, xs, hyx⟩
+      exact hyx.trans (le_csSup Bs xs)
+  · simp [csSup_of_not_bddAbove, (not_or.1 B).1, (not_or.1 B).2]
+
+@[to_dual le_csInf_union]
 
 中文:
 定理 csSup_eq_csSup_of_对任意_存在_le
@@ -1372,7 +1400,29 @@ theorem csSup_eq_csSup_of_forall_exists_le
   rcases eq_empty_or_nonempty t with rfl | t_ne
   · have : s = ∅ := eq_empty_of_forall_notMem (fun x xs => by simpa using hs x xs)
     rw [this]
-  by_ca
+  by_cases B : BddAbove s ∨ BddAbove t
+  · have Bs : BddAbove s := by
+      rcases B with hB | ⟨b, hb⟩
+      · exact hB
+      · refine ⟨b, fun x hx => ?_⟩
+        rcases hs x hx with ⟨y, hy, hxy⟩
+        exact hxy.trans (hb hy)
+    have Bt : BddAbove t := by
+      rcases B with ⟨b, hb⟩ | hB
+      · refine ⟨b, fun y hy => ?_⟩
+        rcases ht y hy with ⟨x, hx, hyx⟩
+        exact hyx.trans (hb hx)
+      · exact hB
+    apply le_antisymm
+    · apply csSup_le s_ne (fun x hx => ?_)
+      rcases hs x hx with ⟨y, yt, hxy⟩
+      exact hxy.trans (le_csSup Bt yt)
+    · apply csSup_le t_ne (fun y hy => ?_)
+      rcases ht y hy with ⟨x, xs, hyx⟩
+      exact hyx.trans (le_csSup Bs xs)
+  · simp [csSup_of_not_bddAbove, (not_or.1 B).1, (not_or.1 B).2]
+
+@[to_dual le_csInf_union]
 
 Depends on / 依赖: BddAbove, eq_empty_of_forall_notMem, eq_empty_or_nonempty, hxy.trans, s_ne, t_ne
 -/
@@ -2076,7 +2126,24 @@ theorem isLUB_sSup'
       exact le_top
   · change ite _ _ _ in _
     split_ifs with h₁ h₂
-
+    · rintro (⟨⟩ | a) ha
+      · exact le_rfl
+      · exact False.elim (not_top_le_coe a (ha h₁))
+    · rintro (⟨⟩ | b) hb
+      · exact le_top
+      refine coe_le_coe.2 (csSup_le ?_ ?_)
+      · rcases hs with ⟨⟨⟩ | b, hb⟩
+        · exact absurd hb h₁
+        · exact ⟨b, hb⟩
+      · intro a ha
+        exact coe_le_coe.1 (hb ha)
+    · rintro (⟨⟩ | b) hb
+      · exact le_rfl
+      · exfalso
+        apply h₂
+        use b
+        intro a ha
+        exact coe_le_coe.1 (hb ha)
 
 中文:
 定理 isLUB_sSup'
@@ -2096,7 +2163,24 @@ theorem isLUB_sSup'
       exact le_top
   · change ite _ _ _ in _
     split_ifs with h₁ h₂
-
+    · rintro (⟨⟩ | a) ha
+      · exact le_rfl
+      · exact False.elim (not_top_le_coe a (ha h₁))
+    · rintro (⟨⟩ | b) hb
+      · exact le_top
+      refine coe_le_coe.2 (csSup_le ?_ ?_)
+      · rcases hs with ⟨⟨⟩ | b, hb⟩
+        · exact absurd hb h₁
+        · exact ⟨b, hb⟩
+      · intro a ha
+        exact coe_le_coe.1 (hb ha)
+    · rintro (⟨⟩ | b) hb
+      · exact le_rfl
+      · exfalso
+        apply h₂
+        use b
+        intro a ha
+        exact coe_le_coe.1 (hb ha)
 
 Depends on / 依赖: False.elim, absurd, classical, coe_le_coe, csSup_le, le_csSup, le_rfl, le_top, not_top_le_coe, split_ifs
 -/
@@ -2183,7 +2267,34 @@ theorem isGLB_sInf'
     · rintro (⟨⟩ | a) ha
       · exact le_top
       refine coe_le_coe.2 (csInf_le ?_ ha)
-      rcases
+      rcases hs with ⟨⟨⟩ | b, hb⟩
+      · exfalso
+        apply h
+        intro c hc
+        rw [mem_singleton_iff]; rw [← top_le_iff]
+        exact hb hc
+      use b
+      intro c hc
+      exact coe_le_coe.1 (hb hc)
+  · change ite _ _ _ in _
+    simp only [hs, not_true_eq_false, or_false]
+    split_ifs with h
+    · intro _ _
+      exact le_top
+    · rintro (⟨⟩ | a) ha
+      · exfalso
+        apply h
+        intro b hb
+        exact Set.mem_singleton_iff.2 (top_le_iff.1 (ha hb))
+      · refine coe_le_coe.2 (le_csInf ?_ ?_)
+        · classical
+            contrapose! h
+            rintro (⟨⟩ | a) ha
+            · exact mem_singleton ⊤
+            · exact (not_nonempty_iff_eq_empty.2 h ⟨a, ha⟩).elim
+        · intro b hb
+          rw [← coe_le_coe]
+          exact ha hb
 
 中文:
 定理 isGLB_sInf'
@@ -2199,7 +2310,34 @@ theorem isGLB_sInf'
     · rintro (⟨⟩ | a) ha
       · exact le_top
       refine coe_le_coe.2 (csInf_le ?_ ha)
-      rcases
+      rcases hs with ⟨⟨⟩ | b, hb⟩
+      · exfalso
+        apply h
+        intro c hc
+        rw [mem_singleton_iff]; rw [← top_le_iff]
+        exact hb hc
+      use b
+      intro c hc
+      exact coe_le_coe.1 (hb hc)
+  · change ite _ _ _ in _
+    simp only [hs, not_true_eq_false, or_false]
+    split_ifs with h
+    · intro _ _
+      exact le_top
+    · rintro (⟨⟩ | a) ha
+      · exfalso
+        apply h
+        intro b hb
+        exact Set.mem_singleton_iff.2 (top_le_iff.1 (ha hb))
+      · refine coe_le_coe.2 (le_csInf ?_ ?_)
+        · classical
+            contrapose! h
+            rintro (⟨⟩ | a) ha
+            · exact mem_singleton ⊤
+            · exact (not_nonempty_iff_eq_empty.2 h ⟨a, ha⟩).elim
+        · intro b hb
+          rw [← coe_le_coe]
+          exact ha hb
 
 Depends on / 依赖: Set.mem_singleton_iff, classical, coe_le_coe, csInf_le, le_top, mem_singleton_iff, not_true_eq_false, or_false, split_ifs, top_le_iff
 -/
@@ -2448,7 +2586,12 @@ lemma MonotoneOn.csInf_eq_of_subset_of_forall_exists_le
     rfl
   refine le_antisymm ?_ (by gcongr; exacts [ht, hs.image f])
   refine le_csInf ((hs.mono hst).image f) ?_
-  simp only [mem_image, forall_exists_index, and_imp, foral
+  simp only [mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+  intro a ha
+  obtain ⟨x, hxs, hxa⟩ := h a ha
+  exact csInf_le_of_le (ht.mono (image_mono hst)) ⟨x, hxs, rfl⟩ (hf (hst hxs) ha hxa)
+
+@[to_dual]
 
 中文:
 引理 MonotoneOn.csInf_eq_of_subset_of_对任意_存在_le
@@ -2458,7 +2601,12 @@ lemma MonotoneOn.csInf_eq_of_subset_of_forall_exists_le
     rfl
   refine le_antisymm ?_ (by gcongr; exacts [ht, hs.image f])
   refine le_csInf ((hs.mono hst).image f) ?_
-  simp only [mem_image, forall_exists_index, and_imp, foral
+  simp only [mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+  intro a ha
+  obtain ⟨x, hxs, hxa⟩ := h a ha
+  exact csInf_le_of_le (ht.mono (image_mono hst)) ⟨x, hxs, rfl⟩ (hf (hst hxs) ha hxa)
+
+@[to_dual]
 
 Depends on / 依赖: Set.eq_empty_iff_forall_notMem, Set.eq_empty_or_nonempty, and_imp, csInf_le_of_le, eq_empty_iff_forall_notMem, eq_empty_or_nonempty, exacts, forall_exists_index, hs.image, hs.mono, ht.mono, image_mono, le_antisymm, le_csInf, mem_image
 -/
@@ -2842,7 +2990,19 @@ instance WithTop.WithBot.completeLattice
     · exact (WithTop.isLUB_sSup' h).2 ha⟩
   isGLB_sInf S := ⟨fun a haS =>
     show ite _ _ _ <= a by
-      simp only [OrderBot.bddBelow, not_true
+      simp only [OrderBot.bddBelow, not_true_eq_false, or_false]
+      split_ifs with h₁
+      · cases a
+        · exact le_rfl
+        cases h₁ haS
+      · cases a
+        · exact le_top
+        · apply WithTop.coe_le_coe.2
+          refine csInf_le ?_ haS
+          use ⊥
+          intro b _
+          exact bot_le,
+    fun a haS => (WithTop.isGLB_sInf' ⟨a, haS⟩).2 haS⟩
 
 中文:
 实例 WithTop.WithBot.completeLattice
@@ -2854,7 +3014,19 @@ instance WithTop.WithBot.completeLattice
     · exact (WithTop.isLUB_sSup' h).2 ha⟩
   isGLB_sInf S := ⟨fun a haS =>
     show ite _ _ _ <= a by
-      simp only [OrderBot.bddBelow, not_true
+      simp only [OrderBot.bddBelow, not_true_eq_false, or_false]
+      split_ifs with h₁
+      · cases a
+        · exact le_rfl
+        cases h₁ haS
+      · cases a
+        · exact le_top
+        · apply WithTop.coe_le_coe.2
+          refine csInf_le ?_ haS
+          use ⊥
+          intro b _
+          exact bot_le,
+    fun a haS => (WithTop.isGLB_sInf' ⟨a, haS⟩).2 haS⟩
 
 Depends on / 依赖: OrderBot, OrderBot.bddBelow, S.eq_empty_or_nonempty, WithTop, WithTop.coe_le_coe, WithTop.isGLB_sInf, WithTop.isLUB_sSup, bddBelow, bot_le, coe_le_coe, csInf_le, eq_empty_or_nonempty, isGLB_sInf, isLUB_sSup, le_rfl, le_top, not_true_eq_false, or_false, split_ifs
 -/

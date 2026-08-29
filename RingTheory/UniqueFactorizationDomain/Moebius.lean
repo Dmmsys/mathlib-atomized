@@ -246,7 +246,8 @@ theorem _root_.IsRelPrime.moebius_mul
   · simp [ha, mt Squarefree.of_mul_left ha]
   by_cases hb : Squarefree b; swap
   · simp [hb, mt Squarefree.of_mul_right hb]
-  have hab : Squarefree (a * b) := squ
+  have hab : Squarefree (a * b) := squarefree_mul_iff.mpr ⟨h, ha, hb⟩
+  rw [hab.moebius_eq]; rw [Multiset.card_eq_card_of_rel (factors_mul ha.ne_zero hb.ne_zero)]; rw [Multiset.card_add]; rw [pow_add]; rw [ha.moebius_eq]; rw [hb.moebius_eq]
 
 中文:
 定理 _root_.IsRelPrime.moebius_mul
@@ -258,7 +259,8 @@ theorem _root_.IsRelPrime.moebius_mul
   · simp [ha, mt Squarefree.of_mul_left ha]
   by_cases hb : Squarefree b; swap
   · simp [hb, mt Squarefree.of_mul_right hb]
-  have hab : Squarefree (a * b) := squ
+  have hab : Squarefree (a * b) := squarefree_mul_iff.mpr ⟨h, ha, hb⟩
+  rw [hab.moebius_eq]; rw [Multiset.card_eq_card_of_rel (factors_mul ha.ne_zero hb.ne_zero)]; rw [Multiset.card_add]; rw [pow_add]; rw [ha.moebius_eq]; rw [hb.moebius_eq]
 
 Depends on / 依赖: Multiset, Multiset.card_add, Multiset.card_eq_card_of_rel, Squarefree, Squarefree.of_mul_left, Squarefree.of_mul_right, Subsingleton, Subsingleton.elim, card_add, card_eq_card_of_rel, factors_mul, ha.moebius_eq, ha.ne_zero, hab.moebius_eq, hb.moebius_eq, hb.ne_zero, moebius_eq, moebius_one, ne_zero, of_mul_left
 -/

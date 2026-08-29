@@ -193,7 +193,11 @@ lemma functor_linear_iff
     intro X r
     have e := L.objObjPreimageIso X
     have : r • 𝟙 X = e.inv ≫ (r • 𝟙 _) ≫ e.hom := by simp
-    rw [this]; rw 
+    rw [this]; rw [G.map_comp]; rw [G.map_comp]; rw [← L.map_id]; rw [← L.map_smul]; rw [← Functor.comp_map]; rw [(L ⋙ G).map_smul]; rw [Functor.map_id]; rw [Linear.smul_comp]; rw [Linear.comp_smul]
+    dsimp
+    rw [Category.id_comp]; rw [← G.map_comp]; rw [e.inv_hom_id]; rw [G.map_id]
+  · intro
+    exact Functor.linear_of_iso _ (Lifting.iso L W F G)
 
 中文:
 引理 functor_linear_iff
@@ -207,7 +211,11 @@ lemma functor_linear_iff
     intro X r
     have e := L.objObjPreimageIso X
     have : r • 𝟙 X = e.inv ≫ (r • 𝟙 _) ≫ e.hom := by simp
-    rw [this]; rw 
+    rw [this]; rw [G.map_comp]; rw [G.map_comp]; rw [← L.map_id]; rw [← L.map_smul]; rw [← Functor.comp_map]; rw [(L ⋙ G).map_smul]; rw [Functor.map_id]; rw [Linear.smul_comp]; rw [Linear.comp_smul]
+    dsimp
+    rw [Category.id_comp]; rw [← G.map_comp]; rw [e.inv_hom_id]; rw [G.map_id]
+  · intro
+    exact Functor.linear_of_iso _ (Lifting.iso L W F G)
 
 Depends on / 依赖: Category, Category.id_comp, Functor, Functor.comp_map, Functor.linear_iff, Functor.linear_of_iso, Functor.map_id, G.map_comp, L.map_id, L.map_smul, L.objObjPreimageIso, Lifting, Lifting.iso, Linear, Linear.comp_smul, Linear.smul_comp, Localization, Localization.essSurj, comp_map, comp_smul
 -/

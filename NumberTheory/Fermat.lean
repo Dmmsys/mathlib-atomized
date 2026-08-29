@@ -400,7 +400,9 @@ theorem coprime_fermatNumber_fermatNumber
   let d := (fermatNumber m).gcd (fermatNumber n)
   have h_n : d ∣ fermatNumber n := gcd_dvd_right ..
   have h_m : d ∣ 2 := (Nat.dvd_add_right <| (gcd_dvd_left _ _).trans <| dvd_prod_of_mem _
- mem_range.mpr hmn').mp <| 
+ mem_range.mpr hmn').mp <| fermatNumber_eq_prod_add_two _ ▸ h_n
+  refine ((dvd_prime prime_two).mp h_m).resolve_right fun h_two => ?_
+  exact (odd_fermatNumber _).not_two_dvd_nat (h_two ▸ h_n)
 
 中文:
 定理 coprime_fermatNumber_fermatNumber
@@ -411,7 +413,9 @@ theorem coprime_fermatNumber_fermatNumber
   let d := (fermatNumber m).gcd (fermatNumber n)
   have h_n : d ∣ fermatNumber n := gcd_dvd_right ..
   have h_m : d ∣ 2 := (Nat.dvd_add_right <| (gcd_dvd_left _ _).trans <| dvd_prod_of_mem _
- mem_range.mpr hmn').mp <| 
+ mem_range.mpr hmn').mp <| fermatNumber_eq_prod_add_two _ ▸ h_n
+  refine ((dvd_prime prime_two).mp h_m).resolve_right fun h_two => ?_
+  exact (odd_fermatNumber _).not_two_dvd_nat (h_two ▸ h_n)
 
 Depends on / 依赖: Nat.dvd_add_right, coprime_comm, dvd_add_right, dvd_prime, dvd_prod_of_mem, fermatNumber, fermatNumber_eq_prod_add_two, gcd_dvd_left, gcd_dvd_right, h_two, hmn.symm, mem_range, mem_range.mpr, not_two_dvd_nat, odd_fermatNumber, prime_two, resolve_right
 -/
@@ -457,7 +461,8 @@ theorem pow_of_pow_add_prime
   use k
   replace ha : 1 < a ^ 2 ^ k := one_lt_pow (pow_ne_zero k two_ne_zero) ha
   let h := hm.nat_add_dvd_pow_add_pow (a ^ 2 ^ k) 1
-  rw [one_pow]; rw [hP.dvd_iff_eq (Nat.lt_add_right 1 ha).ne']; rw [add_left_inj]; rw
+  rw [one_pow]; rw [hP.dvd_iff_eq (Nat.lt_add_right 1 ha).ne']; rw [add_left_inj]; rw [pow_eq_self_iff ha] at h
+  rw [h]; rw [mul_one]
 
 中文:
 定理 pow_of_pow_add_prime
@@ -468,7 +473,8 @@ theorem pow_of_pow_add_prime
   use k
   replace ha : 1 < a ^ 2 ^ k := one_lt_pow (pow_ne_zero k two_ne_zero) ha
   let h := hm.nat_add_dvd_pow_add_pow (a ^ 2 ^ k) 1
-  rw [one_pow]; rw [hP.dvd_iff_eq (Nat.lt_add_right 1 ha).ne']; rw [add_left_inj]; rw
+  rw [one_pow]; rw [hP.dvd_iff_eq (Nat.lt_add_right 1 ha).ne']; rw [add_left_inj]; rw [pow_eq_self_iff ha] at h
+  rw [h]; rw [mul_one]
 
 Depends on / 依赖: Nat.lt_add_right, add_left_inj, dvd_iff_eq, exists_eq_two_pow_mul_odd, hP.dvd_iff_eq, hm.nat_add_dvd_pow_add_pow, lt_add_right, mul_one, nat_add_dvd_pow_add_pow, one_lt_pow, one_pow, pow_eq_self_iff, pow_mul, pow_ne_zero, replace, two_ne_zero
 -/
@@ -493,7 +499,10 @@ lemma pepin_primality
   unfold fermatNumber at h this
   have key : 2 ^ n = 2 ^ n - 1 + 1 := (Nat.sub_add_cancel Nat.one_le_two_pow).symm
   apply lucas_primality (p := 2 ^ (2 ^ n) + 1) (a := 3)
-  · rw [Nat.add_sub_cancel, key, pow_succ, pow_mul, ← pow_succ, ← key, h, neg_one_sq
+  · rw [Nat.add_sub_cancel, key, pow_succ, pow_mul, ← pow_succ, ← key, h, neg_one_sq]
+  · intro p hp1 hp2
+    rw [Nat.add_sub_cancel]; rw [(Nat.prime_dvd_prime_iff_eq hp1 prime_two).mp (hp1.dvd_of_dvd_pow hp2)]; rw [key]; rw [pow_succ]; rw [Nat.mul_div_cancel _ two_pos]; rw [← pow_succ]; rw [← key]; rw [h]
+    exact neg_one_ne_one
 
 中文:
 引理 pepin_primality
@@ -503,7 +512,10 @@ lemma pepin_primality
   unfold fermatNumber at h this
   have key : 2 ^ n = 2 ^ n - 1 + 1 := (Nat.sub_add_cancel Nat.one_le_two_pow).symm
   apply lucas_primality (p := 2 ^ (2 ^ n) + 1) (a := 3)
-  · rw [Nat.add_sub_cancel, key, pow_succ, pow_mul, ← pow_succ, ← key, h, neg_one_sq
+  · rw [Nat.add_sub_cancel, key, pow_succ, pow_mul, ← pow_succ, ← key, h, neg_one_sq]
+  · intro p hp1 hp2
+    rw [Nat.add_sub_cancel]; rw [(Nat.prime_dvd_prime_iff_eq hp1 prime_two).mp (hp1.dvd_of_dvd_pow hp2)]; rw [key]; rw [pow_succ]; rw [Nat.mul_div_cancel _ two_pos]; rw [← pow_succ]; rw [← key]; rw [h]
+    exact neg_one_ne_one
 
 Depends on / 依赖: Fact.mk, Nat.add_sub_cancel, Nat.mul_div_cancel, Nat.one_le_two_pow, Nat.prime_dvd_prime_iff_eq, Nat.sub_add_cancel, add_sub_cancel, dvd_of_dvd_pow, fermatNumber, hp1.dvd_of_dvd_pow, lucas_primality, mul_div_cancel, neg_one_sq, one_le_two_pow, pow_mul, pow_succ, prime_dvd_prime_iff_eq, prime_two, sub_add_cancel, two_lt_fermatNumber
 -/
@@ -561,7 +573,15 @@ lemma fermat_primeFactors_one_lt
     exact (even_two.pow_of_ne_zero <| pow_ne_zero n two_ne_zero).add_one.ne_two_of_dvd_nat hpdvd
   have hp8 : p % 8 = 1 := by
     obtain ⟨k, rfl⟩ := pow_pow_add_primeFactors_one_lt hp hp2 hpdvd
-    obtain ⟨n, rfl⟩ := Nat.exists_eq_add_
+    obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_le' hn
+    rw [add_assoc]; rw [pow_add]; rw [← mul_assoc]; rw [← mod_add_mod]; rw [mul_mod]
+    simp
+  obtain ⟨a, ha⟩ := (exists_sq_eq_two_iff hp2).mpr (Or.inl hp8)
+  suffices h : p ∣ a.val ^ (2 ^ (n + 1)) + 1 by
+    exact pow_pow_add_primeFactors_one_lt hp hp2 h
+  rw [fermatNumber] at hpdvd
+  rw [← natCast_eq_zero_iff]; rw [Nat.cast_add _ 1]; rw [Nat.cast_one]; rw [Nat.cast_pow] at hpdvd ⊢
+  rwa [natCast_val, ZMod.cast_id, pow_succ', pow_mul, sq, ← ha]
 
 中文:
 引理 fermat_primeFactors_one_lt
@@ -572,7 +592,15 @@ lemma fermat_primeFactors_one_lt
     exact (even_two.pow_of_ne_zero <| pow_ne_zero n two_ne_zero).add_one.ne_two_of_dvd_nat hpdvd
   have hp8 : p % 8 = 1 := by
     obtain ⟨k, rfl⟩ := pow_pow_add_primeFactors_one_lt hp hp2 hpdvd
-    obtain ⟨n, rfl⟩ := Nat.exists_eq_add_
+    obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_le' hn
+    rw [add_assoc]; rw [pow_add]; rw [← mul_assoc]; rw [← mod_add_mod]; rw [mul_mod]
+    simp
+  obtain ⟨a, ha⟩ := (exists_sq_eq_two_iff hp2).mpr (Or.inl hp8)
+  suffices h : p ∣ a.val ^ (2 ^ (n + 1)) + 1 by
+    exact pow_pow_add_primeFactors_one_lt hp hp2 h
+  rw [fermatNumber] at hpdvd
+  rw [← natCast_eq_zero_iff]; rw [Nat.cast_add _ 1]; rw [Nat.cast_one]; rw [Nat.cast_pow] at hpdvd ⊢
+  rwa [natCast_val, ZMod.cast_id, pow_succ', pow_mul, sq, ← ha]
 
 Depends on / 依赖: Fact.mk, Nat.exists_eq_add_of_le, Or.inl, a.val, add_assoc, add_one, add_one.ne_two_of_dvd_nat, even_two, even_two.pow_of_ne_zero, exists_eq_add_of_le, exists_sq_eq_two_iff, mod_add_mod, mul_assoc, mul_mod, ne_two_of_dvd_nat, p.Prime, pow_add, pow_ne_zero, pow_of_ne_zero, pow_pow_
 -/
@@ -614,7 +642,15 @@ theorem prime_of_pow_sub_one_prime
   have ha2 : a = 2 := by
     contrapose! hn1
     let h := Nat.sub_dvd_pow_sub_pow a 1 n
-    rw [on
+    rw [one_pow]; rw [hP.dvd_iff_eq (mt (Nat.sub_eq_iff_eq_add ha1.le).mp hn1)]; rw [eq_comm] at h
+    exact (pow_eq_self_iff ha1).mp (Nat.sub_one_cancel ha0 (pow_pos ha0 n) h).symm
+  subst ha2
+  refine ⟨rfl, Nat.prime_def.mpr ⟨(two_le_iff n).mpr ⟨hn0, hn1⟩, fun d hdn => ?_⟩⟩
+  have hinj : forall x y, 2 ^ x - 1 = 2 ^ y - 1 -> x = y :=
+    fun x y h => Nat.pow_right_injective le_rfl (sub_one_cancel (pow_pos ha0 x) (pow_pos ha0 y) h)
+  let h := Nat.sub_dvd_pow_sub_pow (2 ^ d) 1 (n / d)
+  rw [one_pow]; rw [← pow_mul]; rw [Nat.mul_div_cancel' hdn] at h
+  exact (hP.eq_one_or_self_of_dvd (2 ^ d - 1) h).imp (hinj d 1) (hinj d n)
 
 中文:
 定理 prime_of_pow_sub_one_prime
@@ -627,7 +663,15 @@ theorem prime_of_pow_sub_one_prime
   have ha2 : a = 2 := by
     contrapose! hn1
     let h := Nat.sub_dvd_pow_sub_pow a 1 n
-    rw [on
+    rw [one_pow]; rw [hP.dvd_iff_eq (mt (Nat.sub_eq_iff_eq_add ha1.le).mp hn1)]; rw [eq_comm] at h
+    exact (pow_eq_self_iff ha1).mp (Nat.sub_one_cancel ha0 (pow_pos ha0 n) h).symm
+  subst ha2
+  refine ⟨rfl, Nat.prime_def.mpr ⟨(two_le_iff n).mpr ⟨hn0, hn1⟩, fun d hdn => ?_⟩⟩
+  have hinj : forall x y, 2 ^ x - 1 = 2 ^ y - 1 -> x = y :=
+    fun x y h => Nat.pow_right_injective le_rfl (sub_one_cancel (pow_pos ha0 x) (pow_pos ha0 y) h)
+  let h := Nat.sub_dvd_pow_sub_pow (2 ^ d) 1 (n / d)
+  rw [one_pow]; rw [← pow_mul]; rw [Nat.mul_div_cancel' hdn] at h
+  exact (hP.eq_one_or_self_of_dvd (2 ^ d - 1) h).imp (hinj d 1) (hinj d n)
 
 Depends on / 依赖: Nat.one_lt_pow_iff, Nat.prime_def.mpr, Nat.sub_dvd_pow_sub_pow, Nat.sub_eq_iff_eq_add, Nat.sub_one_cancel, contrapose, dvd_iff_eq, eq_comm, hP.dvd_iff_eq, hP.pos, ha1.le, one_lt_pow_iff, one_pos, one_pos.trans, one_pow, pow_eq_self_iff, pow_pos, prime_def, sub_dvd_pow_sub_pow, sub_eq_iff_eq_add
 -/

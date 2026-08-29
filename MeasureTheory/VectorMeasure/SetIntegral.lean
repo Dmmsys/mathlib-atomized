@@ -424,7 +424,13 @@ theorem setIntegral_biUnion_finset
     simp only [Finset.coe_insert, Finset.forall_mem_insert, Set.pairwise_insert,
       Finset.set_biUnion_insert] at hs hf h's ⊢
     rw [setIntegral_union]
-    · rw [Finset.sum_insert hat, IH hs.2 
+    · rw [Finset.sum_insert hat, IH hs.2 h's.1 hf.2]
+    · simp only [disjoint_iUnion_right]
+      exact fun i hi => (h's.2 i hi (ne_of_mem_of_not_mem hi hat).symm).1
+    · exact hs.1
+    · exact Finset.measurableSet_biUnion _ hs.2
+    · exact hf.1
+    · apply IntegrableOn.biUnion_finset hs.2 hf.2
 
 中文:
 定理 set整数egral_biUnion_finset
@@ -437,7 +443,13 @@ theorem setIntegral_biUnion_finset
     simp only [Finset.coe_insert, Finset.forall_mem_insert, Set.pairwise_insert,
       Finset.set_biUnion_insert] at hs hf h's ⊢
     rw [setIntegral_union]
-    · rw [Finset.sum_insert hat, IH hs.2 
+    · rw [Finset.sum_insert hat, IH hs.2 h's.1 hf.2]
+    · simp only [disjoint_iUnion_right]
+      exact fun i hi => (h's.2 i hi (ne_of_mem_of_not_mem hi hat).symm).1
+    · exact hs.1
+    · exact Finset.measurableSet_biUnion _ hs.2
+    · exact hf.1
+    · apply IntegrableOn.biUnion_finset hs.2 hf.2
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.forall_mem_insert, Finset.induction_on, Finset.measurableSet_biUnion, Finset.set_biUnion_insert, Finset.sum_insert, IntegrableOn, IntegrableOn.biUnion_finset, Set.pairwise_insert, biUnion_finset, classical, coe_insert, disjoint_iUnion_right, forall_mem_insert, induction_on, insert, measurableSet_biUnion, ne_of_mem_of_not_mem, pairwise_insert
 -/
@@ -577,7 +589,15 @@ theorem integral_indicator
     simpa [transpose_restrict, variation_restrict hs] using hfi
   calc
     ∫ᵛ x, indicator s f x ∂[B; μ]
-    _ = ∫ᵛ x in s, indicator s f x ∂[B; μ] + ∫ᵛ x in sᶜ, indicator s 
+    _ = ∫ᵛ x in s, indicator s f x ∂[B; μ] + ∫ᵛ x in sᶜ, indicator s f x ∂[B; μ] :=
+      (setIntegral_add_compl hs (hfi.integrable_indicator hs)).symm
+    _ = ∫ᵛ x in s, f x ∂[B; μ] + ∫ᵛ x in sᶜ, 0 ∂[B; μ] := by
+      apply congr_arg₂ (· + ·) (integral_congr_ae ?_) (integral_congr_ae ?_)
+      · rw [variation_restrict hs]
+        exact indicator_ae_eq_restrict hs
+      · rw [variation_restrict hs.compl]
+        exact indicator_ae_eq_restrict_compl hs
+    _ = ∫ᵛ x in s, f x ∂[B; μ] := by simp
 
 中文:
 定理 integral_indicator
@@ -589,7 +609,15 @@ theorem integral_indicator
     simpa [transpose_restrict, variation_restrict hs] using hfi
   calc
     ∫ᵛ x, indicator s f x ∂[B; μ]
-    _ = ∫ᵛ x in s, indicator s f x ∂[B; μ] + ∫ᵛ x in sᶜ, indicator s 
+    _ = ∫ᵛ x in s, indicator s f x ∂[B; μ] + ∫ᵛ x in sᶜ, indicator s f x ∂[B; μ] :=
+      (setIntegral_add_compl hs (hfi.integrable_indicator hs)).symm
+    _ = ∫ᵛ x in s, f x ∂[B; μ] + ∫ᵛ x in sᶜ, 0 ∂[B; μ] := by
+      apply congr_arg₂ (· + ·) (integral_congr_ae ?_) (integral_congr_ae ?_)
+      · rw [variation_restrict hs]
+        exact indicator_ae_eq_restrict hs
+      · rw [variation_restrict hs.compl]
+        exact indicator_ae_eq_restrict_compl hs
+    _ = ∫ᵛ x in s, f x ∂[B; μ] := by simp
 
 Depends on / 依赖: IntegrableOn, hfi.integrable_indicator, indicator, integrable_indicator, integrable_indicator_iff, integral_congr_ae, integral_undef, setIntegral_add_compl, transpose_restrict, variation_r, variation_restrict
 -/
@@ -702,7 +730,17 @@ theorem setIntegral_eq_zero_of_ae_eq_zero
     contrapose hf
     exact hf.1
   simp only [variation_restrict ht] at hf
-  have : ∫ᵛ x in t, hf.mk f x ∂[B; 
+  have : ∫ᵛ x in t, hf.mk f x ∂[B; μ] = 0 := by
+    refine integral_eq_zero_of_ae ?_
+    simp only [variation_restrict ht]
+    apply (ae_restrict_iff' ht).2
+    filter_upwards [ae_imp_of_ae_restrict hf.ae_eq_mk, ht_eq] with x hx h'x h''x
+    rw [← hx h''x]
+    exact h'x h''x
+  rw [← this]
+  apply integral_congr_ae
+  simp only [variation_restrict ht]
+  exact hf.ae_eq_mk
 
 中文:
 定理 set整数egral_eq_zero_of_ae_eq_zero
@@ -714,7 +752,17 @@ theorem setIntegral_eq_zero_of_ae_eq_zero
     contrapose hf
     exact hf.1
   simp only [variation_restrict ht] at hf
-  have : ∫ᵛ x in t, hf.mk f x ∂[B; 
+  have : ∫ᵛ x in t, hf.mk f x ∂[B; μ] = 0 := by
+    refine integral_eq_zero_of_ae ?_
+    simp only [variation_restrict ht]
+    apply (ae_restrict_iff' ht).2
+    filter_upwards [ae_imp_of_ae_restrict hf.ae_eq_mk, ht_eq] with x hx h'x h''x
+    rw [← hx h''x]
+    exact h'x h''x
+  rw [← this]
+  apply integral_congr_ae
+  simp only [variation_restrict ht]
+  exact hf.ae_eq_mk
 
 Depends on / 依赖: AEStronglyMeasurable, MeasurableSet, ae_eq_mk, ae_imp_of_ae_restrict, ae_restrict_iff, contrapose, filter_upwards, hf.ae_eq_mk, hf.mk, ht_eq, integral_eq_zero_of_ae, integral_undef, restrict, setIntegral_eq_zero_of_not_measurableSet, variation, variation_restrict
 -/
@@ -1285,7 +1333,12 @@ theorem continuousLinearMap_apply_integral
     simp [integral_indicator_const _ hs]
   · intro f g _ f_int g_int hf hg
     simp only [Pi.add_apply]
-  
+    simp [integral_fun_add, f_int, g_int, hf, hg]
+  · apply isClosed_eq
+    · apply C.continuous.comp continuous_integral
+    · exact continuous_integral
+  · intro f g hfg _ hf
+    rw [← integral_congr_ae hfg]; rw [← integral_congr_ae hfg]; rw [hf]
 
 中文:
 定理 continuousLinearMap_apply_integral
@@ -1296,7 +1349,12 @@ theorem continuousLinearMap_apply_integral
     simp [integral_indicator_const _ hs]
   · intro f g _ f_int g_int hf hg
     simp only [Pi.add_apply]
-  
+    simp [integral_fun_add, f_int, g_int, hf, hg]
+  · apply isClosed_eq
+    · apply C.continuous.comp continuous_integral
+    · exact continuous_integral
+  · intro f g hfg _ hf
+    rw [← integral_congr_ae hfg]; rw [← integral_congr_ae hfg]; rw [hf]
 
 Depends on / 依赖: C.continuous.comp, IsFiniteMeasure, Pi.add_apply, add_apply, continuous, continuous_integral, f_int, g_int, hf.induction, integral_congr_ae, integral_fun_add, integral_indicator_const, isClosed_eq, restrict, variation, variation.restrict
 -/
@@ -1329,7 +1387,24 @@ theorem integral_continuousLinearMap_comp
   · intro c s hs hc
     have : IsFiniteMeasure (μ.variation.restrict s) := ⟨by simpa⟩
     rw [integral_indicator_const _ hs]
-    ha
+    have : (fun y => C (s.indicator (fun x => c) y)) = s.indicator (fun x => C c) := by
+      ext; simp only [indicator]; grind
+    simp_rw [this]
+    rw [integral_indicator_const _ hs]
+    rfl
+  · intro f g _ f_int g_int hf hg
+    simp only [Pi.add_apply, _root_.map_add]
+    rw [integral_fun_add (C.integrable_comp f_int) (C.integrable_comp g_int)]; rw [hf]; rw [hg]; rw [integral_fun_add f_int g_int]
+  · apply isClosed_eq
+    · have I (f : Lp H 1 μ.variation) : ∫ᵛ x, C (f x) ∂[B; μ] = ∫ᵛ x, (C.compLp f) x ∂[B; μ] :=
+        (integral_congr_ae (coeFn_compLp _ _)).symm
+      simp_rw [I]
+      exact continuous_integral.comp (C.compLpL 1 μ.variation).continuous
+    · exact continuous_integral
+  · intro f g hfg _ hf
+    have : forallᵐ x ∂μ.variation, C (f x) = C (g x) := by
+      filter_upwards [hfg] with x hx using by simp [hx]
+    rw [← integral_congr_ae hfg]; rw [← integral_congr_ae this]; rw [hf]
 
 中文:
 定理 integral_continuousLinearMap_comp
@@ -1340,7 +1415,24 @@ theorem integral_continuousLinearMap_comp
   · intro c s hs hc
     have : IsFiniteMeasure (μ.variation.restrict s) := ⟨by simpa⟩
     rw [integral_indicator_const _ hs]
-    ha
+    have : (fun y => C (s.indicator (fun x => c) y)) = s.indicator (fun x => C c) := by
+      ext; simp only [indicator]; grind
+    simp_rw [this]
+    rw [integral_indicator_const _ hs]
+    rfl
+  · intro f g _ f_int g_int hf hg
+    simp only [Pi.add_apply, _root_.map_add]
+    rw [integral_fun_add (C.integrable_comp f_int) (C.integrable_comp g_int)]; rw [hf]; rw [hg]; rw [integral_fun_add f_int g_int]
+  · apply isClosed_eq
+    · have I (f : Lp H 1 μ.variation) : ∫ᵛ x, C (f x) ∂[B; μ] = ∫ᵛ x, (C.compLp f) x ∂[B; μ] :=
+        (integral_congr_ae (coeFn_compLp _ _)).symm
+      simp_rw [I]
+      exact continuous_integral.comp (C.compLpL 1 μ.variation).continuous
+    · exact continuous_integral
+  · intro f g hfg _ hf
+    have : forallᵐ x ∂μ.variation, C (f x) = C (g x) := by
+      filter_upwards [hfg] with x hx using by simp [hx]
+    rw [← integral_congr_ae hfg]; rw [← integral_congr_ae this]; rw [hf]
 
 Depends on / 依赖: CompleteSpace, IsFiniteMeasure, Pi.add_, add_, f_int, g_int, hf.induction, indicator, integral_indicator_const, integral_of_not_completeSpace, restrict, s.indicator, simp_rw, variation, variation.restrict
 -/
@@ -1455,7 +1547,12 @@ theorem norm_setIntegral_le_of_norm_le_const_ae
     by_cases h's : μ.variation s = 0
     · simp [Measure.real, h's]
     · have : NeBot (ae (μ.variation.restrict s)) := by simpa using h's
-      obtain ⟨x, hx⟩ : exists x, ‖f x‖ <= C := hC
+      obtain ⟨x, hx⟩ : exists x, ‖f x‖ <= C := hC.exists
+      have : 0 <= C := le_trans (norm_nonneg _) hx
+      positivity
+  rw [← variation_restrict hs] at hC h
+  apply (norm_integral_le_of_norm_le_const hC).trans_eq
+  simp [variation_restrict hs]
 
 中文:
 定理 norm_set整数egral_le_of_norm_le_const_ae
@@ -1466,7 +1563,12 @@ theorem norm_setIntegral_le_of_norm_le_const_ae
     by_cases h's : μ.variation s = 0
     · simp [Measure.real, h's]
     · have : NeBot (ae (μ.variation.restrict s)) := by simpa using h's
-      obtain ⟨x, hx⟩ : exists x, ‖f x‖ <= C := hC
+      obtain ⟨x, hx⟩ : exists x, ‖f x‖ <= C := hC.exists
+      have : 0 <= C := le_trans (norm_nonneg _) hx
+      positivity
+  rw [← variation_restrict hs] at hC h
+  apply (norm_integral_le_of_norm_le_const hC).trans_eq
+  simp [variation_restrict hs]
 
 Depends on / 依赖: MeasurableSet, Measure, Measure.real, hC.exists, le_trans, norm_integral_le_of_norm_le_const, norm_nonneg, norm_zero, restrict, setIntegral_eq_zero_of_not_measurableSet, trans_eq, variation, variation.restrict, variation_restrict
 -/
@@ -1500,7 +1602,7 @@ theorem norm_setIntegral_le_of_norm_le_const
     have : 0 <= C := le_trans (norm_nonneg _) (hC x hx)
     positivity
   apply norm_setIntegral_le_of_norm_le_const_ae
-  filter_
+  filter_upwards [ae_restrict_mem hs] with x hx using hC x hx
 
 中文:
 定理 norm_set整数egral_le_of_norm_le_const
@@ -1513,7 +1615,7 @@ theorem norm_setIntegral_le_of_norm_le_const
     have : 0 <= C := le_trans (norm_nonneg _) (hC x hx)
     positivity
   apply norm_setIntegral_le_of_norm_le_const_ae
-  filter_
+  filter_upwards [ae_restrict_mem hs] with x hx using hC x hx
 
 Depends on / 依赖: MeasurableSet, ae_restrict_mem, eq_empty_or_nonempty, filter_upwards, le_trans, norm_nonneg, norm_setIntegral_le_of_norm_le_const_ae, norm_zero, setIntegral_eq_zero_of_not_measurableSet
 -/
@@ -1580,7 +1682,41 @@ theorem hasSum_setIntegral_iUnion_nat
   have I : ∑' i, ‖B‖ₑ * ∫⁻ x in s i, ‖f x‖ₑ ∂μ.variation < ∞ := calc
     ∑' i, ‖B‖ₑ * ∫⁻ x in s i, ‖f x‖ₑ ∂μ.variation
     _ = ‖B‖ₑ * ∫⁻ x in (⋃ i, s i), ‖f x‖ₑ ∂μ.variation := by
-      rw [ENNReal.tsum_mul_left]; r
+      rw [ENNReal.tsum_mul_left]; rw [lintegral_iUnion hm hd]
+    _ < ∞ := by
+      simp only [VectorMeasure.IntegrableOn, VectorMeasure.Integrable,
+        variation_restrict (MeasurableSet.iUnion hm)] at hfi
+      exact ENNReal.mul_lt_top (by simp) hfi.2
+  have : Summable (fun n => ∫ᵛ x in s n, f x ∂[B; μ]) := by
+    apply Summable.of_enorm (lt_of_le_of_lt _ I).ne
+    gcongr
+    exact enorm_setIntegral_le_lintegral_enorm
+  apply (Summable.hasSum_iff_tendsto_nat this).2
+  simp_rw [tendsto_iff_edist_tendsto_0, edist_eq_enorm_sub, enorm_sub_rev]
+  apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
+    (ENNReal.tendsto_sum_nat_add _ I.ne) (by positivity) (fun N => ?_)
+  have : ⋃ n, s n = (⋃ n in Finset.range N, s n) union (⋃ n, s (n + N)) := by
+    ext x
+    have : (exists i, x in s (i + N)) ↔ (exists i >= N, x in s i) :=
+      ⟨fun ⟨i, hi⟩ => ⟨i + N, by grind⟩, fun ⟨i, hi, h'i⟩ => ⟨i - N, by grind⟩⟩
+    simp only [mem_iUnion, Finset.mem_range, mem_union, exists_prop, this, ge_iff_le]
+    grind
+  rw [this]; rw [setIntegral_union]; rotate_left
+  · simp only [Finset.mem_range, disjoint_iUnion_right, disjoint_iUnion_left]
+    intro i j hi
+    apply hd (by grind)
+  · apply MeasurableSet.biUnion (Finset.countable_toSet _) (fun i hi => hm i)
+  · apply MeasurableSet.iUnion (fun i => hm _)
+  · apply hfi.mono (MeasurableSet.iUnion hm) (by simp [subset_iUnion s])
+  · apply hfi.mono (MeasurableSet.iUnion hm) (by simp [subset_iUnion s])
+  rw [setIntegral_biUnion_finset]; rotate_left
+  · exact fun i hi => hm i
+  · exact fun i hi j hj hij => hd hij
+  · exact fun i hi => hfi.mono (MeasurableSet.iUnion hm) (by simp [subset_iUnion s])
+  simp only [add_sub_cancel_left]
+  apply enorm_setIntegral_le_lintegral_enorm.trans_eq
+  rw [lintegral_iUnion (fun i => hm _)]; rw [ENNReal.tsum_mul_left]
+  exact fun i j hij => hd (by grind)
 
 中文:
 定理 hasSum_set整数egral_iUnion_nat
@@ -1591,7 +1727,41 @@ theorem hasSum_setIntegral_iUnion_nat
   have I : ∑' i, ‖B‖ₑ * ∫⁻ x in s i, ‖f x‖ₑ ∂μ.variation < ∞ := calc
     ∑' i, ‖B‖ₑ * ∫⁻ x in s i, ‖f x‖ₑ ∂μ.variation
     _ = ‖B‖ₑ * ∫⁻ x in (⋃ i, s i), ‖f x‖ₑ ∂μ.variation := by
-      rw [ENNReal.tsum_mul_left]; r
+      rw [ENNReal.tsum_mul_left]; rw [lintegral_iUnion hm hd]
+    _ < ∞ := by
+      simp only [VectorMeasure.IntegrableOn, VectorMeasure.Integrable,
+        variation_restrict (MeasurableSet.iUnion hm)] at hfi
+      exact ENNReal.mul_lt_top (by simp) hfi.2
+  have : Summable (fun n => ∫ᵛ x in s n, f x ∂[B; μ]) := by
+    apply Summable.of_enorm (lt_of_le_of_lt _ I).ne
+    gcongr
+    exact enorm_setIntegral_le_lintegral_enorm
+  apply (Summable.hasSum_iff_tendsto_nat this).2
+  simp_rw [tendsto_iff_edist_tendsto_0, edist_eq_enorm_sub, enorm_sub_rev]
+  apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
+    (ENNReal.tendsto_sum_nat_add _ I.ne) (by positivity) (fun N => ?_)
+  have : ⋃ n, s n = (⋃ n in Finset.range N, s n) union (⋃ n, s (n + N)) := by
+    ext x
+    have : (exists i, x in s (i + N)) ↔ (exists i >= N, x in s i) :=
+      ⟨fun ⟨i, hi⟩ => ⟨i + N, by grind⟩, fun ⟨i, hi, h'i⟩ => ⟨i - N, by grind⟩⟩
+    simp only [mem_iUnion, Finset.mem_range, mem_union, exists_prop, this, ge_iff_le]
+    grind
+  rw [this]; rw [setIntegral_union]; rotate_left
+  · simp only [Finset.mem_range, disjoint_iUnion_right, disjoint_iUnion_left]
+    intro i j hi
+    apply hd (by grind)
+  · apply MeasurableSet.biUnion (Finset.countable_toSet _) (fun i hi => hm i)
+  · apply MeasurableSet.iUnion (fun i => hm _)
+  · apply hfi.mono (MeasurableSet.iUnion hm) (by simp [subset_iUnion s])
+  · apply hfi.mono (MeasurableSet.iUnion hm) (by simp [subset_iUnion s])
+  rw [setIntegral_biUnion_finset]; rotate_left
+  · exact fun i hi => hm i
+  · exact fun i hi j hj hij => hd hij
+  · exact fun i hi => hfi.mono (MeasurableSet.iUnion hm) (by simp [subset_iUnion s])
+  simp only [add_sub_cancel_left]
+  apply enorm_setIntegral_le_lintegral_enorm.trans_eq
+  rw [lintegral_iUnion (fun i => hm _)]; rw [ENNReal.tsum_mul_left]
+  exact fun i j hij => hd (by grind)
 -/
 private theorem hasSum_setIntegral_iUnion_nat {s : Nat -> Set X}
     (hm : forall i, MeasurableSet (s i)) (hd : Pairwise (Disjoint on s))
@@ -1650,7 +1820,12 @@ theorem hasSum_setIntegral_iUnion
     have : ∫ᵛ x in ⋃ n, s n, f x ∂[B; μ] = ∑ i, ∫ᵛ x in s i, f x ∂[B; μ] := by
       rw [setIntegral_iUnion_fintype hm hd (fun i => ?_)]
       exact hfi.mono (MeasurableSet.iUnion hm) (by simp [subset_iUnion s])
-
+    rw [this]
+    apply hasSum_fintype
+  obtain ⟨e⟩ : Nonempty (ι ≃ Nat) := nonempty_equiv_of_countable
+  rw [← e.symm.surjective.iUnion_comp]; rw [← e.symm.hasSum_iff]
+  apply hasSum_setIntegral_iUnion_nat (fun i => hm _) (fun i j hij => hd (by simp [hij]))
+  rwa [e.symm.surjective.iUnion_comp]
 
 中文:
 定理 hasSum_set整数egral_iUnion
@@ -1661,7 +1836,12 @@ theorem hasSum_setIntegral_iUnion
     have : ∫ᵛ x in ⋃ n, s n, f x ∂[B; μ] = ∑ i, ∫ᵛ x in s i, f x ∂[B; μ] := by
       rw [setIntegral_iUnion_fintype hm hd (fun i => ?_)]
       exact hfi.mono (MeasurableSet.iUnion hm) (by simp [subset_iUnion s])
-
+    rw [this]
+    apply hasSum_fintype
+  obtain ⟨e⟩ : Nonempty (ι ≃ Nat) := nonempty_equiv_of_countable
+  rw [← e.symm.surjective.iUnion_comp]; rw [← e.symm.hasSum_iff]
+  apply hasSum_setIntegral_iUnion_nat (fun i => hm _) (fun i j hij => hd (by simp [hij]))
+  rwa [e.symm.surjective.iUnion_comp]
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, MeasurableSet, MeasurableSet.iUnion, Nonempty, e.symm.hasSum_iff, e.symm.surjective.iUnion_comp, finite_or_infinite, hasSum_fintype, hasSum_iff, hasSum_setIntegral_iUnion_nat, hfi.mono, iUnion, iUnion_comp, nonempty_equiv_of_countable, ofFinite, setIntegral_iUnion_fintype, subset_iUnion, surjective
 -/
@@ -1732,7 +1912,14 @@ theorem Integrable.tendsto_setIntegral_nhds_zero
   simp_rw [← coe_nnnorm, ← NNReal.coe_zero, NNReal.tendsto_coe, ← ENNReal.tendsto_coe,
     ENNReal.coe_zero]
   have : Tendsto (fun i => ‖B‖ₑ * ∫⁻ (x : X) in s i, ‖f x‖ₑ ∂μ.variation) l (𝓝 (‖B‖ₑ * 0)) :=
-    ENNReal.Tendsto.const_mul (tendsto_setLIntegral_
+    ENNReal.Tendsto.const_mul (tendsto_setLIntegral_zero (ne_of_lt hf.2) hs) (by simp)
+  rw [mul_zero] at this
+  apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds this (fun i => zero_le)
+  intro i
+  apply enorm_integral_le_lintegral_enorm.trans
+  dsimp
+  gcongr
+  exact variation_restrict_le
 
 中文:
 定理 可积.tendsto_set整数egral_nhds_zero
@@ -1742,7 +1929,14 @@ theorem Integrable.tendsto_setIntegral_nhds_zero
   simp_rw [← coe_nnnorm, ← NNReal.coe_zero, NNReal.tendsto_coe, ← ENNReal.tendsto_coe,
     ENNReal.coe_zero]
   have : Tendsto (fun i => ‖B‖ₑ * ∫⁻ (x : X) in s i, ‖f x‖ₑ ∂μ.variation) l (𝓝 (‖B‖ₑ * 0)) :=
-    ENNReal.Tendsto.const_mul (tendsto_setLIntegral_
+    ENNReal.Tendsto.const_mul (tendsto_setLIntegral_zero (ne_of_lt hf.2) hs) (by simp)
+  rw [mul_zero] at this
+  apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds this (fun i => zero_le)
+  intro i
+  apply enorm_integral_le_lintegral_enorm.trans
+  dsimp
+  gcongr
+  exact variation_restrict_le
 -/
 theorem Integrable.tendsto_setIntegral_nhds_zero {ι : Type*}
     (hf : μ.Integrable f) {l : Filter ι} {s : ι -> Set X}
@@ -1773,7 +1967,11 @@ lemma tendsto_setIntegral_of_L1
     grw [variation_restrict_le, Measure.restrict_le_self]
   · filter_upwards [hFi] with i hi using hi.restrict
   · simp_rw [← eLpNorm_one_eq_lintegral_enorm] at hF ⊢
-    apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_c
+    apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hF (fun _ => zero_le)
+      (fun i => ?_)
+    apply eLpNorm_mono_measure
+    grw [variation_restrict_le]
+    apply Measure.restrict_le_self
 
 中文:
 引理 tendsto_set整数egral_of_L1
@@ -1784,7 +1982,11 @@ lemma tendsto_setIntegral_of_L1
     grw [variation_restrict_le, Measure.restrict_le_self]
   · filter_upwards [hFi] with i hi using hi.restrict
   · simp_rw [← eLpNorm_one_eq_lintegral_enorm] at hF ⊢
-    apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_c
+    apply tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hF (fun _ => zero_le)
+      (fun i => ?_)
+    apply eLpNorm_mono_measure
+    grw [variation_restrict_le]
+    apply Measure.restrict_le_self
 
 Depends on / 依赖: Measure, Measure.restrict_le_self, eLpNorm_mono_measure, eLpNorm_one_eq_lintegral_enorm, filter_upwards, hfi.mono_measure, hi.restrict, mono_measure, restrict, restrict_le_self, simp_rw, tendsto_const_nhds, tendsto_integral_of_L1, tendsto_of_tendsto_of_tendsto_of_le_of_le, variation_restrict_le, zero_le
 -/

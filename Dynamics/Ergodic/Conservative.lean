@@ -238,7 +238,25 @@ theorem frequently_measure_inter_ne_zero
   -- Assume that `μ (t n) ≠ 0`, where `t n = s ∩ f^[n] ⁻¹' s`, only for finitely many `n`.
   by_contra H
   -- Let `N` be the maximal `n` such that `μ (t n) ≠ 0`.
-  obtain ⟨N, hN, hmax⟩ : exists N, μ (t N) != 0 ∧ forall n > N, μ (t n) = 0 := b
+  obtain ⟨N, hN, hmax⟩ : exists N, μ (t N) != 0 ∧ forall n > N, μ (t n) = 0 := by
+    rw [Nat.frequently_atTop_iff_infinite]; rw [not_infinite] at H
+    convert! exists_max_image _ (·) H ⟨0, by simpa⟩ using 4
+    rw [gt_iff_lt]; rw [← not_le]; rw [not_imp_comm]; rw [mem_ofPred]
+  have htm {n : Nat} : NullMeasurableSet (t n) μ :=
+hs.inter hs.preimage hf.toQuasiMeasurePreserving.iterate n
+  -- Then all `t n`, `n > N`, are null sets, hence `T = t N \ ⋃ n > N, t n` has positive measure.
+  set T := t N \ ⋃ n > N, t n with hT
+  have hμT : μ T != 0 := by
+    rwa [hT, measure_sdiff_null]
+    exact (measure_biUnion_null_iff {n | N < n}.to_countable).2 hmax
+have hTm : NullMeasurableSet T μ := htm.diff .biUnion {n | N < n}.to_countable fun _ _ => htm
+  -- Take `x ∈ T` and `m ≠ 0` such that `f^[m] x ∈ T`.
+  rcases hf.exists_mem_iterate_mem hTm hμT with ⟨x, hxt, m, hm₀, hmt⟩
+  -- Then `N + m > N`, `x ∈ s`, and `f^[N + m] x = f^[N] (f^[m] x) ∈ s`.
+  -- This contradicts `x ∈ T ⊆ (⋃ n > N, t n)ᶜ`.
+refine hxt.2 mem_iUnion₂.2 ⟨N + m, ?_, hxt.1.1, ?_⟩
+  · simpa [pos_iff_ne_zero]
+  · simpa only [iterate_add] using! hmt.1.2
 
 中文:
 定理 frequently_measure_inter_ne_zero
@@ -248,7 +266,25 @@ theorem frequently_measure_inter_ne_zero
   -- Assume that `μ (t n) ≠ 0`, where `t n = s ∩ f^[n] ⁻¹' s`, only for finitely many `n`.
   by_contra H
   -- Let `N` be the maximal `n` such that `μ (t n) ≠ 0`.
-  obtain ⟨N, hN, hmax⟩ : exists N, μ (t N) != 0 ∧ forall n > N, μ (t n) = 0 := b
+  obtain ⟨N, hN, hmax⟩ : exists N, μ (t N) != 0 ∧ forall n > N, μ (t n) = 0 := by
+    rw [Nat.frequently_atTop_iff_infinite]; rw [not_infinite] at H
+    convert! exists_max_image _ (·) H ⟨0, by simpa⟩ using 4
+    rw [gt_iff_lt]; rw [← not_le]; rw [not_imp_comm]; rw [mem_ofPred]
+  have htm {n : Nat} : NullMeasurableSet (t n) μ :=
+hs.inter hs.preimage hf.toQuasiMeasurePreserving.iterate n
+  -- Then all `t n`, `n > N`, are null sets, hence `T = t N \ ⋃ n > N, t n` has positive measure.
+  set T := t N \ ⋃ n > N, t n with hT
+  have hμT : μ T != 0 := by
+    rwa [hT, measure_sdiff_null]
+    exact (measure_biUnion_null_iff {n | N < n}.to_countable).2 hmax
+have hTm : NullMeasurableSet T μ := htm.diff .biUnion {n | N < n}.to_countable fun _ _ => htm
+  -- Take `x ∈ T` and `m ≠ 0` such that `f^[m] x ∈ T`.
+  rcases hf.exists_mem_iterate_mem hTm hμT with ⟨x, hxt, m, hm₀, hmt⟩
+  -- Then `N + m > N`, `x ∈ s`, and `f^[N + m] x = f^[N] (f^[m] x) ∈ s`.
+  -- This contradicts `x ∈ T ⊆ (⋃ n > N, t n)ᶜ`.
+refine hxt.2 mem_iUnion₂.2 ⟨N + m, ?_, hxt.1.1, ?_⟩
+  · simpa [pos_iff_ne_zero]
+  · simpa only [iterate_add] using! hmt.1.2
 -/
 theorem frequently_measure_inter_ne_zero (hf : Conservative f μ) (hs : NullMeasurableSet s μ)
     (h0 : μ s != 0) : existsᶠ m in atTop, μ (s inter f^[m] ⁻¹' s) != 0 := by
@@ -313,7 +349,9 @@ theorem measure_mem_forall_ge_image_notMem_eq_zero
     simp only [ofPred_forall, ← compl_ofPred]
 exact hs.inter .biInter (to_countable _) fun m _ =>
       (hs.preimage <| hf.toQuasiMeasurePreserving.iterate m).compl
-  rcases (hf.exists_gt_measure_inter_n
+  rcases (hf.exists_gt_measure_inter_ne_zero this H) n with ⟨m, hmn, hm⟩
+  rcases nonempty_of_measure_ne_zero hm with ⟨x, ⟨_, hxn⟩, hxm, -⟩
+  exact hxn m hmn.lt.le hxm
 
 中文:
 定理 measure_mem_对任意_ge_image_notMem_eq_zero
@@ -324,7 +362,9 @@ exact hs.inter .biInter (to_countable _) fun m _ =>
     simp only [ofPred_forall, ← compl_ofPred]
 exact hs.inter .biInter (to_countable _) fun m _ =>
       (hs.preimage <| hf.toQuasiMeasurePreserving.iterate m).compl
-  rcases (hf.exists_gt_measure_inter_n
+  rcases (hf.exists_gt_measure_inter_ne_zero this H) n with ⟨m, hmn, hm⟩
+  rcases nonempty_of_measure_ne_zero hm with ⟨x, ⟨_, hxn⟩, hxm, -⟩
+  exact hxn m hmn.lt.le hxm
 
 Depends on / 依赖: IsPreprimitive, IsPreprimitive.isQuasiPreprimitive, NullMeasurableSet, biInter, compl_ofPred, exists_gt_measure_inter_ne_zero, hf.exists_gt_measure_inter_ne_zero, hf.toQuasiMeasurePreserving.iterate, hmn.lt.le, hs.inter, hs.preimage, isQuasiPreprimitive, iterate, nonempty_of_measure_ne_zero, ofPred_forall, preimage, toQuasiMeasurePreserving, to_countable
 -/
@@ -479,7 +519,8 @@ theorem ae_frequently_mem_of_mem_nhds
   have : forall s in countableBasis α, forallᵐ x ∂μ, x in s -> existsᶠ n in atTop, f^[n] x in s := fun s hs =>
     h.ae_mem_imp_frequently_image_mem (isOpen_of_mem_countableBasis hs).nullMeasurableSet
   refine ((ae_ball_iff <| countable_countableBasis α).2 this).mono fun x hx s hs => ?_
-  rcases 
+  rcases (isBasis_countableBasis α).mem_nhds_iff.1 hs with ⟨o, hoS, hxo, hos⟩
+  exact (hx o hoS hxo).mono fun n hn => hos hn
 
 中文:
 定理 ae_frequently_mem_of_mem_nhds
@@ -488,7 +529,8 @@ theorem ae_frequently_mem_of_mem_nhds
   have : forall s in countableBasis α, forallᵐ x ∂μ, x in s -> existsᶠ n in atTop, f^[n] x in s := fun s hs =>
     h.ae_mem_imp_frequently_image_mem (isOpen_of_mem_countableBasis hs).nullMeasurableSet
   refine ((ae_ball_iff <| countable_countableBasis α).2 this).mono fun x hx s hs => ?_
-  rcases 
+  rcases (isBasis_countableBasis α).mem_nhds_iff.1 hs with ⟨o, hoS, hxo, hos⟩
+  exact (hx o hoS hxo).mono fun n hn => hos hn
 
 Depends on / 依赖: ae_ball_iff, ae_mem_imp_frequently_image_mem, countableBasis, countable_countableBasis, h.ae_mem_imp_frequently_image_mem, isBasis_countableBasis, isOpen_of_mem_countableBasis, mem_nhds_iff, nullMeasurableSet
 -/
@@ -515,7 +557,21 @@ theorem iterate
   refine ⟨hf.1.iterate _, fun s hs hs0 => ?_⟩
   rcases (hf.frequently_ae_mem_and_frequently_image_mem hs.nullMeasurableSet hs0).exists
     with ⟨x, _, hx⟩
-  /- We take a point `x ∈ s` such that `f^[k] x ∈ s`
+  /- We take a point `x ∈ s` such that `f^[k] x ∈ s` for infinitely many values of `k`,
+    then we choose two of these values `k < l` such that `k ≡ l [MOD (n + 1)]`.
+    Then `f^[k] x ∈ s` and `f^[n + 1]^[(l - k) / (n + 1)] (f^[k] x) = f^[l] x ∈ s`. -/
+  rw [Nat.frequently_atTop_iff_infinite] at hx
+  rcases Nat.exists_lt_modEq_of_infinite hx n.succ_pos with ⟨k, hk, l, hl, hkl, hn⟩
+  set m := (l - k) / (n + 1)
+  have : (n + 1) * m = l - k := by
+    apply Nat.mul_div_cancel'
+    exact (Nat.modEq_iff_dvd' hkl.le).1 hn
+  refine ⟨f^[k] x, hk, m, ?_, ?_⟩
+  · intro hm
+    rw [hm]; rw [mul_zero]; rw [eq_comm]; rw [tsub_eq_zero_iff_le] at this
+    exact this.not_gt hkl
+  · rwa [← iterate_mul, this, ← iterate_add_apply, tsub_add_cancel_of_le]
+    exact hkl.le
 
 中文:
 定理 iterate
@@ -528,7 +584,21 @@ theorem iterate
   refine ⟨hf.1.iterate _, fun s hs hs0 => ?_⟩
   rcases (hf.frequently_ae_mem_and_frequently_image_mem hs.nullMeasurableSet hs0).exists
     with ⟨x, _, hx⟩
-  /- We take a point `x ∈ s` such that `f^[k] x ∈ s`
+  /- We take a point `x ∈ s` such that `f^[k] x ∈ s` for infinitely many values of `k`,
+    then we choose two of these values `k < l` such that `k ≡ l [MOD (n + 1)]`.
+    Then `f^[k] x ∈ s` and `f^[n + 1]^[(l - k) / (n + 1)] (f^[k] x) = f^[l] x ∈ s`. -/
+  rw [Nat.frequently_atTop_iff_infinite] at hx
+  rcases Nat.exists_lt_modEq_of_infinite hx n.succ_pos with ⟨k, hk, l, hl, hkl, hn⟩
+  set m := (l - k) / (n + 1)
+  have : (n + 1) * m = l - k := by
+    apply Nat.mul_div_cancel'
+    exact (Nat.modEq_iff_dvd' hkl.le).1 hn
+  refine ⟨f^[k] x, hk, m, ?_, ?_⟩
+  · intro hm
+    rw [hm]; rw [mul_zero]; rw [eq_comm]; rw [tsub_eq_zero_iff_le] at this
+    exact this.not_gt hkl
+  · rwa [← iterate_mul, this, ← iterate_add_apply, tsub_add_cancel_of_le]
+    exact hkl.le
 -/
 protected theorem iterate (hf : Conservative f μ) (n : Nat) : Conservative f^[n] μ := by
   -- Discharge the trivial case `n = 0`

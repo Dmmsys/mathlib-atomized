@@ -868,7 +868,7 @@ theorem symm_apply
 @[deprecated "The junk values of `Pretrivialization.symm` were changed from `0` to
 `Classical.arbitrary` and should not be relied on; this lemma will be removed soon. Note that this
 change does not affect the linear versions `symmₗ` and `symmL`, which still retain `0` as the junk
-values.
+values." (since := "2026-06-23")]
 
 中文:
 定理 symm_apply
@@ -878,7 +878,7 @@ values.
 @[deprecated "The junk values of `Pretrivialization.symm` were changed from `0` to
 `Classical.arbitrary` and should not be relied on; this lemma will be removed soon. Note that this
 change does not affect the linear versions `symmₗ` and `symmL`, which still retain `0` as the junk
-values.
+values." (since := "2026-06-23")]
 
 Depends on / 依赖: dif_pos
 -/
@@ -901,7 +901,8 @@ theorem symm_apply_of_notMem
 
 @[deprecated "The junk values of `Pretrivialization.symm` were changed from `0` to
 `Classical.arbitrary` and should not be relied on; this lemma will be removed soon. Note that this
-change does not affect the linear versions `symmₗ` and `symmL`, which still re
+change does not affect the linear versions `symmₗ` and `symmL`, which still retain `0` as the junk
+values." (since := "2026-06-23")]
 
 中文:
 定理 symm_apply_of_notMem
@@ -911,7 +912,8 @@ change does not affect the linear versions `symmₗ` and `symmL`, which still re
 
 @[deprecated "The junk values of `Pretrivialization.symm` were changed from `0` to
 `Classical.arbitrary` and should not be relied on; this lemma will be removed soon. Note that this
-change does not affect the linear versions `symmₗ` and `symmL`, which still re
+change does not affect the linear versions `symmₗ` and `symmL`, which still retain `0` as the junk
+values." (since := "2026-06-23")]
 
 Depends on / 依赖: Pretrivialization, Pretrivialization.symm
 -/
@@ -1055,7 +1057,26 @@ definition restrictPreimage'
   invFun x := by classical exact if h : (x.1.1, x.2) in e.target then ⟨e.invFun (x.1, x.2), by
       simpa only [mem_preimage, ← e.proj_toFun _ (e.map_target' h), e.right_inv' h] using! x.1.2⟩
     else Classical.arbitrary (s -> F -> _) x.1 x.2
-  source := Subtype.val ⁻¹' e.s
+  source := Subtype.val ⁻¹' e.source
+  target := (Prod.map Subtype.val id) ⁻¹' e.target
+  map_source' z hz := by
+    simpa only [Prod.map_apply, ← e.proj_toFun _ hz] using! e.map_source' hz
+  map_target' x hx := by
+    simp only [mem_preimage, (Prod.map_apply), id_eq] at hx
+    rw [dif_pos hx]; exact e.map_target' hx
+  left_inv' z hz := by
+    dsimp only; rw [dif_pos] <;> all_goals simp_rw [← e.proj_toFun _ hz]
+    exacts [Subtype.ext (e.left_inv' hz), e.map_source' hz]
+right_inv' x hx := Subtype.val_injective.prodMap injective_id by
+    simp only [mem_preimage, (Prod.map_apply), id_eq] at hx
+    simp_rw [Prod.map_apply]; rw [dif_pos hx]
+    convert! ← e.right_inv' hx; exact e.proj_toFun _ (e.map_target' hx)
+open_target := e.open_target.preimage by fun_prop
+  baseSet := Subtype.val ⁻¹' e.baseSet
+  open_baseSet := e.open_baseSet.preimage continuous_subtype_val
+  source_eq := Set.ext fun _ => Set.ext_iff.mp e.source_eq _
+  target_eq := Set.ext fun _ => Set.ext_iff.mp e.target_eq _
+  proj_toFun _ _ := rfl
 
 中文:
 定义 restrictPreimage'
@@ -1064,7 +1085,26 @@ definition restrictPreimage'
   invFun x := by classical exact if h : (x.1.1, x.2) in e.target then ⟨e.invFun (x.1, x.2), by
       simpa only [mem_preimage, ← e.proj_toFun _ (e.map_target' h), e.right_inv' h] using! x.1.2⟩
     else Classical.arbitrary (s -> F -> _) x.1 x.2
-  source := Subtype.val ⁻¹' e.s
+  source := Subtype.val ⁻¹' e.source
+  target := (Prod.map Subtype.val id) ⁻¹' e.target
+  map_source' z hz := by
+    simpa only [Prod.map_apply, ← e.proj_toFun _ hz] using! e.map_source' hz
+  map_target' x hx := by
+    simp only [mem_preimage, (Prod.map_apply), id_eq] at hx
+    rw [dif_pos hx]; exact e.map_target' hx
+  left_inv' z hz := by
+    dsimp only; rw [dif_pos] <;> all_goals simp_rw [← e.proj_toFun _ hz]
+    exacts [Subtype.ext (e.left_inv' hz), e.map_source' hz]
+right_inv' x hx := Subtype.val_injective.prodMap injective_id by
+    simp only [mem_preimage, (Prod.map_apply), id_eq] at hx
+    simp_rw [Prod.map_apply]; rw [dif_pos hx]
+    convert! ← e.right_inv' hx; exact e.proj_toFun _ (e.map_target' hx)
+open_target := e.open_target.preimage by fun_prop
+  baseSet := Subtype.val ⁻¹' e.baseSet
+  open_baseSet := e.open_baseSet.preimage continuous_subtype_val
+  source_eq := Set.ext fun _ => Set.ext_iff.mp e.source_eq _
+  target_eq := Set.ext fun _ => Set.ext_iff.mp e.target_eq _
+  proj_toFun _ _ := rfl
 -/
 noncomputable def restrictPreimage' (e : Pretrivialization F proj) (s : Set B)
     [Nonempty (s -> F -> proj ⁻¹' s)] : Pretrivialization F (s.restrictPreimage proj) where
@@ -1135,7 +1175,17 @@ definition domExtend
   target := e.target
   map_source' _ := by
     rintro ⟨⟨z, hzp : proj z in s⟩, hze, rfl⟩
-    simpa [hzp, e.coe_fst hze] using e.map_sourc
+    simpa [hzp, e.coe_fst hze] using e.map_source hze
+  map_target' x hx := by simpa using ⟨(e.invFun x).2, e.map_target hx⟩
+  left_inv' _ := by rintro ⟨⟨z, hzp : proj z in s⟩, hze, rfl⟩; simp [hzp, e.symm_apply_apply hze]
+  right_inv' x hx := (dif_pos (e.invFun x).2).trans (e.right_inv hx)
+  open_target := e.open_target
+  baseSet := e.baseSet
+  open_baseSet := e.open_baseSet
+  source_eq := by ext z; simpa [e.source_eq] using
+    (e.proj_symm_apply' · ▸ (e.invFun (proj z, Classical.arbitrary (Z -> F) z)).2)
+  target_eq := by ext; simp [e.target_eq]
+  proj_toFun _ := by rintro ⟨⟨z, hzp : proj z in s⟩, hze, rfl⟩; simp [hzp, e.coe_fst hze]
 
 中文:
 定义 domExtend
@@ -1147,7 +1197,17 @@ definition domExtend
   target := e.target
   map_source' _ := by
     rintro ⟨⟨z, hzp : proj z in s⟩, hze, rfl⟩
-    simpa [hzp, e.coe_fst hze] using e.map_sourc
+    simpa [hzp, e.coe_fst hze] using e.map_source hze
+  map_target' x hx := by simpa using ⟨(e.invFun x).2, e.map_target hx⟩
+  left_inv' _ := by rintro ⟨⟨z, hzp : proj z in s⟩, hze, rfl⟩; simp [hzp, e.symm_apply_apply hze]
+  right_inv' x hx := (dif_pos (e.invFun x).2).trans (e.right_inv hx)
+  open_target := e.open_target
+  baseSet := e.baseSet
+  open_baseSet := e.open_baseSet
+  source_eq := by ext z; simpa [e.source_eq] using
+    (e.proj_symm_apply' · ▸ (e.invFun (proj z, Classical.arbitrary (Z -> F) z)).2)
+  target_eq := by ext; simp [e.target_eq]
+  proj_toFun _ := by rintro ⟨⟨z, hzp : proj z in s⟩, hze, rfl⟩; simp [hzp, e.coe_fst hze]
 
 Depends on / 依赖: Classical, Classical.arbitrary, Subtype, Subtype.val, arbitrary, classical, coe_fst, dif_pos, e.coe_fst, e.invFun, e.map_source, e.map_target, e.source, e.symm_apply_apply, e.target, invFun, left_inv, map_source, map_target, right_inv
 -/
@@ -1186,7 +1246,15 @@ definition codExtend'
   source := e.source
   target := (Prod.map Subtype.val id) '' e.target
   map_source' z hz := by simpa using e.map_source hz
-  map_target' _ := by rintr
+  map_target' _ := by rintro ⟨x, hx, rfl⟩; simpa using e.map_target hx
+  left_inv' z hz := by simpa using e.left_inv hz
+  right_inv' _ := by rintro ⟨x, hx, rfl⟩; ext <;> simp [e.apply_symm_apply hx]
+  open_target := hs.isOpenMap_subtype_val.prodMap .id _ e.open_target
+  baseSet := Subtype.val '' e.baseSet
+  open_baseSet := hs.isOpenMap_subtype_val _ e.open_baseSet
+  source_eq := by ext; simp [e.source_eq]
+  target_eq := by rw [e.target_eq, prodMap_image_prod, image_id]
+  proj_toFun _ h := by simp [e.coe_fst h]
 
 中文:
 定义 codExtend'
@@ -1197,7 +1265,15 @@ definition codExtend'
   source := e.source
   target := (Prod.map Subtype.val id) '' e.target
   map_source' z hz := by simpa using e.map_source hz
-  map_target' _ := by rintr
+  map_target' _ := by rintro ⟨x, hx, rfl⟩; simpa using e.map_target hx
+  left_inv' z hz := by simpa using e.left_inv hz
+  right_inv' _ := by rintro ⟨x, hx, rfl⟩; ext <;> simp [e.apply_symm_apply hx]
+  open_target := hs.isOpenMap_subtype_val.prodMap .id _ e.open_target
+  baseSet := Subtype.val '' e.baseSet
+  open_baseSet := hs.isOpenMap_subtype_val _ e.open_baseSet
+  source_eq := by ext; simp [e.source_eq]
+  target_eq := by rw [e.target_eq, prodMap_image_prod, image_id]
+  proj_toFun _ h := by simp [e.coe_fst h]
 -/
 noncomputable def codExtend' {s : Set B} (hs : IsOpen s) {proj : Z -> s}
     (e : Pretrivialization F proj) [Nonempty (B -> F -> Z)] :
@@ -1917,7 +1993,7 @@ theorem image_preimage_eq_prod_univ
       ⟨(e.proj_toFun p (e.preimage_subset_source hb hp)).symm ▸ hp, trivial⟩)
     fun p hp =>
     let hp' : p in e.target := e.mem_target.mpr (hb hp.1)
-    ⟨e.invFun p, mem_preimage.mpr ((e.proj_symm_apply hp').symm ▸ hp.1), e.apply_symm_apply hp
+    ⟨e.invFun p, mem_preimage.mpr ((e.proj_symm_apply hp').symm ▸ hp.1), e.apply_symm_apply hp'⟩
 
 中文:
 定理 image_preimage_eq_prod_univ
@@ -1927,7 +2003,7 @@ theorem image_preimage_eq_prod_univ
       ⟨(e.proj_toFun p (e.preimage_subset_source hb hp)).symm ▸ hp, trivial⟩)
     fun p hp =>
     let hp' : p in e.target := e.mem_target.mpr (hb hp.1)
-    ⟨e.invFun p, mem_preimage.mpr ((e.proj_symm_apply hp').symm ▸ hp.1), e.apply_symm_apply hp
+    ⟨e.invFun p, mem_preimage.mpr ((e.proj_symm_apply hp').symm ▸ hp.1), e.apply_symm_apply hp'⟩
 
 Depends on / 依赖: Subset, Subset.antisymm, antisymm, apply_symm_apply, e.apply_symm_apply, e.invFun, e.mem_target.mpr, e.preimage_subset_source, e.proj_symm_apply, e.proj_toFun, e.target, image_subset_iff, image_subset_iff.mpr, invFun, mem_preimage, mem_preimage.mpr, mem_target, preimage_subset_source, proj_symm_apply, proj_toFun
 -/
@@ -1951,7 +2027,10 @@ theorem tendsto_nhds_iff
   by_cases hl : forallᶠ x in l, f x in e.source
   · simp only [hl, and_true]
     refine (tendsto_congr' ?_).and Iff.rfl
-    exact hl.mo
+    exact hl.mono fun x => e.coe_fst
+  · simp only [hl, and_false, false_iff, not_and]
+    rw [e.source_eq] at hl hz
+exact fun h _ => hl h e.open_baseSet.mem_nhds hz
 
 中文:
 定理 tendsto_nhds_iff
@@ -1961,7 +2040,10 @@ theorem tendsto_nhds_iff
   by_cases hl : forallᶠ x in l, f x in e.source
   · simp only [hl, and_true]
     refine (tendsto_congr' ?_).and Iff.rfl
-    exact hl.mo
+    exact hl.mono fun x => e.coe_fst
+  · simp only [hl, and_false, false_iff, not_and]
+    rw [e.source_eq] at hl hz
+exact fun h _ => hl h e.open_baseSet.mem_nhds hz
 
 Depends on / 依赖: Iff.rfl, Prod.tendsto_iff, and_false, and_true, coe_coe, coe_fst, e.coe_fst, e.nhds_eq_comap_inf_principal, e.open_baseSet.mem_nhds, e.source, e.source_eq, false_iff, hl.mono, mem_nhds, nhds_eq_comap_inf_principal, not_and, open_baseSet, source, source_eq, tendsto_comap_iff
 -/
@@ -2328,7 +2410,7 @@ definition compHomeomorph
   target_eq := by simp [target_eq]
   proj_toFun p hp := by
     have hp : h p in e.source := by simpa using hp
-    si
+    simp [hp]
 
 中文:
 定义 compHomeomorph
@@ -2340,7 +2422,7 @@ definition compHomeomorph
   target_eq := by simp [target_eq]
   proj_toFun p hp := by
     have hp : h p in e.source := by simpa using hp
-    si
+    simp [hp]
 -/
 protected def compHomeomorph {Z' : Type*} [TopologicalSpace Z'] (h : Z' ≃ₜ Z) :
     Trivialization F (proj ∘ h) where
@@ -2364,7 +2446,7 @@ definition homeomorphComp
   open_baseSet := e.open_baseSet.preimage h.continuous_symm
   source_eq := by ext; simp [e.mem_source]
   target_eq := by ext; simp [Prod.map, e.mem_target]
-  proj_toFun p hp := by simpa using e.proj_
+  proj_toFun p hp := by simpa using e.proj_toFun p hp
 
 中文:
 定义 homeomorphComp
@@ -2374,7 +2456,7 @@ definition homeomorphComp
   open_baseSet := e.open_baseSet.preimage h.continuous_symm
   source_eq := by ext; simp [e.mem_source]
   target_eq := by ext; simp [Prod.map, e.mem_target]
-  proj_toFun p hp := by simpa using e.proj_
+  proj_toFun p hp := by simpa using e.proj_toFun p hp
 -/
 protected def homeomorphComp {B' : Type*} [TopologicalSpace B'] (h : B ≃ₜ B') :
     Trivialization F (h ∘ proj) where
@@ -2605,7 +2687,7 @@ theorem symm_apply
 @[deprecated "The junk values of `Trivialization.symm` were changed from `0` to
 `Classical.arbitrary` and should not be relied on; this lemma will be removed soon. Note that this
 change does not affect the linear versions `symmₗ` and `symmL`, which still retain `0` as the junk
-values." (
+values." (since := "2026-06-23")]
 
 中文:
 定理 symm_apply
@@ -2615,7 +2697,7 @@ values." (
 @[deprecated "The junk values of `Trivialization.symm` were changed from `0` to
 `Classical.arbitrary` and should not be relied on; this lemma will be removed soon. Note that this
 change does not affect the linear versions `symmₗ` and `symmL`, which still retain `0` as the junk
-values." (
+values." (since := "2026-06-23")]
 
 Depends on / 依赖: dif_pos
 -/
@@ -2751,7 +2833,7 @@ theorem continuousOn_symm
     rw [e.mk_symm hx]
   refine ContinuousOn.congr ?_ this
   rw [← e.target_eq]
-  exact e.toOpenPartialHomeomorph.continuousOn
+  exact e.toOpenPartialHomeomorph.continuousOn_symm
 
 中文:
 定理 continuousOn_symm
@@ -2763,7 +2845,7 @@ theorem continuousOn_symm
     rw [e.mk_symm hx]
   refine ContinuousOn.congr ?_ this
   rw [← e.target_eq]
-  exact e.toOpenPartialHomeomorph.continuousOn
+  exact e.toOpenPartialHomeomorph.continuousOn_symm
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.congr, TotalSpace, TotalSpace.mk, baseSet, continuousOn_symm, e.baseSet, e.mk_symm, e.symm, e.target_eq, e.toOpenPartialHomeomorph.continuousOn_symm, e.toOpenPartialHomeomorph.symm, mk_symm, target_eq, toOpenPartialHomeomorph
 -/
@@ -3025,7 +3107,9 @@ definition coordChangeHomeomorph
   left_inv x := by simp only [*, coordChange_coordChange, coordChange_same_apply]
   right_inv x := by simp only [*, coordChange_coordChange, coordChange_same_apply]
   continuous_toFun := e₁.continuous_coordChange e₂ h₁ h₂
-  continuous_invFun := e₂.
+  continuous_invFun := e₂.continuous_coordChange e₁ h₂ h₁
+
+@[simp]
 
 中文:
 定义 coordChangeHomeomorph
@@ -3035,7 +3119,9 @@ definition coordChangeHomeomorph
   left_inv x := by simp only [*, coordChange_coordChange, coordChange_same_apply]
   right_inv x := by simp only [*, coordChange_coordChange, coordChange_same_apply]
   continuous_toFun := e₁.continuous_coordChange e₂ h₁ h₂
-  continuous_invFun := e₂.
+  continuous_invFun := e₂.continuous_coordChange e₁ h₂ h₁
+
+@[simp]
 -/
 protected def coordChangeHomeomorph (e₁ e₂ : Trivialization F proj) {b : B} (h₁ : b in e₁.baseSet)
     (h₂ : b in e₂.baseSet) : F ≃ₜ F where
@@ -3125,7 +3211,10 @@ definition restrictPreimage'
 open_source := e.open_source.preimage by fun_prop
 continuousOn_toFun := (Topology.IsInducing.subtypeVal.prodMap .id).continuousOn_iff.mpr
     (e.continuousOn_toFun.comp continuous_subtype_val.continuousOn fun _ => id).congr
-      fun z hz => by ext; exacts [
+      fun z hz => by ext; exacts [(e.proj_toFun _ hz).symm, rfl]
+continuousOn_invFun := Topology.IsInducing.subtypeVal.continuousOn_iff.mpr
+    (e.continuousOn_invFun.comp (continuous_subtype_val.prodMap continuous_id).continuousOn
+      fun _ => id).congr fun x hx => congr_arg Subtype.val (dif_pos hx)
 
 中文:
 定义 restrictPreimage'
@@ -3134,7 +3223,10 @@ continuousOn_toFun := (Topology.IsInducing.subtypeVal.prodMap .id).continuousOn_
 open_source := e.open_source.preimage by fun_prop
 continuousOn_toFun := (Topology.IsInducing.subtypeVal.prodMap .id).continuousOn_iff.mpr
     (e.continuousOn_toFun.comp continuous_subtype_val.continuousOn fun _ => id).congr
-      fun z hz => by ext; exacts [
+      fun z hz => by ext; exacts [(e.proj_toFun _ hz).symm, rfl]
+continuousOn_invFun := Topology.IsInducing.subtypeVal.continuousOn_iff.mpr
+    (e.continuousOn_invFun.comp (continuous_subtype_val.prodMap continuous_id).continuousOn
+      fun _ => id).congr fun x hx => congr_arg Subtype.val (dif_pos hx)
 
 Depends on / 依赖: e.toPretrivialization.restrictPreimage, restrictPreimage, toPretrivialization
 -/
@@ -3190,7 +3282,8 @@ continuousOn_toFun := Topology.IsInducing.subtypeVal.continuousOn_image_iff.mpr 
     convert! e.continuousOn_toFun
     ext1 ⟨x, (hx : proj x in s)⟩
     simpa [Pretrivialization.domExtend] using! dif_pos hx
-c
+continuousOn_invFun := continuous_subtype_val.comp_continuousOn by
+    convert! e.continuousOn_invFun
 
 中文:
 定义 domExtend
@@ -3201,7 +3294,8 @@ continuousOn_toFun := Topology.IsInducing.subtypeVal.continuousOn_image_iff.mpr 
     convert! e.continuousOn_toFun
     ext1 ⟨x, (hx : proj x in s)⟩
     simpa [Pretrivialization.domExtend] using! dif_pos hx
-c
+continuousOn_invFun := continuous_subtype_val.comp_continuousOn by
+    convert! e.continuousOn_invFun
 
 Depends on / 依赖: domExtend, e.toPretrivialization.domExtend, toPretrivialization
 -/
@@ -3230,7 +3324,7 @@ definition codExtend'
   continuousOn_toFun :=
     (continuous_subtype_val.prodMap continuous_id).comp_continuousOn e.continuousOn_toFun
 continuousOn_invFun := (Topology.IsInducing.subtypeVal.prodMap .id).continuousOn_image_iff.2 by
-    convert! e.continuo
+    convert! e.continuousOn_invFun; ext; simp [Pretrivialization.codExtend']; rfl
 
 中文:
 定义 codExtend'
@@ -3240,7 +3334,7 @@ continuousOn_invFun := (Topology.IsInducing.subtypeVal.prodMap .id).continuousOn
   continuousOn_toFun :=
     (continuous_subtype_val.prodMap continuous_id).comp_continuousOn e.continuousOn_toFun
 continuousOn_invFun := (Topology.IsInducing.subtypeVal.prodMap .id).continuousOn_image_iff.2 by
-    convert! e.continuo
+    convert! e.continuousOn_invFun; ext; simp [Pretrivialization.codExtend']; rfl
 
 Depends on / 依赖: codExtend, e.toPretrivialization.codExtend, toPretrivialization
 -/
@@ -3312,7 +3406,11 @@ definition piecewise
       (e.isImage_preimage_prod s) (e'.isImage_preimage_prod s)
       (by rw [e.frontier_preimage, e'.frontier_preimage, Hs]) (by rwa [e.frontier_preimage])
   baseSet := s.ite e.baseSet e'.baseSet
-  open_baseSet :
+  open_baseSet := e.open_baseSet.ite e'.open_baseSet Hs
+  source_eq := by simp [source_eq]
+  target_eq := by simp [target_eq, prod_univ]
+  proj_toFun p := by
+    rintro (⟨he, hs⟩ | ⟨he, hs⟩) <;> simp [*]
 
 中文:
 定义 piecewise
@@ -3321,7 +3419,11 @@ definition piecewise
       (e.isImage_preimage_prod s) (e'.isImage_preimage_prod s)
       (by rw [e.frontier_preimage, e'.frontier_preimage, Hs]) (by rwa [e.frontier_preimage])
   baseSet := s.ite e.baseSet e'.baseSet
-  open_baseSet :
+  open_baseSet := e.open_baseSet.ite e'.open_baseSet Hs
+  source_eq := by simp [source_eq]
+  target_eq := by simp [target_eq, prod_univ]
+  proj_toFun p := by
+    rintro (⟨he, hs⟩ | ⟨he, hs⟩) <;> simp [*]
 
 Depends on / 依赖: baseSet, e.baseSet, e.frontier_preimage, e.isImage_preimage_prod, e.open_baseSet.ite, e.toOpenPartialHomeomorph.piecewise, frontier_preimage, isImage_preimage_prod, open_baseSet, piecewise, prod_univ, proj_toFun, s.ite, source_eq, target_eq, toOpenPartialHomeomorph
 -/
@@ -3417,7 +3519,18 @@ definition disjointUnion
         rw [e.target_eq]; rw [e'.target_eq]; rw [disjoint_iff_inf_le]
         intro x hx
         exact H.le_bot ⟨hx.1.1, hx.2.1⟩)
-  baseSet :
+  baseSet := e.baseSet union e'.baseSet
+  open_baseSet := IsOpen.union e.open_baseSet e'.open_baseSet
+  source_eq := congr_arg₂ (· union ·) e.source_eq e'.source_eq
+  target_eq := (congr_arg₂ (· union ·) e.target_eq e'.target_eq).trans union_prod.symm
+  proj_toFun := by
+    rintro p (hp | hp')
+    · change (e.source.piecewise e e' p).1 = proj p
+      rw [piecewise_eq_of_mem]; rw [e.coe_fst] <;> exact hp
+    · change (e.source.piecewise e e' p).1 = proj p
+      rw [piecewise_eq_of_notMem]; rw [e'.coe_fst hp']
+      simp only [source_eq] at hp' ⊢
+      exact fun h => H.le_bot ⟨h, hp'⟩
 
 中文:
 定义 disjointUnion
@@ -3430,7 +3543,18 @@ definition disjointUnion
         rw [e.target_eq]; rw [e'.target_eq]; rw [disjoint_iff_inf_le]
         intro x hx
         exact H.le_bot ⟨hx.1.1, hx.2.1⟩)
-  baseSet :
+  baseSet := e.baseSet union e'.baseSet
+  open_baseSet := IsOpen.union e.open_baseSet e'.open_baseSet
+  source_eq := congr_arg₂ (· union ·) e.source_eq e'.source_eq
+  target_eq := (congr_arg₂ (· union ·) e.target_eq e'.target_eq).trans union_prod.symm
+  proj_toFun := by
+    rintro p (hp | hp')
+    · change (e.source.piecewise e e' p).1 = proj p
+      rw [piecewise_eq_of_mem]; rw [e.coe_fst] <;> exact hp
+    · change (e.source.piecewise e e' p).1 = proj p
+      rw [piecewise_eq_of_notMem]; rw [e'.coe_fst hp']
+      simp only [source_eq] at hp' ⊢
+      exact fun h => H.le_bot ⟨h, hp'⟩
 
 Depends on / 依赖: H.le_bot, H.preimage, IsOpen, IsOpen.union, baseSet, disjointUnion, disjoint_iff_inf_le, e.baseSet, e.open_baseSet, e.source_eq, e.target_eq, e.toOpenPartialHomeomorph.disjointUnion, le_bot, open_baseSet, preimage, proj_toFun, source_eq, target_eq, toOpenPartialHomeomorph, union_prod
 -/
@@ -3533,7 +3657,7 @@ definition liftCM
     apply Continuous.subtype_mk
     refine T.continuousOn_invFun.comp_continuous ?_ (by simp [mem_target])
     refine .prodMk (by fun_prop) (.snd ?_)
-    exact T.continuousOn_toFun.comp_continuous (by fun_prop) (by simp
+    exact T.continuousOn_toFun.comp_continuous (by fun_prop) (by simp)
 
 中文:
 定义 liftCM
@@ -3543,7 +3667,7 @@ definition liftCM
     apply Continuous.subtype_mk
     refine T.continuousOn_invFun.comp_continuous ?_ (by simp [mem_target])
     refine .prodMk (by fun_prop) (.snd ?_)
-    exact T.continuousOn_toFun.comp_continuous (by fun_prop) (by simp
+    exact T.continuousOn_toFun.comp_continuous (by fun_prop) (by simp)
 
 Depends on / 依赖: T.lift, T.map_target, map_target, mem_target
 -/

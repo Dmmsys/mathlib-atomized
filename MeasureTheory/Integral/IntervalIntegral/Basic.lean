@@ -1343,7 +1343,10 @@ theorem comp_mul_left
   rw [intervalIntegrable_iff' h'] at ⊢
   have A : MeasurableEmbedding fun x => x * c⁻¹ :=
     (Homeomorph.mulRight₀ _ (inv_ne_zero hc)).isClosedEmbedding.measurableEmbedding
-  rw [← Real.smul_map_volume_m
+  rw [← Real.smul_map_volume_mul_right (inv_ne_zero hc)]; rw [IntegrableOn]; rw [Measure.restrict_smul]; rw [integrable_smul_measure (by simpa : ENNReal.ofReal |c⁻¹| != 0) ENNReal.ofReal_ne_top]; rw [← IntegrableOn]; rw [MeasurableEmbedding.integrableOn_map_iff A]
+  convert! hf using 1
+  · ext; simp only [comp_apply]; congr 1; field
+  · rw [preimage_mul_const_uIcc (inv_ne_zero hc)]; field_simp
 
 中文:
 定理 comp_mul_left
@@ -1354,7 +1357,10 @@ theorem comp_mul_left
   rw [intervalIntegrable_iff' h'] at ⊢
   have A : MeasurableEmbedding fun x => x * c⁻¹ :=
     (Homeomorph.mulRight₀ _ (inv_ne_zero hc)).isClosedEmbedding.measurableEmbedding
-  rw [← Real.smul_map_volume_m
+  rw [← Real.smul_map_volume_mul_right (inv_ne_zero hc)]; rw [IntegrableOn]; rw [Measure.restrict_smul]; rw [integrable_smul_measure (by simpa : ENNReal.ofReal |c⁻¹| != 0) ENNReal.ofReal_ne_top]; rw [← IntegrableOn]; rw [MeasurableEmbedding.integrableOn_map_iff A]
+  convert! hf using 1
+  · ext; simp only [comp_apply]; congr 1; field
+  · rw [preimage_mul_const_uIcc (inv_ne_zero hc)]; field_simp
 
 Depends on / 依赖: Homeomorph, Homeomorph.mulRight, IntegrableOn, IntervalIntegrable, MeasurableEmbedding, Measure, Measure.restrict_smu, Real.smul_map_volume_mul_right, eq_or_ne, finiteness, intervalIntegrable_iff, inv_ne_zero, isClosedEmbedding, isClosedEmbedding.measurableEmbedding, measurableEmbedding, restrict_smu, smul_map_volume_mul_right, volume
 -/
@@ -1436,7 +1442,14 @@ theorem comp_add_right
   wlog hab : a <= b generalizing a b
   · apply IntervalIntegrable.symm (this hf.symm ?_ ?_ (le_of_not_ge hab))
     · rw [min_comm]; exact h
-    · rw [min_comm];
+    · rw [min_comm]; exact h'
+  rw [intervalIntegrable_iff' h] at hf
+  rw [intervalIntegrable_iff' h'] at ⊢
+  have A : MeasurableEmbedding fun x => x + c :=
+    (Homeomorph.addRight c).isClosedEmbedding.measurableEmbedding
+  rw [← map_add_right_eq_self volume c] at hf
+  convert! (MeasurableEmbedding.integrableOn_map_iff A).mp hf using 1
+  rw [preimage_add_const_uIcc]
 
 中文:
 定理 comp_add_right
@@ -1448,7 +1461,14 @@ theorem comp_add_right
   wlog hab : a <= b generalizing a b
   · apply IntervalIntegrable.symm (this hf.symm ?_ ?_ (le_of_not_ge hab))
     · rw [min_comm]; exact h
-    · rw [min_comm];
+    · rw [min_comm]; exact h'
+  rw [intervalIntegrable_iff' h] at hf
+  rw [intervalIntegrable_iff' h'] at ⊢
+  have A : MeasurableEmbedding fun x => x + c :=
+    (Homeomorph.addRight c).isClosedEmbedding.measurableEmbedding
+  rw [← map_add_right_eq_self volume c] at hf
+  convert! (MeasurableEmbedding.integrableOn_map_iff A).mp hf using 1
+  rw [preimage_add_const_uIcc]
 
 Depends on / 依赖: Homeomo, IntervalIntegrable, IntervalIntegrable.symm, MeasurableEmbedding, finiteness, generalizing, hf.symm, intervalIntegrable_iff, le_of_not_ge, min_comm, min_sub_sub_right, sub_add, sub_self, sub_zero, volume
 -/
@@ -2535,7 +2555,21 @@ theorem norm_integral_le_of_norm_le_const
 @[simp]
 nonrec theorem integral_add (hf : IntervalIntegrable f μ a b) (hg : IntervalIntegrable g μ a b) :
     ∫ x in a..b, f x + g x ∂μ = (∫ x in a..b, f x ∂μ) + ∫ x in a..b, g x ∂μ := by
-  simp only [intervalIntegral_eq_integral_uIoc, int
+  simp only [intervalIntegral_eq_integral_uIoc, integral_add hf.def' hg.def', smul_add]
+
+nonrec theorem integral_finsetSum {ι} {s : Finset ι} {f : ι -> Real -> E}
+    (h : forall i in s, IntervalIntegrable (f i) μ a b) :
+    ∫ x in a..b, ∑ i in s, f i x ∂μ = ∑ i in s, ∫ x in a..b, f i x ∂μ := by
+  simp only [intervalIntegral_eq_integral_uIoc, integral_finsetSum s fun i hi => (h i hi).def',
+    Finset.smul_sum]
+
+@[deprecated (since := "2026-04-08")] alias integral_finset_sum := integral_finsetSum
+
+@[simp]
+nonrec theorem integral_neg : ∫ x in a..b, -f x ∂μ = -∫ x in a..b, f x ∂μ := by
+  simp only [intervalIntegral, integral_neg]; abel
+
+@[simp]
 
 中文:
 定理 norm_integral_le_of_norm_le_const
@@ -2545,7 +2579,21 @@ nonrec theorem integral_add (hf : IntervalIntegrable f μ a b) (hg : IntervalInt
 @[simp]
 nonrec theorem integral_add (hf : IntervalIntegrable f μ a b) (hg : IntervalIntegrable g μ a b) :
     ∫ x in a..b, f x + g x ∂μ = (∫ x in a..b, f x ∂μ) + ∫ x in a..b, g x ∂μ := by
-  simp only [intervalIntegral_eq_integral_uIoc, int
+  simp only [intervalIntegral_eq_integral_uIoc, integral_add hf.def' hg.def', smul_add]
+
+nonrec theorem integral_finsetSum {ι} {s : Finset ι} {f : ι -> Real -> E}
+    (h : forall i in s, IntervalIntegrable (f i) μ a b) :
+    ∫ x in a..b, ∑ i in s, f i x ∂μ = ∑ i in s, ∫ x in a..b, f i x ∂μ := by
+  simp only [intervalIntegral_eq_integral_uIoc, integral_finsetSum s fun i hi => (h i hi).def',
+    Finset.smul_sum]
+
+@[deprecated (since := "2026-04-08")] alias integral_finset_sum := integral_finsetSum
+
+@[simp]
+nonrec theorem integral_neg : ∫ x in a..b, -f x ∂μ = -∫ x in a..b, f x ∂μ := by
+  simp only [intervalIntegral, integral_neg]; abel
+
+@[simp]
 
 Depends on / 依赖: Eventually, Eventually.of_forall, norm_integral_le_of_norm_le_const_ae, of_forall
 -/
@@ -2613,7 +2661,9 @@ theorem _root_.IntervalIntegrable.integral_smul
 nonrec theorem integral_smul_const [CompleteSpace E]
     {𝕜 : Type*} [RCLike 𝕜] [NormedSpace 𝕜 E] (f : Real -> 𝕜) (c : E) :
     ∫ x in a..b, f x • c ∂μ = (∫ x in a..b, f x ∂μ) • c := by
-  simp only [interval
+  simp only [intervalIntegral_eq_integral_uIoc, integral_smul_const, smul_assoc]
+
+@[simp]
 
 中文:
 定理 _root_.整数erval整数egrable.integral_smul
@@ -2624,7 +2674,9 @@ nonrec theorem integral_smul_const [CompleteSpace E]
 nonrec theorem integral_smul_const [CompleteSpace E]
     {𝕜 : Type*} [RCLike 𝕜] [NormedSpace 𝕜 E] (f : Real -> 𝕜) (c : E) :
     ∫ x in a..b, f x • c ∂μ = (∫ x in a..b, f x ∂μ) • c := by
-  simp only [interval
+  simp only [intervalIntegral_eq_integral_uIoc, integral_smul_const, smul_assoc]
+
+@[simp]
 
 Depends on / 依赖: integral_smul, intervalIntegral, smul_sub
 -/
@@ -2751,7 +2803,7 @@ theorem integral_const
 
 nonrec theorem integral_smul_measure (c : Real>=0∞) :
     ∫ x in a..b, f x ∂c • μ = c.toReal • ∫ x in a..b, f x ∂μ := by
-  simp only [intervalIntegral, Measure.restrict_
+  simp only [intervalIntegral, Measure.restrict_smul, integral_smul_measure, smul_sub]
 
 中文:
 定理 integral_const
@@ -2763,7 +2815,7 @@ nonrec theorem integral_smul_measure (c : Real>=0∞) :
 
 nonrec theorem integral_smul_measure (c : Real>=0∞) :
     ∫ x in a..b, f x ∂c • μ = c.toReal • ∫ x in a..b, f x ∂μ := by
-  simp only [intervalIntegral, Measure.restrict_
+  simp only [intervalIntegral, Measure.restrict_smul, integral_smul_measure, smul_sub]
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_ofReal, Real.volume_Ioc, integral_const, max_zero_sub_eq_self, measureReal_def, neg_sub, toReal_ofReal, volume_Ioc
 -/
@@ -2955,7 +3007,12 @@ theorem integral_comp_mul_right
   conv_rhs => rw [← Real.smul_map_volume_mul_right hc]
   simp_rw [integral_smul_measure, intervalIntegral, A.setIntegral_map,
     ENNReal.toReal_ofReal (abs_nonneg c)]
-  rcases h
+  rcases hc.lt_or_gt with h | h
+  · simp [h, mul_div_cancel_right₀, hc, abs_of_neg,
+      Measure.restrict_congr_set (α := Real) (μ := volume) Ico_ae_eq_Ioc]
+  · simp [h, mul_div_cancel_right₀, hc, abs_of_pos]
+
+@[simp]
 
 中文:
 定理 integral_comp_mul_right
@@ -2966,7 +3023,12 @@ theorem integral_comp_mul_right
   conv_rhs => rw [← Real.smul_map_volume_mul_right hc]
   simp_rw [integral_smul_measure, intervalIntegral, A.setIntegral_map,
     ENNReal.toReal_ofReal (abs_nonneg c)]
-  rcases h
+  rcases hc.lt_or_gt with h | h
+  · simp [h, mul_div_cancel_right₀, hc, abs_of_neg,
+      Measure.restrict_congr_set (α := Real) (μ := volume) Ico_ae_eq_Ioc]
+  · simp [h, mul_div_cancel_right₀, hc, abs_of_pos]
+
+@[simp]
 
 Depends on / 依赖: A.setIntegral_map, ENNReal, ENNReal.toReal_ofReal, Homeomorph, Homeomorph.mulRight, Ico_ae_eq_Ioc, MeasurableEmbedding, Measure, Measure.restrict_congr_set, Real.smul_map_volume_mul_right, abs_nonneg, abs_of_neg, abs_of_pos, conv_rhs, hc.lt_or_gt, integral_smul_measure, intervalIntegral, isClosedEmbedding, isClosedEmbedding.measurableEmbedding, lt_or_gt
 -/
@@ -3125,7 +3187,14 @@ theorem integral_comp_add_right
   calc
     (∫ x in a..b, f (x + d)) = ∫ x in a + d..b + d, f x ∂Measure.map (fun x => x + d) volume := by
       simp [intervalIntegral, A.setIntegral_map]
-    _ = ∫ x in a + d..b + d, f x
+    _ = ∫ x in a + d..b + d, f x := by rw [map_add_right_eq_self]
+
+@[simp]
+nonrec theorem integral_comp_add_left (d) :
+    (∫ x in a..b, f (d + x)) = ∫ x in d + a..d + b, f x := by
+  simpa only [add_comm d] using integral_comp_add_right f d
+
+@[simp]
 
 中文:
 定理 integral_comp_add_right
@@ -3136,7 +3205,14 @@ theorem integral_comp_add_right
   calc
     (∫ x in a..b, f (x + d)) = ∫ x in a + d..b + d, f x ∂Measure.map (fun x => x + d) volume := by
       simp [intervalIntegral, A.setIntegral_map]
-    _ = ∫ x in a + d..b + d, f x
+    _ = ∫ x in a + d..b + d, f x := by rw [map_add_right_eq_self]
+
+@[simp]
+nonrec theorem integral_comp_add_left (d) :
+    (∫ x in a..b, f (d + x)) = ∫ x in d + a..d + b, f x := by
+  simpa only [add_comm d] using integral_comp_add_right f d
+
+@[simp]
 
 Depends on / 依赖: A.setIntegral_map, Homeomorph, Homeomorph.addRight, MeasurableEmbedding, Measure, Measure.map, addRight, intervalIntegral, isClosedEmbedding, isClosedEmbedding.measurableEmbedding, map_add_right_eq_self, measurableEmbedding, setIntegral_map, volume
 -/
@@ -3703,7 +3779,9 @@ theorem integral_add_adjacent_intervals_cancel
   simp only [intervalIntegral, sub_add_sub_comm, sub_eq_zero]
   iterate 4 rw [← setIntegral_union]
   · suffices Ioc a b union Ioc b c union Ioc c a = Ioc b a union Ioc c b union Ioc a c by rw [this]
-    rw [Ioc_union_Ioc_union_Ioc_cycle]; rw [union_right_comm]; rw [Ioc
+    rw [Ioc_union_Ioc_union_Ioc_cycle]; rw [union_right_comm]; rw [Ioc_union_Ioc_union_Ioc_cycle]; rw [min_left_comm]; rw [max_left_comm]
+  all_goals
+    simp [*, hab.1, hab.2, hbc.1, hbc.2, hac.1, hac.2]
 
 中文:
 定理 integral_add_adjacent_intervals_cancel
@@ -3713,7 +3791,9 @@ theorem integral_add_adjacent_intervals_cancel
   simp only [intervalIntegral, sub_add_sub_comm, sub_eq_zero]
   iterate 4 rw [← setIntegral_union]
   · suffices Ioc a b union Ioc b c union Ioc c a = Ioc b a union Ioc c b union Ioc a c by rw [this]
-    rw [Ioc_union_Ioc_union_Ioc_cycle]; rw [union_right_comm]; rw [Ioc
+    rw [Ioc_union_Ioc_union_Ioc_cycle]; rw [union_right_comm]; rw [Ioc_union_Ioc_union_Ioc_cycle]; rw [min_left_comm]; rw [max_left_comm]
+  all_goals
+    simp [*, hab.1, hab.2, hbc.1, hbc.2, hac.1, hac.2]
 
 Depends on / 依赖: Ioc_union_Ioc_union_Ioc_cycle, all_goals, hab.trans, intervalIntegral, iterate, max_left_comm, min_left_comm, setIntegral_union, sub_add_sub_comm, sub_eq_zero, union_right_comm
 -/
@@ -3764,7 +3844,10 @@ theorem sum_integral_adjacent_intervals_Ico
     rw [Finset.sum_Ico_succ_top hmp]; rw [IH]; rw [integral_add_adjacent_intervals]
     · refine IntervalIntegrable.trans_iterate_Ico hmp fun k hk => h k ?_
       exact (Ico_subset_Ico le_rfl (Nat.le_succ _)) hk
-   
+    · apply h
+      simp [hmp]
+    · intro k hk
+      exact h _ (Ico_subset_Ico_right p.le_succ hk)
 
 中文:
 定理 sum_integral_adjacent_intervals_Ico
@@ -3777,7 +3860,10 @@ theorem sum_integral_adjacent_intervals_Ico
     rw [Finset.sum_Ico_succ_top hmp]; rw [IH]; rw [integral_add_adjacent_intervals]
     · refine IntervalIntegrable.trans_iterate_Ico hmp fun k hk => h k ?_
       exact (Ico_subset_Ico le_rfl (Nat.le_succ _)) hk
-   
+    · apply h
+      simp [hmp]
+    · intro k hk
+      exact h _ (Ico_subset_Ico_right p.le_succ hk)
 
 Depends on / 依赖: Finset, Finset.sum_Ico_succ_top, Ico_subset_Ico, Ico_subset_Ico_right, IntervalIntegrable, IntervalIntegrable.trans_iterate_Ico, Nat.le_induction, Nat.le_succ, integral_add_adjacent_intervals, le_induction, le_rfl, le_succ, p.le_succ, revert, sum_Ico_succ_top, trans_iterate_Ico
 -/
@@ -3923,7 +4009,7 @@ theorem integral_Iic_sub_Iic
   wlog hab : a <= b generalizing a b
   · rw [integral_symm, ← this hb ha (le_of_not_ge hab), neg_sub]
   rw [sub_eq_iff_eq_add']; rw [integral_of_le hab]; rw [← setIntegral_union (Iic_disjoint_Ioc le_rfl)]; rw [Iic_union_Ioc_eq_Iic hab]
-  exacts [measurableSet_Ioc, ha, hb.mono_set fun _ => And.rig
+  exacts [measurableSet_Ioc, ha, hb.mono_set fun _ => And.right]
 
 中文:
 定理 integral_Iic_sub_Iic
@@ -3932,7 +4018,7 @@ theorem integral_Iic_sub_Iic
   wlog hab : a <= b generalizing a b
   · rw [integral_symm, ← this hb ha (le_of_not_ge hab), neg_sub]
   rw [sub_eq_iff_eq_add']; rw [integral_of_le hab]; rw [← setIntegral_union (Iic_disjoint_Ioc le_rfl)]; rw [Iic_union_Ioc_eq_Iic hab]
-  exacts [measurableSet_Ioc, ha, hb.mono_set fun _ => And.rig
+  exacts [measurableSet_Ioc, ha, hb.mono_set fun _ => And.right]
 
 Depends on / 依赖: And.right, DistribLattice, Iic_disjoint_Ioc, Iic_union_Ioc_eq_Iic, Order.Frame.toDistribLattice, exacts, generalizing, hb.mono_set, integral_of_le, integral_symm, le_of_not_ge, le_rfl, measurableSet_Ioc, mono_set, neg_sub, setIntegral_union, sub_eq_iff_eq_add, toDistribLattice
 -/
@@ -4412,7 +4498,10 @@ theorem integral_zero_ae
 
 nonrec theorem integral_indicator {a₁ a₂ a₃ : Real} (h : a₂ in Icc a₁ a₃) :
     ∫ x in a₁..a₃, indicator {x | x <= a₂} f x ∂μ = ∫ x in a₁..a₂, f x ∂μ := by
-  have : {x | x <= a₂} inter Ioc a₁ a₃ = Ioc
+  have : {x | x <= a₂} inter Ioc a₁ a₃ = Ioc a₁ a₂ := Iic_inter_Ioc_of_le h.2
+  rw [integral_of_le h.1]; rw [integral_of_le (h.1.trans h.2)]; rw [integral_indicator]; rw [Measure.restrict_restrict]; rw [this]
+  · exact measurableSet_Iic
+  all_goals apply measurableSet_Iic
 
 中文:
 定理 integral_zero_ae
@@ -4424,7 +4513,10 @@ nonrec theorem integral_indicator {a₁ a₂ a₃ : Real} (h : a₂ in Icc a₁ 
 
 nonrec theorem integral_indicator {a₁ a₂ a₃ : Real} (h : a₂ in Icc a₁ a₃) :
     ∫ x in a₁..a₃, indicator {x | x <= a₂} f x ∂μ = ∫ x in a₁..a₂, f x ∂μ := by
-  have : {x | x <= a₂} inter Ioc a₁ a₃ = Ioc
+  have : {x | x <= a₂} inter Ioc a₁ a₃ = Ioc a₁ a₂ := Iic_inter_Ioc_of_le h.2
+  rw [integral_of_le h.1]; rw [integral_of_le (h.1.trans h.2)]; rw [integral_indicator]; rw [Measure.restrict_restrict]; rw [this]
+  · exact measurableSet_Iic
+  all_goals apply measurableSet_Iic
 
 Depends on / 依赖: integral_congr_ae, integral_zero
 -/
@@ -4511,7 +4603,9 @@ theorem integral_pos_iff_support_of_nonneg_ae'
     simp only [hab, true_and, integral_of_le hab.le,
       setIntegral_pos_iff_support_of_nonneg_ae hf hfi.1]
   · suffices (∫ x in a..b, f x ∂μ) <= 0 by simp only [this.not_gt, hba.not_gt, false_and]
-    rw [integral_of_ge hba]
+    rw [integral_of_ge hba]; rw [neg_nonpos]
+    rw [uIoc_comm]; rw [uIoc_of_le hba] at hf
+    exact integral_nonneg_of_ae hf
 
 中文:
 定理 integral_pos_iff_support_of_nonneg_ae'
@@ -4522,7 +4616,9 @@ theorem integral_pos_iff_support_of_nonneg_ae'
     simp only [hab, true_and, integral_of_le hab.le,
       setIntegral_pos_iff_support_of_nonneg_ae hf hfi.1]
   · suffices (∫ x in a..b, f x ∂μ) <= 0 by simp only [this.not_gt, hba.not_gt, false_and]
-    rw [integral_of_ge hba]
+    rw [integral_of_ge hba]; rw [neg_nonpos]
+    rw [uIoc_comm]; rw [uIoc_of_le hba] at hf
+    exact integral_nonneg_of_ae hf
 
 Depends on / 依赖: false_and, hab.le, hba.not_gt, integral_nonneg_of_ae, integral_of_ge, integral_of_le, lt_or_ge, neg_nonpos, not_gt, setIntegral_pos_iff_support_of_nonneg_ae, this.not_gt, true_and, uIoc_comm, uIoc_of_le
 -/
@@ -4569,7 +4665,10 @@ theorem intervalIntegral_pos_of_pos_on
   have h₀ : 0 <=ᵐ[volume.restrict (uIoc a b)] f := by
     rw [EventuallyLE]; rw [uIoc_of_le hab.le]
     refine ae_restrict_of_ae_eq_of_ae_restrict Ioo_ae_eq_Ioc ?_
-
+    rw [ae_restrict_iff' measurableSet_Ioo]
+    filter_upwards with x hx using (hpos x hx).le
+  rw [integral_pos_iff_support_of_nonneg_ae' h₀ hfi]
+  exact ⟨hab, ((Measure.measure_Ioo_pos _).mpr hab).trans_le (measure_mono hsupp)⟩
 
 中文:
 定理 interval整数egral_pos_of_pos_on
@@ -4580,7 +4679,10 @@ theorem intervalIntegral_pos_of_pos_on
   have h₀ : 0 <=ᵐ[volume.restrict (uIoc a b)] f := by
     rw [EventuallyLE]; rw [uIoc_of_le hab.le]
     refine ae_restrict_of_ae_eq_of_ae_restrict Ioo_ae_eq_Ioc ?_
-
+    rw [ae_restrict_iff' measurableSet_Ioo]
+    filter_upwards with x hx using (hpos x hx).le
+  rw [integral_pos_iff_support_of_nonneg_ae' h₀ hfi]
+  exact ⟨hab, ((Measure.measure_Ioo_pos _).mpr hab).trans_le (measure_mono hsupp)⟩
 
 Depends on / 依赖: EventuallyLE, Ioo_ae_eq_Ioc, Ioo_subset_Ioc_self, Measure, Measure.measure_Ioo_pos, ae_restrict_iff, ae_restrict_of_ae_eq_of_ae_restrict, filter_upwards, hab.le, integral_pos_iff_support_of_nonneg_ae, measurableSet_Ioo, measure_Ioo_pos, measure_mono, mem_support, mem_support.mpr, restrict, subseteq, support, trans_le, uIoc_of_le
 -/
@@ -4628,7 +4730,9 @@ theorem integral_lt_integral_of_ae_le_of_measure_setOfPred_lt_ne_zero
     exact fun x hx => (sub_pos.2 hx.out).ne'
   exacts [hle.mono fun x => sub_nonneg.2, hgi.1.sub hfi.1]
 
-@[
+@[deprecated (since := "2026-07-09")]
+alias integral_lt_integral_of_ae_le_of_measure_setOf_lt_ne_zero :=
+  integral_lt_integral_of_ae_le_of_measure_setOfPred_lt_ne_zero
 
 中文:
 定理 integral_lt_integral_of_ae_le_of_measure_setOfPred_lt_ne_zero
@@ -4639,7 +4743,9 @@ theorem integral_lt_integral_of_ae_le_of_measure_setOfPred_lt_ne_zero
     exact fun x hx => (sub_pos.2 hx.out).ne'
   exacts [hle.mono fun x => sub_nonneg.2, hgi.1.sub hfi.1]
 
-@[
+@[deprecated (since := "2026-07-09")]
+alias integral_lt_integral_of_ae_le_of_measure_setOf_lt_ne_zero :=
+  integral_lt_integral_of_ae_le_of_measure_setOfPred_lt_ne_zero
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.integral_pos_iff_support_of_nonneg_ae, exacts, hle.mono, hx.out, integral_of_le, integral_pos_iff_support_of_nonneg_ae, integral_sub, measure_mono_null, pos_iff_ne_zero, sub_nonneg, sub_pos
 -/
@@ -4668,7 +4774,12 @@ theorem integral_lt_integral_of_continuousOn_of_le_of_exists_lt
   · simpa only [measurableSet_Ioc, ae_restrict_eq]
       using! (ae_restrict_mem measurableSet_Ioc).mono hle
   contrapose! hlt
-  have h_eq
+  have h_eq : f =ᵐ[volume.restrict (Ioc a b)] g := by
+    simp only [← not_le, ← ae_iff] at hlt
+    exact EventuallyLE.antisymm ((ae_restrict_iff' measurableSet_Ioc).2 <|
+      Eventually.of_forall hle) hlt
+  rw [Measure.restrict_congr_set Ioc_ae_eq_Icc] at h_eq
+  exact fun c hc => (Measure.eqOn_Icc_of_ae_eq volume hab.ne h_eq hfc hgc hc).ge
 
 中文:
 定理 integral_lt_integral_of_continuousOn_of_le_of_存在_lt
@@ -4679,7 +4790,12 @@ theorem integral_lt_integral_of_continuousOn_of_le_of_exists_lt
   · simpa only [measurableSet_Ioc, ae_restrict_eq]
       using! (ae_restrict_mem measurableSet_Ioc).mono hle
   contrapose! hlt
-  have h_eq
+  have h_eq : f =ᵐ[volume.restrict (Ioc a b)] g := by
+    simp only [← not_le, ← ae_iff] at hlt
+    exact EventuallyLE.antisymm ((ae_restrict_iff' measurableSet_Ioc).2 <|
+      Eventually.of_forall hle) hlt
+  rw [Measure.restrict_congr_set Ioc_ae_eq_Icc] at h_eq
+  exact fun c hc => (Measure.eqOn_Icc_of_ae_eq volume hab.ne h_eq hfc hgc hc).ge
 
 Depends on / 依赖: Eventually, Eventually.of_forall, EventuallyLE, EventuallyLE.antisymm, Ioc_a, Measure, Measure.restrict_congr_set, ae_iff, ae_restrict_eq, ae_restrict_iff, ae_restrict_mem, antisymm, contrapose, h_eq, hab.le, hfc.intervalIntegrable_of_Icc, hgc.intervalIntegrable_of_Icc, integral_lt_integral_of_ae_le_of_measure_setOfPred_lt_ne_zero, intervalIntegrable_of_Icc, measurableSet_Ioc
 -/
@@ -4864,7 +4980,9 @@ theorem abs_integral_mono_interval
   calc
     |∫ x in a..b, f x ∂μ| = |∫ x in Ι a b, f x ∂μ| := abs_integral_eq_abs_integral_uIoc f
     _ = ∫ x in Ι a b, f x ∂μ := abs_of_nonneg (MeasureTheory.integral_nonneg_of_ae hf')
-    _ <= ∫ x in Ι c d, f x ∂μ
+    _ <= ∫ x in Ι c d, f x ∂μ := setIntegral_mono_set hfi.def' hf h.eventuallyLE
+    _ <= |∫ x in Ι c d, f x ∂μ| := le_abs_self _
+    _ = |∫ x in c..d, f x ∂μ| := (abs_integral_eq_abs_integral_uIoc f).symm
 
 中文:
 定理 abs_integral_mono_interval
@@ -4873,7 +4991,9 @@ theorem abs_integral_mono_interval
   calc
     |∫ x in a..b, f x ∂μ| = |∫ x in Ι a b, f x ∂μ| := abs_integral_eq_abs_integral_uIoc f
     _ = ∫ x in Ι a b, f x ∂μ := abs_of_nonneg (MeasureTheory.integral_nonneg_of_ae hf')
-    _ <= ∫ x in Ι c d, f x ∂μ
+    _ <= ∫ x in Ι c d, f x ∂μ := setIntegral_mono_set hfi.def' hf h.eventuallyLE
+    _ <= |∫ x in Ι c d, f x ∂μ| := le_abs_self _
+    _ = |∫ x in c..d, f x ∂μ| := (abs_integral_eq_abs_integral_uIoc f).symm
 
 Depends on / 依赖: Measure, Measure.restrict_mono, MeasureTheory, MeasureTheory.integral_nonneg_of_ae, abs_integral_eq_abs_integral_uIoc, abs_of_nonneg, ae_mono, eventuallyLE, h.eventuallyLE, hfi.def, integral_nonneg_of_ae, le_abs_self, le_rfl, restrict, restrict_mono, setIntegral_mono_set
 -/

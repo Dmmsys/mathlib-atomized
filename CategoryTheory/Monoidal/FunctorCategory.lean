@@ -164,7 +164,10 @@ instance functorCategoryMonoidalStruct
   whiskerRight α F := FunctorCategory.whiskerRight α F
   tensorUnit := (CategoryTheory.Functor.const C).obj (𝟙_ D)
   leftUnitor F := NatIso.ofComponents fun X => fun_ (F.obj X)
-  rightUnitor F := 
+  rightUnitor F := NatIso.ofComponents fun X => ρ_ (F.obj X)
+  associator F G H := NatIso.ofComponents fun X => α_ (F.obj X) (G.obj X) (H.obj X)
+
+@[simp]
 
 中文:
 实例 functorCategoryMonoidalStruct
@@ -175,7 +178,10 @@ instance functorCategoryMonoidalStruct
   whiskerRight α F := FunctorCategory.whiskerRight α F
   tensorUnit := (CategoryTheory.Functor.const C).obj (𝟙_ D)
   leftUnitor F := NatIso.ofComponents fun X => fun_ (F.obj X)
-  rightUnitor F := 
+  rightUnitor F := NatIso.ofComponents fun X => ρ_ (F.obj X)
+  associator F G H := NatIso.ofComponents fun X => α_ (F.obj X) (G.obj X) (H.obj X)
+
+@[simp]
 
 Depends on / 依赖: E.mem, E.presieve, Presieve, Presieve.ofArrows, convert, eqToHom, exists_eq_ofArrows, le_antisymm, ofArrows, tensorObj
 -/

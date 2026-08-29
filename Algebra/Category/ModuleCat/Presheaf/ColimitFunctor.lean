@@ -316,7 +316,11 @@ lemma ιM_jointly_surjective₃
     ((isColimitOfPreserves (forget AddCommGrpCat) hcM).tensor
       ((isColimitOfPreserves (forget AddCommGrpCat) hcM').tensor
         (isColimitOfPreserves (forget AddCommGrpCat) hcM''))) ⟨m, m', m''⟩
-  rw [Prod.ext_iff]; rw 
+  rw [Prod.ext_iff]; rw [Prod.ext_iff] at h
+  obtain ⟨rfl, rfl, rfl⟩ := h
+  exact ⟨U, x, x', x'', rfl, rfl, rfl⟩
+
+include hcR in
 
 中文:
 引理 ιM_jointly_surjective₃
@@ -326,7 +330,11 @@ lemma ιM_jointly_surjective₃
     ((isColimitOfPreserves (forget AddCommGrpCat) hcM).tensor
       ((isColimitOfPreserves (forget AddCommGrpCat) hcM').tensor
         (isColimitOfPreserves (forget AddCommGrpCat) hcM''))) ⟨m, m', m''⟩
-  rw [Prod.ext_iff]; rw 
+  rw [Prod.ext_iff]; rw [Prod.ext_iff] at h
+  obtain ⟨rfl, rfl, rfl⟩ := h
+  exact ⟨U, x, x', x'', rfl, rfl, rfl⟩
+
+include hcR in
 
 Depends on / 依赖: AddCommGrpCat, Prod.ext_iff, Types.jointly_surjective_of_isColimit, ext_iff, forget, isColimitOfPreserves, jointly_surjective_of_isColimit, tensor
 -/
@@ -417,7 +425,9 @@ lemma jointly_surjective₃
     ((isColimitOfPreserves (forget RingCat) hcR).tensor
       ((isColimitOfPreserves (forget RingCat) hcR).tensor
         (isColimitOfPreserves (forget AddCommGrpCat) hcM))) ⟨r₁, r₂, m⟩
-  rw [Prod.ext_iff]; rw [Prod.ext_iff] at
+  rw [Prod.ext_iff]; rw [Prod.ext_iff] at h
+  obtain ⟨rfl, rfl, rfl⟩ := h
+  exact ⟨U, a₁, a₂, x, rfl, rfl, rfl⟩
 
 中文:
 引理 jointly_surjective₃
@@ -427,7 +437,9 @@ lemma jointly_surjective₃
     ((isColimitOfPreserves (forget RingCat) hcR).tensor
       ((isColimitOfPreserves (forget RingCat) hcR).tensor
         (isColimitOfPreserves (forget AddCommGrpCat) hcM))) ⟨r₁, r₂, m⟩
-  rw [Prod.ext_iff]; rw [Prod.ext_iff] at
+  rw [Prod.ext_iff]; rw [Prod.ext_iff] at h
+  obtain ⟨rfl, rfl, rfl⟩ := h
+  exact ⟨U, a₁, a₂, x, rfl, rfl, rfl⟩
 
 Depends on / 依赖: AddCommGrpCat, Prod.ext_iff, RingCat, Types.jointly_surjective_of_isColimit, ext_iff, forget, isColimitOfPreserves, jointly_surjective_of_isColimit, tensor
 -/
@@ -455,7 +467,9 @@ lemma jointly_surjective₃'
     ((isColimitOfPreserves (forget RingCat) hcR).tensor
       ((isColimitOfPreserves (forget AddCommGrpCat) hcM).tensor
         (isColimitOfPreserves (forget AddCommGrpCat) hcM'))) ⟨r, m₁, m₂⟩
-  rw [Prod.ext_iff]; rw [Prod.ext_
+  rw [Prod.ext_iff]; rw [Prod.ext_iff] at h
+  obtain ⟨rfl, rfl, rfl⟩ := h
+  exact ⟨U, a, x₁, x₂, rfl, rfl, rfl⟩
 
 中文:
 引理 jointly_surjective₃'
@@ -465,7 +479,9 @@ lemma jointly_surjective₃'
     ((isColimitOfPreserves (forget RingCat) hcR).tensor
       ((isColimitOfPreserves (forget AddCommGrpCat) hcM).tensor
         (isColimitOfPreserves (forget AddCommGrpCat) hcM'))) ⟨r, m₁, m₂⟩
-  rw [Prod.ext_iff]; rw [Prod.ext_
+  rw [Prod.ext_iff]; rw [Prod.ext_iff] at h
+  obtain ⟨rfl, rfl, rfl⟩ := h
+  exact ⟨U, a, x₁, x₂, rfl, rfl, rfl⟩
 
 Depends on / 依赖: AddCommGrpCat, Prod.ext_iff, RingCat, Types.jointly_surjective_of_isColimit, ext_iff, forget, isColimitOfPreserves, jointly_surjective_of_isColimit, tensor
 -/
@@ -494,7 +510,16 @@ instance :
     simpa using smul_eq hcR hcM 1 m
   zero_smul m := by
     obtain ⟨U, m, rfl⟩ := ιM_jointly_surjective m
-   
+    simpa using smul_eq hcR hcM 0 m
+  smul_zero r := by
+    obtain ⟨U, r, rfl⟩ := ιR_jointly_surjective hcR r
+    simpa using smul_eq hcR hcM r 0
+  smul_add r m₁ m₂ := by
+    obtain ⟨U, r, m₁, m₂, rfl, rfl, rfl⟩ := jointly_surjective₃' r m₁ m₂
+    simp only [smul_eq, smul_add, ← map_add]
+  add_smul r₁ r₂ m := by
+    obtain ⟨U, r₁, r₂, m, rfl, rfl, rfl⟩ := jointly_surjective₃ r₁ r₂ m
+    simp only [smul_eq, ← map_add, add_smul]
 
 中文:
 实例 :
@@ -507,7 +532,16 @@ instance :
     simpa using smul_eq hcR hcM 1 m
   zero_smul m := by
     obtain ⟨U, m, rfl⟩ := ιM_jointly_surjective m
-   
+    simpa using smul_eq hcR hcM 0 m
+  smul_zero r := by
+    obtain ⟨U, r, rfl⟩ := ιR_jointly_surjective hcR r
+    simpa using smul_eq hcR hcM r 0
+  smul_add r m₁ m₂ := by
+    obtain ⟨U, r, m₁, m₂, rfl, rfl, rfl⟩ := jointly_surjective₃' r m₁ m₂
+    simp only [smul_eq, smul_add, ← map_add]
+  add_smul r₁ r₂ m := by
+    obtain ⟨U, r₁, r₂, m, rfl, rfl, rfl⟩ := jointly_surjective₃ r₁ r₂ m
+    simp only [smul_eq, ← map_add, add_smul]
 
 Depends on / 依赖: map_mul, mul_smul, one_smul, smul_add, smul_eq, smul_zero, zero_smul
 -/
@@ -619,7 +653,7 @@ lemma map_smul_homEquiv'_iff
     apply smul_eq
   · rw [homEquiv'_app_apply, homEquiv'_app_apply, ← h]
     congr 1
-    exact (smul_eq ..).sy
+    exact (smul_eq ..).symm
 
 中文:
 引理 map_smul_homEquiv'_iff
@@ -632,7 +666,7 @@ lemma map_smul_homEquiv'_iff
     apply smul_eq
   · rw [homEquiv'_app_apply, homEquiv'_app_apply, ← h]
     congr 1
-    exact (smul_eq ..).sy
+    exact (smul_eq ..).symm
 
 Depends on / 依赖: AddCommGrpCat, HasExactColimitsOfShape, HasExactColimitsOfShape.domain_of_functor, ModuleCat, cR.pt, domain_of_functor, homEquiv
 -/
@@ -664,7 +698,21 @@ definition homEquiv
   invFun ψ := ModuleCat.ofHom
     { toFun := (homEquiv' hcR hcM).symm ((toPresheaf _).map ψ)
       map_add' := by simp
-    
+      map_smul' := by
+        obtain ⟨φ, hφ⟩ := (homEquiv' hcR hcM).surjective ((toPresheaf _).map ψ)
+        simp only [← hφ, AddEquiv.symm_apply_apply, RingHom.id_apply]
+        refine (map_smul_homEquiv'_iff hcR hcM φ).1 (fun U r m => ?_)
+        rw [hφ]
+        erw [toPresheaf_map_app_apply]
+        rw [map_smul]
+        rfl }
+  left_inv φ := (forget₂ _ AddCommGrpCat).map_injective (by
+    ext : 1
+    exact (homEquiv' hcR hcM).left_inv ((forget₂ _ AddCommGrpCat).map φ).hom)
+  right_inv ψ := (toPresheaf _).map_injective ((homEquiv' hcR hcM).right_inv _)
+  map_add' φ₁ φ₂ := (toPresheaf _).map_injective
+    ((homEquiv' hcR hcM).map_add ((forget₂ _ AddCommGrpCat).map φ₁).hom
+      ((forget₂ _ AddCommGrpCat).map φ₂).hom)
 
 中文:
 定义 homEquiv
@@ -675,7 +723,21 @@ definition homEquiv
   invFun ψ := ModuleCat.ofHom
     { toFun := (homEquiv' hcR hcM).symm ((toPresheaf _).map ψ)
       map_add' := by simp
-    
+      map_smul' := by
+        obtain ⟨φ, hφ⟩ := (homEquiv' hcR hcM).surjective ((toPresheaf _).map ψ)
+        simp only [← hφ, AddEquiv.symm_apply_apply, RingHom.id_apply]
+        refine (map_smul_homEquiv'_iff hcR hcM φ).1 (fun U r m => ?_)
+        rw [hφ]
+        erw [toPresheaf_map_app_apply]
+        rw [map_smul]
+        rfl }
+  left_inv φ := (forget₂ _ AddCommGrpCat).map_injective (by
+    ext : 1
+    exact (homEquiv' hcR hcM).left_inv ((forget₂ _ AddCommGrpCat).map φ).hom)
+  right_inv ψ := (toPresheaf _).map_injective ((homEquiv' hcR hcM).right_inv _)
+  map_add' φ₁ φ₂ := (toPresheaf _).map_injective
+    ((homEquiv' hcR hcM).map_add ((forget₂ _ AddCommGrpCat).map φ₁).hom
+      ((forget₂ _ AddCommGrpCat).map φ₂).hom)
 
 Depends on / 依赖: PresheafOfModules, PresheafOfModules.homMk
 -/
@@ -783,7 +845,12 @@ definition map
   map_smul' r m := by
     obtain ⟨U, r, m, rfl, rfl⟩ := ModuleColimit.jointly_surjective₂ r m
     let c := (Cocone.precompose ((toPresheaf _).map f)).obj cM'
-    have h₁ := ConcreteCategory.congr_hom (hcM.f
+    have h₁ := ConcreteCategory.congr_hom (hcM.fac c U) (r • m)
+    have h₂ := ConcreteCategory.congr_hom (hcM.fac c U) m
+    dsimp [c] at h₁ h₂ ⊢
+    rw [ModuleColimit.smul_eq]
+    erw [h₁, h₂, ModuleColimit.smul_eq, ← (f.app U).hom.map_smul]
+    rfl
 
 中文:
 定义 map
@@ -793,7 +860,12 @@ definition map
   map_smul' r m := by
     obtain ⟨U, r, m, rfl, rfl⟩ := ModuleColimit.jointly_surjective₂ r m
     let c := (Cocone.precompose ((toPresheaf _).map f)).obj cM'
-    have h₁ := ConcreteCategory.congr_hom (hcM.f
+    have h₁ := ConcreteCategory.congr_hom (hcM.fac c U) (r • m)
+    have h₂ := ConcreteCategory.congr_hom (hcM.fac c U) m
+    dsimp [c] at h₁ h₂ ⊢
+    rw [ModuleColimit.smul_eq]
+    erw [h₁, h₂, ModuleColimit.smul_eq, ← (f.app U).hom.map_smul]
+    rfl
 
 Depends on / 依赖: Cocone, Cocone.precompose, hcM.desc, precompose, toPresheaf
 -/

@@ -54,7 +54,7 @@ theorem GoodProducts.P0
   · subst C
     exact linearIndependentEmpty
   · subst C
-    exact linearIndependentSing
+    exact linearIndependentSingleton
 
 中文:
 定理 GoodProducts.P0
@@ -67,7 +67,7 @@ theorem GoodProducts.P0
   · subst C
     exact linearIndependentEmpty
   · subst C
-    exact linearIndependentSing
+    exact linearIndependentSingleton
 
 Depends on / 依赖: Bool.eq_false_iff.mpr, Set.subset_singleton_iff_eq, eq_false_iff, linearIndependentEmpty, linearIndependentSingleton, not_lt_zero, subset_singleton_iff_eq, subseteq
 -/
@@ -92,7 +92,8 @@ theorem GoodProducts.Plimit
   rw [linearIndependent_iff_union_smaller C ho hsC]; rw [linearIndependent_subtype_iff]
   exact linearIndepOn_iUnion_of_directed
     (Monotone.directed_le fun _ _ h => GoodProducts.smaller_mono C h) fun ⟨o', ho'⟩ =>
-    (linearIndependent_iff_smaller _ _).mp (h o' ho' (ho'.
+    (linearIndependent_iff_smaller _ _).mp (h o' ho' (ho'.le.trans hho)
+    (π C (ord I · < o')) (isClosed_proj _ _ hC) (contained_proj _ _))
 
 中文:
 定理 GoodProducts.Plimit
@@ -102,7 +103,8 @@ theorem GoodProducts.Plimit
   rw [linearIndependent_iff_union_smaller C ho hsC]; rw [linearIndependent_subtype_iff]
   exact linearIndepOn_iUnion_of_directed
     (Monotone.directed_le fun _ _ h => GoodProducts.smaller_mono C h) fun ⟨o', ho'⟩ =>
-    (linearIndependent_iff_smaller _ _).mp (h o' ho' (ho'.
+    (linearIndependent_iff_smaller _ _).mp (h o' ho' (ho'.le.trans hho)
+    (π C (ord I · < o')) (isClosed_proj _ _ hC) (contained_proj _ _))
 
 Depends on / 依赖: GoodProducts, GoodProducts.smaller_mono, Monotone, Monotone.directed_le, contained_proj, directed_le, isClosed_proj, le.trans, linearIndepOn_iUnion_of_directed, linearIndependent_iff_smaller, linearIndependent_iff_union_smaller, linearIndependent_subtype_iff, smaller_mono
 -/
@@ -128,7 +130,12 @@ theorem GoodProducts.linearIndependentAux
   have ho' : o < Ordinal.type (· < · : I -> I -> Prop) :=
     lt_of_lt_of_le (Order.lt_succ _) ho
   rw [linearIndependent_iff_sum C hsC ho']
-  refine ModuleCat.
+  refine ModuleCat.linearIndependent_leftExact (succ_exact C hC hsC ho') ?_ ?_ (succ_mono C o)
+    (square_commutes C ho')
+  · exact h (le_of_lt ho') (π C (ord I · < o)) (isClosed_proj C o hC) (contained_proj C o)
+  · exact linearIndependent_comp_of_eval C hC hsC ho' (span (π C (ord I · < o))
+      (isClosed_proj C o hC)) (h (le_of_lt ho') (C' C ho') (isClosed_C' C hC ho')
+      (contained_C' C ho'))
 
 中文:
 定理 GoodProducts.linearIndependentAux
@@ -140,7 +147,12 @@ theorem GoodProducts.linearIndependentAux
   have ho' : o < Ordinal.type (· < · : I -> I -> Prop) :=
     lt_of_lt_of_le (Order.lt_succ _) ho
   rw [linearIndependent_iff_sum C hsC ho']
-  refine ModuleCat.
+  refine ModuleCat.linearIndependent_leftExact (succ_exact C hC hsC ho') ?_ ?_ (succ_mono C o)
+    (square_commutes C ho')
+  · exact h (le_of_lt ho') (π C (ord I · < o)) (isClosed_proj C o hC) (contained_proj C o)
+  · exact linearIndependent_comp_of_eval C hC hsC ho' (span (π C (ord I · < o))
+      (isClosed_proj C o hC)) (h (le_of_lt ho') (C' C ho') (isClosed_C' C hC ho')
+      (contained_C' C ho'))
 
 Depends on / 依赖: GoodProducts, GoodProducts.Plimit, ModuleCat, ModuleCat.linearIndependent_leftExact, Order.lt_succ, Ordinal, Ordinal.limitRecOn, Ordinal.type, Plimit, contained_proj, isClosed_proj, le_of_lt, limitRecOn, linearIndependent_com, linearIndependent_iff_sum, linearIndependent_leftExact, lt_of_lt_of_le, lt_succ, square_commutes, succ_exact
 -/
@@ -266,7 +278,20 @@ theorem Nobeling.isClosedEmbedding
     refine ((IsLocallyConstant.tfae _).out 0 3).mpr ?_
     rintro ⟨⟩
     · refine IsClopen.isOpen (isClopen_compl_iff.mp ?_)
-      c
+      convert! C.2
+      ext x
+      simp
+    · refine IsClopen.isOpen ?_
+      convert! C.2
+      ext x
+      simp only [Set.mem_preimage, Set.mem_singleton_iff, decide_eq_true_eq]
+  · intro a b h
+    by_contra hn
+    obtain ⟨C, hC, hh⟩ := exists_isClopen_of_totally_separated hn
+    apply hh.2 ∘ of_decide_eq_true
+    dsimp +unfoldPartialApp [ι] at h
+    rw [← congr_fun h ⟨C]; rw [hC⟩]
+    exact decide_eq_true hh.1
 
 中文:
 定理 Nobeling.isClosedEmbedding
@@ -281,7 +306,20 @@ theorem Nobeling.isClosedEmbedding
     refine ((IsLocallyConstant.tfae _).out 0 3).mpr ?_
     rintro ⟨⟩
     · refine IsClopen.isOpen (isClopen_compl_iff.mp ?_)
-      c
+      convert! C.2
+      ext x
+      simp
+    · refine IsClopen.isOpen ?_
+      convert! C.2
+      ext x
+      simp only [Set.mem_preimage, Set.mem_singleton_iff, decide_eq_true_eq]
+  · intro a b h
+    by_contra hn
+    obtain ⟨C, hC, hh⟩ := exists_isClopen_of_totally_separated hn
+    apply hh.2 ∘ of_decide_eq_true
+    dsimp +unfoldPartialApp [ι] at h
+    rw [← congr_fun h ⟨C]; rw [hC⟩]
+    exact decide_eq_true hh.1
 
 Depends on / 依赖: Continuous, Continuous.isClosedEmbedding, IsClopen, IsClopen.isOpen, IsLocallyConstant, IsLocallyConstant.iff_continuous, IsLocallyConstant.tfae, Set.mem_preimage, Set.mem_singleton_iff, classical, continuous_pi, convert, decide_eq_true_eq, exists_isClopen_of_totally_separated, iff_continuous, isClopen_compl_iff, isClopen_compl_iff.mp, isClosedEmbedding, isOpen, mem_preimage
 -/

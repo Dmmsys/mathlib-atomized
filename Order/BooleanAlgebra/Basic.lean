@@ -270,7 +270,9 @@ theorem sdiff_inf_sdiff
       _ = (x ⊓ (y ⊓ x) ⊔ x ⊓ y \ x) ⊓ x \ y := by rw [inf_sup_left]
       _ = (y ⊓ (x ⊓ x) ⊔ x ⊓ y \ x) ⊓ x \ y := by ac_rfl
       _ = x ⊓ y \ x ⊓ x \ y := by
-          rw [inf_idem]; rw [inf_sup_right];
+          rw [inf_idem]; rw [inf_sup_right]; rw [← inf_comm x y]; rw [inf_inf_sdiff]; rw [bot_sup_eq]
+      _ = x ⊓ x \ y ⊓ y \ x := by ac_rfl
+      _ = x \ y ⊓ y \ x := by rw [inf_of_le_right sdiff_le']
 
 中文:
 定理 sdiff_inf_sdiff
@@ -281,7 +283,9 @@ theorem sdiff_inf_sdiff
       _ = (x ⊓ (y ⊓ x) ⊔ x ⊓ y \ x) ⊓ x \ y := by rw [inf_sup_left]
       _ = (y ⊓ (x ⊓ x) ⊔ x ⊓ y \ x) ⊓ x \ y := by ac_rfl
       _ = x ⊓ y \ x ⊓ x \ y := by
-          rw [inf_idem]; rw [inf_sup_right];
+          rw [inf_idem]; rw [inf_sup_right]; rw [← inf_comm x y]; rw [inf_inf_sdiff]; rw [bot_sup_eq]
+      _ = x ⊓ x \ y ⊓ y \ x := by ac_rfl
+      _ = x \ y ⊓ y \ x := by rw [inf_of_le_right sdiff_le']
 
 Depends on / 依赖: Eq.symm, bot_sup_eq, inf_comm, inf_idem, inf_inf_sdiff, inf_of_le_right, inf_sup_left, inf_sup_right, sdiff_le, sup_inf_sdiff
 -/
@@ -650,7 +654,14 @@ theorem sdiff_sup
       y ⊓ (x ⊔ z) ⊔ y \ x ⊓ y \ z = (y ⊓ x ⊔ y ⊓ z ⊔ y \ x) ⊓ (y ⊓ x ⊔ y ⊓ z ⊔ y \ z) := by
           rw [sup_inf_left]; rw [inf_sup_left y]
       _ = (y ⊓ z ⊔ (y ⊓ x ⊔ y \ x)) ⊓ (y ⊓ x ⊔ (y ⊓ z ⊔ y \ z)) := by ac_rfl
-      _ = (y ⊓ z ⊔ y) ⊓ (y ⊓ x ⊔ y) := by rw [sup_inf_sdiff
+      _ = (y ⊓ z ⊔ y) ⊓ (y ⊓ x ⊔ y) := by rw [sup_inf_sdiff, sup_inf_sdiff]
+      _ = (y ⊔ y ⊓ z) ⊓ (y ⊔ y ⊓ x) := by ac_rfl
+      _ = y := by rw [sup_inf_self, sup_inf_self, inf_idem])
+    (calc
+      y ⊓ (x ⊔ z) ⊓ (y \ x ⊓ y \ z) = y ⊓ x ⊓ (y \ x ⊓ y \ z) ⊔ y ⊓ z ⊓ (y \ x ⊓ y \ z) := by
+          rw [inf_sup_left]; rw [inf_sup_right]
+      _ = y ⊓ x ⊓ y \ x ⊓ y \ z ⊔ y \ x ⊓ (y \ z ⊓ (y ⊓ z)) := by ac_rfl
+      _ = ⊥ := by simp)
 
 中文:
 定理 sdiff_sup
@@ -660,7 +671,14 @@ theorem sdiff_sup
       y ⊓ (x ⊔ z) ⊔ y \ x ⊓ y \ z = (y ⊓ x ⊔ y ⊓ z ⊔ y \ x) ⊓ (y ⊓ x ⊔ y ⊓ z ⊔ y \ z) := by
           rw [sup_inf_left]; rw [inf_sup_left y]
       _ = (y ⊓ z ⊔ (y ⊓ x ⊔ y \ x)) ⊓ (y ⊓ x ⊔ (y ⊓ z ⊔ y \ z)) := by ac_rfl
-      _ = (y ⊓ z ⊔ y) ⊓ (y ⊓ x ⊔ y) := by rw [sup_inf_sdiff
+      _ = (y ⊓ z ⊔ y) ⊓ (y ⊓ x ⊔ y) := by rw [sup_inf_sdiff, sup_inf_sdiff]
+      _ = (y ⊔ y ⊓ z) ⊓ (y ⊔ y ⊓ x) := by ac_rfl
+      _ = y := by rw [sup_inf_self, sup_inf_self, inf_idem])
+    (calc
+      y ⊓ (x ⊔ z) ⊓ (y \ x ⊓ y \ z) = y ⊓ x ⊓ (y \ x ⊓ y \ z) ⊔ y ⊓ z ⊓ (y \ x ⊓ y \ z) := by
+          rw [inf_sup_left]; rw [inf_sup_right]
+      _ = y ⊓ x ⊓ y \ x ⊓ y \ z ⊔ y \ x ⊓ (y \ z ⊓ (y ⊓ z)) := by ac_rfl
+      _ = ⊥ := by simp)
 
 Depends on / 依赖: inf_idem, inf_sup_left, sdiff_unique, sup_inf_left, sup_inf_sdiff, sup_inf_self
 -/
@@ -882,7 +900,17 @@ theorem sdiff_sdiff_right
       x ⊓ y \ z ⊔ (z ⊓ x ⊔ x \ y) = (x ⊔ (z ⊓ x ⊔ x \ y)) ⊓ (y \ z ⊔ (z ⊓ x ⊔ x \ y)) := by
           rw [sup_inf_right]
       _ = (x ⊔ x ⊓ z ⊔ x \ y) ⊓ (y \ z ⊔ (x ⊓ z ⊔ x \ y)) := by ac_rfl
-  
+      _ = x ⊓ (y \ z ⊔ (x ⊓ z ⊔ x ⊓ y) ⊔ x \ y) := by
+          rw [sup_inf_self]; rw [sup_sdiff_left]; rw [← sup_assoc]; rw [sup_inf_left]; rw [sdiff_sup_self']; rw [inf_sup_right]; rw [sup_comm y]; rw [inf_sdiff_sup_right]; rw [inf_sup_left x z y]
+      _ = x ⊓ (y \ z ⊔ (x ⊓ z ⊔ (x ⊓ y ⊔ x \ y))) := by ac_rfl
+      _ = x := by simp
+  · calc
+      x ⊓ y \ z ⊓ (z ⊓ x ⊔ x \ y) = x ⊓ y \ z ⊓ (z ⊓ x) ⊔ x ⊓ y \ z ⊓ x \ y := by rw [inf_sup_left]
+      _ = x ⊓ (y \ z ⊓ z ⊓ x) ⊔ x ⊓ y \ z ⊓ x \ y := by ac_rfl
+      _ = x ⊓ y \ z ⊓ x \ y := by rw [inf_sdiff_self_left, bot_inf_eq, inf_bot_eq, bot_sup_eq]
+      _ = x ⊓ (y \ z ⊓ y) ⊓ x \ y := by conv_lhs => rw [← inf_sdiff_left]
+      _ = x ⊓ (y \ z ⊓ (y ⊓ x \ y)) := by ac_rfl
+      _ = ⊥ := by rw [inf_sdiff_self_right, inf_bot_eq, inf_bot_eq]
 
 中文:
 定理 sdiff_sdiff_right
@@ -894,7 +922,17 @@ theorem sdiff_sdiff_right
       x ⊓ y \ z ⊔ (z ⊓ x ⊔ x \ y) = (x ⊔ (z ⊓ x ⊔ x \ y)) ⊓ (y \ z ⊔ (z ⊓ x ⊔ x \ y)) := by
           rw [sup_inf_right]
       _ = (x ⊔ x ⊓ z ⊔ x \ y) ⊓ (y \ z ⊔ (x ⊓ z ⊔ x \ y)) := by ac_rfl
-  
+      _ = x ⊓ (y \ z ⊔ (x ⊓ z ⊔ x ⊓ y) ⊔ x \ y) := by
+          rw [sup_inf_self]; rw [sup_sdiff_left]; rw [← sup_assoc]; rw [sup_inf_left]; rw [sdiff_sup_self']; rw [inf_sup_right]; rw [sup_comm y]; rw [inf_sdiff_sup_right]; rw [inf_sup_left x z y]
+      _ = x ⊓ (y \ z ⊔ (x ⊓ z ⊔ (x ⊓ y ⊔ x \ y))) := by ac_rfl
+      _ = x := by simp
+  · calc
+      x ⊓ y \ z ⊓ (z ⊓ x ⊔ x \ y) = x ⊓ y \ z ⊓ (z ⊓ x) ⊔ x ⊓ y \ z ⊓ x \ y := by rw [inf_sup_left]
+      _ = x ⊓ (y \ z ⊓ z ⊓ x) ⊔ x ⊓ y \ z ⊓ x \ y := by ac_rfl
+      _ = x ⊓ y \ z ⊓ x \ y := by rw [inf_sdiff_self_left, bot_inf_eq, inf_bot_eq, bot_sup_eq]
+      _ = x ⊓ (y \ z ⊓ y) ⊓ x \ y := by conv_lhs => rw [← inf_sdiff_left]
+      _ = x ⊓ (y \ z ⊓ (y ⊓ x \ y)) := by ac_rfl
+      _ = ⊥ := by rw [inf_sdiff_self_right, inf_bot_eq, inf_bot_eq]
 
 Depends on / 依赖: inf_assoc, inf_comm, inf_sdiff_sup_right, inf_sup_left, inf_sup_right, sdiff_sup_self, sdiff_unique, sup_assoc, sup_comm, sup_inf_inf_sdiff, sup_inf_left, sup_inf_right, sup_inf_self, sup_sdiff_left
 -/
@@ -1154,7 +1192,8 @@ theorem sdiff_sdiff_sup_sdiff
   proof: calc
     z \ (x \ y ⊔ y \ x) = z ⊓ (z \ x ⊔ y) ⊓ (z ⊓ (z \ y ⊔ x)) := by
         rw [sdiff_sup]; rw [sdiff_sdiff_right]; rw [sdiff_sdiff_right]; rw [sup_inf_left]; rw [sup_comm]; rw [sup_inf_sdiff]; rw [sup_inf_left]; rw [sup_comm (z \ y)]; rw [sup_inf_sdiff]
-    _ = z ⊓ z ⊓ (z \ x ⊔ y) ⊓ (z \ y ⊔ x
+    _ = z ⊓ z ⊓ (z \ x ⊔ y) ⊓ (z \ y ⊔ x) := by ac_rfl
+    _ = z ⊓ (z \ x ⊔ y) ⊓ (z \ y ⊔ x) := by rw [inf_idem]
 
 中文:
 定理 sdiff_sdiff_sup_sdiff
@@ -1162,7 +1201,8 @@ theorem sdiff_sdiff_sup_sdiff
   证明: calc
     z \ (x \ y ⊔ y \ x) = z ⊓ (z \ x ⊔ y) ⊓ (z ⊓ (z \ y ⊔ x)) := by
         rw [sdiff_sup]; rw [sdiff_sdiff_right]; rw [sdiff_sdiff_right]; rw [sup_inf_left]; rw [sup_comm]; rw [sup_inf_sdiff]; rw [sup_inf_left]; rw [sup_comm (z \ y)]; rw [sup_inf_sdiff]
-    _ = z ⊓ z ⊓ (z \ x ⊔ y) ⊓ (z \ y ⊔ x
+    _ = z ⊓ z ⊓ (z \ x ⊔ y) ⊓ (z \ y ⊔ x) := by ac_rfl
+    _ = z ⊓ (z \ x ⊔ y) ⊓ (z \ y ⊔ x) := by rw [inf_idem]
 
 Depends on / 依赖: inf_idem, sdiff_sdiff_right, sdiff_sup, sup_comm, sup_inf_left, sup_inf_sdiff
 -/
@@ -1184,7 +1224,7 @@ theorem sdiff_sdiff_sup_sdiff'
     _ = (z \ x ⊔ z ⊓ x ⊓ y) ⊓ (z \ y ⊔ z ⊓ y ⊓ x) := by rw [sdiff_sdiff_right, sdiff_sdiff_right]
     _ = (z \ x ⊔ z ⊓ y ⊓ x) ⊓ (z \ y ⊔ z ⊓ y ⊓ x) := by ac_rfl
     _ = z \ x ⊓ z \ y ⊔ z ⊓ y ⊓ x := by rw [← sup_inf_right]
-    _ = 
+    _ = z ⊓ x ⊓ y ⊔ z \ x ⊓ z \ y := by ac_rfl
 
 中文:
 定理 sdiff_sdiff_sup_sdiff'
@@ -1194,7 +1234,7 @@ theorem sdiff_sdiff_sup_sdiff'
     _ = (z \ x ⊔ z ⊓ x ⊓ y) ⊓ (z \ y ⊔ z ⊓ y ⊓ x) := by rw [sdiff_sdiff_right, sdiff_sdiff_right]
     _ = (z \ x ⊔ z ⊓ y ⊓ x) ⊓ (z \ y ⊔ z ⊓ y ⊓ x) := by ac_rfl
     _ = z \ x ⊓ z \ y ⊔ z ⊓ y ⊓ x := by rw [← sup_inf_right]
-    _ = 
+    _ = z ⊓ x ⊓ y ⊔ z \ x ⊓ z \ y := by ac_rfl
 
 Depends on / 依赖: sdiff_sdiff_right, sdiff_sup, sup_inf_right
 -/
@@ -1268,7 +1308,11 @@ theorem inf_sdiff
       _ = (x ⊓ y ⊓ (z ⊔ x) ⊔ x \ z) ⊓ (x ⊓ y ⊓ z ⊔ y \ z) := by
           rw [sup_inf_left]; rw [sup_inf_right]; rw [sup_sdiff_self_right]; rw [inf_sup_right]; rw [inf_sdiff_sup_right]
       _ = (y ⊓ (x ⊓ (x ⊔ z)) ⊔ x \ z) ⊓ (x ⊓ y ⊓ z ⊔ y \ z) := by ac_rfl
-      _ = x ⊓ y ⊔ x
+      _ = x ⊓ y ⊔ x \ z ⊓ y \ z := by rw [inf_sup_self, sup_inf_inf_sdiff, inf_comm y, sup_inf_left]
+      _ = x ⊓ y := sup_eq_left.2 (inf_le_inf sdiff_le sdiff_le))
+    (calc
+      x ⊓ y ⊓ z ⊓ (x \ z ⊓ y \ z) = x ⊓ y ⊓ (z ⊓ x \ z) ⊓ y \ z := by ac_rfl
+      _ = ⊥ := by rw [inf_sdiff_self_right, inf_bot_eq, bot_inf_eq])
 
 中文:
 定理 inf_sdiff
@@ -1278,7 +1322,11 @@ theorem inf_sdiff
       _ = (x ⊓ y ⊓ (z ⊔ x) ⊔ x \ z) ⊓ (x ⊓ y ⊓ z ⊔ y \ z) := by
           rw [sup_inf_left]; rw [sup_inf_right]; rw [sup_sdiff_self_right]; rw [inf_sup_right]; rw [inf_sdiff_sup_right]
       _ = (y ⊓ (x ⊓ (x ⊔ z)) ⊔ x \ z) ⊓ (x ⊓ y ⊓ z ⊔ y \ z) := by ac_rfl
-      _ = x ⊓ y ⊔ x
+      _ = x ⊓ y ⊔ x \ z ⊓ y \ z := by rw [inf_sup_self, sup_inf_inf_sdiff, inf_comm y, sup_inf_left]
+      _ = x ⊓ y := sup_eq_left.2 (inf_le_inf sdiff_le sdiff_le))
+    (calc
+      x ⊓ y ⊓ z ⊓ (x \ z ⊓ y \ z) = x ⊓ y ⊓ (z ⊓ x \ z) ⊓ y \ z := by ac_rfl
+      _ = ⊥ := by rw [inf_sdiff_self_right, inf_bot_eq, bot_inf_eq])
 
 Depends on / 依赖: inf_comm, inf_le_inf, inf_sdiff_sup_right, inf_sup_right, inf_sup_self, sdiff_le, sdiff_unique, sup_eq_left, sup_inf_inf_sdiff, sup_inf_left, sup_inf_right, sup_sdiff_self_right
 -/
@@ -2686,7 +2734,10 @@ le_top _ := le.1 (@le_top β _ _ _).trans map_top.ge
 bot_le _ := le.1 map_bot.le.trans bot_le
   inf_compl_le_bot a := le.1 ((map_inf _ _).trans <| by
     rw [map_compl]; rw [inf_compl_eq_bot]; rw [map_bot]).le
-  top_le_sup_compl a
+  top_le_sup_compl a := le.1 ((map_sup _ _).trans <| by
+    rw [map_compl]; rw [sup_compl_eq_top]; rw [map_top]).ge
+sdiff_eq a b := hf (map_sdiff _ _).trans sdiff_eq.trans by rw [map_inf, map_compl]
+himp_eq a b := hf (map_himp _ _).trans himp_eq.trans by rw [map_sup, map_compl]
 
 中文:
 缩写 函数.单射.booleanAlgebra
@@ -2696,7 +2747,10 @@ le_top _ := le.1 (@le_top β _ _ _).trans map_top.ge
 bot_le _ := le.1 map_bot.le.trans bot_le
   inf_compl_le_bot a := le.1 ((map_inf _ _).trans <| by
     rw [map_compl]; rw [inf_compl_eq_bot]; rw [map_bot]).le
-  top_le_sup_compl a
+  top_le_sup_compl a := le.1 ((map_sup _ _).trans <| by
+    rw [map_compl]; rw [sup_compl_eq_top]; rw [map_top]).ge
+sdiff_eq a b := hf (map_sdiff _ _).trans sdiff_eq.trans by rw [map_inf, map_compl]
+himp_eq a b := hf (map_himp _ _).trans himp_eq.trans by rw [map_sup, map_compl]
 -/
 protected abbrev Function.Injective.booleanAlgebra [Max α] [Min α] [LE α] [LT α] [Top α] [Bot α]
     [Compl α] [SDiff α] [HImp α] [BooleanAlgebra β] (f : α -> β) (hf : Injective f)

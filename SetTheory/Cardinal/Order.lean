@@ -389,7 +389,11 @@ definition liftInitialSeg
     rw [← lift_umax]; rw [lift_mk_le.{v]; rw [u]; rw [u}]; rw [le_def]
   · refine inductionOn₂ a b fun α β h => ?_
     obtain ⟨e⟩ := h.le
-    replace e := e.congr (Equiv.refl β) 
+    replace e := e.congr (Equiv.refl β) Equiv.ulift
+    refine ⟨#(range e), mk_congr (Equiv.ulift.trans <| Equiv.symm ?_)⟩
+    apply (e.codRestrict _ mem_range_self).equivOfSurjective
+    rintro ⟨a, ⟨b, rfl⟩⟩
+    exact ⟨b, rfl⟩
 
 中文:
 定义 liftInitialSeg
@@ -400,7 +404,11 @@ definition liftInitialSeg
     rw [← lift_umax]; rw [lift_mk_le.{v]; rw [u]; rw [u}]; rw [le_def]
   · refine inductionOn₂ a b fun α β h => ?_
     obtain ⟨e⟩ := h.le
-    replace e := e.congr (Equiv.refl β) 
+    replace e := e.congr (Equiv.refl β) Equiv.ulift
+    refine ⟨#(range e), mk_congr (Equiv.ulift.trans <| Equiv.symm ?_)⟩
+    apply (e.codRestrict _ mem_range_self).equivOfSurjective
+    rintro ⟨a, ⟨b, rfl⟩⟩
+    exact ⟨b, rfl⟩
 
 Depends on / 依赖: Equiv.refl, Equiv.symm, Equiv.ulift, Equiv.ulift.trans, OrderEmbedding, OrderEmbedding.ofMapLEIff, codRestrict, e.codRestrict, e.congr, equivOfSurjective, h.le, le_def, lift_mk_le, lift_umax, ltEmbedding, mem_range_self, mk_congr, ofMapLEIff, replace
 -/
@@ -760,7 +768,21 @@ instance commSemiring
 add_zero a := inductionOn a fun α => mk_congr Equiv.sumEmpty α _
 add_assoc a b c := inductionOn₃ a b c fun α β γ => mk_congr Equiv.sumAssoc α β γ
 add_comm a b := inductionOn₂ a b fun α β => mk_congr Equiv.sumComm α β
-  zero_mul a := inductionOn a fu
+  zero_mul a := inductionOn a fun _ => mk_eq_zero _
+  mul_zero a := inductionOn a fun _ => mk_eq_zero _
+one_mul a := inductionOn a fun α => mk_congr Equiv.uniqueProd α _
+mul_one a := inductionOn a fun α => mk_congr Equiv.prodUnique α _
+mul_assoc a b c := inductionOn₃ a b c fun α β γ => mk_congr Equiv.prodAssoc α β γ
+mul_comm a b := inductionOn₂ a b fun α β => mk_congr Equiv.prodComm α β
+left_distrib a b c := inductionOn₃ a b c fun α β γ => mk_congr Equiv.prodSumDistrib α β γ
+right_distrib a b c := inductionOn₃ a b c fun α β γ => mk_congr Equiv.sumProdDistrib α β γ
+  nsmul := nsmulRec
+  npow n c := c ^ (n : Cardinal)
+  npow_zero := power_zero
+  npow_succ n c := by simp_rw [HPow.hPow, Pow.pow]; rw [cast_succ, power_add, power_one]
+  natCast n := lift #(Fin n)
+  natCast_zero := rfl
+  natCast_succ n := cast_succ n
 
 中文:
 实例 commSemiring
@@ -769,7 +791,21 @@ add_comm a b := inductionOn₂ a b fun α β => mk_congr Equiv.sumComm α β
 add_zero a := inductionOn a fun α => mk_congr Equiv.sumEmpty α _
 add_assoc a b c := inductionOn₃ a b c fun α β γ => mk_congr Equiv.sumAssoc α β γ
 add_comm a b := inductionOn₂ a b fun α β => mk_congr Equiv.sumComm α β
-  zero_mul a := inductionOn a fu
+  zero_mul a := inductionOn a fun _ => mk_eq_zero _
+  mul_zero a := inductionOn a fun _ => mk_eq_zero _
+one_mul a := inductionOn a fun α => mk_congr Equiv.uniqueProd α _
+mul_one a := inductionOn a fun α => mk_congr Equiv.prodUnique α _
+mul_assoc a b c := inductionOn₃ a b c fun α β γ => mk_congr Equiv.prodAssoc α β γ
+mul_comm a b := inductionOn₂ a b fun α β => mk_congr Equiv.prodComm α β
+left_distrib a b c := inductionOn₃ a b c fun α β γ => mk_congr Equiv.prodSumDistrib α β γ
+right_distrib a b c := inductionOn₃ a b c fun α β γ => mk_congr Equiv.sumProdDistrib α β γ
+  nsmul := nsmulRec
+  npow n c := c ^ (n : Cardinal)
+  npow_zero := power_zero
+  npow_succ n c := by simp_rw [HPow.hPow, Pow.pow]; rw [cast_succ, power_add, power_one]
+  natCast n := lift #(Fin n)
+  natCast_zero := rfl
+  natCast_succ n := cast_succ n
 
 Depends on / 依赖: Equiv.emptySum, emptySum, inductionOn, mk_congr
 -/
@@ -1099,7 +1135,10 @@ instance canonicallyOrderedAdd
 exact (Equiv.sumCongr (Equiv.ofInjective f hf) (Equiv.refl _)).trans
           Equiv.Set.sumCompl (range f)
       ⟨#(↥(range f)ᶜ), mk_congr this.symm⟩
-le_self_add a b := (add_zero a).ge.trans 
+le_self_add a b := (add_zero a).ge.trans add_right_mono bot_le
+le_add_self a b := (zero_add a).ge.trans add_left_mono bot_le
+
+@[deprecated zero_le (since := "2026-04-17")]
 
 中文:
 实例 canonicallyOrderedAdd
@@ -1110,7 +1149,10 @@ le_self_add a b := (add_zero a).ge.trans
 exact (Equiv.sumCongr (Equiv.ofInjective f hf) (Equiv.refl _)).trans
           Equiv.Set.sumCompl (range f)
       ⟨#(↥(range f)ᶜ), mk_congr this.symm⟩
-le_self_add a b := (add_zero a).ge.trans 
+le_self_add a b := (add_zero a).ge.trans add_right_mono bot_le
+le_add_self a b := (zero_add a).ge.trans add_left_mono bot_le
+
+@[deprecated zero_le (since := "2026-04-17")]
 
 Depends on / 依赖: Equiv.Set.sumCompl, Equiv.ofInjective, Equiv.refl, Equiv.sumCongr, add_left_mono, add_right_mono, add_zero, bot_le, classical, ge.trans, le_add_self, le_self_add, mk_congr, ofInjective, sumCompl, sumCongr, this.symm, zero_add
 -/
@@ -1456,7 +1498,10 @@ theorem lt_wf
       let f : ι -> Cardinal := Subtype.val
       have hι : Nonempty ι := ⟨⟨_, h⟩⟩
       obtain ⟨⟨c : Cardinal, hc : ¬Acc (· < ·) c⟩, ⟨h_1 : forall j, (f ⟨c, hc⟩).out ↪ (f j).out⟩⟩ :=
-        Embedding.min_in
+        Embedding.min_injective fun i => (f i).out
+      refine hc (Acc.intro _ fun j h' => by_contradiction fun hj => h'.2 ?_)
+      have : #_ <= #_ := ⟨h_1 ⟨j, hj⟩⟩
+      simpa only [mk_out] using this⟩
 
 中文:
 定理 lt_wf
@@ -1467,7 +1512,10 @@ theorem lt_wf
       let f : ι -> Cardinal := Subtype.val
       have hι : Nonempty ι := ⟨⟨_, h⟩⟩
       obtain ⟨⟨c : Cardinal, hc : ¬Acc (· < ·) c⟩, ⟨h_1 : forall j, (f ⟨c, hc⟩).out ↪ (f j).out⟩⟩ :=
-        Embedding.min_in
+        Embedding.min_injective fun i => (f i).out
+      refine hc (Acc.intro _ fun j h' => by_contradiction fun hj => h'.2 ?_)
+      have : #_ <= #_ := ⟨h_1 ⟨j, hj⟩⟩
+      simpa only [mk_out] using this⟩
 -/
 protected theorem lt_wf : @WellFounded Cardinal.{u} (· < ·) :=
   ⟨fun a =>
@@ -1654,7 +1702,7 @@ theorem add_one_le_of_lt
   rw [← mk_option]
   exact (f.optionElim b hb).cardinal_le
 
-@[deprecated add_one
+@[deprecated add_one_le_of_lt (since := "2026-03-21")]
 
 中文:
 定理 add_one_le_of_lt
@@ -1669,7 +1717,7 @@ theorem add_one_le_of_lt
   rw [← mk_option]
   exact (f.optionElim b hb).cardinal_le
 
-@[deprecated add_one
+@[deprecated add_one_le_of_lt (since := "2026-03-21")]
 
 Depends on / 依赖: Cardinal, Cardinal.inductionOn, Surjective, cardinal_le, f.optionElim, h.le, h.not_ge, mk_le_of_surjective, mk_option, not_forall, not_ge, optionElim
 -/
@@ -2180,7 +2228,10 @@ theorem lift_mk_le_lift_mk_mul_of_lift_mk_preimage_le
               (Equiv.trans
                 (by
                   rw [Equiv.image_eq_preimage_symm]
-                  simp only [preimage
+                  simp only [preimage, mem_singleton_iff, ULift.up_inj, mem_ofPred_eq, coe_ofPred]
+                  exact Equiv.refl _)
+                Equiv.ulift.symm)).trans_le
+        (hf b)
 
 中文:
 定理 lift_mk_le_lift_mk_mul_of_lift_mk_preimage_le
@@ -2192,7 +2243,10 @@ theorem lift_mk_le_lift_mk_mul_of_lift_mk_preimage_le
               (Equiv.trans
                 (by
                   rw [Equiv.image_eq_preimage_symm]
-                  simp only [preimage
+                  simp only [preimage, mem_singleton_iff, ULift.up_inj, mem_ofPred_eq, coe_ofPred]
+                  exact Equiv.refl _)
+                Equiv.ulift.symm)).trans_le
+        (hf b)
 
 Depends on / 依赖: Equiv.image_eq_preimage_symm, Equiv.refl, Equiv.trans, Equiv.ulift.image, Equiv.ulift.symm, ULift.forall, ULift.up, ULift.up_inj, coe_ofPred, image_eq_preimage_symm, mem_ofPred_eq, mem_singleton_iff, mk_congr, mk_le_mk_mul_of_mk_preimage_le, preimage, trans_le, up_inj
 -/
@@ -2446,7 +2500,14 @@ refine ⟨fun i => Classical.choice mk_ne_zero_iff.1 ?_⟩
     let G := invFun F
     have sG : Surjective G := invFun_surjective F.2
     choose C hc using
-      show forall i, exist
+      show forall i, exists b, forall a, G ⟨i, a⟩ i != b by
+        intro i
+        simp only [not_exists.symm, not_forall.symm]
+        refine fun h => (H i).not_ge ?_
+        rw [← mk_out (f i)]; rw [← mk_out (g i)]
+        exact ⟨Embedding.ofSurjective _ h⟩
+    let ⟨⟨i, a⟩, h⟩ := sG C
+    exact hc i a (congr_fun h _)
 
 中文:
 定理 sum_lt_prod
@@ -2460,7 +2521,14 @@ refine ⟨fun i => Classical.choice mk_ne_zero_iff.1 ?_⟩
     let G := invFun F
     have sG : Surjective G := invFun_surjective F.2
     choose C hc using
-      show forall i, exist
+      show forall i, exists b, forall a, G ⟨i, a⟩ i != b by
+        intro i
+        simp only [not_exists.symm, not_forall.symm]
+        refine fun h => (H i).not_ge ?_
+        rw [← mk_out (f i)]; rw [← mk_out (g i)]
+        exact ⟨Embedding.ofSurjective _ h⟩
+    let ⟨⟨i, a⟩, h⟩ := sG C
+    exact hc i a (congr_fun h _)
 
 Depends on / 依赖: Classical, Classical.choice, Embedding, Embedding.ofSurjective, Inhabited, Surjective, choice, invFun, invFun_surjective, lt_of_not_ge, mk_ne_zero_iff, mk_out, ne_bot, not_exists, not_exists.symm, not_forall, not_forall.symm, not_ge, ofSurjective
 -/

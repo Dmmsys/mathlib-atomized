@@ -47,7 +47,31 @@ theorem comap_coe_nhdsLT_eq_atTop_iff
   · simp only [hsub, true_and]
     constructor
     · intro h a ha
-      have := preimage_mem_comap (m := ((↑) : s ->
+      have := preimage_mem_comap (m := ((↑) : s -> X)) (Ioo_mem_nhdsLT ha)
+      rw [h] at this
+      rcases Filter.nonempty_of_mem this with ⟨⟨c, hcs⟩, hc⟩
+      exact ⟨c, hcs, hc⟩
+    · intro h
+.ext atTop_basis ?_ ?_ refine (nhdsLT_basis_of_exists_lt (hsne.mono hsub)).comap _
+      · intro a hab
+        rcases h a hab with ⟨c, hcs, hc⟩
+        use ⟨c, hcs⟩
+        simp_all [subset_def, hc.1.trans_le]
+      · rintro ⟨a, has⟩ -
+        use a, hsub has
+        simp_all [subset_def, le_of_lt]
+  · suffices ¬Tendsto (↑) (atTop : Filter s) (𝓝[<] b) by
+      contrapose this
+      simp_all [tendsto_iff_comap]
+    intro h
+    rcases not_subset_iff_exists_mem_notMem.mp hsub with ⟨a, has, ha⟩
+.exists .and (eventually_ge_atTop ⟨a, has⟩) rcases h.eventually eventually_mem_nhdsWithin
+      with ⟨⟨c, hcs⟩, hcb, hac⟩
+    apply lt_irrefl a
+    calc
+      a <= c := by simpa using hac
+      _ < b := by simpa using hcb
+      _ <= a := by simpa using ha
 
 中文:
 定理 comap_coe_nhdsLT_eq_atTop_iff
@@ -60,7 +84,31 @@ theorem comap_coe_nhdsLT_eq_atTop_iff
   · simp only [hsub, true_and]
     constructor
     · intro h a ha
-      have := preimage_mem_comap (m := ((↑) : s ->
+      have := preimage_mem_comap (m := ((↑) : s -> X)) (Ioo_mem_nhdsLT ha)
+      rw [h] at this
+      rcases Filter.nonempty_of_mem this with ⟨⟨c, hcs⟩, hc⟩
+      exact ⟨c, hcs, hc⟩
+    · intro h
+.ext atTop_basis ?_ ?_ refine (nhdsLT_basis_of_exists_lt (hsne.mono hsub)).comap _
+      · intro a hab
+        rcases h a hab with ⟨c, hcs, hc⟩
+        use ⟨c, hcs⟩
+        simp_all [subset_def, hc.1.trans_le]
+      · rintro ⟨a, has⟩ -
+        use a, hsub has
+        simp_all [subset_def, le_of_lt]
+  · suffices ¬Tendsto (↑) (atTop : Filter s) (𝓝[<] b) by
+      contrapose this
+      simp_all [tendsto_iff_comap]
+    intro h
+    rcases not_subset_iff_exists_mem_notMem.mp hsub with ⟨a, has, ha⟩
+.exists .and (eventually_ge_atTop ⟨a, has⟩) rcases h.eventually eventually_mem_nhdsWithin
+      with ⟨⟨c, hcs⟩, hcb, hac⟩
+    apply lt_irrefl a
+    calc
+      a <= c := by simpa using hac
+      _ < b := by simpa using hcb
+      _ <= a := by simpa using ha
 
 Depends on / 依赖: Filter, Filter.nonempty_of_mem, Ioo_mem_nhdsLT, atTop_basis, eq_empty_or_nonempty, eq_iff_true_of_subsingleton, hsne.mono, hsne.to_subtype, nhdsLT_basis_of_exists_lt, nonempty_of_mem, preimage_mem_comap, s.eq_empty_or_nonempty, subseteq, to_subtype, true_and, true_imp_iff
 -/
@@ -200,7 +248,8 @@ theorem map_coe_atTop_of_Ioo_subset
   · have : IsEmpty s := ⟨fun x => hb'.subset (hsb x.2)⟩
     rw [filter_eq_bot_of_isEmpty atTop]; rw [Filter.map_bot]; rw [hb']; rw [nhdsWithin_empty]
   · rw [← comap_coe_nhdsLT_of_Ioo_subset hsb (fun _ => hs a ha) hb, map_comap_of_mem]
-  
+    rw [Subtype.range_val]
+    exact (mem_nhdsLT_iff_exists_Ioo_subset' ha).2 (hs a ha)
 
 中文:
 定理 map_coe_atTop_of_Ioo_subset
@@ -210,7 +259,8 @@ theorem map_coe_atTop_of_Ioo_subset
   · have : IsEmpty s := ⟨fun x => hb'.subset (hsb x.2)⟩
     rw [filter_eq_bot_of_isEmpty atTop]; rw [Filter.map_bot]; rw [hb']; rw [nhdsWithin_empty]
   · rw [← comap_coe_nhdsLT_of_Ioo_subset hsb (fun _ => hs a ha) hb, map_comap_of_mem]
-  
+    rw [Subtype.range_val]
+    exact (mem_nhdsLT_iff_exists_Ioo_subset' ha).2 (hs a ha)
 
 Depends on / 依赖: Filter, Filter.map_bot, IsEmpty, Subtype, Subtype.range_val, comap_coe_nhdsLT_of_Ioo_subset, eq_empty_or_nonempty, filter_eq_bot_of_isEmpty, map_bot, map_comap_of_mem, mem_nhdsLT_iff_exists_Ioo_subset, nhdsWithin_empty, of_dense, range_val, subset
 -/
@@ -670,7 +720,15 @@ theorem locallyFinite_Icc_of_tendsto
   obtain ⟨x_R, hx_R⟩ := exists_gt x
   obtain ⟨a_L, ha_L : forall a <= a_L, g a <= x_L⟩ :=
 .exists_forall_of_atBot hu.eventually_le_atBot x_L
-  obtain ⟨a_R, ha_R : fo
+  obtain ⟨a_R, ha_R : forall a >= a_R, x_R <= f a⟩ :=
+.exists_forall_of_atTop hl.eventually_ge_atTop x_R
+  refine ⟨Ioo x_L x_R, Ioo_mem_nhds hx_L hx_R, (finite_Icc a_L a_R).subset ?_⟩
+  rintro n ⟨y, ⟨hf, hg⟩, ⟨hxL, hxR⟩⟩
+  constructor
+  · contrapose! hxL
+    exact hg.trans (ha_L n hxL.le)
+  · contrapose! hxR
+    exact (ha_R n hxR.le).trans hf
 
 中文:
 定理 locallyFinite_Icc_of_tendsto
@@ -684,7 +742,15 @@ theorem locallyFinite_Icc_of_tendsto
   obtain ⟨x_R, hx_R⟩ := exists_gt x
   obtain ⟨a_L, ha_L : forall a <= a_L, g a <= x_L⟩ :=
 .exists_forall_of_atBot hu.eventually_le_atBot x_L
-  obtain ⟨a_R, ha_R : fo
+  obtain ⟨a_R, ha_R : forall a >= a_R, x_R <= f a⟩ :=
+.exists_forall_of_atTop hl.eventually_ge_atTop x_R
+  refine ⟨Ioo x_L x_R, Ioo_mem_nhds hx_L hx_R, (finite_Icc a_L a_R).subset ?_⟩
+  rintro n ⟨y, ⟨hf, hg⟩, ⟨hxL, hxR⟩⟩
+  constructor
+  · contrapose! hxL
+    exact hg.trans (ha_L n hxL.le)
+  · contrapose! hxR
+    exact (ha_R n hxR.le).trans hf
 
 Depends on / 依赖: Ioo_mem_nhds, Subsingleton, Subsingleton.elim, contrapose, eventually_ge_atTop, eventually_le_atBot, exists_forall_of_atBot, exists_forall_of_atTop, exists_gt, exists_lt, finite_Icc, ha_L, ha_R, hl.eventually_ge_atTop, hu.eventually_le_atBot, hx_L, hx_R, isEmpty_or_nonempty, subset
 -/

@@ -32,7 +32,9 @@ theorem IsCoatomic.of_isChain_bounded
   have := zorn_le_nonempty₀ (Ico x ⊤) (fun c hxc hc y hy => ?_) x (left_mem_Ico.2 hx)
   · obtain ⟨y, hxy, hmax⟩ := this
     refine ⟨y, ⟨hmax.prop.2.ne, fun z hyz => le_top.eq_or_lt.resolve_right fun hz => ?_⟩, hxy⟩
-exact hyz.ne hmax.eq_of
+exact hyz.ne hmax.eq_of_le ⟨hxy.trans hyz.le, hz⟩ hyz.le
+  rcases h c hc ⟨y, hy⟩ fun h => (hxc h).2.ne rfl with ⟨z, hz, hcz⟩
+  exact ⟨z, ⟨le_trans (hxc hy).1 (hcz hy), hz.lt_top⟩, hcz⟩
 
 中文:
 定理 是余原子的.of_isChain_bounded
@@ -42,7 +44,9 @@ exact hyz.ne hmax.eq_of
   have := zorn_le_nonempty₀ (Ico x ⊤) (fun c hxc hc y hy => ?_) x (left_mem_Ico.2 hx)
   · obtain ⟨y, hxy, hmax⟩ := this
     refine ⟨y, ⟨hmax.prop.2.ne, fun z hyz => le_top.eq_or_lt.resolve_right fun hz => ?_⟩, hxy⟩
-exact hyz.ne hmax.eq_of
+exact hyz.ne hmax.eq_of_le ⟨hxy.trans hyz.le, hz⟩ hyz.le
+  rcases h c hc ⟨y, hy⟩ fun h => (hxc h).2.ne rfl with ⟨z, hz, hcz⟩
+  exact ⟨z, ⟨le_trans (hxc hy).1 (hcz hy), hz.lt_top⟩, hcz⟩
 
 Depends on / 依赖: eq_of_le, eq_or_lt, hmax.eq_of_le, hmax.prop, hxy.trans, hyz.le, hyz.ne, hz.lt_top, imp_right, le_top, le_top.eq_or_lt.imp_right, le_top.eq_or_lt.resolve_right, le_trans, left_mem_Ico, lt_top, resolve_right
 -/

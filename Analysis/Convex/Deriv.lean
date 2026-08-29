@@ -42,7 +42,18 @@ theorem MonotoneOn.convexOn_of_deriv
       -- First we prove some trivial inclusions
       have hxzD : Icc x z subseteq D := hD.ordConnected.out hx hz
       have hxyD : Icc x y subseteq D := (Icc_subset_Icc_right hyz.le).trans hxzD
-      have hxyD' : Ioo x y sub
+      have hxyD' : Ioo x y subseteq interior D :=
+        subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hxyD⟩
+      have hyzD : Icc y z subseteq D := (Icc_subset_Icc_left hxy.le).trans hxzD
+      have hyzD' : Ioo y z subseteq interior D :=
+        subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hyzD⟩
+      -- Then we apply MVT to both `[x, y]` and `[y, z]`
+      obtain ⟨a, ⟨hxa, hay⟩, ha⟩ : exists a in Ioo x y, deriv f a = (f y - f x) / (y - x) :=
+        exists_deriv_eq_slope f hxy (hf.mono hxyD) (hf'.mono hxyD')
+      obtain ⟨b, ⟨hyb, hbz⟩, hb⟩ : exists b in Ioo y z, deriv f b = (f z - f y) / (z - y) :=
+        exists_deriv_eq_slope f hyz (hf.mono hyzD) (hf'.mono hyzD')
+      rw [← ha]; rw [← hb]
+      exact hf'_mono (hxyD' ⟨hxa, hay⟩) (hyzD' ⟨hyb, hbz⟩) (hay.trans hyb).le)
 
 中文:
 定理 MonotoneOn.convexOn_of_deriv
@@ -53,7 +64,18 @@ theorem MonotoneOn.convexOn_of_deriv
       -- First we prove some trivial inclusions
       have hxzD : Icc x z subseteq D := hD.ordConnected.out hx hz
       have hxyD : Icc x y subseteq D := (Icc_subset_Icc_right hyz.le).trans hxzD
-      have hxyD' : Ioo x y sub
+      have hxyD' : Ioo x y subseteq interior D :=
+        subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hxyD⟩
+      have hyzD : Icc y z subseteq D := (Icc_subset_Icc_left hxy.le).trans hxzD
+      have hyzD' : Ioo y z subseteq interior D :=
+        subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hyzD⟩
+      -- Then we apply MVT to both `[x, y]` and `[y, z]`
+      obtain ⟨a, ⟨hxa, hay⟩, ha⟩ : exists a in Ioo x y, deriv f a = (f y - f x) / (y - x) :=
+        exists_deriv_eq_slope f hxy (hf.mono hxyD) (hf'.mono hxyD')
+      obtain ⟨b, ⟨hyb, hbz⟩, hb⟩ : exists b in Ioo y z, deriv f b = (f z - f y) / (z - y) :=
+        exists_deriv_eq_slope f hyz (hf.mono hyzD) (hf'.mono hyzD')
+      rw [← ha]; rw [← hb]
+      exact hf'_mono (hxyD' ⟨hxa, hay⟩) (hyzD' ⟨hyb, hbz⟩) (hay.trans hyb).le)
 
 Depends on / 依赖: convexOn_of_slope_mono_adjacent
 -/
@@ -116,7 +138,10 @@ theorem StrictMonoOn.exists_slope_lt_deriv_aux
     (differentiableAt_of_deriv_ne_zero (h w wmem)).differentiableWithinAt
   obtain ⟨a, ⟨hxa, hay⟩, ha⟩ : exists a in Ioo x y, deriv f a = (f y - f x) / (y - x) :=
     exists_deriv_eq_slope f hxy hf A
-  rcases nonempty_Ioo.2 hay with ⟨b
+  rcases nonempty_Ioo.2 hay with ⟨b, ⟨hab, hby⟩⟩
+  refine ⟨b, ⟨hxa.trans hab, hby⟩, ?_⟩
+  rw [← ha]
+  exact hf'_mono ⟨hxa, hay⟩ ⟨hxa.trans hab, hby⟩ hab
 
 中文:
 定理 StrictMonoOn.存在_slope_lt_deriv_aux
@@ -126,7 +151,10 @@ theorem StrictMonoOn.exists_slope_lt_deriv_aux
     (differentiableAt_of_deriv_ne_zero (h w wmem)).differentiableWithinAt
   obtain ⟨a, ⟨hxa, hay⟩, ha⟩ : exists a in Ioo x y, deriv f a = (f y - f x) / (y - x) :=
     exists_deriv_eq_slope f hxy hf A
-  rcases nonempty_Ioo.2 hay with ⟨b
+  rcases nonempty_Ioo.2 hay with ⟨b, ⟨hab, hby⟩⟩
+  refine ⟨b, ⟨hxa.trans hab, hby⟩, ?_⟩
+  rw [← ha]
+  exact hf'_mono ⟨hxa, hay⟩ ⟨hxa.trans hab, hby⟩ hab
 
 Depends on / 依赖: DifferentiableOn, _mono, differentiableAt_of_deriv_ne_zero, differentiableWithinAt, exists_deriv_eq_slope, hxa.trans, nonempty_Ioo
 -/
@@ -153,7 +181,29 @@ theorem StrictMonoOn.exists_slope_lt_deriv
   · apply StrictMonoOn.exists_slope_lt_deriv_aux hf hxy hf'_mono h
   · rcases h with ⟨w, ⟨hxw, hwy⟩, hw⟩
     obtain ⟨a, ⟨hxa, haw⟩, ha⟩ : exists a in Ioo x w, (f w - f x) / (w - x) < deriv f a := by
-      apply StrictMonoOn.exists_slope_lt_deriv
+      apply StrictMonoOn.exists_slope_lt_deriv_aux _ hxw _ _
+      · exact hf.mono (Icc_subset_Icc le_rfl hwy.le)
+      · exact hf'_mono.mono (Ioo_subset_Ioo le_rfl hwy.le)
+      · intro z hz
+        rw [← hw]
+        apply ne_of_lt
+        exact hf'_mono ⟨hz.1, hz.2.trans hwy⟩ ⟨hxw, hwy⟩ hz.2
+    obtain ⟨b, ⟨hwb, hby⟩, hb⟩ : exists b in Ioo w y, (f y - f w) / (y - w) < deriv f b := by
+      apply StrictMonoOn.exists_slope_lt_deriv_aux _ hwy _ _
+      · refine hf.mono (Icc_subset_Icc hxw.le le_rfl)
+      · exact hf'_mono.mono (Ioo_subset_Ioo hxw.le le_rfl)
+      · intro z hz
+        rw [← hw]
+        apply ne_of_gt
+        exact hf'_mono ⟨hxw, hwy⟩ ⟨hxw.trans hz.1, hz.2⟩ hz.1
+    refine ⟨b, ⟨hxw.trans hwb, hby⟩, ?_⟩
+    simp only [div_lt_iff₀, hxy, hxw, hwy, sub_pos] at ha hb ⊢
+    have : deriv f a * (w - x) < deriv f b * (w - x) := by
+      apply mul_lt_mul _ le_rfl (sub_pos.2 hxw) _
+      · exact hf'_mono ⟨hxa, haw.trans hwy⟩ ⟨hxw.trans hwb, hby⟩ (haw.trans hwb)
+      · rw [← hw]
+        exact (hf'_mono ⟨hxw, hwy⟩ ⟨hxw.trans hwb, hby⟩ hwb).le
+    linarith
 
 中文:
 定理 StrictMonoOn.存在_slope_lt_deriv
@@ -163,7 +213,29 @@ theorem StrictMonoOn.exists_slope_lt_deriv
   · apply StrictMonoOn.exists_slope_lt_deriv_aux hf hxy hf'_mono h
   · rcases h with ⟨w, ⟨hxw, hwy⟩, hw⟩
     obtain ⟨a, ⟨hxa, haw⟩, ha⟩ : exists a in Ioo x w, (f w - f x) / (w - x) < deriv f a := by
-      apply StrictMonoOn.exists_slope_lt_deriv
+      apply StrictMonoOn.exists_slope_lt_deriv_aux _ hxw _ _
+      · exact hf.mono (Icc_subset_Icc le_rfl hwy.le)
+      · exact hf'_mono.mono (Ioo_subset_Ioo le_rfl hwy.le)
+      · intro z hz
+        rw [← hw]
+        apply ne_of_lt
+        exact hf'_mono ⟨hz.1, hz.2.trans hwy⟩ ⟨hxw, hwy⟩ hz.2
+    obtain ⟨b, ⟨hwb, hby⟩, hb⟩ : exists b in Ioo w y, (f y - f w) / (y - w) < deriv f b := by
+      apply StrictMonoOn.exists_slope_lt_deriv_aux _ hwy _ _
+      · refine hf.mono (Icc_subset_Icc hxw.le le_rfl)
+      · exact hf'_mono.mono (Ioo_subset_Ioo hxw.le le_rfl)
+      · intro z hz
+        rw [← hw]
+        apply ne_of_gt
+        exact hf'_mono ⟨hxw, hwy⟩ ⟨hxw.trans hz.1, hz.2⟩ hz.1
+    refine ⟨b, ⟨hxw.trans hwb, hby⟩, ?_⟩
+    simp only [div_lt_iff₀, hxy, hxw, hwy, sub_pos] at ha hb ⊢
+    have : deriv f a * (w - x) < deriv f b * (w - x) := by
+      apply mul_lt_mul _ le_rfl (sub_pos.2 hxw) _
+      · exact hf'_mono ⟨hxa, haw.trans hwy⟩ ⟨hxw.trans hwb, hby⟩ (haw.trans hwb)
+      · rw [← hw]
+        exact (hf'_mono ⟨hxw, hwy⟩ ⟨hxw.trans hwb, hby⟩ hwb).le
+    linarith
 
 Depends on / 依赖: Icc_subset_Icc, Ioo_subset_Ioo, StrictMonoOn, StrictMonoOn.exists_slope_lt_deriv_aux, _mono, _mono.mono, exists_slope_lt_deriv_aux, hf.mono, hwy.le, le_rfl, ne_of_lt
 -/
@@ -209,7 +281,10 @@ theorem StrictMonoOn.exists_deriv_lt_slope_aux
     (differentiableAt_of_deriv_ne_zero (h w wmem)).differentiableWithinAt
   obtain ⟨a, ⟨hxa, hay⟩, ha⟩ : exists a in Ioo x y, deriv f a = (f y - f x) / (y - x) :=
     exists_deriv_eq_slope f hxy hf A
-  rcases nonempty_Ioo.2 hxa with ⟨b
+  rcases nonempty_Ioo.2 hxa with ⟨b, ⟨hxb, hba⟩⟩
+  refine ⟨b, ⟨hxb, hba.trans hay⟩, ?_⟩
+  rw [← ha]
+  exact hf'_mono ⟨hxb, hba.trans hay⟩ ⟨hxa, hay⟩ hba
 
 中文:
 定理 StrictMonoOn.存在_deriv_lt_slope_aux
@@ -219,7 +294,10 @@ theorem StrictMonoOn.exists_deriv_lt_slope_aux
     (differentiableAt_of_deriv_ne_zero (h w wmem)).differentiableWithinAt
   obtain ⟨a, ⟨hxa, hay⟩, ha⟩ : exists a in Ioo x y, deriv f a = (f y - f x) / (y - x) :=
     exists_deriv_eq_slope f hxy hf A
-  rcases nonempty_Ioo.2 hxa with ⟨b
+  rcases nonempty_Ioo.2 hxa with ⟨b, ⟨hxb, hba⟩⟩
+  refine ⟨b, ⟨hxb, hba.trans hay⟩, ?_⟩
+  rw [← ha]
+  exact hf'_mono ⟨hxb, hba.trans hay⟩ ⟨hxa, hay⟩ hba
 
 Depends on / 依赖: DifferentiableOn, _mono, differentiableAt_of_deriv_ne_zero, differentiableWithinAt, exists_deriv_eq_slope, hba.trans, nonempty_Ioo
 -/
@@ -246,7 +324,29 @@ theorem StrictMonoOn.exists_deriv_lt_slope
   · apply StrictMonoOn.exists_deriv_lt_slope_aux hf hxy hf'_mono h
   · rcases h with ⟨w, ⟨hxw, hwy⟩, hw⟩
     obtain ⟨a, ⟨hxa, haw⟩, ha⟩ : exists a in Ioo x w, deriv f a < (f w - f x) / (w - x) := by
-      apply StrictMonoOn.exists_deriv_lt_slope
+      apply StrictMonoOn.exists_deriv_lt_slope_aux _ hxw _ _
+      · exact hf.mono (Icc_subset_Icc le_rfl hwy.le)
+      · exact hf'_mono.mono (Ioo_subset_Ioo le_rfl hwy.le)
+      · intro z hz
+        rw [← hw]
+        apply ne_of_lt
+        exact hf'_mono ⟨hz.1, hz.2.trans hwy⟩ ⟨hxw, hwy⟩ hz.2
+    obtain ⟨b, ⟨hwb, hby⟩, hb⟩ : exists b in Ioo w y, deriv f b < (f y - f w) / (y - w) := by
+      apply StrictMonoOn.exists_deriv_lt_slope_aux _ hwy _ _
+      · refine hf.mono (Icc_subset_Icc hxw.le le_rfl)
+      · exact hf'_mono.mono (Ioo_subset_Ioo hxw.le le_rfl)
+      · intro z hz
+        rw [← hw]
+        apply ne_of_gt
+        exact hf'_mono ⟨hxw, hwy⟩ ⟨hxw.trans hz.1, hz.2⟩ hz.1
+    refine ⟨a, ⟨hxa, haw.trans hwy⟩, ?_⟩
+    simp only [lt_div_iff₀, hxy, hxw, hwy, sub_pos] at ha hb ⊢
+    have : deriv f a * (y - w) < deriv f b * (y - w) := by
+      apply mul_lt_mul _ le_rfl (sub_pos.2 hwy) _
+      · exact hf'_mono ⟨hxa, haw.trans hwy⟩ ⟨hxw.trans hwb, hby⟩ (haw.trans hwb)
+      · rw [← hw]
+        exact (hf'_mono ⟨hxw, hwy⟩ ⟨hxw.trans hwb, hby⟩ hwb).le
+    linarith
 
 中文:
 定理 StrictMonoOn.存在_deriv_lt_slope
@@ -256,7 +356,29 @@ theorem StrictMonoOn.exists_deriv_lt_slope
   · apply StrictMonoOn.exists_deriv_lt_slope_aux hf hxy hf'_mono h
   · rcases h with ⟨w, ⟨hxw, hwy⟩, hw⟩
     obtain ⟨a, ⟨hxa, haw⟩, ha⟩ : exists a in Ioo x w, deriv f a < (f w - f x) / (w - x) := by
-      apply StrictMonoOn.exists_deriv_lt_slope
+      apply StrictMonoOn.exists_deriv_lt_slope_aux _ hxw _ _
+      · exact hf.mono (Icc_subset_Icc le_rfl hwy.le)
+      · exact hf'_mono.mono (Ioo_subset_Ioo le_rfl hwy.le)
+      · intro z hz
+        rw [← hw]
+        apply ne_of_lt
+        exact hf'_mono ⟨hz.1, hz.2.trans hwy⟩ ⟨hxw, hwy⟩ hz.2
+    obtain ⟨b, ⟨hwb, hby⟩, hb⟩ : exists b in Ioo w y, deriv f b < (f y - f w) / (y - w) := by
+      apply StrictMonoOn.exists_deriv_lt_slope_aux _ hwy _ _
+      · refine hf.mono (Icc_subset_Icc hxw.le le_rfl)
+      · exact hf'_mono.mono (Ioo_subset_Ioo hxw.le le_rfl)
+      · intro z hz
+        rw [← hw]
+        apply ne_of_gt
+        exact hf'_mono ⟨hxw, hwy⟩ ⟨hxw.trans hz.1, hz.2⟩ hz.1
+    refine ⟨a, ⟨hxa, haw.trans hwy⟩, ?_⟩
+    simp only [lt_div_iff₀, hxy, hxw, hwy, sub_pos] at ha hb ⊢
+    have : deriv f a * (y - w) < deriv f b * (y - w) := by
+      apply mul_lt_mul _ le_rfl (sub_pos.2 hwy) _
+      · exact hf'_mono ⟨hxa, haw.trans hwy⟩ ⟨hxw.trans hwb, hby⟩ (haw.trans hwb)
+      · rw [← hw]
+        exact (hf'_mono ⟨hxw, hwy⟩ ⟨hxw.trans hwb, hby⟩ hwb).le
+    linarith
 
 Depends on / 依赖: Icc_subset_Icc, Ioo_subset_Ioo, StrictMonoOn, StrictMonoOn.exists_deriv_lt_slope_aux, _mono, _mono.mono, exists_deriv_lt_slope_aux, hf.mono, hwy.le, le_rfl, ne_of_lt
 -/
@@ -301,7 +423,19 @@ theorem StrictMonoOn.strictConvexOn_of_deriv
     -- First we prove some trivial inclusions
     have hxzD : Icc x z subseteq D := hD.ordConnected.out hx hz
     have hxyD : Icc x y subseteq D := (Icc_subset_Icc_right hyz.le).trans hxzD
-    have hxyD' : Ioo x y subset
+    have hxyD' : Ioo x y subseteq interior D :=
+      subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hxyD⟩
+    have hyzD : Icc y z subseteq D := (Icc_subset_Icc_left hxy.le).trans hxzD
+    have hyzD' : Ioo y z subseteq interior D :=
+      subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hyzD⟩
+    -- Then we get points `a` and `b` in each interval `[x, y]` and `[y, z]` where the derivatives
+    -- can be compared to the slopes between `x, y` and `y, z` respectively.
+    obtain ⟨a, ⟨hxa, hay⟩, ha⟩ : exists a in Ioo x y, (f y - f x) / (y - x) < deriv f a :=
+      StrictMonoOn.exists_slope_lt_deriv (hf.mono hxyD) hxy (hf'.mono hxyD')
+    obtain ⟨b, ⟨hyb, hbz⟩, hb⟩ : exists b in Ioo y z, deriv f b < (f z - f y) / (z - y) :=
+      StrictMonoOn.exists_deriv_lt_slope (hf.mono hyzD) hyz (hf'.mono hyzD')
+    apply ha.trans (lt_trans _ hb)
+    exact hf' (hxyD' ⟨hxa, hay⟩) (hyzD' ⟨hyb, hbz⟩) (hay.trans hyb)
 
 中文:
 定理 StrictMonoOn.strictConvexOn_of_deriv
@@ -310,7 +444,19 @@ theorem StrictMonoOn.strictConvexOn_of_deriv
     -- First we prove some trivial inclusions
     have hxzD : Icc x z subseteq D := hD.ordConnected.out hx hz
     have hxyD : Icc x y subseteq D := (Icc_subset_Icc_right hyz.le).trans hxzD
-    have hxyD' : Ioo x y subset
+    have hxyD' : Ioo x y subseteq interior D :=
+      subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hxyD⟩
+    have hyzD : Icc y z subseteq D := (Icc_subset_Icc_left hxy.le).trans hxzD
+    have hyzD' : Ioo y z subseteq interior D :=
+      subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hyzD⟩
+    -- Then we get points `a` and `b` in each interval `[x, y]` and `[y, z]` where the derivatives
+    -- can be compared to the slopes between `x, y` and `y, z` respectively.
+    obtain ⟨a, ⟨hxa, hay⟩, ha⟩ : exists a in Ioo x y, (f y - f x) / (y - x) < deriv f a :=
+      StrictMonoOn.exists_slope_lt_deriv (hf.mono hxyD) hxy (hf'.mono hxyD')
+    obtain ⟨b, ⟨hyb, hbz⟩, hb⟩ : exists b in Ioo y z, deriv f b < (f z - f y) / (z - y) :=
+      StrictMonoOn.exists_deriv_lt_slope (hf.mono hyzD) hyz (hf'.mono hyzD')
+    apply ha.trans (lt_trans _ hb)
+    exact hf' (hxyD' ⟨hxa, hay⟩) (hyzD' ⟨hyb, hbz⟩) (hay.trans hyb)
 
 Depends on / 依赖: strictConvexOn_of_slope_strict_mono_adjacent
 -/
@@ -503,7 +649,10 @@ lemma convexOn_of_hasDerivWithinAt2_nonneg
   · rw [differentiableOn_congr this]
     exact fun x hx => (hf'' _ hx).differentiableWithinAt
   · rintro x hx
-    convert hf''₀ 
+    convert hf''₀ _ hx
+    dsimp
+    rw [deriv_eqOn isOpen_interior (fun y hy => ?_) hx]
+exact (hf'' _ hy).congr this by rw [this hy]
 
 中文:
 引理 convexOn_of_hasDerivWithinAt2_nonneg
@@ -514,7 +663,10 @@ lemma convexOn_of_hasDerivWithinAt2_nonneg
   · rw [differentiableOn_congr this]
     exact fun x hx => (hf'' _ hx).differentiableWithinAt
   · rintro x hx
-    convert hf''₀ 
+    convert hf''₀ _ hx
+    dsimp
+    rw [deriv_eqOn isOpen_interior (fun y hy => ?_) hx]
+exact (hf'' _ hy).congr this by rw [this hy]
 
 Depends on / 依赖: convert, convexOn_of_deriv2_nonneg, deriv_eqOn, differentiableOn_congr, differentiableWithinAt, interior, isOpen_interior
 -/
@@ -544,7 +696,10 @@ lemma concaveOn_of_hasDerivWithinAt2_nonpos
   · rw [differentiableOn_congr this]
     exact fun x hx => (hf'' _ hx).differentiableWithinAt
   · rintro x hx
-    convert hf''₀
+    convert hf''₀ _ hx
+    dsimp
+    rw [deriv_eqOn isOpen_interior (fun y hy => ?_) hx]
+exact (hf'' _ hy).congr this by rw [this hy]
 
 中文:
 引理 concaveOn_of_hasDerivWithinAt2_nonpos
@@ -555,7 +710,10 @@ lemma concaveOn_of_hasDerivWithinAt2_nonpos
   · rw [differentiableOn_congr this]
     exact fun x hx => (hf'' _ hx).differentiableWithinAt
   · rintro x hx
-    convert hf''₀
+    convert hf''₀ _ hx
+    dsimp
+    rw [deriv_eqOn isOpen_interior (fun y hy => ?_) hx]
+exact (hf'' _ hy).congr this by rw [this hy]
 
 Depends on / 依赖: concaveOn_of_deriv2_nonpos, convert, deriv_eqOn, differentiableOn_congr, differentiableWithinAt, interior, isOpen_interior
 -/
@@ -955,7 +1113,8 @@ lemma bddBelow_slope_lt_of_mem_interior
   refine bddBelow_iff_subset_Ici.mpr ⟨slope f x y, fun y' ⟨z, hz, hz'⟩ => ?_⟩
   simp_rw [mem_Ici, ← hz']
   refine hfc.slope_mono (interior_subset hxs) ?_ ?_ (hyx.trans hz.2).le
-  · sim
+  · simp [hys, hyx.ne]
+  · simp [hz.2.ne', hz.1]
 
 中文:
 引理 bddBelow_slope_lt_of_mem_interior
@@ -966,7 +1125,8 @@ lemma bddBelow_slope_lt_of_mem_interior
   refine bddBelow_iff_subset_Ici.mpr ⟨slope f x y, fun y' ⟨z, hz, hz'⟩ => ?_⟩
   simp_rw [mem_Ici, ← hz']
   refine hfc.slope_mono (interior_subset hxs) ?_ ?_ (hyx.trans hz.2).le
-  · sim
+  · simp [hys, hyx.ne]
+  · simp [hz.2.ne', hz.1]
 
 Depends on / 依赖: Eventually, Eventually.exists_lt, bddBelow_iff_subset_Ici, bddBelow_iff_subset_Ici.mpr, exists_lt, hfc.slope_mono, hyx.ne, hyx.trans, interior_subset, mem_Ici, mem_interior_iff_mem_nhds, mem_interior_iff_mem_nhds.mp, simp_rw, slope_mono
 -/
@@ -992,7 +1152,8 @@ lemma bddAbove_slope_gt_of_mem_interior
   refine bddAbove_iff_subset_Iic.mpr ⟨slope f x y, fun y' ⟨z, hz, hz'⟩ => ?_⟩
   simp_rw [mem_Iic, ← hz']
   refine hfc.slope_mono (interior_subset hxs) ?_ ?_ (hz.2.trans hyx).le
-  · sim
+  · simp [hz.2.ne, hz.1]
+  · simp [hys, hyx.ne']
 
 中文:
 引理 bddAbove_slope_gt_of_mem_interior
@@ -1003,7 +1164,8 @@ lemma bddAbove_slope_gt_of_mem_interior
   refine bddAbove_iff_subset_Iic.mpr ⟨slope f x y, fun y' ⟨z, hz, hz'⟩ => ?_⟩
   simp_rw [mem_Iic, ← hz']
   refine hfc.slope_mono (interior_subset hxs) ?_ ?_ (hz.2.trans hyx).le
-  · sim
+  · simp [hz.2.ne, hz.1]
+  · simp [hys, hyx.ne']
 
 Depends on / 依赖: Eventually, Eventually.exists_gt, bddAbove_iff_subset_Iic, bddAbove_iff_subset_Iic.mpr, exists_gt, hfc.slope_mono, hyx.ne, interior_subset, mem_Iic, mem_interior_iff_mem_nhds, mem_interior_iff_mem_nhds.mp, simp_rw, slope_mono
 -/
@@ -1038,7 +1200,16 @@ lemma hasDerivWithinAt_sInf_slope_of_mem_interior
   obtain ⟨a, b, hxab, habs⟩ := hxs'
   simp_rw [hasDerivWithinAt_iff_tendsto_slope]
   simp only [mem_Ioi, lt_self_iff_false, not_false_eq_true, sdiff_singleton_eq_self]
-  have h : Ioo x b subseteq {y |
+  have h : Ioo x b subseteq {y | y in S ∧ x < y} := fun z hz => ⟨habs ⟨hxab.1.trans hz.1, hz.2⟩, hz.1⟩
+  have h_Ioo : Tendsto (slope f x) (𝓝[>] x) (𝓝 (sInf (slope f x '' Ioo x b))) :=
+    ((monotoneOn_slope_gt hfc (habs hxab)).mono h).tendsto_nhdsWithin_Ioo_right
+      (by simpa using hxab.2) ((bddBelow_slope_lt_of_mem_interior hfc hxs).mono (image_mono h))
+  suffices sInf (slope f x '' Ioo x b) = sInf (slope f x '' {y in S | x < y}) by rwa [← this]
+  apply (monotoneOn_slope_gt hfc (habs hxab)).csInf_eq_of_subset_of_forall_exists_le
+    (bddBelow_slope_lt_of_mem_interior hfc hxs) h ?_
+  rintro y ⟨hyS, hxy⟩
+  obtain ⟨z, hxz, hzy⟩ := exists_between (lt_min hxab.2 hxy)
+  exact ⟨z, ⟨hxz, hzy.trans_le (min_le_left _ _)⟩, hzy.le.trans (min_le_right _ _)⟩
 
 中文:
 引理 hasDerivWithinAt_sInf_slope_of_mem_interior
@@ -1049,7 +1220,16 @@ lemma hasDerivWithinAt_sInf_slope_of_mem_interior
   obtain ⟨a, b, hxab, habs⟩ := hxs'
   simp_rw [hasDerivWithinAt_iff_tendsto_slope]
   simp only [mem_Ioi, lt_self_iff_false, not_false_eq_true, sdiff_singleton_eq_self]
-  have h : Ioo x b subseteq {y |
+  have h : Ioo x b subseteq {y | y in S ∧ x < y} := fun z hz => ⟨habs ⟨hxab.1.trans hz.1, hz.2⟩, hz.1⟩
+  have h_Ioo : Tendsto (slope f x) (𝓝[>] x) (𝓝 (sInf (slope f x '' Ioo x b))) :=
+    ((monotoneOn_slope_gt hfc (habs hxab)).mono h).tendsto_nhdsWithin_Ioo_right
+      (by simpa using hxab.2) ((bddBelow_slope_lt_of_mem_interior hfc hxs).mono (image_mono h))
+  suffices sInf (slope f x '' Ioo x b) = sInf (slope f x '' {y in S | x < y}) by rwa [← this]
+  apply (monotoneOn_slope_gt hfc (habs hxab)).csInf_eq_of_subset_of_forall_exists_le
+    (bddBelow_slope_lt_of_mem_interior hfc hxs) h ?_
+  rintro y ⟨hyS, hxy⟩
+  obtain ⟨z, hxz, hzy⟩ := exists_between (lt_min hxab.2 hxy)
+  exact ⟨z, ⟨hxz, hzy.trans_le (min_le_left _ _)⟩, hzy.le.trans (min_le_right _ _)⟩
 
 Depends on / 依赖: Tendsto, h_Ioo, hasDerivWithinAt_iff_tendsto_slope, lt_self_iff_false, mem_Ioi, mem_interior_iff_mem_nhds, mem_nhds_iff_exists_Ioo_subset, monotoneOn_slope_gt, not_false_eq_true, sdiff_singleton_eq_self, simp_rw, subseteq, tendsto_nhdsWit
 -/
@@ -1083,7 +1263,16 @@ lemma hasDerivWithinAt_sSup_slope_of_mem_interior
   obtain ⟨a, b, hxab, habs⟩ := hxs'
   simp_rw [hasDerivWithinAt_iff_tendsto_slope]
   simp only [mem_Iio, lt_self_iff_false, not_false_eq_true, sdiff_singleton_eq_self]
-  have h : Ioo a x subseteq {y |
+  have h : Ioo a x subseteq {y | y in S ∧ y < x} := fun z hz => ⟨habs ⟨hz.1, hz.2.trans hxab.2⟩, hz.2⟩
+  have h_Ioo : Tendsto (slope f x) (𝓝[<] x) (𝓝 (sSup (slope f x '' Ioo a x))) :=
+    ((monotoneOn_slope_lt hfc (habs hxab)).mono h).tendsto_nhdsWithin_Ioo_left
+      (by simpa using hxab.1) ((bddAbove_slope_gt_of_mem_interior hfc hxs).mono (image_mono h))
+  suffices sSup (slope f x '' Ioo a x) = sSup (slope f x '' {y in S | y < x}) by rwa [← this]
+  apply (monotoneOn_slope_lt hfc (habs hxab)).csSup_eq_of_subset_of_forall_exists_le
+    (bddAbove_slope_gt_of_mem_interior hfc hxs) h ?_
+  rintro y ⟨hyS, hyx⟩
+  obtain ⟨z, hyz, hzx⟩ := exists_between (max_lt hxab.1 hyx)
+  exact ⟨z, ⟨(le_max_left _ _).trans_lt hyz, hzx⟩, (le_max_right _ _).trans hyz.le⟩
 
 中文:
 引理 hasDerivWithinAt_sSup_slope_of_mem_interior
@@ -1094,7 +1283,16 @@ lemma hasDerivWithinAt_sSup_slope_of_mem_interior
   obtain ⟨a, b, hxab, habs⟩ := hxs'
   simp_rw [hasDerivWithinAt_iff_tendsto_slope]
   simp only [mem_Iio, lt_self_iff_false, not_false_eq_true, sdiff_singleton_eq_self]
-  have h : Ioo a x subseteq {y |
+  have h : Ioo a x subseteq {y | y in S ∧ y < x} := fun z hz => ⟨habs ⟨hz.1, hz.2.trans hxab.2⟩, hz.2⟩
+  have h_Ioo : Tendsto (slope f x) (𝓝[<] x) (𝓝 (sSup (slope f x '' Ioo a x))) :=
+    ((monotoneOn_slope_lt hfc (habs hxab)).mono h).tendsto_nhdsWithin_Ioo_left
+      (by simpa using hxab.1) ((bddAbove_slope_gt_of_mem_interior hfc hxs).mono (image_mono h))
+  suffices sSup (slope f x '' Ioo a x) = sSup (slope f x '' {y in S | y < x}) by rwa [← this]
+  apply (monotoneOn_slope_lt hfc (habs hxab)).csSup_eq_of_subset_of_forall_exists_le
+    (bddAbove_slope_gt_of_mem_interior hfc hxs) h ?_
+  rintro y ⟨hyS, hyx⟩
+  obtain ⟨z, hyz, hzx⟩ := exists_between (max_lt hxab.1 hyx)
+  exact ⟨z, ⟨(le_max_left _ _).trans_lt hyz, hzx⟩, (le_max_right _ _).trans hyz.le⟩
 
 Depends on / 依赖: Tendsto, h_Ioo, hasDerivWithinAt_iff_tendsto_slope, lt_self_iff_false, mem_Iio, mem_interior_iff_mem_nhds, mem_nhds_iff_exists_Ioo_subset, monotoneOn_slope_lt, not_false_eq_true, sdiff_singleton_eq_self, simp_rw, subseteq, tendsto_nhdsWit
 -/
@@ -1242,7 +1440,18 @@ lemma monotoneOn_rightDeriv
   simp_rw [hfc.rightDeriv_eq_sInf_slope_of_mem_interior hxs,
     hfc.rightDeriv_eq_sInf_slope_of_mem_interior hys]
   refine csInf_le_of_le (b := slope f x y) (bddBelow_slope_lt_of_mem_interior hfc hxs)
-    ⟨y, by simp only 
+    ⟨y, by simp only [mem_ofPred_eq, hxy, and_true]; exact interior_subset hys⟩
+    (le_csInf ?_ ?_)
+  · have hys' := hys
+    rw [mem_interior_iff_mem_nhds]; rw [mem_nhds_iff_exists_Ioo_subset] at hys'
+    obtain ⟨a, b, hxab, habs⟩ := hys'
+    rw [image_nonempty]
+    obtain ⟨z, hxz, hzb⟩ := exists_between hxab.2
+    exact ⟨z, habs ⟨hxab.1.trans hxz, hzb⟩, hxz⟩
+  · rintro _ ⟨z, ⟨hzs, hyz : y < z⟩, rfl⟩
+    rw [slope_comm]
+    exact slope_mono hfc (interior_subset hys) ⟨interior_subset hxs, hxy.ne⟩ ⟨hzs, hyz.ne'⟩
+      (hxy.trans hyz).le
 
 中文:
 引理 monotoneOn_rightDeriv
@@ -1253,7 +1462,18 @@ lemma monotoneOn_rightDeriv
   simp_rw [hfc.rightDeriv_eq_sInf_slope_of_mem_interior hxs,
     hfc.rightDeriv_eq_sInf_slope_of_mem_interior hys]
   refine csInf_le_of_le (b := slope f x y) (bddBelow_slope_lt_of_mem_interior hfc hxs)
-    ⟨y, by simp only 
+    ⟨y, by simp only [mem_ofPred_eq, hxy, and_true]; exact interior_subset hys⟩
+    (le_csInf ?_ ?_)
+  · have hys' := hys
+    rw [mem_interior_iff_mem_nhds]; rw [mem_nhds_iff_exists_Ioo_subset] at hys'
+    obtain ⟨a, b, hxab, habs⟩ := hys'
+    rw [image_nonempty]
+    obtain ⟨z, hxz, hzb⟩ := exists_between hxab.2
+    exact ⟨z, habs ⟨hxab.1.trans hxz, hzb⟩, hxz⟩
+  · rintro _ ⟨z, ⟨hzs, hyz : y < z⟩, rfl⟩
+    rw [slope_comm]
+    exact slope_mono hfc (interior_subset hys) ⟨interior_subset hxs, hxy.ne⟩ ⟨hzs, hyz.ne'⟩
+      (hxy.trans hyz).le
 
 Depends on / 依赖: and_true, bddBelow_slope_lt_of_mem_interior, csInf_le_of_le, eq_or_lt_of_le, hfc.rightDeriv_eq_sInf_slope_of_mem_interior, image_n, interior_subset, le_csInf, mem_interior_iff_mem_nhds, mem_nhds_iff_exists_Ioo_subset, mem_ofPred_eq, rightDeriv_eq_sInf_slope_of_mem_interior, simp_rw
 -/
@@ -1289,7 +1509,17 @@ lemma monotoneOn_leftDeriv
   simp_rw [hfc.leftDeriv_eq_sSup_slope_of_mem_interior hxs,
     hfc.leftDeriv_eq_sSup_slope_of_mem_interior hys]
   refine le_csSup_of_le (b := slope f x y) (bddAbove_slope_gt_of_mem_interior hfc hys)
-    ⟨x, by simp only [s
+    ⟨x, by simp only [slope_comm, mem_ofPred_eq, hxy, and_true]; exact interior_subset hxs⟩
+    (csSup_le ?_ ?_)
+  · have hxs' := hxs
+    rw [mem_interior_iff_mem_nhds]; rw [mem_nhds_iff_exists_Ioo_subset] at hxs'
+    obtain ⟨a, b, hxab, habs⟩ := hxs'
+    rw [image_nonempty]
+    obtain ⟨z, hxz, hzb⟩ := exists_between hxab.1
+    exact ⟨z, habs ⟨hxz, hzb.trans hxab.2⟩, hzb⟩
+  · rintro _ ⟨z, ⟨hzs, hyz : z < x⟩, rfl⟩
+    exact slope_mono hfc (interior_subset hxs) ⟨hzs, hyz.ne⟩ ⟨interior_subset hys, hxy.ne'⟩
+      (hyz.trans hxy).le
 
 中文:
 引理 monotoneOn_leftDeriv
@@ -1300,7 +1530,17 @@ lemma monotoneOn_leftDeriv
   simp_rw [hfc.leftDeriv_eq_sSup_slope_of_mem_interior hxs,
     hfc.leftDeriv_eq_sSup_slope_of_mem_interior hys]
   refine le_csSup_of_le (b := slope f x y) (bddAbove_slope_gt_of_mem_interior hfc hys)
-    ⟨x, by simp only [s
+    ⟨x, by simp only [slope_comm, mem_ofPred_eq, hxy, and_true]; exact interior_subset hxs⟩
+    (csSup_le ?_ ?_)
+  · have hxs' := hxs
+    rw [mem_interior_iff_mem_nhds]; rw [mem_nhds_iff_exists_Ioo_subset] at hxs'
+    obtain ⟨a, b, hxab, habs⟩ := hxs'
+    rw [image_nonempty]
+    obtain ⟨z, hxz, hzb⟩ := exists_between hxab.1
+    exact ⟨z, habs ⟨hxz, hzb.trans hxab.2⟩, hzb⟩
+  · rintro _ ⟨z, ⟨hzs, hyz : z < x⟩, rfl⟩
+    exact slope_mono hfc (interior_subset hxs) ⟨hzs, hyz.ne⟩ ⟨interior_subset hys, hxy.ne'⟩
+      (hyz.trans hxy).le
 
 Depends on / 依赖: and_true, bddAbove_slope_gt_of_mem_interior, csSup_le, eq_or_lt_of_le, hfc.leftDeriv_eq_sSup_slope_of_mem_interior, interior_subset, le_csSup_of_le, leftDeriv_eq_sSup_slope_of_mem_interior, mem_interior_iff_mem_nhds, mem_nhds_iff_exists_Ioo_subset, mem_ofPred_eq, simp_rw, slope_comm
 -/
@@ -1336,7 +1576,15 @@ lemma leftDeriv_le_rightDeriv_of_mem_interior
   rw [hfc.rightDeriv_eq_sInf_slope_of_mem_interior hxs]; rw [hfc.leftDeriv_eq_sSup_slope_of_mem_interior hxs]
   refine csSup_le ?_ ?_
   · rw [image_nonempty]
-    ob
+    obtain ⟨z, haz, hzx⟩ := exists_between hxab.1
+    exact ⟨z, habs ⟨haz, hzx.trans hxab.2⟩, hzx⟩
+  rintro _ ⟨z, ⟨hzs, hzx⟩, rfl⟩
+  refine le_csInf ?_ ?_
+  · rw [image_nonempty]
+    obtain ⟨z, hxz, hzb⟩ := exists_between hxab.2
+    exact ⟨z, habs ⟨hxab.1.trans hxz, hzb⟩, hxz⟩
+  rintro _ ⟨y, ⟨hys, hxy⟩, rfl⟩
+  exact slope_mono hfc (interior_subset hxs) ⟨hzs, hzx.ne⟩ ⟨hys, hxy.ne'⟩ (hzx.trans hxy).le
 
 中文:
 引理 leftDeriv_le_rightDeriv_of_mem_interior
@@ -1348,7 +1596,15 @@ lemma leftDeriv_le_rightDeriv_of_mem_interior
   rw [hfc.rightDeriv_eq_sInf_slope_of_mem_interior hxs]; rw [hfc.leftDeriv_eq_sSup_slope_of_mem_interior hxs]
   refine csSup_le ?_ ?_
   · rw [image_nonempty]
-    ob
+    obtain ⟨z, haz, hzx⟩ := exists_between hxab.1
+    exact ⟨z, habs ⟨haz, hzx.trans hxab.2⟩, hzx⟩
+  rintro _ ⟨z, ⟨hzs, hzx⟩, rfl⟩
+  refine le_csInf ?_ ?_
+  · rw [image_nonempty]
+    obtain ⟨z, hxz, hzb⟩ := exists_between hxab.2
+    exact ⟨z, habs ⟨hxab.1.trans hxz, hzb⟩, hxz⟩
+  rintro _ ⟨y, ⟨hys, hxy⟩, rfl⟩
+  exact slope_mono hfc (interior_subset hxs) ⟨hzs, hzx.ne⟩ ⟨hys, hxy.ne'⟩ (hzx.trans hxy).le
 
 Depends on / 依赖: csSup_le, exists_between, hfc.leftDeriv_eq_sSup_slope_of_mem_interior, hfc.rightDeriv_eq_sInf_slope_of_mem_interior, hzx.trans, image_nonempty, le_csInf, leftDeriv_eq_sSup_slope_of_mem_interior, mem_interior_iff_mem_nhds, mem_nhds_iff_exists_Ioo_subset, rightDeriv_eq_sInf_slope_of_mem_interior
 -/
@@ -1388,7 +1644,7 @@ apply le_of_tendsto (hasDerivWithinAt_iff_tendsto_slope' self_notMem_Ioi).mp hf'
   simp_rw [eventually_nhdsWithin_iff, slope_def_field]
   filter_upwards [eventually_lt_nhds hxy] with t ht (ht' : x < t)
   refine hfc.secant_mono hx (?_ : t in S) hy ht'.ne' hxy.ne' ht.le
-  exact hfc.1.ordConnected.o
+  exact hfc.1.ordConnected.out hx hy ⟨ht'.le, ht.le⟩
 
 中文:
 引理 le_slope_of_hasDerivWithinAt_Ioi
@@ -1398,7 +1654,7 @@ apply le_of_tendsto (hasDerivWithinAt_iff_tendsto_slope' self_notMem_Ioi).mp hf'
   simp_rw [eventually_nhdsWithin_iff, slope_def_field]
   filter_upwards [eventually_lt_nhds hxy] with t ht (ht' : x < t)
   refine hfc.secant_mono hx (?_ : t in S) hy ht'.ne' hxy.ne' ht.le
-  exact hfc.1.ordConnected.o
+  exact hfc.1.ordConnected.out hx hy ⟨ht'.le, ht.le⟩
 
 Depends on / 依赖: eventually_lt_nhds, eventually_nhdsWithin_iff, filter_upwards, hasDerivWithinAt_iff_tendsto_slope, hfc.secant_mono, ht.le, hxy.ne, le_of_tendsto, ordConnected, ordConnected.out, secant_mono, self_notMem_Ioi, simp_rw, slope_def_field
 -/
@@ -1555,7 +1811,7 @@ apply ge_of_tendsto (hasDerivWithinAt_iff_tendsto_slope' self_notMem_Iio).mp hf'
   simp_rw [eventually_nhdsWithin_iff, slope_comm f x y, slope_def_field]
   filter_upwards [eventually_gt_nhds hxy] with t ht (ht' : t < y)
   refine hfc.secant_mono hy hx (?_ : t in S) hxy.ne ht'.ne ht.le
-  exact hfc.
+  exact hfc.1.ordConnected.out hx hy ⟨ht.le, ht'.le⟩
 
 中文:
 引理 slope_le_of_hasDerivWithinAt_Iio
@@ -1565,7 +1821,7 @@ apply ge_of_tendsto (hasDerivWithinAt_iff_tendsto_slope' self_notMem_Iio).mp hf'
   simp_rw [eventually_nhdsWithin_iff, slope_comm f x y, slope_def_field]
   filter_upwards [eventually_gt_nhds hxy] with t ht (ht' : t < y)
   refine hfc.secant_mono hy hx (?_ : t in S) hxy.ne ht'.ne ht.le
-  exact hfc.
+  exact hfc.1.ordConnected.out hx hy ⟨ht.le, ht'.le⟩
 
 Depends on / 依赖: eventually_gt_nhds, eventually_nhdsWithin_iff, filter_upwards, ge_of_tendsto, hasDerivWithinAt_iff_tendsto_slope, hfc.secant_mono, ht.le, hxy.ne, ordConnected, ordConnected.out, secant_mono, self_notMem_Iio, simp_rw, slope_comm, slope_def_field
 -/
@@ -1785,7 +2041,14 @@ lemma isMinOn_of_leftDeriv_nonpos_of_rightDeriv_nonneg
       simp only [slope_def_field, div_nonneg_iff, sub_nonneg, tsub_le_iff_right, zero_add,
         not_le.mpr hxy, and_false, or_false] at this
       exact this.1
-exact hf_rd.trans rightDeriv_le_slope_o
+exact hf_rd.trans rightDeriv_le_slope_of_mem_interior hf hx hy hxy
+  · simp [h_eq]
+  · suffices slope f x y <= 0 by
+      simp only [slope_def_field, div_nonpos_iff, sub_nonneg, tsub_le_iff_right, zero_add,
+        not_le.mpr hyx, and_false, or_false] at this
+      exact this.1
+    rw [slope_comm]
+    exact (slope_le_leftDeriv_of_mem_interior hf hy hx hyx).trans hf_ld
 
 中文:
 引理 isMinOn_of_leftDeriv_nonpos_of_rightDeriv_nonneg
@@ -1797,7 +2060,14 @@ exact hf_rd.trans rightDeriv_le_slope_o
       simp only [slope_def_field, div_nonneg_iff, sub_nonneg, tsub_le_iff_right, zero_add,
         not_le.mpr hxy, and_false, or_false] at this
       exact this.1
-exact hf_rd.trans rightDeriv_le_slope_o
+exact hf_rd.trans rightDeriv_le_slope_of_mem_interior hf hx hy hxy
+  · simp [h_eq]
+  · suffices slope f x y <= 0 by
+      simp only [slope_def_field, div_nonpos_iff, sub_nonneg, tsub_le_iff_right, zero_add,
+        not_le.mpr hyx, and_false, or_false] at this
+      exact this.1
+    rw [slope_comm]
+    exact (slope_le_leftDeriv_of_mem_interior hf hy hx hyx).trans hf_ld
 
 Depends on / 依赖: and_false, div_nonneg_iff, div_nonpos_iff, h_eq, hf_rd, hf_rd.trans, lt_trichotomy, not_le, not_le.mpr, or_false, rightDeriv_le_slope_of_mem_interior, slope_, slope_def_field, sub_nonneg, tsub_le_iff_right, zero_add
 -/
@@ -1891,7 +2161,7 @@ lemma lt_slope_of_hasDerivWithinAt_Ioi
   have hu : u in S := hfc.1.ordConnected.out hx hy ⟨hxu.le, huy.le⟩
   have := hfc.secant_strict_mono hx hu hy hxu.ne' hxy.ne' huy
   simp only [← slope_def_field] at this
-  exact (hfc.convexOn.le_slope_of_hasDerivWithinAt_Ioi hx hu hxu hf').trans_lt thi
+  exact (hfc.convexOn.le_slope_of_hasDerivWithinAt_Ioi hx hu hxu hf').trans_lt this
 
 中文:
 引理 lt_slope_of_hasDerivWithinAt_Ioi
@@ -1901,7 +2171,7 @@ lemma lt_slope_of_hasDerivWithinAt_Ioi
   have hu : u in S := hfc.1.ordConnected.out hx hy ⟨hxu.le, huy.le⟩
   have := hfc.secant_strict_mono hx hu hy hxu.ne' hxy.ne' huy
   simp only [← slope_def_field] at this
-  exact (hfc.convexOn.le_slope_of_hasDerivWithinAt_Ioi hx hu hxu hf').trans_lt thi
+  exact (hfc.convexOn.le_slope_of_hasDerivWithinAt_Ioi hx hu hxu hf').trans_lt this
 
 Depends on / 依赖: convexOn, exists_between, hfc.convexOn.le_slope_of_hasDerivWithinAt_Ioi, hfc.secant_strict_mono, huy.le, hxu.le, hxu.ne, hxy.ne, le_slope_of_hasDerivWithinAt_Ioi, ordConnected, ordConnected.out, secant_strict_mono, slope_def_field, trans_lt
 -/
@@ -2035,7 +2305,7 @@ lemma slope_lt_of_hasDerivWithinAt_Iio
   have hu : u in S := hfc.1.ordConnected.out hx hy ⟨hxu.le, huy.le⟩
   have := hfc.secant_strict_mono hy hx hu hxy.ne huy.ne hxu
   simp_rw [← slope_def_field, slope_comm _ y] at this
-exact this.trans_le hfc.convexOn.slope_le_of_hasDerivWithinAt_Iio hu h
+exact this.trans_le hfc.convexOn.slope_le_of_hasDerivWithinAt_Iio hu hy huy hf'
 
 中文:
 引理 slope_lt_of_hasDerivWithinAt_Iio
@@ -2045,7 +2315,7 @@ exact this.trans_le hfc.convexOn.slope_le_of_hasDerivWithinAt_Iio hu h
   have hu : u in S := hfc.1.ordConnected.out hx hy ⟨hxu.le, huy.le⟩
   have := hfc.secant_strict_mono hy hx hu hxy.ne huy.ne hxu
   simp_rw [← slope_def_field, slope_comm _ y] at this
-exact this.trans_le hfc.convexOn.slope_le_of_hasDerivWithinAt_Iio hu h
+exact this.trans_le hfc.convexOn.slope_le_of_hasDerivWithinAt_Iio hu hy huy hf'
 
 Depends on / 依赖: convexOn, exists_between, hfc.convexOn.slope_le_of_hasDerivWithinAt_Iio, hfc.secant_strict_mono, huy.le, huy.ne, hxu.le, hxy.ne, ordConnected, ordConnected.out, secant_strict_mono, simp_rw, slope_comm, slope_def_field, slope_le_of_hasDerivWithinAt_Iio, this.trans_le, trans_le
 -/

@@ -2410,13 +2410,23 @@ English:
 theorem clusterPt_principal_subtype_iff_frequently
   given: {s t : Set α} (hst : s subseteq t) {J : Set s} {a : s}
   proof: by
-  rw [nhdsWithin_eq_map_subtype_coe (hst a.prop)]; rw [Filter.frequently_map]; rw [clusterPt_principal_iff_frequently]; rw [Topology.IsInducing.subtypeVal.nhds_eq_comap]; rw [Filter.frequently_comap]; rw [Topology.IsInducing.subtypeVal.nhds_eq_comap]; rw [Filter.frequently_comap]; rw [Subtype.coe
+  rw [nhdsWithin_eq_map_subtype_coe (hst a.prop)]; rw [Filter.frequently_map]; rw [clusterPt_principal_iff_frequently]; rw [Topology.IsInducing.subtypeVal.nhds_eq_comap]; rw [Filter.frequently_comap]; rw [Topology.IsInducing.subtypeVal.nhds_eq_comap]; rw [Filter.frequently_comap]; rw [Subtype.coe_mk]
+  apply frequently_congr
+  apply Eventually.of_forall
+  intro x
+  simp only [SetCoe.exists, exists_and_left, exists_eq_left]
+  exact ⟨fun ⟨h, hx⟩ => ⟨hst h, h, hx⟩, fun ⟨_, hx⟩ => hx⟩
 
 中文:
 定理 clusterPt_principal_subtype_iff_frequently
   条件: {s t : 集合 α} (hst : s subseteq t) {J : 集合 s} {a : s}
   证明: by
-  rw [nhdsWithin_eq_map_subtype_coe (hst a.prop)]; rw [Filter.frequently_map]; rw [clusterPt_principal_iff_frequently]; rw [Topology.IsInducing.subtypeVal.nhds_eq_comap]; rw [Filter.frequently_comap]; rw [Topology.IsInducing.subtypeVal.nhds_eq_comap]; rw [Filter.frequently_comap]; rw [Subtype.coe
+  rw [nhdsWithin_eq_map_subtype_coe (hst a.prop)]; rw [Filter.frequently_map]; rw [clusterPt_principal_iff_frequently]; rw [Topology.IsInducing.subtypeVal.nhds_eq_comap]; rw [Filter.frequently_comap]; rw [Topology.IsInducing.subtypeVal.nhds_eq_comap]; rw [Filter.frequently_comap]; rw [Subtype.coe_mk]
+  apply frequently_congr
+  apply Eventually.of_forall
+  intro x
+  simp only [SetCoe.exists, exists_and_left, exists_eq_left]
+  exact ⟨fun ⟨h, hx⟩ => ⟨hst h, h, hx⟩, fun ⟨_, hx⟩ => hx⟩
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Filter, Filter.frequently_comap, Filter.frequently_map, IsInducing, SetCoe, SetCoe.exists, Subtype, Subtype.coe_mk, Topology, Topology.IsInducing.subtypeVal.nhds_eq_comap, a.prop, clusterPt_principal_iff_frequently, coe_mk, exists_and_left, exists_eq_left, frequently_comap, frequently_congr, frequently_map
 -/
@@ -2802,7 +2812,7 @@ lemma mem_nhdsSet_induced
   refine ⟨fun ⟨v, ⟨v', hv'⟩, hv⟩ => ?_, fun ⟨v, ⟨v', hv'⟩, hv⟩ => ?_⟩
   · refine ⟨v', ⟨v', hv'.1, ?_, subset_rfl⟩, hv'.2.trans_subset hv.2⟩
     exact (image_mono hv.1).trans (by simp [hv'])
-  · exact ⟨f ⁻¹' v', ⟨v', hv'.1
+  · exact ⟨f ⁻¹' v', ⟨v', hv'.1, rfl⟩, image_subset_iff.1 hv'.2.1, (preimage_mono hv'.2.2).trans hv⟩
 
 中文:
 引理 mem_nhdsSet_induced
@@ -2813,7 +2823,7 @@ lemma mem_nhdsSet_induced
   refine ⟨fun ⟨v, ⟨v', hv'⟩, hv⟩ => ?_, fun ⟨v, ⟨v', hv'⟩, hv⟩ => ?_⟩
   · refine ⟨v', ⟨v', hv'.1, ?_, subset_rfl⟩, hv'.2.trans_subset hv.2⟩
     exact (image_mono hv.1).trans (by simp [hv'])
-  · exact ⟨f ⁻¹' v', ⟨v', hv'.1
+  · exact ⟨f ⁻¹' v', ⟨v', hv'.1, rfl⟩, image_subset_iff.1 hv'.2.1, (preimage_mono hv'.2.2).trans hv⟩
 
 Depends on / 依赖: image_mono, image_subset_iff, induced, isOpen_induced_iff, mem_nhdsSet_iff_exists, preimage_mono, simp_rw, subset_rfl, t.induced, trans_subset
 -/

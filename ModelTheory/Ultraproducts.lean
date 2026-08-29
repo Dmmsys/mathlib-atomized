@@ -58,7 +58,21 @@ instance setoidPrestructure
         RelMap := fun {_} r x => forallᶠ a : α in u, RelMap r fun i => x i a }
     fun_equiv := fun {n} f x y xy => by
       refine mem_of_superset (iInter_mem.2 xy) fun a ha => ?_
-   
+      simp only [Set.mem_iInter, Set.mem_ofPred_eq] at ha
+      simp only [Set.mem_ofPred_eq, ha]
+    rel_equiv := fun {n} r x y xy => by
+      rw [← iff_eq_eq]
+      refine ⟨fun hx => ?_, fun hy => ?_⟩
+      · refine mem_of_superset (inter_mem hx (iInter_mem.2 xy)) ?_
+        rintro a ⟨ha1, ha2⟩
+        simp only [Set.mem_iInter, Set.mem_ofPred_eq] at *
+        rw [← funext ha2]
+        exact ha1
+      · refine mem_of_superset (inter_mem hy (iInter_mem.2 xy)) ?_
+        rintro a ⟨ha1, ha2⟩
+        simp only [Set.mem_iInter, Set.mem_ofPred_eq] at *
+        rw [funext ha2]
+        exact ha1 }
 
 中文:
 实例 setoidPrestructure
@@ -69,7 +83,21 @@ instance setoidPrestructure
         RelMap := fun {_} r x => forallᶠ a : α in u, RelMap r fun i => x i a }
     fun_equiv := fun {n} f x y xy => by
       refine mem_of_superset (iInter_mem.2 xy) fun a ha => ?_
-   
+      simp only [Set.mem_iInter, Set.mem_ofPred_eq] at ha
+      simp only [Set.mem_ofPred_eq, ha]
+    rel_equiv := fun {n} r x y xy => by
+      rw [← iff_eq_eq]
+      refine ⟨fun hx => ?_, fun hy => ?_⟩
+      · refine mem_of_superset (inter_mem hx (iInter_mem.2 xy)) ?_
+        rintro a ⟨ha1, ha2⟩
+        simp only [Set.mem_iInter, Set.mem_ofPred_eq] at *
+        rw [← funext ha2]
+        exact ha1
+      · refine mem_of_superset (inter_mem hy (iInter_mem.2 xy)) ?_
+        rintro a ⟨ha1, ha2⟩
+        simp only [Set.mem_iInter, Set.mem_ofPred_eq] at *
+        rw [funext ha2]
+        exact ha1 }
 
 Depends on / 依赖: Filter, RelMap, Set.mem_iInter, Set.mem_ofPred_eq, funMap, fun_equiv, iInter_mem, iff_eq_eq, inter_mem, mem_iInter, mem_ofPred_eq, mem_of_superset, productSetoid, rel_equiv, toStructure
 -/
@@ -192,7 +220,46 @@ theorem boundedFormula_realize_cast
   | equal =>
     have h2 : forall a : α, (Sum.elim (fun i : β => x i a) fun i => v i a) = fun i => Sum.elim x v i a :=
       fun a => funext fun i => Sum.casesOn i (fun i => rfl) fun i => rfl
-    simp only [Boun
+    simp only [BoundedFormula.Realize, h2]
+    erw [(Sum.comp_elim ((↑) : (forall a, M a) -> (u : Filter α).Product M) x v).symm,
+      term_realize_cast, term_realize_cast]
+    exact Quotient.eq''
+  | rel =>
+    have h2 : forall a : α, (Sum.elim (fun i : β => x i a) fun i => v i a) = fun i => Sum.elim x v i a :=
+      fun a => funext fun i => Sum.casesOn i (fun i => rfl) fun i => rfl
+    simp only [BoundedFormula.Realize, h2]
+    erw [(Sum.comp_elim ((↑) : (forall a, M a) -> (u : Filter α).Product M) x v).symm]
+    conv_lhs => enter [2, i]; erw [term_realize_cast]
+    apply relMap_quotient_mk'
+  | imp _ _ ih ih' =>
+    simp only [BoundedFormula.Realize, ih v, ih' v]
+    rw [Ultrafilter.eventually_imp]
+  | @all k φ ih =>
+    simp only [BoundedFormula.Realize]
+    apply Iff.trans (b := forall m : forall a : α, M a,
+      φ.Realize (fun i : β => (x i : (u : Filter α).Product M))
+        (Fin.snoc (((↑) : (forall a, M a) -> (u : Filter α).Product M) ∘ v)
+          (m : (u : Filter α).Product M)))
+    · exact Quotient.forall
+    have h' :
+      forall (m : forall a, M a) (a : α),
+        (fun i : Fin (k + 1) => (Fin.snoc v m : _ -> forall a, M a) i a) =
+          Fin.snoc (fun i : Fin k => v i a) (m a) := by
+      refine fun m a => funext (Fin.reverseInduction ?_ fun i _ => ?_)
+      · simp only [Fin.snoc_last]
+      · simp only [Fin.snoc_castSucc]
+    simp only [← Fin.comp_snoc]
+    simp only [Function.comp_def, ih, h']
+    refine ⟨fun h => ?_, fun h m => ?_⟩
+    · contrapose! h
+      refine
+        ⟨fun a : α =>
+          Classical.epsilon fun m : M a =>
+            ¬φ.Realize (fun i => x i a) (Fin.snoc (fun i => v i a) m),
+          ?_⟩
+      exact Filter.mem_of_superset h fun a ha => Classical.epsilon_spec ha
+    · rw [Filter.eventually_iff] at *
+      exact Filter.mem_of_superset h fun a ha => ha (m a)
 
 中文:
 定理 boundedFormula_realize_cast
@@ -203,7 +270,46 @@ theorem boundedFormula_realize_cast
   | equal =>
     have h2 : forall a : α, (Sum.elim (fun i : β => x i a) fun i => v i a) = fun i => Sum.elim x v i a :=
       fun a => funext fun i => Sum.casesOn i (fun i => rfl) fun i => rfl
-    simp only [Boun
+    simp only [BoundedFormula.Realize, h2]
+    erw [(Sum.comp_elim ((↑) : (forall a, M a) -> (u : Filter α).Product M) x v).symm,
+      term_realize_cast, term_realize_cast]
+    exact Quotient.eq''
+  | rel =>
+    have h2 : forall a : α, (Sum.elim (fun i : β => x i a) fun i => v i a) = fun i => Sum.elim x v i a :=
+      fun a => funext fun i => Sum.casesOn i (fun i => rfl) fun i => rfl
+    simp only [BoundedFormula.Realize, h2]
+    erw [(Sum.comp_elim ((↑) : (forall a, M a) -> (u : Filter α).Product M) x v).symm]
+    conv_lhs => enter [2, i]; erw [term_realize_cast]
+    apply relMap_quotient_mk'
+  | imp _ _ ih ih' =>
+    simp only [BoundedFormula.Realize, ih v, ih' v]
+    rw [Ultrafilter.eventually_imp]
+  | @all k φ ih =>
+    simp only [BoundedFormula.Realize]
+    apply Iff.trans (b := forall m : forall a : α, M a,
+      φ.Realize (fun i : β => (x i : (u : Filter α).Product M))
+        (Fin.snoc (((↑) : (forall a, M a) -> (u : Filter α).Product M) ∘ v)
+          (m : (u : Filter α).Product M)))
+    · exact Quotient.forall
+    have h' :
+      forall (m : forall a, M a) (a : α),
+        (fun i : Fin (k + 1) => (Fin.snoc v m : _ -> forall a, M a) i a) =
+          Fin.snoc (fun i : Fin k => v i a) (m a) := by
+      refine fun m a => funext (Fin.reverseInduction ?_ fun i _ => ?_)
+      · simp only [Fin.snoc_last]
+      · simp only [Fin.snoc_castSucc]
+    simp only [← Fin.comp_snoc]
+    simp only [Function.comp_def, ih, h']
+    refine ⟨fun h => ?_, fun h m => ?_⟩
+    · contrapose! h
+      refine
+        ⟨fun a : α =>
+          Classical.epsilon fun m : M a =>
+            ¬φ.Realize (fun i => x i a) (Fin.snoc (fun i => v i a) m),
+          ?_⟩
+      exact Filter.mem_of_superset h fun a ha => Classical.epsilon_spec ha
+    · rw [Filter.eventually_iff] at *
+      exact Filter.mem_of_superset h fun a ha => ha (m a)
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.Realize, Filter, Product, Quotient, Quotient.eq, Realize, Sum.casesOn, Sum.comp_elim, Sum.elim, casesOn, comp_elim, eventually_const, falsum, term_realize_cast
 -/

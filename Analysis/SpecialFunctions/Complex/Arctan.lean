@@ -50,7 +50,20 @@ theorem tan_arctan
   proof: by
   unfold tan sin cos
   rw [div_div_eq_mul_div]; rw [div_mul_cancel₀ _ two_ne_zero]; rw [← div_mul_eq_mul_div]; rw [-- multiply top and bottom by `exp (arctan z * I)`
-    ← mul_div_mul_right _ _ (exp_ne_zero (arctan z * I))]; rw [sub_mul]; rw [add_mul]; rw [← exp_add]; rw [neg_mul]; rw [neg_add_ca
+    ← mul_div_mul_right _ _ (exp_ne_zero (arctan z * I))]; rw [sub_mul]; rw [add_mul]; rw [← exp_add]; rw [neg_mul]; rw [neg_add_cancel]; rw [exp_zero]; rw [← exp_add]; rw [← two_mul]
+  have z₁ : 1 + z * I != 0 := by
+    contrapose h₁
+    rw [add_eq_zero_iff_neg_eq]; rw [← div_eq_iff I_ne_zero]; rw [div_I]; rw [neg_one_mul]; rw [neg_neg] at h₁
+    exact h₁.symm
+  have z₂ : 1 - z * I != 0 := by
+    contrapose h₂
+    rw [sub_eq_zero]; rw [← div_eq_iff I_ne_zero]; rw [div_I]; rw [one_mul] at h₂
+    exact h₂.symm
+  have key : exp (2 * (arctan z * I)) = (1 + z * I) / (1 - z * I) := by
+    rw [arctan]; rw [← mul_rotate]; rw [← mul_assoc]; rw [show 2 * (I * (-I / 2)) = 1 by simp [field], one_mul, exp_log]
+    · exact div_ne_zero z₁ z₂
+  -- multiply top and bottom by `1 - z * I`
+  rw [key]; rw [← mul_div_mul_right _ _ z₂]; rw [sub_mul]; rw [add_mul]; rw [div_mul_cancel₀ _ z₂]; rw [one_mul]; rw [show _ / _ * I = -(I * I) * z by ring]; rw [I_mul_I]; rw [neg_neg]; rw [one_mul]
 
 中文:
 定理 tan_arctan
@@ -59,7 +72,20 @@ theorem tan_arctan
   证明: by
   unfold tan sin cos
   rw [div_div_eq_mul_div]; rw [div_mul_cancel₀ _ two_ne_zero]; rw [← div_mul_eq_mul_div]; rw [-- multiply top and bottom by `exp (arctan z * I)`
-    ← mul_div_mul_right _ _ (exp_ne_zero (arctan z * I))]; rw [sub_mul]; rw [add_mul]; rw [← exp_add]; rw [neg_mul]; rw [neg_add_ca
+    ← mul_div_mul_right _ _ (exp_ne_zero (arctan z * I))]; rw [sub_mul]; rw [add_mul]; rw [← exp_add]; rw [neg_mul]; rw [neg_add_cancel]; rw [exp_zero]; rw [← exp_add]; rw [← two_mul]
+  have z₁ : 1 + z * I != 0 := by
+    contrapose h₁
+    rw [add_eq_zero_iff_neg_eq]; rw [← div_eq_iff I_ne_zero]; rw [div_I]; rw [neg_one_mul]; rw [neg_neg] at h₁
+    exact h₁.symm
+  have z₂ : 1 - z * I != 0 := by
+    contrapose h₂
+    rw [sub_eq_zero]; rw [← div_eq_iff I_ne_zero]; rw [div_I]; rw [one_mul] at h₂
+    exact h₂.symm
+  have key : exp (2 * (arctan z * I)) = (1 + z * I) / (1 - z * I) := by
+    rw [arctan]; rw [← mul_rotate]; rw [← mul_assoc]; rw [show 2 * (I * (-I / 2)) = 1 by simp [field], one_mul, exp_log]
+    · exact div_ne_zero z₁ z₂
+  -- multiply top and bottom by `1 - z * I`
+  rw [key]; rw [← mul_div_mul_right _ _ z₂]; rw [sub_mul]; rw [add_mul]; rw [div_mul_cancel₀ _ z₂]; rw [one_mul]; rw [show _ / _ * I = -(I * I) * z by ring]; rw [I_mul_I]; rw [neg_neg]; rw [one_mul]
 
 Depends on / 依赖: I_ne_zero, add_eq_zero_iff_neg_eq, add_mul, arctan, bottom, contrapose, div_I, div_div_eq_mul_div, div_eq_iff, div_mul_eq_mul_div, exp_add, exp_ne_zero, exp_zero, mul_div_mul_right, multiply, neg_add_cancel, neg_mul, neg_neg, neg_one_mul, sub_mul
 -/
@@ -94,7 +120,11 @@ lemma cos_ne_zero_of_arctan_bounds
   rcases h₀ with nr | ni
   · left; contrapose nr
     rw [nr]; rw [mul_div_assoc]; rw [neg_eq_neg_one_mul]; rw [mul_lt_mul_iff_of_pos_right (by positivity)] at h₁
-    rw [nr];
+    rw [nr]; rw [← one_mul (π / 2)]; rw [mul_div_assoc]; rw [mul_le_mul_iff_of_pos_right (by positivity)] at h₂
+    norm_cast at h₁ h₂
+    change -1 < _ at h₁
+    rwa [show 2 * k + 1 = 1 by lia, Int.cast_one, one_mul] at nr
+  · exact Or.inr ni
 
 中文:
 引理 cos_ne_zero_of_arctan_bounds
@@ -106,7 +136,11 @@ lemma cos_ne_zero_of_arctan_bounds
   rcases h₀ with nr | ni
   · left; contrapose nr
     rw [nr]; rw [mul_div_assoc]; rw [neg_eq_neg_one_mul]; rw [mul_lt_mul_iff_of_pos_right (by positivity)] at h₁
-    rw [nr];
+    rw [nr]; rw [← one_mul (π / 2)]; rw [mul_div_assoc]; rw [mul_le_mul_iff_of_pos_right (by positivity)] at h₂
+    norm_cast at h₁ h₂
+    change -1 < _ at h₁
+    rwa [show 2 * k + 1 = 1 by lia, Int.cast_one, one_mul] at nr
+  · exact Or.inr ni
 
 Depends on / 依赖: Complex.ext_iff, Int.cast_one, Or.inr, cast_one, contrapose, cos_ne_zero_iff, cos_ne_zero_iff.mpr, ext_iff, mul_div_assoc, mul_le_mul_iff_of_pos_right, mul_lt_mul_iff_of_pos_right, ne_eq, neg_eq_neg_one_mul, not_and_or, one_mul
 -/
@@ -138,7 +172,13 @@ theorem arctan_tan
   rw [← mul_div_mul_right (1 + _) _ h]; rw [add_mul]; rw [sub_mul]; rw [one_mul]; rw [← mul_rotate]; rw [mul_div_cancel₀ _ h]
   conv_lhs =>
     enter [2, 1, 2]
-    rw [sub_eq_add_neg]; rw
+    rw [sub_eq_add_neg]; rw [← neg_mul]; rw [← sin_neg]; rw [← cos_neg]
+  rw [← exp_mul_I]; rw [← exp_mul_I]; rw [← exp_sub]; rw [show z * I - -z * I = 2 * (I * z) by ring]; rw [log_exp]; rw [show -I / 2 * (2 * (I * z)) = -(I * I) * z by ring]; rw [I_mul_I]; rw [neg_neg]; rw [one_mul]
+  all_goals simp
+  · rwa [← div_lt_iff₀' two_pos, neg_div]
+  · rwa [← le_div_iff₀' two_pos]
+
+@[simp, norm_cast]
 
 中文:
 定理 arctan_tan
@@ -150,7 +190,13 @@ theorem arctan_tan
   rw [← mul_div_mul_right (1 + _) _ h]; rw [add_mul]; rw [sub_mul]; rw [one_mul]; rw [← mul_rotate]; rw [mul_div_cancel₀ _ h]
   conv_lhs =>
     enter [2, 1, 2]
-    rw [sub_eq_add_neg]; rw
+    rw [sub_eq_add_neg]; rw [← neg_mul]; rw [← sin_neg]; rw [← cos_neg]
+  rw [← exp_mul_I]; rw [← exp_mul_I]; rw [← exp_sub]; rw [show z * I - -z * I = 2 * (I * z) by ring]; rw [log_exp]; rw [show -I / 2 * (2 * (I * z)) = -(I * I) * z by ring]; rw [I_mul_I]; rw [neg_neg]; rw [one_mul]
+  all_goals simp
+  · rwa [← div_lt_iff₀' two_pos, neg_div]
+  · rwa [← le_div_iff₀' two_pos]
+
+@[simp, norm_cast]
 
 Depends on / 依赖: arctan, cos_ne_zero_of_arctan_bounds
 -/
@@ -241,7 +287,18 @@ lemma hasSum_arctan_aux
   have z₁ := mem_slitPlane_iff_arg.mp (mem_slitPlane_of_norm_lt_one (z := z * I) (by simpa))
   have z₂ := mem_slitPlane_iff_arg.mp (mem_slitPlane_of_norm_lt_one (z := -(z * I)) (by simpa))
   rw [← sub_eq_add_neg] at z₂
-  rw [← log_inv _ z₂.1]; rw [← (log_mul_eq_add_log_iff z₁.2 (inv_eq_zero.ne.mp
+  rw [← log_inv _ z₂.1]; rw [← (log_mul_eq_add_log_iff z₁.2 (inv_eq_zero.ne.mpr z₂.2)).mpr]; rw [div_eq_mul_inv]
+  -- `log_mul_eq_add_log_iff` requires a bound on `arg (1 + z * I) + arg (1 - z * I)⁻¹`.
+  -- `arg_one_add_mem_Ioo` provides sufficiently tight bounds on both terms
+  have b₁ := arg_one_add_mem_Ioo (z := z * I) (by simpa)
+  have b₂ : arg (1 - z * I)⁻¹ in Set.Ioo (-(π / 2)) (π / 2) := by
+    simp_rw [arg_inv, z₂.1, ite_false, Set.neg_mem_Ioo_iff, neg_neg, sub_eq_add_neg]
+    exact arg_one_add_mem_Ioo (by simpa)
+  have c₁ := add_lt_add b₁.1 b₂.1
+  have c₂ := add_lt_add b₁.2 b₂.2
+  rw [show -(π / 2) + -(π / 2) = -π by ring] at c₁
+  rw [show π / 2 + π / 2 = π by ring] at c₂
+  exact ⟨c₁, c₂.le⟩
 
 中文:
 引理 hasSum_arctan_aux
@@ -250,7 +307,18 @@ lemma hasSum_arctan_aux
   have z₁ := mem_slitPlane_iff_arg.mp (mem_slitPlane_of_norm_lt_one (z := z * I) (by simpa))
   have z₂ := mem_slitPlane_iff_arg.mp (mem_slitPlane_of_norm_lt_one (z := -(z * I)) (by simpa))
   rw [← sub_eq_add_neg] at z₂
-  rw [← log_inv _ z₂.1]; rw [← (log_mul_eq_add_log_iff z₁.2 (inv_eq_zero.ne.mp
+  rw [← log_inv _ z₂.1]; rw [← (log_mul_eq_add_log_iff z₁.2 (inv_eq_zero.ne.mpr z₂.2)).mpr]; rw [div_eq_mul_inv]
+  -- `log_mul_eq_add_log_iff` requires a bound on `arg (1 + z * I) + arg (1 - z * I)⁻¹`.
+  -- `arg_one_add_mem_Ioo` provides sufficiently tight bounds on both terms
+  have b₁ := arg_one_add_mem_Ioo (z := z * I) (by simpa)
+  have b₂ : arg (1 - z * I)⁻¹ in Set.Ioo (-(π / 2)) (π / 2) := by
+    simp_rw [arg_inv, z₂.1, ite_false, Set.neg_mem_Ioo_iff, neg_neg, sub_eq_add_neg]
+    exact arg_one_add_mem_Ioo (by simpa)
+  have c₁ := add_lt_add b₁.1 b₂.1
+  have c₂ := add_lt_add b₁.2 b₂.2
+  rw [show -(π / 2) + -(π / 2) = -π by ring] at c₁
+  rw [show π / 2 + π / 2 = π by ring] at c₂
+  exact ⟨c₁, c₂.le⟩
 
 Depends on / 依赖: div_eq_mul_inv, inv_eq_zero, inv_eq_zero.ne.mpr, log_inv, log_mul_eq_add_log_iff, mem_slitPlane_iff_arg, mem_slitPlane_iff_arg.mp, mem_slitPlane_of_norm_lt_one, sub_eq_add_neg
 -/
@@ -284,7 +352,14 @@ theorem hasSum_arctan
     (hasSum_taylorSeries_neg_log (z := z * I) (by simpa))).mul_left (-I / 2)
   simp_rw [← add_div, ← add_one_mul, hasSum_arctan_aux hz] at this
   replace := (Nat.divModEquiv 2).symm.hasSum_iff.mpr this
-  dsimp [Function.comp_def] at
+  dsimp [Function.comp_def] at this
+  simp_rw [← mul_comm 2 _] at this
+  refine this.prod_fiberwise fun k => ?_
+  dsimp only
+  convert! hasSum_fintype (_ : Fin 2 -> Complex) using 1
+  rw [Fin.sum_univ_two]; rw [Fin.val_zero]; rw [Fin.val_one]; rw [Odd.neg_one_pow (n := 2 * k + 0 + 1) (by simp)]; rw [neg_add_cancel]; rw [zero_mul]; rw [zero_div]; rw [mul_zero]; rw [zero_add]; rw [show 2 * k + 1 + 1 = 2 * (k + 1) by ring]; rw [Even.neg_one_pow (n := 2 * (k + 1)) (by simp)]; rw [← mul_div_assoc (_ / _)]; rw [← mul_assoc]; rw [show -I / 2 * (1 + 1) = -I by ring]
+  congr 1
+  rw [mul_pow]; rw [pow_succ' I]; rw [pow_mul]; rw [I_sq]; rw [show -I * _ = -(I * I) * (-1) ^ k * z ^ (2 * k + 1) by ring]; rw [I_mul_I]; rw [neg_neg]; rw [one_mul]
 
 中文:
 定理 hasSum_arctan
@@ -294,7 +369,14 @@ theorem hasSum_arctan
     (hasSum_taylorSeries_neg_log (z := z * I) (by simpa))).mul_left (-I / 2)
   simp_rw [← add_div, ← add_one_mul, hasSum_arctan_aux hz] at this
   replace := (Nat.divModEquiv 2).symm.hasSum_iff.mpr this
-  dsimp [Function.comp_def] at
+  dsimp [Function.comp_def] at this
+  simp_rw [← mul_comm 2 _] at this
+  refine this.prod_fiberwise fun k => ?_
+  dsimp only
+  convert! hasSum_fintype (_ : Fin 2 -> Complex) using 1
+  rw [Fin.sum_univ_two]; rw [Fin.val_zero]; rw [Fin.val_one]; rw [Odd.neg_one_pow (n := 2 * k + 0 + 1) (by simp)]; rw [neg_add_cancel]; rw [zero_mul]; rw [zero_div]; rw [mul_zero]; rw [zero_add]; rw [show 2 * k + 1 + 1 = 2 * (k + 1) by ring]; rw [Even.neg_one_pow (n := 2 * (k + 1)) (by simp)]; rw [← mul_div_assoc (_ / _)]; rw [← mul_assoc]; rw [show -I / 2 * (1 + 1) = -I by ring]
+  congr 1
+  rw [mul_pow]; rw [pow_succ' I]; rw [pow_mul]; rw [I_sq]; rw [show -I * _ = -(I * I) * (-1) ^ k * z ^ (2 * k + 1) by ring]; rw [I_mul_I]; rw [neg_neg]; rw [one_mul]
 
 Depends on / 依赖: Fin.sum_univ_two, Fin.val_one, Fin.val_zero, Function, Function.comp_def, Nat.divModEquiv, add_div, add_one_mul, comp_def, convert, divModEquiv, hasSum_arctan_aux, hasSum_fintype, hasSum_iff, hasSum_taylorSeries_log, hasSum_taylorSeries_neg_log, mul_comm, mul_left, prod_fiberwise, replace
 -/

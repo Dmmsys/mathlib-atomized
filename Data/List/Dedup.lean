@@ -370,7 +370,12 @@ theorem dedup_eq_cons
     have : count a l.dedup <= 1 := nodup_iff_count_le_one.1 (nodup_dedup l) a
     rw [h]; rw [count_cons_self] at this
     lia
-  · have := @List
+  · have := @List.cons_head!_tail α ⟨a⟩ _ (ne_nil_of_mem (mem_dedup.2 h.1))
+    have hal : a in l.dedup := mem_dedup.2 h.1
+    rw [← this]; rw [mem_cons]; rw [or_iff_not_imp_right] at hal
+    exact this ▸ h.2.2.symm ▸ cons_eq_cons.2 ⟨(hal (h.2.2.symm ▸ h.2.1)).symm, rfl⟩
+
+@[simp]
 
 中文:
 定理 dedup_eq_cons
@@ -382,7 +387,12 @@ theorem dedup_eq_cons
     have : count a l.dedup <= 1 := nodup_iff_count_le_one.1 (nodup_dedup l) a
     rw [h]; rw [count_cons_self] at this
     lia
-  · have := @List
+  · have := @List.cons_head!_tail α ⟨a⟩ _ (ne_nil_of_mem (mem_dedup.2 h.1))
+    have hal : a in l.dedup := mem_dedup.2 h.1
+    rw [← this]; rw [mem_cons]; rw [or_iff_not_imp_right] at hal
+    exact this ▸ h.2.2.symm ▸ cons_eq_cons.2 ⟨(hal (h.2.2.symm ▸ h.2.1)).symm, rfl⟩
+
+@[simp]
 
 Depends on / 依赖: List.cons_head, _tail, cons_eq_cons, cons_head, count_cons_self, count_pos_iff, h.symm, l.dedup, mem_cons, mem_cons_self, mem_dedup, ne_nil_of_mem, nodup_dedup, nodup_iff_count_le_one, or_iff_not_imp_right, tail_cons
 -/
@@ -596,7 +606,8 @@ theorem Disjoint.union_eq
     by_cases hx : x in xs
     · rw [dedup_cons_of_mem hx, insert_of_mem (mem_union_left hx _), ih h.2]
     · rw [dedup_cons_of_notMem hx, insert_of_not_mem, ih h.2, cons_append]
-      rw [
+      rw [mem_union_iff]; rw [not_or]
+      exact ⟨hx, h.1⟩
 
 中文:
 定理 Disjoint.union_eq
@@ -610,7 +621,8 @@ theorem Disjoint.union_eq
     by_cases hx : x in xs
     · rw [dedup_cons_of_mem hx, insert_of_mem (mem_union_left hx _), ih h.2]
     · rw [dedup_cons_of_notMem hx, insert_of_not_mem, ih h.2, cons_append]
-      rw [
+      rw [mem_union_iff]; rw [not_or]
+      exact ⟨hx, h.1⟩
 
 Depends on / 依赖: cons_append, cons_union, dedup_cons_of_mem, dedup_cons_of_notMem, disjoint_cons_left, insert_of_mem, insert_of_not_mem, mem_union_iff, mem_union_left, not_or
 -/

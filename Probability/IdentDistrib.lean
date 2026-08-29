@@ -180,7 +180,8 @@ theorem comp_of_aemeasurable
     aemeasurable_snd := by rw [h.map_eq] at hu; exact hu.comp_aemeasurable h.aemeasurable_snd
     map_eq := by
       rw [← AEMeasurable.map_map_of_aemeasurable hu h.aemeasurable_fst]; rw [←
-        AEMeasurable.map_map_of_aemeasurable _ h
+        AEMeasurable.map_map_of_aemeasurable _ h.aemeasurable_snd]; rw [h.map_eq]
+      rwa [← h.map_eq] }
 
 中文:
 定理 comp_of_aemeasurable
@@ -189,7 +190,8 @@ theorem comp_of_aemeasurable
     aemeasurable_snd := by rw [h.map_eq] at hu; exact hu.comp_aemeasurable h.aemeasurable_snd
     map_eq := by
       rw [← AEMeasurable.map_map_of_aemeasurable hu h.aemeasurable_fst]; rw [←
-        AEMeasurable.map_map_of_aemeasurable _ h
+        AEMeasurable.map_map_of_aemeasurable _ h.aemeasurable_snd]; rw [h.map_eq]
+      rwa [← h.map_eq] }
 -/
 protected theorem comp_of_aemeasurable {u : γ -> δ} (h : IdentDistrib f g μ ν)
     (hu : AEMeasurable u (Measure.map f μ)) : IdentDistrib (u ∘ f) (u ∘ g) μ ν :=
@@ -421,7 +423,7 @@ theorem aestronglyMeasurable_snd
   rcases (aestronglyMeasurable_iff_aemeasurable_separable.1 hf).2 with ⟨t, t_sep, ht⟩
   refine ⟨closure t, t_sep.closure, ?_⟩
   apply h.ae_mem_snd isClosed_closure.measurableSet
-  filter_upwards [ht] with x hx usi
+  filter_upwards [ht] with x hx using subset_closure hx
 
 中文:
 定理 aestronglyMeasurable_snd
@@ -431,7 +433,7 @@ theorem aestronglyMeasurable_snd
   rcases (aestronglyMeasurable_iff_aemeasurable_separable.1 hf).2 with ⟨t, t_sep, ht⟩
   refine ⟨closure t, t_sep.closure, ?_⟩
   apply h.ae_mem_snd isClosed_closure.measurableSet
-  filter_upwards [ht] with x hx usi
+  filter_upwards [ht] with x hx using subset_closure hx
 
 Depends on / 依赖: ae_mem_snd, aemeasurable_snd, aestronglyMeasurable_iff_aemeasurable_separable, closure, filter_upwards, h.ae_mem_snd, h.aemeasurable_snd, isClosed_closure, isClosed_closure.measurableSet, measurableSet, subset_closure, t_sep, t_sep.closure
 -/
@@ -527,7 +529,17 @@ theorem integral_eq
   · have A : AEStronglyMeasurable id (Measure.map f μ) := by
       rw [aestronglyMeasurable_iff_aemeasurable_separable]
       rcases (aestronglyMeasurable_iff_aemeasurable_separable.1 hf).2 with ⟨t, t_sep, ht⟩
-      refine ⟨aemeasurable_id, ⟨closure t, t_s
+      refine ⟨aemeasurable_id, ⟨closure t, t_sep.closure, ?_⟩⟩
+      rw [ae_map_iff h.aemeasurable_fst]
+      · filter_upwards [ht] with x hx using subset_closure hx
+      · exact isClosed_closure.measurableSet
+    change ∫ x, id (f x) ∂μ = ∫ x, id (g x) ∂ν
+    rw [← integral_map h.aemeasurable_fst A]
+    rw [h.map_eq] at A
+    rw [← integral_map h.aemeasurable_snd A]; rw [h.map_eq]
+  · rw [integral_non_aestronglyMeasurable hf]
+    rw [h.aestronglyMeasurable_iff] at hf
+    rw [integral_non_aestronglyMeasurable hf]
 
 中文:
 定理 integral_eq
@@ -537,7 +549,17 @@ theorem integral_eq
   · have A : AEStronglyMeasurable id (Measure.map f μ) := by
       rw [aestronglyMeasurable_iff_aemeasurable_separable]
       rcases (aestronglyMeasurable_iff_aemeasurable_separable.1 hf).2 with ⟨t, t_sep, ht⟩
-      refine ⟨aemeasurable_id, ⟨closure t, t_s
+      refine ⟨aemeasurable_id, ⟨closure t, t_sep.closure, ?_⟩⟩
+      rw [ae_map_iff h.aemeasurable_fst]
+      · filter_upwards [ht] with x hx using subset_closure hx
+      · exact isClosed_closure.measurableSet
+    change ∫ x, id (f x) ∂μ = ∫ x, id (g x) ∂ν
+    rw [← integral_map h.aemeasurable_fst A]
+    rw [h.map_eq] at A
+    rw [← integral_map h.aemeasurable_snd A]; rw [h.map_eq]
+  · rw [integral_non_aestronglyMeasurable hf]
+    rw [h.aestronglyMeasurable_iff] at hf
+    rw [integral_non_aestronglyMeasurable hf]
 
 Depends on / 依赖: AEStronglyMeasurable, Measure, Measure.map, ae_map_iff, aemeasurabl, aemeasurable_fst, aemeasurable_id, aestronglyMeasurable_iff_aemeasurable_separable, closure, filter_upwards, h.aemeasurabl, h.aemeasurable_fst, integral_map, isClosed_closure, isClosed_closure.measurableSet, measurableSet, subset_closure, t_sep, t_sep.closure
 -/
@@ -573,7 +595,11 @@ theorem eLpNorm_eq
       if_false]
     apply essSup_eq
     exact h.comp (measurable_coe_nnreal_ennreal.comp measurable_nnnorm)
-  simp only [eLpNorm_eq_eLpNorm' h0 h_top, eLpNorm',
+  simp only [eLpNorm_eq_eLpNorm' h0 h_top, eLpNorm', one_div]
+  congr 1
+  apply lintegral_eq
+  exact h.comp (Measurable.pow_const (measurable_coe_nnreal_ennreal.comp measurable_nnnorm)
+    p.toReal)
 
 中文:
 定理 eLpNorm_eq
@@ -586,7 +612,11 @@ theorem eLpNorm_eq
       if_false]
     apply essSup_eq
     exact h.comp (measurable_coe_nnreal_ennreal.comp measurable_nnnorm)
-  simp only [eLpNorm_eq_eLpNorm' h0 h_top, eLpNorm',
+  simp only [eLpNorm_eq_eLpNorm' h0 h_top, eLpNorm', one_div]
+  congr 1
+  apply lintegral_eq
+  exact h.comp (Measurable.pow_const (measurable_coe_nnreal_ennreal.comp measurable_nnnorm)
+    p.toReal)
 
 Depends on / 依赖: ENNReal, ENNReal.top_ne_zero, Measurable, Measurable.pow_const, eLpNorm, eLpNormEssSup, eLpNorm_eq_eLpNorm, essSup_eq, h.comp, h_top, if_false, if_true, lintegral_eq, measurable_coe_nnreal_ennreal, measurable_coe_nnreal_ennreal.comp, measurable_nnnorm, one_div, p.toReal, pow_const, toReal
 -/
@@ -966,7 +996,20 @@ theorem MemLp.uniformIntegrable_of_identDistrib_aux
   swap; · exact ⟨0, fun i => False.elim (hι <| Nonempty.intro i)⟩
   obtain ⟨C, hC₁, hC₂⟩ := hℒp.eLpNorm_indicator_norm_ge_pos_le (hfmeas _) hε
   refine ⟨⟨C, hC₁.le⟩, fun i => le_trans (le_of_eq ?_) hC₂⟩
-  have 
+  have : {x | (⟨C, hC₁.le⟩ : Real>=0) <= ‖f i x‖₊} = {x | C <= ‖f i x‖} := by
+    ext x
+    simp_rw [← norm_toNNReal]
+    exact Real.le_toNNReal_iff_coe_le (norm_nonneg _)
+  rw [this]; rw [← eLpNorm_norm]; rw [← eLpNorm_norm (Set.indicator _ _)]
+  simp_rw [norm_indicator_eq_indicator_norm, coe_nnnorm]
+  let F : E -> Real := (fun x : E => if (⟨C, hC₁.le⟩ : Real>=0) <= ‖x‖₊ then ‖x‖ else 0)
+  have F_meas : Measurable F := by
+    apply measurable_norm.indicator (measurableSet_le measurable_const measurable_nnnorm)
+  have : forall k, (fun x => Set.indicator {x | C <= ‖f k x‖} (fun a => ‖f k a‖) x) = F ∘ f k := by
+    intro k
+    ext x
+    simp only [Set.indicator, Set.mem_ofPred_eq]; norm_cast
+  rw [this]; rw [this]; rw [← eLpNorm_map_measure F_meas.aestronglyMeasurable (hf i).aemeasurable_fst]; rw [(hf i).map_eq]; rw [eLpNorm_map_measure F_meas.aestronglyMeasurable (hf j).aemeasurable_fst]
 
 中文:
 定理 MemLp.uniform整数egrable_of_identDistrib_aux
@@ -977,7 +1020,20 @@ theorem MemLp.uniformIntegrable_of_identDistrib_aux
   swap; · exact ⟨0, fun i => False.elim (hι <| Nonempty.intro i)⟩
   obtain ⟨C, hC₁, hC₂⟩ := hℒp.eLpNorm_indicator_norm_ge_pos_le (hfmeas _) hε
   refine ⟨⟨C, hC₁.le⟩, fun i => le_trans (le_of_eq ?_) hC₂⟩
-  have 
+  have : {x | (⟨C, hC₁.le⟩ : Real>=0) <= ‖f i x‖₊} = {x | C <= ‖f i x‖} := by
+    ext x
+    simp_rw [← norm_toNNReal]
+    exact Real.le_toNNReal_iff_coe_le (norm_nonneg _)
+  rw [this]; rw [← eLpNorm_norm]; rw [← eLpNorm_norm (Set.indicator _ _)]
+  simp_rw [norm_indicator_eq_indicator_norm, coe_nnnorm]
+  let F : E -> Real := (fun x : E => if (⟨C, hC₁.le⟩ : Real>=0) <= ‖x‖₊ then ‖x‖ else 0)
+  have F_meas : Measurable F := by
+    apply measurable_norm.indicator (measurableSet_le measurable_const measurable_nnnorm)
+  have : forall k, (fun x => Set.indicator {x | C <= ‖f k x‖} (fun a => ‖f k a‖) x) = F ∘ f k := by
+    intro k
+    ext x
+    simp only [Set.indicator, Set.mem_ofPred_eq]; norm_cast
+  rw [this]; rw [this]; rw [← eLpNorm_map_measure F_meas.aestronglyMeasurable (hf i).aemeasurable_fst]; rw [(hf i).map_eq]; rw [eLpNorm_map_measure F_meas.aestronglyMeasurable (hf j).aemeasurable_fst]
 
 Depends on / 依赖: False.elim, Nonempty, Nonempty.intro, Real.le_toNNReal_iff_coe_le, Set.ind, eLpNorm_indicator_norm_ge_pos_le, eLpNorm_norm, hfmeas, le_of_eq, le_toNNReal_iff_coe_le, le_trans, norm_nonneg, norm_toNNReal, p.eLpNorm_indicator_norm_ge_pos_le, simp_rw, uniformIntegrable_of
 -/
@@ -1015,7 +1071,12 @@ theorem MemLp.uniformIntegrable_of_identDistrib
     (hf i).aestronglyMeasurable_iff.2 hℒp.1
   set g : ι -> α -> E := fun i => (hfmeas i).choose
   have hgmeas : forall i, StronglyMeasurable (g i) := fun i => (Exists.choose_spec <| hfmeas i).1
-  have hgeq : forall i, g i =ᵐ[μ] f 
+  have hgeq : forall i, g i =ᵐ[μ] f i := fun i => (Exists.choose_spec <| hfmeas i).2.symm
+  have hgℒp : MemLp (g j) p μ := hℒp.ae_eq (hgeq j).symm
+  exact UniformIntegrable.ae_eq
+    (MemLp.uniformIntegrable_of_identDistrib_aux hp hp' hgℒp hgmeas fun i =>
+      (IdentDistrib.of_ae_eq (hgmeas i).aemeasurable (hgeq i)).trans
+        ((hf i).trans <| IdentDistrib.of_ae_eq (hfmeas j).aemeasurable (hgeq j).symm)) hgeq
 
 中文:
 定理 MemLp.uniform整数egrable_of_identDistrib
@@ -1025,7 +1086,12 @@ theorem MemLp.uniformIntegrable_of_identDistrib
     (hf i).aestronglyMeasurable_iff.2 hℒp.1
   set g : ι -> α -> E := fun i => (hfmeas i).choose
   have hgmeas : forall i, StronglyMeasurable (g i) := fun i => (Exists.choose_spec <| hfmeas i).1
-  have hgeq : forall i, g i =ᵐ[μ] f 
+  have hgeq : forall i, g i =ᵐ[μ] f i := fun i => (Exists.choose_spec <| hfmeas i).2.symm
+  have hgℒp : MemLp (g j) p μ := hℒp.ae_eq (hgeq j).symm
+  exact UniformIntegrable.ae_eq
+    (MemLp.uniformIntegrable_of_identDistrib_aux hp hp' hgℒp hgmeas fun i =>
+      (IdentDistrib.of_ae_eq (hgmeas i).aemeasurable (hgeq i)).trans
+        ((hf i).trans <| IdentDistrib.of_ae_eq (hfmeas j).aemeasurable (hgeq j).symm)) hgeq
 
 Depends on / 依赖: AEStronglyMeasurable, Exists, Exists.choose_spec, MemLp.uniformIntegrable_of_identDistrib_aux, StronglyMeasurable, UniformIntegrable, UniformIntegrable.ae_eq, ae_eq, aestronglyMeasurable_iff, choose_spec, hfmeas, hgmeas, p.ae_eq, uniformIntegrable_of_identDistrib_aux
 -/
@@ -1054,7 +1120,10 @@ lemma indepFun_of_identDistrib_pair
   rw [indepFun_iff_map_prod_eq_prod_map_map]; rw [← h_ident.map_eq]; rw [h_indep.map_prod_eq_prod_map_map]
   · exact congr (congrArg Measure.prod <| (h_ident.comp measurable_fst).map_eq)
       (h_ident.comp measurable_snd).map_eq
-  · exact measurable_fst.aemeasurable.comp_aemeasurable h_ident.aem
+  · exact measurable_fst.aemeasurable.comp_aemeasurable h_ident.aemeasurable_fst
+  · exact measurable_snd.aemeasurable.comp_aemeasurable h_ident.aemeasurable_fst
+  · exact measurable_fst.aemeasurable.comp_aemeasurable h_ident.aemeasurable_snd
+  · exact measurable_snd.aemeasurable.comp_aemeasurable h_ident.aemeasurable_snd
 
 中文:
 引理 indepFun_of_identDistrib_pair
@@ -1062,7 +1131,10 @@ lemma indepFun_of_identDistrib_pair
   rw [indepFun_iff_map_prod_eq_prod_map_map]; rw [← h_ident.map_eq]; rw [h_indep.map_prod_eq_prod_map_map]
   · exact congr (congrArg Measure.prod <| (h_ident.comp measurable_fst).map_eq)
       (h_ident.comp measurable_snd).map_eq
-  · exact measurable_fst.aemeasurable.comp_aemeasurable h_ident.aem
+  · exact measurable_fst.aemeasurable.comp_aemeasurable h_ident.aemeasurable_fst
+  · exact measurable_snd.aemeasurable.comp_aemeasurable h_ident.aemeasurable_fst
+  · exact measurable_fst.aemeasurable.comp_aemeasurable h_ident.aemeasurable_snd
+  · exact measurable_snd.aemeasurable.comp_aemeasurable h_ident.aemeasurable_snd
 
 Depends on / 依赖: Measure, Measure.prod, aemeasurable, aemeasurable_fst, aemeasurable_snd, comp_aemeasurable, h_ident, h_ident.aemeasurable_fst, h_ident.aemeasurable_snd, h_ident.comp, h_ident.map_eq, h_indep, h_indep.map_prod_eq_prod_map_map, indepFun_iff_map_prod_eq_prod_map_map, map_eq, map_prod_eq_prod_map_map, measurable_fst, measurable_fst.aemeasurable.comp_aemeasurable, measurable_snd, measurable_snd.aemeasurable.comp
 -/

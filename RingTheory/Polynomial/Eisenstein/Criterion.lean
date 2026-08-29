@@ -77,7 +77,33 @@ lemma generalizedEisenstein_aux
     obtain ⟨h, rfl⟩ := hg_div
     simp only [leadingCoeff_mul, map_mul, ne_eq, mul_eq_zero, not_or] at hf_lC
     exact hf_lC.1
-  have map_dvd_pow_
+  have map_dvd_pow_q :
+      g.map (algebraMap R K) ∣ q.map (algebraMap R K) ^ p := by
+    rw [← IsUnit.dvd_mul_left _]; rw [← hfmodP]
+    · exact Polynomial.map_dvd _ hg_div
+    · simp_all
+  obtain ⟨m, hm, hf⟩ := (dvd_prime_pow hq_irr.prime _).mp map_dvd_pow_q
+  set r := g - C g.leadingCoeff * q ^ m
+  have hg : g = C g.leadingCoeff * q ^ m + r := by ring
+  have hr : r.map (algebraMap R K) = 0 := by
+    obtain ⟨u, hu⟩ := hf.symm
+    obtain ⟨a, ha, ha'⟩ := Polynomial.isUnit_iff.mp u.isUnit
+    suffices C (algebraMap R K g.leadingCoeff) = u by
+      simp [r, ← this, Polynomial.map_sub, ← hu, Polynomial.map_mul, map_C,
+        Polynomial.map_pow, mul_comm]
+    rw [← leadingCoeff_map_of_leadingCoeff_ne_zero _ hgP]; rw [← hu]; rw [← ha']; rw [leadingCoeff_mul]; rw [leadingCoeff_C]; rw [(hq_monic.map _).pow m]; rw [one_mul]
+  use m, r, hg, hr
+  intro hm
+  rw [isPrimitive_iff_isUnit_of_C_dvd] at hf_prim
+  rw [hm]; rw [pow_zero]; rw [mul_one] at hg
+  suffices g.natDegree = 0 by
+    obtain ⟨a, rfl⟩ := Polynomial.natDegree_eq_zero.mp this
+    apply IsUnit.map
+    apply hf_prim
+    rwa [leadingCoeff_C] at hgP
+  by_contra hg'
+  apply hgP
+  rw [hg]; rw [leadingCoeff]; rw [coeff_add]; rw [← hg]; rw [coeff_C]; rw [if_neg hg']; rw [zero_add]; rw [mem_ker]; rw [← coeff_map]; rw [hr]; rw [coeff_zero]
 
 中文:
 引理 generalizedEisenstein_aux
@@ -90,7 +116,33 @@ lemma generalizedEisenstein_aux
     obtain ⟨h, rfl⟩ := hg_div
     simp only [leadingCoeff_mul, map_mul, ne_eq, mul_eq_zero, not_or] at hf_lC
     exact hf_lC.1
-  have map_dvd_pow_
+  have map_dvd_pow_q :
+      g.map (algebraMap R K) ∣ q.map (algebraMap R K) ^ p := by
+    rw [← IsUnit.dvd_mul_left _]; rw [← hfmodP]
+    · exact Polynomial.map_dvd _ hg_div
+    · simp_all
+  obtain ⟨m, hm, hf⟩ := (dvd_prime_pow hq_irr.prime _).mp map_dvd_pow_q
+  set r := g - C g.leadingCoeff * q ^ m
+  have hg : g = C g.leadingCoeff * q ^ m + r := by ring
+  have hr : r.map (algebraMap R K) = 0 := by
+    obtain ⟨u, hu⟩ := hf.symm
+    obtain ⟨a, ha, ha'⟩ := Polynomial.isUnit_iff.mp u.isUnit
+    suffices C (algebraMap R K g.leadingCoeff) = u by
+      simp [r, ← this, Polynomial.map_sub, ← hu, Polynomial.map_mul, map_C,
+        Polynomial.map_pow, mul_comm]
+    rw [← leadingCoeff_map_of_leadingCoeff_ne_zero _ hgP]; rw [← hu]; rw [← ha']; rw [leadingCoeff_mul]; rw [leadingCoeff_C]; rw [(hq_monic.map _).pow m]; rw [one_mul]
+  use m, r, hg, hr
+  intro hm
+  rw [isPrimitive_iff_isUnit_of_C_dvd] at hf_prim
+  rw [hm]; rw [pow_zero]; rw [mul_one] at hg
+  suffices g.natDegree = 0 by
+    obtain ⟨a, rfl⟩ := Polynomial.natDegree_eq_zero.mp this
+    apply IsUnit.map
+    apply hf_prim
+    rwa [leadingCoeff_C] at hgP
+  by_contra hg'
+  apply hgP
+  rw [hg]; rw [leadingCoeff]; rw [coeff_add]; rw [← hg]; rw [coeff_C]; rw [if_neg hg']; rw [zero_add]; rw [mem_ker]; rw [← coeff_map]; rw [hr]; rw [coeff_zero]
 -/
 private lemma generalizedEisenstein_aux {q f g : R[X]} {p : Nat}
     (hq_irr : Irreducible (q.map (algebraMap R K)))
@@ -149,7 +201,39 @@ theorem generalizedEisenstein
     -- We have to show that factorizations `f = g * h` are trivial
     set P : Ideal R := ker (algebraMap R K)
     obtain ⟨m, r, hg, hr, hm0⟩ :=
-      generalizedEisenstein_aux hq_ir
+      generalizedEisenstein_aux hq_irr hq_monic hfP hf_prim hfmodP (h_eq ▸ dvd_mul_right g h)
+    obtain ⟨n, s, hh, hs, hn0⟩ :=
+      generalizedEisenstein_aux hq_irr hq_monic hfP hf_prim hfmodP (h_eq ▸ dvd_mul_left h g)
+    by_cases hm : m = 0
+    -- If `m = 0`, `generalizedEisenstein_aux` shows that `g` is a unit.
+    · left; exact hm0 hm
+    by_cases hn : n = 0
+    -- If `n = 0`, `generalizedEisenstein_aux` shows that `h` is a unit.
+    · right; exact hn0 hn
+    -- Otherwise, we will get a contradiction by showing that `f %ₘ q` is zero mod `P ^ 2`.
+    exfalso
+    apply hfmodP2
+    suffices f %ₘ q = (r * s) %ₘ q by
+      -- Since the coefficients of `r` and `s` are in `P`, those of `r * s` are in `P ^ 2`
+      suffices h : map (Ideal.Quotient.mk (P ^ 2)) (r * s) = 0 by
+        simp [this, h, map_modByMonic, hq_monic]
+      ext n
+      have h (x : Nat × Nat) : (Ideal.Quotient.mk (P ^ 2)) (r.coeff x.1 * s.coeff x.2) = 0 := by
+        rw [eq_zero_iff_mem]; rw [pow_two]
+        apply mul_mem_mul
+        · rw [mem_ker, ← coeff_map, hr, coeff_zero]
+        · rw [mem_ker, ← coeff_map, hs, coeff_zero]
+      simp [-Polynomial.map_mul, coeff_mul, h]
+    -- It remains to prove the equality `f %ₘ q = (r * s) %ₘ q`, which is straightforward
+    rw [h_eq]; rw [hg]; rw [hh]
+    simp only [add_mul, mul_add, map_add, ← modByMonicHom_apply]
+    simp only [← add_assoc, modByMonicHom_apply]
+    iterate 3 rw [(modByMonic_eq_zero_iff_dvd hq_monic).mpr]
+    · simp
+    · exact ((dvd_pow_self q hm).mul_left _).mul_right _
+    · simp only [← mul_assoc]
+      exact (dvd_pow_self q hn).mul_left _
+    · exact ((dvd_pow_self q hn).mul_left _).mul_left _
 
 中文:
 定理 generalizedEisenstein
@@ -160,7 +244,39 @@ theorem generalizedEisenstein
     -- We have to show that factorizations `f = g * h` are trivial
     set P : Ideal R := ker (algebraMap R K)
     obtain ⟨m, r, hg, hr, hm0⟩ :=
-      generalizedEisenstein_aux hq_ir
+      generalizedEisenstein_aux hq_irr hq_monic hfP hf_prim hfmodP (h_eq ▸ dvd_mul_right g h)
+    obtain ⟨n, s, hh, hs, hn0⟩ :=
+      generalizedEisenstein_aux hq_irr hq_monic hfP hf_prim hfmodP (h_eq ▸ dvd_mul_left h g)
+    by_cases hm : m = 0
+    -- If `m = 0`, `generalizedEisenstein_aux` shows that `g` is a unit.
+    · left; exact hm0 hm
+    by_cases hn : n = 0
+    -- If `n = 0`, `generalizedEisenstein_aux` shows that `h` is a unit.
+    · right; exact hn0 hn
+    -- Otherwise, we will get a contradiction by showing that `f %ₘ q` is zero mod `P ^ 2`.
+    exfalso
+    apply hfmodP2
+    suffices f %ₘ q = (r * s) %ₘ q by
+      -- Since the coefficients of `r` and `s` are in `P`, those of `r * s` are in `P ^ 2`
+      suffices h : map (Ideal.Quotient.mk (P ^ 2)) (r * s) = 0 by
+        simp [this, h, map_modByMonic, hq_monic]
+      ext n
+      have h (x : Nat × Nat) : (Ideal.Quotient.mk (P ^ 2)) (r.coeff x.1 * s.coeff x.2) = 0 := by
+        rw [eq_zero_iff_mem]; rw [pow_two]
+        apply mul_mem_mul
+        · rw [mem_ker, ← coeff_map, hr, coeff_zero]
+        · rw [mem_ker, ← coeff_map, hs, coeff_zero]
+      simp [-Polynomial.map_mul, coeff_mul, h]
+    -- It remains to prove the equality `f %ₘ q = (r * s) %ₘ q`, which is straightforward
+    rw [h_eq]; rw [hg]; rw [hh]
+    simp only [add_mul, mul_add, map_add, ← modByMonicHom_apply]
+    simp only [← add_assoc, modByMonicHom_apply]
+    iterate 3 rw [(modByMonic_eq_zero_iff_dvd hq_monic).mpr]
+    · simp
+    · exact ((dvd_pow_self q hm).mul_left _).mul_right _
+    · simp only [← mul_assoc]
+      exact (dvd_pow_self q hn).mul_left _
+    · exact ((dvd_pow_self q hn).mul_left _).mul_left _
 
 Depends on / 依赖: degree_eq_zero_of_isUnit, h_eq, isUnit_or_isUnit, natDegree_pos_iff_degree_pos
 -/
@@ -224,7 +340,32 @@ theorem irreducible_of_eisenstein_criterion
     (by simp [map_X, irreducible_X]) monic_X hu
     (natDegree_pos_iff_degree_pos.mpr hfd0)
   · simp only [IsScalarTower.algebraMap_eq R (R ⧸ P) (FractionRing (R ⧸ P)),
-      Quotient.algebraMap_eq, coe_comp, Fu
+      Quotient.algebraMap_eq, coe_comp, Function.comp_apply, ne_eq,
+      FaithfulSMul.algebraMap_eq_zero_iff]
+    rw [Ideal.Quotient.eq_zero_iff_mem]
+    exact hfl
+  · rw [← map_C, ← Polynomial.map_pow, ← Polynomial.map_mul]
+    simp only [IsScalarTower.algebraMap_eq R (R ⧸ P) (FractionRing (R ⧸ P)),
+      Quotient.algebraMap_eq, ← map_map]
+    congr 1
+    ext n
+    simp only [coeff_map, Ideal.Quotient.mk_eq_mk_iff_sub_mem]
+    simp only [coeff_C_mul, coeff_X_pow, mul_ite, mul_one, mul_zero, sub_ite, sub_zero]
+    split_ifs with hn
+    · rw [hn, leadingCoeff, sub_self]
+      exact zero_mem _
+    · by_cases hn' : n < f.natDegree
+      · exact hfP _ (coe_lt_degree.mpr hn')
+      · rw [f.coeff_eq_zero_of_natDegree_lt]
+        · exact P.zero_mem
+        · simp [Nat.lt_iff_le_and_ne, ← Nat.not_lt, hn', Ne.symm hn]
+  · rw [modByMonic_X, map_C, ne_eq, C_eq_zero, Ideal.Quotient.eq_zero_iff_mem,
+      ← coeff_zero_eq_eval_zero]
+    convert! h0
+    · rw [IsScalarTower.algebraMap_eq R (R ⧸ P) (FractionRing (R ⧸ P))]
+      rw [ker_comp_of_injective]
+      · ext a; simp
+      · exact FaithfulSMul.algebraMap_injective (R ⧸ P) (FractionRing (R ⧸ P))
 
 中文:
 定理 irreducible_of_eisenstein_criterion
@@ -234,7 +375,32 @@ theorem irreducible_of_eisenstein_criterion
     (by simp [map_X, irreducible_X]) monic_X hu
     (natDegree_pos_iff_degree_pos.mpr hfd0)
   · simp only [IsScalarTower.algebraMap_eq R (R ⧸ P) (FractionRing (R ⧸ P)),
-      Quotient.algebraMap_eq, coe_comp, Fu
+      Quotient.algebraMap_eq, coe_comp, Function.comp_apply, ne_eq,
+      FaithfulSMul.algebraMap_eq_zero_iff]
+    rw [Ideal.Quotient.eq_zero_iff_mem]
+    exact hfl
+  · rw [← map_C, ← Polynomial.map_pow, ← Polynomial.map_mul]
+    simp only [IsScalarTower.algebraMap_eq R (R ⧸ P) (FractionRing (R ⧸ P)),
+      Quotient.algebraMap_eq, ← map_map]
+    congr 1
+    ext n
+    simp only [coeff_map, Ideal.Quotient.mk_eq_mk_iff_sub_mem]
+    simp only [coeff_C_mul, coeff_X_pow, mul_ite, mul_one, mul_zero, sub_ite, sub_zero]
+    split_ifs with hn
+    · rw [hn, leadingCoeff, sub_self]
+      exact zero_mem _
+    · by_cases hn' : n < f.natDegree
+      · exact hfP _ (coe_lt_degree.mpr hn')
+      · rw [f.coeff_eq_zero_of_natDegree_lt]
+        · exact P.zero_mem
+        · simp [Nat.lt_iff_le_and_ne, ← Nat.not_lt, hn', Ne.symm hn]
+  · rw [modByMonic_X, map_C, ne_eq, C_eq_zero, Ideal.Quotient.eq_zero_iff_mem,
+      ← coeff_zero_eq_eval_zero]
+    convert! h0
+    · rw [IsScalarTower.algebraMap_eq R (R ⧸ P) (FractionRing (R ⧸ P))]
+      rw [ker_comp_of_injective]
+      · ext a; simp
+      · exact FaithfulSMul.algebraMap_injective (R ⧸ P) (FractionRing (R ⧸ P))
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_eq_zero_iff, FractionRing, Function, Function.comp_apply, Ideal.Quotient.eq_zero_iff_mem, IsScalarTower, IsScalarTower.algebraMap_eq, Polynomial, Polynomial.map_mul, Polynomial.map_pow, Quotient, Quotient.algebraMap_eq, algebraMap_eq, algebraMap_eq_zero_iff, coe_comp, comp_apply, eq_zero_iff_mem, f.natDegree, generalizedEisenstein
 -/

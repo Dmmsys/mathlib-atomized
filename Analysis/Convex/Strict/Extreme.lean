@@ -45,7 +45,10 @@ theorem disjoint_interior_extremePoints
   have h₁ : forallᶠ v in 𝓝[!=] 0, x - v in S :=
     (tendsto_inf_left <| (continuous_sub_left _).tendsto' _ _ (sub_zero _)).eventually x_int
   have h₂ : forallᶠ v in 𝓝[!=] 0, x + v in S :=
-    (tend
+    (tendsto_inf_left <| (continuous_const_add _).tendsto' _ _ (add_zero _)).eventually x_int
+.exists .and eventually_mem_nhdsWithin obtain ⟨v, ⟨hv₁, hv₂⟩, (v_ne : v != 0)⟩ := h₁.and h₂
+  have key : x in openSegment Real (x - v) (x + v) := mem_openSegment_sub_add _ _
+  grind only [x_ext.2 hv₁ hv₂ key]
 
 中文:
 定理 disjoint_interior_extremePoints
@@ -56,7 +59,10 @@ theorem disjoint_interior_extremePoints
   have h₁ : forallᶠ v in 𝓝[!=] 0, x - v in S :=
     (tendsto_inf_left <| (continuous_sub_left _).tendsto' _ _ (sub_zero _)).eventually x_int
   have h₂ : forallᶠ v in 𝓝[!=] 0, x + v in S :=
-    (tend
+    (tendsto_inf_left <| (continuous_const_add _).tendsto' _ _ (add_zero _)).eventually x_int
+.exists .and eventually_mem_nhdsWithin obtain ⟨v, ⟨hv₁, hv₂⟩, (v_ne : v != 0)⟩ := h₁.and h₂
+  have key : x in openSegment Real (x - v) (x + v) := mem_openSegment_sub_add _ _
+  grind only [x_ext.2 hv₁ hv₂ key]
 
 Depends on / 依赖: Set.disjoint_iff.mpr, add_zero, continuous_const_add, continuous_sub_left, disjoint_iff, eventually, eventually_mem_nhdsWithin, mem_interior_iff_mem_nhds, openSegment, sub_zero, tendsto, tendsto_inf_left, v_ne, x_ext, x_int
 -/
@@ -87,7 +93,8 @@ exact hx.2 hxab ▸ hc hy hz this ha hb hab
   rwa [← hyz, ← add_smul, hab, one_smul] at hxab
 
 @[deprecated (since := "2026-06-03")]
-alias StrictConvex.diff_interior_subset_extremePoints
+alias StrictConvex.diff_interior_subset_extremePoints :=
+  StrictConvex.sdiff_interior_subset_extremePoints
 
 中文:
 引理 严格凸.sdiff_interior_subset_extremePoints
@@ -100,7 +107,8 @@ exact hx.2 hxab ▸ hc hy hz this ha hb hab
   rwa [← hyz, ← add_smul, hab, one_smul] at hxab
 
 @[deprecated (since := "2026-06-03")]
-alias StrictConvex.diff_interior_subset_extremePoints
+alias StrictConvex.diff_interior_subset_extremePoints :=
+  StrictConvex.sdiff_interior_subset_extremePoints
 
 Depends on / 依赖: add_smul, one_smul
 -/

@@ -84,7 +84,11 @@ nonrec theorem HasFDerivWithinAt.prodMk (hf₁ : HasFDerivWithinAt f₁ f₁' s 
   hf₁.prodMk hf₂
 
 @[fun_prop]
-nonrec theorem HasFDerivAt.prodMk (h
+nonrec theorem HasFDerivAt.prodMk (hf₁ : HasFDerivAt f₁ f₁' x) (hf₂ : HasFDerivAt f₂ f₂' x) :
+    HasFDerivAt (fun x => (f₁ x, f₂ x)) (f₁'.prod f₂') x :=
+  hf₁.prodMk hf₂
+
+@[fun_prop]
 
 中文:
 定理 HasStrictFDerivAt.prodMk
@@ -98,7 +102,11 @@ nonrec theorem HasFDerivWithinAt.prodMk (hf₁ : HasFDerivWithinAt f₁ f₁' s 
   hf₁.prodMk hf₂
 
 @[fun_prop]
-nonrec theorem HasFDerivAt.prodMk (h
+nonrec theorem HasFDerivAt.prodMk (hf₁ : HasFDerivAt f₁ f₁' x) (hf₂ : HasFDerivAt f₂ f₂' x) :
+    HasFDerivAt (fun x => (f₁ x, f₂ x)) (f₁'.prod f₂') x :=
+  hf₁.prodMk hf₂
+
+@[fun_prop]
 -/
 protected theorem HasStrictFDerivAt.prodMk (hf₁ : HasStrictFDerivAt f₁ f₁' x)
     (hf₂ : HasStrictFDerivAt f₂ f₂' x) :

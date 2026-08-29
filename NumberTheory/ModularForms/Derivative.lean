@@ -67,7 +67,8 @@ theorem normalizedDerivOfComplex_mdifferentiable
   have hDeriv : DifferentiableOn Complex (fun z => c * deriv (F ∘ ofComplex) z) upperHalfPlaneSet := by
     simpa [c] using (hF.deriv isOpen_upperHalfPlaneSet).const_mul ((2 * π * I)⁻¹)
   refine hDeriv.congr ?_
- 
+  intro z hz
+  simp [normalizedDerivOfComplex, c, Function.comp_apply, ofComplex_apply_of_im_pos hz]
 
 中文:
 定理 normalizedDerivOfComplex_mdifferentiable
@@ -79,7 +80,8 @@ theorem normalizedDerivOfComplex_mdifferentiable
   have hDeriv : DifferentiableOn Complex (fun z => c * deriv (F ∘ ofComplex) z) upperHalfPlaneSet := by
     simpa [c] using (hF.deriv isOpen_upperHalfPlaneSet).const_mul ((2 * π * I)⁻¹)
   refine hDeriv.congr ?_
- 
+  intro z hz
+  simp [normalizedDerivOfComplex, c, Function.comp_apply, ofComplex_apply_of_im_pos hz]
 
 Depends on / 依赖: DifferentiableOn, Function, Function.comp_apply, UpperHalfPlane, UpperHalfPlane.mdifferentiable_iff, comp_apply, const_mul, hDeriv, hDeriv.congr, hF.deriv, isOpen_upperHalfPlaneSet, mdifferentiable_iff, normalizedDerivOfComplex, ofComplex, ofComplex_apply_of_im_pos, upperHalfPlaneSet
 -/
@@ -109,7 +111,7 @@ theorem normalizedDerivOfComplex_add
   simp only [normalizedDerivOfComplex, Pi.add_apply]
   rw [show (F + G) ∘ ofComplex = F ∘ ofComplex + G ∘ ofComplex from rfl]; rw [deriv_add hFz hGz]; rw [mul_add]
 
-@[
+@[simp]
 
 中文:
 定理 normalizedDerivOfComplex_add
@@ -121,7 +123,7 @@ theorem normalizedDerivOfComplex_add
   simp only [normalizedDerivOfComplex, Pi.add_apply]
   rw [show (F + G) ∘ ofComplex = F ∘ ofComplex + G ∘ ofComplex from rfl]; rw [deriv_add hFz hGz]; rw [mul_add]
 
-@[
+@[simp]
 
 Depends on / 依赖: Pi.add_apply, UpperHalfPlane, UpperHalfPlane.mdifferentiableAt_iff.mp, add_apply, deriv_add, mdifferentiableAt_iff, mul_add, normalizedDerivOfComplex, ofComplex
 -/
@@ -147,7 +149,7 @@ theorem normalizedDerivOfComplex_sub
   simp only [normalizedDerivOfComplex, Pi.sub_apply]
   rw [show (F - G) ∘ ofComplex = F ∘ ofComplex - G ∘ ofComplex from rfl]; rw [deriv_sub hFz hGz]; rw [mul_sub]
 
-@[
+@[simp]
 
 中文:
 定理 normalizedDerivOfComplex_sub
@@ -159,7 +161,7 @@ theorem normalizedDerivOfComplex_sub
   simp only [normalizedDerivOfComplex, Pi.sub_apply]
   rw [show (F - G) ∘ ofComplex = F ∘ ofComplex - G ∘ ofComplex from rfl]; rw [deriv_sub hFz hGz]; rw [mul_sub]
 
-@[
+@[simp]
 
 Depends on / 依赖: Pi.sub_apply, UpperHalfPlane, UpperHalfPlane.mdifferentiableAt_iff.mp, deriv_sub, mdifferentiableAt_iff, mul_sub, normalizedDerivOfComplex, ofComplex, sub_apply
 -/
@@ -292,6 +294,10 @@ theorem normalizedDerivOfComplex_mul
   have hGz := UpperHalfPlane.mdifferentiableAt_iff.mp (hG z)
   simp only [normalizedDerivOfComplex, Pi.add_apply, Pi.mul_apply]
   rw [show (F * G) ∘ ofComplex = (F ∘ ofComplex) * (G ∘ ofComplex) from rfl]; rw [deriv_mul hFz hGz]
+  simp [Function.comp_apply, ofComplex_apply]
+  ring
+
+@[simp]
 
 中文:
 定理 normalizedDerivOfComplex_mul
@@ -302,6 +308,10 @@ theorem normalizedDerivOfComplex_mul
   have hGz := UpperHalfPlane.mdifferentiableAt_iff.mp (hG z)
   simp only [normalizedDerivOfComplex, Pi.add_apply, Pi.mul_apply]
   rw [show (F * G) ∘ ofComplex = (F ∘ ofComplex) * (G ∘ ofComplex) from rfl]; rw [deriv_mul hFz hGz]
+  simp [Function.comp_apply, ofComplex_apply]
+  ring
+
+@[simp]
 
 Depends on / 依赖: Function, Function.comp_apply, Pi.add_apply, Pi.mul_apply, UpperHalfPlane, UpperHalfPlane.mdifferentiableAt_iff.mp, add_apply, comp_apply, deriv_mul, mdifferentiableAt_iff, mul_apply, normalizedDerivOfComplex, ofComplex, ofComplex_apply
 -/
@@ -567,7 +577,25 @@ lemma normalizedDerivOfComplex_slash
   have hdetComplex : (g.val.det : Complex) != 0 := Complex.ofReal_ne_zero.mpr hg.ne'
   have hσ (x) : σ g x = x := by grind [σ, ContinuousAlgEquiv.refl_apply]
   ext z
-  simp only [normalizedDerivOfComplex, ModularForm
+  simp only [normalizedDerivOfComplex, ModularForm.slash_apply]
+  have hz := denom_ne_zero g z
+  have h_smul : HasDerivAt (fun w => ↑(g • ofComplex w) : Complex -> Complex)
+      ((g.val.det : Complex) / denom g z ^ 2) ↑z := (hasStrictDerivAt_smul hg z).hasDerivAt
+  have h_F : HasDerivAt (F ∘ ofComplex) (deriv (F ∘ ofComplex) ↑(g • ofComplex (z : Complex)))
+      ↑(g • ofComplex (z : Complex)) :=
+    (ofComplex_apply z).symm ▸ (mdifferentiableAt_iff.mp (hF (g • z))).hasDerivAt
+  have h_denom : HasDerivAt (fun w => (denom g w) ^ (-k))
+      (-k * (g 1 0 : Complex) * (denom g z) ^ (-k - 1)) ↑z := by
+    simpa using hasDerivAt_denom_zpow g (-k) z
+  have hcomp : ((F ∣[k] g) ∘ ofComplex) =ᶠ[𝓝 ↑z]
+      fun w => (g.val.det : Complex) ^ (k - 1) *
+        ((F ∘ ofComplex) ↑(g • ofComplex w) * (denom g w) ^ (-k)) := by
+    filter_upwards [isOpen_upperHalfPlaneSet.mem_nhds z.im_pos] with w hw
+    grind [ofComplex_apply_of_im_pos, ofComplex_apply, ModularForm.slash_apply]
+  rw [((((h_F.comp (z : Complex) h_smul).mul h_denom).const_mul _).congr_of_eventuallyEq hcomp).deriv]
+  simp only [hσ, hdet, abs_of_pos hg, ofComplex_apply, Function.comp_apply]
+  rw [show k + 2 - 1 = (k - 1) + 2 by ring]; rw [show -(k + 2) = -k + -2 by ring]; rw [zpow_add₀ hdetComplex]; rw [zpow_add₀ hz]; rw [zpow_sub_one₀ hz]
+  field
 
 中文:
 引理 normalizedDerivOfComplex_slash
@@ -577,7 +605,25 @@ lemma normalizedDerivOfComplex_slash
   have hdetComplex : (g.val.det : Complex) != 0 := Complex.ofReal_ne_zero.mpr hg.ne'
   have hσ (x) : σ g x = x := by grind [σ, ContinuousAlgEquiv.refl_apply]
   ext z
-  simp only [normalizedDerivOfComplex, ModularForm
+  simp only [normalizedDerivOfComplex, ModularForm.slash_apply]
+  have hz := denom_ne_zero g z
+  have h_smul : HasDerivAt (fun w => ↑(g • ofComplex w) : Complex -> Complex)
+      ((g.val.det : Complex) / denom g z ^ 2) ↑z := (hasStrictDerivAt_smul hg z).hasDerivAt
+  have h_F : HasDerivAt (F ∘ ofComplex) (deriv (F ∘ ofComplex) ↑(g • ofComplex (z : Complex)))
+      ↑(g • ofComplex (z : Complex)) :=
+    (ofComplex_apply z).symm ▸ (mdifferentiableAt_iff.mp (hF (g • z))).hasDerivAt
+  have h_denom : HasDerivAt (fun w => (denom g w) ^ (-k))
+      (-k * (g 1 0 : Complex) * (denom g z) ^ (-k - 1)) ↑z := by
+    simpa using hasDerivAt_denom_zpow g (-k) z
+  have hcomp : ((F ∣[k] g) ∘ ofComplex) =ᶠ[𝓝 ↑z]
+      fun w => (g.val.det : Complex) ^ (k - 1) *
+        ((F ∘ ofComplex) ↑(g • ofComplex w) * (denom g w) ^ (-k)) := by
+    filter_upwards [isOpen_upperHalfPlaneSet.mem_nhds z.im_pos] with w hw
+    grind [ofComplex_apply_of_im_pos, ofComplex_apply, ModularForm.slash_apply]
+  rw [((((h_F.comp (z : Complex) h_smul).mul h_denom).const_mul _).congr_of_eventuallyEq hcomp).deriv]
+  simp only [hσ, hdet, abs_of_pos hg, ofComplex_apply, Function.comp_apply]
+  rw [show k + 2 - 1 = (k - 1) + 2 by ring]; rw [show -(k + 2) = -k + -2 by ring]; rw [zpow_add₀ hdetComplex]; rw [zpow_add₀ hz]; rw [zpow_sub_one₀ hz]
+  field
 
 Depends on / 依赖: Complex.ofReal_ne_zero.mpr, ContinuousAlgEquiv, ContinuousAlgEquiv.refl_apply, GeneralLinearGroup, HasDerivAt, Matrix, Matrix.GeneralLinearGroup.val_det_apply, ModularForm, ModularForm.slash_apply, denom_ne_zero, g.det.val, g.val.det, h_smul, hasDerivAt, hasStrictDerivAt_smul, hdetComplex, hg.ne, normalizedDerivOfComplex, ofComplex, ofReal_ne_zero
 -/
@@ -660,7 +706,14 @@ theorem serreDerivative_slash_equivariant
   have hLHS : (serreDerivative (k : Complex) F ∣[k + 2] γ) z =
       (D F ∣[k + 2] γ) z - ↑k * 12⁻¹ * ((EisensteinSeries.E2 ∣[(2 : Int)] γ) z * (F ∣[k] γ) z) := by
     grind [ModularForm.SL_slash_apply, serreDerivative_apply, Pi.mul_apply,
-      congrFun (ModularForm.mul_slash_SL2 2 k γ E
+      congrFun (ModularForm.mul_slash_SL2 2 k γ EisensteinSeries.E2 F) z]
+  have hDz : (D (F ∣[k] γ)) z = (D F ∣[k + 2] γ) z -
+      (k * (2 * π * I)⁻¹ * (γ 1 0 / denom γ z) * (F ∣[k] γ) z) := by
+    simp [normalizedDerivOfComplex_SL_slash hF]
+  have hE2z : (EisensteinSeries.E2 ∣[(2 : Int)] γ) z =
+      EisensteinSeries.E2 z - 1 / (2 * riemannZeta 2) * EisensteinSeries.D2 γ z := by
+    simp [EisensteinSeries.E2_slash_action]
+  grind [serreDerivative_apply, EisensteinSeries.D2, riemannZeta_two, I_sq]
 
 中文:
 定理 serreDerivative_slash_equivariant
@@ -670,7 +723,14 @@ theorem serreDerivative_slash_equivariant
   have hLHS : (serreDerivative (k : Complex) F ∣[k + 2] γ) z =
       (D F ∣[k + 2] γ) z - ↑k * 12⁻¹ * ((EisensteinSeries.E2 ∣[(2 : Int)] γ) z * (F ∣[k] γ) z) := by
     grind [ModularForm.SL_slash_apply, serreDerivative_apply, Pi.mul_apply,
-      congrFun (ModularForm.mul_slash_SL2 2 k γ E
+      congrFun (ModularForm.mul_slash_SL2 2 k γ EisensteinSeries.E2 F) z]
+  have hDz : (D (F ∣[k] γ)) z = (D F ∣[k + 2] γ) z -
+      (k * (2 * π * I)⁻¹ * (γ 1 0 / denom γ z) * (F ∣[k] γ) z) := by
+    simp [normalizedDerivOfComplex_SL_slash hF]
+  have hE2z : (EisensteinSeries.E2 ∣[(2 : Int)] γ) z =
+      EisensteinSeries.E2 z - 1 / (2 * riemannZeta 2) * EisensteinSeries.D2 γ z := by
+    simp [EisensteinSeries.E2_slash_action]
+  grind [serreDerivative_apply, EisensteinSeries.D2, riemannZeta_two, I_sq]
 
 Depends on / 依赖: EisensteinSeries, EisensteinSeries.E2, ModularForm, ModularForm.SL_slash_apply, ModularForm.mul_slash_SL2, Pi.mul_apply, SL_slash_apply, mul_apply, mul_slash_SL2, normalizedDerivOfComplex_SL_slash, serreDerivative, serreDerivative_apply
 -/

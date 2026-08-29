@@ -4327,7 +4327,8 @@ theorem predAbove_predAbove_succAbove
     rw [predAbove_of_castSucc_lt _ _ h]; rw [succAbove_of_castSucc_lt _ _ h]; rw [predAbove_of_le_castSucc]; rw [castPred_castSucc]
     rwa [le_castSucc_iff, succ_pred]
   | inr h =>
-    rw [predAbove_of_le_castSucc _ _ h]; rw [succAbove_of_le_castSu
+    rw [predAbove_of_le_castSucc _ _ h]; rw [succAbove_of_le_castSucc _ _ h]; rw [predAbove_of_castSucc_lt]; rw [pred_succ]
+    rwa [castSucc_castPred, ← le_castSucc_iff]
 
 中文:
 定理 predAbove_predAbove_succAbove
@@ -4338,7 +4339,8 @@ theorem predAbove_predAbove_succAbove
     rw [predAbove_of_castSucc_lt _ _ h]; rw [succAbove_of_castSucc_lt _ _ h]; rw [predAbove_of_le_castSucc]; rw [castPred_castSucc]
     rwa [le_castSucc_iff, succ_pred]
   | inr h =>
-    rw [predAbove_of_le_castSucc _ _ h]; rw [succAbove_of_le_castSu
+    rw [predAbove_of_le_castSucc _ _ h]; rw [succAbove_of_le_castSucc _ _ h]; rw [predAbove_of_castSucc_lt]; rw [pred_succ]
+    rwa [castSucc_castPred, ← le_castSucc_iff]
 
 Depends on / 依赖: castPred_castSucc, castSucc, castSucc_castPred, j.castSucc.lt_or_le, le_castSucc_iff, lt_or_le, predAbove_of_castSucc_lt, predAbove_of_le_castSucc, pred_succ, succAbove_of_castSucc_lt, succAbove_of_le_castSucc, succ_pred
 -/
@@ -4393,7 +4395,9 @@ theorem succAbove_succAbove_succAbove_predAbove
   by saying that both functions are strictly monotone and have the same range `{i, i.succAbove j}ᶜ`,
   we give a direct proof by case analysis to avoid extra dependencies. -/
   ext
-  simp only [succAbove, predAbove, lt_def, val_castSucc,
+  simp only [succAbove, predAbove, lt_def, val_castSucc, apply_dite Fin.val, val_pred, coe_castPred,
+    dite_eq_ite, apply_ite Fin.val, val_succ]
+  split_ifs <;> lia
 
 中文:
 定理 succAbove_succAbove_succAbove_predAbove
@@ -4403,7 +4407,9 @@ theorem succAbove_succAbove_succAbove_predAbove
   by saying that both functions are strictly monotone and have the same range `{i, i.succAbove j}ᶜ`,
   we give a direct proof by case analysis to avoid extra dependencies. -/
   ext
-  simp only [succAbove, predAbove, lt_def, val_castSucc,
+  simp only [succAbove, predAbove, lt_def, val_castSucc, apply_dite Fin.val, val_pred, coe_castPred,
+    dite_eq_ite, apply_ite Fin.val, val_succ]
+  split_ifs <;> lia
 -/
 theorem succAbove_succAbove_succAbove_predAbove {n : Nat}
     (i : Fin (n + 2)) (j : Fin (n + 1)) (k : Fin n) :

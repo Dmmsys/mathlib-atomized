@@ -1854,7 +1854,7 @@ instance AddMonoid.measurableSMul_nat₂
     | zero => simp only [zero_smul, ← Pi.zero_def, measurable_zero]
     | succ n ih =>
       simp only [succ_nsmul]
-      exact 
+      exact ih.add measurable_id⟩
 
 中文:
 实例 加法幺半群.measurableSMul_nat₂
@@ -1866,7 +1866,7 @@ instance AddMonoid.measurableSMul_nat₂
     | zero => simp only [zero_smul, ← Pi.zero_def, measurable_zero]
     | succ n ih =>
       simp only [succ_nsmul]
-      exact 
+      exact ih.add measurable_id⟩
 
 Depends on / 依赖: Measurable, Pi.zero_def, ih.add, measurable_from_prod_countable_left, measurable_id, measurable_swap, measurable_zero, succ_nsmul, this.comp, zero_def, zero_smul
 -/
@@ -1895,7 +1895,8 @@ instance SubNegMonoid.measurableSMul_int₂
       simp only [Int.ofNat_eq_natCast, natCast_zsmul]
       exact measurable_const_smul _
     | negSucc n =>
-      
+      simp only [negSucc_zsmul]
+      exact (measurable_const_smul _).neg⟩
 
 中文:
 实例 SubNeg幺半群.measurableSMul_int₂
@@ -1908,7 +1909,8 @@ instance SubNegMonoid.measurableSMul_int₂
       simp only [Int.ofNat_eq_natCast, natCast_zsmul]
       exact measurable_const_smul _
     | negSucc n =>
-      
+      simp only [negSucc_zsmul]
+      exact (measurable_const_smul _).neg⟩
 
 Depends on / 依赖: Int.ofNat_eq_natCast, Measurable, measurable_const_smul, measurable_from_prod_countable_left, measurable_swap, natCast_zsmul, negSucc, negSucc_zsmul, ofNat_eq_natCast, this.comp
 -/
@@ -2084,7 +2086,10 @@ nonrec theorem IsUnit.measurable_const_smul_iff {c : M} (hc : IsUnit c) :
   hu ▸ measurable_const_smul_iff u
 
 @[to_additive]
-nonrec theorem IsUnit.aemeasurable_const_smul_iff {c : M}
+nonrec theorem IsUnit.aemeasurable_const_smul_iff {c : M} (hc : IsUnit c) :
+    AEMeasurable (fun x => c • f x) μ ↔ AEMeasurable f μ :=
+  let ⟨u, hu⟩ := hc
+  hu ▸ aemeasurable_const_smul_iff u
 
 中文:
 实例 单位群.instMeasurableConstSMul
@@ -2098,7 +2103,10 @@ nonrec theorem IsUnit.measurable_const_smul_iff {c : M} (hc : IsUnit c) :
   hu ▸ measurable_const_smul_iff u
 
 @[to_additive]
-nonrec theorem IsUnit.aemeasurable_const_smul_iff {c : M}
+nonrec theorem IsUnit.aemeasurable_const_smul_iff {c : M} (hc : IsUnit c) :
+    AEMeasurable (fun x => c • f x) μ ↔ AEMeasurable f μ :=
+  let ⟨u, hu⟩ := hc
+  hu ▸ aemeasurable_const_smul_iff u
 
 Depends on / 依赖: measurable_const_smul
 -/

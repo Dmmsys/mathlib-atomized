@@ -58,7 +58,8 @@ theorem hasProd_powerSeriesMk_card_restricted
       apply Summable.mul_right
       exact summable_pow_of_constantCoeff_eq_zero (by simp)
     · simp
-  · simp_rw [genFu
+  · simp_rw [genFun, restricted, card_filter, Finsupp.prod, prod_boole]
+    simp
 
 中文:
 定理 hasProd_powerSeriesMk_card_restricted
@@ -73,7 +74,8 @@ theorem hasProd_powerSeriesMk_card_restricted
       apply Summable.mul_right
       exact summable_pow_of_constantCoeff_eq_zero (by simp)
     · simp
-  · simp_rw [genFu
+  · simp_rw [genFun, restricted, card_filter, Finsupp.prod, prod_boole]
+    simp
 
 Depends on / 依赖: Finsupp, Finsupp.prod, Summable, Summable.mul_right, card_filter, convert, genFun, hasProd_genFun, mul_right, pow_add, pow_mul, prod_boole, restricted, simp_rw, split_ifs, summable_pow_of_constantCoeff_eq_zero, tsum_eq_zero_add
 -/
@@ -146,7 +148,14 @@ theorem hasProd_powerSeriesMk_card_countRestricted
   · ext1 i
     rw [sum_range_eq_add_Ico _ hm]; rw [sum_Ico_eq_sum_range]
 congrm (by simp) + ?_
-    trans ∑ k in range (m - 1), (if k + 1 < m then (1 : R) else 0) • X
+    trans ∑ k in range (m - 1), (if k + 1 < m then (1 : R) else 0) • X ^ ((i + 1) * (k + 1))
+    · refine sum_congr rfl fun b hn => ?_
+      rw [add_comm 1 b]
+      have : b + 1 < m := by grind
+      simp [this]
+    · exact (tsum_eq_sum (fun b hb => smul_eq_zero_of_left (by simpa using hb) _)).symm
+  · simp_rw [genFun, countRestricted, card_filter, Finsupp.prod, prod_boole]
+    simp
 
 中文:
 定理 hasProd_powerSeriesMk_card_countRestricted
@@ -157,7 +166,14 @@ congrm (by simp) + ?_
   · ext1 i
     rw [sum_range_eq_add_Ico _ hm]; rw [sum_Ico_eq_sum_range]
 congrm (by simp) + ?_
-    trans ∑ k in range (m - 1), (if k + 1 < m then (1 : R) else 0) • X
+    trans ∑ k in range (m - 1), (if k + 1 < m then (1 : R) else 0) • X ^ ((i + 1) * (k + 1))
+    · refine sum_congr rfl fun b hn => ?_
+      rw [add_comm 1 b]
+      have : b + 1 < m := by grind
+      simp [this]
+    · exact (tsum_eq_sum (fun b hb => smul_eq_zero_of_left (by simpa using hb) _)).symm
+  · simp_rw [genFun, countRestricted, card_filter, Finsupp.prod, prod_boole]
+    simp
 
 Depends on / 依赖: Subsingleton, Subsingleton.eq_one, add_comm, congrm, convert, eq_one, hasProd_genFun, nontriviality, simp_rw, smul_eq_zero_of_left, sum_Ico_eq_sum_range, sum_congr, sum_range_eq_add_Ico, tsum_eq_sum
 -/
@@ -244,7 +260,20 @@ theorem aux_mul_one_sub_X_pow
   conv in fun b => _ =>
     ext b
     rw [tsum_pow_mul_one_sub_of_constantCoeff_eq_zero (by simp)]
-  refine tprod_eq_tprod_of_ne_o
+  refine tprod_eq_tprod_of_ne_one_bij (fun i => (i.val + 1) * m - 1) ?_ ?_ ?_
+  · intro a b h
+    rw [tsub_left_inj (by nlinarith) (by nlinarith)]; rw [mul_left_inj' (hm.ne.symm)]; rw [add_left_inj] at h
+    exact SetCoe.ext h
+  · suffices forall (i : Nat), m ∣ i + 1 -> exists j != 0, j * m - 1 = i by simpa
+    intro i hi
+    obtain ⟨j, hj⟩ := dvd_def.mp hi
+    refine ⟨j, by grind, Nat.sub_eq_of_eq_add ?_⟩
+    rw [hj]; rw [mul_comm m j]
+  · intro i
+    have : (i + 1) * m - 1 + 1 = (i + 1) * m := by grind
+    simp [this, pow_mul]
+
+omit [TopologicalSpace R] in
 
 中文:
 定理 aux_mul_one_sub_X_pow
@@ -257,7 +286,20 @@ theorem aux_mul_one_sub_X_pow
   conv in fun b => _ =>
     ext b
     rw [tsum_pow_mul_one_sub_of_constantCoeff_eq_zero (by simp)]
-  refine tprod_eq_tprod_of_ne_o
+  refine tprod_eq_tprod_of_ne_one_bij (fun i => (i.val + 1) * m - 1) ?_ ?_ ?_
+  · intro a b h
+    rw [tsub_left_inj (by nlinarith) (by nlinarith)]; rw [mul_left_inj' (hm.ne.symm)]; rw [add_left_inj] at h
+    exact SetCoe.ext h
+  · suffices forall (i : Nat), m ∣ i + 1 -> exists j != 0, j * m - 1 = i by simpa
+    intro i hi
+    obtain ⟨j, hj⟩ := dvd_def.mp hi
+    refine ⟨j, by grind, Nat.sub_eq_of_eq_add ?_⟩
+    rw [hj]; rw [mul_comm m j]
+  · intro i
+    have : (i + 1) * m - 1 + 1 = (i + 1) * m := by grind
+    simp [this, pow_mul]
+
+omit [TopologicalSpace R] in
 -/
 private theorem aux_mul_one_sub_X_pow [IsTopologicalRing R] {m : Nat} (hm : 0 < m) :
     (∏' i, if ¬m ∣ i + 1 then ∑' j, (X : R⟦X⟧) ^ ((i + 1) * j) else 1) * ∏' i, (1 - X ^ (i + 1)) =
@@ -297,7 +339,9 @@ theorem powerSeriesMk_card_restricted_eq_powerSeriesMk_card_countRestricted
   rw [powerSeriesMk_card_countRestricted_eq_tprod R hm]
   apply mul_right_cancel₀ (tprod_one_sub_X_pow_ne_zero R)
   rw [aux_mul_one_sub_X_pow R hm]
-
+  rw [← (multipliable_powerSeriesMk_card_countRestricted R m).tprod_mul
+    (multipliable_one_sub_X_pow _)]
+  exact tprod_congr (fun i => by simp_rw [pow_mul, geom_sum_mul_neg])
 
 中文:
 定理 powerSeriesMk_card_restricted_eq_powerSeriesMk_card_countRestricted
@@ -310,7 +354,9 @@ theorem powerSeriesMk_card_restricted_eq_powerSeriesMk_card_countRestricted
   rw [powerSeriesMk_card_countRestricted_eq_tprod R hm]
   apply mul_right_cancel₀ (tprod_one_sub_X_pow_ne_zero R)
   rw [aux_mul_one_sub_X_pow R hm]
-
+  rw [← (multipliable_powerSeriesMk_card_countRestricted R m).tprod_mul
+    (multipliable_one_sub_X_pow _)]
+  exact tprod_congr (fun i => by simp_rw [pow_mul, geom_sum_mul_neg])
 
 Depends on / 依赖: DiscreteTopology, TopologicalSpace, aux_mul_one_sub_X_pow, geom_sum_mul_neg, multipliable_one_sub_X_pow, multipliable_powerSeriesMk_card_countRestricted, nontriviality, pow_mul, powerSeriesMk_card_countRestricted_eq_tprod, powerSeriesMk_card_restricted_eq_tprod, simp_rw, tprod_congr, tprod_mul, tprod_one_sub_X_pow_ne_zero
 -/

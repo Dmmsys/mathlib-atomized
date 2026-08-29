@@ -172,7 +172,12 @@ lemma cartanMatrixIn_nondegenerate
   obtain ⟨B, hB⟩ : exists B : P.InvariantForm, B.form.Nondegenerate :=
     ⟨P.toInvariantForm, P.rootForm_nondegenerate⟩
   replace hB : ((2 : R) • B.form.toMatrix b.toWeightBasis).Nondegenerate := by
-    rwa [Matrix.Nondegenerate.smul_iff two_ne_zero, LinearMap.BilinForm.nondegenerate
+    rwa [Matrix.Nondegenerate.smul_iff two_ne_zero, LinearMap.BilinForm.nondegenerate_toMatrix_iff]
+  have aux : (Matrix.diagonal fun i : b.support => B.form (P.root i) (P.root i)).Nondegenerate := by
+    rw [Matrix.nondegenerate_iff_det_ne_zero]; rw [Matrix.det_diagonal]; rw [Finset.prod_ne_zero_iff]
+    aesop
+  rw [← cartanMatrixIn_mul_diagonal_eq (S := S)]; rw [Matrix.Nondegenerate.mul_iff_right aux]; rw [Matrix.nondegenerate_iff_det_ne_zero]; rw [← (algebraMap S R).mapMatrix_apply]; rw [← RingHom.map_det]; rw [ne_eq]; rw [FaithfulSMul.algebraMap_eq_zero_iff] at hB
+  rwa [Matrix.nondegenerate_iff_det_ne_zero]
 
 中文:
 引理 cartanMatrixIn_nondegenerate
@@ -182,7 +187,12 @@ lemma cartanMatrixIn_nondegenerate
   obtain ⟨B, hB⟩ : exists B : P.InvariantForm, B.form.Nondegenerate :=
     ⟨P.toInvariantForm, P.rootForm_nondegenerate⟩
   replace hB : ((2 : R) • B.form.toMatrix b.toWeightBasis).Nondegenerate := by
-    rwa [Matrix.Nondegenerate.smul_iff two_ne_zero, LinearMap.BilinForm.nondegenerate
+    rwa [Matrix.Nondegenerate.smul_iff two_ne_zero, LinearMap.BilinForm.nondegenerate_toMatrix_iff]
+  have aux : (Matrix.diagonal fun i : b.support => B.form (P.root i) (P.root i)).Nondegenerate := by
+    rw [Matrix.nondegenerate_iff_det_ne_zero]; rw [Matrix.det_diagonal]; rw [Finset.prod_ne_zero_iff]
+    aesop
+  rw [← cartanMatrixIn_mul_diagonal_eq (S := S)]; rw [Matrix.Nondegenerate.mul_iff_right aux]; rw [Matrix.nondegenerate_iff_det_ne_zero]; rw [← (algebraMap S R).mapMatrix_apply]; rw [← RingHom.map_det]; rw [ne_eq]; rw [FaithfulSMul.algebraMap_eq_zero_iff] at hB
+  rwa [Matrix.nondegenerate_iff_det_ne_zero]
 
 Depends on / 依赖: B.form, B.form.Nondegenerate, B.form.toMatrix, BilinForm, Finset, Finset.prod_ne_zero_iff, InvariantForm, LinearMap, LinearMap.BilinForm.nondegenerate_toMatrix_iff, Matrix, Matrix.Nondegenerate.smul_iff, Matrix.det_diagonal, Matrix.diagonal, Matrix.nondegenerate_iff_det_ne_zero, Nondegenerate, P.InvariantForm, P.root, P.rootForm_nondegenerate, P.toInvariantForm, b.support
 -/
@@ -324,7 +334,14 @@ lemma cartanMatrix_mem_of_ne
   have : Module.IsReflexive R N := .of_isPerfPair P.flip.toLinearMap
   simp only [cartanMatrix, cartanMatrixIn_def]
   have h₁ := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
-  have h₂ : P.pairingIn Int i j <= 0 := b.cartan
+  have h₂ : P.pairingIn Int i j <= 0 := b.cartanMatrix_le_zero_of_ne i j hij
+  suffices P.pairingIn Int i j != -4 by aesop
+  by_contra contra
+  replace contra : P.pairingIn Int j i = -1 ∧ P.pairingIn Int i j = -4 := ⟨by simp_all, contra⟩
+  rw [pairingIn_neg_one_neg_four_iff] at contra
+  refine (not_linearIndependent_iff.mpr ?_) b.linearIndepOn_root
+  refine ⟨⟨{i, j}, by simpa⟩, Finsupp.single i (1 : R) + Finsupp.single j (2 : R), ?_⟩
+  simp [contra, hij, hij.symm]
 
 中文:
 引理 cartanMatrix_mem_of_ne
@@ -334,7 +351,14 @@ lemma cartanMatrix_mem_of_ne
   have : Module.IsReflexive R N := .of_isPerfPair P.flip.toLinearMap
   simp only [cartanMatrix, cartanMatrixIn_def]
   have h₁ := P.pairingIn_pairingIn_mem_set_of_isCrystallographic i j
-  have h₂ : P.pairingIn Int i j <= 0 := b.cartan
+  have h₂ : P.pairingIn Int i j <= 0 := b.cartanMatrix_le_zero_of_ne i j hij
+  suffices P.pairingIn Int i j != -4 by aesop
+  by_contra contra
+  replace contra : P.pairingIn Int j i = -1 ∧ P.pairingIn Int i j = -4 := ⟨by simp_all, contra⟩
+  rw [pairingIn_neg_one_neg_four_iff] at contra
+  refine (not_linearIndependent_iff.mpr ?_) b.linearIndepOn_root
+  refine ⟨⟨{i, j}, by simpa⟩, Finsupp.single i (1 : R) + Finsupp.single j (2 : R), ?_⟩
+  simp [contra, hij, hij.symm]
 
 Depends on / 依赖: IsReflexive, Module, Module.IsReflexive, P.flip.toLinearMap, P.pairingIn, P.pairingIn_pairingIn_mem_set_of_isCrystallographic, P.toLinearMap, b.cartanMatrix_le_zero_of_ne, cartanMatrix, cartanMatrixIn_def, cartanMatrix_le_zero_of_ne, contra, of_isPerfPair, pairingIn, pairingIn_neg_one_neg_, pairingIn_pairingIn_mem_set_of_isCrystallographic, replace, toLinearMap
 -/
@@ -491,7 +515,10 @@ lemma cartanMatrix_mul_diagonal_eq
       (2 : Int) • (P.posRootForm Int).posForm.toMatrix b.toWeightBasisInt := by
   ext i j
   apply algebraMap_injective Int R
-  simp only [mul_diagonal, map_mul, algebraMap_rootFormIn, posRootForm_
+  simp only [mul_diagonal, map_mul, algebraMap_rootFormIn, posRootForm_eq, Matrix.smul_apply,
+    LinearMap.BilinForm.toMatrix_apply, Int.zsmul_eq_mul]
+  simpa [← algebraMap_pairingIn P Int i j] using
+    congr_fun₂ (cartanMatrixIn_mul_diagonal_eq Int P.toInvariantForm b) i j
 
 中文:
 引理 cartanMatrix_mul_diagonal_eq
@@ -501,7 +528,10 @@ lemma cartanMatrix_mul_diagonal_eq
       (2 : Int) • (P.posRootForm Int).posForm.toMatrix b.toWeightBasisInt := by
   ext i j
   apply algebraMap_injective Int R
-  simp only [mul_diagonal, map_mul, algebraMap_rootFormIn, posRootForm_
+  simp only [mul_diagonal, map_mul, algebraMap_rootFormIn, posRootForm_eq, Matrix.smul_apply,
+    LinearMap.BilinForm.toMatrix_apply, Int.zsmul_eq_mul]
+  simpa [← algebraMap_pairingIn P Int i j] using
+    congr_fun₂ (cartanMatrixIn_mul_diagonal_eq Int P.toInvariantForm b) i j
 
 Depends on / 依赖: P.RootFormIn, P.rootSpanMem, RootFormIn, rootSpanMem
 -/
@@ -528,7 +558,12 @@ lemma exists_cartanMatrix_mul_diagaonal_posDef
   refine ⟨d, fun i => ?_, ?_⟩
   · rw [hd, ← posRootForm_eq]
     exact RootPositiveForm.zero_lt_posForm_apply_root _ _
-  · rw [cartanMatrix_mul_di
+  · rw [cartanMatrix_mul_diagonal_eq]
+    refine Matrix.PosDef.smul ?_ two_pos
+    have aux : (P.posRootForm Int).posForm.IsSymm := by
+      simpa only [posRootForm_eq, LinearMap.BilinForm.isSymm_iff] using P.rootFormIn_isSymm Int
+    rw [← LinearMap.BilinForm.posDef_toQuadraticMap_iff_matrix _ _ aux]
+    simpa using P.posRootForm_rootFormIn_posDef Int
 
 中文:
 引理 存在_cartanMatrix_mul_diagaonal_posDef
@@ -539,7 +574,12 @@ lemma exists_cartanMatrix_mul_diagaonal_posDef
   refine ⟨d, fun i => ?_, ?_⟩
   · rw [hd, ← posRootForm_eq]
     exact RootPositiveForm.zero_lt_posForm_apply_root _ _
-  · rw [cartanMatrix_mul_di
+  · rw [cartanMatrix_mul_diagonal_eq]
+    refine Matrix.PosDef.smul ?_ two_pos
+    have aux : (P.posRootForm Int).posForm.IsSymm := by
+      simpa only [posRootForm_eq, LinearMap.BilinForm.isSymm_iff] using P.rootFormIn_isSymm Int
+    rw [← LinearMap.BilinForm.posDef_toQuadraticMap_iff_matrix _ _ aux]
+    simpa using P.posRootForm_rootFormIn_posDef Int
 
 Depends on / 依赖: BilinFor, BilinForm, Fintype, Fintype.ofFinite, IsSymm, LinearMap, LinearMap.BilinFor, LinearMap.BilinForm.isSymm_iff, Matrix, Matrix.PosDef.smul, P.RootFormIn, P.posRootForm, P.rootFormIn_isSymm, P.rootSpanMem, PosDef, RootFormIn, RootPositiveForm, RootPositiveForm.zero_lt_posForm_apply_root, b.support, cartanMatrix_mul_diagonal_eq
 -/
@@ -599,7 +639,13 @@ lemma det_four_sub_cartanMatrix_ne_zero
     have aux : (4 - b.cartanMatrix).toLin' = - (b.cartanMatrix.toLin' - (4 : Int) • 1) := by ext; simp
     rwa [ne_eq, ← det_toLin', det_eq_zero_iff_ker_ne_bot, aux, ker_neg, ← eigenspace_def,
       ← hasEigenvalue_iff]
-  obtain ⟨d, hd, hdS⟩ :
+  obtain ⟨d, hd, hdS⟩ := b.exists_cartanMatrix_diagaonal_mul_posDef
+  have aux (i j : b.support) : b.cartanMatrix i j <= if i = j then 2 else 0 := by
+    rcases eq_or_ne i j with rfl | hij
+    · simp
+    · simpa [hij] using cartanMatrix_le_zero_of_ne b i j hij
+  have := b.cartanMatrix.lt_two_mul_of_mul_diagonal_posDef_of_for_le_of_hasEigen d hdS hd 2 4 aux
+  aesop
 
 中文:
 引理 det_four_sub_cartanMatrix_ne_zero
@@ -609,7 +655,13 @@ lemma det_four_sub_cartanMatrix_ne_zero
     have aux : (4 - b.cartanMatrix).toLin' = - (b.cartanMatrix.toLin' - (4 : Int) • 1) := by ext; simp
     rwa [ne_eq, ← det_toLin', det_eq_zero_iff_ker_ne_bot, aux, ker_neg, ← eigenspace_def,
       ← hasEigenvalue_iff]
-  obtain ⟨d, hd, hdS⟩ :
+  obtain ⟨d, hd, hdS⟩ := b.exists_cartanMatrix_diagaonal_mul_posDef
+  have aux (i j : b.support) : b.cartanMatrix i j <= if i = j then 2 else 0 := by
+    rcases eq_or_ne i j with rfl | hij
+    · simp
+    · simpa [hij] using cartanMatrix_le_zero_of_ne b i j hij
+  have := b.cartanMatrix.lt_two_mul_of_mul_diagonal_posDef_of_for_le_of_hasEigen d hdS hd 2 4 aux
+  aesop
 
 Depends on / 依赖: HasEigenvalue, b.cartanMatrix, b.cartanMatrix.toLin, b.exists_cartanMatrix_diagaonal_mul_posDef, b.support, cartanMatrix, cartanMatrix_le_zero_of_ne, det_eq_zero_iff_ker_ne_bot, det_toLin, eigenspace_def, eq_or_ne, exists_cartanMatrix_diagaonal_mul_posDef, hasEigenvalue_iff, ker_neg, ne_eq, support
 -/
@@ -639,7 +691,32 @@ have hq₀ : q != ⊥ := q.ne_bot_iff.mpr ⟨P.root i, subset_span by simpa, P.n
   have hq_mem (k : b.support) : P.root k in q ↔ p k := by
 refine ⟨fun hk => ?_, fun hk => subset_span by simpa⟩
     contrapose hk
-    exact b.linearInd
+    exact b.linearIndepOn_root.linearIndependent.notMem_span_image hk
+  have hq_notMem (k : b.support) (hk : P.root k ∉ q) : q <= LinearMap.ker (P.coroot' k) := by
+    refine fun x hx => LinearMap.mem_ker.mpr ?_
+    contrapose! hk
+    rw [hq_mem]
+    induction hx using Submodule.span_induction with
+    | mem x hx =>
+      obtain ⟨l, hl, rfl⟩ : exists l : b.support, p l ∧ P.root l = x := by simp_all
+      replace hk : b.cartanMatrix k l != 0 := by
+        rwa [ne_eq, cartanMatrix_apply_eq_zero_iff_symm, cartanMatrix_apply_eq_zero_iff_pairing]
+      tauto
+    | zero => simp_all
+    | add x y hx hy hx' hy' =>
+      replace hk : P.coroot' k x != 0 ∨ P.coroot' k y != 0 := by by_contra! contra; simp_all
+      tauto
+    | smul a x hx hx' => simp_all
+  have hq : forall k, q in invtSubmodule (P.reflection k) := by
+    rw [← b.forall_mem_support_invtSubmodule_iff]
+    refine fun k hkb => (mem_invtSubmodule _).mpr fun x hx => ?_
+    rw [Submodule.mem_comap]; rw [LinearEquiv.coe_coe]; rw [reflection_apply]
+    apply q.sub_mem hx
+    by_cases hk : P.root k in q
+    · exact q.smul_mem _ hk
+    · replace hk : P.coroot' k x = 0 := hq_notMem ⟨k, hkb⟩ hk hx
+      simp [hk]
+  simp [← hq_mem, IsIrreducible.eq_top_of_invtSubmodule_reflection q hq hq₀]
 
 中文:
 引理 induction_on_cartanMatrix
@@ -650,7 +727,32 @@ have hq₀ : q != ⊥ := q.ne_bot_iff.mpr ⟨P.root i, subset_span by simpa, P.n
   have hq_mem (k : b.support) : P.root k in q ↔ p k := by
 refine ⟨fun hk => ?_, fun hk => subset_span by simpa⟩
     contrapose hk
-    exact b.linearInd
+    exact b.linearIndepOn_root.linearIndependent.notMem_span_image hk
+  have hq_notMem (k : b.support) (hk : P.root k ∉ q) : q <= LinearMap.ker (P.coroot' k) := by
+    refine fun x hx => LinearMap.mem_ker.mpr ?_
+    contrapose! hk
+    rw [hq_mem]
+    induction hx using Submodule.span_induction with
+    | mem x hx =>
+      obtain ⟨l, hl, rfl⟩ : exists l : b.support, p l ∧ P.root l = x := by simp_all
+      replace hk : b.cartanMatrix k l != 0 := by
+        rwa [ne_eq, cartanMatrix_apply_eq_zero_iff_symm, cartanMatrix_apply_eq_zero_iff_pairing]
+      tauto
+    | zero => simp_all
+    | add x y hx hy hx' hy' =>
+      replace hk : P.coroot' k x != 0 ∨ P.coroot' k y != 0 := by by_contra! contra; simp_all
+      tauto
+    | smul a x hx hx' => simp_all
+  have hq : forall k, q in invtSubmodule (P.reflection k) := by
+    rw [← b.forall_mem_support_invtSubmodule_iff]
+    refine fun k hkb => (mem_invtSubmodule _).mpr fun x hx => ?_
+    rw [Submodule.mem_comap]; rw [LinearEquiv.coe_coe]; rw [reflection_apply]
+    apply q.sub_mem hx
+    by_cases hk : P.root k in q
+    · exact q.smul_mem _ hk
+    · replace hk : P.coroot' k x = 0 := hq_notMem ⟨k, hkb⟩ hk hx
+      simp [hk]
+  simp [← hq_mem, IsIrreducible.eq_top_of_invtSubmodule_reflection q hq hq₀]
 
 Depends on / 依赖: LinearMap, LinearMap.ker, LinearMap.mem_ker.mpr, P.coroot, P.ne_zero, P.root, Submodule, b.linearIndepOn_root.linearIndependent.notMem_span_image, b.support, contrapose, coroot, hq_mem, hq_notMem, linearIndepOn_root, linearIndependent, mem_ker, ne_bot_iff, ne_zero, notMem_span_image, q.ne_bot_iff.mpr
 -/
@@ -708,7 +810,28 @@ lemma injective_pairingIn
   let g' : b.support -> Int := g ∘ (↑)
   suffices f' = g' by
     rw [← P.root.apply_eq_iff_eq]; rw [hf]; rw [hg]
-    refine 
+    refine Finset.sum_congr rfl fun k hk => ?_
+    replace this : f k = g k := congr_fun this ⟨k, hk⟩
+    rw [this]
+  replace hf : (fun k : b.support => P.pairingIn Int i k) = f' ᵥ* b.cartanMatrix := by
+    suffices forall k, P.pairingIn Int i k = ∑ l in b.support, f l * P.pairingIn Int l k by
+      ext; simp [f', this, cartanMatrixIn, Matrix.vecMul_eq_sum, b.support.sum_subtype (by tauto)]
+    refine fun k => algebraMap_injective Int R ?_
+    simp_rw [algebraMap_pairingIn, map_sum, map_mul, algebraMap_pairingIn,
+      ← P.root_coroot'_eq_pairing]
+    simp [hf]
+  replace hg : (fun k : b.support => P.pairingIn Int j k) = g' ᵥ* b.cartanMatrix := by
+    suffices forall k, P.pairingIn Int j k = ∑ l in b.support, g l * P.pairingIn Int l k by
+      ext; simp [g', this, cartanMatrixIn, Matrix.vecMul_eq_sum, b.support.sum_subtype (by tauto)]
+    refine fun k => algebraMap_injective Int R ?_
+    simp_rw [algebraMap_pairingIn, map_sum, map_mul, algebraMap_pairingIn,
+      ← P.root_coroot'_eq_pairing]
+    simp [hg]
+suffices Injective fun v => v ᵥ* b.cartanMatrix from this by simpa [← hf, ← hg]
+  rw [Matrix.vecMul_injective_iff]
+  apply Matrix.linearIndependent_rows_of_det_ne_zero
+  rw [← Matrix.nondegenerate_iff_det_ne_zero]
+  exact b.cartanMatrix_nondegenerate
 
 中文:
 引理 injective_pairingIn
@@ -722,7 +845,28 @@ lemma injective_pairingIn
   let g' : b.support -> Int := g ∘ (↑)
   suffices f' = g' by
     rw [← P.root.apply_eq_iff_eq]; rw [hf]; rw [hg]
-    refine 
+    refine Finset.sum_congr rfl fun k hk => ?_
+    replace this : f k = g k := congr_fun this ⟨k, hk⟩
+    rw [this]
+  replace hf : (fun k : b.support => P.pairingIn Int i k) = f' ᵥ* b.cartanMatrix := by
+    suffices forall k, P.pairingIn Int i k = ∑ l in b.support, f l * P.pairingIn Int l k by
+      ext; simp [f', this, cartanMatrixIn, Matrix.vecMul_eq_sum, b.support.sum_subtype (by tauto)]
+    refine fun k => algebraMap_injective Int R ?_
+    simp_rw [algebraMap_pairingIn, map_sum, map_mul, algebraMap_pairingIn,
+      ← P.root_coroot'_eq_pairing]
+    simp [hf]
+  replace hg : (fun k : b.support => P.pairingIn Int j k) = g' ᵥ* b.cartanMatrix := by
+    suffices forall k, P.pairingIn Int j k = ∑ l in b.support, g l * P.pairingIn Int l k by
+      ext; simp [g', this, cartanMatrixIn, Matrix.vecMul_eq_sum, b.support.sum_subtype (by tauto)]
+    refine fun k => algebraMap_injective Int R ?_
+    simp_rw [algebraMap_pairingIn, map_sum, map_mul, algebraMap_pairingIn,
+      ← P.root_coroot'_eq_pairing]
+    simp [hg]
+suffices Injective fun v => v ᵥ* b.cartanMatrix from this by simpa [← hf, ← hg]
+  rw [Matrix.vecMul_injective_iff]
+  apply Matrix.linearIndependent_rows_of_det_ne_zero
+  rw [← Matrix.nondegenerate_iff_det_ne_zero]
+  exact b.cartanMatrix_nondegenerate
 
 Depends on / 依赖: Finset, Finset.sum_congr, P.pairingIn, P.root.apply_eq_iff_eq, apply_eq_iff_eq, b.cartanMatrix, b.exists_root_eq_sum_int, b.support, cartanMatrix, classical, congr_fun, exists_root_eq_sum_int, pairingIn, replace, sum_congr, support
 -/
@@ -769,7 +913,21 @@ lemma exists_mem_span_pairingIn_ne_zero_and_pairwise_ne
   set p := span K (range fun (i : b.support) j => (P.pairingIn Int j i : K))
   let f : ι oplus {(i, j) : ι × ι | i != j} -> Module.Dual K (ι -> K) := Sum.elim
     LinearMap.proj (fun x => LinearMap.proj (R := K) (φ := fun _ => K) x.1.1 - LinearMap.proj x.1.2)
-  suffices exists d in p, forall i, f
+  suffices exists d in p, forall i, f i d != 0 by
+    obtain ⟨d, hp, hf⟩ := this
+    refine ⟨d, hp, fun i => hf (Sum.inl i), fun i j h => ?_⟩
+    simpa [f, sub_eq_zero] using hf (Sum.inr ⟨⟨i, j⟩, h⟩)
+  apply Module.Dual.exists_forall_mem_ne_zero_of_forall_exists p f
+  rintro (i | ⟨⟨i, j⟩, h : i != j⟩)
+  · obtain ⟨j, hj, hj₀⟩ := b.exists_mem_support_pos_pairingIn_ne_zero i
+    refine ⟨fun i => P.pairingIn Int i j, subset_span ⟨⟨j, hj⟩, rfl⟩, ?_⟩
+    rw [ne_eq]; rw [P.pairingIn_eq_zero_iff] at hj₀
+    simpa [f, ne_eq, Int.cast_eq_zero]
+  · obtain ⟨k, hk, hk'⟩ : exists k in b.support, P.pairingIn Int i k != P.pairingIn Int j k := by
+      contrapose! h
+      apply b.injective_pairingIn
+      aesop
+    simpa [f, sub_eq_zero] using ⟨fun i => P.pairingIn Int i k, subset_span ⟨⟨k, hk⟩, rfl⟩, by simpa⟩
 
 中文:
 引理 存在_mem_span_pairingIn_ne_zero_and_pairwise_ne
@@ -777,7 +935,21 @@ lemma exists_mem_span_pairingIn_ne_zero_and_pairwise_ne
   set p := span K (range fun (i : b.support) j => (P.pairingIn Int j i : K))
   let f : ι oplus {(i, j) : ι × ι | i != j} -> Module.Dual K (ι -> K) := Sum.elim
     LinearMap.proj (fun x => LinearMap.proj (R := K) (φ := fun _ => K) x.1.1 - LinearMap.proj x.1.2)
-  suffices exists d in p, forall i, f
+  suffices exists d in p, forall i, f i d != 0 by
+    obtain ⟨d, hp, hf⟩ := this
+    refine ⟨d, hp, fun i => hf (Sum.inl i), fun i j h => ?_⟩
+    simpa [f, sub_eq_zero] using hf (Sum.inr ⟨⟨i, j⟩, h⟩)
+  apply Module.Dual.exists_forall_mem_ne_zero_of_forall_exists p f
+  rintro (i | ⟨⟨i, j⟩, h : i != j⟩)
+  · obtain ⟨j, hj, hj₀⟩ := b.exists_mem_support_pos_pairingIn_ne_zero i
+    refine ⟨fun i => P.pairingIn Int i j, subset_span ⟨⟨j, hj⟩, rfl⟩, ?_⟩
+    rw [ne_eq]; rw [P.pairingIn_eq_zero_iff] at hj₀
+    simpa [f, ne_eq, Int.cast_eq_zero]
+  · obtain ⟨k, hk, hk'⟩ : exists k in b.support, P.pairingIn Int i k != P.pairingIn Int j k := by
+      contrapose! h
+      apply b.injective_pairingIn
+      aesop
+    simpa [f, sub_eq_zero] using ⟨fun i => P.pairingIn Int i k, subset_span ⟨⟨k, hk⟩, rfl⟩, by simpa⟩
 
 Depends on / 依赖: LinearMap, LinearMap.proj, Module, Module.Dual, Module.Dual.exists_forall_mem_ne_zero_of_forall_exist, P.pairingIn, Sum.elim, Sum.inl, Sum.inr, b.support, exists_forall_mem_ne_zero_of_forall_exist, pairingIn, sub_eq_zero, support
 -/
@@ -822,7 +994,19 @@ lemma apply_mem_range_root_of_cartanMatrixEq
     suffices forall j : b.support,
         (P.reflection k).trans f (P.root j) = f.trans (P₂.reflection (e k)) (P.root j) by
       rw [← LinearEquiv.toLinearMap_inj]
-      exact b.toWeightBasis.ext fun j => by
+      exact b.toWeightBasis.ext fun j => by simpa using this j
+    intro j
+    suffices P₂.pairing (e j) (e k) = P.pairing j k by simp [reflection_apply, hf, this]
+    simpa only [cartanMatrixIn_def, algebraMap_pairingIn] using congr_arg (algebraMap Int R) (he j k)
+  obtain ⟨i, rfl⟩ := hm
+  apply b.induction_reflect i
+  · exact fun j ⟨k, hk⟩ => ⟨P₂.reflectionPerm k k, by simpa⟩
+  · exact fun j hj => ⟨e ⟨j, hj⟩, (hf _).symm⟩
+  · intro j k ⟨l, hl⟩ hk
+    replace this : f (P.reflection k (P.root j)) = (P₂.reflection (e ⟨k, hk⟩)) (f (P.root j)) := by
+      simpa using LinearEquiv.congr_fun (this ⟨k, hk⟩) (P.root j)
+    rw [root_reflectionPerm]; rw [this]; rw [← hl]; rw [← root_reflectionPerm]
+    exact mem_range_self _
 
 中文:
 引理 apply_mem_range_root_of_cartanMatrixEq
@@ -831,7 +1015,19 @@ lemma apply_mem_range_root_of_cartanMatrixEq
     suffices forall j : b.support,
         (P.reflection k).trans f (P.root j) = f.trans (P₂.reflection (e k)) (P.root j) by
       rw [← LinearEquiv.toLinearMap_inj]
-      exact b.toWeightBasis.ext fun j => by
+      exact b.toWeightBasis.ext fun j => by simpa using this j
+    intro j
+    suffices P₂.pairing (e j) (e k) = P.pairing j k by simp [reflection_apply, hf, this]
+    simpa only [cartanMatrixIn_def, algebraMap_pairingIn] using congr_arg (algebraMap Int R) (he j k)
+  obtain ⟨i, rfl⟩ := hm
+  apply b.induction_reflect i
+  · exact fun j ⟨k, hk⟩ => ⟨P₂.reflectionPerm k k, by simpa⟩
+  · exact fun j hj => ⟨e ⟨j, hj⟩, (hf _).symm⟩
+  · intro j k ⟨l, hl⟩ hk
+    replace this : f (P.reflection k (P.root j)) = (P₂.reflection (e ⟨k, hk⟩)) (f (P.root j)) := by
+      simpa using LinearEquiv.congr_fun (this ⟨k, hk⟩) (P.root j)
+    rw [root_reflectionPerm]; rw [this]; rw [← hl]; rw [← root_reflectionPerm]
+    exact mem_range_self _
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.toLinearMap_inj, P.pairing, P.reflection, P.root, algebraMap, algebraMap_pairingIn, b.support, b.toWeightBasis.ext, cartanMatrixIn_def, congr_arg, f.trans, pairing, reflection, reflection_apply, support, toLinearMap_inj, toWeightBasis
 -/
@@ -869,7 +1065,17 @@ definition equivOfCartanMatrixEq
   have hf : forall m, f m in range P₂.root ↔ m in range P.root := by
     refine fun m => ⟨fun h => ?_, fun h => ?_⟩
     · simpa using apply_mem_range_root_of_cartanMatrixEq _ b e.symm f.symm
-        (by simp [f, Module.Basis.equiv]) (f m
+        (by simp [f, Module.Basis.equiv]) (f m) h (by simp [(he _ _).symm])
+    · exact apply_mem_range_root_of_cartanMatrixEq b b₂ e f (by simp [f, Module.Basis.equiv]) m h he
+  let : Fintype ι := Fintype.ofFinite _
+  let : Fintype ι₂ := Fintype.ofFinite _
+  have : DecidableEq M := Classical.typeDecidableEq M
+  have : DecidableEq M₂ := Classical.typeDecidableEq M₂
+let e' : ι ≃ ι₂ := P.root.toEquivRange.trans (f.bijOn hf).equiv.trans P₂.root.toEquivRange.symm
+  have he' (i : ι) : f (P.root i) = P₂.root (e' i) := by
+    simp [f, e', BijOn.equiv, Embedding.toEquivRange]
+  have : Module.IsReflexive R M₂ := .of_isPerfPair P₂.toLinearMap
+  Equiv.mk' P P₂ (b.toWeightBasis.equiv b₂.toWeightBasis e) e' he'
 
 中文:
 定义 equivOfCartanMatrixEq
@@ -878,7 +1084,17 @@ definition equivOfCartanMatrixEq
   have hf : forall m, f m in range P₂.root ↔ m in range P.root := by
     refine fun m => ⟨fun h => ?_, fun h => ?_⟩
     · simpa using apply_mem_range_root_of_cartanMatrixEq _ b e.symm f.symm
-        (by simp [f, Module.Basis.equiv]) (f m
+        (by simp [f, Module.Basis.equiv]) (f m) h (by simp [(he _ _).symm])
+    · exact apply_mem_range_root_of_cartanMatrixEq b b₂ e f (by simp [f, Module.Basis.equiv]) m h he
+  let : Fintype ι := Fintype.ofFinite _
+  let : Fintype ι₂ := Fintype.ofFinite _
+  have : DecidableEq M := Classical.typeDecidableEq M
+  have : DecidableEq M₂ := Classical.typeDecidableEq M₂
+let e' : ι ≃ ι₂ := P.root.toEquivRange.trans (f.bijOn hf).equiv.trans P₂.root.toEquivRange.symm
+  have he' (i : ι) : f (P.root i) = P₂.root (e' i) := by
+    simp [f, e', BijOn.equiv, Embedding.toEquivRange]
+  have : Module.IsReflexive R M₂ := .of_isPerfPair P₂.toLinearMap
+  Equiv.mk' P P₂ (b.toWeightBasis.equiv b₂.toWeightBasis e) e' he'
 
 Depends on / 依赖: Decidab, Fintype, Fintype.ofFinite, Module, Module.Basis.equiv, P.root, apply_mem_range_root_of_cartanMatrixEq, b.toWeightBasis.equiv, e.symm, f.symm, ofFinite, toWeightBasis
 -/

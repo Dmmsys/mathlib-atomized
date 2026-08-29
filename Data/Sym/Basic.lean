@@ -2106,7 +2106,8 @@ definition oneEquiv
     (fun l => l.1.head <| List.length_pos_iff.mp <| by simp)
     fun ⟨_, _⟩ ⟨_, h⟩ => fun perm => by
       obtain ⟨a, rfl⟩ := List.length_eq_one_iff.mp h
- 
+      exact List.eq_of_mem_singleton (List.Perm.mem_iff perm |>.mp <| List.head_mem _)
+  right_inv := by rintro ⟨⟨l⟩, h⟩; obtain ⟨a, rfl⟩ := List.length_eq_one_iff.mp h; rfl
 
 中文:
 定义 oneEquiv
@@ -2117,7 +2118,8 @@ definition oneEquiv
     (fun l => l.1.head <| List.length_pos_iff.mp <| by simp)
     fun ⟨_, _⟩ ⟨_, h⟩ => fun perm => by
       obtain ⟨a, rfl⟩ := List.length_eq_one_iff.mp h
- 
+      exact List.eq_of_mem_singleton (List.Perm.mem_iff perm |>.mp <| List.head_mem _)
+  right_inv := by rintro ⟨⟨l⟩, h⟩; obtain ⟨a, rfl⟩ := List.length_eq_one_iff.mp h; rfl
 -/
 def oneEquiv : α ≃ Sym α 1 where
   toFun a := ⟨{a}, by simp⟩
@@ -2201,7 +2203,7 @@ Nat.eq_sub_of_add_eq
           rw [← countP_eq_card_filter]; rw [add_comm]
           simp only [eq_comm, Ne, count]
           rw [← card_eq_countP_add_countP _ _])
-        m
+        m.2⟩
 
 中文:
 定义 filterNe
@@ -2214,7 +2216,7 @@ Nat.eq_sub_of_add_eq
           rw [← countP_eq_card_filter]; rw [add_comm]
           simp only [eq_comm, Ne, count]
           rw [← card_eq_countP_add_countP _ _])
-        m
+        m.2⟩
 
 Depends on / 依赖: Eq.trans, Nat.eq_sub_of_add_eq, Nat.lt_succ_iff, add_comm, card_eq_countP_add_countP, countP_eq_card_filter, count_le_card, eq_comm, eq_sub_of_add_eq, filter, lt_succ_iff, trans_lt
 -/
@@ -2269,7 +2271,8 @@ theorem fill_filterNe
       ext b; dsimp
       rw [count_add]; rw [count_filter]; rw [Sym.coe_replicate]; rw [count_replicate]
       obtain rfl | h := eq_or_ne a b
-      · rw [if_pos rfl, if_neg (not_not.2 rfl), ze
+      · rw [if_pos rfl, if_neg (not_not.2 rfl), zero_add]
+      · rw [if_pos h, if_neg h, add_zero])
 
 中文:
 定理 fill_filterNe
@@ -2280,7 +2283,8 @@ theorem fill_filterNe
       ext b; dsimp
       rw [count_add]; rw [count_filter]; rw [Sym.coe_replicate]; rw [count_replicate]
       obtain rfl | h := eq_or_ne a b
-      · rw [if_pos rfl, if_neg (not_not.2 rfl), ze
+      · rw [if_pos rfl, if_neg (not_not.2 rfl), zero_add]
+      · rw [if_pos h, if_neg h, add_zero])
 
 Depends on / 依赖: Fin.val_mk, Subtype, Subtype.coe_mk, Sym.coe_replicate, Sym.ext, add_zero, coe_fill, coe_mk, coe_replicate, count_add, count_filter, count_replicate, eq_or_ne, filterNe, if_neg, if_pos, not_not, val_eq_coe, val_mk, zero_add
 -/
@@ -2306,7 +2310,8 @@ theorem filter_ne_fill
       rw [filter_add]; rw [filter_eq_self.2]; rw [add_eq_left]; rw [eq_zero_iff_forall_notMem]
       · intro b hb
         rw [mem_filter]; rw [Sym.mem_coe]; rw [mem_replicate] at hb
-    
+        exact hb.2 hb.1.2.symm
+· exact fun a ha ha' => h ha'.symm ▸ ha)
 
 中文:
 定理 filter_ne_fill
@@ -2316,7 +2321,8 @@ theorem filter_ne_fill
       rw [filter_add]; rw [filter_eq_self.2]; rw [add_eq_left]; rw [eq_zero_iff_forall_notMem]
       · intro b hb
         rw [mem_filter]; rw [Sym.mem_coe]; rw [mem_replicate] at hb
-    
+        exact hb.2 hb.1.2.symm
+· exact fun a ha ha' => h ha'.symm ▸ ha)
 
 Depends on / 依赖: Subtype, Subtype.coe_mk, Sym.mem_coe, add_eq_left, coe_fill, coe_mk, eq_zero_iff_forall_notMem, filterNe, filter_add, filter_eq_self, mem_coe, mem_filter, mem_replicate, sigma_sub_ext, val_eq_coe
 -/
@@ -2589,7 +2595,7 @@ theorem encode_decode
       exact Option.some_ne_none _ ha
     · refine congr_arg Sum.inr ?_
       refine map_injective (Option.some_injective _) _ ?_
-      refine Eq.trans ?_ (.trans
+      refine Eq.trans ?_ (.trans (SymOptionSuccEquiv.decode (Sum.inr s)).attach_map_coe ?_) <;> simp
 
 中文:
 定理 encode_decode
@@ -2603,7 +2609,7 @@ theorem encode_decode
       exact Option.some_ne_none _ ha
     · refine congr_arg Sum.inr ?_
       refine map_injective (Option.some_injective _) _ ?_
-      refine Eq.trans ?_ (.trans
+      refine Eq.trans ?_ (.trans (SymOptionSuccEquiv.decode (Sum.inr s)).attach_map_coe ?_) <;> simp
 
 Depends on / 依赖: Eq.trans, Multiset, Multiset.mem_map.mp, Option.some_injective, Option.some_ne_none, Sum.inr, SymOptionSuccEquiv, SymOptionSuccEquiv.decode, SymOptionSuccEquiv.encode, attach_map_coe, congr_arg, decode, encode, map_injective, mem_map, some_injective, some_ne_none, split_ifs
 -/

@@ -206,7 +206,8 @@ theorem dpow_add_of_lt
   intro k hk
   rw [if_pos hx]; rw [if_pos hy]
   ring_nf
-  simp on
+  simp only [mul_assoc]; congr; rw [← mul_assoc]
+  exact castChoose_eq (hn_fac.natCast_factorial_of_lt hmn) hk
 
 中文:
 定理 dpow_add_of_lt
@@ -219,7 +220,8 @@ theorem dpow_add_of_lt
   intro k hk
   rw [if_pos hx]; rw [if_pos hy]
   ring_nf
-  simp on
+  simp only [mul_assoc]; congr; rw [← mul_assoc]
+  exact castChoose_eq (hn_fac.natCast_factorial_of_lt hmn) hk
 
 Depends on / 依赖: Commute, Commute.add_pow, Commute.all, Finset, Finset.mul_sum, Finset.sum_congr, Ideal.add_mem, add_mem, add_pow, castChoose_eq, dpow_eq_of_mem, hn_fac, hn_fac.natCast_factorial_of_lt, if_pos, inverse_mul_eq_iff_eq_mul, mul_assoc, mul_sum, natCast_factorial_of_lt, ring_nf, sum_congr
 -/
@@ -249,7 +251,17 @@ theorem dpow_add
     rw [dpow_eq_of_mem (Ideal.add_mem I hx hy)]
     simp only [dpow]
     have hxy : (x + y) ^ m = 0 := by
-      rw [← Ideal.mem_bot]; rw [← Ideal.zero_eq_bot]; rw [← hnI
+      rw [← Ideal.mem_bot]; rw [← Ideal.zero_eq_bot]; rw [← hnI]
+      exact Set.mem_of_subset_of_mem h_sub (Ideal.pow_mem_pow (Ideal.add_mem I hx hy) m)
+    rw [hxy]; rw [mul_zero]; rw [eq_comm]
+    apply Finset.sum_eq_zero
+    intro k hk
+    rw [if_pos hx]; rw [if_pos hy]; rw [mul_assoc]; rw [mul_comm (x ^ k.1)]; rw [mul_assoc]; rw [← mul_assoc]
+    apply mul_eq_zero_of_right
+    rw [← Ideal.mem_bot]; rw [← Ideal.zero_eq_bot]; rw [← hnI]
+    apply Set.mem_of_subset_of_mem h_sub
+    rw [← Finset.mem_antidiagonal.mp hk]; rw [add_comm]; rw [pow_add]
+    exact Ideal.mul_mem_mul (Ideal.pow_mem_pow hy _) (Ideal.pow_mem_pow hx _)
 
 中文:
 定理 dpow_add
@@ -261,7 +273,17 @@ theorem dpow_add
     rw [dpow_eq_of_mem (Ideal.add_mem I hx hy)]
     simp only [dpow]
     have hxy : (x + y) ^ m = 0 := by
-      rw [← Ideal.mem_bot]; rw [← Ideal.zero_eq_bot]; rw [← hnI
+      rw [← Ideal.mem_bot]; rw [← Ideal.zero_eq_bot]; rw [← hnI]
+      exact Set.mem_of_subset_of_mem h_sub (Ideal.pow_mem_pow (Ideal.add_mem I hx hy) m)
+    rw [hxy]; rw [mul_zero]; rw [eq_comm]
+    apply Finset.sum_eq_zero
+    intro k hk
+    rw [if_pos hx]; rw [if_pos hy]; rw [mul_assoc]; rw [mul_comm (x ^ k.1)]; rw [mul_assoc]; rw [← mul_assoc]
+    apply mul_eq_zero_of_right
+    rw [← Ideal.mem_bot]; rw [← Ideal.zero_eq_bot]; rw [← hnI]
+    apply Set.mem_of_subset_of_mem h_sub
+    rw [← Finset.mem_antidiagonal.mp hk]; rw [add_comm]; rw [pow_add]
+    exact Ideal.mul_mem_mul (Ideal.pow_mem_pow hy _) (Ideal.pow_mem_pow hx _)
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, Ideal.add_mem, Ideal.mem_bot, Ideal.pow_le_pow_right, Ideal.pow_mem_pow, Ideal.zero_eq_bot, Set.mem_of_subset_of_mem, add_mem, dpow_add_of_lt, dpow_eq_of_mem, eq_comm, h_sub, hn_fac, if_pos, mem_bot, mem_of_subset_of_mem, mul_assoc, mul_comm, mul_zero
 -/
@@ -317,7 +339,11 @@ theorem dpow_mul_of_add_lt
   proof: by
   have hm : m < n := lt_of_le_of_lt le_self_add hkm
   have hk : k < n := lt_of_le_of_lt le_add_self hkm
-  rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_assoc]; rw [← mul_assoc (x ^ m)]; rw [mul_comm (x ^ m)]; rw [mul_assoc _ (x ^ m)]; rw [← pow_add]; rw [← mul_as
+  rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_assoc]; rw [← mul_assoc (x ^ m)]; rw [mul_comm (x ^ m)]; rw [mul_assoc _ (x ^ m)]; rw [← pow_add]; rw [← mul_assoc]; rw [← mul_assoc]
+  apply congr_arg₂ _ _ rfl
+  rw [eq_mul_inverse_iff_mul_eq _ _ _ (hn_fac.natCast_factorial_of_lt hkm)]; rw [mul_assoc]; rw [inverse_mul_eq_iff_eq_mul _ _ _ (hn_fac.natCast_factorial_of_lt hm)]; rw [inverse_mul_eq_iff_eq_mul _ _ _ (hn_fac.natCast_factorial_of_lt hk)]
+  norm_cast; apply congr_arg
+  rw [← Nat.add_choose_mul_factorial_mul_factorial]; rw [mul_comm]; rw [mul_comm _ (m !)]; rw [Nat.choose_symm_add]
 
 中文:
 定理 dpow_mul_of_add_lt
@@ -325,7 +351,11 @@ theorem dpow_mul_of_add_lt
   证明: by
   have hm : m < n := lt_of_le_of_lt le_self_add hkm
   have hk : k < n := lt_of_le_of_lt le_add_self hkm
-  rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_assoc]; rw [← mul_assoc (x ^ m)]; rw [mul_comm (x ^ m)]; rw [mul_assoc _ (x ^ m)]; rw [← pow_add]; rw [← mul_as
+  rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_assoc]; rw [← mul_assoc (x ^ m)]; rw [mul_comm (x ^ m)]; rw [mul_assoc _ (x ^ m)]; rw [← pow_add]; rw [← mul_assoc]; rw [← mul_assoc]
+  apply congr_arg₂ _ _ rfl
+  rw [eq_mul_inverse_iff_mul_eq _ _ _ (hn_fac.natCast_factorial_of_lt hkm)]; rw [mul_assoc]; rw [inverse_mul_eq_iff_eq_mul _ _ _ (hn_fac.natCast_factorial_of_lt hm)]; rw [inverse_mul_eq_iff_eq_mul _ _ _ (hn_fac.natCast_factorial_of_lt hk)]
+  norm_cast; apply congr_arg
+  rw [← Nat.add_choose_mul_factorial_mul_factorial]; rw [mul_comm]; rw [mul_comm _ (m !)]; rw [Nat.choose_symm_add]
 
 Depends on / 依赖: dpow_eq_of_mem, eq_mul_inverse_iff_mul_eq, hn_fac, hn_fac.natCast_factorial_of_lt, inverse_mul_eq_iff_eq_mul, le_add_self, le_self_add, lt_of_le_of_lt, mul_assoc, mul_comm, natCast_factorial_of_lt, pow_add
 -/
@@ -350,7 +380,7 @@ theorem mul_dpow
   by_cases! hkm : m + k < n
   · exact dpow_mul_of_add_lt hn_fac hkm hx
   · have hxmk : x ^ (m + k) = 0 := Ideal.pow_eq_zero_of_mem hnI hkm hx
-    rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_assoc]; rw [← mul_assoc (x ^ m)]; rw [mul_comm (x ^ m)]; rw [mul_assoc 
+    rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_assoc]; rw [← mul_assoc (x ^ m)]; rw [mul_comm (x ^ m)]; rw [mul_assoc _ (x ^ m)]; rw [← pow_add]; rw [hxmk]; rw [mul_zero]; rw [mul_zero]; rw [mul_zero]; rw [mul_zero]
 
 中文:
 定理 mul_dpow
@@ -359,7 +389,7 @@ theorem mul_dpow
   by_cases! hkm : m + k < n
   · exact dpow_mul_of_add_lt hn_fac hkm hx
   · have hxmk : x ^ (m + k) = 0 := Ideal.pow_eq_zero_of_mem hnI hkm hx
-    rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_assoc]; rw [← mul_assoc (x ^ m)]; rw [mul_comm (x ^ m)]; rw [mul_assoc 
+    rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_assoc]; rw [← mul_assoc (x ^ m)]; rw [mul_comm (x ^ m)]; rw [mul_assoc _ (x ^ m)]; rw [← pow_add]; rw [hxmk]; rw [mul_zero]; rw [mul_zero]; rw [mul_zero]; rw [mul_zero]
 
 Depends on / 依赖: Ideal.pow_eq_zero_of_mem, dpow_eq_of_mem, dpow_mul_of_add_lt, hn_fac, mul_assoc, mul_comm, mul_zero, pow_add, pow_eq_zero_of_mem
 -/
@@ -382,7 +412,12 @@ theorem dpow_comp_of_mul_lt
   rw [dpow_eq_of_mem (m := m * k) hx]; rw [dpow_eq_of_mem (dpow_mem hk hx)]
   by_cases hm0 : m = 0
   · simp only [hm0, zero_mul, _root_.pow_zero, mul_one, uniformBell_zero_left, cast_one, one_mul]
-  · hav
+  · have hkn : k < n := lt_of_le_of_lt (Nat.le_mul_of_pos_left _ (Nat.pos_of_ne_zero hm0)) hkm
+    rw [dpow_eq_of_mem hx]; rw [mul_pow]; rw [← pow_mul]; rw [mul_comm k]; rw [← mul_assoc]; rw [← mul_assoc]
+    apply congr_arg₂ _ _ rfl
+    rw [eq_mul_inverse_iff_mul_eq _ _ _ (hn_fac.natCast_factorial_of_lt hkm)]; rw [mul_assoc]; rw [inverse_mul_eq_iff_eq_mul _ _ _ (hn_fac.natCast_factorial_of_lt hmn)]; rw [inverse_pow_mul_eq_iff_eq_mul _ _ (hn_fac.natCast_factorial_of_lt hkn)]; rw [← uniformBell_mul_eq _ hk]
+    push_cast
+    ring_nf
 
 中文:
 定理 dpow_comp_of_mul_lt
@@ -392,7 +427,12 @@ theorem dpow_comp_of_mul_lt
   rw [dpow_eq_of_mem (m := m * k) hx]; rw [dpow_eq_of_mem (dpow_mem hk hx)]
   by_cases hm0 : m = 0
   · simp only [hm0, zero_mul, _root_.pow_zero, mul_one, uniformBell_zero_left, cast_one, one_mul]
-  · hav
+  · have hkn : k < n := lt_of_le_of_lt (Nat.le_mul_of_pos_left _ (Nat.pos_of_ne_zero hm0)) hkm
+    rw [dpow_eq_of_mem hx]; rw [mul_pow]; rw [← pow_mul]; rw [mul_comm k]; rw [← mul_assoc]; rw [← mul_assoc]
+    apply congr_arg₂ _ _ rfl
+    rw [eq_mul_inverse_iff_mul_eq _ _ _ (hn_fac.natCast_factorial_of_lt hkm)]; rw [mul_assoc]; rw [inverse_mul_eq_iff_eq_mul _ _ _ (hn_fac.natCast_factorial_of_lt hmn)]; rw [inverse_pow_mul_eq_iff_eq_mul _ _ (hn_fac.natCast_factorial_of_lt hkn)]; rw [← uniformBell_mul_eq _ hk]
+    push_cast
+    ring_nf
 
 Depends on / 依赖: Nat.le_mul_of_pos_left, Nat.le_mul_of_pos_right, Nat.pos_of_ne_zero, _root_, _root_.pow_zero, cast_one, dpow_eq_of_mem, dpow_mem, le_mul_of_pos_left, le_mul_of_pos_right, lt_of_le_of_lt, mul_assoc, mul_comm, mul_one, mul_pow, one_mul, pos_of_ne_zero, pow_mul, pow_zero, uniformBell_zero_left
 -/
@@ -420,7 +460,7 @@ theorem dpow_comp
   by_cases! hmk : m * k < n
   · exact dpow_comp_of_mul_lt hn_fac hk hmk hx
   · have hxmk : x ^ (m * k) = 0 := Ideal.pow_eq_zero_of_mem hnI hmk hx
-    rw [dpow_eq_of_mem (dpow_mem hk hx)]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_pow]; rw [← pow_mul]; rw [← mul_assoc]; rw [mul_comm 
+    rw [dpow_eq_of_mem (dpow_mem hk hx)]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_pow]; rw [← pow_mul]; rw [← mul_assoc]; rw [mul_comm k]; rw [hxmk]; rw [mul_zero]; rw [mul_zero]; rw [mul_zero]
 
 中文:
 定理 dpow_comp
@@ -429,7 +469,7 @@ theorem dpow_comp
   by_cases! hmk : m * k < n
   · exact dpow_comp_of_mul_lt hn_fac hk hmk hx
   · have hxmk : x ^ (m * k) = 0 := Ideal.pow_eq_zero_of_mem hnI hmk hx
-    rw [dpow_eq_of_mem (dpow_mem hk hx)]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_pow]; rw [← pow_mul]; rw [← mul_assoc]; rw [mul_comm 
+    rw [dpow_eq_of_mem (dpow_mem hk hx)]; rw [dpow_eq_of_mem hx]; rw [dpow_eq_of_mem hx]; rw [mul_pow]; rw [← pow_mul]; rw [← mul_assoc]; rw [mul_comm k]; rw [hxmk]; rw [mul_zero]; rw [mul_zero]; rw [mul_zero]
 
 Depends on / 依赖: Ideal.pow_eq_zero_of_mem, dpow_comp_of_mul_lt, dpow_eq_of_mem, dpow_mem, hn_fac, mul_assoc, mul_comm, mul_pow, mul_zero, pow_eq_zero_of_mem, pow_mul
 -/
@@ -729,7 +769,14 @@ definition dividedPowers
   dpow_one hx := OfInvertibleFactorial.dpow_one hx
   dpow_mem hn hx := OfInvertibleFactorial.dpow_mem hn hx
   dpow_add {n} _ _ hx hy := OfInvertibleFactorial.dpow_add_of_lt
-    (IsUnit.na
+    (IsUnit.natCast_factorial_of_algebra Rat _) (n.lt_succ_self) hx hy
+  dpow_mul hx := OfInvertibleFactorial.dpow_mul hx
+  mul_dpow {m} k _ hx := OfInvertibleFactorial.dpow_mul_of_add_lt
+    (IsUnit.natCast_factorial_of_algebra Rat _) (m + k).lt_succ_self hx
+  dpow_comp hk hx := OfInvertibleFactorial.dpow_comp_of_mul_lt
+    (IsUnit.natCast_factorial_of_algebra Rat _) hk (lt_add_one _) hx
+
+@[simp]
 
 中文:
 定义 dividedPowers
@@ -740,7 +787,14 @@ definition dividedPowers
   dpow_one hx := OfInvertibleFactorial.dpow_one hx
   dpow_mem hn hx := OfInvertibleFactorial.dpow_mem hn hx
   dpow_add {n} _ _ hx hy := OfInvertibleFactorial.dpow_add_of_lt
-    (IsUnit.na
+    (IsUnit.natCast_factorial_of_algebra Rat _) (n.lt_succ_self) hx hy
+  dpow_mul hx := OfInvertibleFactorial.dpow_mul hx
+  mul_dpow {m} k _ hx := OfInvertibleFactorial.dpow_mul_of_add_lt
+    (IsUnit.natCast_factorial_of_algebra Rat _) (m + k).lt_succ_self hx
+  dpow_comp hk hx := OfInvertibleFactorial.dpow_comp_of_mul_lt
+    (IsUnit.natCast_factorial_of_algebra Rat _) hk (lt_add_one _) hx
+
+@[simp]
 -/
 noncomputable def dividedPowers : DividedPowers I where
   dpow := dpow I
@@ -790,7 +844,12 @@ theorem dpow_eq_inv_fact_smul
   congr
   have aux : ((n !) : R) = (n ! : Rat) • (1 : R) := by
     rw [cast_smul_eq_nsmul]; rw [nsmul_eq_mul]; rw [mul_one]
-  rw [aux]; rw [← mul_smul
+  rw [aux]; rw [← mul_smul]
+  suffices (n ! : Rat)⁻¹ * (n !) = 1 by
+    rw [this]; rw [one_smul]
+  apply Rat.inv_mul_cancel
+  rw [← cast_zero]; rw [ne_eq]
+  simp [factorial_ne_zero]
 
 中文:
 定理 dpow_eq_inv_fact_smul
@@ -801,7 +860,12 @@ theorem dpow_eq_inv_fact_smul
   congr
   have aux : ((n !) : R) = (n ! : Rat) • (1 : R) := by
     rw [cast_smul_eq_nsmul]; rw [nsmul_eq_mul]; rw [mul_one]
-  rw [aux]; rw [← mul_smul
+  rw [aux]; rw [← mul_smul]
+  suffices (n ! : Rat)⁻¹ * (n !) = 1 by
+    rw [this]; rw [one_smul]
+  apply Rat.inv_mul_cancel
+  rw [← cast_zero]; rw [ne_eq]
+  simp [factorial_ne_zero]
 
 Depends on / 依赖: Rat.inv_mul_cancel, cast_smul_eq_nsmul, cast_zero, factorial_mul_dpow_eq_pow, factorial_ne_zero, hI.dpow, inv_mul_cancel, inverse_eq_inv, mul_one, mul_smul, ne_eq, nsmul_eq_mul, nth_rewrite, one_smul, smul_assoc, smul_eq_mul
 -/

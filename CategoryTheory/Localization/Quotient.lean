@@ -74,7 +74,8 @@ definition strictUniversalPropertyFixedTarget
         (fun _ _ f g hfg => (h hfg).map_eq_of_isInvertedBy _ hF)) (by
       rintro K L ⟨f⟩ hf
       exact hF _ (by simpa [hW] using! hf))
-  fac F hF := by rw [Functor.assoc, univ.fac, Quotient.lift_spec
+  fac F hF := by rw [Functor.assoc, univ.fac, Quotient.lift_spec]
+  uniq F₁ F₂ h := univ.uniq _ _ (Quotient.lift_unique' _ _ _ h)
 
 中文:
 定义 strictUniversalPropertyFixedTarget
@@ -85,7 +86,8 @@ definition strictUniversalPropertyFixedTarget
         (fun _ _ f g hfg => (h hfg).map_eq_of_isInvertedBy _ hF)) (by
       rintro K L ⟨f⟩ hf
       exact hF _ (by simpa [hW] using! hf))
-  fac F hF := by rw [Functor.assoc, univ.fac, Quotient.lift_spec
+  fac F hF := by rw [Functor.assoc, univ.fac, Quotient.lift_spec]
+  uniq F₁ F₂ h := univ.uniq _ _ (Quotient.lift_unique' _ _ _ h)
 
 Depends on / 依赖: inverts, univ.inverts
 -/

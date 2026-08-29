@@ -689,7 +689,7 @@ theorem exists_measurable_superset_ae_eq
   refine ⟨t union toMeasurable μ (s \ t), ?_, htm.union (measurableSet_toMeasurable _ _), ?_⟩
   · exact sdiff_subset_iff.1 (subset_toMeasurable _ _)
   · have : toMeasurable μ (s \ t) =ᵐ[μ] (∅ : Set α) := by simp [ae_le_set.1 hst.le]
-    simpa only [union_empty] using
+    simpa only [union_empty] using hst.symm.union this
 
 中文:
 定理 存在_measurable_superset_ae_eq
@@ -699,7 +699,7 @@ theorem exists_measurable_superset_ae_eq
   refine ⟨t union toMeasurable μ (s \ t), ?_, htm.union (measurableSet_toMeasurable _ _), ?_⟩
   · exact sdiff_subset_iff.1 (subset_toMeasurable _ _)
   · have : toMeasurable μ (s \ t) =ᵐ[μ] (∅ : Set α) := by simp [ae_le_set.1 hst.le]
-    simpa only [union_empty] using
+    simpa only [union_empty] using hst.symm.union this
 
 Depends on / 依赖: ae_le_set, hst.le, hst.symm.union, htm.union, measurableSet_toMeasurable, sdiff_subset_iff, subset_toMeasurable, toMeasurable, union_empty
 -/
@@ -795,7 +795,9 @@ theorem exists_subordinate_pairwise_disjoint
   rcases exists_null_pairwise_disjoint_sdiff hd with ⟨u, hum, hu₀, hud⟩
   exact
     ⟨fun i => t i \ u i, fun i => sdiff_subset.trans (ht_sub _), fun i =>
-      (ht_eq _).symm.trans (sdiff_null_ae_eq_self (hu₀ i)).symm
+      (ht_eq _).symm.trans (sdiff_null_ae_eq_self (hu₀ i)).symm, fun i => (htm i).diff (hum i),
+      hud.mono fun i j h =>
+        h.mono (sdiff_subset_sdiff_left (ht_sub i)) (sdiff_subset_sdiff_left (ht_sub j))⟩
 
 中文:
 定理 存在_subordinate_pairwise_disjoint
@@ -805,7 +807,9 @@ theorem exists_subordinate_pairwise_disjoint
   rcases exists_null_pairwise_disjoint_sdiff hd with ⟨u, hum, hu₀, hud⟩
   exact
     ⟨fun i => t i \ u i, fun i => sdiff_subset.trans (ht_sub _), fun i =>
-      (ht_eq _).symm.trans (sdiff_null_ae_eq_self (hu₀ i)).symm
+      (ht_eq _).symm.trans (sdiff_null_ae_eq_self (hu₀ i)).symm, fun i => (htm i).diff (hum i),
+      hud.mono fun i j h =>
+        h.mono (sdiff_subset_sdiff_left (ht_sub i)) (sdiff_subset_sdiff_left (ht_sub j))⟩
 
 Depends on / 依赖: exists_measurable_subset_ae_eq, exists_null_pairwise_disjoint_sdiff, h.mono, ht_eq, ht_sub, hud.mono, sdiff_null_ae_eq_self, sdiff_subset, sdiff_subset.trans, sdiff_subset_sdiff_left, symm.trans
 -/
@@ -922,7 +926,13 @@ theorem measure_inter_add_sdiff₀
   replace hs'm : NullMeasurableSet s' μ := hs'm.nullMeasurableSet
   calc
     μ (s inter t) + μ (s \ t) <= μ (s' inter t) + μ (s' \ t) := by gcongr
-    _ = μ (s' inter t un
+    _ = μ (s' inter t union s' \ t) :=
+      (measure_union₀_aux (hs'm.inter ht) (hs'm.diff ht) <|
+          (@disjoint_inf_sdiff _ s' t _).aedisjoint).symm
+    _ = μ s' := congr_arg μ (inter_union_sdiff _ _)
+    _ = μ s := hs'
+
+@[deprecated (since := "2026-06-03")] alias measure_inter_add_diff₀ := measure_inter_add_sdiff₀
 
 中文:
 定理 measure_inter_add_sdiff₀
@@ -933,7 +943,13 @@ theorem measure_inter_add_sdiff₀
   replace hs'm : NullMeasurableSet s' μ := hs'm.nullMeasurableSet
   calc
     μ (s inter t) + μ (s \ t) <= μ (s' inter t) + μ (s' \ t) := by gcongr
-    _ = μ (s' inter t un
+    _ = μ (s' inter t union s' \ t) :=
+      (measure_union₀_aux (hs'm.inter ht) (hs'm.diff ht) <|
+          (@disjoint_inf_sdiff _ s' t _).aedisjoint).symm
+    _ = μ s' := congr_arg μ (inter_union_sdiff _ _)
+    _ = μ s := hs'
+
+@[deprecated (since := "2026-06-03")] alias measure_inter_add_diff₀ := measure_inter_add_sdiff₀
 
 Depends on / 依赖: NullMeasurableSet, aedisjoint, congr_arg, disjoint_inf_sdiff, exists_measurable_superset, inter_union_sdiff, le_antisymm, m.diff, m.inter, m.nullMeasurableSet, measure_le_inter_add_sdiff, nullMeasurableSet, replace
 -/

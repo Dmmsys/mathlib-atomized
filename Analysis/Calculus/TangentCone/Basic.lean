@@ -149,7 +149,7 @@ theorem tangentConeAt_mono_nhds
   suffices Tendsto (x + ·) (𝓝[(x + ·) ⁻¹' s] 0) (𝓝[s] x) from
 .2 tendsto_nhdsWithin_iff.mp this.mono_right h
   refine .inf ?_ (mapsTo_preimage _ _).tendsto
-  exact (conti
+  exact (continuous_const_add x).tendsto' 0 x (add_zero _)
 
 中文:
 定理 tangentConeAt_mono_nhds
@@ -162,7 +162,7 @@ theorem tangentConeAt_mono_nhds
   suffices Tendsto (x + ·) (𝓝[(x + ·) ⁻¹' s] 0) (𝓝[s] x) from
 .2 tendsto_nhdsWithin_iff.mp this.mono_right h
   refine .inf ?_ (mapsTo_preimage _ _).tendsto
-  exact (conti
+  exact (continuous_const_add x).tendsto' 0 x (add_zero _)
 
 Depends on / 依赖: Tendsto, add_zero, continuous_const_add, hy.mono, mapsTo_preimage, mono_right, nhdsWithin_le_iff, ofPred_subset_ofPred, tangentConeAt_def, tendsto, tendsto_nhdsWithin_iff, tendsto_nhdsWithin_iff.mp, this.mono_right
 -/
@@ -261,7 +261,7 @@ theorem tangentConeAt_closure
   simp only [(nhds_basis_opens _).tangentConeAt_eq_biInter_closure]
   refine iInter₂_mono fun U hU => closure_minimal ?_ isClosed_closure
   grw [(isOpenMap_add_left x).preimage_closure_subset_closure_preimage, hU.2.inter_closure,
-   
+    set_smul_closure_subset]
 
 中文:
 定理 tangentConeAt_closure
@@ -271,7 +271,7 @@ theorem tangentConeAt_closure
   simp only [(nhds_basis_opens _).tangentConeAt_eq_biInter_closure]
   refine iInter₂_mono fun U hU => closure_minimal ?_ isClosed_closure
   grw [(isOpenMap_add_left x).preimage_closure_subset_closure_preimage, hU.2.inter_closure,
-   
+    set_smul_closure_subset]
 
 Depends on / 依赖: Subset, Subset.antisymm, antisymm, closure_minimal, inter_closure, isClosed_closure, isOpenMap_add_left, nhds_basis_opens, preimage_closure_subset_closure_preimage, set_smul_closure_subset, subset_closure, tangentConeAt_eq_biInter_closure, tangentConeAt_mono
 -/
@@ -495,7 +495,10 @@ theorem zero_mem_tangentConeAt
   · simp only [Pi.one_apply, one_smul]
     exact Continuous.tendsto' (by fun_prop) _ _ (by simp)
 
-@[deprecated (since := "2026-01-
+@[deprecated (since := "2026-01-21")]
+alias zero_mem_tangentCone := zero_mem_tangentConeAt
+
+@[simp]
 
 中文:
 定理 zero_mem_tangentConeAt
@@ -508,7 +511,10 @@ theorem zero_mem_tangentConeAt
   · simp only [Pi.one_apply, one_smul]
     exact Continuous.tendsto' (by fun_prop) _ _ (by simp)
 
-@[deprecated (since := "2026-01-
+@[deprecated (since := "2026-01-21")]
+alias zero_mem_tangentCone := zero_mem_tangentConeAt
+
+@[simp]
 
 Depends on / 依赖: Continuous, Continuous.tendsto, Pi.one_apply, fun_prop, mem_closure_iff_frequently, mem_tangentConeAt_of_frequently, one_apply, one_smul, tendsto
 -/
@@ -556,7 +562,10 @@ theorem tangentConeAt_subset_zero
   have H₁ : Tendsto (x + d ·) l (𝓝 x) := by
     simpa using tendsto_const_nhds.add hd₀
   have H₂ : forallᶠ n in l, d n = 0 := by
-    simp only [accPt_iff_frequently, not_frequently, not_and', ne_eq, not_
+    simp only [accPt_iff_frequently, not_frequently, not_and', ne_eq, not_not] at hx
+    simpa using hds.mp (H₁.eventually hx)
+  have H₃ : forallᶠ n in l, c n • d n = 0 := H₂.mono fun n hn => by simp [hn]
+  simpa using tendsto_nhds_unique_of_eventuallyEq hcd tendsto_const_nhds H₃
 
 中文:
 定理 tangentConeAt_subset_zero
@@ -568,7 +577,10 @@ theorem tangentConeAt_subset_zero
   have H₁ : Tendsto (x + d ·) l (𝓝 x) := by
     simpa using tendsto_const_nhds.add hd₀
   have H₂ : forallᶠ n in l, d n = 0 := by
-    simp only [accPt_iff_frequently, not_frequently, not_and', ne_eq, not_
+    simp only [accPt_iff_frequently, not_frequently, not_and', ne_eq, not_not] at hx
+    simpa using hds.mp (H₁.eventually hx)
+  have H₃ : forallᶠ n in l, c n • d n = 0 := H₂.mono fun n hn => by simp [hn]
+  simpa using tendsto_nhds_unique_of_eventuallyEq hcd tendsto_const_nhds H₃
 
 Depends on / 依赖: Tendsto, accPt_iff_frequently, eventually, exists_fun_of_mem_tangentConeAt, hds.mp, ne_eq, not_and, not_frequently, not_not, tendsto_const_nhds, tendsto_const_nhds.add, tendsto_nhds_unique_of_eventuallyEq
 -/

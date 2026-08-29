@@ -291,7 +291,27 @@ theorem convexHull_sphere_eq_closedBall
   proof: by
   suffices convexHull Real (sphere (0 : F) r) = closedBall 0 r by
     rw [← add_zero x]; rw [← vadd_eq_add]; rw [← vadd_sphere]; rw [convexHull_vadd]; rw [this]; rw [vadd_closedBall_zero]; rw [vadd_eq_add]; rw [add_zero]
-  refine subset_antisymm (convexHull_min sphere_subset_closedBall (convex_cl
+  refine subset_antisymm (convexHull_min sphere_subset_closedBall (convex_closedBall 0 r))
+    (fun x h => mem_convexHull_iff.mpr fun U hU_sub hU => ?_)
+  have zero_mem : (0 : F) in U := by
+    have _ : Invertible (2 : Real) := by use 2⁻¹ <;> grind
+    obtain ⟨z, hz⟩ := NormedSpace.sphere_nonempty (E := F).mpr hr
+    rw [← midpoint_self_neg (R := Real) (x := z)]
+exact Convex.midpoint_mem hU (hU_sub hz) hU_sub (by simp_all)
+  by_cases hr₀ : r = 0
+  · simp_all
+  by_cases x_zero : x = 0
+  · rwa [x_zero]
+  set z := (r * ‖x‖⁻¹) • x with hz_def
+  have hr₁ : r⁻¹ * ‖x‖ <= 1 := by
+    simp only [mem_closedBall, dist_zero_right] at h
+    grw [h, inv_mul_le_one]
+  have hz : z in U := by
+    apply hU_sub
+    simp_all [norm_smul]
+  have := StarConvex.smul_mem (hU.starConvex zero_mem) hz (by positivity) hr₁
+  rwa [hz_def, ← smul_assoc, smul_eq_mul, ← mul_assoc, mul_comm, mul_comm r⁻¹, mul_assoc _ r⁻¹,
+    inv_mul_cancel₀ hr₀, mul_one, inv_mul_cancel₀ (by simp_all), one_smul] at this
 
 中文:
 定理 convexHull_sphere_eq_closedBall
@@ -299,7 +319,27 @@ theorem convexHull_sphere_eq_closedBall
   证明: by
   suffices convexHull Real (sphere (0 : F) r) = closedBall 0 r by
     rw [← add_zero x]; rw [← vadd_eq_add]; rw [← vadd_sphere]; rw [convexHull_vadd]; rw [this]; rw [vadd_closedBall_zero]; rw [vadd_eq_add]; rw [add_zero]
-  refine subset_antisymm (convexHull_min sphere_subset_closedBall (convex_cl
+  refine subset_antisymm (convexHull_min sphere_subset_closedBall (convex_closedBall 0 r))
+    (fun x h => mem_convexHull_iff.mpr fun U hU_sub hU => ?_)
+  have zero_mem : (0 : F) in U := by
+    have _ : Invertible (2 : Real) := by use 2⁻¹ <;> grind
+    obtain ⟨z, hz⟩ := NormedSpace.sphere_nonempty (E := F).mpr hr
+    rw [← midpoint_self_neg (R := Real) (x := z)]
+exact Convex.midpoint_mem hU (hU_sub hz) hU_sub (by simp_all)
+  by_cases hr₀ : r = 0
+  · simp_all
+  by_cases x_zero : x = 0
+  · rwa [x_zero]
+  set z := (r * ‖x‖⁻¹) • x with hz_def
+  have hr₁ : r⁻¹ * ‖x‖ <= 1 := by
+    simp only [mem_closedBall, dist_zero_right] at h
+    grw [h, inv_mul_le_one]
+  have hz : z in U := by
+    apply hU_sub
+    simp_all [norm_smul]
+  have := StarConvex.smul_mem (hU.starConvex zero_mem) hz (by positivity) hr₁
+  rwa [hz_def, ← smul_assoc, smul_eq_mul, ← mul_assoc, mul_comm, mul_comm r⁻¹, mul_assoc _ r⁻¹,
+    inv_mul_cancel₀ hr₀, mul_one, inv_mul_cancel₀ (by simp_all), one_smul] at this
 
 Depends on / 依赖: Invertible, NormedSpace, NormedSpace.sphere_nonempty, add_zero, closedBall, convexHull, convexHull_min, convexHull_vadd, convex_closedBall, hU_sub, mem_convexHull_iff, mem_convexHull_iff.mpr, sphere, sphere_nonempty, sphere_subset_closedBall, subset_antisymm, vadd_closedBall_zero, vadd_eq_add, vadd_sphere, zero_mem
 -/

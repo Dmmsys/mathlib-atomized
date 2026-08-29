@@ -58,7 +58,33 @@ theorem IsLocalization.smul_mem_finsetIntegerMultiple_span
     AlgHom.mk' (algebraMap S S') fun c x => by simp [Algebra.algebraMap_eq_smul_one]
   have g_apply : forall x, g x = algebraMap S S' x := fun _ => rfl
   -- We first obtain the `y' ∈ M` such that `s' = y' • s` is falls in the image of `S` in `S'`.
-  let y := IsLocalizatio
+  let y := IsLocalization.commonDenomOfFinset (M.map (algebraMap R S)) s
+  have hx₁ : (y : S) • (s : Set S') = g '' _ :=
+    (IsLocalization.finsetIntegerMultiple_image _ s).symm
+  obtain ⟨y', hy', e : algebraMap R S y' = y⟩ := y.prop
+  have : algebraMap R S y' • (s : Set S') = y' • (s : Set S') := by
+    simp_rw [Algebra.algebraMap_eq_smul_one, smul_assoc, one_smul]
+  rw [← e]; rw [this] at hx₁
+  replace hx₁ := congr_arg (Submodule.span R) hx₁
+  rw [Submodule.span_smul] at hx₁
+  replace hx : _ in y' • Submodule.span R (s : Set S') := Set.smul_mem_smul_set hx
+  rw [hx₁]; rw [← g_apply]; rw [← map_smul g]; rw [g_apply]; rw [← Algebra.linearMap_apply]; rw [← AlgHom.coe_toLinearMap]; rw [← Submodule.map_span] at hx
+  -- Since `x` falls in the span of `s` in `S'`, `y' • x : S` falls in the span of `s'` in `S'`.
+  -- That is, there exists some `x' : S` in the span of `s'` in `S` and `x' = y' • x` in `S'`.
+  -- Thus `a • (y' • x) = a • x' ∈ span s'` in `S` for some `a ∈ M`.
+  obtain ⟨x', hx', hx'' : algebraMap _ _ _ = _⟩ := hx
+  obtain ⟨⟨_, a, ha₁, rfl⟩, ha₂⟩ :=
+    (IsLocalization.eq_iff_exists (M.map (algebraMap R S)) S').mp hx''
+  use (⟨a, ha₁⟩ : M) * (⟨y', hy'⟩ : M)
+  convert!
+    (Submodule.span R
+          (IsLocalization.finsetIntegerMultiple (Submonoid.map (algebraMap R S) M) s :
+            Set S)).smul_mem
+      a hx' using 1
+  convert! ha₂.symm using 1
+  · rw [Subtype.coe_mk, Submonoid.smul_def, Submonoid.coe_mul, ← smul_smul]
+    exact Algebra.smul_def _ _
+  · exact Algebra.smul_def _ _
 
 中文:
 定理 是Localization.smul_mem_finset整数egerMultiple_span
@@ -68,7 +94,33 @@ theorem IsLocalization.smul_mem_finsetIntegerMultiple_span
     AlgHom.mk' (algebraMap S S') fun c x => by simp [Algebra.algebraMap_eq_smul_one]
   have g_apply : forall x, g x = algebraMap S S' x := fun _ => rfl
   -- We first obtain the `y' ∈ M` such that `s' = y' • s` is falls in the image of `S` in `S'`.
-  let y := IsLocalizatio
+  let y := IsLocalization.commonDenomOfFinset (M.map (algebraMap R S)) s
+  have hx₁ : (y : S) • (s : Set S') = g '' _ :=
+    (IsLocalization.finsetIntegerMultiple_image _ s).symm
+  obtain ⟨y', hy', e : algebraMap R S y' = y⟩ := y.prop
+  have : algebraMap R S y' • (s : Set S') = y' • (s : Set S') := by
+    simp_rw [Algebra.algebraMap_eq_smul_one, smul_assoc, one_smul]
+  rw [← e]; rw [this] at hx₁
+  replace hx₁ := congr_arg (Submodule.span R) hx₁
+  rw [Submodule.span_smul] at hx₁
+  replace hx : _ in y' • Submodule.span R (s : Set S') := Set.smul_mem_smul_set hx
+  rw [hx₁]; rw [← g_apply]; rw [← map_smul g]; rw [g_apply]; rw [← Algebra.linearMap_apply]; rw [← AlgHom.coe_toLinearMap]; rw [← Submodule.map_span] at hx
+  -- Since `x` falls in the span of `s` in `S'`, `y' • x : S` falls in the span of `s'` in `S'`.
+  -- That is, there exists some `x' : S` in the span of `s'` in `S` and `x' = y' • x` in `S'`.
+  -- Thus `a • (y' • x) = a • x' ∈ span s'` in `S` for some `a ∈ M`.
+  obtain ⟨x', hx', hx'' : algebraMap _ _ _ = _⟩ := hx
+  obtain ⟨⟨_, a, ha₁, rfl⟩, ha₂⟩ :=
+    (IsLocalization.eq_iff_exists (M.map (algebraMap R S)) S').mp hx''
+  use (⟨a, ha₁⟩ : M) * (⟨y', hy'⟩ : M)
+  convert!
+    (Submodule.span R
+          (IsLocalization.finsetIntegerMultiple (Submonoid.map (algebraMap R S) M) s :
+            Set S)).smul_mem
+      a hx' using 1
+  convert! ha₂.symm using 1
+  · rw [Subtype.coe_mk, Submonoid.smul_def, Submonoid.coe_mul, ← smul_smul]
+    exact Algebra.smul_def _ _
+  · exact Algebra.smul_def _ _
 
 Depends on / 依赖: AlgHom, AlgHom.mk, Algebra, Algebra.algebraMap_eq_smul_one, algebraMap, algebraMap_eq_smul_one, g_apply
 -/
@@ -122,7 +174,18 @@ theorem multiple_mem_span_of_mem_localization_span
   · exact ⟨t, Submodule.span_mono hss' ht⟩
   clear hx hss' s
   induction s' using Finset.induction_on generalizing x with
-  | empty => use 1;
+  | empty => use 1; simpa using hs'
+  | insert a s _ hs =>
+  simp only [Finset.coe_insert,
+    Submodule.mem_span_insert] at hs' ⊢
+  rcases hs' with ⟨y, z, hz, rfl⟩
+  rcases IsLocalization.surj M y with ⟨⟨y', s'⟩, e⟩
+  apply congrArg (fun x => x • a) at e
+  simp only [algebraMap_smul] at e
+  rcases hs _ hz with ⟨t, ht⟩
+  refine ⟨t * s', t * y', _, (Submodule.span R (s : Set N)).smul_mem s' ht, ?_⟩
+  rw [smul_add]; rw [← smul_smul]; rw [mul_comm]; rw [← smul_smul]; rw [← smul_smul]; rw [← e]; rw [mul_comm]; rw [← Algebra.smul_def]
+  simp [Submonoid.smul_def]
 
 中文:
 定理 multiple_mem_span_of_mem_localization_span
@@ -133,7 +196,18 @@ theorem multiple_mem_span_of_mem_localization_span
   · exact ⟨t, Submodule.span_mono hss' ht⟩
   clear hx hss' s
   induction s' using Finset.induction_on generalizing x with
-  | empty => use 1;
+  | empty => use 1; simpa using hs'
+  | insert a s _ hs =>
+  simp only [Finset.coe_insert,
+    Submodule.mem_span_insert] at hs' ⊢
+  rcases hs' with ⟨y, z, hz, rfl⟩
+  rcases IsLocalization.surj M y with ⟨⟨y', s'⟩, e⟩
+  apply congrArg (fun x => x • a) at e
+  simp only [algebraMap_smul] at e
+  rcases hs _ hz with ⟨t, ht⟩
+  refine ⟨t * s', t * y', _, (Submodule.span R (s : Set N)).smul_mem s' ht, ?_⟩
+  rw [smul_add]; rw [← smul_smul]; rw [mul_comm]; rw [← smul_smul]; rw [← smul_smul]; rw [← e]; rw [mul_comm]; rw [← Algebra.smul_def]
+  simp [Submonoid.smul_def]
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.induction_on, IsLocalization, IsLocalization.surj, Submodule, Submodule.mem_span_finite_of_mem_span, Submodule.mem_span_insert, Submodule.span, Submodule.span_mono, classical, coe_insert, generalizing, induction_on, insert, mem_span_finite_of_mem_span, mem_span_insert, rsuffices, span_mono
 -/
@@ -216,7 +290,11 @@ lemma of_isLocalization
       (algebraMap R S) (Submonoid.le_comap_map M) := by
     apply IsLocalization.ringHom_ext M
     simp only [IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq]
-  -- We claim that if `S` is g
+  -- We claim that if `S` is generated by `T` as an `R`-module,
+  -- then `S'` is generated by `T` as an `R'`-module.
+  obtain ⟨T, hT⟩ := hRS
+  use T.image (algebraMap S Sₚ)
+  simpa using span_eq_top_localization_localization Rₚ M Sₚ hT
 
 中文:
 引理 of_isLocalization
@@ -227,7 +305,11 @@ lemma of_isLocalization
       (algebraMap R S) (Submonoid.le_comap_map M) := by
     apply IsLocalization.ringHom_ext M
     simp only [IsLocalization.map_comp, ← IsScalarTower.algebraMap_eq]
-  -- We claim that if `S` is g
+  -- We claim that if `S` is generated by `T` as an `R`-module,
+  -- then `S'` is generated by `T` as an `R'`-module.
+  obtain ⟨T, hT⟩ := hRS
+  use T.image (algebraMap S Sₚ)
+  simpa using span_eq_top_localization_localization Rₚ M Sₚ hT
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, IsLocalization, IsLocalization.map, IsLocalization.map_comp, IsLocalization.ringHom_ext, IsScalarTower, IsScalarTower.algebraMap_eq, Submonoid, Submonoid.le_comap_map, algebraMap, algebraMapSubmonoid, algebraMap_eq, classical, le_comap_map, map_comp, ringHom_ext
 -/
@@ -328,7 +410,18 @@ theorem of_localizationSpan_finite'
   use t.attach.biUnion sf
   rw [Submodule.span_attach_biUnion]; rw [eq_top_iff]
   rintro x -
-  refine Submodule.mem_of_span_
+  refine Submodule.mem_of_span_eq_top_of_smul_pow_mem _ (t : Set R) ht _ (fun r => ?_)
+  set S : Submonoid R := Submonoid.powers r.val
+  obtain ⟨⟨_, n₁, rfl⟩, hn₁⟩ := multiple_mem_span_of_mem_localization_span S (Rₚ r)
+    (s₁ r : Set (Mₚ r)) (IsLocalizedModule.mk' (f r) x (1 : S)) (by rw [s₂ r]; trivial)
+  rw [Submonoid.smul_def]; rw [← IsLocalizedModule.mk'_smul]; rw [IsLocalizedModule.mk'_one] at hn₁
+  obtain ⟨⟨_, n₂, rfl⟩, hn₂⟩ := IsLocalizedModule.smul_mem_finsetIntegerMultiple_span
+    S (f r) _ (s₁ r) hn₁
+  rw [Submonoid.smul_def] at hn₂
+  use n₂ + n₁
+  apply le_iSup (fun x : t => Submodule.span R (sf x : Set M)) r
+  rw [pow_add]; rw [mul_smul]
+  exact hn₂
 
 中文:
 定理 of_localizationSpan_finite'
@@ -342,7 +435,18 @@ theorem of_localizationSpan_finite'
   use t.attach.biUnion sf
   rw [Submodule.span_attach_biUnion]; rw [eq_top_iff]
   rintro x -
-  refine Submodule.mem_of_span_
+  refine Submodule.mem_of_span_eq_top_of_smul_pow_mem _ (t : Set R) ht _ (fun r => ?_)
+  set S : Submonoid R := Submonoid.powers r.val
+  obtain ⟨⟨_, n₁, rfl⟩, hn₁⟩ := multiple_mem_span_of_mem_localization_span S (Rₚ r)
+    (s₁ r : Set (Mₚ r)) (IsLocalizedModule.mk' (f r) x (1 : S)) (by rw [s₂ r]; trivial)
+  rw [Submonoid.smul_def]; rw [← IsLocalizedModule.mk'_smul]; rw [IsLocalizedModule.mk'_one] at hn₁
+  obtain ⟨⟨_, n₂, rfl⟩, hn₂⟩ := IsLocalizedModule.smul_mem_finsetIntegerMultiple_span
+    S (f r) _ (s₁ r) hn₁
+  rw [Submonoid.smul_def] at hn₂
+  use n₂ + n₁
+  apply le_iSup (fun x : t => Submodule.span R (sf x : Set M)) r
+  rw [pow_add]; rw [mul_smul]
+  exact hn₂
 
 Depends on / 依赖: IsLocalizedModu, IsLocalizedModule, IsLocalizedModule.finsetIntegerMultiple, Submodule, Submodule.mem_of_span_eq_top_of_smul_pow_mem, Submodule.span_attach_biUnion, Submonoid, Submonoid.powers, attach, biUnion, classical, eq_top_iff, finsetIntegerMultiple, mem_of_span_eq_top_of_smul_pow_mem, multiple_mem_span_of_mem_localization_span, powers, r.val, span_attach_biUnion, t.attach.biUnion, x.val
 -/
@@ -388,7 +492,8 @@ theorem of_localizationSpan'
     h₁ ⟨g.val, hc g.property⟩
   have (g : t') : IsLocalizedModule.Away g.val
     ((fun g => f ⟨g.val, hc g.property⟩) g) := h₂ ⟨g.val, hc g.property⟩
- 
+  apply of_localizationSpan_finite' t' ht' (fun g => f ⟨g.val, hc g.property⟩)
+    (fun g => H ⟨g.val, hc g.property⟩)
 
 中文:
 定理 of_localizationSpan'
@@ -400,7 +505,8 @@ theorem of_localizationSpan'
     h₁ ⟨g.val, hc g.property⟩
   have (g : t') : IsLocalizedModule.Away g.val
     ((fun g => f ⟨g.val, hc g.property⟩) g) := h₂ ⟨g.val, hc g.property⟩
- 
+  apply of_localizationSpan_finite' t' ht' (fun g => f ⟨g.val, hc g.property⟩)
+    (fun g => H ⟨g.val, hc g.property⟩)
 
 Depends on / 依赖: Ideal.span_eq_top_iff_finite, IsLocalization, IsLocalization.Away, IsLocalizedModule, IsLocalizedModule.Away, g.property, g.val, of_localizationSpan_finite, property, span_eq_top_iff_finite
 -/

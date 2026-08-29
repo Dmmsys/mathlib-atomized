@@ -484,7 +484,16 @@ instance leftHasSMul
         match x, y, hxy with
         | _, _, .of_zero_left n =>
 (AddCon.ker_rel _).2 by simp_rw [map_zero, SMul.aux_of, smul_zero, zero_tmul]
-        | _, _, .of_zero
+        | _, _, .of_zero_right m =>
+(AddCon.ker_rel _).2 by simp_rw [map_zero, SMul.aux_of, tmul_zero]
+        | _, _, .of_add_left m₁ m₂ n =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, SMul.aux_of, smul_add, add_tmul]
+        | _, _, .of_add_right m n₁ n₂ =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, SMul.aux_of, tmul_add]
+        | _, _, .of_smul s m n =>
+(AddCon.ker_rel _).2 by rw [SMul.aux_of, SMul.aux_of, ← smul_comm, smul_tmul]
+        | _, _, .add_comm x y =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, add_comm]⟩
 
 中文:
 实例 leftHasSMul
@@ -495,7 +504,16 @@ instance leftHasSMul
         match x, y, hxy with
         | _, _, .of_zero_left n =>
 (AddCon.ker_rel _).2 by simp_rw [map_zero, SMul.aux_of, smul_zero, zero_tmul]
-        | _, _, .of_zero
+        | _, _, .of_zero_right m =>
+(AddCon.ker_rel _).2 by simp_rw [map_zero, SMul.aux_of, tmul_zero]
+        | _, _, .of_add_left m₁ m₂ n =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, SMul.aux_of, smul_add, add_tmul]
+        | _, _, .of_add_right m n₁ n₂ =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, SMul.aux_of, tmul_add]
+        | _, _, .of_smul s m n =>
+(AddCon.ker_rel _).2 by rw [SMul.aux_of, SMul.aux_of, ← smul_comm, smul_tmul]
+        | _, _, .add_comm x y =>
+(AddCon.ker_rel _).2 by simp_rw [map_add, add_comm]⟩
 
 Depends on / 依赖: AddCon, AddCon.addConGen_le, AddCon.ker, AddCon.ker_rel, SMul.aux, SMul.aux_of, TensorProduct, TensorProduct.Eqv, addConGen, addConGen_le, add_tmul, aux_of, ker_rel, map_add, map_zero, of_add_left, of_add_right, of_zero_left, of_zero_right, otimes
 -/
@@ -636,7 +654,7 @@ theorem add_smul
   x.induction_on (by simp_rw [TensorProduct.smul_zero, add_zero])
     (fun m n => by simp_rw [this, add_smul, add_tmul]) fun x y ihx ihy => by
     simp_rw [TensorProduct.smul_add]
-    rw [ihx]; rw [ih
+    rw [ihx]; rw [ihy]; rw [add_add_add_comm]
 
 中文:
 定理 add_smul
@@ -646,7 +664,7 @@ theorem add_smul
   x.induction_on (by simp_rw [TensorProduct.smul_zero, add_zero])
     (fun m n => by simp_rw [this, add_smul, add_tmul]) fun x y ihx ihy => by
     simp_rw [TensorProduct.smul_add]
-    rw [ihx]; rw [ih
+    rw [ihx]; rw [ihy]; rw [add_add_add_comm]
 -/
 protected theorem add_smul (r s : R'') (x : M otimes[R] N) : (r + s) • x = r • x + s • x :=
   have : forall (r : R'') (m : M) (n : N), r • m otimesₜ[R] n = (r • m) otimesₜ n := fun _ _ _ => rfl
@@ -759,7 +777,11 @@ instance leftDistribMulAction
   { smul_add := fun r x y => TensorProduct.smul_add r x y
     mul_smul := fun r s x =>
       x.induction_on (by simp_rw [TensorProduct.smul_zero])
-        (fun m n => by simp_rw [this, mul_smul]) fun x
+        (fun m n => by simp_rw [this, mul_smul]) fun x y ihx ihy => by
+        simp_rw [TensorProduct.smul_add]
+        rw [ihx]; rw [ihy]
+    one_smul := TensorProduct.one_smul
+    smul_zero := TensorProduct.smul_zero }
 
 中文:
 实例 leftDistribMulAction
@@ -768,7 +790,11 @@ instance leftDistribMulAction
   { smul_add := fun r x y => TensorProduct.smul_add r x y
     mul_smul := fun r s x =>
       x.induction_on (by simp_rw [TensorProduct.smul_zero])
-        (fun m n => by simp_rw [this, mul_smul]) fun x
+        (fun m n => by simp_rw [this, mul_smul]) fun x y ihx ihy => by
+        simp_rw [TensorProduct.smul_add]
+        rw [ihx]; rw [ihy]
+    one_smul := TensorProduct.one_smul
+    smul_zero := TensorProduct.smul_zero }
 
 Depends on / 依赖: TensorProduct, TensorProduct.one_smul, TensorProduct.smul_add, TensorProduct.smul_zero, induction_on, mul_smul, one_smul, simp_rw, smul_add, smul_zero, x.induction_on
 -/

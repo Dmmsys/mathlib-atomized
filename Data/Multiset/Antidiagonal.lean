@@ -105,7 +105,10 @@ theorem mem_antidiagonal
     have _ := Classical.decEq α
     simp only [revzip_powersetAux_lemma l revzip_powersetAux, h.symm, mem_coe,
       List.mem_map, mem_powersetAux]
-    obtain 
+    obtain ⟨x₁, x₂⟩ := x
+    exact ⟨x₁, le_add_right _ _, by rw [add_tsub_cancel_left x₁ x₂]⟩
+
+@[simp]
 
 中文:
 定理 mem_antidiagonal
@@ -116,7 +119,10 @@ theorem mem_antidiagonal
     have _ := Classical.decEq α
     simp only [revzip_powersetAux_lemma l revzip_powersetAux, h.symm, mem_coe,
       List.mem_map, mem_powersetAux]
-    obtain 
+    obtain ⟨x₁, x₂⟩ := x
+    exact ⟨x₁, le_add_right _ _, by rw [add_tsub_cancel_left x₁ x₂]⟩
+
+@[simp]
 
 Depends on / 依赖: Classical, Classical.decEq, List.mem_map, Quotient, Quotient.inductionOn, add_tsub_cancel_left, antidiagonal_coe, h.symm, inductionOn, le_add_right, mem_coe, mem_map, mem_powersetAux, quot_mk_to_coe, revzip_powersetAux, revzip_powersetAux_lemma
 -/
@@ -316,7 +322,12 @@ theorem antidiagonal_eq_map_powerset
   | cons a s hs =>
     simp_rw [antidiagonal_cons, powerset_cons, map_add, hs, map_map, Function.comp, Prod.map_apply,
       id, sub_cons, erase_cons_head]
-  
+    rw [add_comm]
+    congr 1
+    refine Multiset.map_congr rfl fun x hx => ?_
+    rw [cons_sub_of_le _ (mem_powerset.mp hx)]
+
+@[simp]
 
 中文:
 定理 antidiagonal_eq_map_powerset
@@ -327,7 +338,12 @@ theorem antidiagonal_eq_map_powerset
   | cons a s hs =>
     simp_rw [antidiagonal_cons, powerset_cons, map_add, hs, map_map, Function.comp, Prod.map_apply,
       id, sub_cons, erase_cons_head]
-  
+    rw [add_comm]
+    congr 1
+    refine Multiset.map_congr rfl fun x hx => ?_
+    rw [cons_sub_of_le _ (mem_powerset.mp hx)]
+
+@[simp]
 
 Depends on / 依赖: Function, Function.comp, Multiset, Multiset.induction_on, Multiset.map_congr, Multiset.zero_sub, Prod.map_apply, add_comm, antidiagonal_cons, antidiagonal_zero, cons_sub_of_le, erase_cons_head, induction_on, map_add, map_apply, map_congr, map_map, map_singleton, mem_powerset, mem_powerset.mp
 -/

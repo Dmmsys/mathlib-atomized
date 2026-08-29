@@ -80,7 +80,13 @@ lemma isCardinalFilteredGenerator
     exact isCardinalPresentable_of_iso e κ
   exists_colimitsOfShape Y := by
     have := adj.isLeftAdjoint
-    obtain ⟨J,
+    obtain ⟨J, _, _, ⟨hY⟩⟩ := hP.exists_colimitsOfShape (G.obj Y)
+    exact ⟨J, inferInstance, inferInstance,
+      ObjectProperty.prop_of_isIso _ (adj.counit.app Y) ⟨{
+        diag := _
+        ι := _
+        isColimit := isColimitOfPreserves F hY.isColimit
+        prop_diag_obj j := P.prop_map_obj _ (hY.prop_diag_obj j) }⟩⟩
 
 中文:
 引理 isCardinalFilteredGenerator
@@ -92,7 +98,13 @@ lemma isCardinalFilteredGenerator
     exact isCardinalPresentable_of_iso e κ
   exists_colimitsOfShape Y := by
     have := adj.isLeftAdjoint
-    obtain ⟨J,
+    obtain ⟨J, _, _, ⟨hY⟩⟩ := hP.exists_colimitsOfShape (G.obj Y)
+    exact ⟨J, inferInstance, inferInstance,
+      ObjectProperty.prop_of_isIso _ (adj.counit.app Y) ⟨{
+        diag := _
+        ι := _
+        isColimit := isColimitOfPreserves F hY.isColimit
+        prop_diag_obj j := P.prop_map_obj _ (hY.prop_diag_obj j) }⟩⟩
 
 Depends on / 依赖: G.obj, ObjectProperty, ObjectProperty.prop_of_isIso, adj.counit.app, adj.isCardinalPresentable_leftAdjoint_obj, adj.isLeftAdjoint, counit, exists_colimitsOfShape, hP.exists_colimitsOfShape, hP.le_isCardinalPresentable, hY.isColimit, isCardinalPresentable_iff, isCardinalPresentable_leftAdjoint_obj, isCardinalPresentable_of_iso, isColimit, isColimitOfPreserves, isLeftAdjoint, le_isCardinalPresentable, prop_diag_obj, prop_of_isIso
 -/

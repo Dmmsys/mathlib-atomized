@@ -264,7 +264,10 @@ instance preorder
     lt_iff_le_not_ge := fun _ _ => by
       constructor
       · rintro ⟨i, a, b, hab⟩
-        rwa [mk_le_mk_iff, mk_le_mk_iff, ← lt_
+        rwa [mk_le_mk_iff, mk_le_mk_iff, ← lt_iff_le_not_ge]
+      · rintro ⟨⟨i, a, b, hab⟩, h⟩
+        rw [mk_le_mk_iff] at h
+        exact mk_lt_mk_iff.2 (hab.lt_of_not_ge h) }
 
 中文:
 实例 preorder
@@ -276,7 +279,10 @@ instance preorder
     lt_iff_le_not_ge := fun _ _ => by
       constructor
       · rintro ⟨i, a, b, hab⟩
-        rwa [mk_le_mk_iff, mk_le_mk_iff, ← lt_
+        rwa [mk_le_mk_iff, mk_le_mk_iff, ← lt_iff_le_not_ge]
+      · rintro ⟨⟨i, a, b, hab⟩, h⟩
+        rw [mk_le_mk_iff] at h
+        exact mk_lt_mk_iff.2 (hab.lt_of_not_ge h) }
 -/
 protected instance preorder [forall i, Preorder (α i)] : Preorder (Σ i, α i) :=
   { le_refl := fun ⟨i, a⟩ => Sigma.LE.fiber i a a le_rfl,
@@ -433,7 +439,14 @@ instance preorder
     le_trans := fun _ _ _ => trans_of ((Lex (· < ·)) fun _ => (· <= ·)),
     lt_iff_le_not_ge := by
       refine fun a b => ⟨fun hab => ⟨hab.mono_right fun i a b => le_of_lt, ?_⟩, ?_⟩
-      · rintro (⟨b, a, hji⟩ | ⟨
+      · rintro (⟨b, a, hji⟩ | ⟨b, a, hba⟩) <;> obtain ⟨_, _, hij⟩ | ⟨_, _, hab⟩ := hab
+        · exact hij.not_gt hji
+        · exact lt_irrefl _ hji
+        · exact lt_irrefl _ hij
+        · exact hab.not_ge hba
+      · rintro ⟨⟨a, b, hij⟩ | ⟨a, b, hab⟩, hba⟩
+        · exact Sigma.Lex.left _ _ hij
+        · exact Sigma.Lex.right _ _ (hab.lt_of_not_ge fun h => hba <| Sigma.Lex.right _ _ h) }
 
 中文:
 实例 preorder
@@ -443,7 +456,14 @@ instance preorder
     le_trans := fun _ _ _ => trans_of ((Lex (· < ·)) fun _ => (· <= ·)),
     lt_iff_le_not_ge := by
       refine fun a b => ⟨fun hab => ⟨hab.mono_right fun i a b => le_of_lt, ?_⟩, ?_⟩
-      · rintro (⟨b, a, hji⟩ | ⟨
+      · rintro (⟨b, a, hji⟩ | ⟨b, a, hba⟩) <;> obtain ⟨_, _, hij⟩ | ⟨_, _, hab⟩ := hab
+        · exact hij.not_gt hji
+        · exact lt_irrefl _ hji
+        · exact lt_irrefl _ hij
+        · exact hab.not_ge hba
+      · rintro ⟨⟨a, b, hij⟩ | ⟨a, b, hab⟩, hba⟩
+        · exact Sigma.Lex.left _ _ hij
+        · exact Sigma.Lex.right _ _ (hab.lt_of_not_ge fun h => hba <| Sigma.Lex.right _ _ h) }
 
 Depends on / 依赖: Lex.right, Sigma.Lex.LE, Sigma.Lex.LT, Sigma.Lex.left, hab.mono_right, hab.not_ge, hij.not_gt, le_of_lt, le_refl, le_rfl, le_trans, lt_iff_le_not_ge, lt_irrefl, mono_right, not_ge, not_gt, trans_of
 -/

@@ -174,7 +174,16 @@ lemma nsmul_notMem_range_root
       ⟨1, -(n : R), by simp [Nat.cast_smul_eq_nsmul], by simp⟩
   rintro ⟨j, hj⟩
   replace this : j = i ∨ P.root j = -P.root i := by
-    simpa only [← hj, IsReduced.linearIn
+    simpa only [← hj, IsReduced.linearIndependent_iff, not_and_or, not_not] using this
+  rcases this with rfl | this
+  · replace hj : (1 : Int) • P.root j = (n : Int) • P.root j := by simpa
+    rw [(smul_left_injective Int <| P.ne_zero j).eq_iff]; rw [eq_comm] at hj
+    have : 2 <= n := Nat.AtLeastTwo.prop
+    lia
+  · rw [← one_smul Int (P.root i), ← neg_smul, hj] at this
+    replace this : (n : Int) • P.root i = -1 • P.root i := by simpa
+    rw [(smul_left_injective Int <| P.ne_zero i).eq_iff] at this
+    lia
 
 中文:
 引理 nsmul_notMem_range_root
@@ -185,7 +194,16 @@ lemma nsmul_notMem_range_root
       ⟨1, -(n : R), by simp [Nat.cast_smul_eq_nsmul], by simp⟩
   rintro ⟨j, hj⟩
   replace this : j = i ∨ P.root j = -P.root i := by
-    simpa only [← hj, IsReduced.linearIn
+    simpa only [← hj, IsReduced.linearIndependent_iff, not_and_or, not_not] using this
+  rcases this with rfl | this
+  · replace hj : (1 : Int) • P.root j = (n : Int) • P.root j := by simpa
+    rw [(smul_left_injective Int <| P.ne_zero j).eq_iff]; rw [eq_comm] at hj
+    have : 2 <= n := Nat.AtLeastTwo.prop
+    lia
+  · rw [← one_smul Int (P.root i), ← neg_smul, hj] at this
+    replace this : (n : Int) • P.root i = -1 • P.root i := by simpa
+    rw [(smul_left_injective Int <| P.ne_zero i).eq_iff] at this
+    lia
 
 Depends on / 依赖: IsReduced, IsReduced.linearIndependent_iff, LinearIndependent, LinearIndependent.pair_iff, Nat.cast_smul_eq_nsmul, P.ne_zero, P.root, cast_smul_eq_nsmul, eq_comm, eq_iff, linearIndependent_iff, ne_zero, not_and_or, not_forall, not_not, pair_iff, replace, smul_left_injective
 -/
@@ -329,7 +347,16 @@ lemma infinite_of_linearIndependent_coxeterWeight_four
     (P.coroot_root_two j) ?_).mpr ?_))
   · rw [range_subset_iff]
     intro n
-    rw [← IsFixedPt.image_iterate ((bijOn_reflection_of_mapsTo 
+    rw [← IsFixedPt.image_iterate ((bijOn_reflection_of_mapsTo (P.coroot_root_two i)
+      (P.mapsTo_reflection_root i)).comp (bijOn_reflection_of_mapsTo (P.coroot_root_two j)
+      (P.mapsTo_reflection_root j))).image_eq n]
+    exact mem_image_of_mem _ (mem_range_self j)
+  · rw [coroot_root_eq_pairing, coroot_root_eq_pairing, ← hc, mul_comm, coxeterWeight]
+  · rw [LinearIndependent.pair_iff] at hl
+    specialize hl (P.pairing j i) (-2)
+    simp only [neg_smul, neg_eq_zero, two_ne_zero (α := R), and_false, imp_false] at hl
+    rw [ne_eq]; rw [coroot_root_eq_pairing]; rw [← sub_eq_zero]; rw [sub_eq_add_neg]
+    exact hl
 
 中文:
 引理 infinite_of_linearIndependent_coxeterWeight_four
@@ -340,7 +367,16 @@ lemma infinite_of_linearIndependent_coxeterWeight_four
     (P.coroot_root_two j) ?_).mpr ?_))
   · rw [range_subset_iff]
     intro n
-    rw [← IsFixedPt.image_iterate ((bijOn_reflection_of_mapsTo 
+    rw [← IsFixedPt.image_iterate ((bijOn_reflection_of_mapsTo (P.coroot_root_two i)
+      (P.mapsTo_reflection_root i)).comp (bijOn_reflection_of_mapsTo (P.coroot_root_two j)
+      (P.mapsTo_reflection_root j))).image_eq n]
+    exact mem_image_of_mem _ (mem_range_self j)
+  · rw [coroot_root_eq_pairing, coroot_root_eq_pairing, ← hc, mul_comm, coxeterWeight]
+  · rw [LinearIndependent.pair_iff] at hl
+    specialize hl (P.pairing j i) (-2)
+    simp only [neg_smul, neg_eq_zero, two_ne_zero (α := R), and_false, imp_false] at hl
+    rw [ne_eq]; rw [coroot_root_eq_pairing]; rw [← sub_eq_zero]; rw [sub_eq_add_neg]
+    exact hl
 
 Depends on / 依赖: Embedding, Embedding.injective, Infinite, Infinite.mono, IsFixedPt, IsFixedPt.image_iterate, P.coroot_root_two, P.mapsTo_reflection_root, P.root, bijOn_reflection_of_mapsTo, coroot_root_eq_pairi, coroot_root_two, image_eq, image_iterate, infinite_range_iff, infinite_range_reflection_reflection_iterate_iff, injective, mapsTo_reflection_root, mem_image_of_mem, mem_range_self
 -/
@@ -378,7 +414,14 @@ lemma pairing_smul_root_eq_of_not_linearIndependent
 · exact False.elim h₂ rfl (smul_eq_zero_iff_left <| P.ne_zero j).mp by simpa using h₁
     · assumption
   have h₃ : t != 0 := by
-    rcases eq_or_ne
+    rcases eq_or_ne t 0 with rfl | ht
+· exact False.elim h₂ (smul_eq_zero_iff_left <| P.ne_zero i).mp by simpa using h₁
+    · assumption
+  replace h₁ : s • P.root i = -t • P.root j := by rwa [← eq_neg_iff_add_eq_zero, ← neg_smul] at h₁
+  have h₄ : s * 2 = -(t * P.pairing j i) := by simpa using congr_arg (P.coroot' i) h₁
+  replace h₁ : (2 : R) • (s • P.root i) = (2 : R) • (-t • P.root j) := by rw [h₁]
+  rw [smul_smul]; rw [mul_comm]; rw [h₄]; rw [smul_comm]; rw [← neg_mul]; rw [← smul_smul] at h₁
+  exact smul_right_injective M (neg_ne_zero.mpr h₃) h₁
 
 中文:
 引理 pairing_smul_root_eq_of_not_linearIndependent
@@ -392,7 +435,14 @@ lemma pairing_smul_root_eq_of_not_linearIndependent
 · exact False.elim h₂ rfl (smul_eq_zero_iff_left <| P.ne_zero j).mp by simpa using h₁
     · assumption
   have h₃ : t != 0 := by
-    rcases eq_or_ne
+    rcases eq_or_ne t 0 with rfl | ht
+· exact False.elim h₂ (smul_eq_zero_iff_left <| P.ne_zero i).mp by simpa using h₁
+    · assumption
+  replace h₁ : s • P.root i = -t • P.root j := by rwa [← eq_neg_iff_add_eq_zero, ← neg_smul] at h₁
+  have h₄ : s * 2 = -(t * P.pairing j i) := by simpa using congr_arg (P.coroot' i) h₁
+  replace h₁ : (2 : R) • (s • P.root i) = (2 : R) • (-t • P.root j) := by rw [h₁]
+  rw [smul_smul]; rw [mul_comm]; rw [h₄]; rw [smul_comm]; rw [← neg_mul]; rw [← smul_smul] at h₁
+  exact smul_right_injective M (neg_ne_zero.mpr h₃) h₁
 
 Depends on / 依赖: False.elim, LinearIndependent, LinearIndependent.pair_iff, P.ne_zero, P.root, eq_neg_iff_add_eq_zero, eq_or_ne, ne_zero, neg_smul, pair_iff, replace, smul_eq_zero_iff_left
 -/
@@ -461,7 +511,13 @@ lemma linearIndependent_iff_coxeterWeight_ne_four
   contrapose h
   have h₁ := P.pairing_smul_root_eq_of_not_linearIndependent h
   rw [LinearIndependent.pair_symm_iff] at h
-  have h₂ := P.pairing_smul_root_eq_of_not_linearInde
+  have h₂ := P.pairing_smul_root_eq_of_not_linearIndependent h
+  suffices P.coxeterWeight i j • P.root i = (4 : R) • P.root i from
+    smul_left_injective R (P.ne_zero i) this
+  calc P.coxeterWeight i j • P.root i
+      = (P.pairing i j * P.pairing j i) • P.root i := by rfl
+    _ = P.pairing i j • (2 : R) • P.root j := by rw [mul_smul, h₁]
+    _ = (4 : R) • P.root i := by rw [smul_comm, h₂, ← mul_smul]; norm_num
 
 中文:
 引理 linearIndependent_iff_coxeterWeight_ne_four
@@ -471,7 +527,13 @@ lemma linearIndependent_iff_coxeterWeight_ne_four
   contrapose h
   have h₁ := P.pairing_smul_root_eq_of_not_linearIndependent h
   rw [LinearIndependent.pair_symm_iff] at h
-  have h₂ := P.pairing_smul_root_eq_of_not_linearInde
+  have h₂ := P.pairing_smul_root_eq_of_not_linearIndependent h
+  suffices P.coxeterWeight i j • P.root i = (4 : R) • P.root i from
+    smul_left_injective R (P.ne_zero i) this
+  calc P.coxeterWeight i j • P.root i
+      = (P.pairing i j * P.pairing j i) • P.root i := by rfl
+    _ = P.pairing i j • (2 : R) • P.root j := by rw [mul_smul, h₁]
+    _ = (4 : R) • P.root i := by rw [smul_comm, h₂, ← mul_smul]; norm_num
 
 Depends on / 依赖: IsAddTorsionFree, LinearIndependent, LinearIndependent.pair_symm_iff, P.coxeterWeight, P.ne_zero, P.pairing, P.pairing_smul_root_eq_of_not_linearIndependent, P.root, contrapose, coxeterWeight, coxeterWeight_ne_four_of_linearIndependent, ne_zero, of_isTorsionFree, pair_symm_iff, pairing, pairing_smul_root_eq_of_not_linearIndependent, smul_left_injective
 -/
@@ -521,7 +583,7 @@ instance instFlipIsReduced
   right
   rw [← coxeterWeight_eq_four_iff_not_linearIndependent]; rw [coxeterWeight_flip]; rw [coxeterWeight_eq_four_iff_not_linearIndependent]; rw [IsReduced.linearIndependent_iff] at h
   push Not at h
-  simp [P.root_eq_neg
+  simp [P.root_eq_neg_iff.mp (h hij)]
 
 中文:
 实例 instFlipIsReduced
@@ -532,7 +594,7 @@ instance instFlipIsReduced
   right
   rw [← coxeterWeight_eq_four_iff_not_linearIndependent]; rw [coxeterWeight_flip]; rw [coxeterWeight_eq_four_iff_not_linearIndependent]; rw [IsReduced.linearIndependent_iff] at h
   push Not at h
-  simp [P.root_eq_neg
+  simp [P.root_eq_neg_iff.mp (h hij)]
 
 Depends on / 依赖: IsReduced, IsReduced.linearIndependent_iff, P.root_eq_neg_iff.mp, coxeterWeight_eq_four_iff_not_linearIndependent, coxeterWeight_flip, eq_or_ne, linearIndependent_iff, root_eq_neg_iff
 -/
@@ -558,7 +620,7 @@ lemma pairing_two_two_iff
   have : ¬ LinearIndependent R ![P.root i, P.root j] := by
     rw [← coxeterWeight_eq_four_iff_not_linearIndependent]; rw [coxeterWeight]; rw [h₁]; rw [h₂]; norm_num
   replace this := P.pairing_smul_root_eq_of_not_linearIndependent this
-exact P.
+exact P.root.injective smul_right_injective M two_ne_zero (h₂ ▸ this)
 
 中文:
 引理 pairing_two_two_iff
@@ -567,7 +629,7 @@ exact P.
   have : ¬ LinearIndependent R ![P.root i, P.root j] := by
     rw [← coxeterWeight_eq_four_iff_not_linearIndependent]; rw [coxeterWeight]; rw [h₁]; rw [h₂]; norm_num
   replace this := P.pairing_smul_root_eq_of_not_linearIndependent this
-exact P.
+exact P.root.injective smul_right_injective M two_ne_zero (h₂ ▸ this)
 
 Depends on / 依赖: LinearIndependent, P.pairing_smul_root_eq_of_not_linearIndependent, P.root, P.root.injective, coxeterWeight, coxeterWeight_eq_four_iff_not_linearIndependent, injective, pairing_smul_root_eq_of_not_linearIndependent, replace, smul_right_injective, two_ne_zero
 -/
@@ -619,7 +681,16 @@ lemma pairing_one_four_iff'
   have : IsAddTorsionFree N := .of_isTorsionFree R N
   refine ⟨fun ⟨h₁, h₂⟩ => ?_, fun h => ?_⟩
   · have : ¬ LinearIndependent R ![P.root i, P.root j] := by
-      rw [← coxeterWeight_eq_four_iff_not_linearIndependent]; rw [coxeterWeight]; rw [h
+      rw [← coxeterWeight_eq_four_iff_not_linearIndependent]; rw [coxeterWeight]; rw [h₁]; rw [h₂]; simp
+    replace this := P.pairing_smul_root_eq_of_not_linearIndependent this
+    rw [h₂]; rw [show (4 : R) = 2 * 2 by norm_num]; rw [mul_smul] at this
+    exact smul_right_injective M two_ne_zero this.symm
+  · rw [← coroot_eq_smul_coroot_iff] at h
+    rw [pairing]; rw [pairing]; rw [h]
+    norm_num
+    suffices (2 : R) • P.pairing i j = (2 : R) • 1 from h2 this
+    rw [pairing]; rw [← map_smul]; rw [← h]
+    simp
 
 中文:
 引理 pairing_one_four_iff'
@@ -629,7 +700,16 @@ lemma pairing_one_four_iff'
   have : IsAddTorsionFree N := .of_isTorsionFree R N
   refine ⟨fun ⟨h₁, h₂⟩ => ?_, fun h => ?_⟩
   · have : ¬ LinearIndependent R ![P.root i, P.root j] := by
-      rw [← coxeterWeight_eq_four_iff_not_linearIndependent]; rw [coxeterWeight]; rw [h
+      rw [← coxeterWeight_eq_four_iff_not_linearIndependent]; rw [coxeterWeight]; rw [h₁]; rw [h₂]; simp
+    replace this := P.pairing_smul_root_eq_of_not_linearIndependent this
+    rw [h₂]; rw [show (4 : R) = 2 * 2 by norm_num]; rw [mul_smul] at this
+    exact smul_right_injective M two_ne_zero this.symm
+  · rw [← coroot_eq_smul_coroot_iff] at h
+    rw [pairing]; rw [pairing]; rw [h]
+    norm_num
+    suffices (2 : R) • P.pairing i j = (2 : R) • 1 from h2 this
+    rw [pairing]; rw [← map_smul]; rw [← h]
+    simp
 
 Depends on / 依赖: IsAddTorsionFree, LinearIndependent, P.pairing_smul_root_eq_of_not_linearIndependent, P.root, coxeterWeight, coxeterWeight_eq_four_iff_not_linearIndependent, mul_smul, of_isTorsionFree, pairing_smul_root_eq_of_not_linearIndependent, replace, smul_right_injective, this.symm, two_ne_zero
 -/

@@ -277,7 +277,10 @@ definition setoid
     ⟨fun ⟨i, _⟩ => ⟨i, refl i, refl i, rfl⟩, @fun ⟨_, _⟩ ⟨_, _⟩ ⟨k, ik, jk, h⟩ =>
       ⟨k, jk, ik, h.symm⟩,
       @fun ⟨i, x⟩ ⟨j, y⟩ ⟨k, z⟩ ⟨ij, hiij, hjij, hij⟩ ⟨jk, hjjk, hkjk, hjk⟩ => by
-        o
+        obtain ⟨ijk, hijijk, hjkijk⟩ := directed_of (· <= ·) ij jk
+        refine ⟨ijk, le_trans hiij hijijk, le_trans hkjk hjkijk, ?_⟩
+        rw [← DirectedSystem.map_map _ hiij hijijk]; rw [hij]; rw [DirectedSystem.map_map]
+        rw [← DirectedSystem.map_map _ hkjk hjkijk]; rw [← hjk]; rw [DirectedSystem.map_map]⟩
 
 中文:
 定义 setoid
@@ -287,7 +290,10 @@ definition setoid
     ⟨fun ⟨i, _⟩ => ⟨i, refl i, refl i, rfl⟩, @fun ⟨_, _⟩ ⟨_, _⟩ ⟨k, ik, jk, h⟩ =>
       ⟨k, jk, ik, h.symm⟩,
       @fun ⟨i, x⟩ ⟨j, y⟩ ⟨k, z⟩ ⟨ij, hiij, hjij, hij⟩ ⟨jk, hjjk, hkjk, hjk⟩ => by
-        o
+        obtain ⟨ijk, hijijk, hjkijk⟩ := directed_of (· <= ·) ij jk
+        refine ⟨ijk, le_trans hiij hijijk, le_trans hkjk hjkijk, ?_⟩
+        rw [← DirectedSystem.map_map _ hiij hijijk]; rw [hij]; rw [DirectedSystem.map_map]
+        rw [← DirectedSystem.map_map _ hkjk hjkijk]; rw [← hjk]; rw [DirectedSystem.map_map]⟩
 -/
 def setoid [DirectedSystem G fun i j h => f i j h] [IsDirectedOrder ι] : Setoid (Σˣ f) where
   r := fun ⟨i, x⟩ ⟨j, y⟩ => exists (k : ι) (ik : i <= k) (jk : j <= k), f i k ik x = f j k jk y
@@ -316,7 +322,7 @@ definition sigmaStructure
   RelMap R x :=
     RelMap R
       (unify f x (Classical.choose (Finite.bddAbove_range fun a => (x a).1))
-        (Classical.
+        (Classical.choose_spec (Finite.bddAbove_range fun a => (x a).1)))
 
 中文:
 定义 sigmaStructure
@@ -328,7 +334,7 @@ definition sigmaStructure
   RelMap R x :=
     RelMap R
       (unify f x (Classical.choose (Finite.bddAbove_range fun a => (x a).1))
-        (Classical.
+        (Classical.choose_spec (Finite.bddAbove_range fun a => (x a).1)))
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Finite, Finite.bddAbove_range, RelMap, bddAbove_range, choose_spec, funMap
 -/
@@ -571,7 +577,10 @@ instance prestructure
         (Setoid.trans ?_ (Setoid.symm (funMap_equiv_unify G f F y i hy)))
     rw [h]
   rel_equiv {n} {R} x y xy := by
-    obtain ⟨i,
+    obtain ⟨i, hx, hy, h⟩ := exists_unify_eq G f xy
+    refine _root_.trans (relMap_equiv_unify G f R x i hx)
+      (_root_.trans ?_ (symm (relMap_equiv_unify G f R y i hy)))
+    rw [h]
 
 中文:
 实例 prestructure
@@ -584,7 +593,10 @@ instance prestructure
         (Setoid.trans ?_ (Setoid.symm (funMap_equiv_unify G f F y i hy)))
     rw [h]
   rel_equiv {n} {R} x y xy := by
-    obtain ⟨i,
+    obtain ⟨i, hx, hy, h⟩ := exists_unify_eq G f xy
+    refine _root_.trans (relMap_equiv_unify G f R x i hx)
+      (_root_.trans ?_ (symm (relMap_equiv_unify G f R y i hy)))
+    rw [h]
 
 Depends on / 依赖: sigmaStructure
 -/
@@ -707,7 +719,11 @@ theorem exists_quotient_mk'_sigma_mk'_eq
   rw [Quotient.eq_mk_iff_out]; rw [unify]
   generalize_proofs r
   change _ ≈ Structure.Sigma.mk f i (f (Quotient.out (x a)).fst i r (Quotient.out (x a)).snd)
-  have : (.mk f i 
+  have : (.mk f i (f (Quotient.out (x a)).fst i r (Quotient.out (x a)).snd) : Σˣ f).fst <= i :=
+    le_rfl
+  rw [equiv_iff G f (i := i) (hi _) this]
+  · simp only [DirectedSystem.map_self]
+  exact ⟨a, rfl⟩
 
 中文:
 定理 存在_quotient_mk'_sigma_mk'_eq
@@ -719,7 +735,11 @@ theorem exists_quotient_mk'_sigma_mk'_eq
   rw [Quotient.eq_mk_iff_out]; rw [unify]
   generalize_proofs r
   change _ ≈ Structure.Sigma.mk f i (f (Quotient.out (x a)).fst i r (Quotient.out (x a)).snd)
-  have : (.mk f i 
+  have : (.mk f i (f (Quotient.out (x a)).fst i r (Quotient.out (x a)).snd) : Σˣ f).fst <= i :=
+    le_rfl
+  rw [equiv_iff G f (i := i) (hi _) this]
+  · simp only [DirectedSystem.map_self]
+  exact ⟨a, rfl⟩
 
 Depends on / 依赖: DirectedSystem, DirectedSystem.map_self, Finite, Finite.bddAbove_range, Quotient, Quotient.eq_mk_iff_out, Quotient.out, Structure, Structure.Sigma.mk, bddAbove_range, eq_mk_iff_out, equiv_iff, generalize_proofs, le_rfl, map_self
 -/
@@ -756,7 +776,8 @@ definition of
     rfl
   map_rel' := by
     intro n R x
-    change RelMap R (fun a => (⟦.mk f i (x a)⟧ : DirectLimit G f))
+    change RelMap R (fun a => (⟦.mk f i (x a)⟧ : DirectLimit G f)) ↔ _
+    simp only [relMap_quotient_mk'_sigma_mk']
 
 中文:
 定义 of
@@ -771,7 +792,8 @@ definition of
     rfl
   map_rel' := by
     intro n R x
-    change RelMap R (fun a => (⟦.mk f i (x a)⟧ : DirectLimit G f))
+    change RelMap R (fun a => (⟦.mk f i (x a)⟧ : DirectLimit G f)) ↔ _
+    simp only [relMap_quotient_mk'_sigma_mk']
 -/
 noncomputable def of (i : ι) : G i ↪[L] DirectLimit G f where
   toFun := fun a => ⟦.mk f i a⟧
@@ -922,7 +944,7 @@ theorem exists_fg_substructure_in_Sigma
   use Substructure.closure L (range y)
   rw [Substructure.map_closure]
   simp only [Embedding.coe_toHom, of_apply]
-  rw [← image_univ]; rw [image_image]; rw [image_univ]; rw [← eq_y]
+  rw [← image_univ]; rw [image_image]; rw [image_univ]; rw [← eq_y]; rw [Subtype.range_coe_subtype]; rw [Finset.setOfPred_mem]; rw [A_closure]
 
 中文:
 定理 存在_fg_substructure_in_Sigma
@@ -934,7 +956,7 @@ theorem exists_fg_substructure_in_Sigma
   use Substructure.closure L (range y)
   rw [Substructure.map_closure]
   simp only [Embedding.coe_toHom, of_apply]
-  rw [← image_univ]; rw [image_image]; rw [image_univ]; rw [← eq_y]
+  rw [← image_univ]; rw [image_image]; rw [image_univ]; rw [← eq_y]; rw [Subtype.range_coe_subtype]; rw [Finset.setOfPred_mem]; rw [A_closure]
 
 Depends on / 依赖: A_closure, Embedding, Embedding.coe_toHom, Finset, Finset.setOfPred_mem, S_fg, Substructure, Substructure.closure, Substructure.map_closure, Subtype, Subtype.range_coe_subtype, _sigma_mk, closure, coe_toHom, eq_y, exists_quotient_mk, image_image, image_univ, map_closure, of_apply
 -/
@@ -963,7 +985,22 @@ definition lift
       rw [← Hg x.1 i hx]; rw [← Hg y.1 i hy]
       exact congr_arg _ ((equiv_iff ..).1 xy)
   inj' x y xy := by
-    rw [← Quotient.out_eq x]; rw [← Quotient.out_eq y]; rw [Quotient.li
+    rw [← Quotient.out_eq x]; rw [← Quotient.out_eq y]; rw [Quotient.lift_mk]; rw [Quotient.lift_mk] at xy
+    obtain ⟨i, hx, hy⟩ := directed_of (· <= ·) x.out.1 y.out.1
+    rw [← Hg x.out.1 i hx]; rw [← Hg y.out.1 i hy] at xy
+    rw [← Quotient.out_eq x]; rw [← Quotient.out_eq y]; rw [Quotient.eq_iff_equiv]; rw [equiv_iff G f hx hy]
+    exact (g i).injective xy
+  map_fun' F x := by
+    obtain ⟨i, y, rfl⟩ := exists_quotient_mk'_sigma_mk'_eq G f x
+    change _ = funMap F (Quotient.lift _ _ ∘ Quotient.mk _ ∘ Structure.Sigma.mk f i ∘ y)
+    rw [funMap_quotient_mk'_sigma_mk']; rw [← Function.comp_assoc]; rw [Quotient.lift_comp_mk]
+    simp only [Quotient.lift_mk, Embedding.map_fun]
+    rfl
+  map_rel' R x := by
+    obtain ⟨i, y, rfl⟩ := exists_quotient_mk'_sigma_mk'_eq G f x
+    change RelMap R (Quotient.lift _ _ ∘ Quotient.mk _ ∘ Structure.Sigma.mk f i ∘ y) ↔ _
+    rw [relMap_quotient_mk'_sigma_mk' G f]; rw [← (g i).map_rel R y]; rw [← Function.comp_assoc]; rw [Quotient.lift_comp_mk]
+    rfl
 
 中文:
 定义 lift
@@ -973,7 +1010,22 @@ definition lift
       rw [← Hg x.1 i hx]; rw [← Hg y.1 i hy]
       exact congr_arg _ ((equiv_iff ..).1 xy)
   inj' x y xy := by
-    rw [← Quotient.out_eq x]; rw [← Quotient.out_eq y]; rw [Quotient.li
+    rw [← Quotient.out_eq x]; rw [← Quotient.out_eq y]; rw [Quotient.lift_mk]; rw [Quotient.lift_mk] at xy
+    obtain ⟨i, hx, hy⟩ := directed_of (· <= ·) x.out.1 y.out.1
+    rw [← Hg x.out.1 i hx]; rw [← Hg y.out.1 i hy] at xy
+    rw [← Quotient.out_eq x]; rw [← Quotient.out_eq y]; rw [Quotient.eq_iff_equiv]; rw [equiv_iff G f hx hy]
+    exact (g i).injective xy
+  map_fun' F x := by
+    obtain ⟨i, y, rfl⟩ := exists_quotient_mk'_sigma_mk'_eq G f x
+    change _ = funMap F (Quotient.lift _ _ ∘ Quotient.mk _ ∘ Structure.Sigma.mk f i ∘ y)
+    rw [funMap_quotient_mk'_sigma_mk']; rw [← Function.comp_assoc]; rw [Quotient.lift_comp_mk]
+    simp only [Quotient.lift_mk, Embedding.map_fun]
+    rfl
+  map_rel' R x := by
+    obtain ⟨i, y, rfl⟩ := exists_quotient_mk'_sigma_mk'_eq G f x
+    change RelMap R (Quotient.lift _ _ ∘ Quotient.mk _ ∘ Structure.Sigma.mk f i ∘ y) ↔ _
+    rw [relMap_quotient_mk'_sigma_mk' G f]; rw [← (g i).map_rel R y]; rw [← Function.comp_assoc]; rw [Quotient.lift_comp_mk]
+    rfl
 
 Depends on / 依赖: Quotient, Quotient.eq_iff_equi, Quotient.lift, Quotient.lift_mk, Quotient.out_eq, congr_arg, directed_of, eq_iff_equi, equiv_iff, lift_mk, out_eq, x.out, y.out
 -/
@@ -1115,7 +1167,12 @@ let F : DirectLimit G f ↪[L] DirectLimit G' f' := lift L _ G f U by
     intro _ _ _ _
     simp only [U, Embedding.comp_apply, Equiv.coe_toEmbedding, H_commuting, of_f]
   have surj_f : Function.Surjective F := by
-   
+    intro x
+    rcases x with ⟨i, pre_x⟩
+    use of L _ G f i ((g i).symm pre_x)
+    simp only [F, U, lift_of, Embedding.comp_apply, Equiv.coe_toEmbedding, Equiv.apply_symm_apply]
+    rfl
+  exact ⟨Equiv.ofBijective F ⟨F.injective, surj_f⟩, F.map_fun', F.map_rel'⟩
 
 中文:
 定义 equiv_lift
@@ -1126,7 +1183,12 @@ let F : DirectLimit G f ↪[L] DirectLimit G' f' := lift L _ G f U by
     intro _ _ _ _
     simp only [U, Embedding.comp_apply, Equiv.coe_toEmbedding, H_commuting, of_f]
   have surj_f : Function.Surjective F := by
-   
+    intro x
+    rcases x with ⟨i, pre_x⟩
+    use of L _ G f i ((g i).symm pre_x)
+    simp only [F, U, lift_of, Embedding.comp_apply, Equiv.coe_toEmbedding, Equiv.apply_symm_apply]
+    rfl
+  exact ⟨Equiv.ofBijective F ⟨F.injective, surj_f⟩, F.map_fun', F.map_rel'⟩
 
 Depends on / 依赖: DirectLimit, Embedding, Embedding.comp_apply, Equiv.apply_symm_apply, Equiv.coe_toEmbedding, Equiv.ofBijective, F.injective, Function, Function.Surjective, H_commuting, Surjective, apply_symm_apply, coe_toEmbedding, comp_apply, injective, lift_of, ofBijective, of_f, pre_x, surj_f
 -/
@@ -1176,7 +1238,13 @@ theorem cg
   · exact Set.countable_iUnion fun i => Set.Countable.image (Classical.choose_spec (h i).out).1 _
   · rw [eq_top_iff, Substructure.closure_iUnion]
     simp_rw [← Embedding.coe_toHom, Substructure.closure_image]
-    r
+    rw [le_iSup_iff]
+    intro S hS x _
+    let out := Quotient.out (s := DirectLimit.setoid G f)
+    refine hS (out x).1 ⟨(out x).2, ?_, ?_⟩
+    · rw [(Classical.choose_spec (h (out x).1).out).2]
+      trivial
+    · simp only [out, Embedding.coe_toHom, DirectLimit.of_apply, Sigma.eta, Quotient.out_eq]
 
 中文:
 定理 cg
@@ -1186,7 +1254,13 @@ theorem cg
   · exact Set.countable_iUnion fun i => Set.Countable.image (Classical.choose_spec (h i).out).1 _
   · rw [eq_top_iff, Substructure.closure_iUnion]
     simp_rw [← Embedding.coe_toHom, Substructure.closure_image]
-    r
+    rw [le_iSup_iff]
+    intro S hS x _
+    let out := Quotient.out (s := DirectLimit.setoid G f)
+    refine hS (out x).1 ⟨(out x).2, ?_, ?_⟩
+    · rw [(Classical.choose_spec (h (out x).1).out).2]
+      trivial
+    · simp only [out, Embedding.coe_toHom, DirectLimit.of_apply, Sigma.eta, Quotient.out_eq]
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Countable, DirectLimit, DirectLimit.of, DirectLimit.setoid, Embedding, Embedding.co, Embedding.coe_toHom, Quotient, Quotient.out, Set.Countable.image, Set.countable_iUnion, Substructure, Substructure.closure_iUnion, Substructure.closure_image, choose_spec, closure_iUnion, closure_image
 -/
@@ -1325,7 +1399,11 @@ definition Equiv_iSup
     intro x; use x
   let F := Embedding.codRestrict (⨆ i, S i) _ liftInclusion_in_sup
   have F_surj : Function.Surjective F := by
-    rintro ⟨m, h
+    rintro ⟨m, hm⟩
+    rw [← rangeLiftInclusion]; rw [Hom.mem_range] at hm
+    rcases hm with ⟨a, _⟩; use a
+    simpa only [F, Embedding.codRestrict_apply', Subtype.mk.injEq]
+  exact ⟨Equiv.ofBijective F ⟨F.injective, F_surj⟩, F.map_fun', F.map_rel'⟩
 
 中文:
 定义 Equiv_iSup
@@ -1336,7 +1414,11 @@ definition Equiv_iSup
     intro x; use x
   let F := Embedding.codRestrict (⨆ i, S i) _ liftInclusion_in_sup
   have F_surj : Function.Surjective F := by
-    rintro ⟨m, h
+    rintro ⟨m, hm⟩
+    rw [← rangeLiftInclusion]; rw [Hom.mem_range] at hm
+    rcases hm with ⟨a, _⟩; use a
+    simpa only [F, Embedding.codRestrict_apply', Subtype.mk.injEq]
+  exact ⟨Equiv.ofBijective F ⟨F.injective, F_surj⟩, F.map_fun', F.map_rel'⟩
 
 Depends on / 依赖: Embedding, Embedding.codRestrict, Embedding.codRestrict_apply, Embedding.coe_toHom, Equiv.ofBijective, F.injective, F.map_fun, F.map_rel, F_surj, Function, Function.Surjective, Hom.mem_range, Subtype, Subtype.mk.injEq, Surjective, codRestrict, codRestrict_apply, coe_toHom, injective, liftInclusion
 -/

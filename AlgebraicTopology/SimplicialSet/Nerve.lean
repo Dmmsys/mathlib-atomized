@@ -680,7 +680,20 @@ lemma nonempty_compStruct_iff
         (by cat_disch) (by cat_disch) (by cat_disch)
   refine ⟨fun ⟨h⟩ => ?_, fun h => ⟨by rwa [← h]⟩⟩
   rw [← Arrow.mk_inj]
-  apply ComposableArrows.arrowEquiv.sym
+  apply ComposableArrows.arrowEquiv.symm.injective
+  convert_to! (nerve C).δ 1 h'.simplex = (nerve C).δ 1 h.simplex
+  · exact (h'.d₁).symm
+  · exact (h.d₁).symm
+  · have h₀ := h.d₀
+    have h₂ := h.d₂
+    have h'₀ := h'.d₀
+    have h'₂ := h'.d₂
+    simp only [δ₂_zero, δ₂_two, edgeMk_edge] at h₀ h₂ h'₀ h'₂
+    exact congr_arg _ (ComposableArrows.ext₂_of_arrow
+      (ComposableArrows.arrowEquiv.symm.injective
+        (by simp [-Edge.CompStruct.d₂, h'₂, ← h₂]))
+      (ComposableArrows.arrowEquiv.symm.injective
+        (by simp [-Edge.CompStruct.d₀, h'₀, ← h₀])))
 
 中文:
 引理 nonempty_compStruct_iff
@@ -691,7 +704,20 @@ lemma nonempty_compStruct_iff
         (by cat_disch) (by cat_disch) (by cat_disch)
   refine ⟨fun ⟨h⟩ => ?_, fun h => ⟨by rwa [← h]⟩⟩
   rw [← Arrow.mk_inj]
-  apply ComposableArrows.arrowEquiv.sym
+  apply ComposableArrows.arrowEquiv.symm.injective
+  convert_to! (nerve C).δ 1 h'.simplex = (nerve C).δ 1 h.simplex
+  · exact (h'.d₁).symm
+  · exact (h.d₁).symm
+  · have h₀ := h.d₀
+    have h₂ := h.d₂
+    have h'₀ := h'.d₀
+    have h'₂ := h'.d₂
+    simp only [δ₂_zero, δ₂_two, edgeMk_edge] at h₀ h₂ h'₀ h'₂
+    exact congr_arg _ (ComposableArrows.ext₂_of_arrow
+      (ComposableArrows.arrowEquiv.symm.injective
+        (by simp [-Edge.CompStruct.d₂, h'₂, ← h₂]))
+      (ComposableArrows.arrowEquiv.symm.injective
+        (by simp [-Edge.CompStruct.d₀, h'₀, ← h₀])))
 
 Depends on / 依赖: Arrow.mk_inj, CompStruct, ComposableArrows, ComposableArrows.arrowEquiv.symm.injective, ComposableArrows.mk, Edge.CompStruct, Edge.CompStruct.mk, arrowEquiv, cat_disch, convert_to, edgeMk, edgeMk_e, h.simplex, injective, mk_inj, simplex
 -/
@@ -732,7 +758,7 @@ lemma homEquiv_comp
   obtain ⟨f₀₁, rfl⟩ := edgeMk_surjective e₀₁
   obtain ⟨f₁₂, rfl⟩ := edgeMk_surjective e₁₂
   obtain ⟨f₀₂, rfl⟩ := edgeMk_surjective e₀₂
-  conv
+  convert! (nerve.nonempty_compStruct_iff _ _ _).1 ⟨h⟩ <;> apply homEquiv_edgeMk
 
 中文:
 引理 homEquiv_comp
@@ -744,7 +770,7 @@ lemma homEquiv_comp
   obtain ⟨f₀₁, rfl⟩ := edgeMk_surjective e₀₁
   obtain ⟨f₁₂, rfl⟩ := edgeMk_surjective e₁₂
   obtain ⟨f₀₂, rfl⟩ := edgeMk_surjective e₀₂
-  conv
+  convert! (nerve.nonempty_compStruct_iff _ _ _).1 ⟨h⟩ <;> apply homEquiv_edgeMk
 
 Depends on / 依赖: convert, edgeMk_surjective, homEquiv_edgeMk, nerve.nonempty_compStruct_iff, nerveEquiv, nerveEquiv.symm.surjective, nonempty_compStruct_iff, surjective
 -/

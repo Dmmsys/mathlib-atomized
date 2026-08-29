@@ -145,7 +145,13 @@ lemma ιMultiDual_apply_nondiag
   obtain ⟨i, his, hit⟩ := (exists_mem_notMem_iff_ne s t).mp hst
   obtain ⟨k, rfl⟩ := (mem_range_ofFinEmbEquiv_symm_iff_mem s i).mpr his
   apply Matrix.det_eq_zero_of_column_eq_zero k
-  simp_rw [Matrix.of_apply, Basis.coord_apply, Function.comp_ap
+  simp_rw [Matrix.of_apply, Basis.coord_apply, Function.comp_apply, Basis.repr_self]
+  intro j
+  apply Finsupp.single_eq_of_ne
+  by_contra! h
+  apply hit
+  rw [h]; rw [powersetCard.ofFinEmbEquiv_symm_apply]; rw [← powersetCard.mem_coe_iff]
+  exact Finset.orderEmbOfFin_mem t.val t.prop j
 
 中文:
 引理 ιMultiDual_apply_nondiag
@@ -155,7 +161,13 @@ lemma ιMultiDual_apply_nondiag
   obtain ⟨i, his, hit⟩ := (exists_mem_notMem_iff_ne s t).mp hst
   obtain ⟨k, rfl⟩ := (mem_range_ofFinEmbEquiv_symm_iff_mem s i).mpr his
   apply Matrix.det_eq_zero_of_column_eq_zero k
-  simp_rw [Matrix.of_apply, Basis.coord_apply, Function.comp_ap
+  simp_rw [Matrix.of_apply, Basis.coord_apply, Function.comp_apply, Basis.repr_self]
+  intro j
+  apply Finsupp.single_eq_of_ne
+  by_contra! h
+  apply hit
+  rw [h]; rw [powersetCard.ofFinEmbEquiv_symm_apply]; rw [← powersetCard.mem_coe_iff]
+  exact Finset.orderEmbOfFin_mem t.val t.prop j
 
 Depends on / 依赖: Basis.coord_apply, Basis.repr_self, Finset, Finset.orderEmbOfFin_mem, Finsupp, Finsupp.single_eq_of_ne, Function, Function.comp_apply, Matrix, Matrix.det_eq_zero_of_column_eq_zero, Matrix.of_apply, comp_apply, coord_apply, det_eq_zero_of_column_eq_zero, exists_mem_notMem_iff_ne, mem_coe_iff, mem_range_ofFinEmbEquiv_symm_iff_mem, ofFinEmbEquiv_symm_apply, of_apply, orderEmbOfFin_mem
 -/
@@ -279,7 +291,8 @@ lemma basis_coord
   rw [Basis.coord_apply]
   by_cases! hst : s = t
   · rw [hst, ιMultiDual_apply_diag, ← basis_apply, Basis.repr_self, Finsupp.single_eq_same]
-  · rw [ιMultiDual_apply_nondiag R n b s t hst, ← basis_apply,
+  · rw [ιMultiDual_apply_nondiag R n b s t hst, ← basis_apply, Basis.repr_self,
+      Finsupp.single_eq_of_ne hst]
 
 中文:
 引理 basis_coord
@@ -290,7 +303,8 @@ lemma basis_coord
   rw [Basis.coord_apply]
   by_cases! hst : s = t
   · rw [hst, ιMultiDual_apply_diag, ← basis_apply, Basis.repr_self, Finsupp.single_eq_same]
-  · rw [ιMultiDual_apply_nondiag R n b s t hst, ← basis_apply,
+  · rw [ιMultiDual_apply_nondiag R n b s t hst, ← basis_apply, Basis.repr_self,
+      Finsupp.single_eq_of_ne hst]
 
 Depends on / 依赖: Basis.coord_apply, Basis.repr_self, Basis.span_eq, Finsupp, Finsupp.single_eq_of_ne, Finsupp.single_eq_same, LinearMap, LinearMap.ext_on, basis_apply, coord_apply, ext_on, repr_self, single_eq_of_ne, single_eq_same, span_eq
 -/
@@ -444,7 +458,7 @@ lemma finrank_eq
   classical
   let : LinearOrder (Module.Free.ChooseBasisIndex R M) := linearOrderOfSTO WellOrderingRel
   let B := (Module.Free.chooseBasis R M).exteriorPower n
-  rw [Module.finrank_eq_card_basis (Module.Free.chooseBasis R M)]; rw [Module.finrank_eq_card_basis B]; rw [Fintype.card_eq_nat_card]; rw
+  rw [Module.finrank_eq_card_basis (Module.Free.chooseBasis R M)]; rw [Module.finrank_eq_card_basis B]; rw [Fintype.card_eq_nat_card]; rw [powersetCard.card]; rw [Fintype.card_eq_nat_card]
 
 中文:
 引理 finrank_eq
@@ -453,7 +467,7 @@ lemma finrank_eq
   classical
   let : LinearOrder (Module.Free.ChooseBasisIndex R M) := linearOrderOfSTO WellOrderingRel
   let B := (Module.Free.chooseBasis R M).exteriorPower n
-  rw [Module.finrank_eq_card_basis (Module.Free.chooseBasis R M)]; rw [Module.finrank_eq_card_basis B]; rw [Fintype.card_eq_nat_card]; rw
+  rw [Module.finrank_eq_card_basis (Module.Free.chooseBasis R M)]; rw [Module.finrank_eq_card_basis B]; rw [Fintype.card_eq_nat_card]; rw [powersetCard.card]; rw [Fintype.card_eq_nat_card]
 
 Depends on / 依赖: ChooseBasisIndex, Fintype, Fintype.card_eq_nat_card, LinearOrder, Module, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, Module.finrank_eq_card_basis, WellOrderingRel, card_eq_nat_card, chooseBasis, classical, exteriorPower, finrank_eq_card_basis, linearOrderOfSTO, powersetCard, powersetCard.card
 -/
@@ -478,7 +492,10 @@ lemma ιMulti_family_linearIndependent_field
     obtain ⟨b, hb⟩ := this
     rw [hb]; rw [← map_comp_ιMulti_family]
     exact LinearIndependent.map' (coe_basis K n b ▸ (b.exteriorPower n).linearIndependent)
-      _ (LinearMap.ker_eq_bot.mpr (map
+      _ (LinearMap.ker_eq_bot.mpr (map_injective_field (Submodule.subtype_injective _)))
+  use Module.Basis.span hv
+  ext i
+  rw [Submodule.coe_subtype]; rw [Function.comp_apply]; rw [Basis.span_apply]
 
 中文:
 引理 ιMulti_family_linearIndependent_field
@@ -489,7 +506,10 @@ lemma ιMulti_family_linearIndependent_field
     obtain ⟨b, hb⟩ := this
     rw [hb]; rw [← map_comp_ιMulti_family]
     exact LinearIndependent.map' (coe_basis K n b ▸ (b.exteriorPower n).linearIndependent)
-      _ (LinearMap.ker_eq_bot.mpr (map
+      _ (LinearMap.ker_eq_bot.mpr (map_injective_field (Submodule.subtype_injective _)))
+  use Module.Basis.span hv
+  ext i
+  rw [Submodule.coe_subtype]; rw [Function.comp_apply]; rw [Basis.span_apply]
 
 Depends on / 依赖: Basis.span_apply, Function, Function.comp_apply, LinearIndependent, LinearIndependent.map, LinearMap, LinearMap.ker_eq_bot.mpr, Module, Module.Basis.span, Set.range, Submodule, Submodule.coe_subtype, Submodule.span, Submodule.subtype_injective, W.subtype, b.exteriorPower, coe_basis, coe_subtype, comp_apply, exteriorPower
 -/

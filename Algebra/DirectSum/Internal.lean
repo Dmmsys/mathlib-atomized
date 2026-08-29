@@ -442,7 +442,7 @@ theorem coe_of_mul_apply_aux
     simp_rw [DFinsupp.sum, H, Finset.sum_ite_eq']
     split_ifs with h
     · rfl
-    rw [DFinsupp.notMem
+    rw [DFinsupp.notMem_support_iff.mp h]; rw [ZeroMemClass.coe_zero]; rw [mul_zero]
 
 中文:
 定理 coe_of_mul_apply_aux
@@ -457,7 +457,7 @@ theorem coe_of_mul_apply_aux
     simp_rw [DFinsupp.sum, H, Finset.sum_ite_eq']
     split_ifs with h
     · rfl
-    rw [DFinsupp.notMem
+    rw [DFinsupp.notMem_support_iff.mp h]; rw [ZeroMemClass.coe_zero]; rw [mul_zero]
 
 Depends on / 依赖: DFinsupp, DFinsupp.notMem_support_iff.mp, DFinsupp.sum, DFinsupp.sum_single_index, DFinsupp.sum_zero, Finset, Finset.sum_ite_eq, ZeroMemClass, ZeroMemClass.coe_zero, classical, coe_mul_apply_eq_dfinsuppSum, coe_zero, ite_self, mul_zero, notMem_support_iff, simp_rw, split_ifs, sum_ite_eq, sum_single_index, sum_zero
 -/
@@ -492,6 +492,7 @@ theorem coe_mul_of_apply_aux
     simp_rw [DFinsupp.sum, H, Finset.sum_ite_eq']
     split_ifs with h
     · rfl
+    rw [DFinsupp.notMem_support_iff.mp h]; rw [ZeroMemClass.coe_zero]; rw [zero_mul]
 
 中文:
 定理 coe_mul_of_apply_aux
@@ -506,6 +507,7 @@ theorem coe_mul_of_apply_aux
     simp_rw [DFinsupp.sum, H, Finset.sum_ite_eq']
     split_ifs with h
     · rfl
+    rw [DFinsupp.notMem_support_iff.mp h]; rw [ZeroMemClass.coe_zero]; rw [zero_mul]
 
 Depends on / 依赖: DFinsupp, DFinsupp.notMem_support_iff.mp, DFinsupp.sum, DFinsupp.sum_comm, DFinsupp.sum_single_index, DFinsupp.sum_zero, Finset, Finset.sum_ite_eq, ZeroMemClass, ZeroMemClass.coe_zero, classical, coe_mul_apply_eq_dfinsuppSum, coe_zero, ite_self, mul_zero, notMem_support_iff, simp_rw, split_ifs, sum_comm, sum_ite_eq
 -/
@@ -621,7 +623,7 @@ theorem coe_of_mul_apply_of_not_le
     · simp_rw [ZeroMemClass.coe_zero, zero_mul, ite_self]
       exact DFinsupp.sum_zero
     · rw [DFinsupp.sum, Finset.sum_ite_of_false, Finset.sum_const_zero]
-      exact fun x _ H => h ((sel
+      exact fun x _ H => h ((self_le_add_right i x).trans_eq H)
 
 中文:
 定理 coe_of_mul_apply_of_not_le
@@ -634,7 +636,7 @@ theorem coe_of_mul_apply_of_not_le
     · simp_rw [ZeroMemClass.coe_zero, zero_mul, ite_self]
       exact DFinsupp.sum_zero
     · rw [DFinsupp.sum, Finset.sum_ite_of_false, Finset.sum_const_zero]
-      exact fun x _ H => h ((sel
+      exact fun x _ H => h ((self_le_add_right i x).trans_eq H)
 
 Depends on / 依赖: Aux_stable_step_of_terminated, DFinsupp, DFinsupp.sum, DFinsupp.sum_single_index, DFinsupp.sum_zero, Finset, Finset.sum_const_zero, Finset.sum_ite_of_false, ZeroMemClass, ZeroMemClass.coe_zero, classical, coe_mul_apply_eq_dfinsuppSum, coe_zero, ite_self, n_le_m, s.terminated_stable, self_le_add_right, simp_rw, sum_const_zero, sum_ite_of_false
 -/
@@ -664,7 +666,7 @@ theorem coe_mul_of_apply_of_not_le
     · simp_rw [ZeroMemClass.coe_zero, mul_zero, ite_self]
       exact DFinsupp.sum_zero
     · rw [DFinsupp.sum, Finset.sum_ite_of_false, Finset.sum_const_zero]
-      ex
+      exact fun x _ H => h ((self_le_add_left i x).trans_eq H)
 
 中文:
 定理 coe_mul_of_apply_of_not_le
@@ -677,7 +679,7 @@ theorem coe_mul_of_apply_of_not_le
     · simp_rw [ZeroMemClass.coe_zero, mul_zero, ite_self]
       exact DFinsupp.sum_zero
     · rw [DFinsupp.sum, Finset.sum_ite_of_false, Finset.sum_const_zero]
-      ex
+      exact fun x _ H => h ((self_le_add_left i x).trans_eq H)
 
 Depends on / 依赖: DFinsupp, DFinsupp.sum, DFinsupp.sum_comm, DFinsupp.sum_single_index, DFinsupp.sum_zero, Finset, Finset.sum_const_zero, Finset.sum_ite_of_false, ZeroMemClass, ZeroMemClass.coe_zero, classical, coe_mul_apply_eq_dfinsuppSum, coe_zero, ite_self, mul_zero, self_le_add_left, simp_rw, sum_comm, sum_const_zero, sum_ite_of_false
 -/
@@ -799,7 +801,10 @@ instance galgebra
 map_one := Subtype.ext (algebraMap S R).map_one
 map_mul _x _y := Sigma.subtype_ext (add_zero 0).symm (algebraMap S R).map_mul _ _
   commutes := fun _r ⟨i, _xi⟩ =>
-Sigma.subtype_ext ((zero_add i).trans (add_
+Sigma.subtype_ext ((zero_add i).trans (add_zero i).symm) Algebra.commutes _ _
+smul_def := fun _r ⟨i, _xi⟩ => Sigma.subtype_ext (zero_add i).symm Algebra.smul_def _ _
+
+@[simp]
 
 中文:
 实例 galgebra
@@ -808,7 +813,10 @@ Sigma.subtype_ext ((zero_add i).trans (add_
 map_one := Subtype.ext (algebraMap S R).map_one
 map_mul _x _y := Sigma.subtype_ext (add_zero 0).symm (algebraMap S R).map_mul _ _
   commutes := fun _r ⟨i, _xi⟩ =>
-Sigma.subtype_ext ((zero_add i).trans (add_
+Sigma.subtype_ext ((zero_add i).trans (add_zero i).symm) Algebra.commutes _ _
+smul_def := fun _r ⟨i, _xi⟩ => Sigma.subtype_ext (zero_add i).symm Algebra.smul_def _ _
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.commutes, Algebra.linearMap, Algebra.smul_def, SetLike, SetLike.algebraMap_mem_graded, Sigma.subtype_ext, Subtype, Subtype.ext, add_zero, algebraMap, algebraMap_mem_graded, codRestrict, commutes, linearMap, map_mul, map_one, smul_def, subtype_ext, toAddMonoidHom
 -/
@@ -1306,7 +1314,7 @@ theorem mul_apply_eq_zero
     by_contra! ⟨hm, hn⟩
     obtain rfl : x.1 + x.2 = k := by simp_all
 apply lt_irrefl (m + n) lt_of_le_of_lt (by gcongr) hk
-  a
+  all_goals simp [hr, hr', hx]
 
 中文:
 定理 mul_apply_eq_zero
@@ -1319,7 +1327,7 @@ apply lt_irrefl (m + n) lt_of_le_of_lt (by gcongr) hk
     by_contra! ⟨hm, hn⟩
     obtain rfl : x.1 + x.2 = k := by simp_all
 apply lt_irrefl (m + n) lt_of_le_of_lt (by gcongr) hk
-  a
+  all_goals simp [hr, hr', hx]
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, Subtype, Subtype.ext_iff, ZeroMemClass, ZeroMemClass.coe_zero, all_goals, classical, coe_mul_apply, coe_zero, ext_iff, lt_irrefl, lt_of_le_of_lt, sum_eq_zero
 -/
@@ -1386,7 +1394,8 @@ theorem listProd_apply_eq_zero
   | nil => simp at hn
   | cons head tail ih =>
     simp only [List.mem_cons, forall_eq_or_imp, List.length_cons, List.prod_cons] at hl hn ⊢
-    refine mul_apply_eq_zero hl.1 (ih hl.
+    refine mul_apply_eq_zero hl.1 (ih hl.2) ?_
+    simpa [add_smul, add_comm m] using hn
 
 中文:
 定理 listProd_apply_eq_zero
@@ -1397,7 +1406,8 @@ theorem listProd_apply_eq_zero
   | nil => simp at hn
   | cons head tail ih =>
     simp only [List.mem_cons, forall_eq_or_imp, List.length_cons, List.prod_cons] at hl hn ⊢
-    refine mul_apply_eq_zero hl.1 (ih hl.
+    refine mul_apply_eq_zero hl.1 (ih hl.2) ?_
+    simpa [add_smul, add_comm m] using hn
 -/
 theorem listProd_apply_eq_zero {l : List (⨁ i, A i)} {m : ι}
     (hl : forall x in l, forall k < m, x k = 0) ⦃n : ι⦄ (hn : n < l.length • m) :

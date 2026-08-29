@@ -2002,7 +2002,9 @@ definition subtypeEquivSubtypePerm
     (f : Perm α).subtypePerm fun _ =>
       ⟨Decidable.not_imp_not.1 fun hfa => (f.prop _ hfa).symm ▸ hfa,
 Decidable.not_imp_not.1 fun hfa ha => hfa f.val.injective (f.prop _ hfa).symm ▸ ha⟩
-  left_inv := Equiv.Perm.subtypePerm_ofSub
+  left_inv := Equiv.Perm.subtypePerm_ofSubtype
+  right_inv f :=
+    Subtype.ext ((Equiv.Perm.ofSubtype_subtypePerm _) fun a => Not.decidable_imp_symm <| f.prop a)
 
 中文:
 定义 subtypeEquivSubtypePerm
@@ -2012,7 +2014,9 @@ Decidable.not_imp_not.1 fun hfa ha => hfa f.val.injective (f.prop _ hfa).symm �
     (f : Perm α).subtypePerm fun _ =>
       ⟨Decidable.not_imp_not.1 fun hfa => (f.prop _ hfa).symm ▸ hfa,
 Decidable.not_imp_not.1 fun hfa ha => hfa f.val.injective (f.prop _ hfa).symm ▸ ha⟩
-  left_inv := Equiv.Perm.subtypePerm_ofSub
+  left_inv := Equiv.Perm.subtypePerm_ofSubtype
+  right_inv f :=
+    Subtype.ext ((Equiv.Perm.ofSubtype_subtypePerm _) fun a => Not.decidable_imp_symm <| f.prop a)
 -/
 protected def subtypeEquivSubtypePerm (p : α -> Prop) [DecidablePred p] :
     Perm (Subtype p) ≃ { f : Perm α // forall a, ¬p a -> f a = a } where
@@ -3205,7 +3209,9 @@ definition toPerm
 @[deprecated (since := "2026-05-26")] alias conj := addConj
 @[deprecated (since := "2026-05-26")] alias conj_apply := addConj_apply
 @[deprecated (since := "2026-05-26")] alias conj_symm_apply := addConj_symm_apply
-@[deprecated (since := "202
+@[deprecated (since := "2026-05-26")] alias conj_inv_apply := addConj_neg_apply
+
+@[deprecated "use `addConj_neg_apply` instead" (since := "2026-05-26")]
 
 中文:
 定义 toPerm
@@ -3217,7 +3223,9 @@ definition toPerm
 @[deprecated (since := "2026-05-26")] alias conj := addConj
 @[deprecated (since := "2026-05-26")] alias conj_apply := addConj_apply
 @[deprecated (since := "2026-05-26")] alias conj_symm_apply := addConj_symm_apply
-@[deprecated (since := "202
+@[deprecated (since := "2026-05-26")] alias conj_inv_apply := addConj_neg_apply
+
+@[deprecated "use `addConj_neg_apply` instead" (since := "2026-05-26")]
 
 Depends on / 依赖: AddEquiv, AddEquiv.toEquiv, toEquiv
 -/

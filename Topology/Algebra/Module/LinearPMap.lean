@@ -131,7 +131,7 @@ theorem IsClosable.leIsClosable
     exact Submodule.topologicalClosure_mono (le_graph_of_le hfg)
   use g.graph.topologicalClosure.toLinearPMap
   rw [Submodule.toLinearPMap_graph_eq]
-  exact fun _ hx hx' => f'.graph_fst_eq_zero_snd (this 
+  exact fun _ hx hx' => f'.graph_fst_eq_zero_snd (this hx) hx'
 
 中文:
 定理 IsClosable.leIsClosable
@@ -143,7 +143,7 @@ theorem IsClosable.leIsClosable
     exact Submodule.topologicalClosure_mono (le_graph_of_le hfg)
   use g.graph.topologicalClosure.toLinearPMap
   rw [Submodule.toLinearPMap_graph_eq]
-  exact fun _ hx hx' => f'.graph_fst_eq_zero_snd (this 
+  exact fun _ hx hx' => f'.graph_fst_eq_zero_snd (this hx) hx'
 
 Depends on / 依赖: Submodule, Submodule.toLinearPMap_graph_eq, Submodule.topologicalClosure_mono, g.graph.topologicalClosure, g.graph.topologicalClosure.toLinearPMap, graph_fst_eq_zero_snd, le_graph_of_le, toLinearPMap, toLinearPMap_graph_eq, topologicalClosure, topologicalClosure_mono
 -/
@@ -454,7 +454,7 @@ theorem closureHasCore
   let z : f.closure.domain := ⟨x, f.le_closure.1 h2⟩
   have hyz : x = z := rfl
   rw [f.le_closure.2 hyz]
-  exact domRestrict_app
+  exact domRestrict_apply hyz
 
 中文:
 定理 closureHasCore
@@ -470,7 +470,7 @@ theorem closureHasCore
   let z : f.closure.domain := ⟨x, f.le_closure.1 h2⟩
   have hyz : x = z := rfl
   rw [f.le_closure.2 hyz]
-  exact domRestrict_app
+  exact domRestrict_apply hyz
 
 Depends on / 依赖: Submodule, Submodule.mem_inf, and_iff_left_iff_imp, closure, domRestrict_apply, domRestrict_domain, domain, f.closure.domain, f.le_closure, le_closure, mem_inf
 -/
@@ -534,7 +534,12 @@ theorem closure_inverse_graph
   apply SetLike.ext'
   simp only [Submodule.topologicalClosure_coe, Submodule.map_coe, LinearEquiv.coe_coe,
     LinearEquiv.prodComm_apply]
-  apply (image_closure_subset_closure_image continuous_swap).antis
+  apply (image_closure_subset_closure_image continuous_swap).antisymm
+  have h1 := (LinearEquiv.prodComm R E F).toEquiv.image_eq_preimage_symm f.graph
+  have h2 := (LinearEquiv.prodComm R E F).toEquiv.image_eq_preimage_symm (_root_.closure f.graph)
+  simp only [LinearEquiv.coe_toEquiv, LinearEquiv.prodComm_apply] at h1 h2
+  rw [h1]; rw [h2]
+  apply continuous_swap.closure_preimage_subset
 
 中文:
 定理 closure_inverse_graph
@@ -544,7 +549,12 @@ theorem closure_inverse_graph
   apply SetLike.ext'
   simp only [Submodule.topologicalClosure_coe, Submodule.map_coe, LinearEquiv.coe_coe,
     LinearEquiv.prodComm_apply]
-  apply (image_closure_subset_closure_image continuous_swap).antis
+  apply (image_closure_subset_closure_image continuous_swap).antisymm
+  have h1 := (LinearEquiv.prodComm R E F).toEquiv.image_eq_preimage_symm f.graph
+  have h2 := (LinearEquiv.prodComm R E F).toEquiv.image_eq_preimage_symm (_root_.closure f.graph)
+  simp only [LinearEquiv.coe_toEquiv, LinearEquiv.prodComm_apply] at h1 h2
+  rw [h1]; rw [h2]
+  apply continuous_swap.closure_preimage_subset
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.coe_toEqui, LinearEquiv.prodComm, LinearEquiv.prodComm_apply, SetLike, SetLike.ext, Submodule, Submodule.map_coe, Submodule.topologicalClosure_coe, _root_, _root_.closure, antisymm, closure, coe_coe, coe_toEqui, continuous_swap, f.graph, graph_closure_eq_closure_graph, image_closure_subset_closure_image
 -/
@@ -577,7 +587,14 @@ theorem inverse_isClosable_iff
     rw [toFun_eq_coe]; rw [eq_comm]; rw [image_iff] at hx'
     have : (0, x) in graph f' := by
       rw [← h]; rw [inverse_graph hf]
-      rw [← hf'.graph_closure_eq_closure_g
+      rw [← hf'.graph_closure_eq_closure_graph]; rw [← SetLike.mem_coe]; rw [Submodule.topologicalClosure_coe] at hx'
+      apply image_closure_subset_closure_image continuous_swap
+      simp only [Set.mem_image, Prod.exists, Prod.swap_prod_mk, Prod.mk.injEq]
+      exact ⟨x, 0, hx', rfl, rfl⟩
+    exact graph_fst_eq_zero_snd f' this rfl
+  · intro h
+    use f.closure.inverse
+    exact (closure_inverse_graph hf hf' h).symm
 
 中文:
 定理 inverse_isClosable_iff
@@ -591,7 +608,14 @@ theorem inverse_isClosable_iff
     rw [toFun_eq_coe]; rw [eq_comm]; rw [image_iff] at hx'
     have : (0, x) in graph f' := by
       rw [← h]; rw [inverse_graph hf]
-      rw [← hf'.graph_closure_eq_closure_g
+      rw [← hf'.graph_closure_eq_closure_graph]; rw [← SetLike.mem_coe]; rw [Submodule.topologicalClosure_coe] at hx'
+      apply image_closure_subset_closure_image continuous_swap
+      simp only [Set.mem_image, Prod.exists, Prod.swap_prod_mk, Prod.mk.injEq]
+      exact ⟨x, 0, hx', rfl, rfl⟩
+    exact graph_fst_eq_zero_snd f' this rfl
+  · intro h
+    use f.closure.inverse
+    exact (closure_inverse_graph hf hf' h).symm
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot, Prod.exists, Prod.mk.injEq, Prod.swap_prod_mk, Set.mem_image, SetLike, SetLike.mem_coe, Submodule, Submodule.mk_eq_zero, Submodule.topologicalClosure_coe, continuous_swap, eq_comm, graph_closure_eq_closure_graph, image_closure_subset_closure_image, image_iff, inverse_graph, ker_eq_bot, mem_coe, mem_image
 -/

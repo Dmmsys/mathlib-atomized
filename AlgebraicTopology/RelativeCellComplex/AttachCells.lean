@@ -121,7 +121,7 @@ lemma pushouts_coproducts
       (Cocone.mk _ (Discrete.natTrans (fun ⟨i⟩ => by exact g (c.π i)) ≫ c.cofan₂.ι)) :=
     c.isColimit₁.hom_ext (fun ⟨i⟩ => by rw [IsColimit.fac]; exact c.hm i)
   rw [this]; rw [coproducts_iff]
-  exact ⟨c.ι, ⟨_, _, _, _, 
+  exact ⟨c.ι, ⟨_, _, _, _, c.isColimit₁, c.isColimit₂, _, fun i => ⟨_⟩⟩⟩
 
 中文:
 引理 pushouts_coproducts
@@ -132,7 +132,7 @@ lemma pushouts_coproducts
       (Cocone.mk _ (Discrete.natTrans (fun ⟨i⟩ => by exact g (c.π i)) ≫ c.cofan₂.ι)) :=
     c.isColimit₁.hom_ext (fun ⟨i⟩ => by rw [IsColimit.fac]; exact c.hm i)
   rw [this]; rw [coproducts_iff]
-  exact ⟨c.ι, ⟨_, _, _, _, 
+  exact ⟨c.ι, ⟨_, _, _, _, c.isColimit₁, c.isColimit₂, _, fun i => ⟨_⟩⟩⟩
 
 Depends on / 依赖: Cocone, Cocone.mk, Discrete, Discrete.natTrans, IsColimit, IsColimit.fac, c.cofan, c.hm, c.isColimit, c.isPushout, coproducts_iff, hom_ext, isPushout, natTrans
 -/
@@ -233,7 +233,7 @@ definition ofArrowIso
   g₂ := c.g₂ ≫ Arrow.rightFunc.map e.hom
   isPushout :=
     c.isPushout.of_iso (Iso.refl _) (Arrow.leftFunc.mapIso e) (Iso.refl _)
-   
+      (Arrow.rightFunc.mapIso e) (by simp) (by simp) (by simp) (by simp)
 
 中文:
 定义 ofArrowIso
@@ -249,7 +249,7 @@ definition ofArrowIso
   g₂ := c.g₂ ≫ Arrow.rightFunc.map e.hom
   isPushout :=
     c.isPushout.of_iso (Iso.refl _) (Arrow.leftFunc.mapIso e) (Iso.refl _)
-   
+      (Arrow.rightFunc.mapIso e) (by simp) (by simp) (by simp) (by simp)
 -/
 def ofArrowIso {Y₁ Y₂ : C} {f' : Y₁ ⟶ Y₂} (e : Arrow.mk f ≅ Arrow.mk f') :
     AttachCells.{w} g f' where
@@ -280,7 +280,12 @@ definition reindex
   cofan₁ := Cofan.mk c.cofan₁.pt (fun i' => c.cofan₁.inj (e i'))
   cofan₂ := Cofan.mk c.cofan₂.pt (fun i' => c.cofan₂.inj (e i'))
   isColimit₁ := IsColimit.whiskerEquivalence (c.isColimit₁) (Discrete.equivalence e)
-  isColimit₂ := IsColimit.whiskerEquivalence (c.isColimit₂) (
+  isColimit₂ := IsColimit.whiskerEquivalence (c.isColimit₂) (Discrete.equivalence e)
+  m := c.m
+  g₁ := c.g₁
+  g₂ := c.g₂
+  hm i' := c.hm (e i')
+  isPushout := c.isPushout
 
 中文:
 定义 reindex
@@ -290,7 +295,12 @@ definition reindex
   cofan₁ := Cofan.mk c.cofan₁.pt (fun i' => c.cofan₁.inj (e i'))
   cofan₂ := Cofan.mk c.cofan₂.pt (fun i' => c.cofan₂.inj (e i'))
   isColimit₁ := IsColimit.whiskerEquivalence (c.isColimit₁) (Discrete.equivalence e)
-  isColimit₂ := IsColimit.whiskerEquivalence (c.isColimit₂) (
+  isColimit₂ := IsColimit.whiskerEquivalence (c.isColimit₂) (Discrete.equivalence e)
+  m := c.m
+  g₁ := c.g₁
+  g₂ := c.g₂
+  hm i' := c.hm (e i')
+  isPushout := c.isPushout
 -/
 def reindex {ι' : Type w'} (e : ι' ≃ c.ι) :
     AttachCells.{w'} g f where
@@ -326,7 +336,22 @@ definition reindexCellTypes
     (fun i => Arrow.rightFunc.map (ha (c.π i)).inv ≫ c.cofan₂.inj i)
   isColimit₁ := by
     let e : Discrete.functor (fun i => A (c.π i)) ≅
-       
+        Discrete.functor (fun i => A' (a (c.π i))) :=
+      Discrete.natIso (fun ⟨i⟩ => Arrow.leftFunc.mapIso (ha (c.π i)))
+    refine (IsColimit.precomposeHomEquiv e _).1
+      (IsColimit.ofIsoColimit c.isColimit₁ (Cofan.ext (Iso.refl _) (fun i => ?_)))
+    simp [Cocone.precompose, e, Cofan.inj]
+  isColimit₂ := by
+    let e : Discrete.functor (fun i => B (c.π i)) ≅
+        Discrete.functor (fun i => B' (a (c.π i))) :=
+      Discrete.natIso (fun ⟨i⟩ => Arrow.rightFunc.mapIso (ha (c.π i)))
+    refine (IsColimit.precomposeHomEquiv e _).1
+      (IsColimit.ofIsoColimit c.isColimit₂ (Cofan.ext (Iso.refl _) (fun i => ?_)))
+    simp [Cocone.precompose, e, Cofan.inj]
+  m := c.m
+  g₁ := c.g₁
+  g₂ := c.g₂
+  isPushout := c.isPushout
 
 中文:
 定义 reindexCellTypes
@@ -339,7 +364,22 @@ definition reindexCellTypes
     (fun i => Arrow.rightFunc.map (ha (c.π i)).inv ≫ c.cofan₂.inj i)
   isColimit₁ := by
     let e : Discrete.functor (fun i => A (c.π i)) ≅
-       
+        Discrete.functor (fun i => A' (a (c.π i))) :=
+      Discrete.natIso (fun ⟨i⟩ => Arrow.leftFunc.mapIso (ha (c.π i)))
+    refine (IsColimit.precomposeHomEquiv e _).1
+      (IsColimit.ofIsoColimit c.isColimit₁ (Cofan.ext (Iso.refl _) (fun i => ?_)))
+    simp [Cocone.precompose, e, Cofan.inj]
+  isColimit₂ := by
+    let e : Discrete.functor (fun i => B (c.π i)) ≅
+        Discrete.functor (fun i => B' (a (c.π i))) :=
+      Discrete.natIso (fun ⟨i⟩ => Arrow.rightFunc.mapIso (ha (c.π i)))
+    refine (IsColimit.precomposeHomEquiv e _).1
+      (IsColimit.ofIsoColimit c.isColimit₂ (Cofan.ext (Iso.refl _) (fun i => ?_)))
+    simp [Cocone.precompose, e, Cofan.inj]
+  m := c.m
+  g₁ := c.g₁
+  g₂ := c.g₂
+  isPushout := c.isPushout
 -/
 def reindexCellTypes : AttachCells g' f where
   ι := c.ι
@@ -386,7 +426,23 @@ lemma nonempty_attachCells_iff
     rw [coproducts_iff] at h
     obtain ⟨ι, ⟨F₁, F₂, c₁, c₂, h₁, h₂, φ, hφ⟩⟩ := h
     let π (i : ι) : α := ((ofHoms_iff _ _).1 (hφ ⟨i⟩)).choose
-    let e (i : ι) : Arrow.mk (φ.app ⟨i⟩) ≅ Arrow.mk (g
+    let e (i : ι) : Arrow.mk (φ.app ⟨i⟩) ≅ Arrow.mk (g (π i)) :=
+      eqToIso (((ofHoms_iff _ _).1 (hφ ⟨i⟩)).choose_spec)
+    let e₁ (i : ι) : F₁.obj ⟨i⟩ ≅ A (π i) := Arrow.leftFunc.mapIso (e i)
+    let e₂ (i : ι) : F₂.obj ⟨i⟩ ≅ B (π i) := Arrow.rightFunc.mapIso (e i)
+    exact ⟨{
+      ι := ι
+      π := π
+      cofan₁ := Cofan.mk c₁.pt (fun i => (e₁ i).inv ≫ c₁.ι.app ⟨i⟩)
+      cofan₂ := Cofan.mk c₂.pt (fun i => (e₂ i).inv ≫ c₂.ι.app ⟨i⟩)
+      isColimit₁ :=
+        (IsColimit.precomposeHomEquiv (Discrete.natIso (fun ⟨i⟩ => e₁ i)) _).1
+          (IsColimit.ofIsoColimit h₁ (Cocone.ext (Iso.refl _) (by simp)))
+      isColimit₂ :=
+        (IsColimit.precomposeHomEquiv (Discrete.natIso (fun ⟨i⟩ => e₂ i)) _).1
+          (IsColimit.ofIsoColimit h₂ (Cocone.ext (Iso.refl _) (by simp)))
+      hm i := by simp [e₁, e₂]
+      isPushout := sq, .. }⟩
 
 中文:
 引理 nonempty_attachCells_iff
@@ -398,7 +454,23 @@ lemma nonempty_attachCells_iff
     rw [coproducts_iff] at h
     obtain ⟨ι, ⟨F₁, F₂, c₁, c₂, h₁, h₂, φ, hφ⟩⟩ := h
     let π (i : ι) : α := ((ofHoms_iff _ _).1 (hφ ⟨i⟩)).choose
-    let e (i : ι) : Arrow.mk (φ.app ⟨i⟩) ≅ Arrow.mk (g
+    let e (i : ι) : Arrow.mk (φ.app ⟨i⟩) ≅ Arrow.mk (g (π i)) :=
+      eqToIso (((ofHoms_iff _ _).1 (hφ ⟨i⟩)).choose_spec)
+    let e₁ (i : ι) : F₁.obj ⟨i⟩ ≅ A (π i) := Arrow.leftFunc.mapIso (e i)
+    let e₂ (i : ι) : F₂.obj ⟨i⟩ ≅ B (π i) := Arrow.rightFunc.mapIso (e i)
+    exact ⟨{
+      ι := ι
+      π := π
+      cofan₁ := Cofan.mk c₁.pt (fun i => (e₁ i).inv ≫ c₁.ι.app ⟨i⟩)
+      cofan₂ := Cofan.mk c₂.pt (fun i => (e₂ i).inv ≫ c₂.ι.app ⟨i⟩)
+      isColimit₁ :=
+        (IsColimit.precomposeHomEquiv (Discrete.natIso (fun ⟨i⟩ => e₁ i)) _).1
+          (IsColimit.ofIsoColimit h₁ (Cocone.ext (Iso.refl _) (by simp)))
+      isColimit₂ :=
+        (IsColimit.precomposeHomEquiv (Discrete.natIso (fun ⟨i⟩ => e₂ i)) _).1
+          (IsColimit.ofIsoColimit h₂ (Cocone.ext (Iso.refl _) (by simp)))
+      hm i := by simp [e₁, e₂]
+      isPushout := sq, .. }⟩
 
 Depends on / 依赖: Arrow.leftFunc.mapIso, Arrow.mk, Arrow.rightFunc.mapIso, c.pushouts_coproducts, choose_spec, coproducts_iff, eqToIso, leftFunc, mapIso, ofHoms_iff, pushouts_coproducts, rightFunc
 -/

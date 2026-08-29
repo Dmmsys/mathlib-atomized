@@ -373,7 +373,9 @@ definition Functor.mapHomologicalComplex
       d_comp_d' := fun i j k _ _ => by rw [← F.map_comp, C.d_comp_d, F.map_zero] }
   map f :=
     { f := fun i => F.map (f.f i)
-      comm' := fun i j _ => b
+      comm' := fun i j _ => by
+        dsimp
+        rw [← F.map_comp]; rw [← F.map_comp]; rw [f.comm] }
 
 中文:
 定义 函子.mapHomologicalComplex
@@ -385,7 +387,9 @@ definition Functor.mapHomologicalComplex
       d_comp_d' := fun i j k _ _ => by rw [← F.map_comp, C.d_comp_d, F.map_zero] }
   map f :=
     { f := fun i => F.map (f.f i)
-      comm' := fun i j _ => b
+      comm' := fun i j _ => by
+        dsimp
+        rw [← F.map_comp]; rw [← F.map_comp]; rw [f.comm] }
 
 Depends on / 依赖: C.d_comp_d, C.shape, F.map, F.map_comp, F.map_zero, F.obj, d_comp_d, f.comm, map_comp, map_zero
 -/
@@ -458,7 +462,7 @@ instance Functor.mapHomologicalComplex_reflects_iso
         ((HomologicalComplex.eval W₂ c n).mapIso
           (asIso ((F.mapHomologicalComplex c).map f))).isIso_hom
     have := fun n => isIso_of_reflects_iso (f.f n) F
-    exact HomologicalComplex.Hom.isIso_of_component
+    exact HomologicalComplex.Hom.isIso_of_components f⟩
 
 中文:
 实例 函子.mapHomologicalComplex_reflects_iso
@@ -469,7 +473,7 @@ instance Functor.mapHomologicalComplex_reflects_iso
         ((HomologicalComplex.eval W₂ c n).mapIso
           (asIso ((F.mapHomologicalComplex c).map f))).isIso_hom
     have := fun n => isIso_of_reflects_iso (f.f n) F
-    exact HomologicalComplex.Hom.isIso_of_component
+    exact HomologicalComplex.Hom.isIso_of_components f⟩
 
 Depends on / 依赖: F.map, F.mapHomologicalComplex, HomologicalComplex, HomologicalComplex.Hom.isIso_of_components, HomologicalComplex.eval, isIso_hom, isIso_of_components, isIso_of_reflects_iso, mapHomologicalComplex, mapIso
 -/
@@ -618,7 +622,7 @@ definition NatIso.mapHomologicalComplex
   hom_inv_id := by simp only [← NatTrans.mapHomologicalComplex_comp, α.hom_inv_id,
     NatTrans.mapHomologicalComplex_id]
   inv_hom_id := by simp only [← NatTrans.mapHomologicalComplex_comp, α.inv_hom_id,
-    NatT
+    NatTrans.mapHomologicalComplex_id]
 
 中文:
 定义 自然数Iso.mapHomologicalComplex
@@ -628,7 +632,7 @@ definition NatIso.mapHomologicalComplex
   hom_inv_id := by simp only [← NatTrans.mapHomologicalComplex_comp, α.hom_inv_id,
     NatTrans.mapHomologicalComplex_id]
   inv_hom_id := by simp only [← NatTrans.mapHomologicalComplex_comp, α.inv_hom_id,
-    NatT
+    NatTrans.mapHomologicalComplex_id]
 
 Depends on / 依赖: NatTrans, NatTrans.mapHomologicalComplex, mapHomologicalComplex
 -/
@@ -777,7 +781,21 @@ definition singleMapHomologicalComplex
           dsimp
           split_ifs with h
           · simp
-     
+          · rw [zero_comp, ← F.map_id,
+              (isZero_single_obj_X c j X _ h).eq_of_src (𝟙 _) 0, F.map_zero]
+        inv_hom_id := by
+          ext i
+          dsimp
+          split_ifs with h
+          · simp
+          · apply (isZero_single_obj_X c j _ _ h).eq_of_src })
+    fun f => by
+      ext i
+      dsimp
+      split_ifs with h
+      · subst h
+        simp [single_map_f_self, singleObjXSelf, singleObjXIsoOfEq, eqToHom_map]
+      · apply (isZero_single_obj_X c j _ _ h).eq_of_tgt
 
 中文:
 定义 singleMapHomologicalComplex
@@ -791,7 +809,21 @@ definition singleMapHomologicalComplex
           dsimp
           split_ifs with h
           · simp
-     
+          · rw [zero_comp, ← F.map_id,
+              (isZero_single_obj_X c j X _ h).eq_of_src (𝟙 _) 0, F.map_zero]
+        inv_hom_id := by
+          ext i
+          dsimp
+          split_ifs with h
+          · simp
+          · apply (isZero_single_obj_X c j _ _ h).eq_of_src })
+    fun f => by
+      ext i
+      dsimp
+      split_ifs with h
+      · subst h
+        simp [single_map_f_self, singleObjXSelf, singleObjXIsoOfEq, eqToHom_map]
+      · apply (isZero_single_obj_X c j _ _ h).eq_of_tgt
 
 Depends on / 依赖: F.map_id, F.map_zero, NatIso, NatIso.ofComponents, eqToHom, eq_of_src, hom_inv_id, inv_hom_id, isZero_single_obj_X, map_id, map_zero, ofComponents, single_map_f_sel, split_ifs, zero_comp
 -/

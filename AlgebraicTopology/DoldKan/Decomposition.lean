@@ -62,7 +62,21 @@ theorem decomposition_Q
     · rw [Q_is_eventually_constant (show n + 1 <= q by lia), hq]
       congr 1
       ext ⟨x, hx⟩
-      si
+      simp_rw [Finset.mem_filter_univ]
+      lia
+    · obtain ⟨a, ha⟩ := Nat.le.dest hqn
+      rw [Q_succ]; rw [HomologicalComplex.sub_f_apply]; rw [HomologicalComplex.comp_f]; rw [hq]
+      symm
+      conv_rhs => rw [sub_eq_add_neg, add_comm]
+      let q' : Fin (n + 1) := ⟨q, Nat.lt_succ_of_le hqn⟩
+      rw [← @Finset.add_sum_erase _ _ _ _ _ _ q' (by simp [q'])]
+      congr
+      · have hnaq' : n = a + q := by lia
+        simp only [(HigherFacesVanish.of_P q n).comp_Hσ_eq hnaq', q'.rev_eq hnaq', neg_neg]
+        rfl
+      · ext ⟨i, hi⟩
+        simp_rw [Finset.mem_erase, Finset.mem_filter_univ, q', ne_eq, Fin.mk.injEq]
+        lia
 
 中文:
 定理 decomposition_Q
@@ -77,7 +91,21 @@ theorem decomposition_Q
     · rw [Q_is_eventually_constant (show n + 1 <= q by lia), hq]
       congr 1
       ext ⟨x, hx⟩
-      si
+      simp_rw [Finset.mem_filter_univ]
+      lia
+    · obtain ⟨a, ha⟩ := Nat.le.dest hqn
+      rw [Q_succ]; rw [HomologicalComplex.sub_f_apply]; rw [HomologicalComplex.comp_f]; rw [hq]
+      symm
+      conv_rhs => rw [sub_eq_add_neg, add_comm]
+      let q' : Fin (n + 1) := ⟨q, Nat.lt_succ_of_le hqn⟩
+      rw [← @Finset.add_sum_erase _ _ _ _ _ _ q' (by simp [q'])]
+      congr
+      · have hnaq' : n = a + q := by lia
+        simp only [(HigherFacesVanish.of_P q n).comp_Hσ_eq hnaq', q'.rev_eq hnaq', neg_neg]
+        rfl
+      · ext ⟨i, hi⟩
+        simp_rw [Finset.mem_erase, Finset.mem_filter_univ, q', ne_eq, Fin.mk.injEq]
+        lia
 
 Depends on / 依赖: Finset, Finset.filter_false, Finset.mem_filter_univ, Finset.sum_empty, HomologicalComplex, HomologicalComplex.comp_f, HomologicalComplex.sub_f_apply, HomologicalComplex.zero_f_apply, Nat.le.dest, Nat.lt, Nat.not_lt_zero, Q_is_eventually_constant, Q_succ, Q_zero, add_comm, comp_f, conv_rhs, filter_false, mem_filter_univ, not_lt_zero
 -/

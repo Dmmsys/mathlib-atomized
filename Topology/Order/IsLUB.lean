@@ -805,7 +805,19 @@ lemma ConditionallyCompleteLinearOrder.isCompact_Icc
   by_contra! hf
   have hpt : forall x in Icc a b, {x} ∉ f := fun x hx _ => hf x hx (le_trans (by simpa) (pure_le_nhds x))
   set s := { x in Icc a b | Icc a x ∉ f }
-  h
+  have hsb : b in upperBounds s := fun x hx => hx.1.2
+  have ha : a in s := by simp [s, *]
+  let c := sSup s
+  have hsc : IsLUB s c := isLUB_csSup ⟨a, ha⟩ ⟨b, hsb⟩
+  have hc : c in Icc a b := ⟨hsc.1 ha, hsc.2 hsb⟩
+  have (i : _) (hic : i < c) : Ioi i in f := by
+    have ⟨j, hj, hij, hjc⟩ := hsc.exists_between hic
+    filter_upwards [f.compl_mem_iff_notMem.mpr hj.2, hfab]; grind
+  have ⟨x, hx, hxf⟩ : exists x, c < x ∧ Iio x ∉ f := by simpa [nhds_eq_order, eq_true this] using hf c hc
+  have : Icc a c ∉ f := mt (mem_of_superset · (by grind)) hxf
+  have : x in Icc a b := ⟨by grind, le_of_not_gt fun h => hxf (mem_of_superset hfab (by grind))⟩
+  have : Icc a x in f := by simpa [s, this.1, this.2] using notMem_of_csSup_lt hx ⟨b, hsb⟩
+  exact hpt _ ‹_› (by filter_upwards [f.compl_mem_iff_notMem.mpr hxf, this]; grind)
 
 中文:
 引理 条件完备线性序.isCompact_Icc
@@ -816,7 +828,19 @@ lemma ConditionallyCompleteLinearOrder.isCompact_Icc
   by_contra! hf
   have hpt : forall x in Icc a b, {x} ∉ f := fun x hx _ => hf x hx (le_trans (by simpa) (pure_le_nhds x))
   set s := { x in Icc a b | Icc a x ∉ f }
-  h
+  have hsb : b in upperBounds s := fun x hx => hx.1.2
+  have ha : a in s := by simp [s, *]
+  let c := sSup s
+  have hsc : IsLUB s c := isLUB_csSup ⟨a, ha⟩ ⟨b, hsb⟩
+  have hc : c in Icc a b := ⟨hsc.1 ha, hsc.2 hsb⟩
+  have (i : _) (hic : i < c) : Ioi i in f := by
+    have ⟨j, hj, hij, hjc⟩ := hsc.exists_between hic
+    filter_upwards [f.compl_mem_iff_notMem.mpr hj.2, hfab]; grind
+  have ⟨x, hx, hxf⟩ : exists x, c < x ∧ Iio x ∉ f := by simpa [nhds_eq_order, eq_true this] using hf c hc
+  have : Icc a c ∉ f := mt (mem_of_superset · (by grind)) hxf
+  have : x in Icc a b := ⟨by grind, le_of_not_gt fun h => hxf (mem_of_superset hfab (by grind))⟩
+  have : Icc a x in f := by simpa [s, this.1, this.2] using notMem_of_csSup_lt hx ⟨b, hsb⟩
+  exact hpt _ ‹_› (by filter_upwards [f.compl_mem_iff_notMem.mpr hxf, this]; grind)
 -/
 protected lemma ConditionallyCompleteLinearOrder.isCompact_Icc (a b : α) :
     IsCompact (Icc a b) := by
@@ -941,7 +965,12 @@ theorem IsLUB.exists_seq_strictMono_tendsto_of_notMem
   obtain ⟨v, hvx, hvt⟩ := exists_seq_forall_of_frequently (htx.frequently_mem ht)
   replace hvx := hvx.mono_right nhdsWithin_le_nhds
   have hvx' : forall {n}, v n < x := (htx.1 (hvt _)).lt_of_ne (ne_of_mem_of_not_mem (hvt _) notMem)
-  have : forall k, forallᶠ l in atTop, v k < v l := fun k => hvx
+  have : forall k, forallᶠ l in atTop, v k < v l := fun k => hvx.eventually (lt_mem_nhds hvx')
+  choose N hN hvN using fun k => ((eventually_gt_atTop k).and (this k)).exists
+  refine ⟨fun k => v (N^[k] 0), strictMono_nat_of_lt_succ fun _ => ?_, fun _ => hvx',
+    hvx.comp (strictMono_nat_of_lt_succ fun _ => ?_).tendsto_atTop, fun _ => hvt _⟩
+  · rw [iterate_succ_apply']; exact hvN _
+  · rw [iterate_succ_apply']; exact hN _
 
 中文:
 定理 IsLUB.存在_seq_strictMono_tendsto_of_notMem
@@ -950,7 +979,12 @@ theorem IsLUB.exists_seq_strictMono_tendsto_of_notMem
   obtain ⟨v, hvx, hvt⟩ := exists_seq_forall_of_frequently (htx.frequently_mem ht)
   replace hvx := hvx.mono_right nhdsWithin_le_nhds
   have hvx' : forall {n}, v n < x := (htx.1 (hvt _)).lt_of_ne (ne_of_mem_of_not_mem (hvt _) notMem)
-  have : forall k, forallᶠ l in atTop, v k < v l := fun k => hvx
+  have : forall k, forallᶠ l in atTop, v k < v l := fun k => hvx.eventually (lt_mem_nhds hvx')
+  choose N hN hvN using fun k => ((eventually_gt_atTop k).and (this k)).exists
+  refine ⟨fun k => v (N^[k] 0), strictMono_nat_of_lt_succ fun _ => ?_, fun _ => hvx',
+    hvx.comp (strictMono_nat_of_lt_succ fun _ => ?_).tendsto_atTop, fun _ => hvt _⟩
+  · rw [iterate_succ_apply']; exact hvN _
+  · rw [iterate_succ_apply']; exact hN _
 
 Depends on / 依赖: eventually, eventually_gt_atTop, exists_seq_forall_of_frequently, frequently_mem, htx.frequently_mem, hvx.comp, hvx.eventually, hvx.mono_right, lt_mem_nhds, lt_of_ne, mono_right, ne_of_mem_of_not_mem, nhdsWithin_le_nhds, notMem, replace, strict, strictMono_nat_of_lt_succ
 -/
@@ -1116,7 +1150,7 @@ theorem Dense.exists_seq_strictMono_tendsto_of_lt
     exact ⟨z, mem_inter hzx hyz⟩
 .mpr isLUB_Ioo hy have hx : IsLUB (Ioo y x inter s) x := hs.isLUB_inter_iff isOpen_Ioo
 .imp apply hx.exists_seq_strictMono_tendsto_of_notMem (by simp) hnonempty
-  
+  simp_all
 
 中文:
 定理 稠密.存在_seq_strictMono_tendsto_of_lt
@@ -1127,7 +1161,7 @@ theorem Dense.exists_seq_strictMono_tendsto_of_lt
     exact ⟨z, mem_inter hzx hyz⟩
 .mpr isLUB_Ioo hy have hx : IsLUB (Ioo y x inter s) x := hs.isLUB_inter_iff isOpen_Ioo
 .imp apply hx.exists_seq_strictMono_tendsto_of_notMem (by simp) hnonempty
-  
+  simp_all
 
 Depends on / 依赖: Nonempty, exists_between, exists_seq_strictMono_tendsto_of_notMem, hnonempty, hs.exists_between, hs.isLUB_inter_iff, hx.exists_seq_strictMono_tendsto_of_notMem, isLUB_Ioo, isLUB_inter_iff, isOpen_Ioo, mem_inter
 -/
@@ -1181,7 +1215,7 @@ theorem DenseRange.exists_seq_strictMono_tendsto_of_lt
   have huf (n : Nat) : u n in range f := (huyxf n).2
   choose v hv using huf
   obtain rfl : f ∘ v = u := funext hv
-exact ⟨v, fun a b hlt => hmono.reflect_lt hu
+exact ⟨v, fun a b hlt => hmono.reflect_lt hu hlt, huyx, hlim⟩
 
 中文:
 定理 DenseRange.存在_seq_strictMono_tendsto_of_lt
@@ -1192,7 +1226,7 @@ exact ⟨v, fun a b hlt => hmono.reflect_lt hu
   have huf (n : Nat) : u n in range f := (huyxf n).2
   choose v hv using huf
   obtain rfl : f ∘ v = u := funext hv
-exact ⟨v, fun a b hlt => hmono.reflect_lt hu
+exact ⟨v, fun a b hlt => hmono.reflect_lt hu hlt, huyx, hlim⟩
 
 Depends on / 依赖: Dense.exists_seq_strictMono_tendsto_of_lt, exists_seq_strictMono_tendsto_of_lt, hmono.reflect_lt, reflect_lt
 -/
@@ -1219,7 +1253,7 @@ theorem DenseRange.exists_seq_strictMono_tendsto
   have huf (n : Nat) : u n in range f := (huxf n).2
   choose v hv using huf
   obtain rfl : f ∘ v = u := funext hv
-exact ⟨v, fun a b hlt => hmono.reflect_lt hu hlt, hux, hli
+exact ⟨v, fun a b hlt => hmono.reflect_lt hu hlt, hux, hlim⟩
 
 中文:
 定理 DenseRange.存在_seq_strictMono_tendsto
@@ -1230,7 +1264,7 @@ exact ⟨v, fun a b hlt => hmono.reflect_lt hu hlt, hux, hli
   have huf (n : Nat) : u n in range f := (huxf n).2
   choose v hv using huf
   obtain rfl : f ∘ v = u := funext hv
-exact ⟨v, fun a b hlt => hmono.reflect_lt hu hlt, hux, hli
+exact ⟨v, fun a b hlt => hmono.reflect_lt hu hlt, hux, hlim⟩
 
 Depends on / 依赖: Dense.exists_seq_strictMono_tendsto, exists_seq_strictMono_tendsto, hmono.reflect_lt, reflect_lt
 -/
@@ -1358,7 +1392,7 @@ theorem exists_seq_strictAnti_strictMono_tendsto
   rcases exists_seq_strictMono_tendsto' (hu_mem 0).2 with ⟨v, hv_mono, hv_mem, hvy⟩
   exact
     ⟨u, v, hu_anti, hv_mono, hu_mem, fun l => ⟨(hu_mem 0).1.trans (hv_mem l).1, (hv_mem l).2⟩,
-      fun k l => (hu_anti.antitone ze
+      fun k l => (hu_anti.antitone zero_le).trans_lt (hv_mem l).1, hux, hvy⟩
 
 中文:
 定理 存在_seq_strictAnti_strictMono_tendsto
@@ -1368,7 +1402,7 @@ theorem exists_seq_strictAnti_strictMono_tendsto
   rcases exists_seq_strictMono_tendsto' (hu_mem 0).2 with ⟨v, hv_mono, hv_mem, hvy⟩
   exact
     ⟨u, v, hu_anti, hv_mono, hu_mem, fun l => ⟨(hu_mem 0).1.trans (hv_mem l).1, (hv_mem l).2⟩,
-      fun k l => (hu_anti.antitone ze
+      fun k l => (hu_anti.antitone zero_le).trans_lt (hv_mem l).1, hux, hvy⟩
 
 Depends on / 依赖: antitone, exists_seq_strictAnti_tendsto, exists_seq_strictMono_tendsto, hu_anti, hu_anti.antitone, hu_mem, hv_mem, hv_mono, trans_lt, zero_le
 -/
@@ -1503,7 +1537,15 @@ theorem eventually_le_const_iff_forall_gt_eventually_lt_const
     obtain rfl | H0 := glb_Ioi_eq_self_or_Ioi_eq_Ici _ hd
     · obtain h | _ := isTop_or_exists_gt d
       · exact .of_forall (fun _ => h _)
-      obtain ⟨u, -, -, hu_tt, hu_gt⟩ := hd.exists_seq_antitone_
+      obtain ⟨u, -, -, hu_tt, hu_gt⟩ := hd.exists_seq_antitone_tendsto (by simpa)
+      replace h := fun n => h (u n) (by grind)
+      rw [← eventually_countable_forall] at h
+      filter_upwards [h] with x hx
+exact ge_of_tendsto hu_tt .of_forall fun n => le_of_lt hx n
+· specialize h d by simp [← Set.mem_Ioi, H0]
+      filter_upwards [h] with x hx
+      rw [← Set.compl_Iic]; rw [← Set.compl_Iio]; rw [compl_inj_iff] at H0
+      simpa [← Set.mem_Iic, ← Set.mem_Iio, H0] using hx
 
 中文:
 定理 eventually_le_const_iff_对任意_gt_eventually_lt_const
@@ -1514,7 +1556,15 @@ theorem eventually_le_const_iff_forall_gt_eventually_lt_const
     obtain rfl | H0 := glb_Ioi_eq_self_or_Ioi_eq_Ici _ hd
     · obtain h | _ := isTop_or_exists_gt d
       · exact .of_forall (fun _ => h _)
-      obtain ⟨u, -, -, hu_tt, hu_gt⟩ := hd.exists_seq_antitone_
+      obtain ⟨u, -, -, hu_tt, hu_gt⟩ := hd.exists_seq_antitone_tendsto (by simpa)
+      replace h := fun n => h (u n) (by grind)
+      rw [← eventually_countable_forall] at h
+      filter_upwards [h] with x hx
+exact ge_of_tendsto hu_tt .of_forall fun n => le_of_lt hx n
+· specialize h d by simp [← Set.mem_Ioi, H0]
+      filter_upwards [h] with x hx
+      rw [← Set.compl_Iic]; rw [← Set.compl_Iio]; rw [compl_inj_iff] at H0
+      simpa [← Set.mem_Iic, ← Set.mem_Iio, H0] using hx
 
 Depends on / 依赖: h.mono, lt_of_le_of_lt
 -/

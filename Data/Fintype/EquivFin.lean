@@ -62,7 +62,8 @@ definition truncEquivFin
       (motive := fun s : Multiset α =>
         (forall x : α, x in s) -> s.Nodup -> Trunc (α ≃ Fin (Multiset.card s)))
       univ.val
-      (fun l (h : forall x : α, x in l) (nd : l.Nodup) => Trunc.mk (nd.getEquivOfForallMemList _ h).sy
+      (fun l (h : forall x : α, x in l) (nd : l.Nodup) => Trunc.mk (nd.getEquivOfForallMemList _ h).symm)
+      mem_univ_val univ.2
 
 中文:
 定义 truncEquivFin
@@ -74,7 +75,8 @@ definition truncEquivFin
       (motive := fun s : Multiset α =>
         (forall x : α, x in s) -> s.Nodup -> Trunc (α ≃ Fin (Multiset.card s)))
       univ.val
-      (fun l (h : forall x : α, x in l) (nd : l.Nodup) => Trunc.mk (nd.getEquivOfForallMemList _ h).sy
+      (fun l (h : forall x : α, x in l) (nd : l.Nodup) => Trunc.mk (nd.getEquivOfForallMemList _ h).symm)
+      mem_univ_val univ.2
 
 Depends on / 依赖: Finset, Finset.card, Multiset, Multiset.card, Quot.recOnSubsingleton, Trunc.mk, getEquivOfForallMemList, l.Nodup, mem_univ_val, motive, nd.getEquivOfForallMemList, recOnSubsingleton, s.Nodup, univ.val
 -/
@@ -122,7 +124,8 @@ definition truncFinBijection
       (motive := fun s : Multiset α =>
         (forall x : α, x in s) -> s.Nodup -> Trunc {f : Fin (Multiset.card s) -> α // Bijective f})
       univ.val
-      (fun l (h : forall x : α, x in l) (nd : l.Nodup) => Trunc.mk (nd.getBijecti
+      (fun l (h : forall x : α, x in l) (nd : l.Nodup) => Trunc.mk (nd.getBijectionOfForallMemList _ h))
+      mem_univ_val univ.2
 
 中文:
 定义 truncFinBijection
@@ -134,7 +137,8 @@ definition truncFinBijection
       (motive := fun s : Multiset α =>
         (forall x : α, x in s) -> s.Nodup -> Trunc {f : Fin (Multiset.card s) -> α // Bijective f})
       univ.val
-      (fun l (h : forall x : α, x in l) (nd : l.Nodup) => Trunc.mk (nd.getBijecti
+      (fun l (h : forall x : α, x in l) (nd : l.Nodup) => Trunc.mk (nd.getBijectionOfForallMemList _ h))
+      mem_univ_val univ.2
 
 Depends on / 依赖: Bijective, Finset, Finset.card, Multiset, Multiset.card, Quot.recOnSubsingleton, Trunc.mk, getBijectionOfForallMemList, l.Nodup, mem_univ_val, motive, nd.getBijectionOfForallMemList, recOnSubsingleton, s.Nodup, univ.val
 -/
@@ -544,7 +548,9 @@ theorem card_le_one_iff
     ⟨fun _h => fun a b => by
       let ⟨x, hx⟩ := card_eq_one_iff.1 ha.symm
       rw [hx a]; rw [hx b], fun _ => ha ▸ le_rfl⟩
-
+  | n + 2, ha =>
+⟨fun h => False.elim by rw [← ha] at h; cases h with | step h => cases h; , fun h =>
+      card_unit ▸ card_le_of_injective (fun _ => ()) fun _ _ _ => h _ _⟩
 
 中文:
 定理 card_le_one_iff
@@ -558,7 +564,9 @@ theorem card_le_one_iff
     ⟨fun _h => fun a b => by
       let ⟨x, hx⟩ := card_eq_one_iff.1 ha.symm
       rw [hx a]; rw [hx b], fun _ => ha ▸ le_rfl⟩
-
+  | n + 2, ha =>
+⟨fun h => False.elim by rw [← ha] at h; cases h with | step h => cases h; , fun h =>
+      card_unit ▸ card_le_of_injective (fun _ => ()) fun _ _ _ => h _ _⟩
 
 Depends on / 依赖: False.elim, Nat.le_succ, card_eq_one_iff, card_eq_zero_iff, card_le_of_injective, card_unit, ha.symm, le_rfl, le_succ
 -/
@@ -1362,7 +1370,7 @@ theorem of_injective_to_set
         Fintype.card α <= Fintype.card s := Fintype.card_le_of_injective f hf
         _ = #s.toFinset := s.toFinset_card.symm
         _ < Fintype.card α :=
-Finset.card_lt_card by rwa [Set.toFinset_ssubset_
+Finset.card_lt_card by rwa [Set.toFinset_ssubset_univ, Set.ssubset_univ_iff]
 
 中文:
 定理 of_injective_to_set
@@ -1374,7 +1382,7 @@ Finset.card_lt_card by rwa [Set.toFinset_ssubset_
         Fintype.card α <= Fintype.card s := Fintype.card_le_of_injective f hf
         _ = #s.toFinset := s.toFinset_card.symm
         _ < Fintype.card α :=
-Finset.card_lt_card by rwa [Set.toFinset_ssubset_
+Finset.card_lt_card by rwa [Set.toFinset_ssubset_univ, Set.ssubset_univ_iff]
 
 Depends on / 依赖: Finset, Finset.card_lt_card, Fintype, Fintype.card, Fintype.card_le_of_injective, Set.ssubset_univ_iff, Set.toFinset_ssubset_univ, card_le_of_injective, card_lt_card, classical, lt_irrefl, of_not_fintype, s.toFinset, s.toFinset_card.symm, ssubset_univ_iff, toFinset, toFinset_card, toFinset_ssubset_univ
 -/
@@ -1816,7 +1824,10 @@ theorem natEmbeddingAux_injective
   by_contra hmn
   have hmn : m < n := lt_of_le_of_ne hmlen hmn
   refine (Classical.choose_spec (exists_notMem_finset
-    ((Multiset.range n).pmap (fun m (_ : m < n) 
+    ((Multiset.range n).pmap (fun m (_ : m < n) => natEmbeddingAux α m)
+      (fun _ => Multiset.mem_range.1)).toFinset)) ?_
+  refine Multiset.mem_toFinset.2 (Multiset.mem_pmap.2 ⟨m, Multiset.mem_range.2 hmn, ?_⟩)
+  rw [h]; rw [natEmbeddingAux]
 
 中文:
 定理 natEmbeddingAux_injective
@@ -1829,7 +1840,10 @@ theorem natEmbeddingAux_injective
   by_contra hmn
   have hmn : m < n := lt_of_le_of_ne hmlen hmn
   refine (Classical.choose_spec (exists_notMem_finset
-    ((Multiset.range n).pmap (fun m (_ : m < n) 
+    ((Multiset.range n).pmap (fun m (_ : m < n) => natEmbeddingAux α m)
+      (fun _ => Multiset.mem_range.1)).toFinset)) ?_
+  refine Multiset.mem_toFinset.2 (Multiset.mem_pmap.2 ⟨m, Multiset.mem_range.2 hmn, ?_⟩)
+  rw [h]; rw [natEmbeddingAux]
 -/
 private theorem natEmbeddingAux_injective (α : Type*) [Infinite α] :
     Function.Injective (natEmbeddingAux α) := by
@@ -1899,7 +1913,8 @@ theorem exists_superset_card_eq
     · exact ⟨s, subset_rfl, hn'⟩
     obtain ⟨t, hs, ht⟩ := IH _ (Nat.le_of_lt_succ hn')
     obtain ⟨x, hx⟩ := exists_notMem_finset t
-    refine ⟨Fi
+    refine ⟨Finset.cons x t hx, hs.trans (Finset.subset_cons _), ?_⟩
+    simp [ht]
 
 中文:
 定理 存在_superset_card_eq
@@ -1912,7 +1927,8 @@ theorem exists_superset_card_eq
     · exact ⟨s, subset_rfl, hn'⟩
     obtain ⟨t, hs, ht⟩ := IH _ (Nat.le_of_lt_succ hn')
     obtain ⟨x, hx⟩ := exists_notMem_finset t
-    refine ⟨Fi
+    refine ⟨Finset.cons x t hx, hs.trans (Finset.subset_cons _), ?_⟩
+    simp [ht]
 
 Depends on / 依赖: Finset, Finset.cons, Finset.subset_cons, Nat.eq_zero_of_le_zero, Nat.le_of_lt_succ, eq_or_lt, eq_zero_of_le_zero, exists_notMem_finset, generalizing, hn.eq_or_lt, hs.trans, le_of_lt_succ, subset_cons, subset_rfl
 -/

@@ -54,7 +54,14 @@ lemma MutuallySingular.compProd_of_right
   have hs : MeasurableSet s := Kernel.measurableSet_mutuallySingularSet κ η
   symm
   refine ⟨s, hs, ?_⟩
-  
+  rw [compProd_apply hs]; rw [compProd_apply hs.compl]
+  have h_eq a : Prod.mk a ⁻¹' s = Kernel.mutuallySingularSetSlice κ η a := rfl
+  have h1 a : η a (Prod.mk a ⁻¹' s) = 0 := by rw [h_eq, Kernel.measure_mutuallySingularSetSlice]
+  have h2 : forallᵐ a ∂μ, κ a (Prod.mk a ⁻¹' s)ᶜ = 0 := by
+    filter_upwards [hκη] with a ha
+    rwa [h_eq, ← Kernel.withDensity_rnDeriv_eq_zero_iff_measure_eq_zero κ η a,
+      Kernel.withDensity_rnDeriv_eq_zero_iff_mutuallySingular]
+  simp [h1, lintegral_congr_ae h2]
 
 中文:
 引理 互奇异.compProd_of_right
@@ -68,7 +75,14 @@ lemma MutuallySingular.compProd_of_right
   have hs : MeasurableSet s := Kernel.measurableSet_mutuallySingularSet κ η
   symm
   refine ⟨s, hs, ?_⟩
-  
+  rw [compProd_apply hs]; rw [compProd_apply hs.compl]
+  have h_eq a : Prod.mk a ⁻¹' s = Kernel.mutuallySingularSetSlice κ η a := rfl
+  have h1 a : η a (Prod.mk a ⁻¹' s) = 0 := by rw [h_eq, Kernel.measure_mutuallySingularSetSlice]
+  have h2 : forallᵐ a ∂μ, κ a (Prod.mk a ⁻¹' s)ᶜ = 0 := by
+    filter_upwards [hκη] with a ha
+    rwa [h_eq, ← Kernel.withDensity_rnDeriv_eq_zero_iff_measure_eq_zero κ η a,
+      Kernel.withDensity_rnDeriv_eq_zero_iff_mutuallySingular]
+  simp [h1, lintegral_congr_ae h2]
 
 Depends on / 依赖: Kernel, Kernel.measurableSet_mutuallySingularSet, Kernel.measure_mutuallySingularSet, Kernel.mutuallySingularSetSlice, MeasurableSet, Prod.mk, SFinite, compProd_apply, compProd_of_not_sfinite, h_eq, hs.compl, measurableSet_mutuallySingularSet, measure_mutuallySingularSet, mutuallySingularSet, mutuallySingularSetSlice
 -/
@@ -148,7 +162,10 @@ lemma AbsolutelyContinuous.kernel_of_compProd
     filter_upwards [this] with a ha
     rwa [Kernel.singularPart_eq_zero_iff_absolutelyContinuous] at ha
   rw [← κ.rnDeriv_add_singularPart η]; rw [compProd_add_right]; rw [AbsolutelyContinuous.add_left_iff] at h
-  have : μ otimesₘ κ.singularPart
+  have : μ otimesₘ κ.singularPart η ⟂ₘ ν otimesₘ η :=
+    MutuallySingular.compProd_of_right μ ν (.of_forall <| Kernel.mutuallySingular_singularPart _ _)
+  refine compProd_eq_zero_iff.mp ?_
+  exact eq_zero_of_absolutelyContinuous_of_mutuallySingular h.2 this
 
 中文:
 引理 AbsolutelyContinuous.kernel_of_compProd
@@ -158,7 +175,10 @@ lemma AbsolutelyContinuous.kernel_of_compProd
     filter_upwards [this] with a ha
     rwa [Kernel.singularPart_eq_zero_iff_absolutelyContinuous] at ha
   rw [← κ.rnDeriv_add_singularPart η]; rw [compProd_add_right]; rw [AbsolutelyContinuous.add_left_iff] at h
-  have : μ otimesₘ κ.singularPart
+  have : μ otimesₘ κ.singularPart η ⟂ₘ ν otimesₘ η :=
+    MutuallySingular.compProd_of_right μ ν (.of_forall <| Kernel.mutuallySingular_singularPart _ _)
+  refine compProd_eq_zero_iff.mp ?_
+  exact eq_zero_of_absolutelyContinuous_of_mutuallySingular h.2 this
 
 Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.add_left_iff, Kernel, Kernel.mutuallySingular_singularPart, Kernel.singularPart_eq_zero_iff_absolutelyContinuous, MutuallySingular, MutuallySingular.compProd_of_right, add_left_iff, compProd_add_right, compProd_eq_zero_iff, compProd_eq_zero_iff.mp, compProd_of_right, eq_zero_of_absolutelyContinuous_of_mutuallySingular, filter_upwards, mutuallySingular_singularPart, of_forall, rnDeriv_add_singularPart, singularPart, singularPart_eq_zero_iff_absolutelyContinuous
 -/

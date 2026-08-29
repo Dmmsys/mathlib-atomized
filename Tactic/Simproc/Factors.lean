@@ -209,7 +209,61 @@ definition evalPrimeFactorsListAux
   In this function we will use the convention that all `e` prefixed variables (proofs or otherwise)
   contain `Expr`s. The variables starting with `h` are proofs about the _meta_ code;
   these will not actually be used in the construction of the proof, and are simply used to help the
-  reade
+  reader reason about why the proof construction is correct.
+  -/
+  let n := enl.natLit!
+let ⟨hn0⟩ ← if h : 0 < n then pure PLift.up h else
+    throwError m!"{enl} must be positive"
+  let a := eal.natLit!
+  let b := n.minFac
+let ⟨hab⟩ ← if h : a <= b then pure PLift.up h else
+    throwError m!"{q($eal < $(enl).minFac)} does not hold"
+  if h_bn : b < n then
+    -- the factor is less than `n`, so we are not done; remove it to get `m`
+    let m := n / b
+    have em : Q(Nat) := mkRawNatLit m
+    have ehm : Q(IsNat (OfNat.ofNat $em) $em) := q(⟨rfl⟩)
+    if h_ba_eq : b = a then
+      -- if the factor is our minimum `a`, then recurse without changing the minimum
+      have eh : Q($eal * $em = $en) :=
+        have : a * m = n := by simp [m, b, ← h_ba_eq, Nat.mul_div_cancel' (minFac_dvd _)]
+        (q(Eq.refl $en) : Expr)
+      let ehp₁ := q(isNat_mul rfl $eha $ehm $eh)
+      let ⟨el, ehp₂⟩ ← evalPrimeFactorsListAux ehm eha
+      pure ⟨q($ea :: $el), q(($ehp₂).cons_self _ $ehp₁)⟩
+    else
+      -- Otherwise when we recurse, we should use `b` as the new minimum factor. Note that
+      -- we must use `evalMinFac.core` to get a proof that `b` is what we computed it as.
+      have eb : Q(Nat) := mkRawNatLit b
+      have ehb : Q(IsNat (OfNat.ofNat $eb) $eb) := q(⟨rfl⟩)
+      have ehbm : Q($eb * $em = $en) :=
+        have : b * m = n := Nat.mul_div_cancel' (minFac_dvd _)
+        (q(Eq.refl $en) : Expr)
+      have ehp₁ := q(isNat_mul rfl $ehb $ehm $ehbm)
+      have ehp₂ : Q(Nat.blt $ea $eb = true) :=
+        have : a < b := lt_of_le_of_ne' hab h_ba_eq
+        (q(Eq.refl (true)) : Expr)
+      let .isNat _ lit ehp₃ ← evalMinFac.core q($eb) q(inferInstance) q($eb) ehb b | failure
+      assertInstancesCommute
+have : lit =Q eb := ⟨⟩
+      let ⟨l, p₄⟩ ← evalPrimeFactorsListAux ehm ehb
+      pure ⟨q($eb :: $l), q(($p₄).cons _ $ehp₁ $ehp₂ $ehp₃ )⟩
+  else
+    -- the factor is our number itself, so we are done
+    have hbn_eq : b = n := (minFac_le hn0).eq_or_lt.resolve_right h_bn
+    if hba : b = a then
+      have eh : Q($en = $ea) :=
+        have : n = a := hbn_eq.symm.trans hba
+        (q(Eq.refl $en) : Expr)
+      pure ⟨q([$ea]), q($eh ▸ FactorsHelper.singleton_self $ea)⟩
+    else do
+      let eh_a_lt_n : Q(Nat.blt $ea $en = true) :=
+        have : a < n := by lia
+        (q(Eq.refl true) : Expr)
+      let .isNat _ lit ehn_minFac ← evalMinFac.core q($en) q(inferInstance) q($enl) ehn n | failure
+have : lit =Q en := ⟨⟩
+      assertInstancesCommute
+      pure ⟨q([$en]), q(FactorsHelper.singleton $en $eh_a_lt_n $ehn_minFac)⟩
 
 中文:
 定义 evalPrimeFactorsListAux
@@ -218,7 +272,61 @@ definition evalPrimeFactorsListAux
   In this function we will use the convention that all `e` prefixed variables (proofs or otherwise)
   contain `Expr`s. The variables starting with `h` are proofs about the _meta_ code;
   these will not actually be used in the construction of the proof, and are simply used to help the
-  reade
+  reader reason about why the proof construction is correct.
+  -/
+  let n := enl.natLit!
+let ⟨hn0⟩ ← if h : 0 < n then pure PLift.up h else
+    throwError m!"{enl} must be positive"
+  let a := eal.natLit!
+  let b := n.minFac
+let ⟨hab⟩ ← if h : a <= b then pure PLift.up h else
+    throwError m!"{q($eal < $(enl).minFac)} does not hold"
+  if h_bn : b < n then
+    -- the factor is less than `n`, so we are not done; remove it to get `m`
+    let m := n / b
+    have em : Q(Nat) := mkRawNatLit m
+    have ehm : Q(IsNat (OfNat.ofNat $em) $em) := q(⟨rfl⟩)
+    if h_ba_eq : b = a then
+      -- if the factor is our minimum `a`, then recurse without changing the minimum
+      have eh : Q($eal * $em = $en) :=
+        have : a * m = n := by simp [m, b, ← h_ba_eq, Nat.mul_div_cancel' (minFac_dvd _)]
+        (q(Eq.refl $en) : Expr)
+      let ehp₁ := q(isNat_mul rfl $eha $ehm $eh)
+      let ⟨el, ehp₂⟩ ← evalPrimeFactorsListAux ehm eha
+      pure ⟨q($ea :: $el), q(($ehp₂).cons_self _ $ehp₁)⟩
+    else
+      -- Otherwise when we recurse, we should use `b` as the new minimum factor. Note that
+      -- we must use `evalMinFac.core` to get a proof that `b` is what we computed it as.
+      have eb : Q(Nat) := mkRawNatLit b
+      have ehb : Q(IsNat (OfNat.ofNat $eb) $eb) := q(⟨rfl⟩)
+      have ehbm : Q($eb * $em = $en) :=
+        have : b * m = n := Nat.mul_div_cancel' (minFac_dvd _)
+        (q(Eq.refl $en) : Expr)
+      have ehp₁ := q(isNat_mul rfl $ehb $ehm $ehbm)
+      have ehp₂ : Q(Nat.blt $ea $eb = true) :=
+        have : a < b := lt_of_le_of_ne' hab h_ba_eq
+        (q(Eq.refl (true)) : Expr)
+      let .isNat _ lit ehp₃ ← evalMinFac.core q($eb) q(inferInstance) q($eb) ehb b | failure
+      assertInstancesCommute
+have : lit =Q eb := ⟨⟩
+      let ⟨l, p₄⟩ ← evalPrimeFactorsListAux ehm ehb
+      pure ⟨q($eb :: $l), q(($p₄).cons _ $ehp₁ $ehp₂ $ehp₃ )⟩
+  else
+    -- the factor is our number itself, so we are done
+    have hbn_eq : b = n := (minFac_le hn0).eq_or_lt.resolve_right h_bn
+    if hba : b = a then
+      have eh : Q($en = $ea) :=
+        have : n = a := hbn_eq.symm.trans hba
+        (q(Eq.refl $en) : Expr)
+      pure ⟨q([$ea]), q($eh ▸ FactorsHelper.singleton_self $ea)⟩
+    else do
+      let eh_a_lt_n : Q(Nat.blt $ea $en = true) :=
+        have : a < n := by lia
+        (q(Eq.refl true) : Expr)
+      let .isNat _ lit ehn_minFac ← evalMinFac.core q($en) q(inferInstance) q($enl) ehn n | failure
+have : lit =Q en := ⟨⟩
+      assertInstancesCommute
+      pure ⟨q([$en]), q(FactorsHelper.singleton $en $eh_a_lt_n $ehn_minFac)⟩
 -/
 private partial def evalPrimeFactorsListAux
     {en enl : Q(Nat)} {ea eal : Q(Nat)} (ehn : Q(IsNat $en $enl)) (eha : Q(IsNat $ea $eal)) :
@@ -298,7 +406,10 @@ have _ : enl =Q nat_lit 0 := ⟨⟩
 let _ : enl =Q nat_lit 1 := ⟨⟩
     have hen : Q($en = 1) := q($(hn).out)
     return ⟨_, q($hen ▸ Nat.primeFactorsList_one)⟩
-  | 
+  | _ => do
+    have h2 : Q(IsNat 2 (nat_lit 2)) := q(⟨Eq.refl (nat_lit 2)⟩)
+    let ⟨l, p⟩ ← evalPrimeFactorsListAux hn h2
+    return ⟨l, q(($p).primeFactorsList_eq)⟩
 
 中文:
 定义 evalPrimeFactorsList
@@ -312,7 +423,10 @@ have _ : enl =Q nat_lit 0 := ⟨⟩
 let _ : enl =Q nat_lit 1 := ⟨⟩
     have hen : Q($en = 1) := q($(hn).out)
     return ⟨_, q($hen ▸ Nat.primeFactorsList_one)⟩
-  | 
+  | _ => do
+    have h2 : Q(IsNat 2 (nat_lit 2)) := q(⟨Eq.refl (nat_lit 2)⟩)
+    let ⟨l, p⟩ ← evalPrimeFactorsListAux hn h2
+    return ⟨l, q(($p).primeFactorsList_eq)⟩
 -/
 def evalPrimeFactorsList
     {en enl : Q(Nat)} (hn : Q(IsNat $en $enl)) :

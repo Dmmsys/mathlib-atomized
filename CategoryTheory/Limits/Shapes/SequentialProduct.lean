@@ -195,7 +195,12 @@ lemma functorMap_commSq_aux
     have : homOfLE (by lia : n <= m + 1) =
         homOfLE (by lia : n <= m) ≫ homOfLE (by lia : m <= m + 1) := by simp
     rw [this]; rw [op_comp]; rw [Functor.map_comp]
-    slice_lhs 2 4 
+    slice_lhs 2 4 => rw [ih]
+    simp only [homOfLE_leOfHom, Functor.ofOpSequence_map_homOfLE_succ,
+      functorMap, dite_eq_ite]
+    split_ifs
+    · omega
+    simp [dif_neg (by lia : ¬(k < m)), dif_neg hh]
 
 中文:
 引理 functorMap_commSq_aux
@@ -208,7 +213,12 @@ lemma functorMap_commSq_aux
     have : homOfLE (by lia : n <= m + 1) =
         homOfLE (by lia : n <= m) ≫ homOfLE (by lia : m <= m + 1) := by simp
     rw [this]; rw [op_comp]; rw [Functor.map_comp]
-    slice_lhs 2 4 
+    slice_lhs 2 4 => rw [ih]
+    simp only [homOfLE_leOfHom, Functor.ofOpSequence_map_homOfLE_succ,
+      functorMap, dite_eq_ite]
+    split_ifs
+    · omega
+    simp [dif_neg (by lia : ¬(k < m)), dif_neg hh]
 
 Depends on / 依赖: Functor, Functor.map_comp, Functor.ofOpSequence_map_homOfLE_succ, Nat.leRec, dif_neg, dite_eq_ite, functorMap, homOfLE, homOfLE_leOfHom, le_succ_of_le, map_comp, ofOpSequence_map_homOfLE_succ, op_comp, slice_lhs, specialize, split_ifs
 -/
@@ -248,7 +258,13 @@ lemma functorMap_commSq
       rw [← functorMap_commSq_succ f (m + 1)]
       simp only [homOfLE_leOfHom, dite_eq_ite,
         Functor.ofOpSequence_map_homOfLE_succ]
-      have : homOfLE (by lia : n <= m + 1 + 1)
+      have : homOfLE (by lia : n <= m + 1 + 1) =
+          homOfLE (by lia : n <= m + 1) ≫ homOfLE (by lia : m + 1 <= m + 1 + 1) := by simp
+      rw [this]; rw [op_comp]; rw [Functor.map_comp]
+      simp only [homOfLE_leOfHom, Functor.ofOpSequence_map_homOfLE_succ,
+        Category.assoc]
+      congr 1
+      exact functorMap_commSq_aux f (by lia) (by lia)
 
 中文:
 引理 functorMap_commSq
@@ -263,7 +279,13 @@ lemma functorMap_commSq
       rw [← functorMap_commSq_succ f (m + 1)]
       simp only [homOfLE_leOfHom, dite_eq_ite,
         Functor.ofOpSequence_map_homOfLE_succ]
-      have : homOfLE (by lia : n <= m + 1 + 1)
+      have : homOfLE (by lia : n <= m + 1 + 1) =
+          homOfLE (by lia : n <= m + 1) ≫ homOfLE (by lia : m + 1 <= m + 1 + 1) := by simp
+      rw [this]; rw [op_comp]; rw [Functor.map_comp]
+      simp only [homOfLE_leOfHom, Functor.ofOpSequence_map_homOfLE_succ,
+        Category.assoc]
+      congr 1
+      exact functorMap_commSq_aux f (by lia) (by lia)
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp, Functor.ofOpSequence_map_homOfLE_succ, dite_eq_ite, functorMap, functorMap_commSq_aux, functorMap_commSq_succ, homOfLE, homOfLE_leOfHom, map_comp, ofOpSequence_map_homOfLE_succ, op_comp
 -/
@@ -304,7 +326,13 @@ definition cone
         f m ≫ eqToHom (functorObj_eq_neg h).symm) (fun n => ?_)
     apply Limits.Pi.hom_ext
     intro m
-    simp only [Functor.const_obj_obj, dite_eq_ite, 
+    simp only [Functor.const_obj_obj, dite_eq_ite, Functor.ofOpSequence_obj, homOfLE_leOfHom,
+      Functor.const_obj_map, Category.id_comp, Pi.map_π, Functor.ofOpSequence_map_homOfLE_succ,
+      functorMap, Category.assoc, Pi.map_π_assoc]
+    split
+    · simp [dif_pos (by lia : m < n + 1)]
+    · split
+      all_goals simp
 
 中文:
 定义 cone
@@ -316,7 +344,13 @@ definition cone
         f m ≫ eqToHom (functorObj_eq_neg h).symm) (fun n => ?_)
     apply Limits.Pi.hom_ext
     intro m
-    simp only [Functor.const_obj_obj, dite_eq_ite, 
+    simp only [Functor.const_obj_obj, dite_eq_ite, Functor.ofOpSequence_obj, homOfLE_leOfHom,
+      Functor.const_obj_map, Category.id_comp, Pi.map_π, Functor.ofOpSequence_map_homOfLE_succ,
+      functorMap, Category.assoc, Pi.map_π_assoc]
+    split
+    · simp [dif_pos (by lia : m < n + 1)]
+    · split
+      all_goals simp
 -/
 noncomputable def cone : Cone (Functor.ofOpSequence (functorMap f)) where
   pt := ∏ᶜ M
@@ -422,7 +456,42 @@ definition isLimit
     intro m
     by_cases h : m < n
     · simp only [Category.assoc, cone_π_app_comp_Pi_π_pos f _ _ h]
+      simp only [dite_eq_ite, limit.lift_π_assoc,
+        Discrete.functor_obj_eq_as, Fan.mk_π_app, Category.assoc, eqToHom_trans]
+      have hh : m + 1 <= n := by lia
+      rw [← s.w (homOfLE hh).op]
+      simp only [homOfLE_leOfHom, Category.assoc]
+      congr
+      induction hh using Nat.leRec with
+      | refl => simp
+      | @le_succ_of_le n hh ih =>
+        have : homOfLE (Nat.le_succ_of_le hh) = homOfLE hh ≫ homOfLE (Nat.le_succ n) := by simp
+        rw [this]; rw [op_comp]; rw [Functor.map_comp]
+        simp only [Nat.succ_eq_add_one, homOfLE_leOfHom,
+          Functor.ofOpSequence_map_homOfLE_succ, Category.assoc]
+        have h₁ : (if _ : m < m + 1 then M m else N m) = if _ : m < n then M m else N m := by
+          rw [dif_pos (by lia)]; rw [dif_pos (by lia)]
+        have h₂ : (if _ : m < n then M m else N m) = if _ : m < n + 1 then M m else N m := by
+          rw [dif_pos h]; rw [dif_pos (by lia)]
+        rw [← eqToHom_trans h₁ h₂]
+        slice_lhs 2 4 => rw [ih (by lia)]
+        simp only [functorMap, dite_eq_ite, Pi.π, Pi.map_π_assoc]
+        split_ifs
+        rw [dif_pos (by lia)]
+        simp
+    · simp only [Category.assoc]
+      rw [cone_π_app_comp_Pi_π_neg f _ _ h]
+      simp only [dite_eq_ite, limit.lift_π_assoc,
+        Discrete.functor_obj_eq_as, Fan.mk_π_app, Category.assoc]
+      slice_lhs 2 4 => simp only [← dite_eq_ite, ← functorMap_commSq f h]
       simp
+  uniq s m h := by
+    apply Pi.hom_ext
+    intro n
+    simp only [dite_eq_ite, limit.lift_π,
+      Fan.mk_π_app, ← h ⟨n + 1⟩, Category.assoc]
+    slice_rhs 2 3 => simp only [← dite_eq_ite, cone_π_app_comp_Pi_π_pos f (n + 1) n (by lia)]
+    simp
 
 中文:
 定义 isLimit
@@ -436,7 +505,42 @@ definition isLimit
     intro m
     by_cases h : m < n
     · simp only [Category.assoc, cone_π_app_comp_Pi_π_pos f _ _ h]
+      simp only [dite_eq_ite, limit.lift_π_assoc,
+        Discrete.functor_obj_eq_as, Fan.mk_π_app, Category.assoc, eqToHom_trans]
+      have hh : m + 1 <= n := by lia
+      rw [← s.w (homOfLE hh).op]
+      simp only [homOfLE_leOfHom, Category.assoc]
+      congr
+      induction hh using Nat.leRec with
+      | refl => simp
+      | @le_succ_of_le n hh ih =>
+        have : homOfLE (Nat.le_succ_of_le hh) = homOfLE hh ≫ homOfLE (Nat.le_succ n) := by simp
+        rw [this]; rw [op_comp]; rw [Functor.map_comp]
+        simp only [Nat.succ_eq_add_one, homOfLE_leOfHom,
+          Functor.ofOpSequence_map_homOfLE_succ, Category.assoc]
+        have h₁ : (if _ : m < m + 1 then M m else N m) = if _ : m < n then M m else N m := by
+          rw [dif_pos (by lia)]; rw [dif_pos (by lia)]
+        have h₂ : (if _ : m < n then M m else N m) = if _ : m < n + 1 then M m else N m := by
+          rw [dif_pos h]; rw [dif_pos (by lia)]
+        rw [← eqToHom_trans h₁ h₂]
+        slice_lhs 2 4 => rw [ih (by lia)]
+        simp only [functorMap, dite_eq_ite, Pi.π, Pi.map_π_assoc]
+        split_ifs
+        rw [dif_pos (by lia)]
+        simp
+    · simp only [Category.assoc]
+      rw [cone_π_app_comp_Pi_π_neg f _ _ h]
+      simp only [dite_eq_ite, limit.lift_π_assoc,
+        Discrete.functor_obj_eq_as, Fan.mk_π_app, Category.assoc]
+      slice_lhs 2 4 => simp only [← dite_eq_ite, ← functorMap_commSq f h]
       simp
+  uniq s m h := by
+    apply Pi.hom_ext
+    intro n
+    simp only [dite_eq_ite, limit.lift_π,
+      Fan.mk_π_app, ← h ⟨n + 1⟩, Category.assoc]
+    slice_rhs 2 3 => simp only [← dite_eq_ite, cone_π_app_comp_Pi_π_pos f (n + 1) n (by lia)]
+    simp
 
 Depends on / 依赖: Pi.lift
 -/
@@ -510,7 +614,11 @@ lemma functorMap_epi
     intro ⟨_, _⟩
     split
     all_goals infer_instance
-  · apply 
+  · apply +allowSynthFailures IsIso.epi_of_iso
+    apply +allowSynthFailures Pi.map_isIso
+    intro ⟨_, _⟩
+    split
+    all_goals infer_instance
 
 中文:
 引理 functorMap_epi
@@ -525,7 +633,11 @@ lemma functorMap_epi
     intro ⟨_, _⟩
     split
     all_goals infer_instance
-  · apply 
+  · apply +allowSynthFailures IsIso.epi_of_iso
+    apply +allowSynthFailures Pi.map_isIso
+    intro ⟨_, _⟩
+    split
+    all_goals infer_instance
 
 Depends on / 依赖: IsIso.epi_of_iso, Pi.map_epi, Pi.map_eq_prod_map, Pi.map_isIso, all_goals, allowSynthFailures, epi_comp, epi_of_iso, functorMap, infer_instance, map_epi, map_eq_prod_map, map_isIso, prod.map_epi
 -/

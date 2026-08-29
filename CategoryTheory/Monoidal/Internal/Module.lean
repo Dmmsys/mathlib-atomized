@@ -56,7 +56,25 @@ definition MonObj.toRing
     one_mul := fun x => by
       convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A)) ((1 : R) otimesₜ x)
       rw [MonoidalCategory.leftUnitor_hom_apply]; rw [one_smul]
-    mul_on
+    mul_one := fun x => by
+      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_one A)) (x otimesₜ (1 : R))
+      rw [MonoidalCategory.rightUnitor_hom_apply]; rw [one_smul]
+    mul_assoc := fun x y z => by
+      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_assoc A)) (x otimesₜ y otimesₜ z)
+    left_distrib := fun x y z => by
+      convert! μ[A].hom.map_add (x otimesₜ y) (x otimesₜ z)
+      rw [← TensorProduct.tmul_add]
+      rfl
+    right_distrib := fun x y z => by
+      convert! μ[A].hom.map_add (x otimesₜ z) (y otimesₜ z)
+      rw [← TensorProduct.add_tmul]
+      rfl
+    zero_mul := fun x => show μ[A] _ = 0 by
+      rw [TensorProduct.zero_tmul]; rw [map_zero]
+    mul_zero := fun x => show μ[A] _ = 0 by
+      rw [TensorProduct.tmul_zero]; rw [map_zero] }
+
+scoped[ModuleCat.MonModuleEquivalenceAlgebra] attribute [instance] MonObj.toRing
 
 中文:
 定义 MonObj.toRing
@@ -67,7 +85,25 @@ definition MonObj.toRing
     one_mul := fun x => by
       convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (one_mul A)) ((1 : R) otimesₜ x)
       rw [MonoidalCategory.leftUnitor_hom_apply]; rw [one_smul]
-    mul_on
+    mul_one := fun x => by
+      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_one A)) (x otimesₜ (1 : R))
+      rw [MonoidalCategory.rightUnitor_hom_apply]; rw [one_smul]
+    mul_assoc := fun x y z => by
+      convert! LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (mul_assoc A)) (x otimesₜ y otimesₜ z)
+    left_distrib := fun x y z => by
+      convert! μ[A].hom.map_add (x otimesₜ y) (x otimesₜ z)
+      rw [← TensorProduct.tmul_add]
+      rfl
+    right_distrib := fun x y z => by
+      convert! μ[A].hom.map_add (x otimesₜ z) (y otimesₜ z)
+      rw [← TensorProduct.add_tmul]
+      rfl
+    zero_mul := fun x => show μ[A] _ = 0 by
+      rw [TensorProduct.zero_tmul]; rw [map_zero]
+    mul_zero := fun x => show μ[A] _ = 0 by
+      rw [TensorProduct.tmul_zero]; rw [map_zero] }
+
+scoped[ModuleCat.MonModuleEquivalenceAlgebra] attribute [instance] MonObj.toRing
 
 Depends on / 依赖: AddCommGroup, LinearMap, LinearMap.congr_fun, ModuleCat, ModuleCat.hom_ext_iff.mp, MonoidalCategory, MonoidalCategory.leftUnitor_hom_apply, MonoidalCategory.rightUnitor_hom_apply, congr_fun, convert, hom_ext_iff, leftUnitor_hom_apply, mul_assoc, mul_one, one_mul, one_smul, rightUnitor_hom_apply
 -/
@@ -151,7 +187,9 @@ definition functor
       toFun := f.hom
       map_one' := LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.one_hom f.hom)) (1 : R)
       map_mul' := fun x y =>
-        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.mul_ho
+        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.mul_hom f.hom)) (x otimesₜ y)
+      commutes' := fun r =>
+        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.one_hom f.hom)) r }
 
 中文:
 定义 functor
@@ -162,7 +200,9 @@ definition functor
       toFun := f.hom
       map_one' := LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.one_hom f.hom)) (1 : R)
       map_mul' := fun x y =>
-        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.mul_ho
+        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.mul_hom f.hom)) (x otimesₜ y)
+      commutes' := fun r =>
+        LinearMap.congr_fun (ModuleCat.hom_ext_iff.mp (IsMonHom.one_hom f.hom)) r }
 
 Depends on / 依赖: AlgCat, AlgCat.of
 -/
@@ -192,7 +232,41 @@ mul := ofHom LinearMap.mul' R A
     ext : 1
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
 refine TensorProduct.ext LinearMap.ext_ring LinearMap.ext fun x => ?_
-    rw [compr₂ₛ
+    rw [compr₂ₛₗ_apply]; rw [compr₂ₛₗ_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]
+    -- Porting note: this `dsimp` does nothing
+    -- dsimp [AlgCat.id_apply, TensorProduct.mk_apply, Algebra.linearMap_apply,
+    -- LinearMap.compr₂_apply, Function.comp_apply, RingHom.map_one,
+    -- ModuleCat.MonoidalCategory.tensorHom_tmul, AlgCat.hom_comp,
+    -- ModuleCat.MonoidalCategory.leftUnitor_hom_apply]
+    -- Porting note: because `dsimp` is not effective, `rw` needs to be changed to `erw`
+    dsimp
+    erw [LinearMap.mul'_apply, MonoidalCategory.leftUnitor_hom_apply, ← Algebra.smul_def]
+    dsimp
+  mul_one := by
+    ext : 1
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
+refine TensorProduct.ext LinearMap.ext fun x => LinearMap.ext_ring ?_
+    -- Porting note: this `dsimp` does nothing
+    -- dsimp only [AlgCat.id_apply, TensorProduct.mk_apply, Algebra.linearMap_apply,
+    -- LinearMap.compr₂_apply, Function.comp_apply, ModuleCat.MonoidalCategory.hom_apply,
+    -- AlgCat.coe_comp]
+    -- Porting note: because `dsimp` is not effective, `rw` needs to be changed to `erw`
+    erw [compr₂_apply, compr₂ₛₗ_apply]
+    simp only [hom_comp, hom_ofHom, id_coe, id_eq, LinearMap.comp_apply]
+    erw [LinearMap.mul'_apply, ModuleCat.MonoidalCategory.rightUnitor_hom_apply, ← Algebra.commutes,
+      ← Algebra.smul_def]
+    dsimp
+  mul_assoc := by
+    ext : 1
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
+refine TensorProduct.ext TensorProduct.ext LinearMap.ext fun x => LinearMap.ext fun y =>
+      LinearMap.ext fun z => ?_
+    dsimp only [compr₂ₛₗ_apply, TensorProduct.mk_apply]
+    rw [hom_comp]; rw [LinearMap.comp_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]
+    erw [LinearMap.mul'_apply, LinearMap.mul'_apply]
+    dsimp only [id_coe, id_eq]
+    erw [TensorProduct.mk_apply, TensorProduct.mk_apply, mul'_apply, LinearMap.id_apply, mul'_apply]
+    simp only [_root_.mul_assoc]
 
 中文:
 定义 inverseObj
@@ -203,7 +277,41 @@ mul := ofHom LinearMap.mul' R A
     ext : 1
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
 refine TensorProduct.ext LinearMap.ext_ring LinearMap.ext fun x => ?_
-    rw [compr₂ₛ
+    rw [compr₂ₛₗ_apply]; rw [compr₂ₛₗ_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]
+    -- Porting note: this `dsimp` does nothing
+    -- dsimp [AlgCat.id_apply, TensorProduct.mk_apply, Algebra.linearMap_apply,
+    -- LinearMap.compr₂_apply, Function.comp_apply, RingHom.map_one,
+    -- ModuleCat.MonoidalCategory.tensorHom_tmul, AlgCat.hom_comp,
+    -- ModuleCat.MonoidalCategory.leftUnitor_hom_apply]
+    -- Porting note: because `dsimp` is not effective, `rw` needs to be changed to `erw`
+    dsimp
+    erw [LinearMap.mul'_apply, MonoidalCategory.leftUnitor_hom_apply, ← Algebra.smul_def]
+    dsimp
+  mul_one := by
+    ext : 1
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
+refine TensorProduct.ext LinearMap.ext fun x => LinearMap.ext_ring ?_
+    -- Porting note: this `dsimp` does nothing
+    -- dsimp only [AlgCat.id_apply, TensorProduct.mk_apply, Algebra.linearMap_apply,
+    -- LinearMap.compr₂_apply, Function.comp_apply, ModuleCat.MonoidalCategory.hom_apply,
+    -- AlgCat.coe_comp]
+    -- Porting note: because `dsimp` is not effective, `rw` needs to be changed to `erw`
+    erw [compr₂_apply, compr₂ₛₗ_apply]
+    simp only [hom_comp, hom_ofHom, id_coe, id_eq, LinearMap.comp_apply]
+    erw [LinearMap.mul'_apply, ModuleCat.MonoidalCategory.rightUnitor_hom_apply, ← Algebra.commutes,
+      ← Algebra.smul_def]
+    dsimp
+  mul_assoc := by
+    ext : 1
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
+refine TensorProduct.ext TensorProduct.ext LinearMap.ext fun x => LinearMap.ext fun y =>
+      LinearMap.ext fun z => ?_
+    dsimp only [compr₂ₛₗ_apply, TensorProduct.mk_apply]
+    rw [hom_comp]; rw [LinearMap.comp_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]; rw [hom_comp]; rw [LinearMap.comp_apply]
+    erw [LinearMap.mul'_apply, LinearMap.mul'_apply]
+    dsimp only [id_coe, id_eq]
+    erw [TensorProduct.mk_apply, TensorProduct.mk_apply, mul'_apply, LinearMap.id_apply, mul'_apply]
+    simp only [_root_.mul_assoc]
 
 Depends on / 依赖: Algebra, Algebra.linearMap, linearMap
 -/
@@ -306,7 +414,34 @@ definition monModuleEquivalenceAlgebra
               map_smul' _ _ := rfl }
           hom.isMonHom_hom.mul_hom := by
             ext : 1
-            -- Porting not
+            -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
+            exact TensorProduct.ext rfl
+          inv.hom := ofHom
+            { toFun := _root_.id
+              map_add' := fun _ _ => rfl
+              map_smul' := fun _ _ => rfl }
+          inv.isMonHom_hom.mul_hom := by
+            ext : 1
+            -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
+            refine TensorProduct.ext ?_
+            rfl })
+  counitIso :=
+    NatIso.ofComponents
+      (fun A =>
+        { hom := AlgCat.ofHom
+            { toFun := _root_.id
+              map_zero' := rfl
+              map_add' := fun _ _ => rfl
+              map_one' := (algebraMap R A).map_one
+              map_mul' := fun x y => @LinearMap.mul'_apply R _ _ _ _ _ _ x y
+              commutes' := fun _ => rfl }
+          inv := AlgCat.ofHom
+            { toFun := _root_.id
+              map_zero' := rfl
+              map_add' := fun _ _ => rfl
+              map_one' := (algebraMap R A).map_one.symm
+              map_mul' := fun x y => (@LinearMap.mul'_apply R _ _ _ _ _ _ x y).symm
+              commutes' := fun _ => rfl } })
 
 中文:
 定义 monModuleEquivalenceAlgebra
@@ -322,7 +457,34 @@ definition monModuleEquivalenceAlgebra
               map_smul' _ _ := rfl }
           hom.isMonHom_hom.mul_hom := by
             ext : 1
-            -- Porting not
+            -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
+            exact TensorProduct.ext rfl
+          inv.hom := ofHom
+            { toFun := _root_.id
+              map_add' := fun _ _ => rfl
+              map_smul' := fun _ _ => rfl }
+          inv.isMonHom_hom.mul_hom := by
+            ext : 1
+            -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` did not pick up `TensorProduct.ext`
+            refine TensorProduct.ext ?_
+            rfl })
+  counitIso :=
+    NatIso.ofComponents
+      (fun A =>
+        { hom := AlgCat.ofHom
+            { toFun := _root_.id
+              map_zero' := rfl
+              map_add' := fun _ _ => rfl
+              map_one' := (algebraMap R A).map_one
+              map_mul' := fun x y => @LinearMap.mul'_apply R _ _ _ _ _ _ x y
+              commutes' := fun _ => rfl }
+          inv := AlgCat.ofHom
+            { toFun := _root_.id
+              map_zero' := rfl
+              map_add' := fun _ _ => rfl
+              map_one' := (algebraMap R A).map_one.symm
+              map_mul' := fun x y => (@LinearMap.mul'_apply R _ _ _ _ _ _ x y).symm
+              commutes' := fun _ => rfl } })
 
 Depends on / 依赖: functor
 -/
@@ -382,7 +544,7 @@ definition monModuleEquivalenceAlgebraForget
         inv := ofHom
           { toFun := _root_.id
             map_add' := fun _ _ => rfl
-            map_smul' := fun _ _ => rfl } 
+            map_smul' := fun _ _ => rfl } })
 
 中文:
 定义 monModuleEquivalenceAlgebraForget
@@ -396,7 +558,7 @@ definition monModuleEquivalenceAlgebraForget
         inv := ofHom
           { toFun := _root_.id
             map_add' := fun _ _ => rfl
-            map_smul' := fun _ _ => rfl } 
+            map_smul' := fun _ _ => rfl } })
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, _root_, _root_.id, map_add, map_smul, ofComponents
 -/

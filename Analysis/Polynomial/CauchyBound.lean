@@ -275,7 +275,54 @@ theorem IsRoot.norm_lt_cauchyBound
     add_eq_zero_iff_eq_neg] at h
   apply_fun nnnorm at h
   simp only [nnnorm_mul, nnnorm_pow, nnnorm_neg] at h
-  suffices ‖a‖₊ ^ p.natDegre
+  suffices ‖a‖₊ ^ p.natDegree <= (cauchyBound p - 1) * ∑ x in range p.natDegree, ‖a‖₊ ^ x by
+    rcases eq_or_ne ‖a‖₊ 1 with ha | ha
+    · simp only [ha, one_pow, sum_const, card_range, nsmul_eq_mul, mul_one, gt_iff_lt] at this ⊢
+      apply lt_of_le_of_ne (by simp)
+      intro nh
+      simp [← nh, tsub_self] at this
+    rcases lt_or_gt_of_ne ha with ha | ha
+    · apply ha.trans_le
+      simp
+    · rw [geom_sum_of_one_lt ha] at this
+      calc
+        ‖a‖₊ = ‖a‖₊ - 1 + 1 := (tsub_add_cancel_of_le ha.le).symm
+        _ = ‖a‖₊ ^ p.natDegree * (‖a‖₊ - 1) / ‖a‖₊ ^ p.natDegree + 1 := by field
+        _ <= (cauchyBound p - 1) * ((‖a‖₊ ^ p.natDegree - 1) / (‖a‖₊ - 1)) * (‖a‖₊ - 1)
+            / ‖a‖₊ ^ p.natDegree + 1 := by gcongr
+        _ = (cauchyBound p - 1) * (‖a‖₊ ^ p.natDegree - 1) / ‖a‖₊ ^ p.natDegree + 1 := by
+          congr 2
+          have : ‖a‖₊ - 1 != 0 := fun nh => (ha.trans_le (tsub_eq_zero_iff_le.mp nh)).false
+          field
+        _ < (cauchyBound p - 1) * ‖a‖₊ ^ p.natDegree / ‖a‖₊ ^ p.natDegree + 1 := by
+          gcongr
+          · apply lt_of_le_of_ne (by simp)
+            contrapose! this
+            simp only [← this, zero_mul]
+            apply pow_pos
+            exact zero_lt_one.trans ha
+          simp [zero_lt_one.trans ha]
+        _ = cauchyBound p := by simp [field, tsub_add_cancel_of_le]
+  apply le_of_eq at h
+  have pld : ‖p.leadingCoeff‖₊ != 0 := by simpa
+  calc ‖a‖₊ ^ p.natDegree
+    _ = ‖p.leadingCoeff‖₊ * ‖a‖₊ ^ p.natDegree / ‖p.leadingCoeff‖₊ := by
+      rw [mul_div_cancel_left₀]
+      simpa
+    _ <= ‖∑ x in range p.natDegree, p.coeff x * a ^ x‖₊ / ‖p.leadingCoeff‖₊ := by gcongr
+    _ <= (∑ x in range p.natDegree, ‖p.coeff x * a ^ x‖₊) / ‖p.leadingCoeff‖₊ := by
+      gcongr
+      apply nnnorm_sum_le
+    _ = (∑ x in range p.natDegree, ‖p.coeff x‖₊ * ‖a‖₊ ^ x) / ‖p.leadingCoeff‖₊ := by simp
+    _ <= (∑ x in range p.natDegree, ‖p.leadingCoeff‖₊ * (cauchyBound p - 1) * ‖a‖₊ ^ x) /
+        ‖p.leadingCoeff‖₊ := by
+      gcongr (∑ x in _, ?_ * _) / _
+      rw [cauchyBound]; rw [add_tsub_cancel_right]
+      field_simp
+      apply le_sup (f := (‖p.coeff ·‖₊)) ‹_›
+    _ = (cauchyBound p - 1) * ∑ x in range p.natDegree, ‖a‖₊ ^ x := by
+      simp only [← mul_sum]
+      field
 
 中文:
 定理 IsRoot.norm_lt_cauchyBound
@@ -286,7 +333,54 @@ theorem IsRoot.norm_lt_cauchyBound
     add_eq_zero_iff_eq_neg] at h
   apply_fun nnnorm at h
   simp only [nnnorm_mul, nnnorm_pow, nnnorm_neg] at h
-  suffices ‖a‖₊ ^ p.natDegre
+  suffices ‖a‖₊ ^ p.natDegree <= (cauchyBound p - 1) * ∑ x in range p.natDegree, ‖a‖₊ ^ x by
+    rcases eq_or_ne ‖a‖₊ 1 with ha | ha
+    · simp only [ha, one_pow, sum_const, card_range, nsmul_eq_mul, mul_one, gt_iff_lt] at this ⊢
+      apply lt_of_le_of_ne (by simp)
+      intro nh
+      simp [← nh, tsub_self] at this
+    rcases lt_or_gt_of_ne ha with ha | ha
+    · apply ha.trans_le
+      simp
+    · rw [geom_sum_of_one_lt ha] at this
+      calc
+        ‖a‖₊ = ‖a‖₊ - 1 + 1 := (tsub_add_cancel_of_le ha.le).symm
+        _ = ‖a‖₊ ^ p.natDegree * (‖a‖₊ - 1) / ‖a‖₊ ^ p.natDegree + 1 := by field
+        _ <= (cauchyBound p - 1) * ((‖a‖₊ ^ p.natDegree - 1) / (‖a‖₊ - 1)) * (‖a‖₊ - 1)
+            / ‖a‖₊ ^ p.natDegree + 1 := by gcongr
+        _ = (cauchyBound p - 1) * (‖a‖₊ ^ p.natDegree - 1) / ‖a‖₊ ^ p.natDegree + 1 := by
+          congr 2
+          have : ‖a‖₊ - 1 != 0 := fun nh => (ha.trans_le (tsub_eq_zero_iff_le.mp nh)).false
+          field
+        _ < (cauchyBound p - 1) * ‖a‖₊ ^ p.natDegree / ‖a‖₊ ^ p.natDegree + 1 := by
+          gcongr
+          · apply lt_of_le_of_ne (by simp)
+            contrapose! this
+            simp only [← this, zero_mul]
+            apply pow_pos
+            exact zero_lt_one.trans ha
+          simp [zero_lt_one.trans ha]
+        _ = cauchyBound p := by simp [field, tsub_add_cancel_of_le]
+  apply le_of_eq at h
+  have pld : ‖p.leadingCoeff‖₊ != 0 := by simpa
+  calc ‖a‖₊ ^ p.natDegree
+    _ = ‖p.leadingCoeff‖₊ * ‖a‖₊ ^ p.natDegree / ‖p.leadingCoeff‖₊ := by
+      rw [mul_div_cancel_left₀]
+      simpa
+    _ <= ‖∑ x in range p.natDegree, p.coeff x * a ^ x‖₊ / ‖p.leadingCoeff‖₊ := by gcongr
+    _ <= (∑ x in range p.natDegree, ‖p.coeff x * a ^ x‖₊) / ‖p.leadingCoeff‖₊ := by
+      gcongr
+      apply nnnorm_sum_le
+    _ = (∑ x in range p.natDegree, ‖p.coeff x‖₊ * ‖a‖₊ ^ x) / ‖p.leadingCoeff‖₊ := by simp
+    _ <= (∑ x in range p.natDegree, ‖p.leadingCoeff‖₊ * (cauchyBound p - 1) * ‖a‖₊ ^ x) /
+        ‖p.leadingCoeff‖₊ := by
+      gcongr (∑ x in _, ?_ * _) / _
+      rw [cauchyBound]; rw [add_tsub_cancel_right]
+      field_simp
+      apply le_sup (f := (‖p.coeff ·‖₊)) ‹_›
+    _ = (cauchyBound p - 1) * ∑ x in range p.natDegree, ‖a‖₊ ^ x := by
+      simp only [← mul_sum]
+      field
 
 Depends on / 依赖: IsRoot, IsRoot.def, add_eq_zero_iff_eq_neg, apply_fun, card_range, cauchyBound, coeff_natDegree, eq_or_ne, eval_eq_sum_range, gt_iff_lt, lt_of_le_of_ne, lt_self_iff_false, mem_range, mul_one, natDegree, nnnorm, nnnorm_mul, nnnorm_neg, nnnorm_pow, not_false_eq_true
 -/

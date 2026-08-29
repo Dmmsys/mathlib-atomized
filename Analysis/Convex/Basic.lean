@@ -592,7 +592,8 @@ theorem convex_segment
   refine
     ⟨a * ap + b * aq, a * bp + b * bq, add_nonneg (mul_nonneg ha hap) (mul_nonneg hb haq),
       add_nonneg (mul_nonneg ha hbp) (mul_nonneg hb hbq), ?_, ?_⟩
-  · rw [add_add_add_comm, ← mul_add, ← mul_a
+  · rw [add_add_add_comm, ← mul_add, ← mul_add, habp, habq, mul_one, mul_one, hab]
+  · match_scalars <;> noncomm_ring
 
 中文:
 定理 convex_segment
@@ -603,7 +604,8 @@ theorem convex_segment
   refine
     ⟨a * ap + b * aq, a * bp + b * bq, add_nonneg (mul_nonneg ha hap) (mul_nonneg hb haq),
       add_nonneg (mul_nonneg ha hbp) (mul_nonneg hb hbq), ?_, ?_⟩
-  · rw [add_add_add_comm, ← mul_add, ← mul_a
+  · rw [add_add_add_comm, ← mul_add, ← mul_add, habp, habq, mul_one, mul_one, hab]
+  · match_scalars <;> noncomm_ring
 
 Depends on / 依赖: add_add_add_comm, add_nonneg, match_scalars, mul_add, mul_nonneg, mul_one, noncomm_ring
 -/
@@ -1108,7 +1110,8 @@ theorem convex_Iio
   rw [mem_Iio] at hx hy
   calc
     a • x + b • y < a • r + b • r := add_lt_add_of_lt_of_le
-        (smul_lt_smul_of_pos_left hx ha') (smul_le_smul_of_nonneg_left
+        (smul_lt_smul_of_pos_left hx ha') (smul_le_smul_of_nonneg_left hy.le hb)
+    _ = r := Convex.combo_self hab _
 
 中文:
 定理 convex_Iio
@@ -1122,7 +1125,8 @@ theorem convex_Iio
   rw [mem_Iio] at hx hy
   calc
     a • x + b • y < a • r + b • r := add_lt_add_of_lt_of_le
-        (smul_lt_smul_of_pos_left hx ha') (smul_le_smul_of_nonneg_left
+        (smul_lt_smul_of_pos_left hx ha') (smul_le_smul_of_nonneg_left hy.le hb)
+    _ = r := Convex.combo_self hab _
 
 Depends on / 依赖: Convex, Convex.combo_self, add_lt_add_of_lt_of_le, combo_self, eq_or_lt, ha.eq_or_lt, hy.le, mem_Iio, one_smul, smul_le_smul_of_nonneg_left, smul_lt_smul_of_pos_left, zero_add, zero_smul
 -/
@@ -1755,7 +1759,7 @@ theorem convex_openSegment
   rintro p ⟨ap, bp, hap, hbp, habp, rfl⟩ q ⟨aq, bq, haq, hbq, habq, rfl⟩ z ⟨a, b, ha, hb, hab, rfl⟩
   refine ⟨a * ap + b * aq, a * bp + b * bq, by positivity, by positivity, ?_, ?_⟩
   · linear_combination (norm := noncomm_ring) a * habp + b * habq + hab
-  · mo
+  · module
 
 中文:
 定理 convex_openSegment
@@ -1766,7 +1770,7 @@ theorem convex_openSegment
   rintro p ⟨ap, bp, hap, hbp, habp, rfl⟩ q ⟨aq, bq, haq, hbq, habq, rfl⟩ z ⟨a, b, ha, hb, hab, rfl⟩
   refine ⟨a * ap + b * aq, a * bp + b * bq, by positivity, by positivity, ?_, ?_⟩
   · linear_combination (norm := noncomm_ring) a * habp + b * habq + hab
-  · mo
+  · module
 
 Depends on / 依赖: convex_iff_openSegment_subset, linear_combination, module, noncomm_ring
 -/
@@ -2058,7 +2062,10 @@ theorem Convex.semilinear_image
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ a b ha hb hab
   obtain ⟨r, rfl⟩ : exists r : 𝕜, σ r = a := RingHomSurjective.is_surjective ..
   obtain ⟨t, rfl⟩ : exists t : 𝕜, σ t = b := RingHomSurjective.is_surjective ..
-  refine ⟨r • x + t • y, hs hx hy (by simp_all [(@hσ 0 r).mp]) (by simp_all [(@hσ 0 
+  refine ⟨r • x + t • y, hs hx hy (by simp_all [(@hσ 0 r).mp]) (by simp_all [(@hσ 0 t).mp])
+    ?_, by simp⟩
+  apply_fun σ using Function.Injective.of_eq_imp_le (hσ.mp ·.le)
+  simpa
 
 中文:
 定理 凸.semilinear_image
@@ -2067,7 +2074,10 @@ theorem Convex.semilinear_image
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ a b ha hb hab
   obtain ⟨r, rfl⟩ : exists r : 𝕜, σ r = a := RingHomSurjective.is_surjective ..
   obtain ⟨t, rfl⟩ : exists t : 𝕜, σ t = b := RingHomSurjective.is_surjective ..
-  refine ⟨r • x + t • y, hs hx hy (by simp_all [(@hσ 0 r).mp]) (by simp_all [(@hσ 0 
+  refine ⟨r • x + t • y, hs hx hy (by simp_all [(@hσ 0 r).mp]) (by simp_all [(@hσ 0 t).mp])
+    ?_, by simp⟩
+  apply_fun σ using Function.Injective.of_eq_imp_le (hσ.mp ·.le)
+  simpa
 
 Depends on / 依赖: Function, Function.Injective.of_eq_imp_le, Injective, RingHomSurjective, RingHomSurjective.is_surjective, apply_fun, is_surjective, of_eq_imp_le
 -/
@@ -2472,7 +2482,7 @@ lemma convex_of_nonneg_surjective_algebraMap
   · rw [← hc2, algebraMap_smul]
   · rw [← hd2, algebraMap_smul]
   rw [← hc2]; rw [← hd2]; rw [← algebraMap.coe_add] at hab
-  ex
+  exact (FaithfulSMul.algebraMap_eq_one_iff R A).mp hab
 
 中文:
 引理 convex_of_nonneg_surjective_algebraMap
@@ -2486,7 +2496,7 @@ lemma convex_of_nonneg_surjective_algebraMap
   · rw [← hc2, algebraMap_smul]
   · rw [← hd2, algebraMap_smul]
   rw [← hc2]; rw [← hd2]; rw [← algebraMap.coe_add] at hab
-  ex
+  exact (FaithfulSMul.algebraMap_eq_one_iff R A).mp hab
 
 Depends on / 依赖: Convex, FaithfulSMul, FaithfulSMul.algebraMap_eq_one_iff, StarConvex, algebraMap, algebraMap.coe_add, algebraMap_eq_one_iff, algebraMap_smul, coe_add, convert
 -/

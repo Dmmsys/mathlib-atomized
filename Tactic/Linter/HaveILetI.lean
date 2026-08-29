@@ -57,7 +57,12 @@ definition runHaveI
     withMainContext do
     if ← isProp (← getMainTarget) then
       let suggs ← Hint.mkSuggestionsMessage #[{toTryThisSuggestion := "have"}] tk none false
-      logLint l
+      logLint linter.style.haveILetI (← getRef) m!"Try this: {suggs}\n\n\
+        The goal is a proposition, so `have` is preferred over `haveI`.\n\
+        The difference between `have` and `haveI` is that `haveI` inlines the value.\n\
+        But this is not relevant for proofs because of proof irrelevance."
+
+@[tactic_alt Parser.Tactic.tacticHaveI__]
 
 中文:
 定义 runHaveI
@@ -68,7 +73,12 @@ definition runHaveI
     withMainContext do
     if ← isProp (← getMainTarget) then
       let suggs ← Hint.mkSuggestionsMessage #[{toTryThisSuggestion := "have"}] tk none false
-      logLint l
+      logLint linter.style.haveILetI (← getRef) m!"Try this: {suggs}\n\n\
+        The goal is a proposition, so `have` is preferred over `haveI`.\n\
+        The difference between `have` and `haveI` is that `haveI` inlines the value.\n\
+        But this is not relevant for proofs because of proof irrelevance."
+
+@[tactic_alt Parser.Tactic.tacticHaveI__]
 -/
 def runHaveI (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl) : TacticM Unit := do
   evalTactic (← `(tactic| haveI $c:letConfig $d:letDecl))
@@ -96,7 +106,12 @@ definition runLetI
     withMainContext do
     if ← isProp (← getMainTarget) then
       let suggs ← Hint.mkSuggestionsMessage #[{toTryThisSuggestion := "let"}] tk none false
-      logLint lin
+      logLint linter.style.haveILetI (← getRef) m!"Try this: {suggs}\n\n\
+        The goal is a proposition, so `let` is preferred over `letI`.\n\
+        The difference between `let` and `letI` is that `letI` inlines the value.\n\
+        But this is not relevant for proofs because of proof irrelevance."
+
+@[tactic_alt Parser.Tactic.tacticLetI__]
 
 中文:
 定义 runLetI
@@ -107,7 +122,12 @@ definition runLetI
     withMainContext do
     if ← isProp (← getMainTarget) then
       let suggs ← Hint.mkSuggestionsMessage #[{toTryThisSuggestion := "let"}] tk none false
-      logLint lin
+      logLint linter.style.haveILetI (← getRef) m!"Try this: {suggs}\n\n\
+        The goal is a proposition, so `let` is preferred over `letI`.\n\
+        The difference between `let` and `letI` is that `letI` inlines the value.\n\
+        But this is not relevant for proofs because of proof irrelevance."
+
+@[tactic_alt Parser.Tactic.tacticLetI__]
 -/
 def runLetI (tk : Syntax) (c : TSyntax ``letConfig) (d : TSyntax ``letDecl) : TacticM Unit := do
   evalTactic (← `(tactic| letI $c:letConfig $d:letDecl))

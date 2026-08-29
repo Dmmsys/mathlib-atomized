@@ -681,7 +681,8 @@ theorem innerSL_apply_norm
   · refine (mul_le_mul_iff_left₀ h).mp ?_
     calc
       ‖x‖ * ‖x‖ = ‖(⟪x, x⟫ : 𝕜)‖ := by
-        rw [← sq]; rw [inner_self_eq_n
+        rw [← sq]; rw [inner_self_eq_norm_sq_to_K]; rw [norm_pow]; rw [norm_ofReal]; rw [abs_norm]
+      _ <= ‖innerSL 𝕜 x‖ * ‖x‖ := (innerSL 𝕜 x).le_opNorm _
 
 中文:
 定理 innerSL_apply_norm
@@ -695,7 +696,8 @@ theorem innerSL_apply_norm
   · refine (mul_le_mul_iff_left₀ h).mp ?_
     calc
       ‖x‖ * ‖x‖ = ‖(⟪x, x⟫ : 𝕜)‖ := by
-        rw [← sq]; rw [inner_self_eq_n
+        rw [← sq]; rw [inner_self_eq_norm_sq_to_K]; rw [norm_pow]; rw [norm_ofReal]; rw [abs_norm]
+      _ <= ‖innerSL 𝕜 x‖ * ‖x‖ := (innerSL 𝕜 x).le_opNorm _
 
 Depends on / 依赖: abs_norm, eq_or_lt, innerSL, inner_self_eq_norm_sq_to_K, le_antisymm, le_opNorm, norm_inner_le_norm, norm_nonneg, norm_ofReal, norm_pow, opNorm_le_bound
 -/
@@ -1198,7 +1200,9 @@ theorem isIdempotentElem_rankOne_self_iff
     map_smul, _root_.smul_apply]
   nth_rw 2 [← one_smul 𝕜 (rankOne 𝕜 x x)]
   rw [← sub_eq_zero]; rw [← sub_smul]
-  simp only [smul_eq_zero, rankOne_eq_zero
+  simp only [smul_eq_zero, rankOne_eq_zero, hx, or_self, or_false, sub_eq_zero, sq_eq_one_iff,
+    FaithfulSMul.algebraMap_eq_one_iff, ← show ((-(1 : Real) : Real) : 𝕜) = -1 by grind, ofReal_inj]
+  grind [norm_nonneg]
 
 中文:
 定理 isIdempotentElem_rankOne_self_iff
@@ -1209,7 +1213,9 @@ theorem isIdempotentElem_rankOne_self_iff
     map_smul, _root_.smul_apply]
   nth_rw 2 [← one_smul 𝕜 (rankOne 𝕜 x x)]
   rw [← sub_eq_zero]; rw [← sub_smul]
-  simp only [smul_eq_zero, rankOne_eq_zero
+  simp only [smul_eq_zero, rankOne_eq_zero, hx, or_self, or_false, sub_eq_zero, sq_eq_one_iff,
+    FaithfulSMul.algebraMap_eq_one_iff, ← show ((-(1 : Real) : Real) : 𝕜) = -1 by grind, ofReal_inj]
+  grind [norm_nonneg]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_eq_one_iff, IsIdempotentElem, _root_, _root_.smul_apply, algebraMap_eq_one_iff, comp_rankOne, inner_self_eq_norm_sq_to_K, isIdempotentElem_rankOne_self, map_smul, mul_def, norm_nonneg, nth_rw, ofReal_inj, one_smul, or_false, or_self, rankOne, rankOne_apply, rankOne_eq_zero
 -/
@@ -1267,7 +1273,17 @@ theorem exists_of_rankOne_eq_rankOne
   have h₃ := calc
     a = (⟪b, b⟫_𝕜 / ⟪b, b⟫_𝕜) • a := by simp_all
     _ = (1 / ⟪b, b⟫_𝕜) • (⟪b, b⟫_𝕜 • a) := by simp only [smul_smul]; ring_nf
-    _ = (⟪d, b⟫_𝕜 / ⟪b, b⟫_𝕜) • c := by si
+    _ = (⟪d, b⟫_𝕜 / ⟪b, b⟫_𝕜) • c := by simp only [h, smul_smul]; ring_nf
+  have h₄ := calc
+    b = (⟪a, a⟫_𝕜 / ⟪a, a⟫_𝕜) • b := by simp_all
+    _ = (1 / ⟪a, a⟫_𝕜) • (⟪a, a⟫_𝕜 • b) := by simp only [smul_smul]; ring_nf
+    _ = ((⟪d, b⟫_𝕜 / ⟪b, b⟫_𝕜) * (⟪c, c⟫_𝕜 / ⟪a, a⟫_𝕜)) • d := by
+      simp_rw [h₂, h₃, inner_smul_right, smul_smul]; ring_nf
+  have h₅ : ⟪d, b⟫_𝕜 != 0 := fun h => by simp [h, hb] at h₄
+  have h₆ : c != 0 := fun h => by simp [h, ha] at h₃
+refine ⟨_, ‖c‖ ^ 2 / ‖a‖ ^ 2, div_ne_zero h₅ by simpa, ?_, h₃, by simpa using h₄⟩
+  simp_rw [← ofReal_pow, ← ofReal_div, pos_iff (K := 𝕜), ofReal_re, ofReal_im, and_true]
+  exact div_pos (by simpa [sq_pos_iff]) (by simpa [sq_pos_iff])
 
 中文:
 定理 存在_of_rankOne_eq_rankOne
@@ -1278,7 +1294,17 @@ theorem exists_of_rankOne_eq_rankOne
   have h₃ := calc
     a = (⟪b, b⟫_𝕜 / ⟪b, b⟫_𝕜) • a := by simp_all
     _ = (1 / ⟪b, b⟫_𝕜) • (⟪b, b⟫_𝕜 • a) := by simp only [smul_smul]; ring_nf
-    _ = (⟪d, b⟫_𝕜 / ⟪b, b⟫_𝕜) • c := by si
+    _ = (⟪d, b⟫_𝕜 / ⟪b, b⟫_𝕜) • c := by simp only [h, smul_smul]; ring_nf
+  have h₄ := calc
+    b = (⟪a, a⟫_𝕜 / ⟪a, a⟫_𝕜) • b := by simp_all
+    _ = (1 / ⟪a, a⟫_𝕜) • (⟪a, a⟫_𝕜 • b) := by simp only [smul_smul]; ring_nf
+    _ = ((⟪d, b⟫_𝕜 / ⟪b, b⟫_𝕜) * (⟪c, c⟫_𝕜 / ⟪a, a⟫_𝕜)) • d := by
+      simp_rw [h₂, h₃, inner_smul_right, smul_smul]; ring_nf
+  have h₅ : ⟪d, b⟫_𝕜 != 0 := fun h => by simp [h, hb] at h₄
+  have h₆ : c != 0 := fun h => by simp [h, ha] at h₃
+refine ⟨_, ‖c‖ ^ 2 / ‖a‖ ^ 2, div_ne_zero h₅ by simpa, ?_, h₃, by simpa using h₄⟩
+  simp_rw [← ofReal_pow, ← ofReal_div, pos_iff (K := 𝕜), ofReal_re, ofReal_im, and_true]
+  exact div_pos (by simpa [sq_pos_iff]) (by simpa [sq_pos_iff])
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.ext_iff, ext_iff, rankOne_apply, rankOne_eq_rankOne_iff_comm, rankOne_eq_rankOne_iff_comm.mp, ring_nf, smul_smul
 -/

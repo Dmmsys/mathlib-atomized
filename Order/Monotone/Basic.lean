@@ -587,7 +587,47 @@ alias ⟨_, Antitone.dual_left⟩ := monotone_comp_ofDual_iff
 
 alias ⟨_, Monotone.dual_right⟩ := antitone_toDual_comp_iff
 
-alias ⟨_, Antitone.dual_right⟩ := monotone_toDu
+alias ⟨_, Antitone.dual_right⟩ := monotone_toDual_comp_iff
+
+alias ⟨_, MonotoneOn.dual_left⟩ := antitoneOn_comp_ofDual_iff
+
+alias ⟨_, AntitoneOn.dual_left⟩ := monotoneOn_comp_ofDual_iff
+
+alias ⟨_, MonotoneOn.dual_right⟩ := antitoneOn_toDual_comp_iff
+
+alias ⟨_, AntitoneOn.dual_right⟩ := monotoneOn_toDual_comp_iff
+
+alias ⟨_, StrictMono.dual_left⟩ := strictAnti_comp_ofDual_iff
+
+alias ⟨_, StrictAnti.dual_left⟩ := strictMono_comp_ofDual_iff
+
+alias ⟨_, StrictMono.dual_right⟩ := strictAnti_toDual_comp_iff
+
+alias ⟨_, StrictAnti.dual_right⟩ := strictMono_toDual_comp_iff
+
+alias ⟨_, StrictMonoOn.dual_left⟩ := strictAntiOn_comp_ofDual_iff
+
+alias ⟨_, StrictAntiOn.dual_left⟩ := strictMonoOn_comp_ofDual_iff
+
+alias ⟨_, StrictMonoOn.dual_right⟩ := strictAntiOn_toDual_comp_iff
+
+alias ⟨_, StrictAntiOn.dual_right⟩ := strictMonoOn_toDual_comp_iff
+
+alias ⟨_, Monotone.dual⟩ := monotone_dual_iff
+
+alias ⟨_, Antitone.dual⟩ := antitone_dual_iff
+
+alias ⟨_, MonotoneOn.dual⟩ := monotoneOn_dual_iff
+
+alias ⟨_, AntitoneOn.dual⟩ := antitoneOn_dual_iff
+
+alias ⟨_, StrictMono.dual⟩ := strictMono_dual_iff
+
+alias ⟨_, StrictAnti.dual⟩ := strictAnti_dual_iff
+
+alias ⟨_, StrictMonoOn.dual⟩ := strictMonoOn_dual_iff
+
+alias ⟨_, StrictAntiOn.dual⟩ := strictAntiOn_dual_iff
 
 中文:
 定理 strictAntiOn_dual_iff
@@ -600,7 +640,47 @@ alias ⟨_, Antitone.dual_left⟩ := monotone_comp_ofDual_iff
 
 alias ⟨_, Monotone.dual_right⟩ := antitone_toDual_comp_iff
 
-alias ⟨_, Antitone.dual_right⟩ := monotone_toDu
+alias ⟨_, Antitone.dual_right⟩ := monotone_toDual_comp_iff
+
+alias ⟨_, MonotoneOn.dual_left⟩ := antitoneOn_comp_ofDual_iff
+
+alias ⟨_, AntitoneOn.dual_left⟩ := monotoneOn_comp_ofDual_iff
+
+alias ⟨_, MonotoneOn.dual_right⟩ := antitoneOn_toDual_comp_iff
+
+alias ⟨_, AntitoneOn.dual_right⟩ := monotoneOn_toDual_comp_iff
+
+alias ⟨_, StrictMono.dual_left⟩ := strictAnti_comp_ofDual_iff
+
+alias ⟨_, StrictAnti.dual_left⟩ := strictMono_comp_ofDual_iff
+
+alias ⟨_, StrictMono.dual_right⟩ := strictAnti_toDual_comp_iff
+
+alias ⟨_, StrictAnti.dual_right⟩ := strictMono_toDual_comp_iff
+
+alias ⟨_, StrictMonoOn.dual_left⟩ := strictAntiOn_comp_ofDual_iff
+
+alias ⟨_, StrictAntiOn.dual_left⟩ := strictMonoOn_comp_ofDual_iff
+
+alias ⟨_, StrictMonoOn.dual_right⟩ := strictAntiOn_toDual_comp_iff
+
+alias ⟨_, StrictAntiOn.dual_right⟩ := strictMonoOn_toDual_comp_iff
+
+alias ⟨_, Monotone.dual⟩ := monotone_dual_iff
+
+alias ⟨_, Antitone.dual⟩ := antitone_dual_iff
+
+alias ⟨_, MonotoneOn.dual⟩ := monotoneOn_dual_iff
+
+alias ⟨_, AntitoneOn.dual⟩ := antitoneOn_dual_iff
+
+alias ⟨_, StrictMono.dual⟩ := strictMono_dual_iff
+
+alias ⟨_, StrictAnti.dual⟩ := strictAnti_dual_iff
+
+alias ⟨_, StrictMonoOn.dual⟩ := strictMonoOn_dual_iff
+
+alias ⟨_, StrictAntiOn.dual⟩ := strictAntiOn_dual_iff
 
 Depends on / 依赖: strictAntiOn_toDual_comp_iff, strictMonoOn_comp_ofDual_iff
 -/
@@ -2415,7 +2495,9 @@ theorem exists_strictMono
   rintro (n | _ | n)
   · exact hf n.lt_succ_self
   · change g 1 < f 0
-  
+    rw [hf₀]; rw [← hg₀]
+    exact hg Nat.zero_lt_one
+  · exact hg (Nat.lt_succ_self _)
 
 中文:
 定理 存在_strictMono
@@ -2428,7 +2510,9 @@ theorem exists_strictMono
   rintro (n | _ | n)
   · exact hf n.lt_succ_self
   · change g 1 < f 0
-  
+    rw [hf₀]; rw [← hg₀]
+    exact hg Nat.zero_lt_one
+  · exact hg (Nat.lt_succ_self _)
 
 Depends on / 依赖: Int.casesOn, Nat.exists_strictAnti, Nat.exists_strictMono, Nat.lt_succ_self, Nat.zero_lt_one, casesOn, exists_strictAnti, exists_strictMono, inhabit, lt_succ_self, n.lt_succ_self, strictMono_int_of_lt_succ, zero_lt_one
 -/
@@ -2576,7 +2660,12 @@ lemma Nat.stabilises_of_monotone
     | 0, _ => Nat.zero_le _
 | m + 1, hmb => (strictMono _ <| m.le_succ.trans hmb).trans_lt (hfmono m.le_succ).lt_of_ne
 hfb _ Nat.le_of_succ_le_succ hmb
-    exact ⟨
+    exact ⟨b + 1, strictMono _ le_rfl⟩
+  replace key : forall k : Nat, f (m + k) = f (m + k + 1) ∧ f (m + k) = f m := fun k =>
+    Nat.rec ⟨hm, rfl⟩ (fun k ih => ⟨hfstab _ ih.1, ih.1.symm.trans ih.2⟩) k
+  replace key : forall k >= m, f k = f m := fun k hk =>
+    (congr_arg f (Nat.add_sub_of_le hk)).symm.trans (key (k - m)).2
+  exact (key n (hmb.trans hbn)).trans (key b hmb).symm
 
 中文:
 引理 自然数.stabilises_of_monotone
@@ -2588,7 +2677,12 @@ hfb _ Nat.le_of_succ_le_succ hmb
     | 0, _ => Nat.zero_le _
 | m + 1, hmb => (strictMono _ <| m.le_succ.trans hmb).trans_lt (hfmono m.le_succ).lt_of_ne
 hfb _ Nat.le_of_succ_le_succ hmb
-    exact ⟨
+    exact ⟨b + 1, strictMono _ le_rfl⟩
+  replace key : forall k : Nat, f (m + k) = f (m + k + 1) ∧ f (m + k) = f m := fun k =>
+    Nat.rec ⟨hm, rfl⟩ (fun k ih => ⟨hfstab _ ih.1, ih.1.symm.trans ih.2⟩) k
+  replace key : forall k >= m, f k = f m := fun k hk =>
+    (congr_arg f (Nat.add_sub_of_le hk)).symm.trans (key (k - m)).2
+  exact (key n (hmb.trans hbn)).trans (key b hmb).symm
 
 Depends on / 依赖: Nat.le_of_succ_le_succ, Nat.rec, Nat.zero_le, contrapose, hfmono, hfstab, le_of_succ_le_succ, le_rfl, le_succ, lt_of_ne, m.le_succ, m.le_succ.trans, replace, strictMono, symm.trans, trans_lt, zero_le
 -/
@@ -2619,7 +2713,13 @@ lemma Nat.stabilises_of_antitone
     by_cases heq : f 0 = f 1
     · have flat (j : Nat) : f j = f (j + 1) := by induction j with grind
       exact ⟨0, Nat.zero_le _, fun m _ => by induction m with grind⟩
-    · have hlt : f 1 < f 0 := (hfmono (Nat.le_su
+    · have hlt : f 1 < f 0 := (hfmono (Nat.le_succ 0)).lt_of_ne' heq
+      let g (i : Nat) := f (i + 1)
+      have hg_anti : Antitone g := by grind [Antitone]
+      obtain ⟨p, hp, hp'⟩ := ih (f 1) (by grind) hg_anti (by grind) rfl
+      refine ⟨p + 1, by omega, fun m hm => ?_⟩
+      specialize hp' (m - 1) (by lia)
+      grind
 
 中文:
 引理 自然数.stabilises_of_antitone
@@ -2630,7 +2730,13 @@ lemma Nat.stabilises_of_antitone
     by_cases heq : f 0 = f 1
     · have flat (j : Nat) : f j = f (j + 1) := by induction j with grind
       exact ⟨0, Nat.zero_le _, fun m _ => by induction m with grind⟩
-    · have hlt : f 1 < f 0 := (hfmono (Nat.le_su
+    · have hlt : f 1 < f 0 := (hfmono (Nat.le_succ 0)).lt_of_ne' heq
+      let g (i : Nat) := f (i + 1)
+      have hg_anti : Antitone g := by grind [Antitone]
+      obtain ⟨p, hp, hp'⟩ := ih (f 1) (by grind) hg_anti (by grind) rfl
+      refine ⟨p + 1, by omega, fun m hm => ?_⟩
+      specialize hp' (m - 1) (by lia)
+      grind
 
 Depends on / 依赖: Antitone, Nat.le_succ, Nat.strongRecOn, Nat.zero_le, generalizing, hfmono, hg_anti, le_succ, lt_of_ne, specialize, strongRecOn, zero_le
 -/
@@ -2665,7 +2771,7 @@ lemma converges_of_monotone_of_bounded
     · obtain ⟨N, hN⟩ := h
       replace hN : f N = c + 1 := by specialize hc N; lia
       use c + 1, N; intro n hn
-      specialize mono_f hn; s
+      specialize mono_f hn; specialize hc n; lia
 
 中文:
 引理 converges_of_monotone_of_bounded
@@ -2679,7 +2785,7 @@ lemma converges_of_monotone_of_bounded
     · obtain ⟨N, hN⟩ := h
       replace hN : f N = c + 1 := by specialize hc N; lia
       use c + 1, N; intro n hn
-      specialize mono_f hn; s
+      specialize mono_f hn; specialize hc n; lia
 
 Depends on / 依赖: Nat.eq_zero_of_le_zero, eq_zero_of_le_zero, mono_f, replace, specialize
 -/

@@ -139,7 +139,9 @@ theorem congr_reverse
       (WY.reverse ≫ (f.toPath ≫ (Quiver.reverse f).toPath) ≫ XW.reverse) := by
     constructor
     constructor
-  simpa only [CategoryStruct.comp, CategoryStruct.id, Quiver.Path.reverse, Quiv
+  simpa only [CategoryStruct.comp, CategoryStruct.id, Quiver.Path.reverse, Quiver.Path.nil_comp,
+    Quiver.Path.reverse_comp, Quiver.reverse_reverse, Quiver.Path.reverse_toPath,
+    Quiver.Path.comp_assoc] using this
 
 中文:
 定理 congr_reverse
@@ -150,7 +152,9 @@ theorem congr_reverse
       (WY.reverse ≫ (f.toPath ≫ (Quiver.reverse f).toPath) ≫ XW.reverse) := by
     constructor
     constructor
-  simpa only [CategoryStruct.comp, CategoryStruct.id, Quiver.Path.reverse, Quiv
+  simpa only [CategoryStruct.comp, CategoryStruct.id, Quiver.Path.reverse, Quiver.Path.nil_comp,
+    Quiver.Path.reverse_comp, Quiver.reverse_reverse, Quiver.Path.reverse_toPath,
+    Quiver.Path.comp_assoc] using this
 
 Depends on / 依赖: CategoryStruct, CategoryStruct.comp, CategoryStruct.id, CompClosure, HomRel, HomRel.CompClosure, Quiver, Quiver.Path.comp_assoc, Quiver.Path.nil_comp, Quiver.Path.reverse, Quiver.Path.reverse_comp, Quiver.Path.reverse_toPath, Quiver.reverse, Quiver.reverse_reverse, WY.reverse, XW.reverse, comp_assoc, f.toPath, nil_comp, redStep
 -/
@@ -182,7 +186,21 @@ theorem congr_comp_reverse
     fapply EqvGen.trans
     -- Porting note: dot notation for `Quiver.Path.*` and `Quiver.Hom.*` not working
     · exact q ≫ Quiver.Path.reverse q
-    · apply EqvGen.sy
+    · apply EqvGen.symm
+      apply EqvGen.rel
+      have : HomRel.CompClosure redStep (q ≫ 𝟙 _ ≫ Quiver.Path.reverse q)
+          (q ≫ (Quiver.Hom.toPath f ≫ Quiver.Hom.toPath (Quiver.reverse f)) ≫
+            Quiver.Path.reverse q) := by
+        apply HomRel.CompClosure.intro
+        apply redStep.step
+      simp only [Category.assoc, Category.id_comp] at this ⊢
+      -- Porting note: `simp` cannot see how `Quiver.Path.comp_assoc` is relevant, so change to
+      -- category notation
+      change HomRel.CompClosure redStep (q ≫ Quiver.Path.reverse q)
+        (Quiver.Path.cons q f ≫ (Quiver.Hom.toPath (Quiver.reverse f)) ≫ (Quiver.Path.reverse q))
+      simp only [← Category.assoc] at this ⊢
+      exact this
+    · exact ih
 
 中文:
 定理 congr_comp_reverse
@@ -196,7 +214,21 @@ theorem congr_comp_reverse
     fapply EqvGen.trans
     -- Porting note: dot notation for `Quiver.Path.*` and `Quiver.Hom.*` not working
     · exact q ≫ Quiver.Path.reverse q
-    · apply EqvGen.sy
+    · apply EqvGen.symm
+      apply EqvGen.rel
+      have : HomRel.CompClosure redStep (q ≫ 𝟙 _ ≫ Quiver.Path.reverse q)
+          (q ≫ (Quiver.Hom.toPath f ≫ Quiver.Hom.toPath (Quiver.reverse f)) ≫
+            Quiver.Path.reverse q) := by
+        apply HomRel.CompClosure.intro
+        apply redStep.step
+      simp only [Category.assoc, Category.id_comp] at this ⊢
+      -- Porting note: `simp` cannot see how `Quiver.Path.comp_assoc` is relevant, so change to
+      -- category notation
+      change HomRel.CompClosure redStep (q ≫ Quiver.Path.reverse q)
+        (Quiver.Path.cons q f ≫ (Quiver.Hom.toPath (Quiver.reverse f)) ≫ (Quiver.Path.reverse q))
+      simp only [← Category.assoc] at this ⊢
+      exact this
+    · exact ih
 
 Depends on / 依赖: EqvGen, EqvGen.refl, EqvGen.trans, Quiver, Quiver.Path.reverse, Quot.eqvGen_sound, eqvGen_sound, fapply, reverse
 -/
@@ -365,7 +397,7 @@ definition lift
     erw [Paths.lift_nil, Paths.lift_cons, Quiver.Path.comp_nil, Paths.lift_toPath,
       Quiver.Symmetrify.lift_reverse]
     symm
- 
+    apply Groupoid.comp_inv
 
 中文:
 定义 lift
@@ -376,7 +408,7 @@ definition lift
     erw [Paths.lift_nil, Paths.lift_cons, Quiver.Path.comp_nil, Paths.lift_toPath,
       Quiver.Symmetrify.lift_reverse]
     symm
- 
+    apply Groupoid.comp_inv
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.lift, Paths.lift, Quiver, Quiver.Symmetrify.lift, Quotient, Symmetrify
 -/
@@ -433,7 +465,10 @@ theorem lift_unique
     exact hΦ
   · rintro X Y f
     simp only [← Functor.toPrefunctor_comp, Prefunctor.comp_map, Paths.of_map]
-    change Φ.map (Groupoid.inv ((Quoti
+    change Φ.map (Groupoid.inv ((Quotient.functor redStep).toPrefunctor.map f.toPath)) =
+      Groupoid.inv (Φ.map ((Quotient.functor redStep).toPrefunctor.map f.toPath))
+    have := Functor.map_inv Φ ((Quotient.functor redStep).toPrefunctor.map f.toPath)
+    convert! this <;> simp only [Groupoid.inv_eq_inv]
 
 中文:
 定理 lift_unique
@@ -446,7 +481,10 @@ theorem lift_unique
     exact hΦ
   · rintro X Y f
     simp only [← Functor.toPrefunctor_comp, Prefunctor.comp_map, Paths.of_map]
-    change Φ.map (Groupoid.inv ((Quoti
+    change Φ.map (Groupoid.inv ((Quotient.functor redStep).toPrefunctor.map f.toPath)) =
+      Groupoid.inv (Φ.map ((Quotient.functor redStep).toPrefunctor.map f.toPath))
+    have := Functor.map_inv Φ ((Quotient.functor redStep).toPrefunctor.map f.toPath)
+    convert! this <;> simp only [Groupoid.inv_eq_inv]
 
 Depends on / 依赖: Functor, Functor.map_inv, Functor.toPrefunctor_comp, Groupoid, Groupoid.inv, Paths.lift_unique, Paths.of_map, Prefunctor, Prefunctor.comp_map, Quiver, Quiver.Symmetrify.lift_unique, Quotient, Quotient.functor, Quotient.lift_unique, Symmetrify, comp_map, convert, f.toPath, fapply, functor
 -/

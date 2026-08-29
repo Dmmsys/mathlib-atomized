@@ -116,7 +116,8 @@ theorem conj_apply
     rw [apply_at]; rw [apply_at]; rw [ComplexEmbedding.conjugate_coe_eq]
   · rw [Pi.zero_apply, Pi.zero_apply, map_zero]
   · rw [Pi.add_apply, Pi.add_apply, map_add, hx, hy]
-  · rw [Pi.
+  · rw [Pi.smul_apply, Complex.real_smul, map_mul, Complex.conj_ofReal]
+    exact congrArg ((a : Complex) * ·) hx
 
 中文:
 定理 conj_apply
@@ -127,7 +128,8 @@ theorem conj_apply
     rw [apply_at]; rw [apply_at]; rw [ComplexEmbedding.conjugate_coe_eq]
   · rw [Pi.zero_apply, Pi.zero_apply, map_zero]
   · rw [Pi.add_apply, Pi.add_apply, map_add, hx, hy]
-  · rw [Pi.
+  · rw [Pi.smul_apply, Complex.real_smul, map_mul, Complex.conj_ofReal]
+    exact congrArg ((a : Complex) * ·) hx
 
 Depends on / 依赖: Complex.conj_ofReal, Complex.real_smul, ComplexEmbedding, ComplexEmbedding.conjugate_coe_eq, Pi.add_apply, Pi.smul_apply, Pi.zero_apply, Submodule, Submodule.span_induction, add_apply, apply_at, conj_ofReal, conjugate_coe_eq, map_add, map_mul, map_zero, real_smul, smul_apply, span_induction, zero_apply
 -/
@@ -176,7 +178,8 @@ theorem norm_le_iff
     · exact (hr.trans_le (norm_nonneg _)).not_ge
     · exact fun h => hr.not_ge (le_trans (norm_nonneg _) (h φ))
   · lift r to NNReal using hr
-    simp_rw [← coe_nnnorm, nn
+    simp_rw [← coe_nnnorm, nnnorm_eq, NNReal.coe_le_coe, Finset.sup_le_iff, Finset.mem_univ,
+      forall_true_left]
 
 中文:
 定理 norm_le_iff
@@ -188,7 +191,8 @@ theorem norm_le_iff
     · exact (hr.trans_le (norm_nonneg _)).not_ge
     · exact fun h => hr.not_ge (le_trans (norm_nonneg _) (h φ))
   · lift r to NNReal using hr
-    simp_rw [← coe_nnnorm, nn
+    simp_rw [← coe_nnnorm, nnnorm_eq, NNReal.coe_le_coe, Finset.sup_le_iff, Finset.mem_univ,
+      forall_true_left]
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.sup_le_iff, NNReal, NNReal.coe_le_coe, Nonempty, coe_le_coe, coe_nnnorm, exists_le_maximal, forall_true_left, hr.not_ge, hr.trans_le, iff_of_false, le_trans, lt_or_ge, mem_univ, nnnorm_eq, norm_nonneg, not_ge, simp_rw
 -/
@@ -235,7 +239,12 @@ theorem integerLattice.inter_ball_finite
   · have heq : forall x, canonicalEmbedding K x in Metric.closedBall 0 r ↔
         forall φ : K ->+* Complex, ‖φ x‖ <= r := by
       intro x; rw [← norm_le_iff, mem_closedBall_zero_iff]
-    convert! (Embeddings.finite_of_n
+    convert! (Embeddings.finite_of_norm_le K Complex r).image (canonicalEmbedding K)
+    ext; constructor
+    · rintro ⟨⟨_, ⟨x, rfl⟩, rfl⟩, hx⟩
+      exact ⟨x, ⟨SetLike.coe_mem x, fun φ => (heq _).mp hx φ⟩, rfl⟩
+    · rintro ⟨x, ⟨hx1, hx2⟩, rfl⟩
+      exact ⟨⟨x, ⟨⟨x, hx1⟩, rfl⟩, rfl⟩, (heq x).mpr hx2⟩
 
 中文:
 定理 integerLattice.inter_ball_finite
@@ -246,7 +255,12 @@ theorem integerLattice.inter_ball_finite
   · have heq : forall x, canonicalEmbedding K x in Metric.closedBall 0 r ↔
         forall φ : K ->+* Complex, ‖φ x‖ <= r := by
       intro x; rw [← norm_le_iff, mem_closedBall_zero_iff]
-    convert! (Embeddings.finite_of_n
+    convert! (Embeddings.finite_of_norm_le K Complex r).image (canonicalEmbedding K)
+    ext; constructor
+    · rintro ⟨⟨_, ⟨x, rfl⟩, rfl⟩, hx⟩
+      exact ⟨x, ⟨SetLike.coe_mem x, fun φ => (heq _).mp hx φ⟩, rfl⟩
+    · rintro ⟨x, ⟨hx1, hx2⟩, rfl⟩
+      exact ⟨⟨x, ⟨⟨x, hx1⟩, rfl⟩, rfl⟩, (heq x).mpr hx2⟩
 
 Depends on / 依赖: Embeddings, Embeddings.finite_of_norm_le, Metric, Metric.closedBall, Metric.closedBall_eq_empty, SetLike, SetLike.coe_mem, canonicalEmbedding, closedBall, closedBall_eq_empty, coe_mem, convert, finite_of_norm_le, lt_or_ge, mem_closedBall_zero_iff, norm_le_iff
 -/
@@ -276,7 +290,26 @@ definition latticeBasis
   -- the image by `canonicalEmbedding` of the integral basis of `K` is nonzero. This
   -- will imply the result.
     let B := Pi.basisFun Complex (K ->+* Complex)
-    let e : (K ->+* Complex) ≃ Fr
+    let e : (K ->+* Complex) ≃ Free.ChooseBasisIndex Int (𝓞 K) :=
+      Fintype.equivOfCardEq ((Embeddings.card K Complex).trans (finrank_eq_card_basis (integralBasis K)))
+    let M := B.toMatrix (fun i => canonicalEmbedding K (integralBasis K (e i)))
+    suffices M.det != 0 by
+      rw [← isUnit_iff_ne_zero]; rw [← Basis.det_apply]; rw [← Basis.is_basis_iff_det] at this
+      exact (basisOfPiSpaceOfLinearIndependent this.1).reindex e
+  -- In order to prove that the determinant is nonzero, we show that it is equal to the
+  -- square of the discriminant of the integral basis and thus it is not zero
+    let N := Algebra.embeddingsMatrixReindex Rat Complex (fun i => integralBasis K (e i))
+      (RingHom.equivRatAlgHom K Complex)
+    rw [show M = N.transpose by { ext : 2; rfl }]
+    rw [Matrix.det_transpose]; rw [← pow_ne_zero_iff two_ne_zero]
+    convert!
+      (map_ne_zero_iff _ (algebraMap Rat Complex).injective).mpr
+        (Algebra.discr_not_zero_of_basis Rat (integralBasis K))
+    rw [← Algebra.discr_reindex Rat (integralBasis K) e.symm]
+    exact (Algebra.discr_eq_det_embeddingsMatrixReindex_pow_two Rat Complex
+      (fun i => integralBasis K (e i)) (RingHom.equivRatAlgHom K Complex)).symm
+
+@[simp]
 
 中文:
 定义 latticeBasis
@@ -287,7 +320,26 @@ definition latticeBasis
   -- the image by `canonicalEmbedding` of the integral basis of `K` is nonzero. This
   -- will imply the result.
     let B := Pi.basisFun Complex (K ->+* Complex)
-    let e : (K ->+* Complex) ≃ Fr
+    let e : (K ->+* Complex) ≃ Free.ChooseBasisIndex Int (𝓞 K) :=
+      Fintype.equivOfCardEq ((Embeddings.card K Complex).trans (finrank_eq_card_basis (integralBasis K)))
+    let M := B.toMatrix (fun i => canonicalEmbedding K (integralBasis K (e i)))
+    suffices M.det != 0 by
+      rw [← isUnit_iff_ne_zero]; rw [← Basis.det_apply]; rw [← Basis.is_basis_iff_det] at this
+      exact (basisOfPiSpaceOfLinearIndependent this.1).reindex e
+  -- In order to prove that the determinant is nonzero, we show that it is equal to the
+  -- square of the discriminant of the integral basis and thus it is not zero
+    let N := Algebra.embeddingsMatrixReindex Rat Complex (fun i => integralBasis K (e i))
+      (RingHom.equivRatAlgHom K Complex)
+    rw [show M = N.transpose by { ext : 2; rfl }]
+    rw [Matrix.det_transpose]; rw [← pow_ne_zero_iff two_ne_zero]
+    convert!
+      (map_ne_zero_iff _ (algebraMap Rat Complex).injective).mpr
+        (Algebra.discr_not_zero_of_basis Rat (integralBasis K))
+    rw [← Algebra.discr_reindex Rat (integralBasis K) e.symm]
+    exact (Algebra.discr_eq_det_embeddingsMatrixReindex_pow_two Rat Complex
+      (fun i => integralBasis K (e i)) (RingHom.equivRatAlgHom K Complex)).symm
+
+@[simp]
 
 Depends on / 依赖: classical
 -/
@@ -352,7 +404,10 @@ theorem mem_span_latticeBasis
   rw [show Set.range (latticeBasis K) =
       (canonicalEmbedding K).toIntAlgHom.toLinearMap '' (Set.range (integralBasis K)) by
     rw [← Set.range_comp]; exact congrArg Set.range (funext (fun i => latticeBasis_apply K i))]
-  rw [← Submodule.map_span]; rw [← SetLike.mem_coe]; rw [Submodule.map_c
+  rw [← Submodule.map_span]; rw [← SetLike.mem_coe]; rw [Submodule.map_coe]
+  rw [← RingHom.map_range]; rw [Subring.mem_map]; rw [Set.mem_image]
+  simp only [SetLike.mem_coe, mem_span_integralBasis K]
+  rfl
 
 中文:
 定理 mem_span_latticeBasis
@@ -361,7 +416,10 @@ theorem mem_span_latticeBasis
   rw [show Set.range (latticeBasis K) =
       (canonicalEmbedding K).toIntAlgHom.toLinearMap '' (Set.range (integralBasis K)) by
     rw [← Set.range_comp]; exact congrArg Set.range (funext (fun i => latticeBasis_apply K i))]
-  rw [← Submodule.map_span]; rw [← SetLike.mem_coe]; rw [Submodule.map_c
+  rw [← Submodule.map_span]; rw [← SetLike.mem_coe]; rw [Submodule.map_coe]
+  rw [← RingHom.map_range]; rw [Subring.mem_map]; rw [Set.mem_image]
+  simp only [SetLike.mem_coe, mem_span_integralBasis K]
+  rfl
 
 Depends on / 依赖: RingHom, RingHom.map_range, Set.mem_image, Set.range, Set.range_comp, SetLike, SetLike.mem_coe, Submodule, Submodule.map_coe, Submodule.map_span, Subring, Subring.mem_map, canonicalEmbedding, integralBasis, latticeBasis, latticeBasis_apply, map_coe, map_range, map_span, mem_coe
 -/
@@ -420,7 +478,14 @@ theorem integralBasis_repr_apply
   rw [← Basis.restrictScalars_repr_apply Rat _ ⟨_]; rw [mem_rat_span_latticeBasis K x⟩]; rw [eq_ratCast]; rw [Rat.cast_inj]
   let f := (canonicalEmbedding K).toRatAlgHom.toLinearMap.codRestrict _
     (fun x => mem_rat_span_latticeBasis K x)
-  suffices ((latticeBasis K).restrictScalars Rat).repr.t
+  suffices ((latticeBasis K).restrictScalars Rat).repr.toLinearMap ∘ₗ f =
+    (integralBasis K).repr.toLinearMap from DFunLike.congr_fun (LinearMap.congr_fun this x) i
+  refine Basis.ext (integralBasis K) (fun i => ?_)
+  have : f (integralBasis K i) = ((latticeBasis K).restrictScalars Rat) i := by
+    apply Subtype.val_injective
+    rw [LinearMap.codRestrict_apply]; rw [AlgHom.toLinearMap_apply]; rw [Basis.restrictScalars_apply]; rw [latticeBasis_apply]
+    rfl
+  simp_rw [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, this, Basis.repr_self]
 
 中文:
 定理 integralBasis_repr_apply
@@ -429,7 +494,14 @@ theorem integralBasis_repr_apply
   rw [← Basis.restrictScalars_repr_apply Rat _ ⟨_]; rw [mem_rat_span_latticeBasis K x⟩]; rw [eq_ratCast]; rw [Rat.cast_inj]
   let f := (canonicalEmbedding K).toRatAlgHom.toLinearMap.codRestrict _
     (fun x => mem_rat_span_latticeBasis K x)
-  suffices ((latticeBasis K).restrictScalars Rat).repr.t
+  suffices ((latticeBasis K).restrictScalars Rat).repr.toLinearMap ∘ₗ f =
+    (integralBasis K).repr.toLinearMap from DFunLike.congr_fun (LinearMap.congr_fun this x) i
+  refine Basis.ext (integralBasis K) (fun i => ?_)
+  have : f (integralBasis K i) = ((latticeBasis K).restrictScalars Rat) i := by
+    apply Subtype.val_injective
+    rw [LinearMap.codRestrict_apply]; rw [AlgHom.toLinearMap_apply]; rw [Basis.restrictScalars_apply]; rw [latticeBasis_apply]
+    rfl
+  simp_rw [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, this, Basis.repr_self]
 
 Depends on / 依赖: Basis.ext, Basis.restrictScalars_repr_apply, DFunLike, DFunLike.congr_fun, LinearMap, LinearMap.congr_fun, Rat.cast_inj, canonicalEmbedding, cast_inj, codRestrict, congr_fun, eq_ratCast, integralBasis, latticeBasis, mem_rat_span_latticeBasis, repr.toLinearMap, restrictScalars, restrictScalars_repr_apply, toLinearMap, toRatAlgHom
 -/
@@ -554,7 +626,7 @@ instance [NumberField
   · have : Nonempty {w : InfinitePlace K // IsReal w} := ⟨⟨w, hw⟩⟩
     exact nontrivial_prod_left
   · have : Nonempty {w : InfinitePlace K // IsComplex w} := ⟨⟨w, hw⟩⟩
-    exact nontrivial_prod_
+    exact nontrivial_prod_right
 
 中文:
 实例 [数域
@@ -565,7 +637,7 @@ instance [NumberField
   · have : Nonempty {w : InfinitePlace K // IsReal w} := ⟨⟨w, hw⟩⟩
     exact nontrivial_prod_left
   · have : Nonempty {w : InfinitePlace K // IsComplex w} := ⟨⟨w, hw⟩⟩
-    exact nontrivial_prod_
+    exact nontrivial_prod_right
 
 Depends on / 依赖: InfinitePlace, IsComplex, IsReal, Nonempty, isReal_or_isComplex, nontrivial_prod_left, nontrivial_prod_right, w.isReal_or_isComplex
 -/
@@ -586,7 +658,7 @@ theorem finrank
   statement: finrank Real (mixedSpace K) = finrank Rat K
   proof: by
   classical
-  rw [finrank_prod]; rw [finrank_pi]; rw [finrank_pi_fintype]; rw [Complex.finrank_real_complex]; rw [sum_const]; rw [card_univ]; rw [← nrRealPlaces]; rw [← nrComplexPlaces]; rw [← card_real_embeddings]; rw [smul_eq_mul]; rw [mul_comm]; rw [← card_complex_embeddings]; rw [← NumberFiel
+  rw [finrank_prod]; rw [finrank_pi]; rw [finrank_pi_fintype]; rw [Complex.finrank_real_complex]; rw [sum_const]; rw [card_univ]; rw [← nrRealPlaces]; rw [← nrComplexPlaces]; rw [← card_real_embeddings]; rw [smul_eq_mul]; rw [mul_comm]; rw [← card_complex_embeddings]; rw [← NumberField.Embeddings.card K Complex]; rw [Fintype.card_subtype_compl]; rw [Nat.add_sub_of_le (Fintype.card_subtype_le _)]
 
 中文:
 定理 finrank
@@ -594,7 +666,7 @@ theorem finrank
   结论: finrank 实数 (mixedSpace K) = finrank 有理数 K
   证明: by
   classical
-  rw [finrank_prod]; rw [finrank_pi]; rw [finrank_pi_fintype]; rw [Complex.finrank_real_complex]; rw [sum_const]; rw [card_univ]; rw [← nrRealPlaces]; rw [← nrComplexPlaces]; rw [← card_real_embeddings]; rw [smul_eq_mul]; rw [mul_comm]; rw [← card_complex_embeddings]; rw [← NumberFiel
+  rw [finrank_prod]; rw [finrank_pi]; rw [finrank_pi_fintype]; rw [Complex.finrank_real_complex]; rw [sum_const]; rw [card_univ]; rw [← nrRealPlaces]; rw [← nrComplexPlaces]; rw [← card_real_embeddings]; rw [smul_eq_mul]; rw [mul_comm]; rw [← card_complex_embeddings]; rw [← NumberField.Embeddings.card K Complex]; rw [Fintype.card_subtype_compl]; rw [Nat.add_sub_of_le (Fintype.card_subtype_le _)]
 -/
 protected theorem finrank [NumberField K] : finrank Real (mixedSpace K) = finrank Rat K := by
   classical
@@ -659,7 +731,9 @@ instance :
   · have : NullSingletonClass (volume : Measure ({w : InfinitePlace K // IsReal w} -> Real)) :=
       pi_nullSingletonClass ⟨w, hw⟩
     exact prod.instNullSingletonClass_fst
-  · have : NullSingletonClass (volume
+  · have : NullSingletonClass (volume : Measure ({w : InfinitePlace K // IsComplex w} -> Complex)) :=
+      pi_nullSingletonClass ⟨w, not_isReal_iff_isComplex.mp hw⟩
+    exact prod.instNullSingletonClass_snd
 
 中文:
 实例 :
@@ -670,7 +744,9 @@ instance :
   · have : NullSingletonClass (volume : Measure ({w : InfinitePlace K // IsReal w} -> Real)) :=
       pi_nullSingletonClass ⟨w, hw⟩
     exact prod.instNullSingletonClass_fst
-  · have : NullSingletonClass (volume
+  · have : NullSingletonClass (volume : Measure ({w : InfinitePlace K // IsComplex w} -> Complex)) :=
+      pi_nullSingletonClass ⟨w, not_isReal_iff_isComplex.mp hw⟩
+    exact prod.instNullSingletonClass_snd
 
 Depends on / 依赖: InfinitePlace, IsComplex, IsReal, Measure, Nonempty, NullSingletonClass, instNullSingletonClass_fst, instNullSingletonClass_snd, not_isReal_iff_isComplex, not_isReal_iff_isComplex.mp, pi_nullSingletonClass, prod.instNullSingletonClass_fst, prod.instNullSingletonClass_snd, volume
 -/
@@ -733,7 +809,8 @@ definition commMap
     exact fun _ _ => ⟨rfl, rfl⟩
   map_smul' := by
     simp only [Pi.smul_apply, Complex.real_smul, Complex.mul_re, Complex.ofReal_re,
-  
+      Complex.ofReal_im, zero_mul, sub_zero, RingHom.id_apply, Prod.smul_mk, Prod.mk.injEq]
+    exact fun _ _ => ⟨rfl, rfl⟩
 
 中文:
 定义 commMap
@@ -744,7 +821,8 @@ definition commMap
     exact fun _ _ => ⟨rfl, rfl⟩
   map_smul' := by
     simp only [Pi.smul_apply, Complex.real_smul, Complex.mul_re, Complex.ofReal_re,
-  
+      Complex.ofReal_im, zero_mul, sub_zero, RingHom.id_apply, Prod.smul_mk, Prod.mk.injEq]
+    exact fun _ _ => ⟨rfl, rfl⟩
 
 Depends on / 依赖: embedding, w.val.embedding
 -/
@@ -834,7 +912,21 @@ theorem disjoint_span_commMap_ker
     refine (Submodule.span_mono ?_) h_mem
     rintro _ ⟨i, rfl⟩
     exact ⟨integralBasis K i, (canonicalEmbedding.latticeBasis_apply K i).symm⟩
-  ext1
+  ext1 φ
+  rw [Pi.zero_apply]
+  by_cases hφ : ComplexEmbedding.IsReal φ
+  · apply Complex.ext
+    · rw [← embedding_mk_eq_of_isReal hφ, ← commMap_apply_of_isReal K x ⟨φ, hφ, rfl⟩]
+      exact congrFun (congrArg (fun x => x.1) h_zero) ⟨InfinitePlace.mk φ, _⟩
+    · rw [Complex.zero_im, ← Complex.conj_eq_iff_im, canonicalEmbedding.conj_apply _ h_mem,
+        ComplexEmbedding.isReal_iff.mp hφ]
+  · have := congrFun (congrArg (fun x => x.2) h_zero) ⟨InfinitePlace.mk φ, ⟨φ, hφ, rfl⟩⟩
+    cases embedding_mk_eq φ with
+    | inl h => rwa [← h, ← commMap_apply_of_isComplex K x ⟨φ, hφ, rfl⟩]
+    | inr h =>
+        apply RingHom.injective (starRingEnd Complex)
+        rwa [canonicalEmbedding.conj_apply _ h_mem, ← h, map_zero,
+          ← commMap_apply_of_isComplex K x ⟨φ, hφ, rfl⟩]
 
 中文:
 定理 disjoint_span_commMap_ker
@@ -845,7 +937,21 @@ theorem disjoint_span_commMap_ker
     refine (Submodule.span_mono ?_) h_mem
     rintro _ ⟨i, rfl⟩
     exact ⟨integralBasis K i, (canonicalEmbedding.latticeBasis_apply K i).symm⟩
-  ext1
+  ext1 φ
+  rw [Pi.zero_apply]
+  by_cases hφ : ComplexEmbedding.IsReal φ
+  · apply Complex.ext
+    · rw [← embedding_mk_eq_of_isReal hφ, ← commMap_apply_of_isReal K x ⟨φ, hφ, rfl⟩]
+      exact congrFun (congrArg (fun x => x.1) h_zero) ⟨InfinitePlace.mk φ, _⟩
+    · rw [Complex.zero_im, ← Complex.conj_eq_iff_im, canonicalEmbedding.conj_apply _ h_mem,
+        ComplexEmbedding.isReal_iff.mp hφ]
+  · have := congrFun (congrArg (fun x => x.2) h_zero) ⟨InfinitePlace.mk φ, ⟨φ, hφ, rfl⟩⟩
+    cases embedding_mk_eq φ with
+    | inl h => rwa [← h, ← commMap_apply_of_isComplex K x ⟨φ, hφ, rfl⟩]
+    | inr h =>
+        apply RingHom.injective (starRingEnd Complex)
+        rwa [canonicalEmbedding.conj_apply _ h_mem, ← h, map_zero,
+          ← commMap_apply_of_isComplex K x ⟨φ, hφ, rfl⟩]
 
 Depends on / 依赖: Complex.ext, ComplexEmbedding, ComplexEmbedding.IsReal, IsReal, LinearMap, LinearMap.disjoint_ker.mpr, Pi.zero_apply, Set.range, Submodule, Submodule.span, Submodule.span_mono, canonicalEmbedding, canonicalEmbedding.latticeBasis_apply, commMap_apply_of_isReal, disjoint_ker, embedding_mk_eq_of_isReal, h_mem, h_zero, integralBasis, latticeBasis_apply
 -/
@@ -1201,7 +1307,12 @@ theorem nnnorm_eq_sup_normAtPlace
       (univ.image (fun w : {w : InfinitePlace K // IsReal w} => w.1)) union
       (univ.image (fun w : {w : InfinitePlace K // IsComplex w} => w.1)) := by
     ext; simp [isReal_or_isComplex]
-  rw [this]; rw [sup_union]; rw [univ.sup_image]; rw [u
+  rw [this]; rw [sup_union]; rw [univ.sup_image]; rw [univ.sup_image]; rw [Prod.nnnorm_def]; rw [Pi.nnnorm_def]; rw [Pi.nnnorm_def]
+  congr
+  · ext w
+    simp [normAtPlace_apply_of_isReal w.prop]
+  · ext w
+    simp [normAtPlace_apply_of_isComplex w.prop]
 
 中文:
 定理 nnnorm_eq_sup_normAtPlace
@@ -1212,7 +1323,12 @@ theorem nnnorm_eq_sup_normAtPlace
       (univ.image (fun w : {w : InfinitePlace K // IsReal w} => w.1)) union
       (univ.image (fun w : {w : InfinitePlace K // IsComplex w} => w.1)) := by
     ext; simp [isReal_or_isComplex]
-  rw [this]; rw [sup_union]; rw [univ.sup_image]; rw [u
+  rw [this]; rw [sup_union]; rw [univ.sup_image]; rw [univ.sup_image]; rw [Prod.nnnorm_def]; rw [Pi.nnnorm_def]; rw [Pi.nnnorm_def]
+  congr
+  · ext w
+    simp [normAtPlace_apply_of_isReal w.prop]
+  · ext w
+    simp [normAtPlace_apply_of_isComplex w.prop]
 
 Depends on / 依赖: Finset, InfinitePlace, IsComplex, IsReal, Pi.nnnorm_def, Prod.nnnorm_def, isReal_or_isComplex, nnnorm_def, normAtPlace_apply_of_isComplex, normAtPlace_apply_of_isReal, sup_image, sup_union, univ.image, univ.sup_image, w.prop
 -/
@@ -1663,12 +1779,14 @@ theorem `volume_fundamentalDomain_stdBasis` / 定理 `volume_fundamentalDomain_s
 English:
 theorem volume_fundamentalDomain_stdBasis
   proof: by
-  rw [fundamentalDomain_stdBasis]; rw [volume_eq_prod]; rw [prod_prod]; rw [volume_pi]; rw [volume_pi]; rw [pi_pi]; rw [pi_pi]; rw [Complex.volume_preserving_equiv_pi.measure_preimage ?_]; rw [volume_pi]; rw [pi_pi]; rw [Real.volume_Ico]; rw [sub_zero]; rw [ENNReal.ofReal_one]; rw [prod_const_one
+  rw [fundamentalDomain_stdBasis]; rw [volume_eq_prod]; rw [prod_prod]; rw [volume_pi]; rw [volume_pi]; rw [pi_pi]; rw [pi_pi]; rw [Complex.volume_preserving_equiv_pi.measure_preimage ?_]; rw [volume_pi]; rw [pi_pi]; rw [Real.volume_Ico]; rw [sub_zero]; rw [ENNReal.ofReal_one]; rw [prod_const_one]; rw [prod_const_one]; rw [prod_const_one]; rw [one_mul]
+  exact (MeasurableSet.pi Set.countable_univ (fun _ _ => measurableSet_Ico)).nullMeasurableSet
 
 中文:
 定理 volume_fundamentalDomain_stdBasis
   证明: by
-  rw [fundamentalDomain_stdBasis]; rw [volume_eq_prod]; rw [prod_prod]; rw [volume_pi]; rw [volume_pi]; rw [pi_pi]; rw [pi_pi]; rw [Complex.volume_preserving_equiv_pi.measure_preimage ?_]; rw [volume_pi]; rw [pi_pi]; rw [Real.volume_Ico]; rw [sub_zero]; rw [ENNReal.ofReal_one]; rw [prod_const_one
+  rw [fundamentalDomain_stdBasis]; rw [volume_eq_prod]; rw [prod_prod]; rw [volume_pi]; rw [volume_pi]; rw [pi_pi]; rw [pi_pi]; rw [Complex.volume_preserving_equiv_pi.measure_preimage ?_]; rw [volume_pi]; rw [pi_pi]; rw [Real.volume_Ico]; rw [sub_zero]; rw [ENNReal.ofReal_one]; rw [prod_const_one]; rw [prod_const_one]; rw [prod_const_one]; rw [one_mul]
+  exact (MeasurableSet.pi Set.countable_univ (fun _ _ => measurableSet_Ico)).nullMeasurableSet
 
 Depends on / 依赖: Complex.volume_preserving_equiv_pi.measure_preimage, ENNReal, ENNReal.ofReal_one, MeasurableSet, MeasurableSet.pi, Real.volume_Ico, Set.countable_univ, countable_univ, fundamentalDomain_stdBasis, measurableSet_Ico, measure_preimage, nullMeasurableSet, ofReal_one, one_mul, pi_pi, prod_const_one, prod_prod, sub_zero, volume_Ico, volume_eq_prod
 -/
@@ -1691,6 +1809,15 @@ definition indexEquiv
     | inl w => exact w.val.embedding
     | inr wj => rcases wj with ⟨w, j⟩
                 exact if j = 0 then w.val.embedding else ComplexEmbedding.conjugate w.val.embedding
+  · intro φ
+    by_cases hφ : ComplexEmbedding.IsReal φ
+    · exact ⟨Sum.inl (InfinitePlace.mkReal ⟨φ, hφ⟩), by simp [embedding_mk_eq_of_isReal hφ]⟩
+    · by_cases hw : (InfinitePlace.mk φ).embedding = φ
+      · exact ⟨Sum.inr ⟨InfinitePlace.mkComplex ⟨φ, hφ⟩, 0⟩, by simp [hw]⟩
+      · exact ⟨Sum.inr ⟨InfinitePlace.mkComplex ⟨φ, hφ⟩, 1⟩,
+          by simp [(embedding_mk_eq φ).resolve_left hw]⟩
+  · rw [Embeddings.card, ← mixedEmbedding.finrank K,
+      ← Module.finrank_eq_card_basis (stdBasis K)]
 
 中文:
 定义 indexEquiv
@@ -1702,6 +1829,15 @@ definition indexEquiv
     | inl w => exact w.val.embedding
     | inr wj => rcases wj with ⟨w, j⟩
                 exact if j = 0 then w.val.embedding else ComplexEmbedding.conjugate w.val.embedding
+  · intro φ
+    by_cases hφ : ComplexEmbedding.IsReal φ
+    · exact ⟨Sum.inl (InfinitePlace.mkReal ⟨φ, hφ⟩), by simp [embedding_mk_eq_of_isReal hφ]⟩
+    · by_cases hw : (InfinitePlace.mk φ).embedding = φ
+      · exact ⟨Sum.inr ⟨InfinitePlace.mkComplex ⟨φ, hφ⟩, 0⟩, by simp [hw]⟩
+      · exact ⟨Sum.inr ⟨InfinitePlace.mkComplex ⟨φ, hφ⟩, 1⟩,
+          by simp [(embedding_mk_eq φ).resolve_left hw]⟩
+  · rw [Embeddings.card, ← mixedEmbedding.finrank K,
+      ← Module.finrank_eq_card_basis (stdBasis K)]
 
 Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.IsReal, ComplexEmbedding.conjugate, Equiv.ofBijective, Fintype, Fintype.bijective_iff_surjective_and_card, InfinitePlace, InfinitePlace.mk, InfinitePlace.mkComplex, InfinitePlace.mkReal, IsReal, Sum.inl, Sum.inr, bijective_iff_surjective_and_card, conjugate, embedding, embedding_mk_eq_of_isReal, mkComplex, mkReal, ofBijective
 -/
@@ -1816,14 +1952,22 @@ theorem det_matrixToStdBasis
   proof: calc
   _ = ∏ _k : { w : InfinitePlace K // IsComplex w }, det ((2 : Complex)⁻¹ • !![1, 1; -I, I]) := by
       rw [matrixToStdBasis]; rw [det_fromBlocks_zero₂₁]; rw [det_diagonal]; rw [prod_const_one]; rw [one_mul]; rw [det_reindex_self]; rw [det_blockDiagonal]
-  _ = ∏ _k : { w : InfinitePlace K // I
+  _ = ∏ _k : { w : InfinitePlace K // IsComplex w }, (2⁻¹ * Complex.I) := by
+      refine prod_congr (Eq.refl _) (fun _ _ => ?_)
+      simp [field]; ring
+  _ = (2⁻¹ * Complex.I) ^ Fintype.card {w : InfinitePlace K // IsComplex w} := by
+      rw [prod_const]; rw [Fintype.card]
 
 中文:
 定理 det_matrixToStdBasis
   证明: calc
   _ = ∏ _k : { w : InfinitePlace K // IsComplex w }, det ((2 : Complex)⁻¹ • !![1, 1; -I, I]) := by
       rw [matrixToStdBasis]; rw [det_fromBlocks_zero₂₁]; rw [det_diagonal]; rw [prod_const_one]; rw [one_mul]; rw [det_reindex_self]; rw [det_blockDiagonal]
-  _ = ∏ _k : { w : InfinitePlace K // I
+  _ = ∏ _k : { w : InfinitePlace K // IsComplex w }, (2⁻¹ * Complex.I) := by
+      refine prod_congr (Eq.refl _) (fun _ _ => ?_)
+      simp [field]; ring
+  _ = (2⁻¹ * Complex.I) ^ Fintype.card {w : InfinitePlace K // IsComplex w} := by
+      rw [prod_const]; rw [Fintype.card]
 
 Depends on / 依赖: Complex.I, Eq.refl, Fintyp, Fintype, Fintype.card, InfinitePlace, IsComplex, det_blockDiagonal, det_diagonal, det_reindex_self, matrixToStdBasis, one_mul, prod_congr, prod_const, prod_const_one
 -/
@@ -1850,7 +1994,29 @@ theorem stdBasis_repr_eq_matrixToStdBasis_mul
     mulVec, dotProduct, Function.comp_apply, index, Fintype.sum_sum_type,
     diagonal_one, reindex_apply, ← univ_product_univ, sum_product,
     indexEquiv_apply_isReal, Fin.sum_univ_two, indexEquiv_apply_isComplex_fst,
-    in
+    indexEquiv_apply_isComplex_snd, smul_of, smul_cons, smul_eq_mul,
+    mul_one, Matrix.smul_empty, Equiv.prodComm_symm, Equiv.coe_prodComm]
+  cases c with
+  | inl w =>
+      simp_rw [stdBasis_apply_isReal, fromBlocks_apply₁₁, fromBlocks_apply₁₂,
+        one_apply, Matrix.zero_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_univ, ite_true,
+        add_zero, sum_const_zero, add_zero, ← conj_eq_iff_re, hx (embedding w.val),
+        conjugate_embedding_eq_of_isReal w.prop]
+  | inr c =>
+    rcases c with ⟨w, j⟩
+    fin_cases j
+    · simp only [Fin.zero_eta, Fin.isValue, stdBasis_apply_isComplex_fst, re_eq_add_conj,
+        mul_neg, fromBlocks_apply₂₁, Matrix.zero_apply, zero_mul, sum_const_zero,
+        fromBlocks_apply₂₂, submatrix_apply, Prod.swap_prod_mk, blockDiagonal_apply, of_apply,
+        cons_val', cons_val_zero, empty_val', cons_val_fin_one, ite_mul, cons_val_one,
+        sum_add_distrib, sum_ite_eq, mem_univ, ↓reduceIte, ← hx (embedding w), zero_add]
+      ring
+    · simp only [Fin.mk_one, Fin.isValue, stdBasis_apply_isComplex_snd, im_eq_sub_conj,
+        mul_neg, fromBlocks_apply₂₁, Matrix.zero_apply, zero_mul, sum_const_zero,
+        fromBlocks_apply₂₂, submatrix_apply, Prod.swap_prod_mk, blockDiagonal_apply, of_apply,
+        cons_val', cons_val_zero, empty_val', cons_val_fin_one, cons_val_one, ite_mul, neg_mul,
+        sum_add_distrib, sum_ite_eq, mem_univ, ↓reduceIte, ← hx (embedding w), zero_add]
+      ring_nf; simp [field]
 
 中文:
 定理 stdBasis_repr_eq_matrixToStdBasis_mul
@@ -1860,7 +2026,29 @@ theorem stdBasis_repr_eq_matrixToStdBasis_mul
     mulVec, dotProduct, Function.comp_apply, index, Fintype.sum_sum_type,
     diagonal_one, reindex_apply, ← univ_product_univ, sum_product,
     indexEquiv_apply_isReal, Fin.sum_univ_two, indexEquiv_apply_isComplex_fst,
-    in
+    indexEquiv_apply_isComplex_snd, smul_of, smul_cons, smul_eq_mul,
+    mul_one, Matrix.smul_empty, Equiv.prodComm_symm, Equiv.coe_prodComm]
+  cases c with
+  | inl w =>
+      simp_rw [stdBasis_apply_isReal, fromBlocks_apply₁₁, fromBlocks_apply₁₂,
+        one_apply, Matrix.zero_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_univ, ite_true,
+        add_zero, sum_const_zero, add_zero, ← conj_eq_iff_re, hx (embedding w.val),
+        conjugate_embedding_eq_of_isReal w.prop]
+  | inr c =>
+    rcases c with ⟨w, j⟩
+    fin_cases j
+    · simp only [Fin.zero_eta, Fin.isValue, stdBasis_apply_isComplex_fst, re_eq_add_conj,
+        mul_neg, fromBlocks_apply₂₁, Matrix.zero_apply, zero_mul, sum_const_zero,
+        fromBlocks_apply₂₂, submatrix_apply, Prod.swap_prod_mk, blockDiagonal_apply, of_apply,
+        cons_val', cons_val_zero, empty_val', cons_val_fin_one, ite_mul, cons_val_one,
+        sum_add_distrib, sum_ite_eq, mem_univ, ↓reduceIte, ← hx (embedding w), zero_add]
+      ring
+    · simp only [Fin.mk_one, Fin.isValue, stdBasis_apply_isComplex_snd, im_eq_sub_conj,
+        mul_neg, fromBlocks_apply₂₁, Matrix.zero_apply, zero_mul, sum_const_zero,
+        fromBlocks_apply₂₂, submatrix_apply, Prod.swap_prod_mk, blockDiagonal_apply, of_apply,
+        cons_val', cons_val_zero, empty_val', cons_val_fin_one, cons_val_one, ite_mul, neg_mul,
+        sum_add_distrib, sum_ite_eq, mem_univ, ↓reduceIte, ← hx (embedding w), zero_add]
+      ring_nf; simp [field]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, Equiv.coe_prodComm, Equiv.prodComm_symm, Fin.sum_univ_two, Fintype, Fintype.sum_sum_type, Function, Function.comp_apply, LinearMap, LinearMap.coe_mk, Matrix, Matrix.smul_empty, RelEmbedding, RelEmbedding.refl, coe_mk, coe_prodComm, commMap, comp_apply, diagonal_one
 -/
@@ -1934,7 +2122,13 @@ definition latticeBasis
     -- `canonicalEmbedding.lattice_basis` by `commMap`
     have := LinearIndependent.map (LinearIndependent.restrict_scalars
       (by { simpa only [Complex.real_smul, mul_one] using Complex.ofReal_injective })
-   
+      (canonicalEmbedding.latticeBasis K).linearIndependent)
+      (disjoint_span_commMap_ker K)
+    -- and it's a basis since it has the right cardinality
+    refine basisOfLinearIndependentOfCardEqFinrank this ?_
+    rw [← finrank_eq_card_chooseBasisIndex]; rw [RingOfIntegers.rank]; rw [finrank_prod]; rw [finrank_pi]; rw [finrank_pi_fintype]; rw [Complex.finrank_real_complex]; rw [sum_const]; rw [card_univ]; rw [← nrRealPlaces]; rw [← nrComplexPlaces]; rw [← card_real_embeddings]; rw [smul_eq_mul]; rw [mul_comm]; rw [← card_complex_embeddings]; rw [← NumberField.Embeddings.card K Complex]; rw [Fintype.card_subtype_compl]; rw [Nat.add_sub_of_le (Fintype.card_subtype_le _)]
+
+@[simp]
 
 中文:
 定义 latticeBasis
@@ -1945,7 +2139,13 @@ definition latticeBasis
     -- `canonicalEmbedding.lattice_basis` by `commMap`
     have := LinearIndependent.map (LinearIndependent.restrict_scalars
       (by { simpa only [Complex.real_smul, mul_one] using Complex.ofReal_injective })
-   
+      (canonicalEmbedding.latticeBasis K).linearIndependent)
+      (disjoint_span_commMap_ker K)
+    -- and it's a basis since it has the right cardinality
+    refine basisOfLinearIndependentOfCardEqFinrank this ?_
+    rw [← finrank_eq_card_chooseBasisIndex]; rw [RingOfIntegers.rank]; rw [finrank_prod]; rw [finrank_pi]; rw [finrank_pi_fintype]; rw [Complex.finrank_real_complex]; rw [sum_const]; rw [card_univ]; rw [← nrRealPlaces]; rw [← nrComplexPlaces]; rw [← card_real_embeddings]; rw [smul_eq_mul]; rw [mul_comm]; rw [← card_complex_embeddings]; rw [← NumberField.Embeddings.card K Complex]; rw [Fintype.card_subtype_compl]; rw [Nat.add_sub_of_le (Fintype.card_subtype_le _)]
+
+@[simp]
 
 Depends on / 依赖: classical
 -/
@@ -1998,7 +2198,9 @@ theorem mem_span_latticeBasis
       (mixedEmbedding K).toIntAlgHom.toLinearMap '' (Set.range (integralBasis K)) by
     rw [← Set.range_comp]; exact congrArg Set.range (funext (fun i => latticeBasis_apply K i))]
   rw [← Submodule.map_span]; rw [← SetLike.mem_coe]; rw [Submodule.map_coe]
-
+  simp only [Set.mem_image, SetLike.mem_coe, mem_span_integralBasis K,
+    RingHom.mem_range, exists_exists_eq_and]
+  rfl
 
 中文:
 定理 mem_span_latticeBasis
@@ -2008,7 +2210,9 @@ theorem mem_span_latticeBasis
       (mixedEmbedding K).toIntAlgHom.toLinearMap '' (Set.range (integralBasis K)) by
     rw [← Set.range_comp]; exact congrArg Set.range (funext (fun i => latticeBasis_apply K i))]
   rw [← Submodule.map_span]; rw [← SetLike.mem_coe]; rw [Submodule.map_coe]
-
+  simp only [Set.mem_image, SetLike.mem_coe, mem_span_integralBasis K,
+    RingHom.mem_range, exists_exists_eq_and]
+  rfl
 
 Depends on / 依赖: RingHom, RingHom.mem_range, Set.mem_image, Set.range, Set.range_comp, SetLike, SetLike.mem_coe, Submodule, Submodule.map_coe, Submodule.map_span, exists_exists_eq_and, integralBasis, latticeBasis, latticeBasis_apply, map_coe, map_span, mem_coe, mem_image, mem_range, mem_span_integralBasis
 -/
@@ -2158,7 +2362,14 @@ theorem latticeBasis_repr_apply
   rw [← Basis.restrictScalars_repr_apply Rat _ ⟨_]; rw [mem_rat_span_latticeBasis K x⟩]; rw [eq_ratCast]; rw [Rat.cast_inj]
   let f := (mixedEmbedding K).toRatAlgHom.toLinearMap.codRestrict _
     (fun x => mem_rat_span_latticeBasis K x)
-  suffices ((latticeBasis K).restrictScalars Rat).repr.toLin
+  suffices ((latticeBasis K).restrictScalars Rat).repr.toLinearMap ∘ₗ f =
+    (integralBasis K).repr.toLinearMap from DFunLike.congr_fun (LinearMap.congr_fun this x) i
+  refine Basis.ext (integralBasis K) (fun i => ?_)
+  have : f (integralBasis K i) = ((latticeBasis K).restrictScalars Rat) i := by
+    apply Subtype.val_injective
+    rw [LinearMap.codRestrict_apply]; rw [AlgHom.toLinearMap_apply]; rw [Basis.restrictScalars_apply]; rw [latticeBasis_apply]
+    rfl
+  simp_rw [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, this, Basis.repr_self]
 
 中文:
 定理 latticeBasis_repr_apply
@@ -2167,7 +2378,14 @@ theorem latticeBasis_repr_apply
   rw [← Basis.restrictScalars_repr_apply Rat _ ⟨_]; rw [mem_rat_span_latticeBasis K x⟩]; rw [eq_ratCast]; rw [Rat.cast_inj]
   let f := (mixedEmbedding K).toRatAlgHom.toLinearMap.codRestrict _
     (fun x => mem_rat_span_latticeBasis K x)
-  suffices ((latticeBasis K).restrictScalars Rat).repr.toLin
+  suffices ((latticeBasis K).restrictScalars Rat).repr.toLinearMap ∘ₗ f =
+    (integralBasis K).repr.toLinearMap from DFunLike.congr_fun (LinearMap.congr_fun this x) i
+  refine Basis.ext (integralBasis K) (fun i => ?_)
+  have : f (integralBasis K i) = ((latticeBasis K).restrictScalars Rat) i := by
+    apply Subtype.val_injective
+    rw [LinearMap.codRestrict_apply]; rw [AlgHom.toLinearMap_apply]; rw [Basis.restrictScalars_apply]; rw [latticeBasis_apply]
+    rfl
+  simp_rw [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, this, Basis.repr_self]
 
 Depends on / 依赖: Basis.ext, Basis.restrictScalars_repr_apply, DFunLike, DFunLike.congr_fun, LinearMap, LinearMap.congr_fun, Rat.cast_inj, cast_inj, codRestrict, congr_fun, eq_ratCast, integralBasis, latticeBasis, mem_rat_span_latticeBasis, mixedEmbedding, repr.toLinearMap, restrict, restrictScalars, restrictScalars_repr_apply, toLinearMap
 -/
@@ -2238,14 +2456,24 @@ theorem det_basisOfFractionalIdeal_eq_norm
   proof: by
   suffices Basis.det (latticeBasis K) ((mixedEmbedding K ∘ (basisOfFractionalIdeal K I) ∘ e)) =
       (algebraMap Rat Real) ((Basis.det (integralBasis K)) ((basisOfFractionalIdeal K I) ∘ e)) by
-    rw [this]; rw [eq_ratCast]; rw [← Rat.cast_abs]; rw [← Equiv.symm_symm e]; rw [← Basis.coe_reindex]
+    rw [this]; rw [eq_ratCast]; rw [← Rat.cast_abs]; rw [← Equiv.symm_symm e]; rw [← Basis.coe_reindex]; rw [det_basisOfFractionalIdeal_eq_absNorm K I e]
+  rw [Basis.det_apply]; rw [Basis.det_apply]; rw [RingHom.map_det]
+  congr
+  ext i j
+  simp_rw [RingHom.mapMatrix_apply, Matrix.map_apply, Basis.toMatrix_apply, Function.comp_apply]
+  exact latticeBasis_repr_apply K _ i
 
 中文:
 定理 det_basisOfFractionalIdeal_eq_norm
   证明: by
   suffices Basis.det (latticeBasis K) ((mixedEmbedding K ∘ (basisOfFractionalIdeal K I) ∘ e)) =
       (algebraMap Rat Real) ((Basis.det (integralBasis K)) ((basisOfFractionalIdeal K I) ∘ e)) by
-    rw [this]; rw [eq_ratCast]; rw [← Rat.cast_abs]; rw [← Equiv.symm_symm e]; rw [← Basis.coe_reindex]
+    rw [this]; rw [eq_ratCast]; rw [← Rat.cast_abs]; rw [← Equiv.symm_symm e]; rw [← Basis.coe_reindex]; rw [det_basisOfFractionalIdeal_eq_absNorm K I e]
+  rw [Basis.det_apply]; rw [Basis.det_apply]; rw [RingHom.map_det]
+  congr
+  ext i j
+  simp_rw [RingHom.mapMatrix_apply, Matrix.map_apply, Basis.toMatrix_apply, Function.comp_apply]
+  exact latticeBasis_repr_apply K _ i
 
 Depends on / 依赖: Basis.coe_reindex, Basis.det, Basis.det_apply, Basis.toMatrix_apply, Equiv.symm_symm, Function, Matrix, Matrix.map_apply, Rat.cast_abs, RingHom, RingHom.mapMatrix_apply, RingHom.map_det, algebraMap, basisOfFractionalIdeal, cast_abs, coe_reindex, det_apply, det_basisOfFractionalIdeal_eq_absNorm, eq_ratCast, integralBasis
 -/
@@ -2273,7 +2501,13 @@ definition fractionalIdealLatticeBasis
     refine Fintype.equivOfCardEq ?_
     rw [← finrank_eq_card_chooseBasisIndex]; rw [← finrank_eq_card_chooseBasisIndex]; rw [fractionalIdeal_rank]
   refine Basis.reindex ?_ e
-  suffices IsUnit ((latticeBasis K).det ((mixedEm
+  suffices IsUnit ((latticeBasis K).det ((mixedEmbedding K) ∘ (basisOfFractionalIdeal K I) ∘ e)) by
+    rw [← Basis.is_basis_iff_det] at this
+    exact Basis.mk this.1 (by rw [this.2])
+  rw [isUnit_iff_ne_zero]; rw [ne_eq]; rw [← abs_eq_zero.not]; rw [det_basisOfFractionalIdeal_eq_norm]; rw [Rat.cast_eq_zero]; rw [FractionalIdeal.absNorm_eq_zero_iff]
+  exact Units.ne_zero I
+
+@[simp]
 
 中文:
 定义 fractionalIdealLatticeBasis
@@ -2283,7 +2517,13 @@ definition fractionalIdealLatticeBasis
     refine Fintype.equivOfCardEq ?_
     rw [← finrank_eq_card_chooseBasisIndex]; rw [← finrank_eq_card_chooseBasisIndex]; rw [fractionalIdeal_rank]
   refine Basis.reindex ?_ e
-  suffices IsUnit ((latticeBasis K).det ((mixedEm
+  suffices IsUnit ((latticeBasis K).det ((mixedEmbedding K) ∘ (basisOfFractionalIdeal K I) ∘ e)) by
+    rw [← Basis.is_basis_iff_det] at this
+    exact Basis.mk this.1 (by rw [this.2])
+  rw [isUnit_iff_ne_zero]; rw [ne_eq]; rw [← abs_eq_zero.not]; rw [det_basisOfFractionalIdeal_eq_norm]; rw [Rat.cast_eq_zero]; rw [FractionalIdeal.absNorm_eq_zero_iff]
+  exact Units.ne_zero I
+
+@[simp]
 
 Depends on / 依赖: Basis.is_basis_iff_det, Basis.mk, Basis.reindex, ChooseBasisIndex, Fintype, Fintype.equivOfCardEq, IsUnit, abs_eq_zero, abs_eq_zero.not, basisOfFractionalIdeal, det_basisOfFractional, equivOfCardEq, finrank_eq_card_chooseBasisIndex, fractionalIdeal_rank, isUnit_iff_ne_zero, is_basis_iff_det, latticeBasis, mixedEmbedding, ne_eq, reindex
 -/
@@ -2335,7 +2575,10 @@ theorem mem_span_fractionalIdealLatticeBasis
         (mixedEmbedding K).toIntAlgHom.toLinearMap '' (Set.range (basisOfFractionalIdeal K I)) by
       rw [← Set.range_comp]
       exact congr_arg Set.range (funext (fun i => fractionalIdealLatticeBasis_apply K I i))]
-  rw [← Submodule.map
+  rw [← Submodule.map_span]; rw [← SetLike.mem_coe]; rw [Submodule.map_coe]
+  rw [show Submodule.span Int (Set.range (basisOfFractionalIdeal K I)) = (I : Set K) by
+        ext; simp [mem_span_basisOfFractionalIdeal]]
+  rfl
 
 中文:
 定理 mem_span_fractionalIdealLatticeBasis
@@ -2345,7 +2588,10 @@ theorem mem_span_fractionalIdealLatticeBasis
         (mixedEmbedding K).toIntAlgHom.toLinearMap '' (Set.range (basisOfFractionalIdeal K I)) by
       rw [← Set.range_comp]
       exact congr_arg Set.range (funext (fun i => fractionalIdealLatticeBasis_apply K I i))]
-  rw [← Submodule.map
+  rw [← Submodule.map_span]; rw [← SetLike.mem_coe]; rw [Submodule.map_coe]
+  rw [show Submodule.span Int (Set.range (basisOfFractionalIdeal K I)) = (I : Set K) by
+        ext; simp [mem_span_basisOfFractionalIdeal]]
+  rfl
 
 Depends on / 依赖: Set.range, Set.range_comp, SetLike, SetLike.mem_coe, Submodule, Submodule.map_coe, Submodule.map_span, Submodule.span, basisOfFractionalIdeal, congr_arg, fractionalIdealLatticeBasis, fractionalIdealLatticeBasis_apply, map_coe, map_span, mem_coe, mem_span_basisOfFractionalIdeal, mixedEmbedding, range_comp, toIntAlgHom, toIntAlgHom.toLinearMap
 -/
@@ -2614,13 +2860,13 @@ English:
 theorem volumePreserving_toMixed
   proof: (toMixed K).continuous.measurable
   map_eq := by
-    rw [← (OrthonormalBasis.addHaar_eq_volume (euclidean.stdOrthonormalBasis K))]; rw [Basis.map_addHaar]; rw [stdOrthonormalBasis_map_eq]; rw [Basis.addHaar_eq_iff]; rw [Basis.coe_parallelepiped]; rw [← measure_congr (ZSpan.fundamentalDomain_ae_paral
+    rw [← (OrthonormalBasis.addHaar_eq_volume (euclidean.stdOrthonormalBasis K))]; rw [Basis.map_addHaar]; rw [stdOrthonormalBasis_map_eq]; rw [Basis.addHaar_eq_iff]; rw [Basis.coe_parallelepiped]; rw [← measure_congr (ZSpan.fundamentalDomain_ae_parallelepiped (stdBasis K) volume)]; rw [volume_fundamentalDomain_stdBasis K]
 
 中文:
 定理 volumePreserving_toMixed
   证明: (toMixed K).continuous.measurable
   map_eq := by
-    rw [← (OrthonormalBasis.addHaar_eq_volume (euclidean.stdOrthonormalBasis K))]; rw [Basis.map_addHaar]; rw [stdOrthonormalBasis_map_eq]; rw [Basis.addHaar_eq_iff]; rw [Basis.coe_parallelepiped]; rw [← measure_congr (ZSpan.fundamentalDomain_ae_paral
+    rw [← (OrthonormalBasis.addHaar_eq_volume (euclidean.stdOrthonormalBasis K))]; rw [Basis.map_addHaar]; rw [stdOrthonormalBasis_map_eq]; rw [Basis.addHaar_eq_iff]; rw [Basis.coe_parallelepiped]; rw [← measure_congr (ZSpan.fundamentalDomain_ae_parallelepiped (stdBasis K) volume)]; rw [volume_fundamentalDomain_stdBasis K]
 
 Depends on / 依赖: continuous, continuous.measurable, measurable, toMixed
 -/
@@ -2969,7 +3215,9 @@ theorem negAt_symm
         prodCongr_apply, piCongrRight_symm_apply, if_pos hw, symm_neg,
         ContinuousLinearEquiv.neg_apply]
     · simp_rw [negAt_apply_isReal_and_notMem _ hw, negAt, prodCongr_symm,
-     
+        prodCongr_apply, piCongrRight_symm_apply, if_neg hw, refl_symm,
+        refl_apply]
+  · rfl
 
 中文:
 定理 negAt_symm
@@ -2980,7 +3228,9 @@ theorem negAt_symm
         prodCongr_apply, piCongrRight_symm_apply, if_pos hw, symm_neg,
         ContinuousLinearEquiv.neg_apply]
     · simp_rw [negAt_apply_isReal_and_notMem _ hw, negAt, prodCongr_symm,
-     
+        prodCongr_apply, piCongrRight_symm_apply, if_neg hw, refl_symm,
+        refl_apply]
+  · rfl
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.neg_apply, if_neg, if_pos, negAt_apply_isReal_and_mem, negAt_apply_isReal_and_notMem, neg_apply, piCongrRight_symm_apply, prodCongr_apply, prodCongr_symm, refl_apply, refl_symm, simp_rw, symm_neg
 -/
@@ -3171,7 +3421,8 @@ theorem disjoint_negAt_plusPart
   obtain ⟨w, hw | hw⟩ : exists w, (w in s ∧ w ∉ t) ∨ (w in t ∧ w ∉ s) := Set.symmDiff_nonempty.mpr hst
 · exact lt_irrefl _
       (neg_of_mem_negA_plusPart A hx hw.1).trans (pos_of_notMem_negAt_plusPart A hx' hw.2)
-· exact lt_irrefl
+· exact lt_irrefl _
+      (neg_of_mem_negA_plusPart A hx' hw.1).trans (pos_of_notMem_negAt_plusPart A hx hw.2)
 
 中文:
 定理 disjoint_negAt_plusPart
@@ -3182,7 +3433,8 @@ theorem disjoint_negAt_plusPart
   obtain ⟨w, hw | hw⟩ : exists w, (w in s ∧ w ∉ t) ∨ (w in t ∧ w ∉ s) := Set.symmDiff_nonempty.mpr hst
 · exact lt_irrefl _
       (neg_of_mem_negA_plusPart A hx hw.1).trans (pos_of_notMem_negAt_plusPart A hx' hw.2)
-· exact lt_irrefl
+· exact lt_irrefl _
+      (neg_of_mem_negA_plusPart A hx' hw.1).trans (pos_of_notMem_negAt_plusPart A hx hw.2)
 
 Depends on / 依赖: Set.disjoint_left.mpr, Set.symmDiff_nonempty.mpr, disjoint_left, lt_irrefl, neg_of_mem_negA_plusPart, pos_of_notMem_negAt_plusPart, symmDiff_nonempty
 -/
@@ -3212,7 +3464,11 @@ theorem mem_negAt_plusPart_of_mem
         ⟨(fun w => ‖x.1 w‖, x.2), ⟨(hA x).mp hx₁, fun w => norm_pos_iff.mpr (hx₂ w)⟩, ?_⟩⟩
   ext w
   · by_cases hw : w in s
-    · simp [negAt_apply_isR
+    · simp [negAt_apply_isReal_and_mem _ hw, abs_of_neg (h₁ w hw)]
+    · simp [negAt_apply_isReal_and_notMem _ hw, abs_of_pos (h₂ w hw)]
+  · rfl
+
+include hA in
 
 中文:
 定理 mem_negAt_plusPart_of_mem
@@ -3224,7 +3480,11 @@ theorem mem_negAt_plusPart_of_mem
         ⟨(fun w => ‖x.1 w‖, x.2), ⟨(hA x).mp hx₁, fun w => norm_pos_iff.mpr (hx₂ w)⟩, ?_⟩⟩
   ext w
   · by_cases hw : w in s
-    · simp [negAt_apply_isR
+    · simp [negAt_apply_isReal_and_mem _ hw, abs_of_neg (h₁ w hw)]
+    · simp [negAt_apply_isReal_and_notMem _ hw, abs_of_pos (h₂ w hw)]
+  · rfl
+
+include hA in
 
 Depends on / 依赖: abs_of_neg, abs_of_pos, negAt_apply_isReal_and_mem, negAt_apply_isReal_and_notMem, neg_of_mem_negA_plusPart, norm_pos_iff, norm_pos_iff.mpr, pos_of_notMem_negAt_plusPart
 -/
@@ -3254,7 +3514,12 @@ theorem iUnion_negAt_plusPart_union
     · simp_rw +singlePass [hA, negAt_apply_norm_isReal, negAt_apply_snd]
       rwa [← hA]
     · exact h.left
-  · obtain hx | hx := exis
+  · obtain hx | hx := exists_or_forall_not (fun w => x.1 w = 0)
+    · exact Or.inr ⟨h, hx⟩
+    · refine Or.inl ⟨signSet x,
+        (mem_negAt_plusPart_of_mem A hA h hx).mpr ⟨fun w hw => ?_, fun w hw => ?_⟩⟩
+      · exact lt_of_le_of_ne hw (hx w)
+      · exact lt_of_le_of_ne (lt_of_not_ge hw).le (Ne.symm (hx w))
 
 中文:
 定理 iUnion_negAt_plusPart_union
@@ -3266,7 +3531,12 @@ theorem iUnion_negAt_plusPart_union
     · simp_rw +singlePass [hA, negAt_apply_norm_isReal, negAt_apply_snd]
       rwa [← hA]
     · exact h.left
-  · obtain hx | hx := exis
+  · obtain hx | hx := exists_or_forall_not (fun w => x.1 w = 0)
+    · exact Or.inr ⟨h, hx⟩
+    · refine Or.inl ⟨signSet x,
+        (mem_negAt_plusPart_of_mem A hA h hx).mpr ⟨fun w hw => ?_, fun w hw => ?_⟩⟩
+      · exact lt_of_le_of_ne hw (hx w)
+      · exact lt_of_le_of_ne (lt_of_not_ge hw).le (Ne.symm (hx w))
 
 Depends on / 依赖: Or.inl, Or.inr, Set.mem_iUnion, Set.mem_inter_iff, Set.mem_union, exists_or_forall_not, h.left, lt_of_le_of_ne, mem_iUnion, mem_inter_iff, mem_negAt_plusPart_of_mem, mem_union, negAt_apply_norm_isReal, negAt_apply_snd, signSet, simp_rw, singlePass
 -/
@@ -3411,7 +3681,7 @@ theorem volume_eq_two_pow_mul_volume_plusPart
   simp only [← measure_congr (iUnion_negAt_plusPart_ae A hA),
     measure_iUnion (disjoint_negAt_plusPart A) (fun _ => measurableSet_negAt_plusPart _ A hm),
     volume_negAt_plusPart hm, tsum_fintype, sum_const, card_univ, Fintype.card_set, nsmul_eq_mul,
-    Nat.cast_pow, Nat.cast_ofNat, nrRealPl
+    Nat.cast_pow, Nat.cast_ofNat, nrRealPlaces]
 
 中文:
 定理 volume_eq_two_pow_mul_volume_plusPart
@@ -3420,7 +3690,7 @@ theorem volume_eq_two_pow_mul_volume_plusPart
   simp only [← measure_congr (iUnion_negAt_plusPart_ae A hA),
     measure_iUnion (disjoint_negAt_plusPart A) (fun _ => measurableSet_negAt_plusPart _ A hm),
     volume_negAt_plusPart hm, tsum_fintype, sum_const, card_univ, Fintype.card_set, nsmul_eq_mul,
-    Nat.cast_pow, Nat.cast_ofNat, nrRealPl
+    Nat.cast_pow, Nat.cast_ofNat, nrRealPlaces]
 
 Depends on / 依赖: Fintype, Fintype.card_set, Nat.cast_ofNat, Nat.cast_pow, card_set, card_univ, cast_ofNat, cast_pow, disjoint_negAt_plusPart, iUnion_negAt_plusPart_ae, measurableSet_negAt_plusPart, measure_congr, measure_iUnion, nrRealPlaces, nsmul_eq_mul, sum_const, tsum_fintype, volume_negAt_plusPart
 -/
@@ -3888,7 +4158,7 @@ theorem normAtAllPlaces_eq_of_normAtComplexPlaces_eq
   · simpa [normAtAllPlaces_apply, normAtPlace_apply_of_isReal hw,
       normAtComplexPlaces_apply_isReal ⟨w, hw⟩] using congr_arg (|·|) (congr_fun h w)
   · simpa [normAtAllPlaces_apply, normAtPlace_apply_of_isComplex hw,
-      normAtComplexPlaces_
+      normAtComplexPlaces_apply_isComplex ⟨w, hw⟩] using congr_fun h w
 
 中文:
 定理 normAtAllPlaces_eq_of_normAtComplexPlaces_eq
@@ -3899,7 +4169,7 @@ theorem normAtAllPlaces_eq_of_normAtComplexPlaces_eq
   · simpa [normAtAllPlaces_apply, normAtPlace_apply_of_isReal hw,
       normAtComplexPlaces_apply_isReal ⟨w, hw⟩] using congr_arg (|·|) (congr_fun h w)
   · simpa [normAtAllPlaces_apply, normAtPlace_apply_of_isComplex hw,
-      normAtComplexPlaces_
+      normAtComplexPlaces_apply_isComplex ⟨w, hw⟩] using congr_fun h w
 
 Depends on / 依赖: congr_arg, congr_fun, isReal_or_isComplex, normAtAllPlaces_apply, normAtComplexPlaces_apply_isComplex, normAtComplexPlaces_apply_isReal, normAtPlace_apply_of_isComplex, normAtPlace_apply_of_isReal
 -/

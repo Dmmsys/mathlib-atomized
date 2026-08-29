@@ -268,7 +268,8 @@ definition isLimitKernelFork
   refine IsLimit.ofIsoLimit (I.cocomplex.cyclesIsKernel 0 1 (by simp)) (Iso.symm ?_)
   refine Fork.ext ((singleObjHomologySelfIso _ _ _).symm ≪≫
     isoOfQuasiIsoAt I.ι 0 ≪≫ I.cocomplex.isoHomologyπ₀.symm) ?_
-  rw [← cancel_epi (singleObjHomologySelfIso (ComplexShape.up Nat) _ _).hom]; rw [← canc
+  rw [← cancel_epi (singleObjHomologySelfIso (ComplexShape.up Nat) _ _).hom]; rw [← cancel_epi (isoHomologyπ₀ _).hom]; rw [← cancel_epi (singleObjCyclesSelfIso (ComplexShape.up Nat) _ _).inv]
+  simp
 
 中文:
 定义 isLimitKernelFork
@@ -277,7 +278,8 @@ definition isLimitKernelFork
   refine IsLimit.ofIsoLimit (I.cocomplex.cyclesIsKernel 0 1 (by simp)) (Iso.symm ?_)
   refine Fork.ext ((singleObjHomologySelfIso _ _ _).symm ≪≫
     isoOfQuasiIsoAt I.ι 0 ≪≫ I.cocomplex.isoHomologyπ₀.symm) ?_
-  rw [← cancel_epi (singleObjHomologySelfIso (ComplexShape.up Nat) _ _).hom]; rw [← canc
+  rw [← cancel_epi (singleObjHomologySelfIso (ComplexShape.up Nat) _ _).hom]; rw [← cancel_epi (isoHomologyπ₀ _).hom]; rw [← cancel_epi (singleObjCyclesSelfIso (ComplexShape.up Nat) _ _).inv]
+  simp
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, Fork.ext, I.cocomplex.cyclesIsKernel, I.cocomplex.isoHomology, IsLimit, IsLimit.ofIsoLimit, Iso.symm, cancel_epi, cocomplex, cyclesIsKernel, isoOfQuasiIsoAt, ofIsoLimit, singleObjCyclesSelfIso, singleObjHomologySelfIso
 -/

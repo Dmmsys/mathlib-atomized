@@ -236,7 +236,16 @@ theorem toQuadraticMap_toBilin
   ext x
   rw [← bm.linearCombination_repr x]; rw [LinearMap.BilinMap.toQuadraticMap_apply]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]
   simp_rw [LinearMap.map_sum₂, map_sum, LinearMap.map_smul₂, map_smul, toBilin_apply,
-    smul_ite, smul_zero, ← Finset.sum_product', ← Finset.diag_un
+    smul_ite, smul_zero, ← Finset.sum_product', ← Finset.diag_union_offDiag,
+    Finset.sum_union (Finset.disjoint_diag_offDiag _), Finset.sum_diag, if_true]
+  rw [Finset.sum_ite_of_false]; rw [QuadraticMap.map_sum]; rw [← Finset.sum_filter]
+  · simp_rw [← polar_smul_right _ (bm.repr x <| Prod.snd _),
+      ← polar_smul_left _ (bm.repr x <| Prod.fst _)]
+    simp_rw [QuadraticMap.map_smul, mul_smul, Finset.sum_sym2_filter_not_isDiag]
+    rfl
+  · intro x hx
+    rw [Finset.mem_offDiag] at hx
+    simpa using hx.2.2
 
 中文:
 定理 toQuadraticMap_toBilin
@@ -245,7 +254,16 @@ theorem toQuadraticMap_toBilin
   ext x
   rw [← bm.linearCombination_repr x]; rw [LinearMap.BilinMap.toQuadraticMap_apply]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]
   simp_rw [LinearMap.map_sum₂, map_sum, LinearMap.map_smul₂, map_smul, toBilin_apply,
-    smul_ite, smul_zero, ← Finset.sum_product', ← Finset.diag_un
+    smul_ite, smul_zero, ← Finset.sum_product', ← Finset.diag_union_offDiag,
+    Finset.sum_union (Finset.disjoint_diag_offDiag _), Finset.sum_diag, if_true]
+  rw [Finset.sum_ite_of_false]; rw [QuadraticMap.map_sum]; rw [← Finset.sum_filter]
+  · simp_rw [← polar_smul_right _ (bm.repr x <| Prod.snd _),
+      ← polar_smul_left _ (bm.repr x <| Prod.fst _)]
+    simp_rw [QuadraticMap.map_smul, mul_smul, Finset.sum_sym2_filter_not_isDiag]
+    rfl
+  · intro x hx
+    rw [Finset.mem_offDiag] at hx
+    simpa using hx.2.2
 
 Depends on / 依赖: BilinMap, Finset, Finset.diag_union_offDiag, Finset.disjoint_diag_offDiag, Finset.sum_diag, Finset.sum_filter, Finset.sum_ite_of_false, Finset.sum_product, Finset.sum_union, Finsupp, Finsupp.linearCombination_apply, Finsupp.sum, LinearMap, LinearMap.BilinMap.toQuadraticMap_apply, LinearMap.map_smul, LinearMap.map_sum, QuadraticMap, QuadraticMap.map_sum, bm.linearCombination_repr, bm.re
 -/

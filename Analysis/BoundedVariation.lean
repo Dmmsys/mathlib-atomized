@@ -59,7 +59,34 @@ lemma eVariationOn_bilinear_comp_le
   rintro ⟨n, ⟨u, u_mono, u_mem⟩⟩
   calc ∑ i in range n, edist (B (f (u (i + 1))) (g (u (i + 1)))) (B (f (u i)) (g (u i)))
   _ <= ∑ i in range n, edist (B (f (u (i + 1))) (g (u (i + 1)))) (B (f (u i)) (g (u (i + 1)))) +
-      ∑ i in range n, edist (B (f (u i)) (g (u (i + 1)))) (B (
+      ∑ i in range n, edist (B (f (u i)) (g (u (i + 1)))) (B (f (u i)) (g (u i))) := by
+    rw [← Finset.sum_add_distrib]
+    gcongr with i hi
+    apply edist_triangle
+  _ = ∑ i in range n, ‖B (f (u (i + 1)) - f (u i)) (g (u (i + 1)))‖ₑ +
+      ∑ i in range n, ‖B (f (u i)) (g (u (i + 1)) - g (u i))‖ₑ := by simp [edist_eq_enorm_sub]
+  _ <= ∑ i in range n, ‖B‖ₑ * ‖f (u (i + 1)) - f (u i)‖ₑ * ‖g (u (i + 1))‖ₑ +
+      ∑ i in range n, ‖B‖ₑ * ‖f (u i)‖ₑ * ‖g (u (i + 1)) - g (u i)‖ₑ := by
+    gcongr with i hi i hi
+    · apply ContinuousLinearMap.le_opENorm₂
+    · apply ContinuousLinearMap.le_opENorm₂
+  _ <= ∑ i in range n, ‖B‖ₑ * ‖f (u (i + 1)) - f (u i)‖ₑ * D +
+      ∑ i in range n, ‖B‖ₑ * C * ‖g (u (i + 1)) - g (u i)‖ₑ := by
+    gcongr with i hi i hi
+    · apply hg _ (u_mem _)
+    · apply hf _ (u_mem _)
+  _ = ‖B‖ₑ * D * ∑ i in range n, ‖f (u (i + 1)) - f (u i)‖ₑ +
+      ‖B‖ₑ * C * ∑ i in range n, ‖g (u (i + 1)) - g (u i)‖ₑ := by
+    simp only [← sum_mul, ← mul_sum]
+    ring
+  _ <= ‖B‖ₑ * D * eVariationOn f s + ‖B‖ₑ * C * eVariationOn g s := by
+    simp only [← edist_eq_enorm_sub]
+    gcongr
+    · exact eVariationOn.sum_le_of_monotoneOn_Iic (u_mono.monotoneOn _) (fun i hi => u_mem i)
+    · exact eVariationOn.sum_le_of_monotoneOn_Iic (u_mono.monotoneOn _) (fun i hi => u_mem i)
+  _ = ‖B‖ₑ * (C * eVariationOn g s + D * eVariationOn f s) := by ring
+
+@[to_fun eVariationOn_fun_smul_le]
 
 中文:
 引理 eVariationOn_bilinear_comp_le
@@ -69,7 +96,34 @@ lemma eVariationOn_bilinear_comp_le
   rintro ⟨n, ⟨u, u_mono, u_mem⟩⟩
   calc ∑ i in range n, edist (B (f (u (i + 1))) (g (u (i + 1)))) (B (f (u i)) (g (u i)))
   _ <= ∑ i in range n, edist (B (f (u (i + 1))) (g (u (i + 1)))) (B (f (u i)) (g (u (i + 1)))) +
-      ∑ i in range n, edist (B (f (u i)) (g (u (i + 1)))) (B (
+      ∑ i in range n, edist (B (f (u i)) (g (u (i + 1)))) (B (f (u i)) (g (u i))) := by
+    rw [← Finset.sum_add_distrib]
+    gcongr with i hi
+    apply edist_triangle
+  _ = ∑ i in range n, ‖B (f (u (i + 1)) - f (u i)) (g (u (i + 1)))‖ₑ +
+      ∑ i in range n, ‖B (f (u i)) (g (u (i + 1)) - g (u i))‖ₑ := by simp [edist_eq_enorm_sub]
+  _ <= ∑ i in range n, ‖B‖ₑ * ‖f (u (i + 1)) - f (u i)‖ₑ * ‖g (u (i + 1))‖ₑ +
+      ∑ i in range n, ‖B‖ₑ * ‖f (u i)‖ₑ * ‖g (u (i + 1)) - g (u i)‖ₑ := by
+    gcongr with i hi i hi
+    · apply ContinuousLinearMap.le_opENorm₂
+    · apply ContinuousLinearMap.le_opENorm₂
+  _ <= ∑ i in range n, ‖B‖ₑ * ‖f (u (i + 1)) - f (u i)‖ₑ * D +
+      ∑ i in range n, ‖B‖ₑ * C * ‖g (u (i + 1)) - g (u i)‖ₑ := by
+    gcongr with i hi i hi
+    · apply hg _ (u_mem _)
+    · apply hf _ (u_mem _)
+  _ = ‖B‖ₑ * D * ∑ i in range n, ‖f (u (i + 1)) - f (u i)‖ₑ +
+      ‖B‖ₑ * C * ∑ i in range n, ‖g (u (i + 1)) - g (u i)‖ₑ := by
+    simp only [← sum_mul, ← mul_sum]
+    ring
+  _ <= ‖B‖ₑ * D * eVariationOn f s + ‖B‖ₑ * C * eVariationOn g s := by
+    simp only [← edist_eq_enorm_sub]
+    gcongr
+    · exact eVariationOn.sum_le_of_monotoneOn_Iic (u_mono.monotoneOn _) (fun i hi => u_mem i)
+    · exact eVariationOn.sum_le_of_monotoneOn_Iic (u_mono.monotoneOn _) (fun i hi => u_mem i)
+  _ = ‖B‖ₑ * (C * eVariationOn g s + D * eVariationOn f s) := by ring
+
+@[to_fun eVariationOn_fun_smul_le]
 
 Depends on / 依赖: Finset, Finset.sum_add_distrib, edist_triangle, iSup_le, sum_add_distrib, u_mem, u_mono
 -/
@@ -174,7 +228,14 @@ lemma BoundedVariationOn.bilinear_comp
   suffices eVariationOn (fun x => (B (f x)) (g x)) s < ∞ from ne_of_lt this
   have A (y) (hy : y in s) : ‖f y‖ₑ <= ‖f x‖ₑ + eVariationOn f s := by
     grw [show f y = f x + (f y - f x) by abel, enorm_add_le, ← edist_eq_enorm_sub,
-     
+      eVariationOn.edist_le _ hy hx]
+  have A' (y) (hy : y in s) : ‖g y‖ₑ <= ‖g x‖ₑ + eVariationOn g s := by
+    grw [show g y = g x + (g y - g x) by abel, enorm_add_le, ← edist_eq_enorm_sub,
+      eVariationOn.edist_le _ hy hx]
+  grw [eVariationOn_bilinear_comp_le A A']
+  simp [mul_add, ENNReal.mul_lt_top_iff, hf.lt_top, hg.lt_top]
+
+@[to_fun]
 
 中文:
 引理 BoundedVariationOn.bilinear_comp
@@ -184,7 +245,14 @@ lemma BoundedVariationOn.bilinear_comp
   suffices eVariationOn (fun x => (B (f x)) (g x)) s < ∞ from ne_of_lt this
   have A (y) (hy : y in s) : ‖f y‖ₑ <= ‖f x‖ₑ + eVariationOn f s := by
     grw [show f y = f x + (f y - f x) by abel, enorm_add_le, ← edist_eq_enorm_sub,
-     
+      eVariationOn.edist_le _ hy hx]
+  have A' (y) (hy : y in s) : ‖g y‖ₑ <= ‖g x‖ₑ + eVariationOn g s := by
+    grw [show g y = g x + (g y - g x) by abel, enorm_add_le, ← edist_eq_enorm_sub,
+      eVariationOn.edist_le _ hy hx]
+  grw [eVariationOn_bilinear_comp_le A A']
+  simp [mul_add, ENNReal.mul_lt_top_iff, hf.lt_top, hg.lt_top]
+
+@[to_fun]
 
 Depends on / 依赖: eVariationOn, eVariationOn.edist_le, edist_eq_enorm_sub, edist_le, enorm_add_le, eq_empty_or_nonempty, ne_of_lt, s.eq_empty_or_nonempty
 -/
@@ -370,7 +438,9 @@ theorem ae_differentiableWithinAt_of_mem_pi
   have A : forall i : ι, LipschitzWith 1 fun x : ι -> Real => x i := fun i => LipschitzWith.eval i
   have : forall i : ι, forallᵐ x, x in s -> DifferentiableWithinAt Real (fun x : Real => f x i) s x := fun i => by
     apply ae_differentiableWithinAt_of_mem_real
-    exact LipschitzWith.comp_locall
+    exact LipschitzWith.comp_locallyBoundedVariationOn (A i) h
+  filter_upwards [ae_all_iff.2 this] with x hx xs
+  exact differentiableWithinAt_pi.2 fun i => hx i xs
 
 中文:
 定理 ae_differentiableWithinAt_of_mem_pi
@@ -379,7 +449,9 @@ theorem ae_differentiableWithinAt_of_mem_pi
   have A : forall i : ι, LipschitzWith 1 fun x : ι -> Real => x i := fun i => LipschitzWith.eval i
   have : forall i : ι, forallᵐ x, x in s -> DifferentiableWithinAt Real (fun x : Real => f x i) s x := fun i => by
     apply ae_differentiableWithinAt_of_mem_real
-    exact LipschitzWith.comp_locall
+    exact LipschitzWith.comp_locallyBoundedVariationOn (A i) h
+  filter_upwards [ae_all_iff.2 this] with x hx xs
+  exact differentiableWithinAt_pi.2 fun i => hx i xs
 
 Depends on / 依赖: DifferentiableWithinAt, LipschitzWith, LipschitzWith.comp_locallyBoundedVariationOn, LipschitzWith.eval, ae_all_iff, ae_differentiableWithinAt_of_mem_real, comp_locallyBoundedVariationOn, differentiableWithinAt_pi, filter_upwards
 -/
@@ -403,7 +475,8 @@ theorem ae_differentiableWithinAt_of_mem
   suffices H : forallᵐ x, x in s -> DifferentiableWithinAt Real (A ∘ f) s x by
     filter_upwards [H] with x hx xs
     exact (ContinuousLinearEquiv.comp_differentiableWithinAt_iff _).mp (hx xs)
-  apply ae_differentiab
+  apply ae_differentiableWithinAt_of_mem_pi
+  exact A.lipschitz.comp_locallyBoundedVariationOn h
 
 中文:
 定理 ae_differentiableWithinAt_of_mem
@@ -413,7 +486,8 @@ theorem ae_differentiableWithinAt_of_mem
   suffices H : forallᵐ x, x in s -> DifferentiableWithinAt Real (A ∘ f) s x by
     filter_upwards [H] with x hx xs
     exact (ContinuousLinearEquiv.comp_differentiableWithinAt_iff _).mp (hx xs)
-  apply ae_differentiab
+  apply ae_differentiableWithinAt_of_mem_pi
+  exact A.lipschitz.comp_locallyBoundedVariationOn h
 
 Depends on / 依赖: A.lipschitz.comp_locallyBoundedVariationOn, ContinuousLinearEquiv, ContinuousLinearEquiv.comp_differentiableWithinAt_iff, DifferentiableWithinAt, Module, Module.Basis.ofVectorSpace, ae_differentiableWithinAt_of_mem_pi, comp_differentiableWithinAt_iff, comp_locallyBoundedVariationOn, equivFun, equivFun.toContinuousLinearEquiv, filter_upwards, lipschitz, ofVectorSpace, toContinuousLinearEquiv
 -/
@@ -438,6 +512,8 @@ theorem _root_.BoundedVariationOn.ae_differentiableAt_of_mem_uIcc
   filter_upwards [h.locallyBoundedVariationOn.ae_differentiableWithinAt_of_mem, h₁, h₂]
     with x hx₁ hx₂ hx₃ hx₄
   rw [uIcc]; rw [mem_Icc] at hx₄
+  exact (hx₁ hx₄).differentiableAt
+    (Icc_mem_nhds (lt_of_le_of_ne hx₄.left hx₂.symm) (lt_of_le_of_ne hx₄.right hx₃))
 
 中文:
 定理 _root_.BoundedVariationOn.ae_differentiableAt_of_mem_uIcc
@@ -448,6 +524,8 @@ theorem _root_.BoundedVariationOn.ae_differentiableAt_of_mem_uIcc
   filter_upwards [h.locallyBoundedVariationOn.ae_differentiableWithinAt_of_mem, h₁, h₂]
     with x hx₁ hx₂ hx₃ hx₄
   rw [uIcc]; rw [mem_Icc] at hx₄
+  exact (hx₁ hx₄).differentiableAt
+    (Icc_mem_nhds (lt_of_le_of_ne hx₄.left hx₂.symm) (lt_of_le_of_ne hx₄.right hx₃))
 
 Depends on / 依赖: Icc_mem_nhds, ae_differentiableWithinAt_of_mem, ae_iff, differentiableAt, filter_upwards, h.locallyBoundedVariationOn.ae_differentiableWithinAt_of_mem, locallyBoundedVariationOn, lt_of_le_of_ne, measure_singleton, mem_Icc
 -/

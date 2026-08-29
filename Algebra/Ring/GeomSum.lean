@@ -256,7 +256,17 @@ lemma Commute.geom_sum₂_mul_add
   induction n with
   | zero => rw [range_zero, sum_empty, zero_mul, zero_add, pow_zero, pow_zero]
   | succ n ih =>
-    have f_last : f (n + 1) n = (x + y) ^ n :
+    have f_last : f (n + 1) n = (x + y) ^ n := by
+      dsimp only [f]
+      rw [← tsub_add_eq_tsub_tsub]; rw [Nat.add_comm]; rw [tsub_self]; rw [pow_zero]; rw [mul_one]
+    have f_succ : forall i, i in range n -> f (n + 1) i = y * f n i := fun i hi => by
+      dsimp only [f]
+      have : Commute y ((x + y) ^ i) := (h.symm.add_right (Commute.refl y)).pow_right i
+      rw [← mul_assoc]; rw [this.eq]; rw [mul_assoc]; rw [← pow_succ' y (n - 1 - i)]; rw [add_tsub_cancel_right]; rw [← tsub_add_eq_tsub_tsub]; rw [add_comm 1 i]
+      have : i + 1 + (n - (i + 1)) = n := add_tsub_cancel_of_le (mem_range.mp hi)
+      rw [add_comm (i + 1)] at this
+      rw [← this]; rw [add_tsub_cancel_right]; rw [add_comm i 1]; rw [← add_assoc]; rw [add_tsub_cancel_right]
+    rw [pow_succ' (x + y)]; rw [add_mul]; rw [sum_range_succ_comm]; rw [add_mul]; rw [f_last]; rw [add_assoc]; rw [(((Commute.refl x).add_right h).pow_right n).eq]; rw [sum_congr rfl f_succ]; rw [← mul_sum]; rw [pow_succ' y]; rw [mul_assoc]; rw [← mul_add y]; rw [ih]
 
 中文:
 引理 Commute.geom_sum₂_mul_add
@@ -267,7 +277,17 @@ lemma Commute.geom_sum₂_mul_add
   induction n with
   | zero => rw [range_zero, sum_empty, zero_mul, zero_add, pow_zero, pow_zero]
   | succ n ih =>
-    have f_last : f (n + 1) n = (x + y) ^ n :
+    have f_last : f (n + 1) n = (x + y) ^ n := by
+      dsimp only [f]
+      rw [← tsub_add_eq_tsub_tsub]; rw [Nat.add_comm]; rw [tsub_self]; rw [pow_zero]; rw [mul_one]
+    have f_succ : forall i, i in range n -> f (n + 1) i = y * f n i := fun i hi => by
+      dsimp only [f]
+      have : Commute y ((x + y) ^ i) := (h.symm.add_right (Commute.refl y)).pow_right i
+      rw [← mul_assoc]; rw [this.eq]; rw [mul_assoc]; rw [← pow_succ' y (n - 1 - i)]; rw [add_tsub_cancel_right]; rw [← tsub_add_eq_tsub_tsub]; rw [add_comm 1 i]
+      have : i + 1 + (n - (i + 1)) = n := add_tsub_cancel_of_le (mem_range.mp hi)
+      rw [add_comm (i + 1)] at this
+      rw [← this]; rw [add_tsub_cancel_right]; rw [add_comm i 1]; rw [← add_assoc]; rw [add_tsub_cancel_right]
+    rw [pow_succ' (x + y)]; rw [add_mul]; rw [sum_range_succ_comm]; rw [add_mul]; rw [f_last]; rw [add_assoc]; rw [(((Commute.refl x).add_right h).pow_right n).eq]; rw [sum_congr rfl f_succ]; rw [← mul_sum]; rw [pow_succ' y]; rw [mul_assoc]; rw [← mul_add y]; rw [ih]
 -/
 protected lemma Commute.geom_sum₂_mul_add {x y : R} (h : Commute x y) (n : Nat) :
     (∑ i in range n, (x + y) ^ i * y ^ (n - 1 - i)) * x + y ^ n = (x + y) ^ n := by
@@ -301,7 +321,9 @@ lemma geom_sum₂_self
       simp_rw [← pow_add]
     _ = ∑ _i in Finset.range n, x ^ (n - 1) :=
       Finset.sum_congr rfl fun _ hi =>
-congr_arg _ add_tsub_cancel_of_le Nat.le_sub_one_of_lt Finset.mem_range
+congr_arg _ add_tsub_cancel_of_le Nat.le_sub_one_of_lt Finset.mem_range.1 hi
+    _ = #(range n) • x ^ (n - 1) := sum_const _
+    _ = n * x ^ (n - 1) := by rw [Finset.card_range, nsmul_eq_mul]
 
 中文:
 引理 geom_sum₂_self
@@ -313,7 +335,9 @@ congr_arg _ add_tsub_cancel_of_le Nat.le_sub_one_of_lt Finset.mem_range
       simp_rw [← pow_add]
     _ = ∑ _i in Finset.range n, x ^ (n - 1) :=
       Finset.sum_congr rfl fun _ hi =>
-congr_arg _ add_tsub_cancel_of_le Nat.le_sub_one_of_lt Finset.mem_range
+congr_arg _ add_tsub_cancel_of_le Nat.le_sub_one_of_lt Finset.mem_range.1 hi
+    _ = #(range n) • x ^ (n - 1) := sum_const _
+    _ = n * x ^ (n - 1) := by rw [Finset.card_range, nsmul_eq_mul]
 
 Depends on / 依赖: Finset, Finset.card_range, Finset.mem_range, Finset.range, Finset.sum_congr, Nat.le_sub_one_of_lt, add_tsub_cancel_of_le, card_range, congr_arg, le_sub_one_of_lt, mem_range, nsmul_eq_mul, pow_add, simp_rw, sum_congr, sum_const
 -/
@@ -813,7 +837,11 @@ theorem dvd_pow_pow_sub_self_of_dvd
       exact dvd_zero _
     have ha₀ : a != 0 := by rintro rfl; rw [zero_dvd_iff] at h; tauto
     rw [hp₀]; rw [zero_pow ha₀]; rw [zero_pow hb₀]
-have hp (c) : 1 <= p ^ c := Nat.pow_pos pos_of_ne_zero h
+have hp (c) : 1 <= p ^ c := Nat.pow_pos pos_of_ne_zero hp₀
+  rw [← Nat.sub_add_cancel (hp a)]; rw [← Nat.sub_add_cancel (hp b)]; rw [pow_succ']; rw [pow_succ']; rw [← mul_sub_one]; rw [← mul_sub_one]
+refine mul_dvd_mul_left _ dvd_pow_sub_one_of_dvd Int.natCast_dvd_natCast.mp ?_
+  push_cast [hp a, hp b]
+  exact dvd_pow_sub_one_of_dvd h
 
 中文:
 定理 dvd_pow_pow_sub_self_of_dvd
@@ -825,7 +853,11 @@ have hp (c) : 1 <= p ^ c := Nat.pow_pos pos_of_ne_zero h
       exact dvd_zero _
     have ha₀ : a != 0 := by rintro rfl; rw [zero_dvd_iff] at h; tauto
     rw [hp₀]; rw [zero_pow ha₀]; rw [zero_pow hb₀]
-have hp (c) : 1 <= p ^ c := Nat.pow_pos pos_of_ne_zero h
+have hp (c) : 1 <= p ^ c := Nat.pow_pos pos_of_ne_zero hp₀
+  rw [← Nat.sub_add_cancel (hp a)]; rw [← Nat.sub_add_cancel (hp b)]; rw [pow_succ']; rw [pow_succ']; rw [← mul_sub_one]; rw [← mul_sub_one]
+refine mul_dvd_mul_left _ dvd_pow_sub_one_of_dvd Int.natCast_dvd_natCast.mp ?_
+  push_cast [hp a, hp b]
+  exact dvd_pow_sub_one_of_dvd h
 
 Depends on / 依赖: Int.natCast_dvd_natCast.mp, Nat.pow_pos, Nat.sub_add_cancel, dvd_pow_sub_one_of_dvd, dvd_zero, mul_dvd_mul_left, mul_sub_one, natCast_dvd_natCast, pos_of_ne_zero, pow_one, pow_pos, pow_succ, pow_zero, sub_add_cancel, sub_self, zero_dvd_iff, zero_pow
 -/
@@ -956,7 +988,9 @@ lemma Commute.mul_geom_sum₂_Ico
     rw [mem_range] at j_in
     lia
   rw [this]
-  simp_rw [pow_mul_comm y (n
+  simp_rw [pow_mul_comm y (n - m) _]
+  simp_rw [← mul_assoc]
+  rw [← sum_mul]; rw [mul_sub]; rw [h.mul_geom_sum₂]; rw [← mul_assoc]; rw [h.mul_geom_sum₂]; rw [sub_mul]; rw [← pow_add]; rw [add_tsub_cancel_of_le hmn]; rw [sub_sub_sub_cancel_right (x ^ n) (x ^ m * y ^ (n - m)) (y ^ n)]
 
 中文:
 引理 Commute.mul_geom_sum₂_Ico
@@ -972,7 +1006,9 @@ lemma Commute.mul_geom_sum₂_Ico
     rw [mem_range] at j_in
     lia
   rw [this]
-  simp_rw [pow_mul_comm y (n
+  simp_rw [pow_mul_comm y (n - m) _]
+  simp_rw [← mul_assoc]
+  rw [← sum_mul]; rw [mul_sub]; rw [h.mul_geom_sum₂]; rw [← mul_assoc]; rw [h.mul_geom_sum₂]; rw [sub_mul]; rw [← pow_add]; rw [add_tsub_cancel_of_le hmn]; rw [sub_sub_sub_cancel_right (x ^ n) (x ^ m * y ^ (n - m)) (y ^ n)]
 -/
 protected lemma Commute.mul_geom_sum₂_Ico (h : Commute x y) {m n : Nat}
     (hmn : m <= n) :
@@ -1038,7 +1074,10 @@ lemma Commute.geom_sum₂_Ico_mul
   have : (∑ k in Ico m n, MulOpposite.op y ^ (n - 1 - k) * MulOpposite.op x ^ k) =
       ∑ k in Ico m n, MulOpposite.op x ^ k * MulOpposite.op y ^ (n - 1 - k) := by
     refine sum_congr rfl fun k _ => ?_
-    have hp := Commute.pow_
+    have hp := Commute.pow_pow (Commute.op h.symm) (n - 1 - k) k
+    simpa [Commute, SemiconjBy] using hp
+  simp only [this]
+  convert! (Commute.op h).mul_geom_sum₂_Ico hmn
 
 中文:
 引理 Commute.geom_sum₂_Ico_mul
@@ -1049,7 +1088,10 @@ lemma Commute.geom_sum₂_Ico_mul
   have : (∑ k in Ico m n, MulOpposite.op y ^ (n - 1 - k) * MulOpposite.op x ^ k) =
       ∑ k in Ico m n, MulOpposite.op x ^ k * MulOpposite.op y ^ (n - 1 - k) := by
     refine sum_congr rfl fun k _ => ?_
-    have hp := Commute.pow_
+    have hp := Commute.pow_pow (Commute.op h.symm) (n - 1 - k) k
+    simpa [Commute, SemiconjBy] using hp
+  simp only [this]
+  convert! (Commute.op h).mul_geom_sum₂_Ico hmn
 -/
 protected lemma Commute.geom_sum₂_Ico_mul (h : Commute x y) {m n : Nat}
     (hmn : m <= n) :

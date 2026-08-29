@@ -165,7 +165,7 @@ lemma HasCondDistrib.comp_left
       rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]
       congr
     _ = (P.map X otimesₘ κ).map (Prod.map id f) := by rw [h.map_eq]
-    _ = P.map X otimesₘ κ.map f := by r
+    _ = P.map X otimesₘ κ.map f := by rw [Measure.compProd_map hf]
 
 中文:
 引理 HasCondDistrib.comp_left
@@ -176,7 +176,7 @@ lemma HasCondDistrib.comp_left
       rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]
       congr
     _ = (P.map X otimesₘ κ).map (Prod.map id f) := by rw [h.map_eq]
-    _ = P.map X otimesₘ κ.map f := by r
+    _ = P.map X otimesₘ κ.map f := by rw [Measure.compProd_map hf]
 -/
 lemma HasCondDistrib.comp_left (h : HasCondDistrib Y X κ P) {f : 𝓨 -> 𝓩} (hf : Measurable f) :
     HasCondDistrib (f ∘ Y) X (κ.map f) P where
@@ -250,7 +250,12 @@ lemma HasCondDistrib.comp_right
         rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]
         rfl
     _ = (P.map Z otimesₘ κ.comap f hf).map (Prod.map f id) := by rw [h.map_eq]
-    _ = (P.map Z).map f 
+    _ = (P.map Z).map f otimesₘ κ := by
+        ext s hs
+        rw [Measure.map_apply (by fun_prop) hs]; rw [Measure.compProd_apply (by measurability)]; rw [Measure.compProd_apply hs]; rw [lintegral_map (Kernel.measurable_kernel_prodMk_left hs) hf]
+        rfl
+    _ = P.map (f ∘ Z) otimesₘ κ := by
+        rw [AEMeasurable.map_map_of_aemeasurable hf.aemeasurable (by fun_prop)]
 
 中文:
 引理 HasCondDistrib.comp_right
@@ -261,7 +266,12 @@ lemma HasCondDistrib.comp_right
         rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]
         rfl
     _ = (P.map Z otimesₘ κ.comap f hf).map (Prod.map f id) := by rw [h.map_eq]
-    _ = (P.map Z).map f 
+    _ = (P.map Z).map f otimesₘ κ := by
+        ext s hs
+        rw [Measure.map_apply (by fun_prop) hs]; rw [Measure.compProd_apply (by measurability)]; rw [Measure.compProd_apply hs]; rw [lintegral_map (Kernel.measurable_kernel_prodMk_left hs) hf]
+        rfl
+    _ = P.map (f ∘ Z) otimesₘ κ := by
+        rw [AEMeasurable.map_map_of_aemeasurable hf.aemeasurable (by fun_prop)]
 -/
 lemma HasCondDistrib.comp_right {f : 𝓩 -> 𝓧}
     {hf : Measurable f} {Z : Ω -> 𝓩} (h : HasCondDistrib Y Z (κ.comap f hf) P) :
@@ -315,7 +325,10 @@ lemma HasCondDistrib.of_compProd
   refine ⟨by fun_prop, ?_⟩
   calc P.map (fun a => ((X a, Y a), Z a))
   _ = (P.map X otimesₘ (κ otimesₖ η)).map MeasurableEquiv.prodAssoc.symm := by
-      rw [← h.map_eq]; rw [AEMeasurable
+      rw [← h.map_eq]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]
+      rfl
+  _ = P.map X otimesₘ κ otimesₘ η := Measure.compProd_assoc
+  _ = P.map (fun a => (X a, Y a)) otimesₘ η := by simp [h.fst.map_eq]
 
 中文:
 引理 HasCondDistrib.of_compProd
@@ -326,7 +339,10 @@ lemma HasCondDistrib.of_compProd
   refine ⟨by fun_prop, ?_⟩
   calc P.map (fun a => ((X a, Y a), Z a))
   _ = (P.map X otimesₘ (κ otimesₖ η)).map MeasurableEquiv.prodAssoc.symm := by
-      rw [← h.map_eq]; rw [AEMeasurable
+      rw [← h.map_eq]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]
+      rfl
+  _ = P.map X otimesₘ κ otimesₘ η := Measure.compProd_assoc
+  _ = P.map (fun a => (X a, Y a)) otimesₘ η := by simp [h.fst.map_eq]
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, MeasurableEquiv, MeasurableEquiv.prodAssoc.symm, Measure, Measure.compProd_assoc, P.map, aemeasurable_snd, compProd_assoc, fun_prop, h.aemeasurable_snd.fst, h.aemeasurable_snd.snd, h.fst.map_eq, h.map_eq, map_eq, map_map_of_aemeasurable, prodAssoc
 -/

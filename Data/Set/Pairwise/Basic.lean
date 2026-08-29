@@ -159,7 +159,7 @@ theorem Pairwise.disjoint_extend_bot
   · rcases em (exists a₂, e a₂ = b₂) with ⟨a₂, rfl⟩ | hb₂
     · simpa only [onFun, he.extend_apply] using! hf (ne_of_apply_ne e hne)
     · simpa only [onFun, extend_apply' _ _ _ hb₂] using! disjoint_bot_right
-  · simpa only
+  · simpa only [onFun, extend_apply' _ _ _ hb₁] using! disjoint_bot_left
 
 中文:
 定理 两两.disjoint_extend_bot
@@ -170,7 +170,7 @@ theorem Pairwise.disjoint_extend_bot
   · rcases em (exists a₂, e a₂ = b₂) with ⟨a₂, rfl⟩ | hb₂
     · simpa only [onFun, he.extend_apply] using! hf (ne_of_apply_ne e hne)
     · simpa only [onFun, extend_apply' _ _ _ hb₂] using! disjoint_bot_right
-  · simpa only
+  · simpa only [onFun, extend_apply' _ _ _ hb₁] using! disjoint_bot_left
 
 Depends on / 依赖: disjoint_bot_left, disjoint_bot_right, extend_apply, he.extend_apply, ne_of_apply_ne
 -/
@@ -1492,7 +1492,9 @@ theorem pairwiseDisjoint_image_right_iff
     refine hs.elim hx.1 hy.1 (not_disjoint_iff.2 ⟨_, mem_image_of_mem _ hx.2, ?_⟩)
     rw [h]
     exact mem_image_of_mem _ hy.2
-  · refi
+  · refine disjoint_iff_inf_le.mpr ?_
+    rintro _ ⟨⟨a, ha, hab⟩, b, hb, rfl⟩
+    exact h (congr_arg Prod.fst <| hs (mk_mem_prod hx ha) (mk_mem_prod hy hb) hab)
 
 中文:
 定理 pairwiseDisjoint_image_right_iff
@@ -1503,7 +1505,9 @@ theorem pairwiseDisjoint_image_right_iff
     refine hs.elim hx.1 hy.1 (not_disjoint_iff.2 ⟨_, mem_image_of_mem _ hx.2, ?_⟩)
     rw [h]
     exact mem_image_of_mem _ hy.2
-  · refi
+  · refine disjoint_iff_inf_le.mpr ?_
+    rintro _ ⟨⟨a, ha, hab⟩, b, hb, rfl⟩
+    exact h (congr_arg Prod.fst <| hs (mk_mem_prod hx ha) (mk_mem_prod hy hb) hab)
 
 Depends on / 依赖: Prod.ext, Prod.fst, congr_arg, disjoint_iff_inf_le, disjoint_iff_inf_le.mpr, h.trans, hs.elim, mem_image_of_mem, mk_mem_prod, not_disjoint_iff
 -/
@@ -1531,7 +1535,9 @@ theorem pairwiseDisjoint_image_left_iff
     refine ht.elim hx.2 hy.2 (not_disjoint_iff.2 ⟨_, mem_image_of_mem _ hx.1, ?_⟩)
     rw [h]
     exact mem_image_of_mem _ hy.1
-  · refi
+  · refine disjoint_iff_inf_le.mpr ?_
+    rintro _ ⟨⟨a, ha, hab⟩, b, hb, rfl⟩
+    exact h (congr_arg Prod.snd <| ht (mk_mem_prod ha hx) (mk_mem_prod hb hy) hab)
 
 中文:
 定理 pairwiseDisjoint_image_left_iff
@@ -1542,7 +1548,9 @@ theorem pairwiseDisjoint_image_left_iff
     refine ht.elim hx.2 hy.2 (not_disjoint_iff.2 ⟨_, mem_image_of_mem _ hx.1, ?_⟩)
     rw [h]
     exact mem_image_of_mem _ hy.1
-  · refi
+  · refine disjoint_iff_inf_le.mpr ?_
+    rintro _ ⟨⟨a, ha, hab⟩, b, hb, rfl⟩
+    exact h (congr_arg Prod.snd <| ht (mk_mem_prod ha hx) (mk_mem_prod hb hy) hab)
 
 Depends on / 依赖: Prod.ext, Prod.snd, congr_arg, disjoint_iff_inf_le, disjoint_iff_inf_le.mpr, h.trans, ht.elim, mem_image_of_mem, mk_mem_prod, not_disjoint_iff
 -/
@@ -1569,7 +1577,8 @@ lemma exists_ne_mem_inter_of_not_pairwiseDisjoint
   obtain ⟨i, hi, j, hj, h_ne, t, hfi, hfj, ht⟩ := h
   replace ht : t.Nonempty := by
     rwa [le_bot_iff, bot_eq_empty, ← Ne, ← nonempty_iff_ne_empty] at ht
-  ob
+  obtain ⟨x, hx⟩ := ht
+  exact ⟨i, hi, j, hj, h_ne, x, hfi hx, hfj hx⟩
 
 中文:
 引理 存在_ne_mem_inter_of_not_pairwiseDisjoint
@@ -1579,7 +1588,8 @@ lemma exists_ne_mem_inter_of_not_pairwiseDisjoint
   obtain ⟨i, hi, j, hj, h_ne, t, hfi, hfj, ht⟩ := h
   replace ht : t.Nonempty := by
     rwa [le_bot_iff, bot_eq_empty, ← Ne, ← nonempty_iff_ne_empty] at ht
-  ob
+  obtain ⟨x, hx⟩ := ht
+  exact ⟨i, hi, j, hj, h_ne, x, hfi hx, hfj hx⟩
 
 Depends on / 依赖: Nonempty, bot_eq_empty, h_ne, le_bot_iff, nonempty_iff_ne_empty, not_forall, replace, t.Nonempty
 -/

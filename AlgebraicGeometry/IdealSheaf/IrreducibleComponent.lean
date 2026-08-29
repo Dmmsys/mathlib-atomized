@@ -76,7 +76,7 @@ definition irreducibleComponentIdeal
   supportSet_eq_iInter_zeroLocus := by
     rw [← IdealSheafData.coe_support_eq_eq_iInter_zeroLocus]; rw [Hom.support_ker]; rw [Opens.range_ι]
     exact (closure_sUnion_irreducibleComponents_sdiff_singleton
-      TopologicalSpace.NoetherianSpace.
+      TopologicalSpace.NoetherianSpace.finite_irreducibleComponents Z hZ).symm
 
 中文:
 定义 irreducibleComponentIdeal
@@ -86,7 +86,7 @@ definition irreducibleComponentIdeal
   supportSet_eq_iInter_zeroLocus := by
     rw [← IdealSheafData.coe_support_eq_eq_iInter_zeroLocus]; rw [Hom.support_ker]; rw [Opens.range_ι]
     exact (closure_sUnion_irreducibleComponents_sdiff_singleton
-      TopologicalSpace.NoetherianSpace.
+      TopologicalSpace.NoetherianSpace.finite_irreducibleComponents Z hZ).symm
 
 Depends on / 依赖: irreducibleComponentOpen
 -/
@@ -248,7 +248,7 @@ instance [IrreducibleSpace
     rw [irreducibleComponentOpen_eq_top X Z hZ]
     exact X.topIso.isIso_hom
   rw [irreducibleComponentι]; rw [isIso_subschemeι_iff_eq_bot]; rw [irreducibleComponentIdeal_def]; rw [irreducibleComponentOpen_eq_top X Z hZ]
-  exact
+  exact X.topIso.hom.ker_eq_bot_of_isIso
 
 中文:
 实例 [不可约空间
@@ -258,7 +258,7 @@ instance [IrreducibleSpace
     rw [irreducibleComponentOpen_eq_top X Z hZ]
     exact X.topIso.isIso_hom
   rw [irreducibleComponentι]; rw [isIso_subschemeι_iff_eq_bot]; rw [irreducibleComponentIdeal_def]; rw [irreducibleComponentOpen_eq_top X Z hZ]
-  exact
+  exact X.topIso.hom.ker_eq_bot_of_isIso
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsIso, X.topIso.hom.ker_eq_bot_of_isIso, X.topIso.isIso_hom, irreducibleComponentIdeal_def, irreducibleComponentOpen, irreducibleComponentOpen_eq_top, isIso_hom, ker_eq_bot_of_isIso, topIso
 -/

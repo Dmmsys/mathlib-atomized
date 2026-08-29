@@ -45,7 +45,7 @@ theorem CPolynomialOn.contDiffOn
     have t_open : IsOpen t := isOpen_cpolynomialAt 𝕜 f
     exact AnalyticOnNhd.contDiffOn this t_open.uniqueDiffOn
   have H : CPolynomialOn 𝕜 f t := fun _x hx => hx
-  exact H.an
+  exact H.analyticOnNhd
 
 中文:
 定理 CPolynomialOn.contDiffOn
@@ -57,7 +57,7 @@ theorem CPolynomialOn.contDiffOn
     have t_open : IsOpen t := isOpen_cpolynomialAt 𝕜 f
     exact AnalyticOnNhd.contDiffOn this t_open.uniqueDiffOn
   have H : CPolynomialOn 𝕜 f t := fun _x hx => hx
-  exact H.an
+  exact H.analyticOnNhd
 
 Depends on / 依赖: AnalyticOnNhd, AnalyticOnNhd.contDiffOn, CPolynomialAt, CPolynomialOn, ContDiffOn, H.analyticOnNhd, IsOpen, analyticOnNhd, contDiffOn, isOpen_cpolynomialAt, t_open, t_open.uniqueDiffOn, this.mono, uniqueDiffOn
 -/

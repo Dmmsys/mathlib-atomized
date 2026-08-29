@@ -50,7 +50,21 @@ WithBot.coe_le_coe.1
       calc
         ↑(natDegree (p.comp q)) = degree (p.comp q) := (degree_eq_natDegree h0).symm
         _ = _ := congr_arg degree comp_eq_sum_left
-        _ <= _ := degre
+        _ <= _ := degree_sum_le _ _
+        _ <= _ :=
+          Finset.sup_le fun n hn =>
+            calc
+              degree (C (coeff p n) * q ^ n) <= degree (C (coeff p n)) + degree (q ^ n) :=
+                degree_mul_le _ _
+              _ <= natDegree (C (coeff p n)) + n • degree q :=
+                (add_le_add degree_le_natDegree (degree_pow_le _ _))
+              _ <= natDegree (C (coeff p n)) + n • ↑(natDegree q) := by grw [degree_le_natDegree]
+              _ = (n * natDegree q : Nat) := by
+                rw [natDegree_C]; rw [Nat.cast_zero]; rw [zero_add]; rw [nsmul_eq_mul]
+                simp
+              _ <= (natDegree p * natDegree q : Nat) :=
+WithBot.coe_le_coe.2
+                  by gcongr; exact le_natDegree_of_ne_zero (mem_support_iff.1 hn)
 
 中文:
 定理 natDegree_comp_le
@@ -62,7 +76,21 @@ WithBot.coe_le_coe.1
       calc
         ↑(natDegree (p.comp q)) = degree (p.comp q) := (degree_eq_natDegree h0).symm
         _ = _ := congr_arg degree comp_eq_sum_left
-        _ <= _ := degre
+        _ <= _ := degree_sum_le _ _
+        _ <= _ :=
+          Finset.sup_le fun n hn =>
+            calc
+              degree (C (coeff p n) * q ^ n) <= degree (C (coeff p n)) + degree (q ^ n) :=
+                degree_mul_le _ _
+              _ <= natDegree (C (coeff p n)) + n • degree q :=
+                (add_le_add degree_le_natDegree (degree_pow_le _ _))
+              _ <= natDegree (C (coeff p n)) + n • ↑(natDegree q) := by grw [degree_le_natDegree]
+              _ = (n * natDegree q : Nat) := by
+                rw [natDegree_C]; rw [Nat.cast_zero]; rw [zero_add]; rw [nsmul_eq_mul]
+                simp
+              _ <= (natDegree p * natDegree q : Nat) :=
+WithBot.coe_le_coe.2
+                  by gcongr; exact le_natDegree_of_ne_zero (mem_support_iff.1 hn)
 
 Depends on / 依赖: Classical, Classical.decEq, Finset, Finset.sup_le, Nat.zero_le, WithBot, WithBot.coe_le_coe, add_le_add, coe_le_coe, comp_eq_sum_left, congr_arg, degree, degree_eq_natDegree, degree_le_natDegree, degree_mul_le, degree_sum_le, natDegree, natDegree_zero, p.comp, sup_le
 -/
@@ -599,7 +627,22 @@ theorem degree_sum_eq_of_disjoint
   | insert x s hx IH =>
     simp only [hx, Finset.sum_insert, not_false_iff, Finset.sup_insert]
     specialize IH (h.mono fun _ => by simp +contextual)
-    rcases lt_trichotomy (degree (f x)) (degree (s.sum f)) with (H | H
+    rcases lt_trichotomy (degree (f x)) (degree (s.sum f)) with (H | H | H)
+    · rw [← IH, sup_eq_right.mpr H.le, degree_add_eq_right_of_degree_lt H]
+    · rcases s.eq_empty_or_nonempty with (rfl | hs)
+      · simp
+      obtain ⟨y, hy, hy'⟩ := Finset.exists_mem_eq_sup s hs fun i => degree (f i)
+      rw [IH]; rw [hy'] at H
+      by_cases hx0 : f x = 0
+      · simp [hx0, IH]
+      have hy0 : f y != 0 := by
+        contrapose! H
+        simpa [H, degree_eq_bot] using hx0
+      refine absurd H (h ?_ ?_ fun H => hx ?_)
+      · simp [hx0]
+      · simp [hy, hy0]
+      · exact H.symm ▸ hy
+    · rw [← IH, sup_eq_left.mpr H.le, degree_add_eq_left_of_degree_lt H]
 
 中文:
 定理 degree_sum_eq_of_disjoint
@@ -611,7 +654,22 @@ theorem degree_sum_eq_of_disjoint
   | insert x s hx IH =>
     simp only [hx, Finset.sum_insert, not_false_iff, Finset.sup_insert]
     specialize IH (h.mono fun _ => by simp +contextual)
-    rcases lt_trichotomy (degree (f x)) (degree (s.sum f)) with (H | H
+    rcases lt_trichotomy (degree (f x)) (degree (s.sum f)) with (H | H | H)
+    · rw [← IH, sup_eq_right.mpr H.le, degree_add_eq_right_of_degree_lt H]
+    · rcases s.eq_empty_or_nonempty with (rfl | hs)
+      · simp
+      obtain ⟨y, hy, hy'⟩ := Finset.exists_mem_eq_sup s hs fun i => degree (f i)
+      rw [IH]; rw [hy'] at H
+      by_cases hx0 : f x = 0
+      · simp [hx0, IH]
+      have hy0 : f y != 0 := by
+        contrapose! H
+        simpa [H, degree_eq_bot] using hx0
+      refine absurd H (h ?_ ?_ fun H => hx ?_)
+      · simp [hx0]
+      · simp [hy, hy0]
+      · exact H.symm ▸ hy
+    · rw [← IH, sup_eq_left.mpr H.le, degree_add_eq_left_of_degree_lt H]
 
 Depends on / 依赖: Finset, Finset.exists_mem_eq_sup, Finset.induction_on, Finset.sum_insert, Finset.sup_insert, H.le, classical, contextual, degree, degree_add_eq_right_of_degree_lt, eq_empty_or_nonempty, exists_mem_eq_sup, h.mono, induction_on, insert, lt_trichotomy, not_false_iff, s.eq_empty_or_nonempty, s.sum, specialize
 -/
@@ -655,7 +713,26 @@ theorem natDegree_sum_eq_of_disjoint
     rw [degree_sum_eq_of_disjoint]
     · rw [← Finset.sup'_eq_sup hs, ← Finset.sup'_eq_sup hs,
         Nat.cast_withBot, Finset.coe_sup' hs, ←
-    
+        Finset.sup'_eq_sup hs]
+      refine le_antisymm ?_ ?_
+      · rw [Finset.sup'_le_iff]
+        intro b hb
+        by_cases hb' : f b = 0
+        · simpa [hb'] using! hs
+        rw [degree_eq_natDegree hb']; rw [Nat.cast_withBot]
+        exact Finset.le_sup' (fun i : S => (natDegree (f i) : WithBot Nat)) hb
+      · rw [Finset.sup'_le_iff]
+        intro b hb
+        simp only [Finset.le_sup'_iff, Function.comp_apply]
+        by_cases hb' : f b = 0
+        · refine ⟨x, hx, ?_⟩
+          contrapose! hx'
+          simpa [← Nat.cast_withBot, hb', degree_eq_bot] using! hx'
+        exact ⟨b, hb, (degree_eq_natDegree hb').ge⟩
+    · exact h.imp fun x y hxy hxy' => hxy (natDegree_eq_of_degree_eq hxy')
+  · rw [Finset.sum_eq_zero H, natDegree_zero, eq_comm, show 0 = ⊥ from rfl, Finset.sup_eq_bot_iff]
+    intro x hx
+    simp [H x hx]
 
 中文:
 定理 natDegree_sum_eq_of_disjoint
@@ -668,7 +745,26 @@ theorem natDegree_sum_eq_of_disjoint
     rw [degree_sum_eq_of_disjoint]
     · rw [← Finset.sup'_eq_sup hs, ← Finset.sup'_eq_sup hs,
         Nat.cast_withBot, Finset.coe_sup' hs, ←
-    
+        Finset.sup'_eq_sup hs]
+      refine le_antisymm ?_ ?_
+      · rw [Finset.sup'_le_iff]
+        intro b hb
+        by_cases hb' : f b = 0
+        · simpa [hb'] using! hs
+        rw [degree_eq_natDegree hb']; rw [Nat.cast_withBot]
+        exact Finset.le_sup' (fun i : S => (natDegree (f i) : WithBot Nat)) hb
+      · rw [Finset.sup'_le_iff]
+        intro b hb
+        simp only [Finset.le_sup'_iff, Function.comp_apply]
+        by_cases hb' : f b = 0
+        · refine ⟨x, hx, ?_⟩
+          contrapose! hx'
+          simpa [← Nat.cast_withBot, hb', degree_eq_bot] using! hx'
+        exact ⟨b, hb, (degree_eq_natDegree hb').ge⟩
+    · exact h.imp fun x y hxy hxy' => hxy (natDegree_eq_of_degree_eq hxy')
+  · rw [Finset.sum_eq_zero H, natDegree_zero, eq_comm, show 0 = ⊥ from rfl, Finset.sup_eq_bot_iff]
+    intro x hx
+    simp [H x hx]
 
 Depends on / 依赖: Finset, Finset.coe_sup, Finset.le_sup, Finset.sup, Nat.cast_withBot, Nonempty, _eq_sup, _le_iff, cast_withBot, coe_sup, degree_eq_natDegree, degree_sum_eq_of_disjoint, le_antisymm, le_sup, natDegree, natDegree_eq_of_degree_eq_some, s.Nonempty
 -/
@@ -807,7 +903,9 @@ theorem degree_map_eq_iff
   have h3 : natDegree (map f p) = natDegree p := by simp_rw [natDegree, h2]
   have h4 : map f p != 0 := by
     rwa [ne_eq, ← degree_eq_bot, h2, degree_eq_bot]
- 
+  rwa [← coeff_natDegree, ← coeff_map, ← h3, coeff_natDegree, ne_eq, leadingCoeff_eq_zero]
+
+@[simp]
 
 中文:
 定理 degree_map_eq_iff
@@ -820,7 +918,9 @@ theorem degree_map_eq_iff
   have h3 : natDegree (map f p) = natDegree p := by simp_rw [natDegree, h2]
   have h4 : map f p != 0 := by
     rwa [ne_eq, ← degree_eq_bot, h2, degree_eq_bot]
- 
+  rwa [← coeff_natDegree, ← coeff_map, ← h3, coeff_natDegree, ne_eq, leadingCoeff_eq_zero]
+
+@[simp]
 
 Depends on / 依赖: coeff_map, coeff_natDegree, degree_eq_bot, degree_map_eq_of_leadingCoeff_ne_zero, eq_or_ne, leadingCoeff_eq_zero, natDegree, ne_eq, or_false, simp_rw
 -/
@@ -1204,7 +1304,10 @@ lemma natDegree_eq_one
     · simp
     · simp
     · simp only [coeff_add, coeff_mul_X, coeff_C_succ, add_zero]
-      rw [coeff_eq_zero_of_natDegree_l
+      rw [coeff_eq_zero_of_natDegree_lt]
+      simp [hp]
+  · rintro ⟨a, ha, b, rfl⟩
+    simp [ha]
 
 中文:
 引理 natDegree_eq_one
@@ -1218,7 +1321,10 @@ lemma natDegree_eq_one
     · simp
     · simp
     · simp only [coeff_add, coeff_mul_X, coeff_C_succ, add_zero]
-      rw [coeff_eq_zero_of_natDegree_l
+      rw [coeff_eq_zero_of_natDegree_lt]
+      simp [hp]
+  · rintro ⟨a, ha, b, rfl⟩
+    simp [ha]
 
 Depends on / 依赖: add_zero, coeff_C_succ, coeff_add, coeff_eq_zero_of_natDegree_lt, coeff_mul_X, coeff_natDegree, leadingCoeff_eq_zero, p.coeff
 -/
@@ -1368,7 +1474,10 @@ theorem natDegree_comp
       natDegree_C, mul_zero]
   · by_cases p0 : p = 0
     · simp only [p0, zero_comp, natDegree_zero, zero_mul]
-    · simp only [Ne, mul_eq_zero, leadingCoeff_eq_zero, p
+    · simp only [Ne, mul_eq_zero, leadingCoeff_eq_zero, p0, natDegree_comp_eq_of_mul_ne_zero,
+        ne_zero_of_natDegree_gt (Nat.pos_of_ne_zero q0), not_false_eq_true, pow_ne_zero, or_self]
+
+@[simp]
 
 中文:
 定理 natDegree_comp
@@ -1379,7 +1488,10 @@ theorem natDegree_comp
       natDegree_C, mul_zero]
   · by_cases p0 : p = 0
     · simp only [p0, zero_comp, natDegree_zero, zero_mul]
-    · simp only [Ne, mul_eq_zero, leadingCoeff_eq_zero, p
+    · simp only [Ne, mul_eq_zero, leadingCoeff_eq_zero, p0, natDegree_comp_eq_of_mul_ne_zero,
+        ne_zero_of_natDegree_gt (Nat.pos_of_ne_zero q0), not_false_eq_true, pow_ne_zero, or_self]
+
+@[simp]
 
 Depends on / 依赖: Nat.pos_of_ne_zero, comp_C, degree_le_zero_iff, degree_le_zero_iff.mp, leadingCoeff_eq_zero, mul_eq_zero, mul_zero, natDegree, natDegree_C, natDegree_comp_eq_of_mul_ne_zero, natDegree_eq_zero_iff_degree_le_zero, natDegree_eq_zero_iff_degree_le_zero.mp, natDegree_zero, ne_zero_of_natDegree_gt, not_false_eq_true, or_self, pos_of_ne_zero, pow_ne_zero, q.natDegree, zero_comp
 -/
@@ -1561,7 +1673,11 @@ lemma comp_eq_zero_iff
   refine ⟨fun h => ?_, Or.rec (fun h => by simp [h]) fun h => by rw [h.2, comp_C, h.1, C_0]⟩
   have key : p.natDegree = 0 ∨ q.natDegree = 0 := by
     rw [← mul_eq_zero]; rw [← natDegree_comp]; rw [h]; rw [natDegree_zero]
-  obtain key | key := Or.imp eq_C_of_natDegree_eq_zero eq_C_of_natDegree_eq_
+  obtain key | key := Or.imp eq_C_of_natDegree_eq_zero eq_C_of_natDegree_eq_zero key
+  · rw [key, C_comp] at h
+    exact Or.inl (key.trans h)
+  · rw [key, comp_C, C_eq_zero] at h
+    exact Or.inr ⟨h, key⟩
 
 中文:
 引理 comp_eq_zero_iff
@@ -1570,7 +1686,11 @@ lemma comp_eq_zero_iff
   refine ⟨fun h => ?_, Or.rec (fun h => by simp [h]) fun h => by rw [h.2, comp_C, h.1, C_0]⟩
   have key : p.natDegree = 0 ∨ q.natDegree = 0 := by
     rw [← mul_eq_zero]; rw [← natDegree_comp]; rw [h]; rw [natDegree_zero]
-  obtain key | key := Or.imp eq_C_of_natDegree_eq_zero eq_C_of_natDegree_eq_
+  obtain key | key := Or.imp eq_C_of_natDegree_eq_zero eq_C_of_natDegree_eq_zero key
+  · rw [key, C_comp] at h
+    exact Or.inl (key.trans h)
+  · rw [key, comp_C, C_eq_zero] at h
+    exact Or.inr ⟨h, key⟩
 
 Depends on / 依赖: C_comp, C_eq_zero, Or.imp, Or.inl, Or.inr, Or.rec, comp_C, eq_C_of_natDegree_eq_zero, key.trans, mul_eq_zero, natDegree, natDegree_comp, natDegree_zero, p.natDegree, q.natDegree
 -/
@@ -1597,7 +1717,8 @@ lemma degree_comp
     simp [hq.ne']
   rw [degree_eq_natDegree hp]; rw [degree_eq_natDegree (ne_zero_of_degree_gt hq)]; rw [← Nat.cast_mul]; rw [← natDegree_comp]
   apply degree_eq_natDegree
-  simp_rw [Ne, comp_eq_zero_iff, hp, fa
+  simp_rw [Ne, comp_eq_zero_iff, hp, false_or, not_and_or, ← degree_le_zero_iff]
+  simp [hq]
 
 中文:
 引理 degree_comp
@@ -1608,7 +1729,8 @@ lemma degree_comp
     simp [hq.ne']
   rw [degree_eq_natDegree hp]; rw [degree_eq_natDegree (ne_zero_of_degree_gt hq)]; rw [← Nat.cast_mul]; rw [← natDegree_comp]
   apply degree_eq_natDegree
-  simp_rw [Ne, comp_eq_zero_iff, hp, fa
+  simp_rw [Ne, comp_eq_zero_iff, hp, false_or, not_and_or, ← degree_le_zero_iff]
+  simp [hq]
 
 Depends on / 依赖: Nat.cast_mul, WithBot, WithBot.bot_mul, bot_mul, cast_mul, comp_eq_zero_iff, degree_eq_natDegree, degree_le_zero_iff, degree_zero, eq_or_ne, false_or, hq.ne, natDegree_comp, ne_zero_of_degree_gt, not_and_or, simp_rw, zero_comp
 -/

@@ -1047,7 +1047,24 @@ definition toENat
     | inl hy =>
       lift x to Nat using hle.trans_lt hy; lift y to Nat using hy
       simp only [← Nat.cast_mul, toENatAux_nat]
-  
+    | inr hy =>
+      rcases eq_or_ne x 0 with rfl | hx
+      · simp
+      · simp only [toENatAux_eq_top hy]
+        rw [toENatAux_eq_top]; rw [ENat.mul_top]
+        · rwa [Ne, toENatAux_eq_zero]
+        · exact le_mul_of_one_le_of_le (Cardinal.one_le_iff_ne_zero.2 hx) hy
+  map_add' x y := by
+    wlog hle : x <= y; · rw [add_comm, this y x (le_of_not_ge hle), add_comm]
+    cases lt_or_ge y ℵ₀ with
+    | inl hy =>
+      lift x to Nat using hle.trans_lt hy; lift y to Nat using hy
+      simp only [← Nat.cast_add, toENatAux_nat]
+    | inr hy =>
+      simp only [toENatAux_eq_top hy, add_top]
+exact toENatAux_eq_top le_add_left hy
+  map_zero' := toENatAux_zero
+  monotone' := toENatAux_gc.monotone_u
 
 中文:
 定义 toE自然数
@@ -1060,7 +1077,24 @@ definition toENat
     | inl hy =>
       lift x to Nat using hle.trans_lt hy; lift y to Nat using hy
       simp only [← Nat.cast_mul, toENatAux_nat]
-  
+    | inr hy =>
+      rcases eq_or_ne x 0 with rfl | hx
+      · simp
+      · simp only [toENatAux_eq_top hy]
+        rw [toENatAux_eq_top]; rw [ENat.mul_top]
+        · rwa [Ne, toENatAux_eq_zero]
+        · exact le_mul_of_one_le_of_le (Cardinal.one_le_iff_ne_zero.2 hx) hy
+  map_add' x y := by
+    wlog hle : x <= y; · rw [add_comm, this y x (le_of_not_ge hle), add_comm]
+    cases lt_or_ge y ℵ₀ with
+    | inl hy =>
+      lift x to Nat using hle.trans_lt hy; lift y to Nat using hy
+      simp only [← Nat.cast_add, toENatAux_nat]
+    | inr hy =>
+      simp only [toENatAux_eq_top hy, add_top]
+exact toENatAux_eq_top le_add_left hy
+  map_zero' := toENatAux_zero
+  monotone' := toENatAux_gc.monotone_u
 
 Depends on / 依赖: toENatAux
 -/

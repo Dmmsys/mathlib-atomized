@@ -232,7 +232,7 @@ lemma isTightMeasureSet_range_of_tendsto_limsup_measure_norm_gt
   refine Nat.tendsto_iSup_of_tendsto_limsup (fun n => ?_) h (fun n u v huv => by gcongr)
   have h_tight : IsTightMeasureSet {μ n} := isTightMeasureSet_singleton
   rw [isTightMeasureSet_iff_tendsto_measure_norm_gt] at h_tight
-  
+  simpa using h_tight
 
 中文:
 引理 isTightMeasureSet_range_of_tendsto_limsup_measure_norm_gt
@@ -241,7 +241,7 @@ lemma isTightMeasureSet_range_of_tendsto_limsup_measure_norm_gt
   refine Nat.tendsto_iSup_of_tendsto_limsup (fun n => ?_) h (fun n u v huv => by gcongr)
   have h_tight : IsTightMeasureSet {μ n} := isTightMeasureSet_singleton
   rw [isTightMeasureSet_iff_tendsto_measure_norm_gt] at h_tight
-  
+  simpa using h_tight
 
 Depends on / 依赖: IsTightMeasureSet, Nat.tendsto_iSup_of_tendsto_limsup, h_tight, iSup_range, isTightMeasureSet_iff_tendsto_measure_norm_gt, isTightMeasureSet_singleton, simp_rw, tendsto_iSup_of_tendsto_limsup
 -/
@@ -265,7 +265,7 @@ lemma isTightMeasureSet_range_iff_tendsto_limsup_measure_norm_gt
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds h_sup (fun _ => zero_le) ?_
   intro r
   simp_rw [iSup_range]
-  exact limsup_le_iSu
+  exact limsup_le_iSup
 
 中文:
 引理 isTightMeasureSet_range_iff_tendsto_limsup_measure_norm_gt
@@ -275,7 +275,7 @@ lemma isTightMeasureSet_range_iff_tendsto_limsup_measure_norm_gt
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds h_sup (fun _ => zero_le) ?_
   intro r
   simp_rw [iSup_range]
-  exact limsup_le_iSu
+  exact limsup_le_iSup
 
 Depends on / 依赖: h_sup, iSup_range, isTightMeasureSet_range_of_tendsto_limsup_measure_norm_gt, limsup_le_iSup, simp_rw, tendsto_const_nhds, tendsto_measure_norm_gt_of_isTightMeasureSet, tendsto_of_tendsto_of_tendsto_of_le_of_le, zero_le
 -/
@@ -308,7 +308,33 @@ lemma isTightMeasureSet_of_forall_basis_tendsto
     simp
   have h_rank : (0 : Real) < Fintype.card ι := by
     simpa [← Module.finrank_eq_card_basis b.toBasis, Module.finrank_pos_iff]
- 
+  have : Nonempty ι := by simpa [Fintype.card_pos_iff] using h_rank
+  have : ProperSpace E := FiniteDimensional.proper 𝕜 E
+  refine isTightMeasureSet_of_tendsto_measure_norm_gt ?_
+  have h_le : (fun r => ⨆ μ in S, μ {x | r < ‖x‖})
+      <= fun r => ∑ i, ⨆ μ in S, μ {x | r / √(Fintype.card ι) < ‖⟪b i, x⟫_𝕜‖} := by
+    intro r
+    calc ⨆ μ in S, μ {x | r < ‖x‖}
+    _ <= ⨆ μ in S, μ (⋃ i, {x : E | r / √(Fintype.card ι) < ‖⟪b i, x⟫_𝕜‖}) := by
+      gcongr with μ hμS
+      intro x hx
+      simp only [Set.mem_ofPred_eq, Set.mem_iUnion] at hx ⊢
+      have hx' : r < √(Fintype.card ι) * ⨆ i, ‖⟪b i, x⟫_𝕜‖ :=
+        hx.trans_le (b.norm_le_card_mul_iSup_norm_inner x)
+      rw [← div_lt_iff₀' (by positivity)] at hx'
+      by_contra! h_le
+      exact lt_irrefl (r / √(Fintype.card ι)) (hx'.trans_le (ciSup_le h_le))
+    _ <= ⨆ μ in S, ∑ i, μ {x : E | r / √(Fintype.card ι) < ‖⟪b i, x⟫_𝕜‖} := by
+      gcongr with μ hμS
+      exact measure_iUnion_fintype_le μ _
+    _ <= ∑ i, ⨆ μ in S, μ {x | r / √(Fintype.card ι) < ‖⟪b i, x⟫_𝕜‖} := by
+      refine iSup_le fun μ => (iSup_le fun hμS => ?_)
+      gcongr with i
+      exact le_biSup (fun μ => μ {x | r / √(Fintype.card ι) < ‖⟪b i, x⟫_𝕜‖}) hμS
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds ?_ (fun _ => zero_le) h_le
+  rw [← Finset.sum_const_zero]
+  refine tendsto_finsetSum Finset.univ fun i _ => (h i).comp ?_
+  exact tendsto_id.atTop_div_const (by positivity)
 
 中文:
 引理 isTightMeasureSet_of_对任意_basis_tendsto
@@ -320,7 +346,33 @@ lemma isTightMeasureSet_of_forall_basis_tendsto
     simp
   have h_rank : (0 : Real) < Fintype.card ι := by
     simpa [← Module.finrank_eq_card_basis b.toBasis, Module.finrank_pos_iff]
- 
+  have : Nonempty ι := by simpa [Fintype.card_pos_iff] using h_rank
+  have : ProperSpace E := FiniteDimensional.proper 𝕜 E
+  refine isTightMeasureSet_of_tendsto_measure_norm_gt ?_
+  have h_le : (fun r => ⨆ μ in S, μ {x | r < ‖x‖})
+      <= fun r => ∑ i, ⨆ μ in S, μ {x | r / √(Fintype.card ι) < ‖⟪b i, x⟫_𝕜‖} := by
+    intro r
+    calc ⨆ μ in S, μ {x | r < ‖x‖}
+    _ <= ⨆ μ in S, μ (⋃ i, {x : E | r / √(Fintype.card ι) < ‖⟪b i, x⟫_𝕜‖}) := by
+      gcongr with μ hμS
+      intro x hx
+      simp only [Set.mem_ofPred_eq, Set.mem_iUnion] at hx ⊢
+      have hx' : r < √(Fintype.card ι) * ⨆ i, ‖⟪b i, x⟫_𝕜‖ :=
+        hx.trans_le (b.norm_le_card_mul_iSup_norm_inner x)
+      rw [← div_lt_iff₀' (by positivity)] at hx'
+      by_contra! h_le
+      exact lt_irrefl (r / √(Fintype.card ι)) (hx'.trans_le (ciSup_le h_le))
+    _ <= ⨆ μ in S, ∑ i, μ {x : E | r / √(Fintype.card ι) < ‖⟪b i, x⟫_𝕜‖} := by
+      gcongr with μ hμS
+      exact measure_iUnion_fintype_le μ _
+    _ <= ∑ i, ⨆ μ in S, μ {x | r / √(Fintype.card ι) < ‖⟪b i, x⟫_𝕜‖} := by
+      refine iSup_le fun μ => (iSup_le fun hμS => ?_)
+      gcongr with i
+      exact le_biSup (fun μ => μ {x | r / √(Fintype.card ι) < ‖⟪b i, x⟫_𝕜‖}) hμS
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds ?_ (fun _ => zero_le) h_le
+  rw [← Finset.sum_const_zero]
+  refine tendsto_finsetSum Finset.univ fun i _ => (h i).comp ?_
+  exact tendsto_id.atTop_div_const (by positivity)
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.proper, Fintype, Fintype.card, Fintype.card_pos_iff, IsTightMeasureSet, Module, Module.finrank_eq_card_basis, Module.finrank_pos_iff, Nonempty, ProperSpace, b.toBasis, card_pos_iff, cocompact_eq_bot, convert, finrank_eq_card_basis, finrank_pos_iff, h_le, h_rank, isTightMeasureSet_of_tendsto_measure_norm_gt
 -/
@@ -396,7 +448,21 @@ lemma isTightMeasureSet_iff_inner_tendsto
   by_cases hy : y = 0
   · simp only [hy, inner_zero_left]
     refine (tendsto_congr' ?_).mpr tendsto_const_nhds
-    filte
+    filter_upwards [eventually_ge_atTop 0] with r hr
+    simp [not_lt.mpr hr]
+  have h' : Tendsto (fun r => ⨆ μ in S, μ {x | r * ‖y‖⁻¹ < ‖x‖}) atTop (𝓝 0) :=
+h.comp (tendsto_mul_const_atTop_of_pos (by positivity)).mpr tendsto_id
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds h' (fun _ => zero_le) ?_
+  intro r
+  have h_le (μ : Measure E) : μ {x | r < ‖⟪y, x⟫_𝕜‖} <= μ {x | r * ‖y‖⁻¹ < ‖x‖} := by
+    refine measure_mono fun x hx => ?_
+    simp only [Set.mem_ofPred_eq] at hx ⊢
+    rw [mul_inv_lt_iff₀]
+    · rw [mul_comm]
+      exact hx.trans_le (norm_inner_le_norm y x)
+    · positivity
+  refine iSup₂_le_iff.mpr fun μ hμS => ?_
+exact le_iSup_of_le (i := μ) by simp [hμS, h_le]
 
 中文:
 引理 isTightMeasureSet_iff_inner_tendsto
@@ -407,7 +473,21 @@ lemma isTightMeasureSet_iff_inner_tendsto
   by_cases hy : y = 0
   · simp only [hy, inner_zero_left]
     refine (tendsto_congr' ?_).mpr tendsto_const_nhds
-    filte
+    filter_upwards [eventually_ge_atTop 0] with r hr
+    simp [not_lt.mpr hr]
+  have h' : Tendsto (fun r => ⨆ μ in S, μ {x | r * ‖y‖⁻¹ < ‖x‖}) atTop (𝓝 0) :=
+h.comp (tendsto_mul_const_atTop_of_pos (by positivity)).mpr tendsto_id
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds h' (fun _ => zero_le) ?_
+  intro r
+  have h_le (μ : Measure E) : μ {x | r < ‖⟪y, x⟫_𝕜‖} <= μ {x | r * ‖y‖⁻¹ < ‖x‖} := by
+    refine measure_mono fun x hx => ?_
+    simp only [Set.mem_ofPred_eq] at hx ⊢
+    rw [mul_inv_lt_iff₀]
+    · rw [mul_comm]
+      exact hx.trans_le (norm_inner_le_norm y x)
+    · positivity
+  refine iSup₂_le_iff.mpr fun μ hμS => ?_
+exact le_iSup_of_le (i := μ) by simp [hμS, h_le]
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.proper, ProperSpace, Tendsto, eventually_ge_atTop, filter_upwards, h.comp, inner_zero_left, isTightMeasureSet_iff_tendsto_measure_norm_gt, isTightMeasureSet_of_inner_tendsto, not_lt, not_lt.mpr, proper, tendsto_congr, tendsto_const_nhds, tendsto_id, tendsto_mul_const_atTop_of_pos
 -/
@@ -448,7 +528,12 @@ lemma isTightMeasureSet_range_of_tendsto_limsup_inner
   simp_rw [iSup_range]
   refine Nat.tendsto_iSup_of_tendsto_limsup (fun n => ?_) (h z) (fun n u v huv => by gcongr)
   have h_tight : IsTightMeasureSet {(μ n).map (fun x => ⟪z, x⟫_𝕜)} := isTightMeasureSet_singleton
-  rw [isTightMeasureSet_i
+  rw [isTightMeasureSet_iff_tendsto_measure_norm_gt] at h_tight
+  have h_map r : (μ n).map (fun x => ⟪z, x⟫_𝕜) {x | r < ‖x‖} = μ n {x | r < ‖⟪z, x⟫_𝕜‖} := by
+    rw [Measure.map_apply (by fun_prop)]
+    · simp
+    · exact MeasurableSet.preimage measurableSet_Ioi (by fun_prop)
+  simpa [h_map] using h_tight
 
 中文:
 引理 isTightMeasureSet_range_of_tendsto_limsup_inner
@@ -457,7 +542,12 @@ lemma isTightMeasureSet_range_of_tendsto_limsup_inner
   simp_rw [iSup_range]
   refine Nat.tendsto_iSup_of_tendsto_limsup (fun n => ?_) (h z) (fun n u v huv => by gcongr)
   have h_tight : IsTightMeasureSet {(μ n).map (fun x => ⟪z, x⟫_𝕜)} := isTightMeasureSet_singleton
-  rw [isTightMeasureSet_i
+  rw [isTightMeasureSet_iff_tendsto_measure_norm_gt] at h_tight
+  have h_map r : (μ n).map (fun x => ⟪z, x⟫_𝕜) {x | r < ‖x‖} = μ n {x | r < ‖⟪z, x⟫_𝕜‖} := by
+    rw [Measure.map_apply (by fun_prop)]
+    · simp
+    · exact MeasurableSet.preimage measurableSet_Ioi (by fun_prop)
+  simpa [h_map] using h_tight
 
 Depends on / 依赖: IsTightMeasureSet, MeasurableSet, MeasurableSet.preimage, Measure, Measure.map_apply, Nat.tendsto_iSup_of_tendsto_limsup, f.hom, fun_prop, h_map, h_tight, iSup_range, isTightMeasureSet_iff_tendsto_measure_norm_gt, isTightMeasureSet_of_inner_tendsto, isTightMeasureSet_singleton, map_apply, preimage, simp_rw, tendsto_iSup_of_tendsto_limsup
 -/
@@ -522,7 +612,17 @@ lemma isTightMeasureSet_range_of_tendsto_limsup_inner_of_norm_eq_one
     refine (tendsto_congr' ?_).mpr tendsto_const_nhds
     filter_upwards [eventually_ge_atTop 0] with r hr
     simp [not_lt.mpr hr]
-  have h' : Tendsto (fun r : Real =>
+  have h' : Tendsto (fun r : Real => limsup (fun n => μ n {x | ‖y‖⁻¹ * r < ‖⟪(‖y‖⁻¹ : 𝕜) • y, x⟫_𝕜‖})
+      atTop) atTop (𝓝 0) := by
+    specialize h ((‖y‖⁻¹ : 𝕜) • y) ?_
+    · simp only [norm_smul, norm_inv, norm_algebraMap', Real.norm_eq_abs, abs_norm]
+      rw [inv_mul_cancel₀ (by positivity)]
+exact h.comp (tendsto_const_mul_atTop_of_pos (by positivity)).mpr tendsto_id
+  convert! h' using 7 with r n x
+  rw [inner_smul_left]
+  simp only [map_inv₀, RCLike.conj_ofReal, norm_mul, norm_inv, norm_algebraMap', norm_norm]
+  rw [mul_lt_mul_iff_right₀]
+  positivity
 
 中文:
 引理 isTightMeasureSet_range_of_tendsto_limsup_inner_of_norm_eq_one
@@ -533,7 +633,17 @@ lemma isTightMeasureSet_range_of_tendsto_limsup_inner_of_norm_eq_one
     refine (tendsto_congr' ?_).mpr tendsto_const_nhds
     filter_upwards [eventually_ge_atTop 0] with r hr
     simp [not_lt.mpr hr]
-  have h' : Tendsto (fun r : Real =>
+  have h' : Tendsto (fun r : Real => limsup (fun n => μ n {x | ‖y‖⁻¹ * r < ‖⟪(‖y‖⁻¹ : 𝕜) • y, x⟫_𝕜‖})
+      atTop) atTop (𝓝 0) := by
+    specialize h ((‖y‖⁻¹ : 𝕜) • y) ?_
+    · simp only [norm_smul, norm_inv, norm_algebraMap', Real.norm_eq_abs, abs_norm]
+      rw [inv_mul_cancel₀ (by positivity)]
+exact h.comp (tendsto_const_mul_atTop_of_pos (by positivity)).mpr tendsto_id
+  convert! h' using 7 with r n x
+  rw [inner_smul_left]
+  simp only [map_inv₀, RCLike.conj_ofReal, norm_mul, norm_inv, norm_algebraMap', norm_norm]
+  rw [mul_lt_mul_iff_right₀]
+  positivity
 
 Depends on / 依赖: Real.norm_eq_abs, Tendsto, abs_norm, eventually_ge_atTop, filter_upwards, inner_zero_left, inv_mul_can, isTightMeasureSet_range_of_tendsto_limsup_inner, limsup, norm_algebraMap, norm_eq_abs, norm_inv, norm_smul, not_lt, not_lt.mpr, specialize, tendsto_congr, tendsto_const_nhds
 -/
@@ -569,7 +679,9 @@ lemma isTightMeasureSet_range_of_tendsto_limsup_measureReal_inner_of_norm_eq_one
   have h_ofReal (r : Real) : limsup (fun n => μ n {x | r < ‖⟪z, x⟫_𝕜‖}) atTop
       = ENNReal.ofReal (limsup (fun n => (μ n).real {x | r < ‖⟪z, x⟫_𝕜‖}) atTop) := by
     simp_rw [measureReal_def]
-    rw [ENNRe
+    rw [ENNReal.ofReal_limsup_toReal (C := C)]
+    filter_upwards [hμ] with n hμn using (measure_mono (Set.subset_univ _)).trans hμn
+  simpa only [h_ofReal, ← ENNReal.ofReal_zero] using ENNReal.tendsto_ofReal (h z hz)
 
 中文:
 引理 isTightMeasureSet_range_of_tendsto_limsup_measure实数_inner_of_norm_eq_one
@@ -578,7 +690,9 @@ lemma isTightMeasureSet_range_of_tendsto_limsup_measureReal_inner_of_norm_eq_one
   have h_ofReal (r : Real) : limsup (fun n => μ n {x | r < ‖⟪z, x⟫_𝕜‖}) atTop
       = ENNReal.ofReal (limsup (fun n => (μ n).real {x | r < ‖⟪z, x⟫_𝕜‖}) atTop) := by
     simp_rw [measureReal_def]
-    rw [ENNRe
+    rw [ENNReal.ofReal_limsup_toReal (C := C)]
+    filter_upwards [hμ] with n hμn using (measure_mono (Set.subset_univ _)).trans hμn
+  simpa only [h_ofReal, ← ENNReal.ofReal_zero] using ENNReal.tendsto_ofReal (h z hz)
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.ofReal_limsup_toReal, ENNReal.ofReal_zero, ENNReal.tendsto_ofReal, Set.subset_univ, filter_upwards, h_ofReal, isTightMeasureSet_range_of_tendsto_limsup_inner_of_norm_eq_one, limsup, measureReal_def, measure_mono, ofReal, ofReal_limsup_toReal, ofReal_zero, simp_rw, subset_univ, tendsto_ofReal
 -/

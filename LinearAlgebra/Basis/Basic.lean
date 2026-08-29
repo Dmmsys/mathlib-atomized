@@ -554,7 +554,20 @@ definition noncomputable
     have h₁ : (((↑) : span R (range v) -> M) '' range fun i => ⟨v i, this i⟩) = range v := by
       simp only [← Set.range_comp]
       rfl
-    have h₂ : 
+    have h₂ : map (Submodule.subtype (span R (range v))) (span R (range fun i => ⟨v i, this i⟩)) =
+        span R (range v) := by
+      rw [← span_image]; rw [Submodule.coe_subtype]; rw [h₁]
+    have h₃ : (x : M) in map (Submodule.subtype (span R (range v)))
+        (span R (Set.range fun i => Subtype.mk (v i) (this i))) := by
+      rw [h₂]
+      apply Subtype.mem x
+    rcases mem_map.1 h₃ with ⟨y, hy₁, hy₂⟩
+    have h_x_eq_y : x = y := by
+      rw [Subtype.ext_iff]; rw [← hy₂]
+      simp
+    rwa [h_x_eq_y]
+
+@[simp]
 
 中文:
 定义 noncomputable
@@ -565,7 +578,20 @@ definition noncomputable
     have h₁ : (((↑) : span R (range v) -> M) '' range fun i => ⟨v i, this i⟩) = range v := by
       simp only [← Set.range_comp]
       rfl
-    have h₂ : 
+    have h₂ : map (Submodule.subtype (span R (range v))) (span R (range fun i => ⟨v i, this i⟩)) =
+        span R (range v) := by
+      rw [← span_image]; rw [Submodule.coe_subtype]; rw [h₁]
+    have h₃ : (x : M) in map (Submodule.subtype (span R (range v)))
+        (span R (Set.range fun i => Subtype.mk (v i) (this i))) := by
+      rw [h₂]
+      apply Subtype.mem x
+    rcases mem_map.1 h₃ with ⟨y, hy₁, hy₂⟩
+    have h_x_eq_y : x = y := by
+      rw [Subtype.ext_iff]; rw [← hy₂]
+      simp
+    rwa [h_x_eq_y]
+
+@[simp]
 -/
 protected noncomputable def span : Basis ι R (span R (range v)) :=
 Basis.mk (linearIndependent_span hli) by
@@ -697,7 +723,19 @@ theorem maximal
   -- and write it in terms of the basis.
   have e := b.linearCombination_repr x
   -- This then expresses `x` as a linear combination
-  -- of elemen
+  -- of elements of `w` which are in the range of `b`,
+  let u : ι ↪ w :=
+    ⟨fun i => ⟨b i, h ⟨i, rfl⟩⟩, fun i i' r =>
+      b.injective (by simpa only [Subtype.mk_eq_mk] using r)⟩
+  simp_rw [Finsupp.linearCombination_apply] at e
+  change ((b.repr x).sum fun (i : ι) (a : R) => a • (u i : M)) = ((⟨x, p⟩ : w) : M) at e
+  rw [← Finsupp.sum_embDomain (f := u) (g := fun x r => r • (x : M))]; rw [← Finsupp.linearCombination_apply] at e
+  -- Now we can contradict the linear independence of `hi`
+  refine hi.linearCombination_ne_of_notMem_support _ ?_ e
+  simp only [Finset.mem_map, Finsupp.support_embDomain]
+  rintro ⟨j, -, W⟩
+  simp only [u, Embedding.coeFn_mk, Subtype.mk_eq_mk] at W
+  apply q ⟨j, W⟩
 
 中文:
 定理 maximal
@@ -712,7 +750,19 @@ theorem maximal
   -- and write it in terms of the basis.
   have e := b.linearCombination_repr x
   -- This then expresses `x` as a linear combination
-  -- of elemen
+  -- of elements of `w` which are in the range of `b`,
+  let u : ι ↪ w :=
+    ⟨fun i => ⟨b i, h ⟨i, rfl⟩⟩, fun i i' r =>
+      b.injective (by simpa only [Subtype.mk_eq_mk] using r)⟩
+  simp_rw [Finsupp.linearCombination_apply] at e
+  change ((b.repr x).sum fun (i : ι) (a : R) => a • (u i : M)) = ((⟨x, p⟩ : w) : M) at e
+  rw [← Finsupp.sum_embDomain (f := u) (g := fun x r => r • (x : M))]; rw [← Finsupp.linearCombination_apply] at e
+  -- Now we can contradict the linear independence of `hi`
+  refine hi.linearCombination_ne_of_notMem_support _ ?_ e
+  simp only [Finset.mem_map, Finsupp.support_embDomain]
+  rintro ⟨j, -, W⟩
+  simp only [u, Embedding.coeFn_mk, Subtype.mk_eq_mk] at W
+  apply q ⟨j, W⟩
 -/
 theorem maximal [Nontrivial R] (b : Basis ι R M) : b.linearIndependent.Maximal := fun w hi h => by
   -- If `w` is strictly bigger than `range b`,
@@ -958,7 +1008,19 @@ theorem basis_singleton_iff
   · rintro ⟨x, nz, w⟩
 refine ⟨ofRepr LinearEquiv.symm
       { toFun := fun f => f default • x
-        invFun := fun y => Finsupp.single de
+        invFun := fun y => Finsupp.single default (w y).choose
+        left_inv := fun f => Finsupp.unique_ext ?_
+        right_inv := fun y => ?_
+        map_add' := fun y z => ?_
+        map_smul' := fun c y => ?_ }⟩
+    · simp [Finsupp.add_apply, add_smul]
+    · simp only [Finsupp.coe_smul, Pi.smul_apply, RingHom.id_apply]
+      rw [← smul_assoc]
+    · refine smul_left_injective _ nz ?_
+      simp only [Finsupp.single_eq_same]
+      exact (w (f default • x)).choose_spec
+    · simp only [Finsupp.single_eq_same]
+      exact (w y).choose_spec
 
 中文:
 定理 basis_singleton_iff
@@ -971,7 +1033,19 @@ refine ⟨ofRepr LinearEquiv.symm
   · rintro ⟨x, nz, w⟩
 refine ⟨ofRepr LinearEquiv.symm
       { toFun := fun f => f default • x
-        invFun := fun y => Finsupp.single de
+        invFun := fun y => Finsupp.single default (w y).choose
+        left_inv := fun f => Finsupp.unique_ext ?_
+        right_inv := fun y => ?_
+        map_add' := fun y z => ?_
+        map_smul' := fun c y => ?_ }⟩
+    · simp [Finsupp.add_apply, add_smul]
+    · simp only [Finsupp.coe_smul, Pi.smul_apply, RingHom.id_apply]
+      rw [← smul_assoc]
+    · refine smul_left_injective _ nz ?_
+      simp only [Finsupp.single_eq_same]
+      exact (w (f default • x)).choose_spec
+    · simp only [Finsupp.single_eq_same]
+      exact (w y).choose_spec
 
 Depends on / 依赖: Finsupp, Finsupp.add_apply, Finsupp.coe_smul, Finsupp.single, Finsupp.unique_ext, LinearEquiv, LinearEquiv.symm, Pi.smul_apply, Set.range_unique, add_apply, add_smul, b.linearIndependent.ne_zero, b.span_eq, coe_smul, invFun, left_inv, linearIndependent, map_add, map_smul, ne_zero
 -/

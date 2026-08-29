@@ -431,7 +431,10 @@ definition adj
           left_inv := fun f => by
             ext
             simp
-         
+          right_inv := fun f => by
+            dsimp only [forget_obj]
+            rw [← T.η.naturality_assoc]; rw [Y.unit]
+            apply Category.comp_id } }
 
 中文:
 定义 adj
@@ -445,7 +448,10 @@ definition adj
           left_inv := fun f => by
             ext
             simp
-         
+          right_inv := fun f => by
+            dsimp only [forget_obj]
+            rw [← T.η.naturality_assoc]; rw [Y.unit]
+            apply Category.comp_id } }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Category, Category.comp_id, T.map, Y.assoc, Y.unit, comp_id, forget_obj, homEquiv, invFun, left_inv, mkOfHomEquiv, naturality_assoc, right_inv
 -/
@@ -702,7 +708,9 @@ definition algebraEquivOfIsoMonads
       algebraFunctorOfMonadHomEq (by simp) ≪≫ algebraFunctorOfMonadHomComp _ _
   counitIso :=
     (algebraFunctorOfMonadHomComp _ _).symm ≪≫
-      algebraFunctorOfMonadHomEq
+      algebraFunctorOfMonadHomEq (by simp) ≪≫ algebraFunctorOfMonadHomId
+
+@[simp]
 
 中文:
 定义 algebraEquivOfIsoMonads
@@ -714,7 +722,9 @@ definition algebraEquivOfIsoMonads
       algebraFunctorOfMonadHomEq (by simp) ≪≫ algebraFunctorOfMonadHomComp _ _
   counitIso :=
     (algebraFunctorOfMonadHomComp _ _).symm ≪≫
-      algebraFunctorOfMonadHomEq
+      algebraFunctorOfMonadHomEq (by simp) ≪≫ algebraFunctorOfMonadHomId
+
+@[simp]
 
 Depends on / 依赖: algebraFunctorOfMonadHom, h.inv
 -/
@@ -1124,7 +1134,11 @@ definition adj
           invFun := fun g => g.f ≫ G.ε.app Y
           left_inv := fun f => by
             dsimp
-            rw [Category.assoc];
+            rw [Category.assoc]; rw [G.ε.naturality]; rw [Functor.id_map]; rw [X.counit_assoc]
+          right_inv := fun g => by
+            ext1; dsimp
+            rw [Functor.map_comp]; rw [g.h_assoc]; rw [cofree_obj_a]; rw [Comonad.right_counit]
+            apply comp_id } }
 
 中文:
 定义 adj
@@ -1137,7 +1151,11 @@ definition adj
           invFun := fun g => g.f ≫ G.ε.app Y
           left_inv := fun f => by
             dsimp
-            rw [Category.assoc];
+            rw [Category.assoc]; rw [G.ε.naturality]; rw [Functor.id_map]; rw [X.counit_assoc]
+          right_inv := fun g => by
+            ext1; dsimp
+            rw [Functor.map_comp]; rw [g.h_assoc]; rw [cofree_obj_a]; rw [Comonad.right_counit]
+            apply comp_id } }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Category, Category.assoc, Coalgebra, Coalgebra.coassoc_assoc, Comonad, Comonad.right_counit, Functor, Functor.id_map, Functor.map_comp, G.map, X.counit_assoc, coassoc_assoc, cofree_obj_a, comp_id, counit_assoc, g.h_assoc, h_assoc, homEquiv
 -/

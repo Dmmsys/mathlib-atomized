@@ -407,7 +407,7 @@ theorem range_toLp
   refine SetLike.ext' ?_
   have := (linearIsometryBoundedOfCompact α E 𝕜).surjective
   convert! Function.Surjective.range_comp this (BoundedContinuousFunction.toLp (E := E) p μ 𝕜)
-  rw [← BoundedContinuousFunction.range_toLp p μ (𝕜 := 𝕜)]; rw [Submodule.coe_toAddSubgroup]; rw [LinearMap.coe_range
+  rw [← BoundedContinuousFunction.range_toLp p μ (𝕜 := 𝕜)]; rw [Submodule.coe_toAddSubgroup]; rw [LinearMap.coe_range]; rw [ContinuousLinearMap.coe_coe]
 
 中文:
 定理 range_toLp
@@ -415,7 +415,7 @@ theorem range_toLp
   refine SetLike.ext' ?_
   have := (linearIsometryBoundedOfCompact α E 𝕜).surjective
   convert! Function.Surjective.range_comp this (BoundedContinuousFunction.toLp (E := E) p μ 𝕜)
-  rw [← BoundedContinuousFunction.range_toLp p μ (𝕜 := 𝕜)]; rw [Submodule.coe_toAddSubgroup]; rw [LinearMap.coe_range
+  rw [← BoundedContinuousFunction.range_toLp p μ (𝕜 := 𝕜)]; rw [Submodule.coe_toAddSubgroup]; rw [LinearMap.coe_range]; rw [ContinuousLinearMap.coe_coe]
 
 Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.range_toLp, BoundedContinuousFunction.toLp, ContinuousLinearMap, ContinuousLinearMap.coe_coe, Function, Function.Surjective.range_comp, LinearMap, LinearMap.coe_range, SetLike, SetLike.ext, Submodule, Submodule.coe_toAddSubgroup, Surjective, coe_coe, coe_range, coe_toAddSubgroup, convert, linearIsometryBoundedOfCompact, range_comp
 -/

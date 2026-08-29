@@ -67,7 +67,8 @@ theorem norm_sub
     rw [norm_sub_rev]; rw [abs_sub_comm]
     exact H b a hb ha h (le_of_not_ge hab)
   rw [← sub_nonneg] at hab
-  rw [← sub_smul]; rw [norm_smul_of_nonneg ha
+  rw [← sub_smul]; rw [norm_smul_of_nonneg hab]; rw [norm_smul_of_nonneg ha]; rw [norm_smul_of_nonneg hb]; rw [←
+    sub_mul]; rw [abs_of_nonneg (mul_nonneg hab (norm_nonneg _))]
 
 中文:
 定理 norm_sub
@@ -80,7 +81,8 @@ theorem norm_sub
     rw [norm_sub_rev]; rw [abs_sub_comm]
     exact H b a hb ha h (le_of_not_ge hab)
   rw [← sub_nonneg] at hab
-  rw [← sub_smul]; rw [norm_smul_of_nonneg ha
+  rw [← sub_smul]; rw [norm_smul_of_nonneg hab]; rw [norm_smul_of_nonneg ha]; rw [norm_smul_of_nonneg hb]; rw [←
+    sub_mul]; rw [abs_of_nonneg (mul_nonneg hab (norm_nonneg _))]
 
 Depends on / 依赖: SameRay, SameRay.sameRay_comm, abs_of_nonneg, abs_sub_comm, exists_eq_smul, generalizing, h.exists_eq_smul, le_of_not_ge, mul_nonneg, norm_nonneg, norm_smul_of_nonneg, norm_sub_rev, sameRay_comm, sub_mul, sub_nonneg, sub_smul
 -/

@@ -53,7 +53,9 @@ definition stateLP
   let constraintRow : List (Nat × Nat × Rat) :=
     [(1, 1, 1), (1, m + 2, -1)] ++ (List.range m).map (fun i => (1, i + 2, 1))
 
-.map fun (i, j, v) => 
+.map fun (i, j, v) => (i + 2, j + 2, v) let valuesA := getValues A
+
+  ofValues (objectiveRow ++ constraintRow ++ valuesA)
 
 中文:
 定义 stateLP
@@ -64,7 +66,9 @@ definition stateLP
   let constraintRow : List (Nat × Nat × Rat) :=
     [(1, 1, 1), (1, m + 2, -1)] ++ (List.range m).map (fun i => (1, i + 2, 1))
 
-.map fun (i, j, v) => 
+.map fun (i, j, v) => (i + 2, j + 2, v) let valuesA := getValues A
+
+  ofValues (objectiveRow ++ constraintRow ++ valuesA)
 -/
 def stateLP {n m : Nat} (A : matType n m) (strictIndexes : List Nat) : matType (n + 2) (m + 3) :=
   /- +2 due to shifting by `f` and `z` -/
@@ -120,7 +124,12 @@ definition findPositiveVector
   operated by the Simplex Algorithm. -/
   let initTableau ← Gauss.getTableau B
 
-  /- Run the Simplex Algorithm and 
+  /- Run the Simplex Algorithm and extract the solution. -/
+  let res ← runSimplexAlgorithm.run initTableau
+  if res.fst.isOk then
+    return extractSolution res.snd
+  else
+    throwError "Simplex Algorithm failed"
 
 中文:
 定义 findPositiveVector
@@ -133,7 +142,12 @@ definition findPositiveVector
   operated by the Simplex Algorithm. -/
   let initTableau ← Gauss.getTableau B
 
-  /- Run the Simplex Algorithm and 
+  /- Run the Simplex Algorithm and extract the solution. -/
+  let res ← runSimplexAlgorithm.run initTableau
+  if res.fst.isOk then
+    return extractSolution res.snd
+  else
+    throwError "Simplex Algorithm failed"
 -/
 def findPositiveVector {n m : Nat} {matType : Nat -> Nat -> Type} [UsableInSimplexAlgorithm matType]
 (A : matType n m) (strictIndexes : List Nat) : Lean.Meta.MetaM Array Rat := do

@@ -216,7 +216,7 @@ instance :
         apply this
     intro M' d'
     apply h₁.postcomp_injective
-    s
+    simp
 
 中文:
 实例 :
@@ -231,7 +231,7 @@ instance :
         apply this
     intro M' d'
     apply h₁.postcomp_injective
-    s
+    simp
 
 Depends on / 依赖: CommRingCat, Derivation, PresheafOfModules, RingCat, Universal, Universal.mk.injEq, postcomp_injective
 -/
@@ -446,7 +446,7 @@ definition relativeDifferentials'
   map f := CommRingCat.KaehlerDifferential.map (g' := R.map f) (φ'.naturality f)
   -- Without `dsimp`, `ext` doesn't pick up the right lemmas.
   map_id _ := by dsimp; ext; simp
-  map_comp
+  map_comp _ _ := by dsimp; ext; simp
 
 中文:
 定义 relativeDifferentials'
@@ -456,7 +456,7 @@ definition relativeDifferentials'
   map f := CommRingCat.KaehlerDifferential.map (g' := R.map f) (φ'.naturality f)
   -- Without `dsimp`, `ext` doesn't pick up the right lemmas.
   map_id _ := by dsimp; ext; simp
-  map_comp
+  map_comp _ _ := by dsimp; ext; simp
 
 Depends on / 依赖: CommRingCat, CommRingCat.KaehlerDifferential, KaehlerDifferential
 -/
@@ -528,7 +528,14 @@ definition isUniversal'
         naturality := fun {X Y} f => CommRingCat.KaehlerDifferential.ext (fun b => by
           dsimp
           rw [ModuleCat.Derivation.desc_d]; rw [Derivation'.app_apply]
-          erw [relativeDifferentials'_map_
+          erw [relativeDifferentials'_map_d φ' f]
+          simp) })
+    (fun {M'} d' => by
+      ext X b
+      apply ModuleCat.Derivation.desc_d)
+    (fun {M} α β h => by
+      ext1 X
+      exact CommRingCat.KaehlerDifferential.ext (Derivation.congr_d h))
 
 中文:
 定义 isUniversal'
@@ -539,7 +546,14 @@ definition isUniversal'
         naturality := fun {X Y} f => CommRingCat.KaehlerDifferential.ext (fun b => by
           dsimp
           rw [ModuleCat.Derivation.desc_d]; rw [Derivation'.app_apply]
-          erw [relativeDifferentials'_map_
+          erw [relativeDifferentials'_map_d φ' f]
+          simp) })
+    (fun {M'} d' => by
+      ext X b
+      apply ModuleCat.Derivation.desc_d)
+    (fun {M} α β h => by
+      ext1 X
+      exact CommRingCat.KaehlerDifferential.ext (Derivation.congr_d h))
 
 Depends on / 依赖: CommRingCat, CommRingCat.KaehlerDifferential.ext, Derivation, Derivation.congr_d, KaehlerDifferential, ModuleCat, ModuleCat.Derivation.desc_d, Universal, Universal.mk, _map_d, app_apply, congr_d, desc_d, naturality, relativeDifferentials
 -/

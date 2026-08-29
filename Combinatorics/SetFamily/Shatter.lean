@@ -480,7 +480,41 @@ lemma card_le_card_shatterer
   intro a 𝒜 ih₀ ih₁
   set ℬ : Finset (Finset α) :=
     ((memberSubfamily a 𝒜).shatterer inter (nonMemberSubfamily a 𝒜).shatterer).image (insert a)
-  have hℬ : #ℬ = #((memberSubfamily a 𝒜).shatterer inter (nonMemberSubfamily a 𝒜).shatt
+  have hℬ : #ℬ = #((memberSubfamily a 𝒜).shatterer inter (nonMemberSubfamily a 𝒜).shatterer) := by
+refine card_image_of_injOn insert_erase_invOn.2.injOn.mono ?_
+    simp only [coe_inter, Set.subset_def, Set.mem_inter_iff, mem_coe, Set.mem_ofPred_eq, and_imp,
+      mem_shatterer]
+    exact fun s _ => aux (fun t ht => (mem_filter.1 ht).2)
+  rw [← card_memberSubfamily_add_card_nonMemberSubfamily a]
+  refine (Nat.add_le_add ih₁ ih₀).trans ?_
+  rw [← card_union_add_card_inter]; rw [← hℬ]; rw [← card_union_of_disjoint]
+  swap
+  · simp only [ℬ, disjoint_left, mem_union, mem_shatterer, mem_image, not_exists, not_and]
+    rintro _ (hs | hs) s - rfl
+· exact aux (fun t ht => (mem_memberSubfamily.1 ht).2) hs mem_insert_self _ _
+· exact aux (fun t ht => (mem_nonMemberSubfamily.1 ht).2) hs mem_insert_self _ _
+refine card_mono union_subset (union_subset ?_ <| shatterer_mono <| filter_subset _ _) ?_
+  · simp only [subset_iff, mem_shatterer]
+    rintro s hs t ht
+    obtain ⟨u, hu, rfl⟩ := hs ht
+    rw [mem_memberSubfamily] at hu
+    refine ⟨insert a u, hu.1, inter_insert_of_notMem fun ha => ?_⟩
+    obtain ⟨v, hv, hsv⟩ := hs.exists_inter_eq_singleton ha
+    rw [mem_memberSubfamily] at hv
+    rw [← singleton_subset_iff (a := a)]; rw [← hsv] at hv
+    exact hv.2 inter_subset_right
+  · refine forall_mem_image.2 fun s hs => mem_shatterer.2 fun t ht => ?_
+    simp only [mem_inter, mem_shatterer] at hs
+    rw [subset_insert_iff] at ht
+    by_cases ha : a in t
+    · obtain ⟨u, hu, hsu⟩ := hs.1 ht
+      rw [mem_memberSubfamily] at hu
+      refine ⟨_, hu.1, ?_⟩
+      rw [← insert_inter_distrib]; rw [hsu]; rw [insert_erase ha]
+    · obtain ⟨u, hu, hsu⟩ := hs.2 ht
+      rw [mem_nonMemberSubfamily] at hu
+      refine ⟨_, hu.1, ?_⟩
+      rwa [insert_inter_of_notMem hu.2, hsu, erase_eq_self]
 
 中文:
 引理 card_le_card_shatterer
@@ -493,7 +527,41 @@ lemma card_le_card_shatterer
   intro a 𝒜 ih₀ ih₁
   set ℬ : Finset (Finset α) :=
     ((memberSubfamily a 𝒜).shatterer inter (nonMemberSubfamily a 𝒜).shatterer).image (insert a)
-  have hℬ : #ℬ = #((memberSubfamily a 𝒜).shatterer inter (nonMemberSubfamily a 𝒜).shatt
+  have hℬ : #ℬ = #((memberSubfamily a 𝒜).shatterer inter (nonMemberSubfamily a 𝒜).shatterer) := by
+refine card_image_of_injOn insert_erase_invOn.2.injOn.mono ?_
+    simp only [coe_inter, Set.subset_def, Set.mem_inter_iff, mem_coe, Set.mem_ofPred_eq, and_imp,
+      mem_shatterer]
+    exact fun s _ => aux (fun t ht => (mem_filter.1 ht).2)
+  rw [← card_memberSubfamily_add_card_nonMemberSubfamily a]
+  refine (Nat.add_le_add ih₁ ih₀).trans ?_
+  rw [← card_union_add_card_inter]; rw [← hℬ]; rw [← card_union_of_disjoint]
+  swap
+  · simp only [ℬ, disjoint_left, mem_union, mem_shatterer, mem_image, not_exists, not_and]
+    rintro _ (hs | hs) s - rfl
+· exact aux (fun t ht => (mem_memberSubfamily.1 ht).2) hs mem_insert_self _ _
+· exact aux (fun t ht => (mem_nonMemberSubfamily.1 ht).2) hs mem_insert_self _ _
+refine card_mono union_subset (union_subset ?_ <| shatterer_mono <| filter_subset _ _) ?_
+  · simp only [subset_iff, mem_shatterer]
+    rintro s hs t ht
+    obtain ⟨u, hu, rfl⟩ := hs ht
+    rw [mem_memberSubfamily] at hu
+    refine ⟨insert a u, hu.1, inter_insert_of_notMem fun ha => ?_⟩
+    obtain ⟨v, hv, hsv⟩ := hs.exists_inter_eq_singleton ha
+    rw [mem_memberSubfamily] at hv
+    rw [← singleton_subset_iff (a := a)]; rw [← hsv] at hv
+    exact hv.2 inter_subset_right
+  · refine forall_mem_image.2 fun s hs => mem_shatterer.2 fun t ht => ?_
+    simp only [mem_inter, mem_shatterer] at hs
+    rw [subset_insert_iff] at ht
+    by_cases ha : a in t
+    · obtain ⟨u, hu, hsu⟩ := hs.1 ht
+      rw [mem_memberSubfamily] at hu
+      refine ⟨_, hu.1, ?_⟩
+      rw [← insert_inter_distrib]; rw [hsu]; rw [insert_erase ha]
+    · obtain ⟨u, hu, hsu⟩ := hs.2 ht
+      rw [mem_nonMemberSubfamily] at hu
+      refine ⟨_, hu.1, ?_⟩
+      rwa [insert_inter_of_notMem hu.2, hsu, erase_eq_self]
 
 Depends on / 依赖: Finset, Set.mem_inter_iff, Set.mem_ofPred_eq, Set.subset_def, and_imp, card_image_of_injOn, coe_inter, injOn.mono, insert, insert_erase_invOn, mem_coe, mem_inter_iff, mem_ofPred_eq, mem_shatterer, memberFamily_induction_on, memberSubfamily, nonMemberSubfamily, shatterer, subset_def
 -/
@@ -558,7 +626,16 @@ lemma Shatters.of_compression
     rw [Down.mem_compression] at hv
     obtain hv | hv := hv
     · refine ⟨erase v a, hv.2, ?_⟩
-    
+      rw [inter_erase]; rw [hsv]; rw [erase_insert]
+      rintro ha
+      rw [insert_eq_self.2 (mem_inter.1 ha).2] at hu
+      exact hu.1 hu.2
+    rw [insert_eq_self.2 <| inter_subset_right (s₁ := s) ?_] at hv
+    cases hv.1 hv.2
+    rw [hsv]
+    exact mem_insert_self _ _
+  · refine ⟨insert a u, hu.2, ?_⟩
+    rw [inter_insert_of_notMem ha]
 
 中文:
 引理 Shatters.of_compression
@@ -575,7 +652,16 @@ lemma Shatters.of_compression
     rw [Down.mem_compression] at hv
     obtain hv | hv := hv
     · refine ⟨erase v a, hv.2, ?_⟩
-    
+      rw [inter_erase]; rw [hsv]; rw [erase_insert]
+      rintro ha
+      rw [insert_eq_self.2 (mem_inter.1 ha).2] at hu
+      exact hu.1 hu.2
+    rw [insert_eq_self.2 <| inter_subset_right (s₁ := s) ?_] at hv
+    cases hv.1 hv.2
+    rw [hsv]
+    exact mem_insert_self _ _
+  · refine ⟨insert a u, hu.2, ?_⟩
+    rw [inter_insert_of_notMem ha]
 
 Depends on / 依赖: Down.mem_compression, erase_insert, insert_eq_self, insert_subset, inter_erase, inter_subset_right, mem_compression, mem_insert_self, mem_inter
 -/

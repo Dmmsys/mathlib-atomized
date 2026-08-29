@@ -39,7 +39,9 @@ fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext by
         obtain ⟨e, he⟩ := r_iff_exists.1 hab
         obtain ⟨f, hf⟩ := r_iff_exists.1 hcd
         simp only [mul_right_inj] at he hf
-        rw [← mul_le_mul_iff_righ
+        rw [← mul_le_mul_iff_right]; rw [mul_right_comm]; rw [← hf]; rw [mul_right_comm]; rw [mul_right_comm (a₂ : α)]; rw [mul_le_mul_iff_right]; rw [← mul_le_mul_iff_left]; rw [mul_left_comm]; rw [he]; rw [mul_left_comm]; rw [mul_left_comm (b₂ : α)]; rw [mul_le_mul_iff_left]⟩
+
+@[to_additive]
 
 中文:
 实例 le
@@ -50,7 +52,9 @@ fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext by
         obtain ⟨e, he⟩ := r_iff_exists.1 hab
         obtain ⟨f, hf⟩ := r_iff_exists.1 hcd
         simp only [mul_right_inj] at he hf
-        rw [← mul_le_mul_iff_righ
+        rw [← mul_le_mul_iff_right]; rw [mul_right_comm]; rw [← hf]; rw [mul_right_comm]; rw [mul_right_comm (a₂ : α)]; rw [mul_le_mul_iff_right]; rw [← mul_le_mul_iff_left]; rw [mul_left_comm]; rw [he]; rw [mul_left_comm]; rw [mul_left_comm (b₂ : α)]; rw [mul_le_mul_iff_left]⟩
+
+@[to_additive]
 
 Depends on / 依赖: Localization, Localization.liftOn, mul_le_mul_i, mul_le_mul_iff_left, mul_le_mul_iff_right, mul_left_comm, mul_right_comm, mul_right_inj, propext, r_iff_exists
 -/
@@ -76,7 +80,9 @@ fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext by
         obtain ⟨e, he⟩ := r_iff_exists.1 hab
         obtain ⟨f, hf⟩ := r_iff_exists.1 hcd
         simp only [mul_right_inj] at he hf
-        rw [← mul_lt_mul_iff_right
+        rw [← mul_lt_mul_iff_right]; rw [mul_right_comm]; rw [← hf]; rw [mul_right_comm]; rw [mul_right_comm (a₂ : α)]; rw [mul_lt_mul_iff_right]; rw [← mul_lt_mul_iff_left]; rw [mul_left_comm]; rw [he]; rw [mul_left_comm]; rw [mul_left_comm (b₂ : α)]; rw [mul_lt_mul_iff_left]⟩
+
+@[to_additive]
 
 中文:
 实例 lt
@@ -87,7 +93,9 @@ fun {a₁ b₁ a₂ b₂ c₁ d₁ c₂ d₂} hab hcd => propext by
         obtain ⟨e, he⟩ := r_iff_exists.1 hab
         obtain ⟨f, hf⟩ := r_iff_exists.1 hcd
         simp only [mul_right_inj] at he hf
-        rw [← mul_lt_mul_iff_right
+        rw [← mul_lt_mul_iff_right]; rw [mul_right_comm]; rw [← hf]; rw [mul_right_comm]; rw [mul_right_comm (a₂ : α)]; rw [mul_lt_mul_iff_right]; rw [← mul_lt_mul_iff_left]; rw [mul_left_comm]; rw [he]; rw [mul_left_comm]; rw [mul_left_comm (b₂ : α)]; rw [mul_lt_mul_iff_left]⟩
+
+@[to_additive]
 
 Depends on / 依赖: Localization, Localization.liftOn, mul_left_comm, mul_lt_mul_if, mul_lt_mul_iff_left, mul_lt_mul_iff_right, mul_right_comm, mul_right_inj, propext, r_iff_exists
 -/
@@ -157,7 +165,17 @@ instance partialOrder
       apply le_of_mul_le_mul_left' _
       · exact ↑b.2
       grw [mul_left_comm, hab]
-      rwa [mul_left_comm, mul_left_comm (b.2 : α
+      rwa [mul_left_comm, mul_left_comm (b.2 : α), mul_le_mul_iff_left]
+  le_antisymm a b := by
+    induction a using Localization.rec
+    on_goal 1 =>
+      induction b using Localization.rec
+      · simp_rw [mk_le_mk, mk_eq_mk_iff, r_iff_exists]
+        exact fun hab hba => ⟨1, by rw [hab.antisymm hba]⟩
+    all_goals rfl
+  lt_iff_le_not_ge a b := Localization.induction_on₂ a b fun _ _ => lt_iff_le_not_ge
+
+@[to_additive]
 
 中文:
 实例 partialOrder
@@ -169,7 +187,17 @@ instance partialOrder
       apply le_of_mul_le_mul_left' _
       · exact ↑b.2
       grw [mul_left_comm, hab]
-      rwa [mul_left_comm, mul_left_comm (b.2 : α
+      rwa [mul_left_comm, mul_left_comm (b.2 : α), mul_le_mul_iff_left]
+  le_antisymm a b := by
+    induction a using Localization.rec
+    on_goal 1 =>
+      induction b using Localization.rec
+      · simp_rw [mk_le_mk, mk_eq_mk_iff, r_iff_exists]
+        exact fun hab hba => ⟨1, by rw [hab.antisymm hba]⟩
+    all_goals rfl
+  lt_iff_le_not_ge a b := Localization.induction_on₂ a b fun _ _ => lt_iff_le_not_ge
+
+@[to_additive]
 
 Depends on / 依赖: Localization, Localization.induction_on, induction_on, le_rfl
 -/
@@ -204,7 +232,11 @@ instance isOrderedCancelMonoid
         simp only [mk_mul, mk_le_mk, Submonoid.coe_mul, mul_mul_mul_comm _ (c.2 : α)] at hab ⊢
         exact mul_le_mul_left hab _
   le_of_mul_le_mul_left := fun a b c =>
-    Localization.ind
+    Localization.induction_on₃ a b c fun a b c hab => by
+      simp only [mk_mul, mk_le_mk, Submonoid.coe_mul, mul_mul_mul_comm _ _ a.1] at hab ⊢
+      exact le_of_mul_le_mul_left' hab
+
+@[to_additive]
 
 中文:
 实例 isOrderedCancelMonoid
@@ -215,7 +247,11 @@ instance isOrderedCancelMonoid
         simp only [mk_mul, mk_le_mk, Submonoid.coe_mul, mul_mul_mul_comm _ (c.2 : α)] at hab ⊢
         exact mul_le_mul_left hab _
   le_of_mul_le_mul_left := fun a b c =>
-    Localization.ind
+    Localization.induction_on₃ a b c fun a b c hab => by
+      simp only [mk_mul, mk_le_mk, Submonoid.coe_mul, mul_mul_mul_comm _ _ a.1] at hab ⊢
+      exact le_of_mul_le_mul_left' hab
+
+@[to_additive]
 -/
 instance isOrderedCancelMonoid : IsOrderedCancelMonoid (Localization s) where
   mul_le_mul_left := fun a b =>

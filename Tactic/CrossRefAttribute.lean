@@ -189,7 +189,7 @@ definition addCrossRefDoc
   let commentInDoc := if comment.isEmpty then "" else s!" ({comment})"
   let link := s!"[{db.label} {idStr}]({db.url}{idStr}){commentInDoc}"
 addDocStringCore decl "\n\n".intercalate ([oldDoc, link].filter (· != ""))
-  addTagEntry decl db 
+  addTagEntry decl db idStr comment
 
 中文:
 定义 addCrossRefDoc
@@ -199,7 +199,7 @@ addDocStringCore decl "\n\n".intercalate ([oldDoc, link].filter (· != ""))
   let commentInDoc := if comment.isEmpty then "" else s!" ({comment})"
   let link := s!"[{db.label} {idStr}]({db.url}{idStr}){commentInDoc}"
 addDocStringCore decl "\n\n".intercalate ([oldDoc, link].filter (· != ""))
-  addTagEntry decl db 
+  addTagEntry decl db idStr comment
 -/
 def addCrossRefDoc (db : Database) (decl : Name) (idStr comment : String) : CoreM Unit := do
   let oldDoc := (← findDocString? (← getEnv) decl).getD ""
@@ -245,7 +245,14 @@ definition stacksTagFn
   else
     let tag := c.extract i s.pos
     if !tag.all fun (c : Char) => c.isDigit || c.isUpper then
-      ParserState.mkUnexpec
+      ParserState.mkUnexpectedError s
+        "Stacks tags must consist only of digits and uppercase letters."
+    else if tag.length != 4 then
+      ParserState.mkUnexpectedError s "Stacks tags must be exactly 4 characters"
+    else
+      mkNodeToken stacksTagKind i true c s
+
+@[inherit_doc stacksTagFn]
 
 中文:
 定义 stacksTagFn
@@ -260,7 +267,14 @@ definition stacksTagFn
   else
     let tag := c.extract i s.pos
     if !tag.all fun (c : Char) => c.isDigit || c.isUpper then
-      ParserState.mkUnexpec
+      ParserState.mkUnexpectedError s
+        "Stacks tags must consist only of digits and uppercase letters."
+    else if tag.length != 4 then
+      ParserState.mkUnexpectedError s "Stacks tags must be exactly 4 characters"
+    else
+      mkNodeToken stacksTagKind i true c s
+
+@[inherit_doc stacksTagFn]
 -/
 def stacksTagFn : ParserFn := fun c s =>
   let i := s.pos
@@ -363,7 +377,16 @@ definition wikidataIdFn
     let id := c.extract i s.pos
     match id.toList with
     | 'Q' :: rest@(_ :: _) =>
-      if rest.all Char.isDigit the
+      if rest.all Char.isDigit then
+        mkNodeToken wikidataIdKind i true c s
+      else
+        ParserState.mkUnexpectedError s
+          "Wikidata ids must consist of the letter Q followed by digits."
+    | _ =>
+      ParserState.mkUnexpectedError s
+        "Wikidata ids must start with the letter Q followed by one or more digits."
+
+@[inherit_doc wikidataIdFn]
 
 中文:
 定义 wikidataIdFn
@@ -379,7 +402,16 @@ definition wikidataIdFn
     let id := c.extract i s.pos
     match id.toList with
     | 'Q' :: rest@(_ :: _) =>
-      if rest.all Char.isDigit the
+      if rest.all Char.isDigit then
+        mkNodeToken wikidataIdKind i true c s
+      else
+        ParserState.mkUnexpectedError s
+          "Wikidata ids must consist of the letter Q followed by digits."
+    | _ =>
+      ParserState.mkUnexpectedError s
+        "Wikidata ids must start with the letter Q followed by one or more digits."
+
+@[inherit_doc wikidataIdFn]
 -/
 def wikidataIdFn : ParserFn := fun c s =>
   let i := s.pos
@@ -483,7 +515,13 @@ definition lmfdbIdFn
     ParserState.mkError s "lmfdb id"
   else
     if !(c.extract i s.pos).toList.all
-      (fun c => c.isLower || c.isDigit || c == '.' || c == '_
+      (fun c => c.isLower || c.isDigit || c == '.' || c == '_') then
+      ParserState.mkUnexpectedError s
+        "LMFDB ids must consist only of lowercase letters, digits, periods, and underscores."
+    else
+      mkNodeToken lmfdbIdKind i true c s
+
+@[inherit_doc lmfdbIdFn]
 
 中文:
 定义 lmfdbIdFn
@@ -497,7 +535,13 @@ definition lmfdbIdFn
     ParserState.mkError s "lmfdb id"
   else
     if !(c.extract i s.pos).toList.all
-      (fun c => c.isLower || c.isDigit || c == '.' || c == '_
+      (fun c => c.isLower || c.isDigit || c == '.' || c == '_') then
+      ParserState.mkUnexpectedError s
+        "LMFDB ids must consist only of lowercase letters, digits, periods, and underscores."
+    else
+      mkNodeToken lmfdbIdKind i true c s
+
+@[inherit_doc lmfdbIdFn]
 -/
 def lmfdbIdFn : ParserFn := fun c s =>
   let i := s.pos
@@ -851,7 +895,15 @@ definition traceCrossRefs
   let mut msgs := #[m!""]
   for d in entries do
     let (parL, parR) := if d.comment.isEmpty then ("", "") else (" (", ")")
-    let cmt := parL ++ d.comment 
+    let cmt := parL ++ d.comment ++ parR
+    msgs := msgs.push
+      m!"[{db.label} {d.tag}]({db.url ++ d.tag}) \
+        corresponds to declaration '{.ofConstName d.declName}'.{cmt}"
+    if verbose then
+      let dType := ((env.find? d.declName).getD default).type
+      msgs := (msgs.push m!"{dType}").push ""
+  let msg := MessageData.joinSep msgs.toList "\n"
+  logInfo msg
 
 中文:
 定义 traceCrossRefs
@@ -863,7 +915,15 @@ definition traceCrossRefs
   let mut msgs := #[m!""]
   for d in entries do
     let (parL, parR) := if d.comment.isEmpty then ("", "") else (" (", ")")
-    let cmt := parL ++ d.comment 
+    let cmt := parL ++ d.comment ++ parR
+    msgs := msgs.push
+      m!"[{db.label} {d.tag}]({db.url ++ d.tag}) \
+        corresponds to declaration '{.ofConstName d.declName}'.{cmt}"
+    if verbose then
+      let dType := ((env.find? d.declName).getD default).type
+      msgs := (msgs.push m!"{dType}").push ""
+  let msg := MessageData.joinSep msgs.toList "\n"
+  logInfo msg
 -/
 def traceCrossRefs (db : Database) (verbose : Bool := false) :
     Command.CommandElabM Unit := do

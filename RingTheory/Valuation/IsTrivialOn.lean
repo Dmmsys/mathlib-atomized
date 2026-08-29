@@ -71,7 +71,13 @@ theorem valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X
   apply Valuation.map_sum_eq_of_lt _ (by simp)
   intro i hi
   simp only [Finset.mem_sdiff, Finset.mem_range, Nat.lt_add_one_iff, Finset.mem_singleton,
-    ← lt_iff_le_and_ne] 
+    ← lt_iff_le_and_ne] at hi
+  simp only [← C_mul_X_pow_eq_monomial, map_mul, aeval_C, map_pow, aeval_X, coeff_natDegree]
+  by_cases h0 : (p.coeff i) = 0
+  · simp [hv.eq_one p.leadingCoeff (leadingCoeff_ne_zero.mpr hp),
+      h0, pow_pos (lt_of_le_of_lt zero_le_one hpos) p.natDegree]
+  · simp [hv.eq_one p.leadingCoeff (leadingCoeff_ne_zero.mpr hp),
+      hv.eq_one _ h0, pow_lt_pow_right₀ hpos hi]
 
 中文:
 定理 valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X
@@ -82,7 +88,13 @@ theorem valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X
   apply Valuation.map_sum_eq_of_lt _ (by simp)
   intro i hi
   simp only [Finset.mem_sdiff, Finset.mem_range, Nat.lt_add_one_iff, Finset.mem_singleton,
-    ← lt_iff_le_and_ne] 
+    ← lt_iff_le_and_ne] at hi
+  simp only [← C_mul_X_pow_eq_monomial, map_mul, aeval_C, map_pow, aeval_X, coeff_natDegree]
+  by_cases h0 : (p.coeff i) = 0
+  · simp [hv.eq_one p.leadingCoeff (leadingCoeff_ne_zero.mpr hp),
+      h0, pow_pos (lt_of_le_of_lt zero_le_one hpos) p.natDegree]
+  · simp [hv.eq_one p.leadingCoeff (leadingCoeff_ne_zero.mpr hp),
+      hv.eq_one _ h0, pow_lt_pow_right₀ hpos hi]
 
 Depends on / 依赖: C_mul_X_pow_eq_monomial, Finset, Finset.mem_range, Finset.mem_sdiff, Finset.mem_singleton, Nat.lt_add_one_iff, Valuation, Valuation.map_sum_eq_of_lt, aeval_C, aeval_X, as_sum_range, coeff_natDegree, eq_one, hv.eq_one, leadingCoeff, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, lt_add_one_iff, lt_iff_le_and_ne, lt_of_le_o
 -/
@@ -126,7 +138,9 @@ theorem Valuation.transcendental_of_ne_one
     exact lt_of_le_of_ne hlt hy
   simp_all only [ne_eq, Transcendental]
   by_contra!
-  replace ⟨p, hpnt, hp⟩ : IsAlgebraic A y := .algebraMap t
+  replace ⟨p, hpnt, hp⟩ : IsAlgebraic A y := .algebraMap this
+  suffices v y ^ p.natDegree = 0 by simp_all
+  rw [← valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X _ hlt] <;> simp_all
 
 中文:
 定理 赋值.transcendental_of_ne_one
@@ -139,7 +153,9 @@ theorem Valuation.transcendental_of_ne_one
     exact lt_of_le_of_ne hlt hy
   simp_all only [ne_eq, Transcendental]
   by_contra!
-  replace ⟨p, hpnt, hp⟩ : IsAlgebraic A y := .algebraMap t
+  replace ⟨p, hpnt, hp⟩ : IsAlgebraic A y := .algebraMap this
+  suffices v y ^ p.natDegree = 0 by simp_all
+  rw [← valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X _ hlt] <;> simp_all
 
 Depends on / 依赖: IsAlgebraic, IsAlgebraic.inv_iff, Transcendental, algebraMap, generalizing, inv_iff, lt_of_le_of_ne, natDegree, ne_eq, p.natDegree, replace, val_lt_one_iff, valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X
 -/

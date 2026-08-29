@@ -164,7 +164,16 @@ definition _root_.ContinuousLinearEquiv.toCompactConvergenceCLM
     apply UniformConvergenceCLM.topologicalSpace_mono
     intro x hx
     exact hx.isVonNBounded 𝕜₁
-  co
+  continuous_invFun := by
+    apply continuous_of_continuousAt_zero (LinearEquiv.toCompactConvergenceCLM σ E F).symm
+    rw [ContinuousAt]; rw [_root_.map_zero]; rw [CompactConvergenceCLM.hasBasis_nhds_zero.tendsto_iff
+      ContinuousLinearMap.hasBasis_nhds_zero]
+    rintro ⟨a, b⟩ ⟨ha, hb⟩
+    use ⟨closure a, b⟩
+    exact ⟨⟨MontelSpace.isCompact_of_isClosed_of_isVonNBounded 𝕜₁ isClosed_closure
+      ha.closure, hb⟩, fun _ hf _ hx => hf _ (subset_closure hx)⟩
+
+@[simp]
 
 中文:
 定义 _root_.连续线性等价.toCompactConvergenceCLM
@@ -177,7 +186,16 @@ definition _root_.ContinuousLinearEquiv.toCompactConvergenceCLM
     apply UniformConvergenceCLM.topologicalSpace_mono
     intro x hx
     exact hx.isVonNBounded 𝕜₁
-  co
+  continuous_invFun := by
+    apply continuous_of_continuousAt_zero (LinearEquiv.toCompactConvergenceCLM σ E F).symm
+    rw [ContinuousAt]; rw [_root_.map_zero]; rw [CompactConvergenceCLM.hasBasis_nhds_zero.tendsto_iff
+      ContinuousLinearMap.hasBasis_nhds_zero]
+    rintro ⟨a, b⟩ ⟨ha, hb⟩
+    use ⟨closure a, b⟩
+    exact ⟨⟨MontelSpace.isCompact_of_isClosed_of_isVonNBounded 𝕜₁ isClosed_closure
+      ha.closure, hb⟩, fun _ hf _ hx => hf _ (subset_closure hx)⟩
+
+@[simp]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.toCompactConvergenceCLM, toCompactConvergenceCLM
 -/

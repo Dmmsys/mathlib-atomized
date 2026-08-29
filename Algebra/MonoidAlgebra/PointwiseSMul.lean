@@ -101,7 +101,17 @@ theorem smul_apply_mulAction
     Set.SMulAntidiagonal.finite_of_finite_fst f.coeff.support.finite_toSet x.support p
   set s : Set (G × P) := ↑(Finset.SMulAntidiagonal p hp)
   have h₁ : s.InjOn Prod.fst := fun _ h₁ _ h₂ h => by
-    rw [F
+    rw [Finset.mem_coe]; rw [mem_smulAntidiagonal_of_group] at h₁ h₂
+    aesop
+  have h₂ : s.MapsTo Prod.fst ↑f.coeff.support := fun g hg => by aesop
+  have h₃ (g : G) (hg : g in f.coeff.support) (hgn : g ∉ Prod.fst '' s) :
+      f.coeff g • x (g⁻¹ • p) = 0 := by
+    obtain (h | h) : f.coeff g = 0 ∨ forall q, ¬ x q = 0 -> ¬g • q = p := by aesop
+    · simp [h]
+    · have := h (g⁻¹ • p)
+      aesop
+  rw [smul_eq]; rw [Finset.sum_of_injOn Prod.fst h₁ h₂ h₃]
+  aesop
 
 中文:
 定理 smul_apply_mulAction
@@ -111,7 +121,17 @@ theorem smul_apply_mulAction
     Set.SMulAntidiagonal.finite_of_finite_fst f.coeff.support.finite_toSet x.support p
   set s : Set (G × P) := ↑(Finset.SMulAntidiagonal p hp)
   have h₁ : s.InjOn Prod.fst := fun _ h₁ _ h₂ h => by
-    rw [F
+    rw [Finset.mem_coe]; rw [mem_smulAntidiagonal_of_group] at h₁ h₂
+    aesop
+  have h₂ : s.MapsTo Prod.fst ↑f.coeff.support := fun g hg => by aesop
+  have h₃ (g : G) (hg : g in f.coeff.support) (hgn : g ∉ Prod.fst '' s) :
+      f.coeff g • x (g⁻¹ • p) = 0 := by
+    obtain (h | h) : f.coeff g = 0 ∨ forall q, ¬ x q = 0 -> ¬g • q = p := by aesop
+    · simp [h]
+    · have := h (g⁻¹ • p)
+      aesop
+  rw [smul_eq]; rw [Finset.sum_of_injOn Prod.fst h₁ h₂ h₃]
+  aesop
 
 Depends on / 依赖: Finite, Finset, Finset.SMulAntidiagonal, Finset.mem_coe, Function, Function.support, MapsTo, Prod.fst, SMulAntidiagonal, Set.SMulAntidiagonal.finite_of_finite_fst, f.coeff, f.coeff.support, f.coeff.support.finite_toSet, finite_of_finite_fst, finite_toSet, mem_coe, mem_smulAntidiagonal_of_group, s.InjOn, s.MapsTo, smulAntidiagonal
 -/

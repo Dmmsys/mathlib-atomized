@@ -550,7 +550,9 @@ theorem Convex.convex_remove_iff_notMem_convexHull_remove
     exact convex_convexHull 𝕜 _
   exact
     Subset.antisymm (subset_convexHull 𝕜 _) fun y hy =>
-      ⟨convexHull_min sdiff_s
+      ⟨convexHull_min sdiff_subset hs hy, by
+        rintro (rfl : y = x)
+        exact hx hy⟩
 
 中文:
 定理 凸.convex_remove_iff_notMem_convexHull_remove
@@ -566,7 +568,9 @@ theorem Convex.convex_remove_iff_notMem_convexHull_remove
     exact convex_convexHull 𝕜 _
   exact
     Subset.antisymm (subset_convexHull 𝕜 _) fun y hy =>
-      ⟨convexHull_min sdiff_s
+      ⟨convexHull_min sdiff_subset hs hy, by
+        rintro (rfl : y = x)
+        exact hx hy⟩
 
 Depends on / 依赖: Subset, Subset.antisymm, antisymm, convexHull, convexHull_eq, convexHull_min, convex_convexHull, hsx.convexHull_eq, mem_singleton, sdiff_subset, subset_convexHull
 -/
@@ -712,7 +716,7 @@ theorem AffineMap.image_convexHull
     rw [← Set.image_subset_iff]
     exact subset_convexHull 𝕜 (f '' s)
   · exact convexHull_min (Set.image_mono (subset_convexHull 𝕜 s))
-      ((convex_convexH
+      ((convex_convexHull 𝕜 s).affine_image f)
 
 中文:
 定理 仿射映射.image_convexHull
@@ -724,7 +728,7 @@ theorem AffineMap.image_convexHull
     rw [← Set.image_subset_iff]
     exact subset_convexHull 𝕜 (f '' s)
   · exact convexHull_min (Set.image_mono (subset_convexHull 𝕜 s))
-      ((convex_convexH
+      ((convex_convexHull 𝕜 s).affine_image f)
 
 Depends on / 依赖: Set.Subset.antisymm, Set.image_mono, Set.image_subset_iff, Subset, affine_image, affine_preimage, antisymm, convexHull_min, convex_convexHull, image_mono, image_subset_iff, subset_convexHull
 -/

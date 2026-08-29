@@ -256,7 +256,9 @@ lemma isZeroAtImInfty_of_valueAtInfty_eq_zero
   have hΓ : Γ.strictWidthInfty in Γ.strictPeriods := Γ.strictWidthInfty_mem_strictPeriods
   have hanal := ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ
   have hper := periodic_comp_ofComplex f hΓ
-  simp_rw [IsZe
+  simp_rw [IsZeroAtImInfty, ZeroAtFilter, ← h, ← cuspFunction_apply_zero hh hanal hper]
+  exact (hanal.continuousAt.tendsto.comp (qParam_tendsto_atImInfty hh)).congr
+    (fun τ => SlashInvariantFormClass.eq_cuspFunction f τ hΓ hh.ne')
 
 中文:
 引理 isZeroAtImInfty_of_valueAtInfty_eq_zero
@@ -266,7 +268,9 @@ lemma isZeroAtImInfty_of_valueAtInfty_eq_zero
   have hΓ : Γ.strictWidthInfty in Γ.strictPeriods := Γ.strictWidthInfty_mem_strictPeriods
   have hanal := ModularFormClass.analyticAt_cuspFunction_zero f hh hΓ
   have hper := periodic_comp_ofComplex f hΓ
-  simp_rw [IsZe
+  simp_rw [IsZeroAtImInfty, ZeroAtFilter, ← h, ← cuspFunction_apply_zero hh hanal hper]
+  exact (hanal.continuousAt.tendsto.comp (qParam_tendsto_atImInfty hh)).congr
+    (fun τ => SlashInvariantFormClass.eq_cuspFunction f τ hΓ hh.ne')
 
 Depends on / 依赖: Fact.out, IsZeroAtImInfty, ModularFormClass, ModularFormClass.analyticAt_cuspFunction_zero, SlashInvariantFormClass, SlashInvariantFormClass.eq_cuspFunction, ZeroAtFilter, analyticAt_cuspFunction_zero, continuousAt, cuspFunction_apply_zero, eq_cuspFunction, hanal.continuousAt.tendsto.comp, hh.n, periodic_comp_ofComplex, qParam_tendsto_atImInfty, simp_rw, strictPeriods, strictWidthInfty, strictWidthInfty_mem_strictPeriods, strictWidthInfty_pos_iff
 -/
@@ -298,7 +302,8 @@ lemma isZeroAt_of_coeffZero_eq_zero
   rw [show (⇑f ∣[k] γ) = ⇑f from f.slash_action_eq' _ ⟨γ, rfl⟩]
 exact isZeroAtImInfty_of_valueAtInfty_eq_zero f by
     rwa [← qExpansion_coeff_zero one_pos
-      (ModularFormClass.analyticAt_c
+      (ModularFormClass.analyticAt_cuspFunction_zero f one_pos one_mem_strictPeriods_SL)
+      (periodic_comp_ofComplex f one_mem_strictPeriods_SL)]
 
 中文:
 引理 isZeroAt_of_coeffZero_eq_zero
@@ -310,7 +315,8 @@ exact isZeroAtImInfty_of_valueAtInfty_eq_zero f by
   rw [show (⇑f ∣[k] γ) = ⇑f from f.slash_action_eq' _ ⟨γ, rfl⟩]
 exact isZeroAtImInfty_of_valueAtInfty_eq_zero f by
     rwa [← qExpansion_coeff_zero one_pos
-      (ModularFormClass.analyticAt_c
+      (ModularFormClass.analyticAt_cuspFunction_zero f one_pos one_mem_strictPeriods_SL)
+      (periodic_comp_ofComplex f one_mem_strictPeriods_SL)]
 
 Depends on / 依赖: IsArithmetic, ModularFormClass, ModularFormClass.analyticAt_cuspFunction_zero, Subgroup, Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z, analyticAt_cuspFunction_zero, f.slash_action_eq, isCusp_iff_isCusp_SL2Z, isZeroAtImInfty_of_valueAtInfty_eq_zero, isZeroAt_iff_forall_SL2Z, one_mem_strictPeriods_SL, one_pos, periodic_comp_ofComplex, qExpansion_coeff_zero, slash_action_eq
 -/
@@ -376,7 +382,7 @@ lemma isCuspForm_iff_coeffZero_eq_zero
   rw [← hg]; rw [qExpansion_coeff_zero one_pos
     (ModularFormClass.analyticAt_cuspFunction_zero _ one_pos one_mem_strictPeriods_SL)
     (periodic_comp_ofComplex _ one_mem_strictPeriods_SL)]
-  exact
+  exact (CuspFormClass.zero_at_infty g).valueAtInfty_eq_zero
 
 中文:
 引理 isCuspForm_iff_coeffZero_eq_zero
@@ -386,7 +392,7 @@ lemma isCuspForm_iff_coeffZero_eq_zero
   rw [← hg]; rw [qExpansion_coeff_zero one_pos
     (ModularFormClass.analyticAt_cuspFunction_zero _ one_pos one_mem_strictPeriods_SL)
     (periodic_comp_ofComplex _ one_mem_strictPeriods_SL)]
-  exact
+  exact (CuspFormClass.zero_at_infty g).valueAtInfty_eq_zero
 
 Depends on / 依赖: CuspFormClass, CuspFormClass.zero_at_infty, ModularFormClass, ModularFormClass.analyticAt_cuspFunction_zero, analyticAt_cuspFunction_zero, isCuspForm_iff, isZeroAt_of_coeffZero_eq_zero, one_mem_strictPeriods_SL, one_pos, periodic_comp_ofComplex, qExpansion_coeff_zero, valueAtInfty_eq_zero, zero_at_infty
 -/

@@ -175,7 +175,7 @@ lemma norm_complexMGF_le_mgf
   simp_rw [add_mul, Complex.exp_add, re_add_im]
   calc ‖∫ ω, cexp (z.re * X ω) * cexp (z.im * I * X ω) ∂μ‖
   _ <= ∫ ω, ‖cexp (z.re * X ω) * cexp (z.im * I * X ω)‖ ∂μ := norm_integral_le_integral_norm _
-  _ = ∫ ω, rexp (z.re * X ω) ∂μ := by simp [Complex.norm_
+  _ = ∫ ω, rexp (z.re * X ω) ∂μ := by simp [Complex.norm_exp]
 
 中文:
 引理 norm_complexMGF_le_mgf
@@ -185,7 +185,7 @@ lemma norm_complexMGF_le_mgf
   simp_rw [add_mul, Complex.exp_add, re_add_im]
   calc ‖∫ ω, cexp (z.re * X ω) * cexp (z.im * I * X ω) ∂μ‖
   _ <= ∫ ω, ‖cexp (z.re * X ω) * cexp (z.im * I * X ω)‖ ∂μ := norm_integral_le_integral_norm _
-  _ = ∫ ω, rexp (z.re * X ω) ∂μ := by simp [Complex.norm_
+  _ = ∫ ω, rexp (z.re * X ω) ∂μ := by simp [Complex.norm_exp]
 
 Depends on / 依赖: Complex.exp_add, Complex.norm_exp, add_mul, complexMGF, exp_add, norm_exp, norm_integral_le_integral_norm, re_add_im, simp_rw, z.im, z.re
 -/
@@ -328,7 +328,41 @@ lemma hasDerivAt_integral_pow_mul_exp
   rw [mem_interior_iff_mem_nhds]; rw [mem_nhds_iff_exists_Ioo_subset] at hz'
   obtain ⟨l, u, hlu, h_subset⟩ := hz'
   let t := ((z.re - l) ⊓ (u - z.re)) / 2
-  have h_pos : 0 < (z.re - l) ⊓ (u - z.re) 
+  have h_pos : 0 < (z.re - l) ⊓ (u - z.re) := by simp [hlu.1, hlu.2]
+  have ht : 0 < t := half_pos h_pos
+  refine (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (bound := fun ω => |X ω| ^ (n + 1) * rexp (z.re * X ω + t / 2 * |X ω|))
+    (F := fun z ω => X ω ^ n * cexp (z * X ω))
+    (F' := fun z ω => X ω ^ (n + 1) * cexp (z * X ω)) (Metric.ball_mem_nhds _ (half_pos ht))
+    ?_ ?_ ?_ ?_ ?_ ?_).2
+  · exact .of_forall fun z => by fun_prop
+  · exact integrable_pow_mul_cexp_of_re_mem_interior_integrableExpSet hz n
+  · fun_prop
+  · refine ae_of_all _ fun ω ε hε => ?_
+    simp only [norm_mul, norm_pow, norm_real, Real.norm_eq_abs]
+    rw [Complex.norm_exp]
+    simp only [mul_re, ofReal_re, ofReal_im, mul_zero, sub_zero]
+    gcongr
+    have : ε = z + (ε - z) := by simp
+    rw [this]; rw [add_re]; rw [add_mul]
+    gcongr _ + ?_
+    refine (le_abs_self _).trans ?_
+    rw [abs_mul]
+    gcongr
+    refine (abs_re_le_norm _).trans ?_
+    simp only [Metric.mem_ball, dist_eq_norm] at hε
+    exact hε.le
+  · refine integrable_pow_abs_mul_exp_add_of_integrable_exp_mul ?_ ?_ ?_ ?_ (t := t) (n + 1)
+    · exact h_subset (add_half_inf_sub_mem_Ioo hlu)
+    · exact h_subset (sub_half_inf_sub_mem_Ioo hlu)
+    · positivity
+    · exact lt_of_lt_of_le (by simp [ht]) (le_abs_self _)
+  · refine ae_of_all _ fun ω ε hε => ?_
+    simp_rw [pow_succ, mul_assoc]
+    refine HasDerivAt.const_mul _ ?_
+    simp_rw [← smul_eq_mul, Complex.exp_eq_exp_Complex]
+    convert! hasDerivAt_exp_smul_const (X ω : Complex) ε using 1
+    rw [smul_eq_mul]; rw [mul_comm]
 
 中文:
 引理 hasDerivAt_integral_pow_mul_exp
@@ -339,7 +373,41 @@ lemma hasDerivAt_integral_pow_mul_exp
   rw [mem_interior_iff_mem_nhds]; rw [mem_nhds_iff_exists_Ioo_subset] at hz'
   obtain ⟨l, u, hlu, h_subset⟩ := hz'
   let t := ((z.re - l) ⊓ (u - z.re)) / 2
-  have h_pos : 0 < (z.re - l) ⊓ (u - z.re) 
+  have h_pos : 0 < (z.re - l) ⊓ (u - z.re) := by simp [hlu.1, hlu.2]
+  have ht : 0 < t := half_pos h_pos
+  refine (hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (bound := fun ω => |X ω| ^ (n + 1) * rexp (z.re * X ω + t / 2 * |X ω|))
+    (F := fun z ω => X ω ^ n * cexp (z * X ω))
+    (F' := fun z ω => X ω ^ (n + 1) * cexp (z * X ω)) (Metric.ball_mem_nhds _ (half_pos ht))
+    ?_ ?_ ?_ ?_ ?_ ?_).2
+  · exact .of_forall fun z => by fun_prop
+  · exact integrable_pow_mul_cexp_of_re_mem_interior_integrableExpSet hz n
+  · fun_prop
+  · refine ae_of_all _ fun ω ε hε => ?_
+    simp only [norm_mul, norm_pow, norm_real, Real.norm_eq_abs]
+    rw [Complex.norm_exp]
+    simp only [mul_re, ofReal_re, ofReal_im, mul_zero, sub_zero]
+    gcongr
+    have : ε = z + (ε - z) := by simp
+    rw [this]; rw [add_re]; rw [add_mul]
+    gcongr _ + ?_
+    refine (le_abs_self _).trans ?_
+    rw [abs_mul]
+    gcongr
+    refine (abs_re_le_norm _).trans ?_
+    simp only [Metric.mem_ball, dist_eq_norm] at hε
+    exact hε.le
+  · refine integrable_pow_abs_mul_exp_add_of_integrable_exp_mul ?_ ?_ ?_ ?_ (t := t) (n + 1)
+    · exact h_subset (add_half_inf_sub_mem_Ioo hlu)
+    · exact h_subset (sub_half_inf_sub_mem_Ioo hlu)
+    · positivity
+    · exact lt_of_lt_of_le (by simp [ht]) (le_abs_self _)
+  · refine ae_of_all _ fun ω ε hε => ?_
+    simp_rw [pow_succ, mul_assoc]
+    refine HasDerivAt.const_mul _ ?_
+    simp_rw [← smul_eq_mul, Complex.exp_eq_exp_Complex]
+    convert! hasDerivAt_exp_smul_const (X ω : Complex) ε using 1
+    rw [smul_eq_mul]; rw [mul_comm]
 
 Depends on / 依赖: AEMeasurable, aemeasurable_of_mem_interior_integrableExpSet, h_pos, h_subset, half_pos, hasDerivAt_integral_of_dominated_loc_of_deriv_le, mem_interior_iff_mem_nhds, mem_nhds_iff_exists_Ioo_subset, z.re
 -/
@@ -513,7 +581,12 @@ lemma hasDerivAt_iteratedDeriv_complexMGF
     rw [iteratedDeriv_succ]
     have : deriv (iteratedDeriv n (complexMGF X μ))
         =ᶠ[𝓝 z] fun z => μ[fun ω => X ω ^ (n + 1) * cexp (z * X ω)] := by
-      have h_mem : forallᶠ y in 𝓝 z, y.re in int
+      have h_mem : forallᶠ y in 𝓝 z, y.re in interior (integrableExpSet X μ) := by
+        refine IsOpen.eventually_mem ?_ hz
+        exact isOpen_interior.preimage Complex.continuous_re
+      filter_upwards [h_mem] with y hy using HasDerivAt.deriv (hn hy)
+    rw [EventuallyEq.hasDerivAt_iff this]
+    exact hasDerivAt_integral_pow_mul_exp hz (n + 1)
 
 中文:
 引理 hasDerivAt_iteratedDeriv_complexMGF
@@ -525,7 +598,12 @@ lemma hasDerivAt_iteratedDeriv_complexMGF
     rw [iteratedDeriv_succ]
     have : deriv (iteratedDeriv n (complexMGF X μ))
         =ᶠ[𝓝 z] fun z => μ[fun ω => X ω ^ (n + 1) * cexp (z * X ω)] := by
-      have h_mem : forallᶠ y in 𝓝 z, y.re in int
+      have h_mem : forallᶠ y in 𝓝 z, y.re in interior (integrableExpSet X μ) := by
+        refine IsOpen.eventually_mem ?_ hz
+        exact isOpen_interior.preimage Complex.continuous_re
+      filter_upwards [h_mem] with y hy using HasDerivAt.deriv (hn hy)
+    rw [EventuallyEq.hasDerivAt_iff this]
+    exact hasDerivAt_integral_pow_mul_exp hz (n + 1)
 
 Depends on / 依赖: Complex.continuous_re, EventuallyEq, EventuallyEq.hasDerivAt_iff, HasDerivAt, HasDerivAt.deriv, IsOpen, IsOpen.eventually_mem, complexMGF, continuous_re, eventually_mem, filter_upwards, generalizing, h_mem, hasDerivAt_complexMGF, hasDerivAt_iff, integrableExpSet, interior, isOpen_interior, isOpen_interior.preimage, iteratedDeriv
 -/
@@ -678,7 +756,24 @@ lemma eqOn_complexMGF_of_mgf'
   obtain ⟨t, ht⟩ := h_empty
   have hX : AnalyticOnNhd Complex (complexMGF X μ) {z | z.re in interior (integrableExpSet X μ)} :=
     analyticOnNhd_complexMGF
-  ha
+  have hY : AnalyticOnNhd Complex (complexMGF Y μ') {z | z.re in interior (integrableExpSet Y μ')} :=
+    analyticOnNhd_complexMGF
+  rw [integrableExpSet_eq_of_mgf' hXY hμμ'] at hX ht ⊢
+  refine AnalyticOnNhd.eqOn_of_preconnected_of_frequently_eq hX hY
+    (convex_integrableExpSet.interior.linear_preimage reLm).isPreconnected
+    (z₀ := (t : Complex)) (by simp [ht]) ?_
+  have h_real : existsᶠ (x : Real) in 𝓝[!=] t, complexMGF X μ x = complexMGF Y μ' x := by
+    refine .of_forall fun y => ?_
+    rw [complexMGF_ofReal]; rw [complexMGF_ofReal]; rw [hXY]
+  rw [frequently_iff_seq_forall] at h_real ⊢
+  obtain ⟨xs, hx_tendsto, hx_eq⟩ := h_real
+  refine ⟨fun n => xs n, ?_, fun n => ?_⟩
+  · rw [tendsto_nhdsWithin_iff] at hx_tendsto ⊢
+    constructor
+    · rw [tendsto_ofReal_iff]
+      exact hx_tendsto.1
+    · simpa using hx_tendsto.2
+  · simp [hx_eq]
 
 中文:
 引理 eqOn_complexMGF_of_mgf'
@@ -690,7 +785,24 @@ lemma eqOn_complexMGF_of_mgf'
   obtain ⟨t, ht⟩ := h_empty
   have hX : AnalyticOnNhd Complex (complexMGF X μ) {z | z.re in interior (integrableExpSet X μ)} :=
     analyticOnNhd_complexMGF
-  ha
+  have hY : AnalyticOnNhd Complex (complexMGF Y μ') {z | z.re in interior (integrableExpSet Y μ')} :=
+    analyticOnNhd_complexMGF
+  rw [integrableExpSet_eq_of_mgf' hXY hμμ'] at hX ht ⊢
+  refine AnalyticOnNhd.eqOn_of_preconnected_of_frequently_eq hX hY
+    (convex_integrableExpSet.interior.linear_preimage reLm).isPreconnected
+    (z₀ := (t : Complex)) (by simp [ht]) ?_
+  have h_real : existsᶠ (x : Real) in 𝓝[!=] t, complexMGF X μ x = complexMGF Y μ' x := by
+    refine .of_forall fun y => ?_
+    rw [complexMGF_ofReal]; rw [complexMGF_ofReal]; rw [hXY]
+  rw [frequently_iff_seq_forall] at h_real ⊢
+  obtain ⟨xs, hx_tendsto, hx_eq⟩ := h_real
+  refine ⟨fun n => xs n, ?_, fun n => ?_⟩
+  · rw [tendsto_nhdsWithin_iff] at hx_tendsto ⊢
+    constructor
+    · rw [tendsto_ofReal_iff]
+      exact hx_tendsto.1
+    · simpa using hx_tendsto.2
+  · simp [hx_eq]
 
 Depends on / 依赖: AnalyticOnNhd, AnalyticOnNhd.eqOn_of_preconnecte, Set.nonempty_iff_ne_empty, analyticOnNhd_complexMGF, complexMGF, eqOn_of_preconnecte, h_empty, integrableExpSet, integrableExpSet_eq_of_mgf, interior, ne_eq, nonempty_iff_ne_empty, z.re
 -/
@@ -780,7 +892,11 @@ theorem _root_.MeasureTheory.Measure.ext_of_complexMGF_eq
   apply MeasureTheory.ext_of_integral_char_eq continuous_probChar probChar_ne_one inner_ne_zero
     continuous_inner (fun w => ?_)
   rw [funext_iff] at h
-  specialize h (Mult
+  specialize h (Multiplicative.toAdd w * I)
+  simp_rw [complexMGF, mul_assoc, mul_comm I, ← mul_assoc] at h
+  simp only [BoundedContinuousFunction.char_apply, innerₗ_apply_apply,
+    RCLike.inner_apply, conj_trivial, probChar_apply, ofReal_mul]
+  rwa [integral_map hX (by fun_prop), integral_map hY (by fun_prop)]
 
 中文:
 定理 _root_.测度论.测度.ext_of_complexMGF_eq
@@ -791,7 +907,11 @@ theorem _root_.MeasureTheory.Measure.ext_of_complexMGF_eq
   apply MeasureTheory.ext_of_integral_char_eq continuous_probChar probChar_ne_one inner_ne_zero
     continuous_inner (fun w => ?_)
   rw [funext_iff] at h
-  specialize h (Mult
+  specialize h (Multiplicative.toAdd w * I)
+  simp_rw [complexMGF, mul_assoc, mul_comm I, ← mul_assoc] at h
+  simp only [BoundedContinuousFunction.char_apply, innerₗ_apply_apply,
+    RCLike.inner_apply, conj_trivial, probChar_apply, ofReal_mul]
+  rwa [integral_map hX (by fun_prop), integral_map hY (by fun_prop)]
 
 Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.char_apply, DFunLike, DFunLike.ne_iff.mpr, MeasureTheory, MeasureTheory.ext_of_integral_char_eq, Multiplicative, Multiplicative.toAdd, RCLike, RCLike.inner_apply, char_apply, complexMGF, conj_trivial, continuous_inner, continuous_probChar, ext_of_integral_char_eq, funext_iff, inner_apply, inner_ne_zero, inner_self_ne_zero
 -/

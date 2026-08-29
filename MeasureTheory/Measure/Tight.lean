@@ -76,7 +76,10 @@ lemma isTightMeasureSet_iff_exists_isCompact_measure_compl_le
     iSup_apply, mem_Icc, tsub_le_iff_right, zero_le, iSup_le_iff, true_and, eventually_smallSets,
     mem_cocompact]
   refine ⟨fun h ε hε => ?_, fun h ε hε => ?_⟩
-  · obtain ⟨A, ⟨K, h1, h2⟩, hA⟩ := h ε 
+  · obtain ⟨A, ⟨K, h1, h2⟩, hA⟩ := h ε hε
+    exact ⟨K, h1, hA Kᶜ h2⟩
+  · obtain ⟨K, h1, h2⟩ := h ε hε
+    exact ⟨Kᶜ, ⟨K, h1, subset_rfl⟩, fun A hA μ hμS => (μ.mono hA).trans (h2 μ hμS)⟩
 
 中文:
 引理 isTightMeasureSet_iff_存在_isCompact_measure_compl_le
@@ -85,7 +88,10 @@ lemma isTightMeasureSet_iff_exists_isCompact_measure_compl_le
     iSup_apply, mem_Icc, tsub_le_iff_right, zero_le, iSup_le_iff, true_and, eventually_smallSets,
     mem_cocompact]
   refine ⟨fun h ε hε => ?_, fun h ε hε => ?_⟩
-  · obtain ⟨A, ⟨K, h1, h2⟩, hA⟩ := h ε 
+  · obtain ⟨A, ⟨K, h1, h2⟩, hA⟩ := h ε hε
+    exact ⟨K, h1, hA Kᶜ h2⟩
+  · obtain ⟨K, h1, h2⟩ := h ε hε
+    exact ⟨Kᶜ, ⟨K, h1, subset_rfl⟩, fun A hA μ hμS => (μ.mono hA).trans (h2 μ hμS)⟩
 
 Depends on / 依赖: ENNReal, ENNReal.tendsto_nhds, ENNReal.zero_ne_top, IsTightMeasureSet, eventually_smallSets, gt_iff_lt, iSup_apply, iSup_le_iff, mem_Icc, mem_cocompact, subset_rfl, tendsto_nhds, true_and, tsub_le_iff_right, zero_add, zero_le, zero_ne_top
 -/
@@ -113,7 +119,13 @@ theorem isTightMeasureSet_singleton_of_innerRegularWRT
   cases lt_or_ge ε r with
   | inl hεr =>
     have hεr' : r - ε < r := ENNReal.sub_lt_self (measure_ne_top μ _) hεr.ne_bot hε.ne'
-    obtain ⟨K, _, ⟨hK_compact, hK_closed⟩, hKμ⟩ := h .univ (r - ε) hεr
+    obtain ⟨K, _, ⟨hK_compact, hK_closed⟩, hKμ⟩ := h .univ (r - ε) hεr'
+    refine ⟨K, hK_compact, ?_⟩
+    simp only [mem_singleton_iff, forall_eq]
+    rw [measure_compl hK_closed.measurableSet (measure_ne_top μ _)]; rw [tsub_le_iff_right]
+    rw [ENNReal.sub_lt_iff_lt_right (ne_top_of_lt hεr) hεr.le]; rw [add_comm] at hKμ
+    exact hKμ.le
+  | inr hεr => exact ⟨∅, isCompact_empty, by simpa⟩
 
 中文:
 定理 isTightMeasureSet_singleton_of_innerRegularWRT
@@ -125,7 +137,13 @@ theorem isTightMeasureSet_singleton_of_innerRegularWRT
   cases lt_or_ge ε r with
   | inl hεr =>
     have hεr' : r - ε < r := ENNReal.sub_lt_self (measure_ne_top μ _) hεr.ne_bot hε.ne'
-    obtain ⟨K, _, ⟨hK_compact, hK_closed⟩, hKμ⟩ := h .univ (r - ε) hεr
+    obtain ⟨K, _, ⟨hK_compact, hK_closed⟩, hKμ⟩ := h .univ (r - ε) hεr'
+    refine ⟨K, hK_compact, ?_⟩
+    simp only [mem_singleton_iff, forall_eq]
+    rw [measure_compl hK_closed.measurableSet (measure_ne_top μ _)]; rw [tsub_le_iff_right]
+    rw [ENNReal.sub_lt_iff_lt_right (ne_top_of_lt hεr) hεr.le]; rw [add_comm] at hKμ
+    exact hKμ.le
+  | inr hεr => exact ⟨∅, isCompact_empty, by simpa⟩
 
 Depends on / 依赖: ENNReal, ENNReal.sub_lt_iff_lt_right, ENNReal.sub_lt_self, Set.univ, forall_eq, hK_closed, hK_closed.measurableSet, hK_compact, isTightMeasureSet_iff_exists_isCompact_measure_compl_le, lt_or_ge, measurableSet, measure_compl, measure_ne_top, mem_singleton_iff, ne_bot, ne_top_of_lt, r.le, r.ne_bot, sub_lt_iff_lt_right, sub_lt_self
 -/
@@ -307,7 +325,12 @@ lemma map
   intro ε hε
   obtain ⟨K, hK_compact, hKS⟩ := hS ε hε
   refine ⟨f '' K, hK_compact.image hf, fun μ hμS => ?_⟩
-  by_cases hf_meas : AEMeasurable f 
+  by_cases hf_meas : AEMeasurable f μ
+  swap; · simp [Measure.map_of_not_aemeasurable hf_meas]
+  rw [Measure.map_apply_of_aemeasurable hf_meas (hK_compact.image hf).measurableSet.compl]
+  refine (measure_mono ?_).trans (hKS μ hμS)
+  simp only [preimage_compl, compl_subset_compl]
+  exact subset_preimage_image f K
 
 中文:
 引理 map
@@ -318,7 +341,12 @@ lemma map
   intro ε hε
   obtain ⟨K, hK_compact, hKS⟩ := hS ε hε
   refine ⟨f '' K, hK_compact.image hf, fun μ hμS => ?_⟩
-  by_cases hf_meas : AEMeasurable f 
+  by_cases hf_meas : AEMeasurable f μ
+  swap; · simp [Measure.map_of_not_aemeasurable hf_meas]
+  rw [Measure.map_apply_of_aemeasurable hf_meas (hK_compact.image hf).measurableSet.compl]
+  refine (measure_mono ?_).trans (hKS μ hμS)
+  simp only [preimage_compl, compl_subset_compl]
+  exact subset_preimage_image f K
 
 Depends on / 依赖: AEMeasurable, Measure, Measure.map_apply_of_aemeasurable, Measure.map_of_not_aemeasurable, and_imp, forall_exists_index, hK_compact, hK_compact.image, hf_meas, isTightMeasureSet_iff_exists_isCompact_measure_compl_le, map_apply_of_aemeasurable, map_of_not_aemeasurable, measurableSet, measurableSet.compl, measure_mono, mem_image, preimage_com
 -/
@@ -349,7 +377,14 @@ lemma prodMk
   obtain ⟨K₁, hK₁_compact, hK₁_le⟩ := hμ₁ (ε / 2) (by aesop)
   obtain ⟨K₂, hK₂_compact, hK₂_le⟩ := hμ₂ (ε / 2) (by aesop)
   refine ⟨K₁ ×ˢ K₂, hK₁_compact.prod hK₂_compact, fun κ hκ_mem => ?_⟩
-  grw [compl_pro
+  grw [compl_prod_eq_union, measure_union_le, ← ENNReal.add_halves (a := ε)]
+  apply add_le_add
+· specialize hK₁_le _ mem_image_of_mem _ hκ_mem
+    grw [Measure.fst, ← Measure.le_map_apply (by fun_prop)] at hK₁_le
+    simpa [prod_univ] using hK₁_le
+· specialize hK₂_le _ Set.mem_image_of_mem _ hκ_mem
+    grw [Measure.snd, ← Measure.le_map_apply (by fun_prop)] at hK₂_le
+    simpa [univ_prod] using hK₂_le
 
 中文:
 引理 prodMk
@@ -360,7 +395,14 @@ lemma prodMk
   obtain ⟨K₁, hK₁_compact, hK₁_le⟩ := hμ₁ (ε / 2) (by aesop)
   obtain ⟨K₂, hK₂_compact, hK₂_le⟩ := hμ₂ (ε / 2) (by aesop)
   refine ⟨K₁ ×ˢ K₂, hK₁_compact.prod hK₂_compact, fun κ hκ_mem => ?_⟩
-  grw [compl_pro
+  grw [compl_prod_eq_union, measure_union_le, ← ENNReal.add_halves (a := ε)]
+  apply add_le_add
+· specialize hK₁_le _ mem_image_of_mem _ hκ_mem
+    grw [Measure.fst, ← Measure.le_map_apply (by fun_prop)] at hK₁_le
+    simpa [prod_univ] using hK₁_le
+· specialize hK₂_le _ Set.mem_image_of_mem _ hκ_mem
+    grw [Measure.snd, ← Measure.le_map_apply (by fun_prop)] at hK₂_le
+    simpa [univ_prod] using hK₂_le
 
 Depends on / 依赖: ENNReal, ENNReal.add_halves, Measure, Measure.fst, Measure.le_map_apply, _compact.prod, add_halves, add_le_add, compl_prod_eq_union, fun_prop, isTightMeasureSet_iff_exists_isCompact_measure_compl_le, le_map_apply, measure_union_le, mem_image_of_mem, prod_univ, specialize
 -/

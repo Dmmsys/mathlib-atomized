@@ -192,7 +192,17 @@ instance preservesLimit_diagramFunctor
         fac := by
           intro E k
           dsimp [diagramNatTrans]
-          refine Multiequalizer.hom_ext _ _ _ (fun a => ?_
+          refine Multiequalizer.hom_ext _ _ _ (fun a => ?_)
+          simp only [Multiequalizer.lift_ι, Multiequalizer.lift_ι_assoc, Category.assoc,
+            liftToDiagramLimitObjAux_fac]
+        uniq := by
+          intro E m hm
+          refine Multiequalizer.hom_ext _ _ _ (fun a => limit_obj_ext (fun j => ?_))
+          dsimp [liftToDiagramLimitObj]
+          rw [Multiequalizer.lift_ι]; rw [Category.assoc]; rw [liftToDiagramLimitObjAux_fac]; rw [← hm]; rw [Category.assoc]
+          dsimp
+          rw [limit.lift_π]
+          dsimp }
 
 中文:
 实例 preservesLimit_diagramFunctor
@@ -202,7 +212,17 @@ instance preservesLimit_diagramFunctor
         fac := by
           intro E k
           dsimp [diagramNatTrans]
-          refine Multiequalizer.hom_ext _ _ _ (fun a => ?_
+          refine Multiequalizer.hom_ext _ _ _ (fun a => ?_)
+          simp only [Multiequalizer.lift_ι, Multiequalizer.lift_ι_assoc, Category.assoc,
+            liftToDiagramLimitObjAux_fac]
+        uniq := by
+          intro E m hm
+          refine Multiequalizer.hom_ext _ _ _ (fun a => limit_obj_ext (fun j => ?_))
+          dsimp [liftToDiagramLimitObj]
+          rw [Multiequalizer.lift_ι]; rw [Category.assoc]; rw [liftToDiagramLimitObjAux_fac]; rw [← hm]; rw [Category.assoc]
+          dsimp
+          rw [limit.lift_π]
+          dsimp }
 
 Depends on / 依赖: Category, Category.assoc, Multiequalizer, Multiequalizer.hom_ext, Multiequalizer.lift_, diagramNatTrans, hom_ext, isLimit, liftToDiagramLimitObj, liftToDiagramLimitObjAux_fac, limit.isLimit, limit_obj_ext, preservesLimit_of_evaluation, preservesLimit_of_preserves_limit_cone
 -/
@@ -290,7 +310,22 @@ definition liftToPlusObjLimitObj
   let t : J.diagram (limit F) X ≅ limit (F ⋙ J.diagramFunctor D X) :=
     (isLimitOfPreserves (J.diagramFunctor D X) (limit.isLimit F)).conePointUniqueUpToIso
       (limit.isLimit _)
-  let p : (J.plusObj (limit 
+  let p : (J.plusObj (limit F)).obj (op X) ≅ colimit (limit (F ⋙ J.diagramFunctor D X)) :=
+    HasColimit.isoOfNatIso t
+  let s :
+    colimit (F ⋙ J.diagramFunctor D X).flip ≅ F ⋙ J.plusFunctor D ⋙ (evaluation Cᵒᵖ D).obj (op X) :=
+    NatIso.ofComponents (fun k => colimitObjIsoColimitCompEvaluation _ k)
+      (by
+        intro i j f
+        rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [← Iso.inv_comp_eq]
+        refine colimit.hom_ext (fun w => ?_)
+        dsimp [plusMap]
+        erw [colimit.ι_map_assoc,
+          colimitObjIsoColimitCompEvaluation_ι_inv (F ⋙ J.diagramFunctor D X).flip w j,
+          colimitObjIsoColimitCompEvaluation_ι_inv_assoc (F ⋙ J.diagramFunctor D X).flip w i]
+        rw [← (colimit.ι (F ⋙ J.diagramFunctor D X).flip w).naturality]
+        rfl)
+  limit.lift _ S ≫ (HasLimit.isoOfNatIso s.symm).hom ≫ e.inv ≫ p.inv
 
 中文:
 定义 liftToPlusObjLimitObj
@@ -300,7 +335,22 @@ definition liftToPlusObjLimitObj
   let t : J.diagram (limit F) X ≅ limit (F ⋙ J.diagramFunctor D X) :=
     (isLimitOfPreserves (J.diagramFunctor D X) (limit.isLimit F)).conePointUniqueUpToIso
       (limit.isLimit _)
-  let p : (J.plusObj (limit 
+  let p : (J.plusObj (limit F)).obj (op X) ≅ colimit (limit (F ⋙ J.diagramFunctor D X)) :=
+    HasColimit.isoOfNatIso t
+  let s :
+    colimit (F ⋙ J.diagramFunctor D X).flip ≅ F ⋙ J.plusFunctor D ⋙ (evaluation Cᵒᵖ D).obj (op X) :=
+    NatIso.ofComponents (fun k => colimitObjIsoColimitCompEvaluation _ k)
+      (by
+        intro i j f
+        rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [← Iso.inv_comp_eq]
+        refine colimit.hom_ext (fun w => ?_)
+        dsimp [plusMap]
+        erw [colimit.ι_map_assoc,
+          colimitObjIsoColimitCompEvaluation_ι_inv (F ⋙ J.diagramFunctor D X).flip w j,
+          colimitObjIsoColimitCompEvaluation_ι_inv_assoc (F ⋙ J.diagramFunctor D X).flip w i]
+        rw [← (colimit.ι (F ⋙ J.diagramFunctor D X).flip w).naturality]
+        rfl)
+  limit.lift _ S ≫ (HasLimit.isoOfNatIso s.symm).hom ≫ e.inv ≫ p.inv
 
 Depends on / 依赖: HasColimit, HasColimit.isoOfNatIso, J.diagram, J.diagramFunctor, J.plusFunctor, J.plusObj, NatIso, NatIso.ofComponents, colimit, colimitLimitIso, conePointUniqueUpToIso, diagram, diagramFunctor, evaluation, isLimit, isLimitOfPreserves, isoOfNatIso, limit.isLimit, ofComponents, plusFunctor
 -/
@@ -348,7 +398,19 @@ theorem liftToPlusObjLimitObj_fac
   congr 1
   dsimp
   rw [Category.assoc]; rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [Iso.inv_comp_eq]; rw [Iso.inv_comp_eq]
-  refine colimit.hom_ex
+  refine colimit.hom_ext (fun j => ?_)
+  dsimp [plusMap]
+  simp only [HasColimit.isoOfNatIso_ι_hom_assoc, ι_colimMap]
+  dsimp [IsLimit.conePointUniqueUpToIso, HasLimit.isoOfNatIso, IsLimit.map]
+  rw [limit.lift_π]
+  dsimp
+  rw [ι_colimitLimitIso_limit_π_assoc]
+  simp_rw [← Category.assoc, ← NatTrans.comp_app]
+  rw [limit.lift_π]; rw [Category.assoc]
+  congr 1
+  rw [← Iso.comp_inv_eq]
+  erw [colimit.ι_desc]
+  rfl
 
 中文:
 定理 liftToPlusObjLimitObj_fac
@@ -359,7 +421,19 @@ theorem liftToPlusObjLimitObj_fac
   congr 1
   dsimp
   rw [Category.assoc]; rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [Iso.inv_comp_eq]; rw [Iso.inv_comp_eq]
-  refine colimit.hom_ex
+  refine colimit.hom_ext (fun j => ?_)
+  dsimp [plusMap]
+  simp only [HasColimit.isoOfNatIso_ι_hom_assoc, ι_colimMap]
+  dsimp [IsLimit.conePointUniqueUpToIso, HasLimit.isoOfNatIso, IsLimit.map]
+  rw [limit.lift_π]
+  dsimp
+  rw [ι_colimitLimitIso_limit_π_assoc]
+  simp_rw [← Category.assoc, ← NatTrans.comp_app]
+  rw [limit.lift_π]; rw [Category.assoc]
+  congr 1
+  rw [← Iso.comp_inv_eq]
+  erw [colimit.ι_desc]
+  rfl
 
 Depends on / 依赖: Category, Category.assoc, HasColimit, HasColimit.isoOfNatIso_, HasLimit, HasLimit.isoOfNatIso, IsLimit, IsLimit.conePointUniqueUpToIso, IsLimit.map, Iso.eq_inv_comp, Iso.inv_comp_eq, J.plusFunctor, colimit, colimit.hom_ext, conePointUniqueUpToIso, eq_inv_comp, evaluation, hom_ext, inv_comp_eq, isLimit
 -/
@@ -402,7 +476,21 @@ instance preservesLimitsOfShape_plusFunctor
     apply liftToPlusObjLimitObj_fac
   · intro S m hm
     dsimp [liftToPlusObjLimitObj]
-  
+    simp_rw [← Category.assoc, Iso.eq_comp_inv, ← Iso.comp_inv_eq]
+    refine limit.hom_ext (fun k => ?_)
+    simp only [limit.lift_π, Category.assoc, ← hm]
+    congr 1
+    refine colimit.hom_ext (fun k => ?_)
+    dsimp [plusMap, plusObj]
+    erw [colimit.ι_map, colimit.ι_desc_assoc, limit.lift_π]
+    conv_lhs => dsimp
+    simp only [Category.assoc]
+    rw [ι_colimitLimitIso_limit_π_assoc]
+    simp only [colimitObjIsoColimitCompEvaluation_ι_app_hom]
+    conv_lhs =>
+      dsimp [IsLimit.conePointUniqueUpToIso]
+    rw [← Category.assoc]; rw [← NatTrans.comp_app]; rw [limit.lift_π]
+    rfl
 
 中文:
 实例 preservesLimitsOfShape_plusFunctor
@@ -414,7 +502,21 @@ instance preservesLimitsOfShape_plusFunctor
     apply liftToPlusObjLimitObj_fac
   · intro S m hm
     dsimp [liftToPlusObjLimitObj]
-  
+    simp_rw [← Category.assoc, Iso.eq_comp_inv, ← Iso.comp_inv_eq]
+    refine limit.hom_ext (fun k => ?_)
+    simp only [limit.lift_π, Category.assoc, ← hm]
+    congr 1
+    refine colimit.hom_ext (fun k => ?_)
+    dsimp [plusMap, plusObj]
+    erw [colimit.ι_map, colimit.ι_desc_assoc, limit.lift_π]
+    conv_lhs => dsimp
+    simp only [Category.assoc]
+    rw [ι_colimitLimitIso_limit_π_assoc]
+    simp only [colimitObjIsoColimitCompEvaluation_ι_app_hom]
+    conv_lhs =>
+      dsimp [IsLimit.conePointUniqueUpToIso]
+    rw [← Category.assoc]; rw [← NatTrans.comp_app]; rw [limit.lift_π]
+    rfl
 
 Depends on / 依赖: Category, Category.assoc, Iso.comp_inv_eq, Iso.eq_comp_inv, X.unop, colimit, colimit.hom_ext, comp_inv_eq, eq_comp_inv, hom_ext, isLimit, liftToPlusObjLimitObj, liftToPlusObjLimitObj_fac, limit.hom_ext, limit.isLimit, limit.lift_, plusMap, plusObj, preservesLimit_of_evaluation, preservesLimit_of_preserves_limit_cone
 -/
@@ -539,7 +641,17 @@ instance preservesLimitsOfShape_presheafToSheaf
     Limits.hasLimitsOfShape_of_equivalence e
   have : FinCategory (AsSmall.{t} (FinCategory.AsType K)) := by
     constructor
-    · change Fintype (ULift 
+    · change Fintype (ULift _)
+      infer_instance
+    · intro j j'
+      change Fintype (ULift _)
+      infer_instance
+  refine @preservesLimitsOfShape_of_equiv _ _ _ _ _ _ _ _ e.symm _ (show _ from ?_)
+  constructor; intro F; constructor; intro S hS; constructor
+  apply isLimitOfReflects (sheafToPresheaf J D)
+  have : ReflectsLimitsOfShape (AsSmall.{t} (FinCategory.AsType K)) (forget D) :=
+    reflectsLimitsOfShape_of_reflectsIsomorphisms
+  apply isLimitOfPreserves (J.sheafification D) hS
 
 中文:
 实例 preservesLimitsOfShape_presheafToSheaf
@@ -549,7 +661,17 @@ instance preservesLimitsOfShape_presheafToSheaf
     Limits.hasLimitsOfShape_of_equivalence e
   have : FinCategory (AsSmall.{t} (FinCategory.AsType K)) := by
     constructor
-    · change Fintype (ULift 
+    · change Fintype (ULift _)
+      infer_instance
+    · intro j j'
+      change Fintype (ULift _)
+      infer_instance
+  refine @preservesLimitsOfShape_of_equiv _ _ _ _ _ _ _ _ e.symm _ (show _ from ?_)
+  constructor; intro F; constructor; intro S hS; constructor
+  apply isLimitOfReflects (sheafToPresheaf J D)
+  have : ReflectsLimitsOfShape (AsSmall.{t} (FinCategory.AsType K)) (forget D) :=
+    reflectsLimitsOfShape_of_reflectsIsomorphisms
+  apply isLimitOfPreserves (J.sheafification D) hS
 
 Depends on / 依赖: AsSmall, AsSmall.equiv, AsType, FinCategory, FinCategory.AsType, FinCategory.equivAsType, Fintype, HasLimitsOfShape, Limits, Limits.hasLimitsOfShape_of_equivalence, e.symm, equivAsType, hasLimitsOfShape_of_equivalence, infer_instance, preservesLimitsOfShape_of_equiv, symm.trans
 -/

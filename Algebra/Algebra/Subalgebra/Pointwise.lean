@@ -105,7 +105,16 @@ theorem mul_toSubmodule
     Algebra.adjoin_induction (fun x hx => ?_) (fun r => ?_) (fun _ _ _ _ => Submodule.add_mem _)
       (fun x y _ _ hx hy => ?_) hx
   · rcases hx with hxS | hxT
-    · rw [← mul_on
+    · rw [← mul_one x]
+      exact Submodule.mul_mem_mul hxS (show (1 : A) in T from one_mem T)
+    · rw [← one_mul x]
+      exact Submodule.mul_mem_mul (show (1 : A) in S from one_mem S) hxT
+  · rw [← one_mul (algebraMap _ _ _)]
+    exact Submodule.mul_mem_mul (show (1 : A) in S from one_mem S) (algebraMap_mem T _)
+  have := Submodule.mul_mem_mul hx hy
+  rwa [mul_assoc, mul_comm _ (Subalgebra.toSubmodule T), ← mul_assoc _ _ (Subalgebra.toSubmodule S),
+    isIdempotentElem_toSubmodule, mul_comm T.toSubmodule, ← mul_assoc,
+    isIdempotentElem_toSubmodule] at this
 
 中文:
 定理 mul_toSubmodule
@@ -117,7 +126,16 @@ theorem mul_toSubmodule
     Algebra.adjoin_induction (fun x hx => ?_) (fun r => ?_) (fun _ _ _ _ => Submodule.add_mem _)
       (fun x y _ _ hx hy => ?_) hx
   · rcases hx with hxS | hxT
-    · rw [← mul_on
+    · rw [← mul_one x]
+      exact Submodule.mul_mem_mul hxS (show (1 : A) in T from one_mem T)
+    · rw [← one_mul x]
+      exact Submodule.mul_mem_mul (show (1 : A) in S from one_mem S) hxT
+  · rw [← one_mul (algebraMap _ _ _)]
+    exact Submodule.mul_mem_mul (show (1 : A) in S from one_mem S) (algebraMap_mem T _)
+  have := Submodule.mul_mem_mul hx hy
+  rwa [mul_assoc, mul_comm _ (Subalgebra.toSubmodule T), ← mul_assoc _ _ (Subalgebra.toSubmodule S),
+    isIdempotentElem_toSubmodule, mul_comm T.toSubmodule, ← mul_assoc,
+    isIdempotentElem_toSubmodule] at this
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_induction, Submodule, Submodule.add_mem, Submodule.mul_mem_mul, add_mem, adjoin, adjoin_induction, algebraMap, le_antisymm, mul_mem_mul, mul_one, mul_toSubmodule_le, one_mem, one_mul
 -/
@@ -158,7 +176,7 @@ definition pointwiseMulAction
   mul_smul _a₁ _a₂ S :=
     (congr_arg (fun f => S.map f) (AlgHom.ext <| mul_smul _ _)).trans (S.map_map _ _).symm
 
-scoped[Pointwise] attribute [instance] Subalgebra.poi
+scoped[Pointwise] attribute [instance] Subalgebra.pointwiseMulAction
 
 中文:
 定义 pointwiseMulAction
@@ -168,7 +186,7 @@ scoped[Pointwise] attribute [instance] Subalgebra.poi
   mul_smul _a₁ _a₂ S :=
     (congr_arg (fun f => S.map f) (AlgHom.ext <| mul_smul _ _)).trans (S.map_map _ _).symm
 
-scoped[Pointwise] attribute [instance] Subalgebra.poi
+scoped[Pointwise] attribute [instance] Subalgebra.pointwiseMulAction
 -/
 protected def pointwiseMulAction : MulAction R' (Subalgebra R A) where
   smul a S := S.map (MulSemiringAction.toAlgHom _ _ a)

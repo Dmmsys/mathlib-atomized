@@ -343,7 +343,18 @@ theorem isChain_of_mem_splitByLoop
     · cases not_mem_nil hm
     · apply List.isChain_reverse.1
       rw [reverse_reverse]
-      exact isChain_cons.2 ⟨hga, hg
+      exact isChain_cons.2 ⟨hga, hg⟩
+  | cons b l IH =>
+    simp only [splitBy.loop, reverse_cons] at h
+    split at h
+    · apply IH _ (isChain_cons.2 ⟨hga, hg⟩) h
+      grind
+    · rw [splitByLoop_eq_append, mem_append, reverse_singleton, mem_singleton] at h
+      obtain rfl | hm := h
+      · apply List.isChain_reverse.1
+        rw [reverse_append]; rw [reverse_cons]; rw [reverse_nil]; rw [nil_append]; rw [reverse_reverse]
+        exact isChain_cons.2 ⟨hga, hg⟩
+      · grind
 
 中文:
 定理 isChain_of_mem_splitByLoop
@@ -356,7 +367,18 @@ theorem isChain_of_mem_splitByLoop
     · cases not_mem_nil hm
     · apply List.isChain_reverse.1
       rw [reverse_reverse]
-      exact isChain_cons.2 ⟨hga, hg
+      exact isChain_cons.2 ⟨hga, hg⟩
+  | cons b l IH =>
+    simp only [splitBy.loop, reverse_cons] at h
+    split at h
+    · apply IH _ (isChain_cons.2 ⟨hga, hg⟩) h
+      grind
+    · rw [splitByLoop_eq_append, mem_append, reverse_singleton, mem_singleton] at h
+      obtain rfl | hm := h
+      · apply List.isChain_reverse.1
+        rw [reverse_append]; rw [reverse_cons]; rw [reverse_nil]; rw [nil_append]; rw [reverse_reverse]
+        exact isChain_cons.2 ⟨hga, hg⟩
+      · grind
 -/
 private theorem isChain_of_mem_splitByLoop {r : α -> α -> Bool} {l : List α} {a : α} {g : List α}
     (hga : forall b in g.head?, r b a) (hg : g.IsChain fun y x => r x y)
@@ -422,7 +444,13 @@ theorem isChain_getLast_head_splitByLoop
     split
     · refine IH hgs' hgs fun m hm => ?_
       obtain ⟨ha, _, H⟩ := hga m hm
-    
+      refine ⟨ha, append_ne_nil_of_right_ne_nil _ (cons_ne_nil _ _), ?_⟩
+      rwa [reverse_cons, head_append_of_ne_nil]
+    · apply IH
+      · simpa using hgs'
+      · rw [reverse_cons]
+        apply isChain_cons.2 ⟨hga, hgs⟩
+      · simpa
 
 中文:
 定理 isChain_getLast_head_splitByLoop
@@ -438,7 +466,13 @@ theorem isChain_getLast_head_splitByLoop
     split
     · refine IH hgs' hgs fun m hm => ?_
       obtain ⟨ha, _, H⟩ := hga m hm
-    
+      refine ⟨ha, append_ne_nil_of_right_ne_nil _ (cons_ne_nil _ _), ?_⟩
+      rwa [reverse_cons, head_append_of_ne_nil]
+    · apply IH
+      · simpa using hgs'
+      · rw [reverse_cons]
+        apply isChain_cons.2 ⟨hga, hgs⟩
+      · simpa
 -/
 private theorem isChain_getLast_head_splitByLoop {r : α -> α -> Bool} (l : List α) {a : α}
     {g : List α} {gs : List (List α)} (hgs' : [] ∉ gs)
@@ -602,7 +636,10 @@ theorem splitBy_flatten
     rw [flatten_cons]; rw [splitBy_append_of_isChain hn.1 (hc _ mem_cons_self)]; rw [IH hn.2 (fun m hm => hc _ (mem_cons_of_mem a hm)) hc'.tail]
     intro y hy
     rw [← head_of_mem_head? hy]
- 
+    rw [isChain_cons] at hc'
+    obtain ⟨x, hx, _⟩ := flatten_ne_nil_iff.1 (ne_nil_of_mem (mem_of_mem_head? hy))
+    obtain ⟨_, _, H⟩ := hc'.1 (l.head (ne_nil_of_mem hx)) (head_mem_head? _)
+    rwa [head_flatten_eq_head_head]
 
 中文:
 定理 splitBy_flatten
@@ -615,7 +652,10 @@ theorem splitBy_flatten
     rw [flatten_cons]; rw [splitBy_append_of_isChain hn.1 (hc _ mem_cons_self)]; rw [IH hn.2 (fun m hm => hc _ (mem_cons_of_mem a hm)) hc'.tail]
     intro y hy
     rw [← head_of_mem_head? hy]
- 
+    rw [isChain_cons] at hc'
+    obtain ⟨x, hx, _⟩ := flatten_ne_nil_iff.1 (ne_nil_of_mem (mem_of_mem_head? hy))
+    obtain ⟨_, _, H⟩ := hc'.1 (l.head (ne_nil_of_mem hx)) (head_mem_head? _)
+    rwa [head_flatten_eq_head_head]
 
 Depends on / 依赖: eq_comm, flatten_cons, flatten_ne_nil_iff, head_flatten_eq_head_head, head_mem_head, head_of_mem_head, isChain_cons, l.head, mem_cons, mem_cons_of_mem, mem_cons_self, mem_of_mem_head, ne_nil_of_mem, not_or, splitBy_append_of_isChain
 -/
@@ -686,7 +726,13 @@ theorem splitBy_append
   rw [splitBy_eq_iff]
   refine ⟨by simp, by simp, ?_, ?_⟩; · aesop (add apply unsafe isChain_of_mem_splitBy)
   rw [isChain_append]
-  refine ⟨isChain_getLast_head_splitBy _ _, isChain_getLast_head_splitBy _ _, 
+  refine ⟨isChain_getLast_head_splitBy _ _, isChain_getLast_head_splitBy _ _, fun x hx y hy => ?_⟩
+  use ne_nil_of_mem_splitBy (mem_of_mem_getLast? hx), ne_nil_of_mem_splitBy (mem_of_mem_head? hy)
+  apply ha
+  · simp_rw [← getLast_of_mem_getLast? hx, getLast_getLast_splitBy _ hl]
+    exact getLast_mem_getLast? _
+  · simp_rw [← head_of_mem_head? hy, head_head_splitBy _ hm]
+    exact head_mem_head? _
 
 中文:
 定理 splitBy_append
@@ -699,7 +745,13 @@ theorem splitBy_append
   rw [splitBy_eq_iff]
   refine ⟨by simp, by simp, ?_, ?_⟩; · aesop (add apply unsafe isChain_of_mem_splitBy)
   rw [isChain_append]
-  refine ⟨isChain_getLast_head_splitBy _ _, isChain_getLast_head_splitBy _ _, 
+  refine ⟨isChain_getLast_head_splitBy _ _, isChain_getLast_head_splitBy _ _, fun x hx y hy => ?_⟩
+  use ne_nil_of_mem_splitBy (mem_of_mem_getLast? hx), ne_nil_of_mem_splitBy (mem_of_mem_head? hy)
+  apply ha
+  · simp_rw [← getLast_of_mem_getLast? hx, getLast_getLast_splitBy _ hl]
+    exact getLast_mem_getLast? _
+  · simp_rw [← head_of_mem_head? hy, head_head_splitBy _ hm]
+    exact head_mem_head? _
 
 Depends on / 依赖: eq_or_ne, getLast_getLast_splitBy, getLast_mem_g, getLast_of_mem_getLast, isChain_append, isChain_getLast_head_splitBy, isChain_of_mem_splitBy, mem_of_mem_getLast, mem_of_mem_head, ne_nil_of_mem_splitBy, simp_rw, splitBy_eq_iff, unsafe
 -/

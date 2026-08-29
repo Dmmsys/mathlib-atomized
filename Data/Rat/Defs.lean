@@ -319,7 +319,8 @@ theorem lift_binop_eq
   rw [fv]
   have d₁0 := Int.ofNat_ne_zero.2 h₁
   have d₂0 := Int.ofNat_ne_zero.2 h₂
-  exact (divInt_eq_divInt_iff (f0 d₁0 d₂0) (f
+  exact (divInt_eq_divInt_iff (f0 d₁0 d₂0) (f0 b0 d0)).2
+    (H ((divInt_eq_divInt_iff b0 d₁0).1 ha) ((divInt_eq_divInt_iff d0 d₂0).1 hc))
 
 中文:
 定理 lift_binop_eq
@@ -330,7 +331,8 @@ theorem lift_binop_eq
   rw [fv]
   have d₁0 := Int.ofNat_ne_zero.2 h₁
   have d₂0 := Int.ofNat_ne_zero.2 h₂
-  exact (divInt_eq_divInt_iff (f0 d₁0 d₂0) (f
+  exact (divInt_eq_divInt_iff (f0 d₁0 d₂0) (f0 b0 d0)).2
+    (H ((divInt_eq_divInt_iff b0 d₁0).1 ha) ((divInt_eq_divInt_iff d0 d₂0).1 hc))
 
 Depends on / 依赖: Int.ofNat_ne_zero, divInt_eq_divInt_iff, generalize, mk_eq_divInt, ofNat_ne_zero
 -/
@@ -643,7 +645,14 @@ instance addCommGroup
   zsmul := (· * ·)
   nsmul_zero := Rat.zero_mul
   nsmul_succ n q := by
-    change ((n + 1 : Int) : Rat) * q
+    change ((n + 1 : Int) : Rat) * q = _
+    rw [Rat.intCast_add]; rw [Rat.add_mul]; rw [Rat.intCast_one]; rw [Rat.one_mul]
+    rfl
+  zsmul_zero' := Rat.zero_mul
+  zsmul_succ' _ _ := by simp_rw [HSMul.hSMul, SMul.smul]; simp [Rat.add_mul]
+  zsmul_neg' _ _ := by
+    simp_rw [HSMul.hSMul, SMul.smul]
+    rw [Int.negSucc_eq]; rw [Rat.intCast_neg]; rw [Rat.neg_mul]; rfl
 
 中文:
 实例 addCommGroup
@@ -658,7 +667,14 @@ instance addCommGroup
   zsmul := (· * ·)
   nsmul_zero := Rat.zero_mul
   nsmul_succ n q := by
-    change ((n + 1 : Int) : Rat) * q
+    change ((n + 1 : Int) : Rat) * q = _
+    rw [Rat.intCast_add]; rw [Rat.add_mul]; rw [Rat.intCast_one]; rw [Rat.one_mul]
+    rfl
+  zsmul_zero' := Rat.zero_mul
+  zsmul_succ' _ _ := by simp_rw [HSMul.hSMul, SMul.smul]; simp [Rat.add_mul]
+  zsmul_neg' _ _ := by
+    simp_rw [HSMul.hSMul, SMul.smul]
+    rw [Int.negSucc_eq]; rw [Rat.intCast_neg]; rw [Rat.neg_mul]; rfl
 
 Depends on / 依赖: Rat.zero_add, zero_add
 -/

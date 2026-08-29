@@ -72,7 +72,9 @@ lemma SnakeLemma.δ_aux
   proof: by
   obtain ⟨d, hd⟩ : i₂ (σ (ι₃ x)) in range g₁ := by
     rw [← hg.linearMap_ker_eq]; rw [mem_ker]; rw [show g₂ (i₂ _) = i₃ (f₂ _) from DFunLike.congr_fun h₂ _]; rw [← @comp_apply _ _ _ f₂ σ]; rw [hσ]; rw [id_eq]; rw [← i₃.comp_apply]; rw [hι₃.linearMap_comp_eq_zero]; rw [zero_apply]
-  rw [← hd]; rw
+  rw [← hd]; rw [← ρ.comp_apply]; rw [hρ]; rw [id_eq]
+
+include hf h₁ hρ hπ₁ in
 
 中文:
 引理 SnakeLemma.δ_aux
@@ -81,7 +83,9 @@ lemma SnakeLemma.δ_aux
   证明: by
   obtain ⟨d, hd⟩ : i₂ (σ (ι₃ x)) in range g₁ := by
     rw [← hg.linearMap_ker_eq]; rw [mem_ker]; rw [show g₂ (i₂ _) = i₃ (f₂ _) from DFunLike.congr_fun h₂ _]; rw [← @comp_apply _ _ _ f₂ σ]; rw [hσ]; rw [id_eq]; rw [← i₃.comp_apply]; rw [hι₃.linearMap_comp_eq_zero]; rw [zero_apply]
-  rw [← hd]; rw
+  rw [← hd]; rw [← ρ.comp_apply]; rw [hρ]; rw [id_eq]
+
+include hf h₁ hρ hπ₁ in
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, comp_apply, congr_fun, hg.linearMap_ker_eq, id_eq, linearMap_comp_eq_zero, linearMap_ker_eq, mem_ker, zero_apply
 -/
@@ -101,7 +105,9 @@ lemma SnakeLemma.eq_of_eq
   have := sub_eq_zero.mpr (hy₁.trans hy₂.symm)
   rw [← map_sub]; rw [hf] at this
   obtain ⟨d, hd⟩ := this
-  rw [← eq_sub_iff_add_eq.mp hd]; rw [map_add]; rw [← hz₂]; rw [← sub_eq_iff_eq_add]; rw [← map_sub]; rw [← i₂.comp_apply]; rw [← h₁]; rw [LinearMap.comp_apply]; rw [(HasLeftInverse.injective
+  rw [← eq_sub_iff_add_eq.mp hd]; rw [map_add]; rw [← hz₂]; rw [← sub_eq_iff_eq_add]; rw [← map_sub]; rw [← i₂.comp_apply]; rw [← h₁]; rw [LinearMap.comp_apply]; rw [(HasLeftInverse.injective ⟨ρ]; rw [congr_fun hρ⟩).eq_iff] at hz₁
+  rw [← sub_eq_zero]; rw [← map_sub]; rw [hz₁]; rw [hπ₁]
+  exact ⟨_, rfl⟩
 
 中文:
 引理 SnakeLemma.eq_of_eq
@@ -110,7 +116,9 @@ lemma SnakeLemma.eq_of_eq
   have := sub_eq_zero.mpr (hy₁.trans hy₂.symm)
   rw [← map_sub]; rw [hf] at this
   obtain ⟨d, hd⟩ := this
-  rw [← eq_sub_iff_add_eq.mp hd]; rw [map_add]; rw [← hz₂]; rw [← sub_eq_iff_eq_add]; rw [← map_sub]; rw [← i₂.comp_apply]; rw [← h₁]; rw [LinearMap.comp_apply]; rw [(HasLeftInverse.injective
+  rw [← eq_sub_iff_add_eq.mp hd]; rw [map_add]; rw [← hz₂]; rw [← sub_eq_iff_eq_add]; rw [← map_sub]; rw [← i₂.comp_apply]; rw [← h₁]; rw [LinearMap.comp_apply]; rw [(HasLeftInverse.injective ⟨ρ]; rw [congr_fun hρ⟩).eq_iff] at hz₁
+  rw [← sub_eq_zero]; rw [← map_sub]; rw [hz₁]; rw [hπ₁]
+  exact ⟨_, rfl⟩
 
 Depends on / 依赖: HasLeftInverse, HasLeftInverse.injective, LinearMap, LinearMap.comp_apply, comp_apply, congr_fun, eq_iff, eq_sub_iff_add_eq, eq_sub_iff_add_eq.mp, injective, map_add, map_sub, sub_eq_iff_eq_add, sub_eq_zero, sub_eq_zero.mpr
 -/
@@ -137,7 +145,11 @@ definition SnakeLemma.δ
     map_add' := fun x y => by
       rw [← map_add]
       exact eq_of_eq i₁ i₂ f₁ f₂ hf g₁ h₁ ρ hρ ι₃ π₁ hπ₁ (x + y) _ (H₁ _) _ (H₂ _)
-        (σ (ι
+        (σ (ι₃ x) + σ (ι₃ y)) (by simp only [map_add, H₁]) _ (by simp only [map_add, H₂])
+    map_smul' := fun r x => by
+      simp only [← map_smul, RingHom.id_apply]
+      apply eq_of_eq i₁ i₂ f₁ f₂ hf g₁ h₁ ρ hρ ι₃ π₁ hπ₁ (r • x) _ (H₁ _) _ (H₂ _)
+        (r • σ (ι₃ x)) (by simp only [map_smul, H₁]) _ (by simp only [map_smul, H₂]) }
 
 中文:
 定义 SnakeLemma.δ
@@ -148,7 +160,11 @@ definition SnakeLemma.δ
     map_add' := fun x y => by
       rw [← map_add]
       exact eq_of_eq i₁ i₂ f₁ f₂ hf g₁ h₁ ρ hρ ι₃ π₁ hπ₁ (x + y) _ (H₁ _) _ (H₂ _)
-        (σ (ι
+        (σ (ι₃ x) + σ (ι₃ y)) (by simp only [map_add, H₁]) _ (by simp only [map_add, H₂])
+    map_smul' := fun r x => by
+      simp only [← map_smul, RingHom.id_apply]
+      apply eq_of_eq i₁ i₂ f₁ f₂ hf g₁ h₁ ρ hρ ι₃ π₁ hπ₁ (r • x) _ (H₁ _) _ (H₂ _)
+        (r • σ (ι₃ x)) (by simp only [map_smul, H₁]) _ (by simp only [map_smul, H₂]) }
 
 Depends on / 依赖: RingHom, RingHom.id_apply, congr_fun, eq_of_eq, id_apply, map_add, map_smul
 -/
@@ -206,7 +222,14 @@ lemma SnakeLemma.exact_δ_right
   · intro H
     obtain ⟨y, hy⟩ := (hπ₁ _).mp H
     obtain ⟨k, hk⟩ : σ (ι₃ x) - f₁ y in Set.range ι₂ := by
-      rw [← hι₂]; rw [map_sub]; rw [← H₂]; rw [← hy]; rw [s
+      rw [← hι₂]; rw [map_sub]; rw [← H₂]; rw [← hy]; rw [sub_eq_zero]; exact congr($h₁ y)
+    refine ⟨k, h ?_⟩
+    rw [← ι₃.comp_apply]; rw [← hF]; rw [f₂.comp_apply]; rw [hk]; rw [map_sub]; rw [H₁]; rw [hf.apply_apply_eq_zero]; rw [sub_zero]
+  · rintro ⟨y, rfl⟩
+    exact (δ_eq i₁ i₂ i₃ f₁ f₂ hf g₁ g₂ hg h₁ h₂ σ hσ ρ hρ ι₃ hι₃ π₁ hπ₁ _ (ι₂ y) congr($hF y)
+      _ (by rw [map_zero, hι₂.apply_apply_eq_zero])).trans π₁.map_zero
+
+include hπ₂ in
 
 中文:
 引理 SnakeLemma.exact_δ_right
@@ -219,7 +242,14 @@ lemma SnakeLemma.exact_δ_right
   · intro H
     obtain ⟨y, hy⟩ := (hπ₁ _).mp H
     obtain ⟨k, hk⟩ : σ (ι₃ x) - f₁ y in Set.range ι₂ := by
-      rw [← hι₂]; rw [map_sub]; rw [← H₂]; rw [← hy]; rw [s
+      rw [← hι₂]; rw [map_sub]; rw [← H₂]; rw [← hy]; rw [sub_eq_zero]; exact congr($h₁ y)
+    refine ⟨k, h ?_⟩
+    rw [← ι₃.comp_apply]; rw [← hF]; rw [f₂.comp_apply]; rw [hk]; rw [map_sub]; rw [H₁]; rw [hf.apply_apply_eq_zero]; rw [sub_zero]
+  · rintro ⟨y, rfl⟩
+    exact (δ_eq i₁ i₂ i₃ f₁ f₂ hf g₁ g₂ hg h₁ h₂ σ hσ ρ hρ ι₃ hι₃ π₁ hπ₁ _ (ι₂ y) congr($hF y)
+      _ (by rw [map_zero, hι₂.apply_apply_eq_zero])).trans π₁.map_zero
+
+include hπ₂ in
 
 Depends on / 依赖: Set.range, apply_apply_eq_zero, comp_apply, congr_fun, hf.apply_apply_eq_zero, map_sub, sub_eq_zero, sub_zero
 -/
@@ -254,7 +284,12 @@ lemma SnakeLemma.exact_δ_left
   · intro H
     obtain ⟨x, rfl⟩ := h x
     obtain ⟨y, hy⟩ := (hπ₂ (g₁ x)).mp (by simpa only [← LinearMap.comp_apply, hF] using H)
-    obtain ⟨z, hz⟩ : f₂ y in range ι₃ := (hι₃ (f₂ y)).mp (by rw [← i₃.comp_apply, ← h₂
+    obtain ⟨z, hz⟩ : f₂ y in range ι₃ := (hι₃ (f₂ y)).mp (by rw [← i₃.comp_apply, ← h₂,
+      g₂.comp_apply, hy, hg.apply_apply_eq_zero])
+    exact ⟨z, δ_eq i₁ i₂ i₃ f₁ f₂ hf g₁ g₂ hg h₁ h₂ σ hσ ρ hρ ι₃ hι₃ π₁ hπ₁ _ _ hz.symm _ hy.symm⟩
+  · rintro ⟨x, rfl⟩
+    simp only [δ, coe_mk, AddHom.coe_mk]
+    rw [← G.comp_apply]; rw [hF]; rw [π₂.comp_apply]; rw [H₂]; rw [hπ₂.apply_apply_eq_zero]
 
 中文:
 引理 SnakeLemma.exact_δ_left
@@ -266,7 +301,12 @@ lemma SnakeLemma.exact_δ_left
   · intro H
     obtain ⟨x, rfl⟩ := h x
     obtain ⟨y, hy⟩ := (hπ₂ (g₁ x)).mp (by simpa only [← LinearMap.comp_apply, hF] using H)
-    obtain ⟨z, hz⟩ : f₂ y in range ι₃ := (hι₃ (f₂ y)).mp (by rw [← i₃.comp_apply, ← h₂
+    obtain ⟨z, hz⟩ : f₂ y in range ι₃ := (hι₃ (f₂ y)).mp (by rw [← i₃.comp_apply, ← h₂,
+      g₂.comp_apply, hy, hg.apply_apply_eq_zero])
+    exact ⟨z, δ_eq i₁ i₂ i₃ f₁ f₂ hf g₁ g₂ hg h₁ h₂ σ hσ ρ hρ ι₃ hι₃ π₁ hπ₁ _ _ hz.symm _ hy.symm⟩
+  · rintro ⟨x, rfl⟩
+    simp only [δ, coe_mk, AddHom.coe_mk]
+    rw [← G.comp_apply]; rw [hF]; rw [π₂.comp_apply]; rw [H₂]; rw [hπ₂.apply_apply_eq_zero]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, G.comp_apply, LinearMap, LinearMap.comp_apply, apply_apply_eq_zero, coe_mk, comp_apply, hg.apply_apply_eq_zero, hy.symm, hz.symm
 -/

@@ -38,7 +38,9 @@ definition radical
   add_mem' := fun {x y} hx hy => by
     refine ⟨?_, by simp [hx.2, hy.2]⟩
     have := congr_arg (· y) hx.2
-    simp only [QuadraticMap.polarBilin_apply_apply, 
+    simp only [QuadraticMap.polarBilin_apply_apply, QuadraticMap.polar,
+      LinearMap.zero_apply, sub_sub, sub_eq_zero] at this
+    rw [this]; rw [hx.1]; rw [hy.1]; rw [zero_add]
 
 中文:
 定义 radical
@@ -49,7 +51,9 @@ definition radical
   add_mem' := fun {x y} hx hy => by
     refine ⟨?_, by simp [hx.2, hy.2]⟩
     have := congr_arg (· y) hx.2
-    simp only [QuadraticMap.polarBilin_apply_apply, 
+    simp only [QuadraticMap.polarBilin_apply_apply, QuadraticMap.polar,
+      LinearMap.zero_apply, sub_sub, sub_eq_zero] at this
+    rw [this]; rw [hx.1]; rw [hy.1]; rw [zero_add]
 
 Depends on / 依赖: QuadraticMap, QuadraticMap.polarBilin, polarBilin
 -/
@@ -175,7 +179,10 @@ definition lift
   use Q.polarBilin.liftQ₂ N N (fun n hn => (hN hn).2) (fun n hn => ?_)
   · simp only [Submodule.Quotient.forall]
     exact QuadraticMap.map_add Q -- remarkably, this works
-  · simp_
+  · simp_rw [LinearMap.mem_ker, LinearMap.ext_iff, LinearMap.flip_apply,
+      polarBilin_apply_apply, polar_comm, ← polarBilin_apply_apply, (hN hn).2, forall_true_iff]
+
+@[simp]
 
 中文:
 定义 lift
@@ -186,7 +193,10 @@ definition lift
   use Q.polarBilin.liftQ₂ N N (fun n hn => (hN hn).2) (fun n hn => ?_)
   · simp only [Submodule.Quotient.forall]
     exact QuadraticMap.map_add Q -- remarkably, this works
-  · simp_
+  · simp_rw [LinearMap.mem_ker, LinearMap.ext_iff, LinearMap.flip_apply,
+      polarBilin_apply_apply, polar_comm, ← polarBilin_apply_apply, (hN hn).2, forall_true_iff]
+
+@[simp]
 -/
 protected def lift (N : Submodule R M) (hN : N <= Q.radical) : QuadraticMap R (M ⧸ N) P := by
   refine QuadraticMap.mk (Quotient.lift Q <| by exact lift_aux hN)
@@ -306,7 +316,8 @@ lemma radical_eq_ker_polarBilin
   refine ⟨by simp +contextual, fun h => ?_⟩
   suffices Q m = 0 by grind
   specialize h m
-  rwa [← two_smul R, QuadraticMap.map_smul, sub_
+  rwa [← two_smul R, QuadraticMap.map_smul, sub_sub, ← two_smul R, mul_smul, ← smul_sub,
+    (isUnit_of_invertible 2).smul_eq_zero, two_smul, add_sub_cancel_right] at h
 
 中文:
 引理 radical_eq_ker_polarBilin
@@ -318,7 +329,8 @@ lemma radical_eq_ker_polarBilin
   refine ⟨by simp +contextual, fun h => ?_⟩
   suffices Q m = 0 by grind
   specialize h m
-  rwa [← two_smul R, QuadraticMap.map_smul, sub_
+  rwa [← two_smul R, QuadraticMap.map_smul, sub_sub, ← two_smul R, mul_smul, ← smul_sub,
+    (isUnit_of_invertible 2).smul_eq_zero, two_smul, add_sub_cancel_right] at h
 
 Depends on / 依赖: LinearMap, LinearMap.ext_iff, LinearMap.mem_ker, LinearMap.zero_apply, QuadraticMap, QuadraticMap.map_smul, QuadraticMap.polar, QuadraticMap.polarBilin_apply_apply, add_sub_cancel_right, contextual, ext_iff, isUnit_of_invertible, map_smul, mem_ker, mem_radical_iff, mul_smul, polarBilin_apply_apply, smul_eq_zero, smul_sub, specialize
 -/
@@ -449,7 +461,9 @@ lemma radical_weightedSumSquares
     add_sq, mul_add, sum_add_distrib, add_eq_right, Pi.mem_spanSubset_iff]
   constructor
   · rintro ⟨hv, hvv'⟩ i
-    simpa [hv, Pi.single_apply, NeZero.ne, or_iff_not_imp_left] using
+    simpa [hv, Pi.single_apply, NeZero.ne, or_iff_not_imp_left] using hvv' (Pi.single i 1)
+  · simpa only [← sum_add_distrib]
+      using fun h => ⟨sum_eq_zero (by grind), fun v => sum_eq_zero (by grind)⟩
 
 中文:
 引理 radical_weightedSumSquares
@@ -460,7 +474,9 @@ lemma radical_weightedSumSquares
     add_sq, mul_add, sum_add_distrib, add_eq_right, Pi.mem_spanSubset_iff]
   constructor
   · rintro ⟨hv, hvv'⟩ i
-    simpa [hv, Pi.single_apply, NeZero.ne, or_iff_not_imp_left] using
+    simpa [hv, Pi.single_apply, NeZero.ne, or_iff_not_imp_left] using hvv' (Pi.single i 1)
+  · simpa only [← sum_add_distrib]
+      using fun h => ⟨sum_eq_zero (by grind), fun v => sum_eq_zero (by grind)⟩
 
 Depends on / 依赖: NeZero, NeZero.ne, Pi.add_apply, Pi.mem_spanSubset_iff, Pi.single, Pi.single_apply, add_apply, add_eq_right, add_sq, classical, mem_radical_iff, mem_spanSubset_iff, mul_add, or_iff_not_imp_left, pow_two, single, single_apply, smul_eq_mul, sum_add_distrib, sum_eq_zero
 -/

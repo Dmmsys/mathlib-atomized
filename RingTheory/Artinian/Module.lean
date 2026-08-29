@@ -194,7 +194,11 @@ theorem isArtinian_of_surjective_algebraMap
     intro c x hx
     obtain ⟨r, rfl⟩ := H c
     suffices r • x in N by simpa [Algebra.algebraMap_eq_smul_one, smul_assoc]
-    apply N.
+    apply N.smul_mem _ hx
+  · intro N1 N2 h
+    rwa [Submodule.ext_iff] at h ⊢
+  · intro N1 N2
+    rfl
 
 中文:
 定理 isArtinian_of_surjective_algebraMap
@@ -207,7 +211,11 @@ theorem isArtinian_of_surjective_algebraMap
     intro c x hx
     obtain ⟨r, rfl⟩ := H c
     suffices r • x in N by simpa [Algebra.algebraMap_eq_smul_one, smul_assoc]
-    apply N.
+    apply N.smul_mem _ hx
+  · intro N1 N2 h
+    rwa [Submodule.ext_iff] at h ⊢
+  · intro N1 N2
+    rfl
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, N.smul_mem, N.toAddSubmonoid, OrderEmbedding, OrderEmbedding.wellFoundedLT, Submodule, Submodule.ext_iff, algebraMap_eq_smul_one, ext_iff, smul_assoc, smul_mem, toAddSubmonoid, wellFoundedLT
 -/
@@ -446,7 +454,8 @@ theorem surjective_of_injective_endomorphism
   refine (RelEmbedding.natGT (LinearMap.range <| f ^ ·) ?_).not_wellFounded
   intro n
   simp_rw [pow_succ, Module.End.mul_eq_comp, LinearMap.range_comp, ← Submodule.map_top (f ^ n)]
-  refine S
+  refine Submodule.map_strictMono_of_injective (Module.End.iterate_injective s n) (Ne.lt_top ?_)
+  rwa [Ne, LinearMap.range_eq_top]
 
 中文:
 定理 surjective_of_injective_endomorphism
@@ -458,7 +467,8 @@ theorem surjective_of_injective_endomorphism
   refine (RelEmbedding.natGT (LinearMap.range <| f ^ ·) ?_).not_wellFounded
   intro n
   simp_rw [pow_succ, Module.End.mul_eq_comp, LinearMap.range_comp, ← Submodule.map_top (f ^ n)]
-  refine S
+  refine Submodule.map_strictMono_of_injective (Module.End.iterate_injective s n) (Ne.lt_top ?_)
+  rwa [Ne, LinearMap.range_eq_top]
 
 Depends on / 依赖: IsArtinian, LinearMap, LinearMap.range, LinearMap.range_comp, LinearMap.range_eq_top, Module, Module.End.iterate_injective, Module.End.mul_eq_comp, Ne.lt_top, RelEmbedding, RelEmbedding.natGT, Submodule, Submodule.map_strictMono_of_injective, Submodule.map_top, WellFoundedLT, contrapose, isWellFounded_iff, iterate_injective, lt_top, map_strictMono_of_injective
 -/
@@ -505,7 +515,9 @@ theorem disjoint_partial_infs_eventually_top
     · cases p
     · apply w
       exact Nat.succ_le_succ_iff.mp p
-  obtain ⟨n, w⟩ := monotone_stabilizes (partialSups (OrderDual.toDua
+  obtain ⟨n, w⟩ := monotone_stabilizes (partialSups (OrderDual.toDual ∘ f))
+refine ⟨n, fun m p => (h m).eq_bot_of_ge sup_eq_left.mp ?_⟩
+simpa only [partialSups_add_one] using! (w (m + 1) <| le_add_right p).symm.trans w m p
 
 中文:
 定理 disjoint_partial_infs_eventually_top
@@ -518,7 +530,9 @@ theorem disjoint_partial_infs_eventually_top
     · cases p
     · apply w
       exact Nat.succ_le_succ_iff.mp p
-  obtain ⟨n, w⟩ := monotone_stabilizes (partialSups (OrderDual.toDua
+  obtain ⟨n, w⟩ := monotone_stabilizes (partialSups (OrderDual.toDual ∘ f))
+refine ⟨n, fun m p => (h m).eq_bot_of_ge sup_eq_left.mp ?_⟩
+simpa only [partialSups_add_one] using! (w (m + 1) <| le_add_right p).symm.trans w m p
 -/
 theorem disjoint_partial_infs_eventually_top (f : Nat -> Submodule R M)
     (h : forall n, Disjoint (partialSups (OrderDual.toDual ∘ f) n) (OrderDual.toDual (f (n + 1)))) :
@@ -579,7 +593,8 @@ lemma eventually_iInf_range_pow_eq
     IsArtinian.monotone_stabilizes f.iterateRange
   refine eventually_atTop.mpr ⟨n, fun l hl => le_antisymm (iInf_le _ _) (le_iInf fun m => ?_)⟩
   rcases le_or_gt l m with h | h
-  · rw [← hn _ (hl.trans h)
+  · rw [← hn _ (hl.trans h), hn _ hl]
+  · exact f.iterateRange.monotone h.le
 
 中文:
 引理 eventually_iInf_range_pow_eq
@@ -589,7 +604,8 @@ lemma eventually_iInf_range_pow_eq
     IsArtinian.monotone_stabilizes f.iterateRange
   refine eventually_atTop.mpr ⟨n, fun l hl => le_antisymm (iInf_le _ _) (le_iInf fun m => ?_)⟩
   rcases le_or_gt l m with h | h
-  · rw [← hn _ (hl.trans h)
+  · rw [← hn _ (hl.trans h), hn _ hl]
+  · exact f.iterateRange.monotone h.le
 
 Depends on / 依赖: IsArtinian, IsArtinian.monotone_stabilizes, LinearMap, LinearMap.range, eventually_atTop, eventually_atTop.mpr, f.iterateRange, f.iterateRange.monotone, h.le, hl.trans, iInf_le, iterateRange, le_antisymm, le_iInf, le_or_gt, monotone, monotone_stabilizes
 -/
@@ -639,7 +655,10 @@ theorem isArtinian_of_range_eq_ker
     (Submodule.map ((LinearMap.ker f).liftQ f le_rfl))
     (Submodule.comap ((LinearMap.ker f).liftQ f le_rfl))
     (Submodule.comap g.rangeRestrict) (Submodule.map g.rangeRestrict)
-    (Submodule.gciMapComap <| LinearMap.ker_eq_bot.mp <| Submodule.k
+    (Submodule.gciMapComap <| LinearMap.ker_eq_bot.mp <| Submodule.ker_liftQ_eq_bot _ _ _ le_rfl)
+    (Submodule.giMapComap g.surjective_rangeRestrict)
+    (by simp [Submodule.map_comap_eq, inf_comm, Submodule.range_liftQ])
+    (by simp [Submodule.comap_map_eq, h])
 
 中文:
 定理 isArtinian_of_range_eq_ker
@@ -648,7 +667,10 @@ theorem isArtinian_of_range_eq_ker
     (Submodule.map ((LinearMap.ker f).liftQ f le_rfl))
     (Submodule.comap ((LinearMap.ker f).liftQ f le_rfl))
     (Submodule.comap g.rangeRestrict) (Submodule.map g.rangeRestrict)
-    (Submodule.gciMapComap <| LinearMap.ker_eq_bot.mp <| Submodule.k
+    (Submodule.gciMapComap <| LinearMap.ker_eq_bot.mp <| Submodule.ker_liftQ_eq_bot _ _ _ le_rfl)
+    (Submodule.giMapComap g.surjective_rangeRestrict)
+    (by simp [Submodule.map_comap_eq, inf_comm, Submodule.range_liftQ])
+    (by simp [Submodule.comap_map_eq, h])
 
 Depends on / 依赖: LinearMap, LinearMap.ker, LinearMap.ker_eq_bot.mp, LinearMap.range, Submodule, Submodule.comap, Submodule.comap_map_eq, Submodule.gciMapComap, Submodule.giMapComap, Submodule.ker_liftQ_eq_bot, Submodule.map, Submodule.map_comap_eq, Submodule.range_liftQ, comap_map_eq, g.rangeRestrict, g.surjective_rangeRestrict, gciMapComap, giMapComap, inf_comm, ker_eq_bot
 -/
@@ -841,7 +863,11 @@ theorem IsArtinian.isSemisimpleModule_iff_jacobson
   proof: ⟨fun _ => IsSemisimpleModule.jacobson_eq_bot R M, fun h =>
     have ⟨s, hs⟩ := Finset.exists_inf_le (Subtype.val (p := fun m : Submodule R M => IsCoatom m))
     have _ (m : s) : IsSimpleModule R (M ⧸ m.1.1) := isSimpleModule_iff_isCoatom.mpr m.1.2
-    let f : M ->ₗ[R] forall m : s, M ⧸ m.1.1 := Line
+    let f : M ->ₗ[R] forall m : s, M ⧸ m.1.1 := LinearMap.pi fun m => m.1.1.mkQ
+.of_injective f LinearMap.ker_eq_bot.mp le_bot_iff.mp fun x hx => by
+      rw [← h]; rw [Module.jacobson]; rw [Submodule.mem_sInf]
+exact fun m hm => hs ⟨m, hm⟩ Submodule.mem_finsetInf.mpr fun i hi =>
+(Submodule.Quotient.mk_eq_zero i.1).mp congr_fun hx ⟨i, hi⟩⟩
 
 中文:
 定理 是Artin.isSemisimpleModule_iff_jacobson
@@ -849,7 +875,11 @@ theorem IsArtinian.isSemisimpleModule_iff_jacobson
   证明: ⟨fun _ => IsSemisimpleModule.jacobson_eq_bot R M, fun h =>
     have ⟨s, hs⟩ := Finset.exists_inf_le (Subtype.val (p := fun m : Submodule R M => IsCoatom m))
     have _ (m : s) : IsSimpleModule R (M ⧸ m.1.1) := isSimpleModule_iff_isCoatom.mpr m.1.2
-    let f : M ->ₗ[R] forall m : s, M ⧸ m.1.1 := Line
+    let f : M ->ₗ[R] forall m : s, M ⧸ m.1.1 := LinearMap.pi fun m => m.1.1.mkQ
+.of_injective f LinearMap.ker_eq_bot.mp le_bot_iff.mp fun x hx => by
+      rw [← h]; rw [Module.jacobson]; rw [Submodule.mem_sInf]
+exact fun m hm => hs ⟨m, hm⟩ Submodule.mem_finsetInf.mpr fun i hi =>
+(Submodule.Quotient.mk_eq_zero i.1).mp congr_fun hx ⟨i, hi⟩⟩
 
 Depends on / 依赖: Finset, Finset.exists_inf_le, IsCoatom, IsSemisimpleModule, IsSemisimpleModule.jacobson_eq_bot, IsSimpleModule, LinearMap, LinearMap.ker_eq_bot.mp, LinearMap.pi, Module, Module.jacobson, Submodule, Submodule.mem_finsetInf.mpr, Submodule.mem_sInf, Subtype, Subtype.val, exists_inf_le, isSimpleModule_iff_isCoatom, isSimpleModule_iff_isCoatom.mpr, jacobson
 -/
@@ -882,7 +912,12 @@ theorem eventually_codisjoint_ker_pow_range_pow
   refine eventually_atTop.mpr ⟨n, fun m hm => codisjoint_iff.mpr ?_⟩
   simp_rw [← hn _ hm, Submodule.eq_top_iff', Submodule.mem_sup]
   intro x
-  rsuffices 
+  rsuffices ⟨y, hy⟩ : exists y, (f ^ m) ((f ^ n) y) = (f ^ m) x
+  · exact ⟨x - (f ^ n) y, by simp [hy], (f ^ n) y, by simp⟩
+  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to change `mem_range` into `mem_range (f := _)`
+  simp_rw [f.pow_apply n, f.pow_apply m, ← iterate_add_apply, ← f.pow_apply (m + n),
+    ← f.pow_apply m, ← mem_range (f := _), ← hn _ (n.le_add_left m), hn _ hm]
+  exact LinearMap.mem_range_self (f ^ m) x
 
 中文:
 定理 eventually_codisjoint_ker_pow_range_pow
@@ -893,7 +928,12 @@ theorem eventually_codisjoint_ker_pow_range_pow
   refine eventually_atTop.mpr ⟨n, fun m hm => codisjoint_iff.mpr ?_⟩
   simp_rw [← hn _ hm, Submodule.eq_top_iff', Submodule.mem_sup]
   intro x
-  rsuffices 
+  rsuffices ⟨y, hy⟩ : exists y, (f ^ m) ((f ^ n) y) = (f ^ m) x
+  · exact ⟨x - (f ^ n) y, by simp [hy], (f ^ n) y, by simp⟩
+  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to change `mem_range` into `mem_range (f := _)`
+  simp_rw [f.pow_apply n, f.pow_apply m, ← iterate_add_apply, ← f.pow_apply (m + n),
+    ← f.pow_apply m, ← mem_range (f := _), ← hn _ (n.le_add_left m), hn _ hm]
+  exact LinearMap.mem_range_self (f ^ m) x
 
 Depends on / 依赖: IsArtinian, IsArtinian.monotone_stabilizes, LinearMap, LinearMap.range, Submodule, Submodule.eq_top_iff, Submodule.mem_sup, codisjoint_iff, codisjoint_iff.mpr, eq_top_iff, eventually_atTop, eventually_atTop.mpr, f.iterateRange, iterateRange, mem_sup, monotone_stabilizes, rsuffices, simp_rw
 -/
@@ -1623,7 +1663,7 @@ lemma setOfPred_isMaximal_finite
   have ⟨q, hq1, hq2⟩ := p.2.isPrime.inf_le'.mp (H p)
   rwa [← Subtype.ext <| q.2.eq_of_le p.2.ne_top hq2]
 
-@[deprecated (since := "2026-07-09")] alias setOf_isMaxim
+@[deprecated (since := "2026-07-09")] alias setOf_isMaximal_finite := setOfPred_isMaximal_finite
 
 中文:
 引理 setOfPred_isMaximal_finite
@@ -1634,7 +1674,7 @@ lemma setOfPred_isMaximal_finite
   have ⟨q, hq1, hq2⟩ := p.2.isPrime.inf_le'.mp (H p)
   rwa [← Subtype.ext <| q.2.eq_of_le p.2.ne_top hq2]
 
-@[deprecated (since := "2026-07-09")] alias setOf_isMaxim
+@[deprecated (since := "2026-07-09")] alias setOf_isMaximal_finite := setOfPred_isMaximal_finite
 
 Depends on / 依赖: Finset, Finset.exists_inf_le, I.IsMaximal, IsMaximal, Set.finite_def, Subtype, Subtype.ext, Subtype.val, eq_of_le, exists_inf_le, finite_def, inf_le, isPrime, isPrime.inf_le, ne_top
 -/
@@ -1688,7 +1728,8 @@ lemma isField_of_isDomain
     rw [mul_sub]; rw [sub_eq_zero]
     convert! hy using 1
     simp [Nat.succ_eq_add_one, pow_add, mul_assoc]
-  rw [mu
+  rw [mul_eq_zero]; rw [sub_eq_zero] at hy
+exact ⟨_, hy.resolve_left pow_ne_zero _ hx⟩
 
 中文:
 引理 isField_of_isDomain
@@ -1701,7 +1742,8 @@ lemma isField_of_isDomain
     rw [mul_sub]; rw [sub_eq_zero]
     convert! hy using 1
     simp [Nat.succ_eq_add_one, pow_add, mul_assoc]
-  rw [mu
+  rw [mul_eq_zero]; rw [sub_eq_zero] at hy
+exact ⟨_, hy.resolve_left pow_ne_zero _ hx⟩
 
 Depends on / 依赖: IsArtinian, IsArtinian.exists_pow_succ_smul_dvd, Nat.succ_eq_add_one, Nontrivial, Nontrivial.exists_pair_ne, convert, exists_pair_ne, exists_pow_succ_smul_dvd, hy.resolve_left, mul_assoc, mul_comm, mul_eq_zero, mul_sub, pow_add, pow_ne_zero, replace, resolve_left, sub_eq_zero, succ_eq_add_one
 -/
@@ -1863,7 +1905,8 @@ theorem nilradical_pow_eq_iInf
   have : Fintype (MaximalSpectrum R) := Fintype.ofFinite (MaximalSpectrum R)
   rw [← iInf_univ]; rw [← Finset.coe_univ]; rw [PrimeSpectrum.nilradical_eq_iInf]
   simp only [Finset.mem_coe]
-  rw [← Ideal.prod_eq_iInf_of_pairwise_isCoprime fun I _ _ _ => .pow ∘ I.isCoprime_of_ne]; rw [Finset.prod_po
+  rw [← Ideal.prod_eq_iInf_of_pairwise_isCoprime fun I _ _ _ => .pow ∘ I.isCoprime_of_ne]; rw [Finset.prod_pow]; rw [Ideal.prod_eq_iInf_of_pairwise_isCoprime fun I _ _ _ => I.isCoprime_of_ne]
+  simp [Finset.mem_univ, iInf, IsArtinianRing.primeSpectrum_asIdeal_range_eq]
 
 中文:
 定理 nilradical_pow_eq_iInf
@@ -1872,7 +1915,8 @@ theorem nilradical_pow_eq_iInf
   have : Fintype (MaximalSpectrum R) := Fintype.ofFinite (MaximalSpectrum R)
   rw [← iInf_univ]; rw [← Finset.coe_univ]; rw [PrimeSpectrum.nilradical_eq_iInf]
   simp only [Finset.mem_coe]
-  rw [← Ideal.prod_eq_iInf_of_pairwise_isCoprime fun I _ _ _ => .pow ∘ I.isCoprime_of_ne]; rw [Finset.prod_po
+  rw [← Ideal.prod_eq_iInf_of_pairwise_isCoprime fun I _ _ _ => .pow ∘ I.isCoprime_of_ne]; rw [Finset.prod_pow]; rw [Ideal.prod_eq_iInf_of_pairwise_isCoprime fun I _ _ _ => I.isCoprime_of_ne]
+  simp [Finset.mem_univ, iInf, IsArtinianRing.primeSpectrum_asIdeal_range_eq]
 
 Depends on / 依赖: Finset, Finset.coe_univ, Finset.mem_coe, Finset.mem_univ, Finset.prod_pow, Fintype, Fintype.ofFinite, I.isCoprime_of_ne, Ideal.prod_eq_iInf_of_pairwise_isCoprime, IsArtinianRing, IsArtinianRing.primeSpectrum_asIdeal_range_eq, MaximalSpectrum, PrimeSpectrum, PrimeSpectrum.nilradical_eq_iInf, coe_univ, iInf_univ, isCoprime_of_ne, mem_coe, mem_univ, nilradical_eq_iInf
 -/
@@ -2135,7 +2179,27 @@ instance :
     let Jac := Ring.jacobson R
     have ⟨n, hn⟩ := IsArtinian.monotone_stabilizes ⟨(Jac ^ ·), @Ideal.pow_le_pow_right _ _ _⟩
     have hn : Jac * Jac ^ n = Jac ^ n := by
-      rw [← Ideal.IsTwoSid
+      rw [← Ideal.IsTwoSided.pow_succ]; exact (hn _ n.le_succ).symm
+    use n; by_contra ne
+    have ⟨N, ⟨eq, ne⟩, min⟩ := wellFounded_lt.has_min {N | Jac * N = N ∧ N != ⊥} ⟨_, hn, ne⟩
+    have : Jac ^ n * N = N := n.rec (by rw [Jac.pow_zero, N.one_mul])
+      fun n hn => by rwa [Jac.pow_succ, mul_assoc, eq]
+    let I x := Submodule.map (LinearMap.toSpanSingleton R R x) (Jac ^ n)
+    have hI x : I x <= Ideal.span {x} := by
+      rw [Ideal.span]; rw [LinearMap.span_singleton_eq_range]; exact LinearMap.map_le_range
+    have ⟨x, hx⟩ : exists x in N, I x != ⊥ := by
+      contrapose! ne
+      rw [← this]; rw [← le_bot_iff]; rw [Ideal.mul_le]
+      refine fun ri hi rn hn => ?_
+      rw [← ne rn hn]
+      exact ⟨ri, hi, rfl⟩
+    rw [← Ideal.span_singleton_le_iff_mem] at hx
+    have : I x = N := by
+      refine ((hI x).trans hx.1).eq_of_not_lt (min _ ⟨?_, hx.2⟩)
+      rw [← smul_eq_mul]; rw [← Submodule.map_smul'']; rw [smul_eq_mul]; rw [hn]
+    have : Ideal.span {x} = N := le_antisymm hx.1 (this.symm.trans_le <| hI x)
+    refine (this ▸ ne) ((Submodule.fg_span <| Set.finite_singleton x).eq_bot_of_le_jacobson_smul ?_)
+    rw [← Ideal.span]; rw [this]; rw [smul_eq_mul]; rw [eq]
 
 中文:
 实例 :
@@ -2145,7 +2209,27 @@ instance :
     let Jac := Ring.jacobson R
     have ⟨n, hn⟩ := IsArtinian.monotone_stabilizes ⟨(Jac ^ ·), @Ideal.pow_le_pow_right _ _ _⟩
     have hn : Jac * Jac ^ n = Jac ^ n := by
-      rw [← Ideal.IsTwoSid
+      rw [← Ideal.IsTwoSided.pow_succ]; exact (hn _ n.le_succ).symm
+    use n; by_contra ne
+    have ⟨N, ⟨eq, ne⟩, min⟩ := wellFounded_lt.has_min {N | Jac * N = N ∧ N != ⊥} ⟨_, hn, ne⟩
+    have : Jac ^ n * N = N := n.rec (by rw [Jac.pow_zero, N.one_mul])
+      fun n hn => by rwa [Jac.pow_succ, mul_assoc, eq]
+    let I x := Submodule.map (LinearMap.toSpanSingleton R R x) (Jac ^ n)
+    have hI x : I x <= Ideal.span {x} := by
+      rw [Ideal.span]; rw [LinearMap.span_singleton_eq_range]; exact LinearMap.map_le_range
+    have ⟨x, hx⟩ : exists x in N, I x != ⊥ := by
+      contrapose! ne
+      rw [← this]; rw [← le_bot_iff]; rw [Ideal.mul_le]
+      refine fun ri hi rn hn => ?_
+      rw [← ne rn hn]
+      exact ⟨ri, hi, rfl⟩
+    rw [← Ideal.span_singleton_le_iff_mem] at hx
+    have : I x = N := by
+      refine ((hI x).trans hx.1).eq_of_not_lt (min _ ⟨?_, hx.2⟩)
+      rw [← smul_eq_mul]; rw [← Submodule.map_smul'']; rw [smul_eq_mul]; rw [hn]
+    have : Ideal.span {x} = N := le_antisymm hx.1 (this.symm.trans_le <| hI x)
+    refine (this ▸ ne) ((Submodule.fg_span <| Set.finite_singleton x).eq_bot_of_le_jacobson_smul ?_)
+    rw [← Ideal.span]; rw [this]; rw [smul_eq_mul]; rw [eq]
 
 Depends on / 依赖: Ideal.IsTwoSided.pow_succ, Ideal.pow_le_pow_right, IsArtinian, IsArtinian.monotone_stabilizes, IsArtinianRing, IsArtinianRing.isSemisimpleRing_iff_jacobson.mpr, IsTwoSided, Jac.pow_zero, N.one_mul, Ring.jacobson, Ring.jacobson_quotient_jacobson, has_min, isNilpotent, isSemisimpleRing_iff_jacobson, jacobson, jacobson_quotient_jacobson, le_succ, monotone_stabilizes, n.le_succ, n.rec
 -/

@@ -220,7 +220,15 @@ theorem count_offDiag_eq_mul_sub_ite
       split_ifs with h
       · rw [h, count_map_of_injective l (x, ·) (by simp [Function.Injective])]
       · simp [count_eq_zero, h]
-    have H₂ {x 
+    have H₂ {x y z : α} : count (x, y) (map (·, z) l) = if z = y then count x l else 0 := by
+      split_ifs with h
+      · rw [h, count_map_of_injective l (·, y) (by simp [Function.Injective])]
+      · simp [count_eq_zero, h]
+    simp only [(offDiag_cons_perm _ _).count_eq, count_append, ihl, H₁, H₂, count_cons, beq_iff_eq]
+    have := Nat.le_mul_self (count c l)
+    split_ifs <;> simp_all <;> grind
+
+@[gcongr]
 
 中文:
 定理 count_offDiag_eq_mul_sub_ite
@@ -233,7 +241,15 @@ theorem count_offDiag_eq_mul_sub_ite
       split_ifs with h
       · rw [h, count_map_of_injective l (x, ·) (by simp [Function.Injective])]
       · simp [count_eq_zero, h]
-    have H₂ {x 
+    have H₂ {x y z : α} : count (x, y) (map (·, z) l) = if z = y then count x l else 0 := by
+      split_ifs with h
+      · rw [h, count_map_of_injective l (·, y) (by simp [Function.Injective])]
+      · simp [count_eq_zero, h]
+    simp only [(offDiag_cons_perm _ _).count_eq, count_append, ihl, H₁, H₂, count_cons, beq_iff_eq]
+    have := Nat.le_mul_self (count c l)
+    split_ifs <;> simp_all <;> grind
+
+@[gcongr]
 
 Depends on / 依赖: Function, Function.Injective, Injective, count_eq_zero, count_map_of_injective, offDiag_cons_perm, split_ifs
 -/
@@ -324,6 +340,9 @@ theorem Nodup.of_offDiag
   suffices 1 + l.count a < l.count a * l.count a by simpa
   calc
     1 + l.count a < l.count a + l.count a := by simpa
+    _ <= l.count a * l.count a := by
+      rw [← Nat.two_mul]
+      exact Nat.mul_le_mul_right _ h
 
 中文:
 定理 Nodup.of_offDiag
@@ -339,6 +358,9 @@ theorem Nodup.of_offDiag
   suffices 1 + l.count a < l.count a * l.count a by simpa
   calc
     1 + l.count a < l.count a + l.count a := by simpa
+    _ <= l.count a * l.count a := by
+      rw [← Nat.two_mul]
+      exact Nat.mul_le_mul_right _ h
 -/
 protected theorem Nodup.of_offDiag (h : l.offDiag.Nodup) : l.Nodup := by
   let := Classical.decEq α
@@ -386,7 +408,7 @@ theorem Nodup.mem_offDiag
   · rintro ⟨i, hi, j, hj, hne, rfl, rfl⟩
     exact ⟨⟨i, hi, rfl⟩, ⟨j, hj, rfl⟩, mt h.getElem_inj_iff.1 hne⟩
   · rintro ⟨⟨i, hi, rfl⟩, ⟨j, hj, rfl⟩, hne⟩
-    exact ⟨i, hi, j, hj, mt h.getElem_inj_iff.2 hn
+    exact ⟨i, hi, j, hj, mt h.getElem_inj_iff.2 hne, rfl, rfl⟩
 
 中文:
 定理 Nodup.mem_offDiag
@@ -398,7 +420,7 @@ theorem Nodup.mem_offDiag
   · rintro ⟨i, hi, j, hj, hne, rfl, rfl⟩
     exact ⟨⟨i, hi, rfl⟩, ⟨j, hj, rfl⟩, mt h.getElem_inj_iff.1 hne⟩
   · rintro ⟨⟨i, hi, rfl⟩, ⟨j, hj, rfl⟩, hne⟩
-    exact ⟨i, hi, j, hj, mt h.getElem_inj_iff.2 hn
+    exact ⟨i, hi, j, hj, mt h.getElem_inj_iff.2 hne, rfl, rfl⟩
 
 Depends on / 依赖: getElem_inj_iff, h.getElem_inj_iff, mem_iff_getElem, mem_offDiag_iff_getElem, simp_rw
 -/

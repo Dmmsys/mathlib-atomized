@@ -133,7 +133,7 @@ definition comonadicExtendScalars
     Comonad.comonadicOfHasPreservesFSplitEqualizersOfReflectsIsomorphisms
       (extendRestrictScalarsAdj f)
   · exact ⟨inferInstance⟩
-  · exact ⟨inferInstanc
+  · exact ⟨inferInstance⟩
 
 中文:
 定义 comonadicExtendScalars
@@ -145,7 +145,7 @@ definition comonadicExtendScalars
     Comonad.comonadicOfHasPreservesFSplitEqualizersOfReflectsIsomorphisms
       (extendRestrictScalarsAdj f)
   · exact ⟨inferInstance⟩
-  · exact ⟨inferInstanc
+  · exact ⟨inferInstance⟩
 
 Depends on / 依赖: Comonad, Comonad.comonadicOfHasPreservesFSplitEqualizersOfReflectsIsomorphisms, comonadicOfHasPreservesFSplitEqualizersOfReflectsIsomorphisms, convert, extendRestrictScalarsAdj, hf.flat, preservesFiniteLimits_extendScalars_of_flat, reflectsIsomorphisms_extendScalars_of_faithfullyFlat
 -/

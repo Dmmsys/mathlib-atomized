@@ -692,7 +692,8 @@ theorem eraseLead_add_of_degree_lt_left
   · rw [nd, eraseLead_coeff, if_pos (natDegree_add_eq_left_of_degree_lt pq).symm]
     simpa using (coeff_eq_zero_of_degree_lt (lt_of_lt_of_le pq degree_le_natDegree)).symm
   · rw [eraseLead_coeff, coeff_add, coeff_add, eraseLead_coeff, if_neg, if_neg nd]
-  
+    rintro rfl
+    exact nd (natDegree_add_eq_left_of_degree_lt pq)
 
 中文:
 定理 eraseLead_add_of_degree_lt_left
@@ -703,7 +704,8 @@ theorem eraseLead_add_of_degree_lt_left
   · rw [nd, eraseLead_coeff, if_pos (natDegree_add_eq_left_of_degree_lt pq).symm]
     simpa using (coeff_eq_zero_of_degree_lt (lt_of_lt_of_le pq degree_le_natDegree)).symm
   · rw [eraseLead_coeff, coeff_add, coeff_add, eraseLead_coeff, if_neg, if_neg nd]
-  
+    rintro rfl
+    exact nd (natDegree_add_eq_left_of_degree_lt pq)
 
 Depends on / 依赖: coeff_add, coeff_eq_zero_of_degree_lt, degree_le_natDegree, eraseLead_coeff, if_neg, if_pos, lt_of_lt_of_le, natDegree, natDegree_add_eq_left_of_degree_lt, p.natDegree
 -/
@@ -748,7 +750,8 @@ theorem eraseLead_add_of_degree_lt_right
   · rw [nd, eraseLead_coeff, if_pos (natDegree_add_eq_right_of_degree_lt pq).symm]
     simpa using (coeff_eq_zero_of_degree_lt (lt_of_lt_of_le pq degree_le_natDegree)).symm
   · rw [eraseLead_coeff, coeff_add, coeff_add, eraseLead_coeff, if_neg, if_neg nd]
- 
+    rintro rfl
+    exact nd (natDegree_add_eq_right_of_degree_lt pq)
 
 中文:
 定理 eraseLead_add_of_degree_lt_right
@@ -759,7 +762,8 @@ theorem eraseLead_add_of_degree_lt_right
   · rw [nd, eraseLead_coeff, if_pos (natDegree_add_eq_right_of_degree_lt pq).symm]
     simpa using (coeff_eq_zero_of_degree_lt (lt_of_lt_of_le pq degree_le_natDegree)).symm
   · rw [eraseLead_coeff, coeff_add, coeff_add, eraseLead_coeff, if_neg, if_neg nd]
- 
+    rintro rfl
+    exact nd (natDegree_add_eq_right_of_degree_lt pq)
 
 Depends on / 依赖: coeff_add, coeff_eq_zero_of_degree_lt, degree_le_natDegree, eraseLead_coeff, if_neg, if_pos, lt_of_lt_of_le, natDegree, natDegree_add_eq_right_of_degree_lt, q.natDegree
 -/
@@ -1033,7 +1037,7 @@ theorem natDegree_eraseLead_le_of_nextCoeff_eq_zero
   obtain ⟨a, rfl⟩ | ⟨hf, h⟩ := h
   · simp
   rw [eraseLead_coeff_of_ne _ (tsub_lt_self hf zero_lt_one).ne]; rw [← nextCoeff_of_natDegree_pos hf]
-  simp [nextCoeff_e
+  simp [nextCoeff_eq_zero, h, eq_zero_or_pos]
 
 中文:
 定理 natDegree_eraseLead_le_of_nextCoeff_eq_zero
@@ -1044,7 +1048,7 @@ theorem natDegree_eraseLead_le_of_nextCoeff_eq_zero
   obtain ⟨a, rfl⟩ | ⟨hf, h⟩ := h
   · simp
   rw [eraseLead_coeff_of_ne _ (tsub_lt_self hf zero_lt_one).ne]; rw [← nextCoeff_of_natDegree_pos hf]
-  simp [nextCoeff_e
+  simp [nextCoeff_eq_zero, h, eq_zero_or_pos]
 
 Depends on / 依赖: eq_zero_or_pos, eraseLead_coeff_of_ne, eraseLead_natDegree_le, f.natDegree, natDegree, natDegree_eq_zero, natDegree_le_pred, nextCoeff_eq_zero, nextCoeff_of_natDegree_pos, tsub_lt_self, zero_lt_one
 -/
@@ -1166,7 +1170,44 @@ lemma eraseLead_mul_eq_mul_eraseLead_of_nextCoeff_zero
   · rw [he, mul_zero]
     by_cases he₂ : ((X - C x) * P).eraseLead = 0
     · simp [he₂]
-    suffices #((X - C x) 
+    suffices #((X - C x) * P).support <= 2 by
+      rw [← card_support_eq_zero]
+      linarith [eraseLead_support_card_lt he₂,
+        eraseLead_support_card_lt (mul_ne_zero (X_sub_C_ne_zero x) hp)]
+    have h₂ : #(X - C x).support = 2 := by
+      simpa [← sub_eq_add_neg] using!
+        card_support_binomial one_ne_zero one_ne_zero (neg_ne_zero.mpr hx)
+    have hmul := card_support_mul_le (p := X - C x) (q := P)
+    rw [h₂] at hmul
+    linarith [card_support_le_one_of_eraseLead_eq_zero he]
+  have h₁ : ((X - C x) * P).natDegree = P.natDegree + 1 := by
+    rw [natDegree_mul (X_sub_C_ne_zero x) hp]; rw [natDegree_X_sub_C]; rw [add_comm]
+  -- 2 ≤ P.natDegree
+  obtain ⟨dP, hdP⟩ := Nat.exists_eq_add_of_le' (two_le_natDegree_of_nextCoeff_eraseLead he h)
+  -- the subleading term of (X - C η) * P is nonzero
+  have h₂ : ((X - C x) * P).nextCoeff != 0 := by
+    simp only [nextCoeff, hdP, Nat.succ_ne_zero, ite_false, Nat.add_one_sub_one] at h
+    rw [nextCoeff]; rw [h₁]; rw [add_tsub_cancel_right]; rw [hdP]; rw [coeff_X_sub_C_mul]
+    simp [h, hx, ← hdP, hp]
+  -- Prove equality by showing coefficients are equal
+  ext n
+  rcases n.lt_or_ge P.natDegree with hn | hn
+  · --n < P.natDegree
+    have hd₁ : n < ((X - C x) * P).eraseLead.natDegree := by
+      linarith [natDegree_eraseLead_add_one h₂]
+    rw [← self_sub_monomial_natDegree_leadingCoeff]; rw [coeff_sub]; rw [coeff_monomial]; rw [if_neg hd₁.ne']
+    rw [← self_sub_monomial_natDegree_leadingCoeff]; rw [coeff_sub]; rw [coeff_monomial]; rw [if_neg (by lia)]
+    rw [← self_sub_monomial_natDegree_leadingCoeff]; rw [mul_sub]; rw [coeff_sub]; rw [sub_zero]; rw [sub_zero]; rw [eq_sub_iff_add_eq]; rw [add_eq_left]
+    rcases hn₂ : n
+    · simpa [coeff_monomial, hp] using! fun _ => by lia
+    · rw [coeff_X_sub_C_mul, coeff_monomial, coeff_monomial, if_neg (by lia),
+        if_neg (by lia), mul_zero, sub_zero]
+  · --n ≥ P.natDegree, so all the coefficients are zero.
+    trans 0 <;> rw [coeff_eq_zero_of_natDegree_lt]
+    · grw [eraseLead_natDegree_le, eraseLead_natDegree_le]
+      simpa [h₁, hdP] using! hn
+    · grw [natDegree_mul (X_sub_C_ne_zero x) he, natDegree_eraseLead_le_of_nextCoeff_eq_zero h]
+      simpa [add_comm, hdP] using! hn
 
 中文:
 引理 eraseLead_mul_eq_mul_eraseLead_of_nextCoeff_zero
@@ -1180,7 +1221,44 @@ lemma eraseLead_mul_eq_mul_eraseLead_of_nextCoeff_zero
   · rw [he, mul_zero]
     by_cases he₂ : ((X - C x) * P).eraseLead = 0
     · simp [he₂]
-    suffices #((X - C x) 
+    suffices #((X - C x) * P).support <= 2 by
+      rw [← card_support_eq_zero]
+      linarith [eraseLead_support_card_lt he₂,
+        eraseLead_support_card_lt (mul_ne_zero (X_sub_C_ne_zero x) hp)]
+    have h₂ : #(X - C x).support = 2 := by
+      simpa [← sub_eq_add_neg] using!
+        card_support_binomial one_ne_zero one_ne_zero (neg_ne_zero.mpr hx)
+    have hmul := card_support_mul_le (p := X - C x) (q := P)
+    rw [h₂] at hmul
+    linarith [card_support_le_one_of_eraseLead_eq_zero he]
+  have h₁ : ((X - C x) * P).natDegree = P.natDegree + 1 := by
+    rw [natDegree_mul (X_sub_C_ne_zero x) hp]; rw [natDegree_X_sub_C]; rw [add_comm]
+  -- 2 ≤ P.natDegree
+  obtain ⟨dP, hdP⟩ := Nat.exists_eq_add_of_le' (two_le_natDegree_of_nextCoeff_eraseLead he h)
+  -- the subleading term of (X - C η) * P is nonzero
+  have h₂ : ((X - C x) * P).nextCoeff != 0 := by
+    simp only [nextCoeff, hdP, Nat.succ_ne_zero, ite_false, Nat.add_one_sub_one] at h
+    rw [nextCoeff]; rw [h₁]; rw [add_tsub_cancel_right]; rw [hdP]; rw [coeff_X_sub_C_mul]
+    simp [h, hx, ← hdP, hp]
+  -- Prove equality by showing coefficients are equal
+  ext n
+  rcases n.lt_or_ge P.natDegree with hn | hn
+  · --n < P.natDegree
+    have hd₁ : n < ((X - C x) * P).eraseLead.natDegree := by
+      linarith [natDegree_eraseLead_add_one h₂]
+    rw [← self_sub_monomial_natDegree_leadingCoeff]; rw [coeff_sub]; rw [coeff_monomial]; rw [if_neg hd₁.ne']
+    rw [← self_sub_monomial_natDegree_leadingCoeff]; rw [coeff_sub]; rw [coeff_monomial]; rw [if_neg (by lia)]
+    rw [← self_sub_monomial_natDegree_leadingCoeff]; rw [mul_sub]; rw [coeff_sub]; rw [sub_zero]; rw [sub_zero]; rw [eq_sub_iff_add_eq]; rw [add_eq_left]
+    rcases hn₂ : n
+    · simpa [coeff_monomial, hp] using! fun _ => by lia
+    · rw [coeff_X_sub_C_mul, coeff_monomial, coeff_monomial, if_neg (by lia),
+        if_neg (by lia), mul_zero, sub_zero]
+  · --n ≥ P.natDegree, so all the coefficients are zero.
+    trans 0 <;> rw [coeff_eq_zero_of_natDegree_lt]
+    · grw [eraseLead_natDegree_le, eraseLead_natDegree_le]
+      simpa [h₁, hdP] using! hn
+    · grw [natDegree_mul (X_sub_C_ne_zero x) he, natDegree_eraseLead_le_of_nextCoeff_eq_zero h]
+      simpa [add_comm, hdP] using! hn
 -/
 lemma eraseLead_mul_eq_mul_eraseLead_of_nextCoeff_zero {R : Type*} [Ring R] [NoZeroDivisors R]
     [Nontrivial R] {x : R} {P : R[X]} (hx : x != 0) (h : P.nextCoeff = 0) :
@@ -1249,7 +1327,21 @@ theorem induction_with_natDegree_le
     rw [← eraseLead_add_C_mul_X_pow f]
     cases c
     · convert C_mul_pow f.natDegree f.leadingCoeff ?_ df
-      · convert! zero_add (C (leadingCoeff
+      · convert! zero_add (C (leadingCoeff f) * X ^ f.natDegree)
+        rw [← card_support_eq_zero]; rw [card_support_eraseLead' hf]
+      · rw [leadingCoeff_ne_zero, Ne, ← card_support_eq_zero, hf]
+        exact zero_ne_one.symm
+    refine add f.eraseLead _ ?_ ?_ ?_ ?_
+    · refine (eraseLead_natDegree_lt ?_).trans_le (le_of_eq ?_)
+      · exact (Nat.succ_le_succ (Nat.succ_le_succ (Nat.zero_le _))).trans hf.ge
+      · rw [natDegree_C_mul_X_pow _ _ (leadingCoeff_ne_zero.mpr _)]
+        rintro rfl
+        simp at hf
+    · exact (natDegree_C_mul_X_pow_le f.leadingCoeff f.natDegree).trans df
+    · exact hc _ (eraseLead_natDegree_le_aux.trans df) (card_support_eraseLead' hf)
+    · refine C_mul_pow _ _ ?_ df
+      rw [Ne]; rw [leadingCoeff_eq_zero]; rw [← card_support_eq_zero]; rw [hf]
+      exact Nat.succ_ne_zero _
 
 中文:
 定理 induction_with_natDegree_le
@@ -1263,7 +1355,21 @@ theorem induction_with_natDegree_le
     rw [← eraseLead_add_C_mul_X_pow f]
     cases c
     · convert C_mul_pow f.natDegree f.leadingCoeff ?_ df
-      · convert! zero_add (C (leadingCoeff
+      · convert! zero_add (C (leadingCoeff f) * X ^ f.natDegree)
+        rw [← card_support_eq_zero]; rw [card_support_eraseLead' hf]
+      · rw [leadingCoeff_ne_zero, Ne, ← card_support_eq_zero, hf]
+        exact zero_ne_one.symm
+    refine add f.eraseLead _ ?_ ?_ ?_ ?_
+    · refine (eraseLead_natDegree_lt ?_).trans_le (le_of_eq ?_)
+      · exact (Nat.succ_le_succ (Nat.succ_le_succ (Nat.zero_le _))).trans hf.ge
+      · rw [natDegree_C_mul_X_pow _ _ (leadingCoeff_ne_zero.mpr _)]
+        rintro rfl
+        simp at hf
+    · exact (natDegree_C_mul_X_pow_le f.leadingCoeff f.natDegree).trans df
+    · exact hc _ (eraseLead_natDegree_le_aux.trans df) (card_support_eraseLead' hf)
+    · refine C_mul_pow _ _ ?_ df
+      rw [Ne]; rw [leadingCoeff_eq_zero]; rw [← card_support_eq_zero]; rw [hf]
+      exact Nat.succ_ne_zero _
 
 Depends on / 依赖: C_mul_pow, card_eq_zero, card_support_eq_zero, card_support_eraseLead, convert, eraseLead, eraseLead_add_C_mul_X_pow, eraseLead_natDegre, f.eraseLead, f.leadingCoeff, f.natDegree, f.support, generalizing, leadingCoeff, leadingCoeff_ne_zero, natDegree, support, support_eq_empty, zero_add, zero_ne_one
 -/
@@ -1307,7 +1413,14 @@ theorem mono_map_natDegree_eq
   · intro n r r0 _
     rw [natDegree_C_mul_X_pow _ _ r0]; rw [C_mul_X_pow_eq_monomial]; rw [φ_mon_nat _ _ r0]
   · intro f g fg _ fk gk
-    rw [natDegree_add_eq_right_of_
+    rw [natDegree_add_eq_right_of_natDegree_lt fg]; rw [map_add]
+    by_cases! FG : k <= f.natDegree
+    · rw [natDegree_add_eq_right_of_natDegree_lt, gk]
+      rw [fk]; rw [gk]
+      exact fc FG fg
+    · cases k
+      · nomatch FG
+      · rwa [φ_k FG, zero_add]
 
 中文:
 定理 mono_map_natDegree_eq
@@ -1318,7 +1431,14 @@ theorem mono_map_natDegree_eq
   · intro n r r0 _
     rw [natDegree_C_mul_X_pow _ _ r0]; rw [C_mul_X_pow_eq_monomial]; rw [φ_mon_nat _ _ r0]
   · intro f g fg _ fk gk
-    rw [natDegree_add_eq_right_of_
+    rw [natDegree_add_eq_right_of_natDegree_lt fg]; rw [map_add]
+    by_cases! FG : k <= f.natDegree
+    · rw [natDegree_add_eq_right_of_natDegree_lt, gk]
+      rw [fk]; rw [gk]
+      exact fc FG fg
+    · cases k
+      · nomatch FG
+      · rwa [φ_k FG, zero_add]
 
 Depends on / 依赖: C_mul_X_pow_eq_monomial, f.natDegree, induction_with_natDegree_le, map_add, natDegree, natDegree_C_mul_X_pow, natDegree_add_eq_right_of_natDegree_lt, nomatch, p.natDegree, rfl.le, zero_add
 -/
@@ -1406,7 +1526,12 @@ theorem card_support_eq'
   simp_rw [Finset.ext_iff, mem_support_iff, finsetSum_coeff, coeff_C_mul_X_pow, mem_image,
     mem_univ, true_and]
   refine fun i => ⟨fun h => ?_, ?_⟩
-  · obtain ⟨j, _,
+  · obtain ⟨j, _, h⟩ := exists_ne_zero_of_sum_ne_zero h
+    exact ⟨j, (ite_ne_right_iff.mp h).1.symm⟩
+  · rintro ⟨j, _, rfl⟩
+    rw [sum_eq_single_of_mem j (mem_univ j)]; rw [if_pos rfl]
+    · exact hx j
+    · exact fun m _ hmj => if_neg fun h => hmj.symm (hk h)
 
 中文:
 定理 card_support_eq'
@@ -1417,7 +1542,12 @@ theorem card_support_eq'
   simp_rw [Finset.ext_iff, mem_support_iff, finsetSum_coeff, coeff_C_mul_X_pow, mem_image,
     mem_univ, true_and]
   refine fun i => ⟨fun h => ?_, ?_⟩
-  · obtain ⟨j, _,
+  · obtain ⟨j, _, h⟩ := exists_ne_zero_of_sum_ne_zero h
+    exact ⟨j, (ite_ne_right_iff.mp h).1.symm⟩
+  · rintro ⟨j, _, rfl⟩
+    rw [sum_eq_single_of_mem j (mem_univ j)]; rw [if_pos rfl]
+    · exact hx j
+    · exact fun m _ hmj => if_neg fun h => hmj.symm (hk h)
 
 Depends on / 依赖: Finset, Finset.ext_iff, card_fin, card_image_of_injective, coeff_C_mul_X_pow, exists_ne_zero_of_sum_ne_zero, ext_iff, finsetSum_coeff, if_neg, if_pos, ite_ne_right_iff, ite_ne_right_iff.mp, mem_image, mem_support_iff, mem_univ, simp_rw, sum_eq_single_of_mem, support, true_and, univ.card_image_of_injective
 -/
@@ -1447,7 +1577,42 @@ theorem card_support_eq
   | zero => exact fun hf => ⟨0, 0, fun x => x.elim0, fun x => x.elim0, card_support_eq_zero.mp hf⟩
   | succ n hn =>
     intro h
-    obtain ⟨k, x, hk, hx, hf⟩ := hn (card_suppo
+    obtain ⟨k, x, hk, hx, hf⟩ := hn (card_support_eraseLead' h)
+    have H : ¬exists k : Fin n, Fin.castSucc k = Fin.last n := by
+      rintro ⟨i, hi⟩
+      exact i.castSucc_lt_last.ne hi
+    refine
+      ⟨Function.extend Fin.castSucc k fun _ => f.natDegree,
+        Function.extend Fin.castSucc x fun _ => f.leadingCoeff, ?_, ?_, ?_⟩
+    · intro i j hij
+      have hi : i in Set.range (Fin.castSucc : Fin n -> Fin (n + 1)) := by
+        simp only [Fin.range_castSucc, Nat.succ_eq_add_one, Set.mem_ofPred_eq]
+        exact lt_of_lt_of_le hij (Nat.lt_succ_iff.mp j.2)
+      obtain ⟨i, rfl⟩ := hi
+      rw [Fin.strictMono_castSucc.injective.extend_apply]
+      by_cases hj : exists j₀, Fin.castSucc j₀ = j
+      · obtain ⟨j, rfl⟩ := hj
+        rwa [Fin.strictMono_castSucc.injective.extend_apply, hk.lt_iff_lt,
+          ← Fin.castSucc_lt_castSucc_iff]
+      · rw [Function.extend_apply' _ _ _ hj]
+        apply lt_natDegree_of_mem_eraseLead_support
+        rw [mem_support_iff]; rw [hf]; rw [finsetSum_coeff]
+        rw [sum_eq_single]; rw [coeff_C_mul]; rw [coeff_X_pow_self]; rw [mul_one]
+        · exact hx i
+        · intro j _ hji
+          rw [coeff_C_mul]; rw [coeff_X_pow]; rw [if_neg (hk.injective.ne hji.symm)]; rw [mul_zero]
+        · exact fun hi => (hi (mem_univ i)).elim
+    · intro i
+      by_cases hi : exists i₀, Fin.castSucc i₀ = i
+      · obtain ⟨i, rfl⟩ := hi
+        rw [Fin.strictMono_castSucc.injective.extend_apply]
+        exact hx i
+      · rw [Function.extend_apply' _ _ _ hi, Ne, leadingCoeff_eq_zero, ← card_support_eq_zero, h]
+        exact n.succ_ne_zero
+    · rw [Fin.sum_univ_castSucc]
+      simp only [Fin.strictMono_castSucc.injective.extend_apply]
+      rw [← hf]; rw [Function.extend_apply']; rw [Function.extend_apply']; rw [eraseLead_add_C_mul_X_pow]
+      all_goals exact H
 
 中文:
 定理 card_support_eq
@@ -1458,7 +1623,42 @@ theorem card_support_eq
   | zero => exact fun hf => ⟨0, 0, fun x => x.elim0, fun x => x.elim0, card_support_eq_zero.mp hf⟩
   | succ n hn =>
     intro h
-    obtain ⟨k, x, hk, hx, hf⟩ := hn (card_suppo
+    obtain ⟨k, x, hk, hx, hf⟩ := hn (card_support_eraseLead' h)
+    have H : ¬exists k : Fin n, Fin.castSucc k = Fin.last n := by
+      rintro ⟨i, hi⟩
+      exact i.castSucc_lt_last.ne hi
+    refine
+      ⟨Function.extend Fin.castSucc k fun _ => f.natDegree,
+        Function.extend Fin.castSucc x fun _ => f.leadingCoeff, ?_, ?_, ?_⟩
+    · intro i j hij
+      have hi : i in Set.range (Fin.castSucc : Fin n -> Fin (n + 1)) := by
+        simp only [Fin.range_castSucc, Nat.succ_eq_add_one, Set.mem_ofPred_eq]
+        exact lt_of_lt_of_le hij (Nat.lt_succ_iff.mp j.2)
+      obtain ⟨i, rfl⟩ := hi
+      rw [Fin.strictMono_castSucc.injective.extend_apply]
+      by_cases hj : exists j₀, Fin.castSucc j₀ = j
+      · obtain ⟨j, rfl⟩ := hj
+        rwa [Fin.strictMono_castSucc.injective.extend_apply, hk.lt_iff_lt,
+          ← Fin.castSucc_lt_castSucc_iff]
+      · rw [Function.extend_apply' _ _ _ hj]
+        apply lt_natDegree_of_mem_eraseLead_support
+        rw [mem_support_iff]; rw [hf]; rw [finsetSum_coeff]
+        rw [sum_eq_single]; rw [coeff_C_mul]; rw [coeff_X_pow_self]; rw [mul_one]
+        · exact hx i
+        · intro j _ hji
+          rw [coeff_C_mul]; rw [coeff_X_pow]; rw [if_neg (hk.injective.ne hji.symm)]; rw [mul_zero]
+        · exact fun hi => (hi (mem_univ i)).elim
+    · intro i
+      by_cases hi : exists i₀, Fin.castSucc i₀ = i
+      · obtain ⟨i, rfl⟩ := hi
+        rw [Fin.strictMono_castSucc.injective.extend_apply]
+        exact hx i
+      · rw [Function.extend_apply' _ _ _ hi, Ne, leadingCoeff_eq_zero, ← card_support_eq_zero, h]
+        exact n.succ_ne_zero
+    · rw [Fin.sum_univ_castSucc]
+      simp only [Fin.strictMono_castSucc.injective.extend_apply]
+      rw [← hf]; rw [Function.extend_apply']; rw [Function.extend_apply']; rw [eraseLead_add_C_mul_X_pow]
+      all_goals exact H
 
 Depends on / 依赖: Fin.castSucc, Fin.last, Function, Function.extend, card_support_eq, card_support_eq_zero, card_support_eq_zero.mp, card_support_eraseLead, castSucc, castSucc_lt_last, extend, f.natDegree, generalizing, hf.symm, hk.injective, i.castSucc_lt_last.ne, injective, natDegree, x.elim0
 -/
@@ -1553,7 +1753,7 @@ theorem card_support_eq_two
     rw [Fin.sum_univ_castSucc]; rw [Fin.sum_univ_one]
     rfl
   · rintro ⟨k, m, hkm, x, y, hx, hy, rfl⟩
-    exact card_support_binomial hkm.ne hx h
+    exact card_support_binomial hkm.ne hx hy
 
 中文:
 定理 card_support_eq_two
@@ -1564,7 +1764,7 @@ theorem card_support_eq_two
     rw [Fin.sum_univ_castSucc]; rw [Fin.sum_univ_one]
     rfl
   · rintro ⟨k, m, hkm, x, y, hx, hy, rfl⟩
-    exact card_support_binomial hkm.ne hx h
+    exact card_support_binomial hkm.ne hx hy
 
 Depends on / 依赖: Fin.sum_univ_castSucc, Fin.sum_univ_one, Nat.zero_lt_one, card_support_binomial, card_support_eq, card_support_eq.mp, hkm.ne, sum_univ_castSucc, sum_univ_one, zero_lt_one
 -/
@@ -1593,7 +1793,8 @@ theorem card_support_eq_three
         ?_⟩
     rw [Fin.sum_univ_castSucc]; rw [Fin.sum_univ_castSucc]; rw [Fin.sum_univ_one]
     rfl
-  
+  · rintro ⟨k, m, n, hkm, hmn, x, y, z, hx, hy, hz, rfl⟩
+    exact card_support_trinomial hkm hmn hx hy hz
 
 中文:
 定理 card_support_eq_three
@@ -1605,7 +1806,8 @@ theorem card_support_eq_three
         ?_⟩
     rw [Fin.sum_univ_castSucc]; rw [Fin.sum_univ_castSucc]; rw [Fin.sum_univ_one]
     rfl
-  
+  · rintro ⟨k, m, n, hkm, hmn, x, y, z, hx, hy, hz, rfl⟩
+    exact card_support_trinomial hkm hmn hx hy hz
 
 Depends on / 依赖: Fin.sum_univ_castSucc, Fin.sum_univ_one, Nat.lt_succ_self, Nat.zero_lt_one, card_support_eq, card_support_eq.mp, card_support_trinomial, lt_succ_self, sum_univ_castSucc, sum_univ_one, zero_lt_one
 -/

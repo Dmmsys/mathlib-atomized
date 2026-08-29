@@ -1930,7 +1930,16 @@ theorem floor_logb_natCast
   · have hb1' : 1 < (b : Real) := Nat.one_lt_cast.mpr hb
     apply le_antisymm
     · rw [← Int.zpow_le_iff_le_log hb hr, ← rpow_intCast b]
-      refine le_of_le_of_eq ?_ (rpow_logb (zero_
+      refine le_of_le_of_eq ?_ (rpow_logb (zero_lt_one.trans hb1') hb1'.ne' hr)
+      exact rpow_le_rpow_of_exponent_le hb1'.le (Int.floor_le _)
+    · rw [Int.le_floor, le_logb_iff_rpow_le hb1' hr, rpow_intCast]
+      exact Int.zpow_log_le_self hb hr
+  · rw [Nat.one_lt_iff_ne_zero_and_ne_one, ← or_iff_not_and_not] at hb
+    cases hb
+    · simp_all only [CharP.cast_eq_zero, logb_zero_left, Int.floor_zero, Int.log_zero_left]
+    · simp_all only [Nat.cast_one, logb_one_left, Int.floor_zero, Int.log_one_left]
+
+@[norm_cast]
 
 中文:
 定理 floor_logb_natCast
@@ -1942,7 +1951,16 @@ theorem floor_logb_natCast
   · have hb1' : 1 < (b : Real) := Nat.one_lt_cast.mpr hb
     apply le_antisymm
     · rw [← Int.zpow_le_iff_le_log hb hr, ← rpow_intCast b]
-      refine le_of_le_of_eq ?_ (rpow_logb (zero_
+      refine le_of_le_of_eq ?_ (rpow_logb (zero_lt_one.trans hb1') hb1'.ne' hr)
+      exact rpow_le_rpow_of_exponent_le hb1'.le (Int.floor_le _)
+    · rw [Int.le_floor, le_logb_iff_rpow_le hb1' hr, rpow_intCast]
+      exact Int.zpow_log_le_self hb hr
+  · rw [Nat.one_lt_iff_ne_zero_and_ne_one, ← or_iff_not_and_not] at hb
+    cases hb
+    · simp_all only [CharP.cast_eq_zero, logb_zero_left, Int.floor_zero, Int.log_zero_left]
+    · simp_all only [Nat.cast_one, logb_one_left, Int.floor_zero, Int.log_one_left]
+
+@[norm_cast]
 
 Depends on / 依赖: Int.floor_le, Int.floor_zero, Int.le_floor, Int.log_zero_right, Int.zpow_le_iff_le_log, Int.zpow_log_le_self, Nat.one_lt_cast.mpr, Nat.one_lt_iff_ne_zero_and_ne, eq_or_lt, floor_le, floor_zero, hr.eq_or_lt, le_antisymm, le_floor, le_logb_iff_rpow_le, le_of_le_of_eq, log_zero_right, logb_zero, one_lt_cast, one_lt_iff_ne_zero_and_ne
 -/
@@ -1978,7 +1996,15 @@ theorem ceil_logb_natCast
     apply le_antisymm
     · rw [Int.ceil_le, logb_le_iff_le_rpow hb1' hr, rpow_intCast]
       exact Int.self_le_zpow_clog hb r
-   
+    · rw [← Int.le_zpow_iff_clog_le hb hr, ← rpow_intCast b]
+      refine (rpow_logb (zero_lt_one.trans hb1') hb1'.ne' hr).symm.trans_le ?_
+      exact rpow_le_rpow_of_exponent_le hb1'.le (Int.le_ceil _)
+  · rw [Nat.one_lt_iff_ne_zero_and_ne_one, ← or_iff_not_and_not] at hb
+    cases hb
+    · simp_all only [CharP.cast_eq_zero, logb_zero_left, Int.ceil_zero, Int.clog_zero_left]
+    · simp_all only [Nat.cast_one, logb_one_left, Int.ceil_zero, Int.clog_one_left]
+
+@[norm_cast]
 
 中文:
 定理 ceil_logb_natCast
@@ -1991,7 +2017,15 @@ theorem ceil_logb_natCast
     apply le_antisymm
     · rw [Int.ceil_le, logb_le_iff_le_rpow hb1' hr, rpow_intCast]
       exact Int.self_le_zpow_clog hb r
-   
+    · rw [← Int.le_zpow_iff_clog_le hb hr, ← rpow_intCast b]
+      refine (rpow_logb (zero_lt_one.trans hb1') hb1'.ne' hr).symm.trans_le ?_
+      exact rpow_le_rpow_of_exponent_le hb1'.le (Int.le_ceil _)
+  · rw [Nat.one_lt_iff_ne_zero_and_ne_one, ← or_iff_not_and_not] at hb
+    cases hb
+    · simp_all only [CharP.cast_eq_zero, logb_zero_left, Int.ceil_zero, Int.clog_zero_left]
+    · simp_all only [Nat.cast_one, logb_one_left, Int.ceil_zero, Int.clog_one_left]
+
+@[norm_cast]
 
 Depends on / 依赖: Int.ceil_le, Int.ceil_zero, Int.clog_zero_right, Int.le_ceil, Int.le_zpow_iff_clog_le, Int.self_le_zpow_clog, Nat.one_lt_cast.mpr, Nat.one_lt_iff_ne_zero_and_ne_o, ceil_le, ceil_zero, clog_zero_right, eq_or_lt, hr.eq_or_lt, le_antisymm, le_ceil, le_zpow_iff_clog_le, logb_le_iff_le_rpow, logb_zero, one_lt_cast, one_lt_iff_ne_zero_and_ne_o
 -/
@@ -2027,7 +2061,9 @@ theorem natFloor_logb_natCast
   obtain rfl | hn := eq_or_ne n 0
   · simp
   rw [← Nat.cast_inj (R := Int)]; rw [Int.natCast_floor_eq_floor]; rw [floor_logb_natCast (by simp)]; rw [Int.log_natCast]
-  exact logb_nonneg (by simp [Nat.cast_add_one_pos]) (Nat.one_le_
+  exact logb_nonneg (by simp [Nat.cast_add_one_pos]) (Nat.one_le_cast.2 (by lia))
+
+@[norm_cast]
 
 中文:
 定理 natFloor_logb_natCast
@@ -2040,7 +2076,9 @@ theorem natFloor_logb_natCast
   obtain rfl | hn := eq_or_ne n 0
   · simp
   rw [← Nat.cast_inj (R := Int)]; rw [Int.natCast_floor_eq_floor]; rw [floor_logb_natCast (by simp)]; rw [Int.log_natCast]
-  exact logb_nonneg (by simp [Nat.cast_add_one_pos]) (Nat.one_le_
+  exact logb_nonneg (by simp [Nat.cast_add_one_pos]) (Nat.one_le_cast.2 (by lia))
+
+@[norm_cast]
 
 Depends on / 依赖: Int.log_natCast, Int.natCast_floor_eq_floor, Nat.cast_add_one_pos, Nat.cast_inj, Nat.one_le_cast, Real.logb, cast_add_one_pos, cast_inj, eq_or_ne, floor_logb_natCast, log_natCast, logb_nonneg, natCast_floor_eq_floor, one_le_cast
 -/
@@ -2068,7 +2106,7 @@ theorem natCeil_logb_natCast
   obtain rfl | hn := eq_or_ne n 0
   · simp
   rw [← Nat.cast_inj (R := Int)]; rw [Int.natCast_ceil_eq_ceil]; rw [ceil_logb_natCast (by simp)]; rw [Int.clog_natCast]
-  exact logb_nonneg (by simp [Nat.cast_add_one_pos]) (Nat.one_le_ca
+  exact logb_nonneg (by simp [Nat.cast_add_one_pos]) (Nat.one_le_cast.2 (by lia))
 
 中文:
 定理 natCeil_logb_natCast
@@ -2081,7 +2119,7 @@ theorem natCeil_logb_natCast
   obtain rfl | hn := eq_or_ne n 0
   · simp
   rw [← Nat.cast_inj (R := Int)]; rw [Int.natCast_ceil_eq_ceil]; rw [ceil_logb_natCast (by simp)]; rw [Int.clog_natCast]
-  exact logb_nonneg (by simp [Nat.cast_add_one_pos]) (Nat.one_le_ca
+  exact logb_nonneg (by simp [Nat.cast_add_one_pos]) (Nat.one_le_cast.2 (by lia))
 
 Depends on / 依赖: Int.clog_natCast, Int.natCast_ceil_eq_ceil, Nat.cast_add_one_pos, Nat.cast_inj, Nat.one_le_cast, Real.logb, cast_add_one_pos, cast_inj, ceil_logb_natCast, clog_natCast, eq_or_ne, logb_nonneg, natCast_ceil_eq_ceil, one_le_cast
 -/
@@ -2261,7 +2299,11 @@ lemma tendsto_abs_logb_atTop
   · exact (this (b := -b) (by simp [hb, neg_eq_iff_eq_neg]) (by linarith +splitNe)).congr (by simp)
   wlog hb₁ : 1 < b generalizing b
   · exact (this (b := b⁻¹) (by simp [hb, inv_eq_iff_eq_inv, inv_neg]) (by simpa)
-      ((one_lt_inv₀ hb₀).2 (by linarith +splitNe
+      ((one_lt_inv₀ hb₀).2 (by linarith +splitNe))).congr (by simp)
+  refine (tendsto_logb_atTop hb₁).congr' ?_
+  filter_upwards [eventually_ge_atTop 1] with x hx₁
+  rw [abs_of_nonneg]
+  exact logb_nonneg hb₁ hx₁
 
 中文:
 引理 tendsto_abs_logb_atTop
@@ -2271,7 +2313,11 @@ lemma tendsto_abs_logb_atTop
   · exact (this (b := -b) (by simp [hb, neg_eq_iff_eq_neg]) (by linarith +splitNe)).congr (by simp)
   wlog hb₁ : 1 < b generalizing b
   · exact (this (b := b⁻¹) (by simp [hb, inv_eq_iff_eq_inv, inv_neg]) (by simpa)
-      ((one_lt_inv₀ hb₀).2 (by linarith +splitNe
+      ((one_lt_inv₀ hb₀).2 (by linarith +splitNe))).congr (by simp)
+  refine (tendsto_logb_atTop hb₁).congr' ?_
+  filter_upwards [eventually_ge_atTop 1] with x hx₁
+  rw [abs_of_nonneg]
+  exact logb_nonneg hb₁ hx₁
 
 Depends on / 依赖: abs_of_nonneg, eventually_ge_atTop, filter_upwards, generalizing, inv_eq_iff_eq_inv, inv_neg, logb_nonneg, neg_eq_iff_eq_neg, splitNe, tendsto_logb_atTop
 -/
@@ -2384,7 +2430,8 @@ theorem continuousAt_logb_iff
       exact not_tendsto_nhds_of_tendsto_atTop (tendsto_logb_nhdsNE_zero_of_base_lt_one hb₀ hb₁)
         _ (h.tendsto.mono_left inf_le_left)
   | inr hb₁ =>
-      exact not_tendsto_nhds_of_tendsto_atBot (t
+      exact not_tendsto_nhds_of_tendsto_atBot (tendsto_logb_nhdsNE_zero hb₁)
+        _ (h.tendsto.mono_left inf_le_left)
 
 中文:
 定理 continuousAt_logb_iff
@@ -2398,7 +2445,8 @@ theorem continuousAt_logb_iff
       exact not_tendsto_nhds_of_tendsto_atTop (tendsto_logb_nhdsNE_zero_of_base_lt_one hb₀ hb₁)
         _ (h.tendsto.mono_left inf_le_left)
   | inr hb₁ =>
-      exact not_tendsto_nhds_of_tendsto_atBot (t
+      exact not_tendsto_nhds_of_tendsto_atBot (tendsto_logb_nhdsNE_zero hb₁)
+        _ (h.tendsto.mono_left inf_le_left)
 
 Depends on / 依赖: continuousAt_logb, h.tendsto.mono_left, inf_le_left, lt_or_gt_of_ne, mono_left, not_tendsto_nhds_of_tendsto_atBot, not_tendsto_nhds_of_tendsto_atTop, tendsto, tendsto_logb_nhdsNE_zero, tendsto_logb_nhdsNE_zero_of_base_lt_one
 -/
@@ -2627,7 +2675,7 @@ theorem isBigO_log_const_mul_log_atTop
       =ᶠ[atTop] (fun x => log c + log x) := by
           filter_upwards [eventually_gt_atTop 0] with a ha using log_mul hc ha.ne'
       _ =O[atTop] log :=
-          isLittleO_const_l
+          isLittleO_const_log_atTop.isBigO.add (Asymptotics.isBigO_refl ..)
 
 中文:
 定理 isBigO_log_const_mul_log_atTop
@@ -2640,7 +2688,7 @@ theorem isBigO_log_const_mul_log_atTop
       =ᶠ[atTop] (fun x => log c + log x) := by
           filter_upwards [eventually_gt_atTop 0] with a ha using log_mul hc ha.ne'
       _ =O[atTop] log :=
-          isLittleO_const_l
+          isLittleO_const_log_atTop.isBigO.add (Asymptotics.isBigO_refl ..)
 
 Depends on / 依赖: Asymptotics, Asymptotics.isBigO_refl, eq_or_ne, eventually_gt_atTop, filter_upwards, ha.ne, isBigO, isBigO_refl, isLittleO_const_log_atTop, isLittleO_const_log_atTop.isBigO, isLittleO_const_log_atTop.isBigO.add, log_mul
 -/
@@ -2768,7 +2816,10 @@ nonrec theorem ContinuousAt.logb (hf : ContinuousAt f a) (h₀ : f a != 0) :
   hf.logb h₀
 
 nonrec theorem ContinuousWithinAt.logb (hf : ContinuousWithinAt f s a) (h₀ : f a != 0) :
-    ContinuousWithinAt 
+    ContinuousWithinAt (fun x => logb b (f x)) s a :=
+  hf.logb h₀
+
+@[fun_prop]
 
 中文:
 定理 连续.logb
@@ -2781,7 +2832,10 @@ nonrec theorem ContinuousAt.logb (hf : ContinuousAt f a) (h₀ : f a != 0) :
   hf.logb h₀
 
 nonrec theorem ContinuousWithinAt.logb (hf : ContinuousWithinAt f s a) (h₀ : f a != 0) :
-    ContinuousWithinAt 
+    ContinuousWithinAt (fun x => logb b (f x)) s a :=
+  hf.logb h₀
+
+@[fun_prop]
 
 Depends on / 依赖: comp_continuous, continuousOn_logb, continuousOn_logb.comp_continuous
 -/
@@ -2880,7 +2934,13 @@ lemma Real.induction_Ico_mul
     intro x hx
     have hx' : 0 < x / x₀ := div_pos (hx₀.trans_le hx) hx₀
     refine this ⌊logb r (x / x₀)⌋₊ x ?_
-    rw [mem_Ico]; rw [← div_lt_iff₀ hx₀]; rw [← rpow_natCast]; rw [← logb_lt_iff_lt_rpow hr hx']; rw [Nat.
+    rw [mem_Ico]; rw [← div_lt_iff₀ hx₀]; rw [← rpow_natCast]; rw [← logb_lt_iff_lt_rpow hr hx']; rw [Nat.cast_add]; rw [Nat.cast_one]
+    exact ⟨hx, Nat.lt_floor_add_one _⟩
+  intro n
+  induction n with
+  | zero => simpa using base
+  | succ n ih =>
+    exact fun x hx => (Ico_subset_Ico_union_Ico hx).elim (ih x) (step (n + 1) (by simp) ih _)
 
 中文:
 引理 实数.induction_Ico_mul
@@ -2890,7 +2950,13 @@ lemma Real.induction_Ico_mul
     intro x hx
     have hx' : 0 < x / x₀ := div_pos (hx₀.trans_le hx) hx₀
     refine this ⌊logb r (x / x₀)⌋₊ x ?_
-    rw [mem_Ico]; rw [← div_lt_iff₀ hx₀]; rw [← rpow_natCast]; rw [← logb_lt_iff_lt_rpow hr hx']; rw [Nat.
+    rw [mem_Ico]; rw [← div_lt_iff₀ hx₀]; rw [← rpow_natCast]; rw [← logb_lt_iff_lt_rpow hr hx']; rw [Nat.cast_add]; rw [Nat.cast_one]
+    exact ⟨hx, Nat.lt_floor_add_one _⟩
+  intro n
+  induction n with
+  | zero => simpa using base
+  | succ n ih =>
+    exact fun x hx => (Ico_subset_Ico_union_Ico hx).elim (ih x) (step (n + 1) (by simp) ih _)
 
 Depends on / 依赖: Ico_subset_Ico_union_Ico, Nat.cast_add, Nat.cast_one, Nat.lt_floor_add_one, Set.Ico, cast_add, cast_one, div_pos, logb_lt_iff_lt_rpow, lt_floor_add_one, mem_Ico, rpow_natCast, trans_le
 -/

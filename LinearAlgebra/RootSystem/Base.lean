@@ -391,7 +391,20 @@ lemma eq_one_or_neg_one_of_mem_support_of_smul_mem_aux
   obtain ⟨f, hf⟩ : exists f : b.support -> Int, P.coroot i = ∑ i, (t * f i) • P.coroot i := by
     have : P.coroot j in span Int (P.coroot '' b.support) := b.coroot_mem_span_int j
     rw [image_eq_range]; rw [mem_span_range_iff_exists_fun] at this
-    refine this.imp fun f 
+    refine this.imp fun f hf => ?_
+    simp only [Finset.coe_sort_coe] at hf
+    simp_rw [mul_smul, ← Finset.smul_sum, Int.cast_smul_eq_zsmul, hf,
+      coroot_eq_smul_coroot_iff.mpr hj]
+  use f ⟨i, h⟩
+  replace hf : P.coroot i = linearCombination R (fun k : b.support => P.coroot k)
+      (t • (linearEquivFunOnFinite R _ _).symm (fun x => (f x : R))) := by
+    rw [map_smul]; rw [linearCombination_eq_fintype_linearCombination_apply]; rw [Fintype.linearCombination_apply]; rw [hf]
+    simp_rw [mul_smul, ← Finset.smul_sum]
+  let g : b.support ->₀ R := single ⟨i, h⟩ 1
+  have hg : P.coroot i = linearCombination R (fun k : b.support => P.coroot k) g := by simp [g]
+  rw [hg] at hf
+  have : Injective (linearCombination R fun k : b.support => P.coroot k) := b.linearIndepOn_coroot
+  simpa [g, linearEquivFunOnFinite, mul_comm t] using (DFunLike.congr_fun (this hf) ⟨i, h⟩).symm
 
 中文:
 引理 eq_one_or_neg_one_of_mem_support_of_smul_mem_aux
@@ -401,7 +414,20 @@ lemma eq_one_or_neg_one_of_mem_support_of_smul_mem_aux
   obtain ⟨f, hf⟩ : exists f : b.support -> Int, P.coroot i = ∑ i, (t * f i) • P.coroot i := by
     have : P.coroot j in span Int (P.coroot '' b.support) := b.coroot_mem_span_int j
     rw [image_eq_range]; rw [mem_span_range_iff_exists_fun] at this
-    refine this.imp fun f 
+    refine this.imp fun f hf => ?_
+    simp only [Finset.coe_sort_coe] at hf
+    simp_rw [mul_smul, ← Finset.smul_sum, Int.cast_smul_eq_zsmul, hf,
+      coroot_eq_smul_coroot_iff.mpr hj]
+  use f ⟨i, h⟩
+  replace hf : P.coroot i = linearCombination R (fun k : b.support => P.coroot k)
+      (t • (linearEquivFunOnFinite R _ _).symm (fun x => (f x : R))) := by
+    rw [map_smul]; rw [linearCombination_eq_fintype_linearCombination_apply]; rw [Fintype.linearCombination_apply]; rw [hf]
+    simp_rw [mul_smul, ← Finset.smul_sum]
+  let g : b.support ->₀ R := single ⟨i, h⟩ 1
+  have hg : P.coroot i = linearCombination R (fun k : b.support => P.coroot k) g := by simp [g]
+  rw [hg] at hf
+  have : Injective (linearCombination R fun k : b.support => P.coroot k) := b.linearIndepOn_coroot
+  simpa [g, linearEquivFunOnFinite, mul_comm t] using (DFunLike.congr_fun (this hf) ⟨i, h⟩).symm
 
 Depends on / 依赖: Finset, Finset.coe_sort_coe, Finset.smul_sum, Int.cast_smul_eq_zsmul, P.coroot, b.coroot_mem_span_int, b.support, cast_smul_eq_zsmul, coe_sort_coe, coroot, coroot_eq_smul_coroot_iff, coroot_eq_smul_coroot_iff.mpr, coroot_mem_span_int, image_eq_range, linearCombination, mem_span_range_iff_exists_fun, mul_smul, replace, simp_rw, smul_sum
 -/
@@ -441,7 +467,16 @@ lemma eq_one_or_neg_one_of_mem_support_of_smul_mem
   replace ht : (z : R) • P.coroot i in range P.coroot := by
     obtain ⟨j, hj⟩ := ht
     simpa only [coroot_eq_smul_coroot_iff.mpr hj, smul_smul, hz, one_smul] using mem_range_self j
-  obtain ⟨w, hw⟩ := b.flip.eq_one_
+  obtain ⟨w, hw⟩ := b.flip.eq_one_or_neg_one_of_mem_support_of_smul_mem_aux i h _ ht
+  have : (z : R) * w = 1 := by
+    simpa [mul_mul_mul_comm _ t, mul_comm t, mul_comm _ (z : R), hz] using congr_arg₂ (· * ·) hz hw
+  suffices z = 1 ∨ z = -1 by
+    rcases this with rfl | rfl
+    · left; simpa using hz
+    · right; simpa [neg_eq_iff_eq_neg] using hz
+  norm_cast at this
+  rw [Int.mul_eq_one_iff_eq_one_or_neg_one] at this
+  tauto
 
 中文:
 引理 eq_one_or_neg_one_of_mem_support_of_smul_mem
@@ -451,7 +486,16 @@ lemma eq_one_or_neg_one_of_mem_support_of_smul_mem
   replace ht : (z : R) • P.coroot i in range P.coroot := by
     obtain ⟨j, hj⟩ := ht
     simpa only [coroot_eq_smul_coroot_iff.mpr hj, smul_smul, hz, one_smul] using mem_range_self j
-  obtain ⟨w, hw⟩ := b.flip.eq_one_
+  obtain ⟨w, hw⟩ := b.flip.eq_one_or_neg_one_of_mem_support_of_smul_mem_aux i h _ ht
+  have : (z : R) * w = 1 := by
+    simpa [mul_mul_mul_comm _ t, mul_comm t, mul_comm _ (z : R), hz] using congr_arg₂ (· * ·) hz hw
+  suffices z = 1 ∨ z = -1 by
+    rcases this with rfl | rfl
+    · left; simpa using hz
+    · right; simpa [neg_eq_iff_eq_neg] using hz
+  norm_cast at this
+  rw [Int.mul_eq_one_iff_eq_one_or_neg_one] at this
+  tauto
 
 Depends on / 依赖: P.coroot, b.eq_one_or_neg_one_of_mem_support_of_smul_mem_aux, b.flip.eq_one_or_neg_one_of_mem_support_of_smul_mem_aux, coroot, coroot_eq_smul_coroot_iff, coroot_eq_smul_coroot_iff.mpr, eq_one_or_neg_one_of_mem_support_of_smul_mem_aux, mem_range_self, mul_comm, mul_mul_mul_comm, one_smul, replace, smul_smul
 -/
@@ -486,7 +530,29 @@ lemma pos_or_neg_of_sum_smul_root_mem
       (hf₀ : f.support subseteq b.support) (hf' : f != 0), 0 < f by
     obtain ⟨k, hk⟩ := hf
 have hf' : f != 0 := by rintro rfl; exact P.ne_zero k by simp [hk]
-    rcases b
+    rcases b.root_mem_or_neg_mem k with hk' | hk' <;> rw [hk] at hk'
+    · left; exact this f hk' hf₀ hf'
+    · right; simpa using this (-f) (by convert! hk'; simp) (by simpa only [support_neg]) (by simpa)
+  intro f hf hf₀ hf'
+  let f' : b.support -> Int := fun i => f i
+  replace hf : ∑ j, f' j • P.root j in AddSubmonoid.closure (P.root '' b.support) := by
+    suffices ∑ j, f' j • P.root j = ∑ j in b.support, f j • P.root j by rwa [this]
+    rw [← b.support.sum_finset_coe]; rfl
+  rw [← span_nat_eq_addSubmonoidClosure]; rw [mem_toAddSubmonoid]; rw [Fintype.mem_span_image_iff_exists_fun] at hf
+  obtain ⟨c, hc⟩ := hf
+  replace hc (i : b.support) : c i = f' i := Fintype.linearIndependent_iffₛ.mp
+    (b.linearIndepOn_root.restrict_scalars' Int) (Int.ofNat ∘ c) f' (by simpa) i
+  have aux : 0 <= f := by
+    intro i
+    by_cases hi : i in b.support
+    · change 0 <= f' ⟨i, hi⟩
+      simp [← hc]
+    · replace hi : i ∉ f.support := by contrapose hi; exact hf₀ hi
+      simp_all
+  refine Pi.lt_def.mpr ⟨aux, ?_⟩
+  by_contra! contra
+  replace contra : f = 0 := le_antisymm contra aux
+  contradiction
 
 中文:
 引理 pos_or_neg_of_sum_smul_root_mem
@@ -497,7 +563,29 @@ have hf' : f != 0 := by rintro rfl; exact P.ne_zero k by simp [hk]
       (hf₀ : f.support subseteq b.support) (hf' : f != 0), 0 < f by
     obtain ⟨k, hk⟩ := hf
 have hf' : f != 0 := by rintro rfl; exact P.ne_zero k by simp [hk]
-    rcases b
+    rcases b.root_mem_or_neg_mem k with hk' | hk' <;> rw [hk] at hk'
+    · left; exact this f hk' hf₀ hf'
+    · right; simpa using this (-f) (by convert! hk'; simp) (by simpa only [support_neg]) (by simpa)
+  intro f hf hf₀ hf'
+  let f' : b.support -> Int := fun i => f i
+  replace hf : ∑ j, f' j • P.root j in AddSubmonoid.closure (P.root '' b.support) := by
+    suffices ∑ j, f' j • P.root j = ∑ j in b.support, f j • P.root j by rwa [this]
+    rw [← b.support.sum_finset_coe]; rfl
+  rw [← span_nat_eq_addSubmonoidClosure]; rw [mem_toAddSubmonoid]; rw [Fintype.mem_span_image_iff_exists_fun] at hf
+  obtain ⟨c, hc⟩ := hf
+  replace hc (i : b.support) : c i = f' i := Fintype.linearIndependent_iffₛ.mp
+    (b.linearIndepOn_root.restrict_scalars' Int) (Int.ofNat ∘ c) f' (by simpa) i
+  have aux : 0 <= f := by
+    intro i
+    by_cases hi : i in b.support
+    · change 0 <= f' ⟨i, hi⟩
+      simp [← hc]
+    · replace hi : i ∉ f.support := by contrapose hi; exact hf₀ hi
+      simp_all
+  refine Pi.lt_def.mpr ⟨aux, ?_⟩
+  by_contra! contra
+  replace contra : f = 0 := le_antisymm contra aux
+  contradiction
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure, P.ne_zero, P.root, b.root_mem_or_neg_mem, b.suppor, b.support, closure, convert, f.support, ne_zero, root_mem_or_neg_mem, subseteq, suppor, support, support_neg
 -/
@@ -615,7 +703,13 @@ lemma sub_notMem_range_root
   classical
   let f : ι -> Int := fun k => if k = i then 1 else if k = j then -1 else 0
   have hf : ∑ k in b.support, f k • P.root k = P.root i - P.root j := by
-    have : {i, j} subse
+    have : {i, j} subseteq b.support := by aesop (add simp Finset.insert_subset_iff)
+    rw [← Finset.sum_subset (s₁ := {i]; rw [j}) (s₂ := b.support) (by lia) (by aesop)]; rw [Finset.sum_insert (by grind)]; rw [Finset.sum_singleton]
+    simp [f, hij, sub_eq_add_neg]
+  intro contra
+  rcases b.pos_or_neg_of_sum_smul_root_mem f (by rwa [hf]) (by aesop) with pos | neg
+  · simpa [hij, f] using le_of_lt pos j
+  · simpa [hij, f] using le_of_lt neg i
 
 中文:
 引理 sub_notMem_range_root
@@ -625,7 +719,13 @@ lemma sub_notMem_range_root
   classical
   let f : ι -> Int := fun k => if k = i then 1 else if k = j then -1 else 0
   have hf : ∑ k in b.support, f k • P.root k = P.root i - P.root j := by
-    have : {i, j} subse
+    have : {i, j} subseteq b.support := by aesop (add simp Finset.insert_subset_iff)
+    rw [← Finset.sum_subset (s₁ := {i]; rw [j}) (s₂ := b.support) (by lia) (by aesop)]; rw [Finset.sum_insert (by grind)]; rw [Finset.sum_singleton]
+    simp [f, hij, sub_eq_add_neg]
+  intro contra
+  rcases b.pos_or_neg_of_sum_smul_root_mem f (by rwa [hf]) (by aesop) with pos | neg
+  · simpa [hij, f] using le_of_lt pos j
+  · simpa [hij, f] using le_of_lt neg i
 
 Depends on / 依赖: Finset, Finset.insert_subset_iff, Finset.sum_insert, Finset.sum_singleton, Finset.sum_subset, P.ne_zero, P.root, b.support, classical, eq_or_ne, insert_subset_iff, mem_range, ne_zero, not_exists, sub_self, subseteq, sum_insert, sum_singleton, sum_subset, support
 -/
@@ -965,7 +1065,16 @@ lemma exists_root_eq_sum_nat_or_neg
     exists f : ι -> Nat, f.support subseteq b.support ∧ m = ∑ j in b.support, f j • P.root j by
     rcases b.root_mem_or_neg_mem i with hi | hi
     · obtain ⟨f, hf, hf'⟩ := this _ hi
-   
+      exact ⟨f, hf, Or.inl hf'⟩
+    · obtain ⟨f, hf, hf'⟩ := this _ hi
+      exact ⟨f, hf, Or.inr hf'⟩
+  intro m hm
+  refine AddSubmonoid.closure_induction ?_ ⟨0, by simp⟩ ?_ hm
+  · rintro - ⟨j, hj, rfl⟩
+    exact ⟨Pi.single j 1, by simpa, by aesop (add simp Pi.single_apply)⟩
+  · intro _ _ _ _ ⟨f, hf, hf'⟩ ⟨g, hg, hg'⟩
+    refine ⟨f + g, ?_, by simp [hf', hg', add_smul, Finset.sum_add_distrib]⟩
+exact (support_add f g).trans union_subset_iff.mpr ⟨hf, hg⟩
 
 中文:
 引理 存在_root_eq_sum_nat_or_neg
@@ -977,7 +1086,16 @@ lemma exists_root_eq_sum_nat_or_neg
     exists f : ι -> Nat, f.support subseteq b.support ∧ m = ∑ j in b.support, f j • P.root j by
     rcases b.root_mem_or_neg_mem i with hi | hi
     · obtain ⟨f, hf, hf'⟩ := this _ hi
-   
+      exact ⟨f, hf, Or.inl hf'⟩
+    · obtain ⟨f, hf, hf'⟩ := this _ hi
+      exact ⟨f, hf, Or.inr hf'⟩
+  intro m hm
+  refine AddSubmonoid.closure_induction ?_ ⟨0, by simp⟩ ?_ hm
+  · rintro - ⟨j, hj, rfl⟩
+    exact ⟨Pi.single j 1, by simpa, by aesop (add simp Pi.single_apply)⟩
+  · intro _ _ _ _ ⟨f, hf, hf'⟩ ⟨g, hg, hg'⟩
+    refine ⟨f + g, ?_, by simp [hf', hg', add_smul, Finset.sum_add_distrib]⟩
+exact (support_add f g).trans union_subset_iff.mpr ⟨hf, hg⟩
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure, AddSubmonoid.closure_induction, Or.inl, Or.inr, P.root, Pi.single, b.root_mem_or_neg_mem, b.support, classical, closure, closure_induction, f.support, neg_eq_iff_eq_neg, root_mem_or_neg_mem, simp_rw, single, subseteq, support
 -/
@@ -1014,7 +1132,10 @@ lemma exists_root_eq_sum_int
     by_contra! contra
     replace contra : f = 0 := by ext i; simpa using contra i
 exact P.ne_zero i by simp [hf', contra]
-· refine ⟨-Nat.
+· refine ⟨-Nat.cast ∘ f, by simpa, Or.inr Pi.lt_def.mpr ⟨fun _ => by simp, ?_⟩, by simp [hf']⟩
+    by_contra! contra
+    replace contra : f = 0 := by ext i; simpa using contra i
+exact P.ne_zero i by simp [hf', contra]
 
 中文:
 引理 存在_root_eq_sum_int
@@ -1025,7 +1146,10 @@ exact P.ne_zero i by simp [hf', contra]
     by_contra! contra
     replace contra : f = 0 := by ext i; simpa using contra i
 exact P.ne_zero i by simp [hf', contra]
-· refine ⟨-Nat.
+· refine ⟨-Nat.cast ∘ f, by simpa, Or.inr Pi.lt_def.mpr ⟨fun _ => by simp, ?_⟩, by simp [hf']⟩
+    by_contra! contra
+    replace contra : f = 0 := by ext i; simpa using contra i
+exact P.ne_zero i by simp [hf', contra]
 
 Depends on / 依赖: Nat.cast, Or.inl, Or.inr, P.ne_zero, Pi.lt_def.mpr, b.exists_root_eq_sum_nat_or_neg, contra, exists_root_eq_sum_nat_or_neg, lt_def, ne_zero, replace
 -/
@@ -1078,7 +1202,11 @@ lemma height_eq_sum
     Finset.sum_congr rfl this
   intro j hj
   obtain ⟨-, -, h⟩ := (b.exists_root_eq_sum_int i).choose_spec
-  rw [h]; rw [b.support.sum_subtype (p := (· in b.support)) (by simp) (F := inferInstance)]; rw [b.support.s
+  rw [h]; rw [b.support.sum_subtype (p := (· in b.support)) (by simp) (F := inferInstance)]; rw [b.support.sum_subtype (p := (· in b.support)) (by simp) (F := inferInstance)] at heq
+  have aux (j : b.support) := Fintype.linearIndependent_iffₛ.mp
+      (b.linearIndepOn_root.restrict_scalars' Int) ((b.exists_root_eq_sum_int i).choose ∘ (↑))
+      (f ∘ (↑)) (by simpa) j
+  simpa using! aux ⟨j, hj⟩
 
 中文:
 引理 height_eq_sum
@@ -1088,7 +1216,11 @@ lemma height_eq_sum
     Finset.sum_congr rfl this
   intro j hj
   obtain ⟨-, -, h⟩ := (b.exists_root_eq_sum_int i).choose_spec
-  rw [h]; rw [b.support.sum_subtype (p := (· in b.support)) (by simp) (F := inferInstance)]; rw [b.support.s
+  rw [h]; rw [b.support.sum_subtype (p := (· in b.support)) (by simp) (F := inferInstance)]; rw [b.support.sum_subtype (p := (· in b.support)) (by simp) (F := inferInstance)] at heq
+  have aux (j : b.support) := Fintype.linearIndependent_iffₛ.mp
+      (b.linearIndepOn_root.restrict_scalars' Int) ((b.exists_root_eq_sum_int i).choose ∘ (↑))
+      (f ∘ (↑)) (by simpa) j
+  simpa using! aux ⟨j, hj⟩
 
 Depends on / 依赖: Finset, Finset.sum_congr, Fintype, Fintype.linearIndependent_iff, b.exists_root_eq_sum_int, b.linearIndepOn_root.restrict_scalars, b.support, b.support.sum_subtype, choose_spec, exists_root_eq_sum_int, linearIndepOn_root, restrict_scalars, sum_congr, sum_subtype, support
 -/
@@ -1118,7 +1250,16 @@ lemma height_ne_zero
     by_contra! contra
     replace contra (j : ι) : f j = 0 := by
       by_cases hj : j in f.support
-      · exact le_antisymm (c
+      · exact le_antisymm (contra j (hf₀ hj)) (pos.le j)
+      · simpa using hj
+exact P.ne_zero i by simp [hf₂, contra]
+  · refine (Finset.sum_neg' (fun i _ => neg.le i) ?_).ne
+    by_contra! contra
+    replace contra (j : ι) : f j = 0 := by
+      by_cases hj : j in f.support
+      · exact le_antisymm (neg.le j) (contra j (hf₀ hj))
+      · simpa using hj
+exact P.ne_zero i by simp [hf₂, contra]
 
 中文:
 引理 height_ne_zero
@@ -1131,7 +1272,16 @@ lemma height_ne_zero
     by_contra! contra
     replace contra (j : ι) : f j = 0 := by
       by_cases hj : j in f.support
-      · exact le_antisymm (c
+      · exact le_antisymm (contra j (hf₀ hj)) (pos.le j)
+      · simpa using hj
+exact P.ne_zero i by simp [hf₂, contra]
+  · refine (Finset.sum_neg' (fun i _ => neg.le i) ?_).ne
+    by_contra! contra
+    replace contra (j : ι) : f j = 0 := by
+      by_cases hj : j in f.support
+      · exact le_antisymm (neg.le j) (contra j (hf₀ hj))
+      · simpa using hj
+exact P.ne_zero i by simp [hf₂, contra]
 
 Depends on / 依赖: Finset, Finset.sum_neg, Finset.sum_pos, P.ne_zero, b.exists_root_eq_sum_int, contra, exists_root_eq_sum_int, f.support, height_eq_sum, le_antisymm, ne_zero, neg.le, pos.le, replace, sum_neg, sum_pos, support
 -/
@@ -1230,7 +1380,8 @@ lemma height_add
   obtain ⟨g, -, -, hg⟩ := b.exists_root_eq_sum_int j
   have hfg : P.root k = ∑ l in b.support, (f + g) l • P.root l := by
     simp_rw [Pi.add_apply, add_smul, Finset.sum_add_distrib, ← hf, ← hg, hk]
-  simp_rw [height_eq_sum hf, height_eq_sum hg
+  simp_rw [height_eq_sum hf, height_eq_sum hg, height_eq_sum hfg, ← Finset.sum_add_distrib,
+    Pi.add_apply]
 
 中文:
 引理 height_add
@@ -1240,7 +1391,8 @@ lemma height_add
   obtain ⟨g, -, -, hg⟩ := b.exists_root_eq_sum_int j
   have hfg : P.root k = ∑ l in b.support, (f + g) l • P.root l := by
     simp_rw [Pi.add_apply, add_smul, Finset.sum_add_distrib, ← hf, ← hg, hk]
-  simp_rw [height_eq_sum hf, height_eq_sum hg
+  simp_rw [height_eq_sum hf, height_eq_sum hg, height_eq_sum hfg, ← Finset.sum_add_distrib,
+    Pi.add_apply]
 
 Depends on / 依赖: Finset, Finset.sum_add_distrib, P.root, Pi.add_apply, add_apply, add_smul, b.exists_root_eq_sum_int, b.support, exists_root_eq_sum_int, height_eq_sum, simp_rw, sum_add_distrib, support
 -/
@@ -1291,7 +1443,9 @@ lemma height_add_zsmul
   obtain ⟨g, -, -, hg⟩ := b.exists_root_eq_sum_int j
   have hfg : P.root k = ∑ l in b.support, (f + z • g) l • P.root l := by
     simp_rw [Pi.add_apply, Pi.smul_apply, add_smul, smul_assoc, Finset.sum_add_distrib,
-      ← Finset.smul_sum, ← hf,
+      ← Finset.smul_sum, ← hf, ← hg, hk]
+  simp_rw [height_eq_sum hf, height_eq_sum hg, height_eq_sum hfg, Pi.add_apply, Pi.smul_apply,
+    Finset.sum_add_distrib, Finset.smul_sum]
 
 中文:
 引理 height_add_zsmul
@@ -1301,7 +1455,9 @@ lemma height_add_zsmul
   obtain ⟨g, -, -, hg⟩ := b.exists_root_eq_sum_int j
   have hfg : P.root k = ∑ l in b.support, (f + z • g) l • P.root l := by
     simp_rw [Pi.add_apply, Pi.smul_apply, add_smul, smul_assoc, Finset.sum_add_distrib,
-      ← Finset.smul_sum, ← hf,
+      ← Finset.smul_sum, ← hf, ← hg, hk]
+  simp_rw [height_eq_sum hf, height_eq_sum hg, height_eq_sum hfg, Pi.add_apply, Pi.smul_apply,
+    Finset.sum_add_distrib, Finset.smul_sum]
 
 Depends on / 依赖: Finset, Finset.smul_sum, Finset.sum_add_distrib, P.root, Pi.add_apply, Pi.smul_apply, add_apply, add_smul, b.exists_root_eq_sum_int, b.support, exists_root_eq_sum_int, height_eq_sum, simp_rw, smul_apply, smul_assoc, smul_sum, sum_add_distrib, support
 -/
@@ -1535,7 +1691,17 @@ lemma IsPos.exists_mem_support_pos_pairingIn
     refine hf₁.resolve_right ?_
     rw [isPos_iff]; rw [height_eq_sum hf₂] at h₀
     contrapose! h₀
-    exact Finset.sum_nonpos fun i _ => h₀.l
+    exact Finset.sum_nonpos fun i _ => h₀.le i
+  have : P.pairingIn Int i i = ∑ j in b.support, f j • P.pairingIn Int j i :=
+algebraMap_injective Int R by
+      simp_rw [algebraMap_pairingIn, map_sum, ← root_coroot_eq_pairing, hf₂, map_sum, map_zsmul,
+        LinearMap.coe_sum, Finset.sum_apply, LinearMap.smul_apply, root_coroot_eq_pairing,
+        zsmul_eq_mul, algebraMap_pairingIn]
+  rw [this]
+  refine Finset.sum_nonpos fun j _ => ?_
+  by_cases hj : j in Function.support f
+  · exact smul_nonpos_of_nonneg_of_nonpos (hf₁.le j) (contra j (hf₀ hj))
+  · simp_all
 
 中文:
 引理 IsPos.存在_mem_support_pos_pairingIn
@@ -1548,7 +1714,17 @@ lemma IsPos.exists_mem_support_pos_pairingIn
     refine hf₁.resolve_right ?_
     rw [isPos_iff]; rw [height_eq_sum hf₂] at h₀
     contrapose! h₀
-    exact Finset.sum_nonpos fun i _ => h₀.l
+    exact Finset.sum_nonpos fun i _ => h₀.le i
+  have : P.pairingIn Int i i = ∑ j in b.support, f j • P.pairingIn Int j i :=
+algebraMap_injective Int R by
+      simp_rw [algebraMap_pairingIn, map_sum, ← root_coroot_eq_pairing, hf₂, map_sum, map_zsmul,
+        LinearMap.coe_sum, Finset.sum_apply, LinearMap.smul_apply, root_coroot_eq_pairing,
+        zsmul_eq_mul, algebraMap_pairingIn]
+  rw [this]
+  refine Finset.sum_nonpos fun j _ => ?_
+  by_cases hj : j in Function.support f
+  · exact smul_nonpos_of_nonneg_of_nonpos (hf₁.le j) (contra j (hf₀ hj))
+  · simp_all
 
 Depends on / 依赖: Finset, Finset.sum_nonpos, LinearMap, LinearMap.coe_sum, P.pairingIn, algebraMap_injective, algebraMap_pairingIn, b.exists_root_eq_sum_int, b.support, coe_sum, contra, contrapose, exists_root_eq_sum_int, height_eq_sum, isPos_iff, map_sum, map_zsmul, pairingIn, replace, resolve_right
 -/
@@ -1619,7 +1795,25 @@ lemma IsPos.add_zsmul
     refine IsReduced.linearIndependent P hij.symm fun contra => ?_
     let := P.indexNeg
     replace contra : i = -j := by rw [eq_comm, neg_eq_iff_eq_neg]; simpa using contra
-    rw [contra]; rw [isPos_iff]; rw [height_reflectionPerm
+    rw [contra]; rw [isPos_iff]; rw [height_reflectionPerm_self]; rw [height_one_of_mem_support hj] at hi
+    lia
+  induction z generalizing i k with
+  | zero => simp_all
+  | succ w hw =>
+    obtain ⟨l, hl⟩ : P.root i + (w : Int) • P.root j in range P.root := by
+      replace hk : P.root i + (w + 1) • P.root j in range P.root := ⟨k, by rw [hk]; module⟩
+      simp only [natCast_zsmul, root_add_nsmul_mem_range_iff_le_chainTopCoeff hij] at hk ⊢
+      lia
+    replace hk : P.root k = P.root l + P.root j := by rw [hk, hl]; module
+    exact (hw hi hl hij).add (b.isPos_of_mem_support hj) hk
+  | pred w hw =>
+    obtain ⟨l, hl⟩ : P.root i + (-w : Int) • P.root j in range P.root := by
+      replace hk : P.root i - (w + 1) • P.root j in range P.root := ⟨k, by rw [hk]; module⟩
+      rw [neg_smul]; rw [← sub_eq_add_neg]; rw [natCast_zsmul]
+      simp only [root_sub_nsmul_mem_range_iff_le_chainBotCoeff hij] at hk ⊢
+      lia
+    replace hk : P.root k = P.root l - P.root j := by rw [hk, hl]; module
+    exact (hw hi hl hij).sub hj hk
 
 中文:
 引理 IsPos.add_zsmul
@@ -1629,7 +1823,25 @@ lemma IsPos.add_zsmul
     refine IsReduced.linearIndependent P hij.symm fun contra => ?_
     let := P.indexNeg
     replace contra : i = -j := by rw [eq_comm, neg_eq_iff_eq_neg]; simpa using contra
-    rw [contra]; rw [isPos_iff]; rw [height_reflectionPerm
+    rw [contra]; rw [isPos_iff]; rw [height_reflectionPerm_self]; rw [height_one_of_mem_support hj] at hi
+    lia
+  induction z generalizing i k with
+  | zero => simp_all
+  | succ w hw =>
+    obtain ⟨l, hl⟩ : P.root i + (w : Int) • P.root j in range P.root := by
+      replace hk : P.root i + (w + 1) • P.root j in range P.root := ⟨k, by rw [hk]; module⟩
+      simp only [natCast_zsmul, root_add_nsmul_mem_range_iff_le_chainTopCoeff hij] at hk ⊢
+      lia
+    replace hk : P.root k = P.root l + P.root j := by rw [hk, hl]; module
+    exact (hw hi hl hij).add (b.isPos_of_mem_support hj) hk
+  | pred w hw =>
+    obtain ⟨l, hl⟩ : P.root i + (-w : Int) • P.root j in range P.root := by
+      replace hk : P.root i - (w + 1) • P.root j in range P.root := ⟨k, by rw [hk]; module⟩
+      rw [neg_smul]; rw [← sub_eq_add_neg]; rw [natCast_zsmul]
+      simp only [root_sub_nsmul_mem_range_iff_le_chainBotCoeff hij] at hk ⊢
+      lia
+    replace hk : P.root k = P.root l - P.root j := by rw [hk, hl]; module
+    exact (hw hi hl hij).sub hj hk
 
 Depends on / 依赖: IsReduced, IsReduced.linearIndependent, LinearIndependent, P.indexNeg, P.root, contra, eq_comm, generalizing, height_one_of_mem_support, height_reflectionPerm_self, hij.symm, indexNeg, isPos_iff, linearIndependent, neg_eq_iff_eq_neg, replace
 -/
@@ -1704,7 +1916,16 @@ lemma IsPos.induction_on_add
   | succ n ih =>
     obtain ⟨j, hj, hj'⟩ := h₀.exists_mem_support_pos_pairingIn
     rw [P.zero_lt_pairingIn_iff'] at hj'
-    rcases eq_or_ne i j with rfl | hi
+    rcases eq_or_ne i j with rfl | hij; · exact h₁ i hj
+    obtain ⟨k, hk⟩ := P.root_sub_root_mem_of_pairingIn_pos hj' hij
+    have hkn : b.height k = n := by rw [b.height_sub hk, height_one_of_mem_support hj]; lia
+    have hkpos : b.IsPos k := by rw [isPos_iff']; lia
+    exact h₂ k j i (by rw [hk]; module) (ih hkpos hkn) hj
+  | pred n ih =>
+    rw [isPos_iff] at h₀
+    lia
+
+omit [P.IsReduced] in
 
 中文:
 引理 IsPos.induction_on_add
@@ -1715,7 +1936,16 @@ lemma IsPos.induction_on_add
   | succ n ih =>
     obtain ⟨j, hj, hj'⟩ := h₀.exists_mem_support_pos_pairingIn
     rw [P.zero_lt_pairingIn_iff'] at hj'
-    rcases eq_or_ne i j with rfl | hi
+    rcases eq_or_ne i j with rfl | hij; · exact h₁ i hj
+    obtain ⟨k, hk⟩ := P.root_sub_root_mem_of_pairingIn_pos hj' hij
+    have hkn : b.height k = n := by rw [b.height_sub hk, height_one_of_mem_support hj]; lia
+    have hkpos : b.IsPos k := by rw [isPos_iff']; lia
+    exact h₂ k j i (by rw [hk]; module) (ih hkpos hkn) hj
+  | pred n ih =>
+    rw [isPos_iff] at h₀
+    lia
+
+omit [P.IsReduced] in
 
 Depends on / 依赖: False.elim, Int.induction_on, P.root_sub_root_mem_of_pairingIn_pos, P.zero_lt_pairingIn_iff, b.IsPos, b.height, b.height_ne_zero, b.height_sub, eq_or_ne, exists_mem_support_pos_pairingIn, generalize, generalizing, height, height_ne_zero, height_one_of_mem_support, height_sub, induction_on, isPos_iff, root_sub_root_mem_of_pairingIn_pos, zero_lt_pairingIn_iff
 -/
@@ -1754,7 +1984,14 @@ lemma exists_eq_sum_and_forall_sum_mem_of_isPos
   · simpa using insert_subset h₅ h₂
   · simp [Fin.sum_univ_castSucc, h₁, h₃]
   · by_cases hm : m < n
-    · have : m = (⟨m, hm⟩ : Fin n).castSucc
+    · have : m = (⟨m, hm⟩ : Fin n).castSucc := rfl
+      rw [this]; rw [Fin.sum_Iic_castSucc]
+      simp only [Fin.snoc_castSucc, h₄]
+    · replace hm : m = n := by lia
+      replace hm : Finset.Iic m = Finset.univ := by ext; simp [hm, Fin.le_def, Fin.is_le]
+      simp [hm, Fin.sum_univ_castSucc, ← h₃, ← h₁]
+
+omit [P.IsReduced] in
 
 中文:
 引理 存在_eq_sum_and_对任意_sum_mem_of_isPos
@@ -1766,7 +2003,14 @@ lemma exists_eq_sum_and_forall_sum_mem_of_isPos
   · simpa using insert_subset h₅ h₂
   · simp [Fin.sum_univ_castSucc, h₁, h₃]
   · by_cases hm : m < n
-    · have : m = (⟨m, hm⟩ : Fin n).castSucc
+    · have : m = (⟨m, hm⟩ : Fin n).castSucc := rfl
+      rw [this]; rw [Fin.sum_Iic_castSucc]
+      simp only [Fin.snoc_castSucc, h₄]
+    · replace hm : m = n := by lia
+      replace hm : Finset.Iic m = Finset.univ := by ext; simp [hm, Fin.le_def, Fin.is_le]
+      simp [hm, Fin.sum_univ_castSucc, ← h₃, ← h₁]
+
+omit [P.IsReduced] in
 
 Depends on / 依赖: Fin.is_le, Fin.le_def, Fin.snoc, Fin.snoc_castSucc, Fin.sum_Iic_castSucc, Fin.sum_univ, Fin.sum_univ_castSucc, Finset, Finset.Iic, Finset.univ, castSucc, hi.induction_on_add, induction_on_add, insert_subset, is_le, le_def, replace, snoc_castSucc, sum_Iic_castSucc, sum_univ
 -/
@@ -1837,7 +2081,19 @@ lemma IsPos.induction_on_reflect
     obtain ⟨j, hj, hj'⟩ := h₀.exists_mem_support_pos_pairingIn
     rw [P.zero_lt_pairingIn_iff'] at hj'
     rcases eq_or_ne i j with rfl | hij; · exact h₁ i hj
-    have hk := h₀.refle
+    have hk := h₀.reflectionPerm hj hij
+    have : (b.height (P.reflectionPerm j i)).natAbs < n := by
+      suffices b.height (P.reflectionPerm j i) < b.height i by
+        have : (b.height (P.reflectionPerm j i)).natAbs = b.height (P.reflectionPerm j i) :=
+Int.natAbs_of_nonneg (isPos_iff' _).mp hk
+        lia
+      have := P.reflection_apply_root' Int (i := j) (j := i)
+      rw [← root_reflectionPerm]; rw [sub_eq_add_neg]; rw [← neg_smul] at this
+      rw [b.height_add_zsmul this]
+replace hj : 0 < b.height j := (isPos_iff _).mp isPos_of_mem_support hj
+      aesop
+    simpa using h₂ (P.reflectionPerm j i) j
+      (ih (m := (b.height (P.reflectionPerm j i)).natAbs) this hk rfl) hj
 
 中文:
 引理 IsPos.induction_on_reflect
@@ -1848,7 +2104,19 @@ lemma IsPos.induction_on_reflect
     obtain ⟨j, hj, hj'⟩ := h₀.exists_mem_support_pos_pairingIn
     rw [P.zero_lt_pairingIn_iff'] at hj'
     rcases eq_or_ne i j with rfl | hij; · exact h₁ i hj
-    have hk := h₀.refle
+    have hk := h₀.reflectionPerm hj hij
+    have : (b.height (P.reflectionPerm j i)).natAbs < n := by
+      suffices b.height (P.reflectionPerm j i) < b.height i by
+        have : (b.height (P.reflectionPerm j i)).natAbs = b.height (P.reflectionPerm j i) :=
+Int.natAbs_of_nonneg (isPos_iff' _).mp hk
+        lia
+      have := P.reflection_apply_root' Int (i := j) (j := i)
+      rw [← root_reflectionPerm]; rw [sub_eq_add_neg]; rw [← neg_smul] at this
+      rw [b.height_add_zsmul this]
+replace hj : 0 < b.height j := (isPos_iff _).mp isPos_of_mem_support hj
+      aesop
+    simpa using h₂ (P.reflectionPerm j i) j
+      (ih (m := (b.height (P.reflectionPerm j i)).natAbs) this hk rfl) hj
 
 Depends on / 依赖: Int.n, Nat.strongRecOn, P.reflectionPerm, P.zero_lt_pairingIn_iff, b.height, eq_or_ne, exists_mem_support_pos_pairingIn, generalize, generalizing, height, natAbs, reflectionPerm, strongRecOn, zero_lt_pairingIn_iff
 -/
@@ -1928,7 +2196,7 @@ lemma forall_mem_support_invtSubmodule_iff
   clear i
   intro i j hi hj
   rw [reflection_reflectionPerm]
-  exact Module.End.i
+  exact Module.End.invtSubmodule.comp _ (Module.End.invtSubmodule.comp _ (hq j hj) hi) (hq j hj)
 
 中文:
 引理 对任意_mem_support_invtSubmodule_iff
@@ -1941,7 +2209,7 @@ lemma forall_mem_support_invtSubmodule_iff
   clear i
   intro i j hi hj
   rw [reflection_reflectionPerm]
-  exact Module.End.i
+  exact Module.End.invtSubmodule.comp _ (Module.End.invtSubmodule.comp _ (hq j hj) hi) (hq j hj)
 
 Depends on / 依赖: Module, Module.End.invtSubmodule.comp, P.indexNeg, P.reflection, b.induction_reflect, indexNeg, induction_reflect, invtSubmodule, reflection, reflection_apply, reflection_reflectionPerm, two_smul
 -/

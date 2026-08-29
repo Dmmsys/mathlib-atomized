@@ -257,7 +257,20 @@ theorem tendsto_IicSnd_atBot
   rw [← h_empty]; rw [← Real.iInter_Iic_rat]; rw [prod_iInter]
   suffices h_neg :
       Tendsto (fun r : Rat => ρ (s ×ˢ Iic ↑(-r))) atTop (𝓝 (ρ (⋂ r : Rat, s ×ˢ Iic ↑(-r)))) by
-    have h_i
+    have h_inter_eq : ⋂ r : Rat, s ×ˢ Iic ↑(-r) = ⋂ r : Rat, s ×ˢ Iic (r : Real) := by
+      ext1 x
+      push _ in _
+      refine ⟨fun h i => ⟨(h i).1, ?_⟩, fun h i => ⟨(h i).1, ?_⟩⟩ <;> have h' := h (-i)
+      · rw [neg_neg] at h'; exact h'.2
+      · exact h'.2
+    rw [h_inter_eq] at h_neg
+    exact tendsto_comp_neg_atTop_iff.mp h_neg
+  refine tendsto_measure_iInter_atTop (fun q => (hs.prod measurableSet_Iic).nullMeasurableSet)
+    ?_ ⟨0, measure_ne_top ρ _⟩
+  refine fun q r hqr => Set.prod_mono subset_rfl fun x hx => ?_
+  simp only [Rat.cast_neg, mem_Iic] at hx ⊢
+  refine hx.trans (neg_le_neg ?_)
+  exact mod_cast hqr
 
 中文:
 定理 tendsto_IicSnd_atBot
@@ -268,7 +281,20 @@ theorem tendsto_IicSnd_atBot
   rw [← h_empty]; rw [← Real.iInter_Iic_rat]; rw [prod_iInter]
   suffices h_neg :
       Tendsto (fun r : Rat => ρ (s ×ˢ Iic ↑(-r))) atTop (𝓝 (ρ (⋂ r : Rat, s ×ˢ Iic ↑(-r)))) by
-    have h_i
+    have h_inter_eq : ⋂ r : Rat, s ×ˢ Iic ↑(-r) = ⋂ r : Rat, s ×ˢ Iic (r : Real) := by
+      ext1 x
+      push _ in _
+      refine ⟨fun h i => ⟨(h i).1, ?_⟩, fun h i => ⟨(h i).1, ?_⟩⟩ <;> have h' := h (-i)
+      · rw [neg_neg] at h'; exact h'.2
+      · exact h'.2
+    rw [h_inter_eq] at h_neg
+    exact tendsto_comp_neg_atTop_iff.mp h_neg
+  refine tendsto_measure_iInter_atTop (fun q => (hs.prod measurableSet_Iic).nullMeasurableSet)
+    ?_ ⟨0, measure_ne_top ρ _⟩
+  refine fun q r hqr => Set.prod_mono subset_rfl fun x hx => ?_
+  simp only [Rat.cast_neg, mem_Iic] at hx ⊢
+  refine hx.trans (neg_le_neg ?_)
+  exact mod_cast hqr
 
 Depends on / 依赖: IicSnd_apply, Real.iInter_Iic_rat, Tendsto, h_empty, h_inter_eq, h_neg, iInter_Iic_rat, measure_empty, neg_neg, prod_empty, prod_iInter, simp_rw
 -/
@@ -401,7 +427,10 @@ theorem setLIntegral_preCDF_fst
   have : forall r, ∫⁻ x in s, preCDF ρ r x ∂ρ.fst = ∫⁻ x in s, (preCDF ρ r * 1) x ∂ρ.fst := by
     simp only [mul_one, forall_const]
   rw [this]; rw [← setLIntegral_withDensity_eq_setLIntegral_mul _ measurable_preCDF _ hs]
-  · simp only [withDensity_preCDF ρ r, Pi.one_apply, lintegral_one, Measur
+  · simp only [withDensity_preCDF ρ r, Pi.one_apply, lintegral_one, Measure.restrict_apply,
+      MeasurableSet.univ, univ_inter]
+  · rw [Pi.one_def]
+    exact measurable_const
 
 中文:
 定理 setL整数egral_preCDF_fst
@@ -410,7 +439,10 @@ theorem setLIntegral_preCDF_fst
   have : forall r, ∫⁻ x in s, preCDF ρ r x ∂ρ.fst = ∫⁻ x in s, (preCDF ρ r * 1) x ∂ρ.fst := by
     simp only [mul_one, forall_const]
   rw [this]; rw [← setLIntegral_withDensity_eq_setLIntegral_mul _ measurable_preCDF _ hs]
-  · simp only [withDensity_preCDF ρ r, Pi.one_apply, lintegral_one, Measur
+  · simp only [withDensity_preCDF ρ r, Pi.one_apply, lintegral_one, Measure.restrict_apply,
+      MeasurableSet.univ, univ_inter]
+  · rw [Pi.one_def]
+    exact measurable_const
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ, Measure, Measure.restrict_apply, Pi.one_apply, Pi.one_def, forall_const, lintegral_one, measurable_const, measurable_preCDF, mul_one, one_apply, one_def, preCDF, restrict_apply, setLIntegral_withDensity_eq_setLIntegral_mul, univ_inter, withDensity_preCDF
 -/
@@ -580,7 +612,8 @@ lemma integrable_preCDF
   · exact measurable_preCDF.ennreal_toReal.aestronglyMeasurable
   · simp_rw [← ofReal_norm, Real.norm_of_nonneg ENNReal.toReal_nonneg]
     rw [← lintegral_one]
-    refine (setLIntegral_le_lintegral _ _).tra
+    refine (setLIntegral_le_lintegral _ _).trans (lintegral_mono_ae ?_)
+    filter_upwards [preCDF_le_one ρ] with a ha using ENNReal.ofReal_toReal_le.trans (ha _)
 
 中文:
 引理 integrable_preCDF
@@ -590,7 +623,8 @@ lemma integrable_preCDF
   · exact measurable_preCDF.ennreal_toReal.aestronglyMeasurable
   · simp_rw [← ofReal_norm, Real.norm_of_nonneg ENNReal.toReal_nonneg]
     rw [← lintegral_one]
-    refine (setLIntegral_le_lintegral _ _).tra
+    refine (setLIntegral_le_lintegral _ _).trans (lintegral_mono_ae ?_)
+    filter_upwards [preCDF_le_one ρ] with a ha using ENNReal.ofReal_toReal_le.trans (ha _)
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_toReal_le.trans, ENNReal.toReal_nonneg, Real.norm_of_nonneg, aestronglyMeasurable, ennreal_toReal, filter_upwards, integrable_of_forall_fin_meas_le, lintegral_mono_ae, lintegral_one, measurable_preCDF, measurable_preCDF.ennreal_toReal.aestronglyMeasurable, measure_lt_top, norm_of_nonneg, ofReal_norm, ofReal_toReal_le, preCDF_le_one, setLIntegral_le_lintegral, simp_rw, toReal_nonneg
 -/
@@ -616,7 +650,25 @@ lemma isRatCondKernelCDFAux_preCDF
   nonneg' _ q := by simp
   le_one' a q := by
     simp only [Kernel.const_apply]
-    fi
+    filter_upwards [preCDF_le_one ρ] with a ha
+    refine ENNReal.toReal_le_of_le_ofReal zero_le_one ?_
+    simp [ha]
+  tendsto_integral_of_antitone a s _ hs_tendsto := by
+    simp_rw [Kernel.const_apply, integral_preCDF_fst ρ]
+    have h := ρ.tendsto_IicSnd_atBot MeasurableSet.univ
+    rw [← ENNReal.toReal_zero]
+    have h0 : Tendsto ENNReal.toReal (𝓝 0) (𝓝 0) :=
+      ENNReal.continuousAt_toReal ENNReal.zero_ne_top
+    exact h0.comp (h.comp hs_tendsto)
+  tendsto_integral_of_monotone a s _ hs_tendsto := by
+    simp_rw [Kernel.const_apply, integral_preCDF_fst ρ]
+    have h := ρ.tendsto_IicSnd_atTop MeasurableSet.univ
+    have h0 : Tendsto ENNReal.toReal (𝓝 (ρ.fst univ)) (𝓝 (ρ.fst.real univ)) :=
+      ENNReal.continuousAt_toReal (measure_ne_top _ _)
+    exact h0.comp (h.comp hs_tendsto)
+  integrable _ q := integrable_preCDF ρ q
+  setIntegral a s hs q := by rw [Kernel.const_apply, Kernel.const_apply,
+    setIntegral_preCDF_fst _ _ hs, measureReal_def, measureReal_def, Measure.IicSnd_apply _ _ hs]
 
 中文:
 引理 isRatCondKernelCDFAux_preCDF
@@ -628,7 +680,25 @@ lemma isRatCondKernelCDFAux_preCDF
   nonneg' _ q := by simp
   le_one' a q := by
     simp only [Kernel.const_apply]
-    fi
+    filter_upwards [preCDF_le_one ρ] with a ha
+    refine ENNReal.toReal_le_of_le_ofReal zero_le_one ?_
+    simp [ha]
+  tendsto_integral_of_antitone a s _ hs_tendsto := by
+    simp_rw [Kernel.const_apply, integral_preCDF_fst ρ]
+    have h := ρ.tendsto_IicSnd_atBot MeasurableSet.univ
+    rw [← ENNReal.toReal_zero]
+    have h0 : Tendsto ENNReal.toReal (𝓝 0) (𝓝 0) :=
+      ENNReal.continuousAt_toReal ENNReal.zero_ne_top
+    exact h0.comp (h.comp hs_tendsto)
+  tendsto_integral_of_monotone a s _ hs_tendsto := by
+    simp_rw [Kernel.const_apply, integral_preCDF_fst ρ]
+    have h := ρ.tendsto_IicSnd_atTop MeasurableSet.univ
+    have h0 : Tendsto ENNReal.toReal (𝓝 (ρ.fst univ)) (𝓝 (ρ.fst.real univ)) :=
+      ENNReal.continuousAt_toReal (measure_ne_top _ _)
+    exact h0.comp (h.comp hs_tendsto)
+  integrable _ q := integrable_preCDF ρ q
+  setIntegral a s hs q := by rw [Kernel.const_apply, Kernel.const_apply,
+    setIntegral_preCDF_fst _ _ hs, measureReal_def, measureReal_def, Measure.IicSnd_apply _ _ hs]
 
 Depends on / 依赖: measurable_preCDF, measurable_snd
 -/

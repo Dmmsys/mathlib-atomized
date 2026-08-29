@@ -43,7 +43,10 @@ lemma coeff_mem_pow_of_mem_adjoin_C_mul_X
   | algebraMap r => simp +contextual [coeff_C, apply_ite]
   | add x y hx hy _ _ => aesop
   | mul x y _ _ hx hy =>
-    rw [c
+    rw [coeff_mul]
+    refine sum_mem fun ⟨j₁, j₂⟩ hj => ?_
+    obtain rfl : j₁ + j₂ = i := by simpa using hj
+    exact pow_add I j₁ j₂ ▸ Ideal.mul_mem_mul (hx _) (hy _)
 
 中文:
 引理 coeff_mem_pow_of_mem_adjoin_C_mul_X
@@ -56,7 +59,10 @@ lemma coeff_mem_pow_of_mem_adjoin_C_mul_X
   | algebraMap r => simp +contextual [coeff_C, apply_ite]
   | add x y hx hy _ _ => aesop
   | mul x y _ _ hx hy =>
-    rw [c
+    rw [coeff_mul]
+    refine sum_mem fun ⟨j₁, j₂⟩ hj => ?_
+    obtain rfl : j₁ + j₂ = i := by simpa using hj
+    exact pow_add I j₁ j₂ ▸ Ideal.mul_mem_mul (hx _) (hy _)
 
 Depends on / 依赖: Algebra, Algebra.adjoin_induction, Ideal.mul_mem_mul, adjoin_induction, algebraMap, apply_ite, coeff_C, coeff_X, coeff_mul, contextual, eq_comm, generalizing, mul_mem_mul, pow_add, sum_mem
 -/
@@ -88,7 +94,20 @@ lemma exists_monic_aeval_eq_zero_forall_mem_pow_of_isIntegral
   let q : R[X] := ∑ i in Finset.range (p.natDegree + 1),
     C ((p.coeff i).1.coeff (p.natDegree - i)) * X ^ i
   have hq : q.natDegree = p.natDegree := by
-    refine natDegree_eq
+    refine natDegree_eq_of_le_of_coeff_ne_zero (natDegree_sum_le_of_forall_le _ _ ?_) ?_
+    · exact fun i hi => (natDegree_C_mul_X_pow_le _ _).trans (by simpa [Nat.lt_succ_iff] using! hi)
+    · simp [q, hp]
+  refine ⟨q, ?_, ?_, ?_⟩
+  · simpa [← hq] using! show q.coeff p.natDegree = 1 by simp [q, hp]
+  · replace e := congr(($e).coeff p.natDegree)
+    simp only [eval₂_eq_sum_range, finsetSum_coeff, coeff_zero] at e
+    simp only [q, map_sum, map_mul, aeval_C, map_pow, aeval_X]
+    refine (Finset.sum_congr rfl fun i hi => ?_).trans e
+    simp only [Finset.mem_range, Nat.lt_succ_iff] at hi
+    rw [mul_pow]; rw [mul_left_comm]; rw [← map_pow]; rw [coeff_C_mul]; rw [coeff_mul_X_pow']; rw [if_pos hi]; rw [mul_comm]
+    simp [Subalgebra.algebraMap_def]
+  · rw [hq]
+    simp [q, apply_ite, coeff_mem_pow_of_mem_adjoin_C_mul_X (p.coeff _).2]
 
 中文:
 引理 存在_monic_aeval_eq_zero_对任意_mem_pow_of_is整数egral
@@ -99,7 +118,20 @@ lemma exists_monic_aeval_eq_zero_forall_mem_pow_of_isIntegral
   let q : R[X] := ∑ i in Finset.range (p.natDegree + 1),
     C ((p.coeff i).1.coeff (p.natDegree - i)) * X ^ i
   have hq : q.natDegree = p.natDegree := by
-    refine natDegree_eq
+    refine natDegree_eq_of_le_of_coeff_ne_zero (natDegree_sum_le_of_forall_le _ _ ?_) ?_
+    · exact fun i hi => (natDegree_C_mul_X_pow_le _ _).trans (by simpa [Nat.lt_succ_iff] using! hi)
+    · simp [q, hp]
+  refine ⟨q, ?_, ?_, ?_⟩
+  · simpa [← hq] using! show q.coeff p.natDegree = 1 by simp [q, hp]
+  · replace e := congr(($e).coeff p.natDegree)
+    simp only [eval₂_eq_sum_range, finsetSum_coeff, coeff_zero] at e
+    simp only [q, map_sum, map_mul, aeval_C, map_pow, aeval_X]
+    refine (Finset.sum_congr rfl fun i hi => ?_).trans e
+    simp only [Finset.mem_range, Nat.lt_succ_iff] at hi
+    rw [mul_pow]; rw [mul_left_comm]; rw [← map_pow]; rw [coeff_C_mul]; rw [coeff_mul_X_pow']; rw [if_pos hi]; rw [mul_comm]
+    simp [Subalgebra.algebraMap_def]
+  · rw [hq]
+    simp [q, apply_ite, coeff_mem_pow_of_mem_adjoin_C_mul_X (p.coeff _).2]
 
 Depends on / 依赖: Finset, Finset.range, Nat.lt_succ_iff, Subsingleton, Subsingleton.elim, lt_succ_iff, natDegree, natDegree_C_mul_X_pow_le, natDegree_eq_of_le_of_coeff_ne_zero, natDegree_sum_le_of_forall_le, p.coeff, p.natDegree, q.natDegree, subsingleton_or_nontrivial
 -/
@@ -140,7 +172,17 @@ lemma exists_monic_aeval_eq_zero_forall_mem_pow_of_mem_map
   refine exists_monic_aeval_eq_zero_forall_mem_pow_of_isIntegral ?_
   induction hx using Submodule.span_induction with
   | zero => simp [isIntegral_zero]
-  | add x y _ _ hx hy => simpa [add_mul] u
+  | add x y _ _ hx hy => simpa [add_mul] using hx.add hy
+  | mem x h =>
+    obtain ⟨x, hx, rfl⟩ := h
+    simpa using isIntegral_algebraMap (R := A) (A := S[X])
+      (x := ⟨C x * X, Algebra.subset_adjoin ⟨x, hx, rfl⟩⟩)
+  | smul a x _ hx =>
+    simp only [smul_eq_mul, map_mul, mul_assoc]
+    refine .mul ?_ hx
+    exact ((Algebra.IsIntegral.isIntegral (R := R) a).map (IsScalarTower.toAlgHom R S _)).tower_top
+
+@[stacks 00H5]
 
 中文:
 引理 存在_monic_aeval_eq_zero_对任意_mem_pow_of_mem_map
@@ -151,7 +193,17 @@ lemma exists_monic_aeval_eq_zero_forall_mem_pow_of_mem_map
   refine exists_monic_aeval_eq_zero_forall_mem_pow_of_isIntegral ?_
   induction hx using Submodule.span_induction with
   | zero => simp [isIntegral_zero]
-  | add x y _ _ hx hy => simpa [add_mul] u
+  | add x y _ _ hx hy => simpa [add_mul] using hx.add hy
+  | mem x h =>
+    obtain ⟨x, hx, rfl⟩ := h
+    simpa using isIntegral_algebraMap (R := A) (A := S[X])
+      (x := ⟨C x * X, Algebra.subset_adjoin ⟨x, hx, rfl⟩⟩)
+  | smul a x _ hx =>
+    simp only [smul_eq_mul, map_mul, mul_assoc]
+    refine .mul ?_ hx
+    exact ((Algebra.IsIntegral.isIntegral (R := R) a).map (IsScalarTower.toAlgHom R S _)).tower_top
+
+@[stacks 00H5]
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.subset_adjoin, Polynomial, Polynomial.algebra, Subalgebra, Submodule, Submodule.span_induction, add_mul, adjoin, algebra, exists_monic_aeval_eq_zero_forall_mem_pow_of_isIntegral, hx.add, isIntegral_algebraMap, isIntegral_zero, map_mul, smul_eq_mul, span_induction, subset_adjoin
 -/

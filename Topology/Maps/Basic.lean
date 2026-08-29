@@ -2550,7 +2550,7 @@ theorem isClosedMap_iff_comap_nhds_le
     simp_rw [preimage_iUnion, nhdsSet_iUnion, comap_iSup, nhdsSet_singleton]
     exact iSup₂_mono fun _ _ => H
 
-alias ⟨IsClosedMap.comap_nh
+alias ⟨IsClosedMap.comap_nhds_le, _⟩ := isClosedMap_iff_comap_nhds_le
 
 中文:
 定理 isClosedMap_iff_comap_nhds_le
@@ -2563,7 +2563,7 @@ alias ⟨IsClosedMap.comap_nh
     simp_rw [preimage_iUnion, nhdsSet_iUnion, comap_iSup, nhdsSet_singleton]
     exact iSup₂_mono fun _ _ => H
 
-alias ⟨IsClosedMap.comap_nh
+alias ⟨IsClosedMap.comap_nhds_le, _⟩ := isClosedMap_iff_comap_nhds_le
 
 Depends on / 依赖: Set.biUnion_of_singleton, biUnion_of_singleton, comap_iSup, isClosedMap_iff_comap_nhdsSet_le, nhdsSet_iUnion, nhdsSet_singleton, preimage_iUnion, simp_rw
 -/
@@ -2677,7 +2677,7 @@ theorem IsClosedMap.frequently_nhds_fiber
   Ultimately, this makes no difference.
   -/
   contrapose! H
-  exact hf.eventuall
+  exact hf.eventually_nhds_fiber y₀ H
 
 中文:
 定理 是闭映射.frequently_nhds_fiber
@@ -2690,7 +2690,7 @@ theorem IsClosedMap.frequently_nhds_fiber
   Ultimately, this makes no difference.
   -/
   contrapose! H
-  exact hf.eventuall
+  exact hf.eventually_nhds_fiber y₀ H
 -/
 theorem IsClosedMap.frequently_nhds_fiber (hf : IsClosedMap f) {p : X -> Prop} (y₀ : Y)
     (H : existsᶠ y in 𝓝 y₀, exists x in f ⁻¹' {y}, p x) :

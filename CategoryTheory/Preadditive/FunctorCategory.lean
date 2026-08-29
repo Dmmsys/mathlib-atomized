@@ -46,7 +46,21 @@ instance functorCategoryPreadditive
       zsmul n α :=
         { app := n • α.app
           naturality X Y f := by
-            simp only [Pi.smul_apply, comp_zsmul, NatTrans.na
+            simp only [Pi.smul_apply, comp_zsmul, NatTrans.naturality, zsmul_comp] }
+      sub α β := { app := fun X => α.app X - β.app X }
+add_assoc _ _ _ := NatTrans.ext add_assoc _ _ _
+zero_add _ := NatTrans.ext zero_add _
+add_zero _ := NatTrans.ext add_zero _
+nsmul_zero _ := NatTrans.ext zero_nsmul _
+nsmul_succ _ _ := NatTrans.ext succ_nsmul _ _
+sub_eq_add_neg _ _ := NatTrans.ext sub_eq_add_neg _ _
+zsmul_zero' _ := NatTrans.ext zero_zsmul _
+zsmul_succ' _ _ := NatTrans.ext SubNegMonoid.zsmul_succ' _ _
+zsmul_neg' _ _ := NatTrans.ext SubNegMonoid.zsmul_neg' _ _
+neg_add_cancel _ := NatTrans.ext neg_add_cancel _
+add_comm _ _ := NatTrans.ext add_comm _ _ }
+add_comp _ _ _ _ _ _ := NatTrans.ext funext fun _ => add_comp _ _ _ _ _ _
+comp_add _ _ _ _ _ _ := NatTrans.ext funext fun _ => comp_add _ _ _ _ _ _
 
 中文:
 实例 functorCategoryPreadditive
@@ -58,7 +72,21 @@ instance functorCategoryPreadditive
       zsmul n α :=
         { app := n • α.app
           naturality X Y f := by
-            simp only [Pi.smul_apply, comp_zsmul, NatTrans.na
+            simp only [Pi.smul_apply, comp_zsmul, NatTrans.naturality, zsmul_comp] }
+      sub α β := { app := fun X => α.app X - β.app X }
+add_assoc _ _ _ := NatTrans.ext add_assoc _ _ _
+zero_add _ := NatTrans.ext zero_add _
+add_zero _ := NatTrans.ext add_zero _
+nsmul_zero _ := NatTrans.ext zero_nsmul _
+nsmul_succ _ _ := NatTrans.ext succ_nsmul _ _
+sub_eq_add_neg _ _ := NatTrans.ext sub_eq_add_neg _ _
+zsmul_zero' _ := NatTrans.ext zero_zsmul _
+zsmul_succ' _ _ := NatTrans.ext SubNegMonoid.zsmul_succ' _ _
+zsmul_neg' _ _ := NatTrans.ext SubNegMonoid.zsmul_neg' _ _
+neg_add_cancel _ := NatTrans.ext neg_add_cancel _
+add_comm _ _ := NatTrans.ext add_comm _ _ }
+add_comp _ _ _ _ _ _ := NatTrans.ext funext fun _ => add_comp _ _ _ _ _ _
+comp_add _ _ _ _ _ _ := NatTrans.ext funext fun _ => comp_add _ _ _ _ _ _
 
 Depends on / 依赖: NatTrans, NatTrans.ext, NatTrans.naturality, Pi.smul_apply, add_assoc, add_zero, comp_nsmul, comp_zsmul, naturality, nsmul_comp, nsmul_succ, nsmul_zero, smul_apply, zero_add, zero_nsmul, zsmul_comp
 -/

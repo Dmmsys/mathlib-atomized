@@ -964,7 +964,9 @@ theorem isOpen_of_mem_nhds
   have : Filter.Tendsto (fun y => y * (x⁻¹ * g)) (𝓝 x) (𝓝 g) :=
     (continuous_id.mul_const _).tendsto' _ _ (mul_inv_cancel_left _ _)
   simpa only [SetLike.mem_coe, Filter.mem_map',
-    H.
+    H.mul_mem_cancel_right (H.mul_mem (H.inv_mem hx) hg')] using! this hg
+
+@[to_additive]
 
 中文:
 定理 isOpen_of_mem_nhds
@@ -975,7 +977,9 @@ theorem isOpen_of_mem_nhds
   have : Filter.Tendsto (fun y => y * (x⁻¹ * g)) (𝓝 x) (𝓝 g) :=
     (continuous_id.mul_const _).tendsto' _ _ (mul_inv_cancel_left _ _)
   simpa only [SetLike.mem_coe, Filter.mem_map',
-    H.
+    H.mul_mem_cancel_right (H.mul_mem (H.inv_mem hx) hg')] using! this hg
+
+@[to_additive]
 
 Depends on / 依赖: Filter, Filter.Tendsto, Filter.mem_map, H.inv_mem, H.mul_mem, H.mul_mem_cancel_right, SetLike, SetLike.mem_coe, Tendsto, continuous_id, continuous_id.mul_const, inv_mem, isOpen_iff_mem_nhds, mem_coe, mem_map, mem_of_mem_nhds, mul_const, mul_inv_cancel_left, mul_mem, mul_mem_cancel_right
 -/
@@ -1776,7 +1780,19 @@ lemma exist_mul_closure_nhds
   apply WClopen.isClosed.isCompact.induction_on (p := fun S => exists T in 𝓝 (1 : G), S * T subseteq W)
     ⟨Set.univ, by simp only [univ_mem, empty_mul, empty_subset, and_self]⟩
     (fun _ _ huv ⟨T, hT, mem⟩ => ⟨T, hT, (mul_subset_mul_right huv).trans mem⟩)
-    fun U V ⟨T₁, hT₁, mem1⟩ ⟨T₂, hT₂, 
+    fun U V ⟨T₁, hT₁, mem1⟩ ⟨T₂, hT₂, mem2⟩ => ⟨T₁ inter T₂, inter_mem hT₁ hT₂, by
+      rw [union_mul]
+      exact union_subset (mul_subset_mul_left inter_subset_left |>.trans mem1)
+        (mul_subset_mul_left inter_subset_right |>.trans mem2) ⟩
+  intro x memW
+  have : (x, 1) in (fun p => p.1 * p.2) ⁻¹' W := by simp [memW]
+  rcases isOpen_prod_iff.mp (continuous_mul.isOpen_preimage W <| WClopen.2) x 1 this with
+    ⟨U, V, Uopen, Vopen, xmemU, onememV, prodsub⟩
+  have h6 : U * V subseteq W := mul_subset_iff.mpr (fun _ hx _ hy => prodsub (mk_mem_prod hx hy))
+  exact ⟨U inter W, ⟨U, Uopen.mem_nhds xmemU, W, fun _ a => a, rfl⟩,
+    V, IsOpen.mem_nhds Vopen onememV, fun _ a => h6 ((mul_subset_mul_right inter_subset_left) a)⟩
+
+@[to_additive]
 
 中文:
 引理 exist_mul_closure_nhds
@@ -1786,7 +1802,19 @@ lemma exist_mul_closure_nhds
   apply WClopen.isClosed.isCompact.induction_on (p := fun S => exists T in 𝓝 (1 : G), S * T subseteq W)
     ⟨Set.univ, by simp only [univ_mem, empty_mul, empty_subset, and_self]⟩
     (fun _ _ huv ⟨T, hT, mem⟩ => ⟨T, hT, (mul_subset_mul_right huv).trans mem⟩)
-    fun U V ⟨T₁, hT₁, mem1⟩ ⟨T₂, hT₂, 
+    fun U V ⟨T₁, hT₁, mem1⟩ ⟨T₂, hT₂, mem2⟩ => ⟨T₁ inter T₂, inter_mem hT₁ hT₂, by
+      rw [union_mul]
+      exact union_subset (mul_subset_mul_left inter_subset_left |>.trans mem1)
+        (mul_subset_mul_left inter_subset_right |>.trans mem2) ⟩
+  intro x memW
+  have : (x, 1) in (fun p => p.1 * p.2) ⁻¹' W := by simp [memW]
+  rcases isOpen_prod_iff.mp (continuous_mul.isOpen_preimage W <| WClopen.2) x 1 this with
+    ⟨U, V, Uopen, Vopen, xmemU, onememV, prodsub⟩
+  have h6 : U * V subseteq W := mul_subset_iff.mpr (fun _ hx _ hy => prodsub (mk_mem_prod hx hy))
+  exact ⟨U inter W, ⟨U, Uopen.mem_nhds xmemU, W, fun _ a => a, rfl⟩,
+    V, IsOpen.mem_nhds Vopen onememV, fun _ a => h6 ((mul_subset_mul_right inter_subset_left) a)⟩
+
+@[to_additive]
 
 Depends on / 依赖: Set.univ, WClopen, WClopen.isClosed.isCompact.induction_on, and_self, empty_mul, empty_subset, induction_on, inter_mem, inter_subset_left, inter_subset_right, isClosed, isCompact, mul_subset_mul_left, mul_subset_mul_right, subseteq, union_mul, union_subset, univ_mem
 -/
@@ -1821,7 +1849,9 @@ lemma exists_mulInvClosureNhd
   · simp [Uopen.mem_nhds onememU, inv_mem_nhds_one]
   · simp [inter_comm]
   · exact Uopen.inter Uopen.inv
-  · exact fun a ha => mu
+  · exact fun a ha => mulclose (mul_subset_mul_left UsubS (mul_subset_mul_left inter_subset_left ha))
+
+@[to_additive]
 
 中文:
 引理 存在_mulInvClosureNhd
@@ -1834,7 +1864,9 @@ lemma exists_mulInvClosureNhd
   · simp [Uopen.mem_nhds onememU, inv_mem_nhds_one]
   · simp [inter_comm]
   · exact Uopen.inter Uopen.inv
-  · exact fun a ha => mu
+  · exact fun a ha => mulclose (mul_subset_mul_left UsubS (mul_subset_mul_left inter_subset_left ha))
+
+@[to_additive]
 
 Depends on / 依赖: Smemnhds, Uopen.inter, Uopen.inv, Uopen.mem_nhds, WClopen, exist_mul_closure_nhds, inter_comm, inter_subset_left, inv_mem_nhds_one, mem_nhds, mem_nhds_iff, mem_nhds_iff.mp, mul_subset_mul_left, mulclose, onememU
 -/
@@ -1865,7 +1897,35 @@ theorem exist_openSubgroup_sub_clopen_nhds_of_one
       rcases mem_iUnion.mp hb with ⟨l, hl⟩
       apply mem_iUnion.mpr
       use k + 1 + l
-      rw [add_assoc]
+      rw [add_assoc]; rw [pow_add]
+      exact Set.mul_mem_mul hk hl
+    one_mem' := by
+      apply mem_iUnion.mpr
+      use 0
+      simp [mem_of_mem_nhds hV.nhds]
+    inv_mem' := fun ha => by
+      rcases mem_iUnion.mp ha with ⟨k, hk⟩
+      apply mem_iUnion.mpr
+      use k
+      rw [← hV.inv]
+      simpa only [inv_pow, Set.mem_inv, inv_inv] using hk }
+  have : IsOpen (⋃ n, V ^ (n + 1)) := by
+    refine isOpen_iUnion (fun n => ?_)
+    rw [pow_succ]
+    exact hV.isOpen.mul_left
+  use ⟨S, this⟩
+  have mulVpow (n : Nat) : W * V ^ (n + 1) subseteq W := by
+    induction n with
+    | zero => simp [hV.mul]
+    | succ n ih =>
+      rw [pow_succ]; rw [← mul_assoc]
+      exact (Set.mul_subset_mul_right ih).trans hV.mul
+  have (n : Nat) : V ^ (n + 1) subseteq W * V ^ (n + 1) := by
+    intro x xin
+    rw [Set.mem_mul]
+    use 1, einW, x, xin
+    rw [one_mul]
+  apply iUnion_subset fun i _ a => mulVpow i (this i a)
 
 中文:
 定理 exist_openSubgroup_sub_clopen_nhds_of_one
@@ -1879,7 +1939,35 @@ theorem exist_openSubgroup_sub_clopen_nhds_of_one
       rcases mem_iUnion.mp hb with ⟨l, hl⟩
       apply mem_iUnion.mpr
       use k + 1 + l
-      rw [add_assoc]
+      rw [add_assoc]; rw [pow_add]
+      exact Set.mul_mem_mul hk hl
+    one_mem' := by
+      apply mem_iUnion.mpr
+      use 0
+      simp [mem_of_mem_nhds hV.nhds]
+    inv_mem' := fun ha => by
+      rcases mem_iUnion.mp ha with ⟨k, hk⟩
+      apply mem_iUnion.mpr
+      use k
+      rw [← hV.inv]
+      simpa only [inv_pow, Set.mem_inv, inv_inv] using hk }
+  have : IsOpen (⋃ n, V ^ (n + 1)) := by
+    refine isOpen_iUnion (fun n => ?_)
+    rw [pow_succ]
+    exact hV.isOpen.mul_left
+  use ⟨S, this⟩
+  have mulVpow (n : Nat) : W * V ^ (n + 1) subseteq W := by
+    induction n with
+    | zero => simp [hV.mul]
+    | succ n ih =>
+      rw [pow_succ]; rw [← mul_assoc]
+      exact (Set.mul_subset_mul_right ih).trans hV.mul
+  have (n : Nat) : V ^ (n + 1) subseteq W * V ^ (n + 1) := by
+    intro x xin
+    rw [Set.mem_mul]
+    use 1, einW, x, xin
+    rw [one_mul]
+  apply iUnion_subset fun i _ a => mulVpow i (this i a)
 
 Depends on / 依赖: Set.mul_mem_mul, Subgroup, WClopen, add_assoc, carrier, exists_mulInvClosureNhd, hV.inv, hV.nhds, inv_mem, inv_pow, mem_iUnion, mem_iUnion.mp, mem_iUnion.mpr, mem_of_mem_nhds, mul_mem, mul_mem_mul, one_mem, pow_add
 -/

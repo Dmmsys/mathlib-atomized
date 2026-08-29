@@ -143,7 +143,10 @@ lemma isKProjective_iff_leftOrthogonal
       fun hK => ⟨fun {L} f hL => ⟨HomotopyCategory.homotopyOfEq _ _ ?_⟩⟩⟩
   · obtain ⟨L, rfl⟩ := HomotopyCategory.quotient_obj_surjective L
     obtain ⟨f, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective f
-    rw [HomotopyCategory.quotient_obj_mem_subcategoryAc
+    rw [HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic] at hL
+    rw [HomotopyCategory.eq_of_homotopy f 0 (IsKProjective.homotopyZero f hL)]; rw [Functor.map_zero]
+  · rw [← HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic] at hL
+    rw [hK ((HomotopyCategory.quotient _ _).map f) hL]; rw [Functor.map_zero]
 
 中文:
 引理 isKProjective_iff_leftOrthogonal
@@ -153,7 +156,10 @@ lemma isKProjective_iff_leftOrthogonal
       fun hK => ⟨fun {L} f hL => ⟨HomotopyCategory.homotopyOfEq _ _ ?_⟩⟩⟩
   · obtain ⟨L, rfl⟩ := HomotopyCategory.quotient_obj_surjective L
     obtain ⟨f, rfl⟩ := (HomotopyCategory.quotient _ _).map_surjective f
-    rw [HomotopyCategory.quotient_obj_mem_subcategoryAc
+    rw [HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic] at hL
+    rw [HomotopyCategory.eq_of_homotopy f 0 (IsKProjective.homotopyZero f hL)]; rw [Functor.map_zero]
+  · rw [← HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic] at hL
+    rw [hK ((HomotopyCategory.quotient _ _).map f) hL]; rw [Functor.map_zero]
 
 Depends on / 依赖: Functor, Functor.map_zero, Homoto, HomotopyCategory, HomotopyCategory.eq_of_homotopy, HomotopyCategory.homotopyOfEq, HomotopyCategory.quotient, HomotopyCategory.quotient_obj_mem_subcategoryAcyclic_iff_acyclic, HomotopyCategory.quotient_obj_surjective, IsKProjective, IsKProjective.homotopyZero, eq_of_homotopy, homotopyOfEq, homotopyZero, map_surjective, map_zero, quotient, quotient_obj_mem_subcategoryAcyclic_iff_acyclic, quotient_obj_surjective
 -/
@@ -267,7 +273,7 @@ lemma isKProjective_of_projective
     rw [isStrictlyGE_iff]
     intro i hi
     exact (K.isZero_of_isStrictlyLE d _ (by dsimp; lia)).op
-  exact isKProjective_of_op (isKInj
+  exact isKProjective_of_op (isKInjective_of_injective L (-d))
 
 中文:
 引理 isKProjective_of_projective
@@ -281,7 +287,7 @@ lemma isKProjective_of_projective
     rw [isStrictlyGE_iff]
     intro i hi
     exact (K.isZero_of_isStrictlyLE d _ (by dsimp; lia)).op
-  exact isKProjective_of_op (isKInj
+  exact isKProjective_of_op (isKInjective_of_injective L (-d))
 
 Depends on / 依赖: Injective, IsStrictlyGE, K.isZero_of_isStrictlyLE, L.IsStrictlyGE, functor, functor.obj, infer_instance, isKInjective_of_injective, isKProjective_of_op, isStrictlyGE_iff, isZero_of_isStrictlyLE, opEquivalence
 -/

@@ -188,7 +188,9 @@ definition ofGradedObject
   shape i₁ i₁' h := by
     ext i₂
     exact shape₁ i₁ i₁' h i₂
-  d_comp_d
+  d_comp_d' i₁ i₁' i₁'' _ _ := by ext i₂; apply d₁_comp_d₁
+
+@[simp]
 
 中文:
 定义 ofGradedObject
@@ -203,7 +205,9 @@ definition ofGradedObject
   shape i₁ i₁' h := by
     ext i₂
     exact shape₁ i₁ i₁' h i₂
-  d_comp_d
+  d_comp_d' i₁ i₁' i₁'' _ _ := by ext i₂; apply d₁_comp_d₁
+
+@[simp]
 
 Depends on / 依赖: d_comp_d, intros
 -/

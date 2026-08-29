@@ -97,7 +97,34 @@ instance :
     rintro x (h | h)
     · exact h₁ _ h
     · exact h₂ _ h
-  inf
+  inf S T :=
+    { obj U := S.obj U ⊓ T.obj U
+      map _ _ h := ⟨S.map _ h.1, T.map _ h.2⟩}
+  inf_le_left _ _ _ _ h := h.1
+  inf_le_right _ _ _ _ h := h.2
+  le_inf _ _ _ h₁ h₂ _ _ h := ⟨h₁ _ h, h₂ _ h⟩
+  sSup S :=
+    { obj U := sSup (Set.image (fun T => T.obj U) S)
+      map f x hx := by
+        obtain ⟨_, ⟨F, h, rfl⟩, h'⟩ := hx
+        simp only [Set.sSup_eq_sUnion, Set.sUnion_image, Set.preimage_iUnion,
+          Set.mem_iUnion, Set.mem_preimage, exists_prop]
+        exact ⟨_, h, F.map f h'⟩ }
+  isLUB_sSup _ := ⟨fun _ _ _ _ => by aesop, fun _ _ _ => by aesop⟩
+  sInf S :=
+    { obj U := sInf (Set.image (fun T => T.obj U) S)
+      map f x hx := by
+        rintro _ ⟨F, h, rfl⟩
+        exact F.map f (hx _ ⟨_, h, rfl⟩) }
+  isGLB_sInf _ := ⟨fun _ _ _ _ => by aesop, fun _ _ _ => by aesop⟩
+  bot :=
+    { obj U := ⊥
+      map := by simp }
+  bot_le _ _ := bot_le
+  top :=
+    { obj U := ⊤
+      map := by simp }
+  le_top _ _ := le_top
 
 中文:
 实例 :
@@ -113,7 +140,34 @@ instance :
     rintro x (h | h)
     · exact h₁ _ h
     · exact h₂ _ h
-  inf
+  inf S T :=
+    { obj U := S.obj U ⊓ T.obj U
+      map _ _ h := ⟨S.map _ h.1, T.map _ h.2⟩}
+  inf_le_left _ _ _ _ h := h.1
+  inf_le_right _ _ _ _ h := h.2
+  le_inf _ _ _ h₁ h₂ _ _ h := ⟨h₁ _ h, h₂ _ h⟩
+  sSup S :=
+    { obj U := sSup (Set.image (fun T => T.obj U) S)
+      map f x hx := by
+        obtain ⟨_, ⟨F, h, rfl⟩, h'⟩ := hx
+        simp only [Set.sSup_eq_sUnion, Set.sUnion_image, Set.preimage_iUnion,
+          Set.mem_iUnion, Set.mem_preimage, exists_prop]
+        exact ⟨_, h, F.map f h'⟩ }
+  isLUB_sSup _ := ⟨fun _ _ _ _ => by aesop, fun _ _ _ => by aesop⟩
+  sInf S :=
+    { obj U := sInf (Set.image (fun T => T.obj U) S)
+      map f x hx := by
+        rintro _ ⟨F, h, rfl⟩
+        exact F.map f (hx _ ⟨_, h, rfl⟩) }
+  isGLB_sInf _ := ⟨fun _ _ _ _ => by aesop, fun _ _ _ => by aesop⟩
+  bot :=
+    { obj U := ⊥
+      map := by simp }
+  bot_le _ _ := bot_le
+  top :=
+    { obj U := ⊤
+      map := by simp }
+  le_top _ _ := le_top
 
 Depends on / 依赖: F.map, F.obj, G.map, G.obj, Or.inl, Or.inr, S.map, S.obj, Set.image, T.map, T.obj, inf_le_left, inf_le_right, le_inf, le_sup_left, le_sup_right, sup_le
 -/

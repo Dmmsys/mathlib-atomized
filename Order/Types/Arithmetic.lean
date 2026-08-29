@@ -117,7 +117,11 @@ instance :
     inductionOn o (fun α _ => by
       simp only [show 0 = type PEmpty by rfl, ← type_lex_sum]
       exact (OrderIso.emptySumLex (β := PEmpty) (α := α)).type_congr)
- 
+  add_zero o :=
+    inductionOn o (fun α _ => by
+      simp only [show 0 = type PEmpty by rfl, ← type_lex_sum]
+      exact (OrderIso.sumLexEmpty (β := PEmpty) (α := α)).type_congr)
+  nsmul := nsmulRec
 
 中文:
 实例 :
@@ -128,7 +132,11 @@ instance :
     inductionOn o (fun α _ => by
       simp only [show 0 = type PEmpty by rfl, ← type_lex_sum]
       exact (OrderIso.emptySumLex (β := PEmpty) (α := α)).type_congr)
- 
+  add_zero o :=
+    inductionOn o (fun α _ => by
+      simp only [show 0 = type PEmpty by rfl, ← type_lex_sum]
+      exact (OrderIso.sumLexEmpty (β := PEmpty) (α := α)).type_congr)
+  nsmul := nsmulRec
 
 Depends on / 依赖: OrderIso, OrderIso.emptySumLex, OrderIso.sumLexAssoc, OrderIso.sumLexEmpty, PEmpty, add_zero, emptySumLex, inductionOn, nsmulRec, sumLexAssoc, sumLexEmpty, type_congr, type_lex_sum, zero_add
 -/
@@ -203,7 +211,10 @@ instance :
     inductionOn o (fun α _ => by
       simp only [show 1 = type PUnit by rfl, ← type_lex_prod]
       exact (Prod.Lex.prodUnique α PUnit).type_congr)
-
+  mul_one o :=
+    inductionOn o (fun α _ => by
+      simp only [show 1 = type PUnit by rfl, ← type_lex_prod]
+      exact (Prod.Lex.uniqueProd PUnit α).type_congr)
 
 中文:
 实例 :
@@ -215,7 +226,10 @@ instance :
     inductionOn o (fun α _ => by
       simp only [show 1 = type PUnit by rfl, ← type_lex_prod]
       exact (Prod.Lex.prodUnique α PUnit).type_congr)
-
+  mul_one o :=
+    inductionOn o (fun α _ => by
+      simp only [show 1 = type PUnit by rfl, ← type_lex_prod]
+      exact (Prod.Lex.uniqueProd PUnit α).type_congr)
 
 Depends on / 依赖: Prod.Lex.prodLexAssoc, Prod.Lex.prodUnique, Prod.Lex.uniqueProd, inductionOn, mul_one, one_mul, prodLexAssoc, prodUnique, symm.type_congr, type_congr, type_lex_prod, uniqueProd
 -/

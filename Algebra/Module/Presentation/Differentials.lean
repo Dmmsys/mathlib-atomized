@@ -166,7 +166,22 @@ lemma surjective_hom₁
   change Function.Surjective φ
   have h₁ := Algebra.Extension.Cotangent.mk_surjective (P := pres.toExtension)
   have h₂ : Submodule.span pres.Ring
-     
+      (Set.range (fun r => (⟨pres.relation r, by simp⟩ : pres.ker))) = ⊤ := by
+    refine Submodule.map_injective_of_injective (f := Submodule.subtype pres.ker)
+      Subtype.coe_injective ?_
+    rw [Submodule.map_top]; rw [Submodule.range_subtype]; rw [Submodule.map_span]; rw [Submodule.coe_subtype]; rw [Ideal.submodule_span_eq]
+    simp only [← pres.span_range_relation_eq_ker]
+    congr
+    aesop
+  rw [← LinearMap.range_eq_top] at h₁ ⊢
+  rw [← top_le_iff]; rw [← h₁]; rw [LinearMap.range_eq_map]; rw [← h₂]
+  dsimp
+  rw [Submodule.map_span_le]
+  rintro _ ⟨r, rfl⟩
+  simp only [LinearMap.mem_range]
+  refine ⟨Finsupp.single r 1, ?_⟩
+  simp only [LinearMap.coe_mk, AddHom.coe_mk, hom₁_single, φ]
+  rfl
 
 中文:
 引理 surjective_hom₁
@@ -179,7 +194,22 @@ lemma surjective_hom₁
   change Function.Surjective φ
   have h₁ := Algebra.Extension.Cotangent.mk_surjective (P := pres.toExtension)
   have h₂ : Submodule.span pres.Ring
-     
+      (Set.range (fun r => (⟨pres.relation r, by simp⟩ : pres.ker))) = ⊤ := by
+    refine Submodule.map_injective_of_injective (f := Submodule.subtype pres.ker)
+      Subtype.coe_injective ?_
+    rw [Submodule.map_top]; rw [Submodule.range_subtype]; rw [Submodule.map_span]; rw [Submodule.coe_subtype]; rw [Ideal.submodule_span_eq]
+    simp only [← pres.span_range_relation_eq_ker]
+    congr
+    aesop
+  rw [← LinearMap.range_eq_top] at h₁ ⊢
+  rw [← top_le_iff]; rw [← h₁]; rw [LinearMap.range_eq_map]; rw [← h₂]
+  dsimp
+  rw [Submodule.map_span_le]
+  rintro _ ⟨r, rfl⟩
+  simp only [LinearMap.mem_range]
+  refine ⟨Finsupp.single r 1, ?_⟩
+  simp only [LinearMap.coe_mk, AddHom.coe_mk, hom₁_single, φ]
+  rfl
 
 Depends on / 依赖: Algebra, Algebra.Extension.Cotangent.mk_surjective, Cotangent, Extension, Function, Function.Surjective, Set.range, Submodule, Submodule.map_injective_of_injective, Submodule.map_top, Submodule.range_subtype, Submodule.span, Submodule.subtype, Subtype, Subtype.coe_injective, Surjective, coe_injective, map_add, map_injective_of_injective, map_smul
 -/
@@ -337,7 +367,13 @@ lemma differentialsSolution_isPresentation
   · rw [← Module.Relations.Solution.surjective_π_iff_span_eq_top, ← comm₂₃]
     exact Extension.toKaehler_surjective.comp pres.cotangentSpaceBasis.repr.symm.surjective
   · rw [← Module.Relations.range_map]
-    exact Function.Exact.
+    exact Function.Exact.linearMap_ker_eq
+      ((LinearMap.exact_iff_of_surjective_of_bijective_of_injective
+      _ _ _ _ (hom₁ pres)
+      pres.cotangentSpaceBasis.repr.symm.toLinearMap .id
+      (comm₁₂ pres) (by simpa using comm₂₃ pres) (surjective_hom₁ pres)
+        (LinearEquiv.bijective _) (Equiv.refl _).injective).2
+        pres.toExtension.exact_cotangentComplex_toKaehler)
 
 中文:
 引理 differentialsSolution_isPresentation
@@ -347,7 +383,13 @@ lemma differentialsSolution_isPresentation
   · rw [← Module.Relations.Solution.surjective_π_iff_span_eq_top, ← comm₂₃]
     exact Extension.toKaehler_surjective.comp pres.cotangentSpaceBasis.repr.symm.surjective
   · rw [← Module.Relations.range_map]
-    exact Function.Exact.
+    exact Function.Exact.linearMap_ker_eq
+      ((LinearMap.exact_iff_of_surjective_of_bijective_of_injective
+      _ _ _ _ (hom₁ pres)
+      pres.cotangentSpaceBasis.repr.symm.toLinearMap .id
+      (comm₁₂ pres) (by simpa using comm₂₃ pres) (surjective_hom₁ pres)
+        (LinearEquiv.bijective _) (Equiv.refl _).injective).2
+        pres.toExtension.exact_cotangentComplex_toKaehler)
 
 Depends on / 依赖: Extension, Extension.toKaehler_surjective.comp, Function, Function.Exact.linearMap_ker_eq, LinearMap, LinearMap.exact_iff_of_surjective_of_bijective_of_injective, Module, Module.Relations.Solution.isPresentation_iff, Module.Relations.Solution.surjective_, Module.Relations.range_map, Relations, Solution, cotangentSpaceBasis, exact_iff_of_surjective_of_bijective_of_injective, isPresentation_iff, linearMap_ker_eq, pres.cotangentSpaceBasis.repr.symm.surjective, pres.cotangentSpaceBasis.repr.symm.toLinearMap, range_map, surjective
 -/

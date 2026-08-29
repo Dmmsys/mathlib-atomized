@@ -83,7 +83,36 @@ definition getTableauImp
     match ← findNonzeroRow row col with
     | none =>
       free := free.push col
-      col := col +
+      col := col + 1
+      continue
+    | some rowToSwap =>
+      modify fun mat => swapRows mat row rowToSwap
+
+    modify fun mat => divideRow mat row mat[(row, col)]!
+
+    for i in [:n] do
+      if i == row then
+        continue
+      let coef := (← get)[(i, col)]!
+      if coef != 0 then
+        modify fun mat => subtractRow mat row i coef
+
+    basic := basic.push col
+    row := row + 1
+    col := col + 1
+
+  for i in [col:m] do
+    free := free.push i
+
+  let ansMatrix : matType basic.size free.size ← do
+.filterMap fun (i, j, v) => let vals := getValues (← get)
+      if j == basic[i]! then
+        none
+      else
+        some (i, free.findIdx? (· == j) |>.get!, -v)
+pure ofValues vals
+
+  return ⟨basic, free, ansMatrix⟩
 
 中文:
 定义 getTableauImp
@@ -100,7 +129,36 @@ definition getTableauImp
     match ← findNonzeroRow row col with
     | none =>
       free := free.push col
-      col := col +
+      col := col + 1
+      continue
+    | some rowToSwap =>
+      modify fun mat => swapRows mat row rowToSwap
+
+    modify fun mat => divideRow mat row mat[(row, col)]!
+
+    for i in [:n] do
+      if i == row then
+        continue
+      let coef := (← get)[(i, col)]!
+      if coef != 0 then
+        modify fun mat => subtractRow mat row i coef
+
+    basic := basic.push col
+    row := row + 1
+    col := col + 1
+
+  for i in [col:m] do
+    free := free.push i
+
+  let ansMatrix : matType basic.size free.size ← do
+.filterMap fun (i, j, v) => let vals := getValues (← get)
+      if j == basic[i]! then
+        none
+      else
+        some (i, free.findIdx? (· == j) |>.get!, -v)
+pure ofValues vals
+
+  return ⟨basic, free, ansMatrix⟩
 -/
 def getTableauImp : GaussM n m matType Tableau matType := do
   let mut free : Array Nat := #[]

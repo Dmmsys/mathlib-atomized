@@ -146,7 +146,14 @@ theorem equiv
     exact Function.Surjective.comp e.surjective hf.1
   suffices (RingHom.ker (AlgHom.comp (e : A ->ₐ[R] B) f).toRingHom) = RingHom.ker f.toRingHom by
     rw [this]
-  
+    exact hf.2
+  have hco : (AlgHom.comp (e : A ->ₐ[R] B) f).toRingHom = RingHom.comp (e.toRingEquiv : A ≃+* B)
+    f.toRingHom := by
+    have h : (AlgHom.comp (e : A ->ₐ[R] B) f).toRingHom =
+      e.toAlgHom.toRingHom.comp f.toRingHom := rfl
+    have h1 : ↑e.toRingEquiv = e.toAlgHom.toRingHom := rfl
+    rw [h]; rw [h1]
+  rw [RingHom.ker_eq_comap_bot]; rw [hco]; rw [← Ideal.comap_comap]; rw [← RingHom.ker_eq_comap_bot]; rw [RingHom.ker_coe_equiv (AlgEquiv.toRingEquiv e)]; rw [RingHom.ker_eq_comap_bot]
 
 中文:
 定理 equiv
@@ -160,7 +167,14 @@ theorem equiv
     exact Function.Surjective.comp e.surjective hf.1
   suffices (RingHom.ker (AlgHom.comp (e : A ->ₐ[R] B) f).toRingHom) = RingHom.ker f.toRingHom by
     rw [this]
-  
+    exact hf.2
+  have hco : (AlgHom.comp (e : A ->ₐ[R] B) f).toRingHom = RingHom.comp (e.toRingEquiv : A ≃+* B)
+    f.toRingHom := by
+    have h : (AlgHom.comp (e : A ->ₐ[R] B) f).toRingHom =
+      e.toAlgHom.toRingHom.comp f.toRingHom := rfl
+    have h1 : ↑e.toRingEquiv = e.toAlgHom.toRingHom := rfl
+    rw [h]; rw [h1]
+  rw [RingHom.ker_eq_comap_bot]; rw [hco]; rw [← Ideal.comap_comap]; rw [← RingHom.ker_eq_comap_bot]; rw [RingHom.ker_coe_equiv (AlgEquiv.toRingEquiv e)]; rw [RingHom.ker_eq_comap_bot]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_comp, AlgHom.comp, FinitePresentation, FinitePresentation.out, Function, Function.Surjective.comp, RingHom, RingHom.comp, RingHom.ker, Surjective, coe_comp, e.surjective, e.toAlgHom.toRingHom.comp, e.toRingEquiv, f.toRingHom, surjective, toAlgHom, toRingEquiv, toRingHom
 -/
@@ -319,7 +333,14 @@ theorem iff_quotient_mvPolynomial'
     refine
       ⟨ULift (Fin n), inferInstance, f.comp ulift_var.toAlgHom, hfs.comp ulift_var.surjective,
         Ideal.fg_ker_comp _ _ ?_ hfk ulift_var.surjective⟩
-    simpa using! Submodule.fg_
+    simpa using! Submodule.fg_bot
+  · rintro ⟨ι, hfintype, f, hf⟩
+    have equiv := MvPolynomial.renameEquiv R (Fintype.equivFin ι)
+    use Fintype.card ι, f.comp equiv.symm, hf.1.comp (AlgEquiv.symm equiv).surjective
+    refine Ideal.fg_ker_comp (S := MvPolynomial ι R) (A := A) _ f ?_ hf.2 equiv.symm.surjective
+    simpa using! Submodule.fg_bot
+
+universe v in
 
 中文:
 定理 iff_quotient_mvPolynomial'
@@ -330,7 +351,14 @@ theorem iff_quotient_mvPolynomial'
     refine
       ⟨ULift (Fin n), inferInstance, f.comp ulift_var.toAlgHom, hfs.comp ulift_var.surjective,
         Ideal.fg_ker_comp _ _ ?_ hfk ulift_var.surjective⟩
-    simpa using! Submodule.fg_
+    simpa using! Submodule.fg_bot
+  · rintro ⟨ι, hfintype, f, hf⟩
+    have equiv := MvPolynomial.renameEquiv R (Fintype.equivFin ι)
+    use Fintype.card ι, f.comp equiv.symm, hf.1.comp (AlgEquiv.symm equiv).surjective
+    refine Ideal.fg_ker_comp (S := MvPolynomial ι R) (A := A) _ f ?_ hf.2 equiv.symm.surjective
+    simpa using! Submodule.fg_bot
+
+universe v in
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.symm, Equiv.ulift, Fintype, Fintype.card, Fintype.equivFin, Ideal.fg_ker_comp, MvPolynomial, MvPolynomial.renameEquiv, Submodule, Submodule.fg_bot, equiv.symm, equivFin, f.comp, fg_bot, fg_ker_comp, hfintype, hfs.comp, renameEquiv, surjective
 -/
@@ -363,7 +391,16 @@ theorem mvPolynomial_of_finitePresentation
   rw [iff_quotient_mvPolynomial'] at hfp ⊢
   -- Make universe level `v` explicit so it matches that of `ι`
   obtain ⟨(ι' : Type v), _, f, hf_surj, hf_ker⟩ := hfp
-  let g := (MvPolynomial.mapAlgHom f).comp (MvPolynomial.sumAlgEquiv R ι ι').toAlg
+  let g := (MvPolynomial.mapAlgHom f).comp (MvPolynomial.sumAlgEquiv R ι ι').toAlgHom
+  cases nonempty_fintype (ι oplus ι')
+  refine
+    ⟨ι oplus ι', by infer_instance, g,
+      (MvPolynomial.map_surjective f.toRingHom hf_surj).comp (AlgEquiv.surjective _),
+      Ideal.fg_ker_comp _ _ ?_ ?_ (AlgEquiv.surjective _)⟩
+  · rw [AlgEquiv.toAlgHom_toRingHom, AlgHom.ker_coe_equiv]
+    exact Submodule.fg_bot
+  · rw [AlgHom.toRingHom_eq_coe, MvPolynomial.mapAlgHom_coe_ringHom, MvPolynomial.ker_map]
+    exact hf_ker.map MvPolynomial.C
 
 中文:
 定理 mvPolynomial_of_finitePresentation
@@ -373,7 +410,16 @@ theorem mvPolynomial_of_finitePresentation
   rw [iff_quotient_mvPolynomial'] at hfp ⊢
   -- Make universe level `v` explicit so it matches that of `ι`
   obtain ⟨(ι' : Type v), _, f, hf_surj, hf_ker⟩ := hfp
-  let g := (MvPolynomial.mapAlgHom f).comp (MvPolynomial.sumAlgEquiv R ι ι').toAlg
+  let g := (MvPolynomial.mapAlgHom f).comp (MvPolynomial.sumAlgEquiv R ι ι').toAlgHom
+  cases nonempty_fintype (ι oplus ι')
+  refine
+    ⟨ι oplus ι', by infer_instance, g,
+      (MvPolynomial.map_surjective f.toRingHom hf_surj).comp (AlgEquiv.surjective _),
+      Ideal.fg_ker_comp _ _ ?_ ?_ (AlgEquiv.surjective _)⟩
+  · rw [AlgEquiv.toAlgHom_toRingHom, AlgHom.ker_coe_equiv]
+    exact Submodule.fg_bot
+  · rw [AlgHom.toRingHom_eq_coe, MvPolynomial.mapAlgHom_coe_ringHom, MvPolynomial.ker_map]
+    exact hf_ker.map MvPolynomial.C
 
 Depends on / 依赖: FinitePresentation, iff_quotient_mvPolynomial
 -/
@@ -508,7 +554,79 @@ theorem of_restrict_scalars_finitePresentation
   let AX := MvPolynomial (Fin n) A
   refine ⟨n, MvPolynomial.aeval (f ∘ X), ?_, ?_⟩
   · rw [← AlgHom.range_eq_top, ← Algebra.adjoin_range_eq_range_aeval,
-      Set.range_comp f Mv
+      Set.range_comp f MvPolynomial.X, eq_top_iff, ← @adjoin_adjoin_of_tower R A B,
+      adjoin_image, adjoin_range_X, Algebra.map_top, (AlgHom.range_eq_top _).mpr hf]
+    exact fun {x} => subset_adjoin ⟨⟩
+  · obtain ⟨t, ht⟩ := FiniteType.out (R := R) (A := A)
+    have := fun i : t => hf (algebraMap A B i)
+    choose t' ht' using this
+    have ht'' : Algebra.adjoin R (algebraMap A AX '' t union Set.range (X : _ -> AX)) = ⊤ := by
+      rw [adjoin_union_eq_adjoin_adjoin]; rw [← Subalgebra.restrictScalars_top R (A := AX)
+        (S := { x // x in adjoin R ((algebraMap A AX) '' t) })]
+      refine congrArg (Subalgebra.restrictScalars R) ?_
+      rw [adjoin_algebraMap]; rw [ht]
+      apply Subalgebra.restrictScalars_injective R
+      rw [← adjoin_restrictScalars]; rw [adjoin_range_X]; rw [Subalgebra.restrictScalars_top]; rw [Subalgebra.restrictScalars_top]
+    let g : t -> AX := fun x => MvPolynomial.C (x : A) - map (algebraMap R A) (t' x)
+    refine ⟨s.image (map (algebraMap R A)) union t.attach.image g, ?_⟩
+    rw [Finset.coe_union]; rw [Finset.coe_image]; rw [Finset.coe_image]; rw [Finset.attach_eq_univ]; rw [Finset.coe_univ]; rw [Set.image_univ]
+    let s₀ := (MvPolynomial.map (algebraMap R A)) '' s union Set.range g
+    let I := RingHom.ker (MvPolynomial.aeval (R := A) (f ∘ MvPolynomial.X))
+    change Ideal.span s₀ = I
+    have leI : Ideal.span ((MvPolynomial.map (algebraMap R A)) '' s union Set.range g) <=
+      RingHom.ker (MvPolynomial.aeval (R := A) (f ∘ MvPolynomial.X)) := by
+      rw [Ideal.span_le]
+      rintro _ (⟨x, hx, rfl⟩ | ⟨⟨x, hx⟩, rfl⟩) <;>
+      rw [SetLike.mem_coe]; rw [RingHom.mem_ker]
+      · rw [MvPolynomial.aeval_map_algebraMap (R := R) (A := A), ← aeval_unique]
+        have := Ideal.subset_span hx
+        rwa [hs] at this
+      · rw [map_sub, MvPolynomial.aeval_map_algebraMap, ← aeval_unique,
+          MvPolynomial.aeval_C, ht', Subtype.coe_mk, sub_self]
+    apply leI.antisymm
+    intro x hx
+    rw [RingHom.mem_ker] at hx
+    let s₀ := (MvPolynomial.map (algebraMap R A)) '' ↑s union Set.range g
+    change x in Ideal.span s₀
+    have : x in (MvPolynomial.map (algebraMap R A) : _ ->+* AX).range.toAddSubmonoid ⊔
+      (Ideal.span s₀).toAddSubmonoid := by
+      have : x in (⊤ : Subalgebra R AX) := trivial
+      rw [← ht''] at this
+      refine adjoin_induction ?_ ?_ ?_ ?_ this
+      · rintro _ (⟨x, hx, rfl⟩ | ⟨i, rfl⟩)
+        · rw [MvPolynomial.algebraMap_eq, ← sub_add_cancel (MvPolynomial.C x)
+            (map (algebraMap R A) (t' ⟨x, hx⟩)), add_comm]
+          apply AddSubmonoid.add_mem_sup
+          · exact Set.mem_range_self _
+          · apply Ideal.subset_span
+            apply Set.mem_union_right
+            exact Set.mem_range_self _
+        · apply AddSubmonoid.mem_sup_left
+          exact ⟨X i, map_X _ _⟩
+      · intro r
+        apply AddSubmonoid.mem_sup_left
+        exact ⟨C r, map_C _ _⟩
+      · intro _ _ _ _ h₁ h₂
+        exact add_mem h₁ h₂
+      · intro x₁ x₂ _ _ h₁ h₂
+        obtain ⟨_, ⟨p₁, rfl⟩, q₁, hq₁, rfl⟩ := AddSubmonoid.mem_sup.mp h₁
+        obtain ⟨_, ⟨p₂, rfl⟩, q₂, hq₂, rfl⟩ := AddSubmonoid.mem_sup.mp h₂
+        rw [add_mul]; rw [mul_add]; rw [add_assoc]; rw [← map_mul]
+        apply AddSubmonoid.add_mem_sup
+        · exact Set.mem_range_self _
+        · refine add_mem (Ideal.mul_mem_left _ _ hq₂) (Ideal.mul_mem_right _ _ hq₁)
+    obtain ⟨_, ⟨p, rfl⟩, q, hq, rfl⟩ := AddSubmonoid.mem_sup.mp this
+    rw [map_add]; rw [aeval_map_algebraMap]; rw [← aeval_unique]; rw [show MvPolynomial.aeval (f ∘ X) q = 0
+      from leI hq]; rw [add_zero] at hx
+    suffices Ideal.span (s : Set RX) <= (Ideal.span s₀).comap (MvPolynomial.map <| algebraMap R A) by
+      refine add_mem ?_ hq
+      rw [hs] at this
+      exact this hx
+    rw [Ideal.span_le]
+    intro x hx
+    apply Ideal.subset_span
+    apply Set.mem_union_left
+    exact Set.mem_image_of_mem _ hx
 
 中文:
 定理 of_restrict_scalars_finitePresentation
@@ -520,7 +638,79 @@ theorem of_restrict_scalars_finitePresentation
   let AX := MvPolynomial (Fin n) A
   refine ⟨n, MvPolynomial.aeval (f ∘ X), ?_, ?_⟩
   · rw [← AlgHom.range_eq_top, ← Algebra.adjoin_range_eq_range_aeval,
-      Set.range_comp f Mv
+      Set.range_comp f MvPolynomial.X, eq_top_iff, ← @adjoin_adjoin_of_tower R A B,
+      adjoin_image, adjoin_range_X, Algebra.map_top, (AlgHom.range_eq_top _).mpr hf]
+    exact fun {x} => subset_adjoin ⟨⟩
+  · obtain ⟨t, ht⟩ := FiniteType.out (R := R) (A := A)
+    have := fun i : t => hf (algebraMap A B i)
+    choose t' ht' using this
+    have ht'' : Algebra.adjoin R (algebraMap A AX '' t union Set.range (X : _ -> AX)) = ⊤ := by
+      rw [adjoin_union_eq_adjoin_adjoin]; rw [← Subalgebra.restrictScalars_top R (A := AX)
+        (S := { x // x in adjoin R ((algebraMap A AX) '' t) })]
+      refine congrArg (Subalgebra.restrictScalars R) ?_
+      rw [adjoin_algebraMap]; rw [ht]
+      apply Subalgebra.restrictScalars_injective R
+      rw [← adjoin_restrictScalars]; rw [adjoin_range_X]; rw [Subalgebra.restrictScalars_top]; rw [Subalgebra.restrictScalars_top]
+    let g : t -> AX := fun x => MvPolynomial.C (x : A) - map (algebraMap R A) (t' x)
+    refine ⟨s.image (map (algebraMap R A)) union t.attach.image g, ?_⟩
+    rw [Finset.coe_union]; rw [Finset.coe_image]; rw [Finset.coe_image]; rw [Finset.attach_eq_univ]; rw [Finset.coe_univ]; rw [Set.image_univ]
+    let s₀ := (MvPolynomial.map (algebraMap R A)) '' s union Set.range g
+    let I := RingHom.ker (MvPolynomial.aeval (R := A) (f ∘ MvPolynomial.X))
+    change Ideal.span s₀ = I
+    have leI : Ideal.span ((MvPolynomial.map (algebraMap R A)) '' s union Set.range g) <=
+      RingHom.ker (MvPolynomial.aeval (R := A) (f ∘ MvPolynomial.X)) := by
+      rw [Ideal.span_le]
+      rintro _ (⟨x, hx, rfl⟩ | ⟨⟨x, hx⟩, rfl⟩) <;>
+      rw [SetLike.mem_coe]; rw [RingHom.mem_ker]
+      · rw [MvPolynomial.aeval_map_algebraMap (R := R) (A := A), ← aeval_unique]
+        have := Ideal.subset_span hx
+        rwa [hs] at this
+      · rw [map_sub, MvPolynomial.aeval_map_algebraMap, ← aeval_unique,
+          MvPolynomial.aeval_C, ht', Subtype.coe_mk, sub_self]
+    apply leI.antisymm
+    intro x hx
+    rw [RingHom.mem_ker] at hx
+    let s₀ := (MvPolynomial.map (algebraMap R A)) '' ↑s union Set.range g
+    change x in Ideal.span s₀
+    have : x in (MvPolynomial.map (algebraMap R A) : _ ->+* AX).range.toAddSubmonoid ⊔
+      (Ideal.span s₀).toAddSubmonoid := by
+      have : x in (⊤ : Subalgebra R AX) := trivial
+      rw [← ht''] at this
+      refine adjoin_induction ?_ ?_ ?_ ?_ this
+      · rintro _ (⟨x, hx, rfl⟩ | ⟨i, rfl⟩)
+        · rw [MvPolynomial.algebraMap_eq, ← sub_add_cancel (MvPolynomial.C x)
+            (map (algebraMap R A) (t' ⟨x, hx⟩)), add_comm]
+          apply AddSubmonoid.add_mem_sup
+          · exact Set.mem_range_self _
+          · apply Ideal.subset_span
+            apply Set.mem_union_right
+            exact Set.mem_range_self _
+        · apply AddSubmonoid.mem_sup_left
+          exact ⟨X i, map_X _ _⟩
+      · intro r
+        apply AddSubmonoid.mem_sup_left
+        exact ⟨C r, map_C _ _⟩
+      · intro _ _ _ _ h₁ h₂
+        exact add_mem h₁ h₂
+      · intro x₁ x₂ _ _ h₁ h₂
+        obtain ⟨_, ⟨p₁, rfl⟩, q₁, hq₁, rfl⟩ := AddSubmonoid.mem_sup.mp h₁
+        obtain ⟨_, ⟨p₂, rfl⟩, q₂, hq₂, rfl⟩ := AddSubmonoid.mem_sup.mp h₂
+        rw [add_mul]; rw [mul_add]; rw [add_assoc]; rw [← map_mul]
+        apply AddSubmonoid.add_mem_sup
+        · exact Set.mem_range_self _
+        · refine add_mem (Ideal.mul_mem_left _ _ hq₂) (Ideal.mul_mem_right _ _ hq₁)
+    obtain ⟨_, ⟨p, rfl⟩, q, hq, rfl⟩ := AddSubmonoid.mem_sup.mp this
+    rw [map_add]; rw [aeval_map_algebraMap]; rw [← aeval_unique]; rw [show MvPolynomial.aeval (f ∘ X) q = 0
+      from leI hq]; rw [add_zero] at hx
+    suffices Ideal.span (s : Set RX) <= (Ideal.span s₀).comap (MvPolynomial.map <| algebraMap R A) by
+      refine add_mem ?_ hq
+      rw [hs] at this
+      exact this hx
+    rw [Ideal.span_le]
+    intro x hx
+    apply Ideal.subset_span
+    apply Set.mem_union_left
+    exact Set.mem_image_of_mem _ hx
 
 Depends on / 依赖: AlgHom, AlgHom.range_eq_top, Algebra, Algebra.adjoin_range_eq_range_aeval, Algebra.map_top, FinitePresentation, FinitePresentation.out, FiniteType, FiniteType.out, MvPolynomial, MvPolynomial.X, MvPolynomial.aeval, Set.range_comp, adjoin_adjoin_of_tower, adjoin_image, adjoin_range_X, adjoin_range_eq_range_aeval, classical, eq_top_iff, map_top
 -/
@@ -624,7 +814,66 @@ theorem ker_fg_of_mvPolynomial
     have := fun i : Fin n => hf' (f <| X i)
     choose g hg using this
     have := fun i : Fin m => hf (f' <| X i)
-    choose h hh usi
+    choose h hh using this
+    let aeval_h : RXm ->ₐ[R] RXn := aeval h
+    let g' : Fin n -> RXn := fun i => X i - aeval_h (g i)
+    refine ⟨Finset.univ.image g' union s.image aeval_h, ?_⟩
+    simp only [Finset.coe_image, Finset.coe_union, Finset.coe_univ, Set.image_univ]
+    have hh' : forall x, f (aeval_h x) = f' x := by
+      intro x
+      rw [← f.coe_toRingHom]; rw [map_aeval]
+      simp_rw [AlgHom.coe_toRingHom, hh]
+      rw [AlgHom.comp_algebraMap]; rw [← aeval_eq_eval₂Hom]; rw [-- Porting note: added line below
+        ← funext fun i => Function.comp_apply (f := ↑f') (g := MvPolynomial.X)]; rw [← aeval_unique]
+    let s' := Set.range g' union aeval_h '' s
+    have leI : Ideal.span s' <= RingHom.ker f.toRingHom := by
+      rw [Ideal.span_le]
+      rintro _ (⟨i, rfl⟩ | ⟨x, hx, rfl⟩)
+      · change f (g' i) = 0
+        rw [map_sub]; rw [← hg]; rw [hh']; rw [sub_self]
+      · change f (aeval_h x) = 0
+        rw [hh']
+        change x in RingHom.ker f'.toRingHom
+        rw [← hs]
+        exact Ideal.subset_span hx
+    apply leI.antisymm
+    intro x hx
+    have : x in aeval_h.range.toAddSubmonoid ⊔ (Ideal.span s').toAddSubmonoid := by
+      have : x in adjoin R (Set.range X : Set RXn) := by
+        rw [adjoin_range_X]
+        trivial
+      refine adjoin_induction ?_ ?_ ?_ ?_ this
+      · rintro _ ⟨i, rfl⟩
+        rw [← sub_add_cancel (X i) (aeval h (g i))]; rw [add_comm]
+        apply AddSubmonoid.add_mem_sup
+        · exact Set.mem_range_self _
+        · apply Submodule.subset_span
+          apply Set.mem_union_left
+          exact Set.mem_range_self _
+      · intro r
+        apply AddSubmonoid.mem_sup_left
+        exact ⟨C r, aeval_C _ _⟩
+      · intro _ _ _ _ h₁ h₂
+        exact add_mem h₁ h₂
+      · intro p₁ p₂ _ _ h₁ h₂
+        obtain ⟨_, ⟨x₁, rfl⟩, y₁, hy₁, rfl⟩ := AddSubmonoid.mem_sup.mp h₁
+        obtain ⟨_, ⟨x₂, rfl⟩, y₂, hy₂, rfl⟩ := AddSubmonoid.mem_sup.mp h₂
+        rw [mul_add]; rw [add_mul]; rw [add_assoc]; rw [← map_mul]
+        apply AddSubmonoid.add_mem_sup
+        · exact Set.mem_range_self _
+        · exact add_mem (Ideal.mul_mem_right _ _ hy₁) (Ideal.mul_mem_left _ _ hy₂)
+    obtain ⟨_, ⟨x, rfl⟩, y, hy, rfl⟩ := AddSubmonoid.mem_sup.mp this
+    refine add_mem ?_ hy
+    simp only [RXn, RingHom.mem_ker, AlgHom.toRingHom_eq_coe, AlgHom.coe_toRingHom, map_add,
+      show f y = 0 from leI hy, add_zero, hh'] at hx
+    suffices Ideal.span (s : Set RXm) <= (Ideal.span s').comap aeval_h by
+      apply this
+      rwa [hs]
+    rw [Ideal.span_le]
+    intro x hx
+    apply Submodule.subset_span
+    apply Set.mem_union_right
+    exact Set.mem_image_of_mem _ hx
 
 中文:
 定理 ker_fg_of_mvPolynomial
@@ -637,7 +886,66 @@ theorem ker_fg_of_mvPolynomial
     have := fun i : Fin n => hf' (f <| X i)
     choose g hg using this
     have := fun i : Fin m => hf (f' <| X i)
-    choose h hh usi
+    choose h hh using this
+    let aeval_h : RXm ->ₐ[R] RXn := aeval h
+    let g' : Fin n -> RXn := fun i => X i - aeval_h (g i)
+    refine ⟨Finset.univ.image g' union s.image aeval_h, ?_⟩
+    simp only [Finset.coe_image, Finset.coe_union, Finset.coe_univ, Set.image_univ]
+    have hh' : forall x, f (aeval_h x) = f' x := by
+      intro x
+      rw [← f.coe_toRingHom]; rw [map_aeval]
+      simp_rw [AlgHom.coe_toRingHom, hh]
+      rw [AlgHom.comp_algebraMap]; rw [← aeval_eq_eval₂Hom]; rw [-- Porting note: added line below
+        ← funext fun i => Function.comp_apply (f := ↑f') (g := MvPolynomial.X)]; rw [← aeval_unique]
+    let s' := Set.range g' union aeval_h '' s
+    have leI : Ideal.span s' <= RingHom.ker f.toRingHom := by
+      rw [Ideal.span_le]
+      rintro _ (⟨i, rfl⟩ | ⟨x, hx, rfl⟩)
+      · change f (g' i) = 0
+        rw [map_sub]; rw [← hg]; rw [hh']; rw [sub_self]
+      · change f (aeval_h x) = 0
+        rw [hh']
+        change x in RingHom.ker f'.toRingHom
+        rw [← hs]
+        exact Ideal.subset_span hx
+    apply leI.antisymm
+    intro x hx
+    have : x in aeval_h.range.toAddSubmonoid ⊔ (Ideal.span s').toAddSubmonoid := by
+      have : x in adjoin R (Set.range X : Set RXn) := by
+        rw [adjoin_range_X]
+        trivial
+      refine adjoin_induction ?_ ?_ ?_ ?_ this
+      · rintro _ ⟨i, rfl⟩
+        rw [← sub_add_cancel (X i) (aeval h (g i))]; rw [add_comm]
+        apply AddSubmonoid.add_mem_sup
+        · exact Set.mem_range_self _
+        · apply Submodule.subset_span
+          apply Set.mem_union_left
+          exact Set.mem_range_self _
+      · intro r
+        apply AddSubmonoid.mem_sup_left
+        exact ⟨C r, aeval_C _ _⟩
+      · intro _ _ _ _ h₁ h₂
+        exact add_mem h₁ h₂
+      · intro p₁ p₂ _ _ h₁ h₂
+        obtain ⟨_, ⟨x₁, rfl⟩, y₁, hy₁, rfl⟩ := AddSubmonoid.mem_sup.mp h₁
+        obtain ⟨_, ⟨x₂, rfl⟩, y₂, hy₂, rfl⟩ := AddSubmonoid.mem_sup.mp h₂
+        rw [mul_add]; rw [add_mul]; rw [add_assoc]; rw [← map_mul]
+        apply AddSubmonoid.add_mem_sup
+        · exact Set.mem_range_self _
+        · exact add_mem (Ideal.mul_mem_right _ _ hy₁) (Ideal.mul_mem_left _ _ hy₂)
+    obtain ⟨_, ⟨x, rfl⟩, y, hy, rfl⟩ := AddSubmonoid.mem_sup.mp this
+    refine add_mem ?_ hy
+    simp only [RXn, RingHom.mem_ker, AlgHom.toRingHom_eq_coe, AlgHom.coe_toRingHom, map_add,
+      show f y = 0 from leI hy, add_zero, hh'] at hx
+    suffices Ideal.span (s : Set RXm) <= (Ideal.span s').comap aeval_h by
+      apply this
+      rwa [hs]
+    rw [Ideal.span_le]
+    intro x hx
+    apply Submodule.subset_span
+    apply Set.mem_union_right
+    exact Set.mem_image_of_mem _ hx
 
 Depends on / 依赖: FinitePresentation, FinitePresentation.out, Finset, Finset.coe_image, Finset.coe_union, Finset.coe_univ, Finset.univ.image, MvPolynomial, Set.imag, aeval_h, classical, coe_image, coe_union, coe_univ, s.image
 -/
@@ -721,7 +1029,7 @@ theorem ker_fG_of_surjective
   obtain ⟨n, g, hg, _⟩ := FinitePresentation.out (R := R) (A := A)
   convert! (ker_fg_of_mvPolynomial (f.comp g) (hf.comp hg)).map g.toRingHom
   simp_rw [RingHom.ker_eq_comap_bot, AlgHom.toRingHom_eq_coe, AlgHom.comp_toRingHom]
-  rw [← Ideal.comap_comap]; rw [Ideal.map_comap_of_surjective (g : Mv
+  rw [← Ideal.comap_comap]; rw [Ideal.map_comap_of_surjective (g : MvPolynomial (Fin n) R ->+* A) hg]
 
 中文:
 定理 ker_fG_of_surjective
@@ -730,7 +1038,7 @@ theorem ker_fG_of_surjective
   obtain ⟨n, g, hg, _⟩ := FinitePresentation.out (R := R) (A := A)
   convert! (ker_fg_of_mvPolynomial (f.comp g) (hf.comp hg)).map g.toRingHom
   simp_rw [RingHom.ker_eq_comap_bot, AlgHom.toRingHom_eq_coe, AlgHom.comp_toRingHom]
-  rw [← Ideal.comap_comap]; rw [Ideal.map_comap_of_surjective (g : Mv
+  rw [← Ideal.comap_comap]; rw [Ideal.map_comap_of_surjective (g : MvPolynomial (Fin n) R ->+* A) hg]
 
 Depends on / 依赖: AlgHom, AlgHom.comp_toRingHom, AlgHom.toRingHom_eq_coe, FinitePresentation, FinitePresentation.out, Ideal.comap_comap, Ideal.map_comap_of_surjective, MvPolynomial, RingHom, RingHom.ker_eq_comap_bot, comap_comap, comp_toRingHom, convert, f.comp, g.toRingHom, hf.comp, ker_eq_comap_bot, ker_fg_of_mvPolynomial, map_comap_of_surjective, simp_rw
 -/
@@ -1029,7 +1337,23 @@ lemma polynomial_induction
   clear g
   induction n generalizing R S with
   | zero =>
-    refine fg_ker _
+    refine fg_ker _ _ _ (hg.comp (MvPolynomial.C_surjective (Fin 0))) ?_
+    rw [← comap_ker]
+    convert! hg'.map (MvPolynomial.isEmptyRingEquiv R (Fin 0)).toRingHom using 1
+    simp only [RingEquiv.toRingHom_eq_coe, ← MvPolynomial.isEmptyRingEquiv_symm_toRingHom]
+    exact Ideal.comap_symm (MvPolynomial.isEmptyRingEquiv R (Fin 0))
+  | succ n IH =>
+    let e : MvPolynomial (Fin (n + 1)) R ≃ₐ[R] MvPolynomial (Fin n) R[X] :=
+      (MvPolynomial.renameEquiv R (finSuccEquiv n)).trans (MvPolynomial.optionEquivRight R (Fin n))
+    have he : (ker (g'.comp <| RingHomClass.toRingHom e.symm)).FG := by
+      rw [← RingHom.comap_ker]
+      convert! hg'.map e.toAlgHom.toRingHom using 1
+      exact Ideal.comap_symm e.toRingEquiv
+    have := IH (R := R[X]) (S := S) (g'.comp e.symm) (hg.comp e.symm.surjective) he
+    convert! comp _ _ _ _ _ (polynomial _) this using 1
+    rw [comp_assoc]; rw [comp_assoc]
+    congr 1 with r
+    simp [e]
 
 中文:
 引理 polynomial_induction
@@ -1045,7 +1369,23 @@ lemma polynomial_induction
   clear g
   induction n generalizing R S with
   | zero =>
-    refine fg_ker _
+    refine fg_ker _ _ _ (hg.comp (MvPolynomial.C_surjective (Fin 0))) ?_
+    rw [← comap_ker]
+    convert! hg'.map (MvPolynomial.isEmptyRingEquiv R (Fin 0)).toRingHom using 1
+    simp only [RingEquiv.toRingHom_eq_coe, ← MvPolynomial.isEmptyRingEquiv_symm_toRingHom]
+    exact Ideal.comap_symm (MvPolynomial.isEmptyRingEquiv R (Fin 0))
+  | succ n IH =>
+    let e : MvPolynomial (Fin (n + 1)) R ≃ₐ[R] MvPolynomial (Fin n) R[X] :=
+      (MvPolynomial.renameEquiv R (finSuccEquiv n)).trans (MvPolynomial.optionEquivRight R (Fin n))
+    have he : (ker (g'.comp <| RingHomClass.toRingHom e.symm)).FG := by
+      rw [← RingHom.comap_ker]
+      convert! hg'.map e.toAlgHom.toRingHom using 1
+      exact Ideal.comap_symm e.toRingEquiv
+    have := IH (R := R[X]) (S := S) (g'.comp e.symm) (hg.comp e.symm.surjective) he
+    convert! comp _ _ _ _ _ (polynomial _) this using 1
+    rw [comp_assoc]; rw [comp_assoc]
+    congr 1 with r
+    simp [e]
 
 Depends on / 依赖: C_surjective, MvPolynomial, MvPolynomial.C, MvPolynomial.C_surjective, MvPolynomial.isEmptyRingEquiv, MvPolynomial.isEmptyRingEquiv_symm_to, RingEquiv, RingEquiv.toRingHom_eq_coe, Surjective, clear_value, comap_ker, comp_algebraMap, convert, f.toAlgebra, fg_ker, g.comp_algebraMap, g.toRingHom, generalizing, hg.comp, isEmptyRingEquiv
 -/

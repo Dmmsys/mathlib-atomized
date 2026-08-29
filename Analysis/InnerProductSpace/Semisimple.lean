@@ -53,7 +53,9 @@ theorem isFinitelySemisimple
     ⟨qᗮ ⊓ p, inf_le_right, Module.End.invtSubmodule.inf_mem ?_ hp₁, ?_, ?_⟩
   · exact orthogonalComplement_mem_invtSubmodule hT hq₁
   · simp [disjoint_iff, ← inf_assoc, Submodule.inf_orthogonal_eq_bot q]
-  · suffices q ⊔ 
+  · suffices q ⊔ qᗮ = ⊤ by rw [← sup_inf_assoc_of_le _ hq₂, this, top_inf_eq p]
+    replace hp₂ : Module.Finite 𝕜 q := Submodule.finiteDimensional_of_le hq₂
+    exact Submodule.sup_orthogonal_of_hasOrthogonalProjection
 
 中文:
 定理 isFinitelySemisimple
@@ -62,7 +64,9 @@ theorem isFinitelySemisimple
     ⟨qᗮ ⊓ p, inf_le_right, Module.End.invtSubmodule.inf_mem ?_ hp₁, ?_, ?_⟩
   · exact orthogonalComplement_mem_invtSubmodule hT hq₁
   · simp [disjoint_iff, ← inf_assoc, Submodule.inf_orthogonal_eq_bot q]
-  · suffices q ⊔ 
+  · suffices q ⊔ qᗮ = ⊤ by rw [← sup_inf_assoc_of_le _ hq₂, this, top_inf_eq p]
+    replace hp₂ : Module.Finite 𝕜 q := Submodule.finiteDimensional_of_le hq₂
+    exact Submodule.sup_orthogonal_of_hasOrthogonalProjection
 
 Depends on / 依赖: Finite, Module, Module.End.invtSubmodule.inf_mem, Module.End.isFinitelySemisimple_iff.mpr, Module.Finite, Submodule, Submodule.finiteDimensional_of_le, Submodule.inf_orthogonal_eq_bot, Submodule.sup_orthogonal_of_hasOrthogonalProjection, disjoint_iff, finiteDimensional_of_le, inf_assoc, inf_le_right, inf_mem, inf_orthogonal_eq_bot, invtSubmodule, isFinitelySemisimple_iff, orthogonalComplement_mem_invtSubmodule, replace, sup_inf_assoc_of_le
 -/

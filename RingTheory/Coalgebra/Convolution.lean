@@ -221,7 +221,7 @@ theorem _root_.TensorProduct.map_convMul_map
     ← comp_assoc _ _ (tensorTensorTensorComm R _ _ _ _).toLinearMap]
   nth_rw 2 [← comp_assoc, comp_assoc]
   simp [AlgebraTensorModule.tensorTensorTensorComm_eq, ← tensorTensorTensorComm_comp_map,
-    ← comp_a
+    ← comp_assoc, map_comp]
 
 中文:
 定理 _root_.张量积.map_convMul_map
@@ -231,7 +231,7 @@ theorem _root_.TensorProduct.map_convMul_map
     ← comp_assoc _ _ (tensorTensorTensorComm R _ _ _ _).toLinearMap]
   nth_rw 2 [← comp_assoc, comp_assoc]
   simp [AlgebraTensorModule.tensorTensorTensorComm_eq, ← tensorTensorTensorComm_comp_map,
-    ← comp_a
+    ← comp_assoc, map_comp]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.map_eq, AlgebraTensorModule.tensorTensorTensorComm_eq, _tensor, comp_assoc, comul_def, convMul_def, map_comp, map_eq, nth_rw, simp_rw, tensorTensorTensorComm, tensorTensorTensorComm_comp_map, tensorTensorTensorComm_eq, toLinearMap
 -/
@@ -326,7 +326,14 @@ instance convNonUnitalSemiring
     _ = (μ ∘ₗ rTensor _ μ) ∘ₗ (((f.ofConv otimesₘ g.ofConv) otimesₘ h.ofConv) ∘ₗ
         (TensorProduct.assoc R C C C).symm) ∘ₗ lTensor C δ ∘ₗ δ := by
       ext; simp [comp_assoc, coassoc_symm, convMul_def]
-    _ = (μ ∘ₗ rTensor A μ ∘ₗ ↑(TensorProduct.assoc R A A A).
+    _ = (μ ∘ₗ rTensor A μ ∘ₗ ↑(TensorProduct.assoc R A A A).symm) ∘ₗ
+        (f.ofConv otimesₘ (g.ofConv otimesₘ h.ofConv)) ∘ₗ lTensor C δ ∘ₗ δ := by
+      simp only [map_map_comp_assoc_symm_eq, comp_assoc]
+    _ = (μ ∘ₗ .lTensor _ μ) ∘ₗ (f.ofConv otimesₘ (g.ofConv otimesₘ h.ofConv)) ∘ₗ (lTensor C δ ∘ₗ δ) := by
+      congr 1
+      ext
+      simp [mul_assoc]
+    _ = μ ∘ₗ (f.ofConv otimesₘ μ ∘ₗ (g.ofConv otimesₘ h.ofConv) ∘ₗ δ) ∘ₗ δ := by ext; simp
 
 中文:
 实例 convNonUnitalSemiring
@@ -335,7 +342,14 @@ instance convNonUnitalSemiring
     _ = (μ ∘ₗ rTensor _ μ) ∘ₗ (((f.ofConv otimesₘ g.ofConv) otimesₘ h.ofConv) ∘ₗ
         (TensorProduct.assoc R C C C).symm) ∘ₗ lTensor C δ ∘ₗ δ := by
       ext; simp [comp_assoc, coassoc_symm, convMul_def]
-    _ = (μ ∘ₗ rTensor A μ ∘ₗ ↑(TensorProduct.assoc R A A A).
+    _ = (μ ∘ₗ rTensor A μ ∘ₗ ↑(TensorProduct.assoc R A A A).symm) ∘ₗ
+        (f.ofConv otimesₘ (g.ofConv otimesₘ h.ofConv)) ∘ₗ lTensor C δ ∘ₗ δ := by
+      simp only [map_map_comp_assoc_symm_eq, comp_assoc]
+    _ = (μ ∘ₗ .lTensor _ μ) ∘ₗ (f.ofConv otimesₘ (g.ofConv otimesₘ h.ofConv)) ∘ₗ (lTensor C δ ∘ₗ δ) := by
+      congr 1
+      ext
+      simp [mul_assoc]
+    _ = μ ∘ₗ (f.ofConv otimesₘ μ ∘ₗ (g.ofConv otimesₘ h.ofConv) ∘ₗ δ) ∘ₗ δ := by ext; simp
 
 Depends on / 依赖: eq_iff, toConv_injective, toConv_injective.eq_iff.mpr
 -/

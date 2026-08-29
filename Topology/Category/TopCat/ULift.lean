@@ -205,7 +205,15 @@ instance :
     · rw [le_iInf_iff]
       rintro j s ⟨t, ht, rfl⟩
       refine ⟨Homeomorph.ulift.symm ⁻¹' ((uliftFunctor.map (c.π.app j)) ⁻¹' t), ?_, rfl⟩
-      apply Homeomorph.ulift.continuous_invF
+      apply Homeomorph.ulift.continuous_invFun.isOpen_preimage
+      apply (uliftFunctor.map (c.π.app j)).hom.continuous_toFun.isOpen_preimage _ ht
+    · change _ <= TopologicalSpace.induced _ _
+      rw [← generateFrom_iUnion_isOpen]; rw [induced_of_isLimit _ hc]; rw [induced_iInf]; rw [le_iInf_iff]
+      rintro i s ⟨-, ⟨t, ht, rfl⟩, rfl⟩
+      refine .basic _ ?_
+      rw [Set.mem_iUnion]
+      exact ⟨i, ULift.down ⁻¹' t, Homeomorph.ulift.continuous_toFun.isOpen_preimage _ ht, rfl⟩
+  · exact isLimitOfPreserves (forget TopCat ⋙ CategoryTheory.uliftFunctor) hc
 
 中文:
 实例 :
@@ -217,7 +225,15 @@ instance :
     · rw [le_iInf_iff]
       rintro j s ⟨t, ht, rfl⟩
       refine ⟨Homeomorph.ulift.symm ⁻¹' ((uliftFunctor.map (c.π.app j)) ⁻¹' t), ?_, rfl⟩
-      apply Homeomorph.ulift.continuous_invF
+      apply Homeomorph.ulift.continuous_invFun.isOpen_preimage
+      apply (uliftFunctor.map (c.π.app j)).hom.continuous_toFun.isOpen_preimage _ ht
+    · change _ <= TopologicalSpace.induced _ _
+      rw [← generateFrom_iUnion_isOpen]; rw [induced_of_isLimit _ hc]; rw [induced_iInf]; rw [le_iInf_iff]
+      rintro i s ⟨-, ⟨t, ht, rfl⟩, rfl⟩
+      refine .basic _ ?_
+      rw [Set.mem_iUnion]
+      exact ⟨i, ULift.down ⁻¹' t, Homeomorph.ulift.continuous_toFun.isOpen_preimage _ ht, rfl⟩
+  · exact isLimitOfPreserves (forget TopCat ⋙ CategoryTheory.uliftFunctor) hc
 
 Depends on / 依赖: Homeomorph, Homeomorph.ulift.continuous_invFun.isOpen_preimage, Homeomorph.ulift.symm, TopologicalSpace, TopologicalSpace.induced, continuous_invFun, continuous_toFun, generateFrom_iUnion_isOpen, hom.continuous_toFun.isOpen_preimage, induced, induced_iInf, induced_of_isLimit, isOpen_preimage, le_antisymm, le_iInf_iff, nonempty_isLimit_iff_eq_induced, uliftFunctor, uliftFunctor.map
 -/
@@ -251,7 +267,9 @@ instance :
   · ext s
     rw [Homeomorph.ulift.symm.isOpenEmbedding.isOpen_iff_preimage_isOpen (by simp)]; rw [isOpen_iff_of_isColimit _ hc]; rw [isOpen_iSup_iff]
     congr!
-    rw [Homeomorph.ulift.isOpenEmbedding.isOpen_i
+    rw [Homeomorph.ulift.isOpenEmbedding.isOpen_iff_preimage_isOpen (by simp)]
+    rfl
+  · exact isColimitOfPreserves (forget TopCat ⋙ CategoryTheory.uliftFunctor) hc
 
 中文:
 实例 :
@@ -262,7 +280,9 @@ instance :
   · ext s
     rw [Homeomorph.ulift.symm.isOpenEmbedding.isOpen_iff_preimage_isOpen (by simp)]; rw [isOpen_iff_of_isColimit _ hc]; rw [isOpen_iSup_iff]
     congr!
-    rw [Homeomorph.ulift.isOpenEmbedding.isOpen_i
+    rw [Homeomorph.ulift.isOpenEmbedding.isOpen_iff_preimage_isOpen (by simp)]
+    rfl
+  · exact isColimitOfPreserves (forget TopCat ⋙ CategoryTheory.uliftFunctor) hc
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.uliftFunctor, Homeomorph, Homeomorph.ulift.isOpenEmbedding.isOpen_iff_preimage_isOpen, Homeomorph.ulift.symm.isOpenEmbedding.isOpen_iff_preimage_isOpen, TopCat, forget, isColimitOfPreserves, isOpenEmbedding, isOpen_iSup_iff, isOpen_iff_of_isColimit, isOpen_iff_preimage_isOpen, nonempty_isColimit_iff_eq_coinduced, uliftFunctor
 -/

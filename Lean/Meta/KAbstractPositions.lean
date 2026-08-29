@@ -44,7 +44,31 @@ definition kabstractPositions
   /-- The main loop that loops through all subexpressions -/
   visit (e : Expr) (pos : SubExpr.Pos) (positions : Array SubExpr.Pos) :
       MetaM (Array SubExpr.Pos) := do
-    let visitChildren : Array 
+    let visitChildren : Array SubExpr.Pos -> MetaM (Array SubExpr.Pos) :=
+      match e with
+      | .app fn arg => visit fn pos.pushAppFn
+                                    >=> visit arg pos.pushAppArg
+      | .mdata _ expr => visit expr pos
+      | .proj _ _ struct => visit struct pos.pushProj
+      | .letE _ type value body _ => visit type pos.pushLetVarType
+                                    >=> visit value pos.pushLetValue
+                                    >=> visit body pos.pushLetBody
+      | .lam _ binderType body _ => visit binderType pos.pushBindingDomain
+                                    >=> visit body pos.pushBindingBody
+      | .forallE _ binderType body _ => visit binderType pos.pushBindingDomain
+                                    >=> visit body pos.pushBindingBody
+      | _ => pure
+    if e.hasLooseBVars then
+      visitChildren positions
+    else if e.toHeadIndex != pHeadIdx || e.headNumArgs != pNumArgs then
+      visitChildren positions
+    else
+      if ← isDefEq e p then
+        setMCtx mctx -- reset the `MetavarContext` because `isDefEq` can modify it if it succeeds
+        visitChildren (positions.push pos)
+      else
+        visitChildren positions
+  visit e .root #[]
 
 中文:
 定义 kabstractPositions
@@ -57,7 +81,31 @@ definition kabstractPositions
   /-- The main loop that loops through all subexpressions -/
   visit (e : Expr) (pos : SubExpr.Pos) (positions : Array SubExpr.Pos) :
       MetaM (Array SubExpr.Pos) := do
-    let visitChildren : Array 
+    let visitChildren : Array SubExpr.Pos -> MetaM (Array SubExpr.Pos) :=
+      match e with
+      | .app fn arg => visit fn pos.pushAppFn
+                                    >=> visit arg pos.pushAppArg
+      | .mdata _ expr => visit expr pos
+      | .proj _ _ struct => visit struct pos.pushProj
+      | .letE _ type value body _ => visit type pos.pushLetVarType
+                                    >=> visit value pos.pushLetValue
+                                    >=> visit body pos.pushLetBody
+      | .lam _ binderType body _ => visit binderType pos.pushBindingDomain
+                                    >=> visit body pos.pushBindingBody
+      | .forallE _ binderType body _ => visit binderType pos.pushBindingDomain
+                                    >=> visit body pos.pushBindingBody
+      | _ => pure
+    if e.hasLooseBVars then
+      visitChildren positions
+    else if e.toHeadIndex != pHeadIdx || e.headNumArgs != pNumArgs then
+      visitChildren positions
+    else
+      if ← isDefEq e p then
+        setMCtx mctx -- reset the `MetavarContext` because `isDefEq` can modify it if it succeeds
+        visitChildren (positions.push pos)
+      else
+        visitChildren positions
+  visit e .root #[]
 -/
 def kabstractPositions (p e : Expr) : MetaM (Array SubExpr.Pos) := do
   let mctx ← getMCtx

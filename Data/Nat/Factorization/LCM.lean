@@ -181,7 +181,8 @@ lemma coprime_factorizationLCMLeft_factorizationLCMRight
   refine coprime_prod_left_iff.mpr fun p hp => coprime_prod_right_iff.mpr fun q hq => ?_
   dsimp only; split_ifs with h h'
   any_goals simp only [coprime_one_right_eq_true, coprime_one_left_eq_true]
-  refine coprime_pow_primes _ _ (prime_of_
+  refine coprime_pow_primes _ _ (prime_of_mem_primeFactors hp) (prime_of_mem_primeFactors hq) ?_
+  contrapose h'; rwa [← h']
 
 中文:
 引理 coprime_factorizationLCMLeft_factorizationLCMRight
@@ -190,7 +191,8 @@ lemma coprime_factorizationLCMLeft_factorizationLCMRight
   refine coprime_prod_left_iff.mpr fun p hp => coprime_prod_right_iff.mpr fun q hq => ?_
   dsimp only; split_ifs with h h'
   any_goals simp only [coprime_one_right_eq_true, coprime_one_left_eq_true]
-  refine coprime_pow_primes _ _ (prime_of_
+  refine coprime_pow_primes _ _ (prime_of_mem_primeFactors hp) (prime_of_mem_primeFactors hq) ?_
+  contrapose h'; rwa [← h']
 
 Depends on / 依赖: any_goals, contrapose, coprime_one_left_eq_true, coprime_one_right_eq_true, coprime_pow_primes, coprime_prod_left_iff, coprime_prod_left_iff.mpr, coprime_prod_right_iff, coprime_prod_right_iff.mpr, factorizationLCMLeft, factorizationLCMRight, prime_of_mem_primeFactors, split_ifs
 -/
@@ -244,7 +246,12 @@ lemma factorizationLCMLeft_dvd_left
   · simp [factorizationLCMLeft]
   nth_rewrite 2 [← prod_factorization_pow_eq_self ha]
   rw [prod_of_support_subset (s := (lcm a b).factorization.support)]
-  · apply prod_dvd_prod_of_dvd; rintro p -; d
+  · apply prod_dvd_prod_of_dvd; rintro p -; dsimp only; split_ifs with le
+    · rw [factorization_lcm ha hb]; apply pow_dvd_pow; exact sup_le le_rfl le
+    · apply one_dvd
+  · intro p hp; rw [mem_support_iff] at hp ⊢
+    rw [factorization_lcm ha hb]; exact (lt_sup_iff.mpr <| .inl <| Nat.pos_of_ne_zero hp).ne'
+  · intros; rw [pow_zero]
 
 中文:
 引理 factorizationLCMLeft_dvd_left
@@ -256,7 +263,12 @@ lemma factorizationLCMLeft_dvd_left
   · simp [factorizationLCMLeft]
   nth_rewrite 2 [← prod_factorization_pow_eq_self ha]
   rw [prod_of_support_subset (s := (lcm a b).factorization.support)]
-  · apply prod_dvd_prod_of_dvd; rintro p -; d
+  · apply prod_dvd_prod_of_dvd; rintro p -; dsimp only; split_ifs with le
+    · rw [factorization_lcm ha hb]; apply pow_dvd_pow; exact sup_le le_rfl le
+    · apply one_dvd
+  · intro p hp; rw [mem_support_iff] at hp ⊢
+    rw [factorization_lcm ha hb]; exact (lt_sup_iff.mpr <| .inl <| Nat.pos_of_ne_zero hp).ne'
+  · intros; rw [pow_zero]
 
 Depends on / 依赖: dvd_zero, eq_or_ne, factorization, factorization.support, factorizationLCMLeft, factorization_lcm, le_rfl, lt_sup_iff, lt_sup_iff.mpr, mem_support_iff, nth_rewrite, one_dvd, pow_dvd_pow, prod_dvd_prod_of_dvd, prod_factorization_pow_eq_self, prod_of_support_subset, split_ifs, sup_le, support
 -/
@@ -287,7 +299,12 @@ lemma factorizationLCMRight_dvd_right
   · simp only [dvd_zero]
   nth_rewrite 2 [← prod_factorization_pow_eq_self hb]
   rw [prod_of_support_subset (s := (lcm a b).factorization.support)]
-  · apply Finset.prod_dvd_prod_of_dvd; rintr
+  · apply Finset.prod_dvd_prod_of_dvd; rintro p -; dsimp only; split_ifs with le
+    · apply one_dvd
+    · rw [factorization_lcm ha hb]; apply pow_dvd_pow; exact sup_le (not_le.1 le).le le_rfl
+  · intro p hp; rw [mem_support_iff] at hp ⊢
+    rw [factorization_lcm ha hb]; exact (lt_sup_iff.mpr <| .inr <| Nat.pos_of_ne_zero hp).ne'
+  · intros; rw [pow_zero]
 
 中文:
 引理 factorizationLCMRight_dvd_right
@@ -299,7 +316,12 @@ lemma factorizationLCMRight_dvd_right
   · simp only [dvd_zero]
   nth_rewrite 2 [← prod_factorization_pow_eq_self hb]
   rw [prod_of_support_subset (s := (lcm a b).factorization.support)]
-  · apply Finset.prod_dvd_prod_of_dvd; rintr
+  · apply Finset.prod_dvd_prod_of_dvd; rintro p -; dsimp only; split_ifs with le
+    · apply one_dvd
+    · rw [factorization_lcm ha hb]; apply pow_dvd_pow; exact sup_le (not_le.1 le).le le_rfl
+  · intro p hp; rw [mem_support_iff] at hp ⊢
+    rw [factorization_lcm ha hb]; exact (lt_sup_iff.mpr <| .inr <| Nat.pos_of_ne_zero hp).ne'
+  · intros; rw [pow_zero]
 
 Depends on / 依赖: Finset, Finset.prod_dvd_prod_of_dvd, dvd_zero, eq_or_ne, factorization, factorization.support, factorizationLCMRight, factorization_lcm, le_rfl, mem_support_iff, not_le, nth_rewrite, one_dvd, pow_dvd_pow, prod_dvd_prod_of_dvd, prod_factorization_pow_eq_self, prod_of_support_subset, split_ifs, sup_le, support
 -/

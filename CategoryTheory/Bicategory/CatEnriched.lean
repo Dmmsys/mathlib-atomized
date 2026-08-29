@@ -423,7 +423,18 @@ instance :
   leftUnitor f := eqToIso (id_comp f)
   rightUnitor f := eqToIso (comp_id f)
   id_whiskerLeft := id_hComp
-  comp_whiskerLeft := by simp [← id_hComp_id, hComp
+  comp_whiskerLeft := by simp [← id_hComp_id, hComp_assoc]
+  whiskerRight_id := hComp_id
+  whiskerRight_comp := by simp [hComp_assoc]
+  whisker_assoc := by simp [hComp_assoc]
+  pentagon f g h i := by
+    generalize_proofs h1 h2 h3 h4; revert h1 h2 h3 h4
+    generalize (f ≫ g) ≫ h = x, (g ≫ h) ≫ i = w
+    rintro rfl _ rfl _; simp
+  triangle f g := by
+    generalize_proofs h1 h2 h3; revert h1 h2 h3
+    generalize 𝟙 _ ≫ g = g, f ≫ 𝟙 _ = f
+    rintro _ rfl rfl; simp
 
 中文:
 实例 :
@@ -435,7 +446,18 @@ instance :
   leftUnitor f := eqToIso (id_comp f)
   rightUnitor f := eqToIso (comp_id f)
   id_whiskerLeft := id_hComp
-  comp_whiskerLeft := by simp [← id_hComp_id, hComp
+  comp_whiskerLeft := by simp [← id_hComp_id, hComp_assoc]
+  whiskerRight_id := hComp_id
+  whiskerRight_comp := by simp [hComp_assoc]
+  whisker_assoc := by simp [hComp_assoc]
+  pentagon f g h i := by
+    generalize_proofs h1 h2 h3 h4; revert h1 h2 h3 h4
+    generalize (f ≫ g) ≫ h = x, (g ≫ h) ≫ i = w
+    rintro rfl _ rfl _; simp
+  triangle f g := by
+    generalize_proofs h1 h2 h3; revert h1 h2 h3
+    generalize 𝟙 _ ≫ g = g, f ≫ 𝟙 _ = f
+    rintro _ rfl rfl; simp
 -/
 instance : Bicategory (CatEnriched C) where
   homCategory := inferInstance
@@ -1065,7 +1087,9 @@ theorem hComp_assoc
     ← heq_eq_eq, heq_eqToHom_comp_iff, heq_comp_eqToHom_iff,
     eqToHom_comp_heq_iff, comp_eqToHom_heq_iff]
   conv => enter [1, 2]; exact ((id_comp _).trans (comp_id _)).symm
-  conv => enter [2, 1]; exact ((id_comp _).trans (com
+  conv => enter [2, 1]; exact ((id_comp _).trans (comp_id _)).symm
+  iterate 4 rw [← CatEnriched.hComp_comp, id_eq_eqToHom, CatEnriched.eqToHom_hComp_eqToHom]
+  simp [CatEnriched.hComp_assoc_heq]
 
 中文:
 定理 hComp_assoc
@@ -1076,7 +1100,9 @@ theorem hComp_assoc
     ← heq_eq_eq, heq_eqToHom_comp_iff, heq_comp_eqToHom_iff,
     eqToHom_comp_heq_iff, comp_eqToHom_heq_iff]
   conv => enter [1, 2]; exact ((id_comp _).trans (comp_id _)).symm
-  conv => enter [2, 1]; exact ((id_comp _).trans (com
+  conv => enter [2, 1]; exact ((id_comp _).trans (comp_id _)).symm
+  iterate 4 rw [← CatEnriched.hComp_comp, id_eq_eqToHom, CatEnriched.eqToHom_hComp_eqToHom]
+  simp [CatEnriched.hComp_assoc_heq]
 
 Depends on / 依赖: CatEnriched, CatEnriched.eqToHom_hComp_eqToHom, CatEnriched.hComp_assoc_heq, CatEnriched.hComp_comp, Hom.base_comp, Hom.base_eqToHom, base_comp, base_eqToHom, base_mk, comp_eqToHom_heq_iff, comp_id, eqToHom_comp_heq_iff, eqToHom_hComp_eqToHom, hComp_assoc_heq, hComp_comp, heq_comp_eqToHom_iff, heq_eqToHom_comp_iff, heq_eq_eq, id_comp, id_eq_eqToHom
 -/
@@ -1126,7 +1152,12 @@ instance :
   leftUnitor f := eqToIso (id_comp f)
   rightUnitor f := eqToIso (comp_id f)
   id_whiskerLeft := by simp [id_hComp]
-  comp_whiskerLeft := by simp [← hComp_as
+  comp_whiskerLeft := by simp [← hComp_assoc]
+  whiskerRight_id := by simp [hComp_id]
+  whiskerRight_comp := by simp [hComp_assoc]
+  whisker_assoc := by simp [hComp_assoc]
+  pentagon := by simp [id_eq_eqToHom, -eqToHom_refl]
+  triangle := by simp [id_eq_eqToHom, -eqToHom_refl]
 
 中文:
 实例 :
@@ -1138,7 +1169,12 @@ instance :
   leftUnitor f := eqToIso (id_comp f)
   rightUnitor f := eqToIso (comp_id f)
   id_whiskerLeft := by simp [id_hComp]
-  comp_whiskerLeft := by simp [← hComp_as
+  comp_whiskerLeft := by simp [← hComp_assoc]
+  whiskerRight_id := by simp [hComp_id]
+  whiskerRight_comp := by simp [hComp_assoc]
+  whisker_assoc := by simp [hComp_assoc]
+  pentagon := by simp [id_eq_eqToHom, -eqToHom_refl]
+  triangle := by simp [id_eq_eqToHom, -eqToHom_refl]
 -/
 instance : Bicategory (CatEnrichedOrdinary C) where
   homCategory := inferInstance

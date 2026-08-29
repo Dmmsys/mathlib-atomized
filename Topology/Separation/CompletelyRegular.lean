@@ -184,7 +184,12 @@ instance NormalSpace.instCompletelyRegularSpace
     rw [Set.disjoint_iff]
     intro a ⟨hax, haK⟩
     exact hx ((specializes_iff_mem_closure.mpr hax).symm.mem_closed hK haK)
-  let ⟨⟨f, cf⟩, hfx, hf
+  let ⟨⟨f, cf⟩, hfx, hfK, hficc⟩ := exists_continuous_zero_one_of_isClosed cx hK d
+  let g : X -> I := fun x => ⟨f x, hficc x⟩
+  have cg : Continuous g := cf.subtype_mk hficc
+  have hgx : g x = 0 := Subtype.ext (hfx (subset_closure (mem_singleton x)))
+  have hgK : EqOn g 1 K := fun k hk => Subtype.ext (hfK hk)
+  exact ⟨g, cg, hgx, hgK⟩
 
 中文:
 实例 正规空间.instCompletelyRegularSpace
@@ -197,7 +202,12 @@ instance NormalSpace.instCompletelyRegularSpace
     rw [Set.disjoint_iff]
     intro a ⟨hax, haK⟩
     exact hx ((specializes_iff_mem_closure.mpr hax).symm.mem_closed hK haK)
-  let ⟨⟨f, cf⟩, hfx, hf
+  let ⟨⟨f, cf⟩, hfx, hfK, hficc⟩ := exists_continuous_zero_one_of_isClosed cx hK d
+  let g : X -> I := fun x => ⟨f x, hficc x⟩
+  have cg : Continuous g := cf.subtype_mk hficc
+  have hgx : g x = 0 := Subtype.ext (hfx (subset_closure (mem_singleton x)))
+  have hgK : EqOn g 1 K := fun k hk => Subtype.ext (hfK hk)
+  exact ⟨g, cg, hgx, hgK⟩
 
 Depends on / 依赖: Continuous, Disjoint, IsClosed, Set.disjoint_iff, Subtype, Subtype.ext, cf.subtype_mk, closure, completelyRegularSpace_iff, disjoint_iff, exists_continuous_zero_one_of_isClosed, isClosed_closure, mem_closed, mem_singleton, specializes_iff_mem_closure, specializes_iff_mem_closure.mpr, subset_closure, subtype_mk, symm.mem_closed
 -/
@@ -229,7 +239,7 @@ lemma Topology.IsInducing.completelyRegularSpace
     obtain ⟨g, hcf, egfx, hgK⟩ := CompletelyRegularSpace.completely_regular _ _ hK hxK
     refine ⟨g ∘ f, hcf.comp hf.continuous, egfx, ?_⟩
     conv => arg 2; equals (1 : Y -> ↥I) ∘ f => rfl
-exact hgK.comp_r
+exact hgK.comp_right mapsTo_preimage _ _
 
 中文:
 引理 拓扑.是Inducing.completelyRegularSpace
@@ -240,7 +250,7 @@ exact hgK.comp_r
     obtain ⟨g, hcf, egfx, hgK⟩ := CompletelyRegularSpace.completely_regular _ _ hK hxK
     refine ⟨g ∘ f, hcf.comp hf.continuous, egfx, ?_⟩
     conv => arg 2; equals (1 : Y -> ↥I) ∘ f => rfl
-exact hgK.comp_r
+exact hgK.comp_right mapsTo_preimage _ _
 
 Depends on / 依赖: CompletelyRegularSpace, CompletelyRegularSpace.completely_regular, comp_right, completely_regular, continuous, equals, hcf.comp, hf.continuous, hf.isClosed_iff, hgK.comp_right, isClosed_iff, mapsTo_preimage, mem_preimage
 -/
@@ -290,7 +300,21 @@ lemma completelyRegularSpace_iInf
   simp_rw [← hK.mem_nhds_iff, nhds_iInf, mem_iInf, exists_finite_iff_finset,
     Finset.coe_sort_coe] at hxK; clear hK
   obtain ⟨I', V, hV, rfl⟩ := hxK
-  si
+  simp only [mem_nhds_iff] at hV
+  choose U hUV hU hxU using hV
+  replace hU := fun (i : ↥I') =>
+    @CompletelyRegularSpace.completely_regular_isOpen _ (t i) (ht i) x (U i) (hU i) (hxU i)
+  clear hxU
+  choose fs hfs hxfs hfsU using hU
+  use I'.attach.sup fs
+  constructorm* _ ∧ _
+  · solve_by_elim [Continuous.finset_sup, continuous_iInf_dom]
+  · simpa [show (0 : ↥I) = ⊥ from rfl] using hxfs
+  · simp only [EqOn, Pi.one_apply, show (1 : ↥I) = ⊤ from rfl] at hfsU ⊢
+    conv => equals forall x i, x in (V i)ᶜ -> exists b, fs b x = ⊤ => simp [Finset.sup_eq_top_iff]
+    intro x i hxi
+    specialize hfsU i (by tauto_set)
+    exists i
 
 中文:
 引理 completelyRegularSpace_iInf
@@ -302,7 +326,21 @@ lemma completelyRegularSpace_iInf
   simp_rw [← hK.mem_nhds_iff, nhds_iInf, mem_iInf, exists_finite_iff_finset,
     Finset.coe_sort_coe] at hxK; clear hK
   obtain ⟨I', V, hV, rfl⟩ := hxK
-  si
+  simp only [mem_nhds_iff] at hV
+  choose U hUV hU hxU using hV
+  replace hU := fun (i : ↥I') =>
+    @CompletelyRegularSpace.completely_regular_isOpen _ (t i) (ht i) x (U i) (hU i) (hxU i)
+  clear hxU
+  choose fs hfs hxfs hfsU using hU
+  use I'.attach.sup fs
+  constructorm* _ ∧ _
+  · solve_by_elim [Continuous.finset_sup, continuous_iInf_dom]
+  · simpa [show (0 : ↥I) = ⊥ from rfl] using hxfs
+  · simp only [EqOn, Pi.one_apply, show (1 : ↥I) = ⊤ from rfl] at hfsU ⊢
+    conv => equals forall x i, x in (V i)ᶜ -> exists b, fs b x = ⊤ => simp [Finset.sup_eq_top_iff]
+    intro x i hxi
+    specialize hfsU i (by tauto_set)
+    exists i
 
 Depends on / 依赖: CompletelyRegularSpace, CompletelyRegularSpace.completely_regular_isOpen, Finset, Finset.coe_sort_coe, coe_sort_coe, completelyRegularSpace_iff_isOpen, completely_regular_isOpen, exists_finite_iff_finset, hK.mem_nhds_iff, mem_iInf, mem_nhds_iff, nhds_iInf, register, replace, simp_rw, topological
 -/
@@ -377,7 +415,13 @@ lemma isInducing_stoneCechUnit
   · simp_rw [le_nhds_iff, ((nhds_basis_opens _).comap _).mem_iff, and_assoc]
     intro U hxU hU
     obtain ⟨f, hf, efx, hfU⟩ :=
-      CompletelyRegularSpace.complet
+      CompletelyRegularSpace.completely_regular_isOpen x U hU hxU
+    conv at hfU => equals Uᶜ subseteq f ⁻¹' {1} => simp [EqOn, subset_def]
+    rw [← compl_subset_comm]; rw [← preimage_compl]; rw [← stoneCechExtend_extends hf]; rw [preimage_comp] at hfU
+    refine ⟨stoneCechExtend hf ⁻¹' {1}ᶜ, ?_,
+      isOpen_compl_singleton.preimage (continuous_stoneCechExtend hf), hfU⟩
+    rw [mem_preimage]; rw [stoneCechExtend_stoneCechUnit]; rw [efx]; rw [mem_compl_iff]; rw [mem_singleton_iff]
+    simp
 
 中文:
 引理 isInducing_stoneCechUnit
@@ -390,7 +434,13 @@ lemma isInducing_stoneCechUnit
   · simp_rw [le_nhds_iff, ((nhds_basis_opens _).comap _).mem_iff, and_assoc]
     intro U hxU hU
     obtain ⟨f, hf, efx, hfU⟩ :=
-      CompletelyRegularSpace.complet
+      CompletelyRegularSpace.completely_regular_isOpen x U hU hxU
+    conv at hfU => equals Uᶜ subseteq f ⁻¹' {1} => simp [EqOn, subset_def]
+    rw [← compl_subset_comm]; rw [← preimage_compl]; rw [← stoneCechExtend_extends hf]; rw [preimage_comp] at hfU
+    refine ⟨stoneCechExtend hf ⁻¹' {1}ᶜ, ?_,
+      isOpen_compl_singleton.preimage (continuous_stoneCechExtend hf), hfU⟩
+    rw [mem_preimage]; rw [stoneCechExtend_stoneCechUnit]; rw [efx]; rw [mem_compl_iff]; rw [mem_singleton_iff]
+    simp
 
 Depends on / 依赖: CompletelyRegularSpace, CompletelyRegularSpace.completely_regular_isOpen, and_assoc, compl_subset_comm, completely_regular_isOpen, continuousAt, continuous_stoneCechUnit, continuous_stoneCechUnit.continuousAt, equals, isInducing_iff_nhds, le_antisymm, le_nhds_iff, map_le_iff_le_comap, mem_iff, nhds_basis_opens, preimage_comp, preimage_compl, simp_rw, stoneCechExtend_extends, subset_def
 -/
@@ -495,7 +545,18 @@ theorem CompletelyRegularSpace.isTopologicalBasis_clopens_of_cardinalMk_lt_conti
   obtain ⟨hfc, hf₀, hf₁⟩ := hf
   let R := Set.range f
   have hR : lift.{u, 0} (Cardinal.mk R) < lift.{0, u} continuum := by
-    simpa [R] us
+    simpa [R] using mk_range_le_lift.trans_lt (lift_strictMono hX)
+  rw [lift_continuum]; rw [← lift_continuum.{u]; rw [0}]; rw [lift_lt]; rw [← mk_Icc_real zero_lt_one]; rw [← unitInterval]
+    at hR
+  obtain ⟨r, hr⟩ : exists r : I, r in Rᶜ := compl_nonempty_of_mk_lt_mk hR
+  have hr' : forall (x : X), f x != r := by simpa [R] using hr
+  have hrclopen : f ⁻¹' Iio r = f ⁻¹' Iic r := by
+    ext; simp [le_iff_lt_or_eq, hr']
+  refine ⟨f ⁻¹' Iio r, ⟨hrclopen ▸ isClosed_Iic.preimage hfc, isOpen_Iio.preimage hfc⟩, ?_, ?_⟩
+  · simp [hf₀, hrclopen]
+  · refine preimage_subset_iff.mpr (fun x => ?_)
+    contrapose; intro hxs
+    simpa [hf₁ hxs] using le_one'
 
 中文:
 定理 余mpletelyRegular空间.isTopologicalBasis_clopens_of_cardinalMk_lt_continuum
@@ -505,7 +566,18 @@ theorem CompletelyRegularSpace.isTopologicalBasis_clopens_of_cardinalMk_lt_conti
   obtain ⟨hfc, hf₀, hf₁⟩ := hf
   let R := Set.range f
   have hR : lift.{u, 0} (Cardinal.mk R) < lift.{0, u} continuum := by
-    simpa [R] us
+    simpa [R] using mk_range_le_lift.trans_lt (lift_strictMono hX)
+  rw [lift_continuum]; rw [← lift_continuum.{u]; rw [0}]; rw [lift_lt]; rw [← mk_Icc_real zero_lt_one]; rw [← unitInterval]
+    at hR
+  obtain ⟨r, hr⟩ : exists r : I, r in Rᶜ := compl_nonempty_of_mk_lt_mk hR
+  have hr' : forall (x : X), f x != r := by simpa [R] using hr
+  have hrclopen : f ⁻¹' Iio r = f ⁻¹' Iic r := by
+    ext; simp [le_iff_lt_or_eq, hr']
+  refine ⟨f ⁻¹' Iio r, ⟨hrclopen ▸ isClosed_Iic.preimage hfc, isOpen_Iio.preimage hfc⟩, ?_, ?_⟩
+  · simp [hf₀, hrclopen]
+  · refine preimage_subset_iff.mpr (fun x => ?_)
+    contrapose; intro hxs
+    simpa [hf₁ hxs] using le_one'
 
 Depends on / 依赖: Cardinal, Cardinal.mk, IsClopen, IsClopen.isOpen, Set.range, completely_regular_isOpen, continuum, isOpen, isTopologicalBasis_of_isOpen_of_nhds, lift_continuum, lift_lt, lift_strictMono, mk_Icc_real, mk_range_le_lift, mk_range_le_lift.trans_lt, trans_lt, unitInterval, zero_lt_one
 -/

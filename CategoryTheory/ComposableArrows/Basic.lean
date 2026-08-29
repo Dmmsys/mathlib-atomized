@@ -415,7 +415,17 @@ definition homMk
       have hij' := leOfHom hij
       simp only [Fin.mk_le_mk] at hij'
       obtain ⟨k, hk⟩ := Nat.le.dest hij'
-      exact thi
+      exact this k i j hk (by valid)
+    intro k
+    induction k with intro i j hj hj'
+    | zero =>
+      simp only [add_zero] at hj
+      obtain rfl := hj
+      rw [F.map'_self i]; rw [G.map'_self i]; rw [id_comp]; rw [comp_id]
+    | succ k hk =>
+      rw [← add_assoc] at hj
+      subst hj
+      rw [F.map'_comp i (i + k) (i + k + 1)]; rw [G.map'_comp i (i + k) (i + k + 1)]; rw [assoc]; rw [w (i + k) (by valid)]; rw [reassoc_of% (hk i (i + k) rfl (by valid))]
 
 中文:
 定义 homMk
@@ -428,7 +438,17 @@ definition homMk
       have hij' := leOfHom hij
       simp only [Fin.mk_le_mk] at hij'
       obtain ⟨k, hk⟩ := Nat.le.dest hij'
-      exact thi
+      exact this k i j hk (by valid)
+    intro k
+    induction k with intro i j hj hj'
+    | zero =>
+      simp only [add_zero] at hj
+      obtain rfl := hj
+      rw [F.map'_self i]; rw [G.map'_self i]; rw [id_comp]; rw [comp_id]
+    | succ k hk =>
+      rw [← add_assoc] at hj
+      subst hj
+      rw [F.map'_comp i (i + k) (i + k + 1)]; rw [G.map'_comp i (i + k) (i + k + 1)]; rw [assoc]; rw [w (i + k) (by valid)]; rw [reassoc_of% (hk i (i + k) rfl (by valid))]
 -/
 def homMk {F G : ComposableArrows C n} (app : forall i, F.obj i ⟶ G.obj i)
     (w : forall (i : Nat) (hi : i < n), F.map' i (i + 1) ≫ app _ = app _ ≫ G.map' i (i + 1)) :
@@ -1211,7 +1231,15 @@ lemma map_comp
       · rfl
     · obtain _ | _ | k := k
       · simp [Fin.ext_iff] at hjk
-      · simp [Fin.le_def] at 
+      · simp [Fin.le_def] at hjk
+      · dsimp
+        rw [assoc]; rw [← F.map_comp]; rw [homOfLE_comp]
+  · obtain _ | j := j
+    · simp [Fin.ext_iff] at hij
+    · obtain _ | k := k
+      · simp [Fin.ext_iff] at hjk
+      · dsimp
+        rw [← F.map_comp]; rw [homOfLE_comp]
 
 中文:
 引理 map_comp
@@ -1230,7 +1258,15 @@ lemma map_comp
       · rfl
     · obtain _ | _ | k := k
       · simp [Fin.ext_iff] at hjk
-      · simp [Fin.le_def] at 
+      · simp [Fin.le_def] at hjk
+      · dsimp
+        rw [assoc]; rw [← F.map_comp]; rw [homOfLE_comp]
+  · obtain _ | j := j
+    · simp [Fin.ext_iff] at hij
+    · obtain _ | k := k
+      · simp [Fin.ext_iff] at hjk
+      · dsimp
+        rw [← F.map_comp]; rw [homOfLE_comp]
 
 Depends on / 依赖: F.map_comp, Fin.ext_iff, Fin.le_def, ext_iff, homOfLE_comp, id_comp, le_def, map_comp
 -/
@@ -1811,7 +1847,10 @@ definition isoMkSucc
     · ext ⟨i, hi⟩
       simp
   inv_hom_id := by
-    apply hom_
+    apply hom_ext_succ
+    · simp
+    · ext ⟨i, hi⟩
+      simp
 
 中文:
 定义 isoMkSucc
@@ -1827,7 +1866,10 @@ definition isoMkSucc
     · ext ⟨i, hi⟩
       simp
   inv_hom_id := by
-    apply hom_
+    apply hom_ext_succ
+    · simp
+    · ext ⟨i, hi⟩
+      simp
 
 Depends on / 依赖: homMkSucc
 -/
@@ -1865,7 +1907,8 @@ lemma ext_succ
   exact Functor.ext_of_iso (isoMkSucc (eqToIso h₀) (eqToIso h) (by
       rw [w]
       dsimp [app']
-      rw [eqToHom_app]; rw [assoc]; rw [assoc]; rw [
+      rw [eqToHom_app]; rw [assoc]; rw [assoc]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [comp_id])) this
+    (by rintro ⟨_ | _, hi⟩ <;> simp)
 
 中文:
 引理 ext_succ
@@ -1879,7 +1922,8 @@ lemma ext_succ
   exact Functor.ext_of_iso (isoMkSucc (eqToIso h₀) (eqToIso h) (by
       rw [w]
       dsimp [app']
-      rw [eqToHom_app]; rw [assoc]; rw [assoc]; rw [
+      rw [eqToHom_app]; rw [assoc]; rw [assoc]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [comp_id])) this
+    (by rintro ⟨_ | _, hi⟩ <;> simp)
 
 Depends on / 依赖: F.obj, Functor, Functor.congr_obj, Functor.ext_of_iso, G.obj, comp_id, congr_obj, eqToHom_app, eqToHom_refl, eqToHom_trans, eqToIso, ext_of_iso, isoMkSucc
 -/
@@ -2149,7 +2193,9 @@ lemma ext₂_of_arrow
   obtain rfl : x₀ = y₀ := congr_arg Arrow.leftFunc.obj h₀₁
   obtain rfl : x₁ = y₁ := congr_arg Arrow.rightFunc.obj h₀₁
   obtain rfl : x₂ = y₂ := congr_arg Arrow.rightFunc.obj h₁₂
-  obtain r
+  obtain rfl : f = g := by rwa [← Arrow.mk_inj]
+  obtain rfl : f' = g' := by rwa [← Arrow.mk_inj]
+  rfl
 
 中文:
 引理 ext₂_of_arrow
@@ -2160,7 +2206,9 @@ lemma ext₂_of_arrow
   obtain rfl : x₀ = y₀ := congr_arg Arrow.leftFunc.obj h₀₁
   obtain rfl : x₁ = y₁ := congr_arg Arrow.rightFunc.obj h₀₁
   obtain rfl : x₂ = y₂ := congr_arg Arrow.rightFunc.obj h₁₂
-  obtain r
+  obtain rfl : f = g := by rwa [← Arrow.mk_inj]
+  obtain rfl : f' = g' := by rwa [← Arrow.mk_inj]
+  rfl
 
 Depends on / 依赖: Arrow.leftFunc.obj, Arrow.mk_inj, Arrow.rightFunc.obj, congr_arg, leftFunc, mk_inj, rightFunc
 -/
@@ -2319,7 +2367,9 @@ definition isoMk₃
     (by rw [← cancel_epi app₀.hom, ← reassoc_of% w₀, app₁.hom_inv_id,
       comp_id, app₀.hom_inv_id_assoc])
     (by rw [← cancel_epi app₁.hom, ← reassoc_of% w₁, app₂.hom_inv_id,
-      comp_id, ap
+      comp_id, app₁.hom_inv_id_assoc])
+    (by rw [← cancel_epi app₂.hom, ← reassoc_of% w₂, app₃.hom_inv_id,
+      comp_id, app₂.hom_inv_id_assoc])
 
 中文:
 定义 isoMk₃
@@ -2329,7 +2379,9 @@ definition isoMk₃
     (by rw [← cancel_epi app₀.hom, ← reassoc_of% w₀, app₁.hom_inv_id,
       comp_id, app₀.hom_inv_id_assoc])
     (by rw [← cancel_epi app₁.hom, ← reassoc_of% w₁, app₂.hom_inv_id,
-      comp_id, ap
+      comp_id, app₁.hom_inv_id_assoc])
+    (by rw [← cancel_epi app₂.hom, ← reassoc_of% w₂, app₃.hom_inv_id,
+      comp_id, app₂.hom_inv_id_assoc])
 -/
 def isoMk₃ {f g : ComposableArrows C 3}
     (app₀ : f.obj' 0 ≅ g.obj' 0) (app₁ : f.obj' 1 ≅ g.obj' 1) (app₂ : f.obj' 2 ≅ g.obj' 2)
@@ -2560,7 +2612,8 @@ definition isoMk₄
   inv := homMk₄ app₀.inv app₁.inv app₂.inv app₃.inv app₄.inv
     (by rw [map'_inv_eq_inv_map' (by valid) app₀ app₁ w₀])
     (by rw [map'_inv_eq_inv_map' (by valid) app₁ app₂ w₁])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂]
+    (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂])
+    (by rw [map'_inv_eq_inv_map' (by valid) app₃ app₄ w₃])
 
 中文:
 定义 isoMk₄
@@ -2569,7 +2622,8 @@ definition isoMk₄
   inv := homMk₄ app₀.inv app₁.inv app₂.inv app₃.inv app₄.inv
     (by rw [map'_inv_eq_inv_map' (by valid) app₀ app₁ w₀])
     (by rw [map'_inv_eq_inv_map' (by valid) app₁ app₂ w₁])
-    (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂]
+    (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂])
+    (by rw [map'_inv_eq_inv_map' (by valid) app₃ app₄ w₃])
 -/
 def isoMk₄ {f g : ComposableArrows C 4}
     (app₀ : f.obj' 0 ≅ g.obj' 0) (app₁ : f.obj' 1 ≅ g.obj' 1) (app₂ : f.obj' 2 ≅ g.obj' 2)
@@ -2799,7 +2853,9 @@ definition isoMk₅
   inv := homMk₅ app₀.inv app₁.inv app₂.inv app₃.inv app₄.inv app₅.inv
     (by rw [map'_inv_eq_inv_map' (by valid) app₀ app₁ w₀])
     (by rw [map'_inv_eq_inv_map' (by valid) app₁ app₂ w₁])
-    (by rw [map'_inv_eq_inv_map' (by
+    (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂])
+    (by rw [map'_inv_eq_inv_map' (by valid) app₃ app₄ w₃])
+    (by rw [map'_inv_eq_inv_map' (by valid) app₄ app₅ w₄])
 
 中文:
 定义 isoMk₅
@@ -2808,7 +2864,9 @@ definition isoMk₅
   inv := homMk₅ app₀.inv app₁.inv app₂.inv app₃.inv app₄.inv app₅.inv
     (by rw [map'_inv_eq_inv_map' (by valid) app₀ app₁ w₀])
     (by rw [map'_inv_eq_inv_map' (by valid) app₁ app₂ w₁])
-    (by rw [map'_inv_eq_inv_map' (by
+    (by rw [map'_inv_eq_inv_map' (by valid) app₂ app₃ w₂])
+    (by rw [map'_inv_eq_inv_map' (by valid) app₃ app₄ w₃])
+    (by rw [map'_inv_eq_inv_map' (by valid) app₄ app₅ w₄])
 -/
 def isoMk₅ {f g : ComposableArrows C 5}
     (app₀ : f.obj' 0 ≅ g.obj' 0) (app₁ : f.obj' 1 ≅ g.obj' 1) (app₂ : f.obj' 2 ≅ g.obj' 2)
@@ -2913,7 +2971,10 @@ lemma mkOfObjOfMapSucc_exists
     obtain ⟨F, e, h⟩ := hn (fun i => obj i.succ) (fun i => mapSucc i.succ)
     refine ⟨F.precomp (mapSucc 0 ≫ (e 0).inv), fun i => match i with
       | 0 => Iso.refl _
-      | ⟨i + 
+      | ⟨i + 1, hi⟩ => e _, fun i hi => ?_⟩
+    obtain _ | i := i
+    · simp
+    · exact h i (by valid)
 
 中文:
 引理 mkOfObjOfMapSucc_存在
@@ -2925,7 +2986,10 @@ lemma mkOfObjOfMapSucc_exists
     obtain ⟨F, e, h⟩ := hn (fun i => obj i.succ) (fun i => mapSucc i.succ)
     refine ⟨F.precomp (mapSucc 0 ≫ (e 0).inv), fun i => match i with
       | 0 => Iso.refl _
-      | ⟨i + 
+      | ⟨i + 1, hi⟩ => e _, fun i hi => ?_⟩
+    obtain _ | i := i
+    · simp
+    · exact h i (by valid)
 
 Depends on / 依赖: F.precomp, Iso.refl, i.succ, mapSucc, precomp
 -/

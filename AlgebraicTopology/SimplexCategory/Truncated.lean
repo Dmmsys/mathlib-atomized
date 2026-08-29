@@ -38,7 +38,18 @@ instance initial_inclusion
   apply zigzag_isConnected
   rintro ⟨⟨Δ₁, hΔ₁⟩, ⟨⟨⟩⟩, f⟩ ⟨⟨Δ₂, hΔ₂⟩, ⟨⟨⟩⟩, f'⟩
   apply Zigzag.trans (j₂ := ⟨⦋0⦌ₙ, ⟨⟨⟩⟩, ⦋0⦌.const _ (f 0)⟩)
-    (.of_inv <|
+    (.of_inv <| CostructuredArrow.homMk <| Hom.tr <| ⦋0⦌.const _ 0)
+  by_cases hff' : f 0 <= f' 0
+  · trans ⟨⦋1⦌ₙ, ⟨⟨⟩⟩, mkOfLe (n := Δ.len) (f 0) (f' 0) hff'⟩
+· apply Zigzag.of_hom CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 0
+    · trans ⟨⦋0⦌ₙ, ⟨⟨⟩⟩, ⦋0⦌.const _ (f' 0)⟩
+· apply Zigzag.of_inv CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 1
+· apply Zigzag.of_hom CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 0
+  · trans ⟨⦋1⦌ₙ, ⟨⟨⟩⟩, mkOfLe (n := Δ.len) (f' 0) (f 0) (le_of_not_ge hff')⟩
+· apply Zigzag.of_hom CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 1
+    · trans ⟨⦋0⦌ₙ, ⟨⟨⟩⟩, ⦋0⦌.const _ (f' 0)⟩
+· apply Zigzag.of_inv CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 0
+· apply Zigzag.of_hom CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 0
 
 中文:
 实例 initial_inclusion
@@ -51,7 +62,18 @@ instance initial_inclusion
   apply zigzag_isConnected
   rintro ⟨⟨Δ₁, hΔ₁⟩, ⟨⟨⟩⟩, f⟩ ⟨⟨Δ₂, hΔ₂⟩, ⟨⟨⟩⟩, f'⟩
   apply Zigzag.trans (j₂ := ⟨⦋0⦌ₙ, ⟨⟨⟩⟩, ⦋0⦌.const _ (f 0)⟩)
-    (.of_inv <|
+    (.of_inv <| CostructuredArrow.homMk <| Hom.tr <| ⦋0⦌.const _ 0)
+  by_cases hff' : f 0 <= f' 0
+  · trans ⟨⦋1⦌ₙ, ⟨⟨⟩⟩, mkOfLe (n := Δ.len) (f 0) (f' 0) hff'⟩
+· apply Zigzag.of_hom CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 0
+    · trans ⟨⦋0⦌ₙ, ⟨⟨⟩⟩, ⦋0⦌.const _ (f' 0)⟩
+· apply Zigzag.of_inv CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 1
+· apply Zigzag.of_hom CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 0
+  · trans ⟨⦋1⦌ₙ, ⟨⟨⟩⟩, mkOfLe (n := Δ.len) (f' 0) (f 0) (le_of_not_ge hff')⟩
+· apply Zigzag.of_hom CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 1
+    · trans ⟨⦋0⦌ₙ, ⟨⟨⟩⟩, ⦋0⦌.const _ (f' 0)⟩
+· apply Zigzag.of_inv CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 0
+· apply Zigzag.of_hom CostructuredArrow.homMk Hom.tr ⦋0⦌.const _ 0
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, Hom.tr, Nat.pos_of_neZero, Nonempty, Zigzag, Zigzag.of_hom, Zigzag.trans, inclusion, mkOfLe, of_hom, of_inv, pos_of_neZero, zigzag_isConnected
 -/

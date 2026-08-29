@@ -42,7 +42,9 @@ definition ofDFinsuppEquiv
     (DFinsupp.lsum R fun p => lift <|
       (PiTensorProduct.map fun i => DFinsupp.lsingle (p i)).compMultilinearMap (tprod R))
     (by ext p x; simp)
-    (by e
+    (by ext x; simp)
+
+@[simp]
 
 中文:
 定义 ofDFinsuppEquiv
@@ -53,7 +55,9 @@ definition ofDFinsuppEquiv
     (DFinsupp.lsum R fun p => lift <|
       (PiTensorProduct.map fun i => DFinsupp.lsingle (p i)).compMultilinearMap (tprod R))
     (by ext p x; simp)
-    (by e
+    (by ext x; simp)
+
+@[simp]
 
 Depends on / 依赖: DFinsupp, DFinsupp.lsingle, DFinsupp.lsum, LinearEquiv, LinearEquiv.ofLinearMap, MultilinearMap, MultilinearMap.fromDFinsuppEquiv, PiTensorProduct, PiTensorProduct.map, compMultilinearMap, fromDFinsuppEquiv, lsingle, ofLinearMap
 -/

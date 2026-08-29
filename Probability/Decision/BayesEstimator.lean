@@ -72,7 +72,8 @@ lemma avgRisk_eq_lintegral_posterior_prod
   congr
   calc π otimesₘ (κ ∘ₖ P) = (Kernel.id ∥ₖ κ) ∘ₘ (π otimesₘ P) := Measure.parallelComp_comp_compProd.symm
   _ = (Kernel.id ∥ₖ κ) ∘ₘ ((P†π) ×ₖ Kernel.id) ∘ₘ P ∘ₘ π := by rw [posterior_prod_id_comp]
-
+  _ = ((P†π) ×ₖ κ) ∘ₘ P ∘ₘ π := by
+      rw [Measure.comp_assoc]; rw [Kernel.parallelComp_comp_prod]; rw [Kernel.id_comp]; rw [Kernel.comp_id]
 
 中文:
 引理 avgRisk_eq_lintegral_posterior_prod
@@ -81,7 +82,8 @@ lemma avgRisk_eq_lintegral_posterior_prod
   congr
   calc π otimesₘ (κ ∘ₖ P) = (Kernel.id ∥ₖ κ) ∘ₘ (π otimesₘ P) := Measure.parallelComp_comp_compProd.symm
   _ = (Kernel.id ∥ₖ κ) ∘ₘ ((P†π) ×ₖ Kernel.id) ∘ₘ P ∘ₘ π := by rw [posterior_prod_id_comp]
-
+  _ = ((P†π) ×ₖ κ) ∘ₘ P ∘ₘ π := by
+      rw [Measure.comp_assoc]; rw [Kernel.parallelComp_comp_prod]; rw [Kernel.id_comp]; rw [Kernel.comp_id]
 
 Depends on / 依赖: Kernel, Kernel.comp_id, Kernel.id, Kernel.id_comp, Kernel.parallelComp_comp_prod, Measure, Measure.comp_assoc, Measure.lintegral_compProd, Measure.parallelComp_comp_compProd.symm, avgRisk, comp_assoc, comp_id, fun_prop, id_comp, lintegral_compProd, parallelComp_comp_compProd, parallelComp_comp_prod, posterior_prod_id_comp
 -/

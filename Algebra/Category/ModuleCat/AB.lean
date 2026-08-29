@@ -93,7 +93,7 @@ lemma ModuleCat.isSeparator
     LinearMap.ext_iff, LinearMap.coe_comp, Function.comp_apply, forall_eq'] at h
   ext x
   simpa using h (ModuleCat.ofHom ((LinearMap.toSpanSingleton R X x).comp
-    (Shrink.linearEquiv R R : Shrink R ->ₗ
+    (Shrink.linearEquiv R R : Shrink R ->ₗ[R] R))) 1
 
 中文:
 引理 模范畴.isSeparator
@@ -104,7 +104,7 @@ lemma ModuleCat.isSeparator
     LinearMap.ext_iff, LinearMap.coe_comp, Function.comp_apply, forall_eq'] at h
   ext x
   simpa using h (ModuleCat.ofHom ((LinearMap.toSpanSingleton R X x).comp
-    (Shrink.linearEquiv R R : Shrink R ->ₗ
+    (Shrink.linearEquiv R R : Shrink R ->ₗ[R] R))) 1
 
 Depends on / 依赖: Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.ext_iff, LinearMap.toSpanSingleton, ModuleCat, ModuleCat.hom_ext_iff, ModuleCat.ofHom, ObjectProperty, ObjectProperty.singleton_iff, Shrink, Shrink.linearEquiv, coe_comp, comp_apply, ext_iff, forall_eq, hom_comp, hom_ext_iff, linearEquiv
 -/

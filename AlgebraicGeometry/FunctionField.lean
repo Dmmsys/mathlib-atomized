@@ -186,7 +186,8 @@ theorem genericPoint_eq_of_isOpenImmersion
   rw [← Set.univ_subset_iff]
   convert! subset_closure_inter_of_isPreirreducible_of_isOpen _ f.isOpenEmbedding.isOpen_range _
   · rw [Set.univ_inter, Set.image_univ]
-  · apply PreirreducibleSpace.
+  · apply PreirreducibleSpace.isPreirreducible_univ (X := Y)
+  · exact ⟨_, trivial, Set.mem_range_self hX.2.some⟩
 
 中文:
 定理 genericPoint_eq_of_isOpenImmersion
@@ -198,7 +199,8 @@ theorem genericPoint_eq_of_isOpenImmersion
   rw [← Set.univ_subset_iff]
   convert! subset_closure_inter_of_isPreirreducible_of_isOpen _ f.isOpenEmbedding.isOpen_range _
   · rw [Set.univ_inter, Set.image_univ]
-  · apply PreirreducibleSpace.
+  · apply PreirreducibleSpace.isPreirreducible_univ (X := Y)
+  · exact ⟨_, trivial, Set.mem_range_self hX.2.some⟩
 
 Depends on / 依赖: PreirreducibleSpace, PreirreducibleSpace.isPreirreducible_univ, Set.image_univ, Set.mem_range_self, Set.univ_inter, Set.univ_subset_iff, continuous, convert, f.continuous, f.isOpenEmbedding.isOpen_range, genericPoint_spec, image_univ, isOpenEmbedding, isOpen_range, isPreirreducible_univ, mem_range_self, subset_closure_inter_of_isPreirreducible_of_isOpen, univ_inter, univ_subset_iff
 -/
@@ -399,7 +401,7 @@ theorem IsAffineOpen.primeIdealOf_genericPoint
 
   -- Porting note: this was `ext1`
   apply Subtype.ext
-  exact (genericPo
+  exact (genericPoint_eq_of_isOpenImmersion U.ι).symm
 
 中文:
 定理 是仿射开集.primeIdealOf_genericPoint
@@ -413,7 +415,7 @@ theorem IsAffineOpen.primeIdealOf_genericPoint
 
   -- Porting note: this was `ext1`
   apply Subtype.ext
-  exact (genericPo
+  exact (genericPoint_eq_of_isOpenImmersion U.ι).symm
 
 Depends on / 依赖: IsAffineOpen, IsAffineOpen.primeIdealOf, Spec.map, U.isOpenEmbedding_obj_top, U.toScheme.isoSpec.hom, X.presheaf.map, convert, eqToHom, genericPoint_eq_of_isOpenImmersion, isOpenEmbedding_obj_top, isoSpec, presheaf, primeIdealOf, toScheme
 -/
@@ -447,7 +449,7 @@ theorem functionField_isFractionRing_of_isAffineOpen
         (((genericPoint_spec X).mem_open_set_iff U.isOpen).mpr (by simpa using ‹Nonempty U›))⟩
     using 1
   rw [hU.primeIdealOf_genericPoint]; rw [genericPoint_eq_bot_of_affine]
-  ext; exact
+  ext; exact mem_nonZeroDivisors_iff_ne_zero
 
 中文:
 定理 functionField_isFractionRing_of_isAffineOpen
@@ -460,7 +462,7 @@ theorem functionField_isFractionRing_of_isAffineOpen
         (((genericPoint_spec X).mem_open_set_iff U.isOpen).mpr (by simpa using ‹Nonempty U›))⟩
     using 1
   rw [hU.primeIdealOf_genericPoint]; rw [genericPoint_eq_bot_of_affine]
-  ext; exact
+  ext; exact mem_nonZeroDivisors_iff_ne_zero
 
 Depends on / 依赖: IsFractionRing, Nonempty, Scheme, Scheme.functionField, U.isOpen, convert, functionField, genericPoint, genericPoint_eq_bot_of_affine, genericPoint_spec, hU.isLocalization_stalk, hU.primeIdealOf_genericPoint, isLocalization_stalk, isOpen, mem_nonZeroDivisors_iff_ne_zero, mem_open_set_iff, primeIdealOf_genericPoint
 -/
@@ -490,7 +492,13 @@ instance [IsIntegral
   let x : U := ⟨x, X.affineCover.covers x⟩
   have : Nonempty U := ⟨x⟩
   let M := (hU.primeIdealOf x).asIdeal.primeCompl
-  have := hU.isLocalization_stalk 
+  have := hU.isLocalization_stalk x
+  have := functionField_isFractionRing_of_isAffineOpen X U hU
+  -- Porting note: the following two lines were not needed.
+  let _hA := Presheaf.algebra_section_stalk X.presheaf x
+  have := functionField_isScalarTower X U x
+  .isFractionRing_of_isDomain_of_isLocalization M ↑(Presheaf.stalk X.presheaf x)
+    (Scheme.functionField X)
 
 中文:
 实例 [是整
@@ -500,7 +508,13 @@ instance [IsIntegral
   let x : U := ⟨x, X.affineCover.covers x⟩
   have : Nonempty U := ⟨x⟩
   let M := (hU.primeIdealOf x).asIdeal.primeCompl
-  have := hU.isLocalization_stalk 
+  have := hU.isLocalization_stalk x
+  have := functionField_isFractionRing_of_isAffineOpen X U hU
+  -- Porting note: the following two lines were not needed.
+  let _hA := Presheaf.algebra_section_stalk X.presheaf x
+  have := functionField_isScalarTower X U x
+  .isFractionRing_of_isDomain_of_isLocalization M ↑(Presheaf.stalk X.presheaf x)
+    (Scheme.functionField X)
 
 Depends on / 依赖: IsAffineOpen, Nonempty, X.Opens, X.affineCover.covers, X.affineCover.f, X.affineCover.idx, affineCover, asIdeal, asIdeal.primeCompl, covers, functionField_isFractionRing_of_isAffineOpen, hU.isLocalization_stalk, hU.primeIdealOf, isAffineOpen_opensRange, isLocalization_stalk, opensRange, primeCompl, primeIdealOf
 -/
@@ -549,7 +563,16 @@ lemma exists_isUnit_germ_eq
     X.isBasis_affineOpens.exists_subset_of_mem_open hU U.isOpen
   have : Nonempty A := ⟨_, hxA⟩
   let gA : Γ(X, A) := X.presheaf.map (homOfLE hAU).op g
-  have h_germ_gA : X.presheaf.germ A (genericPoint
+  have h_germ_gA : X.presheaf.germ A (genericPoint X) hxA gA = f := by
+    simp only [← hg, ← X.presheaf.germ_res_apply (homOfLE hAU) (genericPoint X) hxA g, gA]
+    rfl
+  have hxV : genericPoint X in X.basicOpen gA := by
+    rwa [Scheme.mem_basicOpen X gA (genericPoint X) hxA, h_germ_gA, isUnit_iff_ne_zero]
+  have : Nonempty (X.basicOpen gA) := ⟨⟨_, hxV⟩⟩
+  refine ⟨X.basicOpen gA, hA.basicOpen gA,
+    X.presheaf.map (X.basicOpen_le gA).hom.op gA, ‹_›, ?_,
+    X.toRingedSpace.isUnit_res_basicOpen gA⟩
+  simpa using h_germ_gA
 
 中文:
 引理 存在_isUnit_germ_eq
@@ -560,7 +583,16 @@ lemma exists_isUnit_germ_eq
     X.isBasis_affineOpens.exists_subset_of_mem_open hU U.isOpen
   have : Nonempty A := ⟨_, hxA⟩
   let gA : Γ(X, A) := X.presheaf.map (homOfLE hAU).op g
-  have h_germ_gA : X.presheaf.germ A (genericPoint
+  have h_germ_gA : X.presheaf.germ A (genericPoint X) hxA gA = f := by
+    simp only [← hg, ← X.presheaf.germ_res_apply (homOfLE hAU) (genericPoint X) hxA g, gA]
+    rfl
+  have hxV : genericPoint X in X.basicOpen gA := by
+    rwa [Scheme.mem_basicOpen X gA (genericPoint X) hxA, h_germ_gA, isUnit_iff_ne_zero]
+  have : Nonempty (X.basicOpen gA) := ⟨⟨_, hxV⟩⟩
+  refine ⟨X.basicOpen gA, hA.basicOpen gA,
+    X.presheaf.map (X.basicOpen_le gA).hom.op gA, ‹_›, ?_,
+    X.toRingedSpace.isUnit_res_basicOpen gA⟩
+  simpa using h_germ_gA
 
 Depends on / 依赖: Nonempty, Scheme, Scheme.mem_basicOpen, U.isOpen, X.basicOpen, X.isBasis_affineOpens.exists_subset_of_mem_open, X.presheaf.exists_germ_eq, X.presheaf.germ, X.presheaf.germ_res_apply, X.presheaf.map, basicOpen, exists_germ_eq, exists_subset_of_mem_open, genericPoint, germ_res_apply, h_germ_gA, homOfLE, isBasis_affineOpens, isOpen, mem_basicOpen
 -/

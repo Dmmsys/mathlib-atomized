@@ -174,7 +174,16 @@ theorem gosper_trick
   have l₂ : (n : Rat) - i + 1 != 0 := by norm_cast
   have h₁ := (mul_div_cancel_left₀ (↑(Nat.centralBinom (i + 1))) l₁).symm
   have h₂ := (mul_div_cancel_left₀ (↑(Nat.centralBinom (n - i + 1))) l₂).symm
-  have h₃ : ((i : Rat) + 1) * (i + 1).centralBi
+  have h₃ : ((i : Rat) + 1) * (i + 1).centralBinom = 2 * (2 * i + 1) * i.centralBinom :=
+    mod_cast Nat.succ_mul_centralBinom_succ i
+  have h₄ :
+    ((n : Rat) - i + 1) * (n - i + 1).centralBinom = 2 * (2 * (n - i) + 1) * (n - i).centralBinom :=
+      mod_cast Nat.succ_mul_centralBinom_succ (n - i)
+  simp only [gosperCatalan]
+  push_cast
+  rw [show n + 1 - i = n - i + 1 by rw [Nat.add_comm (n - i) 1]; rw [← (Nat.add_sub_assoc h 1)]; rw [add_comm]]
+  rw [h₁]; rw [h₂]; rw [h₃]; rw [h₄]
+  field
 
 中文:
 定理 gosper_trick
@@ -184,7 +193,16 @@ theorem gosper_trick
   have l₂ : (n : Rat) - i + 1 != 0 := by norm_cast
   have h₁ := (mul_div_cancel_left₀ (↑(Nat.centralBinom (i + 1))) l₁).symm
   have h₂ := (mul_div_cancel_left₀ (↑(Nat.centralBinom (n - i + 1))) l₂).symm
-  have h₃ : ((i : Rat) + 1) * (i + 1).centralBi
+  have h₃ : ((i : Rat) + 1) * (i + 1).centralBinom = 2 * (2 * i + 1) * i.centralBinom :=
+    mod_cast Nat.succ_mul_centralBinom_succ i
+  have h₄ :
+    ((n : Rat) - i + 1) * (n - i + 1).centralBinom = 2 * (2 * (n - i) + 1) * (n - i).centralBinom :=
+      mod_cast Nat.succ_mul_centralBinom_succ (n - i)
+  simp only [gosperCatalan]
+  push_cast
+  rw [show n + 1 - i = n - i + 1 by rw [Nat.add_comm (n - i) 1]; rw [← (Nat.add_sub_assoc h 1)]; rw [add_comm]]
+  rw [h₁]; rw [h₂]; rw [h₃]; rw [h₄]
+  field
 -/
 private theorem gosper_trick {n i : Nat} (h : i <= n) :
     gosperCatalan (n + 1) (i + 1) - gosperCatalan (n + 1) i =
@@ -246,7 +264,21 @@ theorem catalan_eq_centralBinom_div
   | zero => simp
   | ind d hd =>
     simp_rw [catalan_succ, Nat.cast_sum, Nat.cast_mul]
-    trans (∑ i : Fin d.succ, Nat.ce
+    trans (∑ i : Fin d.succ, Nat.centralBinom i / (i + 1) *
+                            (Nat.centralBinom (d - i) / (d - i + 1)) : Rat)
+    · congr
+      ext1 x
+      have m_le_d : x.val <= d := by lia
+      have d_minus_x_le_d : (d - x.val) <= d := tsub_le_self
+      rw [hd _ m_le_d]; rw [hd _ d_minus_x_le_d]
+      norm_cast
+    · trans (∑ i : Fin d.succ, (gosperCatalan (d + 1) (i + 1) - gosperCatalan (d + 1) i))
+      · refine sum_congr rfl fun i _ => ?_
+        rw [gosper_trick i.is_le]; rw [mul_div]
+      · rw [← sum_range fun i => gosperCatalan (d + 1) (i + 1) - gosperCatalan (d + 1) i,
+            sum_range_sub, Nat.succ_eq_add_one]
+        rw [gosper_catalan_sub_eq_central_binom_div d]
+        norm_cast
 
 中文:
 定理 catalan_eq_centralBinom_div
@@ -260,7 +292,21 @@ theorem catalan_eq_centralBinom_div
   | zero => simp
   | ind d hd =>
     simp_rw [catalan_succ, Nat.cast_sum, Nat.cast_mul]
-    trans (∑ i : Fin d.succ, Nat.ce
+    trans (∑ i : Fin d.succ, Nat.centralBinom i / (i + 1) *
+                            (Nat.centralBinom (d - i) / (d - i + 1)) : Rat)
+    · congr
+      ext1 x
+      have m_le_d : x.val <= d := by lia
+      have d_minus_x_le_d : (d - x.val) <= d := tsub_le_self
+      rw [hd _ m_le_d]; rw [hd _ d_minus_x_le_d]
+      norm_cast
+    · trans (∑ i : Fin d.succ, (gosperCatalan (d + 1) (i + 1) - gosperCatalan (d + 1) i))
+      · refine sum_congr rfl fun i _ => ?_
+        rw [gosper_trick i.is_le]; rw [mul_div]
+      · rw [← sum_range fun i => gosperCatalan (d + 1) (i + 1) - gosperCatalan (d + 1) i,
+            sum_range_sub, Nat.succ_eq_add_one]
+        rw [gosper_catalan_sub_eq_central_binom_div d]
+        norm_cast
 
 Depends on / 依赖: Nat.caseStrongRecOn, Nat.cast_mul, Nat.cast_sum, Nat.centralBinom, Nat.succ_dvd_centralBinom, caseStrongRecOn, cast_mul, cast_sum, catalan, catalan_succ, centralBinom, d.succ, d_minus_x_le_d, m_le_d, mod_cast, simp_rw, succ_dvd_centralBinom, tsub_le_self, x.val
 -/

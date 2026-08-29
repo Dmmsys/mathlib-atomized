@@ -62,7 +62,21 @@ theorem Valuation.inversion_estimate
   have hyp1' : v (x - y) * (v y * v y)⁻¹ < γ := mul_inv_lt_of_lt_mul₀ hyp1
   have hyp2 : v (x - y) < v y := lt_of_lt_of_le h (min_le_right _ _)
   have key : v x = v y := Valuation.map_eq_of_sub_lt v hyp2
-  have x_ne :
+  have x_ne : x != 0 := by
+    intro h
+    apply y_ne
+    rw [h]; rw [v.map_zero] at key
+    exact v.zero_iff.1 key.symm
+  have decomp : x⁻¹ - y⁻¹ = x⁻¹ * (y - x) * y⁻¹ := by
+    rw [mul_sub_left_distrib]; rw [sub_mul]; rw [mul_assoc]; rw [show y * y⁻¹ = 1 from mul_inv_cancel₀ y_ne]; rw [show x⁻¹ * x = 1 from inv_mul_cancel₀ x_ne]; rw [mul_one]; rw [one_mul]
+  calc
+    v (x⁻¹ - y⁻¹) = v (x⁻¹ * (y - x) * y⁻¹) := by rw [decomp]
+    _ = v x⁻¹ * (v <| y - x) * v y⁻¹ := by repeat' rw [Valuation.map_mul]
+    _ = (v x)⁻¹ * (v <| y - x) * (v y)⁻¹ := by rw [map_inv₀, map_inv₀]
+    _ = (v <| y - x) * (v y * v y)⁻¹ := by rw [mul_assoc, mul_comm, key, mul_assoc, mul_inv_rev]
+    _ = (v <| y - x) * (v y * v y)⁻¹ := rfl
+    _ = (v <| x - y) * (v y * v y)⁻¹ := by rw [Valuation.map_sub_swap]
+    _ < γ := hyp1'
 
 中文:
 定理 赋值.inversion_estimate
@@ -72,7 +86,21 @@ theorem Valuation.inversion_estimate
   have hyp1' : v (x - y) * (v y * v y)⁻¹ < γ := mul_inv_lt_of_lt_mul₀ hyp1
   have hyp2 : v (x - y) < v y := lt_of_lt_of_le h (min_le_right _ _)
   have key : v x = v y := Valuation.map_eq_of_sub_lt v hyp2
-  have x_ne :
+  have x_ne : x != 0 := by
+    intro h
+    apply y_ne
+    rw [h]; rw [v.map_zero] at key
+    exact v.zero_iff.1 key.symm
+  have decomp : x⁻¹ - y⁻¹ = x⁻¹ * (y - x) * y⁻¹ := by
+    rw [mul_sub_left_distrib]; rw [sub_mul]; rw [mul_assoc]; rw [show y * y⁻¹ = 1 from mul_inv_cancel₀ y_ne]; rw [show x⁻¹ * x = 1 from inv_mul_cancel₀ x_ne]; rw [mul_one]; rw [one_mul]
+  calc
+    v (x⁻¹ - y⁻¹) = v (x⁻¹ * (y - x) * y⁻¹) := by rw [decomp]
+    _ = v x⁻¹ * (v <| y - x) * v y⁻¹ := by repeat' rw [Valuation.map_mul]
+    _ = (v x)⁻¹ * (v <| y - x) * (v y)⁻¹ := by rw [map_inv₀, map_inv₀]
+    _ = (v <| y - x) * (v y * v y)⁻¹ := by rw [mul_assoc, mul_comm, key, mul_assoc, mul_inv_rev]
+    _ = (v <| y - x) * (v y * v y)⁻¹ := rfl
+    _ = (v <| x - y) * (v y * v y)⁻¹ := by rw [Valuation.map_sub_swap]
+    _ < γ := hyp1'
 
 Depends on / 依赖: Valuation, Valuation.map_eq_of_sub_lt, decomp, key.symm, lt_of_lt_of_le, map_eq_of_sub_lt, map_zero, min_le_left, min_le_right, mul_assoc, mul_sub_left_distrib, sub_mul, v.map_zero, v.zero_iff, x_ne, y_ne, zero_iff
 -/
@@ -184,7 +212,11 @@ theorem Valued.continuous_valuation
     intro γ hγ
     rw [Filter.Eventually]; rw [Valued.mem_nhds_zero]
     use Units.mk0 γ hγ; rfl
-  · have v_ne : (v.restrict x : ValueGroup₀ (.ofClass h
+  · have v_ne : (v.restrict x : ValueGroup₀ (.ofClass hv.v)) != 0 :=
+      (Valuation.ne_zero_iff _).mpr h
+    rw [ContinuousAt]; rw [WithZeroTopology.tendsto_of_ne_zero v_ne]
+    simp_rw [v.restrict_inj]
+    apply Valued.locally_const (by simpa [restrict₀_apply] using v_ne)
 
 中文:
 定理 赋值.continuous_valuation
@@ -197,7 +229,11 @@ theorem Valued.continuous_valuation
     intro γ hγ
     rw [Filter.Eventually]; rw [Valued.mem_nhds_zero]
     use Units.mk0 γ hγ; rfl
-  · have v_ne : (v.restrict x : ValueGroup₀ (.ofClass h
+  · have v_ne : (v.restrict x : ValueGroup₀ (.ofClass hv.v)) != 0 :=
+      (Valuation.ne_zero_iff _).mpr h
+    rw [ContinuousAt]; rw [WithZeroTopology.tendsto_of_ne_zero v_ne]
+    simp_rw [v.restrict_inj]
+    apply Valued.locally_const (by simpa [restrict₀_apply] using v_ne)
 
 Depends on / 依赖: ContinuousAt, Eventually, Filter, Filter.Eventually, Units.mk0, Valuation, Valuation.ne_zero_iff, Valued, Valued.locally_const, Valued.mem_nhds_zero, WithZeroTopology, WithZeroTopology.tendsto_of_ne_zero, WithZeroTopology.tendsto_zero, continuous_iff_continuousAt, eq_or_ne, hv.v, locally_const, map_zero, mem_nhds_zero, ne_zero_iff
 -/
@@ -231,7 +267,12 @@ theorem Valued.continuous_valuation_of_surjective
     intro γ hγ
     rw [Filter.Eventually]; rw [Valued.mem_nhds_zero]
     obtain ⟨x, hx⟩ := hsurj γ
-    use Units.mk0 (restrict₀ (.ofClass hv.v) x) (by s
+    use Units.mk0 (restrict₀ (.ofClass hv.v) x) (by simp [restrict₀_apply, hx, hγ])
+    simp only [Units.val_mk0, ofPred_subset_ofPred, ← v.restrict_def, Valuation.restrict_lt_iff, hx,
+      imp_self, implies_true]
+  · have h0 : hv.v x != 0 := (Valuation.ne_zero_iff _).mpr h
+    rw [ContinuousAt]; rw [WithZeroTopology.tendsto_of_ne_zero h0]
+    exact Valued.locally_const (by simpa using h0)
 
 中文:
 定理 赋值.continuous_valuation_of_surjective
@@ -244,7 +285,12 @@ theorem Valued.continuous_valuation_of_surjective
     intro γ hγ
     rw [Filter.Eventually]; rw [Valued.mem_nhds_zero]
     obtain ⟨x, hx⟩ := hsurj γ
-    use Units.mk0 (restrict₀ (.ofClass hv.v) x) (by s
+    use Units.mk0 (restrict₀ (.ofClass hv.v) x) (by simp [restrict₀_apply, hx, hγ])
+    simp only [Units.val_mk0, ofPred_subset_ofPred, ← v.restrict_def, Valuation.restrict_lt_iff, hx,
+      imp_self, implies_true]
+  · have h0 : hv.v x != 0 := (Valuation.ne_zero_iff _).mpr h
+    rw [ContinuousAt]; rw [WithZeroTopology.tendsto_of_ne_zero h0]
+    exact Valued.locally_const (by simpa using h0)
 
 Depends on / 依赖: Continuou, ContinuousAt, Eventually, Filter, Filter.Eventually, Units.mk0, Units.val_mk0, Valuation, Valuation.ne_zero_iff, Valuation.restrict_lt_iff, Valued, Valued.mem_nhds_zero, WithZeroTopology, WithZeroTopology.tendsto_zero, continuous_iff_continuousAt, eq_or_ne, hv.v, imp_self, implies_true, map_zero
 -/
@@ -334,7 +380,12 @@ lemma valuation_isClosedMap
   simp only [← isOpen_compl_iff, isOpen_iff_mem_nhds, mem_compl_iff, mem_nhds, subset_compl_comm,
     compl_ofPred, not_lt] at hU
   simp only [isClosed_iff, mem_image, map_eq_zero, exists_eq_right, ne_eq, image_subset_iff]
-  refine (em _).imp_r
+  refine (em _).imp_right fun h => ?_
+  obtain ⟨γ, h⟩ := hU _ h
+  simp only [sub_zero] at h
+  refine ⟨γ.1, γ.ne_zero, h.trans ?_⟩
+  intro
+  simp
 
 中文:
 引理 valuation_isClosedMap
@@ -345,7 +396,12 @@ lemma valuation_isClosedMap
   simp only [← isOpen_compl_iff, isOpen_iff_mem_nhds, mem_compl_iff, mem_nhds, subset_compl_comm,
     compl_ofPred, not_lt] at hU
   simp only [isClosed_iff, mem_image, map_eq_zero, exists_eq_right, ne_eq, image_subset_iff]
-  refine (em _).imp_r
+  refine (em _).imp_right fun h => ?_
+  obtain ⟨γ, h⟩ := hU _ h
+  simp only [sub_zero] at h
+  refine ⟨γ.1, γ.ne_zero, h.trans ?_⟩
+  intro
+  simp
 
 Depends on / 依赖: IsClosedMap, IsClosedMap.of_nonempty, compl_ofPred, exists_eq_right, h.trans, image_subset_iff, imp_right, isClosed_iff, isOpen_compl_iff, isOpen_iff_mem_nhds, map_eq_zero, mem_compl_iff, mem_image, mem_nhds, ne_eq, ne_zero, not_lt, of_nonempty, sub_zero, subset_compl_comm
 -/
@@ -393,7 +449,68 @@ theorem continuous_extension
   · refine ⟨0, ?_⟩
     rw [← Completion.coe_zero]; rw [← Completion.isDenseInducing_coe.isInducing.nhds_eq_comap]
     exact Valued.continuous_valuation.tendsto' 0 0 (map_zero v.restrict)
+  · have preimage_one : v ⁻¹' {(1 : Γ₀)} in 𝓝 (1 : K) := by
+      have : (v (1 : K) : Γ₀) != 0 := by
+        rw [Valuation.map_one]
+        exact zero_ne_one.symm
+      convert! Valued.locally_const this
+      ext x
+      rw [Valuation.map_one]; rw [mem_preimage]; rw [mem_singleton_iff]; rw [mem_ofPred_eq]
+    obtain ⟨V, V_in, hV⟩ : exists V in 𝓝 (1 : hat K), forall x : K, (x : hat K) in V -> (v x : Γ₀) = 1 := by
+      rwa [Completion.isDenseInducing_coe.nhds_eq_comap, mem_comap] at preimage_one
+    have : exists V' in 𝓝 (1 : hat K), (0 : hat K) ∉ V' ∧ forall (x) (_ : x in V') (y) (_ : y in V'),
+      x * y⁻¹ in V := by
+      have : Tendsto (fun p : hat K × hat K => p.1 * p.2⁻¹) ((𝓝 1) ×ˢ (𝓝 1)) (𝓝 1) := by
+        rw [← nhds_prod_eq]
+        conv =>
+          congr
+          rfl
+          rfl
+          rw [← one_mul (1 : hat K)]
+        refine
+          Tendsto.mul continuous_fst.continuousAt (Tendsto.comp ?_ continuous_snd.continuousAt)
+        convert! (continuousAt_inv₀ (zero_ne_one.symm : 1 != (0 : hat K))).tendsto
+        exact inv_one.symm
+      rcases tendsto_prod_self_iff.mp this V V_in with ⟨U, U_in, hU⟩
+      let hatKstar := ({0}ᶜ : Set <| hat K)
+      have : hatKstar in 𝓝 (1 : hat K) := compl_singleton_mem_nhds zero_ne_one.symm
+      exact ⟨U inter hatKstar, Filter.inter_mem U_in this,
+        ⟨fun ⟨_, h'⟩ => h' rfl, fun x ⟨hx, _⟩ y ⟨hy, _⟩ => hU _ _ hx hy⟩⟩
+    rcases this with ⟨V', V'_in, zeroV', hV'⟩
+    have nhds_right : (fun x => x * x₀) '' V' in 𝓝 x₀ := by
+      have l : Function.LeftInverse (fun x : hat K => x * x₀⁻¹) fun x : hat K => x * x₀ := by
+        intro x
+        simp only [mul_assoc, mul_inv_cancel₀ h, mul_one]
+      have r : Function.RightInverse (fun x : hat K => x * x₀⁻¹) fun x : hat K => x * x₀ := by
+        intro x
+        simp only [mul_assoc, inv_mul_cancel₀ h, mul_one]
+      have c : Continuous fun x : hat K => x * x₀⁻¹ := by fun_prop
+      rw [image_eq_preimage_of_inverse l r]
+      rw [← mul_inv_cancel₀ h] at V'_in
+      exact c.continuousAt V'_in
+    have : exists z₀ : K, exists y₀ in V', ↑z₀ = y₀ * x₀ ∧ z₀ != 0 := by
+      rcases Completion.denseRange_coe.mem_nhds nhds_right with ⟨z₀, y₀, y₀_in, H : y₀ * x₀ = z₀⟩
+      refine ⟨z₀, y₀, y₀_in, ⟨H.symm, ?_⟩⟩
+      rintro rfl
+      exact mul_ne_zero (ne_of_mem_of_not_mem y₀_in zeroV') h H
+    rcases this with ⟨z₀, y₀, y₀_in, hz₀, z₀_ne⟩
+    have vz₀_ne : v.restrict z₀ != 0 := by rwa [Valuation.ne_zero_iff]
+    refine ⟨v.restrict z₀, ?_⟩
+    rw [WithZeroTopology.tendsto_of_ne_zero vz₀_ne]; rw [eventually_comap]
+    filter_upwards [nhds_right] with x x_in a ha
+    rcases x_in with ⟨y, y_in, rfl⟩
+    have : (v.restrict (a * z₀⁻¹)) = 1 := by
+      rw [v.restrict_def]; rw [ValueGroup₀.restrict₀_eq_one_iff]
+      apply hV
+      have : (z₀⁻¹ : K) = (z₀ : hat K)⁻¹ := map_inv₀ (Completion.coeRingHom : K ->+* hat K) z₀
+      rw [Completion.coe_mul]; rw [this]; rw [ha]; rw [hz₀]; rw [mul_inv]; rw [mul_comm y₀⁻¹]; rw [← mul_assoc]; rw [mul_assoc y]; rw [mul_inv_cancel₀ h]; rw [mul_one]
+      solve_by_elim
+    calc
+      v.restrict a = v.restrict (a * z₀⁻¹ * z₀) := by rw [mul_assoc, inv_mul_cancel₀ z₀_ne, mul_one]
+      _ = v.restrict (a * z₀⁻¹) * v.restrict z₀ := Valuation.map_mul _ _ _
+      _ = v.restrict z₀ := by rw [this, one_mul]
 
+@[simp, norm_cast]
 
 中文:
 定理 continuous_extension
@@ -405,7 +522,68 @@ theorem continuous_extension
   · refine ⟨0, ?_⟩
     rw [← Completion.coe_zero]; rw [← Completion.isDenseInducing_coe.isInducing.nhds_eq_comap]
     exact Valued.continuous_valuation.tendsto' 0 0 (map_zero v.restrict)
+  · have preimage_one : v ⁻¹' {(1 : Γ₀)} in 𝓝 (1 : K) := by
+      have : (v (1 : K) : Γ₀) != 0 := by
+        rw [Valuation.map_one]
+        exact zero_ne_one.symm
+      convert! Valued.locally_const this
+      ext x
+      rw [Valuation.map_one]; rw [mem_preimage]; rw [mem_singleton_iff]; rw [mem_ofPred_eq]
+    obtain ⟨V, V_in, hV⟩ : exists V in 𝓝 (1 : hat K), forall x : K, (x : hat K) in V -> (v x : Γ₀) = 1 := by
+      rwa [Completion.isDenseInducing_coe.nhds_eq_comap, mem_comap] at preimage_one
+    have : exists V' in 𝓝 (1 : hat K), (0 : hat K) ∉ V' ∧ forall (x) (_ : x in V') (y) (_ : y in V'),
+      x * y⁻¹ in V := by
+      have : Tendsto (fun p : hat K × hat K => p.1 * p.2⁻¹) ((𝓝 1) ×ˢ (𝓝 1)) (𝓝 1) := by
+        rw [← nhds_prod_eq]
+        conv =>
+          congr
+          rfl
+          rfl
+          rw [← one_mul (1 : hat K)]
+        refine
+          Tendsto.mul continuous_fst.continuousAt (Tendsto.comp ?_ continuous_snd.continuousAt)
+        convert! (continuousAt_inv₀ (zero_ne_one.symm : 1 != (0 : hat K))).tendsto
+        exact inv_one.symm
+      rcases tendsto_prod_self_iff.mp this V V_in with ⟨U, U_in, hU⟩
+      let hatKstar := ({0}ᶜ : Set <| hat K)
+      have : hatKstar in 𝓝 (1 : hat K) := compl_singleton_mem_nhds zero_ne_one.symm
+      exact ⟨U inter hatKstar, Filter.inter_mem U_in this,
+        ⟨fun ⟨_, h'⟩ => h' rfl, fun x ⟨hx, _⟩ y ⟨hy, _⟩ => hU _ _ hx hy⟩⟩
+    rcases this with ⟨V', V'_in, zeroV', hV'⟩
+    have nhds_right : (fun x => x * x₀) '' V' in 𝓝 x₀ := by
+      have l : Function.LeftInverse (fun x : hat K => x * x₀⁻¹) fun x : hat K => x * x₀ := by
+        intro x
+        simp only [mul_assoc, mul_inv_cancel₀ h, mul_one]
+      have r : Function.RightInverse (fun x : hat K => x * x₀⁻¹) fun x : hat K => x * x₀ := by
+        intro x
+        simp only [mul_assoc, inv_mul_cancel₀ h, mul_one]
+      have c : Continuous fun x : hat K => x * x₀⁻¹ := by fun_prop
+      rw [image_eq_preimage_of_inverse l r]
+      rw [← mul_inv_cancel₀ h] at V'_in
+      exact c.continuousAt V'_in
+    have : exists z₀ : K, exists y₀ in V', ↑z₀ = y₀ * x₀ ∧ z₀ != 0 := by
+      rcases Completion.denseRange_coe.mem_nhds nhds_right with ⟨z₀, y₀, y₀_in, H : y₀ * x₀ = z₀⟩
+      refine ⟨z₀, y₀, y₀_in, ⟨H.symm, ?_⟩⟩
+      rintro rfl
+      exact mul_ne_zero (ne_of_mem_of_not_mem y₀_in zeroV') h H
+    rcases this with ⟨z₀, y₀, y₀_in, hz₀, z₀_ne⟩
+    have vz₀_ne : v.restrict z₀ != 0 := by rwa [Valuation.ne_zero_iff]
+    refine ⟨v.restrict z₀, ?_⟩
+    rw [WithZeroTopology.tendsto_of_ne_zero vz₀_ne]; rw [eventually_comap]
+    filter_upwards [nhds_right] with x x_in a ha
+    rcases x_in with ⟨y, y_in, rfl⟩
+    have : (v.restrict (a * z₀⁻¹)) = 1 := by
+      rw [v.restrict_def]; rw [ValueGroup₀.restrict₀_eq_one_iff]
+      apply hV
+      have : (z₀⁻¹ : K) = (z₀ : hat K)⁻¹ := map_inv₀ (Completion.coeRingHom : K ->+* hat K) z₀
+      rw [Completion.coe_mul]; rw [this]; rw [ha]; rw [hz₀]; rw [mul_inv]; rw [mul_comm y₀⁻¹]; rw [← mul_assoc]; rw [mul_assoc y]; rw [mul_inv_cancel₀ h]; rw [mul_one]
+      solve_by_elim
+    calc
+      v.restrict a = v.restrict (a * z₀⁻¹ * z₀) := by rw [mul_assoc, inv_mul_cancel₀ z₀_ne, mul_one]
+      _ = v.restrict (a * z₀⁻¹) * v.restrict z₀ := Valuation.map_mul _ _ _
+      _ = v.restrict z₀ := by rw [this, one_mul]
 
+@[simp, norm_cast]
 
 Depends on / 依赖: Completion, Completion.coe_zero, Completion.isDenseInducing_coe.continuous_extend, Completion.isDenseInducing_coe.isInducing.nhds_eq_comap, Valuation, Valuation.map_one, Valued, Valued.continuous_valuation.tendsto, Valued.locally_const, coe_zero, continuous_extend, continuous_valuation, convert, eq_or_ne, isDenseInducing_coe, isInducing, locally_const, map_one, map_zero, mem_prei
 -/
@@ -518,7 +696,32 @@ definition extensionValuation
   map_zero' := by
     rw [Function.comp_apply]; rw [map_eq_zero]; rw [← v.restrict.map_zero (R := K)]; rw [← Valued.extension_extends (0 : K)]; rw [Completion.coe_zero]
   map_one' := by
-    rw [Function.comp_apply]; rw [← Completion.coe_one]; rw [Valued.exten
+    rw [Function.comp_apply]; rw [← Completion.coe_one]; rw [Valued.extension_extends (1 : K)]; rw [Valuation.map_one _]; rw [map_one]
+  map_mul' x y := by
+    simp only [Function.comp_apply, ← map_mul]
+    rw [embedding_strictMono.injective.eq_iff]
+    apply Completion.induction_on₂ x y
+      (p := fun x y => extension (x * y) = extension x * extension y)
+    · have c1 : Continuous fun x : hat K × hat K => Valued.extension (x.1 * x.2) :=
+        Valued.continuous_extension.comp (continuous_fst.mul continuous_snd)
+      have c2 : Continuous fun x : hat K × hat K => Valued.extension x.1 * Valued.extension x.2 :=
+        (Valued.continuous_extension.comp continuous_fst).mul
+          (Valued.continuous_extension.comp continuous_snd)
+      exact isClosed_eq c1 c2
+    · intro x y
+      norm_cast
+      exact Valuation.map_mul _ _ _
+  map_add_le_max' x y := by
+    simp_rw [le_max_iff, Function.comp_apply]
+    rw [embedding_strictMono.le_iff_le]; rw [embedding_strictMono.le_iff_le (f := embedding)]
+    apply Completion.induction_on₂ x y
+      (p := fun x y => extension (x + y) <= extension x ∨ extension (x + y) <= extension y)
+    · have cont : Continuous (Valued.extension : hat K -> _) := Valued.continuous_extension
+      exact (isClosed_le (by fun_prop) <| cont.comp continuous_fst).union
+          (isClosed_le (by fun_prop) <| cont.comp continuous_snd)
+    · intro x y
+      norm_cast
+      exact le_max_iff.mp (v.restrict.map_add x y)
 
 中文:
 定义 extensionValuation
@@ -527,7 +730,32 @@ definition extensionValuation
   map_zero' := by
     rw [Function.comp_apply]; rw [map_eq_zero]; rw [← v.restrict.map_zero (R := K)]; rw [← Valued.extension_extends (0 : K)]; rw [Completion.coe_zero]
   map_one' := by
-    rw [Function.comp_apply]; rw [← Completion.coe_one]; rw [Valued.exten
+    rw [Function.comp_apply]; rw [← Completion.coe_one]; rw [Valued.extension_extends (1 : K)]; rw [Valuation.map_one _]; rw [map_one]
+  map_mul' x y := by
+    simp only [Function.comp_apply, ← map_mul]
+    rw [embedding_strictMono.injective.eq_iff]
+    apply Completion.induction_on₂ x y
+      (p := fun x y => extension (x * y) = extension x * extension y)
+    · have c1 : Continuous fun x : hat K × hat K => Valued.extension (x.1 * x.2) :=
+        Valued.continuous_extension.comp (continuous_fst.mul continuous_snd)
+      have c2 : Continuous fun x : hat K × hat K => Valued.extension x.1 * Valued.extension x.2 :=
+        (Valued.continuous_extension.comp continuous_fst).mul
+          (Valued.continuous_extension.comp continuous_snd)
+      exact isClosed_eq c1 c2
+    · intro x y
+      norm_cast
+      exact Valuation.map_mul _ _ _
+  map_add_le_max' x y := by
+    simp_rw [le_max_iff, Function.comp_apply]
+    rw [embedding_strictMono.le_iff_le]; rw [embedding_strictMono.le_iff_le (f := embedding)]
+    apply Completion.induction_on₂ x y
+      (p := fun x y => extension (x + y) <= extension x ∨ extension (x + y) <= extension y)
+    · have cont : Continuous (Valued.extension : hat K -> _) := Valued.continuous_extension
+      exact (isClosed_le (by fun_prop) <| cont.comp continuous_fst).union
+          (isClosed_le (by fun_prop) <| cont.comp continuous_snd)
+    · intro x y
+      norm_cast
+      exact le_max_iff.mp (v.restrict.map_add x y)
 
 Depends on / 依赖: Valued, Valued.extension, embedding, extension
 -/
@@ -669,7 +897,19 @@ lemma exists_coe_eq_v
   · refine Completion.denseRange_coe.induction_on x ?_
       (fun a => by simp [extensionValuation_apply_coe a])
     · simp only [extensionValuation_toFun]
-      have hr (r : K) : ValueGroup₀.embedding (restrict₀ (
+      have hr (r : K) : ValueGroup₀.embedding (restrict₀ (.ofClass hv.v) r) = v r := by
+        simp [embedding_restrict₀]
+      have h (a b : ValueGroup₀ (.ofClass hv.v)) :
+          ValueGroup₀.embedding a = ValueGroup₀.embedding b ↔ a = b := by
+        rw [embedding_strictMono.injective.eq_iff]
+      simp_rw [← hr, ← Valuation.restrict_def, h]
+      convert! valuation_isClosedMap.isClosed_range.preimage (continuous_extension (hv := hv))
+      simp_rw [eq_comm (a := extension _)]
+      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in
+      the new canonicalizer; a minimization would help. The original proof was: `grind` -/
+      ext; simp
 
 中文:
 引理 存在_coe_eq_v
@@ -681,7 +921,19 @@ lemma exists_coe_eq_v
   · refine Completion.denseRange_coe.induction_on x ?_
       (fun a => by simp [extensionValuation_apply_coe a])
     · simp only [extensionValuation_toFun]
-      have hr (r : K) : ValueGroup₀.embedding (restrict₀ (
+      have hr (r : K) : ValueGroup₀.embedding (restrict₀ (.ofClass hv.v) r) = v r := by
+        simp [embedding_restrict₀]
+      have h (a b : ValueGroup₀ (.ofClass hv.v)) :
+          ValueGroup₀.embedding a = ValueGroup₀.embedding b ↔ a = b := by
+        rw [embedding_strictMono.injective.eq_iff]
+      simp_rw [← hr, ← Valuation.restrict_def, h]
+      convert! valuation_isClosedMap.isClosed_range.preimage (continuous_extension (hv := hv))
+      simp_rw [eq_comm (a := extension _)]
+      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in
+      the new canonicalizer; a minimization would help. The original proof was: `grind` -/
+      ext; simp
 
 Depends on / 依赖: Completion, Completion.denseRange_coe.induction_on, denseRange_coe, embedding, embedding_strictMono, embedding_strictMono.injective.eq_iff, eq_iff, eq_or_ne, extensionValuation_apply_coe, extensionValuation_toFun, hv.v, induction_on, injective, ofClass, simp_rw
 -/
@@ -719,7 +971,31 @@ theorem closure_coe_completion_v_lt
   have heq : γ₀ = embedding γ₀' := rfl
   suffices γ₀ != 0 -> (x in closure ((↑) '' { x : K | v x < (γ : Γ₀) }) ↔ γ₀ < (γ : Γ₀)) by
     rcases eq_or_ne γ₀ 0 with h | h
-    · simp only [(Valuation.zero_iff 
+    · simp only [(Valuation.zero_iff _).mp h, mem_ofPred_eq, Valuation.map_zero, Units.zero_lt,
+        iff_true]
+      apply subset_closure
+      exact ⟨0, by simp only [mem_ofPred_eq, Valuation.map_zero, Units.zero_lt, true_and]; rfl⟩
+    · exact this h
+  intro h
+  have h' : γ₀' != 0 := by simpa only [heq, map_ne_zero] using h
+  have hγ₀ : extension ⁻¹' {γ₀'} in 𝓝 x :=
+    continuous_extension.continuousAt.preimage_mem_nhds
+      (WithZeroTopology.singleton_mem_nhds_of_ne_zero h')
+  rw [mem_closure_iff_nhds']
+  refine ⟨fun hx => ?_, fun hx s hs => ?_⟩
+  · obtain ⟨⟨-, y, hy₁ : v y < (γ : Γ₀), rfl⟩, hy₂⟩ := hx _ hγ₀
+    replace hy₂ : v y = γ₀ := by
+      simp only [mem_preimage, extension_extends, mem_singleton_iff, v.restrict_def] at hy₂
+      apply_fun embedding at hy₂
+      simpa [heq] using hy₂
+    rwa [← hy₂]
+  · obtain ⟨y, hy₁, hy₂⟩ := Completion.denseRange_coe.mem_nhds (inter_mem hγ₀ hs)
+    replace hy₁ : v y = γ₀ := by
+      simp only [mem_preimage, extension_extends, mem_singleton_iff, v.restrict_def] at hy₁
+      apply_fun embedding at hy₁
+      simpa [heq] using hy₁
+    rw [← hy₁] at hx
+    exact ⟨⟨y, ⟨y, hx, rfl⟩⟩, hy₂⟩
 
 中文:
 定理 closure_coe_completion_v_lt
@@ -731,7 +1007,31 @@ theorem closure_coe_completion_v_lt
   have heq : γ₀ = embedding γ₀' := rfl
   suffices γ₀ != 0 -> (x in closure ((↑) '' { x : K | v x < (γ : Γ₀) }) ↔ γ₀ < (γ : Γ₀)) by
     rcases eq_or_ne γ₀ 0 with h | h
-    · simp only [(Valuation.zero_iff 
+    · simp only [(Valuation.zero_iff _).mp h, mem_ofPred_eq, Valuation.map_zero, Units.zero_lt,
+        iff_true]
+      apply subset_closure
+      exact ⟨0, by simp only [mem_ofPred_eq, Valuation.map_zero, Units.zero_lt, true_and]; rfl⟩
+    · exact this h
+  intro h
+  have h' : γ₀' != 0 := by simpa only [heq, map_ne_zero] using h
+  have hγ₀ : extension ⁻¹' {γ₀'} in 𝓝 x :=
+    continuous_extension.continuousAt.preimage_mem_nhds
+      (WithZeroTopology.singleton_mem_nhds_of_ne_zero h')
+  rw [mem_closure_iff_nhds']
+  refine ⟨fun hx => ?_, fun hx s hs => ?_⟩
+  · obtain ⟨⟨-, y, hy₁ : v y < (γ : Γ₀), rfl⟩, hy₂⟩ := hx _ hγ₀
+    replace hy₂ : v y = γ₀ := by
+      simp only [mem_preimage, extension_extends, mem_singleton_iff, v.restrict_def] at hy₂
+      apply_fun embedding at hy₂
+      simpa [heq] using hy₂
+    rwa [← hy₂]
+  · obtain ⟨y, hy₁, hy₂⟩ := Completion.denseRange_coe.mem_nhds (inter_mem hγ₀ hs)
+    replace hy₁ : v y = γ₀ := by
+      simp only [mem_preimage, extension_extends, mem_singleton_iff, v.restrict_def] at hy₁
+      apply_fun embedding at hy₁
+      simpa [heq] using hy₁
+    rw [← hy₁] at hx
+    exact ⟨⟨y, ⟨y, hx, rfl⟩⟩, hy₂⟩
 
 Depends on / 依赖: Units.zero_lt, Valuation, Valuation.map_zero, Valuation.zero_iff, _def, closure, embedding, eq_or_ne, extension, extensionValuation, iff_true, map_zero, mem_ofPred_eq, subset_closure, true_and, zero_iff, zero_lt
 -/
@@ -810,7 +1110,34 @@ definition valueGroup₀_hom_extensionValuation
     apply_fun embedding using embedding_injective
     simpa using (restrict₀_surjective (.ofClass hv.v) 1).choose_spec
   map_mul' a b := by
-    set x := (re
+    set x := (restrict₀_surjective (.ofClass hv.v) a).choose with hx_def
+    have hx := (restrict₀_surjective (.ofClass hv.v) a).choose_spec
+    set y := (restrict₀_surjective (.ofClass hv.v) b).choose with hy_def
+    have hy := (restrict₀_surjective (.ofClass hv.v) b).choose_spec
+    set xy := (restrict₀_surjective (.ofClass hv.v) (a * b)).choose with hxy_def
+    have hxy := (restrict₀_surjective (.ofClass hv.v) (a * b)).choose_spec
+    rw [← hx_def] at hx
+    rw [← hy_def] at hy
+    rw [← hxy_def] at hxy
+    apply_fun embedding at hxy
+    apply_fun embedding at hx
+    apply_fun embedding at hy
+    simp only [embedding_restrict₀, coe_ofClass, map_mul] at hxy hx hy
+    simp only [Valuation.restrict_def, restrict₀_apply, coe_ofClass, extensionValuation_apply_coe,
+      map_eq_zero, mul_dite, mul_zero, dite_mul, zero_mul]
+    by_cases hx0 : x = 0
+    · simpa [← hx, hx0] using hxy
+    · by_cases hy0 : y = 0
+      · simpa [← hy, hy0] using hxy
+      · rw [dif_neg, dif_neg, dif_neg]
+        · simp only [← WithZero.coe_mul, MulMemClass.mk_mul_mk, WithZero.coe_inj, Subtype.mk.injEq]
+          rw [← Units.mk0_mul]
+          · ext
+            simp [Units.val_mk0, hx, hy, hxy]
+          · aesop
+        · simpa
+        · simpa
+        · simp [extensionValuation_apply_coe, hxy, ← hx, ← hy, hx0, hy0]
 
 中文:
 定义 valueGroup₀_hom_extensionValuation
@@ -821,7 +1148,34 @@ definition valueGroup₀_hom_extensionValuation
     apply_fun embedding using embedding_injective
     simpa using (restrict₀_surjective (.ofClass hv.v) 1).choose_spec
   map_mul' a b := by
-    set x := (re
+    set x := (restrict₀_surjective (.ofClass hv.v) a).choose with hx_def
+    have hx := (restrict₀_surjective (.ofClass hv.v) a).choose_spec
+    set y := (restrict₀_surjective (.ofClass hv.v) b).choose with hy_def
+    have hy := (restrict₀_surjective (.ofClass hv.v) b).choose_spec
+    set xy := (restrict₀_surjective (.ofClass hv.v) (a * b)).choose with hxy_def
+    have hxy := (restrict₀_surjective (.ofClass hv.v) (a * b)).choose_spec
+    rw [← hx_def] at hx
+    rw [← hy_def] at hy
+    rw [← hxy_def] at hxy
+    apply_fun embedding at hxy
+    apply_fun embedding at hx
+    apply_fun embedding at hy
+    simp only [embedding_restrict₀, coe_ofClass, map_mul] at hxy hx hy
+    simp only [Valuation.restrict_def, restrict₀_apply, coe_ofClass, extensionValuation_apply_coe,
+      map_eq_zero, mul_dite, mul_zero, dite_mul, zero_mul]
+    by_cases hx0 : x = 0
+    · simpa [← hx, hx0] using hxy
+    · by_cases hy0 : y = 0
+      · simpa [← hy, hy0] using hxy
+      · rw [dif_neg, dif_neg, dif_neg]
+        · simp only [← WithZero.coe_mul, MulMemClass.mk_mul_mk, WithZero.coe_inj, Subtype.mk.injEq]
+          rw [← Units.mk0_mul]
+          · ext
+            simp [Units.val_mk0, hx, hy, hxy]
+          · aesop
+        · simpa
+        · simpa
+        · simp [extensionValuation_apply_coe, hxy, ← hx, ← hy, hx0, hy0]
 
 Depends on / 依赖: extensionValuation, hv.extensionValuation.restrict, hv.v, ofClass, restrict
 -/
@@ -874,7 +1228,50 @@ definition valueGroup₀_equiv_extensionValuation
   · intro a b hab
     set x := (restrict₀_surjective (.ofClass hv.v) a).choose with hx_def
     have hx := (restrict₀_surjective (.ofClass hv.v) a).choose_spec
-    set y := (restrict₀_surjective (.ofClass hv.v) 
+    set y := (restrict₀_surjective (.ofClass hv.v) b).choose with hy_def
+    have hy := (restrict₀_surjective (.ofClass hv.v) b).choose_spec
+    apply_fun embedding using embedding_injective
+    apply_fun embedding at hx
+    apply_fun embedding at hy
+    simp only [← hx_def, embedding_restrict₀, coe_ofClass, ← hy_def] at hx hy
+    simp only [valueGroup₀_hom_extensionValuation, coe_mk, ZeroHom.coe_mk] at hab
+    have : hv.extensionValuation.restrict (algebraMap K _ x) =
+       hv.extensionValuation.restrict (algebraMap _ _ y) := hab
+    simp only [Valuation.restrict_def, restrict₀_apply, extensionValuation_coe_apply, map_eq_zero,
+      extension_eq_zero_iff] at this
+    by_cases ha0 : a = 0
+    · have h0 : extension ((algebraMap K (hat K)) x) = 0 := by
+        simpa [ha0, extension_eq_zero_iff, map_eq_zero] using hx
+      simp [h0, reduceDIte, extension_eq_zero_iff, map_eq_zero,
+        left_eq_dite_iff, WithZero.zero_ne_coe, imp_false, not_not] at this
+      simp [ha0, ← hy, this]
+    · apply_fun embedding at ha0 using embedding_injective (f := (.ofClass hv.v))
+      have h0 : extension ((algebraMap K (hat K)) x) != 0 := by
+        simp only [ne_eq, extension_eq_zero_iff, map_eq_zero]
+        intro h
+        simp [h, ← hx] at ha0
+      have h0' : extension ((algebraMap K (hat K)) y) != 0 := by
+        have hb0 : b != 0 := by
+          apply_fun embedding at hab using embedding_injective (f := (.ofClass hv.v))
+          simp only [← hx_def, Valuation.embedding_restrict, extensionValuation_apply_coe,
+            ← hy_def] at hab
+          simpa [← hx, hab, hy] using ha0
+        apply_fun embedding at hb0 using embedding_injective (f := (.ofClass hv.v))
+        simp only [ne_eq, extension_eq_zero_iff, map_eq_zero]
+        intro h
+        simp [h, ← hy] at hb0
+      simp only [map_eq_zero, h0, reduceDIte, h0', WithZero.coe_inj, Subtype.mk.injEq,
+        Units.mk0_inj, embedding_inj] at this
+      simp only [Completion.algebraMap_def, Algebra.algebraMap_self, RingHom.id_apply,
+        extension_extends, Valuation.restrict_inj] at this
+      rwa [← hx, ← hy]
+  · intro x
+    obtain ⟨k', hk'⟩ := restrict₀_surjective (.ofClass hv.extensionValuation) x
+    use extension k'
+    have := (restrict₀_surjective (.ofClass hv.v) (extension k')).choose_spec
+    apply_fun embedding at this
+    simpa [← embedding_inj, valueGroup₀_hom_extensionValuation, Valuation.restrict_def, ← hk',
+      ← extensionValuation_toFun] using this
 
 中文:
 定义 valueGroup₀_equiv_extensionValuation
@@ -884,7 +1281,50 @@ definition valueGroup₀_equiv_extensionValuation
   · intro a b hab
     set x := (restrict₀_surjective (.ofClass hv.v) a).choose with hx_def
     have hx := (restrict₀_surjective (.ofClass hv.v) a).choose_spec
-    set y := (restrict₀_surjective (.ofClass hv.v) 
+    set y := (restrict₀_surjective (.ofClass hv.v) b).choose with hy_def
+    have hy := (restrict₀_surjective (.ofClass hv.v) b).choose_spec
+    apply_fun embedding using embedding_injective
+    apply_fun embedding at hx
+    apply_fun embedding at hy
+    simp only [← hx_def, embedding_restrict₀, coe_ofClass, ← hy_def] at hx hy
+    simp only [valueGroup₀_hom_extensionValuation, coe_mk, ZeroHom.coe_mk] at hab
+    have : hv.extensionValuation.restrict (algebraMap K _ x) =
+       hv.extensionValuation.restrict (algebraMap _ _ y) := hab
+    simp only [Valuation.restrict_def, restrict₀_apply, extensionValuation_coe_apply, map_eq_zero,
+      extension_eq_zero_iff] at this
+    by_cases ha0 : a = 0
+    · have h0 : extension ((algebraMap K (hat K)) x) = 0 := by
+        simpa [ha0, extension_eq_zero_iff, map_eq_zero] using hx
+      simp [h0, reduceDIte, extension_eq_zero_iff, map_eq_zero,
+        left_eq_dite_iff, WithZero.zero_ne_coe, imp_false, not_not] at this
+      simp [ha0, ← hy, this]
+    · apply_fun embedding at ha0 using embedding_injective (f := (.ofClass hv.v))
+      have h0 : extension ((algebraMap K (hat K)) x) != 0 := by
+        simp only [ne_eq, extension_eq_zero_iff, map_eq_zero]
+        intro h
+        simp [h, ← hx] at ha0
+      have h0' : extension ((algebraMap K (hat K)) y) != 0 := by
+        have hb0 : b != 0 := by
+          apply_fun embedding at hab using embedding_injective (f := (.ofClass hv.v))
+          simp only [← hx_def, Valuation.embedding_restrict, extensionValuation_apply_coe,
+            ← hy_def] at hab
+          simpa [← hx, hab, hy] using ha0
+        apply_fun embedding at hb0 using embedding_injective (f := (.ofClass hv.v))
+        simp only [ne_eq, extension_eq_zero_iff, map_eq_zero]
+        intro h
+        simp [h, ← hy] at hb0
+      simp only [map_eq_zero, h0, reduceDIte, h0', WithZero.coe_inj, Subtype.mk.injEq,
+        Units.mk0_inj, embedding_inj] at this
+      simp only [Completion.algebraMap_def, Algebra.algebraMap_self, RingHom.id_apply,
+        extension_extends, Valuation.restrict_inj] at this
+      rwa [← hx, ← hy]
+  · intro x
+    obtain ⟨k', hk'⟩ := restrict₀_surjective (.ofClass hv.extensionValuation) x
+    use extension k'
+    have := (restrict₀_surjective (.ofClass hv.v) (extension k')).choose_spec
+    apply_fun embedding at this
+    simpa [← embedding_inj, valueGroup₀_hom_extensionValuation, Valuation.restrict_def, ← hk',
+      ← extensionValuation_toFun] using this
 
 Depends on / 依赖: MulEquiv, MulEquiv.ofBijective, apply_fun, choose_spec, embedding, embedding_injective, embedding_r, hv.v, hx_def, hy_def, ofBijective, ofClass
 -/
@@ -951,7 +1391,51 @@ instance valuedCompletion
         fun γ : (ValueGroup₀ (.ofClass hv.v))ˣ => { x | extensionValuation x <
           (Units.map (ValueGroup₀.embedding (f := (.ofClass hv.v))) γ).1 } by
       rw [this.mem_iff]
-      simp 
+      simp only [extensionValuation_toFun, Units.coe_map, MonoidHom.coe_coe, true_and]
+      have (x : hat K) (γ : (ValueGroup₀ (.ofClass hv.v))ˣ) : extensionValuation.restrict x <
+          ((Units.map valueGroup₀_equiv_extensionValuation.toMonoidHom) γ).1 ↔
+          embedding (extension x) < embedding γ.1 := by
+        simp only [MulEquiv.toMonoidHom_eq_coe, Units.coe_map, MonoidHom.coe_coe]
+        rw [embedding_strictMono.lt_iff_lt]; rw [Valuation.restrict_def]; rw [restrict₀_apply]
+        by_cases hx0 : x = 0
+        · simp only [hx0]
+          rw [dif_pos (map_zero _)]
+          · simp only [valueGroup₀_equiv_extensionValuation, valueGroup₀_hom_extensionValuation,
+              MulEquiv.ofBijective_apply, coe_mk, ZeroHom.coe_mk]
+            rw [Valuation.restrict_def]; rw [restrict₀_apply]; rw [dif_neg]
+            · have hext : hv.extension 0 = 0 := by rw [extension_eq_zero_iff]
+              simp [hext]
+            · simp [← v.restrict.zero_iff, v.restrict_def,
+                (restrict₀_surjective (.ofClass hv.v) _).choose_spec]
+        · rw [dif_neg (by simp [hx0])]
+          · set y := (restrict₀_surjective (.ofClass hv.v) γ).choose with hy_def
+            have hy := (restrict₀_surjective (.ofClass hv.v) γ).choose_spec
+            apply_fun embedding at hy
+            simp only [← hy_def, embedding_restrict₀, coe_ofClass] at hy
+            simp only [coe_ofClass, extensionValuation_toFun, valueGroup₀_equiv_extensionValuation,
+              valueGroup₀_hom_extensionValuation, MulEquiv.ofBijective_apply, coe_mk,
+              ZeroHom.coe_mk]
+            rw [Valuation.restrict_def]; rw [restrict₀_apply]; rw [← hy_def]; rw [dif_neg]
+            · simp only [coe_ofClass, extensionValuation_toFun, extension_extends,
+              Valuation.embedding_restrict, WithZero.coe_lt_coe, Subtype.mk_lt_mk,
+              ← Units.val_lt_val, Units.val_mk0]
+              convert embedding_strictMono (f := (.ofClass hv.v)).lt_iff_lt
+            · simp only [coe_ofClass, extensionValuation_apply_coe, map_eq_zero, ← ne_eq]
+              apply_fun v
+              simp [hy]
+      refine ⟨fun ⟨γ, h⟩ => ?_, fun ⟨γ, h⟩ => ?_⟩
+      · use Units.map valueGroup₀_equiv_extensionValuation.toMonoidHom γ
+        convert! h
+        apply this
+      · use Units.map valueGroup₀_equiv_extensionValuation.symm.toMonoidHom γ
+        convert! h
+        rw [← this]
+        simp [Valuation.restrict_def, restrict₀_apply]
+    simp_rw [← closure_coe_completion_v_lt, Units.coe_map]
+    convert! (hasBasis_nhds_zero K Γ₀).hasBasis_of_isDenseInducing Completion.isDenseInducing_coe
+    rw [Valuation.restrict_lt_iff_lt_embedding]; rfl
+
+@[simp]
 
 中文:
 实例 valuedCompletion
@@ -962,7 +1446,51 @@ instance valuedCompletion
         fun γ : (ValueGroup₀ (.ofClass hv.v))ˣ => { x | extensionValuation x <
           (Units.map (ValueGroup₀.embedding (f := (.ofClass hv.v))) γ).1 } by
       rw [this.mem_iff]
-      simp 
+      simp only [extensionValuation_toFun, Units.coe_map, MonoidHom.coe_coe, true_and]
+      have (x : hat K) (γ : (ValueGroup₀ (.ofClass hv.v))ˣ) : extensionValuation.restrict x <
+          ((Units.map valueGroup₀_equiv_extensionValuation.toMonoidHom) γ).1 ↔
+          embedding (extension x) < embedding γ.1 := by
+        simp only [MulEquiv.toMonoidHom_eq_coe, Units.coe_map, MonoidHom.coe_coe]
+        rw [embedding_strictMono.lt_iff_lt]; rw [Valuation.restrict_def]; rw [restrict₀_apply]
+        by_cases hx0 : x = 0
+        · simp only [hx0]
+          rw [dif_pos (map_zero _)]
+          · simp only [valueGroup₀_equiv_extensionValuation, valueGroup₀_hom_extensionValuation,
+              MulEquiv.ofBijective_apply, coe_mk, ZeroHom.coe_mk]
+            rw [Valuation.restrict_def]; rw [restrict₀_apply]; rw [dif_neg]
+            · have hext : hv.extension 0 = 0 := by rw [extension_eq_zero_iff]
+              simp [hext]
+            · simp [← v.restrict.zero_iff, v.restrict_def,
+                (restrict₀_surjective (.ofClass hv.v) _).choose_spec]
+        · rw [dif_neg (by simp [hx0])]
+          · set y := (restrict₀_surjective (.ofClass hv.v) γ).choose with hy_def
+            have hy := (restrict₀_surjective (.ofClass hv.v) γ).choose_spec
+            apply_fun embedding at hy
+            simp only [← hy_def, embedding_restrict₀, coe_ofClass] at hy
+            simp only [coe_ofClass, extensionValuation_toFun, valueGroup₀_equiv_extensionValuation,
+              valueGroup₀_hom_extensionValuation, MulEquiv.ofBijective_apply, coe_mk,
+              ZeroHom.coe_mk]
+            rw [Valuation.restrict_def]; rw [restrict₀_apply]; rw [← hy_def]; rw [dif_neg]
+            · simp only [coe_ofClass, extensionValuation_toFun, extension_extends,
+              Valuation.embedding_restrict, WithZero.coe_lt_coe, Subtype.mk_lt_mk,
+              ← Units.val_lt_val, Units.val_mk0]
+              convert embedding_strictMono (f := (.ofClass hv.v)).lt_iff_lt
+            · simp only [coe_ofClass, extensionValuation_apply_coe, map_eq_zero, ← ne_eq]
+              apply_fun v
+              simp [hy]
+      refine ⟨fun ⟨γ, h⟩ => ?_, fun ⟨γ, h⟩ => ?_⟩
+      · use Units.map valueGroup₀_equiv_extensionValuation.toMonoidHom γ
+        convert! h
+        apply this
+      · use Units.map valueGroup₀_equiv_extensionValuation.symm.toMonoidHom γ
+        convert! h
+        rw [← this]
+        simp [Valuation.restrict_def, restrict₀_apply]
+    simp_rw [← closure_coe_completion_v_lt, Units.coe_map]
+    convert! (hasBasis_nhds_zero K Γ₀).hasBasis_of_isDenseInducing Completion.isDenseInducing_coe
+    rw [Valuation.restrict_lt_iff_lt_embedding]; rfl
+
+@[simp]
 
 Depends on / 依赖: extensionValuation
 -/
@@ -1054,7 +1582,14 @@ lemma valuedCompletion_surjective_iff
         rcases eq_or_ne γ 0 with rfl | hγ
         · simp at H
         · obtain ⟨r, hr⟩ := h γ
-
+          have hr' : restrict₀ (.ofClass (valuedCompletion (K := K)).v) r != 0 := by
+            rw [ne_eq]; rw [← embedding_inj]; rw [embedding_restrict₀ r]
+            simpa [hr]
+          convert! isClosed_univ.sdiff (isOpen_sphere (hat K) hr') using 1
+          ext x
+          simp [← hr, ← v.restrict_def, v.restrict_inj]
+    · exact ⟨_, by simpa using ha⟩
+  · exact ⟨a, by simp [ha]⟩
 
 中文:
 引理 valuedCompletion_surjective_iff
@@ -1067,7 +1602,14 @@ lemma valuedCompletion_surjective_iff
         rcases eq_or_ne γ 0 with rfl | hγ
         · simp at H
         · obtain ⟨r, hr⟩ := h γ
-
+          have hr' : restrict₀ (.ofClass (valuedCompletion (K := K)).v) r != 0 := by
+            rw [ne_eq]; rw [← embedding_inj]; rw [embedding_restrict₀ r]
+            simpa [hr]
+          convert! isClosed_univ.sdiff (isOpen_sphere (hat K) hr') using 1
+          ext x
+          simp [← hr, ← v.restrict_def, v.restrict_inj]
+    · exact ⟨_, by simpa using ha⟩
+  · exact ⟨a, by simp [ha]⟩
 
 Depends on / 依赖: Completion, Completion.induction_on, convert, embedding_inj, eq_or_ne, imp_false, induction_on, isClosed_univ, isClosed_univ.sdiff, isOpen_sphere, ne_eq, ofClass, restrict_d, v.restrict_d, valuedCompletion
 -/

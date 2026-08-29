@@ -79,7 +79,7 @@ theorem locallyConnectedSpace_iff_subsets_isOpen_isConnected
     exact ⟨V, hVU, hV⟩
   · exact fun h => ⟨fun U => ⟨fun hU =>
       let ⟨V, hVU, hV⟩ := h U hU
-      ⟨V, hV, hVU⟩, fun 
+      ⟨V, hV, hVU⟩, fun ⟨V, ⟨hV, hxV, _⟩, hVU⟩ => mem_nhds_iff.mpr ⟨V, hVU, hV, hxV⟩⟩⟩
 
 中文:
 定理 locallyConnectedSpace_iff_subsets_isOpen_isConnected
@@ -92,7 +92,7 @@ theorem locallyConnectedSpace_iff_subsets_isOpen_isConnected
     exact ⟨V, hVU, hV⟩
   · exact fun h => ⟨fun U => ⟨fun hU =>
       let ⟨V, hVU, hV⟩ := h U hU
-      ⟨V, hV, hVU⟩, fun 
+      ⟨V, hV, hVU⟩, fun ⟨V, ⟨hV, hxV, _⟩, hVU⟩ => mem_nhds_iff.mpr ⟨V, hVU, hV, hxV⟩⟩⟩
 
 Depends on / 依赖: forall_congr, h.mem_iff.mp, locallyConnectedSpace_iff_hasBasis_isOpen_isConnected, mem_iff, mem_nhds_iff, mem_nhds_iff.mpr, simp_rw
 -/
@@ -227,7 +227,9 @@ theorem locallyConnectedSpace_iff_connectedComponentIn_open
     rw [locallyConnectedSpace_iff_subsets_isOpen_isConnected]
     refine fun x U hU =>
         ⟨connectedComponentIn (interior U) x,
-          (connectedComponentIn_subset _ _).trans interior_subset, h _ isOpe
+          (connectedComponentIn_subset _ _).trans interior_subset, h _ isOpen_interior x ?_,
+          mem_connectedComponentIn ?_, isConnected_connectedComponentIn_iff.mpr ?_⟩ <;>
+      exact mem_interior_iff_mem_nhds.mpr hU
 
 中文:
 定理 locallyConnectedSpace_iff_connectedComponentIn_open
@@ -239,7 +241,9 @@ theorem locallyConnectedSpace_iff_connectedComponentIn_open
     rw [locallyConnectedSpace_iff_subsets_isOpen_isConnected]
     refine fun x U hU =>
         ⟨connectedComponentIn (interior U) x,
-          (connectedComponentIn_subset _ _).trans interior_subset, h _ isOpe
+          (connectedComponentIn_subset _ _).trans interior_subset, h _ isOpen_interior x ?_,
+          mem_connectedComponentIn ?_, isConnected_connectedComponentIn_iff.mpr ?_⟩ <;>
+      exact mem_interior_iff_mem_nhds.mpr hU
 
 Depends on / 依赖: connectedComponentIn, connectedComponentIn_subset, hF.connectedComponentIn, interior, interior_subset, isConnected_connectedComponentIn_iff, isConnected_connectedComponentIn_iff.mpr, isOpen_interior, locallyConnectedSpace_iff_subsets_isOpen_isConnected, mem_connectedComponentIn, mem_interior_iff_mem_nhds, mem_interior_iff_mem_nhds.mpr
 -/
@@ -269,7 +273,10 @@ theorem locallyConnectedSpace_iff_connected_subsets
     rcases h x U hxU with ⟨V, hVU, hV₁, hxV, hV₂⟩
     exact ⟨V, hV₁.mem_nhds hxV, hV₂.isPreconnected, hVU⟩
   · rw [locallyConnectedSpace_iff_connectedComponentIn_open]
-    refine fun h U hU x _ => isOp
+    refine fun h U hU x _ => isOpen_iff_mem_nhds.mpr fun y hy => ?_
+    rw [connectedComponentIn_eq hy]
+    rcases h y U (hU.mem_nhds <| (connectedComponentIn_subset _ _) hy) with ⟨V, hVy, hV, hVU⟩
+    exact Filter.mem_of_superset hVy (hV.subset_connectedComponentIn (mem_of_mem_nhds hVy) hVU)
 
 中文:
 定理 locallyConnectedSpace_iff_connected_subsets
@@ -280,7 +287,10 @@ theorem locallyConnectedSpace_iff_connected_subsets
     rcases h x U hxU with ⟨V, hVU, hV₁, hxV, hV₂⟩
     exact ⟨V, hV₁.mem_nhds hxV, hV₂.isPreconnected, hVU⟩
   · rw [locallyConnectedSpace_iff_connectedComponentIn_open]
-    refine fun h U hU x _ => isOp
+    refine fun h U hU x _ => isOpen_iff_mem_nhds.mpr fun y hy => ?_
+    rw [connectedComponentIn_eq hy]
+    rcases h y U (hU.mem_nhds <| (connectedComponentIn_subset _ _) hy) with ⟨V, hVy, hV, hVU⟩
+    exact Filter.mem_of_superset hVy (hV.subset_connectedComponentIn (mem_of_mem_nhds hVy) hVU)
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, connectedComponentIn_eq, connectedComponentIn_subset, hU.mem_nhds, hV.subset_connectedComponentIn, isOpen_iff_mem_nhds, isOpen_iff_mem_nhds.mpr, isPreconnected, locallyConnectedSpace_iff_connectedComponentIn_open, locallyConnectedSpace_iff_subsets_isOpen_isConnected, mem_nhds, mem_of_superset, subset_connectedComponentIn
 -/
@@ -414,7 +424,8 @@ lemma Topology.IsOpenEmbedding.locallyConnectedSpace
     (fun x s => (IsOpen s ∧ f x in s ∧ IsConnected s) ∧ s subseteq range f) (fun x => ?_)
     (fun x s hxs => hxs.1.2.2.isPreconnected.preimage_of_isOpenMap h.injective h.isOpenMap hxs.2)
   rw [h.nhds_eq_comap]
-.restrict_subse
+.restrict_subset exact LocallyConnectedSpace.open_connected_basis (f x)
+.comap _ (h.isOpen_range.mem_nhds <| mem_range_self _)
 
 中文:
 引理 拓扑.是开嵌入.locallyConnectedSpace
@@ -424,7 +435,8 @@ lemma Topology.IsOpenEmbedding.locallyConnectedSpace
     (fun x s => (IsOpen s ∧ f x in s ∧ IsConnected s) ∧ s subseteq range f) (fun x => ?_)
     (fun x s hxs => hxs.1.2.2.isPreconnected.preimage_of_isOpenMap h.injective h.isOpenMap hxs.2)
   rw [h.nhds_eq_comap]
-.restrict_subse
+.restrict_subset exact LocallyConnectedSpace.open_connected_basis (f x)
+.comap _ (h.isOpen_range.mem_nhds <| mem_range_self _)
 
 Depends on / 依赖: IsConnected, IsOpen, LocallyConnectedSpace, LocallyConnectedSpace.open_connected_basis, h.injective, h.isOpenMap, h.isOpen_range.mem_nhds, h.nhds_eq_comap, injective, isOpenMap, isOpen_range, isPreconnected, isPreconnected.preimage_of_isOpenMap, locallyConnectedSpace_of_connected_bases, mem_nhds, mem_range_self, nhds_eq_comap, open_connected_basis, preimage_of_isOpenMap, restrict_subset
 -/
@@ -542,7 +554,8 @@ instance Prod.locallyConnectedSpace
   obtain ⟨u, hu, v, hv, huv⟩ := mem_nhds_prod_iff.mp hU
   exact ⟨connectedComponentIn u x ×ˢ connectedComponentIn v y,
     prod_mem_nhds (connectedComponentIn_mem_nhds hu) (connectedComponentIn_mem_nhds hv),
-    isPreconnecte
+    isPreconnected_connectedComponentIn.prod isPreconnected_connectedComponentIn,
+    (prod_mono (connectedComponentIn_subset _ _) (connectedComponentIn_subset _ _)).trans huv⟩
 
 中文:
 实例 积类型.locallyConnectedSpace
@@ -553,7 +566,8 @@ instance Prod.locallyConnectedSpace
   obtain ⟨u, hu, v, hv, huv⟩ := mem_nhds_prod_iff.mp hU
   exact ⟨connectedComponentIn u x ×ˢ connectedComponentIn v y,
     prod_mem_nhds (connectedComponentIn_mem_nhds hu) (connectedComponentIn_mem_nhds hv),
-    isPreconnecte
+    isPreconnected_connectedComponentIn.prod isPreconnected_connectedComponentIn,
+    (prod_mono (connectedComponentIn_subset _ _) (connectedComponentIn_subset _ _)).trans huv⟩
 
 Depends on / 依赖: connectedComponentIn, connectedComponentIn_mem_nhds, connectedComponentIn_subset, isPreconnected_connectedComponentIn, isPreconnected_connectedComponentIn.prod, locallyConnectedSpace_iff_connected_subsets, mem_nhds_prod_iff, mem_nhds_prod_iff.mp, prod_mem_nhds, prod_mono
 -/
@@ -579,7 +593,17 @@ theorem Pi.locallyConnectedSpace_of_finite_not_preconnectedSpace
   obtain ⟨J, hJ, t, ht, htU⟩ := hU
   let K := J union {i | ¬PreconnectedSpace (X i)}
   refine ⟨K.pi fun i => connectedComponentIn (t i) (x i),
-    set_pi_mem_nhds (hJ.union hfinite) fu
+    set_pi_mem_nhds (hJ.union hfinite) fun i _ => connectedComponentIn_mem_nhds (ht i), ?_,
+    fun f hf => htU fun i hiJ => connectedComponentIn_subset _ _ (hf i (mem_union_left _ hiJ))⟩
+  classical
+  rw [← univ_pi_piecewise_univ]
+  refine isPreconnected_univ_pi fun i => ?_
+  by_cases hi : i in K
+  · rw [piecewise_eq_of_mem _ _ _ hi]
+    exact isPreconnected_connectedComponentIn
+  · rw [piecewise_eq_of_notMem _ _ _ hi]
+    have : PreconnectedSpace (X i) := not_not.mp (not_or.1 hi).2
+    exact isPreconnected_univ
 
 中文:
 定理 依赖函数类型.locallyConnectedSpace_of_finite_not_preconnectedSpace
@@ -590,7 +614,17 @@ theorem Pi.locallyConnectedSpace_of_finite_not_preconnectedSpace
   obtain ⟨J, hJ, t, ht, htU⟩ := hU
   let K := J union {i | ¬PreconnectedSpace (X i)}
   refine ⟨K.pi fun i => connectedComponentIn (t i) (x i),
-    set_pi_mem_nhds (hJ.union hfinite) fu
+    set_pi_mem_nhds (hJ.union hfinite) fun i _ => connectedComponentIn_mem_nhds (ht i), ?_,
+    fun f hf => htU fun i hiJ => connectedComponentIn_subset _ _ (hf i (mem_union_left _ hiJ))⟩
+  classical
+  rw [← univ_pi_piecewise_univ]
+  refine isPreconnected_univ_pi fun i => ?_
+  by_cases hi : i in K
+  · rw [piecewise_eq_of_mem _ _ _ hi]
+    exact isPreconnected_connectedComponentIn
+  · rw [piecewise_eq_of_notMem _ _ _ hi]
+    have : PreconnectedSpace (X i) := not_not.mp (not_or.1 hi).2
+    exact isPreconnected_univ
 
 Depends on / 依赖: Filter, Filter.mem_pi, K.pi, PreconnectedSpace, classical, connectedComponentIn, connectedComponentIn_mem_nhds, connectedComponentIn_subset, hJ.union, hfinite, isPreconnected_univ_pi, locallyConnectedSpace_iff_connected_subsets, mem_pi, mem_union_left, nhds_pi, set_pi_mem_nhds, univ_pi_piecewise_univ
 -/
@@ -670,7 +704,20 @@ theorem Pi.locallyConnectedSpace_iff
     classical
     have : forall i, Nonempty (X i) := Classical.nonempty_pi.mp ⟨x⟩
     refine .inr ⟨fun i => ((isOpenMap_eval i).isQuotientMap (continuous_apply i)
-    
+      (Function.surjective_eval i)).locallyConnectedSpace, ?_⟩
+    have hVn : connectedComponent x in 𝓝 x :=
+      isOpen_connectedComponent.mem_nhds mem_connectedComponent
+    rw [nhds_pi]; rw [Filter.mem_pi] at hVn
+    obtain ⟨J, hJ, t, ht, htV⟩ := hVn
+    refine hJ.subset fun i hi => by_contra fun hiJ => hi ?_
+    suffices himg : Function.eval i '' connectedComponent x = univ from
+      ⟨himg ▸ isPreconnected_connectedComponent.image _ (continuous_apply i).continuousOn⟩
+    refine (subset_univ _).antisymm fun z _ => ⟨Function.update x i z, htV fun j hj => ?_, by simp⟩
+    rw [Function.update_of_ne (ne_of_mem_of_not_mem hj hiJ)]
+    exact mem_of_mem_nhds (ht j)
+  · rintro (he | ⟨hloc, hfin⟩)
+    · exact ⟨he.elim⟩
+    · exact locallyConnectedSpace_of_finite_not_preconnectedSpace hfin
 
 中文:
 定理 依赖函数类型.locallyConnectedSpace_iff
@@ -683,7 +730,20 @@ theorem Pi.locallyConnectedSpace_iff
     classical
     have : forall i, Nonempty (X i) := Classical.nonempty_pi.mp ⟨x⟩
     refine .inr ⟨fun i => ((isOpenMap_eval i).isQuotientMap (continuous_apply i)
-    
+      (Function.surjective_eval i)).locallyConnectedSpace, ?_⟩
+    have hVn : connectedComponent x in 𝓝 x :=
+      isOpen_connectedComponent.mem_nhds mem_connectedComponent
+    rw [nhds_pi]; rw [Filter.mem_pi] at hVn
+    obtain ⟨J, hJ, t, ht, htV⟩ := hVn
+    refine hJ.subset fun i hi => by_contra fun hiJ => hi ?_
+    suffices himg : Function.eval i '' connectedComponent x = univ from
+      ⟨himg ▸ isPreconnected_connectedComponent.image _ (continuous_apply i).continuousOn⟩
+    refine (subset_univ _).antisymm fun z _ => ⟨Function.update x i z, htV fun j hj => ?_, by simp⟩
+    rw [Function.update_of_ne (ne_of_mem_of_not_mem hj hiJ)]
+    exact mem_of_mem_nhds (ht j)
+  · rintro (he | ⟨hloc, hfin⟩)
+    · exact ⟨he.elim⟩
+    · exact locallyConnectedSpace_of_finite_not_preconnectedSpace hfin
 
 Depends on / 依赖: Classical, Classical.nonempty_pi.mp, Filter, Filter.mem_pi, Function, Function.surjective_eval, Nonempty, classical, connectedComponent, continuous_apply, isEmpty_or_nonempty, isOpenMap_eval, isOpen_connectedComponent, isOpen_connectedComponent.mem_nhds, isQuotientMap, locallyConnectedSpace, mem_connectedComponent, mem_nhds, mem_pi, nhds_pi
 -/

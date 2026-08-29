@@ -82,7 +82,11 @@ theorem ContinuousOn.continuousAt_mulIndicator
   obtain h | h := hx
   · have hs : interior s in 𝓝 x := mem_interior_iff_mem_nhds.mp (by rwa [interior_interior])
 exact ContinuousAt.congr (hf.continuousAt hs) Filter.eventuallyEq_iff_exists_mem.mpr
-      ⟨interior s, hs, Set
+      ⟨interior s, hs, Set.eqOn_mulIndicator.symm.mono interior_subset⟩
+· exact ContinuousAt.congr continuousAt_const Filter.eventuallyEq_iff_exists_mem.mpr
+      ⟨sᶜ, mem_interior_iff_mem_nhds.mp h, Set.eqOn_mulIndicator'.symm⟩
+
+@[to_additive]
 
 中文:
 定理 ContinuousOn.continuousAt_mulIndicator
@@ -92,7 +96,11 @@ exact ContinuousAt.congr (hf.continuousAt hs) Filter.eventuallyEq_iff_exists_mem
   obtain h | h := hx
   · have hs : interior s in 𝓝 x := mem_interior_iff_mem_nhds.mp (by rwa [interior_interior])
 exact ContinuousAt.congr (hf.continuousAt hs) Filter.eventuallyEq_iff_exists_mem.mpr
-      ⟨interior s, hs, Set
+      ⟨interior s, hs, Set.eqOn_mulIndicator.symm.mono interior_subset⟩
+· exact ContinuousAt.congr continuousAt_const Filter.eventuallyEq_iff_exists_mem.mpr
+      ⟨sᶜ, mem_interior_iff_mem_nhds.mp h, Set.eqOn_mulIndicator'.symm⟩
+
+@[to_additive]
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.congr, Filter, Filter.eventuallyEq_iff_exists_mem.mpr, Set.eqOn_mulIndicator, Set.eqOn_mulIndicator.symm.mono, Set.mem_compl_iff, compl_frontier_eq_union_interior, continuousAt, continuousAt_const, eqOn_mulIndicator, eventuallyEq_iff_exists_mem, hf.continuousAt, interior, interior_interior, interior_subset, mem_compl_iff, mem_interior_iff_mem_nhds, mem_interior_iff_mem_nhds.mp
 -/

@@ -329,7 +329,13 @@ theorem binCast_eq
       rw [Nat.binCast]
       by_cases h : (k + 1) % 2 = 0
       · conv => rhs; rw [← Nat.mod_add_div (k + 1) 2]
-        rw [if_pos h]; rw [hk _ <| Nat.div_lt_self (Na
+        rw [if_pos h]; rw [hk _ <| Nat.div_lt_self (Nat.succ_pos k) (Nat.le_refl 2)]; rw [← Nat.cast_add]
+        rw [h]; rw [Nat.zero_add]; rw [Nat.succ_mul]; rw [Nat.one_mul]
+      · conv => rhs; rw [← Nat.mod_add_div (k + 1) 2]
+        rw [if_neg h]; rw [hk _ <| Nat.div_lt_self (Nat.succ_pos k) (Nat.le_refl 2)]; rw [← Nat.cast_add]
+        have h1 := Or.resolve_left (Nat.mod_two_eq_zero_or_one (succ k)) h
+        rw [h1]; rw [Nat.add_comm 1]; rw [Nat.succ_mul]; rw [Nat.one_mul]
+        simp only [Nat.cast_add, Nat.cast_one]
 
 中文:
 定理 binCast_eq
@@ -342,7 +348,13 @@ theorem binCast_eq
       rw [Nat.binCast]
       by_cases h : (k + 1) % 2 = 0
       · conv => rhs; rw [← Nat.mod_add_div (k + 1) 2]
-        rw [if_pos h]; rw [hk _ <| Nat.div_lt_self (Na
+        rw [if_pos h]; rw [hk _ <| Nat.div_lt_self (Nat.succ_pos k) (Nat.le_refl 2)]; rw [← Nat.cast_add]
+        rw [h]; rw [Nat.zero_add]; rw [Nat.succ_mul]; rw [Nat.one_mul]
+      · conv => rhs; rw [← Nat.mod_add_div (k + 1) 2]
+        rw [if_neg h]; rw [hk _ <| Nat.div_lt_self (Nat.succ_pos k) (Nat.le_refl 2)]; rw [← Nat.cast_add]
+        have h1 := Or.resolve_left (Nat.mod_two_eq_zero_or_one (succ k)) h
+        rw [h1]; rw [Nat.add_comm 1]; rw [Nat.succ_mul]; rw [Nat.one_mul]
+        simp only [Nat.cast_add, Nat.cast_one]
 
 Depends on / 依赖: Nat.binCast, Nat.cast_add, Nat.cast_zero, Nat.div_lt_self, Nat.le_ref, Nat.le_refl, Nat.mod_add_div, Nat.one_mul, Nat.strongRecOn, Nat.succ_mul, Nat.succ_pos, Nat.zero_add, binCast, cast_add, cast_zero, div_lt_self, if_neg, if_pos, le_ref, le_refl
 -/

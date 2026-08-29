@@ -37,7 +37,8 @@ instance OrderRingHom.subsingleton
     rw [← map_ratCast f] at hf
     rw [← map_ratCast g] at hg
     exact
-      (lt_asymm ((OrderHomClass.mon
+      (lt_asymm ((OrderHomClass.mono g).reflect_lt hg) <|
+          (OrderHomClass.mono f).reflect_lt hf).elim⟩
 
 中文:
 实例 Order环态射.subsingleton
@@ -51,7 +52,8 @@ instance OrderRingHom.subsingleton
     rw [← map_ratCast f] at hf
     rw [← map_ratCast g] at hg
     exact
-      (lt_asymm ((OrderHomClass.mon
+      (lt_asymm ((OrderHomClass.mono g).reflect_lt hg) <|
+          (OrderHomClass.mono f).reflect_lt hf).elim⟩
 
 Depends on / 依赖: Ne.symm, OrderHomClass, OrderHomClass.mono, exists_rat_btwn, lt_asymm, lt_or_gt, lt_or_gt.resolve_left, map_ratCast, reflect_lt, resolve_left
 -/

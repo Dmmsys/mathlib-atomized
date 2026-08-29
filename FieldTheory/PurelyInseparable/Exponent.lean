@@ -501,7 +501,13 @@ theorem elemExponent_le_of_pow_mem
   · exact elemExponent_eq_zero_of_charZero K a ▸ Nat.zero_le _
 · obtain ⟨y, hy⟩ := RingHom.mem_range.mp h
     let f := X ^ ringExpChar K ^ n - C y
-    have hf₁ : f.aeval a = 0 := by rwa [map_sub, aeval_C, aeval_X_pow, sub_eq_ze
+    have hf₁ : f.aeval a = 0 := by rwa [map_sub, aeval_C, aeval_X_pow, sub_eq_zero, eq_comm]
+have hf₂ : f.Monic := monic_X_pow_sub_C y Nat.pos_iff_ne_zero.mp expChar_pow_pos K _ _
+    have hf₃ : f.natDegree = ringExpChar K ^ n := by
+      rw [natDegree_sub_C]; rw [natDegree_pow]; rw [natDegree_X]; rw [mul_one]
+exact (Nat.pow_le_pow_iff_right <| Nat.Prime.one_lt hp).mp
+      ringExpChar.eq K p ▸ hf₃ ▸ minpoly_natDegree_eq K a ▸
+      natDegree_le_natDegree (minpoly.min K a hf₂ hf₁)
 
 中文:
 定理 elemExponent_le_of_pow_mem
@@ -512,7 +518,13 @@ theorem elemExponent_le_of_pow_mem
   · exact elemExponent_eq_zero_of_charZero K a ▸ Nat.zero_le _
 · obtain ⟨y, hy⟩ := RingHom.mem_range.mp h
     let f := X ^ ringExpChar K ^ n - C y
-    have hf₁ : f.aeval a = 0 := by rwa [map_sub, aeval_C, aeval_X_pow, sub_eq_ze
+    have hf₁ : f.aeval a = 0 := by rwa [map_sub, aeval_C, aeval_X_pow, sub_eq_zero, eq_comm]
+have hf₂ : f.Monic := monic_X_pow_sub_C y Nat.pos_iff_ne_zero.mp expChar_pow_pos K _ _
+    have hf₃ : f.natDegree = ringExpChar K ^ n := by
+      rw [natDegree_sub_C]; rw [natDegree_pow]; rw [natDegree_X]; rw [mul_one]
+exact (Nat.pow_le_pow_iff_right <| Nat.Prime.one_lt hp).mp
+      ringExpChar.eq K p ▸ hf₃ ▸ minpoly_natDegree_eq K a ▸
+      natDegree_le_natDegree (minpoly.min K a hf₂ hf₁)
 
 Depends on / 依赖: ExpChar, ExpChar.exists, Nat.pos_iff_ne_zero.mp, Nat.zero_le, RingHom, RingHom.mem_range.mp, aeval_C, aeval_X_pow, elemExponent_eq_zero_of_charZero, eq_comm, expChar_pow_pos, f.Monic, f.aeval, f.natDegree, map_sub, mem_range, monic_X_pow_sub_C, natDegree, natDegree_X, natDegree_pow
 -/
@@ -622,7 +634,10 @@ instance hasExponent_of_finiteDimensional
   · exact ⟨0, fun a => surjective_algebraMap_of_isSeparable K L _⟩
   · let e := Nat.log (ringExpChar K) (Module.finrank K L)
     refine ⟨e, fun a => ⟨elemReduct K a ^ ringExpChar K ^ (e - elemExponent K a), ?_⟩⟩
-    have h_elem
+    have h_elemexp_bound (a : L) : elemExponent K a <= e :=
+      Nat.le_log_of_pow_le (Nat.Prime.one_lt <| ringExpChar.eq K p ▸ hp)
+        (minpoly_natDegree_eq K a ▸ minpoly.natDegree_le a)
+    rw [map_pow]; rw [algebraMap_elemReduct_eq]; rw [← pow_mul]; rw [← pow_add]; rw [Nat.add_sub_cancel' (h_elemexp_bound a)]
 
 中文:
 实例 hasExponent_of_finiteDimensional
@@ -633,7 +648,10 @@ instance hasExponent_of_finiteDimensional
   · exact ⟨0, fun a => surjective_algebraMap_of_isSeparable K L _⟩
   · let e := Nat.log (ringExpChar K) (Module.finrank K L)
     refine ⟨e, fun a => ⟨elemReduct K a ^ ringExpChar K ^ (e - elemExponent K a), ?_⟩⟩
-    have h_elem
+    have h_elemexp_bound (a : L) : elemExponent K a <= e :=
+      Nat.le_log_of_pow_le (Nat.Prime.one_lt <| ringExpChar.eq K p ▸ hp)
+        (minpoly_natDegree_eq K a ▸ minpoly.natDegree_le a)
+    rw [map_pow]; rw [algebraMap_elemReduct_eq]; rw [← pow_mul]; rw [← pow_add]; rw [Nat.add_sub_cancel' (h_elemexp_bound a)]
 
 Depends on / 依赖: ExpChar, ExpChar.exists, Module, Module.finrank, Nat.Prime.one_lt, Nat.le_log_of_pow_le, Nat.log, algebraMap_elemReduct_eq, elemExponent, elemReduct, finrank, h_elemexp_bound, le_log_of_pow_le, map_pow, minpoly, minpoly.natDegree_le, minpoly_natDegree_eq, natDegree_le, one_lt, ringExpChar
 -/
@@ -721,7 +739,15 @@ definition iterateFrobenius
 exact Nat.pos_iff_ne_zero.mp expChar_pow_pos K p n
   map_add' a b := by
     have inj := (algebraMap K L).injective
-    ha
+    have : ExpChar L p := expChar_of_injective_ringHom inj p
+    apply inj
+    rw [(algebraMap K L).map_add]; rw [algebraMap_iterateFrobeniusAux K p hn a]; rw [algebraMap_iterateFrobeniusAux K p hn b]; rw [algebraMap_iterateFrobeniusAux K p hn (a + b)]; rw [add_pow_expChar_pow a b]
+  map_one' := by
+    apply (algebraMap K L).injective
+    rw [(algebraMap K L).map_one]; rw [algebraMap_iterateFrobeniusAux K p hn 1]; rw [one_pow]
+  map_mul' a b := by
+    apply (algebraMap K L).injective
+    rw [(algebraMap K L).map_mul]; rw [algebraMap_iterateFrobeniusAux K p hn a]; rw [algebraMap_iterateFrobeniusAux K p hn b]; rw [algebraMap_iterateFrobeniusAux K p hn (a * b)]; rw [mul_pow]
 
 中文:
 定义 iterateFrobenius
@@ -733,7 +759,15 @@ exact Nat.pos_iff_ne_zero.mp expChar_pow_pos K p n
 exact Nat.pos_iff_ne_zero.mp expChar_pow_pos K p n
   map_add' a b := by
     have inj := (algebraMap K L).injective
-    ha
+    have : ExpChar L p := expChar_of_injective_ringHom inj p
+    apply inj
+    rw [(algebraMap K L).map_add]; rw [algebraMap_iterateFrobeniusAux K p hn a]; rw [algebraMap_iterateFrobeniusAux K p hn b]; rw [algebraMap_iterateFrobeniusAux K p hn (a + b)]; rw [add_pow_expChar_pow a b]
+  map_one' := by
+    apply (algebraMap K L).injective
+    rw [(algebraMap K L).map_one]; rw [algebraMap_iterateFrobeniusAux K p hn 1]; rw [one_pow]
+  map_mul' a b := by
+    apply (algebraMap K L).injective
+    rw [(algebraMap K L).map_mul]; rw [algebraMap_iterateFrobeniusAux K p hn a]; rw [algebraMap_iterateFrobeniusAux K p hn b]; rw [algebraMap_iterateFrobeniusAux K p hn (a * b)]; rw [mul_pow]
 
 Depends on / 依赖: iterateFrobeniusAux
 -/
@@ -818,7 +852,7 @@ definition iterateFrobeniusₛₗ
     dsimp [iterateFrobenius]
     rw [Algebra.smul_def _ (iterateFrobeniusAux K L p n a)]
     apply (algebraMap K L).injective
-    rw [(algebraMap K L).map_mul]; rw [← IsScalarTower.algebraMap_apply]; rw [algebraMap_iterateFrobeniusAux K p hn a]; rw [al
+    rw [(algebraMap K L).map_mul]; rw [← IsScalarTower.algebraMap_apply]; rw [algebraMap_iterateFrobeniusAux K p hn a]; rw [algebraMap_iterateFrobeniusAux K p hn (r • a)]; rw [iterateFrobenius_def]; rw [map_pow]; rw [Algebra.smul_def]; rw [mul_pow]
 
 中文:
 定义 iterateFrobeniusₛₗ
@@ -828,7 +862,7 @@ definition iterateFrobeniusₛₗ
     dsimp [iterateFrobenius]
     rw [Algebra.smul_def _ (iterateFrobeniusAux K L p n a)]
     apply (algebraMap K L).injective
-    rw [(algebraMap K L).map_mul]; rw [← IsScalarTower.algebraMap_apply]; rw [algebraMap_iterateFrobeniusAux K p hn a]; rw [al
+    rw [(algebraMap K L).map_mul]; rw [← IsScalarTower.algebraMap_apply]; rw [algebraMap_iterateFrobeniusAux K p hn a]; rw [algebraMap_iterateFrobeniusAux K p hn (r • a)]; rw [iterateFrobenius_def]; rw [map_pow]; rw [Algebra.smul_def]; rw [mul_pow]
 
 Depends on / 依赖: iterateFrobenius
 -/

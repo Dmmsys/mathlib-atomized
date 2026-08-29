@@ -99,7 +99,7 @@ lemma nonDegenerate_eq_empty_of_hasDimensionLT
 @[deprecated (since := "2026-04-06")]
 alias degenerate_eq_top_of_hasDimensionLT := degenerate_eq_univ_of_hasDimensionLT
 @[deprecated (since := "2026-04-06")]
-alias nonDegenerate_eq_bot_of_hasDimensionLT := nonDegenerate_eq_emp
+alias nonDegenerate_eq_bot_of_hasDimensionLT := nonDegenerate_eq_empty_of_hasDimensionLT
 
 中文:
 引理 nonDegenerate_eq_empty_of_hasDimensionLT
@@ -111,7 +111,7 @@ alias nonDegenerate_eq_bot_of_hasDimensionLT := nonDegenerate_eq_emp
 @[deprecated (since := "2026-04-06")]
 alias degenerate_eq_top_of_hasDimensionLT := degenerate_eq_univ_of_hasDimensionLT
 @[deprecated (since := "2026-04-06")]
-alias nonDegenerate_eq_bot_of_hasDimensionLT := nonDegenerate_eq_emp
+alias nonDegenerate_eq_bot_of_hasDimensionLT := nonDegenerate_eq_empty_of_hasDimensionLT
 
 Depends on / 依赖: X.degenerate_eq_univ_of_hasDimensionLT, X.nonDegenerate, degenerate_eq_univ_of_hasDimensionLT, nonDegenerate
 -/

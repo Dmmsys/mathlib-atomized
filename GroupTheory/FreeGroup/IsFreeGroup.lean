@@ -158,7 +158,9 @@ instance instFunLike
     have H : (b.symm : FreeGroup ι ->* G) = (b'.symm : FreeGroup ι ->* G) := by
       ext i; exact congr_fun hbb' i
     have : b.symm = b'.symm := by ext x; exact DFunLike.congr_fun H x
-    rw [ofRepr.injEq]; rw [← 
+    rw [ofRepr.injEq]; rw [← MulEquiv.symm_symm b]; rw [← MulEquiv.symm_symm b']; rw [this]
+
+@[to_additive (attr := simp)]
 
 中文:
 实例 instFunLike
@@ -169,7 +171,9 @@ instance instFunLike
     have H : (b.symm : FreeGroup ι ->* G) = (b'.symm : FreeGroup ι ->* G) := by
       ext i; exact congr_fun hbb' i
     have : b.symm = b'.symm := by ext x; exact DFunLike.congr_fun H x
-    rw [ofRepr.injEq]; rw [← 
+    rw [ofRepr.injEq]; rw [← MulEquiv.symm_symm b]; rw [← MulEquiv.symm_symm b']; rw [this]
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: FreeGroup, FreeGroup.of, b.repr.symm
 -/
@@ -473,7 +477,11 @@ definition ofLift
         simp only [MonoidHom.coe_comp, Function.comp_apply, MonoidHom.id_apply,
           FreeGroup.lift_apply_of, lift_of])
       (by
-        let lift_symm_of : forall {H : 
+        let lift_symm_of : forall {H : Type u} [Group H], forall (f : G ->* H) (a),
+          lift.symm f a = f (of a) := by intro H _ f a; simp [← lift_of (lift.symm f)]
+        apply lift.symm.injective; ext x
+        simp only [MonoidHom.coe_comp, Function.comp_apply, MonoidHom.id_apply,
+          FreeGroup.lift_apply_of, lift_of, lift_symm_of])
 
 中文:
 定义 ofLift
@@ -484,7 +492,11 @@ definition ofLift
         simp only [MonoidHom.coe_comp, Function.comp_apply, MonoidHom.id_apply,
           FreeGroup.lift_apply_of, lift_of])
       (by
-        let lift_symm_of : forall {H : 
+        let lift_symm_of : forall {H : Type u} [Group H], forall (f : G ->* H) (a),
+          lift.symm f a = f (of a) := by intro H _ f a; simp [← lift_of (lift.symm f)]
+        apply lift.symm.injective; ext x
+        simp only [MonoidHom.coe_comp, Function.comp_apply, MonoidHom.id_apply,
+          FreeGroup.lift_apply_of, lift_of, lift_symm_of])
 
 Depends on / 依赖: FreeGroup, FreeGroup.lift, FreeGroup.of, MonoidHom, MonoidHom.toMulEquiv, MulEquiv, MulEquiv.symm, toMulEquiv
 -/
@@ -522,6 +534,9 @@ definition ofUniqueLift
       invFun := fun F => F ∘ of
       left_inv := fun f => funext (Classical.choose_spec (h f)).left
       right_inv := fun F => ((Classical.choose_spec (h (F ∘ of))).right F fun _ => rfl).symm }
+  let lift_of {H : Type u} [Group H] (f : X -> H) (a : X) : lift f (of a) = f a :=
+    congr_fun (lift.symm_apply_apply f) a
+  ofLift X of @lift @lift_of
 
 中文:
 定义 ofUniqueLift
@@ -531,6 +546,9 @@ definition ofUniqueLift
       invFun := fun F => F ∘ of
       left_inv := fun f => funext (Classical.choose_spec (h f)).left
       right_inv := fun F => ((Classical.choose_spec (h (F ∘ of))).right F fun _ => rfl).symm }
+  let lift_of {H : Type u} [Group H] (f : X -> H) (a : X) : lift f (of a) = f a :=
+    congr_fun (lift.symm_apply_apply f) a
+  ofLift X of @lift @lift_of
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, choose_spec, congr_fun, invFun, left_inv, lift.symm_apply_apply, lift_of, ofLift, right_inv, symm_apply_apply
 -/

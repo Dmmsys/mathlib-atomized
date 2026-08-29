@@ -250,7 +250,7 @@ lemma toAut_continuous
   obtain ⟨X, _, hX⟩ := ((nhds_one_has_basis_stabilizers F).mem_iff' A).mp hA
   rw [mem_nhds_iff]
   exact ⟨MulAction.stabilizer G X.pt, Set.preimage_mono (f := toAut F G) hX,
-    stabilizer_isOpen G X.pt, one
+    stabilizer_isOpen G X.pt, one_mem _⟩
 
 中文:
 引理 toAut_continuous
@@ -262,7 +262,7 @@ lemma toAut_continuous
   obtain ⟨X, _, hX⟩ := ((nhds_one_has_basis_stabilizers F).mem_iff' A).mp hA
   rw [mem_nhds_iff]
   exact ⟨MulAction.stabilizer G X.pt, Set.preimage_mono (f := toAut F G) hX,
-    stabilizer_isOpen G X.pt, one
+    stabilizer_isOpen G X.pt, one_mem _⟩
 
 Depends on / 依赖: MulAction, MulAction.stabilizer, Set.preimage_mono, X.pt, continuousAt_def, continuous_of_continuousAt_one, map_one, mem_iff, mem_nhds_iff, nhds_one_has_basis_stabilizers, one_mem, preimage_mono, stabilizer, stabilizer_isOpen
 -/
@@ -354,7 +354,16 @@ lemma toAut_surjective_isGalois_finite_family
   let P : C := ∏ᶜ X
   let is₁ : F.obj P ≅ ∏ᶜ fun i => (F.obj (X i)) := PreservesProduct.iso F X
   let is₂ : (∏ᶜ fun i => F.obj (X i) : FintypeCat) ≃ forall i, F.obj (X i) :=
-    Limits.FintypeCat.productEquiv (fun i => 
+    Limits.FintypeCat.productEquiv (fun i => (F.obj (X i)))
+  let px : F.obj P := is₁.inv (is₂.symm x)
+  have hpx (i : ι) : F.map (Pi.π X i) px = x i := by
+    simp only [px, is₁, is₂, ← piComparison_comp_π, ← PreservesProduct.iso_hom,
+      FintypeCat.comp_apply]
+    rw [FintypeCat.inv_hom_id_apply]; rw [FintypeCat.productEquiv_symm_comp_π_apply]
+  obtain ⟨A, f, a, _, hfa⟩ := exists_hom_from_galois_of_fiber F P px
+  obtain ⟨g, hg⟩ := toAut_surjective_isGalois F G t A
+  refine ⟨g, fun i y => action_ext_of_isGalois F (x i) ?_ _⟩
+  rw [← hpx i]; rw [← IsNaturalSMul.naturality]; rw [FunctorToFintypeCat.naturality]; rw [← hfa]; rw [FunctorToFintypeCat.naturality]; rw [← IsNaturalSMul.naturality]; rw [hg]
 
 中文:
 引理 toAut_surjective_isGalois_finite_family
@@ -364,7 +373,16 @@ lemma toAut_surjective_isGalois_finite_family
   let P : C := ∏ᶜ X
   let is₁ : F.obj P ≅ ∏ᶜ fun i => (F.obj (X i)) := PreservesProduct.iso F X
   let is₂ : (∏ᶜ fun i => F.obj (X i) : FintypeCat) ≃ forall i, F.obj (X i) :=
-    Limits.FintypeCat.productEquiv (fun i => 
+    Limits.FintypeCat.productEquiv (fun i => (F.obj (X i)))
+  let px : F.obj P := is₁.inv (is₂.symm x)
+  have hpx (i : ι) : F.map (Pi.π X i) px = x i := by
+    simp only [px, is₁, is₂, ← piComparison_comp_π, ← PreservesProduct.iso_hom,
+      FintypeCat.comp_apply]
+    rw [FintypeCat.inv_hom_id_apply]; rw [FintypeCat.productEquiv_symm_comp_π_apply]
+  obtain ⟨A, f, a, _, hfa⟩ := exists_hom_from_galois_of_fiber F P px
+  obtain ⟨g, hg⟩ := toAut_surjective_isGalois F G t A
+  refine ⟨g, fun i y => action_ext_of_isGalois F (x i) ?_ _⟩
+  rw [← hpx i]; rw [← IsNaturalSMul.naturality]; rw [FunctorToFintypeCat.naturality]; rw [← hfa]; rw [FunctorToFintypeCat.naturality]; rw [← IsNaturalSMul.naturality]; rw [hg]
 
 Depends on / 依赖: F.map, F.obj, FintypeCat, FintypeCat.comp_apply, Limits, Limits.FintypeCat.productEquiv, PreservesProduct, PreservesProduct.iso, PreservesProduct.iso_hom, comp_apply, iso_hom, nonempty_fiber_of_isConnected, productEquiv
 -/
@@ -401,7 +419,28 @@ lemma toAut_surjective_of_isPretransitive
   let c : Set G := ⋂ i, cl i
   have hne : c.Nonempty := by
     rw [← Set.univ_inter c]
-    apply CompactSpace.isC
+    apply CompactSpace.isCompact_univ.inter_iInter_nonempty
+    · intro X
+      apply IsClosed.leftCoset
+      exact Subgroup.isClosed_of_isOpen _ (stabilizer_isOpen G X.pt)
+    · intro s
+      rw [Set.univ_inter]
+      obtain ⟨gs, hgs⟩ :=
+        toAut_surjective_isGalois_finite_family F G t (fun X : s => X.val.obj) h
+      use gs
+      simp only [Set.mem_iInter]
+      intro X hXmem
+      rw [mem_leftCoset_iff]; rw [SetLike.mem_coe]; rw [MulAction.mem_stabilizer_iff]; rw [mul_smul]; rw [hgs ⟨X]; rw [hXmem⟩]; rw [← hgi X]; rw [inv_smul_smul]
+  obtain ⟨g, hg⟩ := hne
+refine ⟨g, Iso.ext natTrans_ext_of_isGalois _ fun X _ => ?_⟩
+  ext x
+  simp only [toAut_hom_app_apply]
+  have : g in (gi ⟨X, x, inferInstance⟩ • MulAction.stabilizer G x : Set G) := by
+    simp only [Set.mem_iInter, c] at hg
+    exact hg _
+  obtain ⟨s, (hsmem : s • x = x), (rfl : gi ⟨X, x, inferInstance⟩ • s = _)⟩ := this
+  rw [smul_eq_mul]; rw [mul_smul]; rw [hsmem]
+  exact hgi ⟨X, x, inferInstance⟩ x
 
 中文:
 引理 toAut_surjective_of_isPretransitive
@@ -413,7 +452,28 @@ lemma toAut_surjective_of_isPretransitive
   let c : Set G := ⋂ i, cl i
   have hne : c.Nonempty := by
     rw [← Set.univ_inter c]
-    apply CompactSpace.isC
+    apply CompactSpace.isCompact_univ.inter_iInter_nonempty
+    · intro X
+      apply IsClosed.leftCoset
+      exact Subgroup.isClosed_of_isOpen _ (stabilizer_isOpen G X.pt)
+    · intro s
+      rw [Set.univ_inter]
+      obtain ⟨gs, hgs⟩ :=
+        toAut_surjective_isGalois_finite_family F G t (fun X : s => X.val.obj) h
+      use gs
+      simp only [Set.mem_iInter]
+      intro X hXmem
+      rw [mem_leftCoset_iff]; rw [SetLike.mem_coe]; rw [MulAction.mem_stabilizer_iff]; rw [mul_smul]; rw [hgs ⟨X]; rw [hXmem⟩]; rw [← hgi X]; rw [inv_smul_smul]
+  obtain ⟨g, hg⟩ := hne
+refine ⟨g, Iso.ext natTrans_ext_of_isGalois _ fun X _ => ?_⟩
+  ext x
+  simp only [toAut_hom_app_apply]
+  have : g in (gi ⟨X, x, inferInstance⟩ • MulAction.stabilizer G x : Set G) := by
+    simp only [Set.mem_iInter, c] at hg
+    exact hg _
+  obtain ⟨s, (hsmem : s • x = x), (rfl : gi ⟨X, x, inferInstance⟩ • s = _)⟩ := this
+  rw [smul_eq_mul]; rw [mul_smul]; rw [hsmem]
+  exact hgi ⟨X, x, inferInstance⟩ x
 
 Depends on / 依赖: CompactSpace, CompactSpace.isCompact_univ.inter_iInter_nonempty, IsClosed, IsClosed.leftCoset, MulAction, MulAction.stabilizer, Nonempty, PointedGaloisObject, Set.univ_inter, Subgroup, Subgroup.isClosed_of_isOpen, X.pt, c.Nonempty, inter_iInter_nonempty, isClosed_of_isOpen, isCompact_univ, leftCoset, stabilizer, stabilizer_isOpen, toAut_surjective_isGalois
 -/

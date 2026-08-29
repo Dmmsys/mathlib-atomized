@@ -100,7 +100,11 @@ let e ← withReducible whnf e
   let c ← Common.mkCache sα
   let ⟨a, _, pa⟩ ← match
     (← Common.isAtomOrDerivable (ringCompute c) c q($e)) with
-  | non
+  | none => Common.eval rcNat (ringCompute c) c e
+    -- `none` indicates that `eval` will find something algebraic.
+  | some none => failure -- No point rewriting atoms
+  | some (some r) => pure r -- Nothing algebraic for `eval` to use, but `norm_num` simplifies.
+  pure { expr := a, proof? := pa }
 
 中文:
 定义 evalExpr
@@ -113,7 +117,11 @@ let e ← withReducible whnf e
   let c ← Common.mkCache sα
   let ⟨a, _, pa⟩ ← match
     (← Common.isAtomOrDerivable (ringCompute c) c q($e)) with
-  | non
+  | none => Common.eval rcNat (ringCompute c) c e
+    -- `none` indicates that `eval` will find something algebraic.
+  | some none => failure -- No point rewriting atoms
+  | some (some r) => pure r -- Nothing algebraic for `eval` to use, but `norm_num` simplifies.
+  pure { expr := a, proof? := pa }
 -/
 def evalExpr (e : Expr) : AtomM Simp.Result := do
 let e ← withReducible whnf e
@@ -306,7 +314,13 @@ definition cleanup
     let thms ← [``add_zero, ``_root_.mul_one, ``_root_.pow_one, ``mul_neg, ``add_neg
       ].foldlM (·.addConst ·) thms
     let thms ← [``nat_rawCast_0, ``nat_rawCast_1, ``nat_rawCast_2, ``int_rawCast_neg,
- 
+      ``nnrat_rawCast, ``rat_rawCast_neg, ``add_assoc_rev, ``mul_assoc_rev
+      ].foldlM (·.addConst · (post := false)) thms
+    let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
+      (simpTheorems := #[thms])
+      (congrTheorems := ← getSimpCongrTheorems)
+pure ←
+      r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 
 中文:
 定义 cleanup
@@ -319,7 +333,13 @@ definition cleanup
     let thms ← [``add_zero, ``_root_.mul_one, ``_root_.pow_one, ``mul_neg, ``add_neg
       ].foldlM (·.addConst ·) thms
     let thms ← [``nat_rawCast_0, ``nat_rawCast_1, ``nat_rawCast_2, ``int_rawCast_neg,
- 
+      ``nnrat_rawCast, ``rat_rawCast_neg, ``add_assoc_rev, ``mul_assoc_rev
+      ].foldlM (·.addConst · (post := false)) thms
+    let ctx ← Simp.mkContext { zetaDelta := cfg.zetaDelta }
+      (simpTheorems := #[thms])
+      (congrTheorems := ← getSimpCongrTheorems)
+pure ←
+      r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 -/
 def cleanup (cfg : RingNF.Config) (r : Simp.Result) : MetaM Simp.Result := do
   match cfg.mode with
@@ -409,7 +429,12 @@ definition elabRingNFConv
     if tk.isSome then cfg := { cfg with red := .default, zetaDelta := true }
     let s ← IO.mkRef {}
     Conv.applySimpResult
-      (← AtomM.recurse s cfg.toConfig (wellBeha
+      (← AtomM.recurse s cfg.toConfig (wellBehavedDischarge := true) evalExpr (cleanup cfg)
+        (← instantiateMVars (← Conv.getLhs)))
+  | _ => Elab.throwUnsupportedSyntax
+
+@[inherit_doc ringNF] macro "ring_nf!" cfg:optConfig : conv =>
+  `(conv| ring_nf ! $cfg:optConfig)
 
 中文:
 定义 elabRingNFConv
@@ -420,7 +445,12 @@ definition elabRingNFConv
     if tk.isSome then cfg := { cfg with red := .default, zetaDelta := true }
     let s ← IO.mkRef {}
     Conv.applySimpResult
-      (← AtomM.recurse s cfg.toConfig (wellBeha
+      (← AtomM.recurse s cfg.toConfig (wellBehavedDischarge := true) evalExpr (cleanup cfg)
+        (← instantiateMVars (← Conv.getLhs)))
+  | _ => Elab.throwUnsupportedSyntax
+
+@[inherit_doc ringNF] macro "ring_nf!" cfg:optConfig : conv =>
+  `(conv| ring_nf ! $cfg:optConfig)
 -/
 @[tactic ringNFConv] def elabRingNFConv : Tactic := fun stx => match stx with
   | `(conv| ring_nf $[!%$tk]? $cfg:optConfig) => withMainContext do

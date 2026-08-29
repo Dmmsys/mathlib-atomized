@@ -639,7 +639,32 @@ theorem karoubi_PInfty_f
   let Y₂ := Y.X
   let Y₃ := ((whiskering _ _).obj (toKaroubi C)).obj Y.X
   let Y₄ := (karoubiFunctorCategoryEmbedding _ _).obj ((toKaroubi _).obj Y.X)
-
+  let P₁ : K[Y₁] ⟶ _ := PInfty
+  let P₂ : K[Y₂] ⟶ _ := PInfty
+  let P₃ : K[Y₃] ⟶ _ := PInfty
+  let P₄ : K[Y₄] ⟶ _ := PInfty
+  -- The statement of lemma relates P₁ and P₂.
+  change (P₁.f n).f = Y.p.app (op ⦋n⦌) ≫ P₂.f n
+  -- The proof proceeds by obtaining relations h₃₂, h₄₃, h₁₄.
+  have h₃₂ : (P₃.f n).f = P₂.f n := Karoubi.hom_ext_iff.mp (map_PInfty_f (toKaroubi C) Y₂ n)
+  have h₄₃ : P₄.f n = P₃.f n := by
+    have h := Functor.congr_obj (toKaroubi_comp_karoubiFunctorCategoryEmbedding _ _) Y₂
+    simp only [P₃, P₄, ← natTransPInfty_f_app]
+    congr 1
+  have h₁₄ := Idempotents.natTrans_eq
+    ((𝟙 (karoubiFunctorCategoryEmbedding SimplexCategoryᵒᵖ C)) ◫
+      (natTransPInfty_f (Karoubi C) n)) Y
+  dsimp [natTransPInfty_f] at h₁₄
+  rw [id_comp]; rw [id_comp]; rw [comp_id]; rw [comp_id] at h₁₄
+  -- We use the three equalities h₃₂, h₄₃, h₁₄.
+  rw [← h₃₂]; rw [← h₄₃]; rw [h₁₄]
+  simp only [KaroubiFunctorCategoryEmbedding.map_app_f, Karoubi.decompId_p_f,
+    Karoubi.decompId_i_f, Karoubi.comp_f]
+  let π : Y₄ ⟶ Y₄ := (toKaroubi _ ⋙ karoubiFunctorCategoryEmbedding _ _).map Y.p
+  have eq := Karoubi.hom_ext_iff.mp (PInfty_f_naturality n π)
+  simp only [Karoubi.comp_f] at eq
+  dsimp [π] at eq
+  rw [← eq]; rw [app_idem_assoc Y (op ⦋n⦌)]
 
 中文:
 定理 karoubi_PInfty_f
@@ -650,7 +675,32 @@ theorem karoubi_PInfty_f
   let Y₂ := Y.X
   let Y₃ := ((whiskering _ _).obj (toKaroubi C)).obj Y.X
   let Y₄ := (karoubiFunctorCategoryEmbedding _ _).obj ((toKaroubi _).obj Y.X)
-
+  let P₁ : K[Y₁] ⟶ _ := PInfty
+  let P₂ : K[Y₂] ⟶ _ := PInfty
+  let P₃ : K[Y₃] ⟶ _ := PInfty
+  let P₄ : K[Y₄] ⟶ _ := PInfty
+  -- The statement of lemma relates P₁ and P₂.
+  change (P₁.f n).f = Y.p.app (op ⦋n⦌) ≫ P₂.f n
+  -- The proof proceeds by obtaining relations h₃₂, h₄₃, h₁₄.
+  have h₃₂ : (P₃.f n).f = P₂.f n := Karoubi.hom_ext_iff.mp (map_PInfty_f (toKaroubi C) Y₂ n)
+  have h₄₃ : P₄.f n = P₃.f n := by
+    have h := Functor.congr_obj (toKaroubi_comp_karoubiFunctorCategoryEmbedding _ _) Y₂
+    simp only [P₃, P₄, ← natTransPInfty_f_app]
+    congr 1
+  have h₁₄ := Idempotents.natTrans_eq
+    ((𝟙 (karoubiFunctorCategoryEmbedding SimplexCategoryᵒᵖ C)) ◫
+      (natTransPInfty_f (Karoubi C) n)) Y
+  dsimp [natTransPInfty_f] at h₁₄
+  rw [id_comp]; rw [id_comp]; rw [comp_id]; rw [comp_id] at h₁₄
+  -- We use the three equalities h₃₂, h₄₃, h₁₄.
+  rw [← h₃₂]; rw [← h₄₃]; rw [h₁₄]
+  simp only [KaroubiFunctorCategoryEmbedding.map_app_f, Karoubi.decompId_p_f,
+    Karoubi.decompId_i_f, Karoubi.comp_f]
+  let π : Y₄ ⟶ Y₄ := (toKaroubi _ ⋙ karoubiFunctorCategoryEmbedding _ _).map Y.p
+  have eq := Karoubi.hom_ext_iff.mp (PInfty_f_naturality n π)
+  simp only [Karoubi.comp_f] at eq
+  dsimp [π] at eq
+  rw [← eq]; rw [app_idem_assoc Y (op ⦋n⦌)]
 -/
 theorem karoubi_PInfty_f {Y : Karoubi (SimplicialObject C)} (n : Nat) :
     ((PInfty : K[(karoubiFunctorCategoryEmbedding _ _).obj Y] ⟶ _).f n).f =

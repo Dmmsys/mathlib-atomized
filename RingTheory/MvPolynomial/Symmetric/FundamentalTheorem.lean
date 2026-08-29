@@ -189,7 +189,8 @@ lemma accumulate_injective
   · have := accumulate_rec i.2 h s
     rwa [← he, accumulate_rec i.2 h t, add_right_cancel_iff] at this
   · have := h.antisymm (i.2.nat_succ_le.trans hnm)
-    rw [← accumulate_last i.2 this t]; rw [← accumulate_last 
+    rw [← accumulate_last i.2 this t]; rw [← accumulate_last i.2 this s]; rw [he]
+    iterate 2 { intro j hj; exact ((j.2.trans_le hnm).not_ge hj).elim }
 
 中文:
 引理 accumulate_injective
@@ -201,7 +202,8 @@ lemma accumulate_injective
   · have := accumulate_rec i.2 h s
     rwa [← he, accumulate_rec i.2 h t, add_right_cancel_iff] at this
   · have := h.antisymm (i.2.nat_succ_le.trans hnm)
-    rw [← accumulate_last i.2 this t]; rw [← accumulate_last 
+    rw [← accumulate_last i.2 this t]; rw [← accumulate_last i.2 this s]; rw [he]
+    iterate 2 { intro j hj; exact ((j.2.trans_le hnm).not_ge hj).elim }
 
 Depends on / 依赖: accumulate_last, accumulate_rec, add_right_cancel_iff, antisymm, h.antisymm, iterate, lt_or_ge, nat_succ_le, nat_succ_le.trans, not_ge, trans_le
 -/
@@ -225,7 +227,13 @@ lemma accumulate_invAccumulate
   revert hi
   refine Nat.decreasingInduction' (fun i hi _ ih him => ?_) this fun hm => ?_
   · rw [← Nat.pred_eq_sub_one, Nat.lt_pred_iff, Nat.succ_eq_add_one] at hi
-    rw [accumulate_rec (him.trans_le hmn) hi]; rw [ih hi]; rw [invAccumulate
+    rw [accumulate_rec (him.trans_le hmn) hi]; rw [ih hi]; rw [invAccumulate]; rw [dif_pos him]; rw [dif_pos hi]
+    simp only
+    exact Nat.sub_add_cancel (hs i.le_succ)
+  · have := (Nat.sub_one_add_one <| Nat.ne_zero_of_lt hm).symm
+    rw [accumulate_last (hm.trans_le hmn) this]; rw [invAccumulate]; rw [dif_pos hm]; rw [dif_neg this.not_gt]; rw [Nat.sub_zero]
+    intro j hj
+    rw [invAccumulate]; rw [dif_neg hj.not_gt]; rw [Nat.zero_sub]
 
 中文:
 引理 accumulate_invAccumulate
@@ -235,7 +243,13 @@ lemma accumulate_invAccumulate
   revert hi
   refine Nat.decreasingInduction' (fun i hi _ ih him => ?_) this fun hm => ?_
   · rw [← Nat.pred_eq_sub_one, Nat.lt_pred_iff, Nat.succ_eq_add_one] at hi
-    rw [accumulate_rec (him.trans_le hmn) hi]; rw [ih hi]; rw [invAccumulate
+    rw [accumulate_rec (him.trans_le hmn) hi]; rw [ih hi]; rw [invAccumulate]; rw [dif_pos him]; rw [dif_pos hi]
+    simp only
+    exact Nat.sub_add_cancel (hs i.le_succ)
+  · have := (Nat.sub_one_add_one <| Nat.ne_zero_of_lt hm).symm
+    rw [accumulate_last (hm.trans_le hmn) this]; rw [invAccumulate]; rw [dif_pos hm]; rw [dif_neg this.not_gt]; rw [Nat.sub_zero]
+    intro j hj
+    rw [invAccumulate]; rw [dif_neg hj.not_gt]; rw [Nat.zero_sub]
 
 Depends on / 依赖: Nat.decreasingInduction, Nat.le_sub_one_of_lt, Nat.lt_pred_iff, Nat.ne_zero_of_lt, Nat.pred_eq_sub_one, Nat.sub_add_cancel, Nat.sub_one_add_one, Nat.succ_eq_add_one, accumulate_last, accumulate_rec, decreasingInduction, dif_pos, him.trans_le, hm.trans_le, i.le_succ, invAccumulate, le_sub_one_of_lt, le_succ, lt_pred_iff, ne_zero_of_lt
 -/
@@ -462,7 +476,23 @@ lemma supDegree_monic_esymm
   have := supDegree_leadingCoeff_sum_eq (D := toLex) (s := univ.powersetCard (i + 1))
     (i := Iic (⟨i, him⟩ : Fin m)) ?_ (f := fun s => monomial (∑ j in s, fun₀ | j => 1) (1 : R)) ?_
   · rwa [← esymm_eq_sum_monomial, ← Finsupp.indicator_eq_sum_single, ← single_eq_monomial,
-      supDegree_singl
+      supDegree_single_ne_zero _ one_ne_zero, leadingCoeff_single toLex.injective] at this
+  · exact mem_powersetCard.2 ⟨subset_univ _, Fin.card_Iic _⟩
+  intro t ht hne
+  have ht' : #t = #(Iic (⟨i, him⟩ : Fin m)) := by
+    rw [(mem_powersetCard.1 ht).2]; rw [Fin.card_Iic]
+  simp_rw [← single_eq_monomial, supDegree_single_ne_zero _ one_ne_zero,
+    ← Finsupp.indicator_eq_sum_single]
+  rw [ne_comm]; rw [Ne]; rw [← subset_iff_eq_of_card_le ht'.le]; rw [not_subset] at hne
+  simp_rw [← mem_sdiff] at hne
+  have hkm := mem_sdiff.1 (min'_mem _ hne)
+  refine ⟨min' _ hne, fun k hk => ?_, ?_⟩
+  all_goals simp only [ofLex_toLex, Finsupp.indicator_apply]
+  · have hki := mem_Iic.2 (hk.le.trans <| mem_Iic.1 hkm.1)
+    rw [dif_pos hki]; rw [dif_pos]
+    by_contra h
+exact lt_irrefl k ((lt_min'_iff _ _).1 hk) _ mem_sdiff.2 ⟨hki, h⟩
+  · rw [dif_neg hkm.2, dif_pos hkm.1]; exact Nat.zero_lt_one
 
 中文:
 引理 supDegree_monic_esymm
@@ -471,7 +501,23 @@ lemma supDegree_monic_esymm
   have := supDegree_leadingCoeff_sum_eq (D := toLex) (s := univ.powersetCard (i + 1))
     (i := Iic (⟨i, him⟩ : Fin m)) ?_ (f := fun s => monomial (∑ j in s, fun₀ | j => 1) (1 : R)) ?_
   · rwa [← esymm_eq_sum_monomial, ← Finsupp.indicator_eq_sum_single, ← single_eq_monomial,
-      supDegree_singl
+      supDegree_single_ne_zero _ one_ne_zero, leadingCoeff_single toLex.injective] at this
+  · exact mem_powersetCard.2 ⟨subset_univ _, Fin.card_Iic _⟩
+  intro t ht hne
+  have ht' : #t = #(Iic (⟨i, him⟩ : Fin m)) := by
+    rw [(mem_powersetCard.1 ht).2]; rw [Fin.card_Iic]
+  simp_rw [← single_eq_monomial, supDegree_single_ne_zero _ one_ne_zero,
+    ← Finsupp.indicator_eq_sum_single]
+  rw [ne_comm]; rw [Ne]; rw [← subset_iff_eq_of_card_le ht'.le]; rw [not_subset] at hne
+  simp_rw [← mem_sdiff] at hne
+  have hkm := mem_sdiff.1 (min'_mem _ hne)
+  refine ⟨min' _ hne, fun k hk => ?_, ?_⟩
+  all_goals simp only [ofLex_toLex, Finsupp.indicator_apply]
+  · have hki := mem_Iic.2 (hk.le.trans <| mem_Iic.1 hkm.1)
+    rw [dif_pos hki]; rw [dif_pos]
+    by_contra h
+exact lt_irrefl k ((lt_min'_iff _ _).1 hk) _ mem_sdiff.2 ⟨hki, h⟩
+  · rw [dif_neg hkm.2, dif_pos hkm.1]; exact Nat.zero_lt_one
 -/
 private lemma supDegree_monic_esymm [Nontrivial R] {i : Nat} (him : i < m) :
     supDegree toLex (esymm (Fin m) R (i + 1)) =
@@ -578,7 +624,8 @@ lemma leadingCoeff_esymmAlgHomMonomial
   induction t using Finsupp.induction₂ with
   | zero => rw [esymmAlgHom_zero, leadingCoeff_toLex_C]
   | add_single i _ _ _ _ ih =>
-    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [((monic_esymm <| i.2.trans_le hnm).pow toLex_add toLex.injective).leadingCoeff_mul_eq_left]
+    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [((monic_esymm <| i.2.trans_le hnm).pow toLex_add toLex.injective).leadingCoeff_mul_eq_left]; rw [ih]
+    exacts [toLex.injective, toLex_add]
 
 中文:
 引理 leadingCoeff_esymmAlgHomMonomial
@@ -587,7 +634,8 @@ lemma leadingCoeff_esymmAlgHomMonomial
   induction t using Finsupp.induction₂ with
   | zero => rw [esymmAlgHom_zero, leadingCoeff_toLex_C]
   | add_single i _ _ _ _ ih =>
-    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [((monic_esymm <| i.2.trans_le hnm).pow toLex_add toLex.injective).leadingCoeff_mul_eq_left]
+    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [((monic_esymm <| i.2.trans_le hnm).pow toLex_add toLex.injective).leadingCoeff_mul_eq_left]; rw [ih]
+    exacts [toLex.injective, toLex_add]
 
 Depends on / 依赖: Finsupp, Finsupp.induction, add_single, esymmAlgHomMonomial_add, esymmAlgHomMonomial_single_one, esymmAlgHom_zero, exacts, injective, leadingCoeff_mul_eq_left, leadingCoeff_toLex_C, monic_esymm, toLex.injective, toLex_add, trans_le
 -/
@@ -612,7 +660,12 @@ lemma supDegree_esymmAlgHomMonomial
   | zero => simp_rw [esymmAlgHom_zero, supDegree_toLex_C, ofLex_zero, Finsupp.coe_zero, map_zero]
   | add_single i _ _ _ _ ih =>
     have := i.2.trans_le hnm
-    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [Mo
+    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [Monic.supDegree_mul_of_ne_zero_left toLex.injective toLex_add]; rw [ofLex_add]; rw [Finsupp.coe_add]; rw [ih]; rw [Finsupp.coe_add]; rw [map_add]; rw [Monic.supDegree_pow rfl toLex_add toLex.injective]; rw [ofLex_smul]; rw [Finsupp.coe_smul]; rw [supDegree_esymm this]; rw [← map_nsmul]; rw [← Finsupp.coe_smul]; rw [Finsupp.smul_single]; rw [nsmul_one]; rw [Nat.cast_id]
+    · exact monic_esymm this
+    · exact (monic_esymm this).pow toLex_add toLex.injective
+    · rwa [Ne, ← leadingCoeff_eq_zero toLex.injective, leadingCoeff_esymmAlgHomMonomial _ hnm]
+
+omit [Fintype σ] in
 
 中文:
 引理 supDegree_esymmAlgHomMonomial
@@ -623,7 +676,12 @@ lemma supDegree_esymmAlgHomMonomial
   | zero => simp_rw [esymmAlgHom_zero, supDegree_toLex_C, ofLex_zero, Finsupp.coe_zero, map_zero]
   | add_single i _ _ _ _ ih =>
     have := i.2.trans_le hnm
-    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [Mo
+    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [Monic.supDegree_mul_of_ne_zero_left toLex.injective toLex_add]; rw [ofLex_add]; rw [Finsupp.coe_add]; rw [ih]; rw [Finsupp.coe_add]; rw [map_add]; rw [Monic.supDegree_pow rfl toLex_add toLex.injective]; rw [ofLex_smul]; rw [Finsupp.coe_smul]; rw [supDegree_esymm this]; rw [← map_nsmul]; rw [← Finsupp.coe_smul]; rw [Finsupp.smul_single]; rw [nsmul_one]; rw [Nat.cast_id]
+    · exact monic_esymm this
+    · exact (monic_esymm this).pow toLex_add toLex.injective
+    · rwa [Ne, ← leadingCoeff_eq_zero toLex.injective, leadingCoeff_esymmAlgHomMonomial _ hnm]
+
+omit [Fintype σ] in
 
 Depends on / 依赖: Finsupp, Finsupp.coe_add, Finsupp.coe_zero, Finsupp.induction, Monic.supDegree_mul_of_ne_zero_left, Monic.supDegree_pow, add_single, coe_add, coe_zero, esymmAlgHomMonomial_add, esymmAlgHomMonomial_single_one, esymmAlgHom_zero, injective, map_add, map_zero, nontriviality, ofLex_add, ofLex_smul, ofLex_zero, simp_rw
 -/
@@ -654,7 +712,15 @@ lemma IsSymmetric.antitone_supDegree
   by_contra! ⟨i, j, hle, hlt⟩
   apply (le_sup (s := p.support) (f := toLex) _).not_gt
   pick_goal 3
-  · rw [← hp (Equiv.swap i j), mem_support_iff, coeff_rename_map
+  · rw [← hp (Equiv.swap i j), mem_support_iff, coeff_rename_mapDomain _ (Equiv.injective _)]
+    rw [Ne]; rw [← leadingCoeff_eq_zero toLex.injective]; rw [leadingCoeff_toLex] at h0
+    assumption
+  refine ⟨i, fun k hk => ?_, ?_⟩
+  all_goals dsimp only [Pi.toLex_apply, ofLex_toLex]
+  · conv_rhs => rw [← Equiv.swap_apply_of_ne_of_ne hk.ne (hk.trans_le hle).ne]
+    rw [Finsupp.mapDomain_apply (Equiv.injective _)]; rw [supDegree]; rfl
+  · apply hlt.trans_eq
+    simp_rw [Finsupp.mapDomain_equiv_apply, Equiv.symm_swap, Equiv.swap_apply_left]
 
 中文:
 引理 IsSymmetric.antitone_supDegree
@@ -667,7 +733,15 @@ lemma IsSymmetric.antitone_supDegree
   by_contra! ⟨i, j, hle, hlt⟩
   apply (le_sup (s := p.support) (f := toLex) _).not_gt
   pick_goal 3
-  · rw [← hp (Equiv.swap i j), mem_support_iff, coeff_rename_map
+  · rw [← hp (Equiv.swap i j), mem_support_iff, coeff_rename_mapDomain _ (Equiv.injective _)]
+    rw [Ne]; rw [← leadingCoeff_eq_zero toLex.injective]; rw [leadingCoeff_toLex] at h0
+    assumption
+  refine ⟨i, fun k hk => ?_, ?_⟩
+  all_goals dsimp only [Pi.toLex_apply, ofLex_toLex]
+  · conv_rhs => rw [← Equiv.swap_apply_of_ne_of_ne hk.ne (hk.trans_le hle).ne]
+    rw [Finsupp.mapDomain_apply (Equiv.injective _)]; rw [supDegree]; rfl
+  · apply hlt.trans_eq
+    simp_rw [Finsupp.mapDomain_equiv_apply, Equiv.symm_swap, Equiv.swap_apply_left]
 
 Depends on / 依赖: Antitone, Equiv.injective, Equiv.swap, Pi.toLex_apply, Pi.zero_mono, all_goals, bot_eq_zero, coeff_rename_mapDomain, conv_rhs, eq_or_ne, injective, le_sup, leadingCoeff_eq_zero, leadingCoeff_toLex, mem_support_iff, not_gt, ofLex_toLex, p.support, pick_goal, supDegree_zero
 -/
@@ -708,7 +782,14 @@ lemma esymmAlgHom_fin_injective
   refine fun p => (fun hp => ?_).mtr
   rw [p.as_sum]; rw [map_sum (esymmAlgHom (Fin m) R n)]; rw [← Subalgebra.coe_eq_zero]; rw [AddSubmonoidClass.coe_finsetSum]
   refine sum_ne_zero_of_injOn_supDegree (D := toLex) (support_nonempty.2 hp) (fun t ht => ?_)
-    (fun
+    (fun t ht s hs he => DFunLike.ext' <| accumulate_injective h ?_)
+  · rw [← esymmAlgHomMonomial, Ne, ← leadingCoeff_eq_zero toLex.injective,
+      leadingCoeff_esymmAlgHomMonomial t h]
+    rwa [mem_support_iff] at ht
+  rw [mem_coe]; rw [mem_support_iff] at ht hs
+  dsimp only [Function.comp] at he
+  rwa [← esymmAlgHomMonomial, ← esymmAlgHomMonomial, ← ofLex_inj, DFunLike.ext'_iff,
+       supDegree_esymmAlgHomMonomial ht t h, supDegree_esymmAlgHomMonomial hs s h] at he
 
 中文:
 引理 esymmAlgHom_fin_injective
@@ -718,7 +799,14 @@ lemma esymmAlgHom_fin_injective
   refine fun p => (fun hp => ?_).mtr
   rw [p.as_sum]; rw [map_sum (esymmAlgHom (Fin m) R n)]; rw [← Subalgebra.coe_eq_zero]; rw [AddSubmonoidClass.coe_finsetSum]
   refine sum_ne_zero_of_injOn_supDegree (D := toLex) (support_nonempty.2 hp) (fun t ht => ?_)
-    (fun
+    (fun t ht s hs he => DFunLike.ext' <| accumulate_injective h ?_)
+  · rw [← esymmAlgHomMonomial, Ne, ← leadingCoeff_eq_zero toLex.injective,
+      leadingCoeff_esymmAlgHomMonomial t h]
+    rwa [mem_support_iff] at ht
+  rw [mem_coe]; rw [mem_support_iff] at ht hs
+  dsimp only [Function.comp] at he
+  rwa [← esymmAlgHomMonomial, ← esymmAlgHomMonomial, ← ofLex_inj, DFunLike.ext'_iff,
+       supDegree_esymmAlgHomMonomial ht t h, supDegree_esymmAlgHomMonomial hs s h] at he
 
 Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.coe_finsetSum, DFunLike, DFunLike.ext, Subalgebra, Subalgebra.coe_eq_zero, accumulate_injective, as_sum, coe_eq_zero, coe_finsetSum, esymmAlgHom, esymmAlgHomMonomial, injective, injective_iff_map_eq_zero, leadingCoeff_eq_zero, leadingCoeff_esymmAlgHomMonomial, map_sum, mem_coe, mem_support_iff, p.as_sum
 -/
@@ -775,7 +863,20 @@ lemma esymmAlgHom_fin_bijective
   · exact Subalgebra.zero_mem _
   induction he : p.supDegree toLex using WellFoundedLT.induction generalizing p with | _ t ih
   subst he
-  let t := Finsupp.equivFunOnFinite.symm (
+  let t := Finsupp.equivFunOnFinite.symm (invAccumulate n n <| ↑(ofLex <| p.supDegree toLex))
+  have hd :
+      (esymmAlgHomMonomial _ t <| p.leadingCoeff toLex).supDegree toLex = p.supDegree toLex := by
+    rw [← ofLex_inj]; rw [DFunLike.ext'_iff]; rw [supDegree_esymmAlgHomMonomial _ _ le_rfl]
+    · exact accumulate_invAccumulate le_rfl hp.antitone_supDegree
+    · rwa [Ne, leadingCoeff_eq_zero toLex.injective]
+  obtain he | hne := eq_or_ne p (esymmAlgHomMonomial _ t <| p.leadingCoeff toLex)
+  · convert! AlgHom.mem_range_self _ (monomial t <| p.leadingCoeff toLex)
+  have := (supDegree_sub_lt_of_leadingCoeff_eq toLex.injective hd.symm ?_).resolve_right hne
+  · specialize ih _ this _ (Subalgebra.sub_mem _ hp <| isSymmetric_esymmAlgHomMonomial _ _) _ rfl
+    · rwa [sub_ne_zero]
+    convert! ← Subalgebra.add_mem _ ih ⟨monomial t (p.leadingCoeff toLex), rfl⟩
+    apply sub_add_cancel p
+  · rw [leadingCoeff_esymmAlgHomMonomial t le_rfl]
 
 中文:
 引理 esymmAlgHom_fin_bijective
@@ -788,7 +889,20 @@ lemma esymmAlgHom_fin_bijective
   · exact Subalgebra.zero_mem _
   induction he : p.supDegree toLex using WellFoundedLT.induction generalizing p with | _ t ih
   subst he
-  let t := Finsupp.equivFunOnFinite.symm (
+  let t := Finsupp.equivFunOnFinite.symm (invAccumulate n n <| ↑(ofLex <| p.supDegree toLex))
+  have hd :
+      (esymmAlgHomMonomial _ t <| p.leadingCoeff toLex).supDegree toLex = p.supDegree toLex := by
+    rw [← ofLex_inj]; rw [DFunLike.ext'_iff]; rw [supDegree_esymmAlgHomMonomial _ _ le_rfl]
+    · exact accumulate_invAccumulate le_rfl hp.antitone_supDegree
+    · rwa [Ne, leadingCoeff_eq_zero toLex.injective]
+  obtain he | hne := eq_or_ne p (esymmAlgHomMonomial _ t <| p.leadingCoeff toLex)
+  · convert! AlgHom.mem_range_self _ (monomial t <| p.leadingCoeff toLex)
+  have := (supDegree_sub_lt_of_leadingCoeff_eq toLex.injective hd.symm ?_).resolve_right hne
+  · specialize ih _ this _ (Subalgebra.sub_mem _ hp <| isSymmetric_esymmAlgHomMonomial _ _) _ rfl
+    · rwa [sub_ne_zero]
+    convert! ← Subalgebra.add_mem _ ih ⟨monomial t (p.leadingCoeff toLex), rfl⟩
+    apply sub_add_cancel p
+  · rw [leadingCoeff_esymmAlgHomMonomial t le_rfl]
 
 Depends on / 依赖: AlgHom, AlgHom.mem_range, DFunLike, DFunLike.ext, Finsupp, Finsupp.equivFunOnFinite.symm, Subalgebra, Subalgebra.zero_mem, WellFoundedLT, WellFoundedLT.induction, _iff, eq_or_ne, equivFunOnFinite, esymmAlgHomMonomial, esymmAlgHom_fin_injective, generalizing, invAccumulate, le_rfl, leadingCoeff, mem_range
 -/
@@ -829,7 +943,12 @@ lemma esymmAlgHom_fin_surjective
   induction q using MvPolynomial.induction_on with
   | C r => rw [← algebraMap_eq, AlgHom.commutes]; apply Subalgebra.algebraMap_mem
   | add p q hp hq => rw [map_add]; exact Subalgebra.add_mem _ hp hq
-  |
+  | mul_X p i hp =>
+    rw [map_mul]
+    apply Subalgebra.mul_mem _ hp
+    rw [AlgHom.mem_range]
+    refine ⟨X ⟨i, i.2.trans_le h⟩, ?_⟩
+    simp_rw [esymmAlgHom, aeval_X]
 
 中文:
 引理 esymmAlgHom_fin_surjective
@@ -841,7 +960,12 @@ lemma esymmAlgHom_fin_surjective
   induction q using MvPolynomial.induction_on with
   | C r => rw [← algebraMap_eq, AlgHom.commutes]; apply Subalgebra.algebraMap_mem
   | add p q hp hq => rw [map_add]; exact Subalgebra.add_mem _ hp hq
-  |
+  | mul_X p i hp =>
+    rw [map_mul]
+    apply Subalgebra.mul_mem _ hp
+    rw [AlgHom.mem_range]
+    refine ⟨X ⟨i, i.2.trans_le h⟩, ?_⟩
+    simp_rw [esymmAlgHom, aeval_X]
 
 Depends on / 依赖: AlgHom, AlgHom.commutes, AlgHom.mem_range, MvPolynomial, MvPolynomial.induction_on, Subalgebra, Subalgebra.add_mem, Subalgebra.algebraMap_mem, Subalgebra.mul_mem, add_mem, aeval_X, algebraMap_eq, algebraMap_mem, commutes, esymmAlgHom, esymmAlgHom_fin_bijective, induction_on, map_add, map_mul, mem_range
 -/

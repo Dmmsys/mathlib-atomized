@@ -50,7 +50,27 @@ lemma IsOpenMap.enatCard_connectedComponents_le_encard_preimage_singleton
       (hU₃ : Pairwise (Disjoint on U)) (hU₄ : ⋃ i, U i = Set.univ),
       n <= (f ⁻¹' {y}).encard by
     obtain (hy | hy) := finite_or_infinite (ConnectedComponents X)
-    · case
+    · cases nonempty_fintype (ConnectedComponents X)
+      simp only [ENat.card_eq_coe_fintype_card]
+      refine h (fun i => ConnectedComponents.mk ⁻¹' {(Fintype.equivFin _).symm i}) (fun i => ?_)
+          (fun i => ?_) (fun i j hij => Disjoint.preimage _ (by simp [hij])) ?_
+      · exact (isClopen_discrete _).preimage continuous_coe
+      · exact (Set.singleton_nonempty _).preimage surjective_coe
+      · simp [← Set.preimage_iUnion]
+    · simp only [ENat.card_eq_top_of_infinite, top_le_iff, ENat.eq_top_iff_forall_ge]
+      intro m
+      obtain ⟨U, hU1, hU2, hU3, hU4⟩ := exists_fun_isClopen_of_infinite X (m + 1) (by simp)
+      exact le_trans (by simp) (h U hU1 hU2 hU3 hU4)
+  intro n U hU1 hU2 hU3 hU4
+  have heq : f ⁻¹' {y} = ⋃ i, (U i inter f ⁻¹' {y}) := by
+    conv_lhs => rw [← Set.univ_inter (f ⁻¹' {y}), ← hU4, Set.iUnion_inter]
+  rw [heq]; rw [Set.encard_iUnion_of_finite fun i j hij => .inter_left _ (.inter_right _ <| hU3 hij)]
+  trans ∑ i : Fin n, 1
+  · simp
+  · rw [finsum_eq_sum_of_fintype]
+    refine Fintype.sum_mono fun i => Set.one_le_encard_iff_nonempty.mpr (show y in f '' (U i) from ?_)
+    convert! Set.mem_univ y
+    exact IsClopen.eq_univ ⟨hf₂ _ (hU1 i).1, hf₁ _ (hU1 i).2⟩ ((hU2 i).image f)
 
 中文:
 引理 是开映射.enatCard_connectedComponents_le_encard_preimage_singleton
@@ -60,7 +80,27 @@ lemma IsOpenMap.enatCard_connectedComponents_le_encard_preimage_singleton
       (hU₃ : Pairwise (Disjoint on U)) (hU₄ : ⋃ i, U i = Set.univ),
       n <= (f ⁻¹' {y}).encard by
     obtain (hy | hy) := finite_or_infinite (ConnectedComponents X)
-    · case
+    · cases nonempty_fintype (ConnectedComponents X)
+      simp only [ENat.card_eq_coe_fintype_card]
+      refine h (fun i => ConnectedComponents.mk ⁻¹' {(Fintype.equivFin _).symm i}) (fun i => ?_)
+          (fun i => ?_) (fun i j hij => Disjoint.preimage _ (by simp [hij])) ?_
+      · exact (isClopen_discrete _).preimage continuous_coe
+      · exact (Set.singleton_nonempty _).preimage surjective_coe
+      · simp [← Set.preimage_iUnion]
+    · simp only [ENat.card_eq_top_of_infinite, top_le_iff, ENat.eq_top_iff_forall_ge]
+      intro m
+      obtain ⟨U, hU1, hU2, hU3, hU4⟩ := exists_fun_isClopen_of_infinite X (m + 1) (by simp)
+      exact le_trans (by simp) (h U hU1 hU2 hU3 hU4)
+  intro n U hU1 hU2 hU3 hU4
+  have heq : f ⁻¹' {y} = ⋃ i, (U i inter f ⁻¹' {y}) := by
+    conv_lhs => rw [← Set.univ_inter (f ⁻¹' {y}), ← hU4, Set.iUnion_inter]
+  rw [heq]; rw [Set.encard_iUnion_of_finite fun i j hij => .inter_left _ (.inter_right _ <| hU3 hij)]
+  trans ∑ i : Fin n, 1
+  · simp
+  · rw [finsum_eq_sum_of_fintype]
+    refine Fintype.sum_mono fun i => Set.one_le_encard_iff_nonempty.mpr (show y in f '' (U i) from ?_)
+    convert! Set.mem_univ y
+    exact IsClopen.eq_univ ⟨hf₂ _ (hU1 i).1, hf₁ _ (hU1 i).2⟩ ((hU2 i).image f)
 
 Depends on / 依赖: ConnectedComponents, ConnectedComponents.mk, Disjoint, Disjoint.preimag, ENat.card_eq_coe_fintype_card, Fintype, Fintype.equivFin, IsClopen, Nonempty, Pairwise, Set.univ, card_eq_coe_fintype_card, encard, equivFin, finite_or_infinite, nonempty_fintype, preimag
 -/
@@ -127,7 +167,19 @@ lemma IsOpenMap.finite_connectedComponents_of_finite_preimage_singleton
   suffices h : forall (y : ConnectedComponents Y), Finite (ConnectedComponents (f ⁻¹' mk ⁻¹' {y})) by
     refine .of_equiv _ (equivOfIsClopen (U := fun y => f ⁻¹' mk ⁻¹' {y}) ?_ ?_ ?_).symm
     · exact fun y => (isClopen_discrete {y}).preimage (continuous_coe.comp hfc)
-    · exact fun i j hij => 
+    · exact fun i j hij => (Disjoint.preimage mk (by simpa)).preimage f
+    · rw [Set.iUnion_eq_univ_iff]
+      exact fun x => ⟨mk (f x), rfl⟩
+  intro y
+  obtain ⟨y, rfl⟩ := surjective_coe y
+  have := isConnected_iff_connectedSpace.mp (isConnected_connectedComponent (x := y))
+  rw [connectedComponents_preimage_singleton]
+  refine IsOpenMap.finite_connectedComponents_of_finite_preimage_singleton_of_connectedSpace
+    (hf₁.restrictPreimage (connectedComponent y)) (hf₂.restrictPreimage (connectedComponent y))
+    (y := ⟨y, mem_connectedComponent⟩) ?_
+  rw [← Set.finite_image_iff Subtype.val_injective.injOn]
+  convert! h y
+  aesop (add safe mem_connectedComponent)
 
 中文:
 引理 是开映射.finite_connectedComponents_of_finite_preimage_singleton
@@ -135,7 +187,19 @@ lemma IsOpenMap.finite_connectedComponents_of_finite_preimage_singleton
   suffices h : forall (y : ConnectedComponents Y), Finite (ConnectedComponents (f ⁻¹' mk ⁻¹' {y})) by
     refine .of_equiv _ (equivOfIsClopen (U := fun y => f ⁻¹' mk ⁻¹' {y}) ?_ ?_ ?_).symm
     · exact fun y => (isClopen_discrete {y}).preimage (continuous_coe.comp hfc)
-    · exact fun i j hij => 
+    · exact fun i j hij => (Disjoint.preimage mk (by simpa)).preimage f
+    · rw [Set.iUnion_eq_univ_iff]
+      exact fun x => ⟨mk (f x), rfl⟩
+  intro y
+  obtain ⟨y, rfl⟩ := surjective_coe y
+  have := isConnected_iff_connectedSpace.mp (isConnected_connectedComponent (x := y))
+  rw [connectedComponents_preimage_singleton]
+  refine IsOpenMap.finite_connectedComponents_of_finite_preimage_singleton_of_connectedSpace
+    (hf₁.restrictPreimage (connectedComponent y)) (hf₂.restrictPreimage (connectedComponent y))
+    (y := ⟨y, mem_connectedComponent⟩) ?_
+  rw [← Set.finite_image_iff Subtype.val_injective.injOn]
+  convert! h y
+  aesop (add safe mem_connectedComponent)
 
 Depends on / 依赖: ConnectedComponents, Disjoint, Disjoint.preimage, Finite, Set.iUnion_eq_univ_iff, continuous_coe, continuous_coe.comp, equivOfIsClopen, iUnion_eq_univ_iff, isClopen_discrete, isConnected_connected, isConnected_iff_connectedSpace, isConnected_iff_connectedSpace.mp, of_equiv, preimage, surjective_coe
 -/

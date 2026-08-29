@@ -52,7 +52,16 @@ theorem discrete_gronwall_prod_general
     have hck : 0 <= c k := hc k hk
     have heq : c k * ∑ j in Ico n₀ k, b j * ∏ i in Ico (j + 1) k, c i + b k =
         ∑ j in Ico n₀ (k + 1), b j * ∏ i in Ico (j + 1) (k + 1), c i := by
-      rw [sum_Ico_succ_top
+      rw [sum_Ico_succ_top hk]; rw [mul_sum]; rw [Ico_self]; rw [prod_empty]; rw [mul_one]
+      refine congr_arg (· + b k) (sum_congr rfl fun j hj => ?_)
+      rw [prod_Ico_succ_top (by have := mem_Ico.mp hj; omega)]; ring
+    calc u (k + 1)
+      _ <= c k * u k + b k := hu k hk
+      _ <= c k * (u n₀ * ∏ i in Ico n₀ k, c i +
+            ∑ j in Ico n₀ k, b j * ∏ i in Ico (j + 1) k, c i) + b k := by gcongr
+      _ = u n₀ * ∏ i in Ico n₀ (k + 1), c i +
+            ∑ j in Ico n₀ (k + 1), b j * ∏ i in Ico (j + 1) (k + 1), c i := by
+          rw [← heq]; rw [← prod_Ico_mul_eq_prod_Ico_add_one hk]; ring
 
 中文:
 定理 discrete_gronwall_prod_general
@@ -64,7 +73,16 @@ theorem discrete_gronwall_prod_general
     have hck : 0 <= c k := hc k hk
     have heq : c k * ∑ j in Ico n₀ k, b j * ∏ i in Ico (j + 1) k, c i + b k =
         ∑ j in Ico n₀ (k + 1), b j * ∏ i in Ico (j + 1) (k + 1), c i := by
-      rw [sum_Ico_succ_top
+      rw [sum_Ico_succ_top hk]; rw [mul_sum]; rw [Ico_self]; rw [prod_empty]; rw [mul_one]
+      refine congr_arg (· + b k) (sum_congr rfl fun j hj => ?_)
+      rw [prod_Ico_succ_top (by have := mem_Ico.mp hj; omega)]; ring
+    calc u (k + 1)
+      _ <= c k * u k + b k := hu k hk
+      _ <= c k * (u n₀ * ∏ i in Ico n₀ k, c i +
+            ∑ j in Ico n₀ k, b j * ∏ i in Ico (j + 1) k, c i) + b k := by gcongr
+      _ = u n₀ * ∏ i in Ico n₀ (k + 1), c i +
+            ∑ j in Ico n₀ (k + 1), b j * ∏ i in Ico (j + 1) (k + 1), c i := by
+          rw [← heq]; rw [← prod_Ico_mul_eq_prod_Ico_add_one hk]; ring
 
 Depends on / 依赖: Ico_self, Nat.le_induction, congr_arg, le_induction, mem_Ico, mem_Ico.mp, mul_one, mul_sum, prod_Ico_succ_top, prod_empty, sum_Ico_succ_top, sum_congr
 -/
@@ -108,7 +126,11 @@ theorem discrete_gronwall
         discrete_gronwall_prod_general hu (by grind) hn
     _ <= u n₀ * ∏ i in Ico n₀ n, (1 + c i) +
           ∑ k in Ico n₀ n, b k * ∏ i in Ico n₀ n, (1 + c i) := by
-      
+        gcongr <;> grind
+    _ = (u n₀ + ∑ k in Ico n₀ n, b k) * ∏ i in Ico n₀ n, (1 + c i) := by rw [add_mul, sum_mul]
+    _ <= (u n₀ + ∑ k in Ico n₀ n, b k) * exp (∑ i in Ico n₀ n, c i) := by
+gcongr <;> try exact add_nonneg hun₀ sum_nonneg by grind
+        simpa [exp_sum] using prod_le_prod (by grind) (by grind [add_one_le_exp])
 
 中文:
 定理 discrete_gronwall
@@ -120,7 +142,11 @@ theorem discrete_gronwall
         discrete_gronwall_prod_general hu (by grind) hn
     _ <= u n₀ * ∏ i in Ico n₀ n, (1 + c i) +
           ∑ k in Ico n₀ n, b k * ∏ i in Ico n₀ n, (1 + c i) := by
-      
+        gcongr <;> grind
+    _ = (u n₀ + ∑ k in Ico n₀ n, b k) * ∏ i in Ico n₀ n, (1 + c i) := by rw [add_mul, sum_mul]
+    _ <= (u n₀ + ∑ k in Ico n₀ n, b k) * exp (∑ i in Ico n₀ n, c i) := by
+gcongr <;> try exact add_nonneg hun₀ sum_nonneg by grind
+        simpa [exp_sum] using prod_le_prod (by grind) (by grind [add_one_le_exp])
 
 Depends on / 依赖: add_mul, add_nonneg, discrete_gronwall_prod_general, sum_mul, sum_nonneg
 -/

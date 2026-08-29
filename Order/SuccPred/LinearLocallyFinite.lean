@@ -242,7 +242,11 @@ theorem isMax_of_succFn_le
     have h := succFn_spec i
     rw [h_succFn_eq] at h
     exact isGLB_Ioc_of_isGLB_Ioi hij_lt h
-  have hi_
+  have hi_mem : i in Finset.Ioc i j := by
+    refine Finset.isGLB_mem _ h_glb ?_
+    exact ⟨_, Finset.mem_Ioc.mpr ⟨hij_lt, le_rfl⟩⟩
+  rw [Finset.mem_Ioc] at hi_mem
+  exact lt_irrefl i hi_mem.1
 
 中文:
 定理 isMax_of_succFn_le
@@ -256,7 +260,11 @@ theorem isMax_of_succFn_le
     have h := succFn_spec i
     rw [h_succFn_eq] at h
     exact isGLB_Ioc_of_isGLB_Ioi hij_lt h
-  have hi_
+  have hi_mem : i in Finset.Ioc i j := by
+    refine Finset.isGLB_mem _ h_glb ?_
+    exact ⟨_, Finset.mem_Ioc.mpr ⟨hij_lt, le_rfl⟩⟩
+  rw [Finset.mem_Ioc] at hi_mem
+  exact lt_irrefl i hi_mem.1
 
 Depends on / 依赖: Finset, Finset.Ioc, Finset.coe_Ioc, Finset.isGLB_mem, Finset.mem_Ioc, Finset.mem_Ioc.mpr, coe_Ioc, h_glb, h_succFn_eq, hi_mem, hij_lt, isGLB_Ioc_of_isGLB_Ioi, isGLB_mem, le_antisymm, le_rfl, le_succFn, lt_irrefl, mem_Ioc, not_lt, not_lt.mp
 -/
@@ -722,7 +730,8 @@ theorem toZ_iterate_succ_of_not_isMax
   · nth_rw 2 [← hmn]
     rw [Int.toNat_eq_max]; rw [toZ_of_ge (le_succ_iterate _ _)]; rw [max_eq_left]
     exact Int.natCast_nonneg _
-  suffices IsMax
+  suffices IsMax (succ^[n] i0) from absurd this hn
+  exact isMax_iterate_succ_of_eq_of_ne h_eq.symm (Ne.symm hmn)
 
 中文:
 定理 toZ_iterate_succ_of_not_isMax
@@ -734,7 +743,8 @@ theorem toZ_iterate_succ_of_not_isMax
   · nth_rw 2 [← hmn]
     rw [Int.toNat_eq_max]; rw [toZ_of_ge (le_succ_iterate _ _)]; rw [max_eq_left]
     exact Int.natCast_nonneg _
-  suffices IsMax
+  suffices IsMax (succ^[n] i0) from absurd this hn
+  exact isMax_iterate_succ_of_eq_of_ne h_eq.symm (Ne.symm hmn)
 
 Depends on / 依赖: Int.natCast_nonneg, Int.toNat_eq_max, Ne.symm, absurd, h_eq, h_eq.symm, isMax_iterate_succ_of_eq_of_ne, iterate_succ_toZ, le_succ_iterate, max_eq_left, natCast_nonneg, nth_rw, toNat_eq_max, toZ_of_ge
 -/
@@ -762,7 +772,16 @@ theorem toZ_iterate_pred_of_not_isMin
     refine lt_of_le_of_ne (pred_iterate_le _ _) fun h_pred_iterate_eq => hn ?_
     have h_pred_eq_pred : pred^[n.succ] i0 = pred^[0] i0 := by
       rwa [Function.iterate_zero, id]
-    exact isMin_iterate_pred_of_eq_of_ne h_pred_e
+    exact isMin_iterate_pred_of_eq_of_ne h_pred_eq_pred (Nat.succ_ne_zero n)
+  let m := (-toZ i0 (pred^[n.succ] i0)).toNat
+  have h_eq : pred^[m] i0 = pred^[n.succ] i0 := iterate_pred_toZ _ this
+  by_cases hmn : m = n + 1
+  · nth_rw 2 [← hmn]
+    rw [Int.toNat_eq_max]; rw [toZ_of_lt this]; rw [max_eq_left]; rw [neg_neg]
+    rw [neg_neg]
+    exact Int.natCast_nonneg _
+  · suffices IsMin (pred^[n.succ] i0) from absurd this hn
+    exact isMin_iterate_pred_of_eq_of_ne h_eq.symm (Ne.symm hmn)
 
 中文:
 定理 toZ_iterate_pred_of_not_isMin
@@ -774,7 +793,16 @@ theorem toZ_iterate_pred_of_not_isMin
     refine lt_of_le_of_ne (pred_iterate_le _ _) fun h_pred_iterate_eq => hn ?_
     have h_pred_eq_pred : pred^[n.succ] i0 = pred^[0] i0 := by
       rwa [Function.iterate_zero, id]
-    exact isMin_iterate_pred_of_eq_of_ne h_pred_e
+    exact isMin_iterate_pred_of_eq_of_ne h_pred_eq_pred (Nat.succ_ne_zero n)
+  let m := (-toZ i0 (pred^[n.succ] i0)).toNat
+  have h_eq : pred^[m] i0 = pred^[n.succ] i0 := iterate_pred_toZ _ this
+  by_cases hmn : m = n + 1
+  · nth_rw 2 [← hmn]
+    rw [Int.toNat_eq_max]; rw [toZ_of_lt this]; rw [max_eq_left]; rw [neg_neg]
+    rw [neg_neg]
+    exact Int.natCast_nonneg _
+  · suffices IsMin (pred^[n.succ] i0) from absurd this hn
+    exact isMin_iterate_pred_of_eq_of_ne h_eq.symm (Ne.symm hmn)
 
 Depends on / 依赖: Function, Function.iterate_zero, Int.toNat_eq_max, Nat.succ_ne_zero, h_eq, h_pred_eq_pred, h_pred_iterate_eq, isMin_iterate_pred_of_eq_of_ne, iterate_pred_toZ, iterate_zero, lt_of_le_of_ne, n.succ, nth_rw, pred_iterate_le, succ_ne_zero, toNat_eq_max, toZ_of_lt
 -/
@@ -809,7 +837,11 @@ theorem toZ_strictMono
   rcases le_or_gt i0 i with hi | hi <;> rcases le_or_gt i0 j with hj | hj
   · rw [← iterate_succ_toZ i hi, ← iterate_succ_toZ j hj]
     exact Monotone.monotone_iterate_of_le_map succ_mono (le_succ _) (Int.toNat_le_toNat h_le)
-  · exact absurd ((toZ_neg hj).tran
+  · exact absurd ((toZ_neg hj).trans_le (toZ_nonneg hi)) (not_lt.mpr h_le)
+  · exact hi.le.trans hj
+  · rw [← iterate_pred_toZ i hi, ← iterate_pred_toZ j hj]
+    refine Monotone.antitone_iterate_of_map_le pred_mono (pred_le _) (Int.toNat_le_toNat ?_)
+    exact Int.neg_le_neg h_le
 
 中文:
 定理 toZ_strictMono
@@ -820,7 +852,11 @@ theorem toZ_strictMono
   rcases le_or_gt i0 i with hi | hi <;> rcases le_or_gt i0 j with hj | hj
   · rw [← iterate_succ_toZ i hi, ← iterate_succ_toZ j hj]
     exact Monotone.monotone_iterate_of_le_map succ_mono (le_succ _) (Int.toNat_le_toNat h_le)
-  · exact absurd ((toZ_neg hj).tran
+  · exact absurd ((toZ_neg hj).trans_le (toZ_nonneg hi)) (not_lt.mpr h_le)
+  · exact hi.le.trans hj
+  · rw [← iterate_pred_toZ i hi, ← iterate_pred_toZ j hj]
+    refine Monotone.antitone_iterate_of_map_le pred_mono (pred_le _) (Int.toNat_le_toNat ?_)
+    exact Int.neg_le_neg h_le
 
 Depends on / 依赖: Int.toNat_le_toNat, Monotone, Monotone.antitone_iterate_of_map_le, Monotone.monotone_iterate_of_le_map, absurd, antitone_iterate_of_map_le, contrapose, h_le, hi.le.trans, iterate_pred_toZ, iterate_succ_toZ, le_or_gt, le_succ, monotone_iterate_of_le_map, not_lt, not_lt.mpr, pred_le, pred_mono, succ_mono, toNat_le_toNat
 -/
@@ -1044,7 +1080,18 @@ definition orderIsoIntOfLinearSuccPredArch
     · have h_nonneg : 0 <= toZ hι.some i := toZ_nonneg hi
       simp_rw [if_pos h_nonneg]
       exact iterate_succ_toZ i hi
-    · have h_neg : 
+    · have h_neg : toZ hι.some i < 0 := toZ_neg hi
+      simp_rw [if_neg (not_le.mpr h_neg)]
+      exact iterate_pred_toZ i hi
+  right_inv n := by
+    rcases le_or_gt 0 n with hn | hn
+    · simp_rw [if_pos hn]
+      rw [toZ_iterate_succ]
+      exact Int.toNat_of_nonneg hn
+    · simp_rw [if_neg (not_le.mpr hn)]
+      rw [toZ_iterate_pred]
+      simp only [hn.le, Int.toNat_of_nonneg, Int.neg_nonneg_of_nonpos, Int.neg_neg]
+  map_rel_iff' := by simp
 
 中文:
 定义 orderIso整数OfLinearSuccPredArch
@@ -1056,7 +1103,18 @@ definition orderIsoIntOfLinearSuccPredArch
     · have h_nonneg : 0 <= toZ hι.some i := toZ_nonneg hi
       simp_rw [if_pos h_nonneg]
       exact iterate_succ_toZ i hi
-    · have h_neg : 
+    · have h_neg : toZ hι.some i < 0 := toZ_neg hi
+      simp_rw [if_neg (not_le.mpr h_neg)]
+      exact iterate_pred_toZ i hi
+  right_inv n := by
+    rcases le_or_gt 0 n with hn | hn
+    · simp_rw [if_pos hn]
+      rw [toZ_iterate_succ]
+      exact Int.toNat_of_nonneg hn
+    · simp_rw [if_neg (not_le.mpr hn)]
+      rw [toZ_iterate_pred]
+      simp only [hn.le, Int.toNat_of_nonneg, Int.neg_nonneg_of_nonpos, Int.neg_neg]
+  map_rel_iff' := by simp
 -/
 noncomputable def orderIsoIntOfLinearSuccPredArch [NoMaxOrder ι] [NoMinOrder ι] [hι : Nonempty ι] :
     ι ≃o Int where
@@ -1099,7 +1157,7 @@ definition orderIsoNatOfLinearSuccPredArch
   map_rel_iff' := by
     intro i j
     simp only [Equiv.coe_fn_mk, Int.toNat_le]
-    rw [← toZ_le_
+    rw [← toZ_le_toZ (i0 := (⊥ : ι))]; rw [Int.toNat_of_nonneg (toZ_nonneg bot_le)]
 
 中文:
 定义 orderIso自然数OfLinearSuccPredArch
@@ -1116,7 +1174,7 @@ definition orderIsoNatOfLinearSuccPredArch
   map_rel_iff' := by
     intro i j
     simp only [Equiv.coe_fn_mk, Int.toNat_le]
-    rw [← toZ_le_
+    rw [← toZ_le_toZ (i0 := (⊥ : ι))]; rw [Int.toNat_of_nonneg (toZ_nonneg bot_le)]
 -/
 def orderIsoNatOfLinearSuccPredArch [NoMaxOrder ι] [OrderBot ι] : ι ≃o Nat where
   toFun i := (toZ ⊥ i).toNat
@@ -1150,7 +1208,16 @@ definition orderIsoRangeOfLinearSuccPredArch
     refine le_antisymm ?_ ?_
     · rw [Int.toNat_le]
       exact toZ_iterate_succ_le _
-   
+    by_cases hn_max : IsMax (succ^[↑n] (⊥ : ι))
+    · rw [← isTop_iff_isMax, isTop_iff_eq_top] at hn_max
+      rw [hn_max]
+      exact Nat.lt_succ_iff.mp (Finset.mem_range.mp n.prop)
+    · rw [toZ_iterate_succ_of_not_isMax _ hn_max]
+      simp only [Int.toNat_natCast, le_refl]
+  map_rel_iff' := by
+    intro i j
+    simp only [Equiv.coe_fn_mk, Subtype.mk_le_mk, Int.toNat_le]
+    rw [← toZ_le_toZ (i0 := (⊥ : ι))]; rw [Int.toNat_of_nonneg (toZ_nonneg bot_le)]
 
 中文:
 定义 orderIsoRangeOfLinearSuccPredArch
@@ -1165,7 +1232,16 @@ definition orderIsoRangeOfLinearSuccPredArch
     refine le_antisymm ?_ ?_
     · rw [Int.toNat_le]
       exact toZ_iterate_succ_le _
-   
+    by_cases hn_max : IsMax (succ^[↑n] (⊥ : ι))
+    · rw [← isTop_iff_isMax, isTop_iff_eq_top] at hn_max
+      rw [hn_max]
+      exact Nat.lt_succ_iff.mp (Finset.mem_range.mp n.prop)
+    · rw [toZ_iterate_succ_of_not_isMax _ hn_max]
+      simp only [Int.toNat_natCast, le_refl]
+  map_rel_iff' := by
+    intro i j
+    simp only [Equiv.coe_fn_mk, Subtype.mk_le_mk, Int.toNat_le]
+    rw [← toZ_le_toZ (i0 := (⊥ : ι))]; rw [Int.toNat_of_nonneg (toZ_nonneg bot_le)]
 
 Depends on / 依赖: Finset, Finset.mem_range.mp, Finset.mem_range_succ_iff.mpr, Int.toNat_le, Int.toNat_le_toNat, Int.toNat_natCast, Nat.lt_succ_iff.mp, bot_le, hn_max, invFun, isTop_iff_eq_top, isTop_iff_isMax, iterate_succ_toZ, le_antisymm, le_top, left_inv, lt_succ_iff, mem_range, mem_range_succ_iff, n.prop
 -/

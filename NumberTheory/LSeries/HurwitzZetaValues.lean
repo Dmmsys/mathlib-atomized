@@ -63,7 +63,12 @@ theorem cosZeta_two_mul_nat
       ring_nf
     · push_cast
       congr 1
-      have : (
+      have : (Polynomial.bernoulli (2 * k)).map (algebraMap Rat Complex) = _ :=
+        (Polynomial.map_map (algebraMap Rat Real) ofRealHom _).symm
+      rw [this]; rw [← ofRealHom_eq_coe]; rw [← ofRealHom_eq_coe]
+      apply Polynomial.map_aeval_eq_aeval_map (by simp)
+  · norm_cast
+    lia
 
 中文:
 定理 cosZeta_two_mul_nat
@@ -78,7 +83,12 @@ theorem cosZeta_two_mul_nat
       ring_nf
     · push_cast
       congr 1
-      have : (
+      have : (Polynomial.bernoulli (2 * k)).map (algebraMap Rat Complex) = _ :=
+        (Polynomial.map_map (algebraMap Rat Real) ofRealHom _).symm
+      rw [this]; rw [← ofRealHom_eq_coe]; rw [← ofRealHom_eq_coe]
+      apply Polynomial.map_aeval_eq_aeval_map (by simp)
+  · norm_cast
+    lia
 
 Depends on / 依赖: Eq.trans, Polynomial, Polynomial.bernoulli, Polynomial.map_aeval_eq_aeval_map, Polynomial.map_map, algebraMap, bernoulli, congr_arg, hasSum_nat_cosZeta, hasSum_one_div_nat_pow_mul_cos, map_aeval_eq_aeval_map, map_map, norm_cas, ofReal, ofRealHom, ofRealHom_eq_coe, ofReal_tsum, ring_nf, tsum_congr, tsum_eq
 -/
@@ -117,7 +127,12 @@ theorem sinZeta_two_mul_nat_add_one
       ring_nf
     · push_cast
       congr 1
-      have
+      have : (Polynomial.bernoulli (2 * k + 1)).map (algebraMap Rat Complex) = _ :=
+        (Polynomial.map_map (algebraMap Rat Real) ofRealHom _).symm
+      rw [this]; rw [← ofRealHom_eq_coe]; rw [← ofRealHom_eq_coe]
+      apply Polynomial.map_aeval_eq_aeval_map (by simp)
+  · norm_cast
+    lia
 
 中文:
 定理 sinZeta_two_mul_nat_add_one
@@ -132,7 +147,12 @@ theorem sinZeta_two_mul_nat_add_one
       ring_nf
     · push_cast
       congr 1
-      have
+      have : (Polynomial.bernoulli (2 * k + 1)).map (algebraMap Rat Complex) = _ :=
+        (Polynomial.map_map (algebraMap Rat Real) ofRealHom _).symm
+      rw [this]; rw [← ofRealHom_eq_coe]; rw [← ofRealHom_eq_coe]
+      apply Polynomial.map_aeval_eq_aeval_map (by simp)
+  · norm_cast
+    lia
 
 Depends on / 依赖: Eq.trans, Polynomial, Polynomial.bernoulli, Polynomial.map_aeval_eq_aeval_map, Polynomial.map_map, algebraMap, bernoulli, congr_arg, hasSum_nat_sinZeta, hasSum_one_div_nat_pow_mul_sin, map_aeval_eq_aeval_map, map_map, ofReal, ofRealHom, ofRealHom_eq_coe, ofReal_tsum, ring_nf, tsum_congr, tsum_eq
 -/
@@ -165,7 +185,10 @@ theorem cosZeta_two_mul_nat'
   rw [cosZeta_two_mul_nat hk hx]
   congr 1
   have : (2 * k)! = (2 * k) * Complex.Gamma (2 * k) := by
-    rw [(by { norm_cast; lia } : 2 * (k : Complex) = ↑(2 * k - 1) + 1)]; rw [Complex.Gamma_nat_eq_factorial]; rw [← Nat.cast_add_one]; rw [← Nat.cast_mul]; rw [← Nat.factorial_succ]; rw [Nat.sub_a
+    rw [(by { norm_cast; lia } : 2 * (k : Complex) = ↑(2 * k - 1) + 1)]; rw [Complex.Gamma_nat_eq_factorial]; rw [← Nat.cast_add_one]; rw [← Nat.cast_mul]; rw [← Nat.factorial_succ]; rw [Nat.sub_add_cancel (by lia)]
+  simp_rw [this, GammaComplex, cpow_neg, ← div_div, div_inv_eq_mul, div_mul_eq_mul_div, div_div,
+    mul_right_comm (2 : Complex) (k : Complex)]
+  norm_cast
 
 中文:
 定理 cosZeta_two_mul_nat'
@@ -174,7 +197,10 @@ theorem cosZeta_two_mul_nat'
   rw [cosZeta_two_mul_nat hk hx]
   congr 1
   have : (2 * k)! = (2 * k) * Complex.Gamma (2 * k) := by
-    rw [(by { norm_cast; lia } : 2 * (k : Complex) = ↑(2 * k - 1) + 1)]; rw [Complex.Gamma_nat_eq_factorial]; rw [← Nat.cast_add_one]; rw [← Nat.cast_mul]; rw [← Nat.factorial_succ]; rw [Nat.sub_a
+    rw [(by { norm_cast; lia } : 2 * (k : Complex) = ↑(2 * k - 1) + 1)]; rw [Complex.Gamma_nat_eq_factorial]; rw [← Nat.cast_add_one]; rw [← Nat.cast_mul]; rw [← Nat.factorial_succ]; rw [Nat.sub_add_cancel (by lia)]
+  simp_rw [this, GammaComplex, cpow_neg, ← div_div, div_inv_eq_mul, div_mul_eq_mul_div, div_div,
+    mul_right_comm (2 : Complex) (k : Complex)]
+  norm_cast
 
 Depends on / 依赖: Complex.Gamma, Complex.Gamma_nat_eq_factorial, GammaComplex, Gamma_nat_eq_factorial, Nat.cast_add_one, Nat.cast_mul, Nat.factorial_succ, Nat.sub_add_cancel, cast_add_one, cast_mul, cosZeta_two_mul_nat, cpow_neg, div_div, div_inv_eq_mul, div_mul_eq_mul_div, factorial_succ, mul_right_comm, simp_rw, sub_add_cancel
 -/
@@ -199,7 +225,10 @@ theorem sinZeta_two_mul_nat_add_one'
   rw [sinZeta_two_mul_nat_add_one hk hx]
   congr 1
   have : (2 * k + 1)! = (2 * k + 1) * Complex.Gamma (2 * k + 1) := by
-    rw [(by simp : Complex.Gamma (2 * k + 1) = Complex.Gamma (↑(2 * k) + 1))]; rw [Complex.Gamma_nat_eq_factorial]; rw [← Nat.cast_ofNat (R := Complex)]; rw [← Nat.cast_mul]; r
+    rw [(by simp : Complex.Gamma (2 * k + 1) = Complex.Gamma (↑(2 * k) + 1))]; rw [Complex.Gamma_nat_eq_factorial]; rw [← Nat.cast_ofNat (R := Complex)]; rw [← Nat.cast_mul]; rw [← Nat.cast_add_one]; rw [← Nat.cast_mul]; rw [← Nat.factorial_succ]
+  simp_rw [this, GammaComplex, cpow_neg, ← div_div, div_inv_eq_mul, div_mul_eq_mul_div, div_div]
+  rw [(by simp : 2 * (k : Complex) + 1 = ↑(2 * k + 1))]; rw [cpow_natCast]
+  ring
 
 中文:
 定理 sinZeta_two_mul_nat_add_one'
@@ -208,7 +237,10 @@ theorem sinZeta_two_mul_nat_add_one'
   rw [sinZeta_two_mul_nat_add_one hk hx]
   congr 1
   have : (2 * k + 1)! = (2 * k + 1) * Complex.Gamma (2 * k + 1) := by
-    rw [(by simp : Complex.Gamma (2 * k + 1) = Complex.Gamma (↑(2 * k) + 1))]; rw [Complex.Gamma_nat_eq_factorial]; rw [← Nat.cast_ofNat (R := Complex)]; rw [← Nat.cast_mul]; r
+    rw [(by simp : Complex.Gamma (2 * k + 1) = Complex.Gamma (↑(2 * k) + 1))]; rw [Complex.Gamma_nat_eq_factorial]; rw [← Nat.cast_ofNat (R := Complex)]; rw [← Nat.cast_mul]; rw [← Nat.cast_add_one]; rw [← Nat.cast_mul]; rw [← Nat.factorial_succ]
+  simp_rw [this, GammaComplex, cpow_neg, ← div_div, div_inv_eq_mul, div_mul_eq_mul_div, div_div]
+  rw [(by simp : 2 * (k : Complex) + 1 = ↑(2 * k + 1))]; rw [cpow_natCast]
+  ring
 
 Depends on / 依赖: Complex.Gamma, Complex.Gamma_nat_eq_factorial, GammaComplex, Gamma_nat_eq_factorial, Nat.cast_add_one, Nat.cast_mul, Nat.cast_ofNat, Nat.factorial_succ, cast_add_one, cast_mul, cast_ofNat, cpow_neg, div_div, div_inv_eq_mul, div_mul_eq_mul_div, factorial_succ, simp_rw, sinZeta_two_mul_nat_add_one
 -/
@@ -232,7 +264,15 @@ theorem hurwitzZetaEven_one_sub_two_mul_nat
   proof: by
   have h1 (n : Nat) : (2 * k : Complex) != -n := by
     rw [← Int.cast_ofNat]; rw [← Int.cast_natCast]; rw [← Int.cast_mul]; rw [← Int.cast_natCast n]; rw [← Int.cast_neg]; rw [Ne]; rw [Int.cast_inj]; rw [← Ne]
-    refine ne_of_gt ((neg_nonpos_of_nonneg n.cast_nonneg).trans_lt (mul_pos two_pos ?_
+    refine ne_of_gt ((neg_nonpos_of_nonneg n.cast_nonneg).trans_lt (mul_pos two_pos ?_))
+    exact Nat.cast_pos.mpr (Nat.pos_of_ne_zero hk)
+  have h2 : (2 * k : Complex) != 1 := by norm_cast; simp
+  have h3 : GammaComplex (2 * k) != 0 := by
+    refine mul_ne_zero (mul_ne_zero two_ne_zero ?_) (Gamma_ne_zero h1)
+    simp [pi_ne_zero]
+  rw [hurwitzZetaEven_one_sub _ h1 (Or.inr h2)]; rw [← GammaComplex]; rw [cosZeta_two_mul_nat' hk hx]; rw [← mul_assoc]; rw [← mul_div_assoc]; rw [mul_assoc]; rw [mul_div_cancel_left₀ _ h3]; rw [← mul_div_assoc]
+  congr 2
+  rw [mul_div_assoc]; rw [mul_div_cancel_left₀ _ two_ne_zero]; rw [← ofReal_natCast]; rw [← ofReal_mul]; rw [← ofReal_cos]; rw [mul_comm π]; rw [← sub_zero (k * π)]; rw [cos_nat_mul_pi_sub]; rw [Real.cos_zero]; rw [mul_one]; rw [ofReal_pow]; rw [ofReal_neg]; rw [ofReal_one]; rw [pow_succ]; rw [mul_neg_one]; rw [mul_neg]; rw [← mul_pow]; rw [neg_one_mul]; rw [neg_neg]; rw [one_pow]
 
 中文:
 定理 hurwitzZetaEven_one_sub_two_mul_nat
@@ -240,7 +280,15 @@ theorem hurwitzZetaEven_one_sub_two_mul_nat
   证明: by
   have h1 (n : Nat) : (2 * k : Complex) != -n := by
     rw [← Int.cast_ofNat]; rw [← Int.cast_natCast]; rw [← Int.cast_mul]; rw [← Int.cast_natCast n]; rw [← Int.cast_neg]; rw [Ne]; rw [Int.cast_inj]; rw [← Ne]
-    refine ne_of_gt ((neg_nonpos_of_nonneg n.cast_nonneg).trans_lt (mul_pos two_pos ?_
+    refine ne_of_gt ((neg_nonpos_of_nonneg n.cast_nonneg).trans_lt (mul_pos two_pos ?_))
+    exact Nat.cast_pos.mpr (Nat.pos_of_ne_zero hk)
+  have h2 : (2 * k : Complex) != 1 := by norm_cast; simp
+  have h3 : GammaComplex (2 * k) != 0 := by
+    refine mul_ne_zero (mul_ne_zero two_ne_zero ?_) (Gamma_ne_zero h1)
+    simp [pi_ne_zero]
+  rw [hurwitzZetaEven_one_sub _ h1 (Or.inr h2)]; rw [← GammaComplex]; rw [cosZeta_two_mul_nat' hk hx]; rw [← mul_assoc]; rw [← mul_div_assoc]; rw [mul_assoc]; rw [mul_div_cancel_left₀ _ h3]; rw [← mul_div_assoc]
+  congr 2
+  rw [mul_div_assoc]; rw [mul_div_cancel_left₀ _ two_ne_zero]; rw [← ofReal_natCast]; rw [← ofReal_mul]; rw [← ofReal_cos]; rw [mul_comm π]; rw [← sub_zero (k * π)]; rw [cos_nat_mul_pi_sub]; rw [Real.cos_zero]; rw [mul_one]; rw [ofReal_pow]; rw [ofReal_neg]; rw [ofReal_one]; rw [pow_succ]; rw [mul_neg_one]; rw [mul_neg]; rw [← mul_pow]; rw [neg_one_mul]; rw [neg_neg]; rw [one_pow]
 
 Depends on / 依赖: GammaComplex, Gamma_ne_zero, Int.cast_inj, Int.cast_mul, Int.cast_natCast, Int.cast_neg, Int.cast_ofNat, Nat.cast_pos.mpr, Nat.pos_of_ne_zero, cast_inj, cast_mul, cast_natCast, cast_neg, cast_nonneg, cast_ofNat, cast_pos, mul_ne_zero, mul_pos, n.cast_nonneg, ne_of_gt
 -/
@@ -268,7 +316,14 @@ theorem hurwitzZetaOdd_neg_two_mul_nat
   proof: by
   have h1 (n : Nat) : (2 * k + 1 : Complex) != -n := by
     rw [← Int.cast_ofNat]; rw [← Int.cast_natCast]; rw [← Int.cast_mul]; rw [← Int.cast_natCast n]; rw [← Int.cast_neg]; rw [← Int.cast_one]; rw [← Int.cast_add]; rw [Ne]; rw [Int.cast_inj]; rw [← Ne]
-    refine ne_of_gt ((neg_nonpos_of_nonn
+    refine ne_of_gt ((neg_nonpos_of_nonneg n.cast_nonneg).trans_lt ?_)
+    positivity
+  have h3 : GammaComplex (2 * k + 1) != 0 := by
+    refine mul_ne_zero (mul_ne_zero two_ne_zero ?_) (Gamma_ne_zero h1)
+    simp [pi_ne_zero]
+  rw [(by simp : -(2 * k : Complex) = 1 - (2 * k + 1))]; rw [hurwitzZetaOdd_one_sub _ h1]; rw [← GammaComplex]; rw [sinZeta_two_mul_nat_add_one' hk hx]; rw [← mul_assoc]; rw [← mul_div_assoc]; rw [mul_assoc]; rw [mul_div_cancel_left₀ _ h3]; rw [← mul_div_assoc]
+  congr 2
+  rw [mul_div_assoc]; rw [add_div]; rw [mul_div_cancel_left₀ _ two_ne_zero]; rw [← ofReal_natCast]; rw [← ofReal_one]; rw [← ofReal_ofNat]; rw [← ofReal_div]; rw [← ofReal_add]; rw [← ofReal_mul]; rw [← ofReal_sin]; rw [mul_comm π]; rw [add_mul]; rw [mul_comm (1 / 2)]; rw [mul_one_div]; rw [Real.sin_add_pi_div_two]; rw [← sub_zero (k * π)]; rw [cos_nat_mul_pi_sub]; rw [Real.cos_zero]; rw [mul_one]; rw [ofReal_pow]; rw [ofReal_neg]; rw [ofReal_one]; rw [pow_succ]; rw [mul_neg_one]; rw [mul_neg]; rw [← mul_pow]; rw [neg_one_mul]; rw [neg_neg]; rw [one_pow]
 
 中文:
 定理 hurwitzZetaOdd_neg_two_mul_nat
@@ -276,7 +331,14 @@ theorem hurwitzZetaOdd_neg_two_mul_nat
   证明: by
   have h1 (n : Nat) : (2 * k + 1 : Complex) != -n := by
     rw [← Int.cast_ofNat]; rw [← Int.cast_natCast]; rw [← Int.cast_mul]; rw [← Int.cast_natCast n]; rw [← Int.cast_neg]; rw [← Int.cast_one]; rw [← Int.cast_add]; rw [Ne]; rw [Int.cast_inj]; rw [← Ne]
-    refine ne_of_gt ((neg_nonpos_of_nonn
+    refine ne_of_gt ((neg_nonpos_of_nonneg n.cast_nonneg).trans_lt ?_)
+    positivity
+  have h3 : GammaComplex (2 * k + 1) != 0 := by
+    refine mul_ne_zero (mul_ne_zero two_ne_zero ?_) (Gamma_ne_zero h1)
+    simp [pi_ne_zero]
+  rw [(by simp : -(2 * k : Complex) = 1 - (2 * k + 1))]; rw [hurwitzZetaOdd_one_sub _ h1]; rw [← GammaComplex]; rw [sinZeta_two_mul_nat_add_one' hk hx]; rw [← mul_assoc]; rw [← mul_div_assoc]; rw [mul_assoc]; rw [mul_div_cancel_left₀ _ h3]; rw [← mul_div_assoc]
+  congr 2
+  rw [mul_div_assoc]; rw [add_div]; rw [mul_div_cancel_left₀ _ two_ne_zero]; rw [← ofReal_natCast]; rw [← ofReal_one]; rw [← ofReal_ofNat]; rw [← ofReal_div]; rw [← ofReal_add]; rw [← ofReal_mul]; rw [← ofReal_sin]; rw [mul_comm π]; rw [add_mul]; rw [mul_comm (1 / 2)]; rw [mul_one_div]; rw [Real.sin_add_pi_div_two]; rw [← sub_zero (k * π)]; rw [cos_nat_mul_pi_sub]; rw [Real.cos_zero]; rw [mul_one]; rw [ofReal_pow]; rw [ofReal_neg]; rw [ofReal_one]; rw [pow_succ]; rw [mul_neg_one]; rw [mul_neg]; rw [← mul_pow]; rw [neg_one_mul]; rw [neg_neg]; rw [one_pow]
 
 Depends on / 依赖: GammaComplex, Gamma_ne_zero, Int.cast_add, Int.cast_inj, Int.cast_mul, Int.cast_natCast, Int.cast_neg, Int.cast_ofNat, Int.cast_one, cast_add, cast_inj, cast_mul, cast_natCast, cast_neg, cast_nonneg, cast_ofNat, cast_one, mul_ne_zero, n.cast_nonneg, ne_of_gt
 -/
@@ -305,7 +367,7 @@ lemma hurwitzZeta_one_sub_two_mul_nat
   suffices hurwitzZetaOdd x (1 - 2 * k) = 0 by
     rw [hurwitzZeta]; rw [this]; rw [add_zero]; rw [hurwitzZetaEven_one_sub_two_mul_nat hk hx]
   obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hk
-  rw [Nat.cast_succ]; rw [show (1 : Complex) - 2 * (k + 1) = -2 * k - 1 by ring]; rw [hurwitzZetaOdd_
+  rw [Nat.cast_succ]; rw [show (1 : Complex) - 2 * (k + 1) = -2 * k - 1 by ring]; rw [hurwitzZetaOdd_neg_two_mul_nat_sub_one]
 
 中文:
 引理 hurwitzZeta_one_sub_two_mul_nat
@@ -314,7 +376,7 @@ lemma hurwitzZeta_one_sub_two_mul_nat
   suffices hurwitzZetaOdd x (1 - 2 * k) = 0 by
     rw [hurwitzZeta]; rw [this]; rw [add_zero]; rw [hurwitzZetaEven_one_sub_two_mul_nat hk hx]
   obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hk
-  rw [Nat.cast_succ]; rw [show (1 : Complex) - 2 * (k + 1) = -2 * k - 1 by ring]; rw [hurwitzZetaOdd_
+  rw [Nat.cast_succ]; rw [show (1 : Complex) - 2 * (k + 1) = -2 * k - 1 by ring]; rw [hurwitzZetaOdd_neg_two_mul_nat_sub_one]
 -/
 private lemma hurwitzZeta_one_sub_two_mul_nat (hk : k != 0) (hx : x in Icc (0 : Real) 1) :
     hurwitzZeta x (1 - 2 * k) =
@@ -523,7 +585,9 @@ theorem riemannZeta_neg_nat_eq_bernoulli'
   · rw [Nat.cast_zero, neg_zero, riemannZeta_zero, zero_add, zero_add, div_one,
       bernoulli'_one, Rat.cast_div, Rat.cast_one, Rat.cast_ofNat, neg_div]
   · rw [← hurwitzZeta_zero, ← QuotientAddGroup.mk_zero, hurwitzZeta_neg_nat hk
-      (left_mem_Icc.mpr zer
+      (left_mem_Icc.mpr zero_le_one), ofReal_zero, Polynomial.eval_zero_map,
+      Polynomial.bernoulli_eval_zero, Algebra.algebraMap_eq_smul_one, Rat.smul_one_eq_cast,
+      div_mul_eq_mul_div, neg_one_mul, bernoulli_eq_bernoulli'_of_ne_one (by simp [hk])]
 
 中文:
 定理 riemannZeta_neg_nat_eq_bernoulli'
@@ -533,7 +597,9 @@ theorem riemannZeta_neg_nat_eq_bernoulli'
   · rw [Nat.cast_zero, neg_zero, riemannZeta_zero, zero_add, zero_add, div_one,
       bernoulli'_one, Rat.cast_div, Rat.cast_one, Rat.cast_ofNat, neg_div]
   · rw [← hurwitzZeta_zero, ← QuotientAddGroup.mk_zero, hurwitzZeta_neg_nat hk
-      (left_mem_Icc.mpr zer
+      (left_mem_Icc.mpr zero_le_one), ofReal_zero, Polynomial.eval_zero_map,
+      Polynomial.bernoulli_eval_zero, Algebra.algebraMap_eq_smul_one, Rat.smul_one_eq_cast,
+      div_mul_eq_mul_div, neg_one_mul, bernoulli_eq_bernoulli'_of_ne_one (by simp [hk])]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Nat.cast_zero, Polynomial, Polynomial.bernoulli_eval_zero, Polynomial.eval_zero_map, QuotientAddGroup, QuotientAddGroup.mk_zero, Rat.cast_div, Rat.cast_ofNat, Rat.cast_one, Rat.smul_one_eq_cast, _of_ne_one, _one, algebraMap_eq_smul_one, bernoulli, bernoulli_eq_bernoulli, bernoulli_eval_zero, cast_div, cast_ofNat
 -/

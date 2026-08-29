@@ -166,7 +166,7 @@ definition RingHom.adjoinAlgebraMapEquiv
      ((Function.bijective_iff_existsUnique (adjoinAlgebraMap b)).mpr (fun y => ?_))
   induction y using Algebra.adjoin_singleton_induction with | f p =>
   use ⟨p.aeval b, by simp⟩
-  aesop (add norm [Polynomial.aeval_algebraMap_apply, Subt
+  aesop (add norm [Polynomial.aeval_algebraMap_apply, Subtype.ext_iff])
 
 中文:
 定义 环态射.adjoinAlgebraMapEquiv
@@ -176,7 +176,7 @@ definition RingHom.adjoinAlgebraMapEquiv
      ((Function.bijective_iff_existsUnique (adjoinAlgebraMap b)).mpr (fun y => ?_))
   induction y using Algebra.adjoin_singleton_induction with | f p =>
   use ⟨p.aeval b, by simp⟩
-  aesop (add norm [Polynomial.aeval_algebraMap_apply, Subt
+  aesop (add norm [Polynomial.aeval_algebraMap_apply, Subtype.ext_iff])
 
 Depends on / 依赖: Algebra, Algebra.adjoin_singleton_induction, Function, Function.bijective_iff_existsUnique, Polynomial, Polynomial.aeval_algebraMap_apply, RingEquiv, RingEquiv.ofBijective, RingHom, RingHom.adjoinAlgebraMap, Subtype, Subtype.ext_iff, adjoinAlgebraMap, adjoin_singleton_induction, aeval_algebraMap_apply, bijective_iff_existsUnique, ext_iff, ofBijective, p.aeval
 -/

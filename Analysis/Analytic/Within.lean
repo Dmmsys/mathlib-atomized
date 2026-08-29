@@ -51,6 +51,17 @@ lemma analyticWithinAt_of_singleton_mem
   exact ⟨constFormalMultilinearSeries 𝕜 E (f x), .ofReal r,
   { r_le := by simp only [FormalMultilinearSeries.constFormalMultilinearSeries_radius, le_top]
     r_pos := by positivity
+    hasSum := by
+      intro y ys yr
+      simp only [subset_singleton_iff, mem_inter_iff, and_imp] at st
+      simp only [mem_insert_iff, add_eq_left] at ys
+      have : x + y = x := by
+        rcases ys with rfl | ys
+        · simp
+        · exact st (x + y) (rt (by simpa using yr)) ys
+      simp only [this]
+      apply (hasFPowerSeriesOnBall_const (e := 0)).hasSum
+      simp only [eball_top, mem_univ] }⟩
 
 中文:
 引理 analyticWithinAt_of_singleton_mem
@@ -61,6 +72,17 @@ lemma analyticWithinAt_of_singleton_mem
   exact ⟨constFormalMultilinearSeries 𝕜 E (f x), .ofReal r,
   { r_le := by simp only [FormalMultilinearSeries.constFormalMultilinearSeries_radius, le_top]
     r_pos := by positivity
+    hasSum := by
+      intro y ys yr
+      simp only [subset_singleton_iff, mem_inter_iff, and_imp] at st
+      simp only [mem_insert_iff, add_eq_left] at ys
+      have : x + y = x := by
+        rcases ys with rfl | ys
+        · simp
+        · exact st (x + y) (rt (by simpa using yr)) ys
+      simp only [this]
+      apply (hasFPowerSeriesOnBall_const (e := 0)).hasSum
+      simp only [eball_top, mem_univ] }⟩
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.constFormalMultilinearSeries_radius, Metric, Metric.mem_nhds_iff.mp, add_eq_left, and_imp, constFormalMultilinearSeries, constFormalMultilinearSeries_radius, hasSum, le_top, mem_insert_iff, mem_inter_iff, mem_nhds, mem_nhdsWithin, mem_nhdsWithin.mp, mem_nhds_iff, ofReal, ot.mem_nhds, r_le, r_pos
 -/
@@ -98,7 +120,16 @@ lemma analyticOn_of_locally_analyticOn
     { r_pos := lt_min (by positivity) fp.r_pos
       r_le := min_le_of_right_le fp.r_le
       hasSum := by
-       
+        intro y ys yr
+        simp only [mem_eball, lt_min_iff, edist_lt_ofReal, dist_zero_right] at yr
+        apply fp.hasSum
+        · simp only [mem_insert_iff, add_eq_left] at ys
+          rcases ys with rfl | ys
+          · simp
+          · simp only [mem_insert_iff, add_eq_left, mem_inter_iff, ys, true_and]
+            apply Or.inr (ru ?_)
+            simp only [mem_ball, dist_self_add_left, yr]
+        · simp only [mem_eball, yr] }⟩
 
 中文:
 引理 analyticOn_of_locally_analyticOn
@@ -112,7 +143,16 @@ lemma analyticOn_of_locally_analyticOn
     { r_pos := lt_min (by positivity) fp.r_pos
       r_le := min_le_of_right_le fp.r_le
       hasSum := by
-       
+        intro y ys yr
+        simp only [mem_eball, lt_min_iff, edist_lt_ofReal, dist_zero_right] at yr
+        apply fp.hasSum
+        · simp only [mem_insert_iff, add_eq_left] at ys
+          rcases ys with rfl | ys
+          · simp
+          · simp only [mem_insert_iff, add_eq_left, mem_inter_iff, ys, true_and]
+            apply Or.inr (ru ?_)
+            simp only [mem_ball, dist_self_add_left, yr]
+        · simp only [mem_eball, yr] }⟩
 
 Depends on / 依赖: Metric, Metric.mem_nhds_iff.mp, add_eq_left, dist_zero_right, edist_lt_ofReal, fp.hasSum, fp.r_le, fp.r_pos, hasSum, lt_min, lt_min_iff, mem_eball, mem_insert_iff, mem_inte, mem_nhds, mem_nhds_iff, min_le_of_right_le, ofReal, ou.mem_nhds, r_le
 -/
@@ -153,7 +193,12 @@ lemma IsOpen.analyticOn_iff_analyticOnNhd
   { r_pos := lt_min (by positivity) fp.r_pos
     r_le := min_le_of_right_le fp.r_le
     hasSum := by
-      intro y
+      intro y ym
+      simp only [mem_eball, lt_min_iff, edist_lt_ofReal, dist_zero_right] at ym
+      refine fp.hasSum ?_ ym.2
+      apply mem_insert_of_mem
+      apply rs
+      simp only [mem_ball, dist_self_add_left, ym.1] }⟩
 
 中文:
 引理 是开集.analyticOn_iff_analyticOnNhd
@@ -167,7 +212,12 @@ lemma IsOpen.analyticOn_iff_analyticOnNhd
   { r_pos := lt_min (by positivity) fp.r_pos
     r_le := min_le_of_right_le fp.r_le
     hasSum := by
-      intro y
+      intro y ym
+      simp only [mem_eball, lt_min_iff, edist_lt_ofReal, dist_zero_right] at ym
+      refine fp.hasSum ?_ ym.2
+      apply mem_insert_of_mem
+      apply rs
+      simp only [mem_ball, dist_self_add_left, ym.1] }⟩
 
 Depends on / 依赖: AnalyticOnNhd, AnalyticOnNhd.analyticOn, Metric, Metric.mem_nhds_iff.mp, analyticOn, dist_self_add_left, dist_zero_right, edist_lt_ofReal, fp.hasSum, fp.r_le, fp.r_pos, hasSum, hs.mem_nhds, lt_min, lt_min_iff, mem_ball, mem_eball, mem_insert_of_mem, mem_nhds, mem_nhds_iff
 -/
@@ -212,7 +262,24 @@ lemma hasFPowerSeriesWithinOnBall_iff_exists_hasFPowerSeriesOnBall
       have e0 := p.hasSum (x := y - x) ?_
       · have e1 := (h.hasSum (y := y - x) ?_ ?_)
         · simp only [add_sub_cancel] at e1
-          exact e
+          exact e1.unique e0
+        · simpa only [add_sub_cancel]
+        · simpa only [mem_eball, edist_zero_right]
+      · simp only [mem_eball, edist_zero_right]
+        exact lt_of_lt_of_le yb h.r_le
+    · refine ⟨h.r_le, h.r_pos, ?_⟩
+      intro y lt
+      simp only [add_sub_cancel_left]
+      apply p.hasSum
+      simp only [mem_eball] at lt ⊢
+      exact lt_of_lt_of_le lt h.r_le
+  · intro ⟨g, hfg, hg⟩
+    refine ⟨hg.r_le, hg.r_pos, ?_⟩
+    intro y ys lt
+    rw [hfg]
+    · exact hg.hasSum lt
+    · refine ⟨ys, ?_⟩
+      simpa only [mem_eball, edist_eq_enorm_sub, add_sub_cancel_left, sub_zero] using lt
 
 中文:
 引理 hasFPowerSeriesWithinOnBall_iff_存在_hasFPowerSeriesOnBall
@@ -226,7 +293,24 @@ lemma hasFPowerSeriesWithinOnBall_iff_exists_hasFPowerSeriesOnBall
       have e0 := p.hasSum (x := y - x) ?_
       · have e1 := (h.hasSum (y := y - x) ?_ ?_)
         · simp only [add_sub_cancel] at e1
-          exact e
+          exact e1.unique e0
+        · simpa only [add_sub_cancel]
+        · simpa only [mem_eball, edist_zero_right]
+      · simp only [mem_eball, edist_zero_right]
+        exact lt_of_lt_of_le yb h.r_le
+    · refine ⟨h.r_le, h.r_pos, ?_⟩
+      intro y lt
+      simp only [add_sub_cancel_left]
+      apply p.hasSum
+      simp only [mem_eball] at lt ⊢
+      exact lt_of_lt_of_le lt h.r_le
+  · intro ⟨g, hfg, hg⟩
+    refine ⟨hg.r_le, hg.r_pos, ?_⟩
+    intro y ys lt
+    rw [hfg]
+    · exact hg.hasSum lt
+    · refine ⟨ys, ?_⟩
+      simpa only [mem_eball, edist_eq_enorm_sub, add_sub_cancel_left, sub_zero] using lt
 
 Depends on / 依赖: add_sub_cancel, add_sub_cancel_left, e1.unique, edist_eq_enorm_sub, edist_zero_right, h.hasSum, h.r_le, h.r_pos, hasSum, lt_of_lt_of_le, mem_eball, p.hasSum, p.sum, r_le, r_pos, unique
 -/
@@ -275,7 +359,16 @@ lemma hasFPowerSeriesWithinAt_iff_exists_hasFPowerSeriesAt
     refine ⟨g, ?_, ⟨r, h⟩⟩
     refine Filter.eventuallyEq_iff_exists_mem.mpr ⟨_, ?_, e⟩
     exact inter_mem_nhdsWithin _ (eball_mem_nhds _ h.r_pos)
-  · intro ⟨g, hfg, ⟨r, hg⟩
+  · intro ⟨g, hfg, ⟨r, hg⟩⟩
+    simp only [eventuallyEq_nhdsWithin_iff, Metric.eventually_nhds_iff] at hfg
+    rcases hfg with ⟨e, e0, hfg⟩
+    refine ⟨min r (.ofReal e), ?_⟩
+    refine hasFPowerSeriesWithinOnBall_iff_exists_hasFPowerSeriesOnBall.mpr ⟨g, ?_, ?_⟩
+    · intro y ⟨ys, xy⟩
+      refine hfg ?_ ys
+      simp only [mem_eball, lt_min_iff, edist_lt_ofReal] at xy
+      exact xy.2
+    · exact hg.mono (lt_min hg.r_pos (by positivity)) (min_le_left _ _)
 
 中文:
 引理 hasFPowerSeriesWithinAt_iff_存在_hasFPowerSeriesAt
@@ -287,7 +380,16 @@ lemma hasFPowerSeriesWithinAt_iff_exists_hasFPowerSeriesAt
     refine ⟨g, ?_, ⟨r, h⟩⟩
     refine Filter.eventuallyEq_iff_exists_mem.mpr ⟨_, ?_, e⟩
     exact inter_mem_nhdsWithin _ (eball_mem_nhds _ h.r_pos)
-  · intro ⟨g, hfg, ⟨r, hg⟩
+  · intro ⟨g, hfg, ⟨r, hg⟩⟩
+    simp only [eventuallyEq_nhdsWithin_iff, Metric.eventually_nhds_iff] at hfg
+    rcases hfg with ⟨e, e0, hfg⟩
+    refine ⟨min r (.ofReal e), ?_⟩
+    refine hasFPowerSeriesWithinOnBall_iff_exists_hasFPowerSeriesOnBall.mpr ⟨g, ?_, ?_⟩
+    · intro y ⟨ys, xy⟩
+      refine hfg ?_ ys
+      simp only [mem_eball, lt_min_iff, edist_lt_ofReal] at xy
+      exact xy.2
+    · exact hg.mono (lt_min hg.r_pos (by positivity)) (min_le_left _ _)
 
 Depends on / 依赖: Filter, Filter.eventuallyEq_iff_exists_mem.mpr, Metric, Metric.eventually_nhds_iff, eball_mem_nhds, eventuallyEq_iff_exists_mem, eventuallyEq_nhdsWithin_iff, eventually_nhds_iff, h.r_pos, hasFPowerSeriesWithinOnBall_iff_exists_hasFPowerSeriesOnBall, hasFPowerSeriesWithinOnBall_iff_exists_hasFPowerSeriesOnBall.mp, hasFPowerSeriesWithinOnBall_iff_exists_hasFPowerSeriesOnBall.mpr, inter_mem_nhdsWithin, ofReal, r_pos
 -/
@@ -352,7 +454,18 @@ lemma analyticWithinAt_iff_exists_analyticAt'
     let g' := Set.piecewise u g f
     refine ⟨g', ?_, ?_, ?_⟩
     · have : x in u inter insert x s := ⟨xu, by simp⟩
-      simpa [g', xu
+      simpa [g', xu, this] using hu this
+    · intro y hy
+      by_cases h'y : y in u
+      · have : y in u inter insert x s := ⟨h'y, hy⟩
+        simpa [g', h'y, this] using hu this
+      · simp [g', h'y]
+    · apply hg.congr
+      filter_upwards [u_open.mem_nhds xu] with y hy using by simp [g', hy]
+  · rintro ⟨g, -, hf, hg⟩
+    exact ⟨g, by filter_upwards [self_mem_nhdsWithin] using hf, hg⟩
+
+alias ⟨AnalyticWithinAt.exists_analyticAt, _⟩ := analyticWithinAt_iff_exists_analyticAt'
 
 中文:
 引理 analyticWithinAt_iff_存在_analyticAt'
@@ -366,7 +479,18 @@ lemma analyticWithinAt_iff_exists_analyticAt'
     let g' := Set.piecewise u g f
     refine ⟨g', ?_, ?_, ?_⟩
     · have : x in u inter insert x s := ⟨xu, by simp⟩
-      simpa [g', xu
+      simpa [g', xu, this] using hu this
+    · intro y hy
+      by_cases h'y : y in u
+      · have : y in u inter insert x s := ⟨h'y, hy⟩
+        simpa [g', h'y, this] using hu this
+      · simp [g', h'y]
+    · apply hg.congr
+      filter_upwards [u_open.mem_nhds xu] with y hy using by simp [g', hy]
+  · rintro ⟨g, -, hf, hg⟩
+    exact ⟨g, by filter_upwards [self_mem_nhdsWithin] using hf, hg⟩
+
+alias ⟨AnalyticWithinAt.exists_analyticAt, _⟩ := analyticWithinAt_iff_exists_analyticAt'
 
 Depends on / 依赖: Set.piecewise, analyticWithinAt_iff_exists_analyticAt, classical, filter_upwards, hg.congr, insert, mem_nhds, mem_nhdsWithin, piecewise, u_open, u_open.mem_nhds
 -/
@@ -406,7 +530,8 @@ lemma AnalyticWithinAt.exists_mem_nhdsWithin_analyticOn
   refine ⟨u, ?_, ?_⟩
   · exact inter_mem_nhdsWithin _ ((isOpen_analyticAt 𝕜 g).mem_nhds hg)
   · intro y hy
-    have : AnalyticWit
+    have : AnalyticWithinAt 𝕜 g u y := hy.2.analyticWithinAt
+    exact this.congr (h'g.mono (inter_subset_left)) (h'g (inter_subset_left hy))
 
 中文:
 引理 AnalyticWithinAt.存在_mem_nhdsWithin_analyticOn
@@ -417,7 +542,8 @@ lemma AnalyticWithinAt.exists_mem_nhdsWithin_analyticOn
   refine ⟨u, ?_, ?_⟩
   · exact inter_mem_nhdsWithin _ ((isOpen_analyticAt 𝕜 g).mem_nhds hg)
   · intro y hy
-    have : AnalyticWit
+    have : AnalyticWithinAt 𝕜 g u y := hy.2.analyticWithinAt
+    exact this.congr (h'g.mono (inter_subset_left)) (h'g (inter_subset_left hy))
 
 Depends on / 依赖: AnalyticAt, AnalyticWithinAt, analyticWithinAt, exists_analyticAt, g.mono, h.exists_analyticAt, insert, inter_mem_nhdsWithin, inter_subset_left, isOpen_analyticAt, mem_nhds, this.congr
 -/
@@ -443,7 +569,7 @@ theorem AnalyticWithinAt.eventually_analyticWithinAt
   simp only [Filter.EventuallyEq, eventually_nhdsWithin_iff] at hfg ⊢
   filter_upwards [hfg.eventually_nhds, hga.eventually_analyticAt] with z hfgz hgaz hz
   refine analyticWithinAt_iff_exists_analyticAt.mpr ⟨g, ?_, hgaz⟩
-exac
+exact (eventually_nhdsWithin_iff.mpr hfgz).filter_mono nhdsWithin_mono _ (by simp [hz])
 
 中文:
 定理 AnalyticWithinAt.eventually_analyticWithinAt
@@ -452,7 +578,7 @@ exac
   simp only [Filter.EventuallyEq, eventually_nhdsWithin_iff] at hfg ⊢
   filter_upwards [hfg.eventually_nhds, hga.eventually_analyticAt] with z hfgz hgaz hz
   refine analyticWithinAt_iff_exists_analyticAt.mpr ⟨g, ?_, hgaz⟩
-exac
+exact (eventually_nhdsWithin_iff.mpr hfgz).filter_mono nhdsWithin_mono _ (by simp [hz])
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq, analyticWithinAt_iff_exists_analyticAt, analyticWithinAt_iff_exists_analyticAt.mp, analyticWithinAt_iff_exists_analyticAt.mpr, eventually_analyticAt, eventually_nhds, eventually_nhdsWithin_iff, eventually_nhdsWithin_iff.mpr, filter_mono, filter_upwards, hfg.eventually_nhds, hga.eventually_analyticAt, nhdsWithin_mono
 -/

@@ -439,7 +439,7 @@ definition equivSubZero
       zero := fun _ _ w => h.zero _ _ w
       comm := fun i => by simpa [sub_eq_iff_eq_add] using h.comm i }
   left_inv := by cat_disch
-  ri
+  right_inv := by cat_disch
 
 中文:
 定义 equivSubZero
@@ -452,7 +452,7 @@ definition equivSubZero
       zero := fun _ _ w => h.zero _ _ w
       comm := fun i => by simpa [sub_eq_iff_eq_add] using h.comm i }
   left_inv := by cat_disch
-  ri
+  right_inv := by cat_disch
 
 Depends on / 依赖: cat_disch, h.comm, h.hom, h.zero, invFun, left_inv, right_inv, sub_eq_iff_eq_add
 -/
@@ -769,7 +769,7 @@ definition nullHomotopicMap
       simp only [prevD, AddMonoidHom.mk'_apply, assoc, d_comp_d, comp_zero]
     have eq2 : C.d i j ≫ dNext j hom = 0 := by
       simp only [dNext, AddMonoidHom.mk'_apply, d_comp_d_assoc, zero_comp]
-    rw 
+    rw [dNext_eq hom hij]; rw [prevD_eq hom hij]; rw [Preadditive.comp_add]; rw [Preadditive.add_comp]; rw [eq1]; rw [eq2]; rw [add_zero]; rw [zero_add]; rw [assoc]
 
 中文:
 定义 nullHomotopicMap
@@ -780,7 +780,7 @@ definition nullHomotopicMap
       simp only [prevD, AddMonoidHom.mk'_apply, assoc, d_comp_d, comp_zero]
     have eq2 : C.d i j ≫ dNext j hom = 0 := by
       simp only [dNext, AddMonoidHom.mk'_apply, d_comp_d_assoc, zero_comp]
-    rw 
+    rw [dNext_eq hom hij]; rw [prevD_eq hom hij]; rw [Preadditive.comp_add]; rw [Preadditive.add_comp]; rw [eq1]; rw [eq2]; rw [add_zero]; rw [zero_add]; rw [assoc]
 -/
 def nullHomotopicMap (hom : forall i j, C.X i ⟶ D.X j) : C ⟶ D where
   f i := dNext i hom + prevD i hom
@@ -1562,7 +1562,16 @@ definition mkInductive
     simp only [add_zero]
     refine (mkInductiveAux₂ e zero comm_zero one comm_one succ i).2.2.trans ?_
     congr
- 
+    · cases i
+      · dsimp [fromNext, mkInductiveAux₂]
+      · dsimp [fromNext]
+        simp only [ChainComplex.next_nat_succ, dite_true]
+        rw [mkInductiveAux₃ e zero comm_zero one comm_one succ]
+        dsimp [xNextIso]
+        rw [id_comp]
+    · dsimp [toPrev]
+      rw [dif_pos (by simp only [ChainComplex.prev])]
+      simp [xPrevIso, comp_id]
 
 中文:
 定义 mkInductive
@@ -1576,7 +1585,16 @@ definition mkInductive
     simp only [add_zero]
     refine (mkInductiveAux₂ e zero comm_zero one comm_one succ i).2.2.trans ?_
     congr
- 
+    · cases i
+      · dsimp [fromNext, mkInductiveAux₂]
+      · dsimp [fromNext]
+        simp only [ChainComplex.next_nat_succ, dite_true]
+        rw [mkInductiveAux₃ e zero comm_zero one comm_one succ]
+        dsimp [xNextIso]
+        rw [id_comp]
+    · dsimp [toPrev]
+      rw [dif_pos (by simp only [ChainComplex.prev])]
+      simp [xPrevIso, comp_id]
 
 Depends on / 依赖: ChainComplex, ChainComplex.next_nat_succ, Q.xPrevIso, add_zero, comm_one, comm_zero, dif_neg, dif_pos, dite_true, fromNext, id_comp, next_nat_succ, toPrev, xNextIso, xPrevIso
 -/
@@ -1859,7 +1877,18 @@ definition mkCoinductive
     dsimp
     simp only [add_zero]
     rw [add_comm]
-    refine (mkCoinductiveAux₂ e zero comm_zero one comm_one succ i).2.
+    refine (mkCoinductiveAux₂ e zero comm_zero one comm_one succ i).2.2.trans ?_
+    congr
+    · cases i
+      · dsimp [toPrev, mkCoinductiveAux₂]
+      · dsimp [toPrev]
+        simp only [CochainComplex.prev_nat_succ, dite_true]
+        rw [mkCoinductiveAux₃ e zero comm_zero one comm_one succ]
+        dsimp [xPrevIso]
+        rw [comp_id]
+    · dsimp [fromNext]
+      rw [dif_pos (by simp only [CochainComplex.next])]
+      simp [xNextIso, id_comp]
 
 中文:
 定义 mkCoinductive
@@ -1872,7 +1901,18 @@ definition mkCoinductive
     dsimp
     simp only [add_zero]
     rw [add_comm]
-    refine (mkCoinductiveAux₂ e zero comm_zero one comm_one succ i).2.
+    refine (mkCoinductiveAux₂ e zero comm_zero one comm_one succ i).2.2.trans ?_
+    congr
+    · cases i
+      · dsimp [toPrev, mkCoinductiveAux₂]
+      · dsimp [toPrev]
+        simp only [CochainComplex.prev_nat_succ, dite_true]
+        rw [mkCoinductiveAux₃ e zero comm_zero one comm_one succ]
+        dsimp [xPrevIso]
+        rw [comp_id]
+    · dsimp [fromNext]
+      rw [dif_pos (by simp only [CochainComplex.next])]
+      simp [xNextIso, id_comp]
 
 Depends on / 依赖: CochainComplex, CochainComplex.prev_nat_succ, P.xNextIso, add_comm, add_zero, comm_one, comm_zero, comp_id, dif_neg, dite_true, prev_nat_succ, toPrev, xNextIso, xPrevIso
 -/
@@ -2238,7 +2278,9 @@ instance :
     exact g.homotopyHomInvId.compLeftId f
   of_precomp _ g := by
     rintro ⟨f, rfl⟩ ⟨e, he⟩
-    refine (f.symm.trans
+    refine (f.symm.trans e).homotopyEquivalences_hom.of_homotopy ?_
+    simp only [HomotopyEquiv.trans_hom, HomotopyEquiv.symm_hom, he, ← Category.assoc]
+    exact f.homotopyInvHomId.compRightId g
 
 中文:
 实例 :
@@ -2250,7 +2292,9 @@ instance :
     exact g.homotopyHomInvId.compLeftId f
   of_precomp _ g := by
     rintro ⟨f, rfl⟩ ⟨e, he⟩
-    refine (f.symm.trans
+    refine (f.symm.trans e).homotopyEquivalences_hom.of_homotopy ?_
+    simp only [HomotopyEquiv.trans_hom, HomotopyEquiv.symm_hom, he, ← Category.assoc]
+    exact f.homotopyInvHomId.compRightId g
 
 Depends on / 依赖: Category, Category.assoc, HomotopyEquiv, HomotopyEquiv.symm_hom, HomotopyEquiv.trans_hom, compLeftId, compRightId, e.trans, f.homotopyInvHomId.compRightId, f.symm.trans, g.homotopyHomInvId.compLeftId, g.symm, homotopyEquivalences_hom, homotopyEquivalences_hom.of_homotopy, homotopyHomInvId, homotopyInvHomId, of_homotopy, of_precomp, symm_hom, trans_hom
 -/
@@ -2347,7 +2391,8 @@ definition Functor.mapHomotopyEquiv
     rw [← (F.mapHomologicalComplex c).map_comp]; rw [← (F.mapHomologicalComplex c).map_id]
     exact F.mapHomotopy h.homotopyHomInvId
   homotopyInvHomId := by
-    rw [← (F.mapHomologicalComp
+    rw [← (F.mapHomologicalComplex c).map_comp]; rw [← (F.mapHomologicalComplex c).map_id]
+    exact F.mapHomotopy h.homotopyInvHomId
 
 中文:
 定义 函子.mapHomotopyEquiv
@@ -2358,7 +2403,8 @@ definition Functor.mapHomotopyEquiv
     rw [← (F.mapHomologicalComplex c).map_comp]; rw [← (F.mapHomologicalComplex c).map_id]
     exact F.mapHomotopy h.homotopyHomInvId
   homotopyInvHomId := by
-    rw [← (F.mapHomologicalComp
+    rw [← (F.mapHomologicalComplex c).map_comp]; rw [← (F.mapHomologicalComplex c).map_id]
+    exact F.mapHomotopy h.homotopyInvHomId
 
 Depends on / 依赖: F.mapHomologicalComplex, h.hom, mapHomologicalComplex
 -/
@@ -2400,7 +2446,33 @@ definition Homotopy.toShortComplex
     then K.d _ _ ≫ ho.hom (c.next (c.next i)) _
     else f.f _ - g.f _ - ho.hom _ i ≫ L.d _ _
   h₀_f := by
-    s
+    split_ifs with h
+    · dsimp
+      simp only [assoc, d_comp_d, comp_zero]
+    · dsimp
+      rw [L.shape _ _ h]; rw [comp_zero]
+  g_h₃ := by
+    split_ifs with h
+    · simp
+    · dsimp
+      rw [K.shape _ _ h]; rw [zero_comp]
+  comm₁ := by
+    dsimp
+    split_ifs with h
+    · rw [ho.comm (c.prev i)]
+      dsimp [dFrom, dTo, fromNext, toPrev]
+      rw [congr_arg (fun j => d K (c.prev i) j ≫ ho.hom j (c.prev i)) (c.next_eq' h)]
+    · abel
+  comm₂ := ho.comm i
+  comm₃ := by
+    dsimp
+    split_ifs with h
+    · rw [ho.comm (c.next i)]
+      dsimp [dFrom, dTo, fromNext, toPrev]
+      rw [congr_arg (fun j => ho.hom (c.next i) j ≫ L.d j (c.next i)) (c.prev_eq' h)]
+    · abel
+
+omit [DecidableRel c.Rel]
 
 中文:
 定义 同伦.toShortComplex
@@ -2415,7 +2487,33 @@ definition Homotopy.toShortComplex
     then K.d _ _ ≫ ho.hom (c.next (c.next i)) _
     else f.f _ - g.f _ - ho.hom _ i ≫ L.d _ _
   h₀_f := by
-    s
+    split_ifs with h
+    · dsimp
+      simp only [assoc, d_comp_d, comp_zero]
+    · dsimp
+      rw [L.shape _ _ h]; rw [comp_zero]
+  g_h₃ := by
+    split_ifs with h
+    · simp
+    · dsimp
+      rw [K.shape _ _ h]; rw [zero_comp]
+  comm₁ := by
+    dsimp
+    split_ifs with h
+    · rw [ho.comm (c.prev i)]
+      dsimp [dFrom, dTo, fromNext, toPrev]
+      rw [congr_arg (fun j => d K (c.prev i) j ≫ ho.hom j (c.prev i)) (c.next_eq' h)]
+    · abel
+  comm₂ := ho.comm i
+  comm₃ := by
+    dsimp
+    split_ifs with h
+    · rw [ho.comm (c.next i)]
+      dsimp [dFrom, dTo, fromNext, toPrev]
+      rw [congr_arg (fun j => ho.hom (c.next i) j ≫ L.d j (c.next i)) (c.prev_eq' h)]
+    · abel
+
+omit [DecidableRel c.Rel]
 
 Depends on / 依赖: K.shape, L.shape, c.Rel, c.next, c.prev, comp_zero, d_comp_d, ho.comm, ho.hom, split_ifs, zero_comp
 -/

@@ -106,7 +106,34 @@ lemma indicator_biUnion_eq_sum_powerset
     symm
     apply sum_eq_zero
     simp only [Int.reduceNeg, neg_eq_zero, mem_filter, mem_powerset, and_imp]
-    intro t h
+    intro t hts ht
+    rw [Set.indicator_of_notMem]
+    · simp
+    · contrapose ha
+      simp only [Set.mem_iInter] at ha
+      rcases ht with ⟨i, hi⟩
+      simp only [Set.mem_iUnion, exists_prop]
+      exact ⟨i, hts hi, ha _ hi⟩
+  rw [← sub_eq_zero]
+  calc
+    Set.indicator (⋃ i in s, S i) f a - ∑ t in s.powerset with t.Nonempty,
+      (-1) ^ (#t + 1) • Set.indicator (⋂ i in t.1, S i) f a
+    _ = ∑ t in s.powerset with t.Nonempty, (-1) ^ #t • Set.indicator (⋂ i in t, S i) f a +
+        ∑ t in s.powerset with ¬ t.Nonempty, (-1) ^ #t • Set.indicator (⋂ i in t, S i) f a := by
+      simp [sub_eq_neg_add, ← sum_neg_distrib, filter_eq', pow_succ, ha]
+    _ = ∑ t in s.powerset, (-1) ^ #t • Set.indicator (⋂ i in t, S i) f a := by
+      rw [sum_filter_add_sum_filter_not]
+    _ = (∏ i in s, (1 - Set.indicator (S i) 1 a : Int)) • f a := by
+      simp only [Int.reduceNeg, prod_sub, prod_const_one, mul_one, sum_smul]
+      congr! 1 with t
+      simp only [prod_const_one, prod_indicator_apply]
+      simp [Set.indicator]
+    _ = 0 := by
+      have : Set.indicator (⋃ i in s, S i) 1 a = (1 : Int) := Set.indicator_of_mem ha 1
+      rw [← this]; rw [prod_indicator_biUnion_sub_indicator]; rw [zero_smul]
+      simp only [Set.mem_iUnion, exists_prop] at ha
+      rcases ha with ⟨i, hi, -⟩
+      exact ⟨i, hi⟩
 
 中文:
 引理 indicator_biUnion_eq_sum_powerset
@@ -119,7 +146,34 @@ lemma indicator_biUnion_eq_sum_powerset
     symm
     apply sum_eq_zero
     simp only [Int.reduceNeg, neg_eq_zero, mem_filter, mem_powerset, and_imp]
-    intro t h
+    intro t hts ht
+    rw [Set.indicator_of_notMem]
+    · simp
+    · contrapose ha
+      simp only [Set.mem_iInter] at ha
+      rcases ht with ⟨i, hi⟩
+      simp only [Set.mem_iUnion, exists_prop]
+      exact ⟨i, hts hi, ha _ hi⟩
+  rw [← sub_eq_zero]
+  calc
+    Set.indicator (⋃ i in s, S i) f a - ∑ t in s.powerset with t.Nonempty,
+      (-1) ^ (#t + 1) • Set.indicator (⋂ i in t.1, S i) f a
+    _ = ∑ t in s.powerset with t.Nonempty, (-1) ^ #t • Set.indicator (⋂ i in t, S i) f a +
+        ∑ t in s.powerset with ¬ t.Nonempty, (-1) ^ #t • Set.indicator (⋂ i in t, S i) f a := by
+      simp [sub_eq_neg_add, ← sum_neg_distrib, filter_eq', pow_succ, ha]
+    _ = ∑ t in s.powerset, (-1) ^ #t • Set.indicator (⋂ i in t, S i) f a := by
+      rw [sum_filter_add_sum_filter_not]
+    _ = (∏ i in s, (1 - Set.indicator (S i) 1 a : Int)) • f a := by
+      simp only [Int.reduceNeg, prod_sub, prod_const_one, mul_one, sum_smul]
+      congr! 1 with t
+      simp only [prod_const_one, prod_indicator_apply]
+      simp [Set.indicator]
+    _ = 0 := by
+      have : Set.indicator (⋃ i in s, S i) 1 a = (1 : Int) := Set.indicator_of_mem ha 1
+      rw [← this]; rw [prod_indicator_biUnion_sub_indicator]; rw [zero_smul]
+      simp only [Set.mem_iUnion, exists_prop] at ha
+      rcases ha with ⟨i, hi, -⟩
+      exact ⟨i, hi⟩
 
 Depends on / 依赖: Int.reduceNeg, Set.indicator, Set.indicator_of_notMem, Set.mem_iInter, Set.mem_iUnion, and_imp, classical, contrapose, exists_prop, indicator, indicator_of_notMem, mem_filter, mem_iInter, mem_iUnion, mem_powerset, mul_neg, mul_one, neg_eq_zero, neg_smul, not_false_eq_true
 -/
@@ -203,7 +257,29 @@ theorem inclusion_exclusion_sum_biUnion
       (-1) ^ (#t.1 + 1) • ∑ a in t.1.inf' (mem_filter.1 t.2).2 S, f a
       = ∑ t : s.powerset.filter (·.Nonempty),
           (-1) ^ #t.1 • ∑ a in t.1.inf' (mem_filter.1 t.2).2 S, f a +
-   
+          ∑ t in s.powerset.filter (¬ ·.Nonempty), (-1) ^ #t • ∑ a in s.biUnion S, f a := by
+      simp [sub_eq_neg_add, ← sum_neg_distrib, filter_eq', pow_succ]
+    _ = ∑ t in s.powerset, (-1) ^ #t •
+          if ht : t.Nonempty then ∑ a in t.inf' ht S, f a else ∑ a in s.biUnion S, f a := by
+      rw [← sum_attach (filter ..)]; simp [sum_dite]
+    _ = ∑ a in s.biUnion S, (∏ i in s, (1 - Set.indicator (S i) 1 a : Int)) • f a := by
+      simp only [Int.reduceNeg, prod_sub, sum_comm (s := s.biUnion S), sum_smul, mul_assoc]
+      congr! with t
+      split_ifs with ht
+      · obtain ⟨i, hi⟩ := ht
+        simp only [prod_const_one, prod_indicator_apply]
+        simp only [smul_sum, Set.indicator, Set.mem_iInter, mem_coe, Pi.one_apply, mul_ite, mul_one,
+          mul_zero, ite_smul, zero_smul, sum_ite, not_forall, sum_const_zero, add_zero]
+        congr
+        aesop
+      · obtain rfl := not_nonempty_iff_eq_empty.1 ht
+        simp
+    _ = ∑ a in s.biUnion S, (∏ i in s,
+          (Set.indicator (s.biUnion S) 1 a - Set.indicator (S i) 1 a) : Int) • f a := by
+      congr! with t; rw [Set.indicator_of_mem ‹_›, Pi.one_apply]
+    _ = 0 := by
+      obtain rfl | hs := s.eq_empty_or_nonempty <;>
+        simp [-coe_biUnion, prod_indicator_biUnion_finset_sub_indicator, *]
 
 中文:
 定理 inclusion_exclusion_sum_biUnion
@@ -216,7 +292,29 @@ theorem inclusion_exclusion_sum_biUnion
       (-1) ^ (#t.1 + 1) • ∑ a in t.1.inf' (mem_filter.1 t.2).2 S, f a
       = ∑ t : s.powerset.filter (·.Nonempty),
           (-1) ^ #t.1 • ∑ a in t.1.inf' (mem_filter.1 t.2).2 S, f a +
-   
+          ∑ t in s.powerset.filter (¬ ·.Nonempty), (-1) ^ #t • ∑ a in s.biUnion S, f a := by
+      simp [sub_eq_neg_add, ← sum_neg_distrib, filter_eq', pow_succ]
+    _ = ∑ t in s.powerset, (-1) ^ #t •
+          if ht : t.Nonempty then ∑ a in t.inf' ht S, f a else ∑ a in s.biUnion S, f a := by
+      rw [← sum_attach (filter ..)]; simp [sum_dite]
+    _ = ∑ a in s.biUnion S, (∏ i in s, (1 - Set.indicator (S i) 1 a : Int)) • f a := by
+      simp only [Int.reduceNeg, prod_sub, sum_comm (s := s.biUnion S), sum_smul, mul_assoc]
+      congr! with t
+      split_ifs with ht
+      · obtain ⟨i, hi⟩ := ht
+        simp only [prod_const_one, prod_indicator_apply]
+        simp only [smul_sum, Set.indicator, Set.mem_iInter, mem_coe, Pi.one_apply, mul_ite, mul_one,
+          mul_zero, ite_smul, zero_smul, sum_ite, not_forall, sum_const_zero, add_zero]
+        congr
+        aesop
+      · obtain rfl := not_nonempty_iff_eq_empty.1 ht
+        simp
+    _ = ∑ a in s.biUnion S, (∏ i in s,
+          (Set.indicator (s.biUnion S) 1 a - Set.indicator (S i) 1 a) : Int) • f a := by
+      congr! with t; rw [Set.indicator_of_mem ‹_›, Pi.one_apply]
+    _ = 0 := by
+      obtain rfl | hs := s.eq_empty_or_nonempty <;>
+        simp [-coe_biUnion, prod_indicator_biUnion_finset_sub_indicator, *]
 
 Depends on / 依赖: Nonempty, biUnion, classical, filter, filter_eq, mem_filter, pow_succ, powerset, s.biUnion, s.powerset, s.powerset.filter, sub_eq_neg_add, sub_eq_zero, sum_neg_distrib, t.Nonempty, t.inf
 -/
@@ -291,7 +389,10 @@ theorem inclusion_exclusion_sum_inf_compl
       = ∑ a, f a - ∑ a in s.biUnion S, f a := by
       rw [← Finset.compl_sup]; rw [sup_eq_biUnion]; rw [eq_sub_iff_add_eq]; rw [sum_compl_add_sum]
     _ = ∑ t in s.powerset.filter (¬ ·.Nonempty), (-1) ^ #t • ∑ a in t.inf S, f a
-          +
+          + ∑ t in s.powerset.filter (·.Nonempty), (-1) ^ #t • ∑ a in t.inf S, f a := by
+      simp [← sum_attach (filter ..), inclusion_exclusion_sum_biUnion, inf'_eq_inf, filter_eq',
+        sub_eq_add_neg, pow_succ]
+    _ = ∑ t in s.powerset, (-1) ^ #t • ∑ a in t.inf S, f a := sum_filter_not_add_sum_filter ..
 
 中文:
 定理 inclusion_exclusion_sum_inf_compl
@@ -303,7 +404,10 @@ theorem inclusion_exclusion_sum_inf_compl
       = ∑ a, f a - ∑ a in s.biUnion S, f a := by
       rw [← Finset.compl_sup]; rw [sup_eq_biUnion]; rw [eq_sub_iff_add_eq]; rw [sum_compl_add_sum]
     _ = ∑ t in s.powerset.filter (¬ ·.Nonempty), (-1) ^ #t • ∑ a in t.inf S, f a
-          +
+          + ∑ t in s.powerset.filter (·.Nonempty), (-1) ^ #t • ∑ a in t.inf S, f a := by
+      simp [← sum_attach (filter ..), inclusion_exclusion_sum_biUnion, inf'_eq_inf, filter_eq',
+        sub_eq_add_neg, pow_succ]
+    _ = ∑ t in s.powerset, (-1) ^ #t • ∑ a in t.inf S, f a := sum_filter_not_add_sum_filter ..
 
 Depends on / 依赖: Finset, Finset.compl_sup, Nonempty, _eq_inf, biUnion, classical, compl_sup, eq_sub_iff_add_eq, filter, filter_eq, inclusion_exclusion_sum_biUnion, pow_succ, powerset, s.biUnion, s.inf, s.powerset, s.powerset.filter, sub_eq_add_neg, sum_attach, sum_compl_add_sum
 -/

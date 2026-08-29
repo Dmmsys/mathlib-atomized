@@ -396,7 +396,9 @@ theorem Ioo_subset_Ioo_iff
       exact lt_irrefl _ (h ⟨h', ab⟩).1
     · have ab := xa.trans (h ⟨xa, xb⟩).2
       exact lt_irrefl _ (h ⟨ab, h'⟩).2,
-    fun ⟨h₁, h₂⟩ => Ioo_sub
+    fun ⟨h₁, h₂⟩ => Ioo_subset_Ioo h₁ h₂⟩
+
+@[to_dual]
 
 中文:
 定理 Ioo_subset_Ioo_iff
@@ -408,7 +410,9 @@ theorem Ioo_subset_Ioo_iff
       exact lt_irrefl _ (h ⟨h', ab⟩).1
     · have ab := xa.trans (h ⟨xa, xb⟩).2
       exact lt_irrefl _ (h ⟨ab, h'⟩).2,
-    fun ⟨h₁, h₂⟩ => Ioo_sub
+    fun ⟨h₁, h₂⟩ => Ioo_subset_Ioo h₁ h₂⟩
+
+@[to_dual]
 
 Depends on / 依赖: Ioo_subset_Ioo, exists_between, le_of_not_gt, lt_irrefl, xa.trans
 -/

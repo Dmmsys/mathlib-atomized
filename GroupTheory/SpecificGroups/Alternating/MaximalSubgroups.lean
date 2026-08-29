@@ -164,7 +164,28 @@ theorem stabilizer.surjective_toPerm
     rw [swap_isSwap_iff]; aesop
   obtain ⟨k, hk_swap, hk_support⟩ := this
   have hks : k • s = s := by
-    rw [← mem_stabilizer_iff]; rw [mem_stabilizer
+    rw [← mem_stabilizer_iff]; rw [mem_stabilizer_set_iff_smul_set_subset s.toFinite]
+    intro _
+    simp only [mem_smul_set]
+    rintro ⟨x, hx, rfl⟩
+    convert! hx
+    rw [Perm.smul_def]; rw [← Perm.notMem_support]
+    exact (Set.disjoint_left.mp hk_support) hx
+  intro g
+  rcases Int.units_eq_one_or (sign g) with hsg | hsg
+  · use! Equiv.Perm.ofSubtype g
+    · simp [mem_alternatingGroup, hsg]
+    · rw [mem_stabilizer_iff, Submonoid.mk_smul]
+      exact ofSubtype_mem_stabilizer g
+    · aesop
+  · use! Equiv.Perm.ofSubtype g * k
+    · simp [mem_alternatingGroup, hk_swap.sign_eq, hsg]
+    · rw [mem_stabilizer_iff, Submonoid.mk_smul, mul_smul, hks, ofSubtype_mem_stabilizer]
+    · ext x
+      suffices k x = x by simp [this]
+      rw [Set.disjoint_left] at hk_support
+      rw [← notMem_support]
+      exact hk_support x.prop
 
 中文:
 定理 stabilizer.surjective_toPerm
@@ -177,7 +198,28 @@ theorem stabilizer.surjective_toPerm
     rw [swap_isSwap_iff]; aesop
   obtain ⟨k, hk_swap, hk_support⟩ := this
   have hks : k • s = s := by
-    rw [← mem_stabilizer_iff]; rw [mem_stabilizer
+    rw [← mem_stabilizer_iff]; rw [mem_stabilizer_set_iff_smul_set_subset s.toFinite]
+    intro _
+    simp only [mem_smul_set]
+    rintro ⟨x, hx, rfl⟩
+    convert! hx
+    rw [Perm.smul_def]; rw [← Perm.notMem_support]
+    exact (Set.disjoint_left.mp hk_support) hx
+  intro g
+  rcases Int.units_eq_one_or (sign g) with hsg | hsg
+  · use! Equiv.Perm.ofSubtype g
+    · simp [mem_alternatingGroup, hsg]
+    · rw [mem_stabilizer_iff, Submonoid.mk_smul]
+      exact ofSubtype_mem_stabilizer g
+    · aesop
+  · use! Equiv.Perm.ofSubtype g * k
+    · simp [mem_alternatingGroup, hk_swap.sign_eq, hsg]
+    · rw [mem_stabilizer_iff, Submonoid.mk_smul, mul_smul, hks, ofSubtype_mem_stabilizer]
+    · ext x
+      suffices k x = x by simp [this]
+      rw [Set.disjoint_left] at hk_support
+      rw [← notMem_support]
+      exact hk_support x.prop
 -/
 theorem stabilizer.surjective_toPerm {s : Set α} (hs : sᶜ.Nontrivial) :
     Function.Surjective (toPerm : stabilizer (alternatingGroup α) s -> Perm s) := by
@@ -320,7 +362,18 @@ theorem exists_mem_stabilizer_smul_eq
     replace ht := Set.sdiff_nonempty_of_ncard_lt_ncard ht
     obtain ⟨c, hct, hc⟩ := ht
     simp only [mem_insert_iff, not_or] at hc
-    refine ⟨⟨swap c a * swap a b, by si
+    refine ⟨⟨swap c a * swap a b, by simp [hab, hc.1]⟩, ?_, ?_⟩
+    · simp only [mem_stabilizer_set' t.toFinite, Subgroup.mk_smul, Perm.smul_def, coe_mul]
+      grind
+    · simp only [Subgroup.mk_smul, Perm.smul_def, coe_mul]
+      grind
+  · have := ncard_add_ncard_compl t
+    obtain ⟨c, d, hc, hd, hcd⟩ := (one_lt_ncard_iff tᶜ.toFinite).mp (by grind)
+    refine ⟨⟨swap a b * swap c d, by simp [hab, hcd]⟩, ?_, ?_⟩
+    · simp only [mem_stabilizer_set' t.toFinite, Subgroup.mk_smul, Perm.smul_def, coe_mul]
+      grind
+    · simp only [Subgroup.smul_def, Perm.smul_def, Perm.coe_mul]
+      grind
 
 中文:
 定理 存在_mem_stabilizer_smul_eq
@@ -335,7 +388,18 @@ theorem exists_mem_stabilizer_smul_eq
     replace ht := Set.sdiff_nonempty_of_ncard_lt_ncard ht
     obtain ⟨c, hct, hc⟩ := ht
     simp only [mem_insert_iff, not_or] at hc
-    refine ⟨⟨swap c a * swap a b, by si
+    refine ⟨⟨swap c a * swap a b, by simp [hab, hc.1]⟩, ?_, ?_⟩
+    · simp only [mem_stabilizer_set' t.toFinite, Subgroup.mk_smul, Perm.smul_def, coe_mul]
+      grind
+    · simp only [Subgroup.mk_smul, Perm.smul_def, coe_mul]
+      grind
+  · have := ncard_add_ncard_compl t
+    obtain ⟨c, d, hc, hd, hcd⟩ := (one_lt_ncard_iff tᶜ.toFinite).mp (by grind)
+    refine ⟨⟨swap a b * swap c d, by simp [hab, hcd]⟩, ?_, ?_⟩
+    · simp only [mem_stabilizer_set' t.toFinite, Subgroup.mk_smul, Perm.smul_def, coe_mul]
+      grind
+    · simp only [Subgroup.smul_def, Perm.smul_def, Perm.coe_mul]
+      grind
 
 Depends on / 依赖: Perm.smul_def, Set.ncard_pair, Set.sdiff_nonempty_of_ncard_lt_ncard, Subgroup, Subgroup.mk_smul, coe_mul, mem_insert_iff, mem_stabilizer_set, mk_smul, ncard_add_ncard_compl, ncard_pair, not_or, replace, sdiff_nonempty_of_ncard_lt_ncard, smul_def, t.ncard, t.toFinite, toFinite
 -/
@@ -373,7 +437,15 @@ theorem subgroup_eq_top_of_isPreprimitive
   obtain ⟨g, hg, hg3⟩ := exists_mem_stabilizer_isThreeCycle s h4
   rw [eq_top_iff]; rw [← Subgroup.map_subtype_le_map_subtype]; rw [← MonoidHom.range_eq_map]; rw [Subgroup.range_subtype]
   -- By Jordan's theorem, it suffices to prove that G acts primitively
-  apply alternatingGroup_le_of_isPrepri
+  apply alternatingGroup_le_of_isPreprimitive_of_isThreeCycle_mem _ hg3
+  · use ⟨g, hg3.mem_alternatingGroup⟩
+    simpa only [SetLike.mem_coe, Subgroup.subtype_apply, and_true] using hG hg
+  · let φ := (alternatingGroup α).subtype.subgroupMap G
+    let f : α ->ₑ[φ] α := {
+      toFun := id
+      map_smul' _ _ := rfl }
+    rwa [← isPreprimitive_congr (f := f) ((alternatingGroup α).subtype.subgroupMap_surjective G)
+      Function.bijective_id]
 
 中文:
 定理 subgroup_eq_top_of_isPreprimitive
@@ -382,7 +454,15 @@ theorem subgroup_eq_top_of_isPreprimitive
   obtain ⟨g, hg, hg3⟩ := exists_mem_stabilizer_isThreeCycle s h4
   rw [eq_top_iff]; rw [← Subgroup.map_subtype_le_map_subtype]; rw [← MonoidHom.range_eq_map]; rw [Subgroup.range_subtype]
   -- By Jordan's theorem, it suffices to prove that G acts primitively
-  apply alternatingGroup_le_of_isPrepri
+  apply alternatingGroup_le_of_isPreprimitive_of_isThreeCycle_mem _ hg3
+  · use ⟨g, hg3.mem_alternatingGroup⟩
+    simpa only [SetLike.mem_coe, Subgroup.subtype_apply, and_true] using hG hg
+  · let φ := (alternatingGroup α).subtype.subgroupMap G
+    let f : α ->ₑ[φ] α := {
+      toFun := id
+      map_smul' _ _ := rfl }
+    rwa [← isPreprimitive_congr (f := f) ((alternatingGroup α).subtype.subgroupMap_surjective G)
+      Function.bijective_id]
 
 Depends on / 依赖: MonoidHom, MonoidHom.range_eq_map, Subgroup, Subgroup.map_subtype_le_map_subtype, Subgroup.range_subtype, eq_top_iff, exists_mem_stabilizer_isThreeCycle, map_subtype_le_map_subtype, range_eq_map, range_subtype
 -/
@@ -461,7 +541,56 @@ theorem isCoatom_stabilizer_of_ncard_lt_ncard_compl
   have hα : 4 < Nat.card α := by
     rw [← Set.one_lt_ncard_iff_nontrivial] at h0
     grind
-  -- To prove that `stabilizer (alternatingGroup α
+  -- To prove that `stabilizer (alternatingGroup α) s` is maximal,
+  -- we need to prove that it is `≠ ⊤`
+  use stabilizer_ne_top h0.nonempty h1
+  -- … and that every strict over-subgroup `G` is equal to `⊤`
+  intro G hG
+  suffices IsPreprimitive G α from subgroup_eq_top_of_isPreprimitive hα G hG.le
+  -- G acts transitively
+  have := G.isPretransitive_of_stabilizer_lt hG
+    (exists_mem_stabilizer_smul_eq (Nat.le_of_succ_le hα))
+  apply IsPreprimitive.mk
+  -- We reduce to proving that a block which is not a subsingleton is `univ`.
+  intro B hB
+  rw [IsTrivialBlock]; rw [or_iff_not_imp_left]
+  intro hB'
+  suffices sᶜ subseteq B by
+    apply hB.eq_univ_of_card_lt
+    have : sᶜ.ncard <= B.ncard := ncard_le_ncard this
+    grind
+  -- The proof needs 4 steps
+  /- Step 1 : `sᶜ` is not a block.
+       This uses that `s.ncard < sᶜ.ncard`.
+       In the equality case, it is possible that `B = sᶜ` is a block:
+       in that case, `G` would be a wreath product,
+       this is case (b) of the O'Nan-Scott classification
+       of maximal subgroups of the alternating group. -/
+  have not_isBlock_sc : ¬ IsBlock G sᶜ := fun hsc => by
+    apply compl_ne_univ.mpr h0.nonempty -- `sᶜ ≠ univ`
+    apply hsc.eq_univ_of_card_lt
+    grind
+  -- Step 2 : A block contained in `sᶜ` is a subsingleton
+  have hB_not_le_sc (B : Set α) (hB : IsBlock G B) (hBsc : B subseteq sᶜ) :
+      B.Subsingleton :=
+    IsBlock.subsingleton_of_ssubset_compl_of_stabilizer_alternatingGroup_le h0
+      (hBsc.ssubset_of_ne (by aesop)) -- uses Step 1
+      hG.le hB
+  -- Step 3 : A block contained in `s` is a subsingleton
+  have hB_not_le_s (B : Set α) (hB : IsBlock G B) (hBs : B subseteq s) :
+      B.Subsingleton :=
+    have : IsPreprimitive (stabilizer G s) s :=
+      stabilizer_subgroup_isPreprimitive h1 hG.le
+    hB.subsingleton_of_stabilizer_lt_of_subset hB_not_le_sc hG hBs
+  -- Step 4 : sᶜ ⊆ B : A block which is not a subsingleton contains `sᶜ`.
+  suffices IsMultiplyPretransitive (↥(alternatingGroup α)) α (s.ncard + 1) by
+    have : ¬ B subseteq s := fun h => hB' (hB_not_le_s B hB h)
+    have : ¬ B subseteq sᶜ := fun h => hB' (hB_not_le_sc B hB h)
+    apply hB.compl_subset_of_stabilizer_le_of_not_subset_of_not_subset_compl
+      hG.le <;> grind
+  have := isMultiplyPretransitive α
+  apply isMultiplyPretransitive_of_le (n := Nat.card α - 2) _ (Nat.sub_le _ _)
+  grind
 
 中文:
 定理 isCoatom_stabilizer_of_ncard_lt_ncard_compl
@@ -474,7 +603,56 @@ theorem isCoatom_stabilizer_of_ncard_lt_ncard_compl
   have hα : 4 < Nat.card α := by
     rw [← Set.one_lt_ncard_iff_nontrivial] at h0
     grind
-  -- To prove that `stabilizer (alternatingGroup α
+  -- To prove that `stabilizer (alternatingGroup α) s` is maximal,
+  -- we need to prove that it is `≠ ⊤`
+  use stabilizer_ne_top h0.nonempty h1
+  -- … and that every strict over-subgroup `G` is equal to `⊤`
+  intro G hG
+  suffices IsPreprimitive G α from subgroup_eq_top_of_isPreprimitive hα G hG.le
+  -- G acts transitively
+  have := G.isPretransitive_of_stabilizer_lt hG
+    (exists_mem_stabilizer_smul_eq (Nat.le_of_succ_le hα))
+  apply IsPreprimitive.mk
+  -- We reduce to proving that a block which is not a subsingleton is `univ`.
+  intro B hB
+  rw [IsTrivialBlock]; rw [or_iff_not_imp_left]
+  intro hB'
+  suffices sᶜ subseteq B by
+    apply hB.eq_univ_of_card_lt
+    have : sᶜ.ncard <= B.ncard := ncard_le_ncard this
+    grind
+  -- The proof needs 4 steps
+  /- Step 1 : `sᶜ` is not a block.
+       This uses that `s.ncard < sᶜ.ncard`.
+       In the equality case, it is possible that `B = sᶜ` is a block:
+       in that case, `G` would be a wreath product,
+       this is case (b) of the O'Nan-Scott classification
+       of maximal subgroups of the alternating group. -/
+  have not_isBlock_sc : ¬ IsBlock G sᶜ := fun hsc => by
+    apply compl_ne_univ.mpr h0.nonempty -- `sᶜ ≠ univ`
+    apply hsc.eq_univ_of_card_lt
+    grind
+  -- Step 2 : A block contained in `sᶜ` is a subsingleton
+  have hB_not_le_sc (B : Set α) (hB : IsBlock G B) (hBsc : B subseteq sᶜ) :
+      B.Subsingleton :=
+    IsBlock.subsingleton_of_ssubset_compl_of_stabilizer_alternatingGroup_le h0
+      (hBsc.ssubset_of_ne (by aesop)) -- uses Step 1
+      hG.le hB
+  -- Step 3 : A block contained in `s` is a subsingleton
+  have hB_not_le_s (B : Set α) (hB : IsBlock G B) (hBs : B subseteq s) :
+      B.Subsingleton :=
+    have : IsPreprimitive (stabilizer G s) s :=
+      stabilizer_subgroup_isPreprimitive h1 hG.le
+    hB.subsingleton_of_stabilizer_lt_of_subset hB_not_le_sc hG hBs
+  -- Step 4 : sᶜ ⊆ B : A block which is not a subsingleton contains `sᶜ`.
+  suffices IsMultiplyPretransitive (↥(alternatingGroup α)) α (s.ncard + 1) by
+    have : ¬ B subseteq s := fun h => hB' (hB_not_le_s B hB h)
+    have : ¬ B subseteq sᶜ := fun h => hB' (hB_not_le_sc B hB h)
+    apply hB.compl_subset_of_stabilizer_le_of_not_subset_of_not_subset_compl
+      hG.le <;> grind
+  have := isMultiplyPretransitive α
+  apply isMultiplyPretransitive_of_le (n := Nat.card α - 2) _ (Nat.sub_le _ _)
+  grind
 
 Depends on / 依赖: Nat.card, Nontrivial, Set.one_lt_ncard_iff_nontrivial, h0.nonempty.ncard_pos, lt_of_le_of_lt, ncard_add_ncard_compl, ncard_pos, nonempty, one_lt_ncard_iff_nontrivial
 -/
@@ -553,7 +731,7 @@ theorem isCoatom_stabilizer_singleton
   rw [Subsingleton.eq_singleton_of_mem h1 ha]; rw [stabilizer_singleton]
   have : IsPreprimitive (alternatingGroup α) α :=
     alternatingGroup.isPreprimitive_of_three_le_card α h3
-  apply IsP
+  apply IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive
 
 中文:
 定理 isCoatom_stabilizer_singleton
@@ -566,7 +744,7 @@ theorem isCoatom_stabilizer_singleton
   rw [Subsingleton.eq_singleton_of_mem h1 ha]; rw [stabilizer_singleton]
   have : IsPreprimitive (alternatingGroup α) α :=
     alternatingGroup.isPreprimitive_of_three_le_card α h3
-  apply IsP
+  apply IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive
 
 Depends on / 依赖: Finite, Finite.one_lt_card_iff_nontrivial, IsPreprimitive, IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive, Nontrivial, Subsingleton, Subsingleton.eq_singleton_of_mem, alternatingGroup, alternatingGroup.isPreprimitive_of_three_le_card, eq_singleton_of_mem, isCoatom_stabilizer_of_isPreprimitive, isPreprimitive_of_three_le_card, one_lt_card_iff_nontrivial, stabilizer_singleton
 -/
@@ -594,7 +772,12 @@ theorem isCoatom_stabilizer
   · rw [← stabilizer_compl]
     apply this h1 <;> rw [compl_compl] <;> grind
   · by_cases h0' : s.Nontrivial
-    · apply isCoatom_stabilizer_of_ncard_lt_ncard_compl h0' h
+    · apply isCoatom_stabilizer_of_ncard_lt_ncard_compl h0' hs'
+    · simp only [not_nontrivial_iff] at h0'
+      apply isCoatom_stabilizer_singleton _ h0 h0'
+      rw [← ncard_add_ncard_compl s]
+      rw [← ncard_pos] at h0 h1
+      grind
 
 中文:
 定理 isCoatom_stabilizer
@@ -605,7 +788,12 @@ theorem isCoatom_stabilizer
   · rw [← stabilizer_compl]
     apply this h1 <;> rw [compl_compl] <;> grind
   · by_cases h0' : s.Nontrivial
-    · apply isCoatom_stabilizer_of_ncard_lt_ncard_compl h0' h
+    · apply isCoatom_stabilizer_of_ncard_lt_ncard_compl h0' hs'
+    · simp only [not_nontrivial_iff] at h0'
+      apply isCoatom_stabilizer_singleton _ h0 h0'
+      rw [← ncard_add_ncard_compl s]
+      rw [← ncard_pos] at h0 h1
+      grind
 
 Depends on / 依赖: Nat.add_left_cancel_iff, Nontrivial, add_left_cancel_iff, compl_compl, isCoatom_stabilizer_of_ncard_lt_ncard_compl, isCoatom_stabilizer_singleton, ncard_add_ncard_compl, ncard_pos, ne_eq, not_nontrivial_iff, s.Nontrivial, stabilizer_compl, two_mul
 -/

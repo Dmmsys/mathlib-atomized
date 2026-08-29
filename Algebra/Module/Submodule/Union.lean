@@ -45,7 +45,49 @@ lemma Submodule.iUnion_ssubset_of_forall_ne_top_of_card_lt
     simp only [ssubset_univ_iff] at hj' ⊢
     rcases s.eq_empty_or_nonempty with rfl | hs
     · simpa using! h₁ j
-    replace h₂ : s.card + 1 < ENat.
+    replace h₂ : s.card + 1 < ENat.card K := by simpa [Finset.card_insert_of_notMem hj] using! h₂
+    specialize hj' (lt_trans ENat.natCast_lt_succ h₂)
+    contrapose hj'
+    replace hj' : (p j : Set M) union (⋃ i in s, p i) = univ := by
+      simpa only [Finset.mem_insert, iUnion_iUnion_eq_or_left] using! hj'
+    suffices (p j : Set M) subseteq ⋃ i in s, p i by rwa [union_eq_right.mpr this] at hj'
+    intro x (hx : x in p j)
+    rcases eq_or_ne x 0 with rfl | hx₀
+    · simpa using! hs
+    obtain ⟨y, hy⟩ : exists y, y ∉ p j := by specialize h₁ j; contrapose! h₁; ext; simp [h₁]
+    have hy₀ : y != 0 := by aesop
+    let sxy := {x + t • y | (t : K) (ht : t != 0)}
+    have hsxy : sxy subseteq ⋃ i in s, p i := by
+suffices Disjoint sxy (p j) from this.subset_right_of_subset_union hj' ▸ sxy.subset_univ
+      rw [Set.disjoint_iff]
+      rintro - ⟨⟨t, ht₀, rfl⟩, ht : x + t • y in p j⟩
+      rw [(p j).add_mem_iff_right hx]; rw [(p j).smul_mem_iff ht₀] at ht
+      contradiction
+    obtain ⟨k, hk, t₁, t₂, ht, ht₁, ht₂⟩ : existsᵉ (k in s) (t₁ : K) (t₂ : K),
+        t₁ != t₂ ∧ x + t₁ • y in p k ∧ x + t₂ • y in p k := by
+      suffices existsᵉ (k in s) (z₁ in sxy) (z₂ in sxy), z₁ != z₂ ∧ z₁ in p k ∧ z₂ in p k by
+        obtain ⟨k, hk, -, ⟨t₁, -, rfl⟩, -, ⟨t₂, -, rfl⟩, htne, ht₁, ht₂⟩ := this
+        exact ⟨k, hk, t₁, t₂, by aesop, ht₁, ht₂⟩
+      choose f hf using fun z : sxy => mem_iUnion.mp (hsxy z.property)
+      have hf' : MapsTo f univ s := fun z _ => by specialize hf z; aesop
+      suffices exists z₁ z₂, z₁ != z₂ ∧ f z₁ = f z₂ by
+        obtain ⟨z₁, z₂, hne, heq⟩ := this
+        exact ⟨f z₁, hf' (mem_univ _), z₁, z₁.property, z₂, z₂.property,
+          Subtype.coe_ne_coe.mpr hne, by specialize hf z₁; simp_all, by specialize hf z₂; aesop⟩
+      have key : s.card < sxy.encard := by
+refine lt_of_add_lt_add_right lt_of_lt_of_le h₂ ?_
+        have : Injective (fun t : K => x + t • y) :=
+fun t₁ t₂ ht => smul_left_injective K hy₀ by simpa using! ht
+        have aux : sxy = ((fun t : K => x + t • y) '' {t | t != 0}) := by ext; simp [sxy]
+        rw [aux]; rw [this.encard_image]; rw [encard_ne_add_one]
+      obtain ⟨z₁, -, z₂, -, h⟩ := exists_ne_map_eq_of_encard_lt_of_maps_to (by simpa) hf'
+      exact ⟨z₁, z₂, h⟩
+    replace ht : y in p k := by
+      have : (t₁ - t₂) • y in p k := by convert sub_mem ht₁ ht₂; module
+      refine ((p k).smul_mem_iff ?_).mp this
+      rwa [sub_ne_zero]
+    replace ht : x in p k := by convert sub_mem ht₁ ((p k).smul_mem t₁ ht); simp
+    simpa using! ⟨k, hk, ht⟩
 
 中文:
 引理 子模.iUnion_ssubset_of_对任意_ne_top_of_card_lt
@@ -59,7 +101,49 @@ lemma Submodule.iUnion_ssubset_of_forall_ne_top_of_card_lt
     simp only [ssubset_univ_iff] at hj' ⊢
     rcases s.eq_empty_or_nonempty with rfl | hs
     · simpa using! h₁ j
-    replace h₂ : s.card + 1 < ENat.
+    replace h₂ : s.card + 1 < ENat.card K := by simpa [Finset.card_insert_of_notMem hj] using! h₂
+    specialize hj' (lt_trans ENat.natCast_lt_succ h₂)
+    contrapose hj'
+    replace hj' : (p j : Set M) union (⋃ i in s, p i) = univ := by
+      simpa only [Finset.mem_insert, iUnion_iUnion_eq_or_left] using! hj'
+    suffices (p j : Set M) subseteq ⋃ i in s, p i by rwa [union_eq_right.mpr this] at hj'
+    intro x (hx : x in p j)
+    rcases eq_or_ne x 0 with rfl | hx₀
+    · simpa using! hs
+    obtain ⟨y, hy⟩ : exists y, y ∉ p j := by specialize h₁ j; contrapose! h₁; ext; simp [h₁]
+    have hy₀ : y != 0 := by aesop
+    let sxy := {x + t • y | (t : K) (ht : t != 0)}
+    have hsxy : sxy subseteq ⋃ i in s, p i := by
+suffices Disjoint sxy (p j) from this.subset_right_of_subset_union hj' ▸ sxy.subset_univ
+      rw [Set.disjoint_iff]
+      rintro - ⟨⟨t, ht₀, rfl⟩, ht : x + t • y in p j⟩
+      rw [(p j).add_mem_iff_right hx]; rw [(p j).smul_mem_iff ht₀] at ht
+      contradiction
+    obtain ⟨k, hk, t₁, t₂, ht, ht₁, ht₂⟩ : existsᵉ (k in s) (t₁ : K) (t₂ : K),
+        t₁ != t₂ ∧ x + t₁ • y in p k ∧ x + t₂ • y in p k := by
+      suffices existsᵉ (k in s) (z₁ in sxy) (z₂ in sxy), z₁ != z₂ ∧ z₁ in p k ∧ z₂ in p k by
+        obtain ⟨k, hk, -, ⟨t₁, -, rfl⟩, -, ⟨t₂, -, rfl⟩, htne, ht₁, ht₂⟩ := this
+        exact ⟨k, hk, t₁, t₂, by aesop, ht₁, ht₂⟩
+      choose f hf using fun z : sxy => mem_iUnion.mp (hsxy z.property)
+      have hf' : MapsTo f univ s := fun z _ => by specialize hf z; aesop
+      suffices exists z₁ z₂, z₁ != z₂ ∧ f z₁ = f z₂ by
+        obtain ⟨z₁, z₂, hne, heq⟩ := this
+        exact ⟨f z₁, hf' (mem_univ _), z₁, z₁.property, z₂, z₂.property,
+          Subtype.coe_ne_coe.mpr hne, by specialize hf z₁; simp_all, by specialize hf z₂; aesop⟩
+      have key : s.card < sxy.encard := by
+refine lt_of_add_lt_add_right lt_of_lt_of_le h₂ ?_
+        have : Injective (fun t : K => x + t • y) :=
+fun t₁ t₂ ht => smul_left_injective K hy₀ by simpa using! ht
+        have aux : sxy = ((fun t : K => x + t • y) '' {t | t != 0}) := by ext; simp [sxy]
+        rw [aux]; rw [this.encard_image]; rw [encard_ne_add_one]
+      obtain ⟨z₁, -, z₂, -, h⟩ := exists_ne_map_eq_of_encard_lt_of_maps_to (by simpa) hf'
+      exact ⟨z₁, z₂, h⟩
+    replace ht : y in p k := by
+      have : (t₁ - t₂) • y in p k := by convert sub_mem ht₁ ht₂; module
+      refine ((p k).smul_mem_iff ?_).mp this
+      rwa [sub_ne_zero]
+    replace ht : x in p k := by convert sub_mem ht₁ ((p k).smul_mem t₁ ht); simp
+    simpa using! ⟨k, hk, ht⟩
 -/
 lemma Submodule.iUnion_ssubset_of_forall_ne_top_of_card_lt (s : Finset ι) (p : ι -> Submodule K M)
     (h₁ : forall i, p i != ⊤) (h₂ : s.card < ENat.card K) :

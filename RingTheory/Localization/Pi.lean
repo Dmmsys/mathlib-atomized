@@ -63,7 +63,7 @@ theorem iff_map_piEvalRingHom
     have := Fintype.ofFinite ι
     refine ⟨∏ i, m i ⟨⟩, prod_mem fun i _ => mem i _, pi_dvd_iff.mpr fun i => ?_⟩
     rw [Fintype.prod_apply]
-    exact (eq i ⟨⟩).symm.dvd.trans (Finset.dvd_prod_of_m
+    exact (eq i ⟨⟩).symm.dvd.trans (Finset.dvd_prod_of_mem _ <| Finset.mem_univ _)
 
 中文:
 定理 iff_map_piEvalRingHom
@@ -73,7 +73,7 @@ theorem iff_map_piEvalRingHom
     have := Fintype.ofFinite ι
     refine ⟨∏ i, m i ⟨⟩, prod_mem fun i _ => mem i _, pi_dvd_iff.mpr fun i => ?_⟩
     rw [Fintype.prod_apply]
-    exact (eq i ⟨⟩).symm.dvd.trans (Finset.dvd_prod_of_m
+    exact (eq i ⟨⟩).symm.dvd.trans (Finset.dvd_prod_of_mem _ <| Finset.mem_univ _)
 
 Depends on / 依赖: Finset, Finset.dvd_prod_of_mem, Finset.mem_univ, Fintype, Fintype.ofFinite, Fintype.prod_apply, dvd_prod_of_mem, iff_of_le_of_exists_dvd, mem_univ, ofFinite, pi_dvd_iff, pi_dvd_iff.mpr, prod_apply, prod_mem, symm.dvd.trans
 -/
@@ -181,7 +181,8 @@ lemma algebraMap_pi_surjective_of_isLocalization
   obtain ⟨r, hr⟩ :=
     surjective_piRingHom_algebraMap_comp_piEvalRingHom
     S M ((lift (isUnit_piRingHom_algebraMap_comp_piEvalRingHom R S M)) s)
-  refine ⟨r, (bijective_lift_piRingHom_algebraMap_comp_piEvalRingHom R
+  refine ⟨r, (bijective_lift_piRingHom_algebraMap_comp_piEvalRingHom R S _ M).injective ?_⟩
+  rwa [lift_eq (isUnit_piRingHom_algebraMap_comp_piEvalRingHom R S M) r]
 
 中文:
 引理 algebraMap_pi_surjective_of_isLocalization
@@ -192,7 +193,8 @@ lemma algebraMap_pi_surjective_of_isLocalization
   obtain ⟨r, hr⟩ :=
     surjective_piRingHom_algebraMap_comp_piEvalRingHom
     S M ((lift (isUnit_piRingHom_algebraMap_comp_piEvalRingHom R S M)) s)
-  refine ⟨r, (bijective_lift_piRingHom_algebraMap_comp_piEvalRingHom R
+  refine ⟨r, (bijective_lift_piRingHom_algebraMap_comp_piEvalRingHom R S _ M).injective ?_⟩
+  rwa [lift_eq (isUnit_piRingHom_algebraMap_comp_piEvalRingHom R S M) r]
 
 Depends on / 依赖: Localization, M.map, Pi.evalRingHom, bijective_lift_piRingHom_algebraMap_comp_piEvalRingHom, evalRingHom, injective, isUnit_piRingHom_algebraMap_comp_piEvalRingHom, lift_eq, surjective_piRingHom_algebraMap_comp_piEvalRingHom
 -/

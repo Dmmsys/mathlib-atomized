@@ -973,7 +973,16 @@ lemma cauchy_schwarz_aux'
   calc 0 <= re ⟪(ofReal t : 𝕜) • x + y, (ofReal t : 𝕜) • x + y⟫ := inner_self_nonneg
   _ = re (⟪(ofReal t : 𝕜) • x, (ofReal t : 𝕜) • x⟫ + ⟪(ofReal t : 𝕜) • x, y⟫
       + ⟪y, (ofReal t : 𝕜) • x⟫ + ⟪y, y⟫) := by rw [inner_add_add_self ((ofReal t : 𝕜) • x) y]
-  _ = re ⟪(ofReal t : 𝕜) • x, (ofReal t 
+  _ = re ⟪(ofReal t : 𝕜) • x, (ofReal t : 𝕜) • x⟫
+      + re ⟪(ofReal t : 𝕜) • x, y⟫ + re ⟪y, (ofReal t : 𝕜) • x⟫ + re ⟪y, y⟫ := by
+      simp only [map_add]
+  _ = normSq x * t * t + re (⟪x, y⟫ * t) + re (⟪y, x⟫ * t) + re ⟪y, y⟫ := by rw
+    [re_inner_smul_ofReal_smul_self, inner_smul_ofReal_left, inner_smul_ofReal_right]
+  _ = normSq x * t * t + re ⟪x, y⟫ * t + re ⟪y, x⟫ * t + re ⟪y, y⟫ := by rw [mul_comm ⟪x, y⟫ _,
+    RCLike.re_ofReal_mul, mul_comm t _, mul_comm ⟪y, x⟫ _, RCLike.re_ofReal_mul, mul_comm t _]
+  _ = normSq x * t * t + re ⟪x, y⟫ * t + re ⟪y, x⟫ * t + normSq y := by rw [← normSq]
+  _ = normSq x * t * t + re ⟪x, y⟫ * t + re ⟪x, y⟫ * t + normSq y := by rw [inner_re_symm]
+  _ = normSq x * t * t + 2 * re ⟪x, y⟫ * t + normSq y := by ring
 
 中文:
 引理 cauchy_schwarz_aux'
@@ -983,7 +992,16 @@ lemma cauchy_schwarz_aux'
   calc 0 <= re ⟪(ofReal t : 𝕜) • x + y, (ofReal t : 𝕜) • x + y⟫ := inner_self_nonneg
   _ = re (⟪(ofReal t : 𝕜) • x, (ofReal t : 𝕜) • x⟫ + ⟪(ofReal t : 𝕜) • x, y⟫
       + ⟪y, (ofReal t : 𝕜) • x⟫ + ⟪y, y⟫) := by rw [inner_add_add_self ((ofReal t : 𝕜) • x) y]
-  _ = re ⟪(ofReal t : 𝕜) • x, (ofReal t 
+  _ = re ⟪(ofReal t : 𝕜) • x, (ofReal t : 𝕜) • x⟫
+      + re ⟪(ofReal t : 𝕜) • x, y⟫ + re ⟪y, (ofReal t : 𝕜) • x⟫ + re ⟪y, y⟫ := by
+      simp only [map_add]
+  _ = normSq x * t * t + re (⟪x, y⟫ * t) + re (⟪y, x⟫ * t) + re ⟪y, y⟫ := by rw
+    [re_inner_smul_ofReal_smul_self, inner_smul_ofReal_left, inner_smul_ofReal_right]
+  _ = normSq x * t * t + re ⟪x, y⟫ * t + re ⟪y, x⟫ * t + re ⟪y, y⟫ := by rw [mul_comm ⟪x, y⟫ _,
+    RCLike.re_ofReal_mul, mul_comm t _, mul_comm ⟪y, x⟫ _, RCLike.re_ofReal_mul, mul_comm t _]
+  _ = normSq x * t * t + re ⟪x, y⟫ * t + re ⟪y, x⟫ * t + normSq y := by rw [← normSq]
+  _ = normSq x * t * t + re ⟪x, y⟫ * t + re ⟪x, y⟫ * t + normSq y := by rw [inner_re_symm]
+  _ = normSq x * t * t + 2 * re ⟪x, y⟫ * t + normSq y := by ring
 
 Depends on / 依赖: inner_add_add_self, inner_self_nonneg, map_add, normSq, ofReal, re_inner_smul_ofReal_smul_s
 -/
@@ -1014,7 +1032,9 @@ theorem cauchy_schwarz_aux
   rw [← @ofReal_inj 𝕜]; rw [ofReal_normSq_eq_inner_self]
   simp only [inner_sub_sub_self, inner_smul_left, inner_smul_right, conj_ofReal, mul_sub, ←
     ofReal_normSq_eq_inner_self x, ← ofReal_normSq_eq_inner_self y]
-  rw [← mul_assoc]; rw [mul_conj]; rw [RCLike.conj_mul]; rw [mul_left_comm]; rw 
+  rw [← mul_assoc]; rw [mul_conj]; rw [RCLike.conj_mul]; rw [mul_left_comm]; rw [← inner_conj_symm y]; rw [mul_conj]
+  push_cast
+  ring
 
 中文:
 定理 cauchy_schwarz_aux
@@ -1024,7 +1044,9 @@ theorem cauchy_schwarz_aux
   rw [← @ofReal_inj 𝕜]; rw [ofReal_normSq_eq_inner_self]
   simp only [inner_sub_sub_self, inner_smul_left, inner_smul_right, conj_ofReal, mul_sub, ←
     ofReal_normSq_eq_inner_self x, ← ofReal_normSq_eq_inner_self y]
-  rw [← mul_assoc]; rw [mul_conj]; rw [RCLike.conj_mul]; rw [mul_left_comm]; rw 
+  rw [← mul_assoc]; rw [mul_conj]; rw [RCLike.conj_mul]; rw [mul_left_comm]; rw [← inner_conj_symm y]; rw [mul_conj]
+  push_cast
+  ring
 
 Depends on / 依赖: RCLike, RCLike.conj_mul, conj_mul, conj_ofReal, inner_conj_symm, inner_smul_left, inner_smul_right, inner_sub_sub_self, mul_assoc, mul_conj, mul_left_comm, mul_sub, ofReal_inj, ofReal_normSq_eq_inner_self
 -/
@@ -1051,7 +1073,18 @@ theorem inner_mul_inner_self_le
     linarith
   refine discrim_le_zero fun t => ?_
   by_cases hzero : ⟪x, y⟫ = 0
-  · simp only [← sq, hzero, norm_zero, mul_zero, zero_mul, a
+  · simp only [← sq, hzero, norm_zero, mul_zero, zero_mul, add_zero]
+    obtain ⟨hx, hy⟩ : (0 <= normSqF x ∧ 0 <= normSqF y) := ⟨inner_self_nonneg, inner_self_nonneg⟩
+    positivity
+  · have hzero' : ‖⟪x, y⟫‖ != 0 := norm_ne_zero_iff.2 hzero
+    convert! cauchy_schwarz_aux' (𝕜 := 𝕜) (⟪x, y⟫ • x) y (t / ‖⟪x, y⟫‖) using 3
+    · field_simp
+      rw [normSq]; rw [normSq]; rw [inner_smul_right]; rw [inner_smul_left]; rw [← mul_assoc _ _ ⟪x]; rw [x⟫]; rw [mul_conj]
+      rw [← ofReal_pow]; rw [re_ofReal_mul]
+      ring
+    · field_simp
+      rw [inner_smul_left]; rw [mul_comm _ ⟪x]; rw [y⟫_𝕜]; rw [mul_conj]; rw [← ofReal_pow]; rw [ofReal_re]
+      ring
 
 中文:
 定理 inner_mul_inner_self_le
@@ -1064,7 +1097,18 @@ theorem inner_mul_inner_self_le
     linarith
   refine discrim_le_zero fun t => ?_
   by_cases hzero : ⟪x, y⟫ = 0
-  · simp only [← sq, hzero, norm_zero, mul_zero, zero_mul, a
+  · simp only [← sq, hzero, norm_zero, mul_zero, zero_mul, add_zero]
+    obtain ⟨hx, hy⟩ : (0 <= normSqF x ∧ 0 <= normSqF y) := ⟨inner_self_nonneg, inner_self_nonneg⟩
+    positivity
+  · have hzero' : ‖⟪x, y⟫‖ != 0 := norm_ne_zero_iff.2 hzero
+    convert! cauchy_schwarz_aux' (𝕜 := 𝕜) (⟪x, y⟫ • x) y (t / ‖⟪x, y⟫‖) using 3
+    · field_simp
+      rw [normSq]; rw [normSq]; rw [inner_smul_right]; rw [inner_smul_left]; rw [← mul_assoc _ _ ⟪x]; rw [x⟫]; rw [mul_conj]
+      rw [← ofReal_pow]; rw [re_ofReal_mul]
+      ring
+    · field_simp
+      rw [inner_smul_left]; rw [mul_comm _ ⟪x]; rw [y⟫_𝕜]; rw [mul_conj]; rw [← ofReal_pow]; rw [ofReal_re]
+      ring
 
 Depends on / 依赖: add_zero, cauchy_schwarz_aux, convert, discrim, discrim_le_zero, inner_self_nonneg, mul_zero, normSq, normSqF, norm_inner_symm, norm_ne_zero_iff, norm_zero, zero_mul
 -/
@@ -1175,7 +1219,7 @@ theorem norm_inner_le_norm
     calc
       ‖⟪x, y⟫‖ * ‖⟪x, y⟫‖ = ‖⟪x, y⟫‖ * ‖⟪y, x⟫‖ := by rw [norm_inner_symm]
       _ <= re ⟪x, x⟫ * re ⟪y, y⟫ := inner_mul_inner_self_le x y
-      _ = ‖x‖ * ‖y‖ * (‖x‖ * ‖y‖) := by simp only [inner_self_eq_norm_mul_norm
+      _ = ‖x‖ * ‖y‖ * (‖x‖ * ‖y‖) := by simp only [inner_self_eq_norm_mul_norm]; ring
 
 中文:
 定理 norm_inner_le_norm
@@ -1185,7 +1229,7 @@ theorem norm_inner_le_norm
     calc
       ‖⟪x, y⟫‖ * ‖⟪x, y⟫‖ = ‖⟪x, y⟫‖ * ‖⟪y, x⟫‖ := by rw [norm_inner_symm]
       _ <= re ⟪x, x⟫ * re ⟪y, y⟫ := inner_mul_inner_self_le x y
-      _ = ‖x‖ * ‖y‖ * (‖x‖ * ‖y‖) := by simp only [inner_self_eq_norm_mul_norm
+      _ = ‖x‖ * ‖y‖ * (‖x‖ * ‖y‖) := by simp only [inner_self_eq_norm_mul_norm]; ring
 
 Depends on / 依赖: inner_mul_inner_self_le, inner_self_eq_norm_mul_norm, mul_nonneg, nonneg_le_nonneg_of_sq_le_sq, norm_inner_symm, sqrt_nonneg
 -/
@@ -1209,7 +1253,14 @@ definition toSeminormedAddCommGroup
       map_zero' := by simp only [sqrt_zero, inner_zero_right, map_zero]
       neg' := fun x => by simp only [inner_neg_left, neg_neg, inner_neg_right]
       add_le' := fun x y => by
-        have h₁ : ‖⟪x, y⟫‖ <= ‖x‖ * ‖y‖
+        have h₁ : ‖⟪x, y⟫‖ <= ‖x‖ * ‖y‖ := norm_inner_le_norm _ _
+        have h₂ : re ⟪x, y⟫ <= ‖⟪x, y⟫‖ := re_le_norm _
+        have h₃ : re ⟪x, y⟫ <= ‖x‖ * ‖y‖ := h₂.trans h₁
+        have h₄ : re ⟪y, x⟫ <= ‖x‖ * ‖y‖ := by rwa [← inner_conj_symm, conj_re]
+        have : ‖x + y‖ * ‖x + y‖ <= (‖x‖ + ‖y‖) * (‖x‖ + ‖y‖) := by
+          simp only [← inner_self_eq_norm_mul_norm, inner_add_add_self, mul_add, mul_comm, map_add]
+          linarith
+        exact nonneg_le_nonneg_of_sq_le_sq (add_nonneg (sqrt_nonneg _) (sqrt_nonneg _)) this }
 
 中文:
 定义 toSeminormedAddCommGroup
@@ -1219,7 +1270,14 @@ definition toSeminormedAddCommGroup
       map_zero' := by simp only [sqrt_zero, inner_zero_right, map_zero]
       neg' := fun x => by simp only [inner_neg_left, neg_neg, inner_neg_right]
       add_le' := fun x y => by
-        have h₁ : ‖⟪x, y⟫‖ <= ‖x‖ * ‖y‖
+        have h₁ : ‖⟪x, y⟫‖ <= ‖x‖ * ‖y‖ := norm_inner_le_norm _ _
+        have h₂ : re ⟪x, y⟫ <= ‖⟪x, y⟫‖ := re_le_norm _
+        have h₃ : re ⟪x, y⟫ <= ‖x‖ * ‖y‖ := h₂.trans h₁
+        have h₄ : re ⟪y, x⟫ <= ‖x‖ * ‖y‖ := by rwa [← inner_conj_symm, conj_re]
+        have : ‖x + y‖ * ‖x + y‖ <= (‖x‖ + ‖y‖) * (‖x‖ + ‖y‖) := by
+          simp only [← inner_self_eq_norm_mul_norm, inner_add_add_self, mul_add, mul_comm, map_add]
+          linarith
+        exact nonneg_le_nonneg_of_sq_le_sq (add_nonneg (sqrt_nonneg _) (sqrt_nonneg _)) this }
 
 Depends on / 依赖: AddGroupSeminorm, AddGroupSeminorm.toSeminormedAddCommGroup, add_le, conj_re, inner_conj_symm, inner_neg_left, inner_neg_right, inner_zero_right, map_zero, neg_neg, norm_inner_le_norm, re_le_norm, sqrt_zero, toSeminormedAddCommGroup
 -/
@@ -1427,7 +1485,16 @@ definition toNormedAddCommGroup
       map_zero' := by simp only [sqrt_zero, inner_zero_right, map_zero]
       neg' := fun x => by simp only [inner_neg_left, neg_neg, inner_neg_right]
       add_le' := fun x y => by
-        have h₁ : ‖⟪x, y⟫‖ <= ‖x‖ * ‖y‖ := norm
+        have h₁ : ‖⟪x, y⟫‖ <= ‖x‖ * ‖y‖ := norm_inner_le_norm _ _
+        have h₂ : re ⟪x, y⟫ <= ‖⟪x, y⟫‖ := re_le_norm _
+        have h₃ : re ⟪x, y⟫ <= ‖x‖ * ‖y‖ := h₂.trans h₁
+        have h₄ : re ⟪y, x⟫ <= ‖x‖ * ‖y‖ := by rwa [← inner_conj_symm, conj_re]
+        have : ‖x + y‖ * ‖x + y‖ <= (‖x‖ + ‖y‖) * (‖x‖ + ‖y‖) := by
+          simp only [← inner_self_eq_norm_mul_norm, inner_add_add_self, mul_add, mul_comm, map_add]
+          linarith
+        exact nonneg_le_nonneg_of_sq_le_sq (add_nonneg (sqrt_nonneg _) (sqrt_nonneg _)) this
+      eq_zero_of_map_eq_zero' := fun _ hx =>
+normSq_eq_zero.1 (sqrt_eq_zero inner_self_nonneg).1 hx }
 
 中文:
 定义 toNormedAddCommGroup
@@ -1437,7 +1504,16 @@ definition toNormedAddCommGroup
       map_zero' := by simp only [sqrt_zero, inner_zero_right, map_zero]
       neg' := fun x => by simp only [inner_neg_left, neg_neg, inner_neg_right]
       add_le' := fun x y => by
-        have h₁ : ‖⟪x, y⟫‖ <= ‖x‖ * ‖y‖ := norm
+        have h₁ : ‖⟪x, y⟫‖ <= ‖x‖ * ‖y‖ := norm_inner_le_norm _ _
+        have h₂ : re ⟪x, y⟫ <= ‖⟪x, y⟫‖ := re_le_norm _
+        have h₃ : re ⟪x, y⟫ <= ‖x‖ * ‖y‖ := h₂.trans h₁
+        have h₄ : re ⟪y, x⟫ <= ‖x‖ * ‖y‖ := by rwa [← inner_conj_symm, conj_re]
+        have : ‖x + y‖ * ‖x + y‖ <= (‖x‖ + ‖y‖) * (‖x‖ + ‖y‖) := by
+          simp only [← inner_self_eq_norm_mul_norm, inner_add_add_self, mul_add, mul_comm, map_add]
+          linarith
+        exact nonneg_le_nonneg_of_sq_le_sq (add_nonneg (sqrt_nonneg _) (sqrt_nonneg _)) this
+      eq_zero_of_map_eq_zero' := fun _ hx =>
+normSq_eq_zero.1 (sqrt_eq_zero inner_self_nonneg).1 hx }
 
 Depends on / 依赖: AddGroupNorm, AddGroupNorm.toNormedAddCommGroup, add_le, conj_re, inner_conj_symm, inner_neg_left, inner_neg_right, inner_zero_right, map_zero, neg_neg, norm_inner_le_norm, re_le_norm, sqrt_zero, toNormedAddCommGroup
 -/
@@ -1512,7 +1588,20 @@ lemma topology_eq
   suffices WithSeminorms (fun (i : Fin 1) => p) by
     rw [(SeminormFamily.withSeminorms_iff_topologicalSpace_eq_iInf _).1 this]
     simp
-  have : p.ball 0 1 = {
+  have : p.ball 0 1 = {v | re (cd.inner v v) < 1} := by
+    ext v
+    simp only [ball_normSeminorm, Metric.mem_ball, dist_eq_norm, sub_zero, Set.mem_ofPred_eq, p]
+    change √(re (cd.inner v v)) < 1 ↔ re (cd.inner v v) < 1
+    conv_lhs => rw [show (1 : Real) = √1 by simp]
+    rw [sqrt_lt_sqrt_iff]
+    exact InnerProductSpace.Core.inner_self_nonneg
+  rw [withSeminorms_iff_mem_nhds_isVonNBounded]; rw [this]
+  refine ⟨?_, h'⟩
+  have A : ContinuousAt (fun (v : F) => re (cd.inner v v)) 0 := by fun_prop
+  have B : Set.Iio 1 in 𝓝 (re (cd.inner 0 0)) := by
+    simp only [InnerProductSpace.Core.inner_zero_left, map_zero]
+    exact Iio_mem_nhds (by positivity)
+  exact A B
 
 中文:
 引理 topology_eq
@@ -1522,7 +1611,20 @@ lemma topology_eq
   suffices WithSeminorms (fun (i : Fin 1) => p) by
     rw [(SeminormFamily.withSeminorms_iff_topologicalSpace_eq_iInf _).1 this]
     simp
-  have : p.ball 0 1 = {
+  have : p.ball 0 1 = {v | re (cd.inner v v) < 1} := by
+    ext v
+    simp only [ball_normSeminorm, Metric.mem_ball, dist_eq_norm, sub_zero, Set.mem_ofPred_eq, p]
+    change √(re (cd.inner v v)) < 1 ↔ re (cd.inner v v) < 1
+    conv_lhs => rw [show (1 : Real) = √1 by simp]
+    rw [sqrt_lt_sqrt_iff]
+    exact InnerProductSpace.Core.inner_self_nonneg
+  rw [withSeminorms_iff_mem_nhds_isVonNBounded]; rw [this]
+  refine ⟨?_, h'⟩
+  have A : ContinuousAt (fun (v : F) => re (cd.inner v v)) 0 := by fun_prop
+  have B : Set.Iio 1 in 𝓝 (re (cd.inner 0 0)) := by
+    simp only [InnerProductSpace.Core.inner_zero_left, map_zero]
+    exact Iio_mem_nhds (by positivity)
+  exact A B
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.Core.toNormedSpace, Metric, Metric.mem_ball, Seminorm, SeminormFamily, SeminormFamily.withSeminorms_iff_topologicalSpace_eq_iInf, Set.mem_ofPred_eq, WithSeminorms, ball_normSeminorm, cd.inner, cd.toNormedAddCommGroup.toSeminormedAddCommGroup, conv_lhs, dist_eq_norm, mem_ball, mem_ofPred_eq, normSeminorm, p.ball, sub_zero, toNormedAddCommGroup
 -/
@@ -1579,7 +1681,9 @@ definition toNormedSpaceOfTopology
   letI : NormedAddCommGroup F := cd.toNormedAddCommGroupOfTopology h h'
   { norm_smul_le r x := by
       rw [norm_eq_sqrt_re_inner]; rw [inner_smul_left]; rw [inner_smul_right]; rw [← mul_assoc]
-      rw [RCLike.conj_mul]; rw [← ofReal_p
+      rw [RCLike.conj_mul]; rw [← ofReal_pow]; rw [re_ofReal_mul]; rw [sqrt_mul]; rw [← ofReal_normSq_eq_inner_self]; rw [ofReal_re]
+      · simp [sqrt_normSq_eq_norm]
+      · positivity }
 
 中文:
 定义 toNormedSpaceOfTopology
@@ -1588,7 +1692,9 @@ definition toNormedSpaceOfTopology
   letI : NormedAddCommGroup F := cd.toNormedAddCommGroupOfTopology h h'
   { norm_smul_le r x := by
       rw [norm_eq_sqrt_re_inner]; rw [inner_smul_left]; rw [inner_smul_right]; rw [← mul_assoc]
-      rw [RCLike.conj_mul]; rw [← ofReal_p
+      rw [RCLike.conj_mul]; rw [← ofReal_pow]; rw [re_ofReal_mul]; rw [sqrt_mul]; rw [← ofReal_normSq_eq_inner_self]; rw [ofReal_re]
+      · simp [sqrt_normSq_eq_norm]
+      · positivity }
 -/
 @[reducible] def toNormedSpaceOfTopology
     [tF : TopologicalSpace F] [IsTopologicalAddGroup F] [ContinuousConstSMul 𝕜 F]
@@ -1668,7 +1774,9 @@ definition InnerProductSpace.ofCoreOfTopology
   letI : NormedSpace 𝕜 F := cd.toNormedSpaceOfTopology h h'
   { cd with
     norm_sq_eq_re_inner := fun x => by
-      have h₁ : ‖x‖ ^ 2 = √(re (cd.inner x x)) ^
+      have h₁ : ‖x‖ ^ 2 = √(re (cd.inner x x)) ^ 2 := rfl
+      have h₂ : 0 <= re (cd.inner x x) := InnerProductSpace.Core.inner_self_nonneg
+      simp [h₁, sq_sqrt, h₂] }
 
 中文:
 定义 内积空间.ofCoreOfTopology
@@ -1679,7 +1787,9 @@ definition InnerProductSpace.ofCoreOfTopology
   letI : NormedSpace 𝕜 F := cd.toNormedSpaceOfTopology h h'
   { cd with
     norm_sq_eq_re_inner := fun x => by
-      have h₁ : ‖x‖ ^ 2 = √(re (cd.inner x x)) ^
+      have h₁ : ‖x‖ ^ 2 = √(re (cd.inner x x)) ^ 2 := rfl
+      have h₂ : 0 <= re (cd.inner x x) := InnerProductSpace.Core.inner_self_nonneg
+      simp [h₁, sq_sqrt, h₂] }
 
 Depends on / 依赖: cd.toNormedAddCommGroupOfTopology, toNormedAddCommGroupOfTopology
 -/

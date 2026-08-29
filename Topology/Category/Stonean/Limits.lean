@@ -54,7 +54,9 @@ lemma extremallyDisconnected_preimage
     have h : IsClopen (i ⁻¹' (Set.range f)) :=
       ⟨IsClosed.preimage i.hom.hom.continuous (isCompact_range f.hom.hom.continuous).isClosed,
         IsOpen.preimage i.hom.hom.continuous hi.isOpen_range⟩
-    rw [← (closure U).preimage_image_eq Subtype.coe_injective]; rw [← h.1.isClosedEmbedding_s
+    rw [← (closure U).preimage_image_eq Subtype.coe_injective]; rw [← h.1.isClosedEmbedding_subtypeVal.closure_image_eq U]
+    exact isOpen_induced (ExtremallyDisconnected.open_closure _
+      (h.2.isOpenEmbedding_subtypeVal.isOpenMap U hU))
 
 中文:
 引理 extremallyDisconnected_preimage
@@ -63,7 +65,9 @@ lemma extremallyDisconnected_preimage
     have h : IsClopen (i ⁻¹' (Set.range f)) :=
       ⟨IsClosed.preimage i.hom.hom.continuous (isCompact_range f.hom.hom.continuous).isClosed,
         IsOpen.preimage i.hom.hom.continuous hi.isOpen_range⟩
-    rw [← (closure U).preimage_image_eq Subtype.coe_injective]; rw [← h.1.isClosedEmbedding_s
+    rw [← (closure U).preimage_image_eq Subtype.coe_injective]; rw [← h.1.isClosedEmbedding_subtypeVal.closure_image_eq U]
+    exact isOpen_induced (ExtremallyDisconnected.open_closure _
+      (h.2.isOpenEmbedding_subtypeVal.isOpenMap U hU))
 
 Depends on / 依赖: ExtremallyDisconnected, ExtremallyDisconnected.open_closure, IsClopen, IsClosed, IsClosed.preimage, IsOpen, IsOpen.preimage, Set.range, Subtype, Subtype.coe_injective, closure, closure_image_eq, coe_injective, continuous, f.hom.hom.continuous, hi.isOpen_range, i.hom.hom.continuous, isClosed, isClosedEmbedding_subtypeVal, isClosedEmbedding_subtypeVal.closure_image_eq
 -/
@@ -86,7 +90,9 @@ lemma extremallyDisconnected_pullback
   let e := (TopCat.pullbackHomeoPreimage i i.hom.hom.2 f hi.isEmbedding).symm
   let e' : {xy : X × Y | f xy.1 = i xy.2} ≃ₜ {xy : Y × X | i xy.1 = f xy.2} := by
     exact TopCat.homeoOfIso
-      ((TopCat.pullbackIsoProdSubtype f.hom i.hom).symm ≪≫ pullback
+      ((TopCat.pullbackIsoProdSubtype f.hom i.hom).symm ≪≫ pullbackSymmetry _ _ ≪≫
+        (TopCat.pullbackIsoProdSubtype i.hom f.hom))
+  extremallyDisconnected_of_homeo (e.trans e'.symm)
 
 中文:
 引理 extremallyDisconnected_pullback
@@ -95,7 +101,9 @@ lemma extremallyDisconnected_pullback
   let e := (TopCat.pullbackHomeoPreimage i i.hom.hom.2 f hi.isEmbedding).symm
   let e' : {xy : X × Y | f xy.1 = i xy.2} ≃ₜ {xy : Y × X | i xy.1 = f xy.2} := by
     exact TopCat.homeoOfIso
-      ((TopCat.pullbackIsoProdSubtype f.hom i.hom).symm ≪≫ pullback
+      ((TopCat.pullbackIsoProdSubtype f.hom i.hom).symm ≪≫ pullbackSymmetry _ _ ≪≫
+        (TopCat.pullbackIsoProdSubtype i.hom f.hom))
+  extremallyDisconnected_of_homeo (e.trans e'.symm)
 
 Depends on / 依赖: TopCat, TopCat.homeoOfIso, TopCat.pullbackHomeoPreimage, TopCat.pullbackIsoProdSubtype, e.trans, extremallyDisconnected_of_homeo, extremallyDisconnected_preimage, f.hom, hi.isEmbedding, homeoOfIso, i.hom, i.hom.hom, isEmbedding, pullbackHomeoPreimage, pullbackIsoProdSubtype, pullbackSymmetry
 -/
@@ -123,7 +131,7 @@ example : FinitaryExtensive Stonean.{u} := inferInstance
 
 noncomputable example : PreservesFiniteCoproducts Stonean.toCompHaus := inferInstance
 
-noncomputable example : PreservesFini
+noncomputable example : PreservesFiniteCoproducts Stonean.toProfinite := inferInstance
 
 中文:
 实例 :
@@ -137,7 +145,7 @@ example : FinitaryExtensive Stonean.{u} := inferInstance
 
 noncomputable example : PreservesFiniteCoproducts Stonean.toCompHaus := inferInstance
 
-noncomputable example : PreservesFini
+noncomputable example : PreservesFiniteCoproducts Stonean.toProfinite := inferInstance
 
 Depends on / 依赖: CompHausLike, CompHausLike.hasPullbacksOfInclusions, extremallyDisconnected_pullback, hasPullbacksOfInclusions
 -/

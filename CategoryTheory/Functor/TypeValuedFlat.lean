@@ -46,7 +46,19 @@ lemma Functor.isCofiltered_elements
     let h := mapIsLimitOfPreservesOfIsLimit F _ _ (prodIsProd X Y)
     let h' := Types.binaryProductLimit (F.obj X) (F.obj Y)
     exact ⟨⟨X ⨯ Y, (h'.conePointUniqueUpToIso h).hom ⟨x, y⟩⟩,
-      ⟨
+      ⟨prod.fst, ConcreteCategory.congr_hom (h'.conePointUniqueUpToIso_hom_comp h (.mk .left)) _⟩,
+      ⟨prod.snd, ConcreteCategory.congr_hom (h'.conePointUniqueUpToIso_hom_comp h (.mk .right)) _⟩,
+      by tauto⟩
+  cone_maps := by
+    rintro ⟨X, x⟩ ⟨Y, y⟩ ⟨f, hf⟩ ⟨g, hg⟩
+    dsimp at f g hf hg
+    rw [← hg] at hf
+    let h := isLimitForkMapOfIsLimit F _ (equalizerIsEqualizer f g)
+    let h' := (Types.equalizerLimit (g := F.map f) (h := F.map g)).isLimit
+    exact ⟨⟨equalizer f g, (h'.conePointUniqueUpToIso h).hom ⟨x, hf⟩⟩,
+      ⟨equalizer.ι f g, ConcreteCategory.congr_hom
+        (h'.conePointUniqueUpToIso_hom_comp h .zero) ⟨x, hf⟩⟩,
+      by ext; exact equalizer.condition f g⟩
 
 中文:
 引理 函子.isCofiltered_elements
@@ -56,7 +68,19 @@ lemma Functor.isCofiltered_elements
     let h := mapIsLimitOfPreservesOfIsLimit F _ _ (prodIsProd X Y)
     let h' := Types.binaryProductLimit (F.obj X) (F.obj Y)
     exact ⟨⟨X ⨯ Y, (h'.conePointUniqueUpToIso h).hom ⟨x, y⟩⟩,
-      ⟨
+      ⟨prod.fst, ConcreteCategory.congr_hom (h'.conePointUniqueUpToIso_hom_comp h (.mk .left)) _⟩,
+      ⟨prod.snd, ConcreteCategory.congr_hom (h'.conePointUniqueUpToIso_hom_comp h (.mk .right)) _⟩,
+      by tauto⟩
+  cone_maps := by
+    rintro ⟨X, x⟩ ⟨Y, y⟩ ⟨f, hf⟩ ⟨g, hg⟩
+    dsimp at f g hf hg
+    rw [← hg] at hf
+    let h := isLimitForkMapOfIsLimit F _ (equalizerIsEqualizer f g)
+    let h' := (Types.equalizerLimit (g := F.map f) (h := F.map g)).isLimit
+    exact ⟨⟨equalizer f g, (h'.conePointUniqueUpToIso h).hom ⟨x, hf⟩⟩,
+      ⟨equalizer.ι f g, ConcreteCategory.congr_hom
+        (h'.conePointUniqueUpToIso_hom_comp h .zero) ⟨x, hf⟩⟩,
+      by ext; exact equalizer.condition f g⟩
 
 Depends on / 依赖: isTerminalObj, terminalIsTerminal, terminalIsTerminal.isTerminalObj
 -/
@@ -164,7 +188,12 @@ definition fromOverFunctorElementsEquivalence
     Over.homMk (homMk _ _ f.val.left (Subtype.ext_iff.1 f.prop))
   inverse.obj u :=
     Functor.elementsMk _ (Over.mk u.hom.1) ⟨u.left.snd, u.hom.2⟩
-  inverse.map f := homMk _ _ (Over.homMk f.left.val (Subtype.e
+  inverse.map f := homMk _ _ (Over.homMk f.left.val (Subtype.ext_iff.1 (Over.w f)))
+    (by cat_disch)
+  unitIso := Iso.refl _
+  counitIso := Iso.refl _
+  -- `cat_disch` can fill in this proof, but is unfortunately quite slow.
+  functor_unitIso_comp X := by simp_all; rfl
 
 中文:
 定义 fromOverFunctorElementsEquivalence
@@ -174,7 +203,12 @@ definition fromOverFunctorElementsEquivalence
     Over.homMk (homMk _ _ f.val.left (Subtype.ext_iff.1 f.prop))
   inverse.obj u :=
     Functor.elementsMk _ (Over.mk u.hom.1) ⟨u.left.snd, u.hom.2⟩
-  inverse.map f := homMk _ _ (Over.homMk f.left.val (Subtype.e
+  inverse.map f := homMk _ _ (Over.homMk f.left.val (Subtype.ext_iff.1 (Over.w f)))
+    (by cat_disch)
+  unitIso := Iso.refl _
+  counitIso := Iso.refl _
+  -- `cat_disch` can fill in this proof, but is unfortunately quite slow.
+  functor_unitIso_comp X := by simp_all; rfl
 
 Depends on / 依赖: F.elementsMk, Functor, Functor.elementsMk, Iso.refl, Over.homMk, Over.mk, Over.w, Subtype, Subtype.ext_iff, cat_disch, counitIso, elementsMk, ext_iff, f.left.val, f.prop, f.val.left, functor, functor.map, inverse, inverse.map
 -/

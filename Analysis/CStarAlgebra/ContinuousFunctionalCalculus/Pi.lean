@@ -108,7 +108,9 @@ lemma cfcₙ_map_prod
       exact φ.map_cfcₙ f (a, b) (by rwa [Prod.quasispectrum_eq]) hf₀ continuous_fst hab ha
     case snd =>
       let φ := NonUnitalStarAlgHom.snd S A B
-      exact φ.map_cfcₙ f (a, b) (by r
+      exact φ.map_cfcₙ f (a, b) (by rwa [Prod.quasispectrum_eq]) hf₀ continuous_snd hab hb
+  case neg =>
+    simp [cfcₙ_apply_of_not_map_zero _ hf₀, eqComm]
 
 中文:
 引理 cfcₙ_map_prod
@@ -122,7 +124,9 @@ lemma cfcₙ_map_prod
       exact φ.map_cfcₙ f (a, b) (by rwa [Prod.quasispectrum_eq]) hf₀ continuous_fst hab ha
     case snd =>
       let φ := NonUnitalStarAlgHom.snd S A B
-      exact φ.map_cfcₙ f (a, b) (by r
+      exact φ.map_cfcₙ f (a, b) (by rwa [Prod.quasispectrum_eq]) hf₀ continuous_snd hab hb
+  case neg =>
+    simp [cfcₙ_apply_of_not_map_zero _ hf₀, eqComm]
 
 Depends on / 依赖: NonUnitalStarAlgHom, NonUnitalStarAlgHom.fst, NonUnitalStarAlgHom.snd, Prod.quasispectrum_eq, cfc_cont_tac, cfc_tac, continuous_fst, continuous_snd, quasispectrum_eq
 -/

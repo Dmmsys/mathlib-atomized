@@ -58,7 +58,18 @@ definition monoidalOfHasFiniteCoproducts
     whiskerRight := fun {_ _} f _ => Limits.coprod.map f (𝟙 _)
     tensorHom := fun f g => Limits.coprod.map f g
     tensorUnit := ⊥_ C
-    associator := coprod.associat
+    associator := coprod.associator
+    leftUnitor := coprod.leftUnitor
+    rightUnitor := coprod.rightUnitor
+  }
+  .ofTensorHom
+    (pentagon := coprod.pentagon)
+    (triangle := coprod.triangle)
+    (associator_naturality := @coprod.associator_naturality _ _ _)
+    (id_tensorHom_id := fun _ _ => coprod.map_id_id)
+    (tensorHom_comp_tensorHom := coprod.map_map)
+    (leftUnitor_naturality := coprod.leftUnitor_naturality)
+    (rightUnitor_naturality := coprod.rightUnitor_naturality)
 
 中文:
 定义 monoidalOfHasFiniteCoproducts
@@ -69,7 +80,18 @@ definition monoidalOfHasFiniteCoproducts
     whiskerRight := fun {_ _} f _ => Limits.coprod.map f (𝟙 _)
     tensorHom := fun f g => Limits.coprod.map f g
     tensorUnit := ⊥_ C
-    associator := coprod.associat
+    associator := coprod.associator
+    leftUnitor := coprod.leftUnitor
+    rightUnitor := coprod.rightUnitor
+  }
+  .ofTensorHom
+    (pentagon := coprod.pentagon)
+    (triangle := coprod.triangle)
+    (associator_naturality := @coprod.associator_naturality _ _ _)
+    (id_tensorHom_id := fun _ _ => coprod.map_id_id)
+    (tensorHom_comp_tensorHom := coprod.map_map)
+    (leftUnitor_naturality := coprod.leftUnitor_naturality)
+    (rightUnitor_naturality := coprod.rightUnitor_naturality)
 
 Depends on / 依赖: Limits, Limits.coprod.map, MonoidalCategoryStruct, associator, associator_naturality, coprod, coprod.associator, coprod.associator_naturality, coprod.leftUnitor, coprod.pentagon, coprod.rightUnitor, coprod.triangle, id_tensorHom_id, leftUnitor, ofTensorHom, pentagon, rightUnitor, tensorHom, tensorObj, tensorUnit
 -/
@@ -347,7 +369,7 @@ definition symmetricOfHasFiniteCoproducts
   braiding_naturality_right f g := by simp
   hexagon_forward X Y Z := by dsimp [monoidalOfHasFiniteCoproducts.associator_hom]; simp
   hexagon_reverse X Y Z := by dsimp [monoidalOfHasFiniteCoproducts.associator_inv]; simp
-  symmetry X Y
+  symmetry X Y := by simp
 
 中文:
 定义 symmetricOfHasFiniteCoproducts
@@ -357,7 +379,7 @@ definition symmetricOfHasFiniteCoproducts
   braiding_naturality_right f g := by simp
   hexagon_forward X Y Z := by dsimp [monoidalOfHasFiniteCoproducts.associator_hom]; simp
   hexagon_reverse X Y Z := by dsimp [monoidalOfHasFiniteCoproducts.associator_inv]; simp
-  symmetry X Y
+  symmetry X Y := by simp
 
 Depends on / 依赖: Limits, Limits.coprod.braiding, braiding, coprod
 -/

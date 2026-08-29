@@ -40,7 +40,23 @@ theorem ruzsa_covering_mul
   set C := {F in A.powerset | (SetLike.coe F).PairwiseDisjoint (· • B)}
 obtain ⟨F, hFmax⟩ := C.exists_maximal filter_nonempty_iff.2
     ⟨∅, empty_mem_powerset _, by simp [coe_empty]⟩
-  simp only [C, me
+  simp only [C, mem_filter, mem_powerset] at hFmax
+  obtain ⟨hFA, hF⟩ := hFmax.1
+  refine ⟨F, hFA, le_of_mul_le_mul_right ?_ (by positivity : (0 : Real) < #B), fun a ha => ?_⟩
+  · calc
+      (#F * #B : Real) = #(F * B) := by
+        rw [card_mul_iff.2 <| pairwiseDisjoint_smul_iff.1 hF]; rw [Nat.cast_mul]
+      _ <= #(A * B) := by gcongr
+      _ <= K * #B := hK
+  by_cases hau : a in F
+  · exact subset_mul_left _ hB.one_mem_div hau
+  by_cases! H : forall b in F, Disjoint (a • B) (b • B)
+  · refine (hFmax.not_gt ?_ <| ssubset_insert hau).elim
+    rw [insert_subset_iff]; rw [coe_insert]
+    exact ⟨⟨ha, hFA⟩, hF.insert fun _ hb _ => H _ hb⟩
+  simp_rw [not_disjoint_iff, ← inv_smul_mem_iff] at H
+  obtain ⟨b, hb, c, hc₁, hc₂⟩ := H
+  exact mem_mul.2 ⟨b, hb, b⁻¹ * a, mem_div.2 ⟨_, hc₂, _, hc₁, by simp⟩, by simp⟩
 
 中文:
 定理 ruzsa_covering_mul
@@ -50,7 +66,23 @@ obtain ⟨F, hFmax⟩ := C.exists_maximal filter_nonempty_iff.2
   set C := {F in A.powerset | (SetLike.coe F).PairwiseDisjoint (· • B)}
 obtain ⟨F, hFmax⟩ := C.exists_maximal filter_nonempty_iff.2
     ⟨∅, empty_mem_powerset _, by simp [coe_empty]⟩
-  simp only [C, me
+  simp only [C, mem_filter, mem_powerset] at hFmax
+  obtain ⟨hFA, hF⟩ := hFmax.1
+  refine ⟨F, hFA, le_of_mul_le_mul_right ?_ (by positivity : (0 : Real) < #B), fun a ha => ?_⟩
+  · calc
+      (#F * #B : Real) = #(F * B) := by
+        rw [card_mul_iff.2 <| pairwiseDisjoint_smul_iff.1 hF]; rw [Nat.cast_mul]
+      _ <= #(A * B) := by gcongr
+      _ <= K * #B := hK
+  by_cases hau : a in F
+  · exact subset_mul_left _ hB.one_mem_div hau
+  by_cases! H : forall b in F, Disjoint (a • B) (b • B)
+  · refine (hFmax.not_gt ?_ <| ssubset_insert hau).elim
+    rw [insert_subset_iff]; rw [coe_insert]
+    exact ⟨⟨ha, hFA⟩, hF.insert fun _ hb _ => H _ hb⟩
+  simp_rw [not_disjoint_iff, ← inv_smul_mem_iff] at H
+  obtain ⟨b, hb, c, hc₁, hc₂⟩ := H
+  exact mem_mul.2 ⟨b, hb, b⁻¹ * a, mem_div.2 ⟨_, hc₂, _, hc₁, by simp⟩, by simp⟩
 
 Depends on / 依赖: A.powerset, C.exists_maximal, Classical, Classical.dec, Decidable, PairwiseDisjoint, SetLike, SetLike.coe, card_mul_if, coe_empty, empty_mem_powerset, exists_maximal, filter_nonempty_iff, le_of_mul_le_mul_right, mem_filter, mem_powerset, powerset
 -/

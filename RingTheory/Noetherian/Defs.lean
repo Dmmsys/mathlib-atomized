@@ -114,7 +114,7 @@ theorem isNoetherian_submodule
     Submodule.map_comap_eq_self this ▸ (hn _).map _,
     fun h => ⟨fun s => ?_⟩⟩
   specialize h (s.map N.subtype) (Submodule.map_subtype_le N s)
-  exact Submodule.fg_of_fg_map_injective N.subt
+  exact Submodule.fg_of_fg_map_injective N.subtype Subtype.val_injective h
 
 中文:
 定理 isNoetherian_submodule
@@ -125,7 +125,7 @@ theorem isNoetherian_submodule
     Submodule.map_comap_eq_self this ▸ (hn _).map _,
     fun h => ⟨fun s => ?_⟩⟩
   specialize h (s.map N.subtype) (Submodule.map_subtype_le N s)
-  exact Submodule.fg_of_fg_map_injective N.subt
+  exact Submodule.fg_of_fg_map_injective N.subtype Subtype.val_injective h
 
 Depends on / 依赖: LinearMap, LinearMap.range, N.range_subtype.symm, N.subtype, Submodule, Submodule.fg_of_fg_map_injective, Submodule.map_comap_eq_self, Submodule.map_subtype_le, Subtype, Subtype.val_injective, fg_of_fg_map_injective, map_comap_eq_self, map_subtype_le, range_subtype, s.map, specialize, subtype, val_injective
 -/
@@ -317,7 +317,16 @@ theorem isNoetherian_iff_fg_wellFounded
     constructor
     intro N
     obtain ⟨⟨N₀, h₁⟩, e : N₀ <= N, h₂⟩ :=
-      WellFounded.has_min H.wf { N' : α | N
+      WellFounded.has_min H.wf { N' : α | N'.1 <= N } ⟨⟨⊥, Submodule.fg_bot⟩, @bot_le _ _ _ N⟩
+    convert! h₁
+    refine (e.antisymm ?_).symm
+    by_contra h₃
+    obtain ⟨x, hx₁ : x in N, hx₂ : x ∉ N₀⟩ := Set.not_subset.mp h₃
+    apply hx₂
+    rw [eq_of_le_of_not_lt (le_sup_right : N₀ <= _) (h₂
+⟨_]; rw [Submodule.FG.sup ⟨{x}]; rw [by rw [Finset.coe_singleton]⟩ h₁⟩
+      sup_le ((Submodule.span_singleton_le_iff_mem _ _).mpr hx₁) e)]
+    exact (le_sup_left : R ∙ x <= _) (Submodule.mem_span_singleton_self _)
 
 中文:
 定理 isNoetherian_iff_fg_wellFounded
@@ -331,7 +340,16 @@ theorem isNoetherian_iff_fg_wellFounded
     constructor
     intro N
     obtain ⟨⟨N₀, h₁⟩, e : N₀ <= N, h₂⟩ :=
-      WellFounded.has_min H.wf { N' : α | N
+      WellFounded.has_min H.wf { N' : α | N'.1 <= N } ⟨⟨⊥, Submodule.fg_bot⟩, @bot_le _ _ _ N⟩
+    convert! h₁
+    refine (e.antisymm ?_).symm
+    by_contra h₃
+    obtain ⟨x, hx₁ : x in N, hx₂ : x ∉ N₀⟩ := Set.not_subset.mp h₃
+    apply hx₂
+    rw [eq_of_le_of_not_lt (le_sup_right : N₀ <= _) (h₂
+⟨_]; rw [Submodule.FG.sup ⟨{x}]; rw [by rw [Finset.coe_singleton]⟩ h₁⟩
+      sup_le ((Submodule.span_singleton_le_iff_mem _ _).mpr hx₁) e)]
+    exact (le_sup_left : R ∙ x <= _) (Submodule.mem_span_singleton_self _)
 
 Depends on / 依赖: H.wf, N.FG, OrderEmbedding, OrderEmbedding.subtype, OrderEmbedding.wellFoundedLT, Set.not_subset.mp, Submodule, Submodule.fg_bot, WellFounded, WellFounded.has_min, antisymm, bot_le, convert, e.antisymm, eq_of_le_of_not_lt, f.dual, fg_bot, has_min, le_sup_right, not_subset
 -/
@@ -410,7 +428,10 @@ theorem Module.End.eventually_disjoint_ker_pow_range_pow
   refine eventually_atTop.mpr ⟨n, fun m hm => disjoint_iff.mpr ?_⟩
   rw [← hn _ hm]; rw [Submodule.eq_bot_iff]
   rintro - ⟨hx, ⟨x, rfl⟩⟩
-  
+  apply pow_map_zero_of_le hm
+  replace hx : x in LinearMap.ker (f ^ (n + m)) := by
+    simpa [f.pow_apply n, f.pow_apply m, ← f.pow_apply (n + m), ← iterate_add_apply] using hx
+  rwa [← hn _ (n.le_add_right m)] at hx
 
 中文:
 定理 模.End.eventually_disjoint_ker_pow_range_pow
@@ -421,7 +442,10 @@ theorem Module.End.eventually_disjoint_ker_pow_range_pow
   refine eventually_atTop.mpr ⟨n, fun m hm => disjoint_iff.mpr ?_⟩
   rw [← hn _ hm]; rw [Submodule.eq_bot_iff]
   rintro - ⟨hx, ⟨x, rfl⟩⟩
-  
+  apply pow_map_zero_of_le hm
+  replace hx : x in LinearMap.ker (f ^ (n + m)) := by
+    simpa [f.pow_apply n, f.pow_apply m, ← f.pow_apply (n + m), ← iterate_add_apply] using hx
+  rwa [← hn _ (n.le_add_right m)] at hx
 
 Depends on / 依赖: LinearMap, LinearMap.ker, Submodule, Submodule.eq_bot_iff, disjoint_iff, disjoint_iff.mpr, eq_bot_iff, eventually_atTop, eventually_atTop.mpr, f.iterateKer, f.pow_apply, iterateKer, iterate_add_apply, le_add_right, monotone_stabilizes_iff_noetherian, monotone_stabilizes_iff_noetherian.mpr, n.le_add_right, pow_apply, pow_map_zero_of_le, replace
 -/
@@ -448,7 +472,9 @@ lemma LinearMap.eventually_iSup_ker_pow_eq
     monotone_stabilizes_iff_noetherian.mpr inferInstance f.iterateKer
   refine eventually_atTop.mpr ⟨n, fun m hm => ?_⟩
   refine le_antisymm (iSup_le fun l => ?_) (le_iSup (fun i => LinearMap.ker (f ^ i)) m)
-  rcases le_or_gt m l
+  rcases le_or_gt m l with h | h
+  · rw [← hn _ (hm.trans h), hn _ hm]
+  · exact f.iterateKer.monotone h.le
 
 中文:
 引理 线性映射.eventually_iSup_ker_pow_eq
@@ -458,7 +484,9 @@ lemma LinearMap.eventually_iSup_ker_pow_eq
     monotone_stabilizes_iff_noetherian.mpr inferInstance f.iterateKer
   refine eventually_atTop.mpr ⟨n, fun m hm => ?_⟩
   refine le_antisymm (iSup_le fun l => ?_) (le_iSup (fun i => LinearMap.ker (f ^ i)) m)
-  rcases le_or_gt m l
+  rcases le_or_gt m l with h | h
+  · rw [← hn _ (hm.trans h), hn _ hm]
+  · exact f.iterateKer.monotone h.le
 
 Depends on / 依赖: LinearMap, LinearMap.ker, eventually_atTop, eventually_atTop.mpr, f.iterateKer, f.iterateKer.monotone, h.le, hm.trans, iSup_le, iterateKer, le_antisymm, le_iSup, le_or_gt, monotone, monotone_stabilizes_iff_noetherian, monotone_stabilizes_iff_noetherian.mpr
 -/

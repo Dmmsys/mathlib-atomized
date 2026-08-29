@@ -999,7 +999,9 @@ definition instMul
   than all the way to `Set.image2 (· * ·) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· * ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ * t₂ subseteq s } }⟩
 
-scoped[Pointwise] attribute [instance] Filt
+scoped[Pointwise] attribute [instance] Filter.instMul Filter.instAdd
+
+@[to_additive]
 
 中文:
 定义 instMul
@@ -1008,7 +1010,9 @@ scoped[Pointwise] attribute [instance] Filt
   than all the way to `Set.image2 (· * ·) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· * ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ * t₂ subseteq s } }⟩
 
-scoped[Pointwise] attribute [instance] Filt
+scoped[Pointwise] attribute [instance] Filter.instMul Filter.instAdd
+
+@[to_additive]
 -/
 protected def instMul : Mul (Filter α) :=
   ⟨/- This is defeq to `map₂ (· * ·) f g`, but the hypothesis unfolds to `t₁ * t₂ ⊆ s` rather
@@ -1514,7 +1518,9 @@ definition instDiv
   rather than all the way to `Set.image2 (· / ·) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· / ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ / t₂ subseteq s } }⟩
 
-scoped[Pointwise] attribute [instance] Filt
+scoped[Pointwise] attribute [instance] Filter.instDiv Filter.instSub
+
+@[to_additive]
 
 中文:
 定义 instDiv
@@ -1523,7 +1529,9 @@ scoped[Pointwise] attribute [instance] Filt
   rather than all the way to `Set.image2 (· / ·) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· / ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ / t₂ subseteq s } }⟩
 
-scoped[Pointwise] attribute [instance] Filt
+scoped[Pointwise] attribute [instance] Filter.instDiv Filter.instSub
+
+@[to_additive]
 -/
 protected def instDiv : Div (Filter α) :=
   ⟨/- This is defeq to `map₂ (· / ·) f g`, but the hypothesis unfolds to `t₁ / t₂ ⊆ s`
@@ -2501,7 +2509,12 @@ theorem mul_eq_one_iff
   · obtain ⟨t₁, h₁, t₂, h₂, h⟩ : (1 : Set α) in f * g := hfg.symm ▸ one_mem_one
     have hfg : (f * g).NeBot := hfg.symm.subst one_neBot
     rw [(hfg.nonempty_of_mem <| mul_mem_mul h₁ h₂).subset_one_iff]; rw [Set.mul_eq_one_iff] at h
-    obtain ⟨a, b, rfl, rfl, h⟩ := 
+    obtain ⟨a, b, rfl, rfl, h⟩ := h
+    refine ⟨a, b, ?_, ?_, h⟩
+    · rwa [← hfg.of_mul_left.le_pure_iff, le_pure_iff]
+    · rwa [← hfg.of_mul_right.le_pure_iff, le_pure_iff]
+  · rintro ⟨a, b, rfl, rfl, h⟩
+    rw [pure_mul_pure]; rw [h]; rw [pure_one]
 
 中文:
 定理 mul_eq_one_iff
@@ -2511,7 +2524,12 @@ theorem mul_eq_one_iff
   · obtain ⟨t₁, h₁, t₂, h₂, h⟩ : (1 : Set α) in f * g := hfg.symm ▸ one_mem_one
     have hfg : (f * g).NeBot := hfg.symm.subst one_neBot
     rw [(hfg.nonempty_of_mem <| mul_mem_mul h₁ h₂).subset_one_iff]; rw [Set.mul_eq_one_iff] at h
-    obtain ⟨a, b, rfl, rfl, h⟩ := 
+    obtain ⟨a, b, rfl, rfl, h⟩ := h
+    refine ⟨a, b, ?_, ?_, h⟩
+    · rwa [← hfg.of_mul_left.le_pure_iff, le_pure_iff]
+    · rwa [← hfg.of_mul_right.le_pure_iff, le_pure_iff]
+  · rintro ⟨a, b, rfl, rfl, h⟩
+    rw [pure_mul_pure]; rw [h]; rw [pure_one]
 -/
 protected theorem mul_eq_one_iff : f * g = 1 ↔ exists a b, f = pure a ∧ g = pure b ∧ a * b = 1 := by
   refine ⟨fun hfg => ?_, ?_⟩
@@ -2538,7 +2556,10 @@ definition divisionMonoid
     mul_inv_rev := fun _ _ => map_map₂_antidistrib mul_inv_rev
     inv_eq_of_mul := fun s t h => by
       obtain ⟨a, b, rfl, rfl, hab⟩ := Filter.mul_eq_one_iff.1 h
-      rw [inv_pure]; rw [inv_eq_of_mul_eq_one_r
+      rw [inv_pure]; rw [inv_eq_of_mul_eq_one_right hab]
+    div_eq_mul_inv := fun _ _ => map_map₂_distrib_right div_eq_mul_inv }
+
+@[to_additive]
 
 中文:
 定义 divisionMonoid
@@ -2547,7 +2568,10 @@ definition divisionMonoid
     mul_inv_rev := fun _ _ => map_map₂_antidistrib mul_inv_rev
     inv_eq_of_mul := fun s t h => by
       obtain ⟨a, b, rfl, rfl, hab⟩ := Filter.mul_eq_one_iff.1 h
-      rw [inv_pure]; rw [inv_eq_of_mul_eq_one_r
+      rw [inv_pure]; rw [inv_eq_of_mul_eq_one_right hab]
+    div_eq_mul_inv := fun _ _ => map_map₂_distrib_right div_eq_mul_inv }
+
+@[to_additive]
 -/
 protected def divisionMonoid : DivisionMonoid (Filter α) :=
   { Filter.monoid, Filter.instInvolutiveInv, Filter.instDiv, Filter.instZPow (α := α) with
@@ -2633,7 +2657,8 @@ definition instDistribNeg
     mul_neg := fun _ _ => map_map₂_right_comm mul_neg }
 
 scoped[Pointwise] attribute [instance] Filter.commMonoid Filter.addCommMonoid Filter.divisionMonoid
-  Filter.subtractionMonoid Filter.divisionCommMonoid Filte
+  Filter.subtractionMonoid Filter.divisionCommMonoid Filter.subtractionCommMonoid
+  Filter.instDistribNeg
 
 中文:
 定义 instDistribNeg
@@ -2643,7 +2668,8 @@ scoped[Pointwise] attribute [instance] Filter.commMonoid Filter.addCommMonoid Fi
     mul_neg := fun _ _ => map_map₂_right_comm mul_neg }
 
 scoped[Pointwise] attribute [instance] Filter.commMonoid Filter.addCommMonoid Filter.divisionMonoid
-  Filter.subtractionMonoid Filter.divisionCommMonoid Filte
+  Filter.subtractionMonoid Filter.divisionCommMonoid Filter.subtractionCommMonoid
+  Filter.instDistribNeg
 -/
 protected def instDistribNeg [Mul α] [HasDistribNeg α] : HasDistribNeg (Filter α) :=
   { Filter.instInvolutiveNeg with
@@ -2775,7 +2801,9 @@ theorem one_le_div_iff
   · obtain ⟨s, hs, t, ht, hst⟩ := hfg.le_bot (mem_bot : ∅ in ⊥)
     exact Set.one_mem_div_iff.1 (h <| div_mem_div hs ht) (disjoint_iff.2 hst.symm)
   · rintro h s ⟨t₁, h₁, t₂, h₂, hs⟩
-    exact hs (Set.one_mem_div_iff.2 fun ht => h <| disjoint_of_disjoint_of_mem ht h
+    exact hs (Set.one_mem_div_iff.2 fun ht => h <| disjoint_of_disjoint_of_mem ht h₁ h₂)
+
+@[to_additive]
 
 中文:
 定理 one_le_div_iff
@@ -2785,7 +2813,9 @@ theorem one_le_div_iff
   · obtain ⟨s, hs, t, ht, hst⟩ := hfg.le_bot (mem_bot : ∅ in ⊥)
     exact Set.one_mem_div_iff.1 (h <| div_mem_div hs ht) (disjoint_iff.2 hst.symm)
   · rintro h s ⟨t₁, h₁, t₂, h₂, hs⟩
-    exact hs (Set.one_mem_div_iff.2 fun ht => h <| disjoint_of_disjoint_of_mem ht h
+    exact hs (Set.one_mem_div_iff.2 fun ht => h <| disjoint_of_disjoint_of_mem ht h₁ h₂)
+
+@[to_additive]
 -/
 protected theorem one_le_div_iff : 1 <= f / g ↔ ¬Disjoint f g := by
   refine ⟨fun h hfg => ?_, ?_⟩
@@ -3061,7 +3091,9 @@ definition instSMul
   rather than all the way to `Set.image2 (· • ·) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· • ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ • t₂ subseteq s } }⟩
 
-scoped[Pointwise] attribute [instance] Filt
+scoped[Pointwise] attribute [instance] Filter.instSMul Filter.instVAdd
+
+@[to_additive]
 
 中文:
 定义 instSMul
@@ -3070,7 +3102,9 @@ scoped[Pointwise] attribute [instance] Filt
   rather than all the way to `Set.image2 (· • ·) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· • ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ • t₂ subseteq s } }⟩
 
-scoped[Pointwise] attribute [instance] Filt
+scoped[Pointwise] attribute [instance] Filter.instSMul Filter.instVAdd
+
+@[to_additive]
 -/
 protected def instSMul : SMul (Filter α) (Filter β) :=
   ⟨/- This is defeq to `map₂ (· • ·) f g`, but the hypothesis unfolds to `t₁ • t₂ ⊆ s`
@@ -3532,7 +3566,9 @@ definition instVSub
   the way to `Set.image2 (-ᵥ) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· -ᵥ ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ -ᵥ t₂ subseteq s } }⟩
 
-scoped[Pointwise] attribute [instance] Filter.
+scoped[Pointwise] attribute [instance] Filter.instVSub
+
+@[simp]
 
 中文:
 定义 instVSub
@@ -3541,7 +3577,9 @@ scoped[Pointwise] attribute [instance] Filter.
   the way to `Set.image2 (-ᵥ) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· -ᵥ ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ -ᵥ t₂ subseteq s } }⟩
 
-scoped[Pointwise] attribute [instance] Filter.
+scoped[Pointwise] attribute [instance] Filter.instVSub
+
+@[simp]
 -/
 protected def instVSub : VSub (Filter α) (Filter β) :=
   ⟨/- This is defeq to `map₂ (-ᵥ) f g`, but the hypothesis unfolds to `t₁ -ᵥ t₂ ⊆ s` rather than all

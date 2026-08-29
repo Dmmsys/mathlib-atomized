@@ -593,7 +593,7 @@ instance :
       P.prop_X₂_of_exact ((kernelCokernelCompSequence_exact f g).exact 2) hg.1 hfg.2⟩
   of_precomp f g hf hfg :=
     ⟨P.prop_X₂_of_exact ((kernelCokernelCompSequence_exact f g).exact 1) hfg.1 hf.2,
-      P.prop_of_epi (cokernel.map (f ≫
+      P.prop_of_epi (cokernel.map (f ≫ g) g f (𝟙 _) (by simp)) hfg.2⟩
 
 中文:
 实例 :
@@ -602,7 +602,7 @@ instance :
       P.prop_X₂_of_exact ((kernelCokernelCompSequence_exact f g).exact 2) hg.1 hfg.2⟩
   of_precomp f g hf hfg :=
     ⟨P.prop_X₂_of_exact ((kernelCokernelCompSequence_exact f g).exact 1) hfg.1 hf.2,
-      P.prop_of_epi (cokernel.map (f ≫
+      P.prop_of_epi (cokernel.map (f ≫ g) g f (𝟙 _) (by simp)) hfg.2⟩
 
 Depends on / 依赖: P.prop_X, P.prop_of_epi, P.prop_of_mono, cokernel, cokernel.map, kernel, kernel.map, kernelCokernelCompSequence_exact, of_precomp, prop_of_epi, prop_of_mono
 -/
@@ -660,7 +660,9 @@ lemma isoModSerre_isInvertedBy_iff
     (((ShortComplex.mk _ _ (kernel.condition f)).exact_of_f_is_kernel
       (kernelIsKernel f)).map F).mono_g (((hF _ h₁).eq_of_src _ _))
   have : Epi (F.map f) :=
-    (((ShortComplex.mk _
+    (((ShortComplex.mk _ _ (cokernel.condition f)).exact_of_g_is_cokernel
+      (cokernelIsCokernel f)).map F).epi_f (((hF _ h₂).eq_of_tgt _ _))
+  exact isIso_of_mono_of_epi (F.map f)
 
 中文:
 引理 isoModSerre_isInvertedBy_iff
@@ -671,7 +673,9 @@ lemma isoModSerre_isInvertedBy_iff
     (((ShortComplex.mk _ _ (kernel.condition f)).exact_of_f_is_kernel
       (kernelIsKernel f)).map F).mono_g (((hF _ h₁).eq_of_src _ _))
   have : Epi (F.map f) :=
-    (((ShortComplex.mk _
+    (((ShortComplex.mk _ _ (cokernel.condition f)).exact_of_g_is_cokernel
+      (cokernelIsCokernel f)).map F).epi_f (((hF _ h₂).eq_of_tgt _ _))
+  exact isIso_of_mono_of_epi (F.map f)
 
 Depends on / 依赖: F.map, P.le_kernel_of_isoModSerre_isInvertedBy, ShortComplex, ShortComplex.mk, cokernel, cokernel.condition, cokernelIsCokernel, condition, epi_f, eq_of_src, eq_of_tgt, exact_of_f_is_kernel, exact_of_g_is_cokernel, isIso_of_mono_of_epi, kernel, kernel.condition, kernelIsKernel, le_kernel_of_isoModSerre_isInvertedBy, mono_g
 -/

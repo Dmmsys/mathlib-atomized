@@ -770,7 +770,7 @@ definition trans
         Precylinder.i₀_π]
       infer_instance
     dsimp
-    a
+    apply weakEquivalence_of_precomp (P.i₀ ≫ pushout.inl _ _)
 
 中文:
 定义 trans
@@ -783,7 +783,7 @@ definition trans
         Precylinder.i₀_π]
       infer_instance
     dsimp
-    a
+    apply weakEquivalence_of_precomp (P.i₀ ≫ pushout.inl _ _)
 
 Depends on / 依赖: P.toPrecylinder.trans, toPrecylinder
 -/
@@ -811,7 +811,16 @@ instance [IsCofibrant
     rw [show (P.trans P').i = coprod.map P.i₀ (𝟙 A) ≫ ψ by simp [Precylinder.i]; rw [ψ]]
     have fac : coprod.map P.i₁ (𝟙 A) ≫ ψ = P'.i ≫ pushout.inr _ _ := by
       ext
-      · simp [ψ, pushout.condi
+      · simp [ψ, pushout.condition]
+      · simp [ψ]
+    have sq : IsPushout P.i₁ (coprod.inl ≫ P'.i) (coprod.inl ≫ ψ) (pushout.inr _ _) := by
+      simpa [ψ] using IsPushout.of_hasPushout P.i₁ P'.i₀
+    have : Cofibration ψ := by
+      rw [cofibration_iff]
+      exact (cofibrations C).of_isPushout
+        (IsPushout.of_top sq fac (IsPushout.of_coprod_inl_with_id P.i₁ A).flip)
+        (by rw [← cofibration_iff]; infer_instance)
+    infer_instance
 
 中文:
 实例 [IsCofibrant
@@ -821,7 +830,16 @@ instance [IsCofibrant
     rw [show (P.trans P').i = coprod.map P.i₀ (𝟙 A) ≫ ψ by simp [Precylinder.i]; rw [ψ]]
     have fac : coprod.map P.i₁ (𝟙 A) ≫ ψ = P'.i ≫ pushout.inr _ _ := by
       ext
-      · simp [ψ, pushout.condi
+      · simp [ψ, pushout.condition]
+      · simp [ψ]
+    have sq : IsPushout P.i₁ (coprod.inl ≫ P'.i) (coprod.inl ≫ ψ) (pushout.inr _ _) := by
+      simpa [ψ] using IsPushout.of_hasPushout P.i₁ P'.i₀
+    have : Cofibration ψ := by
+      rw [cofibration_iff]
+      exact (cofibrations C).of_isPushout
+        (IsPushout.of_top sq fac (IsPushout.of_coprod_inl_with_id P.i₁ A).flip)
+        (by rw [← cofibration_iff]; infer_instance)
+    infer_instance
 
 Depends on / 依赖: Cofibration, IsPushout, IsPushout.of_hasPushout, P.trans, Precylinder, Precylinder.i, cofibration_iff, cofibrations, condition, coprod, coprod.desc, coprod.inl, coprod.map, of_hasPushout, pushout, pushout.condition, pushout.inl, pushout.inr
 -/

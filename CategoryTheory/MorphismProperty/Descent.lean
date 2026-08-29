@@ -293,7 +293,18 @@ instance [HasPullbacks
       (pullbackRightPullbackFstIso _ _ _).hom ≫
       (pullback.congrHom (by simp) rfl).hom ≫
       (pullbackSymmetry _ _).hom ≫
-
+      pullback.diagonal (pullback.fst f g) ≫
+      (diagonalObjPullbackFstIso f g).hom := by
+    apply pullback.hom_ext
+    apply pullback.hom_ext <;> simp [pullback.condition]
+    simp [pullback.condition]
+  rw [diagonal_iff]
+  apply MorphismProperty.of_pullback_fst_of_descendsAlong (P := P) (Q := Q)
+      (f := pullback.fst (pullback.snd g g ≫ g) f)
+  · exact MorphismProperty.pullback_fst _ _ hf
+  · rw [heq]
+    iterate 4 rw [cancel_left_of_respectsIso (P := P)]
+    rwa [cancel_right_of_respectsIso (P := P)]
 
 中文:
 实例 [有Pullbacks
@@ -306,7 +317,18 @@ instance [HasPullbacks
       (pullbackRightPullbackFstIso _ _ _).hom ≫
       (pullback.congrHom (by simp) rfl).hom ≫
       (pullbackSymmetry _ _).hom ≫
-
+      pullback.diagonal (pullback.fst f g) ≫
+      (diagonalObjPullbackFstIso f g).hom := by
+    apply pullback.hom_ext
+    apply pullback.hom_ext <;> simp [pullback.condition]
+    simp [pullback.condition]
+  rw [diagonal_iff]
+  apply MorphismProperty.of_pullback_fst_of_descendsAlong (P := P) (Q := Q)
+      (f := pullback.fst (pullback.snd g g ≫ g) f)
+  · exact MorphismProperty.pullback_fst _ _ hf
+  · rw [heq]
+    iterate 4 rw [cancel_left_of_respectsIso (P := P)]
+    rwa [cancel_right_of_respectsIso (P := P)]
 
 Depends on / 依赖: DescendsAlong, DescendsAlong.mk, MorphismProperty, MorphismProperty.of_pul, condition, congrHom, diagonal, diagonalObjPullbackFstIso, diagonal_iff, hom_ext, introv, of_pul, pullback, pullback.condition, pullback.congrHom, pullback.diagonal, pullback.fst, pullback.hom_ext, pullback.snd, pullbackRightPullbackFstIso
 -/
@@ -344,7 +366,10 @@ lemma eq_of_isomorphisms_descendsAlong
   change MorphismProperty.isomorphisms C _
   apply (MorphismProperty.isomorphisms C).of_isPullback_of_descendsAlong
     (IsPullback.of_hasPullback _ _).flip (P.pullback_fst s v hv)
-  have : pullback.snd (equalizer.ι f g) (pullback
+  have : pullback.snd (equalizer.ι f g) (pullback.fst s v) =
+      (equalizerPullbackMapIso hf hg _).inv ≫ equalizer.ι _ _ := by
+    ext <;> simp [pullback.condition]
+  simpa [this] using equalizer.ι_of_eq H
 
 中文:
 引理 eq_of_isomorphisms_descendsAlong
@@ -354,7 +379,10 @@ lemma eq_of_isomorphisms_descendsAlong
   change MorphismProperty.isomorphisms C _
   apply (MorphismProperty.isomorphisms C).of_isPullback_of_descendsAlong
     (IsPullback.of_hasPullback _ _).flip (P.pullback_fst s v hv)
-  have : pullback.snd (equalizer.ι f g) (pullback
+  have : pullback.snd (equalizer.ι f g) (pullback.fst s v) =
+      (equalizerPullbackMapIso hf hg _).inv ≫ equalizer.ι _ _ := by
+    ext <;> simp [pullback.condition]
+  simpa [this] using equalizer.ι_of_eq H
 
 Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, Limits, Limits.eq_of_epi_equalizer, MorphismProperty, MorphismProperty.isomorphisms, P.pullback_fst, condition, eq_of_epi_equalizer, equalizer, equalizerPullbackMapIso, isomorphisms, of_hasPullback, of_isPullback_of_descendsAlong, pullback, pullback.condition, pullback.fst, pullback.snd, pullback_fst
 -/

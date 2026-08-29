@@ -476,7 +476,11 @@ definition addOppositeEquiv
     apply AddOpposite.unop_injective
     simp
   map_add' x y := by
-    apply AddOpposite.unop
+    apply AddOpposite.unop_injective
+    ext
+    simp
+
+@[simp]
 
 中文:
 定义 addOppositeEquiv
@@ -488,7 +492,11 @@ definition addOppositeEquiv
     apply AddOpposite.unop_injective
     simp
   map_add' x y := by
-    apply AddOpposite.unop
+    apply AddOpposite.unop_injective
+    ext
+    simp
+
+@[simp]
 
 Depends on / 依赖: convert, isPWO_support, x.coeff, x.isPWO_support
 -/
@@ -782,7 +790,11 @@ theorem orderTop_add_eq_left
   let g : Γ := Set.IsWF.min x.isWF_support (support_nonempty_iff.2 hx)
   have hcxyne : (x + y).coeff g != 0 := by
     rw [coeff_add]; rw [coeff_eq_zero_of_lt_orderTop (lt_of_eq_of_lt (orderTop_of_ne_zero hx).symm hxy)]; rw [add_zero]
-    exact co
+    exact coeff_orderTop_ne (orderTop_of_ne_zero hx)
+  have hxyx : (x + y).orderTop <= x.orderTop := by
+    rw [orderTop_of_ne_zero hx]
+    exact orderTop_le_of_coeff_ne_zero hcxyne
+  exact le_antisymm hxyx (le_of_eq_of_le (min_eq_left_of_lt hxy).symm min_orderTop_le_orderTop_add)
 
 中文:
 定理 orderTop_add_eq_left
@@ -792,7 +804,11 @@ theorem orderTop_add_eq_left
   let g : Γ := Set.IsWF.min x.isWF_support (support_nonempty_iff.2 hx)
   have hcxyne : (x + y).coeff g != 0 := by
     rw [coeff_add]; rw [coeff_eq_zero_of_lt_orderTop (lt_of_eq_of_lt (orderTop_of_ne_zero hx).symm hxy)]; rw [add_zero]
-    exact co
+    exact coeff_orderTop_ne (orderTop_of_ne_zero hx)
+  have hxyx : (x + y).orderTop <= x.orderTop := by
+    rw [orderTop_of_ne_zero hx]
+    exact orderTop_le_of_coeff_ne_zero hcxyne
+  exact le_antisymm hxyx (le_of_eq_of_le (min_eq_left_of_lt hxy).symm min_orderTop_le_orderTop_add)
 
 Depends on / 依赖: Set.IsWF.min, add_zero, coeff_add, coeff_eq_zero_of_lt_orderTop, coeff_orderTop_ne, hcxyne, hxy.ne_top, isWF_support, le_antisymm, le_of_eq_of_le, lt_of_eq_of_lt, min_eq_left_of, ne_top, orderTop, orderTop_le_of_coeff_ne_zero, orderTop_ne_top, orderTop_of_ne_zero, support_nonempty_iff, x.isWF_support, x.orderTop
 -/
@@ -847,7 +863,8 @@ theorem leadingCoeff_add_eq_left
   by_cases h : x + y = 0
   · rw [h, orderTop_zero] at ho
     rw [h]; rw [orderTop_eq_top.mp ho.symm]
-  · simp_rw [leadingCoeff_of_ne_zero h, leadingCoeff_of_ne_zero hx, ho, coe
+  · simp_rw [leadingCoeff_of_ne_zero h, leadingCoeff_of_ne_zero hx, ho, coeff_add]
+    rw [coeff_eq_zero_of_lt_orderTop (x := y) (by simpa using hxy)]; rw [add_zero]
 
 中文:
 定理 leadingCoeff_add_eq_left
@@ -858,7 +875,8 @@ theorem leadingCoeff_add_eq_left
   by_cases h : x + y = 0
   · rw [h, orderTop_zero] at ho
     rw [h]; rw [orderTop_eq_top.mp ho.symm]
-  · simp_rw [leadingCoeff_of_ne_zero h, leadingCoeff_of_ne_zero hx, ho, coe
+  · simp_rw [leadingCoeff_of_ne_zero h, leadingCoeff_of_ne_zero hx, ho, coeff_add]
+    rw [coeff_eq_zero_of_lt_orderTop (x := y) (by simpa using hxy)]; rw [add_zero]
 
 Depends on / 依赖: add_zero, coeff_add, coeff_eq_zero_of_lt_orderTop, ho.symm, hxy.ne_top, leadingCoeff_of_ne_zero, ne_top, orderTop, orderTop_add_eq_left, orderTop_eq_top, orderTop_eq_top.mp, orderTop_ne_top, orderTop_zero, simp_rw, x.orderTop
 -/
@@ -960,7 +978,13 @@ have hyne : single y.order y.leadingCoeff != 0 := single_ne_zero leadingCoeff_ne
     rw [leadingCoeff_eq]; rw [← h]; rw [coeff_order_of_eq_add_single hxy]; rw [single_eq_zero] at hyne
     exact hyne rfl
   refine lt_of_le_of_ne ?_ this
-  si
+  simp only [order, ne_zero_of_eq_add_single hxy hy, ↓reduceDIte, hy]
+  refine Set.IsWF.min_le_min_of_subset fun g hg => ?_
+  obtain rfl | hgx := eq_or_ne g x.order
+· simpa using coeff_order_eq_zero.not.2 ne_zero_of_eq_add_single hxy hy
+  · have : x.coeff g = (y + (single x.order) x.leadingCoeff).coeff g := by rw [← hxy]
+    rw [coeff_add]; rw [coeff_single_of_ne hgx]; rw [add_zero] at this
+    simpa [this] using hg
 
 中文:
 定理 order_lt_order_of_eq_add_single
@@ -972,7 +996,13 @@ have hyne : single y.order y.leadingCoeff != 0 := single_ne_zero leadingCoeff_ne
     rw [leadingCoeff_eq]; rw [← h]; rw [coeff_order_of_eq_add_single hxy]; rw [single_eq_zero] at hyne
     exact hyne rfl
   refine lt_of_le_of_ne ?_ this
-  si
+  simp only [order, ne_zero_of_eq_add_single hxy hy, ↓reduceDIte, hy]
+  refine Set.IsWF.min_le_min_of_subset fun g hg => ?_
+  obtain rfl | hgx := eq_or_ne g x.order
+· simpa using coeff_order_eq_zero.not.2 ne_zero_of_eq_add_single hxy hy
+  · have : x.coeff g = (y + (single x.order) x.leadingCoeff).coeff g := by rw [← hxy]
+    rw [coeff_add]; rw [coeff_single_of_ne hgx]; rw [add_zero] at this
+    simpa [this] using hg
 
 Depends on / 依赖: Set.IsWF.min_le_min_of_subset, coeff_order_eq_zero, coeff_order_eq_zero.not, coeff_order_of_eq_add_single, eq_or_ne, leadingCoeff, leadingCoeff_eq, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, lt_of_le_of_ne, min_le_min_of_subset, ne_zero_of_eq_add_sin, ne_zero_of_eq_add_single, reduceDIte, single, single_eq_zero, single_ne_zero, x.order, y.leadingCoeff, y.order
 -/
@@ -1657,7 +1687,10 @@ theorem orderTop_sub_ne
   have hx : x != 0 := fun h => by simp_all [orderTop_zero, WithTop.top_ne_coe]
   rw [orderTop_of_ne_zero hx]; rw [WithTop.coe_eq_coe] at hxg
   have hy : y != 0 := fun h => by simp_all [orderTop_zero, WithTop.top_ne_coe]
-  rw [orderTop_of_ne_zero hy]; rw [W
+  rw [orderTop_of_ne_zero hy]; rw [WithTop.coe_eq_coe] at hyg
+  simp only [leadingCoeff_of_ne_zero hx, leadingCoeff_of_ne_zero hy, untop_orderTop_of_ne_zero hx,
+    untop_orderTop_of_ne_zero hy, hxg, hyg] at hxyc
+  rwa [coeff_sub, sub_eq_zero]
 
 中文:
 定理 orderTop_sub_ne
@@ -1667,7 +1700,10 @@ theorem orderTop_sub_ne
   have hx : x != 0 := fun h => by simp_all [orderTop_zero, WithTop.top_ne_coe]
   rw [orderTop_of_ne_zero hx]; rw [WithTop.coe_eq_coe] at hxg
   have hy : y != 0 := fun h => by simp_all [orderTop_zero, WithTop.top_ne_coe]
-  rw [orderTop_of_ne_zero hy]; rw [W
+  rw [orderTop_of_ne_zero hy]; rw [WithTop.coe_eq_coe] at hyg
+  simp only [leadingCoeff_of_ne_zero hx, leadingCoeff_of_ne_zero hy, untop_orderTop_of_ne_zero hx,
+    untop_orderTop_of_ne_zero hy, hxg, hyg] at hxyc
+  rwa [coeff_sub, sub_eq_zero]
 
 Depends on / 依赖: WithTop, WithTop.coe_eq_coe, WithTop.top_ne_coe, coe_eq_coe, coeff_sub, leadingCoeff_of_ne_zero, orderTop_ne_of_coeff_eq_zero, orderTop_of_ne_zero, orderTop_zero, sub_eq_zero, top_ne_coe, untop_orderTop_of_ne_zero
 -/

@@ -132,7 +132,8 @@ definition cochainComplexEquivalence
     NatIso.ofComponents (fun K => HomologicalComplex.Hom.isoOfComponents
       (fun n => K.XIsoOfEq (by simp)))
   counitIso :=
-    NatIso.ofComponents (fun K => H
+    NatIso.ofComponents (fun K => HomologicalComplex.Hom.isoOfComponents
+      (fun n => K.XIsoOfEq (by simp)))
 
 中文:
 定义 cochainComplexEquivalence
@@ -143,7 +144,8 @@ definition cochainComplexEquivalence
     NatIso.ofComponents (fun K => HomologicalComplex.Hom.isoOfComponents
       (fun n => K.XIsoOfEq (by simp)))
   counitIso :=
-    NatIso.ofComponents (fun K => H
+    NatIso.ofComponents (fun K => HomologicalComplex.Hom.isoOfComponents
+      (fun n => K.XIsoOfEq (by simp)))
 
 Depends on / 依赖: ComplexShape, ComplexShape.embeddingUpIntDownInt.restrictionFunctor, embeddingUpIntDownInt, restrictionFunctor
 -/
@@ -212,7 +214,10 @@ definition homotopyOp
     congr 1
     · rw [prevD_eq _ (j' := - (n + 1)) (by simp)]
       symm
-      exact dNext_eq _ (i' := n + 1) (by
+      exact dNext_eq _ (i' := n + 1) (by simp)
+    · rw [dNext_eq _ (i' := - (n - 1)) (by dsimp; lia)]
+      symm
+      exact prevD_eq _ (j' := n - 1) (by simp)
 
 中文:
 定义 homotopyOp
@@ -229,7 +234,10 @@ definition homotopyOp
     congr 1
     · rw [prevD_eq _ (j' := - (n + 1)) (by simp)]
       symm
-      exact dNext_eq _ (i' := n + 1) (by
+      exact dNext_eq _ (i' := n + 1) (by simp)
+    · rw [dNext_eq _ (i' := - (n - 1)) (by dsimp; lia)]
+      symm
+      exact prevD_eq _ (j' := n - 1) (by simp)
 
 Depends on / 依赖: h.hom
 -/
@@ -300,7 +308,23 @@ definition homotopyUnop
     lia
   comm n := Quiver.Hom.op_inj (by
     have H (p q p' q' : Int) (hp : p = p') (hq : q = q') :
-      h.hom p 
+      h.hom p q = (L.XIsoOfEq (by simpa using hp.symm)).hom.op ≫ h.hom p' q' ≫
+        (K.XIsoOfEq (by simpa)).hom.op := by
+      subst hp hq
+      simp
+    obtain ⟨n, rfl⟩ : exists (m : Int), n = -m := ⟨-n , by simp⟩
+    have := h.comm n
+    dsimp at this
+    rw [op_add]; rw [op_add]; rw [this]; rw [add_left_inj]; rw [add_comm]
+    congr 1
+    · refine (prevD_eq _ (j' := n - 1) (by dsimp; lia)).trans ?_
+      rw [dNext_eq _ (i' := - (n - 1)) (by dsimp; lia)]
+      dsimp
+      simp [H (- -n) (- -(n - 1)) n (n - 1) (by lia) (by lia), ← op_comp_assoc]
+    · refine (dNext_eq _ (i' := n + 1) (by dsimp)).trans ?_
+      rw [prevD_eq _ (j' := - (n + 1)) (by simp)]
+      dsimp
+      simp [H (- -(n + 1)) (- -n) (n + 1) n (by simp) (by simp), ← op_comp_assoc, ← op_comp])
 
 中文:
 定义 homotopyUnop
@@ -312,7 +336,23 @@ definition homotopyUnop
     lia
   comm n := Quiver.Hom.op_inj (by
     have H (p q p' q' : Int) (hp : p = p') (hq : q = q') :
-      h.hom p 
+      h.hom p q = (L.XIsoOfEq (by simpa using hp.symm)).hom.op ≫ h.hom p' q' ≫
+        (K.XIsoOfEq (by simpa)).hom.op := by
+      subst hp hq
+      simp
+    obtain ⟨n, rfl⟩ : exists (m : Int), n = -m := ⟨-n , by simp⟩
+    have := h.comm n
+    dsimp at this
+    rw [op_add]; rw [op_add]; rw [this]; rw [add_left_inj]; rw [add_comm]
+    congr 1
+    · refine (prevD_eq _ (j' := n - 1) (by dsimp; lia)).trans ?_
+      rw [dNext_eq _ (i' := - (n - 1)) (by dsimp; lia)]
+      dsimp
+      simp [H (- -n) (- -(n - 1)) n (n - 1) (by lia) (by lia), ← op_comp_assoc]
+    · refine (dNext_eq _ (i' := n + 1) (by dsimp)).trans ?_
+      rw [prevD_eq _ (j' := - (n + 1)) (by simp)]
+      dsimp
+      simp [H (- -(n + 1)) (- -n) (n + 1) n (by simp) (by simp), ← op_comp_assoc, ← op_comp])
 
 Depends on / 依赖: K.XIsoOfEq, L.XIsoOfEq, XIsoOfEq, h.hom
 -/

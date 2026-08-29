@@ -553,7 +553,8 @@ definition GlobalBranchingPreprocessor.process
     if branches.length > 1 then
       trace[linarith] "Preprocessing: {pp.name} has branched, with branches:"
     for ⟨goal, hyps⟩ in branches do
-   
+      trace[linarith] (← goal.withContext <| linarithGetProofsMessage hyps)
+    return branches
 
 中文:
 定义 GlobalBranchingPreprocessor.process
@@ -565,7 +566,8 @@ definition GlobalBranchingPreprocessor.process
     if branches.length > 1 then
       trace[linarith] "Preprocessing: {pp.name} has branched, with branches:"
     for ⟨goal, hyps⟩ in branches do
-   
+      trace[linarith] (← goal.withContext <| linarithGetProofsMessage hyps)
+    return branches
 
 Depends on / 依赖: g.withContext, withContext
 -/
@@ -683,7 +685,9 @@ definition mkSingleCompZeroOf
   else do
     let (_, tp, _) ← tp.ineq?
     let cpos : Q(Prop) ← mkAppM ``GT.gt #[(← tp.ofNat c), (← tp.ofNat 0)]
-    let 
+    let ex ← synthesizeUsingTactic' cpos (← `(tactic| norm_num))
+    let e' ← mkAppM iq.toConstMulName #[h, ex]
+    return (iq, e')
 
 中文:
 定义 mkSingleCompZeroOf
@@ -698,7 +702,9 @@ definition mkSingleCompZeroOf
   else do
     let (_, tp, _) ← tp.ineq?
     let cpos : Q(Prop) ← mkAppM ``GT.gt #[(← tp.ofNat c), (← tp.ofNat 0)]
-    let 
+    let ex ← synthesizeUsingTactic' cpos (← `(tactic| norm_num))
+    let e' ← mkAppM iq.toConstMulName #[h, ex]
+    return (iq, e')
 -/
 def mkSingleCompZeroOf (c : Nat) (h : Expr) : MetaM (Ineq × Expr) := do
   let tp ← inferType h

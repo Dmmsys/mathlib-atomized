@@ -424,7 +424,9 @@ theorem sum_left
   refine ⟨⋂ i, s i, MeasurableSet.iInter hsm, ?_, ?_⟩
   · rw [sum_apply _ (MeasurableSet.iInter hsm), ENNReal.tsum_eq_zero]
     exact fun i => measure_mono_null (iInter_subset _ _) (hsμ i)
-  · rwa [compl_
+  · rwa [compl_iInter, measure_iUnion_null_iff]
+
+@[simp]
 
 中文:
 定理 sum_left
@@ -436,7 +438,9 @@ theorem sum_left
   refine ⟨⋂ i, s i, MeasurableSet.iInter hsm, ?_, ?_⟩
   · rw [sum_apply _ (MeasurableSet.iInter hsm), ENNReal.tsum_eq_zero]
     exact fun i => measure_mono_null (iInter_subset _ _) (hsμ i)
-  · rwa [compl_
+  · rwa [compl_iInter, measure_iUnion_null_iff]
+
+@[simp]
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_eq_zero, MeasurableSet, MeasurableSet.iInter, compl_iInter, h.mono, iInter, iInter_subset, le_rfl, le_sum, measure_iUnion_null_iff, measure_mono_null, sum_apply, tsum_eq_zero
 -/
@@ -665,7 +669,14 @@ lemma absolutelyContinuous_of_add_of_mutuallySingular
   have htμ : μ t = 0 := h_ms.measure_nullSet
   have htν₂ : ν₂ tᶜ = 0 := h_ms.measure_compl_nullSet
   have : μ s = μ (s inter tᶜ) := by
-    conv_lhs => rw [← in
+    conv_lhs => rw [← inter_union_compl s t]
+    rw [measure_union]; rw [measure_inter_null_of_null_right _ htμ]; rw [zero_add]
+    · exact (disjoint_compl_right.inter_right' _).inter_left' _
+    · exact hs.inter ht.compl
+  rw [this]
+  refine h ?_
+  simp only [Measure.coe_add, Pi.add_apply, add_eq_zero]
+  exact ⟨measure_inter_null_of_null_left _ hs_zero, measure_inter_null_of_null_right _ htν₂⟩
 
 中文:
 引理 absolutelyContinuous_of_add_of_mutuallySingular
@@ -677,7 +688,14 @@ lemma absolutelyContinuous_of_add_of_mutuallySingular
   have htμ : μ t = 0 := h_ms.measure_nullSet
   have htν₂ : ν₂ tᶜ = 0 := h_ms.measure_compl_nullSet
   have : μ s = μ (s inter tᶜ) := by
-    conv_lhs => rw [← in
+    conv_lhs => rw [← inter_union_compl s t]
+    rw [measure_union]; rw [measure_inter_null_of_null_right _ htμ]; rw [zero_add]
+    · exact (disjoint_compl_right.inter_right' _).inter_left' _
+    · exact hs.inter ht.compl
+  rw [this]
+  refine h ?_
+  simp only [Measure.coe_add, Pi.add_apply, add_eq_zero]
+  exact ⟨measure_inter_null_of_null_left _ hs_zero, measure_inter_null_of_null_right _ htν₂⟩
 
 Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.mk, MeasurableSet, conv_lhs, disjoint_compl_right, disjoint_compl_right.inter_right, h_ms, h_ms.measurableSet_nullSet, h_ms.measure_compl_nullSet, h_ms.measure_nullSet, h_ms.nullSet, hs.inter, hs_zero, ht.compl, inter_left, inter_right, inter_union_compl, measurableSet_nullSet, measure_compl_nullSet, measure_inter_null_of_null_right
 -/
@@ -738,7 +756,21 @@ lemma exists_null_set_measure_lt_of_disjoint
   have h₂ : forall n : Nat, exists t, μ t + ν tᶜ < ε * (1 / 2) ^ n := by
     intro n
     obtain ⟨m, ⟨t, ht₁, rfl⟩, hm₂⟩ :
-        exists x 
+        exists x in {m | exists t, m = μ t + ν tᶜ}, x < ε * (1 / 2 : Real>=0∞) ^ n := by
+refine exists_lt_of_csInf_lt ⟨ν univ, ∅, by simp⟩ h₁ ▸ ENNReal.mul_pos ?_ (by simp)
+      norm_cast
+      exact hε.ne.symm
+    exact ⟨t, hm₂⟩
+  choose t ht₂ using h₂
+  refine ⟨⋂ n, t n, ?_, ?_⟩
+  · refine eq_zero_of_le_mul_pow (by simp)
+      fun n => ((measure_mono <| iInter_subset_of_subset n fun _ ht => ht).trans
+      (le_add_right le_rfl)).trans (ht₂ n).le
+  · rw [compl_iInter, (by simp [ENNReal.tsum_mul_left, mul_comm] :
+      2 * (ε : Real>=0∞) = ∑' (n : Nat), ε * (1 / 2 : Real>=0∞) ^ n)]
+    refine (measure_iUnion_le _).trans ?_
+    exact ENNReal.summable.tsum_le_tsum (fun n => (le_add_left le_rfl).trans (ht₂ n).le)
+      ENNReal.summable
 
 中文:
 引理 存在_null_set_measure_lt_of_disjoint
@@ -749,7 +781,21 @@ lemma exists_null_set_measure_lt_of_disjoint
   have h₂ : forall n : Nat, exists t, μ t + ν tᶜ < ε * (1 / 2) ^ n := by
     intro n
     obtain ⟨m, ⟨t, ht₁, rfl⟩, hm₂⟩ :
-        exists x 
+        exists x in {m | exists t, m = μ t + ν tᶜ}, x < ε * (1 / 2 : Real>=0∞) ^ n := by
+refine exists_lt_of_csInf_lt ⟨ν univ, ∅, by simp⟩ h₁ ▸ ENNReal.mul_pos ?_ (by simp)
+      norm_cast
+      exact hε.ne.symm
+    exact ⟨t, hm₂⟩
+  choose t ht₂ using h₂
+  refine ⟨⋂ n, t n, ?_, ?_⟩
+  · refine eq_zero_of_le_mul_pow (by simp)
+      fun n => ((measure_mono <| iInter_subset_of_subset n fun _ ht => ht).trans
+      (le_add_right le_rfl)).trans (ht₂ n).le
+  · rw [compl_iInter, (by simp [ENNReal.tsum_mul_left, mul_comm] :
+      2 * (ε : Real>=0∞) = ∑' (n : Nat), ε * (1 / 2 : Real>=0∞) ^ n)]
+    refine (measure_iUnion_le _).trans ?_
+    exact ENNReal.summable.tsum_le_tsum (fun n => (le_add_left le_rfl).trans (ht₂ n).le)
+      ENNReal.summable
 
 Depends on / 依赖: ENNReal, ENNReal.mul_pos, MeasurableSet, MeasurableSet.univ, Measure, Measure.inf_apply, exists_lt_of_csInf_lt, inf_apply, inf_le_left, inf_le_right, inter_univ, le_bot_iff, mul_pos, ne.symm, simp_rw
 -/
@@ -790,7 +836,16 @@ exists_null_set_measure_lt_of_disjoint h (ε := (1 / 2) ^ (n + 1)) pow_pos (by s
     conv =>
       -- this tweak is needed due to the known issue of `norm_cast` with numeric fractions
       enter [1, 1]
-  
+      equals ((1 : Real>=0) / (2 : Real>=0)) => rfl
+    norm_cast
+    ring
+  choose s hs₂ hs₃ using h'
+  refine Measure.MutuallySingular.mk (t := (⋃ n, s n)ᶜ) (measure_iUnion_null hs₂) ?_ ?_
+  · rw [compl_iUnion]
+refine eq_zero_of_le_mul_pow (ε := 1) (by simp : (1 / 2 : Real>=0∞) < 1) fun n => ?_
+    rw [ENNReal.coe_one]; rw [one_mul]
+    exact (measure_mono <| iInter_subset_of_subset n fun _ ht => ht).trans (hs₃ n)
+  · rw [union_compl_self]
 
 中文:
 引理 mutuallySingular_of_disjoint
@@ -803,7 +858,16 @@ exists_null_set_measure_lt_of_disjoint h (ε := (1 / 2) ^ (n + 1)) pow_pos (by s
     conv =>
       -- this tweak is needed due to the known issue of `norm_cast` with numeric fractions
       enter [1, 1]
-  
+      equals ((1 : Real>=0) / (2 : Real>=0)) => rfl
+    norm_cast
+    ring
+  choose s hs₂ hs₃ using h'
+  refine Measure.MutuallySingular.mk (t := (⋃ n, s n)ᶜ) (measure_iUnion_null hs₂) ?_ ?_
+  · rw [compl_iUnion]
+refine eq_zero_of_le_mul_pow (ε := 1) (by simp : (1 / 2 : Real>=0∞) < 1) fun n => ?_
+    rw [ENNReal.coe_one]; rw [one_mul]
+    exact (measure_mono <| iInter_subset_of_subset n fun _ ht => ht).trans (hs₃ n)
+  · rw [union_compl_self]
 
 Depends on / 依赖: another, c.eq_empty_or_nonempty, construction, convert, disjunct, edge_case_construction, eq_empty_or_nonempty, exists_null_set_measure_lt_of_disjoint, hcnemp, operator, pow_pos, proof_post_zorn, proof_that, proof_that_construction_respects_whatever, proof_that_edge_case_construction_contains_all_stuff_in_c, proof_that_edge_case_construction_respects_whatever, variant, whatever, zorn_subset
 -/
@@ -841,7 +905,10 @@ lemma MutuallySingular.disjoint
   ext s hs
   simp only [Measure.coe_zero, Pi.zero_apply]
   rw [← inter_union_compl s h.nullSet]; rw [measure_union]; rw [add_eq_zero]
-· exact ⟨measure_inter_null_of_null_right _ 
+· exact ⟨measure_inter_null_of_null_right _ absolutelyContinuous_of_le hξμ h.measure_nullSet,
+measure_inter_null_of_null_right _ absolutelyContinuous_of_le hξν h.measure_compl_nullSet⟩
+  · exact Disjoint.mono inter_subset_right inter_subset_right disjoint_compl_right
+  · exact hs.inter h.measurableSet_nullSet.compl
 
 中文:
 引理 互奇异.disjoint
@@ -856,7 +923,10 @@ lemma MutuallySingular.disjoint
   ext s hs
   simp only [Measure.coe_zero, Pi.zero_apply]
   rw [← inter_union_compl s h.nullSet]; rw [measure_union]; rw [add_eq_zero]
-· exact ⟨measure_inter_null_of_null_right _ 
+· exact ⟨measure_inter_null_of_null_right _ absolutelyContinuous_of_le hξμ h.measure_nullSet,
+measure_inter_null_of_null_right _ absolutelyContinuous_of_le hξν h.measure_compl_nullSet⟩
+  · exact Disjoint.mono inter_subset_right inter_subset_right disjoint_compl_right
+  · exact hs.inter h.measurableSet_nullSet.compl
 
 Depends on / 依赖: Disjoint, Disjoint.mono, Measure, Measure.coe_zero, Pi.zero_apply, absolutelyContinuous_of_le, add_eq_zero, coe_zero, disjoint_compl_righ, h.measure_compl_nullSet, h.measure_nullSet, h.nullSet, h_bot_iff, inter_subset_right, inter_union_compl, le_bot_iff, measure_compl_nullSet, measure_inter_null_of_null_right, measure_nullSet, measure_union
 -/
@@ -888,7 +958,9 @@ lemma MutuallySingular.disjoint_ae
   · rw [mem_ae_iff, compl_union, compl_compl]
     exact measure_inter_null_of_null_right _ h.measure_nullSet
   · rw [mem_ae_iff, compl_union]
-    exact measure_inter_null_of_null_right _ h.measure_
+    exact measure_inter_null_of_null_right _ h.measure_compl_nullSet
+  · rw [union_eq_compl_compl_inter_compl, union_eq_compl_compl_inter_compl,
+      ← compl_union, compl_compl, inter_union_compl, compl_compl]
 
 中文:
 引理 互奇异.disjoint_ae
@@ -901,7 +973,9 @@ lemma MutuallySingular.disjoint_ae
   · rw [mem_ae_iff, compl_union, compl_compl]
     exact measure_inter_null_of_null_right _ h.measure_nullSet
   · rw [mem_ae_iff, compl_union]
-    exact measure_inter_null_of_null_right _ h.measure_
+    exact measure_inter_null_of_null_right _ h.measure_compl_nullSet
+  · rw [union_eq_compl_compl_inter_compl, union_eq_compl_compl_inter_compl,
+      ← compl_union, compl_compl, inter_union_compl, compl_compl]
 
 Depends on / 依赖: compl_compl, compl_union, disjoint_iff_inf_le, h.measure_compl_nullSet, h.measure_nullSet, h.nullSet, inter_union_compl, measure_compl_nullSet, measure_inter_null_of_null_right, measure_nullSet, mem_ae_iff, nullSet, union_eq_compl_compl_inter_compl
 -/
@@ -930,7 +1004,9 @@ lemma disjoint_of_disjoint_ae
   have : (⊥ : Measure α) = 0 := rfl
   refine Measure.le_intro fun u hu _ => ?_
   simp only [Measure.inf_apply hu, this, coe_zero, Pi.zero_apply, nonpos_iff_eq_zero]
-  refine csInf_eq_bot_
+  refine csInf_eq_bot_of_bot_mem ⟨t, ?_⟩
+  simp [measure_mono_null (inter_subset_left.trans hst.subset_compl_left) hs,
+    measure_mono_null inter_subset_left ht]
 
 中文:
 引理 disjoint_of_disjoint_ae
@@ -943,7 +1019,9 @@ lemma disjoint_of_disjoint_ae
   have : (⊥ : Measure α) = 0 := rfl
   refine Measure.le_intro fun u hu _ => ?_
   simp only [Measure.inf_apply hu, this, coe_zero, Pi.zero_apply, nonpos_iff_eq_zero]
-  refine csInf_eq_bot_
+  refine csInf_eq_bot_of_bot_mem ⟨t, ?_⟩
+  simp [measure_mono_null (inter_subset_left.trans hst.subset_compl_left) hs,
+    measure_mono_null inter_subset_left ht]
 
 Depends on / 依赖: Filter, Filter.disjoint_iff, Measure, Measure.inf_apply, Measure.le_intro, Pi.zero_apply, coe_zero, csInf_eq_bot_of_bot_mem, disjoint_iff, disjoint_iff_inf_le, hst.subset_compl_left, inf_apply, inter_subset_left, inter_subset_left.trans, le_intro, measure_mono_null, mem_ae_iff, nonpos_iff_eq_zero, simp_rw, subset_compl_left
 -/

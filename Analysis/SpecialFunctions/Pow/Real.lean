@@ -424,7 +424,11 @@ theorem rpow_def_of_neg
       simp only [Complex.log, Complex.norm_real, norm_eq_abs, abs_of_neg hx, log_neg_eq_log,
         Complex.arg_ofReal_of_neg hx, Complex.ofReal_mul]
       ring
-    rw 
+    rw [this]; rw [Complex.exp_add_mul_I]; rw [← Complex.ofReal_exp]; rw [← Complex.ofReal_cos]; rw [←
+      Complex.ofReal_sin]; rw [mul_add]; rw [← Complex.ofReal_mul]; rw [← mul_assoc]; rw [← Complex.ofReal_mul]; rw [Complex.add_re]; rw [Complex.ofReal_re]; rw [Complex.mul_re]; rw [Complex.I_re]; rw [Complex.ofReal_im]; rw [Real.log_neg_eq_log]
+    ring
+  · rw [Complex.ofReal_eq_zero]
+    exact ne_of_lt hx
 
 中文:
 定理 rpow_def_of_neg
@@ -436,7 +440,11 @@ theorem rpow_def_of_neg
       simp only [Complex.log, Complex.norm_real, norm_eq_abs, abs_of_neg hx, log_neg_eq_log,
         Complex.arg_ofReal_of_neg hx, Complex.ofReal_mul]
       ring
-    rw 
+    rw [this]; rw [Complex.exp_add_mul_I]; rw [← Complex.ofReal_exp]; rw [← Complex.ofReal_cos]; rw [←
+      Complex.ofReal_sin]; rw [mul_add]; rw [← Complex.ofReal_mul]; rw [← mul_assoc]; rw [← Complex.ofReal_mul]; rw [Complex.add_re]; rw [Complex.ofReal_re]; rw [Complex.mul_re]; rw [Complex.I_re]; rw [Complex.ofReal_im]; rw [Real.log_neg_eq_log]
+    ring
+  · rw [Complex.ofReal_eq_zero]
+    exact ne_of_lt hx
 
 Depends on / 依赖: Complex.I, Complex.add_re, Complex.arg_ofReal_of_neg, Complex.cpow_def, Complex.exp_add_mul_I, Complex.log, Complex.norm_real, Complex.ofReal_cos, Complex.ofReal_exp, Complex.ofReal_mul, Complex.ofReal_sin, abs_of_neg, add_re, arg_ofReal_of_neg, cpow_def, exp_add_mul_I, if_neg, log_neg_eq_log, mul_add, mul_assoc
 -/
@@ -604,7 +612,11 @@ theorem zero_rpow_eq_iff
     · subst h
       simp only [Complex.one_re, Complex.ofReal_zero, Complex.cpow_zero] at hyp
       exact Or.inr ⟨rfl, hyp.symm⟩
-    · rw [Complex.zero_cpow (Complex.ofReal_ne_zero.mpr h)] at h
+    · rw [Complex.zero_cpow (Complex.ofReal_ne_zero.mpr h)] at hyp
+      exact Or.inl ⟨h, hyp.symm⟩
+  · rintro (⟨h, rfl⟩ | ⟨rfl, rfl⟩)
+    · exact zero_rpow h
+    · exact rpow_zero _
 
 中文:
 定理 zero_rpow_eq_iff
@@ -618,7 +630,11 @@ theorem zero_rpow_eq_iff
     · subst h
       simp only [Complex.one_re, Complex.ofReal_zero, Complex.cpow_zero] at hyp
       exact Or.inr ⟨rfl, hyp.symm⟩
-    · rw [Complex.zero_cpow (Complex.ofReal_ne_zero.mpr h)] at h
+    · rw [Complex.zero_cpow (Complex.ofReal_ne_zero.mpr h)] at hyp
+      exact Or.inl ⟨h, hyp.symm⟩
+  · rintro (⟨h, rfl⟩ | ⟨rfl, rfl⟩)
+    · exact zero_rpow h
+    · exact rpow_zero _
 
 Depends on / 依赖: Complex.cpow_zero, Complex.ofReal_ne_zero.mpr, Complex.ofReal_zero, Complex.one_re, Complex.zero_cpow, Or.inl, Or.inr, cpow_zero, hyp.symm, ofReal_ne_zero, ofReal_zero, one_re, rpow_def, rpow_zero, zero_cpow, zero_rpow
 -/
@@ -1116,7 +1132,8 @@ theorem le_rpow_add
           gcongr
           exacts [zero_rpow_nonneg z, zero_rpow_le_one y, zero_rpow_le_one z]
         _ = 1 := by simp
-    · sim
+    · simp [rpow_add', ← H, h]
+  · simp [rpow_add pos]
 
 中文:
 定理 le_rpow_add
@@ -1131,7 +1148,8 @@ theorem le_rpow_add
           gcongr
           exacts [zero_rpow_nonneg z, zero_rpow_le_one y, zero_rpow_le_one z]
         _ = 1 := by simp
-    · sim
+    · simp [rpow_add', ← H, h]
+  · simp [rpow_add pos]
 
 Depends on / 依赖: H.symm, exacts, le_iff_eq_or_lt, rpow_add, rpow_zero, zero_rpow_le_one, zero_rpow_nonneg
 -/
@@ -1351,7 +1369,7 @@ theorem ofReal_cpow_of_nonpos
   rcases hx.eq_or_lt with (rfl | hlt)
   · rcases eq_or_ne y 0 with (rfl | hy) <;> simp [*]
   have hne : (x : Complex) != 0 := ofReal_ne_zero.mpr hlt.ne
-  rw [cpow_def_of_ne_zero hne]; rw [cpow_def_of_ne_zero (neg_ne_zero.2 hne)]; rw [← exp_add]; rw [← add_mul]; rw [log]; rw [log]; rw [norm_neg]; 
+  rw [cpow_def_of_ne_zero hne]; rw [cpow_def_of_ne_zero (neg_ne_zero.2 hne)]; rw [← exp_add]; rw [← add_mul]; rw [log]; rw [log]; rw [norm_neg]; rw [arg_ofReal_of_neg hlt]; rw [← ofReal_neg]; rw [arg_ofReal_of_nonneg (neg_nonneg.2 hx)]; rw [ofReal_zero]; rw [zero_mul]; rw [add_zero]
 
 中文:
 定理 of实数_cpow_of_nonpos
@@ -1360,7 +1378,7 @@ theorem ofReal_cpow_of_nonpos
   rcases hx.eq_or_lt with (rfl | hlt)
   · rcases eq_or_ne y 0 with (rfl | hy) <;> simp [*]
   have hne : (x : Complex) != 0 := ofReal_ne_zero.mpr hlt.ne
-  rw [cpow_def_of_ne_zero hne]; rw [cpow_def_of_ne_zero (neg_ne_zero.2 hne)]; rw [← exp_add]; rw [← add_mul]; rw [log]; rw [log]; rw [norm_neg]; 
+  rw [cpow_def_of_ne_zero hne]; rw [cpow_def_of_ne_zero (neg_ne_zero.2 hne)]; rw [← exp_add]; rw [← add_mul]; rw [log]; rw [log]; rw [norm_neg]; rw [arg_ofReal_of_neg hlt]; rw [← ofReal_neg]; rw [arg_ofReal_of_nonneg (neg_nonneg.2 hx)]; rw [ofReal_zero]; rw [zero_mul]; rw [add_zero]
 
 Depends on / 依赖: add_mul, add_zero, arg_ofReal_of_neg, arg_ofReal_of_nonneg, cpow_def_of_ne_zero, eq_or_lt, eq_or_ne, exp_add, hlt.ne, hx.eq_or_lt, neg_ne_zero, neg_nonneg, norm_neg, ofReal_ne_zero, ofReal_ne_zero.mpr, ofReal_neg, ofReal_zero, zero_mul
 -/
@@ -1382,7 +1400,8 @@ lemma cpow_ofReal
   · simp [ofReal_cpow le_rfl]
   · rw [cpow_def_of_ne_zero hx, exp_eq_exp_re_mul_sin_add_cos, mul_comm (log x)]
     norm_cast
-    rw [re_ofReal_mul]; rw [im_ofReal_mul]; rw [log_re]; rw [log_im]; rw [mul_comm y]; rw [mul_comm y]; rw [Real.exp_mul]; rw [Real.exp_
+    rw [re_ofReal_mul]; rw [im_ofReal_mul]; rw [log_re]; rw [log_im]; rw [mul_comm y]; rw [mul_comm y]; rw [Real.exp_mul]; rw [Real.exp_log]
+    rwa [norm_pos_iff]
 
 中文:
 引理 cpow_of实数
@@ -1392,7 +1411,8 @@ lemma cpow_ofReal
   · simp [ofReal_cpow le_rfl]
   · rw [cpow_def_of_ne_zero hx, exp_eq_exp_re_mul_sin_add_cos, mul_comm (log x)]
     norm_cast
-    rw [re_ofReal_mul]; rw [im_ofReal_mul]; rw [log_re]; rw [log_im]; rw [mul_comm y]; rw [mul_comm y]; rw [Real.exp_mul]; rw [Real.exp_
+    rw [re_ofReal_mul]; rw [im_ofReal_mul]; rw [log_re]; rw [log_im]; rw [mul_comm y]; rw [mul_comm y]; rw [Real.exp_mul]; rw [Real.exp_log]
+    rwa [norm_pos_iff]
 
 Depends on / 依赖: Real.exp_log, Real.exp_mul, cpow_def_of_ne_zero, eq_or_ne, exp_eq_exp_re_mul_sin_add_cos, exp_log, exp_mul, im_ofReal_mul, le_rfl, log_im, log_re, mul_comm, norm_pos_iff, ofReal_cpow, re_ofReal_mul
 -/
@@ -4282,7 +4302,7 @@ lemma norm_prime_cpow_le_one_half
   refine (Real.rpow_le_rpow_of_nonpos zero_lt_two (Nat.cast_le.mpr p.prop.two_le) <|
     by rw [neg_re]; linarith only [hs]).trans ?_
   rw [one_div]; rw [← Real.rpow_neg_one]
-exact Real.rpow_le_rpow_of_exponent_le one_
+exact Real.rpow_le_rpow_of_exponent_le one_le_two (neg_lt_neg hs).le
 
 中文:
 引理 norm_prime_cpow_le_one_half
@@ -4292,7 +4312,7 @@ exact Real.rpow_le_rpow_of_exponent_le one_
   refine (Real.rpow_le_rpow_of_nonpos zero_lt_two (Nat.cast_le.mpr p.prop.two_le) <|
     by rw [neg_re]; linarith only [hs]).trans ?_
   rw [one_div]; rw [← Real.rpow_neg_one]
-exact Real.rpow_le_rpow_of_exponent_le one_
+exact Real.rpow_le_rpow_of_exponent_le one_le_two (neg_lt_neg hs).le
 
 Depends on / 依赖: Nat.cast_le.mpr, Real.rpow_le_rpow_of_exponent_le, Real.rpow_le_rpow_of_nonpos, Real.rpow_neg_one, cast_le, neg_lt_neg, neg_re, norm_natCast_cpow_of_re_ne_zero, one_div, one_le_two, p.prop.two_le, rpow_le_rpow_of_exponent_le, rpow_le_rpow_of_nonpos, rpow_neg_one, two_le, zero_lt_two
 -/
@@ -4447,7 +4467,7 @@ theorem sqrt_eq_rpow
       ← rpow_natCast, ← rpow_mul h]
     simp
   · have : 1 / (2 : Real) * π = π / (2 : Real) := by ring
-    rw [sqrt_eq_zero_of_nonpos h.le]; rw [rpow_def_of_neg h]; rw [this];
+    rw [sqrt_eq_zero_of_nonpos h.le]; rw [rpow_def_of_neg h]; rw [this]; rw [cos_pi_div_two]; rw [mul_zero]
 
 中文:
 定理 sqrt_eq_rpow
@@ -4459,7 +4479,7 @@ theorem sqrt_eq_rpow
       ← rpow_natCast, ← rpow_mul h]
     simp
   · have : 1 / (2 : Real) * π = π / (2 : Real) := by ring
-    rw [sqrt_eq_zero_of_nonpos h.le]; rw [rpow_def_of_neg h]; rw [this];
+    rw [sqrt_eq_zero_of_nonpos h.le]; rw [rpow_def_of_neg h]; rw [this]; rw [cos_pi_div_two]; rw [mul_zero]
 
 Depends on / 依赖: cos_pi_div_two, h.le, le_or_gt, mul_self_inj_of_nonneg, mul_self_sqrt, mul_zero, rpow_def_of_neg, rpow_mul, rpow_natCast, rpow_nonneg, sqrt_eq_zero_of_nonpos, sqrt_nonneg
 -/
@@ -4539,7 +4559,7 @@ lemma cpow_inv_two_im_eq_sqrt
   proof: by
   rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_im]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [sin_half_eq_sqrt]; rw [← sqrt_mul (norm_nonneg _)]; rw [← mul_div_assoc]; rw [mul_sub]; rw [mul_one]; rw [norm_mul_cos_arg]
   · rwa [arg_nonneg_iff]
-  · linarith [pi
+  · linarith [pi_pos, arg_le_pi x]
 
 中文:
 引理 cpow_inv_two_im_eq_sqrt
@@ -4547,7 +4567,7 @@ lemma cpow_inv_two_im_eq_sqrt
   证明: by
   rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_im]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [sin_half_eq_sqrt]; rw [← sqrt_mul (norm_nonneg _)]; rw [← mul_div_assoc]; rw [mul_sub]; rw [mul_one]; rw [norm_mul_cos_arg]
   · rwa [arg_nonneg_iff]
-  · linarith [pi
+  · linarith [pi_pos, arg_le_pi x]
 
 Depends on / 依赖: Real.sqrt_eq_rpow, arg_le_pi, arg_nonneg_iff, cpow_ofReal_im, div_eq_mul_inv, mul_div_assoc, mul_one, mul_sub, norm_mul_cos_arg, norm_nonneg, ofReal_inv, ofReal_ofNat, one_div, pi_pos, sin_half_eq_sqrt, sqrt_eq_rpow, sqrt_mul
 -/
@@ -4565,14 +4585,16 @@ lemma cpow_inv_two_im_eq_neg_sqrt
   given: {x : Complex} (hx : x.im < 0)
   proof: by
   rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_im]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [sin_half_eq_neg_sqrt]; rw [mul_neg]; rw [← sqrt_mul (norm_nonneg _)]; rw [← mul_div_assoc]; rw [mul_sub]; rw [mul_one]; rw [norm_mul_cos_arg]
-  · linarith [pi_pos, n
+  · linarith [pi_pos, neg_pi_lt_arg x]
+  · exact (arg_neg_iff.2 hx).le
 
 中文:
 引理 cpow_inv_two_im_eq_neg_sqrt
   条件: {x : 复形} (hx : x.im < 0)
   证明: by
   rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_im]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [sin_half_eq_neg_sqrt]; rw [mul_neg]; rw [← sqrt_mul (norm_nonneg _)]; rw [← mul_div_assoc]; rw [mul_sub]; rw [mul_one]; rw [norm_mul_cos_arg]
-  · linarith [pi_pos, n
+  · linarith [pi_pos, neg_pi_lt_arg x]
+  · exact (arg_neg_iff.2 hx).le
 
 Depends on / 依赖: Real.sqrt_eq_rpow, arg_neg_iff, cpow_ofReal_im, div_eq_mul_inv, mul_div_assoc, mul_neg, mul_one, mul_sub, neg_pi_lt_arg, norm_mul_cos_arg, norm_nonneg, ofReal_inv, ofReal_ofNat, one_div, pi_pos, sin_half_eq_neg_sqrt, sqrt_eq_rpow, sqrt_mul
 -/
@@ -4590,14 +4612,14 @@ lemma abs_cpow_inv_two_im
   given: (x : Complex)
   statement: |(x ^ (2⁻¹ : Complex)).im| = √((‖x‖ - x.re) / 2)
   proof: by
-  rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_im]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [abs_mul]; rw [abs_of_nonneg (sqrt_nonneg _)]; rw [abs_sin_half]; rw [← sqrt_mul (norm_nonneg _)]; rw [← mul_div_assoc]; rw [mul_sub]; rw [mul_one]; rw [norm_mul_cos_
+  rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_im]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [abs_mul]; rw [abs_of_nonneg (sqrt_nonneg _)]; rw [abs_sin_half]; rw [← sqrt_mul (norm_nonneg _)]; rw [← mul_div_assoc]; rw [mul_sub]; rw [mul_one]; rw [norm_mul_cos_arg]
 
 中文:
 引理 abs_cpow_inv_two_im
   条件: (x : 复形)
   结论: |(x ^ (2⁻¹ : 复形)).im| = √((‖x‖ - x.re) / 2)
   证明: by
-  rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_im]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [abs_mul]; rw [abs_of_nonneg (sqrt_nonneg _)]; rw [abs_sin_half]; rw [← sqrt_mul (norm_nonneg _)]; rw [← mul_div_assoc]; rw [mul_sub]; rw [mul_one]; rw [norm_mul_cos_
+  rw [← ofReal_ofNat]; rw [← ofReal_inv]; rw [cpow_ofReal_im]; rw [← div_eq_mul_inv]; rw [← one_div]; rw [← Real.sqrt_eq_rpow]; rw [abs_mul]; rw [abs_of_nonneg (sqrt_nonneg _)]; rw [abs_sin_half]; rw [← sqrt_mul (norm_nonneg _)]; rw [← mul_div_assoc]; rw [mul_sub]; rw [mul_one]; rw [norm_mul_cos_arg]
 
 Depends on / 依赖: Real.sqrt_eq_rpow, abs_mul, abs_of_nonneg, abs_sin_half, cpow_ofReal_im, div_eq_mul_inv, mul_div_assoc, mul_one, mul_sub, norm_mul_cos_arg, norm_nonneg, ofReal_inv, ofReal_ofNat, one_div, sqrt_eq_rpow, sqrt_mul, sqrt_nonneg
 -/

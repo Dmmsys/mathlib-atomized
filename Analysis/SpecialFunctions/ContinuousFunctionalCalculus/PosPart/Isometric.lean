@@ -41,7 +41,9 @@ lemma CStarAlgebra.norm_posPart_le
   obtain (h | h) := le_or_gt x 0
   · simp [posPart_def, max_eq_right h]
   · simp only [posPart_def, max_eq_left h.le]
-    exact NonUnitalIsometricContinuousF
+    exact NonUnitalIsometricContinuousFunctionalCalculus.norm_quasispectrum_le a hx ha
+
+@[simp]
 
 中文:
 引理 CStar代数.norm_posPart_le
@@ -54,7 +56,9 @@ lemma CStarAlgebra.norm_posPart_le
   obtain (h | h) := le_or_gt x 0
   · simp [posPart_def, max_eq_right h]
   · simp only [posPart_def, max_eq_left h.le]
-    exact NonUnitalIsometricContinuousF
+    exact NonUnitalIsometricContinuousFunctionalCalculus.norm_quasispectrum_le a hx ha
+
+@[simp]
 
 Depends on / 依赖: CFC.posPart_def, IsSelfAdjoint, NonUnitalIsometricContinuousFunctionalCalculus, NonUnitalIsometricContinuousFunctionalCalculus.norm_quasispectrum_le, h.le, le_or_gt, max_eq_left, max_eq_right, norm_quasispectrum_le, posPart_def
 -/
@@ -105,7 +109,10 @@ refine le_antisymm ?_ max_le (norm_posPart_le a) (norm_negPart_le a)
   obtain (hx' | hx') := le_total 0 x
   · apply le_max_of_le_left
 refine le_of_eq_of_le ?_ norm_apply_le_norm_cfcₙ _ a hx
-    rw [posPart_eq_self.mpr hx
+    rw [posPart_eq_self.mpr hx']
+  · apply le_max_of_le_right
+refine le_of_eq_of_le ?_ norm_apply_le_norm_cfcₙ _ a hx
+    rw [negPart_eq_neg.mpr hx']; rw [norm_neg]
 
 中文:
 引理 IsSelfAdjoint.norm_eq_max_norm_posPart_negPart
@@ -118,7 +125,10 @@ refine le_antisymm ?_ max_le (norm_posPart_le a) (norm_negPart_le a)
   obtain (hx' | hx') := le_total 0 x
   · apply le_max_of_le_left
 refine le_of_eq_of_le ?_ norm_apply_le_norm_cfcₙ _ a hx
-    rw [posPart_eq_self.mpr hx
+    rw [posPart_eq_self.mpr hx']
+  · apply le_max_of_le_right
+refine le_of_eq_of_le ?_ norm_apply_le_norm_cfcₙ _ a hx
+    rw [negPart_eq_neg.mpr hx']; rw [norm_neg]
 
 Depends on / 依赖: cfc_tac, conv_lhs, le_antisymm, le_max_of_le_left, le_max_of_le_right, le_of_eq_of_le, le_total, max_le, negPart_eq_neg, negPart_eq_neg.mpr, norm_neg, norm_negPart_le, norm_posPart_le, posPart_eq_self, posPart_eq_self.mpr
 -/

@@ -135,7 +135,18 @@ theorem isTopologicalBasis
       (image2 (fun x x_1 => ⇑WithLower.toLower ⁻¹' x inter ⇑WithScott.toScott ⁻¹' x_1)
         (IsLower.lowerBasis (WithLower α)) {U | IsOpen[scott α univ] U}) := by
     rw [lawsonBasis]; rw [image2]; rw [IsLower.lowerBasis]
-    simp_rw [sdiff_eq_compl_
+    simp_rw [sdiff_eq_compl_inter]
+    aesop
+  rw [lawsonBasis_image2]
+  convert!
+    IsTopologicalBasis.inf_induced IsLower.isTopologicalBasis
+      (isTopologicalBasis_opens (α := WithScott α)) WithLower.toLower WithScott.toScott
+  rw [@topology_eq_lawson α _ _ _]; rw [lawson]
+  apply (congrArg₂ min _) _
+  · let _ := lower α
+    exact (@IsLower.withLowerHomeomorph α ‹_› (lower α) ⟨rfl⟩).isInducing.eq_induced
+  · let _ := scott α univ
+    exact (@IsScott.withScottHomeomorph α _ (scott α univ) ⟨rfl⟩).isInducing.eq_induced
 
 中文:
 定理 isTopologicalBasis
@@ -145,7 +156,18 @@ theorem isTopologicalBasis
       (image2 (fun x x_1 => ⇑WithLower.toLower ⁻¹' x inter ⇑WithScott.toScott ⁻¹' x_1)
         (IsLower.lowerBasis (WithLower α)) {U | IsOpen[scott α univ] U}) := by
     rw [lawsonBasis]; rw [image2]; rw [IsLower.lowerBasis]
-    simp_rw [sdiff_eq_compl_
+    simp_rw [sdiff_eq_compl_inter]
+    aesop
+  rw [lawsonBasis_image2]
+  convert!
+    IsTopologicalBasis.inf_induced IsLower.isTopologicalBasis
+      (isTopologicalBasis_opens (α := WithScott α)) WithLower.toLower WithScott.toScott
+  rw [@topology_eq_lawson α _ _ _]; rw [lawson]
+  apply (congrArg₂ min _) _
+  · let _ := lower α
+    exact (@IsLower.withLowerHomeomorph α ‹_› (lower α) ⟨rfl⟩).isInducing.eq_induced
+  · let _ := scott α univ
+    exact (@IsScott.withScottHomeomorph α _ (scott α univ) ⟨rfl⟩).isInducing.eq_induced
 -/
 protected theorem isTopologicalBasis : TopologicalSpace.IsTopologicalBasis (lawsonBasis α) := by
   have lawsonBasis_image2 : lawsonBasis α =

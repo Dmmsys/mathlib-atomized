@@ -40,7 +40,7 @@ abbreviation algebra'
       rcases ZMod.intCast_surjective a with ⟨k, rfl⟩
       change ZMod.castHom h R k * r = r * ZMod.castHom h R k
       rw [map_intCast]; rw [Int.cast_comm]
-  smul_def' := fun _ _ => 
+  smul_def' := fun _ _ => rfl
 
 中文:
 缩写 algebra'
@@ -52,7 +52,7 @@ abbreviation algebra'
       rcases ZMod.intCast_surjective a with ⟨k, rfl⟩
       change ZMod.castHom h R k * r = r * ZMod.castHom h R k
       rw [map_intCast]; rw [Int.cast_comm]
-  smul_def' := fun _ _ => 
+  smul_def' := fun _ _ => rfl
 
 Depends on / 依赖: ZMod.castHom, castHom
 -/
@@ -101,7 +101,8 @@ definition algebraOfModule
     obtain _ | n := n
     · obtain rfl : ((inferInstance : Module Int R)) = ‹_› := Subsingleton.elim _ _
       simp [ZMod, Int.cast_comm]
-    · obtain ⟨r, rfl⟩ := ZMod
+    · obtain ⟨r, rfl⟩ := ZMod.natCast_zmod_surjective r
+      simp [Nat.cast_smul_eq_nsmul, Nat.cast_comm]
 
 中文:
 定义 algebraOfModule
@@ -111,7 +112,8 @@ definition algebraOfModule
     obtain _ | n := n
     · obtain rfl : ((inferInstance : Module Int R)) = ‹_› := Subsingleton.elim _ _
       simp [ZMod, Int.cast_comm]
-    · obtain ⟨r, rfl⟩ := ZMod
+    · obtain ⟨r, rfl⟩ := ZMod.natCast_zmod_surjective r
+      simp [Nat.cast_smul_eq_nsmul, Nat.cast_comm]
 
 Depends on / 依赖: Algebra, Algebra.ofModule, Int.cast_comm, Module, Nat.cast_comm, Nat.cast_smul_eq_nsmul, Subsingleton, Subsingleton.elim, ZMod.natCast_zmod_surjective, cast_comm, cast_smul_eq_nsmul, natCast_zmod_surjective, ofModule
 -/

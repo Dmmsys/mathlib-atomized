@@ -420,7 +420,29 @@ theorem polynomialFunctions.comap_compRightAlgHom_iccHomeoI
     · simp
     · ext x
       simp only [q, neg_mul, map_neg, map_mul, AlgHom.coe_toRingHom,
-        P
+        Polynomial.eval_X, Polynomial.eval_neg, Polynomial.eval_C, Polynomial.eval_smul,
+        smul_eq_mul, Polynomial.eval_mul, Polynomial.eval_add,
+        Polynomial.eval_comp, Polynomial.toContinuousMapOnAlgHom_apply,
+        Polynomial.toContinuousMapOn_apply, Polynomial.toContinuousMap_apply]
+      convert! w ⟨_, _⟩
+      · ext
+        simp only [iccHomeoI_symm_apply_coe]
+        replace h : b - a != 0 := sub_ne_zero_of_ne h.ne.symm
+        field
+      · rw [mul_comm (b - a)⁻¹, ← neg_mul, ← add_mul, ← sub_eq_add_neg]
+        have w₁ : 0 < (b - a)⁻¹ := inv_pos.mpr (sub_pos.mpr h)
+        have w₂ : 0 <= (x : Real) - a := sub_nonneg.mpr x.2.1
+        have w₃ : (x : Real) - a <= b - a := sub_le_sub_right x.2.2 a
+        fconstructor
+        · exact mul_nonneg w₂ (le_of_lt w₁)
+        · rw [← div_eq_mul_inv, div_le_one (sub_pos.mpr h)]
+          exact w₃
+  · rintro ⟨p, ⟨-, rfl⟩⟩
+    let q := p.comp ((b - a) • Polynomial.X + Polynomial.C a)
+    refine ⟨q, ⟨?_, ?_⟩⟩
+    · simp
+    · ext x
+      simp [q, mul_comm]
 
 中文:
 定理 polynomialFunctions.comap_compRightAlgHom_iccHomeoI
@@ -436,7 +458,29 @@ theorem polynomialFunctions.comap_compRightAlgHom_iccHomeoI
     · simp
     · ext x
       simp only [q, neg_mul, map_neg, map_mul, AlgHom.coe_toRingHom,
-        P
+        Polynomial.eval_X, Polynomial.eval_neg, Polynomial.eval_C, Polynomial.eval_smul,
+        smul_eq_mul, Polynomial.eval_mul, Polynomial.eval_add,
+        Polynomial.eval_comp, Polynomial.toContinuousMapOnAlgHom_apply,
+        Polynomial.toContinuousMapOn_apply, Polynomial.toContinuousMap_apply]
+      convert! w ⟨_, _⟩
+      · ext
+        simp only [iccHomeoI_symm_apply_coe]
+        replace h : b - a != 0 := sub_ne_zero_of_ne h.ne.symm
+        field
+      · rw [mul_comm (b - a)⁻¹, ← neg_mul, ← add_mul, ← sub_eq_add_neg]
+        have w₁ : 0 < (b - a)⁻¹ := inv_pos.mpr (sub_pos.mpr h)
+        have w₂ : 0 <= (x : Real) - a := sub_nonneg.mpr x.2.1
+        have w₃ : (x : Real) - a <= b - a := sub_le_sub_right x.2.2 a
+        fconstructor
+        · exact mul_nonneg w₂ (le_of_lt w₁)
+        · rw [← div_eq_mul_inv, div_le_one (sub_pos.mpr h)]
+          exact w₃
+  · rintro ⟨p, ⟨-, rfl⟩⟩
+    let q := p.comp ((b - a) • Polynomial.X + Polynomial.C a)
+    refine ⟨q, ⟨?_, ?_⟩⟩
+    · simp
+    · ext x
+      simp [q, mul_comm]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, DFunLike, DFunLike.ext_iff, Polynomia, Polynomial, Polynomial.C, Polynomial.X, Polynomial.eval_C, Polynomial.eval_X, Polynomial.eval_add, Polynomial.eval_comp, Polynomial.eval_mul, Polynomial.eval_neg, Polynomial.eval_smul, Polynomial.toContinuousMapOnAlgHom_apply, Polynomial.toContinuousMapOn_apply, coe_toRingHom, eval_C, eval_X
 -/
@@ -490,7 +534,11 @@ theorem polynomialFunctions.eq_adjoin_X
   rw [AlgHom.coe_toRingHom]
   refine p.induction_on (fun r => ?_) (fun f g hf hg => ?_) fun n r hn => ?_
   · rw [Polynomial.C_eq_algebraMap, AlgHomClass.commutes]
-    e
+    exact Subalgebra.algebraMap_mem _ r
+  · rw [map_add]
+    exact add_mem hf hg
+  · rw [pow_succ, ← mul_assoc, map_mul]
+    exact mul_mem hn (Algebra.subset_adjoin <| Set.mem_singleton _)
 
 中文:
 定理 polynomialFunctions.eq_adjoin_X
@@ -502,7 +550,11 @@ theorem polynomialFunctions.eq_adjoin_X
   rw [AlgHom.coe_toRingHom]
   refine p.induction_on (fun r => ?_) (fun f g hf hg => ?_) fun n r hn => ?_
   · rw [Polynomial.C_eq_algebraMap, AlgHomClass.commutes]
-    e
+    exact Subalgebra.algebraMap_mem _ r
+  · rw [map_add]
+    exact add_mem hf hg
+  · rw [pow_succ, ← mul_assoc, map_mul]
+    exact mul_mem hn (Algebra.subset_adjoin <| Set.mem_singleton _)
 
 Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, AlgHomClass, AlgHomClass.commutes, Algebra, Algebra.adjoin_le, Algebra.subset_adjoin, C_eq_algebraMap, Polynomial, Polynomial.C_eq_algebraMap, Set.mem_singleton, Set.mem_singleton_iff, Subalgebra, Subalgebra.algebraMap_mem, add_mem, adjoin_le, algebraMap_mem, coe_toRingHom, commutes, induction_on
 -/

@@ -278,7 +278,9 @@ theorem condExpL2_indicator_of_measurable
   have h_mem : indicatorConstLp 2 (hm s hs) hμs c in lpMeas E 𝕜 m 2 μ :=
     mem_lpMeas_indicatorConstLp hm hs hμs
   let ind := (⟨indicatorConstLp 2 (hm s hs) hμs c, h_mem⟩ : lpMeas E 𝕜 m 2 μ)
-  have h_coe_ind : (ind : α ->₂[μ] E) = indicatorConstL
+  have h_coe_ind : (ind : α ->₂[μ] E) = indicatorConstLp 2 (hm s hs) hμs c := rfl
+  have h_orth_mem := Submodule.orthogonalProjectionOnto_mem_subspace_eq_self ind
+  rw [← h_coe_ind]; rw [h_orth_mem]
 
 中文:
 定理 condExpL2_indicator_of_measurable
@@ -289,7 +291,9 @@ theorem condExpL2_indicator_of_measurable
   have h_mem : indicatorConstLp 2 (hm s hs) hμs c in lpMeas E 𝕜 m 2 μ :=
     mem_lpMeas_indicatorConstLp hm hs hμs
   let ind := (⟨indicatorConstLp 2 (hm s hs) hμs c, h_mem⟩ : lpMeas E 𝕜 m 2 μ)
-  have h_coe_ind : (ind : α ->₂[μ] E) = indicatorConstL
+  have h_coe_ind : (ind : α ->₂[μ] E) = indicatorConstLp 2 (hm s hs) hμs c := rfl
+  have h_orth_mem := Submodule.orthogonalProjectionOnto_mem_subspace_eq_self ind
+  rw [← h_coe_ind]; rw [h_orth_mem]
 
 Depends on / 依赖: Submodule, Submodule.orthogonalProjectionOnto_mem_subspace_eq_self, condExpL2, h_coe_ind, h_mem, h_orth_mem, indicatorConstLp, lpMeas, mem_lpMeas_indicatorConstLp, orthogonalProjectionOnto_mem_subspace_eq_self
 -/
@@ -355,7 +359,7 @@ theorem integral_condExpL2_eq_of_fin_meas_real
   have h_eq_inner : ∫ x in s, (condExpL2 𝕜 𝕜 hm f : α -> 𝕜) x ∂μ =
       ⟪indicatorConstLp 2 (hm s hs) hμs (1 : 𝕜), condExpL2 𝕜 𝕜 hm f⟫ := by
     rw [L2.inner_indicatorConstLp_one (hm s hs) hμs]
-  rw [h_eq_inner]; rw [← inner_condExp
+  rw [h_eq_inner]; rw [← inner_condExpL2_left_eq_right]; rw [condExpL2_indicator_of_measurable hm hs hμs]
 
 中文:
 定理 integral_condExpL2_eq_of_fin_meas_real
@@ -365,7 +369,7 @@ theorem integral_condExpL2_eq_of_fin_meas_real
   have h_eq_inner : ∫ x in s, (condExpL2 𝕜 𝕜 hm f : α -> 𝕜) x ∂μ =
       ⟪indicatorConstLp 2 (hm s hs) hμs (1 : 𝕜), condExpL2 𝕜 𝕜 hm f⟫ := by
     rw [L2.inner_indicatorConstLp_one (hm s hs) hμs]
-  rw [h_eq_inner]; rw [← inner_condExp
+  rw [h_eq_inner]; rw [← inner_condExpL2_left_eq_right]; rw [condExpL2_indicator_of_measurable hm hs hμs]
 
 Depends on / 依赖: L2.inner_indicatorConstLp_one, condExpL2, condExpL2_indicator_of_measurable, h_eq_inner, indicatorConstLp, inner_condExpL2_left_eq_right, inner_indicatorConstLp_one
 -/
@@ -388,7 +392,22 @@ theorem lintegral_nnnorm_condExpL2_le
   let g := h_meas.choose
   have hg_meas : StronglyMeasurable[m] g := h_meas.choose_spec.1
   have hg_eq : g =ᵐ[μ] condExpL2 Real Real hm f := h_meas.choose_spec.2.symm
-  have hg_eq_restrict : g =ᵐ[μ.restrict s] condExpL2 Real R
+  have hg_eq_restrict : g =ᵐ[μ.restrict s] condExpL2 Real Real hm f := ae_restrict_of_ae hg_eq
+  have hg_nnnorm_eq : (fun x => (‖g x‖₊ : Real>=0∞)) =ᵐ[μ.restrict s] fun x =>
+      (‖(condExpL2 Real Real hm f : α -> Real) x‖₊ : Real>=0∞) := by
+    refine hg_eq_restrict.mono fun x hx => ?_
+    dsimp only
+    simp_rw [hx]
+  rw [lintegral_congr_ae hg_nnnorm_eq.symm]
+  refine lintegral_enorm_le_of_forall_fin_meas_integral_eq
+    hm (Lp.stronglyMeasurable f) ?_ ?_ ?_ ?_ hs hμs
+  · exact integrableOn_Lp_of_measure_ne_top f fact_one_le_two_ennreal.elim hμs
+  · exact hg_meas
+  · rw [IntegrableOn, integrable_congr hg_eq_restrict]
+    exact integrableOn_condExpL2_of_measure_ne_top hm hμs f
+  · intro t ht hμt
+    rw [← integral_condExpL2_eq_of_fin_meas_real (hm := hm) f ht hμt.ne]
+    exact setIntegral_congr_ae (hm t ht) (hg_eq.mono fun x hx _ => hx)
 
 中文:
 定理 lintegral_nnnorm_condExpL2_le
@@ -398,7 +417,22 @@ theorem lintegral_nnnorm_condExpL2_le
   let g := h_meas.choose
   have hg_meas : StronglyMeasurable[m] g := h_meas.choose_spec.1
   have hg_eq : g =ᵐ[μ] condExpL2 Real Real hm f := h_meas.choose_spec.2.symm
-  have hg_eq_restrict : g =ᵐ[μ.restrict s] condExpL2 Real R
+  have hg_eq_restrict : g =ᵐ[μ.restrict s] condExpL2 Real Real hm f := ae_restrict_of_ae hg_eq
+  have hg_nnnorm_eq : (fun x => (‖g x‖₊ : Real>=0∞)) =ᵐ[μ.restrict s] fun x =>
+      (‖(condExpL2 Real Real hm f : α -> Real) x‖₊ : Real>=0∞) := by
+    refine hg_eq_restrict.mono fun x hx => ?_
+    dsimp only
+    simp_rw [hx]
+  rw [lintegral_congr_ae hg_nnnorm_eq.symm]
+  refine lintegral_enorm_le_of_forall_fin_meas_integral_eq
+    hm (Lp.stronglyMeasurable f) ?_ ?_ ?_ ?_ hs hμs
+  · exact integrableOn_Lp_of_measure_ne_top f fact_one_le_two_ennreal.elim hμs
+  · exact hg_meas
+  · rw [IntegrableOn, integrable_congr hg_eq_restrict]
+    exact integrableOn_condExpL2_of_measure_ne_top hm hμs f
+  · intro t ht hμt
+    rw [← integral_condExpL2_eq_of_fin_meas_real (hm := hm) f ht hμt.ne]
+    exact setIntegral_congr_ae (hm t ht) (hg_eq.mono fun x hx _ => hx)
 
 Depends on / 依赖: StronglyMeasurable, ae_restrict_of_ae, aestronglyMeasurable, choose_spec, condExpL2, h_meas, h_meas.choose, h_meas.choose_spec, hg_eq, hg_eq_restrict, hg_eq_restrict.mono, hg_meas, hg_nnnorm_eq, lpMeas, lpMeas.aestronglyMeasurable, restrict
 -/
@@ -437,7 +471,17 @@ theorem condExpL2_ae_eq_zero_of_ae_eq_zero
     · refine h_nnnorm_eq_zero.mono fun x hx => ?_
       dsimp only at hx
       rw [Pi.zero_apply] at hx ⊢
-      · rwa [ENNReal.coe_eq_zero, nnnorm_eq_z
+      · rwa [ENNReal.coe_eq_zero, nnnorm_eq_zero] at hx
+    · refine Measurable.coe_nnreal_ennreal (Measurable.nnnorm ?_)
+      exact (Lp.stronglyMeasurable _).measurable
+  rw [← nonpos_iff_eq_zero]
+  refine (lintegral_nnnorm_condExpL2_le hs hμs f).trans (le_of_eq ?_)
+  rw [lintegral_eq_zero_iff]
+  · refine hf.mono fun x hx => ?_
+    dsimp only
+    rw [hx]
+    simp
+  · exact (Lp.stronglyMeasurable _).enorm (ε := Real)
 
 中文:
 定理 condExpL2_ae_eq_zero_of_ae_eq_zero
@@ -448,7 +492,17 @@ theorem condExpL2_ae_eq_zero_of_ae_eq_zero
     · refine h_nnnorm_eq_zero.mono fun x hx => ?_
       dsimp only at hx
       rw [Pi.zero_apply] at hx ⊢
-      · rwa [ENNReal.coe_eq_zero, nnnorm_eq_z
+      · rwa [ENNReal.coe_eq_zero, nnnorm_eq_zero] at hx
+    · refine Measurable.coe_nnreal_ennreal (Measurable.nnnorm ?_)
+      exact (Lp.stronglyMeasurable _).measurable
+  rw [← nonpos_iff_eq_zero]
+  refine (lintegral_nnnorm_condExpL2_le hs hμs f).trans (le_of_eq ?_)
+  rw [lintegral_eq_zero_iff]
+  · refine hf.mono fun x hx => ?_
+    dsimp only
+    rw [hx]
+    simp
+  · exact (Lp.stronglyMeasurable _).enorm (ε := Real)
 
 Depends on / 依赖: ENNReal, ENNReal.coe_eq_zero, Lp.stronglyMeasurable, Measurable, Measurable.coe_nnreal_ennreal, Measurable.nnnorm, Pi.zero_apply, coe_eq_zero, coe_nnreal_ennreal, condExpL2, h_nnnorm_eq_zero, h_nnnorm_eq_zero.mono, le_of_eq, lintegral_eq_z, lintegral_eq_zero_iff, lintegral_nnnorm_condExpL2_le, measurable, nnnorm, nnnorm_eq_zero, nonpos_iff_eq_zero
 -/
@@ -483,7 +537,14 @@ theorem lintegral_nnnorm_condExpL2_indicator_le_real
     ∫⁻ x in t, ‖(indicatorConstLp 2 hs hμs (1 : Real)) x‖₊ ∂μ =
       ∫⁻ x in t, s.indicator (fun _ => (1 : Real>=0∞)) x ∂μ := by
     refine lintegral_congr_ae (ae_restrict_of_ae ?_)
-    refine (@indicatorConstLp_
+    refine (@indicatorConstLp_coeFn _ _ _ 2 _ _ _ hs hμs (1 : Real)).mono fun x hx => ?_
+    dsimp only
+    rw [hx]
+    classical
+    simp_rw [Set.indicator_apply]
+    split_ifs <;> simp
+  rw [h_eq]; rw [lintegral_indicator hs]; rw [lintegral_const]; rw [Measure.restrict_restrict hs]
+  simp only [one_mul, Set.univ_inter, MeasurableSet.univ, Measure.restrict_apply]
 
 中文:
 定理 lintegral_nnnorm_condExpL2_indicator_le_real
@@ -494,7 +555,14 @@ theorem lintegral_nnnorm_condExpL2_indicator_le_real
     ∫⁻ x in t, ‖(indicatorConstLp 2 hs hμs (1 : Real)) x‖₊ ∂μ =
       ∫⁻ x in t, s.indicator (fun _ => (1 : Real>=0∞)) x ∂μ := by
     refine lintegral_congr_ae (ae_restrict_of_ae ?_)
-    refine (@indicatorConstLp_
+    refine (@indicatorConstLp_coeFn _ _ _ 2 _ _ _ hs hμs (1 : Real)).mono fun x hx => ?_
+    dsimp only
+    rw [hx]
+    classical
+    simp_rw [Set.indicator_apply]
+    split_ifs <;> simp
+  rw [h_eq]; rw [lintegral_indicator hs]; rw [lintegral_const]; rw [Measure.restrict_restrict hs]
+  simp only [one_mul, Set.univ_inter, MeasurableSet.univ, Measure.restrict_apply]
 
 Depends on / 依赖: Measure, Measure.restrict_re, Set.indicator_apply, ae_restrict_of_ae, classical, h_eq, indicator, indicatorConstLp, indicatorConstLp_coeFn, indicator_apply, le_of_eq, lintegral_congr_ae, lintegral_const, lintegral_indicator, lintegral_nnnorm_condExpL2_le, restrict_re, s.indicator, simp_rw, split_ifs
 -/
@@ -529,7 +597,18 @@ theorem condExpL2_const_inner
   have h_eq : h_mem_Lp.toLp _ =ᵐ[μ] fun a => ⟪c, (condExpL2 E 𝕜 hm f : α -> E) a⟫ :=
     h_mem_Lp.coeFn_toLp
   refine EventuallyEq.trans ?_ h_eq
-  refine Lp.ae_eq_
+  refine Lp.ae_eq_of_forall_setIntegral_eq' 𝕜 hm _ _ two_ne_zero ENNReal.coe_ne_top
+    (fun s _ hμs => integrableOn_condExpL2_of_measure_ne_top hm hμs.ne _) ?_ ?_ ?_ ?_
+  · intro s _ hμs
+    rw [IntegrableOn]; rw [integrable_congr (ae_restrict_of_ae h_eq)]
+    exact (integrableOn_condExpL2_of_measure_ne_top hm hμs.ne _).const_inner _
+  · intro s hs hμs
+    rw [integral_condExpL2_eq_of_fin_meas_real _ hs hμs.ne]; rw [integral_congr_ae (ae_restrict_of_ae h_eq)]; rw [←
+      L2.inner_indicatorConstLp_eq_setIntegral_inner 𝕜 (↑(condExpL2 E 𝕜 hm f)) (hm s hs) c hμs.ne]; rw [← inner_condExpL2_left_eq_right]; rw [condExpL2_indicator_of_measurable _ hs]; rw [L2.inner_indicatorConstLp_eq_setIntegral_inner 𝕜 f (hm s hs) c hμs.ne]; rw [setIntegral_congr_ae (hm s hs)
+        ((MemLp.coeFn_toLp ((Lp.memLp f).const_inner c)).mono fun x hx _ => hx)]
+  · exact lpMeas.aestronglyMeasurable _
+  · refine AEStronglyMeasurable.congr ?_ h_eq.symm
+    exact (lpMeas.aestronglyMeasurable _).const_inner
 
 中文:
 定理 condExpL2_const_inner
@@ -540,7 +619,18 @@ theorem condExpL2_const_inner
   have h_eq : h_mem_Lp.toLp _ =ᵐ[μ] fun a => ⟪c, (condExpL2 E 𝕜 hm f : α -> E) a⟫ :=
     h_mem_Lp.coeFn_toLp
   refine EventuallyEq.trans ?_ h_eq
-  refine Lp.ae_eq_
+  refine Lp.ae_eq_of_forall_setIntegral_eq' 𝕜 hm _ _ two_ne_zero ENNReal.coe_ne_top
+    (fun s _ hμs => integrableOn_condExpL2_of_measure_ne_top hm hμs.ne _) ?_ ?_ ?_ ?_
+  · intro s _ hμs
+    rw [IntegrableOn]; rw [integrable_congr (ae_restrict_of_ae h_eq)]
+    exact (integrableOn_condExpL2_of_measure_ne_top hm hμs.ne _).const_inner _
+  · intro s hs hμs
+    rw [integral_condExpL2_eq_of_fin_meas_real _ hs hμs.ne]; rw [integral_congr_ae (ae_restrict_of_ae h_eq)]; rw [←
+      L2.inner_indicatorConstLp_eq_setIntegral_inner 𝕜 (↑(condExpL2 E 𝕜 hm f)) (hm s hs) c hμs.ne]; rw [← inner_condExpL2_left_eq_right]; rw [condExpL2_indicator_of_measurable _ hs]; rw [L2.inner_indicatorConstLp_eq_setIntegral_inner 𝕜 f (hm s hs) c hμs.ne]; rw [setIntegral_congr_ae (hm s hs)
+        ((MemLp.coeFn_toLp ((Lp.memLp f).const_inner c)).mono fun x hx _ => hx)]
+  · exact lpMeas.aestronglyMeasurable _
+  · refine AEStronglyMeasurable.congr ?_ h_eq.symm
+    exact (lpMeas.aestronglyMeasurable _).const_inner
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_top, EventuallyEq, EventuallyEq.trans, IntegrableOn, Lp.ae_eq_of_forall_setIntegral_eq, Lp.memLp, MemLp.const_inner, ae_eq_of_forall_setIntegral_eq, ae_restrict, coeFn_toLp, coe_ne_top, condExpL2, const_inner, h_eq, h_mem_Lp, h_mem_Lp.coeFn_toLp, h_mem_Lp.toLp, integrableOn_condExpL2_of_measure_ne_top, integrable_congr
 -/
@@ -576,7 +666,18 @@ theorem integral_condExpL2_eq
     integral_sub' (integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs)
       (integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs)]
   refine integral_eq_zero_of_forall_integral_inner_eq_zero 𝕜 _ ?_ ?_
-  · rw [integrable_congr (ae_rest
+  · rw [integrable_congr (ae_restrict_of_ae (Lp.coeFn_sub (↑(condExpL2 E' 𝕜 hm f)) f).symm)]
+    exact integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs
+  intro c
+  simp_rw [Pi.sub_apply, inner_sub_right]
+  rw [integral_sub
+      ((integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs).const_inner c)
+      ((integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs).const_inner c)]
+  have h_ae_eq_f := MemLp.coeFn_toLp (E := 𝕜) ((Lp.memLp f).const_inner c)
+  rw [sub_eq_zero]; rw [←
+    setIntegral_congr_ae (hm s hs) ((condExpL2_const_inner hm f c).mono fun x hx _ => hx)]; rw [←
+    setIntegral_congr_ae (hm s hs) (h_ae_eq_f.mono fun x hx _ => hx)]
+  exact integral_condExpL2_eq_of_fin_meas_real _ hs hμs
 
 中文:
 定理 integral_condExpL2_eq
@@ -586,7 +687,18 @@ theorem integral_condExpL2_eq
     integral_sub' (integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs)
       (integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs)]
   refine integral_eq_zero_of_forall_integral_inner_eq_zero 𝕜 _ ?_ ?_
-  · rw [integrable_congr (ae_rest
+  · rw [integrable_congr (ae_restrict_of_ae (Lp.coeFn_sub (↑(condExpL2 E' 𝕜 hm f)) f).symm)]
+    exact integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs
+  intro c
+  simp_rw [Pi.sub_apply, inner_sub_right]
+  rw [integral_sub
+      ((integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs).const_inner c)
+      ((integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs).const_inner c)]
+  have h_ae_eq_f := MemLp.coeFn_toLp (E := 𝕜) ((Lp.memLp f).const_inner c)
+  rw [sub_eq_zero]; rw [←
+    setIntegral_congr_ae (hm s hs) ((condExpL2_const_inner hm f c).mono fun x hx _ => hx)]; rw [←
+    setIntegral_congr_ae (hm s hs) (h_ae_eq_f.mono fun x hx _ => hx)]
+  exact integral_condExpL2_eq_of_fin_meas_real _ hs hμs
 
 Depends on / 依赖: Lp.coeFn_sub, Pi.sub_apply, ae_restrict_of_ae, coeFn_sub, condExpL2, fact_one_le_two_ennreal, fact_one_le_two_ennreal.elim, inner_sub_right, integrableOn_L, integrableOn_Lp_of_measure_ne_top, integrable_congr, integral_eq_zero_of_forall_integral_inner_eq_zero, integral_sub, simp_rw, sub_apply, sub_eq_zero
 -/
@@ -625,7 +737,14 @@ theorem condExpL2_comp_continuousLinearMap
     (fun s _ hμs => integrableOn_condExpL2_of_measure_ne_top hm hμs.ne _) (fun s _ hμs =>
       integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs.ne) ?_ ?_ ?_
   · intro s hs hμs
-    rw [T.setIn
+    rw [T.setIntegral_compLp _ (hm s hs)]; rw [T.integral_comp_comm
+        (integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs.ne)]; rw [integral_condExpL2_eq hm f hs hμs.ne]; rw [integral_condExpL2_eq hm (T.compLp f) hs hμs.ne]; rw [T.setIntegral_compLp _ (hm s hs)]; rw [T.integral_comp_comm
+        (integrableOn_Lp_of_measure_ne_top f fact_one_le_two_ennreal.elim hμs.ne)]
+  · exact lpMeas.aestronglyMeasurable _
+  · have h_coe := T.coeFn_compLp (condExpL2 E' 𝕜 hm f : α ->₂[μ] E')
+    rw [← EventuallyEq] at h_coe
+    refine AEStronglyMeasurable.congr ?_ h_coe.symm
+    exact T.continuous.comp_aestronglyMeasurable (lpMeas.aestronglyMeasurable (condExpL2 E' 𝕜 hm f))
 
 中文:
 定理 condExpL2_comp_continuousLinearMap
@@ -635,7 +754,14 @@ theorem condExpL2_comp_continuousLinearMap
     (fun s _ hμs => integrableOn_condExpL2_of_measure_ne_top hm hμs.ne _) (fun s _ hμs =>
       integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs.ne) ?_ ?_ ?_
   · intro s hs hμs
-    rw [T.setIn
+    rw [T.setIntegral_compLp _ (hm s hs)]; rw [T.integral_comp_comm
+        (integrableOn_Lp_of_measure_ne_top _ fact_one_le_two_ennreal.elim hμs.ne)]; rw [integral_condExpL2_eq hm f hs hμs.ne]; rw [integral_condExpL2_eq hm (T.compLp f) hs hμs.ne]; rw [T.setIntegral_compLp _ (hm s hs)]; rw [T.integral_comp_comm
+        (integrableOn_Lp_of_measure_ne_top f fact_one_le_two_ennreal.elim hμs.ne)]
+  · exact lpMeas.aestronglyMeasurable _
+  · have h_coe := T.coeFn_compLp (condExpL2 E' 𝕜 hm f : α ->₂[μ] E')
+    rw [← EventuallyEq] at h_coe
+    refine AEStronglyMeasurable.congr ?_ h_coe.symm
+    exact T.continuous.comp_aestronglyMeasurable (lpMeas.aestronglyMeasurable (condExpL2 E' 𝕜 hm f))
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_top, Lp.ae_eq_of_forall_setIntegral_eq, T.compLp, T.integral_comp_comm, T.setIntegral_compLp, ae_eq_of_forall_setIntegral_eq, coe_ne_top, compLp, fact_one_le_two_ennreal, fact_one_le_two_ennreal.elim, integrableOn_Lp_of_measure_ne_top, integrableOn_condExpL2_of_measure_ne_top, integral_comp_comm, integral_condExpL2_eq, s.ne, setIntegral_compLp, two_ne_zero
 -/
@@ -712,7 +838,7 @@ theorem condExpL2_indicator_eq_toSpanSingleton_comp
     (condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α ->₂[μ] Real)
   rw [← EventuallyEq] at h_comp
   refine EventuallyEq.trans ?_ h_comp.symm
-  filter_upwards wit
+  filter_upwards with y using rfl
 
 中文:
 定理 condExpL2_indicator_eq_toSpanSingleton_comp
@@ -724,7 +850,7 @@ theorem condExpL2_indicator_eq_toSpanSingleton_comp
     (condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α ->₂[μ] Real)
   rw [← EventuallyEq] at h_comp
   refine EventuallyEq.trans ?_ h_comp.symm
-  filter_upwards wit
+  filter_upwards with y using rfl
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.trans, coeFn_compLp, condExpL2, condExpL2_indicator_ae_eq_smul, filter_upwards, h_comp, h_comp.symm, indicatorConstLp, toSpanSingleton
 -/
@@ -751,7 +877,12 @@ theorem setLIntegral_nnnorm_condExpL2_indicator_le
     ∫⁻ a in t, ‖(condExpL2 E' 𝕜 hm (indicatorConstLp 2 hs hμs x) : α -> E') a‖₊ ∂μ =
         ∫⁻ a in t, ‖(condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) a • x‖₊ ∂μ :=
       setLIntegral_congr_fun_ae (hm t ht)
-        ((condExpL2_indicator_ae_eq_smul 𝕜 hm hs hμs x).mono fun a 
+        ((condExpL2_indicator_ae_eq_smul 𝕜 hm hs hμs x).mono fun a ha _ => by rw [ha])
+    _ = (∫⁻ a in t, ‖(condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) a‖₊ ∂μ) * ‖x‖₊ := by
+      simp_rw [nnnorm_smul, ENNReal.coe_mul]
+      rw [lintegral_mul_const]
+      exact (Lp.stronglyMeasurable _).enorm (ε := Real)
+    _ <= μ (s inter t) * ‖x‖₊ := by grw [lintegral_nnnorm_condExpL2_indicator_le_real hs hμs ht hμt]
 
 中文:
 定理 setL整数egral_nnnorm_condExpL2_indicator_le
@@ -760,7 +891,12 @@ theorem setLIntegral_nnnorm_condExpL2_indicator_le
     ∫⁻ a in t, ‖(condExpL2 E' 𝕜 hm (indicatorConstLp 2 hs hμs x) : α -> E') a‖₊ ∂μ =
         ∫⁻ a in t, ‖(condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) a • x‖₊ ∂μ :=
       setLIntegral_congr_fun_ae (hm t ht)
-        ((condExpL2_indicator_ae_eq_smul 𝕜 hm hs hμs x).mono fun a 
+        ((condExpL2_indicator_ae_eq_smul 𝕜 hm hs hμs x).mono fun a ha _ => by rw [ha])
+    _ = (∫⁻ a in t, ‖(condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) a‖₊ ∂μ) * ‖x‖₊ := by
+      simp_rw [nnnorm_smul, ENNReal.coe_mul]
+      rw [lintegral_mul_const]
+      exact (Lp.stronglyMeasurable _).enorm (ε := Real)
+    _ <= μ (s inter t) * ‖x‖₊ := by grw [lintegral_nnnorm_condExpL2_indicator_le_real hs hμs ht hμt]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_mul, Lp.stronglyMeasurable, coe_mul, condExpL2, condExpL2_indicator_ae_eq_smul, indicatorConstLp, lintegral_mul_const, nnnorm_smul, setLIntegral_congr_fun_ae, simp_rw, stronglyMeasurable
 -/
@@ -823,7 +959,7 @@ theorem integrable_condExpL2_indicator
   · refine fun t ht hμt =>
       (setLIntegral_nnnorm_condExpL2_indicator_le hm hs hμs x ht hμt).trans ?_
     gcongr
-    apply Set.inter_subs
+    apply Set.inter_subset_left
 
 中文:
 定理 integrable_condExpL2_indicator
@@ -835,7 +971,7 @@ theorem integrable_condExpL2_indicator
   · refine fun t ht hμt =>
       (setLIntegral_nnnorm_condExpL2_indicator_le hm hs hμs x ht hμt).trans ?_
     gcongr
-    apply Set.inter_subs
+    apply Set.inter_subset_left
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_top, ENNReal.mul_lt_top, Lp.aestronglyMeasurable, Set.inter_subset_left, aestronglyMeasurable, coe_lt_top, condExpL2, indicatorConstLp, integrable_of_forall_fin_meas_le, inter_subset_left, lt_top, mul_lt_top, s.lt_top, setLIntegral_nnnorm_condExpL2_indicator_le
 -/
@@ -982,7 +1118,11 @@ theorem setLIntegral_nnnorm_condExpIndSMul_le
         ∫⁻ a in t, ‖(condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) a • x‖₊ ∂μ :=
       setLIntegral_congr_fun_ae (hm t ht)
         ((condExpIndSMul_ae_eq_smul hm hs hμs x).mono fun a ha _ => by rw [ha])
-    _ = (∫⁻ a in t, 
+    _ = (∫⁻ a in t, ‖(condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) a‖₊ ∂μ) * ‖x‖₊ := by
+      simp_rw [nnnorm_smul, ENNReal.coe_mul]
+      rw [lintegral_mul_const]
+      exact (Lp.stronglyMeasurable _).enorm (ε := Real)
+    _ <= μ (s inter t) * ‖x‖₊ := by grw [lintegral_nnnorm_condExpL2_indicator_le_real hs hμs ht hμt]
 
 中文:
 定理 setL整数egral_nnnorm_condExpIndSMul_le
@@ -992,7 +1132,11 @@ theorem setLIntegral_nnnorm_condExpIndSMul_le
         ∫⁻ a in t, ‖(condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) a • x‖₊ ∂μ :=
       setLIntegral_congr_fun_ae (hm t ht)
         ((condExpIndSMul_ae_eq_smul hm hs hμs x).mono fun a ha _ => by rw [ha])
-    _ = (∫⁻ a in t, 
+    _ = (∫⁻ a in t, ‖(condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) a‖₊ ∂μ) * ‖x‖₊ := by
+      simp_rw [nnnorm_smul, ENNReal.coe_mul]
+      rw [lintegral_mul_const]
+      exact (Lp.stronglyMeasurable _).enorm (ε := Real)
+    _ <= μ (s inter t) * ‖x‖₊ := by grw [lintegral_nnnorm_condExpL2_indicator_le_real hs hμs ht hμt]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_mul, Lp.stronglyMeasurable, coe_mul, condExpIndSMul, condExpIndSMul_ae_eq_smul, condExpL2, indicatorConstLp, lintegral_mul_const, nnnorm_smul, setLIntegral_congr_fun_ae, simp_rw, stronglyMeasurable
 -/
@@ -1112,7 +1256,8 @@ theorem setIntegral_condExpL2_indicator
     ∫ x in s, (condExpL2 Real Real hm (indicatorConstLp 2 ht hμt 1) : α -> Real) x ∂μ =
         ∫ x in s, indicatorConstLp 2 ht hμt (1 : Real) x ∂μ :=
       @integral_condExpL2_eq α _ Real _ _ _ _ _ _ _ _ _ hm (indicatorConstLp 2 ht hμt (1 : Real)) hs hμs
-    _ = μ.real (t inter s) • (1 : Real)
+    _ = μ.real (t inter s) • (1 : Real) := setIntegral_indicatorConstLp (hm s hs) ht hμt 1
+    _ = μ.real (t inter s) := by rw [smul_eq_mul, mul_one]
 
 中文:
 定理 set整数egral_condExpL2_indicator
@@ -1121,7 +1266,8 @@ theorem setIntegral_condExpL2_indicator
     ∫ x in s, (condExpL2 Real Real hm (indicatorConstLp 2 ht hμt 1) : α -> Real) x ∂μ =
         ∫ x in s, indicatorConstLp 2 ht hμt (1 : Real) x ∂μ :=
       @integral_condExpL2_eq α _ Real _ _ _ _ _ _ _ _ _ hm (indicatorConstLp 2 ht hμt (1 : Real)) hs hμs
-    _ = μ.real (t inter s) • (1 : Real)
+    _ = μ.real (t inter s) • (1 : Real) := setIntegral_indicatorConstLp (hm s hs) ht hμt 1
+    _ = μ.real (t inter s) := by rw [smul_eq_mul, mul_one]
 
 Depends on / 依赖: condExpL2, indicatorConstLp, integral_condExpL2_eq, mul_one, setIntegral_indicatorConstLp, smul_eq_mul
 -/
@@ -1146,7 +1292,9 @@ theorem setIntegral_condExpIndSMul
         ∫ a in s, (condExpL2 Real Real hm (indicatorConstLp 2 ht hμt 1) : α -> Real) a • x ∂μ :=
       setIntegral_congr_ae (hm s hs)
         ((condExpIndSMul_ae_eq_smul hm ht hμt x).mono fun _ hx _ => hx)
-    _ = (∫ a in s, (condExpL2 Real Real
+    _ = (∫ a in s, (condExpL2 Real Real hm (indicatorConstLp 2 ht hμt 1) : α -> Real) a ∂μ) • x :=
+      (integral_smul_const _ x)
+    _ = μ.real (t inter s) • x := by rw [setIntegral_condExpL2_indicator hs ht hμs hμt]
 
 中文:
 定理 set整数egral_condExpIndSMul
@@ -1156,7 +1304,9 @@ theorem setIntegral_condExpIndSMul
         ∫ a in s, (condExpL2 Real Real hm (indicatorConstLp 2 ht hμt 1) : α -> Real) a • x ∂μ :=
       setIntegral_congr_ae (hm s hs)
         ((condExpIndSMul_ae_eq_smul hm ht hμt x).mono fun _ hx _ => hx)
-    _ = (∫ a in s, (condExpL2 Real Real
+    _ = (∫ a in s, (condExpL2 Real Real hm (indicatorConstLp 2 ht hμt 1) : α -> Real) a ∂μ) • x :=
+      (integral_smul_const _ x)
+    _ = μ.real (t inter s) • x := by rw [setIntegral_condExpL2_indicator hs ht hμs hμt]
 
 Depends on / 依赖: condExpIndSMul, condExpIndSMul_ae_eq_smul, condExpL2, indicatorConstLp, integral_smul_const, setIntegral_condExpL2_indicator, setIntegral_congr_ae
 -/
@@ -1183,7 +1333,19 @@ theorem condExpL2_indicator_nonneg
     aestronglyMeasurable_condExpL2 _ _
   refine EventuallyLE.trans_eq ?_ h.ae_eq_mk.symm
   refine @ae_le_of_ae_le_trim _ _ _ _ _ _ hm (0 : α -> Real) _ ?_
-  refine ae_nonneg_of_forall_setInt
+  refine ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite ?_ ?_
+  · rintro t - -
+    refine @Integrable.integrableOn _ _ m _ _ _ _ _ ?_
+    refine Integrable.trim hm ?_ h.stronglyMeasurable_mk
+    rw [integrable_congr h.ae_eq_mk.symm]
+    exact integrable_condExpL2_indicator hm hs hμs _
+  · intro t ht hμt
+    rw [← setIntegral_trim hm h.stronglyMeasurable_mk ht]
+    have h_ae :
+        forallᵐ x ∂μ, x in t -> h.mk _ x = (condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) x := by
+      filter_upwards [h.ae_eq_mk] with x hx using fun _ => hx.symm
+    rw [setIntegral_congr_ae (hm t ht) h_ae]; rw [setIntegral_condExpL2_indicator ht hs ((le_trim hm).trans_lt hμt).ne hμs]
+    exact ENNReal.toReal_nonneg
 
 中文:
 定理 condExpL2_indicator_nonneg
@@ -1193,7 +1355,19 @@ theorem condExpL2_indicator_nonneg
     aestronglyMeasurable_condExpL2 _ _
   refine EventuallyLE.trans_eq ?_ h.ae_eq_mk.symm
   refine @ae_le_of_ae_le_trim _ _ _ _ _ _ hm (0 : α -> Real) _ ?_
-  refine ae_nonneg_of_forall_setInt
+  refine ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite ?_ ?_
+  · rintro t - -
+    refine @Integrable.integrableOn _ _ m _ _ _ _ _ ?_
+    refine Integrable.trim hm ?_ h.stronglyMeasurable_mk
+    rw [integrable_congr h.ae_eq_mk.symm]
+    exact integrable_condExpL2_indicator hm hs hμs _
+  · intro t ht hμt
+    rw [← setIntegral_trim hm h.stronglyMeasurable_mk ht]
+    have h_ae :
+        forallᵐ x ∂μ, x in t -> h.mk _ x = (condExpL2 Real Real hm (indicatorConstLp 2 hs hμs 1) : α -> Real) x := by
+      filter_upwards [h.ae_eq_mk] with x hx using fun _ => hx.symm
+    rw [setIntegral_congr_ae (hm t ht) h_ae]; rw [setIntegral_condExpL2_indicator ht hs ((le_trim hm).trans_lt hμt).ne hμs]
+    exact ENNReal.toReal_nonneg
 
 Depends on / 依赖: AEStronglyMeasurable, EventuallyLE, EventuallyLE.trans_eq, Integrable, Integrable.integrableOn, Integrable.trim, ae_eq_mk, ae_le_of_ae_le_trim, ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite, aestronglyMeasurable_condExpL2, condExpL2, h.ae_eq_mk.symm, h.stronglyMeasurable_mk, indicatorConstLp, integrableOn, integrable_cond, integrable_congr, stronglyMeasurable_mk, trans_eq
 -/

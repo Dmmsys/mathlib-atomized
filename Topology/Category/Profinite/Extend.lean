@@ -49,7 +49,7 @@ lemma exists_hom
   obtain ⟨i, g, h⟩ := exists_locallyConstant.{_, u} c hc f'
   refine ⟨i, ⟨↾g⟩, ?_⟩
   ext x
-  exact LocallyConstant.c
+  exact LocallyConstant.congr_fun h x
 
 中文:
 引理 存在_hom
@@ -61,7 +61,7 @@ lemma exists_hom
   obtain ⟨i, g, h⟩ := exists_locallyConstant.{_, u} c hc f'
   refine ⟨i, ⟨↾g⟩, ?_⟩
   ext x
-  exact LocallyConstant.c
+  exact LocallyConstant.congr_fun h x
 
 Depends on / 依赖: DiscreteTopology, IsLocallyConstant, IsLocallyConstant.iff_continuous, LocallyConstant, LocallyConstant.congr_fun, c.pt, congr_fun, continuous, exists_locallyConstant, f.hom.hom.continuous, iff_continuous, toProfinite, toProfinite.obj
 -/
@@ -148,7 +148,16 @@ lemma functor_initial
   rw [initial_iff_of_isCofiltered (F := e.inverse ⋙ functor c)]
   constructor
   · intro ⟨_, X, (f : c.pt ⟶ _)⟩
-    obtain ⟨i,
+    obtain ⟨i, g, h⟩ := exists_hom c hc f
+    exact ⟨⟨i⟩, ⟨StructuredArrow.homMk g h.symm⟩⟩
+  · intro ⟨_, X, (f : c.pt ⟶ _)⟩ ⟨i⟩ ⟨_, (s : F.obj i ⟶ X), (w : f = c.π.app i ≫ _)⟩
+      ⟨_, (s' : F.obj i ⟶ X), (w' : f = c.π.app i ≫ _)⟩
+    simp only [StructuredArrow.hom_eq_iff,
+      StructuredArrow.comp_right]
+    refine ⟨⟨i⟩, 𝟙 _, ?_⟩
+    simp only [CategoryTheory.Functor.map_id]
+    rw [w] at w'
+exact toProfinite.map_injective Epi.left_cancellation _ _ w'
 
 中文:
 引理 functor_initial
@@ -160,7 +169,16 @@ lemma functor_initial
   rw [initial_iff_of_isCofiltered (F := e.inverse ⋙ functor c)]
   constructor
   · intro ⟨_, X, (f : c.pt ⟶ _)⟩
-    obtain ⟨i,
+    obtain ⟨i, g, h⟩ := exists_hom c hc f
+    exact ⟨⟨i⟩, ⟨StructuredArrow.homMk g h.symm⟩⟩
+  · intro ⟨_, X, (f : c.pt ⟶ _)⟩ ⟨i⟩ ⟨_, (s : F.obj i ⟶ X), (w : f = c.π.app i ≫ _)⟩
+      ⟨_, (s' : F.obj i ⟶ X), (w' : f = c.π.app i ≫ _)⟩
+    simp only [StructuredArrow.hom_eq_iff,
+      StructuredArrow.comp_right]
+    refine ⟨⟨i⟩, 𝟙 _, ?_⟩
+    simp only [CategoryTheory.Functor.map_id]
+    rw [w] at w'
+exact toProfinite.map_injective Epi.left_cancellation _ _ w'
 
 Depends on / 依赖: F.obj, Initial, StructuredArrow, StructuredArrow.homMk, ULiftHom, ULiftHomULiftCategory, ULiftHomULiftCategory.equiv, c.pt, e.inverse, exists_hom, functor, h.symm, initial_iff_of_isCofiltered, initial_of_equivalence_comp, inverse
 -/
@@ -312,7 +330,7 @@ definition cocone
         Category.comp_id] at this
       simp [← map_comp, this]) }
 
-example : G.mapCocone c.op = (coco
+example : G.mapCocone c.op = (cocone G c.pt).whisker (functorOp c) := rfl
 
 中文:
 定义 cocone
@@ -326,7 +344,7 @@ example : G.mapCocone c.op = (coco
         Category.comp_id] at this
       simp [← map_comp, this]) }
 
-example : G.mapCocone c.op = (coco
+example : G.mapCocone c.op = (cocone G c.pt).whisker (functorOp c) := rfl
 
 Depends on / 依赖: G.obj
 -/

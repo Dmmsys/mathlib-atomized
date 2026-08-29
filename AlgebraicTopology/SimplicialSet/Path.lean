@@ -309,7 +309,7 @@ definition map
 .symm exact ConcreteCategory.congr_hom (σ.naturality (tr (δ 1)).op) _
   arrow_tgt i := by
     simp only [← f.arrow_tgt i]
-.symm exact ConcreteCategory.congr_hom (σ.naturality
+.symm exact ConcreteCategory.congr_hom (σ.naturality (tr (δ 0)).op) _
 
 中文:
 定义 map
@@ -321,7 +321,7 @@ definition map
 .symm exact ConcreteCategory.congr_hom (σ.naturality (tr (δ 1)).op) _
   arrow_tgt i := by
     simp only [← f.arrow_tgt i]
-.symm exact ConcreteCategory.congr_hom (σ.naturality
+.symm exact ConcreteCategory.congr_hom (σ.naturality (tr (δ 0)).op) _
 
 Depends on / 依赖: f.vertex, vertex
 -/
@@ -954,7 +954,9 @@ lemma spine_δ₀
     rfl
   · ext i
     dsimp
-    rw [SimplicialObject.δ_def]; rw [← Functor.map_comp_apply]; rw
+    rw [SimplicialObject.δ_def]; rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [SimplexCategory.mkOfSucc_δ_gt (j := 0) (i := i) (by simp)]
+    symm
+    exact Path.arrow_interval _ _ _ _ _ _ (by rw [Fin.val_succ, add_comm])
 
 中文:
 引理 spine_δ₀
@@ -968,7 +970,9 @@ lemma spine_δ₀
     rfl
   · ext i
     dsimp
-    rw [SimplicialObject.δ_def]; rw [← Functor.map_comp_apply]; rw
+    rw [SimplicialObject.δ_def]; rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [SimplexCategory.mkOfSucc_δ_gt (j := 0) (i := i) (by simp)]
+    symm
+    exact Path.arrow_interval _ _ _ _ _ _ (by rw [Fin.val_succ, add_comm])
 
 Depends on / 依赖: Fin.val_succ, Functor, Functor.map_comp_apply, Path.arrow_interval, Path.interval, Path.vertex, SimplexCategory, SimplexCategory.mkOfSucc_, SimplicialObject, Truncated, Truncated.Hom.tr, Truncated.Path.interval, Truncated.Path.vertex, Truncated.spine, add_comm, arrow_interval, interval, map_comp_apply, op_comp, val_succ
 -/

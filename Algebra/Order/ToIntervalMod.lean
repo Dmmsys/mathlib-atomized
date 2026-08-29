@@ -1906,7 +1906,10 @@ theorem toIcoDiv_neg
   rw [← neg_eq_iff_eq_neg]; rw [eq_comm]
   apply toIocDiv_eq_of_sub_zsmul_mem_Ioc
   obtain ⟨hc, ho⟩ := sub_toIcoDiv_zsmul_mem_Ico hp a (-b)
- 
+  rw [← neg_lt_neg_iff]; rw [neg_sub' (-b)]; rw [neg_neg]; rw [← neg_smul] at ho
+  rw [← neg_le_neg_iff]; rw [neg_sub' (-b)]; rw [neg_neg]; rw [← neg_smul] at hc
+  refine ⟨ho, hc.trans_eq ?_⟩
+  rw [neg_add]; rw [neg_add_cancel_right]
 
 中文:
 定理 toIcoDiv_neg
@@ -1918,7 +1921,10 @@ theorem toIcoDiv_neg
   rw [← neg_eq_iff_eq_neg]; rw [eq_comm]
   apply toIocDiv_eq_of_sub_zsmul_mem_Ioc
   obtain ⟨hc, ho⟩ := sub_toIcoDiv_zsmul_mem_Ico hp a (-b)
- 
+  rw [← neg_lt_neg_iff]; rw [neg_sub' (-b)]; rw [neg_neg]; rw [← neg_smul] at ho
+  rw [← neg_le_neg_iff]; rw [neg_sub' (-b)]; rw [neg_neg]; rw [← neg_smul] at hc
+  refine ⟨ho, hc.trans_eq ?_⟩
+  rw [neg_add]; rw [neg_add_cancel_right]
 
 Depends on / 依赖: eq_comm, hc.trans_eq, neg_add, neg_add_c, neg_eq_iff_eq_neg, neg_le_neg_iff, neg_lt_neg_iff, neg_neg, neg_smul, neg_sub, sub_eq_add_neg, sub_toIcoDiv_zsmul_mem_Ico, toIcoDiv, toIocDiv, toIocDiv_add_right, toIocDiv_eq_of_sub_zsmul_mem_Ioc, toIocDiv_sub_eq_toIocDiv_add, trans_eq
 -/
@@ -3134,7 +3140,7 @@ theorem toIcoMod_eq_toIcoMod
     abel
   · rcases h with ⟨z, hz⟩
     rw [sub_eq_iff_eq_add] at hz
-    rw [hz]; rw [toIcoMod_zsmul_ad
+    rw [hz]; rw [toIcoMod_zsmul_add]
 
 中文:
 定理 toIcoMod_eq_toIcoMod
@@ -3146,7 +3152,7 @@ theorem toIcoMod_eq_toIcoMod
     abel
   · rcases h with ⟨z, hz⟩
     rw [sub_eq_iff_eq_add] at hz
-    rw [hz]; rw [toIcoMod_zsmul_ad
+    rw [hz]; rw [toIcoMod_zsmul_add]
 
 Depends on / 依赖: conv_lhs, sub_eq_iff_eq_add, sub_smul, toIcoDiv, toIcoMod_add_toIcoDiv_zsmul, toIcoMod_zsmul_add
 -/
@@ -3172,7 +3178,7 @@ theorem toIocMod_eq_toIocMod
     abel
   · rcases h with ⟨z, hz⟩
     rw [sub_eq_iff_eq_add] at hz
-    rw [hz]; rw [toIocMod_zsmul_ad
+    rw [hz]; rw [toIocMod_zsmul_add]
 
 中文:
 定理 toIocMod_eq_toIocMod
@@ -3184,7 +3190,7 @@ theorem toIocMod_eq_toIocMod
     abel
   · rcases h with ⟨z, hz⟩
     rw [sub_eq_iff_eq_add] at hz
-    rw [hz]; rw [toIocMod_zsmul_ad
+    rw [hz]; rw [toIocMod_zsmul_add]
 
 Depends on / 依赖: conv_lhs, sub_eq_iff_eq_add, sub_smul, toIocDiv, toIocMod_add_toIocDiv_zsmul, toIocMod_zsmul_add
 -/
@@ -3245,7 +3251,7 @@ theorem modEq_iff_toIocMod_eq_right
 
 alias ⟨ModEq.toIcoMod_eq_left, _⟩ := modEq_iff_toIcoMod_eq_left
 
-alias ⟨ModEq.toIc
+alias ⟨ModEq.toIcoMod_eq_right, _⟩ := modEq_iff_toIocMod_eq_right
 
 中文:
 定理 modEq_iff_toIocMod_eq_right
@@ -3258,7 +3264,7 @@ alias ⟨ModEq.toIc
 
 alias ⟨ModEq.toIcoMod_eq_left, _⟩ := modEq_iff_toIcoMod_eq_left
 
-alias ⟨ModEq.toIc
+alias ⟨ModEq.toIcoMod_eq_right, _⟩ := modEq_iff_toIocMod_eq_right
 
 Depends on / 依赖: add_left_comm, add_one_zsmul, modEq_iff_eq_add_zsmul, modEq_iff_eq_add_zsmul.trans, sub_eq_iff_eq_add, toIocDiv, toIocMod_add_zsmul, toIocMod_apply_left
 -/
@@ -3286,7 +3292,22 @@ theorem tfae_modEq
     rw [← not_exists]; rw [not_imp_not]
     exact fun ⟨i, hi⟩ =>
       ((toIcoMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ico_self hi, i, (sub_add_cancel b _).symm⟩).trans
-        ((toIocMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ioc_self hi, i, (sub_add_c
+        ((toIocMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ioc_self hi, i, (sub_add_cancel b _).symm⟩).symm
+  tfae_have 4 -> 3
+  | h => by
+    rw [← h]; rw [Ne]; rw [eq_comm]; rw [add_eq_left]
+    exact hp.ne'
+  tfae_have 1 -> 4
+  | h => by
+    rw [h]; rw [eq_comm]; rw [toIocMod_eq_iff]; rw [Set.right_mem_Ioc]
+    refine ⟨lt_add_of_pos_right a hp, toIcoDiv hp a b - 1, ?_⟩
+    rw [sub_one_zsmul]; rw [add_add_add_comm]; rw [add_neg_cancel]; rw [add_zero]
+    conv_lhs => rw [← toIcoMod_add_toIcoDiv_zsmul hp a b, h]
+  tfae_have 2 -> 1 := by
+    rw [← not_exists]; rw [not_imp_comm]
+    have h' := toIcoMod_mem_Ico hp a b
+    exact fun h => ⟨_, h'.1.lt_of_ne' h, h'.2⟩
+  tfae_finish
 
 中文:
 定理 tfae_modEq
@@ -3296,7 +3317,22 @@ theorem tfae_modEq
     rw [← not_exists]; rw [not_imp_not]
     exact fun ⟨i, hi⟩ =>
       ((toIcoMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ico_self hi, i, (sub_add_cancel b _).symm⟩).trans
-        ((toIocMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ioc_self hi, i, (sub_add_c
+        ((toIocMod_eq_iff hp).2 ⟨Set.Ioo_subset_Ioc_self hi, i, (sub_add_cancel b _).symm⟩).symm
+  tfae_have 4 -> 3
+  | h => by
+    rw [← h]; rw [Ne]; rw [eq_comm]; rw [add_eq_left]
+    exact hp.ne'
+  tfae_have 1 -> 4
+  | h => by
+    rw [h]; rw [eq_comm]; rw [toIocMod_eq_iff]; rw [Set.right_mem_Ioc]
+    refine ⟨lt_add_of_pos_right a hp, toIcoDiv hp a b - 1, ?_⟩
+    rw [sub_one_zsmul]; rw [add_add_add_comm]; rw [add_neg_cancel]; rw [add_zero]
+    conv_lhs => rw [← toIcoMod_add_toIcoDiv_zsmul hp a b, h]
+  tfae_have 2 -> 1 := by
+    rw [← not_exists]; rw [not_imp_comm]
+    have h' := toIcoMod_mem_Ico hp a b
+    exact fun h => ⟨_, h'.1.lt_of_ne' h, h'.2⟩
+  tfae_finish
 
 Depends on / 依赖: Ioo_subset_Ico_self, Ioo_subset_Ioc_self, Set.Ioo_subset_Ico_self, Set.Ioo_subset_Ioc_self, Set.right_mem_Ioc, add_eq_left, eq_comm, hp.ne, lt_add_of_p, modEq_iff_toIcoMod_eq_left, not_exists, not_imp_not, right_mem_Ioc, sub_add_cancel, tfae_have, toIcoMod_eq_iff, toIocMod_eq_iff
 -/
@@ -3965,7 +4001,10 @@ right_inv b := Subtype.ext (toIcoMod_eq_self hp).mpr b.prop
   left_inv b := by
     induction b using QuotientAddGroup.induction_on
     dsimp
-    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIcoMod
+    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIcoMod_sub_self]
+    apply AddSubgroup.zsmul_mem_zmultiples
+
+@[simp]
 
 中文:
 定义 QuotientAddGroup.equivIcoMod
@@ -3976,7 +4015,10 @@ right_inv b := Subtype.ext (toIcoMod_eq_self hp).mpr b.prop
   left_inv b := by
     induction b using QuotientAddGroup.induction_on
     dsimp
-    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIcoMod
+    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIcoMod_sub_self]
+    apply AddSubgroup.zsmul_mem_zmultiples
+
+@[simp]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.zsmul_mem_zmultiples, QuotientAddGroup, QuotientAddGroup.eq_iff_sub_mem, QuotientAddGroup.induction_on, Subtype, Subtype.ext, b.prop, eq_iff_sub_mem, induction_on, invFun, left_inv, right_inv, toIcoMod_eq_self, toIcoMod_mem_Ico, toIcoMod_periodic, toIcoMod_sub_self, zsmul_mem_zmultiples
 -/
@@ -4045,7 +4087,10 @@ right_inv b := Subtype.ext (toIocMod_eq_self hp).mpr b.prop
   left_inv b := by
     induction b using QuotientAddGroup.induction_on
     dsimp
-    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIocMod
+    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIocMod_sub_self]
+    apply AddSubgroup.zsmul_mem_zmultiples
+
+@[simp]
 
 中文:
 定义 QuotientAddGroup.equivIocMod
@@ -4056,7 +4101,10 @@ right_inv b := Subtype.ext (toIocMod_eq_self hp).mpr b.prop
   left_inv b := by
     induction b using QuotientAddGroup.induction_on
     dsimp
-    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIocMod
+    rw [QuotientAddGroup.eq_iff_sub_mem]; rw [toIocMod_sub_self]
+    apply AddSubgroup.zsmul_mem_zmultiples
+
+@[simp]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.zsmul_mem_zmultiples, QuotientAddGroup, QuotientAddGroup.eq_iff_sub_mem, QuotientAddGroup.induction_on, Subtype, Subtype.ext, b.prop, eq_iff_sub_mem, induction_on, invFun, left_inv, right_inv, toIocMod_eq_self, toIocMod_mem_Ioc, toIocMod_periodic, toIocMod_sub_self, zsmul_mem_zmultiples
 -/
@@ -4155,7 +4203,17 @@ theorem toIxxMod_cyclic_left
   have h₂₁ : x₂' < x₁ + p := toIcoMod_lt_right _ _ _
   have h₃₂ : x₃' - p < x₂' := sub_lt_iff_lt_add.2 (toIcoMod_lt_right _ _ _)
   suffices hequiv : x₃' <= toIocMod hp x₂' x₁ by
- 
+    obtain ⟨z, hd⟩ : exists z : Int, x₂ = x₂' + z • p := ((toIcoMod_eq_iff hp).1 rfl).2
+    simpa [hd, toIocMod_add_zsmul', toIcoMod_add_zsmul', add_le_add_iff_right]
+  rcases le_or_gt x₃' (x₁ + p) with h₃₁ | h₁₃
+  · suffices hIoc₂₁ : toIocMod hp x₂' x₁ = x₁ + p from hIoc₂₁.trans_ge h₃₁
+    apply (toIocMod_eq_iff hp).2
+    exact ⟨⟨h₂₁, by simp [x₂', left_le_toIcoMod]⟩, -1, by simp⟩
+  have hIoc₁₃ : toIocMod hp x₁ x₃' = x₃' - p := by
+    apply (toIocMod_eq_iff hp).2
+    exact ⟨⟨lt_sub_iff_add_lt.2 h₁₃, le_of_lt (h₃₂.trans h₂₁)⟩, 1, by simp⟩
+  have not_h₃₂ := (h.trans hIoc₁₃.le).not_gt
+  contradiction
 
 中文:
 定理 toIxxMod_cyclic_left
@@ -4167,7 +4225,17 @@ theorem toIxxMod_cyclic_left
   have h₂₁ : x₂' < x₁ + p := toIcoMod_lt_right _ _ _
   have h₃₂ : x₃' - p < x₂' := sub_lt_iff_lt_add.2 (toIcoMod_lt_right _ _ _)
   suffices hequiv : x₃' <= toIocMod hp x₂' x₁ by
- 
+    obtain ⟨z, hd⟩ : exists z : Int, x₂ = x₂' + z • p := ((toIcoMod_eq_iff hp).1 rfl).2
+    simpa [hd, toIocMod_add_zsmul', toIcoMod_add_zsmul', add_le_add_iff_right]
+  rcases le_or_gt x₃' (x₁ + p) with h₃₁ | h₁₃
+  · suffices hIoc₂₁ : toIocMod hp x₂' x₁ = x₁ + p from hIoc₂₁.trans_ge h₃₁
+    apply (toIocMod_eq_iff hp).2
+    exact ⟨⟨h₂₁, by simp [x₂', left_le_toIcoMod]⟩, -1, by simp⟩
+  have hIoc₁₃ : toIocMod hp x₁ x₃' = x₃' - p := by
+    apply (toIocMod_eq_iff hp).2
+    exact ⟨⟨lt_sub_iff_add_lt.2 h₁₃, le_of_lt (h₃₂.trans h₂₁)⟩, 1, by simp⟩
+  have not_h₃₂ := (h.trans hIoc₁₃.le).not_gt
+  contradiction
 -/
 private theorem toIxxMod_cyclic_left {x₁ x₂ x₃ : α} (h : toIcoMod hp x₁ x₂ <= toIocMod hp x₁ x₃) :
     toIcoMod hp x₂ x₃ <= toIocMod hp x₂ x₁ := by
@@ -4231,7 +4299,14 @@ theorem toIxxMod_total'
   /- an essential ingredient is the lemma saying {a-b} + {b-a} = period if a ≠ b (and = 0 if a = b).
     Thus if a ≠ b and b ≠ c then ({a-b} + {b-c}) + ({c-b} + {b-a}) = 2 * period, so one of
     `{a-b} + {b-c}` and `{c-b} + {b-a}` must be `≤ period` -/
-  have := congr_arg₂ (· + ·) (toIcoMod_add_
+  have := congr_arg₂ (· + ·) (toIcoMod_add_toIocMod_zero hp a b) (toIcoMod_add_toIocMod_zero hp c b)
+  simp only [add_add_add_comm] at this
+  rw [_root_.add_comm (toIocMod _ _ _)]; rw [add_add_add_comm]; rw [← two_nsmul] at this
+  replace := min_le_of_add_le_two_nsmul this.le
+  rw [min_le_iff] at this
+  rw [toIxxMod_iff]; rw [toIxxMod_iff]
+  grw [← toIcoMod_le_toIocMod, ← toIcoMod_le_toIocMod] at this
+  exact this
 
 中文:
 定理 toIxxMod_total'
@@ -4240,7 +4315,14 @@ theorem toIxxMod_total'
   /- an essential ingredient is the lemma saying {a-b} + {b-a} = period if a ≠ b (and = 0 if a = b).
     Thus if a ≠ b and b ≠ c then ({a-b} + {b-c}) + ({c-b} + {b-a}) = 2 * period, so one of
     `{a-b} + {b-c}` and `{c-b} + {b-a}` must be `≤ period` -/
-  have := congr_arg₂ (· + ·) (toIcoMod_add_
+  have := congr_arg₂ (· + ·) (toIcoMod_add_toIocMod_zero hp a b) (toIcoMod_add_toIocMod_zero hp c b)
+  simp only [add_add_add_comm] at this
+  rw [_root_.add_comm (toIocMod _ _ _)]; rw [add_add_add_comm]; rw [← two_nsmul] at this
+  replace := min_le_of_add_le_two_nsmul this.le
+  rw [min_le_iff] at this
+  rw [toIxxMod_iff]; rw [toIxxMod_iff]
+  grw [← toIcoMod_le_toIocMod, ← toIcoMod_le_toIocMod] at this
+  exact this
 -/
 private theorem toIxxMod_total' (a b c : α) :
     toIcoMod hp b a <= toIocMod hp b c ∨ toIcoMod hp b c <= toIocMod hp b a := by
@@ -4285,7 +4367,12 @@ theorem toIxxMod_trans
       have h₁₂₃' := toIxxMod_cyclic_left _ (toIxxMod_cyclic_left _ h₁₂₃.1)
       have h₂₃₄' := toIxxMod_cyclic_left _ (toIxxMod_cyclic_left _ h₂₃₄.1)
       rw [(not_modEq_iff_toIcoMod_eq_toIocMod hp).1 h] at h₂₃₄'
-      exact toIxxMod_cyclic_lef
+      exact toIxxMod_cyclic_left _ (h₁₂₃'.trans h₂₃₄')
+    by_contra h
+    rw [(modEq_iff_toIcoMod_eq_left hp).1 h] at h₁₂₃
+    exact h₁₂₃.2 (left_lt_toIocMod _ _ _).le
+  · rw [not_le] at h₁₂₃ h₂₃₄ ⊢
+    exact (h₁₂₃.2.trans_le (toIcoMod_le_toIocMod _ x₃ x₂)).trans h₂₃₄.2
 
 中文:
 定理 toIxxMod_trans
@@ -4296,7 +4383,12 @@ theorem toIxxMod_trans
       have h₁₂₃' := toIxxMod_cyclic_left _ (toIxxMod_cyclic_left _ h₁₂₃.1)
       have h₂₃₄' := toIxxMod_cyclic_left _ (toIxxMod_cyclic_left _ h₂₃₄.1)
       rw [(not_modEq_iff_toIcoMod_eq_toIocMod hp).1 h] at h₂₃₄'
-      exact toIxxMod_cyclic_lef
+      exact toIxxMod_cyclic_left _ (h₁₂₃'.trans h₂₃₄')
+    by_contra h
+    rw [(modEq_iff_toIcoMod_eq_left hp).1 h] at h₁₂₃
+    exact h₁₂₃.2 (left_lt_toIocMod _ _ _).le
+  · rw [not_le] at h₁₂₃ h₂₃₄ ⊢
+    exact (h₁₂₃.2.trans_le (toIcoMod_le_toIocMod _ x₃ x₂)).trans h₂₃₄.2
 -/
 private theorem toIxxMod_trans {x₁ x₂ x₃ x₄ : α}
     (h₁₂₃ : toIcoMod hp x₁ x₂ <= toIocMod hp x₁ x₃ ∧ ¬toIcoMod hp x₃ x₂ <= toIocMod hp x₃ x₁)
@@ -4391,7 +4483,17 @@ instance circularPreorder
     induction x₂ using QuotientAddGroup.induction_on
     induction x₃ using QuotientAddGroup.induction_on
     simp_rw [btw_coe_iff] at h ⊢
-    apply toIxxMod_cyclic_le
+    apply toIxxMod_cyclic_left _ h
+  sbtw := _
+  sbtw_iff_btw_not_btw := Iff.rfl
+  sbtw_trans_left {x₁ x₂ x₃ x₄} (h₁₂₃ : _ ∧ _) (h₂₃₄ : _ ∧ _) :=
+    show _ ∧ _ by
+      induction x₁ using QuotientAddGroup.induction_on
+      induction x₂ using QuotientAddGroup.induction_on
+      induction x₃ using QuotientAddGroup.induction_on
+      induction x₄ using QuotientAddGroup.induction_on
+      simp_rw [btw_coe_iff] at h₁₂₃ h₂₃₄ ⊢
+      apply toIxxMod_trans _ h₁₂₃ h₂₃₄
 
 中文:
 实例 circularPreorder
@@ -4402,7 +4504,17 @@ instance circularPreorder
     induction x₂ using QuotientAddGroup.induction_on
     induction x₃ using QuotientAddGroup.induction_on
     simp_rw [btw_coe_iff] at h ⊢
-    apply toIxxMod_cyclic_le
+    apply toIxxMod_cyclic_left _ h
+  sbtw := _
+  sbtw_iff_btw_not_btw := Iff.rfl
+  sbtw_trans_left {x₁ x₂ x₃ x₄} (h₁₂₃ : _ ∧ _) (h₂₃₄ : _ ∧ _) :=
+    show _ ∧ _ by
+      induction x₁ using QuotientAddGroup.induction_on
+      induction x₂ using QuotientAddGroup.induction_on
+      induction x₃ using QuotientAddGroup.induction_on
+      induction x₄ using QuotientAddGroup.induction_on
+      simp_rw [btw_coe_iff] at h₁₂₃ h₂₃₄ ⊢
+      apply toIxxMod_trans _ h₁₂₃ h₂₃₄
 
 Depends on / 依赖: out.le, sub_self
 -/
@@ -4437,7 +4549,15 @@ instance circularOrder
       induction x₂ using QuotientAddGroup.induction_on
       induction x₃ using QuotientAddGroup.induction_on
       rw [btw_cyclic] at h₃₂₁
-      simp_rw
+      simp_rw [btw_coe_iff] at h₁₂₃ h₃₂₁
+      simp_rw [← modEq_iff_eq_mod_zmultiples]
+      simpa only [modEq_comm] using toIxxMod_antisymm _ h₁₂₃ h₃₂₁
+    btw_total := fun x₁ x₂ x₃ => by
+      induction x₁ using QuotientAddGroup.induction_on
+      induction x₂ using QuotientAddGroup.induction_on
+      induction x₃ using QuotientAddGroup.induction_on
+      simp_rw [btw_coe_iff]
+      apply toIxxMod_total }
 
 中文:
 实例 circularOrder
@@ -4448,7 +4568,15 @@ instance circularOrder
       induction x₂ using QuotientAddGroup.induction_on
       induction x₃ using QuotientAddGroup.induction_on
       rw [btw_cyclic] at h₃₂₁
-      simp_rw
+      simp_rw [btw_coe_iff] at h₁₂₃ h₃₂₁
+      simp_rw [← modEq_iff_eq_mod_zmultiples]
+      simpa only [modEq_comm] using toIxxMod_antisymm _ h₁₂₃ h₃₂₁
+    btw_total := fun x₁ x₂ x₃ => by
+      induction x₁ using QuotientAddGroup.induction_on
+      induction x₂ using QuotientAddGroup.induction_on
+      induction x₃ using QuotientAddGroup.induction_on
+      simp_rw [btw_coe_iff]
+      apply toIxxMod_total }
 
 Depends on / 依赖: Quotie, QuotientAddGroup, QuotientAddGroup.circularPreorder, QuotientAddGroup.induction_on, btw_antisymm, btw_coe_iff, btw_cyclic, btw_total, circularPreorder, induction_on, modEq_comm, modEq_iff_eq_mod_zmultiples, simp_rw, toIxxMod_antisymm
 -/
@@ -6455,7 +6583,9 @@ theorem toIocDiv_eq_neg_floor
   refine toIocDiv_eq_of_sub_zsmul_mem_Ioc hp ?_
   rw [Set.mem_Ioc]; rw [zsmul_eq_mul]; rw [Int.cast_neg]; rw [neg_mul]; rw [sub_neg_eq_add]; rw [← sub_nonneg]; rw [sub_add_eq_sub_sub]
   refine ⟨?_, Int.sub_floor_div_mul_nonneg _ hp⟩
-  rw [← add_lt_add_iff_right p]; rw [add_assoc]; rw [add_comm b]
+  rw [← add_lt_add_iff_right p]; rw [add_assoc]; rw [add_comm b]; rw [← sub_lt_iff_lt_add]; rw [add_comm (_ * _)]; rw [←
+    sub_lt_iff_lt_add]
+  exact Int.sub_floor_div_mul_lt _ hp
 
 中文:
 定理 toIocDiv_eq_neg_floor
@@ -6465,7 +6595,9 @@ theorem toIocDiv_eq_neg_floor
   refine toIocDiv_eq_of_sub_zsmul_mem_Ioc hp ?_
   rw [Set.mem_Ioc]; rw [zsmul_eq_mul]; rw [Int.cast_neg]; rw [neg_mul]; rw [sub_neg_eq_add]; rw [← sub_nonneg]; rw [sub_add_eq_sub_sub]
   refine ⟨?_, Int.sub_floor_div_mul_nonneg _ hp⟩
-  rw [← add_lt_add_iff_right p]; rw [add_assoc]; rw [add_comm b]
+  rw [← add_lt_add_iff_right p]; rw [add_assoc]; rw [add_comm b]; rw [← sub_lt_iff_lt_add]; rw [add_comm (_ * _)]; rw [←
+    sub_lt_iff_lt_add]
+  exact Int.sub_floor_div_mul_lt _ hp
 
 Depends on / 依赖: Int.cast_neg, Int.sub_floor_div_mul_lt, Int.sub_floor_div_mul_nonneg, Set.mem_Ioc, add_assoc, add_comm, add_lt_add_iff_right, cast_neg, mem_Ioc, neg_mul, sub_add_eq_sub_sub, sub_floor_div_mul_lt, sub_floor_div_mul_nonneg, sub_lt_iff_lt_add, sub_neg_eq_add, sub_nonneg, toIocDiv_eq_of_sub_zsmul_mem_Ioc, zsmul_eq_mul
 -/

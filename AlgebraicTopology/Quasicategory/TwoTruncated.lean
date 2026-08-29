@@ -691,7 +691,8 @@ instance :
     exact ((compStruct _ _).comp_unique (compId _) .refl .refl).congr_homotopyCategory₂HomMk
   assoc := by
     rintro _ _ _ _ ⟨f⟩ ⟨g⟩ ⟨h⟩
-    exact (Q
+    exact (Quasicategory₂.fill31 (compStruct f g) (compStruct g h)
+      (compStruct _ _)).some.homotopyCategory₂_fac
 
 中文:
 实例 :
@@ -704,7 +705,8 @@ instance :
     exact ((compStruct _ _).comp_unique (compId _) .refl .refl).congr_homotopyCategory₂HomMk
   assoc := by
     rintro _ _ _ _ ⟨f⟩ ⟨g⟩ ⟨h⟩
-    exact (Q
+    exact (Quasicategory₂.fill31 (compStruct f g) (compStruct g h)
+      (compStruct _ _)).some.homotopyCategory₂_fac
 
 Depends on / 依赖: compId, compStruct, comp_id, comp_unique, fill31, idComp, some.homotopyCategory
 -/

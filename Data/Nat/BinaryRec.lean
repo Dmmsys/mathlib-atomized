@@ -332,7 +332,10 @@ definition binaryRec
     congrArg motive n.bit_testBit_zero_shiftRight_one ▸ x
 termination_by if n = 0 then 0 else n.log2.succ -- redundant, but removing causes slowdown
 decreasing_by
-  obtain _ |
+  obtain _ | n := n; · exact (n0 rfl).elim
+  obtain _ | n := n; · simp
+  have : (n + 1 + 1) >>> 1 != 0 := Nat.div_ne_zero_iff.mpr ⟨by decide, le_add_left ..⟩
+  simpa only [if_neg n0, if_neg this, log2_eq_succ_log2_shiftRight this] using lt_succ_self _
 
 中文:
 定义 binaryRec
@@ -343,7 +346,10 @@ decreasing_by
     congrArg motive n.bit_testBit_zero_shiftRight_one ▸ x
 termination_by if n = 0 then 0 else n.log2.succ -- redundant, but removing causes slowdown
 decreasing_by
-  obtain _ |
+  obtain _ | n := n; · exact (n0 rfl).elim
+  obtain _ | n := n; · simp
+  have : (n + 1 + 1) >>> 1 != 0 := Nat.div_ne_zero_iff.mpr ⟨by decide, le_add_left ..⟩
+  simpa only [if_neg n0, if_neg this, log2_eq_succ_log2_shiftRight this] using lt_succ_self _
 
 Depends on / 依赖: Nat.div_ne_zero_iff.mpr, binaryRec, bit_testBit_zero_shiftRight_one, causes, decreasing_by, div_ne_zero_iff, if_neg, le_add_left, log2_eq_succ_log2_shiftRight, motive, n.bit_testBit_zero_shiftRight_one, n.log2.succ, redundant, removing, slowdown, termination_by
 -/
@@ -655,7 +661,10 @@ theorem binaryRec_eq
     exact h.symm
   case neg =>
     rw [binaryRec]; rw [dif_neg h']
-    change congrArg motive (n.bit b).bit
+    change congrArg motive (n.bit b).bit_testBit_zero_shiftRight_one ▸ bit _ _ _ = _
+    generalize congrArg motive (n.bit b).bit_testBit_zero_shiftRight_one = e; revert e
+    rw [testBit_bit_zero]; rw [bit_shiftRight_one]
+    intros; rfl
 
 中文:
 定理 binaryRec_eq
@@ -669,7 +678,10 @@ theorem binaryRec_eq
     exact h.symm
   case neg =>
     rw [binaryRec]; rw [dif_neg h']
-    change congrArg motive (n.bit b).bit
+    change congrArg motive (n.bit b).bit_testBit_zero_shiftRight_one ▸ bit _ _ _ = _
+    generalize congrArg motive (n.bit b).bit_testBit_zero_shiftRight_one = e; revert e
+    rw [testBit_bit_zero]; rw [bit_shiftRight_one]
+    intros; rfl
 
 Depends on / 依赖: Bool.false_eq_true, binaryRec, bit_eq_zero_iff, bit_eq_zero_iff.mp, bit_shiftRight_one, bit_testBit_zero_shiftRight_one, dif_neg, false_eq_true, generalize, h.symm, imp_false, intros, motive, n.bit, not_true_eq_false, or_false, revert, testBit_bit_zero
 -/

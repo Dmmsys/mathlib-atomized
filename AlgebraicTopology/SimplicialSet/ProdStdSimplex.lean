@@ -49,7 +49,9 @@ definition objEquiv
       (SimplexCategory.Hom.mk (OrderHom.fst.comp f)),
       stdSimplex.objEquiv.symm
       (SimplexCategory.Hom.mk (OrderHom.snd.comp f))⟩
-  left_
+  left_inv := fun ⟨x, y⟩ => by simp
+
+@[simp]
 
 中文:
 定义 objEquiv
@@ -62,7 +64,9 @@ definition objEquiv
       (SimplexCategory.Hom.mk (OrderHom.fst.comp f)),
       stdSimplex.objEquiv.symm
       (SimplexCategory.Hom.mk (OrderHom.snd.comp f))⟩
-  left_
+  left_inv := fun ⟨x, y⟩ => by simp
+
+@[simp]
 
 Depends on / 依赖: OrderHom, OrderHom.prod
 -/
@@ -297,7 +301,7 @@ lemma strictMono_orderHomOfSimplex_iff
     rw [Prod.lt_iff]
     lia
   simp only [Fin.strictMono_iff_lt_succ]
-  exact forall_congr' (fun i => (this _ _ ((objEquiv x).monotone i.castSucc_le_suc
+  exact forall_congr' (fun i => (this _ _ ((objEquiv x).monotone i.castSucc_le_succ)).symm)
 
 中文:
 引理 strictMono_orderHomOfSimplex_iff
@@ -309,7 +313,7 @@ lemma strictMono_orderHomOfSimplex_iff
     rw [Prod.lt_iff]
     lia
   simp only [Fin.strictMono_iff_lt_succ]
-  exact forall_congr' (fun i => (this _ _ ((objEquiv x).monotone i.castSucc_le_suc
+  exact forall_congr' (fun i => (this _ _ ((objEquiv x).monotone i.castSucc_le_succ)).symm)
 
 Depends on / 依赖: Fin.strictMono_iff_lt_succ, Prod.lt_iff, castSucc_le_succ, forall_congr, i.castSucc_le_succ, lt_iff, monotone, objEquiv, strictMono_iff_lt_succ
 -/
@@ -358,7 +362,8 @@ instance :
     by_contra hx
     rw [← mem_nonDegenerate_iff_notMem_degenerate]; rw [nonDegenerate_iff_strictMono_objEquiv]; rw [← strictMono_orderHomOfSimplex_iff _ rfl] at hx
     replace hx := Fintype.card_le_of_injective _ hx.injective
-    
+    simp only [Fintype.card_fin, add_le_add_iff_right] at hx
+    lia
 
 中文:
 实例 :
@@ -369,7 +374,8 @@ instance :
     by_contra hx
     rw [← mem_nonDegenerate_iff_notMem_degenerate]; rw [nonDegenerate_iff_strictMono_objEquiv]; rw [← strictMono_orderHomOfSimplex_iff _ rfl] at hx
     replace hx := Fintype.card_le_of_injective _ hx.injective
-    
+    simp only [Fintype.card_fin, add_le_add_iff_right] at hx
+    lia
 
 Depends on / 依赖: Fintype, Fintype.card_fin, Fintype.card_le_of_injective, Set.mem_univ, Set.top_eq_univ, add_le_add_iff_right, card_fin, card_le_of_injective, hx.injective, iff_true, injective, mem_nonDegenerate_iff_notMem_degenerate, mem_univ, nonDegenerate_iff_strictMono_objEquiv, replace, strictMono_orderHomOfSimplex_iff, top_eq_univ
 -/
@@ -443,7 +449,9 @@ lemma nonDegenerate_max_dim_iff
   · rw [nonDegenerate_iff_injective_objEquiv]
     intro h a b hab
     simp only [DFunLike.ext_iff, orderHomOfSimplex_coe, OrderHom.id_coe, id_eq] at h
-    rw [← h a]; rw [← h b]; 
+    rw [← h a]; rw [← h b]; rw [Fin.ext_iff]
+    change ((objEquiv z a).1 : Nat) + (objEquiv z a).2 = (objEquiv z b).1 + (objEquiv z b).2
+    simp only [hab]
 
 中文:
 引理 nonDegenerate_max_dim_iff
@@ -454,7 +462,9 @@ lemma nonDegenerate_max_dim_iff
   · rw [nonDegenerate_iff_injective_objEquiv]
     intro h a b hab
     simp only [DFunLike.ext_iff, orderHomOfSimplex_coe, OrderHom.id_coe, id_eq] at h
-    rw [← h a]; rw [← h b]; 
+    rw [← h a]; rw [← h b]; rw [Fin.ext_iff]
+    change ((objEquiv z a).1 : Nat) + (objEquiv z a).2 = (objEquiv z b).1 + (objEquiv z b).2
+    simp only [hab]
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, Fin.ext_iff, OrderHom, OrderHom.eq_id_of_injective, OrderHom.id_coe, eq_id_of_injective, ext_iff, id_coe, id_eq, injective, nonDegenerate, nonDegenerate_iff_injective_objEquiv, objEquiv, orderHomOfSimplex, orderHomOfSimplex_coe, otimes, strictMono_orderHomOfSimplex
 -/

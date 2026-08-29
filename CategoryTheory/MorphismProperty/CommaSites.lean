@@ -55,7 +55,8 @@ lemma exists_map_eq_of_presieve
   · use 𝒱.presieve₀
     rw [Presieve.map_ofArrows]
     rfl
-  · rw [← CategoryTheory.Ove
+  · rw [← CategoryTheory.Over.w (𝒰.f i)]
+    exact P.comp_mem _ _ (H _ 𝒰.mem₀ ⟨⟨i⟩⟩) X.prop
 
 中文:
 引理 存在_map_eq_of_presieve
@@ -68,7 +69,8 @@ lemma exists_map_eq_of_presieve
   · use 𝒱.presieve₀
     rw [Presieve.map_ofArrows]
     rfl
-  · rw [← CategoryTheory.Ove
+  · rw [← CategoryTheory.Over.w (𝒰.f i)]
+    exact P.comp_mem _ _ (H _ 𝒰.mem₀ ⟨⟨i⟩⟩) X.prop
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Over.w, Over.homMk, Over.mk, P.comp_mem, PreZeroHypercover, Precoverage, Precoverage.mem_iff_exists_zeroHypercover, Presieve, Presieve.map_ofArrows, X.prop, comp_mem, map_ofArrows, mem_iff_exists_zeroHypercover
 -/
@@ -133,7 +135,11 @@ lemma toGrothendieck_comap_forget_eq_restrictedTopology
     rw [← over_toGrothendieck_eq_toGrothendieck_comap_forget]
     exact MorphismProperty.locallyCoverDense_forget_of_le (S := S) K H
   rw [Precoverage.comap_comp]
-  simp_rw [over_toG
+  simp_rw [over_toGrothendieck_eq_toGrothendieck_comap_forget]
+  apply Precoverage.toGrothendieck_comap_eq_restrictedTopology
+  intro X R hR
+  obtain ⟨T, rfl⟩ := MorphismProperty.exists_map_eq_of_presieve K H hR
+  simpa
 
 中文:
 引理 toGrothendieck_comap_forget_eq_restrictedTopology
@@ -143,7 +149,11 @@ lemma toGrothendieck_comap_forget_eq_restrictedTopology
     rw [← over_toGrothendieck_eq_toGrothendieck_comap_forget]
     exact MorphismProperty.locallyCoverDense_forget_of_le (S := S) K H
   rw [Precoverage.comap_comp]
-  simp_rw [over_toG
+  simp_rw [over_toGrothendieck_eq_toGrothendieck_comap_forget]
+  apply Precoverage.toGrothendieck_comap_eq_restrictedTopology
+  intro X R hR
+  obtain ⟨T, rfl⟩ := MorphismProperty.exists_map_eq_of_presieve K H hR
+  simpa
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Over.forget, K.comap, LocallyCoverDense, MorphismProperty, MorphismProperty.exists_map_eq_of_presieve, MorphismProperty.locallyCoverDense_forget_of_le, Over.forget, Precoverage, Precoverage.comap_comp, Precoverage.toGrothendieck_comap_eq_restrictedTopology, comap_comp, exists_map_eq_of_presieve, forget, locallyCoverDense_forget_of_le, over_toGrothendieck_eq_toGrothendieck_comap_forget, simp_rw, toGrothendieck, toGrothendieck_comap_eq_restrictedTopology
 -/

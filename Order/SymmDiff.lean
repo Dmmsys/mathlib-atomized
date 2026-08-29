@@ -673,7 +673,7 @@ theorem symmDiff_sup_inf
   · rw [sup_assoc]
     exact le_sup_of_le_right le_sdiff_sup
 
-@[to_dual
+@[to_dual (attr := simp)]
 
 中文:
 定理 symmDiff_sup_inf
@@ -687,7 +687,7 @@ theorem symmDiff_sup_inf
   · rw [sup_assoc]
     exact le_sup_of_le_right le_sdiff_sup
 
-@[to_dual
+@[to_dual (attr := simp)]
 
 Depends on / 依赖: inf_le_sup, le_antisymm, le_inf, le_sdiff_sup, le_sup_of_le_left, le_sup_of_le_right, le_sup_right, sup_assoc, sup_inf_left, sup_le, sup_right_comm, symmDiff, symmDiff_le_sup
 -/
@@ -2669,7 +2669,11 @@ theorem symmDiff_symmDiff_right'
         { rw [symmDiff_eq, compl_symmDiff, bihimp_eq', symmDiff_eq] }
     _ = a ⊓ b ⊓ c ⊔ a ⊓ bᶜ ⊓ cᶜ ⊔ b ⊓ cᶜ ⊓ aᶜ ⊔ c ⊓ bᶜ ⊓ aᶜ := by
         { rw [inf_sup_left, inf_sup_right, ← sup_assoc, ← inf_assoc, ← inf_assoc] }
-    
+    _ = a ⊓ b ⊓ c ⊔ a ⊓ bᶜ ⊓ cᶜ ⊔ aᶜ ⊓ b ⊓ cᶜ ⊔ aᶜ ⊓ bᶜ ⊓ c := (by
+      congr 1
+      · congr 1
+        rw [inf_comm]; rw [inf_assoc]
+      · apply inf_left_right_swap)
 
 中文:
 定理 symmDiff_symmDiff_right'
@@ -2678,7 +2682,11 @@ theorem symmDiff_symmDiff_right'
         { rw [symmDiff_eq, compl_symmDiff, bihimp_eq', symmDiff_eq] }
     _ = a ⊓ b ⊓ c ⊔ a ⊓ bᶜ ⊓ cᶜ ⊔ b ⊓ cᶜ ⊓ aᶜ ⊔ c ⊓ bᶜ ⊓ aᶜ := by
         { rw [inf_sup_left, inf_sup_right, ← sup_assoc, ← inf_assoc, ← inf_assoc] }
-    
+    _ = a ⊓ b ⊓ c ⊔ a ⊓ bᶜ ⊓ cᶜ ⊔ aᶜ ⊓ b ⊓ cᶜ ⊔ aᶜ ⊓ bᶜ ⊓ c := (by
+      congr 1
+      · congr 1
+        rw [inf_comm]; rw [inf_assoc]
+      · apply inf_left_right_swap)
 
 Depends on / 依赖: bihimp_eq, compl_symmDiff, inf_assoc, inf_comm, inf_left_right_swap, inf_sup_left, inf_sup_right, sup_assoc, symmDiff_eq
 -/

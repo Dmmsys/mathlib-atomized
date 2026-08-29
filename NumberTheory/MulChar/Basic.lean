@@ -374,7 +374,17 @@ definition ofUnitHom
     classical
       intro x y
       by_cases hx : IsUnit x
-      · simp on
+      · simp only [hx, IsUnit.mul_iff, true_and, dif_pos]
+        by_cases hy : IsUnit y
+        · simp only [hy, dif_pos]
+          have hm : (hx.mul hy).unit = hx.unit * hy.unit := Units.ext rfl
+          rw [hm]; rw [map_mul]
+          norm_cast
+        · simp only [hy, not_false_iff, dif_neg, mul_zero]
+      · simp only [hx, IsUnit.mul_iff, false_and, not_false_iff, dif_neg, zero_mul]
+  map_nonunit' := by
+    intro a ha
+    simp only [ha, not_false_iff, dif_neg]
 
 中文:
 定义 ofUnitHom
@@ -387,7 +397,17 @@ definition ofUnitHom
     classical
       intro x y
       by_cases hx : IsUnit x
-      · simp on
+      · simp only [hx, IsUnit.mul_iff, true_and, dif_pos]
+        by_cases hy : IsUnit y
+        · simp only [hy, dif_pos]
+          have hm : (hx.mul hy).unit = hx.unit * hy.unit := Units.ext rfl
+          rw [hm]; rw [map_mul]
+          norm_cast
+        · simp only [hy, not_false_iff, dif_neg, mul_zero]
+      · simp only [hx, IsUnit.mul_iff, false_and, not_false_iff, dif_neg, zero_mul]
+  map_nonunit' := by
+    intro a ha
+    simp only [ha, not_false_iff, dif_neg]
 
 Depends on / 依赖: IsUnit, IsUnit.mul_iff, Units.ext, Units.val_eq_one, classical, dif_neg, dif_pos, hx.mul, hx.unit, hy.unit, isUnit_one, isUnit_one.unit, map_mul, map_one, mul_iff, mul_z, not_false_iff, true_and, val_eq_one
 -/
@@ -1011,7 +1031,9 @@ theorem inv_apply
     rw [Ring.mul_inverse_cancel _ h]; rw [← map_mul]; rw [Ring.mul_inverse_cancel _ ha]; rw [map_one]
   · revert ha
     nontriviality R
-    in
+    intro ha
+    -- `nontriviality R` by itself doesn't do it
+    rw [map_nonunit _ ha]; rw [Ring.inverse_non_unit a ha]; rw [MulChar.map_zero χ]
 
 中文:
 定理 inv_apply
@@ -1025,7 +1047,9 @@ theorem inv_apply
     rw [Ring.mul_inverse_cancel _ h]; rw [← map_mul]; rw [Ring.mul_inverse_cancel _ ha]; rw [map_one]
   · revert ha
     nontriviality R
-    in
+    intro ha
+    -- `nontriviality R` by itself doesn't do it
+    rw [map_nonunit _ ha]; rw [Ring.inverse_non_unit a ha]; rw [MulChar.map_zero χ]
 
 Depends on / 依赖: IsUnit, IsUnit.map, IsUnit.mul_right_injective, Ring.mul_inverse_cancel, apply_fun, inv_apply_eq_inv, map_mul, map_one, mul_inverse_cancel, mul_right_injective, nontriviality, revert
 -/
@@ -1313,7 +1337,7 @@ definition domRestrictHom
   map_mul' x y := by ext; simp
 
 @[deprecated (since := "2026-07-19")] alias restrictHom := domRestrictHom
-@[deprecated (since := "2026-07-19")] alias res
+@[deprecated (since := "2026-07-19")] alias restrictHom_apply := domRestrictHom_apply
 
 中文:
 定义 domRestrictHom
@@ -1325,7 +1349,7 @@ definition domRestrictHom
   map_mul' x y := by ext; simp
 
 @[deprecated (since := "2026-07-19")] alias restrictHom := domRestrictHom
-@[deprecated (since := "2026-07-19")] alias res
+@[deprecated (since := "2026-07-19")] alias restrictHom_apply := domRestrictHom_apply
 
 Depends on / 依赖: domRestrict
 -/
@@ -1782,7 +1806,7 @@ theorem IsQuadratic.inv
   · rw [h₁, Ring.inverse_one]
   · -- Porting note (#11573): was `by norm_cast`
     have : (-1 : R') = (-1 : R'ˣ) := by norm_cast; simp
-    rw [h₂]; rw [this]; rw [Ring.inverse_unit (-1 : R'ˣ)]; rw [in
+    rw [h₂]; rw [this]; rw [Ring.inverse_unit (-1 : R'ˣ)]; rw [inv_neg]; rw [inv_one]
 
 中文:
 定理 IsQuadratic.inv
@@ -1796,7 +1820,7 @@ theorem IsQuadratic.inv
   · rw [h₁, Ring.inverse_one]
   · -- Porting note (#11573): was `by norm_cast`
     have : (-1 : R') = (-1 : R'ˣ) := by norm_cast; simp
-    rw [h₂]; rw [this]; rw [Ring.inverse_unit (-1 : R'ˣ)]; rw [in
+    rw [h₂]; rw [this]; rw [Ring.inverse_unit (-1 : R'ˣ)]; rw [inv_neg]; rw [inv_one]
 
 Depends on / 依赖: Porting, Ring.inverse_one, Ring.inverse_unit, Ring.inverse_zero, inv_apply_eq_inv, inv_neg, inv_one, inverse_one, inverse_unit, inverse_zero
 -/
@@ -1929,7 +1953,10 @@ lemma isQuadratic_iff_sq_eq_one
     · exact (not_isUnit_zero <| H ▸ IsUnit.map χ <| x.isUnit).elim
     · simp only [H, one_pow]
     · simp only [H, even_two, Even.neg_pow, one_pow]
-  · by_cases hx : IsUnit 
+  · by_cases hx : IsUnit x
+· refine .inr sq_eq_one_iff.mp ?_
+      rw [← χ.pow_apply' two_ne_zero]; rw [h]; rw [MulChar.one_apply hx]
+· exact .inl map_nonunit χ hx
 
 中文:
 引理 isQuadratic_iff_sq_eq_one
@@ -1941,7 +1968,10 @@ lemma isQuadratic_iff_sq_eq_one
     · exact (not_isUnit_zero <| H ▸ IsUnit.map χ <| x.isUnit).elim
     · simp only [H, one_pow]
     · simp only [H, even_two, Even.neg_pow, one_pow]
-  · by_cases hx : IsUnit 
+  · by_cases hx : IsUnit x
+· refine .inr sq_eq_one_iff.mp ?_
+      rw [← χ.pow_apply' two_ne_zero]; rw [h]; rw [MulChar.one_apply hx]
+· exact .inl map_nonunit χ hx
 
 Depends on / 依赖: Even.neg_pow, IsUnit, IsUnit.map, MulChar, MulChar.one_apply, even_two, isUnit, map_nonunit, neg_pow, not_isUnit_zero, one_apply, one_apply_coe, one_pow, pow_apply, pow_apply_coe, sq_eq_one_iff, sq_eq_one_iff.mp, two_ne_zero, x.isUnit
 -/
@@ -2069,7 +2099,13 @@ theorem sum_one_eq_card_units
       Finset.sum_congr rfl fun a _ => ?_
     _ = ((Finset.univ : Finset R).filter IsUnit).card := Finset.sum_boole _ _
     _ = (Finset.univ.map ⟨((↑) : Rˣ -> R), Units.val_injective⟩).card := ?_
-    _ = Fintype.card Rˣ
+    _ = Fintype.card Rˣ := congr_arg _ (Finset.card_map _)
+  · split_ifs with h
+    · exact one_apply_coe h.unit
+    · exact map_nonunit _ h
+  · congr
+    ext a
+    simp [IsUnit]
 
 中文:
 定理 sum_one_eq_card_units
@@ -2080,7 +2116,13 @@ theorem sum_one_eq_card_units
       Finset.sum_congr rfl fun a _ => ?_
     _ = ((Finset.univ : Finset R).filter IsUnit).card := Finset.sum_boole _ _
     _ = (Finset.univ.map ⟨((↑) : Rˣ -> R), Units.val_injective⟩).card := ?_
-    _ = Fintype.card Rˣ
+    _ = Fintype.card Rˣ := congr_arg _ (Finset.card_map _)
+  · split_ifs with h
+    · exact one_apply_coe h.unit
+    · exact map_nonunit _ h
+  · congr
+    ext a
+    simp [IsUnit]
 
 Depends on / 依赖: Finset, Finset.card_map, Finset.sum_boole, Finset.sum_congr, Finset.univ, Finset.univ.map, Fintype, Fintype.card, IsUnit, MulChar, Units.val_injective, card_map, congr_arg, filter, h.unit, map_nonunit, one_apply_coe, split_ifs, sum_boole, sum_congr
 -/

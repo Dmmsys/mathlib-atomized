@@ -199,7 +199,9 @@ theorem χ₄_eq_neg_one_pow
   simp only [hn, Nat.one_ne_zero, if_false]
   nth_rewrite 3 [← Nat.div_add_mod n 4]
   nth_rewrite 3 [show 4 = 2 * 2 by lia]
-  rw [mul_assoc]; rw [add_comm]; rw [Nat.add_mul_div_left _ _ zero_lt_two]; rw [pow_add]; rw [pow_mul]; rw [neg_one_sq]; rw [one_pow]; rw [mul_o
+  rw [mul_assoc]; rw [add_comm]; rw [Nat.add_mul_div_left _ _ zero_lt_two]; rw [pow_add]; rw [pow_mul]; rw [neg_one_sq]; rw [one_pow]; rw [mul_one]
+  have help : forall m : Nat, m < 4 -> m % 2 = 1 -> ite (m = 1) (1 : Int) (-1) = (-1) ^ (m / 2) := by decide
+exact help _ (Nat.mod_lt n (by lia)) (Nat.mod_mod_of_dvd n (by lia : 2 ∣ 4)).trans hn
 
 中文:
 定理 χ₄_eq_neg_one_pow
@@ -210,7 +212,9 @@ theorem χ₄_eq_neg_one_pow
   simp only [hn, Nat.one_ne_zero, if_false]
   nth_rewrite 3 [← Nat.div_add_mod n 4]
   nth_rewrite 3 [show 4 = 2 * 2 by lia]
-  rw [mul_assoc]; rw [add_comm]; rw [Nat.add_mul_div_left _ _ zero_lt_two]; rw [pow_add]; rw [pow_mul]; rw [neg_one_sq]; rw [one_pow]; rw [mul_o
+  rw [mul_assoc]; rw [add_comm]; rw [Nat.add_mul_div_left _ _ zero_lt_two]; rw [pow_add]; rw [pow_mul]; rw [neg_one_sq]; rw [one_pow]; rw [mul_one]
+  have help : forall m : Nat, m < 4 -> m % 2 = 1 -> ite (m = 1) (1 : Int) (-1) = (-1) ^ (m / 2) := by decide
+exact help _ (Nat.mod_lt n (by lia)) (Nat.mod_mod_of_dvd n (by lia : 2 ∣ 4)).trans hn
 
 Depends on / 依赖: Nat.add_mul_div_left, Nat.div_add_mod, Nat.mod_lt, Nat.mod_mod_of_dvd, Nat.one_ne_zero, add_comm, add_mul_div_left, div_add_mod, if_false, mod_lt, mod_mod_of_dvd, mul_assoc, mul_one, neg_one_sq, nth_rewrite, one_ne_zero, one_pow, pow_add, pow_mul, zero_lt_two
 -/
@@ -473,7 +477,7 @@ theorem χ₈_int_eq_if_mod_eight
     forall m : Int, 0 <= m -> m < 8 -> χ₈ m = if m % 2 = 0 then 0 else if m = 1 ∨ m = 7 then 1 else -1 := by
     decide
   rw [← Int.emod_emod_of_dvd n (by lia : (2 : Int) ∣ 8)]; rw [← ZMod.intCast_mod n 8]
-  exact help (n % 8) (Int.emod_nonneg n (by lia)) (Int.emod_lt_abs n (by lia)
+  exact help (n % 8) (Int.emod_nonneg n (by lia)) (Int.emod_lt_abs n (by lia))
 
 中文:
 定理 χ₈_int_eq_if_mod_eight
@@ -483,7 +487,7 @@ theorem χ₈_int_eq_if_mod_eight
     forall m : Int, 0 <= m -> m < 8 -> χ₈ m = if m % 2 = 0 then 0 else if m = 1 ∨ m = 7 then 1 else -1 := by
     decide
   rw [← Int.emod_emod_of_dvd n (by lia : (2 : Int) ∣ 8)]; rw [← ZMod.intCast_mod n 8]
-  exact help (n % 8) (Int.emod_nonneg n (by lia)) (Int.emod_lt_abs n (by lia)
+  exact help (n % 8) (Int.emod_nonneg n (by lia)) (Int.emod_lt_abs n (by lia))
 
 Depends on / 依赖: Int.emod_emod_of_dvd, Int.emod_lt_abs, Int.emod_nonneg, ZMod.intCast_mod, emod_emod_of_dvd, emod_lt_abs, emod_nonneg, intCast_mod
 -/
@@ -588,7 +592,7 @@ theorem χ₈'_int_eq_if_mod_eight
     forall m : Int, 0 <= m -> m < 8 -> χ₈' m = if m % 2 = 0 then 0 else if m = 1 ∨ m = 3 then 1 else -1 := by
     decide
   rw [← Int.emod_emod_of_dvd n (by lia : (2 : Int) ∣ 8)]; rw [← ZMod.intCast_mod n 8]
-  exact help (n % 8) (Int.emod_nonneg n (by lia)) (Int.emod_lt_abs n (by lia
+  exact help (n % 8) (Int.emod_nonneg n (by lia)) (Int.emod_lt_abs n (by lia))
 
 中文:
 定理 χ₈'_int_eq_if_mod_eight
@@ -598,7 +602,7 @@ theorem χ₈'_int_eq_if_mod_eight
     forall m : Int, 0 <= m -> m < 8 -> χ₈' m = if m % 2 = 0 then 0 else if m = 1 ∨ m = 3 then 1 else -1 := by
     decide
   rw [← Int.emod_emod_of_dvd n (by lia : (2 : Int) ∣ 8)]; rw [← ZMod.intCast_mod n 8]
-  exact help (n % 8) (Int.emod_nonneg n (by lia)) (Int.emod_lt_abs n (by lia
+  exact help (n % 8) (Int.emod_nonneg n (by lia)) (Int.emod_lt_abs n (by lia))
 -/
 theorem χ₈'_int_eq_if_mod_eight (n : Int) :
     χ₈' n = if n % 2 = 0 then 0 else if n % 8 = 1 ∨ n % 8 = 3 then 1 else -1 := by

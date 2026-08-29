@@ -188,7 +188,10 @@ lemma Topology.IsOpenEmbedding.prespectralSpace
 apply isTopologicalBasis_of_isOpen_of_nhds (fun U hU => hU.1) fun x U hx hU => ?_
     obtain ⟨V, ⟨hoV, hcV⟩, hfx, hVf⟩ : exists V in {V | IsOpen V ∧ IsCompact V}, f x in V ∧ V subseteq f '' U :=
       (PrespectralSpace.isTopologicalBasis (X := Y)).isOpen_iff.mp
-        (hf.isOpen_iff_image_isOpen
+        (hf.isOpen_iff_image_isOpen.mp hU) (f x) ⟨x, hx, rfl⟩
+    refine ⟨f ⁻¹' V, ⟨hoV.preimage hf.continuous, ?_⟩, ⟨hfx, fun y hy => ?_⟩⟩
+· exact hf.toIsInducing.isCompact_preimage' hcV Set.SurjOn.subset_range hVf
+    · exact hf.injective.mem_set_image.mp (hVf hy)
 
 中文:
 引理 拓扑.是开嵌入.prespectralSpace
@@ -197,7 +200,10 @@ apply isTopologicalBasis_of_isOpen_of_nhds (fun U hU => hU.1) fun x U hx hU => ?
 apply isTopologicalBasis_of_isOpen_of_nhds (fun U hU => hU.1) fun x U hx hU => ?_
     obtain ⟨V, ⟨hoV, hcV⟩, hfx, hVf⟩ : exists V in {V | IsOpen V ∧ IsCompact V}, f x in V ∧ V subseteq f '' U :=
       (PrespectralSpace.isTopologicalBasis (X := Y)).isOpen_iff.mp
-        (hf.isOpen_iff_image_isOpen
+        (hf.isOpen_iff_image_isOpen.mp hU) (f x) ⟨x, hx, rfl⟩
+    refine ⟨f ⁻¹' V, ⟨hoV.preimage hf.continuous, ?_⟩, ⟨hfx, fun y hy => ?_⟩⟩
+· exact hf.toIsInducing.isCompact_preimage' hcV Set.SurjOn.subset_range hVf
+    · exact hf.injective.mem_set_image.mp (hVf hy)
 
 Depends on / 依赖: IsCompact, IsOpen, PrespectralSpace, PrespectralSpace.isTopologicalBasis, Set.SurjOn.subset_range, SurjOn, continuous, hf.continuous, hf.injective.mem_set_image.mp, hf.isOpen_iff_image_isOpen.mp, hf.toIsInducing.isCompact_preimage, hoV.preimage, injective, isCompact_preimage, isOpen_iff, isOpen_iff.mp, isOpen_iff_image_isOpen, isTopologicalBasis, isTopologicalBasis_of_isOpen_of_nhds, mem_set_image
 -/
@@ -285,6 +291,24 @@ definition PrespectralSpace.opensEquiv
     apply le_antisymm
     · simp only [iSup_le_iff]
       exact fun _ => id
+    · intro x hxU
+      obtain ⟨V, ⟨h₁, h₂⟩, hxV, hVU⟩ := isTopologicalBasis.exists_subset_of_mem_open hxU U.2
+      simp only [Opens.mem_iSup]
+      exact ⟨⟨⟨_, h₂⟩, h₁⟩, hVU, hxV⟩
+  right_inv I := by
+    ext U
+    dsimp
+    change U.toOpens <= _ ↔ _
+    refine ⟨fun H => ?_, fun h => le_iSup₂ (f := fun U (h : U in I) => U.toOpens) U h⟩
+    simp only [← SetLike.coe_subset_coe, Opens.iSup_mk, Opens.carrier_eq_coe, Opens.coe_mk] at H
+    obtain ⟨s, hsI, hs, hU⟩ := U.isCompact.elim_finite_subcover_image (fun U _ => U.2) H
+    exact I.lower (a := hs.toFinset.sup fun i => i) (by simpa [← SetLike.coe_subset_coe]) (by simpa)
+  map_rel_iff' {U V} := by
+    change (forall (W : CompactOpens X), (W : Set X) subseteq U -> (W : Set X) subseteq V) ↔ U <= V
+    refine ⟨?_, fun H W => (le_trans · H)⟩
+    intro H x hxU
+    obtain ⟨W, ⟨h₁, h₂⟩, hxW, hWU⟩ := isTopologicalBasis.exists_subset_of_mem_open hxU U.2
+    exact H ⟨⟨W, h₂⟩, h₁⟩ hWU hxW
 
 中文:
 定义 Prespectral空间.opensEquiv
@@ -296,6 +320,24 @@ definition PrespectralSpace.opensEquiv
     apply le_antisymm
     · simp only [iSup_le_iff]
       exact fun _ => id
+    · intro x hxU
+      obtain ⟨V, ⟨h₁, h₂⟩, hxV, hVU⟩ := isTopologicalBasis.exists_subset_of_mem_open hxU U.2
+      simp only [Opens.mem_iSup]
+      exact ⟨⟨⟨_, h₂⟩, h₁⟩, hVU, hxV⟩
+  right_inv I := by
+    ext U
+    dsimp
+    change U.toOpens <= _ ↔ _
+    refine ⟨fun H => ?_, fun h => le_iSup₂ (f := fun U (h : U in I) => U.toOpens) U h⟩
+    simp only [← SetLike.coe_subset_coe, Opens.iSup_mk, Opens.carrier_eq_coe, Opens.coe_mk] at H
+    obtain ⟨s, hsI, hs, hU⟩ := U.isCompact.elim_finite_subcover_image (fun U _ => U.2) H
+    exact I.lower (a := hs.toFinset.sup fun i => i) (by simpa [← SetLike.coe_subset_coe]) (by simpa)
+  map_rel_iff' {U V} := by
+    change (forall (W : CompactOpens X), (W : Set X) subseteq U -> (W : Set X) subseteq V) ↔ U <= V
+    refine ⟨?_, fun H W => (le_trans · H)⟩
+    intro H x hxU
+    obtain ⟨W, ⟨h₁, h₂⟩, hxW, hWU⟩ := isTopologicalBasis.exists_subset_of_mem_open hxU U.2
+    exact H ⟨⟨W, h₂⟩, h₁⟩ hWU hxW
 
 Depends on / 依赖: subset_trans, subseteq
 -/
@@ -340,7 +382,19 @@ lemma IsOpenMap.exists_opens_image_eq_of_prespectralSpace
   obtain ⟨t, ht⟩ := by
     refine hc.elim_finite_subcover (fun s : Us => f '' s.1) (fun s => h _ s.1.2) (fun x hx => ?_)
     obtain ⟨x, rfl⟩ := hs hx
-obtain ⟨i,
+obtain ⟨i, hi, hx⟩ := mem_sSup.mp by rwa [← heq]
+    exact Set.mem_iUnion.mpr ⟨⟨i, hi⟩, x, hx, rfl⟩
+  refine ⟨⨆ s in t, s.1, ?_, ?_⟩
+  · simp only [iSup_mk, carrier_eq_coe, coe_mk]
+    exact t.finite_toSet.isCompact_biUnion fun i _ => hUs i.2
+  · simp only [iSup_mk, carrier_eq_coe, Set.iUnion_coe_set, coe_mk, Set.image_iUnion]
+    convert_to ⋃ i in t, f '' i.1 = U
+    · simp
+    · refine subset_antisymm (fun x => ?_) ht
+      simp_rw [Set.mem_iUnion]
+      rintro ⟨i, hi, x, hx, rfl⟩
+      have := heq ▸ mem_sSup.mpr ⟨i.1, i.2, hx⟩
+      exact this
 
 中文:
 引理 是开映射.存在_opens_image_eq_of_prespectralSpace
@@ -351,7 +405,19 @@ obtain ⟨i,
   obtain ⟨t, ht⟩ := by
     refine hc.elim_finite_subcover (fun s : Us => f '' s.1) (fun s => h _ s.1.2) (fun x hx => ?_)
     obtain ⟨x, rfl⟩ := hs hx
-obtain ⟨i,
+obtain ⟨i, hi, hx⟩ := mem_sSup.mp by rwa [← heq]
+    exact Set.mem_iUnion.mpr ⟨⟨i, hi⟩, x, hx, rfl⟩
+  refine ⟨⨆ s in t, s.1, ?_, ?_⟩
+  · simp only [iSup_mk, carrier_eq_coe, coe_mk]
+    exact t.finite_toSet.isCompact_biUnion fun i _ => hUs i.2
+  · simp only [iSup_mk, carrier_eq_coe, Set.iUnion_coe_set, coe_mk, Set.image_iUnion]
+    convert_to ⋃ i in t, f '' i.1 = U
+    · simp
+    · refine subset_antisymm (fun x => ?_) ht
+      simp_rw [Set.mem_iUnion]
+      rintro ⟨i, hi, x, hx, rfl⟩
+      have := heq ▸ mem_sSup.mpr ⟨i.1, i.2, hx⟩
+      exact this
 
 Depends on / 依赖: PrespectralSpace, PrespectralSpace.isBasis_opens, Set.mem_iUnion.mpr, TopologicalSpace, TopologicalSpace.Opens.isBasis_iff_cover.mp, carrier_eq_coe, coe_mk, elim_finite_subcover, finite_toSet, hU.preimage, hc.elim_finite_subcover, iSup_mk, isBasis_iff_cover, isBasis_opens, isCompact_biUnion, mem_iUnion, mem_sSup, mem_sSup.mp, preimage, t.finite_toSet.isCompact_biUnion
 -/
@@ -388,7 +454,11 @@ lemma PrespectralSpace.exists_isCompact_and_isOpen_between
   · use W, Wc, Wo, subset_trans hst hKW, hWU
   · intro s t ⟨W₁, Wc₁, Wo₁, hKW₁, hWU₁⟩ ⟨W₂, Wc₂, Wo₂, hKW₂, hWU₂⟩
     exact ⟨W₁ union W₂, Wc₁.union Wc₂, Wo₁.union Wo₂, Set.union_subset_union hKW₁ hKW₂,
-      Set.
+      Set.union_subset hWU₁ hWU₂⟩
+  · intro x hx
+    obtain ⟨V, h, hxV, hVU⟩ :=
+      PrespectralSpace.isTopologicalBasis.exists_subset_of_mem_open (hKU hx) hU
+    exact ⟨V, mem_nhdsWithin.mpr ⟨V, h.1, hxV, Set.inter_subset_left⟩, V, h.2, h.1, subset_rfl, hVU⟩
 
 中文:
 引理 Prespectral空间.存在_isCompact_and_isOpen_between
@@ -398,7 +468,11 @@ lemma PrespectralSpace.exists_isCompact_and_isOpen_between
   · use W, Wc, Wo, subset_trans hst hKW, hWU
   · intro s t ⟨W₁, Wc₁, Wo₁, hKW₁, hWU₁⟩ ⟨W₂, Wc₂, Wo₂, hKW₂, hWU₂⟩
     exact ⟨W₁ union W₂, Wc₁.union Wc₂, Wo₁.union Wo₂, Set.union_subset_union hKW₁ hKW₂,
-      Set.
+      Set.union_subset hWU₁ hWU₂⟩
+  · intro x hx
+    obtain ⟨V, h, hxV, hVU⟩ :=
+      PrespectralSpace.isTopologicalBasis.exists_subset_of_mem_open (hKU hx) hU
+    exact ⟨V, mem_nhdsWithin.mpr ⟨V, h.1, hxV, Set.inter_subset_left⟩, V, h.2, h.1, subset_rfl, hVU⟩
 
 Depends on / 依赖: PrespectralSpace, PrespectralSpace.isTopologicalBasis.exists_subset_of_mem_open, Set.inter_subset_left, Set.union_subset, Set.union_subset_union, exists_subset_of_mem_open, hK.induction_on, induction_on, inter_subset_left, isTopologicalBasis, mem_nhdsWithin, mem_nhdsWithin.mpr, subset_trans, union_subset, union_subset_union
 -/
@@ -427,7 +501,18 @@ lemma PrespectralSpace.exists_isClosed_of_not_isPreirreducible
   rw [Set.not_nonempty_iff_eq_empty]; rw [← Set.subset_empty_iff] at hU₁₂
   obtain ⟨x₁, hx₁⟩ : exists x₁ in U₁, x₁ in Z ∧ x₁ ∉ U₂ := by
     obtain ⟨x, hx⟩ := hU₁Z
-    use x, hx.2, hx.1, fun h₂ =
+    use x, hx.2, hx.1, fun h₂ => hU₁₂ ⟨hx.1, hx.2, h₂⟩
+  obtain ⟨x₂, hx₂⟩ : exists x₂ in U₂, x₂ in Z ∧ x₂ ∉ U₁ := by
+    obtain ⟨x, hx⟩ := hU₂Z
+    use x, hx.2, hx.1, fun h₁ => hU₁₂ ⟨hx.1, h₁, hx.2⟩
+  rw [PrespectralSpace.isTopologicalBasis.isOpen_iff] at hU₁ hU₂
+  obtain ⟨W₁, hW₁⟩ := hU₁ x₁ hx₁.1
+  obtain ⟨W₂, hW₂⟩ := hU₂ x₂ hx₂.1
+  refine ⟨W₁ᶜ, W₂ᶜ, by simpa using hW₁.1.1, by simpa using hW₂.1.1, by simp [hW₁.1.2],
+    by simp [hW₂.1.2], fun z hz => ?_, ⟨x₁, by grind⟩, ⟨x₂, by grind⟩⟩
+  · by_contra! hc
+    simp only [Set.mem_union, Set.mem_compl_iff, not_or, not_not] at hc
+    exact hU₁₂ ⟨hz, hW₁.2.2 hc.1, hW₂.2.2 hc.2⟩
 
 中文:
 引理 Prespectral空间.存在_isClosed_of_not_isPreirreducible
@@ -438,7 +523,18 @@ lemma PrespectralSpace.exists_isClosed_of_not_isPreirreducible
   rw [Set.not_nonempty_iff_eq_empty]; rw [← Set.subset_empty_iff] at hU₁₂
   obtain ⟨x₁, hx₁⟩ : exists x₁ in U₁, x₁ in Z ∧ x₁ ∉ U₂ := by
     obtain ⟨x, hx⟩ := hU₁Z
-    use x, hx.2, hx.1, fun h₂ =
+    use x, hx.2, hx.1, fun h₂ => hU₁₂ ⟨hx.1, hx.2, h₂⟩
+  obtain ⟨x₂, hx₂⟩ : exists x₂ in U₂, x₂ in Z ∧ x₂ ∉ U₁ := by
+    obtain ⟨x, hx⟩ := hU₂Z
+    use x, hx.2, hx.1, fun h₁ => hU₁₂ ⟨hx.1, h₁, hx.2⟩
+  rw [PrespectralSpace.isTopologicalBasis.isOpen_iff] at hU₁ hU₂
+  obtain ⟨W₁, hW₁⟩ := hU₁ x₁ hx₁.1
+  obtain ⟨W₂, hW₂⟩ := hU₂ x₂ hx₂.1
+  refine ⟨W₁ᶜ, W₂ᶜ, by simpa using hW₁.1.1, by simpa using hW₂.1.1, by simp [hW₁.1.2],
+    by simp [hW₂.1.2], fun z hz => ?_, ⟨x₁, by grind⟩, ⟨x₂, by grind⟩⟩
+  · by_contra! hc
+    simp only [Set.mem_union, Set.mem_compl_iff, not_or, not_not] at hc
+    exact hU₁₂ ⟨hz, hW₁.2.2 hc.1, hW₂.2.2 hc.2⟩
 
 Depends on / 依赖: IsPreirreducible, PrespectralSpace, PrespectralSpace.isTopologicalBasis.isOpen_iff, Set.not_nonempty_iff_eq_empty, Set.subset_empty_iff, isOpen_iff, isTopologicalBasis, not_forall, not_nonempty_iff_eq_empty, subset_empty_iff
 -/

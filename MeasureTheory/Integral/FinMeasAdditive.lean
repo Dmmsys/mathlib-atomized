@@ -354,7 +354,21 @@ theorem map_iUnion_fin_meas_set_eq_sum
       imp_true_iff, T_empty]
   intro a s has h hps h_disj
   rw [Finset.sum_insert has]; rw [← h]
-  swap; · exact fun i hi => hps i (
+  swap; · exact fun i hi => hps i (Finset.mem_insert_of_mem hi)
+  swap
+  · exact fun i hi j hj hij =>
+      h_disj i (Finset.mem_insert_of_mem hi) j (Finset.mem_insert_of_mem hj) hij
+  rw [←
+    h_add (S a) (⋃ i in s]; rw [S i) (hS_meas a) (measurableSet_biUnion _ fun i _ => hS_meas i)
+      (hps a (Finset.mem_insert_self a s))]
+  · congr; convert! Finset.iSup_insert a s S
+  · exact (measure_biUnion_lt_top s.finite_toSet fun i hi =>
+      (hps i <| Finset.mem_insert_of_mem hi).lt_top).ne
+  · simp_rw [Set.disjoint_iUnion_right]
+    intro i hi
+    refine h_disj a (Finset.mem_insert_self a s) i (Finset.mem_insert_of_mem hi) fun hai => ?_
+    rw [← hai] at hi
+    exact has hi
 
 中文:
 定理 map_iUnion_fin_meas_set_eq_sum
@@ -367,7 +381,21 @@ theorem map_iUnion_fin_meas_set_eq_sum
       imp_true_iff, T_empty]
   intro a s has h hps h_disj
   rw [Finset.sum_insert has]; rw [← h]
-  swap; · exact fun i hi => hps i (
+  swap; · exact fun i hi => hps i (Finset.mem_insert_of_mem hi)
+  swap
+  · exact fun i hi j hj hij =>
+      h_disj i (Finset.mem_insert_of_mem hi) j (Finset.mem_insert_of_mem hj) hij
+  rw [←
+    h_add (S a) (⋃ i in s]; rw [S i) (hS_meas a) (measurableSet_biUnion _ fun i _ => hS_meas i)
+      (hps a (Finset.mem_insert_self a s))]
+  · congr; convert! Finset.iSup_insert a s S
+  · exact (measure_biUnion_lt_top s.finite_toSet fun i hi =>
+      (hps i <| Finset.mem_insert_of_mem hi).lt_top).ne
+  · simp_rw [Set.disjoint_iUnion_right]
+    intro i hi
+    refine h_disj a (Finset.mem_insert_self a s) i (Finset.mem_insert_of_mem hi) fun hai => ?_
+    rw [← hai] at hi
+    exact has hi
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert_of_mem, Finset.notMem_empty, Finset.sum_insert, IsEmpty, IsEmpty.forall_iff, T_empty, classical, forall_iff, hS_meas, h_add, h_disj, iUnion_empty, iUnion_false, imp_true_iff, induction_on, measurableSet_biUnion, mem_insert_of_mem, notMem_empty
 -/
@@ -654,7 +682,9 @@ have h' : forall s, μ s = ∞ -> μ' s = ∞ := fun s hs => top_unique hs.symm.
   calc
     ‖T s‖ <= C * μ.real s := hT.2 s hs hμs
     _ <= C * μ'.real s := by
-      simp 
+      simp only [measureReal_def]
+      gcongr
+      exact hμ's.ne
 
 中文:
 定理 of_measure_le
@@ -666,7 +696,9 @@ have h' : forall s, μ s = ∞ -> μ' s = ∞ := fun s hs => top_unique hs.symm.
   calc
     ‖T s‖ <= C * μ.real s := hT.2 s hs hμs
     _ <= C * μ'.real s := by
-      simp 
+      simp only [measureReal_def]
+      gcongr
+      exact hμ's.ne
 
 Depends on / 依赖: hs.symm.trans_le, measureReal_def, of_eq_top_imp_eq_top, s.ne, top_unique, trans_le, trans_lt
 -/
@@ -694,7 +726,12 @@ theorem add_measure
   have hνs : ν s < ∞ := (Measure.le_add_left le_rfl s).trans_lt hsf
   rw [Pi.add_apply]; rw [measureReal_add_apply hμs.ne hνs.ne]; rw [mul_add]
   calc
-    ‖T s + T' s‖ <= ‖T 
+    ‖T s + T' s‖ <= ‖T s‖ + ‖T' s‖ := norm_add_le _ _
+    _ <= C * μ.real s + C' * ν.real s := add_le_add (hT.2 s hs hμs) (hT'.2 s hs hνs)
+    _ <= max C C' * μ.real s + max C C' * ν.real s := by
+      gcongr
+      · exact le_max_left C C'
+      · exact le_max_right C C'
 
 中文:
 定理 add_measure
@@ -705,7 +742,12 @@ theorem add_measure
   have hνs : ν s < ∞ := (Measure.le_add_left le_rfl s).trans_lt hsf
   rw [Pi.add_apply]; rw [measureReal_add_apply hμs.ne hνs.ne]; rw [mul_add]
   calc
-    ‖T s + T' s‖ <= ‖T 
+    ‖T s + T' s‖ <= ‖T s‖ + ‖T' s‖ := norm_add_le _ _
+    _ <= C * μ.real s + C' * ν.real s := add_le_add (hT.2 s hs hμs) (hT'.2 s hs hνs)
+    _ <= max C C' * μ.real s + max C C' * ν.real s := by
+      gcongr
+      · exact le_max_left C C'
+      · exact le_max_right C C'
 
 Depends on / 依赖: Measure, Measure.le_add_left, Measure.le_add_right, Pi.add_apply, add_apply, add_le_add, add_measure, le_add_left, le_add_right, le_max_left, le_max_ri, le_rfl, measureReal_add_apply, mul_add, norm_add_le, s.ne, trans_lt
 -/
@@ -826,7 +868,11 @@ theorem of_smul_measure
       false_and] at hcμs
     exact hcμs.2
   refine ⟨hT.1.of_eq_top_imp_eq_top (μ := c • μ) h, fun s hs hμs => ?_⟩
-  have hcμs : c • μ s 
+  have hcμs : c • μ s != ∞ := mt (h s hs) hμs.ne
+  rw [smul_eq_mul] at hcμs
+  refine (hT.2 s hs hcμs.lt_top).trans (le_of_eq ?_)
+  simp only [measureReal_ennreal_smul_apply]
+  ring
 
 中文:
 定理 of_smul_measure
@@ -838,7 +884,11 @@ theorem of_smul_measure
       false_and] at hcμs
     exact hcμs.2
   refine ⟨hT.1.of_eq_top_imp_eq_top (μ := c • μ) h, fun s hs hμs => ?_⟩
-  have hcμs : c • μ s 
+  have hcμs : c • μ s != ∞ := mt (h s hs) hμs.ne
+  rw [smul_eq_mul] at hcμs
+  refine (hT.2 s hs hcμs.lt_top).trans (le_of_eq ?_)
+  simp only [measureReal_ennreal_smul_apply]
+  ring
 
 Depends on / 依赖: ENNReal, ENNReal.mul_eq_top, MeasurableSet, false_and, hc_ne_top, le_of_eq, lt_top, measureReal_ennreal_smul_apply, mul_eq_top, of_eq_top_imp_eq_top, or_false, s.lt_top, s.ne, smul_eq_mul
 -/
@@ -1068,7 +1118,30 @@ theorem map_setToSimpleFunc
     (measure_preimage_lt_top_of_integrable f hf hx0).ne
   simp only [setToSimpleFunc, range_map]
   refine Finset.sum_image' _ fun b hb => ?_
-  rcases me
+  rcases mem_range.1 hb with ⟨a, rfl⟩
+  by_cases h0 : g (f a) = 0
+  · simp_rw [h0]
+    rw [map_zero]; rw [Finset.sum_eq_zero fun x hx => ?_]
+    rw [mem_filter] at hx
+    rw [hx.2]; rw [map_zero]
+  have h_left_eq :
+    T (map g f ⁻¹' {g (f a)}) (g (f a))
+      = T (f ⁻¹' ({b in f.range | g b = g (f a)} : Finset _)) (g (f a)) := by
+    rw [map_preimage_singleton]
+  rw [h_left_eq]
+  have h_left_eq' :
+    T (f ⁻¹' ({b in f.range | g b = g (f a)} : Finset _)) (g (f a))
+      = T (⋃ y in {b in f.range | g b = g (f a)}, f ⁻¹' {y}) (g (f a)) := by
+    rw [← Finset.set_biUnion_preimage_singleton]
+  rw [h_left_eq']
+  rw [h_add.map_iUnion_fin_meas_set_eq_sum T T_empty]
+  · simp only [_root_.sum_apply]
+    refine Finset.sum_congr rfl fun x hx => ?_
+    rw [mem_filter] at hx
+    rw [hx.2]
+  · exact fun i => measurableSet_fiber _ _
+  · grind
+  · grind [Set.disjoint_iff]
 
 中文:
 定理 map_setToSimpleFunc
@@ -1080,7 +1153,30 @@ theorem map_setToSimpleFunc
     (measure_preimage_lt_top_of_integrable f hf hx0).ne
   simp only [setToSimpleFunc, range_map]
   refine Finset.sum_image' _ fun b hb => ?_
-  rcases me
+  rcases mem_range.1 hb with ⟨a, rfl⟩
+  by_cases h0 : g (f a) = 0
+  · simp_rw [h0]
+    rw [map_zero]; rw [Finset.sum_eq_zero fun x hx => ?_]
+    rw [mem_filter] at hx
+    rw [hx.2]; rw [map_zero]
+  have h_left_eq :
+    T (map g f ⁻¹' {g (f a)}) (g (f a))
+      = T (f ⁻¹' ({b in f.range | g b = g (f a)} : Finset _)) (g (f a)) := by
+    rw [map_preimage_singleton]
+  rw [h_left_eq]
+  have h_left_eq' :
+    T (f ⁻¹' ({b in f.range | g b = g (f a)} : Finset _)) (g (f a))
+      = T (⋃ y in {b in f.range | g b = g (f a)}, f ⁻¹' {y}) (g (f a)) := by
+    rw [← Finset.set_biUnion_preimage_singleton]
+  rw [h_left_eq']
+  rw [h_add.map_iUnion_fin_meas_set_eq_sum T T_empty]
+  · simp only [_root_.sum_apply]
+    refine Finset.sum_congr rfl fun x hx => ?_
+    rw [mem_filter] at hx
+    rw [hx.2]
+  · exact fun i => measurableSet_fiber _ _
+  · grind
+  · grind [Set.disjoint_iff]
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, Finset.sum_image, T_empty, classical, f.range, h_add, h_add.map_empty_eq_zero, h_left_eq, map_empty_eq_zero, map_zero, measure_preimage_lt_top_of_integrable, mem_filter, mem_range, range_map, setToSimpleFunc, simp_rw, sum_eq_zero, sum_image
 -/
@@ -1128,7 +1224,16 @@ theorem setToSimpleFunc_congr'
     have h_pair : Integrable (f.pair g) μ := integrable_pair hf hg
     rw [map_setToSimpleFunc T h_add h_pair Prod.fst_zero]
     rw [map_setToSimpleFunc T h_add h_pair Prod.snd_zero]
-    refine Finset.s
+    refine Finset.sum_congr rfl fun p hp => ?_
+    rcases mem_range.1 hp with ⟨a, rfl⟩
+    by_cases eq : f a = g a
+    · dsimp only [pair_apply]; rw [eq]
+    · have : T (pair f g ⁻¹' {(f a, g a)}) = 0 := by
+        have h_eq : T ((⇑(f.pair g)) ⁻¹' {(f a, g a)}) = T (f ⁻¹' {f a} inter g ⁻¹' {g a}) := by
+          congr; rw [pair_preimage_singleton f g]
+        rw [h_eq]
+        exact h eq
+      simp only [this, zero_apply, pair_apply]
 
 中文:
 定理 setToSimpleFunc_congr'
@@ -1137,7 +1242,16 @@ theorem setToSimpleFunc_congr'
     have h_pair : Integrable (f.pair g) μ := integrable_pair hf hg
     rw [map_setToSimpleFunc T h_add h_pair Prod.fst_zero]
     rw [map_setToSimpleFunc T h_add h_pair Prod.snd_zero]
-    refine Finset.s
+    refine Finset.sum_congr rfl fun p hp => ?_
+    rcases mem_range.1 hp with ⟨a, rfl⟩
+    by_cases eq : f a = g a
+    · dsimp only [pair_apply]; rw [eq]
+    · have : T (pair f g ⁻¹' {(f a, g a)}) = 0 := by
+        have h_eq : T ((⇑(f.pair g)) ⁻¹' {(f a, g a)}) = T (f ⁻¹' {f a} inter g ⁻¹' {g a}) := by
+          congr; rw [pair_preimage_singleton f g]
+        rw [h_eq]
+        exact h eq
+      simp only [this, zero_apply, pair_apply]
 
 Depends on / 依赖: Finset, Finset.sum_congr, Integrable, Prod.fst, Prod.fst_zero, Prod.snd, Prod.snd_zero, f.pair, fst_zero, h_add, h_eq, h_pair, integrable_pair, map_setToSimpleFunc, mem_range, pair_apply, setToSimpleFunc, snd_zero, sum_congr
 -/
@@ -1171,7 +1285,9 @@ theorem setToSimpleFunc_congr
   refine fun x y hxy => h_zero _ ((measurableSet_fiber f x).inter (measurableSet_fiber g y)) ?_
   rw [EventuallyEq]; rw [ae_iff] at h
   refine measure_mono_null (fun z => ?_) h
-  simp_rw [Set.mem_inter_iff, Set.mem_ofPred_
+  simp_rw [Set.mem_inter_iff, Set.mem_ofPred_eq, Set.mem_preimage, Set.mem_singleton_iff]
+  intro h
+  rwa [h.1, h.2]
 
 中文:
 定理 setToSimpleFunc_congr
@@ -1181,7 +1297,9 @@ theorem setToSimpleFunc_congr
   refine fun x y hxy => h_zero _ ((measurableSet_fiber f x).inter (measurableSet_fiber g y)) ?_
   rw [EventuallyEq]; rw [ae_iff] at h
   refine measure_mono_null (fun z => ?_) h
-  simp_rw [Set.mem_inter_iff, Set.mem_ofPred_
+  simp_rw [Set.mem_inter_iff, Set.mem_ofPred_eq, Set.mem_preimage, Set.mem_singleton_iff]
+  intro h
+  rwa [h.1, h.2]
 
 Depends on / 依赖: EventuallyEq, Set.mem_inter_iff, Set.mem_ofPred_eq, Set.mem_preimage, Set.mem_singleton_iff, ae_iff, h_add, h_zero, integrable_congr, measurableSet_fiber, measure_mono_null, mem_inter_iff, mem_ofPred_eq, mem_preimage, mem_singleton_iff, setToSimpleFunc_congr, simp_rw
 -/
@@ -1276,7 +1394,10 @@ theorem setToSimpleFunc_add_left'
     push_cast
     rw [Pi.add_apply]
   intro x hx
- 
+  refine
+    h_add (f ⁻¹' {x}) (measurableSet_preimage _ _) (measure_preimage_lt_top_of_integrable _ hf ?_)
+  rw [mem_filter] at hx
+  exact hx.2
 
 中文:
 定理 setToSimpleFunc_add_left'
@@ -1291,7 +1412,10 @@ theorem setToSimpleFunc_add_left'
     push_cast
     rw [Pi.add_apply]
   intro x hx
- 
+  refine
+    h_add (f ⁻¹' {x}) (measurableSet_preimage _ _) (measure_preimage_lt_top_of_integrable _ hf ?_)
+  rw [mem_filter] at hx
+  exact hx.2
 
 Depends on / 依赖: Finset, Finset.sum_congr, Pi.add_apply, add_apply, classical, f.range, h_add, measurableSet_preimage, measure_preimage_lt_top_of_integrable, mem_filter, setToSimpleFunc_eq_sum_filter, simp_rw, sum_add_distrib, sum_congr
 -/
@@ -1348,7 +1472,9 @@ theorem setToSimpleFunc_smul_left'
     rw [this x hx]; rw [_root_.smul_apply]
   intro x hx
   refine
-    h_smul (f ⁻¹' {x}) (mea
+    h_smul (f ⁻¹' {x}) (measurableSet_preimage _ _) (measure_preimage_lt_top_of_integrable _ hf ?_)
+  rw [mem_filter] at hx
+  exact hx.2
 
 中文:
 定理 setToSimpleFunc_smul_left'
@@ -1362,7 +1488,9 @@ theorem setToSimpleFunc_smul_left'
     rw [this x hx]; rw [_root_.smul_apply]
   intro x hx
   refine
-    h_smul (f ⁻¹' {x}) (mea
+    h_smul (f ⁻¹' {x}) (measurableSet_preimage _ _) (measure_preimage_lt_top_of_integrable _ hf ?_)
+  rw [mem_filter] at hx
+  exact hx.2
 
 Depends on / 依赖: Finset, Finset.sum_congr, _root_, _root_.smul_apply, classical, f.range, h_smul, measurableSet_preimage, measure_preimage_lt_top_of_integrable, mem_filter, setToSimpleFunc_eq_sum_filter, simp_rw, smul_apply, smul_sum, sum_congr
 -/
@@ -1391,7 +1519,14 @@ theorem setToSimpleFunc_add
   calc
     setToSimpleFunc T (f + g) = ∑ x in (pair f g).range, T (pair f g ⁻¹' {x}) (x.fst + x.snd) := by
       rw [add_eq_map₂]; rw [map_setToSimpleFunc T h_add hp_pair]; simp
-    _ = ∑ x in (pair f g).range, (T (pair f g ⁻¹' {x}) x.f
+    _ = ∑ x in (pair f g).range, (T (pair f g ⁻¹' {x}) x.fst + T (pair f g ⁻¹' {x}) x.snd) :=
+      (Finset.sum_congr rfl fun _ _ => ContinuousLinearMap.map_add _ _ _)
+    _ = (∑ x in (pair f g).range, T (pair f g ⁻¹' {x}) x.fst) +
+          ∑ x in (pair f g).range, T (pair f g ⁻¹' {x}) x.snd := by
+      rw [Finset.sum_add_distrib]
+    _ = ((pair f g).map Prod.fst).setToSimpleFunc T +
+          ((pair f g).map Prod.snd).setToSimpleFunc T := by
+      rw [map_setToSimpleFunc T h_add hp_pair Prod.snd_zero]; rw [map_setToSimpleFunc T h_add hp_pair Prod.fst_zero]
 
 中文:
 定理 setToSimpleFunc_add
@@ -1400,7 +1535,14 @@ theorem setToSimpleFunc_add
   calc
     setToSimpleFunc T (f + g) = ∑ x in (pair f g).range, T (pair f g ⁻¹' {x}) (x.fst + x.snd) := by
       rw [add_eq_map₂]; rw [map_setToSimpleFunc T h_add hp_pair]; simp
-    _ = ∑ x in (pair f g).range, (T (pair f g ⁻¹' {x}) x.f
+    _ = ∑ x in (pair f g).range, (T (pair f g ⁻¹' {x}) x.fst + T (pair f g ⁻¹' {x}) x.snd) :=
+      (Finset.sum_congr rfl fun _ _ => ContinuousLinearMap.map_add _ _ _)
+    _ = (∑ x in (pair f g).range, T (pair f g ⁻¹' {x}) x.fst) +
+          ∑ x in (pair f g).range, T (pair f g ⁻¹' {x}) x.snd := by
+      rw [Finset.sum_add_distrib]
+    _ = ((pair f g).map Prod.fst).setToSimpleFunc T +
+          ((pair f g).map Prod.snd).setToSimpleFunc T := by
+      rw [map_setToSimpleFunc T h_add hp_pair Prod.snd_zero]; rw [map_setToSimpleFunc T h_add hp_pair Prod.fst_zero]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.map_add, Finset, Finset.sum_congr, Integrable, f.pair, h_add, hp_pair, integrable_pair, map_add, map_setToSimpleFunc, setToSimpleFunc, sum_congr, x.fst, x.snd
 -/
@@ -1462,7 +1604,8 @@ theorem setToSimpleFunc_sub
   rw [integrable_iff] at hg ⊢
   intro x hx_ne
   rw [SimpleFunc.coe_neg]; rw [Pi.neg_def]; rw [← Function.comp_def]; rw [preimage_comp]; rw [neg_preimage]; rw [Set.neg_singleton]
-  
+  refine hg (-x) ?_
+  simp [hx_ne]
 
 中文:
 定理 setToSimpleFunc_sub
@@ -1472,7 +1615,8 @@ theorem setToSimpleFunc_sub
   rw [integrable_iff] at hg ⊢
   intro x hx_ne
   rw [SimpleFunc.coe_neg]; rw [Pi.neg_def]; rw [← Function.comp_def]; rw [preimage_comp]; rw [neg_preimage]; rw [Set.neg_singleton]
-  
+  refine hg (-x) ?_
+  simp [hx_ne]
 
 Depends on / 依赖: Function, Function.comp_def, Pi.neg_def, Set.neg_singleton, SimpleFunc, SimpleFunc.coe_neg, coe_neg, comp_def, h_add, hx_ne, integrable_iff, neg_def, neg_preimage, neg_singleton, preimage_comp, setToSimpleFunc_add, setToSimpleFunc_neg, sub_eq_add_neg
 -/
@@ -1497,7 +1641,7 @@ theorem setToSimpleFunc_smul_real
       rw [smul_eq_map c f]; rw [map_setToSimpleFunc T h_add hf]; rw [smul_zero]
     _ = ∑ x in f.range, c • T (f ⁻¹' {x}) x :=
       (Finset.sum_congr rfl fun b _ => by rw [map_smul (T (f ⁻¹' {b})) c b])
-    _ = c • set
+    _ = c • setToSimpleFunc T f := by simp only [setToSimpleFunc, smul_sum]
 
 中文:
 定理 setToSimpleFunc_smul_real
@@ -1507,7 +1651,7 @@ theorem setToSimpleFunc_smul_real
       rw [smul_eq_map c f]; rw [map_setToSimpleFunc T h_add hf]; rw [smul_zero]
     _ = ∑ x in f.range, c • T (f ⁻¹' {x}) x :=
       (Finset.sum_congr rfl fun b _ => by rw [map_smul (T (f ⁻¹' {b})) c b])
-    _ = c • set
+    _ = c • setToSimpleFunc T f := by simp only [setToSimpleFunc, smul_sum]
 
 Depends on / 依赖: Finset, Finset.sum_congr, f.range, h_add, map_setToSimpleFunc, map_smul, setToSimpleFunc, smul_eq_map, smul_sum, smul_zero, sum_congr
 -/
@@ -1530,7 +1674,7 @@ theorem setToSimpleFunc_smul
     setToSimpleFunc T (c • f) = ∑ x in f.range, T (f ⁻¹' {x}) (c • x) := by
       rw [smul_eq_map c f]; rw [map_setToSimpleFunc T h_add hf]; rw [smul_zero]
     _ = ∑ x in f.range, c • T (f ⁻¹' {x}) x := Finset.sum_congr rfl fun b _ => by rw [h_smul]
-    _ = c • setToSimpleFunc T f := by simp on
+    _ = c • setToSimpleFunc T f := by simp only [setToSimpleFunc, smul_sum]
 
 中文:
 定理 setToSimpleFunc_smul
@@ -1539,7 +1683,7 @@ theorem setToSimpleFunc_smul
     setToSimpleFunc T (c • f) = ∑ x in f.range, T (f ⁻¹' {x}) (c • x) := by
       rw [smul_eq_map c f]; rw [map_setToSimpleFunc T h_add hf]; rw [smul_zero]
     _ = ∑ x in f.range, c • T (f ⁻¹' {x}) x := Finset.sum_congr rfl fun b _ => by rw [h_smul]
-    _ = c • setToSimpleFunc T f := by simp on
+    _ = c • setToSimpleFunc T f := by simp only [setToSimpleFunc, smul_sum]
 
 Depends on / 依赖: Finset, Finset.sum_congr, f.range, h_add, h_smul, map_setToSimpleFunc, setToSimpleFunc, smul_eq_map, smul_sum, smul_zero, sum_congr
 -/
@@ -1775,7 +1919,7 @@ theorem norm_setToSimpleFunc_le_sum_mul_norm
     _ <= ∑ x in f.range, C * μ.real (f ⁻¹' {x}) * ‖x‖ := by
       gcongr
 exact hT_norm _ SimpleFunc.measurableSet_fiber _ _
-    _ <= C * ∑ x in f.range, μ.real (f ⁻¹' {x}) * ‖x‖ :=
+    _ <= C * ∑ x in f.range, μ.real (f ⁻¹' {x}) * ‖x‖ := by simp_rw [mul_sum, ← mul_assoc]; rfl
 
 中文:
 定理 norm_setToSimpleFunc_le_sum_mul_norm
@@ -1786,7 +1930,7 @@ exact hT_norm _ SimpleFunc.measurableSet_fiber _ _
     _ <= ∑ x in f.range, C * μ.real (f ⁻¹' {x}) * ‖x‖ := by
       gcongr
 exact hT_norm _ SimpleFunc.measurableSet_fiber _ _
-    _ <= C * ∑ x in f.range, μ.real (f ⁻¹' {x}) * ‖x‖ :=
+    _ <= C * ∑ x in f.range, μ.real (f ⁻¹' {x}) * ‖x‖ := by simp_rw [mul_sum, ← mul_assoc]; rfl
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.measurableSet_fiber, f.range, f.setToSimpleFunc, hT_norm, measurableSet_fiber, mul_assoc, mul_sum, norm_setToSimpleFunc_le_sum_opNorm, setToSimpleFunc, simp_rw
 -/
@@ -1815,7 +1959,9 @@ theorem norm_setToSimpleFunc_le_sum_mul_norm_of_integrable
       obtain rfl | hb := eq_or_ne b 0
       · simp
       gcongr
-exact hT_n
+exact hT_norm _ (SimpleFunc.measurableSet_fiber _ _)
+        SimpleFunc.measure_preimage_lt_top_of_integrable _ hf hb
+    _ <= C * ∑ x in f.range, μ.real (f ⁻¹' {x}) * ‖x‖ := by simp_rw [mul_sum, ← mul_assoc]; rfl
 
 中文:
 定理 norm_setToSimpleFunc_le_sum_mul_norm_of_integrable
@@ -1828,7 +1974,9 @@ exact hT_n
       obtain rfl | hb := eq_or_ne b 0
       · simp
       gcongr
-exact hT_n
+exact hT_norm _ (SimpleFunc.measurableSet_fiber _ _)
+        SimpleFunc.measure_preimage_lt_top_of_integrable _ hf hb
+    _ <= C * ∑ x in f.range, μ.real (f ⁻¹' {x}) * ‖x‖ := by simp_rw [mul_sum, ← mul_assoc]; rfl
 
 Depends on / 依赖: Finset, Finset.sum_le_sum, SimpleFunc, SimpleFunc.measurableSet_fiber, SimpleFunc.measure_preimage_lt_top_of_integrable, eq_or_ne, f.range, f.setToSimpleFunc, hT_norm, measurableSet_fiber, measure_preimage_lt_top_of_integrable, mul_assoc, mul_sum, norm_setToSimpleFunc_le_sum_opNorm, setToSimpleFunc, simp_rw, sum_le_sum
 -/
@@ -1863,7 +2011,20 @@ theorem setToSimpleFunc_indicator
   obtain rfl | hs_univ := eq_or_ne s univ
   · have hα := hs_empty.to_type
     simp [← Function.const_def]
- 
+  rw [range_indicator hs hs_empty hs_univ]
+  by_cases hx0 : x = 0
+  · simp_rw [hx0]; simp
+  rw [sum_insert]
+  swap; · rw [Finset.mem_singleton]; exact hx0
+  rw [sum_singleton]; rw [(T _).map_zero]; rw [add_zero]
+  congr
+  simp only [coe_piecewise, piecewise_eq_indicator, coe_const, Function.const_zero,
+    piecewise_eq_indicator]
+  rw [indicator_preimage]; rw [← Function.const_def]; rw [preimage_const_of_mem]
+  swap; · exact Set.mem_singleton x
+  rw [← Function.const_zero]; rw [← Function.const_def]; rw [preimage_const_of_notMem]
+  swap; · rw [Set.mem_singleton_iff]; exact Ne.symm hx0
+  simp
 
 中文:
 定理 setToSimpleFunc_indicator
@@ -1877,7 +2038,20 @@ theorem setToSimpleFunc_indicator
   obtain rfl | hs_univ := eq_or_ne s univ
   · have hα := hs_empty.to_type
     simp [← Function.const_def]
- 
+  rw [range_indicator hs hs_empty hs_univ]
+  by_cases hx0 : x = 0
+  · simp_rw [hx0]; simp
+  rw [sum_insert]
+  swap; · rw [Finset.mem_singleton]; exact hx0
+  rw [sum_singleton]; rw [(T _).map_zero]; rw [add_zero]
+  congr
+  simp only [coe_piecewise, piecewise_eq_indicator, coe_const, Function.const_zero,
+    piecewise_eq_indicator]
+  rw [indicator_preimage]; rw [← Function.const_def]; rw [preimage_const_of_mem]
+  swap; · exact Set.mem_singleton x
+  rw [← Function.const_zero]; rw [← Function.const_def]; rw [preimage_const_of_notMem]
+  swap; · rw [Set.mem_singleton_iff]; exact Ne.symm hx0
+  simp
 
 Depends on / 依赖: Finset, Finset.mem_singleton, Function, Function.const_def, add_zero, classical, coe_pi, const_def, const_zero, eq_empty_or_nonempty, eq_or_ne, hT_empty, hs_empty, hs_empty.to_type, hs_univ, map_zero, mem_singleton, piecewise_empty, range_indicator, s.eq_empty_or_nonempty
 -/

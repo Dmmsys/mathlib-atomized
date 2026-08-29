@@ -79,7 +79,9 @@ lemma HasIndepIncrements.nat
   · have := (hX 0 (fun _ => t 0) (fun _ => by grind)).isProbabilityMeasure
     exact iIndepFun.of_subsingleton
   · let g (x : s) : Fin (s.max' hs + 1) := ⟨x.1, Nat.lt_add_one_of_le (s.le_max' x.1 x.2)⟩
-    ref
+    refine iIndepFun.precomp (g := g) ?_ (hX (s.max' hs + 1) (fun m => t m) ?_)
+    · simp [g, Function.Injective]
+    · exact ht.comp Fin.val_strictMono.monotone
 
 中文:
 引理 HasIndepIncrements.nat
@@ -89,7 +91,9 @@ lemma HasIndepIncrements.nat
   · have := (hX 0 (fun _ => t 0) (fun _ => by grind)).isProbabilityMeasure
     exact iIndepFun.of_subsingleton
   · let g (x : s) : Fin (s.max' hs + 1) := ⟨x.1, Nat.lt_add_one_of_le (s.le_max' x.1 x.2)⟩
-    ref
+    refine iIndepFun.precomp (g := g) ?_ (hX (s.max' hs + 1) (fun m => t m) ?_)
+    · simp [g, Function.Injective]
+    · exact ht.comp Fin.val_strictMono.monotone
 -/
 protected lemma HasIndepIncrements.nat
     (hX : HasIndepIncrements X P) {t : Nat -> T} (ht : Monotone t) :

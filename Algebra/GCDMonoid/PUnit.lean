@@ -35,7 +35,11 @@ instance :
   gcd_dvd_left _ _ := ⟨unit, by subsingleton⟩
   gcd_dvd_right _ _ := ⟨unit, by subsingleton⟩
   dvd_gcd {_ _} _ _ _ := ⟨unit, by subsingleton⟩
-  gcd_mul_lcm _ _ :=
+  gcd_mul_lcm _ _ := ⟨1, by subsingleton⟩
+  lcm_zero_left := by subsingleton
+  lcm_zero_right := by subsingleton
+  normalize_gcd := by subsingleton
+  normalize_lcm := by subsingleton
 
 中文:
 实例 :
@@ -49,7 +53,11 @@ instance :
   gcd_dvd_left _ _ := ⟨unit, by subsingleton⟩
   gcd_dvd_right _ _ := ⟨unit, by subsingleton⟩
   dvd_gcd {_ _} _ _ _ := ⟨unit, by subsingleton⟩
-  gcd_mul_lcm _ _ :=
+  gcd_mul_lcm _ _ := ⟨1, by subsingleton⟩
+  lcm_zero_left := by subsingleton
+  lcm_zero_right := by subsingleton
+  normalize_gcd := by subsingleton
+  normalize_lcm := by subsingleton
 -/
 instance : StrongNormalizedGCDMonoid PUnit where
   gcd _ _ := unit

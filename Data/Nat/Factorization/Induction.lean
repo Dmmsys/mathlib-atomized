@@ -39,6 +39,12 @@ definition recOnPrimePow
       haveI hp : Prime p := minFac_prime (succ_succ_ne_one k)
       letI t := (k + 2).factorization p
       haveI hpt : p ^ t ∣ k + 2 := ordProj_dvd _ _
+      haveI htp : 0 < t := hp.factorization_pos_of_dvd (k + 1).succ_ne_zero (k + 2).minFac_dvd
+      convert! prime_pow_mul ((k + 2) / p ^ t) p t hp _ htp (hk _ (Nat.div_lt_of_lt_mul _)) using 1
+      · rw [Nat.mul_div_cancel' hpt]
+      · rw [Nat.dvd_div_iff_mul_dvd hpt, ← Nat.pow_succ]
+        exact pow_succ_factorization_not_dvd (k + 1).succ_ne_zero hp
+      · simp [htp.ne', hp.one_lt]
 
 中文:
 定义 recOnPrimePow
@@ -52,6 +58,12 @@ definition recOnPrimePow
       haveI hp : Prime p := minFac_prime (succ_succ_ne_one k)
       letI t := (k + 2).factorization p
       haveI hpt : p ^ t ∣ k + 2 := ordProj_dvd _ _
+      haveI htp : 0 < t := hp.factorization_pos_of_dvd (k + 1).succ_ne_zero (k + 2).minFac_dvd
+      convert! prime_pow_mul ((k + 2) / p ^ t) p t hp _ htp (hk _ (Nat.div_lt_of_lt_mul _)) using 1
+      · rw [Nat.mul_div_cancel' hpt]
+      · rw [Nat.dvd_div_iff_mul_dvd hpt, ← Nat.pow_succ]
+        exact pow_succ_factorization_not_dvd (k + 1).succ_ne_zero hp
+      · simp [htp.ne', hp.one_lt]
 
 Depends on / 依赖: Nat.div_lt_of_lt_mul, Nat.dvd_div_iff_mul, Nat.mul_div_cancel, Nat.strongRec, convert, div_lt_of_lt_mul, dvd_div_iff_mul, factorization, factorization_pos_of_dvd, hp.factorization_pos_of_dvd, minFac, minFac_dvd, minFac_prime, mul_div_cancel, ordProj_dvd, prime_pow_mul, strongRec, succ_ne_zero, succ_succ_ne_one
 -/
@@ -91,7 +103,8 @@ definition recOnPosPrimePosCoprime
     refine coprime (p ^ n) a (hp'.one_lt.trans_le (le_self_pow hn.ne' _)) ?_ ?_
       (prime_pow _ _ hp' hn) hPa
     · contrapose! hpa
-      simp [lt_one_iff.1 (
+      simp [lt_one_iff.1 (lt_of_le_of_ne hpa ha1)]
+    · simpa [hn, Prime.coprime_iff_not_dvd hp']
 
 中文:
 定义 recOnPosPrimePosCoprime
@@ -104,7 +117,8 @@ definition recOnPosPrimePosCoprime
     refine coprime (p ^ n) a (hp'.one_lt.trans_le (le_self_pow hn.ne' _)) ?_ ?_
       (prime_pow _ _ hp' hn) hPa
     · contrapose! hpa
-      simp [lt_one_iff.1 (
+      simp [lt_one_iff.1 (lt_of_le_of_ne hpa ha1)]
+    · simpa [hn, Prime.coprime_iff_not_dvd hp']
 
 Depends on / 依赖: Prime.coprime_iff_not_dvd, contrapose, coprime, coprime_iff_not_dvd, hn.ne, le_self_pow, lt_of_le_of_ne, lt_one_iff, mul_one, one_lt, one_lt.trans_le, prime_pow, recOnPrimePow, trans_le
 -/
@@ -268,7 +282,8 @@ theorem multiplicative_factorization
     rw [factorization_one]; rw [hf]
     simp
   · intro a b _ _ hab ha hb hab_pos
-    rw [h_mult a b hab]; rw [ha (left_ne_zero_of_mul hab_pos)]; r
+    rw [h_mult a b hab]; rw [ha (left_ne_zero_of_mul hab_pos)]; rw [hb (right_ne_zero_of_mul hab_pos)]; rw [factorization_mul_of_coprime hab]; rw [← prod_add_index_of_disjoint]
+    exact hab.disjoint_primeFactors
 
 中文:
 定理 multiplicative_factorization
@@ -282,7 +297,8 @@ theorem multiplicative_factorization
     rw [factorization_one]; rw [hf]
     simp
   · intro a b _ _ hab ha hb hab_pos
-    rw [h_mult a b hab]; rw [ha (left_ne_zero_of_mul hab_pos)]; r
+    rw [h_mult a b hab]; rw [ha (left_ne_zero_of_mul hab_pos)]; rw [hb (right_ne_zero_of_mul hab_pos)]; rw [factorization_mul_of_coprime hab]; rw [← prod_add_index_of_disjoint]
+    exact hab.disjoint_primeFactors
 
 Depends on / 依赖: Finsupp, Finsupp.prod_single_index, Nat.recOnPosPrimePosCoprime, Prime.factorization_pow, disjoint_primeFactors, factorization_mul_of_coprime, factorization_one, factorization_pow, h_mult, hab.disjoint_primeFactors, hab_pos, left_ne_zero_of_mul, prod_add_index_of_disjoint, prod_single_index, recOnPosPrimePosCoprime, right_ne_zero_of_mul
 -/

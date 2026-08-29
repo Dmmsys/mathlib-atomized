@@ -303,7 +303,9 @@ definition limitConeIsLimit
   · intro x y
     simp [← equivShrink_add]
     rfl
-  · int
+  · intro r x
+    simp [← equivShrink_smul]
+    rfl
 
 中文:
 定义 limitConeIsLimit
@@ -316,7 +318,9 @@ definition limitConeIsLimit
   · intro x y
     simp [← equivShrink_add]
     rfl
-  · int
+  · intro r x
+    simp [← equivShrink_smul]
+    rfl
 
 Depends on / 依赖: IsLimit, IsLimit.ofFaithful, ModuleCat, Types.Small.limitConeIsLimit, equivShrink_add, equivShrink_smul, forget, limitConeIsLimit, mapCone, ofFaithful
 -/
@@ -560,7 +564,8 @@ instance forget₂AddCommGroup_reflectsLimit
     have : HasLimit (F ⋙ forget₂ (ModuleCat R) AddCommGrpCat) := ⟨_, hc⟩
     have : Small.{w} (Functor.sections (F ⋙ forget (ModuleCat R))) := by
       simpa only [AddCommGrpCat.hasLimit_iff_small_sections] using! this
-    have := reflectsLimit_of_reflectsIsomorphisms F (forget₂ (ModuleCat R) Ad
+    have := reflectsLimit_of_reflectsIsomorphisms F (forget₂ (ModuleCat R) AddCommGrpCat)
+    exact isLimitOfReflects _ hc⟩
 
 中文:
 实例 forget₂AddCommGroup_reflectsLimit
@@ -569,7 +574,8 @@ instance forget₂AddCommGroup_reflectsLimit
     have : HasLimit (F ⋙ forget₂ (ModuleCat R) AddCommGrpCat) := ⟨_, hc⟩
     have : Small.{w} (Functor.sections (F ⋙ forget (ModuleCat R))) := by
       simpa only [AddCommGrpCat.hasLimit_iff_small_sections] using! this
-    have := reflectsLimit_of_reflectsIsomorphisms F (forget₂ (ModuleCat R) Ad
+    have := reflectsLimit_of_reflectsIsomorphisms F (forget₂ (ModuleCat R) AddCommGrpCat)
+    exact isLimitOfReflects _ hc⟩
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.hasLimit_iff_small_sections, Functor, Functor.sections, HasLimit, ModuleCat, forget, hasLimit_iff_small_sections, isLimitOfReflects, reflectsLimit_of_reflectsIsomorphisms, sections
 -/
@@ -722,7 +728,15 @@ definition directLimitIsColimit
     ext
     dsimp only [hom_comp, directLimitCocone, hom_ofHom, LinearMap.comp_apply]
     apply DirectLimit.lift_of
-  
+  uniq s m h := by
+    have :
+      s.ι.app = fun i =>
+        (ofHom (DirectLimit.of R ι (fun i => G i) (fun i j H => f i j H) i)) ≫ m := by
+      funext i
+      rw [← h]
+      rfl
+    ext
+    simp [this]
 
 中文:
 定义 directLimitIsColimit
@@ -736,7 +750,15 @@ definition directLimitIsColimit
     ext
     dsimp only [hom_comp, directLimitCocone, hom_ofHom, LinearMap.comp_apply]
     apply DirectLimit.lift_of
-  
+  uniq s m h := by
+    have :
+      s.ι.app = fun i =>
+        (ofHom (DirectLimit.of R ι (fun i => G i) (fun i j H => f i j H) i)) ≫ m := by
+      funext i
+      rw [← h]
+      rfl
+    ext
+    simp [this]
 -/
 def directLimitIsColimit : IsColimit (directLimitCocone G f) where
 desc s := ofHom

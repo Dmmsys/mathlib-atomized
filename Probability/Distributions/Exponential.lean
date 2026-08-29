@@ -408,7 +408,33 @@ lemma lintegral_exponentialPDF_eq_antiDeriv
     rw [setLIntegral_congr_fun measurableSet_Iic]; rw [lintegral_zero]; rw [ENNReal.ofReal_zero]
     exact fun a (_ : a <= _) => by rw [if_neg (by linarith), ENNReal.ofReal_eq_zero]
   case pos =>
-    rw [lintegral_Iic_eq_lintegral
+    rw [lintegral_Iic_eq_lintegral_Iio_add_Icc _ h]; rw [lintegral_exponentialPDF_of_nonpos (le_refl 0)]; rw [zero_add]
+    simp only [exponentialPDF_eq]
+    rw [setLIntegral_congr_fun measurableSet_Icc (g := fun x => ENNReal.ofReal (r * rexp (-(r * x))))
+      (by intro a ha; simp [ha.1])]
+    rw [← ENNReal.toReal_eq_toReal_iff' _ ENNReal.ofReal_ne_top]; rw [← integral_eq_lintegral_of_nonneg_ae (Eventually.of_forall fun _ => le_of_lt
+        (mul_pos hr (exp_pos _)))]
+    · have : ∫ a in uIoc 0 x, r * rexp (-(r * a)) = ∫ a in 0..x, r * rexp (-(r * a)) := by
+        rw [intervalIntegral.intervalIntegral_eq_integral_uIoc]; rw [smul_eq_mul]; rw [if_pos h]; rw [one_mul]
+      rw [integral_Icc_eq_integral_Ioc]; rw [← uIoc_of_le h]; rw [this]
+      rw [intervalIntegral.integral_eq_sub_of_hasDeriv_right_of_le h
+        (f := fun a => -1 * rexp (-(r * a))) _ _]
+      · rw [ENNReal.toReal_ofReal_eq_iff.2
+          (sub_nonneg.2 (Real.exp_le_one_iff.2 <| by nlinarith))]
+        norm_num; ring
+      · simp only [intervalIntegrable_iff, uIoc_of_le h]
+        exact Integrable.const_mul (exp_neg_integrableOn_Ioc hr) _
+      · have : Continuous (fun a => rexp (-(r * a))) := by
+          simp only [← neg_mul]; exact (continuous_const_mul (-r)).rexp
+        exact Continuous.continuousOn (Continuous.comp' (continuous_const_mul (-1)) this)
+      · simp only [neg_mul, one_mul]
+        exact fun _ _ => HasDerivAt.hasDerivWithinAt hasDerivAt_neg_exp_mul_exp
+    · refine Integrable.aestronglyMeasurable (Integrable.const_mul ?_ _)
+      rw [← IntegrableOn]; rw [integrableOn_Icc_iff_integrableOn_Ioc]
+      exact exp_neg_integrableOn_Ioc hr
+    · refine ne_of_lt (IntegrableOn.setLIntegral_lt_top ?_)
+      rw [integrableOn_Icc_iff_integrableOn_Ioc]
+      exact Integrable.const_mul (exp_neg_integrableOn_Ioc hr) _
 
 中文:
 引理 lintegral_exponentialPDF_eq_antiDeriv
@@ -420,7 +446,33 @@ lemma lintegral_exponentialPDF_eq_antiDeriv
     rw [setLIntegral_congr_fun measurableSet_Iic]; rw [lintegral_zero]; rw [ENNReal.ofReal_zero]
     exact fun a (_ : a <= _) => by rw [if_neg (by linarith), ENNReal.ofReal_eq_zero]
   case pos =>
-    rw [lintegral_Iic_eq_lintegral
+    rw [lintegral_Iic_eq_lintegral_Iio_add_Icc _ h]; rw [lintegral_exponentialPDF_of_nonpos (le_refl 0)]; rw [zero_add]
+    simp only [exponentialPDF_eq]
+    rw [setLIntegral_congr_fun measurableSet_Icc (g := fun x => ENNReal.ofReal (r * rexp (-(r * x))))
+      (by intro a ha; simp [ha.1])]
+    rw [← ENNReal.toReal_eq_toReal_iff' _ ENNReal.ofReal_ne_top]; rw [← integral_eq_lintegral_of_nonneg_ae (Eventually.of_forall fun _ => le_of_lt
+        (mul_pos hr (exp_pos _)))]
+    · have : ∫ a in uIoc 0 x, r * rexp (-(r * a)) = ∫ a in 0..x, r * rexp (-(r * a)) := by
+        rw [intervalIntegral.intervalIntegral_eq_integral_uIoc]; rw [smul_eq_mul]; rw [if_pos h]; rw [one_mul]
+      rw [integral_Icc_eq_integral_Ioc]; rw [← uIoc_of_le h]; rw [this]
+      rw [intervalIntegral.integral_eq_sub_of_hasDeriv_right_of_le h
+        (f := fun a => -1 * rexp (-(r * a))) _ _]
+      · rw [ENNReal.toReal_ofReal_eq_iff.2
+          (sub_nonneg.2 (Real.exp_le_one_iff.2 <| by nlinarith))]
+        norm_num; ring
+      · simp only [intervalIntegrable_iff, uIoc_of_le h]
+        exact Integrable.const_mul (exp_neg_integrableOn_Ioc hr) _
+      · have : Continuous (fun a => rexp (-(r * a))) := by
+          simp only [← neg_mul]; exact (continuous_const_mul (-r)).rexp
+        exact Continuous.continuousOn (Continuous.comp' (continuous_const_mul (-1)) this)
+      · simp only [neg_mul, one_mul]
+        exact fun _ _ => HasDerivAt.hasDerivWithinAt hasDerivAt_neg_exp_mul_exp
+    · refine Integrable.aestronglyMeasurable (Integrable.const_mul ?_ _)
+      rw [← IntegrableOn]; rw [integrableOn_Icc_iff_integrableOn_Ioc]
+      exact exp_neg_integrableOn_Ioc hr
+    · refine ne_of_lt (IntegrableOn.setLIntegral_lt_top ?_)
+      rw [integrableOn_Icc_iff_integrableOn_Ioc]
+      exact Integrable.const_mul (exp_neg_integrableOn_Ioc hr) _
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.ofReal_eq_zero, ENNReal.ofReal_zero, exponentialPDF_eq, if_neg, le_refl, lintegral_Iic_eq_lintegral_Iio_add_Icc, lintegral_exponentialPDF_of_nonpos, lintegral_zero, measurableSet_Icc, measurableSet_Iic, ofReal, ofReal_eq_zero, ofReal_zero, setLIntegral_congr_fun, split_ifs, zero_add
 -/

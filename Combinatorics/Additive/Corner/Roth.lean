@@ -202,7 +202,12 @@ theorem corners_theorem
     rwa [mul_le_iff_le_one_left] at this
     positivity
   have := noAccidental hA
-  rw [
+  rw [Nat.floor_lt' (by positivity)]; rw [inv_lt_iff_one_lt_mul₀' (by positivity)] at hG
+  refine hG.not_ge (le_of_mul_le_mul_right ?_ (by positivity : (0 : Real) < card G ^ 2))
+  classical
+  have h₁ := (farFromTriangleFree_graph hAε).le_card_cliqueFinset
+  rw [card_triangles]; rw [card_triangleIndices] at h₁
+  convert! h₁.trans (Nat.cast_le.2 <| card_le_univ _) using 1 <;> simp <;> ring
 
 中文:
 定理 corners_theorem
@@ -216,7 +221,12 @@ theorem corners_theorem
     rwa [mul_le_iff_le_one_left] at this
     positivity
   have := noAccidental hA
-  rw [
+  rw [Nat.floor_lt' (by positivity)]; rw [inv_lt_iff_one_lt_mul₀' (by positivity)] at hG
+  refine hG.not_ge (le_of_mul_le_mul_right ?_ (by positivity : (0 : Real) < card G ^ 2))
+  classical
+  have h₁ := (farFromTriangleFree_graph hAε).le_card_cliqueFinset
+  rw [card_triangles]; rw [card_triangleIndices] at h₁
+  convert! h₁.trans (Nat.cast_le.2 <| card_le_univ _) using 1 <;> simp <;> ring
 
 Depends on / 依赖: A.card_le_univ, Fintype, Fintype.card_prod, Nat.add_one_le_iff, Nat.cast_le, Nat.cast_mul, Nat.floor_lt, add_one_le_iff, card_le_univ, card_prod, cast_le, cast_mul, classical, cornersTheoremBound, farFromTriangleFree_graph, floor_lt, hG.not_ge, le_of_mul_le_mul_right, mul_le_iff_le_one_left, noAccidental
 -/
@@ -250,7 +260,30 @@ theorem corners_theorem_nat
   have : A = Prod.map Fin.val Fin.val ''
       (Prod.map Nat.cast Nat.cast '' A : Set (Fin (2 * n).succ × Fin (2 * n).succ)) := by
     rw [Set.image_image]; rw [Set.image_congr]; rw [Set.image_id]
-    simp only [mem_coe, Nat.succ_eq_add_one
+    simp only [mem_coe, Nat.succ_eq_add_one, Prod.map_apply, Fin.val_natCast, id_eq, Prod.forall,
+      Prod.mk.injEq, Nat.mod_succ_eq_iff_lt]
+    rintro a b hab
+    have := hAn hab
+    simp at this
+    lia
+  rw [this] at hA
+  have := Fin.isAddFreimanIso_Iio two_ne_zero (le_refl (2 * n))
+have := hA.of_image this.isAddFreimanHom Fin.val_injective.injOn by
+refine Set.image_subset_iff.2 hAn.trans fun x hx => ?_
+    simp only [coe_range, Set.mem_prod, Set.mem_Iio] at hx
+    exact ⟨Fin.natCast_strictMono (by lia) hx.1, Fin.natCast_strictMono (by lia) hx.2⟩
+  rw [← coe_image] at this
+  refine corners_theorem (ε / 9) (by positivity) (by simp; lia) _ ?_ this
+  calc
+    _ = ε / 9 * (2 * n + 1) ^ 2 := by simp
+    _ <= ε / 9 * (2 * n + n) ^ 2 := by gcongr; simp; unfold cornersTheoremBound at hn; lia
+    _ = ε * n ^ 2 := by ring
+    _ <= #A := hAε
+    _ = _ := by
+      rw [card_image_of_injOn]
+      have : Set.InjOn Nat.cast (range n) :=
+        (CharP.natCast_injOn_Iio (Fin (2 * n).succ) (2 * n).succ).mono (by simp; lia)
+      exact (this.prodMap this).mono hAn
 
 中文:
 定理 corners_theorem_nat
@@ -261,7 +294,30 @@ theorem corners_theorem_nat
   have : A = Prod.map Fin.val Fin.val ''
       (Prod.map Nat.cast Nat.cast '' A : Set (Fin (2 * n).succ × Fin (2 * n).succ)) := by
     rw [Set.image_image]; rw [Set.image_congr]; rw [Set.image_id]
-    simp only [mem_coe, Nat.succ_eq_add_one
+    simp only [mem_coe, Nat.succ_eq_add_one, Prod.map_apply, Fin.val_natCast, id_eq, Prod.forall,
+      Prod.mk.injEq, Nat.mod_succ_eq_iff_lt]
+    rintro a b hab
+    have := hAn hab
+    simp at this
+    lia
+  rw [this] at hA
+  have := Fin.isAddFreimanIso_Iio two_ne_zero (le_refl (2 * n))
+have := hA.of_image this.isAddFreimanHom Fin.val_injective.injOn by
+refine Set.image_subset_iff.2 hAn.trans fun x hx => ?_
+    simp only [coe_range, Set.mem_prod, Set.mem_Iio] at hx
+    exact ⟨Fin.natCast_strictMono (by lia) hx.1, Fin.natCast_strictMono (by lia) hx.2⟩
+  rw [← coe_image] at this
+  refine corners_theorem (ε / 9) (by positivity) (by simp; lia) _ ?_ this
+  calc
+    _ = ε / 9 * (2 * n + 1) ^ 2 := by simp
+    _ <= ε / 9 * (2 * n + n) ^ 2 := by gcongr; simp; unfold cornersTheoremBound at hn; lia
+    _ = ε * n ^ 2 := by ring
+    _ <= #A := hAε
+    _ = _ := by
+      rw [card_image_of_injOn]
+      have : Set.InjOn Nat.cast (range n) :=
+        (CharP.natCast_injOn_Iio (Fin (2 * n).succ) (2 * n).succ).mono (by simp; lia)
+      exact (this.prodMap this).mono hAn
 
 Depends on / 依赖: Fin.isAddFreimanIso_Iio, Fin.val, Fin.val_natCast, Nat.cast, Nat.mod_succ_eq_iff_lt, Nat.succ_eq_add_one, Prod.forall, Prod.map, Prod.map_apply, Prod.mk.injEq, Set.image_congr, Set.image_id, Set.image_image, coe_product, coe_subset, id_eq, image_congr, image_id, image_image, isAddFreimanIso_Iio
 -/
@@ -315,7 +371,14 @@ theorem roth_3ap_theorem
       _ = #B := ?_
     norm_cast
     rw [← card_univ]; rw [← card_product]
-    exact
+    exact card_equiv ((Equiv.refl _).prodShear fun a => Equiv.addLeft a) (by simp [B])
+  obtain ⟨x₁, y₁, x₂, y₂, hx₁y₁, hx₁y₂, hx₂y₁, hxy, hx₁x₂⟩ :
+      exists x₁ y₁ x₂ y₂, y₁ - x₁ in A ∧ y₂ - x₁ in A ∧ y₁ - x₂ in A ∧ x₁ + y₂ = x₂ + y₁ ∧ x₁ != x₂ := by
+    simpa [IsCornerFree, isCorner_iff, B, -exists_and_left, -exists_and_right]
+      using corners_theorem ε hε hG B this
+have := hA hx₂y₁ hx₁y₁ hx₁y₂ by-- TODO: This really ought to just be `by linear_combination h`
+    rw [sub_add_sub_comm]; rw [add_comm]; rw [add_sub_add_comm]; rw [add_right_cancel_iff]; rw [sub_eq_sub_iff_add_eq_add]; rw [add_comm]; rw [hxy]; rw [add_comm]
+exact hx₁x₂ by simpa using this.symm
 
 中文:
 定理 roth_3ap_theorem
@@ -331,7 +394,14 @@ theorem roth_3ap_theorem
       _ = #B := ?_
     norm_cast
     rw [← card_univ]; rw [← card_product]
-    exact
+    exact card_equiv ((Equiv.refl _).prodShear fun a => Equiv.addLeft a) (by simp [B])
+  obtain ⟨x₁, y₁, x₂, y₂, hx₁y₁, hx₁y₂, hx₂y₁, hxy, hx₁x₂⟩ :
+      exists x₁ y₁ x₂ y₂, y₁ - x₁ in A ∧ y₂ - x₁ in A ∧ y₁ - x₂ in A ∧ x₁ + y₂ = x₂ + y₁ ∧ x₁ != x₂ := by
+    simpa [IsCornerFree, isCorner_iff, B, -exists_and_left, -exists_and_right]
+      using corners_theorem ε hε hG B this
+have := hA hx₂y₁ hx₁y₁ hx₁y₂ by-- TODO: This really ought to just be `by linear_combination h`
+    rw [sub_add_sub_comm]; rw [add_comm]; rw [add_sub_add_comm]; rw [add_right_cancel_iff]; rw [sub_eq_sub_iff_add_eq_add]; rw [add_comm]; rw [hxy]; rw [add_comm]
+exact hx₁x₂ by simpa using this.symm
 
 Depends on / 依赖: Equiv.addLeft, Equiv.refl, Finset, addLeft, card_equiv, card_product, card_univ, classical, filter, prodShear, univ.filter
 -/
@@ -369,7 +439,26 @@ theorem roth_3ap_theorem_nat
   have : A = Fin.val '' (Nat.cast '' A : Set (Fin (2 * n).succ)) := by
     rw [Set.image_image]; rw [Set.image_congr]; rw [Set.image_id]
     simp only [mem_coe, Nat.succ_eq_add_one, Fin.val_natCast, id_eq, Nat.mod_succ_eq_iff_lt]
-    rintro a
+    rintro a ha
+    have := hAn ha
+    simp at this
+    lia
+  rw [this] at hA
+  have := Fin.isAddFreimanIso_Iio two_ne_zero (le_refl (2 * n))
+have := hA.of_image this.isAddFreimanHom Fin.val_injective.injOn Set.image_subset_iff.2
+hAn.trans fun x hx => Fin.natCast_strictMono (by lia) by
+        simpa only [coe_range, Set.mem_Iio] using hx
+  rw [← coe_image] at this
+  refine roth_3ap_theorem (ε / 3) (by positivity) (by simp; lia) _ ?_ this
+  calc
+    _ = ε / 3 * (2 * n + 1) := by simp
+    _ <= ε / 3 * (2 * n + n) := by gcongr; simp; unfold cornersTheoremBound at hG; lia
+    _ = ε * n := by ring
+    _ <= #A := hAε
+    _ = _ := by
+      rw [card_image_of_injOn]
+exact (CharP.natCast_injOn_Iio (Fin (2 * n).succ) (2 * n).succ).mono hAn.trans by
+        simp; lia
 
 中文:
 定理 roth_3ap_theorem_nat
@@ -380,7 +469,26 @@ theorem roth_3ap_theorem_nat
   have : A = Fin.val '' (Nat.cast '' A : Set (Fin (2 * n).succ)) := by
     rw [Set.image_image]; rw [Set.image_congr]; rw [Set.image_id]
     simp only [mem_coe, Nat.succ_eq_add_one, Fin.val_natCast, id_eq, Nat.mod_succ_eq_iff_lt]
-    rintro a
+    rintro a ha
+    have := hAn ha
+    simp at this
+    lia
+  rw [this] at hA
+  have := Fin.isAddFreimanIso_Iio two_ne_zero (le_refl (2 * n))
+have := hA.of_image this.isAddFreimanHom Fin.val_injective.injOn Set.image_subset_iff.2
+hAn.trans fun x hx => Fin.natCast_strictMono (by lia) by
+        simpa only [coe_range, Set.mem_Iio] using hx
+  rw [← coe_image] at this
+  refine roth_3ap_theorem (ε / 3) (by positivity) (by simp; lia) _ ?_ this
+  calc
+    _ = ε / 3 * (2 * n + 1) := by simp
+    _ <= ε / 3 * (2 * n + n) := by gcongr; simp; unfold cornersTheoremBound at hG; lia
+    _ = ε * n := by ring
+    _ <= #A := hAε
+    _ = _ := by
+      rw [card_image_of_injOn]
+exact (CharP.natCast_injOn_Iio (Fin (2 * n).succ) (2 * n).succ).mono hAn.trans by
+        simp; lia
 
 Depends on / 依赖: Fin.isAddFreimanIso_Iio, Fin.val, Fin.val_injective.injOn, Fin.val_natCast, Nat.cast, Nat.mod_succ_eq_iff_lt, Nat.succ_eq_add_one, Set.image_congr, Set.image_id, Set.image_image, Set.image_subset_iff, coe_range, coe_subset, hA.of_image, hAn.trans, id_eq, image_congr, image_id, image_image, image_subset_iff
 -/

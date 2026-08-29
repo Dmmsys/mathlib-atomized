@@ -93,7 +93,8 @@ lemma shortExact_of_iso
     suffices Epi (e.hom.τ₂ ≫ S₂.g) by
       exact epi_of_epi e.hom.τ₂ _
     have := h.epi_g
-    rw [e.hom.co
+    rw [e.hom.comm₂₃]
+    apply epi_comp
 
 中文:
 引理 shortExact_of_iso
@@ -110,7 +111,8 @@ lemma shortExact_of_iso
     suffices Epi (e.hom.τ₂ ≫ S₂.g) by
       exact epi_of_epi e.hom.τ₂ _
     have := h.epi_g
-    rw [e.hom.co
+    rw [e.hom.comm₂₃]
+    apply epi_comp
 
 Depends on / 依赖: exact_of_iso, h.exact
 -/
@@ -366,7 +368,7 @@ lemma ShortExact.isIso_f_iff
       S.zero_assoc, zero_comp]
   · intro hX₃
     have : Epi S.f := (S.exact_iff_epi (hX₃.eq_of_tgt _ _)).1 hS.exact
-    appl
+    apply isIso_of_mono_of_epi
 
 中文:
 引理 短正合.isIso_f_iff
@@ -381,7 +383,7 @@ lemma ShortExact.isIso_f_iff
       S.zero_assoc, zero_comp]
   · intro hX₃
     have : Epi S.f := (S.exact_iff_epi (hX₃.eq_of_tgt _ _)).1 hS.exact
-    appl
+    apply isIso_of_mono_of_epi
 
 Depends on / 依赖: IsZero, IsZero.iff_id_eq_zero, S.exact_iff_epi, S.zero_assoc, cancel_epi, epi_g, eq_of_tgt, exact_iff_epi, hS.epi_g, hS.exact, hS.exact.hasZeroObject, hS.mono_f, hasZeroObject, iff_id_eq_zero, isIso_of_mono_of_epi, mono_f, zero_assoc, zero_comp
 -/
@@ -413,7 +415,8 @@ lemma ShortExact.isIso_g_iff
     simp only [IsZero.iff_id_eq_zero, ← cancel_mono S.f, ← cancel_mono S.g,
       S.zero, zero_comp, assoc, comp_zero]
   · intro hX₁
-    have : Mono S.g := (S.exact_iff_mono (hX₁.eq_of_src _ _)).1 h
+    have : Mono S.g := (S.exact_iff_mono (hX₁.eq_of_src _ _)).1 hS.exact
+    apply isIso_of_mono_of_epi
 
 中文:
 引理 短正合.isIso_g_iff
@@ -427,7 +430,8 @@ lemma ShortExact.isIso_g_iff
     simp only [IsZero.iff_id_eq_zero, ← cancel_mono S.f, ← cancel_mono S.g,
       S.zero, zero_comp, assoc, comp_zero]
   · intro hX₁
-    have : Mono S.g := (S.exact_iff_mono (hX₁.eq_of_src _ _)).1 h
+    have : Mono S.g := (S.exact_iff_mono (hX₁.eq_of_src _ _)).1 hS.exact
+    apply isIso_of_mono_of_epi
 
 Depends on / 依赖: IsZero, IsZero.iff_id_eq_zero, S.exact_iff_mono, S.zero, cancel_mono, comp_zero, epi_g, eq_of_src, exact_iff_mono, hS.epi_g, hS.exact, hS.exact.hasZeroObject, hS.mono_f, hasZeroObject, iff_id_eq_zero, isIso_of_mono_of_epi, mono_f, zero_comp
 -/
@@ -564,7 +568,11 @@ lemma Exact.shortExact
         τ₂ := 𝟙 _
         τ₃ := 𝟙 _ }
     let b : S'' ⟶ S' :=
-      { τ₁ :=
+      { τ₁ := 𝟙 _
+        τ₂ := 𝟙 _
+        τ₃ := h.right.g' }
+    rwa [ShortComplex.exact_iff_of_epi_of_isIso_of_mono b,
+      ← ShortComplex.exact_iff_of_epi_of_isIso_of_mono a]
 
 中文:
 引理 正合.shortExact
@@ -579,7 +587,11 @@ lemma Exact.shortExact
         τ₂ := 𝟙 _
         τ₃ := 𝟙 _ }
     let b : S'' ⟶ S' :=
-      { τ₁ :=
+      { τ₁ := 𝟙 _
+        τ₂ := 𝟙 _
+        τ₃ := h.right.g' }
+    rwa [ShortComplex.exact_iff_of_epi_of_isIso_of_mono b,
+      ← ShortComplex.exact_iff_of_epi_of_isIso_of_mono a]
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_iff_of_epi_of_isIso_of_mono, ShortComplex.mk, epi_f, exact_iff_i_p_zero, exact_iff_of_epi_of_isIso_of_mono, h.exact_iff_i_p_zero, h.left, h.left.f, h.left.i, h.right, h.right.g, hS.epi_f, hS.mono_g, mono_g
 -/

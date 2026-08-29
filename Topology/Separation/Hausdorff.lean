@@ -604,7 +604,7 @@ theorem IsCompact.nhdsSet_inter_eq
   refine iSup₂_le fun x hxs => iSup₂_le fun y hyt => ?_
   rcases eq_or_ne x y with (rfl | hne)
   · exact le_iSup₂_of_le x ⟨hxs, hyt⟩ (inf_idem _).le
-  · exact (disjoint
+  · exact (disjoint_nhds_nhds.mpr hne).eq_bot ▸ bot_le
 
 中文:
 定理 是紧集.nhdsSet_inter_eq
@@ -615,7 +615,7 @@ theorem IsCompact.nhdsSet_inter_eq
   refine iSup₂_le fun x hxs => iSup₂_le fun y hyt => ?_
   rcases eq_or_ne x y with (rfl | hne)
   · exact le_iSup₂_of_le x ⟨hxs, hyt⟩ (inf_idem _).le
-  · exact (disjoint
+  · exact (disjoint_nhds_nhds.mpr hne).eq_bot ▸ bot_le
 
 Depends on / 依赖: bot_le, disjoint_nhds_nhds, disjoint_nhds_nhds.mpr, eq_bot, eq_or_ne, hs.nhdsSet_inf_eq_biSup, ht.inf_nhdsSet_eq_biSup, inf_idem, inf_nhdsSet_eq_biSup, le_antisymm, nhdsSet, nhdsSet_inf_eq_biSup, nhdsSet_inter_le, sSup_image, simp_rw
 -/
@@ -689,7 +689,11 @@ theorem Set.InjOn.exists_mem_nhdsSet
     rcases eq_or_ne x y with rfl | hne
     · rcases loc x hx with ⟨u, hu, hf⟩
 exact Filter.mem_of_superset (prod_mem_nhds hu hu) forall_prod_set.2 hf
-    · suffices forallᶠ z in 𝓝 (x, y), f z.1 
+    · suffices forallᶠ z in 𝓝 (x, y), f z.1 != f z.2 from this.mono fun _ hne h => absurd h hne
+refine (fc x hx).prodMap' (fc y hy) isClosed_diagonal.isOpen_compl.mem_nhds ?_
+      exact inj.ne hx hy hne
+  rw [← eventually_nhdsSet_iff_forall]; rw [sc.nhdsSet_prod_eq sc] at this
+  exact eventually_prod_self_iff.1 this
 
 中文:
 定理 集合.单射限制.存在_mem_nhdsSet
@@ -699,7 +703,11 @@ exact Filter.mem_of_superset (prod_mem_nhds hu hu) forall_prod_set.2 hf
     rcases eq_or_ne x y with rfl | hne
     · rcases loc x hx with ⟨u, hu, hf⟩
 exact Filter.mem_of_superset (prod_mem_nhds hu hu) forall_prod_set.2 hf
-    · suffices forallᶠ z in 𝓝 (x, y), f z.1 
+    · suffices forallᶠ z in 𝓝 (x, y), f z.1 != f z.2 from this.mono fun _ hne h => absurd h hne
+refine (fc x hx).prodMap' (fc y hy) isClosed_diagonal.isOpen_compl.mem_nhds ?_
+      exact inj.ne hx hy hne
+  rw [← eventually_nhdsSet_iff_forall]; rw [sc.nhdsSet_prod_eq sc] at this
+  exact eventually_prod_self_iff.1 this
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, absurd, eq_or_ne, eventually_nhdsSet_iff_forall, forall_prod_set, inj.ne, isClosed_diagonal, isClosed_diagonal.isOpen_compl.mem_nhds, isOpen_compl, mem_nhds, mem_of_superset, nhdsSet_prod_eq, prodMap, prod_mem_nhds, sc.nhdsSet_prod_eq, this.mono
 -/
@@ -1231,7 +1239,7 @@ instance Sigma.t2Space
   · replace ne : x != y := ne_of_apply_ne _ ne
     exact separated_by_isOpenEmbedding .sigmaMk ne
   · let _ := (⊥ : TopologicalSpace ι); have : DiscreteTopology ι := ⟨rfl⟩
-    exact separated_by_continuous (continuous_de
+    exact separated_by_continuous (continuous_def.2 fun u _ => isOpen_sigma_fst_preimage u) h
 
 中文:
 实例 依赖和类型.t2Space
@@ -1243,7 +1251,7 @@ instance Sigma.t2Space
   · replace ne : x != y := ne_of_apply_ne _ ne
     exact separated_by_isOpenEmbedding .sigmaMk ne
   · let _ := (⊥ : TopologicalSpace ι); have : DiscreteTopology ι := ⟨rfl⟩
-    exact separated_by_continuous (continuous_de
+    exact separated_by_continuous (continuous_def.2 fun u _ => isOpen_sigma_fst_preimage u) h
 
 Depends on / 依赖: DiscreteTopology, TopologicalSpace, continuous_def, eq_or_ne, isOpen_sigma_fst_preimage, ne_of_apply_ne, replace, separated_by_continuous, separated_by_isOpenEmbedding, sigmaMk
 -/
@@ -1441,7 +1449,7 @@ instance :
   rintro ⟨x⟩ ⟨y⟩ (h : ¬ T2Quotient.mk x = T2Quotient.mk y)
   obtain ⟨s, hs, hsxy⟩ : exists s, T2Space (Quotient s) ∧ Quotient.mk s x != Quotient.mk s y := by
     simpa [T2Quotient.mk_eq, Quotient.eq] using h
-  exact separated_by_continuous (continuous_map_sInf (by exact hs)) hs
+  exact separated_by_continuous (continuous_map_sInf (by exact hs)) hsxy
 
 中文:
 实例 :
@@ -1451,7 +1459,7 @@ instance :
   rintro ⟨x⟩ ⟨y⟩ (h : ¬ T2Quotient.mk x = T2Quotient.mk y)
   obtain ⟨s, hs, hsxy⟩ : exists s, T2Space (Quotient s) ∧ Quotient.mk s x != Quotient.mk s y := by
     simpa [T2Quotient.mk_eq, Quotient.eq] using h
-  exact separated_by_continuous (continuous_map_sInf (by exact hs)) hs
+  exact separated_by_continuous (continuous_map_sInf (by exact hs)) hsxy
 
 Depends on / 依赖: Quotient, Quotient.eq, Quotient.mk, T2Quotient, T2Quotient.mk, T2Quotient.mk_eq, T2Space, continuous_map_sInf, mk_eq, separated_by_continuous, t2Space_iff
 -/
@@ -1838,7 +1846,15 @@ lemma SeparatedNhds.of_isClosed_isCompact_closure_compl_isClosed
 have ht : IsCompact t := .of_isClosed_subset H2 H3 H4.subset_compl_left.trans subset_closure
   -- we split `s` into its frontier and its interior.
   rw [← sdiff_union_of_subset (interior_subset (s := s))]
-  -- since
+  -- since `t ⊆ sᶜ`, which is open, and `interior s` is open, we have
+  -- `SeparatedNhds (interior s) t`, which leaves us only with the frontier.
+  refine .union_left ?_ ⟨interior s, sᶜ, isOpen_interior, H1.isOpen_compl, le_rfl,
+    H4.subset_compl_left, disjoint_compl_right.mono_left interior_subset⟩
+  -- Since the frontier of `s` is compact (as it is a subset of `closure sᶜ`), we simply apply
+  -- `SeparatedNhds_of_isCompact_isCompact`.
+  rw [← H1.frontier_eq]; rw [frontier_eq_closure_inter_closure]; rw [H1.closure_eq]
+  refine .of_isCompact_isCompact_isClosed ?_ ht H3 (disjoint_of_subset_left inter_subset_left H4)
+  exact H2.of_isClosed_subset (H1.inter isClosed_closure) inter_subset_right
 
 中文:
 引理 SeparatedNhds.of_isClosed_isCompact_closure_compl_isClosed
@@ -1848,7 +1864,15 @@ have ht : IsCompact t := .of_isClosed_subset H2 H3 H4.subset_compl_left.trans su
 have ht : IsCompact t := .of_isClosed_subset H2 H3 H4.subset_compl_left.trans subset_closure
   -- we split `s` into its frontier and its interior.
   rw [← sdiff_union_of_subset (interior_subset (s := s))]
-  -- since
+  -- since `t ⊆ sᶜ`, which is open, and `interior s` is open, we have
+  -- `SeparatedNhds (interior s) t`, which leaves us only with the frontier.
+  refine .union_left ?_ ⟨interior s, sᶜ, isOpen_interior, H1.isOpen_compl, le_rfl,
+    H4.subset_compl_left, disjoint_compl_right.mono_left interior_subset⟩
+  -- Since the frontier of `s` is compact (as it is a subset of `closure sᶜ`), we simply apply
+  -- `SeparatedNhds_of_isCompact_isCompact`.
+  rw [← H1.frontier_eq]; rw [frontier_eq_closure_inter_closure]; rw [H1.closure_eq]
+  refine .of_isCompact_isCompact_isClosed ?_ ht H3 (disjoint_of_subset_left inter_subset_left H4)
+  exact H2.of_isClosed_subset (H1.inter isClosed_closure) inter_subset_right
 -/
 lemma SeparatedNhds.of_isClosed_isCompact_closure_compl_isClosed [R1Space X] {s : Set X}
     {t : Set X} (H1 : IsClosed s) (H2 : IsCompact (closure sᶜ)) (H3 : IsClosed t)
@@ -2135,6 +2159,13 @@ theorem ContinuousAt.ne_iff_eventually_ne
       (hf.preimage_mem_nhds (IsOpen.mem_nhds h₁U h₃U))
       (hg.preimage_mem_nhds (IsOpen.mem_nhds h₂U h₄U))]
     intro x hx
+    simp only [Set.mem_inter_iff, Set.mem_preimage] at hx
+    by_contra H
+    rw [H] at hx
+    have : g x in Uf inter Ug := hx
+    simp [h₅U] at this
+  · obtain ⟨t, h₁t, h₂t, h₃t⟩ := eventually_nhds_iff.1 hfg
+    exact h₁t x h₃t
 
 中文:
 定理 ContinuousAt.ne_iff_eventually_ne
@@ -2147,6 +2178,13 @@ theorem ContinuousAt.ne_iff_eventually_ne
       (hf.preimage_mem_nhds (IsOpen.mem_nhds h₁U h₃U))
       (hg.preimage_mem_nhds (IsOpen.mem_nhds h₂U h₄U))]
     intro x hx
+    simp only [Set.mem_inter_iff, Set.mem_preimage] at hx
+    by_contra H
+    rw [H] at hx
+    have : g x in Uf inter Ug := hx
+    simp [h₅U] at this
+  · obtain ⟨t, h₁t, h₂t, h₃t⟩ := eventually_nhds_iff.1 hfg
+    exact h₁t x h₃t
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, Set.disjoint_iff_inter_eq_empty, Set.mem_inter_iff, Set.mem_preimage, disjoint_iff_inter_eq_empty, eventually_nhds_iff, filter_upwards, hf.preimage_mem_nhds, hg.preimage_mem_nhds, inter_mem, mem_inter_iff, mem_nhds, mem_preimage, preimage_mem_nhds, t2_separation
 -/
@@ -2181,7 +2219,10 @@ theorem ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE
     obtain ⟨a, ha⟩ : {x | f x != g x ∧ f x = g x}.Nonempty := by
       have h₁ := (eventually_nhdsWithin_of_eventually_nhds
         ((hf.ne_iff_eventually_ne hg).1 hCon)).and hfg
-      have h₂ : 
+      have h₂ : ∅ ∉ 𝓝[!=] x := by exact empty_notMem (𝓝[!=] x)
+      simp_all
+    simp at ha
+  · exact hfg.filter_mono nhdsWithin_le_nhds
 
 中文:
 定理 ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE
@@ -2193,7 +2234,10 @@ theorem ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE
     obtain ⟨a, ha⟩ : {x | f x != g x ∧ f x = g x}.Nonempty := by
       have h₁ := (eventually_nhdsWithin_of_eventually_nhds
         ((hf.ne_iff_eventually_ne hg).1 hCon)).and hfg
-      have h₂ : 
+      have h₂ : ∅ ∉ 𝓝[!=] x := by exact empty_notMem (𝓝[!=] x)
+      simp_all
+    simp at ha
+  · exact hfg.filter_mono nhdsWithin_le_nhds
 
 Depends on / 依赖: Nonempty, empty_notMem, eventuallyEq_nhds_of_eventuallyEq_nhdsNE, eventually_nhdsWithin_of_eventually_nhds, filter_mono, hf.ne_iff_eventually_ne, hfg.filter_mono, ne_iff_eventually_ne, nhdsWithin_le_nhds
 -/
@@ -2278,7 +2322,7 @@ theorem isPreirreducible_iff_forall_mem_subset_closure_singleton
     obtain ⟨U, V, hU, hV, hxU, hyV, h'⟩ := r1_separation fun h => e h.specializes.mem_closure
     exact ((h U V hU hV ⟨x, hx, hxU⟩ ⟨y, hy, hyV⟩).mono inter_subset_right).not_disjoint h'
   · intro h u v hu hv ⟨x, hxs, hxu⟩ ⟨y, hys, hyv⟩
-    exact
+    exact ⟨x, hxs, hxu, (specializes_iff_mem_closure.mpr (h x hxs hys)).mem_open hv hyv⟩
 
 中文:
 定理 isPreirreducible_iff_对任意_mem_subset_closure_singleton
@@ -2290,7 +2334,7 @@ theorem isPreirreducible_iff_forall_mem_subset_closure_singleton
     obtain ⟨U, V, hU, hV, hxU, hyV, h'⟩ := r1_separation fun h => e h.specializes.mem_closure
     exact ((h U V hU hV ⟨x, hx, hxU⟩ ⟨y, hy, hyV⟩).mono inter_subset_right).not_disjoint h'
   · intro h u v hu hv ⟨x, hxs, hxu⟩ ⟨y, hys, hyv⟩
-    exact
+    exact ⟨x, hxs, hxu, (specializes_iff_mem_closure.mpr (h x hxs hys)).mem_open hv hyv⟩
 
 Depends on / 依赖: h.specializes.mem_closure, inter_subset_right, mem_closure, mem_open, not_disjoint, r1_separation, specializes, specializes_iff_mem_closure, specializes_iff_mem_closure.mpr
 -/

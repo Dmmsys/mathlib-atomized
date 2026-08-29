@@ -223,7 +223,9 @@ definition copy
   isSeparated_packingRadius := by
     simpa [h_carrier, h_packing] using D.isSeparated_packingRadius
   coveringRadius := coveringRadius
-  coveringRadius_pos := by simpa [h_covering] using D
+  coveringRadius_pos := by simpa [h_covering] using D.coveringRadius_pos
+  isCover_coveringRadius := by
+    simpa [h_carrier, h_covering] using D.isCover_coveringRadius
 
 中文:
 定义 copy
@@ -234,7 +236,9 @@ definition copy
   isSeparated_packingRadius := by
     simpa [h_carrier, h_packing] using D.isSeparated_packingRadius
   coveringRadius := coveringRadius
-  coveringRadius_pos := by simpa [h_covering] using D
+  coveringRadius_pos := by simpa [h_covering] using D.coveringRadius_pos
+  isCover_coveringRadius := by
+    simpa [h_carrier, h_covering] using D.isCover_coveringRadius
 -/
 protected def copy (D : DeloneSet X) (carrier : Set X) (packingRadius coveringRadius : Real>=0)
     (h_carrier : carrier = D.carrier) (h_packing : packingRadius = D.packingRadius)
@@ -389,7 +393,7 @@ definition mapBilipschitz
   isSeparated_packingRadius := D.isSeparated_packingRadius.image_antilipschitz hf₁ hK₁
   coveringRadius := K₂ * D.coveringRadius
   coveringRadius_pos := mul_pos hK₂ D.coveringRadius_pos
-  is
+  isCover_coveringRadius := D.isCover_coveringRadius.image_lipschitz_of_surjective hf₂ f.surjective
 
 中文:
 定义 mapBilipschitz
@@ -400,7 +404,7 @@ definition mapBilipschitz
   isSeparated_packingRadius := D.isSeparated_packingRadius.image_antilipschitz hf₁ hK₁
   coveringRadius := K₂ * D.coveringRadius
   coveringRadius_pos := mul_pos hK₂ D.coveringRadius_pos
-  is
+  isCover_coveringRadius := D.isCover_coveringRadius.image_lipschitz_of_surjective hf₂ f.surjective
 
 Depends on / 依赖: D.carrier, carrier
 -/
@@ -491,7 +495,11 @@ definition mapIsometry
   body: (D.mapBilipschitz f.toEquiv 1 1 zero_lt_one zero_lt_one
       f.isometry.antilipschitz f.isometry.lipschitz).copy (f '' D.carrier)
       D.packingRadius D.coveringRadius rfl (by simp [mapBilipschitz]) (by simp [mapBilipschitz])
-  invFun D := (D.mapBilipschitz f.symm.toEquiv 1 1 zero_lt_one zero_lt_o
+  invFun D := (D.mapBilipschitz f.symm.toEquiv 1 1 zero_lt_one zero_lt_one
+      f.symm.isometry.antilipschitz f.symm.isometry.lipschitz).copy (f.symm '' D.carrier)
+      D.packingRadius D.coveringRadius rfl (by simp [mapBilipschitz]) (by simp [mapBilipschitz])
+  left_inv D := by ext <;> simp [copy_eq]
+  right_inv D := by ext <;> simp [copy_eq]
 
 中文:
 定义 mapIsometry
@@ -499,7 +507,11 @@ definition mapIsometry
   定义体: (D.mapBilipschitz f.toEquiv 1 1 zero_lt_one zero_lt_one
       f.isometry.antilipschitz f.isometry.lipschitz).copy (f '' D.carrier)
       D.packingRadius D.coveringRadius rfl (by simp [mapBilipschitz]) (by simp [mapBilipschitz])
-  invFun D := (D.mapBilipschitz f.symm.toEquiv 1 1 zero_lt_one zero_lt_o
+  invFun D := (D.mapBilipschitz f.symm.toEquiv 1 1 zero_lt_one zero_lt_one
+      f.symm.isometry.antilipschitz f.symm.isometry.lipschitz).copy (f.symm '' D.carrier)
+      D.packingRadius D.coveringRadius rfl (by simp [mapBilipschitz]) (by simp [mapBilipschitz])
+  left_inv D := by ext <;> simp [copy_eq]
+  right_inv D := by ext <;> simp [copy_eq]
 
 Depends on / 依赖: D.mapBilipschitz, f.toEquiv, mapBilipschitz, toEquiv, zero_lt_one
 -/

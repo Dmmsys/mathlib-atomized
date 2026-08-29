@@ -539,7 +539,8 @@ theorem isIso_toSheafify
 .right_triangle_components ⟨P, hP⟩ · exact sheafificationAdjunction J D
   · change (sheafToPresheaf _ _).map _ ≫ _ = _
     change _ ≫ (sheafificationAdjunction J D).unit.app ((sheafToPresheaf J D).obj ⟨P, hP⟩) = _
-    rw 
+    rw [← (sheafificationAdjunction J D).inv_counit_map (X := ⟨P]; rw [hP⟩)]
+    simp
 
 中文:
 定理 isIso_toSheafify
@@ -550,7 +551,8 @@ theorem isIso_toSheafify
 .right_triangle_components ⟨P, hP⟩ · exact sheafificationAdjunction J D
   · change (sheafToPresheaf _ _).map _ ≫ _ = _
     change _ ≫ (sheafificationAdjunction J D).unit.app ((sheafToPresheaf J D).obj ⟨P, hP⟩) = _
-    rw 
+    rw [← (sheafificationAdjunction J D).inv_counit_map (X := ⟨P]; rw [hP⟩)]
+    simp
 
 Depends on / 依赖: counit, counit.app, inv_counit_map, right_triangle_components, sheafToPresheaf, sheafificationAdjunction, unit.app
 -/
@@ -669,7 +671,9 @@ theorem toSheafify_sheafifyLift
   change _ ≫ (sheafToPresheaf J D).map _ ≫ _ = _
   simp only [Adjunction.unit_naturality_assoc]
   change _ ≫ (sheafificationAdjunction J D).unit.app ((sheafToPresheaf J D).obj ⟨Q, hQ⟩) ≫ _ = _
-  change _ ≫ _ ≫ (sheafToPresheaf 
+  change _ ≫ _ ≫ (sheafToPresheaf J D).map _ = _
+  rw [sheafificationAdjunction J D |>.right_triangle_components (Y := ⟨Q]; rw [hQ⟩)]
+  simp
 
 中文:
 定理 toSheafify_sheafifyLift
@@ -679,7 +683,9 @@ theorem toSheafify_sheafifyLift
   change _ ≫ (sheafToPresheaf J D).map _ ≫ _ = _
   simp only [Adjunction.unit_naturality_assoc]
   change _ ≫ (sheafificationAdjunction J D).unit.app ((sheafToPresheaf J D).obj ⟨Q, hQ⟩) ≫ _ = _
-  change _ ≫ _ ≫ (sheafToPresheaf 
+  change _ ≫ _ ≫ (sheafToPresheaf J D).map _ = _
+  rw [sheafificationAdjunction J D |>.right_triangle_components (Y := ⟨Q]; rw [hQ⟩)]
+  simp
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_counit, Adjunction.unit_naturality_assoc, homEquiv_counit, right_triangle_components, sheafToPresheaf, sheafificationAdjunction, sheafifyLift, toSheafify, unit.app, unit_naturality_assoc
 -/

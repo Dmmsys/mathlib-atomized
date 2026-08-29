@@ -1088,7 +1088,9 @@ instance :
     ⟨a.1 * b.1 + c₁ * a.2 * b.2 + c₃ * a.3 * b.3 + c₂ * c₃ * a.3 * b.4 - c₁ * c₃ * a.4 * b.4,
       a.1 * b.2 + a.2 * b.1 + c₂ * a.2 * b.2 - c₃ * a.3 * b.4 + c₃ * a.4 * b.3,
       a.1 * b.3 + c₁ * a.2 * b.4 + a.3 * b.1 + c₂ * a.3 * b.2 - c₁ * a.4 * b.2,
-      a.1 * b.4 + a.2 * b.3 + c₂ *
+      a.1 * b.4 + a.2 * b.3 + c₂ * a.2 * b.4 - a.3 * b.2 + a.4 * b.1⟩⟩
+
+@[simp]
 
 中文:
 实例 :
@@ -1097,7 +1099,9 @@ instance :
     ⟨a.1 * b.1 + c₁ * a.2 * b.2 + c₃ * a.3 * b.3 + c₂ * c₃ * a.3 * b.4 - c₁ * c₃ * a.4 * b.4,
       a.1 * b.2 + a.2 * b.1 + c₂ * a.2 * b.2 - c₃ * a.3 * b.4 + c₃ * a.4 * b.3,
       a.1 * b.3 + c₁ * a.2 * b.4 + a.3 * b.1 + c₂ * a.3 * b.2 - c₁ * a.4 * b.2,
-      a.1 * b.4 + a.2 * b.3 + c₂ *
+      a.1 * b.4 + a.2 * b.3 + c₂ * a.2 * b.4 - a.3 * b.2 + a.4 * b.1⟩⟩
+
+@[simp]
 -/
 instance : Mul ℍ[R,c₁,c₂,c₃] :=
   ⟨fun a b =>
@@ -1770,7 +1774,9 @@ instance instRing
   mul_zero _ := by ext <;> simp
   mul_assoc _ _ _ := by ext <;> simp <;> ring
   one_mul _ := by ext <;> simp
-  mul_on
+  mul_one _ := by ext <;> simp
+
+@[norm_cast, simp]
 
 中文:
 实例 instRing
@@ -1782,7 +1788,9 @@ instance instRing
   mul_zero _ := by ext <;> simp
   mul_assoc _ _ _ := by ext <;> simp <;> ring
   one_mul _ := by ext <;> simp
-  mul_on
+  mul_one _ := by ext <;> simp
+
+@[norm_cast, simp]
 
 Depends on / 依赖: AddCommGroupWithOne
 -/
@@ -1846,7 +1854,7 @@ instance [CommSemiring
     map_mul' x y := by simp only [map_mul, coe_mul]
     map_add' x y := by simp only [map_add, coe_add] }
   smul_def' s x := by ext <;> simp [Algebra.smul_def]
-  com
+  commutes' s x := by ext <;> simp [Algebra.commutes]
 
 中文:
 实例 [交换半环
@@ -1857,7 +1865,7 @@ instance [CommSemiring
     map_mul' x y := by simp only [map_mul, coe_mul]
     map_add' x y := by simp only [map_add, coe_add] }
   smul_def' s x := by ext <;> simp [Algebra.smul_def]
-  com
+  commutes' s x := by ext <;> simp [Algebra.commutes]
 
 Depends on / 依赖: Algebra, Algebra.commutes, Algebra.smul_def, algebraMap, coe_add, coe_mul, coe_one, coe_zero, commutes, map_add, map_mul, map_one, map_zero, smul_def
 -/
@@ -5235,7 +5243,7 @@ definition normSq
   map_one' := by simp only [star_one, one_mul, re_one]
 map_mul' x y := coe_injective by
     conv_lhs => rw [← mul_star_eq_coe, star_mul, mul_assoc, ← mul_assoc y, y.mul_star_eq_coe,
-      coe_commutes, ← mul_assoc, x.mul_star
+      coe_commutes, ← mul_assoc, x.mul_star_eq_coe, ← coe_mul]
 
 中文:
 定义 normSq
@@ -5245,7 +5253,7 @@ map_mul' x y := coe_injective by
   map_one' := by simp only [star_one, one_mul, re_one]
 map_mul' x y := coe_injective by
     conv_lhs => rw [← mul_star_eq_coe, star_mul, mul_assoc, ← mul_assoc y, y.mul_star_eq_coe,
-      coe_commutes, ← mul_assoc, x.mul_star
+      coe_commutes, ← mul_assoc, x.mul_star_eq_coe, ← coe_mul]
 -/
 def normSq : ℍ[R] ->*₀ R where
   toFun a := (a * star a).re
@@ -5519,7 +5527,7 @@ theorem normSq_add
       simp_rw [normSq_def, star_add, add_mul, mul_add, re_add]
     _ = normSq a + normSq b + ((a * star b).re + (b * star a).re) := by abel
     _ = normSq a + normSq b + 2 * (a * star b).re := by
-      rw [← re
+      rw [← re_add]; rw [← star_mul_star a b]; rw [self_add_star']; rw [re_coe]
 
 中文:
 定理 normSq_add
@@ -5530,7 +5538,7 @@ theorem normSq_add
       simp_rw [normSq_def, star_add, add_mul, mul_add, re_add]
     _ = normSq a + normSq b + ((a * star b).re + (b * star a).re) := by abel
     _ = normSq a + normSq b + 2 * (a * star b).re := by
-      rw [← re
+      rw [← re_add]; rw [← star_mul_star a b]; rw [self_add_star']; rw [re_coe]
 
 Depends on / 依赖: add_mul, mul_add, normSq, normSq_def, re_add, re_coe, self_add_star, simp_rw, star_add, star_mul_star
 -/
@@ -5565,7 +5573,7 @@ theorem normSq_eq_zero
     at h
   · apply ext a 0 <;> apply eq_zero_of_pow_eq_zero
     exacts [h.1.1.1, h.1.1.2, h.1.2, h.2]
-  all_goals apply_rule
+  all_goals apply_rules [sq_nonneg, add_nonneg]
 
 中文:
 定理 normSq_eq_zero
@@ -5576,7 +5584,7 @@ theorem normSq_eq_zero
     at h
   · apply ext a 0 <;> apply eq_zero_of_pow_eq_zero
     exacts [h.1.1.1, h.1.1.2, h.1.2, h.2]
-  all_goals apply_rule
+  all_goals apply_rules [sq_nonneg, add_nonneg]
 
 Depends on / 依赖: add_eq_zero_iff_of_nonneg, add_nonneg, all_goals, apply_rules, eq_zero_of_pow_eq_zero, exacts, h.symm, map_zero, normSq, normSq.map_zero, normSq_def, sq_nonneg
 -/
@@ -6104,7 +6112,7 @@ instance instGroupWithZero
     mul_inv_cancel := fun a ha => by
       rw [inv_def]; rw [Algebra.mul_smul_comm (normSq a)⁻¹ a (star a)]; rw [self_mul_star]; rw [smul_coe]; rw [inv_mul_cancel₀ (normSq_ne_zero.2 ha)]; rw [coe_one] }
 
-@[norm_ca
+@[norm_cast, simp]
 
 中文:
 实例 instGroupWithZero
@@ -6114,7 +6122,7 @@ instance instGroupWithZero
     mul_inv_cancel := fun a ha => by
       rw [inv_def]; rw [Algebra.mul_smul_comm (normSq a)⁻¹ a (star a)]; rw [self_mul_star]; rw [smul_coe]; rw [inv_mul_cancel₀ (normSq_ne_zero.2 ha)]; rw [coe_one] }
 
-@[norm_ca
+@[norm_cast, simp]
 
 Depends on / 依赖: Algebra, Algebra.mul_smul_comm, Quaternion, Quaternion.instNontrivial, coe_one, instNontrivial, inv_def, inv_zero, mul_inv_cancel, mul_smul_comm, normSq, normSq_ne_zero, self_mul_star, smul_coe, smul_zero, star_zero
 -/
@@ -6207,7 +6215,8 @@ instance instDivisionRing
   qsmul := (· • ·)
   nnratCast_def _ := by rw [← coe_nnratCast, NNRat.cast_def, coe_div, coe_natCast, coe_natCast]
   ratCast_def _ := by rw [← coe_ratCast, Rat.cast_def, coe_div, coe_intCast, coe_natCast]
-  nnqsmul_def _ _
+  nnqsmul_def _ _ := by rw [← coe_nnratCast, coe_mul_eq_smul]; ext <;> exact NNRat.smul_def ..
+  qsmul_def _ _ := by rw [← coe_ratCast, coe_mul_eq_smul]; ext <;> exact Rat.smul_def ..
 
 中文:
 实例 instDivisionRing
@@ -6218,7 +6227,8 @@ instance instDivisionRing
   qsmul := (· • ·)
   nnratCast_def _ := by rw [← coe_nnratCast, NNRat.cast_def, coe_div, coe_natCast, coe_natCast]
   ratCast_def _ := by rw [← coe_ratCast, Rat.cast_def, coe_div, coe_intCast, coe_natCast]
-  nnqsmul_def _ _
+  nnqsmul_def _ _ := by rw [← coe_nnratCast, coe_mul_eq_smul]; ext <;> exact NNRat.smul_def ..
+  qsmul_def _ _ := by rw [← coe_ratCast, coe_mul_eq_smul]; ext <;> exact Rat.smul_def ..
 
 Depends on / 依赖: Quaternion, Quaternion.instRing, instRing
 -/

@@ -202,7 +202,13 @@ theorem Disjoint.map_injective
     refine ⟨?_, ih⟩
     contrapose hA
     simp only [CantorScheme.Disjoint, _root_.Pairwise, Ne, not_forall, exists_prop]
-    refine ⟨res x n, _, _, 
+    refine ⟨res x n, _, _, hA, ?_⟩
+    rw [not_disjoint_iff]
+    refine ⟨(inducedMap A).2 x, ?_, ?_⟩
+    · rw [← res_succ]
+      apply map_mem
+    rw [hxy]; rw [ih]; rw [← res_succ]
+    apply map_mem
 
 中文:
 定理 Disjoint.map_injective
@@ -220,7 +226,13 @@ theorem Disjoint.map_injective
     refine ⟨?_, ih⟩
     contrapose hA
     simp only [CantorScheme.Disjoint, _root_.Pairwise, Ne, not_forall, exists_prop]
-    refine ⟨res x n, _, _, 
+    refine ⟨res x n, _, _, hA, ?_⟩
+    rw [not_disjoint_iff]
+    refine ⟨(inducedMap A).2 x, ?_, ?_⟩
+    · rw [← res_succ]
+      apply map_mem
+    rw [hxy]; rw [ih]; rw [← res_succ]
+    apply map_mem
 
 Depends on / 依赖: CantorScheme, CantorScheme.Disjoint, Disjoint, Pairwise, _root_, _root_.Pairwise, cons.injEq, contrapose, exists_prop, inducedMap, map_mem, not_disjoint_iff, not_forall, res_injective, res_succ
 -/
@@ -284,7 +296,10 @@ theorem VanishingDiam.dist_lt
   use n
   intro y hy z hz
   rw [← ENNReal.ofReal_lt_ofReal_iff ε_pos]; rw [← edist_dist]
-  apply lt_of_le_of_lt (Metric.edist_le_e
+  apply lt_of_le_of_lt (Metric.edist_le_ediam_of_mem hy hz)
+  apply lt_of_le_of_lt (hn _ (le_refl _))
+  rw [ENNReal.ofReal_lt_ofReal_iff ε_pos]
+  linarith
 
 中文:
 定理 VanishingDiam.dist_lt
@@ -297,7 +312,10 @@ theorem VanishingDiam.dist_lt
   use n
   intro y hy z hz
   rw [← ENNReal.ofReal_lt_ofReal_iff ε_pos]; rw [← edist_dist]
-  apply lt_of_le_of_lt (Metric.edist_le_e
+  apply lt_of_le_of_lt (Metric.edist_le_ediam_of_mem hy hz)
+  apply lt_of_le_of_lt (hn _ (le_refl _))
+  rw [ENNReal.ofReal_lt_ofReal_iff ε_pos]
+  linarith
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.ofReal_lt_ofReal_iff, ENNReal.ofReal_pos, ENNReal.tendsto_atTop_zero, Metric, Metric.edist_le_ediam_of_mem, edist_dist, edist_le_ediam_of_mem, gt_iff_lt, le_refl, lt_of_le_of_lt, ofReal, ofReal_lt_ofReal_iff, ofReal_pos, specialize, tendsto_atTop_zero
 -/
@@ -330,7 +348,11 @@ theorem VanishingDiam.map_continuous
   · rintro y hyx
     rw [mem_preimage]; rw [Subtype.coe_mk]; rw [cylinder_eq_res]; rw [mem_ofPred] at hyx
     apply hn
-    
+    · rw [← hyx]
+      apply map_mem
+    apply map_mem
+  apply continuous_subtype_val.isOpen_preimage
+  apply isOpen_cylinder
 
 中文:
 定理 VanishingDiam.map_continuous
@@ -344,7 +366,11 @@ theorem VanishingDiam.map_continuous
   · rintro y hyx
     rw [mem_preimage]; rw [Subtype.coe_mk]; rw [cylinder_eq_res]; rw [mem_ofPred] at hyx
     apply hn
-    
+    · rw [← hyx]
+      apply map_mem
+    apply map_mem
+  apply continuous_subtype_val.isOpen_preimage
+  apply isOpen_cylinder
 
 Depends on / 依赖: Metric, Metric.continuous_iff, Subtype, Subtype.coe_mk, _root_, _root_.eventually_nhds_iff, coe_mk, continuous_iff, continuous_subtype_val, continuous_subtype_val.isOpen_preimage, cylinder, cylinder_eq_res, dist_lt, eventually_nhds_iff, hA.dist_lt, isOpen_cylinder, isOpen_preimage, map_mem, mem_ofPred, mem_preimage
 -/
@@ -379,7 +405,23 @@ theorem ClosureAntitone.map_of_vanishingDiam
       refine antitone_nat_of_succ_le ?_
       intro n
       apply hanti.antitone
-    intro n
+    intro n m hnm
+    exact this hnm (hu _)
+  have : CauchySeq u := by
+    rw [Metric.cauchySeq_iff]
+    intro ε ε_pos
+    obtain ⟨n, hn⟩ := hdiam.dist_lt _ ε_pos x
+    use n
+    intro m₀ hm₀ m₁ hm₁
+    apply hn <;> apply umem <;> assumption
+  obtain ⟨y, hy⟩ := cauchySeq_tendsto_of_complete this
+  use y
+  rw [mem_iInter]
+  intro n
+  apply hanti _ (x n)
+  apply mem_closure_of_tendsto hy
+  rw [eventually_atTop]
+  exact ⟨n.succ, umem _⟩
 
 中文:
 定理 ClosureAntitone.map_of_vanishingDiam
@@ -393,7 +435,23 @@ theorem ClosureAntitone.map_of_vanishingDiam
       refine antitone_nat_of_succ_le ?_
       intro n
       apply hanti.antitone
-    intro n
+    intro n m hnm
+    exact this hnm (hu _)
+  have : CauchySeq u := by
+    rw [Metric.cauchySeq_iff]
+    intro ε ε_pos
+    obtain ⟨n, hn⟩ := hdiam.dist_lt _ ε_pos x
+    use n
+    intro m₀ hm₀ m₁ hm₁
+    apply hn <;> apply umem <;> assumption
+  obtain ⟨y, hy⟩ := cauchySeq_tendsto_of_complete this
+  use y
+  rw [mem_iInter]
+  intro n
+  apply hanti _ (x n)
+  apply mem_closure_of_tendsto hy
+  rw [eventually_atTop]
+  exact ⟨n.succ, umem _⟩
 
 Depends on / 依赖: Antitone, CauchySeq, Metric, Metric.cauchySeq_iff, antitone, antitone_nat_of_succ_le, cauchySeq_iff, cauchySeq_tends, dist_lt, eq_univ_iff_forall, hanti.antitone, hdiam.dist_lt, hnonempty
 -/

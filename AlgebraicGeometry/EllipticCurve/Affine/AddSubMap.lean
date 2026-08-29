@@ -72,6 +72,26 @@ definition addSubMapCoeff
         C (2 * W.b₂ * W.b₄ * W.b₈ - 2 * W.b₄ ^ 2 * W.b₆ - 10 * W.b₆ * W.b₈) * s * t +
         C (-W.b₂ * W.b₆ * W.b₈ + W.b₄ * W.b₆ ^ 2) * s * u +
         C (3 * W.b₄ ^ 2 * W.b₈ - 3 * W.b₄ * W.b₆ ^ 2) * t ^ 2 +
+        C (3 * W.b₄ * W.b₆ * W.b₈ - 3 * W.b₆ ^ 3) * t * u,
+      C (-W.b₂ * W.b₄ * W.b₈ + W.b₄ ^ 2 * W.b₆ + 5 * W.b₆ * W.b₈) * s ^ 2 +
+        C (2 * W.b₂ * W.b₆ * W.b₈ - 2 * W.b₄ * W.b₆ ^ 2 - 10 * W.b₈ ^ 2) * s * t +
+        C (-W.b₂ * W.b₈ ^ 2 + W.b₄ * W.b₆ * W.b₈) * s * u +
+        C (3 * W.b₄ * W.b₆ * W.b₈ - 3 * W.b₆ ^ 3) * t ^ 2 +
+        C (3 * W.b₄ * W.b₈ ^ 2 - 3 * W.b₆ ^ 2 * W.b₈) * t * u,
+      C (W.b₂ * W.b₆ * W.b₈ - 8 * W.b₄ ^ 2 * W.b₈ + 7 * W.b₄ * W.b₆ ^ 2) * s ^ 2 +
+        C (-6 * W.b₄ * W.b₆ * W.b₈ + 6 * W.b₆ ^ 3) * s * t +
+        C (-8 * W.b₄ * W.b₈ ^ 2 + 8 * W.b₆ ^ 2 * W.b₈) * s * u],
+    ![C (96 * W.b₆) * s * t + C (12 * W.b₂ * W.b₆ - 64 * W.b₈) * t ^ 2 +
+        C (16 * W.b₄ * W.b₆) * t * u,
+      C (-48 * W.b₆) * s ^ 2 + C (32 * W.b₈) * s * t +
+        C (-4 * W.b₂ * W.b₈ + 16 * W.b₄ * W.b₆) * t ^ 2 + C (16 * W.b₄ * W.b₈) * t * u,
+      C (-12 * W.b₂ * W.b₆) * s ^ 2 + C (8 * W.b₂ * W.b₈ - 32 * W.b₄ * W.b₆) * s * t +
+        C (-12 * W.b₆ ^ 2) * s * u +
+        C (-W.b₂ ^ 2 * W.b₈ + 9 * W.b₂ * W.b₄ * W.b₆ - 8 * W.b₄ ^ 3 - 27 * W.b₆ ^ 2) * t ^ 2 +
+        C (4 * W.b₂ * W.b₄ * W.b₈ - 4 * W.b₂ * W.b₆ ^ 2) * t * u],
+    ![C (-12) * t ^ 2 + C (-4 * W.b₂) * t * u + C (W.b₂ ^ 2 - 32 * W.b₄) * u ^ 2,
+      C 6 * s * t + C (-W.b₂) * s * u + C (-5 * W.b₄) * t * u + C (W.b₂ * W.b₄ - 27 * W.b₆) * u ^ 2,
+      C (-8 * W.b₄) * s * u + C (-12 * W.b₆) * t * u + C (W.b₄ ^ 2 - 28 * W.b₈) * u ^ 2]].uncurry
 
 中文:
 定义 addSubMapCoeff
@@ -80,6 +100,26 @@ definition addSubMapCoeff
         C (2 * W.b₂ * W.b₄ * W.b₈ - 2 * W.b₄ ^ 2 * W.b₆ - 10 * W.b₆ * W.b₈) * s * t +
         C (-W.b₂ * W.b₆ * W.b₈ + W.b₄ * W.b₆ ^ 2) * s * u +
         C (3 * W.b₄ ^ 2 * W.b₈ - 3 * W.b₄ * W.b₆ ^ 2) * t ^ 2 +
+        C (3 * W.b₄ * W.b₆ * W.b₈ - 3 * W.b₆ ^ 3) * t * u,
+      C (-W.b₂ * W.b₄ * W.b₈ + W.b₄ ^ 2 * W.b₆ + 5 * W.b₆ * W.b₈) * s ^ 2 +
+        C (2 * W.b₂ * W.b₆ * W.b₈ - 2 * W.b₄ * W.b₆ ^ 2 - 10 * W.b₈ ^ 2) * s * t +
+        C (-W.b₂ * W.b₈ ^ 2 + W.b₄ * W.b₆ * W.b₈) * s * u +
+        C (3 * W.b₄ * W.b₆ * W.b₈ - 3 * W.b₆ ^ 3) * t ^ 2 +
+        C (3 * W.b₄ * W.b₈ ^ 2 - 3 * W.b₆ ^ 2 * W.b₈) * t * u,
+      C (W.b₂ * W.b₆ * W.b₈ - 8 * W.b₄ ^ 2 * W.b₈ + 7 * W.b₄ * W.b₆ ^ 2) * s ^ 2 +
+        C (-6 * W.b₄ * W.b₆ * W.b₈ + 6 * W.b₆ ^ 3) * s * t +
+        C (-8 * W.b₄ * W.b₈ ^ 2 + 8 * W.b₆ ^ 2 * W.b₈) * s * u],
+    ![C (96 * W.b₆) * s * t + C (12 * W.b₂ * W.b₆ - 64 * W.b₈) * t ^ 2 +
+        C (16 * W.b₄ * W.b₆) * t * u,
+      C (-48 * W.b₆) * s ^ 2 + C (32 * W.b₈) * s * t +
+        C (-4 * W.b₂ * W.b₈ + 16 * W.b₄ * W.b₆) * t ^ 2 + C (16 * W.b₄ * W.b₈) * t * u,
+      C (-12 * W.b₂ * W.b₆) * s ^ 2 + C (8 * W.b₂ * W.b₈ - 32 * W.b₄ * W.b₆) * s * t +
+        C (-12 * W.b₆ ^ 2) * s * u +
+        C (-W.b₂ ^ 2 * W.b₈ + 9 * W.b₂ * W.b₄ * W.b₆ - 8 * W.b₄ ^ 3 - 27 * W.b₆ ^ 2) * t ^ 2 +
+        C (4 * W.b₂ * W.b₄ * W.b₈ - 4 * W.b₂ * W.b₆ ^ 2) * t * u],
+    ![C (-12) * t ^ 2 + C (-4 * W.b₂) * t * u + C (W.b₂ ^ 2 - 32 * W.b₄) * u ^ 2,
+      C 6 * s * t + C (-W.b₂) * s * u + C (-5 * W.b₄) * t * u + C (W.b₂ * W.b₄ - 27 * W.b₆) * u ^ 2,
+      C (-8 * W.b₄) * s * u + C (-12 * W.b₆) * t * u + C (W.b₄ ^ 2 - 28 * W.b₈) * u ^ 2]].uncurry
 -/
 noncomputable def addSubMapCoeff : Fin 3 × Fin 3 -> MvPolynomial (Fin 3) R :=
   ![![C (-W.b₂ ^ 2 * W.b₈ + 9 * W.b₂ * W.b₄ * W.b₆ - 8 * W.b₄ ^ 3 - 27 * W.b₆ ^ 2) * s ^ 2 +
@@ -159,7 +199,7 @@ lemma isHomogeneous_addSubMap
       Matrix.cons_val_one, Matrix.cons_val_zero]
 .sub CXX .sub CXY .sub CXY · exact isHomogeneous_X_pow ..
 .add CXX .add CXY · exact CXY.add CXY
-.sub CXY · exact isHom
+.sub CXY · exact isHomogeneous_X_pow ..
 
 中文:
 引理 isHomogeneous_addSubMap
@@ -172,7 +212,7 @@ lemma isHomogeneous_addSubMap
       Matrix.cons_val_one, Matrix.cons_val_zero]
 .sub CXX .sub CXY .sub CXY · exact isHomogeneous_X_pow ..
 .add CXX .add CXY · exact CXY.add CXY
-.sub CXY · exact isHom
+.sub CXY · exact isHomogeneous_X_pow ..
 
 Depends on / 依赖: CXY.add, Fin.isValue, Fin.mk_one, Fin.reduceFinMk, Fin.zero_eta, Matrix, Matrix.cons_val, Matrix.cons_val_one, Matrix.cons_val_zero, addSubMap, cons_val, cons_val_one, cons_val_zero, fin_cases, isHomogeneous_X_pow, isValue, mk_one, reduceFinMk, zero_eta
 -/
@@ -196,7 +236,18 @@ lemma isHomogeneous_addSubMapCoeff
   fin_cases ij <;>
     simp only [Nat.succ_eq_add_one, Nat.reduceAdd, Fin.isValue, Function.uncurry_apply_pair,
       Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_fin_one, neg_mul, Fin.mk_one,
-      Matrix.cons_val_one, Fin.reduceFinMk, Matrix.cons_val, Fin
+      Matrix.cons_val_one, Fin.reduceFinMk, Matrix.cons_val, Fin.zero_eta]
+    -- The following works, but is slow (44894 vs. 11717 heartbeats):
+    -- <;> repeat first | refine .add ?_ CXY | refine .add ?_ CXX | exact CXX | exact CXY
+.add CXY .add CXX .add CXY · exact CXX.add CXY
+.add CXY .add CXX .add CXY · exact CXX.add CXY
+.add CXY · exact CXX.add CXY
+.add CXY · exact CXY.add CXX
+.add CXY .add CXX · exact CXX.add CXY
+.add CXY .add CXX .add CXY · exact CXX.add CXY
+.add CXX · exact CXX.add CXY
+.add CXX .add CXY · exact CXY.add CXY
+.add CXX · exact CXY.add CXY
 
 中文:
 引理 isHomogeneous_addSubMapCoeff
@@ -206,7 +257,18 @@ lemma isHomogeneous_addSubMapCoeff
   fin_cases ij <;>
     simp only [Nat.succ_eq_add_one, Nat.reduceAdd, Fin.isValue, Function.uncurry_apply_pair,
       Matrix.cons_val', Matrix.cons_val_zero, Matrix.cons_val_fin_one, neg_mul, Fin.mk_one,
-      Matrix.cons_val_one, Fin.reduceFinMk, Matrix.cons_val, Fin
+      Matrix.cons_val_one, Fin.reduceFinMk, Matrix.cons_val, Fin.zero_eta]
+    -- The following works, but is slow (44894 vs. 11717 heartbeats):
+    -- <;> repeat first | refine .add ?_ CXY | refine .add ?_ CXX | exact CXX | exact CXY
+.add CXY .add CXX .add CXY · exact CXX.add CXY
+.add CXY .add CXX .add CXY · exact CXX.add CXY
+.add CXY · exact CXX.add CXY
+.add CXY · exact CXY.add CXX
+.add CXY .add CXX · exact CXX.add CXY
+.add CXY .add CXX .add CXY · exact CXX.add CXY
+.add CXX · exact CXX.add CXY
+.add CXX .add CXY · exact CXY.add CXY
+.add CXX · exact CXY.add CXY
 
 Depends on / 依赖: Fin.isValue, Fin.mk_one, Fin.reduceFinMk, Fin.zero_eta, Function, Function.uncurry_apply_pair, Matrix, Matrix.cons_val, Matrix.cons_val_fin_one, Matrix.cons_val_one, Matrix.cons_val_zero, Nat.reduceAdd, Nat.succ_eq_add_one, addSubMapCoeff, cons_val, cons_val_fin_one, cons_val_one, cons_val_zero, fin_cases, isValue
 -/

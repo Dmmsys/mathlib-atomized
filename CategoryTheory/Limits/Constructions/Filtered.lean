@@ -86,7 +86,18 @@ definition liftToFinsetColimitCocone
   isColimit :=
     { desc := fun s =>
         colimit.desc (liftToFinsetObj F)
-         
+          { pt := s.pt
+            ι := { app := fun _ => Sigma.desc fun x => s.ι.app x } }
+      uniq := fun s m h => by
+        apply colimit.hom_ext
+        rintro t
+        dsimp [liftToFinsetObj]
+        apply colimit.hom_ext
+        rintro ⟨⟨j, hj⟩⟩
+        convert! h j using 1
+        · simp [← colimit.w (liftToFinsetObj F) ⟨⟨Finset.singleton_subset_iff.2 hj⟩⟩]
+          rfl
+        · simp }
 
 中文:
 定义 liftToFinsetColimitCocone
@@ -99,7 +110,18 @@ definition liftToFinsetColimitCocone
   isColimit :=
     { desc := fun s =>
         colimit.desc (liftToFinsetObj F)
-         
+          { pt := s.pt
+            ι := { app := fun _ => Sigma.desc fun x => s.ι.app x } }
+      uniq := fun s m h => by
+        apply colimit.hom_ext
+        rintro t
+        dsimp [liftToFinsetObj]
+        apply colimit.hom_ext
+        rintro ⟨⟨j, hj⟩⟩
+        convert! h j using 1
+        · simp [← colimit.w (liftToFinsetObj F) ⟨⟨Finset.singleton_subset_iff.2 hj⟩⟩]
+          rfl
+        · simp }
 
 Depends on / 依赖: Discrete, Discrete.natTrans, F.obj, Finset, Finset.s, Sigma.desc, colimit, colimit.desc, colimit.hom_ext, colimit.w, convert, hom_ext, isColimit, liftToFinsetObj, natTrans, s.pt
 -/
@@ -192,7 +214,14 @@ definition isColimitFiniteSubproductsCocone
       (liftToFinsetColimitCocone (Discrete.functor f)).isColimit (colimit.isColimit _) :) (by
     intro S
     simp only [liftToFinsetObj_obj, Discrete.functor_obj_eq_as, finiteSubcoproductsCocone_pt,
-   
+      colimit.cocone_x, colimit.cocone_ι, finiteSubcoproductsCocone_ι_app]
+    ext j
+    rw [← Category.assoc]
+    convert!
+      IsColimit.comp_coconePointUniqueUpToIso_hom
+        (liftToFinsetColimitCocone (Discrete.functor f)).isColimit (colimit.isColimit _) j
+    · simp [← colimit.w (liftToFinsetObj _) (homOfLE (x := {j.1}) (y := S) (by simp))]
+    · simp))
 
 中文:
 定义 isColimitFiniteSubproductsCocone
@@ -202,7 +231,14 @@ definition isColimitFiniteSubproductsCocone
       (liftToFinsetColimitCocone (Discrete.functor f)).isColimit (colimit.isColimit _) :) (by
     intro S
     simp only [liftToFinsetObj_obj, Discrete.functor_obj_eq_as, finiteSubcoproductsCocone_pt,
-   
+      colimit.cocone_x, colimit.cocone_ι, finiteSubcoproductsCocone_ι_app]
+    ext j
+    rw [← Category.assoc]
+    convert!
+      IsColimit.comp_coconePointUniqueUpToIso_hom
+        (liftToFinsetColimitCocone (Discrete.functor f)).isColimit (colimit.isColimit _) j
+    · simp [← colimit.w (liftToFinsetObj _) (homOfLE (x := {j.1}) (y := S) (by simp))]
+    · simp))
 
 Depends on / 依赖: Category, Category.assoc, Cocone, Cocone.ext, Discrete, Discrete.functor, Discrete.functor_obj_eq_as, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.comp_coconePointUniqueUpToIso_hom, IsColimit.ofIsoColimit, coconePointUniqueUpToIso, cocone_x, colimit, colimit.cocone_, colimit.cocone_x, colimit.isC, colimit.isColimit, comp_coconePointUniqueUpToIso_hom, convert
 -/
@@ -361,7 +397,7 @@ definition liftToFinsetColimIso
       ext J
       simp only [liftToFinset_obj_obj]
       ext j
-      simp [liftToFinset, lif
+      simp [liftToFinset, liftToFinsetColimIso_aux, liftToFinsetColimIso_aux_assoc])
 
 中文:
 定义 liftToFinsetColimIso
@@ -373,7 +409,7 @@ definition liftToFinsetColimIso
       ext J
       simp only [liftToFinset_obj_obj]
       ext j
-      simp [liftToFinset, lif
+      simp [liftToFinset, liftToFinsetColimIso_aux, liftToFinsetColimIso_aux_assoc])
 
 Depends on / 依赖: Functor, Functor.comp_map, Functor.comp_obj, Iso.symm, Iso.symm_hom, NatIso, NatIso.ofComponents, colim_map, colim_obj, colimit, colimit.isoColimitCocone, comp_map, comp_obj, isoColimitCocone, liftToFinset, liftToFinsetColimIso_aux, liftToFinsetColimIso_aux_assoc, liftToFinsetColimitCocone, liftToFinset_obj_obj, ofComponents
 -/
@@ -467,7 +503,17 @@ definition liftToFinsetLimitCone
     { lift := fun s =>
         limit.lift (liftToFinsetObj F)
           { pt := s.pt
-            π := { app := fun _ 
+            π := { app := fun _ => Pi.lift fun x => s.π.app x } }
+      uniq := fun s m h => by
+        apply limit.hom_ext
+        rintro t
+        dsimp [liftToFinsetObj]
+        apply limit.hom_ext
+        rintro ⟨⟨j, hj⟩⟩
+        convert! h j using 1
+        · simp [← limit.w (liftToFinsetObj F) ⟨⟨⟨Finset.singleton_subset_iff.2 hj⟩⟩⟩]
+          rfl
+        · simp }
 
 中文:
 定义 liftToFinsetLimitCone
@@ -479,7 +525,17 @@ definition liftToFinsetLimitCone
     { lift := fun s =>
         limit.lift (liftToFinsetObj F)
           { pt := s.pt
-            π := { app := fun _ 
+            π := { app := fun _ => Pi.lift fun x => s.π.app x } }
+      uniq := fun s m h => by
+        apply limit.hom_ext
+        rintro t
+        dsimp [liftToFinsetObj]
+        apply limit.hom_ext
+        rintro ⟨⟨j, hj⟩⟩
+        convert! h j using 1
+        · simp [← limit.w (liftToFinsetObj F) ⟨⟨⟨Finset.singleton_subset_iff.2 hj⟩⟩⟩]
+          rfl
+        · simp }
 
 Depends on / 依赖: Discrete, Discrete.natTrans, Finset, Finset.singleton_subset_iff, Pi.lift, convert, hom_ext, isLimit, liftToFinsetObj, limit.hom_ext, limit.lift, limit.w, natTrans, s.pt, singleton_subset_iff
 -/
@@ -543,7 +599,13 @@ definition isLimitFiniteSubproductsCone
       (liftToFinsetLimitCone (Discrete.functor f)).isLimit (limit.isLimit _) :) (by
     intro S
     simp only [limit.cone_x, Functor.const_obj_obj, liftToFinsetObj_obj, Discrete.functor_obj_eq_as,
-      limit.cone_π, 
+      limit.cone_π, finiteSubproductsCone_pt, finiteSubproductsCone_π_app]
+    ext j
+    simp only [Discrete.functor_obj_eq_as, Category.assoc, limit.lift_π, Fan.mk_pt, Fan.mk_π_app,
+      limit.conePointUniqueUpToIso_hom_comp, liftToFinsetLimitCone_cone_pt, Discrete.mk_as,
+      liftToFinsetLimitCone_cone_π_app]
+    simp [← limit.w (liftToFinsetObj _)
+      (Quiver.Hom.op (homOfLE (x := {j.1}) (y := S.unop) (by simp)))]))
 
 中文:
 定义 isLimitFiniteSubproductsCone
@@ -553,7 +615,13 @@ definition isLimitFiniteSubproductsCone
       (liftToFinsetLimitCone (Discrete.functor f)).isLimit (limit.isLimit _) :) (by
     intro S
     simp only [limit.cone_x, Functor.const_obj_obj, liftToFinsetObj_obj, Discrete.functor_obj_eq_as,
-      limit.cone_π, 
+      limit.cone_π, finiteSubproductsCone_pt, finiteSubproductsCone_π_app]
+    ext j
+    simp only [Discrete.functor_obj_eq_as, Category.assoc, limit.lift_π, Fan.mk_pt, Fan.mk_π_app,
+      limit.conePointUniqueUpToIso_hom_comp, liftToFinsetLimitCone_cone_pt, Discrete.mk_as,
+      liftToFinsetLimitCone_cone_π_app]
+    simp [← limit.w (liftToFinsetObj _)
+      (Quiver.Hom.op (homOfLE (x := {j.1}) (y := S.unop) (by simp)))]))
 
 Depends on / 依赖: Category, Category.assoc, Cone.ext, Discrete, Discrete.functor, Discrete.functor_obj_eq_as, Fan.mk_, Fan.mk_pt, Functor, Functor.const_obj_obj, IsLimit, IsLimit.conePointUniqueUpToIso, IsLimit.ofIsoLimit, conePointUniqueUpToIso, conePointUniqueUpToIso_hom_comp, cone_x, const_obj_obj, finiteSubproductsCone_pt, functor, functor_obj_eq_as
 -/

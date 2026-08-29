@@ -41,7 +41,10 @@ theorem cos_eq_zero_iff
   have h : (exp (θ * I) + exp (-θ * I)) / 2 = 0 ↔ exp (2 * θ * I) = -1 := by
     rw [@div_eq_iff _ _ (exp (θ * I) + exp (-θ * I)) 2 0 two_ne_zero]; rw [zero_mul]; rw [add_eq_zero_iff_eq_neg]; rw [neg_eq_neg_one_mul]; rw [← div_eq_iff (exp_ne_zero _)]; rw [← exp_sub]
     ring_nf
-  rw [cos]; rw [h]
+  rw [cos]; rw [h]; rw [← exp_pi_mul_I]; rw [exp_eq_exp_iff_exists_int]; rw [mul_right_comm]
+  refine exists_congr fun x => ?_
+  refine (iff_of_eq <| congr_arg _ ?_).trans (mul_right_inj' <| mul_ne_zero two_ne_zero I_ne_zero)
+  ring
 
 中文:
 定理 cos_eq_zero_iff
@@ -51,7 +54,10 @@ theorem cos_eq_zero_iff
   have h : (exp (θ * I) + exp (-θ * I)) / 2 = 0 ↔ exp (2 * θ * I) = -1 := by
     rw [@div_eq_iff _ _ (exp (θ * I) + exp (-θ * I)) 2 0 two_ne_zero]; rw [zero_mul]; rw [add_eq_zero_iff_eq_neg]; rw [neg_eq_neg_one_mul]; rw [← div_eq_iff (exp_ne_zero _)]; rw [← exp_sub]
     ring_nf
-  rw [cos]; rw [h]
+  rw [cos]; rw [h]; rw [← exp_pi_mul_I]; rw [exp_eq_exp_iff_exists_int]; rw [mul_right_comm]
+  refine exists_congr fun x => ?_
+  refine (iff_of_eq <| congr_arg _ ?_).trans (mul_right_inj' <| mul_ne_zero two_ne_zero I_ne_zero)
+  ring
 
 Depends on / 依赖: I_ne_zero, add_eq_zero_iff_eq_neg, congr_arg, div_eq_iff, exists_congr, exp_eq_exp_iff_exists_int, exp_ne_zero, exp_pi_mul_I, exp_sub, iff_of_eq, mul_ne_zero, mul_right_comm, mul_right_inj, neg_eq_neg_one_mul, ring_nf, two_ne_zero, zero_mul
 -/
@@ -258,7 +264,13 @@ theorem cos_eq_cos_iff
     cos x = cos y ↔ cos x - cos y = 0 := sub_eq_zero.symm
     _ ↔ -2 * sin ((x + y) / 2) * sin ((x - y) / 2) = 0 := by rw [cos_sub_cos]
     _ ↔ sin ((x + y) / 2) = 0 ∨ sin ((x - y) / 2) = 0 := by simp [(by simp : (2 : Complex) != 0)]
-    _ ↔ sin ((x - y) / 2) = 0 ∨ sin ((x + y) / 2) = 0 := or_c
+    _ ↔ sin ((x - y) / 2) = 0 ∨ sin ((x + y) / 2) = 0 := or_comm
+    _ ↔ (exists k : Int, y = 2 * k * π + x) ∨ exists k : Int, y = 2 * k * π - x := by
+      apply or_congr <;>
+        simp [field, sin_eq_zero_iff, eq_sub_iff_add_eq',
+          sub_eq_iff_eq_add, mul_comm (2 : Complex), mul_right_comm _ (2 : Complex)]
+      constructor <;> · rintro ⟨k, rfl⟩; use -k; simp
+    _ ↔ exists k : Int, y = 2 * k * π + x ∨ y = 2 * k * π - x := exists_or.symm
 
 中文:
 定理 cos_eq_cos_iff
@@ -268,7 +280,13 @@ theorem cos_eq_cos_iff
     cos x = cos y ↔ cos x - cos y = 0 := sub_eq_zero.symm
     _ ↔ -2 * sin ((x + y) / 2) * sin ((x - y) / 2) = 0 := by rw [cos_sub_cos]
     _ ↔ sin ((x + y) / 2) = 0 ∨ sin ((x - y) / 2) = 0 := by simp [(by simp : (2 : Complex) != 0)]
-    _ ↔ sin ((x - y) / 2) = 0 ∨ sin ((x + y) / 2) = 0 := or_c
+    _ ↔ sin ((x - y) / 2) = 0 ∨ sin ((x + y) / 2) = 0 := or_comm
+    _ ↔ (exists k : Int, y = 2 * k * π + x) ∨ exists k : Int, y = 2 * k * π - x := by
+      apply or_congr <;>
+        simp [field, sin_eq_zero_iff, eq_sub_iff_add_eq',
+          sub_eq_iff_eq_add, mul_comm (2 : Complex), mul_right_comm _ (2 : Complex)]
+      constructor <;> · rintro ⟨k, rfl⟩; use -k; simp
+    _ ↔ exists k : Int, y = 2 * k * π + x ∨ y = 2 * k * π - x := exists_or.symm
 
 Depends on / 依赖: cos_sub_cos, eq_sub_iff_add_eq, mul_comm, mul_right_comm, or_comm, or_congr, sin_eq_zero_iff, sub_eq_iff_eq_add, sub_eq_zero, sub_eq_zero.symm
 -/
@@ -421,7 +439,12 @@ theorem tan_add
       div_div_div_cancel_right₀ (mul_ne_zero (cos_ne_zero_iff.mpr h1) (cos_ne_zero_iff.mpr h2)),
       add_div, sub_div]
     simp only [← div_mul_div_comm, tan, mul_one, one_mul, div_self (cos_ne_zero_iff.mpr h1),
-
+      div_self (cos_ne_zero_iff.mpr h2)]
+  · have t := tan_int_mul_pi_div_two
+    obtain ⟨hx, hy, hxy⟩ := t (2 * k + 1), t (2 * l + 1), t (2 * k + 1 + (2 * l + 1))
+    simp only [Int.cast_add, Int.cast_two, Int.cast_mul, Int.cast_one] at hx hy hxy
+    rw [hx]; rw [hy]; rw [add_zero]; rw [zero_div]; rw [mul_div_assoc]; rw [mul_div_assoc]; rw [←
+      add_mul (2 * (k : Complex) + 1) (2 * l + 1) (π / 2)]; rw [← mul_div_assoc]; rw [hxy]
 
 中文:
 定理 tan_add
@@ -432,7 +455,12 @@ theorem tan_add
       div_div_div_cancel_right₀ (mul_ne_zero (cos_ne_zero_iff.mpr h1) (cos_ne_zero_iff.mpr h2)),
       add_div, sub_div]
     simp only [← div_mul_div_comm, tan, mul_one, one_mul, div_self (cos_ne_zero_iff.mpr h1),
-
+      div_self (cos_ne_zero_iff.mpr h2)]
+  · have t := tan_int_mul_pi_div_two
+    obtain ⟨hx, hy, hxy⟩ := t (2 * k + 1), t (2 * l + 1), t (2 * k + 1 + (2 * l + 1))
+    simp only [Int.cast_add, Int.cast_two, Int.cast_mul, Int.cast_one] at hx hy hxy
+    rw [hx]; rw [hy]; rw [add_zero]; rw [zero_div]; rw [mul_div_assoc]; rw [mul_div_assoc]; rw [←
+      add_mul (2 * (k : Complex) + 1) (2 * l + 1) (π / 2)]; rw [← mul_div_assoc]; rw [hxy]
 
 Depends on / 依赖: Int.cast_add, Int.cast_mul, Int.cast_one, Int.cast_two, add_div, cast_add, cast_mul, cast_one, cast_two, cos_add, cos_ne_zero_iff, cos_ne_zero_iff.mpr, div_mul_div_comm, div_self, mul_ne_zero, mul_one, one_mul, sin_add, sub_div, tan_int_mul_pi_div_two
 -/
@@ -487,7 +515,13 @@ have := tan_add (x := x) (y := -y) by
       push_cast
       ring
     · refine .inr ⟨x_eq, ?_⟩
-      rcases minus_y_eq wi
+      rcases minus_y_eq with ⟨l, rfl⟩
+      use -l - 1
+      push_cast
+      ring
+  rw [tan_neg] at this
+  convert! this using 2
+  ring
 
 中文:
 定理 tan_sub
@@ -501,7 +535,13 @@ have := tan_add (x := x) (y := -y) by
       push_cast
       ring
     · refine .inr ⟨x_eq, ?_⟩
-      rcases minus_y_eq wi
+      rcases minus_y_eq with ⟨l, rfl⟩
+      use -l - 1
+      push_cast
+      ring
+  rw [tan_neg] at this
+  convert! this using 2
+  ring
 
 Depends on / 依赖: convert, minus_y_eq, minus_y_ne, neg_eq_iff_eq_neg, tan_add, tan_neg, x_eq, x_ne
 -/
@@ -818,7 +858,13 @@ theorem cos_surjective
       ⟨w, hw⟩
     refine ⟨w, ?_, hw⟩
     rintro rfl
-    simp only [zero_add, one_ne_zero, mul_zero
+    simp only [zero_add, one_ne_zero, mul_zero] at hw
+  refine ⟨log w / I, cos_eq_iff_quadratic.2 ?_⟩
+  rw [div_mul_cancel₀ _ I_ne_zero]; rw [exp_log w₀]
+  convert! hw using 1
+  ring
+
+@[simp]
 
 中文:
 定理 cos_surjective
@@ -831,7 +877,13 @@ theorem cos_surjective
       ⟨w, hw⟩
     refine ⟨w, ?_, hw⟩
     rintro rfl
-    simp only [zero_add, one_ne_zero, mul_zero
+    simp only [zero_add, one_ne_zero, mul_zero] at hw
+  refine ⟨log w / I, cos_eq_iff_quadratic.2 ?_⟩
+  rw [div_mul_cancel₀ _ I_ne_zero]; rw [exp_log w₀]
+  convert! hw using 1
+  ring
+
+@[simp]
 
 Depends on / 依赖: I_ne_zero, convert, cos_eq_iff_quadratic, cpow_nat_inv_pow, exists_quadratic_eq_zero, exp_log, mul_zero, one_ne_zero, pow_two, symm.trans, two_ne_zero, zero_add
 -/
@@ -930,7 +982,12 @@ theorem sin_mul_sum_sin
     ∑ i in range n, -2 * sin (a / 2) * sin (a * i + b)
       = ∑ x in range n, (cos (a * (↑(x + 1) - 1 / 2) + b) - cos (-(a * (x - 1 / 2) + b))) := by
       congr! 1 with x hx
-      rw [cos_sub_cos
+      rw [cos_sub_cos]
+      push_cast
+      ring_nf
+    _ = -2 * sin (n * a / 2) * sin ((n - 1) * a / 2 + b) := by
+      simp_rw [cos_neg, sum_range_sub (fun i => cos (a * (i - 1 / 2) + b)), cos_sub_cos]
+      ring_nf
 
 中文:
 定理 sin_mul_sum_sin
@@ -942,7 +999,12 @@ theorem sin_mul_sum_sin
     ∑ i in range n, -2 * sin (a / 2) * sin (a * i + b)
       = ∑ x in range n, (cos (a * (↑(x + 1) - 1 / 2) + b) - cos (-(a * (x - 1 / 2) + b))) := by
       congr! 1 with x hx
-      rw [cos_sub_cos
+      rw [cos_sub_cos]
+      push_cast
+      ring_nf
+    _ = -2 * sin (n * a / 2) * sin ((n - 1) * a / 2 + b) := by
+      simp_rw [cos_neg, sum_range_sub (fun i => cos (a * (i - 1 / 2) + b)), cos_sub_cos]
+      ring_nf
 
 Depends on / 依赖: cos_neg, cos_sub_cos, mul_assoc, mul_sum, ring_nf, simp_rw, sum_range_sub
 -/
@@ -999,7 +1061,11 @@ theorem sin_mul_sum_cos
       = ∑ x in range n, (sin (a * (↑(x + 1) - 1 / 2) + b) - sin (a * (x - 1 / 2) + b)) := by
       congr! 1 with x hx
       rw [sin_sub_sin]
-   
+      push_cast
+      ring_nf
+    _ = 2 * sin (n * a / 2) * cos ((n - 1) * a / 2 + b) := by
+      simp_rw [sum_range_sub (fun i => sin (a * (i - 1 / 2) + b)), sin_sub_sin]
+      ring_nf
 
 中文:
 定理 sin_mul_sum_cos
@@ -1012,7 +1078,11 @@ theorem sin_mul_sum_cos
       = ∑ x in range n, (sin (a * (↑(x + 1) - 1 / 2) + b) - sin (a * (x - 1 / 2) + b)) := by
       congr! 1 with x hx
       rw [sin_sub_sin]
-   
+      push_cast
+      ring_nf
+    _ = 2 * sin (n * a / 2) * cos ((n - 1) * a / 2 + b) := by
+      simp_rw [sum_range_sub (fun i => sin (a * (i - 1 / 2) + b)), sin_sub_sin]
+      ring_nf
 
 Depends on / 依赖: mul_assoc, mul_sum, ring_nf, simp_rw, sin_sub_sin, sum_range_sub
 -/
@@ -1176,7 +1246,7 @@ lemma abs_cos_eq_one_iff
   · rintro (⟨n, h⟩)
     obtain (⟨n, rfl⟩ | ⟨n, rfl⟩) := n.even_or_odd
     · exact .inl ⟨n, by grind⟩
-    · exa
+    · exact .inr ⟨n, by grind⟩
 
 中文:
 引理 abs_cos_eq_one_iff
@@ -1190,7 +1260,7 @@ lemma abs_cos_eq_one_iff
   · rintro (⟨n, h⟩)
     obtain (⟨n, rfl⟩ | ⟨n, rfl⟩) := n.even_or_odd
     · exact .inl ⟨n, by grind⟩
-    · exa
+    · exact .inr ⟨n, by grind⟩
 
 Depends on / 依赖: abs_eq_abs, abs_one, cos_eq_neg_one_iff, cos_eq_one_iff, even_or_odd, n.even_or_odd
 -/
@@ -1261,7 +1331,7 @@ lemma abs_sin_eq_one_iff
   · rintro (⟨n, h⟩)
     obtain (⟨n, rfl⟩ | ⟨n, rfl⟩) := n.even_or_odd
     · exact .inl ⟨n, by grind⟩
-    · ex
+    · exact .inr ⟨n + 1, by grind⟩
 
 中文:
 引理 abs_sin_eq_one_iff
@@ -1275,7 +1345,7 @@ lemma abs_sin_eq_one_iff
   · rintro (⟨n, h⟩)
     obtain (⟨n, rfl⟩ | ⟨n, rfl⟩) := n.even_or_odd
     · exact .inl ⟨n, by grind⟩
-    · ex
+    · exact .inr ⟨n + 1, by grind⟩
 
 Depends on / 依赖: abs_eq_abs, abs_one, even_or_odd, n.even_or_odd, sin_eq_neg_one_iff, sin_eq_one_iff
 -/

@@ -614,7 +614,7 @@ lemma leRecOn_succ_left
 @[deprecated (since := "2026-03-05")] alias strongRec' := Nat.strongRec
 @[deprecated (since := "2026-03-05")] alias strongRec'_spec := Nat.strongRec_eq
 @[deprecated (since := "2026-03-05")] alias strongRecOn' := Nat.strongRec
-@[d
+@[deprecated (since := "2026-03-05")] alias strongRecOn'_beta := Nat.strongRec_eq
 
 中文:
 引理 leRecOn_succ_left
@@ -624,7 +624,7 @@ lemma leRecOn_succ_left
 @[deprecated (since := "2026-03-05")] alias strongRec' := Nat.strongRec
 @[deprecated (since := "2026-03-05")] alias strongRec'_spec := Nat.strongRec_eq
 @[deprecated (since := "2026-03-05")] alias strongRecOn' := Nat.strongRec
-@[d
+@[deprecated (since := "2026-03-05")] alias strongRecOn'_beta := Nat.strongRec_eq
 
 Depends on / 依赖: leRec_succ_left, motive
 -/

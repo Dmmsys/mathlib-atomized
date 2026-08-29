@@ -122,6 +122,8 @@ instance [HasKernels
     exact IsIso.inv_hom_id f
   nnqsmul := _
   nnqsmul_def := fun _ _ => rfl
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
 
 中文:
 实例 [有Kernels
@@ -136,6 +138,8 @@ instance [HasKernels
     exact IsIso.inv_hom_id f
   nnqsmul := _
   nnqsmul_def := fun _ _ => rfl
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
 
 Depends on / 依赖: isIso_of_hom_simple
 -/
@@ -214,7 +218,10 @@ theorem finrank_endomorphism_eq_one
   intro f
   have : Nontrivial (End X) := nontrivial_of_ne _ _ id_nonzero
   have : FiniteDimensional 𝕜 (End X) := I
-  obtain ⟨c, nu⟩ := spectrum.nonempty_of_isAlgClosed_of_finiteDimens
+  obtain ⟨c, nu⟩ := spectrum.nonempty_of_isAlgClosed_of_finiteDimensional 𝕜 (End.of f)
+  use c
+  rw [spectrum.mem_iff]; rw [IsUnit.sub_iff]; rw [isUnit_iff_isIso]; rw [isIso_iff_nonzero]; rw [Ne]; rw [Classical.not_not]; rw [sub_eq_zero]; rw [Algebra.algebraMap_eq_smul_one] at nu
+  exact nu.symm
 
 中文:
 定理 finrank_endomorphism_eq_one
@@ -225,7 +232,10 @@ theorem finrank_endomorphism_eq_one
   intro f
   have : Nontrivial (End X) := nontrivial_of_ne _ _ id_nonzero
   have : FiniteDimensional 𝕜 (End X) := I
-  obtain ⟨c, nu⟩ := spectrum.nonempty_of_isAlgClosed_of_finiteDimens
+  obtain ⟨c, nu⟩ := spectrum.nonempty_of_isAlgClosed_of_finiteDimensional 𝕜 (End.of f)
+  use c
+  rw [spectrum.mem_iff]; rw [IsUnit.sub_iff]; rw [isUnit_iff_isIso]; rw [isIso_iff_nonzero]; rw [Ne]; rw [Classical.not_not]; rw [sub_eq_zero]; rw [Algebra.algebraMap_eq_smul_one] at nu
+  exact nu.symm
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Classical, Classical.not_not, End.of, FiniteDimensional, IsUnit, IsUnit.sub_iff, Nontrivial, algebraMap_eq_smul_one, finrank_eq_one, id_nonzero, infer_instance, isIso_iff_nonzero, isUnit_iff_isIso, mem_iff, nonempty_of_isAlgClosed_of_finiteDimensional, nontrivial_of_ne, not_not, spectrum
 -/
@@ -340,7 +350,8 @@ theorem finrank_hom_simple_simple_le_one
     have fi := (isIso_iff_nonzero f).mpr nz
     refine finrank_le_one f ?_
     intro g
-    obtain ⟨c, w⟩ := endomorphism_simpl
+    obtain ⟨c, w⟩ := endomorphism_simple_eq_smul_id 𝕜 (g ≫ inv f)
+    exact ⟨c, by simpa using w =≫ f⟩
 
 中文:
 定理 finrank_hom_simple_simple_le_one
@@ -353,7 +364,8 @@ theorem finrank_hom_simple_simple_le_one
     have fi := (isIso_iff_nonzero f).mpr nz
     refine finrank_le_one f ?_
     intro g
-    obtain ⟨c, w⟩ := endomorphism_simpl
+    obtain ⟨c, w⟩ := endomorphism_simple_eq_smul_id 𝕜 (g ≫ inv f)
+    exact ⟨c, by simpa using w =≫ f⟩
 
 Depends on / 依赖: endomorphism_simple_eq_smul_id, finrank_le_one, finrank_zero_of_subsingleton, isIso_iff_nonzero, nontrivial_iff_exists_ne, subsingleton_or_nontrivial, zero_le_one
 -/
@@ -385,7 +397,8 @@ theorem finrank_hom_simple_simple_eq_one_iff
   · rintro ⟨f⟩
     have le_one := finrank_hom_simple_simple_le_one 𝕜 X Y
     have zero_lt : 0 < finrank 𝕜 (X ⟶ Y) :=
-      finrank_pos_iff_exists_ne_zero.
+      finrank_pos_iff_exists_ne_zero.mpr ⟨f.hom, (isIso_iff_nonzero f.hom).mp inferInstance⟩
+    lia
 
 中文:
 定理 finrank_hom_simple_simple_eq_one_iff
@@ -400,7 +413,8 @@ theorem finrank_hom_simple_simple_eq_one_iff
   · rintro ⟨f⟩
     have le_one := finrank_hom_simple_simple_le_one 𝕜 X Y
     have zero_lt : 0 < finrank 𝕜 (X ⟶ Y) :=
-      finrank_pos_iff_exists_ne_zero.
+      finrank_pos_iff_exists_ne_zero.mpr ⟨f.hom, (isIso_iff_nonzero f.hom).mp inferInstance⟩
+    lia
 
 Depends on / 依赖: f.hom, fconstructor, finrank, finrank_eq_one_iff, finrank_hom_simple_simple_le_one, finrank_pos_iff_exists_ne_zero, finrank_pos_iff_exists_ne_zero.mpr, isIso_iff_nonzero, le_one, zero_lt
 -/

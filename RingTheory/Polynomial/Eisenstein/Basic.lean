@@ -143,6 +143,9 @@ theorem mul
   replace hx1 : x.2 < f'.natDegree := by
     by_contra!
     rw [HasAntidiagonal.mem_antidiagonal] at hx
+    replace hn := hn.trans_le natDegree_mul_le
+    linarith
+  exact mul_mem_left _ _ (hf' hx1)
 
 中文:
 定理 mul
@@ -157,6 +160,9 @@ theorem mul
   replace hx1 : x.2 < f'.natDegree := by
     by_contra!
     rw [HasAntidiagonal.mem_antidiagonal] at hx
+    replace hn := hn.trans_le natDegree_mul_le
+    linarith
+  exact mul_mem_left _ _ (hf' hx1)
 
 Depends on / 依赖: ContinuousSMul, HasAntidiagonal, HasAntidiagonal.mem_antidiagonal, ProperSMul, ProperSMul.toContinuousSMul, coeff_mul, f.natDegree, hn.trans_le, isWeaklyEisensteinAt_iff, lt_or_ge, mem_antidiagonal, mul_mem_left, mul_mem_right, natDegree, natDegree_mul_le, replace, sum_mem, toContinuousSMul, trans_le
 -/
@@ -195,7 +201,24 @@ theorem exists_mem_adjoin_mul_eq_pow_natDegree
   proof: by
   rw [aeval_def]; rw [Polynomial.eval₂_eq_eval_map]; rw [eval_eq_sum_range]; rw [range_add_one]; rw [sum_insert notMem_range_self]; rw [sum_range]; rw [(hmo.map (algebraMap R S)).coeff_natDegree]; rw [one_mul] at hx
   replace hx := eq_neg_of_add_eq_zero_left hx
-  have : forall n < f.natDegree, p 
+  have : forall n < f.natDegree, p ∣ f.coeff n := by
+    intro n hn
+    exact mem_span_singleton.1 (by simpa using hf.mem hn)
+  choose! φ hφ using this
+  conv_rhs at hx =>
+    congr
+    congr
+    · skip
+    ext i
+    rw [coeff_map]; rw [hφ i.1 (lt_of_lt_of_le i.2 natDegree_map_le)]; rw [map_mul]; rw [mul_assoc]
+  rw [hx]; rw [← mul_sum]; rw [neg_eq_neg_one_mul]; rw [← mul_assoc (-1 : S)]; rw [mul_comm (-1 : S)]; rw [mul_assoc]
+  refine
+    ⟨-1 * ∑ i : Fin (f.map (algebraMap R S)).natDegree, (algebraMap R S) (φ i.1) * x ^ i.1, ?_, rfl⟩
+  exact
+    Subalgebra.mul_mem _ (Subalgebra.neg_mem _ (Subalgebra.one_mem _))
+      (Subalgebra.sum_mem _ fun i _ =>
+        Subalgebra.mul_mem _ (Subalgebra.algebraMap_mem _ _)
+          (Subalgebra.pow_mem _ (subset_adjoin (Set.mem_singleton x)) _))
 
 中文:
 定理 存在_mem_adjoin_mul_eq_pow_natDegree
@@ -203,7 +226,24 @@ theorem exists_mem_adjoin_mul_eq_pow_natDegree
   证明: by
   rw [aeval_def]; rw [Polynomial.eval₂_eq_eval_map]; rw [eval_eq_sum_range]; rw [range_add_one]; rw [sum_insert notMem_range_self]; rw [sum_range]; rw [(hmo.map (algebraMap R S)).coeff_natDegree]; rw [one_mul] at hx
   replace hx := eq_neg_of_add_eq_zero_left hx
-  have : forall n < f.natDegree, p 
+  have : forall n < f.natDegree, p ∣ f.coeff n := by
+    intro n hn
+    exact mem_span_singleton.1 (by simpa using hf.mem hn)
+  choose! φ hφ using this
+  conv_rhs at hx =>
+    congr
+    congr
+    · skip
+    ext i
+    rw [coeff_map]; rw [hφ i.1 (lt_of_lt_of_le i.2 natDegree_map_le)]; rw [map_mul]; rw [mul_assoc]
+  rw [hx]; rw [← mul_sum]; rw [neg_eq_neg_one_mul]; rw [← mul_assoc (-1 : S)]; rw [mul_comm (-1 : S)]; rw [mul_assoc]
+  refine
+    ⟨-1 * ∑ i : Fin (f.map (algebraMap R S)).natDegree, (algebraMap R S) (φ i.1) * x ^ i.1, ?_, rfl⟩
+  exact
+    Subalgebra.mul_mem _ (Subalgebra.neg_mem _ (Subalgebra.one_mem _))
+      (Subalgebra.sum_mem _ fun i _ =>
+        Subalgebra.mul_mem _ (Subalgebra.algebraMap_mem _ _)
+          (Subalgebra.pow_mem _ (subset_adjoin (Set.mem_singleton x)) _))
 
 Depends on / 依赖: Polynomial, Polynomial.eval, aeval_def, algebraMap, coeff_map, coeff_natDegree, conv_rhs, eq_neg_of_add_eq_zero_left, eval_eq_sum_range, f.coeff, f.natDegree, hf.mem, hmo.map, lt_of_lt_of_le, mem_span_singleton, natDegree, notMem_range_self, one_mul, range_add_one, replace
 -/
@@ -244,7 +284,7 @@ theorem exists_mem_adjoin_mul_eq_pow_natDegree_le
   obtain ⟨y, hy, H⟩ := exists_mem_adjoin_mul_eq_pow_natDegree hx hmo hf
   refine ⟨y * x ^ k, ?_, ?_⟩
   · exact Subalgebra.mul_mem _ hy (Subalgebra.pow_mem _ (subset_adjoin (Set.mem_singleton x)) _)
-  · rw [← mul_assoc _ 
+  · rw [← mul_assoc _ y, H]
 
 中文:
 定理 存在_mem_adjoin_mul_eq_pow_natDegree_le
@@ -256,7 +296,7 @@ theorem exists_mem_adjoin_mul_eq_pow_natDegree_le
   obtain ⟨y, hy, H⟩ := exists_mem_adjoin_mul_eq_pow_natDegree hx hmo hf
   refine ⟨y * x ^ k, ?_, ?_⟩
   · exact Subalgebra.mul_mem _ hy (Subalgebra.pow_mem _ (subset_adjoin (Set.mem_singleton x)) _)
-  · rw [← mul_assoc _ 
+  · rw [← mul_assoc _ y, H]
 
 Depends on / 依赖: Set.mem_singleton, Subalgebra, Subalgebra.mul_mem, Subalgebra.pow_mem, exists_add_of_le, exists_mem_adjoin_mul_eq_pow_natDegree, mem_singleton, mul_assoc, mul_mem, pow_add, pow_mem, subset_adjoin
 -/
@@ -285,7 +325,10 @@ theorem pow_natDegree_le_of_root_of_monic_mem
   obtain ⟨k, hk⟩ := exists_add_of_le hi
   rw [hk]; rw [pow_add]
   suffices x ^ f.natDegree in 𝓟 by exact mul_mem_right (x ^ k) 𝓟 this
-  rw [IsRoot.def]; rw [eval_eq_sum_range]; rw [Finset.range_add_one]; rw [Finset.sum_insert Finset.notMem_range_self]; rw [Finset.sum_range]; rw [hmo.
+  rw [IsRoot.def]; rw [eval_eq_sum_range]; rw [Finset.range_add_one]; rw [Finset.sum_insert Finset.notMem_range_self]; rw [Finset.sum_range]; rw [hmo.coeff_natDegree]; rw [one_mul] at
+    *
+  rw [eq_neg_of_add_eq_zero_left hroot]; rw [neg_mem_iff]
+  exact Submodule.sum_mem _ fun i _ => mul_mem_right _ _ (hf.mem (Fin.is_lt i))
 
 中文:
 定理 pow_natDegree_le_of_root_of_monic_mem
@@ -295,7 +338,10 @@ theorem pow_natDegree_le_of_root_of_monic_mem
   obtain ⟨k, hk⟩ := exists_add_of_le hi
   rw [hk]; rw [pow_add]
   suffices x ^ f.natDegree in 𝓟 by exact mul_mem_right (x ^ k) 𝓟 this
-  rw [IsRoot.def]; rw [eval_eq_sum_range]; rw [Finset.range_add_one]; rw [Finset.sum_insert Finset.notMem_range_self]; rw [Finset.sum_range]; rw [hmo.
+  rw [IsRoot.def]; rw [eval_eq_sum_range]; rw [Finset.range_add_one]; rw [Finset.sum_insert Finset.notMem_range_self]; rw [Finset.sum_range]; rw [hmo.coeff_natDegree]; rw [one_mul] at
+    *
+  rw [eq_neg_of_add_eq_zero_left hroot]; rw [neg_mem_iff]
+  exact Submodule.sum_mem _ fun i _ => mul_mem_right _ _ (hf.mem (Fin.is_lt i))
 
 Depends on / 依赖: Fin.is_lt, Finset, Finset.notMem_range_self, Finset.range_add_one, Finset.sum_insert, Finset.sum_range, IsRoot, IsRoot.def, Submodule, Submodule.sum_mem, coeff_natDegree, eq_neg_of_add_eq_zero_left, eval_eq_sum_range, exists_add_of_le, f.natDegree, hf.mem, hmo.coeff_natDegree, is_lt, mul_mem_right, natDegree
 -/
@@ -324,7 +370,7 @@ theorem pow_natDegree_le_of_aeval_zero_of_monic_mem_map
     rw [hk]; rw [pow_add]
     exact mul_mem_right _ _ this
   rw [aeval_def]; rw [eval₂_eq_eval_map]; rw [← IsRoot.def] at hx
-  exact pow_natDegree_le_of_root_of_
+  exact pow_natDegree_le_of_root_of_monic_mem (hf.map _) hx (hmo.map _) _ rfl.le
 
 中文:
 定理 pow_natDegree_le_of_aeval_zero_of_monic_mem_map
@@ -336,7 +382,7 @@ theorem pow_natDegree_le_of_aeval_zero_of_monic_mem_map
     rw [hk]; rw [pow_add]
     exact mul_mem_right _ _ this
   rw [aeval_def]; rw [eval₂_eq_eval_map]; rw [← IsRoot.def] at hx
-  exact pow_natDegree_le_of_root_of_
+  exact pow_natDegree_le_of_root_of_monic_mem (hf.map _) hx (hmo.map _) _ rfl.le
 
 Depends on / 依赖: IsRoot, IsRoot.def, aeval_def, algebraMap, exists_add_of_le, f.map, hf.map, hmo.map, mul_mem_right, natDegree, pow_add, pow_natDegree_le_of_root_of_monic_mem, rfl.le
 -/
@@ -401,7 +447,9 @@ theorem dvd_pow_natDegree_of_eval₂_eq_zero
     (scaleRoots.isWeaklyEisensteinAt _
           (Ideal.mem_span_singleton.mpr <| dvd_refl x)).pow_natDegree_le_of_root_of_monic_mem
       ?_ ((monic_scaleRoots_iff x).mpr hp) _ le_rfl
-  rw [injective_iff_map_eq_zero'] at
+  rw [injective_iff_map_eq_zero'] at hf
+  have : eval₂ f _ (p.scaleRoots x) = 0 := scaleRoots_eval₂_eq_zero f h
+  rwa [hz, Polynomial.eval₂_at_apply, hf] at this
 
 中文:
 定理 dvd_pow_natDegree_of_eval₂_eq_zero
@@ -412,7 +460,9 @@ theorem dvd_pow_natDegree_of_eval₂_eq_zero
     (scaleRoots.isWeaklyEisensteinAt _
           (Ideal.mem_span_singleton.mpr <| dvd_refl x)).pow_natDegree_le_of_root_of_monic_mem
       ?_ ((monic_scaleRoots_iff x).mpr hp) _ le_rfl
-  rw [injective_iff_map_eq_zero'] at
+  rw [injective_iff_map_eq_zero'] at hf
+  have : eval₂ f _ (p.scaleRoots x) = 0 := scaleRoots_eval₂_eq_zero f h
+  rwa [hz, Polynomial.eval₂_at_apply, hf] at this
 
 Depends on / 依赖: H.subtype, H_closed, H_closed.isClosedEmbedding_subtypeVal, Ideal.mem_span_singleton, Ideal.mem_span_singleton.mpr, Polynomial, Polynomial.eval, dvd_refl, injective_iff_map_eq_zero, isClosedEmbedding_subtypeVal, isWeaklyEisensteinAt, le_rfl, mem_span_singleton, monic_scaleRoots_iff, natDegree_scaleRoots, p.scaleRoots, pow_natDegree_le_of_root_of_monic_mem, properSMul_of_isClosedEmbedding, scaleRoots, scaleRoots.isWeaklyEisensteinAt
 -/

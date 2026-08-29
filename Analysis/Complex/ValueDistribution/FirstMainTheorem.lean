@@ -52,7 +52,11 @@ lemma characteristic_sub_characteristic_inv
     unfold characteristic
     ring
   _ = circleAverage (log ‖f ·‖) 0 - (logCounting f⁻¹ ⊤ - logCounting f ⊤) := by
-    rw [proximity_sub_proximity_inv_eq_circleAver
+    rw [proximity_sub_proximity_inv_eq_circleAverage h]
+  _ = circleAverage (log ‖f ·‖) 0 - (logCounting f 0 - logCounting f ⊤) := by
+    rw [logCounting_inv]
+  _ = circleAverage (log ‖f ·‖) 0 - (divisor f Set.univ).logCounting := by
+    rw [← ValueDistribution.log_counting_zero_sub_logCounting_top]
 
 中文:
 引理 characteristic_sub_characteristic_inv
@@ -63,7 +67,11 @@ lemma characteristic_sub_characteristic_inv
     unfold characteristic
     ring
   _ = circleAverage (log ‖f ·‖) 0 - (logCounting f⁻¹ ⊤ - logCounting f ⊤) := by
-    rw [proximity_sub_proximity_inv_eq_circleAver
+    rw [proximity_sub_proximity_inv_eq_circleAverage h]
+  _ = circleAverage (log ‖f ·‖) 0 - (logCounting f 0 - logCounting f ⊤) := by
+    rw [logCounting_inv]
+  _ = circleAverage (log ‖f ·‖) 0 - (divisor f Set.univ).logCounting := by
+    rw [← ValueDistribution.log_counting_zero_sub_logCounting_top]
 
 Depends on / 依赖: Set.univ, ValueDistribution, ValueDistribution.log_counting_zero, characteristic, circleAverage, divisor, logCounting, logCounting_inv, log_counting_zero, proximity, proximity_sub_proximity_inv_eq_circleAverage
 -/
@@ -92,7 +100,12 @@ lemma characteristic_sub_characteristic_inv_of_ne_zero
   _ = (characteristic f ⊤ - characteristic f⁻¹ ⊤) R := by simp
   _ = circleAverage (log ‖f ·‖) 0 R - (divisor f Set.univ).logCounting R := by
     rw [characteristic_sub_characteristic_inv hf]; rw [Pi.sub_apply]
-  _ = log ‖meromorphicTrailingCoe
+  _ = log ‖meromorphicTrailingCoeffAt f 0‖ := by
+    rw [MeromorphicOn.circleAverage_log_norm hR hf.meromorphicOn]
+    unfold Function.locallyFinsuppWithin.logCounting
+    have : (divisor f (closedBall 0 |R|)) = (divisor f Set.univ).toClosedBall R :=
+      (divisor_restrict hf.meromorphicOn (by tauto)).symm
+    simp [this, toClosedBall, restrictMonoidHom, restrict_apply]
 
 中文:
 引理 characteristic_sub_characteristic_inv_of_ne_zero
@@ -101,7 +114,12 @@ lemma characteristic_sub_characteristic_inv_of_ne_zero
   _ = (characteristic f ⊤ - characteristic f⁻¹ ⊤) R := by simp
   _ = circleAverage (log ‖f ·‖) 0 R - (divisor f Set.univ).logCounting R := by
     rw [characteristic_sub_characteristic_inv hf]; rw [Pi.sub_apply]
-  _ = log ‖meromorphicTrailingCoe
+  _ = log ‖meromorphicTrailingCoeffAt f 0‖ := by
+    rw [MeromorphicOn.circleAverage_log_norm hR hf.meromorphicOn]
+    unfold Function.locallyFinsuppWithin.logCounting
+    have : (divisor f (closedBall 0 |R|)) = (divisor f Set.univ).toClosedBall R :=
+      (divisor_restrict hf.meromorphicOn (by tauto)).symm
+    simp [this, toClosedBall, restrictMonoidHom, restrict_apply]
 
 Depends on / 依赖: Function, Function.locallyFinsuppWithin.logCounting, MeromorphicOn, MeromorphicOn.circleAverage_log_norm, Pi.sub_apply, Set.univ, characteristic, characteristic_sub_characteristic_inv, circleAverage, circleAverage_log_norm, closedBall, divisor, hf.meromorphicOn, locallyFinsuppWithin, logCounting, meromorphicOn, meromorphicTrailingCoeffAt, sub_apply, toClosedBall
 -/
@@ -130,7 +148,8 @@ lemma characteristic_sub_characteristic_inv_at_zero
   _ = (characteristic f ⊤ - characteristic f⁻¹ ⊤) 0 := by simp
   _ = circleAverage (log ‖f ·‖) 0 0 - (divisor f Set.univ).logCounting 0 := by
     rw [ValueDistribution.characteristic_sub_characteristic_inv h]; rw [Pi.sub_apply]
-  _ = log ‖f 0‖ 
+  _ = log ‖f 0‖ := by
+    simp
 
 中文:
 引理 characteristic_sub_characteristic_inv_at_zero
@@ -140,7 +159,8 @@ lemma characteristic_sub_characteristic_inv_at_zero
   _ = (characteristic f ⊤ - characteristic f⁻¹ ⊤) 0 := by simp
   _ = circleAverage (log ‖f ·‖) 0 0 - (divisor f Set.univ).logCounting 0 := by
     rw [ValueDistribution.characteristic_sub_characteristic_inv h]; rw [Pi.sub_apply]
-  _ = log ‖f 0‖ 
+  _ = log ‖f 0‖ := by
+    simp
 
 Depends on / 依赖: Pi.sub_apply, Set.univ, ValueDistribution, ValueDistribution.characteristic_sub_characteristic_inv, characteristic, characteristic_sub_characteristic_inv, circleAverage, divisor, logCounting, sub_apply
 -/
@@ -227,7 +247,22 @@ theorem abs_characteristic_sub_characteristic_shift_le
   have h₂f : CircleIntegrable (fun x => log⁺ ‖f x - a₀‖) 0 r := by
     apply MeromorphicOn.circleIntegrable_posLog_norm
     apply h.meromorphicOn.sub (MeromorphicOn.const a₀)
-  rw [← Pi.sub
+  rw [← Pi.sub_apply]; rw [characteristic_sub_characteristic_eq_proximity_sub_proximity h]
+  simp only [proximity, reduceDIte, Pi.sub_apply, ← circleAverage_sub h₁f h₂f]
+  apply le_trans abs_circleAverage_le_circleAverage_abs
+  apply circleAverage_mono_on_of_le_circle
+  · apply (h₁f.sub h₂f).abs
+  · intro θ hθ
+    simp only [Pi.abs_apply, Pi.sub_apply]
+    by_cases h : 0 <= log⁺ ‖f θ‖ - log⁺ ‖f θ - a₀‖
+    · simpa [abs_of_nonneg h, sub_le_iff_le_add, add_comm (log⁺ ‖a₀‖ + log 2), ← add_assoc]
+        using (posLog_norm_add_le (f θ - a₀) a₀)
+    · simp only [abs_of_nonpos (le_of_not_ge h), neg_sub, tsub_le_iff_right,
+        add_comm (log⁺ ‖a₀‖ + log 2), ← add_assoc]
+      convert! posLog_norm_add_le (-f θ) a₀ using 2
+      · rw [← norm_neg]
+        abel_nf
+      · simp
 
 中文:
 定理 abs_characteristic_sub_characteristic_shift_le
@@ -238,7 +273,22 @@ theorem abs_characteristic_sub_characteristic_shift_le
   have h₂f : CircleIntegrable (fun x => log⁺ ‖f x - a₀‖) 0 r := by
     apply MeromorphicOn.circleIntegrable_posLog_norm
     apply h.meromorphicOn.sub (MeromorphicOn.const a₀)
-  rw [← Pi.sub
+  rw [← Pi.sub_apply]; rw [characteristic_sub_characteristic_eq_proximity_sub_proximity h]
+  simp only [proximity, reduceDIte, Pi.sub_apply, ← circleAverage_sub h₁f h₂f]
+  apply le_trans abs_circleAverage_le_circleAverage_abs
+  apply circleAverage_mono_on_of_le_circle
+  · apply (h₁f.sub h₂f).abs
+  · intro θ hθ
+    simp only [Pi.abs_apply, Pi.sub_apply]
+    by_cases h : 0 <= log⁺ ‖f θ‖ - log⁺ ‖f θ - a₀‖
+    · simpa [abs_of_nonneg h, sub_le_iff_le_add, add_comm (log⁺ ‖a₀‖ + log 2), ← add_assoc]
+        using (posLog_norm_add_le (f θ - a₀) a₀)
+    · simp only [abs_of_nonpos (le_of_not_ge h), neg_sub, tsub_le_iff_right,
+        add_comm (log⁺ ‖a₀‖ + log 2), ← add_assoc]
+      convert! posLog_norm_add_le (-f θ) a₀ using 2
+      · rw [← norm_neg]
+        abel_nf
+      · simp
 
 Depends on / 依赖: CircleIntegrable, MeromorphicOn, MeromorphicOn.circleIntegrable_posLog_norm, MeromorphicOn.const, Pi.sub_apply, abs_circleAverage_le_circleAverage_abs, characteristic_sub_characteristic_eq_proximity_sub_proximity, circleAverage_sub, circleIntegrable_posLog_norm, h.meromorphicOn.circleIntegrable_posLog_norm, h.meromorphicOn.sub, le_trans, meromorphicOn, proximity, reduceDIte, sub_apply
 -/

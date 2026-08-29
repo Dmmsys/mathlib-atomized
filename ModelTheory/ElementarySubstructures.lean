@@ -549,7 +549,7 @@ theorem closure_eq_self
     obtain ⟨t, rfl⟩ := hx
     use (Term.var 0).equal (t.relabel Sum.inl).varsToConstants
     simp [Set.ext_iff]
-exact singleton_inter_nonempty.mp hA _ (singleton_none
+exact singleton_inter_nonempty.mp hA _ (singleton_nonempty x) this
 
 中文:
 定理 closure_eq_self
@@ -562,7 +562,7 @@ exact singleton_inter_nonempty.mp hA _ (singleton_none
     obtain ⟨t, rfl⟩ := hx
     use (Term.var 0).equal (t.relabel Sum.inl).varsToConstants
     simp [Set.ext_iff]
-exact singleton_inter_nonempty.mp hA _ (singleton_none
+exact singleton_inter_nonempty.mp hA _ (singleton_nonempty x) this
 
 Depends on / 依赖: A.Definable, Set.ext_iff, Subset, Subset.antisymm, Sum.inl, Term.var, antisymm, coe_closure_eq_range_term_realize, ext_iff, relabel, singleton_inter_nonempty, singleton_inter_nonempty.mp, singleton_nonempty, subset_closure, t.relabel, varsToConstants
 -/
@@ -590,7 +590,21 @@ theorem isElementary_closure
   have hD_ne : D.Nonempty := ⟨a,hφ⟩
   have hD : A.Definable₁ L D := by
     simp only [Definable₁, Definable, Fin.isValue]
-    refine ⟨((L.lhomW
+    refine ⟨((L.lhomWithConstants A).onBoundedFormula φ).toFormula.relabel
+.subst fun i => Fin.lastCases (Term.var 0) (Sum.elim Empty.elim id)
+        (fun j => (L.con ⟨x j, by
+        nth_rw 1 [← hA.closure_eq_self]
+        simp only [Subtype.coe_prop]
+        ⟩).term) i, ?_⟩
+    ext v
+    simp only [Fin.isValue, mem_ofPred_eq, Formula.relabel, Formula.Realize,
+      BoundedFormula.realize_subst, BoundedFormula.realize_relabel, Nat.add_zero, Fin.castAdd_zero,
+      Fin.cast_refl, Function.comp_id, Fin.natAdd_zero, D]
+    rw [← Formula.Realize]; rw [BoundedFormula.realize_toFormula]; rw [LHom.realize_onBoundedFormula]
+    congr! 1
+    ext i; cases i using Fin.lastCases <;> simp
+  obtain ⟨b, hbD, hbA⟩ := hA D hD_ne hD
+  exact ⟨⟨b, by rwa [← hA.closure_eq_self] at hbA⟩, hbD⟩
 
 中文:
 定理 isElementary_closure
@@ -602,7 +616,21 @@ theorem isElementary_closure
   have hD_ne : D.Nonempty := ⟨a,hφ⟩
   have hD : A.Definable₁ L D := by
     simp only [Definable₁, Definable, Fin.isValue]
-    refine ⟨((L.lhomW
+    refine ⟨((L.lhomWithConstants A).onBoundedFormula φ).toFormula.relabel
+.subst fun i => Fin.lastCases (Term.var 0) (Sum.elim Empty.elim id)
+        (fun j => (L.con ⟨x j, by
+        nth_rw 1 [← hA.closure_eq_self]
+        simp only [Subtype.coe_prop]
+        ⟩).term) i, ?_⟩
+    ext v
+    simp only [Fin.isValue, mem_ofPred_eq, Formula.relabel, Formula.Realize,
+      BoundedFormula.realize_subst, BoundedFormula.realize_relabel, Nat.add_zero, Fin.castAdd_zero,
+      Fin.cast_refl, Function.comp_id, Fin.natAdd_zero, D]
+    rw [← Formula.Realize]; rw [BoundedFormula.realize_toFormula]; rw [LHom.realize_onBoundedFormula]
+    congr! 1
+    ext i; cases i using Fin.lastCases <;> simp
+  obtain ⟨b, hbD, hbA⟩ := hA D hD_ne hD
+  exact ⟨⟨b, by rwa [← hA.closure_eq_self] at hbA⟩, hbD⟩
 
 Depends on / 依赖: A.Definable, D.Nonempty, Definable, Empty.elim, Fin.isValue, Fin.lastCases, Fin.snoc, L.con, L.lhomWithConstants, Nonempty, Realize, Subtype, Subtype.coe_prop, Subtype.val, Sum.elim, Term.var, closure, closure_eq_self, coe_prop, hA.closure_eq_self
 -/
@@ -670,7 +698,24 @@ theorem meetsDefinable
   let ψ : L[[(S : Set M)]].Sentence := (φ.relabel Sum.inr).iExs
   have hψM : ψ.Realize M := by
     simpa only [Sentence.Realize, SetLike.coe_sort_coe, Formula.realize_iExs,
-      Formula.
+      Formula.realize_relabel, Sum.elim_comp_inr, ψ] using
+        (⟨![x], hφx⟩ : exists w : Fin 1 -> M, φ.Realize w)
+  have hψS : ψ.Realize S := by
+    rwa [← Formula.realize_equivSentence_symm_con, ← S.subtype.map_formula,
+      Formula.realize_equivSentence_symm]
+  simp only [Sentence.Realize, SetLike.coe_sort_coe, Formula.realize_iExs,
+    Formula.realize_relabel, Sum.elim_comp_inr, ψ] at hψS
+  obtain ⟨v', hv'⟩ := hψS
+  refine ⟨v' 0, ?_, by simp⟩
+  have hv'' : φ.Realize (Subtype.val ∘ v') := by
+    simp only [Formula.Realize, ← BoundedFormula.realize_constantsVarsEquiv,
+      ← S.subtype.map_boundedFormula] at hv'
+    simp only [Formula.Realize, ← BoundedFormula.realize_constantsVarsEquiv]
+    convert! hv' using 1
+    funext i
+    cases i <;> rfl
+  change (Subtype.val ∘ v') in {x | x 0 in D}
+  simpa [hφ] using hv''
 
 中文:
 定理 meetsDefinable
@@ -684,7 +729,24 @@ theorem meetsDefinable
   let ψ : L[[(S : Set M)]].Sentence := (φ.relabel Sum.inr).iExs
   have hψM : ψ.Realize M := by
     simpa only [Sentence.Realize, SetLike.coe_sort_coe, Formula.realize_iExs,
-      Formula.
+      Formula.realize_relabel, Sum.elim_comp_inr, ψ] using
+        (⟨![x], hφx⟩ : exists w : Fin 1 -> M, φ.Realize w)
+  have hψS : ψ.Realize S := by
+    rwa [← Formula.realize_equivSentence_symm_con, ← S.subtype.map_formula,
+      Formula.realize_equivSentence_symm]
+  simp only [Sentence.Realize, SetLike.coe_sort_coe, Formula.realize_iExs,
+    Formula.realize_relabel, Sum.elim_comp_inr, ψ] at hψS
+  obtain ⟨v', hv'⟩ := hψS
+  refine ⟨v' 0, ?_, by simp⟩
+  have hv'' : φ.Realize (Subtype.val ∘ v') := by
+    simp only [Formula.Realize, ← BoundedFormula.realize_constantsVarsEquiv,
+      ← S.subtype.map_boundedFormula] at hv'
+    simp only [Formula.Realize, ← BoundedFormula.realize_constantsVarsEquiv]
+    convert! hv' using 1
+    funext i
+    cases i <;> rfl
+  change (Subtype.val ∘ v') in {x | x 0 in D}
+  simpa [hφ] using hv''
 
 Depends on / 依赖: Formula, Formula.realize_equivSentence, Formula.realize_equivSentence_symm_con, Formula.realize_iExs, Formula.realize_relabel, Realize, S.subtype.map_formula, Sentence, Sentence.Realize, Set.ext_iff, SetLike, SetLike.coe_sort_coe, Sum.elim_comp_inr, Sum.inr, coe_sort_coe, elim_comp_inr, ext_iff, map_formula, realize_equivSentence, realize_equivSentence_symm_con
 -/

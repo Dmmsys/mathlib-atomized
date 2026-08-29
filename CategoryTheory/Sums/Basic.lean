@@ -65,7 +65,11 @@ instance sum
     | inl X => ULift.up (𝟙 X)
     | inr X => ULift.up (𝟙 X)
   comp {X Y Z} f g :=
-    match X, Y, Z, f,
+    match X, Y, Z, f, g with
+| inl _, inl _, inl _, f, g => ULift.up f.down ≫ g.down
+| inr _, inr _, inr _, f, g => ULift.up f.down ≫ g.down
+
+@[aesop norm -10 destruct (rule_sets := [CategoryTheory])]
 
 中文:
 实例 求和
@@ -80,7 +84,11 @@ instance sum
     | inl X => ULift.up (𝟙 X)
     | inr X => ULift.up (𝟙 X)
   comp {X Y Z} f g :=
-    match X, Y, Z, f,
+    match X, Y, Z, f, g with
+| inl _, inl _, inl _, f, g => ULift.up f.down ≫ g.down
+| inr _, inr _, inr _, f, g => ULift.up f.down ≫ g.down
+
+@[aesop norm -10 destruct (rule_sets := [CategoryTheory])]
 
 Depends on / 依赖: PEmpty, ULift.up, f.down, g.down
 -/
@@ -1132,7 +1140,23 @@ definition equivalence
         ≅ inl_ C D := rightUnitor _
       _ ≅ inr_ D C ⋙ swap D C := (swapCompInr D C).symm
       _ ≅ (inl_ C D ⋙ swap C D) ⋙ swap D C := isoWhiskerRight (swapCompInl C D).symm _
-      _ ≅ inl_ C D ⋙ swa
+      _ ≅ inl_ C D ⋙ swap C D ⋙ swap D C := associator _ _ _)
+    (calc inr_ C D ⋙ 𝟭 (C oplus D)
+        ≅ inr_ C D := rightUnitor _
+      _ ≅ inl_ D C ⋙ swap D C := (swapCompInl D C).symm
+      _ ≅ (inr_ C D ⋙ swap C D) ⋙ swap D C := isoWhiskerRight (swapCompInr C D).symm _
+      _ ≅ inr_ C D ⋙ swap C D ⋙ swap D C := associator _ _ _)
+  counitIso := Functor.sumIsoExt
+    (calc inl_ D C ⋙ swap D C ⋙ swap C D
+        ≅ (inl_ D C ⋙ swap D C) ⋙ swap C D := (associator _ _ _).symm
+      _ ≅ inr_ C D ⋙ swap C D := isoWhiskerRight (swapCompInl D C) _
+      _ ≅ inl_ D C := swapCompInr C D
+      _ ≅ inl_ D C ⋙ 𝟭 (D oplus C) := (rightUnitor _).symm)
+    (calc inr_ D C ⋙ swap D C ⋙ swap C D
+        ≅ (inr_ D C ⋙ swap D C) ⋙ swap C D := (associator _ _ _).symm
+      _ ≅ inl_ C D ⋙ swap C D := isoWhiskerRight (swapCompInr D C) _
+      _ ≅ inr_ D C := swapCompInl C D
+      _ ≅ inr_ D C ⋙ 𝟭 (D oplus C) := (rightUnitor _).symm)
 
 中文:
 定义 equivalence
@@ -1144,7 +1168,23 @@ definition equivalence
         ≅ inl_ C D := rightUnitor _
       _ ≅ inr_ D C ⋙ swap D C := (swapCompInr D C).symm
       _ ≅ (inl_ C D ⋙ swap C D) ⋙ swap D C := isoWhiskerRight (swapCompInl C D).symm _
-      _ ≅ inl_ C D ⋙ swa
+      _ ≅ inl_ C D ⋙ swap C D ⋙ swap D C := associator _ _ _)
+    (calc inr_ C D ⋙ 𝟭 (C oplus D)
+        ≅ inr_ C D := rightUnitor _
+      _ ≅ inl_ D C ⋙ swap D C := (swapCompInl D C).symm
+      _ ≅ (inr_ C D ⋙ swap C D) ⋙ swap D C := isoWhiskerRight (swapCompInr C D).symm _
+      _ ≅ inr_ C D ⋙ swap C D ⋙ swap D C := associator _ _ _)
+  counitIso := Functor.sumIsoExt
+    (calc inl_ D C ⋙ swap D C ⋙ swap C D
+        ≅ (inl_ D C ⋙ swap D C) ⋙ swap C D := (associator _ _ _).symm
+      _ ≅ inr_ C D ⋙ swap C D := isoWhiskerRight (swapCompInl D C) _
+      _ ≅ inl_ D C := swapCompInr C D
+      _ ≅ inl_ D C ⋙ 𝟭 (D oplus C) := (rightUnitor _).symm)
+    (calc inr_ D C ⋙ swap D C ⋙ swap C D
+        ≅ (inr_ D C ⋙ swap D C) ⋙ swap C D := (associator _ _ _).symm
+      _ ≅ inl_ C D ⋙ swap C D := isoWhiskerRight (swapCompInr D C) _
+      _ ≅ inr_ D C := swapCompInl C D
+      _ ≅ inr_ D C ⋙ 𝟭 (D oplus C) := (rightUnitor _).symm)
 -/
 def equivalence : C oplus D ≌ D oplus C where
   functor := swap C D

@@ -67,7 +67,9 @@ lemma sqrt_mul_lt_half_add_of_ne
   · specialize this h.symm (h.gt_or_lt.resolve_left hl)
     rwa [mul_comm, add_comm]
   have key : 0 < (x - y) ^ 2 := sq_pos_iff.mpr (by rwa [← zero_lt_iff, tsub_pos_iff_lt])
-  rw [sq]; rw [tsub_mul]; rw [mul_tsub]; rw [mul_tsub]; rw [tsub_tsub_eq_add_tsub_of_le 
+  rw [sq]; rw [tsub_mul]; rw [mul_tsub]; rw [mul_tsub]; rw [tsub_tsub_eq_add_tsub_of_le (by gcongr)]; rw [tsub_add_eq_add_tsub (by gcongr)]; rw [tsub_tsub]; rw [show x * y + y * x = 2 * x * y by ring]; rw [tsub_pos_iff_lt]; rw [← sq]; rw [← sq] at key
+  rw [← sqrt_sq (_ / 2)]; rw [sqrt_lt_sqrt]; rw [div_pow]; rw [lt_div_iff₀' (by positivity)]; rw [show (2 : Real>=0) ^ 2 * (x * y) = 2 * x * y + 2 * x * y by ring]; rw [add_sq]; rw [add_right_comm]
+  gcongr
 
 中文:
 引理 sqrt_mul_lt_half_add_of_ne
@@ -78,7 +80,9 @@ lemma sqrt_mul_lt_half_add_of_ne
   · specialize this h.symm (h.gt_or_lt.resolve_left hl)
     rwa [mul_comm, add_comm]
   have key : 0 < (x - y) ^ 2 := sq_pos_iff.mpr (by rwa [← zero_lt_iff, tsub_pos_iff_lt])
-  rw [sq]; rw [tsub_mul]; rw [mul_tsub]; rw [mul_tsub]; rw [tsub_tsub_eq_add_tsub_of_le 
+  rw [sq]; rw [tsub_mul]; rw [mul_tsub]; rw [mul_tsub]; rw [tsub_tsub_eq_add_tsub_of_le (by gcongr)]; rw [tsub_add_eq_add_tsub (by gcongr)]; rw [tsub_tsub]; rw [show x * y + y * x = 2 * x * y by ring]; rw [tsub_pos_iff_lt]; rw [← sq]; rw [← sq] at key
+  rw [← sqrt_sq (_ / 2)]; rw [sqrt_lt_sqrt]; rw [div_pow]; rw [lt_div_iff₀' (by positivity)]; rw [show (2 : Real>=0) ^ 2 * (x * y) = 2 * x * y + 2 * x * y by ring]; rw [add_sq]; rw [add_right_comm]
+  gcongr
 
 Depends on / 依赖: add_comm, generalizing, gt_or_lt, h.gt_or_lt.resolve_left, h.symm, mul_comm, mul_tsub, resolve_left, specialize, sq_pos_iff, sq_pos_iff.mpr, sqrt_lt_sqrt, sqrt_sq, tsub_add_eq_add_tsub, tsub_mul, tsub_pos_iff_lt, tsub_tsub, tsub_tsub_eq_add_tsub_of_le, zero_lt_iff
 -/
@@ -244,7 +248,10 @@ lemma dist_gm_am_le
     _ <= ((x + y) / 2 - x).toReal := by
       gcongr
       rw [le_sqrt_iff_sq_le]; rw [sq]
- 
+      gcongr
+    _ = _ := by
+      nth_rw 2 [← add_halves x]
+      rw [add_div]; rw [add_tsub_add_eq_tsub_left]; rw [← tsub_div]; rw [NNReal.coe_div]; rw [NNReal.coe_two]; rw [dist_comm]; rw [dist_eq]; rw [← NNReal.coe_sub h]; rw [abs_eq]
 
 中文:
 引理 dist_gm_am_le
@@ -257,7 +264,10 @@ lemma dist_gm_am_le
     _ <= ((x + y) / 2 - x).toReal := by
       gcongr
       rw [le_sqrt_iff_sq_le]; rw [sq]
- 
+      gcongr
+    _ = _ := by
+      nth_rw 2 [← add_halves x]
+      rw [add_div]; rw [add_tsub_add_eq_tsub_left]; rw [← tsub_div]; rw [NNReal.coe_div]; rw [NNReal.coe_two]; rw [dist_comm]; rw [dist_eq]; rw [← NNReal.coe_sub h]; rw [abs_eq]
 
 Depends on / 依赖: NNReal, NNReal.coe_div, NNReal.coe_sub, NNReal.coe_two, RepresentableBy, RepresentableBy.isRepresentable, RepresentableBy.yoneda, abs_eq, add_comm, add_div, add_halves, add_tsub_add_eq_tsub_left, coe_div, coe_sub, coe_two, dist_comm, dist_eq, generalizing, isRepresentable, le_sqrt_iff_sq_le
 -/
@@ -285,7 +295,8 @@ lemma agmSequences_monotone_and_antitone
     ⟨monotone_nat_of_le_succ (this · |>.1), antitone_nat_of_succ_le (this · |>.2)⟩
   intro n
   induction n generalizing x y with
-  | zero => exact le_gm_
+  | zero => exact le_gm_and_am_le (sqrt_mul_le_half_add ..)
+  | succ n ih => exact Prod.mk_le_mk.mp ih
 
 中文:
 引理 agmSequences_monotone_and_antitone
@@ -295,7 +306,8 @@ lemma agmSequences_monotone_and_antitone
     ⟨monotone_nat_of_le_succ (this · |>.1), antitone_nat_of_succ_le (this · |>.2)⟩
   intro n
   induction n generalizing x y with
-  | zero => exact le_gm_
+  | zero => exact le_gm_and_am_le (sqrt_mul_le_half_add ..)
+  | succ n ih => exact Prod.mk_le_mk.mp ih
 
 Depends on / 依赖: Prod.mk_le_mk.mp, agmSequences, antitone_nat_of_succ_le, generalizing, le_gm_and_am_le, mk_le_mk, monotone_nat_of_le_succ, sqrt_mul_le_half_add
 -/
@@ -359,7 +371,8 @@ lemma agmSequences_fst_le_snd
     · exact this.trans (agmSequences_snd_antitone h)
   intro k
   induction k generalizing x y with
-  | zero => exact sqrt_mul_le_half_ad
+  | zero => exact sqrt_mul_le_half_add ..
+  | succ n ih => exact ih
 
 中文:
 引理 agmSequences_fst_le_snd
@@ -372,7 +385,8 @@ lemma agmSequences_fst_le_snd
     · exact this.trans (agmSequences_snd_antitone h)
   intro k
   induction k generalizing x y with
-  | zero => exact sqrt_mul_le_half_ad
+  | zero => exact sqrt_mul_le_half_add ..
+  | succ n ih => exact ih
 
 Depends on / 依赖: CorepresentableBy, CorepresentableBy.coyoneda, CorepresentableBy.isCorepresentable, agmSequences, agmSequences_fst_monotone, agmSequences_snd_antitone, corepresentableByUliftFunctorEquiv, corepresentableByUliftFunctorEquiv.symm, coyoneda, generalizing, isCorepresentable, le_total, sqrt_mul_le_half_add, this.trans
 -/
@@ -399,7 +413,10 @@ lemma agmSequences_fst_lt_snd_of_ne
     · exact this.trans_le (agmSequences_snd_antitone h)
   intro k
   induction k generalizing x y with
-  | zero => exact sqrt_mul_lt_ha
+  | zero => exact sqrt_mul_lt_half_add_of_ne h
+  | succ n ih =>
+    rw [agmSequences_succ']
+    exact sqrt_mul_lt_half_add_of_ne (ih h).ne
 
 中文:
 引理 agmSequences_fst_lt_snd_of_ne
@@ -411,7 +428,10 @@ lemma agmSequences_fst_lt_snd_of_ne
     · exact this.trans_le (agmSequences_snd_antitone h)
   intro k
   induction k generalizing x y with
-  | zero => exact sqrt_mul_lt_ha
+  | zero => exact sqrt_mul_lt_half_add_of_ne h
+  | succ n ih =>
+    rw [agmSequences_succ']
+    exact sqrt_mul_lt_half_add_of_ne (ih h).ne
 
 Depends on / 依赖: agmSequences, agmSequences_fst_monotone, agmSequences_snd_antitone, agmSequences_succ, generalizing, le_total, sqrt_mul_lt_half_add_of_ne, this.trans_le, trans_le, trans_lt
 -/
@@ -504,7 +524,7 @@ lemma tendsto_dist_agmSequences_atTop_zero
     rw [← zero_mul (dist x y / 2)]
     enter [1, n]
     rw [pow_succ']; rw [← div_div]; rw [div_eq_inv_mul]; rw [← inv_pow]
-  exact (_root_.tendsto_pow_atTop_nhds_zero_of_lt_one (by norm_num) (by norm_num)).mul_const 
+  exact (_root_.tendsto_pow_atTop_nhds_zero_of_lt_one (by norm_num) (by norm_num)).mul_const _
 
 中文:
 引理 tendsto_dist_agmSequences_atTop_zero
@@ -514,7 +534,7 @@ lemma tendsto_dist_agmSequences_atTop_zero
     rw [← zero_mul (dist x y / 2)]
     enter [1, n]
     rw [pow_succ']; rw [← div_div]; rw [div_eq_inv_mul]; rw [← inv_pow]
-  exact (_root_.tendsto_pow_atTop_nhds_zero_of_lt_one (by norm_num) (by norm_num)).mul_const 
+  exact (_root_.tendsto_pow_atTop_nhds_zero_of_lt_one (by norm_num) (by norm_num)).mul_const _
 
 Depends on / 依赖: _root_, _root_.tendsto_pow_atTop_nhds_zero_of_lt_one, dist_agmSequences_fst_snd, dist_nonneg, div_div, div_eq_inv_mul, inv_pow, mul_const, pow_succ, squeeze_zero, tendsto_pow_atTop_nhds_zero_of_lt_one, zero_mul
 -/
@@ -993,7 +1013,10 @@ lemma agmSequences_fst_lt_agm_of_pos_of_ne
   set q := (agmSequences x y n).2
   apply (?_ : p < sqrt (p * q)).trans_le (agmSequences_fst_le_agm 0)
   have ppos : 0 < p :=
-    (show 0 < sqrt (x * y) by positivity).trans_le (agmSequences_fst_monotone zero_
+    (show 0 < sqrt (x * y) by positivity).trans_le (agmSequences_fst_monotone zero_le)
+  have plq : p < q := agmSequences_fst_lt_snd_of_ne hn ..
+  nth_rw 1 [← mul_self_sqrt p, sqrt_mul]
+  gcongr
 
 中文:
 引理 agmSequences_fst_lt_agm_of_pos_of_ne
@@ -1004,7 +1027,10 @@ lemma agmSequences_fst_lt_agm_of_pos_of_ne
   set q := (agmSequences x y n).2
   apply (?_ : p < sqrt (p * q)).trans_le (agmSequences_fst_le_agm 0)
   have ppos : 0 < p :=
-    (show 0 < sqrt (x * y) by positivity).trans_le (agmSequences_fst_monotone zero_
+    (show 0 < sqrt (x * y) by positivity).trans_le (agmSequences_fst_monotone zero_le)
+  have plq : p < q := agmSequences_fst_lt_snd_of_ne hn ..
+  nth_rw 1 [← mul_self_sqrt p, sqrt_mul]
+  gcongr
 
 Depends on / 依赖: agmSequences, agmSequences_fst_le_agm, agmSequences_fst_lt_snd_of_ne, agmSequences_fst_monotone, agm_eq_agm_agmSequences_fst_agmSequences_snd, mul_self_sqrt, nth_rw, sqrt_mul, trans_le, zero_le
 -/
@@ -1035,7 +1061,7 @@ lemma agm_lt_agmSequences_snd_of_ne
   have plq : p < q := agmSequences_fst_lt_snd_of_ne hn ..
   nth_rw 2 [← add_halves q]
   rw [add_div]
-  gcon
+  gcongr
 
 中文:
 引理 agm_lt_agmSequences_snd_of_ne
@@ -1049,7 +1075,7 @@ lemma agm_lt_agmSequences_snd_of_ne
   have plq : p < q := agmSequences_fst_lt_snd_of_ne hn ..
   nth_rw 2 [← add_halves q]
   rw [add_div]
-  gcon
+  gcongr
 
 Depends on / 依赖: add_div, add_halves, agmSequences, agmSequences_fst_lt_snd_of_ne, agm_eq_agm_agmSequences_fst_agmSequences_snd, agm_le_agmSequences_snd, nth_rw, trans_lt
 -/

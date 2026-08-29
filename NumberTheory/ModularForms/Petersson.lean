@@ -85,7 +85,15 @@ lemma petersson_slash
   calc petersson k (f ∣[k] g) (f' ∣[k] g) τ
   _ = D ^ (k - 2 + k) * conj (σ g (f (g • τ))) * σ g (f' (g • τ))
       * (τ.im ^ k * j.normSq ^ (-k)) := by
-    simp [Complex.normSq_eq
+    simp [Complex.normSq_eq_conj_mul_self, (by abel : k - 2 + k = (k - 1) + (k - 1)), petersson,
+      zpow_add₀ hD, mul_zpow, ModularForm.slash_def, -Matrix.GeneralLinearGroup.val_det_apply]
+    ring
+  _ = D ^ (k - 2) * (conj (σ g (f (g • τ))) * σ g (f' (g • τ)) * (D * τ.im / j.normSq) ^ k) := by
+    rw [div_zpow]; rw [mul_zpow]; rw [zpow_neg]; rw [div_eq_mul_inv]; rw [zpow_add₀ hD]
+    ring
+  _ = D ^ (k - 2) * (conj (σ g (f (g • τ))) * σ g (f' (g • τ)) * (im (g • τ)) ^ k) := by
+    rw [im_smul_eq_div_normSq]; rw [Complex.ofReal_div]; rw [Complex.ofReal_mul]
+  _ = D ^ (k - 2) * σ g (petersson k f f' (g • τ)) := by simp [petersson, σ_conj]
 
 中文:
 引理 petersson_slash
@@ -97,7 +105,15 @@ lemma petersson_slash
   calc petersson k (f ∣[k] g) (f' ∣[k] g) τ
   _ = D ^ (k - 2 + k) * conj (σ g (f (g • τ))) * σ g (f' (g • τ))
       * (τ.im ^ k * j.normSq ^ (-k)) := by
-    simp [Complex.normSq_eq
+    simp [Complex.normSq_eq_conj_mul_self, (by abel : k - 2 + k = (k - 1) + (k - 1)), petersson,
+      zpow_add₀ hD, mul_zpow, ModularForm.slash_def, -Matrix.GeneralLinearGroup.val_det_apply]
+    ring
+  _ = D ^ (k - 2) * (conj (σ g (f (g • τ))) * σ g (f' (g • τ)) * (D * τ.im / j.normSq) ^ k) := by
+    rw [div_zpow]; rw [mul_zpow]; rw [zpow_neg]; rw [div_eq_mul_inv]; rw [zpow_add₀ hD]
+    ring
+  _ = D ^ (k - 2) * (conj (σ g (f (g • τ))) * σ g (f' (g • τ)) * (im (g • τ)) ^ k) := by
+    rw [im_smul_eq_div_normSq]; rw [Complex.ofReal_div]; rw [Complex.ofReal_mul]
+  _ = D ^ (k - 2) * σ g (petersson k f f' (g • τ)) := by simp [petersson, σ_conj]
 
 Depends on / 依赖: Complex.normSq_eq_conj_mul_self, GeneralLinearGroup, Matrix, Matrix.GeneralLinearGroup.val_det_apply, ModularForm, ModularForm.slash_def, abs_ne_zero, abs_ne_zero.mpr, det_ne_zero, g.det.val, g.det_ne_zero, j.normSq, mod_cast, mul_zpow, normSq, normSq_eq_conj_mul_self, petersson, slash_def, val_det_apply
 -/
@@ -264,7 +280,13 @@ lemma petersson_exp_decay_left
   use a, ha
   apply IsBigO.of_norm_left
   simp_rw [petersson, norm_mul, Complex.norm_conj, mul_comm ‖f _‖ ‖f' _‖, norm_zpow, mul_assoc,
-      Complex.norm_real, Real.norm_of_nonneg (fu
+      Complex.norm_real, Real.norm_of_nonneg (fun {τ : ℍ} => τ.im_pos).le]
+  conv_rhs => enter [τ]; rw [← one_mul (Real.exp _)]
+  have hf' : IsBoundedAtImInfty f' := ModularFormClass.bdd_at_infty f'
+  refine hf'.norm_left.mul ((hbf.norm_left.mul <| isBigO_refl _ _).trans ?_)
+  refine IsBigO.comp_tendsto (f := fun t : Real => Real.exp (-b * t) * t ^ k)
+     (g := fun t : Real => Real.exp (-a * t)) ?_ tendsto_comap
+  simpa using (isLittleO_exp_mul_rpow_of_lt k (neg_lt_neg ha')).isBigO
 
 中文:
 引理 petersson_exp_decay_left
@@ -275,7 +297,13 @@ lemma petersson_exp_decay_left
   use a, ha
   apply IsBigO.of_norm_left
   simp_rw [petersson, norm_mul, Complex.norm_conj, mul_comm ‖f _‖ ‖f' _‖, norm_zpow, mul_assoc,
-      Complex.norm_real, Real.norm_of_nonneg (fu
+      Complex.norm_real, Real.norm_of_nonneg (fun {τ : ℍ} => τ.im_pos).le]
+  conv_rhs => enter [τ]; rw [← one_mul (Real.exp _)]
+  have hf' : IsBoundedAtImInfty f' := ModularFormClass.bdd_at_infty f'
+  refine hf'.norm_left.mul ((hbf.norm_left.mul <| isBigO_refl _ _).trans ?_)
+  refine IsBigO.comp_tendsto (f := fun t : Real => Real.exp (-b * t) * t ^ k)
+     (g := fun t : Real => Real.exp (-a * t)) ?_ tendsto_comap
+  simpa using (isLittleO_exp_mul_rpow_of_lt k (neg_lt_neg ha')).isBigO
 
 Depends on / 依赖: Complex.norm_conj, Complex.norm_real, IsBigO, IsBigO.of_norm_left, IsBoundedAtImInfty, ModularFormClass, ModularFormClass.bdd_at_infty, ModularFormClass.exp_decay_atImInfty, Real.exp, Real.norm_of_nonneg, bdd_at_infty, conv_rhs, exists_between, exp_decay_atImInfty, h_bd, hbf.norm_left.mul, im_pos, isBigO_refl, mul_assoc, mul_comm
 -/

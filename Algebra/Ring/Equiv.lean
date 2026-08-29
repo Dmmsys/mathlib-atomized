@@ -2001,7 +2001,7 @@ definition prodCongr
     simp only [Equiv.toFun_as_coe, Equiv.prodCongr_apply, EquivLike.coe_coe,
       Prod.map, map_add, Prod.mk_add_mk]
 
-@
+@[simp]
 
 中文:
 定义 prodCongr
@@ -2014,7 +2014,7 @@ definition prodCongr
     simp only [Equiv.toFun_as_coe, Equiv.prodCongr_apply, EquivLike.coe_coe,
       Prod.map, map_add, Prod.mk_add_mk]
 
-@
+@[simp]
 
 Depends on / 依赖: Equiv.prodCongr, prodCongr
 -/

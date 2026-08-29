@@ -131,7 +131,9 @@ theorem inv_right₀
     simp [h.resolve_right ha]
   · have := mul_ne_zero ha hx
     rw [h.eq]; rw [mul_ne_zero_iff] at this
-    exact @units_inv_right _ _
+    exact @units_inv_right _ _ _ (Units.mk0 x hx) (Units.mk0 y this.1) h
+
+@[simp]
 
 中文:
 定理 inv_right₀
@@ -146,7 +148,9 @@ theorem inv_right₀
     simp [h.resolve_right ha]
   · have := mul_ne_zero ha hx
     rw [h.eq]; rw [mul_ne_zero_iff] at this
-    exact @units_inv_right _ _
+    exact @units_inv_right _ _ _ (Units.mk0 x hx) (Units.mk0 y this.1) h
+
+@[simp]
 
 Depends on / 依赖: SemiconjBy, Units.mk0, eq_comm, h.eq, h.resolve_right, mul_eq_zero, mul_ne_zero, mul_ne_zero_iff, mul_zero, resolve_right, units_inv_right, zero_left
 -/

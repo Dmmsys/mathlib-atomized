@@ -226,14 +226,28 @@ theorem norm_condExpIndL1Fin_le
   given: (hs : MeasurableSet s) (hμs : μ s != ∞) (x : G)
   proof: by
   rw [L1.norm_eq_integral_norm]; rw [← ENNReal.toReal_ofReal (norm_nonneg x)]; rw [measureReal_def]; rw [← ENNReal.toReal_mul]; rw [← ENNReal.ofReal_le_iff_le_toReal (ENNReal.mul_ne_top hμs ENNReal.ofReal_ne_top)]; rw [ofReal_integral_norm_eq_lintegral_enorm]
-  swap; · rw [← memLp_one_iff_integra
+  swap; · rw [← memLp_one_iff_integrable]; exact Lp.memLp _
+  have h_eq :
+    ∫⁻ a, ‖condExpIndL1Fin hm hs hμs x a‖ₑ ∂μ = ∫⁻ a, ‖condExpIndSMul hm hs hμs x a‖ₑ ∂μ := by
+    refine lintegral_congr_ae ?_
+    filter_upwards [condExpIndL1Fin_ae_eq_condExpIndSMul hm hs hμs x] with z hz
+    rw [hz]
+  rw [h_eq]; rw [ofReal_norm]
+  exact lintegral_nnnorm_condExpIndSMul_le hm hs hμs x
 
 中文:
 定理 norm_condExpIndL1Fin_le
   条件: (hs : 可测集 s) (hμs : μ s != ∞) (x : G)
   证明: by
   rw [L1.norm_eq_integral_norm]; rw [← ENNReal.toReal_ofReal (norm_nonneg x)]; rw [measureReal_def]; rw [← ENNReal.toReal_mul]; rw [← ENNReal.ofReal_le_iff_le_toReal (ENNReal.mul_ne_top hμs ENNReal.ofReal_ne_top)]; rw [ofReal_integral_norm_eq_lintegral_enorm]
-  swap; · rw [← memLp_one_iff_integra
+  swap; · rw [← memLp_one_iff_integrable]; exact Lp.memLp _
+  have h_eq :
+    ∫⁻ a, ‖condExpIndL1Fin hm hs hμs x a‖ₑ ∂μ = ∫⁻ a, ‖condExpIndSMul hm hs hμs x a‖ₑ ∂μ := by
+    refine lintegral_congr_ae ?_
+    filter_upwards [condExpIndL1Fin_ae_eq_condExpIndSMul hm hs hμs x] with z hz
+    rw [hz]
+  rw [h_eq]; rw [ofReal_norm]
+  exact lintegral_nnnorm_condExpIndSMul_le hm hs hμs x
 
 Depends on / 依赖: ENNReal, ENNReal.mul_ne_top, ENNReal.ofReal_le_iff_le_toReal, ENNReal.ofReal_ne_top, ENNReal.toReal_mul, ENNReal.toReal_ofReal, L1.norm_eq_integral_norm, Lp.memLp, condExpIndL1Fin, condExpIndL1Fin_ae_eq_condExpIndS, condExpIndSMul, filter_upwards, h_eq, lintegral_congr_ae, measureReal_def, memLp_one_iff_integrable, mul_ne_top, norm_eq_integral_norm, norm_nonneg, ofReal_integral_norm_eq_lintegral_enorm
 -/
@@ -264,7 +278,8 @@ theorem condExpIndL1Fin_disjoint_union
   rw [map_add]
   push_cast
   rw [map_add]
-  grw [Lp.coeFn_add
+  grw [Lp.coeFn_add]
+  rfl
 
 中文:
 定理 condExpIndL1Fin_disjoint_union
@@ -278,7 +293,8 @@ theorem condExpIndL1Fin_disjoint_union
   rw [map_add]
   push_cast
   rw [map_add]
-  grw [Lp.coeFn_add
+  grw [Lp.coeFn_add]
+  rfl
 
 Depends on / 依赖: Lp.coeFn_add, coeFn_add, condExpIndL1Fin_ae_eq_condExpIndSMul, condExpIndSMul, indicatorConstLp_disjoint_union, map_add
 -/
@@ -404,7 +420,7 @@ theorem condExpIndL1_add
   by_cases hμs : μ s = ∞
   · simp_rw [condExpIndL1_of_measure_eq_top hμs]; rw [zero_add]
   · simp_rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs]
-    exact condExpIndL1Fin_add hs hμ
+    exact condExpIndL1Fin_add hs hμs x y
 
 中文:
 定理 condExpIndL1_add
@@ -415,7 +431,7 @@ theorem condExpIndL1_add
   by_cases hμs : μ s = ∞
   · simp_rw [condExpIndL1_of_measure_eq_top hμs]; rw [zero_add]
   · simp_rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs]
-    exact condExpIndL1Fin_add hs hμ
+    exact condExpIndL1Fin_add hs hμs x y
 
 Depends on / 依赖: MeasurableSet, condExpIndL1Fin_add, condExpIndL1_of_measurableSet_of_measure_ne_top, condExpIndL1_of_measure_eq_top, condExpIndL1_of_not_measurableSet, simp_rw, zero_add
 -/
@@ -440,7 +456,7 @@ theorem condExpIndL1_smul
   by_cases hμs : μ s = ∞
   · simp_rw [condExpIndL1_of_measure_eq_top hμs]; rw [smul_zero]
   · simp_rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs]
-    exact condExpIndL1Fin_smul hs
+    exact condExpIndL1Fin_smul hs hμs c x
 
 中文:
 定理 condExpIndL1_smul
@@ -451,7 +467,7 @@ theorem condExpIndL1_smul
   by_cases hμs : μ s = ∞
   · simp_rw [condExpIndL1_of_measure_eq_top hμs]; rw [smul_zero]
   · simp_rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs]
-    exact condExpIndL1Fin_smul hs
+    exact condExpIndL1Fin_smul hs hμs c x
 
 Depends on / 依赖: MeasurableSet, condExpIndL1Fin_smul, condExpIndL1_of_measurableSet_of_measure_ne_top, condExpIndL1_of_measure_eq_top, condExpIndL1_of_not_measurableSet, simp_rw, smul_zero
 -/
@@ -476,7 +492,7 @@ theorem condExpIndL1_smul'
   by_cases hμs : μ s = ∞
   · simp_rw [condExpIndL1_of_measure_eq_top hμs]; rw [smul_zero]
   · simp_rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs]
-    exact condExpIndL1Fin_smul' h
+    exact condExpIndL1Fin_smul' hs hμs c x
 
 中文:
 定理 condExpIndL1_smul'
@@ -487,7 +503,7 @@ theorem condExpIndL1_smul'
   by_cases hμs : μ s = ∞
   · simp_rw [condExpIndL1_of_measure_eq_top hμs]; rw [smul_zero]
   · simp_rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs]
-    exact condExpIndL1Fin_smul' h
+    exact condExpIndL1Fin_smul' hs hμs c x
 
 Depends on / 依赖: MeasurableSet, condExpIndL1Fin_smul, condExpIndL1_of_measurableSet_of_measure_ne_top, condExpIndL1_of_measure_eq_top, condExpIndL1_of_not_measurableSet, simp_rw, smul_zero
 -/
@@ -514,7 +530,9 @@ theorem norm_condExpIndL1_le
     exact mul_nonneg ENNReal.toReal_nonneg (norm_nonneg _)
   by_cases hμs : μ s = ∞
   · rw [condExpIndL1_of_measure_eq_top hμs x, Lp.norm_zero]
-    exact mul_nonneg ENNReal.toReal_nonneg (
+    exact mul_nonneg ENNReal.toReal_nonneg (norm_nonneg _)
+  · rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs x]
+    exact norm_condExpIndL1Fin_le hs hμs x
 
 中文:
 定理 norm_condExpIndL1_le
@@ -527,7 +545,9 @@ theorem norm_condExpIndL1_le
     exact mul_nonneg ENNReal.toReal_nonneg (norm_nonneg _)
   by_cases hμs : μ s = ∞
   · rw [condExpIndL1_of_measure_eq_top hμs x, Lp.norm_zero]
-    exact mul_nonneg ENNReal.toReal_nonneg (
+    exact mul_nonneg ENNReal.toReal_nonneg (norm_nonneg _)
+  · rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs x]
+    exact norm_condExpIndL1Fin_le hs hμs x
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, Lp.norm_zero, MeasurableSet, condExpIndL1_of_measurableSet_of_measure_ne_top, condExpIndL1_of_measure_eq_top, condExpIndL1_of_not_measurableSet, mul_nonneg, norm_condExpIndL1Fin_le, norm_nonneg, norm_zero, simp_rw, toReal_nonneg
 -/
@@ -569,7 +589,8 @@ theorem condExpIndL1_disjoint_union
   proof: by
   have hμst : μ (s union t) != ∞ :=
     ((measure_union_le s t).trans_lt (lt_top_iff_ne_top.mpr (ENNReal.add_ne_top.mpr ⟨hμs, hμt⟩))).ne
-  rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs x]; rw [condExpIndL1_of_measurableSet_of_measure_ne_top ht hμt x]; rw [condExpIndL1_of_measurableSe
+  rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs x]; rw [condExpIndL1_of_measurableSet_of_measure_ne_top ht hμt x]; rw [condExpIndL1_of_measurableSet_of_measure_ne_top (hs.union ht) hμst x]
+  exact condExpIndL1Fin_disjoint_union hs ht hμs hμt hst x
 
 中文:
 定理 condExpIndL1_disjoint_union
@@ -577,7 +598,8 @@ theorem condExpIndL1_disjoint_union
   证明: by
   have hμst : μ (s union t) != ∞ :=
     ((measure_union_le s t).trans_lt (lt_top_iff_ne_top.mpr (ENNReal.add_ne_top.mpr ⟨hμs, hμt⟩))).ne
-  rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs x]; rw [condExpIndL1_of_measurableSet_of_measure_ne_top ht hμt x]; rw [condExpIndL1_of_measurableSe
+  rw [condExpIndL1_of_measurableSet_of_measure_ne_top hs hμs x]; rw [condExpIndL1_of_measurableSet_of_measure_ne_top ht hμt x]; rw [condExpIndL1_of_measurableSet_of_measure_ne_top (hs.union ht) hμst x]
+  exact condExpIndL1Fin_disjoint_union hs ht hμs hμt hst x
 
 Depends on / 依赖: ENNReal, ENNReal.add_ne_top.mpr, add_ne_top, condExpIndL1Fin_disjoint_union, condExpIndL1_of_measurableSet_of_measure_ne_top, hs.union, lt_top_iff_ne_top, lt_top_iff_ne_top.mpr, measure_union_le, trans_lt
 -/
@@ -870,7 +892,7 @@ theorem condExpInd_of_measurable
   rw [condExpL2_indicator_of_measurable hm hs hμs (1 : Real)]
   filter_upwards [@indicatorConstLp_coeFn α _ _ 2 μ _ s (hm s hs) hμs (1 : Real)] with x hx
   rw [hx]
-  by_cases hx_
+  by_cases hx_mem : x in s <;> simp [hx_mem]
 
 中文:
 定理 condExpInd_of_measurable
@@ -882,7 +904,7 @@ theorem condExpInd_of_measurable
   rw [condExpL2_indicator_of_measurable hm hs hμs (1 : Real)]
   filter_upwards [@indicatorConstLp_coeFn α _ _ 2 μ _ s (hm s hs) hμs (1 : Real)] with x hx
   rw [hx]
-  by_cases hx_
+  by_cases hx_mem : x in s <;> simp [hx_mem]
 
 Depends on / 依赖: condExpIndSMul_ae_eq_smul, condExpInd_ae_eq_condExpIndSMul, condExpL2_indicator_of_measurable, filter_upwards, hx_mem, indicatorConstLp_coeFn
 -/
@@ -1035,7 +1057,18 @@ theorem setIntegral_condExpL1CLM_of_measure_ne_top
     (isClosed_eq ?_ ?_) f
   · intro x t ht hμt
     simp_rw [condExpL1CLM_indicatorConst ht hμt.ne x]
-    rw [Lp.simpleFunc.coe_indicatorConst]; rw [s
+    rw [Lp.simpleFunc.coe_indicatorConst]; rw [setIntegral_indicatorConstLp (hm _ hs)]
+    exact setIntegral_condExpInd hs ht hμs hμt.ne x
+  · intro f g hf_Lp hg_Lp _ hf hg
+    simp_rw [(condExpL1CLM F' hm μ).map_add]
+    rw [setIntegral_congr_ae (hm s hs) ((Lp.coeFn_add (condExpL1CLM F' hm μ (hf_Lp.toLp f))
+      (condExpL1CLM F' hm μ (hg_Lp.toLp g))).mono fun x hx _ => hx)]
+    rw [setIntegral_congr_ae (hm s hs)
+      ((Lp.coeFn_add (hf_Lp.toLp f) (hg_Lp.toLp g)).mono fun x hx _ => hx)]
+    simp_rw [Pi.add_apply]
+    rw [integral_add (L1.integrable_coeFn _).integrableOn (L1.integrable_coeFn _).integrableOn]; rw [integral_add (L1.integrable_coeFn _).integrableOn (L1.integrable_coeFn _).integrableOn]; rw [hf]; rw [hg]
+  · exact (continuous_setIntegral s).comp (condExpL1CLM F' hm μ).continuous
+  · exact continuous_setIntegral s
 
 中文:
 定理 set整数egral_condExpL1CLM_of_measure_ne_top
@@ -1046,7 +1079,18 @@ theorem setIntegral_condExpL1CLM_of_measure_ne_top
     (isClosed_eq ?_ ?_) f
   · intro x t ht hμt
     simp_rw [condExpL1CLM_indicatorConst ht hμt.ne x]
-    rw [Lp.simpleFunc.coe_indicatorConst]; rw [s
+    rw [Lp.simpleFunc.coe_indicatorConst]; rw [setIntegral_indicatorConstLp (hm _ hs)]
+    exact setIntegral_condExpInd hs ht hμs hμt.ne x
+  · intro f g hf_Lp hg_Lp _ hf hg
+    simp_rw [(condExpL1CLM F' hm μ).map_add]
+    rw [setIntegral_congr_ae (hm s hs) ((Lp.coeFn_add (condExpL1CLM F' hm μ (hf_Lp.toLp f))
+      (condExpL1CLM F' hm μ (hg_Lp.toLp g))).mono fun x hx _ => hx)]
+    rw [setIntegral_congr_ae (hm s hs)
+      ((Lp.coeFn_add (hf_Lp.toLp f) (hg_Lp.toLp g)).mono fun x hx _ => hx)]
+    simp_rw [Pi.add_apply]
+    rw [integral_add (L1.integrable_coeFn _).integrableOn (L1.integrable_coeFn _).integrableOn]; rw [integral_add (L1.integrable_coeFn _).integrableOn (L1.integrable_coeFn _).integrableOn]; rw [hf]; rw [hg]
+  · exact (continuous_setIntegral s).comp (condExpL1CLM F' hm μ).continuous
+  · exact continuous_setIntegral s
 
 Depends on / 依赖: ENNReal, ENNReal.one_ne_top, Lp.coeFn_add, Lp.induction, Lp.simpleFunc.coe_indicatorConst, coeFn_add, coe_indicatorConst, condExpL1, condExpL1CLM, condExpL1CLM_indicatorConst, hf_Lp, hg_Lp, isClosed_eq, map_add, one_ne_top, setIntegral_condExpInd, setIntegral_congr_ae, setIntegral_indicatorConstLp, simp_rw, simpleFunc
 -/
@@ -1082,7 +1126,32 @@ theorem setIntegral_condExpL1CLM
   have hS_meas0 : forall i, MeasurableSet (S i) := fun i => hm _ (hS_meas i)
   have hs_eq : s = ⋃ i, S i inter s := by
     simp_rw [Set.inter_comm]
-    rw [← Set.inter_i
+    rw [← Set.inter_iUnion]; rw [iUnion_spanningSets (μ.trim hm)]; rw [Set.inter_univ]
+  have hS_finite : forall i, μ (S i inter s) < ∞ := by
+    refine fun i => (measure_mono Set.inter_subset_left).trans_lt ?_
+    have hS_finite_trim := measure_spanningSets_lt_top (μ.trim hm) i
+    rwa [trim_measurableSet_eq hm (hS_meas i)] at hS_finite_trim
+  have h_mono : Monotone fun i => S i inter s := by
+    intro i j hij x
+    simp_rw [Set.mem_inter_iff]
+    exact fun h => ⟨monotone_spanningSets (μ.trim hm) hij h.1, h.2⟩
+  have h_eq_forall :
+    (fun i => ∫ x in S i inter s, condExpL1CLM F' hm μ f x ∂μ) = fun i => ∫ x in S i inter s, f x ∂μ :=
+    funext fun i =>
+      setIntegral_condExpL1CLM_of_measure_ne_top f (@MeasurableSet.inter α m _ _ (hS_meas i) hs)
+        (hS_finite i).ne
+  have h_right : Tendsto (fun i => ∫ x in S i inter s, f x ∂μ) atTop (𝓝 (∫ x in s, f x ∂μ)) := by
+    have h :=
+      tendsto_setIntegral_of_monotone (fun i => (hS_meas0 i).inter (hm s hs)) h_mono
+        (L1.integrable_coeFn f).integrableOn
+    rwa [← hs_eq] at h
+  have h_left : Tendsto (fun i => ∫ x in S i inter s, condExpL1CLM F' hm μ f x ∂μ) atTop
+      (𝓝 (∫ x in s, condExpL1CLM F' hm μ f x ∂μ)) := by
+    have h := tendsto_setIntegral_of_monotone (fun i => (hS_meas0 i).inter (hm s hs)) h_mono
+      (L1.integrable_coeFn (condExpL1CLM F' hm μ f)).integrableOn
+    rwa [← hs_eq] at h
+  rw [h_eq_forall] at h_left
+  exact tendsto_nhds_unique h_left h_right
 
 中文:
 定理 set整数egral_condExpL1CLM
@@ -1093,7 +1162,32 @@ theorem setIntegral_condExpL1CLM
   have hS_meas0 : forall i, MeasurableSet (S i) := fun i => hm _ (hS_meas i)
   have hs_eq : s = ⋃ i, S i inter s := by
     simp_rw [Set.inter_comm]
-    rw [← Set.inter_i
+    rw [← Set.inter_iUnion]; rw [iUnion_spanningSets (μ.trim hm)]; rw [Set.inter_univ]
+  have hS_finite : forall i, μ (S i inter s) < ∞ := by
+    refine fun i => (measure_mono Set.inter_subset_left).trans_lt ?_
+    have hS_finite_trim := measure_spanningSets_lt_top (μ.trim hm) i
+    rwa [trim_measurableSet_eq hm (hS_meas i)] at hS_finite_trim
+  have h_mono : Monotone fun i => S i inter s := by
+    intro i j hij x
+    simp_rw [Set.mem_inter_iff]
+    exact fun h => ⟨monotone_spanningSets (μ.trim hm) hij h.1, h.2⟩
+  have h_eq_forall :
+    (fun i => ∫ x in S i inter s, condExpL1CLM F' hm μ f x ∂μ) = fun i => ∫ x in S i inter s, f x ∂μ :=
+    funext fun i =>
+      setIntegral_condExpL1CLM_of_measure_ne_top f (@MeasurableSet.inter α m _ _ (hS_meas i) hs)
+        (hS_finite i).ne
+  have h_right : Tendsto (fun i => ∫ x in S i inter s, f x ∂μ) atTop (𝓝 (∫ x in s, f x ∂μ)) := by
+    have h :=
+      tendsto_setIntegral_of_monotone (fun i => (hS_meas0 i).inter (hm s hs)) h_mono
+        (L1.integrable_coeFn f).integrableOn
+    rwa [← hs_eq] at h
+  have h_left : Tendsto (fun i => ∫ x in S i inter s, condExpL1CLM F' hm μ f x ∂μ) atTop
+      (𝓝 (∫ x in s, condExpL1CLM F' hm μ f x ∂μ)) := by
+    have h := tendsto_setIntegral_of_monotone (fun i => (hS_meas0 i).inter (hm s hs)) h_mono
+      (L1.integrable_coeFn (condExpL1CLM F' hm μ f)).integrableOn
+    rwa [← hs_eq] at h
+  rw [h_eq_forall] at h_left
+  exact tendsto_nhds_unique h_left h_right
 
 Depends on / 依赖: MeasurableSet, Set.inter_comm, Set.inter_iUnion, Set.inter_subset_left, Set.inter_univ, hS_finite, hS_finite_trim, hS_meas, hS_meas0, hs_eq, iUnion_spanningSets, inter_comm, inter_iUnion, inter_subset_left, inter_univ, measurableSet_spanningSets, measure_mono, measure_s, simp_rw, spanningSets
 -/
@@ -1143,7 +1237,14 @@ theorem aestronglyMeasurable_condExpL1CLM
   · intro c s hs hμs
     rw [condExpL1CLM_indicatorConst hs hμs.ne c]
     exact aestronglyMeasurable_condExpInd hs hμs.ne c
-  · intro f g hf hg _ hfm 
+  · intro f g hf hg _ hfm hgm
+    rw [(condExpL1CLM F' hm μ).map_add]
+    exact (hfm.add hgm).congr (coeFn_add ..).symm
+  · have : {f : Lp F' 1 μ | AEStronglyMeasurable[m] (condExpL1CLM F' hm μ f) μ} =
+        condExpL1CLM F' hm μ ⁻¹' {f | AEStronglyMeasurable[m] f μ} := rfl
+    rw [this]
+    refine IsClosed.preimage (condExpL1CLM F' hm μ).continuous ?_
+    exact isClosed_aestronglyMeasurable hm
 
 中文:
 定理 aestronglyMeasurable_condExpL1CLM
@@ -1154,7 +1255,14 @@ theorem aestronglyMeasurable_condExpL1CLM
   · intro c s hs hμs
     rw [condExpL1CLM_indicatorConst hs hμs.ne c]
     exact aestronglyMeasurable_condExpInd hs hμs.ne c
-  · intro f g hf hg _ hfm 
+  · intro f g hf hg _ hfm hgm
+    rw [(condExpL1CLM F' hm μ).map_add]
+    exact (hfm.add hgm).congr (coeFn_add ..).symm
+  · have : {f : Lp F' 1 μ | AEStronglyMeasurable[m] (condExpL1CLM F' hm μ f) μ} =
+        condExpL1CLM F' hm μ ⁻¹' {f | AEStronglyMeasurable[m] f μ} := rfl
+    rw [this]
+    refine IsClosed.preimage (condExpL1CLM F' hm μ).continuous ?_
+    exact isClosed_aestronglyMeasurable hm
 
 Depends on / 依赖: AEStronglyMeasurable, ENNReal, ENNReal.one_ne_top, Lp.induction, aestronglyMeasurable_condExpInd, coeFn_add, condExpL1CLM, condExpL1CLM_indicatorConst, hfm.add, map_add, one_ne_top, s.ne
 -/
@@ -1186,7 +1294,20 @@ theorem condExpL1CLM_lpMeas
     simp only [g, LinearIsometryEquiv.symm_apply_apply]
   rw [hfg]
   refine @Lp.induction α F' m _ 1 (μ.trim hm) _ ENNReal.coe_ne_top (fun g : α ->₁[μ.trim hm] F' =>
-    condExpL1CLM F' 
+    condExpL1CLM F' hm μ ((lpMeasToLpTrimLie F' Real 1 μ hm).symm g : α ->₁[μ] F') =
+    ↑((lpMeasToLpTrimLie F' Real 1 μ hm).symm g)) ?_ ?_ ?_ g
+  · intro c s hs hμs
+    rw [@Lp.simpleFunc.coe_indicatorConst _ _ m]; rw [lpMeasToLpTrimLie_symm_indicator hs hμs.ne c]; rw [condExpL1CLM_indicatorConstLp]
+    exact condExpInd_of_measurable hs ((le_trim hm).trans_lt hμs).ne c
+  · intro f g hf hg _ hf_eq hg_eq
+    rw [LinearIsometryEquiv.map_add]
+    push_cast
+    rw [map_add]; rw [hf_eq]; rw [hg_eq]
+  · refine isClosed_eq ?_ ?_
+    · refine (condExpL1CLM F' hm μ).continuous.comp (continuous_induced_dom.comp ?_)
+      exact LinearIsometryEquiv.continuous _
+    · refine continuous_induced_dom.comp ?_
+      exact LinearIsometryEquiv.continuous _
 
 中文:
 定理 condExpL1CLM_lpMeas
@@ -1197,7 +1318,20 @@ theorem condExpL1CLM_lpMeas
     simp only [g, LinearIsometryEquiv.symm_apply_apply]
   rw [hfg]
   refine @Lp.induction α F' m _ 1 (μ.trim hm) _ ENNReal.coe_ne_top (fun g : α ->₁[μ.trim hm] F' =>
-    condExpL1CLM F' 
+    condExpL1CLM F' hm μ ((lpMeasToLpTrimLie F' Real 1 μ hm).symm g : α ->₁[μ] F') =
+    ↑((lpMeasToLpTrimLie F' Real 1 μ hm).symm g)) ?_ ?_ ?_ g
+  · intro c s hs hμs
+    rw [@Lp.simpleFunc.coe_indicatorConst _ _ m]; rw [lpMeasToLpTrimLie_symm_indicator hs hμs.ne c]; rw [condExpL1CLM_indicatorConstLp]
+    exact condExpInd_of_measurable hs ((le_trim hm).trans_lt hμs).ne c
+  · intro f g hf hg _ hf_eq hg_eq
+    rw [LinearIsometryEquiv.map_add]
+    push_cast
+    rw [map_add]; rw [hf_eq]; rw [hg_eq]
+  · refine isClosed_eq ?_ ?_
+    · refine (condExpL1CLM F' hm μ).continuous.comp (continuous_induced_dom.comp ?_)
+      exact LinearIsometryEquiv.continuous _
+    · refine continuous_induced_dom.comp ?_
+      exact LinearIsometryEquiv.continuous _
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_top, LinearIsometryEquiv, LinearIsometryEquiv.symm_apply_apply, Lp.induction, Lp.simpleFunc.coe_indicatorConst, coe_indicatorConst, coe_ne_top, condExpL1CLM, lpMeasToLpTrimLie, lpMeasToLpTrimLie_symm_in, simpleFunc, symm_apply_apply
 -/
@@ -1383,7 +1517,19 @@ theorem aestronglyMeasurable_condExpL1
     exact (coeFn_zero _ 1 _).symm
   by_cases hf : Integrable f μ; swap
   · rw [condExpL1_undef hf]
-    exact s
+    exact stronglyMeasurable_zero.aestronglyMeasurable.congr (coeFn_zero ..).symm
+  by_cases hf' : f =ᵐ[μ] 0
+  · apply stronglyMeasurable_zero.aestronglyMeasurable.congr
+    simp only [condExpL1_congr_ae hm hf', condExpL1_zero, ZeroMemClass.coe_zero]
+    exact (coeFn_zero _ 1 _).symm
+  have : CompleteSpace F' := by
+    have : Nontrivial (Lp F' 1 μ) := by
+      apply nontrivial_of_ne (hf.toL1 f) 0
+      grw [ne_eq, Lp.ext_iff, Integrable.coeFn_toL1, coeFn_zero]
+      exact hf'
+    exact completeSpace_of_completeSpace_Lp F' 1 μ
+  rw [condExpL1_eq hf]
+  exact aestronglyMeasurable_condExpL1CLM _
 
 中文:
 定理 aestronglyMeasurable_condExpL1
@@ -1395,7 +1541,19 @@ theorem aestronglyMeasurable_condExpL1
     exact (coeFn_zero _ 1 _).symm
   by_cases hf : Integrable f μ; swap
   · rw [condExpL1_undef hf]
-    exact s
+    exact stronglyMeasurable_zero.aestronglyMeasurable.congr (coeFn_zero ..).symm
+  by_cases hf' : f =ᵐ[μ] 0
+  · apply stronglyMeasurable_zero.aestronglyMeasurable.congr
+    simp only [condExpL1_congr_ae hm hf', condExpL1_zero, ZeroMemClass.coe_zero]
+    exact (coeFn_zero _ 1 _).symm
+  have : CompleteSpace F' := by
+    have : Nontrivial (Lp F' 1 μ) := by
+      apply nontrivial_of_ne (hf.toL1 f) 0
+      grw [ne_eq, Lp.ext_iff, Integrable.coeFn_toL1, coeFn_zero]
+      exact hf'
+    exact completeSpace_of_completeSpace_Lp F' 1 μ
+  rw [condExpL1_eq hf]
+  exact aestronglyMeasurable_condExpL1CLM _
 
 Depends on / 依赖: CompleteSpace, Integrable, ZeroMemClas, ZeroMemClass, ZeroMemClass.coe_zero, aestronglyMeasurable, coeFn_zero, coe_zero, condExpL1, condExpL1_congr_ae, condExpL1_undef, condExpL1_zero, reduceDIte, setToFun, stronglyMeasurable_zero, stronglyMeasurable_zero.aestronglyMeasurable.congr
 -/

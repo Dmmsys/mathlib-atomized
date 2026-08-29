@@ -517,7 +517,14 @@ theorem gc
       rw [UniformFun.filter]; rw [← FilterBasis.generate]; rw [le_generate_iff]
     _ ↔ forall U in 𝓕, UniformFun.gen α β U in 𝓐 := image_subset_iff
     _ ↔ forall U in 𝓕,
-          { 
+          { uv | forall x, (uv, x) in { t : ((α ->ᵤ β) × (α ->ᵤ β)) × α | (t.1.1 t.2, t.1.2 t.2) in U } } in
+            𝓐 :=
+      Iff.rfl
+    _ ↔ forall U in 𝓕,
+          { uvx : ((α ->ᵤ β) × (α ->ᵤ β)) × α | (uvx.1.1 uvx.2, uvx.1.2 uvx.2) in U } in
+            𝓐 ×ˢ (⊤ : Filter α) :=
+      forall₂_congr fun U _hU => mem_prod_top.symm
+    _ ↔ lowerAdjoint 𝓐 <= 𝓕 := Iff.rfl
 
 中文:
 定理 gc
@@ -530,7 +537,14 @@ theorem gc
       rw [UniformFun.filter]; rw [← FilterBasis.generate]; rw [le_generate_iff]
     _ ↔ forall U in 𝓕, UniformFun.gen α β U in 𝓐 := image_subset_iff
     _ ↔ forall U in 𝓕,
-          { 
+          { uv | forall x, (uv, x) in { t : ((α ->ᵤ β) × (α ->ᵤ β)) × α | (t.1.1 t.2, t.1.2 t.2) in U } } in
+            𝓐 :=
+      Iff.rfl
+    _ ↔ forall U in 𝓕,
+          { uvx : ((α ->ᵤ β) × (α ->ᵤ β)) × α | (uvx.1.1 uvx.2, uvx.1.2 uvx.2) in U } in
+            𝓐 ×ˢ (⊤ : Filter α) :=
+      forall₂_congr fun U _hU => mem_prod_top.symm
+    _ ↔ lowerAdjoint 𝓐 <= 𝓕 := Iff.rfl
 -/
 protected theorem gc : GaloisConnection lowerAdjoint fun 𝓕 => UniformFun.filter α β 𝓕 := by
   intro 𝓐 𝓕
@@ -563,7 +577,10 @@ definition uniformCore
       hVU ▸
         ⟨UniformFun.gen α β (Prod.swap ⁻¹' V), ⟨Prod.swap ⁻¹' V, tendsto_swap_uniformity hV, rfl⟩,
           fun _ huv x => huv x⟩)
-    
+    fun _ ⟨_, hV, hVU⟩ =>
+    hVU ▸
+      let ⟨W, hW, hWV⟩ := comp_mem_uniformity_sets hV
+      ⟨UniformFun.gen α β W, ⟨W, hW, rfl⟩, fun _ ⟨w, huw, hwv⟩ x => hWV ⟨w x, ⟨huw x, hwv x⟩⟩⟩
 
 中文:
 定义 uniformCore
@@ -574,7 +591,10 @@ definition uniformCore
       hVU ▸
         ⟨UniformFun.gen α β (Prod.swap ⁻¹' V), ⟨Prod.swap ⁻¹' V, tendsto_swap_uniformity hV, rfl⟩,
           fun _ huv x => huv x⟩)
-    
+    fun _ ⟨_, hV, hVU⟩ =>
+    hVU ▸
+      let ⟨W, hW, hWV⟩ := comp_mem_uniformity_sets hV
+      ⟨UniformFun.gen α β W, ⟨W, hW, rfl⟩, fun _ ⟨w, huw, hwv⟩ x => hWV ⟨w x, ⟨huw x, hwv x⟩⟩⟩
 -/
 protected def uniformCore : UniformSpace.Core (α ->ᵤ β) :=
   UniformSpace.Core.mkOfBasis (UniformFun.basis α β (𝓤 β))
@@ -918,7 +938,7 @@ theorem postcomp_uniformContinuous
     calc
       𝒰(α, γ, _) <= 𝒰(α, γ, ‹UniformSpace β›.comap f) :=
         UniformFun.mono (uniformContinuous_iff_le_comap.mp hf)
-      _ = 𝒰(α, β, _).comap (f ∘ ·) := by exact UniformFun.co
+      _ = 𝒰(α, β, _).comap (f ∘ ·) := by exact UniformFun.comap_eq
 
 中文:
 定理 postcomp_uniformContinuous
@@ -929,7 +949,7 @@ theorem postcomp_uniformContinuous
     calc
       𝒰(α, γ, _) <= 𝒰(α, γ, ‹UniformSpace β›.comap f) :=
         UniformFun.mono (uniformContinuous_iff_le_comap.mp hf)
-      _ = 𝒰(α, β, _).comap (f ∘ ·) := by exact UniformFun.co
+      _ = 𝒰(α, β, _).comap (f ∘ ·) := by exact UniformFun.comap_eq
 -/
 protected theorem postcomp_uniformContinuous [UniformSpace γ] {f : γ -> β}
     (hf : UniformContinuous f) :
@@ -1088,7 +1108,20 @@ definition uniformEquivProdArrow
   -- `comap φ (𝒰(α, β, uβ) × 𝒰(α, γ, uγ)) = 𝒰(α, β × γ, uβ × uγ)`.
   -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
   -- `UniformFun.inf_eq` and `UniformFun.comap_eq`, which leaves us to check
-  -- that some s
+  -- that some square commutes.
+Equiv.toUniformEquivOfIsUniformInducing (Equiv.arrowProdEquivProdArrow _ _ _) by
+    constructor
+    change
+      comap (Prod.map (Equiv.arrowProdEquivProdArrow _ _ _) (Equiv.arrowProdEquivProdArrow _ _ _))
+          _ = _
+    simp_rw [UniformFun]
+    rw [← uniformity_comap]
+    congr
+    unfold instUniformSpaceProd
+    rw [UniformSpace.comap_inf]; rw [← UniformSpace.comap_comap]; rw [← UniformSpace.comap_comap]
+    have := (@UniformFun.inf_eq α (β × γ)
+      (UniformSpace.comap Prod.fst ‹_›) (UniformSpace.comap Prod.snd ‹_›)).symm
+    rwa [UniformFun.comap_eq, UniformFun.comap_eq] at this
 
 中文:
 定义 uniformEquivProdArrow
@@ -1097,7 +1130,20 @@ definition uniformEquivProdArrow
   -- `comap φ (𝒰(α, β, uβ) × 𝒰(α, γ, uγ)) = 𝒰(α, β × γ, uβ × uγ)`.
   -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
   -- `UniformFun.inf_eq` and `UniformFun.comap_eq`, which leaves us to check
-  -- that some s
+  -- that some square commutes.
+Equiv.toUniformEquivOfIsUniformInducing (Equiv.arrowProdEquivProdArrow _ _ _) by
+    constructor
+    change
+      comap (Prod.map (Equiv.arrowProdEquivProdArrow _ _ _) (Equiv.arrowProdEquivProdArrow _ _ _))
+          _ = _
+    simp_rw [UniformFun]
+    rw [← uniformity_comap]
+    congr
+    unfold instUniformSpaceProd
+    rw [UniformSpace.comap_inf]; rw [← UniformSpace.comap_comap]; rw [← UniformSpace.comap_comap]
+    have := (@UniformFun.inf_eq α (β × γ)
+      (UniformSpace.comap Prod.fst ‹_›) (UniformSpace.comap Prod.snd ‹_›)).symm
+    rwa [UniformFun.comap_eq, UniformFun.comap_eq] at this
 -/
 protected def uniformEquivProdArrow [UniformSpace γ] : (α ->ᵤ β × γ) ≃ᵤ (α ->ᵤ β) × (α ->ᵤ γ) :=
   -- Denote `φ` this bijection. We want to show that
@@ -1133,7 +1179,19 @@ definition uniformEquivPiComm
     -- `comap φ (Π i, 𝒰(α, δ i, uδ i)) = 𝒰(α, (Π i, δ i), (Π i, uδ i))`.
     -- But `Π i, uδ i` is defined as `⨅ i, comap (eval i) (uδ i)`, so we just have to apply
     -- `UniformFun.iInf_eq` and `UniformFun.comap_eq`, which leaves us to check
-    
+    -- that some square commutes.
+    @Equiv.toUniformEquivOfIsUniformInducing
+    _ _ 𝒰(α, forall i, δ i, Pi.uniformSpace δ)
+(@Pi.uniformSpace ι (fun i => α -> δ i) fun i => 𝒰(α, δ i, _)) (Equiv.piComm _) by
+      refine @IsUniformInducing.mk ?_ ?_ ?_ ?_ ?_ ?_
+      change comap (Prod.map Function.swap Function.swap) _ = _
+      rw [← uniformity_comap]
+      congr
+      unfold Pi.uniformSpace
+      rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.comap_iInf]; rw [UniformFun.iInf_eq]
+      refine iInf_congr fun i => ?_
+      rw [← UniformSpace.comap_comap]; rw [UniformFun.comap_eq]
+      rfl
 
 中文:
 定义 uniformEquivPiComm
@@ -1142,7 +1200,19 @@ definition uniformEquivPiComm
     -- `comap φ (Π i, 𝒰(α, δ i, uδ i)) = 𝒰(α, (Π i, δ i), (Π i, uδ i))`.
     -- But `Π i, uδ i` is defined as `⨅ i, comap (eval i) (uδ i)`, so we just have to apply
     -- `UniformFun.iInf_eq` and `UniformFun.comap_eq`, which leaves us to check
-    
+    -- that some square commutes.
+    @Equiv.toUniformEquivOfIsUniformInducing
+    _ _ 𝒰(α, forall i, δ i, Pi.uniformSpace δ)
+(@Pi.uniformSpace ι (fun i => α -> δ i) fun i => 𝒰(α, δ i, _)) (Equiv.piComm _) by
+      refine @IsUniformInducing.mk ?_ ?_ ?_ ?_ ?_ ?_
+      change comap (Prod.map Function.swap Function.swap) _ = _
+      rw [← uniformity_comap]
+      congr
+      unfold Pi.uniformSpace
+      rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.comap_iInf]; rw [UniformFun.iInf_eq]
+      refine iInf_congr fun i => ?_
+      rw [← UniformSpace.comap_comap]; rw [UniformFun.comap_eq]
+      rfl
 -/
 protected def uniformEquivPiComm : UniformEquiv (α ->ᵤ forall i, δ i) (forall i, α ->ᵤ δ i) :=
   -- Denote `φ` this bijection. We want to show that
@@ -1177,7 +1247,7 @@ theorem isClosed_setOfPred_continuous
 exact huf.continuous Eventually.frequently (le_principal_iff.mp hu)
 
 @[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_continuous := isClosed_setOfPred_c
+alias isClosed_setOf_continuous := isClosed_setOfPred_continuous
 
 中文:
 定理 isClosed_setOfPred_continuous
@@ -1188,7 +1258,7 @@ alias isClosed_setOf_continuous := isClosed_setOfPred_c
 exact huf.continuous Eventually.frequently (le_principal_iff.mp hu)
 
 @[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_continuous := isClosed_setOfPred_c
+alias isClosed_setOf_continuous := isClosed_setOfPred_continuous
 
 Depends on / 依赖: Eventually, Eventually.frequently, UniformFun, UniformFun.tendsto_iff_tendstoUniformly, continuous, frequently, huf.continuous, isClosed_iff_forall_filter, le_principal_iff, le_principal_iff.mp, tendsto_id, tendsto_iff_tendstoUniformly
 -/
@@ -1215,7 +1285,12 @@ theorem uniformSpace_eq_inf_precomp_of_cover
   · exact tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous
   · refine
       (UniformFun.hasBasis_uniformity δ₁ β |>.comap _).inf
-      (UniformFun.hasBasis_uniformity δ₂ β
+      (UniformFun.hasBasis_uniformity δ₂ β |>.comap _)
+.mpr fun U hU => .le_basis_iff (UniformFun.hasBasis_uniformity α β)
+        ⟨⟨U, U⟩, ⟨hU, hU⟩, fun ⟨f, g⟩ hfg x => ?_⟩
+rcases h_cover.ge mem_univ x with (⟨y, rfl⟩ | ⟨y, rfl⟩)
+    · exact hfg.1 y
+    · exact hfg.2 y
 
 中文:
 定理 uniformSpace_eq_inf_precomp_of_cover
@@ -1227,7 +1302,12 @@ theorem uniformSpace_eq_inf_precomp_of_cover
   · exact tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous
   · refine
       (UniformFun.hasBasis_uniformity δ₁ β |>.comap _).inf
-      (UniformFun.hasBasis_uniformity δ₂ β
+      (UniformFun.hasBasis_uniformity δ₂ β |>.comap _)
+.mpr fun U hU => .le_basis_iff (UniformFun.hasBasis_uniformity α β)
+        ⟨⟨U, U⟩, ⟨hU, hU⟩, fun ⟨f, g⟩ hfg x => ?_⟩
+rcases h_cover.ge mem_univ x with (⟨y, rfl⟩ | ⟨y, rfl⟩)
+    · exact hfg.1 y
+    · exact hfg.2 y
 
 Depends on / 依赖: UniformFun, UniformFun.hasBasis_uniformity, UniformFun.precomp_uniformContinuous, h_cover, h_cover.ge, hasBasis_uniformity, le_antisymm, le_basis_iff, le_inf, mem_univ, precomp_uniformContinuous, tendsto_iff_comap, tendsto_iff_comap.mp
 -/
@@ -1262,7 +1342,10 @@ theorem uniformSpace_eq_iInf_precomp_of_cover
   refine le_antisymm (le_iInf fun i => tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous) ?_
   rcases h_cover with ⟨I, I_finite, I_cover⟩
   refine HasBasis.iInf (fun i : ι => UniformFun.hasBasis_uniformity (δ i) β |>.comap _)
-.mpr fu
+.mpr fun U hU => .le_basis_iff (UniformFun.hasBasis_uniformity α β)
+    ⟨⟨I, fun _ => U⟩, ⟨I_finite, fun _ => hU⟩, fun ⟨f, g⟩ hfg x => ?_⟩
+rcases mem_iUnion₂.mp I_cover.ge mem_univ x with ⟨i, hi, y, rfl⟩
+  exact mem_iInter.mp hfg ⟨i, hi⟩ y
 
 中文:
 定理 uniformSpace_eq_iInf_precomp_of_cover
@@ -1273,7 +1356,10 @@ theorem uniformSpace_eq_iInf_precomp_of_cover
   refine le_antisymm (le_iInf fun i => tendsto_iff_comap.mp UniformFun.precomp_uniformContinuous) ?_
   rcases h_cover with ⟨I, I_finite, I_cover⟩
   refine HasBasis.iInf (fun i : ι => UniformFun.hasBasis_uniformity (δ i) β |>.comap _)
-.mpr fu
+.mpr fun U hU => .le_basis_iff (UniformFun.hasBasis_uniformity α β)
+    ⟨⟨I, fun _ => U⟩, ⟨I_finite, fun _ => hU⟩, fun ⟨f, g⟩ hfg x => ?_⟩
+rcases mem_iUnion₂.mp I_cover.ge mem_univ x with ⟨i, hi, y, rfl⟩
+  exact mem_iInter.mp hfg ⟨i, hi⟩ y
 
 Depends on / 依赖: HasBasis, HasBasis.iInf, I_cover, I_cover.ge, I_finite, UniformFun, UniformFun.hasBasis_uniformity, UniformFun.precomp_uniformContinuous, h_cover, hasBasis_uniformity, iInf_uniformity, le_antisymm, le_basis_iff, le_iInf, mem_iInter, mem_univ, precomp_uniformContinuous, simp_rw, tendsto_iff_comap, tendsto_iff_comap.mp
 -/
@@ -1579,7 +1665,11 @@ theorem hasBasis_uniformity_of_covering_of_basis
   have hd : DirectedOn (· subseteq ·) 𝔖 := fun s₁ hs₁ s₂ hs₂ => by
     rcases hex s₁ hs₁, hex s₂ hs₂ with ⟨⟨i₁, his₁⟩, i₂, his₂⟩
     rcases hdir i₁ i₂ with ⟨i, hi₁, hi₂⟩
-    exact ⟨t i, ht _, his₁.trans hi₁, his₂.trans hi₂
+    exact ⟨t i, ht _, his₁.trans hi₁, his₂.trans hi₂⟩
+  refine (UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 hne hd hb).to_hasBasis
+    (fun ⟨s, i'⟩ ⟨hs, hi'⟩ => ?_) fun ⟨i, i'⟩ hi' => ⟨(t i, i'), ⟨ht i, hi'⟩, Subset.rfl⟩
+  rcases hex s hs with ⟨i, hi⟩
+  exact ⟨(i, i'), hi', UniformOnFun.gen_mono hi Subset.rfl⟩
 
 中文:
 定理 hasBasis_uniformity_of_covering_of_basis
@@ -1589,7 +1679,11 @@ theorem hasBasis_uniformity_of_covering_of_basis
   have hd : DirectedOn (· subseteq ·) 𝔖 := fun s₁ hs₁ s₂ hs₂ => by
     rcases hex s₁ hs₁, hex s₂ hs₂ with ⟨⟨i₁, his₁⟩, i₂, his₂⟩
     rcases hdir i₁ i₂ with ⟨i, hi₁, hi₂⟩
-    exact ⟨t i, ht _, his₁.trans hi₁, his₂.trans hi₂
+    exact ⟨t i, ht _, his₁.trans hi₁, his₂.trans hi₂⟩
+  refine (UniformOnFun.hasBasis_uniformity_of_basis α β 𝔖 hne hd hb).to_hasBasis
+    (fun ⟨s, i'⟩ ⟨hs, hi'⟩ => ?_) fun ⟨i, i'⟩ hi' => ⟨(t i, i'), ⟨ht i, hi'⟩, Subset.rfl⟩
+  rcases hex s hs with ⟨i, hi⟩
+  exact ⟨(i, i'), hi', UniformOnFun.gen_mono hi Subset.rfl⟩
 -/
 protected theorem hasBasis_uniformity_of_covering_of_basis {ι ι' : Type*} [Nonempty ι]
     {t : ι -> Set α} {p : ι' -> Prop} {V : ι' -> Set (β × β)} (ht : forall i, t i in 𝔖)
@@ -1618,7 +1712,8 @@ theorem hasAntitoneBasis_uniformity
     ht hmono.directed_le hex hb.1).to_hasBasis ?_ fun i _ => ⟨(i, i), trivial, Subset.rfl⟩, ?_⟩
   · rintro ⟨k, l⟩ -
     rcases directed_of (· <= ·) k l with ⟨n, hkn, hln⟩
-    exact ⟨n, trivial, UniformOnFun.g
+    exact ⟨n, trivial, UniformOnFun.gen_mono (hmono hkn) (hb.2 <| hln)⟩
+  · exact fun k l h => UniformOnFun.gen_mono (hmono h) (hb.2 h)
 
 中文:
 定理 hasAntitoneBasis_uniformity
@@ -1629,7 +1724,8 @@ theorem hasAntitoneBasis_uniformity
     ht hmono.directed_le hex hb.1).to_hasBasis ?_ fun i _ => ⟨(i, i), trivial, Subset.rfl⟩, ?_⟩
   · rintro ⟨k, l⟩ -
     rcases directed_of (· <= ·) k l with ⟨n, hkn, hln⟩
-    exact ⟨n, trivial, UniformOnFun.g
+    exact ⟨n, trivial, UniformOnFun.gen_mono (hmono hkn) (hb.2 <| hln)⟩
+  · exact fun k l h => UniformOnFun.gen_mono (hmono h) (hb.2 h)
 -/
 protected theorem hasAntitoneBasis_uniformity {ι : Type*} [Preorder ι] [IsDirectedOrder ι]
     {t : ι -> Set α} {V : ι -> Set (β × β)}
@@ -1743,7 +1839,10 @@ theorem isUniformEmbedding_toFun_finite
   refine HasBasis.ext (HasBasis.iInf' fun i => (basis_sets _).comap _)
     (UniformOnFun.hasBasis_uniformity α β _ ⟨∅, finite_empty⟩
       (directedOn_of_sup_mem fun _ _ => .union))
-    (fun ⟨S, U⟩ ⟨hS, hU⟩ 
+    (fun ⟨S, U⟩ ⟨hS, hU⟩ => ⟨⟨S, ⋂ x in S, U x⟩, ⟨⟨hS, biInter_mem hS |>.mpr hU⟩,
+      fun f hf => mem_iInter₂.mpr fun x hx => mem_iInter₂.mp (hf x hx) x hx⟩⟩)
+    (fun ⟨S, U⟩ ⟨hS, hU⟩ => ⟨⟨S, fun _ => U⟩, ⟨hS, fun _ _ => hU⟩, fun f hf x hx =>
+      mem_iInter₂.mp hf x hx⟩)
 
 中文:
 定理 isUniformEmbedding_toFun_finite
@@ -1753,7 +1852,10 @@ theorem isUniformEmbedding_toFun_finite
   refine HasBasis.ext (HasBasis.iInf' fun i => (basis_sets _).comap _)
     (UniformOnFun.hasBasis_uniformity α β _ ⟨∅, finite_empty⟩
       (directedOn_of_sup_mem fun _ _ => .union))
-    (fun ⟨S, U⟩ ⟨hS, hU⟩ 
+    (fun ⟨S, U⟩ ⟨hS, hU⟩ => ⟨⟨S, ⋂ x in S, U x⟩, ⟨⟨hS, biInter_mem hS |>.mpr hU⟩,
+      fun f hf => mem_iInter₂.mpr fun x hx => mem_iInter₂.mp (hf x hx) x hx⟩⟩)
+    (fun ⟨S, U⟩ ⟨hS, hU⟩ => ⟨⟨S, fun _ => U⟩, ⟨hS, fun _ _ => hU⟩, fun f hf x hx =>
+      mem_iInter₂.mp hf x hx⟩)
 
 Depends on / 依赖: Function, Function.injective_id, HasBasis, HasBasis.ext, HasBasis.iInf, Pi.uniformity, UniformOnFun, UniformOnFun.hasBasis_uniformity, basis_sets, biInter_mem, comap_comap, comap_iInf, directedOn_of_sup_mem, finite_empty, hasBasis_uniformity, injective_id, mem_iInter, simp_rw, uniformity
 -/
@@ -1798,7 +1900,7 @@ theorem uniformity_eq_of_basis
   simp_rw [iInf_uniformity, uniformity_comap,
     (UniformFun.hasBasis_uniformity_of_basis _ _ h).eq_biInf, comap_iInf, comap_principal,
     Function.comp_apply, UniformFun.gen, Subtype.forall, UniformOnFun.gen, preimage_ofPred_eq,
-    Prod.map_fst, Prod.map_snd, Function.comp_apply, UniformFun.t
+    Prod.map_fst, Prod.map_snd, Function.comp_apply, UniformFun.toFun_ofFun, domRestrict_apply]
 
 中文:
 定理 uniformity_eq_of_basis
@@ -1807,7 +1909,7 @@ theorem uniformity_eq_of_basis
   simp_rw [iInf_uniformity, uniformity_comap,
     (UniformFun.hasBasis_uniformity_of_basis _ _ h).eq_biInf, comap_iInf, comap_principal,
     Function.comp_apply, UniformFun.gen, Subtype.forall, UniformOnFun.gen, preimage_ofPred_eq,
-    Prod.map_fst, Prod.map_snd, Function.comp_apply, UniformFun.t
+    Prod.map_fst, Prod.map_snd, Function.comp_apply, UniformFun.toFun_ofFun, domRestrict_apply]
 -/
 protected theorem uniformity_eq_of_basis {ι : Sort*} {p : ι -> Prop} {V : ι -> Set (β × β)}
     (h : (𝓤 β).HasBasis p V) :
@@ -1954,6 +2056,7 @@ invFun f := ofFun _ UniformFun.toFun f
     simp only [UniformContinuous, (UniformFun.hasBasis_uniformity _ _).tendsto_right_iff]
     intro U hU
     filter_upwards [UniformOnFun.gen_mem_uniformity _ _ h hU] with f hf x using hf x (mem_univ _)
+  uniformContinuous_invFun := uniformContinuous_ofUniformFun _ _
 
 中文:
 定义 uniformEquivUniformFun
@@ -1964,6 +2067,7 @@ invFun f := ofFun _ UniformFun.toFun f
     simp only [UniformContinuous, (UniformFun.hasBasis_uniformity _ _).tendsto_right_iff]
     intro U hU
     filter_upwards [UniformOnFun.gen_mem_uniformity _ _ h hU] with f hf x using hf x (mem_univ _)
+  uniformContinuous_invFun := uniformContinuous_ofUniformFun _ _
 
 Depends on / 依赖: UniformFun, UniformFun.ofFun
 -/
@@ -1988,7 +2092,11 @@ lemma uniformContinuous_ofFun_toFun
   simp only [tendsto_iInf, tendsto_principal, Filter.Eventually, mem_biInf_principal]
   intro s hs
   obtain ⟨T, hT𝔗, hT, hsT⟩ := h s hs
-  
+  refine ⟨T, hT, hT𝔗, fun f hf => ?_⟩
+  simp only [UniformOnFun.gen, Set.mem_iInter, Set.mem_ofPred_eq] at hf ⊢
+  intro x hx
+obtain ⟨t, ht, hxt⟩ := Set.mem_sUnion.mp hsT hx
+  exact hf t ht x hxt
 
 中文:
 引理 uniformContinuous_ofFun_toFun
@@ -1999,7 +2107,11 @@ lemma uniformContinuous_ofFun_toFun
   simp only [tendsto_iInf, tendsto_principal, Filter.Eventually, mem_biInf_principal]
   intro s hs
   obtain ⟨T, hT𝔗, hT, hsT⟩ := h s hs
-  
+  refine ⟨T, hT, hT𝔗, fun f hf => ?_⟩
+  simp only [UniformOnFun.gen, Set.mem_iInter, Set.mem_ofPred_eq] at hf ⊢
+  intro x hx
+obtain ⟨t, ht, hxt⟩ := Set.mem_sUnion.mp hsT hx
+  exact hf t ht x hxt
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually, Set.mem_iInter, Set.mem_ofPred_eq, Set.mem_sUnion.mp, UniformContinuous, UniformOnFun, UniformOnFun.gen, UniformOnFun.uniformity_eq, mem_biInf_principal, mem_iInter, mem_ofPred_eq, mem_sUnion, tendsto_iInf, tendsto_iInf_iInf, tendsto_principal, uniformity_eq
 -/
@@ -2207,7 +2319,8 @@ theorem comap_eq
   -- on `iInf`.
   simp_rw [UniformOnFun.uniformSpace, UniformSpace.comap_iInf, UniformFun.comap_eq, ←
     UniformSpace.comap_comap]
-  -- By definition, `∀ S ∈ 𝔖, (f ∘ —) ∘ S.domRestrict = S.domRestrict ∘ (f ∘ —)`
+  -- By definition, `∀ S ∈ 𝔖, (f ∘ —) ∘ S.domRestrict = S.domRestrict ∘ (f ∘ —)`.
+  rfl
 
 中文:
 定理 comap_eq
@@ -2217,7 +2330,8 @@ theorem comap_eq
   -- on `iInf`.
   simp_rw [UniformOnFun.uniformSpace, UniformSpace.comap_iInf, UniformFun.comap_eq, ←
     UniformSpace.comap_comap]
-  -- By definition, `∀ S ∈ 𝔖, (f ∘ —) ∘ S.domRestrict = S.domRestrict ∘ (f ∘ —)`
+  -- By definition, `∀ S ∈ 𝔖, (f ∘ —) ∘ S.domRestrict = S.domRestrict ∘ (f ∘ —)`.
+  rfl
 -/
 protected theorem comap_eq {f : γ -> β} :
     𝒱(α, γ, 𝔖, ‹UniformSpace β›.comap f) = 𝒱(α, β, 𝔖, _).comap (f ∘ ·) := by
@@ -2269,7 +2383,8 @@ lemma postcomp_isUniformInducing
   change comap (Prod.map (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖) (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖)) _ = _
   rw [← uniformity_comap] at hf ⊢
   congr
-  rw [← UniformSpac
+  rw [← UniformSpace.ext hf]; rw [UniformOnFun.comap_eq]
+  rfl
 
 中文:
 引理 postcomp_isUniformInducing
@@ -2281,7 +2396,8 @@ lemma postcomp_isUniformInducing
   change comap (Prod.map (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖) (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖)) _ = _
   rw [← uniformity_comap] at hf ⊢
   congr
-  rw [← UniformSpac
+  rw [← UniformSpace.ext hf]; rw [UniformOnFun.comap_eq]
+  rfl
 -/
 lemma postcomp_isUniformInducing [UniformSpace γ] {f : γ -> β}
     (hf : IsUniformInducing f) : IsUniformInducing (ofFun 𝔖 ∘ (f ∘ ·) ∘ toFun 𝔖) := by
@@ -2347,7 +2463,7 @@ theorem precomp_uniformContinuous
   simp_rw [UniformContinuous, UniformOnFun.uniformity_eq, tendsto_iInf]
 refine fun t ht V hV => tendsto_iInf' (f '' t) tendsto_iInf' (hf ht)
 tendsto_iInf' V tendsto_iInf' hV ?_
-  simpa only [tendsto_princ
+  simpa only [tendsto_principal_principal, UniformOnFun.gen] using! fun _ => forall_mem_image.1
 
 中文:
 定理 precomp_uniformContinuous
@@ -2357,7 +2473,7 @@ tendsto_iInf' V tendsto_iInf' hV ?_
   simp_rw [UniformContinuous, UniformOnFun.uniformity_eq, tendsto_iInf]
 refine fun t ht V hV => tendsto_iInf' (f '' t) tendsto_iInf' (hf ht)
 tendsto_iInf' V tendsto_iInf' hV ?_
-  simpa only [tendsto_princ
+  simpa only [tendsto_principal_principal, UniformOnFun.gen] using! fun _ => forall_mem_image.1
 -/
 protected theorem precomp_uniformContinuous {𝔗 : Set (Set γ)} {f : γ -> α}
     (hf : MapsTo (f '' ·) 𝔗 𝔖) :
@@ -2517,7 +2633,8 @@ theorem continuousAt_eval₂
   intro U hU
   rcases h𝔖 with ⟨V, hV, hVx⟩
   filter_upwards [prod_mem_nhds (UniformOnFun.gen_mem_nhds _ _ _ hV hU)
-    (inter_mem hVx <| hc <| UniformSpace.ball_mem_nhds _ 
+    (inter_mem hVx <| hc <| UniformSpace.ball_mem_nhds _ hU)]
+    with ⟨g, y⟩ ⟨hg, hyV, hy⟩ using ⟨toFun 𝔖 f y, hy, hg y hyV⟩
 
 中文:
 定理 continuousAt_eval₂
@@ -2527,7 +2644,8 @@ theorem continuousAt_eval₂
   intro U hU
   rcases h𝔖 with ⟨V, hV, hVx⟩
   filter_upwards [prod_mem_nhds (UniformOnFun.gen_mem_nhds _ _ _ hV hU)
-    (inter_mem hVx <| hc <| UniformSpace.ball_mem_nhds _ 
+    (inter_mem hVx <| hc <| UniformSpace.ball_mem_nhds _ hU)]
+    with ⟨g, y⟩ ⟨hg, hyV, hy⟩ using ⟨toFun 𝔖 f y, hy, hg y hyV⟩
 -/
 protected theorem continuousAt_eval₂ [TopologicalSpace α] {f : α ->ᵤ[𝔖] β} {x : α}
     (h𝔖 : exists V in 𝔖, V in 𝓝 x) (hc : ContinuousAt (toFun 𝔖 f) x) :
@@ -2624,7 +2742,15 @@ instance [CompleteSpace
     have : forall x in ⋃₀ 𝔖, exists y : β, Tendsto (toFun 𝔖 · x) F (𝓝 y) := fun x hx =>
       CompleteSpace.complete (hF.map (uniformContinuous_eval_of_mem_sUnion _ _ hx))
     choose! g hg using this
-
+    use ofFun 𝔖 g
+    simp_rw [UniformOnFun.nhds_eq_of_basis _ _ uniformity_hasBasis_closed, le_iInf₂_iff,
+      le_principal_iff]
+    intro s hs U ⟨hU, hUc⟩
+.2 _ UniformOnFun.gen_mem_uniformity _ _ hs hU rcases cauchy_iff.mp hF
+      with ⟨V, hV, hVU⟩
+    filter_upwards [hV] with f hf x hx
+    refine hUc.mem_of_tendsto ((hg x ⟨s, hs, hx⟩).prodMk_nhds tendsto_const_nhds) ?_
+    filter_upwards [hV] with g' hg' using hVU (mk_mem_prod hg' hf) _ hx
 
 中文:
 实例 [完备空间
@@ -2637,7 +2763,15 @@ instance [CompleteSpace
     have : forall x in ⋃₀ 𝔖, exists y : β, Tendsto (toFun 𝔖 · x) F (𝓝 y) := fun x hx =>
       CompleteSpace.complete (hF.map (uniformContinuous_eval_of_mem_sUnion _ _ hx))
     choose! g hg using this
-
+    use ofFun 𝔖 g
+    simp_rw [UniformOnFun.nhds_eq_of_basis _ _ uniformity_hasBasis_closed, le_iInf₂_iff,
+      le_principal_iff]
+    intro s hs U ⟨hU, hUc⟩
+.2 _ UniformOnFun.gen_mem_uniformity _ _ hs hU rcases cauchy_iff.mp hF
+      with ⟨V, hV, hVU⟩
+    filter_upwards [hV] with f hf x hx
+    refine hUc.mem_of_tendsto ((hg x ⟨s, hs, hx⟩).prodMk_nhds tendsto_const_nhds) ?_
+    filter_upwards [hV] with g' hg' using hVU (mk_mem_prod hg' hf) _ hx
 
 Depends on / 依赖: CompleteSpace, CompleteSpace.complete, Tendsto, UniformOnFun, UniformOnFun.gen_mem_uniformity, UniformOnFun.nhds_eq_of_basis, cauchy_iff, cauchy_iff.mp, complete, gen_mem_uniformity, hF.map, infer_instance, isEmpty_or_nonempty, le_principal_iff, nhds_eq_of_basis, simp_rw, uniformContinuous_eval_of_mem_sUnion, uniformity_hasBasis_closed
 -/
@@ -2670,7 +2804,21 @@ definition uniformEquivProdArrow
   -- `comap φ (𝒱(α, β, 𝔖, uβ) × 𝒱(α, γ, 𝔖, uγ)) = 𝒱(α, β × γ, 𝔖, uβ × uγ)`.
   -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
   -- `UniformOnFun.inf_eq` and `UniformOnFun.comap_eq`,
-  -- which leaves us to chec
+  -- which leaves us to check that some square commutes.
+  -- We could also deduce this from `UniformFun.uniformEquivProdArrow`,
+  -- but it turns out to be more annoying.
+  ((UniformOnFun.ofFun 𝔖).symm.trans <| (Equiv.arrowProdEquivProdArrow _ _ _).trans <|
+    (UniformOnFun.ofFun 𝔖).prodCongr (UniformOnFun.ofFun 𝔖)).toUniformEquivOfIsUniformInducing <| by
+      constructor
+      rw [uniformity_prod]; rw [comap_inf]; rw [comap_comap]; rw [comap_comap]
+      have H := @UniformOnFun.inf_eq α (β × γ) 𝔖
+        (UniformSpace.comap Prod.fst ‹_›) (UniformSpace.comap Prod.snd ‹_›)
+      apply_fun (fun u => @uniformity (α ->ᵤ[𝔖] β × γ) u) at H
+      convert! H.symm using 1
+      rw [UniformOnFun.comap_eq]; rw [UniformOnFun.comap_eq]
+      erw [inf_uniformity]
+      rw [uniformity_comap]; rw [uniformity_comap]
+      rfl
 
 中文:
 定义 uniformEquivProdArrow
@@ -2679,7 +2827,21 @@ definition uniformEquivProdArrow
   -- `comap φ (𝒱(α, β, 𝔖, uβ) × 𝒱(α, γ, 𝔖, uγ)) = 𝒱(α, β × γ, 𝔖, uβ × uγ)`.
   -- But `uβ × uγ` is defined as `comap fst uβ ⊓ comap snd uγ`, so we just have to apply
   -- `UniformOnFun.inf_eq` and `UniformOnFun.comap_eq`,
-  -- which leaves us to chec
+  -- which leaves us to check that some square commutes.
+  -- We could also deduce this from `UniformFun.uniformEquivProdArrow`,
+  -- but it turns out to be more annoying.
+  ((UniformOnFun.ofFun 𝔖).symm.trans <| (Equiv.arrowProdEquivProdArrow _ _ _).trans <|
+    (UniformOnFun.ofFun 𝔖).prodCongr (UniformOnFun.ofFun 𝔖)).toUniformEquivOfIsUniformInducing <| by
+      constructor
+      rw [uniformity_prod]; rw [comap_inf]; rw [comap_comap]; rw [comap_comap]
+      have H := @UniformOnFun.inf_eq α (β × γ) 𝔖
+        (UniformSpace.comap Prod.fst ‹_›) (UniformSpace.comap Prod.snd ‹_›)
+      apply_fun (fun u => @uniformity (α ->ᵤ[𝔖] β × γ) u) at H
+      convert! H.symm using 1
+      rw [UniformOnFun.comap_eq]; rw [UniformOnFun.comap_eq]
+      erw [inf_uniformity]
+      rw [uniformity_comap]; rw [uniformity_comap]
+      rfl
 -/
 protected def uniformEquivProdArrow [UniformSpace γ] :
     (α ->ᵤ[𝔖] β × γ) ≃ᵤ (α ->ᵤ[𝔖] β) × (α ->ᵤ[𝔖] γ) :=
@@ -2716,7 +2878,19 @@ definition uniformEquivPiComm
   -- `comap φ (Π i, 𝒱(α, δ i, 𝔖, uδ i)) = 𝒱(α, (Π i, δ i), 𝔖, (Π i, uδ i))`.
   -- But `Π i, uδ i` is defined as `⨅ i, comap (eval i) (uδ i)`, so we just have to apply
   -- `UniformOnFun.iInf_eq` and `UniformOnFun.comap_eq`,
-  -- which leaves us to c
+  -- which leaves us to check that some square commutes.
+  -- We could also deduce this from `UniformFun.uniformEquivPiComm`, but it turns out
+  -- to be more annoying.
+  @Equiv.toUniformEquivOfIsUniformInducing (α ->ᵤ[𝔖] ((i : ι) -> δ i)) ((i : ι) -> α ->ᵤ[𝔖] δ i)
+_ _ (Equiv.piComm _) by
+    constructor
+    change comap (Prod.map Function.swap Function.swap) _ = _
+    erw [← uniformity_comap]
+    congr
+    rw [Pi.uniformSpace]; rw [UniformSpace.ofCoreEq_toCore]; rw [Pi.uniformSpace]; rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.comap_iInf]; rw [UniformOnFun.iInf_eq]
+    refine iInf_congr fun i => ?_
+    rw [← UniformSpace.comap_comap]; rw [UniformOnFun.comap_eq]
+    rfl
 
 中文:
 定义 uniformEquivPiComm
@@ -2725,7 +2899,19 @@ definition uniformEquivPiComm
   -- `comap φ (Π i, 𝒱(α, δ i, 𝔖, uδ i)) = 𝒱(α, (Π i, δ i), 𝔖, (Π i, uδ i))`.
   -- But `Π i, uδ i` is defined as `⨅ i, comap (eval i) (uδ i)`, so we just have to apply
   -- `UniformOnFun.iInf_eq` and `UniformOnFun.comap_eq`,
-  -- which leaves us to c
+  -- which leaves us to check that some square commutes.
+  -- We could also deduce this from `UniformFun.uniformEquivPiComm`, but it turns out
+  -- to be more annoying.
+  @Equiv.toUniformEquivOfIsUniformInducing (α ->ᵤ[𝔖] ((i : ι) -> δ i)) ((i : ι) -> α ->ᵤ[𝔖] δ i)
+_ _ (Equiv.piComm _) by
+    constructor
+    change comap (Prod.map Function.swap Function.swap) _ = _
+    erw [← uniformity_comap]
+    congr
+    rw [Pi.uniformSpace]; rw [UniformSpace.ofCoreEq_toCore]; rw [Pi.uniformSpace]; rw [UniformSpace.ofCoreEq_toCore]; rw [UniformSpace.comap_iInf]; rw [UniformOnFun.iInf_eq]
+    refine iInf_congr fun i => ?_
+    rw [← UniformSpace.comap_comap]; rw [UniformOnFun.comap_eq]
+    rfl
 -/
 protected def uniformEquivPiComm : (α ->ᵤ[𝔖] ((i : ι) -> δ i)) ≃ᵤ ((i : ι) -> α ->ᵤ[𝔖] δ i) :=
   -- Denote `φ` this bijection. We want to show that
@@ -2759,7 +2945,7 @@ theorem isClosed_setOfPred_continuous
 exact (huf s hs).continuousOn Eventually.frequently hu fun _ => Continuous.continuousOn
 
 @[deprecated (since := "2026-07-09")]
-
+alias isClosed_setOf_continuous := isClosed_setOfPred_continuous
 
 中文:
 定理 isClosed_setOfPred_continuous
@@ -2770,7 +2956,7 @@ exact (huf s hs).continuousOn Eventually.frequently hu fun _ => Continuous.conti
 exact (huf s hs).continuousOn Eventually.frequently hu fun _ => Continuous.continuousOn
 
 @[deprecated (since := "2026-07-09")]
-
+alias isClosed_setOf_continuous := isClosed_setOfPred_continuous
 
 Depends on / 依赖: Continuous, Continuous.continuousOn, Eventually, Eventually.frequently, UniformOnFun, UniformOnFun.tendsto_iff_tendstoUniformlyOn, continuousOn, continuous_iff, frequently, h.continuous_iff, isClosed_iff_forall_filter, tendsto_id, tendsto_iff_tendstoUniformlyOn
 -/
@@ -2795,7 +2981,19 @@ theorem uniformSpace_eq_inf_precomp_of_cover
   set ψ₁ : Π S : Set α, φ₁ ⁻¹' S -> S := fun S => S.restrictPreimage φ₁
   set ψ₂ : Π S : Set α, φ₂ ⁻¹' S -> S := fun S => S.restrictPreimage φ₂
   have : forall S in 𝔖, 𝒰(S, β, _) = .comap (· ∘ ψ₁ S) 𝒰(_, β, _) ⊓ .comap (· ∘ ψ₂ S) 𝒰(_, β, _) := by
-    refine fun S hS => UniformFun.uniformSpace_eq_
+    refine fun S hS => UniformFun.uniformSpace_eq_inf_precomp_of_cover β _ _ ?_
+    simpa only [← univ_subset_iff, ψ₁, ψ₂, range_restrictPreimage, ← preimage_union,
+      ← image_subset_iff, image_univ, Subtype.range_val] using h_cover S hS
+  refine le_antisymm (le_inf ?_ ?_) (le_iInf₂ fun S hS => ?_)
+  · rw [← uniformContinuous_iff_le_comap]
+    exact UniformOnFun.precomp_uniformContinuous h_image₁
+  · rw [← uniformContinuous_iff_le_comap]
+    exact UniformOnFun.precomp_uniformContinuous h_image₂
+  · simp_rw [this S hS, uniformSpace, UniformSpace.comap_iInf, UniformSpace.comap_inf,
+      ← UniformSpace.comap_comap]
+    exact inf_le_inf
+      (iInf₂_le_of_le _ (h_preimage₁ hS) le_rfl)
+      (iInf₂_le_of_le _ (h_preimage₂ hS) le_rfl)
 
 中文:
 定理 uniformSpace_eq_inf_precomp_of_cover
@@ -2804,7 +3002,19 @@ theorem uniformSpace_eq_inf_precomp_of_cover
   set ψ₁ : Π S : Set α, φ₁ ⁻¹' S -> S := fun S => S.restrictPreimage φ₁
   set ψ₂ : Π S : Set α, φ₂ ⁻¹' S -> S := fun S => S.restrictPreimage φ₂
   have : forall S in 𝔖, 𝒰(S, β, _) = .comap (· ∘ ψ₁ S) 𝒰(_, β, _) ⊓ .comap (· ∘ ψ₂ S) 𝒰(_, β, _) := by
-    refine fun S hS => UniformFun.uniformSpace_eq_
+    refine fun S hS => UniformFun.uniformSpace_eq_inf_precomp_of_cover β _ _ ?_
+    simpa only [← univ_subset_iff, ψ₁, ψ₂, range_restrictPreimage, ← preimage_union,
+      ← image_subset_iff, image_univ, Subtype.range_val] using h_cover S hS
+  refine le_antisymm (le_inf ?_ ?_) (le_iInf₂ fun S hS => ?_)
+  · rw [← uniformContinuous_iff_le_comap]
+    exact UniformOnFun.precomp_uniformContinuous h_image₁
+  · rw [← uniformContinuous_iff_le_comap]
+    exact UniformOnFun.precomp_uniformContinuous h_image₂
+  · simp_rw [this S hS, uniformSpace, UniformSpace.comap_iInf, UniformSpace.comap_inf,
+      ← UniformSpace.comap_comap]
+    exact inf_le_inf
+      (iInf₂_le_of_le _ (h_preimage₁ hS) le_rfl)
+      (iInf₂_le_of_le _ (h_preimage₂ hS) le_rfl)
 
 Depends on / 依赖: S.restrictPreimage, Subtype, Subtype.range_val, UniformFun, UniformFun.uniformSpace_eq_inf_precomp_of_cover, h_cover, image_subset_iff, image_univ, le_antisymm, le_inf, preimage_union, range_restrictPreimage, range_val, restrictPreimage, uniformSpace_eq_inf_precomp_of_cover, univ_subset_iff
 -/
@@ -2845,7 +3055,16 @@ theorem uniformSpace_eq_iInf_precomp_of_cover
   set ψ : Π S : Set α, Π i : ι, (φ i) ⁻¹' S -> S := fun S i => S.restrictPreimage (φ i)
   have : forall S in 𝔖, 𝒰(S, β, _) = ⨅ i, .comap (· ∘ ψ S i) 𝒰(_, β, _) := fun S hS => by
     rcases h_cover S hS with ⟨I, I_finite, I_cover⟩
-    refine UniformFun.uniformSpace_eq_iInf_precomp_of_cover β _ ⟨I,
+    refine UniformFun.uniformSpace_eq_iInf_precomp_of_cover β _ ⟨I, I_finite, ?_⟩
+    simpa only [← univ_subset_iff, ψ, range_restrictPreimage, ← preimage_iUnion₂,
+      ← image_subset_iff, image_univ, Subtype.range_val] using I_cover
+  -- With a better theory of ideals we may be able to simplify the following by replacing `𝔗 i`
+  -- by `(φ i ⁻¹' ·) '' 𝔖`.
+  refine le_antisymm (le_iInf fun i => ?_) (le_iInf₂ fun S hS => ?_)
+  · rw [← uniformContinuous_iff_le_comap]
+    exact UniformOnFun.precomp_uniformContinuous (h_image i)
+  · simp_rw [this S hS, uniformSpace, UniformSpace.comap_iInf, ← UniformSpace.comap_comap]
+    exact iInf_mono fun i => iInf₂_le_of_le _ (h_preimage i hS) le_rfl
 
 中文:
 定理 uniformSpace_eq_iInf_precomp_of_cover
@@ -2854,7 +3073,16 @@ theorem uniformSpace_eq_iInf_precomp_of_cover
   set ψ : Π S : Set α, Π i : ι, (φ i) ⁻¹' S -> S := fun S i => S.restrictPreimage (φ i)
   have : forall S in 𝔖, 𝒰(S, β, _) = ⨅ i, .comap (· ∘ ψ S i) 𝒰(_, β, _) := fun S hS => by
     rcases h_cover S hS with ⟨I, I_finite, I_cover⟩
-    refine UniformFun.uniformSpace_eq_iInf_precomp_of_cover β _ ⟨I,
+    refine UniformFun.uniformSpace_eq_iInf_precomp_of_cover β _ ⟨I, I_finite, ?_⟩
+    simpa only [← univ_subset_iff, ψ, range_restrictPreimage, ← preimage_iUnion₂,
+      ← image_subset_iff, image_univ, Subtype.range_val] using I_cover
+  -- With a better theory of ideals we may be able to simplify the following by replacing `𝔗 i`
+  -- by `(φ i ⁻¹' ·) '' 𝔖`.
+  refine le_antisymm (le_iInf fun i => ?_) (le_iInf₂ fun S hS => ?_)
+  · rw [← uniformContinuous_iff_le_comap]
+    exact UniformOnFun.precomp_uniformContinuous (h_image i)
+  · simp_rw [this S hS, uniformSpace, UniformSpace.comap_iInf, ← UniformSpace.comap_comap]
+    exact iInf_mono fun i => iInf₂_le_of_le _ (h_preimage i hS) le_rfl
 
 Depends on / 依赖: I_cover, I_finite, S.restrictPreimage, Subtype, Subtype.range_val, UniformFun, UniformFun.uniformSpace_eq_iInf_precomp_of_cover, h_cover, image_subset_iff, image_univ, range_restrictPreimage, range_val, restrictPreimage, uniformSpace_eq_iInf_precomp_of_cover, univ_subset_iff
 -/
@@ -2902,7 +3130,9 @@ theorem UniformContinuousOn.comp_tendstoUniformly
   lift f to α -> s using hf with f' hf'
   rw [tendstoUniformly_iff_tendsto] at h
   have : Tendsto (fun q => (f' q.2, F' q.1 q.2)) (p ×ˢ ⊤) (𝓤 s) :=
-    h.of_tendsto_comp isUniformEmbedding_subtype_val.comap
+    h.of_tendsto_comp isUniformEmbedding_subtype_val.comap_uniformity.le
+  apply UniformContinuous.comp_tendstoUniformly hg ?_
+  rwa [← tendstoUniformly_iff_tendsto] at this
 
 中文:
 定理 UniformContinuousOn.comp_tendstoUniformly
@@ -2912,7 +3142,9 @@ theorem UniformContinuousOn.comp_tendstoUniformly
   lift f to α -> s using hf with f' hf'
   rw [tendstoUniformly_iff_tendsto] at h
   have : Tendsto (fun q => (f' q.2, F' q.1 q.2)) (p ×ˢ ⊤) (𝓤 s) :=
-    h.of_tendsto_comp isUniformEmbedding_subtype_val.comap
+    h.of_tendsto_comp isUniformEmbedding_subtype_val.comap_uniformity.le
+  apply UniformContinuous.comp_tendstoUniformly hg ?_
+  rwa [← tendstoUniformly_iff_tendsto] at this
 
 Depends on / 依赖: Tendsto, UniformContinuous, UniformContinuous.comp_tendstoUniformly, comap_uniformity, comp_tendstoUniformly, h.of_tendsto_comp, isUniformEmbedding_subtype_val, isUniformEmbedding_subtype_val.comap_uniformity.le, of_tendsto_comp, tendstoUniformly_iff_tendsto, uniformContinuousOn_iff_restrict
 -/
@@ -2942,7 +3174,11 @@ theorem UniformContinuousOn.comp_tendstoUniformly_eventually
     rw [eventuallyEq_iff_exists_mem]
     refine ⟨s', hs', fun y hy => by grind⟩
   have h' : TendstoUniformly F' f p := by
-    rwa 
+    rwa [tendstoUniformly_congr hF] at h
+  apply (tendstoUniformly_congr _).mpr
+    (UniformContinuousOn.comp_tendstoUniformly (by grind) hf hg h')
+  rw [eventuallyEq_iff_exists_mem]
+  refine ⟨s', hs', fun i hi => by grind⟩
 
 中文:
 定理 UniformContinuousOn.comp_tendstoUniformly_eventually
@@ -2954,7 +3190,11 @@ theorem UniformContinuousOn.comp_tendstoUniformly_eventually
     rw [eventuallyEq_iff_exists_mem]
     refine ⟨s', hs', fun y hy => by grind⟩
   have h' : TendstoUniformly F' f p := by
-    rwa 
+    rwa [tendstoUniformly_congr hF] at h
+  apply (tendstoUniformly_congr _).mpr
+    (UniformContinuousOn.comp_tendstoUniformly (by grind) hf hg h')
+  rw [eventuallyEq_iff_exists_mem]
+  refine ⟨s', hs', fun i hi => by grind⟩
 
 Depends on / 依赖: TendstoUniformly, UniformContinuousOn, UniformContinuousOn.comp_tendstoUniformly, classical, comp_tendstoUniformly, eventuallyEq_iff_exists_mem, eventually_iff_exists_mem, eventually_iff_exists_mem.mp, tendstoUniformly_congr
 -/

@@ -2105,7 +2105,17 @@ ext (zero_mul x.1)
 ext (mul_zero x.1)
       show x.1 • (0 : M) + (0 : Rᵐᵒᵖ) • x.2 = 0 by rw [smul_zero, zero_add, zero_smul]
   left_distrib := fun x₁ x₂ x₃ =>
-ext (mul_add x₁.1 x₂.1 
+ext (mul_add x₁.1 x₂.1 x₃.1)
+      show
+        x₁.1 •> (x₂.2 + x₃.2) + x₁.2 <• (x₂.1 + x₃.1) =
+          x₁.1 •> x₂.2 + x₁.2 <• x₂.1 + (x₁.1 •> x₃.2 + x₁.2 <• x₃.1)
+        by simp_rw [smul_add, MulOpposite.op_add, add_smul, add_add_add_comm]
+  right_distrib := fun x₁ x₂ x₃ =>
+ext (add_mul x₁.1 x₂.1 x₃.1)
+      show
+        (x₁.1 + x₂.1) •> x₃.2 + (x₁.2 + x₂.2) <• x₃.1 =
+          x₁.1 •> x₃.2 + x₁.2 <• x₃.1 + (x₂.1 •> x₃.2 + x₂.2 <• x₃.1)
+        by simp_rw [add_smul, smul_add, add_add_add_comm]
 
 中文:
 实例 nonAssocSemiring
@@ -2117,7 +2127,17 @@ ext (zero_mul x.1)
 ext (mul_zero x.1)
       show x.1 • (0 : M) + (0 : Rᵐᵒᵖ) • x.2 = 0 by rw [smul_zero, zero_add, zero_smul]
   left_distrib := fun x₁ x₂ x₃ =>
-ext (mul_add x₁.1 x₂.1 
+ext (mul_add x₁.1 x₂.1 x₃.1)
+      show
+        x₁.1 •> (x₂.2 + x₃.2) + x₁.2 <• (x₂.1 + x₃.1) =
+          x₁.1 •> x₂.2 + x₁.2 <• x₂.1 + (x₁.1 •> x₃.2 + x₁.2 <• x₃.1)
+        by simp_rw [smul_add, MulOpposite.op_add, add_smul, add_add_add_comm]
+  right_distrib := fun x₁ x₂ x₃ =>
+ext (add_mul x₁.1 x₂.1 x₃.1)
+      show
+        (x₁.1 + x₂.1) •> x₃.2 + (x₁.2 + x₂.2) <• x₃.1 =
+          x₁.1 •> x₃.2 + x₁.2 <• x₃.1 + (x₂.1 •> x₃.2 + x₂.2 <• x₃.1)
+        by simp_rw [add_smul, smul_add, add_add_add_comm]
 -/
 instance nonAssocSemiring [Semiring R] [AddCommMonoid M] [Module R M] [Module Rᵐᵒᵖ M] :
     NonAssocSemiring (tsze R M) where
@@ -2230,7 +2250,8 @@ theorem snd_pow_of_smul_comm
   | 0 => rw [Nat.pred_zero, pow_zero, List.range_zero, zero_smul, List.map_nil, List.sum_nil]
   | (Nat.succ n) =>
     simp_rw [Nat.pred_succ]
-    exact (List.sum_eq_card_nsmul _ (x.fst ^ n • x.snd
+    exact (List.sum_eq_card_nsmul _ (x.fst ^ n • x.snd) (by grind)).trans
+      (by rw [List.length_map, List.length_range])
 
 中文:
 定理 snd_pow_of_smul_comm
@@ -2241,7 +2262,8 @@ theorem snd_pow_of_smul_comm
   | 0 => rw [Nat.pred_zero, pow_zero, List.range_zero, zero_smul, List.map_nil, List.sum_nil]
   | (Nat.succ n) =>
     simp_rw [Nat.pred_succ]
-    exact (List.sum_eq_card_nsmul _ (x.fst ^ n • x.snd
+    exact (List.sum_eq_card_nsmul _ (x.fst ^ n • x.snd) (by grind)).trans
+      (by rw [List.length_map, List.length_range])
 
 Depends on / 依赖: List.length_map, List.length_range, List.map_nil, List.range_zero, List.sum_eq_card_nsmul, List.sum_nil, Nat.pred_succ, Nat.pred_zero, Nat.succ, length_map, length_range, map_nil, pow_add, pow_zero, pred_succ, pred_zero, range_zero, simp_rw, smul_comm, smul_smul
 -/
@@ -2346,7 +2368,18 @@ ext (mul_assoc x.1 y.1 z.1)
           x.1 •> (y.1 •> z.2 + y.2 <• z.1) + x.2 <• (y.1 * z.1)
         by simp_rw [smul_add, ← mul_smul, add_assoc, smul_comm, op_mul]
   npow := fun n x => x ^ n
-  npow_zero := fun x 
+  npow_zero := fun x => ext (pow_zero x.fst) (by simp [snd_pow_eq_sum])
+  npow_succ := fun n x =>
+    ext (pow_succ _ _)
+      (by
+        simp_rw [snd_mul, snd_pow_eq_sum, Nat.pred_succ]
+        cases n
+        · simp [List.range_succ]
+        rw [List.sum_range_succ']
+        simp only [pow_zero, op_one, Nat.sub_zero, one_smul, Nat.succ_sub_succ_eq_sub, fst_pow,
+          Nat.pred_succ, List.smul_sum, List.map_map, Function.comp_def]
+        simp_rw [← smul_comm (_ : R) (_ : Rᵐᵒᵖ), smul_smul, pow_succ]
+        rfl)
 
 中文:
 实例 monoid
@@ -2358,7 +2391,18 @@ ext (mul_assoc x.1 y.1 z.1)
           x.1 •> (y.1 •> z.2 + y.2 <• z.1) + x.2 <• (y.1 * z.1)
         by simp_rw [smul_add, ← mul_smul, add_assoc, smul_comm, op_mul]
   npow := fun n x => x ^ n
-  npow_zero := fun x 
+  npow_zero := fun x => ext (pow_zero x.fst) (by simp [snd_pow_eq_sum])
+  npow_succ := fun n x =>
+    ext (pow_succ _ _)
+      (by
+        simp_rw [snd_mul, snd_pow_eq_sum, Nat.pred_succ]
+        cases n
+        · simp [List.range_succ]
+        rw [List.sum_range_succ']
+        simp only [pow_zero, op_one, Nat.sub_zero, one_smul, Nat.succ_sub_succ_eq_sub, fst_pow,
+          Nat.pred_succ, List.smul_sum, List.map_map, Function.comp_def]
+        simp_rw [← smul_comm (_ : R) (_ : Rᵐᵒᵖ), smul_smul, pow_succ]
+        rfl)
 -/
 instance monoid [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
     [SMulCommClass R Rᵐᵒᵖ M] : Monoid (tsze R M) where
@@ -2430,7 +2474,9 @@ theorem snd_list_prod
     rw [List.zipIdx_cons']
     simp_rw [List.map_cons, List.map_map, Function.comp_def, Prod.map_snd, Prod.map_fst, id,
       List.take_zero, List.take_succ_cons, List.prod_nil, List.prod_cons, snd_mul, one_smul,
-      List.drop, mul_smul, Li
+      List.drop, mul_smul, List.sum_cons, fst_list_prod, ih, List.smul_sum, List.map_map,
+      ← smul_comm (_ : R) (_ : Rᵐᵒᵖ)]
+    exact add_comm _ _
 
 中文:
 定理 snd_list_prod
@@ -2442,7 +2488,9 @@ theorem snd_list_prod
     rw [List.zipIdx_cons']
     simp_rw [List.map_cons, List.map_map, Function.comp_def, Prod.map_snd, Prod.map_fst, id,
       List.take_zero, List.take_succ_cons, List.prod_nil, List.prod_cons, snd_mul, one_smul,
-      List.drop, mul_smul, Li
+      List.drop, mul_smul, List.sum_cons, fst_list_prod, ih, List.smul_sum, List.map_map,
+      ← smul_comm (_ : R) (_ : Rᵐᵒᵖ)]
+    exact add_comm _ _
 
 Depends on / 依赖: Function, Function.comp_def, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.restrict, List.drop, List.map_cons, List.map_map, List.prod_cons, List.prod_nil, List.smul_sum, List.sum_cons, List.take_succ_cons, List.take_zero, List.zipIdx_cons, Prod.map_fst, Prod.map_snd, add_comm, comp_def, fst_list_prod, map_cons
 -/
@@ -3112,7 +3160,10 @@ theorem mul_inv_rev
     simp only [smul_neg, smul_add]
     simp_rw [mul_inv_rev, smul_comm (_ : R), op_smul_op_smul, smul_smul, add_comm, neg_add]
     obtain ha0 | ha := eq_or_ne (fst a) 0
-    ·
+    · simp [ha0]
+    obtain hb0 | hb := eq_or_ne (fst b) 0
+    · simp [hb0]
+    rw [inv_mul_cancel_right₀ ha]; rw [mul_inv_cancel_left₀ hb]
 
 中文:
 定理 mul_inv_rev
@@ -3124,7 +3175,10 @@ theorem mul_inv_rev
     simp only [smul_neg, smul_add]
     simp_rw [mul_inv_rev, smul_comm (_ : R), op_smul_op_smul, smul_smul, add_comm, neg_add]
     obtain ha0 | ha := eq_or_ne (fst a) 0
-    ·
+    · simp [ha0]
+    obtain hb0 | hb := eq_or_ne (fst b) 0
+    · simp [hb0]
+    rw [inv_mul_cancel_right₀ ha]; rw [mul_inv_cancel_left₀ hb]
 -/
 protected theorem mul_inv_rev (a b : tsze R M) :
     (a * b)⁻¹ = b⁻¹ * a⁻¹ := by
@@ -3155,7 +3209,7 @@ theorem inv_inv
       rw [fst_inv]
       apply inv_ne_zero hx
 
-@[s
+@[simp]
 
 中文:
 定理 inv_inv
@@ -3170,7 +3224,7 @@ theorem inv_inv
       rw [fst_inv]
       apply inv_ne_zero hx
 
-@[s
+@[simp]
 -/
 protected theorem inv_inv {x : tsze R M} (hx : fst x != 0) : x⁻¹⁻¹ = x :=
   -- adapted from `Matrix.nonsing_inv_nonsing_inv`
@@ -3253,7 +3307,11 @@ ext (Algebra.commutes _ _)
       show algebraMap S R s •> x.snd + (0 : M) <• x.fst
           = x.fst •> (0 : M) + x.snd <• algebraMap S R s by
         rw [smul_zero]; rw [smul_zero]; rw [add_zero]; rw [zero_add]
-        rw [A
+        rw [Algebra.algebraMap_eq_smul_one]; rw [MulOpposite.op_smul]; rw [op_one]; rw [smul_assoc]; rw [one_smul]; rw [smul_assoc]; rw [one_smul]
+  smul_def' := fun s x =>
+ext (Algebra.smul_def _ _)
+      show s • x.snd = algebraMap S R s •> x.snd + (0 : M) <• x.fst by
+        rw [smul_zero]; rw [add_zero]; rw [algebraMap_smul]
 
 中文:
 实例 algebra'
@@ -3264,7 +3322,11 @@ ext (Algebra.commutes _ _)
       show algebraMap S R s •> x.snd + (0 : M) <• x.fst
           = x.fst •> (0 : M) + x.snd <• algebraMap S R s by
         rw [smul_zero]; rw [smul_zero]; rw [add_zero]; rw [zero_add]
-        rw [A
+        rw [Algebra.algebraMap_eq_smul_one]; rw [MulOpposite.op_smul]; rw [op_one]; rw [smul_assoc]; rw [one_smul]; rw [smul_assoc]; rw [one_smul]
+  smul_def' := fun s x =>
+ext (Algebra.smul_def _ _)
+      show s • x.snd = algebraMap S R s •> x.snd + (0 : M) <• x.fst by
+        rw [smul_zero]; rw [add_zero]; rw [algebraMap_smul]
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, TrivSqZeroExt, TrivSqZeroExt.inlHom, algebraMap, inlHom, pullback_fst
 -/
@@ -3540,7 +3602,8 @@ definition lift
     (TrivSqZeroExt.ind fun r₁ m₁ =>
       TrivSqZeroExt.ind fun r₂ m₂ => by
         dsimp
-        simp only [add_zero, zero_add, a
+        simp only [add_zero, zero_add, add_mul, mul_add, hg]
+        rw [← map_mul]; rw [map_add]; rw [add_comm (g _)]; rw [add_assoc]; rw [hfg]; rw [hgf])
 
 中文:
 定义 lift
@@ -3551,7 +3614,8 @@ definition lift
     (TrivSqZeroExt.ind fun r₁ m₁ =>
       TrivSqZeroExt.ind fun r₂ m₂ => by
         dsimp
-        simp only [add_zero, zero_add, a
+        simp only [add_zero, zero_add, add_mul, mul_add, hg]
+        rw [← map_mul]; rw [map_add]; rw [add_comm (g _)]; rw [add_assoc]; rw [hfg]; rw [hgf])
 
 Depends on / 依赖: AlgHom, AlgHom.ofLinearMap, TrivSqZeroExt, TrivSqZeroExt.ind, add_assoc, add_comm, add_mul, add_zero, f.comp, fstHom, map_add, map_mul, map_one, map_zero, mul_add, ofLinearMap, restrictScalars, sndHom, toLinearMap, zero_add
 -/
@@ -3811,7 +3875,10 @@ definition liftEquiv
     ⟨(F.comp (inlAlgHom _ _ _), F.toLinearMap ∘ₗ (inrHom _ _ |>.restrictScalars _)),
       (fun _x _y =>
 (map_mul F _ _).symm.trans (F.congr_arg <| inr_mul_inr _ _ _).trans (map_zero F)),
-      (fun _r _x => (F.congr_arg (inl_mul
+      (fun _r _x => (F.congr_arg (inl_mul_inr _ _).symm).trans (map_mul F _ _)),
+      (fun _r _x => (F.congr_arg (inr_mul_inl _ _).symm).trans (map_mul F _ _))⟩
+left_inv _f := Subtype.ext Prod.ext (lift_comp_inlHom _ _ _ _ _) (lift_comp_inrHom _ _ _ _ _)
+  right_inv _F := algHom_ext' (lift_comp_inlHom _ _ _ _ _) (lift_comp_inrHom _ _ _ _ _)
 
 中文:
 定义 liftEquiv
@@ -3821,7 +3888,10 @@ definition liftEquiv
     ⟨(F.comp (inlAlgHom _ _ _), F.toLinearMap ∘ₗ (inrHom _ _ |>.restrictScalars _)),
       (fun _x _y =>
 (map_mul F _ _).symm.trans (F.congr_arg <| inr_mul_inr _ _ _).trans (map_zero F)),
-      (fun _r _x => (F.congr_arg (inl_mul
+      (fun _r _x => (F.congr_arg (inl_mul_inr _ _).symm).trans (map_mul F _ _)),
+      (fun _r _x => (F.congr_arg (inr_mul_inl _ _).symm).trans (map_mul F _ _))⟩
+left_inv _f := Subtype.ext Prod.ext (lift_comp_inlHom _ _ _ _ _) (lift_comp_inrHom _ _ _ _ _)
+  right_inv _F := algHom_ext' (lift_comp_inlHom _ _ _ _ _) (lift_comp_inrHom _ _ _ _ _)
 
 Depends on / 依赖: fg.prop, fg.val
 -/

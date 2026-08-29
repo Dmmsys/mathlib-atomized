@@ -249,7 +249,10 @@ instance [StronglyLocallyContractibleSpace
   · intro (x, y)
     rw [nhds_prod_eq]
     exact (contractible_basis x).prod (contractible_basis y)
- 
+  · intro (x, y) (Ux, Uy) ⟨hUx, hUy⟩
+    have : ContractibleSpace Ux := hUx.2
+    have : ContractibleSpace Uy := hUy.2
+    exact (Homeomorph.Set.prod Ux Uy).contractibleSpace
 
 中文:
 实例 [StronglyLocallyContractible空间
@@ -262,7 +265,10 @@ instance [StronglyLocallyContractibleSpace
   · intro (x, y)
     rw [nhds_prod_eq]
     exact (contractible_basis x).prod (contractible_basis y)
- 
+  · intro (x, y) (Ux, Uy) ⟨hUx, hUy⟩
+    have : ContractibleSpace Ux := hUx.2
+    have : ContractibleSpace Uy := hUy.2
+    exact (Homeomorph.Set.prod Ux Uy).contractibleSpace
 
 Depends on / 依赖: ContractibleSpace, Homeomorph, Homeomorph.Set.prod, contractibleSpace, contractible_basis, nhds_prod_eq, of_bases
 -/
@@ -296,7 +302,11 @@ theorem StronglyLocallyContractibleSpace.locallyContractible
   refine ⟨V, hVU, hVmem, ?_⟩
   -- V is contractible, so the identity on V is nullhomotopic to a constant map
   obtain ⟨v₀, hid⟩ := id_nullhomotopic V
-  -- The inclusion V ↪ U is homotopic to the cons
+  -- The inclusion V ↪ U is homotopic to the constant map at (inclusion v₀)
+  refine ⟨ContinuousMap.inclusion hVU v₀, ?_⟩
+  convert! Homotopic.comp (.refl _) hid
+  ext
+  simp
 
 中文:
 定理 StronglyLocallyContractible空间.locallyContractible
@@ -307,7 +317,11 @@ theorem StronglyLocallyContractibleSpace.locallyContractible
   refine ⟨V, hVU, hVmem, ?_⟩
   -- V is contractible, so the identity on V is nullhomotopic to a constant map
   obtain ⟨v₀, hid⟩ := id_nullhomotopic V
-  -- The inclusion V ↪ U is homotopic to the cons
+  -- The inclusion V ↪ U is homotopic to the constant map at (inclusion v₀)
+  refine ⟨ContinuousMap.inclusion hVU v₀, ?_⟩
+  convert! Homotopic.comp (.refl _) hid
+  ext
+  simp
 
 Depends on / 依赖: contractible_basis, hVcontractible, mem_iff, mem_iff.mp
 -/

@@ -201,7 +201,16 @@ theorem inertiaDeg_eq_of_isFractionRing
   rw [inertiaDeg_eq p q]
   apply Algebra.finrank_eq_of_equiv_equiv
     (IsFractionRing.algEquivOfAlgEquiv (R := R) (A := R ⧸ p) (K := p.ResidueField) (L := K) .refl)
-    (IsFractionRing.algEquivOfAlgEquiv (R := S) (A := S ⧸ q) (K := q.ResidueFie
+    (IsFractionRing.algEquivOfAlgEquiv (R := S) (A := S ⧸ q) (K := q.ResidueField) (L := L) .refl)
+  apply IsFractionRing.ringHom_ext (A := R ⧸ p)
+  intro x
+  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+  simp [← IsScalarTower.algebraMap_apply R p.ResidueField q.ResidueField,
+    IsScalarTower.algebraMap_apply R S q.ResidueField,
+    ← IsScalarTower.algebraMap_apply R K L, ← IsScalarTower.algebraMap_apply R S L]
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg'_eq_of_isFractionRing :=
+inertiaDeg_eq_of_isFractionRing
 
 中文:
 定理 inertiaDeg_eq_of_isFractionRing
@@ -211,7 +220,16 @@ theorem inertiaDeg_eq_of_isFractionRing
   rw [inertiaDeg_eq p q]
   apply Algebra.finrank_eq_of_equiv_equiv
     (IsFractionRing.algEquivOfAlgEquiv (R := R) (A := R ⧸ p) (K := p.ResidueField) (L := K) .refl)
-    (IsFractionRing.algEquivOfAlgEquiv (R := S) (A := S ⧸ q) (K := q.ResidueFie
+    (IsFractionRing.algEquivOfAlgEquiv (R := S) (A := S ⧸ q) (K := q.ResidueField) (L := L) .refl)
+  apply IsFractionRing.ringHom_ext (A := R ⧸ p)
+  intro x
+  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+  simp [← IsScalarTower.algebraMap_apply R p.ResidueField q.ResidueField,
+    IsScalarTower.algebraMap_apply R S q.ResidueField,
+    ← IsScalarTower.algebraMap_apply R K L, ← IsScalarTower.algebraMap_apply R S L]
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg'_eq_of_isFractionRing :=
+inertiaDeg_eq_of_isFractionRing
 
 Depends on / 依赖: Algebra, Algebra.finrank_eq_of_equiv_equiv, AtPrime, Ideal.Quotient.mk_surjective, IsFractionRing, IsFractionRing.algEquivOfAlgEquiv, IsFractionRing.ringHom_ext, IsScalarTower, IsScalarTower.alge, IsScalarTower.algebraMap_apply, Localization, Localization.AtPrime.algebraOfLiesOver, Quotient, ResidueField, algEquivOfAlgEquiv, algebraMap_apply, algebraOfLiesOver, finrank_eq_of_equiv_equiv, inertiaDeg_eq, mk_surjective
 -/
@@ -312,7 +330,12 @@ theorem inertiaDeg_tower
     have : q.LiesOver (r.under R) := LiesOver.tower_bot r q (r.under R)
     let := Localization.AtPrime.algebraOfLiesOver (r.under R) r
     let := Localization.AtPrime.algebraOfLiesOver (r.under R) q
-    let := Localization
+    let := Localization.AtPrime.algebraOfLiesOver q r
+    rw [inertiaDeg_def]; rw [inertiaDeg_eq (r.under R)]; rw [inertiaDeg_eq q]; rw [eq_comm]
+    apply Module.finrank_mul_finrank
+  · rw [inertiaDeg_of_not_isPrime r R hr, inertiaDeg_of_not_isPrime r S hr, mul_zero]
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg'_tower := inertiaDeg_tower
 
 中文:
 定理 inertiaDeg_tower
@@ -323,7 +346,12 @@ theorem inertiaDeg_tower
     have : q.LiesOver (r.under R) := LiesOver.tower_bot r q (r.under R)
     let := Localization.AtPrime.algebraOfLiesOver (r.under R) r
     let := Localization.AtPrime.algebraOfLiesOver (r.under R) q
-    let := Localization
+    let := Localization.AtPrime.algebraOfLiesOver q r
+    rw [inertiaDeg_def]; rw [inertiaDeg_eq (r.under R)]; rw [inertiaDeg_eq q]; rw [eq_comm]
+    apply Module.finrank_mul_finrank
+  · rw [inertiaDeg_of_not_isPrime r R hr, inertiaDeg_of_not_isPrime r S hr, mul_zero]
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg'_tower := inertiaDeg_tower
 
 Depends on / 依赖: AtPrime, IsPrime, LiesOver, LiesOver.tower_bot, Localization, Localization.AtPrime.algebraOfLiesOver, Module, Module.finrank_mul_finrank, algebraOfLiesOver, eq_comm, finrank_mul_finrank, inertiaDeg_def, inertiaDeg_eq, inertiaDeg_of_not_isPrime, isPrime_of_liesOver, q.IsPrime, q.LiesOver, r.IsPrime, r.under, tower_bot
 -/
@@ -467,7 +495,11 @@ theorem inertiaDeg_smul
     let f₀ := MulSemiringAction.toAlgAut G R S g
     let := Localization.AtPrime.algebraOfLiesOver p q
     let := Localization.AtPrime.algebraOfLiesOver p (g • q)
-    rw 
+    rw [inertiaDeg_eq p q]; rw [inertiaDeg_eq p (g • q)]
+    let e₂ := Ideal.residueFieldAlgEquiv' p (g • q) q f₀.symm (comap_symm f₀.toRingEquiv).symm
+    exact e₂.toLinearEquiv.finrank_eq
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg'_smul := inertiaDeg_smul
 
 中文:
 定理 inertiaDeg_smul
@@ -479,7 +511,11 @@ theorem inertiaDeg_smul
     let f₀ := MulSemiringAction.toAlgAut G R S g
     let := Localization.AtPrime.algebraOfLiesOver p q
     let := Localization.AtPrime.algebraOfLiesOver p (g • q)
-    rw 
+    rw [inertiaDeg_eq p q]; rw [inertiaDeg_eq p (g • q)]
+    let e₂ := Ideal.residueFieldAlgEquiv' p (g • q) q f₀.symm (comap_symm f₀.toRingEquiv).symm
+    exact e₂.toLinearEquiv.finrank_eq
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg'_smul := inertiaDeg_smul
 
 Depends on / 依赖: AtPrime, Ideal.residueFieldAlgEquiv, IsPrime, Localization, Localization.AtPrime.algebraOfLiesOver, MulSemiringAction, MulSemiringAction.toAlgAut, algebraOfLiesOver, comap_symm, finrank_eq, inertiaDeg_eq, inertiaDeg_of_not_isPrime, q.IsPrime, q.under, residueFieldAlgEquiv, toAlgAut, toLinearEquiv, toLinearEquiv.finrank_eq, toRingEquiv
 -/
@@ -545,7 +581,7 @@ theorem absNorm_pow_inertiaDeg
   have := IsMaximal.of_liesOver_isMaximal q p
   exact cardQuot_pow_inertiaDeg p q
 
-@[deprecated (since := "2026-
+@[deprecated (since := "2026-07-03")] alias absNorm_pow_inertiaDeg' := absNorm_pow_inertiaDeg
 
 中文:
 定理 absNorm_pow_inertiaDeg
@@ -559,7 +595,7 @@ theorem absNorm_pow_inertiaDeg
   have := IsMaximal.of_liesOver_isMaximal q p
   exact cardQuot_pow_inertiaDeg p q
 
-@[deprecated (since := "2026-
+@[deprecated (since := "2026-07-03")] alias absNorm_pow_inertiaDeg' := absNorm_pow_inertiaDeg
 
 Depends on / 依赖: IsMaximal, IsMaximal.of_liesOver_isMaximal, cardQuot_pow_inertiaDeg, eq_bot_of_liesOver_bot, inertiaDeg_pos, isMaximal_of_isPrime_of_ne_bot, isPrime_of_liesOver, of_liesOver_isMaximal
 -/

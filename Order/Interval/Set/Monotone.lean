@@ -797,7 +797,12 @@ theorem StrictMonoOn.Iic_id_le
   by_cases hk : IsMax k
   · rw [succ_eq_iff_isMax.2 hk] at hm
     exact ih (hφ.mono <| Iic_subset_Iic.2 (le_succ _)) _ hm
-  obtai
+  obtain rfl | h := le_succ_iff_eq_or_le.1 hm
+  · specialize ih (StrictMonoOn.mono hφ fun x hx => le_trans hx (le_succ _)) k le_rfl
+    nth_grw 1 [ih]
+    refine succ_le_of_lt (hφ (le_succ _) le_rfl ?_)
+    exact lt_succ_of_not_isMax hk
+  · exact ih (StrictMonoOn.mono hφ fun x hx => le_trans hx (le_succ _)) _ h
 
 中文:
 定理 StrictMonoOn.Iic_id_le
@@ -811,7 +816,12 @@ theorem StrictMonoOn.Iic_id_le
   by_cases hk : IsMax k
   · rw [succ_eq_iff_isMax.2 hk] at hm
     exact ih (hφ.mono <| Iic_subset_Iic.2 (le_succ _)) _ hm
-  obtai
+  obtain rfl | h := le_succ_iff_eq_or_le.1 hm
+  · specialize ih (StrictMonoOn.mono hφ fun x hx => le_trans hx (le_succ _)) k le_rfl
+    nth_grw 1 [ih]
+    refine succ_le_of_lt (hφ (le_succ _) le_rfl ?_)
+    exact lt_succ_of_not_isMax hk
+  · exact ih (StrictMonoOn.mono hφ fun x hx => le_trans hx (le_succ _)) _ h
 
 Depends on / 依赖: Iic_subset_Iic, Set.Iic, StrictMonoOn, StrictMonoOn.mono, Succ.rec_bot, bot_le, hm.trans, le_rfl, le_succ, le_succ_iff_eq_or_le, le_trans, lt_succ_of_not_isMax, nth_grw, rec_bot, revert, specialize, succ_eq_iff_isMax, succ_le_of_lt
 -/

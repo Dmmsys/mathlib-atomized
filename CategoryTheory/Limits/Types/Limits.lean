@@ -77,7 +77,10 @@ theorem isLimit_iff
     exact ⟨t.lift cs ⟨⟩, fun j => congr_hom (t.fac cs j) ⟨⟩,
       fun x hx => congr_hom (CC := fun X => X)
         (t.uniq cs (↾fun _ => x) fun j => by ext; exact hx j) ⟨⟩⟩
-  · have := fun c y => h _ (sectionOfCone c y).
+  · have := fun c y => h _ (sectionOfCone c y).2
+    choose x hx using fun c y => h _ (sectionOfCone c y).2
+    exact ⟨fun d => ↾(x d), fun c j => by ext y; exact (hx c y).1 j,
+      fun c f hf => by ext y; exact (hx c y).2 (f y) (fun j => congr_hom (hf j) y)⟩
 
 中文:
 定理 isLimit_iff
@@ -88,7 +91,10 @@ theorem isLimit_iff
     exact ⟨t.lift cs ⟨⟩, fun j => congr_hom (t.fac cs j) ⟨⟩,
       fun x hx => congr_hom (CC := fun X => X)
         (t.uniq cs (↾fun _ => x) fun j => by ext; exact hx j) ⟨⟩⟩
-  · have := fun c y => h _ (sectionOfCone c y).
+  · have := fun c y => h _ (sectionOfCone c y).2
+    choose x hx using fun c y => h _ (sectionOfCone c y).2
+    exact ⟨fun d => ↾(x d), fun c j => by ext y; exact (hx c y).1 j,
+      fun c f hf => by ext y; exact (hx c y).2 (f y) (fun j => congr_hom (hf j) y)⟩
 
 Depends on / 依赖: coneOfSection, congr_hom, sectionOfCone, t.fac, t.lift, t.uniq
 -/

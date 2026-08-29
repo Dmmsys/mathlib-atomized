@@ -310,7 +310,10 @@ definition whiskerIsoMapGenerateCocone
         congr 1 }
   hom_inv_id := by
     ext
-    sim
+    simp [eqToHom_map]
+  inv_hom_id := by
+    ext
+    simp [eqToHom_map]
 
 中文:
 定义 whiskerIsoMapGenerateCocone
@@ -328,7 +331,10 @@ definition whiskerIsoMapGenerateCocone
         congr 1 }
   hom_inv_id := by
     ext
-    sim
+    simp [eqToHom_map]
+  inv_hom_id := by
+    ext
+    simp [eqToHom_map]
 
 Depends on / 依赖: F.map, F.map_comp, congr_arg, eqToHom, eqToHom_map, hY.symm, hom_inv_id, inv_hom_id, map_comp
 -/

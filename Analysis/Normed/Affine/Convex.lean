@@ -92,7 +92,40 @@ lemma exists_mem_interior_convexHull_affineBasis
   · obtain ⟨b, hb⟩ := this (s := -x +ᵥ s) (by simpa using vadd_mem_nhds_vadd (-x) hs) rfl
     use x +ᵥ b
     simpa [subset_vadd_set_iff, mem_vadd_set_iff_neg_vadd_mem, convexHull_vadd, interior_vadd,
-      Pi.vadd_def, -vadd_eq_add, v
+      Pi.vadd_def, -vadd_eq_add, vadd_eq_add (a := -x), ← Set.vadd_set_range] using hb
+  subst hx
+  -- The strategy is now to find an arbitrary maximal spanning simplex (aka an affine basis)...
+  obtain ⟨b⟩ := exists_affineBasis_of_finiteDimensional
+    (ι := Fin (finrank Real E + 1)) (k := Real) (P := E) (by simp)
+  -- ... translate it to contain the origin...
+  set c : AffineBasis (Fin (finrank Real E + 1)) Real E := -Finset.univ.centroid Real b +ᵥ b
+  have hc₀ : 0 in interior (convexHull Real (range c) : Set E) := by
+    simpa [c, convexHull_vadd, interior_vadd, range_add, Pi.vadd_def, mem_vadd_set_iff_neg_vadd_mem]
+      using b.centroid_mem_interior_convexHull
+  set cnorm := Finset.univ.sup' Finset.univ_nonempty (fun i => ‖c i‖)
+  have hcnorm : range c subseteq closedBall 0 (cnorm + 1) := by
+    simpa only [cnorm, subset_def, Finset.mem_coe, mem_closedBall, dist_zero_right,
+      ← sub_le_iff_le_add, Finset.le_sup'_iff, forall_mem_range] using fun i => ⟨i, by simp⟩
+  -- ... and finally scale it to fit inside the neighborhood `s`.
+  obtain ⟨ε, hε, hεs⟩ := Metric.mem_nhds_iff.1 hs
+  set ε' : Real := ε / 2 / (cnorm + 1)
+  have hc' : 0 < cnorm + 1 := by
+    have : 0 <= cnorm := Finset.le_sup'_of_le _ (Finset.mem_univ 0) (norm_nonneg _)
+    positivity
+  have hε' : 0 < ε' := by positivity
+  set d : AffineBasis (Fin (finrank Real E + 1)) Real E := Units.mk0 ε' hε'.ne' • c
+  have hε₀ : 0 < ε / 2 := by positivity
+  have hdnorm : (range d : Set E) subseteq closedBall 0 (ε / 2) := by
+    simp [d, abs_of_nonneg hε'.le, range_subset_iff, norm_smul]
+    simpa [ε', hε₀.ne', range_subset_iff, ← mul_div_right_comm (ε / 2), div_le_iff₀ hc', hε₀]
+      using hcnorm
+  refine ⟨d, ?_, ?_⟩
+  · simpa [d, Pi.smul_def, range_smul, interior_smul₀, convexHull_smul, zero_mem_smul_set_iff,
+      hε'.ne']
+  · calc
+      convexHull Real (range d) subseteq closedBall 0 (ε / 2) := convexHull_min hdnorm (convex_closedBall ..)
+      _ subseteq ball 0 ε := closedBall_subset_ball (by linarith)
+      _ subseteq s := hεs
 
 中文:
 引理 存在_mem_interior_convexHull_affineBasis
@@ -103,7 +136,40 @@ lemma exists_mem_interior_convexHull_affineBasis
   · obtain ⟨b, hb⟩ := this (s := -x +ᵥ s) (by simpa using vadd_mem_nhds_vadd (-x) hs) rfl
     use x +ᵥ b
     simpa [subset_vadd_set_iff, mem_vadd_set_iff_neg_vadd_mem, convexHull_vadd, interior_vadd,
-      Pi.vadd_def, -vadd_eq_add, v
+      Pi.vadd_def, -vadd_eq_add, vadd_eq_add (a := -x), ← Set.vadd_set_range] using hb
+  subst hx
+  -- The strategy is now to find an arbitrary maximal spanning simplex (aka an affine basis)...
+  obtain ⟨b⟩ := exists_affineBasis_of_finiteDimensional
+    (ι := Fin (finrank Real E + 1)) (k := Real) (P := E) (by simp)
+  -- ... translate it to contain the origin...
+  set c : AffineBasis (Fin (finrank Real E + 1)) Real E := -Finset.univ.centroid Real b +ᵥ b
+  have hc₀ : 0 in interior (convexHull Real (range c) : Set E) := by
+    simpa [c, convexHull_vadd, interior_vadd, range_add, Pi.vadd_def, mem_vadd_set_iff_neg_vadd_mem]
+      using b.centroid_mem_interior_convexHull
+  set cnorm := Finset.univ.sup' Finset.univ_nonempty (fun i => ‖c i‖)
+  have hcnorm : range c subseteq closedBall 0 (cnorm + 1) := by
+    simpa only [cnorm, subset_def, Finset.mem_coe, mem_closedBall, dist_zero_right,
+      ← sub_le_iff_le_add, Finset.le_sup'_iff, forall_mem_range] using fun i => ⟨i, by simp⟩
+  -- ... and finally scale it to fit inside the neighborhood `s`.
+  obtain ⟨ε, hε, hεs⟩ := Metric.mem_nhds_iff.1 hs
+  set ε' : Real := ε / 2 / (cnorm + 1)
+  have hc' : 0 < cnorm + 1 := by
+    have : 0 <= cnorm := Finset.le_sup'_of_le _ (Finset.mem_univ 0) (norm_nonneg _)
+    positivity
+  have hε' : 0 < ε' := by positivity
+  set d : AffineBasis (Fin (finrank Real E + 1)) Real E := Units.mk0 ε' hε'.ne' • c
+  have hε₀ : 0 < ε / 2 := by positivity
+  have hdnorm : (range d : Set E) subseteq closedBall 0 (ε / 2) := by
+    simp [d, abs_of_nonneg hε'.le, range_subset_iff, norm_smul]
+    simpa [ε', hε₀.ne', range_subset_iff, ← mul_div_right_comm (ε / 2), div_le_iff₀ hc', hε₀]
+      using hcnorm
+  refine ⟨d, ?_, ?_⟩
+  · simpa [d, Pi.smul_def, range_smul, interior_smul₀, convexHull_smul, zero_mem_smul_set_iff,
+      hε'.ne']
+  · calc
+      convexHull Real (range d) subseteq closedBall 0 (ε / 2) := convexHull_min hdnorm (convex_closedBall ..)
+      _ subseteq ball 0 ε := closedBall_subset_ball (by linarith)
+      _ subseteq s := hεs
 -/
 lemma exists_mem_interior_convexHull_affineBasis (hs : s in 𝓝 x) :
     exists b : AffineBasis (Fin (finrank Real E + 1)) Real E,
@@ -159,7 +225,18 @@ theorem Convex.exists_subset_interior_convexHull_finset_of_isCompact
   rcases compact_open_separated_add_left hs₂ hU₁ hU₂ with ⟨V, hV₁, hV₂⟩
   rcases exists_mem_interior_convexHull_affineBasis hV₁ with ⟨b, hb₁, hb₂⟩
   rcases hs₂.elim_finite_subcover_image (b := s)
-      (c := fun x => interio
+      (c := fun x => interior (convexHull Real (Set.range b)) + {x})
+      (fun _ _ => isOpen_interior.add_right)
+      (fun x hx => Set.mem_iUnion₂_of_mem hx <| by simpa using hb₁)
+    with ⟨u, hu₁, hu₂, hu₃⟩
+  lift u to Finset E using hu₂
+  refine ⟨Finset.univ.image b + u, ?_, ?_⟩
+  all_goals rw [Finset.coe_add, Finset.coe_image, Finset.coe_univ, Set.image_univ, convexHull_add]
+  · grw [hu₃, ← subset_interior_add_left, Set.iUnion₂_subset_iff, ← subset_convexHull _ (u : Set E)]
+    intros
+    gcongr
+    simpa
+  · grw [hu₁, hs₁.convexHull_eq, hb₂, hV₂, hU₃]
 
 中文:
 定理 凸.存在_subset_interior_convexHull_finset_of_isCompact
@@ -169,7 +246,18 @@ theorem Convex.exists_subset_interior_convexHull_finset_of_isCompact
   rcases compact_open_separated_add_left hs₂ hU₁ hU₂ with ⟨V, hV₁, hV₂⟩
   rcases exists_mem_interior_convexHull_affineBasis hV₁ with ⟨b, hb₁, hb₂⟩
   rcases hs₂.elim_finite_subcover_image (b := s)
-      (c := fun x => interio
+      (c := fun x => interior (convexHull Real (Set.range b)) + {x})
+      (fun _ _ => isOpen_interior.add_right)
+      (fun x hx => Set.mem_iUnion₂_of_mem hx <| by simpa using hb₁)
+    with ⟨u, hu₁, hu₂, hu₃⟩
+  lift u to Finset E using hu₂
+  refine ⟨Finset.univ.image b + u, ?_, ?_⟩
+  all_goals rw [Finset.coe_add, Finset.coe_image, Finset.coe_univ, Set.image_univ, convexHull_add]
+  · grw [hu₃, ← subset_interior_add_left, Set.iUnion₂_subset_iff, ← subset_convexHull _ (u : Set E)]
+    intros
+    gcongr
+    simpa
+  · grw [hu₁, hs₁.convexHull_eq, hb₂, hV₂, hU₃]
 
 Depends on / 依赖: Finset, Finset.univ.i, Set.mem_iUnion, Set.range, add_right, classical, compact_open_separated_add_left, convexHull, elim_finite_subcover_image, exists_mem_interior_convexHull_affineBasis, interior, isOpen_interior, isOpen_interior.add_right, mem_nhdsSet_iff_exists
 -/

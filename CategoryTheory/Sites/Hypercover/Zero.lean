@@ -1139,7 +1139,12 @@ definition isoMk
     obtain ⟨i, rfl⟩ := s₀.surjective i
     simp only [← cancel_epi (h₀ i).hom, w₀, Category.assoc, Equiv.symm_apply_apply,
       eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id_assoc]
-    r
+    rw [← CategoryTheory.eqToHom_naturality _ (by simp)]
+    simp
+  hom_inv_id := Hom.ext' (by ext; simp) (fun i => by simp)
+  inv_hom_id := Hom.ext' (by ext; simp) (fun i => by simp)
+
+@[simp]
 
 中文:
 定义 isoMk
@@ -1152,7 +1157,12 @@ definition isoMk
     obtain ⟨i, rfl⟩ := s₀.surjective i
     simp only [← cancel_epi (h₀ i).hom, w₀, Category.assoc, Equiv.symm_apply_apply,
       eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id_assoc]
-    r
+    rw [← CategoryTheory.eqToHom_naturality _ (by simp)]
+    simp
+  hom_inv_id := Hom.ext' (by ext; simp) (fun i => by simp)
+  inv_hom_id := Hom.ext' (by ext; simp) (fun i => by simp)
+
+@[simp]
 
 Depends on / 依赖: Category, Category.assoc, CategoryTheory, CategoryTheory.eqToHom_naturality, Equiv.symm_apply_apply, Hom.ext, Iso.hom_inv_id_assoc, cancel_epi, cat_disch, eqToHom, eqToHom_iso_hom_naturality_assoc, eqToHom_naturality, hom.h, hom.s, hom_inv_id, hom_inv_id_assoc, inv.h, inv.s, inv.w, inv_hom_id
 -/
@@ -1414,7 +1424,13 @@ lemma mem_of_iso
     · rw [Presieve.ofArrows_le_iff]
       intro i
       exact .mk (⟨i, ⟨⟩⟩ : Σ (_ : F.I₀), Unit)
-    · simp [Presieve.ofArro
+    · simp [Presieve.ofArrows_le_iff]
+  rw [this]
+  refine K.comp_mem_coverings (fun i => E.f (e.inv.s₀ i)) ?_ (fun i (k : Unit) => e.inv.h₀ i) ?_
+  · rwa [← E.presieve₀_reindex (PreZeroHypercover.equivOfIso e.symm)] at hE
+  · intro i
+    rw [Presieve.ofArrows_pUnit]
+    exact K.mem_coverings_of_isIso _
 
 中文:
 引理 mem_of_iso
@@ -1427,7 +1443,13 @@ lemma mem_of_iso
     · rw [Presieve.ofArrows_le_iff]
       intro i
       exact .mk (⟨i, ⟨⟩⟩ : Σ (_ : F.I₀), Unit)
-    · simp [Presieve.ofArro
+    · simp [Presieve.ofArrows_le_iff]
+  rw [this]
+  refine K.comp_mem_coverings (fun i => E.f (e.inv.s₀ i)) ?_ (fun i (k : Unit) => e.inv.h₀ i) ?_
+  · rwa [← E.presieve₀_reindex (PreZeroHypercover.equivOfIso e.symm)] at hE
+  · intro i
+    rw [Presieve.ofArrows_pUnit]
+    exact K.mem_coverings_of_isIso _
 
 Depends on / 依赖: E.presieve, F.presieve, Hom.w, K.comp_mem_coverings, PreZeroHypercover, PreZeroHypercover.equivOfIso, Presieve, Presieve.ofArrows, Presieve.ofArrows_le_iff, Presieve.ofArrows_pUnit, comp_mem_coverings, e.inv.h, e.inv.s, e.symm, equivOfIso, le_antisymm, ofArrows, ofArrows_le_iff, ofArrows_pUnit
 -/
@@ -2173,7 +2195,35 @@ lemma Precoverage.RespectsIso.of_forall_exists_iso
       f i :=
         match i with
         | .inl i => by exact i.1.2
-        | .inr i => by exact (eT _ i.2).
+        | .inr i => by exact (eT _ i.2).hom ≫ i.1.2 }
+  let F : PreZeroHypercover S :=
+    { I₀ := R.uncurry oplus T.uncurry
+      X i := i.elim (fun j => YR _ j.2) (fun j => j.1.1)
+      f i :=
+        match i with
+        | .inl i => by exact (eR _ i.2).hom ≫ i.1.2
+        | .inr i => by exact i.1.2 }
+  let e : E ≅ F := by
+    refine PreZeroHypercover.isoMk (Equiv.refl _) (fun i => ?_) (fun i => ?_)
+    · match i with
+      | .inl i => dsimp [E, F]; symm; exact eR _ _
+      | .inr i => dsimp [E, F]; apply eT
+    · cases i <;> simp [E, F]
+  have hER : E.presieve₀ = R := by
+    refine le_antisymm ?_ fun Y g hg => .mk (Sum.inl (⟨⟨Y, g⟩, hg⟩ : R.uncurry))
+    rintro - - ⟨i⟩
+    match i with
+    | .inl i => exact i.2
+    | .inr i => apply hReg
+  have hFT : F.presieve₀ = T := by
+    refine le_antisymm ?_ fun Y g hg => .mk (Sum.inr (⟨⟨Y, g⟩, hg⟩ : T.uncurry))
+    rintro - - ⟨i⟩
+    match i with
+    | .inl i => apply hTeg
+    | .inr i => exact i.2
+  rw [← hFT]
+  apply RespectsIso.of_iso e
+  rwa [hER]
 
 中文:
 引理 Precoverage.RespectsIso.of_对任意_存在_iso
@@ -2187,7 +2237,35 @@ lemma Precoverage.RespectsIso.of_forall_exists_iso
       f i :=
         match i with
         | .inl i => by exact i.1.2
-        | .inr i => by exact (eT _ i.2).
+        | .inr i => by exact (eT _ i.2).hom ≫ i.1.2 }
+  let F : PreZeroHypercover S :=
+    { I₀ := R.uncurry oplus T.uncurry
+      X i := i.elim (fun j => YR _ j.2) (fun j => j.1.1)
+      f i :=
+        match i with
+        | .inl i => by exact (eR _ i.2).hom ≫ i.1.2
+        | .inr i => by exact i.1.2 }
+  let e : E ≅ F := by
+    refine PreZeroHypercover.isoMk (Equiv.refl _) (fun i => ?_) (fun i => ?_)
+    · match i with
+      | .inl i => dsimp [E, F]; symm; exact eR _ _
+      | .inr i => dsimp [E, F]; apply eT
+    · cases i <;> simp [E, F]
+  have hER : E.presieve₀ = R := by
+    refine le_antisymm ?_ fun Y g hg => .mk (Sum.inl (⟨⟨Y, g⟩, hg⟩ : R.uncurry))
+    rintro - - ⟨i⟩
+    match i with
+    | .inl i => exact i.2
+    | .inr i => apply hReg
+  have hFT : F.presieve₀ = T := by
+    refine le_antisymm ?_ fun Y g hg => .mk (Sum.inr (⟨⟨Y, g⟩, hg⟩ : T.uncurry))
+    rintro - - ⟨i⟩
+    match i with
+    | .inl i => apply hTeg
+    | .inr i => exact i.2
+  rw [← hFT]
+  apply RespectsIso.of_iso e
+  rwa [hER]
 
 Depends on / 依赖: PreZeroHypercover, R.uncurry, T.uncurry, i.elim, uncurry
 -/
@@ -3007,7 +3085,7 @@ instance [IsStableUnderBaseChange
       exact Presieve.ofArrows_comp_eq_of_surjective _ (fun i => ⟨e.hom.s₀ i, by simp⟩)
     · exact e.inv.h₀ i
     · intro i
-      exact CategoryTheory.IsPullback.of_vert_isIso (by sim
+      exact CategoryTheory.IsPullback.of_vert_isIso (by simp)
 
 中文:
 实例 [是StableUnderBaseChange
@@ -3018,7 +3096,7 @@ instance [IsStableUnderBaseChange
       exact Presieve.ofArrows_comp_eq_of_surjective _ (fun i => ⟨e.hom.s₀ i, by simp⟩)
     · exact e.inv.h₀ i
     · intro i
-      exact CategoryTheory.IsPullback.of_vert_isIso (by sim
+      exact CategoryTheory.IsPullback.of_vert_isIso (by simp)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsPullback.of_vert_isIso, IsPullback, J.mem_coverings_of_isPullback, Presieve, Presieve.ofArrows_comp_eq_of_surjective, convert, e.hom.s, e.inv.h, e.inv.s, mem_coverings_of_isPullback, ofArrows_comp_eq_of_surjective, of_vert_isIso
 -/

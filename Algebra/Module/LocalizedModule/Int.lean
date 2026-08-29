@@ -156,7 +156,10 @@ theorem exist_integer_multiples
   refine ⟨∏ i in s, (sec i).2, fun i hi => ⟨?_, ?_⟩⟩
   · exact (∏ j in s.erase i, (sec j).2) • (sec i).1
   · simp only [LinearMap.map_smul_of_tower, Submonoid.coe_finsetProd]
-    rw [← hsec]; rw [← mul_smul]; rw [Subm
+    rw [← hsec]; rw [← mul_smul]; rw [Submonoid.smul_def]
+    congr
+    simp only [Submonoid.coe_mul, Submonoid.coe_finsetProd, mul_comm]
+    rw [← Finset.prod_insert (f := fun i => ((sec i).snd).val) (s.notMem_erase i)]; rw [Finset.insert_erase hi]
 
 中文:
 定理 exist_integer_multiples
@@ -167,7 +170,10 @@ theorem exist_integer_multiples
   refine ⟨∏ i in s, (sec i).2, fun i hi => ⟨?_, ?_⟩⟩
   · exact (∏ j in s.erase i, (sec j).2) • (sec i).1
   · simp only [LinearMap.map_smul_of_tower, Submonoid.coe_finsetProd]
-    rw [← hsec]; rw [← mul_smul]; rw [Subm
+    rw [← hsec]; rw [← mul_smul]; rw [Submonoid.smul_def]
+    congr
+    simp only [Submonoid.coe_mul, Submonoid.coe_finsetProd, mul_comm]
+    rw [← Finset.prod_insert (f := fun i => ((sec i).snd).val) (s.notMem_erase i)]; rw [Finset.insert_erase hi]
 
 Depends on / 依赖: Finset, Finset.insert_erase, Finset.prod_insert, IsLocalizedModule, IsLocalizedModule.surj, LinearMap, LinearMap.map_smul_of_tower, Submonoid, Submonoid.coe_finsetProd, Submonoid.coe_mul, Submonoid.smul_def, classical, coe_finsetProd, coe_mul, insert_erase, map_smul_of_tower, mul_comm, mul_smul, notMem_erase, prod_insert
 -/
@@ -385,7 +391,16 @@ theorem smul_mem_finsetIntegerMultiple_span
     (IsLocalizedModule.finsetIntegerMultiple_image S f s).symm
   apply congrArg (Submodule.span R) at hx₁
   rw [Submodule.span_smul] at hx₁
-  replace hx : _ in y • Submodule.span R (s : Set M') :=
+  replace hx : _ in y • Submodule.span R (s : Set M') := Set.smul_mem_smul_set hx
+  rw [hx₁]; rw [← f.map_smul]; rw [← Submodule.map_span f] at hx
+  obtain ⟨x', hx', hx''⟩ := hx
+  obtain ⟨a, ha⟩ := (IsLocalizedModule.eq_iff_exists S f).mp hx''
+  use a * y
+  convert!
+    (Submodule.span R (IsLocalizedModule.finsetIntegerMultiple S f s : Set M)).smul_mem a hx'
+      using 1
+  convert! ha.symm using 1
+  simp only [Submonoid.smul_def, ← smul_smul]
 
 中文:
 定理 smul_mem_finset整数egerMultiple_span
@@ -396,7 +411,16 @@ theorem smul_mem_finsetIntegerMultiple_span
     (IsLocalizedModule.finsetIntegerMultiple_image S f s).symm
   apply congrArg (Submodule.span R) at hx₁
   rw [Submodule.span_smul] at hx₁
-  replace hx : _ in y • Submodule.span R (s : Set M') :=
+  replace hx : _ in y • Submodule.span R (s : Set M') := Set.smul_mem_smul_set hx
+  rw [hx₁]; rw [← f.map_smul]; rw [← Submodule.map_span f] at hx
+  obtain ⟨x', hx', hx''⟩ := hx
+  obtain ⟨a, ha⟩ := (IsLocalizedModule.eq_iff_exists S f).mp hx''
+  use a * y
+  convert!
+    (Submodule.span R (IsLocalizedModule.finsetIntegerMultiple S f s : Set M)).smul_mem a hx'
+      using 1
+  convert! ha.symm using 1
+  simp only [Submonoid.smul_def, ← smul_smul]
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.commonDenomOfFinset, IsLocalizedModule.eq_iff_exists, IsLocalizedModule.finsetIntegerMultiple_image, Set.smul_mem_smul_set, Submodule, Submodule.map_span, Submodule.sp, Submodule.span, Submodule.span_smul, commonDenomOfFinset, convert, eq_iff_exists, f.map_smul, finsetIntegerMultiple_image, map_smul, map_span, replace, smul_mem_smul_set, span_smul
 -/

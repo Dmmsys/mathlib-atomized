@@ -109,7 +109,9 @@ definition conePoint
       simp
   assoc :=
     t.hom_ext fun j => by
-      rw [Category.assoc]; rw [Category.assoc]; rw [t.
+      rw [Category.assoc]; rw [Category.assoc]; rw [t.fac (newCone D c)]; rw [newCone_π_app]; rw [←
+        Functor.map_comp_assoc]; rw [t.fac (newCone D c)]; rw [newCone_π_app]; rw [← T.μ.naturality_assoc]; rw [(D.obj j).assoc]; rw [Functor.map_comp]; rw [Category.assoc]
+      rfl
 
 中文:
 定义 conePoint
@@ -122,7 +124,9 @@ definition conePoint
       simp
   assoc :=
     t.hom_ext fun j => by
-      rw [Category.assoc]; rw [Category.assoc]; rw [t.
+      rw [Category.assoc]; rw [Category.assoc]; rw [t.fac (newCone D c)]; rw [newCone_π_app]; rw [←
+        Functor.map_comp_assoc]; rw [t.fac (newCone D c)]; rw [newCone_π_app]; rw [← T.μ.naturality_assoc]; rw [(D.obj j).assoc]; rw [Functor.map_comp]; rw [Category.assoc]
+      rfl
 
 Depends on / 依赖: c.pt
 -/
@@ -191,7 +195,10 @@ definition liftedConeIsLimit
           rw [Category.assoc]; rw [Category.assoc]; rw [t.fac]; rw [newCone_π_app]; rw [← Functor.map_comp_assoc]; rw [t.fac]; rw [Functor.mapCone_π_app]
           apply (s.π.app j).h }
   uniq s m J := by
- 
+    ext1
+    apply t.hom_ext
+    intro j
+    simpa [t.fac ((forget T).mapCone s) j] using congr_arg Algebra.Hom.f (J j)
 
 中文:
 定义 liftedConeIsLimit
@@ -203,7 +210,10 @@ definition liftedConeIsLimit
           rw [Category.assoc]; rw [Category.assoc]; rw [t.fac]; rw [newCone_π_app]; rw [← Functor.map_comp_assoc]; rw [t.fac]; rw [Functor.mapCone_π_app]
           apply (s.π.app j).h }
   uniq s m J := by
- 
+    ext1
+    apply t.hom_ext
+    intro j
+    simpa [t.fac ((forget T).mapCone s) j] using congr_arg Algebra.Hom.f (J j)
 
 Depends on / 依赖: Algebra, Algebra.Hom.f, Category, Category.assoc, Functor, Functor.mapCone_, Functor.map_comp_assoc, congr_arg, forget, hom_ext, mapCone, map_comp_assoc, t.fac, t.hom_ext, t.lift
 -/
@@ -400,7 +410,10 @@ definition coconePoint
         T.η.naturality_assoc _ _]; rw [commuting]; rw [Algebra.unit_assoc (D.obj j)]
     simp
   assoc := by
-    refine (isColimitOfPreserves _ (isColimitOf
+    refine (isColimitOfPreserves _ (isColimitOfPreserves _ t)).hom_ext fun j => ?_
+    rw [Functor.mapCocone_ι_app]; rw [Functor.mapCocone_ι_app]; rw [show (T : C ⥤ C).map ((T : C ⥤ C).map _) ≫ _ ≫ _ = _ from T.μ.naturality_assoc _ _]; rw [←
+      Functor.map_comp_assoc]; rw [commuting]; rw [Functor.map_comp]; rw [Category.assoc]; rw [commuting]
+    apply (D.obj j).assoc_assoc _
 
 中文:
 定义 coconePoint
@@ -414,7 +427,10 @@ definition coconePoint
         T.η.naturality_assoc _ _]; rw [commuting]; rw [Algebra.unit_assoc (D.obj j)]
     simp
   assoc := by
-    refine (isColimitOfPreserves _ (isColimitOf
+    refine (isColimitOfPreserves _ (isColimitOfPreserves _ t)).hom_ext fun j => ?_
+    rw [Functor.mapCocone_ι_app]; rw [Functor.mapCocone_ι_app]; rw [show (T : C ⥤ C).map ((T : C ⥤ C).map _) ≫ _ ≫ _ = _ from T.μ.naturality_assoc _ _]; rw [←
+      Functor.map_comp_assoc]; rw [commuting]; rw [Functor.map_comp]; rw [Category.assoc]; rw [commuting]
+    apply (D.obj j).assoc_assoc _
 
 Depends on / 依赖: c.pt
 -/
@@ -496,7 +512,11 @@ definition liftedCoconeIsColimit
           dsimp
           rw [← Functor.map_comp_assoc]; rw [← Category.assoc]; rw [t.fac]; rw [commuting]; rw [Category.assoc]; rw [t.fac]
           apply Algebra.Hom.h }
-  uniq s m J 
+  uniq s m J := by
+    ext1
+    apply t.hom_ext
+    intro j
+    simpa using congr_arg Algebra.Hom.f (J j)
 
 中文:
 定义 liftedCoconeIsColimit
@@ -507,7 +527,11 @@ definition liftedCoconeIsColimit
           dsimp
           rw [← Functor.map_comp_assoc]; rw [← Category.assoc]; rw [t.fac]; rw [commuting]; rw [Category.assoc]; rw [t.fac]
           apply Algebra.Hom.h }
-  uniq s m J 
+  uniq s m J := by
+    ext1
+    apply t.hom_ext
+    intro j
+    simpa using congr_arg Algebra.Hom.f (J j)
 
 Depends on / 依赖: Algebra, Algebra.Hom.f, Algebra.Hom.h, Category, Category.assoc, Functor, Functor.map_comp_assoc, commuting, congr_arg, forget, hom_ext, isColimitOfPreserves, mapCocone, map_comp_assoc, t.desc, t.fac, t.hom_ext
 -/
@@ -546,7 +570,9 @@ instance forgetCreatesColimit
                   h := commuting _ _ _ }
               naturality := fun A B f => by
                 ext1
-                simpa u
+                simpa using (c.w f) } }
+      validLift := Cocone.ext (Iso.refl _)
+      makesColimit := liftedCoconeIsColimit _ _ }
 
 中文:
 实例 forgetCreatesColimit
@@ -560,7 +586,9 @@ instance forgetCreatesColimit
                   h := commuting _ _ _ }
               naturality := fun A B f => by
                 ext1
-                simpa u
+                simpa using (c.w f) } }
+      validLift := Cocone.ext (Iso.refl _)
+      makesColimit := liftedCoconeIsColimit _ _ }
 
 Depends on / 依赖: Cocone, Cocone.ext, Iso.refl, coconePoint, commuting, createsColimitOfReflectsIso, liftedCocone, liftedCoconeIsColimit, makesColimit, naturality, validLift
 -/
@@ -715,7 +743,24 @@ definition monadicCreatesColimitOfPreservesColimit
   -- instances.
   letI A := Monad.comparison (monadicAdjunction R)
   letI B := Monad.forget (Adjunction.toMonad (monadicAdjunction R))
-  let i : (K ⋙ Monad.comparison (monadicAdjunction R)) ⋙ Monad.f
+  let i : (K ⋙ Monad.comparison (monadicAdjunction R)) ⋙ Monad.forget _ ≅ K ⋙ R :=
+    Functor.associator _ _ _ ≪≫
+      isoWhiskerLeft K (Monad.comparisonForget (monadicAdjunction R))
+  letI : PreservesColimit ((K ⋙ A) ⋙ Monad.forget
+    (Adjunction.toMonad (monadicAdjunction R)))
+      (Adjunction.toMonad (monadicAdjunction R)).toFunctor := by
+    dsimp
+    exact preservesColimit_of_iso_diagram _ i.symm
+  letI : PreservesColimit
+    (((K ⋙ A) ⋙ Monad.forget (Adjunction.toMonad (monadicAdjunction R))) ⋙
+      (Adjunction.toMonad (monadicAdjunction R)).toFunctor)
+      (Adjunction.toMonad (monadicAdjunction R)).toFunctor := by
+    dsimp
+    exact preservesColimit_of_iso_diagram _ (isoWhiskerRight i (monadicLeftAdjoint R ⋙ R)).symm
+  letI : CreatesColimit (K ⋙ A) B := CategoryTheory.Monad.forgetCreatesColimit _
+  letI : CreatesColimit K (A ⋙ B) := CategoryTheory.compCreatesColimit _ _
+  let e := Monad.comparisonForget (monadicAdjunction R)
+  apply createsColimitOfNatIso e
 
 中文:
 定义 monadicCreatesColimitOfPreservesColimit
@@ -725,7 +770,24 @@ definition monadicCreatesColimitOfPreservesColimit
   -- instances.
   letI A := Monad.comparison (monadicAdjunction R)
   letI B := Monad.forget (Adjunction.toMonad (monadicAdjunction R))
-  let i : (K ⋙ Monad.comparison (monadicAdjunction R)) ⋙ Monad.f
+  let i : (K ⋙ Monad.comparison (monadicAdjunction R)) ⋙ Monad.forget _ ≅ K ⋙ R :=
+    Functor.associator _ _ _ ≪≫
+      isoWhiskerLeft K (Monad.comparisonForget (monadicAdjunction R))
+  letI : PreservesColimit ((K ⋙ A) ⋙ Monad.forget
+    (Adjunction.toMonad (monadicAdjunction R)))
+      (Adjunction.toMonad (monadicAdjunction R)).toFunctor := by
+    dsimp
+    exact preservesColimit_of_iso_diagram _ i.symm
+  letI : PreservesColimit
+    (((K ⋙ A) ⋙ Monad.forget (Adjunction.toMonad (monadicAdjunction R))) ⋙
+      (Adjunction.toMonad (monadicAdjunction R)).toFunctor)
+      (Adjunction.toMonad (monadicAdjunction R)).toFunctor := by
+    dsimp
+    exact preservesColimit_of_iso_diagram _ (isoWhiskerRight i (monadicLeftAdjoint R ⋙ R)).symm
+  letI : CreatesColimit (K ⋙ A) B := CategoryTheory.Monad.forgetCreatesColimit _
+  letI : CreatesColimit K (A ⋙ B) := CategoryTheory.compCreatesColimit _ _
+  let e := Monad.comparisonForget (monadicAdjunction R)
+  apply createsColimitOfNatIso e
 -/
 noncomputable def monadicCreatesColimitOfPreservesColimit (R : D ⥤ C) (K : J ⥤ D)
     [MonadicRightAdjoint R] [PreservesColimit (K ⋙ R) (monadicLeftAdjoint R ⋙ R)]
@@ -766,7 +828,7 @@ definition monadicCreatesColimitsOfShapeOfPreservesColimitsOfShape
     apply (Adjunction.leftAdjoint_preservesColimits (monadicAdjunction R)).1
   letI : PreservesColimitsOfShape J (monadicLeftAdjoint R ⋙ R) := by
     apply CategoryTheory.Limits.comp_preservesColimitsOfShape _ _
-  ⟨monadicCreatesColimitO
+  ⟨monadicCreatesColimitOfPreservesColimit _ _⟩
 
 中文:
 定义 monadicCreatesColimitsOfShapeOfPreservesColimitsOfShape
@@ -775,7 +837,7 @@ definition monadicCreatesColimitsOfShapeOfPreservesColimitsOfShape
     apply (Adjunction.leftAdjoint_preservesColimits (monadicAdjunction R)).1
   letI : PreservesColimitsOfShape J (monadicLeftAdjoint R ⋙ R) := by
     apply CategoryTheory.Limits.comp_preservesColimitsOfShape _ _
-  ⟨monadicCreatesColimitO
+  ⟨monadicCreatesColimitOfPreservesColimit _ _⟩
 
 Depends on / 依赖: Adjunction, Adjunction.leftAdjoint_preservesColimits, CategoryTheory, CategoryTheory.Limits.comp_preservesColimitsOfShape, Limits, PreservesColimitsOfShape, comp_preservesColimitsOfShape, leftAdjoint_preservesColimits, monadicAdjunction, monadicCreatesColimitOfPreservesColimit, monadicLeftAdjoint
 -/
@@ -882,7 +944,9 @@ theorem hasColimitsOfShape_of_reflective
       let : PreservesColimitsOfShape J _ :=
         (monadicAdjunction R).leftAdjoint_preservesColimits.1
       let t : IsColimit c := isColimitOfPreserves (monadicLeftAdjoint R) (colimit.isColimit _)
-      apply Ha
+      apply HasColimit.mk ⟨_, (IsColimit.precomposeInvEquiv _ _).symm t⟩
+      apply
+        (isoWhiskerLeft F (asIso (monadicAdjunction R).counit) :) ≪≫ F.rightUnitor
 
 中文:
 定理 hasColimitsOfShape_of_reflective
@@ -892,7 +956,9 @@ theorem hasColimitsOfShape_of_reflective
       let : PreservesColimitsOfShape J _ :=
         (monadicAdjunction R).leftAdjoint_preservesColimits.1
       let t : IsColimit c := isColimitOfPreserves (monadicLeftAdjoint R) (colimit.isColimit _)
-      apply Ha
+      apply HasColimit.mk ⟨_, (IsColimit.precomposeInvEquiv _ _).symm t⟩
+      apply
+        (isoWhiskerLeft F (asIso (monadicAdjunction R).counit) :) ≪≫ F.rightUnitor
 
 Depends on / 依赖: F.rightUnitor, HasColimit, HasColimit.mk, IsColimit, IsColimit.precomposeInvEquiv, PreservesColimitsOfShape, cocone, colimit, colimit.cocone, colimit.isColimit, counit, isColimit, isColimitOfPreserves, isoWhiskerLeft, leftAdjoint_preservesColimits, mapCocone, monadicAdjunction, monadicLeftAdjoint, precomposeInvEquiv, rightUnitor
 -/
@@ -940,7 +1006,13 @@ lemma leftAdjoint_preservesTerminal_of_reflective
       have : HasLimit (F ⋙ R) := ⟨⟨⟨c, h⟩⟩⟩
       have : HasLimit F := hasLimit_of_reflective F R
       constructor
-      apply isLimitChangeEmptyCone D (limit.isLimit 
+      apply isLimitChangeEmptyCone D (limit.isLimit F)
+      apply (asIso ((monadicAdjunction R).counit.app _)).symm.trans
+      apply (monadicLeftAdjoint R).mapIso
+      letI := monadicCreatesLimits.{v, v} R
+      let A := CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit F R
+      apply (isLimitOfPreserves _ (limit.isLimit F)).conePointUniqueUpToIso h
+    apply preservesLimit_of_iso_diagram _ (Functor.emptyExt (F ⋙ R) _)
 
 中文:
 引理 leftAdjoint_preservesTerminal_of_reflective
@@ -953,7 +1025,13 @@ lemma leftAdjoint_preservesTerminal_of_reflective
       have : HasLimit (F ⋙ R) := ⟨⟨⟨c, h⟩⟩⟩
       have : HasLimit F := hasLimit_of_reflective F R
       constructor
-      apply isLimitChangeEmptyCone D (limit.isLimit 
+      apply isLimitChangeEmptyCone D (limit.isLimit F)
+      apply (asIso ((monadicAdjunction R).counit.app _)).symm.trans
+      apply (monadicLeftAdjoint R).mapIso
+      letI := monadicCreatesLimits.{v, v} R
+      let A := CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit F R
+      apply (isLimitOfPreserves _ (limit.isLimit F)).conePointUniqueUpToIso h
+    apply preservesLimit_of_iso_diagram _ (Functor.emptyExt (F ⋙ R) _)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.preservesLimit_of_createsLimit_and_hasLimit, Functor, Functor.empty, HasLimit, PreservesLimit, counit, counit.app, hasLimit_of_reflective, isLimit, isLimitChangeEmptyCone, isLimitOfPreserves, limit.isLimit, mapIso, monadicAdjunction, monadicCreatesLimits, monadicLeftAdjoint, preservesLimit_of_createsLimit_and_hasLimit, symm.trans
 -/
@@ -1043,7 +1121,10 @@ definition coconePoint
     simp only [Functor.comp_obj, forget_obj, Functor.id_obj,
       IsColimit.fac_assoc, newCocone_ι_app, assoc, NatTrans.naturality, Functor.id_map, comp_id]
     rw [← Category.assoc]; rw [(D.obj j).counit]; rw [Category.id_comp]
- 
+  coassoc := t.hom_ext fun j => by
+    simp only [Functor.comp_obj, forget_obj, IsColimit.fac_assoc,
+      newCocone_ι_app, assoc, NatTrans.naturality, Functor.comp_map]
+    rw [← Category.assoc]; rw [(D.obj j).coassoc]; rw [← Functor.map_comp]; rw [t.fac (newCocone D c) j]; rw [newCocone_ι_app]; rw [Functor.map_comp]; rw [assoc]
 
 中文:
 定义 coconePoint
@@ -1054,7 +1135,10 @@ definition coconePoint
     simp only [Functor.comp_obj, forget_obj, Functor.id_obj,
       IsColimit.fac_assoc, newCocone_ι_app, assoc, NatTrans.naturality, Functor.id_map, comp_id]
     rw [← Category.assoc]; rw [(D.obj j).counit]; rw [Category.id_comp]
- 
+  coassoc := t.hom_ext fun j => by
+    simp only [Functor.comp_obj, forget_obj, IsColimit.fac_assoc,
+      newCocone_ι_app, assoc, NatTrans.naturality, Functor.comp_map]
+    rw [← Category.assoc]; rw [(D.obj j).coassoc]; rw [← Functor.map_comp]; rw [t.fac (newCocone D c) j]; rw [newCocone_ι_app]; rw [Functor.map_comp]; rw [assoc]
 
 Depends on / 依赖: c.pt
 -/
@@ -1120,7 +1204,12 @@ definition liftedCoconeIsColimit
         t.hom_ext fun j => by
           dsimp
           rw [← Category.assoc]; rw [← Category.assoc]; rw [t.fac]; rw [newCocone_ι_app]; rw [t.fac]; rw [Functor.mapCocone_ι_app]; rw [Category.assoc]; rw [← Functor.map_comp]; rw [t.fac]
-          apply
+          apply (s.ι.app j).h }
+  uniq s m J := by
+    ext1
+    apply t.hom_ext
+    intro j
+    simpa [t.fac ((forget T).mapCocone s) j] using congr_arg Coalgebra.Hom.f (J j)
 
 中文:
 定义 liftedCoconeIsColimit
@@ -1130,7 +1219,12 @@ definition liftedCoconeIsColimit
         t.hom_ext fun j => by
           dsimp
           rw [← Category.assoc]; rw [← Category.assoc]; rw [t.fac]; rw [newCocone_ι_app]; rw [t.fac]; rw [Functor.mapCocone_ι_app]; rw [Category.assoc]; rw [← Functor.map_comp]; rw [t.fac]
-          apply
+          apply (s.ι.app j).h }
+  uniq s m J := by
+    ext1
+    apply t.hom_ext
+    intro j
+    simpa [t.fac ((forget T).mapCocone s) j] using congr_arg Coalgebra.Hom.f (J j)
 
 Depends on / 依赖: Category, Category.assoc, Coalgebra, Coalgebra.Hom.f, Functor, Functor.mapCocone_, Functor.map_comp, congr_arg, forget, hom_ext, mapCocone, map_comp, t.desc, t.fac, t.hom_ext
 -/
@@ -1317,7 +1411,9 @@ definition conePoint
     simp [Coalgebra.counit (D.obj j)]
   coassoc := by
     refine (isLimitOfPreserves _ (isLimitOfPreserves _ t)).hom_ext fun j => ?_
-
+    rw [Functor.mapCone_π_app]; rw [Functor.mapCone_π_app]; rw [assoc]; rw [← show _ = _ ≫ T.map (T.map _) from T.δ.naturality _]; rw [assoc]; rw [← Functor.map_comp]; rw [commuting]; rw [Functor.map_comp]; rw [← assoc]; rw [commuting]
+    simp only [Functor.comp_obj, forget_obj, Functor.const_obj_obj, assoc]
+    rw [(D.obj j).coassoc]; rw [← assoc]; rw [← assoc]; rw [commuting]
 
 中文:
 定义 conePoint
@@ -1329,7 +1425,9 @@ definition conePoint
     simp [Coalgebra.counit (D.obj j)]
   coassoc := by
     refine (isLimitOfPreserves _ (isLimitOfPreserves _ t)).hom_ext fun j => ?_
-
+    rw [Functor.mapCone_π_app]; rw [Functor.mapCone_π_app]; rw [assoc]; rw [← show _ = _ ≫ T.map (T.map _) from T.δ.naturality _]; rw [assoc]; rw [← Functor.map_comp]; rw [commuting]; rw [Functor.map_comp]; rw [← assoc]; rw [commuting]
+    simp only [Functor.comp_obj, forget_obj, Functor.const_obj_obj, assoc]
+    rw [(D.obj j).coassoc]; rw [← assoc]; rw [← assoc]; rw [commuting]
 
 Depends on / 依赖: c.pt
 -/
@@ -1406,7 +1504,13 @@ definition liftedConeIsLimit
       h :=
         (isLimitOfPreserves (T : C ⥤ C) t).hom_ext fun j => by
           dsimp
-          rw [Category.assoc]; rw [← t.fac]; rw [Category.assoc]; rw [t.fac]; rw [commuting]; rw [← assoc]; rw [← assoc]; rw [t.fac]; rw [assoc]; rw [← Functor.map_comp]; rw
+          rw [Category.assoc]; rw [← t.fac]; rw [Category.assoc]; rw [t.fac]; rw [commuting]; rw [← assoc]; rw [← assoc]; rw [t.fac]; rw [assoc]; rw [← Functor.map_comp]; rw [t.fac]
+          exact (s.π.app j).h }
+  uniq s m J := by
+    ext1
+    apply t.hom_ext
+    intro j
+    simpa using congr_arg Coalgebra.Hom.f (J j)
 
 中文:
 定义 liftedConeIsLimit
@@ -1415,7 +1519,13 @@ definition liftedConeIsLimit
       h :=
         (isLimitOfPreserves (T : C ⥤ C) t).hom_ext fun j => by
           dsimp
-          rw [Category.assoc]; rw [← t.fac]; rw [Category.assoc]; rw [t.fac]; rw [commuting]; rw [← assoc]; rw [← assoc]; rw [t.fac]; rw [assoc]; rw [← Functor.map_comp]; rw
+          rw [Category.assoc]; rw [← t.fac]; rw [Category.assoc]; rw [t.fac]; rw [commuting]; rw [← assoc]; rw [← assoc]; rw [t.fac]; rw [assoc]; rw [← Functor.map_comp]; rw [t.fac]
+          exact (s.π.app j).h }
+  uniq s m J := by
+    ext1
+    apply t.hom_ext
+    intro j
+    simpa using congr_arg Coalgebra.Hom.f (J j)
 
 Depends on / 依赖: Category, Category.assoc, Coalgebra, Coalgebra.Hom.f, Functor, Functor.map_comp, commuting, congr_arg, forget, hom_ext, isLimitOfPreserves, mapCone, map_comp, t.fac, t.hom_ext, t.lift
 -/
@@ -1454,7 +1564,9 @@ instance forgetCreatesLimit
                   h := commuting _ _ _ }
               naturality := fun A B f => by
                 ext1
-                simpa using (
+                simpa using (c.w f).symm } }
+      validLift := Cone.ext (Iso.refl _)
+      makesLimit := liftedConeIsLimit _ _ }
 
 中文:
 实例 forgetCreatesLimit
@@ -1468,7 +1580,9 @@ instance forgetCreatesLimit
                   h := commuting _ _ _ }
               naturality := fun A B f => by
                 ext1
-                simpa using (
+                simpa using (c.w f).symm } }
+      validLift := Cone.ext (Iso.refl _)
+      makesLimit := liftedConeIsLimit _ _ }
 
 Depends on / 依赖: Cone.ext, Iso.refl, commuting, conePoint, createsLimitOfReflectsIso, liftedCone, liftedConeIsLimit, makesLimit, naturality, validLift
 -/
@@ -1620,7 +1734,22 @@ definition comonadicCreatesLimitOfPreservesLimit
   letI B := Comonad.forget (Adjunction.toComonad (comonadicAdjunction R))
   let i : (K ⋙ Comonad.comparison (comonadicAdjunction R)) ⋙ Comonad.forget _ ≅ K ⋙ R :=
     Functor.associator _ _ _ ≪≫
-      isoWhiskerLeft K (Comonad.comparisonForge
+      isoWhiskerLeft K (Comonad.comparisonForget (comonadicAdjunction R))
+  letI : PreservesLimit ((K ⋙ A) ⋙ Comonad.forget
+    (Adjunction.toComonad (comonadicAdjunction R)))
+      (Adjunction.toComonad (comonadicAdjunction R)).toFunctor := by
+    dsimp
+    exact preservesLimit_of_iso_diagram _ i.symm
+  letI : PreservesLimit
+    (((K ⋙ A) ⋙ Comonad.forget (Adjunction.toComonad (comonadicAdjunction R))) ⋙
+      (Adjunction.toComonad (comonadicAdjunction R)).toFunctor)
+      (Adjunction.toComonad (comonadicAdjunction R)).toFunctor := by
+    dsimp
+    exact preservesLimit_of_iso_diagram _ (isoWhiskerRight i (comonadicRightAdjoint R ⋙ R)).symm
+  letI : CreatesLimit (K ⋙ A) B := CategoryTheory.Comonad.forgetCreatesLimit _
+  letI : CreatesLimit K (A ⋙ B) := CategoryTheory.compCreatesLimit _ _
+  let e := Comonad.comparisonForget (comonadicAdjunction R)
+  apply createsLimitOfNatIso e
 
 中文:
 定义 comonadicCreatesLimitOfPreservesLimit
@@ -1630,7 +1759,22 @@ definition comonadicCreatesLimitOfPreservesLimit
   letI B := Comonad.forget (Adjunction.toComonad (comonadicAdjunction R))
   let i : (K ⋙ Comonad.comparison (comonadicAdjunction R)) ⋙ Comonad.forget _ ≅ K ⋙ R :=
     Functor.associator _ _ _ ≪≫
-      isoWhiskerLeft K (Comonad.comparisonForge
+      isoWhiskerLeft K (Comonad.comparisonForget (comonadicAdjunction R))
+  letI : PreservesLimit ((K ⋙ A) ⋙ Comonad.forget
+    (Adjunction.toComonad (comonadicAdjunction R)))
+      (Adjunction.toComonad (comonadicAdjunction R)).toFunctor := by
+    dsimp
+    exact preservesLimit_of_iso_diagram _ i.symm
+  letI : PreservesLimit
+    (((K ⋙ A) ⋙ Comonad.forget (Adjunction.toComonad (comonadicAdjunction R))) ⋙
+      (Adjunction.toComonad (comonadicAdjunction R)).toFunctor)
+      (Adjunction.toComonad (comonadicAdjunction R)).toFunctor := by
+    dsimp
+    exact preservesLimit_of_iso_diagram _ (isoWhiskerRight i (comonadicRightAdjoint R ⋙ R)).symm
+  letI : CreatesLimit (K ⋙ A) B := CategoryTheory.Comonad.forgetCreatesLimit _
+  letI : CreatesLimit K (A ⋙ B) := CategoryTheory.compCreatesLimit _ _
+  let e := Comonad.comparisonForget (comonadicAdjunction R)
+  apply createsLimitOfNatIso e
 
 Depends on / 依赖: Adjunction, Adjunction.toComonad, Comonad, Comonad.comparison, Comonad.comparisonForget, Comonad.forget, Functor, Functor.associator, PreservesLimit, associator, comonadicAdjunction, comparison, comparisonForget, forget, isoWhiskerLeft, preservesLimit_of_, toComonad, toFunctor
 -/
@@ -1671,7 +1815,7 @@ definition comonadicCreatesLimitsOfShapeOfPreservesLimitsOfShape
     apply (Adjunction.rightAdjoint_preservesLimits (comonadicAdjunction R)).1
   letI : PreservesLimitsOfShape J (comonadicRightAdjoint R ⋙ R) := by
     apply CategoryTheory.Limits.comp_preservesLimitsOfShape _ _
-  ⟨comonadicCreatesLimit
+  ⟨comonadicCreatesLimitOfPreservesLimit _ _⟩
 
 中文:
 定义 comonadicCreatesLimitsOfShapeOfPreservesLimitsOfShape
@@ -1680,7 +1824,7 @@ definition comonadicCreatesLimitsOfShapeOfPreservesLimitsOfShape
     apply (Adjunction.rightAdjoint_preservesLimits (comonadicAdjunction R)).1
   letI : PreservesLimitsOfShape J (comonadicRightAdjoint R ⋙ R) := by
     apply CategoryTheory.Limits.comp_preservesLimitsOfShape _ _
-  ⟨comonadicCreatesLimit
+  ⟨comonadicCreatesLimitOfPreservesLimit _ _⟩
 
 Depends on / 依赖: Adjunction, Adjunction.rightAdjoint_preservesLimits, CategoryTheory, CategoryTheory.Limits.comp_preservesLimitsOfShape, Limits, PreservesLimitsOfShape, comonadicAdjunction, comonadicCreatesLimitOfPreservesLimit, comonadicRightAdjoint, comp_preservesLimitsOfShape, rightAdjoint_preservesLimits
 -/
@@ -1787,7 +1931,9 @@ theorem hasLimitsOfShape_of_coreflective
       let : PreservesLimitsOfShape J _ :=
         (comonadicAdjunction R).rightAdjoint_preservesLimits.1
       let t : IsLimit c := isLimitOfPreserves (comonadicRightAdjoint R) (limit.isLimit _)
-      apply HasLimit.mk
+      apply HasLimit.mk ⟨_, (IsLimit.postcomposeHomEquiv _ _).symm t⟩
+      apply
+        (F.rightUnitor ≪≫ (isoWhiskerLeft F ((asIso (comonadicAdjunction R).unit) :))).symm
 
 中文:
 定理 hasLimitsOfShape_of_coreflective
@@ -1797,7 +1943,9 @@ theorem hasLimitsOfShape_of_coreflective
       let : PreservesLimitsOfShape J _ :=
         (comonadicAdjunction R).rightAdjoint_preservesLimits.1
       let t : IsLimit c := isLimitOfPreserves (comonadicRightAdjoint R) (limit.isLimit _)
-      apply HasLimit.mk
+      apply HasLimit.mk ⟨_, (IsLimit.postcomposeHomEquiv _ _).symm t⟩
+      apply
+        (F.rightUnitor ≪≫ (isoWhiskerLeft F ((asIso (comonadicAdjunction R).unit) :))).symm
 
 Depends on / 依赖: F.rightUnitor, HasLimit, HasLimit.mk, IsLimit, IsLimit.postcomposeHomEquiv, PreservesLimitsOfShape, comonadicAdjunction, comonadicRightAdjoint, isLimit, isLimitOfPreserves, isoWhiskerLeft, limit.cone, limit.isLimit, mapCone, postcomposeHomEquiv, rightAdjoint_preservesLimits, rightUnitor
 -/
@@ -1845,7 +1993,13 @@ lemma rightAdjoint_preservesInitial_of_coreflective
       have : HasColimit (F ⋙ R) := ⟨⟨⟨c, h⟩⟩⟩
       have : HasColimit F := hasColimit_of_coreflective F R
       constructor
-      apply isColimitChangeEmptyCocone 
+      apply isColimitChangeEmptyCocone D (colimit.isColimit F)
+      apply (asIso ((comonadicAdjunction R).unit.app _)).trans
+      apply (comonadicRightAdjoint R).mapIso
+      letI := comonadicCreatesColimits.{v, v} R
+      let A := CategoryTheory.preservesColimit_of_createsColimit_and_hasColimit F R
+      apply (isColimitOfPreserves _ (colimit.isColimit F)).coconePointUniqueUpToIso h
+    apply preservesColimit_of_iso_diagram _ (Functor.emptyExt (F ⋙ R) _)
 
 中文:
 引理 rightAdjoint_preservesInitial_of_coreflective
@@ -1858,7 +2012,13 @@ lemma rightAdjoint_preservesInitial_of_coreflective
       have : HasColimit (F ⋙ R) := ⟨⟨⟨c, h⟩⟩⟩
       have : HasColimit F := hasColimit_of_coreflective F R
       constructor
-      apply isColimitChangeEmptyCocone 
+      apply isColimitChangeEmptyCocone D (colimit.isColimit F)
+      apply (asIso ((comonadicAdjunction R).unit.app _)).trans
+      apply (comonadicRightAdjoint R).mapIso
+      letI := comonadicCreatesColimits.{v, v} R
+      let A := CategoryTheory.preservesColimit_of_createsColimit_and_hasColimit F R
+      apply (isColimitOfPreserves _ (colimit.isColimit F)).coconePointUniqueUpToIso h
+    apply preservesColimit_of_iso_diagram _ (Functor.emptyExt (F ⋙ R) _)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.preservesColimit_of_createsColimit_and_hasColimit, Functor, Functor.empty, HasColimit, PreservesColimit, colimit, colimit.isColimit, comonadicAdjunction, comonadicCreatesColimits, comonadicRightAdjoint, hasColimit_of_coreflective, isColimit, isColimitChangeEmptyCocone, mapIso, preservesColimit_of_createsColimit_and_hasColimit, unit.app
 -/

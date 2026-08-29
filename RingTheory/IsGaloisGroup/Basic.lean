@@ -63,7 +63,8 @@ theorem IsGaloisGroup.smul_mem_of_normal
   rw [← inv_smul_eq_iff]; rw [Subgroup.smul_def]; rw [← mul_smul]; rw [← mul_smul]
   exact Subgroup.smul_algebraMap B (hN.conj_mem' n n.prop g) x
 
-@[deprecated (since := "2026-05-28")] alias smul_eq_self := Subgroup.smul_algebraM
+@[deprecated (since := "2026-05-28")] alias smul_eq_self := Subgroup.smul_algebraMap
+@[deprecated (since := "2026-05-28")] alias smul_mem_of_normal := IsGaloisGroup.smul_mem_of_normal
 
 中文:
 定理 是Galois群.smul_mem_of_normal
@@ -74,7 +75,8 @@ theorem IsGaloisGroup.smul_mem_of_normal
   rw [← inv_smul_eq_iff]; rw [Subgroup.smul_def]; rw [← mul_smul]; rw [← mul_smul]
   exact Subgroup.smul_algebraMap B (hN.conj_mem' n n.prop g) x
 
-@[deprecated (since := "2026-05-28")] alias smul_eq_self := Subgroup.smul_algebraM
+@[deprecated (since := "2026-05-28")] alias smul_eq_self := Subgroup.smul_algebraMap
+@[deprecated (since := "2026-05-28")] alias smul_mem_of_normal := IsGaloisGroup.smul_mem_of_normal
 
 Depends on / 依赖: Subgroup, Subgroup.smul_algebraMap, Subgroup.smul_def, algebraMap, conj_mem, hC.isInvariant.isInvariant, hN.conj_mem, inv_smul_eq_iff, isInvariant, mul_smul, n.prop, smul_algebraMap, smul_def
 -/
@@ -189,7 +191,16 @@ theorem IsGaloisGroup.of_isFractionRing
     simp_rw [← IsScalarTower.algebraMap_apply]
   refine ⟨⟨fun h => ?_⟩, ⟨fun g x y => IsFractionRing.injective B L ?_⟩, ⟨fun x h => ?_⟩⟩
   · have := hGKL.faithful
-    refine eq_of_smul_eq_smul fun 
+    refine eq_of_smul_eq_smul fun (y : L) => ?_
+    obtain ⟨a, b, hb, rfl⟩ := IsFractionRing.div_surjective B y
+    simp only [smul_div₀', ← algebraMap.coe_smul', h]
+  · simp [Algebra.smul_def, algebraMap.coe_smul', ← hc]
+  · obtain ⟨b, hb⟩ := hGKL.isInvariant.isInvariant (algebraMap B L x)
+      (by simpa [← algebraMap.coe_smul'])
+    have hx : IsIntegral A (algebraMap B L x) := (Algebra.IsIntegral.isIntegral x).algebraMap
+    rw [← hb]; rw [isIntegral_algebraMap_iff (algebraMap K L).injective]; rw [IsIntegrallyClosedIn.isIntegral_iff] at hx
+    obtain ⟨a, rfl⟩ := hx
+    exact ⟨a, by rwa [hc, IsFractionRing.coe_inj] at hb⟩
 
 中文:
 定理 是Galois群.of_isFractionRing
@@ -199,7 +210,16 @@ theorem IsGaloisGroup.of_isFractionRing
     simp_rw [← IsScalarTower.algebraMap_apply]
   refine ⟨⟨fun h => ?_⟩, ⟨fun g x y => IsFractionRing.injective B L ?_⟩, ⟨fun x h => ?_⟩⟩
   · have := hGKL.faithful
-    refine eq_of_smul_eq_smul fun 
+    refine eq_of_smul_eq_smul fun (y : L) => ?_
+    obtain ⟨a, b, hb, rfl⟩ := IsFractionRing.div_surjective B y
+    simp only [smul_div₀', ← algebraMap.coe_smul', h]
+  · simp [Algebra.smul_def, algebraMap.coe_smul', ← hc]
+  · obtain ⟨b, hb⟩ := hGKL.isInvariant.isInvariant (algebraMap B L x)
+      (by simpa [← algebraMap.coe_smul'])
+    have hx : IsIntegral A (algebraMap B L x) := (Algebra.IsIntegral.isIntegral x).algebraMap
+    rw [← hb]; rw [isIntegral_algebraMap_iff (algebraMap K L).injective]; rw [IsIntegrallyClosedIn.isIntegral_iff] at hx
+    obtain ⟨a, rfl⟩ := hx
+    exact ⟨a, by rwa [hc, IsFractionRing.coe_inj] at hb⟩
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsFractionRing, IsFractionRing.div_surjective, IsFractionRing.injective, IsScalarTower, IsScalarTower.algebraMap_apply, algebraMap, algebraMap.coe_smul, algebraMap_apply, coe_smul, div_surjective, eq_of_smul_eq_smul, faithful, hGKL.faithful, hGKL.isInvariant, injective, isInvariant, simp_rw, smul_def
 -/
@@ -302,7 +322,11 @@ definition mulEquivAlgEquiv
     have := IsDomain.of_faithfulSMul A B
     have : FaithfulSMul G B := IsGaloisGroup.faithful A
     refine ⟨fun _ _ => eq_of_smul_eq_smul ∘ DFunLike.ext_iff.mp, fun φ => ?_⟩
-    obtain ⟨g, hg⟩ := Ideal.Quotient.stabilizerHom_surjective G ⊥
+    obtain ⟨g, hg⟩ := Ideal.Quotient.stabilizerHom_surjective G ⊥ ⊥
+      (Ideal.Quotient.algEquivOfEqMap (⊥ : Ideal A) φ Ideal.map_bot.symm)
+    use g
+    rw [AlgEquiv.ext_iff] at hg ⊢
+    exact fun x => (AlgEquiv.quotientBot A B).symm.injective (hg x))
 
 中文:
 定义 mulEquivAlgEquiv
@@ -311,7 +335,11 @@ definition mulEquivAlgEquiv
     have := IsDomain.of_faithfulSMul A B
     have : FaithfulSMul G B := IsGaloisGroup.faithful A
     refine ⟨fun _ _ => eq_of_smul_eq_smul ∘ DFunLike.ext_iff.mp, fun φ => ?_⟩
-    obtain ⟨g, hg⟩ := Ideal.Quotient.stabilizerHom_surjective G ⊥
+    obtain ⟨g, hg⟩ := Ideal.Quotient.stabilizerHom_surjective G ⊥ ⊥
+      (Ideal.Quotient.algEquivOfEqMap (⊥ : Ideal A) φ Ideal.map_bot.symm)
+    use g
+    rw [AlgEquiv.ext_iff] at hg ⊢
+    exact fun x => (AlgEquiv.quotientBot A B).symm.injective (hg x))
 -/
 @[simps!] noncomputable def mulEquivAlgEquiv : G ≃* Gal(B/A) :=
   MulEquiv.ofBijective (MulSemiringAction.toAlgAut G A B) (by
@@ -465,7 +493,13 @@ definition mulSemiringActionQuotient
   { smul q x :=
       Quotient.liftOn' q (· • x) fun g₁ g₂ h => by
       apply FaithfulSMul.algebraMap_injective B C
-      rw [algebraMap.smul']; rw [algebraMap.smul']; rw [smul_eq_iff_eq_inv_smul]; rw [← smul_assoc]; rw [smul_eq_mul]; rw [Subgroup.smul_alge
+      rw [algebraMap.smul']; rw [algebraMap.smul']; rw [smul_eq_iff_eq_inv_smul]; rw [← smul_assoc]; rw [smul_eq_mul]; rw [Subgroup.smul_algebraMap C (by rwa [← QuotientGroup.leftRel_apply])]
+    one_smul x := one_smul G x
+    mul_smul q₁ q₂ x := Quotient.inductionOn₂' q₁ q₂ fun g h => mul_smul g h x
+    smul_add q x y := Quotient.inductionOn' q fun g => smul_add g x y
+    smul_zero q := Quotient.inductionOn' q fun g => smul_zero g
+    smul_one q := Quotient.inductionOn' q fun g => smul_one g
+    smul_mul q x y := Quotient.inductionOn' q fun g => smul_mul' g x y }
 
 中文:
 定义 mulSemiringActionQuotient
@@ -474,7 +508,13 @@ definition mulSemiringActionQuotient
   { smul q x :=
       Quotient.liftOn' q (· • x) fun g₁ g₂ h => by
       apply FaithfulSMul.algebraMap_injective B C
-      rw [algebraMap.smul']; rw [algebraMap.smul']; rw [smul_eq_iff_eq_inv_smul]; rw [← smul_assoc]; rw [smul_eq_mul]; rw [Subgroup.smul_alge
+      rw [algebraMap.smul']; rw [algebraMap.smul']; rw [smul_eq_iff_eq_inv_smul]; rw [← smul_assoc]; rw [smul_eq_mul]; rw [Subgroup.smul_algebraMap C (by rwa [← QuotientGroup.leftRel_apply])]
+    one_smul x := one_smul G x
+    mul_smul q₁ q₂ x := Quotient.inductionOn₂' q₁ q₂ fun g h => mul_smul g h x
+    smul_add q x y := Quotient.inductionOn' q fun g => smul_add g x y
+    smul_zero q := Quotient.inductionOn' q fun g => smul_zero g
+    smul_one q := Quotient.inductionOn' q fun g => smul_one g
+    smul_mul q x y := Quotient.inductionOn' q fun g => smul_mul' g x y }
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, Quotient, Quotient.inductionOn, Quotient.liftOn, QuotientGroup, QuotientGroup.leftRel_apply, Subgroup, Subgroup.smul_algebraMap, algebraMap, algebraMap.smul, algebraMap_injective, inductionOn, leftRel_apply, liftOn, mulSemiringActionOfNormal, mul_smul, one_smul, smul_add, smul_algebraMap
 -/

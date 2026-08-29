@@ -620,7 +620,10 @@ theorem measurableSet_cut
     exact ⟨fun h => ⟨a, ⟨h, rfl⟩⟩, fun ⟨a', ⟨h', e⟩⟩ => e.symm ▸ h'⟩
   rw [this]
   exact
-    MeasurableSet.biUnion f.finite_range.countable 
+    MeasurableSet.biUnion f.finite_range.countable fun b _ =>
+      MeasurableSet.inter (h b) (f.measurableSet_fiber _)
+
+@[measurability]
 
 中文:
 定理 measurableSet_cut
@@ -632,7 +635,10 @@ theorem measurableSet_cut
     exact ⟨fun h => ⟨a, ⟨h, rfl⟩⟩, fun ⟨a', ⟨h', e⟩⟩ => e.symm ▸ h'⟩
   rw [this]
   exact
-    MeasurableSet.biUnion f.finite_range.countable 
+    MeasurableSet.biUnion f.finite_range.countable fun b _ =>
+      MeasurableSet.inter (h b) (f.measurableSet_fiber _)
+
+@[measurability]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.biUnion, MeasurableSet.inter, biUnion, countable, e.symm, f.finite_range.countable, f.measurableSet_fiber, finite_range, measurableSet_fiber
 -/
@@ -1314,7 +1320,9 @@ definition extend
       (range_extend_subset _ _ _)
   measurableSet_fiber' := by
     let : MeasurableSpace γ := ⊤; have : MeasurableSingletonClass γ := ⟨fun _ => trivial⟩
-    exact fun x =>
+    exact fun x => hg.measurable_extend f₁.measurable f₂.measurable (measurableSet_singleton _)
+
+@[simp]
 
 中文:
 定义 extend
@@ -1325,7 +1333,9 @@ definition extend
       (range_extend_subset _ _ _)
   measurableSet_fiber' := by
     let : MeasurableSpace γ := ⊤; have : MeasurableSingletonClass γ := ⟨fun _ => trivial⟩
-    exact fun x =>
+    exact fun x => hg.measurable_extend f₁.measurable f₂.measurable (measurableSet_singleton _)
+
+@[simp]
 
 Depends on / 依赖: Function, Function.extend, extend
 -/
@@ -3002,7 +3012,10 @@ toFun r := const α algebraMap K β r
 .map_mul .. map_mul' _ _ := ext fun _ => algebraMap K β
 .map_zero ▸ rfl map_zero' := ext fun _ => algebraMap K β
 .map_add .. } map_add' _ _ := ext fun _ => algebraMap K β
-  commutes' _ _ := ext fun _ => Alge
+  commutes' _ _ := ext fun _ => Algebra.commutes ..
+  smul_def' _ _ := ext fun _ => Algebra.smul_def ..
+
+@[simp]
 
 中文:
 实例 [交换半环
@@ -3013,7 +3026,10 @@ toFun r := const α algebraMap K β r
 .map_mul .. map_mul' _ _ := ext fun _ => algebraMap K β
 .map_zero ▸ rfl map_zero' := ext fun _ => algebraMap K β
 .map_add .. } map_add' _ _ := ext fun _ => algebraMap K β
-  commutes' _ _ := ext fun _ => Alge
+  commutes' _ _ := ext fun _ => Algebra.commutes ..
+  smul_def' _ _ := ext fun _ => Algebra.smul_def ..
+
+@[simp]
 -/
 instance [CommSemiring K] [Semiring β] [Algebra K β] : Algebra K (α ->ₛ β) where
   algebraMap := {
@@ -3975,7 +3991,11 @@ theorem iSup_approx_apply
     split_ifs with h
     · exact le_iSup_of_le k (le_iSup (fun _ : i k <= f a => i k) h)
     · exact bot_le
-  · refine le_iSup_of_le (k + 1)
+  · refine le_iSup_of_le (k + 1) ?_
+    rw [approx_apply a hf]
+    have : k in Finset.range (k + 1) := Finset.mem_range.2 (Nat.lt_succ_self _)
+    refine le_trans (le_of_eq ?_) (Finset.le_sup this)
+    rw [if_pos hk]
 
 中文:
 定理 iSup_approx_apply
@@ -3987,7 +4007,11 @@ theorem iSup_approx_apply
     split_ifs with h
     · exact le_iSup_of_le k (le_iSup (fun _ : i k <= f a => i k) h)
     · exact bot_le
-  · refine le_iSup_of_le (k + 1)
+  · refine le_iSup_of_le (k + 1) ?_
+    rw [approx_apply a hf]
+    have : k in Finset.range (k + 1) := Finset.mem_range.2 (Nat.lt_succ_self _)
+    refine le_trans (le_of_eq ?_) (Finset.le_sup this)
+    rw [if_pos hk]
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.mem_range, Finset.range, Finset.sup_le, Nat.lt_succ_self, approx_apply, bot_le, h_zero, iSup_le, if_pos, le_antisymm, le_iSup, le_iSup_of_le, le_of_eq, le_sup, le_trans, lt_succ_self, mem_range, split_ifs
 -/
@@ -4082,7 +4106,13 @@ theorem eapprox_lt_top
   split_ifs
   · simp only [coe_zero, coe_piecewise, piecewise_eq_indicator, coe_const]
     calc
-      { a : α | ennrealRatEmbed b <= f a }.indicator (fun _ => ennrealRatEmbed 
+      { a : α | ennrealRatEmbed b <= f a }.indicator (fun _ => ennrealRatEmbed b) a <=
+          ennrealRatEmbed b :=
+        indicator_le_self _ _ a
+      _ < ⊤ := ENNReal.coe_lt_top
+  · exact WithTop.top_pos
+
+@[gcongr, mono]
 
 中文:
 定理 eapprox_lt_top
@@ -4095,7 +4125,13 @@ theorem eapprox_lt_top
   split_ifs
   · simp only [coe_zero, coe_piecewise, piecewise_eq_indicator, coe_const]
     calc
-      { a : α | ennrealRatEmbed b <= f a }.indicator (fun _ => ennrealRatEmbed 
+      { a : α | ennrealRatEmbed b <= f a }.indicator (fun _ => ennrealRatEmbed b) a <=
+          ennrealRatEmbed b :=
+        indicator_le_self _ _ a
+      _ < ⊤ := ENNReal.coe_lt_top
+  · exact WithTop.top_pos
+
+@[gcongr, mono]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_top, Finset, Finset.sup_lt_iff, WithTop, WithTop.top_pos, approx, bot_lt_top, coe_const, coe_lt_top, coe_piecewise, coe_zero, eapprox, ennrealRatEmbed, finset_sup_apply, indicator, indicator_le_self, piecewise_eq_indicator, restrict, split_ifs
 -/
@@ -4146,7 +4182,11 @@ lemma iSup_eapprox_apply
   intro h
   rcases ENNReal.lt_iff_exists_rat_btwn.1 h with ⟨q, _, lt_q, q_lt⟩
   have :
-    (Real.toNNReal q : Real>=0∞) <= ⨆ (k : Nat) (_ : ennrealRatEm
+    (Real.toNNReal q : Real>=0∞) <= ⨆ (k : Nat) (_ : ennrealRatEmbed k <= f a), ennrealRatEmbed k := by
+    refine le_iSup_of_le (Encodable.encode q) ?_
+    rw [ennrealRatEmbed_encode q]
+    exact le_iSup_of_le (le_of_lt q_lt) le_rfl
+  exact lt_irrefl _ (lt_of_le_of_lt this lt_q)
 
 中文:
 引理 iSup_eapprox_apply
@@ -4158,7 +4198,11 @@ lemma iSup_eapprox_apply
   intro h
   rcases ENNReal.lt_iff_exists_rat_btwn.1 h with ⟨q, _, lt_q, q_lt⟩
   have :
-    (Real.toNNReal q : Real>=0∞) <= ⨆ (k : Nat) (_ : ennrealRatEm
+    (Real.toNNReal q : Real>=0∞) <= ⨆ (k : Nat) (_ : ennrealRatEmbed k <= f a), ennrealRatEmbed k := by
+    refine le_iSup_of_le (Encodable.encode q) ?_
+    rw [ennrealRatEmbed_encode q]
+    exact le_iSup_of_le (le_of_lt q_lt) le_rfl
+  exact lt_irrefl _ (lt_of_le_of_lt this lt_q)
 
 Depends on / 依赖: ENNReal, ENNReal.lt_iff_exists_rat_btwn, Encodable, Encodable.encode, Real.toNNReal, eapprox, encode, ennrealRatEmbed, ennrealRatEmbed_encode, iSup_approx_apply, iSup_le, le_antisymm, le_iSup_of_le, le_of_lt, le_of_not_gt, le_rfl, lt_iff_exists_rat_btwn, lt_irrefl, lt_of_le_of_lt, lt_q
 -/
@@ -4268,7 +4312,10 @@ theorem sum_eapproxDiff
   | zero =>
     simp [eapproxDiff, (eapprox_lt_top f 0 a).ne]
   | succ n IH =>
-    rw [Finset.sum_range_succ]; rw [IH]; rw [eapproxDiff]; rw [coe_map]; rw [Function.comp_apply]; rw [coe_sub]; rw [Pi.sub_apply]; rw [ENNReal.coe_toNNReal]; rw [add_tsub_cancel_of_le (monotone_eapp
+    rw [Finset.sum_range_succ]; rw [IH]; rw [eapproxDiff]; rw [coe_map]; rw [Function.comp_apply]; rw [coe_sub]; rw [Pi.sub_apply]; rw [ENNReal.coe_toNNReal]; rw [add_tsub_cancel_of_le (monotone_eapprox f (Nat.le_succ _) _)]
+    apply (lt_of_le_of_lt _ (eapprox_lt_top f (n + 1) a)).ne
+    rw [tsub_le_iff_right]
+    exact le_self_add
 
 中文:
 定理 sum_eapproxDiff
@@ -4278,7 +4325,10 @@ theorem sum_eapproxDiff
   | zero =>
     simp [eapproxDiff, (eapprox_lt_top f 0 a).ne]
   | succ n IH =>
-    rw [Finset.sum_range_succ]; rw [IH]; rw [eapproxDiff]; rw [coe_map]; rw [Function.comp_apply]; rw [coe_sub]; rw [Pi.sub_apply]; rw [ENNReal.coe_toNNReal]; rw [add_tsub_cancel_of_le (monotone_eapp
+    rw [Finset.sum_range_succ]; rw [IH]; rw [eapproxDiff]; rw [coe_map]; rw [Function.comp_apply]; rw [coe_sub]; rw [Pi.sub_apply]; rw [ENNReal.coe_toNNReal]; rw [add_tsub_cancel_of_le (monotone_eapprox f (Nat.le_succ _) _)]
+    apply (lt_of_le_of_lt _ (eapprox_lt_top f (n + 1) a)).ne
+    rw [tsub_le_iff_right]
+    exact le_self_add
 
 Depends on / 依赖: ENNReal, ENNReal.coe_toNNReal, Finset, Finset.sum_range_succ, Function, Function.comp_apply, Nat.le_succ, Pi.sub_apply, add_tsub_cancel_of_le, coe_map, coe_sub, coe_toNNReal, comp_apply, eapproxDiff, eapprox_lt_top, le_self_add, le_succ, lt_of_le_of_lt, monotone_eapprox, sub_apply
 -/
@@ -4357,7 +4407,9 @@ theorem lintegral_eq_of_subset
   · intro b _ hb
     refine ⟨b, ?_, hb, rfl⟩
     rw [mem_range]; rw [← preimage_singleton_nonempty]
-    exact nonempty_of_measure_ne_zero (mul_ne_zero
+    exact nonempty_of_measure_ne_zero (mul_ne_zero_iff.1 hb).2
+  · intros
+    rfl
 
 中文:
 定理 lintegral_eq_of_subset
@@ -4370,7 +4422,9 @@ theorem lintegral_eq_of_subset
   · intro b _ hb
     refine ⟨b, ?_, hb, rfl⟩
     rw [mem_range]; rw [← preimage_singleton_nonempty]
-    exact nonempty_of_measure_ne_zero (mul_ne_zero
+    exact nonempty_of_measure_ne_zero (mul_ne_zero_iff.1 hb).2
+  · intros
+    rfl
 
 Depends on / 依赖: Finset, Finset.sum_bij_ne_zero, and_imp, forall_mem_range, intros, mem_range, mul_ne_zero_iff, nonempty_of_measure_ne_zero, preimage_singleton_nonempty, sum_bij_ne_zero
 -/
@@ -4461,7 +4515,11 @@ theorem add_lintegral
         ∑ x in (pair f g).range, (x.1 * μ (pair f g ⁻¹' {x}) + x.2 * μ (pair f g ⁻¹' {x})) := by
       rw [add_eq_map₂]; rw [map_lintegral]; exact Finset.sum_congr rfl fun a _ => add_mul _ _ _
     _ = (∑ x in (pair f g).range, x.1 * μ (pair f g ⁻¹' {x})) +
-          ∑ 
+          ∑ x in (pair f g).range, x.2 * μ (pair f g ⁻¹' {x}) := by
+      rw [Finset.sum_add_distrib]
+    _ = ((pair f g).map Prod.fst).lintegral μ + ((pair f g).map Prod.snd).lintegral μ := by
+      rw [map_lintegral]; rw [map_lintegral]
+    _ = lintegral f μ + lintegral g μ := rfl
 
 中文:
 定理 add_lintegral
@@ -4472,7 +4530,11 @@ theorem add_lintegral
         ∑ x in (pair f g).range, (x.1 * μ (pair f g ⁻¹' {x}) + x.2 * μ (pair f g ⁻¹' {x})) := by
       rw [add_eq_map₂]; rw [map_lintegral]; exact Finset.sum_congr rfl fun a _ => add_mul _ _ _
     _ = (∑ x in (pair f g).range, x.1 * μ (pair f g ⁻¹' {x})) +
-          ∑ 
+          ∑ x in (pair f g).range, x.2 * μ (pair f g ⁻¹' {x}) := by
+      rw [Finset.sum_add_distrib]
+    _ = ((pair f g).map Prod.fst).lintegral μ + ((pair f g).map Prod.snd).lintegral μ := by
+      rw [map_lintegral]; rw [map_lintegral]
+    _ = lintegral f μ + lintegral g μ := rfl
 
 Depends on / 依赖: Finset, Finset.sum_add_distrib, Finset.sum_congr, Prod.fst, Prod.snd, add_mul, lintegral, map_lintegral, sum_add_distrib, sum_congr
 -/
@@ -4524,7 +4586,9 @@ definition lintegralₗ
       map_smul' := fun c μ => by
         simp [lintegral, mul_left_comm _ c, Finset.mul_sum, Measure.smul_apply c] }
   map_add' f g := LinearMap.ext fun _ => add_lintegral f g
-  map_smul' c f := LinearMap.e
+  map_smul' c f := LinearMap.ext fun _ => const_mul_lintegral f c
+
+@[simp]
 
 中文:
 定义 lintegralₗ
@@ -4534,7 +4598,9 @@ definition lintegralₗ
       map_smul' := fun c μ => by
         simp [lintegral, mul_left_comm _ c, Finset.mul_sum, Measure.smul_apply c] }
   map_add' f g := LinearMap.ext fun _ => add_lintegral f g
-  map_smul' c f := LinearMap.e
+  map_smul' c f := LinearMap.ext fun _ => const_mul_lintegral f c
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_add_distrib, LinearMap, LinearMap.ext, Measure, Measure.smul_apply, add_lintegral, const_mul_lintegral, lintegral, map_add, map_smul, mul_add, mul_left_comm, mul_sum, smul_apply, sum_add_distrib
 -/
@@ -4697,7 +4763,12 @@ theorem restrict_lintegral
       lintegral_eq_of_subset _ fun x hx =>
         if hxs : x in s then fun _ => by
           simp only [f.restrict_apply hs, indicator_of_mem hxs, mem_range_self]
-else False.elim hx by simp 
+else False.elim hx by simp [*]
+    _ = ∑ r in f.range, r * μ (f ⁻¹' {r} inter s) :=
+Finset.sum_congr rfl
+        forall_mem_range.2 fun b =>
+          if hb : f b = 0 then by simp only [hb, zero_mul]
+          else by rw [restrict_preimage_singleton _ hs hb, inter_comm]
 
 中文:
 定理 restrict_lintegral
@@ -4709,7 +4780,12 @@ else False.elim hx by simp
       lintegral_eq_of_subset _ fun x hx =>
         if hxs : x in s then fun _ => by
           simp only [f.restrict_apply hs, indicator_of_mem hxs, mem_range_self]
-else False.elim hx by simp 
+else False.elim hx by simp [*]
+    _ = ∑ r in f.range, r * μ (f ⁻¹' {r} inter s) :=
+Finset.sum_congr rfl
+        forall_mem_range.2 fun b =>
+          if hb : f b = 0 then by simp only [hb, zero_mul]
+          else by rw [restrict_preimage_singleton _ hs hb, inter_comm]
 
 Depends on / 依赖: False.elim, Finset, Finset.sum_congr, classical, f.range, f.restrict_apply, forall_mem_range, indicator_of_mem, inter_comm, lintegral, lintegral_eq_of_subset, mem_range_self, restrict, restrict_apply, restrict_preimage_singleton, sum_congr, zero_mul
 -/
@@ -4891,7 +4967,7 @@ theorem lintegral_mono_fun
     _ <= ((pair f g).map fun p => p.1 ⊔ p.2).lintegral μ := by
       simp only [map_lintegral]
       gcongr
-      exact le_sup_lef
+      exact le_sup_left
 
 中文:
 定理 lintegral_mono_fun
@@ -4904,7 +4980,7 @@ theorem lintegral_mono_fun
     _ <= ((pair f g).map fun p => p.1 ⊔ p.2).lintegral μ := by
       simp only [map_lintegral]
       gcongr
-      exact le_sup_lef
+      exact le_sup_left
 
 Depends on / 依赖: Monotone, Monotone.of_left_le_map_sup, Prod.fst, f.lintegral, le_sup_left, lintegral, map_fst_pair, map_lintegral, of_left_le_map_sup
 -/
@@ -5557,7 +5633,29 @@ theorem induction
   rw [← Finset.coe_inj]; rw [Finset.coe_sdiff]; rw [Finset.coe_singleton]; rw [SimpleFunc.coe_range] at h
   induction s using Finset.induction generalizing f with
   | empty =>
-    rw [Finset.coe_empty]; rw [sdiff_eq_empty]; rw [range_subset_singleton
+    rw [Finset.coe_empty]; rw [sdiff_eq_empty]; rw [range_subset_singleton] at h
+    convert! const 0 MeasurableSet.univ
+    ext x
+    simp [h]
+  | insert x s hxs ih =>
+    have mx := f.measurableSet_preimage {x}
+    let g := SimpleFunc.piecewise (f ⁻¹' {x}) mx 0 f
+    have Pg : motive g := by
+      apply ih
+      simp only [g, SimpleFunc.coe_piecewise, range_piecewise]
+      rw [image_compl_preimage]; rw [union_sdiff_distrib]; rw [sdiff_sdiff_comm]; rw [h]; rw [Finset.coe_insert]; rw [insert_sdiff_self_of_notMem]; rw [sdiff_eq_empty.mpr]; rw [Set.empty_union]
+      · rw [Set.image_subset_iff]
+        convert! Set.subset_univ _
+        exact preimage_const_of_mem (mem_singleton _)
+      · rwa [Finset.mem_coe]
+    convert! add _ Pg (const x mx)
+    · ext1 y
+      by_cases hy : y in f ⁻¹' {x}
+      · simpa [g, hy]
+      · simp [g, hy]
+    rw [disjoint_iff_inf_le]
+    rintro y
+    by_cases hy : y in f ⁻¹' {x} <;> simp [g, hy]
 
 中文:
 定理 induction
@@ -5568,7 +5666,29 @@ theorem induction
   rw [← Finset.coe_inj]; rw [Finset.coe_sdiff]; rw [Finset.coe_singleton]; rw [SimpleFunc.coe_range] at h
   induction s using Finset.induction generalizing f with
   | empty =>
-    rw [Finset.coe_empty]; rw [sdiff_eq_empty]; rw [range_subset_singleton
+    rw [Finset.coe_empty]; rw [sdiff_eq_empty]; rw [range_subset_singleton] at h
+    convert! const 0 MeasurableSet.univ
+    ext x
+    simp [h]
+  | insert x s hxs ih =>
+    have mx := f.measurableSet_preimage {x}
+    let g := SimpleFunc.piecewise (f ⁻¹' {x}) mx 0 f
+    have Pg : motive g := by
+      apply ih
+      simp only [g, SimpleFunc.coe_piecewise, range_piecewise]
+      rw [image_compl_preimage]; rw [union_sdiff_distrib]; rw [sdiff_sdiff_comm]; rw [h]; rw [Finset.coe_insert]; rw [insert_sdiff_self_of_notMem]; rw [sdiff_eq_empty.mpr]; rw [Set.empty_union]
+      · rw [Set.image_subset_iff]
+        convert! Set.subset_univ _
+        exact preimage_const_of_mem (mem_singleton _)
+      · rwa [Finset.mem_coe]
+    convert! add _ Pg (const x mx)
+    · ext1 y
+      by_cases hy : y in f ⁻¹' {x}
+      · simpa [g, hy]
+      · simp [g, hy]
+    rw [disjoint_iff_inf_le]
+    rintro y
+    by_cases hy : y in f ⁻¹' {x} <;> simp [g, hy]
 -/
 protected theorem induction {α γ} [MeasurableSpace α] [AddZeroClass γ]
     {motive : SimpleFunc α γ -> Prop}
@@ -5625,7 +5745,26 @@ theorem induction'
   rw [← Finset.coe_inj]; rw [Finset.coe_sdiff]; rw [Finset.coe_singleton]; rw [SimpleFunc.coe_range] at h
   induction s using Finset.induction generalizing f with
   | empty =>
-    rw [Finset.coe_empty]; rw [sdiff_e
+    rw [Finset.coe_empty]; rw [sdiff_eq_empty]; rw [range_subset_singleton] at h
+    convert! const c
+    ext x
+    simp [h]
+  | insert x s hxs ih =>
+    have mx := f.measurableSet_preimage {x}
+    let g := SimpleFunc.piecewise (f ⁻¹' {x}) mx (SimpleFunc.const α c) f
+    have Pg : P g := by
+      apply ih
+      simp only [g, SimpleFunc.coe_piecewise, range_piecewise]
+      rw [image_compl_preimage]; rw [union_sdiff_distrib]; rw [sdiff_sdiff_comm]; rw [h]; rw [Finset.coe_insert]; rw [insert_sdiff_self_of_notMem]; rw [sdiff_eq_empty.mpr]; rw [Set.empty_union]
+      · rw [Set.image_subset_iff]
+        convert! Set.subset_univ _
+        exact preimage_const_of_mem (mem_singleton _)
+      · rwa [Finset.mem_coe]
+    convert! pcw mx.compl Pg (const x)
+    · ext1 y
+      by_cases hy : y in f ⁻¹' {x}
+      · simpa [g, hy]
+      · simp [g, hy]
 
 中文:
 定理 induction'
@@ -5637,7 +5776,26 @@ theorem induction'
   rw [← Finset.coe_inj]; rw [Finset.coe_sdiff]; rw [Finset.coe_singleton]; rw [SimpleFunc.coe_range] at h
   induction s using Finset.induction generalizing f with
   | empty =>
-    rw [Finset.coe_empty]; rw [sdiff_e
+    rw [Finset.coe_empty]; rw [sdiff_eq_empty]; rw [range_subset_singleton] at h
+    convert! const c
+    ext x
+    simp [h]
+  | insert x s hxs ih =>
+    have mx := f.measurableSet_preimage {x}
+    let g := SimpleFunc.piecewise (f ⁻¹' {x}) mx (SimpleFunc.const α c) f
+    have Pg : P g := by
+      apply ih
+      simp only [g, SimpleFunc.coe_piecewise, range_piecewise]
+      rw [image_compl_preimage]; rw [union_sdiff_distrib]; rw [sdiff_sdiff_comm]; rw [h]; rw [Finset.coe_insert]; rw [insert_sdiff_self_of_notMem]; rw [sdiff_eq_empty.mpr]; rw [Set.empty_union]
+      · rw [Set.image_subset_iff]
+        convert! Set.subset_univ _
+        exact preimage_const_of_mem (mem_singleton _)
+      · rwa [Finset.mem_coe]
+    convert! pcw mx.compl Pg (const x)
+    · ext1 y
+      by_cases hy : y in f ⁻¹' {x}
+      · simpa [g, hy]
+      · simp [g, hy]
 -/
 protected theorem induction' {α γ} [MeasurableSpace α] [Nonempty γ] {P : SimpleFunc α γ -> Prop}
     (const : forall (c), P (SimpleFunc.const _ c))
@@ -5784,7 +5942,11 @@ lemma Measurable.ennreal_sigmaFinite_induction
     iSup (f := fun n => (s inter spanningSets μ n).indicator fun _ => c)
       (fun n => measurable_const.indicator (hs.inter (measurableSet_spanningSets ..)))
       (fun m n hmn a => by dsimp; grw [hmn])
-      (fun n
+      (fun n =>
+        indicator _ (hs.inter (measurableSet_spanningSets ..))
+          (measure_inter_lt_top_of_right_ne_top (measure_spanningSets_lt_top ..).ne)) with
+    a
+  simp [← Set.indicator_iUnion_apply (M := Real>=0∞) rfl, ← Set.inter_iUnion]
 
 中文:
 引理 可测.ennreal_sigmaFinite_induction
@@ -5795,7 +5957,11 @@ lemma Measurable.ennreal_sigmaFinite_induction
     iSup (f := fun n => (s inter spanningSets μ n).indicator fun _ => c)
       (fun n => measurable_const.indicator (hs.inter (measurableSet_spanningSets ..)))
       (fun m n hmn a => by dsimp; grw [hmn])
-      (fun n
+      (fun n =>
+        indicator _ (hs.inter (measurableSet_spanningSets ..))
+          (measure_inter_lt_top_of_right_ne_top (measure_spanningSets_lt_top ..).ne)) with
+    a
+  simp [← Set.indicator_iUnion_apply (M := Real>=0∞) rfl, ← Set.inter_iUnion]
 
 Depends on / 依赖: Measurable, Measurable.ennreal_induction, Set.indicator_iUnion_apply, Set.inter_iUnion, convert, ennreal_induction, hs.inter, indicator, indicator_iUnion_apply, inter_iUnion, measurableSet_spanningSets, measurable_const, measurable_const.indicator, measure_inter_lt_top_of_right_ne_top, measure_spanningSets_lt_top, spanningSets
 -/

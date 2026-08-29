@@ -126,7 +126,10 @@ lemma indToCoindAux_mul_snd
   · simp only [indToCoindAux, LinearMap.pi_apply]
     rw [dif_pos ⟨s * s₁]; rw [mul_assoc ..⟩]; rw [dif_pos ⟨s₁]; rw [rfl⟩]
     simp [S.1.smul_def, mul_assoc, ← S.1.mul_def]
-  · rw [indToCoindAux_of_not_rel _ _ _ h, indToCoindAux_
+  · rw [indToCoindAux_of_not_rel _ _ _ h, indToCoindAux_of_not_rel, map_zero]
+    exact mt (fun ⟨s₁, hs₁⟩ => ⟨s⁻¹ * s₁, by simp_all [S.1.smul_def, mul_assoc]⟩) h
+
+@[simp]
 
 中文:
 引理 indToCoindAux_mul_snd
@@ -136,7 +139,10 @@ lemma indToCoindAux_mul_snd
   · simp only [indToCoindAux, LinearMap.pi_apply]
     rw [dif_pos ⟨s * s₁]; rw [mul_assoc ..⟩]; rw [dif_pos ⟨s₁]; rw [rfl⟩]
     simp [S.1.smul_def, mul_assoc, ← S.1.mul_def]
-  · rw [indToCoindAux_of_not_rel _ _ _ h, indToCoindAux_
+  · rw [indToCoindAux_of_not_rel _ _ _ h, indToCoindAux_of_not_rel, map_zero]
+    exact mt (fun ⟨s₁, hs₁⟩ => ⟨s⁻¹ * s₁, by simp_all [S.1.smul_def, mul_assoc]⟩) h
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.pi_apply, QuotientGroup, QuotientGroup.rightRel, dif_pos, indToCoindAux, indToCoindAux_of_not_rel, map_zero, mul_assoc, mul_def, pi_apply, rightRel, smul_def
 -/
@@ -162,7 +168,11 @@ lemma indToCoindAux_mul_fst
     rw [dif_pos ⟨s₁ * s⁻¹]; rw [by simp [S.1.smul_def]; rw [smul_eq_mul]; rw [mul_assoc]⟩, dif_pos ⟨s₁, rfl⟩,
       ← Module.End.mul_apply, ← map_mul]
     congr
-    simp [Subtype.
+    simp [Subtype.ext_iff, S.1.smul_def, mul_assoc]
+  · rw [indToCoindAux_of_not_rel (h := h), indToCoindAux_of_not_rel]
+    exact mt (fun ⟨s₁, hs₁⟩ => ⟨s₁ * s, by simp_all [S.1.smul_def, mul_assoc]⟩) h
+
+@[simp]
 
 中文:
 引理 indToCoindAux_mul_fst
@@ -173,7 +183,11 @@ lemma indToCoindAux_mul_fst
     rw [dif_pos ⟨s₁ * s⁻¹]; rw [by simp [S.1.smul_def]; rw [smul_eq_mul]; rw [mul_assoc]⟩, dif_pos ⟨s₁, rfl⟩,
       ← Module.End.mul_apply, ← map_mul]
     congr
-    simp [Subtype.
+    simp [Subtype.ext_iff, S.1.smul_def, mul_assoc]
+  · rw [indToCoindAux_of_not_rel (h := h), indToCoindAux_of_not_rel]
+    exact mt (fun ⟨s₁, hs₁⟩ => ⟨s₁ * s, by simp_all [S.1.smul_def, mul_assoc]⟩) h
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.pi_apply, Module, Module.End.mul_apply, QuotientGroup, QuotientGroup.rightRel, Subtype, Subtype.ext_iff, dif_pos, ext_iff, indToCoindAux, indToCoindAux_of_not_rel, map_mul, mul_apply, mul_assoc, pi_apply, rightRel, smul_def, smul_eq_mul
 -/
@@ -199,7 +213,9 @@ lemma indToCoindAux_snd_mul_inv
   rcases em ((QuotientGroup.rightRel S).r (g₂ * g₃⁻¹) g₁) with ⟨s, hs⟩ | h
   · simp [S.1.smul_def, mul_assoc, ← eq_mul_inv_iff_mul_eq.1 hs]
   · rw [indToCoindAux_of_not_rel (h := h), indToCoindAux_of_not_rel]
-    exact mt (fun ⟨s, hs⟩ => ⟨s, by simpa [S.1.smul_def, eq_mul_inv_iff_mul_eq, mul_asso
+    exact mt (fun ⟨s, hs⟩ => ⟨s, by simpa [S.1.smul_def, eq_mul_inv_iff_mul_eq, mul_assoc]⟩) h
+
+@[simp]
 
 中文:
 引理 indToCoindAux_snd_mul_inv
@@ -208,7 +224,9 @@ lemma indToCoindAux_snd_mul_inv
   rcases em ((QuotientGroup.rightRel S).r (g₂ * g₃⁻¹) g₁) with ⟨s, hs⟩ | h
   · simp [S.1.smul_def, mul_assoc, ← eq_mul_inv_iff_mul_eq.1 hs]
   · rw [indToCoindAux_of_not_rel (h := h), indToCoindAux_of_not_rel]
-    exact mt (fun ⟨s, hs⟩ => ⟨s, by simpa [S.1.smul_def, eq_mul_inv_iff_mul_eq, mul_asso
+    exact mt (fun ⟨s, hs⟩ => ⟨s, by simpa [S.1.smul_def, eq_mul_inv_iff_mul_eq, mul_assoc]⟩) h
+
+@[simp]
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.rightRel, eq_mul_inv_iff_mul_eq, indToCoindAux_of_not_rel, mul_assoc, rightRel, smul_def
 -/
@@ -314,7 +332,12 @@ definition coindToInd
     IndV.mk S.subtype _ g (f.1 g)) fun g₁ g₂ ⟨s, (hs : _ * _ = _)⟩ =>
 (Submodule.Quotient.eq _).2 Coinvariants.mem_ker_of_eq s
 (.single g₂ 1 otimesₜ[k] f.1 g₂) _ by have := f.2 s g₂; simp_all
-  map_add' _ _ := by simpa [← Finset.
+  map_add' _ _ := by simpa [← Finset.sum_add_distrib, TensorProduct.tmul_add] using
+      Finset.sum_congr rfl fun z _ => Quotient.inductionOn z fun _ => by simp
+  map_smul' _ _ := by simpa [Finset.smul_sum] using Finset.sum_congr rfl fun z _ =>
+    Quotient.inductionOn z fun _ => by simp
+
+omit [DecidableRel (QuotientGroup.rightRel S)] in
 
 中文:
 定义 coindToInd
@@ -323,7 +346,12 @@ definition coindToInd
     IndV.mk S.subtype _ g (f.1 g)) fun g₁ g₂ ⟨s, (hs : _ * _ = _)⟩ =>
 (Submodule.Quotient.eq _).2 Coinvariants.mem_ker_of_eq s
 (.single g₂ 1 otimesₜ[k] f.1 g₂) _ by have := f.2 s g₂; simp_all
-  map_add' _ _ := by simpa [← Finset.
+  map_add' _ _ := by simpa [← Finset.sum_add_distrib, TensorProduct.tmul_add] using
+      Finset.sum_congr rfl fun z _ => Quotient.inductionOn z fun _ => by simp
+  map_smul' _ _ := by simpa [Finset.smul_sum] using Finset.sum_congr rfl fun z _ =>
+    Quotient.inductionOn z fun _ => by simp
+
+omit [DecidableRel (QuotientGroup.rightRel S)] in
 
 Depends on / 依赖: Quotient, Quotient.liftOn, QuotientGroup, QuotientGroup.rightRel, liftOn, rightRel
 -/
@@ -404,7 +432,9 @@ lemma coindToInd_indToCoind
   rw [Finset.sum_eq_single ⟦a⟧]
   · simp
   · intro b _ hb
-    induction b using Quotient.inductionO
+    induction b using Quotient.inductionOn with | h b =>
+    simpa using indToCoindAux_of_not_rel b a (g.1 b) (mt Quotient.sound hb.symm)
+  · simp
 
 中文:
 引理 coindToInd_indToCoind
@@ -417,7 +447,9 @@ lemma coindToInd_indToCoind
   rw [Finset.sum_eq_single ⟦a⟧]
   · simp
   · intro b _ hb
-    induction b using Quotient.inductionO
+    induction b using Quotient.inductionOn with | h b =>
+    simpa using indToCoindAux_of_not_rel b a (g.1 b) (mt Quotient.sound hb.symm)
+  · simp
 
 Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.coe_finsetSum, Finset, Finset.sum_apply, Finset.sum_eq_single, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.id_coe, Quotient, Quotient.inductionOn, Quotient.sound, coe_comp, coe_finsetSum, coindToInd_apply, comp_apply, conv_lhs, hb.symm, id_coe
 -/

@@ -240,7 +240,7 @@ lemma range_ad_eq_top
   apply LinearMap.BilinForm.eq_top_of_restrict_nondegenerate_of_orthogonal_eq_bot
     (LieModule.traceForm_isSymm R 𝔻 𝔻).isRefl (killingForm_restrict_range_ad_nondegenerate R L)
   refine (Submodule.eq_bot_iff _).mpr fun D hD => ext fun x => ?_
-  simpa using 
+  simpa using ad_mem_ker_killingForm_ad_range_of_mem_orthogonal hD x
 
 中文:
 引理 range_ad_eq_top
@@ -250,7 +250,7 @@ lemma range_ad_eq_top
   apply LinearMap.BilinForm.eq_top_of_restrict_nondegenerate_of_orthogonal_eq_bot
     (LieModule.traceForm_isSymm R 𝔻 𝔻).isRefl (killingForm_restrict_range_ad_nondegenerate R L)
   refine (Submodule.eq_bot_iff _).mpr fun D hD => ext fun x => ?_
-  simpa using 
+  simpa using ad_mem_ker_killingForm_ad_range_of_mem_orthogonal hD x
 
 Depends on / 依赖: BilinForm, LieModule, LieModule.traceForm_isSymm, LieSubalgebra, LieSubalgebra.toSubmodule_inj, LinearMap, LinearMap.BilinForm.eq_top_of_restrict_nondegenerate_of_orthogonal_eq_bot, Submodule, Submodule.eq_bot_iff, ad_mem_ker_killingForm_ad_range_of_mem_orthogonal, eq_bot_iff, eq_top_of_restrict_nondegenerate_of_orthogonal_eq_bot, isRefl, killingForm_restrict_range_ad_nondegenerate, toSubmodule_inj, traceForm_isSymm
 -/

@@ -42,7 +42,7 @@ theorem eq_induced_by_maps_to_sierpinski
     rw [← generateFrom_iUnion_isOpen]
     apply isOpen_generateFrom_of_mem
     simp only [Set.mem_iUnion, Set.mem_ofPred_eq, isOpen_induced_iff]
-    exact ⟨⟨u, h⟩, {T
+    exact ⟨⟨u, h⟩, {True}, isOpen_singleton_true, by simp [Set.preimage]⟩
 
 中文:
 定理 eq_induced_by_maps_to_sierpinski
@@ -55,7 +55,7 @@ theorem eq_induced_by_maps_to_sierpinski
     rw [← generateFrom_iUnion_isOpen]
     apply isOpen_generateFrom_of_mem
     simp only [Set.mem_iUnion, Set.mem_ofPred_eq, isOpen_induced_iff]
-    exact ⟨⟨u, h⟩, {T
+    exact ⟨⟨u, h⟩, {True}, isOpen_singleton_true, by simp [Set.preimage]⟩
 
 Depends on / 依赖: Continuous, Continuous.le_induced, Set.mem_iUnion, Set.mem_ofPred_eq, Set.preimage, generateFrom_iUnion_isOpen, isOpen_generateFrom_of_mem, isOpen_iff_continuous_mem, isOpen_iff_continuous_mem.mp, isOpen_induced_iff, isOpen_singleton_true, le_antisymm, le_iInf_iff, le_induced, mem_iUnion, mem_ofPred_eq, preimage
 -/

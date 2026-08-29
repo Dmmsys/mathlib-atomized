@@ -220,7 +220,10 @@ definition res
     let v : G × (forget₂ _ TopCat).obj X -> H × (forget₂ _ TopCat).obj X := fun p => (f p.1, p.2)
     have : Continuous v := by fun_prop
     let u : H × (forget₂ _ TopCat).obj X -> (forget₂ _ TopCat).obj X :=
-   
+      fun p => (forget₂ _ TopCat).map (X.obj.ρ p.1) p.2
+    have : Continuous u := X.2.1
+    change Continuous (u ∘ v)
+    fun_prop
 
 中文:
 定义 res
@@ -230,7 +233,10 @@ definition res
     let v : G × (forget₂ _ TopCat).obj X -> H × (forget₂ _ TopCat).obj X := fun p => (f p.1, p.2)
     have : Continuous v := by fun_prop
     let u : H × (forget₂ _ TopCat).obj X -> (forget₂ _ TopCat).obj X :=
-   
+      fun p => (forget₂ _ TopCat).map (X.obj.ρ p.1) p.2
+    have : Continuous u := X.2.1
+    change Continuous (u ∘ v)
+    fun_prop
 
 Depends on / 依赖: Action, Action.res, Continuous, ObjectProperty, ObjectProperty.lift, TopCat, X.obj, fun_prop
 -/
@@ -507,6 +513,7 @@ definition Equivalence.mapContAction
       (fun X => X.2) (fun X => H₂ ((E.functor.mapContAction G H₁).obj X)) ≪≫
     Functor.mapContActionComp G _ _ _ _
   counitIso := (Functor.mapContActionComp G _ _ _ _).symm ≪≫
+    Functor.mapContActionCongr G E.counitIso _ (fun X => X.2)
 
 中文:
 定义 等价.mapContAction
@@ -517,6 +524,7 @@ definition Equivalence.mapContAction
       (fun X => X.2) (fun X => H₂ ((E.functor.mapContAction G H₁).obj X)) ≪≫
     Functor.mapContActionComp G _ _ _ _
   counitIso := (Functor.mapContActionComp G _ _ _ _).symm ≪≫
+    Functor.mapContActionCongr G E.counitIso _ (fun X => X.2)
 
 Depends on / 依赖: E.functor.mapContAction, functor, mapContAction
 -/

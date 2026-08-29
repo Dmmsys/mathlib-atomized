@@ -35,7 +35,8 @@ theorem isUnit_of_isIntegral_of_nonZeroDivisor
   haveI : Module.Finite R B := Algebra.finite_adjoin_simple_of_isIntegral hi
   haveI : IsArtinianRing B := isArtinian_of_tower R inferInstance
   have hinj : Function.Injective B.subtype := Subtype.val_injective
- 
+  have hb : b in B⁰ := comap_nonZeroDivisors_le_of_injective hinj ha
+  (isUnit_of_mem_nonZeroDivisors hb).map B.subtype
 
 中文:
 定理 isUnit_of_is整数egral_of_nonZeroDivisor
@@ -45,7 +46,8 @@ theorem isUnit_of_isIntegral_of_nonZeroDivisor
   haveI : Module.Finite R B := Algebra.finite_adjoin_simple_of_isIntegral hi
   haveI : IsArtinianRing B := isArtinian_of_tower R inferInstance
   have hinj : Function.Injective B.subtype := Subtype.val_injective
- 
+  have hb : b in B⁰ := comap_nonZeroDivisors_le_of_injective hinj ha
+  (isUnit_of_mem_nonZeroDivisors hb).map B.subtype
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.finite_adjoin_simple_of_isIntegral, Algebra.self_mem_adjoin_singleton, B.subtype, Finite, Function, Function.Injective, Injective, IsArtinianRing, Module, Module.Finite, Subtype, Subtype.val_injective, adjoin, comap_nonZeroDivisors_le_of_injective, finite_adjoin_simple_of_isIntegral, isArtinian_of_tower, isUnit_of_mem_nonZeroDivisors, self_mem_adjoin_singleton
 -/

@@ -506,7 +506,11 @@ theorem compl_apply
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
   without the `simp`. This is probably a problem at Mathlib's end rather than `grind`'s,
-  as we are relying on seeing through
+  as we are relying on seeing through the definition of `Matrix`, and `of`. -/
+  simp [compl]
+  grind
+
+@[simp]
 
 中文:
 定理 compl_apply
@@ -516,7 +520,11 @@ theorem compl_apply
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
   without the `simp`. This is probably a problem at Mathlib's end rather than `grind`'s,
-  as we are relying on seeing through
+  as we are relying on seeing through the definition of `Matrix`, and `of`. -/
+  simp [compl]
+  grind
+
+@[simp]
 
 Depends on / 依赖: Before, Mathlib, Matrix, adaptation_note, canonicalizer, closed, definition, directed, github, github.com, leanprover, normalizer, probably, problem, rather, relying, replacing, seeing, through, without
 -/
@@ -587,7 +595,9 @@ theorem IsAdjMatrix.compl_inj
     #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
     (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
     without the `simp`. This is probably a problem at Mathlib's end rather than `grind`'s,
-    as
+    as we are relying on seeing through the definition of `Matrix`, and `of`.
+    The original proof was: `grind [of, congr($h i j), compl, IsAdjMatrix]` -/
+    simp [compl] at h; grind [congr($h i j), IsAdjMatrix], fun h => h ▸ rfl⟩
 
 中文:
 定理 是AdjMatrix.compl_inj
@@ -596,7 +606,9 @@ theorem IsAdjMatrix.compl_inj
     #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
     (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
     without the `simp`. This is probably a problem at Mathlib's end rather than `grind`'s,
-    as
+    as we are relying on seeing through the definition of `Matrix`, and `of`.
+    The original proof was: `grind [of, congr($h i j), compl, IsAdjMatrix]` -/
+    simp [compl] at h; grind [congr($h i j), IsAdjMatrix], fun h => h ▸ rfl⟩
 
 Depends on / 依赖: Before, IsAdjMatrix, Mathlib, Matrix, adaptation_note, canonicalizer, closed, definition, directed, github, github.com, leanprover, normalizer, original, probably, problem, rather, relying, replacing, seeing
 -/
@@ -621,7 +633,9 @@ theorem IsAdjMatrix.compl_compl
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
   without the `simp`. This is probably a problem at Mathlib's end rather than `grind`'s,
-  as we are relying on seeing t
+  as we are relying on seeing through the definition of `Matrix`, and `of`. The original proof was:
+  `grind [of, compl, IsAdjMatrix]` -/
+  simp [compl]; grind [compl, IsAdjMatrix]
 
 中文:
 定理 是AdjMatrix.compl_compl
@@ -631,7 +645,9 @@ theorem IsAdjMatrix.compl_compl
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
   without the `simp`. This is probably a problem at Mathlib's end rather than `grind`'s,
-  as we are relying on seeing t
+  as we are relying on seeing through the definition of `Matrix`, and `of`. The original proof was:
+  `grind [of, compl, IsAdjMatrix]` -/
+  simp [compl]; grind [compl, IsAdjMatrix]
 -/
 @[simp] theorem IsAdjMatrix.compl_compl [Zero α] [One α] {A : Matrix V V α} (hA : A.IsAdjMatrix) :
     A.compl.compl = A := by
@@ -1446,7 +1462,16 @@ theorem adjMatrix_pow_apply_eq_card_walk
     simp only [pow_succ', finsetWalkLength, ih, adjMatrix_mul_apply]
     rw [Finset.card_biUnion]
     · norm_cast
-      simp only [Nat.cast
+      simp only [Nat.cast_sum, card_map, neighborFinset_def]
+      apply Finset.sum_toFinset_eq_subtype
+    -- Disjointness for card_bUnion
+    · rintro ⟨x, hx⟩ - ⟨y, hy⟩ - hxy
+      rw [Function.onFun]; rw [disjoint_iff_inf_le]
+      intro p hp
+      simp only [inf_eq_inter, mem_inter, mem_map] at hp
+      obtain ⟨⟨px, _, rfl⟩, ⟨py, hpy, hp⟩⟩ := hp
+      cases hp
+      simp at hxy
 
 中文:
 定理 adjMatrix_pow_apply_eq_card_walk
@@ -1459,7 +1484,16 @@ theorem adjMatrix_pow_apply_eq_card_walk
     simp only [pow_succ', finsetWalkLength, ih, adjMatrix_mul_apply]
     rw [Finset.card_biUnion]
     · norm_cast
-      simp only [Nat.cast
+      simp only [Nat.cast_sum, card_map, neighborFinset_def]
+      apply Finset.sum_toFinset_eq_subtype
+    -- Disjointness for card_bUnion
+    · rintro ⟨x, hx⟩ - ⟨y, hy⟩ - hxy
+      rw [Function.onFun]; rw [disjoint_iff_inf_le]
+      intro p hp
+      simp only [inf_eq_inter, mem_inter, mem_map] at hp
+      obtain ⟨⟨px, _, rfl⟩, ⟨py, hpy, hp⟩⟩ := hp
+      cases hp
+      simp at hxy
 
 Depends on / 依赖: Finset, Finset.card_biUnion, Finset.sum_toFinset_eq_subtype, Nat.cast_sum, adjMatrix_mul_apply, card_biUnion, card_map, card_set_walk_length_eq, cast_sum, eq_or_ne, finsetWalkLength, generalizing, neighborFinset_def, pow_succ, sum_toFinset_eq_subtype
 -/

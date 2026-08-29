@@ -602,7 +602,11 @@ lemma affineCombination_mem_affineSpan_faceOpposite_iff
       (by simp)
   · rw [range_faceOpposite_points]
     rcases subsingleton_or_nontrivial k with hk | hk
-    · have : Subsingleto
+    · have : Subsingleton V := Module.subsingleton k _
+      have : Subsingleton P := (AddTorsor.subsingleton_iff V P).1 inferInstance
+      rw [(affineSpan_eq_top_iff_nonempty_of_subsingleton k).2 (by simp)]
+      simp
+    · exact affineCombination_mem_affineSpan_image hw (by simpa using h) s.points
 
 中文:
 引理 affineCombination_mem_affineSpan_faceOpposite_iff
@@ -614,7 +618,11 @@ lemma affineCombination_mem_affineSpan_faceOpposite_iff
       (by simp)
   · rw [range_faceOpposite_points]
     rcases subsingleton_or_nontrivial k with hk | hk
-    · have : Subsingleto
+    · have : Subsingleton V := Module.subsingleton k _
+      have : Subsingleton P := (AddTorsor.subsingleton_iff V P).1 inferInstance
+      rw [(affineSpan_eq_top_iff_nonempty_of_subsingleton k).2 (by simp)]
+      simp
+    · exact affineCombination_mem_affineSpan_image hw (by simpa using h) s.points
 
 Depends on / 依赖: AddTorsor, AddTorsor.subsingleton_iff, ContinuousConstSMul, ContinuousConstSMul.toMeasurableConstSMul, Finset, Finset.mem_univ, Module, Module.subsingleton, Subsingleton, TopologicalSpace, affineCombination_mem_affineSpan_image, affineSpan_eq_top_iff_nonempty_of_subsingleton, eq_zero_of_affineCombination_mem_affineSpan, independent, mem_univ, range_faceOpposite_points, s.independent.eq_zero_of_affineCombination_mem_affineSpan, subsingleton, subsingleton_iff, subsingleton_or_nontrivial
 -/
@@ -977,7 +985,7 @@ definition restrict
     Affine.Simplex (V := S.direction) k S n :=
   letI := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
   { points i := ⟨s.points i, hS <| mem_affineSpan _ <| Set.mem_range_self _⟩
-    independent := AffineIndependent.of_comp S.subty
+    independent := AffineIndependent.of_comp S.subtype s.independent }
 
 中文:
 定义 restrict
@@ -986,7 +994,7 @@ definition restrict
     Affine.Simplex (V := S.direction) k S n :=
   letI := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
   { points i := ⟨s.points i, hS <| mem_affineSpan _ <| Set.mem_range_self _⟩
-    independent := AffineIndependent.of_comp S.subty
+    independent := AffineIndependent.of_comp S.subtype s.independent }
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.inclusion, Nonempty, Nonempty.map, inclusion
 -/
@@ -1064,7 +1072,9 @@ theorem restrict_map_restrict
     letI := Nonempty.map (AffineSubspace.inclusion hfS) inferInstance
     (s.restrict S₁ hS₁).map (f.restrict hfS) (AffineMap.restrict.injective hf _) =
       (s.map f hf).restrict S₂ (Eq.trans_le
-          (by simp [AffineSubspace.map_span, 
+          (by simp [AffineSubspace.map_span, Set.range_comp])
+.trans hfS) := by (AffineSubspace.map_mono f hS₁)
+  rfl
 
 中文:
 定理 restrict_map_restrict
@@ -1072,7 +1082,9 @@ theorem restrict_map_restrict
     letI := Nonempty.map (AffineSubspace.inclusion hfS) inferInstance
     (s.restrict S₁ hS₁).map (f.restrict hfS) (AffineMap.restrict.injective hf _) =
       (s.map f hf).restrict S₂ (Eq.trans_le
-          (by simp [AffineSubspace.map_span, 
+          (by simp [AffineSubspace.map_span, Set.range_comp])
+.trans hfS) := by (AffineSubspace.map_mono f hS₁)
+  rfl
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.inclusion, Nonempty, Nonempty.map, inclusion
 -/
@@ -1273,7 +1285,16 @@ lemma setInterior_reindex
   refine ⟨fun ⟨w, hw, hwI, h⟩ => ?_, fun ⟨w, hw, hwI, h⟩ => ?_⟩
   · subst h
     simp_rw [reindex]
-    rw [← Function.comp_id w]; rw [← e.self_comp_symm]; rw [← Function.comp_assoc]; rw [← Equiv.coe_toEmbedding]; rw [← Finset.univ.affineCombination_map e.symm.toEmbedding]; rw [map_univ_equ
+    rw [← Function.comp_id w]; rw [← e.self_comp_symm]; rw [← Function.comp_assoc]; rw [← Equiv.coe_toEmbedding]; rw [← Finset.univ.affineCombination_map e.symm.toEmbedding]; rw [map_univ_equiv]
+    have hw' : ∑ i, (w ∘ e) i = 1 := by rwa [sum_comp_equiv, map_univ_equiv]
+    rw [affineCombination_mem_setInterior_iff hw']
+    exact fun i => hwI (e i)
+  · subst h
+    rw [← Function.comp_id w]; rw [← Function.comp_id s.points]; rw [← e.symm_comp_self]; rw [← Function.comp_assoc]; rw [← Function.comp_assoc]; rw [← e.coe_toEmbedding]; rw [← Finset.univ.affineCombination_map e.toEmbedding]; rw [map_univ_equiv]
+    change Finset.univ.affineCombination k (s.reindex e).points _ in _
+    have hw' : ∑ i, (w ∘ e.symm) i = 1 := by rwa [sum_comp_equiv, map_univ_equiv]
+    rw [affineCombination_mem_setInterior_iff hw']
+    exact fun i => hwI (e.symm i)
 
 中文:
 引理 set整数erior_reindex
@@ -1283,7 +1304,16 @@ lemma setInterior_reindex
   refine ⟨fun ⟨w, hw, hwI, h⟩ => ?_, fun ⟨w, hw, hwI, h⟩ => ?_⟩
   · subst h
     simp_rw [reindex]
-    rw [← Function.comp_id w]; rw [← e.self_comp_symm]; rw [← Function.comp_assoc]; rw [← Equiv.coe_toEmbedding]; rw [← Finset.univ.affineCombination_map e.symm.toEmbedding]; rw [map_univ_equ
+    rw [← Function.comp_id w]; rw [← e.self_comp_symm]; rw [← Function.comp_assoc]; rw [← Equiv.coe_toEmbedding]; rw [← Finset.univ.affineCombination_map e.symm.toEmbedding]; rw [map_univ_equiv]
+    have hw' : ∑ i, (w ∘ e) i = 1 := by rwa [sum_comp_equiv, map_univ_equiv]
+    rw [affineCombination_mem_setInterior_iff hw']
+    exact fun i => hwI (e i)
+  · subst h
+    rw [← Function.comp_id w]; rw [← Function.comp_id s.points]; rw [← e.symm_comp_self]; rw [← Function.comp_assoc]; rw [← Function.comp_assoc]; rw [← e.coe_toEmbedding]; rw [← Finset.univ.affineCombination_map e.toEmbedding]; rw [map_univ_equiv]
+    change Finset.univ.affineCombination k (s.reindex e).points _ in _
+    have hw' : ∑ i, (w ∘ e.symm) i = 1 := by rwa [sum_comp_equiv, map_univ_equiv]
+    rw [affineCombination_mem_setInterior_iff hw']
+    exact fun i => hwI (e.symm i)
 -/
 @[simp] lemma setInterior_reindex (I : Set k) {m n : Nat} (s : Simplex k P n)
     (e : Fin (n + 1) ≃ Fin (m + 1)) : (s.reindex e).setInterior I = s.setInterior I := by
@@ -1354,7 +1384,15 @@ lemma setInterior_map
   rw [Set.mem_image]
   by_cases hp : p in affineSpan k (Set.range (s.map f hf).points)
   · obtain ⟨w, hw1, hw⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hp
-    rw [hw]; rw [Affine.Simplex.affineCombination_mem_setInterior_iff hw1]; rw [Simplex.map_points]; rw [← Finset.map_affi
+    rw [hw]; rw [Affine.Simplex.affineCombination_mem_setInterior_iff hw1]; rw [Simplex.map_points]; rw [← Finset.map_affineCombination _ _ _ hw1]
+    simp_rw [hf.eq_iff]
+    simp [Affine.Simplex.affineCombination_mem_setInterior_iff hw1]
+  · apply iff_of_false
+    · exact fun h => hp (Set.mem_of_mem_of_subset h (s.map f hf).setInterior_subset_affineSpan)
+    · contrapose hp
+      obtain ⟨q, hq, hqp⟩ := hp
+      rw [s.map_points]; rw [Set.range_comp]; rw [← AffineSubspace.map_span]; rw [AffineSubspace.mem_map]
+      exact ⟨q, (Set.mem_of_mem_of_subset hq s.setInterior_subset_affineSpan), hqp⟩
 
 中文:
 引理 set整数erior_map
@@ -1364,7 +1402,15 @@ lemma setInterior_map
   rw [Set.mem_image]
   by_cases hp : p in affineSpan k (Set.range (s.map f hf).points)
   · obtain ⟨w, hw1, hw⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hp
-    rw [hw]; rw [Affine.Simplex.affineCombination_mem_setInterior_iff hw1]; rw [Simplex.map_points]; rw [← Finset.map_affi
+    rw [hw]; rw [Affine.Simplex.affineCombination_mem_setInterior_iff hw1]; rw [Simplex.map_points]; rw [← Finset.map_affineCombination _ _ _ hw1]
+    simp_rw [hf.eq_iff]
+    simp [Affine.Simplex.affineCombination_mem_setInterior_iff hw1]
+  · apply iff_of_false
+    · exact fun h => hp (Set.mem_of_mem_of_subset h (s.map f hf).setInterior_subset_affineSpan)
+    · contrapose hp
+      obtain ⟨q, hq, hqp⟩ := hp
+      rw [s.map_points]; rw [Set.range_comp]; rw [← AffineSubspace.map_span]; rw [AffineSubspace.mem_map]
+      exact ⟨q, (Set.mem_of_mem_of_subset hq s.setInterior_subset_affineSpan), hqp⟩
 
 Depends on / 依赖: Affine, Affine.Simplex.affineCombination_mem_setInterior_iff, Finset, Finset.map_affineCombination, Set.mem_image, Set.mem_of_mem_of_subset, Set.range, Simplex, Simplex.map_points, affineCombination_mem_setInterior_iff, affineSpan, eq_affineCombination_of_mem_affineSpan_of_fintype, eq_iff, hf.eq_iff, iff_of_false, map_affineCombination, map_points, mem_image, mem_of_mem_of_subset, points
 -/
@@ -1393,7 +1439,8 @@ lemma setInterior_restrict
   proof: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).setInterior I = S.subtype ⁻¹' (s.setInterior I) := by
   let := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
-  rw [← S.subtype_injective.image_injective.eq_iff]; rw [Set.image_preimage_eq_of_subset (s.setInteri
+  rw [← S.subtype_injective.image_injective.eq_iff]; rw [Set.image_preimage_eq_of_subset (s.setInterior_subset_affineSpan.trans (by simpa using! hS))]; rw [← (s.restrict S hS).setInterior_map I S.subtype_injective]
+  rfl
 
 中文:
 引理 set整数erior_restrict
@@ -1401,7 +1448,8 @@ lemma setInterior_restrict
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).setInterior I = S.subtype ⁻¹' (s.setInterior I) := by
   let := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
-  rw [← S.subtype_injective.image_injective.eq_iff]; rw [Set.image_preimage_eq_of_subset (s.setInteri
+  rw [← S.subtype_injective.image_injective.eq_iff]; rw [Set.image_preimage_eq_of_subset (s.setInterior_subset_affineSpan.trans (by simpa using! hS))]; rw [← (s.restrict S hS).setInterior_map I S.subtype_injective]
+  rfl
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.inclusion, Nonempty, Nonempty.map, inclusion
 -/
@@ -1711,7 +1759,10 @@ lemma closedInterior_eq_singleton
   constructor
   · rintro ⟨w, h0, hi, rfl⟩
     simp [affineCombination_apply, h0]
-  · rintro
+  · rintro rfl
+    exact ⟨1, by simp [affineCombination_apply]⟩
+
+omit [PartialOrder k] in
 
 中文:
 引理 closed整数erior_eq_singleton
@@ -1724,7 +1775,10 @@ lemma closedInterior_eq_singleton
   constructor
   · rintro ⟨w, h0, hi, rfl⟩
     simp [affineCombination_apply, h0]
-  · rintro
+  · rintro rfl
+    exact ⟨1, by simp [affineCombination_apply]⟩
+
+omit [PartialOrder k] in
 -/
 @[simp] lemma closedInterior_eq_singleton [ZeroLEOneClass k] (s : Simplex k P 0) :
     s.closedInterior = {s.points 0} := by
@@ -1750,7 +1804,25 @@ lemma affineCombination_mem_setInterior_face_iff_mem
   · obtain ⟨w', hw', he⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
       (Set.mem_of_mem_of_subset hi setInterior_subset_affineSpan)
     rw [he]; rw [affineCombination_mem_setInterior_iff hw'] at hi
-    have he' := s.independent.indicator_e
+    have he' := s.independent.indicator_extend_eq_of_affineCombination_comp_embedding_eq_of_fintype
+      hw hw' (fs.orderEmbOfFin h).toEmbedding he.symm
+    simp_rw [he'.symm]
+    refine ⟨fun i hi => ?_, fun i hi => by simp [hi]⟩
+    simp only [RelEmbedding.coe_toEmbedding, range_orderEmbOfFin, mem_coe, hi, Set.indicator_of_mem]
+    rw [← mem_coe]; rw [← fs.range_orderEmbOfFin h] at hi
+    obtain ⟨j, rfl⟩ := hi
+    simp [(fs.orderEmbOfFin h).injective.extend_apply, hi]
+  · let w' : Fin (m + 1) -> k := w ∘ fs.orderEmbOfFin h
+    have hw' : ∑ i, w' i = 1 := by
+      rw [Fintype.sum_of_injective _ (fs.orderEmbOfFin h).injective w' w
+        (fun i hi => hi0 _ (by simpa using hi)) (fun _ => rfl)]; rw [hw]
+    have hw'01 (i) : w' i in I := hii (fs.orderEmbOfFin h i) (by simp)
+    rw [← (s.face h).affineCombination_mem_setInterior_iff hw'] at hw'01
+    convert! hw'01
+    convert! Finset.univ.affineCombination_map (fs.orderEmbOfFin h).toEmbedding w s.points using 1
+    simp only [map_orderEmbOfFin_univ, Finset.affineCombination_indicator_subset _ _ fs.subset_univ]
+    congr
+    grind [Set.indicator_eq_self, mem_support]
 
 中文:
 引理 affineCombination_mem_set整数erior_face_iff_mem
@@ -1760,7 +1832,25 @@ lemma affineCombination_mem_setInterior_face_iff_mem
   · obtain ⟨w', hw', he⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
       (Set.mem_of_mem_of_subset hi setInterior_subset_affineSpan)
     rw [he]; rw [affineCombination_mem_setInterior_iff hw'] at hi
-    have he' := s.independent.indicator_e
+    have he' := s.independent.indicator_extend_eq_of_affineCombination_comp_embedding_eq_of_fintype
+      hw hw' (fs.orderEmbOfFin h).toEmbedding he.symm
+    simp_rw [he'.symm]
+    refine ⟨fun i hi => ?_, fun i hi => by simp [hi]⟩
+    simp only [RelEmbedding.coe_toEmbedding, range_orderEmbOfFin, mem_coe, hi, Set.indicator_of_mem]
+    rw [← mem_coe]; rw [← fs.range_orderEmbOfFin h] at hi
+    obtain ⟨j, rfl⟩ := hi
+    simp [(fs.orderEmbOfFin h).injective.extend_apply, hi]
+  · let w' : Fin (m + 1) -> k := w ∘ fs.orderEmbOfFin h
+    have hw' : ∑ i, w' i = 1 := by
+      rw [Fintype.sum_of_injective _ (fs.orderEmbOfFin h).injective w' w
+        (fun i hi => hi0 _ (by simpa using hi)) (fun _ => rfl)]; rw [hw]
+    have hw'01 (i) : w' i in I := hii (fs.orderEmbOfFin h i) (by simp)
+    rw [← (s.face h).affineCombination_mem_setInterior_iff hw'] at hw'01
+    convert! hw'01
+    convert! Finset.univ.affineCombination_map (fs.orderEmbOfFin h).toEmbedding w s.points using 1
+    simp only [map_orderEmbOfFin_univ, Finset.affineCombination_indicator_subset _ _ fs.subset_univ]
+    congr
+    grind [Set.indicator_eq_self, mem_support]
 
 Depends on / 依赖: RelEmbedding, RelEmbedding.coe_toEmbedding, Set.mem_of_mem_of_subset, affineCombination_mem_setInterior_iff, coe_toEmbedding, eq_affineCombination_of_mem_affineSpan_of_fintype, fs.orderEmbOfFin, he.symm, independent, indicator_extend_eq_of_affineCombination_comp_embedding_eq_of_fintype, mem_of_mem_of_subset, orderEmbOfFin, s.independent.indicator_extend_eq_of_affineCombination_comp_embedding_eq_of_fintype, setInterior_subset_affineSpan, simp_rw, toEmbedding
 -/
@@ -1845,7 +1935,7 @@ lemma affineCombination_mem_interior_face_iff_pos
   refine ⟨by grind, fun ⟨hii, hi0⟩ => ⟨fun i hi => ⟨hii i hi, ?_⟩, hi0⟩⟩
   rw [← hw]; rw [← Finset.sum_subset (Finset.subset_univ fs) fun j _ => hi0 j]
   obtain ⟨j, hj, hji⟩ := fs.exists_mem_ne (by grind [-> NeZero.ne]) i
-  exact Finse
+  exact Finset.single_lt_sum hji hi hj (hii j hj) fun t ht _ => (hii t ht).le
 
 中文:
 引理 affineCombination_mem_interior_face_iff_pos
@@ -1855,7 +1945,7 @@ lemma affineCombination_mem_interior_face_iff_pos
   refine ⟨by grind, fun ⟨hii, hi0⟩ => ⟨fun i hi => ⟨hii i hi, ?_⟩, hi0⟩⟩
   rw [← hw]; rw [← Finset.sum_subset (Finset.subset_univ fs) fun j _ => hi0 j]
   obtain ⟨j, hj, hji⟩ := fs.exists_mem_ne (by grind [-> NeZero.ne]) i
-  exact Finse
+  exact Finset.single_lt_sum hji hi hj (hii j hj) fun t ht _ => (hii t ht).le
 
 Depends on / 依赖: Finset, Finset.single_lt_sum, Finset.subset_univ, Finset.sum_subset, NeZero, NeZero.ne, affineCombination_mem_interior_face_iff_mem_Ioo, exists_mem_ne, fs.exists_mem_ne, s.affineCombination_mem_interior_face_iff_mem_Ioo, single_lt_sum, subset_univ, sum_subset
 -/
@@ -2004,7 +2094,12 @@ Set.mem_of_mem_of_subset hp
 (s.face h).closedInterior_subset_affineSpan.trans
 affineSpan_mono k by simp
   obtain ⟨w, hw1, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hp'
-  rw [affineCombination_mem_closedInterior_fa
+  rw [affineCombination_mem_closedInterior_face_iff_mem_Icc _ _ hw1] at hp
+  rw [affineCombination_mem_closedInterior_iff hw1]
+  intro i
+  by_cases hi : i in fs <;> aesop
+
+@[simp]
 
 中文:
 定理 closed整数erior_face_subset_closed整数erior
@@ -2016,7 +2111,12 @@ Set.mem_of_mem_of_subset hp
 (s.face h).closedInterior_subset_affineSpan.trans
 affineSpan_mono k by simp
   obtain ⟨w, hw1, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hp'
-  rw [affineCombination_mem_closedInterior_fa
+  rw [affineCombination_mem_closedInterior_face_iff_mem_Icc _ _ hw1] at hp
+  rw [affineCombination_mem_closedInterior_iff hw1]
+  intro i
+  by_cases hi : i in fs <;> aesop
+
+@[simp]
 
 Depends on / 依赖: Set.mem_of_mem_of_subset, Set.range, affineCombination_mem_closedInterior_face_iff_mem_Icc, affineCombination_mem_closedInterior_iff, affineSpan, affineSpan_mono, closedInterior_subset_affineSpan, closedInterior_subset_affineSpan.trans, eq_affineCombination_of_mem_affineSpan_of_fintype, mem_of_mem_of_subset, points, s.face, s.points
 -/
@@ -2047,7 +2147,8 @@ theorem point_mem_closedInterior_face_iff
     obtain ⟨w, hw, hw', hs⟩ := hj
     rw [← hs]
     exact Set.mem_of_mem_of_subset (affineCombination_mem_affineSpan hw _) (by simp)
-.ge hfs · obtain ⟨i, rfl⟩ : exists i, fs.orderEmbOfFin h i 
+.ge hfs · obtain ⟨i, rfl⟩ : exists i, fs.orderEmbOfFin h i = j := range_orderEmbOfFin fs h
+    exact point_mem_closedInterior _ _
 
 中文:
 定理 point_mem_closed整数erior_face_iff
@@ -2058,7 +2159,8 @@ theorem point_mem_closedInterior_face_iff
     obtain ⟨w, hw, hw', hs⟩ := hj
     rw [← hs]
     exact Set.mem_of_mem_of_subset (affineCombination_mem_affineSpan hw _) (by simp)
-.ge hfs · obtain ⟨i, rfl⟩ : exists i, fs.orderEmbOfFin h i 
+.ge hfs · obtain ⟨i, rfl⟩ : exists i, fs.orderEmbOfFin h i = j := range_orderEmbOfFin fs h
+    exact point_mem_closedInterior _ _
 
 Depends on / 依赖: Set.mem_of_mem_of_subset, affineCombination_mem_affineSpan, affineSpan, fs.orderEmbOfFin, mem_of_mem_of_subset, orderEmbOfFin, point_mem_closedInterior, points, range_orderEmbOfFin, s.points
 -/
@@ -2112,7 +2214,10 @@ theorem disjoint_interior_closedInterior_face
   have hp : p in affineSpan k (Set.range s.points) :=
 Set.mem_of_mem_of_subset hleft s.interior_subset_closedInterior.trans
       s.closedInterior_subset_affineSpan
-  grind [affineCombination_mem_interior_iff, affineCombination_mem_closedInt
+  grind [affineCombination_mem_interior_iff, affineCombination_mem_closedInterior_face_iff_mem_Icc,
+    eq_affineCombination_of_mem_affineSpan_of_fintype]
+
+@[simp]
 
 中文:
 定理 disjoint_interior_closed整数erior_face
@@ -2122,7 +2227,10 @@ Set.mem_of_mem_of_subset hleft s.interior_subset_closedInterior.trans
   have hp : p in affineSpan k (Set.range s.points) :=
 Set.mem_of_mem_of_subset hleft s.interior_subset_closedInterior.trans
       s.closedInterior_subset_affineSpan
-  grind [affineCombination_mem_interior_iff, affineCombination_mem_closedInt
+  grind [affineCombination_mem_interior_iff, affineCombination_mem_closedInterior_face_iff_mem_Icc,
+    eq_affineCombination_of_mem_affineSpan_of_fintype]
+
+@[simp]
 
 Depends on / 依赖: Set.disjoint_left.mpr, Set.mem_of_mem_of_subset, Set.range, affineCombination_mem_closedInterior_face_iff_mem_Icc, affineCombination_mem_interior_iff, affineSpan, closedInterior_subset_affineSpan, disjoint_left, eq_affineCombination_of_mem_affineSpan_of_fintype, hright, interior_subset_closedInterior, mem_of_mem_of_subset, points, s.closedInterior_subset_affineSpan, s.interior_subset_closedInterior.trans, s.points
 -/
@@ -2237,7 +2345,20 @@ theorem closedInterior_eq_interior_union
     obtain ⟨w, hw1, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hp'
     rw [Set.mem_union]; rw [or_iff_not_imp_left]
     intro h
-    rw [affineCombination_mem_
+    rw [affineCombination_mem_closedInterior_iff hw1] at hp
+    simp_rw [affineCombination_mem_interior_iff hw1, Set.mem_Ioo] at h
+    push +distrib Not at h
+    obtain ⟨j, hj⟩ : exists j : Fin (n + 1), w j = 0 := by
+      obtain ⟨i, hi | hi⟩ := h
+      · exact ⟨i, le_antisymm hi (hp i).1⟩
+      · have hi1 : w i = 1 := le_antisymm (hp i).2 hi
+        rw [← hi1]; rw [← Finset.sum_erase_add _ _ (show i in Finset.univ by simp)]; rw [add_eq_right]; rw [Finset.sum_eq_zero_iff_of_nonneg (fun j _ => (hp j).1)] at hw1
+        exact ⟨i + 1, hw1 _ (by simp)⟩
+    refine Set.mem_iUnion.mpr ⟨j, ?_⟩
+    rw [faceOpposite]; rw [affineCombination_mem_closedInterior_face_iff_mem_Icc _ _ hw1]
+    exact ⟨fun k _ => hp k, by simpa using hj⟩
+  · refine Set.union_subset s.interior_subset_closedInterior (Set.iUnion_subset fun i => ?_)
+    exact s.closedInterior_faceOpposite_subset_closedInterior i
 
 中文:
 定理 closed整数erior_eq_interior_union
@@ -2249,7 +2370,20 @@ theorem closedInterior_eq_interior_union
     obtain ⟨w, hw1, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hp'
     rw [Set.mem_union]; rw [or_iff_not_imp_left]
     intro h
-    rw [affineCombination_mem_
+    rw [affineCombination_mem_closedInterior_iff hw1] at hp
+    simp_rw [affineCombination_mem_interior_iff hw1, Set.mem_Ioo] at h
+    push +distrib Not at h
+    obtain ⟨j, hj⟩ : exists j : Fin (n + 1), w j = 0 := by
+      obtain ⟨i, hi | hi⟩ := h
+      · exact ⟨i, le_antisymm hi (hp i).1⟩
+      · have hi1 : w i = 1 := le_antisymm (hp i).2 hi
+        rw [← hi1]; rw [← Finset.sum_erase_add _ _ (show i in Finset.univ by simp)]; rw [add_eq_right]; rw [Finset.sum_eq_zero_iff_of_nonneg (fun j _ => (hp j).1)] at hw1
+        exact ⟨i + 1, hw1 _ (by simp)⟩
+    refine Set.mem_iUnion.mpr ⟨j, ?_⟩
+    rw [faceOpposite]; rw [affineCombination_mem_closedInterior_face_iff_mem_Icc _ _ hw1]
+    exact ⟨fun k _ => hp k, by simpa using hj⟩
+  · refine Set.union_subset s.interior_subset_closedInterior (Set.iUnion_subset fun i => ?_)
+    exact s.closedInterior_faceOpposite_subset_closedInterior i
 
 Depends on / 依赖: Set.Subset.antisymm, Set.mem_Ioo, Set.mem_of_mem_of_subset, Set.mem_union, Subset, affineCombination_mem_closedInterior_iff, affineCombination_mem_interior_iff, antisymm, closedInterior_subset_affineSpan, distrib, eq_affineCombination_of_mem_affineSpan_of_fintype, le_antisymm, mem_Ioo, mem_of_mem_of_subset, mem_union, or_iff_not_imp_left, s.closedInterior_subset_affineSpan, simp_rw
 -/

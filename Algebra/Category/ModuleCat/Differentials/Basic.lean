@@ -76,7 +76,8 @@ definition mk
       rfl
     map_one_eq_zero' := by
       dsimp
-      rw [← f.hom.map_one
+      rw [← f.hom.map_one]; rw [d_map]
+    leibniz' := d_mul }
 
 中文:
 定义 mk
@@ -91,7 +92,8 @@ definition mk
       rfl
     map_one_eq_zero' := by
       dsimp
-      rw [← f.hom.map_one
+      rw [← f.hom.map_one]; rw [d_map]
+    leibniz' := d_mul }
 
 Depends on / 依赖: Derivation, M.Derivation, Module, Module.compHom, RingHom, RingHom.smul_toAlgebra, add_zero, compHom, d_add, d_map, d_mul, f.hom, f.hom.map_one, f.hom.toAlgebra, leibniz, map_add, map_one, map_one_eq_zero, map_smul, smul_toAlgebra
 -/
@@ -302,7 +304,9 @@ lemma ext
     rintro _ ⟨y, rfl⟩
     rw [SetLike.mem_coe]; rw [LinearMap.mem_ker]; rw [ModuleCat.hom_sub]; rw [LinearMap.sub_apply]; rw [sub_eq_zero]
     apply h
-  
+  rw [top_le_iff]; rw [LinearMap.ker_eq_top] at this
+  ext : 1
+  exact this
 
 中文:
 引理 ext
@@ -314,7 +318,9 @@ lemma ext
     rintro _ ⟨y, rfl⟩
     rw [SetLike.mem_coe]; rw [LinearMap.mem_ker]; rw [ModuleCat.hom_sub]; rw [LinearMap.sub_apply]; rw [sub_eq_zero]
     apply h
-  
+  rw [top_le_iff]; rw [LinearMap.ker_eq_top] at this
+  ext : 1
+  exact this
 
 Depends on / 依赖: KaehlerDifferential, KaehlerDifferential.span_range_derivation, LinearMap, LinearMap.ker, LinearMap.ker_eq_top, LinearMap.mem_ker, LinearMap.sub_apply, ModuleCat, ModuleCat.hom_sub, SetLike, SetLike.mem_coe, Submodule, Submodule.span_le, hom_sub, ker_eq_top, mem_coe, mem_ker, span_le, span_range_derivation, sub_apply
 -/
@@ -344,7 +350,14 @@ definition map
   letI := (g ≫ f').hom.toAlgebra
   have : IsScalarTower A A' B' := IsScalarTower.of_algebraMap_eq' rfl
   have := IsScalarTower.of_algebraMap_eq' (congrArg Hom.hom fac)
-  -- TODO: after https://git
+  -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(Y := ...)`.
+  -- This suggests `restrictScalars` needs to be redesigned.
+  ModuleCat.ofHom (Y := (ModuleCat.restrictScalars g'.hom).obj (KaehlerDifferential f'))
+  { toFun := fun x => _root_.KaehlerDifferential.map A A' B B' x
+    map_add' := by simp
+    map_smul' := by simp }
+
+@[simp]
 
 中文:
 定义 map
@@ -356,7 +369,14 @@ definition map
   letI := (g ≫ f').hom.toAlgebra
   have : IsScalarTower A A' B' := IsScalarTower.of_algebraMap_eq' rfl
   have := IsScalarTower.of_algebraMap_eq' (congrArg Hom.hom fac)
-  -- TODO: after https://git
+  -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(Y := ...)`.
+  -- This suggests `restrictScalars` needs to be redesigned.
+  ModuleCat.ofHom (Y := (ModuleCat.restrictScalars g'.hom).obj (KaehlerDifferential f'))
+  { toFun := fun x => _root_.KaehlerDifferential.map A A' B B' x
+    map_add' := by simp
+    map_smul' := by simp }
+
+@[simp]
 
 Depends on / 依赖: Hom.hom, IsScalarTower, IsScalarTower.of_algebraMap_eq, f.hom.toAlgebra, g.hom.toAlgebra, hom.toAlgebra, of_algebraMap_eq, toAlgebra
 -/

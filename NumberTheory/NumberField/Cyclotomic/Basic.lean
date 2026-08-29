@@ -176,7 +176,38 @@ theorem isIntegralClosure_adjoin_singleton_of_prime_pow
       IsIntegral.algebraMap
         ((le_integralClosure_iff_isIntegral.1
           (adjoin_le_integralClosure (hζ.isIntegral (NeZero.pos _)))).isIntegral _)
-  let B := hζ.subOnePowerBas
+  let B := hζ.subOnePowerBasis Rat
+  have hint : IsIntegral Int B.gen := (hζ.isIntegral (NeZero.pos _)).sub isIntegral_one
+  -- This can't be a `local instance` because it has metavariables.
+  let := IsCyclotomicExtension.finiteDimensional {p ^ k} Rat K
+  have H := discr_mul_isIntegral_mem_adjoin Rat hint h
+  obtain ⟨u, n, hun⟩ := discr_prime_pow_eq_unit_mul_pow' hζ
+  rw [hun] at H
+  replace H := Subalgebra.smul_mem _ H u.inv
+  rw [← smul_assoc]; rw [← smul_mul_assoc]; rw [Units.inv_eq_val_inv]; rw [zsmul_eq_mul]; rw [← Int.cast_mul]; rw [Units.inv_mul]; rw [Int.cast_one]; rw [one_mul]; rw [smul_def]; rw [map_pow] at H
+  cases k
+  · have : IsCyclotomicExtension {1} Rat K := by simpa using hcycl
+    have : x in (⊥ : Subalgebra Rat K) := by
+      rw [singleton_one Rat K]
+      exact mem_top
+    obtain ⟨y, rfl⟩ := mem_bot.1 this
+    replace h := (isIntegral_algebraMap_iff (algebraMap Rat K).injective).1 h
+    obtain ⟨z, hz⟩ := IsIntegrallyClosed.isIntegral_iff.1 h
+    rw [← hz]; rw [← IsScalarTower.algebraMap_apply]
+    exact Subalgebra.algebraMap_mem _ _
+  · have hmin : (minpoly Int B.gen).IsEisensteinAt (Submodule.span Int {(p : Int)}) := by
+      have h₁ := minpoly.isIntegrallyClosed_eq_field_fractions' Rat hint
+      have h₂ := hζ.minpoly_sub_one_eq_cyclotomic_comp (cyclotomic.irreducible_rat (NeZero.pos _))
+      rw [IsPrimitiveRoot.subOnePowerBasis_gen] at h₁
+      rw [h₁]; rw [← map_cyclotomic_int]; rw [← algebraMap_int_eq]; rw [show X + 1 = map (algebraMap Int Rat) (X + 1) by simp]; rw [← map_comp] at h₂
+      rw [IsPrimitiveRoot.subOnePowerBasis_gen]; rw [map_injective (algebraMap Int Rat) (algebraMap Int Rat).injective_int h₂]
+      exact cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt p _
+    refine
+      adjoin_le ?_
+        (mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt (n := n)
+          (Nat.prime_iff_prime_int.1 hp.out) hint h (by simpa using H) hmin)
+    simp only [Set.singleton_subset_iff, SetLike.mem_coe]
+    exact Subalgebra.sub_mem _ (self_mem_adjoin_singleton Int _) (Subalgebra.one_mem _)
 
 中文:
 定理 is整数egralClosure_adjoin_singleton_of_prime_pow
@@ -189,7 +220,38 @@ theorem isIntegralClosure_adjoin_singleton_of_prime_pow
       IsIntegral.algebraMap
         ((le_integralClosure_iff_isIntegral.1
           (adjoin_le_integralClosure (hζ.isIntegral (NeZero.pos _)))).isIntegral _)
-  let B := hζ.subOnePowerBas
+  let B := hζ.subOnePowerBasis Rat
+  have hint : IsIntegral Int B.gen := (hζ.isIntegral (NeZero.pos _)).sub isIntegral_one
+  -- This can't be a `local instance` because it has metavariables.
+  let := IsCyclotomicExtension.finiteDimensional {p ^ k} Rat K
+  have H := discr_mul_isIntegral_mem_adjoin Rat hint h
+  obtain ⟨u, n, hun⟩ := discr_prime_pow_eq_unit_mul_pow' hζ
+  rw [hun] at H
+  replace H := Subalgebra.smul_mem _ H u.inv
+  rw [← smul_assoc]; rw [← smul_mul_assoc]; rw [Units.inv_eq_val_inv]; rw [zsmul_eq_mul]; rw [← Int.cast_mul]; rw [Units.inv_mul]; rw [Int.cast_one]; rw [one_mul]; rw [smul_def]; rw [map_pow] at H
+  cases k
+  · have : IsCyclotomicExtension {1} Rat K := by simpa using hcycl
+    have : x in (⊥ : Subalgebra Rat K) := by
+      rw [singleton_one Rat K]
+      exact mem_top
+    obtain ⟨y, rfl⟩ := mem_bot.1 this
+    replace h := (isIntegral_algebraMap_iff (algebraMap Rat K).injective).1 h
+    obtain ⟨z, hz⟩ := IsIntegrallyClosed.isIntegral_iff.1 h
+    rw [← hz]; rw [← IsScalarTower.algebraMap_apply]
+    exact Subalgebra.algebraMap_mem _ _
+  · have hmin : (minpoly Int B.gen).IsEisensteinAt (Submodule.span Int {(p : Int)}) := by
+      have h₁ := minpoly.isIntegrallyClosed_eq_field_fractions' Rat hint
+      have h₂ := hζ.minpoly_sub_one_eq_cyclotomic_comp (cyclotomic.irreducible_rat (NeZero.pos _))
+      rw [IsPrimitiveRoot.subOnePowerBasis_gen] at h₁
+      rw [h₁]; rw [← map_cyclotomic_int]; rw [← algebraMap_int_eq]; rw [show X + 1 = map (algebraMap Int Rat) (X + 1) by simp]; rw [← map_comp] at h₂
+      rw [IsPrimitiveRoot.subOnePowerBasis_gen]; rw [map_injective (algebraMap Int Rat) (algebraMap Int Rat).injective_int h₂]
+      exact cyclotomic_prime_pow_comp_X_add_one_isEisensteinAt p _
+    refine
+      adjoin_le ?_
+        (mem_adjoin_of_smul_prime_pow_smul_of_minpoly_isEisensteinAt (n := n)
+          (Nat.prime_iff_prime_int.1 hp.out) hint h (by simpa using H) hmin)
+    simp only [Set.singleton_subset_iff, SetLike.mem_coe]
+    exact Subalgebra.sub_mem _ (self_mem_adjoin_singleton Int _) (Subalgebra.one_mem _)
 
 Depends on / 依赖: B.gen, IsIntegral, IsIntegral.algebraMap, NeZero, NeZero.pos, Subtype, Subtype.val_injective, adjoin_le_integralClosure, algebraMap, isIntegral, isIntegral_one, le_integralClosure_iff_isIntegral, subOnePowerBasis, val_injective
 -/
@@ -270,7 +332,10 @@ theorem cyclotomicRing_isIntegralClosure_of_prime_pow
   refine ⟨IsFractionRing.injective _ _, @fun x => ⟨fun h => ⟨⟨x, ?_⟩, rfl⟩, ?_⟩⟩
   · obtain ⟨y, rfl⟩ := (isIntegralClosure_adjoin_singleton_of_prime_pow hζ).isIntegral_iff.1 h
     refine adjoin_mono ?_ y.2
-    simp only [Set.singlet
+    simp only [Set.singleton_subset_iff, Set.mem_ofPred_eq]
+    exact hζ.pow_eq_one
+  · rintro ⟨y, rfl⟩
+    exact IsIntegral.algebraMap ((IsCyclotomicExtension.integral {p ^ k} Int _).isIntegral _)
 
 中文:
 定理 cyclotomicRing_is整数egralClosure_of_prime_pow
@@ -279,7 +344,10 @@ theorem cyclotomicRing_isIntegralClosure_of_prime_pow
   refine ⟨IsFractionRing.injective _ _, @fun x => ⟨fun h => ⟨⟨x, ?_⟩, rfl⟩, ?_⟩⟩
   · obtain ⟨y, rfl⟩ := (isIntegralClosure_adjoin_singleton_of_prime_pow hζ).isIntegral_iff.1 h
     refine adjoin_mono ?_ y.2
-    simp only [Set.singlet
+    simp only [Set.singleton_subset_iff, Set.mem_ofPred_eq]
+    exact hζ.pow_eq_one
+  · rintro ⟨y, rfl⟩
+    exact IsIntegral.algebraMap ((IsCyclotomicExtension.integral {p ^ k} Int _).isIntegral _)
 
 Depends on / 依赖: CyclotomicField, IsCyclotomicExtension, IsCyclotomicExtension.integral, IsFractionRing, IsFractionRing.injective, IsIntegral, IsIntegral.algebraMap, Set.mem_ofPred_eq, Set.singleton_subset_iff, adjoin_mono, algebraMap, injective, integral, isIntegral, isIntegralClosure_adjoin_singleton_of_prime_pow, isIntegral_iff, mem_ofPred_eq, pow_eq_one, singleton_subset_iff, zeta_spec
 -/
@@ -596,7 +664,7 @@ definition subOneIntegralPowerBasisOfPrimePow
     (RingOfIntegers.isIntegral ⟨ζ- 1, (hζ.isIntegral (NeZero.pos _)).sub isIntegral_one⟩) (by
     refine hζ.integralPowerBasisOfPrimePow.adjoin_eq_top_of_gen_mem_adjoin ?_
     convert! Subalgebra.add_mem _ (self_mem_adjoin_singleton Int _) (Subalgebra.one_mem _)
-    simp [R
+    simp [RingOfIntegers.ext_iff, integralPowerBasisOfPrimePow_gen, toInteger])
 
 中文:
 定义 subOne整数egralPowerBasisOfPrimePow
@@ -605,7 +673,7 @@ definition subOneIntegralPowerBasisOfPrimePow
     (RingOfIntegers.isIntegral ⟨ζ- 1, (hζ.isIntegral (NeZero.pos _)).sub isIntegral_one⟩) (by
     refine hζ.integralPowerBasisOfPrimePow.adjoin_eq_top_of_gen_mem_adjoin ?_
     convert! Subalgebra.add_mem _ (self_mem_adjoin_singleton Int _) (Subalgebra.one_mem _)
-    simp [R
+    simp [RingOfIntegers.ext_iff, integralPowerBasisOfPrimePow_gen, toInteger])
 
 Depends on / 依赖: NeZero, NeZero.pos, PowerBasis, PowerBasis.ofAdjoinEqTop, RingOfIntegers, RingOfIntegers.ext_iff, RingOfIntegers.isIntegral, Subalgebra, Subalgebra.add_mem, Subalgebra.one_mem, add_mem, adjoin_eq_top_of_gen_mem_adjoin, convert, ext_iff, integralPowerBasisOfPrimePow, integralPowerBasisOfPrimePow.adjoin_eq_top_of_gen_mem_adjoin, integralPowerBasisOfPrimePow_gen, isIntegral, isIntegral_one, ofAdjoinEqTop
 -/
@@ -655,7 +723,12 @@ theorem zeta_sub_one_prime_of_ne_two
   · apply hζ.pow_ne_one_of_pos_of_lt one_ne_zero (one_lt_pow₀ hp.out.one_lt (by simp))
     rw [sub_eq_zero] at h
     simpa using congrArg (algebraMap _ K) h
-  rw [Nat.i
+  rw [Nat.irreducible_iff_prime]; rw [Ideal.absNorm_span_singleton]; rw [← Nat.prime_iff]; rw [← Int.prime_iff_natAbs_prime]
+  convert! Nat.prime_iff_prime_int.1 hp.out
+  apply RingHom.injective_int (algebraMap Int Rat)
+  rw [← Algebra.norm_localization (Sₘ := K) Int (nonZeroDivisors Int)]
+  simp only [algebraMap_int_eq, map_natCast]
+  exact hζ.norm_sub_one_of_prime_ne_two (Polynomial.cyclotomic.irreducible_rat (NeZero.pos _)) hodd
 
 中文:
 定理 zeta_sub_one_prime_of_ne_two
@@ -666,7 +739,12 @@ theorem zeta_sub_one_prime_of_ne_two
   · apply hζ.pow_ne_one_of_pos_of_lt one_ne_zero (one_lt_pow₀ hp.out.one_lt (by simp))
     rw [sub_eq_zero] at h
     simpa using congrArg (algebraMap _ K) h
-  rw [Nat.i
+  rw [Nat.irreducible_iff_prime]; rw [Ideal.absNorm_span_singleton]; rw [← Nat.prime_iff]; rw [← Int.prime_iff_natAbs_prime]
+  convert! Nat.prime_iff_prime_int.1 hp.out
+  apply RingHom.injective_int (algebraMap Int Rat)
+  rw [← Algebra.norm_localization (Sₘ := K) Int (nonZeroDivisors Int)]
+  simp only [algebraMap_int_eq, map_natCast]
+  exact hζ.norm_sub_one_of_prime_ne_two (Polynomial.cyclotomic.irreducible_rat (NeZero.pos _)) hodd
 
 Depends on / 依赖: Ideal.absNorm_span_singleton, Ideal.prime_of_irreducible_absNorm_span, Int.prime_iff_natAbs_prime, IsCyclotomicExtension, IsCyclotomicExtension.numberField, Nat.irreducible_iff_prime, Nat.prime_iff, Nat.prime_iff_prime_int, RingHom, RingHom.injective_int, absNorm_span_singleton, algebraMap, convert, hp.out, hp.out.one_lt, injective_int, irreducible_iff_prime, numberField, one_lt, one_ne_zero
 -/
@@ -698,7 +776,20 @@ theorem zeta_sub_one_prime_of_two_pow
   · apply hζ.pow_ne_one_of_pos_of_lt one_ne_zero (one_lt_pow₀ (by decide) (by simp))
     rw [sub_eq_zero] at h
     simpa using! congrArg (algebraMap _ K) h
-  rw [Nat.i
+  rw [Nat.irreducible_iff_prime]; rw [Ideal.absNorm_span_singleton]; rw [← Nat.prime_iff]; rw [← Int.prime_iff_natAbs_prime]
+  cases k
+  · convert! Prime.neg Int.prime_two
+    apply RingHom.injective_int (algebraMap Int Rat)
+    rw [← Algebra.norm_localization (Sₘ := K) Int (nonZeroDivisors Int)]
+    simp only [algebraMap_int_eq, map_neg, map_ofNat]
+    simpa only [zero_add, pow_one, AddSubgroupClass.coe_sub, OneMemClass.coe_one,
+        pow_zero]
+      using! hζ.norm_pow_sub_one_two (cyclotomic.irreducible_rat
+        (by simp only [zero_add, pow_one, Nat.ofNat_pos]))
+  convert! Int.prime_two
+  apply RingHom.injective_int (algebraMap Int Rat)
+  rw [← Algebra.norm_localization (Sₘ := K) Int (nonZeroDivisors Int)]; rw [algebraMap_int_eq]
+  exact hζ.norm_sub_one_two Nat.AtLeastTwo.prop (cyclotomic.irreducible_rat (by simp))
 
 中文:
 定理 zeta_sub_one_prime_of_two_pow
@@ -709,7 +800,20 @@ theorem zeta_sub_one_prime_of_two_pow
   · apply hζ.pow_ne_one_of_pos_of_lt one_ne_zero (one_lt_pow₀ (by decide) (by simp))
     rw [sub_eq_zero] at h
     simpa using! congrArg (algebraMap _ K) h
-  rw [Nat.i
+  rw [Nat.irreducible_iff_prime]; rw [Ideal.absNorm_span_singleton]; rw [← Nat.prime_iff]; rw [← Int.prime_iff_natAbs_prime]
+  cases k
+  · convert! Prime.neg Int.prime_two
+    apply RingHom.injective_int (algebraMap Int Rat)
+    rw [← Algebra.norm_localization (Sₘ := K) Int (nonZeroDivisors Int)]
+    simp only [algebraMap_int_eq, map_neg, map_ofNat]
+    simpa only [zero_add, pow_one, AddSubgroupClass.coe_sub, OneMemClass.coe_one,
+        pow_zero]
+      using! hζ.norm_pow_sub_one_two (cyclotomic.irreducible_rat
+        (by simp only [zero_add, pow_one, Nat.ofNat_pos]))
+  convert! Int.prime_two
+  apply RingHom.injective_int (algebraMap Int Rat)
+  rw [← Algebra.norm_localization (Sₘ := K) Int (nonZeroDivisors Int)]; rw [algebraMap_int_eq]
+  exact hζ.norm_sub_one_two Nat.AtLeastTwo.prop (cyclotomic.irreducible_rat (by simp))
 
 Depends on / 依赖: Ideal.absNorm_span_singleton, Ideal.prime_of_irreducible_absNorm_span, Int.prime_iff_natAbs_prime, Int.prime_two, IsCyclotomicExtension, IsCyclotomicExtension.numberField, Nat.irreducible_iff_prime, Nat.prime_iff, Prime.neg, RingHom, RingHom.injective_int, absNorm_span_singleton, algebraMap, convert, injective_int, irreducible_iff_prime, numberField, one_ne_zero, pow_ne_one_of_pos_of_lt, prime_iff
 -/
@@ -824,7 +928,7 @@ theorem norm_toInteger_sub_one_eq_one
   have : NumberField K := IsCyclotomicExtension.numberField {n} Rat K
   have : NeZero n := NeZero.of_gt h₁
   dsimp only
-  rw [norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]; rw [map_sub]; rw [map_one]; rw [map_one]; rw [RingOfIntegers.map_mk];
+  rw [norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]; rw [map_sub]; rw [map_one]; rw [map_one]; rw [RingOfIntegers.map_mk]; rw [sub_one_norm_eq_eval_cyclotomic hζ h₁ (cyclotomic.irreducible_rat (NeZero.pos _))]; rw [eval_one_cyclotomic_not_prime_pow h₂]; rw [Int.cast_one]
 
 中文:
 定理 norm_to整数eger_sub_one_eq_one
@@ -834,7 +938,7 @@ theorem norm_toInteger_sub_one_eq_one
   have : NumberField K := IsCyclotomicExtension.numberField {n} Rat K
   have : NeZero n := NeZero.of_gt h₁
   dsimp only
-  rw [norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]; rw [map_sub]; rw [map_one]; rw [map_one]; rw [RingOfIntegers.map_mk];
+  rw [norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]; rw [map_sub]; rw [map_one]; rw [map_one]; rw [RingOfIntegers.map_mk]; rw [sub_one_norm_eq_eval_cyclotomic hζ h₁ (cyclotomic.irreducible_rat (NeZero.pos _))]; rw [eval_one_cyclotomic_not_prime_pow h₂]; rw [Int.cast_one]
 
 Depends on / 依赖: NeZero, NeZero.of_gt, of_gt
 -/
@@ -943,7 +1047,7 @@ theorem norm_toInteger_sub_one_of_eq_two_pow
   proof: by
   have : NumberField K := IsCyclotomicExtension.numberField {2 ^ (k + 2)} Rat K
   rw [norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]; rw [map_sub]; rw [map_one]; rw [eq_intCast]; rw [Int.cast_ofNat]; rw [RingOfIntegers.map_mk]; rw [hζ.norm_sub_one_two (Nat.le_add_left 2 k)
-    (Polynomial.cyclotom
+    (Polynomial.cyclotomic.irreducible_rat (Nat.two_pow_pos _))]
 
 中文:
 定理 norm_to整数eger_sub_one_of_eq_two_pow
@@ -951,7 +1055,7 @@ theorem norm_toInteger_sub_one_of_eq_two_pow
   证明: by
   have : NumberField K := IsCyclotomicExtension.numberField {2 ^ (k + 2)} Rat K
   rw [norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]; rw [map_sub]; rw [map_one]; rw [eq_intCast]; rw [Int.cast_ofNat]; rw [RingOfIntegers.map_mk]; rw [hζ.norm_sub_one_two (Nat.le_add_left 2 k)
-    (Polynomial.cyclotom
+    (Polynomial.cyclotomic.irreducible_rat (Nat.two_pow_pos _))]
 
 Depends on / 依赖: Int.cast_ofNat, IsCyclotomicExtension, IsCyclotomicExtension.numberField, Nat.le_add_left, Nat.two_pow_pos, NumberField, Polynomial, Polynomial.cyclotomic.irreducible_rat, RingOfIntegers, RingOfIntegers.map_mk, cast_ofNat, cyclotomic, eq_intCast, irreducible_rat, le_add_left, le_rfl, map_mk, map_one, map_sub, norm_eq_iff
 -/
@@ -1138,7 +1242,28 @@ theorem not_exists_int_prime_dvd_sub_of_prime_pow_ne_two
   let pB := hζ.integralPowerBasisOfPrimePow
   have hdim : pB.dim = p ^ k * (↑p - 1) := by
     simp [integralPowerBasisOfPrimePow_dim, pB, Nat.totient_prime_pow hp.1 (Nat.zero_lt_succ k)]
-  replace hdim : 1 < pB.di
+  replace hdim : 1 < pB.dim := by
+    rw [Nat.one_lt_iff_ne_zero_and_ne_one]; rw [hdim]
+    refine ⟨by simp only [ne_eq, mul_eq_zero, NeZero.ne _, Nat.sub_eq_zero_iff_le, false_or,
+      not_le, Nat.Prime.one_lt hp.out], ne_of_gt ?_⟩
+    by_cases hk : k = 0
+    · simp only [hk, zero_add, pow_one, pow_zero, one_mul, Nat.lt_sub_iff_add_lt,
+        Nat.reduceAdd] at htwo ⊢
+      exact htwo.symm.lt_of_le hp.1.two_le
+    · exact one_lt_mul_of_lt_of_le (one_lt_pow₀ hp.1.one_lt hk)
+        (have := Nat.Prime.two_le hp.out; by lia)
+  rw [sub_eq_iff_eq_add] at h
+  -- We are assuming that `ζ = n + p * x` for some integer `n` and `x : 𝓞 K`. Looking at the
+  -- coordinates in the base `pB`, we obtain that `1` is a multiple of `p`, contradiction.
+  replace h := pB.basis.ext_elem_iff.1 h ⟨1, hdim⟩
+  have := pB.basis_eq_pow ⟨1, hdim⟩
+  rw [hζ.integralPowerBasisOfPrimePow_gen] at this
+  simp only [PowerBasis.coe_basis, pow_one] at this
+  rw [← this]; rw [show pB.gen = pB.gen ^ (⟨1]; rw [hdim⟩ : Fin pB.dim).1 by simp]; rw [← pB.basis_eq_pow]; rw [pB.basis.repr_self_apply] at h
+  simp only [↓reduceIte, map_add, Finsupp.coe_add, Pi.add_apply] at h
+  rw [show (p : 𝓞 K) * x = (p : Int) • x by simp]; rw [← pB.basis.coord_apply]; rw [map_smul]; rw [← zsmul_one]; rw [← pB.basis.coord_apply]; rw [map_smul]; rw [show 1 = pB.gen ^ (⟨0]; rw [by lia⟩ : Fin pB.dim).1 by simp]; rw [← pB.basis_eq_pow]; rw [pB.basis.coord_apply]; rw [pB.basis.coord_apply]; rw [pB.basis.repr_self_apply] at h
+  simp only [smul_eq_mul, Fin.mk.injEq, zero_ne_one, ↓reduceIte, mul_zero, add_zero] at h
+  exact (Int.prime_iff_natAbs_prime.2 (by simp [hp.1])).not_dvd_one ⟨_, h⟩
 
 中文:
 定理 not_存在_int_prime_dvd_sub_of_prime_pow_ne_two
@@ -1148,7 +1273,28 @@ theorem not_exists_int_prime_dvd_sub_of_prime_pow_ne_two
   let pB := hζ.integralPowerBasisOfPrimePow
   have hdim : pB.dim = p ^ k * (↑p - 1) := by
     simp [integralPowerBasisOfPrimePow_dim, pB, Nat.totient_prime_pow hp.1 (Nat.zero_lt_succ k)]
-  replace hdim : 1 < pB.di
+  replace hdim : 1 < pB.dim := by
+    rw [Nat.one_lt_iff_ne_zero_and_ne_one]; rw [hdim]
+    refine ⟨by simp only [ne_eq, mul_eq_zero, NeZero.ne _, Nat.sub_eq_zero_iff_le, false_or,
+      not_le, Nat.Prime.one_lt hp.out], ne_of_gt ?_⟩
+    by_cases hk : k = 0
+    · simp only [hk, zero_add, pow_one, pow_zero, one_mul, Nat.lt_sub_iff_add_lt,
+        Nat.reduceAdd] at htwo ⊢
+      exact htwo.symm.lt_of_le hp.1.two_le
+    · exact one_lt_mul_of_lt_of_le (one_lt_pow₀ hp.1.one_lt hk)
+        (have := Nat.Prime.two_le hp.out; by lia)
+  rw [sub_eq_iff_eq_add] at h
+  -- We are assuming that `ζ = n + p * x` for some integer `n` and `x : 𝓞 K`. Looking at the
+  -- coordinates in the base `pB`, we obtain that `1` is a multiple of `p`, contradiction.
+  replace h := pB.basis.ext_elem_iff.1 h ⟨1, hdim⟩
+  have := pB.basis_eq_pow ⟨1, hdim⟩
+  rw [hζ.integralPowerBasisOfPrimePow_gen] at this
+  simp only [PowerBasis.coe_basis, pow_one] at this
+  rw [← this]; rw [show pB.gen = pB.gen ^ (⟨1]; rw [hdim⟩ : Fin pB.dim).1 by simp]; rw [← pB.basis_eq_pow]; rw [pB.basis.repr_self_apply] at h
+  simp only [↓reduceIte, map_add, Finsupp.coe_add, Pi.add_apply] at h
+  rw [show (p : 𝓞 K) * x = (p : Int) • x by simp]; rw [← pB.basis.coord_apply]; rw [map_smul]; rw [← zsmul_one]; rw [← pB.basis.coord_apply]; rw [map_smul]; rw [show 1 = pB.gen ^ (⟨0]; rw [by lia⟩ : Fin pB.dim).1 by simp]; rw [← pB.basis_eq_pow]; rw [pB.basis.coord_apply]; rw [pB.basis.coord_apply]; rw [pB.basis.repr_self_apply] at h
+  simp only [smul_eq_mul, Fin.mk.injEq, zero_ne_one, ↓reduceIte, mul_zero, add_zero] at h
+  exact (Int.prime_iff_natAbs_prime.2 (by simp [hp.1])).not_dvd_one ⟨_, h⟩
 -/
 theorem not_exists_int_prime_dvd_sub_of_prime_pow_ne_two
     [hcycl : IsCyclotomicExtension {p ^ (k + 1)} Rat K]
@@ -1247,7 +1393,7 @@ theorem finite_quotient_span_sub_one
   refine Ideal.finiteQuotientOfFreeOfNeBot _ (fun h => ?_)
   simp only [Ideal.span_singleton_eq_bot, sub_eq_zero] at h
   exact hζ.ne_one (one_lt_pow₀ hp.1.one_lt (Nat.zero_ne_add_one k).symm)
-    (RingOfIntegers.ext_i
+    (RingOfIntegers.ext_iff.1 h)
 
 中文:
 定理 finite_quotient_span_sub_one
@@ -1257,7 +1403,7 @@ theorem finite_quotient_span_sub_one
   refine Ideal.finiteQuotientOfFreeOfNeBot _ (fun h => ?_)
   simp only [Ideal.span_singleton_eq_bot, sub_eq_zero] at h
   exact hζ.ne_one (one_lt_pow₀ hp.1.one_lt (Nat.zero_ne_add_one k).symm)
-    (RingOfIntegers.ext_i
+    (RingOfIntegers.ext_iff.1 h)
 
 Depends on / 依赖: Ideal.finiteQuotientOfFreeOfNeBot, Ideal.span_singleton_eq_bot, IsCyclotomicExtension, IsCyclotomicExtension.numberField, Nat.zero_ne_add_one, NumberField, RingOfIntegers, RingOfIntegers.ext_iff, ext_iff, finiteQuotientOfFreeOfNeBot, ne_one, numberField, one_lt, span_singleton_eq_bot, sub_eq_zero, zero_ne_add_one
 -/
@@ -1311,7 +1457,18 @@ lemma toInteger_sub_one_dvd_prime
     have hζ' : ζ = -1 := by
       refine IsPrimitiveRoot.eq_neg_one_of_two_right ?_
       rwa [hk, zero_add, pow_one, hp2] at hζ
-    replace hζ' : hζ.toInteger = 
+    replace hζ' : hζ.toInteger = -1 := by
+      ext
+      exact hζ'
+    rw [hζ']; rw [hp2]
+    exact ⟨-1, by ring⟩
+  suffices (hζ.toInteger - 1) ∣ (p : Int) by simpa
+  have := IsCyclotomicExtension.numberField {p ^ (k + 1)} Rat K
+  have H := hζ.norm_toInteger_pow_sub_one_of_prime_pow_ne_two zero_le htwo
+  rw [pow_zero]; rw [pow_one] at H
+  rw [← Ideal.norm_dvd_iff]; rw [H]
+  · simp
+  · exact prime_norm_toInteger_sub_one_of_prime_pow_ne_two hζ htwo
 
 中文:
 引理 to整数eger_sub_one_dvd_prime
@@ -1323,7 +1480,18 @@ lemma toInteger_sub_one_dvd_prime
     have hζ' : ζ = -1 := by
       refine IsPrimitiveRoot.eq_neg_one_of_two_right ?_
       rwa [hk, zero_add, pow_one, hp2] at hζ
-    replace hζ' : hζ.toInteger = 
+    replace hζ' : hζ.toInteger = -1 := by
+      ext
+      exact hζ'
+    rw [hζ']; rw [hp2]
+    exact ⟨-1, by ring⟩
+  suffices (hζ.toInteger - 1) ∣ (p : Int) by simpa
+  have := IsCyclotomicExtension.numberField {p ^ (k + 1)} Rat K
+  have H := hζ.norm_toInteger_pow_sub_one_of_prime_pow_ne_two zero_le htwo
+  rw [pow_zero]; rw [pow_one] at H
+  rw [← Ideal.norm_dvd_iff]; rw [H]
+  · simp
+  · exact prime_norm_toInteger_sub_one_of_prime_pow_ne_two hζ htwo
 
 Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.numberField, IsPrimitiveRoot, IsPrimitiveRoot.eq_neg_one_of_two_right, Nat.Prime.pow_eq_iff, Nat.prime_two, add_eq_right, eq_neg_one_of_two_right, norm_toInteger_pow_sub_one_of_prime_pow_ne, numberField, pow_eq_iff, pow_one, prime_two, replace, toInteger, zero_add
 -/
@@ -1386,7 +1554,11 @@ lemma toInteger_sub_one_not_dvd_two
   replace h : hζ.toInteger - 1 ∣ (2 : Int) := by simp [h]
   rw [← Ideal.norm_dvd_iff]; rw [hζ.norm_toInteger_sub_one_of_prime_ne_two hodd] at h
 · refine hodd (prime_dvd_prime_iff_eq ?_ ?_).1 ?_
-    · exact Na
+    · exact Nat.prime_iff.1 hp.1
+    · exact Nat.prime_iff.1 Nat.prime_two
+    · exact Int.ofNat_dvd.mp h
+  · rw [hζ.norm_toInteger_sub_one_of_prime_ne_two hodd]
+    exact Nat.prime_iff_prime_int.1 hp.1
 
 中文:
 引理 to整数eger_sub_one_not_dvd_two
@@ -1396,7 +1568,11 @@ lemma toInteger_sub_one_not_dvd_two
   replace h : hζ.toInteger - 1 ∣ (2 : Int) := by simp [h]
   rw [← Ideal.norm_dvd_iff]; rw [hζ.norm_toInteger_sub_one_of_prime_ne_two hodd] at h
 · refine hodd (prime_dvd_prime_iff_eq ?_ ?_).1 ?_
-    · exact Na
+    · exact Nat.prime_iff.1 hp.1
+    · exact Nat.prime_iff.1 Nat.prime_two
+    · exact Int.ofNat_dvd.mp h
+  · rw [hζ.norm_toInteger_sub_one_of_prime_ne_two hodd]
+    exact Nat.prime_iff_prime_int.1 hp.1
 
 Depends on / 依赖: Ideal.norm_dvd_iff, Int.ofNat_dvd.mp, IsCyclotomicExtension, IsCyclotomicExtension.numberField, Nat.prime_iff, Nat.prime_iff_prime_int, Nat.prime_two, NumberField, norm_dvd_iff, norm_toInteger_sub_one_of_prime_ne_two, numberField, ofNat_dvd, prime_dvd_prime_iff_eq, prime_iff, prime_iff_prime_int, prime_two, replace, toInteger
 -/
@@ -1425,7 +1601,45 @@ theorem prime_dvd_of_dvd_norm_sub_one
   obtain ⟨μ, hC, hμ, h⟩ :
       exists μ : Rat⟮ζ⟯, exists (_ : IsCyclotomicExtension {n} Rat Rat⟮ζ⟯), exists (hμ : IsPrimitiveRoot μ n),
       norm Int (hζ.toInteger - 1) = norm Int (hμ.toInteger - 1) ^ Module.finrank Rat⟮ζ⟯ K := by
-    refine ⟨IntermediateFie
+    refine ⟨IntermediateField.AdjoinSimple.gen Rat ζ,
+      intermediateField_adjoin_isCyclotomicExtension Rat hζ, coe_submonoidClass_iff.mp hζ, ?_⟩
+    have : NumberField Rat⟮ζ⟯ := of_intermediateField _
+    rw [norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]; rw [map_sub]; rw [map_one]; rw [RingOfIntegers.map_mk]; rw [show ζ - 1 = algebraMap Rat⟮ζ⟯ K (IntermediateField.AdjoinSimple.gen Rat ζ - 1) by rfl]; rw [← norm_norm (S := Rat⟮ζ⟯)]; rw [Algebra.norm_algebraMap]; rw [map_pow]; rw [map_pow]; rw [← norm_localization Int
+      (nonZeroDivisors Int) (Sₘ := Rat⟮ζ⟯)]; rw [map_sub (algebraMap _ _)]; rw [RingOfIntegers.map_mk]; rw [map_one]
+  rw [h] at hp
+  rsuffices ⟨q, hq, t, s, ht₁, ht₂, hs⟩ :
+      exists q, q.Prime ∧ exists t s, t != 0 ∧ n = q ^ t ∧ (p : Int) ∣ (q : Int) ^ s := by
+    obtain hn | hn := lt_or_eq_of_le hn
+    · by_cases! h : exists q, q.Prime ∧ exists t, q ^ t = n
+      · obtain ⟨q, hq, t, hn'⟩ := h
+        have : Fact (Nat.Prime q) := ⟨hq⟩
+        cases t with
+        | zero => simp [← hn'] at hn
+        | succ r =>
+          rw [← hn'] at hC hμ
+          refine ⟨q, hq, r + 1, Module.finrank (Rat⟮ζ⟯) K, r.add_one_ne_zero, hn'.symm, ?_⟩
+          by_cases hq' : q = 2
+          · cases r with
+            | zero =>
+                rw [← hn']; rw [hq']; rw [zero_add]; rw [pow_one] at hn
+                exact hn.false.elim
+            | succ k =>
+                rw [hq'] at hC hμ ⊢
+                rwa [hμ.norm_toInteger_sub_one_of_eq_two_pow] at hp
+          · rwa [hμ.norm_toInteger_sub_one_of_prime_ne_two hq'] at hp
+      · rw [IsPrimitiveRoot.norm_toInteger_sub_one_eq_one hμ hn, one_pow,
+          Int.natCast_dvd_ofNat, Nat.dvd_one] at hp
+        · exact (Nat.Prime.ne_one hF.out hp).elim
+        · exact fun {p} a k => h p a k
+    · rw [← hn] at hμ hC ⊢
+      refine ⟨2, Nat.prime_two, 1, Module.finrank Rat⟮ζ⟯ K, one_ne_zero, by rw [pow_one], ?_⟩
+      rwa [hμ.norm_toInteger_sub_one_of_eq_two, neg_eq_neg_one_mul, mul_pow, IsUnit.dvd_mul_left
+        ((isUnit_pow_iff Module.finrank_pos.ne').mpr isUnit_neg_one)] at hp
+  have : p = q := by
+    rw [← Int.natCast_pow]; rw [Int.natCast_dvd_natCast] at hs
+    exact (Nat.prime_dvd_prime_iff_eq hF.out hq).mp (hF.out.dvd_of_dvd_pow hs)
+  rw [ht₂]; rw [this]
+  exact dvd_pow_self _ ht₁
 
 中文:
 定理 prime_dvd_of_dvd_norm_sub_one
@@ -1435,7 +1649,45 @@ theorem prime_dvd_of_dvd_norm_sub_one
   obtain ⟨μ, hC, hμ, h⟩ :
       exists μ : Rat⟮ζ⟯, exists (_ : IsCyclotomicExtension {n} Rat Rat⟮ζ⟯), exists (hμ : IsPrimitiveRoot μ n),
       norm Int (hζ.toInteger - 1) = norm Int (hμ.toInteger - 1) ^ Module.finrank Rat⟮ζ⟯ K := by
-    refine ⟨IntermediateFie
+    refine ⟨IntermediateField.AdjoinSimple.gen Rat ζ,
+      intermediateField_adjoin_isCyclotomicExtension Rat hζ, coe_submonoidClass_iff.mp hζ, ?_⟩
+    have : NumberField Rat⟮ζ⟯ := of_intermediateField _
+    rw [norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]; rw [map_sub]; rw [map_one]; rw [RingOfIntegers.map_mk]; rw [show ζ - 1 = algebraMap Rat⟮ζ⟯ K (IntermediateField.AdjoinSimple.gen Rat ζ - 1) by rfl]; rw [← norm_norm (S := Rat⟮ζ⟯)]; rw [Algebra.norm_algebraMap]; rw [map_pow]; rw [map_pow]; rw [← norm_localization Int
+      (nonZeroDivisors Int) (Sₘ := Rat⟮ζ⟯)]; rw [map_sub (algebraMap _ _)]; rw [RingOfIntegers.map_mk]; rw [map_one]
+  rw [h] at hp
+  rsuffices ⟨q, hq, t, s, ht₁, ht₂, hs⟩ :
+      exists q, q.Prime ∧ exists t s, t != 0 ∧ n = q ^ t ∧ (p : Int) ∣ (q : Int) ^ s := by
+    obtain hn | hn := lt_or_eq_of_le hn
+    · by_cases! h : exists q, q.Prime ∧ exists t, q ^ t = n
+      · obtain ⟨q, hq, t, hn'⟩ := h
+        have : Fact (Nat.Prime q) := ⟨hq⟩
+        cases t with
+        | zero => simp [← hn'] at hn
+        | succ r =>
+          rw [← hn'] at hC hμ
+          refine ⟨q, hq, r + 1, Module.finrank (Rat⟮ζ⟯) K, r.add_one_ne_zero, hn'.symm, ?_⟩
+          by_cases hq' : q = 2
+          · cases r with
+            | zero =>
+                rw [← hn']; rw [hq']; rw [zero_add]; rw [pow_one] at hn
+                exact hn.false.elim
+            | succ k =>
+                rw [hq'] at hC hμ ⊢
+                rwa [hμ.norm_toInteger_sub_one_of_eq_two_pow] at hp
+          · rwa [hμ.norm_toInteger_sub_one_of_prime_ne_two hq'] at hp
+      · rw [IsPrimitiveRoot.norm_toInteger_sub_one_eq_one hμ hn, one_pow,
+          Int.natCast_dvd_ofNat, Nat.dvd_one] at hp
+        · exact (Nat.Prime.ne_one hF.out hp).elim
+        · exact fun {p} a k => h p a k
+    · rw [← hn] at hμ hC ⊢
+      refine ⟨2, Nat.prime_two, 1, Module.finrank Rat⟮ζ⟯ K, one_ne_zero, by rw [pow_one], ?_⟩
+      rwa [hμ.norm_toInteger_sub_one_of_eq_two, neg_eq_neg_one_mul, mul_pow, IsUnit.dvd_mul_left
+        ((isUnit_pow_iff Module.finrank_pos.ne').mpr isUnit_neg_one)] at hp
+  have : p = q := by
+    rw [← Int.natCast_pow]; rw [Int.natCast_dvd_natCast] at hs
+    exact (Nat.prime_dvd_prime_iff_eq hF.out hq).mp (hF.out.dvd_of_dvd_pow hs)
+  rw [ht₂]; rw [this]
+  exact dvd_pow_self _ ht₁
 
 Depends on / 依赖: NeZero, NeZero.of_gt, of_gt, toInteger
 -/
@@ -1510,7 +1762,21 @@ theorem discr_prime_pow
     (-1) ^ ((p ^ k).totient / 2) * p ^ (p ^ (k - 1) * ((p - 1) * k - 1)) := by
   have hζ := IsCyclotomicExtension.zeta_spec (p ^ k) Rat K
   have : NumberField K := IsCyclotomicExtension.numberField {p ^ k} Rat K
-  let pB₁ := i
+  let pB₁ := integralPowerBasisOfPrimePow hζ
+  apply (algebraMap Int Rat).injective_int
+  rw [← NumberField.discr_eq_discr _ pB₁.basis]; rw [← Algebra.discr_localizationLocalization Int Int⁰ K]
+  convert!
+    IsCyclotomicExtension.discr_prime_pow hζ (cyclotomic.irreducible_rat (NeZero.pos _)) using 1
+  · have : pB₁.dim = (IsPrimitiveRoot.powerBasis Rat hζ).dim := by
+      rw [← PowerBasis.finrank]; rw [← PowerBasis.finrank]
+      exact RingOfIntegers.rank K
+    rw [← Algebra.discr_reindex _ _ (finCongr this)]
+    congr 1
+    ext i
+    simp_rw [Function.comp_apply, Module.Basis.localizationLocalization_apply, powerBasis_dim,
+      PowerBasis.coe_basis, pB₁, integralPowerBasisOfPrimePow_gen]
+    convert! ← ((IsPrimitiveRoot.powerBasis Rat hζ).basis_eq_pow i).symm using 1
+  · simp_rw [algebraMap_int_eq, map_mul, map_pow, map_neg, map_one, map_natCast]
 
 中文:
 定理 discr_prime_pow
@@ -1520,7 +1786,21 @@ theorem discr_prime_pow
     (-1) ^ ((p ^ k).totient / 2) * p ^ (p ^ (k - 1) * ((p - 1) * k - 1)) := by
   have hζ := IsCyclotomicExtension.zeta_spec (p ^ k) Rat K
   have : NumberField K := IsCyclotomicExtension.numberField {p ^ k} Rat K
-  let pB₁ := i
+  let pB₁ := integralPowerBasisOfPrimePow hζ
+  apply (algebraMap Int Rat).injective_int
+  rw [← NumberField.discr_eq_discr _ pB₁.basis]; rw [← Algebra.discr_localizationLocalization Int Int⁰ K]
+  convert!
+    IsCyclotomicExtension.discr_prime_pow hζ (cyclotomic.irreducible_rat (NeZero.pos _)) using 1
+  · have : pB₁.dim = (IsPrimitiveRoot.powerBasis Rat hζ).dim := by
+      rw [← PowerBasis.finrank]; rw [← PowerBasis.finrank]
+      exact RingOfIntegers.rank K
+    rw [← Algebra.discr_reindex _ _ (finCongr this)]
+    congr 1
+    ext i
+    simp_rw [Function.comp_apply, Module.Basis.localizationLocalization_apply, powerBasis_dim,
+      PowerBasis.coe_basis, pB₁, integralPowerBasisOfPrimePow_gen]
+    convert! ← ((IsPrimitiveRoot.powerBasis Rat hζ).basis_eq_pow i).symm using 1
+  · simp_rw [algebraMap_int_eq, map_mul, map_pow, map_neg, map_one, map_natCast]
 
 Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.numberField, numberField
 -/
@@ -1623,7 +1903,59 @@ theorem discr
   proof: IsCyclotomicExtension.numberField {n} Rat K
     discr K = (-1) ^ (φ n / 2) * (n ^ φ n / ∏ p in n.primeFactors, p ^ (φ n / (p - 1))) := by
   have : NumberField K := IsCyclotomicExtension.numberField {n} Rat K
-  rw [← Int.sign_mul_natAbs (NumberField.discr K)]; rw [sign_discr]; rw [nrComplexPlaces_eq_
+  rw [← Int.sign_mul_natAbs (NumberField.discr K)]; rw [sign_discr]; rw [nrComplexPlaces_eq_totient_div_two n]
+  congr
+  induction n using Nat.recOnPrimeCoprime generalizing K hn with
+  | zero => exact (neZero_zero_iff_false.mp hn).elim
+  | prime_pow p k hp =>
+    have : Fact (Nat.Prime p) := ⟨hp⟩
+    rw [discr_prime_pow p k K]
+    cases k with
+    | zero => simp
+    | succ k =>
+      simpa only [Int.reduceNeg, add_tsub_cancel_right, Int.natAbs_mul, Int.natAbs_pow,
+        IsUnit.neg_iff, isUnit_one, Int.natAbs_of_isUnit, one_pow, Int.natAbs_natCast, one_mul]
+        using! (Nat.prime_pow_pow_totient_ediv_prod hp k.zero_lt_succ).symm
+  | coprime n₁ n₂ hn₁ hn₂ h hK₁ hK₂ =>
+    have : NeZero n₁ := NeZero.of_gt hn₁
+    have : NeZero n₂ := NeZero.of_gt hn₂
+    let ζ := zeta (n₁ * n₂) Rat K
+    have hζ := zeta_spec (n₁ * n₂) Rat K
+    have hζ₁ := hζ.pow (NeZero.pos _) (a := n₂) (b := n₁) (by rw [mul_comm])
+    have := hζ₁.intermediateField_adjoin_isCyclotomicExtension Rat
+    have hζ₁' : IsPrimitiveRoot (AdjoinSimple.gen Rat (ζ ^ n₂)) n₁ :=
+      IsPrimitiveRoot.coe_submonoidClass_iff.mp hζ₁
+    replace hK₁ := @hK₁ Rat⟮ζ ^ n₂⟯ _ _ _ _ (of_intermediateField _)
+    have hζ₂ := hζ.pow (NeZero.pos _) (a := n₁) (b := n₂) rfl
+    have := hζ₂.intermediateField_adjoin_isCyclotomicExtension Rat
+    have hζ₂' : IsPrimitiveRoot (AdjoinSimple.gen Rat (ζ ^ n₁)) n₂ :=
+      IsPrimitiveRoot.coe_submonoidClass_iff.mp hζ₂
+    replace hK₂ := @hK₂ Rat⟮ζ ^ n₁⟯ _ _ _ _ (of_intermediateField _)
+    have : IsGalois Rat Rat⟮ζ ^ n₂⟯ := isGalois {n₁} Rat _
+    have h_top : Rat⟮ζ ^ n₂⟯ ⊔ Rat⟮ζ ^ n₁⟯ = ⊤ := by
+      have : IsCyclotomicExtension {n₁ * n₂} Rat (⊤ : IntermediateField Rat K) :=
+          hK.equiv _ _ _ topEquiv.symm
+      have : IsCyclotomicExtension {n₁ * n₂} Rat ↥(Rat⟮ζ ^ n₂⟯ ⊔ Rat⟮ζ ^ n₁⟯) := by
+        rw [← Nat.Coprime.lcm_eq_mul h]
+        exact isCyclotomicExtension_lcm_sup Rat K n₁ n₂ Rat⟮ζ ^ n₂⟯ Rat⟮ζ ^ n₁⟯
+      exact isCyclotomicExtension_eq {n₁ * n₂} Rat K _ _
+    have h_cpr : IsCoprime (discr Rat⟮ζ ^ n₂⟯) (discr Rat⟮ζ ^ n₁⟯) := by
+      rw [Int.isCoprime_iff_nat_coprime]; rw [hK₁]; rw [hK₂]
+      refine Coprime.coprime_div_left ?_ (prod_primeFactors_pow_totient_ediv_dvd (NeZero.pos _))
+      refine Coprime.coprime_div_right ?_ (prod_primeFactors_pow_totient_ediv_dvd (NeZero.pos _))
+      exact Coprime.pow_left _ (Coprime.pow_right _ h)
+    have h_dsj : Rat⟮ζ ^ n₂⟯.LinearDisjoint Rat⟮ζ ^ n₁⟯ :=
+      linearDisjoint_of_isGalois_isCoprime_discr _ _ _ h_cpr
+    have h_div₁ := prod_primeFactors_pow_totient_ediv_dvd n₁.pos_of_neZero
+    have h_div₂ := prod_primeFactors_pow_totient_ediv_dvd n₂.pos_of_neZero
+    rw [natAbs_discr_eq_natAbs_discr_pow_mul_natAbs_discr_pow K Rat⟮ζ ^ n₂⟯ Rat⟮ζ ^ n₁⟯ h_dsj h_top
+      (isCoprime_differentIdeal_of_isCoprime_discr _ h_cpr)]; rw [hK₁]; rw [hK₂]; rw [finrank n₁ Rat⟮ζ ^ n₂⟯]; rw [finrank n₂ Rat⟮ζ ^ n₁⟯]; rw [Nat.div_pow h_div₁]; rw [Nat.div_pow h_div₂]; rw [← Nat.mul_div_mul_comm (pow_dvd_pow_of_dvd h_div₁ n₂.totient)
+      (pow_dvd_pow_of_dvd h_div₂ n₁.totient)]; rw [primeFactors_mul (NeZero.ne _) (NeZero.ne _)]; rw [Finset.prod_union h.disjoint_primeFactors]; rw [← Finset.prod_pow]; rw [← Finset.prod_pow]
+    have {n p : Nat} (hp : p in n.primeFactors) : p - 1 ∣ n.totient :=
+      p.totient_prime (prime_of_mem_primeFactors hp) ▸ totient_dvd_of_dvd (b := n)
+ dvd_of_mem_primeFactors hp
+    simp_rw +contextual [← pow_mul, Nat.div_mul_right_comm (this _), Nat.totient_mul h]
+    rw [mul_pow]; rw [mul_comm n₂.totient]
 
 中文:
 定理 discr
@@ -1631,7 +1963,59 @@ theorem discr
   证明: IsCyclotomicExtension.numberField {n} Rat K
     discr K = (-1) ^ (φ n / 2) * (n ^ φ n / ∏ p in n.primeFactors, p ^ (φ n / (p - 1))) := by
   have : NumberField K := IsCyclotomicExtension.numberField {n} Rat K
-  rw [← Int.sign_mul_natAbs (NumberField.discr K)]; rw [sign_discr]; rw [nrComplexPlaces_eq_
+  rw [← Int.sign_mul_natAbs (NumberField.discr K)]; rw [sign_discr]; rw [nrComplexPlaces_eq_totient_div_two n]
+  congr
+  induction n using Nat.recOnPrimeCoprime generalizing K hn with
+  | zero => exact (neZero_zero_iff_false.mp hn).elim
+  | prime_pow p k hp =>
+    have : Fact (Nat.Prime p) := ⟨hp⟩
+    rw [discr_prime_pow p k K]
+    cases k with
+    | zero => simp
+    | succ k =>
+      simpa only [Int.reduceNeg, add_tsub_cancel_right, Int.natAbs_mul, Int.natAbs_pow,
+        IsUnit.neg_iff, isUnit_one, Int.natAbs_of_isUnit, one_pow, Int.natAbs_natCast, one_mul]
+        using! (Nat.prime_pow_pow_totient_ediv_prod hp k.zero_lt_succ).symm
+  | coprime n₁ n₂ hn₁ hn₂ h hK₁ hK₂ =>
+    have : NeZero n₁ := NeZero.of_gt hn₁
+    have : NeZero n₂ := NeZero.of_gt hn₂
+    let ζ := zeta (n₁ * n₂) Rat K
+    have hζ := zeta_spec (n₁ * n₂) Rat K
+    have hζ₁ := hζ.pow (NeZero.pos _) (a := n₂) (b := n₁) (by rw [mul_comm])
+    have := hζ₁.intermediateField_adjoin_isCyclotomicExtension Rat
+    have hζ₁' : IsPrimitiveRoot (AdjoinSimple.gen Rat (ζ ^ n₂)) n₁ :=
+      IsPrimitiveRoot.coe_submonoidClass_iff.mp hζ₁
+    replace hK₁ := @hK₁ Rat⟮ζ ^ n₂⟯ _ _ _ _ (of_intermediateField _)
+    have hζ₂ := hζ.pow (NeZero.pos _) (a := n₁) (b := n₂) rfl
+    have := hζ₂.intermediateField_adjoin_isCyclotomicExtension Rat
+    have hζ₂' : IsPrimitiveRoot (AdjoinSimple.gen Rat (ζ ^ n₁)) n₂ :=
+      IsPrimitiveRoot.coe_submonoidClass_iff.mp hζ₂
+    replace hK₂ := @hK₂ Rat⟮ζ ^ n₁⟯ _ _ _ _ (of_intermediateField _)
+    have : IsGalois Rat Rat⟮ζ ^ n₂⟯ := isGalois {n₁} Rat _
+    have h_top : Rat⟮ζ ^ n₂⟯ ⊔ Rat⟮ζ ^ n₁⟯ = ⊤ := by
+      have : IsCyclotomicExtension {n₁ * n₂} Rat (⊤ : IntermediateField Rat K) :=
+          hK.equiv _ _ _ topEquiv.symm
+      have : IsCyclotomicExtension {n₁ * n₂} Rat ↥(Rat⟮ζ ^ n₂⟯ ⊔ Rat⟮ζ ^ n₁⟯) := by
+        rw [← Nat.Coprime.lcm_eq_mul h]
+        exact isCyclotomicExtension_lcm_sup Rat K n₁ n₂ Rat⟮ζ ^ n₂⟯ Rat⟮ζ ^ n₁⟯
+      exact isCyclotomicExtension_eq {n₁ * n₂} Rat K _ _
+    have h_cpr : IsCoprime (discr Rat⟮ζ ^ n₂⟯) (discr Rat⟮ζ ^ n₁⟯) := by
+      rw [Int.isCoprime_iff_nat_coprime]; rw [hK₁]; rw [hK₂]
+      refine Coprime.coprime_div_left ?_ (prod_primeFactors_pow_totient_ediv_dvd (NeZero.pos _))
+      refine Coprime.coprime_div_right ?_ (prod_primeFactors_pow_totient_ediv_dvd (NeZero.pos _))
+      exact Coprime.pow_left _ (Coprime.pow_right _ h)
+    have h_dsj : Rat⟮ζ ^ n₂⟯.LinearDisjoint Rat⟮ζ ^ n₁⟯ :=
+      linearDisjoint_of_isGalois_isCoprime_discr _ _ _ h_cpr
+    have h_div₁ := prod_primeFactors_pow_totient_ediv_dvd n₁.pos_of_neZero
+    have h_div₂ := prod_primeFactors_pow_totient_ediv_dvd n₂.pos_of_neZero
+    rw [natAbs_discr_eq_natAbs_discr_pow_mul_natAbs_discr_pow K Rat⟮ζ ^ n₂⟯ Rat⟮ζ ^ n₁⟯ h_dsj h_top
+      (isCoprime_differentIdeal_of_isCoprime_discr _ h_cpr)]; rw [hK₁]; rw [hK₂]; rw [finrank n₁ Rat⟮ζ ^ n₂⟯]; rw [finrank n₂ Rat⟮ζ ^ n₁⟯]; rw [Nat.div_pow h_div₁]; rw [Nat.div_pow h_div₂]; rw [← Nat.mul_div_mul_comm (pow_dvd_pow_of_dvd h_div₁ n₂.totient)
+      (pow_dvd_pow_of_dvd h_div₂ n₁.totient)]; rw [primeFactors_mul (NeZero.ne _) (NeZero.ne _)]; rw [Finset.prod_union h.disjoint_primeFactors]; rw [← Finset.prod_pow]; rw [← Finset.prod_pow]
+    have {n p : Nat} (hp : p in n.primeFactors) : p - 1 ∣ n.totient :=
+      p.totient_prime (prime_of_mem_primeFactors hp) ▸ totient_dvd_of_dvd (b := n)
+ dvd_of_mem_primeFactors hp
+    simp_rw +contextual [← pow_mul, Nat.div_mul_right_comm (this _), Nat.totient_mul h]
+    rw [mul_pow]; rw [mul_comm n₂.totient]
 
 Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.numberField, numberField
 -/
@@ -1702,7 +2086,9 @@ theorem natAbs_discr
   proof: IsCyclotomicExtension.numberField {n} Rat K
     (NumberField.discr K).natAbs = n ^ φ n / ∏ p in n.primeFactors, p ^ (φ n / (p - 1)) := by
   have : NumberField K := IsCyclotomicExtension.numberField {n} Rat K
-  rw [discr n K]; rw [Int.natAbs_mul]; rw [Int.natAbs_pow]; rw [Int.natAbs_neg]; rw [Int.nat
+  rw [discr n K]; rw [Int.natAbs_mul]; rw [Int.natAbs_pow]; rw [Int.natAbs_neg]; rw [Int.natAbs_one]; rw [one_pow]; rw [one_mul]; rw [Int.natAbs_ediv_of_dvd]; rw [Int.natAbs_pow]; rw [Int.natAbs_natCast]; rw [Int.natAbs_natCast]
+  rw [← Nat.cast_pow]; rw [Int.natCast_dvd_natCast]
+  exact Nat.prod_primeFactors_pow_totient_ediv_dvd (NeZero.pos _)
 
 中文:
 定理 natAbs_discr
@@ -1710,7 +2096,9 @@ theorem natAbs_discr
   证明: IsCyclotomicExtension.numberField {n} Rat K
     (NumberField.discr K).natAbs = n ^ φ n / ∏ p in n.primeFactors, p ^ (φ n / (p - 1)) := by
   have : NumberField K := IsCyclotomicExtension.numberField {n} Rat K
-  rw [discr n K]; rw [Int.natAbs_mul]; rw [Int.natAbs_pow]; rw [Int.natAbs_neg]; rw [Int.nat
+  rw [discr n K]; rw [Int.natAbs_mul]; rw [Int.natAbs_pow]; rw [Int.natAbs_neg]; rw [Int.natAbs_one]; rw [one_pow]; rw [one_mul]; rw [Int.natAbs_ediv_of_dvd]; rw [Int.natAbs_pow]; rw [Int.natAbs_natCast]; rw [Int.natAbs_natCast]
+  rw [← Nat.cast_pow]; rw [Int.natCast_dvd_natCast]
+  exact Nat.prod_primeFactors_pow_totient_ediv_dvd (NeZero.pos _)
 
 Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.numberField, numberField
 -/
@@ -1733,7 +2121,23 @@ theorem adjoin_singleton_eq_top_aux
   have h_cpr : IsCoprime (NumberField.discr F₁) (NumberField.discr F₂) := by
     rw [Int.isCoprime_iff_nat_coprime]; rw [natAbs_discr n₁ F₁]; rw [natAbs_discr n₂ F₂]
     refine Coprime.coprime_div_left ?_ (prod_primeFactors_pow_totient_ediv_dvd (NeZero.pos _))
-    refine Coprime.coprime_div_right
+    refine Coprime.coprime_div_right ?_ (prod_primeFactors_pow_totient_ediv_dvd (NeZero.pos _))
+    exact Coprime.pow_left _ (Coprime.pow_right _ h)
+  have h_disj : F₁.LinearDisjoint F₂ := by
+    have : IsGalois Rat F₁ := IsCyclotomicExtension.isGalois {n₁} Rat F₁
+    apply linearDisjoint_of_isGalois_isCoprime_discr
+    exact h_cpr
+  replace hζ₁ : IsPrimitiveRoot hζ₁.toInteger n₁ := hζ₁.toInteger_isPrimitiveRoot
+  replace hζ₁ := hζ₁.map_of_injective (FaithfulSMul.algebraMap_injective (𝓞 F₁) (𝓞 K))
+  replace hζ₂ : IsPrimitiveRoot hζ₂.toInteger n₂ := hζ₂.toInteger_isPrimitiveRoot
+  replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective (𝓞 F₂) (𝓞 K))
+  rw [← IsDedekindDomain.adjoin_union_eq_top_of_isCoprime_differentialIdeal Int (𝓞 K) (𝓞 F₁)
+    (𝓞 F₂) h_disj _ _ h₁ h₂]; rw [Set.image_singleton]; rw [Set.image_singleton]; rw [Set.singleton_union]
+  · refine (IsPrimitiveRoot.adjoin_pair_eq Int hζ₁ hζ₂ (NeZero.ne _) (NeZero.ne _) ?_).symm
+    rw [Nat.Coprime.lcm_eq_mul h]
+    exact toInteger_isPrimitiveRoot hζ
+  · simp [← sup_toSubalgebra_of_left, htop]
+  · exact isCoprime_differentIdeal_of_isCoprime_discr _ h_cpr
 
 中文:
 定理 adjoin_singleton_eq_top_aux
@@ -1742,7 +2146,23 @@ theorem adjoin_singleton_eq_top_aux
   have h_cpr : IsCoprime (NumberField.discr F₁) (NumberField.discr F₂) := by
     rw [Int.isCoprime_iff_nat_coprime]; rw [natAbs_discr n₁ F₁]; rw [natAbs_discr n₂ F₂]
     refine Coprime.coprime_div_left ?_ (prod_primeFactors_pow_totient_ediv_dvd (NeZero.pos _))
-    refine Coprime.coprime_div_right
+    refine Coprime.coprime_div_right ?_ (prod_primeFactors_pow_totient_ediv_dvd (NeZero.pos _))
+    exact Coprime.pow_left _ (Coprime.pow_right _ h)
+  have h_disj : F₁.LinearDisjoint F₂ := by
+    have : IsGalois Rat F₁ := IsCyclotomicExtension.isGalois {n₁} Rat F₁
+    apply linearDisjoint_of_isGalois_isCoprime_discr
+    exact h_cpr
+  replace hζ₁ : IsPrimitiveRoot hζ₁.toInteger n₁ := hζ₁.toInteger_isPrimitiveRoot
+  replace hζ₁ := hζ₁.map_of_injective (FaithfulSMul.algebraMap_injective (𝓞 F₁) (𝓞 K))
+  replace hζ₂ : IsPrimitiveRoot hζ₂.toInteger n₂ := hζ₂.toInteger_isPrimitiveRoot
+  replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective (𝓞 F₂) (𝓞 K))
+  rw [← IsDedekindDomain.adjoin_union_eq_top_of_isCoprime_differentialIdeal Int (𝓞 K) (𝓞 F₁)
+    (𝓞 F₂) h_disj _ _ h₁ h₂]; rw [Set.image_singleton]; rw [Set.image_singleton]; rw [Set.singleton_union]
+  · refine (IsPrimitiveRoot.adjoin_pair_eq Int hζ₁ hζ₂ (NeZero.ne _) (NeZero.ne _) ?_).symm
+    rw [Nat.Coprime.lcm_eq_mul h]
+    exact toInteger_isPrimitiveRoot hζ
+  · simp [← sup_toSubalgebra_of_left, htop]
+  · exact isCoprime_differentIdeal_of_isCoprime_discr _ h_cpr
 -/
 private theorem adjoin_singleton_eq_top_aux [NumberField K] (F₁ F₂ : IntermediateField Rat K)
     {n₁ n₂ : Nat} [NeZero n₁] [NeZero n₂] [IsCyclotomicExtension {n₁} Rat F₁]
@@ -1788,7 +2208,28 @@ theorem adjoin_singleton_eq_top
   | zero => exact (neZero_zero_iff_false.mp hn).elim
   | prime_pow p k hp =>
     have : Fact (p.Prime) := ⟨hp⟩
-    rw [← hζ.integralPowerBasisOfPrimePow.adjoin_ge
+    rw [← hζ.integralPowerBasisOfPrimePow.adjoin_gen_eq_top]; rw [hζ.integralPowerBasisOfPrimePow_gen]
+  | coprime n₁ n₂ hn₁ hn₂ h hK₁ hK₂ =>
+    have : NeZero n₁ := NeZero.of_gt hn₁
+    have : NeZero n₂ := NeZero.of_gt hn₂
+    have hζ₁ := hζ.pow (NeZero.pos _) (a := n₂) (b := n₁) (by rw [mul_comm])
+    have := hζ₁.intermediateField_adjoin_isCyclotomicExtension Rat
+    replace hζ₁ : IsPrimitiveRoot (AdjoinSimple.gen Rat (ζ ^ n₂)) n₁ :=
+      IsPrimitiveRoot.coe_submonoidClass_iff.mp hζ₁
+    replace hK₁ := @hK₁ Rat⟮ζ ^ n₂⟯ _ _ _ _ (AdjoinSimple.gen _ _) hζ₁ (of_intermediateField _)
+    have hζ₂ := hζ.pow (NeZero.pos _) (a := n₁) (b := n₂) rfl
+    have := hζ₂.intermediateField_adjoin_isCyclotomicExtension Rat
+    replace hζ₂ : IsPrimitiveRoot (AdjoinSimple.gen Rat (ζ ^ n₁)) n₂ :=
+      IsPrimitiveRoot.coe_submonoidClass_iff.mp hζ₂
+    replace hK₂ := @hK₂ Rat⟮ζ ^ n₁⟯ _ _ _ _ (AdjoinSimple.gen _ _) hζ₂ (of_intermediateField _)
+    have h_top : Rat⟮ζ ^ n₂⟯ ⊔ Rat⟮ζ ^ n₁⟯ = ⊤ := by
+      have : IsCyclotomicExtension {n₁ * n₂} Rat (⊤ : IntermediateField Rat K) :=
+          hK.equiv _ _ _ topEquiv.symm
+      have : IsCyclotomicExtension {n₁ * n₂} Rat ↥(Rat⟮ζ ^ n₂⟯ ⊔ Rat⟮ζ ^ n₁⟯) := by
+        rw [← Nat.Coprime.lcm_eq_mul h]
+        exact isCyclotomicExtension_lcm_sup Rat K n₁ n₂ Rat⟮ζ ^ n₂⟯ Rat⟮ζ ^ n₁⟯
+      exact isCyclotomicExtension_eq {n₁ * n₂} Rat K _ _
+    exact adjoin_singleton_eq_top_aux K Rat⟮ζ ^ n₂⟯ Rat⟮ζ ^ n₁⟯ hζ₁ hK₁ hζ₂ hK₂ h h_top hζ
 
 中文:
 定理 adjoin_singleton_eq_top
@@ -1799,7 +2240,28 @@ theorem adjoin_singleton_eq_top
   | zero => exact (neZero_zero_iff_false.mp hn).elim
   | prime_pow p k hp =>
     have : Fact (p.Prime) := ⟨hp⟩
-    rw [← hζ.integralPowerBasisOfPrimePow.adjoin_ge
+    rw [← hζ.integralPowerBasisOfPrimePow.adjoin_gen_eq_top]; rw [hζ.integralPowerBasisOfPrimePow_gen]
+  | coprime n₁ n₂ hn₁ hn₂ h hK₁ hK₂ =>
+    have : NeZero n₁ := NeZero.of_gt hn₁
+    have : NeZero n₂ := NeZero.of_gt hn₂
+    have hζ₁ := hζ.pow (NeZero.pos _) (a := n₂) (b := n₁) (by rw [mul_comm])
+    have := hζ₁.intermediateField_adjoin_isCyclotomicExtension Rat
+    replace hζ₁ : IsPrimitiveRoot (AdjoinSimple.gen Rat (ζ ^ n₂)) n₁ :=
+      IsPrimitiveRoot.coe_submonoidClass_iff.mp hζ₁
+    replace hK₁ := @hK₁ Rat⟮ζ ^ n₂⟯ _ _ _ _ (AdjoinSimple.gen _ _) hζ₁ (of_intermediateField _)
+    have hζ₂ := hζ.pow (NeZero.pos _) (a := n₁) (b := n₂) rfl
+    have := hζ₂.intermediateField_adjoin_isCyclotomicExtension Rat
+    replace hζ₂ : IsPrimitiveRoot (AdjoinSimple.gen Rat (ζ ^ n₁)) n₂ :=
+      IsPrimitiveRoot.coe_submonoidClass_iff.mp hζ₂
+    replace hK₂ := @hK₂ Rat⟮ζ ^ n₁⟯ _ _ _ _ (AdjoinSimple.gen _ _) hζ₂ (of_intermediateField _)
+    have h_top : Rat⟮ζ ^ n₂⟯ ⊔ Rat⟮ζ ^ n₁⟯ = ⊤ := by
+      have : IsCyclotomicExtension {n₁ * n₂} Rat (⊤ : IntermediateField Rat K) :=
+          hK.equiv _ _ _ topEquiv.symm
+      have : IsCyclotomicExtension {n₁ * n₂} Rat ↥(Rat⟮ζ ^ n₂⟯ ⊔ Rat⟮ζ ^ n₁⟯) := by
+        rw [← Nat.Coprime.lcm_eq_mul h]
+        exact isCyclotomicExtension_lcm_sup Rat K n₁ n₂ Rat⟮ζ ^ n₂⟯ Rat⟮ζ ^ n₁⟯
+      exact isCyclotomicExtension_eq {n₁ * n₂} Rat K _ _
+    exact adjoin_singleton_eq_top_aux K Rat⟮ζ ^ n₂⟯ Rat⟮ζ ^ n₁⟯ hζ₁ hK₁ hζ₂ hK₂ h h_top hζ
 
 Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.numberField, Nat.recOnPrimeCoprime, NeZero, NeZero.of_gt, NeZero.pos, NumberField, adjoin_gen_eq_top, coprime, generalizing, integralPowerBasisOfPrimePow, integralPowerBasisOfPrimePow.adjoin_gen_eq_top, integralPowerBasisOfPrimePow_gen, neZero_zero_iff_false, neZero_zero_iff_false.mp, numberField, of_gt, p.Prime, prime_pow, recOnPrimeCoprime
 -/
@@ -1849,7 +2311,8 @@ theorem isIntegralClosure_adjoin_singleton
     have := congr_arg (Subalgebra.map (IsScalarTower.toAlgHom Int (𝓞 K) K))
       (adjoin_singleton_eq_top hζ)
     simp only [AlgHom.map_adjoin_singleton, IsScalarTower.coe_toAlgHom', RingOfIntegers.map_mk,
-      Algebra.ma
+      Algebra.map_top] at this
+    simp [IsIntegralClosure.isIntegral_iff (A := 𝓞 K), this, ← SetLike.mem_coe]
 
 中文:
 定理 is整数egralClosure_adjoin_singleton
@@ -1861,7 +2324,8 @@ theorem isIntegralClosure_adjoin_singleton
     have := congr_arg (Subalgebra.map (IsScalarTower.toAlgHom Int (𝓞 K) K))
       (adjoin_singleton_eq_top hζ)
     simp only [AlgHom.map_adjoin_singleton, IsScalarTower.coe_toAlgHom', RingOfIntegers.map_mk,
-      Algebra.ma
+      Algebra.map_top] at this
+    simp [IsIntegralClosure.isIntegral_iff (A := 𝓞 K), this, ← SetLike.mem_coe]
 
 Depends on / 依赖: AlgHom, AlgHom.map_adjoin_singleton, Algebra, Algebra.map_top, FaithfulSMul, FaithfulSMul.algebraMap_injective, IsIntegralClosure, IsIntegralClosure.isIntegral_iff, IsScalarTower, IsScalarTower.coe_toAlgHom, IsScalarTower.toAlgHom, RingOfIntegers, RingOfIntegers.map_mk, SetLike, SetLike.mem_coe, Subalgebra, Subalgebra.map, adjoin_singleton_eq_top, algebraMap_injective, coe_toAlgHom
 -/
@@ -1890,7 +2354,10 @@ theorem cyclotomicRing_isIntegralClosure
   refine ⟨IsFractionRing.injective _ _, fun {x} => ⟨fun h => ⟨⟨x, ?_⟩, rfl⟩, ?_⟩⟩
   · obtain ⟨y, rfl⟩ := (isIntegralClosure_adjoin_singleton hζ).isIntegral_iff.1 h
     refine adjoin_mono ?_ y.2
-    simp only [Set.singleton_subset_iff, Set.mem_o
+    simp only [Set.singleton_subset_iff, Set.mem_ofPred_eq]
+    exact hζ.pow_eq_one
+  · rintro ⟨y, rfl⟩
+    exact IsIntegral.algebraMap ((IsCyclotomicExtension.integral {n} Int _).isIntegral _)
 
 中文:
 定理 cyclotomicRing_is整数egralClosure
@@ -1899,7 +2366,10 @@ theorem cyclotomicRing_isIntegralClosure
   refine ⟨IsFractionRing.injective _ _, fun {x} => ⟨fun h => ⟨⟨x, ?_⟩, rfl⟩, ?_⟩⟩
   · obtain ⟨y, rfl⟩ := (isIntegralClosure_adjoin_singleton hζ).isIntegral_iff.1 h
     refine adjoin_mono ?_ y.2
-    simp only [Set.singleton_subset_iff, Set.mem_o
+    simp only [Set.singleton_subset_iff, Set.mem_ofPred_eq]
+    exact hζ.pow_eq_one
+  · rintro ⟨y, rfl⟩
+    exact IsIntegral.algebraMap ((IsCyclotomicExtension.integral {n} Int _).isIntegral _)
 
 Depends on / 依赖: CyclotomicField, IsCyclotomicExtension, IsCyclotomicExtension.integral, IsFractionRing, IsFractionRing.injective, IsIntegral, IsIntegral.algebraMap, Set.mem_ofPred_eq, Set.singleton_subset_iff, adjoin_mono, algebraMap, injective, integral, isIntegral, isIntegralClosure_adjoin_singleton, isIntegral_iff, mem_ofPred_eq, pow_eq_one, singleton_subset_iff, zeta_spec
 -/
@@ -2054,7 +2524,7 @@ definition subOneIntegralPowerBasis
     (RingOfIntegers.isIntegral ⟨ζ- 1, (hζ.isIntegral (NeZero.pos _)).sub isIntegral_one⟩) (by
     refine hζ.integralPowerBasis.adjoin_eq_top_of_gen_mem_adjoin ?_
     convert! Subalgebra.add_mem _ (self_mem_adjoin_singleton Int _) (Subalgebra.one_mem _)
-    simp [RingOfInteg
+    simp [RingOfIntegers.ext_iff, integralPowerBasis_gen, toInteger])
 
 中文:
 定义 subOne整数egralPowerBasis
@@ -2063,7 +2533,7 @@ definition subOneIntegralPowerBasis
     (RingOfIntegers.isIntegral ⟨ζ- 1, (hζ.isIntegral (NeZero.pos _)).sub isIntegral_one⟩) (by
     refine hζ.integralPowerBasis.adjoin_eq_top_of_gen_mem_adjoin ?_
     convert! Subalgebra.add_mem _ (self_mem_adjoin_singleton Int _) (Subalgebra.one_mem _)
-    simp [RingOfInteg
+    simp [RingOfIntegers.ext_iff, integralPowerBasis_gen, toInteger])
 
 Depends on / 依赖: NeZero, NeZero.pos, PowerBasis, PowerBasis.ofAdjoinEqTop, RingOfIntegers, RingOfIntegers.ext_iff, RingOfIntegers.isIntegral, Subalgebra, Subalgebra.add_mem, Subalgebra.one_mem, add_mem, adjoin_eq_top_of_gen_mem_adjoin, convert, ext_iff, integralPowerBasis, integralPowerBasis.adjoin_eq_top_of_gen_mem_adjoin, integralPowerBasis_gen, isIntegral, isIntegral_one, ofAdjoinEqTop
 -/
@@ -2122,7 +2592,8 @@ theorem NumberField.Units.dvd_torsionOrder_of_isPrimitiveRoot
   · rw [Subgroup.orderOf_mk]
     exact hζ.eq_orderOf
   · refine (CommGroup.mem_torsion _).mpr ⟨n, NeZero.pos n, ?_⟩
-    rw [isPeriodicPt_mul_i
+    rw [isPeriodicPt_mul_iff_pow_eq_one]
+    exact hζ.pow_eq_one
 
 中文:
 定理 数域.单位群.dvd_torsionOrder_of_isPrimitiveRoot
@@ -2133,7 +2604,8 @@ theorem NumberField.Units.dvd_torsionOrder_of_isPrimitiveRoot
   · rw [Subgroup.orderOf_mk]
     exact hζ.eq_orderOf
   · refine (CommGroup.mem_torsion _).mpr ⟨n, NeZero.pos n, ?_⟩
-    rw [isPeriodicPt_mul_i
+    rw [isPeriodicPt_mul_iff_pow_eq_one]
+    exact hζ.pow_eq_one
 
 Depends on / 依赖: CommGroup, CommGroup.mem_torsion, NeZero, NeZero.ne, NeZero.pos, Subgroup, Subgroup.orderOf_mk, convert, eq_orderOf, isPeriodicPt_mul_iff_pow_eq_one, isUnit, isUnit_unit, mem_torsion, orderOf_dvd_natCard, orderOf_mk, pow_eq_one, replace, toInteger_isPrimitiveRoot, torsion
 -/
@@ -2158,7 +2630,32 @@ theorem IsCyclotomicExtension.Rat.torsionOrder_eq
   -- We first prove that `K` contains a primitive root of order `torsionOrder K`
   obtain ⟨μ, hμ⟩ : exists μ : torsion K, orderOf μ = torsionOrder K := by
     exact IsCyclic.exists_ofOrder_eq_natCard
-  rw [← IsPrimitiveRoot.iff_orderOf]; rw [← IsPrimitiveRoot.coe_submono
+  rw [← IsPrimitiveRoot.iff_orderOf]; rw [← IsPrimitiveRoot.coe_submonoidClass_iff]; rw [← IsPrimitiveRoot.coe_units_iff] at hμ
+  replace hμ := hμ.map_of_injective (FaithfulSMul.algebraMap_injective (𝓞 K) K)
+  -- Thus, `K` contains a primitive root of order `l = lcm (n, torsionOrder K)`.
+  have h := hζ.pow_mul_pow_lcm hμ (NeZero.ne _) (torsionOrder_ne_zero K)
+  have : NeZero (n.lcm (torsionOrder K)) :=
+NeZero.of_pos Nat.lcm_pos_iff.mpr ⟨NeZero.pos n, torsionOrder_pos K⟩
+  -- and therefore `K` is the `l`-th cyclotomic field
+  have : IsCyclotomicExtension {n.lcm (torsionOrder K)} Rat K := by
+    have := hK.union_of_isPrimitiveRoot _ _ _ h
+    rwa [Set.union_comm, ← IsCyclotomicExtension.iff_union_of_dvd] at this
+    exact ⟨n.lcm (torsionOrder K), by simp, NeZero.ne _, Nat.dvd_lcm_left _ _⟩
+  -- We deduce the identity `φ(n) = φ(lcm (n, torsionOrder K))`.
+have h_main := (IsCyclotomicExtension.Rat.finrank n K).symm.trans
+    (IsCyclotomicExtension.Rat.finrank (n.lcm (torsionOrder K)) K)
+  obtain hn | hn := Nat.even_or_odd n
+  · rw [if_pos hn]
+    apply dvd_antisymm
+    · have := hn.eq_of_totient_eq_totient (Nat.dvd_lcm_left _ _) h_main
+      rwa [eq_comm, Nat.lcm_eq_left_iff_dvd] at this
+    · exact dvd_torsionOrder_of_isPrimitiveRoot hζ
+  · rw [if_neg (Nat.not_even_iff_odd.mpr hn)]
+    have := (Nat.eq_or_eq_of_totient_eq_totient (Nat.dvd_lcm_left _ _) h_main).resolve_left ?_
+    · rw [this, eq_comm, Nat.lcm_eq_right_iff_dvd]
+      exact dvd_torsionOrder_of_isPrimitiveRoot hζ
+    · rw [eq_comm, Nat.lcm_eq_left_iff_dvd]
+      exact fun h => Nat.not_even_iff_odd.mpr (Odd.of_dvd_nat hn h) (even_torsionOrder K)
 
 中文:
 定理 是CyclotomicExtension.有理数.torsionOrder_eq
@@ -2168,7 +2665,32 @@ theorem IsCyclotomicExtension.Rat.torsionOrder_eq
   -- We first prove that `K` contains a primitive root of order `torsionOrder K`
   obtain ⟨μ, hμ⟩ : exists μ : torsion K, orderOf μ = torsionOrder K := by
     exact IsCyclic.exists_ofOrder_eq_natCard
-  rw [← IsPrimitiveRoot.iff_orderOf]; rw [← IsPrimitiveRoot.coe_submono
+  rw [← IsPrimitiveRoot.iff_orderOf]; rw [← IsPrimitiveRoot.coe_submonoidClass_iff]; rw [← IsPrimitiveRoot.coe_units_iff] at hμ
+  replace hμ := hμ.map_of_injective (FaithfulSMul.algebraMap_injective (𝓞 K) K)
+  -- Thus, `K` contains a primitive root of order `l = lcm (n, torsionOrder K)`.
+  have h := hζ.pow_mul_pow_lcm hμ (NeZero.ne _) (torsionOrder_ne_zero K)
+  have : NeZero (n.lcm (torsionOrder K)) :=
+NeZero.of_pos Nat.lcm_pos_iff.mpr ⟨NeZero.pos n, torsionOrder_pos K⟩
+  -- and therefore `K` is the `l`-th cyclotomic field
+  have : IsCyclotomicExtension {n.lcm (torsionOrder K)} Rat K := by
+    have := hK.union_of_isPrimitiveRoot _ _ _ h
+    rwa [Set.union_comm, ← IsCyclotomicExtension.iff_union_of_dvd] at this
+    exact ⟨n.lcm (torsionOrder K), by simp, NeZero.ne _, Nat.dvd_lcm_left _ _⟩
+  -- We deduce the identity `φ(n) = φ(lcm (n, torsionOrder K))`.
+have h_main := (IsCyclotomicExtension.Rat.finrank n K).symm.trans
+    (IsCyclotomicExtension.Rat.finrank (n.lcm (torsionOrder K)) K)
+  obtain hn | hn := Nat.even_or_odd n
+  · rw [if_pos hn]
+    apply dvd_antisymm
+    · have := hn.eq_of_totient_eq_totient (Nat.dvd_lcm_left _ _) h_main
+      rwa [eq_comm, Nat.lcm_eq_left_iff_dvd] at this
+    · exact dvd_torsionOrder_of_isPrimitiveRoot hζ
+  · rw [if_neg (Nat.not_even_iff_odd.mpr hn)]
+    have := (Nat.eq_or_eq_of_totient_eq_totient (Nat.dvd_lcm_left _ _) h_main).resolve_left ?_
+    · rw [this, eq_comm, Nat.lcm_eq_right_iff_dvd]
+      exact dvd_torsionOrder_of_isPrimitiveRoot hζ
+    · rw [eq_comm, Nat.lcm_eq_left_iff_dvd]
+      exact fun h => Nat.not_even_iff_odd.mpr (Odd.of_dvd_nat hn h) (even_torsionOrder K)
 
 Depends on / 依赖: hK.zeta_spec, zeta_spec
 -/

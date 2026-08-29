@@ -126,7 +126,8 @@ definition componentwiseDiagram
   map {j k} f := (F.map f.unop).c.app _ ≫
     (F.obj (unop k)).presheaf.map (eqToHom (by rw [← colimit.w F f.unop, comp_base]; rfl))
   map_comp {i j k} f g := by
-    simp only [assoc, CategoryTheory.NatTrans.naturalit
+    simp only [assoc, CategoryTheory.NatTrans.naturality_assoc]
+    simp
 
 中文:
 定义 componentwiseDiagram
@@ -135,7 +136,8 @@ definition componentwiseDiagram
   map {j k} f := (F.map f.unop).c.app _ ≫
     (F.obj (unop k)).presheaf.map (eqToHom (by rw [← colimit.w F f.unop, comp_base]; rfl))
   map_comp {i j k} f g := by
-    simp only [assoc, CategoryTheory.NatTrans.naturalit
+    simp only [assoc, CategoryTheory.NatTrans.naturality_assoc]
+    simp
 
 Depends on / 依赖: F.obj, Opens.map, colimit, presheaf, presheaf.obj
 -/
@@ -167,7 +169,31 @@ definition pushforwardDiagramToColimit
   map {j j'} f :=
     ((pushforward C (colimit.ι (F ⋙ PresheafedSpace.forget C) j')).map (F.map f).c ≫
       (Pushforward.comp ((F ⋙ PresheafedSpace.forget C).map f)
-        (colimit.ι (F ⋙ PresheafedSpace.forget C) j') (F.obj j).
+        (colimit.ι (F ⋙ PresheafedSpace.forget C) j') (F.obj j).presheaf).inv ≫
+      (pushforwardEq (colimit.w (F ⋙ PresheafedSpace.forget C) f) (F.obj j).presheaf).hom).op
+  map_id j := by
+    apply (opEquiv _ _).injective
+    refine NatTrans.ext (funext fun U => ?_)
+    induction U with
+    | op U =>
+      simp [opEquiv]
+      rfl
+  map_comp {j₁ j₂ j₃} f g := by
+    apply (opEquiv _ _).injective
+    refine NatTrans.ext (funext fun U => ?_)
+    dsimp [opEquiv]
+    have :
+      op ((Opens.map (F.map g).base).obj
+          ((Opens.map (colimit.ι (F ⋙ forget C) j₃)).obj U.unop)) =
+        op ((Opens.map (colimit.ι (F ⋙ PresheafedSpace.forget C) j₂)).obj (unop U)) := by
+      apply unop_injective
+      rw [← Opens.map_comp_obj]
+      congr
+      exact colimit.w (F ⋙ PresheafedSpace.forget C) g
+    simp only [map_comp_c_app, pushforward_obj_obj, pushforward_map_app, comp_base,
+      pushforwardEq_hom_app, op_obj, Opens.map_comp_obj, id_comp, assoc, eqToHom_map_comp,
+      NatTrans.naturality_assoc, pushforward_obj_map, eqToHom_unop]
+    simp [NatTrans.congr (α := (F.map f).c) this]
 
 中文:
 定义 pushforwardDiagramToColimit
@@ -176,7 +202,31 @@ definition pushforwardDiagramToColimit
   map {j j'} f :=
     ((pushforward C (colimit.ι (F ⋙ PresheafedSpace.forget C) j')).map (F.map f).c ≫
       (Pushforward.comp ((F ⋙ PresheafedSpace.forget C).map f)
-        (colimit.ι (F ⋙ PresheafedSpace.forget C) j') (F.obj j).
+        (colimit.ι (F ⋙ PresheafedSpace.forget C) j') (F.obj j).presheaf).inv ≫
+      (pushforwardEq (colimit.w (F ⋙ PresheafedSpace.forget C) f) (F.obj j).presheaf).hom).op
+  map_id j := by
+    apply (opEquiv _ _).injective
+    refine NatTrans.ext (funext fun U => ?_)
+    induction U with
+    | op U =>
+      simp [opEquiv]
+      rfl
+  map_comp {j₁ j₂ j₃} f g := by
+    apply (opEquiv _ _).injective
+    refine NatTrans.ext (funext fun U => ?_)
+    dsimp [opEquiv]
+    have :
+      op ((Opens.map (F.map g).base).obj
+          ((Opens.map (colimit.ι (F ⋙ forget C) j₃)).obj U.unop)) =
+        op ((Opens.map (colimit.ι (F ⋙ PresheafedSpace.forget C) j₂)).obj (unop U)) := by
+      apply unop_injective
+      rw [← Opens.map_comp_obj]
+      congr
+      exact colimit.w (F ⋙ PresheafedSpace.forget C) g
+    simp only [map_comp_c_app, pushforward_obj_obj, pushforward_map_app, comp_base,
+      pushforwardEq_hom_app, op_obj, Opens.map_comp_obj, id_comp, assoc, eqToHom_map_comp,
+      NatTrans.naturality_assoc, pushforward_obj_map, eqToHom_unop]
+    simp [NatTrans.congr (α := (F.map f).c) this]
 
 Depends on / 依赖: F.obj, PresheafedSpace, PresheafedSpace.forget, colimit, forget, presheaf
 -/
@@ -300,7 +350,7 @@ definition colimitCocone
         · ext x
           exact colimit.w_apply (F ⋙ PresheafedSpace.forget C) f x
         · ext ⟨⟩
-          simp
+          simp [← congr_arg NatTrans.app (limit.w (pushforwardDiagramToColimit F).leftOp f.op)] }
 
 中文:
 定义 colimitCocone
@@ -315,7 +365,7 @@ definition colimitCocone
         · ext x
           exact colimit.w_apply (F ⋙ PresheafedSpace.forget C) f x
         · ext ⟨⟩
-          simp
+          simp [← congr_arg NatTrans.app (limit.w (pushforwardDiagramToColimit F).leftOp f.op)] }
 
 Depends on / 依赖: colimit
 -/
@@ -353,7 +403,21 @@ definition descCApp
               naturality := fun j j' f => ?_ } } ≫
       (limitObjIsoLimitCompEvaluation _ _).inv
   -- We still need to construct the `app` and `naturality'` fields omitted above.
-  · ref
+  · refine (s.ι.app (unop j)).c.app U ≫ (F.obj (unop j)).presheaf.map (eqToHom ?_)
+    dsimp
+    rw [← Opens.map_comp_obj]
+    simp
+  · dsimp
+    rw [PresheafedSpace.congr_app (s.w f.unop).symm U]
+    have w :=
+      Functor.congr_obj
+        (congr_arg Opens.map (colimit.ι_desc ((PresheafedSpace.forget C).mapCocone s) (unop j)))
+        (unop U)
+    simp only [Opens.map_comp_obj_unop] at w
+    replace w := congr_arg op w
+    have w' := NatTrans.congr (F.map f.unop).c w
+    rw [w']
+    simp
 
 中文:
 定义 descCApp
@@ -367,7 +431,21 @@ definition descCApp
               naturality := fun j j' f => ?_ } } ≫
       (limitObjIsoLimitCompEvaluation _ _).inv
   -- We still need to construct the `app` and `naturality'` fields omitted above.
-  · ref
+  · refine (s.ι.app (unop j)).c.app U ≫ (F.obj (unop j)).presheaf.map (eqToHom ?_)
+    dsimp
+    rw [← Opens.map_comp_obj]
+    simp
+  · dsimp
+    rw [PresheafedSpace.congr_app (s.w f.unop).symm U]
+    have w :=
+      Functor.congr_obj
+        (congr_arg Opens.map (colimit.ι_desc ((PresheafedSpace.forget C).mapCocone s) (unop j)))
+        (unop U)
+    simp only [Opens.map_comp_obj_unop] at w
+    replace w := congr_arg op w
+    have w' := NatTrans.congr (F.map f.unop).c w
+    rw [w']
+    simp
 
 Depends on / 依赖: limit.lift, limitObjIsoLimitCompEvaluation, naturality, presheaf, s.pt.presheaf.obj
 -/
@@ -483,7 +561,9 @@ theorem desc_fac
   -- but this has to be expanded a bit
   ext U
   · simp [desc]
-  · simp only [op_obj, desc, descCApp, Presheaf.comp_app, comp_c_app, colim
+  · simp only [op_obj, desc, descCApp, Presheaf.comp_app, comp_c_app, colimitCocone_ι_app_c, assoc]
+    rw [limitObjIsoLimitCompEvaluation_inv_π_app_assoc]
+    simp
 
 中文:
 定理 desc_fac
@@ -494,7 +574,9 @@ theorem desc_fac
   -- but this has to be expanded a bit
   ext U
   · simp [desc]
-  · simp only [op_obj, desc, descCApp, Presheaf.comp_app, comp_c_app, colim
+  · simp only [op_obj, desc, descCApp, Presheaf.comp_app, comp_c_app, colimitCocone_ι_app_c, assoc]
+    rw [limitObjIsoLimitCompEvaluation_inv_π_app_assoc]
+    simp
 -/
 theorem desc_fac (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) (j : J) :
     (colimitCocone F).ι.app j ≫ desc F s = s.ι.app j := by
@@ -527,7 +609,18 @@ definition colimitCoconeIsColimit
       m.base =
         colimit.desc (F ⋙ PresheafedSpace.forget C) ((PresheafedSpace.forget C).mapCocone s) := by
       dsimp
-      -- `colimit.
+      -- `colimit.hom_ext` used to be automatically applied by `ext` before https://github.com/leanprover-community/mathlib4/pull/21302
+      apply colimit.hom_ext fun j => ?_
+      ext
+      rw [colimit.ι_desc]; rw [mapCocone_ι_app]; rw [← w j]
+      simp
+    ext : 1
+    · exact t
+    · refine NatTrans.ext (funext fun U => limit_obj_ext fun j => ?_)
+      simp [desc, descCApp,
+        PresheafedSpace.congr_app (w (unop j)).symm U,
+        NatTrans.congr (limit.π (pushforwardDiagramToColimit F).leftOp j)
+        (congr_arg op (Functor.congr_obj (congr_arg Opens.map t) (unop U)))]
 
 中文:
 定义 colimitCoconeIsColimit
@@ -540,7 +633,18 @@ definition colimitCoconeIsColimit
       m.base =
         colimit.desc (F ⋙ PresheafedSpace.forget C) ((PresheafedSpace.forget C).mapCocone s) := by
       dsimp
-      -- `colimit.
+      -- `colimit.hom_ext` used to be automatically applied by `ext` before https://github.com/leanprover-community/mathlib4/pull/21302
+      apply colimit.hom_ext fun j => ?_
+      ext
+      rw [colimit.ι_desc]; rw [mapCocone_ι_app]; rw [← w j]
+      simp
+    ext : 1
+    · exact t
+    · refine NatTrans.ext (funext fun U => limit_obj_ext fun j => ?_)
+      simp [desc, descCApp,
+        PresheafedSpace.congr_app (w (unop j)).symm U,
+        NatTrans.congr (limit.π (pushforwardDiagramToColimit F).leftOp j)
+        (congr_arg op (Functor.congr_obj (congr_arg Opens.map t) (unop U)))]
 -/
 def colimitCoconeIsColimit (F : J ⥤ PresheafedSpace.{_, _, v} C) :
     IsColimit (colimitCocone F) where
@@ -674,7 +778,21 @@ definition colimitPresheafObjIsoComponentwiseLimit
   refine (limitObjIsoLimitCompEvaluation _ _).trans (Limits.lim.mapIso ?_)
   fapply NatIso.ofComponents
   · intro X
-    refine (F.obj (unop X)).presheaf.mapIso (eqToIso
+    refine (F.obj (unop X)).presheaf.mapIso (eqToIso ?_)
+    simp only [Functor.op_obj, op_inj_iff, Opens.map_coe, SetLike.ext'_iff,
+      Set.preimage_preimage]
+    refine congr_arg (Set.preimage · U.1) (funext fun x => ?_)
+    simp only [colimitCocone, colimit, ← TopCat.comp_app]
+    congr
+    exact ι_preservesColimitIso_inv (forget C) F (unop X)
+  · intro X Y f
+    change ((F.map f.unop).c.app _ ≫ _ ≫ _) ≫ (F.obj (unop Y)).presheaf.map _ = _ ≫ _
+    rw [TopCat.Presheaf.Pushforward.comp_inv_app]
+    erw [Category.id_comp]
+    rw [Category.assoc]
+    erw [← (F.obj (unop Y)).presheaf.map_comp, (F.map f.unop).c.naturality_assoc,
+      ← (F.obj (unop Y)).presheaf.map_comp]
+    rfl
 
 中文:
 定义 colimitPresheafObjIsoComponentwiseLimit
@@ -687,7 +805,21 @@ definition colimitPresheafObjIsoComponentwiseLimit
   refine (limitObjIsoLimitCompEvaluation _ _).trans (Limits.lim.mapIso ?_)
   fapply NatIso.ofComponents
   · intro X
-    refine (F.obj (unop X)).presheaf.mapIso (eqToIso
+    refine (F.obj (unop X)).presheaf.mapIso (eqToIso ?_)
+    simp only [Functor.op_obj, op_inj_iff, Opens.map_coe, SetLike.ext'_iff,
+      Set.preimage_preimage]
+    refine congr_arg (Set.preimage · U.1) (funext fun x => ?_)
+    simp only [colimitCocone, colimit, ← TopCat.comp_app]
+    congr
+    exact ι_preservesColimitIso_inv (forget C) F (unop X)
+  · intro X Y f
+    change ((F.map f.unop).c.app _ ≫ _ ≫ _) ≫ (F.obj (unop Y)).presheaf.map _ = _ ≫ _
+    rw [TopCat.Presheaf.Pushforward.comp_inv_app]
+    erw [Category.id_comp]
+    rw [Category.assoc]
+    erw [← (F.obj (unop Y)).presheaf.map_comp, (F.map f.unop).c.naturality_assoc,
+      ← (F.obj (unop Y)).presheaf.map_comp]
+    rfl
 
 Depends on / 依赖: F.obj, Functor, Functor.op_obj, Limits, Limits.lim.mapIso, NatIso, NatIso.ofComponents, Opens.map_coe, Set.preimage, Set.preimage_preimage, SetLike, SetLike.ext, TopCat, TopCat.comp_app, _iff, colimit, colimit.isoColimitCocone, colimitCocone, colimitCoconeIsColimit, comp_app
 -/
@@ -730,7 +862,8 @@ theorem colimitPresheafObjIsoComponentwiseLimit_inv_ι_app
   delta colimitPresheafObjIsoComponentwiseLimit
   rw [Iso.trans_inv]; rw [Iso.trans_inv]; rw [Iso.app_inv]; rw [sheafIsoOfIso_inv]; rw [pushforwardToOfIso_app]; rw [congr_app (Iso.symm_inv _)]
   dsimp
-  rw [map_id]; rw [comp_id]; rw [assoc]; rw [assoc]; rw [assoc]; rw [NatTrans.naturality]; rw [←
+  rw [map_id]; rw [comp_id]; rw [assoc]; rw [assoc]; rw [assoc]; rw [NatTrans.naturality]; rw [← comp_c_app_assoc]; rw [congr_app (colimit.isoColimitCocone_ι_hom _ _)]; rw [assoc]; rw [colimitCocone_ι_app_c]; rw [limitObjIsoLimitCompEvaluation_inv_π_app_assoc]; rw [limMap_π_assoc]
+  simp
 
 中文:
 定理 colimitPresheafObjIsoComponentwiseLimit_inv_ι_app
@@ -739,7 +872,8 @@ theorem colimitPresheafObjIsoComponentwiseLimit_inv_ι_app
   delta colimitPresheafObjIsoComponentwiseLimit
   rw [Iso.trans_inv]; rw [Iso.trans_inv]; rw [Iso.app_inv]; rw [sheafIsoOfIso_inv]; rw [pushforwardToOfIso_app]; rw [congr_app (Iso.symm_inv _)]
   dsimp
-  rw [map_id]; rw [comp_id]; rw [assoc]; rw [assoc]; rw [assoc]; rw [NatTrans.naturality]; rw [←
+  rw [map_id]; rw [comp_id]; rw [assoc]; rw [assoc]; rw [assoc]; rw [NatTrans.naturality]; rw [← comp_c_app_assoc]; rw [congr_app (colimit.isoColimitCocone_ι_hom _ _)]; rw [assoc]; rw [colimitCocone_ι_app_c]; rw [limitObjIsoLimitCompEvaluation_inv_π_app_assoc]; rw [limMap_π_assoc]
+  simp
 
 Depends on / 依赖: Iso.app_inv, Iso.symm_inv, Iso.trans_inv, NatTrans, NatTrans.naturality, app_inv, colimit, colimit.isoColimitCocone_, colimitPresheafObjIsoComponentwiseLimit, comp_c_app_assoc, comp_id, congr_app, map_id, naturality, pushforwardToOfIso_app, sheafIsoOfIso_inv, symm_inv, trans_inv
 -/

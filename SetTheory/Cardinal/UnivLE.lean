@@ -33,7 +33,9 @@ theorem univLE_iff_cardinal_le
   refine ⟨fun ⟨α, le⟩ => ?_, fun h => ?_⟩
   · rw [univ_umax.{v, u}, ← lift_le.{u + 1}, lift_univ, lift_lift] at le
     exact le.trans_lt (lift_lt_univ'.{u, v + 1} #α)
-  · obtain ⟨⟨
+  · obtain ⟨⟨α⟩, h⟩ := lt_univ'.mp h; use α
+    rw [univ_umax.{v]; rw [u}]; rw [← lift_le.{u + 1}]; rw [lift_univ]; rw [lift_lift]
+    exact h.le
 
 中文:
 定理 univLE_iff_cardinal_le
@@ -45,7 +47,9 @@ theorem univLE_iff_cardinal_le
   refine ⟨fun ⟨α, le⟩ => ?_, fun h => ?_⟩
   · rw [univ_umax.{v, u}, ← lift_le.{u + 1}, lift_univ, lift_lift] at le
     exact le.trans_lt (lift_lt_univ'.{u, v + 1} #α)
-  · obtain ⟨⟨
+  · obtain ⟨⟨α⟩, h⟩ := lt_univ'.mp h; use α
+    rw [univ_umax.{v]; rw [u}]; rw [← lift_le.{u + 1}]; rw [lift_univ]; rw [lift_lift]
+    exact h.le
 
 Depends on / 依赖: contrapose, simp_rw, small_iff_lift_mk_lt_univ, univLE_iff
 -/

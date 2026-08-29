@@ -299,7 +299,22 @@ lemma denseRange
   rw [← hsv]; rw [Set.mem_preimage] at uDefaultSpec
   rcases (isOpen_pi_iff.mp hsO) _ uDefaultSpec with ⟨J, fJ, hJ1, hJ2⟩
   let M : Subgroup G := iInf fun (j : J) => j.val
-  have hM : M.Normal := Subgroup.normal
+  have hM : M.Normal := Subgroup.normal_iInf_normal fun j => inferInstance
+  have hMFinite : M.FiniteIndex := by
+    apply Subgroup.finiteIndex_iInf
+    infer_instance
+  let m : FiniteIndexNormalSubgroup G := { toSubgroup := M }
+  rcases QuotientGroup.mk'_surjective M (spc m) with ⟨origin, horigin⟩
+  use etaFn G origin
+  refine ⟨?_, origin, rfl⟩
+  rw [← hsv]
+  apply hJ2
+  intro a a_in_J
+  let M_to_Na : m ⟶ a := (iInf_le (fun (j : J) => (j.val.toSubgroup)) ⟨a, a_in_J⟩).hom
+  rw [← (etaFn G origin).property M_to_Na]
+  dsimp [etaFn] at ⊢ horigin
+  rw [horigin]
+  exact Set.mem_of_eq_of_mem (hspc M_to_Na) (hJ1 a a_in_J).right
 
 中文:
 引理 denseRange
@@ -310,7 +325,22 @@ lemma denseRange
   rw [← hsv]; rw [Set.mem_preimage] at uDefaultSpec
   rcases (isOpen_pi_iff.mp hsO) _ uDefaultSpec with ⟨J, fJ, hJ1, hJ2⟩
   let M : Subgroup G := iInf fun (j : J) => j.val
-  have hM : M.Normal := Subgroup.normal
+  have hM : M.Normal := Subgroup.normal_iInf_normal fun j => inferInstance
+  have hMFinite : M.FiniteIndex := by
+    apply Subgroup.finiteIndex_iInf
+    infer_instance
+  let m : FiniteIndexNormalSubgroup G := { toSubgroup := M }
+  rcases QuotientGroup.mk'_surjective M (spc m) with ⟨origin, horigin⟩
+  use etaFn G origin
+  refine ⟨?_, origin, rfl⟩
+  rw [← hsv]
+  apply hJ2
+  intro a a_in_J
+  let M_to_Na : m ⟶ a := (iInf_le (fun (j : J) => (j.val.toSubgroup)) ⟨a, a_in_J⟩).hom
+  rw [← (etaFn G origin).property M_to_Na]
+  dsimp [etaFn] at ⊢ horigin
+  rw [horigin]
+  exact Set.mem_of_eq_of_mem (hspc M_to_Na) (hJ1 a a_in_J).right
 
 Depends on / 依赖: FiniteIndex, FiniteIndexNormalSubgroup, M.FiniteIndex, M.Normal, Normal, QuotientGroup, QuotientGroup.mk, Set.mem_preimage, Subgroup, Subgroup.finiteIndex_iInf, Subgroup.normal_iInf_normal, _surjectiv, dense_iff_inter_open, dense_iff_inter_open.mpr, finiteIndex_iInf, hMFinite, infer_instance, isOpen_pi_iff, isOpen_pi_iff.mp, j.val
 -/
@@ -419,7 +449,17 @@ definition lift
       intro X Y g
       ext ⟨x, hx⟩
       -- TODO: `dsimp` should handle this `change`; investigate missing simp lemmas in the
-      -- `ProfiniteGrp` / `CompHausLike` API
+      -- `ProfiniteGrp` / `CompHausLike` API.
+      change quotientMap f Y (x <| preimage f Y) =
+        P.diagram.map g (quotientMap _ _ <| x <| preimage f X)
+have := hx .hom preimage_le (f := f) g.le
+      obtain ⟨t, ht⟩ : exists g : G, QuotientGroup.mk g = x (preimage f X) :=
+        QuotientGroup.mk_surjective (x (preimage f X))
+      rw [← this]; rw [← ht]
+      have := P.cone.π.naturality g
+      apply_fun fun q => q (f t) at this
+      exact this
+  }⟩
 
 中文:
 定义 lift
@@ -430,7 +470,17 @@ definition lift
       intro X Y g
       ext ⟨x, hx⟩
       -- TODO: `dsimp` should handle this `change`; investigate missing simp lemmas in the
-      -- `ProfiniteGrp` / `CompHausLike` API
+      -- `ProfiniteGrp` / `CompHausLike` API.
+      change quotientMap f Y (x <| preimage f Y) =
+        P.diagram.map g (quotientMap _ _ <| x <| preimage f X)
+have := hx .hom preimage_le (f := f) g.le
+      obtain ⟨t, ht⟩ : exists g : G, QuotientGroup.mk g = x (preimage f X) :=
+        QuotientGroup.mk_surjective (x (preimage f X))
+      rw [← this]; rw [← ht]
+      have := P.cone.π.naturality g
+      apply_fun fun q => q (f t) at this
+      exact this
+  }⟩
 
 Depends on / 依赖: P.isLimitCone.lift, diagram, isLimitCone, limitCone, naturality, ofFiniteGrpHom, quotientMap
 -/
@@ -469,7 +519,10 @@ lemma lift_eta
   dsimp
   rw [Category.assoc]; rw [← (forget₂ ProfiniteGrp GrpCat).map_comp (lift f) e.hom]
   change eta G ≫ ((forget₂ _ _).map ((_ ≫ e.inv) ≫ e.hom)) = _
-  simp only [Category.ass
+  simp only [Category.assoc, Iso.inv_hom_id]
+  rfl
+
+@[to_additive]
 
 中文:
 引理 lift_eta
@@ -481,7 +534,10 @@ lemma lift_eta
   dsimp
   rw [Category.assoc]; rw [← (forget₂ ProfiniteGrp GrpCat).map_comp (lift f) e.hom]
   change eta G ≫ ((forget₂ _ _).map ((_ ≫ e.inv) ≫ e.hom)) = _
-  simp only [Category.ass
+  simp only [Category.assoc, Iso.inv_hom_id]
+  rfl
+
+@[to_additive]
 
 Depends on / 依赖: Category, Category.assoc, GrpCat, Iso.inv_hom_id, ProfiniteGrp, cancel_iso_hom_right, e.hom, e.inv, inv_hom_id, isoLimittoFiniteQuotientFunctor, mapIso, map_comp
 -/

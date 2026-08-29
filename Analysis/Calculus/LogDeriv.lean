@@ -130,7 +130,7 @@ theorem logDeriv_congr_codiscreteWithin
   refine mem_of_superset (logDeriv_congr_nhdsNE ?_) Set.subset_union_left
   filter_upwards [mem_codiscreteWithin_iff_forall_mem_nhdsNE.1 h x hx,
     nhdsWithin_le_nhds (hU.mem_nhds hx)] with z hz hzU
-  exact hz.resolve_right (no
+  exact hz.resolve_right (not_not_intro hzU)
 
 中文:
 定理 logDeriv_congr_codiscreteWithin
@@ -140,7 +140,7 @@ theorem logDeriv_congr_codiscreteWithin
   refine mem_of_superset (logDeriv_congr_nhdsNE ?_) Set.subset_union_left
   filter_upwards [mem_codiscreteWithin_iff_forall_mem_nhdsNE.1 h x hx,
     nhdsWithin_le_nhds (hU.mem_nhds hx)] with z hz hzU
-  exact hz.resolve_right (no
+  exact hz.resolve_right (not_not_intro hzU)
 
 Depends on / 依赖: Set.subset_union_left, filter_upwards, hU.mem_nhds, hz.resolve_right, logDeriv_congr_nhdsNE, mem_codiscreteWithin_iff_forall_mem_nhdsNE, mem_nhds, mem_of_superset, nhdsWithin_le_nhds, not_not_intro, resolve_right, subset_union_left
 -/
@@ -347,7 +347,8 @@ theorem logDeriv_prod
     rw [logDeriv_mul]; rw [ih hf.2 hd.2]
     · exact hf.1
     · simpa [Finset.prod_eq_zero_iff] using hf.2
-    · exact hd
+    · exact hd.1
+    · exact .fun_finsetProd hd.2
 
 中文:
 定理 logDeriv_prod
@@ -361,7 +362,8 @@ theorem logDeriv_prod
     rw [logDeriv_mul]; rw [ih hf.2 hd.2]
     · exact hf.1
     · simpa [Finset.prod_eq_zero_iff] using hf.2
-    · exact hd
+    · exact hd.1
+    · exact .fun_finsetProd hd.2
 
 Depends on / 依赖: Finset, Finset.cons_induction, Finset.forall_mem_cons, Finset.prod_cons, Finset.prod_eq_zero_iff, Finset.sum_cons, cons_induction, forall_mem_cons, fun_finsetProd, logDeriv_mul, prod_cons, prod_eq_zero_iff, simp_rw, sum_cons
 -/
@@ -543,7 +545,22 @@ lemma logDeriv_eqOn_iff
     · refine fun h => ⟨f t * (g t)⁻¹, by grind, fun y hy => ?_⟩
       have hderiv : s.EqOn (deriv (f * g⁻¹)) (deriv f * g⁻¹ - f * deriv g / g ^ 2) := by
         intro z hz
-        rw [deriv_mul (hf
+        rw [deriv_mul (hf.differentiableAt (hs2.mem_nhds hz)) ((hg.differentiableAt
+          (hs2.mem_nhds hz)).inv (hgn z hz))]
+        simp only [Pi.inv_apply, show g⁻¹ = (fun x => x⁻¹) ∘ g by rfl, deriv_inv, neg_mul,
+          deriv_comp z (differentiableAt_inv (hgn z hz)) (hg.differentiableAt (hs2.mem_nhds hz)),
+          mul_neg, Pi.sub_apply, Pi.mul_apply, comp_apply, Pi.div_apply, Pi.pow_apply]
+        ring
+      have hfg : EqOn (deriv (f * g⁻¹)) 0 s := hderiv.trans fun z hz => by
+        simp only [Pi.sub_apply, Pi.mul_apply, Pi.inv_apply, Pi.div_apply, Pi.pow_apply,
+          Pi.zero_apply]
+        grind [logDeriv_apply, Pi.div_apply]
+      let := IsRCLikeNormedField.rclike 𝕜
+      obtain ⟨a, ha⟩ := hs2.exists_is_const_of_deriv_eq_zero hsc (hf.mul (hg.inv hgn)) hfg
+      grind [Pi.mul_apply, Pi.inv_apply, Pi.smul_apply, smul_eq_mul]
+    · rintro ⟨z, hz0, hz⟩ x hx
+      simp [logDeriv_apply, hz.deriv hs2 hx, hz hx, deriv_const_smul _
+        (hg.differentiableAt (hs2.mem_nhds hx)), mul_div_mul_left (deriv g x) (g x) hz0]
 
 中文:
 引理 logDeriv_eqOn_iff
@@ -555,7 +572,22 @@ lemma logDeriv_eqOn_iff
     · refine fun h => ⟨f t * (g t)⁻¹, by grind, fun y hy => ?_⟩
       have hderiv : s.EqOn (deriv (f * g⁻¹)) (deriv f * g⁻¹ - f * deriv g / g ^ 2) := by
         intro z hz
-        rw [deriv_mul (hf
+        rw [deriv_mul (hf.differentiableAt (hs2.mem_nhds hz)) ((hg.differentiableAt
+          (hs2.mem_nhds hz)).inv (hgn z hz))]
+        simp only [Pi.inv_apply, show g⁻¹ = (fun x => x⁻¹) ∘ g by rfl, deriv_inv, neg_mul,
+          deriv_comp z (differentiableAt_inv (hgn z hz)) (hg.differentiableAt (hs2.mem_nhds hz)),
+          mul_neg, Pi.sub_apply, Pi.mul_apply, comp_apply, Pi.div_apply, Pi.pow_apply]
+        ring
+      have hfg : EqOn (deriv (f * g⁻¹)) 0 s := hderiv.trans fun z hz => by
+        simp only [Pi.sub_apply, Pi.mul_apply, Pi.inv_apply, Pi.div_apply, Pi.pow_apply,
+          Pi.zero_apply]
+        grind [logDeriv_apply, Pi.div_apply]
+      let := IsRCLikeNormedField.rclike 𝕜
+      obtain ⟨a, ha⟩ := hs2.exists_is_const_of_deriv_eq_zero hsc (hf.mul (hg.inv hgn)) hfg
+      grind [Pi.mul_apply, Pi.inv_apply, Pi.smul_apply, smul_eq_mul]
+    · rintro ⟨z, hz0, hz⟩ x hx
+      simp [logDeriv_apply, hz.deriv hs2 hx, hz hx, deriv_const_smul _
+        (hg.differentiableAt (hs2.mem_nhds hx)), mul_div_mul_left (deriv g x) (g x) hz0]
 
 Depends on / 依赖: Pi.inv_apply, deriv_comp, deriv_inv, deriv_mul, differentiableAt, differentiableAt_inv, eq_empty_or_nonempty, hderiv, hf.differentiableAt, hg.dif, hg.differentiableAt, hs2.mem_nhds, inv_apply, mem_nhds, neg_mul, one_ne_zero, s.EqOn, s.eq_empty_or_nonempty
 -/

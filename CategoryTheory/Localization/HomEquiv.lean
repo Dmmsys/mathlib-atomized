@@ -157,7 +157,10 @@ lemma homMap_apply
   change e'.hom.app X ≫ G'.map f ≫ e'.inv.app Y = _
   let : Localization.Lifting L₁ W₁ (Φ.functor ⋙ L₂) G := ⟨e.symm⟩
   let α : G' ≅ G := Localization.liftNatIso L₁ W₁ (L₁ ⋙ G') (Φ.functor ⋙ L₂) _ _ e'.symm
-  have :
+  have : e = e' ≪≫ Functor.isoWhiskerLeft _ α := by
+    ext
+    simp [α, this]
+  simp [this]
 
 中文:
 引理 homMap_apply
@@ -168,7 +171,10 @@ lemma homMap_apply
   change e'.hom.app X ≫ G'.map f ≫ e'.inv.app Y = _
   let : Localization.Lifting L₁ W₁ (Φ.functor ⋙ L₂) G := ⟨e.symm⟩
   let α : G' ≅ G := Localization.liftNatIso L₁ W₁ (L₁ ⋙ G') (Φ.functor ⋙ L₂) _ _ e'.symm
-  have :
+  have : e = e' ≪≫ Functor.isoWhiskerLeft _ α := by
+    ext
+    simp [α, this]
+  simp [this]
 
 Depends on / 依赖: CatCommSq, CatCommSq.iso, Functor, Functor.isoWhiskerLeft, Lifting, Localization, Localization.Lifting, Localization.liftNatIso, e.symm, functor, hom.app, inv.app, isoWhiskerLeft, liftNatIso, localizedFunctor
 -/
@@ -220,7 +226,12 @@ lemma homMap_homMap
   let G' := Ψ.localizedFunctor L₂ L₃
   let e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G := CatCommSq.iso _ _ _ _
   let e' : Ψ.functor ⋙ L₃ ≅ L₂ ⋙ G' := CatCommSq.iso _ _ _ _
-  rw [Φ.homMap_apply L₁ L₂ G e]; rw [Ψ.homMap_apply L₂ L₃ G' e']; rw [(Φ.comp Ψ).homMap_apply L₁ L₃ (G ⋙
+  rw [Φ.homMap_apply L₁ L₂ G e]; rw [Ψ.homMap_apply L₂ L₃ G' e']; rw [(Φ.comp Ψ).homMap_apply L₁ L₃ (G ⋙ G')
+      (Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ e' ≪≫
+      (Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight e _ ≪≫
+      Functor.associator _ _ _)]
+  dsimp
+  simp only [Functor.map_comp, assoc, comp_id, id_comp]
 
 中文:
 引理 homMap_homMap
@@ -230,7 +241,12 @@ lemma homMap_homMap
   let G' := Ψ.localizedFunctor L₂ L₃
   let e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G := CatCommSq.iso _ _ _ _
   let e' : Ψ.functor ⋙ L₃ ≅ L₂ ⋙ G' := CatCommSq.iso _ _ _ _
-  rw [Φ.homMap_apply L₁ L₂ G e]; rw [Ψ.homMap_apply L₂ L₃ G' e']; rw [(Φ.comp Ψ).homMap_apply L₁ L₃ (G ⋙
+  rw [Φ.homMap_apply L₁ L₂ G e]; rw [Ψ.homMap_apply L₂ L₃ G' e']; rw [(Φ.comp Ψ).homMap_apply L₁ L₃ (G ⋙ G')
+      (Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ e' ≪≫
+      (Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight e _ ≪≫
+      Functor.associator _ _ _)]
+  dsimp
+  simp only [Functor.map_comp, assoc, comp_id, id_comp]
 
 Depends on / 依赖: CatCommSq, CatCommSq.iso, Functor, Functor.associator, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, Functor.map_comp, associator, comp_id, functor, homMap_apply, isoWhiskerLeft, isoWhiskerRight, localizedFunctor, map_comp
 -/

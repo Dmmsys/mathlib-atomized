@@ -200,7 +200,17 @@ definition beckCoalgebraEqualizer
     have h₂ : s.pt.a ≫ (T : C ⥤ C).map s.ι.f = s.ι.f ≫ T.δ.app X.A := s.ι.h
     refine ⟨⟨s.ι.f ≫ T.ε.app _, ?_⟩, ?_, ?_⟩
     · dsimp
-      rw [Functor
+      rw [Functor.map_comp]; rw [reassoc_of% h₂]; rw [Comonad.right_counit]
+      dsimp
+      rw [Category.comp_id]; rw [Category.assoc]; rw [← T.counit_naturality]; rw [reassoc_of% h₁]; rw [Comonad.left_counit]
+      simp
+    · ext
+      simpa [← T.ε.naturality_assoc, T.left_counit_assoc] using! h₁ =≫ T.ε.app ((T : C ⥤ C).obj X.A)
+    · intro m hm
+      ext
+      dsimp only
+      rw [← hm]
+      simp [beckCoalgebraFork, X.counit]
 
 中文:
 定义 beckCoalgebraEqualizer
@@ -211,7 +221,17 @@ definition beckCoalgebraEqualizer
     have h₂ : s.pt.a ≫ (T : C ⥤ C).map s.ι.f = s.ι.f ≫ T.δ.app X.A := s.ι.h
     refine ⟨⟨s.ι.f ≫ T.ε.app _, ?_⟩, ?_, ?_⟩
     · dsimp
-      rw [Functor
+      rw [Functor.map_comp]; rw [reassoc_of% h₂]; rw [Comonad.right_counit]
+      dsimp
+      rw [Category.comp_id]; rw [Category.assoc]; rw [← T.counit_naturality]; rw [reassoc_of% h₁]; rw [Comonad.left_counit]
+      simp
+    · ext
+      simpa [← T.ε.naturality_assoc, T.left_counit_assoc] using! h₁ =≫ T.ε.app ((T : C ⥤ C).obj X.A)
+    · intro m hm
+      ext
+      dsimp only
+      rw [← hm]
+      simp [beckCoalgebraFork, X.counit]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Coalgebra, Comonad, Comonad.Coalgebra.Hom.f, Comonad.left_counit, Comonad.right_counit, Fork.IsLimit.mk, Functor, Functor.map_comp, IsLimit, T.counit_naturality, comp_id, condition, congr_arg, counit_naturality, left_counit, map_comp, naturality_assoc
 -/

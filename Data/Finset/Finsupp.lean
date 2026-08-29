@@ -73,7 +73,7 @@ theorem mem_finsupp_iff
     exact indicator_of_mem hi _
   · refine fun h => ⟨fun i _ => f i, mem_pi.2 h.2, ?_⟩
     ext i
-    exact ite_eq_left_iff.2 fun hi => (notMe
+    exact ite_eq_left_iff.2 fun hi => (notMem_support_iff.1 fun H => hi <| h.1 H).symm
 
 中文:
 定理 mem_finsupp_iff
@@ -87,7 +87,7 @@ theorem mem_finsupp_iff
     exact indicator_of_mem hi _
   · refine fun h => ⟨fun i _ => f i, mem_pi.2 h.2, ?_⟩
     ext i
-    exact ite_eq_left_iff.2 fun hi => (notMe
+    exact ite_eq_left_iff.2 fun hi => (notMem_support_iff.1 fun H => hi <| h.1 H).symm
 
 Depends on / 依赖: classical, convert, indicator_of_mem, ite_eq_left_iff, mem_map, mem_map.trans, mem_pi, notMem_support_iff, support_indicator_subset
 -/
@@ -120,7 +120,11 @@ theorem mem_finsupp_iff_of_support_subset
 ⟨fun hi => ht mem_support_iff.2 fun H => mem_support_iff.1 hi ?_, fun _ => h⟩⟩)
   · by_cases hi : i in s
     · exact h.2 hi
-    · rw [notMem_support_iff.1 (mt h.1 hi)
+    · rw [notMem_support_iff.1 (mt h.1 hi), notMem_support_iff.1 fun H => hi <| ht H]
+      exact zero_mem_zero
+  · rwa [H, mem_zero] at h
+
+@[simp]
 
 中文:
 定理 mem_finsupp_iff_of_support_subset
@@ -134,7 +138,11 @@ theorem mem_finsupp_iff_of_support_subset
 ⟨fun hi => ht mem_support_iff.2 fun H => mem_support_iff.1 hi ?_, fun _ => h⟩⟩)
   · by_cases hi : i in s
     · exact h.2 hi
-    · rw [notMem_support_iff.1 (mt h.1 hi)
+    · rw [notMem_support_iff.1 (mt h.1 hi), notMem_support_iff.1 fun H => hi <| ht H]
+      exact zero_mem_zero
+  · rwa [H, mem_zero] at h
+
+@[simp]
 
 Depends on / 依赖: forall_and, forall_and.symm.trans, forall_congr, mem_finsupp_iff, mem_finsupp_iff.trans, mem_support_iff, mem_zero, notMem_support_iff, zero_mem_zero
 -/

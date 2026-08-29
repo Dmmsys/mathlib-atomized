@@ -406,7 +406,9 @@ definition preservesColimitNatIso
       apply colimit.hom_ext; intro j
       dsimp
       rw [ι_colimMap_assoc]
-      simp only [ι_preservesColimitIso_inv, Functor.whiskerRight_a
+      simp only [ι_preservesColimitIso_inv, Functor.whiskerRight_app,
+        ι_preservesColimitIso_inv_assoc, ← G.map_comp]
+      rw [ι_colimMap])
 
 中文:
 定义 preservesColimit自然数Iso
@@ -418,7 +420,9 @@ definition preservesColimitNatIso
       apply colimit.hom_ext; intro j
       dsimp
       rw [ι_colimMap_assoc]
-      simp only [ι_preservesColimitIso_inv, Functor.whiskerRight_a
+      simp only [ι_preservesColimitIso_inv, Functor.whiskerRight_app,
+        ι_preservesColimitIso_inv_assoc, ← G.map_comp]
+      rw [ι_colimMap])
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.whiskerRight_app, G.map_comp, Iso.eq_comp_inv, Iso.inv_comp_eq, NatIso, NatIso.ofComponents, colimit, colimit.hom_ext, eq_comp_inv, hom_ext, inv_comp_eq, map_comp, ofComponents, preservesColimitIso, whiskerRight_app
 -/

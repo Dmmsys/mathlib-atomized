@@ -43,7 +43,8 @@ theorem bubble_sort_induction'
   refine
     @WellFounded.induction_bot' _ _ _ (IsWellFounded.wf : WellFounded (· < ·))
       (Equiv.refl _) (sort f) P (fun σ => f ∘ σ) (fun σ hσ hfσ => ?_) hf
-  obtain ⟨i, j, hij₁, hij₂⟩ := antitone_pair_
+  obtain ⟨i, j, hij₁, hij₂⟩ := antitone_pair_of_not_sorted' hσ
+  exact ⟨σ * Equiv.swap i j, Pi.lex_desc hij₁.le hij₂, h σ i j hij₁ hij₂ hfσ⟩
 
 中文:
 定理 bubble_sort_induction'
@@ -53,7 +54,8 @@ theorem bubble_sort_induction'
   refine
     @WellFounded.induction_bot' _ _ _ (IsWellFounded.wf : WellFounded (· < ·))
       (Equiv.refl _) (sort f) P (fun σ => f ∘ σ) (fun σ hσ hfσ => ?_) hf
-  obtain ⟨i, j, hij₁, hij₂⟩ := antitone_pair_
+  obtain ⟨i, j, hij₁, hij₂⟩ := antitone_pair_of_not_sorted' hσ
+  exact ⟨σ * Equiv.swap i j, Pi.lex_desc hij₁.le hij₂, h σ i j hij₁ hij₂ hfσ⟩
 
 Depends on / 依赖: Equiv.Perm, Equiv.refl, Equiv.swap, IsWellFounded, IsWellFounded.wf, Pi.lex_desc, Preorder, Preorder.lift, WellFounded, WellFounded.induction_bot, antitone_pair_of_not_sorted, induction_bot, lex_desc
 -/

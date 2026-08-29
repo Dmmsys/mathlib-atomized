@@ -296,7 +296,10 @@ theorem Spec.sheafedSpaceMap_comp
     -- Porting note: was one liner
     -- `dsimp, rw category_theory.functor.map_id, rw category.comp_id, erw comap_comp f g, refl`
     rw [NatTrans.comp_app]; rw [sheafedSpaceMap_hom_c_app]; rw [Functor.whiskerRight_app]; rw [eqToHom_refl]
-    erw
+    erw [(sheafedSpaceObj T).presheaf.map_id]
+    dsimp only [CommRingCat.hom_comp, RingHom.coe_comp, Function.comp_apply]
+    rw [comap_comp]
+    rfl
 
 中文:
 定理 Spec.sheafedSpaceMap_comp
@@ -308,7 +311,10 @@ theorem Spec.sheafedSpaceMap_comp
     -- Porting note: was one liner
     -- `dsimp, rw category_theory.functor.map_id, rw category.comp_id, erw comap_comp f g, refl`
     rw [NatTrans.comp_app]; rw [sheafedSpaceMap_hom_c_app]; rw [Functor.whiskerRight_app]; rw [eqToHom_refl]
-    erw
+    erw [(sheafedSpaceObj T).presheaf.map_id]
+    dsimp only [CommRingCat.hom_comp, RingHom.coe_comp, Function.comp_apply]
+    rw [comap_comp]
+    rfl
 
 Depends on / 依赖: Spec.topMap_comp, topMap_comp
 -/
@@ -655,7 +661,8 @@ theorem localRingHom_comp_stalkIso
 (stalkIso S p).toCommRingCatIso.symm.comp_inv_eq.mpr CommRingCat.hom_ext
       Localization.localRingHom_unique _ _ _ (PrimeSpectrum.comap_asIdeal _ _) fun x => by
   dsimp [-RingEquiv.symm_mk]
-  simp only [AlgEquiv.commu
+  simp only [AlgEquiv.commutes, RingEquiv.symm_apply_eq, AlgEquiv.coe_ringEquiv]
+  exact stalkMap_toStalk_apply f p x
 
 中文:
 定理 localRingHom_comp_stalkIso
@@ -664,7 +671,8 @@ theorem localRingHom_comp_stalkIso
 (stalkIso S p).toCommRingCatIso.symm.comp_inv_eq.mpr CommRingCat.hom_ext
       Localization.localRingHom_unique _ _ _ (PrimeSpectrum.comap_asIdeal _ _) fun x => by
   dsimp [-RingEquiv.symm_mk]
-  simp only [AlgEquiv.commu
+  simp only [AlgEquiv.commutes, RingEquiv.symm_apply_eq, AlgEquiv.coe_ringEquiv]
+  exact stalkMap_toStalk_apply f p x
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_ringEquiv, AlgEquiv.commutes, CommRingCat, CommRingCat.hom_ext, Localization, Localization.localRingHom_unique, PrimeSpectrum, PrimeSpectrum.comap, PrimeSpectrum.comap_asIdeal, RingEquiv, RingEquiv.symm_apply_eq, RingEquiv.symm_mk, coe_ringEquiv, comap_asIdeal, commutes, comp_inv_eq, eq_inv_comp, f.hom, hom_ext
 -/
@@ -698,7 +706,9 @@ definition Spec.locallyRingedSpaceMap
     dsimp at ha
     have : IsLocalHom (stalkIso S p) := isLocalHom_equiv _
     have : IsLocalHom (stalkIso R (p.comap f.hom)).symm := isLocalHom_equiv _
-    ex
+    exact ((ha.of_map (stalkIso S p)).of_map _).of_map (stalkIso R (p.comap f.hom)).symm
+
+@[simp]
 
 中文:
 定义 Spec.locallyRingedSpaceMap
@@ -709,7 +719,9 @@ definition Spec.locallyRingedSpaceMap
     dsimp at ha
     have : IsLocalHom (stalkIso S p) := isLocalHom_equiv _
     have : IsLocalHom (stalkIso R (p.comap f.hom)).symm := isLocalHom_equiv _
-    ex
+    exact ((ha.of_map (stalkIso S p)).of_map _).of_map (stalkIso R (p.comap f.hom)).symm
+
+@[simp]
 
 Depends on / 依赖: IsLocalHom, IsLocalHom.mk, LocallyRingedSpace, LocallyRingedSpace.Hom.mk, Spec.sheafedSpaceMap, f.hom, ha.of_map, isLocalHom_equiv, localRingHom_comp_stalkIso, of_map, p.comap, sheafedSpaceMap, stalkIso
 -/
@@ -920,7 +932,10 @@ theorem isIso_SpecMap_stakMap_localization
   simp only [EquivLike.bijective_comp]
   refine (stalkIso (Localization M) x).bijective.comp ?_
   suffices
-    IsIso (IsLocalization.localizationLoc
+    IsIso (IsLocalization.localizationLocalizationAtPrimeIsoLocalization M
+        x.asIdeal).toRingEquiv.toCommRingCatIso.hom by
+    rwa [ConcreteCategory.isIso_iff_bijective] at this
+  infer_instance
 
 中文:
 定理 isIso_SpecMap_stakMap_localization
@@ -932,7 +947,10 @@ theorem isIso_SpecMap_stakMap_localization
   simp only [EquivLike.bijective_comp]
   refine (stalkIso (Localization M) x).bijective.comp ?_
   suffices
-    IsIso (IsLocalization.localizationLoc
+    IsIso (IsLocalization.localizationLocalizationAtPrimeIsoLocalization M
+        x.asIdeal).toRingEquiv.toCommRingCatIso.hom by
+    rwa [ConcreteCategory.isIso_iff_bijective] at this
+  infer_instance
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.isIso_iff_bijective, EquivLike, EquivLike.bijective_comp, IsLocalization, IsLocalization.localizationLocalizationAtPrimeIsoLocalization, Localization, Quiver, Quiver.Hom.unop_op, Spec.toPresheafedSpace_map, asIdeal, bijective, bijective.comp, bijective_comp, infer_instance, isIso_iff_bijective, localRingHom_comp_stalkIso, localizationLocalizationAtPrimeIsoLocalization, stalkIso, toCommRingCatIso
 -/
@@ -1080,7 +1098,31 @@ theorem isLocalizedModule_toPushforwardStalkAlgHom_aux
   obtain ⟨U, hp, s, e⟩ := TopCat.Presheaf.exists_germ_eq _ y
   obtain ⟨_, ⟨r, rfl⟩, hpr : p in PrimeSpectrum.basicOpen r, hrU : PrimeSpectrum.basicOpen r <= U⟩ :=
     PrimeSpectrum.isTopologicalBasis_basic_opens.exists_subset_of_mem_open (show p in U from hp) U.2
-  change PrimeSpectrum.basicOpen 
+  change PrimeSpectrum.basicOpen r <= U at hrU
+  replace e :=
+    ((Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _* (structureSheaf S).1).germ_res_apply
+      (homOfLE hrU) p hpr _).trans e
+  set s' := (Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _* (structureSheaf S).1).map
+      (homOfLE hrU).op s with h
+  replace e : ((Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _* (structureSheaf S).obj).germ _
+      p hpr) s' = y := by
+    rw [h]; exact e
+  clear_value s'; clear! U
+  obtain ⟨⟨s, ⟨_, n, rfl⟩⟩, hsn⟩ :=
+    @IsLocalization.surj _ _ _ _ _ _
+      (StructureSheaf.IsLocalization.to_basicOpen S <| algebraMap R S r) s'
+  refine ⟨⟨s, ⟨r, hpr⟩ ^ n⟩, ?_⟩
+  rw [Submonoid.smul_def]; rw [Algebra.smul_def]; rw [algebraMap_pushforward_stalk]; rw [toPushforwardStalk]; rw [CommRingCat.comp_apply]; rw [CommRingCat.comp_apply]
+  iterate 2
+    erw [← (Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _* (structureSheaf S).1).germ_res_apply
+      (homOfLE le_top) p hpr]
+  rw [← e]
+  let f := TopCat.Presheaf.germ (Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _*
+      (structureSheaf S).obj) _ p hpr
+  rw [← map_mul]; rw [mul_comm]
+  dsimp only [Subtype.coe_mk] at hsn
+  rw [← map_pow (algebraMap R S)] at hsn
+  congr 1
 
 中文:
 定理 isLocalizedModule_toPushforwardStalkAlgHom_aux
@@ -1089,7 +1131,31 @@ theorem isLocalizedModule_toPushforwardStalkAlgHom_aux
   obtain ⟨U, hp, s, e⟩ := TopCat.Presheaf.exists_germ_eq _ y
   obtain ⟨_, ⟨r, rfl⟩, hpr : p in PrimeSpectrum.basicOpen r, hrU : PrimeSpectrum.basicOpen r <= U⟩ :=
     PrimeSpectrum.isTopologicalBasis_basic_opens.exists_subset_of_mem_open (show p in U from hp) U.2
-  change PrimeSpectrum.basicOpen 
+  change PrimeSpectrum.basicOpen r <= U at hrU
+  replace e :=
+    ((Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _* (structureSheaf S).1).germ_res_apply
+      (homOfLE hrU) p hpr _).trans e
+  set s' := (Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _* (structureSheaf S).1).map
+      (homOfLE hrU).op s with h
+  replace e : ((Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _* (structureSheaf S).obj).germ _
+      p hpr) s' = y := by
+    rw [h]; exact e
+  clear_value s'; clear! U
+  obtain ⟨⟨s, ⟨_, n, rfl⟩⟩, hsn⟩ :=
+    @IsLocalization.surj _ _ _ _ _ _
+      (StructureSheaf.IsLocalization.to_basicOpen S <| algebraMap R S r) s'
+  refine ⟨⟨s, ⟨r, hpr⟩ ^ n⟩, ?_⟩
+  rw [Submonoid.smul_def]; rw [Algebra.smul_def]; rw [algebraMap_pushforward_stalk]; rw [toPushforwardStalk]; rw [CommRingCat.comp_apply]; rw [CommRingCat.comp_apply]
+  iterate 2
+    erw [← (Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _* (structureSheaf S).1).germ_res_apply
+      (homOfLE le_top) p hpr]
+  rw [← e]
+  let f := TopCat.Presheaf.germ (Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _*
+      (structureSheaf S).obj) _ p hpr
+  rw [← map_mul]; rw [mul_comm]
+  dsimp only [Subtype.coe_mk] at hsn
+  rw [← map_pow (algebraMap R S)] at hsn
+  congr 1
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, Presheaf, PrimeSpectrum, PrimeSpectrum.basicOpen, PrimeSpectrum.isTopologicalBasis_basic_opens.exists_subset_of_mem_open, Spec.topMap, TopCat, TopCat.Presheaf.exists_germ_eq, algebraMap, basicOpen, exists_germ_eq, exists_subset_of_mem_open, germ_res_apply, homOfLE, isTopologicalBasis_basic_opens, replace, structureSheaf, topMap
 -/
@@ -1136,7 +1202,26 @@ instance isLocalizedModule_toPushforwardStalkAlgHom
   · intro x hx; rw [algebraMap_pushforward_stalk, toPushforwardStalk_comp]
     change IsUnit ((TopCat.Presheaf.stalkFunctor CommRingCat p).map
       (Spec.sheafedSpaceMap (CommRingCat.ofHom (algebraMap ↑R ↑S))).hom.c _)
-    exact (IsLocalization.map_units ((s
+    exact (IsLocalization.map_units ((structureSheaf R).presheaf.stalk p) ⟨x, hx⟩).map _
+  · apply isLocalizedModule_toPushforwardStalkAlgHom_aux
+  · intro x hx
+    rw [toPushforwardStalkAlgHom_apply]; rw [← (toPushforwardStalk (CommRingCat.ofHom (algebraMap ↑R ↑S)) p).hom.map_zero]; rw [toPushforwardStalk] at hx
+    rw [CommRingCat.comp_apply]; rw [map_zero] at hx
+    obtain ⟨U, hpU, i₁, i₂, e⟩ := TopCat.Presheaf.germ_eq (C := CommRingCat) _ _ _ _ _ _ hx
+    obtain ⟨_, ⟨r, rfl⟩, hpr, hrU⟩ :=
+      PrimeSpectrum.isTopologicalBasis_basic_opens.exists_subset_of_mem_open (show p in U.1 from hpU)
+        U.2
+    apply_fun (Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _* (structureSheaf S).1).map
+        (homOfLE hrU).op at e
+    have : algebraMap S ((structureSheaf S).presheaf.obj _) x = 0 := e
+    have :=
+      (@IsLocalization.mk'_one _ _ _ _ _ _
+            (StructureSheaf.IsLocalization.to_basicOpen S <| algebraMap R S r) x).trans
+        this
+    obtain ⟨⟨_, n, rfl⟩, e⟩ := (IsLocalization.mk'_eq_zero_iff _ _).mp this
+    refine ⟨⟨r, hpr⟩ ^ n, ?_⟩
+    rw [Submonoid.smul_def]; rw [Algebra.smul_def]; rw [SubmonoidClass.coe_pow]; rw [map_pow]
+    exact e
 
 中文:
 实例 isLocalizedModule_toPushforwardStalkAlgHom
@@ -1146,7 +1231,26 @@ instance isLocalizedModule_toPushforwardStalkAlgHom
   · intro x hx; rw [algebraMap_pushforward_stalk, toPushforwardStalk_comp]
     change IsUnit ((TopCat.Presheaf.stalkFunctor CommRingCat p).map
       (Spec.sheafedSpaceMap (CommRingCat.ofHom (algebraMap ↑R ↑S))).hom.c _)
-    exact (IsLocalization.map_units ((s
+    exact (IsLocalization.map_units ((structureSheaf R).presheaf.stalk p) ⟨x, hx⟩).map _
+  · apply isLocalizedModule_toPushforwardStalkAlgHom_aux
+  · intro x hx
+    rw [toPushforwardStalkAlgHom_apply]; rw [← (toPushforwardStalk (CommRingCat.ofHom (algebraMap ↑R ↑S)) p).hom.map_zero]; rw [toPushforwardStalk] at hx
+    rw [CommRingCat.comp_apply]; rw [map_zero] at hx
+    obtain ⟨U, hpU, i₁, i₂, e⟩ := TopCat.Presheaf.germ_eq (C := CommRingCat) _ _ _ _ _ _ hx
+    obtain ⟨_, ⟨r, rfl⟩, hpr, hrU⟩ :=
+      PrimeSpectrum.isTopologicalBasis_basic_opens.exists_subset_of_mem_open (show p in U.1 from hpU)
+        U.2
+    apply_fun (Spec.topMap (CommRingCat.ofHom (algebraMap R S)) _* (structureSheaf S).1).map
+        (homOfLE hrU).op at e
+    have : algebraMap S ((structureSheaf S).presheaf.obj _) x = 0 := e
+    have :=
+      (@IsLocalization.mk'_one _ _ _ _ _ _
+            (StructureSheaf.IsLocalization.to_basicOpen S <| algebraMap R S r) x).trans
+        this
+    obtain ⟨⟨_, n, rfl⟩, e⟩ := (IsLocalization.mk'_eq_zero_iff _ _).mp this
+    refine ⟨⟨r, hpr⟩ ^ n, ?_⟩
+    rw [Submonoid.smul_def]; rw [Algebra.smul_def]; rw [SubmonoidClass.coe_pow]; rw [map_pow]
+    exact e
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, IsLocalization, IsLocalization.map_units, IsLocalizedModule, IsLocalizedModule.mkOfAlgebra, IsUnit, Presheaf, Spec.sheafedSpaceMap, TopCat, TopCat.Presheaf.stalkFunctor, algebraMap, algebraMap_pushforward_stalk, hom.c, isLocalizedModule_toPushforwardStalkAlgHom_aux, map_units, mkOfAlgebra, presheaf, presheaf.stalk, sheafedSpaceMap
 -/

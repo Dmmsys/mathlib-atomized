@@ -820,7 +820,9 @@ lemma alexandrovDiscrete_iff_nhds
       inf_principal, principal_neBot_iff]
     intro S hS a ha
     rw [sUnion_eq_biUnion]; rw [inter_iUnion₂]; rw [nonempty_biUnion] at ha
-    obtain ⟨s, hs, has⟩
+    obtain ⟨s, hs, has⟩ := ha
+    specialize hS s hs a has
+    exact mem_sUnion_of_mem hS hs
 
 中文:
 引理 alexandrovDiscrete_iff_nhds
@@ -831,7 +833,9 @@ lemma alexandrovDiscrete_iff_nhds
       inf_principal, principal_neBot_iff]
     intro S hS a ha
     rw [sUnion_eq_biUnion]; rw [inter_iUnion₂]; rw [nonempty_biUnion] at ha
-    obtain ⟨s, hs, has⟩
+    obtain ⟨s, hs, has⟩ := ha
+    specialize hS s hs a has
+    exact mem_sUnion_of_mem hS hs
 
 Depends on / 依赖: SetRel, SetRel.id, SetRel.id_comp, Tendsto, TopologicalSpace, discreteTopology_bot, id_comp, mem_principal_self, nhds_eq_comap_uniformity, principal_mono, principal_nhdsKer_singleton, subset, toTopologicalSpace, uniformity
 -/

@@ -28,7 +28,10 @@ instance Prod.instStarOrderedRing
         closure (Set.range fun s : α × β => star s * s) =
           (closure <| Set.range fun s : α => star s * s).prod
           (closure <| Set.range fun s : β => star s * s) := by
-      rw [← closure_prod (Set.mem_range.2 ⟨0]; rw
+      rw [← closure_prod (Set.mem_range.2 ⟨0]; rw [by simp⟩) (Set.mem_range.2 ⟨0]; rw [by simp⟩)]; rw [Set.prod_range_range_eq]
+      simp_rw [Prod.mul_def, Prod.star_def]
+    simp only [mk_le_mk, Prod.exists, mk_add_mk, mk.injEq, StarOrderedRing.le_iff, this,
+      AddSubmonoid.mem_prod, exists_and_exists_comm, and_and_and_comm]
 
 中文:
 实例 积类型.instStarOrderedRing
@@ -37,7 +40,10 @@ instance Prod.instStarOrderedRing
         closure (Set.range fun s : α × β => star s * s) =
           (closure <| Set.range fun s : α => star s * s).prod
           (closure <| Set.range fun s : β => star s * s) := by
-      rw [← closure_prod (Set.mem_range.2 ⟨0]; rw
+      rw [← closure_prod (Set.mem_range.2 ⟨0]; rw [by simp⟩) (Set.mem_range.2 ⟨0]; rw [by simp⟩)]; rw [Set.prod_range_range_eq]
+      simp_rw [Prod.mul_def, Prod.star_def]
+    simp only [mk_le_mk, Prod.exists, mk_add_mk, mk.injEq, StarOrderedRing.le_iff, this,
+      AddSubmonoid.mem_prod, exists_and_exists_comm, and_and_and_comm]
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_prod, Prod.exists, Prod.forall, Prod.mul_def, Prod.star_def, Set.mem_range, Set.prod_range_range_eq, Set.range, StarOrderedRing, StarOrderedRing.le_iff, closure, closure_prod, exists_and_ex, le_iff, mem_prod, mem_range, mk.injEq, mk_add_mk, mk_le_mk
 -/

@@ -205,6 +205,7 @@ theorem _root_.Measurable.measure_of_isPiSystem
     simp only [measure_compl hsm (measure_ne_top _ _)]
     exact h_univ.sub ihs
   | iUnion f hfd hfm ihf =>
+    simpa only [measure_iUnion hfd hfm] using .tsum ihf
 
 中文:
 定理 _root_.可测.measure_of_isPiSystem
@@ -219,6 +220,7 @@ theorem _root_.Measurable.measure_of_isPiSystem
     simp only [measure_compl hsm (measure_ne_top _ _)]
     exact h_univ.sub ihs
   | iUnion f hfd hfm ihf =>
+    simpa only [measure_iUnion hfd hfm] using .tsum ihf
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.induction_on_inter, h_basic, h_univ, h_univ.sub, iUnion, induction_on_inter, measurable_measure, measure_compl, measure_iUnion, measure_ne_top
 -/
@@ -683,7 +685,27 @@ theorem lintegral_join
     rw [lintegral_congr_ae hfg]; rw [this hgm.aemeasurable hgm]
 exact lintegral_congr_ae (ae_ae_of_ae_join hfg).mono fun μ hμ =>
 .symm lintegral_congr_ae hμ
-  simp_rw [lintegral_eq_iSup_eapprox_lintegral hfm, SimpleFunc.lin
+  simp_rw [lintegral_eq_iSup_eapprox_lintegral hfm, SimpleFunc.lintegral,
+    join_apply (SimpleFunc.measurableSet_preimage _ _)]
+  clear hf
+  suffices
+    forall (s : Nat -> Finset Real>=0∞) (f : Nat -> Real>=0∞ -> Measure α -> Real>=0∞), (forall n r, Measurable (f n r)) ->
+      Monotone (fun n μ => ∑ r in s n, r * f n r μ) ->
+      ⨆ n, ∑ r in s n, r * ∫⁻ μ, f n r μ ∂m = ∫⁻ μ, ⨆ n, ∑ r in s n, r * f n r μ ∂m by
+    refine
+      this (fun n => SimpleFunc.range (SimpleFunc.eapprox f n))
+        (fun n r μ => μ (SimpleFunc.eapprox f n ⁻¹' {r})) ?_ ?_
+    · exact fun n r => measurable_coe (SimpleFunc.measurableSet_preimage _ _)
+    · exact fun n m h μ => SimpleFunc.lintegral_mono (SimpleFunc.monotone_eapprox _ h) le_rfl
+  intro s f hf hm
+  rw [lintegral_iSup _ hm]
+  swap
+  · fun_prop
+  congr
+  funext n
+  rw [lintegral_finsetSum (s n)]
+  · simp_rw [lintegral_const_mul _ (hf _ _)]
+  · exact fun r _ => (hf _ _).const_mul _
 
 中文:
 定理 lintegral_join
@@ -694,7 +716,27 @@ exact lintegral_congr_ae (ae_ae_of_ae_join hfg).mono fun μ hμ =>
     rw [lintegral_congr_ae hfg]; rw [this hgm.aemeasurable hgm]
 exact lintegral_congr_ae (ae_ae_of_ae_join hfg).mono fun μ hμ =>
 .symm lintegral_congr_ae hμ
-  simp_rw [lintegral_eq_iSup_eapprox_lintegral hfm, SimpleFunc.lin
+  simp_rw [lintegral_eq_iSup_eapprox_lintegral hfm, SimpleFunc.lintegral,
+    join_apply (SimpleFunc.measurableSet_preimage _ _)]
+  clear hf
+  suffices
+    forall (s : Nat -> Finset Real>=0∞) (f : Nat -> Real>=0∞ -> Measure α -> Real>=0∞), (forall n r, Measurable (f n r)) ->
+      Monotone (fun n μ => ∑ r in s n, r * f n r μ) ->
+      ⨆ n, ∑ r in s n, r * ∫⁻ μ, f n r μ ∂m = ∫⁻ μ, ⨆ n, ∑ r in s n, r * f n r μ ∂m by
+    refine
+      this (fun n => SimpleFunc.range (SimpleFunc.eapprox f n))
+        (fun n r μ => μ (SimpleFunc.eapprox f n ⁻¹' {r})) ?_ ?_
+    · exact fun n r => measurable_coe (SimpleFunc.measurableSet_preimage _ _)
+    · exact fun n m h μ => SimpleFunc.lintegral_mono (SimpleFunc.monotone_eapprox _ h) le_rfl
+  intro s f hf hm
+  rw [lintegral_iSup _ hm]
+  swap
+  · fun_prop
+  congr
+  funext n
+  rw [lintegral_finsetSum (s n)]
+  · simp_rw [lintegral_const_mul _ (hf _ _)]
+  · exact fun r _ => (hf _ _).const_mul _
 
 Depends on / 依赖: Finset, Measurable, Measure, Monotone, SimpleFunc, SimpleFunc.lintegral, SimpleFunc.measurableSet_preimage, ae_ae_of_ae_join, aemeasurable, generalizing, hgm.aemeasurable, join_apply, lintegral, lintegral_congr_ae, lintegral_eq_iSup_eapprox_lintegral, measurableSet_preimage, simp_rw
 -/

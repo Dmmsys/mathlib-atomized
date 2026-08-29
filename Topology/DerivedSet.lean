@@ -351,7 +351,10 @@ lemma derivedSet_closure
   rw [mem_derivedSet]; rw [AccPt]; rw [(nhdsWithin_basis_open x {x}ᶜ).inf_principal_neBot_iff] at hx ⊢
   peel hx with u hu _
   obtain ⟨-, hu_open⟩ := hu
-  exact mem_closure_iff.mp this.some_mem.2 (u inter {x}ᶜ) (hu_open.in
+  exact mem_closure_iff.mp this.some_mem.2 (u inter {x}ᶜ) (hu_open.inter isOpen_compl_singleton)
+    this.some_mem.1
+
+@[simp]
 
 中文:
 引理 derivedSet_closure
@@ -362,7 +365,10 @@ lemma derivedSet_closure
   rw [mem_derivedSet]; rw [AccPt]; rw [(nhdsWithin_basis_open x {x}ᶜ).inf_principal_neBot_iff] at hx ⊢
   peel hx with u hu _
   obtain ⟨-, hu_open⟩ := hu
-  exact mem_closure_iff.mp this.some_mem.2 (u inter {x}ᶜ) (hu_open.in
+  exact mem_closure_iff.mp this.some_mem.2 (u inter {x}ᶜ) (hu_open.inter isOpen_compl_singleton)
+    this.some_mem.1
+
+@[simp]
 
 Depends on / 依赖: derivedSet_mono, hu_open, hu_open.inter, inf_principal_neBot_iff, isOpen_compl_singleton, le_antisymm, mem_closure_iff, mem_closure_iff.mp, mem_derivedSet, nhdsWithin_basis_open, some_mem, subset_closure, this.some_mem
 -/
@@ -484,7 +490,8 @@ lemma IsPreconnected.inter_derivedSet_nonempty
         exact derivedSet_mono _ _ h
     · exact ha
     · exact hb
-  · obtain ⟨x, hx⟩ := ha.left.exists
+  · obtain ⟨x, hx⟩ := ha.left.exists_eq_singleton_or_nontrivial.resolve_right hu
+    simp_all
 
 中文:
 引理 是预连通.inter_derivedSet_nonempty
@@ -500,7 +507,8 @@ lemma IsPreconnected.inter_derivedSet_nonempty
         exact derivedSet_mono _ _ h
     · exact ha
     · exact hb
-  · obtain ⟨x, hx⟩ := ha.left.exists
+  · obtain ⟨x, hx⟩ := ha.left.exists_eq_singleton_or_nontrivial.resolve_right hu
+    simp_all
 
 Depends on / 依赖: Nontrivial, U.Nontrivial, derivedSet, derivedSet_mono, derivedSet_union, exists_eq_singleton_or_nontrivial, ha.left.exists_eq_singleton_or_nontrivial.resolve_right, hs.preperfect_of_nontrivial, isPreconnected_closed_iff, isPreconnected_closed_iff.mp, preperfect_of_nontrivial, resolve_right
 -/

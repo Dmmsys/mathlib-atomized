@@ -403,7 +403,12 @@ lemma ord_le_smul
   have : a • f != 0 := by simp [ha, Algebra.smul_def, hf, germToFunctionField_injective,
     RingHom.algebraMap_toAlgebra, map_ne_zero_iff]
   rw [ord_le_ord_iff hx hx hf this]
-  algebraize [(X.presheaf.germ U x hxU
+  algebraize [(X.presheaf.germ U x hxU).hom]
+  have : Ring.KrullDimLE 1 ↑(X.presheaf.stalk x) := krullDimLE_of_coheight_le hx.le
+  have : IsScalarTower ↑Γ(X, U) ↑(X.presheaf.stalk x) ↑X.functionField :=
+    functionField_isScalarTower X U ⟨x, hxU⟩
+  simp [ordHom, Ring.ordFrac_le_smul, RingHom.algebraMap_toAlgebra, map_ne_zero_iff,
+    germ_injective_of_isIntegral, ha]
 
 中文:
 引理 ord_le_smul
@@ -416,7 +421,12 @@ lemma ord_le_smul
   have : a • f != 0 := by simp [ha, Algebra.smul_def, hf, germToFunctionField_injective,
     RingHom.algebraMap_toAlgebra, map_ne_zero_iff]
   rw [ord_le_ord_iff hx hx hf this]
-  algebraize [(X.presheaf.germ U x hxU
+  algebraize [(X.presheaf.germ U x hxU).hom]
+  have : Ring.KrullDimLE 1 ↑(X.presheaf.stalk x) := krullDimLE_of_coheight_le hx.le
+  have : IsScalarTower ↑Γ(X, U) ↑(X.presheaf.stalk x) ↑X.functionField :=
+    functionField_isScalarTower X U ⟨x, hxU⟩
+  simp [ordHom, Ring.ordFrac_le_smul, RingHom.algebraMap_toAlgebra, map_ne_zero_iff,
+    germ_injective_of_isIntegral, ha]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsScalarTower, KrullDimLE, Ring.KrullDimLE, RingHom, RingHom.algebraMap_toAlgebra, X.functionField, X.presheaf.germ, X.presheaf.stalk, algebraMap_toAlgebra, algebraize, coheight, functionField, functionField_isScalarTower, germToFunctionField_injective, hx.le, krullDimLE_of_coheight_le, map_ne_zero_iff, ordHom
 -/

@@ -227,7 +227,7 @@ lemma toAddCircle_injective
   have : (0 : Real) < N := Nat.cast_pos.mpr (NeZero.pos _)
   rwa [toAddCircle_apply, toAddCircle_apply, AddCircle.coe_eq_coe_iff_of_mem_Ico,
     div_left_inj' this.ne', Nat.cast_inj, (val_injective N).eq_iff] at hxy <;>
-  exact ⟨by positivity, by simpa only [zero_add, div_lt_one t
+  exact ⟨by positivity, by simpa only [zero_add, div_lt_one this, Nat.cast_lt] using val_lt _⟩
 
 中文:
 引理 toAddCircle_injective
@@ -237,7 +237,7 @@ lemma toAddCircle_injective
   have : (0 : Real) < N := Nat.cast_pos.mpr (NeZero.pos _)
   rwa [toAddCircle_apply, toAddCircle_apply, AddCircle.coe_eq_coe_iff_of_mem_Ico,
     div_left_inj' this.ne', Nat.cast_inj, (val_injective N).eq_iff] at hxy <;>
-  exact ⟨by positivity, by simpa only [zero_add, div_lt_one t
+  exact ⟨by positivity, by simpa only [zero_add, div_lt_one this, Nat.cast_lt] using val_lt _⟩
 
 Depends on / 依赖: AddCircle, AddCircle.coe_eq_coe_iff_of_mem_Ico, Nat.cast_inj, Nat.cast_lt, Nat.cast_pos.mpr, NeZero, NeZero.pos, cast_inj, cast_lt, cast_pos, coe_eq_coe_iff_of_mem_Ico, div_left_inj, div_lt_one, eq_iff, this.ne, toAddCircle_apply, val_injective, val_lt, zero_add
 -/

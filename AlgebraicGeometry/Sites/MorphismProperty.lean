@@ -99,7 +99,8 @@ instance :
       rw [TopCat.pullback_fst_range f.base g.base]
       use y
     obtain ⟨a, ha⟩ := this
-    use (Preserve
+    use (PreservesPullback.iso Scheme.forgetToTop f g).inv a
+    rwa [← TopCat.comp_app, Iso.inv_hom_id_assoc]
 
 中文:
 实例 :
@@ -111,7 +112,8 @@ instance :
       rw [TopCat.pullback_fst_range f.base g.base]
       use y
     obtain ⟨a, ha⟩ := this
-    use (Preserve
+    use (PreservesPullback.iso Scheme.forgetToTop f g).inv a
+    rwa [← TopCat.comp_app, Iso.inv_hom_id_assoc]
 
 Depends on / 依赖: Iso.inv_hom_id_assoc, PreservesPullback, PreservesPullback.iso, PreservesPullback.iso_hom_fst, Scheme, Scheme.forgetToTop, Set.range, TopCat, TopCat.comp_app, TopCat.pullback_fst_range, comp_app, f.base, forgetToTop, g.base, inv_hom_id_assoc, iso_hom_fst, pullback, pullback.fst, pullback_fst_range
 -/
@@ -337,7 +339,9 @@ instance [IsJointlySurjectivePreserving
     obtain ⟨i, y, hy⟩ := hf.1 (g x)
     have := (H i).hasPullback
     obtain ⟨w, hw⟩ := IsJointlySurjectivePreserving.exists_preimage_fst_triplet_of_prop (hf.2 i)
-      (f := g) x 
+      (f := g) x y hy.symm
+    use i, (H i).isoPullback.inv w
+    simpa [← Scheme.Hom.comp_apply]
 
 中文:
 实例 [是JointlySurjectivePreserving
@@ -348,7 +352,9 @@ instance [IsJointlySurjectivePreserving
     obtain ⟨i, y, hy⟩ := hf.1 (g x)
     have := (H i).hasPullback
     obtain ⟨w, hw⟩ := IsJointlySurjectivePreserving.exists_preimage_fst_triplet_of_prop (hf.2 i)
-      (f := g) x 
+      (f := g) x y hy.symm
+    use i, (H i).isoPullback.inv w
+    simpa [← Scheme.Hom.comp_apply]
 
 Depends on / 依赖: IsJointlySurjectivePreserving, IsJointlySurjectivePreserving.exists_preimage_fst_triplet_of_prop, P.of_isPullback, Scheme, Scheme.Hom.comp_apply, comp_apply, exists_preimage_fst_triplet_of_prop, hasPullback, hy.symm, isoPullback, isoPullback.inv, ofArrows_mem_precoverage_iff, of_isPullback
 -/

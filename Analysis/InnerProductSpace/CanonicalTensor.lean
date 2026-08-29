@@ -77,7 +77,18 @@ theorem InnerProductSpace.canonicalCovariantTensor_eq_sum
     congr 1 with m
     rw [Fintype.sum_eq_single m _]; rw [orthonormal_iff_ite.1 w.orthonormal]
     · simp only [↓reduceIte, one_smul]
-    simp only [orthonormal_i
+    simp only [orthonormal_iff_ite.1 w.orthonormal, ite_smul, one_smul, zero_smul,
+      ite_eq_right_iff]
+    tauto
+  _ = ∑ m, ∑ n, (∑ i, ⟪w m, v i⟫_Real * ⟪v i, w n⟫_Real) • w m otimesₜ[Real] w n := by
+    simp_rw [OrthonormalBasis.sum_inner_mul_inner v]
+  _ = ∑ m, ∑ n, (∑ i, ⟪w m, v i⟫_Real * ⟪w n, v i⟫_Real) • w m otimesₜ[Real] w n := by
+    simp only [real_inner_comm (w _)]
+  _ = ∑ i, (∑ m, ⟪w m, v i⟫_Real • w m) otimesₜ[Real] ∑ n, ⟪w n, v i⟫_Real • w n := by
+    simp only [sum_tmul, tmul_sum, smul_tmul_smul, Finset.sum_comm (γ := ι), Finset.sum_smul]
+    rw [Finset.sum_comm]
+  _ = ∑ i, v i otimesₜ[Real] v i := by
+    simp only [w.sum_repr' (v _)]
 
 中文:
 定理 内积空间.canonicalCovariantTensor_eq_sum
@@ -89,7 +100,18 @@ theorem InnerProductSpace.canonicalCovariantTensor_eq_sum
     congr 1 with m
     rw [Fintype.sum_eq_single m _]; rw [orthonormal_iff_ite.1 w.orthonormal]
     · simp only [↓reduceIte, one_smul]
-    simp only [orthonormal_i
+    simp only [orthonormal_iff_ite.1 w.orthonormal, ite_smul, one_smul, zero_smul,
+      ite_eq_right_iff]
+    tauto
+  _ = ∑ m, ∑ n, (∑ i, ⟪w m, v i⟫_Real * ⟪v i, w n⟫_Real) • w m otimesₜ[Real] w n := by
+    simp_rw [OrthonormalBasis.sum_inner_mul_inner v]
+  _ = ∑ m, ∑ n, (∑ i, ⟪w m, v i⟫_Real * ⟪w n, v i⟫_Real) • w m otimesₜ[Real] w n := by
+    simp only [real_inner_comm (w _)]
+  _ = ∑ i, (∑ m, ⟪w m, v i⟫_Real • w m) otimesₜ[Real] ∑ n, ⟪w n, v i⟫_Real • w n := by
+    simp only [sum_tmul, tmul_sum, smul_tmul_smul, Finset.sum_comm (γ := ι), Finset.sum_smul]
+    rw [Finset.sum_comm]
+  _ = ∑ i, v i otimesₜ[Real] v i := by
+    simp only [w.sum_repr' (v _)]
 
 Depends on / 依赖: Fintype, Fintype.sum_eq_single, OrthonormalBasis, OrthonormalBasis.sum_inner_mul_inner, _Real, ite_eq_right_iff, ite_smul, one_smul, orthonormal, orthonormal_iff_ite, reduceIte, simp_rw, stdOrthonormalBasis, sum_eq_single, sum_inner_mul_inner, w.orthonormal, zero_smul
 -/

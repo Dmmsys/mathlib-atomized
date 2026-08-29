@@ -72,7 +72,8 @@ definition mk'
     suffices x ⊔ y = sSup {x, y} by exact this ▸ sSupClosed' (fun z hz => by aesop)
     simp [sSup_singleton]
   infClosed' := fun x hx y hy => by
-    suffices x ⊓ y = sInf {x, y} by exact this ▸ sIn
+    suffices x ⊓ y = sInf {x, y} by exact this ▸ sInfClosed' (fun z hz => by aesop)
+    simp [sInf_singleton]
 
 中文:
 定义 mk'
@@ -84,7 +85,8 @@ definition mk'
     suffices x ⊔ y = sSup {x, y} by exact this ▸ sSupClosed' (fun z hz => by aesop)
     simp [sSup_singleton]
   infClosed' := fun x hx y hy => by
-    suffices x ⊓ y = sInf {x, y} by exact this ▸ sIn
+    suffices x ⊓ y = sInf {x, y} by exact this ▸ sInfClosed' (fun z hz => by aesop)
+    simp [sInf_singleton]
 -/
 @[simps] def mk' (carrier : Set α)
     (sSupClosed' : forall ⦃s : Set α⦄, s subseteq carrier -> sSup s in carrier)
@@ -576,7 +578,9 @@ definition map
     rw [← map_sSup]
     exact mem_image_of_mem f (sSupClosed ht)
   sInfClosed' := fun s hs => by
-    obtain ⟨t, ht, rfl⟩ := subset_image_if
+    obtain ⟨t, ht, rfl⟩ := subset_image_iff.mp hs
+    rw [← map_sInf]
+    exact mem_image_of_mem f (sInfClosed ht)
 
 中文:
 定义 map
@@ -589,7 +593,9 @@ definition map
     rw [← map_sSup]
     exact mem_image_of_mem f (sSupClosed ht)
   sInfClosed' := fun s hs => by
-    obtain ⟨t, ht, rfl⟩ := subset_image_if
+    obtain ⟨t, ht, rfl⟩ := subset_image_iff.mp hs
+    rw [← map_sInf]
+    exact mem_image_of_mem f (sInfClosed ht)
 -/
 @[simps] def map (L : CompleteSublattice α) : CompleteSublattice β where
   carrier := f '' L
@@ -634,7 +640,8 @@ definition comap
     simpa only [mem_preimage, map_sSup, SetLike.mem_coe] using sSupClosed
  mapsTo_iff_image_subset.mp hs
   sInfClosed' s hs := by
-    simpa only [mem_preimage, map_sInf, SetLike.mem_coe] us
+    simpa only [mem_preimage, map_sInf, SetLike.mem_coe] using sInfClosed
+ mapsTo_iff_image_subset.mp hs
 
 中文:
 定义 comap
@@ -646,7 +653,8 @@ definition comap
     simpa only [mem_preimage, map_sSup, SetLike.mem_coe] using sSupClosed
  mapsTo_iff_image_subset.mp hs
   sInfClosed' s hs := by
-    simpa only [mem_preimage, map_sInf, SetLike.mem_coe] us
+    simpa only [mem_preimage, map_sInf, SetLike.mem_coe] using sInfClosed
+ mapsTo_iff_image_subset.mp hs
 -/
 @[simps] def comap (L : CompleteSublattice β) : CompleteSublattice α where
   carrier := f ⁻¹' L

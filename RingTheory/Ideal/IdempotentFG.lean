@@ -33,7 +33,12 @@ theorem isIdempotentElem_iff_of_fg
           rw [smul_eq_mul]
           exact e.ge)
     simp_rw [smul_eq_mul] at hr'
-    refine ⟨r, hr' r hr, antisymm ?_ ((Submodule.span_singleton_le_iff_mem _ _).mpr
+    refine ⟨r, hr' r hr, antisymm ?_ ((Submodule.span_singleton_le_iff_mem _ _).mpr hr)⟩
+    intro x hx
+    rw [← hr' x hx]
+    exact Ideal.mem_span_singleton'.mpr ⟨_, mul_comm _ _⟩
+  · rintro ⟨e, he, rfl⟩
+    simp [IsIdempotentElem, Ideal.span_singleton_mul_span_singleton, he.eq]
 
 中文:
 定理 isIdempotentElem_iff_of_fg
@@ -47,7 +52,12 @@ theorem isIdempotentElem_iff_of_fg
           rw [smul_eq_mul]
           exact e.ge)
     simp_rw [smul_eq_mul] at hr'
-    refine ⟨r, hr' r hr, antisymm ?_ ((Submodule.span_singleton_le_iff_mem _ _).mpr
+    refine ⟨r, hr' r hr, antisymm ?_ ((Submodule.span_singleton_le_iff_mem _ _).mpr hr)⟩
+    intro x hx
+    rw [← hr' x hx]
+    exact Ideal.mem_span_singleton'.mpr ⟨_, mul_comm _ _⟩
+  · rintro ⟨e, he, rfl⟩
+    simp [IsIdempotentElem, Ideal.span_singleton_mul_span_singleton, he.eq]
 
 Depends on / 依赖: Ideal.mem_span_singleton, Ideal.span_singleton_mul_span_singleton, IsIdempotentElem, Submodule, Submodule.exists_mem_and_smul_eq_self_of_fg_of_le_smul, Submodule.span_singleton_le_iff_mem, antisymm, e.ge, exists_mem_and_smul_eq_self_of_fg_of_le_smul, he.eq, mem_span_singleton, mul_comm, simp_rw, smul_eq_mul, span_singleton_le_iff_mem, span_singleton_mul_span_singleton
 -/
@@ -82,7 +92,7 @@ theorem isIdempotentElem_iff_eq_bot_or_top
     apply Or.imp id _ (IsIdempotentElem.iff_eq_zero_or_one.mp he)
     rintro rfl
     simp
-  · rintro (rfl | rfl) <;> simp [IsIdempotentEl
+  · rintro (rfl | rfl) <;> simp [IsIdempotentElem]
 
 中文:
 定理 isIdempotentElem_iff_eq_bot_or_top
@@ -95,7 +105,7 @@ theorem isIdempotentElem_iff_eq_bot_or_top
     apply Or.imp id _ (IsIdempotentElem.iff_eq_zero_or_one.mp he)
     rintro rfl
     simp
-  · rintro (rfl | rfl) <;> simp [IsIdempotentEl
+  · rintro (rfl | rfl) <;> simp [IsIdempotentElem]
 
 Depends on / 依赖: I.isIdempotentElem_iff_of_fg, Ideal.span_singleton_eq_bot, Ideal.submodule_span_eq, IsIdempotentElem, IsIdempotentElem.iff_eq_zero_or_one.mp, Or.imp, iff_eq_zero_or_one, isIdempotentElem_iff_of_fg, span_singleton_eq_bot, submodule_span_eq
 -/

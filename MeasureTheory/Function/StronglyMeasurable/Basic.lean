@@ -453,7 +453,27 @@ theorem tendsto_approxBounded_of_norm_le
   · rw [norm_eq_zero] at hfx0
     rw [hfx0] at h_tendsto ⊢
     have h_tendsto_norm : Tendsto (fun n => ‖hf.approx n x‖) atTop (𝓝 0) := by
-   
+      convert! h_tendsto.norm
+      rw [norm_zero]
+    refine squeeze_zero_norm (fun n => ?_) h_tendsto_norm
+    calc
+      ‖min 1 (c / ‖hf.approx n x‖) • hf.approx n x‖ =
+          ‖min 1 (c / ‖hf.approx n x‖)‖ * ‖hf.approx n x‖ :=
+        norm_smul _ _
+      _ <= ‖(1 : Real)‖ * ‖hf.approx n x‖ := by
+        gcongr
+        rw [norm_one]; rw [Real.norm_of_nonneg]
+        · exact min_le_left _ _
+        · exact le_min zero_le_one (div_nonneg ((norm_nonneg _).trans hfx) (norm_nonneg _))
+      _ = ‖hf.approx n x‖ := by rw [norm_one, one_mul]
+  rw [← one_smul Real (f x)]
+  refine Tendsto.smul ?_ h_tendsto
+  have : min 1 (c / ‖f x‖) = 1 := by
+    rw [min_eq_left_iff]; rw [one_le_div (lt_of_le_of_ne (norm_nonneg _) (Ne.symm hfx0))]
+    exact hfx
+  nth_rw 2 [this.symm]
+  refine Tendsto.min tendsto_const_nhds ?_
+  exact Tendsto.div tendsto_const_nhds h_tendsto.norm hfx0
 
 中文:
 定理 tendsto_approxBounded_of_norm_le
@@ -465,7 +485,27 @@ theorem tendsto_approxBounded_of_norm_le
   · rw [norm_eq_zero] at hfx0
     rw [hfx0] at h_tendsto ⊢
     have h_tendsto_norm : Tendsto (fun n => ‖hf.approx n x‖) atTop (𝓝 0) := by
-   
+      convert! h_tendsto.norm
+      rw [norm_zero]
+    refine squeeze_zero_norm (fun n => ?_) h_tendsto_norm
+    calc
+      ‖min 1 (c / ‖hf.approx n x‖) • hf.approx n x‖ =
+          ‖min 1 (c / ‖hf.approx n x‖)‖ * ‖hf.approx n x‖ :=
+        norm_smul _ _
+      _ <= ‖(1 : Real)‖ * ‖hf.approx n x‖ := by
+        gcongr
+        rw [norm_one]; rw [Real.norm_of_nonneg]
+        · exact min_le_left _ _
+        · exact le_min zero_le_one (div_nonneg ((norm_nonneg _).trans hfx) (norm_nonneg _))
+      _ = ‖hf.approx n x‖ := by rw [norm_one, one_mul]
+  rw [← one_smul Real (f x)]
+  refine Tendsto.smul ?_ h_tendsto
+  have : min 1 (c / ‖f x‖) = 1 := by
+    rw [min_eq_left_iff]; rw [one_le_div (lt_of_le_of_ne (norm_nonneg _) (Ne.symm hfx0))]
+    exact hfx
+  nth_rw 2 [this.symm]
+  refine Tendsto.min tendsto_const_nhds ?_
+  exact Tendsto.div tendsto_const_nhds h_tendsto.norm hfx0
 
 Depends on / 依赖: Function, Function.comp_apply, SimpleFunc, SimpleFunc.coe_map, StronglyMeasurable, StronglyMeasurable.approxBounded, Tendsto, approx, approxBounded, coe_map, comp_apply, convert, h_tendsto, h_tendsto.norm, h_tendsto_norm, hf.approx, hf.tendsto_approx, norm_eq_zero, norm_smul, norm_zero
 -/
@@ -535,7 +575,14 @@ theorem norm_approxBounded_le
   by_cases h0 : ‖hf.approx n x‖ = 0
   · simp only [h0, _root_.div_zero, min_eq_right, zero_le_one, norm_zero, mul_zero]
     exact hc
-  rcases le_total ‖hf.approx n x‖ c wit
+  rcases le_total ‖hf.approx n x‖ c with h | h
+  · rw [min_eq_left _]
+    · simpa only [norm_one, one_mul] using h
+    · rwa [one_le_div (lt_of_le_of_ne (norm_nonneg _) (Ne.symm h0))]
+  · rw [min_eq_right _]
+    · rw [norm_div, norm_norm, mul_comm, mul_div, div_eq_mul_inv, mul_comm, ← mul_assoc,
+        inv_mul_cancel₀ h0, one_mul, Real.norm_of_nonneg hc]
+    · rwa [div_le_one (lt_of_le_of_ne (norm_nonneg _) (Ne.symm h0))]
 
 中文:
 定理 norm_approxBounded_le
@@ -546,7 +593,14 @@ theorem norm_approxBounded_le
   by_cases h0 : ‖hf.approx n x‖ = 0
   · simp only [h0, _root_.div_zero, min_eq_right, zero_le_one, norm_zero, mul_zero]
     exact hc
-  rcases le_total ‖hf.approx n x‖ c wit
+  rcases le_total ‖hf.approx n x‖ c with h | h
+  · rw [min_eq_left _]
+    · simpa only [norm_one, one_mul] using h
+    · rwa [one_le_div (lt_of_le_of_ne (norm_nonneg _) (Ne.symm h0))]
+  · rw [min_eq_right _]
+    · rw [norm_div, norm_norm, mul_comm, mul_div, div_eq_mul_inv, mul_comm, ← mul_assoc,
+        inv_mul_cancel₀ h0, one_mul, Real.norm_of_nonneg hc]
+    · rwa [div_le_one (lt_of_le_of_ne (norm_nonneg _) (Ne.symm h0))]
 
 Depends on / 依赖: Function, Function.comp_apply, Ne.symm, SimpleFunc, SimpleFunc.coe_map, StronglyMeasurable, StronglyMeasurable.approxBounded, _root_, _root_.div_zero, approx, approxBounded, coe_map, comp_apply, div_eq_mul_, div_zero, hf.approx, le_total, lt_of_le_of_ne, min_eq_left, min_eq_right
 -/
@@ -580,7 +634,15 @@ theorem _root_.stronglyMeasurable_bot_iff
   · refine ⟨f hα.some, ?_⟩
     let fs := hf.approx
     have h_fs_tendsto : forall x, Tendsto (fun n => fs n x) atTop (𝓝 (f x)) := hf.tendsto_approx
-    have : forall n, exis
+    have : forall n, exists c, forall x, fs n x = c := fun n => SimpleFunc.simpleFunc_bot (fs n)
+    let cs n := (this n).choose
+    have h_cs_eq : forall n, ⇑(fs n) = fun _ => cs n := fun n => funext (this n).choose_spec
+    conv at h_fs_tendsto => enter [x, 1, n]; rw [h_cs_eq]
+    have h_tendsto : Tendsto cs atTop (𝓝 (f hα.some)) := h_fs_tendsto hα.some
+    ext1 x
+    exact tendsto_nhds_unique (h_fs_tendsto x) h_tendsto
+  · obtain ⟨c, rfl⟩ := hf_eq
+    exact stronglyMeasurable_const
 
 中文:
 定理 _root_.stronglyMeasurable_bot_iff
@@ -592,7 +654,15 @@ theorem _root_.stronglyMeasurable_bot_iff
   · refine ⟨f hα.some, ?_⟩
     let fs := hf.approx
     have h_fs_tendsto : forall x, Tendsto (fun n => fs n x) atTop (𝓝 (f x)) := hf.tendsto_approx
-    have : forall n, exis
+    have : forall n, exists c, forall x, fs n x = c := fun n => SimpleFunc.simpleFunc_bot (fs n)
+    let cs n := (this n).choose
+    have h_cs_eq : forall n, ⇑(fs n) = fun _ => cs n := fun n => funext (this n).choose_spec
+    conv at h_fs_tendsto => enter [x, 1, n]; rw [h_cs_eq]
+    have h_tendsto : Tendsto cs atTop (𝓝 (f hα.some)) := h_fs_tendsto hα.some
+    ext1 x
+    exact tendsto_nhds_unique (h_fs_tendsto x) h_tendsto
+  · obtain ⟨c, rfl⟩ := hf_eq
+    exact stronglyMeasurable_const
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.simpleFunc_bot, Tendsto, approx, choose_spec, eq_iff_true_of_subsingleton, h_cs_eq, h_fs_tendsto, hf.approx, hf.tendsto_approx, hf_eq, isEmpty_or_nonempty, simpleFunc_bot, tendsto_approx
 -/
@@ -628,7 +698,45 @@ theorem finStronglyMeasurable_of_set_sigmaFinite
   have hS_meas : forall n, MeasurableSet (S n) := measurableSet_spanningSets (μ.restrict t)
   let f_approx := hf_meas.approx
   let fs n := SimpleFunc.restrict (f_approx n) (S n inter t)
-  have h_fs_t_compl : forall 
+  have h_fs_t_compl : forall n, forall x, x ∉ t -> fs n x = 0 := by
+    intro n x hxt
+    rw [SimpleFunc.restrict_apply _ ((hS_meas n).inter ht)]
+    refine Set.indicator_of_notMem ?_ _
+    simp [hxt]
+  refine ⟨fs, ?_, fun x => ?_⟩
+  · simp_rw [SimpleFunc.support_eq, ← Finset.mem_coe]
+    classical
+    refine fun n => measure_biUnion_lt_top {y in (fs n).range | y != 0}.finite_toSet fun y hy => ?_
+    rw [SimpleFunc.restrict_preimage_singleton _ ((hS_meas n).inter ht)]
+    swap
+    · let : (y : β) -> Decidable (y = 0) := fun y => Classical.propDecidable _
+      rw [Finset.mem_coe]; rw [Finset.mem_filter] at hy
+      exact hy.2
+    refine (measure_mono Set.inter_subset_left).trans_lt ?_
+    have h_lt_top := measure_spanningSets_lt_top (μ.restrict t) n
+    rwa [Measure.restrict_apply' ht] at h_lt_top
+  · by_cases hxt : x in t
+    swap
+    · rw [funext fun n => h_fs_t_compl n x hxt, hft_zero x hxt]
+      exact tendsto_const_nhds
+    have h : Tendsto (fun n => (f_approx n) x) atTop (𝓝 (f x)) := hf_meas.tendsto_approx x
+    obtain ⟨n₁, hn₁⟩ : exists n, forall m, n <= m -> fs m x = f_approx m x := by
+      obtain ⟨n, hn⟩ : exists n, forall m, n <= m -> x in S m inter t := by
+        rsuffices ⟨n, hn⟩ : exists n, forall m, n <= m -> x in S m
+        · exact ⟨n, fun m hnm => Set.mem_inter (hn m hnm) hxt⟩
+        rsuffices ⟨n, hn⟩ : exists n, x in S n
+        · exact ⟨n, fun m hnm => monotone_spanningSets (μ.restrict t) hnm hn⟩
+        rw [← Set.mem_iUnion]; rw [iUnion_spanningSets (μ.restrict t)]
+        trivial
+      refine ⟨n, fun m hnm => ?_⟩
+      simp_rw [fs, SimpleFunc.restrict_apply _ ((hS_meas m).inter ht),
+        Set.indicator_of_mem (hn m hnm)]
+    rw [tendsto_atTop'] at h ⊢
+    intro s hs
+    obtain ⟨n₂, hn₂⟩ := h s hs
+    refine ⟨max n₁ n₂, fun m hm => ?_⟩
+    rw [hn₁ m ((le_max_left _ _).trans hm)]
+    exact hn₂ m ((le_max_right _ _).trans hm)
 
 中文:
 定理 finStronglyMeasurable_of_set_sigmaFinite
@@ -639,7 +747,45 @@ theorem finStronglyMeasurable_of_set_sigmaFinite
   have hS_meas : forall n, MeasurableSet (S n) := measurableSet_spanningSets (μ.restrict t)
   let f_approx := hf_meas.approx
   let fs n := SimpleFunc.restrict (f_approx n) (S n inter t)
-  have h_fs_t_compl : forall 
+  have h_fs_t_compl : forall n, forall x, x ∉ t -> fs n x = 0 := by
+    intro n x hxt
+    rw [SimpleFunc.restrict_apply _ ((hS_meas n).inter ht)]
+    refine Set.indicator_of_notMem ?_ _
+    simp [hxt]
+  refine ⟨fs, ?_, fun x => ?_⟩
+  · simp_rw [SimpleFunc.support_eq, ← Finset.mem_coe]
+    classical
+    refine fun n => measure_biUnion_lt_top {y in (fs n).range | y != 0}.finite_toSet fun y hy => ?_
+    rw [SimpleFunc.restrict_preimage_singleton _ ((hS_meas n).inter ht)]
+    swap
+    · let : (y : β) -> Decidable (y = 0) := fun y => Classical.propDecidable _
+      rw [Finset.mem_coe]; rw [Finset.mem_filter] at hy
+      exact hy.2
+    refine (measure_mono Set.inter_subset_left).trans_lt ?_
+    have h_lt_top := measure_spanningSets_lt_top (μ.restrict t) n
+    rwa [Measure.restrict_apply' ht] at h_lt_top
+  · by_cases hxt : x in t
+    swap
+    · rw [funext fun n => h_fs_t_compl n x hxt, hft_zero x hxt]
+      exact tendsto_const_nhds
+    have h : Tendsto (fun n => (f_approx n) x) atTop (𝓝 (f x)) := hf_meas.tendsto_approx x
+    obtain ⟨n₁, hn₁⟩ : exists n, forall m, n <= m -> fs m x = f_approx m x := by
+      obtain ⟨n, hn⟩ : exists n, forall m, n <= m -> x in S m inter t := by
+        rsuffices ⟨n, hn⟩ : exists n, forall m, n <= m -> x in S m
+        · exact ⟨n, fun m hnm => Set.mem_inter (hn m hnm) hxt⟩
+        rsuffices ⟨n, hn⟩ : exists n, x in S n
+        · exact ⟨n, fun m hnm => monotone_spanningSets (μ.restrict t) hnm hn⟩
+        rw [← Set.mem_iUnion]; rw [iUnion_spanningSets (μ.restrict t)]
+        trivial
+      refine ⟨n, fun m hnm => ?_⟩
+      simp_rw [fs, SimpleFunc.restrict_apply _ ((hS_meas m).inter ht),
+        Set.indicator_of_mem (hn m hnm)]
+    rw [tendsto_atTop'] at h ⊢
+    intro s hs
+    obtain ⟨n₂, hn₂⟩ := h s hs
+    refine ⟨max n₁ n₂, fun m hm => ?_⟩
+    rw [hn₁ m ((le_max_left _ _).trans hm)]
+    exact hn₂ m ((le_max_right _ _).trans hm)
 
 Depends on / 依赖: MeasurableSet, Set.indicator_of_notMem, SigmaFinite, SimpleFunc, SimpleFunc.restrict, SimpleFunc.restrict_apply, SimpleFunc.suppo, approx, f_approx, hS_meas, h_fs_t_compl, hf_meas, hf_meas.approx, indicator_of_notMem, measurableSet_spanningSets, restrict, restrict_apply, simp_rw, spanningSets
 -/
@@ -768,7 +914,8 @@ theorem _root_.Continuous.comp_stronglyMeasurable
 @[to_additive]
 nonrec theorem measurableSet_mulSupport {m : MeasurableSpace α} [One β] [TopologicalSpace β]
     [MetrizableSpace β] (hf : StronglyMeasurable f) : MeasurableSet (mulSupport f) := by
-  boreli
+  borelize β
+  exact measurableSet_mulSupport hf.measurable
 
 中文:
 定理 _root_.连续.comp_stronglyMeasurable
@@ -778,7 +925,8 @@ nonrec theorem measurableSet_mulSupport {m : MeasurableSpace α} [One β] [Topol
 @[to_additive]
 nonrec theorem measurableSet_mulSupport {m : MeasurableSpace α} [One β] [TopologicalSpace β]
     [MetrizableSpace β] (hf : StronglyMeasurable f) : MeasurableSet (mulSupport f) := by
-  boreli
+  borelize β
+  exact measurableSet_mulSupport hf.measurable
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.map, approx, hf.approx, hf.tendsto_approx, hg.tendsto, tendsto, tendsto_approx
 -/
@@ -1150,7 +1298,15 @@ theorem inv₀
   refine ⟨fun n => ((hf.approx n).restrict {x | f x != 0})⁻¹, fun x => ?_⟩
   have : MeasurableSet {x | f x != 0} := ((MeasurableSet.singleton 0).preimage hf.measurable).compl
   by_cases h : f x = 0
-  · simp_all only [ne_eq, measurableSet_setOfPred, SimpleFunc.coe_inv, SimpleFunc.coe_
+  · simp_all only [ne_eq, measurableSet_setOfPred, SimpleFunc.coe_inv, SimpleFunc.coe_restrict,
+      Pi.inv_apply, mem_ofPred_eq, not_true_eq_false, not_false_eq_true, indicator_of_notMem,
+      _root_.inv_zero]
+    exact tendsto_const_nhds
+  · simp_all only [ne_eq, measurableSet_setOfPred, SimpleFunc.coe_inv, SimpleFunc.coe_restrict,
+      Pi.inv_apply, mem_ofPred_eq, not_false_eq_true, indicator_of_mem]
+    apply (hf.tendsto_approx x).inv₀ h
+
+@[to_additive (attr := to_fun (attr := fun_prop)) sub]
 
 中文:
 定理 inv₀
@@ -1160,7 +1316,15 @@ theorem inv₀
   refine ⟨fun n => ((hf.approx n).restrict {x | f x != 0})⁻¹, fun x => ?_⟩
   have : MeasurableSet {x | f x != 0} := ((MeasurableSet.singleton 0).preimage hf.measurable).compl
   by_cases h : f x = 0
-  · simp_all only [ne_eq, measurableSet_setOfPred, SimpleFunc.coe_inv, SimpleFunc.coe_
+  · simp_all only [ne_eq, measurableSet_setOfPred, SimpleFunc.coe_inv, SimpleFunc.coe_restrict,
+      Pi.inv_apply, mem_ofPred_eq, not_true_eq_false, not_false_eq_true, indicator_of_notMem,
+      _root_.inv_zero]
+    exact tendsto_const_nhds
+  · simp_all only [ne_eq, measurableSet_setOfPred, SimpleFunc.coe_inv, SimpleFunc.coe_restrict,
+      Pi.inv_apply, mem_ofPred_eq, not_false_eq_true, indicator_of_mem]
+    apply (hf.tendsto_approx x).inv₀ h
+
+@[to_additive (attr := to_fun (attr := fun_prop)) sub]
 -/
 protected theorem inv₀ [GroupWithZero β] [ContinuousInv₀ β] [MetrizableSpace β]
     (hf : StronglyMeasurable f) : StronglyMeasurable f⁻¹ := by
@@ -1234,7 +1398,14 @@ theorem div
   refine ⟨fun n => hf.approx n / (hg.approx n).restrict {x | g x != 0}, fun x => ?_⟩
   have : MeasurableSet {x | g x != 0} := ((MeasurableSet.singleton 0).preimage hg.measurable).compl
   by_cases h : g x = 0
-  · simp_all only [ne_eq, SimpleFunc.coe_div, SimpleFunc.coe_restrict, Pi.di
+  · simp_all only [ne_eq, SimpleFunc.coe_div, SimpleFunc.coe_restrict, Pi.div_apply, mem_ofPred_eq,
+      not_true_eq_false, not_false_eq_true, indicator_of_notMem, _root_.div_zero]
+    exact tendsto_const_nhds
+  · simp_all only [ne_eq, SimpleFunc.coe_div, SimpleFunc.coe_restrict,
+      Pi.div_apply, mem_ofPred_eq, not_false_eq_true, indicator_of_mem]
+    exact (hf.tendsto_approx x).div (hg.tendsto_approx x) h
+
+@[to_additive]
 
 中文:
 定理 div
@@ -1244,7 +1415,14 @@ theorem div
   refine ⟨fun n => hf.approx n / (hg.approx n).restrict {x | g x != 0}, fun x => ?_⟩
   have : MeasurableSet {x | g x != 0} := ((MeasurableSet.singleton 0).preimage hg.measurable).compl
   by_cases h : g x = 0
-  · simp_all only [ne_eq, SimpleFunc.coe_div, SimpleFunc.coe_restrict, Pi.di
+  · simp_all only [ne_eq, SimpleFunc.coe_div, SimpleFunc.coe_restrict, Pi.div_apply, mem_ofPred_eq,
+      not_true_eq_false, not_false_eq_true, indicator_of_notMem, _root_.div_zero]
+    exact tendsto_const_nhds
+  · simp_all only [ne_eq, SimpleFunc.coe_div, SimpleFunc.coe_restrict,
+      Pi.div_apply, mem_ofPred_eq, not_false_eq_true, indicator_of_mem]
+    exact (hf.tendsto_approx x).div (hg.tendsto_approx x) h
+
+@[to_additive]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.singleton, Pi.div_apply, SimpleFunc, SimpleFunc.coe_div, SimpleFunc.coe_restrict, _root_, _root_.div_zero, approx, borelize, coe_div, coe_restrict, div_apply, div_zero, hf.approx, hg.approx, hg.measurable, indicator_of_notMem, measurable, mem_ofPred_eq
 -/
@@ -1528,7 +1706,7 @@ nonrec theorem _root_.IsUnit.stronglyMeasurable_const_smul_iff {_ : MeasurableSp
     (hc : IsUnit c) :
     (StronglyMeasurable fun x => c • f x) ↔ StronglyMeasurable f :=
   let ⟨u, hu⟩ := hc
- 
+  hu ▸ stronglyMeasurable_const_smul_iff u
 
 中文:
 定理 _root_.stronglyMeasurable_const_smul_iff
@@ -1539,7 +1717,7 @@ nonrec theorem _root_.IsUnit.stronglyMeasurable_const_smul_iff {_ : MeasurableSp
     (hc : IsUnit c) :
     (StronglyMeasurable fun x => c • f x) ↔ StronglyMeasurable f :=
   let ⟨u, hu⟩ := hc
- 
+  hu ▸ stronglyMeasurable_const_smul_iff u
 
 Depends on / 依赖: const_smul, fun_const_smul, h.const_smul, h.fun_const_smul, inv_smul_smul
 -/
@@ -2199,7 +2377,14 @@ theorem _root_.Embedding.comp_stronglyMeasurable_iff
       hg.continuous.comp_stronglyMeasurable H⟩
   · let G : β -> range g := rangeFactorization g
     have hG : IsClosedEmbedding G :=
-      { hg.codRe
+      { hg.codRestrict _ _ with
+        isClosed_range := by
+          rw [rangeFactorization_surjective.range_eq]
+          exact isClosed_univ }
+    have : Measurable (G ∘ f) := Measurable.subtype_mk H.measurable
+    exact hG.measurableEmbedding.measurable_comp_iff.1 this
+  · have : IsSeparable (g ⁻¹' range (g ∘ f)) := hg.isSeparable_preimage H.isSeparable_range
+    rwa [range_comp, hg.injective.preimage_image] at this
 
 中文:
 定理 _root_.嵌入.comp_stronglyMeasurable_iff
@@ -2212,7 +2397,14 @@ theorem _root_.Embedding.comp_stronglyMeasurable_iff
       hg.continuous.comp_stronglyMeasurable H⟩
   · let G : β -> range g := rangeFactorization g
     have hG : IsClosedEmbedding G :=
-      { hg.codRe
+      { hg.codRestrict _ _ with
+        isClosed_range := by
+          rw [rangeFactorization_surjective.range_eq]
+          exact isClosed_univ }
+    have : Measurable (G ∘ f) := Measurable.subtype_mk H.measurable
+    exact hG.measurableEmbedding.measurable_comp_iff.1 this
+  · have : IsSeparable (g ⁻¹' range (g ∘ f)) := hg.isSeparable_preimage H.isSeparable_range
+    rwa [range_comp, hg.injective.preimage_image] at this
 
 Depends on / 依赖: H.measurable, IsClosedEmbedding, Measurable, Measurable.subtype_mk, borelize, codRestrict, comp_stronglyMeasurable, continuous, hG.measurableEmbedding.measurable_comp_iff, hg.codRestrict, hg.continuous.comp_stronglyMeasurable, isClosed_range, isClosed_univ, measurable, measurableEmbedding, measurable_comp_iff, pseudoMetrizableSpacePseudoMetric, rangeFactorization, rangeFactorization_surjective, rangeFactorization_surjective.range_eq
 -/
@@ -2247,7 +2439,14 @@ theorem _root_.stronglyMeasurable_of_tendsto
   · exact measurable_of_tendsto_metrizable' u (fun i => (hf i).measurable) lim
   · rcases u.exists_seq_tendsto with ⟨v, hv⟩
     have : IsSeparable (closure (⋃ i, range (f (v i)))) :=
-.closure .iUnion fun i => (hf (v i)).
+.closure .iUnion fun i => (hf (v i)).isSeparable_range
+    apply this.mono
+    rintro _ ⟨x, rfl⟩
+    rw [tendsto_pi_nhds] at lim
+    apply mem_closure_of_tendsto ((lim x).comp hv)
+    filter_upwards with n
+    apply mem_iUnion_of_mem n
+    exact mem_range_self _
 
 中文:
 定理 _root_.stronglyMeasurable_of_tendsto
@@ -2258,7 +2457,14 @@ theorem _root_.stronglyMeasurable_of_tendsto
   · exact measurable_of_tendsto_metrizable' u (fun i => (hf i).measurable) lim
   · rcases u.exists_seq_tendsto with ⟨v, hv⟩
     have : IsSeparable (closure (⋃ i, range (f (v i)))) :=
-.closure .iUnion fun i => (hf (v i)).
+.closure .iUnion fun i => (hf (v i)).isSeparable_range
+    apply this.mono
+    rintro _ ⟨x, rfl⟩
+    rw [tendsto_pi_nhds] at lim
+    apply mem_closure_of_tendsto ((lim x).comp hv)
+    filter_upwards with n
+    apply mem_iUnion_of_mem n
+    exact mem_range_self _
 
 Depends on / 依赖: IsSeparable, borelize, closure, exists_seq_tendsto, filter_upwards, iUnion, isSeparable_range, measurable, measurable_of_tendsto_metrizable, mem_closure_of_tendsto, mem_iUnion_of_mem, mem_range_self, stronglyMeasurable_iff_measurable_separable, tendsto_pi_nhds, this.mono, u.exists_seq_tendsto
 -/
@@ -2291,7 +2497,8 @@ theorem piecewise
   by_cases hx : x in s
   · simpa [@Set.piecewise_eq_of_mem _ _ _ _ _ (fun _ => Classical.propDecidable _) _ hx,
       hx] using hf.tendsto_approx x
-  · simpa [@Set.piecewise_eq_of_notMem _ _ _ _ _ (fun _ => Cla
+  · simpa [@Set.piecewise_eq_of_notMem _ _ _ _ _ (fun _ => Classical.propDecidable _) _ hx,
+      hx] using hg.tendsto_approx x
 
 中文:
 定理 piecewise
@@ -2301,7 +2508,8 @@ theorem piecewise
   by_cases hx : x in s
   · simpa [@Set.piecewise_eq_of_mem _ _ _ _ _ (fun _ => Classical.propDecidable _) _ hx,
       hx] using hf.tendsto_approx x
-  · simpa [@Set.piecewise_eq_of_notMem _ _ _ _ _ (fun _ => Cla
+  · simpa [@Set.piecewise_eq_of_notMem _ _ _ _ _ (fun _ => Classical.propDecidable _) _ hx,
+      hx] using hg.tendsto_approx x
 -/
 protected theorem piecewise {m : MeasurableSpace α} [TopologicalSpace β] {s : Set α}
     {_ : DecidablePred (· in s)} (hs : MeasurableSet s) (hf : StronglyMeasurable f)
@@ -2373,7 +2581,10 @@ theorem _root_.ContinuousOn.stronglyMeasurable_of_countable_compl
   have : f = fun x => if hx : x in s then f (⟨x, hx⟩ : s) else f (⟨x, hx⟩ : (sᶜ : Set α)) := by simp
   rw [this]
   apply StronglyMeasurable.dite (f := fun x => f x) (g := fun x => f x) ?_ ?_ h's
-  · have : SecondCou
+  · have : SecondCountableTopologyEither s β := by cases h.out <;> infer_instance
+    exact (continuousOn_iff_continuous_domRestrict.1 hf).stronglyMeasurable
+  · have := hs.to_subtype
+    exact MeasureTheory.StronglyMeasurable.of_discrete
 
 中文:
 定理 _root_.ContinuousOn.stronglyMeasurable_of_countable_compl
@@ -2384,7 +2595,10 @@ theorem _root_.ContinuousOn.stronglyMeasurable_of_countable_compl
   have : f = fun x => if hx : x in s then f (⟨x, hx⟩ : s) else f (⟨x, hx⟩ : (sᶜ : Set α)) := by simp
   rw [this]
   apply StronglyMeasurable.dite (f := fun x => f x) (g := fun x => f x) ?_ ?_ h's
-  · have : SecondCou
+  · have : SecondCountableTopologyEither s β := by cases h.out <;> infer_instance
+    exact (continuousOn_iff_continuous_domRestrict.1 hf).stronglyMeasurable
+  · have := hs.to_subtype
+    exact MeasureTheory.StronglyMeasurable.of_discrete
 
 Depends on / 依赖: MeasurableSet, MeasureTheory, MeasureTheory.StronglyMeasurable.of_discrete, SecondCountableTopologyEither, StronglyMeasurable, StronglyMeasurable.dite, classical, continuousOn_iff_continuous_domRestrict, h.out, hs.measurableSet.compl, hs.to_subtype, infer_instance, measurableSet, of_discrete, stronglyMeasurable, to_subtype
 -/
@@ -2454,7 +2668,8 @@ theorem _root_.MeasurableEmbedding.stronglyMeasurable_extend
   · rcases hx with ⟨y, rfl⟩
     simpa only [SimpleFunc.extend_apply, hg.injective, Injective.extend_apply] using
       hf.tendsto_approx y
-  · simpa only [hx, SimpleFunc.extend_
+  · simpa only [hx, SimpleFunc.extend_apply', not_false_iff, extend_apply'] using
+      hg'.tendsto_approx x
 
 中文:
 定理 _root_.可测嵌入.stronglyMeasurable_extend
@@ -2466,7 +2681,8 @@ theorem _root_.MeasurableEmbedding.stronglyMeasurable_extend
   · rcases hx with ⟨y, rfl⟩
     simpa only [SimpleFunc.extend_apply, hg.injective, Injective.extend_apply] using
       hf.tendsto_approx y
-  · simpa only [hx, SimpleFunc.extend_
+  · simpa only [hx, SimpleFunc.extend_apply', not_false_iff, extend_apply'] using
+      hg'.tendsto_approx x
 
 Depends on / 依赖: Injective, Injective.extend_apply, SimpleFunc, SimpleFunc.extend, SimpleFunc.extend_apply, approx, extend, extend_apply, hf.approx, hf.tendsto_approx, hg.injective, injective, not_false_iff, tendsto_approx
 -/
@@ -2521,7 +2737,14 @@ theorem _root_.stronglyMeasurable_of_stronglyMeasurable_union_cover
   suffices Function.extend Subtype.val (fun x : s => f x)
       (Function.extend (↑) (fun x : t => f x) fun _ => default) = f from
 this ▸ (MeasurableEmbedding.subtype_coe hs).stronglyMeasurable_extend hc
-      (MeasurableEmbedding.subtype_coe ht).stronglyMeasurable_ex
+      (MeasurableEmbedding.subtype_coe ht).stronglyMeasurable_extend hd stronglyMeasurable_const
+  ext x
+  by_cases hxs : x in s
+  · lift x to s using hxs
+    simp
+  · lift x to t using (h trivial).resolve_left hxs
+    rw [extend_apply']; rw [Subtype.coe_injective.extend_apply]
+exact fun ⟨y, hy⟩ => hxs hy ▸ y.2
 
 中文:
 定理 _root_.stronglyMeasurable_of_stronglyMeasurable_union_cover
@@ -2531,7 +2754,14 @@ this ▸ (MeasurableEmbedding.subtype_coe hs).stronglyMeasurable_extend hc
   suffices Function.extend Subtype.val (fun x : s => f x)
       (Function.extend (↑) (fun x : t => f x) fun _ => default) = f from
 this ▸ (MeasurableEmbedding.subtype_coe hs).stronglyMeasurable_extend hc
-      (MeasurableEmbedding.subtype_coe ht).stronglyMeasurable_ex
+      (MeasurableEmbedding.subtype_coe ht).stronglyMeasurable_extend hd stronglyMeasurable_const
+  ext x
+  by_cases hxs : x in s
+  · lift x to s using hxs
+    simp
+  · lift x to t using (h trivial).resolve_left hxs
+    rw [extend_apply']; rw [Subtype.coe_injective.extend_apply]
+exact fun ⟨y, hy⟩ => hxs hy ▸ y.2
 
 Depends on / 依赖: Function, Function.extend, MeasurableEmbedding, MeasurableEmbedding.subtype_coe, Subtype, Subtype.coe_injective.extend_apply, Subtype.val, coe_injective, extend, extend_apply, inhabit, nontriviality, resolve_left, stronglyMeasurable_const, stronglyMeasurable_extend, subtype_coe
 -/
@@ -2611,7 +2841,7 @@ theorem induction
   induction s n using SimpleFunc.induction with
   | const c hs => exact ind c hs
   | @add f g h_supp hf hg =>
-    exact add f.stronglyMeasurable g.stronglyMeasurable (f + g).stronglyMeasurable
+    exact add f.stronglyMeasurable g.stronglyMeasurable (f + g).stronglyMeasurable h_supp hf hg
 
 中文:
 定理 induction
@@ -2622,7 +2852,7 @@ theorem induction
   induction s n using SimpleFunc.induction with
   | const c hs => exact ind c hs
   | @add f g h_supp hf hg =>
-    exact add f.stronglyMeasurable g.stronglyMeasurable (f + g).stronglyMeasurable
+    exact add f.stronglyMeasurable g.stronglyMeasurable (f + g).stronglyMeasurable h_supp hf hg
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.induction, approx, f.stronglyMeasurable, g.stronglyMeasurable, h_supp, hf.approx, hf.tendsto_approx, stronglyMeasurable, tendsto_approx
 -/
@@ -2660,7 +2890,7 @@ theorem induction'
     simp_rw [SimpleFunc.coe_piecewise]
     exact pcw f.stronglyMeasurable g.stronglyMeasurable hs Pf Pg
 
-@[fun_prop
+@[fun_prop]
 
 中文:
 定理 induction'
@@ -2674,7 +2904,7 @@ theorem induction'
     simp_rw [SimpleFunc.coe_piecewise]
     exact pcw f.stronglyMeasurable g.stronglyMeasurable hs Pf Pg
 
-@[fun_prop
+@[fun_prop]
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.coe_piecewise, approx, coe_piecewise, f.stronglyMeasurable, g.stronglyMeasurable, hf.approx, hf.tendsto_approx, simp_rw, stronglyMeasurable, tendsto_approx
 -/
@@ -3006,7 +3236,7 @@ theorem stronglyMeasurable_in_set
     · simpa [SimpleFunc.coe_restrict, hs, hx] using hf.tendsto_approx x
     · simpa [SimpleFunc.coe_restrict, hs, hx, hf_zero x hx] using tendsto_const_nhds
   · intro x hx n
-    simp [SimpleFunc.coe_restrict
+    simp [SimpleFunc.coe_restrict, hs, hx]
 
 中文:
 定理 stronglyMeasurable_in_set
@@ -3018,7 +3248,7 @@ theorem stronglyMeasurable_in_set
     · simpa [SimpleFunc.coe_restrict, hs, hx] using hf.tendsto_approx x
     · simpa [SimpleFunc.coe_restrict, hs, hx, hf_zero x hx] using tendsto_const_nhds
   · intro x hx n
-    simp [SimpleFunc.coe_restrict
+    simp [SimpleFunc.coe_restrict, hs, hx]
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.coe_restrict, approx, coe_restrict, hf.approx, hf.tendsto_approx, hf_zero, restrict, tendsto_approx, tendsto_const_nhds
 -/
@@ -3049,7 +3279,9 @@ theorem stronglyMeasurable_of_measurableSpace_le_on
     intro _ ht
     rcases ht with ⟨u, hu, rfl⟩
     exact ⟨s inter u, hs u (hs_m.inter hu), by simp⟩
-  refine stro
+  refine stronglyMeasurable_of_restrict_of_restrict_compl hs_m₂ ?_ ?_
+  · exact (hf.comp_measurable (comap_measurable _)).mono h_sub
+  · exact stronglyMeasurable_const' fun x y => by simp [hf_zero _ x.2, hf_zero _ y.2]
 
 中文:
 定理 stronglyMeasurable_of_measurableSpace_le_on
@@ -3062,7 +3294,9 @@ theorem stronglyMeasurable_of_measurableSpace_le_on
     intro _ ht
     rcases ht with ⟨u, hu, rfl⟩
     exact ⟨s inter u, hs u (hs_m.inter hu), by simp⟩
-  refine stro
+  refine stronglyMeasurable_of_restrict_of_restrict_compl hs_m₂ ?_ ?_
+  · exact (hf.comp_measurable (comap_measurable _)).mono h_sub
+  · exact stronglyMeasurable_const' fun x y => by simp [hf_zero _ x.2, hf_zero _ y.2]
 
 Depends on / 依赖: MeasurableSet, comap_measurable, comp_measurable, h_sub, hf.comp_measurable, hf_zero, hs_m, hs_m.inter, m.comap, stronglyMeasurable_const, stronglyMeasurable_of_restrict_of_restrict_compl
 -/
@@ -3242,7 +3476,19 @@ theorem exists_set_sigmaFinite
   have hT_meas : forall n, MeasurableSet (T n) := fun n => SimpleFunc.measurableSet_support (fs n)
   let t := ⋃ n, T n
   refine ⟨t, MeasurableSet.iUnion hT_meas, ?_, ?_⟩
-  · have h_fs_zero : forall n, forall x in tᶜ, fs n x = 
+  · have h_fs_zero : forall n, forall x in tᶜ, fs n x = 0 := by
+      intro n x hxt
+      rw [Set.mem_compl_iff]; rw [Set.mem_iUnion]; rw [not_exists] at hxt
+      simpa [T] using hxt n
+    refine fun x hxt => tendsto_nhds_unique (h_approx x) ?_
+    rw [funext fun n => h_fs_zero n x hxt]
+    exact tendsto_const_nhds
+  · refine ⟨⟨⟨fun n => tᶜ union T n, fun _ => trivial, fun n => ?_, ?_⟩⟩⟩
+    · rw [Measure.restrict_apply' (MeasurableSet.iUnion hT_meas), Set.union_inter_distrib_right,
+        Set.compl_inter_self t, Set.empty_union]
+      exact (measure_mono Set.inter_subset_left).trans_lt (hT_lt_top n)
+    · rw [← Set.union_iUnion tᶜ T]
+      exact Set.compl_union_self _
 
 中文:
 定理 存在_set_sigmaFinite
@@ -3253,7 +3499,19 @@ theorem exists_set_sigmaFinite
   have hT_meas : forall n, MeasurableSet (T n) := fun n => SimpleFunc.measurableSet_support (fs n)
   let t := ⋃ n, T n
   refine ⟨t, MeasurableSet.iUnion hT_meas, ?_, ?_⟩
-  · have h_fs_zero : forall n, forall x in tᶜ, fs n x = 
+  · have h_fs_zero : forall n, forall x in tᶜ, fs n x = 0 := by
+      intro n x hxt
+      rw [Set.mem_compl_iff]; rw [Set.mem_iUnion]; rw [not_exists] at hxt
+      simpa [T] using hxt n
+    refine fun x hxt => tendsto_nhds_unique (h_approx x) ?_
+    rw [funext fun n => h_fs_zero n x hxt]
+    exact tendsto_const_nhds
+  · refine ⟨⟨⟨fun n => tᶜ union T n, fun _ => trivial, fun n => ?_, ?_⟩⟩⟩
+    · rw [Measure.restrict_apply' (MeasurableSet.iUnion hT_meas), Set.union_inter_distrib_right,
+        Set.compl_inter_self t, Set.empty_union]
+      exact (measure_mono Set.inter_subset_left).trans_lt (hT_lt_top n)
+    · rw [← Set.union_iUnion tᶜ T]
+      exact Set.compl_union_self _
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iUnion, Set.mem_compl_iff, Set.mem_iUnion, SimpleFunc, SimpleFunc.measurableSet_support, hT_lt_top, hT_meas, h_approx, h_fs_zero, iUnion, measurableSet_support, mem_compl_iff, mem_iUnion, not_exists, support, tendsto_nhds_unique
 -/
@@ -3349,7 +3607,7 @@ theorem add
         (ENNReal.add_lt_top.mpr ⟨hf.fin_support_approx n, hg.fin_support_approx n⟩)),
     fun x => (hf.tendsto_approx x).add (hg.tendsto_approx x)⟩
 
-@[measurabi
+@[measurability]
 
 中文:
 定理 add
@@ -3360,7 +3618,7 @@ theorem add
         (ENNReal.add_lt_top.mpr ⟨hf.fin_support_approx n, hg.fin_support_approx n⟩)),
     fun x => (hf.tendsto_approx x).add (hg.tendsto_approx x)⟩
 
-@[measurabi
+@[measurability]
 -/
 protected theorem add [AddZeroClass β] [ContinuousAdd β] (hf : FinStronglyMeasurable f μ)
     (hg : FinStronglyMeasurable g μ) : FinStronglyMeasurable (f + g) μ :=
@@ -3416,7 +3674,7 @@ theorem sub
         (ENNReal.add_lt_top.mpr ⟨hf.fin_support_approx n, hg.fin_support_approx n⟩)),
     fun x => (hf.tendsto_approx x).sub (hg.tendsto_approx x)⟩
 
-@[measurabi
+@[measurability]
 
 中文:
 定理 sub
@@ -3427,7 +3685,7 @@ theorem sub
         (ENNReal.add_lt_top.mpr ⟨hf.fin_support_approx n, hg.fin_support_approx n⟩)),
     fun x => (hf.tendsto_approx x).sub (hg.tendsto_approx x)⟩
 
-@[measurabi
+@[measurability]
 -/
 protected theorem sub [SubtractionMonoid β] [ContinuousSub β] (hf : FinStronglyMeasurable f μ)
     (hg : FinStronglyMeasurable g μ) : FinStronglyMeasurable (f - g) μ :=
@@ -3484,7 +3742,7 @@ theorem sup
   refine (measure_mono (support_sup _ _)).trans_lt ?_
   exact measure_union_lt_top_iff.mpr ⟨hf.fin_support_approx n, hg.fin_support_approx n⟩
 
-@[aesop safe 20 (rule_
+@[aesop safe 20 (rule_sets := [Measurable])]
 
 中文:
 定理 上确界
@@ -3496,7 +3754,7 @@ theorem sup
   refine (measure_mono (support_sup _ _)).trans_lt ?_
   exact measure_union_lt_top_iff.mpr ⟨hf.fin_support_approx n, hg.fin_support_approx n⟩
 
-@[aesop safe 20 (rule_
+@[aesop safe 20 (rule_sets := [Measurable])]
 -/
 protected theorem sup [SemilatticeSup β] [ContinuousSup β] (hf : FinStronglyMeasurable f μ)
     (hg : FinStronglyMeasurable g μ) : FinStronglyMeasurable (f ⊔ g) μ := by
@@ -3629,7 +3887,27 @@ theorem measurable_uncurry_of_continuous_of_measurable
     exists t : Nat -> SimpleFunc ι ι, forall j x, Tendsto (fun n => u (t n j) x) atTop (𝓝 <| u j x) := by
     have h_str_meas : StronglyMeasurable (id : ι -> ι) := stronglyMeasurable_id
     refine ⟨h_str_meas.approx, fun j x => ?_⟩
-    exact ((hu_cont x).tendsto j).comp (
+    exact ((hu_cont x).tendsto j).comp (h_str_meas.tendsto_approx j)
+  let U (n : Nat) (p : ι × α) := u (t_sf n p.fst) p.snd
+  have h_tendsto : Tendsto U atTop (𝓝 fun p => u p.fst p.snd) := by
+    rw [tendsto_pi_nhds]
+    exact fun p => ht_sf p.fst p.snd
+  refine measurable_of_tendsto_metrizable (fun n => ?_) h_tendsto
+  have h_meas : Measurable fun p : (t_sf n).range × α => u (↑p.fst) p.snd := by
+    have :
+      (fun p : ↥(t_sf n).range × α => u (↑p.fst) p.snd) =
+        (fun p : α × (t_sf n).range => u (↑p.snd) p.fst) ∘ Prod.swap :=
+      rfl
+    rw [this]; rw [@measurable_swap_iff α (↥(t_sf n).range) β m]
+    exact measurable_from_prod_countable_left fun j => h j
+  have :
+    (fun p : ι × α => u (t_sf n p.fst) p.snd) =
+      (fun p : ↥(t_sf n).range × α => u p.fst p.snd) ∘ fun p : ι × α =>
+        (⟨t_sf n p.fst, SimpleFunc.mem_range_self _ _⟩, p.snd) :=
+    rfl
+  simp_rw [U, this]
+  refine h_meas.comp (Measurable.prodMk ?_ measurable_snd)
+  exact ((t_sf n).measurable.comp measurable_fst).subtype_mk
 
 中文:
 定理 measurable_uncurry_of_continuous_of_measurable
@@ -3639,7 +3917,27 @@ theorem measurable_uncurry_of_continuous_of_measurable
     exists t : Nat -> SimpleFunc ι ι, forall j x, Tendsto (fun n => u (t n j) x) atTop (𝓝 <| u j x) := by
     have h_str_meas : StronglyMeasurable (id : ι -> ι) := stronglyMeasurable_id
     refine ⟨h_str_meas.approx, fun j x => ?_⟩
-    exact ((hu_cont x).tendsto j).comp (
+    exact ((hu_cont x).tendsto j).comp (h_str_meas.tendsto_approx j)
+  let U (n : Nat) (p : ι × α) := u (t_sf n p.fst) p.snd
+  have h_tendsto : Tendsto U atTop (𝓝 fun p => u p.fst p.snd) := by
+    rw [tendsto_pi_nhds]
+    exact fun p => ht_sf p.fst p.snd
+  refine measurable_of_tendsto_metrizable (fun n => ?_) h_tendsto
+  have h_meas : Measurable fun p : (t_sf n).range × α => u (↑p.fst) p.snd := by
+    have :
+      (fun p : ↥(t_sf n).range × α => u (↑p.fst) p.snd) =
+        (fun p : α × (t_sf n).range => u (↑p.snd) p.fst) ∘ Prod.swap :=
+      rfl
+    rw [this]; rw [@measurable_swap_iff α (↥(t_sf n).range) β m]
+    exact measurable_from_prod_countable_left fun j => h j
+  have :
+    (fun p : ι × α => u (t_sf n p.fst) p.snd) =
+      (fun p : ↥(t_sf n).range × α => u p.fst p.snd) ∘ fun p : ι × α =>
+        (⟨t_sf n p.fst, SimpleFunc.mem_range_self _ _⟩, p.snd) :=
+    rfl
+  simp_rw [U, this]
+  refine h_meas.comp (Measurable.prodMk ?_ measurable_snd)
+  exact ((t_sf n).measurable.comp measurable_fst).subtype_mk
 
 Depends on / 依赖: SimpleFunc, StronglyMeasurable, Tendsto, approx, h_str_meas, h_str_meas.approx, h_str_meas.tendsto_approx, h_tendsto, ht_sf, hu_cont, measurab, p.fst, p.snd, stronglyMeasurable_id, t_sf, tendsto, tendsto_approx, tendsto_pi_nhds
 -/
@@ -3686,7 +3984,34 @@ theorem stronglyMeasurable_uncurry_of_continuous_of_stronglyMeasurable
     exists t : Nat -> SimpleFunc ι ι, forall j x, Tendsto (fun n => u (t n j) x) atTop (𝓝 <| u j x) := by
     have h_str_meas : StronglyMeasurable (id : ι -> ι) := stronglyMeasurable_id
     refine ⟨h_str_meas.approx, fun j x => ?_⟩
-    exact ((hu_cont x).tend
+    exact ((hu_cont x).tendsto j).comp (h_str_meas.tendsto_approx j)
+  let U (n : Nat) (p : ι × α) := u (t_sf n p.fst) p.snd
+  have h_tendsto : Tendsto U atTop (𝓝 fun p => u p.fst p.snd) := by
+    rw [tendsto_pi_nhds]
+    exact fun p => ht_sf p.fst p.snd
+  refine stronglyMeasurable_of_tendsto _ (fun n => ?_) h_tendsto
+  have h_str_meas : StronglyMeasurable fun p : (t_sf n).range × α => u (↑p.fst) p.snd := by
+    refine stronglyMeasurable_iff_measurable_separable.2 ⟨?_, ?_⟩
+    · have :
+        (fun p : ↥(t_sf n).range × α => u (↑p.fst) p.snd) =
+          (fun p : α × (t_sf n).range => u (↑p.snd) p.fst) ∘ Prod.swap :=
+        rfl
+      rw [this]; rw [measurable_swap_iff]
+      exact measurable_from_prod_countable_left fun j => (h j).measurable
+    · have : IsSeparable (⋃ i : (t_sf n).range, range (u i)) :=
+        .iUnion fun i => (h i).isSeparable_range
+      apply this.mono
+      rintro _ ⟨⟨i, x⟩, rfl⟩
+      simp only [mem_iUnion, mem_range]
+      exact ⟨i, x, rfl⟩
+  have :
+    (fun p : ι × α => u (t_sf n p.fst) p.snd) =
+      (fun p : ↥(t_sf n).range × α => u p.fst p.snd) ∘ fun p : ι × α =>
+        (⟨t_sf n p.fst, SimpleFunc.mem_range_self _ _⟩, p.snd) :=
+    rfl
+  simp_rw [U, this]
+  refine h_str_meas.comp_measurable (Measurable.prodMk ?_ measurable_snd)
+  exact ((t_sf n).measurable.comp measurable_fst).subtype_mk
 
 中文:
 定理 stronglyMeasurable_uncurry_of_continuous_of_stronglyMeasurable
@@ -3697,7 +4022,34 @@ theorem stronglyMeasurable_uncurry_of_continuous_of_stronglyMeasurable
     exists t : Nat -> SimpleFunc ι ι, forall j x, Tendsto (fun n => u (t n j) x) atTop (𝓝 <| u j x) := by
     have h_str_meas : StronglyMeasurable (id : ι -> ι) := stronglyMeasurable_id
     refine ⟨h_str_meas.approx, fun j x => ?_⟩
-    exact ((hu_cont x).tend
+    exact ((hu_cont x).tendsto j).comp (h_str_meas.tendsto_approx j)
+  let U (n : Nat) (p : ι × α) := u (t_sf n p.fst) p.snd
+  have h_tendsto : Tendsto U atTop (𝓝 fun p => u p.fst p.snd) := by
+    rw [tendsto_pi_nhds]
+    exact fun p => ht_sf p.fst p.snd
+  refine stronglyMeasurable_of_tendsto _ (fun n => ?_) h_tendsto
+  have h_str_meas : StronglyMeasurable fun p : (t_sf n).range × α => u (↑p.fst) p.snd := by
+    refine stronglyMeasurable_iff_measurable_separable.2 ⟨?_, ?_⟩
+    · have :
+        (fun p : ↥(t_sf n).range × α => u (↑p.fst) p.snd) =
+          (fun p : α × (t_sf n).range => u (↑p.snd) p.fst) ∘ Prod.swap :=
+        rfl
+      rw [this]; rw [measurable_swap_iff]
+      exact measurable_from_prod_countable_left fun j => (h j).measurable
+    · have : IsSeparable (⋃ i : (t_sf n).range, range (u i)) :=
+        .iUnion fun i => (h i).isSeparable_range
+      apply this.mono
+      rintro _ ⟨⟨i, x⟩, rfl⟩
+      simp only [mem_iUnion, mem_range]
+      exact ⟨i, x, rfl⟩
+  have :
+    (fun p : ι × α => u (t_sf n p.fst) p.snd) =
+      (fun p : ↥(t_sf n).range × α => u p.fst p.snd) ∘ fun p : ι × α =>
+        (⟨t_sf n p.fst, SimpleFunc.mem_range_self _ _⟩, p.snd) :=
+    rfl
+  simp_rw [U, this]
+  refine h_str_meas.comp_measurable (Measurable.prodMk ?_ measurable_snd)
+  exact ((t_sf n).measurable.comp measurable_fst).subtype_mk
 
 Depends on / 依赖: SimpleFunc, StronglyMeasurable, Tendsto, approx, borelize, h_str_meas, h_str_meas.approx, h_str_meas.tendsto_approx, h_tendsto, ht_sf, hu_cont, p.fst, p.snd, stronglyMeasurable_id, t_sf, tendsto, tendsto_approx, tendsto_pi_nhds
 -/

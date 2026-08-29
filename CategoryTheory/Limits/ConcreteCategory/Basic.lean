@@ -388,7 +388,8 @@ theorem isColimit_rep_eq_of_exists
   let h1 : (F ⋙ forget C).map f ≫ E.ι.app k = E.ι.app i := E.ι.naturality f
   let h2 : (F ⋙ forget C).map g ≫ E.ι.app k = E.ι.app j := E.ι.naturality g
   change E.ι.app i x = E.ι.app j y
-  rw [← 
+  rw [← h1]; rw [comp_apply]; rw [hfg]
+  exact ConcreteCategory.congr_hom h2 y
 
 中文:
 定理 isColimit_rep_eq_of_存在
@@ -399,7 +400,8 @@ theorem isColimit_rep_eq_of_exists
   let h1 : (F ⋙ forget C).map f ≫ E.ι.app k = E.ι.app i := E.ι.naturality f
   let h2 : (F ⋙ forget C).map g ≫ E.ι.app k = E.ι.app j := E.ι.naturality g
   change E.ι.app i x = E.ι.app j y
-  rw [← 
+  rw [← h1]; rw [comp_apply]; rw [hfg]
+  exact ConcreteCategory.congr_hom h2 y
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.map, comp_apply, congr_hom, forget, mapCocone, naturality
 -/

@@ -55,7 +55,11 @@ definition grothendieckTopology
   pullback_stable' X Y S f hf y hy := by
     rcases hf y (f.le hy) with ⟨U, g, hg, hU⟩
     refine ⟨U ⊓ Y, homOfLE inf_le_right, ?_, hU, hy⟩
-    apply S.downward_closed hg (homOfLE inf_le_le
+    apply S.downward_closed hg (homOfLE inf_le_left)
+  transitive' X S hS R hR x hx := by
+    rcases hS x hx with ⟨U, f, hf, hU⟩
+    rcases hR hf _ hU with ⟨V, g, hg, hV⟩
+    exact ⟨_, g ≫ f, hg, hV⟩
 
 中文:
 定义 grothendieckTopology
@@ -65,7 +69,11 @@ definition grothendieckTopology
   pullback_stable' X Y S f hf y hy := by
     rcases hf y (f.le hy) with ⟨U, g, hg, hU⟩
     refine ⟨U ⊓ Y, homOfLE inf_le_right, ?_, hU, hy⟩
-    apply S.downward_closed hg (homOfLE inf_le_le
+    apply S.downward_closed hg (homOfLE inf_le_left)
+  transitive' X S hS R hR x hx := by
+    rcases hS x hx with ⟨U, f, hf, hU⟩
+    rcases hR hf _ hU with ⟨V, g, hg, hV⟩
+    exact ⟨_, g ≫ f, hg, hV⟩
 -/
 def grothendieckTopology : GrothendieckTopology (Opens T) where
   sieves X := {S | forall x in X, exists (U : Opens T) (f : U ⟶ X), S f ∧ x in U}
@@ -106,7 +114,13 @@ definition pretopology
   pullbacks X Y f S hS x hx := by
     rcases hS _ (f.le hx) with ⟨U, g, hg, hU⟩
     refine ⟨_, _, Presieve.pullbackArrows.mk _ _ hg, ?_⟩
-    have : U ⊓ Y <= pullb
+    have : U ⊓ Y <= pullback g f :=
+      leOfHom (pullback.lift (homOfLE inf_le_left) (homOfLE inf_le_right) rfl)
+    apply this ⟨hU, hx⟩
+  transitive X S Ti hS hTi x hx := by
+    rcases hS x hx with ⟨U, f, hf, hU⟩
+    rcases hTi f hf x hU with ⟨V, g, hg, hV⟩
+    exact ⟨_, _, ⟨_, g, f, hf, hg, rfl⟩, hV⟩
 
 中文:
 定义 pretopology
@@ -116,7 +130,13 @@ definition pretopology
   pullbacks X Y f S hS x hx := by
     rcases hS _ (f.le hx) with ⟨U, g, hg, hU⟩
     refine ⟨_, _, Presieve.pullbackArrows.mk _ _ hg, ?_⟩
-    have : U ⊓ Y <= pullb
+    have : U ⊓ Y <= pullback g f :=
+      leOfHom (pullback.lift (homOfLE inf_le_left) (homOfLE inf_le_right) rfl)
+    apply this ⟨hU, hx⟩
+  transitive X S Ti hS hTi x hx := by
+    rcases hS x hx with ⟨U, f, hf, hU⟩
+    rcases hTi f hf x hU with ⟨V, g, hg, hV⟩
+    exact ⟨_, _, ⟨_, g, f, hf, hg, rfl⟩, hV⟩
 -/
 def pretopology : Pretopology (Opens T) where
   coverings X := {R | forall x in X, exists (U : _) (f : U ⟶ X), R f ∧ x in U}
@@ -209,7 +229,10 @@ lemma coversTop_iff
   simp only [IsOpenCover, eq_top_iff, SetLike.le_def, exists_and_right, Opens.mem_top,
     Opens.mem_iSup, forall_const]
   refine ⟨fun h x => ?_, fun hU x hx => ?_⟩
-  · obtain ⟨V, ⟨u, ⟨i
+  · obtain ⟨V, ⟨u, ⟨i, ⟨hi⟩⟩⟩, hx⟩ := h x trivial
+    use i, leOfHom hi hx
+  · obtain ⟨i, hi⟩ := hU (x := x)
+    exact ⟨U i, ⟨homOfLE le_top, ⟨i, ⟨𝟙 _⟩⟩⟩, hi⟩
 
 中文:
 引理 coversTop_iff
@@ -220,7 +243,10 @@ lemma coversTop_iff
   simp only [IsOpenCover, eq_top_iff, SetLike.le_def, exists_and_right, Opens.mem_top,
     Opens.mem_iSup, forall_const]
   refine ⟨fun h x => ?_, fun hU x hx => ?_⟩
-  · obtain ⟨V, ⟨u, ⟨i
+  · obtain ⟨V, ⟨u, ⟨i, ⟨hi⟩⟩⟩, hx⟩ := h x trivial
+    use i, leOfHom hi hx
+  · obtain ⟨i, hi⟩ := hU (x := x)
+    exact ⟨U i, ⟨homOfLE le_top, ⟨i, ⟨𝟙 _⟩⟩⟩, hi⟩
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.coversTop_iff_of_isTerminal, IsOpenCover, Opens.grothendieckTopology, Opens.mem_iSup, Opens.mem_top, SetLike, SetLike.le_def, coversTop_iff_of_isTerminal, eq_top_iff, exists_and_right, forall_const, grothendieckTopology, homOfLE, isTerminalTop, leOfHom, le_def, le_top, mem_iSup, mem_top
 -/

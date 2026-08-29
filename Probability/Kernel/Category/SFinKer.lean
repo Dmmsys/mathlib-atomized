@@ -174,7 +174,92 @@ instance :
   tensorUnit := SFinKer.of PUnit
   associator X Y Z := by
     refine ⟨⟨Kernel.deterministic prodAssoc (by fun_prop), inferInstance⟩,
-      ⟨Kernel.deterministic pro
+      ⟨Kernel.deterministic prodAssoc.symm (by fun_prop), inferInstance⟩, ?_, ?_⟩
+    · ext : 1; dsimp
+      rw [Kernel.deterministic_comp_deterministic]; rw [Kernel.id]
+      rfl
+    · ext : 1; dsimp
+      rw [Kernel.deterministic_comp_deterministic]; rw [Kernel.id]
+      rfl
+  leftUnitor X := by
+    let f₁ := fun (x : X) => (PUnit.unit, x)
+    have hf₁ : Measurable f₁ := by fun_prop
+    have hf₂ : Measurable (Prod.snd : PUnit × X -> X) := by fun_prop
+    refine ⟨⟨Kernel.id.map Prod.snd, inferInstance⟩,
+      ⟨Kernel.id.map f₁, inferInstance⟩, ?_, ?_⟩
+    · ext : 1; dsimp
+      rw [Kernel.id_map hf₁]; rw [Kernel.deterministic_comp_eq_map hf₁]; rw [Kernel.id_map hf₂]; rw [Kernel.deterministic_map hf₂ hf₁]
+      ext : 1
+      simp [Kernel.deterministic_apply, Kernel.id_apply, f₁]
+    · ext : 1; dsimp
+      rw [Kernel.id_map hf₂]; rw [Kernel.deterministic_comp_eq_map hf₂]; rw [Kernel.id_map hf₁]; rw [Kernel.deterministic_map hf₁ hf₂]
+      ext : 1
+      simp [Kernel.deterministic_apply, Kernel.id_apply, f₁]
+  rightUnitor X := by
+    let f₁ := fun (x : X) => (x, PUnit.unit)
+    have hf₁ : Measurable f₁ := by fun_prop
+    have hf₂ : Measurable (Prod.fst : X × PUnit -> X) := by fun_prop
+    refine ⟨⟨Kernel.id.map Prod.fst, by infer_instance⟩,
+      ⟨Kernel.id.map f₁, by infer_instance⟩, ?_, ?_⟩
+    · ext : 1; dsimp
+      rw [Kernel.id_map hf₁]; rw [Kernel.deterministic_comp_eq_map hf₁]; rw [Kernel.id_map hf₂]; rw [Kernel.deterministic_map hf₂ hf₁]
+      ext : 1
+      simp [Kernel.deterministic_apply, Kernel.id_apply, f₁]
+    · ext : 1; dsimp
+      rw [Kernel.id_map hf₂]; rw [Kernel.deterministic_comp_eq_map hf₂]; rw [Kernel.id_map hf₁]; rw [Kernel.deterministic_map hf₁ hf₂]
+      ext : 1
+      simp [Kernel.deterministic_apply, Kernel.id_apply, f₁]
+  leftUnitor_naturality κ := by
+    ext : 1; dsimp
+    rw [Kernel.id_map (by fun_prop)]; rw [Kernel.id_map (by fun_prop)]
+    simp only [Kernel.deterministic_comp_eq_map, Kernel.comp_deterministic_eq_comap]
+    ext _ _ hs
+    have := κ.2
+    rw [Kernel.map_apply' _ (by fun_prop) _ hs]; rw [Kernel.comap_apply' _ (by fun_prop)]; rw [Kernel.parallelComp_apply' measurable_snd hs]
+    simp only [Kernel.id_apply, lintegral_dirac]
+    rfl
+  rightUnitor_naturality κ := by
+    ext : 1; dsimp
+    rw [Kernel.id_map (by fun_prop)]; rw [Kernel.id_map (by fun_prop)]
+    simp only [Kernel.deterministic_comp_eq_map, Kernel.comp_deterministic_eq_comap]
+    ext _ _ hs
+    have := κ.2
+    rw [Kernel.map_apply' _ (by fun_prop) _ hs]; rw [Kernel.comap_apply' _ (by fun_prop)]; rw [Kernel.parallelComp_apply' measurable_fst hs]
+    simp only [Kernel.id_apply, MeasurableSpace.measurableSet_top, Measure.dirac_apply']
+    rw [← lintegral_indicator_one hs]
+    rfl
+  tensorHom_comp_tensorHom κ₁ κ₂ η₁ η₂ := by
+    ext : 1; dsimp
+    simp only [Kernel.id_parallelComp_comp_parallelComp_id]
+    exact Kernel.parallelComp_comp_parallelComp
+  associator_naturality κ₁ κ₂ η := by
+    ext : 1; dsimp
+    simp only [Kernel.id_parallelComp_comp_parallelComp_id]
+    rw [Kernel.deterministic_comp_eq_map]; rw [Kernel.comp_deterministic_eq_comap]
+    ext _ _ hs
+    rw [Kernel.map_apply' _ (by fun_prop) _ hs]; rw [Kernel.comap_apply' _ (by fun_prop)]
+    repeat rw [Kernel.parallelComp_apply]
+    rw [Measure.prod_apply hs]; rw [Measure.prod_apply (by measurability)]; rw [lintegral_prod]
+    · congr with a
+      rw [Measure.prod_apply (by measurability)]
+      rfl
+    · refine Measurable.aemeasurable ?_
+      exact measurable_measure_prodMk_left (by measurability)
+  pentagon W X Y Z := by
+    ext : 1; dsimp
+    simp only [Kernel.id]
+    repeat rw [Kernel.deterministic_parallelComp_deterministic (by fun_prop) (by fun_prop)]
+    simp [Kernel.deterministic_comp_deterministic]
+    rfl
+  triangle X Y := by
+    ext : 1; dsimp
+    simp only [Kernel.id]
+    repeat rw [Kernel.deterministic_map (by fun_prop) (by fun_prop)]
+    repeat rw [Kernel.deterministic_parallelComp_deterministic (by fun_prop) (by fun_prop)]
+    simp [Kernel.deterministic_comp_deterministic]
+    rfl
+
+@[simps (attr := scoped simp) -isSimp]
 
 中文:
 实例 :
@@ -185,7 +270,92 @@ instance :
   tensorUnit := SFinKer.of PUnit
   associator X Y Z := by
     refine ⟨⟨Kernel.deterministic prodAssoc (by fun_prop), inferInstance⟩,
-      ⟨Kernel.deterministic pro
+      ⟨Kernel.deterministic prodAssoc.symm (by fun_prop), inferInstance⟩, ?_, ?_⟩
+    · ext : 1; dsimp
+      rw [Kernel.deterministic_comp_deterministic]; rw [Kernel.id]
+      rfl
+    · ext : 1; dsimp
+      rw [Kernel.deterministic_comp_deterministic]; rw [Kernel.id]
+      rfl
+  leftUnitor X := by
+    let f₁ := fun (x : X) => (PUnit.unit, x)
+    have hf₁ : Measurable f₁ := by fun_prop
+    have hf₂ : Measurable (Prod.snd : PUnit × X -> X) := by fun_prop
+    refine ⟨⟨Kernel.id.map Prod.snd, inferInstance⟩,
+      ⟨Kernel.id.map f₁, inferInstance⟩, ?_, ?_⟩
+    · ext : 1; dsimp
+      rw [Kernel.id_map hf₁]; rw [Kernel.deterministic_comp_eq_map hf₁]; rw [Kernel.id_map hf₂]; rw [Kernel.deterministic_map hf₂ hf₁]
+      ext : 1
+      simp [Kernel.deterministic_apply, Kernel.id_apply, f₁]
+    · ext : 1; dsimp
+      rw [Kernel.id_map hf₂]; rw [Kernel.deterministic_comp_eq_map hf₂]; rw [Kernel.id_map hf₁]; rw [Kernel.deterministic_map hf₁ hf₂]
+      ext : 1
+      simp [Kernel.deterministic_apply, Kernel.id_apply, f₁]
+  rightUnitor X := by
+    let f₁ := fun (x : X) => (x, PUnit.unit)
+    have hf₁ : Measurable f₁ := by fun_prop
+    have hf₂ : Measurable (Prod.fst : X × PUnit -> X) := by fun_prop
+    refine ⟨⟨Kernel.id.map Prod.fst, by infer_instance⟩,
+      ⟨Kernel.id.map f₁, by infer_instance⟩, ?_, ?_⟩
+    · ext : 1; dsimp
+      rw [Kernel.id_map hf₁]; rw [Kernel.deterministic_comp_eq_map hf₁]; rw [Kernel.id_map hf₂]; rw [Kernel.deterministic_map hf₂ hf₁]
+      ext : 1
+      simp [Kernel.deterministic_apply, Kernel.id_apply, f₁]
+    · ext : 1; dsimp
+      rw [Kernel.id_map hf₂]; rw [Kernel.deterministic_comp_eq_map hf₂]; rw [Kernel.id_map hf₁]; rw [Kernel.deterministic_map hf₁ hf₂]
+      ext : 1
+      simp [Kernel.deterministic_apply, Kernel.id_apply, f₁]
+  leftUnitor_naturality κ := by
+    ext : 1; dsimp
+    rw [Kernel.id_map (by fun_prop)]; rw [Kernel.id_map (by fun_prop)]
+    simp only [Kernel.deterministic_comp_eq_map, Kernel.comp_deterministic_eq_comap]
+    ext _ _ hs
+    have := κ.2
+    rw [Kernel.map_apply' _ (by fun_prop) _ hs]; rw [Kernel.comap_apply' _ (by fun_prop)]; rw [Kernel.parallelComp_apply' measurable_snd hs]
+    simp only [Kernel.id_apply, lintegral_dirac]
+    rfl
+  rightUnitor_naturality κ := by
+    ext : 1; dsimp
+    rw [Kernel.id_map (by fun_prop)]; rw [Kernel.id_map (by fun_prop)]
+    simp only [Kernel.deterministic_comp_eq_map, Kernel.comp_deterministic_eq_comap]
+    ext _ _ hs
+    have := κ.2
+    rw [Kernel.map_apply' _ (by fun_prop) _ hs]; rw [Kernel.comap_apply' _ (by fun_prop)]; rw [Kernel.parallelComp_apply' measurable_fst hs]
+    simp only [Kernel.id_apply, MeasurableSpace.measurableSet_top, Measure.dirac_apply']
+    rw [← lintegral_indicator_one hs]
+    rfl
+  tensorHom_comp_tensorHom κ₁ κ₂ η₁ η₂ := by
+    ext : 1; dsimp
+    simp only [Kernel.id_parallelComp_comp_parallelComp_id]
+    exact Kernel.parallelComp_comp_parallelComp
+  associator_naturality κ₁ κ₂ η := by
+    ext : 1; dsimp
+    simp only [Kernel.id_parallelComp_comp_parallelComp_id]
+    rw [Kernel.deterministic_comp_eq_map]; rw [Kernel.comp_deterministic_eq_comap]
+    ext _ _ hs
+    rw [Kernel.map_apply' _ (by fun_prop) _ hs]; rw [Kernel.comap_apply' _ (by fun_prop)]
+    repeat rw [Kernel.parallelComp_apply]
+    rw [Measure.prod_apply hs]; rw [Measure.prod_apply (by measurability)]; rw [lintegral_prod]
+    · congr with a
+      rw [Measure.prod_apply (by measurability)]
+      rfl
+    · refine Measurable.aemeasurable ?_
+      exact measurable_measure_prodMk_left (by measurability)
+  pentagon W X Y Z := by
+    ext : 1; dsimp
+    simp only [Kernel.id]
+    repeat rw [Kernel.deterministic_parallelComp_deterministic (by fun_prop) (by fun_prop)]
+    simp [Kernel.deterministic_comp_deterministic]
+    rfl
+  triangle X Y := by
+    ext : 1; dsimp
+    simp only [Kernel.id]
+    repeat rw [Kernel.deterministic_map (by fun_prop) (by fun_prop)]
+    repeat rw [Kernel.deterministic_parallelComp_deterministic (by fun_prop) (by fun_prop)]
+    simp [Kernel.deterministic_comp_deterministic]
+    rfl
+
+@[simps (attr := scoped simp) -isSimp]
 
 Depends on / 依赖: SFinKer, SFinKer.of
 -/
@@ -296,7 +466,25 @@ instance :
   braiding_naturality_right X Y Z κ := by
     ext : 1; dsimp
     exact Kernel.swap_parallelComp
-  braiding_naturality_l
+  braiding_naturality_left κ X := by
+    ext : 1; dsimp
+    exact Kernel.swap_parallelComp
+  hexagon_forward X Y Z := by
+    ext : 1; dsimp
+    simp only [Kernel.id, Kernel.swap]
+    repeat rw [Kernel.deterministic_parallelComp_deterministic]
+    repeat rw [Kernel.deterministic_comp_deterministic]
+    rfl
+  hexagon_reverse X Y Z := by
+    ext : 1; dsimp
+    simp only [Kernel.id, Kernel.swap]
+    repeat rw [Kernel.deterministic_parallelComp_deterministic]
+    repeat rw [Kernel.deterministic_comp_deterministic]
+    rfl
+  symmetry X Y := by
+    ext : 1; simp
+
+@[simps (attr := scoped simp) -isSimp]
 
 中文:
 实例 :
@@ -309,7 +497,25 @@ instance :
   braiding_naturality_right X Y Z κ := by
     ext : 1; dsimp
     exact Kernel.swap_parallelComp
-  braiding_naturality_l
+  braiding_naturality_left κ X := by
+    ext : 1; dsimp
+    exact Kernel.swap_parallelComp
+  hexagon_forward X Y Z := by
+    ext : 1; dsimp
+    simp only [Kernel.id, Kernel.swap]
+    repeat rw [Kernel.deterministic_parallelComp_deterministic]
+    repeat rw [Kernel.deterministic_comp_deterministic]
+    rfl
+  hexagon_reverse X Y Z := by
+    ext : 1; dsimp
+    simp only [Kernel.id, Kernel.swap]
+    repeat rw [Kernel.deterministic_parallelComp_deterministic]
+    repeat rw [Kernel.deterministic_comp_deterministic]
+    rfl
+  symmetry X Y := by
+    ext : 1; simp
+
+@[simps (attr := scoped simp) -isSimp]
 
 Depends on / 依赖: Kernel, Kernel.deterministic_, Kernel.deterministic_parallelComp_deterministic, Kernel.id, Kernel.swap, Kernel.swap_parallelComp, braiding_naturality_left, braiding_naturality_right, deterministic_, deterministic_parallelComp_deterministic, hexagon_forward, infer_instance, repeat, swap_parallelComp
 -/
@@ -373,7 +579,18 @@ instance :
     repeat rw [Kernel.deterministic_parallelComp_deterministic]
     repeat rw [Kernel.deterministic_comp_deterministic]
     rfl
-  disc
+  discard_tensor X Y := by
+    ext : 1; dsimp
+    simp only [Kernel.id_parallelComp_comp_parallelComp_id]
+    rw [Kernel.id_map (by fun_prop)]; rw [Kernel.deterministic_comp_eq_map]
+    ext
+    rw [Kernel.map_apply _ (by fun_prop)]; rw [Kernel.parallelComp_apply]
+    simp [Kernel.discard_apply]
+  copy_unit := by
+    ext : 1; dsimp
+    ext
+    rw [Kernel.id_map (by fun_prop)]
+    simp [Kernel.copy_apply, Kernel.deterministic_apply]
 
 中文:
 实例 :
@@ -385,7 +602,18 @@ instance :
     repeat rw [Kernel.deterministic_parallelComp_deterministic]
     repeat rw [Kernel.deterministic_comp_deterministic]
     rfl
-  disc
+  discard_tensor X Y := by
+    ext : 1; dsimp
+    simp only [Kernel.id_parallelComp_comp_parallelComp_id]
+    rw [Kernel.id_map (by fun_prop)]; rw [Kernel.deterministic_comp_eq_map]
+    ext
+    rw [Kernel.map_apply _ (by fun_prop)]; rw [Kernel.parallelComp_apply]
+    simp [Kernel.discard_apply]
+  copy_unit := by
+    ext : 1; dsimp
+    ext
+    rw [Kernel.id_map (by fun_prop)]
+    simp [Kernel.copy_apply, Kernel.deterministic_apply]
 
 Depends on / 依赖: Kernel, Kernel.swap_copy, swap_copy
 -/

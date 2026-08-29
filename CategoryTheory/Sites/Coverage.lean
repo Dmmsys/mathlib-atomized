@@ -228,7 +228,21 @@ lemma isSheafFor_of_factorsThru
   · intro x y₁ y₂ h₁ h₂
     refine hS.1.ext (fun Y g hg => ?_)
     simp only [← h2 hg, op_comp, P.map_comp, types_comp_apply, h₁ _ (h1 _), h₂ _ (h1 _)]
-
+  let y : S.FamilyOfElements P := fun Y g hg => P.map (i _).op (x (e hg) (h1 _))
+  have hy : y.Compatible := by
+    intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ h
+    rw [← types_comp_apply (P.map (i h₁).op) (P.map g₁.op)]; rw [← types_comp_apply (P.map (i h₂).op) (P.map g₂.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [← P.map_comp]; rw [← op_comp]
+    apply hx
+    simp only [h2, h, Category.assoc]
+  let ⟨_, h2'⟩ := hS
+  obtain ⟨z, hz⟩ := h2' y hy
+  refine ⟨z, fun Y g hg => ?_⟩
+  obtain ⟨R, hR1, hR2⟩ := h hg
+  choose WW ii ee hh1 hh2 using hR2
+  refine hR1.ext (fun Q t ht => ?_)
+  rw [← types_comp_apply (P.map g.op) (P.map t.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [← hh2 ht]; rw [op_comp]; rw [P.map_comp]; rw [types_comp_apply]; rw [hz _ (hh1 _)]; rw [← types_comp_apply _ (P.map (ii ht).op)]; rw [← P.map_comp]; rw [← op_comp]
+  apply hx
+  simp only [Category.assoc, h2, hh2]
 
 中文:
 引理 isSheafFor_of_factorsThru
@@ -239,7 +253,21 @@ lemma isSheafFor_of_factorsThru
   · intro x y₁ y₂ h₁ h₂
     refine hS.1.ext (fun Y g hg => ?_)
     simp only [← h2 hg, op_comp, P.map_comp, types_comp_apply, h₁ _ (h1 _), h₂ _ (h1 _)]
-
+  let y : S.FamilyOfElements P := fun Y g hg => P.map (i _).op (x (e hg) (h1 _))
+  have hy : y.Compatible := by
+    intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ h
+    rw [← types_comp_apply (P.map (i h₁).op) (P.map g₁.op)]; rw [← types_comp_apply (P.map (i h₂).op) (P.map g₂.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [← P.map_comp]; rw [← op_comp]
+    apply hx
+    simp only [h2, h, Category.assoc]
+  let ⟨_, h2'⟩ := hS
+  obtain ⟨z, hz⟩ := h2' y hy
+  refine ⟨z, fun Y g hg => ?_⟩
+  obtain ⟨R, hR1, hR2⟩ := h hg
+  choose WW ii ee hh1 hh2 using hR2
+  refine hR1.ext (fun Q t ht => ?_)
+  rw [← types_comp_apply (P.map g.op) (P.map t.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [← hh2 ht]; rw [op_comp]; rw [P.map_comp]; rw [types_comp_apply]; rw [hz _ (hh1 _)]; rw [← types_comp_apply _ (P.map (ii ht).op)]; rw [← P.map_comp]; rw [← op_comp]
+  apply hx
+  simp only [Category.assoc, h2, hh2]
 
 Depends on / 依赖: Compatible, FamilyOfElements, P.map, P.map_comp, Presieve, Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor, S.FamilyOfElements, isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor, map_comp, op_comp, types_comp_, types_comp_apply, y.Compatible
 -/
@@ -499,7 +527,13 @@ lemma Saturate.pullback
       saturate_of_superset _ this (Saturate.of _ _ hR1)
     intro Z g ⟨W, i, e, h1, h2⟩
     obtain ⟨WW, ii, ee, hh1, hh2⟩ := hR2 h1
-    refine ⟨WW,
+    refine ⟨WW, i ≫ ii, ee, hh1, ?_⟩
+    simp [hh2, reassoc_of% h2]
+  | top X => exact .top _
+  | transitive X R S _ hS H1 _ =>
+    refine (H1 f).transitive _ _ _ fun Z g hg => ?_
+    rw [← Sieve.pullback_comp]
+    exact hS hg
 
 中文:
 引理 Saturate.pullback
@@ -512,7 +546,13 @@ lemma Saturate.pullback
       saturate_of_superset _ this (Saturate.of _ _ hR1)
     intro Z g ⟨W, i, e, h1, h2⟩
     obtain ⟨WW, ii, ee, hh1, hh2⟩ := hR2 h1
-    refine ⟨WW,
+    refine ⟨WW, i ≫ ii, ee, hh1, ?_⟩
+    simp [hh2, reassoc_of% h2]
+  | top X => exact .top _
+  | transitive X R S _ hS H1 _ =>
+    refine (H1 f).transitive _ _ _ fun Z g hg => ?_
+    rw [← Sieve.pullback_comp]
+    exact hS hg
 
 Depends on / 依赖: K.pullback, Saturate, Saturate.of, Sieve.generate, Sieve.pullback_comp, generate, pullback, pullback_comp, reassoc_of, saturate_of_superset, transitive
 -/
@@ -648,7 +688,11 @@ definition gi
     constructor
     · intro H X S hS
 exact H _ Saturate.of _ _ hS
-    · intro H X
+    · intro H X S hS
+      induction hS with
+      | of X S hS => exact H _ hS
+      | top => apply J.top_mem
+      | transitive X R S _ _ H1 H2 => exact J.transitive H1 _ H2
 
 中文:
 定义 gi
@@ -664,7 +708,11 @@ exact H _ Saturate.of _ _ hS
     constructor
     · intro H X S hS
 exact H _ Saturate.of _ _ hS
-    · intro H X
+    · intro H X S hS
+      induction hS with
+      | of X S hS => exact H _ hS
+      | top => apply J.top_mem
+      | transitive X R S _ _ H1 H2 => exact J.transitive H1 _ H2
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.toCoverage, toCoverage
 -/
@@ -750,7 +798,11 @@ instance :
       · obtain ⟨T, hT⟩ := y.pullback f S hy
         exact ⟨T, Or.inr hT.1, hT.2⟩ }
   toPartialOrder := inferInstance
-  le_sup_left 
+  le_sup_left _ _ _ := Set.subset_union_left
+  le_sup_right _ _ _ := Set.subset_union_right
+  sup_le _ _ _ hx hy X := Set.union_subset_iff.mpr ⟨hx X, hy X⟩
+
+@[simp]
 
 中文:
 实例 :
@@ -763,7 +815,11 @@ instance :
       · obtain ⟨T, hT⟩ := y.pullback f S hy
         exact ⟨T, Or.inr hT.1, hT.2⟩ }
   toPartialOrder := inferInstance
-  le_sup_left 
+  le_sup_left _ _ _ := Set.subset_union_left
+  le_sup_right _ _ _ := Set.subset_union_right
+  sup_le _ _ _ hx hy X := Set.union_subset_iff.mpr ⟨hx X, hy X⟩
+
+@[simp]
 
 Depends on / 依赖: Or.inl, Or.inr, Set.subset_union_left, Set.subset_union_right, Set.union_subset_iff.mpr, coverings, le_sup_left, le_sup_right, pullback, subset_union_left, subset_union_right, sup_le, toPartialOrder, union_subset_iff, x.pullback, y.pullback
 -/
@@ -873,7 +929,15 @@ lemma Pretopology.toGrothendieck_toCoverage
   · induction h with
     | of X S hS => use S, hS, Sieve.le_generate S
     | top X => use Presieve.singleton (𝟙 X), J.has_isos (𝟙 X), le_top
-    | transitive X R S hR hRS hle hfS =
+    | transitive X R S hR hRS hle hfS =>
+        obtain ⟨R', hR', hle⟩ := hle
+        choose S' hS' hS'le using hfS
+        refine ⟨Presieve.bind R' (fun Y f hf => S' (hle _ _ hf)), ?_, fun Z u hu => ?_⟩
+        · exact J.transitive R' (fun Y f hf => S' (hle Y _ hf)) hR' fun Y f H => hS' (hle Y _ H)
+        · obtain ⟨W, g, w, hw, hg, rfl⟩ := hu
+          exact hS'le _ _ _ hg
+  · refine Coverage.saturate_of_superset _ ?_ (.of _ _ hR)
+    rwa [Sieve.generate_le_iff]
 
 中文:
 引理 Pretopology.toGrothendieck_toCoverage
@@ -885,7 +949,15 @@ lemma Pretopology.toGrothendieck_toCoverage
   · induction h with
     | of X S hS => use S, hS, Sieve.le_generate S
     | top X => use Presieve.singleton (𝟙 X), J.has_isos (𝟙 X), le_top
-    | transitive X R S hR hRS hle hfS =
+    | transitive X R S hR hRS hle hfS =>
+        obtain ⟨R', hR', hle⟩ := hle
+        choose S' hS' hS'le using hfS
+        refine ⟨Presieve.bind R' (fun Y f hf => S' (hle _ _ hf)), ?_, fun Z u hu => ?_⟩
+        · exact J.transitive R' (fun Y f hf => S' (hle Y _ hf)) hR' fun Y f H => hS' (hle Y _ H)
+        · obtain ⟨W, g, w, hw, hg, rfl⟩ := hu
+          exact hS'le _ _ _ hg
+  · refine Coverage.saturate_of_superset _ ?_ (.of _ _ hR)
+    rwa [Sieve.generate_le_iff]
 
 Depends on / 依赖: Coverage, Coverage.mem_toGrothendieck, J.has_isos, J.transitive, Presieve, Presieve.bind, Presieve.singleton, Sieve.le_generate, has_isos, le_generate, le_top, mem_toGrothendieck, singleton, transitive
 -/
@@ -1019,7 +1091,14 @@ theorem isSheaf_coverage
     simpa [← Presieve.isSheafFor_iff_generate] using H (f := 𝟙 X) S hS
   · intro H X Y f S hS
     obtain ⟨T, hT1, hT2⟩ := K.pullback f S hS
-    apply Presieve.isSheafFor_of_factorsT
+    apply Presieve.isSheafFor_of_factorsThru (S := T)
+    · intro Z g hg
+      obtain ⟨W, i, e, h1, h2⟩ := hT2 hg
+      exact ⟨Z, 𝟙 _, g, ⟨W, i, e, h1, h2⟩, by simp⟩
+    · apply H; assumption
+    · intro Z g _
+      obtain ⟨R, hR1, hR2⟩ := K.pullback g _ hT1
+      exact ⟨R, (H _ hR1).isSeparatedFor, hR2⟩
 
 中文:
 定理 isSheaf_coverage
@@ -1031,7 +1110,14 @@ theorem isSheaf_coverage
     simpa [← Presieve.isSheafFor_iff_generate] using H (f := 𝟙 X) S hS
   · intro H X Y f S hS
     obtain ⟨T, hT1, hT2⟩ := K.pullback f S hS
-    apply Presieve.isSheafFor_of_factorsT
+    apply Presieve.isSheafFor_of_factorsThru (S := T)
+    · intro Z g hg
+      obtain ⟨W, i, e, h1, h2⟩ := hT2 hg
+      exact ⟨Z, 𝟙 _, g, ⟨W, i, e, h1, h2⟩, by simp⟩
+    · apply H; assumption
+    · intro Z g _
+      obtain ⟨R, hR1, hR2⟩ := K.pullback g _ hT1
+      exact ⟨R, (H _ hR1).isSeparatedFor, hR2⟩
 
 Depends on / 依赖: K.pullback, Precoverage, Precoverage.isSheaf_toGrothendieck_iff, Presieve, Presieve.isSheafFor_iff_generate, Presieve.isSheafFor_of_factorsThru, isSeparatedF, isSheafFor_iff_generate, isSheafFor_of_factorsThru, isSheaf_toGrothendieck_iff, pullback, toGrothendieck_toPrecoverage
 -/
@@ -1066,7 +1152,8 @@ theorem isSheaf_sup
   rw [isSheaf_coverage]
   intro X R hR
   rcases hR with hR | hR
-  · exact h.1 
+  · exact h.1 R hR
+  · exact h.2 R hR
 
 中文:
 定理 isSheaf_sup
@@ -1078,7 +1165,8 @@ theorem isSheaf_sup
   rw [isSheaf_coverage]
   intro X R hR
   rcases hR with hR | hR
-  · exact h.1 
+  · exact h.1 R hR
+  · exact h.2 R hR
 
 Depends on / 依赖: Presieve, Presieve.isSheaf_of_le, gc.monotone_l, isSheaf_coverage, isSheaf_of_le, le_sup_left, le_sup_right, monotone_l
 -/
@@ -1130,6 +1218,11 @@ lemma Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small
   rw [Presieve.isSheafFor_iff_generate]
   let E : ZeroHypercover J X := ⟨E₀, hR⟩
   apply Presieve.isSheafFor_subsieve
+      (S := .generate <| (ZeroHypercover.restrictIndexOfSmall.{w} E).presieve₀)
+  · exact Sieve.generate_mono (by simp [E])
+  · intro Y f
+    rw [← Sieve.pullbackArrows_comm]; rw [← Presieve.isSheafFor_iff_generate]; rw [← PreZeroHypercover.presieve₀_pullback₁]; rw [← ZeroHypercover.pullback₂_toPreZeroHypercover]
+    apply h
 
 中文:
 引理 Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small
@@ -1141,6 +1234,11 @@ lemma Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small
   rw [Presieve.isSheafFor_iff_generate]
   let E : ZeroHypercover J X := ⟨E₀, hR⟩
   apply Presieve.isSheafFor_subsieve
+      (S := .generate <| (ZeroHypercover.restrictIndexOfSmall.{w} E).presieve₀)
+  · exact Sieve.generate_mono (by simp [E])
+  · intro Y f
+    rw [← Sieve.pullbackArrows_comm]; rw [← Presieve.isSheafFor_iff_generate]; rw [← PreZeroHypercover.presieve₀_pullback₁]; rw [← ZeroHypercover.pullback₂_toPreZeroHypercover]
+    apply h
 
 Depends on / 依赖: E.mem, Precoverage, Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange, Presieve, Presieve.isSheafFor_iff_generate, Presieve.isSheafFor_subsieve, R.exists_eq_preZeroHypercover, Sieve.generate_mono, Sieve.pullbackArrows_comm, ZeroHypercover, ZeroHypercover.restrictIndexOfSmall, exists_eq_preZeroHypercover, generate, generate_mono, isSheafFor_iff_generate, isSheafFor_subsieve, isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange, pullbackArrows_comm, restrictIndexOfSmall
 -/

@@ -144,7 +144,9 @@ lemma isIntegralCurveAt_iff_exists_mem_nhds
   obtain ⟨s', h₁, h₂, h₃⟩ := hs
   refine ⟨s', h₂.mem_nhds h₃, ?_⟩
   intro t ht
-  apply (h t (h₁ ht)).hasDeri
+  apply (h t (h₁ ht)).hasDerivAt
+  rw [mem_nhds_iff]
+  exact ⟨s', h₁, h₂, ht⟩
 
 中文:
 引理 is整数egralCurveAt_iff_存在_mem_nhds
@@ -156,7 +158,9 @@ lemma isIntegralCurveAt_iff_exists_mem_nhds
   obtain ⟨s', h₁, h₂, h₃⟩ := hs
   refine ⟨s', h₂.mem_nhds h₃, ?_⟩
   intro t ht
-  apply (h t (h₁ ht)).hasDeri
+  apply (h t (h₁ ht)).hasDerivAt
+  rw [mem_nhds_iff]
+  exact ⟨s', h₁, h₂, ht⟩
 
 Depends on / 依赖: Filter, Filter.eventually_iff_exists_mem, IsIntegralCurveAt, eventually_iff_exists_mem, hasDerivAt, hasDerivWithinAt, mem_nhds, mem_nhds_iff
 -/

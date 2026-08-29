@@ -116,7 +116,8 @@ theorem lie_mem_genWeightSpace_of_mem_genWeightSpace
   replace hx : x in genWeightSpaceOf L (χ₁ y) y := by
     rw [rootSpace]; rw [genWeightSpace]; rw [LieSubmodule.mem_iInf] at hx; exact hx y
   replace hm : m in genWeightSpaceOf M (χ₂ y) y := by
-    rw [genWeightSpace]; rw [LieSubmodule.m
+    rw [genWeightSpace]; rw [LieSubmodule.mem_iInf] at hm; exact hm y
+  exact lie_mem_maxGenEigenspace_toEnd hx hm
 
 中文:
 定理 lie_mem_genWeightSpace_of_mem_genWeightSpace
@@ -127,7 +128,8 @@ theorem lie_mem_genWeightSpace_of_mem_genWeightSpace
   replace hx : x in genWeightSpaceOf L (χ₁ y) y := by
     rw [rootSpace]; rw [genWeightSpace]; rw [LieSubmodule.mem_iInf] at hx; exact hx y
   replace hm : m in genWeightSpaceOf M (χ₂ y) y := by
-    rw [genWeightSpace]; rw [LieSubmodule.m
+    rw [genWeightSpace]; rw [LieSubmodule.mem_iInf] at hm; exact hm y
+  exact lie_mem_maxGenEigenspace_toEnd hx hm
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.mem_iInf, genWeightSpace, genWeightSpaceOf, lie_mem_maxGenEigenspace_toEnd, mem_iInf, replace, rootSpace
 -/
@@ -193,7 +195,14 @@ lemma mem_biSup_genWeightSpace_of
     by_cases hχ₁ : χ₁ in s; swap
     · simp_all
     replace hu : u in rootSpace H χ₁ := by simpa [hχ₁] using hu
-    induction hm using LieSubmodule
+    induction hm using LieSubmodule.iSup_induction' with
+    | zero => simp
+    | add _ _ _ _ hv hw => rw [lie_add]; exact add_mem hv hw
+    | mem χ₂ v hv =>
+      by_cases hχ₂ : χ₂ in s; swap
+      · simp_all
+      apply LieSubmodule.mem_iSup_of_mem (χ₁ + χ₂)
+      simp_all [lie_mem_genWeightSpace_of_mem_genWeightSpace]
 
 中文:
 引理 mem_biSup_genWeightSpace_of
@@ -206,7 +215,14 @@ lemma mem_biSup_genWeightSpace_of
     by_cases hχ₁ : χ₁ in s; swap
     · simp_all
     replace hu : u in rootSpace H χ₁ := by simpa [hχ₁] using hu
-    induction hm using LieSubmodule
+    induction hm using LieSubmodule.iSup_induction' with
+    | zero => simp
+    | add _ _ _ _ hv hw => rw [lie_add]; exact add_mem hv hw
+    | mem χ₂ v hv =>
+      by_cases hχ₂ : χ₂ in s; swap
+      · simp_all
+      apply LieSubmodule.mem_iSup_of_mem (χ₁ + χ₂)
+      simp_all [lie_mem_genWeightSpace_of_mem_genWeightSpace]
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.iSup_induction, LieSubmodule.mem_iSup_of_mem, add_lie, add_mem, iSup_induction, lie_add, lie_mem_genWeightS, mem_iSup_of_mem, replace, rootSpace
 -/
@@ -245,7 +261,13 @@ definition rootSpaceWeightSpaceProductAux
       map_smul' := fun t m => by simp }
   map_add' x y := by
     ext m
-
+    simp only [LieSubmodule.coe_add, add_lie, LinearMap.coe_mk, AddHom.coe_mk, LinearMap.add_apply,
+      AddMemClass.mk_add_mk]
+  map_smul' t x := by
+    simp only [RingHom.id_apply]
+    ext m
+    simp only [SetLike.val_smul, smul_lie, LinearMap.coe_mk, AddHom.coe_mk, LinearMap.smul_apply,
+      SetLike.mk_smul_mk]
 
 中文:
 定义 rootSpaceWeightSpaceProductAux
@@ -257,7 +279,13 @@ definition rootSpaceWeightSpaceProductAux
       map_smul' := fun t m => by simp }
   map_add' x y := by
     ext m
-
+    simp only [LieSubmodule.coe_add, add_lie, LinearMap.coe_mk, AddHom.coe_mk, LinearMap.add_apply,
+      AddMemClass.mk_add_mk]
+  map_smul' t x := by
+    simp only [RingHom.id_apply]
+    ext m
+    simp only [SetLike.val_smul, smul_lie, LinearMap.coe_mk, AddHom.coe_mk, LinearMap.smul_apply,
+      SetLike.mk_smul_mk]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, AddMemClass, AddMemClass.mk_add_mk, LieSubmodule, LieSubmodule.coe_add, LinearMap, LinearMap.add_apply, LinearMap.coe_mk, RingHom, RingHom.id_apply, SetLike, SetLike.val_smul, add_apply, add_lie, coe_add, coe_mk, id_apply, lie_add, lie_mem_genWeightSpace_of_mem_genWeightSpace
 -/
@@ -446,7 +474,10 @@ definition zeroRootSubalgebra
     lie_mem' := fun {x y hx hy} => by
       let xy : rootSpace H 0 otimes[R] rootSpace H 0 := ⟨x, hx⟩ otimesₜ ⟨y, hy⟩
       suffices (rootSpaceProduct R L H 0 0 0 (add_zero 0) xy : L) in rootSpace H 0 by
-        rwa [rootSpaceProduct_tmul, Subtype.coe
+        rwa [rootSpaceProduct_tmul, Subtype.coe_mk, Subtype.coe_mk] at this
+      exact (rootSpaceProduct R L H 0 0 0 (add_zero 0) xy).property }
+
+@[simp]
 
 中文:
 定义 zeroRootSubalgebra
@@ -455,7 +486,10 @@ definition zeroRootSubalgebra
     lie_mem' := fun {x y hx hy} => by
       let xy : rootSpace H 0 otimes[R] rootSpace H 0 := ⟨x, hx⟩ otimesₜ ⟨y, hy⟩
       suffices (rootSpaceProduct R L H 0 0 0 (add_zero 0) xy : L) in rootSpace H 0 by
-        rwa [rootSpaceProduct_tmul, Subtype.coe
+        rwa [rootSpaceProduct_tmul, Subtype.coe_mk, Subtype.coe_mk] at this
+      exact (rootSpaceProduct R L H 0 0 0 (add_zero 0) xy).property }
+
+@[simp]
 
 Depends on / 依赖: Submodule, Subtype, Subtype.coe_mk, add_zero, coe_mk, lie_mem, otimes, property, rootSpace, rootSpaceProduct, rootSpaceProduct_tmul, toSubmodule
 -/
@@ -522,7 +556,14 @@ theorem toLieSubmodule_le_rootSpace_zero
   use k
   let f : Module.End R H := toEnd R H H y
   let g : Module.End R L := toEnd R H L y
-  have hfg :
+  have hfg : g.comp (H : Submodule R L).subtype = (H : Submodule R L).subtype.comp f := rfl
+  change (g ^ k).comp (H : Submodule R L).subtype ⟨x, hx⟩ = 0
+  rw [Module.End.commute_pow_left_of_commute hfg k]
+  have h := iterate_toEnd_mem_lowerCentralSeries R H H y ⟨x, hx⟩ k
+  rw [hk]; rw [LieSubmodule.mem_bot] at h
+  simp only [Submodule.subtype_apply, Function.comp_apply, Module.End.pow_apply, LinearMap.coe_comp,
+    Submodule.coe_eq_zero]
+  exact h
 
 中文:
 定理 toLieSubmodule_le_rootSpace_zero
@@ -536,7 +577,14 @@ theorem toLieSubmodule_le_rootSpace_zero
   use k
   let f : Module.End R H := toEnd R H H y
   let g : Module.End R L := toEnd R H L y
-  have hfg :
+  have hfg : g.comp (H : Submodule R L).subtype = (H : Submodule R L).subtype.comp f := rfl
+  change (g ^ k).comp (H : Submodule R L).subtype ⟨x, hx⟩ = 0
+  rw [Module.End.commute_pow_left_of_commute hfg k]
+  have h := iterate_toEnd_mem_lowerCentralSeries R H H y ⟨x, hx⟩ k
+  rw [hk]; rw [LieSubmodule.mem_bot] at h
+  simp only [Submodule.subtype_apply, Function.comp_apply, Module.End.pow_apply, LinearMap.coe_comp,
+    Submodule.coe_eq_zero]
+  exact h
 
 Depends on / 依赖: IsNilpotent, IsNilpotent.nilpotent, LieSubalgebra, LieSubalgebra.mem_toLieSubmodule, Module, Module.End, Module.End.commute_pow_left_of_commute, Pi.zero_apply, Submodule, commute_pow_left_of_commute, g.comp, iterate_toEnd_mem_, mem_genWeightSpace, mem_toLieSubmodule, nilpotent, sub_zero, subtype, subtype.comp, zero_apply, zero_smul
 -/
@@ -626,7 +674,9 @@ theorem zeroRootSubalgebra_normalizer_eq_self
   specialize hx y (le_zeroRootSubalgebra R L H hy)
   rw [mem_zeroRootSubalgebra] at hx
   obtain ⟨k, hk⟩ := hx ⟨y, hy⟩
-  rw [← lie_skew]
+  rw [← lie_skew]; rw [map_neg]; rw [neg_eq_zero] at hk
+  use k + 1
+  rw [Module.End.iterate_succ]; rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [toEnd_apply_apply]; rw [LieSubalgebra.coe_bracket_of_module]; rw [Submodule.coe_mk]; rw [hk]
 
 中文:
 定理 zeroRootSubalgebra_normalizer_eq_self
@@ -639,7 +689,9 @@ theorem zeroRootSubalgebra_normalizer_eq_self
   specialize hx y (le_zeroRootSubalgebra R L H hy)
   rw [mem_zeroRootSubalgebra] at hx
   obtain ⟨k, hk⟩ := hx ⟨y, hy⟩
-  rw [← lie_skew]
+  rw [← lie_skew]; rw [map_neg]; rw [neg_eq_zero] at hk
+  use k + 1
+  rw [Module.End.iterate_succ]; rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [toEnd_apply_apply]; rw [LieSubalgebra.coe_bracket_of_module]; rw [Submodule.coe_mk]; rw [hk]
 
 Depends on / 依赖: Function, Function.comp_apply, LieSubalgebra, LieSubalgebra.coe_bracket_of_module, LieSubalgebra.le_normalizer, LieSubalgebra.mem_normalizer_iff, LinearMap, LinearMap.coe_comp, Module, Module.End.iterate_succ, Submodule, Submodule.coe_mk, coe_bracket_of_module, coe_comp, coe_mk, comp_apply, iterate_succ, le_antisymm, le_normalizer, le_zeroRootSubalgebra
 -/
@@ -827,7 +879,12 @@ lemma mem_corootSpace
     simp only [rootSpaceProduct_def, LieModuleHom.mem_range, LieSubmodule.mem_map,
       LieSubmodule.incl_apply, SetLike.coe_eq_coe, exists_eq_right]
     rfl
-  simp_rw
+  simp_rw [this, corootSpace, ← LieModuleHom.map_top, ← LieSubmodule.mem_toSubmodule,
+    LieSubmodule.toSubmodule_map, LieSubmodule.top_toSubmodule, ← TensorProduct.span_tmul_eq_top,
+    LinearMap.map_span, Set.image, Set.mem_ofPred_eq, exists_exists_exists_and_eq]
+  change (x : L) in Submodule.span R
+    {x | exists (a : rootSpace H α) (b : rootSpace H (-α)), ⁅(a : L), (b : L)⁆ = x} ↔ _
+  simp
 
 中文:
 引理 mem_corootSpace
@@ -839,7 +896,12 @@ lemma mem_corootSpace
     simp only [rootSpaceProduct_def, LieModuleHom.mem_range, LieSubmodule.mem_map,
       LieSubmodule.incl_apply, SetLike.coe_eq_coe, exists_eq_right]
     rfl
-  simp_rw
+  simp_rw [this, corootSpace, ← LieModuleHom.map_top, ← LieSubmodule.mem_toSubmodule,
+    LieSubmodule.toSubmodule_map, LieSubmodule.top_toSubmodule, ← TensorProduct.span_tmul_eq_top,
+    LinearMap.map_span, Set.image, Set.mem_ofPred_eq, exists_exists_exists_and_eq]
+  change (x : L) in Submodule.span R
+    {x | exists (a : rootSpace H α) (b : rootSpace H (-α)), ⁅(a : L), (b : L)⁆ = x} ↔ _
+  simp
 
 Depends on / 依赖: H.toLieSubmodule.incl, LieModuleHom, LieModuleHom.map_top, LieModuleHom.mem_range, LieSubmodule, LieSubmodule.incl_apply, LieSubmodule.map, LieSubmodule.mem_map, LieSubmodule.mem_toSubmodule, LieSubmodule.toSubmodule_map, LieSubmodule.top_toSubmodule, LinearMap, LinearMap.map_span, Set.image, Set.mem_ofPred_eq, SetLike, SetLike.coe_eq_coe, TensorProduct, TensorProduct.span_tmul_eq_top, coe_eq_coe
 -/
@@ -870,7 +932,16 @@ lemma mem_corootSpace'
   suffices H.subtype '' s = {⁅y, z⁆ | (y in rootSpace H α) (z in rootSpace H (-α))} by
     erw [← (H : Submodule R L).injective_subtype.mem_set_image (s := Submodule.span R s)]
     rw [mem_image]
-    simp_rw [Set
+    simp_rw [SetLike.mem_coe]
+    rw [← Submodule.mem_map]; rw [Submodule.coe_subtype]; rw [Submodule.map_span]; rw [mem_corootSpace]; rw [← this]
+  ext u
+  simp only [Submodule.coe_subtype, mem_image, Subtype.exists, LieSubalgebra.mem_toSubmodule,
+    exists_and_right, exists_eq_right, mem_ofPred_eq, s]
+  refine ⟨fun ⟨_, y, hy, z, hz, hyz⟩ => ⟨y, hy, z, hz, hyz⟩,
+    fun ⟨y, hy, z, hz, hyz⟩ => ⟨?_, y, hy, z, hz, hyz⟩⟩
+  convert!
+    (rootSpaceProduct R L H α (-α) 0 (add_neg_cancel α) (⟨y, hy⟩ otimesₜ[R] ⟨z, hz⟩)).property using 0
+  simp [hyz]
 
 中文:
 引理 mem_corootSpace'
@@ -880,7 +951,16 @@ lemma mem_corootSpace'
   suffices H.subtype '' s = {⁅y, z⁆ | (y in rootSpace H α) (z in rootSpace H (-α))} by
     erw [← (H : Submodule R L).injective_subtype.mem_set_image (s := Submodule.span R s)]
     rw [mem_image]
-    simp_rw [Set
+    simp_rw [SetLike.mem_coe]
+    rw [← Submodule.mem_map]; rw [Submodule.coe_subtype]; rw [Submodule.map_span]; rw [mem_corootSpace]; rw [← this]
+  ext u
+  simp only [Submodule.coe_subtype, mem_image, Subtype.exists, LieSubalgebra.mem_toSubmodule,
+    exists_and_right, exists_eq_right, mem_ofPred_eq, s]
+  refine ⟨fun ⟨_, y, hy, z, hz, hyz⟩ => ⟨y, hy, z, hz, hyz⟩,
+    fun ⟨y, hy, z, hz, hyz⟩ => ⟨?_, y, hy, z, hz, hyz⟩⟩
+  convert!
+    (rootSpaceProduct R L H α (-α) 0 (add_neg_cancel α) (⟨y, hy⟩ otimesₜ[R] ⟨z, hz⟩)).property using 0
+  simp [hyz]
 
 Depends on / 依赖: H.subtype, LieSubalgebra, LieSubalgebra.mem_toSu, SetLike, SetLike.mem_coe, Submodule, Submodule.coe_subtype, Submodule.map_span, Submodule.mem_map, Submodule.span, Subtype, Subtype.exists, coe_subtype, injective_subtype, injective_subtype.mem_set_image, map_span, mem_coe, mem_corootSpace, mem_image, mem_map
 -/
@@ -939,7 +1019,8 @@ lemma lieIdeal_eq_inf_cartan_sup_biSup_inf_rootSpace
   exact iSup_le fun α => by
     by_cases hα : α.IsZero
     · rw [show genWeightSpace L (α : H -> K) = H.toLieSubmodule by ext; simp [hα.eq]]
-      exact le_sup_lef
+      exact le_sup_left
+    · exact le_sup_of_le_right (le_iSup₂_of_le α hα le_rfl)
 
 中文:
 引理 lieIdeal_eq_inf_cartan_sup_biSup_inf_rootSpace
@@ -950,7 +1031,8 @@ lemma lieIdeal_eq_inf_cartan_sup_biSup_inf_rootSpace
   exact iSup_le fun α => by
     by_cases hα : α.IsZero
     · rw [show genWeightSpace L (α : H -> K) = H.toLieSubmodule by ext; simp [hα.eq]]
-      exact le_sup_lef
+      exact le_sup_left
+    · exact le_sup_of_le_right (le_iSup₂_of_le α hα le_rfl)
 
 Depends on / 依赖: H.toLieSubmodule, IsZero, conv_lhs, genWeightSpace, iSup_le, inf_le_left, le_antisymm, le_rfl, le_sup_left, le_sup_of_le_right, lieIdeal_eq_iSup_inf_genWeightSpace, sup_le, toLieSubmodule
 -/

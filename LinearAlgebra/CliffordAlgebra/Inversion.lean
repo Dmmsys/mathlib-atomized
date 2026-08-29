@@ -34,7 +34,7 @@ definition invertibleιOfInvertible
   invOf_mul_self := by
     rw [map_smul]; rw [smul_mul_assoc]; rw [ι_sq_scalar]; rw [Algebra.smul_def]; rw [← map_mul]; rw [invOf_mul_self]; rw [map_one]
   mul_invOf_self := by
-    rw [map_smul]; rw [mul_smul_comm]; rw [ι_sq_scalar]; rw [Algebra.smul_def]; rw [← map_mul]; rw [invOf_
+    rw [map_smul]; rw [mul_smul_comm]; rw [ι_sq_scalar]; rw [Algebra.smul_def]; rw [← map_mul]; rw [invOf_mul_self]; rw [map_one]
 
 中文:
 定义 invertibleιOfInvertible
@@ -43,7 +43,7 @@ definition invertibleιOfInvertible
   invOf_mul_self := by
     rw [map_smul]; rw [smul_mul_assoc]; rw [ι_sq_scalar]; rw [Algebra.smul_def]; rw [← map_mul]; rw [invOf_mul_self]; rw [map_one]
   mul_invOf_self := by
-    rw [map_smul]; rw [mul_smul_comm]; rw [ι_sq_scalar]; rw [Algebra.smul_def]; rw [← map_mul]; rw [invOf_
+    rw [map_smul]; rw [mul_smul_comm]; rw [ι_sq_scalar]; rw [Algebra.smul_def]; rw [← map_mul]; rw [invOf_mul_self]; rw [map_one]
 -/
 def invertibleιOfInvertible (m : M) [Invertible (Q m)] : Invertible (ι Q m) where
   invOf := ι Q (⅟(Q m) • m)

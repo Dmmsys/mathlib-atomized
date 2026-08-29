@@ -56,7 +56,22 @@ lemma exists_perm_eq_zero_implies_eq_zero
   let f (i : n) : Finset n := {j | M i j != 0}
   have hf (A : Finset n) : #A <= #(A.biUnion f) := by
     have (i : _) : ∑ j in f i, M i j = s := by simp [f, sum_subset (filter_subset _ _), hM.2.1]
-    have h₁ : ∑ i in A, ∑ j in f i, M i j
+    have h₁ : ∑ i in A, ∑ j in f i, M i j = #A * s := by simp [this]
+    have h₂ : ∑ i, ∑ j in A.biUnion f, M i j = #(A.biUnion f) * s := by
+      simp [sum_comm (t := A.biUnion f), hM.2.2]
+    suffices #A * s <= #(A.biUnion f) * s by exact_mod_cast le_of_mul_le_mul_right this hs
+    rw [← h₁]; rw [← h₂]
+    trans ∑ i in A, ∑ j in A.biUnion f, M i j
+    · refine sum_le_sum fun i hi => ?_
+      exact sum_le_sum_of_subset_of_nonneg (subset_biUnion_of_mem f hi) (by simp [*])
+    · exact sum_le_sum_of_subset_of_nonneg (by simp) fun _ _ _ => sum_nonneg fun j _ => hM.1 _ _
+  obtain ⟨g, hg, hg'⟩ := (all_card_le_biUnion_card_iff_exists_injective f).1 hf
+  rw [Finite.injective_iff_bijective] at hg
+  refine ⟨Equiv.ofBijective g hg, fun i j hij => ?_⟩
+  simp only [PEquiv.toMatrix_apply, Option.mem_def, ite_eq_right_iff, one_ne_zero, imp_false,
+    Equiv.toPEquiv_apply, Equiv.ofBijective_apply, Option.some.injEq]
+  rintro rfl
+  simpa [f, hij] using hg' i
 
 中文:
 引理 存在_perm_eq_zero_implies_eq_zero
@@ -66,7 +81,22 @@ lemma exists_perm_eq_zero_implies_eq_zero
   let f (i : n) : Finset n := {j | M i j != 0}
   have hf (A : Finset n) : #A <= #(A.biUnion f) := by
     have (i : _) : ∑ j in f i, M i j = s := by simp [f, sum_subset (filter_subset _ _), hM.2.1]
-    have h₁ : ∑ i in A, ∑ j in f i, M i j
+    have h₁ : ∑ i in A, ∑ j in f i, M i j = #A * s := by simp [this]
+    have h₂ : ∑ i, ∑ j in A.biUnion f, M i j = #(A.biUnion f) * s := by
+      simp [sum_comm (t := A.biUnion f), hM.2.2]
+    suffices #A * s <= #(A.biUnion f) * s by exact_mod_cast le_of_mul_le_mul_right this hs
+    rw [← h₁]; rw [← h₂]
+    trans ∑ i in A, ∑ j in A.biUnion f, M i j
+    · refine sum_le_sum fun i hi => ?_
+      exact sum_le_sum_of_subset_of_nonneg (subset_biUnion_of_mem f hi) (by simp [*])
+    · exact sum_le_sum_of_subset_of_nonneg (by simp) fun _ _ _ => sum_nonneg fun j _ => hM.1 _ _
+  obtain ⟨g, hg, hg'⟩ := (all_card_le_biUnion_card_iff_exists_injective f).1 hf
+  rw [Finite.injective_iff_bijective] at hg
+  refine ⟨Equiv.ofBijective g hg, fun i j hij => ?_⟩
+  simp only [PEquiv.toMatrix_apply, Option.mem_def, ite_eq_right_iff, one_ne_zero, imp_false,
+    Equiv.toPEquiv_apply, Equiv.ofBijective_apply, Option.some.injEq]
+  rintro rfl
+  simpa [f, hij] using hg' i
 -/
 private lemma exists_perm_eq_zero_implies_eq_zero {s : R} (hs : 0 < s)
     (hM : exists M' in doublyStochastic R n, M = s • M') :
@@ -114,6 +144,43 @@ lemma doublyStochastic_sum_perm_aux
   rcases eq_or_lt_of_le hs with rfl | hs'
   case inl =>
     use 0
+    simp only [zero_smul, exists_and_right] at hM
+    simp [hM]
+  obtain ⟨σ, hσ⟩ := exists_perm_eq_zero_implies_eq_zero hs' hM
+  obtain ⟨i, hi, hi'⟩ := exists_min_image _ (fun i => M i (σ i)) univ_nonempty
+  rw [exists_mem_doublyStochastic_eq_smul_iff hs] at hM
+  let N : Matrix n n R := M - M i (σ i) • σ.permMatrix R
+  have hMi' : 0 < M i (σ i) := (hM.1 _ _).lt_of_ne' fun h => by
+    simpa [Equiv.toPEquiv_apply] using hσ _ _ h
+  let s' : R := s - M i (σ i)
+  have hs' : 0 <= s' := by
+    simp only [s', sub_nonneg, ← hM.2.1 i]
+    exact single_le_sum (fun j _ => hM.1 i j) (by simp)
+  have : exists M' in doublyStochastic R n, N = s' • M' := by
+    rw [exists_mem_doublyStochastic_eq_smul_iff hs']
+    simp only [Matrix.sub_apply, Matrix.smul_apply, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply,
+      Option.mem_def, Option.some.injEq, smul_eq_mul, mul_ite, mul_one, mul_zero, sub_nonneg,
+      sum_sub_distrib, sum_ite_eq, mem_univ, ↓reduceIte, N]
+    refine ⟨fun i' j => ?_, by simp [s', hM.2.1], by simp [s', ← σ.eq_symm_apply, hM]⟩
+    split
+    case isTrue h => exact (hi' i' (by simp)).trans_eq (by rw [h])
+    case isFalse h => exact hM.1 _ _
+  have hd' : #{i : n × n | N i.1 i.2 != 0} < d := by
+    rw [← hd]
+    gcongr
+    rw [ssubset_iff_of_subset (monotone_filter_right _ _)]
+    · simp_rw [mem_filter_univ, not_not, Prod.exists]
+      exact ⟨i, σ i, hMi'.ne', by simp [N, Equiv.toPEquiv_apply]⟩
+    · rintro ⟨i', j'⟩ _ hN' hM'
+      have hσ' : σ i' != j' := by
+        simpa [Equiv.toPEquiv_apply] using hσ i' j' hM'
+exact hN' by simp [N, hM', hσ', Equiv.toPEquiv_apply]
+  obtain ⟨w, hw, hw'⟩ := ih _ hd' _ s' hs' this rfl
+  refine ⟨w + fun σ' => if σ' = σ then M i (σ i) else 0, ?_⟩
+  simp only [Pi.add_apply, add_smul, sum_add_distrib, hw', ite_smul, zero_smul,
+    sum_ite_eq', mem_univ, ↓reduceIte, N, sub_add_cancel, and_true]
+  intro σ'
+  split <;> simp [add_nonneg, hw, hM.1]
 
 中文:
 引理 doublyStochastic_sum_perm_aux
@@ -128,6 +195,43 @@ lemma doublyStochastic_sum_perm_aux
   rcases eq_or_lt_of_le hs with rfl | hs'
   case inl =>
     use 0
+    simp only [zero_smul, exists_and_right] at hM
+    simp [hM]
+  obtain ⟨σ, hσ⟩ := exists_perm_eq_zero_implies_eq_zero hs' hM
+  obtain ⟨i, hi, hi'⟩ := exists_min_image _ (fun i => M i (σ i)) univ_nonempty
+  rw [exists_mem_doublyStochastic_eq_smul_iff hs] at hM
+  let N : Matrix n n R := M - M i (σ i) • σ.permMatrix R
+  have hMi' : 0 < M i (σ i) := (hM.1 _ _).lt_of_ne' fun h => by
+    simpa [Equiv.toPEquiv_apply] using hσ _ _ h
+  let s' : R := s - M i (σ i)
+  have hs' : 0 <= s' := by
+    simp only [s', sub_nonneg, ← hM.2.1 i]
+    exact single_le_sum (fun j _ => hM.1 i j) (by simp)
+  have : exists M' in doublyStochastic R n, N = s' • M' := by
+    rw [exists_mem_doublyStochastic_eq_smul_iff hs']
+    simp only [Matrix.sub_apply, Matrix.smul_apply, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply,
+      Option.mem_def, Option.some.injEq, smul_eq_mul, mul_ite, mul_one, mul_zero, sub_nonneg,
+      sum_sub_distrib, sum_ite_eq, mem_univ, ↓reduceIte, N]
+    refine ⟨fun i' j => ?_, by simp [s', hM.2.1], by simp [s', ← σ.eq_symm_apply, hM]⟩
+    split
+    case isTrue h => exact (hi' i' (by simp)).trans_eq (by rw [h])
+    case isFalse h => exact hM.1 _ _
+  have hd' : #{i : n × n | N i.1 i.2 != 0} < d := by
+    rw [← hd]
+    gcongr
+    rw [ssubset_iff_of_subset (monotone_filter_right _ _)]
+    · simp_rw [mem_filter_univ, not_not, Prod.exists]
+      exact ⟨i, σ i, hMi'.ne', by simp [N, Equiv.toPEquiv_apply]⟩
+    · rintro ⟨i', j'⟩ _ hN' hM'
+      have hσ' : σ i' != j' := by
+        simpa [Equiv.toPEquiv_apply] using hσ i' j' hM'
+exact hN' by simp [N, hM', hσ', Equiv.toPEquiv_apply]
+  obtain ⟨w, hw, hw'⟩ := ih _ hd' _ s' hs' this rfl
+  refine ⟨w + fun σ' => if σ' = σ then M i (σ i) else 0, ?_⟩
+  simp only [Pi.add_apply, add_smul, sum_add_distrib, hw', ite_smul, zero_smul,
+    sum_ite_eq', mem_univ, ↓reduceIte, N, sub_add_cancel, and_true]
+  intro σ'
+  split <;> simp [add_nonneg, hw, hM.1]
 -/
 private lemma doublyStochastic_sum_perm_aux (M : Matrix n n R)
     (s : R) (hs : 0 <= s)
@@ -193,7 +297,10 @@ lemma exists_eq_sum_perm_of_mem_doublyStochastic
   obtain ⟨w, hw1, hw3⟩ := doublyStochastic_sum_perm_aux M 1 (by simp) ⟨M, hM, by simp⟩
   refine ⟨w, hw1, ?_, hw3⟩
   inhabit n
-  have : ∑ j, ∑ σ : Equiv.Perm n, w σ • σ.permMatrix R default j =
+  have : ∑ j, ∑ σ : Equiv.Perm n, w σ • σ.permMatrix R default j = 1 := by
+    simp only [← smul_apply (m := n), ← Finset.sum_apply, hw3]
+    rw [sum_row_of_mem_doublyStochastic hM]
+  simpa [sum_comm (γ := n), Equiv.toPEquiv_apply] using this
 
 中文:
 引理 存在_eq_sum_perm_of_mem_doublyStochastic
@@ -204,7 +311,10 @@ lemma exists_eq_sum_perm_of_mem_doublyStochastic
   obtain ⟨w, hw1, hw3⟩ := doublyStochastic_sum_perm_aux M 1 (by simp) ⟨M, hM, by simp⟩
   refine ⟨w, hw1, ?_, hw3⟩
   inhabit n
-  have : ∑ j, ∑ σ : Equiv.Perm n, w σ • σ.permMatrix R default j =
+  have : ∑ j, ∑ σ : Equiv.Perm n, w σ • σ.permMatrix R default j = 1 := by
+    simp only [← smul_apply (m := n), ← Finset.sum_apply, hw3]
+    rw [sum_row_of_mem_doublyStochastic hM]
+  simpa [sum_comm (γ := n), Equiv.toPEquiv_apply] using this
 
 Depends on / 依赖: Equiv.Perm, Equiv.toPEquiv_apply, Finset, Finset.sum_apply, Subsingleton, Subsingleton.elim, doublyStochastic_sum_perm_aux, inhabit, isEmpty_or_nonempty, permMatrix, smul_apply, sum_apply, sum_comm, sum_row_of_mem_doublyStochastic, toPEquiv_apply
 -/
@@ -232,7 +342,7 @@ theorem doublyStochastic_eq_convexHull_permMatrix
     exact permMatrix_mem_doublyStochastic
   case g2 =>
     obtain ⟨w, hw1, hw2, hw3⟩ := exists_eq_sum_perm_of_mem_doublyStochastic hM
-    exact mem_convexHull_of_exists_fintype w (·.
+    exact mem_convexHull_of_exists_fintype w (·.permMatrix R) hw1 hw2 (by simp) hw3
 
 中文:
 定理 doublyStochastic_eq_convexHull_permMatrix
@@ -243,7 +353,7 @@ theorem doublyStochastic_eq_convexHull_permMatrix
     exact permMatrix_mem_doublyStochastic
   case g2 =>
     obtain ⟨w, hw1, hw2, hw3⟩ := exists_eq_sum_perm_of_mem_doublyStochastic hM
-    exact mem_convexHull_of_exists_fintype w (·.
+    exact mem_convexHull_of_exists_fintype w (·.permMatrix R) hw1 hw2 (by simp) hw3
 
 Depends on / 依赖: antisymm, convexHull_min, convex_doublyStochastic, exists_eq_sum_perm_of_mem_doublyStochastic, mem_convexHull_of_exists_fintype, permMatrix, permMatrix_mem_doublyStochastic
 -/
@@ -269,7 +379,18 @@ theorem extremePoints_doublyStochastic
   rintro _ ⟨σ, rfl⟩
   refine ⟨permMatrix_mem_doublyStochastic, fun x₁ hx₁ x₂ hx₂ hσ => ?_⟩
   suffices forall i j : n, x₁ i j = x₂ i j by
-    obtain rfl : x₁ = x₂ := by simpa
+    obtain rfl : x₁ = x₂ := by simpa [← Matrix.ext_iff]
+    simp_all
+  intro i j
+  have h₁ : σ.permMatrix R i j in openSegment R (x₁ i j) (x₂ i j) :=
+    image_openSegment _ (entryLinearMap R R i j).toAffineMap x₁ x₂ ▸ ⟨_, hσ, rfl⟩
+  by_contra! h
+  have h₂ : openSegment R (x₁ i j) (x₂ i j) subseteq Set.Ioo 0 1 := by
+    rw [openSegment_eq_Ioo' h]
+    apply Set.Ioo_subset_Ioo <;>
+    simp_all [nonneg_of_mem_doublyStochastic, le_one_of_mem_doublyStochastic]
+  specialize h₂ h₁
+  aesop
 
 中文:
 定理 extremePoints_doublyStochastic
@@ -280,7 +401,18 @@ theorem extremePoints_doublyStochastic
   rintro _ ⟨σ, rfl⟩
   refine ⟨permMatrix_mem_doublyStochastic, fun x₁ hx₁ x₂ hx₂ hσ => ?_⟩
   suffices forall i j : n, x₁ i j = x₂ i j by
-    obtain rfl : x₁ = x₂ := by simpa
+    obtain rfl : x₁ = x₂ := by simpa [← Matrix.ext_iff]
+    simp_all
+  intro i j
+  have h₁ : σ.permMatrix R i j in openSegment R (x₁ i j) (x₂ i j) :=
+    image_openSegment _ (entryLinearMap R R i j).toAffineMap x₁ x₂ ▸ ⟨_, hσ, rfl⟩
+  by_contra! h
+  have h₂ : openSegment R (x₁ i j) (x₂ i j) subseteq Set.Ioo 0 1 := by
+    rw [openSegment_eq_Ioo' h]
+    apply Set.Ioo_subset_Ioo <;>
+    simp_all [nonneg_of_mem_doublyStochastic, le_one_of_mem_doublyStochastic]
+  specialize h₂ h₁
+  aesop
 
 Depends on / 依赖: Matrix, Matrix.ext_iff, doublyStochastic_eq_convexHull_permMatrix, entryLinearMap, ext_iff, extremePoints_convexHull_subset, image_openSegment, openSegment, permMatrix, permMatrix_mem_doublyStochastic, subset_antisymm, toAffineMap
 -/

@@ -182,7 +182,8 @@ lemma Presieve.EffectiveEpimorphic.isSheafFor_of_isRepresentable
   rw [← isSheafFor_comp_uliftFunctor_iff]
   refine Presieve.isSheafFor_iso (F ⋙ uliftFunctor.{v}).uliftYonedaReprXIso ?_
   dsimp only [uliftYoneda, Functor.comp_obj, Functor.whiskeringRight_obj_obj]
-  rw [isSheafFor_comp_ulift
+  rw [isSheafFor_comp_uliftFunctor_iff]
+  exact hR _
 
 中文:
 引理 Presieve.EffectiveEpimorphic.isSheafFor_of_isRepresentable
@@ -192,7 +193,8 @@ lemma Presieve.EffectiveEpimorphic.isSheafFor_of_isRepresentable
   rw [← isSheafFor_comp_uliftFunctor_iff]
   refine Presieve.isSheafFor_iso (F ⋙ uliftFunctor.{v}).uliftYonedaReprXIso ?_
   dsimp only [uliftYoneda, Functor.comp_obj, Functor.whiskeringRight_obj_obj]
-  rw [isSheafFor_comp_ulift
+  rw [isSheafFor_comp_uliftFunctor_iff]
+  exact hR _
 
 Depends on / 依赖: EffectiveEpimorphic, Functor, Functor.comp_obj, Functor.whiskeringRight_obj_obj, Presieve, Presieve.EffectiveEpimorphic.iff_forall_isSheafFor_yoneda, Presieve.isSheafFor_iso, comp_obj, iff_forall_isSheafFor_yoneda, isSheafFor_comp_uliftFunctor_iff, isSheafFor_iso, uliftFunctor, uliftYoneda, uliftYonedaReprXIso, whiskeringRight_obj_obj
 -/
@@ -219,7 +221,28 @@ definition isColimitOfEffectiveEpiStruct
   { desc := fun S => Hf.desc (S.ι.app ⟨Over.mk f, ⟨𝟙 _, by simp⟩⟩) <| by
       intro Z g₁ g₂ h
       let Y' : D := ⟨Over.mk f, 𝟙 _, by simp⟩
-     
+      let Z' : D := ⟨Over.mk (g₁ ≫ f), g₁, rfl⟩
+      let g₁' : Z' ⟶ Y' := ObjectProperty.homMk (Over.homMk g₁)
+      let g₂' : Z' ⟶ Y' := ObjectProperty.homMk (Over.homMk g₂ (by simp [Y', Z', h]))
+      change F.map g₁' ≫ _ = F.map g₂' ≫ _
+      simp only [Y', F, S.w]
+    fac := by
+      rintro S ⟨T, g, hT⟩
+      dsimp
+      generalize_proofs h₁ h₂ h₃
+      simp only [← hT, Category.assoc, Hf.fac _ h₂]
+      let y : D := ⟨Over.mk f, 𝟙 _, by simp⟩
+      let x : D := ⟨Over.mk T.hom, g, hT⟩
+      let g' : x ⟶ y := ObjectProperty.homMk (Over.homMk g)
+      change F.map g' ≫ _ = _
+      rw [S.w]
+      rfl
+    uniq := by
+      intro S m hm
+      dsimp
+      generalize_proofs h1 h2
+      apply Hf.uniq _ h2
+      exact hm ⟨Over.mk f, 𝟙 _, by simp⟩ }
 
 中文:
 定义 isColimitOfEffectiveEpiStruct
@@ -229,7 +252,28 @@ definition isColimitOfEffectiveEpiStruct
   { desc := fun S => Hf.desc (S.ι.app ⟨Over.mk f, ⟨𝟙 _, by simp⟩⟩) <| by
       intro Z g₁ g₂ h
       let Y' : D := ⟨Over.mk f, 𝟙 _, by simp⟩
-     
+      let Z' : D := ⟨Over.mk (g₁ ≫ f), g₁, rfl⟩
+      let g₁' : Z' ⟶ Y' := ObjectProperty.homMk (Over.homMk g₁)
+      let g₂' : Z' ⟶ Y' := ObjectProperty.homMk (Over.homMk g₂ (by simp [Y', Z', h]))
+      change F.map g₁' ≫ _ = F.map g₂' ≫ _
+      simp only [Y', F, S.w]
+    fac := by
+      rintro S ⟨T, g, hT⟩
+      dsimp
+      generalize_proofs h₁ h₂ h₃
+      simp only [← hT, Category.assoc, Hf.fac _ h₂]
+      let y : D := ⟨Over.mk f, 𝟙 _, by simp⟩
+      let x : D := ⟨Over.mk T.hom, g, hT⟩
+      let g' : x ⟶ y := ObjectProperty.homMk (Over.homMk g)
+      change F.map g' ≫ _ = _
+      rw [S.w]
+      rfl
+    uniq := by
+      intro S m hm
+      dsimp
+      generalize_proofs h1 h2
+      apply Hf.uniq _ h2
+      exact hm ⟨Over.mk f, 𝟙 _, by simp⟩ }
 
 Depends on / 依赖: F.map, FullSubcategory, Hf.desc, ObjectProperty, ObjectProperty.FullSubcategory, ObjectProperty.homMk, Over.homMk, Over.mk, Sieve.generateSingleton, T.hom, arrows, arrows.diagram, diagram, generateSingleton
 -/
@@ -284,7 +328,26 @@ definition effectiveEpiStructOfIsColimit
       ι := {
         app := fun ⟨_,hT⟩ => hT.choose ≫ e
         naturality := by
-          rintro ⟨A, hA⟩ ⟨B, hB⟩ ⟨q : A ⟶
+          rintro ⟨A, hA⟩ ⟨B, hB⟩ ⟨q : A ⟶ B⟩
+          dsimp; simp only [← Category.assoc, Category.comp_id]
+          apply h
+          rw [Category.assoc]; rw [hB.choose_spec]; rw [hA.choose_spec]; rw [Over.w] } }
+  { desc := fun {_} e h => Hf.desc (aux e h)
+    fac {W} e h := by
+      have := Hf.fac (aux e h) ⟨Over.mk f, 𝟙 _, by simp⟩
+      dsimp [aux] at this; rw [this]; clear this
+      nth_rewrite 2 [← Category.id_comp e]
+      apply h
+      generalize_proofs hh
+      rw [hh.choose_spec]; rw [Category.id_comp]
+    uniq {W} e h m hm := by
+      apply Hf.uniq (aux e h)
+      rintro ⟨A, g, hA⟩
+      dsimp
+      simp only [← hA, Category.assoc, hm]
+      apply h
+      generalize_proofs hh
+      rwa [hh.choose_spec] }
 
 中文:
 定义 effectiveEpiStructOfIsColimit
@@ -296,7 +359,26 @@ definition effectiveEpiStructOfIsColimit
       ι := {
         app := fun ⟨_,hT⟩ => hT.choose ≫ e
         naturality := by
-          rintro ⟨A, hA⟩ ⟨B, hB⟩ ⟨q : A ⟶
+          rintro ⟨A, hA⟩ ⟨B, hB⟩ ⟨q : A ⟶ B⟩
+          dsimp; simp only [← Category.assoc, Category.comp_id]
+          apply h
+          rw [Category.assoc]; rw [hB.choose_spec]; rw [hA.choose_spec]; rw [Over.w] } }
+  { desc := fun {_} e h => Hf.desc (aux e h)
+    fac {W} e h := by
+      have := Hf.fac (aux e h) ⟨Over.mk f, 𝟙 _, by simp⟩
+      dsimp [aux] at this; rw [this]; clear this
+      nth_rewrite 2 [← Category.id_comp e]
+      apply h
+      generalize_proofs hh
+      rw [hh.choose_spec]; rw [Category.id_comp]
+    uniq {W} e h m hm := by
+      apply Hf.uniq (aux e h)
+      rintro ⟨A, g, hA⟩
+      dsimp
+      simp only [← hA, Category.assoc, hm]
+      apply h
+      generalize_proofs hh
+      rwa [hh.choose_spec] }
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Cocone, Hf.desc, Hf.fac, Over.mk, Over.w, Sieve.generateSingleton, arrows, arrows.diagram, choose_spec, comp_id, diagram, generateSingleton, hA.choose_spec, hB.choose_spec, hT.choose, naturality
 -/
@@ -471,7 +553,30 @@ definition isColimitOfEffectiveEpiFamilyStruct
   letI F : D ⥤ _ := (Sieve.generateFamily X π).arrows.diagram
   { desc := fun S => H.desc (fun a => S.ι.app ⟨Over.mk (π a), ⟨a,𝟙 _, by simp⟩⟩) <| by
       intro Z a₁ a₂ g₁ g₂ h
-      let A₁ : D := ⟨Over.mk (π a
+      let A₁ : D := ⟨Over.mk (π a₁), a₁, 𝟙 _, by simp⟩
+      let A₂ : D := ⟨Over.mk (π a₂), a₂, 𝟙 _, by simp⟩
+      let Z' : D := ⟨Over.mk (g₁ ≫ π a₁), a₁, g₁, rfl⟩
+      let i₁ : Z' ⟶ A₁ := ObjectProperty.homMk (Over.homMk g₁)
+      let i₂ : Z' ⟶ A₂ := ObjectProperty.homMk (Over.homMk g₂)
+      change F.map i₁ ≫ _ = F.map i₂ ≫ _
+      simp only [F, A₁, A₂, S.w]
+    fac := by
+      intro S ⟨T, a, (g : T.left ⟶ X a), hT⟩
+      dsimp
+      generalize_proofs h₁ h₂ h₃
+      simp only [← hT, Category.assoc, H.fac _ h₂]
+      let A : D := ⟨Over.mk (π a), a, 𝟙 _, by simp⟩
+      let B : D := ⟨Over.mk T.hom, a, g, hT⟩
+      let i : B ⟶ A := ObjectProperty.homMk (Over.homMk g)
+      change F.map i ≫ _ = _
+      rw [S.w]
+      rfl
+    uniq := by
+      intro S m hm; dsimp
+      generalize_proofs h₁ h₂
+      apply H.uniq _ h₂
+      intro a
+      exact hm ⟨Over.mk (π a), a, 𝟙 _, by simp⟩ }
 
 中文:
 定义 isColimitOfEffectiveEpiFamilyStruct
@@ -480,7 +585,30 @@ definition isColimitOfEffectiveEpiFamilyStruct
   letI F : D ⥤ _ := (Sieve.generateFamily X π).arrows.diagram
   { desc := fun S => H.desc (fun a => S.ι.app ⟨Over.mk (π a), ⟨a,𝟙 _, by simp⟩⟩) <| by
       intro Z a₁ a₂ g₁ g₂ h
-      let A₁ : D := ⟨Over.mk (π a
+      let A₁ : D := ⟨Over.mk (π a₁), a₁, 𝟙 _, by simp⟩
+      let A₂ : D := ⟨Over.mk (π a₂), a₂, 𝟙 _, by simp⟩
+      let Z' : D := ⟨Over.mk (g₁ ≫ π a₁), a₁, g₁, rfl⟩
+      let i₁ : Z' ⟶ A₁ := ObjectProperty.homMk (Over.homMk g₁)
+      let i₂ : Z' ⟶ A₂ := ObjectProperty.homMk (Over.homMk g₂)
+      change F.map i₁ ≫ _ = F.map i₂ ≫ _
+      simp only [F, A₁, A₂, S.w]
+    fac := by
+      intro S ⟨T, a, (g : T.left ⟶ X a), hT⟩
+      dsimp
+      generalize_proofs h₁ h₂ h₃
+      simp only [← hT, Category.assoc, H.fac _ h₂]
+      let A : D := ⟨Over.mk (π a), a, 𝟙 _, by simp⟩
+      let B : D := ⟨Over.mk T.hom, a, g, hT⟩
+      let i : B ⟶ A := ObjectProperty.homMk (Over.homMk g)
+      change F.map i ≫ _ = _
+      rw [S.w]
+      rfl
+    uniq := by
+      intro S m hm; dsimp
+      generalize_proofs h₁ h₂
+      apply H.uniq _ h₂
+      intro a
+      exact hm ⟨Over.mk (π a), a, 𝟙 _, by simp⟩ }
 
 Depends on / 依赖: FullSubcategory, H.desc, ObjectProperty, ObjectProperty.FullSubcategory, ObjectProperty.homM, ObjectProperty.homMk, Over.homMk, Over.mk, Sieve.generateFamily, T.hom, arrows, arrows.diagram, diagram, generateFamily
 -/
@@ -536,7 +664,29 @@ definition effectiveEpiFamilyStructOfIsColimit
     Cocone (Sieve.generateFamily X π).arrows.diagram := {
       pt := W
       ι := {
-        app := fun ⟨_, hT⟩ => hT.choose_spec.choose
+        app := fun ⟨_, hT⟩ => hT.choose_spec.choose ≫ e hT.choose
+        naturality := by
+          rintro ⟨A, a, (g₁ : A.left ⟶ _), ha⟩ ⟨B, b, (g₂ : B.left ⟶ _), hb⟩ ⟨q : A ⟶ B⟩
+          dsimp; rw [Category.comp_id, ← Category.assoc]
+          apply h; rw [Category.assoc]
+          generalize_proofs h1 h2 h3 h4
+          rw [h2.choose_spec]; rw [h4.choose_spec]; rw [Over.w] } }
+  { desc := fun {_} e h => H.desc (aux e h)
+    fac {W} e h a := by
+      have := H.fac (aux e h) ⟨Over.mk (π a), a, 𝟙 _, by simp⟩
+      dsimp [aux] at this; rw [this]; clear this
+      conv_rhs => rw [← Category.id_comp (e a)]
+      apply h
+      generalize_proofs h1 h2
+      rw [h2.choose_spec]; rw [Category.id_comp]
+    uniq {W} e h m hm := by
+      apply H.uniq (aux e h)
+      rintro ⟨T, a, (g : T.left ⟶ _), ha⟩
+      dsimp
+      simp only [← ha, Category.assoc, hm]
+      apply h
+      generalize_proofs h1 h2
+      rwa [h2.choose_spec] }
 
 中文:
 定义 effectiveEpiFamilyStructOfIsColimit
@@ -547,7 +697,29 @@ definition effectiveEpiFamilyStructOfIsColimit
     Cocone (Sieve.generateFamily X π).arrows.diagram := {
       pt := W
       ι := {
-        app := fun ⟨_, hT⟩ => hT.choose_spec.choose
+        app := fun ⟨_, hT⟩ => hT.choose_spec.choose ≫ e hT.choose
+        naturality := by
+          rintro ⟨A, a, (g₁ : A.left ⟶ _), ha⟩ ⟨B, b, (g₂ : B.left ⟶ _), hb⟩ ⟨q : A ⟶ B⟩
+          dsimp; rw [Category.comp_id, ← Category.assoc]
+          apply h; rw [Category.assoc]
+          generalize_proofs h1 h2 h3 h4
+          rw [h2.choose_spec]; rw [h4.choose_spec]; rw [Over.w] } }
+  { desc := fun {_} e h => H.desc (aux e h)
+    fac {W} e h a := by
+      have := H.fac (aux e h) ⟨Over.mk (π a), a, 𝟙 _, by simp⟩
+      dsimp [aux] at this; rw [this]; clear this
+      conv_rhs => rw [← Category.id_comp (e a)]
+      apply h
+      generalize_proofs h1 h2
+      rw [h2.choose_spec]; rw [Category.id_comp]
+    uniq {W} e h m hm := by
+      apply H.uniq (aux e h)
+      rintro ⟨T, a, (g : T.left ⟶ _), ha⟩
+      dsimp
+      simp only [← ha, Category.assoc, hm]
+      apply h
+      generalize_proofs h1 h2
+      rwa [h2.choose_spec] }
 
 Depends on / 依赖: A.left, B.left, Category, Category.assoc, Category.comp_id, Cocone, Sieve.generateFamily, arrows, arrows.diagram, choose_spe, choose_spec, comp_id, diagram, generalize_proofs, generateFamily, h2.choose_spe, hT.choose, hT.choose_spec.choose, naturality
 -/
@@ -600,7 +772,7 @@ theorem Sieve.effectiveEpimorphic_family
   · rintro ⟨h⟩
     change Nonempty _
     rw [Sieve.generateFamily_eq]
-    apply Nonempty.map (isColimitOfEffectiveEpiFamilyStruct _ _) 
+    apply Nonempty.map (isColimitOfEffectiveEpiFamilyStruct _ _) h
 
 中文:
 定理 筛.effectiveEpimorphic_family
@@ -614,7 +786,7 @@ theorem Sieve.effectiveEpimorphic_family
   · rintro ⟨h⟩
     change Nonempty _
     rw [Sieve.generateFamily_eq]
-    apply Nonempty.map (isColimitOfEffectiveEpiFamilyStruct _ _) 
+    apply Nonempty.map (isColimitOfEffectiveEpiFamilyStruct _ _) h
 
 Depends on / 依赖: Nonempty, Nonempty.map, Sieve.generateFamily_eq, effectiveEpiFamilyStructOfIsColimit, generateFamily_eq, isColimitOfEffectiveEpiFamilyStruct
 -/

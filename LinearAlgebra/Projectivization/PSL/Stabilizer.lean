@@ -40,7 +40,12 @@ definition Matrix.SpecialLinearGroup.lineStab
     simp only [Set.mem_ofPred_eq, mul_smul] at hA hB ⊢
     rw [show A • B • w - w = ((A • (B • w) - A • w) - (B • w - w)) +
       (B • w - w) + (A • w - w) by abel]; rw [← smul_sub]
-    exact add_mem 
+    exact add_mem (add_mem (hA _) (hB w)) (hA w)
+  inv_mem' {A} hA := fun w => by
+    convert neg_mem (hA (A⁻¹ • w)) using 1
+    rw [← mul_smul]; rw [mul_inv_cancel]; rw [one_smul]; rw [neg_sub]
+
+@[simp]
 
 中文:
 定义 矩阵.SpecialLinearGroup.lineStab
@@ -51,7 +56,12 @@ definition Matrix.SpecialLinearGroup.lineStab
     simp only [Set.mem_ofPred_eq, mul_smul] at hA hB ⊢
     rw [show A • B • w - w = ((A • (B • w) - A • w) - (B • w - w)) +
       (B • w - w) + (A • w - w) by abel]; rw [← smul_sub]
-    exact add_mem 
+    exact add_mem (add_mem (hA _) (hB w)) (hA w)
+  inv_mem' {A} hA := fun w => by
+    convert neg_mem (hA (A⁻¹ • w)) using 1
+    rw [← mul_smul]; rw [mul_inv_cancel]; rw [one_smul]; rw [neg_sub]
+
+@[simp]
 -/
 def Matrix.SpecialLinearGroup.lineStab (L : Submodule F (ι -> F)) :
     Subgroup (SpecialLinearGroup ι F) where
@@ -147,7 +157,9 @@ lemma Matrix.SpecialLinearGroup.lineStab_smul
   simp only [mem_lineStab_iff, Submodule.mem_smul_pointwise_iff_exists, MulAut.smul_def,
     MulAut.inv_apply, MulAut.conj_symm_apply]
   refine ⟨fun hA w => ?_, fun hA w => ⟨g⁻¹ • (A • w - w), ?_, by simp⟩⟩
-  · obtain ⟨v, hv, hvw⟩ := hA 
+  · obtain ⟨v, hv, hvw⟩ := hA (g • w)
+    simp_all [eq_comm (a := g • v), sub_eq_iff_eq_add, mul_smul]
+  · simpa [mul_smul, smul_sub] using hA (g⁻¹ • w)
 
 中文:
 引理 矩阵.SpecialLinearGroup.lineStab_smul
@@ -157,7 +169,9 @@ lemma Matrix.SpecialLinearGroup.lineStab_smul
   simp only [mem_lineStab_iff, Submodule.mem_smul_pointwise_iff_exists, MulAut.smul_def,
     MulAut.inv_apply, MulAut.conj_symm_apply]
   refine ⟨fun hA w => ?_, fun hA w => ⟨g⁻¹ • (A • w - w), ?_, by simp⟩⟩
-  · obtain ⟨v, hv, hvw⟩ := hA 
+  · obtain ⟨v, hv, hvw⟩ := hA (g • w)
+    simp_all [eq_comm (a := g • v), sub_eq_iff_eq_add, mul_smul]
+  · simpa [mul_smul, smul_sub] using hA (g⁻¹ • w)
 
 Depends on / 依赖: MulAut, MulAut.conj_symm_apply, MulAut.inv_apply, MulAut.smul_def, Subgroup, Subgroup.mem_pointwise_smul_iff_inv_smul_mem, Submodule, Submodule.mem_smul_pointwise_iff_exists, conj_symm_apply, eq_comm, inv_apply, mem_lineStab_iff, mem_pointwise_smul_iff_inv_smul_mem, mem_smul_pointwise_iff_exists, mul_smul, smul_def, smul_sub, sub_eq_iff_eq_add
 -/
@@ -185,7 +199,7 @@ lemma PSL.iwasawaT_map_conj
   simp only [Subgroup.mem_map, Subgroup.mem_pointwise_smul_iff_inv_smul_mem,
     MulAut.smul_def, MulAut.inv_apply, MulAut.conj_symm_apply, QuotientGroup.mk'_apply]
   exact ⟨fun ⟨a, ha, ha'⟩ => ⟨g⁻¹ * a * g, ha, by simp [ha']⟩,
-    fun ⟨a, ha, hx⟩ => ⟨g * a * g⁻¹, by simp [mul_assoc, ha],
+    fun ⟨a, ha, hx⟩ => ⟨g * a * g⁻¹, by simp [mul_assoc, ha], by simp [hx, mul_assoc]⟩⟩
 
 中文:
 引理 PSL.iwasawaT_map_conj
@@ -195,7 +209,7 @@ lemma PSL.iwasawaT_map_conj
   simp only [Subgroup.mem_map, Subgroup.mem_pointwise_smul_iff_inv_smul_mem,
     MulAut.smul_def, MulAut.inv_apply, MulAut.conj_symm_apply, QuotientGroup.mk'_apply]
   exact ⟨fun ⟨a, ha, ha'⟩ => ⟨g⁻¹ * a * g, ha, by simp [ha']⟩,
-    fun ⟨a, ha, hx⟩ => ⟨g * a * g⁻¹, by simp [mul_assoc, ha],
+    fun ⟨a, ha, hx⟩ => ⟨g * a * g⁻¹, by simp [mul_assoc, ha], by simp [hx, mul_assoc]⟩⟩
 
 Depends on / 依赖: MulAut, MulAut.conj_symm_apply, MulAut.inv_apply, MulAut.smul_def, QuotientGroup, QuotientGroup.mk, Subgroup, Subgroup.mem_map, Subgroup.mem_pointwise_smul_iff_inv_smul_mem, _apply, conj_symm_apply, inv_apply, mem_map, mem_pointwise_smul_iff_inv_smul_mem, mul_assoc, smul_def
 -/
@@ -221,7 +235,7 @@ lemma LinearMap.exists_restrict_span_singleton_eq_smul_id
   refine ⟨c, hc.symm, fun w hw => ?_, LinearMap.ext fun ⟨w, hw⟩ => ?_⟩
   <;> obtain ⟨a, rfl⟩ := Submodule.mem_span_singleton.1 hw
   · simpa [Submodule.mem_comap, map_smul] using Submodule.smul_mem _ _ hAv
-  · simp [Subtype.ext_iff, ← hc, smul
+  · simp [Subtype.ext_iff, ← hc, smul_comm a c v]
 
 中文:
 引理 线性映射.存在_restrict_span_singleton_eq_smul_id
@@ -230,7 +244,7 @@ lemma LinearMap.exists_restrict_span_singleton_eq_smul_id
   refine ⟨c, hc.symm, fun w hw => ?_, LinearMap.ext fun ⟨w, hw⟩ => ?_⟩
   <;> obtain ⟨a, rfl⟩ := Submodule.mem_span_singleton.1 hw
   · simpa [Submodule.mem_comap, map_smul] using Submodule.smul_mem _ _ hAv
-  · simp [Subtype.ext_iff, ← hc, smul
+  · simp [Subtype.ext_iff, ← hc, smul_comm a c v]
 -/
 private lemma LinearMap.exists_restrict_span_singleton_eq_smul_id
     {R V : Type*} [CommSemiring R] [AddCommMonoid V] [Module R V]
@@ -253,7 +267,14 @@ lemma Matrix.SpecialLinearGroup.lineStab_fix_of_span
   obtain ⟨c, hcv, hcomap, hres⟩ :=
     LinearMap.exists_restrict_span_singleton_eq_smul_id (A := A.toLin'.toLinearMap)
       (by simpa using! add_mem (hA v) (Submodule.mem_span_singleton_self v))
-  have hQ : L.mapQ L A.toLin'.toLinearMap hcom
+  have hQ : L.mapQ L A.toLin'.toLinearMap hcomap = LinearMap.id := LinearMap.ext fun x => by
+    induction x using Submodule.Quotient.induction_on with
+    | _ w => simpa [Submodule.Quotient.eq] using! hA w
+  have hdet := A.toLin'.toLinearMap.det_eq_det_mul_det L hcomap
+  rw [show LinearMap.det A.toLin'.toLinearMap = 1 by simp [toLin'_to_linearMap],
+      hres, hQ, LinearMap.det_smul, finrank_span_singleton hv, pow_one,
+      LinearMap.det_id, LinearMap.det_id, mul_one, mul_one] at hdet
+  exact hcv.trans (hdet ▸ one_smul F v)
 
 中文:
 引理 矩阵.SpecialLinearGroup.lineStab_fix_of_span
@@ -262,7 +283,14 @@ lemma Matrix.SpecialLinearGroup.lineStab_fix_of_span
   obtain ⟨c, hcv, hcomap, hres⟩ :=
     LinearMap.exists_restrict_span_singleton_eq_smul_id (A := A.toLin'.toLinearMap)
       (by simpa using! add_mem (hA v) (Submodule.mem_span_singleton_self v))
-  have hQ : L.mapQ L A.toLin'.toLinearMap hcom
+  have hQ : L.mapQ L A.toLin'.toLinearMap hcomap = LinearMap.id := LinearMap.ext fun x => by
+    induction x using Submodule.Quotient.induction_on with
+    | _ w => simpa [Submodule.Quotient.eq] using! hA w
+  have hdet := A.toLin'.toLinearMap.det_eq_det_mul_det L hcomap
+  rw [show LinearMap.det A.toLin'.toLinearMap = 1 by simp [toLin'_to_linearMap],
+      hres, hQ, LinearMap.det_smul, finrank_span_singleton hv, pow_one,
+      LinearMap.det_id, LinearMap.det_id, mul_one, mul_one] at hdet
+  exact hcv.trans (hdet ▸ one_smul F v)
 
 Depends on / 依赖: A.toLin, L.mapQ, LinearMap, LinearMap.exists_restrict_span_singleton_eq_smul_id, LinearMap.ext, LinearMap.id, Quotient, Submodule, Submodule.Quotient.eq, Submodule.Quotient.induction_on, Submodule.mem_span_singleton_self, Submodule.span, add_mem, det_eq_det_mul_det, exists_restrict_span_singleton_eq_smul_id, hcomap, induction_on, mem_span_singleton_self, toLinearMap, toLinearMap.det_eq_det_mul_det
 -/
@@ -294,7 +322,7 @@ refine Subtype.ext ext_iff_smul.2 fun w => ?_
   obtain ⟨α, hα⟩ := Submodule.mem_span_singleton.mp (hA w)
   obtain ⟨β, hβ⟩ := Submodule.mem_span_singleton.mp (hB w)
   simp only [coe_mul, mul_smul, ← Matrix.SpecialLinearGroup.smul_def]
-  rw [← sub_add_cancel (A • w) w]; rw [← hα]; rw [← sub_add_can
+  rw [← sub_add_cancel (A • w) w]; rw [← hα]; rw [← sub_add_cancel (B • w) w]; rw [← hβ]; rw [smul_add]; rw [smul_add]; rw [← sub_left_inj (a := w)]; rw [← add_sub]; rw [← hα]; rw [← add_sub]; rw [← hβ]; rw [smul_comm]; rw [lineStab_fix_of_span v hv A hA]; rw [smul_comm]; rw [lineStab_fix_of_span v hv B hB]; rw [add_comm]
 
 中文:
 引理 矩阵.SpecialLinearGroup.lineStab_isMulCommutative_of_span'
@@ -303,7 +331,7 @@ refine Subtype.ext ext_iff_smul.2 fun w => ?_
   obtain ⟨α, hα⟩ := Submodule.mem_span_singleton.mp (hA w)
   obtain ⟨β, hβ⟩ := Submodule.mem_span_singleton.mp (hB w)
   simp only [coe_mul, mul_smul, ← Matrix.SpecialLinearGroup.smul_def]
-  rw [← sub_add_cancel (A • w) w]; rw [← hα]; rw [← sub_add_can
+  rw [← sub_add_cancel (A • w) w]; rw [← hα]; rw [← sub_add_cancel (B • w) w]; rw [← hβ]; rw [smul_add]; rw [smul_add]; rw [← sub_left_inj (a := w)]; rw [← add_sub]; rw [← hα]; rw [← add_sub]; rw [← hβ]; rw [smul_comm]; rw [lineStab_fix_of_span v hv A hA]; rw [smul_comm]; rw [lineStab_fix_of_span v hv B hB]; rw [add_comm]
 
 Depends on / 依赖: Matrix, Matrix.SpecialLinearGroup.smul_def, SpecialLinearGroup, Submodule, Submodule.mem_span_singleton.mp, Subtype, Subtype.ext, add_sub, coe_mul, ext_iff_smul, lineStab_fix_of_span, mem_span_singleton, mul_smul, smul_add, smul_comm, smul_def, sub_add_cancel, sub_left_inj
 -/

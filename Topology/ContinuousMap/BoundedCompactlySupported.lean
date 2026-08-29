@@ -77,7 +77,10 @@ lemma exist_norm_eq
       (map_continuous f).norm.continuousOn
     refine ⟨x, le_antisymm (norm_coe_le_norm f x) (norm_le (norm_nonneg _) |>.mpr fun y => ?_)⟩
     by_cases hy : y in tsupport f
-    · exact hm
+    · exact hmax hy
+    · simp [image_eq_zero_of_notMem_tsupport hy]
+  · suffices f = 0 by simp [this]
+    rwa [not_nonempty_iff_eq_empty, tsupport_eq_empty_iff, ← coe_zero, ← DFunLike.ext'_iff] at hs
 
 中文:
 引理 exist_norm_eq
@@ -89,7 +92,10 @@ lemma exist_norm_eq
       (map_continuous f).norm.continuousOn
     refine ⟨x, le_antisymm (norm_coe_le_norm f x) (norm_le (norm_nonneg _) |>.mpr fun y => ?_)⟩
     by_cases hy : y in tsupport f
-    · exact hm
+    · exact hmax hy
+    · simp [image_eq_zero_of_notMem_tsupport hy]
+  · suffices f = 0 by simp [this]
+    rwa [not_nonempty_iff_eq_empty, tsupport_eq_empty_iff, ← coe_zero, ← DFunLike.ext'_iff] at hs
 
 Depends on / 依赖: DFunLike, DFunLike.ext, Nonempty, _iff, coe_zero, continuousOn, exists_isMaxOn, image_eq_zero_of_notMem_tsupport, le_antisymm, map_continuous, mem_compactlySupported, mem_compactlySupported.mp, norm.continuousOn, norm_coe_le_norm, norm_le, norm_nonneg, not_nonempty_iff_eq_empty, tsupport, tsupport_eq_empty_iff
 -/
@@ -250,7 +256,9 @@ definition ofCompactSupport
     · exact ⟨0, by simp [tsupport_eq_empty_iff.mp hs]⟩
 · obtain ⟨z, _, hmax⟩ := hg₂.exists_isMaxOn hs hg₁.norm.continuousOn
       refine ⟨2 * ‖g z‖, dist_le_two_norm' fun x => ?_⟩
-      by_case
+      by_cases hx : x in tsupport g
+      · exact isMaxOn_iff.mp hmax x hx
+      · simp [image_eq_zero_of_notMem_tsupport hx]
 
 中文:
 定义 ofCompactSupport
@@ -262,7 +270,9 @@ definition ofCompactSupport
     · exact ⟨0, by simp [tsupport_eq_empty_iff.mp hs]⟩
 · obtain ⟨z, _, hmax⟩ := hg₂.exists_isMaxOn hs hg₁.norm.continuousOn
       refine ⟨2 * ‖g z‖, dist_le_two_norm' fun x => ?_⟩
-      by_case
+      by_cases hx : x in tsupport g
+      · exact isMaxOn_iff.mp hmax x hx
+      · simp [image_eq_zero_of_notMem_tsupport hx]
 -/
 def ofCompactSupport (g : α -> γ) (hg₁ : Continuous g) (hg₂ : HasCompactSupport g) : α ->ᵇ γ where
   toFun := g
@@ -305,7 +315,8 @@ instance :
     (HasCompactSupport.mul_left (mem_compactlySupported.mp f.2)), by
       apply mem_compactlySupported.mpr
       rw [ofCompactSupport]
-exact HasCompactSupport.mul_left mem_c
+exact HasCompactSupport.mul_left mem_compactlySupported.mp f.2
+    ⟩)
 
 中文:
 实例 :
@@ -315,7 +326,8 @@ exact HasCompactSupport.mul_left mem_c
     (HasCompactSupport.mul_left (mem_compactlySupported.mp f.2)), by
       apply mem_compactlySupported.mpr
       rw [ofCompactSupport]
-exact HasCompactSupport.mul_left mem_c
+exact HasCompactSupport.mul_left mem_compactlySupported.mp f.2
+    ⟩)
 
 Depends on / 依赖: C_cb
 -/

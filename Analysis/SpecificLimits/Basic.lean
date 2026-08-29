@@ -242,6 +242,9 @@ theorem tendsto_natCast_div_add_atTop
   · have : 𝓝 (1 : 𝕜) = 𝓝 (1 / (1 + x * (0 : 𝕜))) := by
       rw [mul_zero]; rw [add_zero]; rw [div_one]
     rw [this]
+    refine tendsto_const_nhds.div (tendsto_const_nhds.add ?_) (by simp)
+    simp_rw [div_eq_mul_inv]
+    exact tendsto_const_nhds.mul tendsto_inv_atTop_nhds_zero_nat
 
 中文:
 定理 tendsto_natCast_div_add_atTop
@@ -253,6 +256,9 @@ theorem tendsto_natCast_div_add_atTop
   · have : 𝓝 (1 : 𝕜) = 𝓝 (1 / (1 + x * (0 : 𝕜))) := by
       rw [mul_zero]; rw [add_zero]; rw [div_one]
     rw [this]
+    refine tendsto_const_nhds.div (tendsto_const_nhds.add ?_) (by simp)
+    simp_rw [div_eq_mul_inv]
+    exact tendsto_const_nhds.mul tendsto_inv_atTop_nhds_zero_nat
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Nat.cast_ne_zero.mpr, Tendsto, Tendsto.congr, add_div, add_zero, cast_ne_zero, convert, div_eq_mul_inv, div_one, eventually_ne_atTop, mul_zero, of_forall, simp_rw, tendsto_const_nhds, tendsto_const_nhds.add, tendsto_const_nhds.div, tendsto_const_nhds.mul, tendsto_inv_atTop_nhds_zero_nat
 -/
@@ -284,7 +290,9 @@ theorem tendsto_add_mul_div_add_mul_atTop_nhds
     field (discharger := norm_cast)
   · apply Filter.Tendsto.div _ _ hd
     all_goals
-      apply zero_add (_ : 𝕜)
+      apply zero_add (_ : 𝕜) ▸ Filter.Tendsto.add_const _ _
+      apply mul_zero (_ : 𝕜) ▸ Filter.Tendsto.const_mul _ _
+      exact tendsto_inv_atTop_nhds_zero_nat
 
 中文:
 定理 tendsto_add_mul_div_add_mul_atTop_nhds
@@ -298,7 +306,9 @@ theorem tendsto_add_mul_div_add_mul_atTop_nhds
     field (discharger := norm_cast)
   · apply Filter.Tendsto.div _ _ hd
     all_goals
-      apply zero_add (_ : 𝕜)
+      apply zero_add (_ : 𝕜) ▸ Filter.Tendsto.add_const _ _
+      apply mul_zero (_ : 𝕜) ▸ Filter.Tendsto.const_mul _ _
+      exact tendsto_inv_atTop_nhds_zero_nat
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Filter, Filter.Tendsto.add_const, Filter.Tendsto.congr, Filter.Tendsto.const_mul, Filter.Tendsto.div, Tendsto, add_const, all_goals, const_mul, discharger, eventually_ne_atTop, mul_zero, of_forall, tendsto_inv_atTop_nhds_zero_nat, zero_add
 -/
@@ -598,7 +608,14 @@ theorem tendsto_pow_atTop_nhds_zero_iff
   · by_cases hr : 1 = |r|
     · replace h : Tendsto (fun n : Nat => |r| ^ n) atTop (𝓝 0) := by simpa only [← abs_pow, h]
       simp only [hr.symm, one_pow] at h
-exact zero_ne_one tendsto_nhds_uni
+exact zero_ne_one tendsto_nhds_unique h tendsto_const_nhds
+    · apply @not_tendsto_nhds_of_tendsto_atTop 𝕜 Nat _ _ _ _ atTop _ (fun n => |r| ^ n) _ 0 _
+      · refine (pow_right_strictMono₀ <| lt_of_le_of_ne (le_of_not_gt hr_le)
+          hr).monotone.tendsto_atTop_atTop (fun b => ?_)
+        obtain ⟨n, hn⟩ := (pow_unbounded_of_one_lt b (lt_of_le_of_ne (le_of_not_gt hr_le) hr))
+        exact ⟨n, le_of_lt hn⟩
+      · simpa only [← abs_pow]
+  · simpa only [← abs_pow] using! (tendsto_pow_atTop_nhds_zero_of_lt_one (abs_nonneg r)) h
 
 中文:
 定理 tendsto_pow_atTop_nhds_zero_iff
@@ -609,7 +626,14 @@ exact zero_ne_one tendsto_nhds_uni
   · by_cases hr : 1 = |r|
     · replace h : Tendsto (fun n : Nat => |r| ^ n) atTop (𝓝 0) := by simpa only [← abs_pow, h]
       simp only [hr.symm, one_pow] at h
-exact zero_ne_one tendsto_nhds_uni
+exact zero_ne_one tendsto_nhds_unique h tendsto_const_nhds
+    · apply @not_tendsto_nhds_of_tendsto_atTop 𝕜 Nat _ _ _ _ atTop _ (fun n => |r| ^ n) _ 0 _
+      · refine (pow_right_strictMono₀ <| lt_of_le_of_ne (le_of_not_gt hr_le)
+          hr).monotone.tendsto_atTop_atTop (fun b => ?_)
+        obtain ⟨n, hn⟩ := (pow_unbounded_of_one_lt b (lt_of_le_of_ne (le_of_not_gt hr_le) hr))
+        exact ⟨n, le_of_lt hn⟩
+      · simpa only [← abs_pow]
+  · simpa only [← abs_pow] using! (tendsto_pow_atTop_nhds_zero_of_lt_one (abs_nonneg r)) h
 -/
 @[simp] theorem tendsto_pow_atTop_nhds_zero_iff {𝕜 : Type*}
     [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜] [Archimedean 𝕜]
@@ -900,7 +924,10 @@ theorem ENNReal.tendsto_pow_atTop_nhds_zero_iff
   · refine fun hr => top_ne_zero (tendsto_nhds_unique (EventuallyEq.tendsto ?_) (hr ▸ h))
     exact eventually_atTop.mpr ⟨1, fun _ hn => pow_eq_top_iff.mpr ⟨rfl, Nat.pos_iff_ne_zero.mp hn⟩⟩
   rw [← coe_zero] at h
-  n
+  norm_cast at h ⊢
+  exact NNReal.tendsto_pow_atTop_nhds_zero_iff.mp h
+
+@[simp]
 
 中文:
 定理 广义非负实数.tendsto_pow_atTop_nhds_zero_iff
@@ -911,7 +938,10 @@ theorem ENNReal.tendsto_pow_atTop_nhds_zero_iff
   · refine fun hr => top_ne_zero (tendsto_nhds_unique (EventuallyEq.tendsto ?_) (hr ▸ h))
     exact eventually_atTop.mpr ⟨1, fun _ hn => pow_eq_top_iff.mpr ⟨rfl, Nat.pos_iff_ne_zero.mp hn⟩⟩
   rw [← coe_zero] at h
-  n
+  norm_cast at h ⊢
+  exact NNReal.tendsto_pow_atTop_nhds_zero_iff.mp h
+
+@[simp]
 -/
 protected theorem ENNReal.tendsto_pow_atTop_nhds_zero_iff {r : Real>=0∞} :
     Tendsto (fun n : Nat => r ^ n) atTop (𝓝 0) ↔ r < 1 := by
@@ -937,7 +967,11 @@ theorem ENNReal.tendsto_pow_atTop_nhds_top_iff
     specialize h_tends (Ioi_mem_nhds one_lt_top)
     simp only [Filter.mem_map, mem_atTop_sets, Set.mem_preimage, Set.mem_Ioi] at h_tends
     obtain ⟨n, hn⟩ := h_tends
-exact lt_irrefl _ lt_of_lt_of_le (hn n le_rfl) pow_le_one₀ zero_le r
+exact lt_irrefl _ lt_of_lt_of_le (hn n le_rfl) pow_le_one₀ zero_le r_le_one
+  · intro r_gt_one
+    have obs := @Tendsto.inv Real>=0∞ Nat _ _ _ (fun n => (r⁻¹) ^ n) atTop 0
+    simp only [ENNReal.tendsto_pow_atTop_nhds_zero_iff, inv_zero] at obs
+simpa [← ENNReal.inv_pow] using obs ENNReal.inv_lt_one.mpr r_gt_one
 
 中文:
 定理 广义非负实数.tendsto_pow_atTop_nhds_top_iff
@@ -949,7 +983,11 @@ exact lt_irrefl _ lt_of_lt_of_le (hn n le_rfl) pow_le_one₀ zero_le r
     specialize h_tends (Ioi_mem_nhds one_lt_top)
     simp only [Filter.mem_map, mem_atTop_sets, Set.mem_preimage, Set.mem_Ioi] at h_tends
     obtain ⟨n, hn⟩ := h_tends
-exact lt_irrefl _ lt_of_lt_of_le (hn n le_rfl) pow_le_one₀ zero_le r
+exact lt_irrefl _ lt_of_lt_of_le (hn n le_rfl) pow_le_one₀ zero_le r_le_one
+  · intro r_gt_one
+    have obs := @Tendsto.inv Real>=0∞ Nat _ _ _ (fun n => (r⁻¹) ^ n) atTop 0
+    simp only [ENNReal.tendsto_pow_atTop_nhds_zero_iff, inv_zero] at obs
+simpa [← ENNReal.inv_pow] using obs ENNReal.inv_lt_one.mpr r_gt_one
 -/
 protected theorem ENNReal.tendsto_pow_atTop_nhds_top_iff {r : Real>=0∞} :
     Tendsto (fun n => r ^ n) atTop (𝓝 ∞) ↔ 1 < r := by
@@ -1009,7 +1047,7 @@ theorem hasSum_geometric_of_lt_one
   have : Tendsto (fun n => (r ^ n - 1) * (r - 1)⁻¹) atTop (𝓝 ((0 - 1) * (r - 1)⁻¹)) :=
     ((tendsto_pow_atTop_nhds_zero_of_lt_one h₁ h₂).sub tendsto_const_nhds).mul tendsto_const_nhds
 (hasSum_iff_tendsto_nat_of_nonneg (pow_nonneg h₁) _).mpr by
-    simp_all [neg_inv, geo
+    simp_all [neg_inv, geom_sum_eq, div_eq_mul_inv]
 
 中文:
 定理 hasSum_geometric_of_lt_one
@@ -1018,7 +1056,7 @@ theorem hasSum_geometric_of_lt_one
   have : Tendsto (fun n => (r ^ n - 1) * (r - 1)⁻¹) atTop (𝓝 ((0 - 1) * (r - 1)⁻¹)) :=
     ((tendsto_pow_atTop_nhds_zero_of_lt_one h₁ h₂).sub tendsto_const_nhds).mul tendsto_const_nhds
 (hasSum_iff_tendsto_nat_of_nonneg (pow_nonneg h₁) _).mpr by
-    simp_all [neg_inv, geo
+    simp_all [neg_inv, geom_sum_eq, div_eq_mul_inv]
 
 Depends on / 依赖: Tendsto, div_eq_mul_inv, geom_sum_eq, hasSum_iff_tendsto_nat_of_nonneg, ne_of_lt, neg_inv, pow_nonneg, tendsto_const_nhds, tendsto_pow_atTop_nhds_zero_of_lt_one
 -/
@@ -1211,7 +1249,10 @@ theorem tsum_geometric_inv_two_ge
     simpa only [← piecewise_eq_indicator, one_div]
       using! summable_geometric_two.indicator {i | n <= i}
   have B : ((Finset.range n).sum fun i : Nat => ite (n <= i) ((2⁻¹ : Real) ^ i) 0) = 0 :=
-    Finset.sum_eq_zero
+    Finset.sum_eq_zero fun i hi =>
+      ite_eq_right_iff.2 fun h => (lt_irrefl _ ((Finset.mem_range.1 hi).trans_le h)).elim
+  simp [-inv_pow, ← Summable.sum_add_tsum_nat_add n A, B, pow_add, _root_.tsum_mul_right,
+    tsum_geometric_inv_two]
 
 中文:
 定理 tsum_geometric_inv_two_ge
@@ -1221,7 +1262,10 @@ theorem tsum_geometric_inv_two_ge
     simpa only [← piecewise_eq_indicator, one_div]
       using! summable_geometric_two.indicator {i | n <= i}
   have B : ((Finset.range n).sum fun i : Nat => ite (n <= i) ((2⁻¹ : Real) ^ i) 0) = 0 :=
-    Finset.sum_eq_zero
+    Finset.sum_eq_zero fun i hi =>
+      ite_eq_right_iff.2 fun h => (lt_irrefl _ ((Finset.mem_range.1 hi).trans_le h)).elim
+  simp [-inv_pow, ← Summable.sum_add_tsum_nat_add n A, B, pow_add, _root_.tsum_mul_right,
+    tsum_geometric_inv_two]
 
 Depends on / 依赖: Finset, Finset.mem_range, Finset.range, Finset.sum_eq_zero, Summable, Summable.sum_add_tsum_nat_add, _root_, _root_.tsum_mul_right, indicator, inv_pow, ite_eq_right_iff, lt_irrefl, mem_range, one_div, piecewise_eq_indicator, pow_add, sum_add_tsum_nat_add, sum_eq_zero, summable_geometric_two, summable_geometric_two.indicator
 -/
@@ -1409,7 +1453,12 @@ theorem ENNReal.tsum_geometric
     norm_cast at *
     convert! ENNReal.tsum_coe_eq (NNReal.hasSum_geometric hr)
     rw [ENNReal.coe_inv <| ne_of_gt <| tsub_pos_iff_lt.2 hr]; rw [coe_sub]; rw [coe_one]
-  · rw [tsub_eq_zero_iff_le.mpr
+  · rw [tsub_eq_zero_iff_le.mpr hr, ENNReal.inv_zero, ENNReal.tsum_eq_iSup_nat, iSup_eq_top]
+    refine fun a ha =>
+      (ENNReal.exists_nat_gt (lt_top_iff_ne_top.1 ha)).imp fun n hn => lt_of_lt_of_le hn ?_
+    calc
+      (n : Real>=0∞) = ∑ i in range n, 1 := by rw [sum_const, nsmul_one, card_range]
+      _ <= ∑ i in range n, r ^ i := by gcongr; apply one_le_pow₀ hr
 
 中文:
 定理 广义非负实数.tsum_geometric
@@ -1421,7 +1470,12 @@ theorem ENNReal.tsum_geometric
     norm_cast at *
     convert! ENNReal.tsum_coe_eq (NNReal.hasSum_geometric hr)
     rw [ENNReal.coe_inv <| ne_of_gt <| tsub_pos_iff_lt.2 hr]; rw [coe_sub]; rw [coe_one]
-  · rw [tsub_eq_zero_iff_le.mpr
+  · rw [tsub_eq_zero_iff_le.mpr hr, ENNReal.inv_zero, ENNReal.tsum_eq_iSup_nat, iSup_eq_top]
+    refine fun a ha =>
+      (ENNReal.exists_nat_gt (lt_top_iff_ne_top.1 ha)).imp fun n hn => lt_of_lt_of_le hn ?_
+    calc
+      (n : Real>=0∞) = ∑ i in range n, 1 := by rw [sum_const, nsmul_one, card_range]
+      _ <= ∑ i in range n, r ^ i := by gcongr; apply one_le_pow₀ hr
 
 Depends on / 依赖: ENNReal, ENNReal.coe_inv, ENNReal.exists_nat_gt, ENNReal.inv_zero, ENNReal.lt_iff_exists_coe, ENNReal.tsum_coe_eq, ENNReal.tsum_eq_iSup_nat, NNReal, NNReal.hasSum_geometric, coe_inv, coe_one, coe_sub, convert, exists_nat_gt, hasSum_geometric, iSup_eq_top, inv_zero, lt_iff_exists_coe, lt_of_lt_of_le, lt_or_ge
 -/
@@ -1956,7 +2010,8 @@ theorem summable_one_div_pow_of_le
       (summable_geometric_of_lt_one (one_div_nonneg.mpr (zero_le_one.trans hm.le))
         ((one_div_lt (zero_lt_one.trans hm) zero_lt_one).mpr (one_div_one.le.trans_lt hm)))
   rw [div_pow]; rw [one_pow]
-  refine (one_div_le_one_div
+  refine (one_div_le_one_div ?_ ?_).mpr (pow_right_mono₀ hm.le (fi a)) <;>
+    exact pow_pos (zero_lt_one.trans hm) _
 
 中文:
 定理 summable_one_div_pow_of_le
@@ -1966,7 +2021,8 @@ theorem summable_one_div_pow_of_le
       (summable_geometric_of_lt_one (one_div_nonneg.mpr (zero_le_one.trans hm.le))
         ((one_div_lt (zero_lt_one.trans hm) zero_lt_one).mpr (one_div_one.le.trans_lt hm)))
   rw [div_pow]; rw [one_pow]
-  refine (one_div_le_one_div
+  refine (one_div_le_one_div ?_ ?_).mpr (pow_right_mono₀ hm.le (fi a)) <;>
+    exact pow_pos (zero_lt_one.trans hm) _
 
 Depends on / 依赖: div_pow, hm.le, of_nonneg_of_le, one_div_le_one_div, one_div_lt, one_div_nonneg, one_div_nonneg.mpr, one_div_one, one_div_one.le.trans_lt, one_pow, pow_pos, summable_geometric_of_lt_one, trans_lt, zero_le_one, zero_le_one.trans, zero_lt_one, zero_lt_one.trans
 -/
@@ -1993,7 +2049,12 @@ definition posSumOfEncodable
   have hf : HasSum f ε := hasSum_geometric_two' _
   have f0 : forall n, 0 < f n := fun n => div_pos (half_pos hε) (pow_pos zero_lt_two _)
   refine ⟨f ∘ Encodable.encode, fun i => f0 _, ?_⟩
-  rcases hf.summable.comp_injective (@Encodable.encode_injective ι _) with ⟨c, hg
+  rcases hf.summable.comp_injective (@Encodable.encode_injective ι _) with ⟨c, hg⟩
+  refine ⟨c, hg, hasSum_le_inj _ (@Encodable.encode_injective ι _) ?_ ?_ hg hf⟩
+  · intro i _
+    exact le_of_lt (f0 _)
+  · intro n
+    exact le_rfl
 
 中文:
 定义 posSumOfEncodable
@@ -2003,7 +2064,12 @@ definition posSumOfEncodable
   have hf : HasSum f ε := hasSum_geometric_two' _
   have f0 : forall n, 0 < f n := fun n => div_pos (half_pos hε) (pow_pos zero_lt_two _)
   refine ⟨f ∘ Encodable.encode, fun i => f0 _, ?_⟩
-  rcases hf.summable.comp_injective (@Encodable.encode_injective ι _) with ⟨c, hg
+  rcases hf.summable.comp_injective (@Encodable.encode_injective ι _) with ⟨c, hg⟩
+  refine ⟨c, hg, hasSum_le_inj _ (@Encodable.encode_injective ι _) ?_ ?_ hg hf⟩
+  · intro i _
+    exact le_of_lt (f0 _)
+  · intro n
+    exact le_rfl
 
 Depends on / 依赖: Encodable, Encodable.encode, Encodable.encode_injective, HasSum, comp_injective, div_pos, encode, encode_injective, half_pos, hasSum_geometric_two, hasSum_le_inj, hf.summable.comp_injective, le_of_lt, le_rfl, pow_pos, summable, zero_lt_two
 -/
@@ -2034,7 +2100,7 @@ theorem Set.Countable.exists_pos_hasSum_le
   · conv_rhs => simp
     split_ifs
     exacts [hf0 _, zero_lt_one]
-  · simpa only [Subtype.coe_prop, dif_pos, Subtype
+  · simpa only [Subtype.coe_prop, dif_pos, Subtype.coe_eta]
 
 中文:
 定理 集合.可数.存在_pos_hasSum_le
@@ -2047,7 +2113,7 @@ theorem Set.Countable.exists_pos_hasSum_le
   · conv_rhs => simp
     split_ifs
     exacts [hf0 _, zero_lt_one]
-  · simpa only [Subtype.coe_prop, dif_pos, Subtype
+  · simpa only [Subtype.coe_prop, dif_pos, Subtype.coe_eta]
 
 Depends on / 依赖: Subtype, Subtype.coe_eta, Subtype.coe_prop, classical, coe_eta, coe_prop, conv_rhs, dif_pos, exacts, hs.toEncodable, posSumOfEncodable, split_ifs, toEncodable, zero_lt_one
 -/
@@ -2113,7 +2179,8 @@ theorem exists_pos_sum_of_countable
   obtain ⟨ε', hε', c, hc, hcε⟩ := posSumOfEncodable a0 ι
   exact
 ⟨fun i => ⟨ε' i, (hε' i).le⟩, fun i => NNReal.coe_lt_coe.1 hε' i,
-      ⟨c, hasSum_le (fun i => (hε' i).le) hasSum_zero hc⟩, NNReal.hasSum_co
+      ⟨c, hasSum_le (fun i => (hε' i).le) hasSum_zero hc⟩, NNReal.hasSum_coe.1 hc,
+aε.trans_le' NNReal.coe_le_coe.1 hcε⟩
 
 中文:
 定理 存在_pos_sum_of_countable
@@ -2124,7 +2191,8 @@ theorem exists_pos_sum_of_countable
   obtain ⟨ε', hε', c, hc, hcε⟩ := posSumOfEncodable a0 ι
   exact
 ⟨fun i => ⟨ε' i, (hε' i).le⟩, fun i => NNReal.coe_lt_coe.1 hε' i,
-      ⟨c, hasSum_le (fun i => (hε' i).le) hasSum_zero hc⟩, NNReal.hasSum_co
+      ⟨c, hasSum_le (fun i => (hε' i).le) hasSum_zero hc⟩, NNReal.hasSum_coe.1 hc,
+aε.trans_le' NNReal.coe_le_coe.1 hcε⟩
 
 Depends on / 依赖: NNReal, NNReal.coe_le_coe, NNReal.coe_lt_coe, NNReal.hasSum_coe, coe_le_coe, coe_lt_coe, exists_between, hasSum_coe, hasSum_le, hasSum_zero, nonempty_encodable, posSumOfEncodable, pos_iff_ne_zero, trans_le
 -/
@@ -2205,7 +2273,10 @@ theorem exists_pos_tsum_mul_lt_of_countable
   rcases exists_pos_sum_of_countable hε ι with ⟨δ', Hpos, Hsum⟩
   have : forall i, 0 < max 1 (w i) := fun i => zero_lt_one.trans_le (le_max_left _ _)
   refine ⟨fun i => δ' i / max 1 (w i), fun i => div_pos (Hpos _) (this i), ?_⟩
-  refine lt_of_le_of_lt (ENNReal.t
+  refine lt_of_le_of_lt (ENNReal.tsum_le_tsum fun i => ?_) Hsum
+  rw [coe_div (this i).ne']
+  refine mul_le_of_le_div' ?_
+  grw [← le_max_right]
 
 中文:
 定理 存在_pos_tsum_mul_lt_of_countable
@@ -2215,7 +2286,10 @@ theorem exists_pos_tsum_mul_lt_of_countable
   rcases exists_pos_sum_of_countable hε ι with ⟨δ', Hpos, Hsum⟩
   have : forall i, 0 < max 1 (w i) := fun i => zero_lt_one.trans_le (le_max_left _ _)
   refine ⟨fun i => δ' i / max 1 (w i), fun i => div_pos (Hpos _) (this i), ?_⟩
-  refine lt_of_le_of_lt (ENNReal.t
+  refine lt_of_le_of_lt (ENNReal.tsum_le_tsum fun i => ?_) Hsum
+  rw [coe_div (this i).ne']
+  refine mul_le_of_le_div' ?_
+  grw [← le_max_right]
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, coe_div, div_pos, exists_pos_sum_of_countable, le_max_left, le_max_right, lt_of_le_of_lt, mul_le_of_le_div, trans_le, tsum_le_tsum, zero_lt_one, zero_lt_one.trans_le
 -/
@@ -2264,7 +2338,17 @@ theorem tendsto_factorial_div_pow_self_atTop
         (pow_nonneg (mod_cast n.zero_le) _))
     (by
       refine (eventually_gt_atTop 0).mono fun n hn => ?_
-
+      rcases Nat.exists_eq_succ_of_ne_zero hn.ne.symm with ⟨k, rfl⟩
+      rw [factorial_eq_prod_range_add_one]; rw [pow_eq_prod_const]; rw [div_eq_mul_inv]; rw [← inv_eq_one_div]; rw [prod_natCast]; rw [Nat.cast_succ]; rw [← Finset.prod_inv_distrib]; rw [← prod_mul_distrib]; rw [Finset.prod_range_succ']
+      simp only [one_mul, Nat.cast_add, zero_add, Nat.cast_one]
+      refine
+            mul_le_of_le_one_left (inv_nonneg.mpr <| mod_cast hn.le) (prod_le_one ?_ ?_) <;>
+          intro x hx <;>
+        rw [Finset.mem_range] at hx
+      · positivity
+      · refine (div_le_one <| mod_cast hn).mpr ?_
+        norm_cast
+        lia)
 
 中文:
 定理 tendsto_factorial_div_pow_self_atTop
@@ -2275,7 +2359,17 @@ theorem tendsto_factorial_div_pow_self_atTop
         (pow_nonneg (mod_cast n.zero_le) _))
     (by
       refine (eventually_gt_atTop 0).mono fun n hn => ?_
-
+      rcases Nat.exists_eq_succ_of_ne_zero hn.ne.symm with ⟨k, rfl⟩
+      rw [factorial_eq_prod_range_add_one]; rw [pow_eq_prod_const]; rw [div_eq_mul_inv]; rw [← inv_eq_one_div]; rw [prod_natCast]; rw [Nat.cast_succ]; rw [← Finset.prod_inv_distrib]; rw [← prod_mul_distrib]; rw [Finset.prod_range_succ']
+      simp only [one_mul, Nat.cast_add, zero_add, Nat.cast_one]
+      refine
+            mul_le_of_le_one_left (inv_nonneg.mpr <| mod_cast hn.le) (prod_le_one ?_ ?_) <;>
+          intro x hx <;>
+        rw [Finset.mem_range] at hx
+      · positivity
+      · refine (div_le_one <| mod_cast hn).mpr ?_
+        norm_cast
+        lia)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Finset, Finset.prod_inv_dis, Nat.cast_succ, Nat.exists_eq_succ_of_ne_zero, cast_succ, div_eq_mul_inv, div_nonneg, eventually_gt_atTop, exists_eq_succ_of_ne_zero, factorial_eq_prod_range_add_one, factorial_pos, hn.ne.symm, inv_eq_one_div, mod_cast, n.factorial_pos.le, n.zero_le, of_forall, pow_eq_prod_const
 -/
@@ -2390,7 +2484,13 @@ theorem tendsto_nat_floor_mul_div_atTop
   rw [sub_zero] at A
   apply tendsto_of_tendsto_of_tendsto_of_le_of_le' A tendsto_const_nhds
   · refine eventually_atTop.2 ⟨1, fun x hx => ?_⟩
-    simp only [le_div_iff₀ (zero_lt_one.t
+    simp only [le_div_iff₀ (zero_lt_one.trans_le hx), _root_.sub_mul,
+      inv_mul_cancel₀ (zero_lt_one.trans_le hx).ne']
+    have := Nat.lt_floor_add_one (a * x)
+    linarith
+  · refine eventually_atTop.2 ⟨1, fun x hx => ?_⟩
+    rw [div_le_iff₀ (zero_lt_one.trans_le hx)]
+    simp [Nat.floor_le (mul_nonneg ha (zero_le_one.trans hx))]
 
 中文:
 定理 tendsto_nat_floor_mul_div_atTop
@@ -2401,7 +2501,13 @@ theorem tendsto_nat_floor_mul_div_atTop
   rw [sub_zero] at A
   apply tendsto_of_tendsto_of_tendsto_of_le_of_le' A tendsto_const_nhds
   · refine eventually_atTop.2 ⟨1, fun x hx => ?_⟩
-    simp only [le_div_iff₀ (zero_lt_one.t
+    simp only [le_div_iff₀ (zero_lt_one.trans_le hx), _root_.sub_mul,
+      inv_mul_cancel₀ (zero_lt_one.trans_le hx).ne']
+    have := Nat.lt_floor_add_one (a * x)
+    linarith
+  · refine eventually_atTop.2 ⟨1, fun x hx => ?_⟩
+    rw [div_le_iff₀ (zero_lt_one.trans_le hx)]
+    simp [Nat.floor_le (mul_nonneg ha (zero_le_one.trans hx))]
 
 Depends on / 依赖: Nat.lt_floor_add_one, Tendsto, _root_, _root_.sub_mul, eventually_atTop, lt_floor_add_one, sub_mul, sub_zero, tendsto_const_nhds, tendsto_const_nhds.sub, tendsto_inv_atTop_zero, tendsto_of_tendsto_of_tendsto_of_le_of_le, trans_le, zero_lt_one, zero_lt_one.trans_le
 -/
@@ -2452,7 +2558,11 @@ theorem tendsto_nat_ceil_mul_div_atTop
   rw [add_zero] at A
   apply tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds A
   · refine eventually_atTop.2 ⟨1, fun x hx => ?_⟩
-    rw [le_div_iff₀ (zero_lt_one.trans_le
+    rw [le_div_iff₀ (zero_lt_one.trans_le hx)]
+    exact Nat.le_ceil _
+  · refine eventually_atTop.2 ⟨1, fun x hx => ?_⟩
+    simp [div_le_iff₀ (zero_lt_one.trans_le hx), inv_mul_cancel₀ (zero_lt_one.trans_le hx).ne',
+      (Nat.ceil_lt_add_one (mul_nonneg ha (zero_le_one.trans hx))).le, add_mul]
 
 中文:
 定理 tendsto_nat_ceil_mul_div_atTop
@@ -2463,7 +2573,11 @@ theorem tendsto_nat_ceil_mul_div_atTop
   rw [add_zero] at A
   apply tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds A
   · refine eventually_atTop.2 ⟨1, fun x hx => ?_⟩
-    rw [le_div_iff₀ (zero_lt_one.trans_le
+    rw [le_div_iff₀ (zero_lt_one.trans_le hx)]
+    exact Nat.le_ceil _
+  · refine eventually_atTop.2 ⟨1, fun x hx => ?_⟩
+    simp [div_le_iff₀ (zero_lt_one.trans_le hx), inv_mul_cancel₀ (zero_lt_one.trans_le hx).ne',
+      (Nat.ceil_lt_add_one (mul_nonneg ha (zero_le_one.trans hx))).le, add_mul]
 
 Depends on / 依赖: Nat.ceil_lt_add_one, Nat.le_ceil, Tendsto, add_zero, ceil_lt_add_one, eventually_atTop, le_ceil, mul_nonneg, tendsto_const_nhds, tendsto_const_nhds.add, tendsto_inv_atTop_zero, tendsto_of_tendsto_of_tendsto_of_le_of_le, trans_le, zero_le_one, zero_le_one.t, zero_lt_one, zero_lt_one.trans_le
 -/

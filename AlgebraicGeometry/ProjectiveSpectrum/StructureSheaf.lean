@@ -190,7 +190,13 @@ theorem add_mem'
   refine
     ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, ja + jb,
       ⟨sb * ra + sa * rb,
-        add_mem (add_comm jb ja ▸ mul_mem_graded
+        add_mem (add_comm jb ja ▸ mul_mem_graded sb_mem ra_mem : sb * ra in 𝒜 (ja + jb))
+          (mul_mem_graded sa_mem rb_mem)⟩,
+      ⟨sa * sb, mul_mem_graded sa_mem sb_mem⟩, fun y =>
+        y.1.asHomogeneousIdeal.toIdeal.primeCompl.mul_mem (hwa ⟨y.1, y.2.1⟩) (hwb ⟨y.1, y.2.2⟩), ?_⟩
+  rintro ⟨y, hy⟩
+  simp only [Subtype.forall, Opens.apply_mk] at wa wb
+  simp [wa y hy.1, wb y hy.2, ext_iff_val, add_mk, add_comm (sa * rb)]
 
 中文:
 定理 add_mem'
@@ -201,7 +207,13 @@ theorem add_mem'
   refine
     ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, ja + jb,
       ⟨sb * ra + sa * rb,
-        add_mem (add_comm jb ja ▸ mul_mem_graded
+        add_mem (add_comm jb ja ▸ mul_mem_graded sb_mem ra_mem : sb * ra in 𝒜 (ja + jb))
+          (mul_mem_graded sa_mem rb_mem)⟩,
+      ⟨sa * sb, mul_mem_graded sa_mem sb_mem⟩, fun y =>
+        y.1.asHomogeneousIdeal.toIdeal.primeCompl.mul_mem (hwa ⟨y.1, y.2.1⟩) (hwb ⟨y.1, y.2.2⟩), ?_⟩
+  rintro ⟨y, hy⟩
+  simp only [Subtype.forall, Opens.apply_mk] at wa wb
+  simp [wa y hy.1, wb y hy.2, ext_iff_val, add_mk, add_comm (sa * rb)]
 
 Depends on / 依赖: Opens.infLELeft, add_comm, add_mem, asHomogeneousIdeal, asHomogeneousIdeal.toIdeal.primeCompl.mul_mem, infLELeft, mul_mem, mul_mem_graded, primeCompl, ra_mem, rb_mem, sa_mem, sb_mem, toIdeal
 -/
@@ -265,7 +277,11 @@ theorem mul_mem'
   refine
     ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, ja + jb,
       ⟨ra * rb, SetLike.mul_mem_graded ra_mem rb_mem⟩,
-      ⟨sa * sb, Set
+      ⟨sa * sb, SetLike.mul_mem_graded sa_mem sb_mem⟩, fun y =>
+      y.1.asHomogeneousIdeal.toIdeal.primeCompl.mul_mem (hwa ⟨y.1, y.2.1⟩) (hwb ⟨y.1, y.2.2⟩), ?_⟩
+  rintro ⟨y, hy⟩
+  simp only [Subtype.forall, Opens.apply_mk] at wa wb
+  simp [wa y hy.1, wb y hy.2, ext_iff_val, Localization.mk_mul]
 
 中文:
 定理 mul_mem'
@@ -276,7 +292,11 @@ theorem mul_mem'
   refine
     ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, ja + jb,
       ⟨ra * rb, SetLike.mul_mem_graded ra_mem rb_mem⟩,
-      ⟨sa * sb, Set
+      ⟨sa * sb, SetLike.mul_mem_graded sa_mem sb_mem⟩, fun y =>
+      y.1.asHomogeneousIdeal.toIdeal.primeCompl.mul_mem (hwa ⟨y.1, y.2.1⟩) (hwb ⟨y.1, y.2.2⟩), ?_⟩
+  rintro ⟨y, hy⟩
+  simp only [Subtype.forall, Opens.apply_mk] at wa wb
+  simp [wa y hy.1, wb y hy.2, ext_iff_val, Localization.mk_mul]
 
 Depends on / 依赖: Opens.apply_mk, Opens.infLELeft, SetLike, SetLike.mul_mem_graded, Subtype, Subtype.forall, apply_mk, asHomogeneousIdeal, asHomogeneousIdeal.toIdeal.primeCompl.mul_mem, infLELeft, mul_mem, mul_mem_graded, primeCompl, ra_mem, rb_mem, sa_mem, sb_mem, toIdeal
 -/
@@ -812,7 +832,21 @@ definition homogeneousLocalizationToStalk
   fun f g (e : f.embedding = g.embedding) => by
     simp only [HomogeneousLocalization.NumDenSameDeg.embedding, Localization.mk_eq_mk',
       IsLocalization.mk'_eq_iff_eq,
- 
+      IsLocalization.eq_iff_exists x.asHomogeneousIdeal.toIdeal.primeCompl] at e
+    obtain ⟨⟨c, hc⟩, hc'⟩ := e
+    apply (Proj.structureSheaf 𝒜).presheaf.germ_ext
+      (ProjectiveSpectrum.basicOpen 𝒜 f.den.1 ⊓
+        ProjectiveSpectrum.basicOpen 𝒜 g.den.1 ⊓ ProjectiveSpectrum.basicOpen 𝒜 c)
+      ⟨⟨mem_basicOpen_den _ x f, mem_basicOpen_den _ x g⟩, hc⟩
+      (homOfLE inf_le_left ≫ homOfLE inf_le_left) (homOfLE inf_le_left ≫ homOfLE inf_le_right)
+    apply Subtype.ext
+    ext ⟨t, ⟨htf, htg⟩, ht'⟩
+    rw [Proj.res_apply]; rw [Proj.res_apply]
+    simp only [sectionInBasicOpen, HomogeneousLocalization.val_mk, Localization.mk_eq_mk',
+      IsLocalization.mk'_eq_iff_eq]
+    apply (IsLocalization.map_units (M := t.asHomogeneousIdeal.toIdeal.primeCompl)
+      (Localization t.asHomogeneousIdeal.toIdeal.primeCompl) ⟨c, ht'⟩).mul_left_cancel
+    rw [← map_mul]; rw [← map_mul]; rw [hc']
 
 中文:
 定义 homogeneousLocalizationToStalk
@@ -822,7 +856,21 @@ definition homogeneousLocalizationToStalk
   fun f g (e : f.embedding = g.embedding) => by
     simp only [HomogeneousLocalization.NumDenSameDeg.embedding, Localization.mk_eq_mk',
       IsLocalization.mk'_eq_iff_eq,
- 
+      IsLocalization.eq_iff_exists x.asHomogeneousIdeal.toIdeal.primeCompl] at e
+    obtain ⟨⟨c, hc⟩, hc'⟩ := e
+    apply (Proj.structureSheaf 𝒜).presheaf.germ_ext
+      (ProjectiveSpectrum.basicOpen 𝒜 f.den.1 ⊓
+        ProjectiveSpectrum.basicOpen 𝒜 g.den.1 ⊓ ProjectiveSpectrum.basicOpen 𝒜 c)
+      ⟨⟨mem_basicOpen_den _ x f, mem_basicOpen_den _ x g⟩, hc⟩
+      (homOfLE inf_le_left ≫ homOfLE inf_le_left) (homOfLE inf_le_left ≫ homOfLE inf_le_right)
+    apply Subtype.ext
+    ext ⟨t, ⟨htf, htg⟩, ht'⟩
+    rw [Proj.res_apply]; rw [Proj.res_apply]
+    simp only [sectionInBasicOpen, HomogeneousLocalization.val_mk, Localization.mk_eq_mk',
+      IsLocalization.mk'_eq_iff_eq]
+    apply (IsLocalization.map_units (M := t.asHomogeneousIdeal.toIdeal.primeCompl)
+      (Localization t.asHomogeneousIdeal.toIdeal.primeCompl) ⟨c, ht'⟩).mul_left_cancel
+    rw [← map_mul]; rw [← map_mul]; rw [hc']
 
 Depends on / 依赖: Quotient, Quotient.liftOn, liftOn
 -/
@@ -859,7 +907,16 @@ lemma homogeneousLocalizationToStalk_stalkToFiberRingHom
   change homogeneousLocalizationToStalk 𝒜 x ((stalkToFiberRingHom 𝒜 x).hom
       (((Proj.structureSheaf 𝒜).presheaf.germ U x hxU) s)) =
     ((Proj.structureSheaf 𝒜).presheaf.germ U x hxU) s
-  obtain ⟨V, hxV, i, n, a, b
+  obtain ⟨V, hxV, i, n, a, b, h, e⟩ := s.2 ⟨x, hxU⟩
+  simp only [Subtype.forall, apply_mk] at e
+  rw [stalkToFiberRingHom_germ]; rw [homogeneousLocalizationToStalk]; rw [e x hxV]; rw [Quotient.liftOn'_mk'']
+  refine Presheaf.germ_ext (C := CommRingCat) _ V hxV (homOfLE <| fun _ h' => h ⟨_, h'⟩) i ?_
+  change ((Proj.structureSheaf 𝒜).presheaf.map (homOfLE <| fun _ h' => h ⟨_, h'⟩).op) _ =
+    ((Proj.structureSheaf 𝒜).presheaf.map i.op) s
+  apply Subtype.ext
+  ext ⟨t, ht⟩
+  rw [Proj.res_apply]; rw [Proj.res_apply]
+  simp [sectionInBasicOpen, HomogeneousLocalization.val_mk, Localization.mk_eq_mk', e t ht]
 
 中文:
 引理 homogeneousLocalizationToStalk_stalkToFiberRingHom
@@ -869,7 +926,16 @@ lemma homogeneousLocalizationToStalk_stalkToFiberRingHom
   change homogeneousLocalizationToStalk 𝒜 x ((stalkToFiberRingHom 𝒜 x).hom
       (((Proj.structureSheaf 𝒜).presheaf.germ U x hxU) s)) =
     ((Proj.structureSheaf 𝒜).presheaf.germ U x hxU) s
-  obtain ⟨V, hxV, i, n, a, b
+  obtain ⟨V, hxV, i, n, a, b, h, e⟩ := s.2 ⟨x, hxU⟩
+  simp only [Subtype.forall, apply_mk] at e
+  rw [stalkToFiberRingHom_germ]; rw [homogeneousLocalizationToStalk]; rw [e x hxV]; rw [Quotient.liftOn'_mk'']
+  refine Presheaf.germ_ext (C := CommRingCat) _ V hxV (homOfLE <| fun _ h' => h ⟨_, h'⟩) i ?_
+  change ((Proj.structureSheaf 𝒜).presheaf.map (homOfLE <| fun _ h' => h ⟨_, h'⟩).op) _ =
+    ((Proj.structureSheaf 𝒜).presheaf.map i.op) s
+  apply Subtype.ext
+  ext ⟨t, ht⟩
+  rw [Proj.res_apply]; rw [Proj.res_apply]
+  simp [sectionInBasicOpen, HomogeneousLocalization.val_mk, Localization.mk_eq_mk', e t ht]
 
 Depends on / 依赖: CommRingCa, Presheaf, Presheaf.germ_ext, Proj.structureSheaf, Quotient, Quotient.liftOn, Subtype, Subtype.forall, apply_mk, exists_germ_eq, germ_ext, homogeneousLocalizationToStalk, liftOn, presheaf, presheaf.exists_germ_eq, presheaf.germ, stalkToFiberRingHom, stalkToFiberRingHom_germ, structureSheaf
 -/

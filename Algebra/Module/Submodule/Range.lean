@@ -849,7 +849,12 @@ theorem ker_le_iff
     simp only [mem_ker] at hz
     rw [← SetLike.mem_coe]; rw [coe_range]; rw [Set.mem_range] at h₁
     obtain ⟨x, hx⟩ := h₁
- 
+    have hx' : x in p := h₂ hx
+    have hxz : z + x in p := by
+      apply h₂
+      simp [hx, hz]
+    suffices z + x - x in p by simpa only [this, add_sub_cancel_right]
+    exact p.sub_mem hxz hx'
 
 中文:
 定理 ker_le_iff
@@ -866,7 +871,12 @@ theorem ker_le_iff
     simp only [mem_ker] at hz
     rw [← SetLike.mem_coe]; rw [coe_range]; rw [Set.mem_range] at h₁
     obtain ⟨x, hx⟩ := h₁
- 
+    have hx' : x in p := h₂ hx
+    have hxz : z + x in p := by
+      apply h₂
+      simp [hx, hz]
+    suffices z + x - x in p by simpa only [this, add_sub_cancel_right]
+    exact p.sub_mem hxz hx'
 
 Depends on / 依赖: Set.mem_range, SetLike, SetLike.le_def, SetLike.mem_coe, add_sub_cancel_right, coe_range, le_def, map_zero, mem_coe, mem_ker, mem_range, p.sub_mem, sub_mem
 -/
@@ -1276,7 +1286,8 @@ definition MapSubtype.orderIso
   left_inv p' := comap_map_eq_of_injective (by exact Subtype.val_injective) p'
 right_inv := fun ⟨q, hq⟩ => Subtype.ext by simp [map_comap_subtype p, inf_of_le_right hq]
 map_rel_iff' {p₁ p₂} := Subtype.coe_le_coe.symm.trans by
-   
+    dsimp
+    rw [map_le_iff_le_comap]; rw [comap_map_eq_of_injective (show Injective p.subtype from Subtype.coe_injective) p₂]
 
 中文:
 定义 MapSubtype.orderIso
@@ -1286,7 +1297,8 @@ map_rel_iff' {p₁ p₂} := Subtype.coe_le_coe.symm.trans by
   left_inv p' := comap_map_eq_of_injective (by exact Subtype.val_injective) p'
 right_inv := fun ⟨q, hq⟩ => Subtype.ext by simp [map_comap_subtype p, inf_of_le_right hq]
 map_rel_iff' {p₁ p₂} := Subtype.coe_le_coe.symm.trans by
-   
+    dsimp
+    rw [map_le_iff_le_comap]; rw [comap_map_eq_of_injective (show Injective p.subtype from Subtype.coe_injective) p₂]
 -/
 def MapSubtype.orderIso : Submodule R p ≃o { p' : Submodule R M // p' <= p } where
   toFun p' := ⟨map p.subtype p', map_subtype_le p _⟩

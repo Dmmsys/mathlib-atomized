@@ -169,7 +169,14 @@ definition ofLE
     rw [← comp_apply]; rw [← map_comp]
     exact e.map_zero
   map_succ k hk := by
-    rw [← comp_apply]; rw [← map_comp]; rw [← comp_apply]; rw [← map_comp]; rw [← op_comp]; rw [← op_comp]; rw [homOfLE_comp]; rw [homOfLE_comp]; rw [e.map_succ k (lt_of_lt
+    rw [← comp_apply]; rw [← map_comp]; rw [← comp_apply]; rw [← map_comp]; rw [← op_comp]; rw [← op_comp]; rw [homOfLE_comp]; rw [homOfLE_comp]; rw [e.map_succ k (lt_of_lt_of_le hk hij)]
+  map_limit k hk hki := by
+    rw [← comp_apply]; rw [← map_comp]; rw [← op_comp]; rw [homOfLE_comp]; rw [e.map_limit k hk (hki.trans hij)]
+    congr
+    ext ⟨l, hl⟩
+    dsimp
+    rw [← comp_apply]; rw [← map_comp]
+    rfl
 
 中文:
 定义 ofLE
@@ -179,7 +186,14 @@ definition ofLE
     rw [← comp_apply]; rw [← map_comp]
     exact e.map_zero
   map_succ k hk := by
-    rw [← comp_apply]; rw [← map_comp]; rw [← comp_apply]; rw [← map_comp]; rw [← op_comp]; rw [← op_comp]; rw [homOfLE_comp]; rw [homOfLE_comp]; rw [e.map_succ k (lt_of_lt
+    rw [← comp_apply]; rw [← map_comp]; rw [← comp_apply]; rw [← map_comp]; rw [← op_comp]; rw [← op_comp]; rw [homOfLE_comp]; rw [homOfLE_comp]; rw [e.map_succ k (lt_of_lt_of_le hk hij)]
+  map_limit k hk hki := by
+    rw [← comp_apply]; rw [← map_comp]; rw [← op_comp]; rw [homOfLE_comp]; rw [e.map_limit k hk (hki.trans hij)]
+    congr
+    ext ⟨l, hl⟩
+    dsimp
+    rw [← comp_apply]; rw [← map_comp]
+    rfl
 
 Depends on / 依赖: F.map, e.val, homOfLE
 -/
@@ -241,7 +255,25 @@ instance [WellFoundedLT
     have h₁ := e₁.map_zero
     have h₂ := e₂.map_zero
     simp only [homOfLE_refl, op_id, map_id, id_apply] at h₁ h₂
-    rw [h₁
+    rw [h₁]; rw [h₂]
+  | succ i hi hi' =>
+    refine Subsingleton.intro (fun e₁ e₂ => val_injective ?_)
+    have h₁ := e₁.map_succ i (Order.lt_succ_of_not_isMax hi)
+    have h₂ := e₂.map_succ i (Order.lt_succ_of_not_isMax hi)
+    simp only [homOfLE_refl, op_id, map_id, id_apply, homOfLE_leOfHom] at h₁ h₂
+    rw [h₁]; rw [h₂]
+    congr 1
+    exact congrArg val (Subsingleton.elim (e₁.ofLE (Order.le_succ i)) (e₂.ofLE (Order.le_succ i)))
+  | isSuccLimit i hi hi' =>
+    refine Subsingleton.intro (fun e₁ e₂ => val_injective ?_)
+    have h₁ := e₁.map_limit i hi (by rfl)
+    have h₂ := e₂.map_limit i hi (by rfl)
+    simp only [homOfLE_refl, op_id, map_id, id_apply, homOfLE_leOfHom] at h₁ h₂
+    rw [h₁]; rw [h₂]
+    congr
+    ext ⟨⟨l, hl⟩⟩
+    have := hi' l hl
+    exact congr_arg val (Subsingleton.elim (e₁.ofLE hl.le) (e₂.ofLE hl.le))
 
 中文:
 实例 [WellFoundedLT
@@ -254,7 +286,25 @@ instance [WellFoundedLT
     have h₁ := e₁.map_zero
     have h₂ := e₂.map_zero
     simp only [homOfLE_refl, op_id, map_id, id_apply] at h₁ h₂
-    rw [h₁
+    rw [h₁]; rw [h₂]
+  | succ i hi hi' =>
+    refine Subsingleton.intro (fun e₁ e₂ => val_injective ?_)
+    have h₁ := e₁.map_succ i (Order.lt_succ_of_not_isMax hi)
+    have h₂ := e₂.map_succ i (Order.lt_succ_of_not_isMax hi)
+    simp only [homOfLE_refl, op_id, map_id, id_apply, homOfLE_leOfHom] at h₁ h₂
+    rw [h₁]; rw [h₂]
+    congr 1
+    exact congrArg val (Subsingleton.elim (e₁.ofLE (Order.le_succ i)) (e₂.ofLE (Order.le_succ i)))
+  | isSuccLimit i hi hi' =>
+    refine Subsingleton.intro (fun e₁ e₂ => val_injective ?_)
+    have h₁ := e₁.map_limit i hi (by rfl)
+    have h₂ := e₂.map_limit i hi (by rfl)
+    simp only [homOfLE_refl, op_id, map_id, id_apply, homOfLE_leOfHom] at h₁ h₂
+    rw [h₁]; rw [h₂]
+    congr
+    ext ⟨⟨l, hl⟩⟩
+    have := hi' l hl
+    exact congr_arg val (Subsingleton.elim (e₁.ofLE hl.le) (e₂.ofLE hl.le))
 
 Depends on / 依赖: Order.lt_succ_of_not_isMax, Subsingleton, Subsingleton.intro, SuccOrder, SuccOrder.limitRecOn, homOfLE_refl, id_apply, limitRecOn, lt_succ_of_not_isMax, map_id, map_succ, map_zero, op_id, val_injective
 -/
@@ -359,7 +409,25 @@ definition succ
     rfl
   map_succ i hi := by
     obtain hij | rfl := ((Order.lt_succ_iff_of_not_isMax hj).mp hi).lt_or_eq
-    · rw [← homOfLE_comp ((Order.lt_succ_iff_
+    · rw [← homOfLE_comp ((Order.lt_succ_iff_of_not_isMax hj).mp hi) (Order.le_succ j), op_comp,
+        map_comp, comp_apply, d.map_succ, ← e.map_succ i hij,
+        ← homOfLE_comp (Order.succ_le_of_lt hij) (Order.le_succ j), op_comp,
+        map_comp, comp_apply, d.map_succ]
+    · simp only [homOfLE_refl, op_id, map_id, id_apply, homOfLE_leOfHom, d.map_succ]
+  map_limit i hi hij := by
+    obtain hij | rfl := hij.lt_or_eq
+    · have hij' : i <= j := (Order.lt_succ_iff_of_not_isMax hj).mp hij
+      have := congr_arg (F.map (homOfLE hij').op) (d.map_succ j hj e.val)
+      rw [e.map_limit i hi]; rw [← comp_apply]; rw [← map_comp]; rw [← op_comp]; rw [homOfLE_comp] at this
+      rw [this]
+      congr
+      ext ⟨⟨l, hl⟩⟩
+      dsimp
+      conv_lhs => rw [← d.map_succ j hj e.val]
+      rw [← comp_apply]; rw [← map_comp]
+      rfl
+    · exfalso
+      exact hj hi.isMax
 
 中文:
 定义 succ
@@ -372,7 +440,25 @@ definition succ
     rfl
   map_succ i hi := by
     obtain hij | rfl := ((Order.lt_succ_iff_of_not_isMax hj).mp hi).lt_or_eq
-    · rw [← homOfLE_comp ((Order.lt_succ_iff_
+    · rw [← homOfLE_comp ((Order.lt_succ_iff_of_not_isMax hj).mp hi) (Order.le_succ j), op_comp,
+        map_comp, comp_apply, d.map_succ, ← e.map_succ i hij,
+        ← homOfLE_comp (Order.succ_le_of_lt hij) (Order.le_succ j), op_comp,
+        map_comp, comp_apply, d.map_succ]
+    · simp only [homOfLE_refl, op_id, map_id, id_apply, homOfLE_leOfHom, d.map_succ]
+  map_limit i hi hij := by
+    obtain hij | rfl := hij.lt_or_eq
+    · have hij' : i <= j := (Order.lt_succ_iff_of_not_isMax hj).mp hij
+      have := congr_arg (F.map (homOfLE hij').op) (d.map_succ j hj e.val)
+      rw [e.map_limit i hi]; rw [← comp_apply]; rw [← map_comp]; rw [← op_comp]; rw [homOfLE_comp] at this
+      rw [this]
+      congr
+      ext ⟨⟨l, hl⟩⟩
+      dsimp
+      conv_lhs => rw [← d.map_succ j hj e.val]
+      rw [← comp_apply]; rw [← map_comp]
+      rfl
+    · exfalso
+      exact hj hi.isMax
 
 Depends on / 依赖: d.succ, e.val
 -/
@@ -421,7 +507,35 @@ definition limit
   map_zero := by
     rw [d.map_lift _ _ _ _ (by simpa [bot_lt_iff_ne_bot] using hj.not_isMin)]
     simpa using (e ⊥ (by simpa [bot_lt_iff_ne_bot] using hj.not_isMin)).map_zero
-  map_succ i
+  map_succ i hi := by
+    convert!
+      (e (Order.succ i) ((Order.IsSuccLimit.succ_lt_iff hj).mpr hi)).map_succ i
+        (by
+          simp only [Order.lt_succ_iff_not_isMax, not_isMax_iff]
+          exact ⟨_, hi⟩) using 1
+    · dsimp
+      rw [map_id]; rw [id_apply]; rw [d.map_lift _ _ _ _ ((Order.IsSuccLimit.succ_lt_iff hj).mpr hi)]
+    · congr 1
+      rw [d.map_lift _ _ _ _ hi]
+      symm
+      apply compatibility
+  map_limit i hi hij := by
+    obtain hij' | rfl := hij.lt_or_eq
+    · have := (e i hij').map_limit i hi (by rfl)
+      dsimp at this ⊢
+      rw [map_id]; rw [id_apply] at this
+      rw [d.map_lift _ _ _ _ hij']
+      dsimp
+      rw [this]
+      congr
+      ext ⟨⟨l, hl⟩⟩
+      rw [map_lift _ _ _ _ _ (hl.trans hij')]
+      apply compatibility
+    · dsimp
+      rw [map_id]; rw [id_apply]
+      congr
+      ext ⟨⟨l, hl⟩⟩
+      rw [d.map_lift _ _ _ _ hl]
 
 中文:
 定义 limit
@@ -432,7 +546,35 @@ definition limit
   map_zero := by
     rw [d.map_lift _ _ _ _ (by simpa [bot_lt_iff_ne_bot] using hj.not_isMin)]
     simpa using (e ⊥ (by simpa [bot_lt_iff_ne_bot] using hj.not_isMin)).map_zero
-  map_succ i
+  map_succ i hi := by
+    convert!
+      (e (Order.succ i) ((Order.IsSuccLimit.succ_lt_iff hj).mpr hi)).map_succ i
+        (by
+          simp only [Order.lt_succ_iff_not_isMax, not_isMax_iff]
+          exact ⟨_, hi⟩) using 1
+    · dsimp
+      rw [map_id]; rw [id_apply]; rw [d.map_lift _ _ _ _ ((Order.IsSuccLimit.succ_lt_iff hj).mpr hi)]
+    · congr 1
+      rw [d.map_lift _ _ _ _ hi]
+      symm
+      apply compatibility
+  map_limit i hi hij := by
+    obtain hij' | rfl := hij.lt_or_eq
+    · have := (e i hij').map_limit i hi (by rfl)
+      dsimp at this ⊢
+      rw [map_id]; rw [id_apply] at this
+      rw [d.map_lift _ _ _ _ hij']
+      dsimp
+      rw [this]
+      congr
+      ext ⟨⟨l, hl⟩⟩
+      rw [map_lift _ _ _ _ _ (hl.trans hij')]
+      apply compatibility
+    · dsimp
+      rw [map_id]; rw [id_apply]
+      congr
+      ext ⟨⟨l, hl⟩⟩
+      rw [d.map_lift _ _ _ _ hl]
 
 Depends on / 依赖: d.lift
 -/

@@ -151,7 +151,12 @@ definition gluedScheme
   obtain ⟨i, y, rfl⟩ := D.toLocallyRingedSpaceGlueData.ι_jointly_surjective x
   obtain ⟨j, z, hz⟩ := (D.U i).affineCover.exists_eq y
   refine ⟨_, ((D.U i).affineCover.f j).toLRSHom ≫
-  
+    D.toLocallyRingedSpaceGlueData.toGlueData.ι i, ?_⟩
+  constructor
+  · simp only [LocallyRingedSpace.comp_toHom, PresheafedSpace.comp_base,
+      TopCat.hom_comp, ContinuousMap.coe_comp, Set.range_comp]
+    exact Set.mem_image_of_mem _ ⟨z, hz⟩
+  · infer_instance
 
 中文:
 定义 gluedScheme
@@ -163,7 +168,12 @@ definition gluedScheme
   obtain ⟨i, y, rfl⟩ := D.toLocallyRingedSpaceGlueData.ι_jointly_surjective x
   obtain ⟨j, z, hz⟩ := (D.U i).affineCover.exists_eq y
   refine ⟨_, ((D.U i).affineCover.f j).toLRSHom ≫
-  
+    D.toLocallyRingedSpaceGlueData.toGlueData.ι i, ?_⟩
+  constructor
+  · simp only [LocallyRingedSpace.comp_toHom, PresheafedSpace.comp_base,
+      TopCat.hom_comp, ContinuousMap.coe_comp, Set.range_comp]
+    exact Set.mem_image_of_mem _ ⟨z, hz⟩
+  · infer_instance
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_comp, D.toLocallyRingedSpaceGlueData, D.toLocallyRingedSpaceGlueData.toGlueData, D.toLocallyRingedSpaceGlueData.toGlueData.glued, IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.IsOpenImmersion.scheme, LocallyRingedSpace.comp_toHom, PresheafedSpace, PresheafedSpace.comp_base, Set.mem_image_of_me, Set.range_comp, TopCat, TopCat.hom_comp, affineCover, affineCover.exists_eq, affineCover.f, coe_comp, comp_base
 -/
@@ -454,7 +464,8 @@ definition isoCarrier
   refine SheafedSpace.forgetToPresheafedSpace.mapIso ?_ ≪≫
     SheafedSpace.GlueData.isoPresheafedSpace _
   refine LocallyRingedSpace.forgetToSheafedSpace.mapIso ?_ ≪≫
-    LocallyRingedSp
+    LocallyRingedSpace.GlueData.isoSheafedSpace _
+  exact Scheme.GlueData.isoLocallyRingedSpace _
 
 中文:
 定义 isoCarrier
@@ -465,7 +476,8 @@ definition isoCarrier
   refine SheafedSpace.forgetToPresheafedSpace.mapIso ?_ ≪≫
     SheafedSpace.GlueData.isoPresheafedSpace _
   refine LocallyRingedSpace.forgetToSheafedSpace.mapIso ?_ ≪≫
-    LocallyRingedSp
+    LocallyRingedSpace.GlueData.isoSheafedSpace _
+  exact Scheme.GlueData.isoLocallyRingedSpace _
 
 Depends on / 依赖: GlueData, GlueData.gluedIso, LocallyRingedSpace, LocallyRingedSpace.GlueData.isoSheafedSpace, LocallyRingedSpace.forgetToSheafedSpace.mapIso, PresheafedSpace, PresheafedSpace.forget, Scheme, Scheme.GlueData.isoLocallyRingedSpace, SheafedSpace, SheafedSpace.GlueData.isoPresheafedSpace, SheafedSpace.forgetToPresheafedSpace.mapIso, forget, forgetToPresheafedSpace, forgetToSheafedSpace, gluedIso, isoLocallyRingedSpace, isoPresheafedSpace, isoSheafedSpace, mapIso
 -/
@@ -489,14 +501,22 @@ theorem ι_isoCarrier_inv
   given: (i : D.J)
   proof: by
   delta isoCarrier
-  rw [Iso.trans_inv]; rw [GlueData.ι_gluedIso_inv_assoc]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [SheafedSpace.forgetToPresheafedSpace_map]; rw [PresheafedSpace.forget_map]; rw [PresheafedSpace.forget_map]; rw [← PresheafedS
+  rw [Iso.trans_inv]; rw [GlueData.ι_gluedIso_inv_assoc]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [SheafedSpace.forgetToPresheafedSpace_map]; rw [PresheafedSpace.forget_map]; rw [PresheafedSpace.forget_map]; rw [← PresheafedSpace.comp_base]; rw [← Category.assoc]; rw [D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.ι_isoPresheafedSpace_inv i]
+  dsimp
+  rw [← Category.assoc]; rw [← PresheafedSpace.comp_base]; rw [← InducedCategory.comp_hom]; rw [D.toLocallyRingedSpaceGlueData.ι_isoSheafedSpace_inv i]; rw [← PresheafedSpace.comp_base]
+  change (_ ≫ D.isoLocallyRingedSpace.inv).base = _
+  rw [D.ι_isoLocallyRingedSpace_inv i]
 
 中文:
 定理 ι_isoCarrier_inv
   条件: (i : D.J)
   证明: by
   delta isoCarrier
-  rw [Iso.trans_inv]; rw [GlueData.ι_gluedIso_inv_assoc]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [SheafedSpace.forgetToPresheafedSpace_map]; rw [PresheafedSpace.forget_map]; rw [PresheafedSpace.forget_map]; rw [← PresheafedS
+  rw [Iso.trans_inv]; rw [GlueData.ι_gluedIso_inv_assoc]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [Functor.mapIso_inv]; rw [Iso.trans_inv]; rw [SheafedSpace.forgetToPresheafedSpace_map]; rw [PresheafedSpace.forget_map]; rw [PresheafedSpace.forget_map]; rw [← PresheafedSpace.comp_base]; rw [← Category.assoc]; rw [D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.ι_isoPresheafedSpace_inv i]
+  dsimp
+  rw [← Category.assoc]; rw [← PresheafedSpace.comp_base]; rw [← InducedCategory.comp_hom]; rw [D.toLocallyRingedSpaceGlueData.ι_isoSheafedSpace_inv i]; rw [← PresheafedSpace.comp_base]
+  change (_ ≫ D.isoLocallyRingedSpace.inv).base = _
+  rw [D.ι_isoLocallyRingedSpace_inv i]
 
 Depends on / 依赖: Category, Category.assoc, D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData, Functor, Functor.mapIso_inv, GlueData, InducedCa, Iso.trans_inv, PresheafedSpace, PresheafedSpace.comp_base, PresheafedSpace.forget_map, SheafedSpace, SheafedSpace.forgetToPresheafedSpace_map, comp_base, forgetToPresheafedSpace_map, forget_map, isoCarrier, mapIso_inv, toLocallyRingedSpaceGlueData, toSheafedSpaceGlueData
 -/
@@ -540,7 +560,9 @@ theorem ι_eq_iff
       D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toPresheafedSpaceGlueData.toTopGlueData
       i j x y)
   rw [← ((TopCat.mono_iff_injective D.isoCarrier.inv).mp _).eq_iff]; rw [← ConcreteCategory.comp_apply]
-  · simp_rw [← D.ι_iso
+  · simp_rw [← D.ι_isoCarrier_inv]
+    rfl -- `rfl` was not needed before https://github.com/leanprover-community/mathlib4/pull/13170
+  · infer_instance
 
 中文:
 定理 ι_eq_iff
@@ -551,7 +573,9 @@ theorem ι_eq_iff
       D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toPresheafedSpaceGlueData.toTopGlueData
       i j x y)
   rw [← ((TopCat.mono_iff_injective D.isoCarrier.inv).mp _).eq_iff]; rw [← ConcreteCategory.comp_apply]
-  · simp_rw [← D.ι_iso
+  · simp_rw [← D.ι_isoCarrier_inv]
+    rfl -- `rfl` was not needed before https://github.com/leanprover-community/mathlib4/pull/13170
+  · infer_instance
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, D.isoCarrier.inv, D.toLocallyRingedSpaceGlueData.toSheafedSpaceGlueData.toPresheafedSpaceGlueData.toTopGlueData, GlueData, Iff.trans, TopCat, TopCat.GlueData, TopCat.mono_iff_injective, before, community, comp_apply, eq_iff, github, github.com, infer_instance, isoCarrier, leanprover, mathlib4, mono_iff_injective
 -/
@@ -854,7 +878,9 @@ definition gluedCover
   t_id x := by simp
   t' x y z := gluedCoverT' 𝒰 x y z
   t_fac x y z := by apply pullback.hom_ext <;> simp
-  -- The `cocycle` field could have bee
+  -- The `cocycle` field could have been `by tidy` but lean timeouts.
+  cocycle x y z := glued_cover_cocycle 𝒰 x y z
+  f_open _ := inferInstance
 
 中文:
 定义 gluedCover
@@ -868,7 +894,9 @@ definition gluedCover
   t_id x := by simp
   t' x y z := gluedCoverT' 𝒰 x y z
   t_fac x y z := by apply pullback.hom_ext <;> simp
-  -- The `cocycle` field could have bee
+  -- The `cocycle` field could have been `by tidy` but lean timeouts.
+  cocycle x y z := glued_cover_cocycle 𝒰 x y z
+  f_open _ := inferInstance
 -/
 def gluedCover : Scheme.GlueData.{u} where
   J := 𝒰.I₀
@@ -956,7 +984,18 @@ theorem fromGlued_injective
   rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply] at h
   simp_rw [← Scheme.Hom.comp_base] at h
   rw [ι_fromGlued]; rw [ι_fromGlued] at h
-  l
+  let e :=
+    (TopCat.pullbackConeIsLimit _ _).conePointUniqueUpToIso
+      (isLimitOfHasPullbackOfPreservesLimit Scheme.forgetToTop (𝒰.f i) (𝒰.f j))
+  rw [𝒰.gluedCover.ι_eq_iff]
+  use e.hom ⟨⟨x, y⟩, h⟩
+  constructor
+  · erw [← ConcreteCategory.comp_apply e.hom,
+      IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.left]
+    rfl
+  · erw [← ConcreteCategory.comp_apply e.hom, pullbackSymmetry_hom_comp_fst,
+      IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.right]
+    rfl
 
 中文:
 定理 fromGlued_injective
@@ -968,7 +1007,18 @@ theorem fromGlued_injective
   rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply] at h
   simp_rw [← Scheme.Hom.comp_base] at h
   rw [ι_fromGlued]; rw [ι_fromGlued] at h
-  l
+  let e :=
+    (TopCat.pullbackConeIsLimit _ _).conePointUniqueUpToIso
+      (isLimitOfHasPullbackOfPreservesLimit Scheme.forgetToTop (𝒰.f i) (𝒰.f j))
+  rw [𝒰.gluedCover.ι_eq_iff]
+  use e.hom ⟨⟨x, y⟩, h⟩
+  constructor
+  · erw [← ConcreteCategory.comp_apply e.hom,
+      IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.left]
+    rfl
+  · erw [← ConcreteCategory.comp_apply e.hom, pullbackSymmetry_hom_comp_fst,
+      IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.right]
+    rfl
 
 Depends on / 依赖: Concre, ConcreteCategory, ConcreteCategory.comp_apply, Scheme, Scheme.Hom.comp_base, Scheme.forgetToTop, TopCat, TopCat.pullbackConeIsLimit, comp_apply, comp_base, conePointUniqueUpToIso, e.hom, forgetToTop, gluedCover, isLimitOfHasPullbackOfPreservesLimit, pullbackConeIsLimit, simp_rw
 -/
@@ -1019,7 +1069,12 @@ theorem isOpenMap_fromGlued
   constructor
   · rw [← Set.image_preimage_eq_inter_range]
     apply (𝒰.f (𝒰.idx x)).isOpenEmbedding.isOpenMap
-    co
+    convert! hU (𝒰.idx x) using 1
+    simp only [← ι_fromGlued, gluedCover_U, Hom.comp_base, TopCat.hom_comp, ContinuousMap.coe_comp,
+      Set.preimage_comp]
+    congr! 1
+    exact Set.preimage_image_eq _ 𝒰.fromGlued_injective
+  · exact ⟨hx, 𝒰.covers x⟩
 
 中文:
 定理 isOpenMap_fromGlued
@@ -1034,7 +1089,12 @@ theorem isOpenMap_fromGlued
   constructor
   · rw [← Set.image_preimage_eq_inter_range]
     apply (𝒰.f (𝒰.idx x)).isOpenEmbedding.isOpenMap
-    co
+    convert! hU (𝒰.idx x) using 1
+    simp only [← ι_fromGlued, gluedCover_U, Hom.comp_base, TopCat.hom_comp, ContinuousMap.coe_comp,
+      Set.preimage_comp]
+    congr! 1
+    exact Set.preimage_image_eq _ 𝒰.fromGlued_injective
+  · exact ⟨hx, 𝒰.covers x⟩
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_comp, Hom.comp_base, Set.image_preimage_eq_inter_range, Set.inter_subset_left, Set.preimage_comp, Set.preimage_image_eq, Set.range, TopCat, TopCat.hom_comp, coe_comp, comp_base, convert, fromGlued, fromGlued_injective, gluedCover, gluedCover.isOpen_iff, gluedCover_U, hom_comp, image_preimage_eq_inter_range
 -/
@@ -1252,7 +1312,9 @@ theorem ι_glueMorphisms
   refine Cover.hom_ext (𝒰.ulift.pullback₁ (𝒰.f x)) _ _ fun i => ?_
   dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
     PreZeroHypercover.pullback₁_X, ulift_X, ulift_f, PreZeroHypercover.pullback₁_f]
-  simp_rw [pullback.condition_assoc, ← ulift_f, ← ι_fromGlued, Category.as
+  simp_rw [pullback.condition_assoc, ← ulift_f, ← ι_fromGlued, Category.assoc, glueMorphisms,
+    IsIso.hom_inv_id_assoc, ulift_f, hf]
+  simp [CategoryTheory.GlueData.ι]
 
 中文:
 定理 ι_glueMorphisms
@@ -1261,7 +1323,9 @@ theorem ι_glueMorphisms
   refine Cover.hom_ext (𝒰.ulift.pullback₁ (𝒰.f x)) _ _ fun i => ?_
   dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
     PreZeroHypercover.pullback₁_X, ulift_X, ulift_f, PreZeroHypercover.pullback₁_f]
-  simp_rw [pullback.condition_assoc, ← ulift_f, ← ι_fromGlued, Category.as
+  simp_rw [pullback.condition_assoc, ← ulift_f, ← ι_fromGlued, Category.assoc, glueMorphisms,
+    IsIso.hom_inv_id_assoc, ulift_f, hf]
+  simp [CategoryTheory.GlueData.ι]
 
 Depends on / 依赖: Category, Category.assoc, CategoryTheory, CategoryTheory.GlueData, Cover.hom_ext, GlueData, IsIso.hom_inv_id_assoc, PreZeroHypercover, PreZeroHypercover.pullback, Precoverage, Precoverage.ZeroHypercover.pullback, ZeroHypercover, condition_assoc, glueMorphisms, hom_ext, hom_inv_id_assoc, pullback, pullback.condition_assoc, simp_rw, ulift.pullback
 -/
@@ -1330,7 +1394,8 @@ instance :
   body: .mk_of_isStableUnderBaseChange fun {X Y} f (𝒰 : Y.OpenCover) (H : forall i, IsIso _) =>
     ⟨𝒰.glueMorphisms (fun i => inv (snd f (𝒰.f i)) ≫ fst _ _) fun i j => by
     rw [← cancel_epi ((pullbackRightPullbackFstIso _ _ _).hom ≫ map (fst f (𝒰.f i) ≫ f)
-      (𝒰.f j) (𝒰.f i) (𝒰.f j) (snd _ _) (𝟙 _) (𝟙
+      (𝒰.f j) (𝒰.f i) (𝒰.f j) (snd _ _) (𝟙 _) (𝟙 _) (by simp) (by simp))]
+    simp, Cover.hom_ext (𝒰.pullback₁ f) _ _ fun i => by simp, Cover.hom_ext 𝒰 _ _ fun i => by simp⟩
 
 中文:
 实例 :
@@ -1338,7 +1403,8 @@ instance :
   定义体: .mk_of_isStableUnderBaseChange fun {X Y} f (𝒰 : Y.OpenCover) (H : forall i, IsIso _) =>
     ⟨𝒰.glueMorphisms (fun i => inv (snd f (𝒰.f i)) ≫ fst _ _) fun i j => by
     rw [← cancel_epi ((pullbackRightPullbackFstIso _ _ _).hom ≫ map (fst f (𝒰.f i) ≫ f)
-      (𝒰.f j) (𝒰.f i) (𝒰.f j) (snd _ _) (𝟙 _) (𝟙
+      (𝒰.f j) (𝒰.f i) (𝒰.f j) (snd _ _) (𝟙 _) (𝟙 _) (by simp) (by simp))]
+    simp, Cover.hom_ext (𝒰.pullback₁ f) _ _ fun i => by simp, Cover.hom_ext 𝒰 _ _ fun i => by simp⟩
 
 Depends on / 依赖: Cover.hom_ext, OpenCover, Y.OpenCover, cancel_epi, glueMorphisms, hom_ext, mk_of_isStableUnderBaseChange, pullbackRightPullbackFstIso
 -/
@@ -1431,7 +1497,25 @@ lemma exists_of_pullback_V_V
   obtain ⟨k₂, y₂, hy₂⟩ := mem_iSup.mp ((pullback.snd (C := Scheme) _ _) x).2
   obtain ⟨l, hli, hlk, z, rfl, rfl⟩ :=
     (F ⋙ forget).exists_map_eq_of_isLocallyDirected k₁.2.1 k₂.2.1 y₁ y₂
-      (by simpa [hy₁, hy₂] using
+      (by simpa [hy₁, hy₂] using congr($(pullback.condition (f := (V F i j).ι)) x))
+  let α : F.obj l ⟶ pullback (V F i j).ι (V F i k).ι :=
+    pullback.lift
+      ((F.map (hli ≫ k₁.2.1)).isoOpensRange.hom ≫ Scheme.homOfLE _
+        (le_iSup_of_le ⟨l, hli ≫ k₁.2.1, hli ≫ k₁.2.2⟩ le_rfl))
+      ((F.map (hli ≫ k₁.2.1)).isoOpensRange.hom ≫ Scheme.homOfLE _
+        (le_iSup_of_le ⟨l, hli ≫ k₁.2.1, hlk ≫ k₂.2.2⟩ le_rfl))
+      (by simp)
+  have : IsOpenImmersion α := by
+    apply +allowSynthFailures IsOpenImmersion.of_comp
+    · exact (inferInstance : IsOpenImmersion (pullback.fst (V F i j).ι (V F i k).ι))
+    · simp only [limit.lift_π, PullbackCone.mk_π_app, α]
+      infer_instance
+  have : α z = x := by
+    apply (pullback.fst (C := Scheme) _ _).isOpenEmbedding.injective
+    apply (V F i j).ι.isOpenEmbedding.injective
+    rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]; rw [pullback.lift_fst_assoc]
+    simpa using hy₁
+  exact ⟨l, hli ≫ k₁.2.1, hli ≫ k₁.2.2, hlk ≫ k₂.2.2, α, z, ‹_›, by simp [α], by simp [α], ‹_›⟩
 
 中文:
 引理 存在_of_pullback_V_V
@@ -1441,7 +1525,25 @@ lemma exists_of_pullback_V_V
   obtain ⟨k₂, y₂, hy₂⟩ := mem_iSup.mp ((pullback.snd (C := Scheme) _ _) x).2
   obtain ⟨l, hli, hlk, z, rfl, rfl⟩ :=
     (F ⋙ forget).exists_map_eq_of_isLocallyDirected k₁.2.1 k₂.2.1 y₁ y₂
-      (by simpa [hy₁, hy₂] using
+      (by simpa [hy₁, hy₂] using congr($(pullback.condition (f := (V F i j).ι)) x))
+  let α : F.obj l ⟶ pullback (V F i j).ι (V F i k).ι :=
+    pullback.lift
+      ((F.map (hli ≫ k₁.2.1)).isoOpensRange.hom ≫ Scheme.homOfLE _
+        (le_iSup_of_le ⟨l, hli ≫ k₁.2.1, hli ≫ k₁.2.2⟩ le_rfl))
+      ((F.map (hli ≫ k₁.2.1)).isoOpensRange.hom ≫ Scheme.homOfLE _
+        (le_iSup_of_le ⟨l, hli ≫ k₁.2.1, hlk ≫ k₂.2.2⟩ le_rfl))
+      (by simp)
+  have : IsOpenImmersion α := by
+    apply +allowSynthFailures IsOpenImmersion.of_comp
+    · exact (inferInstance : IsOpenImmersion (pullback.fst (V F i j).ι (V F i k).ι))
+    · simp only [limit.lift_π, PullbackCone.mk_π_app, α]
+      infer_instance
+  have : α z = x := by
+    apply (pullback.fst (C := Scheme) _ _).isOpenEmbedding.injective
+    apply (V F i j).ι.isOpenEmbedding.injective
+    rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]; rw [pullback.lift_fst_assoc]
+    simpa using hy₁
+  exact ⟨l, hli ≫ k₁.2.1, hli ≫ k₁.2.2, hlk ≫ k₂.2.2, α, z, ‹_›, by simp [α], by simp [α], ‹_›⟩
 
 Depends on / 依赖: CategoryStruct, CategoryStruct.comp, CategoryStruct.id, MonoidalCategoryStruct, MonoidalCategoryStruct.rightUnitor, MonoidalCategoryStruct.tensorObj, MonoidalCategoryStruct.tensorUnit, MonoidalCategoryStruct.whiskerLeft, OrderEmbedding, OrderEmbedding.toOrderHom, Scheme, WithInitial, WithInitial.comp, WithInitial.down, WithInitial.id, rightUnitor, tensorHom, tensorObj, tensorUnit, toOrderHom
 -/
@@ -1493,7 +1595,32 @@ lemma fst_inv_eq_snd_inv
   obtain ⟨l, hli, hlj, y, hy₁, hy₂⟩ := (F ⋙ forget).exists_map_eq_of_isLocallyDirected k₁.2.1 k₂.2.1
     ((pullback.fst _ _ ≫ (F.map k₁.2.1).isoOpensRange.inv) x)
     ((pullback.snd _ _ ≫ (F.map k₂.2.1).isoOpensRange.inv) x) (by
-      simp only [Functor.
+      simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map,
+        ConcreteCategory.hom_ofHom, Hom.comp_base, TopCat.hom_comp, ContinuousMap.comp_apply,
+        TypeCat.Fun.coe_mk]
+      simp only [← Hom.comp_apply]
+      congr 5
+      simpa using congr($(pullback.condition (f := (F.obj i).homOfLE h₁)
+        (g := (F.obj i).homOfLE h₂)) ≫ Scheme.Opens.ι _))
+  let α : F.obj l ⟶ pullback ((F.obj i).homOfLE h₁) ((F.obj i).homOfLE h₂) :=
+    pullback.lift
+      (F.map hli ≫ (F.map k₁.2.1).isoOpensRange.hom)
+      (F.map hlj ≫ (F.map k₂.2.1).isoOpensRange.hom)
+      (by simp [← cancel_mono (Scheme.Opens.ι _), ← Functor.map_comp,
+        Subsingleton.elim (hli ≫ k₁.2.1) (hlj ≫ k₂.2.1)])
+  have : IsOpenImmersion α := by
+    have : IsOpenImmersion (α ≫ pullback.fst _ _) := by
+      simp only [pullback.lift_fst, α]; infer_instance
+    exact .of_comp _ (pullback.fst _ _)
+  have : α y = x := by
+    simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map, Hom.comp_base,
+      TopCat.hom_comp, ContinuousMap.comp_apply] at hy₁
+    apply (pullback.fst ((F.obj i).homOfLE h₁) _).isOpenEmbedding.injective
+    simp only [← Scheme.Hom.comp_apply, α, pullback.lift_fst]
+    simp_all
+  refine ⟨α.opensRange, ⟨y, this⟩, ?_⟩
+  rw [← cancel_epi α.isoOpensRange.hom]
+  simp [α, ← Functor.map_comp, Subsingleton.elim (hli ≫ k₁.2.2) (hlj ≫ k₂.2.2)]
 
 中文:
 引理 fst_inv_eq_snd_inv
@@ -1503,7 +1630,32 @@ lemma fst_inv_eq_snd_inv
   obtain ⟨l, hli, hlj, y, hy₁, hy₂⟩ := (F ⋙ forget).exists_map_eq_of_isLocallyDirected k₁.2.1 k₂.2.1
     ((pullback.fst _ _ ≫ (F.map k₁.2.1).isoOpensRange.inv) x)
     ((pullback.snd _ _ ≫ (F.map k₂.2.1).isoOpensRange.inv) x) (by
-      simp only [Functor.
+      simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map,
+        ConcreteCategory.hom_ofHom, Hom.comp_base, TopCat.hom_comp, ContinuousMap.comp_apply,
+        TypeCat.Fun.coe_mk]
+      simp only [← Hom.comp_apply]
+      congr 5
+      simpa using congr($(pullback.condition (f := (F.obj i).homOfLE h₁)
+        (g := (F.obj i).homOfLE h₂)) ≫ Scheme.Opens.ι _))
+  let α : F.obj l ⟶ pullback ((F.obj i).homOfLE h₁) ((F.obj i).homOfLE h₂) :=
+    pullback.lift
+      (F.map hli ≫ (F.map k₁.2.1).isoOpensRange.hom)
+      (F.map hlj ≫ (F.map k₂.2.1).isoOpensRange.hom)
+      (by simp [← cancel_mono (Scheme.Opens.ι _), ← Functor.map_comp,
+        Subsingleton.elim (hli ≫ k₁.2.1) (hlj ≫ k₂.2.1)])
+  have : IsOpenImmersion α := by
+    have : IsOpenImmersion (α ≫ pullback.fst _ _) := by
+      simp only [pullback.lift_fst, α]; infer_instance
+    exact .of_comp _ (pullback.fst _ _)
+  have : α y = x := by
+    simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_map, Hom.comp_base,
+      TopCat.hom_comp, ContinuousMap.comp_apply] at hy₁
+    apply (pullback.fst ((F.obj i).homOfLE h₁) _).isOpenEmbedding.injective
+    simp only [← Scheme.Hom.comp_apply, α, pullback.lift_fst]
+    simp_all
+  refine ⟨α.opensRange, ⟨y, this⟩, ?_⟩
+  rw [← cancel_epi α.isoOpensRange.hom]
+  simp [α, ← Functor.map_comp, Subsingleton.elim (hli ≫ k₁.2.2) (hlj ≫ k₂.2.2)]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, ContinuousMap, ContinuousMap.comp_apply, F.map, Functor, Functor.comp_map, Functor.comp_obj, Hom.comp_apply, Hom.comp_base, MonoidalCategoryStruct, MonoidalCategoryStruct.leftUnitor, MonoidalCategoryStruct.whiskerRight, OrderEmbedding, OrderEmbedding.toOrderHom, Scheme, Scheme.hom_ext_of_forall, TopCat, TopCat.hom_comp, TypeCat
 -/
@@ -1606,7 +1758,9 @@ definition t
     rintro _ ⟨x, rfl⟩
     obtain ⟨l, x, rfl⟩ := (Scheme.Opens.iSupOpenCover _).exists_eq x
     simp only [V, tAux, ← Scheme.Hom.comp_apply, Cover.ι_glueMorphisms]
-    simp only [Opens.range_ι, iSup_mk, carrier_eq_coe, Hom.coe_opensRange, coe_mk, Hom.
+    simp only [Opens.range_ι, iSup_mk, carrier_eq_coe, Hom.coe_opensRange, coe_mk, Hom.comp_base,
+      TopCat.hom_comp, ContinuousMap.comp_apply]
+    exact Set.mem_iUnion.mpr ⟨⟨l.1, l.2.2, l.2.1⟩, ⟨_, rfl⟩⟩)
 
 中文:
 定义 t
@@ -1615,7 +1769,9 @@ definition t
     rintro _ ⟨x, rfl⟩
     obtain ⟨l, x, rfl⟩ := (Scheme.Opens.iSupOpenCover _).exists_eq x
     simp only [V, tAux, ← Scheme.Hom.comp_apply, Cover.ι_glueMorphisms]
-    simp only [Opens.range_ι, iSup_mk, carrier_eq_coe, Hom.coe_opensRange, coe_mk, Hom.
+    simp only [Opens.range_ι, iSup_mk, carrier_eq_coe, Hom.coe_opensRange, coe_mk, Hom.comp_base,
+      TopCat.hom_comp, ContinuousMap.comp_apply]
+    exact Set.mem_iUnion.mpr ⟨⟨l.1, l.2.2, l.2.1⟩, ⟨_, rfl⟩⟩)
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.comp_apply, Hom.coe_opensRange, Hom.comp_base, IsOpenImmersion, IsOpenImmersion.lift, Opens.range_, Scheme, Scheme.Hom.comp_apply, Scheme.Opens.iSupOpenCover, Set.mem_iUnion.mpr, TopCat, TopCat.hom_comp, carrier_eq_coe, coe_mk, coe_opensRange, comp_apply, comp_base, exists_eq, hom_comp
 -/
@@ -1639,7 +1795,7 @@ lemma t_id
   refine (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k => ?_
   simp only [Category.comp_id, ← cancel_mono (Scheme.Opens.ι _), Category.assoc,
     IsOpenImmersion.lift_fac, Scheme.Cover.ι_glueMorphisms, t, tAux, V]
-  simp [Scheme.Opens.iSupOpenCover, Iso.inv_comp_eq, Subsingleton.elim k.2.1 k.2
+  simp [Scheme.Opens.iSupOpenCover, Iso.inv_comp_eq, Subsingleton.elim k.2.1 k.2.2]
 
 中文:
 引理 t_id
@@ -1649,7 +1805,7 @@ lemma t_id
   refine (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k => ?_
   simp only [Category.comp_id, ← cancel_mono (Scheme.Opens.ι _), Category.assoc,
     IsOpenImmersion.lift_fac, Scheme.Cover.ι_glueMorphisms, t, tAux, V]
-  simp [Scheme.Opens.iSupOpenCover, Iso.inv_comp_eq, Subsingleton.elim k.2.1 k.2
+  simp [Scheme.Opens.iSupOpenCover, Iso.inv_comp_eq, Subsingleton.elim k.2.1 k.2.2]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, IsOpenImmersion, IsOpenImmersion.lift_fac, Iso.inv_comp_eq, Scheme, Scheme.Cover, Scheme.Opens, Scheme.Opens.iSupOpenCover, Subsingleton, Subsingleton.elim, cancel_mono, comp_id, hom_ext, iSupOpenCover, inv_comp_eq, lift_fac
 -/
@@ -1680,7 +1836,40 @@ definition glueData
   t i j := t F ↓i ↓j
   t_id i := t_id F ↓i
   t' i j k := pullback.lift
-    (IsOpenImmersion.lift (V F 
+    (IsOpenImmersion.lift (V F ↓j ↓k).ι (pullback.fst _ _ ≫ tAux F ↓i ↓j) (by
+      rintro _ ⟨x, rfl⟩
+      obtain ⟨l, fi, fj, fk, α, z, hα, hα₁, hα₂, rfl⟩ := exists_of_pullback_V_V F x
+      rw [← Scheme.Hom.comp_apply]; rw [reassoc_of% hα₁]; rw [homOfLE_tAux F ↓i ↓j fi fj]; rw [Iso.hom_inv_id_assoc]; rw [Scheme.Opens.range_ι]; rw [SetLike.mem_coe]
+      exact TopologicalSpace.Opens.mem_iSup.mpr ⟨⟨l, fj, fk⟩, ⟨z, rfl⟩⟩))
+      (pullback.fst _ _ ≫ t F _ _) (by simp [t])
+  t_fac i j k := pullback.lift_snd _ _ _
+  cocycle i j k := by
+    refine Scheme.hom_ext_of_forall _ _ fun x => ?_
+    have := exists_of_pullback_V_V F x
+    obtain ⟨l, fi, fj, fk, α, z, hα, hα₁, hα₂, e⟩ := this -- doing them in the same step times out.
+    refine ⟨α.opensRange, ⟨_, e⟩, ?_⟩
+    rw [← cancel_mono (pullback.snd _ _)]; rw [← cancel_mono (Scheme.Opens.ι _)]
+    simp only [t, Category.assoc, limit.lift_π, PullbackCone.mk_π_app,
+      limit.lift_π_assoc, cospan_left, IsOpenImmersion.lift_fac, Category.id_comp]
+    rw [IsOpenImmersion.comp_lift_assoc]
+    simp only [limit.lift_π_assoc, cospan_left, PullbackCone.mk_π_app]
+    rw [← cancel_epi α.isoOpensRange.hom]
+    simp_rw [Scheme.Hom.isoOpensRange_hom_ι_assoc, IsOpenImmersion.comp_lift_assoc]
+    simp only [reassoc_of% hα₁, homOfLE_tAux F _ _ fi fj, Iso.hom_inv_id_assoc, reassoc_of% hα₂]
+    generalize_proofs _ h₁
+    have : IsOpenImmersion.lift (V F ↓j ↓k).ι (F.map fj) h₁ = (F.map fj).isoOpensRange.hom ≫
+        (F.obj ↓j).homOfLE (le_iSup_of_le ⟨l, fj, fk⟩ le_rfl) := by
+      rw [← cancel_mono (Scheme.Opens.ι _)]; rw [Category.assoc]; rw [IsOpenImmersion.lift_fac]; rw [← Iso.inv_comp_eq]; rw [Scheme.Hom.isoOpensRange_inv_comp]
+      exact (Scheme.homOfLE_ι _ _).symm
+    simp_rw [this, Category.assoc, homOfLE_tAux F _ _ fj fk, Iso.hom_inv_id_assoc]
+    generalize_proofs h₂
+    have : IsOpenImmersion.lift (V F ↓k ↓i).ι (F.map fk) h₂ = (F.map fk).isoOpensRange.hom ≫
+        (F.obj ↓k).homOfLE (le_iSup_of_le ⟨l, fk, fi⟩ le_rfl) := by
+      rw [← cancel_mono (Scheme.Opens.ι _)]; rw [Category.assoc]; rw [IsOpenImmersion.lift_fac]; rw [← Iso.inv_comp_eq]; rw [Scheme.Hom.isoOpensRange_inv_comp]
+      exact (Scheme.homOfLE_ι _ _).symm
+    simp_rw [this, Category.assoc, homOfLE_tAux F _ _ fk fi, Iso.hom_inv_id_assoc,
+      ← Iso.inv_comp_eq, Scheme.Hom.isoOpensRange_inv_comp]
+    exact (Scheme.homOfLE_ι _ _).symm
 
 中文:
 定义 glueData
@@ -1695,7 +1884,40 @@ definition glueData
   t i j := t F ↓i ↓j
   t_id i := t_id F ↓i
   t' i j k := pullback.lift
-    (IsOpenImmersion.lift (V F 
+    (IsOpenImmersion.lift (V F ↓j ↓k).ι (pullback.fst _ _ ≫ tAux F ↓i ↓j) (by
+      rintro _ ⟨x, rfl⟩
+      obtain ⟨l, fi, fj, fk, α, z, hα, hα₁, hα₂, rfl⟩ := exists_of_pullback_V_V F x
+      rw [← Scheme.Hom.comp_apply]; rw [reassoc_of% hα₁]; rw [homOfLE_tAux F ↓i ↓j fi fj]; rw [Iso.hom_inv_id_assoc]; rw [Scheme.Opens.range_ι]; rw [SetLike.mem_coe]
+      exact TopologicalSpace.Opens.mem_iSup.mpr ⟨⟨l, fj, fk⟩, ⟨z, rfl⟩⟩))
+      (pullback.fst _ _ ≫ t F _ _) (by simp [t])
+  t_fac i j k := pullback.lift_snd _ _ _
+  cocycle i j k := by
+    refine Scheme.hom_ext_of_forall _ _ fun x => ?_
+    have := exists_of_pullback_V_V F x
+    obtain ⟨l, fi, fj, fk, α, z, hα, hα₁, hα₂, e⟩ := this -- doing them in the same step times out.
+    refine ⟨α.opensRange, ⟨_, e⟩, ?_⟩
+    rw [← cancel_mono (pullback.snd _ _)]; rw [← cancel_mono (Scheme.Opens.ι _)]
+    simp only [t, Category.assoc, limit.lift_π, PullbackCone.mk_π_app,
+      limit.lift_π_assoc, cospan_left, IsOpenImmersion.lift_fac, Category.id_comp]
+    rw [IsOpenImmersion.comp_lift_assoc]
+    simp only [limit.lift_π_assoc, cospan_left, PullbackCone.mk_π_app]
+    rw [← cancel_epi α.isoOpensRange.hom]
+    simp_rw [Scheme.Hom.isoOpensRange_hom_ι_assoc, IsOpenImmersion.comp_lift_assoc]
+    simp only [reassoc_of% hα₁, homOfLE_tAux F _ _ fi fj, Iso.hom_inv_id_assoc, reassoc_of% hα₂]
+    generalize_proofs _ h₁
+    have : IsOpenImmersion.lift (V F ↓j ↓k).ι (F.map fj) h₁ = (F.map fj).isoOpensRange.hom ≫
+        (F.obj ↓j).homOfLE (le_iSup_of_le ⟨l, fj, fk⟩ le_rfl) := by
+      rw [← cancel_mono (Scheme.Opens.ι _)]; rw [Category.assoc]; rw [IsOpenImmersion.lift_fac]; rw [← Iso.inv_comp_eq]; rw [Scheme.Hom.isoOpensRange_inv_comp]
+      exact (Scheme.homOfLE_ι _ _).symm
+    simp_rw [this, Category.assoc, homOfLE_tAux F _ _ fj fk, Iso.hom_inv_id_assoc]
+    generalize_proofs h₂
+    have : IsOpenImmersion.lift (V F ↓k ↓i).ι (F.map fk) h₂ = (F.map fk).isoOpensRange.hom ≫
+        (F.obj ↓k).homOfLE (le_iSup_of_le ⟨l, fk, fi⟩ le_rfl) := by
+      rw [← cancel_mono (Scheme.Opens.ι _)]; rw [Category.assoc]; rw [IsOpenImmersion.lift_fac]; rw [← Iso.inv_comp_eq]; rw [Scheme.Hom.isoOpensRange_inv_comp]
+      exact (Scheme.homOfLE_ι _ _).symm
+    simp_rw [this, Category.assoc, homOfLE_tAux F _ _ fk fi, Iso.hom_inv_id_assoc,
+      ← Iso.inv_comp_eq, Scheme.Hom.isoOpensRange_inv_comp]
+    exact (Scheme.homOfLE_ι _ _).symm
 
 Depends on / 依赖: Shrink
 -/
@@ -1759,7 +1981,10 @@ lemma glueDataι_naturality
     exact this ▸ (topIso _).isIso_hom
   have : t F ↓i ↓j ≫ (V F ↓j ↓i).ι ≫ _ = (V F ↓i ↓j).ι ≫ _ :=
     (glueData F).glue_condition i j
-  simp 
+  simp only [t, IsOpenImmersion.lift_fac_assoc] at this
+  rw [← cancel_epi (V F ↓i ↓j).ι]; rw [← this]; rw [← Category.assoc]; rw [← (Iso.eq_inv_comp _).mp (homOfLE_tAux F ↓i ↓j (𝟙 _) f)]; rw [← Category.assoc]; rw [← Category.assoc]; rw [Category.assoc]
+  convert! Category.id_comp _
+  simp [← cancel_mono (Opens.ι _), V]
 
 中文:
 引理 glueDataι_naturality
@@ -1771,7 +1996,10 @@ lemma glueDataι_naturality
     exact this ▸ (topIso _).isIso_hom
   have : t F ↓i ↓j ≫ (V F ↓j ↓i).ι ≫ _ = (V F ↓i ↓j).ι ≫ _ :=
     (glueData F).glue_condition i j
-  simp 
+  simp only [t, IsOpenImmersion.lift_fac_assoc] at this
+  rw [← cancel_epi (V F ↓i ↓j).ι]; rw [← this]; rw [← Category.assoc]; rw [← (Iso.eq_inv_comp _).mp (homOfLE_tAux F ↓i ↓j (𝟙 _) f)]; rw [← Category.assoc]; rw [← Category.assoc]; rw [Category.assoc]
+  convert! Category.id_comp _
+  simp [← cancel_mono (Opens.ι _), V]
 
 Depends on / 依赖: Category, Category.assoc, IsOpenImmersion, IsOpenImmersion.lift_fac_assoc, Iso.eq_inv_comp, Scheme, Scheme.Hom.opensRange_of_isIso, cancel_epi, eq_inv_comp, glueData, glue_condition, homOfLE_tAux, isIso_hom, le_iSup_of_le, lift_fac_assoc, opensRange_of_isIso, topIso, top_le_iff, top_le_iff.mp
 -/
@@ -1840,7 +2068,15 @@ definition isColimit
     simp only [t, IsOpenImmersion.lift_fac]
     apply (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k => ?_
     simp only [Opens.iSupOpenCover, V, Scheme.homOfLE_ι_assoc]
-    rw [homOfLE_tAu
+    rw [homOfLE_tAux_assoc F ↓i ↓j k.2.1 k.2.2]; rw [Iso.eq_inv_comp]
+    simp)
+  fac s j := by
+    refine (Category.assoc _ _ _).trans ?_
+    conv_lhs => enter [2]; tactic => exact Multicoequalizer.π_desc _ _ _ _ _
+    simp
+  uniq s m hm := Multicoequalizer.hom_ext _ _ _ fun i => by
+    simp [← hm ↓i, cocone, reassoc_of% glueDataι_naturality]
+    rfl
 
 中文:
 定义 isColimit
@@ -1851,7 +2087,15 @@ definition isColimit
     simp only [t, IsOpenImmersion.lift_fac]
     apply (Scheme.Opens.iSupOpenCover _).hom_ext _ _ fun k => ?_
     simp only [Opens.iSupOpenCover, V, Scheme.homOfLE_ι_assoc]
-    rw [homOfLE_tAu
+    rw [homOfLE_tAux_assoc F ↓i ↓j k.2.1 k.2.2]; rw [Iso.eq_inv_comp]
+    simp)
+  fac s j := by
+    refine (Category.assoc _ _ _).trans ?_
+    conv_lhs => enter [2]; tactic => exact Multicoequalizer.π_desc _ _ _ _ _
+    simp
+  uniq s m hm := Multicoequalizer.hom_ext _ _ _ fun i => by
+    simp [← hm ↓i, cocone, reassoc_of% glueDataι_naturality]
+    rfl
 
 Depends on / 依赖: Category, Category.assoc, GlueData, GlueData.diagram, IsOpenImmersion, IsOpenImmersion.lift_fac, Iso.eq_inv_comp, Multicoequalizer, Multicoequalizer.desc, Multicoequalizer.hom_, Opens.iSupOpenCover, Scheme, Scheme.Opens.iSupOpenCover, Scheme.homOfLE_, conv_lhs, diagram, eq_inv_comp, glueData, homOfLE_tAux_assoc, hom_
 -/
@@ -1891,7 +2135,25 @@ definition isColimitForgetToLocallyRingedSpace
       rintro ⟨i, j⟩
       dsimp [glueData, GlueData.diagram]
       simp only [t, IsOpenImmersion.lift_fac, ← Scheme.Hom.comp_toLRSHom]
-      rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.fromGlue
+      rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.fromGlued.toLRSHom]; rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.gluedCover.isoLocallyRingedSpace.inv]
+      refine Multicoequalizer.hom_ext _ _ _ fun ⟨k, hk⟩ => ?_
+      rw [← CategoryTheory.GlueData.ι]; rw [reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv]; rw [reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv]; rw [← cancel_epi (Hom.isoOpensRange (F.map _)).hom.toLRSHom]
+      simp +instances only [Opens.iSupOpenCover, Cover.ulift, V, ← Hom.comp_toLRSHom_assoc,
+        Cover.ι_fromGlued_assoc, homOfLE_ι, Hom.isoOpensRange_hom_ι, Cover.idx]
+      generalize_proofs _ _ h
+      rw [homOfLE_tAux F ↓i ↓j h.choose.2.1 h.choose.2.2]; rw [Iso.hom_inv_id_assoc]
+      exact (s.w h.choose.2.1).trans (s.w h.choose.2.2).symm)
+  fac s j := by
+    simp only [cocone, Functor.mapCocone_ι_app, Scheme.Hom.comp_toLRSHom,
+      forgetToLocallyRingedSpace_map, ← GlueData.ι_isoLocallyRingedSpace_inv]
+    simpa [CategoryTheory.GlueData.ι] using s.w _
+  uniq s m hm := by
+    rw [← Iso.inv_comp_eq]
+    refine Multicoequalizer.hom_ext _ _ _ fun i => ?_
+    conv_lhs => rw [← ι.eq_def]
+    dsimp
+    simp [cocone, ← hm, glueDataι_naturality,
+      ← GlueData.ι_isoLocallyRingedSpace_inv, -ι_gluedIso_inv_assoc, -ι_gluedIso_inv]
 
 中文:
 定义 isColimitForgetToLocallyRingedSpace
@@ -1901,7 +2163,25 @@ definition isColimitForgetToLocallyRingedSpace
       rintro ⟨i, j⟩
       dsimp [glueData, GlueData.diagram]
       simp only [t, IsOpenImmersion.lift_fac, ← Scheme.Hom.comp_toLRSHom]
-      rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.fromGlue
+      rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.fromGlued.toLRSHom]; rw [← cancel_epi (Scheme.Opens.iSupOpenCover _).ulift.gluedCover.isoLocallyRingedSpace.inv]
+      refine Multicoequalizer.hom_ext _ _ _ fun ⟨k, hk⟩ => ?_
+      rw [← CategoryTheory.GlueData.ι]; rw [reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv]; rw [reassoc_of% GlueData.ι_isoLocallyRingedSpace_inv]; rw [← cancel_epi (Hom.isoOpensRange (F.map _)).hom.toLRSHom]
+      simp +instances only [Opens.iSupOpenCover, Cover.ulift, V, ← Hom.comp_toLRSHom_assoc,
+        Cover.ι_fromGlued_assoc, homOfLE_ι, Hom.isoOpensRange_hom_ι, Cover.idx]
+      generalize_proofs _ _ h
+      rw [homOfLE_tAux F ↓i ↓j h.choose.2.1 h.choose.2.2]; rw [Iso.hom_inv_id_assoc]
+      exact (s.w h.choose.2.1).trans (s.w h.choose.2.2).symm)
+  fac s j := by
+    simp only [cocone, Functor.mapCocone_ι_app, Scheme.Hom.comp_toLRSHom,
+      forgetToLocallyRingedSpace_map, ← GlueData.ι_isoLocallyRingedSpace_inv]
+    simpa [CategoryTheory.GlueData.ι] using s.w _
+  uniq s m hm := by
+    rw [← Iso.inv_comp_eq]
+    refine Multicoequalizer.hom_ext _ _ _ fun i => ?_
+    conv_lhs => rw [← ι.eq_def]
+    dsimp
+    simp [cocone, ← hm, glueDataι_naturality,
+      ← GlueData.ι_isoLocallyRingedSpace_inv, -ι_gluedIso_inv_assoc, -ι_gluedIso_inv]
 
 Depends on / 依赖: glueData, isoLocallyRingedSpace, isoLocallyRingedSpace.hom
 -/
@@ -1998,7 +2278,9 @@ definition openCover
   body: Cover.copy ((coverOfIsIso ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).hom).bind
     fun i => (glueData F).openCover) J F.obj (colimit.ι F)
     ((equivShrink J).trans <| (Equiv.uniqueSigma fun (_ : Unit) => Shrink J).symm)
-    (fun _ => F.mapIso (eqToIso (by simp [GlueData.openCove
+    (fun _ => F.mapIso (eqToIso (by simp [GlueData.openCover, glueData]))) fun i => by
+  change colimit.ι F i = _ ≫ (glueData F).ι (equivShrink J i) ≫ _
+  simp [← Category.assoc, ← Iso.comp_inv_eq, cocone]
 
 中文:
 定义 openCover
@@ -2006,7 +2288,9 @@ definition openCover
   定义体: Cover.copy ((coverOfIsIso ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).hom).bind
     fun i => (glueData F).openCover) J F.obj (colimit.ι F)
     ((equivShrink J).trans <| (Equiv.uniqueSigma fun (_ : Unit) => Shrink J).symm)
-    (fun _ => F.mapIso (eqToIso (by simp [GlueData.openCove
+    (fun _ => F.mapIso (eqToIso (by simp [GlueData.openCover, glueData]))) fun i => by
+  change colimit.ι F i = _ ≫ (glueData F).ι (equivShrink J i) ≫ _
+  simp [← Category.assoc, ← Iso.comp_inv_eq, cocone]
 
 Depends on / 依赖: Category, Category.assoc, Cover.copy, Equiv.uniqueSigma, F.mapIso, F.obj, GlueData, GlueData.openCover, Iso.comp_inv_eq, Shrink, cocone, coconePointUniqueUpToIso, colimit, colimit.isColimit, comp_inv_eq, coverOfIsIso, eqToIso, equivShrink, glueData, isColimit
 -/
@@ -2035,7 +2319,20 @@ lemma ι_eq_ι_iff
   obtain ⟨i, rfl⟩ := (equivShrink J).symm.surjective i
   obtain ⟨j, rfl⟩ := (equivShrink J).symm.surjective j
   rw [← ((isColimit F).coconePointUniqueUpToIso
-    (colimit.isColimit F)).inv.isOp
+    (colimit.isColimit F)).inv.isOpenEmbedding.injective.eq_iff]
+  simp only [Limits.colimit, ← Scheme.Hom.comp_apply,
+    colimit.comp_coconePointUniqueUpToIso_inv, cocone, glueDataι_naturality]
+  refine ?_ ∘ ((glueData F).ι_eq_iff _ _ _ _).mp
+  dsimp +instances only [GlueData.Rel]
+  rintro ⟨x, rfl, rfl⟩
+  obtain ⟨⟨k, ki, kj⟩, y, hy : F.map ki y = (glueData F).f i j x⟩ := mem_iSup.mp x.2
+  refine ⟨k, ki, kj, y, hy, ?_⟩
+  obtain ⟨k, rfl⟩ := (equivShrink J).symm.surjective k
+  apply ((glueData F).ι _).isOpenEmbedding.injective
+  simp only [← Scheme.Hom.comp_apply, Category.assoc, GlueData.glue_condition]
+  trans (glueData F).ι k y
+  · simp [← glueDataι_naturality F kj]; rfl
+  · simp [← glueDataι_naturality F ki, ← hy]; rfl
 
 中文:
 引理 ι_eq_ι_iff
@@ -2046,7 +2343,20 @@ lemma ι_eq_ι_iff
   obtain ⟨i, rfl⟩ := (equivShrink J).symm.surjective i
   obtain ⟨j, rfl⟩ := (equivShrink J).symm.surjective j
   rw [← ((isColimit F).coconePointUniqueUpToIso
-    (colimit.isColimit F)).inv.isOp
+    (colimit.isColimit F)).inv.isOpenEmbedding.injective.eq_iff]
+  simp only [Limits.colimit, ← Scheme.Hom.comp_apply,
+    colimit.comp_coconePointUniqueUpToIso_inv, cocone, glueDataι_naturality]
+  refine ?_ ∘ ((glueData F).ι_eq_iff _ _ _ _).mp
+  dsimp +instances only [GlueData.Rel]
+  rintro ⟨x, rfl, rfl⟩
+  obtain ⟨⟨k, ki, kj⟩, y, hy : F.map ki y = (glueData F).f i j x⟩ := mem_iSup.mp x.2
+  refine ⟨k, ki, kj, y, hy, ?_⟩
+  obtain ⟨k, rfl⟩ := (equivShrink J).symm.surjective k
+  apply ((glueData F).ι _).isOpenEmbedding.injective
+  simp only [← Scheme.Hom.comp_apply, Category.assoc, GlueData.glue_condition]
+  trans (glueData F).ι k y
+  · simp [← glueDataι_naturality F kj]; rfl
+  · simp [← glueDataι_naturality F ki, ← hy]; rfl
 
 Depends on / 依赖: Limits, Limits.colimit, Scheme, Scheme.Hom.comp_apply, cocone, coconePointUniqueUpToIso, colimit, colimit.comp_coconePointUniqueUpToIso_inv, colimit.isColimit, colimit.w, comp_apply, comp_coconePointUniqueUpToIso_inv, eq_iff, equivShrink, glueData, injective, inv.isOpenEmbedding.injective.eq_iff, isColimit, isOpenEmbedding, surjective
 -/
@@ -2085,7 +2395,12 @@ lemma ι_jointly_surjective
     (IsLocallyDirected.glueData F).ι_jointly_surjective
       (((IsLocallyDirected.isColimit F).coconePointUniqueUpToIso (colimit.isColimit _)).inv x)
   use (equivShrink J).symm i, xi
-  apply ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).inv.isOpenEmbedding
+  apply ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).inv.isOpenEmbedding.injective
+  simp_rw [← h, colimit.cocone_x, ← Scheme.Hom.comp_apply]
+  congr 5
+  have := eqToHom_naturality (fun j => (glueData F).ι j)
+    (show i = ((equivShrink J) ((equivShrink J).symm i)) by simp)
+  simp [cocone, eqToHom_map, ← this]
 
 中文:
 引理 ι_jointly_surjective
@@ -2095,7 +2410,12 @@ lemma ι_jointly_surjective
     (IsLocallyDirected.glueData F).ι_jointly_surjective
       (((IsLocallyDirected.isColimit F).coconePointUniqueUpToIso (colimit.isColimit _)).inv x)
   use (equivShrink J).symm i, xi
-  apply ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).inv.isOpenEmbedding
+  apply ((isColimit F).coconePointUniqueUpToIso (colimit.isColimit F)).inv.isOpenEmbedding.injective
+  simp_rw [← h, colimit.cocone_x, ← Scheme.Hom.comp_apply]
+  congr 5
+  have := eqToHom_naturality (fun j => (glueData F).ι j)
+    (show i = ((equivShrink J) ((equivShrink J).symm i)) by simp)
+  simp [cocone, eqToHom_map, ← this]
 
 Depends on / 依赖: IsLocallyDirected, IsLocallyDirected.glueData, IsLocallyDirected.isColimit, Scheme, Scheme.Hom.comp_apply, cocone, coconePointUniqueUpToIso, cocone_x, colimit, colimit.cocone_x, colimit.isColimit, comp_apply, eqToHom_m, eqToHom_naturality, equivShrink, glueData, injective, inv.isOpenEmbedding.injective, isColimit, isOpenEmbedding
 -/

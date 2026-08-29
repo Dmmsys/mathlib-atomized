@@ -117,14 +117,14 @@ lemma HasLaw.comp_of_hasLaw_comp
   statement: {Ω' 𝓨 : Type*} {m' : MeasurableSpace Ω'} {m𝓨 : MeasurableSpace 𝓨}
   proof: (hY.map_eq ▸ hf).comp_aemeasurable hY.aemeasurable
   map_eq := by
-    rw [← Function.comp_def]; rw [← AEMeasurable.map_map_of_aemeasurable (hY.map_eq ▸ hf) hY.aemeasurable]; rw [hY.map_eq]; rw [← hX.map_eq]; rw [AEMeasurable.map_map_of_aemeasurable (hX.map_eq ▸ hf) hX.aemeasurable]; rw [Function.com
+    rw [← Function.comp_def]; rw [← AEMeasurable.map_map_of_aemeasurable (hY.map_eq ▸ hf) hY.aemeasurable]; rw [hY.map_eq]; rw [← hX.map_eq]; rw [AEMeasurable.map_map_of_aemeasurable (hX.map_eq ▸ hf) hX.aemeasurable]; rw [Function.comp_def]; rw [h.map_eq]
 
 中文:
 引理 有Law.comp_of_hasLaw_comp
   结论: {Ω' 𝓨 : 类型} {m' : 可测空间 Ω'} {m𝓨 : 可测空间 𝓨}
   证明: (hY.map_eq ▸ hf).comp_aemeasurable hY.aemeasurable
   map_eq := by
-    rw [← Function.comp_def]; rw [← AEMeasurable.map_map_of_aemeasurable (hY.map_eq ▸ hf) hY.aemeasurable]; rw [hY.map_eq]; rw [← hX.map_eq]; rw [AEMeasurable.map_map_of_aemeasurable (hX.map_eq ▸ hf) hX.aemeasurable]; rw [Function.com
+    rw [← Function.comp_def]; rw [← AEMeasurable.map_map_of_aemeasurable (hY.map_eq ▸ hf) hY.aemeasurable]; rw [hY.map_eq]; rw [← hX.map_eq]; rw [AEMeasurable.map_map_of_aemeasurable (hX.map_eq ▸ hf) hX.aemeasurable]; rw [Function.comp_def]; rw [h.map_eq]
 
 Depends on / 依赖: aemeasurable, comp_aemeasurable, hY.aemeasurable, hY.map_eq, map_eq
 -/
@@ -818,7 +818,7 @@ lemma indepFun_iff_hasLaw_prodMk_prod
   mpr h := by
     rw [indepFun_iff_map_prod_eq_prod_map_map (by fun_prop) (by fun_prop)]; rw [h.map_eq]; rw [hX.map_eq]; rw [hY.map_eq]
 
-alias ⟨IndepFun.hasLaw_prod, _⟩ := indepFun_if
+alias ⟨IndepFun.hasLaw_prod, _⟩ := indepFun_iff_hasLaw_prodMk_prod
 
 中文:
 引理 indepFun_iff_hasLaw_prodMk_prod
@@ -828,7 +828,7 @@ alias ⟨IndepFun.hasLaw_prod, _⟩ := indepFun_if
   mpr h := by
     rw [indepFun_iff_map_prod_eq_prod_map_map (by fun_prop) (by fun_prop)]; rw [h.map_eq]; rw [hX.map_eq]; rw [hY.map_eq]
 
-alias ⟨IndepFun.hasLaw_prod, _⟩ := indepFun_if
+alias ⟨IndepFun.hasLaw_prod, _⟩ := indepFun_iff_hasLaw_prodMk_prod
 
 Depends on / 依赖: fun_prop, h.map_eq, h.map_prod_eq_prod_map_map, hX.map_eq, hY.map_eq, indepFun_iff_map_prod_eq_prod_map_map, map_eq, map_prod_eq_prod_map_map
 -/

@@ -280,7 +280,10 @@ definition hfdifferential
           dsimp; rw [ContMDiffMap.smul_comp, Derivation.map_smul, smul_eq_mul] }
       fun g g' => by
         dsimp
-        rw [C
+        rw [ContMDiffMap.mul_comp]; rw [Derivation.leibniz]; rw [PointedContMDiffMap.smul_def]; rw [ContMDiffMap.comp_apply]; rw [PointedContMDiffMap.smul_def]; rw [ContMDiffMap.comp_apply]; rw [h]
+        norm_cast
+  map_smul' _ _ := rfl
+  map_add' _ _ := rfl
 
 中文:
 定义 hfdifferential
@@ -292,7 +295,10 @@ definition hfdifferential
           dsimp; rw [ContMDiffMap.smul_comp, Derivation.map_smul, smul_eq_mul] }
       fun g g' => by
         dsimp
-        rw [C
+        rw [ContMDiffMap.mul_comp]; rw [Derivation.leibniz]; rw [PointedContMDiffMap.smul_def]; rw [ContMDiffMap.comp_apply]; rw [PointedContMDiffMap.smul_def]; rw [ContMDiffMap.comp_apply]; rw [h]
+        norm_cast
+  map_smul' _ _ := rfl
+  map_add' _ _ := rfl
 
 Depends on / 依赖: ContMDiffMap, ContMDiffMap.add_comp, ContMDiffMap.comp_apply, ContMDiffMap.mul_comp, ContMDiffMap.smul_comp, Derivation, Derivation.leibniz, Derivation.map_add, Derivation.map_smul, Derivation.mk, PointedContMDiffMap, PointedContMDiffMap.smul_def, add_comp, comp_apply, g.comp, leibniz, map_add, map_smul, mul_comp, smul_comp
 -/

@@ -141,7 +141,9 @@ theorem affineIndependent_of_toMatrix_right_inv
   have hweq' : w₁ ᵥ* b.toMatrix p = w₂ ᵥ* b.toMatrix p := by
     ext j
     change (∑ i, w₁ i • b.coord j (p i)) = ∑ i, w₂ i • b.coord j (p i)
-    rw [← Finset.univ.affineCombinat
+    rw [← Finset.univ.affineCombination_eq_linear_combination _ _ hw₁]; rw [← Finset.univ.affineCombination_eq_linear_combination _ _ hw₂]; rw [← Function.comp_def (b.coord j) p]; rw [← Finset.univ.map_affineCombination p w₁ hw₁]; rw [← Finset.univ.map_affineCombination p w₂ hw₂]; rw [hweq]
+  replace hweq' := congr_arg (fun w => w ᵥ* A) hweq'
+  simpa only [Matrix.vecMul_vecMul, hA, Matrix.vecMul_one] using hweq'
 
 中文:
 定理 affineIndependent_of_toMatrix_right_inv
@@ -153,7 +155,9 @@ theorem affineIndependent_of_toMatrix_right_inv
   have hweq' : w₁ ᵥ* b.toMatrix p = w₂ ᵥ* b.toMatrix p := by
     ext j
     change (∑ i, w₁ i • b.coord j (p i)) = ∑ i, w₂ i • b.coord j (p i)
-    rw [← Finset.univ.affineCombinat
+    rw [← Finset.univ.affineCombination_eq_linear_combination _ _ hw₁]; rw [← Finset.univ.affineCombination_eq_linear_combination _ _ hw₂]; rw [← Function.comp_def (b.coord j) p]; rw [← Finset.univ.map_affineCombination p w₁ hw₁]; rw [← Finset.univ.map_affineCombination p w₂ hw₂]; rw [hweq]
+  replace hweq' := congr_arg (fun w => w ᵥ* A) hweq'
+  simpa only [Matrix.vecMul_vecMul, hA, Matrix.vecMul_one] using hweq'
 
 Depends on / 依赖: Finset, Finset.univ.affineCombination_eq_linear_combination, Finset.univ.map_aff, Finset.univ.map_affineCombination, Function, Function.comp_def, affineCombination_eq_linear_combination, affineIndependent_iff_eq_of_fintype_affineCombination_eq, b.coord, b.toMatrix, comp_def, isHaarMeasure, map_aff, map_affineCombination, nonempty_fintype, pi.isHaarMeasure, toMatrix
 -/
@@ -185,7 +189,18 @@ theorem affineSpan_eq_top_of_toMatrix_left_inv
   have hAi : ∑ j, A i j = 1 := by
     calc
       ∑ j, A i j = ∑ j, A i j * ∑ l, b.toMatrix p j l := by simp
-     
+      _ = ∑ j, ∑ l, A i j * b.toMatrix p j l := by simp_rw [Finset.mul_sum]
+      _ = ∑ l, ∑ j, A i j * b.toMatrix p j l := by rw [Finset.sum_comm]
+      _ = ∑ l, (A * b.toMatrix p) i l := rfl
+      _ = 1 := by simp [hA, Matrix.one_apply]
+  have hbi : b i = Finset.univ.affineCombination k p (A i) := by
+    apply b.ext_elem
+    intro j
+    rw [b.coord_apply]; rw [Finset.univ.map_affineCombination _ _ hAi]; rw [Finset.univ.affineCombination_eq_linear_combination _ _ hAi]
+    change _ = (A * b.toMatrix p) i j
+    simp_rw [hA, Matrix.one_apply, @eq_comm _ i j]
+  rw [hbi]
+  exact affineCombination_mem_affineSpan hAi p
 
 中文:
 定理 affineSpan_eq_top_of_toMatrix_left_inv
@@ -200,7 +215,18 @@ theorem affineSpan_eq_top_of_toMatrix_left_inv
   have hAi : ∑ j, A i j = 1 := by
     calc
       ∑ j, A i j = ∑ j, A i j * ∑ l, b.toMatrix p j l := by simp
-     
+      _ = ∑ j, ∑ l, A i j * b.toMatrix p j l := by simp_rw [Finset.mul_sum]
+      _ = ∑ l, ∑ j, A i j * b.toMatrix p j l := by rw [Finset.sum_comm]
+      _ = ∑ l, (A * b.toMatrix p) i l := rfl
+      _ = 1 := by simp [hA, Matrix.one_apply]
+  have hbi : b i = Finset.univ.affineCombination k p (A i) := by
+    apply b.ext_elem
+    intro j
+    rw [b.coord_apply]; rw [Finset.univ.map_affineCombination _ _ hAi]; rw [Finset.univ.affineCombination_eq_linear_combination _ _ hAi]
+    change _ = (A * b.toMatrix p) i j
+    simp_rw [hA, Matrix.one_apply, @eq_comm _ i j]
+  rw [hbi]
+  exact affineCombination_mem_affineSpan hAi p
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_comm, Matrix, Matrix.one_apply, affineSpan, affineSpan_le, b.toMatrix, b.tot, eq_top_iff, mul_sum, nonempty_fintype, one_apply, simp_rw, sum_comm, toMatrix
 -/
@@ -338,7 +364,7 @@ theorem isUnit_toMatrix_iff
   · rintro ⟨h_tot, h_ind⟩
     let b' : AffineBasis ι k P := ⟨p, h_tot, h_ind⟩
     change IsUnit (b.toMatrix b')
-    e
+    exact b.isUnit_toMatrix b'
 
 中文:
 定理 isUnit_toMatrix_iff
@@ -351,7 +377,7 @@ theorem isUnit_toMatrix_iff
   · rintro ⟨h_tot, h_ind⟩
     let b' : AffineBasis ι k P := ⟨p, h_tot, h_ind⟩
     change IsUnit (b.toMatrix b')
-    e
+    exact b.isUnit_toMatrix b'
 
 Depends on / 依赖: AffineBasis, IsUnit, affineIndependent_of_toMatrix_right_inv, affineSpan_eq_top_of_toMatrix_left_inv, b.affineIndependent_of_toMatrix_right_inv, b.affineSpan_eq_top_of_toMatrix_left_inv, b.isUnit_toMatrix, b.toMatrix, h_ind, h_tot, isUnit_toMatrix, toMatrix
 -/

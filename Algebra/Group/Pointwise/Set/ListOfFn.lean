@@ -35,7 +35,9 @@ theorem mem_prod_list_ofFn
   | zero => simp_rw [List.ofFn_zero, List.prod_nil, Fin.exists_fin_zero_pi, eq_comm, Set.mem_one]
   | succ n ih =>
     simp_rw [List.ofFn_succ, List.prod_cons, Fin.exists_fin_succ_pi, Fin.cons_zero, Fin.cons_succ,
-      mem_mul, @ih, exists_exists_eq_and, SetCoe.
+      mem_mul, @ih, exists_exists_eq_and, SetCoe.exists, exists_prop]
+
+@[to_additive]
 
 中文:
 定理 mem_prod_list_ofFn
@@ -45,7 +47,9 @@ theorem mem_prod_list_ofFn
   | zero => simp_rw [List.ofFn_zero, List.prod_nil, Fin.exists_fin_zero_pi, eq_comm, Set.mem_one]
   | succ n ih =>
     simp_rw [List.ofFn_succ, List.prod_cons, Fin.exists_fin_succ_pi, Fin.cons_zero, Fin.cons_succ,
-      mem_mul, @ih, exists_exists_eq_and, SetCoe.
+      mem_mul, @ih, exists_exists_eq_and, SetCoe.exists, exists_prop]
+
+@[to_additive]
 
 Depends on / 依赖: Fin.cons_succ, Fin.cons_zero, Fin.exists_fin_succ_pi, Fin.exists_fin_zero_pi, List.ofFn_succ, List.ofFn_zero, List.prod_cons, List.prod_nil, Set.mem_one, SetCoe, SetCoe.exists, cons_succ, cons_zero, eq_comm, exists_exists_eq_and, exists_fin_succ_pi, exists_fin_zero_pi, exists_prop, generalizing, mem_mul
 -/
@@ -71,7 +75,10 @@ theorem mem_list_prod
   constructor
   · rintro ⟨fi, rfl⟩
     exact ⟨fun i => ⟨_, fi i⟩, rfl, rfl⟩
+  · rintro ⟨fi, rfl, rfl⟩
+    exact ⟨fun i => _, rfl⟩
 
+@[to_additive (attr := push)]
 
 中文:
 定理 mem_list_prod
@@ -83,7 +90,10 @@ theorem mem_list_prod
   constructor
   · rintro ⟨fi, rfl⟩
     exact ⟨fun i => ⟨_, fi i⟩, rfl, rfl⟩
+  · rintro ⟨fi, rfl, rfl⟩
+    exact ⟨fun i => _, rfl⟩
 
+@[to_additive (attr := push)]
 
 Depends on / 依赖: List.exists_iff_exists_tuple, List.map_ofFn, List.ofFnRec, List.ofFn_inj, Sigma.mk.inj_iff, and_left_comm, exists_and_left, exists_eq_left, exists_iff_exists_tuple, heq_eq_eq, inj_iff, map_ofFn, mem_prod_list_ofFn, ofFnRec, ofFn_inj
 -/

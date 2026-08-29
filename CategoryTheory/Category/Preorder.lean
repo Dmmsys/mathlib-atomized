@@ -739,7 +739,7 @@ definition Equivalence.toOrderIso
   map_rel_iff' {a a'} :=
     ⟨fun h =>
       ((Equivalence.unit e).app a ≫ e.inverse.map h.hom ≫ (Equivalence.unitInv e).app a').le,
-      fun h : a <= a' => (e.functor.map
+      fun h : a <= a' => (e.functor.map h.hom).le⟩
 
 中文:
 定义 等价.toOrderIso
@@ -751,7 +751,7 @@ definition Equivalence.toOrderIso
   map_rel_iff' {a a'} :=
     ⟨fun h =>
       ((Equivalence.unit e).app a ≫ e.inverse.map h.hom ≫ (Equivalence.unitInv e).app a').le,
-      fun h : a <= a' => (e.functor.map
+      fun h : a <= a' => (e.functor.map h.hom).le⟩
 
 Depends on / 依赖: e.functor.obj, functor
 -/

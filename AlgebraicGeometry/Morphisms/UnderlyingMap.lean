@@ -270,7 +270,11 @@ instance surjective_isZariskiLocalAtTarget
   rw [surjective_eq_topologically] at this ⊢
   refine topologically_isZariskiLocalAtTarget _ (fun _ s _ _ h => h.restrictPreimage s) ?_
   intro α β _ _ f ι U H _ hf x
-  obtain ⟨i, hxi⟩ : exists i, x in U i := by simpa using congr(
+  obtain ⟨i, hxi⟩ : exists i, x in U i := by simpa using congr(x in $H)
+  obtain ⟨⟨y, _⟩, hy⟩ := hf i ⟨x, hxi⟩
+  exact ⟨y, congr(($hy).1)⟩
+
+@[simp]
 
 中文:
 实例 surjective_isZariskiLocalAtTarget
@@ -280,7 +284,11 @@ instance surjective_isZariskiLocalAtTarget
   rw [surjective_eq_topologically] at this ⊢
   refine topologically_isZariskiLocalAtTarget _ (fun _ s _ _ h => h.restrictPreimage s) ?_
   intro α β _ _ f ι U H _ hf x
-  obtain ⟨i, hxi⟩ : exists i, x in U i := by simpa using congr(
+  obtain ⟨i, hxi⟩ : exists i, x in U i := by simpa using congr(x in $H)
+  obtain ⟨⟨y, _⟩, hy⟩ := hf i ⟨x, hxi⟩
+  exact ⟨y, congr(($hy).1)⟩
+
+@[simp]
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.RespectsIso, RespectsIso, Surjective, h.restrictPreimage, restrictPreimage, surjective_eq_topologically, topologically_isZariskiLocalAtTarget
 -/
@@ -1030,7 +1038,24 @@ instance specializingMap_isZariskiLocalAtTarget
     intro ⟨x, hx⟩ ⟨y, hy⟩ hcl
     simp only [closure_subtype, Set.restrictPreimage_mk, Set.image_singleton] at hcl
     obtain ⟨a, ha, hay⟩ := hf x hcl
-    rw [← specializes
+    rw [← specializes_iff_mem_closure] at hcl
+    exact ⟨⟨a, by simp [hay, hy]⟩, by simpa [closure_subtype], by simpa⟩
+  · introv hU _ hsp
+    simp_rw [specializingMap_iff_closure_singleton_subset] at hsp ⊢
+    intro x y hy
+    have : exists i, y in U i := Opens.mem_iSup.mp (hU ▸ Opens.mem_top _)
+    obtain ⟨i, hi⟩ := this
+    rw [← specializes_iff_mem_closure] at hy
+    have hfx : f x in U i := (U i).2.stableUnderGeneralization hy hi
+    have hy : (⟨y, hi⟩ : U i) in closure {⟨f x, hfx⟩} := by
+      simp only [closure_subtype, Set.image_singleton]
+      rwa [← specializes_iff_mem_closure]
+    obtain ⟨a, ha, hay⟩ := hsp i ⟨x, hfx⟩ hy
+    rw [closure_subtype] at ha
+    simp only [Opens.carrier_eq_coe, Set.image_singleton] at ha
+    apply_fun Subtype.val at hay
+    simp only [Opens.carrier_eq_coe, Set.restrictPreimage_coe] at hay
+    use a.val, ha, hay
 
 中文:
 实例 specializingMap_isZariskiLocalAtTarget
@@ -1042,7 +1067,24 @@ instance specializingMap_isZariskiLocalAtTarget
     intro ⟨x, hx⟩ ⟨y, hy⟩ hcl
     simp only [closure_subtype, Set.restrictPreimage_mk, Set.image_singleton] at hcl
     obtain ⟨a, ha, hay⟩ := hf x hcl
-    rw [← specializes
+    rw [← specializes_iff_mem_closure] at hcl
+    exact ⟨⟨a, by simp [hay, hy]⟩, by simpa [closure_subtype], by simpa⟩
+  · introv hU _ hsp
+    simp_rw [specializingMap_iff_closure_singleton_subset] at hsp ⊢
+    intro x y hy
+    have : exists i, y in U i := Opens.mem_iSup.mp (hU ▸ Opens.mem_top _)
+    obtain ⟨i, hi⟩ := this
+    rw [← specializes_iff_mem_closure] at hy
+    have hfx : f x in U i := (U i).2.stableUnderGeneralization hy hi
+    have hy : (⟨y, hi⟩ : U i) in closure {⟨f x, hfx⟩} := by
+      simp only [closure_subtype, Set.image_singleton]
+      rwa [← specializes_iff_mem_closure]
+    obtain ⟨a, ha, hay⟩ := hsp i ⟨x, hfx⟩ hy
+    rw [closure_subtype] at ha
+    simp only [Opens.carrier_eq_coe, Set.image_singleton] at ha
+    apply_fun Subtype.val at hay
+    simp only [Opens.carrier_eq_coe, Set.restrictPreimage_coe] at hay
+    use a.val, ha, hay
 
 Depends on / 依赖: Set.image_singleton, Set.restrictPreimage_mk, closure_subtype, image_singleton, introv, restrictPreimage_mk, simp_rw, specializes_iff_mem_closure, specializingMap_iff_closure_singleton_subset, topologically_isZariskiLocalAtTarget
 -/

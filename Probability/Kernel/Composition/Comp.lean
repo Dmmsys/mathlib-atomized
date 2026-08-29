@@ -258,7 +258,7 @@ theorem ae_lt_top_of_comp_ne_top
   have h : forallᵐ b ∂κ a, η b (toMeasurable ((η ∘ₖ κ) a) s) < ∞ := by
     refine ae_lt_top (Kernel.measurable_coe η (measurableSet_toMeasurable ..)) ?_
     rwa [← Kernel.comp_apply' _ _ _ (measurableSet_toMeasurable ..), measure_toMeasurable]
-  filter_upwards [h] with b hb using (measure_mono (s
+  filter_upwards [h] with b hb using (measure_mono (subset_toMeasurable _ _)).trans_lt hb
 
 中文:
 定理 ae_lt_top_of_comp_ne_top
@@ -268,7 +268,7 @@ theorem ae_lt_top_of_comp_ne_top
   have h : forallᵐ b ∂κ a, η b (toMeasurable ((η ∘ₖ κ) a) s) < ∞ := by
     refine ae_lt_top (Kernel.measurable_coe η (measurableSet_toMeasurable ..)) ?_
     rwa [← Kernel.comp_apply' _ _ _ (measurableSet_toMeasurable ..), measure_toMeasurable]
-  filter_upwards [h] with b hb using (measure_mono (s
+  filter_upwards [h] with b hb using (measure_mono (subset_toMeasurable _ _)).trans_lt hb
 
 Depends on / 依赖: Kernel, Kernel.comp_apply, Kernel.measurable_coe, ae_lt_top, comp_apply, filter_upwards, measurableSet_toMeasurable, measurable_coe, measure_mono, measure_toMeasurable, subset_toMeasurable, toMeasurable, trans_lt
 -/

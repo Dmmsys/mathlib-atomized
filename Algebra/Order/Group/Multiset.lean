@@ -513,7 +513,7 @@ lemma filter_nsmul
     split_ifs with hp <;>
       · simp only [filter_eq_self, nsmul_zero, filter_eq_nil]
         intro b hb
-        rwa 
+        rwa [mem_singleton.mp (mem_of_mem_nsmul hb)]
 
 中文:
 引理 filter_nsmul
@@ -528,7 +528,7 @@ lemma filter_nsmul
     split_ifs with hp <;>
       · simp only [filter_eq_self, nsmul_zero, filter_eq_nil]
         intro b hb
-        rwa 
+        rwa [mem_singleton.mp (mem_of_mem_nsmul hb)]
 
 Depends on / 依赖: filter_add, filter_cons, filter_eq_nil, filter_eq_self, filter_zero, induction_on, mem_of_mem_nsmul, mem_singleton, mem_singleton.mp, nsmul_add, nsmul_cons, nsmul_zero, s.induction_on, split_ifs
 -/
@@ -739,7 +739,7 @@ theorem le_card_smul_iff_subset
   refine fun hsub => le_iff_count.mpr fun a => ?_
   by_cases! has : a ∉ s
   · simp [count_eq_zero_of_notMem has]
-  grw [count_le_card, count_nsmul, ← one_le_count_iff_mem.mpr <| mem_of_subset hsub ha
+  grw [count_le_card, count_nsmul, ← one_le_count_iff_mem.mpr <| mem_of_subset hsub has, mul_one]
 
 中文:
 定理 le_card_smul_iff_subset
@@ -751,7 +751,7 @@ theorem le_card_smul_iff_subset
   refine fun hsub => le_iff_count.mpr fun a => ?_
   by_cases! has : a ∉ s
   · simp [count_eq_zero_of_notMem has]
-  grw [count_le_card, count_nsmul, ← one_le_count_iff_mem.mpr <| mem_of_subset hsub ha
+  grw [count_le_card, count_nsmul, ← one_le_count_iff_mem.mpr <| mem_of_subset hsub has, mul_one]
 
 Depends on / 依赖: MulPosReflectLT, MulPosReflectLT.toSMulPosReflectLT, Subset, Subset.trans, classical, count_eq_zero_of_notMem, count_le_card, count_nsmul, le_iff_count, le_iff_count.mpr, mem_of_subset, mul_one, one_le_count_iff_mem, one_le_count_iff_mem.mpr, s.card, smul_subset_self, subset_of_le, t.smul_subset_self, toSMulPosReflectLT
 -/

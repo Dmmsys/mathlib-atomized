@@ -141,7 +141,11 @@ definition groupSeminorm
     have := (norm_aux y).to_subtype
     refine le_ciInf_add_ciInf ?_
     rintro ⟨a, rfl⟩ ⟨b, rfl⟩
-    refine ciInf_le_of_le ⟨0, fora
+    refine ciInf_le_of_le ⟨0, forall_mem_range.2 fun _ => dist_nonneg⟩ ⟨a * b, rfl⟩ ?_
+    simpa using norm_mul_le' _ _
+  inv' x := eq_of_forall_le_iff fun r => by
+    simp only [le_infDist (norm_aux _)]
+    exact (Equiv.inv _).forall_congr (by simp [← inv_eq_iff_eq_inv])
 
 中文:
 定义 groupSeminorm
@@ -154,7 +158,11 @@ definition groupSeminorm
     have := (norm_aux y).to_subtype
     refine le_ciInf_add_ciInf ?_
     rintro ⟨a, rfl⟩ ⟨b, rfl⟩
-    refine ciInf_le_of_le ⟨0, fora
+    refine ciInf_le_of_le ⟨0, forall_mem_range.2 fun _ => dist_nonneg⟩ ⟨a * b, rfl⟩ ?_
+    simpa using norm_mul_le' _ _
+  inv' x := eq_of_forall_le_iff fun r => by
+    simp only [le_infDist (norm_aux _)]
+    exact (Equiv.inv _).forall_congr (by simp [← inv_eq_iff_eq_inv])
 
 Depends on / 依赖: infDist
 -/
@@ -306,7 +314,7 @@ refine fun ε => Set.ext forall_mk.2 fun x => ?_
     rw [ball_one_eq]; rw [mem_ofPred_eq]; rw [norm_lt_iff]; rw [mem_image]
     exact exists_congr fun _ => and_comm
   rw [← mk_one]; rw [nhds_eq]; rw [← funext this]
-  exac
+  exact .map _ Metric.nhds_basis_ball
 
 中文:
 引理 nhds_one_hasBasis
@@ -317,7 +325,7 @@ refine fun ε => Set.ext forall_mk.2 fun x => ?_
     rw [ball_one_eq]; rw [mem_ofPred_eq]; rw [norm_lt_iff]; rw [mem_image]
     exact exists_congr fun _ => and_comm
   rw [← mk_one]; rw [nhds_eq]; rw [← funext this]
-  exac
+  exact .map _ Metric.nhds_basis_ball
 
 Depends on / 依赖: Metric, Metric.nhds_basis_ball, Set.ext, and_comm, ball_one_eq, exists_congr, forall_mk, mem_image, mem_ofPred_eq, mk_one, nhds_basis_ball, nhds_eq, norm_lt_iff
 -/
@@ -621,7 +629,7 @@ definition quotientQuotientIsometryEquivQuotient
     simp only [le_norm_iff]
     exact ⟨
 fun h₁ y h₂ z h₃ => h₁ z by subst_vars; rfl,
-      fun h₁ 
+      fun h₁ y h₂ => h₁ y ((quotientQuotientEquivQuotient S T h).injective h₂) y rfl⟩
 
 中文:
 定义 quotientQuotientIsometryEquivQuotient
@@ -633,7 +641,7 @@ fun h₁ y h₂ z h₃ => h₁ z by subst_vars; rfl,
     simp only [le_norm_iff]
     exact ⟨
 fun h₁ y h₂ z h₃ => h₁ z by subst_vars; rfl,
-      fun h₁ 
+      fun h₁ y h₂ => h₁ y ((quotientQuotientEquivQuotient S T h).injective h₂) y rfl⟩
 
 Depends on / 依赖: quotientQuotientEquivQuotient
 -/
@@ -857,7 +865,7 @@ theorem norm_normedMk
     refine (Set.nonempty_compl.2 h).imp fun x hx => ?_
 exact (norm_nonneg _).lt_of_ne' mt norm_mk_eq_zero_iff_mem_closure.1 hx
   refine (le_mul_iff_one_le_left hx).1 ?_
-  exact norm_lift_apply_le
+  exact norm_lift_apply_le S.normedMk (fun x => (eq_zero_iff x).2) x
 
 中文:
 定理 norm_normedMk
@@ -868,7 +876,7 @@ exact (norm_nonneg _).lt_of_ne' mt norm_mk_eq_zero_iff_mem_closure.1 hx
     refine (Set.nonempty_compl.2 h).imp fun x hx => ?_
 exact (norm_nonneg _).lt_of_ne' mt norm_mk_eq_zero_iff_mem_closure.1 hx
   refine (le_mul_iff_one_le_left hx).1 ?_
-  exact norm_lift_apply_le
+  exact norm_lift_apply_le S.normedMk (fun x => (eq_zero_iff x).2) x
 
 Depends on / 依赖: S.normedMk, Set.nonempty_compl, eq_zero_iff, le_antisymm, le_mul_iff_one_le_left, lt_of_ne, nonempty_compl, norm_lift_apply_le, norm_mk_eq_zero_iff_mem_closure, norm_nonneg, norm_normedMk_le, normedMk
 -/
@@ -1049,7 +1057,8 @@ theorem IsQuotient.norm_lift
     exact ⟨0, f.ker.zero_mem⟩
   rcases Real.lt_sInf_add_pos nonemp hε
     with ⟨_, ⟨⟨x, hx, rfl⟩, H : ‖m + x‖ < sInf ((fun m' : M => ‖m + m'‖) '' f.ker) + ε⟩⟩
-  exact
+  exact ⟨m + x, by rw [map_add, (NormedAddGroupHom.mem_ker f x).mp hx, add_zero], by
+    rwa [hquot.norm]⟩
 
 中文:
 定理 是商.norm_lift
@@ -1061,7 +1070,8 @@ theorem IsQuotient.norm_lift
     exact ⟨0, f.ker.zero_mem⟩
   rcases Real.lt_sInf_add_pos nonemp hε
     with ⟨_, ⟨⟨x, hx, rfl⟩, H : ‖m + x‖ < sInf ((fun m' : M => ‖m + m'‖) '' f.ker) + ε⟩⟩
-  exact
+  exact ⟨m + x, by rw [map_add, (NormedAddGroupHom.mem_ker f x).mp hx, add_zero], by
+    rwa [hquot.norm]⟩
 
 Depends on / 依赖: Nonempty, NormedAddGroupHom, NormedAddGroupHom.mem_ker, Real.lt_sInf_add_pos, Set.image_nonempty, add_zero, f.ker, f.ker.zero_mem, hquot.norm, hquot.surjective, image_nonempty, lt_sInf_add_pos, map_add, mem_ker, nonemp, surjective, zero_mem
 -/
@@ -1289,7 +1299,15 @@ instance Submodule.Quotient.instIsBoundedSMul
     -- this is `QuotientAddGroup.norm_lift_apply_le` for `f : M → M ⧸ S` given by
     -- `x ↦ mk (k • x)`; todo: add scalar multiplication as `NormedAddGroupHom`, use it here
     _root_.le_of_forall_pos_le_add fun ε hε => by
-      have := (nhds_basis_ball.tendsto_iff nhds
+      have := (nhds_basis_ball.tendsto_iff nhds_basis_ball).mp
+        ((@Real.uniformContinuous_const_mul ‖k‖).continuous.tendsto ‖x‖) ε hε
+      simp only [mem_ball, dist, abs_sub_lt_iff] at this
+      rcases this with ⟨δ, hδ, h⟩
+      obtain ⟨a, rfl, ha⟩ := Submodule.Quotient.norm_mk_lt x hδ
+      specialize h ‖a‖ ⟨by linarith, by linarith [Submodule.Quotient.norm_mk_le S a]⟩
+      calc
+        _ <= ‖k‖ * ‖a‖ := (norm_mk_le ..).trans (norm_smul_le k a)
+        _ <= _ := (sub_lt_iff_lt_add'.mp h.1).le
 
 中文:
 实例 子模.商.instIsBoundedSMul
@@ -1298,7 +1316,15 @@ instance Submodule.Quotient.instIsBoundedSMul
     -- this is `QuotientAddGroup.norm_lift_apply_le` for `f : M → M ⧸ S` given by
     -- `x ↦ mk (k • x)`; todo: add scalar multiplication as `NormedAddGroupHom`, use it here
     _root_.le_of_forall_pos_le_add fun ε hε => by
-      have := (nhds_basis_ball.tendsto_iff nhds
+      have := (nhds_basis_ball.tendsto_iff nhds_basis_ball).mp
+        ((@Real.uniformContinuous_const_mul ‖k‖).continuous.tendsto ‖x‖) ε hε
+      simp only [mem_ball, dist, abs_sub_lt_iff] at this
+      rcases this with ⟨δ, hδ, h⟩
+      obtain ⟨a, rfl, ha⟩ := Submodule.Quotient.norm_mk_lt x hδ
+      specialize h ‖a‖ ⟨by linarith, by linarith [Submodule.Quotient.norm_mk_le S a]⟩
+      calc
+        _ <= ‖k‖ * ‖a‖ := (norm_mk_le ..).trans (norm_smul_le k a)
+        _ <= _ := (sub_lt_iff_lt_add'.mp h.1).le
 
 Depends on / 依赖: of_norm_smul_le
 -/
@@ -1447,7 +1473,16 @@ instance Ideal.Quotient.semiNormedCommRing
   norm_mul_le x y := le_of_forall_pos_le_add fun ε hε => by
     have := ((nhds_basis_ball.prod_nhds nhds_basis_ball).tendsto_iff nhds_basis_ball).mp
       (continuous_mul.tendsto (‖x‖, ‖y‖)) ε hε
-    simp only [Set.mem_prod, mem_ball, and_imp, Prod.
+    simp only [Set.mem_prod, mem_ball, and_imp, Prod.forall, Prod.exists] at this
+    rcases this with ⟨ε₁, ε₂, ⟨h₁, h₂⟩, h⟩
+    obtain ⟨⟨a, rfl, ha⟩, ⟨b, rfl, hb⟩⟩ := Ideal.Quotient.norm_mk_lt x h₁,
+      Ideal.Quotient.norm_mk_lt y h₂
+    simp only [dist, abs_sub_lt_iff] at h
+    specialize h ‖a‖ ‖b‖ ⟨by linarith, by linarith [Ideal.Quotient.norm_mk_le I a]⟩
+      ⟨by linarith, by linarith [Ideal.Quotient.norm_mk_le I b]⟩
+    calc
+      _ <= ‖a‖ * ‖b‖ := (Ideal.Quotient.norm_mk_le I (a * b)).trans (norm_mul_le a b)
+      _ <= _ := (sub_lt_iff_lt_add'.mp h.1).le
 
 中文:
 实例 理想.商.semiNormedCommRing
@@ -1457,7 +1492,16 @@ instance Ideal.Quotient.semiNormedCommRing
   norm_mul_le x y := le_of_forall_pos_le_add fun ε hε => by
     have := ((nhds_basis_ball.prod_nhds nhds_basis_ball).tendsto_iff nhds_basis_ball).mp
       (continuous_mul.tendsto (‖x‖, ‖y‖)) ε hε
-    simp only [Set.mem_prod, mem_ball, and_imp, Prod.
+    simp only [Set.mem_prod, mem_ball, and_imp, Prod.forall, Prod.exists] at this
+    rcases this with ⟨ε₁, ε₂, ⟨h₁, h₂⟩, h⟩
+    obtain ⟨⟨a, rfl, ha⟩, ⟨b, rfl, hb⟩⟩ := Ideal.Quotient.norm_mk_lt x h₁,
+      Ideal.Quotient.norm_mk_lt y h₂
+    simp only [dist, abs_sub_lt_iff] at h
+    specialize h ‖a‖ ‖b‖ ⟨by linarith, by linarith [Ideal.Quotient.norm_mk_le I a]⟩
+      ⟨by linarith, by linarith [Ideal.Quotient.norm_mk_le I b]⟩
+    calc
+      _ <= ‖a‖ * ‖b‖ := (Ideal.Quotient.norm_mk_le I (a * b)).trans (norm_mul_le a b)
+      _ <= _ := (sub_lt_iff_lt_add'.mp h.1).le
 
 Depends on / 依赖: dist_eq_norm_neg_add
 -/

@@ -50,7 +50,11 @@ theorem eisensteinSeries_tendstoLocallyUniformly
     mod_cast (summable_one_div_norm_rpow hk').subtype (· in gammaSet N 1 a)
   simp only [tendstoLocallyUniformly_iff_forall_isCompact, eisensteinSeries]
   intro K hK
-  obtain ⟨A, B, hB,
+  obtain ⟨A, B, hB, HABK⟩ := subset_verticalStrip_of_isCompact hK
+  refine (tendstoUniformlyOn_tsum (hu := p_sum.mul_left <| r ⟨⟨A, B⟩, hB⟩ ^ (-k : Real))
+    (fun p z hz => ?_)).mono HABK
+  simpa only [eisSummand, one_div, ← zpow_neg, norm_zpow, ← Real.rpow_intCast,
+    Int.cast_neg] using summand_bound_of_mem_verticalStrip (by positivity) p hB hz
 
 中文:
 定理 eisensteinSeries_tendstoLocallyUniformly
@@ -61,7 +65,11 @@ theorem eisensteinSeries_tendstoLocallyUniformly
     mod_cast (summable_one_div_norm_rpow hk').subtype (· in gammaSet N 1 a)
   simp only [tendstoLocallyUniformly_iff_forall_isCompact, eisensteinSeries]
   intro K hK
-  obtain ⟨A, B, hB,
+  obtain ⟨A, B, hB, HABK⟩ := subset_verticalStrip_of_isCompact hK
+  refine (tendstoUniformlyOn_tsum (hu := p_sum.mul_left <| r ⟨⟨A, B⟩, hB⟩ ^ (-k : Real))
+    (fun p z hz => ?_)).mono HABK
+  simpa only [eisSummand, one_div, ← zpow_neg, norm_zpow, ← Real.rpow_intCast,
+    Int.cast_neg] using summand_bound_of_mem_verticalStrip (by positivity) p hB hz
 
 Depends on / 依赖: Summable, eisSummand, eisensteinSeries, gammaSet, mod_cast, mul_left, norm_, one_div, p_sum, p_sum.mul_left, subset_verticalStrip_of_isCompact, subtype, summable_one_div_norm_rpow, tendstoLocallyUniformly_iff_forall_isCompact, tendstoUniformlyOn_tsum, x.val, zpow_neg
 -/
@@ -90,7 +98,8 @@ lemma eisensteinSeries_tendstoLocallyUniformlyOn
   apply TendstoLocallyUniformlyOn.comp (s := ⊤) _ _ _ (OpenPartialHomeomorph.continuousOn_symm _)
   · simp only [Set.top_eq_univ, tendstoLocallyUniformlyOn_univ]
     apply eisensteinSeries_tendstoLocallyUniformly hk
-  · simp only [Is
+  · simp only [IsOpenEmbedding.toOpenPartialHomeomorph_target, Set.top_eq_univ, mapsTo_range_iff,
+    Set.mem_univ, forall_const]
 
 中文:
 引理 eisensteinSeries_tendstoLocallyUniformlyOn
@@ -100,7 +109,8 @@ lemma eisensteinSeries_tendstoLocallyUniformlyOn
   apply TendstoLocallyUniformlyOn.comp (s := ⊤) _ _ _ (OpenPartialHomeomorph.continuousOn_symm _)
   · simp only [Set.top_eq_univ, tendstoLocallyUniformlyOn_univ]
     apply eisensteinSeries_tendstoLocallyUniformly hk
-  · simp only [Is
+  · simp only [IsOpenEmbedding.toOpenPartialHomeomorph_target, Set.top_eq_univ, mapsTo_range_iff,
+    Set.mem_univ, forall_const]
 
 Depends on / 依赖: IsOpenEmbedding, IsOpenEmbedding.toOpenPartialHomeomorph_target, OpenPartialHomeomorph, OpenPartialHomeomorph.continuousOn_symm, Set.mem_univ, Set.top_eq_univ, TendstoLocallyUniformlyOn, TendstoLocallyUniformlyOn.comp, continuousOn_symm, eisensteinSeries_tendstoLocallyUniformly, forall_const, image_univ, mapsTo_range_iff, mem_univ, range_coe, tendstoLocallyUniformlyOn_univ, toOpenPartialHomeomorph_target, top_eq_univ, upperHalfPlaneSet
 -/

@@ -47,7 +47,17 @@ theorem mdifferentiableWithinAt_totalSpace
   rw [and_and_and_comm]; rw [← FiberBundle.continuousWithinAt_totalSpace]; rw [and_congr_right_iff]
   intro hf
   simp_rw +instances [modelWithCornersSelf_prod, FiberBundle.extChartAt, Function.comp_def,
-    PartialEquiv.trans_apply, Par
+    PartialEquiv.trans_apply, PartialEquiv.prod_coe, PartialEquiv.refl_coe,
+    extChartAt_self_apply, modelWithCornersSelf_coe, Function.id_def, ← chartedSpaceSelf_prod]
+  refine (mdifferentiableWithinAt_prod_iff _).trans (and_congr ?_ Iff.rfl)
+  have h1 : (fun x => (f x).proj) ⁻¹' (trivializationAt F E (f x₀).proj).baseSet in 𝓝[s] x₀ :=
+    ((FiberBundle.continuous_proj F E).continuousWithinAt.comp hf (mapsTo_image f s))
+      ((Trivialization.open_baseSet _).mem_nhds (mem_baseSet_trivializationAt F E _))
+  refine EventuallyEq.mdifferentiableWithinAt_iff (eventually_of_mem h1 fun x hx => ?_) ?_
+  · simp_rw [Function.comp, OpenPartialHomeomorph.coe_toPartialEquiv, Trivialization.coe_coe]
+    rw [Trivialization.coe_fst']
+    exact hx
+  · simp only [mfld_simps]
 
 中文:
 定理 mdifferentiableWithinAt_totalSpace
@@ -57,7 +67,17 @@ theorem mdifferentiableWithinAt_totalSpace
   rw [and_and_and_comm]; rw [← FiberBundle.continuousWithinAt_totalSpace]; rw [and_congr_right_iff]
   intro hf
   simp_rw +instances [modelWithCornersSelf_prod, FiberBundle.extChartAt, Function.comp_def,
-    PartialEquiv.trans_apply, Par
+    PartialEquiv.trans_apply, PartialEquiv.prod_coe, PartialEquiv.refl_coe,
+    extChartAt_self_apply, modelWithCornersSelf_coe, Function.id_def, ← chartedSpaceSelf_prod]
+  refine (mdifferentiableWithinAt_prod_iff _).trans (and_congr ?_ Iff.rfl)
+  have h1 : (fun x => (f x).proj) ⁻¹' (trivializationAt F E (f x₀).proj).baseSet in 𝓝[s] x₀ :=
+    ((FiberBundle.continuous_proj F E).continuousWithinAt.comp hf (mapsTo_image f s))
+      ((Trivialization.open_baseSet _).mem_nhds (mem_baseSet_trivializationAt F E _))
+  refine EventuallyEq.mdifferentiableWithinAt_iff (eventually_of_mem h1 fun x hx => ?_) ?_
+  · simp_rw [Function.comp, OpenPartialHomeomorph.coe_toPartialEquiv, Trivialization.coe_coe]
+    rw [Trivialization.coe_fst']
+    exact hx
+  · simp only [mfld_simps]
 
 Depends on / 依赖: FiberBundle, FiberBundle.continuousWithinAt_totalSpace, FiberBundle.extChartAt, Function, Function.comp_def, Function.id_def, Iff.rfl, PartialEquiv, PartialEquiv.prod_coe, PartialEquiv.refl_coe, PartialEquiv.trans_apply, and_and_and_comm, and_congr, and_congr_right_iff, chartedSpaceSelf_prod, comp_def, continuousWithinAt_totalSpace, extChartAt, extChartAt_self_apply, id_def
 -/
@@ -259,7 +279,7 @@ theorem mdifferentiable_zeroSection
   apply (mdifferentiableAt_const (c := 0)).congr_of_eventuallyEq
   filter_upwards [(trivializationAt F E x).open_baseSet.mem_nhds
     (mem_baseSet_trivializationAt F E x)] with y hy
-using congr_arg Prod.snd (trivializationAt F E x).z
+using congr_arg Prod.snd (trivializationAt F E x).zeroSection 𝕜 hy
 
 中文:
 定理 mdifferentiable_zeroSection
@@ -271,7 +291,7 @@ using congr_arg Prod.snd (trivializationAt F E x).z
   apply (mdifferentiableAt_const (c := 0)).congr_of_eventuallyEq
   filter_upwards [(trivializationAt F E x).open_baseSet.mem_nhds
     (mem_baseSet_trivializationAt F E x)] with y hy
-using congr_arg Prod.snd (trivializationAt F E x).z
+using congr_arg Prod.snd (trivializationAt F E x).zeroSection 𝕜 hy
 
 Depends on / 依赖: Prod.snd, congr_arg, congr_of_eventuallyEq, filter_upwards, mdifferentiableAt_const, mdifferentiableAt_section, mem_baseSet_trivializationAt, mem_nhds, open_baseSet, open_baseSet.mem_nhds, trivializationAt, zeroSection
 -/
@@ -590,7 +610,8 @@ theorem MDifferentiableWithinAt.coordChange
   · have : e.baseSet inter e'.baseSet in 𝓝 (f x) :=
      (e.open_baseSet.inter e'.open_baseSet).mem_nhds ⟨he, he'⟩
     filter_upwards [hf.continuousWithinAt this] with y hy
-    exact (Trivialization.coordChangeL_apply' e
+    exact (Trivialization.coordChangeL_apply' e e' hy (g y)).symm
+  · exact (Trivialization.coordChangeL_apply' e e' ⟨he, he'⟩ (g x)).symm
 
 中文:
 定理 MDifferentiableWithinAt.coordChange
@@ -599,7 +620,8 @@ theorem MDifferentiableWithinAt.coordChange
   · have : e.baseSet inter e'.baseSet in 𝓝 (f x) :=
      (e.open_baseSet.inter e'.open_baseSet).mem_nhds ⟨he, he'⟩
     filter_upwards [hf.continuousWithinAt this] with y hy
-    exact (Trivialization.coordChangeL_apply' e
+    exact (Trivialization.coordChangeL_apply' e e' hy (g y)).symm
+  · exact (Trivialization.coordChangeL_apply' e e' ⟨he, he'⟩ (g x)).symm
 -/
 protected theorem MDifferentiableWithinAt.coordChange
     (hf : MDiffAt[s] f x) (hg : MDiffAt[s] g x)
@@ -1003,7 +1025,8 @@ lemma mdifferentiableWithinAt_add_section
   · apply eventually_of_mem (U := e.baseSet)
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F E x₀)
-    · exac
+    · exact fun x hx => (e.linear 𝕜 hx).1 ..
+  · exact (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).1 ..
 
 中文:
 引理 mdifferentiableWithinAt_add_section
@@ -1014,7 +1037,8 @@ lemma mdifferentiableWithinAt_add_section
   · apply eventually_of_mem (U := e.baseSet)
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F E x₀)
-    · exac
+    · exact fun x hx => (e.linear 𝕜 hx).1 ..
+  · exact (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).1 ..
 
 Depends on / 依赖: FiberBundle, FiberBundle.mem_baseSet_trivializationAt, baseSet, congr_of_eventuallyEq, e.baseSet, e.linear, e.open_baseSet.mem_nhds, eventually_of_mem, hs.add, linear, mdifferentiableWithinAt_section, mem_baseSet_trivializationAt, mem_nhds, mem_nhdsWithin_of_mem_nhds, open_baseSet, trivializationAt
 -/
@@ -1099,7 +1123,8 @@ lemma mdifferentiableWithinAt_neg_section
   · apply eventually_of_mem (U := e.baseSet)
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F E x₀)
-    · exact fun x 
+    · exact fun x hx => (e.linear 𝕜 hx).map_neg ..
+  · exact (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).map_neg ..
 
 中文:
 引理 mdifferentiableWithinAt_neg_section
@@ -1110,7 +1135,8 @@ lemma mdifferentiableWithinAt_neg_section
   · apply eventually_of_mem (U := e.baseSet)
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F E x₀)
-    · exact fun x 
+    · exact fun x hx => (e.linear 𝕜 hx).map_neg ..
+  · exact (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).map_neg ..
 
 Depends on / 依赖: FiberBundle, FiberBundle.mem_baseSet_trivializationAt, baseSet, congr_of_eventuallyEq, e.baseSet, e.linear, e.open_baseSet.mem_nhds, eventually_of_mem, hs.neg.congr_of_eventuallyEq, linear, map_neg, mdifferentiableWithinAt_section, mem_baseSet_trivializationAt, mem_nhds, mem_nhdsWithin_of_mem_nhds, open_baseSet, trivializationAt
 -/
@@ -1276,7 +1302,8 @@ lemma MDifferentiableWithinAt.smul_section
   · apply eventually_of_mem (U := e.baseSet)
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F E x₀)
-    · exact 
+    · exact fun x hx => (e.linear 𝕜 hx).2 ..
+  · apply (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).2
 
 中文:
 引理 MDifferentiableWithinAt.smul_section
@@ -1287,7 +1314,8 @@ lemma MDifferentiableWithinAt.smul_section
   · apply eventually_of_mem (U := e.baseSet)
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F E x₀)
-    · exact 
+    · exact fun x hx => (e.linear 𝕜 hx).2 ..
+  · apply (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).2
 
 Depends on / 依赖: FiberBundle, FiberBundle.mem_baseSet_trivializationAt, baseSet, congr_of_eventuallyEq, e.baseSet, e.linear, e.open_baseSet.mem_nhds, eventually_of_mem, hf.smul, linear, mdifferentiableWithinAt_section, mem_baseSet_trivializationAt, mem_nhds, mem_nhdsWithin_of_mem_nhds, open_baseSet, trivializationAt
 -/
@@ -1439,7 +1467,7 @@ lemma MDifferentiableWithinAt.sum_section
   | empty => simpa using! (contMDiffWithinAt_zeroSection 𝕜 E).mdifferentiableWithinAt one_ne_zero
   | insert i s hi h =>
     simp only [Finset.mem_insert, forall_eq_or_imp] at hs
-    simpa [Finset.sum_insert hi] using mdifferentiableWithinA
+    simpa [Finset.sum_insert hi] using mdifferentiableWithinAt_add_section (hs.1) (h hs.2)
 
 中文:
 引理 MDifferentiableWithinAt.sum_section
@@ -1450,7 +1478,7 @@ lemma MDifferentiableWithinAt.sum_section
   | empty => simpa using! (contMDiffWithinAt_zeroSection 𝕜 E).mdifferentiableWithinAt one_ne_zero
   | insert i s hi h =>
     simp only [Finset.mem_insert, forall_eq_or_imp] at hs
-    simpa [Finset.sum_insert hi] using mdifferentiableWithinA
+    simpa [Finset.sum_insert hi] using mdifferentiableWithinAt_add_section (hs.1) (h hs.2)
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert, Finset.sum_insert, classical, contMDiffWithinAt_zeroSection, forall_eq_or_imp, induction_on, insert, mdifferentiableWithinAt, mdifferentiableWithinAt_add_section, mem_insert, one_ne_zero, sum_insert
 -/
@@ -1540,7 +1568,8 @@ lemma MDifferentiableOn.smul_section_of_tsupport
       (isOpen_compl_iff.mpr <| isClosed_tsupport ψ)
   · apply ((mdifferentiable_zeroSection _ _).mdifferentiableOn (s := (tsupport ψ)ᶜ)).congr
     intro y hy
-    simp [image_eq_zero_of_notMem_tsupport hy, z
+    simp [image_eq_zero_of_notMem_tsupport hy, zeroSection]
+· exact Set.compl_subset_iff_union.mp Set.compl_subset_compl.mpr ht'
 
 中文:
 引理 MDifferentiableOn.smul_section_of_tsupport
@@ -1550,7 +1579,8 @@ lemma MDifferentiableOn.smul_section_of_tsupport
       (isOpen_compl_iff.mpr <| isClosed_tsupport ψ)
   · apply ((mdifferentiable_zeroSection _ _).mdifferentiableOn (s := (tsupport ψ)ᶜ)).congr
     intro y hy
-    simp [image_eq_zero_of_notMem_tsupport hy, z
+    simp [image_eq_zero_of_notMem_tsupport hy, zeroSection]
+· exact Set.compl_subset_iff_union.mp Set.compl_subset_compl.mpr ht'
 
 Depends on / 依赖: Set.compl_subset_compl.mpr, Set.compl_subset_iff_union.mp, compl_subset_compl, compl_subset_iff_union, image_eq_zero_of_notMem_tsupport, isClosed_tsupport, isOpen_compl_iff, isOpen_compl_iff.mpr, mdifferentiableOn, mdifferentiable_of_mdifferentiableOn_union_of_isOpen, mdifferentiable_zeroSection, smul_section, tsupport, zeroSection
 -/
@@ -1579,7 +1609,19 @@ lemma MDifferentiableWithinAt.sum_section_of_locallyFinite
   -- and a finite set `s` of sections which don't vanish.
   let s := {i | ((fun i => {x | t i x != 0}) i inter u').Nonempty}
   have := hfin.fintype
-  have : MDiffAt[
+  have : MDiffAt[u inter u'] (T% (fun x => ∑ i in s, (t i x))) x₀ :=
+     .sum_section fun i _ => ((ht' i).mono inter_subset_left)
+  apply (mdifferentiableWithinAt_inter hu').mp
+  apply this.congr' (fun y hy => ?_) inter_subset_right (mem_of_mem_nhds hu')
+  rw [TotalSpace.mk_inj]; rw [tsum_eq_sum']
+  refine support_subset_iff'.mpr fun i hi => ?_
+  by_contra! h
+  have : i in s.toFinset := by
+    refine Set.mem_toFinset.mpr ?_
+    simp only [s, ne_eq, Set.mem_ofPred_eq]
+    use y
+    simp [h, hy]
+  exact hi this
 
 中文:
 引理 MDifferentiableWithinAt.sum_section_of_locallyFinite
@@ -1589,7 +1631,19 @@ lemma MDifferentiableWithinAt.sum_section_of_locallyFinite
   -- and a finite set `s` of sections which don't vanish.
   let s := {i | ((fun i => {x | t i x != 0}) i inter u').Nonempty}
   have := hfin.fintype
-  have : MDiffAt[
+  have : MDiffAt[u inter u'] (T% (fun x => ∑ i in s, (t i x))) x₀ :=
+     .sum_section fun i _ => ((ht' i).mono inter_subset_left)
+  apply (mdifferentiableWithinAt_inter hu').mp
+  apply this.congr' (fun y hy => ?_) inter_subset_right (mem_of_mem_nhds hu')
+  rw [TotalSpace.mk_inj]; rw [tsum_eq_sum']
+  refine support_subset_iff'.mpr fun i hi => ?_
+  by_contra! h
+  have : i in s.toFinset := by
+    refine Set.mem_toFinset.mpr ?_
+    simp only [s, ne_eq, Set.mem_ofPred_eq]
+    use y
+    simp [h, hy]
+  exact hi this
 -/
 lemma MDifferentiableWithinAt.sum_section_of_locallyFinite
     (ht : LocallyFinite fun i => {x : B | t i x != 0})
@@ -1688,7 +1742,10 @@ lemma MDifferentiableWithinAt.finsum_section_of_locallyFinite
   choose U hu hfin using ht y
   have : {x | t x y != 0} subseteq {i | ((fun i => {x | t i x != 0}) i inter U).Nonempty} := by
     intro x hx
-    rw [Set.mem_ofPre
+    rw [Set.mem_ofPred] at hx ⊢
+    use y
+    simpa using ⟨hx, mem_of_mem_nhds hu⟩
+  rw [tsum_eq_finsum (hfin.subset this)]
 
 中文:
 引理 MDifferentiableWithinAt.finsum_section_of_locallyFinite
@@ -1698,7 +1755,10 @@ lemma MDifferentiableWithinAt.finsum_section_of_locallyFinite
   choose U hu hfin using ht y
   have : {x | t x y != 0} subseteq {i | ((fun i => {x | t i x != 0}) i inter U).Nonempty} := by
     intro x hx
-    rw [Set.mem_ofPre
+    rw [Set.mem_ofPred] at hx ⊢
+    use y
+    simpa using ⟨hx, mem_of_mem_nhds hu⟩
+  rw [tsum_eq_finsum (hfin.subset this)]
 
 Depends on / 依赖: MDifferentiableWithinAt, MDifferentiableWithinAt.sum_section_of_locallyFinite, Nonempty, Set.mem_ofPred, Set.univ, hfin.subset, mem_ofPred, mem_of_mem_nhds, subset, subseteq, sum_section_of_locallyFinite, tsum_eq_finsum
 -/
@@ -1816,7 +1876,15 @@ lemma MDifferentiableWithinAt.clm_apply_of_inCoordinates
   apply (MDifferentiableWithinAt.clm_apply hϕ hv.2).congr_of_eventuallyEq_insert
   have A : forallᶠ m in 𝓝[insert m₀ s] m₀, b₁ m in (trivializationAt F₁ E₁ (b₁ m₀)).baseSet := by
     apply hv.1.insert.continuousWithinAt
-    appl
+    apply (trivializationAt F₁ E₁ (b₁ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₁ m₀)
+  have A' : forallᶠ m in 𝓝[insert m₀ s] m₀, b₂ m in (trivializationAt F₂ E₂ (b₂ m₀)).baseSet := by
+    apply hb₂.insert.continuousWithinAt
+    apply (trivializationAt F₂ E₂ (b₂ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₂ m₀)
+  filter_upwards [A, A'] with m hm h'm
+  rw [inCoordinates_eq hm h'm]
+  simp [hm]
 
 中文:
 引理 MDifferentiableWithinAt.clm_apply_of_inCoordinates
@@ -1826,7 +1894,15 @@ lemma MDifferentiableWithinAt.clm_apply_of_inCoordinates
   apply (MDifferentiableWithinAt.clm_apply hϕ hv.2).congr_of_eventuallyEq_insert
   have A : forallᶠ m in 𝓝[insert m₀ s] m₀, b₁ m in (trivializationAt F₁ E₁ (b₁ m₀)).baseSet := by
     apply hv.1.insert.continuousWithinAt
-    appl
+    apply (trivializationAt F₁ E₁ (b₁ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₁ m₀)
+  have A' : forallᶠ m in 𝓝[insert m₀ s] m₀, b₂ m in (trivializationAt F₂ E₂ (b₂ m₀)).baseSet := by
+    apply hb₂.insert.continuousWithinAt
+    apply (trivializationAt F₂ E₂ (b₂ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₂ m₀)
+  filter_upwards [A, A'] with m hm h'm
+  rw [inCoordinates_eq hm h'm]
+  simp [hm]
 
 Depends on / 依赖: FiberBundle, FiberBundle.mem_baseSet_trivializationAt, MDifferentiableWithinAt, MDifferentiableWithinAt.clm_apply, baseSet, clm_apply, congr_of_eventuallyEq_insert, continuousWithinAt, insert, insert.continuousWithinAt, mdifferentiableWithinAt_totalSpace, mem_baseSet_trivializationAt, mem_nhds, open_baseSet, open_baseSet.mem_nhds, trivializationAt
 -/
@@ -1902,7 +1978,10 @@ lemma exists_contMDiffOn_extend
   suffices CMDiff[t.baseSet] k (fun x => (t ⟨x, extend F σ₀ x⟩).2) by
     intro x hx
     rw [t.contMDiffWithinAt_section _ hx]
-    exact thi
+    exact this x hx
+  let w : F := (t ⟨x₀, σ₀⟩).2
+  have : CMDiff[t.baseSet] k (fun (_x : M) => w) := contMDiffOn_const
+  exact this.congr (fun x hx => by simp [extend, t, w, hx])
 
 中文:
 引理 存在_contMDiffOn_extend
@@ -1915,7 +1994,10 @@ lemma exists_contMDiffOn_extend
   suffices CMDiff[t.baseSet] k (fun x => (t ⟨x, extend F σ₀ x⟩).2) by
     intro x hx
     rw [t.contMDiffWithinAt_section _ hx]
-    exact thi
+    exact this x hx
+  let w : F := (t ⟨x₀, σ₀⟩).2
+  have : CMDiff[t.baseSet] k (fun (_x : M) => w) := contMDiffOn_const
+  exact this.congr (fun x hx => by simp [extend, t, w, hx])
 
 Depends on / 依赖: CMDiff, FiberBundle, FiberBundle.mem_baseSet_trivializationAt, baseSet, contMDiffOn_const, contMDiffWithinAt_section, extend, mem_baseSet_trivializationAt, mem_nhds, open_baseSet, t.baseSet, t.contMDiffWithinAt_section, t.open_baseSet.mem_nhds, this.congr, trivializationAt
 -/
@@ -1950,7 +2032,10 @@ lemma contMDiffAt_extend
   apply eventually_nhds_iff.mpr
   refine ⟨t.baseSet, ?_, t.open_baseSet, ?_⟩
   · intro x hx
-    simp [ext
+    simp [extend, t, hx, w]
+  · exact FiberBundle.mem_baseSet_trivializationAt' x
+
+@[deprecated (since := "2026-06-30")] alias contMDiffAt_extend' := contMDiffAt_extend
 
 中文:
 引理 contMDiffAt_extend
@@ -1965,7 +2050,10 @@ lemma contMDiffAt_extend
   apply eventually_nhds_iff.mpr
   refine ⟨t.baseSet, ?_, t.open_baseSet, ?_⟩
   · intro x hx
-    simp [ext
+    simp [extend, t, hx, w]
+  · exact FiberBundle.mem_baseSet_trivializationAt' x
+
+@[deprecated (since := "2026-06-30")] alias contMDiffAt_extend' := contMDiffAt_extend
 
 Depends on / 依赖: CMDiffAt, FiberBundle, FiberBundle.mem_baseSet_trivializationAt, baseSet, congr_of_eventuallyEq, contMDiffAt_const, contMDiffAt_section, eventually_nhds_iff, eventually_nhds_iff.mpr, extend, mem_baseSet_trivializationAt, open_baseSet, t.baseSet, t.open_baseSet, this.congr_of_eventuallyEq, trivializationAt
 -/

@@ -59,7 +59,7 @@ definition FilterBasis.ofSets
   inter_sets := by
     rintro _ _ ⟨a, ⟨fina, suba⟩, rfl⟩ ⟨b, ⟨finb, subb⟩, rfl⟩
     exact ⟨⋂₀ (a union b), mem_image_of_mem _ ⟨fina.union finb, union_subset suba subb⟩,
-        (sInt
+        (sInter_union _ _).subset⟩
 
 中文:
 定义 滤子基.ofSets
@@ -69,7 +69,7 @@ definition FilterBasis.ofSets
   inter_sets := by
     rintro _ _ ⟨a, ⟨fina, suba⟩, rfl⟩ ⟨b, ⟨finb, subb⟩, rfl⟩
     exact ⟨⋂₀ (a union b), mem_image_of_mem _ ⟨fina.union finb, union_subset suba subb⟩,
-        (sInt
+        (sInter_union _ _).subset⟩
 
 Depends on / 依赖: Finite, Set.Finite, sInter, subseteq
 -/
@@ -174,7 +174,7 @@ theorem HasBasis.iInf'
       exact ⟨⟨I, u⟩, ⟨hI, fun i _ => (hu i).1⟩, iInter₂_mono fun i _ => (hu i).2⟩
     · rintro ⟨⟨I, f⟩, ⟨hI₁, hI₂⟩, hsub⟩
       grw [← hsub]
-exact (biInter_me
+exact (biInter_mem hI₁).mpr fun i hi => mem_iInf_of_mem i (hl i).mem_of_mem hI₂ _ hi⟩
 
 中文:
 定理 有基.iInf'
@@ -188,7 +188,7 @@ exact (biInter_me
       exact ⟨⟨I, u⟩, ⟨hI, fun i _ => (hu i).1⟩, iInter₂_mono fun i _ => (hu i).2⟩
     · rintro ⟨⟨I, f⟩, ⟨hI₁, hI₂⟩, hsub⟩
       grw [← hsub]
-exact (biInter_me
+exact (biInter_mem hI₁).mpr fun i hi => mem_iInf_of_mem i (hl i).mem_of_mem hI₂ _ hi⟩
 -/
 protected theorem HasBasis.iInf' {ι : Type*} {ι' : ι -> Type*} {l : ι -> Filter α}
     {p : forall i, ι' i -> Prop} {s : forall i, ι' i -> Set α} (hl : forall i, (l i).HasBasis (p i) (s i)) :
@@ -218,7 +218,7 @@ theorem HasBasis.iInf
   · rintro ⟨⟨I, f⟩, ⟨hI, hf⟩, hsub⟩
     grw [← hsub]
     cases hI.nonempty_fintype
-exact iI
+exact iInter_mem.2 fun i => mem_iInf_of_mem ↑i (hl i).mem_of_mem hf _
 
 中文:
 定理 有基.iInf
@@ -230,7 +230,7 @@ exact iI
   · rintro ⟨⟨I, f⟩, ⟨hI, hf⟩, hsub⟩
     grw [← hsub]
     cases hI.nonempty_fintype
-exact iI
+exact iInter_mem.2 fun i => mem_iInf_of_mem ↑i (hl i).mem_of_mem hf _
 -/
 protected theorem HasBasis.iInf {ι : Type*} {ι' : ι -> Type*} {l : ι -> Filter α}
     {p : forall i, ι' i -> Prop} {s : forall i, ι' i -> Set α} (hl : forall i, (l i).HasBasis (p i) (s i)) :

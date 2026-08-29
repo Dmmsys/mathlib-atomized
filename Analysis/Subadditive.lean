@@ -112,7 +112,9 @@ theorem apply_mul_add_le
       u ((k + 1) * n + r) = u (n + (k * n + r)) := by congr 1; ring
       _ <= u n + u (k * n + r) := h _ _
       _ <= u n + (k * u n + u r) := by grw [IH]
-      _ = (k + 1 : Nat) * u n + u
+      _ = (k + 1 : Nat) * u n + u r := by simp; ring
+
+include h in
 
 中文:
 定理 apply_mul_add_le
@@ -126,7 +128,9 @@ theorem apply_mul_add_le
       u ((k + 1) * n + r) = u (n + (k * n + r)) := by congr 1; ring
       _ <= u n + u (k * n + r) := h _ _
       _ <= u n + (k * u n + u r) := by grw [IH]
-      _ = (k + 1 : Nat) * u n + u
+      _ = (k + 1 : Nat) * u n + u r := by simp; ring
+
+include h in
 
 Depends on / 依赖: Nat.cast_zero, cast_zero, zero_add, zero_mul
 -/
@@ -152,7 +156,21 @@ theorem eventually_div_lt_of_div_lt
   refine .atTop_of_arithmetic hn fun r _ => ?_
   /- `(k * u n + u r) / (k * n + r)` tends to `u n / n < L`, hence
   `(k * u n + u r) / (k * n + r) < L` for sufficiently large `k`. -/
-  have A : Tendsto (fun 
+  have A : Tendsto (fun x : Real => (u n + u r / x) / (n + r / x)) atTop (𝓝 ((u n + 0) / (n + 0))) :=
+    (tendsto_const_nhds.add <| tendsto_const_nhds.div_atTop tendsto_id).div
+(tendsto_const_nhds.add <| tendsto_const_nhds.div_atTop tendsto_id) by simpa
+  have B : Tendsto (fun x => (x * u n + u r) / (x * n + r)) atTop (𝓝 (u n / n)) := by
+    rw [add_zero]; rw [add_zero] at A
+refine A.congr' (eventually_ne_atTop 0).mono fun x hx => ?_
+    simp only [add_div' _ _ _ hx, div_div_div_cancel_right₀ hx, mul_comm]
+  refine ((B.comp tendsto_natCast_atTop_atTop).eventually (gt_mem_nhds hL)).mono fun k hk => ?_
+  /- Finally, we use an upper estimate on `u (k * n + r)` to get an estimate on
+  `u (k * n + r) / (k * n + r)`. -/
+  rw [mul_comm]
+  refine lt_of_le_of_lt ?_ hk
+  simp only [(· ∘ ·), ← Nat.cast_add, ← Nat.cast_mul]
+  gcongr
+  apply h.apply_mul_add_le
 
 中文:
 定理 eventually_div_lt_of_div_lt
@@ -162,7 +180,21 @@ theorem eventually_div_lt_of_div_lt
   refine .atTop_of_arithmetic hn fun r _ => ?_
   /- `(k * u n + u r) / (k * n + r)` tends to `u n / n < L`, hence
   `(k * u n + u r) / (k * n + r) < L` for sufficiently large `k`. -/
-  have A : Tendsto (fun 
+  have A : Tendsto (fun x : Real => (u n + u r / x) / (n + r / x)) atTop (𝓝 ((u n + 0) / (n + 0))) :=
+    (tendsto_const_nhds.add <| tendsto_const_nhds.div_atTop tendsto_id).div
+(tendsto_const_nhds.add <| tendsto_const_nhds.div_atTop tendsto_id) by simpa
+  have B : Tendsto (fun x => (x * u n + u r) / (x * n + r)) atTop (𝓝 (u n / n)) := by
+    rw [add_zero]; rw [add_zero] at A
+refine A.congr' (eventually_ne_atTop 0).mono fun x hx => ?_
+    simp only [add_div' _ _ _ hx, div_div_div_cancel_right₀ hx, mul_comm]
+  refine ((B.comp tendsto_natCast_atTop_atTop).eventually (gt_mem_nhds hL)).mono fun k hk => ?_
+  /- Finally, we use an upper estimate on `u (k * n + r)` to get an estimate on
+  `u (k * n + r) / (k * n + r)`. -/
+  rw [mul_comm]
+  refine lt_of_le_of_lt ?_ hk
+  simp only [(· ∘ ·), ← Nat.cast_add, ← Nat.cast_mul]
+  gcongr
+  apply h.apply_mul_add_le
 -/
 theorem eventually_div_lt_of_div_lt {L : Real} {n : Nat} (hn : n != 0) (hL : u n / n < L) :
     forallᶠ p in atTop, u p / p < L := by
@@ -198,7 +230,10 @@ theorem tendsto_lim
       ⟨1, fun n hn => hl.trans_le (h.lim_le_div hbdd (zero_lt_one.trans_le hn).ne')⟩
   · obtain ⟨n, npos, hn⟩ : exists n : Nat, 0 < n ∧ u n / n < L := by
       rw [Subadditive.lim] at hL
-      rcases exists_lt
+      rcases exists_lt_of_csInf_lt (by simp) hL with ⟨x, hx, xL⟩
+      rcases (mem_image _ _ _).1 hx with ⟨n, hn, rfl⟩
+      exact ⟨n, zero_lt_one.trans_le hn, xL⟩
+    exact h.eventually_div_lt_of_div_lt npos.ne' hn
 
 中文:
 定理 tendsto_lim
@@ -209,7 +244,10 @@ theorem tendsto_lim
       ⟨1, fun n hn => hl.trans_le (h.lim_le_div hbdd (zero_lt_one.trans_le hn).ne')⟩
   · obtain ⟨n, npos, hn⟩ : exists n : Nat, 0 < n ∧ u n / n < L := by
       rw [Subadditive.lim] at hL
-      rcases exists_lt
+      rcases exists_lt_of_csInf_lt (by simp) hL with ⟨x, hx, xL⟩
+      rcases (mem_image _ _ _).1 hx with ⟨n, hn, rfl⟩
+      exact ⟨n, zero_lt_one.trans_le hn, xL⟩
+    exact h.eventually_div_lt_of_div_lt npos.ne' hn
 
 Depends on / 依赖: Subadditive, Subadditive.lim, eventually_atTop, eventually_div_lt_of_div_lt, exists_lt_of_csInf_lt, h.eventually_div_lt_of_div_lt, h.lim_le_div, hl.trans_le, lim_le_div, mem_image, npos.ne, tendsto_order, trans_le, zero_lt_one, zero_lt_one.trans_le
 -/

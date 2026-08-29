@@ -139,7 +139,9 @@ theorem optionFunLeft_monomial
     rw [← optionElim_apply_none n]; rw [h1]
   · replace h1 : ¬ y = x.some := fun h => by
       absurd h1; ext u
-      cases u <;> si
+      cases u <;> simp_all
+    rw [coeff_monomial]; rw [if_neg h1]
+  · rw [coeff_zero]
 
 中文:
 定理 optionFunLeft_monomial
@@ -154,7 +156,9 @@ theorem optionFunLeft_monomial
     rw [← optionElim_apply_none n]; rw [h1]
   · replace h1 : ¬ y = x.some := fun h => by
       absurd h1; ext u
-      cases u <;> si
+      cases u <;> simp_all
+    rw [coeff_monomial]; rw [if_neg h1]
+  · rw [coeff_zero]
 -/
 private theorem optionFunLeft_monomial (x : Option σ ->₀ Nat) (r : R) :
     optionFunLeft σ R (monomial x r) = PowerSeries.monomial (x none) (monomial x.some r) := by
@@ -184,7 +188,14 @@ lemma optionFunLeft_mul
   refine sum_bij (fun y _ => ⟨(y.1 none, y.2 none), (y.1.some, y.2.some)⟩) ?_ ?_ ?_ ?_
   · intros; simp_all [Finsupp.ext_iff]
   · intros; ext t <;> cases t
-    all_goals simp_all [
+    all_goals simp_all [Finsupp.ext_iff]
+  · rintro ⟨⟨m, n⟩, ⟨u, v⟩⟩ h
+    suffices exists a b, (a none = m ∧ b none = n) ∧ a.some = u ∧ a + b = optionElim k x ∧
+      b.some = v by simpa
+    use u.optionElim m, v.optionElim n
+    suffices optionElim m u + optionElim n v = optionElim k x by simp_all
+    ext t; cases t <;> simp_all [Finsupp.ext_iff]
+  · intros; simp_all [Finsupp.ext_iff]
 
 中文:
 引理 optionFunLeft_mul
@@ -196,7 +207,14 @@ lemma optionFunLeft_mul
   refine sum_bij (fun y _ => ⟨(y.1 none, y.2 none), (y.1.some, y.2.some)⟩) ?_ ?_ ?_ ?_
   · intros; simp_all [Finsupp.ext_iff]
   · intros; ext t <;> cases t
-    all_goals simp_all [
+    all_goals simp_all [Finsupp.ext_iff]
+  · rintro ⟨⟨m, n⟩, ⟨u, v⟩⟩ h
+    suffices exists a b, (a none = m ∧ b none = n) ∧ a.some = u ∧ a + b = optionElim k x ∧
+      b.some = v by simpa
+    use u.optionElim m, v.optionElim n
+    suffices optionElim m u + optionElim n v = optionElim k x by simp_all
+    ext t; cases t <;> simp_all [Finsupp.ext_iff]
+  · intros; simp_all [Finsupp.ext_iff]
 -/
 private lemma optionFunLeft_mul (p q : MvPowerSeries (Option σ) R) :
     optionFunLeft σ R (p * q) = optionFunLeft σ R p * optionFunLeft σ R q := by
@@ -263,7 +281,10 @@ definition optionEquivLeft
   left_inv _ := by ext; simp [coeff_optionInvFunLeft, coeff_coeff_optionFunLeft]
   right_inv _ := by ext; simp [coeff_optionInvFunLeft, coeff_coeff_optionFunLeft]
   map_mul' := optionFunLeft_mul
-  map_add' _ _ := by ext; simp [coeff_coeff_optionFunL
+  map_add' _ _ := by ext; simp [coeff_coeff_optionFunLeft]
+  commutes' := by
+    simpa [MvPowerSeries.algebraMap_apply, PowerSeries.C] using
+      optionFunLeft_monomial (0 : Option σ ->₀ Nat)
 
 中文:
 定义 optionEquivLeft
@@ -273,7 +294,10 @@ definition optionEquivLeft
   left_inv _ := by ext; simp [coeff_optionInvFunLeft, coeff_coeff_optionFunLeft]
   right_inv _ := by ext; simp [coeff_optionInvFunLeft, coeff_coeff_optionFunLeft]
   map_mul' := optionFunLeft_mul
-  map_add' _ _ := by ext; simp [coeff_coeff_optionFunL
+  map_add' _ _ := by ext; simp [coeff_coeff_optionFunLeft]
+  commutes' := by
+    simpa [MvPowerSeries.algebraMap_apply, PowerSeries.C] using
+      optionFunLeft_monomial (0 : Option σ ->₀ Nat)
 
 Depends on / 依赖: optionFunLeft
 -/
@@ -796,7 +820,16 @@ definition truncTotalAlgHom
       exact Subsingleton.allEq ..
     rw [truncTotal_one h]; rw [map_one]
   map_mul' p q := by
-    rw [← map_mul]; rw [Ideal.Quoti
+    rw [← map_mul]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]
+    exact truncTotal_mul_sub_mul_truncTotal_mem_pow_idealOfVars p q
+  map_zero' := by rw [map_zero, map_zero]
+  map_add' _ _ := by simp
+  commutes' p := by
+    change (Ideal.Quotient.mk (MvPolynomial.idealOfVars σ R ^ n)) (truncTotal n p) =
+      (Ideal.Quotient.mk (MvPolynomial.idealOfVars σ R ^ n)) p
+    rw [Ideal.Quotient.eq]; rw [MvPolynomial.mem_pow_idealOfVars_iff']
+    intro x h
+    rw [MvPolynomial.coeff_sub]; rw [sub_eq_zero]; rw [coeff_truncTotal _ h]; rw [MvPolynomial.coeff_coe]
 
 中文:
 定义 truncTotalAlgHom
@@ -809,7 +842,16 @@ definition truncTotalAlgHom
       exact Subsingleton.allEq ..
     rw [truncTotal_one h]; rw [map_one]
   map_mul' p q := by
-    rw [← map_mul]; rw [Ideal.Quoti
+    rw [← map_mul]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]
+    exact truncTotal_mul_sub_mul_truncTotal_mem_pow_idealOfVars p q
+  map_zero' := by rw [map_zero, map_zero]
+  map_add' _ _ := by simp
+  commutes' p := by
+    change (Ideal.Quotient.mk (MvPolynomial.idealOfVars σ R ^ n)) (truncTotal n p) =
+      (Ideal.Quotient.mk (MvPolynomial.idealOfVars σ R ^ n)) p
+    rw [Ideal.Quotient.eq]; rw [MvPolynomial.mem_pow_idealOfVars_iff']
+    intro x h
+    rw [MvPolynomial.coeff_sub]; rw [sub_eq_zero]; rw [coeff_truncTotal _ h]; rw [MvPolynomial.coeff_coe]
 
 Depends on / 依赖: truncTotal
 -/
@@ -891,7 +933,8 @@ theorem coeff_toAdicCompletion_val_apply_out
   apply (MvPolynomial.mem_pow_idealOfVars_iff' n _).mp
   · rw [toAdicCompletion_apply_eq_mk_truncTotal, smul_eq_mul]
     nth_rw 1 [← Ideal.mul_top (MvPolynomial.idealOfVars σ R ^ n), ← Ideal.Quotient.eq,
-      Ideal
+      Ideal.Quotient.mk_out]
+  exact hx
 
 中文:
 定理 coeff_toAdicCompletion_val_apply_out
@@ -901,7 +944,8 @@ theorem coeff_toAdicCompletion_val_apply_out
   apply (MvPolynomial.mem_pow_idealOfVars_iff' n _).mp
   · rw [toAdicCompletion_apply_eq_mk_truncTotal, smul_eq_mul]
     nth_rw 1 [← Ideal.mul_top (MvPolynomial.idealOfVars σ R ^ n), ← Ideal.Quotient.eq,
-      Ideal
+      Ideal.Quotient.mk_out]
+  exact hx
 
 Depends on / 依赖: Ideal.Quotient.eq, Ideal.Quotient.mk_out, Ideal.mul_top, MvPolynomial, MvPolynomial.coeff_sub, MvPolynomial.idealOfVars, MvPolynomial.mem_pow_idealOfVars_iff, Quotient, coeff_sub, coeff_truncTotal, idealOfVars, mem_pow_idealOfVars_iff, mk_out, mul_top, nth_rw, smul_eq_mul, sub_eq_zero, toAdicCompletion_apply_eq_mk_truncTotal
 -/
@@ -927,7 +971,7 @@ theorem toAdicCompletion_coe
   suffices p - (truncTotal n) p in MvPolynomial.idealOfVars σ R ^ n by
     simpa [toAdicCompletion, AdicCompletion.liftAlgHom, AdicCompletion.liftRingHom,
       Ideal.Quotient.mk_eq_mk_iff_sub_mem]
-  exact (MvPolynomial.mem_pow_idealOfVars_iff' ..).mpr fun x hx => by simp [coeff_tru
+  exact (MvPolynomial.mem_pow_idealOfVars_iff' ..).mpr fun x hx => by simp [coeff_truncTotal _ hx]
 
 中文:
 定理 toAdicCompletion_coe
@@ -937,7 +981,7 @@ theorem toAdicCompletion_coe
   suffices p - (truncTotal n) p in MvPolynomial.idealOfVars σ R ^ n by
     simpa [toAdicCompletion, AdicCompletion.liftAlgHom, AdicCompletion.liftRingHom,
       Ideal.Quotient.mk_eq_mk_iff_sub_mem]
-  exact (MvPolynomial.mem_pow_idealOfVars_iff' ..).mpr fun x hx => by simp [coeff_tru
+  exact (MvPolynomial.mem_pow_idealOfVars_iff' ..).mpr fun x hx => by simp [coeff_truncTotal _ hx]
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.liftAlgHom, AdicCompletion.liftRingHom, Ideal.Quotient.mk_eq_mk_iff_sub_mem, MvPolynomial, MvPolynomial.idealOfVars, MvPolynomial.mem_pow_idealOfVars_iff, Quotient, coeff_truncTotal, idealOfVars, liftAlgHom, liftRingHom, mem_pow_idealOfVars_iff, mk_eq_mk_iff_sub_mem, toAdicCompletion, truncTotal
 -/
@@ -1002,7 +1046,13 @@ theorem mk_truncTotal_toAdicCompletionInv
     MvPolynomial.coeff_sub]
   intro x h
   rw [coeff_truncTotal _ h]; rw [coeff_toAdicCompletionInv]; rw [← MvPolynomial.coeff_sub]
-  a
+  apply (MvPolynomial.mem_pow_idealOfVars_iff' (degree x + 1) _).mp
+  · nth_rw 1 [← Ideal.mul_top (MvPolynomial.idealOfVars σ R ^ (degree x + 1)),
+      ← smul_eq_mul, ← Ideal.Quotient.eq]
+    simp only [Submodule.mapQ_eq_factor, Submodule.factor_eq_factor, Ideal.Quotient.mk_out]
+    rw [← AdicCompletion.transitionMap_ideal_mk _ (Nat.lt_iff_add_one_le.mp h)]; rw [eq_comm]
+    convert! f.prop h; simp
+  simp
 
 中文:
 定理 mk_truncTotal_toAdicCompletionInv
@@ -1013,7 +1063,13 @@ theorem mk_truncTotal_toAdicCompletionInv
     MvPolynomial.coeff_sub]
   intro x h
   rw [coeff_truncTotal _ h]; rw [coeff_toAdicCompletionInv]; rw [← MvPolynomial.coeff_sub]
-  a
+  apply (MvPolynomial.mem_pow_idealOfVars_iff' (degree x + 1) _).mp
+  · nth_rw 1 [← Ideal.mul_top (MvPolynomial.idealOfVars σ R ^ (degree x + 1)),
+      ← smul_eq_mul, ← Ideal.Quotient.eq]
+    simp only [Submodule.mapQ_eq_factor, Submodule.factor_eq_factor, Ideal.Quotient.mk_out]
+    rw [← AdicCompletion.transitionMap_ideal_mk _ (Nat.lt_iff_add_one_le.mp h)]; rw [eq_comm]
+    convert! f.prop h; simp
+  simp
 
 Depends on / 依赖: Ideal.Quotient.eq, Ideal.Quotient.mk_eq_mk_iff_sub_mem, Ideal.Quotient.mk_out, Ideal.mul_top, MvPolynomial, MvPolynomial.coeff_sub, MvPolynomial.idealOfVars, MvPolynomial.mem_pow_idealOfVars_iff, Quotient, Submodule, Submodule.mapQ_eq_factor, coeff_sub, coeff_toAdicCompletionInv, coeff_truncTotal, degree, f.val, idealOfVars, mapQ_eq_factor, mem_pow_idealOfVars_iff, mk_eq_mk_iff_sub_mem
 -/
@@ -1301,7 +1357,10 @@ lemma toMvPowerSeries_coeff_eq_zero
   proof: by classical
   rw [toMvPowerSeries_apply]; rw [MvPowerSeries.rename_eq_subst]; rw [subst_X_comp_const]; rw [coeff_subst (HasSubst.X _)]; rw [finsum_eq_zero_of_forall_eq_zero]
   simp only [MvPowerSeries.X_pow_eq, MvPowerSeries.coeff_monomial, smul_eq_mul, mul_ite, mul_one,
-    mul_zero, ite_eq_right_
+    mul_zero, ite_eq_right_iff]
+  intro _ a
+  subst a
+  simp_all
 
 中文:
 引理 toMvPowerSeries_coeff_eq_zero
@@ -1309,7 +1368,10 @@ lemma toMvPowerSeries_coeff_eq_zero
   证明: by classical
   rw [toMvPowerSeries_apply]; rw [MvPowerSeries.rename_eq_subst]; rw [subst_X_comp_const]; rw [coeff_subst (HasSubst.X _)]; rw [finsum_eq_zero_of_forall_eq_zero]
   simp only [MvPowerSeries.X_pow_eq, MvPowerSeries.coeff_monomial, smul_eq_mul, mul_ite, mul_one,
-    mul_zero, ite_eq_right_
+    mul_zero, ite_eq_right_iff]
+  intro _ a
+  subst a
+  simp_all
 
 Depends on / 依赖: HasSubst, HasSubst.X, MvPowerSeries, MvPowerSeries.X_pow_eq, MvPowerSeries.coeff_monomial, MvPowerSeries.rename_eq_subst, X_pow_eq, classical, coeff_monomial, coeff_subst, finsum_eq_zero_of_forall_eq_zero, ite_eq_right_iff, mul_ite, mul_one, mul_zero, rename_eq_subst, smul_eq_mul, subst_X_comp_const, toMvPowerSeries_apply
 -/

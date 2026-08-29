@@ -147,7 +147,7 @@ theorem AnalyticWithinAt.cpow
     intro z fz
     simp only [fz, cpow_def, if_false]
   apply AnalyticWithinAt.congr_of_eventuallyEq_insert _ e
-  exact 
+  exact ((fa.clog m).mul ga).cexp
 
 中文:
 定理 AnalyticWithinAt.cpow
@@ -158,7 +158,7 @@ theorem AnalyticWithinAt.cpow
     intro z fz
     simp only [fz, cpow_def, if_false]
   apply AnalyticWithinAt.congr_of_eventuallyEq_insert _ e
-  exact 
+  exact ((fa.clog m).mul ga).cexp
 
 Depends on / 依赖: AnalyticWithinAt, AnalyticWithinAt.congr_of_eventuallyEq_insert, congr_of_eventuallyEq_insert, continuousWithinAt_insert, cpow_def, eventually_ne, fa.clog, fa.continuousWithinAt_insert.eventually_ne, filter_upwards, if_false, insert, slitPlane_ne_zero
 -/
@@ -606,7 +606,14 @@ theorem hasFPowerSeriesAt_clog_one
   suffices ((FormalMultilinearSeries.ofScalars Complex (fun n => -(-1 : Complex) ^ n / n)) =
       FormalMultilinearSeries.ofScalars Complex (fun n => iteratedDeriv n log 1 / (n.factorial : Complex))) by
     convert! AnalyticAt.hasFPowerSeriesAt _ using 1 <;> try infer_instance
-    exact analytic
+    exact analyticAt_clog (by simp)
+  ext n
+  simp only [FormalMultilinearSeries.apply_eq_prod_smul_coeff, Finset.prod_const_one,
+    FormalMultilinearSeries.coeff_ofScalars, smul_eq_mul, one_mul]
+  obtain _ | n := n
+  · simp
+  simp [iteratedDeriv_succ_log one_mem_slitPlane, Nat.factorial_succ, pow_succ]
+  field_simp [show n.factorial != 0 by positivity]
 
 中文:
 定理 hasFPowerSeriesAt_clog_one
@@ -614,7 +621,14 @@ theorem hasFPowerSeriesAt_clog_one
   suffices ((FormalMultilinearSeries.ofScalars Complex (fun n => -(-1 : Complex) ^ n / n)) =
       FormalMultilinearSeries.ofScalars Complex (fun n => iteratedDeriv n log 1 / (n.factorial : Complex))) by
     convert! AnalyticAt.hasFPowerSeriesAt _ using 1 <;> try infer_instance
-    exact analytic
+    exact analyticAt_clog (by simp)
+  ext n
+  simp only [FormalMultilinearSeries.apply_eq_prod_smul_coeff, Finset.prod_const_one,
+    FormalMultilinearSeries.coeff_ofScalars, smul_eq_mul, one_mul]
+  obtain _ | n := n
+  · simp
+  simp [iteratedDeriv_succ_log one_mem_slitPlane, Nat.factorial_succ, pow_succ]
+  field_simp [show n.factorial != 0 by positivity]
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.hasFPowerSeriesAt, Finset, Finset.prod_const_one, FormalMultilinearSeries, FormalMultilinearSeries.apply_eq_prod_smul_coeff, FormalMultilinearSeries.coeff_ofScalars, FormalMultilinearSeries.ofScalars, analyticAt_clog, apply_eq_prod_smul_coeff, coeff_ofScalars, convert, factorial, hasFPowerSeriesAt, infer_instance, iteratedDeriv, iteratedDeriv_, n.factorial, ofScalars, one_mul
 -/
@@ -662,7 +676,14 @@ theorem hasFPowerSeriesAt_log_one
       ((FormalMultilinearSeries.ofScalars Complex (fun n => -(-1 : Complex) ^ n / n)).restrictScalars Real)
       (ofRealCLM 1) r := by
     simpa using hp.restrictScalars
-  convert ((reCLM.comp_hasFPowerSeriesOnBall
+  convert ((reCLM.comp_hasFPowerSeriesOnBall this.compContinuousLinearMap).congr
+    (fun x _ => log_ofReal_re x)).hasFPowerSeriesAt
+  ext n
+  simp only [ContinuousLinearMap.compFormalMultilinearSeries_apply,
+    ContinuousLinearMap.compContinuousMultilinearMap_coe, Function.comp_apply,
+    FormalMultilinearSeries.compContinuousLinearMap_apply]
+  simp
+  norm_cast
 
 中文:
 定理 hasFPowerSeriesAt_log_one
@@ -672,7 +693,14 @@ theorem hasFPowerSeriesAt_log_one
       ((FormalMultilinearSeries.ofScalars Complex (fun n => -(-1 : Complex) ^ n / n)).restrictScalars Real)
       (ofRealCLM 1) r := by
     simpa using hp.restrictScalars
-  convert ((reCLM.comp_hasFPowerSeriesOnBall
+  convert ((reCLM.comp_hasFPowerSeriesOnBall this.compContinuousLinearMap).congr
+    (fun x _ => log_ofReal_re x)).hasFPowerSeriesAt
+  ext n
+  simp only [ContinuousLinearMap.compFormalMultilinearSeries_apply,
+    ContinuousLinearMap.compContinuousMultilinearMap_coe, Function.comp_apply,
+    FormalMultilinearSeries.compContinuousLinearMap_apply]
+  simp
+  norm_cast
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.compContinuousMultilinearMap_coe, ContinuousLinearMap.compFormalMultilinearSeries_apply, FormalMultilinearSeries, FormalMultilinearSeries.ofScalars, Function, Function.co, HasFPowerSeriesOnBall, compContinuousLinearMap, compContinuousMultilinearMap_coe, compFormalMultilinearSeries_apply, comp_hasFPowerSeriesOnBall, convert, hasFPowerSeriesAt, hasFPowerSeriesAt_clog_one, hp.restrictScalars, log_ofReal_re, ofRealCLM, ofScalars, reCLM.comp_hasFPowerSeriesOnBall
 -/

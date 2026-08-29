@@ -168,7 +168,7 @@ theorem iff_iteratedDerivWithin_nonneg
   refine ⟨fun hf => ⟨hf.contDiffOn, fun n x hx => hf.iteratedDerivWithin_nonneg hs n hx⟩, ?_⟩
   rintro ⟨hcont, hnn⟩
   refine ⟨ftaylorSeriesWithin Real f s, hcont.ftaylorSeriesWithin hs, fun n x hx => ?_⟩
-  exact iteratedDerivWithin_eq_iteratedFDerivWithin (𝕜 := Real) (f := f) (s := s) ▸ hnn n x h
+  exact iteratedDerivWithin_eq_iteratedFDerivWithin (𝕜 := Real) (f := f) (s := s) ▸ hnn n x hx
 
 中文:
 定理 iff_iteratedDerivWithin_nonneg
@@ -177,7 +177,7 @@ theorem iff_iteratedDerivWithin_nonneg
   refine ⟨fun hf => ⟨hf.contDiffOn, fun n x hx => hf.iteratedDerivWithin_nonneg hs n hx⟩, ?_⟩
   rintro ⟨hcont, hnn⟩
   refine ⟨ftaylorSeriesWithin Real f s, hcont.ftaylorSeriesWithin hs, fun n x hx => ?_⟩
-  exact iteratedDerivWithin_eq_iteratedFDerivWithin (𝕜 := Real) (f := f) (s := s) ▸ hnn n x h
+  exact iteratedDerivWithin_eq_iteratedFDerivWithin (𝕜 := Real) (f := f) (s := s) ▸ hnn n x hx
 
 Depends on / 依赖: contDiffOn, ftaylorSeriesWithin, hcont.ftaylorSeriesWithin, hf.contDiffOn, hf.iteratedDerivWithin_nonneg, iteratedDerivWithin_eq_iteratedFDerivWithin, iteratedDerivWithin_nonneg
 -/
@@ -235,7 +235,10 @@ theorem smul
   -- Witness: post-composition by the CLM `y ↦ c * y`.
   set T : Real ->L[Real] Real := c • ContinuousLinearMap.id Real Real with hT
   have hcomp : (T ∘ f) = c • f := by ext x; simp [hT, smul_eq_mul]
-  refine ⟨_, hcomp ▸ hp.continuousLinearMap_comp T, fun n x hx => ?
+  refine ⟨_, hcomp ▸ hp.continuousLinearMap_comp T, fun n x hx => ?_⟩
+  simp only [ContinuousLinearMap.compContinuousMultilinearMap_coe, Function.comp_apply, hT,
+    smul_apply, ContinuousLinearMap.id_apply, smul_eq_mul]
+  exact mul_nonneg hc (hp_nn n hx)
 
 中文:
 定理 smul
@@ -245,7 +248,10 @@ theorem smul
   -- Witness: post-composition by the CLM `y ↦ c * y`.
   set T : Real ->L[Real] Real := c • ContinuousLinearMap.id Real Real with hT
   have hcomp : (T ∘ f) = c • f := by ext x; simp [hT, smul_eq_mul]
-  refine ⟨_, hcomp ▸ hp.continuousLinearMap_comp T, fun n x hx => ?
+  refine ⟨_, hcomp ▸ hp.continuousLinearMap_comp T, fun n x hx => ?_⟩
+  simp only [ContinuousLinearMap.compContinuousMultilinearMap_coe, Function.comp_apply, hT,
+    smul_apply, ContinuousLinearMap.id_apply, smul_eq_mul]
+  exact mul_nonneg hc (hp_nn n hx)
 
 Depends on / 依赖: hp_nn
 -/

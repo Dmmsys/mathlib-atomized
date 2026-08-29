@@ -118,7 +118,10 @@ instance :
     simp only [comp_whiskerRight, whisker_assoc, Category.assoc,
       MonoidalCategory.whiskerLeft_comp]
     slice_lhs 7 8 =>
-      rw 
+      rw [← whisker_exchange]
+    slice_rhs 2 3 =>
+      rw [← whisker_exchange]
+    simp
 
 中文:
 实例 :
@@ -130,7 +133,10 @@ instance :
     simp only [comp_whiskerRight, whisker_assoc, Category.assoc,
       MonoidalCategory.whiskerLeft_comp]
     slice_lhs 7 8 =>
-      rw 
+      rw [← whisker_exchange]
+    slice_rhs 2 3 =>
+      rw [← whisker_exchange]
+    simp
 
 Depends on / 依赖: Category, Category.assoc, MonoidalCategory, MonoidalCategory.whiskerLeft_comp, comp_whiskerRight, mul_assoc, mul_eq, mul_one, one_eq, slice_lhs, slice_rhs, whiskerLeft_comp, whisker_assoc, whisker_exchange, whisker_exchange_assoc
 -/

@@ -103,7 +103,18 @@ lemma innerFibration_pullbackObjObjπ
   rw [← internalHomAdjunction₂.hasLiftingProperty_iff sq₁₂]
   suffices innerAnodyneExtensions sq₁₂.ι from
     this _ (by rwa [← innerFibration_iff])
-  intro E B p 
+  intro E B p hp
+  rw [HasLiftingProperty.iff_of_arrow_iso_left
+    (show Arrow.mk sq₁₂.ι ≅ Arrow.mk sq₁₂.flipTensor.ι from
+      Arrow.isoMk (Iso.refl _) (β_ _ _))]
+  let sq₁₃' := Functor.PullbackObjObj.ofHasPullback MonoidalClosed.internalHom Λ[_, k].ι p
+  rw [internalHomAdjunction₂.hasLiftingProperty_iff _ sq₁₃']
+  suffices (MorphismProperty.monomorphisms _).rlp sq₁₃'.π from this _ inferInstance
+  rw [rlp_monomorphisms]
+  rintro _ _ _ ⟨n⟩
+  rw [← internalHomAdjunction₂.hasLiftingProperty_iff
+    (Subcomplex.unionProd.pushoutObjObj.{u} _ _)]; rw [Subcomplex.unionProd.pushoutObjObj_ι]
+  exact prodStdSimplex.innerAnodyneExtensions_unionProd_ι k h0 hn n _ hp
 
 中文:
 引理 innerFibration_pullbackObjObjπ
@@ -115,7 +126,18 @@ lemma innerFibration_pullbackObjObjπ
   rw [← internalHomAdjunction₂.hasLiftingProperty_iff sq₁₂]
   suffices innerAnodyneExtensions sq₁₂.ι from
     this _ (by rwa [← innerFibration_iff])
-  intro E B p 
+  intro E B p hp
+  rw [HasLiftingProperty.iff_of_arrow_iso_left
+    (show Arrow.mk sq₁₂.ι ≅ Arrow.mk sq₁₂.flipTensor.ι from
+      Arrow.isoMk (Iso.refl _) (β_ _ _))]
+  let sq₁₃' := Functor.PullbackObjObj.ofHasPullback MonoidalClosed.internalHom Λ[_, k].ι p
+  rw [internalHomAdjunction₂.hasLiftingProperty_iff _ sq₁₃']
+  suffices (MorphismProperty.monomorphisms _).rlp sq₁₃'.π from this _ inferInstance
+  rw [rlp_monomorphisms]
+  rintro _ _ _ ⟨n⟩
+  rw [← internalHomAdjunction₂.hasLiftingProperty_iff
+    (Subcomplex.unionProd.pushoutObjObj.{u} _ _)]; rw [Subcomplex.unionProd.pushoutObjObj_ι]
+  exact prodStdSimplex.innerAnodyneExtensions_unionProd_ι k h0 hn n _ hp
 
 Depends on / 依赖: Arrow.isoMk, Arrow.mk, Functor, Functor.PullbackObjObj.ofHasPullback, Functor.PushoutObjObj.ofHasPushout, HasLiftingProperty, HasLiftingProperty.iff_of_arrow_iso_left, Iso.refl, MonoidalClosed, MonoidalClosed.internalHom, PullbackObjObj, PushoutObjObj, curriedTensor, flipTensor, hasLiftingProperty_iff, iff_of_arrow_iso_left, innerAnodyneExtensions, innerFibration_iff, internalHom, ofHasPullback
 -/

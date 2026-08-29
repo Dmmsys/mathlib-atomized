@@ -428,7 +428,8 @@ instance Prod.supConvergenceClass
   have A : Tendsto (fun x : s => (x : α × β).1) atTop (𝓝 a) :=
     tendsto_atTop_isLUB (monotone_fst.domRestrict s) h.1
   have B : Tendsto (fun x : s => (x : α × β).2) atTop (𝓝 b) :=
-    t
+    tendsto_atTop_isLUB (monotone_snd.domRestrict s) h.2
+  exact A.prodMk_nhds B
 
 中文:
 实例 积类型.supConvergenceClass
@@ -439,7 +440,8 @@ instance Prod.supConvergenceClass
   have A : Tendsto (fun x : s => (x : α × β).1) atTop (𝓝 a) :=
     tendsto_atTop_isLUB (monotone_fst.domRestrict s) h.1
   have B : Tendsto (fun x : s => (x : α × β).2) atTop (𝓝 b) :=
-    t
+    tendsto_atTop_isLUB (monotone_snd.domRestrict s) h.2
+  exact A.prodMk_nhds B
 
 Depends on / 依赖: A.prodMk_nhds, Tendsto, domRestrict, isLUB_prod, monotone_fst, monotone_fst.domRestrict, monotone_snd, monotone_snd.domRestrict, prodMk_nhds, range_domRestrict, tendsto_atTop_isLUB
 -/

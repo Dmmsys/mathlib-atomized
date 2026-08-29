@@ -146,7 +146,9 @@ lemma PSL.iSup_iwasawaT_eq_top
       Subgroup.map (QuotientGroup.mk' (Subgroup.center (Matrix.SpecialLinearGroup (Fin 2) F)))
         (⨆ p : ℙ F (Fin 2 -> F),
           Matrix.SpecialLinearGroup.lineStab (F := F) (ι := Fin 2) p.submodule) := by
-    rw [Subgroup.map_iSu
+    rw [Subgroup.map_iSup]
+  rw [step1]; rw [PSL.iSup_lineStab_eq_top]
+  exact Subgroup.map_top_of_surjective _ (QuotientGroup.mk'_surjective _)
 
 中文:
 引理 PSL.iSup_iwasawaT_eq_top
@@ -155,7 +157,9 @@ lemma PSL.iSup_iwasawaT_eq_top
       Subgroup.map (QuotientGroup.mk' (Subgroup.center (Matrix.SpecialLinearGroup (Fin 2) F)))
         (⨆ p : ℙ F (Fin 2 -> F),
           Matrix.SpecialLinearGroup.lineStab (F := F) (ι := Fin 2) p.submodule) := by
-    rw [Subgroup.map_iSu
+    rw [Subgroup.map_iSup]
+  rw [step1]; rw [PSL.iSup_lineStab_eq_top]
+  exact Subgroup.map_top_of_surjective _ (QuotientGroup.mk'_surjective _)
 
 Depends on / 依赖: Matrix, Matrix.SpecialLinearGroup, Matrix.SpecialLinearGroup.lineStab, PSL.iSup_lineStab_eq_top, PSL.iwasawaT, QuotientGroup, QuotientGroup.mk, SpecialLinearGroup, Subgroup, Subgroup.center, Subgroup.map, Subgroup.map_iSup, Subgroup.map_top_of_surjective, _surjective, center, iSup_lineStab_eq_top, iwasawaT, lineStab, map_iSup, map_top_of_surjective
 -/
@@ -183,7 +187,12 @@ abbreviation PSL2.Iwasawa
       rw [← Projectivization.mk_rep p]; rw [Projectivization.submodule_mk]
       exact lineStab_isMulCommutative_of_span p.rep p.rep_nonzero
     exact Subgroup.map_isMulCommutative _ _
- 
+  is_conj g p := by
+    obtain ⟨g_SL, rfl⟩ := QuotientGroup.mk_surjective g
+    rw [Matrix.ProjectiveSpecialLinearGroup.smul_proj_mk]
+    change Subgroup.map _ _ = _
+    rw [PSL.smul_submodule]; rw [Matrix.SpecialLinearGroup.lineStab_smul]; rw [PSL.iwasawaT_map_conj]
+  is_generator := PSL.iSup_iwasawaT_eq_top
 
 中文:
 缩写 PSL2.Iwasawa
@@ -194,7 +203,12 @@ abbreviation PSL2.Iwasawa
       rw [← Projectivization.mk_rep p]; rw [Projectivization.submodule_mk]
       exact lineStab_isMulCommutative_of_span p.rep p.rep_nonzero
     exact Subgroup.map_isMulCommutative _ _
- 
+  is_conj g p := by
+    obtain ⟨g_SL, rfl⟩ := QuotientGroup.mk_surjective g
+    rw [Matrix.ProjectiveSpecialLinearGroup.smul_proj_mk]
+    change Subgroup.map _ _ = _
+    rw [PSL.smul_submodule]; rw [Matrix.SpecialLinearGroup.lineStab_smul]; rw [PSL.iwasawaT_map_conj]
+  is_generator := PSL.iSup_iwasawaT_eq_top
 
 Depends on / 依赖: PSL.iwasawaT, iwasawaT
 -/
@@ -313,7 +327,8 @@ lemma field_cond_of_four_le_card
   obtain ⟨x, hx⟩ : IsCyclic Fˣ := by infer_instance
   refine ⟨x, Units.ne_zero x, fun h => ?_⟩
   grw [Nat.card_eq_card_units_add_one F, ← orderOf_eq_card_of_forall_mem_zpowers hx,
-    orderOf_le_of_pow_eq_one zero_lt_two (Units.ext <| by simp
+    orderOf_le_of_pow_eq_one zero_lt_two (Units.ext <| by simpa using h)] at hF
+  omega
 
 中文:
 引理 field_cond_of_four_le_card
@@ -323,7 +338,8 @@ lemma field_cond_of_four_le_card
   obtain ⟨x, hx⟩ : IsCyclic Fˣ := by infer_instance
   refine ⟨x, Units.ne_zero x, fun h => ?_⟩
   grw [Nat.card_eq_card_units_add_one F, ← orderOf_eq_card_of_forall_mem_zpowers hx,
-    orderOf_le_of_pow_eq_one zero_lt_two (Units.ext <| by simp
+    orderOf_le_of_pow_eq_one zero_lt_two (Units.ext <| by simpa using h)] at hF
+  omega
 -/
 private lemma field_cond_of_four_le_card (hF : 4 <= Nat.card F) :
     exists a : F, a != 0 ∧ a ^ 2 != 1 := by

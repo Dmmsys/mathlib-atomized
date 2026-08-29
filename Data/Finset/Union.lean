@@ -195,7 +195,8 @@ lemma disjiUnion_disjiUnion
             (h2 (mem_disjiUnion.mpr ⟨_, a.prop, hfa⟩) (mem_disjiUnion.mpr ⟨_, b.prop, hfb⟩) ?_) hga
             hgb
           rintro rfl
-          exact disjoint_left.mp (h1 a.prop b.prop
+          exact disjoint_left.mp (h1 a.prop b.prop <| Subtype.coe_injective.ne hab) hfa hfb :=
+eq_of_veq Multiset.bind_assoc.trans (Multiset.attach_bind_coe _ _).symm
 
 中文:
 引理 disjiUnion_disjiUnion
@@ -206,7 +207,8 @@ lemma disjiUnion_disjiUnion
             (h2 (mem_disjiUnion.mpr ⟨_, a.prop, hfa⟩) (mem_disjiUnion.mpr ⟨_, b.prop, hfb⟩) ?_) hga
             hgb
           rintro rfl
-          exact disjoint_left.mp (h1 a.prop b.prop
+          exact disjoint_left.mp (h1 a.prop b.prop <| Subtype.coe_injective.ne hab) hfa hfb :=
+eq_of_veq Multiset.bind_assoc.trans (Multiset.attach_bind_coe _ _).symm
 
 Depends on / 依赖: mem_disjiUnion, mem_disjiUnion.mp
 -/

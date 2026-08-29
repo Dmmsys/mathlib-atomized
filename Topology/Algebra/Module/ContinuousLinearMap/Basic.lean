@@ -1653,7 +1653,7 @@ theorem toLinearMap_sum
 
 @[deprecated (since := "2026-05-20")] protected alias coe_sum := toLinearMap_sum
 
-@[deprecated (since := "2026-05-20"
+@[deprecated (since := "2026-05-20")] alias coe_sum' := FunLike.coe_sum
 
 中文:
 定理 toLinearMap_sum
@@ -1664,7 +1664,7 @@ theorem toLinearMap_sum
 
 @[deprecated (since := "2026-05-20")] protected alias coe_sum := toLinearMap_sum
 
-@[deprecated (since := "2026-05-20"
+@[deprecated (since := "2026-05-20")] alias coe_sum' := FunLike.coe_sum
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, map_sum
 -/
@@ -1697,7 +1697,9 @@ infixr:80 " ∘L " =>
 
 @[inherit_doc comp]
 infixr:90 " ∘SL " =>
-  ContinuousLinea
+  ContinuousLinearMap.comp
+
+@[simp, norm_cast]
 
 中文:
 定义 comp
@@ -1711,7 +1713,9 @@ infixr:80 " ∘L " =>
 
 @[inherit_doc comp]
 infixr:90 " ∘SL " =>
-  ContinuousLinea
+  ContinuousLinearMap.comp
+
+@[simp, norm_cast]
 -/
 def comp (g : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂) : M₁ ->SL[σ₁₃] M₃ :=
   ⟨(g : M₂ ->ₛₗ[σ₂₃] M₃).comp (f : M₁ ->ₛₗ[σ₁₂] M₂), g.2.comp f.2⟩

@@ -289,7 +289,7 @@ definition createsLimitOfUnop
     letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F.unop)
       (coconeLeftOpOfCone c) (isColimitCoconeLeftOpOfCone _ hc)
     { liftedCone := coneOfCoconeLeftOp lc.liftedCocone
-      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.s
+      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.symm).unop }
 
 中文:
 定义 createsLimitOfUnop
@@ -299,7 +299,7 @@ definition createsLimitOfUnop
     letI lc := CreatesColimit.lifts (K := K.leftOp) (F := F.unop)
       (coconeLeftOpOfCone c) (isColimitCoconeLeftOpOfCone _ hc)
     { liftedCone := coneOfCoconeLeftOp lc.liftedCocone
-      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.s
+      validLift := (coconeLeftOpOfConeEquiv.inverse.mapIso lc.validLift.symm).unop }
 
 Depends on / 依赖: CreatesLimitOfIsCosplitPair, CreatesLimitOfIsCosplitPair.out, reflectsLimit_of_unop
 -/
@@ -573,7 +573,7 @@ definition createsColimitOfUnop
     letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F.unop)
       (coneLeftOpOfCocone c) (isLimitConeLeftOpOfCocone _ hc)
     { liftedCocone := coconeOfConeLeftOp lc.liftedCone
-      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op
+      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op).symm }
 
 中文:
 定义 createsColimitOfUnop
@@ -583,7 +583,7 @@ definition createsColimitOfUnop
     letI lc := CreatesLimit.lifts (K := K.leftOp) (F := F.unop)
       (coneLeftOpOfCocone c) (isLimitConeLeftOpOfCocone _ hc)
     { liftedCocone := coconeOfConeLeftOp lc.liftedCone
-      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op
+      validLift := (coconeRightOpOfConeEquiv.functor.mapIso lc.validLift.op).symm }
 
 Depends on / 依赖: reflectsColimit_of_unop
 -/

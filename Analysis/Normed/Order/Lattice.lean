@@ -237,7 +237,12 @@ theorem norm_inf_sub_inf_le_add_norm
   rw [abs_of_nonneg (add_nonneg (abs_nonneg (a - c)) (abs_nonneg (b - d)))]
   calc
     |a ⊓ b - c ⊓ d| = |a ⊓ b - c ⊓ b + (c ⊓ b - c ⊓ d)| := by rw [sub_add_sub_cancel]
-  
+    _ <= |a ⊓ b - c ⊓ b| + |c ⊓ b - c ⊓ d| := abs_add_le _ _
+    _ <= |a - c| + |b - d| := by
+      gcongr ?_ + ?_
+      · exact abs_inf_sub_inf_le_abs _ _ _
+      · rw [inf_comm c, inf_comm c]
+        exact abs_inf_sub_inf_le_abs _ _ _
 
 中文:
 定理 norm_inf_sub_inf_le_add_norm
@@ -249,7 +254,12 @@ theorem norm_inf_sub_inf_le_add_norm
   rw [abs_of_nonneg (add_nonneg (abs_nonneg (a - c)) (abs_nonneg (b - d)))]
   calc
     |a ⊓ b - c ⊓ d| = |a ⊓ b - c ⊓ b + (c ⊓ b - c ⊓ d)| := by rw [sub_add_sub_cancel]
-  
+    _ <= |a ⊓ b - c ⊓ b| + |c ⊓ b - c ⊓ d| := abs_add_le _ _
+    _ <= |a - c| + |b - d| := by
+      gcongr ?_ + ?_
+      · exact abs_inf_sub_inf_le_abs _ _ _
+      · rw [inf_comm c, inf_comm c]
+        exact abs_inf_sub_inf_le_abs _ _ _
 
 Depends on / 依赖: abs_add_le, abs_inf_sub_inf_le_abs, abs_nonneg, abs_of_nonneg, add_nonneg, inf_comm, le_trans, norm_abs_eq_norm, norm_add_le, sub_add_sub_cancel
 -/
@@ -279,7 +289,12 @@ theorem norm_sup_sub_sup_le_add_norm
   rw [abs_of_nonneg (add_nonneg (abs_nonneg (a - c)) (abs_nonneg (b - d)))]
   calc
     |a ⊔ b - c ⊔ d| = |a ⊔ b - c ⊔ b + (c ⊔ b - c ⊔ d)| := by rw [sub_add_sub_cancel]
-  
+    _ <= |a ⊔ b - c ⊔ b| + |c ⊔ b - c ⊔ d| := abs_add_le _ _
+    _ <= |a - c| + |b - d| := by
+      gcongr ?_ + ?_
+      · exact abs_sup_sub_sup_le_abs _ _ _
+      · rw [sup_comm c, sup_comm c]
+        exact abs_sup_sub_sup_le_abs _ _ _
 
 中文:
 定理 norm_sup_sub_sup_le_add_norm
@@ -291,7 +306,12 @@ theorem norm_sup_sub_sup_le_add_norm
   rw [abs_of_nonneg (add_nonneg (abs_nonneg (a - c)) (abs_nonneg (b - d)))]
   calc
     |a ⊔ b - c ⊔ d| = |a ⊔ b - c ⊔ b + (c ⊔ b - c ⊔ d)| := by rw [sub_add_sub_cancel]
-  
+    _ <= |a ⊔ b - c ⊔ b| + |c ⊔ b - c ⊔ d| := abs_add_le _ _
+    _ <= |a - c| + |b - d| := by
+      gcongr ?_ + ?_
+      · exact abs_sup_sub_sup_le_abs _ _ _
+      · rw [sup_comm c, sup_comm c]
+        exact abs_sup_sub_sup_le_abs _ _ _
 
 Depends on / 依赖: abs_add_le, abs_nonneg, abs_of_nonneg, abs_sup_sub_sup_le_abs, add_nonneg, le_trans, norm_abs_eq_norm, norm_add_le, sub_add_sub_cancel, sup_comm
 -/

@@ -3075,7 +3075,9 @@ theorem seq_of_forall_finite_exists
   set f : (n : Nat) -> (g : (m : Nat) -> m < n -> γ) -> γ := fun n g => c (range fun k : Iio n => g k.1 k.2)
   set u : Nat -> γ := fun n => Nat.strongRecOn n f
   refine ⟨u, fun n => ?_⟩
-  convert! hc (u '' Iio n) ((finite_l
+  convert! hc (u '' Iio n) ((finite_lt_nat _).image _)
+  rw [image_eq_range]
+  exact Nat.strongRecOn_eq f n
 
 中文:
 定理 seq_of_对任意_finite_存在
@@ -3086,7 +3088,9 @@ theorem seq_of_forall_finite_exists
   set f : (n : Nat) -> (g : (m : Nat) -> m < n -> γ) -> γ := fun n g => c (range fun k : Iio n => g k.1 k.2)
   set u : Nat -> γ := fun n => Nat.strongRecOn n f
   refine ⟨u, fun n => ?_⟩
-  convert! hc (u '' Iio n) ((finite_l
+  convert! hc (u '' Iio n) ((finite_lt_nat _).image _)
+  rw [image_eq_range]
+  exact Nat.strongRecOn_eq f n
 
 Depends on / 依赖: Nat.strongRecOn, Nat.strongRecOn_eq, Nonempty, convert, finite_empty, finite_lt_nat, image_eq_range, nonempty, strongRecOn, strongRecOn_eq
 -/
@@ -3175,7 +3179,7 @@ theorem card_image_of_inj_on
     _ = s.toFinset.card :=
       Finset.card_image_of_injOn fun x hx y hy hxy =>
         H x (mem_toFinset.1 hx) y (mem_toFinset.1 hy) hxy
-    _ = Fintype.card s := (F
+    _ = Fintype.card s := (Fintype.card_of_finset' _ fun _ => mem_toFinset).symm
 
 中文:
 定理 card_image_of_inj_on
@@ -3186,7 +3190,7 @@ theorem card_image_of_inj_on
     _ = s.toFinset.card :=
       Finset.card_image_of_injOn fun x hx y hy hxy =>
         H x (mem_toFinset.1 hx) y (mem_toFinset.1 hy) hxy
-    _ = Fintype.card s := (F
+    _ = Fintype.card s := (Fintype.card_of_finset' _ fun _ => mem_toFinset).symm
 
 Depends on / 依赖: Classical, Classical.propDecidable, Finset, Finset.card_image_of_injOn, Fintype, Fintype.card, Fintype.card_of_finset, card_image_of_injOn, card_of_finset, mem_toFinset, propDecidable, s.toFinset.card, s.toFinset.image, toFinset
 -/

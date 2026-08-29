@@ -948,7 +948,17 @@ theorem dlookup_map₂
 the grind proof here worked, but after changes to the canonicalizer it now times out.
 Changes to grind attributes in Batteries in
 https://github.com/leanprover-community/batteries/pull/1744
-may allow restorin
+may allow restoring the original proof:
+```
+  induction l with
+  | nil => grind [nodupKeys_nil]
+  | cons hd tl =>
+    have := dlookup_map₁ tl hf hd.fst
+    grind [dlookup_isSome, → notMem_keys_of_nodupKeys_cons, nodupKeys_of_nodupKeys_cons,
+      nodupKeys_cons]
+```
+-/
+omit [DecidableEq α] [DecidableEq α'] in
 
 中文:
 定理 dlookup_map₂
@@ -959,7 +969,17 @@ may allow restorin
 the grind proof here worked, but after changes to the canonicalizer it now times out.
 Changes to grind attributes in Batteries in
 https://github.com/leanprover-community/batteries/pull/1744
-may allow restorin
+may allow restoring the original proof:
+```
+  induction l with
+  | nil => grind [nodupKeys_nil]
+  | cons hd tl =>
+    have := dlookup_map₁ tl hf hd.fst
+    grind [dlookup_isSome, → notMem_keys_of_nodupKeys_cons, nodupKeys_of_nodupKeys_cons,
+      nodupKeys_cons]
+```
+-/
+omit [DecidableEq α] [DecidableEq α'] in
 
 Depends on / 依赖: Function, Function.injective_id, dlookup_map, injective_id
 -/
@@ -998,7 +1018,7 @@ theorem NodupKeys.map₁
       obtain ⟨x, hm, he⟩ := mem_map.mp h
       exact mem_map.mpr ⟨x, hm, hf he⟩) nd.1, ih nd.2⟩
 
-omit [Decidabl
+omit [DecidableEq α] in
 
 中文:
 定理 NodupKeys.map₁
@@ -1013,7 +1033,7 @@ omit [Decidabl
       obtain ⟨x, hm, he⟩ := mem_map.mp h
       exact mem_map.mpr ⟨x, hm, hf he⟩) nd.1, ih nd.2⟩
 
-omit [Decidabl
+omit [DecidableEq α] in
 
 Depends on / 依赖: map_cons, map_map, mem_map, mem_map.mp, mem_map.mpr, nodupKeys_cons, nodupKeys_nil
 -/
@@ -1768,7 +1788,11 @@ theorem exists_of_kerase
     · simp only [keys_cons, mem_cons] at h
       rcases h with h | h
       · exact absurd h e
-      rcases ih h with ⟨b, tl₁, tl₂, h₁, 
+      rcases ih h with ⟨b, tl₁, tl₂, h₁, h₂, h₃⟩
+      exact ⟨b, hd :: tl₁, tl₂, not_mem_cons_of_ne_of_not_mem e h₁, by (rw [h₂]; rfl), by
+            simp [e, h₃]⟩
+
+@[simp]
 
 中文:
 定理 存在_of_kerase
@@ -1783,7 +1807,11 @@ theorem exists_of_kerase
     · simp only [keys_cons, mem_cons] at h
       rcases h with h | h
       · exact absurd h e
-      rcases ih h with ⟨b, tl₁, tl₂, h₁, 
+      rcases ih h with ⟨b, tl₁, tl₂, h₁, h₂, h₃⟩
+      exact ⟨b, hd :: tl₁, tl₂, not_mem_cons_of_ne_of_not_mem e h₁, by (rw [h₂]; rfl), by
+            simp [e, h₃]⟩
+
+@[simp]
 
 Depends on / 依赖: absurd, keys_cons, mem_cons, not_mem_cons_of_ne_of_not_mem
 -/
@@ -1878,7 +1906,7 @@ theorem kerase_kerase
     by_cases h' : a = x.1
     · subst a
       simp [kerase_cons_eq rfl, kerase_cons_ne (Ne.symm h)]
-    · simp [kerase_
+    · simp [kerase_cons_ne, *]
 
 中文:
 定理 kerase_kerase
@@ -1895,7 +1923,7 @@ theorem kerase_kerase
     by_cases h' : a = x.1
     · subst a
       simp [kerase_cons_eq rfl, kerase_cons_ne (Ne.symm h)]
-    · simp [kerase_
+    · simp [kerase_cons_ne, *]
 
 Depends on / 依赖: Ne.symm, kerase_cons_eq, kerase_cons_ne
 -/
@@ -2141,6 +2169,12 @@ theorem kerase_comm
         | _, _, ⟨b₁, l₁, l₂, a₁_nin_l₁, rfl, rfl⟩, _ =>
           if h' : a₂ in l₁.keys then by
             simp [kerase_append_left h',
+              kerase_append_right (mt (mem_keys_kerase_of_ne h).mp a₁_nin_l₁)]
+          else by
+            simp [kerase_append_right h', kerase_append_right a₁_nin_l₁,
+              @kerase_cons_ne _ _ _ a₂ ⟨a₁, b₁⟩ _ (Ne.symm h)]
+      else by simp [ha₂, mt mem_keys_of_mem_keys_kerase ha₂]
+    else by simp [ha₁, mt mem_keys_of_mem_keys_kerase ha₁]
 
 中文:
 定理 kerase_comm
@@ -2153,6 +2187,12 @@ theorem kerase_comm
         | _, _, ⟨b₁, l₁, l₂, a₁_nin_l₁, rfl, rfl⟩, _ =>
           if h' : a₂ in l₁.keys then by
             simp [kerase_append_left h',
+              kerase_append_right (mt (mem_keys_kerase_of_ne h).mp a₁_nin_l₁)]
+          else by
+            simp [kerase_append_right h', kerase_append_right a₁_nin_l₁,
+              @kerase_cons_ne _ _ _ a₂ ⟨a₁, b₁⟩ _ (Ne.symm h)]
+      else by simp [ha₂, mt mem_keys_of_mem_keys_kerase ha₂]
+    else by simp [ha₁, mt mem_keys_of_mem_keys_kerase ha₁]
 
 Depends on / 依赖: Ne.symm, exists_of_kerase, kerase, kerase_append_left, kerase_append_right, kerase_cons_ne, l.keys, mem_keys_kerase_of_ne, mem_keys_of_mem_keys_kerase
 -/
@@ -2445,7 +2485,8 @@ theorem nodupKeys_dedupKeys
     simp only [foldr_cons, kinsert_def, nodupKeys_cons]
     constructor
     · simp only [keys_kerase]
-
+      apply l_ih.not_mem_erase
+    · exact l_ih.kerase _
 
 中文:
 定理 nodupKeys_dedupKeys
@@ -2465,7 +2506,8 @@ theorem nodupKeys_dedupKeys
     simp only [foldr_cons, kinsert_def, nodupKeys_cons]
     constructor
     · simp only [keys_kerase]
-
+      apply l_ih.not_mem_erase
+    · exact l_ih.kerase _
 
 Depends on / 依赖: NodupKeys, dedupKeys, foldr_cons, generalize, kerase, keys_kerase, kinsert_def, l_ih, l_ih.kerase, l_ih.not_mem_erase, nodupKeys_cons, nodup_nil, not_mem_erase
 -/

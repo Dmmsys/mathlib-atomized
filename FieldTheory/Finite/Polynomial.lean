@@ -181,7 +181,7 @@ refine degrees_prod_le.trans Finset.sum_le_sum fun s _ => degrees_sub_le.trans ?
   refine le_trans degrees_pow_le (nsmul_le_nsmul_right ?_ _)
   refine degrees_sub_le.trans ?_
   rw [degrees_C]; rw [Multiset.union_zero]
-  ex
+  exact degrees_X' _
 
 中文:
 定理 degrees_indicator
@@ -194,7 +194,7 @@ refine degrees_prod_le.trans Finset.sum_le_sum fun s _ => degrees_sub_le.trans ?
   refine le_trans degrees_pow_le (nsmul_le_nsmul_right ?_ _)
   refine degrees_sub_le.trans ?_
   rw [degrees_C]; rw [Multiset.union_zero]
-  ex
+  exact degrees_X' _
 
 Depends on / 依赖: Finset, Finset.sum_le_sum, Multiset, Multiset.union_zero, Multiset.zero_union, classical, degrees_C, degrees_X, degrees_one, degrees_pow_le, degrees_prod_le, degrees_prod_le.trans, degrees_sub_le, degrees_sub_le.trans, indicator, le_trans, nsmul_le_nsmul_right, sum_le_sum, union_zero, zero_union
 -/
@@ -223,7 +223,11 @@ theorem indicator_mem_restrictDegree
   simp_rw [← Multiset.coe_countAddMonoidHom, map_sum,
     map_nsmul, Multiset.coe_countAddMonoidHom, nsmul_eq_mul, Nat.cast_id]
   trans
-  · re
+  · refine Finset.sum_eq_single n ?_ ?_
+    · intro b _ ne
+      simp [ne, eqComm]
+    · intro h; exact (h <| Finset.mem_univ _).elim
+  · rw [Multiset.count_singleton_self, mul_one]
 
 中文:
 定理 indicator_mem_restrictDegree
@@ -236,7 +240,11 @@ theorem indicator_mem_restrictDegree
   simp_rw [← Multiset.coe_countAddMonoidHom, map_sum,
     map_nsmul, Multiset.coe_countAddMonoidHom, nsmul_eq_mul, Nat.cast_id]
   trans
-  · re
+  · refine Finset.sum_eq_single n ?_ ?_
+    · intro b _ ne
+      simp [ne, eqComm]
+    · intro h; exact (h <| Finset.mem_univ _).elim
+  · rw [Multiset.count_singleton_self, mul_one]
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum_eq_single, Multiset, Multiset.coe_countAddMonoidHom, Multiset.count_le_of_le, Multiset.count_singleton_self, Nat.cast_id, cast_id, classical, coe_countAddMonoidHom, count_le_of_le, count_singleton_self, degrees_indicator, eqComm, indicator, le_of_eq, le_trans, map_nsmul, map_sum
 -/
@@ -272,7 +280,7 @@ theorem eval_indicator_apply_eq_zero
     Finset.prod_eq_zero_iff]
   refine ⟨i, Finset.mem_univ _, ?_⟩
   rw [FiniteField.pow_card_sub_one_eq_one]; rw [sub_self]
-  rwa [Ne, su
+  rwa [Ne, sub_eq_zero]
 
 中文:
 定理 eval_indicator_apply_eq_zero
@@ -284,7 +292,7 @@ theorem eval_indicator_apply_eq_zero
     Finset.prod_eq_zero_iff]
   refine ⟨i, Finset.mem_univ _, ?_⟩
   rw [FiniteField.pow_card_sub_one_eq_one]; rw [sub_self]
-  rwa [Ne, su
+  rwa [Ne, sub_eq_zero]
 
 Depends on / 依赖: FiniteField, FiniteField.pow_card_sub_one_eq_one, Finset, Finset.mem_univ, Finset.prod_eq_zero_iff, eval_C, eval_X, funext_iff, indicator, map_one, map_pow, map_prod, map_sub, mem_univ, not_forall, pow_card_sub_one_eq_one, prod_eq_zero_iff, sub_eq_zero, sub_self
 -/
@@ -343,7 +351,8 @@ theorem map_restrict_dom_evalₗ
   · exact sum_mem fun c _ => smul_mem _ _ (indicator_mem_restrictDegree _)
   · ext n
     simp only [evalₗ_apply, map_sum, smul_eval]
-    rw [Fin
+    rw [Finset.sum_eq_single n] <;>
+      aesop (add simp [eval_indicator_apply_eq_zero, eval_indicator_apply_eq_one, eq_comm])
 
 中文:
 定理 map_restrict_dom_evalₗ
@@ -356,7 +365,8 @@ theorem map_restrict_dom_evalₗ
   · exact sum_mem fun c _ => smul_mem _ _ (indicator_mem_restrictDegree _)
   · ext n
     simp only [evalₗ_apply, map_sum, smul_eval]
-    rw [Fin
+    rw [Finset.sum_eq_single n] <;>
+      aesop (add simp [eval_indicator_apply_eq_zero, eval_indicator_apply_eq_one, eq_comm])
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, SetLike, SetLike.le_def, classical, eq_comm, eval_indicator_apply_eq_one, eval_indicator_apply_eq_zero, indicator, indicator_mem_restrictDegree, le_def, map_sum, mem_map, nonempty_fintype, smul_eval, smul_mem, sum_eq_single, sum_mem, top_unique
 -/
@@ -515,7 +525,17 @@ theorem rank_R
         Module.rank K (↥{ s : σ ->₀ Nat | forall n : σ, s n <= Fintype.card K - 1 } ->₀ K) :=
       LinearEquiv.rank_eq
         (AddMonoidAlgebra.supportedEquivFinsupp { s : σ ->₀ Nat | forall n : σ, s n <= Fintype.card K - 1 })
-    _ = #{ s : σ ->₀ Nat | forall n : 
+    _ = #{ s : σ ->₀ Nat | forall n : σ, s n <= Fintype.card K - 1 } := by rw [rank_finsupp_self']
+    _ = #{ s : σ -> Nat | forall n : σ, s n < Fintype.card K } := by
+      refine Quotient.sound ⟨Equiv.subtypeEquiv Finsupp.equivFunOnFinite fun f => ?_⟩
+      refine forall_congr' fun n => le_tsub_iff_right ?_
+      exact Fintype.card_pos_iff.2 ⟨0⟩
+    _ = #(σ -> { n // n < Fintype.card K }) :=
+      (@Equiv.subtypePiEquivPi σ (fun _ => Nat) fun _ n => n < Fintype.card K).cardinal_eq
+    _ = #(σ -> Fin (Fintype.card K)) :=
+      (Equiv.arrowCongr (Equiv.refl σ) Fin.equivSubtype.symm).cardinal_eq
+    _ = #(σ -> K) := (Equiv.arrowCongr (Equiv.refl σ) (Fintype.equivFin K).symm).cardinal_eq
+    _ = Fintype.card (σ -> K) := Cardinal.mk_fintype _
 
 中文:
 定理 rank_R
@@ -526,7 +546,17 @@ theorem rank_R
         Module.rank K (↥{ s : σ ->₀ Nat | forall n : σ, s n <= Fintype.card K - 1 } ->₀ K) :=
       LinearEquiv.rank_eq
         (AddMonoidAlgebra.supportedEquivFinsupp { s : σ ->₀ Nat | forall n : σ, s n <= Fintype.card K - 1 })
-    _ = #{ s : σ ->₀ Nat | forall n : 
+    _ = #{ s : σ ->₀ Nat | forall n : σ, s n <= Fintype.card K - 1 } := by rw [rank_finsupp_self']
+    _ = #{ s : σ -> Nat | forall n : σ, s n < Fintype.card K } := by
+      refine Quotient.sound ⟨Equiv.subtypeEquiv Finsupp.equivFunOnFinite fun f => ?_⟩
+      refine forall_congr' fun n => le_tsub_iff_right ?_
+      exact Fintype.card_pos_iff.2 ⟨0⟩
+    _ = #(σ -> { n // n < Fintype.card K }) :=
+      (@Equiv.subtypePiEquivPi σ (fun _ => Nat) fun _ n => n < Fintype.card K).cardinal_eq
+    _ = #(σ -> Fin (Fintype.card K)) :=
+      (Equiv.arrowCongr (Equiv.refl σ) Fin.equivSubtype.symm).cardinal_eq
+    _ = #(σ -> K) := (Equiv.arrowCongr (Equiv.refl σ) (Fintype.equivFin K).symm).cardinal_eq
+    _ = Fintype.card (σ -> K) := Cardinal.mk_fintype _
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.supportedEquivFinsupp, Equiv.subtypeEquiv, Finsupp, Finsupp.equivFunOnFinite, Fintype, Fintype.card, LinearEquiv, LinearEquiv.rank_eq, Module, Module.rank, Quotient, Quotient.sound, equivFunOnFinite, forall_congr, rank_eq, rank_finsupp_self, subtypeEquiv, supportedEquivFinsupp
 -/

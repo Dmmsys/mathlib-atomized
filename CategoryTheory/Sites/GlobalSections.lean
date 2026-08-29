@@ -337,7 +337,7 @@ definition Sheaf.isLimitConeΓ
     simp [coneΓ, ← ΓHomEquiv_naturality_left_symm]
   uniq c f hf := by
     replace hf : ((Functor.const Cᵒᵖ).map f) ≫ F.coneΓ.π = c.π := by ext j; exact hf j
-    simpa [con
+    simpa [coneΓ, ← ΓHomEquiv_naturality_left_symm, Equiv.symm_apply_eq] using hf
 
 中文:
 定义 层.isLimitConeΓ
@@ -348,7 +348,7 @@ definition Sheaf.isLimitConeΓ
     simp [coneΓ, ← ΓHomEquiv_naturality_left_symm]
   uniq c f hf := by
     replace hf : ((Functor.const Cᵒᵖ).map f) ≫ F.coneΓ.π = c.π := by ext j; exact hf j
-    simpa [con
+    simpa [coneΓ, ← ΓHomEquiv_naturality_left_symm, Equiv.symm_apply_eq] using hf
 -/
 noncomputable def Sheaf.isLimitConeΓ [HasGlobalSectionsFunctor J A] (F : Sheaf J A) :
     IsLimit F.coneΓ where

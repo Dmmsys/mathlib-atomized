@@ -67,7 +67,21 @@ theorem eq_one_of_noncommProd_eq_one_of_iSupIndep
     | insert i s hnotMem ih =>
       have hcomm := comm.mono (Finset.coe_subset.2 <| Finset.subset_insert _ _)
       simp only [Finset.forall_mem_insert] at hmem
-      have hmem_bsupr : s.noncommProd f 
+      have hmem_bsupr : s.noncommProd f hcomm in ⨆ i in (s : Set ι), K i := by
+        refine Subgroup.noncommProd_mem _ _ ?_
+        intro x hx
+        have : K x <= ⨆ i in (s : Set ι), K i := le_iSup₂ (f := fun i _ => K i) x hx
+        exact this (hmem.2 x hx)
+      intro heq1
+      rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hnotMem] at heq1
+      have hnotMem' : i ∉ (s : Set ι) := by simpa
+      obtain ⟨heq1i : f i = 1, heq1S : s.noncommProd f _ = 1⟩ :=
+        Subgroup.disjoint_iff_mul_eq_one.mp (hind.disjoint_biSup hnotMem') hmem.1 hmem_bsupr heq1
+      intro i h
+      simp only [Finset.mem_insert] at h
+      rcases h with (rfl | h)
+      · exact heq1i
+      · refine ih hcomm hmem.2 heq1S _ h
 
 中文:
 定理 eq_one_of_noncommProd_eq_one_of_iSupIndep
@@ -80,7 +94,21 @@ theorem eq_one_of_noncommProd_eq_one_of_iSupIndep
     | insert i s hnotMem ih =>
       have hcomm := comm.mono (Finset.coe_subset.2 <| Finset.subset_insert _ _)
       simp only [Finset.forall_mem_insert] at hmem
-      have hmem_bsupr : s.noncommProd f 
+      have hmem_bsupr : s.noncommProd f hcomm in ⨆ i in (s : Set ι), K i := by
+        refine Subgroup.noncommProd_mem _ _ ?_
+        intro x hx
+        have : K x <= ⨆ i in (s : Set ι), K i := le_iSup₂ (f := fun i _ => K i) x hx
+        exact this (hmem.2 x hx)
+      intro heq1
+      rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hnotMem] at heq1
+      have hnotMem' : i ∉ (s : Set ι) := by simpa
+      obtain ⟨heq1i : f i = 1, heq1S : s.noncommProd f _ = 1⟩ :=
+        Subgroup.disjoint_iff_mul_eq_one.mp (hind.disjoint_biSup hnotMem') hmem.1 hmem_bsupr heq1
+      intro i h
+      simp only [Finset.mem_insert] at h
+      rcases h with (rfl | h)
+      · exact heq1i
+      · refine ih hcomm hmem.2 heq1S _ h
 
 Depends on / 依赖: Finset, Finset.coe_subset, Finset.forall_mem_insert, Finset.induction_on, Finset.noncommProd_insert_of_n, Finset.subset_insert, Subgroup, Subgroup.noncommProd_mem, classical, coe_subset, comm.mono, forall_mem_insert, hmem_bsupr, hnotMem, induction_on, insert, noncommProd, noncommProd_insert_of_n, noncommProd_mem, revert
 -/
@@ -145,7 +173,9 @@ definition noncommPiCoprod
     simp
   map_mul' f g := by
     convert! @Finset.noncommProd_mul_distrib _ _ _ _ (fun i => ϕ i (f i)) (fun i => ϕ i (g i)) _ _ _
-    · e
+    · exact map_mul _ _ _
+    · rintro i - j - h
+      exact hcomm h _ _
 
 中文:
 定义 noncommPiCoprod
@@ -156,7 +186,9 @@ definition noncommPiCoprod
     simp
   map_mul' f g := by
     convert! @Finset.noncommProd_mul_distrib _ _ _ _ (fun i => ϕ i (f i)) (fun i => ϕ i (g i)) _ _ _
-    · e
+    · exact map_mul _ _ _
+    · rintro i - j - h
+      exact hcomm h _ _
 
 Depends on / 依赖: Finset, Finset.univ.noncommProd, noncommProd
 -/
@@ -187,7 +219,12 @@ theorem noncommPiCoprod_mulSingle
   rw [← Finset.insert_erase (Finset.mem_univ i)]
   rw [Finset.noncommProd_insert_of_notMem _ _ _ _ (Finset.notMem_erase i _)]
   rw [Pi.mulSingle_eq_same]
-  rw [Finset.noncommProd_eq_pow
+  rw [Finset.noncommProd_eq_pow_card]
+  · rw [one_pow]
+    exact mul_one _
+  · intro j hj
+    simp only [Finset.mem_erase] at hj
+    simp [hj]
 
 中文:
 定理 noncommPiCoprod_mulSingle
@@ -198,7 +235,12 @@ theorem noncommPiCoprod_mulSingle
   rw [← Finset.insert_erase (Finset.mem_univ i)]
   rw [Finset.noncommProd_insert_of_notMem _ _ _ _ (Finset.notMem_erase i _)]
   rw [Pi.mulSingle_eq_same]
-  rw [Finset.noncommProd_eq_pow
+  rw [Finset.noncommProd_eq_pow_card]
+  · rw [one_pow]
+    exact mul_one _
+  · intro j hj
+    simp only [Finset.mem_erase] at hj
+    simp [hj]
 
 Depends on / 依赖: Finset, Finset.insert_erase, Finset.mem_erase, Finset.mem_univ, Finset.noncommProd_eq_pow_card, Finset.noncommProd_insert_of_notMem, Finset.notMem_erase, Finset.univ.noncommProd, Pi.mulSingle, Pi.mulSingle_eq_same, insert_erase, mem_erase, mem_univ, mulSingle, mulSingle_eq_same, mul_one, noncommProd, noncommProd_eq_pow_card, noncommProd_insert_of_notMem, notMem_erase
 -/
@@ -240,7 +282,10 @@ definition noncommPiCoprodEquiv
   left_inv ϕ := by
     ext
     simp only [coe_comp, Function.comp_apply, mulSingle_apply, noncommPiCoprod_mulSingle]
-  right_inv f := pi_ext fu
+  right_inv f := pi_ext fun i x => by
+    simp only [noncommPiCoprod_mulSingle, coe_comp, Function.comp_apply, mulSingle_apply]
+
+@[to_additive]
 
 中文:
 定义 noncommPiCoprodEquiv
@@ -252,7 +297,10 @@ definition noncommPiCoprodEquiv
   left_inv ϕ := by
     ext
     simp only [coe_comp, Function.comp_apply, mulSingle_apply, noncommPiCoprod_mulSingle]
-  right_inv f := pi_ext fu
+  right_inv f := pi_ext fun i x => by
+    simp only [noncommPiCoprod_mulSingle, coe_comp, Function.comp_apply, mulSingle_apply]
+
+@[to_additive]
 
 Depends on / 依赖: noncommPiCoprod
 -/
@@ -285,7 +333,9 @@ theorem noncommPiCoprod_mrange
     simp
   · refine iSup_le ?_
     rintro i x ⟨y, rfl⟩
-    exact ⟨Pi.mulSingle i y, noncom
+    exact ⟨Pi.mulSingle i y, noncommPiCoprod_mulSingle _ _ _⟩
+
+@[to_additive]
 
 中文:
 定理 noncommPiCoprod_mrange
@@ -299,7 +349,9 @@ theorem noncommPiCoprod_mrange
     simp
   · refine iSup_le ?_
     rintro i x ⟨y, rfl⟩
-    exact ⟨Pi.mulSingle i y, noncom
+    exact ⟨Pi.mulSingle i y, noncommPiCoprod_mulSingle _ _ _⟩
+
+@[to_additive]
 
 Depends on / 依赖: Classical, Classical.decEq, Pi.mulSingle, Submonoid, Submonoid.mem_sSup_of_mem, Submonoid.noncommProd_mem, iSup_le, le_antisymm, mem_sSup_of_mem, mulSingle, noncommPiCoprod_mulSingle, noncommProd_mem
 -/
@@ -443,7 +495,9 @@ theorem noncommPiCoprod_range
     simp
   · refine iSup_le ?_
     rintro i x ⟨y, rfl⟩
-    exact ⟨Pi.mulSingle i y, noncommPi
+    exact ⟨Pi.mulSingle i y, noncommPiCoprod_mulSingle _ _ _⟩
+
+@[to_additive]
 
 中文:
 定理 noncommPiCoprod_range
@@ -459,7 +513,9 @@ theorem noncommPiCoprod_range
     simp
   · refine iSup_le ?_
     rintro i x ⟨y, rfl⟩
-    exact ⟨Pi.mulSingle i y, noncommPi
+    exact ⟨Pi.mulSingle i y, noncommPiCoprod_mulSingle _ _ _⟩
+
+@[to_additive]
 
 Depends on / 依赖: Classical, Classical.decEq, Pi.mulSingle, Subgroup, Subgroup.mem_sSup_of_mem, Subgroup.noncommProd_mem, iSup_le, le_antisymm, mem_sSup_of_mem, mulSingle, noncommPiCoprod_mulSingle, noncommProd_mem
 -/
@@ -494,7 +550,9 @@ theorem injective_noncommPiCoprod_of_iSupIndep
       _ hind (by simp) heq1
   ext i
   apply hinj
-  simp [this i (Finset.mem_un
+  simp [this i (Finset.mem_univ i)]
+
+@[to_additive]
 
 中文:
 定理 injective_noncommPiCoprod_of_iSupIndep
@@ -508,7 +566,9 @@ theorem injective_noncommPiCoprod_of_iSupIndep
       _ hind (by simp) heq1
   ext i
   apply hinj
-  simp [this i (Finset.mem_un
+  simp [this i (Finset.mem_univ i)]
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.univ, MonoidHom, MonoidHom.ker_eq_bot_iff, Subgroup, Subgroup.eq_one_of_noncommProd_eq_one_of_iSupIndep, eq_bot_iff, eq_one_of_noncommProd_eq_one_of_iSupIndep, ker_eq_bot_iff, mem_univ
 -/
@@ -545,7 +605,22 @@ theorem independent_range_of_coprime_order
     apply hcomm
     exact hj ∘ Subtype.ext
   obtain ⟨g, hgf⟩ := hxp
-  obtai
+  obtain ⟨g', hg'f⟩ := hxi
+  have hxi : orderOf f ∣ Fintype.card (H i) := by
+    rw [← hg'f]
+    exact (orderOf_map_dvd _ _).trans orderOf_dvd_card
+  have hxp : orderOf f ∣ ∏ j : { j // j != i }, Fintype.card (H j) := by
+    rw [← hgf]; rw [← Fintype.card_pi]
+    exact (orderOf_map_dvd _ _).trans orderOf_dvd_card
+  change f = 1
+  rw [← pow_one f]; rw [← orderOf_dvd_iff_pow_eq_one]
+  obtain ⟨c, hc⟩ := Nat.dvd_gcd hxp hxi
+  use c
+  rw [← hc]
+  symm
+  rw [← Nat.coprime_iff_gcd_eq_one]; rw [Nat.coprime_fintype_prod_left_iff]; rw [Subtype.forall]
+  intro j h
+  exact hcoprime h
 
 中文:
 定理 independent_range_of_coprime_order
@@ -562,7 +637,22 @@ theorem independent_range_of_coprime_order
     apply hcomm
     exact hj ∘ Subtype.ext
   obtain ⟨g, hgf⟩ := hxp
-  obtai
+  obtain ⟨g', hg'f⟩ := hxi
+  have hxi : orderOf f ∣ Fintype.card (H i) := by
+    rw [← hg'f]
+    exact (orderOf_map_dvd _ _).trans orderOf_dvd_card
+  have hxp : orderOf f ∣ ∏ j : { j // j != i }, Fintype.card (H j) := by
+    rw [← hgf]; rw [← Fintype.card_pi]
+    exact (orderOf_map_dvd _ _).trans orderOf_dvd_card
+  change f = 1
+  rw [← pow_one f]; rw [← orderOf_dvd_iff_pow_eq_one]
+  obtain ⟨c, hc⟩ := Nat.dvd_gcd hxp hxi
+  use c
+  rw [← hc]
+  symm
+  rw [← Nat.coprime_iff_gcd_eq_one]; rw [Nat.coprime_fintype_prod_left_iff]; rw [Subtype.forall]
+  intro j h
+  exact hcoprime h
 
 Depends on / 依赖: Classical, Classical.decEq, Fintype, Fintype.ca, Fintype.card, Subtype, Subtype.ext, disjoint_iff_inf_le, iSup_subtype, noncommPiCoprod_range, nonempty_fintype, orderOf, orderOf_dvd_card, orderOf_map_dvd, rotate_left
 -/

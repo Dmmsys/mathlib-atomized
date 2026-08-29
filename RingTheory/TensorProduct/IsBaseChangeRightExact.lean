@@ -58,7 +58,13 @@ lemma IsBaseChange.of_right_exact
   simp only [IsBaseChange, IsTensorProduct] at isb₁ isb₂ ⊢
   refine LinearMap.bijective_of_surjective_of_bijective_of_right_exact
     ((f.baseChange S).restrictScalars R) ((g.baseChange S).restrictScalars R)
-    (f'.restrictScalars R) (g'.restrictScalars R) _ _ _ ?_ ?_ ?_ exact₂ isb₁.2 isb₂ ?_ su
+    (f'.restrictScalars R) (g'.restrictScalars R) _ _ _ ?_ ?_ ?_ exact₂ isb₁.2 isb₂ ?_ surj₂
+  · ext s m
+    simpa using congr(s • ($comm₁ m)).symm
+  · ext s m
+    simpa using congr(s • ($comm₂ m)).symm
+  · exact lTensor_exact S exact₁ surj₁
+  · exact LinearMap.lTensor_surjective S surj₁
 
 中文:
 引理 IsBaseChange.of_right_exact
@@ -67,7 +73,13 @@ lemma IsBaseChange.of_right_exact
   simp only [IsBaseChange, IsTensorProduct] at isb₁ isb₂ ⊢
   refine LinearMap.bijective_of_surjective_of_bijective_of_right_exact
     ((f.baseChange S).restrictScalars R) ((g.baseChange S).restrictScalars R)
-    (f'.restrictScalars R) (g'.restrictScalars R) _ _ _ ?_ ?_ ?_ exact₂ isb₁.2 isb₂ ?_ su
+    (f'.restrictScalars R) (g'.restrictScalars R) _ _ _ ?_ ?_ ?_ exact₂ isb₁.2 isb₂ ?_ surj₂
+  · ext s m
+    simpa using congr(s • ($comm₁ m)).symm
+  · ext s m
+    simpa using congr(s • ($comm₂ m)).symm
+  · exact lTensor_exact S exact₁ surj₁
+  · exact LinearMap.lTensor_surjective S surj₁
 
 Depends on / 依赖: IsBaseChange, IsTensorProduct, LinearMap, LinearMap.bijective_of_surjective_of_bijective_of_right_exact, LinearMap.lTensor_surjective, baseChange, bijective_of_surjective_of_bijective_of_right_exact, f.baseChange, g.baseChange, lTensor_exact, lTensor_surjective, restrictScalars
 -/

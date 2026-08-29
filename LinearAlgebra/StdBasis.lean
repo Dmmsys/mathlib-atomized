@@ -167,7 +167,14 @@ theorem basis_repr_single
       Basis.repr_symm_apply, LinearEquiv.coe_mk]
     symm
     simp [Finsupp.single_apply]
-  simp only [P
+  simp only [Pi.basis, LinearEquiv.trans_apply, Finsupp.sigmaFinsuppLEquivPiFinsupp_symm_apply,
+    LinearEquiv.piCongrRight]
+  dsimp
+  rw [Pi.single_eq_of_ne (Ne.symm hj)]; rw [map_zero]; rw [Finsupp.zero_apply]; rw [Finsupp.single_eq_of_ne]
+  rintro ⟨⟩
+  contradiction
+
+@[simp]
 
 中文:
 定理 basis_repr_single
@@ -182,7 +189,14 @@ theorem basis_repr_single
       Basis.repr_symm_apply, LinearEquiv.coe_mk]
     symm
     simp [Finsupp.single_apply]
-  simp only [P
+  simp only [Pi.basis, LinearEquiv.trans_apply, Finsupp.sigmaFinsuppLEquivPiFinsupp_symm_apply,
+    LinearEquiv.piCongrRight]
+  dsimp
+  rw [Pi.single_eq_of_ne (Ne.symm hj)]; rw [map_zero]; rw [Finsupp.zero_apply]; rw [Finsupp.single_eq_of_ne]
+  rintro ⟨⟩
+  contradiction
+
+@[simp]
 
 Depends on / 依赖: Basis.repr_symm_apply, Finsupp, Finsupp.sigmaFinsuppLEquivPiFinsupp_symm_apply, Finsupp.single_apply, Finsupp.single_eq_of_ne, Finsupp.zero_apply, LinearEquiv, LinearEquiv.coe_mk, LinearEquiv.piCongrRight, LinearEquiv.trans_apply, Ne.symm, Pi.basis, Pi.single_eq_of_ne, classical, coe_mk, map_zero, piCongrRight, repr_symm_apply, sigmaFinsuppLEquivPiFinsupp_symm_apply, single_apply
 -/
@@ -410,7 +424,16 @@ lemma AlgHom.eq_piEvalAlgHom
     by_contra
     simp_all
   have h2 : forall t != s, φ (Pi.single t 1) = 0 := by
-    re
+    refine fun _ _ => (eq_zero_or_eq_zero_of_mul_eq_zero ?_).resolve_left hs
+    rw [← map_mul]
+    convert! map_zero φ
+    ext u
+    by_cases u = s <;> simp_all
+  have h3 : φ (Pi.single s 1) = 1 := by
+    rwa [Fintype.sum_eq_single s h2] at h1
+  use s
+  refine AlgHom.toLinearMap_injective ((Pi.basisFun k G).ext fun t => ?_)
+  by_cases t = s <;> simp_all
 
 中文:
 引理 代数态射.eq_piEvalAlgHom
@@ -424,7 +447,16 @@ lemma AlgHom.eq_piEvalAlgHom
     by_contra
     simp_all
   have h2 : forall t != s, φ (Pi.single t 1) = 0 := by
-    re
+    refine fun _ _ => (eq_zero_or_eq_zero_of_mul_eq_zero ?_).resolve_left hs
+    rw [← map_mul]
+    convert! map_zero φ
+    ext u
+    by_cases u = s <;> simp_all
+  have h3 : φ (Pi.single s 1) = 1 := by
+    rwa [Fintype.sum_eq_single s h2] at h1
+  use s
+  refine AlgHom.toLinearMap_injective ((Pi.basisFun k G).ext fun t => ?_)
+  by_cases t = s <;> simp_all
 
 Depends on / 依赖: Finset, Finset.univ_sum_single, Fintype, Fintype.ofFinite, Fintype.sum_eq_single, Pi.one_apply, Pi.single, classical, convert, eq_zero_or_eq_zero_of_mul_eq_zero, map_mul, map_one, map_sum, map_zero, ofFinite, one_apply, resolve_left, single, sum_eq_single, univ_sum_single
 -/

@@ -237,14 +237,14 @@ lemma IsFinite.eq_isProper_inf_isAffineHom
   proof: by
   have : (@IsAffineHom ⊓ @IsSeparated : MorphismProperty _) = @IsAffineHom :=
     inf_eq_left.mpr fun _ _ _ _ => inferInstance
-  rw [inf_comm]; rw [isProper_eq]; rw [inf_assoc]; rw [← inf_assoc]; rw [this]; rw [eq_inf]; rw [IsIntegralHom.eq_universallyClosed_inf_isAffineHom]; rw [inf_assoc]; rw [
+  rw [inf_comm]; rw [isProper_eq]; rw [inf_assoc]; rw [← inf_assoc]; rw [this]; rw [eq_inf]; rw [IsIntegralHom.eq_universallyClosed_inf_isAffineHom]; rw [inf_assoc]; rw [inf_left_comm]
 
 中文:
 引理 是有限.eq_isProper_inf_isAffineHom
   证明: by
   have : (@IsAffineHom ⊓ @IsSeparated : MorphismProperty _) = @IsAffineHom :=
     inf_eq_left.mpr fun _ _ _ _ => inferInstance
-  rw [inf_comm]; rw [isProper_eq]; rw [inf_assoc]; rw [← inf_assoc]; rw [this]; rw [eq_inf]; rw [IsIntegralHom.eq_universallyClosed_inf_isAffineHom]; rw [inf_assoc]; rw [
+  rw [inf_comm]; rw [isProper_eq]; rw [inf_assoc]; rw [← inf_assoc]; rw [this]; rw [eq_inf]; rw [IsIntegralHom.eq_universallyClosed_inf_isAffineHom]; rw [inf_assoc]; rw [inf_left_comm]
 
 Depends on / 依赖: IsAffineHom, IsIntegralHom, IsIntegralHom.eq_universallyClosed_inf_isAffineHom, IsSeparated, MorphismProperty, eq_inf, eq_universallyClosed_inf_isAffineHom, inf_assoc, inf_comm, inf_eq_left, inf_eq_left.mpr, inf_left_comm, isProper_eq
 -/
@@ -427,7 +427,9 @@ theorem isIntegral_appTop_of_universallyClosed
   have : UniversallyClosed (X.toSpecΓ ≫ Spec.map f.appTop) := by
     rwa [← Scheme.toSpecΓ_naturality,
       MorphismProperty.cancel_right_of_respectsIso (P := @UniversallyClosed)]
-  have : UniversallyClosed X.toSpecΓ :
+  have : UniversallyClosed X.toSpecΓ := .of_comp_of_isSeparated _ (Spec.map f.appTop)
+  rw [← IsIntegralHom.SpecMap_iff]; rw [IsIntegralHom.iff_universallyClosed_and_isAffineHom]
+  exact ⟨.of_comp_surjective X.toSpecΓ _, inferInstance⟩
 
 中文:
 定理 is整数egral_appTop_of_universallyClosed
@@ -437,7 +439,9 @@ theorem isIntegral_appTop_of_universallyClosed
   have : UniversallyClosed (X.toSpecΓ ≫ Spec.map f.appTop) := by
     rwa [← Scheme.toSpecΓ_naturality,
       MorphismProperty.cancel_right_of_respectsIso (P := @UniversallyClosed)]
-  have : UniversallyClosed X.toSpecΓ :
+  have : UniversallyClosed X.toSpecΓ := .of_comp_of_isSeparated _ (Spec.map f.appTop)
+  rw [← IsIntegralHom.SpecMap_iff]; rw [IsIntegralHom.iff_universallyClosed_and_isAffineHom]
+  exact ⟨.of_comp_surjective X.toSpecΓ _, inferInstance⟩
 
 Depends on / 依赖: CompactSpace, IsIntegralHom, IsIntegralHom.SpecMap_iff, IsIntegralHom.iff_universallyClosed_and_isAffineHom, MorphismProperty, MorphismProperty.cancel_right_of_respectsIso, Scheme, Scheme.toSpec, Spec.map, SpecMap_iff, UniversallyClosed, X.toSpec, appTop, cancel_right_of_respectsIso, f.appTop, iff_universallyClosed_and_isAffineHom, of_comp_of_isSeparated, of_comp_surjective, quasiCompact_iff_compactSpace
 -/
@@ -463,7 +467,7 @@ theorem isField_of_universallyClosed
     apply RingHom.isIntegral_respectsIso.2 (e := (Scheme.ΓSpecIso _).symm.commRingCatIsoToRingEquiv)
     exact isIntegral_appTop_of_universallyClosed f
   algebraize [F.hom]
-  exact isField_of_isIntegral_of_isField' (Fie
+  exact isField_of_isIntegral_of_isField' (Field.toIsField K)
 
 中文:
 定理 isField_of_universallyClosed
@@ -474,7 +478,7 @@ theorem isField_of_universallyClosed
     apply RingHom.isIntegral_respectsIso.2 (e := (Scheme.ΓSpecIso _).symm.commRingCatIsoToRingEquiv)
     exact isIntegral_appTop_of_universallyClosed f
   algebraize [F.hom]
-  exact isField_of_isIntegral_of_isField' (Fie
+  exact isField_of_isIntegral_of_isField' (Field.toIsField K)
 
 Depends on / 依赖: F.hom, F.hom.IsIntegral, Field.toIsField, IsIntegral, RingHom, RingHom.isIntegral_respectsIso, Scheme, algebraize, appTop, commRingCatIsoToRingEquiv, f.appTop, isField_of_isIntegral_of_isField, isIntegral_appTop_of_universallyClosed, isIntegral_respectsIso, symm.commRingCatIsoToRingEquiv, toIsField
 -/
@@ -499,7 +503,11 @@ theorem finite_appTop_of_universallyClosed
     X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
   let := ((Scheme.ΓSpecIso (.of K)).commRingCatIsoToRingEquiv.toMulEquiv.isField
     (Field.toIsField K)).toField
-  let := (isField_of
+  let := (isField_of_universallyClosed K f).toField
+  have : Nonempty U := ⟨⟨x, hxU⟩⟩
+  apply RingHom.finite_of_algHom_finiteType_of_isJacobsonRing (A := Γ(X, U))
+    (g := (X.presheaf.map (homOfLE le_top).op).hom)
+  exact f.finiteType_appLE (isAffineOpen_top _) hU (by simp)
 
 中文:
 定理 finite_appTop_of_universallyClosed
@@ -510,7 +518,11 @@ theorem finite_appTop_of_universallyClosed
     X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
   let := ((Scheme.ΓSpecIso (.of K)).commRingCatIsoToRingEquiv.toMulEquiv.isField
     (Field.toIsField K)).toField
-  let := (isField_of
+  let := (isField_of_universallyClosed K f).toField
+  have : Nonempty U := ⟨⟨x, hxU⟩⟩
+  apply RingHom.finite_of_algHom_finiteType_of_isJacobsonRing (A := Γ(X, U))
+    (g := (X.presheaf.map (homOfLE le_top).op).hom)
+  exact f.finiteType_appLE (isAffineOpen_top _) hU (by simp)
 
 Depends on / 依赖: Field.toIsField, Nonempty, Nonempty.some, RingHom, RingHom.finite_of_algHom_finiteType_of_isJacobsonRing, Scheme, Set.mem_univ, X.isBasis_affineOpens.exists_subset_of_mem_open, X.presheaf.map, commRingCatIsoToRingEquiv, commRingCatIsoToRingEquiv.toMulEquiv.isField, exists_subset_of_mem_open, f.finiteType_appLE, finiteType_appLE, finite_of_algHom_finiteType_of_isJacobsonRing, homOfLE, isBasis_affineOpens, isField, isField_of_universallyClosed, isOpen_univ
 -/

@@ -319,7 +319,12 @@ theorem norm_deriv_mulExpNegMulSq_le_one
   rw [heq]; rw [abs_mul]; rw [abs_exp]
   set y := ε * x * x with hy
   have hynonneg : 0 <= y := by
-    rw [hy]; rw 
+    rw [hy]; rw [mul_assoc]
+    exact mul_nonneg hε.le (mul_self_nonneg x)
+  apply mul_le_of_le_inv_mul₀ (zero_le_one' Real) (exp_nonneg _)
+  simp only [← exp_neg (-y), neg_neg, mul_one, abs_le, neg_le_sub_iff_le_add, tsub_le_iff_right]
+  refine ⟨le_trans two_mul_le_exp ((le_add_iff_nonneg_left (exp y)).mpr zero_le_one), ?_⟩
+  exact le_trans (one_le_exp hynonneg) (le_add_of_nonneg_right (by simp [hynonneg]))
 
 中文:
 定理 norm_deriv_mulExpNegMulSq_le_one
@@ -331,7 +336,12 @@ theorem norm_deriv_mulExpNegMulSq_le_one
   rw [heq]; rw [abs_mul]; rw [abs_exp]
   set y := ε * x * x with hy
   have hynonneg : 0 <= y := by
-    rw [hy]; rw 
+    rw [hy]; rw [mul_assoc]
+    exact mul_nonneg hε.le (mul_self_nonneg x)
+  apply mul_le_of_le_inv_mul₀ (zero_le_one' Real) (exp_nonneg _)
+  simp only [← exp_neg (-y), neg_neg, mul_one, abs_le, neg_le_sub_iff_le_add, tsub_le_iff_right]
+  refine ⟨le_trans two_mul_le_exp ((le_add_iff_nonneg_left (exp y)).mpr zero_le_one), ?_⟩
+  exact le_trans (one_le_exp hynonneg) (le_add_of_nonneg_right (by simp [hynonneg]))
 
 Depends on / 依赖: abs_exp, abs_le, abs_mul, deriv_mulExpNegMulSq, exp_neg, exp_nonneg, hynonneg, mul_assoc, mul_nonneg, mul_one, mul_self_nonneg, neg_le_sub_iff_le_add, neg_neg, norm_eq_abs, tsub_le_iff_right, zero_le_one
 -/

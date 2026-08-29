@@ -1347,7 +1347,9 @@ instance :
     · rw [← ClosedSubmodule.closure_toSubmodule_eq (s := a)]
       apply closure_mono
       simp only [Submodule.coe_toAddSubmonoid, coe_toSubmodule]
-      intro y 
+      intro y hy
+      simp only [SetLike.mem_coe, Submodule.mem_iSup] at hy
+.mp hz _ fun hb => h hb exact hy a fun b _ hz => Submodule.mem_iSup _
 
 中文:
 实例 :
@@ -1358,7 +1360,9 @@ instance :
     · rw [← ClosedSubmodule.closure_toSubmodule_eq (s := a)]
       apply closure_mono
       simp only [Submodule.coe_toAddSubmonoid, coe_toSubmodule]
-      intro y 
+      intro y hy
+      simp only [SetLike.mem_coe, Submodule.mem_iSup] at hy
+.mp hz _ fun hb => h hb exact hy a fun b _ hz => Submodule.mem_iSup _
 
 Depends on / 依赖: ClosedSubmodule, ClosedSubmodule.closure_toSubmodule_eq, SetLike, SetLike.mem_coe, Submodule, Submodule.coe_toAddSubmonoid, Submodule.mem_iSup, Submodule.mem_iSup_of_mem, closure_mono, closure_toSubmodule_eq, coe_toAddSubmonoid, coe_toSubmodule, mem_coe, mem_iSup, mem_iSup_of_mem, subset_closure
 -/
@@ -1648,7 +1652,9 @@ lemma mapEquiv_sup_eq
     LinearEquiv.coe_coe, ContinuousLinearEquiv.coe_toLinearEquiv, coe_toSubmodule,
     Submodule.coe_closure, Set.mem_image]
   have : f = f.toLinearEquiv.toLinearMap := by
-    exact LinearMap.ext (c
+    exact LinearMap.ext (congrFun rfl)
+  rw [← this]; rw [← Submodule.coe_closure]; rw [← Submodule.map_sup]; rw [Submodule.map_coe]
+  simp [← ContinuousLinearEquiv.image_closure]
 
 中文:
 引理 mapEquiv_sup_eq
@@ -1659,7 +1665,9 @@ lemma mapEquiv_sup_eq
     LinearEquiv.coe_coe, ContinuousLinearEquiv.coe_toLinearEquiv, coe_toSubmodule,
     Submodule.coe_closure, Set.mem_image]
   have : f = f.toLinearEquiv.toLinearMap := by
-    exact LinearMap.ext (c
+    exact LinearMap.ext (congrFun rfl)
+  rw [← this]; rw [← Submodule.coe_closure]; rw [← Submodule.map_sup]; rw [Submodule.map_coe]
+  simp [← ContinuousLinearEquiv.image_closure]
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.coe_toLinearEquiv, ContinuousLinearEquiv.image_closure, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.ext, Set.mem_image, Submodule, Submodule.carrier_eq_coe, Submodule.coe_closure, Submodule.map_coe, Submodule.map_sup, carrier_eq_coe, coe_closure, coe_coe, coe_toLinearEquiv, coe_toSubmodule, f.toLinearEquiv.toLinearMap, image_closure
 -/

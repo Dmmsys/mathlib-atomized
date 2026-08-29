@@ -235,7 +235,8 @@ theorem range_d₁₀_eq_coinvariantsKer
     induction y using Finsupp.induction generalizing x with
     | zero => simp [← hy]
     | single_add _ _ _ _ _ h =>
-      simpa [← hy, add_sub_add_comm, sum_add_index, d₁₀_s
+      simpa [← hy, add_sub_add_comm, sum_add_index, d₁₀_single (G := G)]
+        using! Submodule.add_mem _ (Coinvariants.mem_ker_of_eq _ _ _ rfl) (h rfl)
 
 中文:
 定理 range_d₁₀_eq_coinvariantsKer
@@ -249,7 +250,8 @@ theorem range_d₁₀_eq_coinvariantsKer
     induction y using Finsupp.induction generalizing x with
     | zero => simp [← hy]
     | single_add _ _ _ _ _ h =>
-      simpa [← hy, add_sub_add_comm, sum_add_index, d₁₀_s
+      simpa [← hy, add_sub_add_comm, sum_add_index, d₁₀_single (G := G)]
+        using! Submodule.add_mem _ (Coinvariants.mem_ker_of_eq _ _ _ rfl) (h rfl)
 
 Depends on / 依赖: Coinvariants, Coinvariants.mem_ker_of_eq, Finsupp, Finsupp.induction, Submodule, Submodule.add_mem, Submodule.span_eq_of_le, add_mem, add_sub_add_comm, generalizing, mem_ker_of_eq, single, single_add, span_eq_of_le, sum_add_index
 -/
@@ -758,7 +760,10 @@ theorem comp_d₃₂_eq
     simp [chainsIso₂, ChainComplex.of.d, pow_succ, chainsIso₃,
       -domLCongr_apply, domLCongr_single, d₃₂, Fin.sum_univ_three,
       Fin.contractNth, Fin.tail_def, sub_eq_add_neg, add_assoc,
-      inhomogeneousChains.d_single (G := G), add_rotate' (-(singl
+      inhomogeneousChains.d_single (G := G), add_rotate' (-(single (_ * _, _) _)),
+      add_left_comm (single (_, _ * _) _)]
+
+@[reassoc, elementwise]
 
 中文:
 定理 comp_d₃₂_eq
@@ -766,7 +771,10 @@ theorem comp_d₃₂_eq
     simp [chainsIso₂, ChainComplex.of.d, pow_succ, chainsIso₃,
       -domLCongr_apply, domLCongr_single, d₃₂, Fin.sum_univ_three,
       Fin.contractNth, Fin.tail_def, sub_eq_add_neg, add_assoc,
-      inhomogeneousChains.d_single (G := G), add_rotate' (-(singl
+      inhomogeneousChains.d_single (G := G), add_rotate' (-(single (_ * _, _) _)),
+      add_left_comm (single (_, _ * _) _)]
+
+@[reassoc, elementwise]
 
 Depends on / 依赖: ChainComplex, ChainComplex.of.d, Fin.contractNth, Fin.sum_univ_three, Fin.tail_def, ModuleCat, ModuleCat.hom_ext, add_assoc, add_left_comm, add_rotate, contractNth, d_single, domLCongr_apply, domLCongr_single, hom_ext, inhomogeneousChains, inhomogeneousChains.d_single, lhom_ext, pow_succ, single
 -/
@@ -2974,7 +2982,10 @@ lemma H1π_eq_zero_iff
     (shortComplexH1 A).moduleCatLeftHomologyData (leftHomologyData _)
     ((inhomogeneousChains A).sc 1).leftHomologyIso.hom
   simp only [H1π, isoCycles₁, π, HomologicalComplex.homologyπ, homologyπ,
-    cyclesMapIso'_inv, leftH
+    cyclesMapIso'_inv, leftHomologyπ, ← h, ← leftHomologyMapIso'_inv, ModuleCat.hom_comp,
+    LinearMap.coe_comp, Function.comp_apply, map_eq_zero_iff _
+    ((ModuleCat.mono_iff_injective <| _).1 inferInstance)]
+  simp [LinearMap.range_codRestrict, boundaries₁, shortComplexH1, cycles₁]
 
 中文:
 引理 H1π_eq_zero_iff
@@ -2985,7 +2996,10 @@ lemma H1π_eq_zero_iff
     (shortComplexH1 A).moduleCatLeftHomologyData (leftHomologyData _)
     ((inhomogeneousChains A).sc 1).leftHomologyIso.hom
   simp only [H1π, isoCycles₁, π, HomologicalComplex.homologyπ, homologyπ,
-    cyclesMapIso'_inv, leftH
+    cyclesMapIso'_inv, leftHomologyπ, ← h, ← leftHomologyMapIso'_inv, ModuleCat.hom_comp,
+    LinearMap.coe_comp, Function.comp_apply, map_eq_zero_iff _
+    ((ModuleCat.mono_iff_injective <| _).1 inferInstance)]
+  simp [LinearMap.range_codRestrict, boundaries₁, shortComplexH1, cycles₁]
 
 Depends on / 依赖: Function, Function.comp_apply, HomologicalComplex, HomologicalComplex.homology, LinearMap, LinearMap.coe_comp, LinearMap.range_codRestrict, ModuleCat, ModuleCat.hom_comp, ModuleCat.mono_iff_injective, _assoc, _inv, coe_comp, comp_apply, cyclesMapIso, hom_comp, inhomogeneousChains, isoShortComplexH1, leftHomologyData, leftHomologyIso
 -/
@@ -3124,7 +3138,12 @@ definition mkH1OfIsTrivial
   body: AddMonoidHom.toIntLinearMap AddMonoidHom.toMultiplicativeRight.symm Abelianization.lift {
     toFun g := Multiplicative.ofAdd (AddMonoidHom.toIntLinearMap (AddMonoidHomClass.toAddMonoidHom
       ((H1π A).hom ∘ₗ (cycles₁IsoOfIsTrivial A).inv.hom ∘ₗ lsingle g)))
-map_one' := Multiplicative.toAdd.inject
+map_one' := Multiplicative.toAdd.injective
+LinearMap.ext fun _ => (H1π_eq_zero_iff _).2 single_one_mem_boundaries₁ _
+map_mul' g h := Multiplicative.toAdd.injective LinearMap.ext fun a => by
+      simpa [← map_add] using ((H1π_eq_iff _ _).2 ⟨single (g, h) a, by
+        simp [cycles₁IsoOfIsTrivial, sub_add_eq_add_sub, add_comm (single h a),
+          d₂₁_single (A := A)]⟩).symm }
 
 中文:
 定义 mkH1OfIsTrivial
@@ -3132,7 +3151,12 @@ map_one' := Multiplicative.toAdd.inject
   定义体: AddMonoidHom.toIntLinearMap AddMonoidHom.toMultiplicativeRight.symm Abelianization.lift {
     toFun g := Multiplicative.ofAdd (AddMonoidHom.toIntLinearMap (AddMonoidHomClass.toAddMonoidHom
       ((H1π A).hom ∘ₗ (cycles₁IsoOfIsTrivial A).inv.hom ∘ₗ lsingle g)))
-map_one' := Multiplicative.toAdd.inject
+map_one' := Multiplicative.toAdd.injective
+LinearMap.ext fun _ => (H1π_eq_zero_iff _).2 single_one_mem_boundaries₁ _
+map_mul' g h := Multiplicative.toAdd.injective LinearMap.ext fun a => by
+      simpa [← map_add] using ((H1π_eq_iff _ _).2 ⟨single (g, h) a, by
+        simp [cycles₁IsoOfIsTrivial, sub_add_eq_add_sub, add_comm (single h a),
+          d₂₁_single (A := A)]⟩).symm }
 
 Depends on / 依赖: Abelianization, Abelianization.lift, AddMonoidHom, AddMonoidHom.toIntLinearMap, AddMonoidHom.toMultiplicativeRight.symm, AddMonoidHomClass, AddMonoidHomClass.toAddMonoidHom, LinearMap, LinearMap.ext, Multiplicative, Multiplicative.ofAdd, Multiplicative.toAdd.injective, choose_spec, exists_generator_lt_one, injective, inv.hom, lsingle, map_add, map_mul, map_one
 -/
@@ -3176,7 +3200,8 @@ definition H1ToTensorOfIsTrivial
   body: ((QuotientAddGroup.lift _ ((Finsupp.liftAddHom fun g => AddMonoidHomClass.toAddMonoidHom
     (TensorProduct.mk Int _ _ (Additive.ofMul (Abelianization.of g)))).comp
       (cycles₁ A).toAddSubgroup.subtype) fun ⟨y, hy⟩ ⟨z, hz⟩ => AddMonoidHom.mem_ker.2 <| by
-      simp [← hz, d₂₁, sum_sum_index, sum_
+      simp [← hz, d₂₁, sum_sum_index, sum_add_index', tmul_add, sum_sub_index, tmul_sub,
+        shortComplexH1]).comp <| AddMonoidHomClass.toAddMonoidHom (H1Iso A).hom.hom).toIntLinearMap
 
 中文:
 定义 H1ToTensorOfIsTrivial
@@ -3184,7 +3209,8 @@ definition H1ToTensorOfIsTrivial
   定义体: ((QuotientAddGroup.lift _ ((Finsupp.liftAddHom fun g => AddMonoidHomClass.toAddMonoidHom
     (TensorProduct.mk Int _ _ (Additive.ofMul (Abelianization.of g)))).comp
       (cycles₁ A).toAddSubgroup.subtype) fun ⟨y, hy⟩ ⟨z, hz⟩ => AddMonoidHom.mem_ker.2 <| by
-      simp [← hz, d₂₁, sum_sum_index, sum_
+      simp [← hz, d₂₁, sum_sum_index, sum_add_index', tmul_add, sum_sub_index, tmul_sub,
+        shortComplexH1]).comp <| AddMonoidHomClass.toAddMonoidHom (H1Iso A).hom.hom).toIntLinearMap
 
 Depends on / 依赖: Abelianization, Abelianization.of, AddMonoidHom, AddMonoidHom.mem_ker, AddMonoidHomClass, AddMonoidHomClass.toAddMonoidHom, Additive, Additive.ofMul, Finsupp, Finsupp.liftAddHom, QuotientAddGroup, QuotientAddGroup.lift, TensorProduct, TensorProduct.mk, hom.hom, liftAddHom, mem_ker, shortComplexH1, subtype, sum_add_index
 -/
@@ -3209,7 +3235,8 @@ lemma H1ToTensorOfIsTrivial_H1π_single
   simp only [H1ToTensorOfIsTrivial, H1π, AddMonoidHom.coe_toIntLinearMap, AddMonoidHom.coe_comp]
   -- todo: change this proof so that we don't need `change` that abuses defeq.
   change QuotientAddGroup.lift _ _ _ ((H1Iso A).hom _) = _
-  simp [π_comp_H1Iso_hom_apply, ← Submodule.Quotient.quotientA
+  simp [π_comp_H1Iso_hom_apply, ← Submodule.Quotient.quotientAddGroupMk_eq_mk, Submodule.mkQ,
+    AddSubgroup.subtype, cycles₁IsoOfIsTrivial]
 
 中文:
 引理 H1ToTensorOfIsTrivial_H1π_single
@@ -3218,7 +3245,8 @@ lemma H1ToTensorOfIsTrivial_H1π_single
   simp only [H1ToTensorOfIsTrivial, H1π, AddMonoidHom.coe_toIntLinearMap, AddMonoidHom.coe_comp]
   -- todo: change this proof so that we don't need `change` that abuses defeq.
   change QuotientAddGroup.lift _ _ _ ((H1Iso A).hom _) = _
-  simp [π_comp_H1Iso_hom_apply, ← Submodule.Quotient.quotientA
+  simp [π_comp_H1Iso_hom_apply, ← Submodule.Quotient.quotientAddGroupMk_eq_mk, Submodule.mkQ,
+    AddSubgroup.subtype, cycles₁IsoOfIsTrivial]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_comp, AddMonoidHom.coe_toIntLinearMap, H1ToTensorOfIsTrivial, coe_comp, coe_toIntLinearMap
 -/
@@ -3246,7 +3274,20 @@ definition H1AddEquivOfIsTrivial
     (ext <| LinearMap.toAddMonoidHom_injective <| by
       ext g a
       simp [TensorProduct.mk_apply, TensorProduct.lift.tmul, mkH1OfIsTrivial_apply,
-        H1ToTensorOfIsTrivial_H1π_single g a
+        H1ToTensorOfIsTrivial_H1π_single g a])
+    (LinearMap.toAddMonoidHom_injective <|
+(H1Iso A).symm.toLinearEquiv.toAddEquiv.comp_left_injective
+QuotientAddGroup.addMonoidHom_ext _
+(cycles₁IsoOfIsTrivial A).symm.toLinearEquiv.toAddEquiv.comp_left_injective by
+        ext
+        simp only [H1ToTensorOfIsTrivial, Iso.toLinearEquiv, AddMonoidHom.coe_comp,
+          LinearMap.toAddMonoidHom_coe, LinearMap.coe_comp, AddMonoidHom.coe_toIntLinearMap]
+        -- todo: change this proof so that we don't need `change` and `simpa` that both abuse defeq.
+        change TensorProduct.lift _ (QuotientAddGroup.lift _ _ _ ((H1Iso A).hom _)) = _
+        simpa [AddSubgroup.subtype, -π_comp_H1Iso_inv_apply, QuotientAddGroup.mk',
+          cycles₁IsoOfIsTrivial_inv_apply (A := A)] using! (π_comp_H1Iso_inv_apply A _).symm)
+
+@[simp]
 
 中文:
 定义 H1AddEquivOfIsTrivial
@@ -3256,7 +3297,20 @@ definition H1AddEquivOfIsTrivial
     (ext <| LinearMap.toAddMonoidHom_injective <| by
       ext g a
       simp [TensorProduct.mk_apply, TensorProduct.lift.tmul, mkH1OfIsTrivial_apply,
-        H1ToTensorOfIsTrivial_H1π_single g a
+        H1ToTensorOfIsTrivial_H1π_single g a])
+    (LinearMap.toAddMonoidHom_injective <|
+(H1Iso A).symm.toLinearEquiv.toAddEquiv.comp_left_injective
+QuotientAddGroup.addMonoidHom_ext _
+(cycles₁IsoOfIsTrivial A).symm.toLinearEquiv.toAddEquiv.comp_left_injective by
+        ext
+        simp only [H1ToTensorOfIsTrivial, Iso.toLinearEquiv, AddMonoidHom.coe_comp,
+          LinearMap.toAddMonoidHom_coe, LinearMap.coe_comp, AddMonoidHom.coe_toIntLinearMap]
+        -- todo: change this proof so that we don't need `change` and `simpa` that both abuse defeq.
+        change TensorProduct.lift _ (QuotientAddGroup.lift _ _ _ ((H1Iso A).hom _)) = _
+        simpa [AddSubgroup.subtype, -π_comp_H1Iso_inv_apply, QuotientAddGroup.mk',
+          cycles₁IsoOfIsTrivial_inv_apply (A := A)] using! (π_comp_H1Iso_inv_apply A _).symm)
+
+@[simp]
 
 Depends on / 依赖: H1ToTensorOfIsTrivial, LinearEquiv, LinearEquiv.ofLinearMap, LinearEquiv.toAddEquiv, LinearMap, LinearMap.toAddMonoidHom_injective, QuotientAddGroup, QuotientAddGroup.addMonoidHom_ext, TensorProduct, TensorProduct.lift.tmul, TensorProduct.mk_apply, addMonoidHom_ext, comp_left_injective, mkH1OfIsTrivial, mkH1OfIsTrivial_apply, mk_apply, ofLinearMap, symm.toLinearEquiv.toAddEquiv.comp_left_injective, toAddEquiv, toAddMonoidHom_injective
 -/
@@ -3397,7 +3451,10 @@ lemma H2π_eq_zero_iff
     (shortComplexH2 A).moduleCatLeftHomologyData (leftHomologyData _)
     ((inhomogeneousChains A).sc 2).leftHomologyIso.hom
   simp only [H2π, isoCycles₂, π, HomologicalComplex.homologyπ, homologyπ,
-    cyclesMapIso'_inv, leftH
+    cyclesMapIso'_inv, leftHomologyπ, ← h, ← leftHomologyMapIso'_inv, ModuleCat.hom_comp,
+    LinearMap.coe_comp, Function.comp_apply, map_eq_zero_iff _
+    ((ModuleCat.mono_iff_injective <| _).1 inferInstance)]
+  simp [LinearMap.range_codRestrict, boundaries₂, shortComplexH2, cycles₂]
 
 中文:
 引理 H2π_eq_zero_iff
@@ -3408,7 +3465,10 @@ lemma H2π_eq_zero_iff
     (shortComplexH2 A).moduleCatLeftHomologyData (leftHomologyData _)
     ((inhomogeneousChains A).sc 2).leftHomologyIso.hom
   simp only [H2π, isoCycles₂, π, HomologicalComplex.homologyπ, homologyπ,
-    cyclesMapIso'_inv, leftH
+    cyclesMapIso'_inv, leftHomologyπ, ← h, ← leftHomologyMapIso'_inv, ModuleCat.hom_comp,
+    LinearMap.coe_comp, Function.comp_apply, map_eq_zero_iff _
+    ((ModuleCat.mono_iff_injective <| _).1 inferInstance)]
+  simp [LinearMap.range_codRestrict, boundaries₂, shortComplexH2, cycles₂]
 
 Depends on / 依赖: Function, Function.comp_apply, HomologicalComplex, HomologicalComplex.homology, LinearMap, LinearMap.coe_comp, LinearMap.range_codRestrict, ModuleCat, ModuleCat.hom_comp, ModuleCat.mono_iff_injective, _assoc, _inv, coe_comp, comp_apply, cyclesMapIso, hom_comp, inhomogeneousChains, isoShortComplexH2, leftHomologyData, leftHomologyIso
 -/

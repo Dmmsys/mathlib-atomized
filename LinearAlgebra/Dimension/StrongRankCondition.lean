@@ -75,7 +75,24 @@ theorem mk_eq_mk_of_basis
   · -- `v` is a finite basis, so by `basis_finite_of_finite_spans` so is `v'`.
     -- haveI : Finite (range v) := Set.finite_range v
     have := basis_finite_of_finite_spans (Set.finite_range v) v.span_eq v'
-    cases none
+    cases nonempty_fintype ι'
+    -- We clean up a little:
+    rw [Cardinal.mk_fintype]; rw [Cardinal.mk_fintype]
+    simp only [Cardinal.lift_natCast, Nat.cast_inj]
+    -- Now we can use invariant basis number to show they have the same cardinality.
+    apply card_eq_of_linearEquiv R
+    exact
+      (Finsupp.linearEquivFunOnFinite R R ι).symm.trans v.repr.symm ≪≫ₗ v'.repr ≪≫ₗ
+        Finsupp.linearEquivFunOnFinite R R ι'
+  · -- `v` is an infinite basis,
+    -- so by `infinite_basis_le_maximal_linearIndependent`, `v'` is at least as big,
+    -- and then applying `infinite_basis_le_maximal_linearIndependent` again
+    -- we see they have the same cardinality.
+    have w₁ := infinite_basis_le_maximal_linearIndependent' v _ v'.linearIndependent v'.maximal
+    rcases Cardinal.lift_mk_le'.mp w₁ with ⟨f⟩
+    have : Infinite ι' := Infinite.of_injective f f.2
+    have w₂ := infinite_basis_le_maximal_linearIndependent' v' _ v.linearIndependent v.maximal
+    exact le_antisymm w₁ w₂
 
 中文:
 定理 mk_eq_mk_of_basis
@@ -86,7 +103,24 @@ theorem mk_eq_mk_of_basis
   · -- `v` is a finite basis, so by `basis_finite_of_finite_spans` so is `v'`.
     -- haveI : Finite (range v) := Set.finite_range v
     have := basis_finite_of_finite_spans (Set.finite_range v) v.span_eq v'
-    cases none
+    cases nonempty_fintype ι'
+    -- We clean up a little:
+    rw [Cardinal.mk_fintype]; rw [Cardinal.mk_fintype]
+    simp only [Cardinal.lift_natCast, Nat.cast_inj]
+    -- Now we can use invariant basis number to show they have the same cardinality.
+    apply card_eq_of_linearEquiv R
+    exact
+      (Finsupp.linearEquivFunOnFinite R R ι).symm.trans v.repr.symm ≪≫ₗ v'.repr ≪≫ₗ
+        Finsupp.linearEquivFunOnFinite R R ι'
+  · -- `v` is an infinite basis,
+    -- so by `infinite_basis_le_maximal_linearIndependent`, `v'` is at least as big,
+    -- and then applying `infinite_basis_le_maximal_linearIndependent` again
+    -- we see they have the same cardinality.
+    have w₁ := infinite_basis_le_maximal_linearIndependent' v _ v'.linearIndependent v'.maximal
+    rcases Cardinal.lift_mk_le'.mp w₁ with ⟨f⟩
+    have : Infinite ι' := Infinite.of_injective f f.2
+    have w₂ := infinite_basis_le_maximal_linearIndependent' v' _ v.linearIndependent v.maximal
+    exact le_antisymm w₁ w₂
 
 Depends on / 依赖: basis_finite_of_finite_spans, finite, fintypeOrInfinite, nontrivial_of_invariantBasisNumber
 -/
@@ -171,7 +205,10 @@ theorem Basis.le_span''
   -- by expressing a linear combination in `w` as a linear combination in `ι`.
   fapply card_le_of_surjective' R
   · exact b.repr.toLinearMap.comp (Finsupp.linearCombination R (↑))
-  · apply Surjective.comp (g := b.repr.toLinearMa
+  · apply Surjective.comp (g := b.repr.toLinearMap)
+    · apply LinearEquiv.surjective
+    rw [← LinearMap.range_eq_top]; rw [Finsupp.range_linearCombination]
+    simpa using s
 
 中文:
 定理 基.le_span''
@@ -181,7 +218,10 @@ theorem Basis.le_span''
   -- by expressing a linear combination in `w` as a linear combination in `ι`.
   fapply card_le_of_surjective' R
   · exact b.repr.toLinearMap.comp (Finsupp.linearCombination R (↑))
-  · apply Surjective.comp (g := b.repr.toLinearMa
+  · apply Surjective.comp (g := b.repr.toLinearMap)
+    · apply LinearEquiv.surjective
+    rw [← LinearMap.range_eq_top]; rw [Finsupp.range_linearCombination]
+    simpa using s
 -/
 theorem Basis.le_span'' {ι : Type*} [Fintype ι] (b : Basis ι R M) {w : Set M} [Fintype w]
     (s : span R w = ⊤) : Fintype.card ι <= Fintype.card w := by
@@ -245,7 +285,24 @@ theorem Module.Basis.le_span
     convert! Cardinal.lift_le.{v}.2 (basis_le_span' v hJ)
     simp
   · let S : J -> Set ι := fun j => ↑(v.repr j).support
-  
+    let S' : J -> Set M := fun j => v '' S j
+    have hs : range v subseteq ⋃ j, S' j := by
+      intro b hb
+      rcases mem_range.1 hb with ⟨i, hi⟩
+      have : span R J <= comap v.repr.toLinearMap (Finsupp.supported R R (⋃ j, S j)) :=
+        span_le.2 fun j hj x hx => ⟨_, ⟨⟨j, hj⟩, rfl⟩, hx⟩
+      rw [hJ] at this
+      replace : v.repr (v i) in Finsupp.supported R R (⋃ j, S j) := this trivial
+      rw [v.repr_self]; rw [Finsupp.mem_supported]; rw [Finsupp.support_single _ one_ne_zero] at this
+      · subst b
+        rcases mem_iUnion.1 (this (Finset.mem_singleton_self _)) with ⟨j, hj⟩
+        exact mem_iUnion.2 ⟨j, (mem_image _ _ _).2 ⟨i, hj, rfl⟩⟩
+    refine le_of_not_gt fun IJ => ?_
+    suffices #(⋃ j, S' j) < #(range v) by exact not_le_of_gt this ⟨Set.embeddingOfSubset _ _ hs⟩
+    refine lt_of_le_of_lt (le_trans Cardinal.mk_iUnion_le_sum_mk
+      (Cardinal.sum_le_sum _ (fun _ => ℵ₀) ?_)) ?_
+    · exact fun j => (Cardinal.lt_aleph0_of_finite _).le
+    · simpa
 
 中文:
 定理 模.基.le_span
@@ -257,7 +314,24 @@ theorem Module.Basis.le_span
     convert! Cardinal.lift_le.{v}.2 (basis_le_span' v hJ)
     simp
   · let S : J -> Set ι := fun j => ↑(v.repr j).support
-  
+    let S' : J -> Set M := fun j => v '' S j
+    have hs : range v subseteq ⋃ j, S' j := by
+      intro b hb
+      rcases mem_range.1 hb with ⟨i, hi⟩
+      have : span R J <= comap v.repr.toLinearMap (Finsupp.supported R R (⋃ j, S j)) :=
+        span_le.2 fun j hj x hx => ⟨_, ⟨⟨j, hj⟩, rfl⟩, hx⟩
+      rw [hJ] at this
+      replace : v.repr (v i) in Finsupp.supported R R (⋃ j, S j) := this trivial
+      rw [v.repr_self]; rw [Finsupp.mem_supported]; rw [Finsupp.support_single _ one_ne_zero] at this
+      · subst b
+        rcases mem_iUnion.1 (this (Finset.mem_singleton_self _)) with ⟨j, hj⟩
+        exact mem_iUnion.2 ⟨j, (mem_image _ _ _).2 ⟨i, hj, rfl⟩⟩
+    refine le_of_not_gt fun IJ => ?_
+    suffices #(⋃ j, S' j) < #(range v) by exact not_le_of_gt this ⟨Set.embeddingOfSubset _ _ hs⟩
+    refine lt_of_le_of_lt (le_trans Cardinal.mk_iUnion_le_sum_mk
+      (Cardinal.sum_le_sum _ (fun _ => ℵ₀) ?_)) ?_
+    · exact fun j => (Cardinal.lt_aleph0_of_finite _).le
+    · simpa
 
 Depends on / 依赖: Cardinal, Cardinal.lift_le, Cardinal.mk_fintype, Cardinal.mk_range_eq_of_injective, Finsupp, Finsupp.supported, basis_le_span, convert, fintypeOrInfinite, injective, lift_le, mem_range, mk_fintype, mk_range_eq_of_injective, nontrivial_of_invariantBasisNumber, span_l, subseteq, support, supported, toLinearMap
 -/
@@ -308,7 +382,15 @@ theorem linearIndependent_le_span_aux'
   -- We construct an injective linear map `(ι → R) →ₗ[R] (w → R)`,
   -- by thinking of `f : ι → R` as a linear combination of the finite family `v`,
   -- and expressing that (using the axiom of choice) as a linear combination over `w`.
-  -- We can do this linearly by constructing the map on a bas
+  -- We can do this linearly by constructing the map on a basis.
+  fapply card_le_of_injective' R
+  · apply Finsupp.linearCombination
+    exact fun i => Span.repr R w ⟨v i, s (mem_range_self i)⟩
+  · intro f g h
+    apply_fun linearCombination R ((↑) : w -> M) at h
+    simp only [linearCombination_linearCombination,
+               Span.finsupp_linearCombination_repr] at h
+    exact i h
 
 中文:
 定理 linearIndependent_le_span_aux'
@@ -317,7 +399,15 @@ theorem linearIndependent_le_span_aux'
   -- We construct an injective linear map `(ι → R) →ₗ[R] (w → R)`,
   -- by thinking of `f : ι → R` as a linear combination of the finite family `v`,
   -- and expressing that (using the axiom of choice) as a linear combination over `w`.
-  -- We can do this linearly by constructing the map on a bas
+  -- We can do this linearly by constructing the map on a basis.
+  fapply card_le_of_injective' R
+  · apply Finsupp.linearCombination
+    exact fun i => Span.repr R w ⟨v i, s (mem_range_self i)⟩
+  · intro f g h
+    apply_fun linearCombination R ((↑) : w -> M) at h
+    simp only [linearCombination_linearCombination,
+               Span.finsupp_linearCombination_repr] at h
+    exact i h
 -/
 theorem linearIndependent_le_span_aux' {ι : Type*} [Fintype ι] (v : ι -> M)
     (i : LinearIndependent R v) (w : Set M) [Fintype w] (s : range v <= span R w) :
@@ -346,7 +436,7 @@ Fintype.finite fintypeOfFinsetCardLe (Fintype.card w) fun t => by
     let v' := fun x : (t : Set ι) => v x
     have i' : LinearIndependent R v' := i.comp _ Subtype.val_injective
     have s' : range v' <= span R w := (range_comp_subset_range _ _).trans s
-    simpa using lin
+    simpa using linearIndependent_le_span_aux' v' i' w s'
 
 中文:
 引理 LinearIndependent.finite_of_le_span_finite
@@ -356,7 +446,7 @@ Fintype.finite fintypeOfFinsetCardLe (Fintype.card w) fun t => by
     let v' := fun x : (t : Set ι) => v x
     have i' : LinearIndependent R v' := i.comp _ Subtype.val_injective
     have s' : range v' <= span R w := (range_comp_subset_range _ _).trans s
-    simpa using lin
+    simpa using linearIndependent_le_span_aux' v' i' w s'
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.finite, Fintype.ofFinite, LinearIndependent, Subtype, Subtype.val_injective, finite, fintypeOfFinsetCardLe, i.comp, linearIndependent_le_span_aux, ofFinite, range_comp_subset_range, val_injective
 -/
@@ -463,7 +553,13 @@ theorem linearIndependent_le_infinite_basis
   let Φ := fun k : κ => (b.repr (v k)).support
   obtain ⟨s, w : Infinite ↑(Φ ⁻¹' {s})⟩ := Cardinal.exists_infinite_fiber' Φ h
   let v' := fun k : Φ ⁻¹' {s} => v k
-  have i' : LinearIndependent R v' := i.comp _ S
+  have i' : LinearIndependent R v' := i.comp _ Subtype.val_injective
+  have w' : Finite (Φ ⁻¹' {s}) := by
+    apply i'.finite_of_le_span_finite v' (s.image b)
+    rintro m ⟨⟨p, ⟨rfl⟩⟩, rfl⟩
+    simp only [SetLike.mem_coe, Finset.coe_image]
+    apply Basis.mem_span_repr_support
+  exact w.false
 
 中文:
 定理 linearIndependent_le_infinite_basis
@@ -475,7 +571,13 @@ theorem linearIndependent_le_infinite_basis
   let Φ := fun k : κ => (b.repr (v k)).support
   obtain ⟨s, w : Infinite ↑(Φ ⁻¹' {s})⟩ := Cardinal.exists_infinite_fiber' Φ h
   let v' := fun k : Φ ⁻¹' {s} => v k
-  have i' : LinearIndependent R v' := i.comp _ S
+  have i' : LinearIndependent R v' := i.comp _ Subtype.val_injective
+  have w' : Finite (Φ ⁻¹' {s}) := by
+    apply i'.finite_of_le_span_finite v' (s.image b)
+    rintro m ⟨⟨p, ⟨rfl⟩⟩, rfl⟩
+    simp only [SetLike.mem_coe, Finset.coe_image]
+    apply Basis.mem_span_repr_support
+  exact w.false
 
 Depends on / 依赖: Basis.mem_span_repr_support, Cardinal, Cardinal.exists_infinite_fiber, Cardinal.mk_finset_of_infinite, Finite, Finset, Finset.coe_image, Infinite, LinearIndependent, SetLike, SetLike.mem_coe, Subtype, Subtype.val_injective, b.repr, classical, coe_image, exists_infinite_fiber, finite_of_le_span_finite, i.comp, mem_coe
 -/
@@ -507,7 +609,10 @@ theorem linearIndependent_le_basis
   cases fintypeOrInfinite ι
   · rw [Cardinal.mk_fintype ι] -- When `ι` is finite, we have `linearIndependent_le_span`,
     have : Nontrivial R := nontrivial_of_invariantBasisNumber R
-    rw [Fintype.card_congr (Equiv.ofInj
+    rw [Fintype.card_congr (Equiv.ofInjective b b.injective)]
+    exact linearIndependent_le_span v i (range b) b.span_eq
+  · -- and otherwise we have `linearIndependent_le_infinite_basis`.
+    exact linearIndependent_le_infinite_basis b v i
 
 中文:
 定理 linearIndependent_le_basis
@@ -518,7 +623,10 @@ theorem linearIndependent_le_basis
   cases fintypeOrInfinite ι
   · rw [Cardinal.mk_fintype ι] -- When `ι` is finite, we have `linearIndependent_le_span`,
     have : Nontrivial R := nontrivial_of_invariantBasisNumber R
-    rw [Fintype.card_congr (Equiv.ofInj
+    rw [Fintype.card_congr (Equiv.ofInjective b b.injective)]
+    exact linearIndependent_le_span v i (range b) b.span_eq
+  · -- and otherwise we have `linearIndependent_le_infinite_basis`.
+    exact linearIndependent_le_infinite_basis b v i
 
 Depends on / 依赖: classical
 -/
@@ -580,7 +688,8 @@ theorem linearIndependent_le_span''
   · intro f g h
     apply_fun linearCombination R ((↑) : w -> M) at h
     simp only [linearCombination_linearCombination,
-               Span.finsupp_linearCombination_
+               Span.finsupp_linearCombination_repr] at h
+    exact i h
 
 中文:
 定理 linearIndependent_le_span''
@@ -592,7 +701,8 @@ theorem linearIndependent_le_span''
   · intro f g h
     apply_fun linearCombination R ((↑) : w -> M) at h
     simp only [linearCombination_linearCombination,
-               Span.finsupp_linearCombination_
+               Span.finsupp_linearCombination_repr] at h
+    exact i h
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Span.finsupp_linearCombination_repr, Span.repr, apply_fun, card_le_of_injective, fapply, finsupp_linearCombination_repr, linearCombination, linearCombination_linearCombination
 -/
@@ -678,7 +788,10 @@ theorem Module.Basis.mk_eq_rank''
           rw [LinearIndepOn]
           convert! v.reindexRange.linearIndependent
           simp⟩
-    · 
+    · exact (Cardinal.mk_range_eq v v.injective).ge
+  · apply ciSup_le'
+    rintro ⟨s, li⟩
+    apply linearIndependent_le_basis v _ li
 
 中文:
 定理 模.基.mk_eq_rank''
@@ -696,7 +809,10 @@ theorem Module.Basis.mk_eq_rank''
           rw [LinearIndepOn]
           convert! v.reindexRange.linearIndependent
           simp⟩
-    · 
+    · exact (Cardinal.mk_range_eq v v.injective).ge
+  · apply ciSup_le'
+    rintro ⟨s, li⟩
+    apply linearIndependent_le_basis v _ li
 
 Depends on / 依赖: Cardinal, Cardinal.bddAbove_of_small, Cardinal.mk_range_eq, LinearIndepOn, Module, Module.rank_def, Set.range, bddAbove_of_small, ciSup_le, convert, injective, le_antisymm, le_ciSup, linearIndependent, linearIndependent_le_basis, mk_range_eq, nontrivial_of_invariantBasisNumber, rank_def, reindexRange, v.injective
 -/
@@ -988,7 +1104,12 @@ theorem Ideal.rank_eq
     rw [Fintype.linearIndependent_iff] at hb ⊢
     intro g hg
     apply hb g
-    simp only [← smul_assoc, ← Finset.sum_smul, smul_e
+    simp only [← smul_assoc, ← Finset.sum_smul, smul_eq_zero] at hg
+    exact hg.resolve_right ha
+  exact le_antisymm
+    (b.card_le_card_of_linearIndependent (c.linearIndependent.map' (Submodule.subtype I)
+      ((LinearMap.ker_eq_bot (f := (Submodule.subtype I : I ->ₗ[R] S))).mpr Subtype.coe_injective)))
+    (c.card_le_card_of_linearIndependent this)
 
 中文:
 定理 理想.rank_eq
@@ -1000,7 +1121,12 @@ theorem Ideal.rank_eq
     rw [Fintype.linearIndependent_iff] at hb ⊢
     intro g hg
     apply hb g
-    simp only [← smul_assoc, ← Finset.sum_smul, smul_e
+    simp only [← smul_assoc, ← Finset.sum_smul, smul_eq_zero] at hg
+    exact hg.resolve_right ha
+  exact le_antisymm
+    (b.card_le_card_of_linearIndependent (c.linearIndependent.map' (Submodule.subtype I)
+      ((LinearMap.ker_eq_bot (f := (Submodule.subtype I : I ->ₗ[R] S))).mpr Subtype.coe_injective)))
+    (c.card_le_card_of_linearIndependent this)
 
 Depends on / 依赖: Finset, Finset.sum_smul, Fintype, Fintype.linearIndependent_iff, LinearIndependent, LinearMap, LinearMap.ker_eq_bot, Submodule, Submodule.nonzero_mem_of_bot_lt, Submodule.subtype, Subtype, Subtype.coe, b.card_le_card_of_linearIndependent, b.linearIndependent, bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mpr, c.linearIndependent.map, card_le_card_of_linearIndependent, hg.resolve_right, ker_eq_bot
 -/
@@ -1667,7 +1793,8 @@ theorem strongRankCondition_iff_forall_rank_lt_aleph0
     refine ⟨fun ⟨n, f, inj⟩ => ⟨n, ?_⟩, fun ⟨n, le⟩ =>
       ⟨n, le_rank_iff_exists_linearMap.mp (natCast_le_aleph0.trans le)⟩⟩
     have ⟨g, hg⟩ := f.exists_finsupp_nat_of_fin_fun_injective inj
-    convert! (Finsupp.basisSingleOne
+    convert! (Finsupp.basisSingleOne.linearIndependent.map_injOn _ hg.injOn).cardinal_lift_le_rank
+    simp
 
 中文:
 定理 strongRankCondition_iff_对任意_rank_lt_aleph0
@@ -1677,7 +1804,8 @@ theorem strongRankCondition_iff_forall_rank_lt_aleph0
     refine ⟨fun ⟨n, f, inj⟩ => ⟨n, ?_⟩, fun ⟨n, le⟩ =>
       ⟨n, le_rank_iff_exists_linearMap.mp (natCast_le_aleph0.trans le)⟩⟩
     have ⟨g, hg⟩ := f.exists_finsupp_nat_of_fin_fun_injective inj
-    convert! (Finsupp.basisSingleOne
+    convert! (Finsupp.basisSingleOne.linearIndependent.map_injOn _ hg.injOn).cardinal_lift_le_rank
+    simp
 
 Depends on / 依赖: Finsupp, Finsupp.basisSingleOne.linearIndependent.map_injOn, basisSingleOne, cardinal_lift_le_rank, convert, exists_finsupp_nat_of_fin_fun_injective, f.exists_finsupp_nat_of_fin_fun_injective, hg.injOn, le_rank_iff_exists_linearMap, le_rank_iff_exists_linearMap.mp, linearIndependent, map_injOn, natCast_le_aleph0, natCast_le_aleph0.trans, not_iff_not, not_iff_not.mp, strongRankCondition_iff_succ
 -/
@@ -1703,7 +1831,10 @@ theorem strongRankCondition_iff_forall_zero_lt_finrank
   simp_rw [finrank, Nat.le_zero, toNat_eq_zero]
   refine ⟨fun ⟨n, le⟩ => ⟨n + 1, n.succ_pos, ?_⟩, fun ⟨n, pos, eq⟩ => ⟨n, ?_⟩⟩
 · exact .inr le.trans LinearMap.rank_le_of_injective
-(ExtendByZero.linearMap R _) exte
+(ExtendByZero.linearMap R _) extend_injective (Fin.castSucc_injective n) _
+  · rw [or_iff_not_imp_left, ← Ne, ← Cardinal.one_le_iff_ne_zero, one_le_rank_iff] at eq
+    rw [← n.succ_pred_eq_of_pos pos] at eq ⊢
+    exact eq ⟨.single R (fun _ => _) 0, Pi.single_injective (M := fun _ => _) _⟩
 
 中文:
 定理 strongRankCondition_iff_对任意_zero_lt_finrank
@@ -1714,7 +1845,10 @@ theorem strongRankCondition_iff_forall_zero_lt_finrank
   simp_rw [finrank, Nat.le_zero, toNat_eq_zero]
   refine ⟨fun ⟨n, le⟩ => ⟨n + 1, n.succ_pos, ?_⟩, fun ⟨n, pos, eq⟩ => ⟨n, ?_⟩⟩
 · exact .inr le.trans LinearMap.rank_le_of_injective
-(ExtendByZero.linearMap R _) exte
+(ExtendByZero.linearMap R _) extend_injective (Fin.castSucc_injective n) _
+  · rw [or_iff_not_imp_left, ← Ne, ← Cardinal.one_le_iff_ne_zero, one_le_rank_iff] at eq
+    rw [← n.succ_pred_eq_of_pos pos] at eq ⊢
+    exact eq ⟨.single R (fun _ => _) 0, Pi.single_injective (M := fun _ => _) _⟩
 
 Depends on / 依赖: Cardinal, Cardinal.one_le_iff_ne_zero, ExtendByZero, ExtendByZero.linearMap, Fin.castSucc_injective, LinearMap, LinearMap.rank_le_of_injective, Nat.le_zero, castSucc_injective, extend_injective, finrank, le.trans, le_zero, linearMap, n.succ_pos, n.succ_pred_eq_of_pos, not_iff_not, one_le_iff_ne_zero, one_le_rank_iff, or_iff_not_imp_left
 -/
@@ -1775,7 +1909,7 @@ theorem exists_finset_span_eq_linearIndepOn
   rcases exists_linearIndependent K s with ⟨t, ht_sub, ht_span, ht_indep⟩
   obtain ⟨t, rfl, ht_card⟩ : exists u : Finset M, ↑u = t ∧ u.card = finrank K (span K s) := by
     rw [← Cardinal.mk_set_eq_nat_iff_finset]; rw [finrank_eq_rank]; rw [← ht_span]; rw [rank_span_set ht_indep]
-  exact ⟨t, ht_s
+  exact ⟨t, ht_sub, ht_card, ht_span, ht_indep⟩
 
 中文:
 定理 存在_finset_span_eq_linearIndepOn
@@ -1783,7 +1917,7 @@ theorem exists_finset_span_eq_linearIndepOn
   rcases exists_linearIndependent K s with ⟨t, ht_sub, ht_span, ht_indep⟩
   obtain ⟨t, rfl, ht_card⟩ : exists u : Finset M, ↑u = t ∧ u.card = finrank K (span K s) := by
     rw [← Cardinal.mk_set_eq_nat_iff_finset]; rw [finrank_eq_rank]; rw [← ht_span]; rw [rank_span_set ht_indep]
-  exact ⟨t, ht_s
+  exact ⟨t, ht_sub, ht_card, ht_span, ht_indep⟩
 
 Depends on / 依赖: Cardinal, Cardinal.mk_set_eq_nat_iff_finset, Finset, exists_linearIndependent, finrank, finrank_eq_rank, ht_card, ht_indep, ht_span, ht_sub, mk_set_eq_nat_iff_finset, rank_span_set, u.card
 -/
@@ -1835,7 +1969,7 @@ theorem mem_span_set_iff_exists_finsupp_le_finrank
     refine ⟨c, ?_, hct.trans ht_sub, hx⟩
     exact ht_card ▸ Finset.card_mono hct
   · rintro ⟨c, -, hcs, hx⟩
-    exa
+    exact mem_span_set.mpr ⟨c, hcs, hx⟩
 
 中文:
 定理 mem_span_set_iff_存在_finsupp_le_finrank
@@ -1847,7 +1981,7 @@ theorem mem_span_set_iff_exists_finsupp_le_finrank
     refine ⟨c, ?_, hct.trans ht_sub, hx⟩
     exact ht_card ▸ Finset.card_mono hct
   · rintro ⟨c, -, hcs, hx⟩
-    exa
+    exact mem_span_set.mpr ⟨c, hcs, hx⟩
 
 Depends on / 依赖: Finset, Finset.card_mono, card_mono, exists_finset_span_eq_linearIndepOn, hct.trans, ht_card, ht_indep, ht_span, ht_sub, mem_span_set, mem_span_set.mp, mem_span_set.mpr
 -/

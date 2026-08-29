@@ -134,7 +134,8 @@ theorem summable_ofDigitsTerm
   obtain rfl | hb := (Nat.one_le_of_lt (b_pos digits)).eq_or_lt
   · simp
   simp_rw [pow_succ', mul_inv, ← inv_pow, ← mul_assoc]
-  refine Summable.mul_left _ (summable_geometric_of_lt_one (by positivity)
+  refine Summable.mul_left _ (summable_geometric_of_lt_one (by positivity) ?_)
+  simp [inv_lt_one_iff₀, hb]
 
 中文:
 定理 summable_ofDigitsTerm
@@ -144,7 +145,8 @@ theorem summable_ofDigitsTerm
   obtain rfl | hb := (Nat.one_le_of_lt (b_pos digits)).eq_or_lt
   · simp
   simp_rw [pow_succ', mul_inv, ← inv_pow, ← mul_assoc]
-  refine Summable.mul_left _ (summable_geometric_of_lt_one (by positivity)
+  refine Summable.mul_left _ (summable_geometric_of_lt_one (by positivity) ?_)
+  simp [inv_lt_one_iff₀, hb]
 
 Depends on / 依赖: Nat.one_le_of_lt, Summable, Summable.mul_left, Summable.of_nonneg_of_le, b_pos, digits, eq_or_lt, inv_pow, mul_assoc, mul_inv, mul_left, ofDigitsTerm_le, ofDigitsTerm_nonneg, of_nonneg_of_le, one_le_of_lt, pow_succ, simp_rw, summable_geometric_of_lt_one
 -/
@@ -213,7 +215,12 @@ theorem ofDigits_le_one
   rify at hb
   convert! Summable.tsum_mono summable_ofDigitsTerm _ (fun _ => ofDigitsTerm_le)
   · simp_rw [pow_succ', mul_inv, ← inv_pow, ← mul_assoc]
-    rw [tsum_mul_left]; rw [tsum_geometric_of_lt
+    rw [tsum_mul_left]; rw [tsum_geometric_of_lt_one (by positivity) (by simp [inv_lt_one_iff₀]; rw [hb])]
+    have := sub_pos.mpr hb
+    field
+  · simp_rw [pow_succ', mul_inv, ← inv_pow, ← mul_assoc]
+    refine Summable.mul_left _ (summable_geometric_of_lt_one (by positivity) ?_)
+    simp [inv_lt_one_iff₀, hb]
 
 中文:
 定理 ofDigits_le_one
@@ -225,7 +232,12 @@ theorem ofDigits_le_one
   rify at hb
   convert! Summable.tsum_mono summable_ofDigitsTerm _ (fun _ => ofDigitsTerm_le)
   · simp_rw [pow_succ', mul_inv, ← inv_pow, ← mul_assoc]
-    rw [tsum_mul_left]; rw [tsum_geometric_of_lt
+    rw [tsum_mul_left]; rw [tsum_geometric_of_lt_one (by positivity) (by simp [inv_lt_one_iff₀]; rw [hb])]
+    have := sub_pos.mpr hb
+    field
+  · simp_rw [pow_succ', mul_inv, ← inv_pow, ← mul_assoc]
+    refine Summable.mul_left _ (summable_geometric_of_lt_one (by positivity) ?_)
+    simp [inv_lt_one_iff₀, hb]
 
 Depends on / 依赖: Nat.one_le_of_lt, Summable, Summable.mul_left, Summable.tsum_mono, b_pos, convert, digits, eq_or_lt, inv_pow, mul_assoc, mul_inv, mul_left, ofDigits, ofDigitsTerm, ofDigitsTerm_le, one_le_of_lt, pow_succ, simp_rw, sub_pos, sub_pos.mpr
 -/
@@ -289,7 +301,12 @@ theorem abs_ofDigits_sub_ofDigits_le
   rw [ofDigits_eq_sum_add_ofDigits x n]; rw [ofDigits_eq_sum_add_ofDigits y n]
   have : ∑ i in Finset.range n, ofDigitsTerm x i = ∑ i in Finset.range n, ofDigitsTerm y i :=
     Finset.sum_congr rfl fun i hi => by simp [ofDigitsTerm, hxy i (Finset.mem_range.mp hi)]
-  rw [this]; rw [add_sub_add_lef
+  rw [this]; rw [add_sub_add_left_eq_sub]; rw [← mul_sub]; rw [abs_mul]; rw [abs_of_nonneg (by positivity)]
+  apply mul_le_of_le_one_right (by positivity)
+  convert!
+    abs_sub_le_of_le_of_le (ofDigits_nonneg _) (ofDigits_le_one _) (ofDigits_nonneg _)
+      (ofDigits_le_one _)
+  simp
 
 中文:
 定理 abs_ofDigits_sub_ofDigits_le
@@ -298,7 +315,12 @@ theorem abs_ofDigits_sub_ofDigits_le
   rw [ofDigits_eq_sum_add_ofDigits x n]; rw [ofDigits_eq_sum_add_ofDigits y n]
   have : ∑ i in Finset.range n, ofDigitsTerm x i = ∑ i in Finset.range n, ofDigitsTerm y i :=
     Finset.sum_congr rfl fun i hi => by simp [ofDigitsTerm, hxy i (Finset.mem_range.mp hi)]
-  rw [this]; rw [add_sub_add_lef
+  rw [this]; rw [add_sub_add_left_eq_sub]; rw [← mul_sub]; rw [abs_mul]; rw [abs_of_nonneg (by positivity)]
+  apply mul_le_of_le_one_right (by positivity)
+  convert!
+    abs_sub_le_of_le_of_le (ofDigits_nonneg _) (ofDigits_le_one _) (ofDigits_nonneg _)
+      (ofDigits_le_one _)
+  simp
 
 Depends on / 依赖: Finset, Finset.mem_range.mp, Finset.range, Finset.sum_congr, abs_mul, abs_of_nonneg, abs_sub_le_of_le_of_le, add_sub_add_left_eq_sub, convert, mem_range, mul_le_of_le_one_right, mul_sub, ofDigitsTerm, ofDigits_eq_sum_add_ofDigits, ofDigits_le_one, ofDigits_nonneg, sum_congr
 -/
@@ -344,7 +366,10 @@ theorem ofDigits_digits_sum_eq
   induction n with
   | zero => simp [Nat.floor_eq_zero.mpr hx.right]
   | succ n ih =>
-    rw [Finset.sum_range_succ]; rw [mul_add]; rw [pow_succ']; rw [mul_assoc]; rw [ih]; rw [ofDigitsTerm]; rw [digits]; rw [← pow_succ']; rw [mul_left_comm]; rw [mul_inv_cancel₀ (by positivi
+    rw [Finset.sum_range_succ]; rw [mul_add]; rw [pow_succ']; rw [mul_assoc]; rw [ih]; rw [ofDigitsTerm]; rw [digits]; rw [← pow_succ']; rw [mul_left_comm]; rw [mul_inv_cancel₀ (by positivity)]; rw [mul_one]; rw [mul_comm x]; rw [pow_succ']; rw [mul_assoc]
+    set y := (b : Real) ^ n * x
+    norm_cast
+    rw [← Nat.cast_mul_floor_div_cancel (a := y) (show b != 0 by lia)]; rw [Fin.val_ofNat]; rw [Nat.div_add_mod]
 
 中文:
 定理 ofDigits_digits_sum_eq
@@ -354,7 +379,10 @@ theorem ofDigits_digits_sum_eq
   induction n with
   | zero => simp [Nat.floor_eq_zero.mpr hx.right]
   | succ n ih =>
-    rw [Finset.sum_range_succ]; rw [mul_add]; rw [pow_succ']; rw [mul_assoc]; rw [ih]; rw [ofDigitsTerm]; rw [digits]; rw [← pow_succ']; rw [mul_left_comm]; rw [mul_inv_cancel₀ (by positivi
+    rw [Finset.sum_range_succ]; rw [mul_add]; rw [pow_succ']; rw [mul_assoc]; rw [ih]; rw [ofDigitsTerm]; rw [digits]; rw [← pow_succ']; rw [mul_left_comm]; rw [mul_inv_cancel₀ (by positivity)]; rw [mul_one]; rw [mul_comm x]; rw [pow_succ']; rw [mul_assoc]
+    set y := (b : Real) ^ n * x
+    norm_cast
+    rw [← Nat.cast_mul_floor_div_cancel (a := y) (show b != 0 by lia)]; rw [Fin.val_ofNat]; rw [Nat.div_add_mod]
 
 Depends on / 依赖: Fin.val_ofNat, Finset, Finset.sum_range_succ, Nat.cast_mul_floor_div_cancel, Nat.div_add_mo, Nat.floor_eq_zero.mpr, NeZero, NeZero.ne, cast_mul_floor_div_cancel, digits, div_add_mo, floor_eq_zero, hx.right, mul_add, mul_assoc, mul_comm, mul_left_comm, mul_one, ofDigitsTerm, pow_succ
 -/
@@ -450,7 +478,9 @@ theorem hasSum_ofDigitsTerm_digits
   rw [hasSum_iff_tendsto_nat_of_summable_norm (by exact summable_ofDigitsTerm.abs)]
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le ?_ tendsto_const_nhds
     (le_sum_ofDigitsTerm_digits hx) (sum_ofDigitsTerm_digits_le hx)
-  convert! tendsto_const_nhds.sub (tendsto_pow_atTop_nhds_zero_of_abs_lt
+  convert! tendsto_const_nhds.sub (tendsto_pow_atTop_nhds_zero_of_abs_lt_one _)
+  · simp
+  · simp [abs_of_nonneg, inv_lt_one_iff₀, hb]
 
 中文:
 定理 hasSum_ofDigitsTerm_digits
@@ -459,7 +489,9 @@ theorem hasSum_ofDigitsTerm_digits
   rw [hasSum_iff_tendsto_nat_of_summable_norm (by exact summable_ofDigitsTerm.abs)]
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le ?_ tendsto_const_nhds
     (le_sum_ofDigitsTerm_digits hx) (sum_ofDigitsTerm_digits_le hx)
-  convert! tendsto_const_nhds.sub (tendsto_pow_atTop_nhds_zero_of_abs_lt
+  convert! tendsto_const_nhds.sub (tendsto_pow_atTop_nhds_zero_of_abs_lt_one _)
+  · simp
+  · simp [abs_of_nonneg, inv_lt_one_iff₀, hb]
 
 Depends on / 依赖: abs_of_nonneg, convert, hasSum_iff_tendsto_nat_of_summable_norm, le_sum_ofDigitsTerm_digits, sum_ofDigitsTerm_digits_le, summable_ofDigitsTerm, summable_ofDigitsTerm.abs, tendsto_const_nhds, tendsto_const_nhds.sub, tendsto_of_tendsto_of_tendsto_of_le_of_le, tendsto_pow_atTop_nhds_zero_of_abs_lt_one
 -/
@@ -515,7 +547,12 @@ theorem ofDigits_const_last_eq_one
   simp only [ofDigits, ofDigitsTerm, ← inv_pow]
   rw [Summable.tsum_mul_left]
   · rw [geom_series_succ _ (by simp [inv_lt_one_iff₀, this]),
-      tsum_geometric_of_lt_on
+      tsum_geometric_of_lt_one (by positivity) (by simp [inv_lt_one_iff₀, NeZero.pos b])]
+    push_cast
+    have : (b : Real) != 0 := mod_cast NeZero.ne b
+    field [*]
+  · rw [summable_nat_add_iff (f := fun n => ((b + 1 : Nat) : Real)⁻¹ ^ n) 1]
+    apply summable_geometric_of_lt_one (by positivity) (by simp [inv_lt_one_iff₀, NeZero.pos b])
 
 中文:
 定理 ofDigits_const_last_eq_one
@@ -527,7 +564,12 @@ theorem ofDigits_const_last_eq_one
   simp only [ofDigits, ofDigitsTerm, ← inv_pow]
   rw [Summable.tsum_mul_left]
   · rw [geom_series_succ _ (by simp [inv_lt_one_iff₀, this]),
-      tsum_geometric_of_lt_on
+      tsum_geometric_of_lt_one (by positivity) (by simp [inv_lt_one_iff₀, NeZero.pos b])]
+    push_cast
+    have : (b : Real) != 0 := mod_cast NeZero.ne b
+    field [*]
+  · rw [summable_nat_add_iff (f := fun n => ((b + 1 : Nat) : Real)⁻¹ ^ n) 1]
+    apply summable_geometric_of_lt_one (by positivity) (by simp [inv_lt_one_iff₀, NeZero.pos b])
 
 Depends on / 依赖: Nat.cast_add_one, Nat.cast_nonneg, NeZero, NeZero.ne, NeZero.pos, Summable, Summable.tsum_mul_left, abs_of_nonneg, cast_add_one, cast_nonneg, geom_series_succ, inv_pow, mod_cast, ofDigits, ofDigitsTerm, summable_geom, summable_nat_add_iff, tsum_geometric_of_lt_one, tsum_mul_left
 -/
@@ -633,7 +675,15 @@ theorem continuous_ofDigits
     refine continuous_tsum (u := fun i => (b : Real)⁻¹ ^ i) ?_ ?_ fun n x => ?_
     · simp only [ofDigitsTerm]
       fun_prop
-
+    · exact summable_geometric_of_lt_one (by positivity) (inv_lt_one_of_one_lt₀ hb)
+    · simp only [norm_eq_abs, abs_of_nonneg ofDigitsTerm_nonneg, inv_pow]
+      apply ofDigitsTerm_le.trans
+      calc
+        _ <= b * ((b : Real) ^ (n + 1))⁻¹ := by
+          gcongr
+          linarith
+        _ = _ := by
+          grind
 
 中文:
 定理 continuous_ofDigits
@@ -650,7 +700,15 @@ theorem continuous_ofDigits
     refine continuous_tsum (u := fun i => (b : Real)⁻¹ ^ i) ?_ ?_ fun n x => ?_
     · simp only [ofDigitsTerm]
       fun_prop
-
+    · exact summable_geometric_of_lt_one (by positivity) (inv_lt_one_of_one_lt₀ hb)
+    · simp only [norm_eq_abs, abs_of_nonneg ofDigitsTerm_nonneg, inv_pow]
+      apply ofDigitsTerm_le.trans
+      calc
+        _ <= b * ((b : Real) ^ (n + 1))⁻¹ := by
+          gcongr
+          linarith
+        _ = _ := by
+          grind
 
 Depends on / 依赖: abs_of_nonneg, continuous_tsum, fun_prop, generalize, inv_pow, norm_eq_abs, ofDigitsTerm, ofDigitsTerm_le, ofDigitsTerm_le.trans, ofDigitsTerm_nonneg, summable_geometric_of_lt_one
 -/

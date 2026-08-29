@@ -143,7 +143,8 @@ definition coneLift
     hom := f.hom.left
     w
     | star => by cat_disch
-    | of a => 
+    | of a => by simp [← Comma.comp_left]
+  }
 
 中文:
 定义 coneLift
@@ -162,7 +163,8 @@ definition coneLift
     hom := f.hom.left
     w
     | star => by cat_disch
-    | of a => 
+    | of a => by simp [← Comma.comp_left]
+  }
 -/
 private def coneLift : Cone K ⥤ Cone (liftFromOver.obj K) where
   obj t := {
@@ -473,7 +475,8 @@ definition coconeLift
     hom := f.hom.right
     w
     | star => by cat_disch
-    | of a
+    | of a => by simp [← Comma.comp_right]
+  }
 
 中文:
 定义 coconeLift
@@ -492,7 +495,8 @@ definition coconeLift
     hom := f.hom.right
     w
     | star => by cat_disch
-    | of a
+    | of a => by simp [← Comma.comp_right]
+  }
 -/
 private def coconeLift : Cocone K ⥤ Cocone (liftFromUnder.obj K) where
   obj t := {

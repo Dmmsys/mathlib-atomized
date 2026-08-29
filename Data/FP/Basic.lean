@@ -257,7 +257,10 @@ theorem Float.Zero.valid
       rw [← sub_nonneg] at *
       simp only [emin, emax] at *
       lia
-    le_trans C.pr
+    le_trans C.precMax (Nat.le_mul_of_pos_left _ Nat.zero_lt_two),
+    by (simp [sub_eq_add_neg, Int.natCast_nonneg])⟩
+
+@[nolint docBlame]
 
 中文:
 定理 Float.零.valid
@@ -273,7 +276,10 @@ theorem Float.Zero.valid
       rw [← sub_nonneg] at *
       simp only [emin, emax] at *
       lia
-    le_trans C.pr
+    le_trans C.precMax (Nat.le_mul_of_pos_left _ Nat.zero_lt_two),
+    by (simp [sub_eq_add_neg, Int.natCast_nonneg])⟩
+
+@[nolint docBlame]
 
 Depends on / 依赖: C.precMax, C.precPos, Int.natCast_nonneg, Int.ofNat_le, Int.ofNat_le_ofNat_of_le, Nat.le_mul_of_pos_left, Nat.zero_lt_two, add_sub_assoc, le_add_of_nonneg_right, le_mul_of_pos_left, le_trans, natCast_nonneg, ofNat_le, ofNat_le_ofNat_of_le, precMax, precPos, sub_eq_add_neg, sub_nonneg, sub_nonneg_of_le, zero_lt_two
 -/
@@ -509,7 +515,42 @@ unsafe def add (mode : RMode) : Float -> Float -> Float
   | inf s₁, _ => inf s₁
   | _, inf s₂ => inf s₂
   | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
+    let f₁ := finite s₁ e₁ m₁ v₁
+    let f₂ := finite s₂ e₂ m₂ v₂
+    ofRat mode (toRat f₁ rfl + toRat f₂ rfl)
 
+unsafe instance : Add Float :=
+  ⟨Float.add RMode.NE⟩
+
+@[nolint docBlame]
+unsafe def sub (mode : RMode) (f1 f2 : Float) : Float :=
+  add mode f1 (-f2)
+
+unsafe instance : Sub Float :=
+  ⟨Float.sub RMode.NE⟩
+
+@[nolint docBlame]
+unsafe def mul (mode : RMode) : Float -> Float -> Float
+  | nan, _ => nan
+  | _, nan => nan
+  | inf s₁, f₂ => if f₂.isZero then nan else inf (xor s₁ f₂.sign)
+  | f₁, inf s₂ => if f₁.isZero then nan else inf (xor f₁.sign s₂)
+  | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
+    let f₁ := finite s₁ e₁ m₁ v₁
+    let f₂ := finite s₂ e₂ m₂ v₂
+    ofRat mode (toRat f₁ rfl * toRat f₂ rfl)
+
+@[nolint docBlame]
+unsafe def div (mode : RMode) : Float -> Float -> Float
+  | nan, _ => nan
+  | _, nan => nan
+  | inf _, inf _ => nan
+  | inf s₁, f₂ => inf (xor s₁ f₂.sign)
+  | f₁, inf s₂ => zero (xor f₁.sign s₂)
+  | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
+    let f₁ := finite s₁ e₁ m₁ v₁
+    let f₂ := finite s₂ e₂ m₂ v₂
+    if f₂.isZero then inf (xor s₁ s₂) else ofRat mode (toRat f₁ rfl / toRat f₂ rfl)
 
 中文:
 实例 :
@@ -525,7 +566,42 @@ unsafe def add (mode : RMode) : Float -> Float -> Float
   | inf s₁, _ => inf s₁
   | _, inf s₂ => inf s₂
   | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
+    let f₁ := finite s₁ e₁ m₁ v₁
+    let f₂ := finite s₂ e₂ m₂ v₂
+    ofRat mode (toRat f₁ rfl + toRat f₂ rfl)
 
+unsafe instance : Add Float :=
+  ⟨Float.add RMode.NE⟩
+
+@[nolint docBlame]
+unsafe def sub (mode : RMode) (f1 f2 : Float) : Float :=
+  add mode f1 (-f2)
+
+unsafe instance : Sub Float :=
+  ⟨Float.sub RMode.NE⟩
+
+@[nolint docBlame]
+unsafe def mul (mode : RMode) : Float -> Float -> Float
+  | nan, _ => nan
+  | _, nan => nan
+  | inf s₁, f₂ => if f₂.isZero then nan else inf (xor s₁ f₂.sign)
+  | f₁, inf s₂ => if f₁.isZero then nan else inf (xor f₁.sign s₂)
+  | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
+    let f₁ := finite s₁ e₁ m₁ v₁
+    let f₂ := finite s₂ e₂ m₂ v₂
+    ofRat mode (toRat f₁ rfl * toRat f₂ rfl)
+
+@[nolint docBlame]
+unsafe def div (mode : RMode) : Float -> Float -> Float
+  | nan, _ => nan
+  | _, nan => nan
+  | inf _, inf _ => nan
+  | inf s₁, f₂ => inf (xor s₁ f₂.sign)
+  | f₁, inf s₂ => zero (xor f₁.sign s₂)
+  | finite s₁ e₁ m₁ v₁, finite s₂ e₂ m₂ v₂ =>
+    let f₁ := finite s₁ e₁ m₁ v₁
+    let f₂ := finite s₂ e₂ m₂ v₂
+    if f₂.isZero then inf (xor s₁ s₂) else ofRat mode (toRat f₁ rfl / toRat f₂ rfl)
 
 Depends on / 依赖: Float.neg
 -/

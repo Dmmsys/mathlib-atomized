@@ -82,7 +82,7 @@ theorem homotopyPToId_eventually_constant
   simp only [homotopyHσToZero, AlternatingFaceMapComplex.obj_X, Homotopy.trans_hom,
     Homotopy.ofEq_hom, Pi.zero_apply, Homotopy.add_hom, Homotopy.compLeft_hom, add_zero,
     Homotopy.nullHomotopy'_hom, ComplexShape.down_Rel, hσ'_eq_zero hqn (c_mk (n + 1) n rfl),
-    dite_eq_ite, ite_self, comp
+    dite_eq_ite, ite_self, comp_zero, zero_add, homotopyPToId]
 
 中文:
 定理 homotopyPToId_eventually_constant
@@ -91,7 +91,7 @@ theorem homotopyPToId_eventually_constant
   simp only [homotopyHσToZero, AlternatingFaceMapComplex.obj_X, Homotopy.trans_hom,
     Homotopy.ofEq_hom, Pi.zero_apply, Homotopy.add_hom, Homotopy.compLeft_hom, add_zero,
     Homotopy.nullHomotopy'_hom, ComplexShape.down_Rel, hσ'_eq_zero hqn (c_mk (n + 1) n rfl),
-    dite_eq_ite, ite_self, comp
+    dite_eq_ite, ite_self, comp_zero, zero_add, homotopyPToId]
 
 Depends on / 依赖: AlternatingFaceMapComplex, AlternatingFaceMapComplex.obj_X, ComplexShape, ComplexShape.down_Rel, Homotopy, Homotopy.add_hom, Homotopy.compLeft_hom, Homotopy.nullHomotopy, Homotopy.ofEq_hom, Homotopy.trans_hom, Pi.zero_apply, _eq_zero, _hom, add_hom, add_zero, c_mk, compLeft_hom, comp_zero, dite_eq_ite, down_Rel
 -/
@@ -118,7 +118,11 @@ definition homotopyPInftyToId
     rcases n with _ | n
     · simpa only [Homotopy.dNext_zero_chainComplex, Homotopy.prevD_chainComplex,
         PInfty_f, P_f_0_eq, zero_add] using (homotopyPToId X 2).comm 0
-    · simpa only [Homotopy.dNext_
+    · simpa only [Homotopy.dNext_succ_chainComplex, Homotopy.prevD_chainComplex,
+          HomologicalComplex.id_f, PInfty_f, ← P_is_eventually_constant (le_refl <| n + 1),
+          homotopyPToId_eventually_constant X (Nat.lt_add_one (Nat.succ n)),
+          Homotopy.dNext_succ_chainComplex, Homotopy.prevD_chainComplex]
+        using (homotopyPToId X (n + 2)).comm (n + 1)
 
 中文:
 定义 homotopyPInftyToId
@@ -129,7 +133,11 @@ definition homotopyPInftyToId
     rcases n with _ | n
     · simpa only [Homotopy.dNext_zero_chainComplex, Homotopy.prevD_chainComplex,
         PInfty_f, P_f_0_eq, zero_add] using (homotopyPToId X 2).comm 0
-    · simpa only [Homotopy.dNext_
+    · simpa only [Homotopy.dNext_succ_chainComplex, Homotopy.prevD_chainComplex,
+          HomologicalComplex.id_f, PInfty_f, ← P_is_eventually_constant (le_refl <| n + 1),
+          homotopyPToId_eventually_constant X (Nat.lt_add_one (Nat.succ n)),
+          Homotopy.dNext_succ_chainComplex, Homotopy.prevD_chainComplex]
+        using (homotopyPToId X (n + 2)).comm (n + 1)
 
 Depends on / 依赖: homotopyPToId
 -/
@@ -161,7 +169,7 @@ definition homotopyEquivNormalizedMooreComplexAlternatingFaceMapComplex
   homotopyHomInvId := Homotopy.ofEq (splitMonoInclusionOfMooreComplexMap Y).id
   homotopyInvHomId := Homotopy.trans
       (Homotopy.ofEq (PInftyToNormalizedMooreComplex_comp_inclusionOfMooreComplexMap Y))
-      (homotopyPInftyToI
+      (homotopyPInftyToId Y)
 
 中文:
 定义 homotopyEquivNormalizedMooreComplexAlternatingFaceMapComplex
@@ -171,7 +179,7 @@ definition homotopyEquivNormalizedMooreComplexAlternatingFaceMapComplex
   homotopyHomInvId := Homotopy.ofEq (splitMonoInclusionOfMooreComplexMap Y).id
   homotopyInvHomId := Homotopy.trans
       (Homotopy.ofEq (PInftyToNormalizedMooreComplex_comp_inclusionOfMooreComplexMap Y))
-      (homotopyPInftyToI
+      (homotopyPInftyToId Y)
 
 Depends on / 依赖: inclusionOfMooreComplexMap
 -/

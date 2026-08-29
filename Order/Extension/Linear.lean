@@ -35,7 +35,46 @@ theorem extend_partialOrder
     refine ⟨sSup c, ?_, fun z hz => le_sSup hz⟩
     refine
         { refl := ?_
-          
+          trans := ?_
+          antisymm := ?_ } <;>
+      simp_rw [binary_relation_sSup_iff]
+    · intro x
+      exact ⟨s, hs, refl x⟩
+    · rintro x y z ⟨s₁, h₁s₁, h₂s₁⟩ ⟨s₂, h₁s₂, h₂s₂⟩
+      have : IsPartialOrder _ _ := hc₁ h₁s₁
+      have : IsPartialOrder _ _ := hc₁ h₁s₂
+      rcases hc₂.total h₁s₁ h₁s₂ with h | h
+      · exact ⟨s₂, h₁s₂, _root_.trans (h _ _ h₂s₁) h₂s₂⟩
+      · exact ⟨s₁, h₁s₁, _root_.trans h₂s₁ (h _ _ h₂s₂)⟩
+    · rintro x y ⟨s₁, h₁s₁, h₂s₁⟩ ⟨s₂, h₁s₂, h₂s₂⟩
+      have : IsPartialOrder _ _ := hc₁ h₁s₁
+      have : IsPartialOrder _ _ := hc₁ h₁s₂
+      rcases hc₂.total h₁s₁ h₁s₂ with h | h
+      · exact antisymm (h _ _ h₂s₁) h₂s₂
+      · apply antisymm h₂s₁ (h _ _ h₂s₂)
+  obtain ⟨s, hrs, hs⟩ := zorn_le_nonempty₀ S hS r ‹_›
+  have : IsPartialOrder α s := hs.prop
+  refine ⟨s,
+    { total := ?_, refl := hs.1.refl, trans := hs.1.trans, antisymm := hs.1.antisymm }, hrs⟩
+  intro x y
+  by_contra! h
+  let s' x' y' := s x' y' ∨ s x' x ∧ s y y'
+  rw [hs.eq_of_le (y := s') ?_ fun _ _ => Or.inl] at h
+  · apply h.1 (Or.inr ⟨refl _, refl _⟩)
+  · refine
+    { refl := fun x => Or.inl (refl _)
+      trans := ?_
+      antisymm := ?_ }
+    · rintro a b c (ab | ⟨ax : s a x, yb : s y b⟩) (bc | ⟨bx : s b x, yc : s y c⟩)
+      · exact Or.inl (_root_.trans ab bc)
+      · exact Or.inr ⟨_root_.trans ab bx, yc⟩
+      · exact Or.inr ⟨ax, _root_.trans yb bc⟩
+      · exact Or.inr ⟨ax, yc⟩
+    rintro a b (ab | ⟨ax : s a x, yb : s y b⟩) (ba | ⟨bx : s b x, ya : s y a⟩)
+    · exact antisymm ab ba
+    · exact (h.2 (_root_.trans ya (_root_.trans ab bx))).elim
+    · exact (h.2 (_root_.trans yb (_root_.trans ba ax))).elim
+    · exact (h.2 (_root_.trans yb bx)).elim
 
 中文:
 定理 extend_partialOrder
@@ -48,7 +87,46 @@ theorem extend_partialOrder
     refine ⟨sSup c, ?_, fun z hz => le_sSup hz⟩
     refine
         { refl := ?_
-          
+          trans := ?_
+          antisymm := ?_ } <;>
+      simp_rw [binary_relation_sSup_iff]
+    · intro x
+      exact ⟨s, hs, refl x⟩
+    · rintro x y z ⟨s₁, h₁s₁, h₂s₁⟩ ⟨s₂, h₁s₂, h₂s₂⟩
+      have : IsPartialOrder _ _ := hc₁ h₁s₁
+      have : IsPartialOrder _ _ := hc₁ h₁s₂
+      rcases hc₂.total h₁s₁ h₁s₂ with h | h
+      · exact ⟨s₂, h₁s₂, _root_.trans (h _ _ h₂s₁) h₂s₂⟩
+      · exact ⟨s₁, h₁s₁, _root_.trans h₂s₁ (h _ _ h₂s₂)⟩
+    · rintro x y ⟨s₁, h₁s₁, h₂s₁⟩ ⟨s₂, h₁s₂, h₂s₂⟩
+      have : IsPartialOrder _ _ := hc₁ h₁s₁
+      have : IsPartialOrder _ _ := hc₁ h₁s₂
+      rcases hc₂.total h₁s₁ h₁s₂ with h | h
+      · exact antisymm (h _ _ h₂s₁) h₂s₂
+      · apply antisymm h₂s₁ (h _ _ h₂s₂)
+  obtain ⟨s, hrs, hs⟩ := zorn_le_nonempty₀ S hS r ‹_›
+  have : IsPartialOrder α s := hs.prop
+  refine ⟨s,
+    { total := ?_, refl := hs.1.refl, trans := hs.1.trans, antisymm := hs.1.antisymm }, hrs⟩
+  intro x y
+  by_contra! h
+  let s' x' y' := s x' y' ∨ s x' x ∧ s y y'
+  rw [hs.eq_of_le (y := s') ?_ fun _ _ => Or.inl] at h
+  · apply h.1 (Or.inr ⟨refl _, refl _⟩)
+  · refine
+    { refl := fun x => Or.inl (refl _)
+      trans := ?_
+      antisymm := ?_ }
+    · rintro a b c (ab | ⟨ax : s a x, yb : s y b⟩) (bc | ⟨bx : s b x, yc : s y c⟩)
+      · exact Or.inl (_root_.trans ab bc)
+      · exact Or.inr ⟨_root_.trans ab bx, yc⟩
+      · exact Or.inr ⟨ax, _root_.trans yb bc⟩
+      · exact Or.inr ⟨ax, yc⟩
+    rintro a b (ab | ⟨ax : s a x, yb : s y b⟩) (ba | ⟨bx : s b x, ya : s y a⟩)
+    · exact antisymm ab ba
+    · exact (h.2 (_root_.trans ya (_root_.trans ab bx))).elim
+    · exact (h.2 (_root_.trans yb (_root_.trans ba ax))).elim
+    · exact (h.2 (_root_.trans yb bx)).elim
 
 Depends on / 依赖: IsChain, IsPartialOrder, antisymm, binary_relation_sSup_iff, le_sSup, simp_rw, subseteq
 -/

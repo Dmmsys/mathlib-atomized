@@ -113,7 +113,12 @@ lemma compatibilityCounit_of_compatibilityUnit
     Iso.hom_inv_id_app, Functor.comp_obj, Functor.map_id] at eq
   apply (adj.homEquiv _ _).injective
   dsimp
-  rw [adj.homEquiv_un
+  rw [adj.homEquiv_unit]; rw [adj.homEquiv_unit]; rw [G.map_comp]; rw [adj.unit_naturality_assoc]; rw [← eq]
+  simp only [assoc, ← Functor.map_comp, Iso.inv_hom_id_app_assoc]
+  erw [← e₂.inv.naturality]
+  dsimp
+  simp only [right_triangle_components, ← Functor.map_comp_assoc, Functor.map_id, id_comp,
+    Iso.hom_inv_id_app, Functor.comp_obj]
 
 中文:
 引理 compatibilityCounit_of_compatibilityUnit
@@ -126,7 +131,12 @@ lemma compatibilityCounit_of_compatibilityUnit
     Iso.hom_inv_id_app, Functor.comp_obj, Functor.map_id] at eq
   apply (adj.homEquiv _ _).injective
   dsimp
-  rw [adj.homEquiv_un
+  rw [adj.homEquiv_unit]; rw [adj.homEquiv_unit]; rw [G.map_comp]; rw [adj.unit_naturality_assoc]; rw [← eq]
+  simp only [assoc, ← Functor.map_comp, Iso.inv_hom_id_app_assoc]
+  erw [← e₂.inv.naturality]
+  dsimp
+  simp only [right_triangle_components, ← Functor.map_comp_assoc, Functor.map_id, id_comp,
+    Iso.hom_inv_id_app, Functor.comp_obj]
 
 Depends on / 依赖: Functor, Functor.comp_obj, Functor.map_comp, Functor.map_id, G.map, G.map_comp, G.obj, Iso.hom_inv_id_app, Iso.hom_inv_id_app_assoc, Iso.inv_hom_id_app_assoc, adj.homEquiv, adj.homEquiv_unit, adj.unit_naturality_assoc, cancel_mono, comp_id, comp_obj, homEquiv, homEquiv_unit, hom_inv_id_app, hom_inv_id_app_assoc
 -/
@@ -159,7 +169,8 @@ lemma compatibilityUnit_right
   erw [comp_id] at this
   rw [← assoc]; rw [← this]; rw [assoc]; erw [← e₂.inv.naturality]
   rw [← cancel_mono (e₂.hom.app _)]
-  simp only [Functor.comp_obj, Iso.inv_hom_id_app, Func
+  simp only [Functor.comp_obj, Iso.inv_hom_id_app, Functor.id_obj, Functor.comp_map, assoc, comp_id,
+    ← (shiftFunctor C a).map_comp, right_triangle_components, Functor.map_id]
 
 中文:
 引理 compatibilityUnit_right
@@ -170,7 +181,8 @@ lemma compatibilityUnit_right
   erw [comp_id] at this
   rw [← assoc]; rw [← this]; rw [assoc]; erw [← e₂.inv.naturality]
   rw [← cancel_mono (e₂.hom.app _)]
-  simp only [Functor.comp_obj, Iso.inv_hom_id_app, Func
+  simp only [Functor.comp_obj, Iso.inv_hom_id_app, Functor.id_obj, Functor.comp_map, assoc, comp_id,
+    ← (shiftFunctor C a).map_comp, right_triangle_components, Functor.map_id]
 
 Depends on / 依赖: Functor, Functor.comp_map, Functor.comp_obj, Functor.id_obj, Functor.map_id, G.obj, Iso.hom_inv_id_app, Iso.inv_hom_id_app, cancel_mono, comp_id, comp_map, comp_obj, hom.app, hom_inv_id_app, id_obj, inv.app, inv.naturality, inv_hom_id_app, map_comp, map_id
 -/
@@ -195,7 +207,8 @@ lemma compatibilityCounit_left
   have := h (F.obj X)
   rw [← cancel_epi (F.map (e₂.inv.app _))]; rw [← assoc]; rw [← F.map_comp]; rw [Iso.inv_hom_id_app]; rw [F.map_id]; rw [id_comp] at this
   dsimp only [Functor.comp_obj, Functor.id_obj]
-  rw [this]; rw [dsimp% e₁.hom.naturality_assoc]; rw [← Functor.map_comp]; rw [left_trian
+  rw [this]; rw [dsimp% e₁.hom.naturality_assoc]; rw [← Functor.map_comp]; rw [left_triangle_components]
+  simp only [Functor.map_id, comp_id]
 
 中文:
 引理 compatibilityCounit_left
@@ -204,7 +217,8 @@ lemma compatibilityCounit_left
   have := h (F.obj X)
   rw [← cancel_epi (F.map (e₂.inv.app _))]; rw [← assoc]; rw [← F.map_comp]; rw [Iso.inv_hom_id_app]; rw [F.map_id]; rw [id_comp] at this
   dsimp only [Functor.comp_obj, Functor.id_obj]
-  rw [this]; rw [dsimp% e₁.hom.naturality_assoc]; rw [← Functor.map_comp]; rw [left_trian
+  rw [this]; rw [dsimp% e₁.hom.naturality_assoc]; rw [← Functor.map_comp]; rw [left_triangle_components]
+  simp only [Functor.map_id, comp_id]
 
 Depends on / 依赖: F.map, F.map_comp, F.map_id, F.obj, Functor, Functor.comp_obj, Functor.id_obj, Functor.map_comp, Functor.map_id, Iso.inv_hom_id_app, cancel_epi, comp_id, comp_obj, hom.naturality_assoc, id_comp, id_obj, inv.app, inv_hom_id_app, left_triangle_components, map_comp
 -/
@@ -279,7 +293,7 @@ lemma compatibilityUnit_isoZero
   simp only [Functor.id_obj, Functor.comp_obj, Functor.CommShift.isoZero_hom_app,
     Functor.map_comp, assoc, unit_naturality_assoc,
     ← cancel_mono ((shiftFunctorZero C A).hom.app _), ← G.map_comp_assoc, Iso.inv_hom_id_app,
-    Functor.id_obj, Functor.map_id, id_comp, NatTrans.natural
+    Functor.id_obj, Functor.map_id, id_comp, NatTrans.naturality, Functor.id_map, assoc, comp_id]
 
 中文:
 引理 compatibilityUnit_isoZero
@@ -289,7 +303,7 @@ lemma compatibilityUnit_isoZero
   simp only [Functor.id_obj, Functor.comp_obj, Functor.CommShift.isoZero_hom_app,
     Functor.map_comp, assoc, unit_naturality_assoc,
     ← cancel_mono ((shiftFunctorZero C A).hom.app _), ← G.map_comp_assoc, Iso.inv_hom_id_app,
-    Functor.id_obj, Functor.map_id, id_comp, NatTrans.natural
+    Functor.id_obj, Functor.map_id, id_comp, NatTrans.naturality, Functor.id_map, assoc, comp_id]
 
 Depends on / 依赖: CommShift, Functor, Functor.CommShift.isoZero_hom_app, Functor.comp_obj, Functor.id_map, Functor.id_obj, Functor.map_comp, Functor.map_id, G.map_comp_assoc, Iso.inv_hom_id_app, NatTrans, NatTrans.naturality, cancel_mono, comp_id, comp_obj, hom.app, id_comp, id_map, id_obj, inv_hom_id_app
 -/
@@ -315,7 +329,14 @@ lemma compatibilityUnit_isoAdd
     Functor.id_obj, Functor.comp_obj, comp_id] at this
   simp only [Functor.id_obj, Functor.comp_obj, Functor.CommShift.isoAdd_hom_app,
     Functor.map_comp, assoc, unit_naturality_assoc]
-  slice_r
+  slice_rhs 5 6 => rw [← G.map_comp, Iso.inv_hom_id_app]
+  simp only [Functor.comp_obj, Functor.map_id, id_comp, assoc]
+  erw [f₂.hom.naturality_assoc]
+  rw [← reassoc_of% this]; rw [← cancel_mono ((shiftFunctorAdd C a b).hom.app _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.inv_hom_id_app]
+  dsimp
+  rw [← (shiftFunctor C b).map_comp_assoc]; rw [← (shiftFunctor C b).map_comp_assoc]; rw [assoc]; rw [← h X]; rw [NatTrans.naturality]
+  dsimp
+  rw [comp_id]
 
 中文:
 引理 compatibilityUnit_isoAdd
@@ -327,7 +348,14 @@ lemma compatibilityUnit_isoAdd
     Functor.id_obj, Functor.comp_obj, comp_id] at this
   simp only [Functor.id_obj, Functor.comp_obj, Functor.CommShift.isoAdd_hom_app,
     Functor.map_comp, assoc, unit_naturality_assoc]
-  slice_r
+  slice_rhs 5 6 => rw [← G.map_comp, Iso.inv_hom_id_app]
+  simp only [Functor.comp_obj, Functor.map_id, id_comp, assoc]
+  erw [f₂.hom.naturality_assoc]
+  rw [← reassoc_of% this]; rw [← cancel_mono ((shiftFunctorAdd C a b).hom.app _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.inv_hom_id_app]
+  dsimp
+  rw [← (shiftFunctor C b).map_comp_assoc]; rw [← (shiftFunctor C b).map_comp_assoc]; rw [assoc]; rw [← h X]; rw [NatTrans.naturality]
+  dsimp
+  rw [comp_id]
 
 Depends on / 依赖: CommShift, Functor, Functor.CommShift.isoAdd_hom_app, Functor.comp_obj, Functor.id_obj, Functor.map_comp, Functor.map_id, G.map_comp, Iso.hom_inv_id_app, Iso.inv_hom_id_app, cancel_mono, comp_id, comp_obj, hom.app, hom.naturality_assoc, hom_inv_id_app, id_comp, id_obj, inv.app, inv_hom_id_app
 -/
@@ -489,7 +517,8 @@ lemma mk'
     simp only [Functor.comp_obj, Functor.id_obj, NatTrans.comp_app,
       Functor.commShiftIso_comp_hom_app, Functor.whiskerRight_app, assoc, Functor.whiskerLeft_app,
       Functor.commShiftIso_id_hom_app, comp_id]
-    refine (compatibilityCounit_of_compatibilityUnit adj _ _ (fu
+    refine (compatibilityCounit_of_compatibilityUnit adj _ _ (fun X => ?_) _).symm
+    simpa [Functor.commShiftIso_comp_hom_app] using NatTrans.shift_app_comm adj.unit a X⟩
 
 中文:
 引理 mk'
@@ -499,7 +528,8 @@ lemma mk'
     simp only [Functor.comp_obj, Functor.id_obj, NatTrans.comp_app,
       Functor.commShiftIso_comp_hom_app, Functor.whiskerRight_app, assoc, Functor.whiskerLeft_app,
       Functor.commShiftIso_id_hom_app, comp_id]
-    refine (compatibilityCounit_of_compatibilityUnit adj _ _ (fu
+    refine (compatibilityCounit_of_compatibilityUnit adj _ _ (fun X => ?_) _).symm
+    simpa [Functor.commShiftIso_comp_hom_app] using NatTrans.shift_app_comm adj.unit a X⟩
 
 Depends on / 依赖: Functor, Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, Functor.whiskerLeft_app, Functor.whiskerRight_app, NatTrans, NatTrans.comp_app, NatTrans.shift_app_comm, adj.unit, commShiftIso_comp_hom_app, commShiftIso_id_hom_app, comp_app, comp_id, comp_obj, compatibilityCounit_of_compatibilityUnit, id_obj, shift_app_comm, whiskerLeft_app
 -/
@@ -617,7 +647,7 @@ lemma shift_counit_app
   simp only [Functor.comp_obj, Functor.id_obj, Functor.commShiftIso_comp_hom_app, assoc,
     Functor.commShiftIso_id_hom_app, comp_id] at eq
   simp only [← eq, Functor.comp_obj, Functor.id_obj, ← F.map_comp_assoc, Iso.inv_hom_id_app,
-    F.map_i
+    F.map_id, id_comp, Iso.inv_hom_id_app_assoc]
 
 中文:
 引理 shift_counit_app
@@ -627,7 +657,7 @@ lemma shift_counit_app
   simp only [Functor.comp_obj, Functor.id_obj, Functor.commShiftIso_comp_hom_app, assoc,
     Functor.commShiftIso_id_hom_app, comp_id] at eq
   simp only [← eq, Functor.comp_obj, Functor.id_obj, ← F.map_comp_assoc, Iso.inv_hom_id_app,
-    F.map_i
+    F.map_id, id_comp, Iso.inv_hom_id_app_assoc]
 
 Depends on / 依赖: F.map_comp_assoc, F.map_id, Functor, Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, Iso.inv_hom_id_app, Iso.inv_hom_id_app_assoc, NatTrans, NatTrans.shift_app_comm, adj.counit, commShiftIso_comp_hom_app, commShiftIso_id_hom_app, comp_id, comp_obj, counit, id_comp, id_obj, inv_hom_id_app
 -/
@@ -735,7 +765,11 @@ lemma iso_inv_app
   obtain rfl : b = -a := by rw [← add_left_inj a, h, neg_add_cancel]
   simp only [iso, iso', shiftEquiv', Equiv.toFun_as_coe, conjugateIsoEquiv_apply_inv,
     conjugateEquiv_apply_app, Functor.comp_obj, comp_unit_app, Functor.id_obj,
-    Equivalence.toAdjunction_unit, Equivalence.Equivalence_mk'_
+    Equivalence.toAdjunction_unit, Equivalence.Equivalence_mk'_unit, Iso.symm_hom, Functor.comp_map,
+    comp_counit_app, Equivalence.toAdjunction_counit, Equivalence.Equivalence_mk'_counit,
+    Functor.map_shiftFunctorCompIsoId_hom_app, assoc, Functor.map_comp]
+  slice_lhs 3 4 => rw [← Functor.map_comp, ← Functor.map_comp, Iso.inv_hom_id_app]
+  simp only [Functor.comp_obj, Functor.map_id, id_comp, assoc]
 
 中文:
 引理 iso_inv_app
@@ -744,7 +778,11 @@ lemma iso_inv_app
   obtain rfl : b = -a := by rw [← add_left_inj a, h, neg_add_cancel]
   simp only [iso, iso', shiftEquiv', Equiv.toFun_as_coe, conjugateIsoEquiv_apply_inv,
     conjugateEquiv_apply_app, Functor.comp_obj, comp_unit_app, Functor.id_obj,
-    Equivalence.toAdjunction_unit, Equivalence.Equivalence_mk'_
+    Equivalence.toAdjunction_unit, Equivalence.Equivalence_mk'_unit, Iso.symm_hom, Functor.comp_map,
+    comp_counit_app, Equivalence.toAdjunction_counit, Equivalence.Equivalence_mk'_counit,
+    Functor.map_shiftFunctorCompIsoId_hom_app, assoc, Functor.map_comp]
+  slice_lhs 3 4 => rw [← Functor.map_comp, ← Functor.map_comp, Iso.inv_hom_id_app]
+  simp only [Functor.comp_obj, Functor.map_id, id_comp, assoc]
 
 Depends on / 依赖: Equiv.toFun_as_coe, Equivalence, Equivalence.Equivalence_mk, Equivalence.toAdjunction_counit, Equivalence.toAdjunction_unit, Equivalence_mk, Functor, Functor.comp_map, Functor.comp_obj, Functor.id_obj, Functor.map_comp, Functor.map_shiftFunctorCompIsoId_hom_app, Iso.symm_hom, _counit, _unit, add_left_inj, comp_counit_app, comp_map, comp_obj, comp_unit_app
 -/
@@ -780,7 +818,11 @@ lemma compatibilityUnit_iso
   rw [← cancel_mono ((RightAdjointCommShift.iso adj a).inv.app _)]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app]; rw [RightAdjointCommShift.iso_inv_app adj _ _ (neg_add_cancel a)]
   apply (adj.homEquiv _ _).symm.injective
   dsimp
-  simp only [comp_id, homEquiv_counit, Functor.map_comp,
+  simp only [comp_id, homEquiv_counit, Functor.map_comp, assoc, counit_naturality,
+    counit_naturality_assoc, left_triangle_components_assoc]
+  erw [← NatTrans.naturality_assoc]
+  dsimp
+  rw [shift_shiftFunctorCompIsoId_hom_app]; rw [Iso.inv_hom_id_app_assoc]; rw [Functor.commShiftIso_hom_naturality_assoc]; rw [← Functor.map_comp]; rw [left_triangle_components]; rw [Functor.map_id]; rw [comp_id]
 
 中文:
 引理 compatibilityUnit_iso
@@ -790,7 +832,11 @@ lemma compatibilityUnit_iso
   rw [← cancel_mono ((RightAdjointCommShift.iso adj a).inv.app _)]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app]; rw [RightAdjointCommShift.iso_inv_app adj _ _ (neg_add_cancel a)]
   apply (adj.homEquiv _ _).symm.injective
   dsimp
-  simp only [comp_id, homEquiv_counit, Functor.map_comp,
+  simp only [comp_id, homEquiv_counit, Functor.map_comp, assoc, counit_naturality,
+    counit_naturality_assoc, left_triangle_components_assoc]
+  erw [← NatTrans.naturality_assoc]
+  dsimp
+  rw [shift_shiftFunctorCompIsoId_hom_app]; rw [Iso.inv_hom_id_app_assoc]; rw [Functor.commShiftIso_hom_naturality_assoc]; rw [← Functor.map_comp]; rw [left_triangle_components]; rw [Functor.map_id]; rw [comp_id]
 
 Depends on / 依赖: Functor, Functor.c, Functor.map_comp, Iso.hom_inv_id_app, Iso.inv_hom_id_app_assoc, NatTrans, NatTrans.naturality_assoc, RightAdjointCommShift, RightAdjointCommShift.iso, RightAdjointCommShift.iso_inv_app, adj.homEquiv, cancel_mono, comp_id, counit_naturality, counit_naturality_assoc, homEquiv, homEquiv_counit, hom_inv_id_app, injective, inv.app
 -/
@@ -829,7 +875,11 @@ definition rightAdjointCommShift
     rw [F.commShiftIso_zero]
     exact CommShift.compatibilityUnit_isoZero adj
   commShiftIso_add a b := by
-    refine CommShift.compatibilityUnit
+    refine CommShift.compatibilityUnit_unique_right adj (F.commShiftIso (a + b)) _ _
+      (compatibilityUnit_iso adj (a + b)) ?_
+    rw [F.commShiftIso_add]
+    exact CommShift.compatibilityUnit_isoAdd adj _ _ _ _
+      (compatibilityUnit_iso adj a) (compatibilityUnit_iso adj b)
 
 中文:
 定义 rightAdjointCommShift
@@ -841,7 +891,11 @@ definition rightAdjointCommShift
     rw [F.commShiftIso_zero]
     exact CommShift.compatibilityUnit_isoZero adj
   commShiftIso_add a b := by
-    refine CommShift.compatibilityUnit
+    refine CommShift.compatibilityUnit_unique_right adj (F.commShiftIso (a + b)) _ _
+      (compatibilityUnit_iso adj (a + b)) ?_
+    rw [F.commShiftIso_add]
+    exact CommShift.compatibilityUnit_isoAdd adj _ _ _ _
+      (compatibilityUnit_iso adj a) (compatibilityUnit_iso adj b)
 -/
 noncomputable def rightAdjointCommShift [F.CommShift A] : G.CommShift A where
   commShiftIso a := iso adj a
@@ -871,7 +925,7 @@ lemma commShift_of_leftAdjoint
   ext X
   dsimp
   simpa only [Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, id_comp,
-    Functor.commShiftIso_comp_hom_app] using! RightAdjointComm
+    Functor.commShiftIso_comp_hom_app] using! RightAdjointCommShift.compatibilityUnit_iso adj a X
 
 中文:
 引理 commShift_of_leftAdjoint
@@ -883,7 +937,7 @@ lemma commShift_of_leftAdjoint
   ext X
   dsimp
   simpa only [Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, id_comp,
-    Functor.commShiftIso_comp_hom_app] using! RightAdjointComm
+    Functor.commShiftIso_comp_hom_app] using! RightAdjointCommShift.compatibilityUnit_iso adj a X
 
 Depends on / 依赖: adj.rightAdjointCommShift, rightAdjointCommShift
 -/
@@ -1012,7 +1066,10 @@ lemma compatibilityUnit_iso
   rw [LeftAdjointCommShift.iso_hom_app adj _ _ (add_neg_cancel a)]
   simp only [Functor.id_obj, Functor.comp_obj, Functor.map_shiftFunctorCompIsoId_inv_app,
     Functor.map_comp, assoc, unit_naturality_assoc, right_triangle_components_assoc]
-  slice_rhs 4 5 => rw [← Functor.map_comp, Iso.
+  slice_rhs 4 5 => rw [← Functor.map_comp, Iso.inv_hom_id_app]
+  simp only [Functor.comp_obj, Functor.map_id, id_comp]
+  rw [shift_shiftFunctorCompIsoId_inv_app]; rw [← Functor.comp_map]; rw [(shiftFunctorCompIsoId C _ _ (neg_add_cancel a)).hom.naturality_assoc]
+  simp
 
 中文:
 引理 compatibilityUnit_iso
@@ -1022,7 +1079,10 @@ lemma compatibilityUnit_iso
   rw [LeftAdjointCommShift.iso_hom_app adj _ _ (add_neg_cancel a)]
   simp only [Functor.id_obj, Functor.comp_obj, Functor.map_shiftFunctorCompIsoId_inv_app,
     Functor.map_comp, assoc, unit_naturality_assoc, right_triangle_components_assoc]
-  slice_rhs 4 5 => rw [← Functor.map_comp, Iso.
+  slice_rhs 4 5 => rw [← Functor.map_comp, Iso.inv_hom_id_app]
+  simp only [Functor.comp_obj, Functor.map_id, id_comp]
+  rw [shift_shiftFunctorCompIsoId_inv_app]; rw [← Functor.comp_map]; rw [(shiftFunctorCompIsoId C _ _ (neg_add_cancel a)).hom.naturality_assoc]
+  simp
 
 Depends on / 依赖: Functor, Functor.comp_map, Functor.comp_obj, Functor.id_obj, Functor.map_comp, Functor.map_id, Functor.map_shiftFunctorCompIsoId_inv_app, Iso.inv_hom_id_app, LeftAdjointCommShift, LeftAdjointCommShift.iso_hom_app, add_neg_cancel, comp_map, comp_obj, hom.naturality_assoc, id_comp, id_obj, inv_hom_id_app, iso_hom_app, map_comp, map_id
 -/
@@ -1058,7 +1118,11 @@ definition leftAdjointCommShift
     rw [G.commShiftIso_zero]
     exact CommShift.compatibilityUnit_isoZero adj
   commShiftIso_add a b := by
-    refine CommShift.compatibilityUnit_
+    refine CommShift.compatibilityUnit_unique_left adj _ _ (G.commShiftIso (a + b))
+      (compatibilityUnit_iso adj (a + b)) ?_
+    rw [G.commShiftIso_add]
+    exact CommShift.compatibilityUnit_isoAdd adj _ _ _ _
+      (compatibilityUnit_iso adj a) (compatibilityUnit_iso adj b)
 
 中文:
 定义 leftAdjointCommShift
@@ -1070,7 +1134,11 @@ definition leftAdjointCommShift
     rw [G.commShiftIso_zero]
     exact CommShift.compatibilityUnit_isoZero adj
   commShiftIso_add a b := by
-    refine CommShift.compatibilityUnit_
+    refine CommShift.compatibilityUnit_unique_left adj _ _ (G.commShiftIso (a + b))
+      (compatibilityUnit_iso adj (a + b)) ?_
+    rw [G.commShiftIso_add]
+    exact CommShift.compatibilityUnit_isoAdd adj _ _ _ _
+      (compatibilityUnit_iso adj a) (compatibilityUnit_iso adj b)
 -/
 noncomputable def leftAdjointCommShift [G.CommShift A] : F.CommShift A where
   commShiftIso a := iso adj a
@@ -1100,7 +1168,7 @@ lemma commShift_of_rightAdjoint
   ext X
   dsimp
   simpa only [Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, id_comp,
-    Functor.commShiftIso_comp_hom_app] using! LeftAdjointCommShi
+    Functor.commShiftIso_comp_hom_app] using! LeftAdjointCommShift.compatibilityUnit_iso adj a X
 
 中文:
 引理 commShift_of_rightAdjoint
@@ -1112,7 +1180,7 @@ lemma commShift_of_rightAdjoint
   ext X
   dsimp
   simpa only [Functor.commShiftIso_id_hom_app, Functor.comp_obj, Functor.id_obj, id_comp,
-    Functor.commShiftIso_comp_hom_app] using! LeftAdjointCommShi
+    Functor.commShiftIso_comp_hom_app] using! LeftAdjointCommShift.compatibilityUnit_iso adj a X
 
 Depends on / 依赖: adj.leftAdjointCommShift, leftAdjointCommShift
 -/

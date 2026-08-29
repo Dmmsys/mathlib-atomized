@@ -136,7 +136,13 @@ theorem piComparison_fac
     Equalizer.Presieve.Arrows.forkMap F X c.inj := by
   have : HasCoproduct X := ⟨⟨c, hc⟩⟩
   dsimp only [Equalizer.Presieve.Arrows.forkMap]
-  have h : Pi.lift (fun i => F.map (c.inj i).op)
+  have h : Pi.lift (fun i => F.map (c.inj i).op) =
+      F.map (Pi.lift (fun i => (c.inj i).op)) ≫ piComparison F _ := by simp
+  rw [h]; rw [← Category.assoc]; rw [← Functor.map_comp]
+  have hh : Pi.lift (fun i => (c.inj i).op) = (productIsProduct (op <| X ·)).lift c.op := by
+    simp [Pi.lift, productIsProduct]
+  rw [hh]; rw [← desc_op_comp_opCoproductIsoProduct'_hom hc]
+  simp
 
 中文:
 定理 piComparison_fac
@@ -145,7 +151,13 @@ theorem piComparison_fac
     Equalizer.Presieve.Arrows.forkMap F X c.inj := by
   have : HasCoproduct X := ⟨⟨c, hc⟩⟩
   dsimp only [Equalizer.Presieve.Arrows.forkMap]
-  have h : Pi.lift (fun i => F.map (c.inj i).op)
+  have h : Pi.lift (fun i => F.map (c.inj i).op) =
+      F.map (Pi.lift (fun i => (c.inj i).op)) ≫ piComparison F _ := by simp
+  rw [h]; rw [← Category.assoc]; rw [← Functor.map_comp]
+  have hh : Pi.lift (fun i => (c.inj i).op) = (productIsProduct (op <| X ·)).lift c.op := by
+    simp [Pi.lift, productIsProduct]
+  rw [hh]; rw [← desc_op_comp_opCoproductIsoProduct'_hom hc]
+  simp
 -/
 theorem piComparison_fac :
     have : HasCoproduct X := ⟨⟨c, hc⟩⟩
@@ -176,7 +188,14 @@ theorem isSheafFor_of_preservesProduct
   rw [Equalizer.Presieve.Arrows.sheaf_condition]; rw [Limits.Types.type_equalizer_iff_unique]
   have : HasCoproduct X := ⟨⟨c, hc⟩⟩
   have hi : IsIso (piComparison F (fun x => op (X x))) := inferInstance
-  rw [piComparison_fac (hc := hc)]; rw [isIso_iff_bijective]; rw [Function.bijective_iff_exist
+  rw [piComparison_fac (hc := hc)]; rw [isIso_iff_bijective]; rw [Function.bijective_iff_existsUnique] at hi
+  intro b _
+  obtain ⟨t, ht₁, ht₂⟩ := hi b
+  refine ⟨F.map ((opCoproductIsoProduct' hc (productIsProduct _)).inv) t, ht₁, fun y hy => ?_⟩
+  apply_fun F.map ((opCoproductIsoProduct' hc (productIsProduct _)).hom) using injective_of_mono _
+  simp only [Fan.mk_pt, ← comp_apply, ← Functor.map_comp, Iso.inv_hom_id, Functor.map_id, id_apply]
+  apply ht₂ (F.map ((opCoproductIsoProduct' hc (productIsProduct _)).hom) y)
+    (by simp [← hy, ← comp_apply])
 
 中文:
 定理 isSheafFor_of_preservesProduct
@@ -185,7 +204,14 @@ theorem isSheafFor_of_preservesProduct
   rw [Equalizer.Presieve.Arrows.sheaf_condition]; rw [Limits.Types.type_equalizer_iff_unique]
   have : HasCoproduct X := ⟨⟨c, hc⟩⟩
   have hi : IsIso (piComparison F (fun x => op (X x))) := inferInstance
-  rw [piComparison_fac (hc := hc)]; rw [isIso_iff_bijective]; rw [Function.bijective_iff_exist
+  rw [piComparison_fac (hc := hc)]; rw [isIso_iff_bijective]; rw [Function.bijective_iff_existsUnique] at hi
+  intro b _
+  obtain ⟨t, ht₁, ht₂⟩ := hi b
+  refine ⟨F.map ((opCoproductIsoProduct' hc (productIsProduct _)).inv) t, ht₁, fun y hy => ?_⟩
+  apply_fun F.map ((opCoproductIsoProduct' hc (productIsProduct _)).hom) using injective_of_mono _
+  simp only [Fan.mk_pt, ← comp_apply, ← Functor.map_comp, Iso.inv_hom_id, Functor.map_id, id_apply]
+  apply ht₂ (F.map ((opCoproductIsoProduct' hc (productIsProduct _)).hom) y)
+    (by simp [← hy, ← comp_apply])
 
 Depends on / 依赖: Arrows, Equalizer, Equalizer.Presieve.Arrows.sheaf_condition, F.map, Function, Function.bijective_iff_existsUnique, HasCoproduct, Limits, Limits.Types.type_equalizer_iff_unique, Presieve, apply_fun, bijective_iff_existsUnique, isIso_iff_bijective, opCoproductIsoProduct, piComparison, piComparison_fac, productIsProduct, sheaf_condition, type_equalizer_iff_unique
 -/
@@ -219,7 +245,12 @@ theorem firstMap_eq_secondMap
     TypeCat.Fun.toFun_apply, comp_apply, Equalizer.Presieve.Arrows.secondMap]
   by_cases hi : i = j
   · rw [hi, Mono.right_cancellation _ _ pullback.condition]
-  · have := preservesTerminal_of_isSheaf_for_
+  · have := preservesTerminal_of_isSheaf_for_empty F hF hI
+    apply_fun (F.mapIso ((hd hi).isoPullback).op ≪≫ F.mapIso (terminalIsoIsTerminal
+      (terminalOpOfInitial initialIsInitial)).symm ≪≫ (PreservesTerminal.iso F)).hom using
+      injective_of_mono _
+    ext ⟨i⟩
+    exact i.elim
 
 中文:
 定理 firstMap_eq_secondMap
@@ -229,7 +260,12 @@ theorem firstMap_eq_secondMap
     TypeCat.Fun.toFun_apply, comp_apply, Equalizer.Presieve.Arrows.secondMap]
   by_cases hi : i = j
   · rw [hi, Mono.right_cancellation _ _ pullback.condition]
-  · have := preservesTerminal_of_isSheaf_for_
+  · have := preservesTerminal_of_isSheaf_for_empty F hF hI
+    apply_fun (F.mapIso ((hd hi).isoPullback).op ≪≫ F.mapIso (terminalIsoIsTerminal
+      (terminalOpOfInitial initialIsInitial)).symm ≪≫ (PreservesTerminal.iso F)).hom using
+      injective_of_mono _
+    ext ⟨i⟩
+    exact i.elim
 
 Depends on / 依赖: Arrows, Equalizer, Equalizer.Presieve.Arrows.firstMap, Equalizer.Presieve.Arrows.secondMap, F.mapIso, Fan.mk_, Mono.right_cancellation, PreservesTerminal, PreservesTerminal.iso, Presieve, TypeCat, TypeCat.Fun.toFun_apply, apply_fun, comp_apply, condition, firstMap, initialIsInitial, injective_of_mono, isoPullback, limit.lift_
 -/
@@ -261,7 +297,10 @@ lemma preservesProduct_of_isSheafFor
   rw [piComparison_fac (hc := hc)]
   refine IsIso.comp_isIso' inferInstance ?_
   rw [isIso_iff_bijective]; rw [Function.bijective_iff_existsUnique]
-  rw [Equalizer.Presieve.Arr
+  rw [Equalizer.Presieve.Arrows.sheaf_condition]; rw [Limits.Types.type_equalizer_iff_unique] at hF'
+  exact fun b => hF' b (ConcreteCategory.congr_hom (firstMap_eq_secondMap F hF hI c hd) b)
+
+include hc hd hF hI in
 
 中文:
 引理 preservesProduct_of_isSheafFor
@@ -271,7 +310,10 @@ lemma preservesProduct_of_isSheafFor
   rw [piComparison_fac (hc := hc)]
   refine IsIso.comp_isIso' inferInstance ?_
   rw [isIso_iff_bijective]; rw [Function.bijective_iff_existsUnique]
-  rw [Equalizer.Presieve.Arr
+  rw [Equalizer.Presieve.Arrows.sheaf_condition]; rw [Limits.Types.type_equalizer_iff_unique] at hF'
+  exact fun b => hF' b (ConcreteCategory.congr_hom (firstMap_eq_secondMap F hF hI c hd) b)
+
+include hc hd hF hI in
 
 Depends on / 依赖: Arrows, ConcreteCategory, ConcreteCategory.congr_hom, Equalizer, Equalizer.Presieve.Arrows.sheaf_condition, Function, Function.bijective_iff_existsUnique, HasCoproduct, IsIso.comp_isIso, Limits, Limits.Types.type_equalizer_iff_unique, PreservesProduct, PreservesProduct.of_iso_comparison, Presieve, bijective_iff_existsUnique, comp_isIso, congr_hom, firstMap_eq_secondMap, isIso_iff_bijective, of_iso_comparison
 -/

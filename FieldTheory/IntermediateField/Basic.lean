@@ -1106,7 +1106,10 @@ definition Subalgebra.toIntermediateField'
       exact S.zero_mem
     let hS' := hS.toField
     obtain ⟨y, hy⟩ := hS.mul_inv_cancel (show (⟨x, hx⟩ : S) != 0 from Subtype.coe_ne_coe.1 hx0)
-    rw [Subtype.ext_iff]; rw [S.coe_mul]; rw [S.coe_one]; rw [Subtyp
+    rw [Subtype.ext_iff]; rw [S.coe_mul]; rw [S.coe_one]; rw [Subtype.coe_mk]; rw [mul_eq_one_iff_inv_eq₀ hx0] at hy
+    exact hy.symm ▸ y.2
+
+@[simp]
 
 中文:
 定义 子代数.to整数ermediateField'
@@ -1117,7 +1120,10 @@ definition Subalgebra.toIntermediateField'
       exact S.zero_mem
     let hS' := hS.toField
     obtain ⟨y, hy⟩ := hS.mul_inv_cancel (show (⟨x, hx⟩ : S) != 0 from Subtype.coe_ne_coe.1 hx0)
-    rw [Subtype.ext_iff]; rw [S.coe_mul]; rw [S.coe_one]; rw [Subtyp
+    rw [Subtype.ext_iff]; rw [S.coe_mul]; rw [S.coe_one]; rw [Subtype.coe_mk]; rw [mul_eq_one_iff_inv_eq₀ hx0] at hy
+    exact hy.symm ▸ y.2
+
+@[simp]
 
 Depends on / 依赖: S.coe_mul, S.coe_one, S.toIntermediateField, S.zero_mem, Subtype, Subtype.coe_mk, Subtype.coe_ne_coe, Subtype.ext_iff, coe_mk, coe_mul, coe_ne_coe, coe_one, ext_iff, hS.mul_inv_cancel, hS.toField, hy.symm, inv_zero, mul_inv_cancel, toField, toIntermediateField
 -/

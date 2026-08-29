@@ -171,7 +171,7 @@ theorem strongEpi_of_strongEpi
       exact
         CommSq.HasLift.mk'
           ⟨(CommSq.mk h₀).lift, by
-            simp only [← cancel_mono z, Category.asso
+            simp only [← cancel_mono z, Category.assoc, CommSq.fac_right, sq.w], by simp⟩ }
 
 中文:
 定理 strongEpi_of_strongEpi
@@ -185,7 +185,7 @@ theorem strongEpi_of_strongEpi
       exact
         CommSq.HasLift.mk'
           ⟨(CommSq.mk h₀).lift, by
-            simp only [← cancel_mono z, Category.asso
+            simp only [← cancel_mono z, Category.assoc, CommSq.fac_right, sq.w], by simp⟩ }
 
 Depends on / 依赖: Category, Category.assoc, CommSq, CommSq.HasLift.mk, CommSq.fac_right, CommSq.mk, HasLift, cancel_mono, epi_of_epi, fac_right, sq.w
 -/

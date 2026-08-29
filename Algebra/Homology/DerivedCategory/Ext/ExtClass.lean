@@ -182,7 +182,11 @@ lemma extClass_hom
   erw [SmallHom.equiv_comp]
   rw [SmallHom.equiv_mkInv]; rw [SmallHom.equiv_mk]
   dsimp [-Q_obj_single_obj, singleδ, triangleOfSESδ]
-  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [si
+  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [singleFunctorsPostcompQIso_hom_hom]; rw [singleFunctorsPostcompQIso_inv_hom]; rw [NatTrans.id_app]; rw [Category.id_comp]; rw [NatTrans.id_app]
+  simp only [SingleFunctors.postcomp, Functor.comp_obj]
+  unfold CochainComplex.singleFunctors
+  rw [Functor.map_id]; rw [Category.comp_id]
+  rfl
 
 中文:
 引理 extClass_hom
@@ -194,7 +198,11 @@ lemma extClass_hom
   erw [SmallHom.equiv_comp]
   rw [SmallHom.equiv_mkInv]; rw [SmallHom.equiv_mk]
   dsimp [-Q_obj_single_obj, singleδ, triangleOfSESδ]
-  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [si
+  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [singleFunctorsPostcompQIso_hom_hom]; rw [singleFunctorsPostcompQIso_inv_hom]; rw [NatTrans.id_app]; rw [Category.id_comp]; rw [NatTrans.id_app]
+  simp only [SingleFunctors.postcomp, Functor.comp_obj]
+  unfold CochainComplex.singleFunctors
+  rw [Functor.map_id]; rw [Category.comp_id]
+  rfl
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, CochainCo, Functor, Functor.comp_obj, NatTrans, NatTrans.id_app, Q_obj_single_obj, SingleFunctors, SingleFunctors.postcomp, SmallHom, SmallHom.equiv_comp, SmallHom.equiv_mk, SmallHom.equiv_mkInv, SmallShiftedHom, SmallShiftedHom.equiv, comp_obj, equiv_comp, equiv_mk
 -/

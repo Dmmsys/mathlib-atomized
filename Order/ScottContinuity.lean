@@ -107,7 +107,7 @@ theorem ScottContinuousOn.monotone
   rw [IsLUB]; rw [upperBounds_insert]; rw [upperBounds_singleton]; rw [inter_eq_self_of_subset_right (Ici_subset_Ici.2 hab)]
   exact isLeast_Ici
 
-@[fun_prop, 
+@[fun_prop, to_fun (attr := simp)]
 
 中文:
 定理 ScottContinuousOn.monotone
@@ -119,7 +119,7 @@ theorem ScottContinuousOn.monotone
   rw [IsLUB]; rw [upperBounds_insert]; rw [upperBounds_singleton]; rw [inter_eq_self_of_subset_right (Ici_subset_Ici.2 hab)]
   exact isLeast_Ici
 
-@[fun_prop, 
+@[fun_prop, to_fun (attr := simp)]
 -/
 protected theorem ScottContinuousOn.monotone (D : Set (Set α)) (hD : forall a b : α, a <= b -> {a, b} in D)
     (h : ScottContinuousOn D f) : Monotone f := by
@@ -196,7 +196,9 @@ theorem ScottContinuousOn.comp
       and_imp, forall_apply_eq_imp_iff₂] at ⊢ this hd₃
     grind
   rw [Set.image_comp]
-  
+  exact hg (hD' hd₁) ⟨f hd₂.choose, by grind⟩ hd (hf hd₁ hd₂ hd₃ ha)
+
+@[fun_prop, to_fun]
 
 中文:
 定理 ScottContinuousOn.comp
@@ -209,7 +211,9 @@ theorem ScottContinuousOn.comp
       and_imp, forall_apply_eq_imp_iff₂] at ⊢ this hd₃
     grind
   rw [Set.image_comp]
-  
+  exact hg (hD' hd₁) ⟨f hd₂.choose, by grind⟩ hd (hf hd₁ hd₂ hd₃ ha)
+
+@[fun_prop, to_fun]
 
 Depends on / 依赖: DirectedOn, Monotone, Set.image_comp, and_imp, exists_exists_and_eq_and, forall_exists_index, hf.monotone, image_comp, mem_image, monotone
 -/
@@ -267,7 +271,20 @@ lemma ScottContinuousOn.prodMk
       Prod.mk_le_mk]
     intro b hb
     exact ⟨hf.monotone D hD (hda.1 hb), hg.monotone D hD (hda.1 hb)⟩
-  · intro
+  · intro ⟨p₁, p₂⟩ hp
+    simp only [mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, mem_ofPred_eq,
+      Prod.mk_le_mk] at hp
+    constructor
+    · rw [isLUB_le_iff (hf hd₁ hd₂ hd₃ hda), upperBounds]
+      simp only [mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, mem_ofPred_eq]
+      intro _ hb
+      exact (hp _ hb).1
+    · rw [isLUB_le_iff (hg hd₁ hd₂ hd₃ hda), upperBounds]
+      simp only [mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, mem_ofPred_eq]
+      intro _ hb
+      exact (hp _ hb).2
+
+@[simp, fun_prop]
 
 中文:
 引理 ScottContinuousOn.prodMk
@@ -279,7 +296,20 @@ lemma ScottContinuousOn.prodMk
       Prod.mk_le_mk]
     intro b hb
     exact ⟨hf.monotone D hD (hda.1 hb), hg.monotone D hD (hda.1 hb)⟩
-  · intro
+  · intro ⟨p₁, p₂⟩ hp
+    simp only [mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, mem_ofPred_eq,
+      Prod.mk_le_mk] at hp
+    constructor
+    · rw [isLUB_le_iff (hf hd₁ hd₂ hd₃ hda), upperBounds]
+      simp only [mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, mem_ofPred_eq]
+      intro _ hb
+      exact (hp _ hb).1
+    · rw [isLUB_le_iff (hg hd₁ hd₂ hd₃ hda), upperBounds]
+      simp only [mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂, mem_ofPred_eq]
+      intro _ hb
+      exact (hp _ hb).2
+
+@[simp, fun_prop]
 
 Depends on / 依赖: IsLeast, Prod.mk_le_mk, and_imp, forall_, forall_exists_index, hf.monotone, hg.monotone, isLUB_le_iff, mem_image, mem_ofPred_eq, mk_le_mk, monotone, upperBounds
 -/
@@ -617,14 +647,30 @@ lemma ScottContinuous.sup₂
   proof: fun d _ _ ⟨p₁, p₂⟩ hdp => by
   simp only [IsLUB, IsLeast, upperBounds, Prod.forall, mem_ofPred_eq, Prod.mk_le_mk] at hdp
   simp only [IsLUB, IsLeast, upperBounds, mem_image, Prod.exists, forall_exists_index, and_imp]
-  have e1 : (p₁, p₂) in lowerBounds {x | forall (b₁ b₂ : β), (b₁, b₂) in d -> (b₁, 
+  have e1 : (p₁, p₂) in lowerBounds {x | forall (b₁ b₂ : β), (b₁, b₂) in d -> (b₁, b₂) <= x} := hdp.2
+  simp only [lowerBounds, mem_ofPred_eq, Prod.forall, Prod.mk_le_mk] at e1
+  refine ⟨fun a b₁ b₂ hbd hba => ?_,fun b hb => ?_⟩
+  · rw [← hba]
+    exact sup_le_sup (hdp.1 _ _ hbd).1 (hdp.1 _ _ hbd).2
+  · rw [sup_le_iff]
+    exact e1 _ _ fun b₁ b₂ hb' => sup_le_iff.mp (hb b₁ b₂ hb' rfl)
+
+@[fun_prop]
 
 中文:
 引理 ScottContinuous.sup₂
   证明: fun d _ _ ⟨p₁, p₂⟩ hdp => by
   simp only [IsLUB, IsLeast, upperBounds, Prod.forall, mem_ofPred_eq, Prod.mk_le_mk] at hdp
   simp only [IsLUB, IsLeast, upperBounds, mem_image, Prod.exists, forall_exists_index, and_imp]
-  have e1 : (p₁, p₂) in lowerBounds {x | forall (b₁ b₂ : β), (b₁, b₂) in d -> (b₁, 
+  have e1 : (p₁, p₂) in lowerBounds {x | forall (b₁ b₂ : β), (b₁, b₂) in d -> (b₁, b₂) <= x} := hdp.2
+  simp only [lowerBounds, mem_ofPred_eq, Prod.forall, Prod.mk_le_mk] at e1
+  refine ⟨fun a b₁ b₂ hbd hba => ?_,fun b hb => ?_⟩
+  · rw [← hba]
+    exact sup_le_sup (hdp.1 _ _ hbd).1 (hdp.1 _ _ hbd).2
+  · rw [sup_le_iff]
+    exact e1 _ _ fun b₁ b₂ hb' => sup_le_iff.mp (hb b₁ b₂ hb' rfl)
+
+@[fun_prop]
 
 Depends on / 依赖: IsLeast, Prod.exists, Prod.forall, Prod.mk_le_mk, and_imp, forall_exists_index, lowerBounds, mem_image, mem_ofPred_eq, mk_le_mk, sup_le_sup, upperBounds
 -/

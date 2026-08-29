@@ -34,7 +34,10 @@ lemma E2_mdifferentiable
   have hη : DifferentiableOn Complex η _ := fun z hz =>
     (differentiableAt_eta_of_mem_upperHalfPlaneSet hz).differentiableWithinAt
   have hlog : DifferentiableOn Complex (logDeriv η) _ :=
-    (hη.deriv isOpen_upperHalfPlaneSet).div hη (fun _ hz => eta_
+    (hη.deriv isOpen_upperHalfPlaneSet).div hη (fun _ hz => eta_ne_zero hz)
+  refine (hlog.const_mul (π * I / 12)⁻¹).congr (fun z hz => ?_)
+  simp [ofComplex_apply_of_im_pos hz, logDeriv_eta_eq_E2 ⟨z, hz⟩]
+  field_simp
 
 中文:
 引理 E2_mdifferentiable
@@ -44,7 +47,10 @@ lemma E2_mdifferentiable
   have hη : DifferentiableOn Complex η _ := fun z hz =>
     (differentiableAt_eta_of_mem_upperHalfPlaneSet hz).differentiableWithinAt
   have hlog : DifferentiableOn Complex (logDeriv η) _ :=
-    (hη.deriv isOpen_upperHalfPlaneSet).div hη (fun _ hz => eta_
+    (hη.deriv isOpen_upperHalfPlaneSet).div hη (fun _ hz => eta_ne_zero hz)
+  refine (hlog.const_mul (π * I / 12)⁻¹).congr (fun z hz => ?_)
+  simp [ofComplex_apply_of_im_pos hz, logDeriv_eta_eq_E2 ⟨z, hz⟩]
+  field_simp
 
 Depends on / 依赖: DifferentiableOn, UpperHalfPlane, UpperHalfPlane.mdifferentiable_iff, const_mul, differentiableAt_eta_of_mem_upperHalfPlaneSet, differentiableWithinAt, eta_ne_zero, hlog.const_mul, isOpen_upperHalfPlaneSet, logDeriv, logDeriv_eta_eq_E2, mdifferentiable_iff, ofComplex_apply_of_im_pos
 -/

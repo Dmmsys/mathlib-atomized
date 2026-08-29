@@ -85,7 +85,15 @@ theorem exists_hasSum_smul_of_apply_eq_zero
   by_cases h : z = 0
   · have : s = 0 := hs.unique (by simpa [ha 0 hn, h] using hasSum_at_zero a)
     exact ⟨a n, by simp [h, hn.ne', this], by simpa [h] using hasSum_at_zero fun m => a (m + n)⟩
-  · refine ⟨(z ^ n)⁻¹ • s, by match_scalars; field, ?_
+  · refine ⟨(z ^ n)⁻¹ • s, by match_scalars; field, ?_⟩
+    have h1 : ∑ i in Finset.range n, z ^ i • a i = 0 :=
+      Finset.sum_eq_zero fun k hk => by simp [ha k (Finset.mem_range.mp hk)]
+    have h2 : HasSum (fun m => z ^ (m + n) • a (m + n)) s := by
+      simpa [h1] using (hasSum_nat_add_iff' n).mpr hs
+    convert! h2.const_smul (z⁻¹ ^ n) using 2 with x
+    · match_scalars
+      simp [field, pow_add]
+    · simp only [inv_pow]
 
 中文:
 定理 存在_hasSum_smul_of_apply_eq_zero
@@ -96,7 +104,15 @@ theorem exists_hasSum_smul_of_apply_eq_zero
   by_cases h : z = 0
   · have : s = 0 := hs.unique (by simpa [ha 0 hn, h] using hasSum_at_zero a)
     exact ⟨a n, by simp [h, hn.ne', this], by simpa [h] using hasSum_at_zero fun m => a (m + n)⟩
-  · refine ⟨(z ^ n)⁻¹ • s, by match_scalars; field, ?_
+  · refine ⟨(z ^ n)⁻¹ • s, by match_scalars; field, ?_⟩
+    have h1 : ∑ i in Finset.range n, z ^ i • a i = 0 :=
+      Finset.sum_eq_zero fun k hk => by simp [ha k (Finset.mem_range.mp hk)]
+    have h2 : HasSum (fun m => z ^ (m + n) • a (m + n)) s := by
+      simpa [h1] using (hasSum_nat_add_iff' n).mpr hs
+    convert! h2.const_smul (z⁻¹ ^ n) using 2 with x
+    · match_scalars
+      simp [field, pow_add]
+    · simp only [inv_pow]
 
 Depends on / 依赖: Finset, Finset.mem_range.mp, Finset.range, Finset.sum_eq_zero, HasSum, eq_zero_or_pos, hasSum_at_zero, hasSum_nat_, hn.ne, hs.unique, match_scalars, mem_range, n.eq_zero_or_pos, sum_eq_zero, unique
 -/
@@ -134,7 +150,10 @@ theorem has_fpower_series_dslope_fslope
   refine hp.mono fun x hx => ?_
   by_cases h : x = 0
   · convert! hasSum_single (α := E) 0 _ <;> intros <;> simp [*]
-  · have hxx : forall n :
+  · have hxx : forall n : Nat, x⁻¹ * x ^ (n + 1) = x ^ n := fun n => by simp [field, _root_.pow_succ]
+    suffices HasSum (fun n => x⁻¹ • x ^ (n + 1) • p.coeff (n + 1)) (x⁻¹ • (f (z₀ + x) - f z₀)) by
+      simpa [dslope, slope, h, smul_smul, hxx] using this
+    simpa [hp0] using ((hasSum_nat_add_iff' 1).mpr hx).const_smul x⁻¹
 
 中文:
 定理 has_fpower_series_dslope_fslope
@@ -146,7 +165,10 @@ theorem has_fpower_series_dslope_fslope
   refine hp.mono fun x hx => ?_
   by_cases h : x = 0
   · convert! hasSum_single (α := E) 0 _ <;> intros <;> simp [*]
-  · have hxx : forall n :
+  · have hxx : forall n : Nat, x⁻¹ * x ^ (n + 1) = x ^ n := fun n => by simp [field, _root_.pow_succ]
+    suffices HasSum (fun n => x⁻¹ • x ^ (n + 1) • p.coeff (n + 1)) (x⁻¹ • (f (z₀ + x) - f z₀)) by
+      simpa [dslope, slope, h, smul_smul, hxx] using this
+    simpa [hp0] using ((hasSum_nat_add_iff' 1).mpr hx).const_smul x⁻¹
 
 Depends on / 依赖: HasSum, _root_, _root_.pow_succ, coeff_fslope, coeff_zero, convert, dslope, hasFPowerSeriesAt_iff, hasSum_single, hp.coeff_zero, hp.deriv, hp.mono, intros, p.coeff, pow_succ, smul_smul
 -/
@@ -250,7 +272,7 @@ theorem locally_ne_zero
   have h2 := (has_fpower_series_iterate_dslope_fslope p.order hp).continuousAt
   have h3 := h2.eventually_ne (iterate_dslope_fslope_ne_zero hp h)
   filter_upwards [h3] with z e1 e2
-  simpa [eq_pow_order_mul_iterate_dslope hp, e1, e2] using pow_ne_zero p.order (sub
+  simpa [eq_pow_order_mul_iterate_dslope hp, e1, e2] using pow_ne_zero p.order (sub_ne_zero.mpr e2)
 
 中文:
 定理 locally_ne_zero
@@ -261,7 +283,7 @@ theorem locally_ne_zero
   have h2 := (has_fpower_series_iterate_dslope_fslope p.order hp).continuousAt
   have h3 := h2.eventually_ne (iterate_dslope_fslope_ne_zero hp h)
   filter_upwards [h3] with z e1 e2
-  simpa [eq_pow_order_mul_iterate_dslope hp, e1, e2] using pow_ne_zero p.order (sub
+  simpa [eq_pow_order_mul_iterate_dslope hp, e1, e2] using pow_ne_zero p.order (sub_ne_zero.mpr e2)
 
 Depends on / 依赖: continuousAt, eq_pow_order_mul_iterate_dslope, eventually_ne, eventually_nhdsWithin_iff, filter_upwards, h2.eventually_ne, has_fpower_series_iterate_dslope_fslope, iterate_dslope_fslope_ne_zero, p.order, pow_ne_zero, sub_ne_zero, sub_ne_zero.mpr
 -/
@@ -404,7 +426,14 @@ lemma unique_eventuallyEq_zpow_smul_nonzero
   contrapose! hj_ne
   have : existsᶠ z in 𝓝[!=] z₀, j z = (z - z₀) ^ (m - n) • g z := by
     apply Filter.Eventually.frequently
-    rw [eventually_nhd
+    rw [eventually_nhdsWithin_iff] at hg_eq hj_eq ⊢
+    filter_upwards [hg_eq, hj_eq] with z hfz hfz' hz
+    rw [← add_sub_cancel_left n m]; rw [add_sub_assoc]; rw [zpow_add₀ <| sub_ne_zero.mpr hz]; rw [mul_smul]; rw [hfz' hz]; rw [smul_right_inj zpow_ne_zero _ sub_ne_zero.mpr hz] at hfz
+    exact hfz hz
+  rw [frequently_eq_iff_eventually_eq hj_an] at this
+  · rw [EventuallyEq.eq_of_nhds this, sub_self, zero_zpow _ (sub_ne_zero.mpr hj_ne), zero_smul]
+  conv => enter [2, z, 1]; rw [← Int.toNat_sub_of_le h_le, zpow_natCast]
+  exact ((analyticAt_id.sub analyticAt_const).pow _).smul hg_an
 
 中文:
 引理 unique_eventuallyEq_zpow_smul_nonzero
@@ -417,7 +446,14 @@ lemma unique_eventuallyEq_zpow_smul_nonzero
   contrapose! hj_ne
   have : existsᶠ z in 𝓝[!=] z₀, j z = (z - z₀) ^ (m - n) • g z := by
     apply Filter.Eventually.frequently
-    rw [eventually_nhd
+    rw [eventually_nhdsWithin_iff] at hg_eq hj_eq ⊢
+    filter_upwards [hg_eq, hj_eq] with z hfz hfz' hz
+    rw [← add_sub_cancel_left n m]; rw [add_sub_assoc]; rw [zpow_add₀ <| sub_ne_zero.mpr hz]; rw [mul_smul]; rw [hfz' hz]; rw [smul_right_inj zpow_ne_zero _ sub_ne_zero.mpr hz] at hfz
+    exact hfz hz
+  rw [frequently_eq_iff_eventually_eq hj_an] at this
+  · rw [EventuallyEq.eq_of_nhds this, sub_self, zero_zpow _ (sub_ne_zero.mpr hj_ne), zero_smul]
+  conv => enter [2, z, 1]; rw [← Int.toNat_sub_of_le h_le, zpow_natCast]
+  exact ((analyticAt_id.sub analyticAt_const).pow _).smul hg_an
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually.frequently, add_sub_assoc, add_sub_cancel_left, contrapose, eventually_nhdsWithin_iff, filter_upwards, frequently, generalizing, h_le, h_le.le, hg_an, hg_eq, hj_an, hj_eq, hj_ne, mul_smul, smul_right_inj, sub_ne_zero
 -/
@@ -486,7 +522,14 @@ theorem exists_eventuallyEq_pow_smul_nonzero_iff
     apply EventuallyEq.eq_of_nhds
     rw [EventuallyEq]; rw [← AnalyticAt.frequently_eq_iff_eventually_eq hg_an analyticAt_const]
     refine (eventually_nhdsWithin_iff.mpr ?_).frequently
-    filter_upwards [hg_eq, hg_ne] wi
+    filter_upwards [hg_eq, hg_ne] with z hf_eq hf0 hz
+    rwa [hf0, eq_comm, smul_eq_zero_iff_right] at hf_eq
+    exact pow_ne_zero _ (sub_ne_zero.mpr hz)
+  · intro hf_ne
+    rcases hf with ⟨p, hp⟩
+    exact ⟨p.order, _, ⟨_, hp.has_fpower_series_iterate_dslope_fslope p.order⟩,
+      hp.iterate_dslope_fslope_ne_zero (hf_ne.imp hp.locally_zero_iff.mpr),
+      .of_forall hp.eq_pow_order_mul_iterate_dslope⟩
 
 中文:
 定理 存在_eventuallyEq_pow_smul_nonzero_iff
@@ -498,7 +541,14 @@ theorem exists_eventuallyEq_pow_smul_nonzero_iff
     apply EventuallyEq.eq_of_nhds
     rw [EventuallyEq]; rw [← AnalyticAt.frequently_eq_iff_eventually_eq hg_an analyticAt_const]
     refine (eventually_nhdsWithin_iff.mpr ?_).frequently
-    filter_upwards [hg_eq, hg_ne] wi
+    filter_upwards [hg_eq, hg_ne] with z hf_eq hf0 hz
+    rwa [hf0, eq_comm, smul_eq_zero_iff_right] at hf_eq
+    exact pow_ne_zero _ (sub_ne_zero.mpr hz)
+  · intro hf_ne
+    rcases hf with ⟨p, hp⟩
+    exact ⟨p.order, _, ⟨_, hp.has_fpower_series_iterate_dslope_fslope p.order⟩,
+      hp.iterate_dslope_fslope_ne_zero (hf_ne.imp hp.locally_zero_iff.mpr),
+      .of_forall hp.eq_pow_order_mul_iterate_dslope⟩
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.frequently_eq_iff_eventually_eq, EventuallyEq, EventuallyEq.eq_of_nhds, analyticAt_const, contrapose, eq_comm, eq_of_nhds, eventually_nhdsWithin_iff, eventually_nhdsWithin_iff.mpr, filter_upwards, frequently, frequently_eq_iff_eventually_eq, has_fpower_series_iterate_dslope_fslope, hf_eq, hf_ne, hg_an, hg_eq, hg_ne, hp.has_fpower_series_iterate_dslope_fslope
 -/
@@ -723,7 +773,18 @@ lemma eq_zero_or_eq_zero_of_smul_eq_zero
   by_cases hU' : U = ∅
   · simp [hU']
   obtain ⟨z, hz⟩ : exists z, z in U := nonempty_iff_ne_empty.mpr hU'
-  by_ca
+  by_cases hU'' : U = {z}
+  · simpa [hU''] using hfg z hz
+  apply (nontrivial_iff_ne_singleton hz).mpr at hU''
+  -- Now connectedness implies that `z` is an accumulation point of `U`, so at least one of
+  -- `f` and `g` must vanish frequently in a neighbourhood of `z`.
+  have : existsᶠ w in 𝓝[!=] z, w in U :=
+frequently_mem_iff_neBot.mpr hU.preperfect_of_nontrivial hU'' z hz
+  have : existsᶠ w in 𝓝[!=] z, f w = 0 ∨ g w = 0 :=
+this.mp by filter_upwards with w hw using smul_eq_zero.mp (hfg w hw)
+  cases frequently_or_distrib.mp this with
+| inl h => exact Or.inl hf.eqOn_zero_of_preconnected_of_frequently_eq_zero hU hz h
+| inr h => exact Or.inr hg.eqOn_zero_of_preconnected_of_frequently_eq_zero hU hz h
 
 中文:
 引理 eq_zero_or_eq_zero_of_smul_eq_zero
@@ -734,7 +795,18 @@ lemma eq_zero_or_eq_zero_of_smul_eq_zero
   by_cases hU' : U = ∅
   · simp [hU']
   obtain ⟨z, hz⟩ : exists z, z in U := nonempty_iff_ne_empty.mpr hU'
-  by_ca
+  by_cases hU'' : U = {z}
+  · simpa [hU''] using hfg z hz
+  apply (nontrivial_iff_ne_singleton hz).mpr at hU''
+  -- Now connectedness implies that `z` is an accumulation point of `U`, so at least one of
+  -- `f` and `g` must vanish frequently in a neighbourhood of `z`.
+  have : existsᶠ w in 𝓝[!=] z, w in U :=
+frequently_mem_iff_neBot.mpr hU.preperfect_of_nontrivial hU'' z hz
+  have : existsᶠ w in 𝓝[!=] z, f w = 0 ∨ g w = 0 :=
+this.mp by filter_upwards with w hw using smul_eq_zero.mp (hfg w hw)
+  cases frequently_or_distrib.mp this with
+| inl h => exact Or.inl hf.eqOn_zero_of_preconnected_of_frequently_eq_zero hU hz h
+| inr h => exact Or.inr hg.eqOn_zero_of_preconnected_of_frequently_eq_zero hU hz h
 -/
 lemma eq_zero_or_eq_zero_of_smul_eq_zero [IsTorsionFree A B]
     {f : 𝕜 -> A} {g : 𝕜 -> B} (hf : AnalyticOnNhd 𝕜 f U) (hg : AnalyticOnNhd 𝕜 g U)
@@ -800,7 +872,12 @@ theorem AnalyticAt.preimage_of_nhdsNE
   contrapose h₂f with h
   rw [eventuallyConst_iff_exists_eventuallyEq]
   use f x
-  rw [EventuallyEq]; rw [← hfx.frequently_eq_iff_eventually_eq
+  rw [EventuallyEq]; rw [← hfx.frequently_eq_iff_eventually_eq analyticAt_const]
+  apply ((frequently_imp_distrib_right.2 h).and_eventually
+    (eventually_nhdsWithin_of_eventually_nhds this)).mono
+  intro z ⟨h₁z, h₂z⟩
+  rw [Set.mem_insert_iff] at h₂z
+  tauto
 
 中文:
 定理 AnalyticAt.preimage_of_nhdsNE
@@ -812,7 +889,12 @@ theorem AnalyticAt.preimage_of_nhdsNE
   contrapose h₂f with h
   rw [eventuallyConst_iff_exists_eventuallyEq]
   use f x
-  rw [EventuallyEq]; rw [← hfx.frequently_eq_iff_eventually_eq
+  rw [EventuallyEq]; rw [← hfx.frequently_eq_iff_eventually_eq analyticAt_const]
+  apply ((frequently_imp_distrib_right.2 h).and_eventually
+    (eventually_nhdsWithin_of_eventually_nhds this)).mono
+  intro z ⟨h₁z, h₂z⟩
+  rw [Set.mem_insert_iff] at h₂z
+  tauto
 
 Depends on / 依赖: EventuallyEq, Set.mem_insert_iff, analyticAt_const, and_eventually, continuousAt, contrapose, eventuallyConst_iff_exists_eventuallyEq, eventually_nhdsWithin_of_eventually_nhds, filter_upwards, frequently_eq_iff_eventually_eq, frequently_imp_distrib_right, hfx.continuousAt.preimage_mem_nhds, hfx.frequently_eq_iff_eventually_eq, insert, insert_mem_nhds_iff, mem_insert_iff, preimage_mem_nhds
 -/

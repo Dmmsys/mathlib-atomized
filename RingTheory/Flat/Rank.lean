@@ -95,7 +95,17 @@ lemma PrimeSpectrum.comap_surjective_iff_injective_of_finite
     Algebra.IsIntegral.comap_surjective _ _⟩
   apply injective_of_isLocalization_isMaximal (fun P _ => Localization.AtPrime P)
     (fun P _ => Localization.AtPrime P otimes[R] S)
-  int
+  intro p _
+  rw [← faithfulSMul_iff_algebraMap_injective]
+  obtain ⟨⟨Q, _⟩, hQ⟩ := h ⟨p, inferInstance⟩
+  have : Q.LiesOver p := ⟨congr($(hQ).asIdeal).symm⟩
+  let := Localization.AtPrime.algebraOfLiesOver p Q
+  have : Nontrivial (Localization.AtPrime p otimes[R] S) := by
+    let f : Localization.AtPrime p otimes[R] S ->ₐ[R] Localization.AtPrime Q :=
+      Algebra.TensorProduct.lift (IsScalarTower.toAlgHom R _ _)
+        (IsScalarTower.toAlgHom R S _) (fun _ _ => Commute.all _ _)
+    exact f.domain_nontrivial
+  infer_instance
 
 中文:
 引理 素谱.comap_surjective_iff_injective_of_finite
@@ -105,7 +115,17 @@ lemma PrimeSpectrum.comap_surjective_iff_injective_of_finite
     Algebra.IsIntegral.comap_surjective _ _⟩
   apply injective_of_isLocalization_isMaximal (fun P _ => Localization.AtPrime P)
     (fun P _ => Localization.AtPrime P otimes[R] S)
-  int
+  intro p _
+  rw [← faithfulSMul_iff_algebraMap_injective]
+  obtain ⟨⟨Q, _⟩, hQ⟩ := h ⟨p, inferInstance⟩
+  have : Q.LiesOver p := ⟨congr($(hQ).asIdeal).symm⟩
+  let := Localization.AtPrime.algebraOfLiesOver p Q
+  have : Nontrivial (Localization.AtPrime p otimes[R] S) := by
+    let f : Localization.AtPrime p otimes[R] S ->ₐ[R] Localization.AtPrime Q :=
+      Algebra.TensorProduct.lift (IsScalarTower.toAlgHom R _ _)
+        (IsScalarTower.toAlgHom R S _) (fun _ _ => Commute.all _ _)
+    exact f.domain_nontrivial
+  infer_instance
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.comap_surjective, AtPrime, FaithfulSMul, IsIntegral, LiesOver, Localization, Localization.AtPrime, Localization.AtPrime.algebraOfLiesOver, Nontrivial, Q.LiesOver, algebraOfLiesOver, asIdeal, comap_surjective, faithfulSMul_iff_algebraMap_injective, injective_of_isLocalization_isMaximal, otimes
 -/
@@ -160,7 +180,11 @@ lemma Module.algebraMap_surjective_of_rankAtStalk_le_one
   intro p _
   by_cases hr : Module.rankAtStalk S ⟨p, inferInstance⟩ = 0
   · have : Subsingleton (Localization.AtPrime p otimes[R] S) := by
-      apply Module.subs
+      apply Module.subsingleton_of_rank_zero (R := Localization.AtPrime p)
+      simp [← finrank_eq_rank, ← rankAtStalk_eq_finrank_tensorProduct ⟨p, inferInstance⟩, hr]
+    exact Function.surjective_to_subsingleton _
+  · refine (Free.bijective_algebraMap_of_finrank_eq_one ?_).2
+    grind [rankAtStalk_eq_finrank_tensorProduct ⟨p, inferInstance⟩]
 
 中文:
 引理 模.algebraMap_surjective_of_rankAtStalk_le_one
@@ -171,7 +195,11 @@ lemma Module.algebraMap_surjective_of_rankAtStalk_le_one
   intro p _
   by_cases hr : Module.rankAtStalk S ⟨p, inferInstance⟩ = 0
   · have : Subsingleton (Localization.AtPrime p otimes[R] S) := by
-      apply Module.subs
+      apply Module.subsingleton_of_rank_zero (R := Localization.AtPrime p)
+      simp [← finrank_eq_rank, ← rankAtStalk_eq_finrank_tensorProduct ⟨p, inferInstance⟩, hr]
+    exact Function.surjective_to_subsingleton _
+  · refine (Free.bijective_algebraMap_of_finrank_eq_one ?_).2
+    grind [rankAtStalk_eq_finrank_tensorProduct ⟨p, inferInstance⟩]
 -/
 lemma Module.algebraMap_surjective_of_rankAtStalk_le_one (h : forall p, rankAtStalk (R := R) S p <= 1) :
     Function.Surjective (algebraMap R S) := by
@@ -200,7 +228,10 @@ lemma Module.Flat.tfae_algebraMap_surjective
       simp [rankAtStalk_tensorProduct, sq]
     by_contra! hc
     apply Nat.succ_succ_ne_one 0
-    rw [← Nat.pow_eq_self_iff h
+    rw [← Nat.pow_eq_self_iff hc]; rw [← h]; rw [Module.rankAtStalk_eq_of_equiv
+      (AlgEquiv.ofBijective (Algebra.TensorProduct.lmul' R (S := S)) H).toLinearEquiv]
+  tfae_have 3 -> 1 := Module.algebraMap_surjective_of_rankAtStalk_le_one
+  tfae_finish
 
 中文:
 引理 模.平坦.tfae_algebraMap_surjective
@@ -211,7 +242,10 @@ lemma Module.Flat.tfae_algebraMap_surjective
       simp [rankAtStalk_tensorProduct, sq]
     by_contra! hc
     apply Nat.succ_succ_ne_one 0
-    rw [← Nat.pow_eq_self_iff h
+    rw [← Nat.pow_eq_self_iff hc]; rw [← h]; rw [Module.rankAtStalk_eq_of_equiv
+      (AlgEquiv.ofBijective (Algebra.TensorProduct.lmul' R (S := S)) H).toLinearEquiv]
+  tfae_have 3 -> 1 := Module.algebraMap_surjective_of_rankAtStalk_le_one
+  tfae_finish
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, Algebra, Algebra.TensorProduct.lmul, LinearMap, LinearMap.mul, Module, Module.algebraMap_surjective_of_rankAtStalk_le_one, Module.rankAtStalk_eq_of_equiv, Nat.pow_eq_self_iff, Nat.succ_succ_ne_one, TensorProduct, _bijective_of_surjective, algebraMap_surjective_of_rankAtStalk_le_one, ofBijective, otimes, pow_eq_self_iff, rankAtStalk, rankAtStalk_eq_of_equiv, rankAtStalk_tensorProduct
 -/
@@ -259,7 +293,7 @@ lemma Module.algebraMap_bijective_iff_rankAtStalk
   rw [Pi.one_apply]
   grind
 
-alias ⟨Module.algebraMap_bijective_of_rankAtStalk, _⟩ := Module.algebraMap_bijective_iff_rankAtSta
+alias ⟨Module.algebraMap_bijective_of_rankAtStalk, _⟩ := Module.algebraMap_bijective_iff_rankAtStalk
 
 中文:
 引理 模.algebraMap_bijective_iff_rankAtStalk
@@ -270,7 +304,7 @@ alias ⟨Module.algebraMap_bijective_of_rankAtStalk, _⟩ := Module.algebraMap_b
   rw [Pi.one_apply]
   grind
 
-alias ⟨Module.algebraMap_bijective_of_rankAtStalk, _⟩ := Module.algebraMap_bijective_iff_rankAtSta
+alias ⟨Module.algebraMap_bijective_of_rankAtStalk, _⟩ := Module.algebraMap_bijective_iff_rankAtStalk
 
 Depends on / 依赖: Bijective, Function, Function.Bijective, Pi.one_apply, algebraMap, eq_or_ne, one_apply, rankAtStalk_le_one_iff_surjective, rankAtStalk_pos_iff_algebraMap_injective, zpow_eq_zero_iff
 -/

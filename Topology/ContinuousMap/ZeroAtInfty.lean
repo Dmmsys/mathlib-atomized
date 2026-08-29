@@ -1255,7 +1255,13 @@ theorem bounded
     (tendsto_def.mp (zero_at_infty (f : F)) _ (closedBall_mem_nhds (0 : β) zero_lt_one))
   obtain ⟨C, hC⟩ := (hK₁.image (map_continuous f)).isBounded.subset_closedBall (0 : β)
   refine ⟨max C 1 + max C 1, fun x y => ?_⟩
-  have : forall x, f x in 
+  have : forall x, f x in closedBall (0 : β) (max C 1) := by
+    intro x
+    by_cases hx : x in K
+    · exact (mem_closedBall.mp <| hC ⟨x, hx, rfl⟩).trans (le_max_left _ _)
+    · exact (mem_closedBall.mp <| mem_preimage.mp (hK₂ hx)).trans (le_max_right _ _)
+  exact (dist_triangle (f x) 0 (f y)).trans
+    (add_le_add (mem_closedBall.mp <| this x) (mem_closedBall'.mp <| this y))
 
 中文:
 定理 bounded
@@ -1266,7 +1272,13 @@ theorem bounded
     (tendsto_def.mp (zero_at_infty (f : F)) _ (closedBall_mem_nhds (0 : β) zero_lt_one))
   obtain ⟨C, hC⟩ := (hK₁.image (map_continuous f)).isBounded.subset_closedBall (0 : β)
   refine ⟨max C 1 + max C 1, fun x y => ?_⟩
-  have : forall x, f x in 
+  have : forall x, f x in closedBall (0 : β) (max C 1) := by
+    intro x
+    by_cases hx : x in K
+    · exact (mem_closedBall.mp <| hC ⟨x, hx, rfl⟩).trans (le_max_left _ _)
+    · exact (mem_closedBall.mp <| mem_preimage.mp (hK₂ hx)).trans (le_max_right _ _)
+  exact (dist_triangle (f x) 0 (f y)).trans
+    (add_le_add (mem_closedBall.mp <| this x) (mem_closedBall'.mp <| this y))
 -/
 protected theorem bounded (f : F) : exists C, forall x y : α, dist ((f : α -> β) x) (f y) <= C := by
   obtain ⟨K : Set α, hK₁, hK₂⟩ := mem_cocompact.mp
@@ -1496,7 +1508,13 @@ theorem isClosed_range_toBCF
   have : Tendsto f (cocompact α) (𝓝 0) := by
     refine Metric.tendsto_nhds.mpr fun ε hε => ?_
     obtain ⟨_, hg, g, rfl⟩ := hf (ball f (ε / 2)) (ball_mem_nhds f <| half_pos hε)
-    refine (Metric.tendsto_nhds
+    refine (Metric.tendsto_nhds.mp (zero_at_infty g) (ε / 2) (half_pos hε)).mp
+      (Eventually.of_forall fun x hx => ?_)
+    calc
+      dist (f x) 0 <= dist (g.toBCF x) (f x) + dist (g x) 0 := dist_triangle_left _ _ _
+      _ < dist g.toBCF f + ε / 2 := add_lt_add_of_le_of_lt (dist_coe_le_dist x) hx
+      _ <= ε := by grw [mem_ball.1 hg, add_halves ε]
+  exact ⟨⟨f.toContinuousMap, this⟩, rfl⟩
 
 中文:
 定理 isClosed_range_toBCF
@@ -1507,7 +1525,13 @@ theorem isClosed_range_toBCF
   have : Tendsto f (cocompact α) (𝓝 0) := by
     refine Metric.tendsto_nhds.mpr fun ε hε => ?_
     obtain ⟨_, hg, g, rfl⟩ := hf (ball f (ε / 2)) (ball_mem_nhds f <| half_pos hε)
-    refine (Metric.tendsto_nhds
+    refine (Metric.tendsto_nhds.mp (zero_at_infty g) (ε / 2) (half_pos hε)).mp
+      (Eventually.of_forall fun x hx => ?_)
+    calc
+      dist (f x) 0 <= dist (g.toBCF x) (f x) + dist (g x) 0 := dist_triangle_left _ _ _
+      _ < dist g.toBCF f + ε / 2 := add_lt_add_of_le_of_lt (dist_coe_le_dist x) hx
+      _ <= ε := by grw [mem_ball.1 hg, add_halves ε]
+  exact ⟨⟨f.toContinuousMap, this⟩, rfl⟩
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Metric, Metric.tendsto_nhds.mp, Metric.tendsto_nhds.mpr, Tendsto, add_lt_add_of_l, ball_mem_nhds, clusterPt_principal_iff, cocompact, dist_triangle_left, g.toBCF, half_pos, isClosed_iff_clusterPt, isClosed_iff_clusterPt.mpr, of_forall, tendsto_nhds, zero_at_infty
 -/

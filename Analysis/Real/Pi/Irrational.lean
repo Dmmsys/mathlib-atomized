@@ -93,7 +93,52 @@ lemma recursion'
   let v₁ (x : Real) : Real := sin (x * θ)
   let v₁' (x : Real) : Real := cos (x * θ) * θ
   let u₂ (x : Real) : Real := x * (f x) ^ n
-  let u₂' (
+  let u₂' (x : Real) : Real := (f x) ^ n - 2 * n * x ^ 2 * (f x) ^ (n - 1)
+  let v₂ (x : Real) : Real := cos (x * θ)
+  let v₂' (x : Real) : Real := -sin (x * θ) * θ
+  have hfd : Continuous f := by fun_prop
+  have hu₁d : Continuous u₁' := by fun_prop
+  have hv₁d : Continuous v₁' := by fun_prop
+  have hu₂d : Continuous u₂' := by fun_prop
+  have hv₂d : Continuous v₂' := by fun_prop
+  have hu₁_eval_one : u₁ 1 = 0 := by simp only [u₁, f]; simp
+  have hu₁_eval_neg_one : u₁ (-1) = 0 := by simp only [u₁, f]; simp
+  have t : u₂ 1 * v₂ 1 - u₂ (-1) * v₂ (-1) = 2 * (0 ^ n * cos θ) := by simp [u₂, v₂, f, ← two_mul]
+  have hf (x) : HasDerivAt f (- 2 * x) x := by
+    convert! (hasDerivAt_pow 2 x).const_sub 1 using 1
+    simp
+  have hu₁ (x) : HasDerivAt u₁ (u₁' x) x := by
+    convert! (hf x).pow _ using 1
+    simp only [Nat.add_succ_sub_one, u₁', Nat.cast_add_one]
+    ring
+  have hv₁ (x) : HasDerivAt v₁ (v₁' x) x := (hasDerivAt_mul_const θ).sin
+  have hu₂ (x) : HasDerivAt u₂ (u₂' x) x := by
+    convert! (hasDerivAt_id' x).fun_mul ((hf x).fun_pow _) using 1
+    simp only [u₂']
+    ring
+  have hv₂ (x) : HasDerivAt v₂ (v₂' x) x := (hasDerivAt_mul_const θ).cos
+  convert_to (∫ (x : Real) in (-1)..1, u₁ x * v₁' x) * θ = _ using 1
+  · simp_rw [u₁, v₁', f, ← intervalIntegral.integral_mul_const, sq θ, mul_assoc]
+  rw [integral_mul_deriv_eq_deriv_mul (fun x _ => hu₁ x) (fun x _ => hv₁ x)
+    (hu₁d.intervalIntegrable _ _) (hv₁d.intervalIntegrable _ _)]; rw [hu₁_eval_one]; rw [hu₁_eval_neg_one]; rw [zero_mul]; rw [zero_mul]; rw [sub_zero]; rw [zero_sub]; rw [← integral_neg]; rw [← integral_mul_const]
+  convert_to ((-2 : Real) * (n + 1)) * ∫ (x : Real) in (-1)..1, (u₂ x * v₂' x) = _ using 1
+  · rw [← integral_const_mul]
+    congr 1 with x
+    dsimp [u₁', v₁, u₂, v₂']
+    ring
+  rw [integral_mul_deriv_eq_deriv_mul (fun x _ => hu₂ x) (fun x _ => hv₂ x)
+    (hu₂d.intervalIntegrable _ _) (hv₂d.intervalIntegrable _ _)]; rw [mul_sub]; rw [t]; rw [neg_mul]; rw [neg_mul]; rw [neg_mul]; rw [sub_neg_eq_add]
+  have (x : _) : u₂' x = (2 * n + 1) * f x ^ n - 2 * n * f x ^ (n - 1) := by
+    cases n with
+    | zero => simp [u₂']
+    | succ n => ring!
+  simp_rw [this, sub_mul, mul_assoc _ _ (v₂ _)]
+  have : Continuous v₂ := by fun_prop
+  rw [mul_mul_mul_comm]; rw [integral_sub]; rw [mul_sub]; rw [add_sub_assoc]
+  · congr 1
+    simp_rw [integral_const_mul]
+    ring!
+  all_goals exact Continuous.intervalIntegrable (by fun_prop) _ _
 
 中文:
 引理 recursion'
@@ -106,7 +151,52 @@ lemma recursion'
   let v₁ (x : Real) : Real := sin (x * θ)
   let v₁' (x : Real) : Real := cos (x * θ) * θ
   let u₂ (x : Real) : Real := x * (f x) ^ n
-  let u₂' (
+  let u₂' (x : Real) : Real := (f x) ^ n - 2 * n * x ^ 2 * (f x) ^ (n - 1)
+  let v₂ (x : Real) : Real := cos (x * θ)
+  let v₂' (x : Real) : Real := -sin (x * θ) * θ
+  have hfd : Continuous f := by fun_prop
+  have hu₁d : Continuous u₁' := by fun_prop
+  have hv₁d : Continuous v₁' := by fun_prop
+  have hu₂d : Continuous u₂' := by fun_prop
+  have hv₂d : Continuous v₂' := by fun_prop
+  have hu₁_eval_one : u₁ 1 = 0 := by simp only [u₁, f]; simp
+  have hu₁_eval_neg_one : u₁ (-1) = 0 := by simp only [u₁, f]; simp
+  have t : u₂ 1 * v₂ 1 - u₂ (-1) * v₂ (-1) = 2 * (0 ^ n * cos θ) := by simp [u₂, v₂, f, ← two_mul]
+  have hf (x) : HasDerivAt f (- 2 * x) x := by
+    convert! (hasDerivAt_pow 2 x).const_sub 1 using 1
+    simp
+  have hu₁ (x) : HasDerivAt u₁ (u₁' x) x := by
+    convert! (hf x).pow _ using 1
+    simp only [Nat.add_succ_sub_one, u₁', Nat.cast_add_one]
+    ring
+  have hv₁ (x) : HasDerivAt v₁ (v₁' x) x := (hasDerivAt_mul_const θ).sin
+  have hu₂ (x) : HasDerivAt u₂ (u₂' x) x := by
+    convert! (hasDerivAt_id' x).fun_mul ((hf x).fun_pow _) using 1
+    simp only [u₂']
+    ring
+  have hv₂ (x) : HasDerivAt v₂ (v₂' x) x := (hasDerivAt_mul_const θ).cos
+  convert_to (∫ (x : Real) in (-1)..1, u₁ x * v₁' x) * θ = _ using 1
+  · simp_rw [u₁, v₁', f, ← intervalIntegral.integral_mul_const, sq θ, mul_assoc]
+  rw [integral_mul_deriv_eq_deriv_mul (fun x _ => hu₁ x) (fun x _ => hv₁ x)
+    (hu₁d.intervalIntegrable _ _) (hv₁d.intervalIntegrable _ _)]; rw [hu₁_eval_one]; rw [hu₁_eval_neg_one]; rw [zero_mul]; rw [zero_mul]; rw [sub_zero]; rw [zero_sub]; rw [← integral_neg]; rw [← integral_mul_const]
+  convert_to ((-2 : Real) * (n + 1)) * ∫ (x : Real) in (-1)..1, (u₂ x * v₂' x) = _ using 1
+  · rw [← integral_const_mul]
+    congr 1 with x
+    dsimp [u₁', v₁, u₂, v₂']
+    ring
+  rw [integral_mul_deriv_eq_deriv_mul (fun x _ => hu₂ x) (fun x _ => hv₂ x)
+    (hu₂d.intervalIntegrable _ _) (hv₂d.intervalIntegrable _ _)]; rw [mul_sub]; rw [t]; rw [neg_mul]; rw [neg_mul]; rw [neg_mul]; rw [sub_neg_eq_add]
+  have (x : _) : u₂' x = (2 * n + 1) * f x ^ n - 2 * n * f x ^ (n - 1) := by
+    cases n with
+    | zero => simp [u₂']
+    | succ n => ring!
+  simp_rw [this, sub_mul, mul_assoc _ _ (v₂ _)]
+  have : Continuous v₂ := by fun_prop
+  rw [mul_mul_mul_comm]; rw [integral_sub]; rw [mul_sub]; rw [add_sub_assoc]
+  · congr 1
+    simp_rw [integral_const_mul]
+    ring!
+  all_goals exact Continuous.intervalIntegrable (by fun_prop) _ _
 -/
 private lemma recursion' (n : Nat) :
     I (n + 1) θ * θ ^ 2 = - (2 * 2 * ((n + 1) * (0 ^ n * cos θ))) +
@@ -331,7 +421,12 @@ lemma is_integer
     exact ⟨0, by simp [hk.ne']⟩
   refine ⟨∑ i in p.support, p.coeff i * a ^ i * b ^ (k - i), ?_⟩
   conv => lhs; rw [← sum_monomial_eq p]
-  rw [eval₂_sum]; rw [sum]; rw [Finset.sum_mul]; 
+  rw [eval₂_sum]; rw [sum]; rw [Finset.sum_mul]; rw [Int.cast_sum]
+  simp only [eval₂_monomial, eq_intCast, div_pow, Int.cast_mul, Int.cast_pow]
+  refine Finset.sum_congr rfl (fun i hi => ?_)
+  have ik := (le_natDegree_of_mem_supp i hi).trans hp
+  rw [mul_assoc]; rw [div_mul_comm]; rw [← Int.cast_pow]; rw [← Int.cast_pow]; rw [← Int.cast_pow]; rw [← pow_sub_mul_pow b ik]; rw [← Int.cast_div_charZero]; rw [Int.mul_ediv_cancel _ (pow_ne_zero _ hb)]; rw [← mul_assoc]; rw [mul_right_comm]; rw [← Int.cast_pow]
+  exact dvd_mul_left _ _
 
 中文:
 引理 is_integer
@@ -343,7 +438,12 @@ lemma is_integer
     exact ⟨0, by simp [hk.ne']⟩
   refine ⟨∑ i in p.support, p.coeff i * a ^ i * b ^ (k - i), ?_⟩
   conv => lhs; rw [← sum_monomial_eq p]
-  rw [eval₂_sum]; rw [sum]; rw [Finset.sum_mul]; 
+  rw [eval₂_sum]; rw [sum]; rw [Finset.sum_mul]; rw [Int.cast_sum]
+  simp only [eval₂_monomial, eq_intCast, div_pow, Int.cast_mul, Int.cast_pow]
+  refine Finset.sum_congr rfl (fun i hi => ?_)
+  have ik := (le_natDegree_of_mem_supp i hi).trans hp
+  rw [mul_assoc]; rw [div_mul_comm]; rw [← Int.cast_pow]; rw [← Int.cast_pow]; rw [← Int.cast_pow]; rw [← pow_sub_mul_pow b ik]; rw [← Int.cast_div_charZero]; rw [Int.mul_ediv_cancel _ (pow_ne_zero _ hb)]; rw [← mul_assoc]; rw [mul_right_comm]; rw [← Int.cast_pow]
+  exact dvd_mul_left _ _
 -/
 private lemma is_integer {p : Int[X]} (a b : Int) {k : Nat} (hp : p.natDegree <= k) :
     exists z : Int, p.eval₂ (Int.castRingHom Real) (a / b) * b ^ k = z := by
@@ -408,7 +508,9 @@ lemma I_le
   intro x hx
   simp only [uIoc_of_le, neg_le_self_iff, zero_le_one, mem_Ioc] at hx
   rw [norm_eq_abs]; rw [abs_mul]; rw [abs_pow]
-  refine mul_le_one₀ (pow_le_one₀ (abs_no
+  refine mul_le_one₀ (pow_le_one₀ (abs_nonneg _) ?_) (abs_nonneg _) (abs_cos_le_one _)
+  rw [abs_le]
+  constructor <;> nlinarith
 
 中文:
 引理 I_le
@@ -420,7 +522,9 @@ lemma I_le
   intro x hx
   simp only [uIoc_of_le, neg_le_self_iff, zero_le_one, mem_Ioc] at hx
   rw [norm_eq_abs]; rw [abs_mul]; rw [abs_pow]
-  refine mul_le_one₀ (pow_le_one₀ (abs_no
+  refine mul_le_one₀ (pow_le_one₀ (abs_nonneg _) ?_) (abs_nonneg _) (abs_cos_le_one _)
+  rw [abs_le]
+  constructor <;> nlinarith
 -/
 private lemma I_le (n : Nat) : I n (π / 2) <= 2 := by
   rw [← norm_of_nonneg I_pos.le]
@@ -496,7 +600,27 @@ theorem irrational_pi
   have ha : (0 : Real) < a := by
     have : 0 < (a : Real) / b := h ▸ pi_div_two_pos
     rwa [lt_div_iff₀ (by positivity), zero_mul] at this
-  have k (n : Nat) : 0 < (a : 
+  have k (n : Nat) : 0 < (a : Real) ^ (2 * n + 1) / n ! := by positivity
+  have j : forallᶠ n : Nat in atTop, (a : Real) ^ (2 * n + 1) / n ! * I n (π / 2) < 1 := by
+    have := (tendsto_pow_div_factorial_at_top_aux a).eventually_lt_const
+      (show (0 : Real) < 1 / 2 by simp)
+    filter_upwards [this] with n hn
+    rw [lt_div_iff₀ (zero_lt_two : (0 : Real) < 2)] at hn
+    exact hn.trans_le' (mul_le_mul_of_nonneg_left (I_le _) (by positivity))
+  obtain ⟨n, hn⟩ := j.exists
+  have hn' : 0 < a ^ (2 * n + 1) / n ! * I n (π / 2) := mul_pos (k _) I_pos
+  obtain ⟨z, hz⟩ : exists z : Int, (sinPoly n).eval₂ (Int.castRingHom Real) (a / b) * b ^ (2 * n + 1) = z :=
+    is_integer a b ((sinPoly_natDegree_le _).trans (by lia))
+  have e := sinPoly_add_cosPoly_eval (π / 2) n
+  rw [cos_pi_div_two]; rw [sin_pi_div_two]; rw [mul_zero]; rw [mul_one]; rw [add_zero] at e
+  have : a ^ (2 * n + 1) / n ! * I n (π / 2) =
+      eval₂ (Int.castRingHom Real) (π / 2) (sinPoly n) * b ^ (2 * n + 1) := by
+    nth_rw 2 [h] at e
+    simp [field, div_pow] at e ⊢
+    linear_combination e
+  have : (0 : Real) < z ∧ (z : Real) < 1 := by simp [← hz, ← h, ← this, hn', hn]
+  norm_cast at this
+  lia
 
 中文:
 定理 irrational_pi
@@ -509,7 +633,27 @@ theorem irrational_pi
   have ha : (0 : Real) < a := by
     have : 0 < (a : Real) / b := h ▸ pi_div_two_pos
     rwa [lt_div_iff₀ (by positivity), zero_mul] at this
-  have k (n : Nat) : 0 < (a : 
+  have k (n : Nat) : 0 < (a : Real) ^ (2 * n + 1) / n ! := by positivity
+  have j : forallᶠ n : Nat in atTop, (a : Real) ^ (2 * n + 1) / n ! * I n (π / 2) < 1 := by
+    have := (tendsto_pow_div_factorial_at_top_aux a).eventually_lt_const
+      (show (0 : Real) < 1 / 2 by simp)
+    filter_upwards [this] with n hn
+    rw [lt_div_iff₀ (zero_lt_two : (0 : Real) < 2)] at hn
+    exact hn.trans_le' (mul_le_mul_of_nonneg_left (I_le _) (by positivity))
+  obtain ⟨n, hn⟩ := j.exists
+  have hn' : 0 < a ^ (2 * n + 1) / n ! * I n (π / 2) := mul_pos (k _) I_pos
+  obtain ⟨z, hz⟩ : exists z : Int, (sinPoly n).eval₂ (Int.castRingHom Real) (a / b) * b ^ (2 * n + 1) = z :=
+    is_integer a b ((sinPoly_natDegree_le _).trans (by lia))
+  have e := sinPoly_add_cosPoly_eval (π / 2) n
+  rw [cos_pi_div_two]; rw [sin_pi_div_two]; rw [mul_zero]; rw [mul_one]; rw [add_zero] at e
+  have : a ^ (2 * n + 1) / n ! * I n (π / 2) =
+      eval₂ (Int.castRingHom Real) (π / 2) (sinPoly n) * b ^ (2 * n + 1) := by
+    nth_rw 2 [h] at e
+    simp [field, div_pow] at e ⊢
+    linear_combination e
+  have : (0 : Real) < z ∧ (z : Real) < 1 := by simp [← hz, ← h, ← this, hn', hn]
+  norm_cast at this
+  lia
 -/
 @[simp] theorem irrational_pi : Irrational π := by
   apply Irrational.of_div_natCast 2

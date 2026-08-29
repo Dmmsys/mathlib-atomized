@@ -1088,7 +1088,7 @@ definition coeffAddEquiv
 @[deprecated (since := "2026-07-04")] alias toFinsuppAddEquiv := coeffAddEquiv
 @[deprecated (since := "2026-07-04")] alias toFinsuppAddEquiv_apply := coeffAddEquiv_apply
 @[deprecated (since := "2026-07-04")]
-alias toFinsuppAddEquiv_symm_apply := coe
+alias toFinsuppAddEquiv_symm_apply := coeffAddEquiv_symm_apply
 
 中文:
 定义 coeffAddEquiv
@@ -1100,7 +1100,7 @@ alias toFinsuppAddEquiv_symm_apply := coe
 @[deprecated (since := "2026-07-04")] alias toFinsuppAddEquiv := coeffAddEquiv
 @[deprecated (since := "2026-07-04")] alias toFinsuppAddEquiv_apply := coeffAddEquiv_apply
 @[deprecated (since := "2026-07-04")]
-alias toFinsuppAddEquiv_symm_apply := coe
+alias toFinsuppAddEquiv_symm_apply := coeffAddEquiv_symm_apply
 -/
 def coeffAddEquiv : SkewMonoidAlgebra k G ≃+ (G ->₀ k) where
   toFun := coeff
@@ -2652,7 +2652,11 @@ instance instNonUnitalNonAssocSemiring
         forall_true_iff, sum_add]
   right_distrib f g h := by
     classical
-    simp only
+    simp only [mul_def]
+    refine Eq.trans (sum_add_index ?_ ?_) ?_ <;>
+      simp only [add_mul, zero_mul, single_zero, single_add, forall_true_iff, sum_zero, sum_add]
+  zero_mul f := sum_zero_index
+  mul_zero f := Eq.trans (congr_arg (sum f) (funext₂ fun _ _ => sum_zero_index)) sum_zero
 
 中文:
 实例 instNonUnitalNonAssocSemiring
@@ -2665,7 +2669,11 @@ instance instNonUnitalNonAssocSemiring
         forall_true_iff, sum_add]
   right_distrib f g h := by
     classical
-    simp only
+    simp only [mul_def]
+    refine Eq.trans (sum_add_index ?_ ?_) ?_ <;>
+      simp only [add_mul, zero_mul, single_zero, single_add, forall_true_iff, sum_zero, sum_add]
+  zero_mul f := sum_zero_index
+  mul_zero f := Eq.trans (congr_arg (sum f) (funext₂ fun _ _ => sum_zero_index)) sum_zero
 
 Depends on / 依赖: Eq.trans, add_mul, classical, congr_arg, forall_true_iff, mul_add, mul_def, mul_zero, right_distrib, single_add, single_zero, smul_add, smul_zero, sum_add, sum_add_index, sum_zero, sum_zero_index, zero_mul
 -/
@@ -2698,7 +2706,7 @@ theorem liftNC_mul
   simp_rw [mul_def, map_sum, liftNC_single, sum_mul, mul_sum]
   refine sum_congr fun y hy => sum_congr fun x _hx => ?_
   simp only [AddMonoidHom.coe_coe, map_mul]
-  rw [mul_assoc]; rw [← mul_assoc (f (y • b.coeff x))]; rw [h_comm hy]; rw [mul_asso
+  rw [mul_assoc]; rw [← mul_assoc (f (y • b.coeff x))]; rw [h_comm hy]; rw [mul_assoc]; rw [mul_assoc]
 
 中文:
 定理 liftNC_mul
@@ -2708,7 +2716,7 @@ theorem liftNC_mul
   simp_rw [mul_def, map_sum, liftNC_single, sum_mul, mul_sum]
   refine sum_congr fun y hy => sum_congr fun x _hx => ?_
   simp only [AddMonoidHom.coe_coe, map_mul]
-  rw [mul_assoc]; rw [← mul_assoc (f (y • b.coeff x))]; rw [h_comm hy]; rw [mul_asso
+  rw [mul_assoc]; rw [← mul_assoc (f (y • b.coeff x))]; rw [h_comm hy]; rw [mul_assoc]; rw [mul_assoc]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_coe, b.coeff, coe_coe, conv_rhs, h_comm, liftNC_single, map_mul, map_sum, mul_assoc, mul_def, mul_sum, simp_rw, sum_congr, sum_mul, sum_single
 -/
@@ -2944,7 +2952,7 @@ instance instCommSemiring
     simp only [mul_def, hgk, sum_def]
     rw [Finsupp.sum_comm]
     exact Finsupp.sum_congr (fun x _ => Finsupp.sum_congr
-      (fun y _ => by rw [mul_comm, mul_comm (a.coeff y) _
+      (fun y _ => by rw [mul_comm, mul_comm (a.coeff y) _]))
 
 中文:
 实例 instCommSemiring
@@ -2955,7 +2963,7 @@ instance instCommSemiring
     simp only [mul_def, hgk, sum_def]
     rw [Finsupp.sum_comm]
     exact Finsupp.sum_congr (fun x _ => Finsupp.sum_congr
-      (fun y _ => by rw [mul_comm, mul_comm (a.coeff y) _
+      (fun y _ => by rw [mul_comm, mul_comm (a.coeff y) _]))
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_self_apply, Finsupp, Finsupp.sum_comm, Finsupp.sum_congr, a.coeff, algebraMap_self_apply, mul_comm, mul_def, smul_algebraMap, sum_comm, sum_congr, sum_def
 -/
@@ -3388,7 +3396,16 @@ theorem coeff_mul_antidiagonal_of_finset
   calc
     (f * g).coeff x = ∑ a₁ in f.support, ∑ a₂ in g.support, F (a₁, a₂) := coeff_mul f g x
     _ = ∑ p in f.support ×ˢ g.support, F p := by rw [Finset.sum_product]
-    _ = ∑ p in (f.sup
+    _ = ∑ p in (f.support ×ˢ g.support).filter fun p : G × G => p.1 * p.2 = x,
+      f.coeff p.1 * p.1 • g.coeff p.2 := (Finset.sum_filter _ _).symm
+    _ = ∑ p in s.filter fun p : G × G => p.1 in f.support ∧ p.2 in g.support,
+      f.coeff p.1 * p.1 • g.coeff p.2 :=
+      (Finset.sum_congr (by ext; simp [Finset.mem_filter, Finset.mem_product, hs, and_comm])
+        fun _ _ => rfl)
+    _ = ∑ p in s, f.coeff p.1 * p.1 • g.coeff p.2 :=
+      Finset.sum_subset (Finset.filter_subset _ _) fun p hps hp => by
+        simp only [Finset.mem_filter, mem_support_iff, not_and, Classical.not_not] at hp ⊢
+        by_cases h1 : f.coeff p.1 = 0 <;> simp_all
 
 中文:
 定理 coeff_mul_antidiagonal_of_finset
@@ -3399,7 +3416,16 @@ theorem coeff_mul_antidiagonal_of_finset
   calc
     (f * g).coeff x = ∑ a₁ in f.support, ∑ a₂ in g.support, F (a₁, a₂) := coeff_mul f g x
     _ = ∑ p in f.support ×ˢ g.support, F p := by rw [Finset.sum_product]
-    _ = ∑ p in (f.sup
+    _ = ∑ p in (f.support ×ˢ g.support).filter fun p : G × G => p.1 * p.2 = x,
+      f.coeff p.1 * p.1 • g.coeff p.2 := (Finset.sum_filter _ _).symm
+    _ = ∑ p in s.filter fun p : G × G => p.1 in f.support ∧ p.2 in g.support,
+      f.coeff p.1 * p.1 • g.coeff p.2 :=
+      (Finset.sum_congr (by ext; simp [Finset.mem_filter, Finset.mem_product, hs, and_comm])
+        fun _ _ => rfl)
+    _ = ∑ p in s, f.coeff p.1 * p.1 • g.coeff p.2 :=
+      Finset.sum_subset (Finset.filter_subset _ _) fun p hps hp => by
+        simp only [Finset.mem_filter, mem_support_iff, not_and, Classical.not_not] at hp ⊢
+        by_cases h1 : f.coeff p.1 = 0 <;> simp_all
 
 Depends on / 依赖: Finset, Finset.sum_filter, Finset.sum_product, classical, coeff_mul, f.coeff, f.support, filter, g.coeff, g.support, s.filter, sum_filter, sum_product, support
 -/
@@ -3434,7 +3460,23 @@ theorem coeff_mul_antidiagonal_finsum
     apply Set.Finite.inter_of_right
     apply Set.Finite.subset (Finset.finite_toSet ((f.support).product (g.support)))
     aesop
-  rw [← finsum_mem_inter_support]; rw [finsum
+  rw [← finsum_mem_inter_support]; rw [finsum_mem_eq_finite_toFinset_sum _ this]
+  classical
+  let s := Set.Finite.toFinset (s := ({p : G × G | p.1 * p.2 = x}
+    inter Function.support fun p => f.coeff p.1 * p.1 • g.coeff p.2)) this
+  let F : G × G -> k := fun p => if p.1 * p.2 = x then f.coeff p.1 * p.1 • g.coeff p.2 else 0
+  calc
+    (f * g).coeff x = ∑ a₁ in f.support, ∑ a₂ in g.support, F (a₁, a₂) := coeff_mul f g x
+    _ = ∑ p in f.support ×ˢ g.support, F p := by rw [Finset.sum_product]
+    _ = ∑ p in (f.support ×ˢ g.support).filter fun p : G × G => p.1 * p.2 = x,
+      f.coeff p.1 * p.1 • g.coeff p.2 := (Finset.sum_filter _ _).symm
+    _ = ∑ p in s.filter fun p : G × G => p.1 in f.support ∧ p.2 in g.support,
+      f.coeff p.1 * p.1 • g.coeff p.2 := by
+        apply Finset.sum_congr_of_eq_on_inter <;> aesop
+    _ = ∑ p in s, f.coeff p.1 * p.1 • g.coeff p.2 :=
+      Finset.sum_subset (Finset.filter_subset _ _) fun p hps hp => by
+        simp only [Finset.mem_filter, mem_support_iff, not_and, Classical.not_not] at hp ⊢
+        by_cases h1 : f.coeff p.1 = 0 <;> simp_all
 
 中文:
 定理 coeff_mul_antidiagonal_finsum
@@ -3445,7 +3487,23 @@ theorem coeff_mul_antidiagonal_finsum
     apply Set.Finite.inter_of_right
     apply Set.Finite.subset (Finset.finite_toSet ((f.support).product (g.support)))
     aesop
-  rw [← finsum_mem_inter_support]; rw [finsum
+  rw [← finsum_mem_inter_support]; rw [finsum_mem_eq_finite_toFinset_sum _ this]
+  classical
+  let s := Set.Finite.toFinset (s := ({p : G × G | p.1 * p.2 = x}
+    inter Function.support fun p => f.coeff p.1 * p.1 • g.coeff p.2)) this
+  let F : G × G -> k := fun p => if p.1 * p.2 = x then f.coeff p.1 * p.1 • g.coeff p.2 else 0
+  calc
+    (f * g).coeff x = ∑ a₁ in f.support, ∑ a₂ in g.support, F (a₁, a₂) := coeff_mul f g x
+    _ = ∑ p in f.support ×ˢ g.support, F p := by rw [Finset.sum_product]
+    _ = ∑ p in (f.support ×ˢ g.support).filter fun p : G × G => p.1 * p.2 = x,
+      f.coeff p.1 * p.1 • g.coeff p.2 := (Finset.sum_filter _ _).symm
+    _ = ∑ p in s.filter fun p : G × G => p.1 in f.support ∧ p.2 in g.support,
+      f.coeff p.1 * p.1 • g.coeff p.2 := by
+        apply Finset.sum_congr_of_eq_on_inter <;> aesop
+    _ = ∑ p in s, f.coeff p.1 * p.1 • g.coeff p.2 :=
+      Finset.sum_subset (Finset.filter_subset _ _) fun p hps hp => by
+        simp only [Finset.mem_filter, mem_support_iff, not_and, Classical.not_not] at hp ⊢
+        by_cases h1 : f.coeff p.1 = 0 <;> simp_all
 
 Depends on / 依赖: Finite, Finset, Finset.finite_toSet, Function, Function.support, Set.Finite.inter_of_right, Set.Finite.subset, Set.Finite.toFinset, classical, f.coeff, f.support, finite_toSet, finsum_mem_eq_finite_toFinset_sum, finsum_mem_inter_support, g.coeff, g.support, inter_of_right, product, subset, support
 -/
@@ -3487,7 +3545,10 @@ theorem coeff_mul_single_aux
 fun a₁ b₁ => sum_single_index by simp
   calc
     (f * (single x r)).coeff z =
-        sum f fun a b => if a = y then b * y • r else 0 := by simp [coe
+        sum f fun a b => if a = y then b * y • r else 0 := by simp [coeff_mul, A, H, sum_ite_eq']
+    _ = if y in f.support then f.coeff y * y • r else 0 := (f.support.sum_ite_eq' _ _)
+    _ = f.coeff y * y • r := by
+      split_ifs with h <;> simp [support] at h <;> simp [h]
 
 中文:
 定理 coeff_mul_single_aux
@@ -3499,7 +3560,10 @@ fun a₁ b₁ => sum_single_index by simp
 fun a₁ b₁ => sum_single_index by simp
   calc
     (f * (single x r)).coeff z =
-        sum f fun a b => if a = y then b * y • r else 0 := by simp [coe
+        sum f fun a b => if a = y then b * y • r else 0 := by simp [coeff_mul, A, H, sum_ite_eq']
+    _ = if y in f.support then f.coeff y * y • r else 0 := (f.support.sum_ite_eq' _ _)
+    _ = f.coeff y * y • r := by
+      split_ifs with h <;> simp [support] at h <;> simp [h]
 
 Depends on / 依赖: classical, coeff_mul, f.coeff, f.support, f.support.sum_ite_eq, single, split_ifs, sum_ite_eq, sum_single_index, support
 -/
@@ -3566,7 +3630,8 @@ theorem coeff_single_mul_aux
         sum f fun a b => ite (x * a = y) (r * x • b) 0 :=
 (coeff_mul _ _ _).trans sum_single_index this
     _ = f.sum fun a b => ite (a = z) (r * x • b) 0 := by simp [H]
-    
+    _ = if z in f.support then r * x • f.coeff z else 0 := (f.support.sum_ite_eq' _ _)
+    _ = _ := by split_ifs with h <;> simp [support] at h <;> simp [h]
 
 中文:
 定理 coeff_single_mul_aux
@@ -3579,7 +3644,8 @@ theorem coeff_single_mul_aux
         sum f fun a b => ite (x * a = y) (r * x • b) 0 :=
 (coeff_mul _ _ _).trans sum_single_index this
     _ = f.sum fun a b => ite (a = z) (r * x • b) 0 := by simp [H]
-    
+    _ = if z in f.support then r * x • f.coeff z else 0 := (f.support.sum_ite_eq' _ _)
+    _ = _ := by split_ifs with h <;> simp [support] at h <;> simp [h]
 
 Depends on / 依赖: classical, coeff_mul, f.coeff, f.sum, f.support, f.support.sum_ite_eq, single, split_ifs, sum_ite_eq, sum_single_index, support
 -/
@@ -3919,7 +3985,7 @@ theorem ringHom_ext
     simp [single_mul_single, one_mul, one_smul]
 RingHom.coe_addMonoidHom_injective
     addHom_ext fun a b => by rw [← mul_one b, ← this, AddMonoidHom.coe_coe f,
-      AddMonoidHom.coe_coe g, f.map_mul, g.map_mul, h₁,
+      AddMonoidHom.coe_coe g, f.map_mul, g.map_mul, h₁, h_of]
 
 中文:
 定理 ringHom_ext
@@ -3928,7 +3994,7 @@ RingHom.coe_addMonoidHom_injective
     simp [single_mul_single, one_mul, one_smul]
 RingHom.coe_addMonoidHom_injective
     addHom_ext fun a b => by rw [← mul_one b, ← this, AddMonoidHom.coe_coe f,
-      AddMonoidHom.coe_coe g, f.map_mul, g.map_mul, h₁,
+      AddMonoidHom.coe_coe g, f.map_mul, g.map_mul, h₁, h_of]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_coe, RingHom, RingHom.coe_addMonoidHom_injective, addHom_ext, coe_addMonoidHom_injective, coe_coe, f.map_mul, g.map_mul, h_of, map_mul, mul_one, one_mul, one_smul, single, single_mul_single
 -/
@@ -3980,7 +4046,13 @@ theorem mapDomain_mul
       sum (mapDomain (↑f) x) fun a₁ b₁ =>
         sum (mapDomain (↑f) y) fun a₂ b₂ => single (a₁ * a₂) (b₁ * a₁ • b₂) := by
     simp_rw [mapDomain_single, map_mul]
-    rw [s
+    rw [sum_mapDomain_index (by simp) (by simp [add_mul]; rw [single_add]; rw [sum_add])]
+    congr
+    ext a b c
+    rw [sum_mapDomain_index (by simp) (by simp [smul_add]; rw [mul_add]; rw [single_add])]
+    simp_rw [hf]
+  convert! this using 4
+  rw [map_sum]
 
 中文:
 定理 mapDomain_mul
@@ -3991,7 +4063,13 @@ theorem mapDomain_mul
       sum (mapDomain (↑f) x) fun a₁ b₁ =>
         sum (mapDomain (↑f) y) fun a₂ b₂ => single (a₁ * a₂) (b₁ * a₁ • b₂) := by
     simp_rw [mapDomain_single, map_mul]
-    rw [s
+    rw [sum_mapDomain_index (by simp) (by simp [add_mul]; rw [single_add]; rw [sum_add])]
+    congr
+    ext a b c
+    rw [sum_mapDomain_index (by simp) (by simp [smul_add]; rw [mul_add]; rw [single_add])]
+    simp_rw [hf]
+  convert! this using 4
+  rw [map_sum]
 
 Depends on / 依赖: add_mul, convert, mapDomain, mapDomain_single, map_mul, map_sum, mul_add, mul_def, simp_rw, single, single_add, smul_add, sum_add, sum_mapDomain_index
 -/
@@ -4480,7 +4558,10 @@ instance [MulSemiringAction
   commutes' r f := by
     ext
     simp only [singleOneRingHom, singleAddHom, ZeroHom.toFun_eq_coe, ZeroHom.coe_mk, RingHom.coe_mk,
-      MonoidHom.coe_mk, OneHom.coe_mk, 
+      MonoidHom.coe_mk, OneHom.coe_mk, coeff_single_one_mul, Algebra.commutes, coeff_mul_single_one,
+      smul_algebraMap, RingHom.coe_comp, comp_apply]
+
+@[simp]
 
 中文:
 实例 [MulSemiring作用
@@ -4490,7 +4571,10 @@ instance [MulSemiringAction
   commutes' r f := by
     ext
     simp only [singleOneRingHom, singleAddHom, ZeroHom.toFun_eq_coe, ZeroHom.coe_mk, RingHom.coe_mk,
-      MonoidHom.coe_mk, OneHom.coe_mk, 
+      MonoidHom.coe_mk, OneHom.coe_mk, coeff_single_one_mul, Algebra.commutes, coeff_mul_single_one,
+      smul_algebraMap, RingHom.coe_comp, comp_apply]
+
+@[simp]
 
 Depends on / 依赖: algebraMap, singleOneRingHom, singleOneRingHom.comp
 -/

@@ -60,7 +60,9 @@ lemma eq_neg_mul_add_of_roots_quadratic_eq_pair
   have hp_natDegree : p.natDegree = 2 := le_antisymm natDegree_quadratic_le
     (by convert! p.card_roots'; rw [hroots, Multiset.card_pair])
   have hp_roots_card : p.roots.card = p.natDegree := by
-    rw [hp_natDegree]; rw [hroots]; rw [Multiset.card_
+    rw [hp_natDegree]; rw [hroots]; rw [Multiset.card_pair]
+  simpa [leadingCoeff, hp_natDegree, p, hroots, mul_assoc, add_comm x1] using
+    coeff_eq_esymm_roots_of_card hp_roots_card (k := 1) (by simp [hp_natDegree])
 
 中文:
 引理 eq_neg_mul_add_of_roots_quadratic_eq_pair
@@ -70,7 +72,9 @@ lemma eq_neg_mul_add_of_roots_quadratic_eq_pair
   have hp_natDegree : p.natDegree = 2 := le_antisymm natDegree_quadratic_le
     (by convert! p.card_roots'; rw [hroots, Multiset.card_pair])
   have hp_roots_card : p.roots.card = p.natDegree := by
-    rw [hp_natDegree]; rw [hroots]; rw [Multiset.card_
+    rw [hp_natDegree]; rw [hroots]; rw [Multiset.card_pair]
+  simpa [leadingCoeff, hp_natDegree, p, hroots, mul_assoc, add_comm x1] using
+    coeff_eq_esymm_roots_of_card hp_roots_card (k := 1) (by simp [hp_natDegree])
 
 Depends on / 依赖: Multiset, Multiset.card_pair, add_comm, card_pair, card_roots, coeff_eq_esymm_roots_of_card, convert, hp_natDegree, hp_roots_card, hroots, le_antisymm, leadingCoeff, mul_assoc, natDegree, natDegree_quadratic_le, p.card_roots, p.natDegree, p.roots.card
 -/
@@ -96,7 +100,9 @@ lemma eq_mul_mul_of_roots_quadratic_eq_pair
   have hp_natDegree : p.natDegree = 2 := le_antisymm natDegree_quadratic_le
     (by convert! p.card_roots'; rw [hroots, Multiset.card_pair])
   have hp_roots_card : p.roots.card = p.natDegree := by
-    rw [hp_natDegree]; rw [hroots]; rw [Multiset.card_
+    rw [hp_natDegree]; rw [hroots]; rw [Multiset.card_pair]
+  simpa [leadingCoeff, hp_natDegree, p, hroots, mul_assoc, add_comm x1] using
+    coeff_eq_esymm_roots_of_card hp_roots_card (k := 0) (by simp [hp_natDegree])
 
 中文:
 引理 eq_mul_mul_of_roots_quadratic_eq_pair
@@ -106,7 +112,9 @@ lemma eq_mul_mul_of_roots_quadratic_eq_pair
   have hp_natDegree : p.natDegree = 2 := le_antisymm natDegree_quadratic_le
     (by convert! p.card_roots'; rw [hroots, Multiset.card_pair])
   have hp_roots_card : p.roots.card = p.natDegree := by
-    rw [hp_natDegree]; rw [hroots]; rw [Multiset.card_
+    rw [hp_natDegree]; rw [hroots]; rw [Multiset.card_pair]
+  simpa [leadingCoeff, hp_natDegree, p, hroots, mul_assoc, add_comm x1] using
+    coeff_eq_esymm_roots_of_card hp_roots_card (k := 0) (by simp [hp_natDegree])
 
 Depends on / 依赖: Multiset, Multiset.card_pair, add_comm, card_pair, card_roots, coeff_eq_esymm_roots_of_card, convert, hp_natDegree, hp_roots_card, hroots, le_antisymm, leadingCoeff, mul_assoc, natDegree, natDegree_quadratic_le, p.card_roots, p.natDegree, p.roots.card
 -/
@@ -185,7 +193,13 @@ lemma roots_quadratic_eq_pair_iff_of_ne_zero
   proof: have roots_of_ne_zero_of_vieta (hvieta : b = -a * (x1 + x2) ∧ c = a * x1 * x2) :
       (C a * X ^ 2 + C b * X + C c).roots = {x1, x2} := by
     suffices C a * X ^ 2 + C b * X + C c = C a * (X - C x1) * (X - C x2) by
-      have h1 : C a * (X - C x1) != 0 := mul_ne_zero (by simpa) (Polynomial.X_sub_C_
+      have h1 : C a * (X - C x1) != 0 := mul_ne_zero (by simpa) (Polynomial.X_sub_C_ne_zero _)
+      have h2 : C a * (X - C x1) * (X - C x2) != 0 := mul_ne_zero h1 (Polynomial.X_sub_C_ne_zero _)
+      simp [this, Polynomial.roots_mul h2, Polynomial.roots_mul h1]
+    simp [hvieta.1, hvieta.2]
+    ring
+  ⟨fun h => ⟨eq_neg_mul_add_of_roots_quadratic_eq_pair h, eq_mul_mul_of_roots_quadratic_eq_pair h⟩,
+    roots_of_ne_zero_of_vieta⟩
 
 中文:
 引理 roots_quadratic_eq_pair_iff_of_ne_zero
@@ -193,7 +207,13 @@ lemma roots_quadratic_eq_pair_iff_of_ne_zero
   证明: have roots_of_ne_zero_of_vieta (hvieta : b = -a * (x1 + x2) ∧ c = a * x1 * x2) :
       (C a * X ^ 2 + C b * X + C c).roots = {x1, x2} := by
     suffices C a * X ^ 2 + C b * X + C c = C a * (X - C x1) * (X - C x2) by
-      have h1 : C a * (X - C x1) != 0 := mul_ne_zero (by simpa) (Polynomial.X_sub_C_
+      have h1 : C a * (X - C x1) != 0 := mul_ne_zero (by simpa) (Polynomial.X_sub_C_ne_zero _)
+      have h2 : C a * (X - C x1) * (X - C x2) != 0 := mul_ne_zero h1 (Polynomial.X_sub_C_ne_zero _)
+      simp [this, Polynomial.roots_mul h2, Polynomial.roots_mul h1]
+    simp [hvieta.1, hvieta.2]
+    ring
+  ⟨fun h => ⟨eq_neg_mul_add_of_roots_quadratic_eq_pair h, eq_mul_mul_of_roots_quadratic_eq_pair h⟩,
+    roots_of_ne_zero_of_vieta⟩
 
 Depends on / 依赖: Polynomial, Polynomial.X_sub_C_ne_zero, Polynomial.roots_mul, X_sub_C_ne_zero, eq_neg_, hvieta, mul_ne_zero, roots_mul, roots_of_ne_zero_of_vieta
 -/

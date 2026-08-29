@@ -807,7 +807,7 @@ theorem isPeriodicPt_of_mem_periodicPts_of_isPeriodicPt_iterate
     convert! (hm.apply_iterate ((n / r + 1) * r - n)).eq <;>
       rw [← iterate_add_apply]; rw [Nat.sub_add_cancel this]; rw [iterate_mul]; rw [(hr'.iterate _).eq]
   rw [Nat.add_mul]; rw [one_mul]
-
+  exact (Nat.lt_div_mul_add hr).le
 
 中文:
 定理 isPeriodicPt_of_mem_periodicPts_of_isPeriodicPt_iterate
@@ -819,7 +819,7 @@ theorem isPeriodicPt_of_mem_periodicPts_of_isPeriodicPt_iterate
     convert! (hm.apply_iterate ((n / r + 1) * r - n)).eq <;>
       rw [← iterate_add_apply]; rw [Nat.sub_add_cancel this]; rw [iterate_mul]; rw [(hr'.iterate _).eq]
   rw [Nat.add_mul]; rw [one_mul]
-
+  exact (Nat.lt_div_mul_add hr).le
 
 Depends on / 依赖: IsFixedPt, IsPeriodicPt, Nat.add_mul, Nat.lt_div_mul_add, Nat.sub_add_cancel, add_mul, apply_iterate, convert, hm.apply_iterate, iterate, iterate_add_apply, iterate_mul, lt_div_mul_add, one_mul, sub_add_cancel
 -/
@@ -1168,7 +1168,9 @@ theorem minimalPeriod_apply_iterate
       ((isPeriodicPt_of_mem_periodicPts_of_isPeriodicPt_iterate hx
             (isPeriodicPt_minimalPeriod f _)).minimalPeriod_le
         (minimalPeriod_pos_of_mem_periodicPts _))
-  · exact (isPeriodi
+  · exact (isPeriodicPt_minimalPeriod f x).apply_iterate n
+  · rcases hx with ⟨m, hm, hx⟩
+    exact ⟨m, hm, hx.apply_iterate n⟩
 
 中文:
 定理 minimalPeriod_apply_iterate
@@ -1179,7 +1181,9 @@ theorem minimalPeriod_apply_iterate
       ((isPeriodicPt_of_mem_periodicPts_of_isPeriodicPt_iterate hx
             (isPeriodicPt_minimalPeriod f _)).minimalPeriod_le
         (minimalPeriod_pos_of_mem_periodicPts _))
-  · exact (isPeriodi
+  · exact (isPeriodicPt_minimalPeriod f x).apply_iterate n
+  · rcases hx with ⟨m, hm, hx⟩
+    exact ⟨m, hm, hx.apply_iterate n⟩
 
 Depends on / 依赖: IsPeriodicPt, IsPeriodicPt.minimalPeriod_le, antisymm, apply_iterate, hx.apply_iterate, isPeriodicPt_minimalPeriod, isPeriodicPt_of_mem_periodicPts_of_isPeriodicPt_iterate, minimalPeriod_le, minimalPeriod_pos_of_mem_periodicPts
 -/
@@ -1225,7 +1229,7 @@ theorem le_of_lt_minimalPeriod_of_iterate_eq
   rw [← Nat.add_sub_of_le hmn'.le]; rw [add_comm]; rw [iterate_add_apply] at hmn
   exact ((IsPeriodicPt.minimalPeriod_le (tsub_pos_of_lt hmn')
     (isPeriodicPt_of_mem_periodicPts_of_isPeriodicPt_iterate
-      (minimalPeriod_pos_iff_mem_periodicPts.1 hm.pos) hmn)).trans (Nat.sub
+      (minimalPeriod_pos_iff_mem_periodicPts.1 hm.pos) hmn)).trans (Nat.sub_le m n)).not_gt hm
 
 中文:
 定理 le_of_lt_minimalPeriod_of_iterate_eq
@@ -1235,7 +1239,7 @@ theorem le_of_lt_minimalPeriod_of_iterate_eq
   rw [← Nat.add_sub_of_le hmn'.le]; rw [add_comm]; rw [iterate_add_apply] at hmn
   exact ((IsPeriodicPt.minimalPeriod_le (tsub_pos_of_lt hmn')
     (isPeriodicPt_of_mem_periodicPts_of_isPeriodicPt_iterate
-      (minimalPeriod_pos_iff_mem_periodicPts.1 hm.pos) hmn)).trans (Nat.sub
+      (minimalPeriod_pos_iff_mem_periodicPts.1 hm.pos) hmn)).trans (Nat.sub_le m n)).not_gt hm
 
 Depends on / 依赖: IsPeriodicPt, IsPeriodicPt.minimalPeriod_le, Nat.add_sub_of_le, Nat.sub_le, add_comm, add_sub_of_le, hm.pos, isPeriodicPt_of_mem_periodicPts_of_isPeriodicPt_iterate, iterate_add_apply, minimalPeriod_le, minimalPeriod_pos_iff_mem_periodicPts, not_gt, sub_le, tsub_pos_of_lt
 -/
@@ -1325,7 +1329,9 @@ theorem minimalPeriod_eq_one_iff_isFixedPt
     exact isPeriodicPt_minimalPeriod f x
   · exact
       ((h.isPeriodicPt 1).minimalPeriod_le Nat.one_pos).antisymm
-        (Nat.succ_le_of_lt ((h.isPeriodicPt 1).minimalPeriod_
+        (Nat.succ_le_of_lt ((h.isPeriodicPt 1).minimalPeriod_pos Nat.one_pos))
+
+@[nontriviality]
 
 中文:
 定理 minimalPeriod_eq_one_iff_isFixedPt
@@ -1338,7 +1344,9 @@ theorem minimalPeriod_eq_one_iff_isFixedPt
     exact isPeriodicPt_minimalPeriod f x
   · exact
       ((h.isPeriodicPt 1).minimalPeriod_le Nat.one_pos).antisymm
-        (Nat.succ_le_of_lt ((h.isPeriodicPt 1).minimalPeriod_
+        (Nat.succ_le_of_lt ((h.isPeriodicPt 1).minimalPeriod_pos Nat.one_pos))
+
+@[nontriviality]
 
 Depends on / 依赖: Function, Function.IsPeriodicPt.isFixedPt, IsPeriodicPt, Nat.one_pos, Nat.succ_le_of_lt, antisymm, h.isPeriodicPt, isFixedPt, isPeriodicPt, isPeriodicPt_minimalPeriod, iterate_one, minimalPeriod_le, minimalPeriod_pos, one_pos, succ_le_of_lt
 -/
@@ -1515,7 +1523,13 @@ theorem minimalPeriod_iterate_eq_div_gcd_aux
   apply Nat.dvd_antisymm
   · apply IsPeriodicPt.minimalPeriod_dvd
     rw [IsPeriodicPt]; rw [IsFixedPt]; rw [← iterate_mul]; rw [← Nat.mul_div_assoc _ (gcd_dvd_left _ _)]; rw [mul_comm]; rw [Nat.mul_div_assoc _ (gcd_dvd_right _ _)]; rw [mul_comm]; rw [iterate_mul]
-    exact (isPeriodicPt_minimalP
+    exact (isPeriodicPt_minimalPeriod f x).iterate _
+  · apply Coprime.dvd_of_dvd_mul_right (coprime_div_gcd_div_gcd h)
+    apply Nat.dvd_of_mul_dvd_mul_right h
+    rw [Nat.div_mul_cancel (gcd_dvd_left _ _)]; rw [mul_assoc]; rw [Nat.div_mul_cancel (gcd_dvd_right _ _)]; rw [mul_comm]
+    apply IsPeriodicPt.minimalPeriod_dvd
+    rw [IsPeriodicPt]; rw [IsFixedPt]; rw [iterate_mul]
+    exact isPeriodicPt_minimalPeriod _ _
 
 中文:
 定理 minimalPeriod_iterate_eq_div_gcd_aux
@@ -1524,7 +1538,13 @@ theorem minimalPeriod_iterate_eq_div_gcd_aux
   apply Nat.dvd_antisymm
   · apply IsPeriodicPt.minimalPeriod_dvd
     rw [IsPeriodicPt]; rw [IsFixedPt]; rw [← iterate_mul]; rw [← Nat.mul_div_assoc _ (gcd_dvd_left _ _)]; rw [mul_comm]; rw [Nat.mul_div_assoc _ (gcd_dvd_right _ _)]; rw [mul_comm]; rw [iterate_mul]
-    exact (isPeriodicPt_minimalP
+    exact (isPeriodicPt_minimalPeriod f x).iterate _
+  · apply Coprime.dvd_of_dvd_mul_right (coprime_div_gcd_div_gcd h)
+    apply Nat.dvd_of_mul_dvd_mul_right h
+    rw [Nat.div_mul_cancel (gcd_dvd_left _ _)]; rw [mul_assoc]; rw [Nat.div_mul_cancel (gcd_dvd_right _ _)]; rw [mul_comm]
+    apply IsPeriodicPt.minimalPeriod_dvd
+    rw [IsPeriodicPt]; rw [IsFixedPt]; rw [iterate_mul]
+    exact isPeriodicPt_minimalPeriod _ _
 -/
 private theorem minimalPeriod_iterate_eq_div_gcd_aux (h : 0 < gcd (minimalPeriod f x) n) :
     minimalPeriod f^[n] x = minimalPeriod f x / Nat.gcd (minimalPeriod f x) n := by
@@ -1891,7 +1911,17 @@ theorem periodicOrbit_chain
   · have hx' := minimalPeriod_pos_of_mem_periodicPts hx
     have hM := Nat.sub_add_cancel (succ_le_iff.2 hx')
     rw [periodicOrbit]; rw [← Cycle.map_coe]; rw [Cycle.chain_map]; rw [← hM]; rw [Cycle.chain_range_succ]
-    refine ⟨?_, fun H => ⟨?_, fun m hm => H _
+    refine ⟨?_, fun H => ⟨?_, fun m hm => H _ (hm.trans (Nat.lt_succ_self _))⟩⟩
+    · rintro ⟨hr, H⟩ n hn
+      rcases eq_or_lt_of_le (Nat.lt_succ_iff.1 hn) with hM' | hM'
+      · rwa [hM', hM, iterate_minimalPeriod]
+      · exact H _ hM'
+    · rw [iterate_zero_apply]
+      nth_rw 3 [← @iterate_minimalPeriod α f x]
+      nth_rw 2 [← hM]
+      exact H _ (Nat.lt_succ_self _)
+  · rw [periodicOrbit_eq_nil_of_not_periodic_pt hx, minimalPeriod_eq_zero_of_notMem_periodicPts hx]
+    simp
 
 中文:
 定理 periodicOrbit_chain
@@ -1901,7 +1931,17 @@ theorem periodicOrbit_chain
   · have hx' := minimalPeriod_pos_of_mem_periodicPts hx
     have hM := Nat.sub_add_cancel (succ_le_iff.2 hx')
     rw [periodicOrbit]; rw [← Cycle.map_coe]; rw [Cycle.chain_map]; rw [← hM]; rw [Cycle.chain_range_succ]
-    refine ⟨?_, fun H => ⟨?_, fun m hm => H _
+    refine ⟨?_, fun H => ⟨?_, fun m hm => H _ (hm.trans (Nat.lt_succ_self _))⟩⟩
+    · rintro ⟨hr, H⟩ n hn
+      rcases eq_or_lt_of_le (Nat.lt_succ_iff.1 hn) with hM' | hM'
+      · rwa [hM', hM, iterate_minimalPeriod]
+      · exact H _ hM'
+    · rw [iterate_zero_apply]
+      nth_rw 3 [← @iterate_minimalPeriod α f x]
+      nth_rw 2 [← hM]
+      exact H _ (Nat.lt_succ_self _)
+  · rw [periodicOrbit_eq_nil_of_not_periodic_pt hx, minimalPeriod_eq_zero_of_notMem_periodicPts hx]
+    simp
 
 Depends on / 依赖: Cycle.chain_map, Cycle.chain_range_succ, Cycle.map_coe, Nat.lt_succ_iff, Nat.lt_succ_self, Nat.sub_add_cancel, chain_map, chain_range_succ, eq_or_lt_of_le, hm.trans, iterate_minimalPeriod, iterate_zero_apply, lt_succ_iff, lt_succ_self, map_coe, minimalPeriod_pos_of_mem_periodicPts, nth_rw, periodicOrbit, periodicPts, sub_add_cancel
 -/
@@ -1933,7 +1973,7 @@ theorem periodicOrbit_chain'
   rw [periodicOrbit_chain r]
   refine ⟨fun H n => ?_, fun H n _ => H n⟩
   rw [iterate_succ_apply]; rw [← iterate_mod_minimalPeriod_eq]; rw [← iterate_mod_minimalPeriod_eq (n := n)]; rw [← iterate_succ_apply]; rw [minimalPeriod_apply hx]
-  exact H _ (mod_lt _ (minimalPeriod_pos_of_mem_periodicPts 
+  exact H _ (mod_lt _ (minimalPeriod_pos_of_mem_periodicPts hx))
 
 中文:
 定理 periodicOrbit_chain'
@@ -1942,7 +1982,7 @@ theorem periodicOrbit_chain'
   rw [periodicOrbit_chain r]
   refine ⟨fun H n => ?_, fun H n _ => H n⟩
   rw [iterate_succ_apply]; rw [← iterate_mod_minimalPeriod_eq]; rw [← iterate_mod_minimalPeriod_eq (n := n)]; rw [← iterate_succ_apply]; rw [minimalPeriod_apply hx]
-  exact H _ (mod_lt _ (minimalPeriod_pos_of_mem_periodicPts 
+  exact H _ (mod_lt _ (minimalPeriod_pos_of_mem_periodicPts hx))
 
 Depends on / 依赖: iterate_mod_minimalPeriod_eq, iterate_succ_apply, minimalPeriod_apply, minimalPeriod_pos_of_mem_periodicPts, mod_lt, periodicOrbit_chain
 -/
@@ -2289,7 +2329,7 @@ theorem zpow_smul_eq_iff_period_dvd
   | -(n + 1 : Nat) =>
     rw [zpow_neg]; rw [zpow_natCast]; rw [inv_smul_eq_iff]; rw [eq_comm]; rw [Int.dvd_neg]; rw [Int.natCast_dvd_natCast]; rw [pow_smul_eq_iff_period_dvd]
 
-@[to_additive (at
+@[to_additive (attr := simp)]
 
 中文:
 定理 zpow_smul_eq_iff_period_dvd
@@ -2300,7 +2340,7 @@ theorem zpow_smul_eq_iff_period_dvd
   | -(n + 1 : Nat) =>
     rw [zpow_neg]; rw [zpow_natCast]; rw [inv_smul_eq_iff]; rw [eq_comm]; rw [Int.dvd_neg]; rw [Int.natCast_dvd_natCast]; rw [pow_smul_eq_iff_period_dvd]
 
-@[to_additive (at
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Int.dvd_neg, Int.natCast_dvd_natCast, dvd_neg, eq_comm, equiv.symm, inv_smul_eq_iff, natCast_dvd_natCast, pow_smul_eq_iff_period_dvd, zpow_natCast, zpow_neg
 -/

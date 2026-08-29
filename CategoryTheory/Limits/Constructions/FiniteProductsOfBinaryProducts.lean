@@ -94,7 +94,20 @@ definition extendFanIsLimit
     · apply (BinaryFan.IsLimit.lift' t₂ _ _).2.1
     · rintro i -
       dsimp only [extendFan_π_app]
-      rw [
+      rw [Fin.cases_succ]; rw [← assoc]; rw [(BinaryFan.IsLimit.lift' t₂ _ _).2.2]; rw [t₁.fac]
+      rfl
+  uniq s m w := by
+    apply BinaryFan.IsLimit.hom_ext t₂
+    · rw [(BinaryFan.IsLimit.lift' t₂ _ _).2.1]
+      apply w ⟨0⟩
+    · rw [(BinaryFan.IsLimit.lift' t₂ _ _).2.2]
+      apply t₁.uniq ⟨_, _⟩
+      rintro ⟨j⟩
+      rw [assoc]
+      dsimp only [Discrete.natTrans_app]
+      rw [← w ⟨j.succ⟩]
+      dsimp only [extendFan_π_app]
+      rw [Fin.cases_succ]
 
 中文:
 定义 extendFanIsLimit
@@ -107,7 +120,20 @@ definition extendFanIsLimit
     · apply (BinaryFan.IsLimit.lift' t₂ _ _).2.1
     · rintro i -
       dsimp only [extendFan_π_app]
-      rw [
+      rw [Fin.cases_succ]; rw [← assoc]; rw [(BinaryFan.IsLimit.lift' t₂ _ _).2.2]; rw [t₁.fac]
+      rfl
+  uniq s m w := by
+    apply BinaryFan.IsLimit.hom_ext t₂
+    · rw [(BinaryFan.IsLimit.lift' t₂ _ _).2.1]
+      apply w ⟨0⟩
+    · rw [(BinaryFan.IsLimit.lift' t₂ _ _).2.2]
+      apply t₁.uniq ⟨_, _⟩
+      rintro ⟨j⟩
+      rw [assoc]
+      dsimp only [Discrete.natTrans_app]
+      rw [← w ⟨j.succ⟩]
+      dsimp only [extendFan_π_app]
+      rw [Fin.cases_succ]
 
 Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.hom_ext, BinaryFan.IsLimit.lift, Discrete, Discrete.natTrans, Fin.cases_succ, Fin.inductionOn, IsLimit, cases_succ, hom_ext, i.succ, inductionOn, natTrans
 -/
@@ -222,7 +248,22 @@ lemma preservesFinOfPreservesBinaryAndTerminal
     intro f
     apply
       preservesLimit_of_preserves_limit_cone
-        (extendFanIsLimit f (limit.isLimit _) (limit.isLimit
+        (extendFanIsLimit f (limit.isLimit _) (limit.isLimit _)) _
+    apply (isLimitMapConeFanMkEquiv _ _ _).symm _
+    let :=
+      extendFanIsLimit (fun i => F.obj (f i)) (isLimitOfHasProductOfPreservesLimit F _)
+        (isLimitOfHasBinaryProductOfPreservesLimit F _ _)
+    refine IsLimit.ofIsoLimit this ?_
+    apply Cone.ext _ _
+    · apply Iso.refl _
+    rintro ⟨j⟩
+    refine Fin.inductionOn j ?_ ?_
+    · apply (Category.id_comp _).symm
+    · rintro i _
+      dsimp [extendFan_π_app, Iso.refl_hom, Fan.mk_π_app]
+      change F.map _ ≫ _ = 𝟙 _ ≫ _
+      simp only [id_comp, ← F.map_comp]
+      rfl
 
 中文:
 引理 preservesFinOfPreservesBinaryAndTerminal
@@ -233,7 +274,22 @@ lemma preservesFinOfPreservesBinaryAndTerminal
     intro f
     apply
       preservesLimit_of_preserves_limit_cone
-        (extendFanIsLimit f (limit.isLimit _) (limit.isLimit
+        (extendFanIsLimit f (limit.isLimit _) (limit.isLimit _)) _
+    apply (isLimitMapConeFanMkEquiv _ _ _).symm _
+    let :=
+      extendFanIsLimit (fun i => F.obj (f i)) (isLimitOfHasProductOfPreservesLimit F _)
+        (isLimitOfHasBinaryProductOfPreservesLimit F _ _)
+    refine IsLimit.ofIsoLimit this ?_
+    apply Cone.ext _ _
+    · apply Iso.refl _
+    rintro ⟨j⟩
+    refine Fin.inductionOn j ?_ ?_
+    · apply (Category.id_comp _).symm
+    · rintro i _
+      dsimp [extendFan_π_app, Iso.refl_hom, Fan.mk_π_app]
+      change F.map _ ≫ _ = 𝟙 _ ≫ _
+      simp only [id_comp, ← F.map_comp]
+      rfl
 
 Depends on / 依赖: Discrete, Discrete.equivalence, F.obj, IsLimit, IsLimit.ofIsoLimit, equivalence, extendFanIsLimit, finZeroEquiv, infer_instance, isLimit, isLimitMapConeFanMkEquiv, isLimitOfHasBinaryProductOfPreservesLimit, isLimitOfHasProductOfPreservesLimit, limit.isLimit, ofIsoLimit, preservesFinOfPreservesBinaryAndTerminal, preservesLimit_of_preserves_limit_cone, preservesLimitsOfShape_of_equiv
 -/
@@ -353,7 +409,20 @@ definition extendCofanIsColimit
     refine Fin.inductionOn j ?_ ?_
     · apply (BinaryCofan.IsColimit.desc' t₂ _ _).2.1
     · rintro i -
-      dsimp only [extendCofan_ι_
+      dsimp only [extendCofan_ι_app]
+      rw [Fin.cases_succ]; rw [assoc]; rw [(BinaryCofan.IsColimit.desc' t₂ _ _).2.2]; rw [t₁.fac]
+      rfl
+  uniq s m w := by
+    apply BinaryCofan.IsColimit.hom_ext t₂
+    · rw [(BinaryCofan.IsColimit.desc' t₂ _ _).2.1]
+      apply w ⟨0⟩
+    · rw [(BinaryCofan.IsColimit.desc' t₂ _ _).2.2]
+      apply t₁.uniq ⟨_, _⟩
+      rintro ⟨j⟩
+      dsimp only [Discrete.natTrans_app]
+      rw [← w ⟨j.succ⟩]
+      dsimp only [extendCofan_ι_app]
+      rw [Fin.cases_succ]; rw [assoc]
 
 中文:
 定义 extendCofanIsColimit
@@ -366,7 +435,20 @@ definition extendCofanIsColimit
     refine Fin.inductionOn j ?_ ?_
     · apply (BinaryCofan.IsColimit.desc' t₂ _ _).2.1
     · rintro i -
-      dsimp only [extendCofan_ι_
+      dsimp only [extendCofan_ι_app]
+      rw [Fin.cases_succ]; rw [assoc]; rw [(BinaryCofan.IsColimit.desc' t₂ _ _).2.2]; rw [t₁.fac]
+      rfl
+  uniq s m w := by
+    apply BinaryCofan.IsColimit.hom_ext t₂
+    · rw [(BinaryCofan.IsColimit.desc' t₂ _ _).2.1]
+      apply w ⟨0⟩
+    · rw [(BinaryCofan.IsColimit.desc' t₂ _ _).2.2]
+      apply t₁.uniq ⟨_, _⟩
+      rintro ⟨j⟩
+      dsimp only [Discrete.natTrans_app]
+      rw [← w ⟨j.succ⟩]
+      dsimp only [extendCofan_ι_app]
+      rw [Fin.cases_succ]; rw [assoc]
 
 Depends on / 依赖: BinaryCo, BinaryCofan, BinaryCofan.IsColimit.desc, BinaryCofan.IsColimit.hom_ext, Discrete, Discrete.natTrans, Fin.cases_succ, Fin.inductionOn, IsColimit, cases_succ, hom_ext, i.as.succ, inductionOn, natTrans
 -/
@@ -480,7 +562,22 @@ lemma preserves_fin_of_preserves_binary_and_initial
     intro f
     apply
       preservesColimit_of_preserves_colimit_cocone
-        (extendCofanIsColimit f (colimit.isColi
+        (extendCofanIsColimit f (colimit.isColimit _) (colimit.isColimit _)) _
+    apply (isColimitMapCoconeCofanMkEquiv _ _ _).symm _
+    let :=
+      extendCofanIsColimit (fun i => F.obj (f i))
+        (isColimitOfHasCoproductOfPreservesColimit F _)
+        (isColimitOfHasBinaryCoproductOfPreservesColimit F _ _)
+    refine IsColimit.ofIsoColimit this ?_
+    apply Cocone.ext _ _
+    · apply Iso.refl _
+    rintro ⟨j⟩
+    refine Fin.inductionOn j ?_ ?_
+    · apply Category.comp_id
+    · rintro i _
+      dsimp [extendCofan_ι_app, Iso.refl_hom, Cofan.mk_ι_app]
+      rw [comp_id]; rw [← F.map_comp]
+      rfl
 
 中文:
 引理 preserves_fin_of_preserves_binary_and_initial
@@ -491,7 +588,22 @@ lemma preserves_fin_of_preserves_binary_and_initial
     intro f
     apply
       preservesColimit_of_preserves_colimit_cocone
-        (extendCofanIsColimit f (colimit.isColi
+        (extendCofanIsColimit f (colimit.isColimit _) (colimit.isColimit _)) _
+    apply (isColimitMapCoconeCofanMkEquiv _ _ _).symm _
+    let :=
+      extendCofanIsColimit (fun i => F.obj (f i))
+        (isColimitOfHasCoproductOfPreservesColimit F _)
+        (isColimitOfHasBinaryCoproductOfPreservesColimit F _ _)
+    refine IsColimit.ofIsoColimit this ?_
+    apply Cocone.ext _ _
+    · apply Iso.refl _
+    rintro ⟨j⟩
+    refine Fin.inductionOn j ?_ ?_
+    · apply Category.comp_id
+    · rintro i _
+      dsimp [extendCofan_ι_app, Iso.refl_hom, Cofan.mk_ι_app]
+      rw [comp_id]; rw [← F.map_comp]
+      rfl
 
 Depends on / 依赖: Discrete, Discrete.equivalence, F.obj, colimit, colimit.isColimit, equivalence, extendCofanIsColimit, finZeroEquiv, infer_instance, isColimit, isColimitMapCoconeCofanMkEquiv, isColimitOfHasBinaryCoproductOfPreservesColimit, isColimitOfHasCoproductOfPreservesColimit, preservesColimit_of_preserves_colimit_cocone, preservesColimitsOfShape_of_equiv, preserves_fin_of_preserves_binary_and_initial
 -/
@@ -563,7 +675,7 @@ lemma PreservesFiniteCoproducts.of_preserves_binary_and_initial
 
 @[deprecated (since := "2026-03-10")]
 alias preservesFiniteCoproductsOfPreservesBinaryAndInitial :=
-  PreservesFiniteCoprodu
+  PreservesFiniteCoproducts.of_preserves_binary_and_initial
 
 中文:
 引理 保持FiniteCoproducts.of_preserves_binary_and_initial
@@ -574,7 +686,7 @@ alias preservesFiniteCoproductsOfPreservesBinaryAndInitial :=
 
 @[deprecated (since := "2026-03-10")]
 alias preservesFiniteCoproductsOfPreservesBinaryAndInitial :=
-  PreservesFiniteCoprodu
+  PreservesFiniteCoproducts.of_preserves_binary_and_initial
 
 Depends on / 依赖: Discrete, Discrete.equivalence, Finite, Finite.exists_equiv_fin, equivalence, exists_equiv_fin, preservesColimitsOfShape_of_equiv, preservesShape_fin_of_preserves_binary_and_initial
 -/

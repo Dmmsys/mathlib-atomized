@@ -96,7 +96,8 @@ lemma mk_of_zeroHypercover
     rw [CategoryTheory.Precoverage.mem_iff_exists_zeroHypercover] at hR
     obtain ⟨𝒰, rfl⟩ := hR
     rw [H 𝒰]
-  
+    intro i
+    exact h ⟨i⟩
 
 中文:
 引理 mk_of_zeroHypercover
@@ -111,7 +112,8 @@ lemma mk_of_zeroHypercover
     rw [CategoryTheory.Precoverage.mem_iff_exists_zeroHypercover] at hR
     obtain ⟨𝒰, rfl⟩ := hR
     rw [H 𝒰]
-  
+    intro i
+    exact h ⟨i⟩
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Precoverage.mem_iff_exists_zeroHypercover, Precoverage, mem_iff_exists_zeroHypercover, of_presieve
 -/

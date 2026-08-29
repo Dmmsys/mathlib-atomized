@@ -69,7 +69,30 @@ theorem factorial_mul_shiftedLegendre_eq
     congr
     rw [sub_eq_add_neg]; rw [add_comm]; rw [add_pow]
     congr! 1 with m hm
- 
+    rw [neg_pow]; rw [pow_two]; rw [mul_pow]; rw [← mul_assoc]; rw [mul_comm]; rw [mul_assoc]; rw [pow_mul_pow_sub]; rw [mul_assoc]; rw [← pow_add]; rw [← mul_assoc]; rw [nsmul_eq_mul]; rw [add_comm]
+    rw [Finset.mem_range] at hm
+    linarith
+  _ = ∑ x in range (n + 1), ↑((n + x)! / x !) * C (↑(n.choose x) * (-1) ^ x) * X ^ x := by
+    rw [iterate_derivative_sum]
+    congr! 1 with x _
+    rw [show (n.choose x • (-1) ^ x : Int[X]) = C (n.choose x • (-1) ^ x) by simp,
+      iterate_derivative_C_mul, iterate_derivative_X_pow_eq_smul,
+      descFactorial_eq_div (by lia), show n + x - n = x by lia]
+    simp only [Int.reduceNeg, nsmul_eq_mul, eq_intCast, Int.cast_mul, Int.cast_natCast,
+      Int.cast_pow, Int.cast_neg, Int.cast_one, zsmul_eq_mul]
+    ring
+  _ = ∑ i in range (n + 1), ↑n ! * C ((-1) ^ i * ↑(n.choose i) * ↑((n + i).choose n)) * X ^ i := by
+    congr! 2 with x _
+    rw [C_mul (b := ((n + x).choose n : Int))]; rw [mul_comm]; rw [mul_comm (n ! : Int[X]), mul_comm _ ((-1) ^ x),
+      mul_assoc]
+    congr 1
+    rw [add_comm]; rw [add_choose]
+    simp only [Int.natCast_ediv, cast_mul, eq_intCast]
+    norm_cast
+    rw [mul_comm]; rw [← Nat.mul_div_assoc]
+    · rw [mul_comm, Nat.mul_div_mul_right _ _ (by positivity)]
+    · simp only [factorial_mul_factorial_dvd_factorial_add]
+  _ = (n ! : Int[X]) * (shiftedLegendre n) := by simp [← mul_assoc, shiftedLegendre, mul_sum]
 
 中文:
 定理 factorial_mul_shiftedLegendre_eq
@@ -84,7 +107,30 @@ theorem factorial_mul_shiftedLegendre_eq
     congr
     rw [sub_eq_add_neg]; rw [add_comm]; rw [add_pow]
     congr! 1 with m hm
- 
+    rw [neg_pow]; rw [pow_two]; rw [mul_pow]; rw [← mul_assoc]; rw [mul_comm]; rw [mul_assoc]; rw [pow_mul_pow_sub]; rw [mul_assoc]; rw [← pow_add]; rw [← mul_assoc]; rw [nsmul_eq_mul]; rw [add_comm]
+    rw [Finset.mem_range] at hm
+    linarith
+  _ = ∑ x in range (n + 1), ↑((n + x)! / x !) * C (↑(n.choose x) * (-1) ^ x) * X ^ x := by
+    rw [iterate_derivative_sum]
+    congr! 1 with x _
+    rw [show (n.choose x • (-1) ^ x : Int[X]) = C (n.choose x • (-1) ^ x) by simp,
+      iterate_derivative_C_mul, iterate_derivative_X_pow_eq_smul,
+      descFactorial_eq_div (by lia), show n + x - n = x by lia]
+    simp only [Int.reduceNeg, nsmul_eq_mul, eq_intCast, Int.cast_mul, Int.cast_natCast,
+      Int.cast_pow, Int.cast_neg, Int.cast_one, zsmul_eq_mul]
+    ring
+  _ = ∑ i in range (n + 1), ↑n ! * C ((-1) ^ i * ↑(n.choose i) * ↑((n + i).choose n)) * X ^ i := by
+    congr! 2 with x _
+    rw [C_mul (b := ((n + x).choose n : Int))]; rw [mul_comm]; rw [mul_comm (n ! : Int[X]), mul_comm _ ((-1) ^ x),
+      mul_assoc]
+    congr 1
+    rw [add_comm]; rw [add_choose]
+    simp only [Int.natCast_ediv, cast_mul, eq_intCast]
+    norm_cast
+    rw [mul_comm]; rw [← Nat.mul_div_assoc]
+    · rw [mul_comm, Nat.mul_div_mul_right _ _ (by positivity)]
+    · simp only [factorial_mul_factorial_dvd_factorial_add]
+  _ = (n ! : Int[X]) * (shiftedLegendre n) := by simp [← mul_assoc, shiftedLegendre, mul_sum]
 
 Depends on / 依赖: Finset, Finset.mem_range, add_comm, add_pow, derivative, mem_range, mul_assoc, mul_comm, mul_one_sub, mul_pow, n.choose, neg_pow, nsmul_eq_mul, pow_add, pow_mul_pow_sub, pow_two, sub_eq_add_neg
 -/

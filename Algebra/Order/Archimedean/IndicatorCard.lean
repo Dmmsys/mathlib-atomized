@@ -40,7 +40,10 @@ lemma sum_indicator_eventually_eq_card
     rw [indicator_of_mem (hs.mem_toFinset.1 hx) (fun _ => a)]
   rw [Nat.card_eq_card_finite_toFinset hs]; rw [← sum_eq_card_nsmul key]; rw [eventually_atTop]
   obtain ⟨m, hm⟩ := hs.bddAbove
-  refine ⟨m + 1, 
+  refine ⟨m + 1, fun n n_m => (sum_subset ?_ ?_).symm⟩ <;> intro x <;> rw [hs.mem_toFinset]
+  · rw [Finset.mem_range]
+    exact fun x_s => ((mem_upperBounds.1 hm) x x_s).trans_lt (Nat.lt_of_succ_le n_m)
+  · exact fun _ x_s => indicator_of_notMem x_s (fun _ => a)
 
 中文:
 引理 sum_indicator_eventually_eq_card
@@ -51,7 +54,10 @@ lemma sum_indicator_eventually_eq_card
     rw [indicator_of_mem (hs.mem_toFinset.1 hx) (fun _ => a)]
   rw [Nat.card_eq_card_finite_toFinset hs]; rw [← sum_eq_card_nsmul key]; rw [eventually_atTop]
   obtain ⟨m, hm⟩ := hs.bddAbove
-  refine ⟨m + 1, 
+  refine ⟨m + 1, fun n n_m => (sum_subset ?_ ?_).symm⟩ <;> intro x <;> rw [hs.mem_toFinset]
+  · rw [Finset.mem_range]
+    exact fun x_s => ((mem_upperBounds.1 hm) x x_s).trans_lt (Nat.lt_of_succ_le n_m)
+  · exact fun _ x_s => indicator_of_notMem x_s (fun _ => a)
 
 Depends on / 依赖: Finset, Finset.mem_range, Nat.card_eq_card_finite_toFinset, Nat.lt_of_succ_le, bddAbove, card_eq_card_finite_toFinset, eventually_atTop, hs.bddAbove, hs.mem_toFinset, hs.toFinset, indicator, indicator_of_mem, indicator_of_no, lt_of_succ_le, mem_range, mem_toFinset, mem_upperBounds, s.indicator, sum_eq_card_nsmul, sum_subset
 -/
@@ -81,7 +87,22 @@ lemma infinite_iff_tendsto_sum_indicator_atTop
       exact (fun _ => indicator_nonneg (fun _ _ => h.le) _)
     rw [h_mono.tendsto_atTop_atTop_iff]
     intro hs n
-    obtain ⟨n', hn'
+    obtain ⟨n', hn'⟩ := exists_lt_nsmul h n
+    obtain ⟨t, t_s, t_card⟩ := hs.exists_subset_card_eq n'
+    obtain ⟨m, hm⟩ := t.bddAbove
+    use m + 1
+    grw [hn', ← t_s]
+    have h : t subseteq Finset.range (m + 1) := by
+      intro i i_t
+      rw [Finset.mem_range]
+      exact (hm i_t).trans_lt (lt_add_one m)
+    rw [sum_indicator_subset (fun _ => r) h]; rw [sum_eq_card_nsmul (fun _ _ => rfl)]; rw [t_card]
+  · contrapose!
+    intro hs
+    rw [tendsto_congr' (sum_indicator_eventually_eq_card r hs)]; rw [tendsto_atTop_atTop]
+    push Not
+    obtain ⟨m, hm⟩ := exists_lt_nsmul h (Nat.card s • r)
+    exact ⟨m • r, fun n => ⟨n, le_refl n, not_le_of_gt hm⟩⟩
 
 中文:
 引理 infinite_iff_tendsto_sum_indicator_atTop
@@ -93,7 +114,22 @@ lemma infinite_iff_tendsto_sum_indicator_atTop
       exact (fun _ => indicator_nonneg (fun _ _ => h.le) _)
     rw [h_mono.tendsto_atTop_atTop_iff]
     intro hs n
-    obtain ⟨n', hn'
+    obtain ⟨n', hn'⟩ := exists_lt_nsmul h n
+    obtain ⟨t, t_s, t_card⟩ := hs.exists_subset_card_eq n'
+    obtain ⟨m, hm⟩ := t.bddAbove
+    use m + 1
+    grw [hn', ← t_s]
+    have h : t subseteq Finset.range (m + 1) := by
+      intro i i_t
+      rw [Finset.mem_range]
+      exact (hm i_t).trans_lt (lt_add_one m)
+    rw [sum_indicator_subset (fun _ => r) h]; rw [sum_eq_card_nsmul (fun _ _ => rfl)]; rw [t_card]
+  · contrapose!
+    intro hs
+    rw [tendsto_congr' (sum_indicator_eventually_eq_card r hs)]; rw [tendsto_atTop_atTop]
+    push Not
+    obtain ⟨m, hm⟩ := exists_lt_nsmul h (Nat.card s • r)
+    exact ⟨m • r, fun n => ⟨n, le_refl n, not_le_of_gt hm⟩⟩
 
 Depends on / 依赖: Finset, Finset.mem_range, Finset.range, Monotone, bddAbove, exists_lt_nsmul, exists_subset_card_eq, h.le, h_mono, h_mono.tendsto_atTop_atTop_iff, hs.exists_subset_card_eq, indicator, indicator_nonneg, mem_range, range_mono, s.indicator, subseteq, sum_mono_set_of_nonneg, t.bddAbove, t_card
 -/

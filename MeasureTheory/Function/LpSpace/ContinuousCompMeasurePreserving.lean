@@ -51,7 +51,14 @@ theorem compMeasurePreserving_continuous
     (MeasureTheory.Lp.simpleFunc.dense hp) ?_ fun f => (isometry_compMeasurePreserving f.2).lipschitz
   intro f hf
   lift f to Lp.simpleFunc E p ν using hf
-  induction f using Lp.
+  induction f using Lp.simpleFunc.induction hp₀ hp with
+  | add hfp hgp _ ihf ihg => exact ihf.add ihg
+  | @indicatorConst c s hs hνs =>
+    dsimp only [Lp.simpleFunc.coe_indicatorConst, Lp.indicatorConstLp_compMeasurePreserving]
+    refine continuous_indicatorConstLp_set hp fun f => ?_
+    apply tendsto_measure_symmDiff_preimage_nhds_zero continuousAt_subtype_val _ f.2
+      hs.nullMeasurableSet hνs.ne
+    exact .of_forall Subtype.property
 
 中文:
 定理 compMeasurePreserving_continuous
@@ -62,7 +69,14 @@ theorem compMeasurePreserving_continuous
     (MeasureTheory.Lp.simpleFunc.dense hp) ?_ fun f => (isometry_compMeasurePreserving f.2).lipschitz
   intro f hf
   lift f to Lp.simpleFunc E p ν using hf
-  induction f using Lp.
+  induction f using Lp.simpleFunc.induction hp₀ hp with
+  | add hfp hgp _ ihf ihg => exact ihf.add ihg
+  | @indicatorConst c s hs hνs =>
+    dsimp only [Lp.simpleFunc.coe_indicatorConst, Lp.indicatorConstLp_compMeasurePreserving]
+    refine continuous_indicatorConstLp_set hp fun f => ?_
+    apply tendsto_measure_symmDiff_preimage_nhds_zero continuousAt_subtype_val _ f.2
+      hs.nullMeasurableSet hνs.ne
+    exact .of_forall Subtype.property
 
 Depends on / 依赖: Fact.out, Lp.indicatorConstLp_compMeasurePreserving, Lp.simpleFunc, Lp.simpleFunc.coe_indicatorConst, Lp.simpleFunc.induction, MeasureTheory, MeasureTheory.Lp.simpleFunc.dense, coe_indicatorConst, continuo, continuous_prod_of_dense_continuous_lipschitzWith, ihf.add, indicatorConst, indicatorConstLp_compMeasurePreserving, isometry_compMeasurePreserving, lipschitz, one_pos, one_pos.trans_le, simpleFunc, trans_le
 -/

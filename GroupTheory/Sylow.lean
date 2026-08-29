@@ -214,7 +214,9 @@ definition _root_.IsPGroup.toSylow
       have : P.FiniteIndex := ⟨fun h => hP2 (h ▸ (dvd_zero p))⟩
       obtain ⟨k, hk⟩ := (hQ.to_quotient (P.normalCore.subgroupOf Q)).exists_card_eq
       have h := hk ▸ Nat.Prime.coprime_pow_of_not_dvd (m := k) Fact.out hP2
-   
+      exact le_antisymm (Subgroup.relIndex_eq_one.mp
+        (Nat.eq_one_of_dvd_coprimes h (Subgroup.relIndex_dvd_index_of_le hPQ)
+        (Subgroup.relIndex_dvd_of_le_left Q P.normalCore_le))) hPQ }
 
 中文:
 定义 _root_.是p群.toSylow
@@ -226,7 +228,9 @@ definition _root_.IsPGroup.toSylow
       have : P.FiniteIndex := ⟨fun h => hP2 (h ▸ (dvd_zero p))⟩
       obtain ⟨k, hk⟩ := (hQ.to_quotient (P.normalCore.subgroupOf Q)).exists_card_eq
       have h := hk ▸ Nat.Prime.coprime_pow_of_not_dvd (m := k) Fact.out hP2
-   
+      exact le_antisymm (Subgroup.relIndex_eq_one.mp
+        (Nat.eq_one_of_dvd_coprimes h (Subgroup.relIndex_dvd_index_of_le hPQ)
+        (Subgroup.relIndex_dvd_of_le_left Q P.normalCore_le))) hPQ }
 
 Depends on / 依赖: Fact.out, FiniteIndex, Nat.Prime.coprime_pow_of_not_dvd, Nat.eq_one_of_dvd_coprimes, P.FiniteIndex, P.normalCore.subgroupOf, P.normalCore_le, Subgroup, Subgroup.relIndex_dvd_index_of_le, Subgroup.relIndex_dvd_of_le_left, Subgroup.relIndex_eq_one.mp, coprime_pow_of_not_dvd, dvd_zero, eq_one_of_dvd_coprimes, exists_card_eq, hQ.to_quotient, isPGroup, is_maximal, le_antisymm, normalCore
 -/
@@ -397,7 +401,11 @@ definition equivProdPrimeFactors
 is_maximal' hQ := H.is_maximal' .mpr hQ } isPGroup_iff_isPGroup_prod_primeFactors h
   invFun H := { H with
 .mpr H.isPGroup', isPGroup' := isPGroup_iff_isPGroup_prod_primeFactors h
-is_maximal' hQ := H.is_maximal' .mp hQ 
+is_maximal' hQ := H.is_maximal' .mp hQ } isPGroup_iff_isPGroup_prod_primeFactors h
+  left_inv _ := rfl
+  right_inv _ := rfl
+
+@[simp]
 
 中文:
 定义 equivProdPrimeFactors
@@ -407,7 +415,11 @@ is_maximal' hQ := H.is_maximal' .mp hQ
 is_maximal' hQ := H.is_maximal' .mpr hQ } isPGroup_iff_isPGroup_prod_primeFactors h
   invFun H := { H with
 .mpr H.isPGroup', isPGroup' := isPGroup_iff_isPGroup_prod_primeFactors h
-is_maximal' hQ := H.is_maximal' .mp hQ 
+is_maximal' hQ := H.is_maximal' .mp hQ } isPGroup_iff_isPGroup_prod_primeFactors h
+  left_inv _ := rfl
+  right_inv _ := rfl
+
+@[simp]
 -/
 def equivProdPrimeFactors (h : p != 0) : Sylow p G ≃ Sylow (p.primeFactors.prod id) G where
   toFun H := { H with
@@ -476,7 +488,7 @@ definition comapOfKerIsPGroup
       rw [← P.3 (hQ.map ϕ) (le_trans (ge_of_eq (map_comap_eq_self h)) (map_mono hle))]
       exact (comap_map_eq_self ((P.1.ker_le_comap ϕ).trans hle)).symm }
 
-@[simp
+@[simp]
 
 中文:
 定义 comapOfKerIsPGroup
@@ -488,7 +500,7 @@ definition comapOfKerIsPGroup
       rw [← P.3 (hQ.map ϕ) (le_trans (ge_of_eq (map_comap_eq_self h)) (map_mono hle))]
       exact (comap_map_eq_self ((P.1.ker_le_comap ϕ).trans hle)).symm }
 
-@[simp
+@[simp]
 
 Depends on / 依赖: comap_map_eq_self, comap_of_ker_isPGroup, ge_of_eq, hQ.map, isPGroup, is_maximal, ker_le_comap, le_trans, map_comap_eq_self, map_mono
 -/
@@ -636,7 +648,14 @@ theorem IsPGroup.exists_le_sylow
         ⟨{ carrier := ⋃ R : c, R
             one_mem' := ⟨Q, ⟨⟨Q, hQ⟩, rfl⟩, Q.one_mem⟩
             inv_mem' := fun {_} ⟨_, ⟨R, rfl⟩, hg⟩ => ⟨R, ⟨R, rfl⟩, R.1.inv_mem hg⟩
-            mul_mem' := fun {_}
+            mul_mem' := fun {_} _ ⟨_, ⟨R, rfl⟩, hg⟩ ⟨_, ⟨S, rfl⟩, hh⟩ =>
+              (hc2.total R.2 S.2).elim (fun T => ⟨S, ⟨S, rfl⟩, S.1.mul_mem (T hg) hh⟩) fun T =>
+                ⟨R, ⟨R, rfl⟩, R.1.mul_mem hg (T hh)⟩ },
+          fun ⟨g, _, ⟨S, rfl⟩, hg⟩ => by
+          refine Exists.imp (fun k hk => ?_) (hc1 S.2 ⟨g, hg⟩)
+          rwa [Subtype.ext_iff, coe_pow] at hk ⊢, fun M hM _ hg => ⟨M, ⟨⟨M, hM⟩, rfl⟩, hg⟩⟩)
+      P hP)
+    fun {Q} h => ⟨⟨Q, h.2.prop, h.2.eq_of_ge⟩, h.1⟩
 
 中文:
 定理 是p群.存在_le_sylow
@@ -648,7 +667,14 @@ theorem IsPGroup.exists_le_sylow
         ⟨{ carrier := ⋃ R : c, R
             one_mem' := ⟨Q, ⟨⟨Q, hQ⟩, rfl⟩, Q.one_mem⟩
             inv_mem' := fun {_} ⟨_, ⟨R, rfl⟩, hg⟩ => ⟨R, ⟨R, rfl⟩, R.1.inv_mem hg⟩
-            mul_mem' := fun {_}
+            mul_mem' := fun {_} _ ⟨_, ⟨R, rfl⟩, hg⟩ ⟨_, ⟨S, rfl⟩, hh⟩ =>
+              (hc2.total R.2 S.2).elim (fun T => ⟨S, ⟨S, rfl⟩, S.1.mul_mem (T hg) hh⟩) fun T =>
+                ⟨R, ⟨R, rfl⟩, R.1.mul_mem hg (T hh)⟩ },
+          fun ⟨g, _, ⟨S, rfl⟩, hg⟩ => by
+          refine Exists.imp (fun k hk => ?_) (hc1 S.2 ⟨g, hg⟩)
+          rwa [Subtype.ext_iff, coe_pow] at hk ⊢, fun M hM _ hg => ⟨M, ⟨⟨M, hM⟩, rfl⟩, hg⟩⟩)
+      P hP)
+    fun {Q} h => ⟨⟨Q, h.2.prop, h.2.eq_of_ge⟩, h.1⟩
 
 Depends on / 依赖: Exists, Exists.elim, Exists.imp, IsPGroup, Q.one_mem, Subgroup, carrier, hc2.total, inv_mem, mul_mem, one_mem
 -/
@@ -848,7 +874,7 @@ theorem finite_of_ker_is_pGroup
   proof: let h_exists := fun P : Sylow p H => P.exists_comap_eq_of_ker_isPGroup hf
   let g : Sylow p H -> Sylow p G := fun P => Classical.choose (h_exists P)
   have hg : forall P : Sylow p H, (g P).1.comap f = P := fun P => Classical.choose_spec (h_exists P)
-  Finite.of_injective g fun P Q h => ext (by rw [←
+  Finite.of_injective g fun P Q h => ext (by rw [← hg, h]; exact (h_exists Q).choose_spec)
 
 中文:
 定理 finite_of_ker_is_pGroup
@@ -856,7 +882,7 @@ theorem finite_of_ker_is_pGroup
   证明: let h_exists := fun P : Sylow p H => P.exists_comap_eq_of_ker_isPGroup hf
   let g : Sylow p H -> Sylow p G := fun P => Classical.choose (h_exists P)
   have hg : forall P : Sylow p H, (g P).1.comap f = P := fun P => Classical.choose_spec (h_exists P)
-  Finite.of_injective g fun P Q h => ext (by rw [←
+  Finite.of_injective g fun P Q h => ext (by rw [← hg, h]; exact (h_exists Q).choose_spec)
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Finite, Finite.of_injective, P.exists_comap_eq_of_ker_isPGroup, choose_spec, exists_comap_eq_of_ker_isPGroup, h_exists, of_injective
 -/
@@ -931,7 +957,8 @@ instance pointwiseMulAction
         (P.3 (hQ.map _) fun s hs =>
           (congr_arg (· in g⁻¹ • Q) (inv_smul_smul g s)).mp
             (smul_mem_pointwise_smul (g • s) g⁻¹ Q (hS (smul_mem_pointwise_smul s g P hs))))⟩
-  one_smul P := ext (one_smul α P.toSu
+  one_smul P := ext (one_smul α P.toSubgroup)
+  mul_smul g h P := ext (mul_smul g h P.toSubgroup)
 
 中文:
 实例 pointwiseMulAction
@@ -941,7 +968,8 @@ instance pointwiseMulAction
         (P.3 (hQ.map _) fun s hs =>
           (congr_arg (· in g⁻¹ • Q) (inv_smul_smul g s)).mp
             (smul_mem_pointwise_smul (g • s) g⁻¹ Q (hS (smul_mem_pointwise_smul s g P hs))))⟩
-  one_smul P := ext (one_smul α P.toSu
+  one_smul P := ext (one_smul α P.toSubgroup)
+  mul_smul g h P := ext (mul_smul g h P.toSubgroup)
 
 Depends on / 依赖: P.toSubgroup, congr_arg, hQ.map, inv_smul_eq_iff, inv_smul_eq_iff.mp, inv_smul_smul, mul_smul, one_smul, smul_mem_pointwise_smul, toSubgroup
 -/
@@ -1095,7 +1123,7 @@ theorem smul_eq_iff_mem_normalizer
     forall_congr' fun h =>
       iff_congr Iff.rfl
         ⟨fun ⟨a, b, c⟩ => c ▸ by simpa [mul_assoc] using b,
-          fun hh => ⟨(MulAut.conj g)⁻¹ h, hh, Mul
+          fun hh => ⟨(MulAut.conj g)⁻¹ h, hh, MulAut.apply_inv_self G (MulAut.conj g) h⟩⟩
 
 中文:
 定理 smul_eq_iff_mem_normalizer
@@ -1106,7 +1134,7 @@ theorem smul_eq_iff_mem_normalizer
     forall_congr' fun h =>
       iff_congr Iff.rfl
         ⟨fun ⟨a, b, c⟩ => c ▸ by simpa [mul_assoc] using b,
-          fun hh => ⟨(MulAut.conj g)⁻¹ h, hh, Mul
+          fun hh => ⟨(MulAut.conj g)⁻¹ h, hh, MulAut.apply_inv_self G (MulAut.conj g) h⟩⟩
 
 Depends on / 依赖: Iff.rfl, MulAut, MulAut.apply_inv_self, MulAut.conj, SetLike, SetLike.ext_iff, apply_inv_self, eq_comm, ext_iff, forall_congr, iff_congr, inv_inv, inv_mem_iff, mem_set_normalizer_iff, mul_assoc, normalizer
 -/
@@ -1228,7 +1256,21 @@ instance Sylow.isPretransitive_of_finite
         S in fixedPoints R (orbit G P) ↔ S.1 in fixedPoints R (Sylow p G) :=
           forall_congr' fun a => Subtype.ext_iff
         _ ↔ R.1 <= S := R.2.sylow_mem_fixedPoints_iff
-        _ ↔ S.1.1 = R := ⟨fun h => R.3 S.
+        _ ↔ S.1.1 = R := ⟨fun h => R.3 S.1.2 h, ge_of_eq⟩
+    suffices Set.Nonempty (fixedPoints Q (orbit G P)) by
+      exact Exists.elim this fun R hR => by
+        rw [← Sylow.ext (H.mp hR)]
+        exact R.2
+    apply Q.2.nonempty_fixed_point_of_prime_not_dvd_card
+    refine fun h => hp.out.not_dvd_one (Nat.modEq_zero_iff_dvd.mp ?_)
+    calc
+      1 = Nat.card (fixedPoints P (orbit G P)) := ?_
+      _ ≡ Nat.card (orbit G P) [MOD p] := (P.2.card_modEq_card_fixedPoints (orbit G P)).symm
+      _ ≡ 0 [MOD p] := Nat.modEq_zero_iff_dvd.mpr h
+    rw [← Nat.card_unique (α := ({⟨P]; rw [mem_orbit_self P⟩} : Set (orbit G P)))]; rw [eq_comm]
+    congr
+    rw [Set.eq_singleton_iff_unique_mem]
+    exact ⟨H.mpr rfl, fun R h => Subtype.ext (Sylow.ext (H.mp h))⟩⟩
 
 中文:
 实例 Sylow.isPretransitive_of_finite
@@ -1239,7 +1281,21 @@ instance Sylow.isPretransitive_of_finite
         S in fixedPoints R (orbit G P) ↔ S.1 in fixedPoints R (Sylow p G) :=
           forall_congr' fun a => Subtype.ext_iff
         _ ↔ R.1 <= S := R.2.sylow_mem_fixedPoints_iff
-        _ ↔ S.1.1 = R := ⟨fun h => R.3 S.
+        _ ↔ S.1.1 = R := ⟨fun h => R.3 S.1.2 h, ge_of_eq⟩
+    suffices Set.Nonempty (fixedPoints Q (orbit G P)) by
+      exact Exists.elim this fun R hR => by
+        rw [← Sylow.ext (H.mp hR)]
+        exact R.2
+    apply Q.2.nonempty_fixed_point_of_prime_not_dvd_card
+    refine fun h => hp.out.not_dvd_one (Nat.modEq_zero_iff_dvd.mp ?_)
+    calc
+      1 = Nat.card (fixedPoints P (orbit G P)) := ?_
+      _ ≡ Nat.card (orbit G P) [MOD p] := (P.2.card_modEq_card_fixedPoints (orbit G P)).symm
+      _ ≡ 0 [MOD p] := Nat.modEq_zero_iff_dvd.mpr h
+    rw [← Nat.card_unique (α := ({⟨P]; rw [mem_orbit_self P⟩} : Set (orbit G P)))]; rw [eq_comm]
+    congr
+    rw [Set.eq_singleton_iff_unique_mem]
+    exact ⟨H.mpr rfl, fun R h => Subtype.ext (Sylow.ext (H.mp h))⟩⟩
 
 Depends on / 依赖: Exists, Exists.elim, H.mp, Nat.modEq_, Nonempty, Set.Nonempty, Subtype, Subtype.ext_iff, Sylow.ext, ext_iff, fixedPoints, forall_congr, ge_of_eq, hp.out.not_dvd_one, modEq_, nonempty_fixed_point_of_prime_not_dvd_card, not_dvd_one, sylow_mem_fixedPoints_iff
 -/
@@ -1282,7 +1338,9 @@ theorem card_sylow_modEq_one
       calc
         Q in fixedPoints P (Sylow p G) ↔ P.1 <= Q := P.2.sylow_mem_fixedPoints_iff
         _ ↔ Q.1 = P.1 := ⟨P.3 Q.2, ge_of_eq⟩
-        _ ↔ Q in {P} := Sy
+        _ ↔ Q in {P} := Sylow.ext_iff.symm.trans Set.mem_singleton_iff.symm
+  have : Nat.card (fixedPoints P.1 (Sylow p G)) = 1 := by simp [this]
+  exact (P.2.card_modEq_card_fixedPoints (Sylow p G)).trans (by rw [this])
 
 中文:
 定理 card_sylow_modEq_one
@@ -1294,7 +1352,9 @@ theorem card_sylow_modEq_one
       calc
         Q in fixedPoints P (Sylow p G) ↔ P.1 <= Q := P.2.sylow_mem_fixedPoints_iff
         _ ↔ Q.1 = P.1 := ⟨P.3 Q.2, ge_of_eq⟩
-        _ ↔ Q in {P} := Sy
+        _ ↔ Q in {P} := Sylow.ext_iff.symm.trans Set.mem_singleton_iff.symm
+  have : Nat.card (fixedPoints P.1 (Sylow p G)) = 1 := by simp [this]
+  exact (P.2.card_modEq_card_fixedPoints (Sylow p G)).trans (by rw [this])
 
 Depends on / 依赖: Nat.card, Set.ext, Set.mem_singleton_iff.symm, Sylow.ext_iff.symm.trans, Sylow.nonempty.elim, card_modEq_card_fixedPoints, ext_iff, fixedPoints, ge_of_eq, mem_singleton_iff, nonempty, sylow_mem_fixedPoints_iff
 -/
@@ -1431,7 +1491,13 @@ theorem conj_eq_normalizer_conj_of_mem_centralizer
     rw [le_centralizer_iff]; rw [zpowers_le]
     rintro - ⟨z, hz, rfl⟩
     specialize hy z hz
-    rwa [← mul_assoc, ← eq_mul_inv_iff_mul_eq, mu
+    rwa [← mul_assoc, ← eq_mul_inv_iff_mul_eq, mul_assoc, mul_assoc, mul_assoc, ← mul_assoc,
+      eq_inv_mul_iff_mul_eq, ← mul_assoc, ← mul_assoc] at hy
+  obtain ⟨h, hh⟩ :=
+    exists_smul_eq (centralizer (zpowers x : Set G)) ((g • P).subtype h2) (P.subtype h1)
+  simp_rw [smul_subtype, Subgroup.smul_def, smul_smul] at hh
+  refine ⟨h * g, smul_eq_iff_mem_normalizer.mp (subtype_injective hh), ?_⟩
+  rw [← mul_assoc]; rw [Commute.right_comm (h.prop x (mem_zpowers x))]; rw [mul_inv_rev]; rw [inv_mul_cancel_right]
 
 中文:
 定理 conj_eq_normalizer_conj_of_mem_centralizer
@@ -1442,7 +1508,13 @@ theorem conj_eq_normalizer_conj_of_mem_centralizer
     rw [le_centralizer_iff]; rw [zpowers_le]
     rintro - ⟨z, hz, rfl⟩
     specialize hy z hz
-    rwa [← mul_assoc, ← eq_mul_inv_iff_mul_eq, mu
+    rwa [← mul_assoc, ← eq_mul_inv_iff_mul_eq, mul_assoc, mul_assoc, mul_assoc, ← mul_assoc,
+      eq_inv_mul_iff_mul_eq, ← mul_assoc, ← mul_assoc] at hy
+  obtain ⟨h, hh⟩ :=
+    exists_smul_eq (centralizer (zpowers x : Set G)) ((g • P).subtype h2) (P.subtype h1)
+  simp_rw [smul_subtype, Subgroup.smul_def, smul_smul] at hh
+  refine ⟨h * g, smul_eq_iff_mem_normalizer.mp (subtype_injective hh), ?_⟩
+  rw [← mul_assoc]; rw [Commute.right_comm (h.prop x (mem_zpowers x))]; rw [mul_inv_rev]; rw [inv_mul_cancel_right]
 
 Depends on / 依赖: P.subtype, centralizer, eq_inv_mul_iff_mul_eq, eq_mul_inv_iff_mul_eq, exists_smul_eq, le_centralizer_iff, mul_assoc, simp_rw, smul_subt, specialize, subtype, zpowers, zpowers_le
 -/
@@ -1608,7 +1680,14 @@ theorem not_dvd_index_aux
   obtain ⟨x, hx⟩ := exists_prime_orderOf_dvd_card' (G := G ⧸ (P : Subgroup G)) p h
   have h := IsPGroup.of_card (((Nat.card_zpowers x).trans hx).trans (pow_one p).symm)
   let Q := (zpowers x).comap (QuotientGroup.mk' (P : Subgroup G))
-  have hQ : IsPGroup p Q
+  have hQ : IsPGroup p Q := by
+    apply h.comap_of_ker_isPGroup
+    rw [QuotientGroup.ker_mk']
+    exact P.2
+  replace hp := mt orderOf_eq_one_iff.mpr (ne_of_eq_of_ne hx hp.1.ne_one)
+  rw [← zpowers_eq_bot]; rw [← Ne]; rw [← bot_lt_iff_ne_bot]; rw [←
+    comap_lt_comap_of_surjective (QuotientGroup.mk'_surjective _)]; rw [MonoidHom.comap_bot]; rw [QuotientGroup.ker_mk'] at hp
+  exact hp.ne' (P.3 hQ hp.le)
 
 中文:
 定理 not_dvd_index_aux
@@ -1619,7 +1698,14 @@ theorem not_dvd_index_aux
   obtain ⟨x, hx⟩ := exists_prime_orderOf_dvd_card' (G := G ⧸ (P : Subgroup G)) p h
   have h := IsPGroup.of_card (((Nat.card_zpowers x).trans hx).trans (pow_one p).symm)
   let Q := (zpowers x).comap (QuotientGroup.mk' (P : Subgroup G))
-  have hQ : IsPGroup p Q
+  have hQ : IsPGroup p Q := by
+    apply h.comap_of_ker_isPGroup
+    rw [QuotientGroup.ker_mk']
+    exact P.2
+  replace hp := mt orderOf_eq_one_iff.mpr (ne_of_eq_of_ne hx hp.1.ne_one)
+  rw [← zpowers_eq_bot]; rw [← Ne]; rw [← bot_lt_iff_ne_bot]; rw [←
+    comap_lt_comap_of_surjective (QuotientGroup.mk'_surjective _)]; rw [MonoidHom.comap_bot]; rw [QuotientGroup.ker_mk'] at hp
+  exact hp.ne' (P.3 hQ hp.le)
 -/
 private theorem not_dvd_index_aux [hp : Fact p.Prime] (P : Sylow p G) [P.Normal]
     [P.FiniteIndex] : ¬ p ∣ P.index := by
@@ -1649,7 +1735,7 @@ theorem not_dvd_index'
     Subgroup.normal_in_normalizer
   have : (P.subtype le_normalizer).FiniteIndex := ⟨hP⟩
   replace hP := not_dvd_index_aux (P.subtype le_normalizer)
-  exact hp.1
+  exact hp.1.not_dvd_mul hP (not_dvd_card_sylow p G)
 
 中文:
 定理 not_dvd_index'
@@ -1660,7 +1746,7 @@ theorem not_dvd_index'
     Subgroup.normal_in_normalizer
   have : (P.subtype le_normalizer).FiniteIndex := ⟨hP⟩
   replace hP := not_dvd_index_aux (P.subtype le_normalizer)
-  exact hp.1
+  exact hp.1.not_dvd_mul hP (not_dvd_card_sylow p G)
 
 Depends on / 依赖: EquivLike, EquivLike.toEquiv, FiniteIndex, Normal, P.coe_coe, P.subtype, Subgroup, Subgroup.normal_in_normalizer, card_eq_index_normalizer, coe_coe, le_normalizer, normal_in_normalizer, not_dvd_card_sylow, not_dvd_index_aux, not_dvd_mul, relIndex_mul_index, replace, subtype, toEquiv
 -/
@@ -1758,7 +1844,13 @@ theorem mapSurjective_surjective
   let Q₀ : Sylow p (P.comap f) := Sylow.nonempty.some
   let Q : Subgroup G := Q₀.map (P.comap f).subtype
   have hPQ : Q.map f <= P := Subgroup.map_le_iff_le_comap.mpr (Subgroup.map_subtype_le Q₀.1)
-  have hpQ : IsPGroup p Q := Q₀.2.map (P.
+  have hpQ : IsPGroup p Q := Q₀.2.map (P.comap f).subtype
+  have hQ : ¬ p ∣ Q.index := by
+    rw [Subgroup.index_map_subtype Q₀.1]; rw [P.index_comap_of_surjective hf]
+    exact Nat.Prime.not_dvd_mul Fact.out Q₀.not_dvd_index P.not_dvd_index
+  use hpQ.toSylow hQ
+  rw [Sylow.ext_iff]; rw [Sylow.coe_mapSurjective]; rw [eq_comm]
+  exact ((hpQ.map f).toSylow (fun h => hQ (h.trans (Q.index_map_dvd hf)))).3 P.2 hPQ
 
 中文:
 定理 mapSurjective_surjective
@@ -1769,7 +1861,13 @@ theorem mapSurjective_surjective
   let Q₀ : Sylow p (P.comap f) := Sylow.nonempty.some
   let Q : Subgroup G := Q₀.map (P.comap f).subtype
   have hPQ : Q.map f <= P := Subgroup.map_le_iff_le_comap.mpr (Subgroup.map_subtype_le Q₀.1)
-  have hpQ : IsPGroup p Q := Q₀.2.map (P.
+  have hpQ : IsPGroup p Q := Q₀.2.map (P.comap f).subtype
+  have hQ : ¬ p ∣ Q.index := by
+    rw [Subgroup.index_map_subtype Q₀.1]; rw [P.index_comap_of_surjective hf]
+    exact Nat.Prime.not_dvd_mul Fact.out Q₀.not_dvd_index P.not_dvd_index
+  use hpQ.toSylow hQ
+  rw [Sylow.ext_iff]; rw [Sylow.coe_mapSurjective]; rw [eq_comm]
+  exact ((hpQ.map f).toSylow (fun h => hQ (h.trans (Q.index_map_dvd hf)))).3 P.2 hPQ
 
 Depends on / 依赖: Fact.out, Finite, Finite.of_surjective, IsPGroup, Nat.Prime.not_dvd_mul, P.comap, P.index_comap_of_surjective, P.not_dvd_index, Q.index, Q.map, Subgroup, Subgroup.index_map_subtype, Subgroup.map_le_iff_le_comap.mpr, Subgroup.map_subtype_le, Sylow.nonempty.some, hpQ.toSylow, index_comap_of_surjective, index_map_subtype, map_le_iff_le_comap, map_subtype_le
 -/
@@ -1802,7 +1900,11 @@ theorem normalizer_sup_eq_top
   obtain ⟨n, hn⟩ := exists_smul_eq N ((MulAut.conjNormal g : MulAut N) • P) P
   rw [← inv_mul_cancel_left (↑n) g]; rw [sup_comm]
   apply mul_mem_sup (N.inv_mem n.2)
-  rw [smul_def]; rw [← mul_smul]; rw [← MulAut.conjNormal_val]; rw [← MulAut.conjNormal.map_mul
+  rw [smul_def]; rw [← mul_smul]; rw [← MulAut.conjNormal_val]; rw [← MulAut.conjNormal.map_mul]; rw [Sylow.ext_iff]; rw [pointwise_smul_def]; rw [Subgroup.pointwise_smul_def] at hn
+  have : Function.Injective (MulAut.conj (n * g)).toMonoidHom := (MulAut.conj (n * g)).injective
+  refine fun x => (mem_map_iff_mem this).symm.trans ?_
+  rw [map_map]; rw [← congr_arg (map N.subtype) hn]; rw [map_map]
+  rfl
 
 中文:
 定理 normalizer_sup_eq_top
@@ -1812,7 +1914,11 @@ theorem normalizer_sup_eq_top
   obtain ⟨n, hn⟩ := exists_smul_eq N ((MulAut.conjNormal g : MulAut N) • P) P
   rw [← inv_mul_cancel_left (↑n) g]; rw [sup_comm]
   apply mul_mem_sup (N.inv_mem n.2)
-  rw [smul_def]; rw [← mul_smul]; rw [← MulAut.conjNormal_val]; rw [← MulAut.conjNormal.map_mul
+  rw [smul_def]; rw [← mul_smul]; rw [← MulAut.conjNormal_val]; rw [← MulAut.conjNormal.map_mul]; rw [Sylow.ext_iff]; rw [pointwise_smul_def]; rw [Subgroup.pointwise_smul_def] at hn
+  have : Function.Injective (MulAut.conj (n * g)).toMonoidHom := (MulAut.conj (n * g)).injective
+  refine fun x => (mem_map_iff_mem this).symm.trans ?_
+  rw [map_map]; rw [← congr_arg (map N.subtype) hn]; rw [map_map]
+  rfl
 
 Depends on / 依赖: Function, Function.Injective, Injective, MulAut, MulAut.conj, MulAut.conjNormal, MulAut.conjNormal.map_mul, MulAut.conjNormal_val, N.inv_mem, Subgroup, Subgroup.pointwise_smul_def, Sylow.ext_iff, conjNormal, conjNormal_val, exists_smul_eq, ext_iff, injective, inv_mem, inv_mul_cancel_left, map_mul
 -/
@@ -1894,7 +2000,19 @@ theorem mem_fixedPoints_mul_left_cosets_iff_mem_normalizer
       (mem_normalizer_fintype fun n (hn : n in H) =>
         have : (n⁻¹ * x)⁻¹ * x in H := QuotientGroup.eq.1 (ha ⟨⟨n⁻¹, inv_mem hn⟩, rfl⟩)
         show _ in H by
- 
+          rw [mul_inv_rev]; rw [inv_inv] at this
+          convert! this
+          rw [inv_inv]),
+    fun hx : forall n : G, n in H ↔ x * n * x⁻¹ in H =>
+    mem_fixedPoints'.2 fun y =>
+      Quotient.inductionOn' y fun y hy =>
+        QuotientGroup.eq.2
+          (let ⟨⟨b, hb₁⟩, hb₂⟩ := hy
+          have hb₂ : (b * x)⁻¹ * y in H := QuotientGroup.eq.1 hb₂
+(inv_mem_iff (G := G)).1
+(hx _).2
+(mul_mem_cancel_left (inv_mem hb₁)).1 by
+                rw [hx] at hb₂; simpa [mul_inv_rev, mul_assoc] using hb₂)⟩
 
 中文:
 定理 mem_fixedPoints_mul_left_cosets_iff_mem_normalizer
@@ -1905,7 +2023,19 @@ theorem mem_fixedPoints_mul_left_cosets_iff_mem_normalizer
       (mem_normalizer_fintype fun n (hn : n in H) =>
         have : (n⁻¹ * x)⁻¹ * x in H := QuotientGroup.eq.1 (ha ⟨⟨n⁻¹, inv_mem hn⟩, rfl⟩)
         show _ in H by
- 
+          rw [mul_inv_rev]; rw [inv_inv] at this
+          convert! this
+          rw [inv_inv]),
+    fun hx : forall n : G, n in H ↔ x * n * x⁻¹ in H =>
+    mem_fixedPoints'.2 fun y =>
+      Quotient.inductionOn' y fun y hy =>
+        QuotientGroup.eq.2
+          (let ⟨⟨b, hb₁⟩, hb₂⟩ := hy
+          have hb₂ : (b * x)⁻¹ * y in H := QuotientGroup.eq.1 hb₂
+(inv_mem_iff (G := G)).1
+(hx _).2
+(mul_mem_cancel_left (inv_mem hb₁)).1 by
+                rw [hx] at hb₂; simpa [mul_inv_rev, mul_assoc] using hb₂)⟩
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, QuotientGroup, QuotientGroup.eq, convert, inductionOn, inv_inv, inv_mem, inv_mem_iff, mem_fixedPoints, mem_normalizer_fintype, mul_inv_rev
 -/
@@ -1943,7 +2073,8 @@ definition fixedPointsMulLeftCosetsEquivQuotient
     (by
       intros
       unfold_projs
-      rw [leftRel_apply (α := normalizer (H : Set G))]; rw [left
+      rw [leftRel_apply (α := normalizer (H : Set G))]; rw [leftRel_apply]
+      rfl)
 
 中文:
 定义 fixedPointsMulLeftCosetsEquivQuotient
@@ -1954,7 +2085,8 @@ definition fixedPointsMulLeftCosetsEquivQuotient
     (by
       intros
       unfold_projs
-      rw [leftRel_apply (α := normalizer (H : Set G))]; rw [left
+      rw [leftRel_apply (α := normalizer (H : Set G))]; rw [leftRel_apply]
+      rfl)
 
 Depends on / 依赖: MulAction, MulAction.fixedPoints, fixedPoints, intros, leftRel_apply, mem_fixedPoints_mul_left_cosets_iff_mem_normalizer, normalizer, subtypeQuotientEquivQuotientSubtype, unfold_projs
 -/
@@ -2005,7 +2137,7 @@ theorem card_normalizer_modEq_card
   proof: by
   have : H.subgroupOf (normalizer H) ≃ H := (subgroupOfEquivOfLe le_normalizer).toEquiv
   rw [card_eq_card_quotient_mul_card_subgroup H]; rw [card_eq_card_quotient_mul_card_subgroup (H.subgroupOf (normalizer H))]; rw [Nat.card_congr this]; rw [hH]; rw [pow_succ']
-  exact (card_quotient_normalizer
+  exact (card_quotient_normalizer_modEq_card_quotient hH).mul_right' _
 
 中文:
 定理 card_normalizer_modEq_card
@@ -2013,7 +2145,7 @@ theorem card_normalizer_modEq_card
   证明: by
   have : H.subgroupOf (normalizer H) ≃ H := (subgroupOfEquivOfLe le_normalizer).toEquiv
   rw [card_eq_card_quotient_mul_card_subgroup H]; rw [card_eq_card_quotient_mul_card_subgroup (H.subgroupOf (normalizer H))]; rw [Nat.card_congr this]; rw [hH]; rw [pow_succ']
-  exact (card_quotient_normalizer
+  exact (card_quotient_normalizer_modEq_card_quotient hH).mul_right' _
 
 Depends on / 依赖: H.subgroupOf, Nat.card_congr, card_congr, card_eq_card_quotient_mul_card_subgroup, card_quotient_normalizer_modEq_card_quotient, le_normalizer, mul_right, normalizer, pow_succ, subgroupOf, subgroupOfEquivOfLe, toEquiv
 -/
@@ -2035,7 +2167,11 @@ theorem prime_dvd_card_quotient_normalizer
     (mul_left_inj' (show Nat.card H != 0 from Nat.card_pos.ne')).1
       (by
         rw [← card_eq_card_quotient_mul_card_subgroup H]; rw [hH]; rw [hs]; rw [pow_succ']; rw [mul_assoc]; rw [mul_comm p])
-  have hm
+  have hm :
+    s * p % p =
+      Nat.card (normalizer H ⧸ H.comap (normalizer (H : Set G)).subtype) % p :=
+    hcard ▸ (card_quotient_normalizer_modEq_card_quotient hH).symm
+  Nat.dvd_of_mod_eq_zero (by rwa [Nat.mod_eq_zero_of_dvd (dvd_mul_left _ _), eq_comm] at hm)
 
 中文:
 定理 prime_dvd_card_quotient_normalizer
@@ -2045,7 +2181,11 @@ theorem prime_dvd_card_quotient_normalizer
     (mul_left_inj' (show Nat.card H != 0 from Nat.card_pos.ne')).1
       (by
         rw [← card_eq_card_quotient_mul_card_subgroup H]; rw [hH]; rw [hs]; rw [pow_succ']; rw [mul_assoc]; rw [mul_comm p])
-  have hm
+  have hm :
+    s * p % p =
+      Nat.card (normalizer H ⧸ H.comap (normalizer (H : Set G)).subtype) % p :=
+    hcard ▸ (card_quotient_normalizer_modEq_card_quotient hH).symm
+  Nat.dvd_of_mod_eq_zero (by rwa [Nat.mod_eq_zero_of_dvd (dvd_mul_left _ _), eq_comm] at hm)
 
 Depends on / 依赖: H.comap, Nat.card, Nat.card_pos.ne, Nat.dvd_of_mod_eq_zero, Nat.mod_eq_zero_of_dvd, card_eq_card_quotient_mul_card_subgroup, card_pos, card_quotient_normalizer_modEq_card_quotient, dvd_mul_left, dvd_of_mod_eq_zero, exists_eq_mul_left_of_dvd, mod_eq_zero_of_dvd, mul_assoc, mul_comm, mul_left_inj, normalizer, pow_succ, subtype
 -/
@@ -2094,7 +2234,29 @@ theorem exists_subgroup_card_pow_succ
     (mul_left_inj' (show Nat.card H != 0 from Nat.card_pos.ne')).1
       (by
         rw [← card_eq_card_quotient_mul_card_subgroup H]; rw [hH]; rw [hs]; rw [pow_succ']; rw [mul_assoc]; rw [mul_comm p])
-  have hm
+  have hm : s * p % p = Nat.card (normalizer H ⧸ H.subgroupOf (normalizer H)) % p :=
+    Nat.card_congr (fixedPointsMulLeftCosetsEquivQuotient H) ▸
+      hcard ▸ (IsPGroup.of_card hH).card_modEq_card_fixedPoints _
+  have hm' : p ∣ Nat.card (normalizer H ⧸ H.subgroupOf (normalizer H)) :=
+    Nat.dvd_of_mod_eq_zero (by rwa [Nat.mod_eq_zero_of_dvd (dvd_mul_left _ _), eq_comm] at hm)
+  let ⟨x, hx⟩ := @exists_prime_orderOf_dvd_card' _ (QuotientGroup.Quotient.group _) _ _ hp hm'
+  have hequiv : H ≃ H.subgroupOf (normalizer H) := (subgroupOfEquivOfLe le_normalizer).symm.toEquiv
+  ⟨((zpowers x).comap (mk' (H.subgroupOf (normalizer H)))).map (normalizer H).subtype, by
+    show Nat.card (Subgroup.map (normalizer (H : Set G)).subtype
+      (comap (mk' (H.subgroupOf (normalizer H))) (Subgroup.zpowers x))) = p ^ (n + 1)
+    suffices Nat.card (Subtype.val ''
+      ((zpowers x).comap (mk' (H.subgroupOf (normalizer H))) : Set (normalizer H))) = p ^ (n + 1)
+      by convert! this using 2
+    rw [Nat.card_image_of_injective Subtype.val_injective
+        ((zpowers x).comap (mk' (H.subgroupOf (normalizer H))) : Set (normalizer (H : Set G)))]; rw [pow_succ]; rw [← hH]; rw [Nat.card_congr hequiv]; rw [← hx]; rw [← Nat.card_zpowers]; rw [← Nat.card_prod]
+    exact Nat.card_congr
+      (preimageMkEquivSubgroupProdSet (H.subgroupOf (normalizer H)) (zpowers x)), by
+    intro y hy
+    simp only [Subgroup.coe_subtype, mk'_apply, Subgroup.mem_map, Subgroup.mem_comap]
+    refine ⟨⟨y, le_normalizer hy⟩, ⟨0, ?_⟩, rfl⟩
+    dsimp only
+    rw [zpow_zero]; rw [eq_comm]; rw [QuotientGroup.eq_one_iff]
+    simpa using! hy⟩
 
 中文:
 定理 存在_subgroup_card_pow_succ
@@ -2104,7 +2266,29 @@ theorem exists_subgroup_card_pow_succ
     (mul_left_inj' (show Nat.card H != 0 from Nat.card_pos.ne')).1
       (by
         rw [← card_eq_card_quotient_mul_card_subgroup H]; rw [hH]; rw [hs]; rw [pow_succ']; rw [mul_assoc]; rw [mul_comm p])
-  have hm
+  have hm : s * p % p = Nat.card (normalizer H ⧸ H.subgroupOf (normalizer H)) % p :=
+    Nat.card_congr (fixedPointsMulLeftCosetsEquivQuotient H) ▸
+      hcard ▸ (IsPGroup.of_card hH).card_modEq_card_fixedPoints _
+  have hm' : p ∣ Nat.card (normalizer H ⧸ H.subgroupOf (normalizer H)) :=
+    Nat.dvd_of_mod_eq_zero (by rwa [Nat.mod_eq_zero_of_dvd (dvd_mul_left _ _), eq_comm] at hm)
+  let ⟨x, hx⟩ := @exists_prime_orderOf_dvd_card' _ (QuotientGroup.Quotient.group _) _ _ hp hm'
+  have hequiv : H ≃ H.subgroupOf (normalizer H) := (subgroupOfEquivOfLe le_normalizer).symm.toEquiv
+  ⟨((zpowers x).comap (mk' (H.subgroupOf (normalizer H)))).map (normalizer H).subtype, by
+    show Nat.card (Subgroup.map (normalizer (H : Set G)).subtype
+      (comap (mk' (H.subgroupOf (normalizer H))) (Subgroup.zpowers x))) = p ^ (n + 1)
+    suffices Nat.card (Subtype.val ''
+      ((zpowers x).comap (mk' (H.subgroupOf (normalizer H))) : Set (normalizer H))) = p ^ (n + 1)
+      by convert! this using 2
+    rw [Nat.card_image_of_injective Subtype.val_injective
+        ((zpowers x).comap (mk' (H.subgroupOf (normalizer H))) : Set (normalizer (H : Set G)))]; rw [pow_succ]; rw [← hH]; rw [Nat.card_congr hequiv]; rw [← hx]; rw [← Nat.card_zpowers]; rw [← Nat.card_prod]
+    exact Nat.card_congr
+      (preimageMkEquivSubgroupProdSet (H.subgroupOf (normalizer H)) (zpowers x)), by
+    intro y hy
+    simp only [Subgroup.coe_subtype, mk'_apply, Subgroup.mem_map, Subgroup.mem_comap]
+    refine ⟨⟨y, le_normalizer hy⟩, ⟨0, ?_⟩, rfl⟩
+    dsimp only
+    rw [zpow_zero]; rw [eq_comm]; rw [QuotientGroup.eq_one_iff]
+    simpa using! hy⟩
 
 Depends on / 依赖: H.subgroupOf, IsPGroup, IsPGroup.of_card, Nat.card, Nat.card_congr, Nat.card_pos.ne, card_congr, card_eq_card_quotient_mul_card_subgroup, card_modEq_card_fixedPoints, card_pos, exists_eq_mul_left_of_dvd, fixedPointsMulLeftCosetsEquivQuotient, mul_assoc, mul_comm, mul_left_inj, normalizer, of_card, pow_succ, subgroupOf
 -/
@@ -2274,7 +2458,7 @@ lemma exists_subgroup_le_card_le
     exists_nat_pow_near (Nat.one_le_iff_ne_zero.2 hk₀) hp.one_lt
   obtain ⟨H', H'H, H'card⟩ := exists_subgroup_le_card_pow_prime_of_le_card hp h (hmk.trans hk)
   refine ⟨H', H'H, ?_⟩
-  simpa only [pow_succ', H'card] using And.intr
+  simpa only [pow_succ', H'card] using And.intro hmk hkm
 
 中文:
 引理 存在_subgroup_le_card_le
@@ -2284,7 +2468,7 @@ lemma exists_subgroup_le_card_le
     exists_nat_pow_near (Nat.one_le_iff_ne_zero.2 hk₀) hp.one_lt
   obtain ⟨H', H'H, H'card⟩ := exists_subgroup_le_card_pow_prime_of_le_card hp h (hmk.trans hk)
   refine ⟨H', H'H, ?_⟩
-  simpa only [pow_succ', H'card] using And.intr
+  simpa only [pow_succ', H'card] using And.intro hmk hkm
 
 Depends on / 依赖: And.intro, Nat.one_le_iff_ne_zero, exists_nat_pow_near, exists_subgroup_le_card_pow_prime_of_le_card, hmk.trans, hp.one_lt, one_le_iff_ne_zero, one_lt, pow_succ
 -/
@@ -2441,7 +2625,10 @@ theorem _root_.Group.card_dvd_prod_orderOf
   have ⟨H, hH⟩ := exists_subgroup_card_pow_prime p h
   have (g : G) (hg : g in (H \ {1} : Set G).toFinset) : p ∣ orderOf g := by
     have ⟨hg, hg1⟩ : g in H ∧ g != 1 := by simpa using hg
-.dvd_orderOf 
+.dvd_orderOf (g := ⟨g, hg⟩) by simpa simpa using IsPGroup.of_card hH
+  grw [← prod_dvd_prod_of_subset _ _ _ (H \ {1} : Set G).toFinset.subset_univ,
+← prod_dvd_prod_of_dvd _ _ this, prod_const, k.le_sub_one_of_lt k.lt_pow_self hp.one_lt]
+  simp [Finset.card_sdiff, ← Nat.card_eq_fintype_card, hH]
 
 中文:
 定理 _root_.群.card_dvd_prod_orderOf
@@ -2454,7 +2641,10 @@ theorem _root_.Group.card_dvd_prod_orderOf
   have ⟨H, hH⟩ := exists_subgroup_card_pow_prime p h
   have (g : G) (hg : g in (H \ {1} : Set G).toFinset) : p ∣ orderOf g := by
     have ⟨hg, hg1⟩ : g in H ∧ g != 1 := by simpa using hg
-.dvd_orderOf 
+.dvd_orderOf (g := ⟨g, hg⟩) by simpa simpa using IsPGroup.of_card hH
+  grw [← prod_dvd_prod_of_subset _ _ _ (H \ {1} : Set G).toFinset.subset_univ,
+← prod_dvd_prod_of_dvd _ _ this, prod_const, k.le_sub_one_of_lt k.lt_pow_self hp.one_lt]
+  simp [Finset.card_sdiff, ← Nat.card_eq_fintype_card, hH]
 
 Depends on / 依赖: Fact.mk, IsPGroup, IsPGroup.of_card, Nat.dvd_iff_prime_pow_dvd_dvd, classical, dvd_iff_prime_pow_dvd_dvd, dvd_orderOf, exists_subgroup_card_pow_prime, k.le_sub_one_of_lt, k.lt_pow_self, le_sub_one_of_lt, lt_pow_self, of_card, orderOf, prod_const, prod_dvd_prod_of_dvd, prod_dvd_prod_of_subset, subset_univ, toFinset, toFinset.subset_univ
 -/
@@ -2610,7 +2800,7 @@ theorem normalizer_normalizer
   proof: by
   have := normal_of_normalizer_normal (P.subtype (le_normalizer.trans le_normalizer))
   rw [← (P.subtype _).coe_coe]; rw [coe_subtype]; rw [normal_subgroupOf_iff_le_normalizer (le_normalizer.trans le_normalizer)]; rw [← subgroupOf_normalizer_eq (le_normalizer.trans le_normalizer)] at this
-  exact
+  exact le_antisymm (this normal_in_normalizer) le_normalizer
 
 中文:
 定理 normalizer_normalizer
@@ -2618,7 +2808,7 @@ theorem normalizer_normalizer
   证明: by
   have := normal_of_normalizer_normal (P.subtype (le_normalizer.trans le_normalizer))
   rw [← (P.subtype _).coe_coe]; rw [coe_subtype]; rw [normal_subgroupOf_iff_le_normalizer (le_normalizer.trans le_normalizer)]; rw [← subgroupOf_normalizer_eq (le_normalizer.trans le_normalizer)] at this
-  exact
+  exact le_antisymm (this normal_in_normalizer) le_normalizer
 
 Depends on / 依赖: P.subtype, coe_coe, coe_subtype, le_antisymm, le_normalizer, le_normalizer.trans, normal_in_normalizer, normal_of_normalizer_normal, normal_subgroupOf_iff_le_normalizer, subgroupOf_normalizer_eq, subtype
 -/
@@ -2642,7 +2832,7 @@ theorem normal_of_all_max_subgroups_normal
       · have := hnc _ hK
         have hPK : P <= K := le_trans le_normalizer hNK
         refine (hK.1 ?_).elim
-        rw [← sup_of_le_right hNK]; rw 
+        rw [← sup_of_le_right hNK]; rw [P.normalizer_sup_eq_top' hPK])
 
 中文:
 定理 normal_of_all_max_subgroups_normal
@@ -2655,7 +2845,7 @@ theorem normal_of_all_max_subgroups_normal
       · have := hnc _ hK
         have hPK : P <= K := le_trans le_normalizer hNK
         refine (hK.1 ?_).elim
-        rw [← sup_of_le_right hNK]; rw 
+        rw [← sup_of_le_right hNK]; rw [P.normalizer_sup_eq_top' hPK])
 
 Depends on / 依赖: P.normalizer_sup_eq_top, eq_top_or_exists_le_coatom, le_normalizer, le_trans, normalizer, normalizer_eq_top_iff, normalizer_eq_top_iff.mp, normalizer_sup_eq_top, sup_of_le_right
 -/
@@ -2706,7 +2896,42 @@ definition directProductOfNormal
   -- “The” Sylow subgroup for p
   let P : forall p, Sylow p G := default
   have : forall p, Fintype (P p) := fun p => Fintype.ofFinite (P p)
-  have hcomm : Pairwise fun p₁ p₂ : ps => forall x y : G, x in P p₁ -> y in P p₂ -> Commu
+  have hcomm : Pairwise fun p₁ p₂ : ps => forall x y : G, x in P p₁ -> y in P p₂ -> Commute x y := by
+    rintro ⟨p₁, hp₁⟩ ⟨p₂, hp₂⟩ hne
+    have hp₁' := Fact.mk (Nat.prime_of_mem_primeFactors hp₁)
+    have hp₂' := Fact.mk (Nat.prime_of_mem_primeFactors hp₂)
+    have hne' : p₁ != p₂ := by simpa using hne
+    apply Subgroup.commute_of_normal_of_disjoint _ _ (hn (P p₁)) (hn (P p₂))
+    apply IsPGroup.disjoint_of_ne p₁ p₂ hne' _ _ (P p₁).isPGroup' (P p₂).isPGroup'
+  refine MulEquiv.trans (N := forall p : ps, P p) ?_ ?_
+  -- There is only one Sylow subgroup for each p, so the inner product is trivial
+  · -- here we need to help the elaborator with an explicit instantiation
+    apply @MulEquiv.piCongrRight ps (fun p => forall P : Sylow p G, P) (fun p => P p) _ _
+    rintro ⟨p, hp⟩
+    haveI hp' := Fact.mk (Nat.prime_of_mem_primeFactors hp)
+    letI := unique_of_normal _ (hn (P p))
+    apply MulEquiv.piUnique
+  apply MulEquiv.ofBijective (Subgroup.noncommPiCoprod hcomm)
+  apply (Fintype.bijective_iff_injective_and_card _).mpr
+  constructor
+  · apply Subgroup.injective_noncommPiCoprod_of_iSupIndep
+    apply independent_of_coprime_order hcomm
+    rintro ⟨p₁, hp₁⟩ ⟨p₂, hp₂⟩ hne
+    have hp₁' := Fact.mk (Nat.prime_of_mem_primeFactors hp₁)
+    have hp₂' := Fact.mk (Nat.prime_of_mem_primeFactors hp₂)
+    have hne' : p₁ != p₂ := by simpa using hne
+    simp only [← Nat.card_eq_fintype_card]
+    apply IsPGroup.coprime_card_of_ne p₁ p₂ hne' _ _ (P p₁).isPGroup' (P p₂).isPGroup'
+  · simp only [← Nat.card_eq_fintype_card]
+    calc
+      Nat.card (forall p : ps, P p) = ∏ p : ps, Nat.card (P p) := Nat.card_pi
+      _ = ∏ p : ps, p.1 ^ (Nat.card G).factorization p.1 := by
+        congr 1 with ⟨p, hp⟩
+        exact @card_eq_multiplicity _ _ _ p ⟨Nat.prime_of_mem_primeFactors hp⟩ (P p)
+      _ = ∏ p in ps, p ^ (Nat.card G).factorization p :=
+        (Finset.prod_finset_coe (fun p => p ^ (Nat.card G).factorization p) _)
+      _ = (Nat.card G).factorization.prod (· ^ ·) := rfl
+      _ = Nat.card G := Nat.prod_factorization_pow_eq_self Nat.card_pos.ne'
 
 中文:
 定义 directProductOfNormal
@@ -2717,7 +2942,42 @@ definition directProductOfNormal
   -- “The” Sylow subgroup for p
   let P : forall p, Sylow p G := default
   have : forall p, Fintype (P p) := fun p => Fintype.ofFinite (P p)
-  have hcomm : Pairwise fun p₁ p₂ : ps => forall x y : G, x in P p₁ -> y in P p₂ -> Commu
+  have hcomm : Pairwise fun p₁ p₂ : ps => forall x y : G, x in P p₁ -> y in P p₂ -> Commute x y := by
+    rintro ⟨p₁, hp₁⟩ ⟨p₂, hp₂⟩ hne
+    have hp₁' := Fact.mk (Nat.prime_of_mem_primeFactors hp₁)
+    have hp₂' := Fact.mk (Nat.prime_of_mem_primeFactors hp₂)
+    have hne' : p₁ != p₂ := by simpa using hne
+    apply Subgroup.commute_of_normal_of_disjoint _ _ (hn (P p₁)) (hn (P p₂))
+    apply IsPGroup.disjoint_of_ne p₁ p₂ hne' _ _ (P p₁).isPGroup' (P p₂).isPGroup'
+  refine MulEquiv.trans (N := forall p : ps, P p) ?_ ?_
+  -- There is only one Sylow subgroup for each p, so the inner product is trivial
+  · -- here we need to help the elaborator with an explicit instantiation
+    apply @MulEquiv.piCongrRight ps (fun p => forall P : Sylow p G, P) (fun p => P p) _ _
+    rintro ⟨p, hp⟩
+    haveI hp' := Fact.mk (Nat.prime_of_mem_primeFactors hp)
+    letI := unique_of_normal _ (hn (P p))
+    apply MulEquiv.piUnique
+  apply MulEquiv.ofBijective (Subgroup.noncommPiCoprod hcomm)
+  apply (Fintype.bijective_iff_injective_and_card _).mpr
+  constructor
+  · apply Subgroup.injective_noncommPiCoprod_of_iSupIndep
+    apply independent_of_coprime_order hcomm
+    rintro ⟨p₁, hp₁⟩ ⟨p₂, hp₂⟩ hne
+    have hp₁' := Fact.mk (Nat.prime_of_mem_primeFactors hp₁)
+    have hp₂' := Fact.mk (Nat.prime_of_mem_primeFactors hp₂)
+    have hne' : p₁ != p₂ := by simpa using hne
+    simp only [← Nat.card_eq_fintype_card]
+    apply IsPGroup.coprime_card_of_ne p₁ p₂ hne' _ _ (P p₁).isPGroup' (P p₂).isPGroup'
+  · simp only [← Nat.card_eq_fintype_card]
+    calc
+      Nat.card (forall p : ps, P p) = ∏ p : ps, Nat.card (P p) := Nat.card_pi
+      _ = ∏ p : ps, p.1 ^ (Nat.card G).factorization p.1 := by
+        congr 1 with ⟨p, hp⟩
+        exact @card_eq_multiplicity _ _ _ p ⟨Nat.prime_of_mem_primeFactors hp⟩ (P p)
+      _ = ∏ p in ps, p ^ (Nat.card G).factorization p :=
+        (Finset.prod_finset_coe (fun p => p ^ (Nat.card G).factorization p) _)
+      _ = (Nat.card G).factorization.prod (· ^ ·) := rfl
+      _ = Nat.card G := Nat.prod_factorization_pow_eq_self Nat.card_pos.ne'
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, Nat.card, ofFinite, primeFactors
 -/

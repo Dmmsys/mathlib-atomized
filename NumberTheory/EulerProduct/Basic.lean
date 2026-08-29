@@ -125,7 +125,25 @@ lemma summable_and_hasSum_factoredNumbers_prod_filter_prime_tsum
     simp only [notMem_empty, IsEmpty.forall_iff, forall_const, filter_true_of_mem, prod_empty]
     exact ⟨(Set.finite_singleton 1).summable (‖f ·‖), hf₁ ▸ hasSum_singleton 1 f⟩
   | insert p s hp ih =>
-    rw [fi
+    rw [filter_insert]
+    split_ifs with hpp
+    · constructor
+      · simp only [← (equivProdNatFactoredNumbers hpp hp).summable_iff, Function.comp_def,
+          equivProdNatFactoredNumbers_apply', factoredNumbers.map_prime_pow_mul hmul hpp hp]
+        refine Summable.of_nonneg_of_le (fun _ => norm_nonneg _) (fun _ => norm_mul_le ..) ?_
+        apply Summable.mul_of_nonneg (hsum hpp) ih.1 <;> exact fun n => norm_nonneg _
+      · have hp' : p ∉ {p in s | p.Prime} := mt (mem_of_mem_filter p) hp
+        rw [prod_insert hp']; rw [← (equivProdNatFactoredNumbers hpp hp).hasSum_iff]; rw [Function.comp_def]
+        conv =>
+          enter [1, x]
+          rw [equivProdNatFactoredNumbers_apply']; rw [factoredNumbers.map_prime_pow_mul hmul hpp hp]
+        have : T3Space R := instT3Space -- speeds up the following
+        apply (hsum hpp).of_norm.hasSum.mul ih.2
+        -- `exact summable_mul_of_summable_norm (hsum hpp) ih.1` gives a time-out
+        apply summable_mul_of_summable_norm (hsum hpp) ih.1
+    · rwa [factoredNumbers_insert s hpp]
+
+include hf₁ hmul in
 
 中文:
 引理 summable_and_hasSum_factoredNumbers_prod_filter_prime_tsum
@@ -136,7 +154,25 @@ lemma summable_and_hasSum_factoredNumbers_prod_filter_prime_tsum
     simp only [notMem_empty, IsEmpty.forall_iff, forall_const, filter_true_of_mem, prod_empty]
     exact ⟨(Set.finite_singleton 1).summable (‖f ·‖), hf₁ ▸ hasSum_singleton 1 f⟩
   | insert p s hp ih =>
-    rw [fi
+    rw [filter_insert]
+    split_ifs with hpp
+    · constructor
+      · simp only [← (equivProdNatFactoredNumbers hpp hp).summable_iff, Function.comp_def,
+          equivProdNatFactoredNumbers_apply', factoredNumbers.map_prime_pow_mul hmul hpp hp]
+        refine Summable.of_nonneg_of_le (fun _ => norm_nonneg _) (fun _ => norm_mul_le ..) ?_
+        apply Summable.mul_of_nonneg (hsum hpp) ih.1 <;> exact fun n => norm_nonneg _
+      · have hp' : p ∉ {p in s | p.Prime} := mt (mem_of_mem_filter p) hp
+        rw [prod_insert hp']; rw [← (equivProdNatFactoredNumbers hpp hp).hasSum_iff]; rw [Function.comp_def]
+        conv =>
+          enter [1, x]
+          rw [equivProdNatFactoredNumbers_apply']; rw [factoredNumbers.map_prime_pow_mul hmul hpp hp]
+        have : T3Space R := instT3Space -- speeds up the following
+        apply (hsum hpp).of_norm.hasSum.mul ih.2
+        -- `exact summable_mul_of_summable_norm (hsum hpp) ih.1` gives a time-out
+        apply summable_mul_of_summable_norm (hsum hpp) ih.1
+    · rwa [factoredNumbers_insert s hpp]
+
+include hf₁ hmul in
 
 Depends on / 依赖: Finset, Finset.induction, Function, Function.comp_def, IsEmpty, IsEmpty.forall_iff, Set.finite_singleton, comp_def, equivProdNatFactoredNumbers, equivProdNatFactoredNumbers_apply, factoredNumbers, factoredNumbers.map_prime_pow_mul, factoredNumbers_empty, filter_insert, filter_true_of_mem, finite_singleton, forall_const, forall_iff, hasSum_singleton, insert
 -/
@@ -205,7 +241,7 @@ summable_iff_nat_tsum_vanishing.mp hsum (Metric.ball 0 ε) Metric.ball_mem_nhds 
   refine ⟨N, fun s hs => ?_⟩
 have := hN _ factoredNumbers_compl hs
   rwa [← hsum.tsum_subtype_add_tsum_subtype_compl (factoredNumbers s),
-    add_sub_cance
+    add_sub_cancel_left, tsum_eq_tsum_sdiff_singleton (factoredNumbers s)ᶜ hf₀]
 
 中文:
 引理 norm_tsum_factoredNumbers_sub_tsum_lt
@@ -217,7 +253,7 @@ summable_iff_nat_tsum_vanishing.mp hsum (Metric.ball 0 ε) Metric.ball_mem_nhds 
   refine ⟨N, fun s hs => ?_⟩
 have := hN _ factoredNumbers_compl hs
   rwa [← hsum.tsum_subtype_add_tsum_subtype_compl (factoredNumbers s),
-    add_sub_cance
+    add_sub_cancel_left, tsum_eq_tsum_sdiff_singleton (factoredNumbers s)ᶜ hf₀]
 
 Depends on / 依赖: Metric, Metric.ball, Metric.ball_mem_nhds, add_sub_cancel_left, ball_mem_nhds, factoredNumbers, factoredNumbers_compl, hsum.tsum_subtype_add_tsum_subtype_compl, mem_ball_zero_iff, simp_rw, summable_iff_nat_tsum_vanishing, summable_iff_nat_tsum_vanishing.mp, tsum_eq_tsum_sdiff_singleton, tsum_subtype_add_tsum_subtype_compl
 -/
@@ -337,7 +373,14 @@ theorem eulerProduct_hasProd
   change HasProd (F ∘ Subtype.val (p := (· in {x | Nat.Prime x}))) _
   rw [hasProd_subtype_iff_mulIndicator]; rw [HasProd]; rw [SummationFilter.unconditional]; rw [Metric.tendsto_atTop]
   intro ε hε
-  obtain ⟨N₀, hN₀⟩ := norm_tsum_factoredNumbers_sub
+  obtain ⟨N₀, hN₀⟩ := norm_tsum_factoredNumbers_sub_tsum_lt hsum.of_norm hf₀ hε
+  refine ⟨range N₀, fun s hs => ?_⟩
+  have : ∏ p in s, {p | Nat.Prime p}.mulIndicator F p = ∏ p in s with p.Prime, F p :=
+    prod_mulIndicator_eq_prod_filter s (fun _ => F) _ id
+  rw [this]; rw [dist_eq_norm]; rw [prod_filter_prime_tsum_eq_tsum_factoredNumbers hf₁ hmul hsum]; rw [norm_sub_rev]
+exact hN₀ s fun p hp => hs mem_range.mpr lt_of_mem_primesBelow hp
+
+include hf₁ hmul in
 
 中文:
 定理 eulerProduct_hasProd
@@ -347,7 +390,14 @@ theorem eulerProduct_hasProd
   change HasProd (F ∘ Subtype.val (p := (· in {x | Nat.Prime x}))) _
   rw [hasProd_subtype_iff_mulIndicator]; rw [HasProd]; rw [SummationFilter.unconditional]; rw [Metric.tendsto_atTop]
   intro ε hε
-  obtain ⟨N₀, hN₀⟩ := norm_tsum_factoredNumbers_sub
+  obtain ⟨N₀, hN₀⟩ := norm_tsum_factoredNumbers_sub_tsum_lt hsum.of_norm hf₀ hε
+  refine ⟨range N₀, fun s hs => ?_⟩
+  have : ∏ p in s, {p | Nat.Prime p}.mulIndicator F p = ∏ p in s with p.Prime, F p :=
+    prod_mulIndicator_eq_prod_filter s (fun _ => F) _ id
+  rw [this]; rw [dist_eq_norm]; rw [prod_filter_prime_tsum_eq_tsum_factoredNumbers hf₁ hmul hsum]; rw [norm_sub_rev]
+exact hN₀ s fun p hp => hs mem_range.mpr lt_of_mem_primesBelow hp
+
+include hf₁ hmul in
 
 Depends on / 依赖: HasProd, Metric, Metric.tendsto_atTop, Nat.Prime, OrderIsoClass, OrderIsoClass.toSupHomClass, SemilatticeSup, Subtype, Subtype.val, SummationFilter, SummationFilter.unconditional, hasProd_subtype_iff_mulIndicator, hsum.of_norm, mulIndicator, norm_tsum_factoredNumbers_sub_tsum_lt, of_norm, p.Prime, prod_mulIndicator_eq_prod_filter, tendsto_atTop, toSupHomClass
 -/
@@ -402,7 +452,10 @@ theorem eulerProduct
   let F : Nat -> R := fun p => ∑' (e : Nat), f (p ^ e)
   have H (n : Nat) : ∏ i in range n, Set.mulIndicator {p | Nat.Prime p} F i =
                      ∏ p in primesBelow n, ∑' (e : Nat), f (p ^ e) :=
-    prod_mulI
+    prod_mulIndicator_eq_prod_filter (range n) (fun _ => F) (fun _ => {p | Nat.Prime p}) id
+  simpa only [F, H]
+
+include hf₁ hmul in
 
 中文:
 定理 eulerProduct
@@ -412,7 +465,10 @@ theorem eulerProduct
   let F : Nat -> R := fun p => ∑' (e : Nat), f (p ^ e)
   have H (n : Nat) : ∏ i in range n, Set.mulIndicator {p | Nat.Prime p} F i =
                      ∏ p in primesBelow n, ∑' (e : Nat), f (p ^ e) :=
-    prod_mulI
+    prod_mulIndicator_eq_prod_filter (range n) (fun _ => F) (fun _ => {p | Nat.Prime p}) id
+  simpa only [F, H]
+
+include hf₁ hmul in
 
 Depends on / 依赖: Nat.Prime, Set.mulIndicator, eulerProduct_hasProd_mulIndicator, mulIndicator, primesBelow, prod_mulIndicator_eq_prod_filter, tendsto_prod_nat
 -/
@@ -548,7 +604,12 @@ lemma summable_and_hasSum_factoredNumbers_prod_filter_prime_geometric
     refine prod_congr rfl fun p hp => ?_
     simp only [map_pow]
 exact tsum_geometric_of_norm_lt_one h (mem_filter.mp hp).2
-  have H₂ 
+  have H₂ : forall {p : Nat}, p.Prime -> Summable fun n => ‖f (p ^ n)‖ := by
+    intro p hp
+    simp only [map_pow]
+    refine Summable.of_nonneg_of_le (fun _ => norm_nonneg _) (fun _ => norm_pow_le ..) ?_
+exact summable_geometric_iff_norm_lt_one.mpr (norm_norm (f p)).symm ▸ h hp
+  exact H₁ ▸ summable_and_hasSum_factoredNumbers_prod_filter_prime_tsum f.map_one hmul H₂ s
 
 中文:
 引理 summable_and_hasSum_factoredNumbers_prod_filter_prime_geometric
@@ -560,7 +621,12 @@ exact tsum_geometric_of_norm_lt_one h (mem_filter.mp hp).2
     refine prod_congr rfl fun p hp => ?_
     simp only [map_pow]
 exact tsum_geometric_of_norm_lt_one h (mem_filter.mp hp).2
-  have H₂ 
+  have H₂ : forall {p : Nat}, p.Prime -> Summable fun n => ‖f (p ^ n)‖ := by
+    intro p hp
+    simp only [map_pow]
+    refine Summable.of_nonneg_of_le (fun _ => norm_nonneg _) (fun _ => norm_pow_le ..) ?_
+exact summable_geometric_iff_norm_lt_one.mpr (norm_norm (f p)).symm ▸ h hp
+  exact H₁ ▸ summable_and_hasSum_factoredNumbers_prod_filter_prime_tsum f.map_one hmul H₂ s
 
 Depends on / 依赖: Coprime, Nat.Coprime, Summable, Summable.of_nonneg_of_le, f.map_mul, map_mul, map_pow, mem_filter, mem_filter.mp, norm_nonneg, norm_pow_le, of_nonneg_of_le, p.Prime, prod_congr, summable_geometric_iff_norm_lt, tsum_geometric_of_norm_lt_one
 -/
@@ -716,7 +782,13 @@ theorem eulerProduct_completely_multiplicative
   have hmul {m n} (_ : Nat.Coprime m n) := f.map_mul m n
   have := (eulerProduct_hasProd_mulIndicator f.map_one hmul hsum f.map_zero).tendsto_prod_nat
   have H (n : Nat) : ∏ p in range n, {p | Nat.Prime p}.mulIndicator (fun p => (1 - f p)⁻¹) p =
-                     ∏ p in primesBelow n, (1 - f p
+                     ∏ p in primesBelow n, (1 - f p)⁻¹ :=
+    prod_mulIndicator_eq_prod_filter
+      (range n) (fun _ p => (1 - f p)⁻¹) (fun _ => {p | Nat.Prime p}) id
+  have H' : {p | Nat.Prime p}.mulIndicator (fun p => (1 - f p)⁻¹) =
+              {p | Nat.Prime p}.mulIndicator (fun p => ∑' e : Nat, f (p ^ e)) :=
+    Set.mulIndicator_congr fun p hp => one_sub_inv_eq_geometric_of_summable_norm hp hsum
+  simpa only [← H, H'] using this
 
 中文:
 定理 eulerProduct_completely_multiplicative
@@ -725,7 +797,13 @@ theorem eulerProduct_completely_multiplicative
   have hmul {m n} (_ : Nat.Coprime m n) := f.map_mul m n
   have := (eulerProduct_hasProd_mulIndicator f.map_one hmul hsum f.map_zero).tendsto_prod_nat
   have H (n : Nat) : ∏ p in range n, {p | Nat.Prime p}.mulIndicator (fun p => (1 - f p)⁻¹) p =
-                     ∏ p in primesBelow n, (1 - f p
+                     ∏ p in primesBelow n, (1 - f p)⁻¹ :=
+    prod_mulIndicator_eq_prod_filter
+      (range n) (fun _ p => (1 - f p)⁻¹) (fun _ => {p | Nat.Prime p}) id
+  have H' : {p | Nat.Prime p}.mulIndicator (fun p => (1 - f p)⁻¹) =
+              {p | Nat.Prime p}.mulIndicator (fun p => ∑' e : Nat, f (p ^ e)) :=
+    Set.mulIndicator_congr fun p hp => one_sub_inv_eq_geometric_of_summable_norm hp hsum
+  simpa only [← H, H'] using this
 
 Depends on / 依赖: Coprime, Nat.Coprime, Nat.Prime, eulerProduct_hasProd_mulIndicator, f.map_mul, f.map_one, f.map_zero, map_mul, map_one, map_zero, mulIndicator, primesBelow, prod_mulIndicator_eq_prod_filter, tendsto_prod_nat
 -/
@@ -824,7 +902,11 @@ lemma tprod_eq_tprod_primes_mul_tprod_primes_of_mulSupport_subset_prime_powers
   have hfs' (p : Nat.Primes) : Multipliable fun k => f (p ^ (k + 1)) :=
 hfm.comp_injective (strictMono_nat_of_lt_succ
       (pow_lt_pow_right₀ p.prop.one_lt <| lt_add_one <| · + 1)).injective
-  simp only [(hfs' _).tprod_eq_zero
+  simp only [(hfs' _).tprod_eq_zero_mul, zero_add, pow_one]
+  apply (Multipliable.subtype hfm _).tprod_mul
+  refine (hfm.comp_injective ?_).prod (f := fun (pk : Nat.Primes × Nat) => f (pk.1 ^ (pk.2 + 2)))
+.comp exact Subtype.val_injective.comp prodNatEquiv.injective
+Function.Injective.prodMap (fun ⦃_ _⦄ => id) add_left_injective 1
 
 中文:
 引理 tprod_eq_tprod_primes_mul_tprod_primes_of_mulSupport_subset_prime_powers
@@ -833,7 +915,11 @@ hfm.comp_injective (strictMono_nat_of_lt_succ
   have hfs' (p : Nat.Primes) : Multipliable fun k => f (p ^ (k + 1)) :=
 hfm.comp_injective (strictMono_nat_of_lt_succ
       (pow_lt_pow_right₀ p.prop.one_lt <| lt_add_one <| · + 1)).injective
-  simp only [(hfs' _).tprod_eq_zero
+  simp only [(hfs' _).tprod_eq_zero_mul, zero_add, pow_one]
+  apply (Multipliable.subtype hfm _).tprod_mul
+  refine (hfm.comp_injective ?_).prod (f := fun (pk : Nat.Primes × Nat) => f (pk.1 ^ (pk.2 + 2)))
+.comp exact Subtype.val_injective.comp prodNatEquiv.injective
+Function.Injective.prodMap (fun ⦃_ _⦄ => id) add_left_injective 1
 
 Depends on / 依赖: Multipliable, Multipliable.subtype, Nat.Primes, Primes, Subtype, Subtype.val_injective.comp, comp_injective, hfm.comp_injective, injective, lt_add_one, one_lt, p.prop.one_lt, pow_one, prodNat, strictMono_nat_of_lt_succ, subtype, tprod_eq_tprod_primes_of_mulSupport_subset_prime_powers, tprod_eq_zero_mul, tprod_mul, val_injective
 -/

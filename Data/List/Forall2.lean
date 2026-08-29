@@ -528,7 +528,11 @@ theorem forall₂_iff_zip
     | cons a l₁ IH =>
       rcases l₂ with - | ⟨b, l₂⟩
       · simp at h₁
-      · simp only [l
+      · simp only [length_cons, succ.injEq] at h₁
+        exact Forall₂.cons (h₂ <| by simp [zip])
+          (IH h₁ fun h => h₂ <| by
+            simp only [zip, zipWith, mem_cons, Prod.mk.injEq]; right
+            simpa [zip] using h)⟩
 
 中文:
 定理 对任意₂_iff_zip
@@ -542,7 +546,11 @@ theorem forall₂_iff_zip
     | cons a l₁ IH =>
       rcases l₂ with - | ⟨b, l₂⟩
       · simp at h₁
-      · simp only [l
+      · simp only [length_cons, succ.injEq] at h₁
+        exact Forall₂.cons (h₂ <| by simp [zip])
+          (IH h₁ fun h => h₂ <| by
+            simp only [zip, zipWith, mem_cons, Prod.mk.injEq]; right
+            simpa [zip] using h)⟩
 
 Depends on / 依赖: Prod.mk.injEq, generalizing, length_cons, length_eq, length_eq_zero_iff, mem_cons, succ.injEq, zipWith
 -/
@@ -907,7 +915,19 @@ theorem sublistForall₂_iff
       exact ⟨b :: l, Forall₂.cons rab hl1, hl2.cons_cons b⟩
     | cons_right _ ih =>
       obtain ⟨l, hl1, hl2⟩ := ih
-      exact 
+      exact ⟨l, hl1, hl2.trans (Sublist.cons _ (Sublist.refl _))⟩
+  · obtain ⟨l, hl1, hl2⟩ := h
+    revert l₁
+    induction hl2 with
+    | slnil =>
+      intro l₁ hl1
+      rw [forall₂_nil_right_iff.1 hl1]
+      exact SublistForall₂.nil
+    | cons _ _ ih => intro l₁ hl1; exact SublistForall₂.cons_right (ih hl1)
+    | cons_cons _ _ ih =>
+      intro l₁ hl1
+      obtain - | ⟨hr, hl⟩ := hl1
+      exact SublistForall₂.cons hr (ih hl)
 
 中文:
 定理 sublistForall₂_iff
@@ -921,7 +941,19 @@ theorem sublistForall₂_iff
       exact ⟨b :: l, Forall₂.cons rab hl1, hl2.cons_cons b⟩
     | cons_right _ ih =>
       obtain ⟨l, hl1, hl2⟩ := ih
-      exact 
+      exact ⟨l, hl1, hl2.trans (Sublist.cons _ (Sublist.refl _))⟩
+  · obtain ⟨l, hl1, hl2⟩ := h
+    revert l₁
+    induction hl2 with
+    | slnil =>
+      intro l₁ hl1
+      rw [forall₂_nil_right_iff.1 hl1]
+      exact SublistForall₂.nil
+    | cons _ _ ih => intro l₁ hl1; exact SublistForall₂.cons_right (ih hl1)
+    | cons_cons _ _ ih =>
+      intro l₁ hl1
+      obtain - | ⟨hr, hl⟩ := hl1
+      exact SublistForall₂.cons hr (ih hl)
 
 Depends on / 依赖: Sublist, Sublist.cons, Sublist.refl, SublistFor, cons_cons, cons_right, hl2.cons_cons, hl2.trans, nil_sublist, revert
 -/
@@ -986,7 +1018,10 @@ instance SublistForall₂.is_trans
       · cases h1
         exact SublistForall₂.nil
       · obtain - | ⟨hab, tab⟩ | atb := h1
-     
+        · exact SublistForall₂.nil
+        · exact SublistForall₂.cons (_root_.trans hab hbc) (ih _ _ tab tbc)
+        · exact SublistForall₂.cons_right (ih _ _ atb tbc)
+      · exact SublistForall₂.cons_right (ih _ _ h1 btc)⟩
 
 中文:
 实例 SublistForall₂.is_trans
@@ -1004,7 +1039,10 @@ instance SublistForall₂.is_trans
       · cases h1
         exact SublistForall₂.nil
       · obtain - | ⟨hab, tab⟩ | atb := h1
-     
+        · exact SublistForall₂.nil
+        · exact SublistForall₂.cons (_root_.trans hab hbc) (ih _ _ tab tbc)
+        · exact SublistForall₂.cons_right (ih _ _ atb tbc)
+      · exact SublistForall₂.cons_right (ih _ _ h1 btc)⟩
 
 Depends on / 依赖: _root_, _root_.trans, cons_right, revert
 -/

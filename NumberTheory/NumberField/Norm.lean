@@ -192,7 +192,7 @@ theorem dvd_norm
   refine ⟨⟨_, hint⟩, ?_⟩
   ext
   rw [coe_algebraMap_norm K x]; rw [norm_eq_prod_automorphisms]
-  simp [← Finset.mu
+  simp [← Finset.mul_prod_erase _ _ (mem_univ AlgEquiv.refl)]
 
 中文:
 定理 dvd_norm
@@ -206,7 +206,7 @@ theorem dvd_norm
   refine ⟨⟨_, hint⟩, ?_⟩
   ext
   rw [coe_algebraMap_norm K x]; rw [norm_eq_prod_automorphisms]
-  simp [← Finset.mu
+  simp [← Finset.mul_prod_erase _ _ (mem_univ AlgEquiv.refl)]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.refl, Finset, Finset.mul_prod_erase, IsIntegral, IsIntegral.prod, RingOfIntegers, RingOfIntegers.isIntegral_coe, classical, coe_algebraMap_norm, isIntegral_coe, mem_univ, mul_prod_erase, norm_eq_prod_automorphisms, univ.erase
 -/
@@ -279,7 +279,14 @@ theorem isUnit_norm
   have : FiniteDimensional F L := FiniteDimensional.right K F L
   have : IsGalois F L := IsGalois.tower_top_of_isGalois K F L
   calc
-    IsUnit (norm K x) ↔ IsUnit ((norm K) 
+    IsUnit (norm K x) ↔ IsUnit ((norm K) x ^ finrank F L) :=
+      (isUnit_pow_iff (pos_iff_ne_zero.mp finrank_pos)).symm
+    _ ↔ IsUnit (norm K (algebraMap (𝓞 F) (𝓞 L) x)) := by
+      rw [← norm_norm K F (algebraMap (𝓞 F) (𝓞 L) x)]; rw [norm_algebraMap F _]; rw [map_pow]
+    _ ↔ IsUnit (algebraMap (𝓞 F) (𝓞 L) x) := isUnit_norm_of_isGalois K
+    _ ↔ IsUnit (norm F (algebraMap (𝓞 F) (𝓞 L) x)) := (isUnit_norm_of_isGalois F).symm
+    _ ↔ IsUnit (x ^ finrank F L) := (congr_arg IsUnit (norm_algebraMap F _)).to_iff
+    _ ↔ IsUnit x := isUnit_pow_iff (pos_iff_ne_zero.mp finrank_pos)
 
 中文:
 定理 isUnit_norm
@@ -291,7 +298,14 @@ theorem isUnit_norm
   have : FiniteDimensional F L := FiniteDimensional.right K F L
   have : IsGalois F L := IsGalois.tower_top_of_isGalois K F L
   calc
-    IsUnit (norm K x) ↔ IsUnit ((norm K) 
+    IsUnit (norm K x) ↔ IsUnit ((norm K) x ^ finrank F L) :=
+      (isUnit_pow_iff (pos_iff_ne_zero.mp finrank_pos)).symm
+    _ ↔ IsUnit (norm K (algebraMap (𝓞 F) (𝓞 L) x)) := by
+      rw [← norm_norm K F (algebraMap (𝓞 F) (𝓞 L) x)]; rw [norm_algebraMap F _]; rw [map_pow]
+    _ ↔ IsUnit (algebraMap (𝓞 F) (𝓞 L) x) := isUnit_norm_of_isGalois K
+    _ ↔ IsUnit (norm F (algebraMap (𝓞 F) (𝓞 L) x)) := (isUnit_norm_of_isGalois F).symm
+    _ ↔ IsUnit (x ^ finrank F L) := (congr_arg IsUnit (norm_algebraMap F _)).to_iff
+    _ ↔ IsUnit x := isUnit_pow_iff (pos_iff_ne_zero.mp finrank_pos)
 
 Depends on / 依赖: Algebra, AlgebraicClosure, AlgebraicClosure.instAlgebra, FiniteDimensional, FiniteDimensional.right, IsGalois, IsGalois.tower_top_of_isGalois, IsUnit, algebraMap, finrank, finrank_pos, instAlgebra, isUnit_pow_iff, map_pow, norm_algebraMap, norm_norm, normalClosure, pos_iff_ne_zero, pos_iff_ne_zero.mp, tower_top_of_isGalois
 -/

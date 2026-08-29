@@ -43,7 +43,9 @@ definition AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly
     refine ⟨(injective_iff_map_eq_zero _).2 fun P₁ hP₁ => ?_, Minpoly.toAdjoin.surjective F x⟩
     obtain ⟨P, rfl⟩ := mk_surjective P₁
     refine AdjoinRoot.mk_eq_zero.mpr (minpoly.dvd F x ?_)
-    simpa [← Subalgebra.coe_eq_zero, ← aeval_d
+    simpa [← Subalgebra.coe_eq_zero, ← aeval_def] using hP₁
+
+@[simp]
 
 中文:
 定义 代数等价.adjoinSingletonEquivAdjoinRootMinpoly
@@ -52,7 +54,9 @@ definition AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly
     refine ⟨(injective_iff_map_eq_zero _).2 fun P₁ hP₁ => ?_, Minpoly.toAdjoin.surjective F x⟩
     obtain ⟨P, rfl⟩ := mk_surjective P₁
     refine AdjoinRoot.mk_eq_zero.mpr (minpoly.dvd F x ?_)
-    simpa [← Subalgebra.coe_eq_zero, ← aeval_d
+    simpa [← Subalgebra.coe_eq_zero, ← aeval_def] using hP₁
+
+@[simp]
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.mk_eq_zero.mpr, AlgEquiv, AlgEquiv.ofBijective, AlgEquiv.symm, Minpoly, Minpoly.toAdjoin, Minpoly.toAdjoin.surjective, Subalgebra, Subalgebra.coe_eq_zero, aeval_def, coe_eq_zero, injective_iff_map_eq_zero, minpoly, minpoly.dvd, mk_eq_zero, mk_surjective, ofBijective, surjective, toAdjoin
 -/
@@ -143,6 +147,20 @@ theorem Polynomial.lift_of_splits
     rcases H with ⟨⟨H1, H2⟩, H3⟩
     obtain ⟨f⟩ := ih H3
     choose H3 _ using H3
+    rw [coe_insert]; rw [Set.insert_eq]; rw [Set.union_comm]; rw [Algebra.adjoin_union_eq_adjoin_adjoin]
+    set Ks := Algebra.adjoin F (s : Set K)
+    have : FiniteDimensional F Ks := ((Submodule.fg_iff_finiteDimensional _).1
+      (fg_adjoin_of_finite s.finite_toSet H3)).of_subalgebra_toSubmodule
+    let := fieldOfFiniteDimensional F Ks
+    let := (f : Ks ->+* L).toAlgebra
+    have H5 : IsIntegral Ks a := H1.tower_top
+    have H6 : ((minpoly Ks a).map (algebraMap Ks L)).Splits := by
+      refine Splits.of_dvd H2 (map_ne_zero (minpoly.ne_zero H1)) ?_
+      rw [IsScalarTower.algebraMap_eq F Ks L]; rw [← map_map]; rw [map_dvd_map']
+      exact minpoly.dvd_map_of_isScalarTower F Ks a
+    obtain ⟨y, hy⟩ := H6.exists_eval_eq_zero (by simp [(minpoly.degree_pos H5).ne'])
+    rw [eval_map] at hy
+exact ⟨Subalgebra.ofRestrictScalars F _ Algebra.adjoin.liftSingleton Ks a y hy⟩
 
 中文:
 定理 多项式.lift_of_splits
@@ -156,6 +174,20 @@ theorem Polynomial.lift_of_splits
     rcases H with ⟨⟨H1, H2⟩, H3⟩
     obtain ⟨f⟩ := ih H3
     choose H3 _ using H3
+    rw [coe_insert]; rw [Set.insert_eq]; rw [Set.union_comm]; rw [Algebra.adjoin_union_eq_adjoin_adjoin]
+    set Ks := Algebra.adjoin F (s : Set K)
+    have : FiniteDimensional F Ks := ((Submodule.fg_iff_finiteDimensional _).1
+      (fg_adjoin_of_finite s.finite_toSet H3)).of_subalgebra_toSubmodule
+    let := fieldOfFiniteDimensional F Ks
+    let := (f : Ks ->+* L).toAlgebra
+    have H5 : IsIntegral Ks a := H1.tower_top
+    have H6 : ((minpoly Ks a).map (algebraMap Ks L)).Splits := by
+      refine Splits.of_dvd H2 (map_ne_zero (minpoly.ne_zero H1)) ?_
+      rw [IsScalarTower.algebraMap_eq F Ks L]; rw [← map_map]; rw [map_dvd_map']
+      exact minpoly.dvd_map_of_isScalarTower F Ks a
+    obtain ⟨y, hy⟩ := H6.exists_eval_eq_zero (by simp [(minpoly.degree_pos H5).ne'])
+    rw [eval_map] at hy
+exact ⟨Subalgebra.ofRestrictScalars F _ Algebra.adjoin.liftSingleton Ks a y hy⟩
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_empty, Algebra.adjoin_union_eq_adjoin_adjoin, Algebra.botEquiv, Algebra.ofId, FiniteDimensional, Finset, Finset.induction_on, Set.insert_eq, Set.union_comm, Submodule, Submodule.fg_iff_finiteDimensional, adjoin, adjoin_empty, adjoin_union_eq_adjoin_adjoin, botEquiv, classical, coe_empty, coe_insert
 -/

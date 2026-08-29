@@ -199,7 +199,7 @@ theorem isClosed_iteratedDerivedSet
     simp_all [ha.relDerivedSet_eq, isClosed_iff_derivedSet_subset, derivedSet_mono]
   | limit a ha ih =>
     simpa [iteratedDerivedSet_limit ha] using
-      isClosed_iInter f
+      isClosed_iInter fun i => isClosed_iInter fun hi => ih i hi
 
 中文:
 定理 isClosed_iteratedDerivedSet
@@ -212,7 +212,7 @@ theorem isClosed_iteratedDerivedSet
     simp_all [ha.relDerivedSet_eq, isClosed_iff_derivedSet_subset, derivedSet_mono]
   | limit a ha ih =>
     simpa [iteratedDerivedSet_limit ha] using
-      isClosed_iInter f
+      isClosed_iInter fun i => isClosed_iInter fun hi => ih i hi
 
 Depends on / 依赖: Ordinal, Ordinal.limitRecOn, add_one, derivedSet_mono, ha.relDerivedSet_eq, isClosed_iInter, isClosed_iff_derivedSet_subset, iteratedDerivedSet_limit, iteratedDerivedSet_zero, limitRecOn, relDerivedSet_eq
 -/

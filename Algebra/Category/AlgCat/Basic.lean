@@ -898,7 +898,8 @@ definition restrictScalars
     letI : Algebra R B := Algebra.compHom _ f
     letI : Algebra R S := f.toAlgebra
     haveI : IsScalarTower R S A := .of_algebraMap_eq' rfl
-    haveI : IsScalarTower R S B := 
+    haveI : IsScalarTower R S B := .of_algebraMap_eq' rfl
+    AlgCat.ofHom (g.hom.restrictScalars _)
 
 中文:
 定义 restrictScalars
@@ -910,7 +911,8 @@ definition restrictScalars
     letI : Algebra R B := Algebra.compHom _ f
     letI : Algebra R S := f.toAlgebra
     haveI : IsScalarTower R S A := .of_algebraMap_eq' rfl
-    haveI : IsScalarTower R S B := 
+    haveI : IsScalarTower R S B := .of_algebraMap_eq' rfl
+    AlgCat.ofHom (g.hom.restrictScalars _)
 
 Depends on / 依赖: AlgCat, AlgCat.of, AlgCat.ofHom, Algebra, Algebra.compHom, IsScalarTower, compHom, f.toAlgebra, g.hom.restrictScalars, of_algebraMap_eq, restrictScalars, toAlgebra
 -/
@@ -1013,7 +1015,7 @@ definition restrictScalarsEquivalenceOfRingEquiv
   unitIso := (restrictScalarsId' _ rfl).symm ≪≫
     restrictScalarsComp' _ _ _ e.toRingHom_comp_symm_toRingHom.symm
   counitIso := (restrictScalarsComp' _ _ _ e.symm_toRingHom_comp_toRingHom.symm).symm ≪≫
-    restrictScalarsId
+    restrictScalarsId' _ rfl
 
 中文:
 定义 restrictScalarsEquivalenceOfRingEquiv
@@ -1023,7 +1025,7 @@ definition restrictScalarsEquivalenceOfRingEquiv
   unitIso := (restrictScalarsId' _ rfl).symm ≪≫
     restrictScalarsComp' _ _ _ e.toRingHom_comp_symm_toRingHom.symm
   counitIso := (restrictScalarsComp' _ _ _ e.symm_toRingHom_comp_toRingHom.symm).symm ≪≫
-    restrictScalarsId
+    restrictScalarsId' _ rfl
 
 Depends on / 依赖: e.toRingHom, restrictScalars, toRingHom
 -/

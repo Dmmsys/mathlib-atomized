@@ -78,7 +78,20 @@ definition privateModule
       return
     if (← getEnv).header.isModule
       -- If there are new initializers, this module has a downstream effect and is not private.
-      && (regularInitAttr.ext.getState 
+      && (regularInitAttr.ext.getState (← getEnv)).1.isEmpty
+      -- Don't lint an imports-only module:
+      && !(← getEnv).constants.map₂.isEmpty
+    then
+      -- Exit if any declaration from the current module is public:
+      for (decl, _) in (← getEnv).constants.map₂ do
+        -- Ignore both private and reserved names; see implementation notes
+        if !isPrivateName decl && !isReservedName (← getEnv) decl then return
+      -- Lint if all names are private:
+      let topOfFileRef := Syntax.atom (.synthetic ⟨0⟩ ⟨0⟩) ""
+      logLint linter.privateModule topOfFileRef
+        "The current module only contains private declarations.\n\n\
+        Consider adding `@[expose] public section` at the beginning of the module, \
+        or selectively marking declarations as `public`."
 
 中文:
 定义 privateModule
@@ -89,7 +102,20 @@ definition privateModule
       return
     if (← getEnv).header.isModule
       -- If there are new initializers, this module has a downstream effect and is not private.
-      && (regularInitAttr.ext.getState 
+      && (regularInitAttr.ext.getState (← getEnv)).1.isEmpty
+      -- Don't lint an imports-only module:
+      && !(← getEnv).constants.map₂.isEmpty
+    then
+      -- Exit if any declaration from the current module is public:
+      for (decl, _) in (← getEnv).constants.map₂ do
+        -- Ignore both private and reserved names; see implementation notes
+        if !isPrivateName decl && !isReservedName (← getEnv) decl then return
+      -- Lint if all names are private:
+      let topOfFileRef := Syntax.atom (.synthetic ⟨0⟩ ⟨0⟩) ""
+      logLint linter.privateModule topOfFileRef
+        "The current module only contains private declarations.\n\n\
+        Consider adding `@[expose] public section` at the beginning of the module, \
+        or selectively marking declarations as `public`."
 -/
 def privateModule : Linter where run stx := do
   if stx.isOfKind ``Parser.Command.eoi then

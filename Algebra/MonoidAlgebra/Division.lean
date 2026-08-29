@@ -569,7 +569,7 @@ theorem divOf_add_modOf
   obtain ⟨d, rfl⟩ | h := em (exists d, g' = g + d)
   · rw [coeff_modOf_self_add, add_zero, coeff_single_mul_add, one_mul, coeff_divOf]
   · rw [coeff_modOf_of_not_exists_add x _ _ h, coeff_single_mul_of_forall_add_ne, zero_add]
-    si
+    simpa [eq_comm] using h
 
 中文:
 定理 divOf_add_modOf
@@ -580,7 +580,7 @@ theorem divOf_add_modOf
   obtain ⟨d, rfl⟩ | h := em (exists d, g' = g + d)
   · rw [coeff_modOf_self_add, add_zero, coeff_single_mul_add, one_mul, coeff_divOf]
   · rw [coeff_modOf_of_not_exists_add x _ _ h, coeff_single_mul_of_forall_add_ne, zero_add]
-    si
+    simpa [eq_comm] using h
 
 Depends on / 依赖: Finsupp, Finsupp.add_apply, _apply, add_apply, add_zero, coeff_add, coeff_divOf, coeff_modOf_of_not_exists_add, coeff_modOf_self_add, coeff_single_mul_add, coeff_single_mul_of_forall_add_ne, eq_comm, one_mul, zero_add
 -/

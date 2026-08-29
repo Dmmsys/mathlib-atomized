@@ -267,7 +267,7 @@ lemma le_triangEnvelopeIter
     _ <= (P.shiftClosure Int).binaryProductsClosure.retractClosure := le_retractClosure _
     _ <= P.triangEnvelopeIter n := by
       rw [← triangEnvelopeIter_zero]
-     
+      exact P.monotone'_triangEnvelopeIter (Nat.zero_le n)
 
 中文:
 引理 le_triangEnvelopeIter
@@ -279,7 +279,7 @@ lemma le_triangEnvelopeIter
     _ <= (P.shiftClosure Int).binaryProductsClosure.retractClosure := le_retractClosure _
     _ <= P.triangEnvelopeIter n := by
       rw [← triangEnvelopeIter_zero]
-     
+      exact P.monotone'_triangEnvelopeIter (Nat.zero_le n)
 
 Depends on / 依赖: Nat.zero_le, P.monotone, P.shiftClosure, P.triangEnvelopeIter, _triangEnvelopeIter, binaryProductsClosure, binaryProductsClosure.retractClosure, le_limitsClosure, le_retractClosure, le_shiftClosure, monotone, retractClosure, shiftClosure, triangEnvelopeIter, triangEnvelopeIter_zero, zero_le
 -/
@@ -574,7 +574,7 @@ lemma triangEnvelope_le_iff
   intro n
   rw [triangEnvelopeIter]; rw [retractClosure_le_iff]
   apply extensionProductIter_le_of_isTriangulatedClosed₂
-  rwa [retractClosure_le_iff, binaryProductsClosure_le_iff, shiftClosure
+  rwa [retractClosure_le_iff, binaryProductsClosure_le_iff, shiftClosure_le_iff]
 
 中文:
 引理 triangEnvelope_le_iff
@@ -585,7 +585,7 @@ lemma triangEnvelope_le_iff
   intro n
   rw [triangEnvelopeIter]; rw [retractClosure_le_iff]
   apply extensionProductIter_le_of_isTriangulatedClosed₂
-  rwa [retractClosure_le_iff, binaryProductsClosure_le_iff, shiftClosure
+  rwa [retractClosure_le_iff, binaryProductsClosure_le_iff, shiftClosure_le_iff]
 
 Depends on / 依赖: P.le_triangEnvelope, binaryProductsClosure_le_iff, iSup_le_iff, le_trans, le_triangEnvelope, retractClosure_le_iff, shiftClosure_le_iff, triangEnvelope, triangEnvelopeIter
 -/

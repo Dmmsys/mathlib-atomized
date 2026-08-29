@@ -142,7 +142,16 @@ theorem antidiagonal_single
   constructor
   · intro h
 .trans single_eq_same, ?_⟩ refine ⟨x a, y a, DFunLike.congr_fun h a
-    simp_rw [DFunLike.e
+    simp_rw [DFunLike.ext_iff, ← forall_and]
+    intro i
+    replace h := DFunLike.congr_fun h i
+    simp_rw [single_apply, Finsupp.add_apply] at h ⊢
+    obtain rfl | hai := Decidable.eq_or_ne a i
+    · exact ⟨if_pos rfl, if_pos rfl⟩
+    · simp_rw [if_neg hai, add_eq_zero] at h ⊢
+      exact h.imp Eq.symm Eq.symm
+  · rintro ⟨a, b, rfl, rfl, rfl⟩
+    exact (single_add _ _ _).symm
 
 中文:
 定理 antidiagonal_single
@@ -154,7 +163,16 @@ theorem antidiagonal_single
   constructor
   · intro h
 .trans single_eq_same, ?_⟩ refine ⟨x a, y a, DFunLike.congr_fun h a
-    simp_rw [DFunLike.e
+    simp_rw [DFunLike.ext_iff, ← forall_and]
+    intro i
+    replace h := DFunLike.congr_fun h i
+    simp_rw [single_apply, Finsupp.add_apply] at h ⊢
+    obtain rfl | hai := Decidable.eq_or_ne a i
+    · exact ⟨if_pos rfl, if_pos rfl⟩
+    · simp_rw [if_neg hai, add_eq_zero] at h ⊢
+      exact h.imp Eq.symm Eq.symm
+  · rintro ⟨a, b, rfl, rfl, rfl⟩
+    exact (single_add _ _ _).symm
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, DFunLike.ext_iff, Decidable, Decidable.eq_or_ne, Embedding, Finsupp, Finsupp.add_apply, Function, Function.Embedding.coeFn_mk, Function.Embedding.coe_prodMap, Prod.exists, Prod.map_apply, Prod.mk.injEq, add_apply, coeFn_mk, coe_prodMap, congr_fun, eq_or_ne, ext_iff
 -/
@@ -191,7 +209,11 @@ theorem image_prodMap_embDomain_antidiagonal
   refine ⟨fun ⟨w, z, h, hw, hz⟩ => ?_, fun h => ⟨u.comapDomain f f.injective.injOn,
     ⟨v.comapDomain f f.injective.injOn, ?_, ?_, ?_⟩⟩⟩
   · rw [← hw, ← hz, ← embDomain_add, h]
-  · rw [← comapD
+  · rw [← comapDomain_add_of_injective f.injective, h, comapDomain_embDomain]
+  · rw [embDomain_comapDomain ((mem_range_embDomain_iff ..).mp
+      (isLowerSet_range_embDomain f (le_iff_exists_add.mpr ⟨v, h.symm⟩) (by simp)))]
+  · rw [embDomain_comapDomain ((mem_range_embDomain_iff ..).mp
+      (isLowerSet_range_embDomain f (le_iff_exists_add'.mpr ⟨u, h.symm⟩) (by simp)))]
 
 中文:
 定理 image_prodMap_embDomain_antidiagonal
@@ -203,7 +225,11 @@ theorem image_prodMap_embDomain_antidiagonal
   refine ⟨fun ⟨w, z, h, hw, hz⟩ => ?_, fun h => ⟨u.comapDomain f f.injective.injOn,
     ⟨v.comapDomain f f.injective.injOn, ?_, ?_, ?_⟩⟩⟩
   · rw [← hw, ← hz, ← embDomain_add, h]
-  · rw [← comapD
+  · rw [← comapDomain_add_of_injective f.injective, h, comapDomain_embDomain]
+  · rw [embDomain_comapDomain ((mem_range_embDomain_iff ..).mp
+      (isLowerSet_range_embDomain f (le_iff_exists_add.mpr ⟨v, h.symm⟩) (by simp)))]
+  · rw [embDomain_comapDomain ((mem_range_embDomain_iff ..).mp
+      (isLowerSet_range_embDomain f (le_iff_exists_add'.mpr ⟨u, h.symm⟩) (by simp)))]
 
 Depends on / 依赖: Prod.exists, Prod.map_apply, Prod.mk.injEq, comapDomain, comapDomain_add_of_injective, comapDomain_embDomain, embDomain_, embDomain_add, embDomain_comapDomain, f.injective, f.injective.injOn, h.symm, injective, isLowerSet_range_embDomain, le_iff_exists_add, le_iff_exists_add.mpr, map_apply, mem_antidiagonal, mem_image, mem_range_embDomain_iff
 -/
@@ -234,7 +260,11 @@ theorem image_sumElim_product_antidiagonal
   simp only [mem_antidiagonal, mem_image, mem_product, Prod.mk.injEq, Prod.exists]
   refine ⟨fun ⟨a, b, a', b', h1, h2, h3⟩ => ?_, fun h =>
     ⟨u.comapDomain Sum.inl Sum.inl_injective.injOn, v.comapDomain Sum.inl Sum.inl_injective.injOn,
-    u.comapDomain Sum.inr Sum.inr_injective.i
+    u.comapDomain Sum.inr Sum.inr_injective.injOn, v.comapDomain Sum.inr Sum.inr_injective.injOn,
+    ⟨?_, ?_⟩, comapDomain_sumElim_comapDomain .., comapDomain_sumElim_comapDomain ..⟩⟩
+  · rw [← h2, ← h3, ← sumElim_add, h1.left, h1.right]
+  · rw [← comapDomain_add_of_injective Sum.inl_injective, h, comapDomain_inl_sumElim]
+  · rw [← comapDomain_add_of_injective Sum.inr_injective, h, comapDomain_inr_sumElim]
 
 中文:
 定理 image_sumElim_product_antidiagonal
@@ -244,7 +274,11 @@ theorem image_sumElim_product_antidiagonal
   simp only [mem_antidiagonal, mem_image, mem_product, Prod.mk.injEq, Prod.exists]
   refine ⟨fun ⟨a, b, a', b', h1, h2, h3⟩ => ?_, fun h =>
     ⟨u.comapDomain Sum.inl Sum.inl_injective.injOn, v.comapDomain Sum.inl Sum.inl_injective.injOn,
-    u.comapDomain Sum.inr Sum.inr_injective.i
+    u.comapDomain Sum.inr Sum.inr_injective.injOn, v.comapDomain Sum.inr Sum.inr_injective.injOn,
+    ⟨?_, ?_⟩, comapDomain_sumElim_comapDomain .., comapDomain_sumElim_comapDomain ..⟩⟩
+  · rw [← h2, ← h3, ← sumElim_add, h1.left, h1.right]
+  · rw [← comapDomain_add_of_injective Sum.inl_injective, h, comapDomain_inl_sumElim]
+  · rw [← comapDomain_add_of_injective Sum.inr_injective, h, comapDomain_inr_sumElim]
 
 Depends on / 依赖: Prod.exists, Prod.mk.injEq, Sum.inl, Sum.inl_injective.injOn, Sum.inr, Sum.inr_injective.injOn, comapDomain, comapDomain_add_of, comapDomain_sumElim_comapDomain, h1.left, h1.right, inl_injective, inr_injective, mem_antidiagonal, mem_image, mem_product, sumElim_add, u.comapDomain, v.comapDomain
 -/

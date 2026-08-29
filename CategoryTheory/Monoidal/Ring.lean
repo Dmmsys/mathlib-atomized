@@ -50,7 +50,16 @@ lemma mul_add_iff
     simp only [Hom.add_def, Hom.mul_def, this, ← Category.assoc]
     cat_disch
   · replace h := h (fst R (R otimes R)) (snd _ _ ≫ fst _ _) (snd _ _ ≫ snd _ _)
-    simp onl
+    simp only [Hom.mul_def, Hom.add_def] at h
+    convert! h using 2
+    · cat_disch
+    · ext
+      · simp only [lift_fst]
+        congr 1
+        cat_disch
+      · simp only [lift_snd]
+        congr 1
+        cat_disch
 
 中文:
 引理 mul_add_iff
@@ -62,7 +71,16 @@ lemma mul_add_iff
     simp only [Hom.add_def, Hom.mul_def, this, ← Category.assoc]
     cat_disch
   · replace h := h (fst R (R otimes R)) (snd _ _ ≫ fst _ _) (snd _ _ ≫ snd _ _)
-    simp onl
+    simp only [Hom.mul_def, Hom.add_def] at h
+    convert! h using 2
+    · cat_disch
+    · ext
+      · simp only [lift_fst]
+        congr 1
+        cat_disch
+      · simp only [lift_snd]
+        congr 1
+        cat_disch
 
 Depends on / 依赖: Category, Category.assoc, Hom.add_def, Hom.mul_def, add_def, cat_disch, convert, lift_fst, lift_snd, lift_whiskerLeft_assoc, mul_def, otimes, replace
 -/
@@ -99,7 +117,16 @@ lemma add_mul_iff
     simp only [Hom.add_def, Hom.mul_def, this, ← Category.assoc]
     cat_disch
   · replace h := h (fst (R otimes R) R ≫ fst _ _) (fst _ _ ≫ snd _ _) (snd _ _)
-    simp on
+    simp only [Hom.mul_def, Hom.add_def] at h
+    convert! h using 2
+    · cat_disch
+    · ext
+      · simp only [lift_fst]
+        congr 1
+        cat_disch
+      · simp only [lift_snd]
+        congr 1
+        cat_disch
 
 中文:
 引理 add_mul_iff
@@ -111,7 +138,16 @@ lemma add_mul_iff
     simp only [Hom.add_def, Hom.mul_def, this, ← Category.assoc]
     cat_disch
   · replace h := h (fst (R otimes R) R ≫ fst _ _) (fst _ _ ≫ snd _ _) (snd _ _)
-    simp on
+    simp only [Hom.mul_def, Hom.add_def] at h
+    convert! h using 2
+    · cat_disch
+    · ext
+      · simp only [lift_fst]
+        congr 1
+        cat_disch
+      · simp only [lift_snd]
+        congr 1
+        cat_disch
 
 Depends on / 依赖: Category, Category.assoc, Hom.add_def, Hom.mul_def, add_def, cat_disch, convert, lift_fst, lift_snd, lift_whiskerRight_assoc, mul_def, otimes, replace
 -/

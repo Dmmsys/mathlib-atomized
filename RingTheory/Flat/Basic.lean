@@ -93,7 +93,10 @@ theorem _root_.LinearMap.rTensor_injective_of_fg
   obtain ⟨x, rfl⟩ := sub (.inl rfl)
   obtain ⟨y, rfl⟩ := sub (.inr rfl)
   simp_rw [← rTensor_comp_apply, show f ∘ₗ N'.subtype = (N'.map f).subtype ∘ₗ f.submoduleMap N'
-    from rfl, rTensor
+    from rfl, rTensor_comp_apply] at eq
+  have ⟨P', Pfg, le, eq⟩ := (Nfg.map _).exists_rTensor_fg_inclusion_eq eq
+  simp_rw [← rTensor_comp_apply] at eq
+  rw [h _ _ Nfg Pfg (map_le_iff_le_comap.mp le) eq]
 
 中文:
 定理 _root_.线性映射.rTensor_injective_of_fg
@@ -103,7 +106,10 @@ theorem _root_.LinearMap.rTensor_injective_of_fg
   obtain ⟨x, rfl⟩ := sub (.inl rfl)
   obtain ⟨y, rfl⟩ := sub (.inr rfl)
   simp_rw [← rTensor_comp_apply, show f ∘ₗ N'.subtype = (N'.map f).subtype ∘ₗ f.submoduleMap N'
-    from rfl, rTensor
+    from rfl, rTensor_comp_apply] at eq
+  have ⟨P', Pfg, le, eq⟩ := (Nfg.map _).exists_rTensor_fg_inclusion_eq eq
+  simp_rw [← rTensor_comp_apply] at eq
+  rw [h _ _ Nfg Pfg (map_le_iff_le_comap.mp le) eq]
 
 Depends on / 依赖: Nfg.map, Submodule, Submodule.exists_fg_le_subset_range_rTensor_subtype, exists_fg_le_subset_range_rTensor_subtype, exists_rTensor_fg_inclusion_eq, f.submoduleMap, map_le_iff_le_comap, map_le_iff_le_comap.mp, rTensor_comp_apply, simp_rw, submoduleMap, subtype
 -/
@@ -186,7 +192,7 @@ theorem rTensor_preserves_injective_linearMap
   let se := (Shrink.linearEquiv R P).symm
   have := Module.Finite.equiv se
   rw [rTensor_injective_iff_subtype (fun _ _ => (Subtype.ext <| hf <| Subtype.ext_iff.mp ·)) se]
-  exac
+  exact (flat_iff R M).mp ‹_› _ (Finite.iff_fg.mp inferInstance)
 
 中文:
 定理 rTensor_preserves_injective_linearMap
@@ -198,7 +204,7 @@ theorem rTensor_preserves_injective_linearMap
   let se := (Shrink.linearEquiv R P).symm
   have := Module.Finite.equiv se
   rw [rTensor_injective_iff_subtype (fun _ _ => (Subtype.ext <| hf <| Subtype.ext_iff.mp ·)) se]
-  exac
+  exact (flat_iff R M).mp ‹_› _ (Finite.iff_fg.mp inferInstance)
 
 Depends on / 依赖: Finite, Finite.iff_fg, Finite.iff_fg.mp, Finite.small, Module, Module.Finite.equiv, Shrink, Shrink.linearEquiv, Subtype, Subtype.ext, Subtype.ext_iff.mp, ext_iff, flat_iff, iff_fg, linearEquiv, rTensor_injective_iff_subtype, rTensor_injective_of_fg
 -/
@@ -383,7 +389,7 @@ lemma of_retract
   refine fun P _ _ Q => .of_comp (f := lTensor P i) ?_
   rw [← coe_comp]; rw [lTensor_comp_rTensor]; rw [← rTensor_comp_lTensor]; rw [coe_comp]
   refine (f Q).comp (Function.RightInverse.injective (g := lTensor Q r) fun x => ?_)
-  simp [← comp_apply, ← lTensor_c
+  simp [← comp_apply, ← lTensor_comp, h]
 
 中文:
 引理 of_retract
@@ -393,7 +399,7 @@ lemma of_retract
   refine fun P _ _ Q => .of_comp (f := lTensor P i) ?_
   rw [← coe_comp]; rw [lTensor_comp_rTensor]; rw [← rTensor_comp_lTensor]; rw [coe_comp]
   refine (f Q).comp (Function.RightInverse.injective (g := lTensor Q r) fun x => ?_)
-  simp [← comp_apply, ← lTensor_c
+  simp [← comp_apply, ← lTensor_comp, h]
 
 Depends on / 依赖: Function, Function.RightInverse.injective, RightInverse, coe_comp, comp_apply, injective, lTensor, lTensor_comp, lTensor_comp_rTensor, of_comp, rTensor_comp_lTensor
 -/
@@ -900,7 +906,11 @@ lemma lTensor_exact
     Submodule.subtype _ ∘ₗ (LinearMap.quotKerEquivRange g).toLinearMap ∘ₗ
       Submodule.quotEquivOfEq (LinearMap.range f) (LinearMap.ker g)
         (LinearMap.exact_iff.mp exact).symm
-  
+  suffices exact1 : Function.Exact (f.lTensor M) (π.lTensor M) by
+    rw [show g = ι.comp π from rfl]; rw [lTensor_comp]
+    exact exact1.comp_injective _ (lTensor_preserves_injective_linearMap ι <| by
+      simpa [ι, -Subtype.val_injective] using Subtype.val_injective) (map_zero _)
+  exact _root_.lTensor_exact _ (fun x => by simp [π]) Quotient.mk''_surjective
 
 中文:
 引理 lTensor_exact
@@ -912,7 +922,11 @@ lemma lTensor_exact
     Submodule.subtype _ ∘ₗ (LinearMap.quotKerEquivRange g).toLinearMap ∘ₗ
       Submodule.quotEquivOfEq (LinearMap.range f) (LinearMap.ker g)
         (LinearMap.exact_iff.mp exact).symm
-  
+  suffices exact1 : Function.Exact (f.lTensor M) (π.lTensor M) by
+    rw [show g = ι.comp π from rfl]; rw [lTensor_comp]
+    exact exact1.comp_injective _ (lTensor_preserves_injective_linearMap ι <| by
+      simpa [ι, -Subtype.val_injective] using Subtype.val_injective) (map_zero _)
+  exact _root_.lTensor_exact _ (fun x => by simp [π]) Quotient.mk''_surjective
 
 Depends on / 依赖: Function, Function.Exact, LinearMap, LinearMap.exact_iff.mp, LinearMap.ker, LinearMap.quotKerEquivRange, LinearMap.range, Submodule, Submodule.mkQ, Submodule.quotEquivOfEq, Submodule.subtype, Subtype, Subtype.val_injective, comp_injective, exact1, exact1.comp_injective, exact_iff, f.lTensor, lTensor, lTensor_comp
 -/
@@ -945,7 +959,11 @@ lemma rTensor_exact
     Submodule.subtype _ ∘ₗ (LinearMap.quotKerEquivRange g).toLinearMap ∘ₗ
       Submodule.quotEquivOfEq (LinearMap.range f) (LinearMap.ker g)
         (LinearMap.exact_iff.mp exact).symm
-  
+  suffices exact1 : Function.Exact (f.rTensor M) (π.rTensor M) by
+    rw [show g = ι.comp π from rfl]; rw [rTensor_comp]
+    exact exact1.comp_injective _ (rTensor_preserves_injective_linearMap ι <| by
+      simpa [ι, -Subtype.val_injective] using Subtype.val_injective) (map_zero _)
+  exact _root_.rTensor_exact M (fun x => by simp [π]) Quotient.mk''_surjective
 
 中文:
 引理 rTensor_exact
@@ -957,7 +975,11 @@ lemma rTensor_exact
     Submodule.subtype _ ∘ₗ (LinearMap.quotKerEquivRange g).toLinearMap ∘ₗ
       Submodule.quotEquivOfEq (LinearMap.range f) (LinearMap.ker g)
         (LinearMap.exact_iff.mp exact).symm
-  
+  suffices exact1 : Function.Exact (f.rTensor M) (π.rTensor M) by
+    rw [show g = ι.comp π from rfl]; rw [rTensor_comp]
+    exact exact1.comp_injective _ (rTensor_preserves_injective_linearMap ι <| by
+      simpa [ι, -Subtype.val_injective] using Subtype.val_injective) (map_zero _)
+  exact _root_.rTensor_exact M (fun x => by simp [π]) Quotient.mk''_surjective
 
 Depends on / 依赖: Function, Function.Exact, LinearMap, LinearMap.exact_iff.mp, LinearMap.ker, LinearMap.quotKerEquivRange, LinearMap.range, Submodule, Submodule.mkQ, Submodule.quotEquivOfEq, Submodule.subtype, Subtype, Subtype.val_injective, comp_injective, exact1, exact1.comp_injective, exact_iff, f.rTensor, quotEquivOfEq, quotKerEquivRange
 -/
@@ -988,7 +1010,8 @@ theorem iff_lTensor_exact'
 .mp .mpr eq_bot_iff fun N' N'' _ _ _ _ L hL => LinearMap.ker_eq_bot
       fun x (hx : _ = 0) => ?_⟩
   simpa [Eq.comm] using @H PUnit N' N'' _ _ _ _ _ _ 0 L (fun x => by
-    simp_rw [Set.mem_range, LinearMa
+    simp_rw [Set.mem_range, LinearMap.zero_apply, exists_const]
+    exact (L.map_eq_zero_iff hL).trans eq_comm) x |>.mp hx
 
 中文:
 定理 iff_lTensor_exact'
@@ -999,7 +1022,8 @@ theorem iff_lTensor_exact'
 .mp .mpr eq_bot_iff fun N' N'' _ _ _ _ L hL => LinearMap.ker_eq_bot
       fun x (hx : _ = 0) => ?_⟩
   simpa [Eq.comm] using @H PUnit N' N'' _ _ _ _ _ _ 0 L (fun x => by
-    simp_rw [Set.mem_range, LinearMa
+    simp_rw [Set.mem_range, LinearMap.zero_apply, exists_const]
+    exact (L.map_eq_zero_iff hL).trans eq_comm) x |>.mp hx
 
 Depends on / 依赖: Eq.comm, L.map_eq_zero_iff, LinearMap, LinearMap.ker_eq_bot, LinearMap.zero_apply, Set.mem_range, eq_bot_iff, eq_comm, exists_const, iff_lTensor_preserves_injective_linearMap, ker_eq_bot, lTensor_exact, map_eq_zero_iff, mem_range, simp_rw, zero_apply
 -/
@@ -1047,7 +1071,8 @@ theorem iff_rTensor_exact'
 .mp .mpr eq_bot_iff fun N' N'' _ _ _ _ f hf => LinearMap.ker_eq_bot
       fun x (hx : _ = 0) => ?_⟩
   simpa [Eq.comm] using @H PUnit N' N'' _ _ _ _ _ _ 0 f (fun x => by
-    simp_rw [Set.mem_range, LinearMa
+    simp_rw [Set.mem_range, LinearMap.zero_apply, exists_const]
+    exact (f.map_eq_zero_iff hf).trans eq_comm) x |>.mp hx
 
 中文:
 定理 iff_rTensor_exact'
@@ -1058,7 +1083,8 @@ theorem iff_rTensor_exact'
 .mp .mpr eq_bot_iff fun N' N'' _ _ _ _ f hf => LinearMap.ker_eq_bot
       fun x (hx : _ = 0) => ?_⟩
   simpa [Eq.comm] using @H PUnit N' N'' _ _ _ _ _ _ 0 f (fun x => by
-    simp_rw [Set.mem_range, LinearMa
+    simp_rw [Set.mem_range, LinearMap.zero_apply, exists_const]
+    exact (f.map_eq_zero_iff hf).trans eq_comm) x |>.mp hx
 
 Depends on / 依赖: Eq.comm, LinearMap, LinearMap.ker_eq_bot, LinearMap.zero_apply, Set.mem_range, eq_bot_iff, eq_comm, exists_const, f.map_eq_zero_iff, iff_rTensor_preserves_injective_linearMap, ker_eq_bot, map_eq_zero_iff, mem_range, rTensor_exact, simp_rw, zero_apply
 -/
@@ -1703,7 +1729,12 @@ theorem IsReduced.tensorProduct_of_flat_of_forall_fg
   obtain ⟨D, hD⟩ := exists_fg_and_mem_baseChange x
   have h_inj : Function.Injective
       (Algebra.TensorProduct.map (AlgHom.id C C) D.val) :=
-    Module.Flat.lTensor_preserves_injective_linearMap _ Subtype.val
+    Module.Flat.lTensor_preserves_injective_linearMap _ Subtype.val_injective
+  obtain ⟨z, rfl⟩ := hD.2
+  have h_notReduced : ¬IsReduced (C otimes[R] D) := by
+    simp_rw [isReduced_iff, not_forall]
+    exact ⟨z, (IsNilpotent.map_iff h_inj).mp hx.right, (by simpa [·] using hx.1)⟩
+  tauto
 
 中文:
 定理 是既约.tensorProduct_of_flat_of_对任意_fg
@@ -1714,7 +1745,12 @@ theorem IsReduced.tensorProduct_of_flat_of_forall_fg
   obtain ⟨D, hD⟩ := exists_fg_and_mem_baseChange x
   have h_inj : Function.Injective
       (Algebra.TensorProduct.map (AlgHom.id C C) D.val) :=
-    Module.Flat.lTensor_preserves_injective_linearMap _ Subtype.val
+    Module.Flat.lTensor_preserves_injective_linearMap _ Subtype.val_injective
+  obtain ⟨z, rfl⟩ := hD.2
+  have h_notReduced : ¬IsReduced (C otimes[R] D) := by
+    simp_rw [isReduced_iff, not_forall]
+    exact ⟨z, (IsNilpotent.map_iff h_inj).mp hx.right, (by simpa [·] using hx.1)⟩
+  tauto
 
 Depends on / 依赖: AlgHom, AlgHom.id, Algebra, Algebra.TensorProduct.map, D.val, Function, Function.Injective, Injective, IsNilpotent, IsNilpotent.map_iff, IsReduced, Module, Module.Flat.lTensor_preserves_injective_linearMap, Subtype, Subtype.val_injective, TensorProduct, exists_fg_and_mem_baseChange, exists_isNilpotent_of_not_isReduced, h_contra, h_inj
 -/

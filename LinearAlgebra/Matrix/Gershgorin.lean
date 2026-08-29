@@ -39,6 +39,27 @@ theorem eigenvalue_mem_ball
     have h_nz : v i != 0 := by
       contrapose h_nz
       ext j
+      rw [Pi.zero_apply]; rw [← norm_le_zero_iff]
+      refine (h_i ▸ Finset.le_sup' (fun i => ‖v i‖) (Finset.mem_univ j)).trans ?_
+      exact norm_le_zero_iff.mpr h_nz
+    have h_le : forall j, ‖v j * (v i)⁻¹‖ <= 1 := fun j => by
+      rw [norm_mul]; rw [norm_inv]; rw [mul_inv_le_iff₀ (norm_pos_iff.mpr h_nz)]; rw [one_mul]
+      exact h_i ▸ Finset.le_sup' (fun i => ‖v i‖) (Finset.mem_univ j)
+    simp_rw [mem_closedBall_iff_norm']
+    refine ⟨i, ?_⟩
+    calc
+      _ = ‖(A i i * v i - μ * v i) * (v i)⁻¹‖ := by congr; field
+      _ = ‖(A i i * v i - ∑ j, A i j * v j) * (v i)⁻¹‖ := by
+                rw [show μ * v i = ∑ x : n]; rw [A i x * v x by
+                  rw [← dotProduct]; rw [← Matrix.mulVec]
+                  exact (congrFun (Module.End.mem_eigenspace_iff.mp h_eg) i).symm]
+      _ = ‖(∑ j in Finset.univ.erase i, A i j * v j) * (v i)⁻¹‖ := by
+                rw [Finset.sum_erase_eq_sub (Finset.mem_univ i)]; rw [← neg_sub]; rw [neg_mul]; rw [norm_neg]
+      _ <= ∑ j in Finset.univ.erase i, ‖A i j‖ * ‖v j * (v i)⁻¹‖ := by
+                rw [Finset.sum_mul]
+                exact (norm_sum_le _ _).trans (le_of_eq (by simp_rw [mul_assoc, norm_mul]))
+      _ <= ∑ j in Finset.univ.erase i, ‖A i j‖ :=
+                (Finset.sum_le_sum fun j _ => mul_le_of_le_one_right (norm_nonneg _) (h_le j))
 
 中文:
 定理 eigenvalue_mem_ball
@@ -52,6 +73,27 @@ theorem eigenvalue_mem_ball
     have h_nz : v i != 0 := by
       contrapose h_nz
       ext j
+      rw [Pi.zero_apply]; rw [← norm_le_zero_iff]
+      refine (h_i ▸ Finset.le_sup' (fun i => ‖v i‖) (Finset.mem_univ j)).trans ?_
+      exact norm_le_zero_iff.mpr h_nz
+    have h_le : forall j, ‖v j * (v i)⁻¹‖ <= 1 := fun j => by
+      rw [norm_mul]; rw [norm_inv]; rw [mul_inv_le_iff₀ (norm_pos_iff.mpr h_nz)]; rw [one_mul]
+      exact h_i ▸ Finset.le_sup' (fun i => ‖v i‖) (Finset.mem_univ j)
+    simp_rw [mem_closedBall_iff_norm']
+    refine ⟨i, ?_⟩
+    calc
+      _ = ‖(A i i * v i - μ * v i) * (v i)⁻¹‖ := by congr; field
+      _ = ‖(A i i * v i - ∑ j, A i j * v j) * (v i)⁻¹‖ := by
+                rw [show μ * v i = ∑ x : n]; rw [A i x * v x by
+                  rw [← dotProduct]; rw [← Matrix.mulVec]
+                  exact (congrFun (Module.End.mem_eigenspace_iff.mp h_eg) i).symm]
+      _ = ‖(∑ j in Finset.univ.erase i, A i j * v j) * (v i)⁻¹‖ := by
+                rw [Finset.sum_erase_eq_sub (Finset.mem_univ i)]; rw [← neg_sub]; rw [neg_mul]; rw [norm_neg]
+      _ <= ∑ j in Finset.univ.erase i, ‖A i j‖ * ‖v j * (v i)⁻¹‖ := by
+                rw [Finset.sum_mul]
+                exact (norm_sum_le _ _).trans (le_of_eq (by simp_rw [mul_assoc, norm_mul]))
+      _ <= ∑ j in Finset.univ.erase i, ‖A i j‖ :=
+                (Finset.sum_le_sum fun j _ => mul_le_of_le_one_right (norm_nonneg _) (h_le j))
 
 Depends on / 依赖: Finset, Finset.exists_mem_eq_sup, Finset.le_sup, Finset.mem_univ, Finset.univ_nonempty, Pi.zero_apply, Submodule, Submodule.eq_bot_of_subsingleton, contrapose, eq_bot_of_subsingleton, exists_hasEigenvector, exists_mem_eq_sup, h_eg, h_le, h_nz, isEmpty_or_nonempty, le_sup, mem_univ, norm_le_zero_iff, norm_le_zero_iff.mpr
 -/
@@ -98,7 +140,8 @@ theorem det_ne_zero_of_sum_row_lt_diag
   suffices exists k, 0 in Metric.closedBall (A k k) (∑ j in Finset.univ.erase k, ‖A k j‖) by
     exact this.imp (fun a h => by rwa [mem_closedBall_iff_norm', sub_zero] at h)
   refine eigenvalue_mem_ball ?_
-  rw [Module.End.hasEigenvalue_iff]; rw [Module.End.eigenspace_zero]; rw [n
+  rw [Module.End.hasEigenvalue_iff]; rw [Module.End.eigenspace_zero]; rw [ne_comm]
+  exact ne_of_lt (LinearMap.bot_lt_ker_of_det_eq_zero (by rwa [LinearMap.det_toLin']))
 
 中文:
 定理 det_ne_zero_of_sum_row_lt_diag
@@ -108,7 +151,8 @@ theorem det_ne_zero_of_sum_row_lt_diag
   suffices exists k, 0 in Metric.closedBall (A k k) (∑ j in Finset.univ.erase k, ‖A k j‖) by
     exact this.imp (fun a h => by rwa [mem_closedBall_iff_norm', sub_zero] at h)
   refine eigenvalue_mem_ball ?_
-  rw [Module.End.hasEigenvalue_iff]; rw [Module.End.eigenspace_zero]; rw [n
+  rw [Module.End.hasEigenvalue_iff]; rw [Module.End.eigenspace_zero]; rw [ne_comm]
+  exact ne_of_lt (LinearMap.bot_lt_ker_of_det_eq_zero (by rwa [LinearMap.det_toLin']))
 
 Depends on / 依赖: Finset, Finset.univ.erase, LinearMap, LinearMap.bot_lt_ker_of_det_eq_zero, LinearMap.det_toLin, Metric, Metric.closedBall, Module, Module.End.eigenspace_zero, Module.End.hasEigenvalue_iff, bot_lt_ker_of_det_eq_zero, closedBall, contrapose, det_toLin, eigenspace_zero, eigenvalue_mem_ball, hasEigenvalue_iff, mem_closedBall_iff_norm, ne_comm, ne_of_lt
 -/

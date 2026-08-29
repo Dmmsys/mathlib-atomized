@@ -61,7 +61,15 @@ theorem specializes_TFAE
   tfae_have 2 -> 3 := fun h s hso hy => h (hso.mem_nhds hy)
   tfae_have 3 -> 4 := fun h s hsc hx => of_not_not fun hy => h sᶜ hsc.isOpen_compl hy hx
   tfae_have 4 -> 5 := fun h => h _ isClosed_closure (subset_closure <| mem_singleton _)
-  tfae_have 6 ↔
+  tfae_have 6 ↔ 5 := isClosed_closure.closure_subset_iff.trans singleton_subset_iff
+  tfae_have 5 ↔ 7 := by
+    rw [mem_closure_iff_clusterPt]; rw [principal_singleton]
+  tfae_have 5 -> 1 := by
+    refine fun h => (nhds_basis_opens _).ge_iff.2 ?_
+    rintro s ⟨hy, ho⟩
+    rcases mem_closure_iff.1 h s ho hy with ⟨z, hxs, rfl : z = x⟩
+    exact ho.mem_nhds hxs
+  tfae_finish
 
 中文:
 定理 specializes_TFAE
@@ -71,7 +79,15 @@ theorem specializes_TFAE
   tfae_have 2 -> 3 := fun h s hso hy => h (hso.mem_nhds hy)
   tfae_have 3 -> 4 := fun h s hsc hx => of_not_not fun hy => h sᶜ hsc.isOpen_compl hy hx
   tfae_have 4 -> 5 := fun h => h _ isClosed_closure (subset_closure <| mem_singleton _)
-  tfae_have 6 ↔
+  tfae_have 6 ↔ 5 := isClosed_closure.closure_subset_iff.trans singleton_subset_iff
+  tfae_have 5 ↔ 7 := by
+    rw [mem_closure_iff_clusterPt]; rw [principal_singleton]
+  tfae_have 5 -> 1 := by
+    refine fun h => (nhds_basis_opens _).ge_iff.2 ?_
+    rintro s ⟨hy, ho⟩
+    rcases mem_closure_iff.1 h s ho hy with ⟨z, hxs, rfl : z = x⟩
+    exact ho.mem_nhds hxs
+  tfae_finish
 
 Depends on / 依赖: closure_subset_iff, hsc.isOpen_compl, hso.mem_nhds, isClosed_closure, isClosed_closure.closure_subset_iff.trans, isOpen_compl, mem_closure_iff_clusterPt, mem_nhds, mem_singleton, nhds_basis_opens, of_not_not, principal_singleton, pure_le_nhds, singleton_subset_iff, subset_closure, tfae_have
 -/
@@ -1430,7 +1446,8 @@ lemma stableUnderGeneralization_iff_exists_sInter_eq
   refine ⟨?_, fun ⟨S, hS, e⟩ => e ▸
     stableUnderGeneralization_sInter S (fun x hx => (hS x hx).stableUnderGeneralization)⟩
   rw [← stableUnderSpecialization_compl_iff]; rw [stableUnderSpecialization_iff_exists_sUnion_eq]
-  exact fun ⟨S, h₁, h₂⟩ => ⟨(·ᶜ) '' S, fun s ⟨t, ht, e⟩ => e ▸ (h₁ t ht).
+  exact fun ⟨S, h₁, h₂⟩ => ⟨(·ᶜ) '' S, fun s ⟨t, ht, e⟩ => e ▸ (h₁ t ht).isOpen_compl,
+    compl_injective ((sUnion_eq_compl_sInter_compl S).symm.trans h₂)⟩
 
 中文:
 引理 stableUnderGeneralization_iff_存在_s整数er_eq
@@ -1439,7 +1456,8 @@ lemma stableUnderGeneralization_iff_exists_sInter_eq
   refine ⟨?_, fun ⟨S, hS, e⟩ => e ▸
     stableUnderGeneralization_sInter S (fun x hx => (hS x hx).stableUnderGeneralization)⟩
   rw [← stableUnderSpecialization_compl_iff]; rw [stableUnderSpecialization_iff_exists_sUnion_eq]
-  exact fun ⟨S, h₁, h₂⟩ => ⟨(·ᶜ) '' S, fun s ⟨t, ht, e⟩ => e ▸ (h₁ t ht).
+  exact fun ⟨S, h₁, h₂⟩ => ⟨(·ᶜ) '' S, fun s ⟨t, ht, e⟩ => e ▸ (h₁ t ht).isOpen_compl,
+    compl_injective ((sUnion_eq_compl_sInter_compl S).symm.trans h₂)⟩
 
 Depends on / 依赖: compl_injective, isOpen_compl, sUnion_eq_compl_sInter_compl, stableUnderGeneralization, stableUnderGeneralization_sInter, stableUnderSpecialization_compl_iff, stableUnderSpecialization_iff_exists_sUnion_eq, symm.trans
 -/

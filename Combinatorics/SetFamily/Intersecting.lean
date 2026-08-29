@@ -235,7 +235,7 @@ theorem intersecting_iff_pairwise_not_disjoint
   exact
     h.2
       (eq_singleton_iff_unique_mem.2
-   
+        ⟨hb, fun c hc => not_ne_iff.1 fun H => h.1 hb hc H.symm disjoint_bot_left⟩)
 
 中文:
 定理 intersecting_iff_pairwise_not_disjoint
@@ -249,7 +249,7 @@ theorem intersecting_iff_pairwise_not_disjoint
   exact
     h.2
       (eq_singleton_iff_unique_mem.2
-   
+        ⟨hb, fun c hc => not_ne_iff.1 fun H => h.1 hb hc H.symm disjoint_bot_left⟩)
 
 Depends on / 依赖: Classical, Classical.not_not, H.symm, disjoint_bot_left, disjoint_self, eq_singleton_iff_unique_mem, intersecting_singleton, not_ne_iff, not_not
 -/
@@ -545,7 +545,19 @@ theorem Intersecting.is_max_iff_card_eq
 refine ⟨fun h => ?_, fun h t ht hst => Finset.eq_of_subset_of_card_le hst
       Nat.le_of_mul_le_mul_left (ht.card_le.trans_eq h.symm) Nat.two_pos⟩
     suffices s.disjUnion (s.map ⟨compl, compl_injective⟩) hs.disjoint_map_compl = Finset.univ by
-      rw [Fintype.card]; rw [← this]; rw
+      rw [Fintype.card]; rw [← this]; rw [Nat.two_mul]; rw [card_disjUnion]; rw [card_map]
+    rw [← coe_eq_univ]; rw [disjUnion_eq_union]; rw [coe_union]; rw [coe_map]; rw [Function.Embedding.coeFn_mk]; rw [image_eq_preimage_of_inverse compl_compl compl_compl]
+    refine eq_univ_of_forall fun a => ?_
+    simp_rw [mem_union, mem_preimage]
+    by_contra! ha
+    refine s.ne_insert_of_notMem _ ha.1 (h _ ?_ <| s.subset_insert _)
+    rw [coe_insert]
+refine hs.insert ?_ fun b hb hab => ha.2 (hs.isUpperSet' h) hab.le_compl_left hb
+    rintro rfl
+    have := h {⊤} (by rw [coe_singleton]; exact intersecting_singleton.2 top_ne_bot)
+    rw [compl_bot] at ha
+    rw [coe_eq_empty.1 ((hs.isUpperSet' h).top_notMem.1 ha.2)] at this
+    exact Finset.singleton_ne_empty _ (this <| Finset.empty_subset _).symm
 
 中文:
 定理 整数ersecting.is_max_iff_card_eq
@@ -555,7 +567,19 @@ refine ⟨fun h => ?_, fun h t ht hst => Finset.eq_of_subset_of_card_le hst
 refine ⟨fun h => ?_, fun h t ht hst => Finset.eq_of_subset_of_card_le hst
       Nat.le_of_mul_le_mul_left (ht.card_le.trans_eq h.symm) Nat.two_pos⟩
     suffices s.disjUnion (s.map ⟨compl, compl_injective⟩) hs.disjoint_map_compl = Finset.univ by
-      rw [Fintype.card]; rw [← this]; rw
+      rw [Fintype.card]; rw [← this]; rw [Nat.two_mul]; rw [card_disjUnion]; rw [card_map]
+    rw [← coe_eq_univ]; rw [disjUnion_eq_union]; rw [coe_union]; rw [coe_map]; rw [Function.Embedding.coeFn_mk]; rw [image_eq_preimage_of_inverse compl_compl compl_compl]
+    refine eq_univ_of_forall fun a => ?_
+    simp_rw [mem_union, mem_preimage]
+    by_contra! ha
+    refine s.ne_insert_of_notMem _ ha.1 (h _ ?_ <| s.subset_insert _)
+    rw [coe_insert]
+refine hs.insert ?_ fun b hb hab => ha.2 (hs.isUpperSet' h) hab.le_compl_left hb
+    rintro rfl
+    have := h {⊤} (by rw [coe_singleton]; exact intersecting_singleton.2 top_ne_bot)
+    rw [compl_bot] at ha
+    rw [coe_eq_empty.1 ((hs.isUpperSet' h).top_notMem.1 ha.2)] at this
+    exact Finset.singleton_ne_empty _ (this <| Finset.empty_subset _).symm
 
 Depends on / 依赖: Embedding, Finset, Finset.eq_of_subset_of_card_le, Finset.univ, Fintype, Fintype.card, Function, Function.Embedding.coeFn_mk, Nat.le_of_mul_le_mul_left, Nat.two_mul, Nat.two_pos, card_disjUnion, card_le, card_map, classical, coeFn_mk, coe_eq_univ, coe_map, coe_union, compl_compl
 -/
@@ -592,7 +616,11 @@ theorem Intersecting.exists_card_eq
   refine s.strongDownwardInductionOn ?_ this
   rintro s ih _hcard hs
   by_cases! h : forall t : Finset α, (t : Set α).Intersecting -> s subseteq t -> s = t
-  · exact ⟨s, Subset.rfl, hs.is_max_if
+  · exact ⟨s, Subset.rfl, hs.is_max_iff_card_eq.1 h, hs⟩
+  obtain ⟨t, ht, hst⟩ := h
+  refine (ih ?_ (_root_.ssubset_iff_subset_ne.2 hst) ht).imp fun u => And.imp_left hst.1.trans
+  rw [Nat.le_div_iff_mul_le Nat.two_pos]; rw [Nat.mul_comm]
+  exact ht.card_le
 
 中文:
 定理 整数ersecting.存在_card_eq
@@ -604,7 +632,11 @@ theorem Intersecting.exists_card_eq
   refine s.strongDownwardInductionOn ?_ this
   rintro s ih _hcard hs
   by_cases! h : forall t : Finset α, (t : Set α).Intersecting -> s subseteq t -> s = t
-  · exact ⟨s, Subset.rfl, hs.is_max_if
+  · exact ⟨s, Subset.rfl, hs.is_max_iff_card_eq.1 h, hs⟩
+  obtain ⟨t, ht, hst⟩ := h
+  refine (ih ?_ (_root_.ssubset_iff_subset_ne.2 hst) ht).imp fun u => And.imp_left hst.1.trans
+  rw [Nat.le_div_iff_mul_le Nat.two_pos]; rw [Nat.mul_comm]
+  exact ht.card_le
 
 Depends on / 依赖: And.imp_left, Finset, Intersecting, Nat.le_div_iff_mul_le, Nat.mul_comm, Nat.two_pos, Subset, Subset.rfl, _hcard, _root_, _root_.ssubset_iff_subset_ne, card_le, hs.card_le, hs.is_max_iff_card_eq, ht.card_le, imp_left, is_max_iff_card_eq, le_div_iff_mul_le, mul_comm, revert
 -/

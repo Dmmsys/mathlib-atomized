@@ -393,7 +393,8 @@ theorem map_orientation_eq_det_inv_smul
   cases nonempty_fintype ι
   let := Classical.decEq ι
   induction x using Module.Ray.ind with | h g hg =>
-  rw [Orientation.map_apply]; rw [smul_rayOfNeZero]; rw [ray_eq_iff]; rw [Units.smul_def]; rw [(g.compLinearMap f.symm).eq_smul_basis_det e]; rw [g.eq_smul_basis_det e]; rw [AlternatingMap.co
+  rw [Orientation.map_apply]; rw [smul_rayOfNeZero]; rw [ray_eq_iff]; rw [Units.smul_def]; rw [(g.compLinearMap f.symm).eq_smul_basis_det e]; rw [g.eq_smul_basis_det e]; rw [AlternatingMap.compLinearMap_apply]; rw [AlternatingMap.smul_apply]; rw [show (fun i => (LinearEquiv.symm f).toLinearMap (e i)) = (LinearEquiv.symm f).toLinearMap ∘ e
+    by rfl]; rw [Basis.det_comp]; rw [Basis.det_self]; rw [mul_one]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_smul]; rw [LinearEquiv.coe_inv_det]
 
 中文:
 定理 map_orientation_eq_det_inv_smul
@@ -402,7 +403,8 @@ theorem map_orientation_eq_det_inv_smul
   cases nonempty_fintype ι
   let := Classical.decEq ι
   induction x using Module.Ray.ind with | h g hg =>
-  rw [Orientation.map_apply]; rw [smul_rayOfNeZero]; rw [ray_eq_iff]; rw [Units.smul_def]; rw [(g.compLinearMap f.symm).eq_smul_basis_det e]; rw [g.eq_smul_basis_det e]; rw [AlternatingMap.co
+  rw [Orientation.map_apply]; rw [smul_rayOfNeZero]; rw [ray_eq_iff]; rw [Units.smul_def]; rw [(g.compLinearMap f.symm).eq_smul_basis_det e]; rw [g.eq_smul_basis_det e]; rw [AlternatingMap.compLinearMap_apply]; rw [AlternatingMap.smul_apply]; rw [show (fun i => (LinearEquiv.symm f).toLinearMap (e i)) = (LinearEquiv.symm f).toLinearMap ∘ e
+    by rfl]; rw [Basis.det_comp]; rw [Basis.det_self]; rw [mul_one]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_smul]; rw [LinearEquiv.coe_inv_det]
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.compLinearMap_apply, AlternatingMap.smul_apply, Basis.det_comp, Basis.det_self, Classical, Classical.decEq, LinearEquiv, LinearEquiv.symm, Module, Module.Ray.ind, Orientation, Orientation.map_apply, Units.smul_def, compLinearMap, compLinearMap_apply, det_comp, det_self, eq_smul_basis_det, f.symm
 -/
@@ -562,7 +564,12 @@ theorem eq_or_eq_neg_of_isEmpty
   rw [sameRay_or_sameRay_neg_iff_not_linearIndependent]
   intro h
   set f : (M [⋀^ι]->ₗ[R] R) ≃ₗ[R] R := AlternatingMap.constLinearEquivOfIsEmpty.symm
-  have H : LinearIndependent R ![f x, 1
+  have H : LinearIndependent R ![f x, 1] := by
+    convert! h.map' f.toLinearMap f.ker
+    ext i
+    fin_cases i <;> simp [f]
+  rw [linearIndependent_iff'] at H
+  simpa using H Finset.univ ![1, -f x] (by simp [Fin.sum_univ_succ]) 0 (by simp)
 
 中文:
 定理 eq_or_eq_neg_of_isEmpty
@@ -574,7 +581,12 @@ theorem eq_or_eq_neg_of_isEmpty
   rw [sameRay_or_sameRay_neg_iff_not_linearIndependent]
   intro h
   set f : (M [⋀^ι]->ₗ[R] R) ≃ₗ[R] R := AlternatingMap.constLinearEquivOfIsEmpty.symm
-  have H : LinearIndependent R ![f x, 1
+  have H : LinearIndependent R ![f x, 1] := by
+    convert! h.map' f.toLinearMap f.ker
+    ext i
+    fin_cases i <;> simp [f]
+  rw [linearIndependent_iff'] at H
+  simpa using H Finset.univ ![1, -f x] (by simp [Fin.sum_univ_succ]) 0 (by simp)
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.constLinearEquivOfIsEmpty.symm, Fin.sum_univ_succ, Finset, Finset.univ, LinearIndependent, Module, Module.Ray.ind, constLinearEquivOfIsEmpty, convert, f.ker, f.toLinearMap, fin_cases, h.map, linearIndependent_iff, positiveOrientation, ray_eq_iff, sameRay_or_sameRay_neg_iff_not_linearIndependent, sum_univ_succ, toLinearMap
 -/
@@ -638,7 +650,7 @@ theorem orientation_eq_or_eq_neg
   rw [← x.map_basis_ne_zero_iff e] at hx
   rwa [Basis.orientation, ray_eq_iff, neg_rayOfNeZero, ray_eq_iff, x.eq_smul_basis_det e,
     sameRay_neg_smul_left_iff_of_ne e.det_ne_zero hx, sameRay_smul_left_iff_of_ne e.det_ne_zero hx,
-    lt_or_lt_i
+    lt_or_lt_iff_ne, ne_comm]
 
 中文:
 定理 orientation_eq_or_eq_neg
@@ -648,7 +660,7 @@ theorem orientation_eq_or_eq_neg
   rw [← x.map_basis_ne_zero_iff e] at hx
   rwa [Basis.orientation, ray_eq_iff, neg_rayOfNeZero, ray_eq_iff, x.eq_smul_basis_det e,
     sameRay_neg_smul_left_iff_of_ne e.det_ne_zero hx, sameRay_smul_left_iff_of_ne e.det_ne_zero hx,
-    lt_or_lt_i
+    lt_or_lt_iff_ne, ne_comm]
 
 Depends on / 依赖: Basis.orientation, Module, Module.Ray.ind, det_ne_zero, e.det_ne_zero, eq_smul_basis_det, lt_or_lt_iff_ne, map_basis_ne_zero_iff, ne_comm, neg_rayOfNeZero, orientation, ray_eq_iff, sameRay_neg_smul_left_iff_of_ne, sameRay_smul_left_iff_of_ne, x.eq_smul_basis_det, x.map_basis_ne_zero_iff
 -/
@@ -1045,7 +1057,8 @@ theorem map_eq_neg_iff_det_neg
   have H : 0 < finrank R M := by
     rw [← h]
     exact Fintype.card_pos
-  have : FiniteDimensional R M := of_finrank_pos 
+  have : FiniteDimensional R M := of_finrank_pos H
+  rw [map_eq_det_inv_smul _ _ h]; rw [units_inv_smul]; rw [units_smul_eq_neg_iff]; rw [LinearEquiv.coe_det]
 
 中文:
 定理 map_eq_neg_iff_det_neg
@@ -1057,7 +1070,8 @@ theorem map_eq_neg_iff_det_neg
   have H : 0 < finrank R M := by
     rw [← h]
     exact Fintype.card_pos
-  have : FiniteDimensional R M := of_finrank_pos 
+  have : FiniteDimensional R M := of_finrank_pos H
+  rw [map_eq_det_inv_smul _ _ h]; rw [units_inv_smul]; rw [units_smul_eq_neg_iff]; rw [LinearEquiv.coe_det]
 
 Depends on / 依赖: FiniteDimensional, Fintype, Fintype.card_eq_zero, Fintype.card_pos, LinearEquiv, LinearEquiv.coe_det, LinearMap, LinearMap.det_eq_one_of_finrank_eq_zero, Module, Module.Ray.ne_neg_self, card_eq_zero, card_pos, coe_det, det_eq_one_of_finrank_eq_zero, finrank, h.symm.trans, isEmpty_or_nonempty, map_eq_det_inv_smul, ne_neg_self, of_finrank_pos
 -/

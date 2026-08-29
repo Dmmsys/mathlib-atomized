@@ -175,7 +175,7 @@ definition sumOfConjugatesEquivariant
   body: MonoidAlgebra.equivariantOfLinearOfComm (π.sumOfConjugates G) fun g v => by
     simp only [sumOfConjugates_apply, Finset.smul_sum, conjugate_apply]
     refine Fintype.sum_bijective (· * g) (Group.mulRight_bijective g) _ _ fun i => ?_
-    simp only [smul_smul, single_mul_single, mul_inv_rev, mul_inv_
+    simp only [smul_smul, single_mul_single, mul_inv_rev, mul_inv_cancel_left, one_mul]
 
 中文:
 定义 sumOfConjugatesEquivariant
@@ -183,7 +183,7 @@ definition sumOfConjugatesEquivariant
   定义体: MonoidAlgebra.equivariantOfLinearOfComm (π.sumOfConjugates G) fun g v => by
     simp only [sumOfConjugates_apply, Finset.smul_sum, conjugate_apply]
     refine Fintype.sum_bijective (· * g) (Group.mulRight_bijective g) _ _ fun i => ?_
-    simp only [smul_smul, single_mul_single, mul_inv_rev, mul_inv_
+    simp only [smul_smul, single_mul_single, mul_inv_rev, mul_inv_cancel_left, one_mul]
 
 Depends on / 依赖: Finset, Finset.smul_sum, Fintype, Fintype.sum_bijective, Group.mulRight_bijective, MonoidAlgebra, MonoidAlgebra.equivariantOfLinearOfComm, conjugate_apply, equivariantOfLinearOfComm, mulRight_bijective, mul_inv_cancel_left, mul_inv_rev, one_mul, single_mul_single, smul_smul, smul_sum, sumOfConjugates, sumOfConjugates_apply, sum_bijective
 -/
@@ -312,7 +312,11 @@ theorem exists_leftInverse_of_injective
   have := IsScalarTower.of_compHom k A V
   set φ := (f.restrictScalars k).leftInverse
   have hφ : forall (x : V), φ (f x) = x := by
-    appl
+    apply LinearMap.leftInverse_apply_of_inj
+    simp [hf]
+  have _ : Fintype G := Fintype.ofFinite G
+  refine ⟨φ.equivariantProjection G, LinearMap.ext ?_⟩
+exact φ.equivariantProjection_condition G _ (.mk0 _ <| NeZero.ne _) hφ
 
 中文:
 定理 存在_leftInverse_of_injective
@@ -325,7 +329,11 @@ theorem exists_leftInverse_of_injective
   have := IsScalarTower.of_compHom k A V
   set φ := (f.restrictScalars k).leftInverse
   have hφ : forall (x : V), φ (f x) = x := by
-    appl
+    apply LinearMap.leftInverse_apply_of_inj
+    simp [hf]
+  have _ : Fintype G := Fintype.ofFinite G
+  refine ⟨φ.equivariantProjection G, LinearMap.ext ?_⟩
+exact φ.equivariantProjection_condition G _ (.mk0 _ <| NeZero.ne _) hφ
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, IsScalarTower, IsScalarTower.of_compHom, LinearMap, LinearMap.ext, LinearMap.leftInverse_apply_of_inj, Module, NeZero, NeZero.ne, algebraMap, compHom, equivariantProjection, equivariantProjection_condition, f.restrictScalars, leftInverse, leftInverse_apply_of_inj, ofFinite, of_compHom, restrictScalars
 -/

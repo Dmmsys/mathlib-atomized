@@ -140,7 +140,8 @@ definition toLinearEquiv
     simp_rw [← LinearMap.comp_apply, ← Matrix.toLin_mul b b b, Matrix.nonsing_inv_mul _ hA,
       toLin_one, LinearMap.id_apply]
   right_inv x := by
-    simp_rw [← LinearMap.comp_apply, ← Matrix.toLin_mul b b b, Matrix.m
+    simp_rw [← LinearMap.comp_apply, ← Matrix.toLin_mul b b b, Matrix.mul_nonsing_inv _ hA,
+      toLin_one, LinearMap.id_apply]
 
 中文:
 定义 toLinearEquiv
@@ -152,7 +153,8 @@ definition toLinearEquiv
     simp_rw [← LinearMap.comp_apply, ← Matrix.toLin_mul b b b, Matrix.nonsing_inv_mul _ hA,
       toLin_one, LinearMap.id_apply]
   right_inv x := by
-    simp_rw [← LinearMap.comp_apply, ← Matrix.toLin_mul b b b, Matrix.m
+    simp_rw [← LinearMap.comp_apply, ← Matrix.toLin_mul b b b, Matrix.mul_nonsing_inv _ hA,
+      toLin_one, LinearMap.id_apply]
 -/
 noncomputable def toLinearEquiv [DecidableEq n] (A : Matrix n n R) (hA : IsUnit A.det) :
     M ≃ₗ[R] M where
@@ -225,7 +227,11 @@ theorem exists_mulVec_eq_zero_iff_aux
     intro h
     have : Function.Injective (Matrix.toLin' M) := by
       simpa only [← LinearMap.ker_eq_bot, ker_toLin'_eq_bot_iff, not_imp_not] using h
-    have : M * (LinearE
+    have : M * (LinearEquiv.ofInjectiveEndo _ this).symm.toMatrix' = 1 := by
+      refine Matrix.toLin'.injective (LinearMap.ext fun v => ?_)
+      rw [Matrix.toLin'_mul]; rw [Matrix.toLin'_one]; rw [Matrix.toLin'_toMatrix']; rw [LinearMap.comp_apply]
+      exact (LinearEquiv.ofInjectiveEndo (Matrix.toLin' M) this).apply_symm_apply v
+    exact Matrix.det_ne_zero_of_right_inverse this
 
 中文:
 定理 存在_mulVec_eq_zero_iff_aux
@@ -239,7 +245,11 @@ theorem exists_mulVec_eq_zero_iff_aux
     intro h
     have : Function.Injective (Matrix.toLin' M) := by
       simpa only [← LinearMap.ker_eq_bot, ker_toLin'_eq_bot_iff, not_imp_not] using h
-    have : M * (LinearE
+    have : M * (LinearEquiv.ofInjectiveEndo _ this).symm.toMatrix' = 1 := by
+      refine Matrix.toLin'.injective (LinearMap.ext fun v => ?_)
+      rw [Matrix.toLin'_mul]; rw [Matrix.toLin'_one]; rw [Matrix.toLin'_toMatrix']; rw [LinearMap.comp_apply]
+      exact (LinearEquiv.ofInjectiveEndo (Matrix.toLin' M) this).apply_symm_apply v
+    exact Matrix.det_ne_zero_of_right_inverse this
 -/
 private theorem exists_mulVec_eq_zero_iff_aux {K : Type*} [DecidableEq n] [Field K]
     {M : Matrix n n K} : (exists v != 0, M *ᵥ v = 0) ↔ M.det = 0 := by
@@ -268,7 +278,31 @@ theorem exists_mulVec_eq_zero_iff'
     exists_mulVec_eq_zero_iff_aux
   rw [← RingHom.map_det]; rw [IsFractionRing.to_map_eq_zero_iff] at this
   refine Iff.trans ?_ this; constructor <;> rintro ⟨v, hv, mul_eq⟩
-  · refine ⟨fun i => algebraMap _ _ (v i), mt (fun h
+  · refine ⟨fun i => algebraMap _ _ (v i), mt (fun h => funext fun i => ?_) hv, ?_⟩
+    · exact IsFractionRing.to_map_eq_zero_iff.mp (congr_fun h i)
+    · ext i
+      refine (RingHom.map_mulVec _ _ _ i).symm.trans ?_
+      rw [mul_eq]; rw [Pi.zero_apply]; rw [map_zero]; rw [Pi.zero_apply]
+  · let := Classical.decEq K
+    obtain ⟨⟨b, hb⟩, ba_eq⟩ :=
+      IsLocalization.exist_integer_multiples_of_finset (nonZeroDivisors A) (Finset.univ.image v)
+    choose f hf using ba_eq
+    refine
+      ⟨fun i => f _ (Finset.mem_image.mpr ⟨i, Finset.mem_univ i, rfl⟩),
+        mt (fun h => funext fun i => ?_) hv, ?_⟩
+    · have := congr_arg (algebraMap A K) (congr_fun h i)
+      rw [hf]; rw [Subtype.coe_mk]; rw [Pi.zero_apply]; rw [map_zero]; rw [Algebra.smul_def]; rw [mul_eq_zero]; rw [IsFractionRing.to_map_eq_zero_iff] at this
+      exact this.resolve_left (nonZeroDivisors.ne_zero hb)
+    · ext i
+      refine IsFractionRing.injective A K ?_
+      calc
+        algebraMap A K ((M *ᵥ (fun i : n => f (v i) _)) i) =
+            ((algebraMap A K).mapMatrix M *ᵥ algebraMap _ K b • v) i := ?_
+        _ = 0 := ?_
+        _ = algebraMap A K 0 := (map_zero _).symm
+      · simp_rw [RingHom.map_mulVec, mulVec, dotProduct, Function.comp_apply, hf,
+          RingHom.mapMatrix_apply, Pi.smul_apply, smul_eq_mul, Algebra.smul_def]
+      · rw [mulVec_smul, mul_eq, Pi.smul_apply, Pi.zero_apply, smul_zero]
 
 中文:
 定理 存在_mulVec_eq_zero_iff'
@@ -278,7 +312,31 @@ theorem exists_mulVec_eq_zero_iff'
     exists_mulVec_eq_zero_iff_aux
   rw [← RingHom.map_det]; rw [IsFractionRing.to_map_eq_zero_iff] at this
   refine Iff.trans ?_ this; constructor <;> rintro ⟨v, hv, mul_eq⟩
-  · refine ⟨fun i => algebraMap _ _ (v i), mt (fun h
+  · refine ⟨fun i => algebraMap _ _ (v i), mt (fun h => funext fun i => ?_) hv, ?_⟩
+    · exact IsFractionRing.to_map_eq_zero_iff.mp (congr_fun h i)
+    · ext i
+      refine (RingHom.map_mulVec _ _ _ i).symm.trans ?_
+      rw [mul_eq]; rw [Pi.zero_apply]; rw [map_zero]; rw [Pi.zero_apply]
+  · let := Classical.decEq K
+    obtain ⟨⟨b, hb⟩, ba_eq⟩ :=
+      IsLocalization.exist_integer_multiples_of_finset (nonZeroDivisors A) (Finset.univ.image v)
+    choose f hf using ba_eq
+    refine
+      ⟨fun i => f _ (Finset.mem_image.mpr ⟨i, Finset.mem_univ i, rfl⟩),
+        mt (fun h => funext fun i => ?_) hv, ?_⟩
+    · have := congr_arg (algebraMap A K) (congr_fun h i)
+      rw [hf]; rw [Subtype.coe_mk]; rw [Pi.zero_apply]; rw [map_zero]; rw [Algebra.smul_def]; rw [mul_eq_zero]; rw [IsFractionRing.to_map_eq_zero_iff] at this
+      exact this.resolve_left (nonZeroDivisors.ne_zero hb)
+    · ext i
+      refine IsFractionRing.injective A K ?_
+      calc
+        algebraMap A K ((M *ᵥ (fun i : n => f (v i) _)) i) =
+            ((algebraMap A K).mapMatrix M *ᵥ algebraMap _ K b • v) i := ?_
+        _ = 0 := ?_
+        _ = algebraMap A K 0 := (map_zero _).symm
+      · simp_rw [RingHom.map_mulVec, mulVec, dotProduct, Function.comp_apply, hf,
+          RingHom.mapMatrix_apply, Pi.smul_apply, smul_eq_mul, Algebra.smul_def]
+      · rw [mulVec_smul, mul_eq, Pi.smul_apply, Pi.zero_apply, smul_zero]
 -/
 private theorem exists_mulVec_eq_zero_iff' {A : Type*} (K : Type*) [DecidableEq n] [CommRing A]
     [Nontrivial A] [Field K] [Algebra A K] [IsFractionRing A K] {M : Matrix n n A} :
@@ -649,7 +707,21 @@ lemma det_ne_zero_of_sum_col_pos
     obtain ⟨v, ⟨h_vnz, h_vA⟩⟩ := Matrix.exists_vecMul_eq_zero_iff.mpr h2
     wlog h_sup : 0 < Finset.sup' Finset.univ Finset.univ_nonempty v
     · refine this h1 inferInstance h2 (-1 • v) (by simp [*]) ?_ ?_
-      · rw [Matrix.smul_vecMul,
+      · rw [Matrix.smul_vecMul, h_vA, smul_zero]
+      · obtain ⟨i, hi⟩ := Function.ne_iff.mp h_vnz
+        simp_rw [Finset.lt_sup'_iff, Finset.mem_univ, true_and] at h_sup ⊢
+        simp_rw [not_exists, not_lt] at h_sup
+        refine ⟨i, ?_⟩
+        rw [Pi.smul_apply]; rw [neg_smul]; rw [one_smul]; rw [Left.neg_pos_iff]
+        exact Ne.lt_of_le hi (h_sup i)
+    · obtain ⟨j₀, -, h_j₀⟩ := Finset.exists_mem_eq_sup' Finset.univ_nonempty v
+      refine ⟨j₀, ?_⟩
+      rw [← mul_le_mul_iff_right₀ (h_j₀ ▸ h_sup)]; rw [Finset.mul_sum]; rw [mul_zero]
+      rw [show 0 = ∑ i]; rw [v i * A i j₀ from (congrFun h_vA j₀).symm]
+      refine Finset.sum_le_sum (fun i hi => ?_)
+      by_cases h : i = j₀
+      · rw [h]
+      · exact (mul_le_mul_right_of_neg (h1 h)).mpr (h_j₀ ▸ Finset.le_sup' v hi)
 
 中文:
 引理 det_ne_zero_of_sum_col_pos
@@ -661,7 +733,21 @@ lemma det_ne_zero_of_sum_col_pos
     obtain ⟨v, ⟨h_vnz, h_vA⟩⟩ := Matrix.exists_vecMul_eq_zero_iff.mpr h2
     wlog h_sup : 0 < Finset.sup' Finset.univ Finset.univ_nonempty v
     · refine this h1 inferInstance h2 (-1 • v) (by simp [*]) ?_ ?_
-      · rw [Matrix.smul_vecMul,
+      · rw [Matrix.smul_vecMul, h_vA, smul_zero]
+      · obtain ⟨i, hi⟩ := Function.ne_iff.mp h_vnz
+        simp_rw [Finset.lt_sup'_iff, Finset.mem_univ, true_and] at h_sup ⊢
+        simp_rw [not_exists, not_lt] at h_sup
+        refine ⟨i, ?_⟩
+        rw [Pi.smul_apply]; rw [neg_smul]; rw [one_smul]; rw [Left.neg_pos_iff]
+        exact Ne.lt_of_le hi (h_sup i)
+    · obtain ⟨j₀, -, h_j₀⟩ := Finset.exists_mem_eq_sup' Finset.univ_nonempty v
+      refine ⟨j₀, ?_⟩
+      rw [← mul_le_mul_iff_right₀ (h_j₀ ▸ h_sup)]; rw [Finset.mul_sum]; rw [mul_zero]
+      rw [show 0 = ∑ i]; rw [v i * A i j₀ from (congrFun h_vA j₀).symm]
+      refine Finset.sum_le_sum (fun i hi => ?_)
+      by_cases h : i = j₀
+      · rw [h]
+      · exact (mul_le_mul_right_of_neg (h1 h)).mpr (h_j₀ ▸ Finset.le_sup' v hi)
 
 Depends on / 依赖: Finset, Finset.lt_sup, Finset.mem_univ, Finset.sup, Finset.univ, Finset.univ_nonempty, Function, Function.ne_iff.mp, Matrix, Matrix.exists_vecMul_eq_zero_iff.mpr, Matrix.smul_vecMul, Pi.smul_apply, _iff, contrapose, exists_vecMul_eq_zero_iff, h_sup, h_vA, h_vnz, isEmpty_or_nonempty, lt_sup
 -/

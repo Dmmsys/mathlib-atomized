@@ -159,7 +159,9 @@ theorem not_of_mem_foldl_argAux
   rcases hf : foldl (argAux r) o tl with - | c
   · rw [hf] at ho
     rw [foldl_argAux_eq_none] at hf
-    simp_a
+    simp_all [hf.1, hf.2, hr₀.irrefl _]
+  rw [hf]; rw [Option.mem_def] at ho
+  grind +splitIndPred
 
 中文:
 定理 not_of_mem_foldl_argAux
@@ -173,7 +175,9 @@ theorem not_of_mem_foldl_argAux
   rcases hf : foldl (argAux r) o tl with - | c
   · rw [hf] at ho
     rw [foldl_argAux_eq_none] at hf
-    simp_a
+    simp_all [hf.1, hf.2, hr₀.irrefl _]
+  rw [hf]; rw [Option.mem_def] at ho
+  grind +splitIndPred
 
 Depends on / 依赖: List.reverseRecOn, Option.mem_def, append_singleton, argAux, foldl_append, foldl_argAux_eq_none, foldl_cons, foldl_nil, irrefl, mem_def, reverseRecOn, splitIndPred
 -/
@@ -441,7 +445,11 @@ theorem index_of_argmax
     · rw [if_neg, if_neg]
       · exact Nat.succ_le_succ (index_of_argmax h (by assumption) ham)
       · exact ne_of_apply_ne f (lt_of_lt_of_le ‹_› ‹_›).ne
-      · exact ne_of_apply_ne
+      · exact ne_of_apply_ne _ ‹f hd < f _›.ne
+    · rw [if_pos rfl]
+      exact Nat.zero_le _
+
+@[to_dual]
 
 中文:
 定理 index_of_argmax
@@ -451,7 +459,11 @@ theorem index_of_argmax
     · rw [if_neg, if_neg]
       · exact Nat.succ_le_succ (index_of_argmax h (by assumption) ham)
       · exact ne_of_apply_ne f (lt_of_lt_of_le ‹_› ‹_›).ne
-      · exact ne_of_apply_ne
+      · exact ne_of_apply_ne _ ‹f hd < f _›.ne
+    · rw [if_pos rfl]
+      exact Nat.zero_le _
+
+@[to_dual]
 
 Depends on / 依赖: injection, split_ifs
 -/
@@ -489,7 +501,10 @@ theorem mem_argmax_iff
       · simp_all
       · have :=
           Nat.le_antisymm (hma n (argmax_mem harg) (le_of_mem_argmax hml harg))
-            (ind
+            (index_of_argmax harg hml (ham _ (argmax_mem harg)))
+        rw [(idxOf_inj hml).1 this]; rw [Option.mem_def]⟩
+
+@[to_dual]
 
 中文:
 定理 mem_argmax_iff
@@ -500,7 +515,10 @@ theorem mem_argmax_iff
       · simp_all
       · have :=
           Nat.le_antisymm (hma n (argmax_mem harg) (le_of_mem_argmax hml harg))
-            (ind
+            (index_of_argmax harg hml (ham _ (argmax_mem harg)))
+        rw [(idxOf_inj hml).1 this]; rw [Option.mem_def]⟩
+
+@[to_dual]
 
 Depends on / 依赖: Nat.le_antisymm, Option.mem_def, argmax, argmax_mem, idxOf_inj, index_of_argmax, le_antisymm, le_of_mem_argmax, mem_def
 -/
@@ -1234,7 +1252,10 @@ lemma getD_max?_eq_unbotD_maximum
     cases hz : l.max? with
     | none => simp [List.max?_eq_none_iff.mp hz] at hy
     | some z =>
-      have : Std.Antisymm (α := α) (· <=
+      have : Std.Antisymm (α := α) (· <= ·) := ⟨fun _ _ => _root_.le_antisymm⟩
+      rw [List.max?_eq_some_iff] at hz
+      · rw [Option.getD_some]
+        exact _root_.le_antisymm (hy.right _ hz.left) (hz.right _ hy.left)
 
 中文:
 引理 getD_max?_eq_unbotD_maximum
@@ -1249,7 +1270,10 @@ lemma getD_max?_eq_unbotD_maximum
     cases hz : l.max? with
     | none => simp [List.max?_eq_none_iff.mp hz] at hy
     | some z =>
-      have : Std.Antisymm (α := α) (· <=
+      have : Std.Antisymm (α := α) (· <= ·) := ⟨fun _ _ => _root_.le_antisymm⟩
+      rw [List.max?_eq_some_iff] at hz
+      · rw [Option.getD_some]
+        exact _root_.le_antisymm (hy.right _ hz.left) (hz.right _ hy.left)
 
 Depends on / 依赖: Antisymm, List.max, List.maximum_eq_bot.mp, List.maximum_eq_coe_iff, Option.getD_some, Std.Antisymm, WithBot, WithBot.unbotD_coe, _eq_none_iff, _eq_none_iff.mp, _eq_some_iff, _root_, _root_.le_antisymm, getD_some, hy.left, hy.right, hz.left, hz.right, l.max, l.maximum
 -/

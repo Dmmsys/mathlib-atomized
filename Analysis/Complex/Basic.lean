@@ -1431,7 +1431,14 @@ instance :
   ofReal_re_ax := ofReal_re
   ofReal_im_ax := ofReal_im
   mul_re_ax := mul_re
-  mul_im_ax := mul
+  mul_im_ax := mul_im
+  conj_re_ax _ := rfl
+  conj_im_ax _ := rfl
+  conj_I_ax := conj_I
+  norm_sq_eq_def_ax z := (normSq_eq_norm_sq z).symm
+  mul_im_I_ax _ := mul_one _
+  toPartialOrder := Complex.partialOrder
+  le_iff_re_im := Iff.rfl
 
 中文:
 实例 :
@@ -1445,7 +1452,14 @@ instance :
   ofReal_re_ax := ofReal_re
   ofReal_im_ax := ofReal_im
   mul_re_ax := mul_re
-  mul_im_ax := mul
+  mul_im_ax := mul_im
+  conj_re_ax _ := rfl
+  conj_im_ax _ := rfl
+  conj_I_ax := conj_I
+  norm_sq_eq_def_ax z := (normSq_eq_norm_sq z).symm
+  mul_im_I_ax _ := mul_one _
+  toPartialOrder := Complex.partialOrder
+  le_iff_re_im := Iff.rfl
 
 Depends on / 依赖: Complex.add_re, Complex.re, Complex.zero_re, add_re, zero_re
 -/
@@ -1702,7 +1716,8 @@ definition _root_.RCLike.complexRingEquiv
   map_mul' x y := by
     simp only [RCLike.mul_re, ofReal_sub, ofReal_mul, RCLike.mul_im, ofReal_add]
     ring_nf
-    rw 
+    rw [I_sq]
+    ring
 
 中文:
 定义 _root_.RCLike.complexRingEquiv
@@ -1715,7 +1730,8 @@ definition _root_.RCLike.complexRingEquiv
   map_mul' x y := by
     simp only [RCLike.mul_re, ofReal_sub, ofReal_mul, RCLike.mul_im, ofReal_add]
     ring_nf
-    rw 
+    rw [I_sq]
+    ring
 
 Depends on / 依赖: RCLike, RCLike.im, RCLike.re
 -/

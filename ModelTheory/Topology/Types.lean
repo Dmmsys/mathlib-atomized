@@ -85,7 +85,22 @@ instance :
     exact F.mem_of_superset Filter.univ_mem (fun p _ => p.subset x)
   · rw [Theory.IsMaximal, Theory.isSatisfiable_iff_isFinitelySatisfiable]
     refine ⟨?_, ?_⟩
-   
+    · rw[Theory.IsFinitelySatisfiable]
+      intro x hx
+      have : forall φ in x, T.typesWith φ in F.toFilter := by intro φ hφ; exact hx hφ
+      rw [← Filter.biInter_finset_mem x] at this
+      obtain ⟨T, T_inter⟩ := F.neBot.nonempty_of_mem this
+      have subset : (x : Set _) subseteq T.toTheory := by rwa [Set.mem_iInter₂] at T_inter
+      exact T.isMaximal.1.mono subset
+    · intro φ
+      simp only [mem_ofPred_eq, typesWith_not]
+      exact Ultrafilter.mem_or_compl_mem F (T.typesWith φ)
+  · refine ⟨mem_univ _, ?_⟩
+    · rw [nhds_generateFrom]
+      apply le_iInf₂
+      rintro _ ⟨hφ, φ, rfl⟩
+      rw [Filter.le_principal_iff]
+      exact hφ
 
 中文:
 实例 :
@@ -99,7 +114,22 @@ instance :
     exact F.mem_of_superset Filter.univ_mem (fun p _ => p.subset x)
   · rw [Theory.IsMaximal, Theory.isSatisfiable_iff_isFinitelySatisfiable]
     refine ⟨?_, ?_⟩
-   
+    · rw[Theory.IsFinitelySatisfiable]
+      intro x hx
+      have : forall φ in x, T.typesWith φ in F.toFilter := by intro φ hφ; exact hx hφ
+      rw [← Filter.biInter_finset_mem x] at this
+      obtain ⟨T, T_inter⟩ := F.neBot.nonempty_of_mem this
+      have subset : (x : Set _) subseteq T.toTheory := by rwa [Set.mem_iInter₂] at T_inter
+      exact T.isMaximal.1.mono subset
+    · intro φ
+      simp only [mem_ofPred_eq, typesWith_not]
+      exact Ultrafilter.mem_or_compl_mem F (T.typesWith φ)
+  · refine ⟨mem_univ _, ?_⟩
+    · rw [nhds_generateFrom]
+      apply le_iInf₂
+      rintro _ ⟨hφ, φ, rfl⟩
+      rw [Filter.le_principal_iff]
+      exact hφ
 
 Depends on / 依赖: F.mem_of_superset, F.neBot.nonempty_of_mem, F.toFilter, Filter, Filter.biInter_finset_mem, Filter.univ_mem, IsFinitelySatisfiable, IsMaximal, T.typesWith, T_inter, Theory, Theory.IsFinitelySatisfiable, Theory.IsMaximal, Theory.isSatisfiable_iff_isFinitelySatisfiable, biInter_finset_mem, intros, isCompact_iff_ultrafilter_le_nhds, isSatisfiable_iff_isFinitelySatisfiable, mem_of_superset, nonempty_of_mem
 -/

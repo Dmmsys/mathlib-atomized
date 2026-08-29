@@ -39,7 +39,16 @@ definition maxPowDvdDiv
   go (p : Nat) (hp : 1 < p ∧ n != 0) :=
     if hmod : n % p = 0 then
 let (e, q) := go (p * p) by simp [Nat.one_lt_mul_iff, hp, Nat.lt_trans Nat.one_pos]
-      if q % p = 0 then (2 * 
+      if q % p = 0 then (2 * e + 1, q / p) else (2 * e, q)
+    else
+      (0, n)
+  termination_by n / p
+  decreasing_by
+    rw [← Nat.dvd_iff_mod_eq_zero] at hmod
+    rcases hmod with ⟨m, rfl⟩
+    have hp₀ : 0 < p := Nat.lt_trans Nat.one_pos hp.1
+    rw [Nat.mul_div_mul_left _ _ hp₀]; rw [Nat.mul_div_cancel_left _ hp₀]
+    exact Nat.div_lt_self (by grind) hp.1
 
 中文:
 定义 maxPowDvdDiv
@@ -53,7 +62,16 @@ let (e, q) := go (p * p) by simp [Nat.one_lt_mul_iff, hp, Nat.lt_trans Nat.one_p
   go (p : Nat) (hp : 1 < p ∧ n != 0) :=
     if hmod : n % p = 0 then
 let (e, q) := go (p * p) by simp [Nat.one_lt_mul_iff, hp, Nat.lt_trans Nat.one_pos]
-      if q % p = 0 then (2 * 
+      if q % p = 0 then (2 * e + 1, q / p) else (2 * e, q)
+    else
+      (0, n)
+  termination_by n / p
+  decreasing_by
+    rw [← Nat.dvd_iff_mod_eq_zero] at hmod
+    rcases hmod with ⟨m, rfl⟩
+    have hp₀ : 0 < p := Nat.lt_trans Nat.one_pos hp.1
+    rw [Nat.mul_div_mul_left _ _ hp₀]; rw [Nat.mul_div_cancel_left _ hp₀]
+    exact Nat.div_lt_self (by grind) hp.1
 -/
 def maxPowDvdDiv (p n : Nat) : Nat × Nat :=
   if H : 1 < p ∧ n != 0 then
@@ -124,7 +142,12 @@ theorem maxPowDvdDiv.go_spec
     have hp₀ : 0 < p := Nat.lt_trans Nat.one_pos hp.1
     simp_all [← Nat.dvd_iff_mod_eq_zero, Nat.pow_add', ← Nat.mul_assoc, Nat.div_mul_cancel,
       Nat.two_mul, Nat.mul_pow]
-  | cas
+  | case2 p hp hmod e q heq hqp ih =>
+    rw [heq] at ih
+    rcases ih with ⟨rfl, hdvd⟩
+    simp_all [Nat.dvd_iff_mod_eq_zero, Nat.two_mul, Nat.mul_pow, Nat.pow_add]
+  | case3 =>
+    simp_all [Nat.dvd_iff_mod_eq_zero]
 
 中文:
 定理 maxPowDvdDiv.go_spec
@@ -137,7 +160,12 @@ theorem maxPowDvdDiv.go_spec
     have hp₀ : 0 < p := Nat.lt_trans Nat.one_pos hp.1
     simp_all [← Nat.dvd_iff_mod_eq_zero, Nat.pow_add', ← Nat.mul_assoc, Nat.div_mul_cancel,
       Nat.two_mul, Nat.mul_pow]
-  | cas
+  | case2 p hp hmod e q heq hqp ih =>
+    rw [heq] at ih
+    rcases ih with ⟨rfl, hdvd⟩
+    simp_all [Nat.dvd_iff_mod_eq_zero, Nat.two_mul, Nat.mul_pow, Nat.pow_add]
+  | case3 =>
+    simp_all [Nat.dvd_iff_mod_eq_zero]
 
 Depends on / 依赖: Nat.div_mul_cancel, Nat.dvd_iff_mod_eq_zero, Nat.lt_trans, Nat.mul_assoc, Nat.mul_pow, Nat.one_pos, Nat.pow_add, Nat.two_mul, div_mul_cancel, dvd_iff_mod_eq_zero, fun_induction, lt_trans, mul_assoc, mul_pow, one_pos, pow_add, two_mul
 -/
@@ -680,7 +708,10 @@ theorem pow_dvd_iff_le_of_spec
     refine iff_of_false (fun hdvd => ?_) (Nat.not_le_of_lt hlt)
     obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_lt hlt
     rw [Nat.add_assoc]; rw [Nat.pow_add]; rw [Nat.mul_dvd_mul_iff_left (Nat.pow_pos (Nat.zero_lt_of_lt hp))] at hdvd
-exact hb
+exact hb Nat.dvd_of_pow_dvd (Nat.le_add_left 1 l) hdvd
+  | inr hle =>
+    refine iff_of_true (Nat.dvd_mul_right_of_dvd ?_ _) hle
+    exact Nat.pow_dvd_pow p hle
 
 中文:
 定理 pow_dvd_iff_le_of_spec
@@ -692,7 +723,10 @@ exact hb
     refine iff_of_false (fun hdvd => ?_) (Nat.not_le_of_lt hlt)
     obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_lt hlt
     rw [Nat.add_assoc]; rw [Nat.pow_add]; rw [Nat.mul_dvd_mul_iff_left (Nat.pow_pos (Nat.zero_lt_of_lt hp))] at hdvd
-exact hb
+exact hb Nat.dvd_of_pow_dvd (Nat.le_add_left 1 l) hdvd
+  | inr hle =>
+    refine iff_of_true (Nat.dvd_mul_right_of_dvd ?_ _) hle
+    exact Nat.pow_dvd_pow p hle
 -/
 private theorem pow_dvd_iff_le_of_spec {p k n a b : Nat} (hp : 1 < p) (hn : n != 0)
     (hab : p ^ a * b = n) (hb : ¬p ∣ b) : p ^ k ∣ n ↔ k <= a := by
@@ -750,7 +784,15 @@ theorem maxPowDvdDiv_of_pow_mul_eq
   · have hk : k = (p.maxPowDvdDiv n).1 := by
       · apply Nat.le_antisymm
         · rw [← padicValNat, ← pow_dvd_iff_le_padicValNat (Nat.ne_of_gt hp) hn,
-            pow_dvd_iff_le_of
+            pow_dvd_iff_le_of_spec hp hn h hl]
+          apply Nat.le_refl
+        · rw [← pow_dvd_iff_le_of_spec hp hn h hl, pow_dvd_iff_le_padicValNat (Nat.ne_of_gt hp) hn]
+          apply Nat.le_refl
+    rw [← pow_padicValNat_mul_divMaxPow p n]; rw [hk]; rw [padicValNat]; rw [Nat.mul_left_cancel_iff] at h
+    · exact Prod.ext hk.symm h.symm
+· exact Nat.pow_pos Nat.zero_lt_of_lt hp
+
+@[simp]
 
 中文:
 定理 maxPowDvdDiv_of_pow_mul_eq
@@ -762,7 +804,15 @@ theorem maxPowDvdDiv_of_pow_mul_eq
   · have hk : k = (p.maxPowDvdDiv n).1 := by
       · apply Nat.le_antisymm
         · rw [← padicValNat, ← pow_dvd_iff_le_padicValNat (Nat.ne_of_gt hp) hn,
-            pow_dvd_iff_le_of
+            pow_dvd_iff_le_of_spec hp hn h hl]
+          apply Nat.le_refl
+        · rw [← pow_dvd_iff_le_of_spec hp hn h hl, pow_dvd_iff_le_padicValNat (Nat.ne_of_gt hp) hn]
+          apply Nat.le_refl
+    rw [← pow_padicValNat_mul_divMaxPow p n]; rw [hk]; rw [padicValNat]; rw [Nat.mul_left_cancel_iff] at h
+    · exact Prod.ext hk.symm h.symm
+· exact Nat.pow_pos Nat.zero_lt_of_lt hp
+
+@[simp]
 
 Depends on / 依赖: Nat.le_antisymm, Nat.le_refl, Nat.mul_left_ca, Nat.ne_of_gt, eq_zero_or_pos, k.eq_zero_or_pos, le_antisymm, le_refl, maxPowDvdDiv, mul_left_ca, ne_of_gt, p.maxPowDvdDiv, padicValNat, pow_dvd_iff_le_of_spec, pow_dvd_iff_le_padicValNat, pow_padicValNat_mul_divMaxPow
 -/
@@ -1156,7 +1206,17 @@ alias maxPowDiv.base_mul_eq_succ := padicValNat_base_mul
 @[deprecated (since := "2026-03-15")]
 alias maxPowDiv.base_pow_mul := padicValNat_base_pow_mul
 
-@[deprecated (since := "2026-03-1
+@[deprecated (since := "2026-03-15")]
+alias ⟨_, maxPowDiv.le_of_dvd⟩ := pow_dvd_iff_le_padicValNat
+
+@[deprecated (since := "2026-03-15")]
+alias maxPowDiv.pow_dvd := pow_padicValNat_dvd
+
+@[deprecated (since := "2026-03-15")]
+alias maxPowDiv.zero := padicValNat_zero_right
+
+@[deprecated (since := "2026-03-15")]
+alias maxPowDiv.zero_base := padicValNat_zero_left
 
 中文:
 定理 snd_maxPowDvdDiv
@@ -1173,7 +1233,17 @@ alias maxPowDiv.base_mul_eq_succ := padicValNat_base_mul
 @[deprecated (since := "2026-03-15")]
 alias maxPowDiv.base_pow_mul := padicValNat_base_pow_mul
 
-@[deprecated (since := "2026-03-1
+@[deprecated (since := "2026-03-15")]
+alias ⟨_, maxPowDiv.le_of_dvd⟩ := pow_dvd_iff_le_padicValNat
+
+@[deprecated (since := "2026-03-15")]
+alias maxPowDiv.pow_dvd := pow_padicValNat_dvd
+
+@[deprecated (since := "2026-03-15")]
+alias maxPowDiv.zero := padicValNat_zero_right
+
+@[deprecated (since := "2026-03-15")]
+alias maxPowDiv.zero_base := padicValNat_zero_left
 -/
 theorem snd_maxPowDvdDiv (p n : Nat) : (p.maxPowDvdDiv n).2 = n.divMaxPow p := rfl
 

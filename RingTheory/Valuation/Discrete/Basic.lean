@@ -376,7 +376,10 @@ instance :
     simp only [valueGroup, valueMonoid, Submonoid.coe_set_mk, Subsemigroup.coe_set_mk,
       closure_eq_bot_iff, subset_singleton_iff, mem_preimage, mem_range, forall_exists_index,
       Units.ext_iff]
-
+    intro y x
+    specialize h1 x
+    aesop
+  aesop (add safe forward [generator_lt_one, generator_zpowers_eq_valueGroup])
 
 中文:
 实例 :
@@ -388,7 +391,10 @@ instance :
     simp only [valueGroup, valueMonoid, Submonoid.coe_set_mk, Subsemigroup.coe_set_mk,
       closure_eq_bot_iff, subset_singleton_iff, mem_preimage, mem_range, forall_exists_index,
       Units.ext_iff]
-
+    intro y x
+    specialize h1 x
+    aesop
+  aesop (add safe forward [generator_lt_one, generator_zpowers_eq_valueGroup])
 
 Depends on / 依赖: IsNontrivial, IsNontrivial.mk, Submonoid, Submonoid.coe_set_mk, Subsemigroup, Subsemigroup.coe_set_mk, Units.ext_iff, closure_eq_bot_iff, coe_set_mk, ext_iff, forall_exists_index, forward, generator_lt_one, generator_zpowers_eq_valueGroup, hvalueGroup, mem_preimage, mem_range, ofClass, specialize, subset_singleton_iff
 -/
@@ -444,7 +450,14 @@ theorem generator_eq_exp_neg_one_of_mem_range
   apply Subgroup.genLTOne_unique
   · exact compareOfLessAndEq_eq_lt.mp rfl
   · ext n
-    simp_all only [Int.reduceNe
+    simp_all only [Int.reduceNeg, exp_neg, Subgroup.mem_zpowers_iff, mem_valueGroup_iff_of_comm,
+      ne_eq]
+    refine ⟨fun ⟨k, h⟩ => ?_ , fun _ => ⟨-WithZero.log n, by aesop⟩⟩
+    rw [← h]
+    have ⟨π, hπ⟩ := hπ
+    cases k with
+    | ofNat n => refine ⟨1, ?_, π ^ n, ?_⟩ <;> simp [hπ]
+    | negSucc n => refine ⟨π ^ (n + 1), ?_, 1, ?_⟩ <;> simp [hπ, Int.negSucc_eq, mul_assoc]
 
 中文:
 定理 generator_eq_exp_neg_one_of_mem_range
@@ -456,7 +469,14 @@ theorem generator_eq_exp_neg_one_of_mem_range
   apply Subgroup.genLTOne_unique
   · exact compareOfLessAndEq_eq_lt.mp rfl
   · ext n
-    simp_all only [Int.reduceNe
+    simp_all only [Int.reduceNeg, exp_neg, Subgroup.mem_zpowers_iff, mem_valueGroup_iff_of_comm,
+      ne_eq]
+    refine ⟨fun ⟨k, h⟩ => ?_ , fun _ => ⟨-WithZero.log n, by aesop⟩⟩
+    rw [← h]
+    have ⟨π, hπ⟩ := hπ
+    cases k with
+    | ofNat n => refine ⟨1, ?_, π ^ n, ?_⟩ <;> simp [hπ]
+    | negSucc n => refine ⟨π ^ (n + 1), ?_, 1, ?_⟩ <;> simp [hπ, Int.negSucc_eq, mul_assoc]
 
 Depends on / 依赖: Int.reduceNeg, IsRankOneDiscrete, Subgroup, Subgroup.genLTOne, Subgroup.genLTOne_unique, Subgroup.mem_zpowers_iff, Units.mk0, Valuation, Valuation.IsRankOneDiscrete.valueGroup_genLTOne_eq_generator, WithZero, WithZero.log, compareOfLessAndEq_eq_lt, compareOfLessAndEq_eq_lt.mp, exp_neg, genLTOne, genLTOne_unique, mem_valueGroup_iff_of_comm, mem_zpowers_iff, ne_eq, ofClass
 -/
@@ -889,7 +909,12 @@ theorem exists_isUniformizer_of_isCyclic_of_nontrivial
   set g := (valueGroup (.ofClass v)).genLTOne with hg
   obtain ⟨⟨π, hπ⟩, hγ0⟩ : g.1 in ((range (MonoidWithZeroHom.ofClass v)) \ {0}) := by
     rw [← valueGroup_eq_range]; rw [hg]
-    exact mem_image_of_mem Unit
+    exact mem_image_of_mem Units.val (valueGroup (.ofClass v)).genLTOne_mem
+  use π
+  simp only [MonoidWithZeroHom.coe_ofClass] at hπ
+  rw [hπ]; rw [hg]
+  exact ⟨le_of_lt (valueGroup (.ofClass v)).genLTOne_lt_one,
+    by rw [valueGroup_genLTOne_eq_generator]⟩
 
 中文:
 定理 存在_isUniformizer_of_isCyclic_of_nontrivial
@@ -899,7 +924,12 @@ theorem exists_isUniformizer_of_isCyclic_of_nontrivial
   set g := (valueGroup (.ofClass v)).genLTOne with hg
   obtain ⟨⟨π, hπ⟩, hγ0⟩ : g.1 in ((range (MonoidWithZeroHom.ofClass v)) \ {0}) := by
     rw [← valueGroup_eq_range]; rw [hg]
-    exact mem_image_of_mem Unit
+    exact mem_image_of_mem Units.val (valueGroup (.ofClass v)).genLTOne_mem
+  use π
+  simp only [MonoidWithZeroHom.coe_ofClass] at hπ
+  rw [hπ]; rw [hg]
+  exact ⟨le_of_lt (valueGroup (.ofClass v)).genLTOne_lt_one,
+    by rw [valueGroup_genLTOne_eq_generator]⟩
 
 Depends on / 依赖: IsUniformizer, IsUniformizer.iff, MonoidWithZeroHom, MonoidWithZeroHom.coe_ofClass, MonoidWithZeroHom.ofClass, Subtype, Subtype.exists, Units.val, coe_ofClass, exists_prop, genLTOne, genLTOne_lt_one, genLTOne_mem, le_of_lt, mem_image_of_mem, mem_valuationSubring_iff, ofClass, valueGroup, valueGroup_eq_range, valueGroup_genLTOne_eq_generator
 -/
@@ -983,7 +1013,8 @@ theorem associated_of_isUniformizer
     simp [IsUniformizer.iff.mp h1, IsUniformizer.iff.mp h2]
   set p : v.integer := ⟨(π₁.1 : K)⁻¹ * π₂.1, (v.mem_integer_iff _).mpr (le_of_eq hval)⟩ with hp
   use ((Integers.isUnit_iff_valuation_eq_one (x := p) <| integer.integers v).mpr hval).unit
-  app
+  apply_fun ((↑) : K₀ -> K) using Subtype.val_injective
+  simp [hp, ← mul_assoc, mul_inv_cancel₀ h1.ne_zero]
 
 中文:
 定理 associated_of_isUniformizer
@@ -993,7 +1024,8 @@ theorem associated_of_isUniformizer
     simp [IsUniformizer.iff.mp h1, IsUniformizer.iff.mp h2]
   set p : v.integer := ⟨(π₁.1 : K)⁻¹ * π₂.1, (v.mem_integer_iff _).mpr (le_of_eq hval)⟩ with hp
   use ((Integers.isUnit_iff_valuation_eq_one (x := p) <| integer.integers v).mpr hval).unit
-  app
+  apply_fun ((↑) : K₀ -> K) using Subtype.val_injective
+  simp [hp, ← mul_assoc, mul_inv_cancel₀ h1.ne_zero]
 
 Depends on / 依赖: Integers, Integers.isUnit_iff_valuation_eq_one, IsUniformizer, IsUniformizer.iff.mp, Subtype, Subtype.val_injective, apply_fun, h1.ne_zero, integer, integer.integers, integers, isUnit_iff_valuation_eq_one, le_of_eq, mem_integer_iff, mul_assoc, ne_zero, v.integer, v.mem_integer_iff, val_injective
 -/
@@ -1019,7 +1051,29 @@ theorem exists_pow_Uniformizer
     apply mem_valueGroup
     rw [hvr_def]; rw [Units.val_mk0 hr₀]
     exact mem_range_self _
-  rw [π.2.zpowers_e
+  rw [π.2.zpowers_eq_valueGroup]; rw [mem_zpowers_iff] at hvr
+  obtain ⟨m, hm⟩ := hvr
+  have hm' : v π.val ^ m = v r := by
+    rw [hvr_def] at hm
+    rw [← Units.val_mk0 hr₀]; rw [← hm]
+    simp [Units.val_zpow_eq_zpow_val, Units.val_mk0]
+  have hm₀ : 0 <= m := by
+    rw [← zpow_le_one_iff_right_of_lt_one₀ π.2.val_pos π.2.val_lt_one]; rw [hm']
+    exact r.2
+  obtain ⟨n, hn⟩ := Int.eq_ofNat_of_zero_le hm₀
+  use n
+  have hpow : v (π.1.1 ^ (-m) * r) = 1 := by
+    rw [map_mul]; rw [map_zpow₀]; rw [← hm']; rw [zpow_neg]; rw [hm']; rw [inv_mul_cancel₀ hr₀]
+  set a : K₀ := ⟨π.1.1 ^ (-m) * r, by apply le_of_eq hpow⟩ with ha
+  have ha₀ : (↑a : K) != 0 := by
+    simp only [zpow_neg, ne_eq, mul_eq_zero, inv_eq_zero, ZeroMemClass.coe_eq_zero, not_or, ha]
+    refine ⟨?_, hr⟩
+    rw [hn]; rw [zpow_natCast]; rw [pow_eq_zero_iff']; rw [not_and_or]
+    exact Or.inl π.ne_zero
+  have h_unit_a : IsUnit a :=
+    Integers.isUnit_of_one (integer.integers v) (isUnit_iff_ne_zero.mpr ha₀) hpow
+  use h_unit_a.unit
+  rw [IsUnit.unit_spec]; rw [Subring.coe_pow]; rw [ha]; rw [← mul_assoc]; rw [zpow_neg]; rw [hn]; rw [zpow_natCast]; rw [mul_inv_cancel₀ (pow_ne_zero _ π.ne_zero)]; rw [one_mul]
 
 中文:
 定理 存在_pow_Uniformizer
@@ -1031,7 +1085,29 @@ theorem exists_pow_Uniformizer
     apply mem_valueGroup
     rw [hvr_def]; rw [Units.val_mk0 hr₀]
     exact mem_range_self _
-  rw [π.2.zpowers_e
+  rw [π.2.zpowers_eq_valueGroup]; rw [mem_zpowers_iff] at hvr
+  obtain ⟨m, hm⟩ := hvr
+  have hm' : v π.val ^ m = v r := by
+    rw [hvr_def] at hm
+    rw [← Units.val_mk0 hr₀]; rw [← hm]
+    simp [Units.val_zpow_eq_zpow_val, Units.val_mk0]
+  have hm₀ : 0 <= m := by
+    rw [← zpow_le_one_iff_right_of_lt_one₀ π.2.val_pos π.2.val_lt_one]; rw [hm']
+    exact r.2
+  obtain ⟨n, hn⟩ := Int.eq_ofNat_of_zero_le hm₀
+  use n
+  have hpow : v (π.1.1 ^ (-m) * r) = 1 := by
+    rw [map_mul]; rw [map_zpow₀]; rw [← hm']; rw [zpow_neg]; rw [hm']; rw [inv_mul_cancel₀ hr₀]
+  set a : K₀ := ⟨π.1.1 ^ (-m) * r, by apply le_of_eq hpow⟩ with ha
+  have ha₀ : (↑a : K) != 0 := by
+    simp only [zpow_neg, ne_eq, mul_eq_zero, inv_eq_zero, ZeroMemClass.coe_eq_zero, not_or, ha]
+    refine ⟨?_, hr⟩
+    rw [hn]; rw [zpow_natCast]; rw [pow_eq_zero_iff']; rw [not_and_or]
+    exact Or.inl π.ne_zero
+  have h_unit_a : IsUnit a :=
+    Integers.isUnit_of_one (integer.integers v) (isUnit_iff_ne_zero.mpr ha₀) hpow
+  use h_unit_a.unit
+  rw [IsUnit.unit_spec]; rw [Subring.coe_pow]; rw [ha]; rw [← mul_assoc]; rw [zpow_neg]; rw [hn]; rw [zpow_natCast]; rw [mul_inv_cancel₀ (pow_ne_zero _ π.ne_zero)]; rw [one_mul]
 
 Depends on / 依赖: Subring, Subring.coe_eq_zero_iff, Units.mk0, Units.val_mk0, Units.val_zpow_eq_zpow_val, coe_eq_zero_iff, hvr_def, mem_range_self, mem_valueGroup, mem_zpowers_iff, ne_eq, ofClass, val_mk0, val_zpow_eq_zpow_val, valueGroup, zero_iff, zpowers_eq_valueGroup
 -/
@@ -1084,7 +1160,11 @@ theorem Uniformizer.is_generator
     · simp [hx₀]
     · obtain ⟨n, ⟨u, hu⟩⟩ := exists_pow_Uniformizer hx₀ π
       rw [← Subring.coe_mul]; rw [Subtype.coe_inj] at hu
-
+      have hn : Not (IsUnit x) := fun h =>
+        (maximalIdeal.isMaximal _).ne_top (eq_top_of_isUnit_mem _ hx h)
+      replace hn : n != 0 := fun h => by
+        simp only [hu, h, pow_zero, one_mul, Units.isUnit, not_true] at hn
+      simp [Ideal.mem_span_singleton, hu, dvd_pow_self _ hn]
 
 中文:
 定理 一致化子.is_generator
@@ -1099,7 +1179,11 @@ theorem Uniformizer.is_generator
     · simp [hx₀]
     · obtain ⟨n, ⟨u, hu⟩⟩ := exists_pow_Uniformizer hx₀ π
       rw [← Subring.coe_mul]; rw [Subtype.coe_inj] at hu
-
+      have hn : Not (IsUnit x) := fun h =>
+        (maximalIdeal.isMaximal _).ne_top (eq_top_of_isUnit_mem _ hx h)
+      replace hn : n != 0 := fun h => by
+        simp only [hu, h, pow_zero, one_mul, Units.isUnit, not_true] at hn
+      simp [Ideal.mem_span_singleton, hu, dvd_pow_self _ hn]
 
 Depends on / 依赖: Ideal.mem_span_singleto, Ideal.span_singleton_eq_top, IsUnit, Subring, Subring.coe_mul, Subtype, Subtype.coe_inj, Units.isUnit, coe_inj, coe_mul, eq_of_le, eq_top_of_isUnit_mem, exists_pow_Uniformizer, isMaximal, isUnit, maximalIdeal, maximalIdeal.isMaximal, mem_span_singleto, ne_top, not_isUnit
 -/
@@ -1217,7 +1301,10 @@ theorem isUniformizer_of_maximalIdeal_eq_span
     rw [h]; rw [Set.singleton_zero]; rw [span_zero] at hr
     exact Ring.ne_bot_of_isMaximal_of_not_isField (maximalIdeal.isMaximal v.valuationSubring)
       (valuationSubring_not_isField v) hr
-  obtain ⟨π, hπ⟩ := exists_isUniformizer_of_isCyclic_of_nontrivia
+  obtain ⟨π, hπ⟩ := exists_isUniformizer_of_isCyclic_of_nontrivial v
+  obtain ⟨n, u, hu⟩ := exists_pow_Uniformizer hr₀ ⟨π, hπ⟩
+  rw [Uniformizer.is_generator ⟨π]; rw [hπ⟩]; rw [span_singleton_eq_span_singleton] at hr
+  exact hπ.of_associated hr
 
 中文:
 定理 isUniformizer_of_maximalIdeal_eq_span
@@ -1228,7 +1315,10 @@ theorem isUniformizer_of_maximalIdeal_eq_span
     rw [h]; rw [Set.singleton_zero]; rw [span_zero] at hr
     exact Ring.ne_bot_of_isMaximal_of_not_isField (maximalIdeal.isMaximal v.valuationSubring)
       (valuationSubring_not_isField v) hr
-  obtain ⟨π, hπ⟩ := exists_isUniformizer_of_isCyclic_of_nontrivia
+  obtain ⟨π, hπ⟩ := exists_isUniformizer_of_isCyclic_of_nontrivial v
+  obtain ⟨n, u, hu⟩ := exists_pow_Uniformizer hr₀ ⟨π, hπ⟩
+  rw [Uniformizer.is_generator ⟨π]; rw [hπ⟩]; rw [span_singleton_eq_span_singleton] at hr
+  exact hπ.of_associated hr
 
 Depends on / 依赖: Ring.ne_bot_of_isMaximal_of_not_isField, Set.singleton_zero, Uniformizer, Uniformizer.is_generator, exists_isUniformizer_of_isCyclic_of_nontrivial, exists_pow_Uniformizer, isMaximal, is_generator, maximalIdeal, maximalIdeal.isMaximal, ne_bot_of_isMaximal_of_not_isField, of_associated, singleton_zero, span_singleton_eq_span_singleton, span_zero, v.valuationSubring, valuationSubring, valuationSubring_not_isField
 -/
@@ -1259,7 +1349,17 @@ theorem ideal_isPrincipal
   by_cases h_ne_bot : P = ⊥
   · rw [h_ne_bot]; exact bot_isPrincipal
   · let π : Uniformizer v := Nonempty.some (by infer_instance)
-    obtain ⟨x, ⟨hx_me
+    obtain ⟨x, ⟨hx_mem, hx₀⟩⟩ := Submodule.exists_mem_ne_zero_of_ne_bot h_ne_bot
+    obtain ⟨n, ⟨u, hu⟩⟩ := exists_pow_Uniformizer hx₀ π
+    by_cases hn : n = 0
+    · rw [← Subring.coe_mul, hn, pow_zero, one_mul, SetLike.coe_eq_coe] at hu
+      refine (hP.ne_top (Ideal.eq_top_of_isUnit_mem P hx_mem ?_)).elim
+      simp only [hu, Units.isUnit]
+    · rw [← Subring.coe_mul, SetLike.coe_eq_coe] at hu
+      rw [hu]; rw [Ideal.mul_unit_mem_iff_mem P u.isUnit]; rw [IsPrime.pow_mem_iff_mem hP _ (pos_iff_ne_zero.mpr hn)]; rw [← Ideal.span_singleton_le_iff_mem] at hx_mem
+      replace hx_mem := π.is_generator ▸ hx_mem
+      rw [← Ideal.IsMaximal.eq_of_le (IsLocalRing.maximalIdeal.isMaximal K₀) hP.ne_top hx_mem]
+      exact ⟨π.1, π.is_generator⟩
 
 中文:
 定理 ideal_isPrincipal
@@ -1271,7 +1371,17 @@ theorem ideal_isPrincipal
   by_cases h_ne_bot : P = ⊥
   · rw [h_ne_bot]; exact bot_isPrincipal
   · let π : Uniformizer v := Nonempty.some (by infer_instance)
-    obtain ⟨x, ⟨hx_me
+    obtain ⟨x, ⟨hx_mem, hx₀⟩⟩ := Submodule.exists_mem_ne_zero_of_ne_bot h_ne_bot
+    obtain ⟨n, ⟨u, hu⟩⟩ := exists_pow_Uniformizer hx₀ π
+    by_cases hn : n = 0
+    · rw [← Subring.coe_mul, hn, pow_zero, one_mul, SetLike.coe_eq_coe] at hu
+      refine (hP.ne_top (Ideal.eq_top_of_isUnit_mem P hx_mem ?_)).elim
+      simp only [hu, Units.isUnit]
+    · rw [← Subring.coe_mul, SetLike.coe_eq_coe] at hu
+      rw [hu]; rw [Ideal.mul_unit_mem_iff_mem P u.isUnit]; rw [IsPrime.pow_mem_iff_mem hP _ (pos_iff_ne_zero.mpr hn)]; rw [← Ideal.span_singleton_le_iff_mem] at hx_mem
+      replace hx_mem := π.is_generator ▸ hx_mem
+      rw [← Ideal.IsMaximal.eq_of_le (IsLocalRing.maximalIdeal.isMaximal K₀) hP.ne_top hx_mem]
+      exact ⟨π.1, π.is_generator⟩
 
 Depends on / 依赖: IsPrime, IsPrincipal, IsPrincipalIdealRing, IsPrincipalIdealRing.of_prime, Nonempty, Nonempty.some, P.IsPrime, SetLike, SetLike.coe_eq_coe, Submodule, Submodule.IsPrincipal, Submodule.exists_mem_ne_zero_of_ne_bot, Subring, Subring.coe_mul, Uniformizer, bot_isPrincipal, coe_eq_coe, coe_mul, exists_mem_ne_zero_of_ne_bot, exists_pow_Uniformizer
 -/

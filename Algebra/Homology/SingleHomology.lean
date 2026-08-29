@@ -403,14 +403,18 @@ lemma singleObjCyclesSelfIso_hom_naturality
   proof: by
   rw [← cancel_mono (singleObjCyclesSelfIso c j B).inv]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [← cancel_mono (iCycles _ _)]
   simp only [cyclesMap_i, singleObjCyclesSelfIso, Iso.trans_hom, iCyclesIso_hom, Iso.trans_inv,
-    assoc, iCyclesIso_inv_hom_id, comp_id, single_ma
+    assoc, iCyclesIso_inv_hom_id, comp_id, single_map_f_self]
+
+@[reassoc (attr := simp)]
 
 中文:
 引理 singleObjCyclesSelfIso_hom_naturality
   证明: by
   rw [← cancel_mono (singleObjCyclesSelfIso c j B).inv]; rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [← cancel_mono (iCycles _ _)]
   simp only [cyclesMap_i, singleObjCyclesSelfIso, Iso.trans_hom, iCyclesIso_hom, Iso.trans_inv,
-    assoc, iCyclesIso_inv_hom_id, comp_id, single_ma
+    assoc, iCyclesIso_inv_hom_id, comp_id, single_map_f_self]
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Iso.hom_inv_id, Iso.trans_hom, Iso.trans_inv, cancel_mono, comp_id, cyclesMap_i, hom_inv_id, iCycles, iCyclesIso_hom, iCyclesIso_inv_hom_id, singleObjCyclesSelfIso, single_map_f_self, trans_hom, trans_inv
 -/

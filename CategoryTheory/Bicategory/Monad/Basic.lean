@@ -212,7 +212,15 @@ definition ofOplaxFromUnit
   comul_assoc := by
     simp only [tensorObj_def, MonoidalCategory.whiskerLeft_comp, whiskerLeft_def, Category.assoc,
       MonoidalCategory.comp_whiskerRight, whiskerRight_def, associator_def]
-    rw [← F.mapComp_naturality_left_assoc]; rw [← 
+    rw [← F.mapComp_naturality_left_assoc]; rw [← F.mapComp_naturality_right_assoc]
+    simp only [whiskerLeft_rightUnitor_inv, PrelaxFunctor.map₂_comp, Category.assoc,
+      OplaxFunctor.map₂_associator, whiskerRight_id, Iso.hom_inv_id_assoc]
+  counit_comul := by
+    simp only [tensorUnit_def, tensorObj_def, whiskerRight_def, Category.assoc, leftUnitor_def]
+    rw [F.mapComp_id_left]; rw [unitors_equal]; rw [F.map₂_inv_hom_assoc]
+  comul_counit := by
+    simp only [tensorUnit_def, tensorObj_def, whiskerLeft_def, rightUnitor_def]
+    rw [Category.assoc]; rw [F.mapComp_id_right]; rw [F.map₂_inv_hom_assoc]
 
 中文:
 定义 ofOplaxFromUnit
@@ -222,7 +230,15 @@ definition ofOplaxFromUnit
   comul_assoc := by
     simp only [tensorObj_def, MonoidalCategory.whiskerLeft_comp, whiskerLeft_def, Category.assoc,
       MonoidalCategory.comp_whiskerRight, whiskerRight_def, associator_def]
-    rw [← F.mapComp_naturality_left_assoc]; rw [← 
+    rw [← F.mapComp_naturality_left_assoc]; rw [← F.mapComp_naturality_right_assoc]
+    simp only [whiskerLeft_rightUnitor_inv, PrelaxFunctor.map₂_comp, Category.assoc,
+      OplaxFunctor.map₂_associator, whiskerRight_id, Iso.hom_inv_id_assoc]
+  counit_comul := by
+    simp only [tensorUnit_def, tensorObj_def, whiskerRight_def, Category.assoc, leftUnitor_def]
+    rw [F.mapComp_id_left]; rw [unitors_equal]; rw [F.map₂_inv_hom_assoc]
+  comul_counit := by
+    simp only [tensorUnit_def, tensorObj_def, whiskerLeft_def, rightUnitor_def]
+    rw [Category.assoc]; rw [F.mapComp_id_right]; rw [F.map₂_inv_hom_assoc]
 
 Depends on / 依赖: F.map, F.mapComp, mapComp
 -/

@@ -711,7 +711,11 @@ instance instCompleteLattice
     lt := (· < ·)
     top := ⊤
     le_top := fun _ x _ => mem_top x
-    inf := (· ⊓
+    inf := (· ⊓ ·)
+    sInf := InfSet.sInf
+    le_inf := fun _a _b _c ha hb _x hx => ⟨ha hx, hb hx⟩
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 中文:
 实例 instCompleteLattice
@@ -724,7 +728,11 @@ instance instCompleteLattice
     lt := (· < ·)
     top := ⊤
     le_top := fun _ x _ => mem_top x
-    inf := (· ⊓
+    inf := (· ⊓ ·)
+    sInf := InfSet.sInf
+    le_inf := fun _a _b _c ha hb _x hx => ⟨ha hx, hb hx⟩
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 Depends on / 依赖: And.left, And.right, InfSet, InfSet.sInf, IsGLB.of_image, L.Substructure, SetLike, SetLike.coe_subset_coe, Substructure, coe_subset_coe, completeLatticeOfInf, inf_le_left, inf_le_right, isGLB_biInf, le_inf, le_top, mem_top, of_image
 -/
@@ -929,7 +937,10 @@ theorem coe_closure_eq_range_term_realize
     refine ⟨func f fun i => Classical.choose (hx i), ?_⟩
     simp only [Term.realize, fun i => Classical.choose_spec (hx i)]⟩
   change _ = (S : Set M)
-  rw [← SetLike.e
+  rw [← SetLike.ext'_iff]
+  refine closure_eq_of_le (fun x hx => ⟨var ⟨x, hx⟩, rfl⟩) (le_sInf fun S' hS' => ?_)
+  rintro _ ⟨t, rfl⟩
+  exact t.realize_mem _ fun i => hS' i.2
 
 中文:
 定理 coe_closure_eq_range_term_realize
@@ -939,7 +950,10 @@ theorem coe_closure_eq_range_term_realize
     refine ⟨func f fun i => Classical.choose (hx i), ?_⟩
     simp only [Term.realize, fun i => Classical.choose_spec (hx i)]⟩
   change _ = (S : Set M)
-  rw [← SetLike.e
+  rw [← SetLike.ext'_iff]
+  refine closure_eq_of_le (fun x hx => ⟨var ⟨x, hx⟩, rfl⟩) (le_sInf fun S' hS' => ?_)
+  rintro _ ⟨t, rfl⟩
+  exact t.realize_mem _ fun i => hS' i.2
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, L.Substructure, SetLike, SetLike.ext, Substructure, Term.realize, _iff, choose_spec, closure_eq_of_le, le_sInf, mem_range, realize, realize_mem, t.realize_mem
 -/
@@ -1447,7 +1461,8 @@ theorem mem_iSup_of_directed
     simpa only [closure_iUnion, closure_eq (S _)] using this
   refine fun hx => closure_induction hx (fun _ => mem_iUnion.1) (fun f v hC => ?_)
   simp_rw [Set.mem_ofPred] at *
-  ha
+  have ⟨i, hi⟩ := hS.finite_le (fun i => Classical.choose (hC i))
+  refine ⟨i, (S i).fun_mem f v (fun j => hi j (Classical.choose_spec (hC j)))⟩
 
 中文:
 定理 mem_iSup_of_directed
@@ -1458,7 +1473,8 @@ theorem mem_iSup_of_directed
     simpa only [closure_iUnion, closure_eq (S _)] using this
   refine fun hx => closure_induction hx (fun _ => mem_iUnion.1) (fun f v hC => ?_)
   simp_rw [Set.mem_ofPred] at *
-  ha
+  have ⟨i, hi⟩ := hS.finite_le (fun i => Classical.choose (hC i))
+  refine ⟨i, (S i).fun_mem f v (fun j => hi j (Classical.choose_spec (hC j)))⟩
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Set.mem_ofPred, choose_spec, closure, closure_eq, closure_iUnion, closure_induction, finite_le, fun_mem, hS.finite_le, le_iSup, mem_iUnion, mem_ofPred, simp_rw
 -/
@@ -1516,7 +1532,8 @@ instance [IsEmpty
     · exact isEmptyElim f
     · intro x hx
       simp only [mem_empty_iff_false, forall_const] at hx
-  rw [← closure_empty]; rw [← SetLike.mem_coe]; rw
+  rw [← closure_empty]; rw [← SetLike.mem_coe]; rw [h]
+  exact Set.notMem_empty _
 
 中文:
 实例 [是空
@@ -1530,7 +1547,8 @@ instance [IsEmpty
     · exact isEmptyElim f
     · intro x hx
       simp only [mem_empty_iff_false, forall_const] at hx
-  rw [← closure_empty]; rw [← SetLike.mem_coe]; rw
+  rw [← closure_empty]; rw [← SetLike.mem_coe]; rw [h]
+  exact Set.notMem_empty _
 
 Depends on / 依赖: Set.notMem_empty, SetLike, SetLike.mem_coe, closed, closure, closure_empty, forall_const, isEmptyElim, isEmpty_subtype, mem_closed_iff, mem_coe, mem_empty_iff_false, notMem_empty
 -/
@@ -1661,7 +1679,7 @@ definition map
         simp only [Hom.map_fun, SetLike.mem_coe]
         exact congr rfl (funext fun i => (Classical.choose_spec (hx i)).2)⟩
 
-@
+@[simp]
 
 中文:
 定义 map
@@ -1674,7 +1692,7 @@ definition map
         simp only [Hom.map_fun, SetLike.mem_coe]
         exact congr rfl (funext fun i => (Classical.choose_spec (hx i)).2)⟩
 
-@
+@[simp]
 -/
 def map (φ : M ->[L] N) (S : L.Substructure M) : L.Substructure N where
   carrier := φ '' S
@@ -2834,7 +2852,7 @@ definition substructureReduct
   inj' S T h := by
     simp only [SetLike.coe_set_eq, Substructure.mk.injEq] at h
     exact h
-  map_rel_iff'
+  map_rel_iff' {_ _} := Iff.rfl
 
 中文:
 定义 substructureReduct
@@ -2847,7 +2865,7 @@ definition substructureReduct
   inj' S T h := by
     simp only [SetLike.coe_set_eq, Substructure.mk.injEq] at h
     exact h
-  map_rel_iff'
+  map_rel_iff' {_ _} := Iff.rfl
 
 Depends on / 依赖: Iff.rfl, LHom.map_onFunction, S.fun_mem, SetLike, SetLike.coe_set_eq, Substructure, Substructure.mem_carrier, Substructure.mk.injEq, carrier, coe_set_eq, fun_mem, map_onFunction, map_rel_iff, mem_carrier, onFunction
 -/
@@ -3055,7 +3073,7 @@ theorem closure_withConstants_eq
   rw [← (L.lhomWithConstants A).substructureReduct.le_iff_le]
   simp only [subset_closure, reduct_withConstants, closure_le, LHom.coe_substructureReduct,
     Set.union_subset_iff, and_true]
-  exact subset_closure_withConst
+  exact subset_closure_withConstants
 
 中文:
 定理 closure_withConstants_eq
@@ -3064,7 +3082,7 @@ theorem closure_withConstants_eq
   rw [← (L.lhomWithConstants A).substructureReduct.le_iff_le]
   simp only [subset_closure, reduct_withConstants, closure_le, LHom.coe_substructureReduct,
     Set.union_subset_iff, and_true]
-  exact subset_closure_withConst
+  exact subset_closure_withConstants
 
 Depends on / 依赖: A.subset_union_right, L.lhomWithConstants, LHom.coe_substructureReduct, Set.union_subset_iff, and_true, closure_eq_of_le, closure_le, coe_substructureReduct, le_iff_le, lhomWithConstants, reduct_withConstants, subset_closure, subset_closure_withConstants, subset_union_right, substructureReduct, substructureReduct.le_iff_le, union_subset_iff
 -/
@@ -3597,7 +3615,10 @@ definition codRestrict
   map_rel' {n} r x := by
     rw [← p.subtype.map_rel]
     change RelMap r (Hom.comp p.subtype.toHom (f.toHom.codRestrict p h) ∘ x) ↔ _
-    rw [Hom.subtype_comp_co
+    rw [Hom.subtype_comp_codRestrict]; rw [← f.map_rel]
+    rfl
+
+@[simp]
 
 中文:
 定义 codRestrict
@@ -3608,7 +3629,10 @@ definition codRestrict
   map_rel' {n} r x := by
     rw [← p.subtype.map_rel]
     change RelMap r (Hom.comp p.subtype.toHom (f.toHom.codRestrict p h) ∘ x) ↔ _
-    rw [Hom.subtype_comp_co
+    rw [Hom.subtype_comp_codRestrict]; rw [← f.map_rel]
+    rfl
+
+@[simp]
 
 Depends on / 依赖: codRestrict, f.toHom.codRestrict
 -/
@@ -3718,7 +3742,13 @@ definition substructureEquivMap
     Subtype.mk_eq_mk.2
       (f.injective
         (Classical.choose_spec
-            (codRestrict (s.map f.toHom) (f.domRestrict 
+            (codRestrict (s.map f.toHom) (f.domRestrict s) (fun ⟨m, hm⟩ => ⟨m, hm, rfl⟩)
+                ⟨m, hm⟩).2).2)
+  right_inv := fun ⟨_, hn⟩ => Subtype.mk_eq_mk.2 (Classical.choose_spec hn).2
+  map_fun' {n} f x := by simp
+  map_rel' {n} R x := by simp
+
+@[simp]
 
 中文:
 定义 substructureEquivMap
@@ -3729,7 +3759,13 @@ definition substructureEquivMap
     Subtype.mk_eq_mk.2
       (f.injective
         (Classical.choose_spec
-            (codRestrict (s.map f.toHom) (f.domRestrict 
+            (codRestrict (s.map f.toHom) (f.domRestrict s) (fun ⟨m, hm⟩ => ⟨m, hm, rfl⟩)
+                ⟨m, hm⟩).2).2)
+  right_inv := fun ⟨_, hn⟩ => Subtype.mk_eq_mk.2 (Classical.choose_spec hn).2
+  map_fun' {n} f x := by simp
+  map_rel' {n} R x := by simp
+
+@[simp]
 
 Depends on / 依赖: codRestrict, domRestrict, f.domRestrict, f.toHom, s.map
 -/
@@ -3800,7 +3836,10 @@ definition equivRange
   left_inv m :=
     f.injective (Classical.choose_spec (codRestrict f.toHom.range f f.toHom.mem_range_self m).2)
   right_inv := fun ⟨_, hn⟩ => Subtype.mk_eq_mk.2 (Classical.choose_spec hn)
-  map_fun' {n} f x := by 
+  map_fun' {n} f x := by simp
+  map_rel' {n} R x := by simp
+
+@[simp]
 
 中文:
 定义 equivRange
@@ -3810,7 +3849,10 @@ definition equivRange
   left_inv m :=
     f.injective (Classical.choose_spec (codRestrict f.toHom.range f f.toHom.mem_range_self m).2)
   right_inv := fun ⟨_, hn⟩ => Subtype.mk_eq_mk.2 (Classical.choose_spec hn)
-  map_fun' {n} f x := by 
+  map_fun' {n} f x := by simp
+  map_rel' {n} R x := by simp
+
+@[simp]
 -/
 @[simps toEquiv_apply] noncomputable def equivRange (f : M ↪[L] N) : M ≃[L] f.toHom.range where
   toFun := codRestrict f.toHom.range f f.toHom.mem_range_self

@@ -304,7 +304,11 @@ lemma Bundle.Trivialization.contMDiffAt_symmL
   refine contMDiffAt_totalSpace.mpr ⟨contMDiffAt_id, ?_⟩
   apply (contMDiffAt_coordChangeL hx hx').congr_of_eventuallyEq
   filter_upwards [e.open_baseSet.mem_nhds hx,
-    (trivializationAt F₁ E₁ x).open_b
+    (trivializationAt F₁ E₁ x).open_baseSet.mem_nhds hx'] with b hb hb'
+  ext v
+  simp [hom_trivializationAt_apply, ContinuousLinearMap.inCoordinates,
+    coordChangeL_apply' e _ ⟨hb, hb'⟩, coe_linearMapAt_of_mem _ hb',
+    e.symmL_apply hb, e.mk_symm hb]
 
 中文:
 引理 Bundle.Trivialization.contMDiffAt_symmL
@@ -314,7 +318,11 @@ lemma Bundle.Trivialization.contMDiffAt_symmL
   refine contMDiffAt_totalSpace.mpr ⟨contMDiffAt_id, ?_⟩
   apply (contMDiffAt_coordChangeL hx hx').congr_of_eventuallyEq
   filter_upwards [e.open_baseSet.mem_nhds hx,
-    (trivializationAt F₁ E₁ x).open_b
+    (trivializationAt F₁ E₁ x).open_baseSet.mem_nhds hx'] with b hb hb'
+  ext v
+  simp [hom_trivializationAt_apply, ContinuousLinearMap.inCoordinates,
+    coordChangeL_apply' e _ ⟨hb, hb'⟩, coe_linearMapAt_of_mem _ hb',
+    e.symmL_apply hb, e.mk_symm hb]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.inCoordinates, baseSet, coe_linearMapAt_of_mem, congr_of_eventuallyEq, contMDiffAt_coordChangeL, contMDiffAt_id, contMDiffAt_totalSpace, contMDiffAt_totalSpace.mpr, coordChangeL_apply, e.mk_symm, e.open_baseSet.mem_nhds, e.symmL_apply, filter_upwards, hom_trivializationAt_apply, inCoordinates, mem_baseSet_trivializationAt, mem_nhds, mk_symm, open_baseSet
 -/
@@ -393,7 +401,17 @@ lemma ContMDiffWithinAt.clm_apply_of_inCoordinates
   rw [contMDiffWithinAt_totalSpace] at hv ⊢
   refine ⟨hb₂, ?_⟩
   apply (ContMDiffWithinAt.clm_apply hϕ hv.2).congr_of_eventuallyEq_of_mem ?_ (mem_insert m₀ s)
-  have A : forallᶠ m in 𝓝[insert m₀ s] m₀, b₁ m in (trivializationAt F₁ E₁ (b₁ m₀)).
+  have A : forallᶠ m in 𝓝[insert m₀ s] m₀, b₁ m in (trivializationAt F₁ E₁ (b₁ m₀)).baseSet := by
+    apply hv.1.continuousWithinAt
+    apply (trivializationAt F₁ E₁ (b₁ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₁ m₀)
+  have A' : forallᶠ m in 𝓝[insert m₀ s] m₀, b₂ m in (trivializationAt F₂ E₂ (b₂ m₀)).baseSet := by
+    apply hb₂.continuousWithinAt
+    apply (trivializationAt F₂ E₂ (b₂ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₂ m₀)
+  filter_upwards [A, A'] with m hm h'm
+  rw [inCoordinates_eq hm h'm]
+  simp [*]
 
 中文:
 引理 ContMDiffWithinAt.clm_apply_of_inCoordinates
@@ -402,7 +420,17 @@ lemma ContMDiffWithinAt.clm_apply_of_inCoordinates
   rw [contMDiffWithinAt_totalSpace] at hv ⊢
   refine ⟨hb₂, ?_⟩
   apply (ContMDiffWithinAt.clm_apply hϕ hv.2).congr_of_eventuallyEq_of_mem ?_ (mem_insert m₀ s)
-  have A : forallᶠ m in 𝓝[insert m₀ s] m₀, b₁ m in (trivializationAt F₁ E₁ (b₁ m₀)).
+  have A : forallᶠ m in 𝓝[insert m₀ s] m₀, b₁ m in (trivializationAt F₁ E₁ (b₁ m₀)).baseSet := by
+    apply hv.1.continuousWithinAt
+    apply (trivializationAt F₁ E₁ (b₁ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₁ m₀)
+  have A' : forallᶠ m in 𝓝[insert m₀ s] m₀, b₂ m in (trivializationAt F₂ E₂ (b₂ m₀)).baseSet := by
+    apply hb₂.continuousWithinAt
+    apply (trivializationAt F₂ E₂ (b₂ m₀)).open_baseSet.mem_nhds
+    exact FiberBundle.mem_baseSet_trivializationAt' (b₂ m₀)
+  filter_upwards [A, A'] with m hm h'm
+  rw [inCoordinates_eq hm h'm]
+  simp [*]
 
 Depends on / 依赖: ContMDiffWithinAt, ContMDiffWithinAt.clm_apply, FiberBundle, FiberBundle.mem_baseSet_trivializationAt, baseSet, clm_apply, congr_of_eventuallyEq_of_mem, contMDiffWithinAt_insert_self, contMDiffWithinAt_totalSpace, continuousWithinAt, insert, mem_baseSet_trivializationAt, mem_insert, mem_nhds, open_baseSet, open_baseSet.mem_nhds, trivializationAt
 -/

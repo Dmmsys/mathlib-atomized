@@ -192,7 +192,15 @@ lemma isLoop_tfae
   tfae_have 2 ↔ 3 := by simp [M.empty_indep.mem_closure_iff_of_notMem (notMem_empty e),
     isCircuit_def, minimal_iff_forall_ssubset, ssubset_singleton_iff]
   tfae_have 2 ↔ 4 := by simp [M.empty_indep.mem_closure_iff_of_notMem (notMem_empty e)]
-  tfae_have 4 ↔ 5 := b
+  tfae_have 4 ↔ 5 := by
+    simp only [dep_iff, singleton_subset_iff, mem_sdiff, forall_and]
+    refine ⟨fun h => ⟨fun _ _ => h.2, fun B hB heB => h.1 (hB.indep.subset (by simpa))⟩,
+      fun h => ⟨fun hi => ?_, h.1 _ M.exists_isBase.choose_spec⟩⟩
+    obtain ⟨B, hB, heB⟩ := hi.exists_isBase_superset
+    exact h.2 _ hB (by simpa using heB)
+  tfae_finish
+
+@[simp]
 
 中文:
 引理 isLoop_tfae
@@ -203,7 +211,15 @@ lemma isLoop_tfae
   tfae_have 2 ↔ 3 := by simp [M.empty_indep.mem_closure_iff_of_notMem (notMem_empty e),
     isCircuit_def, minimal_iff_forall_ssubset, ssubset_singleton_iff]
   tfae_have 2 ↔ 4 := by simp [M.empty_indep.mem_closure_iff_of_notMem (notMem_empty e)]
-  tfae_have 4 ↔ 5 := b
+  tfae_have 4 ↔ 5 := by
+    simp only [dep_iff, singleton_subset_iff, mem_sdiff, forall_and]
+    refine ⟨fun h => ⟨fun _ _ => h.2, fun B hB heB => h.1 (hB.indep.subset (by simpa))⟩,
+      fun h => ⟨fun hi => ?_, h.1 _ M.exists_isBase.choose_spec⟩⟩
+    obtain ⟨B, hB, heB⟩ := hi.exists_isBase_superset
+    exact h.2 _ hB (by simpa using heB)
+  tfae_finish
+
+@[simp]
 
 Depends on / 依赖: Iff.rfl, M.empty_indep.mem_closure_iff_of_notMem, M.exists_isBase.choose_spec, choose_spec, dep_iff, empty_indep, exists_isBase, forall_and, hB.indep.subset, isCircuit_def, mem_closure_iff_of_notMem, mem_sdiff, minimal_iff_forall_ssubset, notMem_empty, singleton_subset_iff, ssubset_singleton_iff, subset, tfae_have
 -/
@@ -1714,7 +1730,7 @@ lemma IsNonloop.isNonloop_of_mem_closure
   obtain (hf | hf) := em (f in M.E)
   · rw [← closure_loops, ← insert_eq_of_mem (h hf), closure_insert_congr_right M.closure_loops,
       insert_empty_eq]
-  rw [eq_comm]; rw [← clo
+  rw [eq_comm]; rw [← closure_inter_ground]; rw [inter_comm]; rw [inter_singleton_eq_empty.mpr hf]; rw [loops]
 
 中文:
 引理 是Nonloop.isNonloop_of_mem_closure
@@ -1726,7 +1742,7 @@ lemma IsNonloop.isNonloop_of_mem_closure
   obtain (hf | hf) := em (f in M.E)
   · rw [← closure_loops, ← insert_eq_of_mem (h hf), closure_insert_congr_right M.closure_loops,
       insert_empty_eq]
-  rw [eq_comm]; rw [← clo
+  rw [eq_comm]; rw [← closure_inter_ground]; rw [inter_comm]; rw [inter_singleton_eq_empty.mpr hf]; rw [loops]
 
 Depends on / 依赖: M.closure_loops, and_comm, closure_insert_congr_right, closure_inter_ground, closure_loops, convert, eq_comm, he.not_isLoop, insert_empty_eq, insert_eq_of_mem, inter_comm, inter_singleton_eq_empty, inter_singleton_eq_empty.mpr, isLoop_iff, isNonloop_iff, not_isLoop
 -/
@@ -1770,7 +1786,13 @@ lemma IsNonloop.closure_eq_closure_iff_isCircuit_of_ne
   proof: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · have hf := he.isNonloop_of_mem_closure (by rw [← h]; exact M.mem_closure_self e)
-    rw [isCircuit_iff_dep_forall_sdiff_singleton_indep]; rw [dep_iff]; rw [insert_subset_iff]; rw [and_iff_right he.mem_ground]; rw [singleton_subset_iff]; rw [and_iff_left hf.
+    rw [isCircuit_iff_dep_forall_sdiff_singleton_indep]; rw [dep_iff]; rw [insert_subset_iff]; rw [and_iff_right he.mem_ground]; rw [singleton_subset_iff]; rw [and_iff_left hf.mem_ground]
+    suffices ¬ M.Indep {e, f} by simpa [pair_sdiff_left hef, hf, pair_sdiff_right hef, he]
+    rw [Indep.insert_indep_iff_of_notMem (by simpa) (by simpa)]
+    simp [← h, mem_closure_self _ _ he.mem_ground]
+  have hclosure := (h.closure_sdiff_singleton_eq e).trans
+    (h.closure_sdiff_singleton_eq f).symm
+  rwa [pair_sdiff_left hef, pair_sdiff_right hef, eq_comm] at hclosure
 
 中文:
 引理 是Nonloop.closure_eq_closure_iff_isCircuit_of_ne
@@ -1778,7 +1800,13 @@ lemma IsNonloop.closure_eq_closure_iff_isCircuit_of_ne
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · have hf := he.isNonloop_of_mem_closure (by rw [← h]; exact M.mem_closure_self e)
-    rw [isCircuit_iff_dep_forall_sdiff_singleton_indep]; rw [dep_iff]; rw [insert_subset_iff]; rw [and_iff_right he.mem_ground]; rw [singleton_subset_iff]; rw [and_iff_left hf.
+    rw [isCircuit_iff_dep_forall_sdiff_singleton_indep]; rw [dep_iff]; rw [insert_subset_iff]; rw [and_iff_right he.mem_ground]; rw [singleton_subset_iff]; rw [and_iff_left hf.mem_ground]
+    suffices ¬ M.Indep {e, f} by simpa [pair_sdiff_left hef, hf, pair_sdiff_right hef, he]
+    rw [Indep.insert_indep_iff_of_notMem (by simpa) (by simpa)]
+    simp [← h, mem_closure_self _ _ he.mem_ground]
+  have hclosure := (h.closure_sdiff_singleton_eq e).trans
+    (h.closure_sdiff_singleton_eq f).symm
+  rwa [pair_sdiff_left hef, pair_sdiff_right hef, eq_comm] at hclosure
 
 Depends on / 依赖: Indep.insert_indep_iff_of_notMem, M.Indep, M.mem_closure_self, and_iff_left, and_iff_right, dep_iff, he.isNonloop_of_mem_closure, he.mem_ground, hf.mem_ground, insert_indep_iff_of_notMem, insert_subset_iff, isCircuit_iff_dep_forall_sdiff_singleton_indep, isNonloop_of_mem_closure, mem_closure_self, mem_ground, pair_sdiff_left, pair_sdiff_right, singleton_subset_iff
 -/
@@ -1805,7 +1833,11 @@ lemma IsNonloop.closure_eq_closure_iff_eq_or_dep
   · exact iff_of_true rfl (Or.inl rfl)
   simp_rw [he.closure_eq_closure_iff_isCircuit_of_ne hne, or_iff_right hne,
     isCircuit_iff_dep_forall_sdiff_singleton_indep, dep_iff, insert_subset_iff,
-    singleton_subset_iff, and_iff_left hf.mem_ground, and_iff_lef
+    singleton_subset_iff, and_iff_left hf.mem_ground, and_iff_left he.mem_ground,
+    and_iff_left_iff_imp]
+  rintro hi x (rfl | rfl)
+  · rwa [pair_sdiff_left hne, indep_singleton]
+  rwa [pair_sdiff_right hne, indep_singleton]
 
 中文:
 引理 是Nonloop.closure_eq_closure_iff_eq_or_dep
@@ -1815,7 +1847,11 @@ lemma IsNonloop.closure_eq_closure_iff_eq_or_dep
   · exact iff_of_true rfl (Or.inl rfl)
   simp_rw [he.closure_eq_closure_iff_isCircuit_of_ne hne, or_iff_right hne,
     isCircuit_iff_dep_forall_sdiff_singleton_indep, dep_iff, insert_subset_iff,
-    singleton_subset_iff, and_iff_left hf.mem_ground, and_iff_lef
+    singleton_subset_iff, and_iff_left hf.mem_ground, and_iff_left he.mem_ground,
+    and_iff_left_iff_imp]
+  rintro hi x (rfl | rfl)
+  · rwa [pair_sdiff_left hne, indep_singleton]
+  rwa [pair_sdiff_right hne, indep_singleton]
 
 Depends on / 依赖: Or.inl, and_iff_left, and_iff_left_iff_imp, closure_eq_closure_iff_isCircuit_of_ne, dep_iff, eq_or_ne, he.closure_eq_closure_iff_isCircuit_of_ne, he.mem_ground, hf.mem_ground, iff_of_true, indep_singleton, insert_subset_iff, isCircuit_iff_dep_forall_sdiff_singleton_indep, mem_ground, or_iff_right, pair_sdiff_left, pair_sdiff_right, simp_rw, singleton_subset_iff
 -/
@@ -2385,7 +2421,26 @@ lemma isColoop_tfae
   tfae_have 1 ↔ 4 := by
     simp_rw [← dual_isLoop_iff_isColoop, isLoop_iff_forall_mem_compl_isBase]
     refine ⟨fun h B hB => ?_, fun h B hB => h hB.compl_isBase_of_dual⟩
-    obtain ⟨-, heB : e in B⟩ := by simpa using h
+    obtain ⟨-, heB : e in B⟩ := by simpa using h (M.E \ B) hB.compl_isBase_dual
+    assumption
+  tfae_have 3 -> 5 := fun h =>
+    ⟨fun C hC heC => hC.inter_isCocircuit_ne_singleton h (e := e) (by simpa), h.subset_ground rfl⟩
+  tfae_have 5 -> 4 := by
+    refine fun ⟨h, heE⟩ B hB => by_contra fun heB => ?_
+    rw [← hB.closure_eq] at heE
+    obtain ⟨C, -, hC, heC⟩ := (mem_closure_iff_exists_isCircuit heB).1 heE
+    exact h hC heC
+  tfae_have 5 ↔ 6 := by
+    refine ⟨fun h X => ⟨fun heX => by_contra fun heX' => ?_, fun heX => M.mem_closure_of_mem' heX h.2⟩,
+fun h => ⟨fun C hC heC => ?_, M.closure_subset_ground _ (h {e}).2 rfl⟩⟩
+    · obtain ⟨C, -, hC, heC⟩ := (mem_closure_iff_exists_isCircuit heX').1 heX
+      exact h.1 hC heC
+    · simpa [hC.mem_closure_sdiff_singleton_of_mem heC] using h (C \ {e})
+  tfae_have 1 ↔ 7 := by
+    wlog he : e in M.E
+· exact iff_of_false (fun h => he h.mem_ground) by simp [he, M.ground_spanning]
+    rw [spanning_iff_compl_coindep sdiff_subset]; rw [← dual_isLoop_iff_isColoop]; rw [← singleton_dep]; rw [sdiff_sdiff_cancel_left (by simpa)]; rw [← not_indep_iff (by simpa)]
+  tfae_finish
 
 中文:
 引理 isColoop_tfae
@@ -2397,7 +2452,26 @@ lemma isColoop_tfae
   tfae_have 1 ↔ 4 := by
     simp_rw [← dual_isLoop_iff_isColoop, isLoop_iff_forall_mem_compl_isBase]
     refine ⟨fun h B hB => ?_, fun h B hB => h hB.compl_isBase_of_dual⟩
-    obtain ⟨-, heB : e in B⟩ := by simpa using h
+    obtain ⟨-, heB : e in B⟩ := by simpa using h (M.E \ B) hB.compl_isBase_dual
+    assumption
+  tfae_have 3 -> 5 := fun h =>
+    ⟨fun C hC heC => hC.inter_isCocircuit_ne_singleton h (e := e) (by simpa), h.subset_ground rfl⟩
+  tfae_have 5 -> 4 := by
+    refine fun ⟨h, heE⟩ B hB => by_contra fun heB => ?_
+    rw [← hB.closure_eq] at heE
+    obtain ⟨C, -, hC, heC⟩ := (mem_closure_iff_exists_isCircuit heB).1 heE
+    exact h hC heC
+  tfae_have 5 ↔ 6 := by
+    refine ⟨fun h X => ⟨fun heX => by_contra fun heX' => ?_, fun heX => M.mem_closure_of_mem' heX h.2⟩,
+fun h => ⟨fun C hC heC => ?_, M.closure_subset_ground _ (h {e}).2 rfl⟩⟩
+    · obtain ⟨C, -, hC, heC⟩ := (mem_closure_iff_exists_isCircuit heX').1 heX
+      exact h.1 hC heC
+    · simpa [hC.mem_closure_sdiff_singleton_of_mem heC] using h (C \ {e})
+  tfae_have 1 ↔ 7 := by
+    wlog he : e in M.E
+· exact iff_of_false (fun h => he h.mem_ground) by simp [he, M.ground_spanning]
+    rw [spanning_iff_compl_coindep sdiff_subset]; rw [← dual_isLoop_iff_isColoop]; rw [← singleton_dep]; rw [sdiff_sdiff_cancel_left (by simpa)]; rw [← not_indep_iff (by simpa)]
+  tfae_finish
 
 Depends on / 依赖: Iff.rfl, compl_isBase_dual, compl_isBase_of_dual, dual_isLoop_iff_isColoop, h.subset_ground, hB.compl_isBase_dual, hB.compl_isBase_of_dual, hC.inter_isCocircuit_ne_singleton, inter_isCocircuit_ne_singleton, isLoop_iff_forall_mem_compl_isBase, simp_rw, singleton_isCocircuit, singleton_isCocircuit.symm, subset_ground, tfae_have
 -/
@@ -2859,7 +2933,15 @@ lemma IsBase.isColoop_iff_forall_notMem_fundCircuit
   have h' : M.E \ {e} subseteq M.closure (B \ {e}) := by
     rintro x ⟨hxE, hne : x != e⟩
     obtain (hx | hx) := em (x in B)
-    · exact M.subset_closure (B \ {e}) (sdiff_subset.trans hB.
+    · exact M.subset_closure (B \ {e}) (sdiff_subset.trans hB.subset_ground) ⟨hx, hne⟩
+    have h_cct := (hB.fundCircuit_isCircuit hxE hx).mem_closure_sdiff_singleton_of_mem
+      (M.mem_fundCircuit x B)
+    refine (M.closure_subset_closure (subset_sdiff_singleton ?_ ?_)) h_cct
+    · simpa using fundCircuit_subset_insert ..
+    simp [hne.symm, h x ⟨hxE, hx⟩]
+  rw [isColoop_iff_notMem_closure_compl (hB.subset_ground he)]
+exact notMem_subset (M.closure_subset_closure_of_subset_closure h')
+    hB.indep.notMem_closure_sdiff_of_mem he
 
 中文:
 引理 IsBase.isColoop_iff_对任意_notMem_fundCircuit
@@ -2870,7 +2952,15 @@ lemma IsBase.isColoop_iff_forall_notMem_fundCircuit
   have h' : M.E \ {e} subseteq M.closure (B \ {e}) := by
     rintro x ⟨hxE, hne : x != e⟩
     obtain (hx | hx) := em (x in B)
-    · exact M.subset_closure (B \ {e}) (sdiff_subset.trans hB.
+    · exact M.subset_closure (B \ {e}) (sdiff_subset.trans hB.subset_ground) ⟨hx, hne⟩
+    have h_cct := (hB.fundCircuit_isCircuit hxE hx).mem_closure_sdiff_singleton_of_mem
+      (M.mem_fundCircuit x B)
+    refine (M.closure_subset_closure (subset_sdiff_singleton ?_ ?_)) h_cct
+    · simpa using fundCircuit_subset_insert ..
+    simp [hne.symm, h x ⟨hxE, hx⟩]
+  rw [isColoop_iff_notMem_closure_compl (hB.subset_ground he)]
+exact notMem_subset (M.closure_subset_closure_of_subset_closure h')
+    hB.indep.notMem_closure_sdiff_of_mem he
 
 Depends on / 依赖: M.closure, M.closure_subset_closure, M.mem_fundCircuit, M.subset_closure, closure, closure_subset_closure, fundCircuit_isCircuit, h.notMem_isCircuit, hB.fundCircuit_isCircuit, hB.subset_ground, h_cct, mem_closure_sdiff_singleton_of_mem, mem_fundCircuit, notMem_isCircuit, sdiff_subset, sdiff_subset.trans, subset_closure, subset_ground, subset_sdiff_singleton, subseteq
 -/
@@ -3030,7 +3120,9 @@ lemma closure_union_eq_of_subset_coloops
   rw [← closure_union_closure_left_eq]; rw [subset_antisymm_iff]; rw [and_iff_left (M.subset_closure _)]; rw [← sdiff_eq_empty]; rw [eq_empty_iff_forall_notMem]
   refine fun e ⟨hecl, he⟩ => he (.inl ?_)
   obtain ⟨C, hCss, hC, heC⟩ := (mem_closure_iff_exists_isCircuit he).1 hecl
-  rw [← singleton_
+  rw [← singleton_union]; rw [← union_assoc]; rw [union_comm]; rw [← sdiff_subset_iff]; rw [(hC.disjoint_coloops.mono_right hK).sdiff_eq_left]; rw [singleton_union] at hCss
+exact M.closure_subset_closure_of_subset_closure (by simpa)
+    hC.mem_closure_sdiff_singleton_of_mem heC
 
 中文:
 引理 closure_union_eq_of_subset_coloops
@@ -3039,7 +3131,9 @@ lemma closure_union_eq_of_subset_coloops
   rw [← closure_union_closure_left_eq]; rw [subset_antisymm_iff]; rw [and_iff_left (M.subset_closure _)]; rw [← sdiff_eq_empty]; rw [eq_empty_iff_forall_notMem]
   refine fun e ⟨hecl, he⟩ => he (.inl ?_)
   obtain ⟨C, hCss, hC, heC⟩ := (mem_closure_iff_exists_isCircuit he).1 hecl
-  rw [← singleton_
+  rw [← singleton_union]; rw [← union_assoc]; rw [union_comm]; rw [← sdiff_subset_iff]; rw [(hC.disjoint_coloops.mono_right hK).sdiff_eq_left]; rw [singleton_union] at hCss
+exact M.closure_subset_closure_of_subset_closure (by simpa)
+    hC.mem_closure_sdiff_singleton_of_mem heC
 
 Depends on / 依赖: M.closure_subset_closure_of_subset_closure, M.subset_closure, and_iff_left, closure_subset_closure_of_subset_closure, closure_union_closure_left_eq, disjoint_coloops, eq_empty_iff_forall_notMem, hC.disjoint_coloops.mono_right, mem_closure_iff_exists_isCircuit, mono_right, sdiff_eq_empty, sdiff_eq_left, sdiff_subset_iff, singleton_union, subset_antisymm_iff, subset_closure, union_assoc, union_comm
 -/
@@ -3104,7 +3198,12 @@ lemma closure_sdiff_eq_of_subset_coloops
   proof: by
   nth_rw 2 [← inter_union_sdiff X K]
   rw [union_comm]; rw [closure_union_eq_of_subset_coloops _ (inter_subset_right.trans hK)]; rw [union_sdiff_distrib]; rw [sdiff_eq_empty.mpr inter_subset_right]; rw [union_empty]; rw [eq_comm]; rw [sdiff_eq_self_iff_disjoint]; rw [disjoint_iff_forall_ne]
-  rin
+  rintro e heK _ heX rfl
+  rw [IsColoop.mem_closure_iff_mem (hK heK)] at heX
+  exact heX.2 heK
+
+@[deprecated (since := "2026-06-03")]
+alias closure_diff_eq_of_subset_coloops := closure_sdiff_eq_of_subset_coloops
 
 中文:
 引理 closure_sdiff_eq_of_subset_coloops
@@ -3112,7 +3211,12 @@ lemma closure_sdiff_eq_of_subset_coloops
   证明: by
   nth_rw 2 [← inter_union_sdiff X K]
   rw [union_comm]; rw [closure_union_eq_of_subset_coloops _ (inter_subset_right.trans hK)]; rw [union_sdiff_distrib]; rw [sdiff_eq_empty.mpr inter_subset_right]; rw [union_empty]; rw [eq_comm]; rw [sdiff_eq_self_iff_disjoint]; rw [disjoint_iff_forall_ne]
-  rin
+  rintro e heK _ heX rfl
+  rw [IsColoop.mem_closure_iff_mem (hK heK)] at heX
+  exact heX.2 heK
+
+@[deprecated (since := "2026-06-03")]
+alias closure_diff_eq_of_subset_coloops := closure_sdiff_eq_of_subset_coloops
 
 Depends on / 依赖: IsColoop, IsColoop.mem_closure_iff_mem, closure_union_eq_of_subset_coloops, disjoint_iff_forall_ne, eq_comm, inter_subset_right, inter_subset_right.trans, inter_union_sdiff, mem_closure_iff_mem, nth_rw, sdiff_eq_empty, sdiff_eq_empty.mpr, sdiff_eq_self_iff_disjoint, union_comm, union_empty, union_sdiff_distrib
 -/
@@ -3415,7 +3519,12 @@ lemma ext_indep_disjoint_loops_coloops
   obtain hdj | hndj := em (Disjoint I (M₁.loops))
   · rw [h _ (sdiff_subset.trans hI)]
     rw [disjoint_union_right]
-    exact ⟨disjoint_of_subset_left sdiff_subset hdj, disjoint
+    exact ⟨disjoint_of_subset_left sdiff_subset hdj, disjoint_sdiff_left⟩
+  obtain ⟨e, heI, hel : M₁.IsLoop e⟩ := not_disjoint_iff_nonempty_inter.mp hndj
+  refine iff_of_false (hel.not_indep_of_mem ⟨heI, hel.not_isColoop⟩) ?_
+  rw [isLoop_iff]; rw [hl]; rw [← isLoop_iff] at hel
+  rw [hc]
+  exact hel.not_indep_of_mem ⟨heI, hel.not_isColoop⟩
 
 中文:
 引理 ext_indep_disjoint_loops_coloops
@@ -3426,7 +3535,12 @@ lemma ext_indep_disjoint_loops_coloops
   obtain hdj | hndj := em (Disjoint I (M₁.loops))
   · rw [h _ (sdiff_subset.trans hI)]
     rw [disjoint_union_right]
-    exact ⟨disjoint_of_subset_left sdiff_subset hdj, disjoint
+    exact ⟨disjoint_of_subset_left sdiff_subset hdj, disjoint_sdiff_left⟩
+  obtain ⟨e, heI, hel : M₁.IsLoop e⟩ := not_disjoint_iff_nonempty_inter.mp hndj
+  refine iff_of_false (hel.not_indep_of_mem ⟨heI, hel.not_isColoop⟩) ?_
+  rw [isLoop_iff]; rw [hl]; rw [← isLoop_iff] at hel
+  rw [hc]
+  exact hel.not_indep_of_mem ⟨heI, hel.not_isColoop⟩
 
 Depends on / 依赖: Disjoint, IsLoop, disjoint_of_subset_left, disjoint_sdiff_left, disjoint_union_right, ext_indep, hel.not_indep_of_mem, hel.not_isColoop, iff_of_false, isLoop_iff, not_disjoint_iff_nonempty_inter, not_disjoint_iff_nonempty_inter.mp, not_indep_of_mem, not_isColoop, sdiff_coloops_indep_iff, sdiff_subset, sdiff_subset.trans
 -/
@@ -3617,7 +3731,8 @@ lemma loopless_iff_forall_isCircuit
     exact this
   refine ⟨fun ⟨e, _, he⟩ => ⟨{e}, he.isCircuit, by simp⟩, fun ⟨C, hC, hCs⟩ => ?_⟩
   obtain (rfl | ⟨e, rfl⟩) := hCs.eq_empty_or_singleton
-  
+  · simpa using hC.nonempty
+  exact ⟨e, (singleton_isCircuit.1 hC).mem_ground, singleton_isCircuit.1 hC⟩
 
 中文:
 引理 loopless_iff_对任意_isCircuit
@@ -3629,7 +3744,8 @@ lemma loopless_iff_forall_isCircuit
     exact this
   refine ⟨fun ⟨e, _, he⟩ => ⟨{e}, he.isCircuit, by simp⟩, fun ⟨C, hC, hCs⟩ => ?_⟩
   obtain (rfl | ⟨e, rfl⟩) := hCs.eq_empty_or_singleton
-  
+  · simpa using hC.nonempty
+  exact ⟨e, (singleton_isCircuit.1 hC).mem_ground, singleton_isCircuit.1 hC⟩
 
 Depends on / 依赖: IsCircuit, IsLoop, M.IsCircuit, M.IsLoop, Subsingleton, contrapose, eq_empty_or_singleton, hC.nonempty, hCs.eq_empty_or_singleton, he.isCircuit, isCircuit, loopless_iff_forall_not_isLoop, mem_ground, nonempty, singleton_isCircuit, x.Subsingleton
 -/

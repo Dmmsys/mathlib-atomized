@@ -146,7 +146,7 @@ lemma toGrothendieck_eq_sInf
     | top => exact K.top_mem _
     | pullback _ _ _ _ _ ih => exact K.pullback_stable _ ih
     | transitive _ _ _ _ _ ih1 ih2 => exact K.transitive ih1 _ ih2
-  · exact sInf
+  · exact sInf_le (fun _ _ hS => .of _ _ hS)
 
 中文:
 引理 toGrothendieck_eq_sInf
@@ -160,7 +160,7 @@ lemma toGrothendieck_eq_sInf
     | top => exact K.top_mem _
     | pullback _ _ _ _ _ ih => exact K.pullback_stable _ ih
     | transitive _ _ _ _ _ ih1 ih2 => exact K.transitive ih1 _ ih2
-  · exact sInf
+  · exact sInf_le (fun _ _ hS => .of _ _ hS)
 
 Depends on / 依赖: K.pullback_stable, K.top_mem, K.transitive, le_antisymm, le_sInf_iff, pullback, pullback_stable, sInf_le, top_mem, transitive
 -/
@@ -192,7 +192,61 @@ theorem isSheaf_toGrothendieck_iff
   · intro H X S hS
     -- This is the key point of the proof:
     -- We must generalize the induction in the correct way.
-    suffices forall
+    suffices forall ⦃Y : C⦄ (f : Y ⟶ X), Presieve.IsSheafFor P (S.pullback f).arrows by
+      simpa using this (f := 𝟙 _)
+    induction hS with
+    | of X S hS =>
+      exact fun _ _ => H S hS
+    | top =>
+      simp [Presieve.isSheafFor_top P]
+    | pullback X S hS _ f ih =>
+      intro Y f
+      rw [← S.pullback_comp]
+      exact ih (f ≫ _)
+    | transitive X R S hS h H1 H2 =>
+      intro Y f
+      simp only [← Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor] at *
+      choose H1 H1' using H1
+      choose H2 H2' using H2
+      refine ⟨?_, fun x hx => ?_⟩
+      · intro x t₁ t₂ h₁ h₂
+        refine (H1 f).ext (fun Z g hg => ?_)
+        refine (H2 hg (𝟙 _)).ext (fun ZZ gg hgg => ?_)
+        simp only [Sieve.pullback_id, Sieve.pullback_apply] at hgg
+        simp only [← comp_apply]
+        rw [← P.map_comp]; rw [← op_comp]; rw [h₁]; rw [h₂]
+        simpa only [Sieve.pullback_apply, Category.assoc] using hgg
+      let y : forall ⦃Z : C⦄ (g : Z ⟶ Y),
+        ((S.pullback (g ≫ f)).pullback (𝟙 _)).arrows.FamilyOfElements P :=
+        fun Z g ZZ gg hgg => x (gg ≫ g) (by simpa using hgg)
+      have hy : forall ⦃Z : C⦄ (g : Z ⟶ Y), (y g).Compatible := by
+        intro Z g Y₁ Y₂ ZZ g₁ g₂ f₁ f₂ h₁ h₂ h
+        rw [hx]
+        rw [reassoc_of% h]
+      choose z hz using fun ⦃Z : C⦄ ⦃g : Z ⟶ Y⦄ (hg : R.pullback f g) =>
+        H2' hg (𝟙 _) (y g) (hy g)
+      let q : (R.pullback f).arrows.FamilyOfElements P := fun Z g hg => z hg
+      have hq : q.Compatible := by
+        intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ h
+        apply (H2 h₁ g₁).ext
+        intro ZZ gg hgg
+        simp only [← comp_apply]
+        rw [← P.map_comp]; rw [← P.map_comp]; rw [← op_comp]; rw [← op_comp]; rw [hz]; rw [hz]
+        · dsimp [y]; congr 1; simp only [Category.assoc, h]
+        · simpa [reassoc_of% h] using hgg
+        · simpa using hgg
+      obtain ⟨t, ht⟩ := H1' f q hq
+      refine ⟨t, fun Z g hg => ?_⟩
+      refine (H1 (g ≫ f)).ext (fun ZZ gg hgg => ?_)
+      rw [← comp_apply _ (P.map gg.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [ht]
+      on_goal 2 => simpa using hgg
+      refine (H2 hgg (𝟙 _)).ext (fun ZZZ ggg hggg => ?_)
+      rw [← comp_apply _ (P.map ggg.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [hz]
+      on_goal 2 => simpa using hggg
+      refine (H2 hgg ggg).ext (fun ZZZZ gggg _ => ?_)
+      rw [← comp_apply _ (P.map gggg.op)]; rw [← P.map_comp]; rw [← op_comp]
+      apply hx
+      simp
 
 中文:
 定理 isSheaf_toGrothendieck_iff
@@ -206,7 +260,61 @@ theorem isSheaf_toGrothendieck_iff
   · intro H X S hS
     -- This is the key point of the proof:
     -- We must generalize the induction in the correct way.
-    suffices forall
+    suffices forall ⦃Y : C⦄ (f : Y ⟶ X), Presieve.IsSheafFor P (S.pullback f).arrows by
+      simpa using this (f := 𝟙 _)
+    induction hS with
+    | of X S hS =>
+      exact fun _ _ => H S hS
+    | top =>
+      simp [Presieve.isSheafFor_top P]
+    | pullback X S hS _ f ih =>
+      intro Y f
+      rw [← S.pullback_comp]
+      exact ih (f ≫ _)
+    | transitive X R S hS h H1 H2 =>
+      intro Y f
+      simp only [← Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor] at *
+      choose H1 H1' using H1
+      choose H2 H2' using H2
+      refine ⟨?_, fun x hx => ?_⟩
+      · intro x t₁ t₂ h₁ h₂
+        refine (H1 f).ext (fun Z g hg => ?_)
+        refine (H2 hg (𝟙 _)).ext (fun ZZ gg hgg => ?_)
+        simp only [Sieve.pullback_id, Sieve.pullback_apply] at hgg
+        simp only [← comp_apply]
+        rw [← P.map_comp]; rw [← op_comp]; rw [h₁]; rw [h₂]
+        simpa only [Sieve.pullback_apply, Category.assoc] using hgg
+      let y : forall ⦃Z : C⦄ (g : Z ⟶ Y),
+        ((S.pullback (g ≫ f)).pullback (𝟙 _)).arrows.FamilyOfElements P :=
+        fun Z g ZZ gg hgg => x (gg ≫ g) (by simpa using hgg)
+      have hy : forall ⦃Z : C⦄ (g : Z ⟶ Y), (y g).Compatible := by
+        intro Z g Y₁ Y₂ ZZ g₁ g₂ f₁ f₂ h₁ h₂ h
+        rw [hx]
+        rw [reassoc_of% h]
+      choose z hz using fun ⦃Z : C⦄ ⦃g : Z ⟶ Y⦄ (hg : R.pullback f g) =>
+        H2' hg (𝟙 _) (y g) (hy g)
+      let q : (R.pullback f).arrows.FamilyOfElements P := fun Z g hg => z hg
+      have hq : q.Compatible := by
+        intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ h
+        apply (H2 h₁ g₁).ext
+        intro ZZ gg hgg
+        simp only [← comp_apply]
+        rw [← P.map_comp]; rw [← P.map_comp]; rw [← op_comp]; rw [← op_comp]; rw [hz]; rw [hz]
+        · dsimp [y]; congr 1; simp only [Category.assoc, h]
+        · simpa [reassoc_of% h] using hgg
+        · simpa using hgg
+      obtain ⟨t, ht⟩ := H1' f q hq
+      refine ⟨t, fun Z g hg => ?_⟩
+      refine (H1 (g ≫ f)).ext (fun ZZ gg hgg => ?_)
+      rw [← comp_apply _ (P.map gg.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [ht]
+      on_goal 2 => simpa using hgg
+      refine (H2 hgg (𝟙 _)).ext (fun ZZZ ggg hggg => ?_)
+      rw [← comp_apply _ (P.map ggg.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [hz]
+      on_goal 2 => simpa using hggg
+      refine (H2 hgg ggg).ext (fun ZZZZ gggg _ => ?_)
+      rw [← comp_apply _ (P.map gggg.op)]; rw [← P.map_comp]; rw [← op_comp]
+      apply hx
+      simp
 
 Depends on / 依赖: H.isSheafFor, J.toGrothendieck.pullback_stable, Saturate, Saturate.of, Sieve.generate_sieve, generate_sieve, isSheafFor, pullback_stable, toGrothendieck
 -/
@@ -294,7 +402,29 @@ lemma mem_toGrothendieck_iff_of_isStableUnderComposition
       exact ⟨Presieve.singleton (𝟙 X), mem_coverings_of_isIso (𝟙 X), by simp⟩
     | pullback X S hS Y f h =>
       obtain ⟨R, hR, hle⟩ := h
-     
+      have : R.HasPullbacks f := J.hasPullbacks_of_mem f hR
+      refine ⟨R.pullbackArrows f, pullbackArrows_mem f hR, ?_⟩
+      rw [← Sieve.generate_le_iff]; rw [Sieve.pullbackArrows_comm]
+      apply Sieve.pullback_monotone
+      rwa [Sieve.generate_le_iff]
+    | transitive X S T hS hT hleS hleT =>
+      obtain ⟨R, hR, hle⟩ := hleS
+      rw [mem_iff_exists_zeroHypercover] at hR
+      obtain ⟨E, rfl⟩ := hR
+      replace hleT (i : E.I₀) : exists (F : J.ZeroHypercover (E.X i)),
+          F.presieve₀ <= (Sieve.pullback (E.f i) T).arrows := by
+        obtain ⟨R', hR', hle'⟩ := hleT (hle _ _ ⟨i⟩)
+        rw [mem_iff_exists_zeroHypercover] at hR'
+        obtain ⟨F, rfl⟩ := hR'
+        use F
+      choose F hle' using hleT
+      refine ⟨(E.bind F).presieve₀, (E.bind F).mem₀, ?_⟩
+      rw [Presieve.ofArrows_le_iff]
+      intro i
+      exact hle' _ _ _ ⟨i.snd⟩
+  · rw [← Sieve.generate_le_iff] at hle
+    apply GrothendieckTopology.superset_covering _ hle
+    exact generate_mem_toGrothendieck hR
 
 中文:
 引理 mem_toGrothendieck_iff_of_isStableUnderComposition
@@ -309,7 +439,29 @@ lemma mem_toGrothendieck_iff_of_isStableUnderComposition
       exact ⟨Presieve.singleton (𝟙 X), mem_coverings_of_isIso (𝟙 X), by simp⟩
     | pullback X S hS Y f h =>
       obtain ⟨R, hR, hle⟩ := h
-     
+      have : R.HasPullbacks f := J.hasPullbacks_of_mem f hR
+      refine ⟨R.pullbackArrows f, pullbackArrows_mem f hR, ?_⟩
+      rw [← Sieve.generate_le_iff]; rw [Sieve.pullbackArrows_comm]
+      apply Sieve.pullback_monotone
+      rwa [Sieve.generate_le_iff]
+    | transitive X S T hS hT hleS hleT =>
+      obtain ⟨R, hR, hle⟩ := hleS
+      rw [mem_iff_exists_zeroHypercover] at hR
+      obtain ⟨E, rfl⟩ := hR
+      replace hleT (i : E.I₀) : exists (F : J.ZeroHypercover (E.X i)),
+          F.presieve₀ <= (Sieve.pullback (E.f i) T).arrows := by
+        obtain ⟨R', hR', hle'⟩ := hleT (hle _ _ ⟨i⟩)
+        rw [mem_iff_exists_zeroHypercover] at hR'
+        obtain ⟨F, rfl⟩ := hR'
+        use F
+      choose F hle' using hleT
+      refine ⟨(E.bind F).presieve₀, (E.bind F).mem₀, ?_⟩
+      rw [Presieve.ofArrows_le_iff]
+      intro i
+      exact hle' _ _ _ ⟨i.snd⟩
+  · rw [← Sieve.generate_le_iff] at hle
+    apply GrothendieckTopology.superset_covering _ hle
+    exact generate_mem_toGrothendieck hR
 
 Depends on / 依赖: HasPullbacks, J.hasPullbacks_of_mem, Presieve, Presieve.singleton, R.HasPullbacks, R.pullbackArrows, Sieve.generate_le_iff, Sieve.le_generate, Sieve.pullbackArrows_comm, Sieve.pullback_monotone, generate_le_iff, hasPullbacks_of_mem, le_generate, mem_coverings_of_isIso, pullback, pullbackArrows, pullbackArrows_comm, pullbackArrows_mem, pullback_monotone, singleton
 -/
@@ -501,6 +653,14 @@ lemma Presieve.IsSheafFor.comp_iff_of_preservesPairwisePullbacks
   congr! with x
   rw [forall₂_congr]
   intro i j
+  have : PreservesLimit (cospan (f i) (f j)) F :=
+    F.preservesLimit_cospan_of_mem_presieve (ofArrows _ f) ⟨i⟩ ⟨j⟩
+  have : HasPullback (F.map (f i)) (F.map (f j)) := hasPullback_of_preservesPullback _ _ _
+  rw [← pullbackComparison_comp_fst]; rw [op_comp]; rw [Functor.map_comp]; rw [← pullbackComparison_comp_snd]; rw [op_comp]; rw [Functor.map_comp]
+  have : Function.Bijective (P.map (pullbackComparison F (f i) (f j)).op) := by
+    rw [← isIso_iff_bijective]
+    infer_instance
+  exact this.1.eq_iff
 
 中文:
 引理 Presieve.IsSheafFor.comp_iff_of_preservesPairwisePullbacks
@@ -514,6 +674,14 @@ lemma Presieve.IsSheafFor.comp_iff_of_preservesPairwisePullbacks
   congr! with x
   rw [forall₂_congr]
   intro i j
+  have : PreservesLimit (cospan (f i) (f j)) F :=
+    F.preservesLimit_cospan_of_mem_presieve (ofArrows _ f) ⟨i⟩ ⟨j⟩
+  have : HasPullback (F.map (f i)) (F.map (f j)) := hasPullback_of_preservesPullback _ _ _
+  rw [← pullbackComparison_comp_fst]; rw [op_comp]; rw [Functor.map_comp]; rw [← pullbackComparison_comp_snd]; rw [op_comp]; rw [Functor.map_comp]
+  have : Function.Bijective (P.map (pullbackComparison F (f i) (f j)).op) := by
+    rw [← isIso_iff_bijective]
+    infer_instance
+  exact this.1.eq_iff
 
 Depends on / 依赖: Arrows, Arrows.PullbackCompatible, F.map, F.preservesLimit_cospan_of_mem_presieve, HasPairwisePullbacks, HasPullback, PreservesLimit, Presieve, Presieve.isSheafFor_arrows_iff_pullbacks, PullbackCompatible, R.exists_eq_ofArrows, R.map, cospan, exists_eq_ofArrows, hasPullback_of_preservesPullback, isSheafFor_arrows_iff_pullbacks, map_ofArrows, map_of_preservesPairwisePullbacks, ofArrows, preservesLimit_cospan_of_mem_presieve
 -/
@@ -629,7 +797,7 @@ lemma toGrothendieck_le_iff_le_toPrecoverage
     | of X S hS => exact h _ hS
     | top X => grind
     | pullback X S _ Y f _ => grind
-    | transitive X S R _ _ 
+    | transitive X S R _ _ _ _ => grind
 
 中文:
 引理 toGrothendieck_le_iff_le_toPrecoverage
@@ -643,7 +811,7 @@ lemma toGrothendieck_le_iff_le_toPrecoverage
     | of X S hS => exact h _ hS
     | top X => grind
     | pullback X S _ Y f _ => grind
-    | transitive X S R _ _ 
+    | transitive X S R _ _ _ _ => grind
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.mem_toPrecoverage_iff, generate_mem_toGrothendieck, mem_toPrecoverage_iff, pullback, transitive
 -/

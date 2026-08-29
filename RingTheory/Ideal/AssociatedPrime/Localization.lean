@@ -51,7 +51,24 @@ lemma mem_associatedPrimes_of_comap_mem_associatedPrimes_of_isLocalizedModule
     simp [eqtop, Ideal.comap_top, Ideal.isPrime_iff] at hp
   · use f x
     ext t
-    rcases IsLocalizati
+    rcases IsLocalization.exists_mk'_eq S t with ⟨r, s, hrs⟩
+    simp_rw [← hrs, Ideal.mem_radical_iff, mem_colon_singleton, ← IsLocalizedModule.mk'_one S f,
+      ← IsLocalization.mk'_pow, IsLocalizedModule.mk'_smul_mk', mul_one, mem_bot,
+      IsLocalizedModule.mk'_eq_zero']
+    refine ⟨fun h => exists_comm.mp ⟨1, ?_⟩, fun ⟨n, t, ht⟩ => ?_⟩
+    · simp only [← mem_colon_singleton, one_smul, ← mem_bot R, ← hx, ← Ideal.mem_radical_iff]
+      exact hSR'.mk'_mem_iff.mp h
+    · have : hSR'.mk' R' r s = hSR'.mk' R' (t.1 * r) 1 * hSR'.mk' R' 1 (t * s) := by
+        rw [← hSR'.mk'_mul]; rw [mul_one]; rw [one_mul]; rw [← sub_eq_zero]; rw [← hSR'.mk'_sub]; rw [Submonoid.coe_mul]
+        simp [← mul_assoc, mul_comm r t.1, IsLocalization.mk'_zero]
+      rw [this]
+      apply Ideal.IsTwoSided.mul_mem_of_left
+      rw [IsLocalization.mk'_one]; rw [← Ideal.mem_comap]; rw [hx]
+      rcases eq_zero_or_pos n with rfl | hn
+      · exact Ideal.IsTwoSided.mul_mem_of_left _ ⟨1, by simpa using! ht⟩
+      · use n
+        rw [mem_colon_singleton]; rw [mul_pow]; rw [mul_smul]; rw [← mem_colon_singleton]
+        exact Ideal.pow_mem_of_mem _ (by simpa using! ht) n hn
 
 中文:
 引理 mem_associatedPrimes_of_comap_mem_associatedPrimes_of_isLocalizedModule
@@ -64,7 +81,24 @@ lemma mem_associatedPrimes_of_comap_mem_associatedPrimes_of_isLocalizedModule
     simp [eqtop, Ideal.comap_top, Ideal.isPrime_iff] at hp
   · use f x
     ext t
-    rcases IsLocalizati
+    rcases IsLocalization.exists_mk'_eq S t with ⟨r, s, hrs⟩
+    simp_rw [← hrs, Ideal.mem_radical_iff, mem_colon_singleton, ← IsLocalizedModule.mk'_one S f,
+      ← IsLocalization.mk'_pow, IsLocalizedModule.mk'_smul_mk', mul_one, mem_bot,
+      IsLocalizedModule.mk'_eq_zero']
+    refine ⟨fun h => exists_comm.mp ⟨1, ?_⟩, fun ⟨n, t, ht⟩ => ?_⟩
+    · simp only [← mem_colon_singleton, one_smul, ← mem_bot R, ← hx, ← Ideal.mem_radical_iff]
+      exact hSR'.mk'_mem_iff.mp h
+    · have : hSR'.mk' R' r s = hSR'.mk' R' (t.1 * r) 1 * hSR'.mk' R' 1 (t * s) := by
+        rw [← hSR'.mk'_mul]; rw [mul_one]; rw [one_mul]; rw [← sub_eq_zero]; rw [← hSR'.mk'_sub]; rw [Submonoid.coe_mul]
+        simp [← mul_assoc, mul_comm r t.1, IsLocalization.mk'_zero]
+      rw [this]
+      apply Ideal.IsTwoSided.mul_mem_of_left
+      rw [IsLocalization.mk'_one]; rw [← Ideal.mem_comap]; rw [hx]
+      rcases eq_zero_or_pos n with rfl | hn
+      · exact Ideal.IsTwoSided.mul_mem_of_left _ ⟨1, by simpa using! ht⟩
+      · use n
+        rw [mem_colon_singleton]; rw [mul_pow]; rw [mul_smul]; rw [← mem_colon_singleton]
+        exact Ideal.pow_mem_of_mem _ (by simpa using! ht) n hn
 
 Depends on / 依赖: Ideal.comap_top, Ideal.isPrime_iff, Ideal.mem_radical_iff, IsLocalization, IsLocalization.disjoint_under_iff, IsLocalization.exists_mk, IsLocalization.isPrime_iff_isPrime_disjoint, IsLocalization.mk, IsLocalizedModule, IsLocalizedModule.mk, _one, _pow, _smul_mk, comap_top, disjoint_under_iff, exists_mk, isPrime_iff, isPrime_iff_isPrime_disjoint, mem_bot, mem_colon_singleton
 -/
@@ -146,7 +180,29 @@ lemma comap_mem_associatedPrimes_of_mem_associatedPrimes_of_isLocalizedModule_of
   simp only [Function.uncurry_apply_pair] at hx
   have mem (a : T) : algebraMap R R' a in p := by
     simpa [← Ideal.mem_comap, ← hT] using Ideal.subset_span a.2
-  simp only [
+  simp only [hx, Ideal.mem_radical_iff, mem_bot, mem_colon_singleton, ← map_pow, algebraMap_smul,
+    ← IsLocalizedModule.mk'_smul, IsLocalizedModule.mk'_eq_zero' f] at mem
+  choose e g hg using mem
+  refine ⟨.under R p, (∏ a, g a).1 • m, le_antisymm ?_ fun r hr => ?_⟩
+  · rw [← hT, Ideal.span_le]
+    intro a ha
+    simp only [SetLike.mem_coe, Ideal.mem_radical_iff, mem_bot, mem_colon_singleton]
+    obtain ⟨u, hu⟩ : g ⟨a, ha⟩ ∣ (∏ a, g a) := by
+      apply Finset.dvd_prod_of_mem g (Finset.mem_univ ⟨a, ha⟩)
+    use e ⟨a, ha⟩
+    rw [hu]; rw [Submonoid.coe_mul]; rw [smul_smul]; rw [← mul_assoc]; rw [mul_comm]; rw [← smul_smul]; rw [mul_comm]; rw [← smul_smul]
+    exact smul_eq_zero_of_right u.1 (hg ⟨a, ha⟩)
+  · simp only [Ideal.mem_radical_iff, mem_bot, mem_colon_singleton, smul_smul] at hr
+    obtain ⟨k, hk⟩ := hr
+    have mem : r ^ k * (∏ a, g a).1 in Ideal.comap (algebraMap R R') p := by
+      rw [hx]
+      use 1
+      simp_rw [pow_one, mem_colon_singleton, algebraMap_smul, ← IsLocalizedModule.mk'_smul,
+        hk, IsLocalizedModule.mk'_zero, mem_bot]
+    apply hp.mem_of_pow_mem k
+    rw [← map_pow]
+    exact ((hp.under R).mul_mem_iff_mem_or_mem.mp mem).resolve_right
+      (Set.disjoint_left.mp ((IsLocalization.disjoint_under_iff S R' p).mpr hp.1) (∏ a, g a).2)
 
 中文:
 引理 comap_mem_associatedPrimes_of_mem_associatedPrimes_of_isLocalizedModule_of_fg
@@ -158,7 +214,29 @@ lemma comap_mem_associatedPrimes_of_mem_associatedPrimes_of_isLocalizedModule_of
   simp only [Function.uncurry_apply_pair] at hx
   have mem (a : T) : algebraMap R R' a in p := by
     simpa [← Ideal.mem_comap, ← hT] using Ideal.subset_span a.2
-  simp only [
+  simp only [hx, Ideal.mem_radical_iff, mem_bot, mem_colon_singleton, ← map_pow, algebraMap_smul,
+    ← IsLocalizedModule.mk'_smul, IsLocalizedModule.mk'_eq_zero' f] at mem
+  choose e g hg using mem
+  refine ⟨.under R p, (∏ a, g a).1 • m, le_antisymm ?_ fun r hr => ?_⟩
+  · rw [← hT, Ideal.span_le]
+    intro a ha
+    simp only [SetLike.mem_coe, Ideal.mem_radical_iff, mem_bot, mem_colon_singleton]
+    obtain ⟨u, hu⟩ : g ⟨a, ha⟩ ∣ (∏ a, g a) := by
+      apply Finset.dvd_prod_of_mem g (Finset.mem_univ ⟨a, ha⟩)
+    use e ⟨a, ha⟩
+    rw [hu]; rw [Submonoid.coe_mul]; rw [smul_smul]; rw [← mul_assoc]; rw [mul_comm]; rw [← smul_smul]; rw [mul_comm]; rw [← smul_smul]
+    exact smul_eq_zero_of_right u.1 (hg ⟨a, ha⟩)
+  · simp only [Ideal.mem_radical_iff, mem_bot, mem_colon_singleton, smul_smul] at hr
+    obtain ⟨k, hk⟩ := hr
+    have mem : r ^ k * (∏ a, g a).1 in Ideal.comap (algebraMap R R') p := by
+      rw [hx]
+      use 1
+      simp_rw [pow_one, mem_colon_singleton, algebraMap_smul, ← IsLocalizedModule.mk'_smul,
+        hk, IsLocalizedModule.mk'_zero, mem_bot]
+    apply hp.mem_of_pow_mem k
+    rw [← map_pow]
+    exact ((hp.under R).mul_mem_iff_mem_or_mem.mp mem).resolve_right
+      (Set.disjoint_left.mp ((IsLocalization.disjoint_under_iff S R' p).mpr hp.1) (∏ a, g a).2)
 
 Depends on / 依赖: Function, Function.uncurry_apply_pair, Ideal.mem_comap, Ideal.mem_radical_iff, Ideal.subset_span, IsLocalizedModule, IsLocalizedModule.mk, _eq_zero, _smul, _surjective, algebraMap, algebraMap_smul, map_pow, mem_bot, mem_colon_singleton, mem_comap, mem_radical_iff, subset_span, uncurry_apply_pair
 -/
@@ -243,7 +321,17 @@ lemma minimalPrimes_annihilator_subset_associatedPrimes
   let Rₚ := Localization.AtPrime p
   have : Nontrivial (LocalizedModule p.primeCompl M) := by
     simpa [← Module.mem_support_iff (p := ⟨p, prime⟩), Module.support_eq_zeroLocus] using! hp.1.2
-  rcases associatedPrimes.nonempty Rₚ (LocalizedModule p.primeCom
+  rcases associatedPrimes.nonempty Rₚ (LocalizedModule p.primeCompl M) with ⟨q, hq⟩
+  have q_prime : q.IsPrime := IsAssociatedPrime.isPrime hq
+  simp only [← preimage_comap_associatedPrimes_eq_associatedPrimes_of_isLocalizedModule p.primeCompl
+    Rₚ (LocalizedModule.mkLinearMap p.primeCompl M), Set.mem_preimage] at hq
+  have ann_le : Module.annihilator R M <= Ideal.comap (algebraMap R Rₚ) q :=
+    le_of_eq_of_le Submodule.annihilator_top.symm (IsAssociatedPrime.annihilator_le hq)
+  have le : Ideal.comap (algebraMap R Rₚ) q <= p := by
+    have := (IsLocalization.disjoint_under_iff p.primeCompl Rₚ q).mpr q_prime.ne_top
+    simpa only [Ideal.primeCompl, Submonoid.coe_set_mk, Subsemigroup.coe_set_mk,
+      Set.disjoint_compl_left_iff_subset] using! this
+  simpa [Minimal.eq_of_le hp.out ⟨IsAssociatedPrime.isPrime hq, ann_le⟩ le] using! hq
 
 中文:
 引理 minimalPrimes_annihilator_subset_associatedPrimes
@@ -254,7 +342,17 @@ lemma minimalPrimes_annihilator_subset_associatedPrimes
   let Rₚ := Localization.AtPrime p
   have : Nontrivial (LocalizedModule p.primeCompl M) := by
     simpa [← Module.mem_support_iff (p := ⟨p, prime⟩), Module.support_eq_zeroLocus] using! hp.1.2
-  rcases associatedPrimes.nonempty Rₚ (LocalizedModule p.primeCom
+  rcases associatedPrimes.nonempty Rₚ (LocalizedModule p.primeCompl M) with ⟨q, hq⟩
+  have q_prime : q.IsPrime := IsAssociatedPrime.isPrime hq
+  simp only [← preimage_comap_associatedPrimes_eq_associatedPrimes_of_isLocalizedModule p.primeCompl
+    Rₚ (LocalizedModule.mkLinearMap p.primeCompl M), Set.mem_preimage] at hq
+  have ann_le : Module.annihilator R M <= Ideal.comap (algebraMap R Rₚ) q :=
+    le_of_eq_of_le Submodule.annihilator_top.symm (IsAssociatedPrime.annihilator_le hq)
+  have le : Ideal.comap (algebraMap R Rₚ) q <= p := by
+    have := (IsLocalization.disjoint_under_iff p.primeCompl Rₚ q).mpr q_prime.ne_top
+    simpa only [Ideal.primeCompl, Submonoid.coe_set_mk, Subsemigroup.coe_set_mk,
+      Set.disjoint_compl_left_iff_subset] using! this
+  simpa [Minimal.eq_of_le hp.out ⟨IsAssociatedPrime.isPrime hq, ann_le⟩ le] using! hq
 
 Depends on / 依赖: AtPrime, IsAssociatedPrime, IsAssociatedPrime.isPrime, IsPrime, Localization, Localization.AtPrime, LocalizedModule, LocalizedModule.mkLinearMap, Module, Module.mem_support_iff, Module.support_eq_zeroLocus, Nontrivial, associatedPrimes, associatedPrimes.nonempty, hp.isPrime, isPrime, mem_support_iff, mkLinearMap, nonempty, p.prime
 -/

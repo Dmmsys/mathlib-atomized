@@ -316,7 +316,14 @@ lemma support_of_supportDim_eq_zero
     by_contra nmem
     push _ in _ at nmem
     have : p < ⟨maximalIdeal R, IsMaximal.isPrime' (maximalIdeal R)⟩ :=
-      lt_of_le_of_
+      lt_of_le_of_ne (IsLocalRing.le_maximalIdeal IsPrime.ne_top') nmem
+    have : Module.supportDim R N > 0 := by
+      simp only [Module.supportDim, gt_iff_lt, Order.krullDim_pos_iff, Subtype.exists,
+        Subtype.mk_lt_mk, exists_prop]
+      use p
+      simpa [hp] using! ⟨_, IsLocalRing.closedPoint_mem_support R N, this⟩
+    exact (ne_of_lt this) dim.symm
+  · simpa using! IsLocalRing.closedPoint_mem_support R N
 
 中文:
 引理 support_of_supportDim_eq_zero
@@ -329,7 +336,14 @@ lemma support_of_supportDim_eq_zero
     by_contra nmem
     push _ in _ at nmem
     have : p < ⟨maximalIdeal R, IsMaximal.isPrime' (maximalIdeal R)⟩ :=
-      lt_of_le_of_
+      lt_of_le_of_ne (IsLocalRing.le_maximalIdeal IsPrime.ne_top') nmem
+    have : Module.supportDim R N > 0 := by
+      simp only [Module.supportDim, gt_iff_lt, Order.krullDim_pos_iff, Subtype.exists,
+        Subtype.mk_lt_mk, exists_prop]
+      use p
+      simpa [hp] using! ⟨_, IsLocalRing.closedPoint_mem_support R N, this⟩
+    exact (ne_of_lt this) dim.symm
+  · simpa using! IsLocalRing.closedPoint_mem_support R N
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.le_maximalIdeal, IsMaximal, IsMaximal.isPrime, IsPrime, IsPrime.ne_top, Module, Module.supportDim, Module.supportDim_ne_bot_iff_nontrivial, Nontrivial, Order.krullDim_pos_iff, PrimeSpectrum, PrimeSpectrum.zeroLocus_eq_singleton, Subtype, Subtype.exists, Subtype.mk_lt_mk, exists_prop, gt_iff_lt, isPrime, krullDim_pos_iff
 -/

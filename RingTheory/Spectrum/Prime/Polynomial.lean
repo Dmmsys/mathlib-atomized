@@ -46,7 +46,25 @@ lemma isNilpotent_tensor_residueField_iff
   · have := (algebraMap R (A otimes[R] I.ResidueField)).codomain_trivial
     simp [Subsingleton.elim I ⊤, Subsingleton.elim (f otimesₜ[R] (1 : I.ResidueField)) 0]
   have : Module.finrank I.ResidueField (I.ResidueField otimes[R] A) = Module.finrank R A := by
-  
+    rw [Module.finrank_tensorProduct]; rw [Module.finrank_self]; rw [one_mul]
+  rw [← IsNilpotent.map_iff (Algebra.TensorProduct.comm R A I.ResidueField).injective]
+  simp only [Algebra.TensorProduct.algebraMap_apply, Algebra.algebraMap_self, RingHom.id_apply,
+    Algebra.coe_lmul_eq_mul, Algebra.TensorProduct.comm_tmul]
+  rw [← IsNilpotent.map_iff (Algebra.lmul_injective (R := I.ResidueField))]; rw [LinearMap.isNilpotent_iff_charpoly]; rw [← Algebra.baseChange_lmul]; rw [LinearMap.charpoly_baseChange]; rw [this]
+  simp_rw [← ((LinearMap.mul R A) f).charpoly_natDegree]
+  constructor
+  · intro e i hi
+    replace e := congr(($e).coeff i)
+    simpa only [Algebra.coe_lmul_eq_mul, coeff_map, coeff_X_pow, hi.ne, ↓reduceIte,
+      ← RingHom.mem_ker, Ideal.ker_algebraMap_residueField] using e
+  · intro H
+    ext i
+    obtain (hi | hi) := eq_or_ne i ((LinearMap.mul R A) f).charpoly.natDegree
+    · simp only [Algebra.coe_lmul_eq_mul, hi, coeff_map, coeff_X_pow, ↓reduceIte]
+      rw [← Polynomial.leadingCoeff]; rw [((LinearMap.mul R A) f).charpoly_monic]; rw [map_one]
+    obtain (hi | hi) := lt_or_gt_of_ne hi
+    · simpa [hi.ne, ← RingHom.mem_ker, Ideal.ker_algebraMap_residueField] using H i hi
+    · simp [hi.ne', coeff_eq_zero_of_natDegree_lt hi]
 
 中文:
 引理 isNilpotent_tensor_residueField_iff
@@ -55,7 +73,25 @@ lemma isNilpotent_tensor_residueField_iff
   · have := (algebraMap R (A otimes[R] I.ResidueField)).codomain_trivial
     simp [Subsingleton.elim I ⊤, Subsingleton.elim (f otimesₜ[R] (1 : I.ResidueField)) 0]
   have : Module.finrank I.ResidueField (I.ResidueField otimes[R] A) = Module.finrank R A := by
-  
+    rw [Module.finrank_tensorProduct]; rw [Module.finrank_self]; rw [one_mul]
+  rw [← IsNilpotent.map_iff (Algebra.TensorProduct.comm R A I.ResidueField).injective]
+  simp only [Algebra.TensorProduct.algebraMap_apply, Algebra.algebraMap_self, RingHom.id_apply,
+    Algebra.coe_lmul_eq_mul, Algebra.TensorProduct.comm_tmul]
+  rw [← IsNilpotent.map_iff (Algebra.lmul_injective (R := I.ResidueField))]; rw [LinearMap.isNilpotent_iff_charpoly]; rw [← Algebra.baseChange_lmul]; rw [LinearMap.charpoly_baseChange]; rw [this]
+  simp_rw [← ((LinearMap.mul R A) f).charpoly_natDegree]
+  constructor
+  · intro e i hi
+    replace e := congr(($e).coeff i)
+    simpa only [Algebra.coe_lmul_eq_mul, coeff_map, coeff_X_pow, hi.ne, ↓reduceIte,
+      ← RingHom.mem_ker, Ideal.ker_algebraMap_residueField] using e
+  · intro H
+    ext i
+    obtain (hi | hi) := eq_or_ne i ((LinearMap.mul R A) f).charpoly.natDegree
+    · simp only [Algebra.coe_lmul_eq_mul, hi, coeff_map, coeff_X_pow, ↓reduceIte]
+      rw [← Polynomial.leadingCoeff]; rw [((LinearMap.mul R A) f).charpoly_monic]; rw [map_one]
+    obtain (hi | hi) := lt_or_gt_of_ne hi
+    · simpa [hi.ne, ← RingHom.mem_ker, Ideal.ker_algebraMap_residueField] using H i hi
+    · simp [hi.ne', coeff_eq_zero_of_natDegree_lt hi]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.algebraMap_apply, Algebra.TensorProduct.comm, I.ResidueField, IsNilpotent, IsNilpotent.map_iff, Module, Module.finrank, Module.finrank_self, Module.finrank_tensorProduct, ResidueField, Subsingleton, Subsingleton.elim, TensorProduct, algebraMap, algebraMap_apply, codomain_trivial, finrank, finrank_self, finrank_tensorProduct
 -/
@@ -102,7 +138,26 @@ lemma mem_image_comap_zeroLocus_sdiff
     simp only [mem_zeroLocus, Set.singleton_subset_iff, SetLike.mem_coe] at hqg hqf
     have hs : Ideal.span s <= RingHom.ker (algebraMap A q.asIdeal.ResidueField) := by
       rwa [Ideal.span_le, Ideal.ker_algebraMap_residueField]
-    let F : (A ⧸ I
+    let F : (A ⧸ Ideal.span s) otimes[R] (q.asIdeal.comap (algebraMap R A)).ResidueField ->ₐ[A]
+        q.asIdeal.ResidueField :=
+      Algebra.TensorProduct.lift
+        (Ideal.Quotient.liftₐ (Ideal.span s) (Algebra.ofId A _) hs)
+        (Ideal.ResidueField.mapₐ _ _ (Algebra.ofId _ _) rfl)
+        fun _ _ => .all _ _
+    have := H.map F
+    rw [AlgHom.commutes]; rw [isNilpotent_iff_eq_zero]; rw [← RingHom.mem_ker]; rw [Ideal.ker_algebraMap_residueField] at this
+    exact hqf this
+  · intro H
+    rw [← mem_nilradical]; rw [nilradical_eq_sInf]; rw [Ideal.mem_sInf] at H
+    simp only [Set.mem_ofPred_eq, Algebra.TensorProduct.algebraMap_apply,
+      Ideal.Quotient.algebraMap_eq, not_forall] at H
+    obtain ⟨q, hq, hfq⟩ := H
+    have : forall a in s, Ideal.Quotient.mk (Ideal.span s) a otimesₜ[R] 1 in q := fun a ha => by
+      simp [Ideal.Quotient.eq_zero_iff_mem.mpr (Ideal.subset_span ha)]
+    refine ⟨comap (algebraMap A _) ⟨q, hq⟩, ⟨by simpa [Set.subset_def], by simpa⟩, ?_⟩
+    rw [← comap_comp_apply]; rw [← IsScalarTower.algebraMap_eq]; rw [← Algebra.TensorProduct.includeRight.comp_algebraMap]; rw [comap_comp_apply]; rw [Subsingleton.elim (α := PrimeSpectrum x.asIdeal.ResidueField) (comap _ _) ⊥]
+    ext a
+    exact congr(a in $(Ideal.ker_algebraMap_residueField _))
 
 中文:
 引理 mem_image_comap_zeroLocus_sdiff
@@ -113,7 +168,26 @@ lemma mem_image_comap_zeroLocus_sdiff
     simp only [mem_zeroLocus, Set.singleton_subset_iff, SetLike.mem_coe] at hqg hqf
     have hs : Ideal.span s <= RingHom.ker (algebraMap A q.asIdeal.ResidueField) := by
       rwa [Ideal.span_le, Ideal.ker_algebraMap_residueField]
-    let F : (A ⧸ I
+    let F : (A ⧸ Ideal.span s) otimes[R] (q.asIdeal.comap (algebraMap R A)).ResidueField ->ₐ[A]
+        q.asIdeal.ResidueField :=
+      Algebra.TensorProduct.lift
+        (Ideal.Quotient.liftₐ (Ideal.span s) (Algebra.ofId A _) hs)
+        (Ideal.ResidueField.mapₐ _ _ (Algebra.ofId _ _) rfl)
+        fun _ _ => .all _ _
+    have := H.map F
+    rw [AlgHom.commutes]; rw [isNilpotent_iff_eq_zero]; rw [← RingHom.mem_ker]; rw [Ideal.ker_algebraMap_residueField] at this
+    exact hqf this
+  · intro H
+    rw [← mem_nilradical]; rw [nilradical_eq_sInf]; rw [Ideal.mem_sInf] at H
+    simp only [Set.mem_ofPred_eq, Algebra.TensorProduct.algebraMap_apply,
+      Ideal.Quotient.algebraMap_eq, not_forall] at H
+    obtain ⟨q, hq, hfq⟩ := H
+    have : forall a in s, Ideal.Quotient.mk (Ideal.span s) a otimesₜ[R] 1 in q := fun a ha => by
+      simp [Ideal.Quotient.eq_zero_iff_mem.mpr (Ideal.subset_span ha)]
+    refine ⟨comap (algebraMap A _) ⟨q, hq⟩, ⟨by simpa [Set.subset_def], by simpa⟩, ?_⟩
+    rw [← comap_comp_apply]; rw [← IsScalarTower.algebraMap_eq]; rw [← Algebra.TensorProduct.includeRight.comp_algebraMap]; rw [comap_comp_apply]; rw [Subsingleton.elim (α := PrimeSpectrum x.asIdeal.ResidueField) (comap _ _) ⊥]
+    ext a
+    exact congr(a in $(Ideal.ker_algebraMap_residueField _))
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lift, Algebra.ofId, Ideal.Quotient.lift, Ideal.ResidueField.map, Ideal.ker_algebraMap_residueField, Ideal.span, Ideal.span_le, Quotient, ResidueField, RingHom, RingHom.ker, Set.singleton_subset_iff, SetLike, SetLike.mem_coe, TensorProduct, algebraMap, asIdeal, ker_algebraMap_residueField, mem_coe
 -/
@@ -158,7 +232,7 @@ lemma mem_image_comap_basicOpen
     refine Algebra.TensorProduct.congr ?f AlgEquiv.refl
     rw [Ideal.span_empty]
     exact { __ := (RingEquiv.quotientBot A).symm, __ := Algebra.ofId _ _ }
-  rw [← IsNi
+  rw [← IsNilpotent.map_iff e.injective]; rw [AlgEquiv.commutes]; rw [← mem_image_comap_zeroLocus_sdiff f ∅ x]; rw [zeroLocus_empty]; rw [← Set.compl_eq_univ_sdiff]; rw [basicOpen_eq_zeroLocus_compl]
 
 中文:
 引理 mem_image_comap_basicOpen
@@ -169,7 +243,7 @@ lemma mem_image_comap_basicOpen
     refine Algebra.TensorProduct.congr ?f AlgEquiv.refl
     rw [Ideal.span_empty]
     exact { __ := (RingEquiv.quotientBot A).symm, __ := Algebra.ofId _ _ }
-  rw [← IsNi
+  rw [← IsNilpotent.map_iff e.injective]; rw [AlgEquiv.commutes]; rw [← mem_image_comap_zeroLocus_sdiff f ∅ x]; rw [zeroLocus_empty]; rw [← Set.compl_eq_univ_sdiff]; rw [basicOpen_eq_zeroLocus_compl]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.commutes, AlgEquiv.refl, Algebra, Algebra.TensorProduct.congr, Algebra.ofId, Ideal.span, Ideal.span_empty, IsNilpotent, IsNilpotent.map_iff, ResidueField, RingEquiv, RingEquiv.quotientBot, Set.compl_eq_univ_sdiff, TensorProduct, asIdeal, basicOpen_eq_zeroLocus_compl, commutes, compl_eq_univ_sdiff, e.injective
 -/
@@ -194,7 +268,8 @@ lemma exists_image_comap_of_finite_of_free
   use (Finset.range (Module.finrank R (A ⧸ Ideal.span s))).image
     (Algebra.lmul R (A ⧸ Ideal.span s) (Ideal.Quotient.mk _ f)).charpoly.coeff
   ext x
-  rw [mem_image_comap_zeroLocus_sdiff]; rw [IsScalarTower.algebraMap_apply A (A ⧸ Ideal.span s)]; rw [isNilpotent_tensor_residueField
+  rw [mem_image_comap_zeroLocus_sdiff]; rw [IsScalarTower.algebraMap_apply A (A ⧸ Ideal.span s)]; rw [isNilpotent_tensor_residueField_iff]
+  simp [Set.subset_def]
 
 中文:
 引理 存在_image_comap_of_finite_of_free
@@ -204,7 +279,8 @@ lemma exists_image_comap_of_finite_of_free
   use (Finset.range (Module.finrank R (A ⧸ Ideal.span s))).image
     (Algebra.lmul R (A ⧸ Ideal.span s) (Ideal.Quotient.mk _ f)).charpoly.coeff
   ext x
-  rw [mem_image_comap_zeroLocus_sdiff]; rw [IsScalarTower.algebraMap_apply A (A ⧸ Ideal.span s)]; rw [isNilpotent_tensor_residueField
+  rw [mem_image_comap_zeroLocus_sdiff]; rw [IsScalarTower.algebraMap_apply A (A ⧸ Ideal.span s)]; rw [isNilpotent_tensor_residueField_iff]
+  simp [Set.subset_def]
 
 Depends on / 依赖: Algebra, Algebra.lmul, Finset, Finset.range, Ideal.Quotient.mk, Ideal.span, IsScalarTower, IsScalarTower.algebraMap_apply, Module, Module.finrank, Quotient, Set.subset_def, algebraMap_apply, charpoly, charpoly.coeff, classical, finrank, isNilpotent_tensor_residueField_iff, mem_image_comap_zeroLocus_sdiff, subset_def
 -/
@@ -232,7 +308,10 @@ lemma mem_image_comap_C_basicOpen
   trans f.map (algebraMap R x.asIdeal.ResidueField) != 0
   · refine (mem_image_comap_basicOpen _ _).trans (not_iff_not.mpr ?_)
     let e : R[X] otimes[R] x.asIdeal.ResidueField ≃ₐ[R] x.asIdeal.ResidueField[X] :=
-      (Algebra.TensorProduct.comm R _ _).trans (polyEquivTensor R x.asIdeal.ResidueFi
+      (Algebra.TensorProduct.comm R _ _).trans (polyEquivTensor R x.asIdeal.ResidueField).symm
+    rw [← IsNilpotent.map_iff e.injective]; rw [isNilpotent_iff_eq_zero]
+    simp [e]
+  · simp [Polynomial.ext_iff]
 
 中文:
 引理 mem_image_comap_C_basicOpen
@@ -241,7 +320,10 @@ lemma mem_image_comap_C_basicOpen
   trans f.map (algebraMap R x.asIdeal.ResidueField) != 0
   · refine (mem_image_comap_basicOpen _ _).trans (not_iff_not.mpr ?_)
     let e : R[X] otimes[R] x.asIdeal.ResidueField ≃ₐ[R] x.asIdeal.ResidueField[X] :=
-      (Algebra.TensorProduct.comm R _ _).trans (polyEquivTensor R x.asIdeal.ResidueFi
+      (Algebra.TensorProduct.comm R _ _).trans (polyEquivTensor R x.asIdeal.ResidueField).symm
+    rw [← IsNilpotent.map_iff e.injective]; rw [isNilpotent_iff_eq_zero]
+    simp [e]
+  · simp [Polynomial.ext_iff]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.comm, IsNilpotent, IsNilpotent.map_iff, Polynomial, Polynomial.ext_iff, ResidueField, TensorProduct, algebraMap, asIdeal, e.injective, ext_iff, f.map, injective, isNilpotent_iff_eq_zero, map_iff, mem_image_comap_basicOpen, not_iff_not, not_iff_not.mpr, otimes
 -/
@@ -450,7 +532,14 @@ lemma mem_image_comap_C_basicOpen
   · refine (mem_image_comap_basicOpen _ _).trans (not_iff_not.mpr ?_)
     let e : x.asIdeal.ResidueField otimes[R] MvPolynomial σ R ≃ₐ[x.asIdeal.ResidueField]
         MvPolynomial σ x.asIdeal.ResidueField := scalarRTensorAlgEquiv
-    rw [← 
+    rw [← IsNilpotent.map_iff (Algebra.TensorProduct.comm ..).injective]; rw [← IsNilpotent.map_iff e.injective]; rw [isNilpotent_iff_eq_zero]
+    change (e.toAlgHom.toRingHom.comp (Algebra.TensorProduct.comm ..).toRingHom).comp
+      (algebraMap _ _) f = 0 ↔ MvPolynomial.map _ f = 0
+    congr!
+    ext
+    · simp [scalarRTensorAlgEquiv, e, Algebra.smul_def]
+    · simp [e, scalarRTensorAlgEquiv, coeff, map, X, monomial]
+  · simp [MvPolynomial.ext_iff, coeff_map]
 
 中文:
 引理 mem_image_comap_C_basicOpen
@@ -460,7 +549,14 @@ lemma mem_image_comap_C_basicOpen
   · refine (mem_image_comap_basicOpen _ _).trans (not_iff_not.mpr ?_)
     let e : x.asIdeal.ResidueField otimes[R] MvPolynomial σ R ≃ₐ[x.asIdeal.ResidueField]
         MvPolynomial σ x.asIdeal.ResidueField := scalarRTensorAlgEquiv
-    rw [← 
+    rw [← IsNilpotent.map_iff (Algebra.TensorProduct.comm ..).injective]; rw [← IsNilpotent.map_iff e.injective]; rw [isNilpotent_iff_eq_zero]
+    change (e.toAlgHom.toRingHom.comp (Algebra.TensorProduct.comm ..).toRingHom).comp
+      (algebraMap _ _) f = 0 ↔ MvPolynomial.map _ f = 0
+    congr!
+    ext
+    · simp [scalarRTensorAlgEquiv, e, Algebra.smul_def]
+    · simp [e, scalarRTensorAlgEquiv, coeff, map, X, monomial]
+  · simp [MvPolynomial.ext_iff, coeff_map]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.comm, IsNilpotent, IsNilpotent.map_iff, MvPolynomial, ResidueField, TensorProduct, algebraMap, asIdeal, basicOpen, e.injective, e.toAlgHom.toRingHom.co, f.coeff, f.map, injective, isNilpotent_iff_eq_zero, map_iff, mem_image_comap_basicOpen, not_iff_not, not_iff_not.mpr
 -/

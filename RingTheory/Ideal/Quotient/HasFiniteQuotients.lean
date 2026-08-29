@@ -124,7 +124,10 @@ instance :
   · exact hI ▸ Submodule.fg_bot
   obtain ⟨x, hx₁, hx₂⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hI
   refine Submodule.fg_of_fg_map_of_fg_inf_ker (Submodule.mkQ (Ideal.span {x})) ?_ ?_
-  · have := finiteQuotient (I :
+  · have := finiteQuotient (I := Ideal.span {x}) (by simp [hx₂])
+    exact Submodule.FG.of_finite
+  · rw [Submodule.ker_mkQ, inf_eq_right.mpr ((Ideal.span_singleton_le_iff_mem I).mpr hx₁)]
+    exact Submodule.fg_span_singleton x
 
 中文:
 实例 :
@@ -135,7 +138,10 @@ instance :
   · exact hI ▸ Submodule.fg_bot
   obtain ⟨x, hx₁, hx₂⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hI
   refine Submodule.fg_of_fg_map_of_fg_inf_ker (Submodule.mkQ (Ideal.span {x})) ?_ ?_
-  · have := finiteQuotient (I :
+  · have := finiteQuotient (I := Ideal.span {x}) (by simp [hx₂])
+    exact Submodule.FG.of_finite
+  · rw [Submodule.ker_mkQ, inf_eq_right.mpr ((Ideal.span_singleton_le_iff_mem I).mpr hx₁)]
+    exact Submodule.fg_span_singleton x
 
 Depends on / 依赖: Ideal.span, Ideal.span_singleton_le_iff_mem, Submodule, Submodule.FG.of_finite, Submodule.exists_mem_ne_zero_of_ne_bot, Submodule.fg_bot, Submodule.fg_of_fg_map_of_fg_inf_ker, Submodule.fg_span_singleton, Submodule.ker_mkQ, Submodule.mkQ, exists_mem_ne_zero_of_ne_bot, fg_bot, fg_of_fg_map_of_fg_inf_ker, fg_span_singleton, finiteQuotient, inf_eq_right, inf_eq_right.mpr, isNoetherianRing_iff_ideal_fg, ker_mkQ, of_finite
 -/
@@ -221,7 +227,7 @@ theorem finite_setOfPred_mem
     .of_equiv _ (Ideal.relIsoOfSurjective _ Ideal.Quotient.mk_surjective).toEquiv
   simpa [← RingHom.ker_eq_comap_bot] using this
 
-@[deprecated (since :
+@[deprecated (since := "2026-07-09")] alias finite_setOf_mem := finite_setOfPred_mem
 
 中文:
 定理 finite_setOfPred_mem
@@ -233,7 +239,7 @@ theorem finite_setOfPred_mem
     .of_equiv _ (Ideal.relIsoOfSurjective _ Ideal.Quotient.mk_surjective).toEquiv
   simpa [← RingHom.ker_eq_comap_bot] using this
 
-@[deprecated (since :
+@[deprecated (since := "2026-07-09")] alias finite_setOf_mem := finite_setOfPred_mem
 
 Depends on / 依赖: Finite, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.comap, Ideal.relIsoOfSurjective, Ideal.span, Ideal.span_singleton_eq_bot.mp, Quotient, RingHom, RingHom.ker_eq_comap_bot, finiteQuotient, ker_eq_comap_bot, mk_surjective, of_equiv, relIsoOfSurjective, span_singleton_eq_bot, toEquiv
 -/
@@ -261,7 +267,24 @@ theorem finite_cardQuot_le
   obtain ⟨s, hs⟩ := Infinite.exists_subset_card_eq R (B + 1)
   -- and consider the finite set `t` of nonzero differences
   let t := (s - s) \ {0}
-  re
+  refine Set.Finite.of_sdiff ?_ (Set.finite_singleton ⊥)
+  -- in a ring with finite quotients, each nonzero element is contained in only finitely many ideals
+  -- so it is enough to show that each ideal `I` of norm at most `B` contains some element of `t`
+  suffices {I | Submodule.cardQuot I <= B} \ {⊥} subseteq ⋃ x in t, {I | x in I} from
+    (t.finite_toSet.biUnion fun x hx => finite_setOfPred_mem x (by grind)).subset this
+  intro I hI
+  rw [Set.mem_sdiff]; rw [Set.mem_ofPred]; rw [Submodule.cardQuot_apply] at hI
+  simp_rw [Set.mem_iUnion, exists_prop, Set.mem_ofPred_eq]
+  -- `s` has cardinality `B + 1`, but the quotient `R ⧸ I` has cardinality at most `B`
+  replace hs : (s.image (Ideal.Quotient.mk I)).card < s.card := by
+    have := finiteQuotient hI.2
+    have := Fintype.ofFinite (R ⧸ I)
+    grw [Finset.card_le_univ, Fintype.card_eq_nat_card, hI.1, hs, Nat.lt_add_one_iff]
+  -- so we can find distinct `x, y ∈ s` with the desired collision `x - y ∈ I`
+  obtain ⟨x, hx, y, hy, hxy, h⟩ := Finset.exists_ne_map_eq_of_card_image_lt hs
+  refine ⟨x - y, ?_, (Submodule.Quotient.eq I).mp h⟩
+  refine Finset.mem_sdiff.mpr ⟨Finset.mem_sub.mpr ⟨x, hx, y, hy, rfl⟩, ?_⟩
+  rwa [Finset.notMem_singleton, sub_ne_zero]
 
 中文:
 定理 finite_cardQuot_le
@@ -275,7 +298,24 @@ theorem finite_cardQuot_le
   obtain ⟨s, hs⟩ := Infinite.exists_subset_card_eq R (B + 1)
   -- and consider the finite set `t` of nonzero differences
   let t := (s - s) \ {0}
-  re
+  refine Set.Finite.of_sdiff ?_ (Set.finite_singleton ⊥)
+  -- in a ring with finite quotients, each nonzero element is contained in only finitely many ideals
+  -- so it is enough to show that each ideal `I` of norm at most `B` contains some element of `t`
+  suffices {I | Submodule.cardQuot I <= B} \ {⊥} subseteq ⋃ x in t, {I | x in I} from
+    (t.finite_toSet.biUnion fun x hx => finite_setOfPred_mem x (by grind)).subset this
+  intro I hI
+  rw [Set.mem_sdiff]; rw [Set.mem_ofPred]; rw [Submodule.cardQuot_apply] at hI
+  simp_rw [Set.mem_iUnion, exists_prop, Set.mem_ofPred_eq]
+  -- `s` has cardinality `B + 1`, but the quotient `R ⧸ I` has cardinality at most `B`
+  replace hs : (s.image (Ideal.Quotient.mk I)).card < s.card := by
+    have := finiteQuotient hI.2
+    have := Fintype.ofFinite (R ⧸ I)
+    grw [Finset.card_le_univ, Fintype.card_eq_nat_card, hI.1, hs, Nat.lt_add_one_iff]
+  -- so we can find distinct `x, y ∈ s` with the desired collision `x - y ∈ I`
+  obtain ⟨x, hx, y, hy, hxy, h⟩ := Finset.exists_ne_map_eq_of_card_image_lt hs
+  refine ⟨x - y, ?_, (Submodule.Quotient.eq I).mp h⟩
+  refine Finset.mem_sdiff.mpr ⟨Finset.mem_sub.mpr ⟨x, hx, y, hy, rfl⟩, ?_⟩
+  rwa [Finset.notMem_singleton, sub_ne_zero]
 
 Depends on / 依赖: Set.toFinite, classical, finite_or_infinite, toFinite
 -/
@@ -416,7 +456,8 @@ theorem of_module_finite
       exact Quotient.finite _
     let J : Ideal R := Ideal.under R I
 have : Finite (R ⧸ J) := finiteQuotient Ideal.under_ne_bot R hI
-    have : Module.Finite (R ⧸ J) (S ⧸ I) := Module.Finite.of_r
+    have : Module.Finite (R ⧸ J) (S ⧸ I) := Module.Finite.of_restrictScalars_finite R _ _
+    exact Module.finite_of_finite (R ⧸ J)
 
 中文:
 定理 of_module_finite
@@ -427,7 +468,8 @@ have : Finite (R ⧸ J) := finiteQuotient Ideal.under_ne_bot R hI
       exact Quotient.finite _
     let J : Ideal R := Ideal.under R I
 have : Finite (R ⧸ J) := finiteQuotient Ideal.under_ne_bot R hI
-    have : Module.Finite (R ⧸ J) (S ⧸ I) := Module.Finite.of_r
+    have : Module.Finite (R ⧸ J) (S ⧸ I) := Module.Finite.of_restrictScalars_finite R _ _
+    exact Module.finite_of_finite (R ⧸ J)
 
 Depends on / 依赖: Finite, Ideal.under, Ideal.under_ne_bot, Module, Module.Finite, Module.Finite.of_restrictScalars_finite, Module.finite_of_finite, Quotient, Quotient.finite, finite, finiteQuotient, finite_of_finite, of_restrictScalars_finite, subsingleton_or_nontrivial, under_ne_bot
 -/

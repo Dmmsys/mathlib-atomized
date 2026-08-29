@@ -389,7 +389,17 @@ definition ofMapSplitAdd
     induction s using Finset.induction_on with
     | empty => simp
     | insert a s _ ihs =>
-      rw [splitMany_insert]; rw [inf_split]; rw [← ihs]; rw [biUnion_boxes]; rw [s
+      rw [splitMany_insert]; rw [inf_split]; rw [← ihs]; rw [biUnion_boxes]; rw [sum_biUnion_boxes]
+      refine Finset.sum_congr rfl fun J' hJ' => ?_
+      by_cases h : a.2 in Ioo (J'.lower a.1) (J'.upper a.1)
+      · rw [sum_split_boxes]
+        exact hf _ ((WithTop.coe_le_coe.2 <| le_of_mem _ hJ').trans hI) h
+      · rw [split_of_notMem_Ioo h, top_boxes, Finset.sum_singleton]
+  intro I hI π hπ
+  have Hle : forall J in π, ↑J <= I₀ := fun J hJ => (WithTop.coe_le_coe.2 <| π.le_of_mem hJ).trans hI
+  rcases hπ.exists_splitMany_le with ⟨s, hs⟩
+  rw [← hf _ hI]; rw [← inf_of_le_right hs]; rw [inf_splitMany]; rw [biUnion_boxes]; rw [sum_biUnion_boxes]
+  exact Finset.sum_congr rfl fun J hJ => (hf _ (Hle _ hJ) _).symm
 
 中文:
 定义 ofMapSplitAdd
@@ -401,7 +411,17 @@ definition ofMapSplitAdd
     induction s using Finset.induction_on with
     | empty => simp
     | insert a s _ ihs =>
-      rw [splitMany_insert]; rw [inf_split]; rw [← ihs]; rw [biUnion_boxes]; rw [s
+      rw [splitMany_insert]; rw [inf_split]; rw [← ihs]; rw [biUnion_boxes]; rw [sum_biUnion_boxes]
+      refine Finset.sum_congr rfl fun J' hJ' => ?_
+      by_cases h : a.2 in Ioo (J'.lower a.1) (J'.upper a.1)
+      · rw [sum_split_boxes]
+        exact hf _ ((WithTop.coe_le_coe.2 <| le_of_mem _ hJ').trans hI) h
+      · rw [split_of_notMem_Ioo h, top_boxes, Finset.sum_singleton]
+  intro I hI π hπ
+  have Hle : forall J in π, ↑J <= I₀ := fun J hJ => (WithTop.coe_le_coe.2 <| π.le_of_mem hJ).trans hI
+  rcases hπ.exists_splitMany_le with ⟨s, hs⟩
+  rw [← hf _ hI]; rw [← inf_of_le_right hs]; rw [inf_splitMany]; rw [biUnion_boxes]; rw [sum_biUnion_boxes]
+  exact Finset.sum_congr rfl fun J hJ => (hf _ (Hle _ hJ) _).symm
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.sum_congr, WithTop, WithTop.coe_le_coe, biUnion_boxes, classical, coe_le_coe, induction_on, inf_split, insert, le_of_mem, replace, splitMany, splitMany_insert, split_of_not, sum_biUnion_boxes, sum_congr, sum_split_boxes
 -/
@@ -462,7 +482,15 @@ theorem sum_boxes_congr
   rcases hs _ (Or.inl rfl), hs _ (Or.inr rfl) with ⟨h₁, h₂⟩; clear hs
   rw [h] at h₁
   calc
-    ∑ J in π₁.boxes, f J = ∑ J in π₁.boxes, ∑ J' in (splitMany 
+    ∑ J in π₁.boxes, f J = ∑ J in π₁.boxes, ∑ J' in (splitMany J s).boxes, f J' :=
+      Finset.sum_congr rfl fun J hJ => (f.sum_partition_boxes ?_ (isPartition_splitMany _ _)).symm
+    _ = ∑ J in (π₁.biUnion fun J => splitMany J s).boxes, f J := (sum_biUnion_boxes _ _ _).symm
+    _ = ∑ J in (π₂.biUnion fun J => splitMany J s).boxes, f J := by rw [h₁, h₂]
+    _ = ∑ J in π₂.boxes, ∑ J' in (splitMany J s).boxes, f J' := sum_biUnion_boxes _ _ _
+    _ = ∑ J in π₂.boxes, f J :=
+      Finset.sum_congr rfl fun J hJ => f.sum_partition_boxes ?_ (isPartition_splitMany _ _)
+  exacts [(WithTop.coe_le_coe.2 <| π₁.le_of_mem hJ).trans hI,
+    (WithTop.coe_le_coe.2 <| π₂.le_of_mem hJ).trans hI]
 
 中文:
 定理 sum_boxes_congr
@@ -474,7 +502,15 @@ theorem sum_boxes_congr
   rcases hs _ (Or.inl rfl), hs _ (Or.inr rfl) with ⟨h₁, h₂⟩; clear hs
   rw [h] at h₁
   calc
-    ∑ J in π₁.boxes, f J = ∑ J in π₁.boxes, ∑ J' in (splitMany 
+    ∑ J in π₁.boxes, f J = ∑ J in π₁.boxes, ∑ J' in (splitMany J s).boxes, f J' :=
+      Finset.sum_congr rfl fun J hJ => (f.sum_partition_boxes ?_ (isPartition_splitMany _ _)).symm
+    _ = ∑ J in (π₁.biUnion fun J => splitMany J s).boxes, f J := (sum_biUnion_boxes _ _ _).symm
+    _ = ∑ J in (π₂.biUnion fun J => splitMany J s).boxes, f J := by rw [h₁, h₂]
+    _ = ∑ J in π₂.boxes, ∑ J' in (splitMany J s).boxes, f J' := sum_biUnion_boxes _ _ _
+    _ = ∑ J in π₂.boxes, f J :=
+      Finset.sum_congr rfl fun J hJ => f.sum_partition_boxes ?_ (isPartition_splitMany _ _)
+  exacts [(WithTop.coe_le_coe.2 <| π₁.le_of_mem hJ).trans hI,
+    (WithTop.coe_le_coe.2 <| π₂.le_of_mem hJ).trans hI]
 
 Depends on / 依赖: Finset, Finset.sum_congr, Or.inl, Or.inr, biUnion, exists_splitMany_inf_eq_filter_of_finite, f.sum_partition_boxes, finite_singleton, inf_splitMany, insert, isPartition_splitMany, splitMany, sum_biUnion_boxes, sum_congr, sum_partition_boxes
 -/
@@ -687,7 +723,19 @@ definition upperSubLower.{u}
       intro J hJ j x
       rw [WithTop.coe_le_coe] at hJ
       refine i.succAboveCases (fun hx => ?_) (fun j hx => ?_) j
-      · simp only [Box.splitLower_def hx, Box.splitUpper_def hx, up
+      · simp only [Box.splitLower_def hx, Box.splitUpper_def hx, update_self, ← WithBot.some_eq_coe,
+          Option.elim', Box.face, Function.comp_def, update_of_ne (Fin.succAbove_ne _ _)]
+        abel
+      · have : (J.face i : WithTop (Box (Fin n))) <= I₀.face i :=
+          WithTop.coe_le_coe.2 (face_mono hJ i)
+        rw [le_iff_Icc]; rw [@Box.Icc_eq_pi _ I₀] at hJ
+        rw [hf _ (hJ J.upper_mem_Icc _ trivial)]; rw [hf _ (hJ J.lower_mem_Icc _ trivial)]; rw [← (fb _).map_split_add this j x]; rw [← (fb _).map_split_add this j x]
+        have hx' : x in Ioo ((J.face i).lower j) ((J.face i).upper j) := hx
+        simp only [Box.splitLower_def hx, Box.splitUpper_def hx, Box.splitLower_def hx',
+          Box.splitUpper_def hx', ← WithBot.some_eq_coe, Option.elim', Box.face_mk,
+          update_of_ne (Fin.succAbove_ne _ _).symm, sub_add_sub_comm,
+          update_comp_eq_of_injective _ (Fin.strictMono_succAbove i).injective j x, ← hf]
+        simp only [Box.face])
 
 中文:
 定义 upperSubLower.{u}
@@ -698,7 +746,19 @@ definition upperSubLower.{u}
       intro J hJ j x
       rw [WithTop.coe_le_coe] at hJ
       refine i.succAboveCases (fun hx => ?_) (fun j hx => ?_) j
-      · simp only [Box.splitLower_def hx, Box.splitUpper_def hx, up
+      · simp only [Box.splitLower_def hx, Box.splitUpper_def hx, update_self, ← WithBot.some_eq_coe,
+          Option.elim', Box.face, Function.comp_def, update_of_ne (Fin.succAbove_ne _ _)]
+        abel
+      · have : (J.face i : WithTop (Box (Fin n))) <= I₀.face i :=
+          WithTop.coe_le_coe.2 (face_mono hJ i)
+        rw [le_iff_Icc]; rw [@Box.Icc_eq_pi _ I₀] at hJ
+        rw [hf _ (hJ J.upper_mem_Icc _ trivial)]; rw [hf _ (hJ J.lower_mem_Icc _ trivial)]; rw [← (fb _).map_split_add this j x]; rw [← (fb _).map_split_add this j x]
+        have hx' : x in Ioo ((J.face i).lower j) ((J.face i).upper j) := hx
+        simp only [Box.splitLower_def hx, Box.splitUpper_def hx, Box.splitLower_def hx',
+          Box.splitUpper_def hx', ← WithBot.some_eq_coe, Option.elim', Box.face_mk,
+          update_of_ne (Fin.succAbove_ne _ _).symm, sub_add_sub_comm,
+          update_comp_eq_of_injective _ (Fin.strictMono_succAbove i).injective j x, ← hf]
+        simp only [Box.face])
 
 Depends on / 依赖: Box.face, Box.splitLower_def, Box.splitUpper_def, Fin.succAbove_ne, Function, Function.comp_def, J.face, J.lower, J.upper, Option.elim, WithBot, WithBot.some_eq_coe, WithTop, WithTop.coe_le_coe, coe_le_coe, comp_def, face_mono, i.succAboveCases, le_iff_Icc, ofMapSplitAdd
 -/

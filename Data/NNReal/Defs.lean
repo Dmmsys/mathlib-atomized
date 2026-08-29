@@ -164,7 +164,11 @@ deriving instance
   Semiring, CommMonoidWithZero, CommSemiring, AddCancelCommMonoid,
   Sub, OrderedSub, OrderBot,
   CanonicallyOrderedAdd, NoZeroDivisors, DenselyOrdered,
-  Archimedean, MulArchimedean, IsOr
+  Archimedean, MulArchimedean, IsOrderedRing, IsStrictOrderedRing
+  for NNReal
+
+noncomputable section
+deriving instance LinearOrder for NNReal
 
 中文:
 实例 :
@@ -177,7 +181,11 @@ deriving instance
   Semiring, CommMonoidWithZero, CommSemiring, AddCancelCommMonoid,
   Sub, OrderedSub, OrderBot,
   CanonicallyOrderedAdd, NoZeroDivisors, DenselyOrdered,
-  Archimedean, MulArchimedean, IsOr
+  Archimedean, MulArchimedean, IsOrderedRing, IsStrictOrderedRing
+  for NNReal
+
+noncomputable section
+deriving instance LinearOrder for NNReal
 -/
 instance : Bot Real>=0 := ⟨0⟩
 
@@ -634,7 +642,15 @@ example : Mul Real>=0 := by infer_instance
 
 noncomputable example : Inv Real>=0 := by infer_instance
 
-noncomputable ex
+noncomputable example : Div Real>=0 := by infer_instance
+
+example : LE Real>=0 := by infer_instance
+
+example : Bot Real>=0 := by infer_instance
+
+example : Inhabited Real>=0 := by infer_instance
+
+example : Nontrivial Real>=0 := by infer_instance
 
 中文:
 定理 coe_mk
@@ -654,7 +670,15 @@ example : Mul Real>=0 := by infer_instance
 
 noncomputable example : Inv Real>=0 := by infer_instance
 
-noncomputable ex
+noncomputable example : Div Real>=0 := by infer_instance
+
+example : LE Real>=0 := by infer_instance
+
+example : Bot Real>=0 := by infer_instance
+
+example : Inhabited Real>=0 := by infer_instance
+
+example : Nontrivial Real>=0 := by infer_instance
 -/
 @[simp, norm_cast] theorem coe_mk (a : Real) (ha) : toReal (.mk a ha) = a := rfl
 
@@ -1816,7 +1840,12 @@ theorem coe_sSup
       rintro - ⟨y, -, rfl⟩
       exact y.2
     exact (@subset_sSup_of_within Real (Set.Ici (0 : Real)) _ _ (_) s hs H A).symm
- 
+  · simp only [csSup_of_not_bddAbove H, csSup_empty, bot_eq_zero', NNReal.coe_zero]
+    apply (Real.sSup_of_not_bddAbove ?_).symm
+    contrapose H
+    exact bddAbove_coe.1 H
+
+@[simp, norm_cast]
 
 中文:
 定理 coe_sSup
@@ -1831,7 +1860,12 @@ theorem coe_sSup
       rintro - ⟨y, -, rfl⟩
       exact y.2
     exact (@subset_sSup_of_within Real (Set.Ici (0 : Real)) _ _ (_) s hs H A).symm
- 
+  · simp only [csSup_of_not_bddAbove H, csSup_empty, bot_eq_zero', NNReal.coe_zero]
+    apply (Real.sSup_of_not_bddAbove ?_).symm
+    contrapose H
+    exact bddAbove_coe.1 H
+
+@[simp, norm_cast]
 
 Depends on / 依赖: BddAbove, IsScalarTower, NNReal, NNReal.coe_zero, Real.sSup_nonneg, Real.sSup_of_not_bddAbove, Set.Ici, Set.eq_empty_or_nonempty, Subtype, Subtype.val, bddAbove_coe, bot_eq_zero, coe_zero, contrapose, csSup_empty, csSup_of_not_bddAbove, eq_empty_or_nonempty, sSup_nonneg, sSup_of_not_bddAbove, subset_sSup_of_within
 -/
@@ -1892,6 +1926,9 @@ theorem coe_sInf
     apply Real.sInf_nonneg
     rintro - ⟨y, -, rfl⟩
     exact y.2
+  exact (@subset_sInf_of_within Real (Set.Ici (0 : Real)) _ _ (_) s hs (OrderBot.bddBelow s) A).symm
+
+@[simp]
 
 中文:
 定理 coe_sInf
@@ -1905,6 +1942,9 @@ theorem coe_sInf
     apply Real.sInf_nonneg
     rintro - ⟨y, -, rfl⟩
     exact y.2
+  exact (@subset_sInf_of_within Real (Set.Ici (0 : Real)) _ _ (_) s hs (OrderBot.bddBelow s) A).symm
+
+@[simp]
 
 Depends on / 依赖: OrderBot, OrderBot.bddBelow, Real.sInf_empty, Real.sInf_nonneg, Set.Ici, Set.eq_empty_or_nonempty, Set.image_empty, Subtype, Subtype.val, bddBelow, coe_eq_zero, eq_empty_or_nonempty, image_empty, sInf_empty, sInf_nonneg, subset_sInf_emptyset, subset_sInf_of_within
 -/
@@ -2022,7 +2062,7 @@ theorem lt_iff_exists_rat_btwn
 have : 0 <= (q : Real) := le_trans a.2 le_of_lt haq
       ⟨q, Rat.cast_nonneg.1 this, by
         simp [Real.coe_toNNReal _ this, NNReal.coe_lt_coe.symm, haq, hqb]⟩)
-    fun ⟨_, _, haq, hqb⟩ => lt_trans h
+    fun ⟨_, _, haq, hqb⟩ => lt_trans haq hqb
 
 中文:
 定理 lt_iff_存在_rat_btwn
@@ -2033,7 +2073,7 @@ have : 0 <= (q : Real) := le_trans a.2 le_of_lt haq
 have : 0 <= (q : Real) := le_trans a.2 le_of_lt haq
       ⟨q, Rat.cast_nonneg.1 this, by
         simp [Real.coe_toNNReal _ this, NNReal.coe_lt_coe.symm, haq, hqb]⟩)
-    fun ⟨_, _, haq, hqb⟩ => lt_trans h
+    fun ⟨_, _, haq, hqb⟩ => lt_trans haq hqb
 
 Depends on / 依赖: Iff.intro, NNReal, NNReal.coe_lt_coe.symm, Rat.cast_nonneg, Real.coe_toNNReal, cast_nonneg, coe_lt_coe, coe_toNNReal, exists_rat_btwn, le_of_lt, le_trans, lt_trans
 -/
@@ -3254,7 +3294,13 @@ nonrec theorem exists_pow_lt_of_lt_one {a b : Real>=0} (ha : 0 < a) (hb : b < 1)
   simpa only [← coe_pow, NNReal.coe_lt_coe] using
     exists_pow_lt_of_lt_one (NNReal.coe_pos.2 ha) (NNReal.coe_lt_coe.2 hb)
 
-nonrec theorem exis
+nonrec theorem exists_mem_Ico_zpow {x : Real>=0} {y : Real>=0} (hx : x != 0) (hy : 1 < y) :
+    exists n : Int, x in Set.Ico (y ^ n) (y ^ (n + 1)) :=
+  exists_mem_Ico_zpow hx.bot_lt hy
+
+nonrec theorem exists_mem_Ioc_zpow {x : Real>=0} {y : Real>=0} (hx : x != 0) (hy : 1 < y) :
+    exists n : Int, x in Set.Ioc (y ^ n) (y ^ (n + 1)) :=
+  exists_mem_Ioc_zpow hx.bot_lt hy
 
 中文:
 定理 pow_antitone_exp
@@ -3267,7 +3313,13 @@ nonrec theorem exists_pow_lt_of_lt_one {a b : Real>=0} (ha : 0 < a) (hb : b < 1)
   simpa only [← coe_pow, NNReal.coe_lt_coe] using
     exists_pow_lt_of_lt_one (NNReal.coe_pos.2 ha) (NNReal.coe_lt_coe.2 hb)
 
-nonrec theorem exis
+nonrec theorem exists_mem_Ico_zpow {x : Real>=0} {y : Real>=0} (hx : x != 0) (hy : 1 < y) :
+    exists n : Int, x in Set.Ico (y ^ n) (y ^ (n + 1)) :=
+  exists_mem_Ico_zpow hx.bot_lt hy
+
+nonrec theorem exists_mem_Ioc_zpow {x : Real>=0} {y : Real>=0} (hx : x != 0) (hy : 1 < y) :
+    exists n : Int, x in Set.Ioc (y ^ n) (y ^ (n + 1)) :=
+  exists_mem_Ioc_zpow hx.bot_lt hy
 
 Depends on / 依赖: pow_le_pow_of_le_one, zero_le
 -/
@@ -3533,7 +3585,11 @@ theorem le_of_forall_lt_one_mul_le
     have : a * x⁻¹ * x <= y := h _ this
     rwa [mul_assoc, inv_mul_cancel₀ hx, mul_one] at this
 
+nonrec theorem half_le_self (a : Real>=0) : a / 2 <= a :=
+  half_le_self bot_le
 
+nonrec theorem half_lt_self {a : Real>=0} (h : a != 0) : a / 2 < a :=
+  half_lt_self h.bot_lt
 
 中文:
 定理 le_of_对任意_lt_one_mul_le
@@ -3546,7 +3602,11 @@ theorem le_of_forall_lt_one_mul_le
     have : a * x⁻¹ * x <= y := h _ this
     rwa [mul_assoc, inv_mul_cancel₀ hx, mul_one] at this
 
+nonrec theorem half_le_self (a : Real>=0) : a / 2 <= a :=
+  half_le_self bot_le
 
+nonrec theorem half_lt_self {a : Real>=0} (h : a != 0) : a / 2 < a :=
+  half_lt_self h.bot_lt
 
 Depends on / 依赖: ha.ne_zero, inv_eq_zero, inv_inv, le_of_forall_lt_imp_le_of_dense, lt_inv_iff_mul_lt, mul_assoc, mul_one, ne_zero
 -/
@@ -3962,7 +4022,8 @@ theorem image_real_toNNReal
   · rw [mem_Icc, Real.toNNReal_of_nonpos hy₀, nonpos_iff_eq_zero] at hz
     exact ⟨y, hy, (toNNReal_of_nonpos hy₀).trans hz.2.symm⟩
   · lift y to Real>=0 using hy₀
-    rw [toNNRea
+    rw [toNNReal_coe] at hz
+    exact ⟨z, h.out hx hy ⟨toNNReal_le_iff_le_coe.1 hz.1, hz.2⟩, toNNReal_coe⟩
 
 中文:
 定理 image_real_toNN实数
@@ -3974,7 +4035,8 @@ theorem image_real_toNNReal
   · rw [mem_Icc, Real.toNNReal_of_nonpos hy₀, nonpos_iff_eq_zero] at hz
     exact ⟨y, hy, (toNNReal_of_nonpos hy₀).trans hz.2.symm⟩
   · lift y to Real>=0 using hy₀
-    rw [toNNRea
+    rw [toNNReal_coe] at hz
+    exact ⟨z, h.out hx hy ⟨toNNReal_le_iff_le_coe.1 hz.1, hz.2⟩, toNNReal_coe⟩
 
 Depends on / 依赖: Real.toNNReal_of_nonpos, forall_mem_image, h.out, le_total, mem_Icc, nonpos_iff_eq_zero, toNNReal_coe, toNNReal_le_iff_le_coe, toNNReal_of_nonpos
 -/
@@ -4367,7 +4429,13 @@ theorem NNReal.exists_lt_of_strictMono
     split_ifs with hu1
     · rw [← map_one f]; exact hf hu1
     · have hfg0 : f g != 0 :=
-        fun h0 => (Units.ne_zero g) ((map_eq_zero f).mp
+        fun h0 => (Units.ne_zero g) ((map_eq_zero f).mp h0)
+      have hg1' : 1 < g := lt_of_le_of_ne (not_lt.mp hu1) hg1.symm
+      rw [Units.val_inv_eq_inv_val]; rw [map_inv₀]; rw [inv_lt_one_iff hfg0]; rw [← map_one f]
+      exact hf hg1'
+  obtain ⟨n, hn⟩ := exists_pow_lt_of_lt_one hr hfu
+  use u ^ n
+  rwa [Units.val_pow_eq_pow_val, map_pow]
 
 中文:
 定理 非负实数.存在_lt_of_strictMono
@@ -4380,7 +4448,13 @@ theorem NNReal.exists_lt_of_strictMono
     split_ifs with hu1
     · rw [← map_one f]; exact hf hu1
     · have hfg0 : f g != 0 :=
-        fun h0 => (Units.ne_zero g) ((map_eq_zero f).mp
+        fun h0 => (Units.ne_zero g) ((map_eq_zero f).mp h0)
+      have hg1' : 1 < g := lt_of_le_of_ne (not_lt.mp hu1) hg1.symm
+      rw [Units.val_inv_eq_inv_val]; rw [map_inv₀]; rw [inv_lt_one_iff hfg0]; rw [← map_one f]
+      exact hf hg1'
+  obtain ⟨n, hn⟩ := exists_pow_lt_of_lt_one hr hfu
+  use u ^ n
+  rwa [Units.val_pow_eq_pow_val, map_pow]
 
 Depends on / 依赖: Units.ne_zero, Units.val_inv_eq_inv_val, exists_pow_lt_of_lt_one, hg1.symm, inv_lt_one_iff, lt_of_le_of_ne, map_eq_zero, map_one, ne_zero, nontrivial_iff_exists_ne, not_lt, not_lt.mp, split_ifs, val_inv_eq_inv_val
 -/

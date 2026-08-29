@@ -111,7 +111,14 @@ theorem isIntegrallyClosed_dvd
   let _ : Algebra K L := FractionRing.liftAlgebra R L
   have : minpoly K (algebraMap S L s) ∣ map (algebraMap R K) (p %ₘ minpoly R s) := by
     rw [map_modByMonic _ (minpoly.monic hs)]; rw [modByMonic_eq_sub_mul_div]
-    refine dvd_sub (minpoly.
+    refine dvd_sub (minpoly.dvd K (algebraMap S L s) ?_) ?_
+    · rw [← map_aeval_eq_aeval_map, hp, map_zero]
+      rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
+    apply dvd_mul_of_dvd_left
+    rw [isIntegrallyClosed_eq_field_fractions K L hs]
+  rw [isIntegrallyClosed_eq_field_fractions _ _ hs]; rw [map_dvd_map (algebraMap R K) (IsFractionRing.injective R K) (minpoly.monic hs)] at this
+  rw [← modByMonic_eq_zero_iff_dvd (minpoly.monic hs)]
+  exact Polynomial.eq_zero_of_dvd_of_degree_lt this (degree_modByMonic_lt p <| minpoly.monic hs)
 
 中文:
 定理 is整数egrallyClosed_dvd
@@ -122,7 +129,14 @@ theorem isIntegrallyClosed_dvd
   let _ : Algebra K L := FractionRing.liftAlgebra R L
   have : minpoly K (algebraMap S L s) ∣ map (algebraMap R K) (p %ₘ minpoly R s) := by
     rw [map_modByMonic _ (minpoly.monic hs)]; rw [modByMonic_eq_sub_mul_div]
-    refine dvd_sub (minpoly.
+    refine dvd_sub (minpoly.dvd K (algebraMap S L s) ?_) ?_
+    · rw [← map_aeval_eq_aeval_map, hp, map_zero]
+      rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
+    apply dvd_mul_of_dvd_left
+    rw [isIntegrallyClosed_eq_field_fractions K L hs]
+  rw [isIntegrallyClosed_eq_field_fractions _ _ hs]; rw [map_dvd_map (algebraMap R K) (IsFractionRing.injective R K) (minpoly.monic hs)] at this
+  rw [← modByMonic_eq_zero_iff_dvd (minpoly.monic hs)]
+  exact Polynomial.eq_zero_of_dvd_of_degree_lt this (degree_modByMonic_lt p <| minpoly.monic hs)
 
 Depends on / 依赖: Algebra, FractionRing, FractionRing.liftAlgebra, IsScalarTower, IsScalarTower.algebraMap_eq, algebraMap, algebraMap_eq, dvd_mul_of_dvd_left, dvd_sub, isIntegrallyClosed_eq_field_fractions, liftAlgebra, map_aeval_eq_aeval_map, map_modByMonic, map_zero, minpoly, minpoly.dvd, minpoly.monic, modByMonic_eq_sub_mul_div
 -/
@@ -242,7 +256,7 @@ theorem IsIntegrallyClosed.isIntegral_iff_isUnit_leadingCoeff
     rw [leadingCoeff_mul]; rw [monic int_x]; rw [one_mul]
     exact ((of_irreducible_mul hirr).resolve_left (not_isUnit R x)).map leadingCoeffHom
   mpr isUnit := by
-    simpa [smul_smul] using (isIntegral_leadingCoeff_smul _ _ hp).smul ((isUn
+    simpa [smul_smul] using (isIntegral_leadingCoeff_smul _ _ hp).smul ((isUnit.unit⁻¹ : Rˣ) : R)
 
 中文:
 定理 是整闭.is整数egral_iff_isUnit_leadingCoeff
@@ -252,7 +266,7 @@ theorem IsIntegrallyClosed.isIntegral_iff_isUnit_leadingCoeff
     rw [leadingCoeff_mul]; rw [monic int_x]; rw [one_mul]
     exact ((of_irreducible_mul hirr).resolve_left (not_isUnit R x)).map leadingCoeffHom
   mpr isUnit := by
-    simpa [smul_smul] using (isIntegral_leadingCoeff_smul _ _ hp).smul ((isUn
+    simpa [smul_smul] using (isIntegral_leadingCoeff_smul _ _ hp).smul ((isUnit.unit⁻¹ : Rˣ) : R)
 
 Depends on / 依赖: int_x, isIntegral_leadingCoeff_smul, isIntegrallyClosed_dvd, isUnit, isUnit.unit, leadingCoeffHom, leadingCoeff_mul, not_isUnit, of_irreducible_mul, one_mul, resolve_left, smul_smul
 -/
@@ -278,7 +292,8 @@ theorem _root_.IsIntegrallyClosed.minpoly.unique
   by_contra hnz
 .not_gt ?_ refine IsIntegrallyClosed.degree_le_of_ne_zero (s := s) hnz (by simp [hP])
   refine degree_sub_lt_left ?_ (ne_zero hs) ?_
-  · exact le_antisymm (min R s hmo hP) (Pmin (minpoly R s) (monic hs) (ae
+  · exact le_antisymm (min R s hmo hP) (Pmin (minpoly R s) (monic hs) (aeval R s))
+  · rw [(monic hs).leadingCoeff, hmo.leadingCoeff]
 
 中文:
 定理 _root_.是整闭.minpoly.unique
@@ -289,7 +304,8 @@ theorem _root_.IsIntegrallyClosed.minpoly.unique
   by_contra hnz
 .not_gt ?_ refine IsIntegrallyClosed.degree_le_of_ne_zero (s := s) hnz (by simp [hP])
   refine degree_sub_lt_left ?_ (ne_zero hs) ?_
-  · exact le_antisymm (min R s hmo hP) (Pmin (minpoly R s) (monic hs) (ae
+  · exact le_antisymm (min R s hmo hP) (Pmin (minpoly R s) (monic hs) (aeval R s))
+  · rw [(monic hs).leadingCoeff, hmo.leadingCoeff]
 
 Depends on / 依赖: IsIntegral, IsIntegrallyClosed, IsIntegrallyClosed.degree_le_of_ne_zero, degree_le_of_ne_zero, degree_sub_lt_left, eq_of_sub_eq_zero, hmo.leadingCoeff, le_antisymm, leadingCoeff, minpoly, ne_zero, not_gt
 -/
@@ -335,7 +351,21 @@ theorem IsIntegrallyClosed.isIntegral_iff_leadingCoeff_dvd
   · use minpoly R s
     have ⟨q, hMul⟩ := isIntegrallyClosed_dvd hInt hp
     suffices q.degree <= 0 by simp [degree_le_zero_iff.mp this ▸ hMul, minpoly.monic hInt, mul_comm]
-apply WithBot.le_of_add_le_add_left Polynomial.degree
+apply WithBot.le_of_add_le_add_left Polynomial.degree_ne_bot.mpr minpoly.ne_zero hInt
+    convert! pmin _ (minpoly.monic hInt) (minpoly.aeval ..)
+    · rw [hMul, degree_mul]
+    · rw [add_zero]
+· convert! right_ne_zero_of_mul hMul ▸ h₀
+.symm refine IsIntegrallyClosed.minpoly.unique ?_ ?_ ?_
+.symm · have := hMul ▸ leadingCoeff_mul ..
+      simp only [leadingCoeff_C, ne_eq, leadingCoeff_eq_zero, h₀, not_false_eq_true, mul_eq_left₀]
+        at this
+      exact this
+    · have := congrArg (Polynomial.aeval s) hMul
+      simp only [hp, h₀, map_mul, aeval_C, zero_eq_mul, FaithfulSMul.algebraMap_eq_zero_iff,
+        leadingCoeff_eq_zero, false_or] at this
+      exact this
+    · exact (hMul ▸ degree_C_mul <| by simp [h₀]) ▸ pmin
 
 中文:
 定理 是整闭.is整数egral_iff_leadingCoeff_dvd
@@ -345,7 +375,21 @@ apply WithBot.le_of_add_le_add_left Polynomial.degree
   · use minpoly R s
     have ⟨q, hMul⟩ := isIntegrallyClosed_dvd hInt hp
     suffices q.degree <= 0 by simp [degree_le_zero_iff.mp this ▸ hMul, minpoly.monic hInt, mul_comm]
-apply WithBot.le_of_add_le_add_left Polynomial.degree
+apply WithBot.le_of_add_le_add_left Polynomial.degree_ne_bot.mpr minpoly.ne_zero hInt
+    convert! pmin _ (minpoly.monic hInt) (minpoly.aeval ..)
+    · rw [hMul, degree_mul]
+    · rw [add_zero]
+· convert! right_ne_zero_of_mul hMul ▸ h₀
+.symm refine IsIntegrallyClosed.minpoly.unique ?_ ?_ ?_
+.symm · have := hMul ▸ leadingCoeff_mul ..
+      simp only [leadingCoeff_C, ne_eq, leadingCoeff_eq_zero, h₀, not_false_eq_true, mul_eq_left₀]
+        at this
+      exact this
+    · have := congrArg (Polynomial.aeval s) hMul
+      simp only [hp, h₀, map_mul, aeval_C, zero_eq_mul, FaithfulSMul.algebraMap_eq_zero_iff,
+        leadingCoeff_eq_zero, false_or] at this
+      exact this
+    · exact (hMul ▸ degree_C_mul <| by simp [h₀]) ▸ pmin
 
 Depends on / 依赖: IsIntegrallyClosed, IsIntegrallyClosed.minpoly.u, Polynomial, Polynomial.degree_ne_bot.mpr, WithBot, WithBot.le_of_add_le_add_left, add_zero, convert, degree, degree_le_zero_iff, degree_le_zero_iff.mp, degree_mul, degree_ne_bot, isIntegrallyClosed_dvd, le_of_add_le_add_left, minpoly, minpoly.aeval, minpoly.monic, minpoly.ne_zero, minpoly.ne_zero_iff.mp
 -/
@@ -386,7 +430,7 @@ theorem prime_of_isIntegrallyClosed
         fun a b h => or_iff_not_imp_left.mpr fun h' => ?_⟩⟩
   rw [← minpoly.isIntegrallyClosed_dvd_iff hx] at h' h ⊢
   rw [aeval_mul] at h
-  exact eq_zero_
+  exact eq_zero_of_ne_zero_of_mul_left_eq_zero h' h
 
 中文:
 定理 prime_of_is整数egrallyClosed
@@ -399,7 +443,7 @@ theorem prime_of_isIntegrallyClosed
         fun a b h => or_iff_not_imp_left.mpr fun h' => ?_⟩⟩
   rw [← minpoly.isIntegrallyClosed_dvd_iff hx] at h' h ⊢
   rw [aeval_mul] at h
-  exact eq_zero_
+  exact eq_zero_of_ne_zero_of_mul_left_eq_zero h' h
 
 Depends on / 依赖: aeval_mul, degree_eq_zero_of_isUnit, degree_pos, eq_zero_of_ne_zero_of_mul_left_eq_zero, h_contra, isIntegrallyClosed_dvd_iff, minpoly, minpoly.degree_pos, minpoly.isIntegrallyClosed_dvd_iff, minpoly.monic, ne_of_lt, ne_zero, or_iff_not_imp_left, or_iff_not_imp_left.mpr
 -/
@@ -423,7 +467,24 @@ lemma _root_.IsIntegrallyClosed.minpoly_smul
   let L := FractionRing S
   let : Algebra K L := FractionRing.liftAlgebra _ _
   apply map_injective _ (FaithfulSMul.algebraMap_injective R K)
-  rw [← minpoly.isIntegrallyClosed_eq_field_fractions K L (hs.smul r)]; rw [map_scaleRoots _ _ _ (by simpa [minpoly.ne_zero_iff])
+  rw [← minpoly.isIntegrallyClosed_eq_field_fractions K L (hs.smul r)]; rw [map_scaleRoots _ _ _ (by simpa [minpoly.ne_zero_iff]),
+    ← minpoly.isIntegrallyClosed_eq_field_fractions K L hs]
+  simp_rw [Algebra.smul_def, map_mul, ← IsScalarTower.algebraMap_apply,
+    IsScalarTower.algebraMap_apply R K L]
+  refine eq_of_monic_of_associated (minpoly.monic ?_) ?_
+    (associated_of_dvd_dvd (minpoly.dvd _ _ ?_) ?_)
+  · refine isIntegral_algebraMap.mul (hs.map (IsScalarTower.toAlgHom R S L)).tower_top
+  · simpa [monic_scaleRoots_iff] using minpoly.monic
+      (hs.map (IsScalarTower.toAlgHom R S L)).tower_top
+  · exact scaleRoots_aeval_eq_zero (minpoly.aeval _ _)
+  · rw [← Polynomial.scaleRoots_dvd_iff _ _ (r := (algebraMap R K r)⁻¹) (IsUnit.mk0 _ (by simpa)),
+      ← scaleRoots_mul, mul_inv_cancel₀ (by simpa), scaleRoots_one]
+    refine minpoly.dvd _ _ ?_
+    nth_rw 1 [← inv_mul_cancel_left₀ (b := algebraMap S L s)
+      (a := algebraMap K L (algebraMap R K r)) (by simpa), ← map_inv₀]
+    exact scaleRoots_aeval_eq_zero (minpoly.aeval _ _)
+
+noncomputable section AdjoinRoot
 
 中文:
 引理 _root_.是整闭.minpoly_smul
@@ -433,7 +494,24 @@ lemma _root_.IsIntegrallyClosed.minpoly_smul
   let L := FractionRing S
   let : Algebra K L := FractionRing.liftAlgebra _ _
   apply map_injective _ (FaithfulSMul.algebraMap_injective R K)
-  rw [← minpoly.isIntegrallyClosed_eq_field_fractions K L (hs.smul r)]; rw [map_scaleRoots _ _ _ (by simpa [minpoly.ne_zero_iff])
+  rw [← minpoly.isIntegrallyClosed_eq_field_fractions K L (hs.smul r)]; rw [map_scaleRoots _ _ _ (by simpa [minpoly.ne_zero_iff]),
+    ← minpoly.isIntegrallyClosed_eq_field_fractions K L hs]
+  simp_rw [Algebra.smul_def, map_mul, ← IsScalarTower.algebraMap_apply,
+    IsScalarTower.algebraMap_apply R K L]
+  refine eq_of_monic_of_associated (minpoly.monic ?_) ?_
+    (associated_of_dvd_dvd (minpoly.dvd _ _ ?_) ?_)
+  · refine isIntegral_algebraMap.mul (hs.map (IsScalarTower.toAlgHom R S L)).tower_top
+  · simpa [monic_scaleRoots_iff] using minpoly.monic
+      (hs.map (IsScalarTower.toAlgHom R S L)).tower_top
+  · exact scaleRoots_aeval_eq_zero (minpoly.aeval _ _)
+  · rw [← Polynomial.scaleRoots_dvd_iff _ _ (r := (algebraMap R K r)⁻¹) (IsUnit.mk0 _ (by simpa)),
+      ← scaleRoots_mul, mul_inv_cancel₀ (by simpa), scaleRoots_one]
+    refine minpoly.dvd _ _ ?_
+    nth_rw 1 [← inv_mul_cancel_left₀ (b := algebraMap S L s)
+      (a := algebraMap K L (algebraMap R K r)) (by simpa), ← map_inv₀]
+    exact scaleRoots_aeval_eq_zero (minpoly.aeval _ _)
+
+noncomputable section AdjoinRoot
 
 Depends on / 依赖: Algebra, Algebra.smul_def, FaithfulSMul, FaithfulSMul.algebraMap_injective, FractionRing, FractionRing.liftAlgebra, IsScalarTower, IsScalarTower.algebraMap_apply, algebraMap_apply, algebraMap_injective, eq_of_monic_of_associated, hs.smul, isIntegrallyClosed_eq_field_fractions, liftAlgebra, map_injective, map_mul, map_scaleRoots, minpoly, minpoly.isIntegrallyClosed_eq_field_fractions, minpoly.mo
 -/

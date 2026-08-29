@@ -400,7 +400,7 @@ theorem mulIndicator_mul_compl_eq_piecewise
   · rw [piecewise_eq_of_mem _ _ _ h, Pi.mul_apply, Set.mulIndicator_of_mem h,
       Set.mulIndicator_of_notMem (Set.notMem_compl_iff.2 h), mul_one]
   · rw [piecewise_eq_of_notMem _ _ _ h, Pi.mul_apply, Set.mulIndicator_of_notMem h,
-      Set.mulIndicator_of_mem (Set.
+      Set.mulIndicator_of_mem (Set.mem_compl h), one_mul]
 
 中文:
 定理 mulIndicator_mul_compl_eq_piecewise
@@ -411,7 +411,7 @@ theorem mulIndicator_mul_compl_eq_piecewise
   · rw [piecewise_eq_of_mem _ _ _ h, Pi.mul_apply, Set.mulIndicator_of_mem h,
       Set.mulIndicator_of_notMem (Set.notMem_compl_iff.2 h), mul_one]
   · rw [piecewise_eq_of_notMem _ _ _ h, Pi.mul_apply, Set.mulIndicator_of_notMem h,
-      Set.mulIndicator_of_mem (Set.
+      Set.mulIndicator_of_mem (Set.mem_compl h), one_mul]
 
 Depends on / 依赖: Pi.mul_apply, Set.mem_compl, Set.mulIndicator_of_mem, Set.mulIndicator_of_notMem, Set.notMem_compl_iff, mem_compl, mulIndicator_of_mem, mulIndicator_of_notMem, mul_apply, mul_one, notMem_compl_iff, one_mul, piecewise_eq_of_mem, piecewise_eq_of_notMem
 -/

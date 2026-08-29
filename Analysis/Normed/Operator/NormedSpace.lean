@@ -256,7 +256,9 @@ theorem bound_of_ball_bound
     ‖f x‖ <= c := h _ (mem_ball_zero_iff.mpr hxo)
     _ <= c * (‖x‖ * ‖k‖ / r) := le_mul_of_one_le_right ?_ ?_
     _ = _ := by ring
-  · exac
+  · exact le_trans (norm_nonneg _) (h 0 (by simp [r_pos]))
+  · rw [div_le_iff₀ (zero_lt_one.trans hk)] at hko
+    exact (one_le_div r_pos).mpr hko
 
 中文:
 定理 bound_of_ball_bound
@@ -270,7 +272,9 @@ theorem bound_of_ball_bound
     ‖f x‖ <= c := h _ (mem_ball_zero_iff.mpr hxo)
     _ <= c * (‖x‖ * ‖k‖ / r) := le_mul_of_one_le_right ?_ ?_
     _ = _ := by ring
-  · exac
+  · exact le_trans (norm_nonneg _) (h 0 (by simp [r_pos]))
+  · rw [div_le_iff₀ (zero_lt_one.trans hk)] at hko
+    exact (one_le_div r_pos).mpr hko
 
 Depends on / 依赖: NontriviallyNormedField, NontriviallyNormedField.non_trivial, bound_of_shell, le_mul_of_one_le_right, le_trans, mem_ball_zero_iff, mem_ball_zero_iff.mpr, non_trivial, norm_nonneg, one_le_div, r_pos, zero_lt_one, zero_lt_one.trans
 -/
@@ -299,7 +303,21 @@ theorem antilipschitz_of_comap_nhds_le
   simp only [Set.subset_def, Set.mem_preimage, mem_ball_zero_iff] at hε
   lift ε to Real>=0 using ε0.le
   rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
-  refine ⟨ε⁻¹ * ‖c‖₊, AddMonoidHomClass.
+  refine ⟨ε⁻¹ * ‖c‖₊, AddMonoidHomClass.antilipschitz_of_bound f fun x => ?_⟩
+  by_cases hx : f x = 0
+  · rw [← hx] at hf
+    obtain rfl : x = 0 := Specializes.eq (specializes_iff_pure.2 <|
+      ((Filter.tendsto_pure_pure _ _).mono_right (pure_le_nhds _)).le_comap.trans hf)
+    exact norm_zero.trans_le (mul_nonneg (NNReal.coe_nonneg _) (norm_nonneg _))
+  have hc₀ : c != 0 := norm_pos_iff.1 (one_pos.trans hc)
+  rw [← h.1] at hc
+  rcases rescale_to_shell_zpow hc ε0 hx with ⟨n, -, hlt, -, hle⟩
+  simp only [← map_zpow₀, h.1, ← map_smulₛₗ] at hlt hle
+  calc
+    ‖x‖ = ‖c ^ n‖⁻¹ * ‖c ^ n • x‖ := by
+      rwa [← norm_inv, ← norm_smul, inv_smul_smul₀ (zpow_ne_zero _ _)]
+    _ <= ‖c ^ n‖⁻¹ * 1 := by gcongr; exact (hε _ hlt).le
+    _ <= ε⁻¹ * ‖c‖ * ‖f x‖ := by rwa [mul_one]
 
 中文:
 定理 antilipschitz_of_comap_nhds_le
@@ -309,7 +327,21 @@ theorem antilipschitz_of_comap_nhds_le
   simp only [Set.subset_def, Set.mem_preimage, mem_ball_zero_iff] at hε
   lift ε to Real>=0 using ε0.le
   rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
-  refine ⟨ε⁻¹ * ‖c‖₊, AddMonoidHomClass.
+  refine ⟨ε⁻¹ * ‖c‖₊, AddMonoidHomClass.antilipschitz_of_bound f fun x => ?_⟩
+  by_cases hx : f x = 0
+  · rw [← hx] at hf
+    obtain rfl : x = 0 := Specializes.eq (specializes_iff_pure.2 <|
+      ((Filter.tendsto_pure_pure _ _).mono_right (pure_le_nhds _)).le_comap.trans hf)
+    exact norm_zero.trans_le (mul_nonneg (NNReal.coe_nonneg _) (norm_nonneg _))
+  have hc₀ : c != 0 := norm_pos_iff.1 (one_pos.trans hc)
+  rw [← h.1] at hc
+  rcases rescale_to_shell_zpow hc ε0 hx with ⟨n, -, hlt, -, hle⟩
+  simp only [← map_zpow₀, h.1, ← map_smulₛₗ] at hlt hle
+  calc
+    ‖x‖ = ‖c ^ n‖⁻¹ * ‖c ^ n • x‖ := by
+      rwa [← norm_inv, ← norm_smul, inv_smul_smul₀ (zpow_ne_zero _ _)]
+    _ <= ‖c ^ n‖⁻¹ * 1 := by gcongr; exact (hε _ hlt).le
+    _ <= ε⁻¹ * ‖c‖ * ‖f x‖ := by rwa [mul_one]
 
 Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.antilipschitz_of_bound, Filter, Filter.tendsto_pure_pure, NormedField, NormedField.exists_one_lt_norm, Set.mem_preimage, Set.subset_def, Specializes, Specializes.eq, antilipschitz_of_bound, exists_one_lt_norm, le_basis_iff, le_coma, mem_ball_zero_iff, mem_preimage, mono_right, nhds_basis_ball, nhds_basis_ball.comap, one_pos
 -/
@@ -930,7 +962,38 @@ theorem NormedSpace.equicontinuous_TFAE
   tfae_have 1 -> 3 := uniformEquicontinuous_of_equicontinuousAt_zero f
   tfae_have 3 -> 2 := UniformEquicontinuous.equicontinuous
   tfae_have 2 -> 1 := fun H => H 0
-  -- `4 ↔ 5 ↔ 6 ↔ 7 ↔ 8 ↔ 9` is morally trivial, we j
+  -- `4 ↔ 5 ↔ 6 ↔ 7 ↔ 8 ↔ 9` is morally trivial, we just have to use a lot of rewriting
+  -- and `congr` lemmas
+  tfae_have 4 ↔ 5 := by
+    rw [exists_ge_and_iff_exists]
+exact fun C₁ C₂ hC => forall₂_imp fun i x => le_trans' by gcongr
+  tfae_have 5 ↔ 7 := by
+    refine exists_congr (fun C => and_congr_right fun hC => forall_congr' fun i => ?_)
+    rw [ContinuousLinearMap.opNorm_le_iff hC]
+  tfae_have 7 ↔ 8 := by
+    simp_rw [bddAbove_iff_exists_ge (0 : Real), Set.forall_mem_range]
+  tfae_have 6 ↔ 8 := by
+    simp_rw [bddAbove_def, Set.forall_mem_range]
+  tfae_have 8 ↔ 9 := by
+    rw [ENNReal.iSup_coe_lt_top]; rw [← NNReal.bddAbove_coe]; rw [← Set.range_comp]
+    rfl
+  -- `3 ↔ 4` is the interesting part of the result. It is essentially a combination of
+  -- `WithSeminorms.uniformEquicontinuous_iff_exists_continuous_seminorm` which turns
+  -- equicontinuity into existence of some continuous seminorm and
+  -- `Seminorm.bound_of_continuous_normedSpace` which characterize such seminorms.
+  tfae_have 3 ↔ 4 := by
+    refine ((norm_withSeminorms 𝕜₂ F).uniformEquicontinuous_iff_exists_continuous_seminorm _).trans
+      ?_
+    rw [forall_const]
+    constructor
+    · intro ⟨p, hp, hpf⟩
+      rcases p.bound_of_continuous_normedSpace hp with ⟨C, -, hC⟩
+      exact ⟨C, fun i x => (hpf i x).trans (hC x)⟩
+    · intro ⟨C, hC⟩
+      refine ⟨C.toNNReal • normSeminorm 𝕜 E,
+        ((norm_withSeminorms 𝕜 E).continuous_seminorm 0).const_smul C.toNNReal, fun i x => ?_⟩
+      exact (hC i x).trans (mul_le_mul_of_nonneg_right (C.le_coe_toNNReal) (norm_nonneg x))
+  tfae_finish
 
 中文:
 定理 赋范空间.equicontinuous_TFAE
@@ -940,7 +1003,38 @@ theorem NormedSpace.equicontinuous_TFAE
   tfae_have 1 -> 3 := uniformEquicontinuous_of_equicontinuousAt_zero f
   tfae_have 3 -> 2 := UniformEquicontinuous.equicontinuous
   tfae_have 2 -> 1 := fun H => H 0
-  -- `4 ↔ 5 ↔ 6 ↔ 7 ↔ 8 ↔ 9` is morally trivial, we j
+  -- `4 ↔ 5 ↔ 6 ↔ 7 ↔ 8 ↔ 9` is morally trivial, we just have to use a lot of rewriting
+  -- and `congr` lemmas
+  tfae_have 4 ↔ 5 := by
+    rw [exists_ge_and_iff_exists]
+exact fun C₁ C₂ hC => forall₂_imp fun i x => le_trans' by gcongr
+  tfae_have 5 ↔ 7 := by
+    refine exists_congr (fun C => and_congr_right fun hC => forall_congr' fun i => ?_)
+    rw [ContinuousLinearMap.opNorm_le_iff hC]
+  tfae_have 7 ↔ 8 := by
+    simp_rw [bddAbove_iff_exists_ge (0 : Real), Set.forall_mem_range]
+  tfae_have 6 ↔ 8 := by
+    simp_rw [bddAbove_def, Set.forall_mem_range]
+  tfae_have 8 ↔ 9 := by
+    rw [ENNReal.iSup_coe_lt_top]; rw [← NNReal.bddAbove_coe]; rw [← Set.range_comp]
+    rfl
+  -- `3 ↔ 4` is the interesting part of the result. It is essentially a combination of
+  -- `WithSeminorms.uniformEquicontinuous_iff_exists_continuous_seminorm` which turns
+  -- equicontinuity into existence of some continuous seminorm and
+  -- `Seminorm.bound_of_continuous_normedSpace` which characterize such seminorms.
+  tfae_have 3 ↔ 4 := by
+    refine ((norm_withSeminorms 𝕜₂ F).uniformEquicontinuous_iff_exists_continuous_seminorm _).trans
+      ?_
+    rw [forall_const]
+    constructor
+    · intro ⟨p, hp, hpf⟩
+      rcases p.bound_of_continuous_normedSpace hp with ⟨C, -, hC⟩
+      exact ⟨C, fun i x => (hpf i x).trans (hC x)⟩
+    · intro ⟨C, hC⟩
+      refine ⟨C.toNNReal • normSeminorm 𝕜 E,
+        ((norm_withSeminorms 𝕜 E).continuous_seminorm 0).const_smul C.toNNReal, fun i x => ?_⟩
+      exact (hC i x).trans (mul_le_mul_of_nonneg_right (C.le_coe_toNNReal) (norm_nonneg x))
+  tfae_finish
 -/
 protected theorem NormedSpace.equicontinuous_TFAE : List.TFAE
     [ EquicontinuousAt ((↑) ∘ f) 0,

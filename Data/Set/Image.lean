@@ -469,7 +469,7 @@ lemma exists_eq_const_of_preimage_singleton
   · exact ⟨b, funext fun x => eq_univ_iff_forall.1 hb x⟩
   · have : forall x b, f x != b := fun x b =>
       eq_empty_iff_forall_notMem.1 ((hf b).resolve_right fun h => hf' ⟨b, h⟩) x
-    exact ⟨Classical.arbitrary β, funext fun x => absu
+    exact ⟨Classical.arbitrary β, funext fun x => absurd rfl (this x _)⟩
 
 中文:
 引理 存在_eq_const_of_preimage_singleton
@@ -479,7 +479,7 @@ lemma exists_eq_const_of_preimage_singleton
   · exact ⟨b, funext fun x => eq_univ_iff_forall.1 hb x⟩
   · have : forall x b, f x != b := fun x b =>
       eq_empty_iff_forall_notMem.1 ((hf b).resolve_right fun h => hf' ⟨b, h⟩) x
-    exact ⟨Classical.arbitrary β, funext fun x => absu
+    exact ⟨Classical.arbitrary β, funext fun x => absurd rfl (this x _)⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, absurd, arbitrary, eq_empty_iff_forall_notMem, eq_univ_iff_forall, resolve_right
 -/
@@ -1746,7 +1746,7 @@ theorem image_sdiff
     (subset_image_sdiff f s t)
 
 @[deprecated image_sdiff (since := "2026-06-03")] alias subset_image_diff := subset_image_sdiff
-@[deprecated (since := "2026-06-03")] alias image_diff 
+@[deprecated (since := "2026-06-03")] alias image_diff := image_sdiff
 
 中文:
 定理 image_sdiff
@@ -1757,7 +1757,7 @@ theorem image_sdiff
     (subset_image_sdiff f s t)
 
 @[deprecated image_sdiff (since := "2026-06-03")] alias subset_image_diff := subset_image_sdiff
-@[deprecated (since := "2026-06-03")] alias image_diff 
+@[deprecated (since := "2026-06-03")] alias image_diff := image_sdiff
 
 Depends on / 依赖: Subset, Subset.antisymm, Subset.trans, antisymm, image_compl_subset, image_sdiff_subset, inter_subset_inter_right, subset_image_sdiff
 -/

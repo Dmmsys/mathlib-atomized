@@ -206,7 +206,13 @@ theorem orthonormal_iff_ite
     · intro i
       have h' : ‖v i‖ ^ 2 = 1 ^ 2 := by
         rw [@norm_sq_eq_re_inner 𝕜]; rw [h i i]; simp
-      have h₁ : 0 <
+      have h₁ : 0 <= ‖v i‖ := norm_nonneg _
+      have h₂ : (0 : Real) <= 1 := zero_le_one
+      rwa [sq_eq_sq₀ h₁ h₂] at h'
+    · intro i j hij
+      simpa [hij] using h i j
+
+@[simp]
 
 中文:
 定理 orthonormal_iff_ite
@@ -222,7 +228,13 @@ theorem orthonormal_iff_ite
     · intro i
       have h' : ‖v i‖ ^ 2 = 1 ^ 2 := by
         rw [@norm_sq_eq_re_inner 𝕜]; rw [h i i]; simp
-      have h₁ : 0 <
+      have h₁ : 0 <= ‖v i‖ := norm_nonneg _
+      have h₂ : (0 : Real) <= 1 := zero_le_one
+      rwa [sq_eq_sq₀ h₁ h₂] at h'
+    · intro i j hij
+      simpa [hij] using h i j
+
+@[simp]
 
 Depends on / 依赖: hv.inner_eq_zero, hv.norm_eq_one, inner_eq_zero, inner_self_eq_norm_sq_to_K, norm_eq_one, norm_nonneg, norm_sq_eq_re_inner, split_ifs, zero_le_one
 -/
@@ -796,7 +808,7 @@ theorem exists_maximal_orthonormal
     exact ⟨b, hb.1, hb.2.1, fun u hus hu => hb.2.eq_of_ge hu hus⟩
   · refine fun c hc cc _c0 => ⟨⋃₀ c, ?_, ?_⟩
     · exact orthonormal_sUnion_of_directed cc.directedOn fun x xc => hc xc
-
+    · exact fun _ => Set.subset_sUnion_of_mem
 
 中文:
 定理 存在_maximal_orthonormal
@@ -807,7 +819,7 @@ theorem exists_maximal_orthonormal
     exact ⟨b, hb.1, hb.2.1, fun u hus hu => hb.2.eq_of_ge hu hus⟩
   · refine fun c hc cc _c0 => ⟨⋃₀ c, ?_, ?_⟩
     · exact orthonormal_sUnion_of_directed cc.directedOn fun x xc => hc xc
-
+    · exact fun _ => Set.subset_sUnion_of_mem
 
 Depends on / 依赖: Orthonormal, Set.subset_sUnion_of_mem, Subtype, Subtype.val, cc.directedOn, directedOn, eq_of_ge, orthonormal_sUnion_of_directed, subset_sUnion_of_mem, zorn_subset_nonempty
 -/
@@ -1064,14 +1076,18 @@ definition LinearEquiv.isometryOfOrthonormal
   signature: (f : E ≃ₗ[𝕜] E') {v : Basis ι 𝕜 E} (hv : Orthonormal 𝕜 v)
   body: f.isometryOfInner fun x y => by
     rw [← LinearEquiv.coe_coe] at hf
-    rw [← v.linearCombination_repr x]; rw [← v.linearCombination_repr y]; rw [← LinearEquiv.coe_coe f]; rw [Finsupp.apply_linearCombination]; rw [Finsupp.apply_linearCombination]; rw [hv.inner_finsupp_eq_sum_left]; rw [hf.inner_fin
+    rw [← v.linearCombination_repr x]; rw [← v.linearCombination_repr y]; rw [← LinearEquiv.coe_coe f]; rw [Finsupp.apply_linearCombination]; rw [Finsupp.apply_linearCombination]; rw [hv.inner_finsupp_eq_sum_left]; rw [hf.inner_finsupp_eq_sum_left]
+
+@[simp]
 
 中文:
 定义 线性等价.isometryOfOrthonormal
   签名: (f : E ≃ₗ[𝕜] E') {v : 基 ι 𝕜 E} (hv : Orthonormal 𝕜 v)
   定义体: f.isometryOfInner fun x y => by
     rw [← LinearEquiv.coe_coe] at hf
-    rw [← v.linearCombination_repr x]; rw [← v.linearCombination_repr y]; rw [← LinearEquiv.coe_coe f]; rw [Finsupp.apply_linearCombination]; rw [Finsupp.apply_linearCombination]; rw [hv.inner_finsupp_eq_sum_left]; rw [hf.inner_fin
+    rw [← v.linearCombination_repr x]; rw [← v.linearCombination_repr y]; rw [← LinearEquiv.coe_coe f]; rw [Finsupp.apply_linearCombination]; rw [Finsupp.apply_linearCombination]; rw [hv.inner_finsupp_eq_sum_left]; rw [hf.inner_finsupp_eq_sum_left]
+
+@[simp]
 
 Depends on / 依赖: Finsupp, Finsupp.apply_linearCombination, LinearEquiv, LinearEquiv.coe_coe, apply_linearCombination, coe_coe, f.isometryOfInner, hf.inner_finsupp_eq_sum_left, hv.inner_finsupp_eq_sum_left, inner_finsupp_eq_sum_left, isometryOfInner, linearCombination_repr, v.linearCombination_repr
 -/
@@ -1343,7 +1359,14 @@ theorem Orthonormal.sum_inner_products_le
     intro z
     simp only [mul_conj]
     norm_cast
-  suffices hbf : ‖x - ∑ i in s, ⟪v i
+  suffices hbf : ‖x - ∑ i in s, ⟪v i, x⟫ • v i‖ ^ 2 = ‖x‖ ^ 2 - ∑ i in s, ‖⟪v i, x⟫‖ ^ 2 by
+    rw [← sub_nonneg]; rw [← hbf]
+    simp only [norm_nonneg, pow_nonneg]
+  rw [@norm_sub_sq 𝕜]; rw [sub_add]
+  simp only [@InnerProductSpace.norm_sq_eq_re_inner 𝕜 E, inner_sum, sum_inner]
+  simp only [inner_smul_right, two_mul, inner_smul_left, inner_conj_symm, ← mul_assoc, h₂,
+    add_sub_cancel_right, sub_right_inj]
+  simp only [map_sum, ← inner_conj_symm x, ← h₃]
 
 中文:
 定理 Orthonormal.sum_inner_products_le
@@ -1356,7 +1379,14 @@ theorem Orthonormal.sum_inner_products_le
     intro z
     simp only [mul_conj]
     norm_cast
-  suffices hbf : ‖x - ∑ i in s, ⟪v i
+  suffices hbf : ‖x - ∑ i in s, ⟪v i, x⟫ • v i‖ ^ 2 = ‖x‖ ^ 2 - ∑ i in s, ‖⟪v i, x⟫‖ ^ 2 by
+    rw [← sub_nonneg]; rw [← hbf]
+    simp only [norm_nonneg, pow_nonneg]
+  rw [@norm_sub_sq 𝕜]; rw [sub_add]
+  simp only [@InnerProductSpace.norm_sq_eq_re_inner 𝕜 E, inner_sum, sum_inner]
+  simp only [inner_smul_right, two_mul, inner_smul_left, inner_conj_symm, ← mul_assoc, h₂,
+    add_sub_cancel_right, sub_right_inj]
+  simp only [map_sum, ← inner_conj_symm x, ← h₃]
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.norm_sq_eq_re_inner, hv.inner_left_right_finset, inner_left_right_finset, inner_sum, mul_conj, norm_nonneg, norm_sq_eq_re_inner, norm_sub_sq, pow_nonneg, sub_add, sub_nonneg, sum_
 -/

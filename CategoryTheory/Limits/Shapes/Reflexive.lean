@@ -782,7 +782,7 @@ definition inclusionWalkingReflexivePair
     | .right => WalkingReflexivePair.Hom.right
     | .id _ => WalkingReflexivePair.Hom.id _
   map_comp := by
-    intro _ _ _
+    intro _ _ _ f g; cases f <;> cases g <;> rfl
 
 中文:
 定义 inclusionWalkingReflexivePair
@@ -795,7 +795,7 @@ definition inclusionWalkingReflexivePair
     | .right => WalkingReflexivePair.Hom.right
     | .id _ => WalkingReflexivePair.Hom.id _
   map_comp := by
-    intro _ _ _
+    intro _ _ _ f g; cases f <;> cases g <;> rfl
 -/
 def inclusionWalkingReflexivePair : WalkingParallelPair ⥤ WalkingReflexivePair where
   obj := fun x => match x with
@@ -882,7 +882,8 @@ definition reflexivePair
     | .leftCompReflexion => f ≫ s
   map_comp := by
     rintro _ _ _ ⟨⟩ g <;> cases g <;>
-      simp only [Category.id
+      simp only [Category.id_comp, Category.comp_id, Category.assoc, sl, sr,
+        reassoc_of% sl, reassoc_of% sr] <;> rfl
 
 中文:
 定义 reflexivePair
@@ -900,7 +901,8 @@ definition reflexivePair
     | .leftCompReflexion => f ≫ s
   map_comp := by
     rintro _ _ _ ⟨⟩ g <;> cases g <;>
-      simp only [Category.id
+      simp only [Category.id_comp, Category.comp_id, Category.assoc, sl, sr,
+        reassoc_of% sl, reassoc_of% sr] <;> rfl
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, WalkingReflexivePair, cat_disch, comp_id, id_comp, leftCompReflexion, map_comp, reassoc_of, reflexion, rightCompReflexion
 -/
@@ -1198,7 +1200,11 @@ definition mkNatIso
         (by rw [← cancel_epi e₁.hom, e₁.hom_inv_id_assoc, ← reassoc_of% h₁, e₀.hom_inv_id,
             Category.comp_id])
         (by rw [← cancel_epi e₁.hom, e₁.hom_inv_id_assoc, ← reassoc_of% h₂, e₀.hom_inv_id,
-            Category.comp_id
+            Category.comp_id])
+        (by rw [← cancel_epi e₀.hom, e₀.hom_inv_id_assoc, ← reassoc_of% h₃, e₁.hom_inv_id,
+            Category.comp_id])
+  hom_inv_id := by ext x; cases x <;> simp
+  inv_hom_id := by ext x; cases x <;> simp
 
 中文:
 定义 mk自然数Iso
@@ -1208,7 +1214,11 @@ definition mkNatIso
         (by rw [← cancel_epi e₁.hom, e₁.hom_inv_id_assoc, ← reassoc_of% h₁, e₀.hom_inv_id,
             Category.comp_id])
         (by rw [← cancel_epi e₁.hom, e₁.hom_inv_id_assoc, ← reassoc_of% h₂, e₀.hom_inv_id,
-            Category.comp_id
+            Category.comp_id])
+        (by rw [← cancel_epi e₀.hom, e₀.hom_inv_id_assoc, ← reassoc_of% h₃, e₁.hom_inv_id,
+            Category.comp_id])
+  hom_inv_id := by ext x; cases x <;> simp
+  inv_hom_id := by ext x; cases x <;> simp
 
 Depends on / 依赖: Category, Category.comp_id, F.map, G.map, cancel_epi, cat_disch, comp_id, hom_inv_id, hom_inv_id_assoc, mkNatTrans, reassoc_of, reflexion
 -/

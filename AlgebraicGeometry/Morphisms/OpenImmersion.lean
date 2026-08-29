@@ -44,7 +44,25 @@ lemma isOpenImmersion_SpecMap_iff_of_surjective
       ⟨PrimeSpectrum.isClosed_range_comap_of_surjective _ _ hf,
         (Spec.map f).isOpenEmbedding.isOpen_range⟩
     refine ⟨e, he, ?_⟩
-    let φ : R ⟶ _ := (CommRingCat.ofHom (Ideal.Quotient.mk (.span 
+    let φ : R ⟶ _ := (CommRingCat.ofHom (Ideal.Quotient.mk (.span {e})))
+    have : IsOpenImmersion (Spec.map φ) :=
+      have : IsLocalization.Away (1 - e) (↑R ⧸ Ideal.span {e}) :=
+        IsLocalization.away_of_isIdempotentElem he.one_sub (by simp) Ideal.Quotient.mk_surjective
+      IsOpenImmersion.of_isLocalization (1 - e)
+    have H : Set.range (Spec.map φ) = Set.range (Spec.map f) :=
+      ((range_comap_of_surjective _ _
+        Ideal.Quotient.mk_surjective).trans (by simp)).trans he'.symm
+    let i : S ≅ .of _ := (Scheme.Spec.preimageIso
+      (IsOpenImmersion.isoOfRangeEq (Spec.map φ) (Spec.map f) H)).unop
+    have hi : Function.Injective i.inv.hom := (ConcreteCategory.bijective_of_isIso i.inv).1
+    have : f = φ ≫ i.inv := by apply Spec.map_injective; simp [i, ← Scheme.Spec_map]
+    rw [this]; rw [CommRingCat.hom_comp]; rw [RingHom.ker_eq_comap_bot]; rw [← Ideal.comap_comap]; rw [← RingHom.ker_eq_comap_bot]; rw [(RingHom.injective_iff_ker_eq_bot i.inv.hom).mp hi]; rw [← RingHom.ker_eq_comap_bot]
+    simp [φ]
+  · rintro ⟨e, he, he'⟩
+    let := f.hom.toAlgebra
+    have : IsLocalization.Away (1 - e) S :=
+      IsLocalization.away_of_isIdempotentElem he.one_sub (by simpa using! he') hf
+    exact IsOpenImmersion.of_isLocalization (1 - e)
 
 中文:
 引理 isOpenImmersion_SpecMap_iff_of_surjective
@@ -56,7 +74,25 @@ lemma isOpenImmersion_SpecMap_iff_of_surjective
       ⟨PrimeSpectrum.isClosed_range_comap_of_surjective _ _ hf,
         (Spec.map f).isOpenEmbedding.isOpen_range⟩
     refine ⟨e, he, ?_⟩
-    let φ : R ⟶ _ := (CommRingCat.ofHom (Ideal.Quotient.mk (.span 
+    let φ : R ⟶ _ := (CommRingCat.ofHom (Ideal.Quotient.mk (.span {e})))
+    have : IsOpenImmersion (Spec.map φ) :=
+      have : IsLocalization.Away (1 - e) (↑R ⧸ Ideal.span {e}) :=
+        IsLocalization.away_of_isIdempotentElem he.one_sub (by simp) Ideal.Quotient.mk_surjective
+      IsOpenImmersion.of_isLocalization (1 - e)
+    have H : Set.range (Spec.map φ) = Set.range (Spec.map f) :=
+      ((range_comap_of_surjective _ _
+        Ideal.Quotient.mk_surjective).trans (by simp)).trans he'.symm
+    let i : S ≅ .of _ := (Scheme.Spec.preimageIso
+      (IsOpenImmersion.isoOfRangeEq (Spec.map φ) (Spec.map f) H)).unop
+    have hi : Function.Injective i.inv.hom := (ConcreteCategory.bijective_of_isIso i.inv).1
+    have : f = φ ≫ i.inv := by apply Spec.map_injective; simp [i, ← Scheme.Spec_map]
+    rw [this]; rw [CommRingCat.hom_comp]; rw [RingHom.ker_eq_comap_bot]; rw [← Ideal.comap_comap]; rw [← RingHom.ker_eq_comap_bot]; rw [(RingHom.injective_iff_ker_eq_bot i.inv.hom).mp hi]; rw [← RingHom.ker_eq_comap_bot]
+    simp [φ]
+  · rintro ⟨e, he, he'⟩
+    let := f.hom.toAlgebra
+    have : IsLocalization.Away (1 - e) S :=
+      IsLocalization.away_of_isIdempotentElem he.one_sub (by simpa using! he') hf
+    exact IsOpenImmersion.of_isLocalization (1 - e)
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.span, IsLocalization, IsLocalization.Away, IsLocalization.away_of_isIdempotentElem, IsOpenImmersion, IsOpenImmersion.of_isLocalization, PrimeSpectrum, PrimeSpectrum.isClopen_iff_zeroLocus.mp, PrimeSpectrum.isClosed_range_comap_of_surjective, Quotient, Spec.map, away_of_isIdempotentElem, he.one_sub, isClopen_iff_zeroLocus, isClosed_range_comap_of_surjective, isOpenEmbedding
 -/
@@ -110,7 +146,9 @@ theorem IsOpenImmersion.of_openCover_source
     ext x
     exact ⟨fun ⟨x, _, _⟩ => by have := 𝒰.exists_eq x; simp; grind, by simp; grind⟩
   · intro x
-    o
+    obtain ⟨i, x, rfl⟩ := 𝒰.exists_eq x
+    rw [← (IsIso.comp_inv_eq _).mpr (Scheme.Hom.stalkMap_comp (𝒰.f i) f x)]
+    infer_instance
 
 中文:
 定理 是开浸入.of_openCover_source
@@ -123,7 +161,9 @@ theorem IsOpenImmersion.of_openCover_source
     ext x
     exact ⟨fun ⟨x, _, _⟩ => by have := 𝒰.exists_eq x; simp; grind, by simp; grind⟩
   · intro x
-    o
+    obtain ⟨i, x, rfl⟩ := 𝒰.exists_eq x
+    rw [← (IsIso.comp_inv_eq _).mpr (Scheme.Hom.stalkMap_comp (𝒰.f i) f x)]
+    infer_instance
 
 Depends on / 依赖: IsIso.comp_inv_eq, IsOpenImmersion, IsOpenImmersion.iff_isIso_stalkMap.mpr, Scheme, Scheme.Hom.stalkMap_comp, comp_inv_eq, continuous, convert, exists_eq, f.continuous, iff_isIso_stalkMap, infer_instance, of_continuous_injective_isOpenMap, stalkMap_comp
 -/

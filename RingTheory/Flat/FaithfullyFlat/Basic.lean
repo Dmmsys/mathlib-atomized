@@ -165,7 +165,20 @@ instance rTensor_nontrivial
   by_cases I_ne_top : I = ⊤
   · rw [Ideal.eq_top_iff_one, Submodule.mem_annihilator_span_singleton, one_smul] at I_ne_top
     contradiction
-let inc : R ⧸ I ->ₗ[R] N := Submodule.liftQ
+let inc : R ⧸ I ->ₗ[R] N := Submodule.liftQ _ ((LinearMap.lsmul R N).flip n) fun r hr => by
+    simpa only [LinearMap.mem_ker, LinearMap.flip_apply, LinearMap.lsmul_apply,
+      Submodule.mem_annihilator_span_singleton, I] using hr
+have injective_inc : Function.Injective inc := LinearMap.ker_eq_bot.1 eq_bot_iff.2 by
+    intro r hr
+    induction r using Quotient.inductionOn' with | h r =>
+    simpa only [Submodule.Quotient.mk''_eq_mk, Submodule.mem_bot, Submodule.Quotient.mk_eq_zero,
+      Submodule.mem_annihilator_span_singleton, LinearMap.mem_ker, Submodule.liftQ_apply,
+      LinearMap.flip_apply, LinearMap.lsmul_apply, I, inc] using hr
+.2 I I_ne_top .1 fl have ne_top := iff_flat_and_proper_ideal R M
+.resolve_left fun rid => ne_top ?_ refine subsingleton_or_nontrivial _
+  rw [← Submodule.Quotient.subsingleton_iff]
+  exact (fl.toFlat.rTensor_preserves_injective_linearMap inc injective_inc).comp
+.subsingleton (quotTensorEquivQuotSMul M I).symm.injective
 
 中文:
 实例 rTensor_nontrivial
@@ -175,7 +188,20 @@ let inc : R ⧸ I ->ₗ[R] N := Submodule.liftQ
   by_cases I_ne_top : I = ⊤
   · rw [Ideal.eq_top_iff_one, Submodule.mem_annihilator_span_singleton, one_smul] at I_ne_top
     contradiction
-let inc : R ⧸ I ->ₗ[R] N := Submodule.liftQ
+let inc : R ⧸ I ->ₗ[R] N := Submodule.liftQ _ ((LinearMap.lsmul R N).flip n) fun r hr => by
+    simpa only [LinearMap.mem_ker, LinearMap.flip_apply, LinearMap.lsmul_apply,
+      Submodule.mem_annihilator_span_singleton, I] using hr
+have injective_inc : Function.Injective inc := LinearMap.ker_eq_bot.1 eq_bot_iff.2 by
+    intro r hr
+    induction r using Quotient.inductionOn' with | h r =>
+    simpa only [Submodule.Quotient.mk''_eq_mk, Submodule.mem_bot, Submodule.Quotient.mk_eq_zero,
+      Submodule.mem_annihilator_span_singleton, LinearMap.mem_ker, Submodule.liftQ_apply,
+      LinearMap.flip_apply, LinearMap.lsmul_apply, I, inc] using hr
+.2 I I_ne_top .1 fl have ne_top := iff_flat_and_proper_ideal R M
+.resolve_left fun rid => ne_top ?_ refine subsingleton_or_nontrivial _
+  rw [← Submodule.Quotient.subsingleton_iff]
+  exact (fl.toFlat.rTensor_preserves_injective_linearMap inc injective_inc).comp
+.subsingleton (quotTensorEquivQuotSMul M I).symm.injective
 
 Depends on / 依赖: Function, Function.I, I_ne_top, Ideal.eq_top_iff_one, LinearMap, LinearMap.flip_apply, LinearMap.lsmul, LinearMap.lsmul_apply, LinearMap.mem_ker, Submodule, Submodule.liftQ, Submodule.mem_annihilator_span_singleton, Submodule.span, annihilator, eq_top_iff_one, flip_apply, injective_inc, lsmul_apply, mem_annihilator_span_singleton, mem_ker
 -/
@@ -282,7 +308,10 @@ lemma iff_flat_and_rTensor_faithful
   specialize faithful (ULift (R ⧸ m)) inferInstance
   have : Nontrivial ((R ⧸ m) otimes[R] M) :=
     (congr (ULift.moduleEquiv : ULift (R ⧸ m) ≃ₗ[R] R ⧸ m)
-      (LinearEquiv.refl R M)).sym
+      (LinearEquiv.refl R M)).symm.toEquiv.nontrivial
+  have := (quotTensorEquivQuotSMul M m).toEquiv.symm.nontrivial
+  refine not_subsingleton (M ⧸ m • (⊤ : Submodule R M)) ?_
+  rwa [Submodule.Quotient.subsingleton_iff]
 
 中文:
 引理 iff_flat_and_rTensor_faithful
@@ -292,7 +321,10 @@ lemma iff_flat_and_rTensor_faithful
   specialize faithful (ULift (R ⧸ m)) inferInstance
   have : Nontrivial ((R ⧸ m) otimes[R] M) :=
     (congr (ULift.moduleEquiv : ULift (R ⧸ m) ≃ₗ[R] R ⧸ m)
-      (LinearEquiv.refl R M)).sym
+      (LinearEquiv.refl R M)).symm.toEquiv.nontrivial
+  have := (quotTensorEquivQuotSMul M m).toEquiv.symm.nontrivial
+  refine not_subsingleton (M ⧸ m • (⊤ : Submodule R M)) ?_
+  rwa [Submodule.Quotient.subsingleton_iff]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.refl, Nontrivial, Quotient, Submodule, Submodule.Quotient.subsingleton_iff, ULift.moduleEquiv, faithful, moduleEquiv, nontrivial, not_subsingleton, otimes, quotTensorEquivQuotSMul, rTensor_nontrivial, specialize, subsingleton_iff, symm.toEquiv.nontrivial, toEquiv, toEquiv.symm.nontrivial
 -/
@@ -346,7 +378,7 @@ lemma iff_flat_and_lTensor_faithful
   ⟨fun ⟨flat, faithful⟩ => ⟨flat, fun N _ _ _ =>
       letI := faithful N inferInstance; (TensorProduct.comm R M N).toEquiv.nontrivial⟩,
     fun ⟨flat, faithful⟩ => ⟨flat, fun N _ _ _ =>
-      letI := faithful N inferInstance; (TensorProduct.comm R M N).symm.
+      letI := faithful N inferInstance; (TensorProduct.comm R M N).symm.toEquiv.nontrivial⟩⟩
 
 中文:
 引理 iff_flat_and_lTensor_faithful
@@ -354,7 +386,7 @@ lemma iff_flat_and_lTensor_faithful
   ⟨fun ⟨flat, faithful⟩ => ⟨flat, fun N _ _ _ =>
       letI := faithful N inferInstance; (TensorProduct.comm R M N).toEquiv.nontrivial⟩,
     fun ⟨flat, faithful⟩ => ⟨flat, fun N _ _ _ =>
-      letI := faithful N inferInstance; (TensorProduct.comm R M N).symm.
+      letI := faithful N inferInstance; (TensorProduct.comm R M N).symm.toEquiv.nontrivial⟩⟩
 
 Depends on / 依赖: TensorProduct, TensorProduct.comm, faithful, iff_flat_and_rTensor_faithful, nontrivial, symm.toEquiv.nontrivial, toEquiv, toEquiv.nontrivial
 -/
@@ -439,7 +471,8 @@ instance directSum
   obtain ⟨i⟩ := ‹Nonempty ι›
   obtain ⟨x, y, hxy⟩ := Nontrivial.exists_pair_ne (α := M i otimes[R] N)
   have : Nontrivial (⨁ (i : ι), M i otimes[R] N) :=
-    ⟨DirectSum.of _ i x, DirectSum.of _ i y, fun 
+    ⟨DirectSum.of _ i x, DirectSum.of _ i y, fun h => hxy (DirectSum.of_injective i h)⟩
+  apply (TensorProduct.directSumLeft R R M N).toEquiv.nontrivial
 
 中文:
 实例 directSum
@@ -451,7 +484,8 @@ instance directSum
   obtain ⟨i⟩ := ‹Nonempty ι›
   obtain ⟨x, y, hxy⟩ := Nontrivial.exists_pair_ne (α := M i otimes[R] N)
   have : Nontrivial (⨁ (i : ι), M i otimes[R] N) :=
-    ⟨DirectSum.of _ i x, DirectSum.of _ i y, fun 
+    ⟨DirectSum.of _ i x, DirectSum.of _ i y, fun h => hxy (DirectSum.of_injective i h)⟩
+  apply (TensorProduct.directSumLeft R R M N).toEquiv.nontrivial
 
 Depends on / 依赖: DirectSum, DirectSum.of, DirectSum.of_injective, Nonempty, Nontrivial, Nontrivial.exists_pair_ne, TensorProduct, TensorProduct.directSumLeft, classical, directSumLeft, exists_pair_ne, iff_flat_and_lTensor_faithful, nontrivial, of_injective, otimes, toEquiv, toEquiv.nontrivial
 -/
@@ -653,7 +687,37 @@ lemma range_le_ker_of_exact_rTensor
   by_contra! hn1
   -- Let `E` be the submodule spanned by `l23 (l12 n1)`. Then because `l23 (l12 n1) ≠ 0`, we have
   -- `E ≠ 0`.
-  let E : Submodule R N3 := Submodul
+  let E : Submodule R N3 := Submodule.span R {l23 (l12 n1)}
+  have hE : Nontrivial E :=
+    ⟨0, ⟨⟨l23 (l12 n1), Submodule.mem_span_singleton_self _⟩, Subtype.coe_ne_coe.1 hn1.symm⟩⟩
+  -- Since `N1 ⊗ M -> N2 ⊗ M -> N3 ⊗ M` is exact, we have `l23 (l12 n1) ⊗ₜ m = 0` for all `m : M`.
+  have eq1 : forall (m : M), l23 (l12 n1) otimesₜ[R] m = 0 := fun m =>
+    ex.apply_apply_eq_zero (n1 otimesₜ[R] m)
+  -- Then `E ⊗ M = 0`. Indeed,
+  have eq0 : (⊤ : Submodule R (E otimes[R] M)) = ⊥ := by
+    -- suppose `x ∈ E ⊗ M`. We will show `x = 0`.
+    ext x
+    simp only [Submodule.mem_top, Submodule.mem_bot, true_iff]
+    have mem : x in (⊤ : Submodule R _) := ⟨⟩
+    rw [← TensorProduct.span_tmul_eq_top]; rw [Submodule.mem_span_set] at mem
+    obtain ⟨c, hc, rfl⟩ := mem
+    choose b a hy using hc
+    let r : ⦃a : E otimes[R] M⦄ -> a in ↑c.support -> R := fun a ha =>
+.choose Submodule.mem_span_singleton.1 (b ha).2
+    have hr : forall ⦃i : E otimes[R] M⦄ (hi : i in c.support), b hi =
+        r hi • ⟨l23 (l12 n1), Submodule.mem_span_singleton_self _⟩ := fun a ha =>
+Subtype.ext .choose_spec.symm Submodule.mem_span_singleton.1 (b ha).2
+    -- Since `M` is flat and `E -> N1` is injective, we only need to check that x = 0
+    -- in `N1 ⊗ M`. We write `x = ∑ μᵢ • (l23 (l12 n1)) ⊗ mᵢ = ∑ μᵢ • 0 = 0`
+    -- (remember `E = span {l23 (l12 n1)}` and `eq1`)
+    refine Finset.sum_eq_zero fun i hi => show c i • i = 0 from
+      (Module.Flat.rTensor_preserves_injective_linearMap (M := M) E.subtype <|
+              Submodule.injective_subtype E) ?_
+    rw [← hy hi]; rw [hr hi]; rw [smul_tmul]; rw [map_smul]; rw [LinearMap.rTensor_tmul]; rw [Submodule.subtype_apply]; rw [eq1]; rw [smul_zero]; rw [map_zero]
+.2 fun x => have : Subsingleton (E otimes[R] M) := subsingleton_iff_forall_eq 0
+    show x in (⊥ : Submodule R _) from eq0 ▸ ⟨⟩
+  -- but `E ⊗ M = 0` implies `E = 0` because `M` is faithfully flat and this is a contradiction.
+exact not_subsingleton_iff_nontrivial.2 inferInstance fl.rTensor_reflects_triviality R M E
 
 中文:
 引理 range_le_ker_of_exact_rTensor
@@ -665,7 +729,37 @@ lemma range_le_ker_of_exact_rTensor
   by_contra! hn1
   -- Let `E` be the submodule spanned by `l23 (l12 n1)`. Then because `l23 (l12 n1) ≠ 0`, we have
   -- `E ≠ 0`.
-  let E : Submodule R N3 := Submodul
+  let E : Submodule R N3 := Submodule.span R {l23 (l12 n1)}
+  have hE : Nontrivial E :=
+    ⟨0, ⟨⟨l23 (l12 n1), Submodule.mem_span_singleton_self _⟩, Subtype.coe_ne_coe.1 hn1.symm⟩⟩
+  -- Since `N1 ⊗ M -> N2 ⊗ M -> N3 ⊗ M` is exact, we have `l23 (l12 n1) ⊗ₜ m = 0` for all `m : M`.
+  have eq1 : forall (m : M), l23 (l12 n1) otimesₜ[R] m = 0 := fun m =>
+    ex.apply_apply_eq_zero (n1 otimesₜ[R] m)
+  -- Then `E ⊗ M = 0`. Indeed,
+  have eq0 : (⊤ : Submodule R (E otimes[R] M)) = ⊥ := by
+    -- suppose `x ∈ E ⊗ M`. We will show `x = 0`.
+    ext x
+    simp only [Submodule.mem_top, Submodule.mem_bot, true_iff]
+    have mem : x in (⊤ : Submodule R _) := ⟨⟩
+    rw [← TensorProduct.span_tmul_eq_top]; rw [Submodule.mem_span_set] at mem
+    obtain ⟨c, hc, rfl⟩ := mem
+    choose b a hy using hc
+    let r : ⦃a : E otimes[R] M⦄ -> a in ↑c.support -> R := fun a ha =>
+.choose Submodule.mem_span_singleton.1 (b ha).2
+    have hr : forall ⦃i : E otimes[R] M⦄ (hi : i in c.support), b hi =
+        r hi • ⟨l23 (l12 n1), Submodule.mem_span_singleton_self _⟩ := fun a ha =>
+Subtype.ext .choose_spec.symm Submodule.mem_span_singleton.1 (b ha).2
+    -- Since `M` is flat and `E -> N1` is injective, we only need to check that x = 0
+    -- in `N1 ⊗ M`. We write `x = ∑ μᵢ • (l23 (l12 n1)) ⊗ mᵢ = ∑ μᵢ • 0 = 0`
+    -- (remember `E = span {l23 (l12 n1)}` and `eq1`)
+    refine Finset.sum_eq_zero fun i hi => show c i • i = 0 from
+      (Module.Flat.rTensor_preserves_injective_linearMap (M := M) E.subtype <|
+              Submodule.injective_subtype E) ?_
+    rw [← hy hi]; rw [hr hi]; rw [smul_tmul]; rw [map_smul]; rw [LinearMap.rTensor_tmul]; rw [Submodule.subtype_apply]; rw [eq1]; rw [smul_zero]; rw [map_zero]
+.2 fun x => have : Subsingleton (E otimes[R] M) := subsingleton_iff_forall_eq 0
+    show x in (⊥ : Submodule R _) from eq0 ▸ ⟨⟩
+  -- but `E ⊗ M = 0` implies `E = 0` because `M` is faithfully flat and this is a contradiction.
+exact not_subsingleton_iff_nontrivial.2 inferInstance fl.rTensor_reflects_triviality R M E
 -/
 lemma range_le_ker_of_exact_rTensor [fl : FaithfullyFlat R M]
     (ex : Function.Exact (l12.rTensor M) (l23.rTensor M)) :
@@ -718,7 +812,38 @@ lemma rTensor_reflects_exact
   have complex : LinearMap.range l12 <= LinearMap.ker l23 := range_le_ker_of_exact_rTensor R M _ _ ex
   -- By the previous lemma we have that range l12 ≤ ker l23 and hence the quotient
   -- H := ker l23 ⧸ range l12 makes sense.
-  -- Hence our goal ker l23 = range l12 follows
+  -- Hence our goal ker l23 = range l12 follows from the claim that H = 0.
+  let H := LinearMap.ker l23 ⧸ LinearMap.range (Submodule.inclusion complex)
+  suffices triv_coh : Subsingleton H by
+    rw [Submodule.Quotient.subsingleton_iff]; rw [Submodule.range_inclusion]; rw [Submodule.comap_subtype_eq_top] at triv_coh
+    exact le_antisymm triv_coh complex
+  -- Since `M` is faithfully flat, we need only to show that `H ⊗ M` is trivial.
+  suffices Subsingleton (H otimes[R] M) from rTensor_reflects_triviality R M H
+  let e : H otimes[R] M ≃ₗ[R] _ := TensorProduct.quotientTensorEquiv _ _
+  -- Note that `H ⊗ M` is isomorphic to `ker l12 ⊗ M ⧸ range ((range l12 ⊗ M) -> (ker l23 ⊗ M))`.
+  -- So the problem is reduced to proving surjectivity of `range l12 ⊗ M → ker l23 ⊗ M`.
+  rw [e.toEquiv.subsingleton_congr]; rw [Submodule.Quotient.subsingleton_iff]; rw [LinearMap.range_eq_top]
+  intro x
+  induction x using TensorProduct.induction_on with
+  | zero => exact ⟨0, by simp⟩
+  -- let `x ⊗ m` be an element in `ker l23 ⊗ M`, then `x ⊗ m` is in the kernel of `l23 ⊗ 𝟙M`.
+  -- Since `N1 ⊗ M -l12 ⊗ M-> N2 ⊗ M -l23 ⊗ M-> N3 ⊗ M` is exact, we have that `x ⊗ m` is in
+  -- the range of `l12 ⊗ 𝟙M`, i.e. `x ⊗ m = (l12 ⊗ 𝟙M) y` for some `y ∈ N1 ⊗ M` as elements of
+  -- `N2 ⊗ M`. We need to prove that `x ⊗ m = (l12 ⊗ 𝟙M) y` still holds in `(ker l23) ⊗ M`.
+  -- This is okay because `M` is flat and `ker l23 -> N2` is injective.
+  | tmul x m =>
+    rcases x with ⟨x, (hx : l23 x = 0)⟩
+    have mem : x otimesₜ[R] m in LinearMap.ker (l23.rTensor M) := by simp [hx]
+    rw [LinearMap.exact_iff.1 ex] at mem
+    obtain ⟨y, hy⟩ := mem
+    refine ⟨LinearMap.rTensor M (LinearMap.rangeRestrict _ ∘ₗ LinearMap.rangeRestrict l12) y,
+      Module.Flat.rTensor_preserves_injective_linearMap (LinearMap.ker l23).subtype
+      Subtype.val_injective ?_⟩
+    simp only [LinearMap.comp_codRestrict, LinearMap.rTensor_tmul, Submodule.coe_subtype, ← hy]
+    rw [← LinearMap.comp_apply]; rw [← LinearMap.rTensor_def]; rw [← LinearMap.rTensor_comp]; rw [← LinearMap.comp_apply]; rw [← LinearMap.rTensor_comp]; rw [LinearMap.comp_assoc]; rw [LinearMap.subtype_comp_codRestrict]; rw [← LinearMap.comp_assoc]; rw [Submodule.subtype_comp_inclusion]; rw [LinearMap.subtype_comp_codRestrict]
+  | add x y hx hy =>
+    obtain ⟨x, rfl⟩ := hx; obtain ⟨y, rfl⟩ := hy
+    exact ⟨x + y, by simp⟩
 
 中文:
 引理 rTensor_reflects_exact
@@ -727,7 +852,38 @@ lemma rTensor_reflects_exact
   have complex : LinearMap.range l12 <= LinearMap.ker l23 := range_le_ker_of_exact_rTensor R M _ _ ex
   -- By the previous lemma we have that range l12 ≤ ker l23 and hence the quotient
   -- H := ker l23 ⧸ range l12 makes sense.
-  -- Hence our goal ker l23 = range l12 follows
+  -- Hence our goal ker l23 = range l12 follows from the claim that H = 0.
+  let H := LinearMap.ker l23 ⧸ LinearMap.range (Submodule.inclusion complex)
+  suffices triv_coh : Subsingleton H by
+    rw [Submodule.Quotient.subsingleton_iff]; rw [Submodule.range_inclusion]; rw [Submodule.comap_subtype_eq_top] at triv_coh
+    exact le_antisymm triv_coh complex
+  -- Since `M` is faithfully flat, we need only to show that `H ⊗ M` is trivial.
+  suffices Subsingleton (H otimes[R] M) from rTensor_reflects_triviality R M H
+  let e : H otimes[R] M ≃ₗ[R] _ := TensorProduct.quotientTensorEquiv _ _
+  -- Note that `H ⊗ M` is isomorphic to `ker l12 ⊗ M ⧸ range ((range l12 ⊗ M) -> (ker l23 ⊗ M))`.
+  -- So the problem is reduced to proving surjectivity of `range l12 ⊗ M → ker l23 ⊗ M`.
+  rw [e.toEquiv.subsingleton_congr]; rw [Submodule.Quotient.subsingleton_iff]; rw [LinearMap.range_eq_top]
+  intro x
+  induction x using TensorProduct.induction_on with
+  | zero => exact ⟨0, by simp⟩
+  -- let `x ⊗ m` be an element in `ker l23 ⊗ M`, then `x ⊗ m` is in the kernel of `l23 ⊗ 𝟙M`.
+  -- Since `N1 ⊗ M -l12 ⊗ M-> N2 ⊗ M -l23 ⊗ M-> N3 ⊗ M` is exact, we have that `x ⊗ m` is in
+  -- the range of `l12 ⊗ 𝟙M`, i.e. `x ⊗ m = (l12 ⊗ 𝟙M) y` for some `y ∈ N1 ⊗ M` as elements of
+  -- `N2 ⊗ M`. We need to prove that `x ⊗ m = (l12 ⊗ 𝟙M) y` still holds in `(ker l23) ⊗ M`.
+  -- This is okay because `M` is flat and `ker l23 -> N2` is injective.
+  | tmul x m =>
+    rcases x with ⟨x, (hx : l23 x = 0)⟩
+    have mem : x otimesₜ[R] m in LinearMap.ker (l23.rTensor M) := by simp [hx]
+    rw [LinearMap.exact_iff.1 ex] at mem
+    obtain ⟨y, hy⟩ := mem
+    refine ⟨LinearMap.rTensor M (LinearMap.rangeRestrict _ ∘ₗ LinearMap.rangeRestrict l12) y,
+      Module.Flat.rTensor_preserves_injective_linearMap (LinearMap.ker l23).subtype
+      Subtype.val_injective ?_⟩
+    simp only [LinearMap.comp_codRestrict, LinearMap.rTensor_tmul, Submodule.coe_subtype, ← hy]
+    rw [← LinearMap.comp_apply]; rw [← LinearMap.rTensor_def]; rw [← LinearMap.rTensor_comp]; rw [← LinearMap.comp_apply]; rw [← LinearMap.rTensor_comp]; rw [LinearMap.comp_assoc]; rw [LinearMap.subtype_comp_codRestrict]; rw [← LinearMap.comp_assoc]; rw [Submodule.subtype_comp_inclusion]; rw [LinearMap.subtype_comp_codRestrict]
+  | add x y hx hy =>
+    obtain ⟨x, rfl⟩ := hx; obtain ⟨y, rfl⟩ := hy
+    exact ⟨x + y, by simp⟩
 
 Depends on / 依赖: LinearMap, LinearMap.exact_iff, LinearMap.ker, LinearMap.range, complex, exact_iff, range_le_ker_of_exact_rTensor
 -/
@@ -953,7 +1109,8 @@ lemma iff_exact_iff_rTensor_exact
 .2 iff_flat_and_rTensor_reflects_triviality _ _
 ⟨Flat.iff_rTensor_exact.2 .1, fun _ _ _ => iff_exact ..
 .2 fun y => by fun N _ _ h => subsingleton_iff_forall_eq 0
-      simpa [eq_comm] using (iff_exact 
+      simpa [eq_comm] using (iff_exact (0 : PUnit ->ₗ[R] N) (0 : N ->ₗ[R] PUnit) |>.2 fun x => by
+        simpa using Subsingleton.elim _ _) y⟩⟩
 
 中文:
 引理 iff_exact_iff_rTensor_exact
@@ -961,7 +1118,8 @@ lemma iff_exact_iff_rTensor_exact
 .2 iff_flat_and_rTensor_reflects_triviality _ _
 ⟨Flat.iff_rTensor_exact.2 .1, fun _ _ _ => iff_exact ..
 .2 fun y => by fun N _ _ h => subsingleton_iff_forall_eq 0
-      simpa [eq_comm] using (iff_exact 
+      simpa [eq_comm] using (iff_exact (0 : PUnit ->ₗ[R] N) (0 : N ->ₗ[R] PUnit) |>.2 fun x => by
+        simpa using Subsingleton.elim _ _) y⟩⟩
 
 Depends on / 依赖: Flat.iff_rTensor_exact, Subsingleton, Subsingleton.elim, eq_comm, iff_exact, iff_flat_and_rTensor_reflects_triviality, iff_rTensor_exact, rTensor_exact_iff_exact, subsingleton_iff_forall_eq
 -/
@@ -1031,7 +1189,8 @@ lemma zero_iff_lTensor_zero
     have := lTensor_reflects_exact R M f LinearMap.id (by
       rw [LinearMap.exact_iff]; rw [hf]; rw [LinearMap.range_zero]; rw [LinearMap.ker_eq_bot]
       apply Module.Flat.lTensor_preserves_injective_linearMap
-      exact fun _ _ h => h
+      exact fun _ _ h => h)
+    ext x; simpa using this (f x)⟩
 
 中文:
 引理 zero_iff_lTensor_zero
@@ -1040,7 +1199,8 @@ lemma zero_iff_lTensor_zero
     have := lTensor_reflects_exact R M f LinearMap.id (by
       rw [LinearMap.exact_iff]; rw [hf]; rw [LinearMap.range_zero]; rw [LinearMap.ker_eq_bot]
       apply Module.Flat.lTensor_preserves_injective_linearMap
-      exact fun _ _ h => h
+      exact fun _ _ h => h)
+    ext x; simpa using this (f x)⟩
 
 Depends on / 依赖: LinearMap, LinearMap.exact_iff, LinearMap.id, LinearMap.ker_eq_bot, LinearMap.lTensor_zero, LinearMap.range_zero, Module, Module.Flat.lTensor_preserves_injective_linearMap, exact_iff, hf.symm, ker_eq_bot, lTensor_preserves_injective_linearMap, lTensor_reflects_exact, lTensor_zero, range_zero
 -/
@@ -1105,7 +1265,8 @@ theorem one_tmul_eq_zero_iff
   rw [Module.FaithfullyFlat.zero_iff_lTensor_zero R A]
   ext a
   apply_fun (a • ·) at h
-  rw [smul_zero]; rw [smul_tmul']
+  rw [smul_zero]; rw [smul_tmul']; rw [smul_eq_mul]; rw [mul_one] at h
+  simpa [f]
 
 中文:
 定理 one_tmul_eq_zero_iff
@@ -1119,7 +1280,8 @@ theorem one_tmul_eq_zero_iff
   rw [Module.FaithfullyFlat.zero_iff_lTensor_zero R A]
   ext a
   apply_fun (a • ·) at h
-  rw [smul_zero]; rw [smul_tmul']
+  rw [smul_zero]; rw [smul_tmul']; rw [smul_eq_mul]; rw [mul_one] at h
+  simpa [f]
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, FaithfullyFlat, LinearMap, LinearMap.lsmul, Module, Module.FaithfullyFlat.zero_iff_lTensor_zero, apply_fun, congr_fun, mul_one, smul_eq_mul, smul_tmul, smul_zero, tmul_zero, zero_iff_lTensor_zero
 -/
@@ -1149,7 +1311,7 @@ lemma iff_zero_iff_lTensor_zero
 .2 ⟨flat, fun N _ _ _ => by fun ⟨flat, Z⟩ => iff_flat_and_lTensor_reflects_triviality R M
 .1 (by ext; exact Subsingleton.elim _ _) have := Z (LinearMap.id : N ->ₗ[R] N)
       rw [subsingleton_iff_forall_eq 0]
-      exact fun y =
+      exact fun y => congr($this y)⟩⟩
 
 中文:
 引理 iff_zero_iff_lTensor_zero
@@ -1157,7 +1319,7 @@ lemma iff_zero_iff_lTensor_zero
 .2 ⟨flat, fun N _ _ _ => by fun ⟨flat, Z⟩ => iff_flat_and_lTensor_reflects_triviality R M
 .1 (by ext; exact Subsingleton.elim _ _) have := Z (LinearMap.id : N ->ₗ[R] N)
       rw [subsingleton_iff_forall_eq 0]
-      exact fun y =
+      exact fun y => congr($this y)⟩⟩
 
 Depends on / 依赖: LinearMap, LinearMap.id, Subsingleton, Subsingleton.elim, iff_flat_and_lTensor_reflects_triviality, subsingleton_iff_forall_eq, zero_iff_lTensor_zero
 -/
@@ -1182,7 +1344,7 @@ lemma iff_zero_iff_rTensor_zero
 .2 ⟨flat, fun N _ _ _ => by fun ⟨flat, Z⟩ => iff_flat_and_rTensor_reflects_triviality R M
 .1 (by ext; exact Subsingleton.elim _ _) have := Z (LinearMap.id : N ->ₗ[R] N)
       rw [subsingleton_iff_forall_eq 0]
-      exact fun y =
+      exact fun y => congr($this y)⟩⟩
 
 中文:
 引理 iff_zero_iff_rTensor_zero
@@ -1190,7 +1352,7 @@ lemma iff_zero_iff_rTensor_zero
 .2 ⟨flat, fun N _ _ _ => by fun ⟨flat, Z⟩ => iff_flat_and_rTensor_reflects_triviality R M
 .1 (by ext; exact Subsingleton.elim _ _) have := Z (LinearMap.id : N ->ₗ[R] N)
       rw [subsingleton_iff_forall_eq 0]
-      exact fun y =
+      exact fun y => congr($this y)⟩⟩
 
 Depends on / 依赖: LinearMap, LinearMap.id, Subsingleton, Subsingleton.elim, iff_flat_and_rTensor_reflects_triviality, subsingleton_iff_forall_eq, zero_iff_rTensor_zero
 -/
@@ -1229,7 +1391,11 @@ theorem trans
   proof: by
   rw [iff_zero_iff_lTensor_zero]
   refine ⟨Module.Flat.trans R S M, @fun N _ _ N' _ _ f => ⟨fun aux => ?_, fun eq => eq ▸ by simp⟩⟩
-  rw [zero_iff_lTensor_zero (R := R) (M := S) f]; rw [show f.lTensor S = (AlgebraTensorModule.map (A := S) LinearMap.id f).restrictScalars R by aesop]; rw [show (0 :
+  rw [zero_iff_lTensor_zero (R := R) (M := S) f]; rw [show f.lTensor S = (AlgebraTensorModule.map (A := S) LinearMap.id f).restrictScalars R by aesop]; rw [show (0 : S otimes[R] N ->ₗ[R] S otimes[R] N') = (0 : S otimes[R] N ->ₗ[S] S otimes[R] N').restrictScalars R by rfl,
+    restrictScalars_inj, zero_iff_lTensor_zero (R := S) (M := M)]
+  ext m n
+  apply_fun AlgebraTensorModule.cancelBaseChange R S S M N' using LinearEquiv.injective _
+  simpa using congr($aux (m otimesₜ[R] n))
 
 中文:
 定理 trans
@@ -1237,7 +1403,11 @@ theorem trans
   证明: by
   rw [iff_zero_iff_lTensor_zero]
   refine ⟨Module.Flat.trans R S M, @fun N _ _ N' _ _ f => ⟨fun aux => ?_, fun eq => eq ▸ by simp⟩⟩
-  rw [zero_iff_lTensor_zero (R := R) (M := S) f]; rw [show f.lTensor S = (AlgebraTensorModule.map (A := S) LinearMap.id f).restrictScalars R by aesop]; rw [show (0 :
+  rw [zero_iff_lTensor_zero (R := R) (M := S) f]; rw [show f.lTensor S = (AlgebraTensorModule.map (A := S) LinearMap.id f).restrictScalars R by aesop]; rw [show (0 : S otimes[R] N ->ₗ[R] S otimes[R] N') = (0 : S otimes[R] N ->ₗ[S] S otimes[R] N').restrictScalars R by rfl,
+    restrictScalars_inj, zero_iff_lTensor_zero (R := S) (M := M)]
+  ext m n
+  apply_fun AlgebraTensorModule.cancelBaseChange R S S M N' using LinearEquiv.injective _
+  simpa using congr($aux (m otimesₜ[R] n))
 
 Depends on / 依赖: AlgebraTensorModul, AlgebraTensorModule, AlgebraTensorModule.map, LinearMap, LinearMap.id, Module, Module.Flat.trans, apply_fun, f.lTensor, iff_zero_iff_lTensor_zero, lTensor, otimes, restrictScalars, restrictScalars_inj, zero_iff_lTensor_zero
 -/
@@ -1277,7 +1447,9 @@ theorem _root_.IsBaseChange.map_smul_top_ne_top_iff_of_faithfullyFlat
 simpa only [← Submodule.Quotient.subsingleton_iff.not] using not_congr
     (tensorQuotEquivQuotSMul N (I.map (algebraMap R S))).symm ≪≫ₗ TensorProduct.comm S N _ ≪≫ₗ
       hf.tensorEquiv _ ≪≫ₗ AlgebraTensorModule.congr (I.qoutMapEquivTensorQout S) (.refl R M) ≪≫ₗ
-        AlgebraTensorModule.assoc
+        AlgebraTensorModule.assoc R R S S _ M ≪≫ₗ (TensorProduct.comm R _ M).baseChange R S _ _ ≪≫ₗ
+.subsingleton_congr.trans (tensorQuotEquivQuotSMul M I).baseChange R S _ _
+            subsingleton_tensorProduct_iff_right R S
 
 中文:
 定理 _root_.IsBaseChange.map_smul_top_ne_top_iff_of_faithfullyFlat
@@ -1286,7 +1458,9 @@ simpa only [← Submodule.Quotient.subsingleton_iff.not] using not_congr
 simpa only [← Submodule.Quotient.subsingleton_iff.not] using not_congr
     (tensorQuotEquivQuotSMul N (I.map (algebraMap R S))).symm ≪≫ₗ TensorProduct.comm S N _ ≪≫ₗ
       hf.tensorEquiv _ ≪≫ₗ AlgebraTensorModule.congr (I.qoutMapEquivTensorQout S) (.refl R M) ≪≫ₗ
-        AlgebraTensorModule.assoc
+        AlgebraTensorModule.assoc R R S S _ M ≪≫ₗ (TensorProduct.comm R _ M).baseChange R S _ _ ≪≫ₗ
+.subsingleton_congr.trans (tensorQuotEquivQuotSMul M I).baseChange R S _ _
+            subsingleton_tensorProduct_iff_right R S
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.assoc, AlgebraTensorModule.congr, I.map, I.qoutMapEquivTensorQout, Quotient, Submodule, Submodule.Quotient.subsingleton_iff.not, TensorProduct, TensorProduct.comm, algebraMap, baseChange, hf.tensorEquiv, not_congr, qoutMapEquivTensorQout, subsingleton_congr, subsingleton_congr.trans, subsingleton_iff, subsingleton_tensorProduct_iff_right, tensorEquiv
 -/
@@ -1316,7 +1490,11 @@ lemma Flat.of_flat_tensorProduct
   have : Flat R (S otimes[R] M) := Flat.trans _ S _
   rw [← FaithfullyFlat.lTensor_injective_iff_injective R S]
   have : LinearMap.lTensor S (LinearMap.lTensor M f) =
-      (TensorProduct.assoc _ _ _ _).toLinear
+      (TensorProduct.assoc _ _ _ _).toLinearMap ∘ₗ LinearMap.lTensor (S otimes[R] M) f ∘ₗ
+        (TensorProduct.assoc _ _ _ _).symm.toLinearMap := by
+    ext
+    simp
+  simpa [this] using Flat.lTensor_preserves_injective_linearMap f hf
 
 中文:
 引理 平坦.of_flat_tensorProduct
@@ -1327,7 +1505,11 @@ lemma Flat.of_flat_tensorProduct
   have : Flat R (S otimes[R] M) := Flat.trans _ S _
   rw [← FaithfullyFlat.lTensor_injective_iff_injective R S]
   have : LinearMap.lTensor S (LinearMap.lTensor M f) =
-      (TensorProduct.assoc _ _ _ _).toLinear
+      (TensorProduct.assoc _ _ _ _).toLinearMap ∘ₗ LinearMap.lTensor (S otimes[R] M) f ∘ₗ
+        (TensorProduct.assoc _ _ _ _).symm.toLinearMap := by
+    ext
+    simp
+  simpa [this] using Flat.lTensor_preserves_injective_linearMap f hf
 
 Depends on / 依赖: FaithfullyFlat, FaithfullyFlat.lTensor_injective_iff_injective, Flat.lTensor_preserves_injective_linearMap, Flat.trans, LinearMap, LinearMap.lTensor, Module, Module.Flat.iff_lTensor_preserves_injective_linearMap, TensorProduct, TensorProduct.assoc, iff_lTensor_preserves_injective_linearMap, lTensor, lTensor_injective_iff_injective, lTensor_preserves_injective_linearMap, otimes, symm.toLinearMap, toLinearMap
 -/

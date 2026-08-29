@@ -136,7 +136,16 @@ lemma inner_normalized_ortho_sq_add_inner_sq_eq_one
   · simp [*]
   rw [real_inner_self_eq_norm_sq]; rw [hx]
   have H1 : ‖x - ⟪y, x⟫ • y‖ != 0 := by
-    si
+    simp only [ne_eq, norm_eq_zero, sub_eq_zero]
+    intro H2
+    rw [H2]; rw [norm_smul]; rw [hy]; rw [Real.norm_eq_abs]; rw [mul_one] at hx
+    apply eq_or_eq_neg_of_abs_eq at hx
+    rcases hx with hx | hx <;> simp [*] at H2
+  have H2 : (1 - ⟪y, x⟫ * ⟪x, y⟫) ^ 2 + ‖x - ⟪y, x⟫ • y‖ ^ 2 * ⟪x, y⟫ ^ 2 =
+      ‖x - ⟪y, x⟫ • y‖ ^ 2 := by
+    rw [← real_inner_self_eq_norm_sq]; rw [inner_sub_left]; rw [inner_sub_right]; rw [inner_sub_right]; rw [real_inner_smul_right]; rw [real_inner_smul_left]; rw [real_inner_smul_right]; rw [real_inner_smul_left]; rw [real_inner_comm x y]; rw [real_inner_self_eq_norm_sq]; rw [hx]; rw [real_inner_self_eq_norm_sq]; rw [hy]
+    ring
+  field_simp; exact H2
 
 中文:
 引理 inner_normalized_ortho_sq_add_inner_sq_eq_one
@@ -148,7 +157,16 @@ lemma inner_normalized_ortho_sq_add_inner_sq_eq_one
   · simp [*]
   rw [real_inner_self_eq_norm_sq]; rw [hx]
   have H1 : ‖x - ⟪y, x⟫ • y‖ != 0 := by
-    si
+    simp only [ne_eq, norm_eq_zero, sub_eq_zero]
+    intro H2
+    rw [H2]; rw [norm_smul]; rw [hy]; rw [Real.norm_eq_abs]; rw [mul_one] at hx
+    apply eq_or_eq_neg_of_abs_eq at hx
+    rcases hx with hx | hx <;> simp [*] at H2
+  have H2 : (1 - ⟪y, x⟫ * ⟪x, y⟫) ^ 2 + ‖x - ⟪y, x⟫ • y‖ ^ 2 * ⟪x, y⟫ ^ 2 =
+      ‖x - ⟪y, x⟫ • y‖ ^ 2 := by
+    rw [← real_inner_self_eq_norm_sq]; rw [inner_sub_left]; rw [inner_sub_right]; rw [inner_sub_right]; rw [real_inner_smul_right]; rw [real_inner_smul_left]; rw [real_inner_smul_right]; rw [real_inner_smul_left]; rw [real_inner_comm x y]; rw [real_inner_self_eq_norm_sq]; rw [hx]; rw [real_inner_self_eq_norm_sq]; rw [hy]
+    ring
+  field_simp; exact H2
 
 Depends on / 依赖: NormedSpace, NormedSpace.normalize, Real.norm_eq_abs, eq_or_eq_neg_of_abs_eq, inner_sub_right, mul_one, ne_eq, norm_eq_abs, norm_eq_zero, norm_smul, normalize, ortho_eq_sub_inner, real_inner_self_eq_norm_sq, real_inner_smul_right, sub_eq_zero
 -/
@@ -183,7 +201,11 @@ lemma inner_ortho_right_eq_sin_angle
     simp [Real.sin_sq, ← inner_eq_cos_angle_of_norm_eq_one hx hy,
       ← inner_normalized_ortho_sq_add_inner_sq_eq_one hx hy]
   rw [sq_eq_sq_iff_abs_eq_abs]; rw [abs_of_nonneg (sin_angle_nonneg x y)] at H
-  have H0 : 0 <=
+  have H0 : 0 <= ⟪x, normalize (ortho y x)⟫ := by
+    rw [NormedSpace.normalize]; rw [real_inner_smul_right]
+    exact Left.mul_nonneg (inv_nonneg_of_nonneg (norm_nonneg (ortho y x)))
+      (inner_ortho_nonneg hx hy)
+  simp_all [abs_of_nonneg H0]
 
 中文:
 引理 inner_ortho_right_eq_sin_angle
@@ -193,7 +215,11 @@ lemma inner_ortho_right_eq_sin_angle
     simp [Real.sin_sq, ← inner_eq_cos_angle_of_norm_eq_one hx hy,
       ← inner_normalized_ortho_sq_add_inner_sq_eq_one hx hy]
   rw [sq_eq_sq_iff_abs_eq_abs]; rw [abs_of_nonneg (sin_angle_nonneg x y)] at H
-  have H0 : 0 <=
+  have H0 : 0 <= ⟪x, normalize (ortho y x)⟫ := by
+    rw [NormedSpace.normalize]; rw [real_inner_smul_right]
+    exact Left.mul_nonneg (inv_nonneg_of_nonneg (norm_nonneg (ortho y x)))
+      (inner_ortho_nonneg hx hy)
+  simp_all [abs_of_nonneg H0]
 
 Depends on / 依赖: Left.mul_nonneg, NormedSpace, NormedSpace.normalize, Real.sin, Real.sin_sq, abs_of_nonneg, inner_eq_cos_angle_of_norm_eq_one, inner_normalized_ortho_sq_add_inner_sq_eq_one, inner_ortho_nonneg, inv_nonneg_of_nonneg, mul_nonneg, norm_nonneg, normalize, real_inner_smul_right, sin_angle_nonneg, sin_sq, sq_eq_sq_iff_abs_eq_abs
 -/
@@ -217,7 +243,25 @@ lemma angle_le_angle_add_angle_aux
   rw [← inner_ortho_right_eq_sin_angle hx hy]; rw [← inner_eq_cos_angle_of_norm_eq_one hx hy]; rw [ortho_eq_sub_inner _ hy]
   by_cases hxy : x - ⟪x, y⟫ • y = 0
   · simp [hxy, real_inner_comm, ← sub_eq_zero]
-  rw [NormedSpace.normalize]; rw [real_inner_smul_right]; rw [inner_sub_right]; rw [real_i
+  rw [NormedSpace.normalize]; rw [real_inner_smul_right]; rw [inner_sub_right]; rw [real_inner_smul_right]; rw [real_inner_self_eq_norm_sq]; rw [hx]; rw [real_inner_comm y]; rw [← sq]; rw [mul_smul]; rw [← smul_assoc]
+  simp only [one_pow, smul_eq_mul]
+  have H : 1 - ⟪x, y⟫ ^ 2 != 0 := by
+    rw [sub_ne_zero]; rw [ne_comm]; rw [sq_ne_one_iff]
+    constructor <;> contrapose hxy
+    · rw [inner_eq_one_iff_of_norm_eq_one hx hy] at hxy
+      simp [hy, hxy]
+    · rw [inner_eq_neg_one_iff_of_norm_eq_one hx hy] at hxy
+      simp [hy, hxy]
+  rw [← smul_assoc]; rw [smul_eq_mul]
+  field_simp
+  rw [← real_inner_self_eq_norm_sq]
+  have H0 : ⟪x - ⟪x, y⟫ • y, x - ⟪x, y⟫ • y⟫ = 1 - ⟪x, y⟫ ^ 2 := by
+    rw [inner_sub_left]; rw [inner_sub_right]; rw [inner_sub_right]; rw [inner_self_eq_one_of_norm_eq_one hx]; rw [real_inner_smul_right]; rw [← sq]; rw [real_inner_smul_left]; rw [real_inner_smul_left]; rw [real_inner_smul_right]; rw [inner_self_eq_one_of_norm_eq_one hy]; rw [real_inner_comm y x]
+    ring
+  rw [real_inner_comm x]; rw [H0]
+  simp [H]
+
+include hz in
 
 中文:
 引理 angle_le_angle_add_angle_aux
@@ -225,7 +269,25 @@ lemma angle_le_angle_add_angle_aux
   rw [← inner_ortho_right_eq_sin_angle hx hy]; rw [← inner_eq_cos_angle_of_norm_eq_one hx hy]; rw [ortho_eq_sub_inner _ hy]
   by_cases hxy : x - ⟪x, y⟫ • y = 0
   · simp [hxy, real_inner_comm, ← sub_eq_zero]
-  rw [NormedSpace.normalize]; rw [real_inner_smul_right]; rw [inner_sub_right]; rw [real_i
+  rw [NormedSpace.normalize]; rw [real_inner_smul_right]; rw [inner_sub_right]; rw [real_inner_smul_right]; rw [real_inner_self_eq_norm_sq]; rw [hx]; rw [real_inner_comm y]; rw [← sq]; rw [mul_smul]; rw [← smul_assoc]
+  simp only [one_pow, smul_eq_mul]
+  have H : 1 - ⟪x, y⟫ ^ 2 != 0 := by
+    rw [sub_ne_zero]; rw [ne_comm]; rw [sq_ne_one_iff]
+    constructor <;> contrapose hxy
+    · rw [inner_eq_one_iff_of_norm_eq_one hx hy] at hxy
+      simp [hy, hxy]
+    · rw [inner_eq_neg_one_iff_of_norm_eq_one hx hy] at hxy
+      simp [hy, hxy]
+  rw [← smul_assoc]; rw [smul_eq_mul]
+  field_simp
+  rw [← real_inner_self_eq_norm_sq]
+  have H0 : ⟪x - ⟪x, y⟫ • y, x - ⟪x, y⟫ • y⟫ = 1 - ⟪x, y⟫ ^ 2 := by
+    rw [inner_sub_left]; rw [inner_sub_right]; rw [inner_sub_right]; rw [inner_self_eq_one_of_norm_eq_one hx]; rw [real_inner_smul_right]; rw [← sq]; rw [real_inner_smul_left]; rw [real_inner_smul_left]; rw [real_inner_smul_right]; rw [inner_self_eq_one_of_norm_eq_one hy]; rw [real_inner_comm y x]
+    ring
+  rw [real_inner_comm x]; rw [H0]
+  simp [H]
+
+include hz in
 
 Depends on / 依赖: NormedSpace, NormedSpace.normalize, inner_eq_cos_angle_of_norm_eq_one, inner_ortho_right_eq_sin_angle, inner_sub_right, mul_smul, normalize, one_pow, ortho_eq_sub_inner, real_inner_comm, real_inner_self_eq_norm_sq, real_inner_smul_right, smul_assoc, smul_eq_mul, sub_eq_zero, sub_ne_z
 -/
@@ -265,7 +327,26 @@ lemma angle_le_angle_add_angle_of_norm_eq_one
   suffices Real.cos (angle x y + angle y z) <= Real.cos (angle x z) by
     have H0 : 0 <= angle x y + angle y z :=
       add_nonneg (angle_nonneg x y) (angle_nonneg y z)
-    rwa [Real.strictAntiOn_cos.le_iff_ge 
+    rwa [Real.strictAntiOn_cos.le_iff_ge ⟨H0, H⟩ ⟨angle_nonneg x z, angle_le_pi x z⟩] at this
+  have H1 : ⟪x, z⟫ = ⟪x, z⟫ := rfl
+  nth_rw 2 [angle_le_angle_add_angle_aux hx hy, angle_le_angle_add_angle_aux hz hy] at H1
+  simp only [inner_add_left, inner_add_right, real_inner_smul_left, real_inner_smul_right,
+    real_inner_comm y (normalize _), real_inner_self_eq_norm_sq, hy, angle_comm z y,
+    inner_normalize_ortho] at H1
+  simp only [one_pow, mul_one, mul_zero, add_zero, zero_add] at H1
+  rw [mul_comm (Real.cos (angle y z))] at H1
+  rw [Real.cos_add]; rw [← inner_eq_cos_angle_of_norm_eq_one hx hz]; rw [H1]
+  have H2 : -1 <= ⟪normalize (ortho y x), normalize (ortho y z)⟫ := by
+    by_cases H3 : ortho y x = 0
+    · simp [*]
+    by_cases H4 : ortho y z = 0
+    · simp [*]
+    exact neg_one_le_real_inner_of_norm_eq_one
+      (norm_normalize_eq_one_iff.mpr H3) (norm_normalize_eq_one_iff.mpr H4)
+  have := sin_angle_nonneg x y; have := sin_angle_nonneg y z
+  grw [← H2]
+  apply le_of_eq
+  ring
 
 中文:
 引理 angle_le_angle_add_angle_of_norm_eq_one
@@ -276,7 +357,26 @@ lemma angle_le_angle_add_angle_of_norm_eq_one
   suffices Real.cos (angle x y + angle y z) <= Real.cos (angle x z) by
     have H0 : 0 <= angle x y + angle y z :=
       add_nonneg (angle_nonneg x y) (angle_nonneg y z)
-    rwa [Real.strictAntiOn_cos.le_iff_ge 
+    rwa [Real.strictAntiOn_cos.le_iff_ge ⟨H0, H⟩ ⟨angle_nonneg x z, angle_le_pi x z⟩] at this
+  have H1 : ⟪x, z⟫ = ⟪x, z⟫ := rfl
+  nth_rw 2 [angle_le_angle_add_angle_aux hx hy, angle_le_angle_add_angle_aux hz hy] at H1
+  simp only [inner_add_left, inner_add_right, real_inner_smul_left, real_inner_smul_right,
+    real_inner_comm y (normalize _), real_inner_self_eq_norm_sq, hy, angle_comm z y,
+    inner_normalize_ortho] at H1
+  simp only [one_pow, mul_one, mul_zero, add_zero, zero_add] at H1
+  rw [mul_comm (Real.cos (angle y z))] at H1
+  rw [Real.cos_add]; rw [← inner_eq_cos_angle_of_norm_eq_one hx hz]; rw [H1]
+  have H2 : -1 <= ⟪normalize (ortho y x), normalize (ortho y z)⟫ := by
+    by_cases H3 : ortho y x = 0
+    · simp [*]
+    by_cases H4 : ortho y z = 0
+    · simp [*]
+    exact neg_one_le_real_inner_of_norm_eq_one
+      (norm_normalize_eq_one_iff.mpr H3) (norm_normalize_eq_one_iff.mpr H4)
+  have := sin_angle_nonneg x y; have := sin_angle_nonneg y z
+  grw [← H2]
+  apply le_of_eq
+  ring
 
 Depends on / 依赖: Real.cos, Real.strictAntiOn_cos.le_iff_ge, add_nonneg, angle_le_angle_add_angle_aux, angle_le_pi, angle_nonneg, inner_add_left, inner_add_right, le_iff_ge, lt_or_ge, nth_rw, strictAntiOn_cos
 -/
@@ -374,7 +474,34 @@ lemma angle_expression_of_angle_eq_angle_sum
     grind [sin_eq_zero_iff_angle_eq_zero_or_angle_eq_pi]
   by_cases H2 : angle x y = 0
   · grind [Real.sin_zero, zero_smul, eq_of_angle_eq_zero]
-  by_cases H
+  by_cases H3 : angle y z = 0
+  · grind [Real.sin_zero, zero_smul, smul_right_inj, eq_of_angle_eq_zero]
+  by_cases H4 : angle x y = π
+  · grind [angle_le_pi, angle_nonneg]
+  by_cases H5 : angle y z = π
+  · grind [angle_le_pi, angle_nonneg]
+  have H6 : ⟪x, z⟫ = ⟪x, z⟫ := rfl
+  nth_rw 2 [angle_le_angle_add_angle_aux hx hy, angle_le_angle_add_angle_aux hz hy] at H6
+  simp only [inner_add_left, inner_add_right, real_inner_smul_left, real_inner_smul_right,
+             real_inner_comm y (normalize _), real_inner_self_eq_norm_sq, hy, angle_comm z y,
+             inner_normalize_ortho] at H6
+  simp only [one_pow, mul_one, mul_zero, add_zero, zero_add] at H6
+  rw [inner_eq_cos_angle_of_norm_eq_one hx hz]; rw [H0]; rw [Real.cos_add] at H6
+  ring_nf at H6
+  have Hw : Real.sin (angle x y) * Real.sin (angle y z) != 0 := by
+    grind [sin_eq_zero_iff_angle_eq_zero_or_angle_eq_pi]
+  have H8 : ⟪normalize (ortho y x), normalize (ortho y z)⟫ = -1 := by
+    grind
+  have H9 : ortho y x != 0 := by
+    grind [ortho_ne_zero_of_not_collinear, angle_comm]
+  have H10 : ortho y z != 0 := by
+    grind [ortho_ne_zero_of_not_collinear]
+  have H11 : ‖normalize (ortho y x)‖ = 1 := norm_normalize_eq_one_iff.mpr H9
+  have H12 : ‖normalize (ortho y z)‖ = 1 := norm_normalize_eq_one_iff.mpr H10
+  rw [inner_eq_neg_one_iff_of_norm_eq_one H11 H12] at H8
+  nth_rw 2 [angle_le_angle_add_angle_aux hx hy]
+  nth_rw 3 [angle_le_angle_add_angle_aux hz hy]
+  rw [H8]; match_scalars <;> grind [Real.sin_add, angle_comm]
 
 中文:
 引理 angle_expression_of_angle_eq_angle_sum
@@ -386,7 +513,34 @@ lemma angle_expression_of_angle_eq_angle_sum
     grind [sin_eq_zero_iff_angle_eq_zero_or_angle_eq_pi]
   by_cases H2 : angle x y = 0
   · grind [Real.sin_zero, zero_smul, eq_of_angle_eq_zero]
-  by_cases H
+  by_cases H3 : angle y z = 0
+  · grind [Real.sin_zero, zero_smul, smul_right_inj, eq_of_angle_eq_zero]
+  by_cases H4 : angle x y = π
+  · grind [angle_le_pi, angle_nonneg]
+  by_cases H5 : angle y z = π
+  · grind [angle_le_pi, angle_nonneg]
+  have H6 : ⟪x, z⟫ = ⟪x, z⟫ := rfl
+  nth_rw 2 [angle_le_angle_add_angle_aux hx hy, angle_le_angle_add_angle_aux hz hy] at H6
+  simp only [inner_add_left, inner_add_right, real_inner_smul_left, real_inner_smul_right,
+             real_inner_comm y (normalize _), real_inner_self_eq_norm_sq, hy, angle_comm z y,
+             inner_normalize_ortho] at H6
+  simp only [one_pow, mul_one, mul_zero, add_zero, zero_add] at H6
+  rw [inner_eq_cos_angle_of_norm_eq_one hx hz]; rw [H0]; rw [Real.cos_add] at H6
+  ring_nf at H6
+  have Hw : Real.sin (angle x y) * Real.sin (angle y z) != 0 := by
+    grind [sin_eq_zero_iff_angle_eq_zero_or_angle_eq_pi]
+  have H8 : ⟪normalize (ortho y x), normalize (ortho y z)⟫ = -1 := by
+    grind
+  have H9 : ortho y x != 0 := by
+    grind [ortho_ne_zero_of_not_collinear, angle_comm]
+  have H10 : ortho y z != 0 := by
+    grind [ortho_ne_zero_of_not_collinear]
+  have H11 : ‖normalize (ortho y x)‖ = 1 := norm_normalize_eq_one_iff.mpr H9
+  have H12 : ‖normalize (ortho y z)‖ = 1 := norm_normalize_eq_one_iff.mpr H10
+  rw [inner_eq_neg_one_iff_of_norm_eq_one H11 H12] at H8
+  nth_rw 2 [angle_le_angle_add_angle_aux hx hy]
+  nth_rw 3 [angle_le_angle_add_angle_aux hz hy]
+  rw [H8]; match_scalars <;> grind [Real.sin_add, angle_comm]
 
 Depends on / 依赖: Real.sin, Real.sin_zero, angle_le_pi, angle_nonneg, eq_of_angle_eq_zero, intros, sin_eq_zero_iff_angle_eq_zero_or_angle_eq_pi, sin_zero, smul_right_inj, zero_smul
 -/

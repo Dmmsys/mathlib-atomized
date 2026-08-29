@@ -109,7 +109,9 @@ theorem hasDerivAt_gronwallBound
   · simp only [gronwallBound_of_K_ne_0 hK]
     convert!
       (((hasDerivAt_id x).const_mul K).exp.const_mul δ).add
-        ((((hasDeriv
+        ((((hasDerivAt_id x).const_mul K).exp.sub_const 1).const_mul (ε / K)) using 1
+    simp only [id]
+    field
 
 中文:
 定理 hasDerivAt_gronwallBound
@@ -123,7 +125,9 @@ theorem hasDerivAt_gronwallBound
   · simp only [gronwallBound_of_K_ne_0 hK]
     convert!
       (((hasDerivAt_id x).const_mul K).exp.const_mul δ).add
-        ((((hasDeriv
+        ((((hasDerivAt_id x).const_mul K).exp.sub_const 1).const_mul (ε / K)) using 1
+    simp only [id]
+    field
 
 Depends on / 依赖: const_add, const_mul, convert, exp.const_mul, exp.sub_const, gronwallBound_K0, gronwallBound_of_K_ne_0, hasDerivAt_id, mul_one, sub_const, zero_add, zero_mul
 -/
@@ -330,7 +334,13 @@ theorem le_gronwallBound_of_liminf_deriv_right_le
     apply image_le_of_liminf_slope_right_lt_deriv_boundary hf hf'
     · rwa [sub_self, gronwallBound_x0]
     · exact fun x => hasDerivAt_gronwallBound_shift δ K ε' x a
-  
+    · grind
+    · exact hx
+  intro x hx
+  change f x <= (fun ε' => gronwallBound δ K ε' (x - a)) ε
+  convert! continuousWithinAt_const.closure_le _ _ (H x hx)
+  · simp only [closure_Ioi, self_mem_Ici]
+  exact (gronwallBound_continuous_ε δ K (x - a)).continuousWithinAt
 
 中文:
 定理 le_gronwallBound_of_liminf_deriv_right_le
@@ -341,7 +351,13 @@ theorem le_gronwallBound_of_liminf_deriv_right_le
     apply image_le_of_liminf_slope_right_lt_deriv_boundary hf hf'
     · rwa [sub_self, gronwallBound_x0]
     · exact fun x => hasDerivAt_gronwallBound_shift δ K ε' x a
-  
+    · grind
+    · exact hx
+  intro x hx
+  change f x <= (fun ε' => gronwallBound δ K ε' (x - a)) ε
+  convert! continuousWithinAt_const.closure_le _ _ (H x hx)
+  · simp only [closure_Ioi, self_mem_Ici]
+  exact (gronwallBound_continuous_ε δ K (x - a)).continuousWithinAt
 
 Depends on / 依赖: closure_Ioi, closure_le, continuousWithinAt_const, continuousWithinAt_const.closure_le, convert, gronwallBound, gronwallBound_x0, hasDerivAt_gronwallBound_shift, image_le_of_liminf_slope_right_lt_deriv_boundary, self_mem_Ici, sub_self
 -/
@@ -438,7 +454,9 @@ theorem dist_le_of_approx_trajectories_ODE_of_mem
     fun t ht => (hf' t ht).sub (hg' t ht)
   apply norm_le_gronwallBound_of_norm_deriv_right_le (hf.fun_sub hg) h_deriv ha
   intro t ht
-  have := dist_triangle4
+  have := dist_triangle4_right (f' t) (g' t) (v t (f t)) (v t (g t))
+  have := (hv t ht).dist_le_mul _ (hfs t ht) _ (hgs t ht)
+  grind [dist_eq_norm]
 
 中文:
 定理 dist_le_of_approx_trajectories_ODE_of_mem
@@ -448,7 +466,9 @@ theorem dist_le_of_approx_trajectories_ODE_of_mem
     fun t ht => (hf' t ht).sub (hg' t ht)
   apply norm_le_gronwallBound_of_norm_deriv_right_le (hf.fun_sub hg) h_deriv ha
   intro t ht
-  have := dist_triangle4
+  have := dist_triangle4_right (f' t) (g' t) (v t (f t)) (v t (g t))
+  have := (hv t ht).dist_le_mul _ (hfs t ht) _ (hgs t ht)
+  grind [dist_eq_norm]
 
 Depends on / 依赖: HasDerivWithinAt, IsSplitEpi, IsSplitEpi.of_iso, dist_eq_norm, dist_le_mul, dist_triangle4_right, fun_sub, h_deriv, hf.fun_sub, norm_le_gronwallBound_of_norm_deriv_right_le, of_iso
 -/
@@ -514,7 +534,8 @@ theorem dist_le_of_trajectories_ODE_of_mem
   have g_bound : forall t in Ico a b, dist (v t (g t)) (v t (g t)) <= 0 := by intros; rw [dist_self]
   intro t ht
   have :=
-    dist_le_of_approx_trajectories_ODE_of_mem hv hf hf' f_bound hfs hg h
+    dist_le_of_approx_trajectories_ODE_of_mem hv hf hf' f_bound hfs hg hg' g_bound hgs ha t ht
+  rwa [zero_add, gronwallBound_ε0] at this
 
 中文:
 定理 dist_le_of_trajectories_ODE_of_mem
@@ -523,7 +544,8 @@ theorem dist_le_of_trajectories_ODE_of_mem
   have g_bound : forall t in Ico a b, dist (v t (g t)) (v t (g t)) <= 0 := by intros; rw [dist_self]
   intro t ht
   have :=
-    dist_le_of_approx_trajectories_ODE_of_mem hv hf hf' f_bound hfs hg h
+    dist_le_of_approx_trajectories_ODE_of_mem hv hf hf' f_bound hfs hg hg' g_bound hgs ha t ht
+  rwa [zero_add, gronwallBound_ε0] at this
 
 Depends on / 依赖: IsSplitEpi, IsSplitEpi.epi, dist_le_of_approx_trajectories_ODE_of_mem, dist_self, f_bound, g_bound, intros, zero_add
 -/

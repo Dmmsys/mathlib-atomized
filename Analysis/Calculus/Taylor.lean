@@ -161,7 +161,7 @@ theorem taylorWithinEval_succ
   simp only [Polynomial.eval_sub, Polynomial.eval_X, Polynomial.eval_C,
     PolynomialModule.eval_single, mul_inv_rev]
   dsimp only [taylorCoeffWithin]
-  rw [← mul_smul]; rw [mul_comm]; rw [Nat.factorial_
+  rw [← mul_smul]; rw [mul_comm]; rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [mul_inv_rev]
 
 中文:
 定理 taylorWithinEval_succ
@@ -172,7 +172,7 @@ theorem taylorWithinEval_succ
   simp only [Polynomial.eval_sub, Polynomial.eval_X, Polynomial.eval_C,
     PolynomialModule.eval_single, mul_inv_rev]
   dsimp only [taylorCoeffWithin]
-  rw [← mul_smul]; rw [mul_comm]; rw [Nat.factorial_
+  rw [← mul_smul]; rw [mul_comm]; rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [mul_inv_rev]
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_mul, Nat.cast_one, Nat.factorial_succ, Polynomial, Polynomial.eval_C, Polynomial.eval_X, Polynomial.eval_sub, PolynomialModule, PolynomialModule.comp_eval, PolynomialModule.eval_single, cast_add, cast_mul, cast_one, comp_eval, eval_C, eval_X, eval_single, eval_sub, factorial_succ
 -/
@@ -292,7 +292,9 @@ theorem continuousOn_taylorWithinEval
   refine continuousOn_finsetSum (Finset.range (n + 1)) fun i hi => ?_
   refine (continuousOn_const.mul ((continuousOn_const.sub continuousOn_id).pow _)).smul ?_
   rw [contDiffOn_nat_iff_continuousOn_differentiableOn_deriv hs] at hf
-  simp only [Finset.mem_range] at
+  simp only [Finset.mem_range] at hi
+  refine hf.1 i ?_
+  simp only [Nat.lt_succ_iff.mp hi]
 
 中文:
 定理 continuousOn_taylorWithinEval
@@ -302,7 +304,9 @@ theorem continuousOn_taylorWithinEval
   refine continuousOn_finsetSum (Finset.range (n + 1)) fun i hi => ?_
   refine (continuousOn_const.mul ((continuousOn_const.sub continuousOn_id).pow _)).smul ?_
   rw [contDiffOn_nat_iff_continuousOn_differentiableOn_deriv hs] at hf
-  simp only [Finset.mem_range] at
+  simp only [Finset.mem_range] at hi
+  refine hf.1 i ?_
+  simp only [Nat.lt_succ_iff.mp hi]
 
 Depends on / 依赖: Finset, Finset.mem_range, Finset.range, Nat.lt_succ_iff.mp, contDiffOn_nat_iff_continuousOn_differentiableOn_deriv, continuousOn_const, continuousOn_const.mul, continuousOn_const.sub, continuousOn_finsetSum, continuousOn_id, lt_succ_iff, mem_range, simp_rw, taylor_within_apply
 -/
@@ -359,7 +363,16 @@ theorem hasDerivWithinAt_taylor_coeff_within
     convert (hf.mono_of_mem_nhdsWithin hs).hasDerivWithinAt
     rw [iteratedDerivWithin_succ]
     exact (derivWithin_of_mem_nhdsWithin hs ht hf).symm
-  have : HasDerivWithinAt (fun 
+  have : HasDerivWithinAt (fun t => ((k + 1 : Real) * k !)⁻¹ * (x - t) ^ (k + 1))
+      (-((k ! : Real)⁻¹ * (x - y) ^ k)) t y := by
+    -- Commuting the factors:
+    have : -((k ! : Real)⁻¹ * (x - y) ^ k) = ((k + 1 : Real) * k !)⁻¹ * (-(k + 1) * (x - y) ^ k) := by
+      field
+    rw [this]
+    exact (monomial_has_deriv_aux y x _).hasDerivWithinAt.const_mul _
+  convert! this.smul hf using 1
+  field_simp
+  module
 
 中文:
 定理 hasDerivWithinAt_taylor_coeff_within
@@ -370,7 +383,16 @@ theorem hasDerivWithinAt_taylor_coeff_within
     convert (hf.mono_of_mem_nhdsWithin hs).hasDerivWithinAt
     rw [iteratedDerivWithin_succ]
     exact (derivWithin_of_mem_nhdsWithin hs ht hf).symm
-  have : HasDerivWithinAt (fun 
+  have : HasDerivWithinAt (fun t => ((k + 1 : Real) * k !)⁻¹ * (x - t) ^ (k + 1))
+      (-((k ! : Real)⁻¹ * (x - y) ^ k)) t y := by
+    -- Commuting the factors:
+    have : -((k ! : Real)⁻¹ * (x - y) ^ k) = ((k + 1 : Real) * k !)⁻¹ * (-(k + 1) * (x - y) ^ k) := by
+      field
+    rw [this]
+    exact (monomial_has_deriv_aux y x _).hasDerivWithinAt.const_mul _
+  convert! this.smul hf using 1
+  field_simp
+  module
 
 Depends on / 依赖: HasDerivWithinAt, convert, derivWithin_of_mem_nhdsWithin, hasDerivWithinAt, hf.mono_of_mem_nhdsWithin, iteratedDerivWithin, iteratedDerivWithin_succ, mono_of_mem_nhdsWithin, replace
 -/
@@ -410,7 +432,21 @@ theorem hasDerivWithinAt_taylorWithinEval
   | zero =>
     simp only [taylor_within_zero_eval, Nat.factorial_zero, Nat.cast_one, inv_one, pow_zero,
       mul_one, zero_add, one_smul]
-    
+    simp only [iteratedDerivWithin_zero] at hf'
+    rw [iteratedDerivWithin_one]
+    exact hf'.hasDerivWithinAt.mono h
+  | succ k hk =>
+    simp_rw [Nat.add_succ, taylorWithinEval_succ]
+    simp only [add_zero, Nat.factorial_succ, Nat.cast_mul, Nat.cast_add, Nat.cast_one]
+    have coe_lt_succ : (k : WithTop Nat) < k.succ := Nat.cast_lt.2 k.lt_succ_self
+    have hdiff : DifferentiableOn Real (iteratedDerivWithin k f s) s' :=
+      (hf.differentiableOn_iteratedDerivWithin (mod_cast coe_lt_succ) hs_unique).mono h
+    specialize hk hf.of_succ ((hdiff y hy).mono_of_mem_nhdsWithin hs')
+    convert!
+      hk.add
+        (hasDerivWithinAt_taylor_coeff_within hs'_unique (nhdsWithin_mono _ h self_mem_nhdsWithin)
+          hf') using 1
+    exact (add_sub_cancel _ _).symm
 
 中文:
 定理 hasDerivWithinAt_taylorWithinEval
@@ -422,7 +458,21 @@ theorem hasDerivWithinAt_taylorWithinEval
   | zero =>
     simp only [taylor_within_zero_eval, Nat.factorial_zero, Nat.cast_one, inv_one, pow_zero,
       mul_one, zero_add, one_smul]
-    
+    simp only [iteratedDerivWithin_zero] at hf'
+    rw [iteratedDerivWithin_one]
+    exact hf'.hasDerivWithinAt.mono h
+  | succ k hk =>
+    simp_rw [Nat.add_succ, taylorWithinEval_succ]
+    simp only [add_zero, Nat.factorial_succ, Nat.cast_mul, Nat.cast_add, Nat.cast_one]
+    have coe_lt_succ : (k : WithTop Nat) < k.succ := Nat.cast_lt.2 k.lt_succ_self
+    have hdiff : DifferentiableOn Real (iteratedDerivWithin k f s) s' :=
+      (hf.differentiableOn_iteratedDerivWithin (mod_cast coe_lt_succ) hs_unique).mono h
+    specialize hk hf.of_succ ((hdiff y hy).mono_of_mem_nhdsWithin hs')
+    convert!
+      hk.add
+        (hasDerivWithinAt_taylor_coeff_within hs'_unique (nhdsWithin_mono _ h self_mem_nhdsWithin)
+          hf') using 1
+    exact (add_sub_cancel _ _).symm
 
 Depends on / 依赖: Nat.add_succ, Nat.cast_mul, Nat.cast_one, Nat.factorial_succ, Nat.factorial_zero, UniqueDiffWithinAt, UniqueDiffWithinAt.mono_nhds, _unique, add_succ, add_zero, cast_mul, cast_one, factorial_succ, factorial_zero, hasDerivWithinAt, hasDerivWithinAt.mono, hs_unique, inv_one, iteratedDerivWithin_one, iteratedDerivWithin_zero
 -/
@@ -521,7 +571,14 @@ theorem hasDerivAt_taylorWithinEval_succ
   simp_rw [taylor_within_apply]
   have : forall (i : Nat) {c : Real} {c' : E},
       HasDerivAt (fun x => (c * (x - x₀) ^ i) • c') ((c * (i * (x - x₀) ^ (i - 1) * 1)) • c') x :=
-.smul_const _ .const_mul _ .pow _ .sub_const _ fun _ _ =
+.smul_const _ .const_mul _ .pow _ .sub_const _ fun _ _ => hasDerivAt_id _
+.congr_deriv apply HasDerivAt.fun_sum (fun i _ => this i)
+  rw [Finset.sum_range_succ']; rw [Nat.cast_zero]; rw [zero_mul]; rw [zero_mul]; rw [mul_zero]; rw [zero_smul]; rw [add_zero]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [← iteratedDerivWithin_succ']
+  congr 1
+  simp [field, Nat.factorial_succ]
 
 中文:
 定理 hasDerivAt_taylorWithinEval_succ
@@ -531,7 +588,14 @@ theorem hasDerivAt_taylorWithinEval_succ
   simp_rw [taylor_within_apply]
   have : forall (i : Nat) {c : Real} {c' : E},
       HasDerivAt (fun x => (c * (x - x₀) ^ i) • c') ((c * (i * (x - x₀) ^ (i - 1) * 1)) • c') x :=
-.smul_const _ .const_mul _ .pow _ .sub_const _ fun _ _ =
+.smul_const _ .const_mul _ .pow _ .sub_const _ fun _ _ => hasDerivAt_id _
+.congr_deriv apply HasDerivAt.fun_sum (fun i _ => this i)
+  rw [Finset.sum_range_succ']; rw [Nat.cast_zero]; rw [zero_mul]; rw [zero_mul]; rw [mul_zero]; rw [zero_smul]; rw [add_zero]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [← iteratedDerivWithin_succ']
+  congr 1
+  simp [field, Nat.factorial_succ]
 
 Depends on / 依赖: Finset, Finset.sum_range_succ, HasDerivAt, HasDerivAt.fun_sum, Nat.cast_zero, add_zero, cast_zero, congr_deriv, const_mul, fun_sum, hasDerivAt_id, mul_zero, simp_rw, smul_const, sub_const, sum_range_succ, taylorWithinEval, taylor_within_apply, zero_mul, zero_smul
 -/
@@ -565,7 +629,16 @@ theorem taylor_isLittleO
     exact hf.continuousOn.continuousWithinAt hx₀s
   | succ n h =>
     rcases s.eq_singleton_or_nontrivial hx₀s with rfl | hs'
-    · sim
+    · simp
+    replace hs' := uniqueDiffOn_convex hs (hs.nontrivial_iff_nonempty_interior.1 hs')
+    simp only [Nat.cast_add, Nat.cast_one] at hf
+    convert!
+      Convex.isLittleO_pow_succ_real hs hx₀s ?_ (h (hf.derivWithin hs' le_rfl)) (f := fun x =>
+        f x - taylorWithinEval f (n + 1) s x₀ x) using 1
+    · simp
+    · intro x hx
+      refine HasDerivWithinAt.sub ?_ (hasDerivAt_taylorWithinEval_succ f n).hasDerivWithinAt
+      exact (hf.differentiableOn (by simp) _ hx).hasDerivWithinAt
 
 中文:
 定理 taylor_isLittleO
@@ -578,7 +651,16 @@ theorem taylor_isLittleO
     exact hf.continuousOn.continuousWithinAt hx₀s
   | succ n h =>
     rcases s.eq_singleton_or_nontrivial hx₀s with rfl | hs'
-    · sim
+    · simp
+    replace hs' := uniqueDiffOn_convex hs (hs.nontrivial_iff_nonempty_interior.1 hs')
+    simp only [Nat.cast_add, Nat.cast_one] at hf
+    convert!
+      Convex.isLittleO_pow_succ_real hs hx₀s ?_ (h (hf.derivWithin hs' le_rfl)) (f := fun x =>
+        f x - taylorWithinEval f (n + 1) s x₀ x) using 1
+    · simp
+    · intro x hx
+      refine HasDerivWithinAt.sub ?_ (hasDerivAt_taylorWithinEval_succ f n).hasDerivWithinAt
+      exact (hf.differentiableOn (by simp) _ hx).hasDerivWithinAt
 
 Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_one_iff, Convex, Convex.isLittleO_pow_succ_real, Nat.cast_add, Nat.cast_one, cast_add, cast_one, continuousOn, continuousWithinAt, convert, derivWithin, eq_singleton_or_nontrivial, generalizing, hf.continuousOn.continuousWithinAt, hf.derivWithin, hs.nontrivial_iff_nonempty_interior, isLittleO_one_iff, isLittleO_pow_succ_real, le_rfl
 -/
@@ -635,7 +717,11 @@ theorem taylor_tendsto
   rw [Asymptotics.isLittleO_iff_tendsto] at h_isLittleO
   · rw [tendsto_zero_iff_norm_tendsto_zero]
     simpa [norm_smul, div_eq_inv_mul] using h_isLittleO
-  · simp only [norm_pow, Real.norm_eq_abs, pow_eq_zero_iff', abs_eq_zero, ne_eq
+  · simp only [norm_pow, Real.norm_eq_abs, pow_eq_zero_iff', abs_eq_zero, ne_eq, norm_eq_zero,
+      and_imp]
+    intro x hx
+    rw [sub_eq_zero] at hx
+    simp [hx]
 
 中文:
 定理 taylor_tendsto
@@ -645,7 +731,11 @@ theorem taylor_tendsto
   rw [Asymptotics.isLittleO_iff_tendsto] at h_isLittleO
   · rw [tendsto_zero_iff_norm_tendsto_zero]
     simpa [norm_smul, div_eq_inv_mul] using h_isLittleO
-  · simp only [norm_pow, Real.norm_eq_abs, pow_eq_zero_iff', abs_eq_zero, ne_eq
+  · simp only [norm_pow, Real.norm_eq_abs, pow_eq_zero_iff', abs_eq_zero, ne_eq, norm_eq_zero,
+      and_imp]
+    intro x hx
+    rw [sub_eq_zero] at hx
+    simp [hx]
 
 Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_iff_tendsto, Real.norm_eq_abs, abs_eq_zero, and_imp, div_eq_inv_mul, h_isLittleO, isLittleO_iff_tendsto, ne_eq, norm_eq_abs, norm_eq_zero, norm_norm, norm_pow, norm_smul, pow_eq_zero_iff, sub_eq_zero, taylor_isLittleO, tendsto_zero_iff_norm_tendsto_zero
 -/
@@ -704,7 +794,12 @@ theorem taylor_mean_remainder
   -- We apply the mean value theorem
   rcases exists_ratio_hasDerivAt_eq_ratio_slope (fun t => taylorWithinEval f n (uIcc x₀ x) t x)
       (fun t => ((n ! : Real)⁻¹ * (x - t) ^ n) • iteratedDerivWithin (n + 1) f (uIcc x₀ x) t) hx₁
-      (continuousOn_t
+      (continuousOn_taylorWithinEval (uniqueDiffOn_Icc hx₁) hf)
+      (fun _ hy => taylorWithinEval_hasDerivAt_Ioo x hx₁ hy hf hf')
+    g g' gcont gdiff with ⟨y, hy, h⟩
+  use y, hy
+  -- The rest is simplifications and trivial calculations
+  grind [uIoo, smul_eq_mul, taylorWithinEval_self]
 
 中文:
 定理 taylor_mean_remainder
@@ -714,7 +809,12 @@ theorem taylor_mean_remainder
   -- We apply the mean value theorem
   rcases exists_ratio_hasDerivAt_eq_ratio_slope (fun t => taylorWithinEval f n (uIcc x₀ x) t x)
       (fun t => ((n ! : Real)⁻¹ * (x - t) ^ n) • iteratedDerivWithin (n + 1) f (uIcc x₀ x) t) hx₁
-      (continuousOn_t
+      (continuousOn_taylorWithinEval (uniqueDiffOn_Icc hx₁) hf)
+      (fun _ hy => taylorWithinEval_hasDerivAt_Ioo x hx₁ hy hf hf')
+    g g' gcont gdiff with ⟨y, hy, h⟩
+  use y, hy
+  -- The rest is simplifications and trivial calculations
+  grind [uIoo, smul_eq_mul, taylorWithinEval_self]
 -/
 theorem taylor_mean_remainder {f : Real -> Real} {g g' : Real -> Real} {x x₀ : Real} {n : Nat} (hx : x₀ != x)
     (hf : ContDiffOn Real n f (uIcc x₀ x))
@@ -747,7 +847,14 @@ theorem taylor_mean_remainder_lagrange
   have gcont : ContinuousOn (fun t : Real => (x - t) ^ (n + 1)) (uIcc x₀ x) := by fun_prop
   have xy_ne : forall y : Real, y in uIoo x₀ x -> (x - y) ^ n != 0 := by grind [uIoo, pow_ne_zero]
   have hg' : forall y : Real, y in uIoo x₀ x -> -(↑n + 1) * (x - y) ^ n != 0 := fun y hy =>
-    mul_ne_zero
+    mul_ne_zero (neg_ne_zero.mpr (Nat.cast_add_one_ne_zero n)) (xy_ne y hy)
+  -- We apply the general theorem with g(t) = (x - t)^(n+1)
+  rcases taylor_mean_remainder hx hf hf' gcont (fun y _ => monomial_has_deriv_aux y x _) hg' with
+    ⟨y, hy, h⟩
+  use y, hy
+  simp only [sub_self, zero_pow, Ne, Nat.succ_ne_zero, not_false_iff, zero_sub, mul_neg] at h
+  rw [h]; rw [neg_div]; rw [← div_neg]; rw [neg_mul]; rw [neg_neg]
+  simp [field, xy_ne y hy, Nat.factorial]
 
 中文:
 定理 taylor_mean_remainder_lagrange
@@ -756,7 +863,14 @@ theorem taylor_mean_remainder_lagrange
   have gcont : ContinuousOn (fun t : Real => (x - t) ^ (n + 1)) (uIcc x₀ x) := by fun_prop
   have xy_ne : forall y : Real, y in uIoo x₀ x -> (x - y) ^ n != 0 := by grind [uIoo, pow_ne_zero]
   have hg' : forall y : Real, y in uIoo x₀ x -> -(↑n + 1) * (x - y) ^ n != 0 := fun y hy =>
-    mul_ne_zero
+    mul_ne_zero (neg_ne_zero.mpr (Nat.cast_add_one_ne_zero n)) (xy_ne y hy)
+  -- We apply the general theorem with g(t) = (x - t)^(n+1)
+  rcases taylor_mean_remainder hx hf hf' gcont (fun y _ => monomial_has_deriv_aux y x _) hg' with
+    ⟨y, hy, h⟩
+  use y, hy
+  simp only [sub_self, zero_pow, Ne, Nat.succ_ne_zero, not_false_iff, zero_sub, mul_neg] at h
+  rw [h]; rw [neg_div]; rw [← div_neg]; rw [neg_mul]; rw [neg_neg]
+  simp [field, xy_ne y hy, Nat.factorial]
 
 Depends on / 依赖: ContinuousOn, Nat.cast_add_one_ne_zero, cast_add_one_ne_zero, fun_prop, mul_ne_zero, neg_ne_zero, neg_ne_zero.mpr, pow_ne_zero, xy_ne
 -/
@@ -789,7 +903,10 @@ lemma taylor_mean_remainder_lagrange_iteratedDeriv
     refine hf.differentiableOn_iteratedDerivWithin ?_ hu
     norm_cast
     simp
-  obtain ⟨x', h1, h2⟩ := taylor_mean_remainder_lagrange hx hf
+  obtain ⟨x', h1, h2⟩ := taylor_mean_remainder_lagrange hx hf.of_succ (hd.mono Ioo_subset_Icc_self)
+  use x', h1
+  rw [h2]; rw [iteratedDeriv_eq_iteratedFDeriv]; rw [iteratedDerivWithin_eq_iteratedFDerivWithin]; rw [iteratedFDerivWithin_eq_iteratedFDeriv hu _ ⟨le_of_lt h1.1]; rw [le_of_lt h1.2⟩]
+  exact hf.contDiffAt (Icc_mem_nhds_iff.2 h1)
 
 中文:
 引理 taylor_mean_remainder_lagrange_iteratedDeriv
@@ -800,7 +917,10 @@ lemma taylor_mean_remainder_lagrange_iteratedDeriv
     refine hf.differentiableOn_iteratedDerivWithin ?_ hu
     norm_cast
     simp
-  obtain ⟨x', h1, h2⟩ := taylor_mean_remainder_lagrange hx hf
+  obtain ⟨x', h1, h2⟩ := taylor_mean_remainder_lagrange hx hf.of_succ (hd.mono Ioo_subset_Icc_self)
+  use x', h1
+  rw [h2]; rw [iteratedDeriv_eq_iteratedFDeriv]; rw [iteratedDerivWithin_eq_iteratedFDerivWithin]; rw [iteratedFDerivWithin_eq_iteratedFDeriv hu _ ⟨le_of_lt h1.1]; rw [le_of_lt h1.2⟩]
+  exact hf.contDiffAt (Icc_mem_nhds_iff.2 h1)
 
 Depends on / 依赖: DifferentiableOn, Ioo_subset_Icc_self, UniqueDiffOn, differentiableOn_iteratedDerivWithin, hd.mono, hf.differentiableOn_iteratedDerivWithin, hf.of_succ, iteratedDerivWithin, iteratedDerivWithin_eq_iteratedFDerivWithin, iteratedDeriv_eq_iteratedFDeriv, iteratedFDerivWithin_eq_iteratedFDeriv, le_of_lt, of_succ, taylor_mean_remainder_lagrange, uniqueDiffOn_uIcc
 -/
@@ -829,7 +949,10 @@ theorem taylor_mean_remainder_cauchy
   have gdiff : forall x_1 : Real, x_1 in uIoo x₀ x -> HasDerivAt id ((fun _ : Real => (1 : Real)) x_1) x_1 :=
     fun _ _ => hasDerivAt_id _
   -- We apply the general theorem with g = id
-  rcases taylor_mean_remainder hx hf hf' gcont gdiff
+  rcases taylor_mean_remainder hx hf hf' gcont gdiff fun _ _ => by simp with ⟨y, hy, h⟩
+  use y, hy
+  rw [h]
+  simp [field]
 
 中文:
 定理 taylor_mean_remainder_cauchy
@@ -839,7 +962,10 @@ theorem taylor_mean_remainder_cauchy
   have gdiff : forall x_1 : Real, x_1 in uIoo x₀ x -> HasDerivAt id ((fun _ : Real => (1 : Real)) x_1) x_1 :=
     fun _ _ => hasDerivAt_id _
   -- We apply the general theorem with g = id
-  rcases taylor_mean_remainder hx hf hf' gcont gdiff
+  rcases taylor_mean_remainder hx hf hf' gcont gdiff fun _ _ => by simp with ⟨y, hy, h⟩
+  use y, hy
+  rw [h]
+  simp [field]
 
 Depends on / 依赖: ContinuousOn, HasDerivAt, fun_prop, hasDerivAt_id
 -/
@@ -869,7 +995,31 @@ theorem taylor_mean_remainder_bound
     simp [hx]
   -- The nth iterated derivative is differentiable
   have hf' : DifferentiableOn Real (iteratedDerivWithin n f (Icc a b)) (Icc a b) :=
-    hf.differentiableOn_iteratedDerivWithin (mod_cast n.lt_suc
+    hf.differentiableOn_iteratedDerivWithin (mod_cast n.lt_succ_self)
+      (uniqueDiffOn_Icc h)
+  -- We can uniformly bound the derivative of the Taylor polynomial
+  have h' : forall y in Ico a x,
+      ‖((n ! : Real)⁻¹ * (x - y) ^ n) • iteratedDerivWithin (n + 1) f (Icc a b) y‖ <=
+        (n ! : Real)⁻¹ * |x - a| ^ n * C := by
+    rintro y ⟨hay, hyx⟩
+    rw [norm_smul]; rw [Real.norm_eq_abs]
+    gcongr
+    · rw [abs_mul, abs_pow, abs_inv, Nat.abs_cast]
+      gcongr
+    -- Estimate the iterated derivative by `C`
+    · exact hC y ⟨hay, hyx.le.trans hx.2⟩
+  -- Apply the mean value theorem for vector-valued functions:
+  have A : forall t in Icc a x, HasDerivWithinAt (fun y => taylorWithinEval f n (Icc a b) y x)
+      (((↑n !)⁻¹ * (x - t) ^ n) • iteratedDerivWithin (n + 1) f (Icc a b) t) (Icc a x) t := by
+    intro t ht
+    have I : Icc a x subseteq Icc a b := Icc_subset_Icc_right hx.2
+    exact (hasDerivWithinAt_taylorWithinEval_at_Icc x h (I ht) hf.of_succ hf').mono I
+  have := norm_image_sub_le_of_norm_deriv_le_segment' A h' x (right_mem_Icc.2 hx.1)
+  simp only [taylorWithinEval_self] at this
+  refine this.trans_eq ?_
+  -- The rest is a trivial calculation
+  rw [abs_of_nonneg (sub_nonneg.mpr hx.1)]
+  ring
 
 中文:
 定理 taylor_mean_remainder_bound
@@ -880,7 +1030,31 @@ theorem taylor_mean_remainder_bound
     simp [hx]
   -- The nth iterated derivative is differentiable
   have hf' : DifferentiableOn Real (iteratedDerivWithin n f (Icc a b)) (Icc a b) :=
-    hf.differentiableOn_iteratedDerivWithin (mod_cast n.lt_suc
+    hf.differentiableOn_iteratedDerivWithin (mod_cast n.lt_succ_self)
+      (uniqueDiffOn_Icc h)
+  -- We can uniformly bound the derivative of the Taylor polynomial
+  have h' : forall y in Ico a x,
+      ‖((n ! : Real)⁻¹ * (x - y) ^ n) • iteratedDerivWithin (n + 1) f (Icc a b) y‖ <=
+        (n ! : Real)⁻¹ * |x - a| ^ n * C := by
+    rintro y ⟨hay, hyx⟩
+    rw [norm_smul]; rw [Real.norm_eq_abs]
+    gcongr
+    · rw [abs_mul, abs_pow, abs_inv, Nat.abs_cast]
+      gcongr
+    -- Estimate the iterated derivative by `C`
+    · exact hC y ⟨hay, hyx.le.trans hx.2⟩
+  -- Apply the mean value theorem for vector-valued functions:
+  have A : forall t in Icc a x, HasDerivWithinAt (fun y => taylorWithinEval f n (Icc a b) y x)
+      (((↑n !)⁻¹ * (x - t) ^ n) • iteratedDerivWithin (n + 1) f (Icc a b) t) (Icc a x) t := by
+    intro t ht
+    have I : Icc a x subseteq Icc a b := Icc_subset_Icc_right hx.2
+    exact (hasDerivWithinAt_taylorWithinEval_at_Icc x h (I ht) hf.of_succ hf').mono I
+  have := norm_image_sub_le_of_norm_deriv_le_segment' A h' x (right_mem_Icc.2 hx.1)
+  simp only [taylorWithinEval_self] at this
+  refine this.trans_eq ?_
+  -- The rest is a trivial calculation
+  rw [abs_of_nonneg (sub_nonneg.mpr hx.1)]
+  ring
 
 Depends on / 依赖: Icc_self, eq_or_lt_of_le, mem_singleton_iff
 -/
@@ -931,7 +1105,12 @@ theorem exists_taylor_mean_remainder_bound
     have : x = a := by simpa [← le_antisymm_iff] using hx
     simp [← this]
   -- We estimate by the supremum of the norm of the iterated derivative
-  let g : Real -> Real := fun y => ‖iteratedDerivWithin (n + 1) f (Icc a b)
+  let g : Real -> Real := fun y => ‖iteratedDerivWithin (n + 1) f (Icc a b) y‖
+  use SupSet.sSup (g '' Icc a b) / (n !)
+  intro x hx
+  rw [div_mul_eq_mul_div₀]
+  refine taylor_mean_remainder_bound hab hf hx fun y => ?_
+  exact (hf.continuousOn_iteratedDerivWithin rfl.le <| uniqueDiffOn_Icc h).norm.le_sSup_image_Icc
 
 中文:
 定理 存在_taylor_mean_remainder_bound
@@ -942,7 +1121,12 @@ theorem exists_taylor_mean_remainder_bound
     have : x = a := by simpa [← le_antisymm_iff] using hx
     simp [← this]
   -- We estimate by the supremum of the norm of the iterated derivative
-  let g : Real -> Real := fun y => ‖iteratedDerivWithin (n + 1) f (Icc a b)
+  let g : Real -> Real := fun y => ‖iteratedDerivWithin (n + 1) f (Icc a b) y‖
+  use SupSet.sSup (g '' Icc a b) / (n !)
+  intro x hx
+  rw [div_mul_eq_mul_div₀]
+  refine taylor_mean_remainder_bound hab hf hx fun y => ?_
+  exact (hf.continuousOn_iteratedDerivWithin rfl.le <| uniqueDiffOn_Icc h).norm.le_sSup_image_Icc
 
 Depends on / 依赖: eq_or_lt_of_le, le_antisymm_iff
 -/
@@ -974,7 +1158,38 @@ theorem taylor_integral_remainder_aux
   | zero =>
     simp only [taylor_within_zero_eval, pow_zero, Nat.factorial_zero, Nat.cast_one, ne_eq,
       one_ne_zero, not_false_eq_true, div_self, zero_add, iteratedDerivWithin_one, one_smul]
-    simp only [nonpos_iff_eq_zero,
+    simp only [nonpos_iff_eq_zero, sub_self, deriv_div_const, forall_eq, pow_zero,
+      Nat.factorial_zero, Nat.cast_one, ne_eq, one_ne_zero, not_false_eq_true, div_self,
+      iteratedDerivWithin_zero, one_smul, deriv_const', div_one, zero_smul,
+      intervalIntegral.integral_zero, sub_zero] at hf
+    rw [← hf]
+    refine intervalIntegral.integral_congr_uIoo fun _ ⟨h1, h2⟩ => ?_
+    rw [← derivWithin_of_mem_nhds <| Icc_mem_nhds h1 h2]
+    rfl
+  | succ n ih =>
+    specialize ih (by grind)
+    simp only [taylorWithinEval_succ, mul_inv_rev]
+    rw [sub_add_eq_sub_sub]; rw [ih]
+    simp only [Nat.factorial, Nat.succ_eq_add_one, Nat.cast_mul, Nat.cast_add, Nat.cast_one]
+    have := hf (n + 1) (by rfl)
+    convert! this.symm using 1
+    · simp only [sub_self, ne_eq, Nat.add_eq_zero_iff, one_ne_zero, and_false, not_false_eq_true,
+        zero_pow, zero_div, zero_smul, zero_sub, deriv_div_const, Nat.factorial]
+      apply fun (a b c d : F) (_ : b = c) (_ : a = -d) => show a - b = -c - d by grind
+      · grind
+      · rw [← intervalIntegral.integral_neg]
+        congr
+        ext t
+        rw [deriv_fun_pow (by fun_prop)]; rw [deriv_const_sub]; rw [deriv_id'']; rw [← neg_smul]
+        congr
+        field_simp
+        grind
+    · refine intervalIntegral.integral_congr_uIoo fun _ ⟨h1, h2⟩ => ?_
+      rw [iteratedDerivWithin_succ]
+      congr
+      · rw [Nat.factorial, Nat.cast_mul, Nat.succ_eq_add_one, Nat.cast_add, Nat.cast_one]
+      · rw [← derivWithin_of_mem_nhds <| Icc_mem_nhds h1 h2]
+        rfl
 
 中文:
 定理 taylor_integral_remainder_aux
@@ -986,7 +1201,38 @@ theorem taylor_integral_remainder_aux
   | zero =>
     simp only [taylor_within_zero_eval, pow_zero, Nat.factorial_zero, Nat.cast_one, ne_eq,
       one_ne_zero, not_false_eq_true, div_self, zero_add, iteratedDerivWithin_one, one_smul]
-    simp only [nonpos_iff_eq_zero,
+    simp only [nonpos_iff_eq_zero, sub_self, deriv_div_const, forall_eq, pow_zero,
+      Nat.factorial_zero, Nat.cast_one, ne_eq, one_ne_zero, not_false_eq_true, div_self,
+      iteratedDerivWithin_zero, one_smul, deriv_const', div_one, zero_smul,
+      intervalIntegral.integral_zero, sub_zero] at hf
+    rw [← hf]
+    refine intervalIntegral.integral_congr_uIoo fun _ ⟨h1, h2⟩ => ?_
+    rw [← derivWithin_of_mem_nhds <| Icc_mem_nhds h1 h2]
+    rfl
+  | succ n ih =>
+    specialize ih (by grind)
+    simp only [taylorWithinEval_succ, mul_inv_rev]
+    rw [sub_add_eq_sub_sub]; rw [ih]
+    simp only [Nat.factorial, Nat.succ_eq_add_one, Nat.cast_mul, Nat.cast_add, Nat.cast_one]
+    have := hf (n + 1) (by rfl)
+    convert! this.symm using 1
+    · simp only [sub_self, ne_eq, Nat.add_eq_zero_iff, one_ne_zero, and_false, not_false_eq_true,
+        zero_pow, zero_div, zero_smul, zero_sub, deriv_div_const, Nat.factorial]
+      apply fun (a b c d : F) (_ : b = c) (_ : a = -d) => show a - b = -c - d by grind
+      · grind
+      · rw [← intervalIntegral.integral_neg]
+        congr
+        ext t
+        rw [deriv_fun_pow (by fun_prop)]; rw [deriv_const_sub]; rw [deriv_id'']; rw [← neg_smul]
+        congr
+        field_simp
+        grind
+    · refine intervalIntegral.integral_congr_uIoo fun _ ⟨h1, h2⟩ => ?_
+      rw [iteratedDerivWithin_succ]
+      congr
+      · rw [Nat.factorial, Nat.cast_mul, Nat.succ_eq_add_one, Nat.cast_add, Nat.cast_one]
+      · rw [← derivWithin_of_mem_nhds <| Icc_mem_nhds h1 h2]
+        rfl
 -/
 theorem taylor_integral_remainder_aux [NormedAddCommGroup F] [NormedSpace Real F]
     {f : Real -> F} {x x₀ : Real} {n : Nat}
@@ -1051,7 +1297,9 @@ theorem taylor_integral_remainder_of_absolutelyContinuous
     fun_prop
   · rcases hk.eq_or_lt with rfl | hk
     · exact hf₂
-    repla
+    replace hf₁ := hf₁.of_le (m := k.succ) (by norm_cast)
+    grind [ContDiffOn.absolutelyContinuousOnInterval, uniqueDiffOn_uIcc,
+      contDiffOn_nat_succ_iff_contDiffOn_one_iteratedDerivWithin]
 
 中文:
 定理 taylor_integral_remainder_of_absolutelyContinuous
@@ -1066,7 +1314,9 @@ theorem taylor_integral_remainder_of_absolutelyContinuous
     fun_prop
   · rcases hk.eq_or_lt with rfl | hk
     · exact hf₂
-    repla
+    replace hf₁ := hf₁.of_le (m := k.succ) (by norm_cast)
+    grind [ContDiffOn.absolutelyContinuousOnInterval, uniqueDiffOn_uIcc,
+      contDiffOn_nat_succ_iff_contDiffOn_one_iteratedDerivWithin]
 
 Depends on / 依赖: AbsolutelyContinuousOnInterval, AbsolutelyContinuousOnInterval.integral_mul_deriv_eq_deriv_mul, ContDiffOn, ContDiffOn.absolutelyContinuousOnInterval, absolutelyContinuousOnInterval, contDiffOn_nat_succ_iff_contDiffOn_one_iteratedDerivWithin, eq_or_lt, eq_or_ne, fun_prop, hk.eq_or_lt, integral_mul_deriv_eq_deriv_mul, k.succ, of_le, replace, taylor_integral_remainder_aux, uniqueDiffOn_uIcc
 -/
@@ -1101,7 +1351,24 @@ theorem taylor_integral_remainder
   apply taylor_integral_remainder_aux
   intro k hk
   apply intervalIntegral.integral_smul_deriv_eq_deriv_smul_of_hasDerivAt
-    (u := fun t => (x - t) ^ k / k !) (v := fun t => iteratedD
+    (u := fun t => (x - t) ^ k / k !) (v := fun t => iteratedDerivWithin k f (uIcc x₀ x) t)
+  · fun_prop
+  · exact hf.continuousOn_iteratedDerivWithin (by norm_cast; omega) this
+  · intro t ht
+    apply DifferentiableAt.hasDerivAt
+    fun_prop
+  · intro t ht
+    refine DifferentiableOn.hasDerivAt (s := uIoo x₀ x) ?_ (by grind [Ioo_mem_nhds, uIoo])
+    exact hf.differentiableOn_iteratedDerivWithin (by norm_cast; omega) this
+.mono (by grind [uIoo, uIcc])
+  · apply ContinuousOn.intervalIntegrable
+    fun_prop
+  · apply IntervalIntegrable.congr_ae (f := iteratedDerivWithin (k + 1) f [[x₀, x]])
+.intervalIntegrable · exact hf.continuousOn_iteratedDerivWithin (by norm_cast; omega) this
+    · rw [Filter.EventuallyEq, MeasureTheory.ae_restrict_iff' (by measurability)]
+      filter_upwards [MeasureTheory.volume.ae_ne x₀, MeasureTheory.volume.ae_ne x] with _ _ _ _
+      rw [iteratedDerivWithin_succ]
+      grind [derivWithin_of_mem_nhds, Icc_mem_nhds, uIcc]
 
 中文:
 定理 taylor_integral_remainder
@@ -1113,7 +1380,24 @@ theorem taylor_integral_remainder
   apply taylor_integral_remainder_aux
   intro k hk
   apply intervalIntegral.integral_smul_deriv_eq_deriv_smul_of_hasDerivAt
-    (u := fun t => (x - t) ^ k / k !) (v := fun t => iteratedD
+    (u := fun t => (x - t) ^ k / k !) (v := fun t => iteratedDerivWithin k f (uIcc x₀ x) t)
+  · fun_prop
+  · exact hf.continuousOn_iteratedDerivWithin (by norm_cast; omega) this
+  · intro t ht
+    apply DifferentiableAt.hasDerivAt
+    fun_prop
+  · intro t ht
+    refine DifferentiableOn.hasDerivAt (s := uIoo x₀ x) ?_ (by grind [Ioo_mem_nhds, uIoo])
+    exact hf.differentiableOn_iteratedDerivWithin (by norm_cast; omega) this
+.mono (by grind [uIoo, uIcc])
+  · apply ContinuousOn.intervalIntegrable
+    fun_prop
+  · apply IntervalIntegrable.congr_ae (f := iteratedDerivWithin (k + 1) f [[x₀, x]])
+.intervalIntegrable · exact hf.continuousOn_iteratedDerivWithin (by norm_cast; omega) this
+    · rw [Filter.EventuallyEq, MeasureTheory.ae_restrict_iff' (by measurability)]
+      filter_upwards [MeasureTheory.volume.ae_ne x₀, MeasureTheory.volume.ae_ne x] with _ _ _ _
+      rw [iteratedDerivWithin_succ]
+      grind [derivWithin_of_mem_nhds, Icc_mem_nhds, uIcc]
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.hasDerivAt, DifferentiableOn, DifferentiableOn.hasDerivAt, UniqueDiffOn, continuousOn_iteratedDerivWithin, eq_or_ne, fun_prop, hasDerivAt, hf.continuousOn_iteratedDerivWithin, integral_smul_deriv_eq_deriv_smul_of_hasDerivAt, intervalIntegral, intervalIntegral.integral_smul_deriv_eq_deriv_smul_of_hasDerivAt, iteratedDerivWithin, taylor_integral_remainder_aux, uniqueDiffOn_uIcc
 -/

@@ -132,7 +132,7 @@ instance :
       forget₂ (AlgCat.{u} Int) RingCat.{u} ⋙ forget₂ RingCat.{u} AddCommGrpCat.{u} :=
     rfl
   rw [← heq]
-  infer_instan
+  infer_instance
 
 中文:
 实例 :
@@ -143,7 +143,7 @@ instance :
       forget₂ (AlgCat.{u} Int) RingCat.{u} ⋙ forget₂ RingCat.{u} AddCommGrpCat.{u} :=
     rfl
   rw [← heq]
-  infer_instan
+  infer_instance
 
 Depends on / 依赖: AddCommGrpCat, AlgCat, Functor, Functor.isRightAdjoint_comp_iff_right, ModuleCat, RingCat, infer_instance, isRightAdjoint_comp_iff_right
 -/

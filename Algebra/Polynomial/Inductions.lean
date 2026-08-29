@@ -344,7 +344,7 @@ theorem natDegree_divX_eq_natDegree_tsub_one
     rw [← C_mul_X_pow_eq_monomial]; rw [divX_hom_toFun]; rw [divX_C_mul]; rw [divX_X_pow]
     split_ifs with n0
     · simp [n0]
-    · exact natDegree_C_
+    · exact natDegree_C_mul_X_pow (n - 1) c c0
 
 中文:
 定理 natDegree_divX_eq_natDegree_tsub_one
@@ -357,7 +357,7 @@ theorem natDegree_divX_eq_natDegree_tsub_one
     rw [← C_mul_X_pow_eq_monomial]; rw [divX_hom_toFun]; rw [divX_C_mul]; rw [divX_X_pow]
     split_ifs with n0
     · simp [n0]
-    · exact natDegree_C_
+    · exact natDegree_C_mul_X_pow (n - 1) c c0
 
 Depends on / 依赖: C_mul_X_pow_eq_monomial, divX_C_mul, divX_X_pow, divX_eq_zero_iff, divX_hom, divX_hom_toFun, eq_C_of_natDegree_eq_zero, map_natDegree_eq_sub, natDegree_C_mul_X_pow, split_ifs
 -/
@@ -422,7 +422,25 @@ theorem degree_divX_lt
     degree (divX p) < (divX p * X + C (p.coeff 0)).degree :=
       if h : degree p <= 0 then by
         have h' : C (p.coeff 0) != 0 := by rwa [← eq_C_of_degree_le_zero h]
-        rw [eq_C_of_degree_le_zero h]; rw [divX_C]; rw [degree_zero]; rw [ze
+        rw [eq_C_of_degree_le_zero h]; rw [divX_C]; rw [degree_zero]; rw [zero_mul]; rw [zero_add]
+        exact lt_of_le_of_ne bot_le (Ne.symm (mt degree_eq_bot.1 <| by simpa using h'))
+      else by
+        have hXp0 : divX p != 0 := by
+          simpa [divX_eq_zero_iff, -not_le, degree_le_zero_iff] using h
+        have : leadingCoeff (divX p) * leadingCoeff X != 0 := by simpa
+        have : degree (C (p.coeff 0)) < degree (divX p * X) :=
+          calc
+            degree (C (p.coeff 0)) <= 0 := degree_C_le
+            _ < 1 := by decide
+            _ = degree (X : R[X]) := degree_X.symm
+            _ <= degree (divX p * X) := by
+              rw [← zero_add (degree X)]; rw [degree_mul' this]
+              exact add_le_add
+                (by rw [zero_le_degree_iff, Ne, divX_eq_zero_iff]
+                    exact fun h0 => h (h0.symm ▸ degree_C_le))
+                    le_rfl
+        rw [degree_add_eq_left_of_degree_lt this]; exact degree_lt_degree_mul_X hXp0
+    _ = degree p := congr_arg _ (divX_mul_X_add _)
 
 中文:
 定理 degree_divX_lt
@@ -434,7 +452,25 @@ theorem degree_divX_lt
     degree (divX p) < (divX p * X + C (p.coeff 0)).degree :=
       if h : degree p <= 0 then by
         have h' : C (p.coeff 0) != 0 := by rwa [← eq_C_of_degree_le_zero h]
-        rw [eq_C_of_degree_le_zero h]; rw [divX_C]; rw [degree_zero]; rw [ze
+        rw [eq_C_of_degree_le_zero h]; rw [divX_C]; rw [degree_zero]; rw [zero_mul]; rw [zero_add]
+        exact lt_of_le_of_ne bot_le (Ne.symm (mt degree_eq_bot.1 <| by simpa using h'))
+      else by
+        have hXp0 : divX p != 0 := by
+          simpa [divX_eq_zero_iff, -not_le, degree_le_zero_iff] using h
+        have : leadingCoeff (divX p) * leadingCoeff X != 0 := by simpa
+        have : degree (C (p.coeff 0)) < degree (divX p * X) :=
+          calc
+            degree (C (p.coeff 0)) <= 0 := degree_C_le
+            _ < 1 := by decide
+            _ = degree (X : R[X]) := degree_X.symm
+            _ <= degree (divX p * X) := by
+              rw [← zero_add (degree X)]; rw [degree_mul' this]
+              exact add_le_add
+                (by rw [zero_le_degree_iff, Ne, divX_eq_zero_iff]
+                    exact fun h0 => h (h0.symm ▸ degree_C_le))
+                    le_rfl
+        rw [degree_add_eq_left_of_degree_lt this]; exact degree_lt_degree_mul_X hXp0
+    _ = degree p := congr_arg _ (divX_mul_X_add _)
 
 Depends on / 依赖: Ne.symm, Nontrivial, Nontrivial.of_polynomial_ne, bot_le, degree, degree_eq_bot, degree_le_zero_iff, degree_zero, divX_C, divX_eq_zero_iff, eq_C_of_degree_le_zero, leadingCoeff, lt_of_le_of_ne, not_le, of_polynomial_ne, p.coeff, zero_add, zero_mul
 -/
@@ -481,7 +517,12 @@ definition recOnHorner
       if hcp0 : coeff p 0 = 0 then by
         rw [hcp0]; rw [C_0]; rw [add_zero]
         exact
-          MX _ (fun h : divX p = 0 
+          MX _ (fun h : divX p = 0 => by simp [h, hcp0] at hp) (recOnHorner (divX p) M0 MC MX)
+      else
+        MC _ _ (coeff_mul_X_zero _) hcp0
+          (if hpX0 : divX p = 0 then show M (divX p * X) by rw [hpX0, zero_mul]; exact M0
+          else MX (divX p) hpX0 (recOnHorner _ M0 MC MX))
+termination_by p.degree
 
 中文:
 定义 recOnHorner
@@ -495,7 +536,12 @@ definition recOnHorner
       if hcp0 : coeff p 0 = 0 then by
         rw [hcp0]; rw [C_0]; rw [add_zero]
         exact
-          MX _ (fun h : divX p = 0 
+          MX _ (fun h : divX p = 0 => by simp [h, hcp0] at hp) (recOnHorner (divX p) M0 MC MX)
+      else
+        MC _ _ (coeff_mul_X_zero _) hcp0
+          (if hpX0 : divX p = 0 then show M (divX p * X) by rw [hpX0, zero_mul]; exact M0
+          else MX (divX p) hpX0 (recOnHorner _ M0 MC MX))
+termination_by p.degree
 
 Depends on / 依赖: Classical, Classical.decEq, add_zero, coeff_mul_X_zero, degree, degree_divX_lt, divX_mul_X_add, p.degre, recOnHorner, termination_by, zero_mul
 -/
@@ -541,7 +587,13 @@ theorem degree_pos_induction_on
         (lt_of_not_ge fun h =>
 not_lt_of_ge (degree_C_le (a := a))
             by rwa [eq_C_of_degree_le_zero h, ← C_add, heq0, zero_add] at h0)
-      hadd this (i
+      hadd this (ih this)))
+    (fun p _ ih h0' =>
+      if h0 : 0 < degree p then hX h0 (ih h0)
+      else by
+        rw [eq_C_of_degree_le_zero (le_of_not_gt h0)] at h0' ⊢
+        exact hC fun h : coeff p 0 = 0 => by simp [h] at h0')
+    h0
 
 中文:
 定理 degree_pos_induction_on
@@ -552,7 +604,13 @@ not_lt_of_ge (degree_C_le (a := a))
         (lt_of_not_ge fun h =>
 not_lt_of_ge (degree_C_le (a := a))
             by rwa [eq_C_of_degree_le_zero h, ← C_add, heq0, zero_add] at h0)
-      hadd this (i
+      hadd this (ih this)))
+    (fun p _ ih h0' =>
+      if h0 : 0 < degree p then hX h0 (ih h0)
+      else by
+        rw [eq_C_of_degree_le_zero (le_of_not_gt h0)] at h0' ⊢
+        exact hC fun h : coeff p 0 = 0 => by simp [h] at h0')
+    h0
 
 Depends on / 依赖: C_add, absurd, degree, degree_C_le, degree_zero, eq_C_of_degree_le_zero, le_of_not_gt, lt_of_not_ge, not_lt_of_ge, recOnHorner, zero_add
 -/
@@ -598,7 +656,20 @@ theorem natDegree_ne_zero_induction_on
   · exact fun a => Or.inl (natDegree_C _)
   · rintro p q (hp | hp) (hq | hq)
     · refine Or.inl ?_
-      rw [eq_C_of_natDegree_eq_zero hp]; rw [eq_C_of_natDegree_eq_zero hq];
+      rw [eq_C_of_natDegree_eq_zero hp]; rw [eq_C_of_natDegree_eq_zero hq]; rw [← C_add]; rw [natDegree_C]
+    · refine Or.inr ?_
+      rw [eq_C_of_natDegree_eq_zero hp]
+      exact h_C_add hq
+    · refine Or.inr ?_
+      rw [eq_C_of_natDegree_eq_zero hq]; rw [add_comm]
+      exact h_C_add hp
+    · exact Or.inr (h_add hp hq)
+  · intro n a _
+    by_cases a0 : a = 0
+    · exact Or.inl (by rw [a0, C_0, zero_mul, natDegree_zero])
+    · refine Or.inr ?_
+      rw [C_mul_X_pow_eq_monomial]
+      exact h_monomial a0 n.succ_ne_zero
 
 中文:
 定理 natDegree_ne_zero_induction_on
@@ -609,7 +680,20 @@ theorem natDegree_ne_zero_induction_on
   · exact fun a => Or.inl (natDegree_C _)
   · rintro p q (hp | hp) (hq | hq)
     · refine Or.inl ?_
-      rw [eq_C_of_natDegree_eq_zero hp]; rw [eq_C_of_natDegree_eq_zero hq];
+      rw [eq_C_of_natDegree_eq_zero hp]; rw [eq_C_of_natDegree_eq_zero hq]; rw [← C_add]; rw [natDegree_C]
+    · refine Or.inr ?_
+      rw [eq_C_of_natDegree_eq_zero hp]
+      exact h_C_add hq
+    · refine Or.inr ?_
+      rw [eq_C_of_natDegree_eq_zero hq]; rw [add_comm]
+      exact h_C_add hp
+    · exact Or.inr (h_add hp hq)
+  · intro n a _
+    by_cases a0 : a = 0
+    · exact Or.inl (by rw [a0, C_0, zero_mul, natDegree_zero])
+    · refine Or.inr ?_
+      rw [C_mul_X_pow_eq_monomial]
+      exact h_monomial a0 n.succ_ne_zero
 
 Depends on / 依赖: C_add, Or.inl, Or.inr, Or.recOn, Polynomial, Polynomial.induction_on, add_comm, eq_C_of_natDegree_eq_zero, f.natDegree, h_C_add, h_add, induction_on, natDegree, natDegree_C
 -/

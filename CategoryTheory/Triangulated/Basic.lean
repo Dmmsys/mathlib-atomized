@@ -478,7 +478,11 @@ definition Triangle.isoMk
   inv := Triangle.homMk _ _ iso₁.inv iso₂.inv iso₃.inv
     (by simp only [← cancel_mono iso₂.hom, assoc, Iso.inv_hom_id, comp_id,
       comm₁, Iso.inv_hom_id_assoc])
-    (by simp only [← cancel_mono iso₃.hom, assoc, Iso.inv_hom_id, comp
+    (by simp only [← cancel_mono iso₃.hom, assoc, Iso.inv_hom_id, comp_id,
+      comm₂, Iso.inv_hom_id_assoc])
+    (by simp only [← cancel_mono (iso₁.hom⟦(1 : Int)⟧'), Category.assoc, comm₃,
+      Iso.inv_hom_id_assoc, ← Functor.map_comp, Iso.inv_hom_id,
+      Functor.map_id, Category.comp_id])
 
 中文:
 定义 Triangle.isoMk
@@ -487,7 +491,11 @@ definition Triangle.isoMk
   inv := Triangle.homMk _ _ iso₁.inv iso₂.inv iso₃.inv
     (by simp only [← cancel_mono iso₂.hom, assoc, Iso.inv_hom_id, comp_id,
       comm₁, Iso.inv_hom_id_assoc])
-    (by simp only [← cancel_mono iso₃.hom, assoc, Iso.inv_hom_id, comp
+    (by simp only [← cancel_mono iso₃.hom, assoc, Iso.inv_hom_id, comp_id,
+      comm₂, Iso.inv_hom_id_assoc])
+    (by simp only [← cancel_mono (iso₁.hom⟦(1 : Int)⟧'), Category.assoc, comm₃,
+      Iso.inv_hom_id_assoc, ← Functor.map_comp, Iso.inv_hom_id,
+      Functor.map_id, Category.comp_id])
 
 Depends on / 依赖: A.mor, B.mor, Iso.inv_hom_id, Iso.inv_hom_id_assoc, Triangle, Triangle.homMk, cancel_mono, cat_disch, comp_id, inv_hom_id, inv_hom_id_assoc
 -/
@@ -877,6 +885,10 @@ instance :
   neg_add_cancel f := by ext <;> apply neg_add_cancel
   sub_eq_add_neg f g := by ext <;> apply sub_eq_add_neg
   nsmul_zero f := by cat_disch
+  nsmul_succ n f := by ext <;> apply AddMonoid.nsmul_succ
+  zsmul_zero' := by cat_disch
+  zsmul_succ' n f := by ext <;> apply SubNegMonoid.zsmul_succ'
+  zsmul_neg' n f := by ext <;> apply SubNegMonoid.zsmul_neg'
 
 中文:
 实例 :
@@ -888,6 +900,10 @@ instance :
   neg_add_cancel f := by ext <;> apply neg_add_cancel
   sub_eq_add_neg f g := by ext <;> apply sub_eq_add_neg
   nsmul_zero f := by cat_disch
+  nsmul_succ n f := by ext <;> apply AddMonoid.nsmul_succ
+  zsmul_zero' := by cat_disch
+  zsmul_succ' n f := by ext <;> apply SubNegMonoid.zsmul_succ'
+  zsmul_neg' n f := by ext <;> apply SubNegMonoid.zsmul_neg'
 
 Depends on / 依赖: AddMonoid, AddMonoid.nsmul_succ, SubNegMonoid, SubNegMonoid.zsmul_neg, SubNegMonoid.zsmul_succ, add_assoc, add_comm, add_zero, cat_disch, neg_add_cancel, nsmul_succ, nsmul_zero, sub_eq_add_neg, zero_add, zsmul_neg, zsmul_succ, zsmul_zero
 -/
@@ -1207,7 +1223,9 @@ lemma productTriangle.zero₃₁
       (productIsProduct (fun j => (T j).obj₂))⟩
   dsimp
   change _ ≫ (Pi.lift (fun j => Pi.π _ j ≫ (T j).mor₁))⟦(1 : Int)⟧' = 0
-  rw [assoc]; rw [← cancel_mono (piComparison _ _
+  rw [assoc]; rw [← cancel_mono (piComparison _ _)]; rw [zero_comp]; rw [assoc]; rw [assoc]
+  ext j
+  simp [h j]
 
 中文:
 引理 productTriangle.zero₃₁
@@ -1218,7 +1236,9 @@ lemma productTriangle.zero₃₁
       (productIsProduct (fun j => (T j).obj₂))⟩
   dsimp
   change _ ≫ (Pi.lift (fun j => Pi.π _ j ≫ (T j).mor₁))⟦(1 : Int)⟧' = 0
-  rw [assoc]; rw [← cancel_mono (piComparison _ _
+  rw [assoc]; rw [← cancel_mono (piComparison _ _)]; rw [zero_comp]; rw [assoc]; rw [assoc]
+  ext j
+  simp [h j]
 
 Depends on / 依赖: HasProduct, Pi.lift, cancel_mono, isLimitFanMkObjOfIsLimit, piComparison, productIsProduct, shiftFunctor, zero_comp
 -/
@@ -1512,7 +1532,7 @@ definition functorHomMk
     ext
     · exact hom₁.naturality φ
     · exact hom₂.naturality φ
-    · ex
+    · exact hom₃.naturality φ
 
 中文:
 定义 functorHomMk
@@ -1527,7 +1547,7 @@ definition functorHomMk
     ext
     · exact hom₁.naturality φ
     · exact hom₂.naturality φ
-    · ex
+    · exact hom₃.naturality φ
 
 Depends on / 依赖: NatTrans, NatTrans.congr_app, cat_disch, congr_app, naturality, shiftFunctor, whiskerLeft, whiskerRight
 -/
@@ -1594,7 +1614,11 @@ definition functorIsoMk
     (by simp only [← cancel_epi iso₁.hom, ← reassoc_of% comm₁,
           Iso.hom_inv_id, comp_id, Iso.hom_inv_id_assoc])
     (by simp only [← cancel_epi iso₂.hom, ← reassoc_of% comm₂,
- 
+          Iso.hom_inv_id, comp_id, Iso.hom_inv_id_assoc])
+    (by
+      simp only [← cancel_epi iso₃.hom, ← reassoc_of% comm₃, Iso.hom_inv_id_assoc,
+        ← whiskerRight_comp, Iso.hom_inv_id, whiskerRight_id']
+      apply comp_id)
 
 中文:
 定义 functorIsoMk
@@ -1604,7 +1628,11 @@ definition functorIsoMk
     (by simp only [← cancel_epi iso₁.hom, ← reassoc_of% comm₁,
           Iso.hom_inv_id, comp_id, Iso.hom_inv_id_assoc])
     (by simp only [← cancel_epi iso₂.hom, ← reassoc_of% comm₂,
- 
+          Iso.hom_inv_id, comp_id, Iso.hom_inv_id_assoc])
+    (by
+      simp only [← cancel_epi iso₃.hom, ← reassoc_of% comm₃, Iso.hom_inv_id_assoc,
+        ← whiskerRight_comp, Iso.hom_inv_id, whiskerRight_id']
+      apply comp_id)
 
 Depends on / 依赖: functorHomMk
 -/

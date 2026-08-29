@@ -71,7 +71,7 @@ theorem isClopen_iff_frontier_eq_empty
   exact ⟨(h.trans interior_subset).antisymm subset_closure,
     interior_subset.antisymm (subset_closure.trans h)⟩
 
-@[sim
+@[simp] alias ⟨IsClopen.frontier_eq, _⟩ := isClopen_iff_frontier_eq_empty
 
 中文:
 定理 isClopen_iff_frontier_eq_empty
@@ -82,7 +82,7 @@ theorem isClopen_iff_frontier_eq_empty
   exact ⟨(h.trans interior_subset).antisymm subset_closure,
     interior_subset.antisymm (subset_closure.trans h)⟩
 
-@[sim
+@[simp] alias ⟨IsClopen.frontier_eq, _⟩ := isClopen_iff_frontier_eq_empty
 
 Depends on / 依赖: IsClopen, antisymm, closure_eq_iff_isClosed, frontier, h.trans, interior_eq_iff_isOpen, interior_subset, interior_subset.antisymm, sdiff_eq_empty, subset, subset_closure, subset_closure.trans
 -/
@@ -434,7 +434,7 @@ theorem isClopen_inter_of_disjoint_cover_clopen
   convert! this using 1
   refine (inter_subset_inter_right s hab.subset_compl_right).antisymm ?_
   rintro x ⟨hx₁, hx₂⟩
-  exact ⟨hx₁, by simpa [notMem_of_mem_compl hx₂] using cover hx₁
+  exact ⟨hx₁, by simpa [notMem_of_mem_compl hx₂] using cover hx₁⟩
 
 中文:
 定理 isClopen_inter_of_disjoint_cover_clopen
@@ -445,7 +445,7 @@ theorem isClopen_inter_of_disjoint_cover_clopen
   convert! this using 1
   refine (inter_subset_inter_right s hab.subset_compl_right).antisymm ?_
   rintro x ⟨hx₁, hx₂⟩
-  exact ⟨hx₁, by simpa [notMem_of_mem_compl hx₂] using cover hx₁
+  exact ⟨hx₁, by simpa [notMem_of_mem_compl hx₂] using cover hx₁⟩
 
 Depends on / 依赖: IsClosed, IsClosed.inter, IsOpen, IsOpen.inter, antisymm, convert, hab.subset_compl_right, inter_subset_inter_right, isClosed_compl_iff, notMem_of_mem_compl, subset_compl_right
 -/

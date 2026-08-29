@@ -372,7 +372,9 @@ lemma Subcomplex.Pairing.anodyneExtensions
     ⟨P.rankFunction.relativeCellComplex.toTransfiniteCompositionOfShape, fun j hj => by
       refine (?_ : (_ : MorphismProperty _) <= _ ) _
         (P.rankFunction.relativeCellComplex.attachCells j hj).pushouts_coproducts
-      simp only [pushouts_le_iff, cop
+      simp only [pushouts_le_iff, coproducts_le_iff]
+      rintro _ _ _ ⟨c⟩
+      exact .horn_ι c.index⟩
 
 中文:
 引理 子复形.Pairing.anodyneExtensions
@@ -381,7 +383,9 @@ lemma Subcomplex.Pairing.anodyneExtensions
     ⟨P.rankFunction.relativeCellComplex.toTransfiniteCompositionOfShape, fun j hj => by
       refine (?_ : (_ : MorphismProperty _) <= _ ) _
         (P.rankFunction.relativeCellComplex.attachCells j hj).pushouts_coproducts
-      simp only [pushouts_le_iff, cop
+      simp only [pushouts_le_iff, coproducts_le_iff]
+      rintro _ _ _ ⟨c⟩
+      exact .horn_ι c.index⟩
 
 Depends on / 依赖: MorphismProperty, P.rankFunction.relativeCellComplex.attachCells, P.rankFunction.relativeCellComplex.toTransfiniteCompositionOfShape, attachCells, c.index, coproducts_le_iff, pushouts_coproducts, pushouts_le_iff, rankFunction, relativeCellComplex, toTransfiniteCompositionOfShape, transfiniteCompositionsOfShape_le
 -/
@@ -409,7 +413,8 @@ instance :
       Subcomplex.image_top]
   postcomp e _ f hf := by
     obtain ⟨_, P, hP⟩ := hf
-    refine ⟨inferInstance, P.ofIso (asIso e).symm ?_, inferI
+    refine ⟨inferInstance, P.ofIso (asIso e).symm ?_, inferInstance⟩
+    simp [Subcomplex.preimage_inv, Subcomplex.range_comp]
 
 中文:
 实例 :
@@ -421,7 +426,8 @@ instance :
       Subcomplex.image_top]
   postcomp e _ f hf := by
     obtain ⟨_, P, hP⟩ := hf
-    refine ⟨inferInstance, P.ofIso (asIso e).symm ?_, inferI
+    refine ⟨inferInstance, P.ofIso (asIso e).symm ?_, inferInstance⟩
+    simp [Subcomplex.preimage_inv, Subcomplex.range_comp]
 
 Depends on / 依赖: Iso.refl, P.ofIso, Subcomplex, Subcomplex.image_top, Subcomplex.preimage_inv, Subcomplex.range_comp, Subcomplex.range_eq_top, image_top, postcomp, preimage_inv, range_comp, range_eq_top
 -/

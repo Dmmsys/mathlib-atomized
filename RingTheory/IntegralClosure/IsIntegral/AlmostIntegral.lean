@@ -57,7 +57,11 @@ definition completeIntegralClosure
     exact mul_mem (hr' _) (hs' _)
   add_mem' := by
     rintro a b ⟨r, hr, hr'⟩ ⟨s, hs, hs'⟩
-    refine ⟨r * s, mul_mem hr hs,
+    refine ⟨r * s, mul_mem hr hs, fun n => ?_⟩
+    simp only [add_pow, Finset.smul_sum, ← smul_mul_assoc _ (_ * _),
+      ← smul_mul_smul_comm _ (a ^ _)]
+    exact sum_mem fun i _ => mul_mem (mul_mem (hr' _) (hs' _)) (by simp)
+  algebraMap_mem' r := ⟨1, one_mem _, by simp [← map_pow]⟩
 
 中文:
 定义 complete整数egralClosure
@@ -70,7 +74,11 @@ definition completeIntegralClosure
     exact mul_mem (hr' _) (hs' _)
   add_mem' := by
     rintro a b ⟨r, hr, hr'⟩ ⟨s, hs, hs'⟩
-    refine ⟨r * s, mul_mem hr hs,
+    refine ⟨r * s, mul_mem hr hs, fun n => ?_⟩
+    simp only [add_pow, Finset.smul_sum, ← smul_mul_assoc _ (_ * _),
+      ← smul_mul_smul_comm _ (a ^ _)]
+    exact sum_mem fun i _ => mul_mem (mul_mem (hr' _) (hs' _)) (by simp)
+  algebraMap_mem' r := ⟨1, one_mem _, by simp [← map_pow]⟩
 
 Depends on / 依赖: IsAlmostIntegral
 -/
@@ -115,7 +123,19 @@ lemma IsIntegral.isAlmostIntegral_of_exists_smul_mem_range
       exists b in R⁰, forall i < (minpoly R s).natDegree, (b • s ^ i) in (algebraMap R S).range := by
     obtain ⟨t, ht, ht'⟩ := h
     refine ⟨t ^ (minpoly R s).natDegree, pow_mem ht _, fun i hi => ?_⟩
-    rw [← Nat.sub_add_cancel hi.le]; rw [pow_add]; rw [mul_smul]; rw [←
+    rw [← Nat.sub_add_cancel hi.le]; rw [pow_add]; rw [mul_smul]; rw [← smul_pow]
+    exact (AlgHom.range (Algebra.ofId _ _)).smul_mem (Subalgebra.pow_mem _ ht' _) _
+  refine ⟨b, hb', fun n => ?_⟩
+  induction n using Nat.strong_induction_on with | h n IH =>
+  obtain hn | hn := lt_or_ge n (minpoly R s).natDegree
+  · exact hb _ (by simpa)
+  have := minpoly.aeval R s
+  rw [Polynomial.aeval_eq_sum_range]; rw [Finset.sum_range_succ]; rw [add_eq_zero_iff_eq_neg']; rw [Polynomial.coeff_natDegree]; rw [minpoly.monic H]; rw [one_smul] at this
+  rw [← Nat.sub_add_cancel hn]; rw [pow_add]; rw [this]; rw [mul_neg]; rw [smul_neg]; rw [Finset.mul_sum]; rw [Finset.smul_sum]
+  simp_rw [mul_smul_comm, ← pow_add, smul_comm b]
+  refine neg_mem (sum_mem fun i hi => (AlgHom.range (Algebra.ofId _ _)).smul_mem (IH _ ?_) _)
+  simp only [Finset.mem_range] at hi
+  lia
 
 中文:
 引理 是整.isAlmost整数egral_of_存在_smul_mem_range
@@ -124,7 +144,19 @@ lemma IsIntegral.isAlmostIntegral_of_exists_smul_mem_range
       exists b in R⁰, forall i < (minpoly R s).natDegree, (b • s ^ i) in (algebraMap R S).range := by
     obtain ⟨t, ht, ht'⟩ := h
     refine ⟨t ^ (minpoly R s).natDegree, pow_mem ht _, fun i hi => ?_⟩
-    rw [← Nat.sub_add_cancel hi.le]; rw [pow_add]; rw [mul_smul]; rw [←
+    rw [← Nat.sub_add_cancel hi.le]; rw [pow_add]; rw [mul_smul]; rw [← smul_pow]
+    exact (AlgHom.range (Algebra.ofId _ _)).smul_mem (Subalgebra.pow_mem _ ht' _) _
+  refine ⟨b, hb', fun n => ?_⟩
+  induction n using Nat.strong_induction_on with | h n IH =>
+  obtain hn | hn := lt_or_ge n (minpoly R s).natDegree
+  · exact hb _ (by simpa)
+  have := minpoly.aeval R s
+  rw [Polynomial.aeval_eq_sum_range]; rw [Finset.sum_range_succ]; rw [add_eq_zero_iff_eq_neg']; rw [Polynomial.coeff_natDegree]; rw [minpoly.monic H]; rw [one_smul] at this
+  rw [← Nat.sub_add_cancel hn]; rw [pow_add]; rw [this]; rw [mul_neg]; rw [smul_neg]; rw [Finset.mul_sum]; rw [Finset.smul_sum]
+  simp_rw [mul_smul_comm, ← pow_add, smul_comm b]
+  refine neg_mem (sum_mem fun i hi => (AlgHom.range (Algebra.ofId _ _)).smul_mem (IH _ ?_) _)
+  simp only [Finset.mem_range] at hi
+  lia
 
 Depends on / 依赖: AlgHom, AlgHom.range, Algebra, Algebra.ofId, Nat.strong_induction_on, Nat.sub_add_cancel, Subalgebra, Subalgebra.pow_mem, algebraMap, hi.le, lt_or_ge, minpoly, mul_smul, natDegree, pow_add, pow_mem, smul_mem, smul_pow, strong_induction_on, sub_add_cancel
 -/
@@ -226,7 +258,27 @@ lemma IsAlmostIntegral.isIntegral_of_nonZeroDivisors_le_comap
       Submodule.span R {Localization.Away.invSelf (algebraMap R S r)} :=
     (IsScalarTower.toAlgHom R S (Localization.Away (algebraMap R S r))).toLinearMap.restrict
 (p := (Algebra.adjoin R {s}).toSubmodule) by
-    change (Algebra.a
+    change (Algebra.adjoin R {s}).toSubmodule <= (Submodule.span _ _).comap _
+    rw [Algebra.adjoin_eq_span]; rw [← Submonoid.powers_eq_closure]; rw [Submodule.span_le]
+    rintro _ ⟨n, rfl⟩
+    obtain ⟨a, ha⟩ := hr' n
+    refine Submodule.mem_span_singleton.mpr ⟨a, ?_⟩
+    suffices algebraMap _ _ (s ^ n) * algebraMap _ _ ((algebraMap R S) r) *
+        Localization.Away.invSelf ((algebraMap R S) r) = algebraMap S _ (s ^ n) by
+      simpa [Algebra.smul_def, IsScalarTower.algebraMap_apply R S (Localization.Away _),
+        ha, mul_assoc, mul_left_comm] using this
+    simp [mul_assoc, Localization.Away.invSelf, Localization.mk_eq_mk']
+  have : Function.Injective f := by
+    have : Function.Injective (algebraMap S (Localization.Away (algebraMap R S r))) := by
+      apply IsLocalization.injective (M := .powers (algebraMap R S r))
+      exact Submonoid.powers_le.mpr (H' hr)
+    exact fun x y e => Subtype.ext (this congr($e))
+  have : (Algebra.adjoin R {s}).toSubmodule.FG := by
+    rw [← Module.Finite.iff_fg]
+    exact .of_injective f this
+  exact .of_mem_of_fg _ this _ (Algebra.self_mem_adjoin_singleton R s)
+
+@[stacks 00GX "Part 3"]
 
 中文:
 引理 IsAlmost整数egral.is整数egral_of_nonZeroDivisors_le_comap
@@ -236,7 +288,27 @@ lemma IsAlmostIntegral.isIntegral_of_nonZeroDivisors_le_comap
       Submodule.span R {Localization.Away.invSelf (algebraMap R S r)} :=
     (IsScalarTower.toAlgHom R S (Localization.Away (algebraMap R S r))).toLinearMap.restrict
 (p := (Algebra.adjoin R {s}).toSubmodule) by
-    change (Algebra.a
+    change (Algebra.adjoin R {s}).toSubmodule <= (Submodule.span _ _).comap _
+    rw [Algebra.adjoin_eq_span]; rw [← Submonoid.powers_eq_closure]; rw [Submodule.span_le]
+    rintro _ ⟨n, rfl⟩
+    obtain ⟨a, ha⟩ := hr' n
+    refine Submodule.mem_span_singleton.mpr ⟨a, ?_⟩
+    suffices algebraMap _ _ (s ^ n) * algebraMap _ _ ((algebraMap R S) r) *
+        Localization.Away.invSelf ((algebraMap R S) r) = algebraMap S _ (s ^ n) by
+      simpa [Algebra.smul_def, IsScalarTower.algebraMap_apply R S (Localization.Away _),
+        ha, mul_assoc, mul_left_comm] using this
+    simp [mul_assoc, Localization.Away.invSelf, Localization.mk_eq_mk']
+  have : Function.Injective f := by
+    have : Function.Injective (algebraMap S (Localization.Away (algebraMap R S r))) := by
+      apply IsLocalization.injective (M := .powers (algebraMap R S r))
+      exact Submonoid.powers_le.mpr (H' hr)
+    exact fun x y e => Subtype.ext (this congr($e))
+  have : (Algebra.adjoin R {s}).toSubmodule.FG := by
+    rw [← Module.Finite.iff_fg]
+    exact .of_injective f this
+  exact .of_mem_of_fg _ this _ (Algebra.self_mem_adjoin_singleton R s)
+
+@[stacks 00GX "Part 3"]
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_eq_span, IsScalarTower, IsScalarTower.toAlgHom, Localization, Localization.Away, Localization.Away.invSelf, Submodule, Submodule.mem_span_singl, Submodule.span, Submodule.span_le, Submonoid, Submonoid.powers_eq_closure, adjoin, adjoin_eq_span, algebraMap, invSelf, mem_span_singl, powers_eq_closure
 -/

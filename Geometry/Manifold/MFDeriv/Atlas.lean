@@ -445,7 +445,9 @@ theorem symm_comp_deriv
   rw [← this]
   have : mfderiv% (_root_.id : M -> M) x = ContinuousLinearMap.id _ _ := mfderiv_id
   rw [← this]
-  apply Filt
+  apply Filter.EventuallyEq.mfderiv_eq
+  have : e.source in 𝓝 x := e.open_source.mem_nhds hx
+  exact Filter.mem_of_superset this (by mfld_set_tac)
 
 中文:
 定理 symm_comp_deriv
@@ -456,7 +458,9 @@ theorem symm_comp_deriv
   rw [← this]
   have : mfderiv% (_root_.id : M -> M) x = ContinuousLinearMap.id _ _ := mfderiv_id
   rw [← this]
-  apply Filt
+  apply Filter.EventuallyEq.mfderiv_eq
+  have : e.source in 𝓝 x := e.open_source.mem_nhds hx
+  exact Filter.mem_of_superset this (by mfld_set_tac)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, EventuallyEq, Filter, Filter.EventuallyEq.mfderiv_eq, Filter.mem_of_superset, _root_, _root_.id, e.map_source, e.open_source.mem_nhds, e.source, e.symm, he.mdifferentiableAt, he.mdifferentiableAt_symm, map_source, mdifferentiableAt, mdifferentiableAt_symm, mem_nhds, mem_of_superset, mfderiv
 -/
@@ -504,7 +508,15 @@ definition mfderiv
     continuous_invFun := (mfderiv% e.symm (e x)).cont
     left_inv := fun y => by
       have : (ContinuousLinearMap.id _ _ : TangentSpace I x ->L[𝕜] TangentSpace I x) y = y := rfl
-      conv_rhs => rw
+      conv_rhs => rw [← this, ← he.symm_comp_deriv hx]
+      rfl
+    right_inv := fun y => by
+      have :
+        (ContinuousLinearMap.id 𝕜 _ : TangentSpace I' (e x) ->L[𝕜] TangentSpace I' (e x)) y = y :=
+        rfl
+      conv_rhs => rw [← this, ← he.comp_symm_deriv (e.map_source hx)]
+      rw [e.left_inv hx]
+      rfl }
 
 中文:
 定义 mfderiv
@@ -515,7 +527,15 @@ definition mfderiv
     continuous_invFun := (mfderiv% e.symm (e x)).cont
     left_inv := fun y => by
       have : (ContinuousLinearMap.id _ _ : TangentSpace I x ->L[𝕜] TangentSpace I x) y = y := rfl
-      conv_rhs => rw
+      conv_rhs => rw [← this, ← he.symm_comp_deriv hx]
+      rfl
+    right_inv := fun y => by
+      have :
+        (ContinuousLinearMap.id 𝕜 _ : TangentSpace I' (e x) ->L[𝕜] TangentSpace I' (e x)) y = y :=
+        rfl
+      conv_rhs => rw [← this, ← he.comp_symm_deriv (e.map_source hx)]
+      rw [e.left_inv hx]
+      rfl }
 -/
 protected def mfderiv (he : e.MDifferentiable I I') {x : M} (hx : x in e.source) :
     TangentSpace I x ≃L[𝕜] TangentSpace I' (e x) :=
@@ -672,7 +692,7 @@ theorem trans
     simp only [mfld_simps] at hx
     exact
       ((he.symm.mdifferentiableAt hx.2).comp _
-          (he'.symm.mdif
+          (he'.symm.mdifferentiableAt hx.1)).mdifferentiableWithinAt
 
 中文:
 定理 trans
@@ -688,7 +708,7 @@ theorem trans
     simp only [mfld_simps] at hx
     exact
       ((he.symm.mdifferentiableAt hx.2).comp _
-          (he'.symm.mdif
+          (he'.symm.mdifferentiableAt hx.1)).mdifferentiableWithinAt
 
 Depends on / 依赖: he.mdifferentiableAt, he.symm.mdifferentiableAt, mdifferentiableAt, mdifferentiableWithinAt, mfld_simps, symm.mdifferentiableAt
 -/
@@ -797,7 +817,10 @@ theorem mdifferentiableWithinAt_extChartAt_symm
   have Z := I.mdifferentiableWithinAt_symm (extChartAt_target_subset_range x h)
   apply MDifferentiableAt.comp_mdifferentiableWithinAt (I' := I) _ _ Z
   apply mdifferentiableAt_atlas_symm (ChartedSpace.chart_mem_atlas x)
-  simp only [extChartAt, OpenPartialHomeomorph.extend, PartialEquiv.trans_ta
+  simp only [extChartAt, OpenPartialHomeomorph.extend, PartialEquiv.trans_target,
+    ModelWithCorners.target_eq, ModelWithCorners.toPartialEquiv_coe_symm, mem_inter_iff, mem_range,
+    mem_preimage] at h
+  exact h.2
 
 中文:
 定理 mdifferentiableWithinAt_extChartAt_symm
@@ -806,7 +829,10 @@ theorem mdifferentiableWithinAt_extChartAt_symm
   have Z := I.mdifferentiableWithinAt_symm (extChartAt_target_subset_range x h)
   apply MDifferentiableAt.comp_mdifferentiableWithinAt (I' := I) _ _ Z
   apply mdifferentiableAt_atlas_symm (ChartedSpace.chart_mem_atlas x)
-  simp only [extChartAt, OpenPartialHomeomorph.extend, PartialEquiv.trans_ta
+  simp only [extChartAt, OpenPartialHomeomorph.extend, PartialEquiv.trans_target,
+    ModelWithCorners.target_eq, ModelWithCorners.toPartialEquiv_coe_symm, mem_inter_iff, mem_range,
+    mem_preimage] at h
+  exact h.2
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.chart_mem_atlas, I.mdifferentiableWithinAt_symm, MDifferentiableAt, MDifferentiableAt.comp_mdifferentiableWithinAt, ModelWithCorners, ModelWithCorners.target_eq, ModelWithCorners.toPartialEquiv_coe_symm, OpenPartialHomeomorph, OpenPartialHomeomorph.extend, PartialEquiv, PartialEquiv.trans_target, chart_mem_atlas, comp_mdifferentiableWithinAt, extChartAt, extChartAt_target_subset_range, extend, mdifferentiableAt_atlas_symm, mdifferentiableWithinAt_symm, mem_inter_iff
 -/
@@ -854,7 +880,16 @@ lemma mfderiv_extChartAt_comp_mfderivWithin_extChartAt_symm
     exact extChartAt_target_subset_range x hy
   have h'y : (extChartAt I x).symm y in (extChartAt I x).source := (extChartAt I x).map_target hy
   have h''y : (extChartAt I x).symm y in (chartAt H x).source := by
-    rwa [← extCha
+    rwa [← extChartAt_source (I := I)]
+  rw [← mfderiv_comp_mfderivWithin]; rotate_left
+  · apply mdifferentiableAt_extChartAt h''y
+  · exact mdifferentiableWithinAt_extChartAt_symm hy
+  · exact U
+  rw [← mfderivWithin_id U]
+  apply Filter.EventuallyEq.mfderivWithin_eq
+  · filter_upwards [extChartAt_target_mem_nhdsWithin_of_mem hy] with z hz
+    simp only [Function.comp_def, PartialEquiv.right_inv (extChartAt I x) hz, id_eq]
+  · simp only [Function.comp_def, PartialEquiv.right_inv (extChartAt I x) hy, id_eq]
 
 中文:
 引理 mfderiv_extChartAt_comp_mfderivWithin_extChartAt_symm
@@ -865,7 +900,16 @@ lemma mfderiv_extChartAt_comp_mfderivWithin_extChartAt_symm
     exact extChartAt_target_subset_range x hy
   have h'y : (extChartAt I x).symm y in (extChartAt I x).source := (extChartAt I x).map_target hy
   have h''y : (extChartAt I x).symm y in (chartAt H x).source := by
-    rwa [← extCha
+    rwa [← extChartAt_source (I := I)]
+  rw [← mfderiv_comp_mfderivWithin]; rotate_left
+  · apply mdifferentiableAt_extChartAt h''y
+  · exact mdifferentiableWithinAt_extChartAt_symm hy
+  · exact U
+  rw [← mfderivWithin_id U]
+  apply Filter.EventuallyEq.mfderivWithin_eq
+  · filter_upwards [extChartAt_target_mem_nhdsWithin_of_mem hy] with z hz
+    simp only [Function.comp_def, PartialEquiv.right_inv (extChartAt I x) hz, id_eq]
+  · simp only [Function.comp_def, PartialEquiv.right_inv (extChartAt I x) hy, id_eq]
 
 Depends on / 依赖: Eventua, Filter, Filter.Eventua, I.uniqueMDiffOn, UniqueMDiffAt, chartAt, extChartAt, extChartAt_source, extChartAt_target_subset_range, map_target, mdifferentiableAt_extChartAt, mdifferentiableWithinAt_extChartAt_symm, mfderivWithin_id, mfderiv_comp_mfderivWithin, rotate_left, source, uniqueMDiffOn
 -/
@@ -926,7 +970,24 @@ lemma mfderivWithin_extChartAt_symm_comp_mfderiv_extChartAt
   have h''y : (extChartAt I x).symm y in (chartAt H x).source := by
     rwa [← extChartAt_source (I := I)]
   have U' : UniqueMDiffAt[(extChartAt I x).source] ((extChartAt I x).symm y) :=
-    (isOpen_
+    (isOpen_extChartAt_source x).uniqueMDiffWithinAt h'y
+  have : mfderiv% (extChartAt I x) ((extChartAt I x).symm y)
+      = mfderiv[(extChartAt I x).source] (extChartAt I x) ((extChartAt I x).symm y) := by
+    rw [mfderivWithin_eq_mfderiv U']
+    exact mdifferentiableAt_extChartAt h''y
+  rw [this]; rw [← mfderivWithin_comp_of_eq]; rotate_left
+  · exact mdifferentiableWithinAt_extChartAt_symm hy
+  · exact (mdifferentiableAt_extChartAt h''y).mdifferentiableWithinAt
+  · intro z hz
+    apply extChartAt_target_subset_range x
+    exact PartialEquiv.map_source (extChartAt I x) hz
+  · exact U'
+  · exact PartialEquiv.right_inv (extChartAt I x) hy
+  rw [← mfderivWithin_id U']
+  apply Filter.EventuallyEq.mfderivWithin_eq
+  · filter_upwards [extChartAt_source_mem_nhdsWithin' h'y] with z hz
+    simp only [Function.comp_def, PartialEquiv.left_inv (extChartAt I x) hz, id_eq]
+  · simp only [Function.comp_def, PartialEquiv.right_inv (extChartAt I x) hy, id_eq]
 
 中文:
 引理 mfderivWithin_extChartAt_symm_comp_mfderiv_extChartAt
@@ -935,7 +996,24 @@ lemma mfderivWithin_extChartAt_symm_comp_mfderiv_extChartAt
   have h''y : (extChartAt I x).symm y in (chartAt H x).source := by
     rwa [← extChartAt_source (I := I)]
   have U' : UniqueMDiffAt[(extChartAt I x).source] ((extChartAt I x).symm y) :=
-    (isOpen_
+    (isOpen_extChartAt_source x).uniqueMDiffWithinAt h'y
+  have : mfderiv% (extChartAt I x) ((extChartAt I x).symm y)
+      = mfderiv[(extChartAt I x).source] (extChartAt I x) ((extChartAt I x).symm y) := by
+    rw [mfderivWithin_eq_mfderiv U']
+    exact mdifferentiableAt_extChartAt h''y
+  rw [this]; rw [← mfderivWithin_comp_of_eq]; rotate_left
+  · exact mdifferentiableWithinAt_extChartAt_symm hy
+  · exact (mdifferentiableAt_extChartAt h''y).mdifferentiableWithinAt
+  · intro z hz
+    apply extChartAt_target_subset_range x
+    exact PartialEquiv.map_source (extChartAt I x) hz
+  · exact U'
+  · exact PartialEquiv.right_inv (extChartAt I x) hy
+  rw [← mfderivWithin_id U']
+  apply Filter.EventuallyEq.mfderivWithin_eq
+  · filter_upwards [extChartAt_source_mem_nhdsWithin' h'y] with z hz
+    simp only [Function.comp_def, PartialEquiv.left_inv (extChartAt I x) hz, id_eq]
+  · simp only [Function.comp_def, PartialEquiv.right_inv (extChartAt I x) hy, id_eq]
 
 Depends on / 依赖: UniqueMDiffAt, chartAt, extChartAt, extChartAt_source, isOpen_extChartAt_source, map_target, mfderiv, mfderivWithin_eq_mfder, source, uniqueMDiffWithinAt
 -/
@@ -1030,7 +1108,8 @@ lemma isInvertible_mfderiv_extChartAt
   have Z := ContinuousLinearMap.IsInvertible.of_inverse
     (mfderiv_extChartAt_comp_mfderivWithin_extChartAt_symm h'y)
     (mfderivWithin_extChartAt_symm_comp_mfderiv_extChartAt h'y)
-  have : (extChartAt I
+  have : (extChartAt I x).symm ((extChartAt I x) y) = y := (extChartAt I x).left_inv hy
+  rwa [this] at Z
 
 中文:
 引理 isInvertible_mfderiv_extChartAt
@@ -1040,7 +1119,8 @@ lemma isInvertible_mfderiv_extChartAt
   have Z := ContinuousLinearMap.IsInvertible.of_inverse
     (mfderiv_extChartAt_comp_mfderivWithin_extChartAt_symm h'y)
     (mfderivWithin_extChartAt_symm_comp_mfderiv_extChartAt h'y)
-  have : (extChartAt I
+  have : (extChartAt I x).symm ((extChartAt I x) y) = y := (extChartAt I x).left_inv hy
+  rwa [this] at Z
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.IsInvertible.of_inverse, IsInvertible, extChartAt, left_inv, map_source, mfderivWithin_extChartAt_symm_comp_mfderiv_extChartAt, mfderiv_extChartAt_comp_mfderivWithin_extChartAt_symm, of_inverse, target
 -/
@@ -1128,7 +1208,7 @@ lemma fderivWithin_extChartAt_comp_extChartAt_symm_range
     Filter.eventuallyEq_of_mem (extChartAt_target_mem_nhdsWithin x)
       (fun _ => (extChartAt I x).right_inv)
   rw [eq_nhd.fderivWithin_eq (by simp)]
-exact fderivWithin_i
+exact fderivWithin_id I.uniqueDiffOn.uniqueDiffWithinAt (mem_range_self _)
 
 中文:
 引理 fderivWithin_extChartAt_comp_extChartAt_symm_range
@@ -1138,7 +1218,7 @@ exact fderivWithin_i
     Filter.eventuallyEq_of_mem (extChartAt_target_mem_nhdsWithin x)
       (fun _ => (extChartAt I x).right_inv)
   rw [eq_nhd.fderivWithin_eq (by simp)]
-exact fderivWithin_i
+exact fderivWithin_id I.uniqueDiffOn.uniqueDiffWithinAt (mem_range_self _)
 
 Depends on / 依赖: Filter, Filter.eventuallyEq_of_mem, I.uniqueDiffOn.uniqueDiffWithinAt, eq_nhd, eq_nhd.fderivWithin_eq, eventuallyEq_of_mem, extChartAt, extChartAt_target_mem_nhdsWithin, fderivWithin_eq, fderivWithin_id, mem_range_self, right_inv, uniqueDiffOn, uniqueDiffWithinAt
 -/

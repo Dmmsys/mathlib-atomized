@@ -152,7 +152,8 @@ lemma epi_f
       (kernelIsKernel (g y)))
     (colimit.isColimit _) (isColimitConstCocone _ _)
     ((Functor.Final.isColimitWhiskerEquiv (Under.forget j₀) c).symm hc) (f y) 0
-    (fun j => by simpa u
+    (fun j => by simpa using! hf y j)
+    (fun _ => by simpa using! hy.symm)).epi_f rfl
 
 中文:
 引理 epi_f
@@ -164,7 +165,8 @@ lemma epi_f
       (kernelIsKernel (g y)))
     (colimit.isColimit _) (isColimitConstCocone _ _)
     ((Functor.Final.isColimitWhiskerEquiv (Under.forget j₀) c).symm hc) (f y) 0
-    (fun j => by simpa u
+    (fun j => by simpa using! hf y j)
+    (fun _ => by simpa using! hy.symm)).epi_f rfl
 
 Depends on / 依赖: Functor, Functor.Final.isColimitWhiskerEquiv, ShortComplex, ShortComplex.mk, Under.forget, colim.exact_mapShortComplex, colimit, colimit.isColimit, condition, epi_f, exact_mapShortComplex, exact_of_f_is_kernel, forget, hy.symm, isColimit, isColimitConstCocone, isColimitWhiskerEquiv, kernel, kernel.condition, kernelIsKernel
 -/
@@ -228,7 +230,8 @@ lemma injectivity₀
       (epi_f hc hy)
   dsimp at h
   refine ⟨j.right, j.hom, ?_⟩
-  simpa only [← cancel_epi ((kernel.ι
+  simpa only [← cancel_epi ((kernel.ι (g y)).app j), comp_zero]
+    using! NatTrans.congr_app (kernel.condition (g y)) j
 
 中文:
 引理 injectivity₀
@@ -240,7 +243,8 @@ lemma injectivity₀
       (epi_f hc hy)
   dsimp at h
   refine ⟨j.right, j.hom, ?_⟩
-  simpa only [← cancel_epi ((kernel.ι
+  simpa only [← cancel_epi ((kernel.ι (g y)).app j), comp_zero]
+    using! NatTrans.congr_app (kernel.condition (g y)) j
 
 Depends on / 依赖: NatTrans, NatTrans.congr_app, cancel_epi, colimit, colimit.isColimit, comp_zero, condition, congr_app, epi_f, exists_isIso_of_functor_from_monoOver, isColimit, isFiltered_of_isCardinalFiltered, j.hom, j.right, kernel, kernel.condition
 -/
@@ -393,7 +397,16 @@ lemma isIso_f
     (MorphismProperty.of_isPullback
       ((IsPullback.of_hasPullback c.ι ((Functor.const _).map z)).map colim) ?_)
   · refine Arrow.isoMk (Iso.refl _)
-      (IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) (isColimitCons
+      (IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) (isColimitConstCocone J X)) ?_
+    dsimp
+    ext j
+    rw [Category.id_comp]; rw [ι_colimMap_assoc]; rw [colimit.comp_coconePointUniqueUpToIso_hom]; rw [constCocone_ι]; rw [NatTrans.id_app]; rw [Category.comp_id]
+    apply hf
+  · refine ((MorphismProperty.isomorphisms C).arrow_mk_iso_iff ?_).2
+      ((inferInstance : IsIso (𝟙 c.pt)))
+    exact Arrow.isoMk (IsColimit.coconePointUniqueUpToIso (colimit.isColimit Y) hc)
+      (IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
+        (isColimitConstCocone J c.pt))
 
 中文:
 引理 isIso_f
@@ -404,7 +417,16 @@ lemma isIso_f
     (MorphismProperty.of_isPullback
       ((IsPullback.of_hasPullback c.ι ((Functor.const _).map z)).map colim) ?_)
   · refine Arrow.isoMk (Iso.refl _)
-      (IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) (isColimitCons
+      (IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) (isColimitConstCocone J X)) ?_
+    dsimp
+    ext j
+    rw [Category.id_comp]; rw [ι_colimMap_assoc]; rw [colimit.comp_coconePointUniqueUpToIso_hom]; rw [constCocone_ι]; rw [NatTrans.id_app]; rw [Category.comp_id]
+    apply hf
+  · refine ((MorphismProperty.isomorphisms C).arrow_mk_iso_iff ?_).2
+      ((inferInstance : IsIso (𝟙 c.pt)))
+    exact Arrow.isoMk (IsColimit.coconePointUniqueUpToIso (colimit.isColimit Y) hc)
+      (IsColimit.coconePointUniqueUpToIso (colimit.isColimit _)
+        (isColimitConstCocone J c.pt))
 
 Depends on / 依赖: Arrow.isoMk, Category, Category.comp_id, Category.id_comp, Faithful, Functor, Functor.const, IsColimit, IsColimit.coconePointUniqueUpToIso, IsPullback, IsPullback.of_hasPullback, Iso.refl, MorphismPrope, MorphismProperty, MorphismProperty.isomorphisms, MorphismProperty.of_isPullback, NatTrans, NatTrans.id_app, arrow_mk_iso_iff, coconePointUniqueUpToIso
 -/
@@ -467,7 +489,9 @@ lemma surjectivity
   have := NatTrans.mono_of_mono_app c.ι
   obtain ⟨j, _⟩ := exists_isIso_of_functor_from_monoOver (F z) hXκ _
     (colimit.isColimit _) (f z) (hf z) (epi_f hc z)
-  refine ⟨j, inv ((F z).obj j).obj.hom ≫ (pullback.
+  refine ⟨j, inv ((F z).obj j).obj.hom ≫ (pullback.fst c.ι _).app j, ?_⟩
+  dsimp
+  rw [Category.assoc]; rw [IsIso.eq_inv_comp]; rw [← NatTrans.comp_app]; rw [pullback.condition]; rw [NatTrans.comp_app]; rw [Functor.const_map_app]
 
 中文:
 引理 surjectivity
@@ -478,7 +502,9 @@ lemma surjectivity
   have := NatTrans.mono_of_mono_app c.ι
   obtain ⟨j, _⟩ := exists_isIso_of_functor_from_monoOver (F z) hXκ _
     (colimit.isColimit _) (f z) (hf z) (epi_f hc z)
-  refine ⟨j, inv ((F z).obj j).obj.hom ≫ (pullback.
+  refine ⟨j, inv ((F z).obj j).obj.hom ≫ (pullback.fst c.ι _).app j, ?_⟩
+  dsimp
+  rw [Category.assoc]; rw [IsIso.eq_inv_comp]; rw [← NatTrans.comp_app]; rw [pullback.condition]; rw [NatTrans.comp_app]; rw [Functor.const_map_app]
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.const_map_app, IsIso.eq_inv_comp, NatTrans, NatTrans.comp_app, NatTrans.mono_of_mono_app, colimit, colimit.isColimit, comp_app, condition, const_map_app, epi_f, eq_inv_comp, exists_isIso_of_functor_from_monoOver, hc.mono_, isColimit, isFiltered_of_isCardinalFiltered, mono_of_mono_app
 -/

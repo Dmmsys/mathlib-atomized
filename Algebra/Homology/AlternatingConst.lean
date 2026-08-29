@@ -108,7 +108,8 @@ definition alternatingConst
     split_ifs with hi hj hj
 · exact False.elim Nat.not_odd_iff_even.2 hi by simp_all [Nat.odd_add]
     · assumption
-    · assump
+    · assumption
+· exact False.elim hj by simp_all [Nat.odd_add]
 
 中文:
 定义 alternatingConst
@@ -125,7 +126,8 @@ definition alternatingConst
     split_ifs with hi hj hj
 · exact False.elim Nat.not_odd_iff_even.2 hi by simp_all [Nat.odd_add]
     · assumption
-    · assump
+    · assumption
+· exact False.elim hj by simp_all [Nat.odd_add]
 -/
 noncomputable def alternatingConst {c : ComplexShape Nat} [DecidableRel c.Rel]
     (hc : forall i j, c.Rel i j -> Odd (i + j)) :
@@ -161,7 +163,8 @@ definition alternatingConstScIsoEven
         shortComplexFunctor'_obj_f, ↓reduceIte, Category.comp_id, right_eq_ite_iff]
       intro hi
       have := hc i j hij
-exact False.elim Nat.not_odd_iff_even.2
+exact False.elim Nat.not_odd_iff_even.2 hi by simp_all [Nat.odd_add])
+    (by simp_all [alternatingConst])
 
 中文:
 定义 alternatingConstScIsoEven
@@ -171,7 +174,8 @@ exact False.elim Nat.not_odd_iff_even.2
         shortComplexFunctor'_obj_f, ↓reduceIte, Category.comp_id, right_eq_ite_iff]
       intro hi
       have := hc i j hij
-exact False.elim Nat.not_odd_iff_even.2
+exact False.elim Nat.not_odd_iff_even.2 hi by simp_all [Nat.odd_add])
+    (by simp_all [alternatingConst])
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, False.elim, Iso.refl, Iso.refl_hom, Nat.not_odd_iff_even, Nat.odd_add, _obj_f, alternatingConst, comp_id, dite_eq_ite, id_comp, not_odd_iff_even, odd_add, reduceIte, refl_hom, right_eq_ite_iff, shortComplexFunctor
 -/
@@ -199,7 +203,8 @@ definition alternatingConstScIsoOdd
         shortComplexFunctor'_obj_f, ↓reduceIte, Category.comp_id, left_eq_ite_iff]
       intro hi
       have := hc i j hij
-exact False.elim Nat.not_even_iff_odd.2 
+exact False.elim Nat.not_even_iff_odd.2 h by simp_all [Nat.odd_add])
+    (by simp_all [alternatingConst])
 
 中文:
 定义 alternatingConstScIsoOdd
@@ -209,7 +214,8 @@ exact False.elim Nat.not_even_iff_odd.2
         shortComplexFunctor'_obj_f, ↓reduceIte, Category.comp_id, left_eq_ite_iff]
       intro hi
       have := hc i j hij
-exact False.elim Nat.not_even_iff_odd.2 
+exact False.elim Nat.not_even_iff_odd.2 h by simp_all [Nat.odd_add])
+    (by simp_all [alternatingConst])
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, False.elim, Iso.refl, Iso.refl_hom, Nat.not_even_iff_odd, Nat.odd_add, _obj_f, alternatingConst, comp_id, dite_eq_ite, id_comp, left_eq_ite_iff, not_even_iff_odd, odd_add, reduceIte, refl_hom, shortComplexFunctor
 -/
@@ -239,7 +245,8 @@ lemma alternatingConst_iCycles_even_comp
     (alternatingConstScIsoEven A hOdd hEven hc hpj hnj h)).inv]
   simpa [HomologicalComplex.iCycles, -Preadditive.IsIso.comp_left_eq_zero, HomologicalComplex.sc,
     HomologicalComplex.shortComplexFunctor, alternatingConstScIsoEven,
-    Category.id_co
+    Category.id_comp (X := (alternatingConst A hOdd hEven hc).X _)]
+    using (ShortComplex.mk ψ φ hEven).iCycles_g
 
 中文:
 引理 alternatingConst_iCycles_even_comp
@@ -249,7 +256,8 @@ lemma alternatingConst_iCycles_even_comp
     (alternatingConstScIsoEven A hOdd hEven hc hpj hnj h)).inv]
   simpa [HomologicalComplex.iCycles, -Preadditive.IsIso.comp_left_eq_zero, HomologicalComplex.sc,
     HomologicalComplex.shortComplexFunctor, alternatingConstScIsoEven,
-    Category.id_co
+    Category.id_comp (X := (alternatingConst A hOdd hEven hc).X _)]
+    using (ShortComplex.mk ψ φ hEven).iCycles_g
 
 Depends on / 依赖: Category, Category.id_comp, HomologicalComplex, HomologicalComplex.iCycles, HomologicalComplex.sc, HomologicalComplex.shortComplexFunctor, Preadditive, Preadditive.IsIso.comp_left_eq_zero, ShortComplex, ShortComplex.cyclesMapIso, ShortComplex.mk, alternatingConst, alternatingConstScIsoEven, cancel_epi, comp_left_eq_zero, cyclesMapIso, iCycles, iCycles_g, id_comp, shortComplexFunctor
 -/
@@ -277,7 +285,8 @@ lemma alternatingConst_iCycles_odd_comp
     (alternatingConstScIsoOdd A hOdd hEven hc hpj hnj h)).inv]
   simpa [HomologicalComplex.iCycles, -Preadditive.IsIso.comp_left_eq_zero, HomologicalComplex.sc,
     HomologicalComplex.shortComplexFunctor, alternatingConstScIsoOdd,
-    Category.id_comp
+    Category.id_comp (X := (alternatingConst A hOdd hEven hc).X _)]
+    using (ShortComplex.mk φ ψ hOdd).iCycles_g
 
 中文:
 引理 alternatingConst_iCycles_odd_comp
@@ -287,7 +296,8 @@ lemma alternatingConst_iCycles_odd_comp
     (alternatingConstScIsoOdd A hOdd hEven hc hpj hnj h)).inv]
   simpa [HomologicalComplex.iCycles, -Preadditive.IsIso.comp_left_eq_zero, HomologicalComplex.sc,
     HomologicalComplex.shortComplexFunctor, alternatingConstScIsoOdd,
-    Category.id_comp
+    Category.id_comp (X := (alternatingConst A hOdd hEven hc).X _)]
+    using (ShortComplex.mk φ ψ hOdd).iCycles_g
 
 Depends on / 依赖: Category, Category.id_comp, HomologicalComplex, HomologicalComplex.iCycles, HomologicalComplex.sc, HomologicalComplex.shortComplexFunctor, Preadditive, Preadditive.IsIso.comp_left_eq_zero, ShortComplex, ShortComplex.cyclesMapIso, ShortComplex.mk, alternatingConst, alternatingConstScIsoOdd, cancel_epi, comp_left_eq_zero, cyclesMapIso, iCycles, iCycles_g, id_comp, shortComplexFunctor
 -/

@@ -231,7 +231,16 @@ theorem Ideal.exists_minimalPrimes_le
     exact ⟨p, ⟨hp.prop, fun q hq hle => hp.le_of_ge hq hle⟩, hJp⟩
   apply zorn_le_nonempty₀
   swap
-  · refine ⟨show J.Is
+  · refine ⟨show J.IsPrime by infer_instance, e⟩
+  rintro (c : Set (Ideal R)) hc hc' J' hJ'
+  refine
+    ⟨OrderDual.toDual (sInf c),
+      ⟨Ideal.sInf_isPrime_of_isChain ⟨J', hJ'⟩ hc'.symm fun x hx => (hc hx).1, ?_⟩, ?_⟩
+  · rw [OrderDual.ofDual_toDual, le_sInf_iff]
+    exact fun _ hx => (hc hx).2
+  · rintro z hz
+    rw [OrderDual.le_toDual]
+    exact sInf_le hz
 
 中文:
 定理 理想.存在_minimalPrimes_le
@@ -244,7 +253,16 @@ theorem Ideal.exists_minimalPrimes_le
     exact ⟨p, ⟨hp.prop, fun q hq hle => hp.le_of_ge hq hle⟩, hJp⟩
   apply zorn_le_nonempty₀
   swap
-  · refine ⟨show J.Is
+  · refine ⟨show J.IsPrime by infer_instance, e⟩
+  rintro (c : Set (Ideal R)) hc hc' J' hJ'
+  refine
+    ⟨OrderDual.toDual (sInf c),
+      ⟨Ideal.sInf_isPrime_of_isChain ⟨J', hJ'⟩ hc'.symm fun x hx => (hc hx).1, ?_⟩, ?_⟩
+  · rw [OrderDual.ofDual_toDual, le_sInf_iff]
+    exact fun _ hx => (hc hx).2
+  · rintro z hz
+    rw [OrderDual.le_toDual]
+    exact sInf_le hz
 
 Depends on / 依赖: Ideal.IsPrime, Ideal.sInf_isPrime_of_isChain, IsPrime, J.IsPrime, Maximal, OrderDual, OrderDual.ofDual, OrderDual.ofDual_toDual, OrderDual.toDual, hp.le_of_ge, hp.prop, infer_instance, le_of_ge, ofDual, ofDual_toDual, sInf_isPrime_of_isChain, toDual
 -/
@@ -341,7 +359,10 @@ theorem Ideal.radical_minimalPrimes
     simp only [and_imp] at *
     exact fun _ h2 h3 h4 => b h2 (h2.radical_le_iff.2 h3) h4
   · refine ⟨⟨a, a.radical_le_iff.2 ha⟩, ?_⟩
-    simp only [a
+    simp only [and_imp] at *
+    exact fun _ h2 h3 h4 => b h2 (h2.radical_le_iff.1 h3) h4
+
+@[simp]
 
 中文:
 定理 理想.radical_minimalPrimes
@@ -354,7 +375,10 @@ theorem Ideal.radical_minimalPrimes
     simp only [and_imp] at *
     exact fun _ h2 h3 h4 => b h2 (h2.radical_le_iff.2 h3) h4
   · refine ⟨⟨a, a.radical_le_iff.2 ha⟩, ?_⟩
-    simp only [a
+    simp only [and_imp] at *
+    exact fun _ h2 h3 h4 => b h2 (h2.radical_le_iff.1 h3) h4
+
+@[simp]
 
 Depends on / 依赖: Ideal.minimalPrimes, a.radical_le_iff, and_imp, h2.radical_le_iff, minimalPrimes, radical_le_iff
 -/
@@ -606,7 +630,8 @@ lemma Ideal.mem_minimalPrimes_sup
     refine ⟨hle, by simpa [hle] using Ideal.comap_mono (f := Ideal.Quotient.mk I) h.le⟩
   · rw [sup_le_iff] at hq
     have h2 : p.map (Quotient.mk I) <= q.map (Quotient.mk I) :=
-      h.2 ⟨isPrime_map_quotientMk_of_isPrime hq.1, ma
+      h.2 ⟨isPrime_map_quotientMk_of_isPrime hq.1, map_mono hq.2⟩ (map_mono hqp)
+    simpa [comap_map_quotientMk, hq.1, sup_le_iff] using comap_mono (f := Ideal.Quotient.mk I) h2
 
 中文:
 引理 理想.mem_minimalPrimes_sup
@@ -617,7 +642,8 @@ lemma Ideal.mem_minimalPrimes_sup
     refine ⟨hle, by simpa [hle] using Ideal.comap_mono (f := Ideal.Quotient.mk I) h.le⟩
   · rw [sup_le_iff] at hq
     have h2 : p.map (Quotient.mk I) <= q.map (Quotient.mk I) :=
-      h.2 ⟨isPrime_map_quotientMk_of_isPrime hq.1, ma
+      h.2 ⟨isPrime_map_quotientMk_of_isPrime hq.1, map_mono hq.2⟩ (map_mono hqp)
+    simpa [comap_map_quotientMk, hq.1, sup_le_iff] using comap_mono (f := Ideal.Quotient.mk I) h2
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.comap_mono, Quotient, Quotient.mk, comap_map_quotientMk, comap_mono, h.le, isPrime_map_quotientMk_of_isPrime, map_mono, p.map, q.map, sup_le_iff
 -/
@@ -646,7 +672,15 @@ lemma Ideal.map_sup_mem_minimalPrimes_of_map_quotientMk_mem_minimalPrimes
     exact hI.le
   · simp only [sup_le_iff] at hleq
     have h1 : p.map (algebraMap R S) <= q := by
-      rw [Ideal.m
+      rw [Ideal.map_le_iff_le_comap]
+      refine hI.2 ⟨inferInstance, le_trans Ideal.le_comap_map (Ideal.comap_mono hleq.1)⟩ ?_
+      convert! Ideal.comap_mono hqle
+      exact Ideal.LiesOver.over
+    have h2 : P.map (Ideal.Quotient.mk (p.map (algebraMap R S))) <=
+        q.map (Ideal.Quotient.mk (p.map (algebraMap R S))) :=
+      hJ.2 ⟨Ideal.isPrime_map_quotientMk_of_isPrime h1, Ideal.map_mono hleq.2⟩
+        (Ideal.map_mono hqle)
+    simpa [h1] using Ideal.comap_mono (f := Ideal.Quotient.mk (p.map (algebraMap R S))) h2
 
 中文:
 引理 理想.map_sup_mem_minimalPrimes_of_map_quotientMk_mem_minimalPrimes
@@ -657,7 +691,15 @@ lemma Ideal.map_sup_mem_minimalPrimes_of_map_quotientMk_mem_minimalPrimes
     exact hI.le
   · simp only [sup_le_iff] at hleq
     have h1 : p.map (algebraMap R S) <= q := by
-      rw [Ideal.m
+      rw [Ideal.map_le_iff_le_comap]
+      refine hI.2 ⟨inferInstance, le_trans Ideal.le_comap_map (Ideal.comap_mono hleq.1)⟩ ?_
+      convert! Ideal.comap_mono hqle
+      exact Ideal.LiesOver.over
+    have h2 : P.map (Ideal.Quotient.mk (p.map (algebraMap R S))) <=
+        q.map (Ideal.Quotient.mk (p.map (algebraMap R S))) :=
+      hJ.2 ⟨Ideal.isPrime_map_quotientMk_of_isPrime h1, Ideal.map_mono hleq.2⟩
+        (Ideal.map_mono hqle)
+    simpa [h1] using Ideal.comap_mono (f := Ideal.Quotient.mk (p.map (algebraMap R S))) h2
 
 Depends on / 依赖: Ideal.LiesOver.over, Ideal.Quotient.mk, Ideal.comap_mono, Ideal.le_comap_map, Ideal.map_le_iff_le_comap, Ideal.over_def, Ideal.under_def, LiesOver, P.map, Quotient, algebraMap, comap_mono, convert, hI.le, le_comap_map, le_trans, map_le_iff_le_comap, over_def, p.map, sup_le_iff
 -/

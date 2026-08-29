@@ -49,7 +49,8 @@ theorem contDiffOn_clm_apply
   have hd : d = finrank 𝕜 (Fin d -> 𝕜) := (finrank_fin_fun 𝕜).symm
   let e₁ := ContinuousLinearEquiv.ofFinrankEq hd
   let e₂ := (e₁.arrowCongr (1 : F ≃L[𝕜] F)).trans (ContinuousLinearEquiv.piRing (Fin d))
-  rw 
+  rw [← id_comp f]; rw [← e₂.symm_comp_self]
+  exact e₂.symm.contDiff.comp_contDiffOn (contDiffOn_pi.mpr fun i => h _)
 
 中文:
 定理 contDiffOn_clm_apply
@@ -60,7 +61,8 @@ theorem contDiffOn_clm_apply
   have hd : d = finrank 𝕜 (Fin d -> 𝕜) := (finrank_fin_fun 𝕜).symm
   let e₁ := ContinuousLinearEquiv.ofFinrankEq hd
   let e₂ := (e₁.arrowCongr (1 : F ≃L[𝕜] F)).trans (ContinuousLinearEquiv.piRing (Fin d))
-  rw 
+  rw [← id_comp f]; rw [← e₂.symm_comp_self]
+  exact e₂.symm.contDiff.comp_contDiffOn (contDiffOn_pi.mpr fun i => h _)
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.ofFinrankEq, ContinuousLinearEquiv.piRing, arrowCongr, clm_apply, comp_contDiffOn, contDiff, contDiffOn_const, contDiffOn_pi, contDiffOn_pi.mpr, finrank, finrank_fin_fun, h.clm_apply, id_comp, ofFinrankEq, piRing, symm.contDiff.comp_contDiffOn, symm_comp_self
 -/

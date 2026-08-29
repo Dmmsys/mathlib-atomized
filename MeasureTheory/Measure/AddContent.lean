@@ -295,7 +295,17 @@ lemma addContent_union'
   convert! addContent_iUnion (f := ![s, t]) (m := m) (fun i => ?_) (fun i j hij => ?_) ?_ using 2
   · simp [Fin.univ_castSuccEmb, add_comm]
   · fin_cases i <;> simpa
-  · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/1316
+  · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed all four
+    cases. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in
+    the new canonicalizer; a minimization would help. The original proof was:
+    `fin_cases i <;> fin_cases j <;> grind` -/
+    fin_cases i <;> fin_cases j
+    · grind
+    · assumption
+    · exact h_dis.symm
+    · grind
+  · rwa [← A]
 
 中文:
 引理 addContent_union'
@@ -305,7 +315,17 @@ lemma addContent_union'
   convert! addContent_iUnion (f := ![s, t]) (m := m) (fun i => ?_) (fun i j hij => ?_) ?_ using 2
   · simp [Fin.univ_castSuccEmb, add_comm]
   · fin_cases i <;> simpa
-  · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/1316
+  · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed all four
+    cases. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in
+    the new canonicalizer; a minimization would help. The original proof was:
+    `fin_cases i <;> fin_cases j <;> grind` -/
+    fin_cases i <;> fin_cases j
+    · grind
+    · assumption
+    · exact h_dis.symm
+    · grind
+  · rwa [← A]
 
 Depends on / 依赖: Before, Fin.univ_castSuccEmb, Mathlib, adaptation_note, addContent_iUnion, add_comm, canonicalizer, closed, convert, directed, fin_cases, github, github.com, leanprover, normalizer, problem, replacing, univ_castSuccEmb, whether
 -/
@@ -361,7 +381,8 @@ lemma addContent_eq_add_disjointOfDiffUnion_of_subset
   · rw [coe_union]
     exact Set.union_subset hI (hC.disjointOfDiffUnion_subset hs hI)
   · rw [coe_union]
-    exact hC.pairwis
+    exact hC.pairwiseDisjoint_union_disjointOfDiffUnion hs hI h_dis
+  · rwa [hC.sUnion_union_disjointOfDiffUnion_of_subset hs hI hI_ss]
 
 中文:
 引理 addContent_eq_add_disjointOfDiffUnion_of_subset
@@ -374,7 +395,8 @@ lemma addContent_eq_add_disjointOfDiffUnion_of_subset
   · rw [coe_union]
     exact Set.union_subset hI (hC.disjointOfDiffUnion_subset hs hI)
   · rw [coe_union]
-    exact hC.pairwis
+    exact hC.pairwiseDisjoint_union_disjointOfDiffUnion hs hI h_dis
+  · rwa [hC.sUnion_union_disjointOfDiffUnion_of_subset hs hI hI_ss]
 
 Depends on / 依赖: Set.union_subset, addContent_sUnion, coe_union, conv_lhs, disjointOfDiffUnion_subset, disjoint_disjointOfDiffUnion, hC.disjointOfDiffUnion_subset, hC.disjoint_disjointOfDiffUnion, hC.pairwiseDisjoint_union_disjointOfDiffUnion, hC.sUnion_union_disjointOfDiffUnion_of_subset, hI_ss, h_dis, pairwiseDisjoint_union_disjointOfDiffUnion, sUnion_union_disjointOfDiffUnion_of_subset, sum_union, union_subset
 -/
@@ -406,7 +428,9 @@ theorem eq_add_disjointOfDiff_of_subset
   · rw [coe_insert]
     exact Set.insert_subset hs (hC.subset_disjointOfDiff ht hs)
   · rw [coe_insert]
-    exact hC.pairwiseDisj
+    exact hC.pairwiseDisjoint_insert_disjointOfDiff ht hs
+  · rw [coe_insert]
+    rwa [hC.sUnion_insert_disjointOfDiff ht hs hst]
 
 中文:
 定理 eq_add_disjointOfDiff_of_subset
@@ -419,7 +443,9 @@ theorem eq_add_disjointOfDiff_of_subset
   · rw [coe_insert]
     exact Set.insert_subset hs (hC.subset_disjointOfDiff ht hs)
   · rw [coe_insert]
-    exact hC.pairwiseDisj
+    exact hC.pairwiseDisjoint_insert_disjointOfDiff ht hs
+  · rw [coe_insert]
+    rwa [hC.sUnion_insert_disjointOfDiff ht hs hst]
 
 Depends on / 依赖: Set.insert_subset, addContent_sUnion, coe_insert, conv_lhs, hC.notMem_disjointOfDiff, hC.pairwiseDisjoint_insert_disjointOfDiff, hC.sUnion_insert_disjointOfDiff, hC.subset_disjointOfDiff, insert_subset, notMem_disjointOfDiff, pairwiseDisjoint_insert_disjointOfDiff, sUnion_insert_disjointOfDiff, subset_disjointOfDiff, sum_insert
 -/
@@ -450,7 +476,24 @@ theorem sum_addContent_eq_of_sUnion_eq
     have : s = ⋃ t in J', s inter t := by
       simp_rw [← Finset.set_biUnion_coe, ← inter_iUnion, left_eq_inter, ← sUnion_eq_biUnion, ← h]
       exact subset_sUnion_of_mem hs
-   
+    nth_rewrite 1 [this]
+    apply addContent_biUnion
+    · exact fun t ht => hC.inter_mem _ (hJ hs) _ (hJ' ht)
+    · exact hJ'disj.mono fun _ => by simp
+    · rw [← this]
+      exact hJ hs
+  _ = ∑ t in J', (∑ s in J, m (s inter t)) := sum_comm
+  _ = ∑ t in J', m t := by
+    apply Finset.sum_congr rfl (fun t ht => ?_)
+    have : t = ⋃ s in J, s inter t := by
+      simp_rw [← Finset.set_biUnion_coe, ← iUnion_inter, right_eq_inter, ← sUnion_eq_biUnion, h]
+      exact subset_sUnion_of_mem ht
+    nth_rewrite 2 [this]
+    apply (addContent_biUnion _ _ _).symm
+    · exact fun s hs => hC.inter_mem _ (hJ hs) _ (hJ' ht)
+    · exact hJdisj.mono fun _ => by simp
+    · rw [← this]
+      exact hJ' ht
 
 中文:
 定理 sum_addContent_eq_of_sUnion_eq
@@ -462,7 +505,24 @@ theorem sum_addContent_eq_of_sUnion_eq
     have : s = ⋃ t in J', s inter t := by
       simp_rw [← Finset.set_biUnion_coe, ← inter_iUnion, left_eq_inter, ← sUnion_eq_biUnion, ← h]
       exact subset_sUnion_of_mem hs
-   
+    nth_rewrite 1 [this]
+    apply addContent_biUnion
+    · exact fun t ht => hC.inter_mem _ (hJ hs) _ (hJ' ht)
+    · exact hJ'disj.mono fun _ => by simp
+    · rw [← this]
+      exact hJ hs
+  _ = ∑ t in J', (∑ s in J, m (s inter t)) := sum_comm
+  _ = ∑ t in J', m t := by
+    apply Finset.sum_congr rfl (fun t ht => ?_)
+    have : t = ⋃ s in J, s inter t := by
+      simp_rw [← Finset.set_biUnion_coe, ← iUnion_inter, right_eq_inter, ← sUnion_eq_biUnion, h]
+      exact subset_sUnion_of_mem ht
+    nth_rewrite 2 [this]
+    apply (addContent_biUnion _ _ _).symm
+    · exact fun s hs => hC.inter_mem _ (hJ hs) _ (hJ' ht)
+    · exact hJdisj.mono fun _ => by simp
+    · rw [← this]
+      exact hJ' ht
 
 Depends on / 依赖: Finset, Finset.set_biUnion_coe, Finset.sum_congr, addContent_biUnion, disj.mono, hC.inter_mem, inter_iUnion, inter_mem, left_eq_inter, nth_rewrite, sUnion_eq_biUnion, set_biUnion_coe, simp_rw, subset_sUnion_of_mem, sum_comm, sum_congr
 -/
@@ -531,7 +591,7 @@ lemma AddContent.supClosureFun_apply
   simp only [supClosureFun, h, ↓reduceDIte]
   apply sum_addContent_eq_of_sUnion_eq hC _ _ h.choose_spec.1 h.choose_spec.2.1 hJ h'J
   rw [← hs]
-  exact h.choose_spec.
+  exact h.choose_spec.2.2.symm
 
 中文:
 引理 加法内容.supClosureFun_apply
@@ -542,7 +602,7 @@ lemma AddContent.supClosureFun_apply
   simp only [supClosureFun, h, ↓reduceDIte]
   apply sum_addContent_eq_of_sUnion_eq hC _ _ h.choose_spec.1 h.choose_spec.2.1 hJ h'J
   rw [← hs]
-  exact h.choose_spec.
+  exact h.choose_spec.2.2.symm
 -/
 private lemma AddContent.supClosureFun_apply (hC : IsSetSemiring C)
     (m : AddContent G C) {s : Set α} {J : Finset (Set α)}
@@ -592,7 +652,11 @@ definition AddContent.supClosure
   sUnion' I hI h'I hh'I := by
     choose! J hJC using fun s (hs : s in I) => hC.mem_supClosure_iff.mp (hI hs)
     let K : Finpartition (I.sup id) := Finpartition.combine J h'I.supIndep
-    rw [← sSup_e
+    rw [← sSup_eq_sUnion]; rw [← sup_id_eq_sSup]; rw [← K.sup_parts]; rw [sup_id_eq_sSup]; rw [sSup_eq_sUnion]; rw [m.supClosureFun_apply hC (by simpa [K] using hJC) K.supIndep.pairwiseDisjoint rfl,
+      Finpartition.sum_combine]
+refine Finset.sum_congr rfl fun i hi => Eq.symm
+      m.supClosureFun_apply hC (hJC i hi) (J i).supIndep.pairwiseDisjoint ?_
+    rw [← sSup_eq_sUnion]; rw [← sup_id_eq_sSup]; rw [(J i).sup_parts]
 
 中文:
 定义 加法内容.supClosure
@@ -602,7 +666,11 @@ definition AddContent.supClosure
   sUnion' I hI h'I hh'I := by
     choose! J hJC using fun s (hs : s in I) => hC.mem_supClosure_iff.mp (hI hs)
     let K : Finpartition (I.sup id) := Finpartition.combine J h'I.supIndep
-    rw [← sSup_e
+    rw [← sSup_eq_sUnion]; rw [← sup_id_eq_sSup]; rw [← K.sup_parts]; rw [sup_id_eq_sSup]; rw [sSup_eq_sUnion]; rw [m.supClosureFun_apply hC (by simpa [K] using hJC) K.supIndep.pairwiseDisjoint rfl,
+      Finpartition.sum_combine]
+refine Finset.sum_congr rfl fun i hi => Eq.symm
+      m.supClosureFun_apply hC (hJC i hi) (J i).supIndep.pairwiseDisjoint ?_
+    rw [← sSup_eq_sUnion]; rw [← sup_id_eq_sSup]; rw [(J i).sup_parts]
 -/
 @[no_expose] noncomputable def AddContent.supClosure (m : AddContent G C) (hC : IsSetSemiring C) :
     AddContent G (supClosure C) where
@@ -759,7 +827,18 @@ lemma addContent_le_sum_of_subset_sUnion
     ← J.equivFin.symm.iSup_comp, iSup_eq_iUnion, ← iUnion_disjointed] at htJ
   set f := disjointed fun j => (J.equivFin.symm j).1
   have h1 : forall j, f j in supClosure C :=
-    hC.isSetRing_supClosure.disjointed_mem f
+    hC.isSetRing_supClosure.disjointed_mem fun j =>
+subset_supClosure h_ss (J.equivFin.symm j).2
+  have h2 : Pairwise (Disjoint on f) := disjoint_disjointed _
+  have h3 : ⋃ i, f i in supClosure C :=
+    supClosed_supClosure.iSup_mem (subset_supClosure hC.empty_mem) h1
+  grw [← m.supClosure_apply_of_mem hC ht,
+    addContent_mono hC.isSetRing_supClosure.isSetSemiring (subset_supClosure ht) h3 htJ,
+    addContent_iUnion h1 h2 h3, ← J.sum_attach, Finset.attach_eq_univ, ← J.equivFin.symm.sum_comp]
+  gcongr with j -
+  rw [← m.supClosure_apply_of_mem hC (h_ss (J.equivFin.symm _).2)]
+  exact addContent_mono hC.isSetRing_supClosure.isSetSemiring (h1 j)
+    (subset_supClosure (h_ss (J.equivFin.symm j).2)) (disjointed_subset _ j)
 
 中文:
 引理 addContent_le_sum_of_subset_sUnion
@@ -769,7 +848,18 @@ lemma addContent_le_sum_of_subset_sUnion
     ← J.equivFin.symm.iSup_comp, iSup_eq_iUnion, ← iUnion_disjointed] at htJ
   set f := disjointed fun j => (J.equivFin.symm j).1
   have h1 : forall j, f j in supClosure C :=
-    hC.isSetRing_supClosure.disjointed_mem f
+    hC.isSetRing_supClosure.disjointed_mem fun j =>
+subset_supClosure h_ss (J.equivFin.symm j).2
+  have h2 : Pairwise (Disjoint on f) := disjoint_disjointed _
+  have h3 : ⋃ i, f i in supClosure C :=
+    supClosed_supClosure.iSup_mem (subset_supClosure hC.empty_mem) h1
+  grw [← m.supClosure_apply_of_mem hC ht,
+    addContent_mono hC.isSetRing_supClosure.isSetSemiring (subset_supClosure ht) h3 htJ,
+    addContent_iUnion h1 h2 h3, ← J.sum_attach, Finset.attach_eq_univ, ← J.equivFin.symm.sum_comp]
+  gcongr with j -
+  rw [← m.supClosure_apply_of_mem hC (h_ss (J.equivFin.symm _).2)]
+  exact addContent_mono hC.isSetRing_supClosure.isSetSemiring (h1 j)
+    (subset_supClosure (h_ss (J.equivFin.symm j).2)) (disjointed_subset _ j)
 
 Depends on / 依赖: Disjoint, J.equivFin.symm, J.equivFin.symm.iSup_comp, Pairwise, SetLike, SetLike.coe_sort_coe, coe_sort_coe, disjoint_disjointed, disjointed, disjointed_mem, empty_mem, equivFin, hC.empty_mem, hC.isSetRing_supClosure.disjointed_mem, h_ss, iSup_comp, iSup_eq_iUnion, iSup_mem, iUnion_disjointed, isSetRing_supClosure
 -/
@@ -824,7 +914,19 @@ theorem addContent_iUnion_eq_tsum_of_disjoint_of_addContent_iUnion_le
   refine ENNReal.summable.tsum_le_of_sum_le fun I => ?_
   rw [← Finset.sum_image_of_disjoint addContent_empty (hf_disj.pairwiseDisjoint _)]
   refine sum_addContent_le_of_subset hC (I := I.image f) ?_ ?_ hf_Union ?_
-  · simp only [coe_image,
+  · simp only [coe_image, Set.image_subset_iff]
+    refine (subset_preimage_image f I).trans (preimage_mono ?_)
+    rintro i ⟨j, _, rfl⟩
+    exact hf j
+  · simp only [coe_image]
+    intro s hs t ht hst
+    rw [Set.mem_image] at hs ht
+    obtain ⟨i, _, rfl⟩ := hs
+    obtain ⟨j, _, rfl⟩ := ht
+    have hij : i != j := by intro h_eq; rw [h_eq] at hst; exact hst rfl
+    exact hf_disj hij
+  · simp only [Finset.mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+    exact fun i _ => subset_iUnion _ i
 
 中文:
 定理 addContent_iUnion_eq_tsum_of_disjoint_of_addContent_iUnion_le
@@ -834,7 +936,19 @@ theorem addContent_iUnion_eq_tsum_of_disjoint_of_addContent_iUnion_le
   refine ENNReal.summable.tsum_le_of_sum_le fun I => ?_
   rw [← Finset.sum_image_of_disjoint addContent_empty (hf_disj.pairwiseDisjoint _)]
   refine sum_addContent_le_of_subset hC (I := I.image f) ?_ ?_ hf_Union ?_
-  · simp only [coe_image,
+  · simp only [coe_image, Set.image_subset_iff]
+    refine (subset_preimage_image f I).trans (preimage_mono ?_)
+    rintro i ⟨j, _, rfl⟩
+    exact hf j
+  · simp only [coe_image]
+    intro s hs t ht hst
+    rw [Set.mem_image] at hs ht
+    obtain ⟨i, _, rfl⟩ := hs
+    obtain ⟨j, _, rfl⟩ := ht
+    have hij : i != j := by intro h_eq; rw [h_eq] at hst; exact hst rfl
+    exact hf_disj hij
+  · simp only [Finset.mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+    exact fun i _ => subset_iUnion _ i
 
 Depends on / 依赖: ENNReal, ENNReal.summable.tsum_le_of_sum_le, Finset, Finset.sum_image_of_disjoint, I.image, Set.image_subset_iff, Set.mem_image, addContent_empty, coe_image, hf_Union, hf_disj, hf_disj.pairwiseDisjoint, image_subset_iff, le_antisymm, m_subadd, mem_image, pairwiseDisjoint, preimage_mono, subset_preimage_image, sum_addContent_le_of_subset
 -/
@@ -930,7 +1044,9 @@ lemma AddContent.onIocAux_apply
   set v' := h'.choose.2
   have hu'v' : u' <= v' ∧ Ioc u v = Ioc u' v' := h'.choose_spec
   rcases h.eq_or_lt with rfl | huv
-  · grind [Set.Ioc_eq_e
+  · grind [Set.Ioc_eq_empty_iff]
+  rw [Ioc_eq_Ioc_iff (Or.inl huv)] at hu'v'
+  grind
 
 中文:
 引理 加法内容.onIocAux_apply
@@ -942,7 +1058,9 @@ lemma AddContent.onIocAux_apply
   set v' := h'.choose.2
   have hu'v' : u' <= v' ∧ Ioc u v = Ioc u' v' := h'.choose_spec
   rcases h.eq_or_lt with rfl | huv
-  · grind [Set.Ioc_eq_e
+  · grind [Set.Ioc_eq_empty_iff]
+  rw [Ioc_eq_Ioc_iff (Or.inl huv)] at hu'v'
+  grind
 
 Depends on / 依赖: Ioc_eq_Ioc_iff, Ioc_eq_empty_iff, Or.inl, Set.Ioc_eq_empty_iff, choose_spec, eq_or_lt, h.eq_or_lt, onIocAux, reduceDIte
 -/
@@ -996,7 +1114,58 @@ definition AddContent.onIoc
   sUnion' := by
     /- Consider a finite union of open-closed intervals whose union is again an open-closed
     interval `(u, v]`. We have to show that the sum of `f b - f a` over the intervals gives
-    `f v - f u`. Informally, `(u, v]` 
+    `f v - f u`. Informally, `(u, v]` is an ordered
+    union `(a₀, a₁] ∪ (a₁, a₂] ∪ ... ∪ (a_{n-1}, aₙ]` and there is a telescoping sum.
+    For the formal argument, we argue by induction on the number of intervals, and remove the
+    right-most one (i.e., the one that contains `v`) to reduce to one interval less. Denoting
+    this right-most interval by `(u', v]`, then the union of the other intervals
+    is exactly `(u, u']`. From this and the induction assumption, the conclusion follows. -/
+    intro I hI h'I h''I
+    induction hn : Finset.card I generalizing I with
+    | zero =>
+      have : I = ∅ := by grind
+      simp [this, onIocAux_empty f]
+    | succ n ih =>
+      rcases h''I with ⟨u, v, huv, h'uv⟩
+      -- If the interval `(u, v]` is empty, i.e., `u = v`, then the result is easy.
+      rcases huv.eq_or_lt with rfl | huv
+      · have : onIocAux f (Set.Ioc u u) = ∑ u in I, 0 := by simp [onIocAux_empty f]
+        rw [h'uv]; rw [this]
+        apply Finset.sum_congr rfl fun i hi => ?_
+        have : i = ∅ := by grind [sUnion_eq_empty]
+        grind [onIocAux_empty]
+      -- otherwise, `v` is in `(u, v]`, therefore it belongs to some interval `(u', v']`
+      -- featuring in the union.
+      have : v in ⋃₀ ↑I := by simp [h'uv, huv]
+      obtain ⟨t, tI, ht⟩ : exists t in I, v in t := by simpa using this
+      rcases hI tI with ⟨u', v', hu'v', rfl⟩
+      -- we have `u ≤ u'` and `v' = v` since `(u', v']` is part of the union, and therefore
+      -- contained in `(u, v]`.
+      have ⟨_, uu'⟩ : v' <= v ∧ u <= u' := (Ioc_subset_Ioc_iff (by grind)).1 (by grind)
+      obtain rfl : v = v' := by grind
+      rw [h'uv]; rw [onIocAux_apply huv.le]
+      -- let us remove the right-most interval `(u', v]` from the union, and let `I'` be the
+      -- remaining set of intervals.
+      let I' := I.erase (Set.Ioc u' v)
+      have I'I : I' subseteq I := erase_subset (Set.Ioc u' v) I
+      have I_eq_insert : I = insert (Set.Ioc u' v) I' := by simp [I', tI]
+      -- the intervals in `I'` cover exactly `(u, u']`.
+      have UI' : ⋃₀ ↑I' = Ioc u u' := by
+        have : (Ioc u' v union ⋃₀ ↑I') \ Ioc u' v = ⋃₀ ↑I' := by
+          refine Disjoint.sup_sdiff_cancel_left ?_
+          simp only [coe_erase, disjoint_sUnion_right, Set.mem_sdiff, mem_singleton_iff, and_imp,
+            I']
+          intro u hu hu'
+          exact (h'I hu tI hu').symm
+        simp only [I_eq_insert, coe_insert, sUnion_insert] at h'uv
+        grind
+      -- by the inductive assumption, the sum over `I'` is exactly `f u' - f u`.
+      have IH : onIocAux f (⋃₀ ↑I') = ∑ u in I', onIocAux f u :=
+        ih _ (Subset.trans I'I hI) (h'I.subset I'I) (by grind) (by grind)
+      -- the conclusion follows.
+      rw [I_eq_insert]; rw [sum_insert]; rw [← IH]; rw [UI']; rw [onIocAux_apply hu'v']; rw [onIocAux_apply uu']
+      · simp
+      · simp [I']
 
 中文:
 定义 加法内容.onIoc
@@ -1006,7 +1175,58 @@ definition AddContent.onIoc
   sUnion' := by
     /- Consider a finite union of open-closed intervals whose union is again an open-closed
     interval `(u, v]`. We have to show that the sum of `f b - f a` over the intervals gives
-    `f v - f u`. Informally, `(u, v]` 
+    `f v - f u`. Informally, `(u, v]` is an ordered
+    union `(a₀, a₁] ∪ (a₁, a₂] ∪ ... ∪ (a_{n-1}, aₙ]` and there is a telescoping sum.
+    For the formal argument, we argue by induction on the number of intervals, and remove the
+    right-most one (i.e., the one that contains `v`) to reduce to one interval less. Denoting
+    this right-most interval by `(u', v]`, then the union of the other intervals
+    is exactly `(u, u']`. From this and the induction assumption, the conclusion follows. -/
+    intro I hI h'I h''I
+    induction hn : Finset.card I generalizing I with
+    | zero =>
+      have : I = ∅ := by grind
+      simp [this, onIocAux_empty f]
+    | succ n ih =>
+      rcases h''I with ⟨u, v, huv, h'uv⟩
+      -- If the interval `(u, v]` is empty, i.e., `u = v`, then the result is easy.
+      rcases huv.eq_or_lt with rfl | huv
+      · have : onIocAux f (Set.Ioc u u) = ∑ u in I, 0 := by simp [onIocAux_empty f]
+        rw [h'uv]; rw [this]
+        apply Finset.sum_congr rfl fun i hi => ?_
+        have : i = ∅ := by grind [sUnion_eq_empty]
+        grind [onIocAux_empty]
+      -- otherwise, `v` is in `(u, v]`, therefore it belongs to some interval `(u', v']`
+      -- featuring in the union.
+      have : v in ⋃₀ ↑I := by simp [h'uv, huv]
+      obtain ⟨t, tI, ht⟩ : exists t in I, v in t := by simpa using this
+      rcases hI tI with ⟨u', v', hu'v', rfl⟩
+      -- we have `u ≤ u'` and `v' = v` since `(u', v']` is part of the union, and therefore
+      -- contained in `(u, v]`.
+      have ⟨_, uu'⟩ : v' <= v ∧ u <= u' := (Ioc_subset_Ioc_iff (by grind)).1 (by grind)
+      obtain rfl : v = v' := by grind
+      rw [h'uv]; rw [onIocAux_apply huv.le]
+      -- let us remove the right-most interval `(u', v]` from the union, and let `I'` be the
+      -- remaining set of intervals.
+      let I' := I.erase (Set.Ioc u' v)
+      have I'I : I' subseteq I := erase_subset (Set.Ioc u' v) I
+      have I_eq_insert : I = insert (Set.Ioc u' v) I' := by simp [I', tI]
+      -- the intervals in `I'` cover exactly `(u, u']`.
+      have UI' : ⋃₀ ↑I' = Ioc u u' := by
+        have : (Ioc u' v union ⋃₀ ↑I') \ Ioc u' v = ⋃₀ ↑I' := by
+          refine Disjoint.sup_sdiff_cancel_left ?_
+          simp only [coe_erase, disjoint_sUnion_right, Set.mem_sdiff, mem_singleton_iff, and_imp,
+            I']
+          intro u hu hu'
+          exact (h'I hu tI hu').symm
+        simp only [I_eq_insert, coe_insert, sUnion_insert] at h'uv
+        grind
+      -- by the inductive assumption, the sum over `I'` is exactly `f u' - f u`.
+      have IH : onIocAux f (⋃₀ ↑I') = ∑ u in I', onIocAux f u :=
+        ih _ (Subset.trans I'I hI) (h'I.subset I'I) (by grind) (by grind)
+      -- the conclusion follows.
+      rw [I_eq_insert]; rw [sum_insert]; rw [← IH]; rw [UI']; rw [onIocAux_apply hu'v']; rw [onIocAux_apply uu']
+      · simp
+      · simp [I']
 
 Depends on / 依赖: AddContent, AddContent.onIocAux, onIocAux
 -/
@@ -1110,7 +1330,7 @@ definition AddContent.extend
     rw [addContent_sUnion h_ss h_dis h_mem]
     refine Finset.sum_congr rfl (fun s hs => ?_)
     rw [extend_eq]
-    exa
+    exact h_ss hs
 
 中文:
 定义 加法内容.extend
@@ -1123,7 +1343,7 @@ definition AddContent.extend
     rw [addContent_sUnion h_ss h_dis h_mem]
     refine Finset.sum_congr rfl (fun s hs => ?_)
     rw [extend_eq]
-    exa
+    exact h_ss hs
 
 Depends on / 依赖: extend
 -/
@@ -1229,7 +1449,11 @@ lemma addContent_biUnion_eq
     rw [Finset.sum_insert hiS]
     simp_rw [← Finset.mem_coe, Finset.coe_insert, Set.biUnion_insert]
     simp only [Finset.mem_insert, forall_eq_or_imp] at hs
-    simp only [Finset.coe_insert, Set.pair
+    simp only [Finset.coe_insert, Set.pairwiseDisjoint_insert] at hS
+    rw [← h hs.2 hS.1]
+    refine addContent_union hC hs.1 (hC.biUnion_mem S hs.2) ?_
+    rw [disjoint_iUnion₂_right]
+    exact fun j hjS => hS.2 j hjS (ne_of_mem_of_not_mem hjS hiS).symm
 
 中文:
 引理 addContent_biUnion_eq
@@ -1242,7 +1466,11 @@ lemma addContent_biUnion_eq
     rw [Finset.sum_insert hiS]
     simp_rw [← Finset.mem_coe, Finset.coe_insert, Set.biUnion_insert]
     simp only [Finset.mem_insert, forall_eq_or_imp] at hs
-    simp only [Finset.coe_insert, Set.pair
+    simp only [Finset.coe_insert, Set.pairwiseDisjoint_insert] at hS
+    rw [← h hs.2 hS.1]
+    refine addContent_union hC hs.1 (hC.biUnion_mem S hs.2) ?_
+    rw [disjoint_iUnion₂_right]
+    exact fun j hjS => hS.2 j hjS (ne_of_mem_of_not_mem hjS hiS).symm
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.induction, Finset.mem_coe, Finset.mem_insert, Finset.sum_insert, Set.biUnion_insert, Set.pairwiseDisjoint_insert, addContent_union, biUnion_insert, biUnion_mem, classical, coe_insert, forall_eq_or_imp, hC.biUnion_mem, insert, mem_coe, mem_insert, ne_of_mem_of_not_mem, pairwiseDisjoint_insert
 -/
@@ -1313,7 +1541,15 @@ definition IsSetRing.addContent_of_union
     | insert s I hsI h =>
       rw [Finset.coe_insert] at *
       rw [Set.insert_subset_iff] at h_ss
-      rw 
+      rw [Set.pairwiseDisjoint_insert_of_notMem] at h_dis
+      swap; · exact hsI
+      have h_sUnion_mem : ⋃₀ ↑I in C := by
+        rw [Set.sUnion_eq_biUnion]
+        apply hC.biUnion_mem
+        intro n hn
+        exact h_ss.2 hn
+      rw [Set.sUnion_insert]; rw [m_add h_ss.1 h_sUnion_mem (Set.disjoint_sUnion_right.mpr h_dis.2)]; rw [Finset.sum_insert hsI]; rw [h h_ss.2 h_dis.1]
+      rwa [Set.sUnion_insert] at h_mem
 
 中文:
 定义 是集合环.addContent_of_union
@@ -1326,7 +1562,15 @@ definition IsSetRing.addContent_of_union
     | insert s I hsI h =>
       rw [Finset.coe_insert] at *
       rw [Set.insert_subset_iff] at h_ss
-      rw 
+      rw [Set.pairwiseDisjoint_insert_of_notMem] at h_dis
+      swap; · exact hsI
+      have h_sUnion_mem : ⋃₀ ↑I in C := by
+        rw [Set.sUnion_eq_biUnion]
+        apply hC.biUnion_mem
+        intro n hn
+        exact h_ss.2 hn
+      rw [Set.sUnion_insert]; rw [m_add h_ss.1 h_sUnion_mem (Set.disjoint_sUnion_right.mpr h_dis.2)]; rw [Finset.sum_insert hsI]; rw [h h_ss.2 h_dis.1]
+      rwa [Set.sUnion_insert] at h_mem
 -/
 def IsSetRing.addContent_of_union (m : Set α -> G) (hC : IsSetRing C) (m_empty : m ∅ = 0)
     (m_add : forall {s t : Set α} (_hs : s in C) (_ht : t in C), Disjoint s t -> m (s union t) = m s + m t) :
@@ -1392,7 +1636,8 @@ lemma addContent_biUnion_le
     rw [Finset.sum_insert hiS]
     simp_rw [← Finset.mem_coe, Finset.coe_insert, Set.biUnion_insert]
     simp only [Finset.mem_insert, forall_eq_or_imp] at hs
-    refine (addContent_union_le hC hs.1 (h
+    refine (addContent_union_le hC hs.1 (hC.biUnion_mem S hs.2)).trans ?_
+    exact add_le_add le_rfl (h hs.2)
 
 中文:
 引理 addContent_biUnion_le
@@ -1405,7 +1650,8 @@ lemma addContent_biUnion_le
     rw [Finset.sum_insert hiS]
     simp_rw [← Finset.mem_coe, Finset.coe_insert, Set.biUnion_insert]
     simp only [Finset.mem_insert, forall_eq_or_imp] at hs
-    refine (addContent_union_le hC hs.1 (h
+    refine (addContent_union_le hC hs.1 (hC.biUnion_mem S hs.2)).trans ?_
+    exact add_le_add le_rfl (h hs.2)
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.induction, Finset.mem_coe, Finset.mem_insert, Finset.sum_insert, Set.biUnion_insert, addContent_union_le, add_le_add, biUnion_insert, biUnion_mem, classical, coe_insert, forall_eq_or_imp, hC.biUnion_mem, insert, le_rfl, mem_coe, mem_insert, simp_rw
 -/
@@ -1433,7 +1679,9 @@ lemma le_addContent_sdiff
   rw [addContent_union hC (hC.inter_mem hs ht) (hC.sdiff_mem hs ht) disjoint_inf_sdiff]; rw [add_comm]
   refine add_tsub_le_assoc.trans_eq ?_
   rw [tsub_eq_zero_of_le
-    (addContent_mono hC.isSetSemiring (hC.inter_mem hs ht) ht inter_subset_right)]; rw 
+    (addContent_mono hC.isSetSemiring (hC.inter_mem hs ht) ht inter_subset_right)]; rw [add_zero]
+
+@[deprecated (since := "2026-06-03")] alias le_addContent_diff := le_addContent_sdiff
 
 中文:
 引理 le_addContent_sdiff
@@ -1443,7 +1691,9 @@ lemma le_addContent_sdiff
   rw [addContent_union hC (hC.inter_mem hs ht) (hC.sdiff_mem hs ht) disjoint_inf_sdiff]; rw [add_comm]
   refine add_tsub_le_assoc.trans_eq ?_
   rw [tsub_eq_zero_of_le
-    (addContent_mono hC.isSetSemiring (hC.inter_mem hs ht) ht inter_subset_right)]; rw 
+    (addContent_mono hC.isSetSemiring (hC.inter_mem hs ht) ht inter_subset_right)]; rw [add_zero]
+
+@[deprecated (since := "2026-06-03")] alias le_addContent_diff := le_addContent_sdiff
 
 Depends on / 依赖: addContent_mono, addContent_union, add_comm, add_tsub_le_assoc, add_tsub_le_assoc.trans_eq, add_zero, conv_lhs, disjoint_inf_sdiff, hC.inter_mem, hC.isSetSemiring, hC.sdiff_mem, inter_mem, inter_subset_right, inter_union_sdiff, isSetSemiring, sdiff_mem, trans_eq, tsub_eq_zero_of_le
 -/
@@ -1469,7 +1719,7 @@ lemma addContent_sdiff_of_ne_top
   simp_rw [Set.union_sdiff_self, Set.union_eq_right.mpr hts] at h_union
   rw [h_union]; rw [ENNReal.add_sub_cancel_left (hm_ne_top _ ht)]
 
-@[deprecated (since := "2026
+@[deprecated (since := "2026-06-03")] alias addContent_diff_of_ne_top := addContent_sdiff_of_ne_top
 
 中文:
 引理 addContent_sdiff_of_ne_top
@@ -1480,7 +1730,7 @@ lemma addContent_sdiff_of_ne_top
   simp_rw [Set.union_sdiff_self, Set.union_eq_right.mpr hts] at h_union
   rw [h_union]; rw [ENNReal.add_sub_cancel_left (hm_ne_top _ ht)]
 
-@[deprecated (since := "2026
+@[deprecated (since := "2026-06-03")] alias addContent_diff_of_ne_top := addContent_sdiff_of_ne_top
 
 Depends on / 依赖: ENNReal, ENNReal.add_sub_cancel_left, Set.union_eq_right.mpr, Set.union_sdiff_self, addContent_union, add_sub_cancel_left, disjoint_sdiff_self_right, hC.sdiff_mem, h_union, hm_ne_top, sdiff_mem, simp_rw, union_eq_right, union_sdiff_self
 -/
@@ -1506,7 +1756,23 @@ theorem addContent_iUnion_eq_sum_of_tendsto_zero
   let s : Nat -> Set α := fun n => (⋃ i, f i) \ Set.accumulate f n
   have hCs n : s n in C := hC.sdiff_mem hUf (hC.accumulate_mem hf n)
   have h_tendsto : Tendsto (fun n => m (s n)) atTop (𝓝 0) := by
-
+    refine hm_tendsto hCs ?_ ?_
+    · intro i j hij x hxj
+      rw [Set.mem_sdiff] at hxj ⊢
+      exact ⟨hxj.1, fun hxi => hxj.2 (Set.monotone_accumulate hij hxi)⟩
+    · simp_rw [s, Set.sdiff_eq]
+      rw [Set.iInter_inter_distrib]; rw [Set.iInter_const]; rw [← Set.compl_iUnion]; rw [Set.iUnion_accumulate]
+      exact Set.inter_compl_self _
+  have hmsn n : m (s n) = m (⋃ i, f i) - ∑ i in Finset.range (n + 1), m (f i) := by
+    rw [addContent_sdiff_of_ne_top m hC hm_ne_top hUf (hC.accumulate_mem hf n)
+      (Set.accumulate_subset_iUnion _)]; rw [addContent_accumulate m hC h_disj hf n]
+  simp_rw [hmsn] at h_tendsto
+  refine tendsto_nhds_unique ?_ (ENNReal.tendsto_nat_tsum fun i => m (f i))
+  refine (Filter.tendsto_add_atTop_iff_nat 1).mp ?_
+  rwa [ENNReal.tendsto_const_sub_nhds_zero_iff (hm_ne_top _ hUf) (fun n => ?_)] at h_tendsto
+  rw [← addContent_accumulate m hC h_disj hf]
+  exact addContent_mono hC.isSetSemiring (hC.accumulate_mem hf n) hUf
+    (Set.accumulate_subset_iUnion _)
 
 中文:
 定理 addContent_iUnion_eq_sum_of_tendsto_zero
@@ -1516,7 +1782,23 @@ theorem addContent_iUnion_eq_sum_of_tendsto_zero
   let s : Nat -> Set α := fun n => (⋃ i, f i) \ Set.accumulate f n
   have hCs n : s n in C := hC.sdiff_mem hUf (hC.accumulate_mem hf n)
   have h_tendsto : Tendsto (fun n => m (s n)) atTop (𝓝 0) := by
-
+    refine hm_tendsto hCs ?_ ?_
+    · intro i j hij x hxj
+      rw [Set.mem_sdiff] at hxj ⊢
+      exact ⟨hxj.1, fun hxi => hxj.2 (Set.monotone_accumulate hij hxi)⟩
+    · simp_rw [s, Set.sdiff_eq]
+      rw [Set.iInter_inter_distrib]; rw [Set.iInter_const]; rw [← Set.compl_iUnion]; rw [Set.iUnion_accumulate]
+      exact Set.inter_compl_self _
+  have hmsn n : m (s n) = m (⋃ i, f i) - ∑ i in Finset.range (n + 1), m (f i) := by
+    rw [addContent_sdiff_of_ne_top m hC hm_ne_top hUf (hC.accumulate_mem hf n)
+      (Set.accumulate_subset_iUnion _)]; rw [addContent_accumulate m hC h_disj hf n]
+  simp_rw [hmsn] at h_tendsto
+  refine tendsto_nhds_unique ?_ (ENNReal.tendsto_nat_tsum fun i => m (f i))
+  refine (Filter.tendsto_add_atTop_iff_nat 1).mp ?_
+  rwa [ENNReal.tendsto_const_sub_nhds_zero_iff (hm_ne_top _ hUf) (fun n => ?_)] at h_tendsto
+  rw [← addContent_accumulate m hC h_disj hf]
+  exact addContent_mono hC.isSetSemiring (hC.accumulate_mem hf n) hUf
+    (Set.accumulate_subset_iUnion _)
 -/
 theorem addContent_iUnion_eq_sum_of_tendsto_zero (hC : IsSetRing C) (m : AddContent Real>=0∞ C)
     (hm_ne_top : forall s in C, m s != ∞)
@@ -1557,7 +1839,11 @@ theorem tendsto_atTop_addContent_iUnion_of_addContent_iUnion_eq_tsum
       (disjoint_disjointed f)]
   have h n : m (f n) = ∑ i in range (n + 1), m (disjointed f i) := by
     nth_rw 1 [← addContent_accumulate _ hC (disjoint_disjointed f) (hC.disjointed_mem hf),
-    ← hf_m
+    ← hf_mono.partialSups_eq, ← partialSups_disjointed, partialSups_eq_biSup, accumulate]
+    rfl
+  simp_rw [h]
+  refine (tendsto_add_atTop_iff_nat (f := (fun k => ∑ i in range k, m (disjointed f i))) 1).2 ?_
+  exact ENNReal.tendsto_nat_tsum _
 
 中文:
 定理 tendsto_atTop_addContent_iUnion_of_addContent_iUnion_eq_tsum
@@ -1566,7 +1852,11 @@ theorem tendsto_atTop_addContent_iUnion_of_addContent_iUnion_eq_tsum
       (disjoint_disjointed f)]
   have h n : m (f n) = ∑ i in range (n + 1), m (disjointed f i) := by
     nth_rw 1 [← addContent_accumulate _ hC (disjoint_disjointed f) (hC.disjointed_mem hf),
-    ← hf_m
+    ← hf_mono.partialSups_eq, ← partialSups_disjointed, partialSups_eq_biSup, accumulate]
+    rfl
+  simp_rw [h]
+  refine (tendsto_add_atTop_iff_nat (f := (fun k => ∑ i in range k, m (disjointed f i))) 1).2 ?_
+  exact ENNReal.tendsto_nat_tsum _
 
 Depends on / 依赖: ENNReal, ENNReal.tendsto_nat_t, accumulate, addContent_accumulate, disjoint_disjointed, disjointed, disjointed_mem, hC.disjointed_mem, hf_mono, hf_mono.partialSups_eq, iUnion_disjointed, m_iUnion, nth_rw, partialSups_disjointed, partialSups_eq, partialSups_eq_biSup, simp_rw, tendsto_add_atTop_iff_nat, tendsto_nat_t
 -/
@@ -1597,7 +1887,14 @@ theorem isSigmaSubadditive_of_addContent_iUnion_eq_tsum
   have h_tendsto : Tendsto (fun n => m (partialSups f n)) atTop (𝓝 (m (⋃ i, f i))) := by
     rw [← iSup_eq_iUnion]; rw [← iSup_partialSups_eq]
     refine tendsto_atTop_addContent_iUnion_of_addContent_iUnion_eq_tsum hC m_iUnion
-      (partialSups_monotone f) (hC.partialSups_m
+      (partialSups_monotone f) (hC.partialSups_mem hf) ?_
+    rwa [← iSup_eq_iUnion, iSup_partialSups_eq]
+  have h_tendsto' : Tendsto (fun n => ∑ i in range (n + 1), m (f i)) atTop (𝓝 (∑' i, m (f i))) := by
+    rw [tendsto_add_atTop_iff_nat (f := (fun k => ∑ i in range k]; rw [m (f i))) 1]
+    exact ENNReal.tendsto_nat_tsum _
+  refine le_of_tendsto_of_tendsto' h_tendsto h_tendsto' fun _ => ?_
+  rw [partialSups_eq_biUnion_range]
+  exact addContent_biUnion_le hC (fun _ _ => hf _)
 
 中文:
 定理 isSigmaSubadditive_of_addContent_iUnion_eq_tsum
@@ -1607,7 +1904,14 @@ theorem isSigmaSubadditive_of_addContent_iUnion_eq_tsum
   have h_tendsto : Tendsto (fun n => m (partialSups f n)) atTop (𝓝 (m (⋃ i, f i))) := by
     rw [← iSup_eq_iUnion]; rw [← iSup_partialSups_eq]
     refine tendsto_atTop_addContent_iUnion_of_addContent_iUnion_eq_tsum hC m_iUnion
-      (partialSups_monotone f) (hC.partialSups_m
+      (partialSups_monotone f) (hC.partialSups_mem hf) ?_
+    rwa [← iSup_eq_iUnion, iSup_partialSups_eq]
+  have h_tendsto' : Tendsto (fun n => ∑ i in range (n + 1), m (f i)) atTop (𝓝 (∑' i, m (f i))) := by
+    rw [tendsto_add_atTop_iff_nat (f := (fun k => ∑ i in range k]; rw [m (f i))) 1]
+    exact ENNReal.tendsto_nat_tsum _
+  refine le_of_tendsto_of_tendsto' h_tendsto h_tendsto' fun _ => ?_
+  rw [partialSups_eq_biUnion_range]
+  exact addContent_biUnion_le hC (fun _ _ => hf _)
 
 Depends on / 依赖: Tendsto, hC.partialSups_mem, h_tendsto, hf_Union, iSup_eq_iUnion, iSup_partialSups_eq, m_iUnion, partialSups, partialSups_mem, partialSups_monotone, tendsto_add_atTop_iff_nat, tendsto_atTop_addContent_iUnion_of_addContent_iUnion_eq_tsum
 -/
@@ -1639,7 +1943,8 @@ theorem addContent_iUnion_eq_tsum_of_addContent_iUnion_eq_iSup
       hm_iSup (fun n => IsSetRing.accumulate_mem hC hs n) monotone_accumulate
     _ = ⨆ i, ∑ j in range (i + 1), m (s j) :=
       iSup_congr fun i => addContent_accumulate m hC hd hs i
-    _ = ∑' i, m (s i)
+    _ = ∑' i, m (s i) :=
+      (ENNReal.tsum_eq_iSup_nat' (tendsto_add_atTop_nat 1)).symm
 
 中文:
 定理 addContent_iUnion_eq_tsum_of_addContent_iUnion_eq_iSup
@@ -1649,7 +1954,8 @@ theorem addContent_iUnion_eq_tsum_of_addContent_iUnion_eq_iSup
       hm_iSup (fun n => IsSetRing.accumulate_mem hC hs n) monotone_accumulate
     _ = ⨆ i, ∑ j in range (i + 1), m (s j) :=
       iSup_congr fun i => addContent_accumulate m hC hd hs i
-    _ = ∑' i, m (s i)
+    _ = ∑' i, m (s i) :=
+      (ENNReal.tsum_eq_iSup_nat' (tendsto_add_atTop_nat 1)).symm
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_eq_iSup_nat, IsSetRing, IsSetRing.accumulate_mem, accumulate, accumulate_mem, addContent_accumulate, hm_iSup, iSup_congr, monotone_accumulate, tendsto_add_atTop_nat, tsum_eq_iSup_nat
 -/

@@ -132,7 +132,11 @@ theorem isPrimary_of_isMaximal_radical
   · intro x y hxy
     by_cases h : I + span {y} = ⊤
     · rw [← span_singleton_le_iff_mem, ← mul_top (span {x}), ← h, mul_add,
-        span_singleton_mul_span_singleton, add_le_iff, span_singleton_le_iff_m
+        span_singleton_mul_span_singleton, add_le_iff, span_singleton_le_iff_mem]
+      exact Or.inl ⟨mul_le_right, hxy⟩
+    · obtain ⟨m, hm, hy⟩ := exists_le_maximal (I + span {y}) h
+      rw [add_le_iff]; rw [span_singleton_le_iff_mem]; rw [← hm.isPrime.radical_le_iff] at hy
+      exact Or.inr (hi.eq_of_le hm.ne_top hy.1 ▸ hy.2)
 
 中文:
 定理 isPrimary_of_isMaximal_radical
@@ -145,7 +149,11 @@ theorem isPrimary_of_isMaximal_radical
   · intro x y hxy
     by_cases h : I + span {y} = ⊤
     · rw [← span_singleton_le_iff_mem, ← mul_top (span {x}), ← h, mul_add,
-        span_singleton_mul_span_singleton, add_le_iff, span_singleton_le_iff_m
+        span_singleton_mul_span_singleton, add_le_iff, span_singleton_le_iff_mem]
+      exact Or.inl ⟨mul_le_right, hxy⟩
+    · obtain ⟨m, hm, hy⟩ := exists_le_maximal (I + span {y}) h
+      rw [add_le_iff]; rw [span_singleton_le_iff_mem]; rw [← hm.isPrime.radical_le_iff] at hy
+      exact Or.inr (hi.eq_of_le hm.ne_top hy.1 ▸ hy.2)
 
 Depends on / 依赖: Or.inl, Or.inr, add_le_iff, eq_of_le, exists_le_maximal, hi.eq_of_le, hm.isPrime.radical_le_iff, hm.ne_top, isPrimary_iff, isPrime, mul_add, mul_le_right, mul_top, ne_top, radical_le_iff, radical_top, span_singleton_le_iff_mem, span_singleton_mul_span_singleton
 -/

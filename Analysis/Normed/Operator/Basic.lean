@@ -91,7 +91,7 @@ theorem ball_subset_range_iff_surjective
   intro _ _
   rw [← Submodule.add_mem_iff_left (f : E ->ₛₗ[σ₁₂] F).range (h _ <| mem_ball_self hr)]
   apply h
- 
+  simp_all
 
 中文:
 定理 ball_subset_range_iff_surjective
@@ -103,7 +103,7 @@ theorem ball_subset_range_iff_surjective
   intro _ _
   rw [← Submodule.add_mem_iff_left (f : E ->ₛₗ[σ₁₂] F).range (h _ <| mem_ball_self hr)]
   apply h
- 
+  simp_all
 
 Depends on / 依赖: LinearMap, LinearMap.coe_coe, LinearMap.coe_range, Set.subset_def, SetLike, SetLike.mem_coe, Submodule, Submodule.add_mem_iff_left, add_mem_iff_left, ball_zero_subset_range_iff_surjective, coe_coe, coe_range, mem_ball_self, mem_coe, simp_rw, subset_def
 -/
@@ -864,7 +864,8 @@ instance :
     obtain ⟨σ, hσ⟩ := (mem_image _ _ _).1 hy
     calc ‖y‖
       _ <= ‖ℓ σ‖ := by rw [hσ.2]
-      _ <= ‖ℓ‖ * ‖σ‖ := Cont
+      _ <= ‖ℓ‖ * ‖σ‖ := ContinuousLinearMap.le_opNorm ℓ σ
+      _ <= ‖ℓ‖ * M := mul_le_mul (by rfl) (hM σ hσ.1) (norm_nonneg σ) (opNorm_nonneg ℓ)
 
 中文:
 实例 :
@@ -880,7 +881,8 @@ instance :
     obtain ⟨σ, hσ⟩ := (mem_image _ _ _).1 hy
     calc ‖y‖
       _ <= ‖ℓ σ‖ := by rw [hσ.2]
-      _ <= ‖ℓ‖ * ‖σ‖ := Cont
+      _ <= ‖ℓ‖ * ‖σ‖ := ContinuousLinearMap.le_opNorm ℓ σ
+      _ <= ‖ℓ‖ * M := mul_le_mul (by rfl) (hM σ hσ.1) (norm_nonneg σ) (opNorm_nonneg ℓ)
 
 Depends on / 依赖: Bornology, Bornology.comap_cobounded_le_iff, ContinuousLinearMap, ContinuousLinearMap.le_opNorm, comap_cobounded_le_iff, exists_norm_le, hs.exists_norm_le, isBounded_iff_forall_norm_le, le_opNorm, mem_image, mul_le_mul, norm_nonneg, opNorm_nonneg
 -/
@@ -980,7 +982,7 @@ theorem opNorm_le_of_shell'
     · rwa [ball_zero_eq] at hx
   · rw [← inv_inv c, norm_inv, inv_lt_one₀ (norm_pos_iff.2 <| inv_ne_zero h0)] at hc
     refine opNorm_le_of_shell ε_pos hC hc ?_
-    rwa [norm_inv, div_eq_mul_inv, in
+    rwa [norm_inv, div_eq_mul_inv, inv_inv]
 
 中文:
 定理 opNorm_le_of_shell'
@@ -992,7 +994,7 @@ theorem opNorm_le_of_shell'
     · rwa [ball_zero_eq] at hx
   · rw [← inv_inv c, norm_inv, inv_lt_one₀ (norm_pos_iff.2 <| inv_ne_zero h0)] at hc
     refine opNorm_le_of_shell ε_pos hC hc ?_
-    rwa [norm_inv, div_eq_mul_inv, in
+    rwa [norm_inv, div_eq_mul_inv, inv_inv]
 
 Depends on / 依赖: ball_zero_eq, div_eq_mul_inv, inv_inv, inv_ne_zero, norm_inv, norm_pos_iff, opNorm_le_of_ball, opNorm_le_of_shell
 -/
@@ -1187,7 +1189,22 @@ lemma uniformity_eq_seminorm
     rw [← opNorm_neg]; rw [neg_add]; rw [neg_neg]; rw [sub_eq_add_neg]
   simp only [A]
 .uniformity_eq_of_hasBasis refine ContinuousLinearMap.seminorm (σ₁₂ := σ₁₂) (E := E) (F := F)
-    (ContinuousLinearMap.hasBasi
+    (ContinuousLinearMap.hasBasis_nhds_zero_of_basis Metric.nhds_basis_closedBall)
+    ?_ fun (s, r) ⟨hs, hr⟩ => ?_
+  · rcases NormedField.exists_lt_norm 𝕜 1 with ⟨c, hc⟩
+    refine ⟨‖c‖, ContinuousLinearMap.hasBasis_nhds_zero.mem_iff.2
+      ⟨(closedBall 0 1, closedBall 0 1), ?_⟩⟩
+    suffices forall f : E ->SL[σ₁₂] F, (forall x, ‖x‖ <= 1 -> ‖f x‖ <= 1) -> ‖f‖ <= ‖c‖ by
+      simpa [NormedSpace.isVonNBounded_closedBall, closedBall_mem_nhds, subset_def] using! this
+    intro f hf
+    refine opNorm_le_of_shell (f := f) one_pos (norm_nonneg c) hc fun x hcx hx => ?_
+    exact (hf x hx.le).trans ((div_le_iff₀' <| one_pos.trans hc).1 hcx)
+  · rcases (NormedSpace.isVonNBounded_iff' _).1 hs with ⟨ε, hε⟩
+    rcases exists_pos_mul_lt hr ε with ⟨δ, hδ₀, hδ⟩
+    refine ⟨δ, hδ₀, fun f hf x hx => ?_⟩
+    simp only [Seminorm.mem_ball_zero, mem_closedBall_zero_iff] at hf ⊢
+    rw [mul_comm] at hδ
+    exact le_trans (le_of_opNorm_le_of_le _ hf.le (hε _ hx)) hδ.le
 
 中文:
 引理 uniformity_eq_seminorm
@@ -1196,7 +1213,22 @@ lemma uniformity_eq_seminorm
     rw [← opNorm_neg]; rw [neg_add]; rw [neg_neg]; rw [sub_eq_add_neg]
   simp only [A]
 .uniformity_eq_of_hasBasis refine ContinuousLinearMap.seminorm (σ₁₂ := σ₁₂) (E := E) (F := F)
-    (ContinuousLinearMap.hasBasi
+    (ContinuousLinearMap.hasBasis_nhds_zero_of_basis Metric.nhds_basis_closedBall)
+    ?_ fun (s, r) ⟨hs, hr⟩ => ?_
+  · rcases NormedField.exists_lt_norm 𝕜 1 with ⟨c, hc⟩
+    refine ⟨‖c‖, ContinuousLinearMap.hasBasis_nhds_zero.mem_iff.2
+      ⟨(closedBall 0 1, closedBall 0 1), ?_⟩⟩
+    suffices forall f : E ->SL[σ₁₂] F, (forall x, ‖x‖ <= 1 -> ‖f x‖ <= 1) -> ‖f‖ <= ‖c‖ by
+      simpa [NormedSpace.isVonNBounded_closedBall, closedBall_mem_nhds, subset_def] using! this
+    intro f hf
+    refine opNorm_le_of_shell (f := f) one_pos (norm_nonneg c) hc fun x hcx hx => ?_
+    exact (hf x hx.le).trans ((div_le_iff₀' <| one_pos.trans hc).1 hcx)
+  · rcases (NormedSpace.isVonNBounded_iff' _).1 hs with ⟨ε, hε⟩
+    rcases exists_pos_mul_lt hr ε with ⟨δ, hδ₀, hδ⟩
+    refine ⟨δ, hδ₀, fun f hf x hx => ?_⟩
+    simp only [Seminorm.mem_ball_zero, mem_closedBall_zero_iff] at hf ⊢
+    rw [mul_comm] at hδ
+    exact le_trans (le_of_opNorm_le_of_le _ hf.le (hε _ hx)) hδ.le
 -/
 private lemma uniformity_eq_seminorm :
     𝓤 (E ->SL[σ₁₂] F) = ⨅ r > 0, 𝓟 {f | ‖-f.1 + f.2‖ < r} := by
@@ -1394,7 +1426,7 @@ theorem homothety_norm
   replace hx : 0 < ‖x‖ := lt_of_le_of_ne' (norm_nonneg _) hx
   have ha : 0 <= a := by simpa only [hf, hx, mul_nonneg_iff_of_pos_right] using norm_nonneg (f x)
   apply le_antisymm (f.opNorm_le_bound ha fun y => le_of_eq (hf y))
-  simpa only [hf, hx, mul_le
+  simpa only [hf, hx, mul_le_mul_iff_left₀] using f.le_opNorm x
 
 中文:
 定理 homothety_norm
@@ -1404,7 +1436,7 @@ theorem homothety_norm
   replace hx : 0 < ‖x‖ := lt_of_le_of_ne' (norm_nonneg _) hx
   have ha : 0 <= a := by simpa only [hf, hx, mul_nonneg_iff_of_pos_right] using norm_nonneg (f x)
   apply le_antisymm (f.opNorm_le_bound ha fun y => le_of_eq (hf y))
-  simpa only [hf, hx, mul_le
+  simpa only [hf, hx, mul_le_mul_iff_left₀] using f.le_opNorm x
 
 Depends on / 依赖: exists_norm_ne_zero, f.le_opNorm, f.opNorm_le_bound, le_antisymm, le_of_eq, le_opNorm, lt_of_le_of_ne, mul_nonneg_iff_of_pos_right, norm_nonneg, opNorm_le_bound, replace
 -/

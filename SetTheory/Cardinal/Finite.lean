@@ -505,7 +505,7 @@ theorem bijective_iff_surjective_and_card
   have := Fintype.ofFinite α
   have := Fintype.ofSurjective f h
   revert h
-  rw [← and_congr_left_iff]; rw [← Bijective]; rw [← and_comm]; rw [card_eq_fintype_card]; rw [card_eq_fintype_card]; rw [Fintype.biject
+  rw [← and_congr_left_iff]; rw [← Bijective]; rw [← and_comm]; rw [card_eq_fintype_card]; rw [card_eq_fintype_card]; rw [Fintype.bijective_iff_surjective_and_card]
 
 中文:
 定理 bijective_iff_surjective_and_card
@@ -517,7 +517,7 @@ theorem bijective_iff_surjective_and_card
   have := Fintype.ofFinite α
   have := Fintype.ofSurjective f h
   revert h
-  rw [← and_congr_left_iff]; rw [← Bijective]; rw [← and_comm]; rw [card_eq_fintype_card]; rw [card_eq_fintype_card]; rw [Fintype.biject
+  rw [← and_congr_left_iff]; rw [← Bijective]; rw [← and_comm]; rw [card_eq_fintype_card]; rw [card_eq_fintype_card]; rw [Fintype.bijective_iff_surjective_and_card]
 -/
 protected theorem bijective_iff_surjective_and_card [Finite α] (f : α -> β) :
     Bijective f ↔ Surjective f ∧ Nat.card α = Nat.card β := by
@@ -2037,7 +2037,22 @@ lemma card_fun
       let := Fintype.ofFinite β
       simp
     · simp only [card_eq_top_of_infinite]
-      rw [
+      rw [top_epow]
+      rwa [card_ne_zero_iff_nonempty]
+  · rw [card_eq_top_of_infinite (α := α)]
+    rcases lt_trichotomy (card β) 1 with b_0 | b_1 | b_2
+    · rw [Order.lt_one_iff, card_eq_zero_iff_empty] at b_0
+      rw [(card_eq_zero_iff_empty β).2 b_0]; rw [zero_epow_top]; rw [card_eq_zero_iff_empty]
+      simp [b_0]
+    · rw [b_1, one_epow]
+      apply le_antisymm
+      · let := (card_le_one_iff_subsingleton β).1 b_1.le
+        exact (card_le_one_iff_subsingleton (α -> β)).2 Pi.instSubsingleton
+      · let := (one_le_card_iff_nonempty β).1 b_1.ge
+        exact (one_le_card_iff_nonempty (α -> β)).2 Pi.instNonempty
+    · rw [epow_top b_2, card_eq_top]
+      rw [one_lt_card_iff_nontrivial β] at b_2
+      exact Pi.infinite_of_left
 
 中文:
 引理 card_fun
@@ -2053,7 +2068,22 @@ lemma card_fun
       let := Fintype.ofFinite β
       simp
     · simp only [card_eq_top_of_infinite]
-      rw [
+      rw [top_epow]
+      rwa [card_ne_zero_iff_nonempty]
+  · rw [card_eq_top_of_infinite (α := α)]
+    rcases lt_trichotomy (card β) 1 with b_0 | b_1 | b_2
+    · rw [Order.lt_one_iff, card_eq_zero_iff_empty] at b_0
+      rw [(card_eq_zero_iff_empty β).2 b_0]; rw [zero_epow_top]; rw [card_eq_zero_iff_empty]
+      simp [b_0]
+    · rw [b_1, one_epow]
+      apply le_antisymm
+      · let := (card_le_one_iff_subsingleton β).1 b_1.le
+        exact (card_le_one_iff_subsingleton (α -> β)).2 Pi.instSubsingleton
+      · let := (one_le_card_iff_nonempty β).1 b_1.ge
+        exact (one_le_card_iff_nonempty (α -> β)).2 Pi.instNonempty
+    · rw [epow_top b_2, card_eq_top]
+      rw [one_lt_card_iff_nontrivial β] at b_2
+      exact Pi.infinite_of_left
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, Order.lt_one_iff, card_eq_top_of_infinite, card_eq_zero_iff_empty, card_ne_zero_iff_nonempty, classical, finite_or_infinite, isEmpty_or_nonempty, lt_one_iff, lt_trichotomy, ofFinite, top_epow
 -/

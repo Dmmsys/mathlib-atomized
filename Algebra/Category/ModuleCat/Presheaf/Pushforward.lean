@@ -50,7 +50,14 @@ definition pushforward₀Obj
       refine ModuleCat.hom_ext
         -- Work around an instance diamond for `restrictScalarsId'`
         (@LinearMap.ext _ _ _ _ _ _ _ _ (_) (_) _ _ _ (fun x => ?_))
-      exact (M.congr_map_app
+      exact (M.congr_map_apply (F.op.map_id X) x).trans (by simp)
+    map_comp := fun f g => by
+      refine ModuleCat.hom_ext
+        -- Work around an instance diamond for `restrictScalarsId'`
+        (@LinearMap.ext _ _ _ _ _ _ _ _ (_) (_) _ _ _ (fun x => ?_))
+      exact (M.congr_map_apply (F.op.map_comp f g) x).trans (by simp) }
+
+@[deprecated (since := "2026-04-27")] alias pushforward₀_obj := pushforward₀Obj
 
 中文:
 定义 pushforward₀Obj
@@ -61,7 +68,14 @@ definition pushforward₀Obj
       refine ModuleCat.hom_ext
         -- Work around an instance diamond for `restrictScalarsId'`
         (@LinearMap.ext _ _ _ _ _ _ _ _ (_) (_) _ _ _ (fun x => ?_))
-      exact (M.congr_map_app
+      exact (M.congr_map_apply (F.op.map_id X) x).trans (by simp)
+    map_comp := fun f g => by
+      refine ModuleCat.hom_ext
+        -- Work around an instance diamond for `restrictScalarsId'`
+        (@LinearMap.ext _ _ _ _ _ _ _ _ (_) (_) _ _ _ (fun x => ?_))
+      exact (M.congr_map_apply (F.op.map_comp f g) x).trans (by simp) }
+
+@[deprecated (since := "2026-04-27")] alias pushforward₀_obj := pushforward₀Obj
 
 Depends on / 依赖: F.op.map, F.op.obj, M.map, M.obj, ModuleCat, ModuleCat.hom_ext, ModuleCat.of, hom_ext, map_id
 -/

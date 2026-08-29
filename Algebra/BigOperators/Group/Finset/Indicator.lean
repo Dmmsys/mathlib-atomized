@@ -98,7 +98,7 @@ refine (prod_filter_mul_prod_filter_not s (fun i => g i in t i) _).symm.trans
   · exact prod_congr rfl fun x hx => mulIndicator_of_mem (mem_filter.1 hx).2 _
   · exact prod_eq_one fun x hx => mulIndicator_of_notMem (mem_filter.1 hx).2 _
 
-@[to_ad
+@[to_additive]
 
 中文:
 引理 prod_mulIndicator_eq_prod_filter
@@ -109,7 +109,7 @@ refine (prod_filter_mul_prod_filter_not s (fun i => g i in t i) _).symm.trans
   · exact prod_congr rfl fun x hx => mulIndicator_of_mem (mem_filter.1 hx).2 _
   · exact prod_eq_one fun x hx => mulIndicator_of_notMem (mem_filter.1 hx).2 _
 
-@[to_ad
+@[to_additive]
 
 Depends on / 依赖: Eq.trans, mem_filter, mulIndicator_of_mem, mulIndicator_of_notMem, mul_one, prod_congr, prod_eq_one, prod_filter_mul_prod_filter_not, symm.trans
 -/
@@ -185,7 +185,10 @@ lemma mulIndicator_biUnion
     ext j
     rw [coe_cons]; rw [Set.pairwiseDisjoint_insert_of_notMem (Finset.mem_coe.not.2 hi)] at hs
     classical
-    rw [prod_cons]; rw [cons_eq_insert]; rw [set_biUnion_insert]; rw [mulIndicator_union_of_
+    rw [prod_cons]; rw [cons_eq_insert]; rw [set_biUnion_insert]; rw [mulIndicator_union_of_notMem_inter]; rw [ih hs.1]
+    exact (Set.disjoint_iff.mp (Set.disjoint_iUnion₂_right.mpr hs.2) ·)
+
+@[to_additive]
 
 中文:
 引理 mulIndicator_biUnion
@@ -197,7 +200,10 @@ lemma mulIndicator_biUnion
     ext j
     rw [coe_cons]; rw [Set.pairwiseDisjoint_insert_of_notMem (Finset.mem_coe.not.2 hi)] at hs
     classical
-    rw [prod_cons]; rw [cons_eq_insert]; rw [set_biUnion_insert]; rw [mulIndicator_union_of_
+    rw [prod_cons]; rw [cons_eq_insert]; rw [set_biUnion_insert]; rw [mulIndicator_union_of_notMem_inter]; rw [ih hs.1]
+    exact (Set.disjoint_iff.mp (Set.disjoint_iUnion₂_right.mpr hs.2) ·)
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.cons_induction, Finset.mem_coe.not, Set.disjoint_iUnion, Set.disjoint_iff.mp, Set.pairwiseDisjoint_insert_of_notMem, _right.mpr, classical, coe_cons, cons_eq_insert, cons_induction, disjoint_iff, mem_coe, mulIndicator_union_of_notMem_inter, pairwiseDisjoint_insert_of_notMem, prod_cons, set_biUnion_insert
 -/

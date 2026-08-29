@@ -155,7 +155,22 @@ definition getDeprecatedInfo
     -- retrieve the `range` for the declaration
     if let some {range := rg, ..} ← findDeclarationRanges? nm
     then
-      -- retrieve the m
+      -- retrieve the module where the declaration is located
+      if let some mod ← findModuleOf? nm
+      then
+        -- We filter here based on the top dir of the declaration.
+        unless repos.contains mod.getRoot do
+          return none
+        if verbose? then
+          logInfo
+            s!"In the module '{mod}', the declaration {nm} at {rg.pos}--{rg.endPos} \
+              is deprecated since {since}"
+        return some { module := mod
+                      decl := nm
+                      rgStart := rg.pos
+                      rgStop := rg.endPos
+                      since := since }
+  return none
 
 中文:
 定义 getDeprecatedInfo
@@ -168,7 +183,22 @@ definition getDeprecatedInfo
     -- retrieve the `range` for the declaration
     if let some {range := rg, ..} ← findDeclarationRanges? nm
     then
-      -- retrieve the m
+      -- retrieve the module where the declaration is located
+      if let some mod ← findModuleOf? nm
+      then
+        -- We filter here based on the top dir of the declaration.
+        unless repos.contains mod.getRoot do
+          return none
+        if verbose? then
+          logInfo
+            s!"In the module '{mod}', the declaration {nm} at {rg.pos}--{rg.endPos} \
+              is deprecated since {since}"
+        return some { module := mod
+                      decl := nm
+                      rgStart := rg.pos
+                      rgStop := rg.endPos
+                      since := since }
+  return none
 -/
 def getDeprecatedInfo (nm : Name) (verbose? : Bool) :
     CommandElabM (Option DeprecationInfo) := do
@@ -209,7 +239,20 @@ definition deprecatedHashMap
     if let some ⟨modName, decl, rgStart, rgStop, since⟩ ← getDeprecatedInfo nm false
     then
       unless repos.contains modName.getRoot do continue
-      if !(oldDate <= since && since <= newD
+      if !(oldDate <= since && since <= newDate) then
+        continue
+      -- Ideally, `lean` would be computed by `← findLean (← getSrcSearchPath) modName`
+      -- However, while this works locally, CI throws the error ` unknown module prefix 'Mathlib'`
+      let lean := (modName.components.foldl (init := "")
+        fun a b => (a.push System.FilePath.pathSeparator) ++ b.toString) ++ ".lean" |>.drop 1
+.copy
+      --let lean ← findLean searchPath modName
+      let file ← IO.FS.readFile lean
+      let fm := FileMap.ofString file
+      let rg : Lean.Syntax.Range := ⟨fm.ofPosition rgStart, fm.ofPosition rgStop⟩
+      fin := fin.alter (modName, lean) fun a =>
+        (a.getD #[]).binInsert (·.2.1 < ·.2.1) (decl, rg)
+  return fin
 
 中文:
 定义 deprecatedHashMap
@@ -221,7 +264,20 @@ definition deprecatedHashMap
     if let some ⟨modName, decl, rgStart, rgStop, since⟩ ← getDeprecatedInfo nm false
     then
       unless repos.contains modName.getRoot do continue
-      if !(oldDate <= since && since <= newD
+      if !(oldDate <= since && since <= newDate) then
+        continue
+      -- Ideally, `lean` would be computed by `← findLean (← getSrcSearchPath) modName`
+      -- However, while this works locally, CI throws the error ` unknown module prefix 'Mathlib'`
+      let lean := (modName.components.foldl (init := "")
+        fun a b => (a.push System.FilePath.pathSeparator) ++ b.toString) ++ ".lean" |>.drop 1
+.copy
+      --let lean ← findLean searchPath modName
+      let file ← IO.FS.readFile lean
+      let fm := FileMap.ofString file
+      let rg : Lean.Syntax.Range := ⟨fm.ofPosition rgStart, fm.ofPosition rgStop⟩
+      fin := fin.alter (modName, lean) fun a =>
+        (a.getD #[]).binInsert (·.2.1 < ·.2.1) (decl, rg)
+  return fin
 -/
 def deprecatedHashMap (oldDate newDate : String) :
     CommandElabM (Std.HashMap (Name × String) (Array (Name × Lean.Syntax.Range))) := do
@@ -269,7 +325,10 @@ definition removeRanges
   for next in rgs.push ⟨last, last⟩ do
     if next.start < curr then continue
     let part := {fileSubstring with stopPos := next.start}.toString
-    
+    tot := tot ++ part
+    curr := next.start
+    fileSubstring := {fileSubstring with startPos := next.stop}.trimLeft
+  return tot
 
 中文:
 定义 removeRanges
@@ -282,7 +341,10 @@ definition removeRanges
   for next in rgs.push ⟨last, last⟩ do
     if next.start < curr then continue
     let part := {fileSubstring with stopPos := next.start}.toString
-    
+    tot := tot ++ part
+    curr := next.start
+    fileSubstring := {fileSubstring with startPos := next.stop}.trimLeft
+  return tot
 
 Depends on / 依赖: Id.run
 -/
@@ -372,7 +434,56 @@ definition rewriteOneFile
   -- `option` is the extra text that we add to the files that contain deprecations.
   -- We save these modified files with a different name then their originals, so that all their
   -- dependencies still have valid `olean`s and we build them to collect the ranges of the commands
-  -- in each one 
+  -- in each one of them.
+  let option :=
+    s!"\nimport Mathlib.Tactic.Linter.CommandRanges\n\
+      set_option linter.commandRanges true\n"
+  -- `offset` represents the difference between a position in the modified file and the
+  -- corresponding position in the original file.
+  -- Since we added the modification right after the imports, the command positions of the old file
+  -- are always smaller than the command positions of the new file.
+  let offset := option.toRawSubstring.stopPos
+  let fileWithOptionAdded ← addAfterImports fname option
+  let fname_with_option := (fname.dropEnd ".lean".length).copy ++ "_with_option.lean"
+  let file ← IO.FS.readFile fname
+  let fm := file.toFileMap
+  let rgsPos := rgs.map fun (decl, ⟨s, e⟩) =>
+    m!"* {.ofConstName decl} {(fm.toPosition s, fm.toPosition e)}"
+  let rgsStringPos := rgs.map (m!"{·.2}")
+.toList let combinedRanges := rgsPos.zipWith (· ++ m!" " ++ ·) rgsStringPos
+  logInfo m!"Adding '{option}' to '{fname}'\nWriting to {indentD fname_with_option}\n\
+          Removing the following declarations\n{m!"\n".joinSep combinedRanges}"
+  IO.FS.writeFile fname_with_option fileWithOptionAdded
+  let ranges := rgs.map (·.2)
+
+  logInfo m!"Retrieving command positions from '{fname_with_option}'"
+  let commandPositions ←
+    IO.Process.output {cmd := "lake", args := #["build", fname_with_option]}
+  -- `stringPositions` consists of lists of the form `[p₁, p₂, p₃]`, where
+  -- * `p₁` is the start of a command;
+  -- * `p₂` is the end of the command, excluding trailing whitespace and comments;
+  -- * `p₁` is the end of the command, including trailing whitespace and comments.
+.reduceOption let stringPositions := (commandPositions.stdout.splitOn "\n").map parseLine
+  let mut removals : Std.HashSet (List String.Pos.Raw) := ∅
+  -- For each range `rg` in `ranges`, we isolate the unique entry of `stringPositions` that
+  -- entirely contains `rg`. This helps catching the full range of `open Nat in @[deprecated] ...`,
+  -- rather than just the `@[deprecated] ...` range.
+  let : Sub String.Pos.Raw := ⟨fun | ⟨a⟩, ⟨b⟩ => ⟨a - b⟩⟩
+  for rg in ranges do
+    let candidate := stringPositions.filterMap (fun arr =>
+      let a := arr.head! - offset
+      let b := arr[arr.length - 1]! - offset
+      if a <= rg.start ∧ rg.stop <= b then some (arr.map (· - offset)) else none)
+    match candidate with
+    | [d@([_, _, _])] => removals := removals.insert d
+    | _ => logInfo "Something went wrong!"
+  -- We only remember the `start` and `end` of each command, ignoring trailing whitespace and
+  -- comments. This means that we may err on the side of preserving comments that may have to be
+  -- manually removed, instead of having to manually add them back later on.
+  let rems : Std.HashSet _ := removals.fold (init := ∅) fun tot => fun
+    | [a, b, _c] => tot.insert (⟨a, b⟩ : Lean.Syntax.Range)
+    | _ => tot
+  return (fname_with_option, ← removeDeprecations fname (rems.toArray.qsort (·.1 < ·.1)))
 
 中文:
 定义 rewriteOneFile
@@ -381,7 +492,56 @@ definition rewriteOneFile
   -- `option` is the extra text that we add to the files that contain deprecations.
   -- We save these modified files with a different name then their originals, so that all their
   -- dependencies still have valid `olean`s and we build them to collect the ranges of the commands
-  -- in each one 
+  -- in each one of them.
+  let option :=
+    s!"\nimport Mathlib.Tactic.Linter.CommandRanges\n\
+      set_option linter.commandRanges true\n"
+  -- `offset` represents the difference between a position in the modified file and the
+  -- corresponding position in the original file.
+  -- Since we added the modification right after the imports, the command positions of the old file
+  -- are always smaller than the command positions of the new file.
+  let offset := option.toRawSubstring.stopPos
+  let fileWithOptionAdded ← addAfterImports fname option
+  let fname_with_option := (fname.dropEnd ".lean".length).copy ++ "_with_option.lean"
+  let file ← IO.FS.readFile fname
+  let fm := file.toFileMap
+  let rgsPos := rgs.map fun (decl, ⟨s, e⟩) =>
+    m!"* {.ofConstName decl} {(fm.toPosition s, fm.toPosition e)}"
+  let rgsStringPos := rgs.map (m!"{·.2}")
+.toList let combinedRanges := rgsPos.zipWith (· ++ m!" " ++ ·) rgsStringPos
+  logInfo m!"Adding '{option}' to '{fname}'\nWriting to {indentD fname_with_option}\n\
+          Removing the following declarations\n{m!"\n".joinSep combinedRanges}"
+  IO.FS.writeFile fname_with_option fileWithOptionAdded
+  let ranges := rgs.map (·.2)
+
+  logInfo m!"Retrieving command positions from '{fname_with_option}'"
+  let commandPositions ←
+    IO.Process.output {cmd := "lake", args := #["build", fname_with_option]}
+  -- `stringPositions` consists of lists of the form `[p₁, p₂, p₃]`, where
+  -- * `p₁` is the start of a command;
+  -- * `p₂` is the end of the command, excluding trailing whitespace and comments;
+  -- * `p₁` is the end of the command, including trailing whitespace and comments.
+.reduceOption let stringPositions := (commandPositions.stdout.splitOn "\n").map parseLine
+  let mut removals : Std.HashSet (List String.Pos.Raw) := ∅
+  -- For each range `rg` in `ranges`, we isolate the unique entry of `stringPositions` that
+  -- entirely contains `rg`. This helps catching the full range of `open Nat in @[deprecated] ...`,
+  -- rather than just the `@[deprecated] ...` range.
+  let : Sub String.Pos.Raw := ⟨fun | ⟨a⟩, ⟨b⟩ => ⟨a - b⟩⟩
+  for rg in ranges do
+    let candidate := stringPositions.filterMap (fun arr =>
+      let a := arr.head! - offset
+      let b := arr[arr.length - 1]! - offset
+      if a <= rg.start ∧ rg.stop <= b then some (arr.map (· - offset)) else none)
+    match candidate with
+    | [d@([_, _, _])] => removals := removals.insert d
+    | _ => logInfo "Something went wrong!"
+  -- We only remember the `start` and `end` of each command, ignoring trailing whitespace and
+  -- comments. This means that we may err on the side of preserving comments that may have to be
+  -- manually removed, instead of having to manually add them back later on.
+  let rems : Std.HashSet _ := removals.fold (init := ∅) fun tot => fun
+    | [a, b, _c] => tot.insert (⟨a, b⟩ : Lean.Syntax.Range)
+    | _ => tot
+  return (fname_with_option, ← removeDeprecations fname (rems.toArray.qsort (·.1 < ·.1)))
 -/
 def rewriteOneFile (fname : String) (rgs : Array (Name × Lean.Syntax.Range)) :
     CommandElabM (String × String) := do

@@ -2687,7 +2687,7 @@ definition largeCurriedYonedaLemma
     (by
       intro Y Z f
       ext F g
-      simpa [← ULift.down_inj] using! (yonedaEquiv_naturality _ _)
+      simpa [← ULift.down_inj] using! (yonedaEquiv_naturality _ _).symm)
 
 中文:
 定义 largeCurriedYonedaLemma
@@ -2702,7 +2702,7 @@ definition largeCurriedYonedaLemma
     (by
       intro Y Z f
       ext F g
-      simpa [← ULift.down_inj] using! (yonedaEquiv_naturality _ _)
+      simpa [← ULift.down_inj] using! (yonedaEquiv_naturality _ _).symm)
 
 Depends on / 依赖: Equiv.toIso, Equiv.ulift.symm, NatIso, NatIso.ofComponents, ULift.down_inj, down_inj, ofComponents, yonedaEquiv, yonedaEquiv.trans, yonedaEquiv_naturality
 -/
@@ -3063,7 +3063,8 @@ definition uliftYonedaOpCompCoyoneda
     (by
       intros Y Z f
       ext F g
-      rw [
+      rw [← ULift.down_inj]
+      simpa using (uliftYonedaEquiv_naturality _ _).symm)
 
 中文:
 定义 uliftYonedaOpCompCoyoneda
@@ -3079,7 +3080,8 @@ definition uliftYonedaOpCompCoyoneda
     (by
       intros Y Z f
       ext F g
-      rw [
+      rw [← ULift.down_inj]
+      simpa using (uliftYonedaEquiv_naturality _ _).symm)
 
 Depends on / 依赖: Equiv.toIso, Equiv.ulift.symm, NatIso, NatIso.ofComponents, ULift.down_inj, down_inj, intros, ofComponents, uliftYonedaEquiv, uliftYonedaEquiv.trans, uliftYonedaEquiv_comp, uliftYonedaEquiv_naturality
 -/
@@ -3496,7 +3498,8 @@ definition largeCurriedCoyonedaLemma
     (by
       intro Y Z f
       ext F g
-      rw [← ULift.
+      rw [← ULift.down_inj]
+      simpa using (coyonedaEquiv_naturality _ _).symm)
 
 中文:
 定义 largeCurriedCoyonedaLemma
@@ -3512,7 +3515,8 @@ definition largeCurriedCoyonedaLemma
     (by
       intro Y Z f
       ext F g
-      rw [← ULift.
+      rw [← ULift.down_inj]
+      simpa using (coyonedaEquiv_naturality _ _).symm)
 
 Depends on / 依赖: Equiv.toIso, Equiv.ulift.symm, NatIso, NatIso.ofComponents, ULift.down_inj, coyonedaEquiv, coyonedaEquiv.trans, coyonedaEquiv_comp, coyonedaEquiv_naturality, down_inj, ofComponents
 -/
@@ -3853,7 +3857,8 @@ definition uliftCoyonedaRightOpCompCoyoneda
     (by
       intros Y Z f
       ext F g
-      
+      rw [← ULift.down_inj]
+      simpa using (uliftCoyonedaEquiv_naturality _ _).symm)
 
 中文:
 定义 uliftCoyonedaRightOpCompCoyoneda
@@ -3869,7 +3874,8 @@ definition uliftCoyonedaRightOpCompCoyoneda
     (by
       intros Y Z f
       ext F g
-      
+      rw [← ULift.down_inj]
+      simpa using (uliftCoyonedaEquiv_naturality _ _).symm)
 
 Depends on / 依赖: Equiv.toIso, Equiv.ulift.symm, NatIso, NatIso.ofComponents, ULift.down_inj, down_inj, intros, ofComponents, uliftCoyonedaEquiv, uliftCoyonedaEquiv.trans, uliftCoyonedaEquiv_comp, uliftCoyonedaEquiv_naturality
 -/
@@ -4009,6 +4015,7 @@ definition Functor.sectionsEquivHom
   right_inv τ := by
     ext _ (x : X)
     rw [Unique.eq_default x]
+    rfl
 
 中文:
 定义 函子.sectionsEquivHom
@@ -4022,6 +4029,7 @@ definition Functor.sectionsEquivHom
   right_inv τ := by
     ext _ (x : X)
     rw [Unique.eq_default x]
+    rfl
 
 Depends on / 依赖: NatTrans, NatTrans.naturality, Unique, Unique.eq_default, comp_apply, const_obj_obj, eq_default, invFun, naturality, right_inv, types_comp_apply
 -/

@@ -459,7 +459,7 @@ lemma ae_eq_top
     rintro ⟨a, ha⟩
 exact h _ measure_mono_null (singleton_subset_iff.2 ha) hs
   · rintro rfl
-    
+    simp
 
 中文:
 引理 ae_eq_top
@@ -471,7 +471,7 @@ exact h _ measure_mono_null (singleton_subset_iff.2 ha) hs
     rintro ⟨a, ha⟩
 exact h _ measure_mono_null (singleton_subset_iff.2 ha) hs
   · rintro rfl
-    
+    simp
 -/
 @[simp] lemma ae_eq_top : ae μ = ⊤ ↔ forall a, μ {a} != 0 := by
   simp only [Filter.ext_iff, mem_ae_iff, mem_top, ne_eq]

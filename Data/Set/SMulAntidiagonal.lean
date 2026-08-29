@@ -146,7 +146,7 @@ theorem fst_eq_fst_iff_snd_eq_snd
           rw [← h]
           exact x.2.2.2.symm).symm⟩
 
-@[to_additive VAddAntidiagonal.eq_of_fst_
+@[to_additive VAddAntidiagonal.eq_of_fst_eq_fst]
 
 中文:
 定理 fst_eq_fst_iff_snd_eq_snd
@@ -162,7 +162,7 @@ theorem fst_eq_fst_iff_snd_eq_snd
           rw [← h]
           exact x.2.2.2.symm).symm⟩
 
-@[to_additive VAddAntidiagonal.eq_of_fst_
+@[to_additive VAddAntidiagonal.eq_of_fst_eq_fst]
 
 Depends on / 依赖: IsCancelSMul, IsCancelSMul.left_cancel, IsCancelSMul.right_cancel, left_cancel, right_cancel
 -/
@@ -306,7 +306,11 @@ theorem finite_of_isPWO
   have h1 : (smulAntidiagonal s t a).PartiallyWellOrderedOn (Prod.fst ⁻¹'o (· <= ·)) :=
     fun f => hs fun n => ⟨_, (mem_smulAntidiagonal.1 (f n).2).1⟩
   have h2 : (smulAntidiagonal s t a).PartiallyWellOrderedOn (Prod.snd ⁻¹'o (· <= ·)) :=
-    fun f => ht fun n => ⟨_, (mem_smulAnt
+    fun f => ht fun n => ⟨_, (mem_smulAntidiagonal.1 (f n).2).2.1⟩
+  obtain ⟨g, hg⟩ := h1.exists_monotone_subseq fun n => (h.natEmbedding _ n).2
+  obtain ⟨m, n, mn, h2'⟩ := h2 fun n => h.natEmbedding _ _
+  refine mn.ne (g.injective <| (h.natEmbedding _).injective ?_)
+  exact eq_of_fst_le_fst_of_snd_le_snd (hg _ _ mn.le) h2'
 
 中文:
 定理 finite_of_isPWO
@@ -317,7 +321,11 @@ theorem finite_of_isPWO
   have h1 : (smulAntidiagonal s t a).PartiallyWellOrderedOn (Prod.fst ⁻¹'o (· <= ·)) :=
     fun f => hs fun n => ⟨_, (mem_smulAntidiagonal.1 (f n).2).1⟩
   have h2 : (smulAntidiagonal s t a).PartiallyWellOrderedOn (Prod.snd ⁻¹'o (· <= ·)) :=
-    fun f => ht fun n => ⟨_, (mem_smulAnt
+    fun f => ht fun n => ⟨_, (mem_smulAntidiagonal.1 (f n).2).2.1⟩
+  obtain ⟨g, hg⟩ := h1.exists_monotone_subseq fun n => (h.natEmbedding _ n).2
+  obtain ⟨m, n, mn, h2'⟩ := h2 fun n => h.natEmbedding _ _
+  refine mn.ne (g.injective <| (h.natEmbedding _).injective ?_)
+  exact eq_of_fst_le_fst_of_snd_le_snd (hg _ _ mn.le) h2'
 
 Depends on / 依赖: PartiallyWellOrderedOn, Prod.fst, Prod.snd, exists_monotone_subseq, g.injective, h.natEmbedding, h1.exists_monotone_subseq, injecti, injective, mem_smulAntidiagonal, mn.ne, natEmbedding, smulAntidiagonal
 -/

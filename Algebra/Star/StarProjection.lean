@@ -401,7 +401,7 @@ theorem sub_iff_mul_eq_left
   nth_rw 3 [← hp.isSelfAdjoint]
   nth_rw 2 [← hq.isSelfAdjoint]
   rw [← star_mul]; rw [star_eq_iff_star_eq]; rw [hp.isSelfAdjoint]; rw [eq_comm]
-  simp_rw 
+  simp_rw [and_self]
 
 中文:
 定理 sub_iff_mul_eq_left
@@ -412,7 +412,7 @@ theorem sub_iff_mul_eq_left
   nth_rw 3 [← hp.isSelfAdjoint]
   nth_rw 2 [← hq.isSelfAdjoint]
   rw [← star_mul]; rw [star_eq_iff_star_eq]; rw [hp.isSelfAdjoint]; rw [eq_comm]
-  simp_rw 
+  simp_rw [and_self]
 
 Depends on / 依赖: and_self, and_true, eq_comm, hp.isIdempotentElem.sub_iff, hp.isSelfAdjoint, hq.isIdempotentElem, hq.isSelfAdjoint, hq.isSelfAdjoint.sub, isIdempotentElem, isSelfAdjoint, isStarProjection_iff, nth_rw, simp_rw, star_eq_iff_star_eq, star_mul, sub_iff
 -/

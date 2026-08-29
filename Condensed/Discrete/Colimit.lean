@@ -73,7 +73,18 @@ definition isColimitLocallyConstantPresheaf
     obtain ⟨j, h⟩ := Profinite.exists_locallyConstant.{_, u} c hc f
     exact ⟨⟨j⟩, h⟩
   · intro ⟨i⟩ ⟨j⟩ (fi : LocallyConstant _ _) (fj : LocallyConstant _ _)
-      (h : fi.comap (c.π.app i).hom.hom = fj.c
+      (h : fi.comap (c.π.app i).hom.hom = fj.comap (c.π.app j).hom.hom)
+    obtain ⟨k, ki, kj, _⟩ := IsCofilteredOrEmpty.cone_objs i j
+    refine ⟨⟨k⟩, ki.op, kj.op, ?_⟩
+    dsimp
+    ext x
+    obtain ⟨x, hx⟩ := ((Profinite.epi_iff_surjective (c.π.app k)).mp inferInstance) x
+    rw [← hx]
+    change fi ((c.π.app k ≫ (F ⋙ toProfinite).map _) x) =
+      fj ((c.π.app k ≫ (F ⋙ toProfinite).map _) x)
+    have h := LocallyConstant.congr_fun h x
+    dsimp [- CompHausLike.coe_comp] -- `coe_comp` prevents rewriting with `c.w`
+    rwa [dsimp% c.w, dsimp% c.w]
 
 中文:
 定义 isColimitLocallyConstantPresheaf
@@ -84,7 +95,18 @@ definition isColimitLocallyConstantPresheaf
     obtain ⟨j, h⟩ := Profinite.exists_locallyConstant.{_, u} c hc f
     exact ⟨⟨j⟩, h⟩
   · intro ⟨i⟩ ⟨j⟩ (fi : LocallyConstant _ _) (fj : LocallyConstant _ _)
-      (h : fi.comap (c.π.app i).hom.hom = fj.c
+      (h : fi.comap (c.π.app i).hom.hom = fj.comap (c.π.app j).hom.hom)
+    obtain ⟨k, ki, kj, _⟩ := IsCofilteredOrEmpty.cone_objs i j
+    refine ⟨⟨k⟩, ki.op, kj.op, ?_⟩
+    dsimp
+    ext x
+    obtain ⟨x, hx⟩ := ((Profinite.epi_iff_surjective (c.π.app k)).mp inferInstance) x
+    rw [← hx]
+    change fi ((c.π.app k ≫ (F ⋙ toProfinite).map _) x) =
+      fj ((c.π.app k ≫ (F ⋙ toProfinite).map _) x)
+    have h := LocallyConstant.congr_fun h x
+    dsimp [- CompHausLike.coe_comp] -- `coe_comp` prevents rewriting with `c.w`
+    rwa [dsimp% c.w, dsimp% c.w]
 
 Depends on / 依赖: FilteredColimit, IsCofilteredOrEmpty, IsCofilteredOrEmpty.cone_objs, LocallyConstant, Profinite, Profinite.epi_iff_surjective, Profinite.exists_locallyConstant, Types.FilteredColimit.isColimitOf, c.pt, cone_objs, epi_iff_surjective, exists_locallyConstant, fi.comap, fj.comap, hom.hom, isColimitOf, ki.op, kj.op
 -/
@@ -421,7 +443,7 @@ definition lanSheafProfinite
     rw [Presheaf.isSheaf_of_iso_iff (lanPresheafNatIso
       fun _ => isColimitLocallyConstantPresheafDiagram _ _)]
     exact ((CompHausLike.LocallyConstant.functor.{u, u + 1}
-      (hs := fun _ _ _ => ((Profinite.effectiveEpi_tfae _).out 0 2)
+      (hs := fun _ _ _ => ((Profinite.effectiveEpi_tfae _).out 0 2).mp)).obj X).property
 
 中文:
 定义 lanSheafProfinite
@@ -431,7 +453,7 @@ definition lanSheafProfinite
     rw [Presheaf.isSheaf_of_iso_iff (lanPresheafNatIso
       fun _ => isColimitLocallyConstantPresheafDiagram _ _)]
     exact ((CompHausLike.LocallyConstant.functor.{u, u + 1}
-      (hs := fun _ _ _ => ((Profinite.effectiveEpi_tfae _).out 0 2)
+      (hs := fun _ _ _ => ((Profinite.effectiveEpi_tfae _).out 0 2).mp)).obj X).property
 
 Depends on / 依赖: lanPresheaf, locallyConstantPresheaf
 -/
@@ -650,7 +672,7 @@ lemma isoFinYonedaComponents_inv_comp
   ext x
   rw [isoFinYonedaComponents_hom_apply]
   simp only [← Functor.map_comp_apply, ← op_comp, CompHausLike.const_comp,
-    ← isoFinYonedaComponents_hom_apply, Iso.inv_hom_id_apply, Function.comp_appl
+    ← isoFinYonedaComponents_hom_apply, Iso.inv_hom_id_apply, Function.comp_apply]
 
 中文:
 引理 isoFinYonedaComponents_inv_comp
@@ -661,7 +683,7 @@ lemma isoFinYonedaComponents_inv_comp
   ext x
   rw [isoFinYonedaComponents_hom_apply]
   simp only [← Functor.map_comp_apply, ← op_comp, CompHausLike.const_comp,
-    ← isoFinYonedaComponents_hom_apply, Iso.inv_hom_id_apply, Function.comp_appl
+    ← isoFinYonedaComponents_hom_apply, Iso.inv_hom_id_apply, Function.comp_apply]
 
 Depends on / 依赖: CompHausLike, CompHausLike.const_comp, Function, Function.comp_apply, Functor, Functor.map_comp_apply, Iso.inv_hom_id_apply, comp_apply, const_comp, injective_of_mono, inv_hom_id_apply, isoFinYonedaComponents, isoFinYonedaComponents_hom_apply, map_comp_apply, op_comp
 -/
@@ -694,7 +716,9 @@ definition isoFinYoneda
     simp only [comp_obj, op_obj, finYoneda_obj, Functor.comp_map, op_map]
     ext
     simp only [isoFinYonedaComponents_hom, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply,
-      ConcreteCategory.hom_ofH
+      ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, toProfinite_obj,
+      ← Functor.map_comp_apply]
+    rfl
 
 中文:
 定义 isoFinYoneda
@@ -703,7 +727,9 @@ definition isoFinYoneda
     simp only [comp_obj, op_obj, finYoneda_obj, Functor.comp_map, op_map]
     ext
     simp only [isoFinYonedaComponents_hom, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply,
-      ConcreteCategory.hom_ofH
+      ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, toProfinite_obj,
+      ← Functor.map_comp_apply]
+    rfl
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.comp_apply, ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.comp_map, Functor.map_comp_apply, NatIso, NatIso.ofComponents, TypeCat, TypeCat.Fun.coe_mk, TypeCat.Fun.toFun_apply, X.unop, coe_mk, comp_apply, comp_map, comp_obj, finYoneda_obj, hom_ofHom, isoFinYonedaComponents
 -/
@@ -757,7 +783,29 @@ lemma isoLocallyConstantOfIsColimit_inv
   intro ⟨Y, _, g⟩
   suffices _ ≫ (isoFinYonedaComponents _ _).inv ≫ X.map g =
     (locallyConstantPresheaf _).map g ≫ counitAppApp (Opposite.unop S) X by
-      simpa [lo
+      simpa [locallyConstantIsoFinYoneda, isoFinYoneda, counitApp]
+  erw [(counitApp.{u, u + 1} X).naturality]
+  simp only [← Category.assoc, op_obj, functorToPresheaves_obj_obj]
+  congr
+  ext f
+  simp only [toProfinite_obj, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply,
+    ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, counitApp_app]
+  apply presheaf_ext.{u, u + 1} (X := X) (Y := X) (f := f)
+  intro x
+  dsimp [toProfinite_obj]
+  rw [incl_of_counitAppApp.{u]; rw [u + 1}]
+  simp only [counitAppAppImage]
+  have : Finite (fiber.{u, u + 1} f x) :=
+    Finite.of_injective (sigmaIncl.{u, u + 1} f x).1 Subtype.val_injective
+  apply injective_of_mono (isoFinYonedaComponents X (fiber.{u, u + 1} f x)).hom
+  ext y
+  simp only [toProfinite_obj, isoFinYonedaComponents_hom, ConcreteCategory.hom_ofHom,
+    TypeCat.Fun.coe_mk, ← Functor.map_comp_apply, ← op_comp]
+  rw [show (Profinite.of PUnit.{u + 1}).const y ≫
+    IsTerminal.from _ (fiber.{u]; rw [u + 1} f x) = 𝟙 _ from rfl]
+  simp only [op_comp, Functor.map_comp_apply, op_id, Functor.map_id_apply]
+  simpa [← dsimp% isoFinYonedaComponents_inv_comp X _ (sigmaIncl.{u, u + 1} f x),
+    ← isoFinYonedaComponents_hom_apply, -isoFinYonedaComponents_hom] using! x.map_eq_image f y
 
 中文:
 引理 isoLocallyConstantOfIsColimit_inv
@@ -771,7 +819,29 @@ lemma isoLocallyConstantOfIsColimit_inv
   intro ⟨Y, _, g⟩
   suffices _ ≫ (isoFinYonedaComponents _ _).inv ≫ X.map g =
     (locallyConstantPresheaf _).map g ≫ counitAppApp (Opposite.unop S) X by
-      simpa [lo
+      simpa [locallyConstantIsoFinYoneda, isoFinYoneda, counitApp]
+  erw [(counitApp.{u, u + 1} X).naturality]
+  simp only [← Category.assoc, op_obj, functorToPresheaves_obj_obj]
+  congr
+  ext f
+  simp only [toProfinite_obj, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply,
+    ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, counitApp_app]
+  apply presheaf_ext.{u, u + 1} (X := X) (Y := X) (f := f)
+  intro x
+  dsimp [toProfinite_obj]
+  rw [incl_of_counitAppApp.{u]; rw [u + 1}]
+  simp only [counitAppAppImage]
+  have : Finite (fiber.{u, u + 1} f x) :=
+    Finite.of_injective (sigmaIncl.{u, u + 1} f x).1 Subtype.val_injective
+  apply injective_of_mono (isoFinYonedaComponents X (fiber.{u, u + 1} f x)).hom
+  ext y
+  simp only [toProfinite_obj, isoFinYonedaComponents_hom, ConcreteCategory.hom_ofHom,
+    TypeCat.Fun.coe_mk, ← Functor.map_comp_apply, ← op_comp]
+  rw [show (Profinite.of PUnit.{u + 1}).const y ≫
+    IsTerminal.from _ (fiber.{u]; rw [u + 1} f x) = 𝟙 _ from rfl]
+  simp only [op_comp, Functor.map_comp_apply, op_id, Functor.map_id_apply]
+  simpa [← dsimp% isoFinYonedaComponents_inv_comp X _ (sigmaIncl.{u, u + 1} f x),
+    ← isoFinYonedaComponents_hom_apply, -isoFinYonedaComponents_hom] using! x.map_eq_image f y
 
 Depends on / 依赖: Category, Category.assoc, Iso.inv_comp_eq, Opposite, Opposite.unop, TypeCat, TypeCat.Fun.toFun_apply, X.map, colimit, colimit.hom_ext, counitApp, counitAppApp, functorToPresheaves_obj_obj, hom_ext, inv_comp_eq, isoFinYoneda, isoFinYonedaComponents, isoLocallyConstantOfIsColimit, locallyConstantIsoFinYoneda, locallyConstantPresheaf
 -/
@@ -851,7 +921,19 @@ definition isColimitLocallyConstantPresheaf
     obtain ⟨j, h⟩ := Profinite.exists_locallyConstant.{_, 0} (lightToProfinite.mapCone c)
       (isLimitOfPreserves lightToProfinite hc) f
     exact ⟨⟨j⟩, h⟩
-  · intro ⟨i⟩ ⟨j⟩ (fi : LocallyConstant _ _) (f
+  · intro ⟨i⟩ ⟨j⟩ (fi : LocallyConstant _ _) (fj : LocallyConstant _ _)
+      (h : fi.comap (c.π.app i).hom.hom = fj.comap (c.π.app j).hom.hom)
+    obtain ⟨k, ki, kj, _⟩ := IsCofilteredOrEmpty.cone_objs i j
+    refine ⟨⟨k⟩, ki.op, kj.op, ?_⟩
+    dsimp
+    ext x
+    obtain ⟨x, hx⟩ := ((LightProfinite.epi_iff_surjective (c.π.app k)).mp inferInstance) x
+    rw [← hx]
+    change fi ((c.π.app k ≫ (F ⋙ toLightProfinite).map _) x) =
+      fj ((c.π.app k ≫ (F ⋙ toLightProfinite).map _) x)
+    have h := LocallyConstant.congr_fun h x
+    dsimp [- CompHausLike.coe_comp] -- `coe_comp` prevents rewriting with `c.w`
+    rwa [dsimp% c.w, dsimp% c.w]
 
 中文:
 定义 isColimitLocallyConstantPresheaf
@@ -862,7 +944,19 @@ definition isColimitLocallyConstantPresheaf
     obtain ⟨j, h⟩ := Profinite.exists_locallyConstant.{_, 0} (lightToProfinite.mapCone c)
       (isLimitOfPreserves lightToProfinite hc) f
     exact ⟨⟨j⟩, h⟩
-  · intro ⟨i⟩ ⟨j⟩ (fi : LocallyConstant _ _) (f
+  · intro ⟨i⟩ ⟨j⟩ (fi : LocallyConstant _ _) (fj : LocallyConstant _ _)
+      (h : fi.comap (c.π.app i).hom.hom = fj.comap (c.π.app j).hom.hom)
+    obtain ⟨k, ki, kj, _⟩ := IsCofilteredOrEmpty.cone_objs i j
+    refine ⟨⟨k⟩, ki.op, kj.op, ?_⟩
+    dsimp
+    ext x
+    obtain ⟨x, hx⟩ := ((LightProfinite.epi_iff_surjective (c.π.app k)).mp inferInstance) x
+    rw [← hx]
+    change fi ((c.π.app k ≫ (F ⋙ toLightProfinite).map _) x) =
+      fj ((c.π.app k ≫ (F ⋙ toLightProfinite).map _) x)
+    have h := LocallyConstant.congr_fun h x
+    dsimp [- CompHausLike.coe_comp] -- `coe_comp` prevents rewriting with `c.w`
+    rwa [dsimp% c.w, dsimp% c.w]
 
 Depends on / 依赖: FilteredColimit, IsCofilteredOrEmpty, IsCofilteredOrEmpty.cone_objs, LightPr, LocallyConstant, Profinite, Profinite.exists_locallyConstant, Types.FilteredColimit.isColimitOf, c.pt, cone_objs, exists_locallyConstant, fi.comap, fj.comap, hom.hom, isColimitOf, isLimitOfPreserves, ki.op, kj.op, lightToProfinite, lightToProfinite.mapCone
 -/
@@ -1221,7 +1315,7 @@ definition lanLightCondSet
     rw [Presheaf.isSheaf_of_iso_iff (lanPresheafNatIso
       fun _ => isColimitLocallyConstantPresheafDiagram _ _)]
     exact (CompHausLike.LocallyConstant.functor.{u, u}
-      (hs := fun _ _ _ => ((LightProfinite.effectiveEpi_iff_surjective _
+      (hs := fun _ _ _ => ((LightProfinite.effectiveEpi_iff_surjective _).mp)).obj X).property
 
 中文:
 定义 lanLightCondSet
@@ -1231,7 +1325,7 @@ definition lanLightCondSet
     rw [Presheaf.isSheaf_of_iso_iff (lanPresheafNatIso
       fun _ => isColimitLocallyConstantPresheafDiagram _ _)]
     exact (CompHausLike.LocallyConstant.functor.{u, u}
-      (hs := fun _ _ _ => ((LightProfinite.effectiveEpi_iff_surjective _
+      (hs := fun _ _ _ => ((LightProfinite.effectiveEpi_iff_surjective _).mp)).obj X).property
 
 Depends on / 依赖: lanPresheaf, locallyConstantPresheaf
 -/
@@ -1427,7 +1521,7 @@ lemma isoFinYonedaComponents_inv_comp
   ext x
   rw [isoFinYonedaComponents_hom_apply]
   simp only [← Functor.map_comp_apply, ← op_comp, CompHausLike.const_comp,
-    ← isoFinYonedaComponents_hom_apply, Iso.inv_hom_id_apply, Function.comp_appl
+    ← isoFinYonedaComponents_hom_apply, Iso.inv_hom_id_apply, Function.comp_apply]
 
 中文:
 引理 isoFinYonedaComponents_inv_comp
@@ -1438,7 +1532,7 @@ lemma isoFinYonedaComponents_inv_comp
   ext x
   rw [isoFinYonedaComponents_hom_apply]
   simp only [← Functor.map_comp_apply, ← op_comp, CompHausLike.const_comp,
-    ← isoFinYonedaComponents_hom_apply, Iso.inv_hom_id_apply, Function.comp_appl
+    ← isoFinYonedaComponents_hom_apply, Iso.inv_hom_id_apply, Function.comp_apply]
 
 Depends on / 依赖: CompHausLike, CompHausLike.const_comp, Function, Function.comp_apply, Functor, Functor.map_comp_apply, Iso.inv_hom_id_apply, comp_apply, const_comp, injective_of_mono, inv_hom_id_apply, isoFinYonedaComponents, isoFinYonedaComponents_hom_apply, map_comp_apply, op_comp
 -/
@@ -1471,7 +1565,9 @@ definition isoFinYoneda
     simp only [comp_obj, op_obj, finYoneda_obj, Functor.comp_map, op_map]
     ext
     simp only [isoFinYonedaComponents_hom, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply,
-      ConcreteCategory.ho
+      ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, toLightProfinite_obj,
+      ← Functor.map_comp_apply]
+    rfl
 
 中文:
 定义 isoFinYoneda
@@ -1480,7 +1576,9 @@ definition isoFinYoneda
     simp only [comp_obj, op_obj, finYoneda_obj, Functor.comp_map, op_map]
     ext
     simp only [isoFinYonedaComponents_hom, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply,
-      ConcreteCategory.ho
+      ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, toLightProfinite_obj,
+      ← Functor.map_comp_apply]
+    rfl
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.comp_apply, ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.comp_map, Functor.map_comp_apply, NatIso, NatIso.ofComponents, TypeCat, TypeCat.Fun.coe_mk, TypeCat.Fun.toFun_apply, X.unop, coe_mk, comp_apply, comp_map, comp_obj, finYoneda_obj, hom_ofHom, isoFinYonedaComponents
 -/
@@ -1537,7 +1635,26 @@ lemma isoLocallyConstantOfIsColimit_inv
   intro ⟨Y, _, g⟩
   suffices _ ≫ (isoFinYonedaComponents _ _).inv ≫ X.map g =
     (locallyConstantPresheaf _).map g ≫ counitAppApp (Opposite.unop S) X by
-      simpa [lo
+      simpa [locallyConstantIsoFinYoneda, isoFinYoneda, counitApp]
+  erw [(counitApp.{u, u} X).naturality]
+  simp only [← Category.assoc, op_obj, functorToPresheaves_obj_obj]
+  congr
+  ext f
+  apply presheaf_ext.{u, u} (X := X) (Y := X) (f := f)
+  intro x
+  dsimp [toLightProfinite_obj]
+  rw [incl_of_counitAppApp]
+  simp only [counitAppAppImage]
+  have : Finite (fiber.{u, u} f x) :=
+    Finite.of_injective (sigmaIncl.{u, u} f x).1 Subtype.val_injective
+  apply injective_of_mono (isoFinYonedaComponents X (fiber.{u, u} f x)).hom
+  ext y
+  simp only [toLightProfinite_obj, isoFinYonedaComponents_hom, TypeCat.hom_ofHom,
+    TypeCat.Fun.coe_mk, ← map_comp_apply, ← op_comp]
+  rw [show (LightProfinite.of PUnit.{u + 1}).const y ≫
+    IsTerminal.from _ (fiber.{u]; rw [u} f x) = 𝟙 _ from rfl]
+  simpa [← dsimp% isoFinYonedaComponents_inv_comp X _ (sigmaIncl.{u, u} f x),
+    ← isoFinYonedaComponents_hom_apply, -isoFinYonedaComponents_hom] using! x.map_eq_image f y
 
 中文:
 引理 isoLocallyConstantOfIsColimit_inv
@@ -1551,7 +1668,26 @@ lemma isoLocallyConstantOfIsColimit_inv
   intro ⟨Y, _, g⟩
   suffices _ ≫ (isoFinYonedaComponents _ _).inv ≫ X.map g =
     (locallyConstantPresheaf _).map g ≫ counitAppApp (Opposite.unop S) X by
-      simpa [lo
+      simpa [locallyConstantIsoFinYoneda, isoFinYoneda, counitApp]
+  erw [(counitApp.{u, u} X).naturality]
+  simp only [← Category.assoc, op_obj, functorToPresheaves_obj_obj]
+  congr
+  ext f
+  apply presheaf_ext.{u, u} (X := X) (Y := X) (f := f)
+  intro x
+  dsimp [toLightProfinite_obj]
+  rw [incl_of_counitAppApp]
+  simp only [counitAppAppImage]
+  have : Finite (fiber.{u, u} f x) :=
+    Finite.of_injective (sigmaIncl.{u, u} f x).1 Subtype.val_injective
+  apply injective_of_mono (isoFinYonedaComponents X (fiber.{u, u} f x)).hom
+  ext y
+  simp only [toLightProfinite_obj, isoFinYonedaComponents_hom, TypeCat.hom_ofHom,
+    TypeCat.Fun.coe_mk, ← map_comp_apply, ← op_comp]
+  rw [show (LightProfinite.of PUnit.{u + 1}).const y ≫
+    IsTerminal.from _ (fiber.{u]; rw [u} f x) = 𝟙 _ from rfl]
+  simpa [← dsimp% isoFinYonedaComponents_inv_comp X _ (sigmaIncl.{u, u} f x),
+    ← isoFinYonedaComponents_hom_apply, -isoFinYonedaComponents_hom] using! x.map_eq_image f y
 
 Depends on / 依赖: Category, Category.assoc, Iso.inv_comp_eq, Opposite, Opposite.unop, X.map, colimit, colimit.hom_ext, counitApp, counitAppApp, functorToPresheaves_obj_obj, hom_ext, inv_comp_eq, isoFinYoneda, isoFinYonedaComponents, isoLocallyConstantOfIsColimit, locallyConstantIsoFinYoneda, locallyConstantPresheaf, naturality, op_obj
 -/

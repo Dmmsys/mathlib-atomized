@@ -277,7 +277,7 @@ theorem image_connectedComponentIn
   rwa [image_subset_iff, h.preimage_symm, h.image_symm, h.preimage_image, h.symm_apply_apply]
     at this
 
-@[sim
+@[simp]
 
 中文:
 定理 image_connectedComponentIn
@@ -288,7 +288,7 @@ theorem image_connectedComponentIn
   rwa [image_subset_iff, h.preimage_symm, h.image_symm, h.preimage_image, h.symm_apply_apply]
     at this
 
-@[sim
+@[simp]
 
 Depends on / 依赖: antisymm, continuous, continuousOn, h.continuous.continuousOn.image_connectedComponentIn_subset, h.image_symm, h.preimage_image, h.preimage_symm, h.symm.continuous.continuousOn.image_connectedComponentIn_subset, h.symm_apply_apply, image_connectedComponentIn_subset, image_subset_iff, image_symm, mem_image_of_mem, preimage_image, preimage_symm, symm_apply_apply
 -/
@@ -508,7 +508,7 @@ theorem locallyConnectedSpace
     rw [← h.symm_map_nhds_eq]
     exact (i.1 _).map _
   refine locallyConnectedSpace_of_connected_bases _ _ this fun _ _ hs => ?_
-  exact hs.2.2.2.image _ h.symm.continuous.continuo
+  exact hs.2.2.2.image _ h.symm.continuous.continuousOn
 
 中文:
 定理 locallyConnectedSpace
@@ -519,7 +519,7 @@ theorem locallyConnectedSpace
     rw [← h.symm_map_nhds_eq]
     exact (i.1 _).map _
   refine locallyConnectedSpace_of_connected_bases _ _ this fun _ _ hs => ?_
-  exact hs.2.2.2.image _ h.symm.continuous.continuo
+  exact hs.2.2.2.image _ h.symm.continuous.continuousOn
 
 Depends on / 依赖: HasBasis, IsConnected, IsOpen, continuous, continuousOn, h.symm, h.symm.continuous.continuousOn, h.symm_map_nhds_eq, locallyConnectedSpace_of_connected_bases, symm_map_nhds_eq
 -/
@@ -1016,7 +1016,7 @@ definition sumArrowHomeomorphProdArrow
     fun_prop
   continuous_invFun := continuous_pi fun i => match i with
     | .inl i => by apply (continuous_apply _).comp' continuous_fst
-    | .inr i => by apply (continuous_apply _).comp' continuo
+    | .inr i => by apply (continuous_apply _).comp' continuous_snd
 
 中文:
 定义 sumArrowHomeomorphProdArrow
@@ -1027,7 +1027,7 @@ definition sumArrowHomeomorphProdArrow
     fun_prop
   continuous_invFun := continuous_pi fun i => match i with
     | .inl i => by apply (continuous_apply _).comp' continuous_fst
-    | .inr i => by apply (continuous_apply _).comp' continuo
+    | .inr i => by apply (continuous_apply _).comp' continuous_snd
 
 Depends on / 依赖: Equiv.sumArrowEquivProdArrow, sumArrowEquivProdArrow
 -/

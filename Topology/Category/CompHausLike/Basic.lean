@@ -575,7 +575,8 @@ theorem mono_iff_injective
     let g₂ : X ⟶ X := ofHom _ ⟨fun _ => x₂, continuous_const⟩
     have : g₁ ≫ f = g₂ ≫ f := by ext; exact h
     exact CategoryTheory.congr_fun ((cancel_mono _).mp this) x₁
-  · rw [← CategoryTheory.ofH
+  · rw [← CategoryTheory.ofHom_mono_iff_injective]
+    apply (forget (CompHausLike P)).mono_of_mono_map
 
 中文:
 定理 mono_iff_injective
@@ -587,7 +588,8 @@ theorem mono_iff_injective
     let g₂ : X ⟶ X := ofHom _ ⟨fun _ => x₂, continuous_const⟩
     have : g₁ ≫ f = g₂ ≫ f := by ext; exact h
     exact CategoryTheory.congr_fun ((cancel_mono _).mp this) x₁
-  · rw [← CategoryTheory.ofH
+  · rw [← CategoryTheory.ofHom_mono_iff_injective]
+    apply (forget (CompHausLike P)).mono_of_mono_map
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.congr_fun, CategoryTheory.ofHom_mono_iff_injective, CompHausLike, cancel_mono, congr_fun, continuous_const, forget, mono_of_mono_map, ofHom_mono_iff_injective
 -/
@@ -639,7 +641,7 @@ theorem isIso_of_bijective
   · ext x
     apply E.symm_apply_apply
   · ext x
-    apply E.apply_symm
+    apply E.apply_symm_apply
 
 中文:
 定理 isIso_of_bijective
@@ -655,7 +657,7 @@ theorem isIso_of_bijective
   · ext x
     apply E.symm_apply_apply
   · ext x
-    apply E.apply_symm
+    apply E.apply_symm_apply
 
 Depends on / 依赖: Continuous, E.apply_symm_apply, E.image_eq_preimage_symm, E.symm, E.symm_apply_apply, Equiv.ofBijective, apply_symm_apply, continuous_iff_isClosed, image_eq_preimage_symm, isClosedMap, ofBijective, symm_apply_apply
 -/

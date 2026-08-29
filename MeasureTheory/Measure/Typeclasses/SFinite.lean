@@ -175,6 +175,7 @@ lemma sfinite_sum_of_countable
   · rw [hf.extend_apply]
     infer_instance
   · rw [Function.extend_apply' _ _ _ hn, Pi.zero_apply]
+    infer_instance
 
 中文:
 引理 sfinite_sum_of_countable
@@ -186,6 +187,7 @@ lemma sfinite_sum_of_countable
   · rw [hf.extend_apply]
     infer_instance
   · rw [Function.extend_apply' _ _ _ hn, Pi.zero_apply]
+    infer_instance
 
 Depends on / 依赖: Countable, Countable.exists_injective_nat, Function, Function.Injective, Function.extend_apply, Injective, Pi.zero_apply, exists_injective_nat, extend_apply, hf.extend_apply, infer_instance, sum_extend_zero, zero_apply
 -/
@@ -281,7 +283,9 @@ theorem exists_isFiniteMeasure_absolutelyContinuous
     fun _ => measure_ne_top _ _ with ⟨c, hc₀, hc⟩
   have {s : Set α} : sum (fun n => c n • sfiniteSeq μ n) s = 0 ↔ μ s = 0 := by
     conv_rhs => rw [← sum_sfiniteSeq μ, sum_apply_of_countable]
-    simp [(hc₀ _)
+    simp [(hc₀ _).ne']
+  refine ⟨.sum fun n => c n • sfiniteSeq μ n, ⟨?_⟩, fun _ => this.1, fun _ => this.2⟩
+  simpa [mul_comm] using hc
 
 中文:
 定理 存在_isFiniteMeasure_absolutelyContinuous
@@ -291,7 +295,9 @@ theorem exists_isFiniteMeasure_absolutelyContinuous
     fun _ => measure_ne_top _ _ with ⟨c, hc₀, hc⟩
   have {s : Set α} : sum (fun n => c n • sfiniteSeq μ n) s = 0 ↔ μ s = 0 := by
     conv_rhs => rw [← sum_sfiniteSeq μ, sum_apply_of_countable]
-    simp [(hc₀ _)
+    simp [(hc₀ _).ne']
+  refine ⟨.sum fun n => c n • sfiniteSeq μ n, ⟨?_⟩, fun _ => this.1, fun _ => this.2⟩
+  simpa [mul_comm] using hc
 
 Depends on / 依赖: ENNReal, ENNReal.exists_pos_tsum_mul_lt_of_countable, conv_rhs, exists_pos_tsum_mul_lt_of_countable, measure_ne_top, mul_comm, sfiniteSeq, sum_apply_of_countable, sum_sfiniteSeq, top_ne_zero
 -/
@@ -884,7 +890,8 @@ theorem _root_.Set.Infinite.meas_eq_top
     ∞ = ∑' _ : s, ε := (ENNReal.tsum_const_eq_top_of_ne_zero hne).symm
     _ <= ∑' x : s, μ {x.1} := ENNReal.tsum_le_tsum fun x => hε x x.2
     _ <= μ (⋃ x : s, {x.1}) := tsum_meas_le_meas_iUnion_of_disjoint _
-      (fun _ => Measurab
+      (fun _ => MeasurableSet.singleton _) fun x y hne => by simpa [Subtype.val_inj]
+    _ = μ s := by simp
 
 中文:
 定理 _root_.集合.无限.meas_eq_top
@@ -895,7 +902,8 @@ theorem _root_.Set.Infinite.meas_eq_top
     ∞ = ∑' _ : s, ε := (ENNReal.tsum_const_eq_top_of_ne_zero hne).symm
     _ <= ∑' x : s, μ {x.1} := ENNReal.tsum_le_tsum fun x => hε x x.2
     _ <= μ (⋃ x : s, {x.1}) := tsum_meas_le_meas_iUnion_of_disjoint _
-      (fun _ => Measurab
+      (fun _ => MeasurableSet.singleton _) fun x y hne => by simpa [Subtype.val_inj]
+    _ = μ s := by simp
 
 Depends on / 依赖: top_unique
 -/
@@ -921,7 +929,14 @@ theorem countable_meas_pos_of_disjoint_of_meas_iUnion_ne_top₀
     ⟨as, _, as_mem, as_lim⟩
   set fairmeas := fun n : Nat => { i : ι | as n <= μ (As i) }
   have countable_union : posmeas = ⋃ n, fairmeas n := by
-    have fa
+    have fairmeas_eq : forall n, fairmeas n = (fun i => μ (As i)) ⁻¹' Ici (as n) := fun n => by
+      simp only [fairmeas]
+      rfl
+    simpa only [fairmeas_eq, posmeas_def, ← preimage_iUnion,
+      iUnion_Ici_eq_Ioi_of_lt_of_tendsto (fun n => (as_mem n).1) as_lim]
+  rw [countable_union]
+  refine countable_iUnion fun n => Finite.countable ?_
+  exact finite_const_le_meas_of_disjoint_iUnion₀ μ (as_mem n).1 As_mble As_disj Union_As_finite
 
 中文:
 定理 countable_meas_pos_of_disjoint_of_meas_iUnion_ne_top₀
@@ -932,7 +947,14 @@ theorem countable_meas_pos_of_disjoint_of_meas_iUnion_ne_top₀
     ⟨as, _, as_mem, as_lim⟩
   set fairmeas := fun n : Nat => { i : ι | as n <= μ (As i) }
   have countable_union : posmeas = ⋃ n, fairmeas n := by
-    have fa
+    have fairmeas_eq : forall n, fairmeas n = (fun i => μ (As i)) ⁻¹' Ici (as n) := fun n => by
+      simp only [fairmeas]
+      rfl
+    simpa only [fairmeas_eq, posmeas_def, ← preimage_iUnion,
+      iUnion_Ici_eq_Ioi_of_lt_of_tendsto (fun n => (as_mem n).1) as_lim]
+  rw [countable_union]
+  refine countable_iUnion fun n => Finite.countable ?_
+  exact finite_const_le_meas_of_disjoint_iUnion₀ μ (as_mem n).1 As_mble As_disj Union_As_finite
 
 Depends on / 依赖: as_lim, as_mem, countable_union, exists_seq_strictAnti_tendsto, fairmeas, fairmeas_eq, iUnion_Ici_eq_Ioi_of_lt_of_tendsto, posmeas, posmeas_def, preimage_iUnion, zero_lt_one
 -/
@@ -991,7 +1013,16 @@ theorem countable_meas_pos_of_disjoint_iUnion₀
     intro i hi
     by_contra con
     simp only [mem_iUnion, mem_ofPred_eq, not_exists, not_lt, nonpos_iff_eq_zero] at *
-    rw [sum
+    rw [sum_apply₀] at hi
+    · simp_rw [con] at hi
+      simp at hi
+    · exact As_mble i
+  apply Countable.mono obs
+  refine countable_iUnion fun n => ?_
+  apply countable_meas_pos_of_disjoint_of_meas_iUnion_ne_top₀
+  · exact fun i => (As_mble i).mono (le_sum _ _)
+  · exact fun i j hij => AEDisjoint.of_le (As_disj hij) (le_sum _ _)
+  · exact measure_ne_top _ (⋃ i, As i)
 
 中文:
 定理 countable_meas_pos_of_disjoint_iUnion₀
@@ -1003,7 +1034,16 @@ theorem countable_meas_pos_of_disjoint_iUnion₀
     intro i hi
     by_contra con
     simp only [mem_iUnion, mem_ofPred_eq, not_exists, not_lt, nonpos_iff_eq_zero] at *
-    rw [sum
+    rw [sum_apply₀] at hi
+    · simp_rw [con] at hi
+      simp at hi
+    · exact As_mble i
+  apply Countable.mono obs
+  refine countable_iUnion fun n => ?_
+  apply countable_meas_pos_of_disjoint_of_meas_iUnion_ne_top₀
+  · exact fun i => (As_mble i).mono (le_sum _ _)
+  · exact fun i j hij => AEDisjoint.of_le (As_disj hij) (le_sum _ _)
+  · exact measure_ne_top _ (⋃ i, As i)
 
 Depends on / 依赖: As_disj, As_mble, Countable, Countable.mono, countable_iUnion, le_s, mem_iUnion, mem_ofPred_eq, nonpos_iff_eq_zero, not_exists, not_lt, sfiniteSeq, simp_rw, subseteq, sum_sfiniteSeq
 -/
@@ -1062,7 +1102,7 @@ theorem countable_meas_level_set_pos₀
     fun s t hst => Disjoint.preimage g (disjoint_singleton.mpr hst)
   exact Measure.countable_meas_pos_of_disjoint_iUnion₀
     (fun b => g_mble (‹MeasurableSingletonClass β›.measurableSet_singleton b))
-    ((f
+    ((fun _ _ h => Disjoint.aedisjoint (level_sets_disjoint h)))
 
 中文:
 定理 countable_meas_level_set_pos₀
@@ -1072,7 +1112,7 @@ theorem countable_meas_level_set_pos₀
     fun s t hst => Disjoint.preimage g (disjoint_singleton.mpr hst)
   exact Measure.countable_meas_pos_of_disjoint_iUnion₀
     (fun b => g_mble (‹MeasurableSingletonClass β›.measurableSet_singleton b))
-    ((f
+    ((fun _ _ h => Disjoint.aedisjoint (level_sets_disjoint h)))
 
 Depends on / 依赖: Disjoint, Disjoint.aedisjoint, Disjoint.preimage, MeasurableSingletonClass, Measure, Measure.countable_meas_pos_of_disjoint_iUnion, Pairwise, aedisjoint, disjoint_singleton, disjoint_singleton.mpr, g_mble, level_sets_disjoint, measurableSet_singleton, preimage
 -/
@@ -1117,7 +1157,24 @@ lemma exists_ae_subset_biUnion_countable_of_isFiniteMeasure
     rcases eq_bot_or_bot_lt m with hm | hm
     · exact ⟨∅, by simp, by simp [hm]⟩
     obtain ⟨u, -, u_mem, u_lim⟩ :
- 
+        exists u : Nat -> Real>=0∞, StrictMono u ∧ (forall n, u n in Ioo 0 m) ∧ Tendsto u atTop (𝓝 m) :=
+      exists_seq_strictMono_tendsto' hm
+    have A n : exists D in {D : Set (Set α) | D subseteq C ∧ D.Countable}, u n < μ (⋃₀ D) :=
+      lt_biSup_iff.1 (u_mem n).2
+    choose! D D_mem huD using A
+    have hD : ⋃ n, D n in {D | D subseteq C ∧ D.Countable} := by simp; grind
+    refine ⟨⋃ n, D n, hD, ?_⟩
+    apply le_antisymm (le_biSup (f := fun D => μ (⋃₀ D)) hD)
+    apply le_of_tendsto' u_lim (fun n => (huD n).le.trans ?_)
+    exact measure_mono (fun x hx => by simp at hx ⊢; grind)
+  refine ⟨D, by grind, by grind, fun s hs => union_ae_eq_right_iff_ae_subset.mp ?_⟩
+  symm
+  apply ae_eq_of_ae_subset_of_measure_ge subset_union_right.eventuallyLE
+  · rw [hD, show s union ⋃₀ D = ⋃₀ (D union {s}) by simp]
+    apply le_biSup (f := fun D => μ (⋃₀ D))
+    simp [D_mem.2, insert_subset_iff, hs, D_mem.1]
+  · exact (MeasurableSet.sUnion D_mem.2 (by grind)).nullMeasurableSet
+  · simp
 
 中文:
 引理 存在_ae_subset_biUnion_countable_of_isFiniteMeasure
@@ -1128,7 +1185,24 @@ lemma exists_ae_subset_biUnion_countable_of_isFiniteMeasure
     rcases eq_bot_or_bot_lt m with hm | hm
     · exact ⟨∅, by simp, by simp [hm]⟩
     obtain ⟨u, -, u_mem, u_lim⟩ :
- 
+        exists u : Nat -> Real>=0∞, StrictMono u ∧ (forall n, u n in Ioo 0 m) ∧ Tendsto u atTop (𝓝 m) :=
+      exists_seq_strictMono_tendsto' hm
+    have A n : exists D in {D : Set (Set α) | D subseteq C ∧ D.Countable}, u n < μ (⋃₀ D) :=
+      lt_biSup_iff.1 (u_mem n).2
+    choose! D D_mem huD using A
+    have hD : ⋃ n, D n in {D | D subseteq C ∧ D.Countable} := by simp; grind
+    refine ⟨⋃ n, D n, hD, ?_⟩
+    apply le_antisymm (le_biSup (f := fun D => μ (⋃₀ D)) hD)
+    apply le_of_tendsto' u_lim (fun n => (huD n).le.trans ?_)
+    exact measure_mono (fun x hx => by simp at hx ⊢; grind)
+  refine ⟨D, by grind, by grind, fun s hs => union_ae_eq_right_iff_ae_subset.mp ?_⟩
+  symm
+  apply ae_eq_of_ae_subset_of_measure_ge subset_union_right.eventuallyLE
+  · rw [hD, show s union ⋃₀ D = ⋃₀ (D union {s}) by simp]
+    apply le_biSup (f := fun D => μ (⋃₀ D))
+    simp [D_mem.2, insert_subset_iff, hs, D_mem.1]
+  · exact (MeasurableSet.sUnion D_mem.2 (by grind)).nullMeasurableSet
+  · simp
 -/
 private lemma exists_ae_subset_biUnion_countable_of_isFiniteMeasure [IsFiniteMeasure μ]
     {C : Set (Set α)} (hC : forall s in C, MeasurableSet s) :
@@ -1170,7 +1244,8 @@ lemma exists_ae_subset_biUnion_countable
   choose D DC D_count hD using A
   refine ⟨⋃ n, D n, by simp [DC], by simp [D_count], fun s hs => ?_⟩
   rw [← sum_sfiniteSeq μ]
-  apply ae_su
+  apply ae_sum_iff.2 (fun n => (hD n s hs).trans ?_)
+  exact LE.le.eventuallyLE (fun x hx => by simp at hx ⊢; grind)
 
 中文:
 引理 存在_ae_subset_biUnion_countable
@@ -1181,7 +1256,8 @@ lemma exists_ae_subset_biUnion_countable
   choose D DC D_count hD using A
   refine ⟨⋃ n, D n, by simp [DC], by simp [D_count], fun s hs => ?_⟩
   rw [← sum_sfiniteSeq μ]
-  apply ae_su
+  apply ae_sum_iff.2 (fun n => (hD n s hs).trans ?_)
+  exact LE.le.eventuallyLE (fun x hx => by simp at hx ⊢; grind)
 
 Depends on / 依赖: Countable, D.Countable, D_count, LE.le.eventuallyLE, ae_sum_iff, eventuallyLE, exists_ae_subset_biUnion_countable_of_isFiniteMeasure, sfiniteSeq, subseteq, sum_sfiniteSeq
 -/
@@ -1207,7 +1283,27 @@ theorem measure_toMeasurable_inter_of_sum
   -- we show that there is a measurable superset of `t` satisfying the conclusion for any
   -- measurable set `s`. It is built for each measure `mₙ` using `toMeasurable`
   -- (which is well behaved for finite measure sets thanks to `measure_toMeasurable_inter`), and
-  -- then taking the intersect
+  -- then taking the intersection over `n`.
+  have A : exists t', t' ⊇ t ∧ MeasurableSet t' ∧ forall u, MeasurableSet u -> μ (t' inter u) = μ (t inter u) := by
+    let w n := toMeasurable (m n) t
+    have T : t subseteq ⋂ n, w n := subset_iInter (fun i => subset_toMeasurable (m i) t)
+    have M : MeasurableSet (⋂ n, w n) :=
+      MeasurableSet.iInter (fun i => measurableSet_toMeasurable (m i) t)
+    refine ⟨⋂ n, w n, T, M, fun u hu => ?_⟩
+    refine le_antisymm ?_ (by gcongr)
+    rw [hμ]; rw [sum_apply _ (M.inter hu)]
+    apply le_trans _ (le_sum_apply _ _)
+    apply ENNReal.tsum_le_tsum (fun i => ?_)
+    calc
+    m i ((⋂ n, w n) inter u) <= m i (w i inter u) := by gcongr; apply iInter_subset
+    _ = m i (t inter u) := measure_toMeasurable_inter hu (hv i)
+  -- thanks to the definition of `toMeasurable`, the previous property will also be shared
+  -- by `toMeasurable μ t`, which is enough to conclude the proof.
+  rw [toMeasurable]
+  split_ifs with ht
+  · apply measure_congr
+    exact ae_eq_set_inter ht.choose_spec.2.2 (ae_eq_refl _)
+  · exact A.choose_spec.2.2 s hs
 
 中文:
 定理 measure_toMeasurable_inter_of_sum
@@ -1216,7 +1312,27 @@ theorem measure_toMeasurable_inter_of_sum
   -- we show that there is a measurable superset of `t` satisfying the conclusion for any
   -- measurable set `s`. It is built for each measure `mₙ` using `toMeasurable`
   -- (which is well behaved for finite measure sets thanks to `measure_toMeasurable_inter`), and
-  -- then taking the intersect
+  -- then taking the intersection over `n`.
+  have A : exists t', t' ⊇ t ∧ MeasurableSet t' ∧ forall u, MeasurableSet u -> μ (t' inter u) = μ (t inter u) := by
+    let w n := toMeasurable (m n) t
+    have T : t subseteq ⋂ n, w n := subset_iInter (fun i => subset_toMeasurable (m i) t)
+    have M : MeasurableSet (⋂ n, w n) :=
+      MeasurableSet.iInter (fun i => measurableSet_toMeasurable (m i) t)
+    refine ⟨⋂ n, w n, T, M, fun u hu => ?_⟩
+    refine le_antisymm ?_ (by gcongr)
+    rw [hμ]; rw [sum_apply _ (M.inter hu)]
+    apply le_trans _ (le_sum_apply _ _)
+    apply ENNReal.tsum_le_tsum (fun i => ?_)
+    calc
+    m i ((⋂ n, w n) inter u) <= m i (w i inter u) := by gcongr; apply iInter_subset
+    _ = m i (t inter u) := measure_toMeasurable_inter hu (hv i)
+  -- thanks to the definition of `toMeasurable`, the previous property will also be shared
+  -- by `toMeasurable μ t`, which is enough to conclude the proof.
+  rw [toMeasurable]
+  split_ifs with ht
+  · apply measure_congr
+    exact ae_eq_set_inter ht.choose_spec.2.2 (ae_eq_refl _)
+  · exact A.choose_spec.2.2 s hs
 -/
 theorem measure_toMeasurable_inter_of_sum {s : Set α} (hs : MeasurableSet s) {t : Set α}
     {m : Nat -> Measure α} (hv : forall n, m n t != ∞) (hμ : μ = sum m) :
@@ -1256,7 +1372,63 @@ theorem measure_toMeasurable_inter_of_cover
   -- we show that there is a measurable superset of `t` satisfying the conclusion for any
   -- measurable set `s`. It is built on each member of a spanning family using `toMeasurable`
   -- (which is well behaved for finite measure sets thanks to `measure_toMeasurable_inter`), and
-  -- the desired
+  -- the desired property passes to the union.
+  have A : exists t', t' ⊇ t ∧ MeasurableSet t' ∧ forall u, MeasurableSet u -> μ (t' inter u) = μ (t inter u) := by
+    let w n := toMeasurable μ (t inter v n)
+    have hw : forall n, μ (w n) < ∞ := by
+      intro n
+      simp_rw [w, measure_toMeasurable]
+      exact (h'v n).lt_top
+    set t' := ⋃ n, toMeasurable μ (t inter disjointed w n) with ht'
+    have tt' : t subseteq t' :=
+      calc
+        t subseteq ⋃ n, t inter disjointed w n := by
+          rw [← inter_iUnion]; rw [iUnion_disjointed]; rw [inter_iUnion]
+          intro x hx
+          rcases mem_iUnion.1 (hv hx) with ⟨n, hn⟩
+          refine mem_iUnion.2 ⟨n, ?_⟩
+          have : x in t inter v n := ⟨hx, hn⟩
+          exact ⟨hx, subset_toMeasurable μ _ this⟩
+        _ subseteq ⋃ n, toMeasurable μ (t inter disjointed w n) :=
+          iUnion_mono fun n => subset_toMeasurable _ _
+    refine ⟨t', tt', MeasurableSet.iUnion fun n => measurableSet_toMeasurable μ _, fun u hu => ?_⟩
+    apply le_antisymm _ (by gcongr)
+    calc
+      μ (t' inter u) <= ∑' n, μ (toMeasurable μ (t inter disjointed w n) inter u) := by
+        rw [ht']; rw [iUnion_inter]
+        exact measure_iUnion_le _
+      _ = ∑' n, μ (t inter disjointed w n inter u) := by
+        congr 1
+        ext1 n
+        apply measure_toMeasurable_inter hu
+        apply ne_of_lt
+        calc
+          μ (t inter disjointed w n) <= μ (t inter w n) := by
+            gcongr
+            exact disjointed_le w n
+          _ <= μ (w n) := measure_mono inter_subset_right
+          _ < ∞ := hw n
+      _ = ∑' n, μ.restrict (t inter u) (disjointed w n) := by
+        congr 1
+        ext1 n
+        rw [restrict_apply]; rw [inter_comm t _]; rw [inter_assoc]
+        refine MeasurableSet.disjointed (fun n => ?_) n
+        exact measurableSet_toMeasurable _ _
+      _ = μ.restrict (t inter u) (⋃ n, disjointed w n) := by
+        rw [measure_iUnion]
+        · exact disjoint_disjointed _
+        · intro i
+          refine MeasurableSet.disjointed (fun n => ?_) i
+          exact measurableSet_toMeasurable _ _
+      _ <= μ.restrict (t inter u) univ := measure_mono (subset_univ _)
+      _ = μ (t inter u) := by rw [restrict_apply MeasurableSet.univ, univ_inter]
+  -- thanks to the definition of `toMeasurable`, the previous property will also be shared
+  -- by `toMeasurable μ t`, which is enough to conclude the proof.
+  rw [toMeasurable]
+  split_ifs with ht
+  · apply measure_congr
+    exact ae_eq_set_inter ht.choose_spec.2.2 (ae_eq_refl _)
+  · exact A.choose_spec.2.2 s hs
 
 中文:
 定理 measure_toMeasurable_inter_of_cover
@@ -1265,7 +1437,63 @@ theorem measure_toMeasurable_inter_of_cover
   -- we show that there is a measurable superset of `t` satisfying the conclusion for any
   -- measurable set `s`. It is built on each member of a spanning family using `toMeasurable`
   -- (which is well behaved for finite measure sets thanks to `measure_toMeasurable_inter`), and
-  -- the desired
+  -- the desired property passes to the union.
+  have A : exists t', t' ⊇ t ∧ MeasurableSet t' ∧ forall u, MeasurableSet u -> μ (t' inter u) = μ (t inter u) := by
+    let w n := toMeasurable μ (t inter v n)
+    have hw : forall n, μ (w n) < ∞ := by
+      intro n
+      simp_rw [w, measure_toMeasurable]
+      exact (h'v n).lt_top
+    set t' := ⋃ n, toMeasurable μ (t inter disjointed w n) with ht'
+    have tt' : t subseteq t' :=
+      calc
+        t subseteq ⋃ n, t inter disjointed w n := by
+          rw [← inter_iUnion]; rw [iUnion_disjointed]; rw [inter_iUnion]
+          intro x hx
+          rcases mem_iUnion.1 (hv hx) with ⟨n, hn⟩
+          refine mem_iUnion.2 ⟨n, ?_⟩
+          have : x in t inter v n := ⟨hx, hn⟩
+          exact ⟨hx, subset_toMeasurable μ _ this⟩
+        _ subseteq ⋃ n, toMeasurable μ (t inter disjointed w n) :=
+          iUnion_mono fun n => subset_toMeasurable _ _
+    refine ⟨t', tt', MeasurableSet.iUnion fun n => measurableSet_toMeasurable μ _, fun u hu => ?_⟩
+    apply le_antisymm _ (by gcongr)
+    calc
+      μ (t' inter u) <= ∑' n, μ (toMeasurable μ (t inter disjointed w n) inter u) := by
+        rw [ht']; rw [iUnion_inter]
+        exact measure_iUnion_le _
+      _ = ∑' n, μ (t inter disjointed w n inter u) := by
+        congr 1
+        ext1 n
+        apply measure_toMeasurable_inter hu
+        apply ne_of_lt
+        calc
+          μ (t inter disjointed w n) <= μ (t inter w n) := by
+            gcongr
+            exact disjointed_le w n
+          _ <= μ (w n) := measure_mono inter_subset_right
+          _ < ∞ := hw n
+      _ = ∑' n, μ.restrict (t inter u) (disjointed w n) := by
+        congr 1
+        ext1 n
+        rw [restrict_apply]; rw [inter_comm t _]; rw [inter_assoc]
+        refine MeasurableSet.disjointed (fun n => ?_) n
+        exact measurableSet_toMeasurable _ _
+      _ = μ.restrict (t inter u) (⋃ n, disjointed w n) := by
+        rw [measure_iUnion]
+        · exact disjoint_disjointed _
+        · intro i
+          refine MeasurableSet.disjointed (fun n => ?_) i
+          exact measurableSet_toMeasurable _ _
+      _ <= μ.restrict (t inter u) univ := measure_mono (subset_univ _)
+      _ = μ (t inter u) := by rw [restrict_apply MeasurableSet.univ, univ_inter]
+  -- thanks to the definition of `toMeasurable`, the previous property will also be shared
+  -- by `toMeasurable μ t`, which is enough to conclude the proof.
+  rw [toMeasurable]
+  split_ifs with ht
+  · apply measure_congr
+    exact ae_eq_set_inter ht.choose_spec.2.2 (ae_eq_refl _)
+  · exact A.choose_spec.2.2 s hs
 -/
 theorem measure_toMeasurable_inter_of_cover {s : Set α} (hs : MeasurableSet s) {t : Set α}
     {v : Nat -> Set α} (hv : t subseteq ⋃ n, v n) (h'v : forall n, μ (t inter v n) != ∞) :
@@ -1437,7 +1665,7 @@ theorem iSup_restrict_spanningSets
   rw [← measure_toMeasurable s]; rw [← iSup_restrict_spanningSets_of_measurableSet (measurableSet_toMeasurable _ _)]
   simp_rw [restrict_apply' (measurableSet_spanningSets μ _), Set.inter_comm s,
     ← restrict_apply (measurableSet_spanningSets μ _), ← restrict_toMeasurable_of_sFinite s,
-    rest
+    restrict_apply (measurableSet_spanningSets μ _), Set.inter_comm _ (toMeasurable μ s)]
 
 中文:
 定理 iSup_restrict_spanningSets
@@ -1446,7 +1674,7 @@ theorem iSup_restrict_spanningSets
   rw [← measure_toMeasurable s]; rw [← iSup_restrict_spanningSets_of_measurableSet (measurableSet_toMeasurable _ _)]
   simp_rw [restrict_apply' (measurableSet_spanningSets μ _), Set.inter_comm s,
     ← restrict_apply (measurableSet_spanningSets μ _), ← restrict_toMeasurable_of_sFinite s,
-    rest
+    restrict_apply (measurableSet_spanningSets μ _), Set.inter_comm _ (toMeasurable μ s)]
 
 Depends on / 依赖: Set.inter_comm, iSup_restrict_spanningSets_of_measurableSet, inter_comm, measurableSet_spanningSets, measurableSet_toMeasurable, measure_toMeasurable, restrict_apply, restrict_toMeasurable_of_sFinite, simp_rw, toMeasurable
 -/
@@ -1469,7 +1697,7 @@ theorem exists_subset_measure_lt_top
   simp only [restrict_apply hs] at hn
   refine
     ⟨s inter spanningSets μ n, hs.inter (measurableSet_spanningSets _ _), inter_subset_left, hn, ?_⟩
-  exac
+  exact (measure_mono inter_subset_right).trans_lt (measure_spanningSets_lt_top _ _)
 
 中文:
 定理 存在_subset_measure_lt_top
@@ -1480,7 +1708,7 @@ theorem exists_subset_measure_lt_top
   simp only [restrict_apply hs] at hn
   refine
     ⟨s inter spanningSets μ n, hs.inter (measurableSet_spanningSets _ _), inter_subset_left, hn, ?_⟩
-  exac
+  exact (measure_mono inter_subset_right).trans_lt (measure_spanningSets_lt_top _ _)
 
 Depends on / 依赖: hs.inter, iSup_restrict_spanningSets, inter_subset_left, inter_subset_right, lt_iSup_iff, measurableSet_spanningSets, measure_mono, measure_spanningSets_lt_top, restrict, restrict_apply, spanningSets, trans_lt
 -/
@@ -1674,7 +1902,7 @@ lemma add_right_inj
   rw [← ENNReal.add_right_inj (measure_mono s.inter_subset_right |>.trans_lt <|
     measure_spanningSets_lt_top μ i).ne]
   simp only [ext_iff', coe_add, Pi.add_apply] at h
-  si
+  simp [hs, h]
 
 中文:
 引理 add_right_inj
@@ -1687,7 +1915,7 @@ lemma add_right_inj
   rw [← ENNReal.add_right_inj (measure_mono s.inter_subset_right |>.trans_lt <|
     measure_spanningSets_lt_top μ i).ne]
   simp only [ext_iff', coe_add, Pi.add_apply] at h
-  si
+  simp [hs, h]
 -/
 @[simp] lemma add_right_inj (μ ν₁ ν₂ : Measure α) [SigmaFinite μ] :
     μ + ν₁ = μ + ν₂ ↔ ν₁ = ν₂ := by
@@ -1773,7 +2001,17 @@ theorem sigmaFinite_bot_iff
   let s := spanningSets μ
   have hs_univ : ⋃ i, s i = Set.univ := iUnion_spanningSets μ
   have hs_meas : forall i, MeasurableSet[⊥] (s i) := measurableSet_spanningSets μ
-  simp_rw [MeasurableSpace.measurableSet_bot_i
+  simp_rw [MeasurableSpace.measurableSet_bot_iff] at hs_meas
+  by_cases h_univ_empty : (Set.univ : Set α) = ∅
+  · rw [h_univ_empty, measure_empty]
+    exact ENNReal.zero_ne_top.lt_top
+  obtain ⟨i, hsi⟩ : exists i, s i = Set.univ := by
+    by_contra! h_not_univ
+    have h_empty : forall i, s i = ∅ := by simpa [h_not_univ] using hs_meas
+    simp only [h_empty, iUnion_empty] at hs_univ
+    exact h_univ_empty hs_univ.symm
+  rw [← hsi]
+  exact measure_spanningSets_lt_top μ i
 
 中文:
 定理 sigmaFinite_bot_iff
@@ -1785,7 +2023,17 @@ theorem sigmaFinite_bot_iff
   let s := spanningSets μ
   have hs_univ : ⋃ i, s i = Set.univ := iUnion_spanningSets μ
   have hs_meas : forall i, MeasurableSet[⊥] (s i) := measurableSet_spanningSets μ
-  simp_rw [MeasurableSpace.measurableSet_bot_i
+  simp_rw [MeasurableSpace.measurableSet_bot_iff] at hs_meas
+  by_cases h_univ_empty : (Set.univ : Set α) = ∅
+  · rw [h_univ_empty, measure_empty]
+    exact ENNReal.zero_ne_top.lt_top
+  obtain ⟨i, hsi⟩ : exists i, s i = Set.univ := by
+    by_contra! h_not_univ
+    have h_empty : forall i, s i = ∅ := by simpa [h_not_univ] using hs_meas
+    simp only [h_empty, iUnion_empty] at hs_univ
+    exact h_univ_empty hs_univ.symm
+  rw [← hsi]
+  exact measure_spanningSets_lt_top μ i
 
 Depends on / 依赖: ENNReal, ENNReal.zero_ne_top.lt_top, MeasurableSet, MeasurableSpace, MeasurableSpace.measurableSet_bot_iff, Set.univ, SigmaFinite, h_empt, h_not_univ, h_univ_empty, hs_meas, hs_univ, iUnion_spanningSets, infer_instance, lt_top, measurableSet_bot_iff, measurableSet_spanningSets, measure_empty, simp_rw, spanningSets
 -/
@@ -1845,7 +2093,12 @@ instance sum.sigmaFinite
   have : forall n, MeasurableSet (⋂ i : ι, spanningSets (μ i) n) := fun n =>
     MeasurableSet.iInter fun i => measurableSet_spanningSets (μ i) n
   refine ⟨⟨⟨fun n => ⋂ i, spanningSets (μ i) n, fun _ => trivial, fun n => ?_, ?_⟩⟩⟩
-  · rw [sum_apply _ (this n), tsum_fint
+  · rw [sum_apply _ (this n), tsum_fintype, ENNReal.sum_lt_top]
+    rintro i -
+    exact (measure_mono <| iInter_subset _ i).trans_lt (measure_spanningSets_lt_top (μ i) n)
+  · rw [iUnion_iInter_of_monotone]
+    · simp_rw [iUnion_spanningSets, iInter_univ]
+    exact fun i => monotone_spanningSets (μ i)
 
 中文:
 实例 求和.sigmaFinite
@@ -1855,7 +2108,12 @@ instance sum.sigmaFinite
   have : forall n, MeasurableSet (⋂ i : ι, spanningSets (μ i) n) := fun n =>
     MeasurableSet.iInter fun i => measurableSet_spanningSets (μ i) n
   refine ⟨⟨⟨fun n => ⋂ i, spanningSets (μ i) n, fun _ => trivial, fun n => ?_, ?_⟩⟩⟩
-  · rw [sum_apply _ (this n), tsum_fint
+  · rw [sum_apply _ (this n), tsum_fintype, ENNReal.sum_lt_top]
+    rintro i -
+    exact (measure_mono <| iInter_subset _ i).trans_lt (measure_spanningSets_lt_top (μ i) n)
+  · rw [iUnion_iInter_of_monotone]
+    · simp_rw [iUnion_spanningSets, iInter_univ]
+    exact fun i => monotone_spanningSets (μ i)
 
 Depends on / 依赖: ENNReal, ENNReal.sum_lt_top, MeasurableSet, MeasurableSet.iInter, iInter, iInter_subset, iInter_univ, iUnion_iInter_of_monotone, iUnion_spanningSets, measurableSet_spanningSets, measure_mono, measure_spanningSets_lt_top, nonempty_fintype, simp_rw, spanningSets, sum_apply, sum_lt_top, trans_lt, tsum_fintype
 -/
@@ -2027,7 +2285,9 @@ lemma _root_.MeasurableEmbedding.sigmaFinite_map
   · rw [hf.map_apply, Set.preimage_union]
     simp only [Set.preimage_compl, Set.preimage_range, Set.compl_univ, Set.union_empty,
       Set.preimage_image_eq _ hf.injective]
-    exact measure_spanningSets_l
+    exact measure_spanningSets_lt_top μ n
+  · rw [← Set.iUnion_union, ← Set.image_iUnion, iUnion_spanningSets,
+      Set.image_univ, Set.union_compl_self]
 
 中文:
 引理 _root_.可测嵌入.sigmaFinite_map
@@ -2037,7 +2297,9 @@ lemma _root_.MeasurableEmbedding.sigmaFinite_map
   · rw [hf.map_apply, Set.preimage_union]
     simp only [Set.preimage_compl, Set.preimage_range, Set.compl_univ, Set.union_empty,
       Set.preimage_image_eq _ hf.injective]
-    exact measure_spanningSets_l
+    exact measure_spanningSets_lt_top μ n
+  · rw [← Set.iUnion_union, ← Set.image_iUnion, iUnion_spanningSets,
+      Set.image_univ, Set.union_compl_self]
 
 Depends on / 依赖: Set.compl_univ, Set.iUnion_union, Set.image_iUnion, Set.image_univ, Set.preimage_compl, Set.preimage_image_eq, Set.preimage_range, Set.preimage_union, Set.range, Set.union_compl_self, Set.union_empty, compl_univ, hf.injective, hf.map_apply, iUnion_spanningSets, iUnion_union, image_iUnion, image_univ, injective, map_apply
 -/
@@ -2082,7 +2344,9 @@ theorem ae_of_forall_measure_lt_top_ae_restrict'
     have := h
       (spanningSets (μ + ν) n) (measurableSet_spanningSets _ _)
       ((self_le_add_right _ _).trans_lt (measure_spanningSets_lt_top (μ + ν) _))
-      ((self_le_add_left _ _).trans_lt (measure_span
+      ((self_le_add_left _ _).trans_lt (measure_spanningSets_lt_top (μ + ν) _))
+    exact (ae_restrict_iff' (measurableSet_spanningSets _ _)).mp this
+  filter_upwards [ae_all_iff.2 this] with _ hx using hx _ (mem_spanningSetsIndex _ _)
 
 中文:
 定理 ae_of_对任意_measure_lt_top_ae_restrict'
@@ -2093,7 +2357,9 @@ theorem ae_of_forall_measure_lt_top_ae_restrict'
     have := h
       (spanningSets (μ + ν) n) (measurableSet_spanningSets _ _)
       ((self_le_add_right _ _).trans_lt (measure_spanningSets_lt_top (μ + ν) _))
-      ((self_le_add_left _ _).trans_lt (measure_span
+      ((self_le_add_left _ _).trans_lt (measure_spanningSets_lt_top (μ + ν) _))
+    exact (ae_restrict_iff' (measurableSet_spanningSets _ _)).mp this
+  filter_upwards [ae_all_iff.2 this] with _ hx using hx _ (mem_spanningSetsIndex _ _)
 
 Depends on / 依赖: ae_all_iff, ae_restrict_iff, filter_upwards, measurableSet_spanningSets, measure_spanningSets_lt_top, mem_spanningSetsIndex, self_le_add_left, self_le_add_right, spanningSets, trans_lt
 -/

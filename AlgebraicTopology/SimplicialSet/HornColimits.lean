@@ -47,7 +47,7 @@ lemma sq
       fin_cases i
       · exact le_sup_right
       · exact le_sup_left
-  inf_eq :
+  inf_eq := by simp [stdSimplex.face_inter_face]
 
 中文:
 引理 sq
@@ -63,7 +63,7 @@ lemma sq
       fin_cases i
       · exact le_sup_right
       · exact le_sup_left
-  inf_eq :
+  inf_eq := by simp [stdSimplex.face_inter_face]
 
 Depends on / 依赖: face_inter_face, face_le_horn, fin_cases, horn_eq_iSup, iSup_le_iff, inf_eq, le_antisymm, le_sup_left, le_sup_right, stdSimplex, stdSimplex.face_inter_face, sup_le_iff
 -/
@@ -162,7 +162,7 @@ lemma sq
       fin_cases i
       · exact le_sup_right
       · exact le_sup_left
-  inf_eq :
+  inf_eq := by simp [stdSimplex.face_inter_face]
 
 中文:
 引理 sq
@@ -178,7 +178,7 @@ lemma sq
       fin_cases i
       · exact le_sup_right
       · exact le_sup_left
-  inf_eq :
+  inf_eq := by simp [stdSimplex.face_inter_face]
 
 Depends on / 依赖: face_inter_face, face_le_horn, fin_cases, horn_eq_iSup, iSup_le_iff, inf_eq, le_antisymm, le_sup_left, le_sup_right, stdSimplex, stdSimplex.face_inter_face, sup_le_iff
 -/
@@ -277,7 +277,7 @@ lemma sq
       fin_cases i
       · exact le_sup_right
       · exact le_sup_left
-  inf_eq :
+  inf_eq := by simp [stdSimplex.face_inter_face]
 
 中文:
 引理 sq
@@ -293,7 +293,7 @@ lemma sq
       fin_cases i
       · exact le_sup_right
       · exact le_sup_left
-  inf_eq :
+  inf_eq := by simp [stdSimplex.face_inter_face]
 
 Depends on / 依赖: face_inter_face, face_le_horn, fin_cases, horn_eq_iSup, iSup_le_iff, inf_eq, le_antisymm, le_sup_left, le_sup_right, stdSimplex, stdSimplex.face_inter_face, sup_le_iff
 -/
@@ -552,7 +552,9 @@ lemma of_hom
     congr 1
     obtain ⟨j, rfl⟩ := j.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hjk)
     obtain ⟨k, rfl⟩ := k.eq_succ_of_ne_zero (Fin.ne_zero_of_lt hjk)
-    rw [← cancel_mono (Subcomplex.ι _)]; 
+    rw [← cancel_mono (Subcomplex.ι _)]; rw [Category.assoc]; rw [Category.assoc]; rw [ι_ι]; rw [ι_ι]; rw [Fin.pred_succ]; rw [Fin.castPred_castSucc]; rw [stdSimplex.δ_comp_δ (by grind)]
+
+@[reassoc]
 
 中文:
 引理 of_hom
@@ -565,7 +567,9 @@ lemma of_hom
     congr 1
     obtain ⟨j, rfl⟩ := j.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hjk)
     obtain ⟨k, rfl⟩ := k.eq_succ_of_ne_zero (Fin.ne_zero_of_lt hjk)
-    rw [← cancel_mono (Subcomplex.ι _)]; 
+    rw [← cancel_mono (Subcomplex.ι _)]; rw [Category.assoc]; rw [Category.assoc]; rw [ι_ι]; rw [ι_ι]; rw [Fin.pred_succ]; rw [Fin.castPred_castSucc]; rw [stdSimplex.δ_comp_δ (by grind)]
+
+@[reassoc]
 
 Depends on / 依赖: Category, Category.assoc, Fin.castPred_castSucc, Fin.ne_last_of_lt, Fin.ne_zero_of_lt, Fin.pred_succ, Subcomplex, cancel_mono, castPred_castSucc, eq_castSucc_of_ne_last, eq_succ_of_ne_zero, isCompatible_iff, j.eq_castSucc_of_ne_last, k.eq_succ_of_ne_zero, ne_last_of_lt, ne_zero_of_lt, pred_succ, stdSimplex
 -/
@@ -621,7 +625,7 @@ definition multicofork
     · rintro ⟨⟨⟨a, ha⟩, ⟨b, hb⟩⟩, hab : a < b⟩
       simp only [Set.mem_compl_iff, Set.mem_singleton_iff] at ha hb
       dsimp
-      rw [homOfLE_fac
+      rw [homOfLE_faceSingletonComplIso_inv_eq_facePairComplIso_inv_δ_pred_assoc _ _ hab]; rw [homOfLE_faceSingletonComplIso_inv_eq_facePairComplIso_inv_δ_castPred_assoc _ _ hab]; rw [hf.δ_pred_comp ..])
 
 中文:
 定义 multicofork
@@ -633,7 +637,7 @@ definition multicofork
     · rintro ⟨⟨⟨a, ha⟩, ⟨b, hb⟩⟩, hab : a < b⟩
       simp only [Set.mem_compl_iff, Set.mem_singleton_iff] at ha hb
       dsimp
-      rw [homOfLE_fac
+      rw [homOfLE_faceSingletonComplIso_inv_eq_facePairComplIso_inv_δ_pred_assoc _ _ hab]; rw [homOfLE_faceSingletonComplIso_inv_eq_facePairComplIso_inv_δ_castPred_assoc _ _ hab]; rw [hf.δ_pred_comp ..])
 -/
 private def multicofork (hf : horn.IsCompatible f) :
     Multicofork ((multicoequalizerDiagram i).multispanIndex.toLinearOrder.map
@@ -791,6 +795,20 @@ definition desc.multicofork
     | 2 => (stdSimplex.faceSingletonComplIso 2).inv ≫ f₂
     | 3 => (stdSimplex.faceSingletonComplIso 3).inv ≫ f₃) (fun x => by
       dsimp at x ⊢
+      fin_cases x
+      · simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 1 3 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₁₃ <;> decide
+      · dsimp
+        simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 1 2 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₁₂ <;> decide
+      · dsimp
+        simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 0 1 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₂₃ <;> decide)
+
+@[simp, reassoc]
 
 中文:
 定义 desc.multicofork
@@ -801,6 +819,20 @@ definition desc.multicofork
     | 2 => (stdSimplex.faceSingletonComplIso 2).inv ≫ f₂
     | 3 => (stdSimplex.faceSingletonComplIso 3).inv ≫ f₃) (fun x => by
       dsimp at x ⊢
+      fin_cases x
+      · simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 1 3 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₁₃ <;> decide
+      · dsimp
+        simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 1 2 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₁₂ <;> decide
+      · dsimp
+        simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 0 1 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₂₃ <;> decide)
+
+@[simp, reassoc]
 
 Depends on / 依赖: Category, Category.assoc, False.elim, Multicofork, Multicofork.of, cancel_epi, convert, facePairIso, faceSingletonComplIso, fin_cases, stdSimplex, stdSimplex.facePairIso, stdSimplex.faceSingletonComplIso
 -/
@@ -1076,6 +1108,21 @@ definition desc.multicofork
     | 2 => False.elim (by simp at hi)
     | 3 => (stdSimplex.faceSingletonComplIso 3).inv ≫ f₃) (fun x => by
       dsimp at x ⊢
+      fin_cases x
+      · dsimp
+        simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 2 3 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₂₃ <;> decide
+      · dsimp
+        simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 1 2 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₁₂ <;> decide
+      · dsimp
+        simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 0 2 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₀₂ <;> decide)
+
+@[simp, reassoc]
 
 中文:
 定义 desc.multicofork
@@ -1086,6 +1133,21 @@ definition desc.multicofork
     | 2 => False.elim (by simp at hi)
     | 3 => (stdSimplex.faceSingletonComplIso 3).inv ≫ f₃) (fun x => by
       dsimp at x ⊢
+      fin_cases x
+      · dsimp
+        simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 2 3 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₂₃ <;> decide
+      · dsimp
+        simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 1 2 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₁₂ <;> decide
+      · dsimp
+        simp only [← cancel_epi (stdSimplex.facePairIso.{u} (n := 3) 0 2 (by simp)).hom,
+          ← Category.assoc]
+        convert! h₀₂ <;> decide)
+
+@[simp, reassoc]
 -/
 def desc.multicofork :
     Multicofork ((horn.multicoequalizerDiagram (2 : Fin 4)).multispanIndex.toLinearOrder.map

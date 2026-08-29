@@ -92,7 +92,16 @@ theorem Algebra.isInvariant_of_isGalois
   replace h := ((IsGalois.tfae (F := K) (E := L)).out 0 1).mp h
   let := IsIntegralClosure.MulSemiringAction A K L B
   refine ⟨fun b hb => ?_⟩
-  replace hb : algebraMap B L b in IntermediateField.fixedField (⊤ : S
+  replace hb : algebraMap B L b in IntermediateField.fixedField (⊤ : Subgroup Gal(L/K)) := by
+    rintro ⟨g, -⟩
+    exact (algebraMap_galRestrict_apply A g b).symm.trans (congrArg (algebraMap B L) (hb g))
+  rw [h]; rw [IntermediateField.mem_bot] at hb
+  obtain ⟨k, hk⟩ := hb
+  have hb : IsIntegral A b := IsIntegralClosure.isIntegral A L b
+  rw [← isIntegral_algebraMap_iff (FaithfulSMul.algebraMap_injective B L)]; rw [← hk]; rw [isIntegral_algebraMap_iff (FaithfulSMul.algebraMap_injective K L)] at hb
+  obtain ⟨a, rfl⟩ := IsIntegrallyClosed.algebraMap_eq_of_integral hb
+  rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply A B L]; rw [(FaithfulSMul.algebraMap_injective B L).eq_iff] at hk
+  exact ⟨a, hk⟩
 
 中文:
 定理 代数.isInvariant_of_isGalois
@@ -102,7 +111,16 @@ theorem Algebra.isInvariant_of_isGalois
   replace h := ((IsGalois.tfae (F := K) (E := L)).out 0 1).mp h
   let := IsIntegralClosure.MulSemiringAction A K L B
   refine ⟨fun b hb => ?_⟩
-  replace hb : algebraMap B L b in IntermediateField.fixedField (⊤ : S
+  replace hb : algebraMap B L b in IntermediateField.fixedField (⊤ : Subgroup Gal(L/K)) := by
+    rintro ⟨g, -⟩
+    exact (algebraMap_galRestrict_apply A g b).symm.trans (congrArg (algebraMap B L) (hb g))
+  rw [h]; rw [IntermediateField.mem_bot] at hb
+  obtain ⟨k, hk⟩ := hb
+  have hb : IsIntegral A b := IsIntegralClosure.isIntegral A L b
+  rw [← isIntegral_algebraMap_iff (FaithfulSMul.algebraMap_injective B L)]; rw [← hk]; rw [isIntegral_algebraMap_iff (FaithfulSMul.algebraMap_injective K L)] at hb
+  obtain ⟨a, rfl⟩ := IsIntegrallyClosed.algebraMap_eq_of_integral hb
+  rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply A B L]; rw [(FaithfulSMul.algebraMap_injective B L).eq_iff] at hk
+  exact ⟨a, hk⟩
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.MulSemiringAction, MulSemiringAction
 -/
@@ -171,6 +189,38 @@ lemma normal
   intro x
   obtain ⟨x, y, hy, rfl⟩ := IsFractionRing.div_surjective (B ⧸ Q) x
   obtain ⟨b, a, ha, h⟩ := (Algebra.IsAlgebraic.isAlgebraic (R := A ⧸ P) y).exists_smul_eq_mul x hy
+  obtain ⟨a, rfl⟩ := Quotient.mk_surjective a
+  obtain ⟨b, rfl⟩ := Quotient.mk_surjective b
+  simp_rw [← Quotient.algebraMap_eq] at *
+  cases nonempty_fintype G
+  obtain ⟨p, hp, -, h_monic⟩ := lifts_and_natDegree_eq_and_monic
+    (Algebra.IsInvariant.charpoly_mem_lifts A B G b) (MulSemiringAction.monic_charpoly ..)
+  have h_eval : p.aeval b = 0 := by
+    rw [← eval_map_algebraMap]; rw [hp]; rw [MulSemiringAction.eval_charpoly]
+  let q := p.comp (C a * X)
+  let d := (algebraMap (B ⧸ Q) L) x / (algebraMap (B ⧸ Q) L) y
+  have comm₁ : (algebraMap K L).comp (algebraMap (A ⧸ P) K) =
+      (algebraMap (B ⧸ Q) L).comp (algebraMap (A ⧸ P) (B ⧸ Q)) := by
+    simp_rw [← IsScalarTower.algebraMap_eq]
+  have comm₂ : (algebraMap (A ⧸ P) (B ⧸ Q)).comp (algebraMap A (A ⧸ P)) =
+      (algebraMap B (B ⧸ Q)).comp (algebraMap A B) := by
+    simp_rw [← IsScalarTower.algebraMap_eq]
+  replace h_eval : ((q.map (algebraMap A (A ⧸ P))).map (algebraMap (A ⧸ P) K)).aeval d = 0 := by
+    simp_rw [q, map_comp, Polynomial.map_mul, map_C, map_X, aeval_comp, aeval_mul, aeval_C, aeval_X,
+      ← RingHom.comp_apply, ← RingHom.comp_assoc, comm₁, RingHom.comp_apply, d, mul_div, ← map_mul]
+    rw [← Algebra.smul_def]; rw [h]; rw [map_mul]; rw [mul_div_cancel_left₀ _ (by simpa using hy)]; rw [aeval_map_algebraMap]; rw [aeval_algebraMap_apply]; rw [aeval_map_algebraMap]; rw [aeval_algebraMap_apply]; rw [h_eval]; rw [map_zero]; rw [map_zero]
+  replace h_splits : (p.map (algebraMap A B)).Splits := by
+    rw [hp]
+    exact MulSemiringAction.splits_charpoly G b
+  refine .of_dvd ?_ ?_ (map_dvd (algebraMap K L) (minpoly.dvd K d h_eval))
+  · simp_rw [q, map_comp, Polynomial.map_mul, map_C, map_X]
+    refine .comp_of_degree_le_one ?_ (degree_C_mul_X_le _)
+    rw [Polynomial.map_map]; rw [Polynomial.map_map]; rw [comm₁]; rw [RingHom.comp_assoc]; rw [comm₂]; rw [← RingHom.comp_assoc]; rw [← Polynomial.map_map]
+    apply h_splits.map
+  · simp_rw [q, map_comp, Polynomial.map_mul, map_C, map_X, Polynomial.map_map]
+    exact mt (comp_C_mul_X_eq_zero_iff (by simpa)).mp (map_monic_ne_zero h_monic)
+
+include P Q in
 
 中文:
 引理 normal
@@ -182,6 +232,38 @@ lemma normal
   intro x
   obtain ⟨x, y, hy, rfl⟩ := IsFractionRing.div_surjective (B ⧸ Q) x
   obtain ⟨b, a, ha, h⟩ := (Algebra.IsAlgebraic.isAlgebraic (R := A ⧸ P) y).exists_smul_eq_mul x hy
+  obtain ⟨a, rfl⟩ := Quotient.mk_surjective a
+  obtain ⟨b, rfl⟩ := Quotient.mk_surjective b
+  simp_rw [← Quotient.algebraMap_eq] at *
+  cases nonempty_fintype G
+  obtain ⟨p, hp, -, h_monic⟩ := lifts_and_natDegree_eq_and_monic
+    (Algebra.IsInvariant.charpoly_mem_lifts A B G b) (MulSemiringAction.monic_charpoly ..)
+  have h_eval : p.aeval b = 0 := by
+    rw [← eval_map_algebraMap]; rw [hp]; rw [MulSemiringAction.eval_charpoly]
+  let q := p.comp (C a * X)
+  let d := (algebraMap (B ⧸ Q) L) x / (algebraMap (B ⧸ Q) L) y
+  have comm₁ : (algebraMap K L).comp (algebraMap (A ⧸ P) K) =
+      (algebraMap (B ⧸ Q) L).comp (algebraMap (A ⧸ P) (B ⧸ Q)) := by
+    simp_rw [← IsScalarTower.algebraMap_eq]
+  have comm₂ : (algebraMap (A ⧸ P) (B ⧸ Q)).comp (algebraMap A (A ⧸ P)) =
+      (algebraMap B (B ⧸ Q)).comp (algebraMap A B) := by
+    simp_rw [← IsScalarTower.algebraMap_eq]
+  replace h_eval : ((q.map (algebraMap A (A ⧸ P))).map (algebraMap (A ⧸ P) K)).aeval d = 0 := by
+    simp_rw [q, map_comp, Polynomial.map_mul, map_C, map_X, aeval_comp, aeval_mul, aeval_C, aeval_X,
+      ← RingHom.comp_apply, ← RingHom.comp_assoc, comm₁, RingHom.comp_apply, d, mul_div, ← map_mul]
+    rw [← Algebra.smul_def]; rw [h]; rw [map_mul]; rw [mul_div_cancel_left₀ _ (by simpa using hy)]; rw [aeval_map_algebraMap]; rw [aeval_algebraMap_apply]; rw [aeval_map_algebraMap]; rw [aeval_algebraMap_apply]; rw [h_eval]; rw [map_zero]; rw [map_zero]
+  replace h_splits : (p.map (algebraMap A B)).Splits := by
+    rw [hp]
+    exact MulSemiringAction.splits_charpoly G b
+  refine .of_dvd ?_ ?_ (map_dvd (algebraMap K L) (minpoly.dvd K d h_eval))
+  · simp_rw [q, map_comp, Polynomial.map_mul, map_C, map_X]
+    refine .comp_of_degree_le_one ?_ (degree_C_mul_X_le _)
+    rw [Polynomial.map_map]; rw [Polynomial.map_map]; rw [comm₁]; rw [RingHom.comp_assoc]; rw [comm₂]; rw [← RingHom.comp_assoc]; rw [← Polynomial.map_map]
+    apply h_splits.map
+  · simp_rw [q, map_comp, Polynomial.map_mul, map_C, map_X, Polynomial.map_map]
+    exact mt (comp_C_mul_X_eq_zero_iff (by simpa)).mp (map_monic_ne_zero h_monic)
+
+include P Q in
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, Algebra.IsInvariant.isIntegral, IsAlgebraic, IsFractionRing, IsFractionRing.div_surjective, IsInvariant, Quotient, Quotient.algebraMap_eq, Quotient.mk_surjective, algebraMap_eq, div_surjective, exists_smul_eq_mul, h_monic, isAlgebraic, isAlgebraic_of_isFractionRing, isIntegral, lifts_and_natDegree_eq_and_m, mk_surjective, nonempty_fintype
 -/

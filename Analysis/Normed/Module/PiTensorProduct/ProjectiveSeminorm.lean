@@ -418,7 +418,9 @@ theorem norm_eval_le_projectiveSeminorm
   rw! [← ((mem_lifts_iff x p).mp hp), ← List.sum_map_hom, ← Multiset.sum_coe]
   grw [norm_multiset_sum_le]
   simp only [mul_comm, ← smul_eq_mul, List.smul_sum, projectiveSeminormAux]
- 
+  refine List.Forall₂.sum_le_sum ?_
+  simpa [norm_smul, ← mul_assoc, mul_comm ‖f‖ _] using
+    fun a m _ => mul_le_mul_of_nonneg_left (f.le_opNorm _) (norm_nonneg _)
 
 中文:
 定理 norm_eval_le_projectiveSeminorm
@@ -429,7 +431,9 @@ theorem norm_eval_le_projectiveSeminorm
   rw! [← ((mem_lifts_iff x p).mp hp), ← List.sum_map_hom, ← Multiset.sum_coe]
   grw [norm_multiset_sum_le]
   simp only [mul_comm, ← smul_eq_mul, List.smul_sum, projectiveSeminormAux]
- 
+  refine List.Forall₂.sum_le_sum ?_
+  simpa [norm_smul, ← mul_assoc, mul_comm ‖f‖ _] using
+    fun a m _ => mul_le_mul_of_nonneg_left (f.le_opNorm _) (norm_nonneg _)
 
 Depends on / 依赖: List.Forall, List.smul_sum, List.sum_map_hom, Multiset, Multiset.sum_coe, Real.iInf_mul_of_nonneg, f.le_opNorm, iInf_mul_of_nonneg, le_ciInf, le_opNorm, mem_lifts_iff, mul_assoc, mul_comm, mul_le_mul_of_nonneg_left, norm_def, norm_multiset_sum_le, norm_nonneg, norm_smul, projectiveSeminormAux, smul_eq_mul
 -/
@@ -464,7 +468,11 @@ definition liftEquiv
   map_add' f g := by ext; simp
   map_smul' a f := by ext; simp
   invFun l := MultilinearMap.mkContinuous (lift.symm l.toLinearMap) ‖l‖ fun x =>
-    ContinuousLinearMap.le_opNorm_of_le _ (projectiveS
+    ContinuousLinearMap.le_opNorm_of_le _ (projectiveSeminorm_tprod_le x)
+  left_inv f := by ext; simp
+  right_inv l := by
+    rw [← ContinuousLinearMap.coe_inj]
+    ext; simp
 
 中文:
 定义 liftEquiv
@@ -474,7 +482,11 @@ definition liftEquiv
   map_add' f g := by ext; simp
   map_smul' a f := by ext; simp
   invFun l := MultilinearMap.mkContinuous (lift.symm l.toLinearMap) ‖l‖ fun x =>
-    ContinuousLinearMap.le_opNorm_of_le _ (projectiveS
+    ContinuousLinearMap.le_opNorm_of_le _ (projectiveSeminorm_tprod_le x)
+  left_inv f := by ext; simp
+  right_inv l := by
+    rw [← ContinuousLinearMap.coe_inj]
+    ext; simp
 
 Depends on / 依赖: LinearMap, LinearMap.mkContinuous, f.toMultilinearMap, mkContinuous, toMultilinearMap
 -/
@@ -972,7 +984,10 @@ theorem opNorm_mapL
   refine (ContinuousLinearMap.opNorm_le_iff (by positivity)).mpr fun x => ?_
   apply le_trans (norm_eval_le_projectiveSeminorm ..) (mul_le_mul_of_nonneg_right _ (norm_nonneg x))
   refine (ContinuousMultilinearMap.opNorm_le_iff (by positivity)).mpr fun m => ?_
-  apply le_trans (projectiveSeminorm_
+  apply le_trans (projectiveSeminorm_tprod_le fun i => f i (m i))
+  rw [← Finset.prod_mul_distrib]
+  gcongr
+  exact ContinuousLinearMap.le_opNorm _ _
 
 中文:
 定理 opNorm_mapL
@@ -981,7 +996,10 @@ theorem opNorm_mapL
   refine (ContinuousLinearMap.opNorm_le_iff (by positivity)).mpr fun x => ?_
   apply le_trans (norm_eval_le_projectiveSeminorm ..) (mul_le_mul_of_nonneg_right _ (norm_nonneg x))
   refine (ContinuousMultilinearMap.opNorm_le_iff (by positivity)).mpr fun m => ?_
-  apply le_trans (projectiveSeminorm_
+  apply le_trans (projectiveSeminorm_tprod_le fun i => f i (m i))
+  rw [← Finset.prod_mul_distrib]
+  gcongr
+  exact ContinuousLinearMap.le_opNorm _ _
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.le_opNorm, ContinuousLinearMap.opNorm_le_iff, ContinuousMultilinearMap, ContinuousMultilinearMap.opNorm_le_iff, Finset, Finset.prod_mul_distrib, le_opNorm, le_trans, mul_le_mul_of_nonneg_right, norm_eval_le_projectiveSeminorm, norm_nonneg, opNorm_le_iff, prod_mul_distrib, projectiveSeminorm_tprod_le
 -/

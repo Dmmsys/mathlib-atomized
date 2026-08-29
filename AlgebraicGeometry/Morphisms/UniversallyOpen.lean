@@ -318,7 +318,20 @@ lemma isOpenMap_of_generalizingMap
     intro i
     dsimp only [Scheme.Cover.pullbackHom]
     refine this _ ?_ ⟨_, rfl⟩
-    exact IsZariskiLocalAtTarget.of_isPullback (P :
+    exact IsZariskiLocalAtTarget.of_isPullback (P := topologically GeneralizingMap)
+      (iY := Y.affineCover.f i) (IsPullback.of_hasPullback ..) hf
+  obtain ⟨R, rfl⟩ := hY
+  wlog hX : exists S, X = Spec S
+  · rw [IsZariskiLocalAtSource.iff_of_openCover (P := topologically IsOpenMap) X.affineCover]
+    intro i
+    refine this f _ _ ?_ ⟨_, rfl⟩
+    exact IsZariskiLocalAtSource.comp (P := topologically GeneralizingMap) hf _
+  obtain ⟨S, rfl⟩ := hX
+  obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+  algebraize [φ.hom]
+  convert! PrimeSpectrum.isOpenMap_comap_of_hasGoingDown_of_finitePresentation
+  · rwa [Algebra.HasGoingDown.iff_generalizingMap_primeSpectrumComap]
+  · apply (HasRingHomProperty.Spec_iff (P := @LocallyOfFinitePresentation)).mp inferInstance
 
 中文:
 引理 isOpenMap_of_generalizingMap
@@ -330,7 +343,20 @@ lemma isOpenMap_of_generalizingMap
     intro i
     dsimp only [Scheme.Cover.pullbackHom]
     refine this _ ?_ ⟨_, rfl⟩
-    exact IsZariskiLocalAtTarget.of_isPullback (P :
+    exact IsZariskiLocalAtTarget.of_isPullback (P := topologically GeneralizingMap)
+      (iY := Y.affineCover.f i) (IsPullback.of_hasPullback ..) hf
+  obtain ⟨R, rfl⟩ := hY
+  wlog hX : exists S, X = Spec S
+  · rw [IsZariskiLocalAtSource.iff_of_openCover (P := topologically IsOpenMap) X.affineCover]
+    intro i
+    refine this f _ _ ?_ ⟨_, rfl⟩
+    exact IsZariskiLocalAtSource.comp (P := topologically GeneralizingMap) hf _
+  obtain ⟨S, rfl⟩ := hX
+  obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+  algebraize [φ.hom]
+  convert! PrimeSpectrum.isOpenMap_comap_of_hasGoingDown_of_finitePresentation
+  · rwa [Algebra.HasGoingDown.iff_generalizingMap_primeSpectrumComap]
+  · apply (HasRingHomProperty.Spec_iff (P := @LocallyOfFinitePresentation)).mp inferInstance
 
 Depends on / 依赖: GeneralizingMap, IsOpenMap, IsPullback, IsPullback.of_hasPullback, IsZariskiLocalAtSource, IsZariskiLocalAtSource.iff_of_openCover, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_openCover, IsZariskiLocalAtTarget.of_isPullback, Scheme, Scheme.Cover.pullbackHom, Y.affineCover, Y.affineCover.f, affineCover, iff_of_openCover, of_hasPullback, of_isPullback, pullbackHom, topologically
 -/
@@ -371,7 +397,9 @@ lemma Flat.generalizingMap
   rw [HasRingHomProperty.iff_appLE (P := topologically GeneralizingMap)]
   intro U V e
   algebraize [(f.appLE U V e).hom]
-  apply Algeb
+  apply Algebra.HasGoingDown.iff_generalizingMap_primeSpectrumComap.mp
+  convert! Algebra.HasGoingDown.of_flat
+  exact HasRingHomProperty.appLE @Flat f ‹_› U V e
 
 中文:
 引理 平坦.generalizingMap
@@ -384,7 +412,9 @@ lemma Flat.generalizingMap
   rw [HasRingHomProperty.iff_appLE (P := topologically GeneralizingMap)]
   intro U V e
   algebraize [(f.appLE U V e).hom]
-  apply Algeb
+  apply Algebra.HasGoingDown.iff_generalizingMap_primeSpectrumComap.mp
+  convert! Algebra.HasGoingDown.of_flat
+  exact HasRingHomProperty.appLE @Flat f ‹_› U V e
 
 Depends on / 依赖: Algebra, Algebra.HasGoingDown.iff_generalizingMap_primeSpectrumComap.mp, Algebra.HasGoingDown.of_flat, GeneralizingMap, HasGoingDown, HasRingHomProperty, HasRingHomProperty.appLE, HasRingHomProperty.iff_appLE, HasRingHomProperty.of_isZariskiLocalAtSource_of_isZariskiLocalAtTarget, algebraize, convert, f.appLE, iff_appLE, iff_generalizingMap_primeSpectrumComap, of_flat, of_isZariskiLocalAtSource_of_isZariskiLocalAtTarget, topologically
 -/

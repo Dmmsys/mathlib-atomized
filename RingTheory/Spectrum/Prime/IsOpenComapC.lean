@@ -101,7 +101,11 @@ theorem imageOfDf_eq_comap_C_compl_zeroLocus
     obtain ⟨i, hi⟩ := hx
     exact fun a => hi (mem_map_C_iff.mp a i)
   · ext x
-    refine ⟨fun h => ?_, fun h => subset_span (mem_image_of_mem C.1 
+    refine ⟨fun h => ?_, fun h => subset_span (mem_image_of_mem C.1 h)⟩
+    rw [← @coeff_C_zero R x _]
+    exact mem_map_C_iff.mp h 0
+  · rintro ⟨xli, complement, rfl⟩
+    exact comap_C_mem_imageOfDf complement
 
 中文:
 定理 imageOfDf_eq_comap_C_compl_zeroLocus
@@ -112,7 +116,11 @@ theorem imageOfDf_eq_comap_C_compl_zeroLocus
     obtain ⟨i, hi⟩ := hx
     exact fun a => hi (mem_map_C_iff.mp a i)
   · ext x
-    refine ⟨fun h => ?_, fun h => subset_span (mem_image_of_mem C.1 
+    refine ⟨fun h => ?_, fun h => subset_span (mem_image_of_mem C.1 h)⟩
+    rw [← @coeff_C_zero R x _]
+    exact mem_map_C_iff.mp h 0
+  · rintro ⟨xli, complement, rfl⟩
+    exact comap_C_mem_imageOfDf complement
 
 Depends on / 依赖: asIdeal, coeff_C_zero, comap_C_mem_imageOfDf, complement, isPrime_map_C_of_isPrime, mem_compl_iff, mem_image_of_mem, mem_map_C_iff, mem_map_C_iff.mp, mem_zeroLocus, singleton_subset_iff, subset_span, x.asIdeal
 -/

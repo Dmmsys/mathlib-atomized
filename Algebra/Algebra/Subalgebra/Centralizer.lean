@@ -121,7 +121,24 @@ lemma centralizer_coe_image_includeLeft_eq_center_tensorProduct
     obtain ⟨b, rfl⟩ := TensorProduct.eq_repr_basis_right ℬ w
     refine Subalgebra.sum_mem _ fun j hj => ⟨⟨b j, ?_⟩ otimesₜ[R] ℬ j, by simp⟩
     rw [Subalgebra.mem_centralizer_iff]
-    i
+    intro x hx
+    suffices x • b = b.mapRange (· * x) (by simp) from Finsupp.ext_iff.1 this j
+    specialize hw (x otimesₜ[R] 1) ⟨x, hx, rfl⟩
+    simp only [Finsupp.sum, Finset.mul_sum, Algebra.TensorProduct.tmul_mul_tmul, one_mul,
+      Finset.sum_mul, mul_one] at hw
+    refine TensorProduct.sum_tmul_basis_right_injective ℬ ?_
+    simp only [Finsupp.coe_lsum]
+    rw [sum_of_support_subset (s := b.support) (hs := Finsupp.support_smul) (h := by simp)]; rw [sum_of_support_subset (s := b.support) (hs := support_mapRange) (h := by simp)]
+    simpa only [Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul, LinearMap.flip_apply,
+      TensorProduct.mk_apply, Finsupp.mapRange_apply] using hw
+  · rintro ⟨w, rfl⟩
+    rw [Subalgebra.mem_centralizer_iff]
+    rintro _ ⟨x, hx, rfl⟩
+    induction w using TensorProduct.induction_on with
+    | zero => simp
+    | tmul b c =>
+      simp [Subalgebra.mem_centralizer_iff _ |>.1 b.2 x hx]
+    | add y z hy hz => rw [map_add, mul_add, hy, hz, add_mul]
 
 中文:
 引理 centralizer_coe_image_includeLeft_eq_center_tensorProduct
@@ -134,7 +151,24 @@ lemma centralizer_coe_image_includeLeft_eq_center_tensorProduct
     obtain ⟨b, rfl⟩ := TensorProduct.eq_repr_basis_right ℬ w
     refine Subalgebra.sum_mem _ fun j hj => ⟨⟨b j, ?_⟩ otimesₜ[R] ℬ j, by simp⟩
     rw [Subalgebra.mem_centralizer_iff]
-    i
+    intro x hx
+    suffices x • b = b.mapRange (· * x) (by simp) from Finsupp.ext_iff.1 this j
+    specialize hw (x otimesₜ[R] 1) ⟨x, hx, rfl⟩
+    simp only [Finsupp.sum, Finset.mul_sum, Algebra.TensorProduct.tmul_mul_tmul, one_mul,
+      Finset.sum_mul, mul_one] at hw
+    refine TensorProduct.sum_tmul_basis_right_injective ℬ ?_
+    simp only [Finsupp.coe_lsum]
+    rw [sum_of_support_subset (s := b.support) (hs := Finsupp.support_smul) (h := by simp)]; rw [sum_of_support_subset (s := b.support) (hs := support_mapRange) (h := by simp)]
+    simpa only [Finsupp.coe_smul, Pi.smul_apply, smul_eq_mul, LinearMap.flip_apply,
+      TensorProduct.mk_apply, Finsupp.mapRange_apply] using hw
+  · rintro ⟨w, rfl⟩
+    rw [Subalgebra.mem_centralizer_iff]
+    rintro _ ⟨x, hx, rfl⟩
+    induction w using TensorProduct.induction_on with
+    | zero => simp
+    | tmul b c =>
+      simp [Subalgebra.mem_centralizer_iff _ |>.1 b.2 x hx]
+    | add y z hy hz => rw [map_add, mul_add, hy, hz, add_mul]
 -/
 lemma centralizer_coe_image_includeLeft_eq_center_tensorProduct
     (S : Set A) [Module.Free R B] :
@@ -180,7 +214,17 @@ lemma centralizer_coe_image_includeRight_eq_center_tensorProduct
   convert! eq1
   · ext x
     simpa [mem_centralizer_iff] using
-⟨fun h b hb => (Algebra.TensorProduct.comm R A B).symm.injective by aesop,
+⟨fun h b hb => (Algebra.TensorProduct.comm R A B).symm.injective by aesop, fun h b hb =>
+(Algebra.TensorProduct.comm R A B).injective by aesop⟩
+  · ext x
+    simp only [AlgHom.mem_range, mem_comap, AlgEquiv.coe_toAlgHom]
+    constructor
+    · rintro ⟨x, rfl⟩
+      exact ⟨(Algebra.TensorProduct.comm R _ _) x,
+        by rw [Algebra.TensorProduct.comm_comp_map_apply]⟩
+    · rintro ⟨y, hy⟩
+      refine ⟨(Algebra.TensorProduct.comm R _ _) y, (Algebra.TensorProduct.comm R A B).injective ?_⟩
+      rw [← hy]; rw [comm_comp_map_apply]; rw [← Algebra.TensorProduct.comm_symm]; rw [AlgEquiv.symm_apply_apply]
 
 中文:
 引理 centralizer_coe_image_includeRight_eq_center_tensorProduct
@@ -190,7 +234,17 @@ lemma centralizer_coe_image_includeRight_eq_center_tensorProduct
   convert! eq1
   · ext x
     simpa [mem_centralizer_iff] using
-⟨fun h b hb => (Algebra.TensorProduct.comm R A B).symm.injective by aesop,
+⟨fun h b hb => (Algebra.TensorProduct.comm R A B).symm.injective by aesop, fun h b hb =>
+(Algebra.TensorProduct.comm R A B).injective by aesop⟩
+  · ext x
+    simp only [AlgHom.mem_range, mem_comap, AlgEquiv.coe_toAlgHom]
+    constructor
+    · rintro ⟨x, rfl⟩
+      exact ⟨(Algebra.TensorProduct.comm R _ _) x,
+        by rw [Algebra.TensorProduct.comm_comp_map_apply]⟩
+    · rintro ⟨y, hy⟩
+      refine ⟨(Algebra.TensorProduct.comm R _ _) y, (Algebra.TensorProduct.comm R A B).injective ?_⟩
+      rw [← hy]; rw [comm_comp_map_apply]; rw [← Algebra.TensorProduct.comm_symm]; rw [AlgEquiv.symm_apply_apply]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom, AlgHom, AlgHom.mem_range, Algebra, Algebra.TensorProduct.comm, Subalgebra, Subalgebra.comap, TensorProduct, apply_fun, centralizer_coe_image_includeLeft_eq_center_tensorProduct, coe_toAlgHom, convert, injective, mem_centralizer_iff, mem_comap, mem_range, symm.injective, toAlgHom
 -/

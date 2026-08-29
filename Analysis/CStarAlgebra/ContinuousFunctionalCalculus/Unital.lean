@@ -408,7 +408,11 @@ theorem cfcHom_comp
 (cfcHom ha).comp ContinuousMap.compStarAlgHom' R R f'
   suffices cfcHom (cfcHom_predicate ha f) = φ from DFunLike.congr_fun this.symm g
   refine cfcHom_eq_of_continuous_of_map_id (cfcHom_predicate ha f) φ ?_ ?_
-.comp f'.continuous_precomp · ex
+.comp f'.continuous_precomp · exact cfcHom_continuous ha
+  · simp only [φ, StarAlgHom.comp_apply, ContinuousMap.compStarAlgHom'_apply]
+    congr
+    ext x
+    simp [hff']
 
 中文:
 定理 cfcHom_comp
@@ -418,7 +422,11 @@ theorem cfcHom_comp
 (cfcHom ha).comp ContinuousMap.compStarAlgHom' R R f'
   suffices cfcHom (cfcHom_predicate ha f) = φ from DFunLike.congr_fun this.symm g
   refine cfcHom_eq_of_continuous_of_map_id (cfcHom_predicate ha f) φ ?_ ?_
-.comp f'.continuous_precomp · ex
+.comp f'.continuous_precomp · exact cfcHom_continuous ha
+  · simp only [φ, StarAlgHom.comp_apply, ContinuousMap.compStarAlgHom'_apply]
+    congr
+    ext x
+    simp [hff']
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.compStarAlgHom, DFunLike, DFunLike.congr_fun, StarAlgHom, StarAlgHom.comp_apply, _apply, cfcHom, cfcHom_continuous, cfcHom_eq_of_continuous_of_map_id, cfcHom_predicate, compStarAlgHom, comp_apply, congr_fun, continuous_precomp, spectrum, this.symm
 -/
@@ -949,7 +957,8 @@ lemma cfc_congr
     exact Set.domRestrict_eq_iff.mpr hfg
   · obtain (ha | hg) := not_and_or.mp h
     · simp [cfc_apply_of_not_predicate a ha]
-    · rw [cfc_apply_
+    · rw [cfc_apply_of_not_continuousOn a hg, cfc_apply_of_not_continuousOn]
+      exact fun hf => hg (hf.congr hfg.symm)
 
 中文:
 引理 cfc_congr
@@ -961,7 +970,8 @@ lemma cfc_congr
     exact Set.domRestrict_eq_iff.mpr hfg
   · obtain (ha | hg) := not_and_or.mp h
     · simp [cfc_apply_of_not_predicate a ha]
-    · rw [cfc_apply_
+    · rw [cfc_apply_of_not_continuousOn a hg, cfc_apply_of_not_continuousOn]
+      exact fun hf => hg (hf.congr hfg.symm)
 
 Depends on / 依赖: ContinuousOn, Set.domRestrict_eq_iff.mpr, cfc_apply, cfc_apply_of_not_continuousOn, cfc_apply_of_not_predicate, domRestrict_eq_iff, hf.congr, hfg.symm, not_and_or, not_and_or.mp, spectrum
 -/
@@ -1274,7 +1284,11 @@ lemma cfc_sum
       rw [sum_coe_sort s]; rw [hsum]
       exact continuousOn_finsetSum s fun i hi => hf i hi
     rw [← sum_coe_sort s]; rw [← sum_coe_sort s]
-   
+    rw [cfc_apply_pi _ a ha (fun ⟨i]; rw [hi⟩ => hf i hi)]; rw [← map_sum]; rw [cfc_apply _ a ha hf']
+    congr 1
+    ext
+    simp
+  · simp [cfc_apply_of_not_predicate a ha]
 
 中文:
 引理 cfc_sum
@@ -1286,7 +1300,11 @@ lemma cfc_sum
       rw [sum_coe_sort s]; rw [hsum]
       exact continuousOn_finsetSum s fun i hi => hf i hi
     rw [← sum_coe_sort s]; rw [← sum_coe_sort s]
-   
+    rw [cfc_apply_pi _ a ha (fun ⟨i]; rw [hi⟩ => hf i hi)]; rw [← map_sum]; rw [cfc_apply _ a ha hf']
+    congr 1
+    ext
+    simp
+  · simp [cfc_apply_of_not_predicate a ha]
 
 Depends on / 依赖: ContinuousOn, cfc_apply, cfc_apply_of_not_predicate, cfc_apply_pi, cfc_cont_tac, continuousOn_finsetSum, map_sum, s.sum, spectrum, sum_coe_sort
 -/
@@ -1398,7 +1416,8 @@ lemma cfc_star
     congr
   · obtain (ha | hf) := not_and_or.mp h
     · simp [cfc_apply_of_not_predicate a ha]
-    · rw [cfc_apply_of_not_continuousOn a hf, cfc_apply_of_not_con
+    · rw [cfc_apply_of_not_continuousOn a hf, cfc_apply_of_not_continuousOn, star_zero]
+exact fun hf_star => hf by simpa using hf_star.star
 
 中文:
 引理 cfc_star
@@ -1411,7 +1430,8 @@ lemma cfc_star
     congr
   · obtain (ha | hf) := not_and_or.mp h
     · simp [cfc_apply_of_not_predicate a ha]
-    · rw [cfc_apply_of_not_continuousOn a hf, cfc_apply_of_not_con
+    · rw [cfc_apply_of_not_continuousOn a hf, cfc_apply_of_not_continuousOn, star_zero]
+exact fun hf_star => hf by simpa using hf_star.star
 
 Depends on / 依赖: ContinuousOn, cfc_apply, cfc_apply_of_not_continuousOn, cfc_apply_of_not_predicate, hf_star, hf_star.star, map_star, not_and_or, not_and_or.mp, spectrum, star_zero
 -/
@@ -1603,7 +1623,8 @@ lemma cfc_map_polynomial
   | add q₁ q₂ hq₁ hq₂ =>
     simp only [eval_add, map_add, ← hq₁, ← hq₂, cfc_add a (q₁.eval <| f ·) (q₂.eval <| f ·)]
   | monomial n r _ =>
-    simp only [eval_mul, eval_C, eval_X_pow, map_mul, aeval_C, map_pow, aeva
+    simp only [eval_mul, eval_C, eval_X_pow, map_mul, aeval_C, map_pow, aeval_X]
+    rw [cfc_const_mul ..]; rw [cfc_pow _ (n + 1) _]; rw [← smul_eq_mul]; rw [algebraMap_smul]
 
 中文:
 引理 cfc_map_polynomial
@@ -1614,7 +1635,8 @@ lemma cfc_map_polynomial
   | add q₁ q₂ hq₁ hq₂ =>
     simp only [eval_add, map_add, ← hq₁, ← hq₂, cfc_add a (q₁.eval <| f ·) (q₂.eval <| f ·)]
   | monomial n r _ =>
-    simp only [eval_mul, eval_C, eval_X_pow, map_mul, aeval_C, map_pow, aeva
+    simp only [eval_mul, eval_C, eval_X_pow, map_mul, aeval_C, map_pow, aeval_X]
+    rw [cfc_const_mul ..]; rw [cfc_pow _ (n + 1) _]; rw [← smul_eq_mul]; rw [algebraMap_smul]
 
 Depends on / 依赖: ContinuousOn, Polynomial, Polynomial.induction_on, aeval_C, aeval_X, algebraMap_smul, cfc_add, cfc_const, cfc_const_mul, cfc_cont_tac, cfc_pow, cfc_tac, eval_C, eval_X_pow, eval_add, eval_mul, induction_on, map_add, map_mul, map_pow
 -/
@@ -1669,7 +1691,11 @@ have := hg.comp hf (spectrum R a).mapsTo_image f
     rw [cfcHom_map_spectrum (by exact ha) _]
     ext
     simp
-  rw [cfc_apply ..]; rw [cfc_apply f a]; rw [cfc_apply _ _ (cf
+  rw [cfc_apply ..]; rw [cfc_apply f a]; rw [cfc_apply _ _ (cfcHom_predicate (show p a from ha) _) (by convert! hg)]; rw [← cfcHom_comp _ _]
+  swap
+· exact ContinuousMap.mk _ hf.domRestrict.codRestrict fun x => by rw [sp_eq]; use x.1; simp
+  · congr
+  · exact fun _ => rfl
 
 中文:
 引理 cfc_comp
@@ -1681,7 +1707,11 @@ have := hg.comp hf (spectrum R a).mapsTo_image f
     rw [cfcHom_map_spectrum (by exact ha) _]
     ext
     simp
-  rw [cfc_apply ..]; rw [cfc_apply f a]; rw [cfc_apply _ _ (cf
+  rw [cfc_apply ..]; rw [cfc_apply f a]; rw [cfc_apply _ _ (cfcHom_predicate (show p a from ha) _) (by convert! hg)]; rw [← cfcHom_comp _ _]
+  swap
+· exact ContinuousMap.mk _ hf.domRestrict.codRestrict fun x => by rw [sp_eq]; use x.1; simp
+  · congr
+  · exact fun _ => rfl
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.mk, ContinuousOn, cfcHom, cfcHom_map_spectrum, cfcHom_predicate, cfc_apply, cfc_cont_tac, cfc_tac, convert, domRestrict, hf.domRestrict, hg.comp, mapsTo_image, sp_eq, spectrum
 -/
@@ -2041,7 +2071,9 @@ lemma cfc_algebraMap
 .mono CFC.spectrum_algebraMap_subset r continuousOn_singleton _ _
   rw [cfc_apply f (algebraMap R A r) (cfc_predicate_algebraMap r)]; rw [← AlgHomClass.commutes (cfcHom (p := p) (cfc_predicate_algebraMap r)) (f r)]
   congr
-  ext ⟨x, hx
+  ext ⟨x, hx⟩
+  apply CFC.spectrum_algebraMap_subset r at hx
+  simp_all
 
 中文:
 引理 cfc_algebraMap
@@ -2052,7 +2084,9 @@ lemma cfc_algebraMap
 .mono CFC.spectrum_algebraMap_subset r continuousOn_singleton _ _
   rw [cfc_apply f (algebraMap R A r) (cfc_predicate_algebraMap r)]; rw [← AlgHomClass.commutes (cfcHom (p := p) (cfc_predicate_algebraMap r)) (f r)]
   congr
-  ext ⟨x, hx
+  ext ⟨x, hx⟩
+  apply CFC.spectrum_algebraMap_subset r at hx
+  simp_all
 
 Depends on / 依赖: AlgHomClass, AlgHomClass.commutes, CFC.spectrum_algebraMap_subset, ContinuousOn, algebraMap, cfcHom, cfc_apply, cfc_predicate_algebraMap, commutes, continuousOn_singleton, spectrum, spectrum_algebraMap_subset
 -/
@@ -2672,7 +2706,8 @@ lemma cfc_neg
     congr
   · obtain (ha | hf) := not_and_or.mp h
     · simp [cfc_apply_of_not_predicate a ha]
-    · rw [cfc_apply_of_not_continuousOn a hf, cfc_apply_of_not_conti
+    · rw [cfc_apply_of_not_continuousOn a hf, cfc_apply_of_not_continuousOn, neg_zero]
+exact fun hf_neg => hf by simpa using hf_neg.fun_neg
 
 中文:
 引理 cfc_neg
@@ -2684,7 +2719,8 @@ lemma cfc_neg
     congr
   · obtain (ha | hf) := not_and_or.mp h
     · simp [cfc_apply_of_not_predicate a ha]
-    · rw [cfc_apply_of_not_continuousOn a hf, cfc_apply_of_not_conti
+    · rw [cfc_apply_of_not_continuousOn a hf, cfc_apply_of_not_continuousOn, neg_zero]
+exact fun hf_neg => hf by simpa using hf_neg.fun_neg
 
 Depends on / 依赖: ContinuousOn, cfc_apply, cfc_apply_of_not_continuousOn, cfc_apply_of_not_predicate, fun_neg, hf_neg, hf_neg.fun_neg, map_neg, neg_zero, not_and_or, not_and_or.mp, spectrum
 -/

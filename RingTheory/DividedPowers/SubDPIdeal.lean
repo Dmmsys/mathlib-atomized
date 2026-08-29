@@ -139,7 +139,13 @@ definition dividedPowers
   dpow_zero hx := by simp [if_pos hx, hI.dpow_zero (hJ.isSubideal hx)]
   dpow_one hx := by simp [if_pos hx, hI.dpow_one (hJ.isSubideal hx)]
   dpow_mem hn hx := by simp [if_pos hx, hJ.dpow_mem _ hn hx]
-  dpow_add hx hy := by simp
+  dpow_add hx hy := by simp_rw [if_pos hx, if_pos hy, if_pos (Ideal.add_mem J hx hy),
+    hI.dpow_add (hJ.isSubideal hx) (hJ.isSubideal hy)]
+  dpow_mul hx := by
+    simp [if_pos hx, if_pos (mul_mem_left J _ hx), hI.dpow_mul (hJ.isSubideal hx)]
+  mul_dpow hx := by simp [if_pos hx, hI.mul_dpow (hJ.isSubideal hx)]
+  dpow_comp hn hx := by
+    simp [if_pos hx, if_pos (hJ.dpow_mem _ hn hx), hI.dpow_comp hn (hJ.isSubideal hx)]
 
 中文:
 定义 dividedPowers
@@ -149,7 +155,13 @@ definition dividedPowers
   dpow_zero hx := by simp [if_pos hx, hI.dpow_zero (hJ.isSubideal hx)]
   dpow_one hx := by simp [if_pos hx, hI.dpow_one (hJ.isSubideal hx)]
   dpow_mem hn hx := by simp [if_pos hx, hJ.dpow_mem _ hn hx]
-  dpow_add hx hy := by simp
+  dpow_add hx hy := by simp_rw [if_pos hx, if_pos hy, if_pos (Ideal.add_mem J hx hy),
+    hI.dpow_add (hJ.isSubideal hx) (hJ.isSubideal hy)]
+  dpow_mul hx := by
+    simp [if_pos hx, if_pos (mul_mem_left J _ hx), hI.dpow_mul (hJ.isSubideal hx)]
+  mul_dpow hx := by simp [if_pos hx, hI.mul_dpow (hJ.isSubideal hx)]
+  dpow_comp hn hx := by
+    simp [if_pos hx, if_pos (hJ.dpow_mem _ hn hx), hI.dpow_comp hn (hJ.isSubideal hx)]
 
 Depends on / 依赖: hI.dpow
 -/
@@ -244,7 +256,11 @@ theorem isSubDPIdeal_inf_iff
   refine ⟨fun hIJ n a b ha hb hab => ?_, fun hIJ => ?_⟩
   · have hab' : a - b in I := I.sub_mem ha hb
     rw [← add_sub_cancel b a]; rw [hI.dpow_add' hb hab']; rw [range_add_one]; rw [sum_insert notMem_range_self]; rw [tsub_self]; rw [hI.dpow_zero hab']; rw [mul_one]; rw [add_sub_cancel_left]
-   
+    exact J.sum_mem (fun i hi => SemilatticeInf.inf_le_left J I ((J ⊓ I).smul_mem _
+      (hIJ.dpow_mem _ (ne_of_gt (Nat.sub_pos_of_lt (mem_range.mp hi))) ⟨hab, hab'⟩)))
+  · refine ⟨SemilatticeInf.inf_le_right J I, fun {n} hn {a} ha => ⟨?_, hI.dpow_mem hn ha.right⟩⟩
+    rw [← sub_zero (hI.dpow n a)]; rw [← hI.dpow_eval_zero hn]
+    exact hIJ ha.right I.zero_mem (J.sub_mem ha.left J.zero_mem)
 
 中文:
 定理 isSubDPIdeal_inf_iff
@@ -253,7 +269,11 @@ theorem isSubDPIdeal_inf_iff
   refine ⟨fun hIJ n a b ha hb hab => ?_, fun hIJ => ?_⟩
   · have hab' : a - b in I := I.sub_mem ha hb
     rw [← add_sub_cancel b a]; rw [hI.dpow_add' hb hab']; rw [range_add_one]; rw [sum_insert notMem_range_self]; rw [tsub_self]; rw [hI.dpow_zero hab']; rw [mul_one]; rw [add_sub_cancel_left]
-   
+    exact J.sum_mem (fun i hi => SemilatticeInf.inf_le_left J I ((J ⊓ I).smul_mem _
+      (hIJ.dpow_mem _ (ne_of_gt (Nat.sub_pos_of_lt (mem_range.mp hi))) ⟨hab, hab'⟩)))
+  · refine ⟨SemilatticeInf.inf_le_right J I, fun {n} hn {a} ha => ⟨?_, hI.dpow_mem hn ha.right⟩⟩
+    rw [← sub_zero (hI.dpow n a)]; rw [← hI.dpow_eval_zero hn]
+    exact hIJ ha.right I.zero_mem (J.sub_mem ha.left J.zero_mem)
 
 Depends on / 依赖: I.sub_mem, J.sum_mem, Nat.sub_pos_of_lt, SemilatticeInf, SemilatticeInf.inf_le_left, SemilatticeInf.inf_le_right, add_sub_cancel, add_sub_cancel_left, dpow_add, dpow_mem, dpow_zero, hI.dpow_add, hI.dpow_zero, hIJ.dpow_mem, inf_le_left, inf_le_right, mem_range, mem_range.mp, mul_one, ne_of_gt
 -/
@@ -286,7 +306,19 @@ theorem span_isSubDPIdeal_iff
     intro m hm z hz
     induction hz using Submodule.span_induction generalizing m hm with
     | mem x h => exact hhI hm x h
-
+    | zero =>
+        rw [hI.dpow_eval_zero hm]
+        exact (span S).zero_mem
+    | add x y hxI hyI hx hy =>
+        rw [hI.dpow_add' (hSI hxI) (hSI hyI)]
+        apply Submodule.sum_mem (span S)
+        intro m _
+        by_cases hm0 : m = 0
+        · exact hm0 ▸ mul_mem_left (span S) _ (hy _ hm)
+        · exact mul_mem_right _ (span S) (hx _ hm0)
+    | smul a x hxI hx =>
+        rw [smul_eq_mul]; rw [hI.dpow_mul (hSI hxI)]
+        exact mul_mem_left (span S) (a ^ m) (hx m hm)
 
 中文:
 定理 span_isSubDPIdeal_iff
@@ -299,7 +331,19 @@ theorem span_isSubDPIdeal_iff
     intro m hm z hz
     induction hz using Submodule.span_induction generalizing m hm with
     | mem x h => exact hhI hm x h
-
+    | zero =>
+        rw [hI.dpow_eval_zero hm]
+        exact (span S).zero_mem
+    | add x y hxI hyI hx hy =>
+        rw [hI.dpow_add' (hSI hxI) (hSI hyI)]
+        apply Submodule.sum_mem (span S)
+        intro m _
+        by_cases hm0 : m = 0
+        · exact hm0 ▸ mul_mem_left (span S) _ (hy _ hm)
+        · exact mul_mem_right _ (span S) (hx _ hm0)
+    | smul a x hxI hx =>
+        rw [smul_eq_mul]; rw [hI.dpow_mul (hSI hxI)]
+        exact mul_mem_left (span S) (a ^ m) (hx m hm)
 
 Depends on / 依赖: IsSubDPIdeal, IsSubDPIdeal.mk, Submodule, Submodule.span_induction, Submodule.sum_mem, direction, dpow_add, dpow_eval_zero, dpow_mem, generalizing, hI.dpow_add, hI.dpow_eval_zero, hhI.dpow_mem, interesting, mul_mem_left, span_induction, span_le, span_le.mpr, subset_span, sum_mem
 -/
@@ -337,7 +381,7 @@ theorem isSubDPIdeal_sup
   intro n hn a ha
   rcases ha with ha | ha
   · exact span_mono Set.subset_union_left (subset_span (hJ.2 n hn ha))
-  · exact span_mono Set.subset_union_right (subset_spa
+  · exact span_mono Set.subset_union_right (subset_span (hK.2 n hn ha))
 
 中文:
 定理 isSubDPIdeal_sup
@@ -347,7 +391,7 @@ theorem isSubDPIdeal_sup
   intro n hn a ha
   rcases ha with ha | ha
   · exact span_mono Set.subset_union_left (subset_span (hJ.2 n hn ha))
-  · exact span_mono Set.subset_union_right (subset_spa
+  · exact span_mono Set.subset_union_right (subset_span (hK.2 n hn ha))
 
 Depends on / 依赖: J.span_eq, K.span_eq, Set.subset_union_left, Set.subset_union_right, Set.union_subset_iff.mpr, span_eq, span_isSubDPIdeal_iff, span_mono, span_union, subset_span, subset_union_left, subset_union_right, union_subset_iff
 -/
@@ -403,7 +447,8 @@ theorem isSubDPIdeal_iInf
     simp only [Ideal.mem_inf, mem_iInf] at hx ⊢
     exact ⟨hI.dpow_mem hn hx.1, fun i => IsSubDPIdeal.dpow_mem (hJ i) n hn (hx.2 i)⟩
   | inl _ =>
-    simp only [iInf_of_empty, le_top, inf_of_le_l
+    simp only [iInf_of_empty, le_top, inf_of_le_left]
+    exact IsSubDPIdeal.self hI
 
 中文:
 定理 isSubDPIdeal_iInf
@@ -416,7 +461,8 @@ theorem isSubDPIdeal_iInf
     simp only [Ideal.mem_inf, mem_iInf] at hx ⊢
     exact ⟨hI.dpow_mem hn hx.1, fun i => IsSubDPIdeal.dpow_mem (hJ i) n hn (hx.2 i)⟩
   | inl _ =>
-    simp only [iInf_of_empty, le_top, inf_of_le_l
+    simp only [iInf_of_empty, le_top, inf_of_le_left]
+    exact IsSubDPIdeal.self hI
 
 Depends on / 依赖: Ideal.mem_inf, IsSubDPIdeal, IsSubDPIdeal.dpow_mem, IsSubDPIdeal.self, dpow_mem, hI.dpow_mem, iInf_of_empty, inf_of_le_left, isEmpty_or_nonempty, le_top, mem_iInf, mem_inf
 -/
@@ -692,7 +738,15 @@ definition prod
     induction hx using Submodule.smul_induction_on' generalizing m with
     | smul a ha b hb =>
       rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm a b]; rw [hI.dpow_mul ha]; rw [mul_comm]
-      exact Submodule.mul_mem_mul (J.pow_mem_of
+      exact Submodule.mul_mem_mul (J.pow_mem_of_mem hb m (zero_lt_iff.mpr hm))
+        (hI.dpow_mem hm ha)
+    | add x hx y hy hx' hy' =>
+      rw [hI.dpow_add' (mul_le_left hx) (mul_le_left hy)]
+      apply Submodule.sum_mem (I • J)
+      intro k _
+      by_cases hk0 : k = 0
+      · exact hk0 ▸ mul_mem_left (I • J) _ (hy' _ hm)
+      · exact mul_mem_right _ (I • J) (hx' k hk0)
 
 中文:
 定义 乘积
@@ -703,7 +757,15 @@ definition prod
     induction hx using Submodule.smul_induction_on' generalizing m with
     | smul a ha b hb =>
       rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm a b]; rw [hI.dpow_mul ha]; rw [mul_comm]
-      exact Submodule.mul_mem_mul (J.pow_mem_of
+      exact Submodule.mul_mem_mul (J.pow_mem_of_mem hb m (zero_lt_iff.mpr hm))
+        (hI.dpow_mem hm ha)
+    | add x hx y hy hx' hy' =>
+      rw [hI.dpow_add' (mul_le_left hx) (mul_le_left hy)]
+      apply Submodule.sum_mem (I • J)
+      intro k _
+      by_cases hk0 : k = 0
+      · exact hk0 ▸ mul_mem_left (I • J) _ (hy' _ hm)
+      · exact mul_mem_right _ (I • J) (hx' k hk0)
 -/
 def prod (J : Ideal A) : SubDPIdeal hI where
   carrier := I • J
@@ -933,7 +995,7 @@ instance :
         exact hx ⊤ (Set.mem_insert ⊤ S)
       dpow_mem := fun _ hn x hx => by
         simp only [mem_iInf] at hx ⊢
-        exact fun s hs => s.dpow_m
+        exact fun s hs => s.dpow_mem _ hn x (hx s hs) }⟩
 
 中文:
 实例 :
@@ -945,7 +1007,7 @@ instance :
         exact hx ⊤ (Set.mem_insert ⊤ S)
       dpow_mem := fun _ hn x hx => by
         simp only [mem_iInf] at hx ⊢
-        exact fun s hs => s.dpow_m
+        exact fun s hs => s.dpow_mem _ hn x (hx s hs) }⟩
 
 Depends on / 依赖: Insert, Insert.insert, Set.mem_insert, SubDPIdeal, carrier, dpow_mem, hI.SubDPIdeal, insert, isSubideal, mem_iInf, mem_insert, s.dpow_mem
 -/
@@ -1020,7 +1082,14 @@ instance :
       have h : (⋃ (i : Ideal A) (_ : i in (fun J => J.carrier) '' S), ↑i) subseteq (I : Set A) := by
         rintro a ⟨-, ⟨J, rfl⟩, haJ⟩
         rw [Set.mem_iUnion]; rw [SetLike.mem_coe]; rw [exists_prop] at haJ
-        obtain ⟨J', 
+        obtain ⟨J', hJ'⟩ := (Set.mem_image _ _ _).mp haJ.1
+        exact J'.isSubideal (hJ'.2 ▸ haJ.2)
+      rw [sSup_eq_iSup]; rw [Submodule.iSup_eq_span']; rw [submodule_span_eq]; rw [span_isSubDPIdeal_iff h]
+      rintro n hn x ⟨T, ⟨J, rfl⟩, ⟨J', ⟨⟨hJ', rfl⟩, h'⟩⟩⟩
+      apply subset_span
+      apply Set.mem_biUnion hJ'
+      obtain ⟨K, hKS, rfl⟩ := hJ'
+      exact K.dpow_mem _ hn x h'⟩
 
 中文:
 实例 :
@@ -1029,7 +1098,14 @@ instance :
       have h : (⋃ (i : Ideal A) (_ : i in (fun J => J.carrier) '' S), ↑i) subseteq (I : Set A) := by
         rintro a ⟨-, ⟨J, rfl⟩, haJ⟩
         rw [Set.mem_iUnion]; rw [SetLike.mem_coe]; rw [exists_prop] at haJ
-        obtain ⟨J', 
+        obtain ⟨J', hJ'⟩ := (Set.mem_image _ _ _).mp haJ.1
+        exact J'.isSubideal (hJ'.2 ▸ haJ.2)
+      rw [sSup_eq_iSup]; rw [Submodule.iSup_eq_span']; rw [submodule_span_eq]; rw [span_isSubDPIdeal_iff h]
+      rintro n hn x ⟨T, ⟨J, rfl⟩, ⟨J', ⟨⟨hJ', rfl⟩, h'⟩⟩⟩
+      apply subset_span
+      apply Set.mem_biUnion hJ'
+      obtain ⟨K, hKS, rfl⟩ := hJ'
+      exact K.dpow_mem _ hn x h'⟩
 
 Depends on / 依赖: J.carrier, Set.mem_iUnion, Set.mem_image, SetLike, SetLike.mem_coe, SubDPIdeal, SubDPIdeal.mk, Submodule, Submodule.iSup_eq_span, carrier, exists_prop, iSup_eq_span, isSubideal, mem_coe, mem_iUnion, mem_image, sSup_eq_iSup, span_isSubDPIdeal_iff, submodule_span_eq, subseteq
 -/
@@ -1076,7 +1152,24 @@ instance :
     (fun J J' h => by simpa only [SubDPIdeal.ext_iff, Subtype.mk.injEq] using h)
     .rfl .rfl (fun J J' => by rfl) (fun J J' => by rfl) (fun S => ?_) (fun S => ?_) rfl rfl
   · conv_rhs => rw [iSup]
-    rw [Sub
+    rw [Subtype.ext_iff]; rw [Set.Iic.coe_sSup]
+    dsimp only
+    rw [sSup_carrier_def]; rw [sSup_image]; rw [sSup_image]; rw [iSup_range]
+    have (J : hI.SubDPIdeal) :
+      ((⨆ (_ : J in S), (J : Set.Iic I) : Set.Iic I) : Ideal A) = ⨆ (_ : J in S), (J : Ideal A) := by
+      by_cases hJ : J in S
+      · simp [ciSup_pos hJ]
+      · simp [hJ, not_false_eq_true, iSup_neg, Set.Iic.coe_bot]
+    simp_rw [this]
+    rfl
+  · conv_rhs => rw [iInf]
+    rw [Subtype.ext_iff]; rw [Set.Iic.coe_sInf]
+    dsimp only
+    rw [sInf_carrier_def]; rw [sInf_image]; rw [iInf_range]; rw [inf_iInf]; rw [iInf_insert]; rw [inf_iInf]
+    apply iInf_congr (fun J => ?_)
+    by_cases hJ : J in S
+    · rw [ciInf_pos hJ, ciInf_pos hJ]; rfl
+    · simp [hJ, iInf_neg, le_top, inf_of_le_left, Set.Iic.coe_top]; rfl
 
 中文:
 实例 :
@@ -1086,7 +1179,24 @@ instance :
     (fun J J' h => by simpa only [SubDPIdeal.ext_iff, Subtype.mk.injEq] using h)
     .rfl .rfl (fun J J' => by rfl) (fun J J' => by rfl) (fun S => ?_) (fun S => ?_) rfl rfl
   · conv_rhs => rw [iSup]
-    rw [Sub
+    rw [Subtype.ext_iff]; rw [Set.Iic.coe_sSup]
+    dsimp only
+    rw [sSup_carrier_def]; rw [sSup_image]; rw [sSup_image]; rw [iSup_range]
+    have (J : hI.SubDPIdeal) :
+      ((⨆ (_ : J in S), (J : Set.Iic I) : Set.Iic I) : Ideal A) = ⨆ (_ : J in S), (J : Ideal A) := by
+      by_cases hJ : J in S
+      · simp [ciSup_pos hJ]
+      · simp [hJ, not_false_eq_true, iSup_neg, Set.Iic.coe_bot]
+    simp_rw [this]
+    rfl
+  · conv_rhs => rw [iInf]
+    rw [Subtype.ext_iff]; rw [Set.Iic.coe_sInf]
+    dsimp only
+    rw [sInf_carrier_def]; rw [sInf_image]; rw [iInf_range]; rw [inf_iInf]; rw [iInf_insert]; rw [inf_iInf]
+    apply iInf_congr (fun J => ?_)
+    by_cases hJ : J in S
+    · rw [ciInf_pos hJ, ciInf_pos hJ]; rfl
+    · simp [hJ, iInf_neg, le_top, inf_of_le_left, Set.Iic.coe_top]; rfl
 
 Depends on / 依赖: Function, Function.Injective.completeLattice, Injective, Set.Iic, Set.Iic.coe_sSup, SubDPIdeal, SubDPIdeal.ext_iff, Subtype, Subtype.ext_iff, Subtype.mk.injEq, coe_sSup, completeLattice, conv_rhs, eBody.instantiateRev, ext_iff, hI.SubDPIdeal, iSup_range, instantiateRev, sSup_carrier_def, sSup_image
 -/
@@ -1173,7 +1283,24 @@ theorem dpow_mem_span_of_mem_span
   have hSI := hI.dpow_span_isSubideal hS
   have haux : forall (n : Nat) (_ : n != 0),
       hI.dpow n z in span {y | exists n, exists (_ : n != 0), exists x, exists (_ : x in S), y = hI.dpow n x} := by
- 
+    refine Submodule.span_induction ?_ ?_ ?_ ?_ hz
+    · -- Elements of S
+      rintro y ⟨m, hm, x, hxS, hxy⟩ n hn
+      rw [hxy]; rw [hI.dpow_comp hm (hS hxS)]
+      exact mul_mem_left _ _ (subset_span ⟨n * m, mul_ne_zero hn hm, x, hxS, rfl⟩)
+    · -- Zero
+      exact fun _ hn => by simp only [hI.dpow_eval_zero hn, zero_mem]
+    · intro x y hx hy hx_pow hy_pow n hn
+      rw [hI.dpow_add' (hSI hx) (hSI hy)]
+      apply Submodule.sum_mem (span _)
+      intro m _
+      by_cases hm0 : m = 0
+      · rw [hm0]; exact (span _).mul_mem_left _ (hy_pow n hn)
+      · exact (span _).mul_mem_right _ (hx_pow m hm0)
+    · intro a x hx hx_pow n hn
+      rw [smul_eq_mul]; rw [hI.dpow_mul (hSI hx)]
+      exact mul_mem_left (span _) (a ^ n) (hx_pow n hn)
+  exact haux _ hk
 
 中文:
 定理 dpow_mem_span_of_mem_span
@@ -1183,7 +1310,24 @@ theorem dpow_mem_span_of_mem_span
   have hSI := hI.dpow_span_isSubideal hS
   have haux : forall (n : Nat) (_ : n != 0),
       hI.dpow n z in span {y | exists n, exists (_ : n != 0), exists x, exists (_ : x in S), y = hI.dpow n x} := by
- 
+    refine Submodule.span_induction ?_ ?_ ?_ ?_ hz
+    · -- Elements of S
+      rintro y ⟨m, hm, x, hxS, hxy⟩ n hn
+      rw [hxy]; rw [hI.dpow_comp hm (hS hxS)]
+      exact mul_mem_left _ _ (subset_span ⟨n * m, mul_ne_zero hn hm, x, hxS, rfl⟩)
+    · -- Zero
+      exact fun _ hn => by simp only [hI.dpow_eval_zero hn, zero_mem]
+    · intro x y hx hy hx_pow hy_pow n hn
+      rw [hI.dpow_add' (hSI hx) (hSI hy)]
+      apply Submodule.sum_mem (span _)
+      intro m _
+      by_cases hm0 : m = 0
+      · rw [hm0]; exact (span _).mul_mem_left _ (hy_pow n hn)
+      · exact (span _).mul_mem_right _ (hx_pow m hm0)
+    · intro a x hx hx_pow n hn
+      rw [smul_eq_mul]; rw [hI.dpow_mul (hSI hx)]
+      exact mul_mem_left (span _) (a ^ n) (hx_pow n hn)
+  exact haux _ hk
 
 Depends on / 依赖: Elements, Submodule, Submodule.span_induction, dpow_comp, dpow_span_isSubideal, hI.dpow, hI.dpow_comp, hI.dpow_span_isSubideal, mul_mem_left, mul_ne_zero, span_induction, subset_span
 -/
@@ -1225,7 +1369,21 @@ theorem span_carrier_eq_dpow_span
     isSubideal := hI.dpow_span_isSubideal hS
     dpow_mem _ hk _ hz := dpow_mem_span_of_mem_span hI hS hk hz }
   simp only [SubDPIdeal.span, sInf_carrier_def]
-  apply le
+  apply le_antisymm
+  · have h : J in insert ⊤ {J : hI.SubDPIdeal | S subseteq ↑J.carrier} :=
+      Set.mem_insert_of_mem _
+        (fun x hx => subset_span ⟨1, one_ne_zero, x, hx, by rw [hI.dpow_one (hS hx)]⟩)
+    refine sInf_le_of_le ⟨J, ?_⟩ (le_refl _)
+    simp only [h, ciInf_pos, J]
+  · rw [le_iInf₂_iff]
+    intro K hK
+    have : S <= K := by
+      simp only [Set.mem_insert_iff, Set.mem_ofPred_eq] at hK
+      rcases hK with rfl | hKS
+      exacts [hS, hKS]
+    rw [span_le]
+    rintro y ⟨n, hn, x, hx, rfl⟩
+    exact K.dpow_mem n hn x (this hx)
 
 中文:
 定理 span_carrier_eq_dpow_span
@@ -1236,7 +1394,21 @@ theorem span_carrier_eq_dpow_span
     isSubideal := hI.dpow_span_isSubideal hS
     dpow_mem _ hk _ hz := dpow_mem_span_of_mem_span hI hS hk hz }
   simp only [SubDPIdeal.span, sInf_carrier_def]
-  apply le
+  apply le_antisymm
+  · have h : J in insert ⊤ {J : hI.SubDPIdeal | S subseteq ↑J.carrier} :=
+      Set.mem_insert_of_mem _
+        (fun x hx => subset_span ⟨1, one_ne_zero, x, hx, by rw [hI.dpow_one (hS hx)]⟩)
+    refine sInf_le_of_le ⟨J, ?_⟩ (le_refl _)
+    simp only [h, ciInf_pos, J]
+  · rw [le_iInf₂_iff]
+    intro K hK
+    have : S <= K := by
+      simp only [Set.mem_insert_iff, Set.mem_ofPred_eq] at hK
+      rcases hK with rfl | hKS
+      exacts [hS, hKS]
+    rw [span_le]
+    rintro y ⟨n, hn, x, hx, rfl⟩
+    exact K.dpow_mem n hn x (this hx)
 
 Depends on / 依赖: J.carrier, Set.mem_insert_of_mem, SubDPIdeal, SubDPIdeal.span, carrier, dpow_mem, dpow_mem_span_of_mem_span, dpow_one, dpow_span_isSubideal, hI.SubDPIdeal, hI.dpow, hI.dpow_one, hI.dpow_span_isSubideal, insert, isSubideal, le_antisymm, mem_insert_of_mem, one_ne_zero, sInf_carrier_def, sInf_le_of_le
 -/
@@ -1363,7 +1535,13 @@ definition dpEqualizer
     rw [hI.dpow_add ha.1 hb.1]; rw [hI'.dpow_add ha.1 hb.1]
     exact Finset.sum_congr rfl (fun k _ => by rw [ha.2, hb.2])
   zero_mem' := by
-    apply And.intr
+    apply And.intro I.zero_mem (fun n => ?_)
+    by_cases hn : n = 0
+    · rw [hn, hI.dpow_zero (zero_mem I), hI'.dpow_zero (zero_mem I)]
+    · rw [hI.dpow_eval_zero hn, hI'.dpow_eval_zero hn]
+  smul_mem' a x hx := by
+    rw [smul_eq_mul]
+    exact ⟨I.mul_mem_left a hx.1, (fun n => by rw [hI.dpow_mul hx.1, hI'.dpow_mul hx.1, hx.2])⟩
 
 中文:
 定义 dpEqualizer
@@ -1374,7 +1552,13 @@ definition dpEqualizer
     rw [hI.dpow_add ha.1 hb.1]; rw [hI'.dpow_add ha.1 hb.1]
     exact Finset.sum_congr rfl (fun k _ => by rw [ha.2, hb.2])
   zero_mem' := by
-    apply And.intr
+    apply And.intro I.zero_mem (fun n => ?_)
+    by_cases hn : n = 0
+    · rw [hn, hI.dpow_zero (zero_mem I), hI'.dpow_zero (zero_mem I)]
+    · rw [hI.dpow_eval_zero hn, hI'.dpow_eval_zero hn]
+  smul_mem' a x hx := by
+    rw [smul_eq_mul]
+    exact ⟨I.mul_mem_left a hx.1, (fun n => by rw [hI.dpow_mul hx.1, hI'.dpow_mul hx.1, hx.2])⟩
 
 Depends on / 依赖: hI.dpow
 -/
@@ -1501,7 +1685,9 @@ definition subDPIdeal_inf_of_quot
     refine ⟨?_, hI.dpow_mem hn haI⟩
     rw [SetLike.mem_coe]; rw [← Quotient.eq_zero_iff_mem]; rw [← hφ]; rw [← φ.dpow_comp a haI]
     suffices ha0 : φ.toRingHom a = 0 by
-      rw [ha0]; rw [hJ.dpow_eval_zero
+      rw [ha0]; rw [hJ.dpow_eval_zero hn]
+    rw [hφ]; rw [Quotient.eq_zero_iff_mem]
+    exact haJ
 
 中文:
 定义 subDPIdeal_inf_of_quot
@@ -1512,7 +1698,9 @@ definition subDPIdeal_inf_of_quot
     refine ⟨?_, hI.dpow_mem hn haI⟩
     rw [SetLike.mem_coe]; rw [← Quotient.eq_zero_iff_mem]; rw [← hφ]; rw [← φ.dpow_comp a haI]
     suffices ha0 : φ.toRingHom a = 0 by
-      rw [ha0]; rw [hJ.dpow_eval_zero
+      rw [ha0]; rw [hJ.dpow_eval_zero hn]
+    rw [hφ]; rw [Quotient.eq_zero_iff_mem]
+    exact haJ
 -/
 def subDPIdeal_inf_of_quot {A : Type*} [CommRing A] {I : Ideal A} {hI : DividedPowers I}
     {J : Ideal A} {hJ : DividedPowers (I.map (Ideal.Quotient.mk J))} {φ : DPMorphism hI hJ}
@@ -1576,7 +1764,7 @@ theorem dpow_apply'
   have h : exists (a_1 : I), f ↑a_1 = f a := by use ⟨a, ha⟩
   rw [dif_pos h]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]
   apply (hI.isSubDPIdeal_inf_iff.mp hIf) (Submodule.coe_mem _) ha
-  rw [RingHom.mem_ker]; rw [map_sub]; rw [
+  rw [RingHom.mem_ker]; rw [map_sub]; rw [sub_eq_zero]; rw [h.choose_spec]
 
 中文:
 定理 dpow_apply'
@@ -1587,7 +1775,7 @@ theorem dpow_apply'
   have h : exists (a_1 : I), f ↑a_1 = f a := by use ⟨a, ha⟩
   rw [dif_pos h]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]
   apply (hI.isSubDPIdeal_inf_iff.mp hIf) (Submodule.coe_mem _) ha
-  rw [RingHom.mem_ker]; rw [map_sub]; rw [
+  rw [RingHom.mem_ker]; rw [map_sub]; rw [sub_eq_zero]; rw [h.choose_spec]
 
 Depends on / 依赖: Function, Function.extend_def, RingHom, RingHom.mem_ker, Submodule, Submodule.coe_mem, choose_spec, classical, coe_mem, dif_pos, extend_def, h.choose_spec, hI.isSubDPIdeal_inf_iff.mp, isSubDPIdeal_inf_iff, map_sub, mem_ker, sub_eq_zero
 -/
@@ -1615,7 +1803,33 @@ definition dividedPowers
     rintro ⟨⟨a, ha⟩, rfl⟩
     exact (hIJ ▸ hx') (apply_coe_mem_map f I ⟨a, ha⟩)
   dpow_zero {x} hx := by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸
+    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
+    rw [dpow_apply' hI hIf ha]; rw [hI.dpow_zero ha]; rw [map_one]
+  dpow_one {x} hx := by
+    obtain ⟨a, ha, hax⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
+    rw [← hax]; rw [dpow_apply' hI hIf ha]; rw [hI.dpow_one ha]
+  dpow_mem {n x} hn hx := by
+    rw [hIJ] at hx ⊢
+    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp hx
+    rw [dpow_apply' hI hIf ha]
+    exact mem_map_of_mem _ (hI.dpow_mem hn ha)
+  dpow_add hx hy := by
+    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
+    obtain ⟨b, hb, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hy)
+    rw [← map_add]; rw [dpow_apply' hI hIf (I.add_mem ha hb)]; rw [hI.dpow_add ha hb]; rw [map_sum]; rw [Finset.sum_congr rfl]
+    exact fun k _ => by rw [dpow_apply' hI hIf ha, dpow_apply' hI hIf hb, ← _root_.map_mul]
+  dpow_mul {n x y} hy := by
+    obtain ⟨a, rfl⟩ := hf x
+    obtain ⟨b, hb, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hy)
+    rw [dpow_apply' hI hIf hb]; rw [← _root_.map_mul]; rw [← map_pow]; rw [dpow_apply' hI hIf (mul_mem_left I a hb)]; rw [hI.dpow_mul hb]; rw [_root_.map_mul]
+  mul_dpow hx := by
+    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
+    simp only [dpow_apply' hI hIf ha]
+    rw [← _root_.map_mul]; rw [hI.mul_dpow ha]; rw [_root_.map_mul]; rw [map_natCast]
+  dpow_comp hn hx := by
+    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
+    simp only [dpow_apply' hI hIf, ha, hI.dpow_mem hn ha]
+    rw [hI.dpow_comp hn ha]; rw [_root_.map_mul]; rw [map_natCast]
 
 中文:
 定义 dividedPowers
@@ -1627,7 +1841,33 @@ definition dividedPowers
     rintro ⟨⟨a, ha⟩, rfl⟩
     exact (hIJ ▸ hx') (apply_coe_mem_map f I ⟨a, ha⟩)
   dpow_zero {x} hx := by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸
+    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
+    rw [dpow_apply' hI hIf ha]; rw [hI.dpow_zero ha]; rw [map_one]
+  dpow_one {x} hx := by
+    obtain ⟨a, ha, hax⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
+    rw [← hax]; rw [dpow_apply' hI hIf ha]; rw [hI.dpow_one ha]
+  dpow_mem {n x} hn hx := by
+    rw [hIJ] at hx ⊢
+    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp hx
+    rw [dpow_apply' hI hIf ha]
+    exact mem_map_of_mem _ (hI.dpow_mem hn ha)
+  dpow_add hx hy := by
+    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
+    obtain ⟨b, hb, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hy)
+    rw [← map_add]; rw [dpow_apply' hI hIf (I.add_mem ha hb)]; rw [hI.dpow_add ha hb]; rw [map_sum]; rw [Finset.sum_congr rfl]
+    exact fun k _ => by rw [dpow_apply' hI hIf ha, dpow_apply' hI hIf hb, ← _root_.map_mul]
+  dpow_mul {n x y} hy := by
+    obtain ⟨a, rfl⟩ := hf x
+    obtain ⟨b, hb, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hy)
+    rw [dpow_apply' hI hIf hb]; rw [← _root_.map_mul]; rw [← map_pow]; rw [dpow_apply' hI hIf (mul_mem_left I a hb)]; rw [hI.dpow_mul hb]; rw [_root_.map_mul]
+  mul_dpow hx := by
+    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
+    simp only [dpow_apply' hI hIf ha]
+    rw [← _root_.map_mul]; rw [hI.mul_dpow ha]; rw [_root_.map_mul]; rw [map_natCast]
+  dpow_comp hn hx := by
+    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
+    simp only [dpow_apply' hI hIf, ha, hI.dpow_mem hn ha]
+    rw [hI.dpow_comp hn ha]; rw [_root_.map_mul]; rw [map_natCast]
 -/
 noncomputable def dividedPowers : DividedPowers J where
   dpow := dpow hI f

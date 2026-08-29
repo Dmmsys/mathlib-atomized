@@ -141,7 +141,8 @@ example : (Semiring.toNatAlgebra : Algebra Nat Complex) = Complex.instAlgebraOfR
 example : (Ring.toIntAlgebra Complex : Algebra Int Complex) = Complex.instAlgebraOfReal := by
   with_reducible_and_instances rfl
 
-example : Module.restrictScalars Real C
+example : Module.restrictScalars Real Complex Complex = Complex.instModule := by
+  with_reducible_and_instances rfl
 
 中文:
 定理 coe_algebraMap
@@ -154,7 +155,8 @@ example : (Semiring.toNatAlgebra : Algebra Nat Complex) = Complex.instAlgebraOfR
 example : (Ring.toIntAlgebra Complex : Algebra Int Complex) = Complex.instAlgebraOfReal := by
   with_reducible_and_instances rfl
 
-example : Module.restrictScalars Real C
+example : Module.restrictScalars Real Complex Complex = Complex.instModule := by
+  with_reducible_and_instances rfl
 -/
 theorem coe_algebraMap : (algebraMap Real Complex : Real -> Complex) = ((↑) : Real -> Complex) :=
   rfl
@@ -2175,7 +2177,7 @@ lemma mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one
   refine ⟨fun ⟨h, h'⟩ => ?_, fun ⟨hx, h⟩ => ?_⟩
   · have : IsStarNormal x := ⟨h.trans h'.symm⟩
     exact ⟨this, by simp [sq, ← star_mul_self_eq_realPart_sq_add_imaginaryPart_sq x, h]⟩
-  · simp [← hx.star_comm_self.eq, star_mul_self_eq_realPart_sq_add_imaginaryPart_sq, ← sq,
+  · simp [← hx.star_comm_self.eq, star_mul_self_eq_realPart_sq_add_imaginaryPart_sq, ← sq, h]
 
 中文:
 引理 mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one
@@ -2185,7 +2187,7 @@ lemma mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one
   refine ⟨fun ⟨h, h'⟩ => ?_, fun ⟨hx, h⟩ => ?_⟩
   · have : IsStarNormal x := ⟨h.trans h'.symm⟩
     exact ⟨this, by simp [sq, ← star_mul_self_eq_realPart_sq_add_imaginaryPart_sq x, h]⟩
-  · simp [← hx.star_comm_self.eq, star_mul_self_eq_realPart_sq_add_imaginaryPart_sq, ← sq,
+  · simp [← hx.star_comm_self.eq, star_mul_self_eq_realPart_sq_add_imaginaryPart_sq, ← sq, h]
 
 Depends on / 依赖: IsStarNormal, Unitary, Unitary.mem_iff, h.trans, hx.star_comm_self.eq, mem_iff, star_comm_self, star_mul_self_eq_realPart_sq_add_imaginaryPart_sq
 -/

@@ -261,7 +261,10 @@ theorem succ_mul_centralBinom_succ
     (n + 1) * (2 * (n + 1)).choose (n + 1) = (2 * n + 2).choose (n + 1) * (n + 1) := mul_comm _ _
     _ = (2 * n + 1).choose n * (2 * n + 2) := by rw [choose_succ_right_eq, choose_mul_succ_eq]
     _ = 2 * ((2 * n + 1).choose n * (n + 1)) := by ring
-    _ = 2 * ((2 * n + 1).choose n * (2 * n + 1
+    _ = 2 * ((2 * n + 1).choose n * (2 * n + 1 - n)) := by rw [two_mul n, add_assoc,
+                                                               Nat.add_sub_cancel_left]
+    _ = 2 * ((2 * n).choose n * (2 * n + 1)) := by rw [choose_mul_succ_eq]
+    _ = 2 * (2 * n + 1) * (2 * n).choose n := by rw [mul_assoc, mul_comm (2 * n + 1)]
 
 中文:
 定理 succ_mul_centralBinom_succ
@@ -270,7 +273,10 @@ theorem succ_mul_centralBinom_succ
     (n + 1) * (2 * (n + 1)).choose (n + 1) = (2 * n + 2).choose (n + 1) * (n + 1) := mul_comm _ _
     _ = (2 * n + 1).choose n * (2 * n + 2) := by rw [choose_succ_right_eq, choose_mul_succ_eq]
     _ = 2 * ((2 * n + 1).choose n * (n + 1)) := by ring
-    _ = 2 * ((2 * n + 1).choose n * (2 * n + 1
+    _ = 2 * ((2 * n + 1).choose n * (2 * n + 1 - n)) := by rw [two_mul n, add_assoc,
+                                                               Nat.add_sub_cancel_left]
+    _ = 2 * ((2 * n).choose n * (2 * n + 1)) := by rw [choose_mul_succ_eq]
+    _ = 2 * (2 * n + 1) * (2 * n).choose n := by rw [mul_assoc, mul_comm (2 * n + 1)]
 
 Depends on / 依赖: Nat.add_sub_cancel_left, add_assoc, add_sub_cancel_left, choose_mul_succ_eq, choose_succ_right_eq, mul_assoc, mul_comm, two_mul
 -/
@@ -299,6 +305,11 @@ theorem four_pow_lt_mul_centralBinom
   · norm_num [centralBinom, choose]
   obtain ⟨n, rfl⟩ : exists m, n = m + 1 := Nat.exists_eq_succ_of_ne_zero (Nat.ne_zero_of_lt hn)
   calc
+    4 ^ (n + 1)
+    _ = 4 * 4 ^ n := by rw [pow_succ']
+    _ < 4 * (n * centralBinom n) := by gcongr; exact IH n n.lt_succ_self (Nat.le_of_lt_succ hn)
+    _ <= 2 * (2 * n + 1) * centralBinom n := by rw [← mul_assoc]; linarith
+    _ = (n + 1) * centralBinom (n + 1) := (succ_mul_centralBinom_succ n).symm
 
 中文:
 定理 four_pow_lt_mul_centralBinom
@@ -311,6 +322,11 @@ theorem four_pow_lt_mul_centralBinom
   · norm_num [centralBinom, choose]
   obtain ⟨n, rfl⟩ : exists m, n = m + 1 := Nat.exists_eq_succ_of_ne_zero (Nat.ne_zero_of_lt hn)
   calc
+    4 ^ (n + 1)
+    _ = 4 * 4 ^ n := by rw [pow_succ']
+    _ < 4 * (n * centralBinom n) := by gcongr; exact IH n n.lt_succ_self (Nat.le_of_lt_succ hn)
+    _ <= 2 * (2 * n + 1) * centralBinom n := by rw [← mul_assoc]; linarith
+    _ = (n + 1) * centralBinom (n + 1) := (succ_mul_centralBinom_succ n).symm
 
 Depends on / 依赖: False.elim, Nat.exists_eq_succ_of_ne_zero, Nat.le_of_lt_succ, Nat.ne_zero_of_lt, Nat.strong_induction_on, centralBinom, exists_eq_succ_of_ne_zero, le_of_lt_succ, lt_succ_self, lt_trichotomy, mul_assoc, n.lt_succ_self, n_big, ne_zero_of_lt, not_lt, pow_succ, strong_induction_on
 -/
@@ -420,7 +436,8 @@ theorem succ_dvd_centralBinom
     exact coprime_one_left n
   apply h_s.dvd_of_dvd_mul_left
   apply Nat.dvd_of_mul_dvd_mul_left zero_lt_two
-  rw [← mul_assoc]; rw [← succ_mul_centralBinom_suc
+  rw [← mul_assoc]; rw [← succ_mul_centralBinom_succ]; rw [mul_comm]
+  exact mul_dvd_mul_left _ (two_dvd_centralBinom_succ n)
 
 中文:
 定理 succ_dvd_centralBinom
@@ -432,7 +449,8 @@ theorem succ_dvd_centralBinom
     exact coprime_one_left n
   apply h_s.dvd_of_dvd_mul_left
   apply Nat.dvd_of_mul_dvd_mul_left zero_lt_two
-  rw [← mul_assoc]; rw [← succ_mul_centralBinom_suc
+  rw [← mul_assoc]; rw [← succ_mul_centralBinom_succ]; rw [mul_comm]
+  exact mul_dvd_mul_left _ (two_dvd_centralBinom_succ n)
 
 Depends on / 依赖: Coprime, Nat.dvd_of_mul_dvd_mul_left, add_assoc, coprime_add_self_right, coprime_one_left, coprime_self_add_left, dvd_of_dvd_mul_left, dvd_of_mul_dvd_mul_left, h_s.dvd_of_dvd_mul_left, mul_assoc, mul_comm, mul_dvd_mul_left, succ_mul_centralBinom_succ, two_dvd_centralBinom_succ, two_mul, zero_lt_two
 -/

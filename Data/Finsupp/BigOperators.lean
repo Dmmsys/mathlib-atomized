@@ -214,7 +214,13 @@ theorem List.support_sum_eq
     simp only [List.pairwise_cons] at hl
     simp only [List.sum_cons, List.foldr_cons]
     rw [Finsupp.support_add_eq]; rw [IH hl.right]; rw [Finset.sup_eq_union]
-    suffices _root_.Disjoint hd.support (tl.foldr (fun x y => (Finsupp.suppor
+    suffices _root_.Disjoint hd.support (tl.foldr (fun x y => (Finsupp.support x ⊔ y)) ∅) by
+      exact Finset.disjoint_of_subset_right (List.support_sum_subset _) this
+    rw [← List.foldr_map]; rw [← Finset.bot_eq_empty]; rw [List.foldr_sup_eq_sup_toFinset]; rw [Finset.disjoint_sup_right]
+    intro f hf
+    simp only [List.mem_toFinset, List.mem_map] at hf
+    obtain ⟨f, hf, rfl⟩ := hf
+    exact hl.left _ hf
 
 中文:
 定理 列表.support_sum_eq
@@ -226,7 +232,13 @@ theorem List.support_sum_eq
     simp only [List.pairwise_cons] at hl
     simp only [List.sum_cons, List.foldr_cons]
     rw [Finsupp.support_add_eq]; rw [IH hl.right]; rw [Finset.sup_eq_union]
-    suffices _root_.Disjoint hd.support (tl.foldr (fun x y => (Finsupp.suppor
+    suffices _root_.Disjoint hd.support (tl.foldr (fun x y => (Finsupp.support x ⊔ y)) ∅) by
+      exact Finset.disjoint_of_subset_right (List.support_sum_subset _) this
+    rw [← List.foldr_map]; rw [← Finset.bot_eq_empty]; rw [List.foldr_sup_eq_sup_toFinset]; rw [Finset.disjoint_sup_right]
+    intro f hf
+    simp only [List.mem_toFinset, List.mem_map] at hf
+    obtain ⟨f, hf, rfl⟩ := hf
+    exact hl.left _ hf
 
 Depends on / 依赖: Disjoint, Finset, Finset.bot_eq_empty, Finset.disjoint_of_subset_right, Finset.disjoint_sup_right, Finset.sup_eq_union, Finsupp, Finsupp.support, Finsupp.support_add_eq, List.foldr_cons, List.foldr_map, List.foldr_sup_eq_sup_toFinset, List.pairwise_cons, List.sum_cons, List.support_sum_subset, _root_, _root_.Disjoint, bot_eq_empty, disjoint_of_subset_right, disjoint_sup_right
 -/
@@ -260,7 +272,8 @@ theorem Multiset.support_sum_eq
     convert! List.support_sum_eq a this
     simp only [quot_mk_to_coe'', map_coe, sup_coe,
       Finset.sup_eq_union, Finset.bot_eq_empty, List.foldr_map]
-  sim
+  simp only [Multiset.quot_mk_to_coe'', Multiset.coe_eq_coe] at hl
+  exact hl.symm.pairwise hd fun h => _root_.Disjoint.symm h
 
 中文:
 定理 Multiset.support_sum_eq
@@ -272,7 +285,8 @@ theorem Multiset.support_sum_eq
     convert! List.support_sum_eq a this
     simp only [quot_mk_to_coe'', map_coe, sup_coe,
       Finset.sup_eq_union, Finset.bot_eq_empty, List.foldr_map]
-  sim
+  simp only [Multiset.quot_mk_to_coe'', Multiset.coe_eq_coe] at hl
+  exact hl.symm.pairwise hd fun h => _root_.Disjoint.symm h
 
 Depends on / 依赖: Disjoint, Finset, Finset.bot_eq_empty, Finset.sup_eq_union, Finsupp, Finsupp.support, List.foldr_map, List.support_sum_eq, Multiset, Multiset.coe_eq_coe, Multiset.quot_mk_to_coe, Pairwise, Quot.inductionOn, _root_, _root_.Disjoint, _root_.Disjoint.symm, a.Pairwise, bot_eq_empty, coe_eq_coe, convert
 -/
@@ -302,7 +316,9 @@ theorem Finset.support_sum_eq
   obtain ⟨l, hl, hn⟩ : exists l : List (ι ->₀ M), l.toFinset = s ∧ l.Nodup := by
     refine ⟨s.toList, ?_, Finset.nodup_toList _⟩
     simp
-  
+  subst hl
+  rwa [List.toFinset_val, List.dedup_eq_self.mpr hn, Multiset.pairwise_coe_iff_pairwise,
+    ← List.pairwiseDisjoint_iff_coe_toFinset_pairwise_disjoint hn]
 
 中文:
 定理 有限集.support_sum_eq
@@ -315,7 +331,9 @@ theorem Finset.support_sum_eq
   obtain ⟨l, hl, hn⟩ : exists l : List (ι ->₀ M), l.toFinset = s ∧ l.Nodup := by
     refine ⟨s.toList, ?_, Finset.nodup_toList _⟩
     simp
-  
+  subst hl
+  rwa [List.toFinset_val, List.dedup_eq_self.mpr hn, Multiset.pairwise_coe_iff_pairwise,
+    ← List.pairwiseDisjoint_iff_coe_toFinset_pairwise_disjoint hn]
 
 Depends on / 依赖: Disjoint, Finset, Finset.nodup_toList, Finset.sum_val, Finsupp, Finsupp.support, List.dedup_eq_self.mpr, List.pairwiseDisjoint_iff_coe_toFinset_pairwise_disjoint, List.toFinset_val, Multiset, Multiset.pairwise_coe_iff_pairwise, Multiset.support_sum_eq, Pairwise, _root_, _root_.Disjoint, classical, convert, dedup_eq_self, l.Nodup, l.toFinset
 -/

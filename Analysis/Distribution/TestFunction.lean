@@ -960,7 +960,9 @@ theorem continuous_iff_continuous_comp
   have : @IsTopologicalAddGroup _ (induced (f.restrictScalars Real) t) _ :=
     topologicalAddGroup_induced _
   have : @ContinuousSMul Real _ _ _ (induced (f.restrictScalars Real) t) := continuousSMul_induced _
-  have : @Lo
+  have : @LocallyConvexSpace Real _ _ _ _ _ (induced (f.restrictScalars Real) t) := .induced _
+  simp_rw [topologicalSpace_le_iff, originalTop, iSup₂_le_iff, ← continuous_iff_le_induced,
+    continuous_coinduced_dom]
 
 中文:
 定理 continuous_iff_continuous_comp
@@ -971,7 +973,9 @@ theorem continuous_iff_continuous_comp
   have : @IsTopologicalAddGroup _ (induced (f.restrictScalars Real) t) _ :=
     topologicalAddGroup_induced _
   have : @ContinuousSMul Real _ _ _ (induced (f.restrictScalars Real) t) := continuousSMul_induced _
-  have : @Lo
+  have : @LocallyConvexSpace Real _ _ _ _ _ (induced (f.restrictScalars Real) t) := .induced _
+  simp_rw [topologicalSpace_le_iff, originalTop, iSup₂_le_iff, ← continuous_iff_le_induced,
+    continuous_coinduced_dom]
 
 Depends on / 依赖: f.hom
 -/
@@ -1036,7 +1040,21 @@ definition noncomputable
   body: haveI toFun_add (f g : 𝓓^{n}(Ω, F)) : toFun (f + g) = toFun f + toFun g := by
     set K : Compacts E := ⟨tsupport f union tsupport g, .union f.hasCompactSupport g.hasCompactSupport⟩
     have K_sub_Ω : (K : Set E) subseteq Ω := union_subset f.tsupport_subset g.tsupport_subset
-    let f_K : 𝓓^{n}_{K}(
+    let f_K : 𝓓^{n}_{K}(E, F) :=
+      .of_support_subset f.contDiff (subset_closure.trans subset_union_left)
+    let g_K : 𝓓^{n}_{K}(E, F) :=
+      .of_support_subset g.contDiff (subset_closure.trans subset_union_right)
+    change toFun (ofSupportedIn K_sub_Ω (f_K + g_K)) =
+      toFun (ofSupportedIn K_sub_Ω f_K) + toFun (ofSupportedIn K_sub_Ω g_K)
+    simp [toFun_eq_T]
+  haveI toFun_smul (c : 𝕜) (f : 𝓓^{n}(Ω, F)) : toFun (c • f) = c • toFun f := by
+    set K : Compacts E := ⟨tsupport f, f.hasCompactSupport⟩
+    have K_sub_Ω : (K : Set E) subseteq Ω := f.tsupport_subset
+    let f_K : 𝓓^{n}_{K}(E, F) := .of_support_subset f.contDiff subset_closure
+    change toFun (ofSupportedIn K_sub_Ω (c • f_K)) = c • toFun (ofSupportedIn K_sub_Ω f_K)
+    simp [toFun_eq_T]
+  TestFunction.mkCLM 𝕜 toFun toFun_add toFun_smul
+    (fun K K_sub_Ω => .congr (T K K_sub_Ω).continuous (fun f => (toFun_eq_T K K_sub_Ω f).symm))
 
 中文:
 定义 noncomputable
@@ -1044,7 +1062,21 @@ definition noncomputable
   定义体: haveI toFun_add (f g : 𝓓^{n}(Ω, F)) : toFun (f + g) = toFun f + toFun g := by
     set K : Compacts E := ⟨tsupport f union tsupport g, .union f.hasCompactSupport g.hasCompactSupport⟩
     have K_sub_Ω : (K : Set E) subseteq Ω := union_subset f.tsupport_subset g.tsupport_subset
-    let f_K : 𝓓^{n}_{K}(
+    let f_K : 𝓓^{n}_{K}(E, F) :=
+      .of_support_subset f.contDiff (subset_closure.trans subset_union_left)
+    let g_K : 𝓓^{n}_{K}(E, F) :=
+      .of_support_subset g.contDiff (subset_closure.trans subset_union_right)
+    change toFun (ofSupportedIn K_sub_Ω (f_K + g_K)) =
+      toFun (ofSupportedIn K_sub_Ω f_K) + toFun (ofSupportedIn K_sub_Ω g_K)
+    simp [toFun_eq_T]
+  haveI toFun_smul (c : 𝕜) (f : 𝓓^{n}(Ω, F)) : toFun (c • f) = c • toFun f := by
+    set K : Compacts E := ⟨tsupport f, f.hasCompactSupport⟩
+    have K_sub_Ω : (K : Set E) subseteq Ω := f.tsupport_subset
+    let f_K : 𝓓^{n}_{K}(E, F) := .of_support_subset f.contDiff subset_closure
+    change toFun (ofSupportedIn K_sub_Ω (c • f_K)) = c • toFun (ofSupportedIn K_sub_Ω f_K)
+    simp [toFun_eq_T]
+  TestFunction.mkCLM 𝕜 toFun toFun_add toFun_smul
+    (fun K K_sub_Ω => .congr (T K K_sub_Ω).continuous (fun f => (toFun_eq_T K K_sub_Ω f).symm))
 -/
 protected noncomputable def limitCLM [Algebra Real 𝕜] [IsScalarTower Real 𝕜 F] [Module 𝕜 V]
     [IsScalarTower Real 𝕜 V]
@@ -1204,7 +1236,10 @@ definition postcompCLM
       f.hasCompactSupport.comp_left (map_zero _),
       (tsupport_comp_subset (map_zero _) f).trans f.tsupport_subset⟩
   TestFunction.limitCLM 𝕜 Φ
-    (fun K K_sub_Ω => ofSupportedInCLM 𝕜 K_sub_Ω ∘L 
+    (fun K K_sub_Ω => ofSupportedInCLM 𝕜 K_sub_Ω ∘L ContDiffMapSupportedIn.postcompCLM T)
+    (fun _ _ _ => by ext; simp [Φ])
+
+@[simp]
 
 中文:
 定义 postcompCLM
@@ -1214,7 +1249,10 @@ definition postcompCLM
       f.hasCompactSupport.comp_left (map_zero _),
       (tsupport_comp_subset (map_zero _) f).trans f.tsupport_subset⟩
   TestFunction.limitCLM 𝕜 Φ
-    (fun K K_sub_Ω => ofSupportedInCLM 𝕜 K_sub_Ω ∘L 
+    (fun K K_sub_Ω => ofSupportedInCLM 𝕜 K_sub_Ω ∘L ContDiffMapSupportedIn.postcompCLM T)
+    (fun _ _ _ => by ext; simp [Φ])
+
+@[simp]
 
 Depends on / 依赖: ContDiffMapSupportedIn, ContDiffMapSupportedIn.postcompCLM, T.restrictScalars, TestFunction, TestFunction.limitCLM, comp_left, contDiff, contDiff.comp, f.contDiff, f.hasCompactSupport.comp_left, f.tsupport_subset, hasCompactSupport, limitCLM, map_zero, ofSupportedInCLM, postcompCLM, restrictScalars, tsupport_comp_subset, tsupport_subset
 -/
@@ -1268,7 +1306,9 @@ definition monoCLM
     else 0
   TestFunction.limitCLM 𝕜 Φ
     (fun K K_sub_Ω₁ => if h : n₂ <= n₁ ∧ Ω₁ <= Ω₂
-      the
+      then ofSupportedInCLM 𝕜 (K_sub_Ω₁.trans h.2) ∘L ContDiffMapSupportedIn.monoCLM 𝕜
+      else 0)
+    (fun _ _ _ => by ext; dsimp [Φ]; split_ifs with h <;> simp [h])
 
 中文:
 定义 monoCLM
@@ -1280,7 +1320,9 @@ definition monoCLM
     else 0
   TestFunction.limitCLM 𝕜 Φ
     (fun K K_sub_Ω₁ => if h : n₂ <= n₁ ∧ Ω₁ <= Ω₂
-      the
+      then ofSupportedInCLM 𝕜 (K_sub_Ω₁.trans h.2) ∘L ContDiffMapSupportedIn.monoCLM 𝕜
+      else 0)
+    (fun _ _ _ => by ext; dsimp [Φ]; split_ifs with h <;> simp [h])
 
 Depends on / 依赖: Classical, ContDiffMapSupportedIn, ContDiffMapSupportedIn.monoCLM, TestFunction, TestFunction.limitCLM, contDiff, f.contDiff.of_le, f.hasCompactSupport, f.tsupport_subset.trans, hasCompactSupport, limitCLM, mod_cast, monoCLM, ofSupportedInCLM, of_le, scoped, split_ifs, tsupport_subset
 -/
@@ -1380,7 +1422,10 @@ definition fderivCLM
 .trans f.tsupport_subset⟩ f.hasCompactSupport.fderiv Real, tsupport_fderiv_subset Real
     else 0
   TestFunction.limitCLM 𝕜 Φ
-    (fun K K_sub_Ω => ofSupport
+    (fun K K_sub_Ω => ofSupportedInCLM 𝕜 K_sub_Ω ∘L ContDiffMapSupportedIn.fderivCLM 𝕜 n k)
+    (fun _ _ _ => by ext; dsimp [Φ]; split_ifs with h <;> simp [h])
+
+@[simp]
 
 中文:
 定义 fderivCLM
@@ -1391,7 +1436,10 @@ definition fderivCLM
 .trans f.tsupport_subset⟩ f.hasCompactSupport.fderiv Real, tsupport_fderiv_subset Real
     else 0
   TestFunction.limitCLM 𝕜 Φ
-    (fun K K_sub_Ω => ofSupport
+    (fun K K_sub_Ω => ofSupportedInCLM 𝕜 K_sub_Ω ∘L ContDiffMapSupportedIn.fderivCLM 𝕜 n k)
+    (fun _ _ _ => by ext; dsimp [Φ]; split_ifs with h <;> simp [h])
+
+@[simp]
 
 Depends on / 依赖: ContDiffMapSupportedIn, ContDiffMapSupportedIn.fderivCLM, M.str, TestFunction, TestFunction.limitCLM, contDiff, f.contDiff.fderiv_right, f.hasCompactSupport.fderiv, f.tsupport_subset, fderiv, fderivCLM, fderiv_right, hasCompactSupport, limitCLM, mod_cast, ofSupportedInCLM, split_ifs, tsupport_fderiv_subset, tsupport_subset
 -/
@@ -1937,7 +1985,9 @@ theorem integrable_bilin
     rwa [integrableOn_iff_integrable_of_support_subset] at this
     refine subset_trans ?_ (subset_tsupport f)
     exact fun x hx hfx => hx (by simp [hfx])
-  replace hφ := hφ.integrableOn_compact_subset f.tsupport_subset f.hasComp
+  replace hφ := hφ.integrableOn_compact_subset f.tsupport_subset f.hasCompactSupport
+  rw [IntegrableOn]; rw [← memLp_one_iff_integrable] at hφ ⊢
+  exact B.memLp_of_bilin 1 f.memLp_top hφ
 
 中文:
 定理 integrable_bilin
@@ -1947,7 +1997,9 @@ theorem integrable_bilin
     rwa [integrableOn_iff_integrable_of_support_subset] at this
     refine subset_trans ?_ (subset_tsupport f)
     exact fun x hx hfx => hx (by simp [hfx])
-  replace hφ := hφ.integrableOn_compact_subset f.tsupport_subset f.hasComp
+  replace hφ := hφ.integrableOn_compact_subset f.tsupport_subset f.hasCompactSupport
+  rw [IntegrableOn]; rw [← memLp_one_iff_integrable] at hφ ⊢
+  exact B.memLp_of_bilin 1 f.memLp_top hφ
 -/
 protected theorem integrable_bilin (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {μ : Measure E} {φ : E -> F₂}
     (hφ : LocallyIntegrableOn φ Ω μ) (f : 𝓓^{n}(Ω, F₁)) :
@@ -1971,7 +2023,7 @@ theorem integrable
   replace H := H.integrableOn_compact_subset f.tsupport_subset f.hasCompactSupport
   suffices IntegrableOn ((1 : Real) • f) (tsupport f) μ by simpa
   rw [IntegrableOn]; rw [← memLp_one_iff_integrable] at H ⊢
-  exact f.memL
+  exact f.memLp_top.smul H
 
 中文:
 定理 integrable
@@ -1981,7 +2033,7 @@ theorem integrable
   replace H := H.integrableOn_compact_subset f.tsupport_subset f.hasCompactSupport
   suffices IntegrableOn ((1 : Real) • f) (tsupport f) μ by simpa
   rw [IntegrableOn]; rw [← memLp_one_iff_integrable] at H ⊢
-  exact f.memL
+  exact f.memLp_top.smul H
 -/
 protected theorem integrable {μ : Measure E}
     (H : LocallyIntegrableOn (fun (_ : E) => (1 : Real)) Ω μ)
@@ -2009,7 +2061,9 @@ definition integralAgainstBilinCLM
       then ContDiffMapSupportedIn.integralAgainstBilinCLM B μ φ
       else 0)
     (fun K K_sub_Ω f => by
-      spl
+      split_ifs with h
+      · simp [h.integrableOn_compact_subset K_sub_Ω K.2]
+      · simp)
 
 中文:
 定义 integralAgainstBilinCLM
@@ -2022,7 +2076,9 @@ definition integralAgainstBilinCLM
       then ContDiffMapSupportedIn.integralAgainstBilinCLM B μ φ
       else 0)
     (fun K K_sub_Ω f => by
-      spl
+      split_ifs with h
+      · simp [h.integrableOn_compact_subset K_sub_Ω K.2]
+      · simp)
 
 Depends on / 依赖: Classical, scoped
 -/

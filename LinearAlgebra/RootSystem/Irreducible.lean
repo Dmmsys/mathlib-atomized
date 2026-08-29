@@ -306,7 +306,24 @@ lemma invtRootSubmodule.eq_span_root
   refine le_antisymm ?_ hSQ
   set S := span K (P.root '' {i | P.root i in Q})
   set T := span K (P.root '' {i | P.root i ∉ Q})
-  have h_sup : S ⊔ T = 
+  have h_sup : S ⊔ T = ⊤ := by
+    rw [← Submodule.span_union]; rw [← Set.image_union]
+    have : {i | P.root i in Q} union {i | P.root i ∉ Q} = Set.univ := by ext; simp [em]
+    rw [this]; rw [Set.image_univ]
+    simp
+  intro v hv
+  obtain ⟨s, hs, t, ht, rfl⟩ := Submodule.mem_sup.mp (h_sup ▸ Submodule.mem_top (x := v))
+  suffices t = 0 by rw [this, add_zero]; exact hs
+  have htQ : t in Q := by simpa using Q.sub_mem hv (hSQ hs)
+  have h_ker : forall k, P.coroot' k t = 0 := by
+    intro k
+    by_cases hk : P.root k in Q
+    · refine LinearMap.mem_ker.mp (span_le.mpr ?_ ht)
+      rintro _ ⟨j, hj, rfl⟩
+      rw [SetLike.mem_coe]; rw [LinearMap.mem_ker]; rw [P.root_coroot'_eq_pairing]; rw [P.pairing_eq_zero_iff']; rw [← P.root_coroot'_eq_pairing]
+      exact LinearMap.mem_ker.mp (invtRootSubmodule.le_ker_coroot' q hj hk)
+    · exact LinearMap.mem_ker.mp (invtRootSubmodule.le_ker_coroot' q hk htQ)
+  exact P.eq_zero_iff_forall_coroot'_eq_zero.mpr h_ker
 
 中文:
 引理 invtRootSubmodule.eq_span_root
@@ -318,7 +335,24 @@ lemma invtRootSubmodule.eq_span_root
   refine le_antisymm ?_ hSQ
   set S := span K (P.root '' {i | P.root i in Q})
   set T := span K (P.root '' {i | P.root i ∉ Q})
-  have h_sup : S ⊔ T = 
+  have h_sup : S ⊔ T = ⊤ := by
+    rw [← Submodule.span_union]; rw [← Set.image_union]
+    have : {i | P.root i in Q} union {i | P.root i ∉ Q} = Set.univ := by ext; simp [em]
+    rw [this]; rw [Set.image_univ]
+    simp
+  intro v hv
+  obtain ⟨s, hs, t, ht, rfl⟩ := Submodule.mem_sup.mp (h_sup ▸ Submodule.mem_top (x := v))
+  suffices t = 0 by rw [this, add_zero]; exact hs
+  have htQ : t in Q := by simpa using Q.sub_mem hv (hSQ hs)
+  have h_ker : forall k, P.coroot' k t = 0 := by
+    intro k
+    by_cases hk : P.root k in Q
+    · refine LinearMap.mem_ker.mp (span_le.mpr ?_ ht)
+      rintro _ ⟨j, hj, rfl⟩
+      rw [SetLike.mem_coe]; rw [LinearMap.mem_ker]; rw [P.root_coroot'_eq_pairing]; rw [P.pairing_eq_zero_iff']; rw [← P.root_coroot'_eq_pairing]
+      exact LinearMap.mem_ker.mp (invtRootSubmodule.le_ker_coroot' q hj hk)
+    · exact LinearMap.mem_ker.mp (invtRootSubmodule.le_ker_coroot' q hk htQ)
+  exact P.eq_zero_iff_forall_coroot'_eq_zero.mpr h_ker
 
 Depends on / 依赖: P.root, Set.image_subset_iff.mpr, Set.image_union, Set.image_univ, Set.univ, Submodule, Submodule.span_union, TopologicalSpace, h_sup, image_subset_iff, image_union, image_univ, le_antisymm, sigmaFinite_of_locallyFinite, span_le, span_le.mpr, span_union
 -/
@@ -362,7 +396,19 @@ lemma isSimpleModule_weylGroupRootRep_iff
   refine ⟨fun h q hq₁ hq₂ => ?_, fun h => ⟨fun q => ?_⟩⟩
   · suffices forall g : P.weylGroup, q in invtSubmodule (P.weylGroupRootRep g) by
       let q' : P.weylGroupRootRep.invtSubmodule :=
-        ⟨q, (Representa
+        ⟨q, (Representation.mem_invtSubmodule P.weylGroupRootRep).mpr this⟩
+      suffices q' = ⊤ by simpa [q']
+      apply (IsSimpleOrder.eq_bot_or_eq_top _).resolve_left
+      simpa [q']
+    rintro ⟨g, hg⟩
+    induction hg using weylGroup.induction with
+    | mem i => exact hq₁ i
+    | one => simp [← Submonoid.one_def]
+    | mul x y hx hy hx' hy' => apply invtSubmodule.comp <;> assumption
+  · rcases eq_or_ne q ⊥ with rfl | hq; · tauto
+    suffices (q : Submodule R M) = ⊤ by right; simpa using this
+    refine h q (fun i => ?_) (by simpa using hq)
+    exact P.weylGroupRootRep.mem_invtSubmodule.mp q.property ⟨_, P.reflection_mem_weylGroup i⟩
 
 中文:
 引理 isSimpleModule_weylGroupRootRep_iff
@@ -372,7 +418,19 @@ lemma isSimpleModule_weylGroupRootRep_iff
   refine ⟨fun h q hq₁ hq₂ => ?_, fun h => ⟨fun q => ?_⟩⟩
   · suffices forall g : P.weylGroup, q in invtSubmodule (P.weylGroupRootRep g) by
       let q' : P.weylGroupRootRep.invtSubmodule :=
-        ⟨q, (Representa
+        ⟨q, (Representation.mem_invtSubmodule P.weylGroupRootRep).mpr this⟩
+      suffices q' = ⊤ by simpa [q']
+      apply (IsSimpleOrder.eq_bot_or_eq_top _).resolve_left
+      simpa [q']
+    rintro ⟨g, hg⟩
+    induction hg using weylGroup.induction with
+    | mem i => exact hq₁ i
+    | one => simp [← Submonoid.one_def]
+    | mul x y hx hy hx' hy' => apply invtSubmodule.comp <;> assumption
+  · rcases eq_or_ne q ⊥ with rfl | hq; · tauto
+    suffices (q : Submodule R M) = ⊤ by right; simpa using this
+    refine h q (fun i => ?_) (by simpa using hq)
+    exact P.weylGroupRootRep.mem_invtSubmodule.mp q.property ⟨_, P.reflection_mem_weylGroup i⟩
 
 Depends on / 依赖: IsSimpleOrder, IsSimpleOrder.eq_bot_or_eq_top, P.weylGroup, P.weylGroupRootRep, P.weylGroupRootRep.invtSubmodule, P.weylGroupRootRep.mapSubmodule.isSimpleOrder_iff, Representation, Representation.mem_invtSubmodule, eq_bot_or_eq_top, invtSubmodule, isSimpleModule_iff, isSimpleOrder_iff, mapSubmodule, mem_invtSubmodule, resolve_left, weylGroup, weylGroup.induction, weylGroupRootRep
 -/
@@ -563,7 +621,10 @@ lemma IsIrreducible.mk'
   eq_top_of_invtSubmodule_reflection := h
   eq_top_of_invtSubmodule_coreflection q stab ne_bot := by
     specialize h (q.dualAnnihilator.map P.toPerfPair.symm)
-      fun i => invtSubmodule_reflection_of_inv
+      fun i => invtSubmodule_reflection_of_invtSubmodule_coreflection P i q (stab i)
+    rw [Submodule.map_eq_top_iff]; rw [not_imp_comm] at h
+    replace ne_bot : q.dualAnnihilator != ⊤ := by simpa
+    simpa using h ne_bot
 
 中文:
 引理 是不可约.mk'
@@ -573,7 +634,10 @@ lemma IsIrreducible.mk'
   eq_top_of_invtSubmodule_reflection := h
   eq_top_of_invtSubmodule_coreflection q stab ne_bot := by
     specialize h (q.dualAnnihilator.map P.toPerfPair.symm)
-      fun i => invtSubmodule_reflection_of_inv
+      fun i => invtSubmodule_reflection_of_invtSubmodule_coreflection P i q (stab i)
+    rw [Submodule.map_eq_top_iff]; rw [not_imp_comm] at h
+    replace ne_bot : q.dualAnnihilator != ⊤ := by simpa
+    simpa using h ne_bot
 -/
 lemma IsIrreducible.mk' {K : Type*} [Field K] [Module K M] [Module K N] [Nontrivial M]
     (P : RootPairing ι K M N)
@@ -599,7 +663,12 @@ lemma isIrreducible_iff_invtRootSubmodule
   · simp only [invtRootSubmodule.bot_mem, invtRootSubmodule.top_mem, Subtype.mk_eq_bot_iff,
       Subtype.mk_eq_top_iff]
     rw [mem_invtRootSubmodule_iff] at hq
-    have := IsIrreducible.eq_top_of_invtSubmod
+    have := IsIrreducible.eq_top_of_invtSubmodule_reflection q hq
+    tauto
+  · let q' : P.invtRootSubmodule := ⟨q, P.mem_invtRootSubmodule_iff.mpr hq⟩
+    replace hq' : ⊥ < q' := by simpa [q', bot_lt_iff_ne_bot, -IsSimpleOrder.bot_lt_iff_eq_top]
+    suffices q' = ⊤ by simpa [q'] using this
+    exact IsSimpleOrder.eq_top_of_lt hq'
 
 中文:
 引理 isIrreducible_iff_invtRootSubmodule
@@ -608,7 +677,12 @@ lemma isIrreducible_iff_invtRootSubmodule
   · simp only [invtRootSubmodule.bot_mem, invtRootSubmodule.top_mem, Subtype.mk_eq_bot_iff,
       Subtype.mk_eq_top_iff]
     rw [mem_invtRootSubmodule_iff] at hq
-    have := IsIrreducible.eq_top_of_invtSubmod
+    have := IsIrreducible.eq_top_of_invtSubmodule_reflection q hq
+    tauto
+  · let q' : P.invtRootSubmodule := ⟨q, P.mem_invtRootSubmodule_iff.mpr hq⟩
+    replace hq' : ⊥ < q' := by simpa [q', bot_lt_iff_ne_bot, -IsSimpleOrder.bot_lt_iff_eq_top]
+    suffices q' = ⊤ by simpa [q'] using this
+    exact IsSimpleOrder.eq_top_of_lt hq'
 
 Depends on / 依赖: IsIrreducible, IsIrreducible.eq_top_of_invtSubmodule_reflection, IsIrreducible.mk, IsSimpleOrder, IsSimpleOrder.bot_lt_iff_eq_top, P.invtRootSubmodule, P.mem_invtRootSubmodule_iff.mpr, Subtype, Subtype.mk_eq_bot_iff, Subtype.mk_eq_top_iff, bot_lt_iff_eq_top, bot_lt_iff_ne_bot, bot_mem, eq_top_of_invtSubmodule_reflection, invtRootSubmodule, invtRootSubmodule.bot_mem, invtRootSubmodule.top_mem, mem_invtRootSubmodule_iff, mk_eq_bot_iff, mk_eq_top_iff
 -/
@@ -700,7 +774,9 @@ lemma exists_form_eq_form_and_form_ne_zero
 B.apply_root_ne_zero i by simpa [span_orbit_eq_top] using this
   refine span_le.mpr fun v hv => ?_
   obtain ⟨g, rfl⟩ := mem_orbit_iff.mp hv
-  simp only [P.weylGroup_apply_root, SetLike.mem_coe, Li
+  simp only [P.weylGroup_apply_root, SetLike.mem_coe, LinearMap.mem_ker]
+  apply contra
+  simp [← Subgroup.smul_def g]
 
 中文:
 引理 存在_form_eq_form_and_form_ne_zero
@@ -711,7 +787,9 @@ B.apply_root_ne_zero i by simpa [span_orbit_eq_top] using this
 B.apply_root_ne_zero i by simpa [span_orbit_eq_top] using this
   refine span_le.mpr fun v hv => ?_
   obtain ⟨g, rfl⟩ := mem_orbit_iff.mp hv
-  simp only [P.weylGroup_apply_root, SetLike.mem_coe, Li
+  simp only [P.weylGroup_apply_root, SetLike.mem_coe, LinearMap.mem_ker]
+  apply contra
+  simp [← Subgroup.smul_def g]
 
 Depends on / 依赖: B.apply_root_ne_zero, B.form, LinearMap, LinearMap.mem_ker, P.root, P.weylGroup, P.weylGroup_apply_root, SetLike, SetLike.mem_coe, Subgroup, Subgroup.smul_def, apply_root_ne_zero, contra, mem_coe, mem_ker, mem_orbit_iff, mem_orbit_iff.mp, smul_def, span_le, span_le.mpr
 -/
@@ -738,7 +816,10 @@ lemma span_root_image_eq_top_of_forall_orthogonal
     by_cases hj : P.root j in span R (P.root '' s)
     · exact Submodule.mem_invtSubmodule_reflection_of_mem _ _ hj
     · refine (Module.End.mem_invtSubmodule _).mpr fun x hx => ?_
-      rwa [Submodule.mem
+      rwa [Submodule.mem_comap, LinearEquiv.coe_coe,
+        (isFixedPt_reflection_of_isOrthogonal (h _ hj) hx).eq]
+  apply IsIrreducible.eq_top_of_invtSubmodule_reflection _ hq
+  simpa using ⟨hne.choose, hne.choose_spec, P.ne_zero _⟩
 
 中文:
 引理 span_root_image_eq_top_of_对任意_orthogonal
@@ -748,7 +829,10 @@ lemma span_root_image_eq_top_of_forall_orthogonal
     by_cases hj : P.root j in span R (P.root '' s)
     · exact Submodule.mem_invtSubmodule_reflection_of_mem _ _ hj
     · refine (Module.End.mem_invtSubmodule _).mpr fun x hx => ?_
-      rwa [Submodule.mem
+      rwa [Submodule.mem_comap, LinearEquiv.coe_coe,
+        (isFixedPt_reflection_of_isOrthogonal (h _ hj) hx).eq]
+  apply IsIrreducible.eq_top_of_invtSubmodule_reflection _ hq
+  simpa using ⟨hne.choose, hne.choose_spec, P.ne_zero _⟩
 
 Depends on / 依赖: IsIrreducible, IsIrreducible.eq_top_of_invtSubmodule_reflection, LinearEquiv, LinearEquiv.coe_coe, Module, Module.End.invtSubmodule, Module.End.mem_invtSubmodule, P.ne_zero, P.reflection, P.root, Submodule, Submodule.mem_comap, Submodule.mem_invtSubmodule_reflection_of_mem, choose_spec, coe_coe, eq_top_of_invtSubmodule_reflection, hne.choose, hne.choose_spec, invtSubmodule, isFixedPt_reflection_of_isOrthogonal
 -/
@@ -774,7 +858,9 @@ lemma eq_top_of_mem_invtSubmodule_of_forall_eq_univ
   rcases Φ.eq_empty_or_nonempty with rfl | hΦ
   · replace c : q <= ⨅ i, LinearMap.ker (P.coroot' i) := by simpa using! c
     simp [h₀, ← P.corootSpan_dualAnnihilator_map_eq_iInf_ker_coroot'] at c
-  · repl
+  · replace b : P.root '' Φ subseteq q := by
+      simpa [Submodule.disjoint_span_singleton' (P.ne_zero _)] using! b
+    simpa [h₂ Φ hΦ b c, ← span_le] using! b
 
 中文:
 引理 eq_top_of_mem_invtSubmodule_of_对任意_eq_univ
@@ -783,7 +869,9 @@ lemma eq_top_of_mem_invtSubmodule_of_forall_eq_univ
   rcases Φ.eq_empty_or_nonempty with rfl | hΦ
   · replace c : q <= ⨅ i, LinearMap.ker (P.coroot' i) := by simpa using! c
     simp [h₀, ← P.corootSpan_dualAnnihilator_map_eq_iInf_ker_coroot'] at c
-  · repl
+  · replace b : P.root '' Φ subseteq q := by
+      simpa [Submodule.disjoint_span_singleton' (P.ne_zero _)] using! b
+    simpa [h₂ Φ hΦ b c, ← span_le] using! b
 
 Depends on / 依赖: LinearMap, LinearMap.ker, MeasurableInf, OrderDual, OrderDual.instMeasurableSup, P.coroot, P.corootSpan_dualAnnihilator_map_eq_iInf_ker_coroot, P.exist_set_root_not_disjoint_and_le_ker_coroot, P.ne_zero, P.root, Submodule, Submodule.disjoint_span_singleton, _of_invtSubmodule, coroot, corootSpan_dualAnnihilator_map_eq_iInf_ker_coroot, disjoint_span_singleton, eq_empty_or_nonempty, exist_set_root_not_disjoint_and_le_ker_coroot, instMeasurableSup, ne_zero
 -/

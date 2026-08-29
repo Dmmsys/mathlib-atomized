@@ -350,7 +350,8 @@ definition piScalarRightHomBil
     ext i j
     dsimp only [coe_comp, coe_single, Function.comp_apply, compLeft_apply, toSpanSingleton_apply,
       RingHom.id_apply, smul_apply, Pi.smul_apply]
-    rw [← IsScalarTower.smul_a
+    rw [← IsScalarTower.smul_assoc]; rw [_root_.Algebra.smul_def]; rw [mul_comm]; rw [mul_smul]
+    simp
 
 中文:
 定义 piScalarRightHomBil
@@ -363,7 +364,8 @@ definition piScalarRightHomBil
     ext i j
     dsimp only [coe_comp, coe_single, Function.comp_apply, compLeft_apply, toSpanSingleton_apply,
       RingHom.id_apply, smul_apply, Pi.smul_apply]
-    rw [← IsScalarTower.smul_a
+    rw [← IsScalarTower.smul_assoc]; rw [_root_.Algebra.smul_def]; rw [mul_comm]; rw [mul_smul]
+    simp
 
 Depends on / 依赖: LinearMap, LinearMap.compLeft, compLeft, toSpanSingleton
 -/

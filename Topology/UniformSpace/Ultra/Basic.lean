@@ -214,7 +214,8 @@ lemma IsUltraUniformity.mem_nhds_iff_symm_trans
     rw [IsUltraUniformity.hasBasis.mem_iff'] at V_in
     obtain ⟨U, ⟨U_in, U_sym, U_trans⟩, U_sub⟩ := V_in
     refine ⟨U, U_in, U_sym, U_trans, (UniformSpace.ball_mono U_sub _).trans V_sub⟩
-  · rintro ⟨V, V_in, _, _, V_sub
+  · rintro ⟨V, V_in, _, _, V_sub⟩
+    exact ⟨V, V_in, V_sub⟩
 
 中文:
 引理 是UltraUniformity.mem_nhds_iff_symm_trans
@@ -226,7 +227,8 @@ lemma IsUltraUniformity.mem_nhds_iff_symm_trans
     rw [IsUltraUniformity.hasBasis.mem_iff'] at V_in
     obtain ⟨U, ⟨U_in, U_sym, U_trans⟩, U_sub⟩ := V_in
     refine ⟨U, U_in, U_sym, U_trans, (UniformSpace.ball_mono U_sub _).trans V_sub⟩
-  · rintro ⟨V, V_in, _, _, V_sub
+  · rintro ⟨V, V_in, _, _, V_sub⟩
+    exact ⟨V, V_in, V_sub⟩
 
 Depends on / 依赖: IsUltraUniformity, IsUltraUniformity.hasBasis.mem_iff, U_in, U_sub, U_sym, U_trans, UniformSpace, UniformSpace.ball_mono, UniformSpace.mem_nhds_iff, V_in, V_sub, ball_mono, hasBasis, mem_iff, mem_nhds_iff
 -/

@@ -59,7 +59,13 @@ theorem Commute.cfcHom
     rw [AlgHomClass.commutes]
     exact Algebra.commute_algebraMap_left r b
   | id => rwa [cfcHom_id ha]
-
+  | star_id => rwa [map_star, cfcHom_id]
+  | add f g hf hg => rw [map_add]; exact hf.add_left hg
+  | mul f g hf hg => rw [map_mul]; exact mul_left hf hg
+  | frequently f hf =>
+    rw [commute_iff_eq]; rw [← Set.mem_ofPred (p := fun x => x * b = b * x)]; rw [← (isClosed_eq (by fun_prop) (by fun_prop)).closure_eq]
+    apply mem_closure_of_frequently_of_tendsto hf
+.tendsto _ exact cfcHom_continuous ha
 
 中文:
 定理 Commute.cfcHom
@@ -74,7 +80,13 @@ theorem Commute.cfcHom
     rw [AlgHomClass.commutes]
     exact Algebra.commute_algebraMap_left r b
   | id => rwa [cfcHom_id ha]
-
+  | star_id => rwa [map_star, cfcHom_id]
+  | add f g hf hg => rw [map_add]; exact hf.add_left hg
+  | mul f g hf hg => rw [map_mul]; exact mul_left hf hg
+  | frequently f hf =>
+    rw [commute_iff_eq]; rw [← Set.mem_ofPred (p := fun x => x * b = b * x)]; rw [← (isClosed_eq (by fun_prop) (by fun_prop)).closure_eq]
+    apply mem_closure_of_frequently_of_tendsto hf
+.tendsto _ exact cfcHom_continuous ha
 -/
 protected theorem Commute.cfcHom {a b : A} (ha : p a) (hb₁ : Commute a b)
     (hb₂ : Commute (star a) b) (f : C(spectrum 𝕜 a, 𝕜)) :
@@ -252,7 +264,12 @@ theorem Commute.cfcₙHom
   | smul r f hf => rw [map_smul]; exact hf.smul_left r
   | id => rwa [cfcₙHom_id ha]
   | star_id => rwa [map_star, cfcₙHom_id]
-  | add f g hf hg => rw [map_ad
+  | add f g hf hg => rw [map_add]; exact hf.add_left hg
+  | mul f g hf hg => rw [map_mul]; exact mul_left hf hg
+  | frequently f hf =>
+    rw [commute_iff_eq]; rw [← Set.mem_ofPred (p := fun x => x * b = b * x)]; rw [← (isClosed_eq (by fun_prop) (by fun_prop)).closure_eq]
+    apply mem_closure_of_frequently_of_tendsto hf
+.tendsto _ exact cfcₙHom_continuous ha
 
 中文:
 定理 Commute.cfcₙHom
@@ -264,7 +281,12 @@ theorem Commute.cfcₙHom
   | smul r f hf => rw [map_smul]; exact hf.smul_left r
   | id => rwa [cfcₙHom_id ha]
   | star_id => rwa [map_star, cfcₙHom_id]
-  | add f g hf hg => rw [map_ad
+  | add f g hf hg => rw [map_add]; exact hf.add_left hg
+  | mul f g hf hg => rw [map_mul]; exact mul_left hf hg
+  | frequently f hf =>
+    rw [commute_iff_eq]; rw [← Set.mem_ofPred (p := fun x => x * b = b * x)]; rw [← (isClosed_eq (by fun_prop) (by fun_prop)).closure_eq]
+    apply mem_closure_of_frequently_of_tendsto hf
+.tendsto _ exact cfcₙHom_continuous ha
 -/
 protected theorem Commute.cfcₙHom {a b : A} (ha : p a) (hb₁ : Commute a b)
     (hb₂ : Commute (star a) b) (f : C(quasispectrum 𝕜 a, 𝕜)₀) :

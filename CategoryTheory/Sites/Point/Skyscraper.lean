@@ -91,7 +91,11 @@ definition skyscraperPresheafHomEquiv
         have := Φ.toPresheafFiber_w g.unop y P
         dsimp at this
         simp [reassoc_of% this] }
-  invFun g := Φ.presheafFiberDesc (fun X x => g.app (op X) ≫ Pi.π _ x) (by 
+  invFun g := Φ.presheafFiberDesc (fun X x => g.app (op X) ≫ Pi.π _ x) (by simp)
+  left_inv f := by cat_disch
+  right_inv g := by cat_disch
+
+#adaptation_note
 
 中文:
 定义 skyscraperPresheafHomEquiv
@@ -103,7 +107,11 @@ definition skyscraperPresheafHomEquiv
         have := Φ.toPresheafFiber_w g.unop y P
         dsimp at this
         simp [reassoc_of% this] }
-  invFun g := Φ.presheafFiberDesc (fun X x => g.app (op X) ≫ Pi.π _ x) (by 
+  invFun g := Φ.presheafFiberDesc (fun X x => g.app (op X) ≫ Pi.π _ x) (by simp)
+  left_inv f := by cat_disch
+  right_inv g := by cat_disch
+
+#adaptation_note
 
 Depends on / 依赖: Pi.lift, X.unop, cat_disch, g.app, g.unop, invFun, left_inv, naturality, presheafFiberDesc, reassoc_of, right_inv, toPresheafFiber, toPresheafFiber_w
 -/
@@ -367,7 +375,28 @@ lemma isSheaf_skyscraperPresheaf_aux
       forall ⦃Y : C⦄ (g : Y ⟶ X) (hg : R g) (y : Φ.fiber.obj Y) (hy : Φ.fiber.map g y = x),
         s.π.app (op (Presieve.categoryMk _ _ hg)) ≫ Pi.π _ y = l by
     choose l hl using this
-    exact ⟨Pi.lift l, fun j y => by simpa using!
+    exact ⟨Pi.lift l, fun j y => by simpa using! (hl _ j.obj.hom j.property y rfl).symm⟩
+  intro x
+  obtain ⟨Y₁, f₁, hf₁, y₁, hy₁⟩ := Φ.jointly_surjective _ hR x
+  refine ⟨s.π.app (op (Presieve.categoryMk _ _ hf₁)) ≫ Pi.π _ y₁,
+    fun Y₂ f₂ hf₂ y₂ hy₂ => ?_⟩
+  obtain ⟨Z, p₁, p₂, z, fac, hz₁, hz₂⟩ :
+      exists (Z : C) (p₁ : Z ⟶ Y₁) (p₂ : Z ⟶ Y₂) (z : Φ.fiber.obj Z), p₁ ≫ f₁ = p₂ ≫ f₂ ∧
+        Φ.fiber.map p₁ z = y₁ ∧ Φ.fiber.map p₂ z = y₂ := by
+    let α₁ : Φ.fiber.elementsMk _ y₁ ⟶ Φ.fiber.elementsMk _ x := ⟨f₁, hy₁⟩
+    let α₂ : Φ.fiber.elementsMk _ y₂ ⟶ Φ.fiber.elementsMk _ x := ⟨f₂, hy₂⟩
+    obtain ⟨z, q₁, q₂, fac⟩ := IsCofiltered.cospan α₁ α₂
+    rw [Subtype.ext_iff] at fac
+    refine ⟨z.1, q₁.1, q₂.1, z.2, fac, ?_, ?_⟩
+    all_goals rw [CategoryOfElements.map_snd] -- was `simp`
+  let φ₁ : Presieve.categoryMk _ _ (R.downward_closed hf₁ p₁) ⟶
+      Presieve.categoryMk _ _ hf₁ :=
+    ObjectProperty.homMk (Over.homMk p₁)
+  let φ₂ : Presieve.categoryMk _ _ (R.downward_closed hf₁ p₁) ⟶
+      Presieve.categoryMk _ _ hf₂ :=
+    ObjectProperty.homMk (Over.homMk p₂)
+  simpa [hz₁, hz₂, φ₁, φ₂] using!
+    (Cone.w s φ₂.op =≫ Pi.π _ z).trans (Cone.w s φ₁.op =≫ Pi.π _ z).symm
 
 中文:
 引理 isSheaf_skyscraperPresheaf_aux
@@ -376,7 +405,28 @@ lemma isSheaf_skyscraperPresheaf_aux
       forall ⦃Y : C⦄ (g : Y ⟶ X) (hg : R g) (y : Φ.fiber.obj Y) (hy : Φ.fiber.map g y = x),
         s.π.app (op (Presieve.categoryMk _ _ hg)) ≫ Pi.π _ y = l by
     choose l hl using this
-    exact ⟨Pi.lift l, fun j y => by simpa using!
+    exact ⟨Pi.lift l, fun j y => by simpa using! (hl _ j.obj.hom j.property y rfl).symm⟩
+  intro x
+  obtain ⟨Y₁, f₁, hf₁, y₁, hy₁⟩ := Φ.jointly_surjective _ hR x
+  refine ⟨s.π.app (op (Presieve.categoryMk _ _ hf₁)) ≫ Pi.π _ y₁,
+    fun Y₂ f₂ hf₂ y₂ hy₂ => ?_⟩
+  obtain ⟨Z, p₁, p₂, z, fac, hz₁, hz₂⟩ :
+      exists (Z : C) (p₁ : Z ⟶ Y₁) (p₂ : Z ⟶ Y₂) (z : Φ.fiber.obj Z), p₁ ≫ f₁ = p₂ ≫ f₂ ∧
+        Φ.fiber.map p₁ z = y₁ ∧ Φ.fiber.map p₂ z = y₂ := by
+    let α₁ : Φ.fiber.elementsMk _ y₁ ⟶ Φ.fiber.elementsMk _ x := ⟨f₁, hy₁⟩
+    let α₂ : Φ.fiber.elementsMk _ y₂ ⟶ Φ.fiber.elementsMk _ x := ⟨f₂, hy₂⟩
+    obtain ⟨z, q₁, q₂, fac⟩ := IsCofiltered.cospan α₁ α₂
+    rw [Subtype.ext_iff] at fac
+    refine ⟨z.1, q₁.1, q₂.1, z.2, fac, ?_, ?_⟩
+    all_goals rw [CategoryOfElements.map_snd] -- was `simp`
+  let φ₁ : Presieve.categoryMk _ _ (R.downward_closed hf₁ p₁) ⟶
+      Presieve.categoryMk _ _ hf₁ :=
+    ObjectProperty.homMk (Over.homMk p₁)
+  let φ₂ : Presieve.categoryMk _ _ (R.downward_closed hf₁ p₁) ⟶
+      Presieve.categoryMk _ _ hf₂ :=
+    ObjectProperty.homMk (Over.homMk p₂)
+  simpa [hz₁, hz₂, φ₁, φ₂] using!
+    (Cone.w s φ₂.op =≫ Pi.π _ z).trans (Cone.w s φ₁.op =≫ Pi.π _ z).symm
 -/
 private lemma isSheaf_skyscraperPresheaf_aux
     {M : A} {X : C} (R : Sieve X) (hR : R in J X)
@@ -431,7 +481,9 @@ lemma isSheaf_skyscraperPresheaf
     uniq s m hm := by
       dsimp at hm ⊢
       ext x
-   
+      obtain ⟨Y, g, hg, y, rfl⟩ := Φ.jointly_surjective _ hR x
+      simpa [← hm (op (Presieve.categoryMk _ _ hg))] using!
+        ((isSheaf_skyscraperPresheaf_aux R hR s).choose_spec (Presieve.categoryMk _ _ hg) y).symm }⟩
 
 中文:
 引理 isSheaf_skyscraperPresheaf
@@ -448,7 +500,9 @@ lemma isSheaf_skyscraperPresheaf
     uniq s m hm := by
       dsimp at hm ⊢
       ext x
-   
+      obtain ⟨Y, g, hg, y, rfl⟩ := Φ.jointly_surjective _ hR x
+      simpa [← hm (op (Presieve.categoryMk _ _ hg))] using!
+        ((isSheaf_skyscraperPresheaf_aux R hR s).choose_spec (Presieve.categoryMk _ _ hg) y).symm }⟩
 
 Depends on / 依赖: Presheaf, Presheaf.isSheaf_iff_isLimit, Presieve, Presieve.categoryMk, categoryMk, choose_spec, isSheaf_iff_isLimit, isSheaf_skyscraperPresheaf_aux, jointly_surjective
 -/
@@ -526,7 +580,9 @@ definition skyscraperSheafAdjunction
           ((fullyFaithfulSheafToPresheaf J A).homEquiv (Y := Φ.skyscraperSheaf M)).symm
       homEquiv_naturality_left_symm f g :=
         Φ.skyscraperPresheafHomEquiv_naturality_left_symm f.hom g.hom
-      homE
+      homEquiv_naturality_right f g := by
+        ext : 1
+        exact Φ.skyscraperPresheafHomEquiv_naturality_right f g }
 
 中文:
 定义 skyscraperSheafAdjunction
@@ -537,7 +593,9 @@ definition skyscraperSheafAdjunction
           ((fullyFaithfulSheafToPresheaf J A).homEquiv (Y := Φ.skyscraperSheaf M)).symm
       homEquiv_naturality_left_symm f g :=
         Φ.skyscraperPresheafHomEquiv_naturality_left_symm f.hom g.hom
-      homE
+      homEquiv_naturality_right f g := by
+        ext : 1
+        exact Φ.skyscraperPresheafHomEquiv_naturality_right f g }
 
 Depends on / 依赖: skyscraperSheafFunctor
 -/
@@ -604,7 +662,8 @@ lemma skyscraperSheafAdjunction_homEquiv_apply_hom
   simp [skyscraperSheafAdjunction, Functor.FullyFaithful.homEquiv]
 
 @[deprecated (since := "2026-03-05")]
-alias skyscraperSheafAdjunction_homEquiv_apply_val 
+alias skyscraperSheafAdjunction_homEquiv_apply_val :=
+  skyscraperSheafAdjunction_homEquiv_apply_hom
 
 中文:
 引理 skyscraperSheafAdjunction_homEquiv_apply_hom
@@ -615,7 +674,8 @@ alias skyscraperSheafAdjunction_homEquiv_apply_val
   simp [skyscraperSheafAdjunction, Functor.FullyFaithful.homEquiv]
 
 @[deprecated (since := "2026-03-05")]
-alias skyscraperSheafAdjunction_homEquiv_apply_val 
+alias skyscraperSheafAdjunction_homEquiv_apply_val :=
+  skyscraperSheafAdjunction_homEquiv_apply_hom
 
 Depends on / 依赖: homEquiv, skyscraperSheafAdjunction, skyscraperSheafAdjunction.homEquiv
 -/
@@ -670,7 +730,7 @@ lemma W_isInvertedBy_presheafFiber
   rw [← Function.Bijective.of_comp_iff' Φ.skyscraperPresheafHomEquiv.bijective]
   convert! (hf _ (Φ.isSheaf_skyscraperPresheaf M)).comp Φ.skyscraperPresheafHomEquiv.bijective
   ext g : 1
-  simp [skyscraperPresheafHomEquiv_natura
+  simp [skyscraperPresheafHomEquiv_naturality_left]
 
 中文:
 引理 W_isInvertedBy_presheafFiber
@@ -681,7 +741,7 @@ lemma W_isInvertedBy_presheafFiber
   rw [← Function.Bijective.of_comp_iff' Φ.skyscraperPresheafHomEquiv.bijective]
   convert! (hf _ (Φ.isSheaf_skyscraperPresheaf M)).comp Φ.skyscraperPresheafHomEquiv.bijective
   ext g : 1
-  simp [skyscraperPresheafHomEquiv_natura
+  simp [skyscraperPresheafHomEquiv_naturality_left]
 
 Depends on / 依赖: Bijective, Function, Function.Bijective.of_comp_iff, bijective, convert, isIso_iff_coyoneda_map_bijective, isSheaf_skyscraperPresheaf, of_comp_iff, skyscraperPresheafHomEquiv, skyscraperPresheafHomEquiv.bijective, skyscraperPresheafHomEquiv_naturality_left
 -/

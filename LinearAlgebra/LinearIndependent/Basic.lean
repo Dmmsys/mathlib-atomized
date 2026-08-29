@@ -131,7 +131,7 @@ theorem Submodule.range_ker_disjoint
   proof: by
   rw [LinearIndependent]; rw [Finsupp.linearCombination_linear_comp] at hv
   rw [disjoint_iff_inf_le]; rw [← Set.image_univ]; rw [Finsupp.span_image_eq_map_linearCombination]; rw [map_inf_eq_map_inf_comap]; rw [(LinearMap.ker_comp _ _).symm.trans
-      (LinearMap.ker_eq_bot_of_injective hv)]; rw 
+      (LinearMap.ker_eq_bot_of_injective hv)]; rw [inf_bot_eq]; rw [map_bot]
 
 中文:
 定理 子模.range_ker_disjoint
@@ -139,7 +139,7 @@ theorem Submodule.range_ker_disjoint
   证明: by
   rw [LinearIndependent]; rw [Finsupp.linearCombination_linear_comp] at hv
   rw [disjoint_iff_inf_le]; rw [← Set.image_univ]; rw [Finsupp.span_image_eq_map_linearCombination]; rw [map_inf_eq_map_inf_comap]; rw [(LinearMap.ker_comp _ _).symm.trans
-      (LinearMap.ker_eq_bot_of_injective hv)]; rw 
+      (LinearMap.ker_eq_bot_of_injective hv)]; rw [inf_bot_eq]; rw [map_bot]
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination_linear_comp, Finsupp.span_image_eq_map_linearCombination, LinearIndependent, LinearMap, LinearMap.ker_comp, LinearMap.ker_eq_bot_of_injective, Set.image_univ, disjoint_iff_inf_le, image_univ, inf_bot_eq, ker_comp, ker_eq_bot_of_injective, linearCombination_linear_comp, map_bot, map_inf_eq_map_inf_comap, span_image_eq_map_linearCombination, symm.trans
 -/
@@ -717,7 +717,7 @@ theorem LinearIndependent.linearCombination_ne_of_notMem_support
   have p : forall x in Finsupp.supported R R f.support,
     Finsupp.linearCombination R v x != f.linearCombination R v := by
     simpa [← w, Finsupp.span_image_eq_map_linearCombination] using hv.notMem_span_image h
-  exact p f (f.mem_supported_
+  exact p f (f.mem_supported_support R) rfl
 
 中文:
 定理 LinearIndependent.linearCombination_ne_of_notMem_support
@@ -728,7 +728,7 @@ theorem LinearIndependent.linearCombination_ne_of_notMem_support
   have p : forall x in Finsupp.supported R R f.support,
     Finsupp.linearCombination R v x != f.linearCombination R v := by
     simpa [← w, Finsupp.span_image_eq_map_linearCombination] using hv.notMem_span_image h
-  exact p f (f.mem_supported_
+  exact p f (f.mem_supported_support R) rfl
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Finsupp.span_image_eq_map_linearCombination, Finsupp.supported, f.linearCombination, f.mem_supported_support, f.support, hv.notMem_span_image, linearCombination, mem_supported_support, notMem_span_image, replace, span_image_eq_map_linearCombination, support, supported
 -/
@@ -776,7 +776,17 @@ theorem surjective_of_linearIndependent_of_span
   have h_total_l : Finsupp.linearCombination R v l = v i := by
     dsimp only [l]
     rw [Finsupp.linearCombination_mapDomain]
-    rw [(
+    rw [(hv.comp f f.injective).linearCombination_repr]
+  have h_total_eq : Finsupp.linearCombination R v l = Finsupp.linearCombination R v
+       (Finsupp.single i 1) := by
+    rw [h_total_l]; rw [Finsupp.linearCombination_single]; rw [one_smul]
+  have l_eq : l = _ := hv h_total_eq
+  dsimp only [l] at l_eq
+  rw [← Finsupp.embDomain_eq_mapDomain] at l_eq
+  rcases Finsupp.single_of_embDomain_single (repr ⟨v i, _⟩) f i (1 : R) zero_ne_one.symm l_eq with
+    ⟨i', hi'⟩
+  use i'
+  exact hi'.2
 
 中文:
 定理 surjective_of_linearIndependent_of_span
@@ -788,7 +798,17 @@ theorem surjective_of_linearIndependent_of_span
   have h_total_l : Finsupp.linearCombination R v l = v i := by
     dsimp only [l]
     rw [Finsupp.linearCombination_mapDomain]
-    rw [(
+    rw [(hv.comp f f.injective).linearCombination_repr]
+  have h_total_eq : Finsupp.linearCombination R v l = Finsupp.linearCombination R v
+       (Finsupp.single i 1) := by
+    rw [h_total_l]; rw [Finsupp.linearCombination_single]; rw [one_smul]
+  have l_eq : l = _ := hv h_total_eq
+  dsimp only [l] at l_eq
+  rw [← Finsupp.embDomain_eq_mapDomain] at l_eq
+  rcases Finsupp.single_of_embDomain_single (repr ⟨v i, _⟩) f i (1 : R) zero_ne_one.symm l_eq with
+    ⟨i', hi'⟩
+  use i'
+  exact hi'.2
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Finsupp.linearCombination_mapDomain, Finsupp.linearCombination_single, Finsupp.single, f.injective, h_total_eq, h_total_l, hv.comp, injective, linearCombination, linearCombination_mapDomain, linearCombination_repr, linearCombination_single, mapDomain, mem_range_self, one_s, single
 -/
@@ -828,7 +848,9 @@ theorem eq_of_linearIndepOn_id_of_span_subtype
   change s = t
   apply Subset.antisymm _ h
   intro x hx
-  r
+  rcases h_surj ⟨x, hx⟩ with ⟨y, hy⟩
+  convert! y.mem
+  rw [← Subtype.mk.inj hy]
 
 中文:
 定理 eq_of_linearIndepOn_id_of_span_subtype
@@ -842,7 +864,9 @@ theorem eq_of_linearIndepOn_id_of_span_subtype
   change s = t
   apply Subset.antisymm _ h
   intro x hx
-  r
+  rcases h_surj ⟨x, hx⟩ with ⟨y, hy⟩
+  convert! y.mem
+  rw [← Subtype.mk.inj hy]
 
 Depends on / 依赖: Subset, Subset.antisymm, Subtype, Subtype.coe_injective, Subtype.mk.inj, Surjective, antisymm, coe_injective, comp_def, convert, h_surj, surjective_of_linearIndependent_of_span, y.mem
 -/
@@ -1066,7 +1090,11 @@ theorem LinearIndependent.finCons'
   have : g 0 = 0 := by
     refine x_ortho (g 0) (∑ i : Fin m, g i.succ • v i) ?_ total_eq
     exact sum_mem fun i _ => smul_mem _ _ (subset_span ⟨i, rfl⟩)
-  
+  rw [this]; rw [zero_smul]; rw [zero_add] at total_eq
+  exact Fin.cases this (hli _ total_eq) j
+
+@[deprecated (since := "2026-04-07")]
+alias LinearIndependent.fin_cons' := LinearIndependent.finCons'
 
 中文:
 定理 LinearIndependent.finCons'
@@ -1078,7 +1106,11 @@ theorem LinearIndependent.finCons'
   have : g 0 = 0 := by
     refine x_ortho (g 0) (∑ i : Fin m, g i.succ • v i) ?_ total_eq
     exact sum_mem fun i _ => smul_mem _ _ (subset_span ⟨i, rfl⟩)
-  
+  rw [this]; rw [zero_smul]; rw [zero_add] at total_eq
+  exact Fin.cases this (hli _ total_eq) j
+
+@[deprecated (since := "2026-04-07")]
+alias LinearIndependent.fin_cons' := LinearIndependent.finCons'
 
 Depends on / 依赖: Fin.cases, Fin.cons_succ, Fin.cons_zero, Fin.sum_univ_succ, Fintype, Fintype.linearIndependent_iff, cons_succ, cons_zero, i.succ, linearIndependent_iff, simp_rw, smul_mem, subset_span, sum_mem, sum_univ_succ, total_eq, x_ortho, zero_add, zero_smul
 -/
@@ -1149,7 +1181,25 @@ exact h.disjoint_span_image isCompl_range_inl_range_inr.disjoint
   rintro ⟨hl, hr, hlr⟩
   rw [linearIndependent_iff'] at *
   intro s g hg i hi
- 
+  have :
+    ((∑ i in s.preimage Sum.inl Sum.inl_injective.injOn, (fun x => g x • v x) (Sum.inl i)) +
+        ∑ i in s.preimage Sum.inr Sum.inr_injective.injOn, (fun x => g x • v x) (Sum.inr i)) =
+      0 := by
+    -- Porting note: `g` must be specified.
+    rw [Finset.sum_preimage' (g := fun x => g x • v x)]; rw [Finset.sum_preimage' (g := fun x => g x • v x)]; rw [← Finset.sum_union]; rw [← Finset.filter_or]
+    · simpa only [← mem_union, range_inl_union_range_inr, mem_univ, Finset.filter_true]
+    · exact Finset.disjoint_filter.2 fun x _ hx =>
+        disjoint_left.1 isCompl_range_inl_range_inr.disjoint hx
+  rw [← eq_neg_iff_add_eq_zero] at this
+  rw [disjoint_def'] at hlr
+  have A := by
+    refine hlr _ (sum_mem fun i _ => ?_) _ (neg_mem <| sum_mem fun i _ => ?_) this
+    · exact smul_mem _ _ (subset_span ⟨Sum.inl i, mem_range_self _, rfl⟩)
+    · exact smul_mem _ _ (subset_span ⟨Sum.inr i, mem_range_self _, rfl⟩)
+  rcases i with i | i
+  · exact hl _ _ A i (Finset.mem_preimage.2 hi)
+  · rw [this, neg_eq_zero] at A
+    exact hr _ _ A i (Finset.mem_preimage.2 hi)
 
 中文:
 定理 linearIndependent_sum
@@ -1164,7 +1214,25 @@ exact h.disjoint_span_image isCompl_range_inl_range_inr.disjoint
   rintro ⟨hl, hr, hlr⟩
   rw [linearIndependent_iff'] at *
   intro s g hg i hi
- 
+  have :
+    ((∑ i in s.preimage Sum.inl Sum.inl_injective.injOn, (fun x => g x • v x) (Sum.inl i)) +
+        ∑ i in s.preimage Sum.inr Sum.inr_injective.injOn, (fun x => g x • v x) (Sum.inr i)) =
+      0 := by
+    -- Porting note: `g` must be specified.
+    rw [Finset.sum_preimage' (g := fun x => g x • v x)]; rw [Finset.sum_preimage' (g := fun x => g x • v x)]; rw [← Finset.sum_union]; rw [← Finset.filter_or]
+    · simpa only [← mem_union, range_inl_union_range_inr, mem_univ, Finset.filter_true]
+    · exact Finset.disjoint_filter.2 fun x _ hx =>
+        disjoint_left.1 isCompl_range_inl_range_inr.disjoint hx
+  rw [← eq_neg_iff_add_eq_zero] at this
+  rw [disjoint_def'] at hlr
+  have A := by
+    refine hlr _ (sum_mem fun i _ => ?_) _ (neg_mem <| sum_mem fun i _ => ?_) this
+    · exact smul_mem _ _ (subset_span ⟨Sum.inl i, mem_range_self _, rfl⟩)
+    · exact smul_mem _ _ (subset_span ⟨Sum.inr i, mem_range_self _, rfl⟩)
+  rcases i with i | i
+  · exact hl _ _ A i (Finset.mem_preimage.2 hi)
+  · rw [this, neg_eq_zero] at A
+    exact hr _ _ A i (Finset.mem_preimage.2 hi)
 
 Depends on / 依赖: Sum.inl, Sum.inl_injective, Sum.inl_injective.injOn, Sum.inr, Sum.inr_injective, Sum.inr_injective.injOn, classical, disjoint, disjoint_span_image, h.comp, h.disjoint_span_image, inl_injective, inr_injective, isCompl_range_inl_range_inr, isCompl_range_inl_range_inr.disjoint, linearIndependent_iff, preimage, range_comp, s.preimage
 -/
@@ -1237,7 +1305,8 @@ theorem LinearIndepOn.union
   have hdj := (hdj.of_span₀ hs.zero_notMem_image).of_image
   rw [LinearIndepOn]
   convert! (hli.comp _ (Equiv.Set.union hdj).injective) with ⟨x, hx | hx⟩
-  · rw [comp_apply, 
+  · rw [comp_apply, Equiv.Set.union_apply_left _ hx, Sum.elim_inl]
+  rw [comp_apply]; rw [Equiv.Set.union_apply_right _ hx]; rw [Sum.elim_inr]
 
 中文:
 定理 LinearIndepOn.union
@@ -1249,7 +1318,8 @@ theorem LinearIndepOn.union
   have hdj := (hdj.of_span₀ hs.zero_notMem_image).of_image
   rw [LinearIndepOn]
   convert! (hli.comp _ (Equiv.Set.union hdj).injective) with ⟨x, hx | hx⟩
-  · rw [comp_apply, 
+  · rw [comp_apply, Equiv.Set.union_apply_left _ hx, Sum.elim_inl]
+  rw [comp_apply]; rw [Equiv.Set.union_apply_right _ hx]; rw [Sum.elim_inr]
 
 Depends on / 依赖: Equiv.Set.union, Equiv.Set.union_apply_left, Equiv.Set.union_apply_right, LinearIndepOn, LinearIndependent, LinearIndependent.sum_type, Sum.elim_inl, Sum.elim_inr, classical, comp_apply, convert, elim_inl, elim_inr, hdj.of_span, hli.comp, hs.zero_notMem_image, image_eq_range, injective, nontriviality, of_image
 -/
@@ -1376,7 +1446,60 @@ theorem linearIndependent_monoidHom
   intro s
   induction s using Finset.induction_on with
   | empty => simp
-  | in
+  | insert a s has ih =>
+  intro g hg
+  -- Here
+  -- * `a` is a new character we will insert into the `Finset` of characters `s`,
+  -- * `ih` is the fact that only the trivial linear combination of characters in `s` is zero
+  -- * `hg` is the fact that `g` are the coefficients of a linear combination summing to zero
+  -- and it remains to prove that `g` vanishes on `insert a s`.
+  -- We now make the key calculation:
+  -- For any character `i` in the original `Finset`, we have `g i • i = g i • a` as functions
+  -- on the monoid `G`.
+  have h1 (i) (his : i in s) : (g i • i : G -> L) = g i • a := by
+    ext x
+    rw [← sub_eq_zero]
+    apply ih (fun j => g j * j x - g j * a x) _ i his
+    ext y
+    -- After that, it's just a chase scene.
+    calc
+      (∑ i in s, (g i * i x - g i * a x) • i : G -> L) y =
+          (∑ i in s, g i * i x * i y) - ∑ i in s, g i * a x * i y := by simp [sub_mul]
+      _ = (∑ i in insert a s, g i * i x * i y) -
+            ∑ i in insert a s, g i * a x * i y := by simp [Finset.sum_insert has]
+      _ = (∑ i in insert a s, g i * (i x * i y)) -
+            ∑ i in insert a s, a x * (g i * i y) := by
+        congrm ∑ i in insert a s, ?_ - ∑ i in insert a s, ?_
+        · rw [mul_assoc]
+        · rw [mul_assoc, mul_left_comm]
+      _ = (∑ i in insert a s, g i • i : G -> L) (x * y) -
+            a x * (∑ i in insert a s, (g i • (i : G -> L))) y := by simp [Finset.mul_sum]
+      _ = 0 := by rw [hg]; simp
+  -- On the other hand, since `a` is not already in `s`, for any character `i ∈ s`
+  -- there is some element of the monoid on which it differs from `a`.
+  have h2 (i) (his : i in s) : exists y, i y != a y := by
+    by_contra! hia
+    obtain rfl : i = a := MonoidHom.ext hia
+    contradiction
+  -- From these two facts we deduce that `g` actually vanishes on `s`,
+  have h3 (i) (his : i in s) : g i = 0 := by
+    let ⟨y, hy⟩ := h2 i his
+    have h : g i • i y = g i • a y := congr_fun (h1 i his) y
+    rw [← sub_eq_zero]; rw [← smul_sub]; rw [smul_eq_zero] at h
+    exact h.resolve_right (sub_ne_zero_of_ne hy)
+  -- And so, using the fact that the linear combination over `s` and over `insert a s` both
+  -- vanish, we deduce that `g a = 0`.
+  have h4 : g a = 0 :=
+    calc
+      g a = g a * 1 := (mul_one _).symm
+      _ = (g a • a : G -> L) 1 := by rw [← a.map_one]; rfl
+      _ = (∑ i in insert a s, g i • i : G -> L) 1 := by
+        rw [Finset.sum_insert has]; rw [Finset.sum_eq_zero]; rw [add_zero]
+        simp +contextual [h3]
+      _ = 0 := by rw [hg]; rfl
+  -- Now we're done; the last two facts together imply that `g` vanishes on every element
+  -- of `insert a s`.
+  exact (Finset.forall_mem_insert ..).2 ⟨h4, h3⟩
 
 中文:
 定理 linearIndependent_monoidHom
@@ -1389,7 +1512,60 @@ theorem linearIndependent_monoidHom
   intro s
   induction s using Finset.induction_on with
   | empty => simp
-  | in
+  | insert a s has ih =>
+  intro g hg
+  -- Here
+  -- * `a` is a new character we will insert into the `Finset` of characters `s`,
+  -- * `ih` is the fact that only the trivial linear combination of characters in `s` is zero
+  -- * `hg` is the fact that `g` are the coefficients of a linear combination summing to zero
+  -- and it remains to prove that `g` vanishes on `insert a s`.
+  -- We now make the key calculation:
+  -- For any character `i` in the original `Finset`, we have `g i • i = g i • a` as functions
+  -- on the monoid `G`.
+  have h1 (i) (his : i in s) : (g i • i : G -> L) = g i • a := by
+    ext x
+    rw [← sub_eq_zero]
+    apply ih (fun j => g j * j x - g j * a x) _ i his
+    ext y
+    -- After that, it's just a chase scene.
+    calc
+      (∑ i in s, (g i * i x - g i * a x) • i : G -> L) y =
+          (∑ i in s, g i * i x * i y) - ∑ i in s, g i * a x * i y := by simp [sub_mul]
+      _ = (∑ i in insert a s, g i * i x * i y) -
+            ∑ i in insert a s, g i * a x * i y := by simp [Finset.sum_insert has]
+      _ = (∑ i in insert a s, g i * (i x * i y)) -
+            ∑ i in insert a s, a x * (g i * i y) := by
+        congrm ∑ i in insert a s, ?_ - ∑ i in insert a s, ?_
+        · rw [mul_assoc]
+        · rw [mul_assoc, mul_left_comm]
+      _ = (∑ i in insert a s, g i • i : G -> L) (x * y) -
+            a x * (∑ i in insert a s, (g i • (i : G -> L))) y := by simp [Finset.mul_sum]
+      _ = 0 := by rw [hg]; simp
+  -- On the other hand, since `a` is not already in `s`, for any character `i ∈ s`
+  -- there is some element of the monoid on which it differs from `a`.
+  have h2 (i) (his : i in s) : exists y, i y != a y := by
+    by_contra! hia
+    obtain rfl : i = a := MonoidHom.ext hia
+    contradiction
+  -- From these two facts we deduce that `g` actually vanishes on `s`,
+  have h3 (i) (his : i in s) : g i = 0 := by
+    let ⟨y, hy⟩ := h2 i his
+    have h : g i • i y = g i • a y := congr_fun (h1 i his) y
+    rw [← sub_eq_zero]; rw [← smul_sub]; rw [smul_eq_zero] at h
+    exact h.resolve_right (sub_ne_zero_of_ne hy)
+  -- And so, using the fact that the linear combination over `s` and over `insert a s` both
+  -- vanish, we deduce that `g a = 0`.
+  have h4 : g a = 0 :=
+    calc
+      g a = g a * 1 := (mul_one _).symm
+      _ = (g a • a : G -> L) 1 := by rw [← a.map_one]; rfl
+      _ = (∑ i in insert a s, g i • i : G -> L) 1 := by
+        rw [Finset.sum_insert has]; rw [Finset.sum_eq_zero]; rw [add_zero]
+        simp +contextual [h3]
+      _ = 0 := by rw [hg]; rfl
+  -- Now we're done; the last two facts together imply that `g` vanishes on every element
+  -- of `insert a s`.
+  exact (Finset.forall_mem_insert ..).2 ⟨h4, h3⟩
 
 Depends on / 依赖: Classical, Classical.decEq, DistribMulAction, DistribMulAction.toMulAction, MulAction, toMulAction
 -/

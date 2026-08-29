@@ -502,7 +502,8 @@ theorem angle_eq_zero_of_angle_eq_pi_left
   rw [angle_eq_zero_iff]
   rw [← neg_vsub_eq_vsub_rev]; rw [neg_ne_zero] at hp₁p₂
   use hp₁p₂, -r + 1, add_pos (neg_pos_of_neg hr) zero_lt_one
-  rw [add_smul]; rw [← neg_vsub_eq_vsub_rev p₁ p₂];
+  rw [add_smul]; rw [← neg_vsub_eq_vsub_rev p₁ p₂]; rw [smul_neg]
+  simp [← hpr]
 
 中文:
 定理 angle_eq_zero_of_angle_eq_pi_left
@@ -516,7 +517,8 @@ theorem angle_eq_zero_of_angle_eq_pi_left
   rw [angle_eq_zero_iff]
   rw [← neg_vsub_eq_vsub_rev]; rw [neg_ne_zero] at hp₁p₂
   use hp₁p₂, -r + 1, add_pos (neg_pos_of_neg hr) zero_lt_one
-  rw [add_smul]; rw [← neg_vsub_eq_vsub_rev p₁ p₂];
+  rw [add_smul]; rw [← neg_vsub_eq_vsub_rev p₁ p₂]; rw [smul_neg]
+  simp [← hpr]
 
 Depends on / 依赖: add_pos, add_smul, angle_eq_pi_iff, angle_eq_zero_iff, neg_ne_zero, neg_pos_of_neg, neg_vsub_eq_vsub_rev, smul_neg, zero_lt_one
 -/
@@ -569,7 +571,7 @@ theorem angle_eq_angle_of_angle_eq_pi
     rw [add_smul]; rw [← neg_vsub_eq_vsub_rev p₂ p₃]; rw [smul_neg]; rw [neg_smul]; rw [← hpr]
     simp
   replace hr : 0 < -r + 1 := by linarith
-  exact 
+  exact angle_smul_right_of_pos p₁ hr hpr
 
 中文:
 定理 angle_eq_angle_of_angle_eq_pi
@@ -582,7 +584,7 @@ theorem angle_eq_angle_of_angle_eq_pi
     rw [add_smul]; rw [← neg_vsub_eq_vsub_rev p₂ p₃]; rw [smul_neg]; rw [neg_smul]; rw [← hpr]
     simp
   replace hr : 0 < -r + 1 := by linarith
-  exact 
+  exact angle_smul_right_of_pos p₁ hr hpr
 
 Depends on / 依赖: add_smul, angle_eq_pi_iff, angle_smul_right_of_pos, eq_comm, neg_smul, neg_vsub_eq_vsub_rev, replace, smul_neg
 -/
@@ -827,7 +829,8 @@ theorem angle_left_midpoint_eq_pi_div_two_of_dist_eq
   have h1 : p₃ -ᵥ p₁ = p₃ -ᵥ m - (p₁ -ᵥ m) := (vsub_sub_vsub_cancel_right p₃ p₁ m).symm
   have h2 : p₃ -ᵥ p₂ = p₃ -ᵥ m + (p₁ -ᵥ m) := by
     rw [left_vsub_midpoint]; rw [← midpoint_vsub_right]; rw [vsub_add_vsub_cancel]
-  rw [dist_eq_norm_vsub V p₃ p₁]; rw [dist
+  rw [dist_eq_norm_vsub V p₃ p₁]; rw [dist_eq_norm_vsub V p₃ p₂]; rw [h1]; rw [h2] at h
+  exact (norm_add_eq_norm_sub_iff_angle_eq_pi_div_two (p₃ -ᵥ m) (p₁ -ᵥ m)).mp h.symm
 
 中文:
 定理 angle_left_midpoint_eq_pi_div_two_of_dist_eq
@@ -837,7 +840,8 @@ theorem angle_left_midpoint_eq_pi_div_two_of_dist_eq
   have h1 : p₃ -ᵥ p₁ = p₃ -ᵥ m - (p₁ -ᵥ m) := (vsub_sub_vsub_cancel_right p₃ p₁ m).symm
   have h2 : p₃ -ᵥ p₂ = p₃ -ᵥ m + (p₁ -ᵥ m) := by
     rw [left_vsub_midpoint]; rw [← midpoint_vsub_right]; rw [vsub_add_vsub_cancel]
-  rw [dist_eq_norm_vsub V p₃ p₁]; rw [dist
+  rw [dist_eq_norm_vsub V p₃ p₁]; rw [dist_eq_norm_vsub V p₃ p₂]; rw [h1]; rw [h2] at h
+  exact (norm_add_eq_norm_sub_iff_angle_eq_pi_div_two (p₃ -ᵥ m) (p₁ -ᵥ m)).mp h.symm
 
 Depends on / 依赖: dist_eq_norm_vsub, h.symm, left_vsub_midpoint, midpoint, midpoint_vsub_right, norm_add_eq_norm_sub_iff_angle_eq_pi_div_two, vsub_add_vsub_cancel, vsub_sub_vsub_cancel_right
 -/
@@ -889,7 +893,12 @@ theorem _root_.Sbtw.angle₁₂₃_eq_pi
   have hr1' : r != 1 := by
     rintro rfl
     rw [← hp₂] at hp₂p₃
-    
+    simp at hp₂p₃
+  replace hr0 := hr0.lt_of_ne hr0'.symm
+  replace hr1 := hr1.lt_of_ne hr1'
+  refine ⟨div_neg_of_neg_of_pos (Left.neg_neg_iff.2 (sub_pos.2 hr1)) hr0, ?_⟩
+  rw [← hp₂]; rw [AffineMap.lineMap_apply]; rw [vsub_vadd_eq_vsub_sub]; rw [vsub_vadd_eq_vsub_sub]; rw [vsub_self]; rw [zero_sub]; rw [smul_neg]; rw [smul_smul]; rw [div_mul_cancel₀ _ hr0']; rw [neg_smul]; rw [neg_neg]; rw [sub_eq_iff_eq_add]; rw [←
+    add_smul]; rw [sub_add_cancel]; rw [one_smul]
 
 中文:
 定理 _root_.Sbtw.angle₁₂₃_eq_pi
@@ -906,7 +915,12 @@ theorem _root_.Sbtw.angle₁₂₃_eq_pi
   have hr1' : r != 1 := by
     rintro rfl
     rw [← hp₂] at hp₂p₃
-    
+    simp at hp₂p₃
+  replace hr0 := hr0.lt_of_ne hr0'.symm
+  replace hr1 := hr1.lt_of_ne hr1'
+  refine ⟨div_neg_of_neg_of_pos (Left.neg_neg_iff.2 (sub_pos.2 hr1)) hr0, ?_⟩
+  rw [← hp₂]; rw [AffineMap.lineMap_apply]; rw [vsub_vadd_eq_vsub_sub]; rw [vsub_vadd_eq_vsub_sub]; rw [vsub_self]; rw [zero_sub]; rw [smul_neg]; rw [smul_smul]; rw [div_mul_cancel₀ _ hr0']; rw [neg_smul]; rw [neg_neg]; rw [sub_eq_iff_eq_add]; rw [←
+    add_smul]; rw [sub_add_cancel]; rw [one_smul]
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap_apply, Left.neg_neg_iff, angle_eq_pi_iff, div_neg_of_neg_of_pos, hr0.lt_of_ne, hr1.lt_of_ne, lineMap_apply, lt_of_ne, neg_neg_iff, replace, sub_pos, vsub_ne_zero, vsub_vadd_eq_vsub_sub
 -/
@@ -963,7 +977,14 @@ theorem angle_eq_pi_iff_sbtw
   rintro ⟨hp₁p₂, r, hr, hp₃p₂⟩
   refine ⟨⟨1 / (1 - r), ⟨div_nonneg zero_le_one (sub_nonneg.2 (hr.le.trans zero_le_one)),
     (div_le_one (sub_pos.2 (hr.trans zero_lt_one))).2 ((le_sub_self_iff 1).2 hr.le)⟩, ?_⟩,
-    (vsub
+    (vsub_ne_zero.1 hp₁p₂).symm, ?_⟩
+  · rw [← eq_vadd_iff_vsub_eq] at hp₃p₂
+    rw [AffineMap.lineMap_apply]; rw [hp₃p₂]; rw [vadd_vsub_assoc]; rw [← neg_vsub_eq_vsub_rev p₂ p₁]; rw [smul_neg]; rw [←
+      neg_smul]; rw [smul_add]; rw [smul_smul]; rw [← add_smul]; rw [eq_comm]; rw [eq_vadd_iff_vsub_eq]
+    convert! (one_smul Real (p₂ -ᵥ p₁)).symm
+    field [(sub_pos.2 (hr.trans zero_lt_one)).ne.symm]
+  · rw [ne_comm, ← @vsub_ne_zero V, hp₃p₂, smul_ne_zero_iff]
+    exact ⟨hr.ne, hp₁p₂⟩
 
 中文:
 定理 angle_eq_pi_iff_sbtw
@@ -975,7 +996,14 @@ theorem angle_eq_pi_iff_sbtw
   rintro ⟨hp₁p₂, r, hr, hp₃p₂⟩
   refine ⟨⟨1 / (1 - r), ⟨div_nonneg zero_le_one (sub_nonneg.2 (hr.le.trans zero_le_one)),
     (div_le_one (sub_pos.2 (hr.trans zero_lt_one))).2 ((le_sub_self_iff 1).2 hr.le)⟩, ?_⟩,
-    (vsub
+    (vsub_ne_zero.1 hp₁p₂).symm, ?_⟩
+  · rw [← eq_vadd_iff_vsub_eq] at hp₃p₂
+    rw [AffineMap.lineMap_apply]; rw [hp₃p₂]; rw [vadd_vsub_assoc]; rw [← neg_vsub_eq_vsub_rev p₂ p₁]; rw [smul_neg]; rw [←
+      neg_smul]; rw [smul_add]; rw [smul_smul]; rw [← add_smul]; rw [eq_comm]; rw [eq_vadd_iff_vsub_eq]
+    convert! (one_smul Real (p₂ -ᵥ p₁)).symm
+    field [(sub_pos.2 (hr.trans zero_lt_one)).ne.symm]
+  · rw [ne_comm, ← @vsub_ne_zero V, hp₃p₂, smul_ne_zero_iff]
+    exact ⟨hr.ne, hp₁p₂⟩
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap_apply, angle_eq_pi_iff, div_le_one, div_nonneg, eq_vadd_iff_vsub_eq, h.angle, hr.le, hr.le.trans, hr.trans, le_sub_self_iff, lineMap_apply, neg_smul, neg_vsub_eq_vsub_rev, smul_add, smul_neg, sub_nonneg, sub_pos, vadd_vsub_assoc, vsub_ne_zero
 -/
@@ -1008,7 +1036,7 @@ theorem _root_.Wbtw.angle₂₁₃_eq_zero_of_ne
     simp at hp₂p₁
   replace hr0 := hr0.lt_of_ne hr0'.symm
   refine ⟨vsub_ne_zero.2 hp₂p₁, r⁻¹, inv_pos.2 hr0, ?_⟩
-  rw [AffineMap.lineMap_apply]; rw [vadd_vsub_assoc]; rw [vsub_self
+  rw [AffineMap.lineMap_apply]; rw [vadd_vsub_assoc]; rw [vsub_self]; rw [add_zero]; rw [smul_smul]; rw [inv_mul_cancel₀ hr0']; rw [one_smul]
 
 中文:
 定理 _root_.Wbtw.angle₂₁₃_eq_zero_of_ne
@@ -1021,7 +1049,7 @@ theorem _root_.Wbtw.angle₂₁₃_eq_zero_of_ne
     simp at hp₂p₁
   replace hr0 := hr0.lt_of_ne hr0'.symm
   refine ⟨vsub_ne_zero.2 hp₂p₁, r⁻¹, inv_pos.2 hr0, ?_⟩
-  rw [AffineMap.lineMap_apply]; rw [vadd_vsub_assoc]; rw [vsub_self
+  rw [AffineMap.lineMap_apply]; rw [vadd_vsub_assoc]; rw [vsub_self]; rw [add_zero]; rw [smul_smul]; rw [inv_mul_cancel₀ hr0']; rw [one_smul]
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap_apply, add_zero, angle_eq_zero_iff, hr0.lt_of_ne, inv_pos, lineMap_apply, lt_of_ne, one_smul, replace, smul_smul, vadd_vsub_assoc, vsub_ne_zero, vsub_self
 -/
@@ -1184,7 +1212,14 @@ theorem angle_eq_zero_iff_ne_and_wbtw
     rintro ⟨hp₁p₂, r, hr0, hp₃p₂⟩
     rcases le_or_gt 1 r with (hr1 | hr1)
     · refine Or.inl ⟨vsub_ne_zero.1 hp₁p₂, r⁻¹, ⟨(inv_pos.2 hr0).le, inv_le_one_of_one_le₀ hr1⟩, ?_⟩
-      rw [AffineMap.lineMap_apply]; rw [hp₃p₂]; rw [smul_smul]; rw [inv_m
+      rw [AffineMap.lineMap_apply]; rw [hp₃p₂]; rw [smul_smul]; rw [inv_mul_cancel₀ hr0.ne.symm]; rw [one_smul]; rw [vsub_vadd]
+    · refine Or.inr ⟨?_, r, ⟨hr0.le, hr1.le⟩, ?_⟩
+      · rw [← @vsub_ne_zero V, hp₃p₂, smul_ne_zero_iff]
+        exact ⟨hr0.ne.symm, hp₁p₂⟩
+      · rw [AffineMap.lineMap_apply, ← hp₃p₂, vsub_vadd]
+  · rintro (⟨hp₁p₂, h⟩ | ⟨hp₃p₂, h⟩)
+    · exact h.angle₂₁₃_eq_zero_of_ne hp₁p₂
+    · exact h.angle₃₁₂_eq_zero_of_ne hp₃p₂
 
 中文:
 定理 angle_eq_zero_iff_ne_and_wbtw
@@ -1195,7 +1230,14 @@ theorem angle_eq_zero_iff_ne_and_wbtw
     rintro ⟨hp₁p₂, r, hr0, hp₃p₂⟩
     rcases le_or_gt 1 r with (hr1 | hr1)
     · refine Or.inl ⟨vsub_ne_zero.1 hp₁p₂, r⁻¹, ⟨(inv_pos.2 hr0).le, inv_le_one_of_one_le₀ hr1⟩, ?_⟩
-      rw [AffineMap.lineMap_apply]; rw [hp₃p₂]; rw [smul_smul]; rw [inv_m
+      rw [AffineMap.lineMap_apply]; rw [hp₃p₂]; rw [smul_smul]; rw [inv_mul_cancel₀ hr0.ne.symm]; rw [one_smul]; rw [vsub_vadd]
+    · refine Or.inr ⟨?_, r, ⟨hr0.le, hr1.le⟩, ?_⟩
+      · rw [← @vsub_ne_zero V, hp₃p₂, smul_ne_zero_iff]
+        exact ⟨hr0.ne.symm, hp₁p₂⟩
+      · rw [AffineMap.lineMap_apply, ← hp₃p₂, vsub_vadd]
+  · rintro (⟨hp₁p₂, h⟩ | ⟨hp₃p₂, h⟩)
+    · exact h.angle₂₁₃_eq_zero_of_ne hp₁p₂
+    · exact h.angle₃₁₂_eq_zero_of_ne hp₃p₂
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap_apply, Or.inl, Or.inr, angle_eq_zero_iff, hr0.le, hr0.ne.symm, hr1.le, inv_pos, le_or_gt, lineMap_apply, one_smul, smul_ne_zero_iff, smul_smul, vsub_ne_zero, vsub_vadd
 -/
@@ -1384,7 +1426,20 @@ theorem collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi
     · exact Or.inr (Or.inl h₃₂)
     rw [or_iff_right h₁₂]; rw [or_iff_right h₃₂]
     rcases h with (h | h | h)
-    · exact Or.inr (angle_eq_pi_i
+    · exact Or.inr (angle_eq_pi_iff_sbtw.2 ⟨h, Ne.symm h₁₂, Ne.symm h₃₂⟩)
+    · exact Or.inl (h.angle₃₁₂_eq_zero_of_ne h₃₂)
+    · exact Or.inl (h.angle₂₃₁_eq_zero_of_ne h₁₂)
+  · rcases h with (rfl | rfl | h | h)
+    · simpa using collinear_pair Real p₁ p₃
+    · simpa using collinear_pair Real p₁ p₃
+    · rw [angle_eq_zero_iff_ne_and_wbtw] at h
+      rcases h with (⟨-, h⟩ | ⟨-, h⟩)
+      · rw [Set.insert_comm]
+        exact h.collinear
+      · rw [Set.insert_comm, Set.pair_comm]
+        exact h.collinear
+    · rw [angle_eq_pi_iff_sbtw] at h
+      exact h.wbtw.collinear
 
 中文:
 定理 collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi
@@ -1398,7 +1453,20 @@ theorem collinear_iff_eq_or_eq_or_angle_eq_zero_or_angle_eq_pi
     · exact Or.inr (Or.inl h₃₂)
     rw [or_iff_right h₁₂]; rw [or_iff_right h₃₂]
     rcases h with (h | h | h)
-    · exact Or.inr (angle_eq_pi_i
+    · exact Or.inr (angle_eq_pi_iff_sbtw.2 ⟨h, Ne.symm h₁₂, Ne.symm h₃₂⟩)
+    · exact Or.inl (h.angle₃₁₂_eq_zero_of_ne h₃₂)
+    · exact Or.inl (h.angle₂₃₁_eq_zero_of_ne h₁₂)
+  · rcases h with (rfl | rfl | h | h)
+    · simpa using collinear_pair Real p₁ p₃
+    · simpa using collinear_pair Real p₁ p₃
+    · rw [angle_eq_zero_iff_ne_and_wbtw] at h
+      rcases h with (⟨-, h⟩ | ⟨-, h⟩)
+      · rw [Set.insert_comm]
+        exact h.collinear
+      · rw [Set.insert_comm, Set.pair_comm]
+        exact h.collinear
+    · rw [angle_eq_pi_iff_sbtw] at h
+      exact h.wbtw.collinear
 
 Depends on / 依赖: Ne.symm, Or.inl, Or.inr, angle_eq_pi_iff_sbtw, collinear, collinear_pair, h.angle, h.wbtw_or_wbtw_or_wbtw, or_iff_right, replace, wbtw_or_wbtw_or_wbtw
 -/

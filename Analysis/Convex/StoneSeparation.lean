@@ -40,7 +40,42 @@ theorem not_disjoint_segment_convexHull_triple
   · rw [zero_add] at habz
     rw [zero_smul]; rw [zero_add]; rw [habz]; rw [one_smul]
     refine ⟨v, by apply right_mem_segment, segment_subset_convexHull ?_ ?_ hv⟩ <;> simp
-  obtain ⟨av, bv, 
+  obtain ⟨av, bv, hav, hbv, habv, rfl⟩ := hv
+  obtain rfl | hav' := hav.eq_or_lt
+  · rw [zero_add] at habv
+    rw [zero_smul]; rw [zero_add]; rw [habv]; rw [one_smul]
+exact ⟨q, right_mem_segment _ _ _, subset_convexHull _ _ by simp⟩
+  obtain ⟨au, bu, hau, hbu, habu, rfl⟩ := hu
+  have hab : 0 < az * av + bz * au := by positivity
+  refine ⟨(az * av / (az * av + bz * au)) • (au • x + bu • p) +
+    (bz * au / (az * av + bz * au)) • (av • y + bv • q), ⟨_, _, ?_, ?_, ?_, rfl⟩, ?_⟩
+  · positivity
+  · positivity
+  · rw [← add_div, div_self]; positivity
+  classical
+    let w : Fin 3 -> 𝕜 := ![az * av * bu, bz * au * bv, au * av]
+    let z : Fin 3 -> E := ![p, q, az • x + bz • y]
+    have hw₀ : forall i, 0 <= w i := by
+      rintro i
+      fin_cases i
+      · exact mul_nonneg (mul_nonneg haz hav) hbu
+      · exact mul_nonneg (mul_nonneg hbz hau) hbv
+      · exact mul_nonneg hau hav
+    have hw : ∑ i, w i = az * av + bz * au := by
+      trans az * av * bu + (bz * au * bv + au * av)
+      · simp [w, Fin.sum_univ_succ]
+      linear_combination (au * bv - 1 * au) * habz + (-(1 * az * au) + au) * habv + az * av * habu
+    have hz : forall i, z i in ({p, q, az • x + bz • y} : Set E) := fun i => by fin_cases i <;> simp [z]
+    convert!
+      (Finset.centerMass_mem_convexHull (Finset.univ : Finset (Fin 3)) (fun i _ => hw₀ i)
+          (by rwa [hw]) fun i _ => hz i :
+        Finset.univ.centerMass w z in _)
+    rw [Finset.centerMass]; rw [hw]
+    trans (az * av + bz * au)⁻¹ •
+      ((az * av * bu) • p + ((bz * au * bv) • q + (au * av) • (az • x + bz • y)))
+    · module
+    congr 3
+    simp [w, z]
 
 中文:
 定理 not_disjoint_segment_convexHull_triple
@@ -52,7 +87,42 @@ theorem not_disjoint_segment_convexHull_triple
   · rw [zero_add] at habz
     rw [zero_smul]; rw [zero_add]; rw [habz]; rw [one_smul]
     refine ⟨v, by apply right_mem_segment, segment_subset_convexHull ?_ ?_ hv⟩ <;> simp
-  obtain ⟨av, bv, 
+  obtain ⟨av, bv, hav, hbv, habv, rfl⟩ := hv
+  obtain rfl | hav' := hav.eq_or_lt
+  · rw [zero_add] at habv
+    rw [zero_smul]; rw [zero_add]; rw [habv]; rw [one_smul]
+exact ⟨q, right_mem_segment _ _ _, subset_convexHull _ _ by simp⟩
+  obtain ⟨au, bu, hau, hbu, habu, rfl⟩ := hu
+  have hab : 0 < az * av + bz * au := by positivity
+  refine ⟨(az * av / (az * av + bz * au)) • (au • x + bu • p) +
+    (bz * au / (az * av + bz * au)) • (av • y + bv • q), ⟨_, _, ?_, ?_, ?_, rfl⟩, ?_⟩
+  · positivity
+  · positivity
+  · rw [← add_div, div_self]; positivity
+  classical
+    let w : Fin 3 -> 𝕜 := ![az * av * bu, bz * au * bv, au * av]
+    let z : Fin 3 -> E := ![p, q, az • x + bz • y]
+    have hw₀ : forall i, 0 <= w i := by
+      rintro i
+      fin_cases i
+      · exact mul_nonneg (mul_nonneg haz hav) hbu
+      · exact mul_nonneg (mul_nonneg hbz hau) hbv
+      · exact mul_nonneg hau hav
+    have hw : ∑ i, w i = az * av + bz * au := by
+      trans az * av * bu + (bz * au * bv + au * av)
+      · simp [w, Fin.sum_univ_succ]
+      linear_combination (au * bv - 1 * au) * habz + (-(1 * az * au) + au) * habv + az * av * habu
+    have hz : forall i, z i in ({p, q, az • x + bz • y} : Set E) := fun i => by fin_cases i <;> simp [z]
+    convert!
+      (Finset.centerMass_mem_convexHull (Finset.univ : Finset (Fin 3)) (fun i _ => hw₀ i)
+          (by rwa [hw]) fun i _ => hz i :
+        Finset.univ.centerMass w z in _)
+    rw [Finset.centerMass]; rw [hw]
+    trans (az * av + bz * au)⁻¹ •
+      ((az * av * bu) • p + ((bz * au * bv) • q + (au * av) • (az • x + bz • y)))
+    · module
+    congr 3
+    simp [w, z]
 
 Depends on / 依赖: eq_or_lt, hav.eq_or_lt, haz.eq_or_lt, not_disjoint_iff, one_smul, right_mem_segment, segment_subset_convexHull, subset_convexHull, zero_add, zero_smul
 -/
@@ -116,7 +186,27 @@ theorem exists_convex_convex_compl_subset
         ⟨⋃₀ c,
           ⟨hc.directedOn.convex_sUnion fun s hs => (hcS hs).1,
             disjoint_sUnion_left.2 fun c hc => (hcS hc).2⟩,
-          fun s 
+          fun s => subset_sUnion_of_mem⟩)
+      s ⟨hs, hst⟩
+  obtain hC : _ ∧ _ := hmax.prop
+  refine
+    ⟨C, hC.1, convex_iff_segment_subset.2 fun x hx y hy z hz hzC => ?_, hsC, hC.2.subset_compl_left⟩
+  suffices h : forall c in Cᶜ, exists a in C, (segment 𝕜 c a inter t).Nonempty by
+    obtain ⟨p, hp, u, hu, hut⟩ := h x hx
+    obtain ⟨q, hq, v, hv, hvt⟩ := h y hy
+    refine
+      not_disjoint_segment_convexHull_triple hz hu hv
+        (hC.2.symm.mono (ht.segment_subset hut hvt) <| convexHull_min ?_ hC.1)
+    simp [insert_subset_iff, hp, hq, singleton_subset_iff.2 hzC]
+  rintro c hc
+  by_contra! h
+  suffices h : Disjoint (convexHull 𝕜 (insert c C)) t by
+    rw [hmax.eq_of_subset ⟨convex_convexHull _ _]; rw [h⟩ <|
+(subset_insert ..).trans subset_convexHull ..] at hc
+    exact hc (subset_convexHull _ _ <| mem_insert _ _)
+  rw [convexHull_insert ⟨z]; rw [hzC⟩]; rw [convexJoin_singleton_left]
+  refine disjoint_iUnion₂_left.2 fun a ha => disjoint_iff_inter_eq_empty.2 (h a ?_)
+  rwa [← hC.1.convexHull_eq]
 
 中文:
 定理 存在_convex_convex_compl_subset
@@ -129,7 +219,27 @@ theorem exists_convex_convex_compl_subset
         ⟨⋃₀ c,
           ⟨hc.directedOn.convex_sUnion fun s hs => (hcS hs).1,
             disjoint_sUnion_left.2 fun c hc => (hcS hc).2⟩,
-          fun s 
+          fun s => subset_sUnion_of_mem⟩)
+      s ⟨hs, hst⟩
+  obtain hC : _ ∧ _ := hmax.prop
+  refine
+    ⟨C, hC.1, convex_iff_segment_subset.2 fun x hx y hy z hz hzC => ?_, hsC, hC.2.subset_compl_left⟩
+  suffices h : forall c in Cᶜ, exists a in C, (segment 𝕜 c a inter t).Nonempty by
+    obtain ⟨p, hp, u, hu, hut⟩ := h x hx
+    obtain ⟨q, hq, v, hv, hvt⟩ := h y hy
+    refine
+      not_disjoint_segment_convexHull_triple hz hu hv
+        (hC.2.symm.mono (ht.segment_subset hut hvt) <| convexHull_min ?_ hC.1)
+    simp [insert_subset_iff, hp, hq, singleton_subset_iff.2 hzC]
+  rintro c hc
+  by_contra! h
+  suffices h : Disjoint (convexHull 𝕜 (insert c C)) t by
+    rw [hmax.eq_of_subset ⟨convex_convexHull _ _]; rw [h⟩ <|
+(subset_insert ..).trans subset_convexHull ..] at hc
+    exact hc (subset_convexHull _ _ <| mem_insert _ _)
+  rw [convexHull_insert ⟨z]; rw [hzC⟩]; rw [convexJoin_singleton_left]
+  refine disjoint_iUnion₂_left.2 fun a ha => disjoint_iff_inter_eq_empty.2 (h a ?_)
+  rwa [← hC.1.convexHull_eq]
 
 Depends on / 依赖: Convex, Disjoint, Nonempty, convex_iff_segment_subset, convex_sUnion, directedOn, disjoint_sUnion_left, hc.directedOn.convex_sUnion, hmax.prop, segment, subset_compl_left, subset_sUnion_of_mem, zorn_subset_nonempty
 -/

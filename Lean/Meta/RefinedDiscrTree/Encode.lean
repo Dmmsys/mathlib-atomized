@@ -231,7 +231,7 @@ definition etaPossibilities
           etaPossibilities f lambdas root entry
         else
           pure []
-    
+      | _, _ => pure [])
 
 中文:
 定义 etaPossibilities
@@ -244,7 +244,7 @@ definition etaPossibilities
           etaPossibilities f lambdas root entry
         else
           pure []
-    
+      | _, _ => pure [])
 -/
 private def etaPossibilities (e : Expr) (lambdas : List FVarId) (root : Bool)
     (entry : LazyEntry) : ReaderT Context MetaM (List (Key × LazyEntry)) := do
@@ -278,7 +278,8 @@ definition lambdaTelescopeReduce
     match ← DiscrTree.reduce e with
     | .lam n d b bi =>
       withLocalDecl n bi d fun fvar =>
-        lambdaTelescopeReduce (b.instantiate1 fvar) (fva
+        lambdaTelescopeReduce (b.instantiate1 fvar) (fvar.fvarId! :: lambdas) noIndex k
+    | e => k e lambdas
 
 中文:
 定义 lambdaTelescopeReduce
@@ -291,7 +292,8 @@ definition lambdaTelescopeReduce
     match ← DiscrTree.reduce e with
     | .lam n d b bi =>
       withLocalDecl n bi d fun fvar =>
-        lambdaTelescopeReduce (b.instantiate1 fvar) (fva
+        lambdaTelescopeReduce (b.instantiate1 fvar) (fvar.fvarId! :: lambdas) noIndex k
+    | e => k e lambdas
 -/
 private partial def lambdaTelescopeReduce {m} {α} [Nonempty (m α)] [Monad m] [MonadLiftT MetaM m]
     [MonadControlT MetaM m] (e : Expr) (lambdas : List FVarId) (noIndex : List FVarId -> m α)
@@ -427,7 +429,11 @@ definition evalLazyEntryAux
       return some [(.star, entry)]
     | .expr { expr, bvars, lctx, localInsts, cfg } =>
       withLCtx lctx localInsts do
-      withConfig (fun
+      withConfig (fun _ => cfg) do
+        if eta then
+          return some (← encodingStepWithEta expr false entry |>.run { bvars := bvars })
+        else
+          return some [← encodingStep expr false |>.run { bvars := bvars } |>.run entry]
 
 中文:
 定义 evalLazyEntryAux
@@ -442,7 +448,11 @@ definition evalLazyEntryAux
       return some [(.star, entry)]
     | .expr { expr, bvars, lctx, localInsts, cfg } =>
       withLCtx lctx localInsts do
-      withConfig (fun
+      withConfig (fun _ => cfg) do
+        if eta then
+          return some (← encodingStepWithEta expr false entry |>.run { bvars := bvars })
+        else
+          return some [← encodingStep expr false |>.run { bvars := bvars } |>.run entry]
 -/
 private partial def evalLazyEntryAux (entry : LazyEntry) (eta : Bool) :
     MetaM (Option (List (Key × LazyEntry))) := do
@@ -524,7 +534,22 @@ definition processPrevious
   expr.withApp fun fn args => do
 
     let stackArgs (entry : LazyEntry) : MetaM LazyEntry := do
-      let en
+      let entries ← getStackEntries fn args bvars
+      return { entry with stack := entries.reverseAux entry.stack }
+
+    match fn with
+    | .forallE n d b bi =>
+      let d' := .expr (← mkExprInfo d bvars)
+      let b' ← withLocalDecl n bi d fun fvar =>
+        return .expr (← mkExprInfo (b.instantiate1 fvar) (fvar.fvarId! :: bvars))
+      return { entry with stack := d' :: b' :: entry.stack }
+    | .proj n _ a =>
+      let entry ← stackArgs entry
+      if isClass (← getEnv) n then
+        return { entry with stack := .star :: entry.stack }
+      else
+        return { entry with stack := .expr (← mkExprInfo a bvars) :: entry.stack }
+    | _ => stackArgs entry
 
 中文:
 定义 processPrevious
@@ -536,7 +561,22 @@ definition processPrevious
   expr.withApp fun fn args => do
 
     let stackArgs (entry : LazyEntry) : MetaM LazyEntry := do
-      let en
+      let entries ← getStackEntries fn args bvars
+      return { entry with stack := entries.reverseAux entry.stack }
+
+    match fn with
+    | .forallE n d b bi =>
+      let d' := .expr (← mkExprInfo d bvars)
+      let b' ← withLocalDecl n bi d fun fvar =>
+        return .expr (← mkExprInfo (b.instantiate1 fvar) (fvar.fvarId! :: bvars))
+      return { entry with stack := d' :: b' :: entry.stack }
+    | .proj n _ a =>
+      let entry ← stackArgs entry
+      if isClass (← getEnv) n then
+        return { entry with stack := .star :: entry.stack }
+      else
+        return { entry with stack := .expr (← mkExprInfo a bvars) :: entry.stack }
+    | _ => stackArgs entry
 -/
 private def processPrevious (entry : LazyEntry) : MetaM LazyEntry := do
   let some { expr, bvars, lctx, localInsts, cfg } := entry.previous | return entry

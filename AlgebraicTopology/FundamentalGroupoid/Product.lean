@@ -136,7 +136,13 @@ definition piIso
     · intros; rfl
     · intros; ext; simp
   inv_hom_id := by
-    change CategoryTheory.Functor.pi' (proj X) ⋙ piTo
+    change CategoryTheory.Functor.pi' (proj X) ⋙ piToPiTop X = 𝟭 _
+    apply CategoryTheory.Functor.ext
+    · intro _ _ f
+      suffices Path.Homotopic.pi ((CategoryTheory.Functor.pi' (proj X)).map f) = f by simpa
+      change Path.Homotopic.pi (fun i => (CategoryTheory.Functor.pi' (proj X)).map f i) = _
+      simp
+    · intros; rfl
 
 中文:
 定义 piIso
@@ -149,7 +155,13 @@ definition piIso
     · intros; rfl
     · intros; ext; simp
   inv_hom_id := by
-    change CategoryTheory.Functor.pi' (proj X) ⋙ piTo
+    change CategoryTheory.Functor.pi' (proj X) ⋙ piToPiTop X = 𝟭 _
+    apply CategoryTheory.Functor.ext
+    · intro _ _ f
+      suffices Path.Homotopic.pi ((CategoryTheory.Functor.pi' (proj X)).map f) = f by simpa
+      change Path.Homotopic.pi (fun i => (CategoryTheory.Functor.pi' (proj X)).map f i) = _
+      simp
+    · intros; rfl
 
 Depends on / 依赖: piToPiTop
 -/
@@ -390,7 +402,8 @@ definition prodToProdTop
     rfl
   map_comp {x y z} f g :=
     match x, y, z, f, g with
-    | (_, _), (_, _), (_, _), (f₀, f₁), (g₀, g
+    | (_, _), (_, _), (_, _), (f₀, f₁), (g₀, g₁) =>
+      (Path.Homotopic.comp_prod_eq_prod_comp f₀ f₁ g₀ g₁).symm
 
 中文:
 定义 prodToProdTop
@@ -405,7 +418,8 @@ definition prodToProdTop
     rfl
   map_comp {x y z} f g :=
     match x, y, z, f, g with
-    | (_, _), (_, _), (_, _), (f₀, f₁), (g₀, g
+    | (_, _), (_, _), (_, _), (f₀, f₁), (g₀, g₁) =>
+      (Path.Homotopic.comp_prod_eq_prod_comp f₀ f₁ g₀ g₁).symm
 
 Depends on / 依赖: g.fst.as, g.snd.as
 -/
@@ -458,7 +472,16 @@ definition prodIso
     change prodToProdTop A B ⋙ (projLeft A B).prod' (projRight A B) = 𝟭 _
     apply CategoryTheory.Functor.hext; · intros; ext <;> simp <;> rfl
     rintro ⟨x₀, x₁⟩ ⟨y₀, y₁⟩ ⟨f₀, f₁⟩
-    have : Path.Homotopic.projLeft 
+    have : Path.Homotopic.projLeft ((prodToProdTop A B).map (f₀, f₁)) = f₀ ∧
+      Path.Homotopic.projRight ((prodToProdTop A B).map (f₀, f₁)) = f₁ :=
+        And.intro (Path.Homotopic.projLeft_prod f₀ f₁) (Path.Homotopic.projRight_prod f₀ f₁)
+    cat_disch
+  inv_hom_id := by
+    change (projLeft A B).prod' (projRight A B) ⋙ prodToProdTop A B = 𝟭 _
+    apply CategoryTheory.Functor.hext
+    · intros; apply FundamentalGroupoid.ext; apply Prod.ext <;> simp <;> rfl
+    rintro ⟨x₀, x₁⟩ ⟨y₀, y₁⟩ f
+    simpa [-Path.Homotopic.prod_projLeft_projRight] using! Path.Homotopic.prod_projLeft_projRight f
 
 中文:
 定义 prodIso
@@ -469,7 +492,16 @@ definition prodIso
     change prodToProdTop A B ⋙ (projLeft A B).prod' (projRight A B) = 𝟭 _
     apply CategoryTheory.Functor.hext; · intros; ext <;> simp <;> rfl
     rintro ⟨x₀, x₁⟩ ⟨y₀, y₁⟩ ⟨f₀, f₁⟩
-    have : Path.Homotopic.projLeft 
+    have : Path.Homotopic.projLeft ((prodToProdTop A B).map (f₀, f₁)) = f₀ ∧
+      Path.Homotopic.projRight ((prodToProdTop A B).map (f₀, f₁)) = f₁ :=
+        And.intro (Path.Homotopic.projLeft_prod f₀ f₁) (Path.Homotopic.projRight_prod f₀ f₁)
+    cat_disch
+  inv_hom_id := by
+    change (projLeft A B).prod' (projRight A B) ⋙ prodToProdTop A B = 𝟭 _
+    apply CategoryTheory.Functor.hext
+    · intros; apply FundamentalGroupoid.ext; apply Prod.ext <;> simp <;> rfl
+    rintro ⟨x₀, x₁⟩ ⟨y₀, y₁⟩ f
+    simpa [-Path.Homotopic.prod_projLeft_projRight] using! Path.Homotopic.prod_projLeft_projRight f
 
 Depends on / 依赖: prodToProdTop
 -/

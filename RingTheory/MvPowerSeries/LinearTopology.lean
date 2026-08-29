@@ -62,7 +62,17 @@ definition basis
     (fun {f g} hg e he => by
       classical
       rw [coeff_mul]
-      
+      apply sum_mem
+      rintro uv huv
+      exact TwoSidedIdeal.mul_mem_left _ _ _
+        (hg _ (le_trans (Finset.HasAntidiagonal.antidiagonal.snd_le huv) he)))
+    (fun {f g} hf e he => by
+      classical
+      rw [coeff_mul]
+      apply sum_mem
+      rintro uv huv
+      exact TwoSidedIdeal.mul_mem_right _ _ _
+        (hf _ (le_trans (Finset.HasAntidiagonal.antidiagonal.fst_le huv) he)))
 
 中文:
 定义 basis
@@ -74,7 +84,17 @@ definition basis
     (fun {f g} hg e he => by
       classical
       rw [coeff_mul]
-      
+      apply sum_mem
+      rintro uv huv
+      exact TwoSidedIdeal.mul_mem_left _ _ _
+        (hg _ (le_trans (Finset.HasAntidiagonal.antidiagonal.snd_le huv) he)))
+    (fun {f g} hf e he => by
+      classical
+      rw [coeff_mul]
+      apply sum_mem
+      rintro uv huv
+      exact TwoSidedIdeal.mul_mem_right _ _ _
+        (hf _ (le_trans (Finset.HasAntidiagonal.antidiagonal.fst_le huv) he)))
 
 Depends on / 依赖: Finset, Finset.HasAntidiagonal.antidiagonal.snd_le, HasAntidiagonal, TwoSidedIdea, TwoSidedIdeal, TwoSidedIdeal.mk, TwoSidedIdeal.mul_mem_left, add_mem, antidiagonal, classical, coeff_mul, coeff_zero, le_trans, map_add, map_neg, mul_mem_left, neg_mem, snd_le, sum_mem
 -/
@@ -156,7 +176,17 @@ theorem basis_le_iff
     · intro x hx
       have (d' : _) : coeff d' (C (σ := σ) x) in J := by
         rw [coeff_C]; split_ifs <;> [exact hx; exact J.zero_mem]
-      simpa usi
+      simpa using h (C x) (fun _ _ => this _) _ zero_le
+    · by_contra h'
+      apply hK
+      rw [eq_top_iff]
+      intro x _
+      have (d') (hd'_le : d' <= d) : coeff d' (monomial e x) in J := by
+        rw [coeff_monomial]
+        split_ifs with hd' <;> [exact (h' (hd' ▸ hd'_le)).elim; exact J.zero_mem]
+      simpa using h (monomial e x) this _ le_rfl
+  · rintro ⟨hJK, hed⟩
+    exact basis_le hJK hed
 
 中文:
 定理 basis_le_iff
@@ -170,7 +200,17 @@ theorem basis_le_iff
     · intro x hx
       have (d' : _) : coeff d' (C (σ := σ) x) in J := by
         rw [coeff_C]; split_ifs <;> [exact hx; exact J.zero_mem]
-      simpa usi
+      simpa using h (C x) (fun _ _ => this _) _ zero_le
+    · by_contra h'
+      apply hK
+      rw [eq_top_iff]
+      intro x _
+      have (d') (hd'_le : d' <= d) : coeff d' (monomial e x) in J := by
+        rw [coeff_monomial]
+        split_ifs with hd' <;> [exact (h' (hd' ▸ hd'_le)).elim; exact J.zero_mem]
+      simpa using h (monomial e x) this _ le_rfl
+  · rintro ⟨hJK, hed⟩
+    exact basis_le hJK hed
 
 Depends on / 依赖: J.zero_mem, TwoSidedIdeal, TwoSidedIdeal.coe_mk, TwoSidedIdeal.le_iff, classical, coe_mk, coeff_C, coeff_monomial, eq_top_iff, le_iff, monomial, ofPred_subset_ofPred, split_ifs, zero_le, zero_mem
 -/
@@ -215,7 +255,10 @@ lemma hasBasis_nhds_zero
   · intro ⟨D, I⟩ ⟨hD, hI⟩
     refine ⟨⟨I, Finset.sup hD.toFinset id⟩, hI, fun f hf d hd => ?_⟩
     rw [SetLike.mem_coe]; rw [mem_basis_iff] at hf
-convert! hf _ Finset.le_sup (hD.mem_toFinset.mpr 
+convert! hf _ Finset.le_sup (hD.mem_toFinset.mpr hd)
+  · intro ⟨I, d⟩ hI
+    refine ⟨⟨Iic d, I⟩, ⟨finite_Iic d, hI⟩, ?_⟩
+    simpa [basis, coeff_apply, Iic, Set.pi] using! subset_rfl
 
 中文:
 引理 hasBasis_nhds_zero
@@ -227,7 +270,10 @@ convert! hf _ Finset.le_sup (hD.mem_toFinset.mpr
   · intro ⟨D, I⟩ ⟨hD, hI⟩
     refine ⟨⟨I, Finset.sup hD.toFinset id⟩, hI, fun f hf d hd => ?_⟩
     rw [SetLike.mem_coe]; rw [mem_basis_iff] at hf
-convert! hf _ Finset.le_sup (hD.mem_toFinset.mpr 
+convert! hf _ Finset.le_sup (hD.mem_toFinset.mpr hd)
+  · intro ⟨I, d⟩ hI
+    refine ⟨⟨Iic d, I⟩, ⟨finite_Iic d, hI⟩, ?_⟩
+    simpa [basis, coeff_apply, Iic, Set.pi] using! subset_rfl
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.sup, IsLinearTopology, IsLinearTopology.hasBasis_twoSidedIdeal.pi_self.to_hasBasis, Set.pi, SetLike, SetLike.mem_coe, classical, coeff_apply, convert, finite_Iic, hD.mem_toFinset.mpr, hD.toFinset, hasBasis_twoSidedIdeal, le_sup, mem_basis_iff, mem_coe, mem_toFinset, nhds_pi
 -/
@@ -295,7 +341,11 @@ theorem isTopologicallyNilpotent_of_constantCoeff
   intro d I hI
   replace hf := hf.eventually_mem hI
   simp_rw [eventually_atTop, SetLike.mem_coe, ← Ideal.Quotient.eq_zero_iff_mem,
-    map_pow, ← coeff_map, ← consta
+    map_pow, ← coeff_map, ← constantCoeff_map] at hf ⊢
+  obtain ⟨N, hN⟩ := hf
+  use N + d.degree
+  intro n hn
+  simpa only [map_pow] using coeff_eq_zero_of_constantCoeff_nilpotent (hN N le_rfl) hn
 
 中文:
 定理 isTopologicallyNilpotent_of_constantCoeff
@@ -305,7 +355,11 @@ theorem isTopologicallyNilpotent_of_constantCoeff
   intro d I hI
   replace hf := hf.eventually_mem hI
   simp_rw [eventually_atTop, SetLike.mem_coe, ← Ideal.Quotient.eq_zero_iff_mem,
-    map_pow, ← coeff_map, ← consta
+    map_pow, ← coeff_map, ← constantCoeff_map] at hf ⊢
+  obtain ⟨N, hN⟩ := hf
+  use N + d.degree
+  intro n hn
+  simpa only [map_pow] using coeff_eq_zero_of_constantCoeff_nilpotent (hN N le_rfl) hn
 
 Depends on / 依赖: Ideal.Quotient.eq_zero_iff_mem, IsLinearTopology, IsLinearTopology.hasBasis_ideal.tendsto_right_iff, IsTopologicallyNilpotent, Quotient, SetLike, SetLike.mem_coe, coeff_eq_zero_of_constantCoeff_nilpotent, coeff_map, coeff_zero, constantCoeff_map, d.degree, degree, eq_zero_iff_mem, eventually_atTop, eventually_mem, hasBasis_ideal, hf.eventually_mem, le_rfl, map_pow
 -/

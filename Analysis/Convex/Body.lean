@@ -530,7 +530,9 @@ theorem smul_le_of_le
     exact Set.mem_smul_set.mpr ⟨0, h_zero, smul_zero _⟩
   · intro x hx
     obtain ⟨y, hy, rfl⟩ := Set.mem_smul_set.mp hx
-    rw [← Set.mem_i
+    rw [← Set.mem_inv_smul_set_iff₀ ha.ne']; rw [smul_smul]
+    refine Convex.mem_smul_of_zero_mem K.convex h_zero hy (?_ : 1 <= a⁻¹ * b)
+    rwa [le_inv_mul_iff₀ ha, mul_one]
 
 中文:
 定理 smul_le_of_le
@@ -542,7 +544,9 @@ theorem smul_le_of_le
     exact Set.mem_smul_set.mpr ⟨0, h_zero, smul_zero _⟩
   · intro x hx
     obtain ⟨y, hy, rfl⟩ := Set.mem_smul_set.mp hx
-    rw [← Set.mem_i
+    rw [← Set.mem_inv_smul_set_iff₀ ha.ne']; rw [smul_smul]
+    refine Convex.mem_smul_of_zero_mem K.convex h_zero hy (?_ : 1 <= a⁻¹ * b)
+    rwa [le_inv_mul_iff₀ ha, mul_one]
 
 Depends on / 依赖: Convex, Convex.mem_smul_of_zero_mem, K.convex, K.nonempty, Set.mem_inv_smul_set_iff, Set.mem_smul_set.mp, Set.mem_smul_set.mpr, Set.zero_smul_set, Set.zero_subset, SetLike, SetLike.coe_subset_coe, coe_smul, coe_subset_coe, convex, eq_zero_or_pos, h_zero, ha.ne, mem_smul_of_zero_mem, mem_smul_set, mul_one
 -/
@@ -755,7 +759,17 @@ theorem iInter_smul_eq_self
     rw [← K.isClosed.closure_eq]; rw [SeminormedAddCommGroup.mem_closure_iff]
     rw [← NNReal.tendsto_coe]; rw [NormedAddCommGroup.tendsto_atTop] at hu
     intro ε hε
-    obtain ⟨n, hn⟩ :
+    obtain ⟨n, hn⟩ := hu (ε / C) (div_pos hε hC_pos)
+    obtain ⟨y, hyK, rfl⟩ := Set.mem_smul_set.mp (Set.mem_iInter.mp h n)
+    refine ⟨y, hyK, ?_⟩
+    rw [show (1 + u n : Real) • y - y = (u n : Real) • y by rw [add_smul]; rw [one_smul]; rw [add_sub_cancel_left],
+      norm_smul, Real.norm_eq_abs]
+    specialize hn n le_rfl
+    rw [lt_div_iff₀' hC_pos]; rw [mul_comm]; rw [NNReal.coe_zero]; rw [sub_zero]; rw [Real.norm_eq_abs] at hn
+    refine lt_of_le_of_lt ?_ hn
+    gcongr; exact hC_bdd _ hyK
+  · refine Set.mem_iInter.mpr (fun n => Convex.mem_smul_of_zero_mem K.convex h_zero h ?_)
+    exact le_add_of_nonneg_right (by positivity)
 
 中文:
 定理 i整数er_smul_eq_self
@@ -767,7 +781,17 @@ theorem iInter_smul_eq_self
     rw [← K.isClosed.closure_eq]; rw [SeminormedAddCommGroup.mem_closure_iff]
     rw [← NNReal.tendsto_coe]; rw [NormedAddCommGroup.tendsto_atTop] at hu
     intro ε hε
-    obtain ⟨n, hn⟩ :
+    obtain ⟨n, hn⟩ := hu (ε / C) (div_pos hε hC_pos)
+    obtain ⟨y, hyK, rfl⟩ := Set.mem_smul_set.mp (Set.mem_iInter.mp h n)
+    refine ⟨y, hyK, ?_⟩
+    rw [show (1 + u n : Real) • y - y = (u n : Real) • y by rw [add_smul]; rw [one_smul]; rw [add_sub_cancel_left],
+      norm_smul, Real.norm_eq_abs]
+    specialize hn n le_rfl
+    rw [lt_div_iff₀' hC_pos]; rw [mul_comm]; rw [NNReal.coe_zero]; rw [sub_zero]; rw [Real.norm_eq_abs] at hn
+    refine lt_of_le_of_lt ?_ hn
+    gcongr; exact hC_bdd _ hyK
+  · refine Set.mem_iInter.mpr (fun n => Convex.mem_smul_of_zero_mem K.convex h_zero h ?_)
+    exact le_add_of_nonneg_right (by positivity)
 
 Depends on / 依赖: K.isBounded.exists_pos_norm_le, K.isClosed.closure_eq, NNReal, NNReal.tendsto_coe, NormedAddCommGroup, NormedAddCommGroup.tendsto_atTop, SeminormedAddCommGroup, SeminormedAddCommGroup.mem_closure_iff, Set.mem_iInter.mp, Set.mem_smul_set.mp, add_smul, add_sub_can, closure_eq, div_pos, exists_pos_norm_le, hC_bdd, hC_pos, isBounded, isClosed, mem_closure_iff
 -/

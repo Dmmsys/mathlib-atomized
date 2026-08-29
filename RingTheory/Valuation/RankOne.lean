@@ -99,7 +99,28 @@ lemma nonempty_rankOne_iff_mulArchimedean
   · intro _
     obtain ⟨f, hf⟩ :=
       Archimedean.exists_orderAddMonoidHom_real_injective (Additive (ValueGroup₀ (.ofClass v))ˣ)
-    let e := AddMonoidHom.toMultiplicativ
+    let e := AddMonoidHom.toMultiplicativeRight (α := (ValueGroup₀ (.ofClass v))ˣ) (β := Real) f
+    have he : StrictMono e := by
+      simp only [AddMonoidHom.coe_toMultiplicativeRight, AddMonoidHom.coe_coe, e]
+      -- toAdd_strictMono is already in an applied form, do defeq abuse instead
+      exact StrictMono.comp strictMono_id (f.monotone'.strictMono_of_injective hf)
+    let rf : Multiplicative Real ->* Real>=0ˣ := {
+toFun x := Units.mk0 (.mk ((2 : Real) ^ (log (M := Real) x)) (by positivity)) by
+        simp only [ne_eq, NNReal.eq_iff, NNReal.coe_mk, NNReal.coe_zero]
+        positivity
+      map_one' := by ext; simp
+      map_mul' _ _ := by ext; simp [Real.rpow_add]
+      }
+    have H : StrictMono (map' (rf.comp e)) := by
+      refine map'_strictMono ?_
+      intro a b h
+      simpa [← Units.val_lt_val, ← NNReal.coe_lt_coe, rf] using he h
+    exact ⟨{
+hom' := withZeroUnitsEquiv.toMonoidWithZeroHom.comp (map' (rf.comp e)).comp
+        withZeroUnitsEquiv.symm.toMonoidWithZeroHom
+strictMono' := withZeroUnitsEquiv_strictMono.comp H.comp
+        withZeroUnitsEquiv_symm_strictMono
+    }⟩
 
 中文:
 引理 nonempty_rankOne_iff_mulArchimedean
@@ -112,7 +133,28 @@ lemma nonempty_rankOne_iff_mulArchimedean
   · intro _
     obtain ⟨f, hf⟩ :=
       Archimedean.exists_orderAddMonoidHom_real_injective (Additive (ValueGroup₀ (.ofClass v))ˣ)
-    let e := AddMonoidHom.toMultiplicativ
+    let e := AddMonoidHom.toMultiplicativeRight (α := (ValueGroup₀ (.ofClass v))ˣ) (β := Real) f
+    have he : StrictMono e := by
+      simp only [AddMonoidHom.coe_toMultiplicativeRight, AddMonoidHom.coe_coe, e]
+      -- toAdd_strictMono is already in an applied form, do defeq abuse instead
+      exact StrictMono.comp strictMono_id (f.monotone'.strictMono_of_injective hf)
+    let rf : Multiplicative Real ->* Real>=0ˣ := {
+toFun x := Units.mk0 (.mk ((2 : Real) ^ (log (M := Real) x)) (by positivity)) by
+        simp only [ne_eq, NNReal.eq_iff, NNReal.coe_mk, NNReal.coe_zero]
+        positivity
+      map_one' := by ext; simp
+      map_mul' _ _ := by ext; simp [Real.rpow_add]
+      }
+    have H : StrictMono (map' (rf.comp e)) := by
+      refine map'_strictMono ?_
+      intro a b h
+      simpa [← Units.val_lt_val, ← NNReal.coe_lt_coe, rf] using he h
+    exact ⟨{
+hom' := withZeroUnitsEquiv.toMonoidWithZeroHom.comp (map' (rf.comp e)).comp
+        withZeroUnitsEquiv.symm.toMonoidWithZeroHom
+strictMono' := withZeroUnitsEquiv_strictMono.comp H.comp
+        withZeroUnitsEquiv_symm_strictMono
+    }⟩
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_coe, AddMonoidHom.coe_toMultiplicativeRight, AddMonoidHom.toMultiplicativeRight, Additive, Archimedean, Archimedean.exists_orderAddMonoidHom_real_injective, MulArchimedean, MulArchimedean.comap, Nonempty, Nonempty.some, StrictMono, coe_coe, coe_toMultiplicativeRight, exists_orderAddMonoidHom_real_injective, hv.hom, hv.strictMono, ofClass, strictMono, toMonoidHom
 -/
@@ -394,7 +436,15 @@ theorem exists_val_lt
   obtain ⟨x, h⟩ := NNReal.exists_lt_of_strictMono (RankOne.strictMono v.restrict) hγ_pos
   obtain ⟨k, hk⟩ := ValueGroup₀.restrict₀_surjective _ x.val
   refine ⟨k, ?_, ?_⟩
-  · simp only [restrict₀_apply, MonoidWithZeroHom.coe_ofClass, restrict_def, m
+  · simp only [restrict₀_apply, MonoidWithZeroHom.coe_ofClass, restrict_def, map_eq_zero,
+      dite_eq_left_iff, coe_ne_zero, imp_false, not_not] at hk
+    by_contra h0
+    rw [dif_pos (by rw [dif_pos ((zero_iff v).mpr h0)]), eq_comm] at hk
+    simp at hk
+  · convert! h
+    simp only [restrict_RankOne_hom_eq, coe_comp, Function.comp_apply, ← hk]
+    congr 1
+    exact (embedding_restrict₀ k).symm
 
 中文:
 定理 存在_val_lt
@@ -405,7 +455,15 @@ theorem exists_val_lt
   obtain ⟨x, h⟩ := NNReal.exists_lt_of_strictMono (RankOne.strictMono v.restrict) hγ_pos
   obtain ⟨k, hk⟩ := ValueGroup₀.restrict₀_surjective _ x.val
   refine ⟨k, ?_, ?_⟩
-  · simp only [restrict₀_apply, MonoidWithZeroHom.coe_ofClass, restrict_def, m
+  · simp only [restrict₀_apply, MonoidWithZeroHom.coe_ofClass, restrict_def, map_eq_zero,
+      dite_eq_left_iff, coe_ne_zero, imp_false, not_not] at hk
+    by_contra h0
+    rw [dif_pos (by rw [dif_pos ((zero_iff v).mpr h0)]), eq_comm] at hk
+    simp at hk
+  · convert! h
+    simp only [restrict_RankOne_hom_eq, coe_comp, Function.comp_apply, ← hk]
+    congr 1
+    exact (embedding_restrict₀ k).symm
 
 Depends on / 依赖: MonoidWithZeroHom, MonoidWithZeroHom.coe_ofClass, NNReal, NNReal.exists_lt_of_strictMono, RankOne, RankOne.strictMono, SeparationQuotient, SeparationQuotient.lift, coe_ne_zero, coe_ofClass, convert, dif_pos, dite_eq_left_iff, eq_comm, exists_lt_of_strictMono, imp_false, map_eq_zero, not_not, pos_iff_ne_zero, pos_iff_ne_zero.mpr
 -/
@@ -480,6 +538,15 @@ definition rankOne_of_nontrivial
       apply_fun embedding at hk
       simp only [embedding_restrict₀, MonoidWithZeroHom.coe_ofClass] at hk
       simp [hk]
+    have h1 : v k != 1 := by
+      apply_fun embedding at hk
+      simp only [embedding_restrict₀, MonoidWithZeroHom.coe_ofClass] at hk
+      apply_fun Units.val at hx using
+          Units.val_injective (α := (MonoidWithZeroHom.ofClass v).ValueGroup₀)
+      intro h
+      apply_fun embedding at hx using embedding_injective (f := .ofClass v)
+      simp [← hk, h] at hx
+    exact h1 (H' k h0)
 
 中文:
 定义 rankOne_of_nontrivial
@@ -493,6 +560,15 @@ definition rankOne_of_nontrivial
       apply_fun embedding at hk
       simp only [embedding_restrict₀, MonoidWithZeroHom.coe_ofClass] at hk
       simp [hk]
+    have h1 : v k != 1 := by
+      apply_fun embedding at hk
+      simp only [embedding_restrict₀, MonoidWithZeroHom.coe_ofClass] at hk
+      apply_fun Units.val at hx using
+          Units.val_injective (α := (MonoidWithZeroHom.ofClass v).ValueGroup₀)
+      intro h
+      apply_fun embedding at hx using embedding_injective (f := .ofClass v)
+      simp [← hk, h] at hx
+    exact h1 (H' k h0)
 
 Depends on / 依赖: MonoidWithZeroHom, MonoidWithZeroHom.coe_ofClass, MonoidWithZeroHom.ofClass, Units.val, Units.val_injective, apply_fu, apply_fun, coe_ofClass, embedding, nontrivial_iff_exists_ne, ofClass, val_injective, x.val
 -/
@@ -669,7 +745,19 @@ lemma ValuativeRel.isRankLeOne_iff_mulArchimedean
     by_cases H : IsNontrivial R
     · rw [isNontrivial_iff_isNontrivial (valuation R)] at H
       have h' : MulArchimedean (ValueGroup₀ (.ofClass (valuation R))) :=
-        MulArchimedean.comap embedding.toMonoidHom 
+        MulArchimedean.comap embedding.toMonoidHom embedding_strictMono
+      rw [← (valuation R).nonempty_rankOne_iff_mulArchimedean] at h'
+      obtain ⟨f⟩ := h'
+      exact isRankLeOne_of_rankOne
+    · refine ⟨⟨{ emb := 1, strictMono := ?_ }⟩⟩
+      intro a b
+      contrapose! H
+      obtain ⟨H, H'⟩ := H
+      rcases eq_or_ne a 0 with rfl | ha
+      · simp_all
+      rcases eq_or_ne a 1 with rfl | ha'
+      · exact ⟨⟨b, (H.trans' zero_lt_one).ne', H.ne'⟩⟩
+      · exact ⟨⟨a, ha, ha'⟩⟩
 
 中文:
 引理 ValuativeRel.isRankLeOne_iff_mulArchimedean
@@ -681,7 +769,19 @@ lemma ValuativeRel.isRankLeOne_iff_mulArchimedean
     by_cases H : IsNontrivial R
     · rw [isNontrivial_iff_isNontrivial (valuation R)] at H
       have h' : MulArchimedean (ValueGroup₀ (.ofClass (valuation R))) :=
-        MulArchimedean.comap embedding.toMonoidHom 
+        MulArchimedean.comap embedding.toMonoidHom embedding_strictMono
+      rw [← (valuation R).nonempty_rankOne_iff_mulArchimedean] at h'
+      obtain ⟨f⟩ := h'
+      exact isRankLeOne_of_rankOne
+    · refine ⟨⟨{ emb := 1, strictMono := ?_ }⟩⟩
+      intro a b
+      contrapose! H
+      obtain ⟨H, H'⟩ := H
+      rcases eq_or_ne a 0 with rfl | ha
+      · simp_all
+      rcases eq_or_ne a 1 with rfl | ha'
+      · exact ⟨⟨b, (H.trans' zero_lt_one).ne', H.ne'⟩⟩
+      · exact ⟨⟨a, ha, ha'⟩⟩
 
 Depends on / 依赖: IsNontrivial, MulArchimedean, MulArchimedean.comap, contrapose, embedding, embedding.toMonoidHom, embedding_strictMono, eq_or_n, f.toMonoidHom, isNontrivial_iff_isNontrivial, isRankLeOne_of_rankOne, nonempty_rankOne_iff_mulArchimedean, ofClass, strictMono, toMonoidHom, valuation
 -/

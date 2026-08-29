@@ -178,7 +178,10 @@ theorem pullback_base
   proof: by
   have eq₁ : _ = (π₁ i, j, k).base := PreservesPullback.iso_hom_fst (forget C) _ _
   have eq₂ : _ = (π₂ i, j, k).base := PreservesPullback.iso_hom_snd (forget C) _ _
-  rw [← eq₁]; rw [← eq₂]; rw [TopCat.coe_comp]; rw [Set.image_comp]; rw [TopCat.coe_comp]; rw [Set.preimage_comp]; rw [Set.image_pr
+  rw [← eq₁]; rw [← eq₂]; rw [TopCat.coe_comp]; rw [Set.image_comp]; rw [TopCat.coe_comp]; rw [Set.preimage_comp]; rw [Set.image_preimage_eq]
+  · simp only [forget_obj, forget_map, TopCat.pullback_snd_image_fst_preimage]
+  rw [← TopCat.epi_iff_surjective]
+  infer_instance
 
 中文:
 定理 pullback_base
@@ -186,7 +189,10 @@ theorem pullback_base
   证明: by
   have eq₁ : _ = (π₁ i, j, k).base := PreservesPullback.iso_hom_fst (forget C) _ _
   have eq₂ : _ = (π₂ i, j, k).base := PreservesPullback.iso_hom_snd (forget C) _ _
-  rw [← eq₁]; rw [← eq₂]; rw [TopCat.coe_comp]; rw [Set.image_comp]; rw [TopCat.coe_comp]; rw [Set.preimage_comp]; rw [Set.image_pr
+  rw [← eq₁]; rw [← eq₂]; rw [TopCat.coe_comp]; rw [Set.image_comp]; rw [TopCat.coe_comp]; rw [Set.preimage_comp]; rw [Set.image_preimage_eq]
+  · simp only [forget_obj, forget_map, TopCat.pullback_snd_image_fst_preimage]
+  rw [← TopCat.epi_iff_surjective]
+  infer_instance
 
 Depends on / 依赖: PreservesPullback, PreservesPullback.iso_hom_fst, PreservesPullback.iso_hom_snd, Set.image_comp, Set.image_preimage_eq, Set.preimage_comp, TopCat, TopCat.coe_comp, TopCat.epi_iff_surjective, TopCat.pullback_snd_image_fst_preimage, coe_comp, epi_iff_surjective, forget, forget_map, forget_obj, image_comp, image_preimage_eq, infer_instance, iso_hom_fst, iso_hom_snd
 -/
@@ -213,7 +219,12 @@ theorem f_invApp_f_app
   dsimp only [comp_c_app] at this
   rw [← cancel_epi (inv ((D.f_open i j).invApp _ U))]; rw [IsIso.inv_hom_id_assoc]; rw [IsOpenImmersion.inv_invApp]
   simp_rw [Category.assoc]
-  erw [(π₁ i, j, k).c.naturali
+  erw [(π₁ i, j, k).c.naturality_assoc, reassoc_of% this, ← Functor.map_comp_assoc,
+    IsOpenImmersion.inv_naturality_assoc, IsOpenImmersion.app_invApp_assoc, ←
+    (D.V (i, k)).presheaf.map_comp, ← (D.V (i, k)).presheaf.map_comp]
+  convert! (Category.comp_id _).symm
+  erw [(D.V (i, k)).presheaf.map_id]
+  rfl
 
 中文:
 定理 f_invApp_f_app
@@ -223,7 +234,12 @@ theorem f_invApp_f_app
   dsimp only [comp_c_app] at this
   rw [← cancel_epi (inv ((D.f_open i j).invApp _ U))]; rw [IsIso.inv_hom_id_assoc]; rw [IsOpenImmersion.inv_invApp]
   simp_rw [Category.assoc]
-  erw [(π₁ i, j, k).c.naturali
+  erw [(π₁ i, j, k).c.naturality_assoc, reassoc_of% this, ← Functor.map_comp_assoc,
+    IsOpenImmersion.inv_naturality_assoc, IsOpenImmersion.app_invApp_assoc, ←
+    (D.V (i, k)).presheaf.map_comp, ← (D.V (i, k)).presheaf.map_comp]
+  convert! (Category.comp_id _).symm
+  erw [(D.V (i, k)).presheaf.map_id]
+  rfl
 
 Depends on / 依赖: Catego, Category, Category.assoc, D.f_open, Functor, Functor.map_comp_assoc, IsIso.inv_hom_id_assoc, IsOpenImmersion, IsOpenImmersion.app_invApp_assoc, IsOpenImmersion.inv_invApp, IsOpenImmersion.inv_naturality_assoc, PresheafedSpace, PresheafedSpace.congr_app, app_invApp_assoc, c.naturality_assoc, cancel_epi, comp_c_app, condition, congr_app, convert
 -/
@@ -263,7 +279,41 @@ theorem snd_invApp_t_app'
   · delta IsOpenImmersion.opensFunctor IsOpenEmbedding.functor
     dsimp only [Functor.op, Opens.map_def, IsOpenMap.functor, unop_op, Opens.coe_mk]
     congr 2
-    have := (𝖣.t_fac 
+    have := (𝖣.t_fac k i j).symm
+    rw [← IsIso.inv_comp_eq] at this
+    replace this := (congr_arg ((PresheafedSpace.Hom.base ·)) this).symm
+    replace this := congr_arg (TopCat.Hom.hom ·) this
+    replace this := congr_arg (ContinuousMap.toFun ·) this
+    dsimp at this
+    rw [this]; rw [Set.image_comp]; rw [Set.image_comp]; rw [Set.preimage_image_eq]
+    swap
+    · refine Function.HasLeftInverse.injective ⟨(D.t i k).base, fun x => ?_⟩
+      rw [← ConcreteCategory.comp_apply]; rw [← comp_base]; rw [D.t_inv]; rw [id_base]; rw [ConcreteCategory.id_apply]
+    refine congr_arg (_ '' ·) ?_
+    refine congr_fun ?_ _
+    refine Set.image_eq_preimage_of_inverse ?_ ?_
+    · intro x
+      rw [← ConcreteCategory.comp_apply]; rw [← comp_base]; rw [IsIso.inv_hom_id]; rw [id_base]; rw [ConcreteCategory.id_apply]
+    · intro x
+      rw [← ConcreteCategory.comp_apply]; rw [← comp_base]; rw [IsIso.hom_inv_id]; rw [id_base]; rw [ConcreteCategory.id_apply]
+  · rw [← IsIso.eq_inv_comp, IsOpenImmersion.inv_invApp, Category.assoc,
+      (D.t' k i j).c.naturality_assoc]
+    simp_rw [← Category.assoc]
+    dsimp
+    rw [← comp_c_app]; rw [congr_app (D.t_fac k i j)]; rw [comp_c_app]
+    dsimp
+    simp_rw [Category.assoc]
+    rw [IsOpenImmersion.inv_naturality]; rw [IsOpenImmersion.inv_naturality_assoc]; rw [IsOpenImmersion.app_inv_app'_assoc]
+    · simp_rw [← (𝖣.V (k, i)).presheaf.map_comp]; rfl
+    rintro x ⟨y, -, eq⟩
+    replace eq := ConcreteCategory.congr_arg (𝖣.t i k).base eq
+    change ((π₂ i, j, k) ≫ D.t i k).base y = (D.t k i ≫ D.t i k).base x at eq
+    rw [𝖣.t_inv]; rw [id_base]; rw [TopCat.id_app] at eq
+    subst eq
+    use (inv (D.t' k i j)).base y
+    change (inv (D.t' k i j) ≫ π₁ k, i, j).base y = _
+    congr 3
+    rw [IsIso.inv_comp_eq]; rw [𝖣.t_fac_assoc]; rw [𝖣.t_inv]; rw [Category.comp_id]
 
 中文:
 定理 snd_invApp_t_app'
@@ -274,7 +324,41 @@ theorem snd_invApp_t_app'
   · delta IsOpenImmersion.opensFunctor IsOpenEmbedding.functor
     dsimp only [Functor.op, Opens.map_def, IsOpenMap.functor, unop_op, Opens.coe_mk]
     congr 2
-    have := (𝖣.t_fac 
+    have := (𝖣.t_fac k i j).symm
+    rw [← IsIso.inv_comp_eq] at this
+    replace this := (congr_arg ((PresheafedSpace.Hom.base ·)) this).symm
+    replace this := congr_arg (TopCat.Hom.hom ·) this
+    replace this := congr_arg (ContinuousMap.toFun ·) this
+    dsimp at this
+    rw [this]; rw [Set.image_comp]; rw [Set.image_comp]; rw [Set.preimage_image_eq]
+    swap
+    · refine Function.HasLeftInverse.injective ⟨(D.t i k).base, fun x => ?_⟩
+      rw [← ConcreteCategory.comp_apply]; rw [← comp_base]; rw [D.t_inv]; rw [id_base]; rw [ConcreteCategory.id_apply]
+    refine congr_arg (_ '' ·) ?_
+    refine congr_fun ?_ _
+    refine Set.image_eq_preimage_of_inverse ?_ ?_
+    · intro x
+      rw [← ConcreteCategory.comp_apply]; rw [← comp_base]; rw [IsIso.inv_hom_id]; rw [id_base]; rw [ConcreteCategory.id_apply]
+    · intro x
+      rw [← ConcreteCategory.comp_apply]; rw [← comp_base]; rw [IsIso.hom_inv_id]; rw [id_base]; rw [ConcreteCategory.id_apply]
+  · rw [← IsIso.eq_inv_comp, IsOpenImmersion.inv_invApp, Category.assoc,
+      (D.t' k i j).c.naturality_assoc]
+    simp_rw [← Category.assoc]
+    dsimp
+    rw [← comp_c_app]; rw [congr_app (D.t_fac k i j)]; rw [comp_c_app]
+    dsimp
+    simp_rw [Category.assoc]
+    rw [IsOpenImmersion.inv_naturality]; rw [IsOpenImmersion.inv_naturality_assoc]; rw [IsOpenImmersion.app_inv_app'_assoc]
+    · simp_rw [← (𝖣.V (k, i)).presheaf.map_comp]; rfl
+    rintro x ⟨y, -, eq⟩
+    replace eq := ConcreteCategory.congr_arg (𝖣.t i k).base eq
+    change ((π₂ i, j, k) ≫ D.t i k).base y = (D.t k i ≫ D.t i k).base x at eq
+    rw [𝖣.t_inv]; rw [id_base]; rw [TopCat.id_app] at eq
+    subst eq
+    use (inv (D.t' k i j)).base y
+    change (inv (D.t' k i j) ≫ π₁ k, i, j).base y = _
+    congr 3
+    rw [IsIso.inv_comp_eq]; rw [𝖣.t_fac_assoc]; rw [𝖣.t_inv]; rw [Category.comp_id]
 
 Depends on / 依赖: fconstructor
 -/
@@ -374,7 +458,19 @@ theorem ι_image_preimage_eq
   dsimp only [Opens.map_coe, IsOpenMap.coe_functor_obj]
   rw [← show _ = (𝖣.ι i).base from 𝖣.ι_gluedIso_inv (PresheafedSpace.forget _) i]; rw [←
     show _ = (𝖣.ι j).base from 𝖣.ι_gluedIso_inv (PresheafedSpace.forget _) j]
-  rw [TopCat.coe_comp]; rw [TopCat.coe_comp]; rw [Set.image_comp]; 
+  rw [TopCat.coe_comp]; rw [TopCat.coe_comp]; rw [Set.image_comp]; rw [Set.preimage_comp]; rw [Set.preimage_image_eq]
+  · refine Eq.trans (D.toTopGlueData.preimage_image_eq_image' _ _ _) ?_
+    dsimp
+    rw [Set.image_comp]
+    refine congr_arg (_ '' ·) ?_
+    rw [Set.eq_preimage_iff_image_eq]; rw [← Set.image_comp]
+    swap
+    · exact CategoryTheory.ConcreteCategory.bijective_of_isIso (C := TopCat) _
+    change (D.t i j ≫ D.t j i).base '' _ = _
+    rw [𝖣.t_inv]
+    simp
+  · rw [← TopCat.mono_iff_injective]
+    infer_instance
 
 中文:
 定理 ι_image_preimage_eq
@@ -384,7 +480,19 @@ theorem ι_image_preimage_eq
   dsimp only [Opens.map_coe, IsOpenMap.coe_functor_obj]
   rw [← show _ = (𝖣.ι i).base from 𝖣.ι_gluedIso_inv (PresheafedSpace.forget _) i]; rw [←
     show _ = (𝖣.ι j).base from 𝖣.ι_gluedIso_inv (PresheafedSpace.forget _) j]
-  rw [TopCat.coe_comp]; rw [TopCat.coe_comp]; rw [Set.image_comp]; 
+  rw [TopCat.coe_comp]; rw [TopCat.coe_comp]; rw [Set.image_comp]; rw [Set.preimage_comp]; rw [Set.preimage_image_eq]
+  · refine Eq.trans (D.toTopGlueData.preimage_image_eq_image' _ _ _) ?_
+    dsimp
+    rw [Set.image_comp]
+    refine congr_arg (_ '' ·) ?_
+    rw [Set.eq_preimage_iff_image_eq]; rw [← Set.image_comp]
+    swap
+    · exact CategoryTheory.ConcreteCategory.bijective_of_isIso (C := TopCat) _
+    change (D.t i j ≫ D.t j i).base '' _ = _
+    rw [𝖣.t_inv]
+    simp
+  · rw [← TopCat.mono_iff_injective]
+    infer_instance
 
 Depends on / 依赖: D.toTopGlueData.preimage_image_eq_image, Eq.trans, IsOpenMap, IsOpenMap.coe_functor_obj, Opens.map_coe, PresheafedSpace, PresheafedSpace.forget, Set.eq_preimage_iff_image_eq, Set.image_comp, Set.preimage_comp, Set.preimage_image_eq, TopCat, TopCat.coe_comp, coe_comp, coe_functor_obj, congr_arg, eq_preimage_iff_image_eq, forget, image_comp, map_coe
 -/
@@ -456,7 +564,9 @@ theorem opensImagePreimageMap_app'
       · simp_rw [← Category.assoc]
         erw [← comp_c_app, ← comp_c_app]
         · simp_rw [Category.assoc]
-       
+          dsimp only [Functor.op, unop_op, Quiver.Hom.unop_op]
+          rw [eqToHom_map (Opens.map _)]; rw [eqToHom_op]; rw [eqToHom_trans]
+          congr
 
 中文:
 定理 opensImagePreimageMap_app'
@@ -470,7 +580,9 @@ theorem opensImagePreimageMap_app'
       · simp_rw [← Category.assoc]
         erw [← comp_c_app, ← comp_c_app]
         · simp_rw [Category.assoc]
-       
+          dsimp only [Functor.op, unop_op, Quiver.Hom.unop_op]
+          rw [eqToHom_map (Opens.map _)]; rw [eqToHom_op]; rw [eqToHom_trans]
+          congr
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.op, Opens.map, Quiver, Quiver.Hom.unop_op, c.naturality, comp_c_app, eqToHom_map, eqToHom_op, eqToHom_trans, f_invApp_f_app_assoc, map_comp, naturality, opensImagePreimageMap, presheaf, presheaf.map_comp, simp_rw, unop_op
 -/
@@ -593,7 +705,10 @@ definition ιInvAppπApp
     congr 1; ext1
     dsimp only [Functor.op_obj, Opens.map_coe, unop_op, IsOpenMap.coe_functor_obj]
     rw [Set.preimage_preimage]
-    
+    change (D.f j k ≫ 𝖣.ι j).base ⁻¹' _ = _
+    congr 4
+    exact colimit.w 𝖣.diagram.multispan (WalkingMultispan.Hom.fst (j, k))
+  · exact D.opensImagePreimageMap i j U
 
 中文:
 定义 ιInvAppπApp
@@ -606,7 +721,10 @@ definition ιInvAppπApp
     congr 1; ext1
     dsimp only [Functor.op_obj, Opens.map_coe, unop_op, IsOpenMap.coe_functor_obj]
     rw [Set.preimage_preimage]
-    
+    change (D.f j k ≫ 𝖣.ι j).base ⁻¹' _ = _
+    congr 4
+    exact colimit.w 𝖣.diagram.multispan (WalkingMultispan.Hom.fst (j, k))
+  · exact D.opensImagePreimageMap i j U
 
 Depends on / 依赖: D.opensImagePreimageMap, Functor, Functor.op_obj, IsOpenMap, IsOpenMap.coe_functor_obj, Opens.map_coe, Set.preimage_preimage, WalkingMultispan, WalkingMultispan.Hom.fst, c.app, coe_functor_obj, colimit, colimit.w, diagram, diagram.multispan, eqToHom, map_coe, multispan, op_obj, opensImagePreimageMap
 -/
@@ -639,7 +757,40 @@ definition ιInvApp
           naturality := fun {X Y} f' => by
             induction X with | op X => ?_
             induction Y with | op Y => ?_
-            let f : Y ⟶ X := f'.unop; 
+            let f : Y ⟶ X := f'.unop; have : f' = f.op := rfl; clear_value f; subst this
+            rcases f with (_ | ⟨j, k⟩ | ⟨j, k⟩)
+            · simp
+            · simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.id_comp]
+              congr 1
+            simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.id_comp]
+            -- It remains to show that the blue is equal to red + green in the original diagram.
+            -- The proof strategy is illustrated in ![this diagram](https://i.imgur.com/mBzV1Rx.png)
+            -- where we prove red = pink = light-blue = green = blue.
+            change
+              D.opensImagePreimageMap i j U ≫
+                  (D.f j k).c.app _ ≫ (D.V (j, k)).presheaf.map (eqToHom _) =
+                D.opensImagePreimageMap _ _ _ ≫
+                  ((D.f k j).c.app _ ≫ (D.t j k).c.app _) ≫ (D.V (j, k)).presheaf.map (eqToHom _)
+            rw [opensImagePreimageMap_app_assoc]
+            simp_rw [Category.assoc]
+            rw [opensImagePreimageMap_app_assoc]; rw [(D.t j k).c.naturality_assoc]; rw [snd_invApp_t_app_assoc]; rw [← PresheafedSpace.comp_c_app_assoc]
+            -- light-blue = green is relatively easy since the part that differs does not involve
+            -- partial inverses.
+            have :
+              D.t' j k i ≫ (π₁ k, i, j) ≫ D.t k i ≫ 𝖣.f i k =
+                (pullbackSymmetry _ _).hom ≫ (π₁ j, i, k) ≫ D.t j i ≫ D.f i j := by
+              rw [← 𝖣.t_fac_assoc]; rw [𝖣.t'_comp_eq_pullbackSymmetry_assoc]; rw [pullbackSymmetry_hom_comp_snd_assoc]; rw [pullback.condition]; rw [𝖣.t_fac_assoc]
+            rw [congr_app this]; rw [PresheafedSpace.comp_c_app_assoc (pullbackSymmetry _ _).hom]
+            simp_rw [Category.assoc]
+            congr 1
+            rw [← IsIso.eq_inv_comp]; rw [IsOpenImmersion.inv_invApp]; rw [Category.assoc]; rw [NatTrans.naturality_assoc]
+            simp_rw [Functor.op_obj]
+            rw [← PresheafedSpace.comp_c_app_assoc]; rw [congr_app (pullbackSymmetry_hom_comp_snd _ _)]
+            simp_rw [Category.assoc, Functor.op_obj, comp_base, Opens.map_comp_obj,
+              TopCat.Presheaf.pushforward_obj_map]
+            rw [IsOpenImmersion.inv_naturality_assoc]; rw [IsOpenImmersion.inv_naturality_assoc]; rw [IsOpenImmersion.inv_naturality_assoc]; rw [IsOpenImmersion.app_invApp_assoc]
+            repeat rw [← (D.V (j, k)).presheaf.map_comp]
+            rfl } }
 
 中文:
 定义 ιInvApp
@@ -651,7 +802,40 @@ definition ιInvApp
           naturality := fun {X Y} f' => by
             induction X with | op X => ?_
             induction Y with | op Y => ?_
-            let f : Y ⟶ X := f'.unop; 
+            let f : Y ⟶ X := f'.unop; have : f' = f.op := rfl; clear_value f; subst this
+            rcases f with (_ | ⟨j, k⟩ | ⟨j, k⟩)
+            · simp
+            · simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.id_comp]
+              congr 1
+            simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.id_comp]
+            -- It remains to show that the blue is equal to red + green in the original diagram.
+            -- The proof strategy is illustrated in ![this diagram](https://i.imgur.com/mBzV1Rx.png)
+            -- where we prove red = pink = light-blue = green = blue.
+            change
+              D.opensImagePreimageMap i j U ≫
+                  (D.f j k).c.app _ ≫ (D.V (j, k)).presheaf.map (eqToHom _) =
+                D.opensImagePreimageMap _ _ _ ≫
+                  ((D.f k j).c.app _ ≫ (D.t j k).c.app _) ≫ (D.V (j, k)).presheaf.map (eqToHom _)
+            rw [opensImagePreimageMap_app_assoc]
+            simp_rw [Category.assoc]
+            rw [opensImagePreimageMap_app_assoc]; rw [(D.t j k).c.naturality_assoc]; rw [snd_invApp_t_app_assoc]; rw [← PresheafedSpace.comp_c_app_assoc]
+            -- light-blue = green is relatively easy since the part that differs does not involve
+            -- partial inverses.
+            have :
+              D.t' j k i ≫ (π₁ k, i, j) ≫ D.t k i ≫ 𝖣.f i k =
+                (pullbackSymmetry _ _).hom ≫ (π₁ j, i, k) ≫ D.t j i ≫ D.f i j := by
+              rw [← 𝖣.t_fac_assoc]; rw [𝖣.t'_comp_eq_pullbackSymmetry_assoc]; rw [pullbackSymmetry_hom_comp_snd_assoc]; rw [pullback.condition]; rw [𝖣.t_fac_assoc]
+            rw [congr_app this]; rw [PresheafedSpace.comp_c_app_assoc (pullbackSymmetry _ _).hom]
+            simp_rw [Category.assoc]
+            congr 1
+            rw [← IsIso.eq_inv_comp]; rw [IsOpenImmersion.inv_invApp]; rw [Category.assoc]; rw [NatTrans.naturality_assoc]
+            simp_rw [Functor.op_obj]
+            rw [← PresheafedSpace.comp_c_app_assoc]; rw [congr_app (pullbackSymmetry_hom_comp_snd _ _)]
+            simp_rw [Category.assoc, Functor.op_obj, comp_base, Opens.map_comp_obj,
+              TopCat.Presheaf.pushforward_obj_map]
+            rw [IsOpenImmersion.inv_naturality_assoc]; rw [IsOpenImmersion.inv_naturality_assoc]; rw [IsOpenImmersion.inv_naturality_assoc]; rw [IsOpenImmersion.app_invApp_assoc]
+            repeat rw [← (D.V (j, k)).presheaf.map_comp]
+            rfl } }
 
 Depends on / 依赖: Category, Category.id_comp, D.diagramOverOpen, Functor, Functor.const_obj_map, Functor.const_obj_obj, clear_value, const_obj_map, const_obj_obj, diagramOverOpen, f.op, id_comp, limit.lift, naturality, presheaf, presheaf.obj
 -/
@@ -713,7 +897,29 @@ theorem ιInvApp_π
   · congr; ext1; change _ = _ ⁻¹' _ '' _; ext1 x
     simp only [SetLike.mem_coe, unop_op, Set.mem_preimage, Set.mem_image]
     refine ⟨fun h => ⟨_, h, rfl⟩, ?_⟩
-    rintro ⟨y, h1, h
+    rintro ⟨y, h1, h2⟩
+    convert! h1 using 1
+    delta ι Multicoequalizer.π at h2
+    apply_fun (D.ι _).base
+    · exact h2.symm
+    · have := D.ι_gluedIso_inv (PresheafedSpace.forget _) i
+      dsimp at this
+      rw [← this]; rw [TopCat.coe_comp]
+      refine Function.Injective.comp ?_ (TopCat.GlueData.ι_injective D.toTopGlueData i)
+      rw [← TopCat.mono_iff_injective]
+      infer_instance
+  delta ιInvApp
+  rw [limit.lift_π]
+  change D.opensImagePreimageMap i i U = _
+  dsimp [opensImagePreimageMap]
+  rw [congr_app (D.t_id _)]; rw [id_c_app]; rw [← Functor.map_comp]
+  erw [IsOpenImmersion.inv_naturality_assoc, IsOpenImmersion.app_inv_app'_assoc]
+  · simp only [eqToHom_op, ← Functor.map_comp]
+    rfl
+  · rw [Set.range_eq_univ.mpr _]
+    · simp
+    · rw [← TopCat.epi_iff_surjective]
+      infer_instance
 
 中文:
 定理 ιInvApp_π
@@ -724,7 +930,29 @@ theorem ιInvApp_π
   · congr; ext1; change _ = _ ⁻¹' _ '' _; ext1 x
     simp only [SetLike.mem_coe, unop_op, Set.mem_preimage, Set.mem_image]
     refine ⟨fun h => ⟨_, h, rfl⟩, ?_⟩
-    rintro ⟨y, h1, h
+    rintro ⟨y, h1, h2⟩
+    convert! h1 using 1
+    delta ι Multicoequalizer.π at h2
+    apply_fun (D.ι _).base
+    · exact h2.symm
+    · have := D.ι_gluedIso_inv (PresheafedSpace.forget _) i
+      dsimp at this
+      rw [← this]; rw [TopCat.coe_comp]
+      refine Function.Injective.comp ?_ (TopCat.GlueData.ι_injective D.toTopGlueData i)
+      rw [← TopCat.mono_iff_injective]
+      infer_instance
+  delta ιInvApp
+  rw [limit.lift_π]
+  change D.opensImagePreimageMap i i U = _
+  dsimp [opensImagePreimageMap]
+  rw [congr_app (D.t_id _)]; rw [id_c_app]; rw [← Functor.map_comp]
+  erw [IsOpenImmersion.inv_naturality_assoc, IsOpenImmersion.app_inv_app'_assoc]
+  · simp only [eqToHom_op, ← Functor.map_comp]
+    rfl
+  · rw [Set.range_eq_univ.mpr _]
+    · simp
+    · rw [← TopCat.epi_iff_surjective]
+      infer_instance
 
 Depends on / 依赖: fconstructor
 -/
@@ -792,7 +1020,28 @@ theorem π_ιInvApp_π
     rw [limit.w_assoc]
     erw [limit.lift_π_assoc]
     rw [Category.comp_id]; rw [Category.comp_id]
-   
+    change _ ≫ _ ≫ (_ ≫ _) ≫ _ = _
+    rw [congr_app (D.t_id _)]; rw [id_c_app]
+    simp_rw [Category.assoc]
+    rw [← Functor.map_comp_assoc]
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): change `rw` to `erw`
+    erw [IsOpenImmersion.inv_naturality_assoc]
+    erw [IsOpenImmersion.app_invApp_assoc]
+    iterate 3 rw [← Functor.map_comp_assoc]
+    rw [NatTrans.naturality_assoc]
+    erw [← (D.V (i, j)).presheaf.map_comp]
+    convert!
+      limit.w (componentwiseDiagram 𝖣.diagram.multispan _)
+        (Quiver.Hom.op (WalkingMultispan.Hom.fst (i, j)))
+  · rw [Category.comp_id]
+    apply +allowSynthFailures mono_comp
+    change Mono ((_ ≫ D.f j i).c.app _)
+    rw [comp_c_app]
+    apply +allowSynthFailures mono_comp
+    · erw [D.ι_image_preimage_eq i j U]
+      infer_instance
+    · have : IsIso (D.t i j).c := by apply c_isIso_of_iso
+      infer_instance
 
 中文:
 定理 π_ιInvApp_π
@@ -805,7 +1054,28 @@ theorem π_ιInvApp_π
     rw [limit.w_assoc]
     erw [limit.lift_π_assoc]
     rw [Category.comp_id]; rw [Category.comp_id]
-   
+    change _ ≫ _ ≫ (_ ≫ _) ≫ _ = _
+    rw [congr_app (D.t_id _)]; rw [id_c_app]
+    simp_rw [Category.assoc]
+    rw [← Functor.map_comp_assoc]
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): change `rw` to `erw`
+    erw [IsOpenImmersion.inv_naturality_assoc]
+    erw [IsOpenImmersion.app_invApp_assoc]
+    iterate 3 rw [← Functor.map_comp_assoc]
+    rw [NatTrans.naturality_assoc]
+    erw [← (D.V (i, j)).presheaf.map_comp]
+    convert!
+      limit.w (componentwiseDiagram 𝖣.diagram.multispan _)
+        (Quiver.Hom.op (WalkingMultispan.Hom.fst (i, j)))
+  · rw [Category.comp_id]
+    apply +allowSynthFailures mono_comp
+    change Mono ((_ ≫ D.f j i).c.app _)
+    rw [comp_c_app]
+    apply +allowSynthFailures mono_comp
+    · erw [D.ι_image_preimage_eq i j U]
+      infer_instance
+    · have : IsIso (D.t i j).c := by apply c_isIso_of_iso
+      infer_instance
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, D.t_id, Functor, Functor.map_comp_assoc, Quiver, Quiver.Hom.op, WalkingMultispan, WalkingMultispan.Hom.snd, cancel_mono, comp_id, componentwiseDiagram, congr_app, diagram, diagram.multispan, id_c_app, limit.lift_, limit.w_assoc, map_comp_assoc
 -/
@@ -859,6 +1129,9 @@ theorem π_ιInvApp_eq_id
     congr 1
     simp_rw [Category.assoc]
     apply π_ιInvApp_π
+  · simp_rw [Category.assoc]
+    rw [Category.id_comp]
+    apply π_ιInvApp_π
 
 中文:
 定理 π_ιInvApp_eq_id
@@ -872,6 +1145,9 @@ theorem π_ιInvApp_eq_id
       ← Category.assoc, Category.id_comp]
     congr 1
     simp_rw [Category.assoc]
+    apply π_ιInvApp_π
+  · simp_rw [Category.assoc]
+    rw [Category.id_comp]
     apply π_ιInvApp_π
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, Quiver, Quiver.Hom.op, WalkingMultispan, WalkingMultispan.Hom.fst, componentwiseDiagram, diagram, diagram.multispan, id_comp, limit.w, multispan, simp_rw
@@ -960,7 +1236,23 @@ definition vPullbackConeIsLimit
       have :
         s.fst.base ≫ D.toTopGlueData.ι i =
           s.snd.base ≫ D.toTopGlueData.ι j := by
-        rw
+        rw [← 𝖣.ι_gluedIso_hom (PresheafedSpace.forget _) _]; rw [←
+          𝖣.ι_gluedIso_hom (PresheafedSpace.forget _) _]
+        have := congr_arg PresheafedSpace.Hom.base s.condition
+        rw [comp_base]; rw [comp_base] at this
+        replace this := reassoc_of% this
+        exact this _
+      simp only [mapGlueData_U, forget_obj]
+      rw [← Set.image_subset_iff]; rw [← Set.image_univ]; rw [← Set.image_comp]; rw [Set.image_univ]; rw [← TopCat.coe_comp]; rw [this]; rw [TopCat.coe_comp]; rw [← Set.image_univ]; rw [Set.image_comp]
+      exact Set.image_subset_range _ _
+    · apply IsOpenImmersion.lift_fac
+    · rw [← cancel_mono (𝖣.ι j), Category.assoc, ← (𝖣.vPullbackCone i j).condition]
+      conv_rhs => rw [← s.condition]
+      erw [IsOpenImmersion.lift_fac_assoc]
+    · intro m e₁ _
+      rw [← cancel_mono (D.f i j)]
+      simp only [lift_fac]
+      tauto
 
 中文:
 定义 vPullbackConeIsLimit
@@ -972,7 +1264,23 @@ definition vPullbackConeIsLimit
       have :
         s.fst.base ≫ D.toTopGlueData.ι i =
           s.snd.base ≫ D.toTopGlueData.ι j := by
-        rw
+        rw [← 𝖣.ι_gluedIso_hom (PresheafedSpace.forget _) _]; rw [←
+          𝖣.ι_gluedIso_hom (PresheafedSpace.forget _) _]
+        have := congr_arg PresheafedSpace.Hom.base s.condition
+        rw [comp_base]; rw [comp_base] at this
+        replace this := reassoc_of% this
+        exact this _
+      simp only [mapGlueData_U, forget_obj]
+      rw [← Set.image_subset_iff]; rw [← Set.image_univ]; rw [← Set.image_comp]; rw [Set.image_univ]; rw [← TopCat.coe_comp]; rw [this]; rw [TopCat.coe_comp]; rw [← Set.image_univ]; rw [Set.image_comp]
+      exact Set.image_subset_range _ _
+    · apply IsOpenImmersion.lift_fac
+    · rw [← cancel_mono (𝖣.ι j), Category.assoc, ← (𝖣.vPullbackCone i j).condition]
+      conv_rhs => rw [← s.condition]
+      erw [IsOpenImmersion.lift_fac_assoc]
+    · intro m e₁ _
+      rw [← cancel_mono (D.f i j)]
+      simp only [lift_fac]
+      tauto
 
 Depends on / 依赖: D.toTopGlueData, D.toTopGlueData.preimage_range, IsOpenImmersion, PresheafedSpace, PresheafedSpace.Hom.base, PresheafedSpace.IsOpenImmersion.lift, PresheafedSpace.forget, PullbackCone, PullbackCone.isLimitAux, comp_base, condition, congr_arg, forget, isLimitAux, preimage_range, reassoc_of, replace, s.condition, s.fst, s.fst.base
 -/

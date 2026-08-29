@@ -451,7 +451,10 @@ instance monoidalCategory
   (id_tensorHom_id := fun M N => id_tensorHom_id M N)
   (tensorHom_comp_tensorHom := fun f g h => MonoidalCategory.tensorHom_comp_tensorHom f g h)
   (associator_naturality := fun f g h => MonoidalCategory.associator_naturality f g h)
-  (leftUnitor_naturality := fun f => 
+  (leftUnitor_naturality := fun f => MonoidalCategory.leftUnitor_naturality f)
+  (rightUnitor_naturality := fun f => rightUnitor_naturality f)
+  (pentagon := fun M N K L => pentagon M N K L)
+  (triangle := fun M N => triangle M N)
 
 中文:
 实例 monoidalCategory
@@ -460,7 +463,10 @@ instance monoidalCategory
   (id_tensorHom_id := fun M N => id_tensorHom_id M N)
   (tensorHom_comp_tensorHom := fun f g h => MonoidalCategory.tensorHom_comp_tensorHom f g h)
   (associator_naturality := fun f g h => MonoidalCategory.associator_naturality f g h)
-  (leftUnitor_naturality := fun f => 
+  (leftUnitor_naturality := fun f => MonoidalCategory.leftUnitor_naturality f)
+  (rightUnitor_naturality := fun f => rightUnitor_naturality f)
+  (pentagon := fun M N K L => pentagon M N K L)
+  (triangle := fun M N => triangle M N)
 
 Depends on / 依赖: MonoidalCategory, MonoidalCategory.ofTensorHom, ofTensorHom
 -/
@@ -985,7 +991,8 @@ whiskerRight f M := ofHom f.hom.rTensor M
 tensorHom f g := ofHom TensorProduct.map f.hom g.hom
   tensorUnit := of R R
   associator M N K := (TensorProduct.assoc R M N K).toModuleIso
-  leftUnitor M := (TensorProduct.lid R M).toMo
+  leftUnitor M := (TensorProduct.lid R M).toModuleIso
+  rightUnitor M := (TensorProduct.rid R M).toModuleIso
 
 中文:
 实例 幺半群范畴.instMonoidalCategoryStruct
@@ -996,7 +1003,8 @@ whiskerRight f M := ofHom f.hom.rTensor M
 tensorHom f g := ofHom TensorProduct.map f.hom g.hom
   tensorUnit := of R R
   associator M N K := (TensorProduct.assoc R M N K).toModuleIso
-  leftUnitor M := (TensorProduct.lid R M).toMo
+  leftUnitor M := (TensorProduct.lid R M).toModuleIso
+  rightUnitor M := (TensorProduct.rid R M).toModuleIso
 
 Depends on / 依赖: TensorProduct
 -/
@@ -1556,7 +1564,15 @@ instance :
   · intros
     ext : 1
     refine TensorProduct.ext (LinearMap.ext fun x => LinearMap.ext fun y => ?_)
-    simp [ModuleCat.hom_whis
+    simp [ModuleCat.hom_whiskerRight]
+  · intros
+    ext : 1
+    refine TensorProduct.ext (LinearMap.ext fun x => LinearMap.ext fun y => ?_)
+    simp [ModuleCat.hom_whiskerLeft]
+  · intros
+    ext : 1
+    refine TensorProduct.ext (LinearMap.ext fun x => LinearMap.ext fun y => ?_)
+    simp [ModuleCat.hom_whiskerRight]
 
 中文:
 实例 :
@@ -1570,7 +1586,15 @@ instance :
   · intros
     ext : 1
     refine TensorProduct.ext (LinearMap.ext fun x => LinearMap.ext fun y => ?_)
-    simp [ModuleCat.hom_whis
+    simp [ModuleCat.hom_whiskerRight]
+  · intros
+    ext : 1
+    refine TensorProduct.ext (LinearMap.ext fun x => LinearMap.ext fun y => ?_)
+    simp [ModuleCat.hom_whiskerLeft]
+  · intros
+    ext : 1
+    refine TensorProduct.ext (LinearMap.ext fun x => LinearMap.ext fun y => ?_)
+    simp [ModuleCat.hom_whiskerRight]
 
 Depends on / 依赖: LinearMap, LinearMap.ext, ModuleCat, ModuleCat.hom_whiskerLeft, ModuleCat.hom_whiskerRight, TensorProduct, TensorProduct.ext, hom_whiskerLeft, hom_whiskerRight, intros
 -/
@@ -1609,7 +1633,7 @@ instance :
   · intros
     ext : 1
     refine TensorProduct.ext (LinearMap.ext fun x => LinearMap.ext fun y => ?_)
-    simp [ModuleCat.hom_whiskerRight
+    simp [ModuleCat.hom_whiskerRight]
 
 中文:
 实例 :
@@ -1623,7 +1647,7 @@ instance :
   · intros
     ext : 1
     refine TensorProduct.ext (LinearMap.ext fun x => LinearMap.ext fun y => ?_)
-    simp [ModuleCat.hom_whiskerRight
+    simp [ModuleCat.hom_whiskerRight]
 
 Depends on / 依赖: LinearMap, LinearMap.ext, ModuleCat, ModuleCat.hom_whiskerLeft, ModuleCat.hom_whiskerRight, TensorProduct, TensorProduct.ext, hom_whiskerLeft, hom_whiskerRight, intros
 -/

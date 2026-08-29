@@ -112,7 +112,21 @@ theorem exists_root_sum_quadratic
     simp only [disjoint_left, mem_image] at this
     push Not at this
     rcases this with ⟨x, ⟨a, _, ha⟩, ⟨b, _, hb⟩⟩
-    exact ⟨a, b, by rw [ha, ← hb, eval_neg, neg_add_ca
+    exact ⟨a, b, by rw [ha, ← hb, eval_neg, neg_add_cancel]⟩
+  fun hd : Disjoint _ _ =>
+lt_irrefl (2 * #((univ.image fun x : R => eval x f) union univ.image fun x : R => eval x (-g)))
+    calc 2 * #((univ.image fun x : R => eval x f) union univ.image fun x : R => eval x (-g))
+        <= 2 * Fintype.card R := Nat.mul_le_mul_left _ (Finset.card_le_univ _)
+      _ = Fintype.card R + Fintype.card R := two_mul _
+      _ < natDegree f * #(univ.image fun x : R => eval x f) +
+            natDegree (-g) * #(univ.image fun x : R => eval x (-g)) :=
+        (add_lt_add_of_lt_of_le
+          (lt_of_le_of_ne (card_image_polynomial_eval (by rw [hf2]; decide))
+            (mt (congr_arg (· % 2)) (by simp [natDegree_eq_of_degree_eq_some hf2, hR])))
+          (card_image_polynomial_eval (by rw [degree_neg, hg2]; decide)))
+      _ = 2 * #((univ.image fun x : R => eval x f) union univ.image fun x : R => eval x (-g)) := by
+        rw [card_union_of_disjoint hd]
+        simp [natDegree_eq_of_degree_eq_some hf2, natDegree_eq_of_degree_eq_some hg2, mul_add]
 
 中文:
 定理 存在_root_sum_quadratic
@@ -123,7 +137,21 @@ theorem exists_root_sum_quadratic
     simp only [disjoint_left, mem_image] at this
     push Not at this
     rcases this with ⟨x, ⟨a, _, ha⟩, ⟨b, _, hb⟩⟩
-    exact ⟨a, b, by rw [ha, ← hb, eval_neg, neg_add_ca
+    exact ⟨a, b, by rw [ha, ← hb, eval_neg, neg_add_cancel]⟩
+  fun hd : Disjoint _ _ =>
+lt_irrefl (2 * #((univ.image fun x : R => eval x f) union univ.image fun x : R => eval x (-g)))
+    calc 2 * #((univ.image fun x : R => eval x f) union univ.image fun x : R => eval x (-g))
+        <= 2 * Fintype.card R := Nat.mul_le_mul_left _ (Finset.card_le_univ _)
+      _ = Fintype.card R + Fintype.card R := two_mul _
+      _ < natDegree f * #(univ.image fun x : R => eval x f) +
+            natDegree (-g) * #(univ.image fun x : R => eval x (-g)) :=
+        (add_lt_add_of_lt_of_le
+          (lt_of_le_of_ne (card_image_polynomial_eval (by rw [hf2]; decide))
+            (mt (congr_arg (· % 2)) (by simp [natDegree_eq_of_degree_eq_some hf2, hR])))
+          (card_image_polynomial_eval (by rw [degree_neg, hg2]; decide)))
+      _ = 2 * #((univ.image fun x : R => eval x f) union univ.image fun x : R => eval x (-g)) := by
+        rw [card_union_of_disjoint hd]
+        simp [natDegree_eq_of_degree_eq_some hf2, natDegree_eq_of_degree_eq_some hg2, mul_add]
 
 Depends on / 依赖: Classical, Classical.decEq, Disjoint, disjoint_left, eval_neg, lt_irrefl, mem_image, neg_add_cancel, univ.image
 -/
@@ -165,7 +193,7 @@ theorem prod_univ_units_id_eq_neg_one
       prod_involution (fun x _ => x⁻¹) (by simp)
         (fun a => by simp +contextual [Units.inv_eq_self_iff])
         (fun a => by simp [@inv_eq_iff_eq_inv _ _ a]) (by simp)
-    rw [← insert_erase (mem_univ (-1 : Kˣ))]; rw [prod_
+    rw [← insert_erase (mem_univ (-1 : Kˣ))]; rw [prod_insert (notMem_erase _ _)]; rw [this]; rw [mul_one]
 
 中文:
 定理 prod_univ_units_id_eq_neg_one
@@ -176,7 +204,7 @@ theorem prod_univ_units_id_eq_neg_one
       prod_involution (fun x _ => x⁻¹) (by simp)
         (fun a => by simp +contextual [Units.inv_eq_self_iff])
         (fun a => by simp [@inv_eq_iff_eq_inv _ _ a]) (by simp)
-    rw [← insert_erase (mem_univ (-1 : Kˣ))]; rw [prod_
+    rw [← insert_erase (mem_univ (-1 : Kˣ))]; rw [prod_insert (notMem_erase _ _)]; rw [this]; rw [mul_one]
 
 Depends on / 依赖: Units.inv_eq_self_iff, classical, contextual, insert_erase, inv_eq_iff_eq_inv, inv_eq_self_iff, mem_univ, mul_one, notMem_erase, prod_insert, prod_involution
 -/
@@ -204,7 +232,21 @@ theorem card_cast_subgroup_card_ne_zero
   | inr pzero =>
 exact (Fintype.card_pos).ne' Nat.eq_zero_of_zero_dvd pzero ▸ hd
   | inl pprime =>
-    have fact_p
+    have fact_pprime := Fact.mk pprime
+    -- G has an element x of order p by Cauchy's theorem
+    have ⟨x, hx⟩ := exists_prime_orderOf_dvd_card p hd
+    -- F has an element u (= ↑↑x) of order p
+    let u := ((x : Kˣ) : K)
+    have hu : orderOf u = p := by rwa [orderOf_units, Subgroup.orderOf_coe]
+    -- u ^ p = 1 implies (u - 1) ^ p = 0 and hence u = 1 ...
+    have h : u = 1 := by
+      rw [← sub_left_inj]; rw [sub_self 1]
+      apply eq_zero_of_pow_eq_zero (n := p)
+      rw [sub_pow_char_of_commute]; rw [one_pow]; rw [← hu]; rw [pow_orderOf_eq_one]; rw [sub_self]
+      exact Commute.one_right u
+    -- ... meaning x didn't have order p after all, contradiction
+    apply pprime.one_lt.ne
+    rw [← hu]; rw [h]; rw [orderOf_one]
 
 中文:
 定理 card_cast_subgroup_card_ne_zero
@@ -218,7 +260,21 @@ exact (Fintype.card_pos).ne' Nat.eq_zero_of_zero_dvd pzero ▸ hd
   | inr pzero =>
 exact (Fintype.card_pos).ne' Nat.eq_zero_of_zero_dvd pzero ▸ hd
   | inl pprime =>
-    have fact_p
+    have fact_pprime := Fact.mk pprime
+    -- G has an element x of order p by Cauchy's theorem
+    have ⟨x, hx⟩ := exists_prime_orderOf_dvd_card p hd
+    -- F has an element u (= ↑↑x) of order p
+    let u := ((x : Kˣ) : K)
+    have hu : orderOf u = p := by rwa [orderOf_units, Subgroup.orderOf_coe]
+    -- u ^ p = 1 implies (u - 1) ^ p = 0 and hence u = 1 ...
+    have h : u = 1 := by
+      rw [← sub_left_inj]; rw [sub_self 1]
+      apply eq_zero_of_pow_eq_zero (n := p)
+      rw [sub_pow_char_of_commute]; rw [one_pow]; rw [← hu]; rw [pow_orderOf_eq_one]; rw [sub_self]
+      exact Commute.one_right u
+    -- ... meaning x didn't have order p after all, contradiction
+    apply pprime.one_lt.ne
+    rw [← hu]; rw [h]; rw [orderOf_one]
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, CharP.char_is_prime_or_zero, CharP.exists, Fact.mk, Fintype, Fintype.card, Fintype.card_pos, Nat.eq_zero_of_zero_dvd, card_pos, cast_eq_zero_iff, char_is_prime_or_zero, char_p, eq_zero_of_zero_dvd, fact_pprime, pprime
 -/
@@ -261,7 +317,19 @@ theorem sum_subgroup_units_eq_zero
   let a_mul_emb : G ↪ G := mulLeftEmbedding a
   -- ... and leaves G unchanged
   have h_unchanged : Finset.univ.map a_mul_emb = Finset.univ := by simp
-  -- Therefore the sum of x over 
+  -- Therefore the sum of x over a G is the sum of a x over G
+  have h_sum_map := Finset.univ.sum_map a_mul_emb fun x => ((x : Kˣ) : K)
+  -- ... and the former is the sum of x over G.
+  -- By algebraic manipulation, we have Σ G, x = ∑ G, a x = a ∑ G, x
+  simp only [h_unchanged, mulLeftEmbedding_apply, Subgroup.coe_mul, Units.val_mul, ← mul_sum,
+    a_mul_emb] at h_sum_map
+  -- thus one of (a - 1) or ∑ G, x is zero
+  have hzero : (((a : Kˣ) : K) - 1) = 0 ∨ ∑ x : ↥G, ((x : Kˣ) : K) = 0 := by
+    rw [← mul_eq_zero]; rw [sub_mul]; rw [← h_sum_map]; rw [one_mul]; rw [sub_self]
+  apply Or.resolve_left hzero
+  contrapose ha
+  ext
+  rwa [← sub_eq_zero]
 
 中文:
 定理 sum_subgroup_units_eq_zero
@@ -273,7 +341,19 @@ theorem sum_subgroup_units_eq_zero
   let a_mul_emb : G ↪ G := mulLeftEmbedding a
   -- ... and leaves G unchanged
   have h_unchanged : Finset.univ.map a_mul_emb = Finset.univ := by simp
-  -- Therefore the sum of x over 
+  -- Therefore the sum of x over a G is the sum of a x over G
+  have h_sum_map := Finset.univ.sum_map a_mul_emb fun x => ((x : Kˣ) : K)
+  -- ... and the former is the sum of x over G.
+  -- By algebraic manipulation, we have Σ G, x = ∑ G, a x = a ∑ G, x
+  simp only [h_unchanged, mulLeftEmbedding_apply, Subgroup.coe_mul, Units.val_mul, ← mul_sum,
+    a_mul_emb] at h_sum_map
+  -- thus one of (a - 1) or ∑ G, x is zero
+  have hzero : (((a : Kˣ) : K) - 1) = 0 ∨ ∑ x : ↥G, ((x : Kˣ) : K) = 0 := by
+    rw [← mul_eq_zero]; rw [sub_mul]; rw [← h_sum_map]; rw [one_mul]; rw [sub_self]
+  apply Or.resolve_left hzero
+  contrapose ha
+  ext
+  rwa [← sub_eq_zero]
 
 Depends on / 依赖: Subgroup, Subgroup.ne_bot_iff_exists_ne_one, ne_bot_iff_exists_ne_one
 -/
@@ -361,7 +441,29 @@ theorem sum_subgroup_pow_eq_zero
   rw [Finset.sum_eq_multiset_sum]
   have h_multiset_map :
     Finset.univ.val.map (fun x : G => ((x : Kˣ) : K) ^ k) =
- 
+      Finset.univ.val.map (fun x : G => ((x : Kˣ) : K) ^ k * ((a : Kˣ) : K) ^ k) := by
+    simp_rw [← mul_pow]
+    have as_comp :
+      (fun x : ↥G => (((x : Kˣ) : K) * ((a : Kˣ) : K)) ^ k)
+        = (fun x : ↥G => ((x : Kˣ) : K) ^ k) ∘ fun x : ↥G => x * a := by
+      funext x
+      simp only [Function.comp_apply, Subgroup.coe_mul, Units.val_mul]
+    rw [as_comp]; rw [← Multiset.map_map]
+    congr
+    rw [eq_comm]
+    exact Multiset.map_univ_val_equiv (Equiv.mulRight a)
+  have h_multiset_map_sum : (Multiset.map (fun x : G => ((x : Kˣ) : K) ^ k) Finset.univ.val).sum =
+    (Multiset.map (fun x : G => ((x : Kˣ) : K) ^ k * ((a : Kˣ) : K) ^ k) Finset.univ.val).sum := by
+    rw [h_multiset_map]
+  rw [Multiset.sum_map_mul_right] at h_multiset_map_sum
+  have hzero : (((a : Kˣ) : K) ^ k - 1 : K)
+                  * (Multiset.map (fun i : G => (i.val : K) ^ k) Finset.univ.val).sum = 0 := by
+    rw [sub_mul]; rw [mul_comm]; rw [← h_multiset_map_sum]; rw [one_mul]; rw [sub_self]
+  rw [mul_eq_zero] at hzero
+  refine hzero.resolve_left fun h => ha ?_
+  ext
+  rw [← sub_eq_zero]
+  simp_rw [SubmonoidClass.coe_pow, Units.val_pow_eq_pow_val, OneMemClass.coe_one, Units.val_one, h]
 
 中文:
 定理 sum_subgroup_pow_eq_zero
@@ -374,7 +476,29 @@ theorem sum_subgroup_pow_eq_zero
   rw [Finset.sum_eq_multiset_sum]
   have h_multiset_map :
     Finset.univ.val.map (fun x : G => ((x : Kˣ) : K) ^ k) =
- 
+      Finset.univ.val.map (fun x : G => ((x : Kˣ) : K) ^ k * ((a : Kˣ) : K) ^ k) := by
+    simp_rw [← mul_pow]
+    have as_comp :
+      (fun x : ↥G => (((x : Kˣ) : K) * ((a : Kˣ) : K)) ^ k)
+        = (fun x : ↥G => ((x : Kˣ) : K) ^ k) ∘ fun x : ↥G => x * a := by
+      funext x
+      simp only [Function.comp_apply, Subgroup.coe_mul, Units.val_mul]
+    rw [as_comp]; rw [← Multiset.map_map]
+    congr
+    rw [eq_comm]
+    exact Multiset.map_univ_val_equiv (Equiv.mulRight a)
+  have h_multiset_map_sum : (Multiset.map (fun x : G => ((x : Kˣ) : K) ^ k) Finset.univ.val).sum =
+    (Multiset.map (fun x : G => ((x : Kˣ) : K) ^ k * ((a : Kˣ) : K) ^ k) Finset.univ.val).sum := by
+    rw [h_multiset_map]
+  rw [Multiset.sum_map_mul_right] at h_multiset_map_sum
+  have hzero : (((a : Kˣ) : K) ^ k - 1 : K)
+                  * (Multiset.map (fun i : G => (i.val : K) ^ k) Finset.univ.val).sum = 0 := by
+    rw [sub_mul]; rw [mul_comm]; rw [← h_multiset_map_sum]; rw [one_mul]; rw [sub_self]
+  rw [mul_eq_zero] at hzero
+  refine hzero.resolve_left fun h => ha ?_
+  ext
+  rw [← sub_eq_zero]
+  simp_rw [SubmonoidClass.coe_pow, Units.val_pow_eq_pow_val, OneMemClass.coe_one, Units.val_one, h]
 
 Depends on / 依赖: Finset, Finset.sum_eq_multiset_sum, Finset.univ.val.map, Nat.card_eq_fintype_card, NoZeroDivisors, NoZeroDivisors.to_isDomain, as_comp, card_eq_fintype_card, exists_pow_ne_one_of_isCyclic, h_multiset_map, k_lt_card_G, k_pos, mul_pow, nontriviality, simp_rw, sum_eq_multiset_sum, to_isDomain
 -/
@@ -554,7 +678,10 @@ theorem card
   rw [ZMod.card] at h
   refine ⟨⟨n, ?_⟩, hp.1, h⟩
   apply Or.resolve_left (Nat.eq_zero_or_pos n)
-  r
+  rintro rfl
+  rw [pow_zero] at h
+  have : (0 : K) = 1 := by apply Fintype.card_le_one_iff.mp (le_of_eq h)
+  exact absurd this zero_ne_one
 
 中文:
 定理 card
@@ -567,7 +694,10 @@ theorem card
   rw [ZMod.card] at h
   refine ⟨⟨n, ?_⟩, hp.1, h⟩
   apply Or.resolve_left (Nat.eq_zero_or_pos n)
-  r
+  rintro rfl
+  rw [pow_zero] at h
+  have : (0 : K) = 1 := by apply Fintype.card_le_one_iff.mp (le_of_eq h)
+  exact absurd this zero_ne_one
 
 Depends on / 依赖: CharP.char_is_prime, Fintype, Fintype.card_le_one_iff.mp, Module, Nat.eq_zero_or_pos, Or.resolve_left, VectorSpace, VectorSpace.card_fintype, ZMod.card, ZMod.castHom, absurd, card_fintype, card_le_one_iff, castHom, char_is_prime, dvd_rfl, eq_zero_or_pos, le_of_eq, p.Prime, pow_zero
 -/
@@ -660,7 +790,8 @@ theorem forall_pow_eq_one_iff
   · intro h; apply h
   · intro h y
     simp_rw [← mem_powers_iff_mem_zpowers] at hx
-    
+    rcases hx y with ⟨j, rfl⟩
+    rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]; rw [h]; rw [one_pow]
 
 中文:
 定理 对任意_pow_eq_one_iff
@@ -673,7 +804,8 @@ theorem forall_pow_eq_one_iff
   · intro h; apply h
   · intro h y
     simp_rw [← mem_powers_iff_mem_zpowers] at hx
-    
+    rcases hx y with ⟨j, rfl⟩
+    rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]; rw [h]; rw [one_pow]
 
 Depends on / 依赖: IsCyclic, IsCyclic.exists_generator, Nat.card_eq_fintype_card, Nat.card_units, card_eq_fintype_card, card_units, exists_generator, mem_powers_iff_mem_zpowers, mul_comm, one_pow, orderOf_dvd_iff_pow_eq_one, orderOf_eq_card_of_forall_mem_zpowers, pow_mul, simp_rw
 -/
@@ -700,7 +832,16 @@ theorem sum_pow_units
       map_mul' := by simp [mul_pow] }
   have : Decidable (φ = 1) := by classical infer_instance
   calc (∑ x : Kˣ, φ x) = if φ = 1 then Fintype.card Kˣ else 0 := sum_hom_units φ
-      _ = if q - 1 ∣ i then -1 else 0 := b
+      _ = if q - 1 ∣ i then -1 else 0 := by
+        suffices q - 1 ∣ i ↔ φ = 1 by
+          simp only [this]
+          split_ifs; swap
+          · exact Nat.cast_zero
+          · rw [Fintype.card_units, Nat.cast_sub,
+              cast_card_eq_zero, Nat.cast_one, zero_sub]
+            show 1 <= q; exact Fintype.card_pos_iff.mpr ⟨0⟩
+        rw [← forall_pow_eq_one_iff]; rw [DFunLike.ext_iff]
+        apply forall_congr'; intro x; simp [φ, Units.ext_iff]
 
 中文:
 定理 sum_pow_units
@@ -712,7 +853,16 @@ theorem sum_pow_units
       map_mul' := by simp [mul_pow] }
   have : Decidable (φ = 1) := by classical infer_instance
   calc (∑ x : Kˣ, φ x) = if φ = 1 then Fintype.card Kˣ else 0 := sum_hom_units φ
-      _ = if q - 1 ∣ i then -1 else 0 := b
+      _ = if q - 1 ∣ i then -1 else 0 := by
+        suffices q - 1 ∣ i ↔ φ = 1 by
+          simp only [this]
+          split_ifs; swap
+          · exact Nat.cast_zero
+          · rw [Fintype.card_units, Nat.cast_sub,
+              cast_card_eq_zero, Nat.cast_one, zero_sub]
+            show 1 <= q; exact Fintype.card_pos_iff.mpr ⟨0⟩
+        rw [← forall_pow_eq_one_iff]; rw [DFunLike.ext_iff]
+        apply forall_congr'; intro x; simp [φ, Units.ext_iff]
 
 Depends on / 依赖: Decidable, Fintype, Fintype.card, Fintype.card_pos_iff.mpr, Fintype.card_units, Nat.cast_one, Nat.cast_sub, Nat.cast_zero, card_pos_iff, card_units, cast_card_eq_zero, cast_one, cast_sub, cast_zero, classical, infer_instance, map_mul, map_one, mul_pow, split_ifs
 -/
@@ -748,7 +898,15 @@ theorem sum_pow_lt_card_sub_one
   classical
     have hiq : ¬q - 1 ∣ i := by contrapose! h; exact Nat.le_of_dvd (Nat.pos_of_ne_zero hi) h
     let φ : Kˣ ↪ K := ⟨fun x => x, Units.val_injective⟩
-    have : univ.map φ = univ \ {0
+    have : univ.map φ = univ \ {0} := by
+      ext x
+      simpa only [mem_map, mem_univ, Function.Embedding.coeFn_mk, true_and, mem_sdiff,
+        mem_singleton, φ] using! isUnit_iff_ne_zero
+    calc
+      ∑ x : K, x ^ i = ∑ x in univ \ {(0 : K)}, x ^ i := by
+        rw [← sum_sdiff ({0} : Finset K).subset_univ]; rw [sum_singleton]; rw [zero_pow hi]; rw [add_zero]
+      _ = ∑ x : Kˣ, (x ^ i : K) := by simp [φ, ← this, univ.sum_map φ]
+      _ = 0 := by rw [sum_pow_units K i, if_neg]; exact hiq
 
 中文:
 定理 sum_pow_lt_card_sub_one
@@ -760,7 +918,15 @@ theorem sum_pow_lt_card_sub_one
   classical
     have hiq : ¬q - 1 ∣ i := by contrapose! h; exact Nat.le_of_dvd (Nat.pos_of_ne_zero hi) h
     let φ : Kˣ ↪ K := ⟨fun x => x, Units.val_injective⟩
-    have : univ.map φ = univ \ {0
+    have : univ.map φ = univ \ {0} := by
+      ext x
+      simpa only [mem_map, mem_univ, Function.Embedding.coeFn_mk, true_and, mem_sdiff,
+        mem_singleton, φ] using! isUnit_iff_ne_zero
+    calc
+      ∑ x : K, x ^ i = ∑ x in univ \ {(0 : K)}, x ^ i := by
+        rw [← sum_sdiff ({0} : Finset K).subset_univ]; rw [sum_singleton]; rw [zero_pow hi]; rw [add_zero]
+      _ = ∑ x : Kˣ, (x ^ i : K) := by simp [φ, ← this, univ.sum_map φ]
+      _ = 0 := by rw [sum_pow_units K i, if_neg]; exact hiq
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.coeFn_mk, Nat.le_of_dvd, Nat.pos_of_ne_zero, Units.val_injective, card_univ, cast_card_eq_zero, classical, coeFn_mk, contrapose, isUnit_iff_ne_zero, le_of_dvd, mem_map, mem_sdiff, mem_singleton, mem_univ, nsmul_one, pos_of_ne_zero, pow_zero
 -/
@@ -797,7 +963,9 @@ definition frobeniusAlgHom
     nontriviality R
     have : CharP R p := charP_of_injective_algebraMap' K p
     have : ExpChar R p := .prime hp
-    simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe,
+    simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, powMonoidHom_apply, card_eq]
+    exact add_pow_expChar_pow ..
+  commutes' _ := by simp [← map_pow, pow_card]
 
 中文:
 定义 frobeniusAlgHom
@@ -809,7 +977,9 @@ definition frobeniusAlgHom
     nontriviality R
     have : CharP R p := charP_of_injective_algebraMap' K p
     have : ExpChar R p := .prime hp
-    simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe,
+    simp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe, powMonoidHom_apply, card_eq]
+    exact add_pow_expChar_pow ..
+  commutes' _ := by simp [← map_pow, pow_card]
 -/
 @[simps!] def frobeniusAlgHom : R ->ₐ[K] R where
   __ := powMonoidHom q
@@ -851,7 +1021,7 @@ definition frobeniusAlgEquiv
     nontriviality R
     have := ExpChar.eq ‹_› (expChar_of_injective_algebraMap (algebraMap K R).injective p')
     subst this
-   
+    apply bijective_iterateFrobenius
 
 中文:
 定义 frobeniusAlgEquiv
@@ -863,7 +1033,7 @@ definition frobeniusAlgEquiv
     nontriviality R
     have := ExpChar.eq ‹_› (expChar_of_injective_algebraMap (algebraMap K R).injective p')
     subst this
-   
+    apply bijective_iterateFrobenius
 -/
 @[simps!] noncomputable def frobeniusAlgEquiv (p : Nat) [ExpChar R p] [PerfectRing R p] : R ≃ₐ[K] R :=
 .ofBijective (frobeniusAlgHom K R) by
@@ -942,7 +1112,15 @@ theorem orderOf_frobeniusAlgHom
     refine ⟨DFunLike.ext _ _ fun x => ?_, fun m lt pos eq => ?_⟩
     · simp_rw [AlgHom.coe_pow, coe_frobeniusAlgHom, pow_iterate, AlgHom.one_apply,
         ← Module.card_eq_pow_finrank, pow_card]
-    have := card_le_degree_of_
+    have := card_le_degree_of_subset_roots (R := L) (p := X ^ q ^ m - X) (Z := univ) fun x _ => by
+      simp_rw [mem_roots', IsRoot, eval_sub, eval_pow, eval_X]
+      have := DFunLike.congr_fun eq x
+      rw [AlgHom.coe_pow]; rw [coe_frobeniusAlgHom]; rw [pow_iterate]; rw [AlgHom.one_apply]; rw [← sub_eq_zero] at this
+      refine ⟨fun h => ?_, this⟩
+      simpa [Fintype.one_lt_card.ne, pos.ne, eqComm] using congr_arg (coeff · 1) h
+    refine this.not_gt (((natDegree_sub_le ..).trans_eq ?_).trans_lt <|
+      (Nat.pow_lt_pow_right Fintype.one_lt_card lt).trans_eq Module.card_eq_pow_finrank.symm)
+    simp [Nat.one_le_pow _ _ Fintype.card_pos]
 
 中文:
 定理 orderOf_frobeniusAlgHom
@@ -952,7 +1130,15 @@ theorem orderOf_frobeniusAlgHom
     refine ⟨DFunLike.ext _ _ fun x => ?_, fun m lt pos eq => ?_⟩
     · simp_rw [AlgHom.coe_pow, coe_frobeniusAlgHom, pow_iterate, AlgHom.one_apply,
         ← Module.card_eq_pow_finrank, pow_card]
-    have := card_le_degree_of_
+    have := card_le_degree_of_subset_roots (R := L) (p := X ^ q ^ m - X) (Z := univ) fun x _ => by
+      simp_rw [mem_roots', IsRoot, eval_sub, eval_pow, eval_X]
+      have := DFunLike.congr_fun eq x
+      rw [AlgHom.coe_pow]; rw [coe_frobeniusAlgHom]; rw [pow_iterate]; rw [AlgHom.one_apply]; rw [← sub_eq_zero] at this
+      refine ⟨fun h => ?_, this⟩
+      simpa [Fintype.one_lt_card.ne, pos.ne, eqComm] using congr_arg (coeff · 1) h
+    refine this.not_gt (((natDegree_sub_le ..).trans_eq ?_).trans_lt <|
+      (Nat.pow_lt_pow_right Fintype.one_lt_card lt).trans_eq Module.card_eq_pow_finrank.symm)
+    simp [Nat.one_le_pow _ _ Fintype.card_pos]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_pow, AlgHom.one_apply, DFunLike, DFunLike.congr_fun, DFunLike.ext, Fintype, Fintype.ofFinite, IsRoot, Module, Module.card_eq_pow_finrank, Module.finrank_pos, card_eq_pow_finrank, card_le_degree_of_subset_roots, coe_frobeniusAlgHom, coe_pow, congr_fun, eval_X, eval_pow, eval_sub
 -/
@@ -1054,7 +1240,9 @@ theorem minpoly_frobeniusAlgHom
     (LinearMap.ext fun x => by
       simpa [sub_eq_zero, Module.End.coe_pow, orderOf_frobeniusAlgHom] using!
         congr($(pow_orderOf_eq_one (frobeniusAlgHom K L)) x)) _
-(degree_X_pow_sub_C Module.finrank_pos _) b
+(degree_X_pow_sub_C Module.finrank_pos _) by
+      simpa [← AlgHom.toEnd_apply, ← map_pow] using! (linearIndependent_algHom_toLinearMap K L L
+.restrict_scalars' K).comp _ (bijective_frobeniusAlgHom_pow K L).1
 
 中文:
 定理 minpoly_frobeniusAlgHom
@@ -1062,7 +1250,9 @@ theorem minpoly_frobeniusAlgHom
     (LinearMap.ext fun x => by
       simpa [sub_eq_zero, Module.End.coe_pow, orderOf_frobeniusAlgHom] using!
         congr($(pow_orderOf_eq_one (frobeniusAlgHom K L)) x)) _
-(degree_X_pow_sub_C Module.finrank_pos _) b
+(degree_X_pow_sub_C Module.finrank_pos _) by
+      simpa [← AlgHom.toEnd_apply, ← map_pow] using! (linearIndependent_algHom_toLinearMap K L L
+.restrict_scalars' K).comp _ (bijective_frobeniusAlgHom_pow K L).1
 
 Depends on / 依赖: AlgHom, AlgHom.toEnd_apply, LinearMap, LinearMap.ext, Module, Module.End.coe_pow, Module.finrank_pos, bijective_frobeniusAlgHom_pow, coe_pow, degree_X_pow_sub_C, eq_of_linearIndependent, finrank_pos, frobeniusAlgHom, leadingCoeff_X_pow_sub_one, linearIndependent_algHom_toLinearMap, map_pow, minpoly, minpoly.eq_of_linearIndependent, orderOf_frobeniusAlgHom, pow_orderOf_eq_one
 -/
@@ -1197,7 +1387,12 @@ theorem roots_X_pow_card_sub_X
     have : (roots (X ^ q - X : K[X])).toFinset = Finset.univ := by
       rw [eq_univ_iff_forall]
       intro x
-      rw [Multiset.mem_toFinset]; rw [mem_roots aux]; rw [IsRoot.def]; rw [eval_sub];
+      rw [Multiset.mem_toFinset]; rw [mem_roots aux]; rw [IsRoot.def]; rw [eval_sub]; rw [eval_pow]; rw [eval_X]; rw [sub_eq_zero]; rw [pow_card]
+    rw [← this]; rw [Multiset.toFinset_val]; rw [eq_comm]; rw [Multiset.dedup_eq_self]
+    apply nodup_roots
+    rw [separable_def]
+    convert! isCoprime_one_right.neg_right (R := K[X]) using 1
+    rw [derivative_sub]; rw [derivative_X]; rw [derivative_X_pow]; rw [Nat.cast_card_eq_zero K]; rw [C_0]; rw [zero_mul]; rw [zero_sub]
 
 中文:
 定理 roots_X_pow_card_sub_X
@@ -1208,7 +1403,12 @@ theorem roots_X_pow_card_sub_X
     have : (roots (X ^ q - X : K[X])).toFinset = Finset.univ := by
       rw [eq_univ_iff_forall]
       intro x
-      rw [Multiset.mem_toFinset]; rw [mem_roots aux]; rw [IsRoot.def]; rw [eval_sub];
+      rw [Multiset.mem_toFinset]; rw [mem_roots aux]; rw [IsRoot.def]; rw [eval_sub]; rw [eval_pow]; rw [eval_X]; rw [sub_eq_zero]; rw [pow_card]
+    rw [← this]; rw [Multiset.toFinset_val]; rw [eq_comm]; rw [Multiset.dedup_eq_self]
+    apply nodup_roots
+    rw [separable_def]
+    convert! isCoprime_one_right.neg_right (R := K[X]) using 1
+    rw [derivative_sub]; rw [derivative_X]; rw [derivative_X_pow]; rw [Nat.cast_card_eq_zero K]; rw [C_0]; rw [zero_mul]; rw [zero_sub]
 
 Depends on / 依赖: Finset, Finset.univ, Fintype, Fintype.one_lt_card, IsRoot, IsRoot.def, Multiset, Multiset.dedup_eq_self, Multiset.mem_toFinset, Multiset.toFinset_val, X_pow_card_sub_X_ne_zero, classical, convert, dedup_eq_self, eq_comm, eq_univ_iff_forall, eval_X, eval_pow, eval_sub, isCoprime_one_right
 -/
@@ -1322,7 +1522,11 @@ theorem sq_add_sq
   let f : (ZMod p)[X] := X ^ 2
   let g : (ZMod p)[X] := X ^ 2 - C x
   obtain ⟨a, b, hab⟩ : exists a b, f.eval a + g.eval b = 0 :=
-    @exists_root_sum_quadratic _ _ _ _ f g (
+    @exists_root_sum_quadratic _ _ _ _ f g (degree_X_pow 2) (degree_X_pow_sub_C (by decide) _)
+      (by rw [ZMod.card, hp_odd])
+  refine ⟨a, b, ?_⟩
+  rw [← sub_eq_zero]
+  simpa only [f, g, eval_C, eval_X, eval_pow, eval_sub, ← add_sub_assoc] using hab
 
 中文:
 定理 sq_add_sq
@@ -1337,7 +1541,11 @@ theorem sq_add_sq
   let f : (ZMod p)[X] := X ^ 2
   let g : (ZMod p)[X] := X ^ 2 - C x
   obtain ⟨a, b, hab⟩ : exists a b, f.eval a + g.eval b = 0 :=
-    @exists_root_sum_quadratic _ _ _ _ f g (
+    @exists_root_sum_quadratic _ _ _ _ f g (degree_X_pow 2) (degree_X_pow_sub_C (by decide) _)
+      (by rw [ZMod.card, hp_odd])
+  refine ⟨a, b, ?_⟩
+  rw [← sub_eq_zero]
+  simpa only [f, g, eval_C, eval_X, eval_pow, eval_sub, ← add_sub_assoc] using hab
 
 Depends on / 依赖: ZMod.card, add_sub_assoc, degree_X_pow, degree_X_pow_sub_C, eq_two_or_odd, eval_C, eval_X, eval_pow, eval_sub, exists_root_sum_quadratic, f.eval, fin_cases, g.eval, hp_odd, sub_eq_zero
 -/
@@ -1371,7 +1579,7 @@ theorem Nat.sq_add_sq_zmodEq
   rw [← a.coe_valMinAbs]; rw [← b.coe_valMinAbs] at hx
   push_cast
   rw [sq_abs]; rw [sq_abs]; rw [← ZMod.intCast_eq_intCast_iff]
-  exact m
+  exact mod_cast hx
 
 中文:
 定理 自然数.sq_add_sq_zmodEq
@@ -1383,7 +1591,7 @@ theorem Nat.sq_add_sq_zmodEq
   rw [← a.coe_valMinAbs]; rw [← b.coe_valMinAbs] at hx
   push_cast
   rw [sq_abs]; rw [sq_abs]; rw [← ZMod.intCast_eq_intCast_iff]
-  exact m
+  exact mod_cast hx
 
 Depends on / 依赖: ZMod.intCast_eq_intCast_iff, ZMod.natAbs_valMinAbs_le, ZMod.sq_add_sq, a.coe_valMinAbs, a.valMinAbs.natAbs, b.coe_valMinAbs, b.valMinAbs.natAbs, coe_valMinAbs, intCast_eq_intCast_iff, mod_cast, natAbs, natAbs_valMinAbs_le, sq_abs, sq_add_sq, valMinAbs
 -/
@@ -1500,7 +1708,7 @@ theorem Nat.ModEq.pow_totient
   have := ZMod.pow_totient x'
   apply_fun ((fun (x : Units (ZMod n)) => (x : ZMod n)) : Units (ZMod n) -> ZMod n) at this
   simpa only [Nat.succ_eq_add_one, Nat.cast_pow, Units.val_one, Nat.cast_one,
-    coe_
+    coe_unitOfCoprime, Units.val_pow_eq_pow_val]
 
 中文:
 定理 自然数.ModEq.pow_totient
@@ -1512,7 +1720,7 @@ theorem Nat.ModEq.pow_totient
   have := ZMod.pow_totient x'
   apply_fun ((fun (x : Units (ZMod n)) => (x : ZMod n)) : Units (ZMod n) -> ZMod n) at this
   simpa only [Nat.succ_eq_add_one, Nat.cast_pow, Units.val_one, Nat.cast_one,
-    coe_
+    coe_unitOfCoprime, Units.val_pow_eq_pow_val]
 
 Depends on / 依赖: Nat.cast_one, Nat.cast_pow, Nat.succ_eq_add_one, Units.val_one, Units.val_pow_eq_pow_val, ZMod.natCast_eq_natCast_iff, ZMod.pow_totient, ZMod.unitOfCoprime, apply_fun, cast_one, cast_pow, coe_unitOfCoprime, natCast_eq_natCast_iff, pow_totient, succ_eq_add_one, unitOfCoprime, val_one, val_pow_eq_pow_val
 -/
@@ -1927,7 +2135,8 @@ theorem Int.ModEq.pow_eq_pow
   by_cases hn : n ≡ 0 [ZMOD p]
   · grw [hn, zero_pow (hy.trans_le hxy).ne', zero_pow hy.ne']
   · rw [Int.modEq_zero_iff_dvd, ← (Nat.prime_iff_prime_int.mp hp).coprime_iff_not_dvd] at hn
-    grw [← pow_sub_mul_pow n hxy, ← h, pow_mul, Int.ModEq.pow_card_sub_one
+    grw [← pow_sub_mul_pow n hxy, ← h, pow_mul, Int.ModEq.pow_card_sub_one_eq_one hp hn.symm,
+      one_pow, one_mul]
 
 中文:
 定理 整数.ModEq.pow_eq_pow
@@ -1937,7 +2146,8 @@ theorem Int.ModEq.pow_eq_pow
   by_cases hn : n ≡ 0 [ZMOD p]
   · grw [hn, zero_pow (hy.trans_le hxy).ne', zero_pow hy.ne']
   · rw [Int.modEq_zero_iff_dvd, ← (Nat.prime_iff_prime_int.mp hp).coprime_iff_not_dvd] at hn
-    grw [← pow_sub_mul_pow n hxy, ← h, pow_mul, Int.ModEq.pow_card_sub_one
+    grw [← pow_sub_mul_pow n hxy, ← h, pow_mul, Int.ModEq.pow_card_sub_one_eq_one hp hn.symm,
+      one_pow, one_mul]
 
 Depends on / 依赖: Int.ModEq.pow_card_sub_one_eq_one, Int.modEq_zero_iff_dvd, Nat.mul_div_eq_iff_dvd, Nat.prime_iff_prime_int.mp, coprime_iff_not_dvd, hn.symm, hy.ne, hy.trans_le, modEq_zero_iff_dvd, mul_div_eq_iff_dvd, one_mul, one_pow, pow_card_sub_one_eq_one, pow_mul, pow_sub_mul_pow, prime_iff_prime_int, trans_le, zero_pow
 -/
@@ -2007,7 +2217,14 @@ theorem pow_pow_modEq_one
     rw [Nat.ModEq.comm]; rw [add_comm]; rw [Nat.modEq_iff_dvd' (Nat.one_le_pow' _ _)] at hm
     obtain ⟨d, hd⟩ := hm
     rw [tsub_eq_iff_eq_add_of_le (Nat.one_le_pow' _ _)]; rw [add_comm] at hd
-    rw [pow_succ]; rw [pow_mul]; rw
+    rw [pow_succ]; rw [pow_mul]; rw [hd]; rw [add_pow]; rw [Finset.sum_range_succ']; rw [pow_zero]; rw [one_mul]; rw [one_pow]; rw [one_mul]; rw [Nat.choose_zero_right]; rw [Nat.cast_one]
+    refine Nat.ModEq.add_right 1 (Nat.modEq_zero_iff_dvd.mpr ?_)
+    simp_rw [one_pow, mul_one, pow_succ', mul_assoc, ← Finset.mul_sum]
+    refine mul_dvd_mul_left (p ^ m) (dvd_mul_of_dvd_right (Finset.dvd_sum fun k hk => ?_) d)
+    cases m
+    · rw [pow_zero, pow_one, one_mul, add_comm, add_left_inj] at hd
+      cases k <;> simp [← hd, mul_assoc, pow_succ']
+    · cases k <;> simp [mul_assoc, pow_succ']
 
 中文:
 定理 pow_pow_modEq_one
@@ -2020,7 +2237,14 @@ theorem pow_pow_modEq_one
     rw [Nat.ModEq.comm]; rw [add_comm]; rw [Nat.modEq_iff_dvd' (Nat.one_le_pow' _ _)] at hm
     obtain ⟨d, hd⟩ := hm
     rw [tsub_eq_iff_eq_add_of_le (Nat.one_le_pow' _ _)]; rw [add_comm] at hd
-    rw [pow_succ]; rw [pow_mul]; rw
+    rw [pow_succ]; rw [pow_mul]; rw [hd]; rw [add_pow]; rw [Finset.sum_range_succ']; rw [pow_zero]; rw [one_mul]; rw [one_pow]; rw [one_mul]; rw [Nat.choose_zero_right]; rw [Nat.cast_one]
+    refine Nat.ModEq.add_right 1 (Nat.modEq_zero_iff_dvd.mpr ?_)
+    simp_rw [one_pow, mul_one, pow_succ', mul_assoc, ← Finset.mul_sum]
+    refine mul_dvd_mul_left (p ^ m) (dvd_mul_of_dvd_right (Finset.dvd_sum fun k hk => ?_) d)
+    cases m
+    · rw [pow_zero, pow_one, one_mul, add_comm, add_left_inj] at hd
+      cases k <;> simp [← hd, mul_assoc, pow_succ']
+    · cases k <;> simp [mul_assoc, pow_succ']
 
 Depends on / 依赖: Finset, Finset.sum_range_succ, Nat.ModEq.add_right, Nat.ModEq.comm, Nat.cast_one, Nat.choose_zero_right, Nat.modEq_iff_dvd, Nat.modEq_one, Nat.modEq_zero_iff_dvd.mpr, Nat.one_le_pow, add_comm, add_pow, add_right, cast_one, choose_zero_right, modEq_iff_dvd, modEq_one, modEq_zero_iff_dvd, one_le_pow, one_mul
 -/
@@ -2053,7 +2277,16 @@ theorem ZMod.eq_one_or_isUnit_sub_one
   · exact Or.inr (zero_sub (1 : ZMod n) ▸ isUnit_neg_one)
   have : NeZero n := ⟨hn0⟩
   obtain ⟨a, rfl⟩ := ZMod.natCast_zmod_surjective a
-  rw [
+  rw [← orderOf_eq_one_iff]; rw [or_iff_not_imp_right]
+  refine fun h => ha.eq_one_of_dvd ?_
+  rw [orderOf_dvd_iff_pow_eq_one]; rw [← Nat.cast_pow]; rw [← Nat.cast_one]; rw [ZMod.natCast_eq_natCast_iff]; rw [hn]
+  replace ha0 : 1 <= a := by
+    contrapose! ha0
+    rw [Nat.lt_one_iff.mp ha0]; rw [Nat.cast_zero]
+  rw [← Nat.cast_one]; rw [← Nat.cast_sub ha0]; rw [ZMod.isUnit_iff_coprime]; rw [hn] at h
+  obtain ⟨b, hb⟩ := not_imp_comm.mp (Nat.Prime.coprime_pow_of_not_dvd Fact.out) h
+  rw [tsub_eq_iff_eq_add_of_le ha0]; rw [add_comm] at hb
+  exact hb ▸ pow_pow_modEq_one p k b
 
 中文:
 定理 ZMod.eq_one_or_isUnit_sub_one
@@ -2065,7 +2298,16 @@ theorem ZMod.eq_one_or_isUnit_sub_one
   · exact Or.inr (zero_sub (1 : ZMod n) ▸ isUnit_neg_one)
   have : NeZero n := ⟨hn0⟩
   obtain ⟨a, rfl⟩ := ZMod.natCast_zmod_surjective a
-  rw [
+  rw [← orderOf_eq_one_iff]; rw [or_iff_not_imp_right]
+  refine fun h => ha.eq_one_of_dvd ?_
+  rw [orderOf_dvd_iff_pow_eq_one]; rw [← Nat.cast_pow]; rw [← Nat.cast_one]; rw [ZMod.natCast_eq_natCast_iff]; rw [hn]
+  replace ha0 : 1 <= a := by
+    contrapose! ha0
+    rw [Nat.lt_one_iff.mp ha0]; rw [Nat.cast_zero]
+  rw [← Nat.cast_one]; rw [← Nat.cast_sub ha0]; rw [ZMod.isUnit_iff_coprime]; rw [hn] at h
+  obtain ⟨b, hb⟩ := not_imp_comm.mp (Nat.Prime.coprime_pow_of_not_dvd Fact.out) h
+  rw [tsub_eq_iff_eq_add_of_le ha0]; rw [add_comm] at hb
+  exact hb ▸ pow_pow_modEq_one p k b
 
 Depends on / 依赖: Nat.cast_one, Nat.cast_pow, NeZero, Or.inl, Or.inr, ZMod.natCast_eq_natCast_iff, ZMod.natCast_zmod_surjective, cast_one, cast_pow, coprime_zero_right, coprime_zero_right.mp, eq_one_of_dvd, eq_or_ne, ha.eq_one_of_dvd, isUnit_neg_one, natCast_eq_natCast_iff, natCast_zmod_surjective, or_iff_not_imp_right, orderOf, orderOf_dvd_iff_pow_eq_one
 -/
@@ -2409,7 +2651,21 @@ theorem unit_isSquare_iff
   have hodd := Nat.two_mul_odd_div_two (FiniteField.odd_card_of_char_ne_two hF)
   constructor
   · rintro ⟨y, rfl⟩
-    rw [← pow_two]; rw [← pow_mul]; 
+    rw [← pow_two]; rw [← pow_mul]; rw [hodd]
+    apply_fun Units.val using Units.val_injective
+    push_cast
+    exact FiniteField.pow_card_sub_one_eq_one (y : F) (Units.ne_zero y)
+  · subst a; intro h
+    rw [← Nat.card_eq_fintype_card] at hodd h
+    have key : 2 * (Nat.card F / 2) ∣ n * (Nat.card F / 2) := by
+      rw [← pow_mul] at h
+      rw [hodd]; rw [← Nat.card_units]; rw [← orderOf_eq_card_of_forall_mem_zpowers hg]
+      apply orderOf_dvd_of_pow_eq_one h
+    have : 0 < Nat.card F / 2 := Nat.div_pos Finite.one_lt_card (by simp)
+    obtain ⟨m, rfl⟩ := Nat.dvd_of_mul_dvd_mul_right this key
+    refine ⟨g ^ m, ?_⟩
+    dsimp
+    rw [mul_comm]; rw [pow_mul]; rw [pow_two]
 
 中文:
 定理 unit_isSquare_iff
@@ -2420,7 +2676,21 @@ theorem unit_isSquare_iff
   have hodd := Nat.two_mul_odd_div_two (FiniteField.odd_card_of_char_ne_two hF)
   constructor
   · rintro ⟨y, rfl⟩
-    rw [← pow_two]; rw [← pow_mul]; 
+    rw [← pow_two]; rw [← pow_mul]; rw [hodd]
+    apply_fun Units.val using Units.val_injective
+    push_cast
+    exact FiniteField.pow_card_sub_one_eq_one (y : F) (Units.ne_zero y)
+  · subst a; intro h
+    rw [← Nat.card_eq_fintype_card] at hodd h
+    have key : 2 * (Nat.card F / 2) ∣ n * (Nat.card F / 2) := by
+      rw [← pow_mul] at h
+      rw [hodd]; rw [← Nat.card_units]; rw [← orderOf_eq_card_of_forall_mem_zpowers hg]
+      apply orderOf_dvd_of_pow_eq_one h
+    have : 0 < Nat.card F / 2 := Nat.div_pos Finite.one_lt_card (by simp)
+    obtain ⟨m, rfl⟩ := Nat.dvd_of_mul_dvd_mul_right this key
+    refine ⟨g ^ m, ?_⟩
+    dsimp
+    rw [mul_comm]; rw [pow_mul]; rw [pow_two]
 
 Depends on / 依赖: FiniteField, FiniteField.odd_card_of_char_ne_two, FiniteField.pow_card_sub_one_eq_one, IsCyclic, IsCyclic.exists_generator, Nat.card_eq_fintype_card, Nat.two_mul_odd_div_two, Submonoid, Submonoid.powers, Units.ne_zero, Units.val, Units.val_injective, apply_fun, card_eq_fintype_card, exists_generator, mem_powers_iff_mem_zpowers, ne_zero, odd_card_of_char_ne_two, pow_card_sub_one_eq_one, pow_mul
 -/
@@ -2461,7 +2731,7 @@ theorem isSquare_iff
   · rintro ⟨y, hy⟩; exact ⟨y, hy⟩
   · rintro ⟨y, rfl⟩
     have hy : y != 0 := by rintro rfl; simp at ha
-    
+    refine ⟨Units.mk0 y hy, ?_⟩; simp
 
 中文:
 定理 isSquare_iff
@@ -2474,7 +2744,7 @@ theorem isSquare_iff
   · rintro ⟨y, hy⟩; exact ⟨y, hy⟩
   · rintro ⟨y, rfl⟩
     have hy : y != 0 := by rintro rfl; simp at ha
-    
+    refine ⟨Units.mk0 y hy, ?_⟩; simp
 
 Depends on / 依赖: FiniteField, FiniteField.unit_isSquare_iff, IsSquare, Units.ext_iff, Units.mk0, Units.val_mk0, Units.val_mul, ext_iff, iff_congr, unit_isSquare_iff, val_mk0, val_mul
 -/

@@ -654,7 +654,12 @@ theorem map_piMap_pi
   rintro ⟨I, s⟩ ⟨hI : I.Finite, hs : forall i in I, s i in l i⟩
   classical
   rw [← univ_pi_piecewise_univ]; rw [piMap_image_univ_pi]
-  refine univ_pi_mem_pi (fun i
+  refine univ_pi_mem_pi (fun i => ?_) ?_
+  · by_cases hi : i in I
+    · simpa [hi] using image_mem_map (hs i hi)
+    · simp [hi]
+  · filter_upwards [hf, hI.compl_mem_cofinite] with i hsurj (hiI : i ∉ I)
+    simp [hiI, hsurj.range_eq]
 
 中文:
 定理 map_piMap_pi
@@ -665,7 +670,12 @@ theorem map_piMap_pi
   rintro ⟨I, s⟩ ⟨hI : I.Finite, hs : forall i in I, s i in l i⟩
   classical
   rw [← univ_pi_piecewise_univ]; rw [piMap_image_univ_pi]
-  refine univ_pi_mem_pi (fun i
+  refine univ_pi_mem_pi (fun i => ?_) ?_
+  · by_cases hi : i in I
+    · simpa [hi] using image_mem_map (hs i hi)
+    · simp [hi]
+  · filter_upwards [hf, hI.compl_mem_cofinite] with i hsurj (hiI : i ∉ I)
+    simp [hiI, hsurj.range_eq]
 
 Depends on / 依赖: Finite, I.Finite, basis_sets, classical, compl_mem_cofinite, filter_upwards, ge_iff, hI.compl_mem_cofinite, hasBasis_pi, hsurj.range_eq, image_mem_map, le_antisymm, piMap_image_univ_pi, range_eq, tendsto_map, tendsto_piMap_pi, univ_pi_mem_pi, univ_pi_piecewise_univ
 -/
@@ -835,7 +845,14 @@ theorem Filter.Tendsto.exists_within_forall_le
   · -- the set of points `{y | f y < x}` is nonempty and finite, so we take `min` over this set
     rcases all_top with ⟨y, hys, x, hx⟩
     have : { y | ¬x <= f y }.Finite := Filter.eventually_cofinite.mp (tendsto_atTop.1 hf x)
-    simp only 
+    simp only [not_le] at this
+    obtain ⟨a₀, ⟨ha₀ : f a₀ < x, ha₀s⟩, others_bigger⟩ :=
+      exists_min_image _ f (this.inter_of_left s) ⟨y, hx, hys⟩
+    refine ⟨a₀, ha₀s, fun a has => (lt_or_ge (f a) x).elim ?_ (le_trans ha₀.le)⟩
+    exact fun h => others_bigger a ⟨h, has⟩
+  · -- in this case, f is constant because all values are at top
+    obtain ⟨a₀, ha₀s⟩ := hs
+    exact ⟨a₀, ha₀s, fun a ha => all_top a ha (f a₀)⟩
 
 中文:
 定理 滤子.收敛.存在_within_对任意_le
@@ -845,7 +862,14 @@ theorem Filter.Tendsto.exists_within_forall_le
   · -- the set of points `{y | f y < x}` is nonempty and finite, so we take `min` over this set
     rcases all_top with ⟨y, hys, x, hx⟩
     have : { y | ¬x <= f y }.Finite := Filter.eventually_cofinite.mp (tendsto_atTop.1 hf x)
-    simp only 
+    simp only [not_le] at this
+    obtain ⟨a₀, ⟨ha₀ : f a₀ < x, ha₀s⟩, others_bigger⟩ :=
+      exists_min_image _ f (this.inter_of_left s) ⟨y, hx, hys⟩
+    refine ⟨a₀, ha₀s, fun a has => (lt_or_ge (f a) x).elim ?_ (le_trans ha₀.le)⟩
+    exact fun h => others_bigger a ⟨h, has⟩
+  · -- in this case, f is constant because all values are at top
+    obtain ⟨a₀, ha₀s⟩ := hs
+    exact ⟨a₀, ha₀s, fun a ha => all_top a ha (f a₀)⟩
 
 Depends on / 依赖: Filter, Filter.eventually_cofinite.mp, Finite, all_top, eventually_cofinite, exists_min_image, finite, inter_of_left, le_trans, lt_or_ge, nonempty, not_le, others_bigger, points, tendsto_atTop, this.inter_of_left
 -/
@@ -1208,6 +1232,15 @@ theorem existsUnique_eq_principal_sup_free
     exact mem_inf_of_right (mem_principal_self f.kerᶜ)
   · rw [← compl_compl f.ker, ← hnot_principal, ← Filter.hnot_def,
       Coheyting.hnot_hnot_sup_boundary]
+  · have hqk := congrArg Filter.ker hq.2.2
+    rw [ker_sup]; rw [ker_principal]; rw [le_cofinite_iff_ker.mp hq.1]; rw [union_empty] at hqk
+    refine congrArg₂ Prod.mk hqk.symm (le_antisymm (le_inf ?_ ?_) ?_)
+    · rw [hq.2.2]
+      exact le_sup_right
+    · rw [Filter.hnot_def, le_principal_iff, ← disjoint_principal_left, hqk]
+      exact hq.2.1
+    · grw [hq.2.2, Coheyting.boundary_sup_le, boundary_principal, bot_sup_eq]
+      exact Coheyting.boundary_le
 
 中文:
 定理 存在Unique_eq_principal_sup_free
@@ -1218,6 +1251,15 @@ theorem existsUnique_eq_principal_sup_free
     exact mem_inf_of_right (mem_principal_self f.kerᶜ)
   · rw [← compl_compl f.ker, ← hnot_principal, ← Filter.hnot_def,
       Coheyting.hnot_hnot_sup_boundary]
+  · have hqk := congrArg Filter.ker hq.2.2
+    rw [ker_sup]; rw [ker_principal]; rw [le_cofinite_iff_ker.mp hq.1]; rw [union_empty] at hqk
+    refine congrArg₂ Prod.mk hqk.symm (le_antisymm (le_inf ?_ ?_) ?_)
+    · rw [hq.2.2]
+      exact le_sup_right
+    · rw [Filter.hnot_def, le_principal_iff, ← disjoint_principal_left, hqk]
+      exact hq.2.1
+    · grw [hq.2.2, Coheyting.boundary_sup_le, boundary_principal, bot_sup_eq]
+      exact Coheyting.boundary_le
 
 Depends on / 依赖: Coheyting, Coheyting.boundary, Coheyting.hnot_hnot_sup_boundary, Filter, Filter.hnot_def, Filter.ker, Prod.mk, boundary, boundary_le_cofinite, compl_compl, disjoint_principal_left, f.ker, hnot_def, hnot_hnot_sup_boundary, hnot_principal, hqk.symm, ker_principal, ker_sup, le_antisymm, le_cofinite_iff_ker
 -/

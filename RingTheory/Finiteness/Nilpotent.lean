@@ -33,7 +33,10 @@ theorem Module.End.isNilpotent_iff_of_finite
   ext m
   have hm : m in Submodule.span R S := by simp [hS]
   induction hm using Submodule.span_induction with
-  | mem x hx => exact p
+  | mem x hx => exact pow_map_zero_of_le (Finset.le_sup hx) (hg x)
+  | zero => simp
+  | add => simp_all
+  | smul => simp_all
 
 中文:
 定理 模.End.isNilpotent_iff_of_finite
@@ -46,7 +49,10 @@ theorem Module.End.isNilpotent_iff_of_finite
   ext m
   have hm : m in Submodule.span R S := by simp [hS]
   induction hm using Submodule.span_induction with
-  | mem x hx => exact p
+  | mem x hx => exact pow_map_zero_of_le (Finset.le_sup hx) (hg x)
+  | zero => simp
+  | add => simp_all
+  | smul => simp_all
 
 Depends on / 依赖: Finite, Finset, Finset.le_sup, Finset.sup, Module, Module.Finite.fg_top, Submodule, Submodule.span, Submodule.span_induction, fg_top, le_sup, pow_map_zero_of_le, span_induction
 -/
@@ -123,7 +129,8 @@ theorem isNilpotent_iff_forall_row
   · obtain ⟨n, hn⟩ := h (Pi.single i 1)
     exact ⟨n, by simpa [← transpose_pow] using hn⟩
   · choose n hn using h
-    suffices forall i, (A ^ ⨆ j, n j) i = 0 from ⟨⨆ j, n j, by simp [mulVec_eq_sum, t
+    suffices forall i, (A ^ ⨆ j, n j) i = 0 from ⟨⨆ j, n j, by simp [mulVec_eq_sum, this]⟩
+    exact fun i => pow_row_eq_zero_of_le (hn i) (Finite.le_ciSup n i)
 
 中文:
 定理 isNilpotent_iff_对任意_row
@@ -133,7 +140,8 @@ theorem isNilpotent_iff_forall_row
   · obtain ⟨n, hn⟩ := h (Pi.single i 1)
     exact ⟨n, by simpa [← transpose_pow] using hn⟩
   · choose n hn using h
-    suffices forall i, (A ^ ⨆ j, n j) i = 0 from ⟨⨆ j, n j, by simp [mulVec_eq_sum, t
+    suffices forall i, (A ^ ⨆ j, n j) i = 0 from ⟨⨆ j, n j, by simp [mulVec_eq_sum, this]⟩
+    exact fun i => pow_row_eq_zero_of_le (hn i) (Finite.le_ciSup n i)
 
 Depends on / 依赖: Finite, Finite.le_ciSup, Pi.single, isNilpotent_iff, isNilpotent_transpose_iff, le_ciSup, mulVec_eq_sum, pow_row_eq_zero_of_le, single, transpose_pow
 -/

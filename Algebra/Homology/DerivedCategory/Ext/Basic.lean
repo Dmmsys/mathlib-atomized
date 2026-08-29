@@ -86,7 +86,21 @@ lemma hasExt_iff
       ((singleFunctor C 0).obj X)).homFromEquiv).1 (h X Y 0 n)
   · intro h X Y a b
     obtain hab | hab := le_or_gt a b
-    · refine (small_
+    · refine (small_congr ?_).1 (h X Y (b - a) (by simpa))
+      exact (Functor.FullyFaithful.ofFullyFaithful
+        (shiftFunctor _ a)).homEquiv.trans
+        ((shiftFunctorAdd' _ _ _ _ (Int.sub_add_cancel b a)).symm.app _).homToEquiv
+    · suffices Subsingleton ((Q.obj ((CochainComplex.singleFunctor C 0).obj X))⟦a⟧ ⟶
+          (Q.obj ((CochainComplex.singleFunctor C 0).obj Y))⟦b⟧) from inferInstance
+      constructor
+      intro x y
+      rw [← cancel_mono ((Q.commShiftIso b).inv.app _)]; rw [← cancel_epi ((Q.commShiftIso a).hom.app _)]
+      have : (((CochainComplex.singleFunctor C 0).obj X)⟦a⟧).IsStrictlyLE (-a) :=
+        CochainComplex.isStrictlyLE_shift _ 0 _ _ (by lia)
+      have : (((CochainComplex.singleFunctor C 0).obj Y)⟦b⟧).IsStrictlyGE (-b) :=
+        CochainComplex.isStrictlyGE_shift _ 0 _ _ (by lia)
+      apply (subsingleton_hom_of_isStrictlyLE_of_isStrictlyGE _ _ (-a) (-b) (by
+        lia)).elim
 
 中文:
 引理 hasExt_iff
@@ -100,7 +114,21 @@ lemma hasExt_iff
       ((singleFunctor C 0).obj X)).homFromEquiv).1 (h X Y 0 n)
   · intro h X Y a b
     obtain hab | hab := le_or_gt a b
-    · refine (small_
+    · refine (small_congr ?_).1 (h X Y (b - a) (by simpa))
+      exact (Functor.FullyFaithful.ofFullyFaithful
+        (shiftFunctor _ a)).homEquiv.trans
+        ((shiftFunctorAdd' _ _ _ _ (Int.sub_add_cancel b a)).symm.app _).homToEquiv
+    · suffices Subsingleton ((Q.obj ((CochainComplex.singleFunctor C 0).obj X))⟦a⟧ ⟶
+          (Q.obj ((CochainComplex.singleFunctor C 0).obj Y))⟦b⟧) from inferInstance
+      constructor
+      intro x y
+      rw [← cancel_mono ((Q.commShiftIso b).inv.app _)]; rw [← cancel_epi ((Q.commShiftIso a).hom.app _)]
+      have : (((CochainComplex.singleFunctor C 0).obj X)⟦a⟧).IsStrictlyLE (-a) :=
+        CochainComplex.isStrictlyLE_shift _ 0 _ _ (by lia)
+      have : (((CochainComplex.singleFunctor C 0).obj Y)⟦b⟧).IsStrictlyGE (-b) :=
+        CochainComplex.isStrictlyGE_shift _ 0 _ _ (by lia)
+      apply (subsingleton_hom_of_isStrictlyLE_of_isStrictlyGE _ _ (-a) (-b) (by
+        lia)).elim
 
 Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.ofFullyFaithful, HasExt, Int.sub_add_cancel, Q.obj, Subsingleton, hasSmallLocalizedShiftedHom_iff, homEquiv, homEquiv.trans, homFromEquiv, homToEquiv, le_or_gt, ofFullyFaithful, shiftFunctor, shiftFunctorAdd, shiftFunctorZero, singleFunctor, small_congr, sub_add_cancel
 -/
@@ -192,7 +220,13 @@ instance [HasExt.{w}
     (hasSmallLocalizedShiftedHom_iff.{w}
       (W := (HomologicalComplex.quasiIso C (ComplexShape.up Int))) (M := Int)
       (X := (CochainComplex.singleFunctor C 0).obj X)
-      (Y := (Cocha
+      (Y := (CochainComplex.singleFunctor C 0).obj Y) Q).1 inferInstance a b
+  exact small_of_injective
+    (β := ((singleFunctor C 0).obj X)⟦-a⟧ ⟶ ((singleFunctor C 0).obj Y)⟦-b⟧)
+    (f := fun φ =>
+      ((singleFunctors C).shiftIso (-a) a 0 (by simp)).hom.app X ≫ φ ≫
+        ((singleFunctors C).shiftIso (-b) b 0 (by simp)).inv.app Y)
+    (fun φ₁ φ₂ h => by simpa using h)
 
 中文:
 实例 [HasExt.{w}
@@ -203,7 +237,13 @@ instance [HasExt.{w}
     (hasSmallLocalizedShiftedHom_iff.{w}
       (W := (HomologicalComplex.quasiIso C (ComplexShape.up Int))) (M := Int)
       (X := (CochainComplex.singleFunctor C 0).obj X)
-      (Y := (Cocha
+      (Y := (CochainComplex.singleFunctor C 0).obj Y) Q).1 inferInstance a b
+  exact small_of_injective
+    (β := ((singleFunctor C 0).obj X)⟦-a⟧ ⟶ ((singleFunctor C 0).obj Y)⟦-b⟧)
+    (f := fun φ =>
+      ((singleFunctors C).shiftIso (-a) a 0 (by simp)).hom.app X ≫ φ ≫
+        ((singleFunctors C).shiftIso (-b) b 0 (by simp)).inv.app Y)
+    (fun φ₁ φ₂ h => by simpa using h)
 
 Depends on / 依赖: CochainComplex, CochainComplex.singleFunctor, ComplexShape, ComplexShape.up, HomologicalComplex, HomologicalComplex.quasiIso, hasSmallLocalizedShiftedHom_iff, hom.app, quasiIso, shiftIso, singleFunctor, singleFunctors, small_of_injective
 -/
@@ -568,7 +608,12 @@ lemma mk₀_bijective
   have he : e.toFun = mk₀ := by
     ext f : 1
     dsimp [e]
-
+    apply homEquiv.injective
+    apply (Equiv.apply_symm_apply _ _).trans
+    symm
+    apply SmallShiftedHom.equiv_mk₀
+  rw [← he]
+  exact e.bijective
 
 中文:
 引理 mk₀_bijective
@@ -581,7 +626,12 @@ lemma mk₀_bijective
   have he : e.toFun = mk₀ := by
     ext f : 1
     dsimp [e]
-
+    apply homEquiv.injective
+    apply (Equiv.apply_symm_apply _ _).trans
+    symm
+    apply SmallShiftedHom.equiv_mk₀
+  rw [← he]
+  exact e.bijective
 
 Depends on / 依赖: Equiv.apply_symm_apply, FullyFaithful, Functor, Functor.FullyFaithful.ofFullyFaithful, HasDerivedCategory, HasDerivedCategory.standard, ShiftedHom, ShiftedHom.homEquiv, SmallShiftedHom, SmallShiftedHom.equiv_mk, apply_symm_apply, bijective, e.bijective, e.toFun, h.homEquiv.trans, homEquiv, homEquiv.injective, homEquiv.symm, injective, ofFullyFaithful
 -/
@@ -1195,7 +1245,19 @@ lemma add_hom
   let β' : Ext (X ⊞ X) Y n := (mk₀ biprod.snd).comp β (zero_add n)
   have eq₁ : α + β = (mk₀ (biprod.lift (𝟙 X) (𝟙 X))).comp (α' + β') (zero_add n) := by
     simp [α', β']
-  have eq₂ : α' + β' = homEquiv.symm (α'.hom + β'.hom) := 
+  have eq₂ : α' + β' = homEquiv.symm (α'.hom + β'.hom) := by
+    apply biprod_ext
+    all_goals ext; simp [α', β', ← Functor.map_comp]
+  simp only [eq₁, eq₂, comp_hom, Equiv.apply_symm_apply, ShiftedHom.comp_add]
+  congr
+  · dsimp [α']
+    rw [comp_hom]; rw [mk₀_hom]; rw [mk₀_hom]
+    dsimp
+    rw [ShiftedHom.mk₀_comp_mk₀_assoc]; rw [← Functor.map_comp]; rw [biprod.lift_fst]; rw [Functor.map_id]; rw [ShiftedHom.mk₀_id_comp]
+  · dsimp [β']
+    rw [comp_hom]; rw [mk₀_hom]; rw [mk₀_hom]
+    dsimp
+    rw [ShiftedHom.mk₀_comp_mk₀_assoc]; rw [← Functor.map_comp]; rw [biprod.lift_snd]; rw [Functor.map_id]; rw [ShiftedHom.mk₀_id_comp]
 
 中文:
 引理 add_hom
@@ -1206,7 +1268,19 @@ lemma add_hom
   let β' : Ext (X ⊞ X) Y n := (mk₀ biprod.snd).comp β (zero_add n)
   have eq₁ : α + β = (mk₀ (biprod.lift (𝟙 X) (𝟙 X))).comp (α' + β') (zero_add n) := by
     simp [α', β']
-  have eq₂ : α' + β' = homEquiv.symm (α'.hom + β'.hom) := 
+  have eq₂ : α' + β' = homEquiv.symm (α'.hom + β'.hom) := by
+    apply biprod_ext
+    all_goals ext; simp [α', β', ← Functor.map_comp]
+  simp only [eq₁, eq₂, comp_hom, Equiv.apply_symm_apply, ShiftedHom.comp_add]
+  congr
+  · dsimp [α']
+    rw [comp_hom]; rw [mk₀_hom]; rw [mk₀_hom]
+    dsimp
+    rw [ShiftedHom.mk₀_comp_mk₀_assoc]; rw [← Functor.map_comp]; rw [biprod.lift_fst]; rw [Functor.map_id]; rw [ShiftedHom.mk₀_id_comp]
+  · dsimp [β']
+    rw [comp_hom]; rw [mk₀_hom]; rw [mk₀_hom]
+    dsimp
+    rw [ShiftedHom.mk₀_comp_mk₀_assoc]; rw [← Functor.map_comp]; rw [biprod.lift_snd]; rw [Functor.map_id]; rw [ShiftedHom.mk₀_id_comp]
 
 Depends on / 依赖: Equiv.apply_symm_apply, Functor, Functor.map_comp, ShiftedHom, ShiftedHom.comp_add, all_goals, apply_symm_apply, biprod, biprod.fst, biprod.lift, biprod.snd, biprod_ext, comp_add, comp_hom, homEquiv, homEquiv.symm, map_comp, zero_add
 -/
@@ -1425,7 +1499,10 @@ definition extFunctor
         dsimp
         symm
         apply Ext.comp_assoc
-        all_goals lia
+        all_goals lia }
+  map_comp {X₁ X₂ X₃} f f' := by
+    ext Y α
+    simp
 
 中文:
 定义 extFunctor
@@ -1439,7 +1516,10 @@ definition extFunctor
         dsimp
         symm
         apply Ext.comp_assoc
-        all_goals lia
+        all_goals lia }
+  map_comp {X₁ X₂ X₃} f f' := by
+    ext Y α
+    simp
 
 Depends on / 依赖: X.unop, extFunctorObj
 -/
@@ -1537,7 +1617,13 @@ definition Ext.biproductAddEquiv
     simp only [← comp_assoc_of_second_deg_zero, mk₀_comp_mk₀]
     rw [← Ext.sum_comp]; rw [← Ext.mk₀_sum]; rw [IsBilimit.total hc]; rw [mk₀_id_comp]
   right_inv _ := by
-    ext
+    ext i
+    simp only [Ext.comp_sum, ← comp_assoc_of_second_deg_zero, mk₀_comp_mk₀]
+    rw [Finset.sum_eq_single i _ (by simp)]; rw [bicone_ι_π_self]; rw [mk₀_id_comp]
+    intro _ _ hij
+    rw [c.ι_π]; rw [dif_neg hij.symm]; rw [mk₀_zero]; rw [zero_comp]
+  map_add' _ _ := by
+    simp only [comp_add, Pi.add_def]
 
 中文:
 定义 Ext.biproductAddEquiv
@@ -1548,7 +1634,13 @@ definition Ext.biproductAddEquiv
     simp only [← comp_assoc_of_second_deg_zero, mk₀_comp_mk₀]
     rw [← Ext.sum_comp]; rw [← Ext.mk₀_sum]; rw [IsBilimit.total hc]; rw [mk₀_id_comp]
   right_inv _ := by
-    ext
+    ext i
+    simp only [Ext.comp_sum, ← comp_assoc_of_second_deg_zero, mk₀_comp_mk₀]
+    rw [Finset.sum_eq_single i _ (by simp)]; rw [bicone_ι_π_self]; rw [mk₀_id_comp]
+    intro _ _ hij
+    rw [c.ι_π]; rw [dif_neg hij.symm]; rw [mk₀_zero]; rw [zero_comp]
+  map_add' _ _ := by
+    simp only [comp_add, Pi.add_def]
 
 Depends on / 依赖: Ext.mk, zero_add
 -/
@@ -1581,7 +1673,12 @@ definition Ext.addEquivBiproduct
       ← Ext.mk₀_sum, IsBilimit.total hc, comp_mk₀_id]
   right_inv _ := by
     ext i
-    simp only [E
+    simp only [Ext.sum_comp, comp_assoc_of_second_deg_zero, mk₀_comp_mk₀]
+    rw [Finset.sum_eq_single i _ (by simp)]; rw [bicone_ι_π_self]; rw [comp_mk₀_id]
+    intro _ _ hij
+    rw [c.ι_π]; rw [dif_neg hij]; rw [mk₀_zero]; rw [comp_zero]
+  map_add' _ _ := by
+    simp only [add_comp, Pi.add_def]
 
 中文:
 定义 Ext.addEquivBiproduct
@@ -1593,7 +1690,12 @@ definition Ext.addEquivBiproduct
       ← Ext.mk₀_sum, IsBilimit.total hc, comp_mk₀_id]
   right_inv _ := by
     ext i
-    simp only [E
+    simp only [Ext.sum_comp, comp_assoc_of_second_deg_zero, mk₀_comp_mk₀]
+    rw [Finset.sum_eq_single i _ (by simp)]; rw [bicone_ι_π_self]; rw [comp_mk₀_id]
+    intro _ _ hij
+    rw [c.ι_π]; rw [dif_neg hij]; rw [mk₀_zero]; rw [comp_zero]
+  map_add' _ _ := by
+    simp only [add_comp, Pi.add_def]
 
 Depends on / 依赖: Ext.mk, add_zero, e.comp
 -/
@@ -1628,7 +1730,7 @@ definition Ext.biprodAddEquiv
   left_inv _ := by
     simp only [mk₀_comp_mk₀_assoc, ← add_comp, ← mk₀_add, biprod.total, mk₀_id_comp]
   right_inv _ := by simp
-
+  map_add' := by simp
 
 中文:
 定义 Ext.biprodAddEquiv
@@ -1638,7 +1740,7 @@ definition Ext.biprodAddEquiv
   left_inv _ := by
     simp only [mk₀_comp_mk₀_assoc, ← add_comp, ← mk₀_add, biprod.total, mk₀_id_comp]
   right_inv _ := by simp
-
+  map_add' := by simp
 
 Depends on / 依赖: biprod, biprod.inl, biprod.inr, zero_add
 -/
@@ -1663,7 +1765,9 @@ definition Ext.addEquivBiprod
   invFun e := e.1.comp (mk₀ biprod.inl) (add_zero n) + e.2.comp (mk₀ biprod.inr) (add_zero n)
   left_inv e := by
     simp only [comp_assoc_of_second_deg_zero, mk₀_comp_mk₀, ← comp_add, ← mk₀_add,
-      biprod.total, comp_mk
+      biprod.total, comp_mk₀_id]
+  right_inv _ := by simp
+  map_add' := by simp
 
 中文:
 定义 Ext.addEquivBiprod
@@ -1672,7 +1776,9 @@ definition Ext.addEquivBiprod
   invFun e := e.1.comp (mk₀ biprod.inl) (add_zero n) + e.2.comp (mk₀ biprod.inr) (add_zero n)
   left_inv e := by
     simp only [comp_assoc_of_second_deg_zero, mk₀_comp_mk₀, ← comp_add, ← mk₀_add,
-      biprod.total, comp_mk
+      biprod.total, comp_mk₀_id]
+  right_inv _ := by simp
+  map_add' := by simp
 
 Depends on / 依赖: add_zero, biprod, biprod.fst, biprod.snd, e.comp
 -/

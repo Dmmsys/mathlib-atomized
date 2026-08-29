@@ -94,7 +94,7 @@ theorem equicontinuousAt_iff_pair
   · intro U hU
     rcases mem_uniformity_dist.mp hU with ⟨ε, hε, hεU⟩
     refine Exists.imp (fun V => And.imp_right fun h => ?_) (H _ hε)
-    exact fun x hx x' hx' i => hεU (h _ hx _ h
+    exact fun x hx x' hx' i => hεU (h _ hx _ hx' i)
 
 中文:
 定理 equicontinuousAt_iff_pair
@@ -107,7 +107,7 @@ theorem equicontinuousAt_iff_pair
   · intro U hU
     rcases mem_uniformity_dist.mp hU with ⟨ε, hε, hεU⟩
     refine Exists.imp (fun V => And.imp_right fun h => ?_) (H _ hε)
-    exact fun x hx x' hx' i => hεU (h _ hx _ h
+    exact fun x hx x' hx' i => hεU (h _ hx _ hx' i)
 -/
 protected theorem equicontinuousAt_iff_pair {ι : Type*} [TopologicalSpace β] {F : ι -> β -> α}
     {x₀ : β} :
@@ -203,7 +203,8 @@ theorem uniformEquicontinuous_of_continuity_modulus
   calc
     dist (F i x) (F i y) <= b (dist x y) := H x y i
     _ <= |b (dist x y)| := le_abs_self _
-    _ = dist (b (dist x y)) 0 := by simp [Real.di
+    _ = dist (b (dist x y)) 0 := by simp [Real.dist_eq]
+    _ < ε := hδ (by simpa only [Real.dist_eq, tsub_zero, abs_dist] using hxy)
 
 中文:
 定理 uniformEquicontinuous_of_continuity_modulus
@@ -216,7 +217,8 @@ theorem uniformEquicontinuous_of_continuity_modulus
   calc
     dist (F i x) (F i y) <= b (dist x y) := H x y i
     _ <= |b (dist x y)| := le_abs_self _
-    _ = dist (b (dist x y)) 0 := by simp [Real.di
+    _ = dist (b (dist x y)) 0 := by simp [Real.dist_eq]
+    _ < ε := hδ (by simpa only [Real.dist_eq, tsub_zero, abs_dist] using hxy)
 
 Depends on / 依赖: Metric, Metric.uniformEquicontinuous_iff, Real.dist_eq, abs_dist, b_lim, dist_eq, le_abs_self, tendsto_nhds_nhds, tsub_zero, uniformEquicontinuous_iff
 -/

@@ -62,7 +62,11 @@ lemma exists_polynomial_eval_sub_aux
   suffices forall (ij kl : ι × ι) (hij : a ij.1 - a ij.2 = a kl.1 - a kl.2),
       algebraMap R K (f ⟨a ij.1, ha ij.1⟩) - algebraMap R K (f ⟨a ij.2, ha ij.2⟩) =
       algebraMap R K (f ⟨a kl.1, ha kl.1⟩) - algebraMap R K (f ⟨a kl.2, ha kl.2⟩) by
-    obtain ⟨r, hr⟩ := (Polynomial.exists_eval_eq_if
+    obtain ⟨r, hr⟩ := (Polynomial.exists_eval_eq_iff _ _).mpr this
+    exact ⟨r, fun i j => hr (i, j)⟩
+  rintro ⟨i, j⟩ ⟨k, l⟩ hij
+  have heq : (⟨a i, ha i⟩ - ⟨a j, ha j⟩ : E) = ⟨a k, ha k⟩ - ⟨a l, ha l⟩ := Subtype.ext hij
+  rw [← (algebraMap R K).map_sub]; rw [← (algebraMap R K).map_sub]; rw [← map_sub]; rw [← map_sub]; rw [heq]
 
 中文:
 引理 存在_polynomial_eval_sub_aux
@@ -70,7 +74,11 @@ lemma exists_polynomial_eval_sub_aux
   suffices forall (ij kl : ι × ι) (hij : a ij.1 - a ij.2 = a kl.1 - a kl.2),
       algebraMap R K (f ⟨a ij.1, ha ij.1⟩) - algebraMap R K (f ⟨a ij.2, ha ij.2⟩) =
       algebraMap R K (f ⟨a kl.1, ha kl.1⟩) - algebraMap R K (f ⟨a kl.2, ha kl.2⟩) by
-    obtain ⟨r, hr⟩ := (Polynomial.exists_eval_eq_if
+    obtain ⟨r, hr⟩ := (Polynomial.exists_eval_eq_iff _ _).mpr this
+    exact ⟨r, fun i j => hr (i, j)⟩
+  rintro ⟨i, j⟩ ⟨k, l⟩ hij
+  have heq : (⟨a i, ha i⟩ - ⟨a j, ha j⟩ : E) = ⟨a k, ha k⟩ - ⟨a l, ha l⟩ := Subtype.ext hij
+  rw [← (algebraMap R K).map_sub]; rw [← (algebraMap R K).map_sub]; rw [← map_sub]; rw [← map_sub]; rw [heq]
 
 Depends on / 依赖: Polynomial, Polynomial.exists_eval_eq_iff, Subtype, Subtype.ext, algebraMap, exists_eval_eq_iff, map_sub
 -/
@@ -103,7 +111,95 @@ theorem isNilpotent_derivedSeries_of_traceForm_eq_zero_aux
   suffices forall x in derivedSeries K L 1, _root_.IsNilpotent (φ x) from
     isNilpotent_iff_forall'.mpr fun ⟨x, hx⟩ => this x hx
   intro x hx
-  /- Using Jordan-Chevalley, let `s` and `n
+  /- Using Jordan-Chevalley, let `s` and `n` be the semisimple and nilpotent parts of `φ x`. -/
+  obtain ⟨n, hn_adj, s, hns, hn_nil, hs_ss, hX_ns⟩ := (φ x).exists_isNilpotent_isSemisimple
+  replace hns : Commute n s :=
+    commute_of_mem_adjoin_singleton_of_commute hns (commute_of_mem_adjoin_self hn_adj).symm
+  /- It suffices to prove `s = 0`. -/
+  suffices s = 0 by aesop
+  classical
+  /- Decompose `M` as a direct sum of eigenspaces of `s`. -/
+  let eigenDecomp := DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top
+    s.eigenspaces_iSupIndep hs_ss.iSup_eigenspace_eq_top
+  let I := (ν : K) × Fin (finrank K (s.eigenspace ν))
+  let v : Basis I K M := eigenDecomp.collectedBasis fun μ => finBasis K (s.eigenspace μ)
+  have : Fintype I := FiniteDimensional.fintypeBasisIndex v
+  let μ : I -> K := Sigma.fst
+  have hsv (i : I) : s (v i) = μ i • v i :=
+    mem_eigenspace_iff.mp (eigenDecomp.collectedBasis_mem _ i)
+  /- Let `E ⊆ K` be the `ℚ`-submodule of scalars spanned by the eigenvalues of `s`. -/
+  let E : Submodule Rat K := Submodule.span Rat (Set.range μ)
+  have hμ (i : I) : μ i in E := Submodule.subset_span (Set.mem_range_self i)
+  /- It suffices to prove that the `ℚ`-dual of `E` is trivial. This can be regarded as a trick to
+     handle the fact that our scalars `K` are not ordered. -/
+  suffices forall f : Dual Rat E, f = 0 by
+    suffices forall ν, s.HasEigenvalue ν -> ν = 0 from hs_ss.eq_zero_iff_forall_eigenvalue.mpr this
+    intro ν hν
+    have : Nontrivial (s.eigenspace ν) :=
+      Submodule.nontrivial_iff_ne_bot.mpr (hasEigenvalue_iff.mp hν)
+    replace hν : ν in E := Submodule.subset_span ⟨⟨ν, ⟨0, finrank_pos⟩⟩, rfl⟩
+    have : Subsingleton E := (subsingleton_dual_iff Rat).mp ⟨by aesop⟩
+    simpa using! Subsingleton.elim (⟨ν, hν⟩ : E) 0
+  intro f
+  /- It suffices to show that any `f : Dual ℚ E` vanishes on all the eigenvalues of `s`. -/
+  suffices forall i, f ⟨μ i, hμ i⟩ = 0 by
+    rw [Submodule.linearMap_eq_zero_iff_of_eq_span f rfl]
+    rintro ⟨-, ⟨i, rfl⟩⟩
+    exact this i
+  /- We will deduce this by proving that the sum of the squares of all such values vanishes. -/
+suffices ∑ i, f ⟨μ i, hμ i⟩ ^ 2 = 0 from fun i => eq_zero_of_pow_eq_zero
+    (Finset.sum_eq_zero_iff_of_nonneg (fun _ _ => sq_nonneg _)).mp this i (Finset.mem_univ _)
+  /- Which will follow from the fact that the following `f`-linear expression vanishes. -/
+  suffices ∑ i, (f ⟨μ i, hμ i⟩) • (⟨μ i, hμ i⟩ : E) = 0 by
+    simpa only [map_sum, map_zero, map_smul, sq] using! f.congr_arg this
+  let fμ (i : I) : K := f ⟨μ i, hμ i⟩
+  /- Defining `fμ i = f ⟨μ i, hμ i⟩`, we can restate our goal as `∑ i, fμ i * μ i = 0`. -/
+  suffices ∑ i, fμ i * μ i = 0 by simp [Subtype.ext_iff, fμ, ← this, smul_def]
+  /- We will do this by constructing endomorphism `y` such that `trace K M (φ x * y) = 0` and also
+     `trace K M (φ x * y) = ∑ i, fμ i * μ i`. -/
+  suffices exists y : End K M, trace K M (φ x * y) = 0 ∧ trace K M (φ x * y) = ∑ i, fμ i * μ i by grind
+  /- We define `y` diagonal wrt our basis `v` and takes the values `fμ` on the diagonal. -/
+  let y : End K M := (Matrix.diagonal fμ).toLin v v
+  have hyv (i : I) : y (v i) = fμ i • v i :=
+    mem_eigenspace_iff.mp (hasEigenvector_toLin_diagonal fμ i v).1
+  /- Using Lagrange interpolation, we can show that the representation is stable under `y`. -/
+  have hy_range (z : End K M) (hz : z in LieHom.range φ) : ⁅y, z⁆ in LieHom.range φ := by
+    obtain ⟨q, hq⟩ : exists q : K[X], q.aeval (ad K _ (φ x)) = ad K _ y := by
+      obtain ⟨r, hr⟩ : exists r : K[X], r.aeval (ad K _ s) = ad K _ y := by
+        have h₁ (i j : I) : ⁅s, v.end (i, j)⁆ = (μ i - μ j) • v.end (i, j) := by
+          rw [instLieRingModule_eq]; rw [v.lie_end_of_apply_eq_smul μ s hsv]
+        have h₂ (i j : I) : ⁅y, v.end (i, j)⁆ = (fμ i - fμ j) • v.end (i, j) := by
+          rw [instLieRingModule_eq]; rw [v.lie_end_of_apply_eq_smul fμ y hyv]
+        obtain ⟨r, hr⟩ := exists_polynomial_eval_sub_aux μ hμ f
+        refine ⟨r, v.end.ext fun ⟨i, j⟩ => ?_⟩
+        rw [ad_apply]; rw [← instLieRingModule_eq]; rw [aeval_apply_of_mem_apply_eq_smul (h₁ i j)]; rw [hr]; rw [h₂]
+        rfl
+      obtain ⟨p, hp⟩ : exists p : K[X], p.aeval (ad K _ (φ x)) = ad K _ s :=
+adjoin_mem_exists_aeval K _ by
+          simpa only [← hX_ns] using! ad_mem_adjoin_of_isSemisimple hns hn_nil hs_ss
+      exact ⟨r.comp p, by rw [aeval_comp, hp, hr]⟩
+    rw [instLieRingModule_eq]; rw [← ad_apply K]; rw [← hq]
+    apply q.aeval_apply_smul_mem_of_le_comap hz _ ?_
+    rintro - ⟨w, rfl⟩
+    exact ⟨⁅x, w⁆, LieHom.map_lie φ x w⟩
+  /- Using Lagrange interpolation again we can show that `n` and `y` commute. -/
+  have hny_comm : Commute n y := by
+    suffices y in K[s] from commute_of_mem_adjoin_singleton_of_commute this hns
+    rw [adjoin_singleton_eq_range_aeval]
+    obtain ⟨q, hq⟩ : exists q : K[X], forall i, q.eval (μ i) = fμ i :=
+(Polynomial.exists_eval_eq_iff μ fμ).mpr by aesop
+    refine ⟨q, v.ext fun i => ?_⟩
+    rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [aeval_apply_of_mem_apply_eq_smul (hsv i)]; rw [hq]; rw [hyv]
+  /- By general results we need only prove `trace K M (φ x * y) = ∑ i, fμ i * μ i`. -/
+  suffices trace K M (φ x * y) = ∑ i, fμ i * μ i from
+    ⟨y, trace_toEnd_mul_eq_zero_of_traceForm_eq_zero h y hy_range x hx, this⟩
+  /- And this is an easy calculation. -/
+  have htr_n : trace K M (n * y) = 0 :=
+    (isNilpotent_trace_of_isNilpotent (hny_comm.isNilpotent_mul_right hn_nil)).eq_zero
+  have htr_s : trace K M (s * y) = ∑ i, fμ i * μ i := by
+    rw [trace_eq_matrix_trace _ v]; rw [Matrix.trace]
+exact Finset.sum_congr rfl by simp [toMatrix_apply, hyv, hsv]
+  rw [hX_ns]; rw [add_mul]; rw [map_add]; rw [htr_n]; rw [htr_s]; rw [zero_add]
 
 中文:
 定理 isNilpotent_derivedSeries_of_traceForm_eq_zero_aux
@@ -114,7 +210,95 @@ theorem isNilpotent_derivedSeries_of_traceForm_eq_zero_aux
   suffices forall x in derivedSeries K L 1, _root_.IsNilpotent (φ x) from
     isNilpotent_iff_forall'.mpr fun ⟨x, hx⟩ => this x hx
   intro x hx
-  /- Using Jordan-Chevalley, let `s` and `n
+  /- Using Jordan-Chevalley, let `s` and `n` be the semisimple and nilpotent parts of `φ x`. -/
+  obtain ⟨n, hn_adj, s, hns, hn_nil, hs_ss, hX_ns⟩ := (φ x).exists_isNilpotent_isSemisimple
+  replace hns : Commute n s :=
+    commute_of_mem_adjoin_singleton_of_commute hns (commute_of_mem_adjoin_self hn_adj).symm
+  /- It suffices to prove `s = 0`. -/
+  suffices s = 0 by aesop
+  classical
+  /- Decompose `M` as a direct sum of eigenspaces of `s`. -/
+  let eigenDecomp := DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top
+    s.eigenspaces_iSupIndep hs_ss.iSup_eigenspace_eq_top
+  let I := (ν : K) × Fin (finrank K (s.eigenspace ν))
+  let v : Basis I K M := eigenDecomp.collectedBasis fun μ => finBasis K (s.eigenspace μ)
+  have : Fintype I := FiniteDimensional.fintypeBasisIndex v
+  let μ : I -> K := Sigma.fst
+  have hsv (i : I) : s (v i) = μ i • v i :=
+    mem_eigenspace_iff.mp (eigenDecomp.collectedBasis_mem _ i)
+  /- Let `E ⊆ K` be the `ℚ`-submodule of scalars spanned by the eigenvalues of `s`. -/
+  let E : Submodule Rat K := Submodule.span Rat (Set.range μ)
+  have hμ (i : I) : μ i in E := Submodule.subset_span (Set.mem_range_self i)
+  /- It suffices to prove that the `ℚ`-dual of `E` is trivial. This can be regarded as a trick to
+     handle the fact that our scalars `K` are not ordered. -/
+  suffices forall f : Dual Rat E, f = 0 by
+    suffices forall ν, s.HasEigenvalue ν -> ν = 0 from hs_ss.eq_zero_iff_forall_eigenvalue.mpr this
+    intro ν hν
+    have : Nontrivial (s.eigenspace ν) :=
+      Submodule.nontrivial_iff_ne_bot.mpr (hasEigenvalue_iff.mp hν)
+    replace hν : ν in E := Submodule.subset_span ⟨⟨ν, ⟨0, finrank_pos⟩⟩, rfl⟩
+    have : Subsingleton E := (subsingleton_dual_iff Rat).mp ⟨by aesop⟩
+    simpa using! Subsingleton.elim (⟨ν, hν⟩ : E) 0
+  intro f
+  /- It suffices to show that any `f : Dual ℚ E` vanishes on all the eigenvalues of `s`. -/
+  suffices forall i, f ⟨μ i, hμ i⟩ = 0 by
+    rw [Submodule.linearMap_eq_zero_iff_of_eq_span f rfl]
+    rintro ⟨-, ⟨i, rfl⟩⟩
+    exact this i
+  /- We will deduce this by proving that the sum of the squares of all such values vanishes. -/
+suffices ∑ i, f ⟨μ i, hμ i⟩ ^ 2 = 0 from fun i => eq_zero_of_pow_eq_zero
+    (Finset.sum_eq_zero_iff_of_nonneg (fun _ _ => sq_nonneg _)).mp this i (Finset.mem_univ _)
+  /- Which will follow from the fact that the following `f`-linear expression vanishes. -/
+  suffices ∑ i, (f ⟨μ i, hμ i⟩) • (⟨μ i, hμ i⟩ : E) = 0 by
+    simpa only [map_sum, map_zero, map_smul, sq] using! f.congr_arg this
+  let fμ (i : I) : K := f ⟨μ i, hμ i⟩
+  /- Defining `fμ i = f ⟨μ i, hμ i⟩`, we can restate our goal as `∑ i, fμ i * μ i = 0`. -/
+  suffices ∑ i, fμ i * μ i = 0 by simp [Subtype.ext_iff, fμ, ← this, smul_def]
+  /- We will do this by constructing endomorphism `y` such that `trace K M (φ x * y) = 0` and also
+     `trace K M (φ x * y) = ∑ i, fμ i * μ i`. -/
+  suffices exists y : End K M, trace K M (φ x * y) = 0 ∧ trace K M (φ x * y) = ∑ i, fμ i * μ i by grind
+  /- We define `y` diagonal wrt our basis `v` and takes the values `fμ` on the diagonal. -/
+  let y : End K M := (Matrix.diagonal fμ).toLin v v
+  have hyv (i : I) : y (v i) = fμ i • v i :=
+    mem_eigenspace_iff.mp (hasEigenvector_toLin_diagonal fμ i v).1
+  /- Using Lagrange interpolation, we can show that the representation is stable under `y`. -/
+  have hy_range (z : End K M) (hz : z in LieHom.range φ) : ⁅y, z⁆ in LieHom.range φ := by
+    obtain ⟨q, hq⟩ : exists q : K[X], q.aeval (ad K _ (φ x)) = ad K _ y := by
+      obtain ⟨r, hr⟩ : exists r : K[X], r.aeval (ad K _ s) = ad K _ y := by
+        have h₁ (i j : I) : ⁅s, v.end (i, j)⁆ = (μ i - μ j) • v.end (i, j) := by
+          rw [instLieRingModule_eq]; rw [v.lie_end_of_apply_eq_smul μ s hsv]
+        have h₂ (i j : I) : ⁅y, v.end (i, j)⁆ = (fμ i - fμ j) • v.end (i, j) := by
+          rw [instLieRingModule_eq]; rw [v.lie_end_of_apply_eq_smul fμ y hyv]
+        obtain ⟨r, hr⟩ := exists_polynomial_eval_sub_aux μ hμ f
+        refine ⟨r, v.end.ext fun ⟨i, j⟩ => ?_⟩
+        rw [ad_apply]; rw [← instLieRingModule_eq]; rw [aeval_apply_of_mem_apply_eq_smul (h₁ i j)]; rw [hr]; rw [h₂]
+        rfl
+      obtain ⟨p, hp⟩ : exists p : K[X], p.aeval (ad K _ (φ x)) = ad K _ s :=
+adjoin_mem_exists_aeval K _ by
+          simpa only [← hX_ns] using! ad_mem_adjoin_of_isSemisimple hns hn_nil hs_ss
+      exact ⟨r.comp p, by rw [aeval_comp, hp, hr]⟩
+    rw [instLieRingModule_eq]; rw [← ad_apply K]; rw [← hq]
+    apply q.aeval_apply_smul_mem_of_le_comap hz _ ?_
+    rintro - ⟨w, rfl⟩
+    exact ⟨⁅x, w⁆, LieHom.map_lie φ x w⟩
+  /- Using Lagrange interpolation again we can show that `n` and `y` commute. -/
+  have hny_comm : Commute n y := by
+    suffices y in K[s] from commute_of_mem_adjoin_singleton_of_commute this hns
+    rw [adjoin_singleton_eq_range_aeval]
+    obtain ⟨q, hq⟩ : exists q : K[X], forall i, q.eval (μ i) = fμ i :=
+(Polynomial.exists_eval_eq_iff μ fμ).mpr by aesop
+    refine ⟨q, v.ext fun i => ?_⟩
+    rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [aeval_apply_of_mem_apply_eq_smul (hsv i)]; rw [hq]; rw [hyv]
+  /- By general results we need only prove `trace K M (φ x * y) = ∑ i, fμ i * μ i`. -/
+  suffices trace K M (φ x * y) = ∑ i, fμ i * μ i from
+    ⟨y, trace_toEnd_mul_eq_zero_of_traceForm_eq_zero h y hy_range x hx, this⟩
+  /- And this is an easy calculation. -/
+  have htr_n : trace K M (n * y) = 0 :=
+    (isNilpotent_trace_of_isNilpotent (hny_comm.isNilpotent_mul_right hn_nil)).eq_zero
+  have htr_s : trace K M (s * y) = ∑ i, fμ i * μ i := by
+    rw [trace_eq_matrix_trace _ v]; rw [Matrix.trace]
+exact Finset.sum_congr rfl by simp [toMatrix_apply, hyv, hsv]
+  rw [hX_ns]; rw [add_mul]; rw [map_add]; rw [htr_n]; rw [htr_s]; rw [zero_add]
 -/
 theorem isNilpotent_derivedSeries_of_traceForm_eq_zero_aux {K : Type*}
     [Field K] [CharZero K] [IsAlgClosed K]

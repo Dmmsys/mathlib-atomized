@@ -153,7 +153,35 @@ instance instInnerProductSpace
       calc
         ‖f‖ ^ 2 = ‖f‖ ^ (2 : Real>=0∞).toReal := by norm_cast
         _ = ∑' i, ‖f i‖ ^ (2 : Real>=0∞).toReal := lp.norm_rpow_eq_tsum ?_ f
-        _ = ∑' i, ‖f i‖
+        _ = ∑' i, ‖f i‖ ^ (2 : Nat) := by norm_cast
+        _ = ∑' i, re ⟪f i, f i⟫ := by simp
+        _ = re (∑' i, ⟪f i, f i⟫) := (RCLike.reCLM.map_tsum ?_).symm
+      · norm_num
+      · exact summable_inner f f
+    conj_inner_symm := fun f g => by
+      calc
+        conj _ = conj (∑' i, ⟪g i, f i⟫) := by congr
+        _ = ∑' i, conj ⟪g i, f i⟫ := RCLike.conjCLE.map_tsum
+        _ = ∑' i, ⟪f i, g i⟫ := by simp only [inner_conj_symm]
+        _ = _ := by congr
+    add_left := fun f₁ f₂ g => by
+      calc
+        _ = ∑' i, ⟪(f₁ + f₂) i, g i⟫ := ?_
+        _ = ∑' i, (⟪f₁ i, g i⟫ + ⟪f₂ i, g i⟫) := by
+          simp only [inner_add_left, Pi.add_apply, coeFn_add]
+        _ = (∑' i, ⟪f₁ i, g i⟫) + ∑' i, ⟪f₂ i, g i⟫ := Summable.tsum_add ?_ ?_
+        _ = _ := by congr
+      · congr
+      · exact summable_inner f₁ g
+      · exact summable_inner f₂ g
+    smul_left := fun f g c => by
+      calc
+        _ = ∑' i, ⟪c • f i, g i⟫ := ?_
+        _ = ∑' i, conj c * ⟪f i, g i⟫ := by simp only [inner_smul_left]
+        _ = conj c * ∑' i, ⟪f i, g i⟫ := tsum_mul_left
+        _ = _ := ?_
+      · simp only [coeFn_smul, Pi.smul_apply]
+      · congr }
 
 中文:
 实例 instInnerProductSpace
@@ -164,7 +192,35 @@ instance instInnerProductSpace
       calc
         ‖f‖ ^ 2 = ‖f‖ ^ (2 : Real>=0∞).toReal := by norm_cast
         _ = ∑' i, ‖f i‖ ^ (2 : Real>=0∞).toReal := lp.norm_rpow_eq_tsum ?_ f
-        _ = ∑' i, ‖f i‖
+        _ = ∑' i, ‖f i‖ ^ (2 : Nat) := by norm_cast
+        _ = ∑' i, re ⟪f i, f i⟫ := by simp
+        _ = re (∑' i, ⟪f i, f i⟫) := (RCLike.reCLM.map_tsum ?_).symm
+      · norm_num
+      · exact summable_inner f f
+    conj_inner_symm := fun f g => by
+      calc
+        conj _ = conj (∑' i, ⟪g i, f i⟫) := by congr
+        _ = ∑' i, conj ⟪g i, f i⟫ := RCLike.conjCLE.map_tsum
+        _ = ∑' i, ⟪f i, g i⟫ := by simp only [inner_conj_symm]
+        _ = _ := by congr
+    add_left := fun f₁ f₂ g => by
+      calc
+        _ = ∑' i, ⟪(f₁ + f₂) i, g i⟫ := ?_
+        _ = ∑' i, (⟪f₁ i, g i⟫ + ⟪f₂ i, g i⟫) := by
+          simp only [inner_add_left, Pi.add_apply, coeFn_add]
+        _ = (∑' i, ⟪f₁ i, g i⟫) + ∑' i, ⟪f₂ i, g i⟫ := Summable.tsum_add ?_ ?_
+        _ = _ := by congr
+      · congr
+      · exact summable_inner f₁ g
+      · exact summable_inner f₂ g
+    smul_left := fun f g c => by
+      calc
+        _ = ∑' i, ⟪c • f i, g i⟫ := ?_
+        _ = ∑' i, conj c * ⟪f i, g i⟫ := by simp only [inner_smul_left]
+        _ = conj c * ∑' i, ⟪f i, g i⟫ := tsum_mul_left
+        _ = _ := ?_
+      · simp only [coeFn_smul, Pi.smul_apply]
+      · congr }
 
 Depends on / 依赖: RCLike, RCLike.reCLM.map_tsum, conj_inner_symm, lp.norm_rpow_eq_tsum, lp.normedAddCommGroup, map_tsum, norm_rpow_eq_tsum, norm_sq_eq_re_inner, normedAddCommGroup, summable_inner, toReal
 -/
@@ -353,7 +409,16 @@ definition linearIsometry
       LinearIsometry.map_add]
   map_smul' c f := by
     simpa only [LinearIsometry.map_smul, Pi.smul_apply, lp.coeFn_smul] using!
-      (hV.summable_of_lp f).tsum_con
+      (hV.summable_of_lp f).tsum_const_smul c
+  norm_map' f := by
+    -- needed for lattice instance on `Finset ι`, for `Filter.atTop_neBot`
+    have H : 0 < (2 : Real>=0∞).toReal := by simp
+    suffices ‖∑' i : ι, V i (f i)‖ ^ (2 : Real>=0∞).toReal = ‖f‖ ^ (2 : Real>=0∞).toReal by
+      exact Real.rpow_left_injOn H.ne' (norm_nonneg _) (norm_nonneg _) this
+    refine tendsto_nhds_unique ?_ (lp.hasSum_norm H f)
+    convert! (hV.summable_of_lp f).hasSum.norm.rpow_const (Or.inr H.le) using 1
+    ext s
+    exact mod_cast (hV.norm_sum f s).symm
 
 中文:
 定义 linearIsometry
@@ -364,7 +429,16 @@ definition linearIsometry
       LinearIsometry.map_add]
   map_smul' c f := by
     simpa only [LinearIsometry.map_smul, Pi.smul_apply, lp.coeFn_smul] using!
-      (hV.summable_of_lp f).tsum_con
+      (hV.summable_of_lp f).tsum_const_smul c
+  norm_map' f := by
+    -- needed for lattice instance on `Finset ι`, for `Filter.atTop_neBot`
+    have H : 0 < (2 : Real>=0∞).toReal := by simp
+    suffices ‖∑' i : ι, V i (f i)‖ ^ (2 : Real>=0∞).toReal = ‖f‖ ^ (2 : Real>=0∞).toReal by
+      exact Real.rpow_left_injOn H.ne' (norm_nonneg _) (norm_nonneg _) this
+    refine tendsto_nhds_unique ?_ (lp.hasSum_norm H f)
+    convert! (hV.summable_of_lp f).hasSum.norm.rpow_const (Or.inr H.le) using 1
+    ext s
+    exact mod_cast (hV.norm_sum f s).symm
 -/
 protected def linearIsometry (hV : OrthogonalFamily 𝕜 G V) : lp G 2 ->ₗᵢ[𝕜] E where
   toFun f := ∑' i, V i (f i)
@@ -497,6 +571,12 @@ theorem range_linearIsometry
     intro i _
     refine mem_iSup_of_mem i ?_
     exact LinearMap.mem_range_self _ (f i)
+  · apply topologicalClosure_minimal
+    · refine iSup_le ?_
+      rintro i x ⟨x, rfl⟩
+      use lp.single 2 i x
+      exact hV.linearIsometry_apply_single x
+    exact hV.linearIsometry.isometry.isUniformInducing.isComplete_range.isClosed
 
 中文:
 定理 range_linearIsometry
@@ -512,6 +592,12 @@ theorem range_linearIsometry
     intro i _
     refine mem_iSup_of_mem i ?_
     exact LinearMap.mem_range_self _ (f i)
+  · apply topologicalClosure_minimal
+    · refine iSup_le ?_
+      rintro i x ⟨x, rfl⟩
+      use lp.single 2 i x
+      exact hV.linearIsometry_apply_single x
+    exact hV.linearIsometry.isometry.isUniformInducing.isComplete_range.isClosed
 -/
 protected theorem range_linearIsometry [forall i, CompleteSpace (G i)] :
     LinearMap.range hV.linearIsometry.toLinearMap =
@@ -793,7 +879,9 @@ theorem Submodule.isHilbertSumOrthogonal
     cases b <;> first | exact instOrthogonalCompleteSpace K | assumption
   refine IsHilbertSum.mkInternal _ K.orthogonalFamily_self ?_
   refine le_trans ?_ (Submodule.le_topologicalClosure _)
-  rw [iSup_bool_eq]; rw [cond]; rw [c
+  rw [iSup_bool_eq]; rw [cond]; rw [cond]
+  refine Codisjoint.top_le ?_
+  exact K.isCompl_orthogonal.codisjoint
 
 中文:
 定理 子模.isHilbertSumOrthogonal
@@ -804,7 +892,9 @@ theorem Submodule.isHilbertSumOrthogonal
     cases b <;> first | exact instOrthogonalCompleteSpace K | assumption
   refine IsHilbertSum.mkInternal _ K.orthogonalFamily_self ?_
   refine le_trans ?_ (Submodule.le_topologicalClosure _)
-  rw [iSup_bool_eq]; rw [cond]; rw [c
+  rw [iSup_bool_eq]; rw [cond]; rw [cond]
+  refine Codisjoint.top_le ?_
+  exact K.isCompl_orthogonal.codisjoint
 
 Depends on / 依赖: Codisjoint, Codisjoint.top_le, CompleteSpace, IsHilbertSum, IsHilbertSum.mkInternal, K.isCompl_orthogonal.codisjoint, K.orthogonalFamily_self, Submodule, Submodule.le_topologicalClosure, codisjoint, iSup_bool_eq, instOrthogonalCompleteSpace, isCompl_orthogonal, le_topologicalClosure, le_trans, mkInternal, orthogonalFamily_self, top_le
 -/
@@ -866,7 +956,11 @@ instance instFunLike
     apply LinearIsometryEquiv.symm_bijective.injective
     apply LinearIsometryEquiv.toContinuousLinearEquiv_injective
     apply ContinuousLinearEquiv.coe_injective
-    refine lp.ext_continuousLinearMap (ENNReal.of
+    refine lp.ext_continuousLinearMap (ENNReal.ofNat_ne_top (n := nat_lit 2)) fun i => ?_
+    ext
+    exact congr_fun h i
+
+@[simp]
 
 中文:
 实例 instFunLike
@@ -878,7 +972,11 @@ instance instFunLike
     apply LinearIsometryEquiv.symm_bijective.injective
     apply LinearIsometryEquiv.toContinuousLinearEquiv_injective
     apply ContinuousLinearEquiv.coe_injective
-    refine lp.ext_continuousLinearMap (ENNReal.of
+    refine lp.ext_continuousLinearMap (ENNReal.ofNat_ne_top (n := nat_lit 2)) fun i => ?_
+    ext
+    exact congr_fun h i
+
+@[simp]
 
 Depends on / 依赖: b.repr.symm, lp.single, single
 -/
@@ -1011,7 +1109,15 @@ suffices H : (fun i : ι => f i • b i) = fun b_1 : ι => b.repr.symm.toContinu
       (fun i : ι => lp.single 2 i (f i) (E := (fun _ : ι => 𝕜))) b_1 by
     rw [H]
     have : HasSum (fun i : ι => lp.single 2 i (f i)) f := lp.hasSum_single ENNReal.ofNat_ne_top f
-    exact (↑b
+    exact (↑b.repr.symm.toContinuousLinearEquiv : ℓ²(ι, 𝕜) ->L[𝕜] E).hasSum this
+  ext i
+  apply b.repr.injective
+  let : NormedSpace 𝕜 (lp (fun _i : ι => 𝕜) 2) := by infer_instance
+  have : lp.single (E := (fun _ : ι => 𝕜)) 2 i (f i * 1) = f i • lp.single 2 i 1 :=
+    lp.single_smul (E := (fun _ : ι => 𝕜)) 2 i (f i) (1 : 𝕜)
+  rw [mul_one] at this
+  rw [map_smul]; rw [b.repr_self]; rw [← this]; rw [LinearIsometryEquiv.coe_toContinuousLinearEquiv]
+  exact (b.repr.apply_symm_apply (lp.single 2 i (f i))).symm
 
 中文:
 定理 hasSum_repr_symm
@@ -1022,7 +1128,15 @@ suffices H : (fun i : ι => f i • b i) = fun b_1 : ι => b.repr.symm.toContinu
       (fun i : ι => lp.single 2 i (f i) (E := (fun _ : ι => 𝕜))) b_1 by
     rw [H]
     have : HasSum (fun i : ι => lp.single 2 i (f i)) f := lp.hasSum_single ENNReal.ofNat_ne_top f
-    exact (↑b
+    exact (↑b.repr.symm.toContinuousLinearEquiv : ℓ²(ι, 𝕜) ->L[𝕜] E).hasSum this
+  ext i
+  apply b.repr.injective
+  let : NormedSpace 𝕜 (lp (fun _i : ι => 𝕜) 2) := by infer_instance
+  have : lp.single (E := (fun _ : ι => 𝕜)) 2 i (f i * 1) = f i • lp.single 2 i 1 :=
+    lp.single_smul (E := (fun _ : ι => 𝕜)) 2 i (f i) (1 : 𝕜)
+  rw [mul_one] at this
+  rw [map_smul]; rw [b.repr_self]; rw [← this]; rw [LinearIsometryEquiv.coe_toContinuousLinearEquiv]
+  exact (b.repr.apply_symm_apply (lp.single 2 i (f i))).symm
 -/
 protected theorem hasSum_repr_symm (b : HilbertBasis ι 𝕜 E) (f : ℓ²(ι, 𝕜)) :
     HasSum (fun i => f i • b i) (b.repr.symm f) := by
@@ -1178,7 +1292,9 @@ definition toOrthonormalBasis
       classical
       have := (span 𝕜 (Finset.univ.image b : Set E)).closed_of_finiteDimensional
       simpa only [Finset.coe_image, Finset.coe_univ, Set.image_univ, HilbertBasis.dense_span] using
-        this.submodule_topologicalClosu
+        this.submodule_topologicalClosure_eq.symm)
+
+@[simp]
 
 中文:
 定义 toOrthonormalBasis
@@ -1189,7 +1305,9 @@ definition toOrthonormalBasis
       classical
       have := (span 𝕜 (Finset.univ.image b : Set E)).closed_of_finiteDimensional
       simpa only [Finset.coe_image, Finset.coe_univ, Set.image_univ, HilbertBasis.dense_span] using
-        this.submodule_topologicalClosu
+        this.submodule_topologicalClosure_eq.symm)
+
+@[simp]
 -/
 protected def toOrthonormalBasis [Fintype ι] (b : HilbertBasis ι 𝕜 E) : OrthonormalBasis ι 𝕜 E :=
   OrthonormalBasis.mk b.orthonormal
@@ -1520,7 +1638,7 @@ theorem _root_.Orthonormal.exists_hilbertBasis_extension
   ⟨w, HilbertBasis.mkOfOrthogonalEqBot hw_ortho
     (by simpa only [Subtype.range_coe_subtype, Set.ofPred_mem_eq,
       maximal_orthonormal_iff_orthogonalComplement_eq_bot hw_ortho] using hw_max),
-    hws, HilbertBasis.coe_mkOfOrthogona
+    hws, HilbertBasis.coe_mkOfOrthogonalEqBot _ _⟩
 
 中文:
 定理 _root_.Orthonormal.存在_hilbertBasis_extension
@@ -1529,7 +1647,7 @@ theorem _root_.Orthonormal.exists_hilbertBasis_extension
   ⟨w, HilbertBasis.mkOfOrthogonalEqBot hw_ortho
     (by simpa only [Subtype.range_coe_subtype, Set.ofPred_mem_eq,
       maximal_orthonormal_iff_orthogonalComplement_eq_bot hw_ortho] using hw_max),
-    hws, HilbertBasis.coe_mkOfOrthogona
+    hws, HilbertBasis.coe_mkOfOrthogonalEqBot _ _⟩
 
 Depends on / 依赖: HilbertBasis, HilbertBasis.coe_mkOfOrthogonalEqBot, HilbertBasis.mkOfOrthogonalEqBot, Set.ofPred_mem_eq, Subtype, Subtype.range_coe_subtype, coe_mkOfOrthogonalEqBot, exists_maximal_orthonormal, hw_max, hw_ortho, maximal_orthonormal_iff_orthogonalComplement_eq_bot, mkOfOrthogonalEqBot, ofPred_mem_eq, range_coe_subtype
 -/

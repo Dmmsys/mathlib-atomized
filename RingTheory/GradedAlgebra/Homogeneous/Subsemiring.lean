@@ -254,7 +254,15 @@ theorem IsHomogeneous.subsemiringClosure
   | one =>
     rw [decompose_one]; rw [one_def]
     obtain rfl | h := eq_or_ne i 0 <;> simp [of_eq_of_ne, *]
-  | add _ _ _ _ h₁ h₂ => simpa u
+  | add _ _ _ _ h₁ h₂ => simpa using add_mem (h₁ i) (h₂ i)
+  | mul x y _ _ h₁ h₂ =>
+    classical
+    rw [decompose_mul]; rw [DirectSum.mul_eq_dfinsuppSum]
+    rw [DFinsupp.sum_apply]; rw [DFinsupp.sum]; rw [AddSubmonoidClass.coe_finsetSum]
+    refine sum_mem fun j _ => ?_
+    rw [DFinsupp.sum_apply]; rw [DFinsupp.sum]; rw [AddSubmonoidClass.coe_finsetSum]
+    refine sum_mem fun k _ => ?_
+    obtain rfl | h := eq_or_ne i (j + k) <;> simp [of_eq_of_ne, mul_mem, *]
 
 中文:
 定理 IsHomogeneous.subsemiringClosure
@@ -266,7 +274,15 @@ theorem IsHomogeneous.subsemiringClosure
   | one =>
     rw [decompose_one]; rw [one_def]
     obtain rfl | h := eq_or_ne i 0 <;> simp [of_eq_of_ne, *]
-  | add _ _ _ _ h₁ h₂ => simpa u
+  | add _ _ _ _ h₁ h₂ => simpa using add_mem (h₁ i) (h₂ i)
+  | mul x y _ _ h₁ h₂ =>
+    classical
+    rw [decompose_mul]; rw [DirectSum.mul_eq_dfinsuppSum]
+    rw [DFinsupp.sum_apply]; rw [DFinsupp.sum]; rw [AddSubmonoidClass.coe_finsetSum]
+    refine sum_mem fun j _ => ?_
+    rw [DFinsupp.sum_apply]; rw [DFinsupp.sum]; rw [AddSubmonoidClass.coe_finsetSum]
+    refine sum_mem fun k _ => ?_
+    obtain rfl | h := eq_or_ne i (j + k) <;> simp [of_eq_of_ne, mul_mem, *]
 
 Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.coe_finsetSum, DFinsupp, DFinsupp.sum, DFinsupp.sum_apply, DirectSum, DirectSum.mul_eq_dfinsuppSum, Subsemiring, Subsemiring.closure_induction, Subsemiring.subset_closure, add_mem, classical, closure_induction, coe_finsetSum, decompose_mul, decompose_one, eq_or_ne, generalizing, mul_eq_dfinsuppSum, of_eq_of_ne
 -/

@@ -590,7 +590,7 @@ instance [ContinuousInv₀
   intro x hx
   have : ContMDiffWithinAt I I 0 (fun (x : G) => x⁻¹) {0}ᶜ x := A x hx
   apply ContMDiffWithinAt.contMDiffAt this
-  exact IsO
+  exact IsOpen.mem_nhds isOpen_compl_singleton hx
 
 中文:
 实例 [余ntinuousInv₀
@@ -604,7 +604,7 @@ instance [ContinuousInv₀
   intro x hx
   have : ContMDiffWithinAt I I 0 (fun (x : G) => x⁻¹) {0}ᶜ x := A x hx
   apply ContMDiffWithinAt.contMDiffAt this
-  exact IsO
+  exact IsOpen.mem_nhds isOpen_compl_singleton hx
 
 Depends on / 依赖: CMDiff, ContMDiffWithinAt, ContMDiffWithinAt.contMDiffAt, I.t1Space, IsOpen, IsOpen.mem_nhds, T1Space, contMDiffAt, contMDiffOn_zero_iff, isOpen_compl_singleton, mem_nhds, t1Space
 -/

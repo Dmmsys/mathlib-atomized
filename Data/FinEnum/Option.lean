@@ -76,7 +76,8 @@ definition recEmptyOption
     have : card (ULift.{u} <| Fin n) = n := card_ulift.trans card_fin
     congr (insertNone _ <| finChoice n) _
 (cardeq.trans <| congrArg Nat.succ this.symm)
-        option fN (recEmp
+        option fN (recEmptyOption finChoice congr empty option _)
+termination_by card α
 
 中文:
 定义 recEmptyOption
@@ -88,7 +89,8 @@ definition recEmptyOption
     have : card (ULift.{u} <| Fin n) = n := card_ulift.trans card_fin
     congr (insertNone _ <| finChoice n) _
 (cardeq.trans <| congrArg Nat.succ this.symm)
-        option fN (recEmp
+        option fN (recEmptyOption finChoice congr empty option _)
+termination_by card α
 
 Depends on / 依赖: Nat.succ, ULift.instFinEnum, card_fin, card_ulift, card_ulift.trans, cardeq, cardeq.trans, finChoice, insertNone, instFinEnum, option, recEmptyOption, termination_by, this.symm
 -/

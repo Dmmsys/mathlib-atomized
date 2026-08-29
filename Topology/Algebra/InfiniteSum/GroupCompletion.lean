@@ -71,7 +71,9 @@ theorem summable_iff_cauchySeq_finset_and_tsum_mem
     apply (summable_iff_summable_compl_and_tsum_mem f).mpr
     constructor
     · apply summable_iff_cauchySeq_finset.mpr
-      simp_rw [
+      simp_rw [Function.comp_apply, ← map_sum]
+      exact h_cauchy.map (uniformContinuous_coe α)
+    · exact h_tsum
 
 中文:
 定理 summable_iff_cauchySeq_finset_and_tsum_mem
@@ -85,7 +87,9 @@ theorem summable_iff_cauchySeq_finset_and_tsum_mem
     apply (summable_iff_summable_compl_and_tsum_mem f).mpr
     constructor
     · apply summable_iff_cauchySeq_finset.mpr
-      simp_rw [
+      simp_rw [Function.comp_apply, ← map_sum]
+      exact h_cauchy.map (uniformContinuous_coe α)
+    · exact h_tsum
 
 Depends on / 依赖: Function, Function.comp_apply, cauchySeq, classical, comp_apply, h_cauchy, h_cauchy.map, h_tsum, ha.cauchySeq, map_sum, simp_rw, summable_iff_cauchySeq_finset, summable_iff_cauchySeq_finset.mpr, summable_iff_summable_compl_and_tsum_mem, uniformContinuous_coe
 -/

@@ -399,7 +399,12 @@ instance partialOrder
     ⟨I₃, hI₃, hI₁₂.trans hI₂₃⟩
   le_antisymm := by
     suffices forall {π₁ π₂ : Prepartition I}, π₁ <= π₂ -> π₂ <= π₁ -> π₁.boxes subseteq π₂.boxes from
-      fun π₁ π₂ h₁ h₂ => inj
+      fun π₁ π₂ h₁ h₂ => injective_boxes (Subset.antisymm (this h₁ h₂) (this h₂ h₁))
+    intro π₁ π₂ h₁ h₂ J hJ
+    rcases h₁ hJ with ⟨J', hJ', hle⟩; rcases h₂ hJ' with ⟨J'', hJ'', hle'⟩
+    obtain rfl : J = J'' := π₁.eq_of_le hJ hJ'' (hle.trans hle')
+    obtain rfl : J' = J := le_antisymm ‹_› ‹_›
+    assumption
 
 中文:
 实例 partialOrder
@@ -411,7 +416,12 @@ instance partialOrder
     ⟨I₃, hI₃, hI₁₂.trans hI₂₃⟩
   le_antisymm := by
     suffices forall {π₁ π₂ : Prepartition I}, π₁ <= π₂ -> π₂ <= π₁ -> π₁.boxes subseteq π₂.boxes from
-      fun π₁ π₂ h₁ h₂ => inj
+      fun π₁ π₂ h₁ h₂ => injective_boxes (Subset.antisymm (this h₁ h₂) (this h₂ h₁))
+    intro π₁ π₂ h₁ h₂ J hJ
+    rcases h₁ hJ with ⟨J', hJ', hle⟩; rcases h₂ hJ' with ⟨J'', hJ'', hle'⟩
+    obtain rfl : J = J'' := π₁.eq_of_le hJ hJ'' (hle.trans hle')
+    obtain rfl : J' = J := le_antisymm ‹_› ‹_›
+    assumption
 
 Depends on / 依赖: le_rfl
 -/
@@ -606,7 +616,18 @@ theorem injOn_setOfPred_mem_Icc_setOfPred_lower_eq
     choose y hy₁ hy₂ using this
     exact π.eq_of_mem_of_mem h₁ h₂ hy₁ hy₂
   intro i
-  simp only [Set.e
+  simp only [Set.ext_iff, mem_ofPred] at H
+  rcases (hx₁.1 i).eq_or_lt with hi₁ | hi₁
+  · have hi₂ : J₂.lower i = x i := (H _).1 hi₁
+    have H₁ : x i < J₁.upper i := by simpa only [hi₁] using J₁.lower_lt_upper i
+    have H₂ : x i < J₂.upper i := by simpa only [hi₂] using J₂.lower_lt_upper i
+    rw [Set.Ioc_inter_Ioc]; rw [hi₁]; rw [hi₂]; rw [sup_idem]; rw [Set.nonempty_Ioc]
+    exact lt_min H₁ H₂
+  · have hi₂ : J₂.lower i < x i := (hx₂.1 i).lt_of_ne (mt (H _).2 hi₁.ne)
+    exact ⟨x i, ⟨hi₁, hx₁.2 i⟩, ⟨hi₂, hx₂.2 i⟩⟩
+
+@[deprecated (since := "2026-07-09")]
+alias injOn_setOf_mem_Icc_setOf_lower_eq := injOn_setOfPred_mem_Icc_setOfPred_lower_eq
 
 中文:
 定理 injOn_setOfPred_mem_Icc_setOfPred_lower_eq
@@ -617,7 +638,18 @@ theorem injOn_setOfPred_mem_Icc_setOfPred_lower_eq
     choose y hy₁ hy₂ using this
     exact π.eq_of_mem_of_mem h₁ h₂ hy₁ hy₂
   intro i
-  simp only [Set.e
+  simp only [Set.ext_iff, mem_ofPred] at H
+  rcases (hx₁.1 i).eq_or_lt with hi₁ | hi₁
+  · have hi₂ : J₂.lower i = x i := (H _).1 hi₁
+    have H₁ : x i < J₁.upper i := by simpa only [hi₁] using J₁.lower_lt_upper i
+    have H₂ : x i < J₂.upper i := by simpa only [hi₂] using J₂.lower_lt_upper i
+    rw [Set.Ioc_inter_Ioc]; rw [hi₁]; rw [hi₂]; rw [sup_idem]; rw [Set.nonempty_Ioc]
+    exact lt_min H₁ H₂
+  · have hi₂ : J₂.lower i < x i := (hx₂.1 i).lt_of_ne (mt (H _).2 hi₁.ne)
+    exact ⟨x i, ⟨hi₁, hx₁.2 i⟩, ⟨hi₂, hx₂.2 i⟩⟩
+
+@[deprecated (since := "2026-07-09")]
+alias injOn_setOf_mem_Icc_setOf_lower_eq := injOn_setOfPred_mem_Icc_setOfPred_lower_eq
 
 Depends on / 依赖: Nonempty, Set.ext_iff, eq_of_mem_of_mem, eq_or_lt, ext_iff, lower_lt_upper, mem_ofPred
 -/
@@ -944,7 +976,8 @@ theorem le_iff_nonempty_imp_le_and_iUnion_subset
     rwa [π₂.eq_of_mem_of_mem hJ' hJ'' hx' (Hle hx)]
   · rintro ⟨H, HU⟩ J hJ
     simp only [Set.subset_def, mem_iUnion] at HU
-    rcases HU J.upper ⟨J
+    rcases HU J.upper ⟨J, hJ, J.upper_mem⟩ with ⟨J₂, hJ₂, hx⟩
+    exact ⟨J₂, hJ₂, H _ hJ _ hJ₂ ⟨_, J.upper_mem, hx⟩⟩
 
 中文:
 定理 le_iff_nonempty_imp_le_and_iUnion_subset
@@ -956,7 +989,8 @@ theorem le_iff_nonempty_imp_le_and_iUnion_subset
     rwa [π₂.eq_of_mem_of_mem hJ' hJ'' hx' (Hle hx)]
   · rintro ⟨H, HU⟩ J hJ
     simp only [Set.subset_def, mem_iUnion] at HU
-    rcases HU J.upper ⟨J
+    rcases HU J.upper ⟨J, hJ, J.upper_mem⟩ with ⟨J₂, hJ₂, hx⟩
+    exact ⟨J₂, hJ₂, H _ hJ _ hJ₂ ⟨_, J.upper_mem, hx⟩⟩
 
 Depends on / 依赖: J.upper, J.upper_mem, Set.subset_def, eq_of_mem_of_mem, iUnion_mono, mem_iUnion, subset_def, upper_mem
 -/
@@ -1021,7 +1055,12 @@ definition biUnion
     exact ((πi J').le_of_mem hJ).trans (π.le_of_mem hJ')
   pairwiseDisjoint := by
     simp only [Set.Pairwise, Finset.mem_coe, Finset.mem_biUnion]
-    ri
+    rintro J₁' ⟨J₁, hJ₁, hJ₁'⟩ J₂' ⟨J₂, hJ₂, hJ₂'⟩ Hne
+    rw [Function.onFun]; rw [Set.disjoint_left]
+    rintro x hx₁ hx₂; apply Hne
+    obtain rfl : J₁ = J₂ :=
+      π.eq_of_mem_of_mem hJ₁ hJ₂ ((πi J₁).le_of_mem hJ₁' hx₁) ((πi J₂).le_of_mem hJ₂' hx₂)
+    exact (πi J₁).eq_of_mem_of_mem hJ₁' hJ₂' hx₁ hx₂
 
 中文:
 定义 biUnion
@@ -1033,7 +1072,12 @@ definition biUnion
     exact ((πi J').le_of_mem hJ).trans (π.le_of_mem hJ')
   pairwiseDisjoint := by
     simp only [Set.Pairwise, Finset.mem_coe, Finset.mem_biUnion]
-    ri
+    rintro J₁' ⟨J₁, hJ₁, hJ₁'⟩ J₂' ⟨J₂, hJ₂, hJ₂'⟩ Hne
+    rw [Function.onFun]; rw [Set.disjoint_left]
+    rintro x hx₁ hx₂; apply Hne
+    obtain rfl : J₁ = J₂ :=
+      π.eq_of_mem_of_mem hJ₁ hJ₂ ((πi J₁).le_of_mem hJ₁' hx₁) ((πi J₂).le_of_mem hJ₂' hx₂)
+    exact (πi J₁).eq_of_mem_of_mem hJ₁' hJ₂' hx₁ hx₂
 
 Depends on / 依赖: biUnion, boxes.biUnion
 -/
@@ -1422,7 +1466,9 @@ definition ofWithBot
     simpa only [WithBot.some_eq_coe, WithBot.coe_le_coe] using le_of_mem _ hJ
   pairwiseDisjoint J₁ h₁ J₂ h₂ hne := by
     simp only [mem_coe, mem_eraseNone] at h₁ h₂
-    exact Box.disjoint_coe.1 (pairwise_disjoint h₁ h₂ (mt
+    exact Box.disjoint_coe.1 (pairwise_disjoint h₁ h₂ (mt Option.some_inj.1 hne))
+
+@[simp]
 
 中文:
 定义 ofWithBot
@@ -1433,7 +1479,9 @@ definition ofWithBot
     simpa only [WithBot.some_eq_coe, WithBot.coe_le_coe] using le_of_mem _ hJ
   pairwiseDisjoint J₁ h₁ J₂ h₂ hne := by
     simp only [mem_coe, mem_eraseNone] at h₁ h₂
-    exact Box.disjoint_coe.1 (pairwise_disjoint h₁ h₂ (mt
+    exact Box.disjoint_coe.1 (pairwise_disjoint h₁ h₂ (mt Option.some_inj.1 hne))
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.eraseNone, eraseNone
 -/
@@ -1627,7 +1675,12 @@ definition restrict
     (by
       simp only [Set.Pairwise, Finset.mem_coe, Finset.mem_image]
       rintro _ ⟨J₁, h₁, rfl⟩ _ ⟨J₂, h₂, rfl⟩ Hne
-      have : J₁ != J₂ := b
+      have : J₁ != J₂ := by
+        rintro rfl
+        exact Hne rfl
+      exact ((Box.disjoint_coe.2 <| π.disjoint_coe_of_mem h₁ h₂ this).inf_left' _).inf_right' _)
+
+@[simp]
 
 中文:
 定义 restrict
@@ -1639,7 +1692,12 @@ definition restrict
     (by
       simp only [Set.Pairwise, Finset.mem_coe, Finset.mem_image]
       rintro _ ⟨J₁, h₁, rfl⟩ _ ⟨J₂, h₂, rfl⟩ Hne
-      have : J₁ != J₂ := b
+      have : J₁ != J₂ := by
+        rintro rfl
+        exact Hne rfl
+      exact ((Box.disjoint_coe.2 <| π.disjoint_coe_of_mem h₁ h₂ this).inf_left' _).inf_right' _)
+
+@[simp]
 
 Depends on / 依赖: Box.disjoint_coe, Finset, Finset.mem_coe, Finset.mem_image, Pairwise, Set.Pairwise, boxes.image, disjoint_coe, disjoint_coe_of_mem, inf_le_left, inf_left, inf_right, mem_coe, mem_image, ofWithBot
 -/
@@ -1769,7 +1827,9 @@ theorem restrict_boxes_of_le
   refine (Finset.biUnion_congr rfl ?_).trans Finset.biUnion_singleton_eq_self
   intro J' hJ'
   rw [inf_of_le_right]; rw [← WithBot.some_eq_coe]; rw [Option.toFinset_some]
-  exact WithBot.coe
+  exact WithBot.coe_le_coe.2 ((π.le_of_mem hJ').trans h)
+
+@[simp]
 
 中文:
 定理 restrict_boxes_of_le
@@ -1782,7 +1842,9 @@ theorem restrict_boxes_of_le
   refine (Finset.biUnion_congr rfl ?_).trans Finset.biUnion_singleton_eq_self
   intro J' hJ'
   rw [inf_of_le_right]; rw [← WithBot.some_eq_coe]; rw [Option.toFinset_some]
-  exact WithBot.coe
+  exact WithBot.coe_le_coe.2 ((π.le_of_mem hJ').trans h)
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.biUnion_congr, Finset.biUnion_singleton_eq_self, Finset.image_biUnion.trans, Option.toFinset_some, WithBot, WithBot.coe_le_coe, WithBot.some_eq_coe, biUnion_congr, biUnion_singleton_eq_self, classical, coe_le_coe, eraseNone_eq_biUnion, image_biUnion, inf_of_le_right, le_of_mem, ofWithBot, restrict, some_eq_coe, toFinset_some
 -/
@@ -1854,7 +1916,10 @@ theorem restrict_biUnion
   refine (eq_of_boxes_subset_iUnion_superset (fun J₁ h₁ => ?_) ?_).symm
   · refine (mem_restrict _).2 ⟨J₁, π.mem_biUnion.2 ⟨J, hJ, h₁⟩, (inf_of_le_right ?_).symm⟩
     exact WithBot.coe_le_coe.2 (le_of_mem _ h₁)
-  · simp only [iUnion_restrict, iUnion_biUnion, Set.subset_def, Set.mem_inter_iff, Set
+  · simp only [iUnion_restrict, iUnion_biUnion, Set.subset_def, Set.mem_inter_iff, Set.mem_iUnion]
+    rintro x ⟨hxJ, J₁, h₁, hx⟩
+    obtain rfl : J = J₁ := π.eq_of_mem_of_mem hJ h₁ hxJ (iUnion_subset _ hx)
+    exact hx
 
 中文:
 定理 restrict_biUnion
@@ -1863,7 +1928,10 @@ theorem restrict_biUnion
   refine (eq_of_boxes_subset_iUnion_superset (fun J₁ h₁ => ?_) ?_).symm
   · refine (mem_restrict _).2 ⟨J₁, π.mem_biUnion.2 ⟨J, hJ, h₁⟩, (inf_of_le_right ?_).symm⟩
     exact WithBot.coe_le_coe.2 (le_of_mem _ h₁)
-  · simp only [iUnion_restrict, iUnion_biUnion, Set.subset_def, Set.mem_inter_iff, Set
+  · simp only [iUnion_restrict, iUnion_biUnion, Set.subset_def, Set.mem_inter_iff, Set.mem_iUnion]
+    rintro x ⟨hxJ, J₁, h₁, hx⟩
+    obtain rfl : J = J₁ := π.eq_of_mem_of_mem hJ h₁ hxJ (iUnion_subset _ hx)
+    exact hx
 
 Depends on / 依赖: Set.mem_iUnion, Set.mem_inter_iff, Set.subset_def, WithBot, WithBot.coe_le_coe, coe_le_coe, eq_of_boxes_subset_iUnion_superset, eq_of_mem_of_mem, iUnion_biUnion, iUnion_restrict, iUnion_subset, inf_of_le_right, le_of_mem, mem_biUnion, mem_iUnion, mem_inter_iff, mem_restrict, subset_def
 -/
@@ -1891,7 +1959,7 @@ theorem biUnion_le_iff
     rcases hJ with ⟨J₁, h₁, hJ⟩
     rcases H J₁ h₁ hJ with ⟨J₂, h₂, Hle⟩
     rcases π'.mem_restrict.mp h₂ with ⟨J₃, h₃, H⟩
-exact ⟨J₃, h₃, Hle.trans WithBot.coe_le_coe.1 H.trans_
+exact ⟨J₃, h₃, Hle.trans WithBot.coe_le_coe.1 H.trans_le inf_le_right⟩
 
 中文:
 定理 biUnion_le_iff
@@ -1904,7 +1972,7 @@ exact ⟨J₃, h₃, Hle.trans WithBot.coe_le_coe.1 H.trans_
     rcases hJ with ⟨J₁, h₁, hJ⟩
     rcases H J₁ h₁ hJ with ⟨J₂, h₂, Hle⟩
     rcases π'.mem_restrict.mp h₂ with ⟨J₃, h₃, H⟩
-exact ⟨J₃, h₃, Hle.trans WithBot.coe_le_coe.1 H.trans_
+exact ⟨J₃, h₃, Hle.trans WithBot.coe_le_coe.1 H.trans_le inf_le_right⟩
 
 Depends on / 依赖: H.trans_le, Hle.trans, WithBot, WithBot.coe_le_coe, coe_le_coe, inf_le_right, mem_biUnion, mem_restrict, mem_restrict.mp, restrict_biUnion, restrict_mono, trans_le
 -/
@@ -1932,7 +2000,9 @@ theorem le_biUnion_iff
   · rintro ⟨H, Hi⟩ J' hJ'
     rcases H hJ' with ⟨J, hJ, hle⟩
     have : J' in π'.restrict J :=
-      π'.mem_restrict.2 ⟨J', hJ', (inf_of_le_right <| WithBot.coe_le_coe
+      π'.mem_restrict.2 ⟨J', hJ', (inf_of_le_right <| WithBot.coe_le_coe.2 hle).symm⟩
+    rcases Hi J hJ this with ⟨Ji, hJi, hlei⟩
+    exact ⟨Ji, π.mem_biUnion.2 ⟨J, hJ, hJi⟩, hlei⟩
 
 中文:
 定理 le_biUnion_iff
@@ -1944,7 +2014,9 @@ theorem le_biUnion_iff
   · rintro ⟨H, Hi⟩ J' hJ'
     rcases H hJ' with ⟨J, hJ, hle⟩
     have : J' in π'.restrict J :=
-      π'.mem_restrict.2 ⟨J', hJ', (inf_of_le_right <| WithBot.coe_le_coe
+      π'.mem_restrict.2 ⟨J', hJ', (inf_of_le_right <| WithBot.coe_le_coe.2 hle).symm⟩
+    rcases Hi J hJ this with ⟨Ji, hJi, hlei⟩
+    exact ⟨Ji, π.mem_biUnion.2 ⟨J, hJ, hJi⟩, hlei⟩
 
 Depends on / 依赖: H.trans, WithBot, WithBot.coe_le_coe, biUnion_le, coe_le_coe, inf_of_le_right, mem_biUnion, mem_restrict, restrict, restrict_biUnion, restrict_mono
 -/
@@ -2200,7 +2272,7 @@ theorem iUnion_filter_not
   · rw [Set.PairwiseDisjoint]
     convert! π.pairwiseDisjoint
     rw [Set.union_eq_left]; rw [filter_boxes]; rw [coe_filter]
-    
+    exact fun _ ⟨h, _⟩ => h
 
 中文:
 定理 iUnion_filter_not
@@ -2213,7 +2285,7 @@ theorem iUnion_filter_not
   · rw [Set.PairwiseDisjoint]
     convert! π.pairwiseDisjoint
     rw [Set.union_eq_left]; rw [filter_boxes]; rw [coe_filter]
-    
+    exact fun _ ⟨h, _⟩ => h
 
 Depends on / 依赖: PairwiseDisjoint, Prepartition, Prepartition.iUnion, Set.PairwiseDisjoint, Set.biUnion_sdiff_biUnion_eq, Set.union_eq_left, biUnion_sdiff_biUnion_eq, coe_filter, contextual, convert, filter, filter_boxes, iUnion, pairwiseDisjoint, union_eq_left
 -/
@@ -2265,7 +2337,9 @@ definition disjUnion
   pairwiseDisjoint :=
     suffices forall J₁ in π₁, forall J₂ in π₂, J₁ != J₂ -> Disjoint (J₁ : Set (ι -> Real)) J₂ by
       simpa [pairwise_union_of_symm, pairwiseDisjoint]
-    fun _ h₁ _ h₂ _ => h.m
+    fun _ h₁ _ h₂ _ => h.mono (π₁.subset_iUnion h₁) (π₂.subset_iUnion h₂)
+
+@[simp]
 
 中文:
 定义 disjUnion
@@ -2275,7 +2349,9 @@ definition disjUnion
   pairwiseDisjoint :=
     suffices forall J₁ in π₁, forall J₂ in π₂, J₁ != J₂ -> Disjoint (J₁ : Set (ι -> Real)) J₂ by
       simpa [pairwise_union_of_symm, pairwiseDisjoint]
-    fun _ h₁ _ h₂ _ => h.m
+    fun _ h₁ _ h₂ _ => h.mono (π₁.subset_iUnion h₁) (π₂.subset_iUnion h₂)
+
+@[simp]
 -/
 def disjUnion (π₁ π₂ : Prepartition I) (h : Disjoint π₁.iUnion π₂.iUnion) : Prepartition I where
   boxes := π₁.boxes union π₂.boxes

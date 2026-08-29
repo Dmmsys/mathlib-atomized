@@ -1104,7 +1104,26 @@ definition IsLocalDiffeomorph.diffeomorphOfBijective
   -- Choose diffeomorphisms φ_x which coincide with `f` near `x`.
   choose Φ hyp using (fun x => hf x)
   -- Two such diffeomorphisms (and their inverses!) coincide on their sources:
-  --
+  -- they're both inverses to g. In fact, the latter suffices for our proof.
+  -- have (x y) : EqOn (Φ x).symm (Φ y).symm ((Φ x).target ∩ (Φ y).target) := sorry
+  have aux (x) : EqOn g (Φ x).symm (Φ x).target :=
+    eqOn_of_leftInvOn_of_rightInvOn (fun x' _ => hgInverse.1 x')
+      (LeftInvOn.congr_left ((Φ x).toOpenPartialHomeomorph).rightInvOn
+        ((Φ x).toOpenPartialHomeomorph).mapsTo_symm (hyp x).2.symm)
+      (fun _y hy => (Φ x).map_target hy)
+  exact {
+    toFun := f
+    invFun := g
+    left_inv := hgInverse.1
+    right_inv := hgInverse.2
+    contMDiff_toFun := hf.contMDiff
+    contMDiff_invFun := by
+      intro y
+      let x := g y
+      obtain ⟨hx, hfx⟩ := hyp x
+      apply ((Φ x).symm.contMDiffOn.congr (aux x)).contMDiffAt (((Φ x).open_target).mem_nhds ?_)
+      have : y = (Φ x) x := ((hgInverse.2 y).congr (hfx hx)).mp rfl
+      exact this ▸ (Φ x).map_source hx }
 
 中文:
 定义 IsLocalDiffeomorph.diffeomorphOfBijective
@@ -1114,7 +1133,26 @@ definition IsLocalDiffeomorph.diffeomorphOfBijective
   -- Choose diffeomorphisms φ_x which coincide with `f` near `x`.
   choose Φ hyp using (fun x => hf x)
   -- Two such diffeomorphisms (and their inverses!) coincide on their sources:
-  --
+  -- they're both inverses to g. In fact, the latter suffices for our proof.
+  -- have (x y) : EqOn (Φ x).symm (Φ y).symm ((Φ x).target ∩ (Φ y).target) := sorry
+  have aux (x) : EqOn g (Φ x).symm (Φ x).target :=
+    eqOn_of_leftInvOn_of_rightInvOn (fun x' _ => hgInverse.1 x')
+      (LeftInvOn.congr_left ((Φ x).toOpenPartialHomeomorph).rightInvOn
+        ((Φ x).toOpenPartialHomeomorph).mapsTo_symm (hyp x).2.symm)
+      (fun _y hy => (Φ x).map_target hy)
+  exact {
+    toFun := f
+    invFun := g
+    left_inv := hgInverse.1
+    right_inv := hgInverse.2
+    contMDiff_toFun := hf.contMDiff
+    contMDiff_invFun := by
+      intro y
+      let x := g y
+      obtain ⟨hx, hfx⟩ := hyp x
+      apply ((Φ x).symm.contMDiffOn.congr (aux x)).contMDiffAt (((Φ x).open_target).mem_nhds ?_)
+      have : y = (Φ x) x := ((hgInverse.2 y).congr (hfx hx)).mp rfl
+      exact this ▸ (Φ x).map_source hx }
 -/
 def IsLocalDiffeomorph.diffeomorphOfBijective
     (hf : IsLocalDiffeomorph I J n f) (hf' : Function.Bijective f) : Diffeomorph I J M N n := by
@@ -1164,7 +1202,21 @@ definition IsLocalDiffeomorphAt.mfderivToContinuousLinearEquiv
     apply ContinuousLinearMap.leftInverse_of_comp
     rw [← mfderiv_id]; rw [← hf.localInverse_eventuallyEq_left.mfderiv_eq]
     exact (mfderiv_comp _ (hf.localInverse_mdifferentiableAt hn) (hf.mdifferentiableAt hn)).symm
-  rig
+  right_inv := by
+    apply ContinuousLinearMap.rightInverse_of_comp
+    rw [← mfderiv_id]; rw [← hf.localInverse_eventuallyEq_right.mfderiv_eq]
+    -- We need to rewrite the base point hf.localInverse (f x) = x twice,
+    -- in the differentiability hypothesis and for applying the chain rule.
+    have hf' : MDifferentiableAt I J f (hf.localInverse (f x)) := by
+      rw [hf.localInverse_left_inv hf.localInverse_mem_target]
+      exact hf.mdifferentiableAt hn
+    rw [mfderiv_comp _ hf' (hf.localInverse_mdifferentiableAt hn)]; rw [hf.localInverse_left_inv hf.localInverse_mem_target]
+  continuous_toFun := (mfderiv% f x).cont
+  continuous_invFun := (mfderiv% hf.localInverse (f x)).cont
+  map_add' := fun x_1 y => map_add _ x_1 y
+  map_smul' := by intros; simp
+
+@[simp, mfld_simps]
 
 中文:
 定义 IsLocalDiffeomorphAt.mfderivToContinuousLinearEquiv
@@ -1174,7 +1226,21 @@ definition IsLocalDiffeomorphAt.mfderivToContinuousLinearEquiv
     apply ContinuousLinearMap.leftInverse_of_comp
     rw [← mfderiv_id]; rw [← hf.localInverse_eventuallyEq_left.mfderiv_eq]
     exact (mfderiv_comp _ (hf.localInverse_mdifferentiableAt hn) (hf.mdifferentiableAt hn)).symm
-  rig
+  right_inv := by
+    apply ContinuousLinearMap.rightInverse_of_comp
+    rw [← mfderiv_id]; rw [← hf.localInverse_eventuallyEq_right.mfderiv_eq]
+    -- We need to rewrite the base point hf.localInverse (f x) = x twice,
+    -- in the differentiability hypothesis and for applying the chain rule.
+    have hf' : MDifferentiableAt I J f (hf.localInverse (f x)) := by
+      rw [hf.localInverse_left_inv hf.localInverse_mem_target]
+      exact hf.mdifferentiableAt hn
+    rw [mfderiv_comp _ hf' (hf.localInverse_mdifferentiableAt hn)]; rw [hf.localInverse_left_inv hf.localInverse_mem_target]
+  continuous_toFun := (mfderiv% f x).cont
+  continuous_invFun := (mfderiv% hf.localInverse (f x)).cont
+  map_add' := fun x_1 y => map_add _ x_1 y
+  map_smul' := by intros; simp
+
+@[simp, mfld_simps]
 -/
 @[expose] def IsLocalDiffeomorphAt.mfderivToContinuousLinearEquiv
     (hf : IsLocalDiffeomorphAt I J n f x) (hn : n != 0) :

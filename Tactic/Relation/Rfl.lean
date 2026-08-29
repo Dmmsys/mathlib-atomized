@@ -54,7 +54,11 @@ definition _root_.Lean.Expr.relSidesIfRefl?
   if let some (_, lhs, _, rhs) := e.heq? then
     return (``HEq, lhs, rhs)
   if let .app (.app rel lhs) rhs := e then
-    unless (← (reflExt.getState (← getEn
+    unless (← (reflExt.getState (← getEnv)).getMatch rel).isEmpty do
+      match rel.getAppFn.constName? with
+      | some n => return some (n, lhs, rhs)
+      | none => return none
+  return none
 
 中文:
 定义 _root_.Lean.Expr.relSidesIfRefl?
@@ -67,7 +71,11 @@ definition _root_.Lean.Expr.relSidesIfRefl?
   if let some (_, lhs, _, rhs) := e.heq? then
     return (``HEq, lhs, rhs)
   if let .app (.app rel lhs) rhs := e then
-    unless (← (reflExt.getState (← getEn
+    unless (← (reflExt.getState (← getEnv)).getMatch rel).isEmpty do
+      match rel.getAppFn.constName? with
+      | some n => return some (n, lhs, rhs)
+      | none => return none
+  return none
 -/
 def _root_.Lean.Expr.relSidesIfRefl? (e : Expr) : MetaM (Option (Name × Expr × Expr)) := do
   if let some (_, lhs, rhs) := e.eq? then

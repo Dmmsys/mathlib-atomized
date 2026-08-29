@@ -55,7 +55,7 @@ theorem exists_extension_norm_eq
       (show Continuous (‖f‖₊ • (normSeminorm 𝕜 E)) from ?_) fun x => f.le_opNorm x
     exact continuous_norm.const_smul ‖f‖₊
   refine ⟨g, hg, le_antisymm (g.opNorm_le_bound (norm_nonneg f) hl) ?_⟩
-  e
+  exact f.opNorm_le_bound (norm_nonneg _) fun x => by simpa [hg x] using g.le_opNorm x
 
 中文:
 定理 存在_extension_norm_eq
@@ -66,7 +66,7 @@ theorem exists_extension_norm_eq
       (show Continuous (‖f‖₊ • (normSeminorm 𝕜 E)) from ?_) fun x => f.le_opNorm x
     exact continuous_norm.const_smul ‖f‖₊
   refine ⟨g, hg, le_antisymm (g.opNorm_le_bound (norm_nonneg f) hl) ?_⟩
-  e
+  exact f.opNorm_le_bound (norm_nonneg _) fun x => by simpa [hg x] using g.le_opNorm x
 
 Depends on / 依赖: Continuous, Module, Module.Dual.exists_continuous_extension_of_le_seminorm, const_smul, continuous_norm, continuous_norm.const_smul, exists_continuous_extension_of_le_seminorm, f.le_opNorm, f.opNorm_le_bound, g.le_opNorm, g.opNorm_le_bound, le_antisymm, le_opNorm, normSeminorm, norm_nonneg, opNorm_le_bound
 -/
@@ -103,7 +103,16 @@ theorem exists_dual_vector
   let coord : span 𝕜 {x} ->L[𝕜] 𝕜 := (ofHomothety _ _ (by positivity) hhomothety).symm
   obtain ⟨g, hg⟩ := exists_extension_norm_eq (span 𝕜 {x}) ((‖x‖ : 𝕜) • coord)
   have hval : g x = ‖x‖ := by
-    
+    have hgx : g x = g (⟨x, by simp⟩ : span 𝕜 {x}) := by rw [Submodule.coe_mk]
+    have hcx : coord ⟨x, _⟩ = 1 := LinearEquiv.coord_self 𝕜 E x (ne_zero_of_norm_ne_zero h)
+    simp [-algebraMap_smul, hgx, ↓hg.left, hcx]
+  refine ⟨g, le_antisymm ?_ ?_, hval⟩
+  · simp only [hg.right, norm_smul, norm_algebraMap', norm_norm]
+    grw [coord.opNorm_le_bound (by positivity)
+      (fun y => (homothety_inverse _ (by positivity) _ hhomothety y).le), mul_inv_cancel₀ h]
+  · have hle := g.le_opNorm x
+    simp only [hval, norm_algebraMap', norm_norm] at hle
+    exact one_le_of_le_mul_right₀ (by positivity) hle
 
 中文:
 定理 存在_dual_vector
@@ -114,7 +123,16 @@ theorem exists_dual_vector
   let coord : span 𝕜 {x} ->L[𝕜] 𝕜 := (ofHomothety _ _ (by positivity) hhomothety).symm
   obtain ⟨g, hg⟩ := exists_extension_norm_eq (span 𝕜 {x}) ((‖x‖ : 𝕜) • coord)
   have hval : g x = ‖x‖ := by
-    
+    have hgx : g x = g (⟨x, by simp⟩ : span 𝕜 {x}) := by rw [Submodule.coe_mk]
+    have hcx : coord ⟨x, _⟩ = 1 := LinearEquiv.coord_self 𝕜 E x (ne_zero_of_norm_ne_zero h)
+    simp [-algebraMap_smul, hgx, ↓hg.left, hcx]
+  refine ⟨g, le_antisymm ?_ ?_, hval⟩
+  · simp only [hg.right, norm_smul, norm_algebraMap', norm_norm]
+    grw [coord.opNorm_le_bound (by positivity)
+      (fun y => (homothety_inverse _ (by positivity) _ hhomothety y).le), mul_inv_cancel₀ h]
+  · have hle := g.le_opNorm x
+    simp only [hval, norm_algebraMap', norm_norm] at hle
+    exact one_le_of_le_mul_right₀ (by positivity) hle
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coord_self, LinearEquiv.toSpanNonzeroSingleton_homothety, Submodule, Submodule.coe_mk, algebraMap_smul, coe_mk, coord_self, exists_extension_norm_eq, hg.left, hhomothety, ne_zero_of_norm_ne_zero, ofHomothety, toSpanNonzeroSingleton_homothety
 -/

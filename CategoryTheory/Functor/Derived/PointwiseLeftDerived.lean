@@ -249,7 +249,29 @@ definition isPointwiseRightKanExtensionAtOfIsoOfIsLocalization
     refine Localization.induction_structuredArrow L W _ (by simp)
       (fun X₁ X₂ f φ hφ => ?_) (fun X₁ X₂ w hw φ hφ => ?_) j
     · have eq := s.π.naturality
-        (StructuredArrow.homMk f : StructuredArrow.mk φ ⟶ Structured
+        (StructuredArrow.homMk f : StructuredArrow.mk φ ⟶ StructuredArrow.mk (φ ≫ L.map f))
+      dsimp at eq hφ ⊢
+      rw [id_comp] at eq
+      rw [assoc] at hφ
+      simp [eq, ← reassoc_of% hφ, ← e.inv.naturality f]
+    · have : IsIso (F.map w) := by
+        have := Localization.inverts L W w hw
+        rw [← NatIso.naturality_2 e w]
+        dsimp
+        infer_instance
+      have eq := s.π.naturality (StructuredArrow.homMk w :
+          StructuredArrow.mk (φ ≫ (Localization.isoOfHom L W w hw).inv) ⟶
+            StructuredArrow.mk φ)
+      dsimp at eq hφ ⊢
+      rw [id_comp] at eq
+      rw [assoc] at hφ
+      simp only [← cancel_mono (F.map w), ← eq, comp_obj, comp_map, assoc,
+        ← hφ, ← NatTrans.naturality, ← G.map_comp_assoc,
+        Localization.isoOfHom_inv_hom_id, comp_id]
+  uniq s m hm := by
+    have := hm (StructuredArrow.mk (𝟙 (L.obj Y)))
+    dsimp at this m hm ⊢
+    simp [← reassoc_of% this]
 
 中文:
 定义 isPointwiseRightKanExtensionAtOfIsoOfIsLocalization
@@ -258,7 +280,29 @@ definition isPointwiseRightKanExtensionAtOfIsoOfIsLocalization
     refine Localization.induction_structuredArrow L W _ (by simp)
       (fun X₁ X₂ f φ hφ => ?_) (fun X₁ X₂ w hw φ hφ => ?_) j
     · have eq := s.π.naturality
-        (StructuredArrow.homMk f : StructuredArrow.mk φ ⟶ Structured
+        (StructuredArrow.homMk f : StructuredArrow.mk φ ⟶ StructuredArrow.mk (φ ≫ L.map f))
+      dsimp at eq hφ ⊢
+      rw [id_comp] at eq
+      rw [assoc] at hφ
+      simp [eq, ← reassoc_of% hφ, ← e.inv.naturality f]
+    · have : IsIso (F.map w) := by
+        have := Localization.inverts L W w hw
+        rw [← NatIso.naturality_2 e w]
+        dsimp
+        infer_instance
+      have eq := s.π.naturality (StructuredArrow.homMk w :
+          StructuredArrow.mk (φ ≫ (Localization.isoOfHom L W w hw).inv) ⟶
+            StructuredArrow.mk φ)
+      dsimp at eq hφ ⊢
+      rw [id_comp] at eq
+      rw [assoc] at hφ
+      simp only [← cancel_mono (F.map w), ← eq, comp_obj, comp_map, assoc,
+        ← hφ, ← NatTrans.naturality, ← G.map_comp_assoc,
+        Localization.isoOfHom_inv_hom_id, comp_id]
+  uniq s m hm := by
+    have := hm (StructuredArrow.mk (𝟙 (L.obj Y)))
+    dsimp at this m hm ⊢
+    simp [← reassoc_of% this]
 
 Depends on / 依赖: L.obj, StructuredArrow, StructuredArrow.mk, e.hom.app
 -/

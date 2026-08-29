@@ -119,7 +119,19 @@ lemma le_variation
   have hQ' : forall t in Q'.parts, t subseteq s := by simp [Q', Q]; grind
   calc
     ∑ p in P, ‖μ p‖ₑ = ∑ p in Q.parts, ‖μ p‖ₑ :=
-      (Finpartition.
+      (Finpartition.sum_ofPairwiseDisjoint_eq_sum hP₂ (by simp)).symm
+    _ = ∑ p in Q'.parts, ‖μ p‖ₑ := (Q.sum_ofSubset_eq_sum _ _ _ (by simp_all)).symm
+    _ <= ∑ p in (Q'.extendOfLE (Finset.sup_le hQ')).parts, ‖μ p‖ₑ :=
+      sum_le_sum_of_subset (Q'.parts_subset_extendOfLE (Finset.sup_le hQ'))
+    _ <= μ.variation s := by
+      simp only [variation_apply, preVariation_apply, ennrealToMeasure_apply hs,
+        ennrealPreVariation_apply]
+      apply preVariation.sum_le' (fun p => ‖μ p‖ₑ) hs
+      intro p hp
+      rcases Q'.mem_parts_or_eq_sdiff_of_mem_extendOfLE _ hp with h | rfl
+      · simp_all
+      simp only [sup_set_eq_biUnion, id_eq]
+exact hs.diff .biUnion (Finset.countable_toSet _) (by simp)
 
 中文:
 引理 le_variation
@@ -131,7 +143,19 @@ lemma le_variation
   have hQ' : forall t in Q'.parts, t subseteq s := by simp [Q', Q]; grind
   calc
     ∑ p in P, ‖μ p‖ₑ = ∑ p in Q.parts, ‖μ p‖ₑ :=
-      (Finpartition.
+      (Finpartition.sum_ofPairwiseDisjoint_eq_sum hP₂ (by simp)).symm
+    _ = ∑ p in Q'.parts, ‖μ p‖ₑ := (Q.sum_ofSubset_eq_sum _ _ _ (by simp_all)).symm
+    _ <= ∑ p in (Q'.extendOfLE (Finset.sup_le hQ')).parts, ‖μ p‖ₑ :=
+      sum_le_sum_of_subset (Q'.parts_subset_extendOfLE (Finset.sup_le hQ'))
+    _ <= μ.variation s := by
+      simp only [variation_apply, preVariation_apply, ennrealToMeasure_apply hs,
+        ennrealPreVariation_apply]
+      apply preVariation.sum_le' (fun p => ‖μ p‖ₑ) hs
+      intro p hp
+      rcases Q'.mem_parts_or_eq_sdiff_of_mem_extendOfLE _ hp with h | rfl
+      · simp_all
+      simp only [sup_set_eq_biUnion, id_eq]
+exact hs.diff .biUnion (Finset.countable_toSet _) (by simp)
 
 Depends on / 依赖: Finpartition, Finpartition.ofPairwiseDisjoint, Finpartition.sum_ofPairwiseDisjoint_eq_sum, Finset, Finset.sup_le, MeasurableSet, Q.ofSubset, Q.parts, Q.sum_ofSubset_eq_sum, classical, extendOfLE, filter_subset, ofPairwiseDisjoint, ofSubset, subseteq, sum_le_sum_of_subset, sum_ofPairwiseDisjoint_eq_sum, sum_ofSubset_eq_sum, sup_le
 -/
@@ -170,7 +194,20 @@ lemma exists_lt_sum_of_lt_variation
   obtain ⟨P, hP⟩ : exists P : Finpartition (⟨s, hs⟩ : Subtype MeasurableSet),
       a < ∑ p in P.parts, (fun x => ‖μ x‖ₑ) p :=
     preVariation.exists_Finpartition_sum_gt (‖μ ·‖ₑ) _ ha
-  
+  refine ⟨P.parts.map (Function.Embedding.subtype _), ?_, ?_, ?_, ?_⟩
+  · simp only [mem_map, Function.Embedding.subtype_apply, Subtype.exists, exists_and_right,
+      exists_eq_right, forall_exists_index]
+    intro t ht h't
+    exact P.le h't
+  · intro i hi j hj hij
+    simp only [coe_map, Function.Embedding.subtype_apply, Set.mem_image, SetLike.mem_coe,
+      Subtype.exists, exists_and_right, exists_eq_right] at hi hj
+    rcases hi with ⟨h'i, i_mem⟩
+    rcases hj with ⟨h'j, j_mem⟩
+    exact (disjoint_subtype_iff (fun _ _ hs ht => hs.inter ht) _).1
+      (P.disjoint i_mem j_mem (by simpa using hij))
+  · simp +contextual
+  · rwa [Finset.sum_map]
 
 中文:
 引理 存在_lt_sum_of_lt_variation
@@ -181,7 +218,20 @@ lemma exists_lt_sum_of_lt_variation
   obtain ⟨P, hP⟩ : exists P : Finpartition (⟨s, hs⟩ : Subtype MeasurableSet),
       a < ∑ p in P.parts, (fun x => ‖μ x‖ₑ) p :=
     preVariation.exists_Finpartition_sum_gt (‖μ ·‖ₑ) _ ha
-  
+  refine ⟨P.parts.map (Function.Embedding.subtype _), ?_, ?_, ?_, ?_⟩
+  · simp only [mem_map, Function.Embedding.subtype_apply, Subtype.exists, exists_and_right,
+      exists_eq_right, forall_exists_index]
+    intro t ht h't
+    exact P.le h't
+  · intro i hi j hj hij
+    simp only [coe_map, Function.Embedding.subtype_apply, Set.mem_image, SetLike.mem_coe,
+      Subtype.exists, exists_and_right, exists_eq_right] at hi hj
+    rcases hi with ⟨h'i, i_mem⟩
+    rcases hj with ⟨h'j, j_mem⟩
+    exact (disjoint_subtype_iff (fun _ _ hs ht => hs.inter ht) _).1
+      (P.disjoint i_mem j_mem (by simpa using hij))
+  · simp +contextual
+  · rwa [Finset.sum_map]
 
 Depends on / 依赖: Embedding, Finpartition, Function, Function.Embedding.subtype, Function.Embedding.subtype_apply, MeasurableSet, P.parts, P.parts.map, Subtype, Subtype.exists, ennrealPreVariation_apply, ennrealToMeasure_apply, exists_Finpartition_sum_gt, exists_and_right, exists_eq_right, forall_exists_index, mem_map, preVariation, preVariation.exists_Finpartition_sum_gt, subtype
 -/
@@ -220,7 +270,21 @@ lemma exists_variation_le_add'
     at hμ ⊢
   obtain ⟨P, hP⟩ : exists P : Finpartition (⟨s, hs⟩ : Subtype MeasurableSet),
       preVariationFun (fun x => ‖μ x‖ₑ) s <= ∑ p in P.parts, (fun x => ‖μ x‖ₑ) ↑p + ε :=
-    preVariation.exi
+    preVariation.exists_Finpartition_sum_ge' (‖μ ·‖ₑ) hs hε hμ
+  refine ⟨P.parts.map (Function.Embedding.subtype _), ?_, ?_, ?_, ?_⟩
+  · simp only [mem_map, Function.Embedding.subtype_apply, Subtype.exists, exists_and_right,
+      exists_eq_right, forall_exists_index]
+    intro t ht h't
+    exact P.le h't
+  · intro i hi j hj hij
+    simp only [coe_map, Function.Embedding.subtype_apply, Set.mem_image, SetLike.mem_coe,
+      Subtype.exists, exists_and_right, exists_eq_right] at hi hj
+    rcases hi with ⟨h'i, i_mem⟩
+    rcases hj with ⟨h'j, j_mem⟩
+    exact (disjoint_subtype_iff (fun _ _ hs ht => hs.inter ht) _).1
+      (P.disjoint i_mem j_mem (by simpa using hij))
+  · simp +contextual
+  · rwa [Finset.sum_map]
 
 中文:
 引理 存在_variation_le_add'
@@ -230,7 +294,21 @@ lemma exists_variation_le_add'
     at hμ ⊢
   obtain ⟨P, hP⟩ : exists P : Finpartition (⟨s, hs⟩ : Subtype MeasurableSet),
       preVariationFun (fun x => ‖μ x‖ₑ) s <= ∑ p in P.parts, (fun x => ‖μ x‖ₑ) ↑p + ε :=
-    preVariation.exi
+    preVariation.exists_Finpartition_sum_ge' (‖μ ·‖ₑ) hs hε hμ
+  refine ⟨P.parts.map (Function.Embedding.subtype _), ?_, ?_, ?_, ?_⟩
+  · simp only [mem_map, Function.Embedding.subtype_apply, Subtype.exists, exists_and_right,
+      exists_eq_right, forall_exists_index]
+    intro t ht h't
+    exact P.le h't
+  · intro i hi j hj hij
+    simp only [coe_map, Function.Embedding.subtype_apply, Set.mem_image, SetLike.mem_coe,
+      Subtype.exists, exists_and_right, exists_eq_right] at hi hj
+    rcases hi with ⟨h'i, i_mem⟩
+    rcases hj with ⟨h'j, j_mem⟩
+    exact (disjoint_subtype_iff (fun _ _ hs ht => hs.inter ht) _).1
+      (P.disjoint i_mem j_mem (by simpa using hij))
+  · simp +contextual
+  · rwa [Finset.sum_map]
 
 Depends on / 依赖: Embedding, Finpartition, Function, Function.Embedding.subtype, Function.Embedding.subtype_apply, MeasurableSet, P.parts, P.parts.map, Subtype, Subtype.exists, ennrealPreVariation_apply, ennrealToMeasure_apply, exists_Finpartition_sum_ge, exists_and_right, exists_eq_right, mem_map, preVariation, preVariation.exists_Finpartition_sum_ge, preVariationFun, subtype
 -/
@@ -292,7 +370,10 @@ theorem enorm_measure_le_variation
   · simp_all
   simp only [variation_apply, preVariation, ennrealToMeasure_apply hE, ennrealPreVariation_apply]
   calc
-    ‖μ E‖ₑ = ∑ p in (Finpartition.indiscrete hE').parts, ‖μ p‖ₑ := by si
+    ‖μ E‖ₑ = ∑ p in (Finpartition.indiscrete hE').parts, ‖μ p‖ₑ := by simp
+    _ <= preVariationFun (‖μ ·‖ₑ) E := by apply preVariation.sum_le
+
+@[simp]
 
 中文:
 定理 enorm_measure_le_variation
@@ -304,7 +385,10 @@ theorem enorm_measure_le_variation
   · simp_all
   simp only [variation_apply, preVariation, ennrealToMeasure_apply hE, ennrealPreVariation_apply]
   calc
-    ‖μ E‖ₑ = ∑ p in (Finpartition.indiscrete hE').parts, ‖μ p‖ₑ := by si
+    ‖μ E‖ₑ = ∑ p in (Finpartition.indiscrete hE').parts, ‖μ p‖ₑ := by simp
+    _ <= preVariationFun (‖μ ·‖ₑ) E := by apply preVariation.sum_le
+
+@[simp]
 
 Depends on / 依赖: Finpartition, Finpartition.indiscrete, MeasurableSet, Subtype, ennrealPreVariation_apply, ennrealToMeasure_apply, indiscrete, preVariation, preVariation.sum_le, preVariationFun, sum_le, variation_apply
 -/
@@ -390,7 +474,14 @@ lemma variation_apply_le_of_forall_enorm_le
   calc
     ∑ x in i.parts, ‖μ x‖ₑ <= ∑ x in i.parts, m x := Finset.sum_le_sum
         (fun s hs => h s s.property (i.le hs))
-    _ = m (i.pa
+    _ = m (i.parts.sup Subtype.val) := by
+      rw [sup_set_eq_biUnion]
+      refine (MeasureTheory.measure_biUnion_finset ?_ fun b _ => b.property).symm
+      intro a ha b hb hab
+      simpa [disjoint_iff, Subtype.ext_iff] using i.disjoint ha hb hab
+    _ <= m s := by
+      rw [sup_set_eq_biUnion]
+exact measure_mono Set.iUnion₂_subset fun _ hp => Subtype.coe_le_coe.mpr (i.le hp)
 
 中文:
 引理 variation_apply_le_of_对任意_enorm_le
@@ -402,7 +493,14 @@ lemma variation_apply_le_of_forall_enorm_le
   calc
     ∑ x in i.parts, ‖μ x‖ₑ <= ∑ x in i.parts, m x := Finset.sum_le_sum
         (fun s hs => h s s.property (i.le hs))
-    _ = m (i.pa
+    _ = m (i.parts.sup Subtype.val) := by
+      rw [sup_set_eq_biUnion]
+      refine (MeasureTheory.measure_biUnion_finset ?_ fun b _ => b.property).symm
+      intro a ha b hb hab
+      simpa [disjoint_iff, Subtype.ext_iff] using i.disjoint ha hb hab
+    _ <= m s := by
+      rw [sup_set_eq_biUnion]
+exact measure_mono Set.iUnion₂_subset fun _ hp => Subtype.coe_le_coe.mpr (i.le hp)
 
 Depends on / 依赖: Finset, Finset.sum_le_sum, MeasureTheory, MeasureTheory.measure_biUnion_finset, Subtype, Subtype.ext_iff, Subtype.val, b.property, disjoint, disjoint_iff, dite_true, ennrealPreVariation_apply, ennrealToMeasure_apply, ext_iff, i.disjoint, i.le, i.parts, i.parts.sup, iSup_le_iff, measure_biUnion_finset
 -/
@@ -525,7 +623,7 @@ lemma variation_apply_eq_zero
     apply (enorm_measure_le_variation _ _).trans (measure_mono hts)
   · suffices μ.variation s <= (0 : Measure X) s by simpa
     apply variation_apply_le_of_forall_enorm_le hs (fun t ht hts => ?_)
-    simp [
+    simp [h t hts ht]
 
 中文:
 引理 variation_apply_eq_zero
@@ -536,7 +634,7 @@ lemma variation_apply_eq_zero
     apply (enorm_measure_le_variation _ _).trans (measure_mono hts)
   · suffices μ.variation s <= (0 : Measure X) s by simpa
     apply variation_apply_le_of_forall_enorm_le hs (fun t ht hts => ?_)
-    simp [
+    simp [h t hts ht]
 
 Depends on / 依赖: Measure, enorm_eq_zero, enorm_measure_le_variation, le_zero_iff, measure_mono, variation, variation_apply_le_of_forall_enorm_le
 -/
@@ -595,7 +693,16 @@ lemma variation_restrict
     apply enorm_measure_le_variation
   · apply Measure.le_iff.2 (fun t ht => ?_)
     simp only [ht, Measure.restrict_apply]
-    calc μ.variat
+    calc μ.variation (t inter s)
+    _ <= (μ.restrict s).variation (t inter s) := by
+      apply variation_apply_le_of_forall_enorm_le (ht.inter hs) (fun u u_meas hu => ?_)
+      have : μ u = μ.restrict s u :=
+        (VectorMeasure.restrict_eq_self _ hs u_meas (hu.trans inter_subset_right)).symm
+      rw [this]
+      apply enorm_measure_le_variation
+    _ <= (μ.restrict s).variation t := by
+      gcongr
+      exact Set.inter_subset_left
 
 中文:
 引理 variation_restrict
@@ -607,7 +714,16 @@ lemma variation_restrict
     apply enorm_measure_le_variation
   · apply Measure.le_iff.2 (fun t ht => ?_)
     simp only [ht, Measure.restrict_apply]
-    calc μ.variat
+    calc μ.variation (t inter s)
+    _ <= (μ.restrict s).variation (t inter s) := by
+      apply variation_apply_le_of_forall_enorm_le (ht.inter hs) (fun u u_meas hu => ?_)
+      have : μ u = μ.restrict s u :=
+        (VectorMeasure.restrict_eq_self _ hs u_meas (hu.trans inter_subset_right)).symm
+      rw [this]
+      apply enorm_measure_le_variation
+    _ <= (μ.restrict s).variation t := by
+      gcongr
+      exact Set.inter_subset_left
 
 Depends on / 依赖: Measure, Measure.le_iff, Measure.restrict_apply, VectorMeasure, VectorMeasure.restrict_apply, VectorMeasure.restrict_eq_self, enorm_measure_le_variation, ht.inter, le_antisymm, le_iff, restrict, restrict_apply, restrict_eq_self, u_meas, variation, variation_apply_le_of_forall_enorm_le, variation_le_of_forall_enorm_le
 -/
@@ -735,7 +851,16 @@ theorem _root_.MeasurableEmbedding.variation_map
   simp only [hφ.measurable, hs, Measure.map_apply]
   have : (μ.map φ).variation s = (μ.map φ).variation (s inter range φ) := by
     nth_rw 1 [← inter_union_sdiff s (range φ)]
-    have : (μ.map φ).variation (s \ rang
+    have : (μ.map φ).variation (s \ range φ) = 0 := by
+      apply (variation_apply_eq_zero (hs.diff hφ.measurableSet_range)).2 (fun t ht t_meas => ?_)
+      have : φ ⁻¹' t = ∅ := by grind
+      simp [map_apply, t_meas, hφ.measurable, this]
+    rw [measure_union (by grind) (hs.diff hφ.measurableSet_range)]; rw [this]; rw [add_zero]
+  rw [this]; rw [← hφ.comap_preimage]
+  apply variation_le_of_forall_enorm_le (fun t ht => ?_)
+  simp only [hφ.comap_apply]
+  apply le_trans ?_ (enorm_measure_le_variation _ _)
+  rw [map_apply _ hφ.measurable (hφ.measurableSet_image.2 ht)]; rw [preimage_image_eq _ hφ.injective]
 
 中文:
 定理 _root_.可测嵌入.variation_map
@@ -746,7 +871,16 @@ theorem _root_.MeasurableEmbedding.variation_map
   simp only [hφ.measurable, hs, Measure.map_apply]
   have : (μ.map φ).variation s = (μ.map φ).variation (s inter range φ) := by
     nth_rw 1 [← inter_union_sdiff s (range φ)]
-    have : (μ.map φ).variation (s \ rang
+    have : (μ.map φ).variation (s \ range φ) = 0 := by
+      apply (variation_apply_eq_zero (hs.diff hφ.measurableSet_range)).2 (fun t ht t_meas => ?_)
+      have : φ ⁻¹' t = ∅ := by grind
+      simp [map_apply, t_meas, hφ.measurable, this]
+    rw [measure_union (by grind) (hs.diff hφ.measurableSet_range)]; rw [this]; rw [add_zero]
+  rw [this]; rw [← hφ.comap_preimage]
+  apply variation_le_of_forall_enorm_le (fun t ht => ?_)
+  simp only [hφ.comap_apply]
+  apply le_trans ?_ (enorm_measure_le_variation _ _)
+  rw [map_apply _ hφ.measurable (hφ.measurableSet_image.2 ht)]; rw [preimage_image_eq _ hφ.injective]
 
 Depends on / 依赖: Measure, Measure.le_iff, Measure.map_apply, hs.diff, inter_union_sdiff, le_antisymm, le_iff, map_apply, measurable, measurableSet_range, measure_union, nth_rw, t_meas, variation, variation_apply_eq_zero, variation_map_le
 -/
@@ -911,7 +1045,8 @@ lemma variation_smul
   _ <= ‖c‖₊ • ‖c⁻¹‖₊ • (c • μ).variation := by
     gcongr
     exact variation_smul_le
-  _ = (c • μ).var
+  _ = (c • μ).variation := by
+    simp [smul_smul, mul_inv_cancel₀ (nnnorm_ne_zero_iff.mpr hc)]
 
 中文:
 引理 variation_smul
@@ -925,7 +1060,8 @@ lemma variation_smul
   _ <= ‖c‖₊ • ‖c⁻¹‖₊ • (c • μ).variation := by
     gcongr
     exact variation_smul_le
-  _ = (c • μ).var
+  _ = (c • μ).variation := by
+    simp [smul_smul, mul_inv_cancel₀ (nnnorm_ne_zero_iff.mpr hc)]
 
 Depends on / 依赖: eq_or_ne, le_antisymm, nnnorm_ne_zero_iff, nnnorm_ne_zero_iff.mpr, smul_smul, variation, variation_smul_le
 -/
@@ -958,7 +1094,7 @@ instance [Finite
     let : Fintype X := Fintype.ofFinite X
     simp only [variation_apply, preVariation_apply, MeasurableSet.univ, ennrealToMeasure_apply,
       ennrealPreVariation_apply, preVariationFun, ↓reduceDIte, ← sup_univ_eq_ciSup]
-    exact (Finset.sup_lt_iff (by simp)).2 (fun b hb => by sim
+    exact (Finset.sup_lt_iff (by simp)).2 (fun b hb => by simp [ENNReal.sum_lt_top, enorm_lt_top])
 
 中文:
 实例 [有限
@@ -968,7 +1104,7 @@ instance [Finite
     let : Fintype X := Fintype.ofFinite X
     simp only [variation_apply, preVariation_apply, MeasurableSet.univ, ennrealToMeasure_apply,
       ennrealPreVariation_apply, preVariationFun, ↓reduceDIte, ← sup_univ_eq_ciSup]
-    exact (Finset.sup_lt_iff (by simp)).2 (fun b hb => by sim
+    exact (Finset.sup_lt_iff (by simp)).2 (fun b hb => by simp [ENNReal.sum_lt_top, enorm_lt_top])
 
 Depends on / 依赖: ENNReal, ENNReal.sum_lt_top, Finset, Finset.sup_lt_iff, Fintype, Fintype.ofFinite, MeasurableSet, MeasurableSet.univ, classical, ennrealPreVariation_apply, ennrealToMeasure_apply, enorm_lt_top, ofFinite, preVariationFun, preVariation_apply, reduceDIte, sum_lt_top, sup_lt_iff, sup_univ_eq_ciSup, variation_apply
 -/
@@ -1026,7 +1162,57 @@ lemma _root_.MeasureTheory.SignedMeasure.exists_subset_lt_enorm_apply_of_lt_vari
   /- One may almost realize the variation through a partition into finitely many sets.
   As their measures are real numbers, we can group together those of positive measure, and
   also those of negative measure. This gives two measurable sets. Among these two, the one with the
-  largest measure i
+  largest measure in absolute value satisfies the result. -/
+  obtain ⟨P, Ps, P_disj, P_meas, hP⟩ : exists (P : Finset (Set X)), (forall t in P, t subseteq s) ∧
+    ((P : Set (Set X)).PairwiseDisjoint id) ∧
+    (forall t in P, MeasurableSet t) ∧ a < ∑ p in P, ‖μ p‖ₑ := exists_lt_sum_of_lt_variation _ hs ha
+  have I : (∑ p in P.filter (fun p => 0 <= μ p), ‖μ p‖ₑ) =
+      ‖μ (⋃ p in P.filter (fun p => 0 <= μ p), p)‖ₑ := by
+    simp only [Real.norm_eq_abs, enorm_eq_nnnorm,
+      ← ENNReal.ofNNReal_finsetSum, ENNReal.coe_inj, ← NNReal.coe_inj,
+      NNReal.coe_sum, coe_nnnorm, Real.norm_eq_abs]
+    have A : ∑ x in P with 0 <= μ x, |μ x| = μ (⋃ x in P.filter (fun x => 0 <= μ x), x) := calc
+      _ = ∑ x in P with 0 <= μ x, μ x := by
+        apply Finset.sum_congr rfl (fun p hp => ?_)
+        simp only [Finset.mem_filter] at hp
+        simp [hp]
+      _ = μ (⋃ x in P.filter (fun x => 0 <= μ x), x) := by
+        rw [of_biUnion_finset]
+        · apply P_disj.subset (by grind)
+        · grind
+    rw [A]; rw [abs_of_nonneg]
+    rw [← A]
+    exact Finset.sum_nonneg (fun p hp => by positivity)
+  have J : (∑ p in P.filter (fun p => ¬ 0 <= μ p), ‖μ p‖ₑ) =
+      ‖μ (⋃ p in P.filter (fun p => ¬ 0 <= μ p), p)‖ₑ := by
+    simp only [not_le, enorm_eq_nnnorm, ← ENNReal.ofNNReal_finsetSum,
+      ENNReal.coe_inj, ← NNReal.coe_inj, NNReal.coe_sum, coe_nnnorm, Real.norm_eq_abs]
+    have A : ∑ x in P with μ x < 0, |μ x| = - μ (⋃ x in P.filter (fun x => μ x < 0), x) := calc
+      ∑ x in P with μ x < 0, |μ x|
+      _ = ∑ x in P with μ x < 0, -μ x := by
+        refine Finset.sum_congr rfl (fun p hp => ?_)
+        simp only [Finset.mem_filter] at hp
+        simp [hp.2.le]
+      _ = -μ (⋃ x in P.filter (fun x => μ x < 0), x) := by
+        rw [of_biUnion_finset]
+        · simp
+        · apply P_disj.subset (by grind)
+        · grind
+    rw [A]; rw [abs_of_nonpos]
+    rw [← neg_nonneg]; rw [← A]
+    exact Finset.sum_nonneg (fun p hp => by positivity)
+  simp_rw [two_mul]
+  rw [← Finset.sum_filter_add_sum_filter_not _ (fun p => 0 <= μ p)]; rw [I]; rw [J] at hP
+  rcases le_total (‖μ (⋃ p in P.filter (fun p => ¬ 0 <= μ p), p)‖ₑ)
+    (‖μ (⋃ p in P.filter (fun p => 0 <= μ p), p)‖ₑ) with h | h
+  · refine ⟨⋃ p in P.filter (fun p => 0 <= μ p), p, ?_, ?_, ?_⟩
+    · simp; grind
+    · exact Finset.measurableSet_biUnion _ (by grind)
+    · exact hP.trans_le (by gcongr)
+  · refine ⟨⋃ p in P.filter (fun p => ¬ 0 <= μ p), p, ?_, ?_, ?_⟩
+    · simp; grind
+    · exact Finset.measurableSet_biUnion _ (by grind)
+    · exact hP.trans_le (by gcongr)
 
 中文:
 引理 _root_.测度论.符号测度.存在_subset_lt_enorm_apply_of_lt_variation
@@ -1034,7 +1220,57 @@ lemma _root_.MeasureTheory.SignedMeasure.exists_subset_lt_enorm_apply_of_lt_vari
   /- One may almost realize the variation through a partition into finitely many sets.
   As their measures are real numbers, we can group together those of positive measure, and
   also those of negative measure. This gives two measurable sets. Among these two, the one with the
-  largest measure i
+  largest measure in absolute value satisfies the result. -/
+  obtain ⟨P, Ps, P_disj, P_meas, hP⟩ : exists (P : Finset (Set X)), (forall t in P, t subseteq s) ∧
+    ((P : Set (Set X)).PairwiseDisjoint id) ∧
+    (forall t in P, MeasurableSet t) ∧ a < ∑ p in P, ‖μ p‖ₑ := exists_lt_sum_of_lt_variation _ hs ha
+  have I : (∑ p in P.filter (fun p => 0 <= μ p), ‖μ p‖ₑ) =
+      ‖μ (⋃ p in P.filter (fun p => 0 <= μ p), p)‖ₑ := by
+    simp only [Real.norm_eq_abs, enorm_eq_nnnorm,
+      ← ENNReal.ofNNReal_finsetSum, ENNReal.coe_inj, ← NNReal.coe_inj,
+      NNReal.coe_sum, coe_nnnorm, Real.norm_eq_abs]
+    have A : ∑ x in P with 0 <= μ x, |μ x| = μ (⋃ x in P.filter (fun x => 0 <= μ x), x) := calc
+      _ = ∑ x in P with 0 <= μ x, μ x := by
+        apply Finset.sum_congr rfl (fun p hp => ?_)
+        simp only [Finset.mem_filter] at hp
+        simp [hp]
+      _ = μ (⋃ x in P.filter (fun x => 0 <= μ x), x) := by
+        rw [of_biUnion_finset]
+        · apply P_disj.subset (by grind)
+        · grind
+    rw [A]; rw [abs_of_nonneg]
+    rw [← A]
+    exact Finset.sum_nonneg (fun p hp => by positivity)
+  have J : (∑ p in P.filter (fun p => ¬ 0 <= μ p), ‖μ p‖ₑ) =
+      ‖μ (⋃ p in P.filter (fun p => ¬ 0 <= μ p), p)‖ₑ := by
+    simp only [not_le, enorm_eq_nnnorm, ← ENNReal.ofNNReal_finsetSum,
+      ENNReal.coe_inj, ← NNReal.coe_inj, NNReal.coe_sum, coe_nnnorm, Real.norm_eq_abs]
+    have A : ∑ x in P with μ x < 0, |μ x| = - μ (⋃ x in P.filter (fun x => μ x < 0), x) := calc
+      ∑ x in P with μ x < 0, |μ x|
+      _ = ∑ x in P with μ x < 0, -μ x := by
+        refine Finset.sum_congr rfl (fun p hp => ?_)
+        simp only [Finset.mem_filter] at hp
+        simp [hp.2.le]
+      _ = -μ (⋃ x in P.filter (fun x => μ x < 0), x) := by
+        rw [of_biUnion_finset]
+        · simp
+        · apply P_disj.subset (by grind)
+        · grind
+    rw [A]; rw [abs_of_nonpos]
+    rw [← neg_nonneg]; rw [← A]
+    exact Finset.sum_nonneg (fun p hp => by positivity)
+  simp_rw [two_mul]
+  rw [← Finset.sum_filter_add_sum_filter_not _ (fun p => 0 <= μ p)]; rw [I]; rw [J] at hP
+  rcases le_total (‖μ (⋃ p in P.filter (fun p => ¬ 0 <= μ p), p)‖ₑ)
+    (‖μ (⋃ p in P.filter (fun p => 0 <= μ p), p)‖ₑ) with h | h
+  · refine ⟨⋃ p in P.filter (fun p => 0 <= μ p), p, ?_, ?_, ?_⟩
+    · simp; grind
+    · exact Finset.measurableSet_biUnion _ (by grind)
+    · exact hP.trans_le (by gcongr)
+  · refine ⟨⋃ p in P.filter (fun p => ¬ 0 <= μ p), p, ?_, ?_, ?_⟩
+    · simp; grind
+    · exact Finset.measurableSet_biUnion _ (by grind)
+    · exact hP.trans_le (by gcongr)
 -/
 lemma _root_.MeasureTheory.SignedMeasure.exists_subset_lt_enorm_apply_of_lt_variation
     (μ : SignedMeasure X) {s : Set X} (hs : MeasurableSet s)

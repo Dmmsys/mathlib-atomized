@@ -456,7 +456,8 @@ theorem MeasurableSet.residualEq_isOpen
     use (closure U)ᶜ, isClosed_closure.isOpen_compl
 exact .compl hsU.trans .symm closure_residualEq Uo.isLocallyClosed
   | iUnion f _ _ ihf =>
-   
+    choose u uo su using ihf
+    exact ⟨⋃ i, u i, isOpen_iUnion uo, .countable_iUnion su⟩
 
 中文:
 定理 可测集.residualEq_isOpen
@@ -469,7 +470,8 @@ exact .compl hsU.trans .symm closure_residualEq Uo.isLocallyClosed
     use (closure U)ᶜ, isClosed_closure.isOpen_compl
 exact .compl hsU.trans .symm closure_residualEq Uo.isLocallyClosed
   | iUnion f _ _ ihf =>
-   
+    choose u uo su using ihf
+    exact ⟨⋃ i, u i, isOpen_iUnion uo, .countable_iUnion su⟩
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.induction_on_open, Uo.isLocallyClosed, closure, closure_residualEq, countable_iUnion, hsU.trans, iUnion, induction_on_open, isClosed_closure, isClosed_closure.isOpen_compl, isLocallyClosed, isOpen, isOpen_compl, isOpen_iUnion
 -/

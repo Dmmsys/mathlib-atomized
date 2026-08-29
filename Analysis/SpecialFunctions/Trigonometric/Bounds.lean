@@ -52,7 +52,10 @@ theorem sin_lt
   have := le_of_abs_le (sin_bound <| show |x| <= 1 by rwa [hx])
   rw [sub_le_iff_le_add']; rw [hx] at this
   apply this.trans_lt
-  rw [sub_add]; rw [sub_lt_self_iff]; rw [sub_pos]; rw
+  rw [sub_add]; rw [sub_lt_self_iff]; rw [sub_pos]; rw [div_eq_mul_inv (x ^ 3)]
+  refine mul_lt_mul' ?_ (by norm_num) (by norm_num) (pow_pos h 3)
+  apply pow_le_pow_of_le_one h.le h'
+  simp
 
 中文:
 定理 sin_lt
@@ -65,7 +68,10 @@ theorem sin_lt
   have := le_of_abs_le (sin_bound <| show |x| <= 1 by rwa [hx])
   rw [sub_le_iff_le_add']; rw [hx] at this
   apply this.trans_lt
-  rw [sub_add]; rw [sub_lt_self_iff]; rw [sub_pos]; rw
+  rw [sub_add]; rw [sub_lt_self_iff]; rw [sub_pos]; rw [div_eq_mul_inv (x ^ 3)]
+  refine mul_lt_mul' ?_ (by norm_num) (by norm_num) (pow_pos h 3)
+  apply pow_le_pow_of_le_one h.le h'
+  simp
 
 Depends on / 依赖: abs_of_nonneg, div_eq_mul_inv, h.le, le_of_abs_le, lt_or_ge, mul_lt_mul, pow_le_pow_of_le_one, pow_pos, sin_bound, sin_le_one, sub_add, sub_le_iff_le_add, sub_lt_self_iff, sub_pos, this.trans_lt, trans_lt
 -/
@@ -330,7 +336,7 @@ simpa using this (neg_ne_zero.2 hx) neg_pos_of_neg hx.lt_of_le hx₀
     exact pow_lt_pow_left₀ (sin_lt hx₀)
       (sin_nonneg_of_nonneg_of_le_pi hx₀.le (by linarith [two_le_pi])) (by simp)
   case inr =>
-    exact 
+    exact (sin_sq_le_one _).trans_lt (by rwa [one_lt_sq_iff₀ hx₀.le])
 
 中文:
 引理 sin_sq_lt_sq
@@ -345,7 +351,7 @@ simpa using this (neg_ne_zero.2 hx) neg_pos_of_neg hx.lt_of_le hx₀
     exact pow_lt_pow_left₀ (sin_lt hx₀)
       (sin_nonneg_of_nonneg_of_le_pi hx₀.le (by linarith [two_le_pi])) (by simp)
   case inr =>
-    exact 
+    exact (sin_sq_le_one _).trans_lt (by rwa [one_lt_sq_iff₀ hx₀.le])
 
 Depends on / 依赖: hx.lt_of_le, le_or_gt, lt_of_le, neg_ne_zero, neg_pos_of_neg, sin_lt, sin_nonneg_of_nonneg_of_le_pi, sin_sq_le_one, trans_lt, two_le_pi
 -/
@@ -534,7 +540,9 @@ lemma cos_le_one_sub_mul_cos_sq
 case inr => simpa using this (by rwa [abs_neg]) neg_nonneg.2 le_of_not_ge hx₀
   rw [abs_of_nonneg hx₀] at hx
   have : x / π <= sin (x / 2) := by simpa using mul_le_sin (x := x / 2) (by positivity) (by linarith)
-  have := (pow_le_pow_left₀ (by positivity) this 2).trans_eq (sin_
+  have := (pow_le_pow_left₀ (by positivity) this 2).trans_eq (sin_sq_eq_half_sub _)
+  ring_nf at this ⊢
+  linarith
 
 中文:
 引理 cos_le_one_sub_mul_cos_sq
@@ -545,7 +553,9 @@ case inr => simpa using this (by rwa [abs_neg]) neg_nonneg.2 le_of_not_ge hx₀
 case inr => simpa using this (by rwa [abs_neg]) neg_nonneg.2 le_of_not_ge hx₀
   rw [abs_of_nonneg hx₀] at hx
   have : x / π <= sin (x / 2) := by simpa using mul_le_sin (x := x / 2) (by positivity) (by linarith)
-  have := (pow_le_pow_left₀ (by positivity) this 2).trans_eq (sin_
+  have := (pow_le_pow_left₀ (by positivity) this 2).trans_eq (sin_sq_eq_half_sub _)
+  ring_nf at this ⊢
+  linarith
 
 Depends on / 依赖: abs_neg, abs_of_nonneg, ext_iff, le_of_not_ge, mul_le_sin, neg_nonneg, ring_nf, sin_sq_eq_half_sub, trans_eq
 -/
@@ -572,7 +582,9 @@ theorem sin_gt_sub_cube
     ring
   have hmono : StrictMonoOn f (Set.Ici 0) := by
     apply strictMonoOn_of_deriv_pos (convex_Ici 0) (by fun_prop)
-    grind [one_su
+    grind [one_sub_sq_div_two_lt_cos, interior_Ici]
+  have h0 : f 0 < f x := hmono (by simp) hx.le hx
+  grind [Real.sin_zero]
 
 中文:
 定理 sin_gt_sub_cube
@@ -585,7 +597,9 @@ theorem sin_gt_sub_cube
     ring
   have hmono : StrictMonoOn f (Set.Ici 0) := by
     apply strictMonoOn_of_deriv_pos (convex_Ici 0) (by fun_prop)
-    grind [one_su
+    grind [one_sub_sq_div_two_lt_cos, interior_Ici]
+  have h0 : f 0 < f x := hmono (by simp) hx.le hx
+  grind [Real.sin_zero]
 
 Depends on / 依赖: G.map_injective, Real.sin, Real.sin_zero, Set.Ici, StrictMonoOn, convex_Ici, f.left, fun_prop, hderiv, hx.le, interior_Ici, map_injective, one_sub_sq_div_two_lt_cos, sin_zero, strictMonoOn_of_deriv_pos
 -/
@@ -688,7 +702,30 @@ theorem lt_tan
   have half_pi_pos : 0 < π / 2 := div_pos pi_pos two_pos
   have cos_pos {y : Real} (hy : y in U) : 0 < cos y := by
     exact cos_pos_of_mem_Ioo (Ico_subset_Ioo_left (neg_lt_zero.mpr half_pi_pos) hy)
-  have sin_pos {
+  have sin_pos {y : Real} (hy : y in interior U) : 0 < sin y := by
+    rw [intU] at hy
+    exact sin_pos_of_mem_Ioo (Ioo_subset_Ioo_right (div_le_self pi_pos.le one_le_two) hy)
+  have tan_cts_U : ContinuousOn tan U := by
+    apply ContinuousOn.mono continuousOn_tan
+    intro z hz
+    simp only [mem_ofPred_eq]
+    exact (cos_pos hz).ne'
+  have tan_minus_id_cts : ContinuousOn (fun y : Real => tan y - y) U := tan_cts_U.sub continuousOn_id
+  have deriv_pos (y : Real) (hy : y in interior U) : 0 < deriv (fun y' : Real => tan y' - y') y := by
+    have := cos_pos (interior_subset hy)
+    simp only [deriv_tan_sub_id y this.ne', one_div, gt_iff_lt, sub_pos]
+    norm_cast
+    have bd2 : cos y ^ 2 < 1 := by
+      apply lt_of_le_of_ne y.cos_sq_le_one
+      rw [cos_sq']
+      simpa only [Ne, sub_eq_self, sq_eq_zero_iff] using (sin_pos hy).ne'
+    rwa [lt_inv_comm₀, inv_one]
+    · exact zero_lt_one
+    simpa only [sq, mul_self_pos] using this.ne'
+  have mono := strictMonoOn_of_deriv_pos (convex_Ico 0 (π / 2)) tan_minus_id_cts deriv_pos
+  have zero_in_U : (0 : Real) in U := by rwa [left_mem_Ico]
+  have x_in_U : x in U := ⟨h1.le, h2⟩
+  simpa only [tan_zero, sub_zero, sub_pos] using mono zero_in_U x_in_U h1
 
 中文:
 定理 lt_tan
@@ -700,7 +737,30 @@ theorem lt_tan
   have half_pi_pos : 0 < π / 2 := div_pos pi_pos two_pos
   have cos_pos {y : Real} (hy : y in U) : 0 < cos y := by
     exact cos_pos_of_mem_Ioo (Ico_subset_Ioo_left (neg_lt_zero.mpr half_pi_pos) hy)
-  have sin_pos {
+  have sin_pos {y : Real} (hy : y in interior U) : 0 < sin y := by
+    rw [intU] at hy
+    exact sin_pos_of_mem_Ioo (Ioo_subset_Ioo_right (div_le_self pi_pos.le one_le_two) hy)
+  have tan_cts_U : ContinuousOn tan U := by
+    apply ContinuousOn.mono continuousOn_tan
+    intro z hz
+    simp only [mem_ofPred_eq]
+    exact (cos_pos hz).ne'
+  have tan_minus_id_cts : ContinuousOn (fun y : Real => tan y - y) U := tan_cts_U.sub continuousOn_id
+  have deriv_pos (y : Real) (hy : y in interior U) : 0 < deriv (fun y' : Real => tan y' - y') y := by
+    have := cos_pos (interior_subset hy)
+    simp only [deriv_tan_sub_id y this.ne', one_div, gt_iff_lt, sub_pos]
+    norm_cast
+    have bd2 : cos y ^ 2 < 1 := by
+      apply lt_of_le_of_ne y.cos_sq_le_one
+      rw [cos_sq']
+      simpa only [Ne, sub_eq_self, sq_eq_zero_iff] using (sin_pos hy).ne'
+    rwa [lt_inv_comm₀, inv_one]
+    · exact zero_lt_one
+    simpa only [sq, mul_self_pos] using this.ne'
+  have mono := strictMonoOn_of_deriv_pos (convex_Ico 0 (π / 2)) tan_minus_id_cts deriv_pos
+  have zero_in_U : (0 : Real) in U := by rwa [left_mem_Ico]
+  have x_in_U : x in U := ⟨h1.le, h2⟩
+  simpa only [tan_zero, sub_zero, sub_pos] using mono zero_in_U x_in_U h1
 
 Depends on / 依赖: ContinuousOn, Ico_subset_Ioo_left, Ioo_subset_Ioo_right, cos_pos, cos_pos_of_mem_Ioo, div_le_self, div_pos, half_pi_pos, interior, interior_Ico, neg_lt_zero, neg_lt_zero.mpr, one_le_two, pi_pos, pi_pos.le, sin_pos, sin_pos_of_mem_Ioo, tan_cts_U, two_pos
 -/
@@ -777,7 +837,16 @@ theorem cos_lt_one_div_sqrt_sq_add_one
       · rw [cos_neg]
       · rw [neg_sq]
   intro y hy1 hy2
-  have hy3 : ↑0 
+  have hy3 : ↑0 < y ^ 2 + 1 := by linarith [sq_nonneg y]
+  rcases lt_or_ge y (π / 2) with (hy2' | hy1')
+  · -- Main case : `0 < y < π / 2`
+    have hy4 : 0 < cos y := cos_pos_of_mem_Ioo ⟨by linarith, hy2'⟩
+    rw [← abs_of_nonneg (cos_nonneg_of_mem_Icc ⟨by linarith]; rw [hy2'.le⟩)]; rw [←
+      abs_of_nonneg (one_div_nonneg.mpr (sqrt_nonneg _))]; rw [← sq_lt_sq]; rw [div_pow]; rw [one_pow]; rw [sq_sqrt hy3.le]; rw [lt_one_div (pow_pos hy4 _) hy3]; rw [← inv_one_add_tan_sq hy4.ne']; rw [one_div]; rw [inv_inv]; rw [add_comm]; rw [add_lt_add_iff_left]; rw [sq_lt_sq]; rw [abs_of_pos hy1]; rw [abs_of_nonneg (tan_nonneg_of_nonneg_of_le_pi_div_two hy1.le hy2'.le)]
+    exact Real.lt_tan hy1 hy2'
+  · -- Easy case : `π / 2 ≤ y ≤ 3 * π / 2`
+    refine lt_of_le_of_lt ?_ (one_div_pos.mpr <| sqrt_pos_of_pos hy3)
+    exact cos_nonpos_of_pi_div_two_le_of_le hy1' (by linarith [pi_pos])
 
 中文:
 定理 cos_lt_one_div_sqrt_sq_add_one
@@ -790,7 +859,16 @@ theorem cos_lt_one_div_sqrt_sq_add_one
       · rw [cos_neg]
       · rw [neg_sq]
   intro y hy1 hy2
-  have hy3 : ↑0 
+  have hy3 : ↑0 < y ^ 2 + 1 := by linarith [sq_nonneg y]
+  rcases lt_or_ge y (π / 2) with (hy2' | hy1')
+  · -- Main case : `0 < y < π / 2`
+    have hy4 : 0 < cos y := cos_pos_of_mem_Ioo ⟨by linarith, hy2'⟩
+    rw [← abs_of_nonneg (cos_nonneg_of_mem_Icc ⟨by linarith]; rw [hy2'.le⟩)]; rw [←
+      abs_of_nonneg (one_div_nonneg.mpr (sqrt_nonneg _))]; rw [← sq_lt_sq]; rw [div_pow]; rw [one_pow]; rw [sq_sqrt hy3.le]; rw [lt_one_div (pow_pos hy4 _) hy3]; rw [← inv_one_add_tan_sq hy4.ne']; rw [one_div]; rw [inv_inv]; rw [add_comm]; rw [add_lt_add_iff_left]; rw [sq_lt_sq]; rw [abs_of_pos hy1]; rw [abs_of_nonneg (tan_nonneg_of_nonneg_of_le_pi_div_two hy1.le hy2'.le)]
+    exact Real.lt_tan hy1 hy2'
+  · -- Easy case : `π / 2 ≤ y ≤ 3 * π / 2`
+    refine lt_of_le_of_lt ?_ (one_div_pos.mpr <| sqrt_pos_of_pos hy3)
+    exact cos_nonpos_of_pi_div_two_le_of_le hy1' (by linarith [pi_pos])
 
 Depends on / 依赖: abs_of_nonneg, convert, cos_neg, cos_nonneg_of_mem_Icc, cos_pos_of_mem_Ioo, hx3.symm, lt_or_ge, lt_or_lt_iff_ne, lt_or_lt_iff_ne.mpr, neg_sq, sq_nonneg
 -/

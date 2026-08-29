@@ -204,7 +204,20 @@ theorem gramSchmidt_orthogonal
   revert a
   apply wellFounded_lt.induction b
   intro b ih a h₀
-  simp 
+  simp only [gramSchmidt_def 𝕜 f b, inner_sub_right, inner_sum,
+    starProjection_singleton, inner_smul_right]
+  rw [Finset.sum_eq_single_of_mem a (Finset.mem_Iio.mpr h₀)]
+  · by_cases h : gramSchmidt 𝕜 f a = 0
+    · simp only [h, inner_zero_left, zero_div, zero_mul, sub_zero]
+    · rw [RCLike.ofReal_pow, ← inner_self_eq_norm_sq_to_K, div_mul_cancel₀, sub_self]
+      rwa [inner_self_ne_zero]
+  intro i hi hia
+  simp only [mul_eq_zero, div_eq_zero_iff]
+  right
+  rcases hia.lt_or_gt with hia₁ | hia₂
+  · rw [inner_eq_zero_symm]
+    exact ih a h₀ i hia₁
+  · exact ih i (mem_Iio.1 hi) a hia₂
 
 中文:
 定理 gramSchmidt_orthogonal
@@ -220,7 +233,20 @@ theorem gramSchmidt_orthogonal
   revert a
   apply wellFounded_lt.induction b
   intro b ih a h₀
-  simp 
+  simp only [gramSchmidt_def 𝕜 f b, inner_sub_right, inner_sum,
+    starProjection_singleton, inner_smul_right]
+  rw [Finset.sum_eq_single_of_mem a (Finset.mem_Iio.mpr h₀)]
+  · by_cases h : gramSchmidt 𝕜 f a = 0
+    · simp only [h, inner_zero_left, zero_div, zero_mul, sub_zero]
+    · rw [RCLike.ofReal_pow, ← inner_self_eq_norm_sq_to_K, div_mul_cancel₀, sub_self]
+      rwa [inner_self_ne_zero]
+  intro i hi hia
+  simp only [mul_eq_zero, div_eq_zero_iff]
+  right
+  rcases hia.lt_or_gt with hia₁ | hia₂
+  · rw [inner_eq_zero_symm]
+    exact ih a h₀ i hia₁
+  · exact ih i (mem_Iio.1 hi) a hia₂
 
 Depends on / 依赖: Finset, Finset.mem_Iio.mpr, Finset.sum_eq_single_of_mem, gramSchmidt, gramSchmidt_def, inner_eq_zero_symm, inner_smul_right, inner_sub_right, inner_sum, inner_zero_left, lt_or_gt, mem_Iio, revert, starProjection_singleton, sum_eq_single_of_mem, wellFounded_lt, wellFounded_lt.induction
 -/
@@ -285,7 +311,8 @@ theorem gramSchmidt_inv_triangular
   apply Finset.sum_eq_zero
   rintro k hki'
   have hki : k < i := by simpa using hki'
-  have : ⟪b j, 
+  have : ⟪b j, b k⟫ = 0 := gramSchmidt_orthogonal 𝕜 v (hki.trans hij).ne'
+  simp [this]
 
 中文:
 定理 gramSchmidt_inv_triangular
@@ -299,7 +326,8 @@ theorem gramSchmidt_inv_triangular
   apply Finset.sum_eq_zero
   rintro k hki'
   have hki : k < i := by simpa using hki'
-  have : ⟪b j, 
+  have : ⟪b j, b k⟫ = 0 := gramSchmidt_orthogonal 𝕜 v (hki.trans hij).ne'
+  simp [this]
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, convert, gramSchmidt, gramSchmidt_def, gramSchmidt_orthogonal, hij.ne, hki.trans, inner_add_right, inner_smul_right, inner_sum, sum_eq_zero, zero_add
 -/
@@ -329,7 +357,7 @@ theorem mem_span_gramSchmidt
   simp_rw [starProjection_singleton]
   exact Submodule.add_mem _ (subset_span <| mem_image_of_mem _ hij)
     (Submodule.sum_mem _ fun k hk => smul_mem (span 𝕜 (gramSchmidt 𝕜 f '' Set.Iic j)) _ <|
-subset_span mem_image_of_mem (gramSchmidt 𝕜 f) (Finset.mem_Iio.1 hk).le
+subset_span mem_image_of_mem (gramSchmidt 𝕜 f) (Finset.mem_Iio.1 hk).le.trans hij)
 
 中文:
 定理 mem_span_gramSchmidt
@@ -339,7 +367,7 @@ subset_span mem_image_of_mem (gramSchmidt 𝕜 f) (Finset.mem_Iio.1 hk).le
   simp_rw [starProjection_singleton]
   exact Submodule.add_mem _ (subset_span <| mem_image_of_mem _ hij)
     (Submodule.sum_mem _ fun k hk => smul_mem (span 𝕜 (gramSchmidt 𝕜 f '' Set.Iic j)) _ <|
-subset_span mem_image_of_mem (gramSchmidt 𝕜 f) (Finset.mem_Iio.1 hk).le
+subset_span mem_image_of_mem (gramSchmidt 𝕜 f) (Finset.mem_Iio.1 hk).le.trans hij)
 
 Depends on / 依赖: Finset, Finset.mem_Iio, Set.Iic, Submodule, Submodule.add_mem, Submodule.sum_mem, add_mem, gramSchmidt, gramSchmidt_def, le.trans, mem_Iio, mem_image_of_mem, simp_rw, smul_mem, starProjection_singleton, subset_span, sum_mem
 -/
@@ -365,7 +393,8 @@ theorem gramSchmidt_mem_span
     (Submodule.sum_mem _ fun k hk => ?_)
   let hkj : k < j := (Finset.mem_Iio.1 hk).trans_le hij
   exact smul_mem _ _
-    (span_mono (image_mono <|
+    (span_mono (image_mono <| Set.Iic_subset_Iic.2 hkj.le) <| gramSchmidt_mem_span _ le_rfl)
+termination_by j => j
 
 中文:
 定理 gramSchmidt_mem_span
@@ -378,7 +407,8 @@ theorem gramSchmidt_mem_span
     (Submodule.sum_mem _ fun k hk => ?_)
   let hkj : k < j := (Finset.mem_Iio.1 hk).trans_le hij
   exact smul_mem _ _
-    (span_mono (image_mono <|
+    (span_mono (image_mono <| Set.Iic_subset_Iic.2 hkj.le) <| gramSchmidt_mem_span _ le_rfl)
+termination_by j => j
 
 Depends on / 依赖: Finset, Finset.mem_Iio, Iic_subset_Iic, Set.Iic_subset_Iic, Submodule, Submodule.sub_mem, Submodule.sum_mem, gramSchmidt_def, gramSchmidt_mem_span, hkj.le, image_mono, le_rfl, mem_Iio, mem_image_of_mem, simp_rw, smul_mem, span_mono, starProjection_singleton, sub_mem, subset_span
 -/
@@ -489,7 +519,13 @@ theorem gramSchmidt_of_orthogonal
     rw [Submodule.starProjection_apply]; rw [Submodule.coe_eq_zero]
     suffices span 𝕜 (f '' Set.Iic j) ⟂ 𝕜 ∙ f i by
       apply orthogonalProjectionOnto_apply_of_mem_orthogonal
-      rw [mem_ort
+      rw [mem_orthogonal_singleton_iff_inner_left]; rw [← mem_orthogonal_singleton_iff_inner_right]
+      exact this (gramSchmidt_mem_span 𝕜 f (le_refl j))
+    rw [isOrtho_span]
+    rintro u ⟨k, hk, rfl⟩ v (rfl : v = f i)
+    apply hf
+    exact (lt_of_le_of_lt hk (Finset.mem_Iio.mp hj)).ne
+  · simp
 
 中文:
 定理 gramSchmidt_of_orthogonal
@@ -504,7 +540,13 @@ theorem gramSchmidt_of_orthogonal
     rw [Submodule.starProjection_apply]; rw [Submodule.coe_eq_zero]
     suffices span 𝕜 (f '' Set.Iic j) ⟂ 𝕜 ∙ f i by
       apply orthogonalProjectionOnto_apply_of_mem_orthogonal
-      rw [mem_ort
+      rw [mem_orthogonal_singleton_iff_inner_left]; rw [← mem_orthogonal_singleton_iff_inner_right]
+      exact this (gramSchmidt_mem_span 𝕜 f (le_refl j))
+    rw [isOrtho_span]
+    rintro u ⟨k, hk, rfl⟩ v (rfl : v = f i)
+    apply hf
+    exact (lt_of_le_of_lt hk (Finset.mem_Iio.mp hj)).ne
+  · simp
 
 Depends on / 依赖: Finset, Finset.mem, Finset.sum_eq_zero, Set.Iic, Submodule, Submodule.coe_eq_zero, Submodule.starProjection_apply, coe_eq_zero, gramSchmidt_def, gramSchmidt_mem_span, isOrtho_span, le_refl, lt_of_le_of_lt, mem_orthogonal_singleton_iff_inner_left, mem_orthogonal_singleton_iff_inner_right, orthogonalProjectionOnto_apply_of_mem_orthogonal, starProjection_apply, sum_eq_zero
 -/
@@ -543,7 +585,14 @@ theorem gramSchmidt_ne_zero_coe
     intro a ha
     simp only [starProjection_singleton]
     apply Submodule.smul_mem _ _ _
-    rw [Finset.mem_Iio]
+    rw [Finset.mem_Iio] at ha
+    exact subset_span ⟨a, ha, by rfl⟩
+  have h₂ : (f ∘ ((↑) : Set.Iic n -> ι)) ⟨n, le_refl n⟩ in
+      span 𝕜 (f ∘ ((↑) : Set.Iic n -> ι) '' Set.Iio ⟨n, le_refl n⟩) := by
+    rw [image_comp]
+    simpa using h₁
+  apply LinearIndependent.notMem_span_image h₀ _ h₂
+  simp only [Set.mem_Iio, lt_self_iff_false, not_false_iff]
 
 中文:
 定理 gramSchmidt_ne_zero_coe
@@ -556,7 +605,14 @@ theorem gramSchmidt_ne_zero_coe
     intro a ha
     simp only [starProjection_singleton]
     apply Submodule.smul_mem _ _ _
-    rw [Finset.mem_Iio]
+    rw [Finset.mem_Iio] at ha
+    exact subset_span ⟨a, ha, by rfl⟩
+  have h₂ : (f ∘ ((↑) : Set.Iic n -> ι)) ⟨n, le_refl n⟩ in
+      span 𝕜 (f ∘ ((↑) : Set.Iic n -> ι) '' Set.Iio ⟨n, le_refl n⟩) := by
+    rw [image_comp]
+    simpa using h₁
+  apply LinearIndependent.notMem_span_image h₀ _ h₂
+  simp only [Set.mem_Iio, lt_self_iff_false, not_false_iff]
 
 Depends on / 依赖: Finset, Finset.mem_Iio, LinearIndependent, LinearIndependent.notMem_, Set.Iic, Set.Iio, Submodule, Submodule.smul_mem, Submodule.sum_mem, gramSchmidt_def, image_comp, le_refl, mem_Iio, notMem_, smul_mem, span_gramSchmidt_Iio, starProjection_singleton, subset_span, sum_mem, zero_add
 -/
@@ -608,7 +664,8 @@ theorem gramSchmidt_triangular
     subset_span ((Set.mem_image _ _ _).2 ⟨i, hij, rfl⟩)
   have : gramSchmidt 𝕜 b i in span 𝕜 (b '' Set.Iio j) := by rwa [← span_gramSchmidt_Iio 𝕜 b j]
   have : ↑(b.repr (gramSchmidt 𝕜 b i)).support subseteq Set.Iio j :=
-    Ba
+    Basis.repr_support_subset_of_mem_span b (Set.Iio j) this
+  exact (Finsupp.mem_supported' _ _).1 ((Finsupp.mem_supported 𝕜 _).2 this) j Set.self_notMem_Iio
 
 中文:
 定理 gramSchmidt_triangular
@@ -618,7 +675,8 @@ theorem gramSchmidt_triangular
     subset_span ((Set.mem_image _ _ _).2 ⟨i, hij, rfl⟩)
   have : gramSchmidt 𝕜 b i in span 𝕜 (b '' Set.Iio j) := by rwa [← span_gramSchmidt_Iio 𝕜 b j]
   have : ↑(b.repr (gramSchmidt 𝕜 b i)).support subseteq Set.Iio j :=
-    Ba
+    Basis.repr_support_subset_of_mem_span b (Set.Iio j) this
+  exact (Finsupp.mem_supported' _ _).1 ((Finsupp.mem_supported 𝕜 _).2 this) j Set.self_notMem_Iio
 
 Depends on / 依赖: Basis.repr_support_subset_of_mem_span, Finsupp, Finsupp.mem_supported, Set.Iio, Set.mem_image, Set.self_notMem_Iio, b.repr, gramSchmidt, mem_image, mem_supported, repr_support_subset_of_mem_span, self_notMem_Iio, span_gramSchmidt_Iio, subset_span, subseteq, support
 -/
@@ -796,7 +854,8 @@ theorem gramSchmidtNormed_orthonormal
   · intro i j hij
     simp only [gramSchmidtNormed, inner_smul_left, inner_smul_right, RCLike.conj_inv,
       RCLike.conj_ofReal, mul_eq_zero, inv_eq_zero, RCLike.ofReal_eq_zero, norm_eq_zero]
-    r
+    repeat' right
+    exact gramSchmidt_orthogonal 𝕜 f hij
 
 中文:
 定理 gramSchmidtNormed_orthonormal
@@ -808,7 +867,8 @@ theorem gramSchmidtNormed_orthonormal
   · intro i j hij
     simp only [gramSchmidtNormed, inner_smul_left, inner_smul_right, RCLike.conj_inv,
       RCLike.conj_ofReal, mul_eq_zero, inv_eq_zero, RCLike.ofReal_eq_zero, norm_eq_zero]
-    r
+    repeat' right
+    exact gramSchmidt_orthogonal 𝕜 f hij
 
 Depends on / 依赖: Orthonormal, RCLike, RCLike.conj_inv, RCLike.conj_ofReal, RCLike.ofReal_eq_zero, conj_inv, conj_ofReal, gramSchmidtNormed, gramSchmidtNormed_unit_length, gramSchmidt_orthogonal, imp_true_iff, inner_smul_left, inner_smul_right, inv_eq_zero, mul_eq_zero, norm_eq_zero, ofReal_eq_zero, repeat
 -/
@@ -867,7 +927,10 @@ theorem span_gramSchmidtNormed
     (Set.image_subset_iff.2 fun i hi =>
       span_mono (image_mono <| singleton_subset_set_iff.2 hi) ?_)
   simp only [coe_singleton, Set.image_singleton]
-  by_cases h : gramSchmidt
+  by_cases h : gramSchmidt 𝕜 f i = 0
+  · simp [h]
+  · refine mem_span_singleton.2 ⟨‖gramSchmidt 𝕜 f i‖, smul_inv_smul₀ ?_ _⟩
+    exact mod_cast norm_ne_zero_iff.2 h
 
 中文:
 定理 span_gramSchmidtNormed
@@ -878,7 +941,10 @@ theorem span_gramSchmidtNormed
     (Set.image_subset_iff.2 fun i hi =>
       span_mono (image_mono <| singleton_subset_set_iff.2 hi) ?_)
   simp only [coe_singleton, Set.image_singleton]
-  by_cases h : gramSchmidt
+  by_cases h : gramSchmidt 𝕜 f i = 0
+  · simp [h]
+  · refine mem_span_singleton.2 ⟨‖gramSchmidt 𝕜 f i‖, smul_inv_smul₀ ?_ _⟩
+    exact mod_cast norm_ne_zero_iff.2 h
 
 Depends on / 依赖: Set.image_singleton, Set.image_subset_iff, coe_singleton, gramSchmidt, image_mono, image_singleton, image_subset_iff, mem_image_of_mem, mem_span_singleton, mod_cast, norm_ne_zero_iff, singleton_subset_set_iff, smul_mem, span_eq_span, span_mono, subset_span
 -/
@@ -1040,7 +1106,13 @@ theorem inner_gramSchmidtOrthonormalBasis_eq_zero
     exact mem_span_gramSchmidt 𝕜 f le_rfl
   rw [isOrtho_span]
   rintro u ⟨k, _, rfl⟩ v (rfl : v = _)
- 
+  by_cases hk : gramSchmidtNormed 𝕜 f k = 0
+  · rw [hk, inner_zero_left]
+  rw [← gramSchmidtOrthonormalBasis_apply h hk]
+  have : k != i := by
+    rintro rfl
+    exact hk hi
+  exact (gramSchmidtOrthonormalBasis h f).orthonormal.2 this
 
 中文:
 定理 inner_gramSchmidtOrthonormalBasis_eq_zero
@@ -1053,7 +1125,13 @@ theorem inner_gramSchmidtOrthonormalBasis_eq_zero
     exact mem_span_gramSchmidt 𝕜 f le_rfl
   rw [isOrtho_span]
   rintro u ⟨k, _, rfl⟩ v (rfl : v = _)
- 
+  by_cases hk : gramSchmidtNormed 𝕜 f k = 0
+  · rw [hk, inner_zero_left]
+  rw [← gramSchmidtOrthonormalBasis_apply h hk]
+  have : k != i := by
+    rintro rfl
+    exact hk hi
+  exact (gramSchmidtOrthonormalBasis h f).orthonormal.2 this
 
 Depends on / 依赖: Set.Iic, gramSchmidtNormed, gramSchmidtOrthonormalBasis, gramSchmidtOrthonormalBasis_apply, inner_zero_left, isOrtho_span, le_rfl, mem_orthogonal_singleton_iff_inner_right, mem_span_gramSchmidt, orthonormal, span_gramSchmidtNormed
 -/

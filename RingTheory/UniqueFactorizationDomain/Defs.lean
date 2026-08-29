@@ -86,7 +86,7 @@ theorem exists_irreducible_factor
         of_not_not fun hd => hr c ⟨h, hc⟩ ⟨ne_zero_of_dvd_ne_zero ha0 h, d, hd, he⟩⟩,
     hs.1⟩
 
-@[e
+@[elab_as_elim]
 
 中文:
 定理 存在_irreducible_factor
@@ -99,7 +99,7 @@ theorem exists_irreducible_factor
         of_not_not fun hd => hr c ⟨h, hc⟩ ⟨ne_zero_of_dvd_ne_zero ha0 h, d, hd, he⟩⟩,
     hs.1⟩
 
-@[e
+@[elab_as_elim]
 
 Depends on / 依赖: IsUnit, dvd_rfl, dvd_trans, has_min, ne_zero_of_dvd_ne_zero, of_not_not, or_iff_not_imp_left, wellFounded_dvdNotUnit, wellFounded_dvdNotUnit.has_min
 -/
@@ -128,7 +128,9 @@ theorem induction_on_irreducible
         if hau : IsUnit a then unit a hau
         else
           let ⟨i, i_irred, b, hb⟩ := exists_irreducible_factor hau ha0
-          let hb0 : b != 0 := ne_zero_of_dvd_ne_zero
+          let hb0 : b != 0 := ne_zero_of_dvd_ne_zero ha0 ⟨i, mul_comm i b ▸ hb⟩
+hb.symm ▸ mul b i hb0 i_irred ih b ⟨hb0, i, i_irred.1, mul_comm i b ▸ hb⟩)
+    a
 
 中文:
 定理 induction_on_irreducible
@@ -141,7 +143,9 @@ theorem induction_on_irreducible
         if hau : IsUnit a then unit a hau
         else
           let ⟨i, i_irred, b, hb⟩ := exists_irreducible_factor hau ha0
-          let hb0 : b != 0 := ne_zero_of_dvd_ne_zero
+          let hb0 : b != 0 := ne_zero_of_dvd_ne_zero ha0 ⟨i, mul_comm i b ▸ hb⟩
+hb.symm ▸ mul b i hb0 i_irred ih b ⟨hb0, i, i_irred.1, mul_comm i b ▸ hb⟩)
+    a
 
 Depends on / 依赖: Classical, Classical.dec, IsUnit, exists_irreducible_factor, ha0.substr, hb.symm, i_irred, mul_comm, ne_zero_of_dvd_ne_zero, substr, wellFounded_dvdNotUnit, wellFounded_dvdNotUnit.fix
 -/
@@ -171,7 +175,8 @@ theorem exists_factors
     fun a i ha0 hi ih _ =>
     let ⟨s, hs⟩ := ih ha0
     ⟨i ::ₘ s, fun b H => (Multiset.mem_cons.1 H).elim (fun h => h.symm ▸ hi) (hs.1 b), by
-      rw [s.
+      rw [s.prod_cons i]
+      exact hs.2.mul_left i⟩
 
 中文:
 定理 存在_factors
@@ -181,7 +186,8 @@ theorem exists_factors
     fun a i ha0 hi ih _ =>
     let ⟨s, hs⟩ := ih ha0
     ⟨i ::ₘ s, fun b H => (Multiset.mem_cons.1 H).elim (fun h => h.symm ▸ hi) (hs.1 b), by
-      rw [s.
+      rw [s.prod_cons i]
+      exact hs.2.mul_left i⟩
 
 Depends on / 依赖: False.elim, Multiset, Multiset.mem_cons, Multiset.notMem_zero, h.symm, hu.unit, induction_on_irreducible, mem_cons, mul_left, notMem_zero, one_mul, prod_cons, s.prod_cons
 -/
@@ -207,7 +213,14 @@ obtain ⟨b, h⟩ := Multiset.exists_mem_of_ne_zero fun h : f = 0 => hnu by simp
     classical
       refine ⟨(f.erase b).cons (b * u), fun a ha => ?_, ?_, Multiset.cons_ne_zero⟩
       · obtain rfl | ha := Multiset.mem_cons.1 ha
-      
+        exacts [Associated.irreducible ⟨u, rfl⟩ (hi b h), hi a (Multiset.mem_of_mem_erase ha)]
+      · rw [Multiset.prod_cons, mul_comm b, mul_assoc, Multiset.prod_erase h, mul_comm],
+    fun ⟨_, hi, he, hne⟩ =>
+    let ⟨b, h⟩ := Multiset.exists_mem_of_ne_zero hne
+not_isUnit_of_not_isUnit_dvd (hi b h).not_isUnit he ▸ Multiset.dvd_prod h⟩
+
+@[deprecated (since := "2026-08-02")]
+alias not_unit_iff_exists_factors_eq := not_isUnit_iff_exists_factors_eq
 
 中文:
 定理 not_isUnit_iff_存在_factors_eq
@@ -218,7 +231,14 @@ obtain ⟨b, h⟩ := Multiset.exists_mem_of_ne_zero fun h : f = 0 => hnu by simp
     classical
       refine ⟨(f.erase b).cons (b * u), fun a ha => ?_, ?_, Multiset.cons_ne_zero⟩
       · obtain rfl | ha := Multiset.mem_cons.1 ha
-      
+        exacts [Associated.irreducible ⟨u, rfl⟩ (hi b h), hi a (Multiset.mem_of_mem_erase ha)]
+      · rw [Multiset.prod_cons, mul_comm b, mul_assoc, Multiset.prod_erase h, mul_comm],
+    fun ⟨_, hi, he, hne⟩ =>
+    let ⟨b, h⟩ := Multiset.exists_mem_of_ne_zero hne
+not_isUnit_of_not_isUnit_dvd (hi b h).not_isUnit he ▸ Multiset.dvd_prod h⟩
+
+@[deprecated (since := "2026-08-02")]
+alias not_unit_iff_exists_factors_eq := not_isUnit_iff_exists_factors_eq
 
 Depends on / 依赖: Associated, Associated.irreducible, Multiset, Multiset.cons_ne_zero, Multiset.exists_me, Multiset.exists_mem_of_ne_zero, Multiset.mem_cons, Multiset.mem_of_mem_erase, Multiset.prod_cons, Multiset.prod_erase, classical, cons_ne_zero, exacts, exists_factors, exists_me, exists_mem_of_ne_zero, f.erase, irreducible, mem_cons, mem_of_mem_erase
 -/
@@ -637,7 +657,12 @@ theorem card_factors_of_irreducible
     simpa [hf, Associated.comm, ha.not_isUnit] using factors_prod ha.ne_zero
   obtain ⟨b, hb⟩ := exists_mem_of_ne_zero hf
   obtain ⟨f, hf⟩ := exists_cons_of_mem hb
-  rw [hf]; rw [card_cons]; rw [add_eq_right]; rw [card_eq_zero]; rw [eq_zero_iff_forall
+  rw [hf]; rw [card_cons]; rw [add_eq_right]; rw [card_eq_zero]; rw [eq_zero_iff_forall_notMem]
+  intro c hc
+  obtain ⟨f, rfl⟩ := exists_cons_of_mem hc
+  replace hb := (irreducible_of_factor b hb).not_isUnit
+  replace hc := (irreducible_of_factor c (hf ▸ mem_cons_of_mem hc)).not_isUnit
+  simp [← (factors_prod ha.ne_zero).irreducible_iff, hf, irreducible_mul_iff, hb, hc] at ha
 
 中文:
 定理 card_factors_of_irreducible
@@ -649,7 +674,12 @@ theorem card_factors_of_irreducible
     simpa [hf, Associated.comm, ha.not_isUnit] using factors_prod ha.ne_zero
   obtain ⟨b, hb⟩ := exists_mem_of_ne_zero hf
   obtain ⟨f, hf⟩ := exists_cons_of_mem hb
-  rw [hf]; rw [card_cons]; rw [add_eq_right]; rw [card_eq_zero]; rw [eq_zero_iff_forall
+  rw [hf]; rw [card_cons]; rw [add_eq_right]; rw [card_eq_zero]; rw [eq_zero_iff_forall_notMem]
+  intro c hc
+  obtain ⟨f, rfl⟩ := exists_cons_of_mem hc
+  replace hb := (irreducible_of_factor b hb).not_isUnit
+  replace hc := (irreducible_of_factor c (hf ▸ mem_cons_of_mem hc)).not_isUnit
+  simp [← (factors_prod ha.ne_zero).irreducible_iff, hf, irreducible_mul_iff, hb, hc] at ha
 
 Depends on / 依赖: Associated, Associated.comm, add_eq_right, card_cons, card_eq_zero, eq_zero_iff_forall_notMem, exists_cons_of_mem, exists_mem_of_ne_zero, factors, factors_prod, ha.ne_zero, ha.not_isUnit, irreducible_of_factor, mem_cons_of_mem, ne_zero, not_isUnit, replace
 -/

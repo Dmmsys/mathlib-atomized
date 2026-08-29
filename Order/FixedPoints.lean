@@ -995,7 +995,12 @@ instance completeLattice
   isLUB_sSup _ :=
     ⟨fun _ hx => (le_sSup <| Set.mem_image_of_mem _ hx).trans (f.le_nextFixed _),
 fun _ hx => f.nextFixed_le _ sSup_le Set.forall_mem_image.2 hx⟩
-  
+  sInf s :=
+    f.prevFixed (sInf (Subtype.val '' s))
+      (f.map_sInf_subset_fixedPoints_le (Subtype.val '' s) fun _ ⟨x, hx⟩ => hx.2 ▸ x.2)
+  isGLB_sInf _ :=
+    ⟨fun _ hx => (f.prevFixed_le _).trans (sInf_le <| Set.mem_image_of_mem _ hx),
+fun _ hx => f.le_prevFixed _ le_sInf Set.forall_mem_image.2 hx⟩
 
 中文:
 实例 completeLattice
@@ -1006,7 +1011,12 @@ fun _ hx => f.nextFixed_le _ sSup_le Set.forall_mem_image.2 hx⟩
   isLUB_sSup _ :=
     ⟨fun _ hx => (le_sSup <| Set.mem_image_of_mem _ hx).trans (f.le_nextFixed _),
 fun _ hx => f.nextFixed_le _ sSup_le Set.forall_mem_image.2 hx⟩
-  
+  sInf s :=
+    f.prevFixed (sInf (Subtype.val '' s))
+      (f.map_sInf_subset_fixedPoints_le (Subtype.val '' s) fun _ ⟨x, hx⟩ => hx.2 ▸ x.2)
+  isGLB_sInf _ :=
+    ⟨fun _ hx => (f.prevFixed_le _).trans (sInf_le <| Set.mem_image_of_mem _ hx),
+fun _ hx => f.le_prevFixed _ le_sInf Set.forall_mem_image.2 hx⟩
 
 Depends on / 依赖: Set.forall_mem_image, Set.mem_image_of_mem, Subtype, Subtype.val, f.le_map_sSup_subset_fixedPoints, f.le_nextFixed, f.map_sInf_subset_fixedPoints_le, f.nextFixed, f.nextFixed_le, f.prevFixed, f.prevFixed_le, forall_mem_image, isGLB_sInf, isLUB_sSup, le_map_sSup_subset_fixedPoints, le_nextFixed, le_sSup, map_sInf_subset_fixedPoints_le, mem_image_of_mem, nextFixed
 -/

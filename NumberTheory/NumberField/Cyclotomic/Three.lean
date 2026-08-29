@@ -87,7 +87,27 @@ theorem Units.mem
     rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [nrRealPlaces_eq_zero (n := 3) K (by decide)]; rw [zero_add]; rw [nrComplexPlaces_eq_totient_div_two (n := 3)]
     rfl
   obtain ⟨⟨x, e⟩, hxu, -⟩ := exist_unique_eq_mul_prod _ u
-  replace hx
+  replace hxu : u = x := by
+    rw [← mul_one x.1]; rw [hxu]
+    apply congr_arg
+    rw [← Finset.prod_empty]
+    congr
+    rw [Finset.univ_eq_empty_iff]; rw [hrank]
+    infer_instance
+obtain ⟨n, hnpos, hn⟩ := isOfFinOrder_iff_pow_eq_one.1 (CommGroup.mem_torsion _).1 x.2
+  replace hn : (↑u : K) ^ ((⟨n, hnpos⟩ : Nat+) : Nat) = 1 := by
+    rw [← map_pow]
+    convert! map_one (algebraMap (𝓞 K) K)
+    rw_mod_cast [hxu, hn]
+    simp
+  obtain ⟨r, hr3, hru⟩ := hζ.exists_pow_or_neg_mul_pow_of_isOfFinOrder (by decide)
+    (isOfFinOrder_iff_pow_eq_one.2 ⟨n, hnpos, hn⟩)
+  replace hr : r in Finset.Ico 0 3 := Finset.mem_Ico.2 ⟨by simp, hr3⟩
+  replace hru : ↑u = η ^ r ∨ ↑u = -η ^ r := by
+    rcases hru with h | h
+    · left; ext; exact h
+    · right; ext; exact h
+  fin_cases hr <;> rcases hru with h | h <;> simp [h]
 
 中文:
 定理 单位群.mem
@@ -98,7 +118,27 @@ theorem Units.mem
     rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [nrRealPlaces_eq_zero (n := 3) K (by decide)]; rw [zero_add]; rw [nrComplexPlaces_eq_totient_div_two (n := 3)]
     rfl
   obtain ⟨⟨x, e⟩, hxu, -⟩ := exist_unique_eq_mul_prod _ u
-  replace hx
+  replace hxu : u = x := by
+    rw [← mul_one x.1]; rw [hxu]
+    apply congr_arg
+    rw [← Finset.prod_empty]
+    congr
+    rw [Finset.univ_eq_empty_iff]; rw [hrank]
+    infer_instance
+obtain ⟨n, hnpos, hn⟩ := isOfFinOrder_iff_pow_eq_one.1 (CommGroup.mem_torsion _).1 x.2
+  replace hn : (↑u : K) ^ ((⟨n, hnpos⟩ : Nat+) : Nat) = 1 := by
+    rw [← map_pow]
+    convert! map_one (algebraMap (𝓞 K) K)
+    rw_mod_cast [hxu, hn]
+    simp
+  obtain ⟨r, hr3, hru⟩ := hζ.exists_pow_or_neg_mul_pow_of_isOfFinOrder (by decide)
+    (isOfFinOrder_iff_pow_eq_one.2 ⟨n, hnpos, hn⟩)
+  replace hr : r in Finset.Ico 0 3 := Finset.mem_Ico.2 ⟨by simp, hr3⟩
+  replace hru : ↑u = η ^ r ∨ ↑u = -η ^ r := by
+    rcases hru with h | h
+    · left; ext; exact h
+    · right; ext; exact h
+  fin_cases hr <;> rcases hru with h | h <;> simp [h]
 
 Depends on / 依赖: CommGroup, CommGroup.mem, Finset, Finset.prod_empty, Finset.univ_eq_empty_iff, card_eq_nrRealPlaces_add_nrComplexPlaces, congr_arg, exist_unique_eq_mul_prod, infer_instance, isOfFinOrder_iff_pow_eq_one, mul_one, nrComplexPlaces_eq_totient_div_two, nrRealPlaces_eq_zero, prod_empty, replace, univ_eq_empty_iff, zero_add
 -/
@@ -201,7 +241,22 @@ theorem eq_one_or_neg_one_of_unit_of_congruent
   · left; rfl
   · right; rfl
   all_goals exfalso
-  · exact hζ.not_exists_int_
+  · exact hζ.not_exists_int_prime_dvd_sub_of_prime_ne_two' (by decide) hcong
+  · apply hζ.not_exists_int_prime_dvd_sub_of_prime_ne_two' (by decide)
+    obtain ⟨n, x, hx⟩ := hcong
+    rw [sub_eq_iff_eq_add] at hx
+    refine ⟨-n, -x, sub_eq_iff_eq_add.2 ?_⟩
+    simp only [Nat.cast_ofNat, mul_neg, Int.cast_neg, ← neg_add, ← hx, Units.val_neg,
+      IsUnit.unit_spec, RingOfIntegers.neg_mk, neg_neg]
+  · exact (hζ.pow_of_coprime 2 (by decide)).not_exists_int_prime_dvd_sub_of_prime_ne_two'
+      (by decide) hcong
+  · apply (hζ.pow_of_coprime 2 (by decide)).not_exists_int_prime_dvd_sub_of_prime_ne_two'
+      (by decide)
+    obtain ⟨n, x, hx⟩ := hcong
+    refine ⟨-n, -x, sub_eq_iff_eq_add.2 ?_⟩
+    have : (hζ.pow_of_coprime 2 (by decide)).toInteger = hζ.toInteger ^ 2 := by ext; simp
+    simp only [this, Nat.cast_ofNat, mul_neg, Int.cast_neg, ← neg_add, ← sub_eq_iff_eq_add.1 hx,
+      Units.val_neg, val_pow_eq_pow_val, IsUnit.unit_spec, neg_neg]
 
 中文:
 定理 eq_one_or_neg_one_of_unit_of_congruent
@@ -214,7 +269,22 @@ theorem eq_one_or_neg_one_of_unit_of_congruent
   · left; rfl
   · right; rfl
   all_goals exfalso
-  · exact hζ.not_exists_int_
+  · exact hζ.not_exists_int_prime_dvd_sub_of_prime_ne_two' (by decide) hcong
+  · apply hζ.not_exists_int_prime_dvd_sub_of_prime_ne_two' (by decide)
+    obtain ⟨n, x, hx⟩ := hcong
+    rw [sub_eq_iff_eq_add] at hx
+    refine ⟨-n, -x, sub_eq_iff_eq_add.2 ?_⟩
+    simp only [Nat.cast_ofNat, mul_neg, Int.cast_neg, ← neg_add, ← hx, Units.val_neg,
+      IsUnit.unit_spec, RingOfIntegers.neg_mk, neg_neg]
+  · exact (hζ.pow_of_coprime 2 (by decide)).not_exists_int_prime_dvd_sub_of_prime_ne_two'
+      (by decide) hcong
+  · apply (hζ.pow_of_coprime 2 (by decide)).not_exists_int_prime_dvd_sub_of_prime_ne_two'
+      (by decide)
+    obtain ⟨n, x, hx⟩ := hcong
+    refine ⟨-n, -x, sub_eq_iff_eq_add.2 ?_⟩
+    have : (hζ.pow_of_coprime 2 (by decide)).toInteger = hζ.toInteger ^ 2 := by ext; simp
+    simp only [this, Nat.cast_ofNat, mul_neg, Int.cast_neg, ← neg_add, ← sub_eq_iff_eq_add.1 hx,
+      Units.val_neg, val_pow_eq_pow_val, IsUnit.unit_spec, neg_neg]
 
 Depends on / 依赖: Units.mem, all_goals, fin_cases, lambda_sq, mul_assoc, mul_neg, neg_mul, not_exists_int_prime_dvd_sub_of_prime_ne_two, replace, sub_eq_iff_eq_add
 -/
@@ -259,7 +329,22 @@ lemma lambda_dvd_or_dvd_sub_one_or_dvd_add_one
   have := hζ.finite_quotient_toInteger_sub_one (by decide)
   let _ := Fintype.ofFinite (𝓞 K ⧸ Ideal.span {fun})
   let _ : Ring (𝓞 K ⧸ Ideal.span {fun}) := CommRing.toRing -- to speed up instance synthesis
-  let _ : AddGroup (𝓞 K ⧸ Ideal.span {fun}) := AddGroupWithOne.toAddGroup -- dit
+  let _ : AddGroup (𝓞 K ⧸ Ideal.span {fun}) := AddGroupWithOne.toAddGroup -- ditto
+  have := Finset.mem_univ (Ideal.Quotient.mk (Ideal.span {fun}) x)
+  have h3 : Fintype.card (𝓞 K ⧸ Ideal.span {fun}) = 3 := by
+    rw [← Nat.card_eq_fintype_card]; rw [hζ.card_quotient_toInteger_sub_one]; rw [hζ.norm_toInteger_sub_one_of_prime_ne_two' (by decide)]
+    simp only [Nat.cast_ofNat, Int.reduceAbs]
+  rw [Finset.univ_of_card_le_three h3.le] at this
+  simp only [Finset.mem_insert, Finset.mem_singleton] at this
+  rcases this with h | h | h
+  · left
+exact Ideal.mem_span_singleton.1 Ideal.Quotient.eq_zero_iff_mem.1 h
+  · right; left
+refine Ideal.mem_span_singleton.1 Ideal.Quotient.eq_zero_iff_mem.1 ?_
+    rw [RingHom.map_sub]; rw [h]; rw [RingHom.map_one]; rw [sub_self]
+  · right; right
+refine Ideal.mem_span_singleton.1 Ideal.Quotient.eq_zero_iff_mem.1 ?_
+    rw [RingHom.map_add]; rw [h]; rw [RingHom.map_one]; rw [neg_add_cancel]
 
 中文:
 引理 lambda_dvd_or_dvd_sub_one_or_dvd_add_one
@@ -269,7 +354,22 @@ lemma lambda_dvd_or_dvd_sub_one_or_dvd_add_one
   have := hζ.finite_quotient_toInteger_sub_one (by decide)
   let _ := Fintype.ofFinite (𝓞 K ⧸ Ideal.span {fun})
   let _ : Ring (𝓞 K ⧸ Ideal.span {fun}) := CommRing.toRing -- to speed up instance synthesis
-  let _ : AddGroup (𝓞 K ⧸ Ideal.span {fun}) := AddGroupWithOne.toAddGroup -- dit
+  let _ : AddGroup (𝓞 K ⧸ Ideal.span {fun}) := AddGroupWithOne.toAddGroup -- ditto
+  have := Finset.mem_univ (Ideal.Quotient.mk (Ideal.span {fun}) x)
+  have h3 : Fintype.card (𝓞 K ⧸ Ideal.span {fun}) = 3 := by
+    rw [← Nat.card_eq_fintype_card]; rw [hζ.card_quotient_toInteger_sub_one]; rw [hζ.norm_toInteger_sub_one_of_prime_ne_two' (by decide)]
+    simp only [Nat.cast_ofNat, Int.reduceAbs]
+  rw [Finset.univ_of_card_le_three h3.le] at this
+  simp only [Finset.mem_insert, Finset.mem_singleton] at this
+  rcases this with h | h | h
+  · left
+exact Ideal.mem_span_singleton.1 Ideal.Quotient.eq_zero_iff_mem.1 h
+  · right; left
+refine Ideal.mem_span_singleton.1 Ideal.Quotient.eq_zero_iff_mem.1 ?_
+    rw [RingHom.map_sub]; rw [h]; rw [RingHom.map_one]; rw [sub_self]
+  · right; right
+refine Ideal.mem_span_singleton.1 Ideal.Quotient.eq_zero_iff_mem.1 ?_
+    rw [RingHom.map_add]; rw [h]; rw [RingHom.map_one]; rw [neg_add_cancel]
 
 Depends on / 依赖: AddGroup, AddGroupWithOne, AddGroupWithOne.toAddGroup, CommRing, CommRing.toRing, Finset, Finset.mem_univ, Fintype, Fintype.card, Fintype.ofFinite, Ideal.Quotient.mk, Ideal.span, Nat.card_eq_fintype_card, Quotient, card_eq_fintype_card, card_quotient_toInteger_sub_one, classical, finite_quotient_toInteger_sub_one, instance, mem_univ
 -/
@@ -365,7 +465,7 @@ lemma lambda_dvd_mul_sub_one_mul_sub_eta_add_one
   · exact dvd_mul_of_dvd_left (dvd_mul_of_dvd_right h _) _
   · refine dvd_mul_of_dvd_right ?_ _
     rw [show x - (η + 1) = x + 1 - (η - 1 + 3) by ring]
-exact dvd_sub h d
+exact dvd_sub h dvd_add dvd_rfl hζ.toInteger_sub_one_dvd_prime'
 
 中文:
 引理 lambda_dvd_mul_sub_one_mul_sub_eta_add_one
@@ -376,7 +476,7 @@ exact dvd_sub h d
   · exact dvd_mul_of_dvd_left (dvd_mul_of_dvd_right h _) _
   · refine dvd_mul_of_dvd_right ?_ _
     rw [show x - (η + 1) = x + 1 - (η - 1 + 3) by ring]
-exact dvd_sub h d
+exact dvd_sub h dvd_add dvd_rfl hζ.toInteger_sub_one_dvd_prime'
 
 Depends on / 依赖: dvd_add, dvd_mul_of_dvd_left, dvd_mul_of_dvd_right, dvd_rfl, dvd_sub, lambda_dvd_or_dvd_sub_one_or_dvd_add_one, toInteger_sub_one_dvd_prime
 -/
@@ -401,7 +501,7 @@ lemma lambda_pow_four_dvd_cube_sub_one_of_dvd_sub_one
           simp only [coe_eta, cube_sub_one_eq_mul hζ x]; ring
     _ = _ := by rw [hy]; ring
   rw [this]; rw [pow_succ]
-  exact mul_dvd_mul_
+  exact mul_dvd_mul_left _ (lambda_dvd_mul_sub_one_mul_sub_eta_add_one hζ y)
 
 中文:
 引理 lambda_pow_four_dvd_cube_sub_one_of_dvd_sub_one
@@ -413,7 +513,7 @@ lemma lambda_pow_four_dvd_cube_sub_one_of_dvd_sub_one
           simp only [coe_eta, cube_sub_one_eq_mul hζ x]; ring
     _ = _ := by rw [hy]; ring
   rw [this]; rw [pow_succ]
-  exact mul_dvd_mul_
+  exact mul_dvd_mul_left _ (lambda_dvd_mul_sub_one_mul_sub_eta_add_one hζ y)
 
 Depends on / 依赖: coe_eta, cube_sub_one_eq_mul, lambda_dvd_mul_sub_one_mul_sub_eta_add_one, mul_dvd_mul_left, pow_succ
 -/

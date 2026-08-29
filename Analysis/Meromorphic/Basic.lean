@@ -89,7 +89,10 @@ theorem MeromorphicAt.eventually_eq_zero_or_eventually_ne_zero
   · left
     filter_upwards [nhdsWithin_le_nhds h₁, self_mem_nhdsWithin] with y h₁y h₂y
     rw [Set.mem_compl_iff]; rw [Set.mem_singleton_iff]; rw [← sub_eq_zero] at h₂y
-.mp h₁y exact smul_eq_zero_iff_right (po
+.mp h₁y exact smul_eq_zero_iff_right (pow_ne_zero n h₂y)
+  · right
+    filter_upwards [h₂, self_mem_nhdsWithin] with y h₁y h₂y
+    exact (smul_ne_zero_iff.1 h₁y).2
 
 中文:
 定理 MeromorphicAt.eventually_eq_zero_or_eventually_ne_zero
@@ -100,7 +103,10 @@ theorem MeromorphicAt.eventually_eq_zero_or_eventually_ne_zero
   · left
     filter_upwards [nhdsWithin_le_nhds h₁, self_mem_nhdsWithin] with y h₁y h₂y
     rw [Set.mem_compl_iff]; rw [Set.mem_singleton_iff]; rw [← sub_eq_zero] at h₂y
-.mp h₁y exact smul_eq_zero_iff_right (po
+.mp h₁y exact smul_eq_zero_iff_right (pow_ne_zero n h₂y)
+  · right
+    filter_upwards [h₂, self_mem_nhdsWithin] with y h₁y h₂y
+    exact (smul_ne_zero_iff.1 h₁y).2
 
 Depends on / 依赖: Set.mem_compl_iff, Set.mem_singleton_iff, eventually_eq_zero_or_eventually_ne_zero, filter_upwards, h.eventually_eq_zero_or_eventually_ne_zero, mem_compl_iff, mem_singleton_iff, nhdsWithin_le_nhds, pow_ne_zero, self_mem_nhdsWithin, smul_eq_zero_iff_right, smul_ne_zero_iff, sub_eq_zero
 -/
@@ -181,7 +187,13 @@ lemma add
   refine ⟨max m n, ?_⟩
   have : (fun z => (z - x) ^ max m n • (f + g) z) = fun z => (z - x) ^ (max m n - m) •
       ((z - x) ^ m • f z) + (z - x) ^ (max m n - n) • ((z - x) ^ n • g z) := by
-    simp_rw [← mul_smul, ← pow_add, Nat.sub_add_cancel (N
+    simp_rw [← mul_smul, ← pow_add, Nat.sub_add_cancel (Nat.le_max_left _ _),
+      Nat.sub_add_cancel (Nat.le_max_right _ _), Pi.add_apply, smul_add]
+  rw [this]
+  exact (((analyticAt_id.sub analyticAt_const).pow _).smul hf).add
+    (((analyticAt_id.sub analyticAt_const).pow _).smul hg)
+
+@[to_fun (attr := fun_prop)]
 
 中文:
 引理 add
@@ -192,7 +204,13 @@ lemma add
   refine ⟨max m n, ?_⟩
   have : (fun z => (z - x) ^ max m n • (f + g) z) = fun z => (z - x) ^ (max m n - m) •
       ((z - x) ^ m • f z) + (z - x) ^ (max m n - n) • ((z - x) ^ n • g z) := by
-    simp_rw [← mul_smul, ← pow_add, Nat.sub_add_cancel (N
+    simp_rw [← mul_smul, ← pow_add, Nat.sub_add_cancel (Nat.le_max_left _ _),
+      Nat.sub_add_cancel (Nat.le_max_right _ _), Pi.add_apply, smul_add]
+  rw [this]
+  exact (((analyticAt_id.sub analyticAt_const).pow _).smul hf).add
+    (((analyticAt_id.sub analyticAt_const).pow _).smul hg)
+
+@[to_fun (attr := fun_prop)]
 
 Depends on / 依赖: Nat.le_max_left, Nat.le_max_right, Nat.sub_add_cancel, Pi.add_apply, add_apply, analyticAt_const, analyticAt_id, analyticAt_id.sub, le_max_left, le_max_right, mul_smul, pow_add, simp_rw, smul_add, sub_add_cancel
 -/
@@ -418,7 +436,7 @@ theorem sum
   | insert σ s hσ hind =>
     rw [Finset.sum_insert hσ]
     apply (h σ (Finset.mem_insert_self σ s)).add
-      (hind (fun τ hτ => h τ (Finset.mem_insert_of_
+      (hind (fun τ hτ => h τ (Finset.mem_insert_of_mem hτ)))
 
 中文:
 定理 求和
@@ -432,7 +450,7 @@ theorem sum
   | insert σ s hσ hind =>
     rw [Finset.sum_insert hσ]
     apply (h σ (Finset.mem_insert_self σ s)).add
-      (hind (fun τ hτ => h τ (Finset.mem_insert_of_
+      (hind (fun τ hτ => h τ (Finset.mem_insert_of_mem hτ)))
 
 Depends on / 依赖: Finset, Finset.induction, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.sum_empty, Finset.sum_insert, analyticAt_const, analyticAt_const.meromorphicAt, classical, insert, mem_insert_of_mem, mem_insert_self, meromorphicAt, sum_empty, sum_insert
 -/
@@ -762,7 +780,7 @@ lemma congr
   filter_upwards [hfg] with z hz
   rcases eq_or_ne z x with rfl | hn
   · simp
-  · rw [hz (Set.mem_compl_singleton_if
+  · rw [hz (Set.mem_compl_singleton_iff.mp hn), pow_succ', mul_smul]
 
 中文:
 引理 congr
@@ -776,7 +794,7 @@ lemma congr
   filter_upwards [hfg] with z hz
   rcases eq_or_ne z x with rfl | hn
   · simp
-  · rw [hz (Set.mem_compl_singleton_if
+  · rw [hz (Set.mem_compl_singleton_iff.mp hn), pow_succ', mul_smul]
 
 Depends on / 依赖: AnalyticAt, Set.mem_compl_singleton_iff.mp, eq_or_ne, eventuallyEq_nhdsWithin_iff, filter_upwards, fun_prop, fun_smul, mem_compl_singleton_iff, mul_smul, pow_succ, this.fun_smul
 -/
@@ -878,7 +896,22 @@ lemma inv
     refine (MeromorphicAt.const 0 x).congr ?_
     rw [eventuallyEq_nhdsWithin_iff]
     filter_upwards [h_eq] with z hfz hz
-    rw [Pi.inv_apply]; rw [(smul_eq_zero_iff_right <| 
+    rw [Pi.inv_apply]; rw [(smul_eq_zero_iff_right <| pow_ne_zero _ (sub_ne_zero.mpr hz)).mp hfz]; rw [inv_zero]
+  · -- interesting case: use local formula for `f`
+    obtain ⟨n, g, hg_an, hg_ne, hg_eq⟩ := hf.exists_eventuallyEq_pow_smul_nonzero_iff.mpr h_eq
+    have : AnalyticAt 𝕜 (fun z => (z - x) ^ (m + 1)) x :=
+      (analyticAt_id.sub analyticAt_const).pow _
+    -- use `m + 1` rather than `m` to damp out any silly issues with the value at `z = x`
+    refine ⟨n + 1, (this.fun_smul <| hg_an.inv hg_ne).congr ?_⟩
+    filter_upwards [hg_eq, hg_an.continuousAt.eventually_ne hg_ne] with z hfg hg_ne'
+    rcases eq_or_ne z x with rfl | hz_ne
+    · simp
+    · replace hfg := congr_arg (·⁻¹) hfg
+      simp only [smul_inv₀] at hfg
+      rw [inv_smul_eq_iff₀ (pow_ne_zero m (sub_ne_zero.mpr hz_ne))]; rw [smul_comm]; rw [eq_inv_smul_iff₀ (pow_ne_zero n (sub_ne_zero.mpr hz_ne))] at hfg
+      simp [pow_succ', mul_smul, hfg]
+
+@[simp]
 
 中文:
 引理 inv
@@ -891,7 +924,22 @@ lemma inv
     refine (MeromorphicAt.const 0 x).congr ?_
     rw [eventuallyEq_nhdsWithin_iff]
     filter_upwards [h_eq] with z hfz hz
-    rw [Pi.inv_apply]; rw [(smul_eq_zero_iff_right <| 
+    rw [Pi.inv_apply]; rw [(smul_eq_zero_iff_right <| pow_ne_zero _ (sub_ne_zero.mpr hz)).mp hfz]; rw [inv_zero]
+  · -- interesting case: use local formula for `f`
+    obtain ⟨n, g, hg_an, hg_ne, hg_eq⟩ := hf.exists_eventuallyEq_pow_smul_nonzero_iff.mpr h_eq
+    have : AnalyticAt 𝕜 (fun z => (z - x) ^ (m + 1)) x :=
+      (analyticAt_id.sub analyticAt_const).pow _
+    -- use `m + 1` rather than `m` to damp out any silly issues with the value at `z = x`
+    refine ⟨n + 1, (this.fun_smul <| hg_an.inv hg_ne).congr ?_⟩
+    filter_upwards [hg_eq, hg_an.continuousAt.eventually_ne hg_ne] with z hfg hg_ne'
+    rcases eq_or_ne z x with rfl | hz_ne
+    · simp
+    · replace hfg := congr_arg (·⁻¹) hfg
+      simp only [smul_inv₀] at hfg
+      rw [inv_smul_eq_iff₀ (pow_ne_zero m (sub_ne_zero.mpr hz_ne))]; rw [smul_comm]; rw [eq_inv_smul_iff₀ (pow_ne_zero n (sub_ne_zero.mpr hz_ne))] at hfg
+      simp [pow_succ', mul_smul, hfg]
+
+@[simp]
 
 Depends on / 依赖: AnalyticAt, MeromorphicAt, MeromorphicAt.const, Pi.inv_apply, eventuallyEq_nhdsWithin_iff, exists_eventuallyEq_pow_smul_nonzero_iff, filter_upwards, formula, h_eq, hf.exists_eventuallyEq_pow_smul_nonzero_iff.mpr, hg_an, hg_eq, hg_ne, interesting, inv_apply, inv_zero, locally, pow_ne_zero, smul_eq_zero_iff_right, sub_ne_zero
 -/
@@ -1039,7 +1087,11 @@ theorem eventually_continuousAt
     nhdsWithin_le_nhds h.eventually_continuousAt
   filter_upwards [this, self_mem_nhdsWithin] with y hy h'y
   simp only [Set.mem_compl_iff, Set.mem_singleton_iff] at h'y
-  have : ContinuousAt (fun z
+  have : ContinuousAt (fun z => ((z - x) ^ n)⁻¹) y :=
+    ContinuousAt.inv₀ (by fun_prop) (by simp [sub_eq_zero, h'y])
+  apply (this.smul hy).congr
+  filter_upwards [eventually_ne_nhds h'y] with z hz
+  simp [smul_smul, hz, sub_eq_zero]
 
 中文:
 定理 eventually_continuousAt
@@ -1050,7 +1102,11 @@ theorem eventually_continuousAt
     nhdsWithin_le_nhds h.eventually_continuousAt
   filter_upwards [this, self_mem_nhdsWithin] with y hy h'y
   simp only [Set.mem_compl_iff, Set.mem_singleton_iff] at h'y
-  have : ContinuousAt (fun z
+  have : ContinuousAt (fun z => ((z - x) ^ n)⁻¹) y :=
+    ContinuousAt.inv₀ (by fun_prop) (by simp [sub_eq_zero, h'y])
+  apply (this.smul hy).congr
+  filter_upwards [eventually_ne_nhds h'y] with z hz
+  simp [smul_smul, hz, sub_eq_zero]
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.inv, Set.mem_compl_iff, Set.mem_singleton_iff, eventually_continuousAt, eventually_ne_nhds, filter_upwards, fun_prop, h.eventually_continuousAt, mem_compl_iff, mem_singleton_iff, nhdsWithin_le_nhds, self_mem_nhdsWithin, smul_smul, sub_eq_zero, this.smul
 -/
@@ -1082,7 +1138,11 @@ theorem eventually_analyticAt
     apply Filter.Eventually.of_forall
     intro y hy hf
     rw [Set.mem_compl_iff]; rw [Set.mem_singleton_iff] at hy
-    have := ((analytic
+    have := ((analyticAt_id (𝕜 := 𝕜).sub analyticAt_const).pow n).inv
+      (pow_ne_zero _ (sub_ne_zero_of_ne hy))
+    apply (this.smul hf).congr ∘ (eventually_ne_nhds hy).mono
+    intro z hz
+    simp [smul_smul, hz, sub_eq_zero]
 
 中文:
 定理 eventually_analyticAt
@@ -1096,7 +1156,11 @@ theorem eventually_analyticAt
     apply Filter.Eventually.of_forall
     intro y hy hf
     rw [Set.mem_compl_iff]; rw [Set.mem_singleton_iff] at hy
-    have := ((analytic
+    have := ((analyticAt_id (𝕜 := 𝕜).sub analyticAt_const).pow n).inv
+      (pow_ne_zero _ (sub_ne_zero_of_ne hy))
+    apply (this.smul hf).congr ∘ (eventually_ne_nhds hy).mono
+    intro z hz
+    simp [smul_smul, hz, sub_eq_zero]
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.eventually_analyticAt, Eventually, Filter, Filter.Eventually.of_forall, Set.mem_compl_iff, Set.mem_singleton_iff, analyticAt_const, analyticAt_id, eventually_analyticAt, eventually_ne_nhds, eventually_nhdsWithin_iff, filter_mono, h.filter_mono, mem_compl_iff, mem_singleton_iff, nhdsWithin, of_forall, pow_ne_zero, smul_smul
 -/
@@ -1129,7 +1193,7 @@ lemma iff_eventuallyEq_zpow_smul_analyticAt
     match_scalars
     simp [sub_ne_zero.mpr hz]
   · refine fun ⟨n, g, hg_an, hg_eq⟩ => MeromorphicAt.congr ?_ (EventuallyEq.symm hg_eq)
-    exact (((MeromorphicAt.id x).sub (.const _ x)).zpo
+    exact (((MeromorphicAt.id x).sub (.const _ x)).zpow _).smul hg_an.meromorphicAt
 
 中文:
 引理 iff_eventuallyEq_zpow_smul_analyticAt
@@ -1141,7 +1205,7 @@ lemma iff_eventuallyEq_zpow_smul_analyticAt
     match_scalars
     simp [sub_ne_zero.mpr hz]
   · refine fun ⟨n, g, hg_an, hg_eq⟩ => MeromorphicAt.congr ?_ (EventuallyEq.symm hg_eq)
-    exact (((MeromorphicAt.id x).sub (.const _ x)).zpo
+    exact (((MeromorphicAt.id x).sub (.const _ x)).zpow _).smul hg_an.meromorphicAt
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.symm, MeromorphicAt, MeromorphicAt.congr, MeromorphicAt.id, eventually_nhdsWithin_iff, eventually_nhdsWithin_iff.mpr, filter_upwards, hg_an, hg_an.meromorphicAt, hg_eq, match_scalars, meromorphicAt, sub_ne_zero, sub_ne_zero.mpr
 -/
@@ -1169,7 +1233,13 @@ theorem deriv
   obtain ⟨n, g, h₁g, h₂g⟩ := h
   have : _root_.deriv (fun z => (z - x) ^ n • g z)
       =ᶠ[𝓝[!=] x] fun z => (n * (z - x) ^ (n - 1)) • g z + (z - x) ^ n • _root_.deriv g z := by
-    filter_upwards [eventually_nhdsWithin_of_eventually
+    filter_upwards [eventually_nhdsWithin_of_eventually_nhds h₁g.eventually_analyticAt,
+      eventually_nhdsWithin_of_forall fun _ a => a] with z₀ h₁ h₂
+    rw [deriv_fun_smul (DifferentiableAt.zpow (by fun_prop) (by simp_all [sub_ne_zero_of_ne h₂]))
+      (by fun_prop), add_comm, deriv_comp_sub_const (f := (· ^ n))]
+    aesop
+  rw [MeromorphicAt.meromorphicAt_congr (Filter.EventuallyEq.nhdsNE_deriv h₂g)]; rw [MeromorphicAt.meromorphicAt_congr this]
+  fun_prop
 
 中文:
 定理 deriv
@@ -1179,7 +1249,13 @@ theorem deriv
   obtain ⟨n, g, h₁g, h₂g⟩ := h
   have : _root_.deriv (fun z => (z - x) ^ n • g z)
       =ᶠ[𝓝[!=] x] fun z => (n * (z - x) ^ (n - 1)) • g z + (z - x) ^ n • _root_.deriv g z := by
-    filter_upwards [eventually_nhdsWithin_of_eventually
+    filter_upwards [eventually_nhdsWithin_of_eventually_nhds h₁g.eventually_analyticAt,
+      eventually_nhdsWithin_of_forall fun _ a => a] with z₀ h₁ h₂
+    rw [deriv_fun_smul (DifferentiableAt.zpow (by fun_prop) (by simp_all [sub_ne_zero_of_ne h₂]))
+      (by fun_prop), add_comm, deriv_comp_sub_const (f := (· ^ n))]
+    aesop
+  rw [MeromorphicAt.meromorphicAt_congr (Filter.EventuallyEq.nhdsNE_deriv h₂g)]; rw [MeromorphicAt.meromorphicAt_congr this]
+  fun_prop
 -/
 protected theorem deriv [CompleteSpace E] {f : 𝕜 -> E} {x : 𝕜} (h : MeromorphicAt f x) :
     MeromorphicAt (deriv f) x := by
@@ -1318,7 +1394,16 @@ lemma MeromorphicAt.comp_analyticAt
     refine .congr (.const (f (g x)) x) ?_
     filter_upwards [nhdsWithin_le_nhds <| analyticOrderAt_eq_top.mp hg'] with z hz
     grind
-  · -- interesting case: `g z - g 
+  · -- interesting case: `g z - g x` looks like `(z - x) ^ n` times a non-vanishing function
+    obtain ⟨n, hn⟩ := WithTop.ne_top_iff_exists.mp hg'
+    obtain ⟨h, han, hne, heq⟩ := (hg.fun_sub analyticAt_const).analyticOrderAt_eq_natCast.mp hn.symm
+    set j := fun z => (z - g x) ^ r • f z
+    have : AnalyticAt 𝕜 (fun i => (h i)⁻¹ ^ r • j (g i)) x :=
+      ((han.inv hne).pow r).smul (hr.restrictScalars.comp hg)
+    refine ⟨n * r, this.congr ?_⟩
+    filter_upwards [heq, han.continuousAt.tendsto.eventually_ne hne] with z hz hzne
+    simp only [j, inv_pow, Function.comp_apply, inv_smul_eq_iff₀ (pow_ne_zero r hzne)]
+    rw [hz]; rw [smul_comm]; rw [← smul_assoc]; rw [pow_mul]; rw [smul_pow]
 
 中文:
 引理 MeromorphicAt.comp_analyticAt
@@ -1330,7 +1415,16 @@ lemma MeromorphicAt.comp_analyticAt
     refine .congr (.const (f (g x)) x) ?_
     filter_upwards [nhdsWithin_le_nhds <| analyticOrderAt_eq_top.mp hg'] with z hz
     grind
-  · -- interesting case: `g z - g 
+  · -- interesting case: `g z - g x` looks like `(z - x) ^ n` times a non-vanishing function
+    obtain ⟨n, hn⟩ := WithTop.ne_top_iff_exists.mp hg'
+    obtain ⟨h, han, hne, heq⟩ := (hg.fun_sub analyticAt_const).analyticOrderAt_eq_natCast.mp hn.symm
+    set j := fun z => (z - g x) ^ r • f z
+    have : AnalyticAt 𝕜 (fun i => (h i)⁻¹ ^ r • j (g i)) x :=
+      ((han.inv hne).pow r).smul (hr.restrictScalars.comp hg)
+    refine ⟨n * r, this.congr ?_⟩
+    filter_upwards [heq, han.continuousAt.tendsto.eventually_ne hne] with z hz hzne
+    simp only [j, inv_pow, Function.comp_apply, inv_smul_eq_iff₀ (pow_ne_zero r hzne)]
+    rw [hz]; rw [smul_comm]; rw [← smul_assoc]; rw [pow_mul]; rw [smul_pow]
 
 Depends on / 依赖: WithTop, WithTop.ne_top_iff_exists.mp, analyticAt_const, analyticOrderAt, analyticOrderAt_eq_natCast, analyticOrderAt_eq_natCast.mp, analyticOrderAt_eq_top, analyticOrderAt_eq_top.mp, constant, filter_upwards, fun_sub, function, hg.fun_sub, hn.symm, interesting, locally, ne_top_iff_exists, nhdsWithin_le_nhds, vanishing
 -/
@@ -1366,7 +1460,8 @@ lemma meromorphicAt_comp_iff_of_deriv_ne_zero
   have hra : AnalyticAt 𝕜 r (g x) := hg.analyticAt_localInverse hg'
   have : r (g x) = x := HasStrictFDerivAt.localInverse_apply_image ..
   rw [← this] at hf
-  refine (hf.comp_analyticAt hra).congr (.filter
+  refine (hf.comp_analyticAt hra).congr (.filter_mono ?_ nhdsWithin_le_nhds)
+  exact EventuallyEq.fun_comp (HasStrictDerivAt.eventually_right_inverse ..) f
 
 中文:
 引理 meromorphicAt_comp_iff_of_deriv_ne_zero
@@ -1377,7 +1472,8 @@ lemma meromorphicAt_comp_iff_of_deriv_ne_zero
   have hra : AnalyticAt 𝕜 r (g x) := hg.analyticAt_localInverse hg'
   have : r (g x) = x := HasStrictFDerivAt.localInverse_apply_image ..
   rw [← this] at hf
-  refine (hf.comp_analyticAt hra).congr (.filter
+  refine (hf.comp_analyticAt hra).congr (.filter_mono ?_ nhdsWithin_le_nhds)
+  exact EventuallyEq.fun_comp (HasStrictDerivAt.eventually_right_inverse ..) f
 
 Depends on / 依赖: AnalyticAt, EventuallyEq, EventuallyEq.fun_comp, HasStrictDerivAt, HasStrictDerivAt.eventually_right_inverse, HasStrictFDerivAt, HasStrictFDerivAt.localInverse_apply_image, analyticAt_localInverse, comp_analyticAt, eventually_right_inverse, filter_mono, fun_comp, fun_prop, hasStrictDerivAt, hf.comp_analyticAt, hg.analyticAt_localInverse, hg.hasStrictDerivAt.localInverse, localInverse, localInverse_apply_image, nhdsWithin_le_nhds
 -/
@@ -1550,7 +1646,8 @@ theorem congr_codiscreteWithin
     apply mem_nhdsWithin.mpr
     use U, h₂, hx, Set.inter_subset_left
   filter_upwards [this, h₁ x hx] with a h₁a h₂a
-  simp only 
+  simp only [Set.mem_compl_iff, Set.mem_sdiff, Set.mem_ofPred_eq, not_and] at h₂a
+  tauto
 
 中文:
 定理 congr_codiscreteWithin
@@ -1564,7 +1661,8 @@ theorem congr_codiscreteWithin
     apply mem_nhdsWithin.mpr
     use U, h₂, hx, Set.inter_subset_left
   filter_upwards [this, h₁ x hx] with a h₁a h₂a
-  simp only 
+  simp only [Set.mem_compl_iff, Set.mem_sdiff, Set.mem_ofPred_eq, not_and] at h₂a
+  tauto
 
 Depends on / 依赖: Eventually, EventuallyEq, Filter, Filter.Eventually, Set.inter_subset_left, Set.mem_compl_iff, Set.mem_ofPred_eq, Set.mem_sdiff, disjoint_principal_right, filter_upwards, inter_subset_left, mem_codiscreteWithin, mem_compl_iff, mem_nhdsWithin, mem_nhdsWithin.mpr, mem_ofPred_eq, mem_sdiff, not_and, simp_rw
 -/
@@ -2853,7 +2951,8 @@ theorem measurable
   have h₁' := h₁.to_subtype
   have h₂ : IsOpen s := isOpen_analyticAt 𝕜 f
   have h₃ : ContinuousOn f s := fun z hz => hz.continuousAt.continuousWithinAt
-  exact .of_union_range_cover (.su
+  exact .of_union_range_cover (.subtype_coe h₂.measurableSet) (.subtype_coe h₁.measurableSet)
+    (by simp [-mem_compl_iff]) h₃.domRestrict.measurable (measurable_of_countable _)
 
 中文:
 定理 measurable
@@ -2864,7 +2963,8 @@ theorem measurable
   have h₁' := h₁.to_subtype
   have h₂ : IsOpen s := isOpen_analyticAt 𝕜 f
   have h₃ : ContinuousOn f s := fun z hz => hz.continuousAt.continuousWithinAt
-  exact .of_union_range_cover (.su
+  exact .of_union_range_cover (.subtype_coe h₂.measurableSet) (.subtype_coe h₁.measurableSet)
+    (by simp [-mem_compl_iff]) h₃.domRestrict.measurable (measurable_of_countable _)
 -/
 @[fun_prop] theorem measurable [MeasurableSpace 𝕜] [SecondCountableTopology 𝕜] [BorelSpace 𝕜]
     [MeasurableSpace E] [CompleteSpace E] [BorelSpace E] (h : Meromorphic f) :

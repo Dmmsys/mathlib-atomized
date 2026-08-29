@@ -354,7 +354,8 @@ theorem qParam_tendsto
   rw [tendsto_zero_iff_norm_tendsto_zero]
   simp only [norm_qParam]
   apply (tendsto_comap'_iff (m := fun y => Real.exp (-2 * π * y / h)) (range_im ▸ univ_mem)).mpr
-  refine Real.tendsto_
+  refine Real.tendsto_exp_atBot.comp (.atBot_div_const hh (tendsto_id.const_mul_atTop_of_neg ?_))
+  simpa using Real.pi_pos
 
 中文:
 定理 qParam_tendsto
@@ -366,7 +367,8 @@ theorem qParam_tendsto
   rw [tendsto_zero_iff_norm_tendsto_zero]
   simp only [norm_qParam]
   apply (tendsto_comap'_iff (m := fun y => Real.exp (-2 * π * y / h)) (range_im ▸ univ_mem)).mpr
-  refine Real.tendsto_
+  refine Real.tendsto_exp_atBot.comp (.atBot_div_const hh (tendsto_id.const_mul_atTop_of_neg ?_))
+  simpa using Real.pi_pos
 
 Depends on / 依赖: Real.exp, Real.pi_pos, Real.tendsto_exp_atBot.comp, _iff, atBot_div_const, const_mul_atTop_of_neg, exp_ne_zero, norm_qParam, of_forall, pi_pos, range_im, tendsto_comap, tendsto_exp_atBot, tendsto_id, tendsto_id.const_mul_atTop_of_neg, tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within, tendsto_zero_iff_norm_tendsto_zero, univ_mem
 -/
@@ -551,7 +553,22 @@ theorem differentiableAt_cuspFunction
   have qdiff : HasStrictDerivAt (𝕢 h) (q * (2 * π * I / h)) z := by
     simpa only [id_eq, mul_one] using! (((hasStrictDerivAt_id z).const_mul _).div_const _).cexp
   -- Now show that the q-map has a differentiable local inverse at z, say L : ℂ → ℂ with L q = z.
-  have diff_ne : q
+  have diff_ne : q * (2 * π * I / h) != 0 :=
+    mul_ne_zero (exp_ne_zero _) (div_ne_zero two_pi_I_ne_zero <| mod_cast hh)
+  let L := (qdiff.localInverse (𝕢 h) _ z) diff_ne
+  have diff_L : DifferentiableAt Complex L q :=
+    (qdiff.to_localInverse diff_ne).hasStrictFDerivAt.differentiableAt
+  have hL : 𝕢 h ∘ L =ᶠ[𝓝 q] (id : Complex -> Complex) :=
+    (qdiff.hasStrictFDerivAt_equiv diff_ne).eventually_right_inverse
+  -- Thus, if F = cuspFunction h f, we have F q' = f (L q') for q' near q.
+  -- Since L is differentiable at q, and f is differentiable at L q [ = z], we conclude
+  -- that F is differentiable at q.
+  have hF := hL.fun_comp (cuspFunction h f)
+  have : cuspFunction h f ∘ 𝕢 h ∘ L = f ∘ L := funext fun z => eq_cuspFunction hh hf (L z)
+  rw [this] at hF
+  rw [← EventuallyEq.eq_of_nhds (qdiff.hasStrictFDerivAt_equiv diff_ne).eventually_left_inverse]
+    at hol_z
+  exact (hol_z.comp q diff_L).congr_of_eventuallyEq hF.symm
 
 中文:
 定理 differentiableAt_cuspFunction
@@ -561,7 +578,22 @@ theorem differentiableAt_cuspFunction
   have qdiff : HasStrictDerivAt (𝕢 h) (q * (2 * π * I / h)) z := by
     simpa only [id_eq, mul_one] using! (((hasStrictDerivAt_id z).const_mul _).div_const _).cexp
   -- Now show that the q-map has a differentiable local inverse at z, say L : ℂ → ℂ with L q = z.
-  have diff_ne : q
+  have diff_ne : q * (2 * π * I / h) != 0 :=
+    mul_ne_zero (exp_ne_zero _) (div_ne_zero two_pi_I_ne_zero <| mod_cast hh)
+  let L := (qdiff.localInverse (𝕢 h) _ z) diff_ne
+  have diff_L : DifferentiableAt Complex L q :=
+    (qdiff.to_localInverse diff_ne).hasStrictFDerivAt.differentiableAt
+  have hL : 𝕢 h ∘ L =ᶠ[𝓝 q] (id : Complex -> Complex) :=
+    (qdiff.hasStrictFDerivAt_equiv diff_ne).eventually_right_inverse
+  -- Thus, if F = cuspFunction h f, we have F q' = f (L q') for q' near q.
+  -- Since L is differentiable at q, and f is differentiable at L q [ = z], we conclude
+  -- that F is differentiable at q.
+  have hF := hL.fun_comp (cuspFunction h f)
+  have : cuspFunction h f ∘ 𝕢 h ∘ L = f ∘ L := funext fun z => eq_cuspFunction hh hf (L z)
+  rw [this] at hF
+  rw [← EventuallyEq.eq_of_nhds (qdiff.hasStrictFDerivAt_equiv diff_ne).eventually_left_inverse]
+    at hol_z
+  exact (hol_z.comp q diff_L).congr_of_eventuallyEq hF.symm
 
 Depends on / 依赖: HasStrictDerivAt, const_mul, div_const, hasStrictDerivAt_id, id_eq, mul_one
 -/
@@ -685,7 +717,16 @@ theorem differentiableAt_cuspFunction_zero
   replace t := (eventually_differentiableAt_cuspFunction_nhds_ne_zero hh hf h_hol).and t
   simp only [norm_one, Pi.one_apply, mul_one] at t
   obtain ⟨S, hS1, hS2, hS3⟩ := eventually_nhds_iff.mp (eventually_nhdsWithin_iff.mp t)
-  have
+  have h_diff : DifferentiableOn Complex (cuspFunction h f) (S \ {0}) :=
+    fun x hx => (hS1 x hx.1 hx.2).1.differentiableWithinAt
+  have hF_bd : BddAbove (norm ∘ cuspFunction h f '' (S \ {0})) := by
+    use c
+    simp only [mem_upperBounds, Set.mem_image, Set.mem_sdiff, forall_exists_index, and_imp]
+    intro y q hq hq2 hy
+    simpa only [← hy, norm_one, mul_one] using! (hS1 q hq hq2).2
+  have := differentiableOn_update_limUnder_of_bddAbove (IsOpen.mem_nhds hS2 hS3) h_diff hF_bd
+  rw [← cuspFunction_zero_eq_limUnder_nhds_ne]; rw [update_eq_self] at this
+  exact this.differentiableAt (IsOpen.mem_nhds hS2 hS3)
 
 中文:
 定理 differentiableAt_cuspFunction_zero
@@ -695,7 +736,16 @@ theorem differentiableAt_cuspFunction_zero
   replace t := (eventually_differentiableAt_cuspFunction_nhds_ne_zero hh hf h_hol).and t
   simp only [norm_one, Pi.one_apply, mul_one] at t
   obtain ⟨S, hS1, hS2, hS3⟩ := eventually_nhds_iff.mp (eventually_nhdsWithin_iff.mp t)
-  have
+  have h_diff : DifferentiableOn Complex (cuspFunction h f) (S \ {0}) :=
+    fun x hx => (hS1 x hx.1 hx.2).1.differentiableWithinAt
+  have hF_bd : BddAbove (norm ∘ cuspFunction h f '' (S \ {0})) := by
+    use c
+    simp only [mem_upperBounds, Set.mem_image, Set.mem_sdiff, forall_exists_index, and_imp]
+    intro y q hq hq2 hy
+    simpa only [← hy, norm_one, mul_one] using! (hS1 q hq hq2).2
+  have := differentiableOn_update_limUnder_of_bddAbove (IsOpen.mem_nhds hS2 hS3) h_diff hF_bd
+  rw [← cuspFunction_zero_eq_limUnder_nhds_ne]; rw [update_eq_self] at this
+  exact this.differentiableAt (IsOpen.mem_nhds hS2 hS3)
 
 Depends on / 依赖: BddAbove, DifferentiableOn, Pi.one_apply, boundedAtFilter_cuspFunction, cuspFunction, differentiableWithinAt, eventually_differentiableAt_cuspFunction_nhds_ne_zero, eventually_nhdsWithin_iff, eventually_nhdsWithin_iff.mp, eventually_nhds_iff, eventually_nhds_iff.mp, hF_bd, h_bd, h_diff, h_hol, mem_, mul_one, norm_one, one_apply, replace
 -/

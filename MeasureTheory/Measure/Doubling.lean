@@ -121,7 +121,17 @@ theorem exists_eventually_forall_measure_closedBall_le_mul
       forallᶠ ε in 𝓝[>] 0, forall x, μ (closedBall x ((2 : Real) ^ n * ε)) <= C ^ n * μ (closedBall x ε) by
     rcases pow_unbounded_of_one_lt K one_lt_two with ⟨n, hn⟩
     use C ^ n
-    filter_upwards [eventually_mem_nhdsWithin, this n] with ε h
+    filter_upwards [eventually_mem_nhdsWithin, this n] with ε hε₀ hε x t ht
+    rw [mem_Ioi] at hε₀
+    grw [ht, hn, ENNReal.coe_pow]
+    exact hε x
+  intro n
+  induction n with
+  | zero => simp
+  | succ n ihn =>
+    replace ihn := eventually_nhdsGT_zero_mul_left (two_pos : 0 < (2 : Real)) ihn
+    filter_upwards [ihn, eventually_measure_le_doublingConstant_mul μ] with ε hεn hε x
+    grw [pow_succ, mul_assoc, hεn, hε, ← mul_assoc, pow_succ]
 
 中文:
 定理 存在_eventually_对任意_measure_closedBall_le_mul
@@ -132,7 +142,17 @@ theorem exists_eventually_forall_measure_closedBall_le_mul
       forallᶠ ε in 𝓝[>] 0, forall x, μ (closedBall x ((2 : Real) ^ n * ε)) <= C ^ n * μ (closedBall x ε) by
     rcases pow_unbounded_of_one_lt K one_lt_two with ⟨n, hn⟩
     use C ^ n
-    filter_upwards [eventually_mem_nhdsWithin, this n] with ε h
+    filter_upwards [eventually_mem_nhdsWithin, this n] with ε hε₀ hε x t ht
+    rw [mem_Ioi] at hε₀
+    grw [ht, hn, ENNReal.coe_pow]
+    exact hε x
+  intro n
+  induction n with
+  | zero => simp
+  | succ n ihn =>
+    replace ihn := eventually_nhdsGT_zero_mul_left (two_pos : 0 < (2 : Real)) ihn
+    filter_upwards [ihn, eventually_measure_le_doublingConstant_mul μ] with ε hεn hε x
+    grw [pow_succ, mul_assoc, hεn, hε, ← mul_assoc, pow_succ]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_pow, closedBall, coe_pow, doublingConstant, eventually_mem_nhdsWithin, eventually_nhdsGT_zero_mul_left, filter_upwards, mem_Ioi, one_lt_two, pow_unbounded_of_one_lt, replace, two_pos
 -/
@@ -209,7 +229,14 @@ theorem eventually_measure_mul_le_scalingConstantOf_mul
   rcases mem_nhdsGT_iff_exists_Ioc_subset.1 h with ⟨R, Rpos, hR⟩
   refine ⟨R, Rpos, fun x t r ht hr => ?_⟩
   rcases lt_trichotomy r 0 with (rneg | rfl | rpos)
-  · have : t * r < 0 := mul_neg_of_pos_of_neg h
+  · have : t * r < 0 := mul_neg_of_pos_of_neg ht.1 rneg
+    simp only [closedBall_eq_empty.2 this, measure_empty, zero_le]
+  · simp only [mul_zero]
+    refine le_mul_of_one_le_of_le ?_ le_rfl
+    apply ENNReal.one_le_coe_iff.2 (le_max_right _ _)
+  · apply (hR ⟨rpos, hr⟩ x t ht.2).trans
+    gcongr
+    apply le_max_left
 
 中文:
 定理 eventually_measure_mul_le_scalingConstantOf_mul
@@ -219,7 +246,14 @@ theorem eventually_measure_mul_le_scalingConstantOf_mul
   rcases mem_nhdsGT_iff_exists_Ioc_subset.1 h with ⟨R, Rpos, hR⟩
   refine ⟨R, Rpos, fun x t r ht hr => ?_⟩
   rcases lt_trichotomy r 0 with (rneg | rfl | rpos)
-  · have : t * r < 0 := mul_neg_of_pos_of_neg h
+  · have : t * r < 0 := mul_neg_of_pos_of_neg ht.1 rneg
+    simp only [closedBall_eq_empty.2 this, measure_empty, zero_le]
+  · simp only [mul_zero]
+    refine le_mul_of_one_le_of_le ?_ le_rfl
+    apply ENNReal.one_le_coe_iff.2 (le_max_right _ _)
+  · apply (hR ⟨rpos, hr⟩ x t ht.2).trans
+    gcongr
+    apply le_max_left
 
 Depends on / 依赖: Classical, Classical.choose_spec, ENNReal, ENNReal.one_le_coe_iff, choose_spec, closedBall_eq_empty, exists_eventually_forall_measure_closedBall_le_mul, le_max_right, le_mul_of_one_le_of_le, le_rfl, lt_trichotomy, measure_empty, mem_nhdsGT_iff_exists_Ioc_subset, mul_neg_of_pos_of_neg, mul_zero, one_le_coe_iff, zero_le
 -/

@@ -250,7 +250,7 @@ lemma _root_.AlgebraicGeometry.isPullback_of_isClosedImmersion
     simpa using (IsPullback.of_vert_isIso (show CommSq iX (pullback.lift iX Zf h)
       (𝟙 X) (pullback.fst _ _) from ⟨by simp⟩)).paste_vert (IsPullback.of_hasPullback f iY)
   refine IsClosedImmersion.isIso_of_ker_eq iX (pullback.fst f iY) _ (by simp) ?_
-
+  rw [ker_fst_of_isClosedImmersion]; rw [h']
 
 中文:
 引理 _root_.AlgebraicGeometry.isPullback_of_isClosedImmersion
@@ -259,7 +259,7 @@ lemma _root_.AlgebraicGeometry.isPullback_of_isClosedImmersion
     simpa using (IsPullback.of_vert_isIso (show CommSq iX (pullback.lift iX Zf h)
       (𝟙 X) (pullback.fst _ _) from ⟨by simp⟩)).paste_vert (IsPullback.of_hasPullback f iY)
   refine IsClosedImmersion.isIso_of_ker_eq iX (pullback.fst f iY) _ (by simp) ?_
-
+  rw [ker_fst_of_isClosedImmersion]; rw [h']
 
 Depends on / 依赖: CommSq, IsClosedImmersion, IsClosedImmersion.isIso_of_ker_eq, IsPullback, IsPullback.of_hasPullback, IsPullback.of_vert_isIso, isIso_of_ker_eq, ker_fst_of_isClosedImmersion, of_hasPullback, of_vert_isIso, paste_vert, pullback, pullback.fst, pullback.lift
 -/
@@ -305,7 +305,10 @@ lemma le_map_iff_comap_le
       ((I.subschemeι ≫ f).toImage ≫ inclusion H) (by simp)]
     exact Hom.le_ker_comp _ _
   · intro H
-    have : (inclusion H ≫ (J.comapIso f).hom ≫ pullback.snd _ _) ≫ J.subsc
+    have : (inclusion H ≫ (J.comapIso f).hom ≫ pullback.snd _ _) ≫ J.subschemeι =
+        I.subschemeι ≫ f := by simp [← pullback.condition]
+    rw [map]; rw [← J.ker_subschemeι]; rw [← this]
+    exact Hom.le_ker_comp _ _
 
 中文:
 引理 le_map_iff_comap_le
@@ -317,7 +320,10 @@ lemma le_map_iff_comap_le
       ((I.subschemeι ≫ f).toImage ≫ inclusion H) (by simp)]
     exact Hom.le_ker_comp _ _
   · intro H
-    have : (inclusion H ≫ (J.comapIso f).hom ≫ pullback.snd _ _) ≫ J.subsc
+    have : (inclusion H ≫ (J.comapIso f).hom ≫ pullback.snd _ _) ≫ J.subschemeι =
+        I.subschemeι ≫ f := by simp [← pullback.condition]
+    rw [map]; rw [← J.ker_subschemeι]; rw [← this]
+    exact Hom.le_ker_comp _ _
 
 Depends on / 依赖: Hom.le_ker_comp, I.ker_subscheme, I.subscheme, J.comapIso, J.ker_subscheme, J.subscheme, comapIso, condition, inclusion, le_ker_comp, lift_fst, pullback, pullback.condition, pullback.lift_fst, pullback.snd, toImage
 -/
@@ -644,7 +650,10 @@ lemma map_vanishingIdeal
   · rw [map, ← le_support_iff_le_vanishingIdeal, TopologicalSpace.Closeds.closure_le]
     refine .trans ?_ (Hom.range_subset_ker_support _)
     rw [Scheme.Hom.comp_base]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [range_subschemeι]; rw [coe_support_vanishingIdeal]
-  · simp
+  · simp [le_map_iff_comap_le, ← le_support_iff_le_vanishingIdeal, ← Set.image_subset_iff,
+      subset_closure, ← SetLike.coe_subset_coe]
+
+@[simp]
 
 中文:
 引理 map_vanishingIdeal
@@ -654,7 +663,10 @@ lemma map_vanishingIdeal
   · rw [map, ← le_support_iff_le_vanishingIdeal, TopologicalSpace.Closeds.closure_le]
     refine .trans ?_ (Hom.range_subset_ker_support _)
     rw [Scheme.Hom.comp_base]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [range_subschemeι]; rw [coe_support_vanishingIdeal]
-  · simp
+  · simp [le_map_iff_comap_le, ← le_support_iff_le_vanishingIdeal, ← Set.image_subset_iff,
+      subset_closure, ← SetLike.coe_subset_coe]
+
+@[simp]
 
 Depends on / 依赖: Closeds, Hom.range_subset_ker_support, Scheme, Scheme.Hom.comp_base, Set.image_subset_iff, Set.range_comp, SetLike, SetLike.coe_subset_coe, TopCat, TopCat.coe_comp, TopologicalSpace, TopologicalSpace.Closeds.closure_le, closure_le, coe_comp, coe_subset_coe, coe_support_vanishingIdeal, comp_base, image_subset_iff, le_antisymm, le_map_iff_comap_le
 -/

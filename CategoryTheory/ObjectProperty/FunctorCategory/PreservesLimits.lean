@@ -545,7 +545,9 @@ instance [HasColimitsOfShape
         (fun k' => isLimitOfPreserves (h.diag.obj k') hc)⟩⟩⟩
     let e : h.diag.flip ⋙ colim ≅ G :=
       NatIso.ofComponents
-       
+        (fun j => (colimit.isColimit (h.diag.flip.obj j)).coconePointUniqueUpToIso
+          (isColimitOfPreserves ((evaluation _ _).obj j) h.isColimit))
+    exact preservesLimitsOfShape_of_natIso e
 
 中文:
 实例 [有形状余极限
@@ -558,7 +560,9 @@ instance [HasColimitsOfShape
         (fun k' => isLimitOfPreserves (h.diag.obj k') hc)⟩⟩⟩
     let e : h.diag.flip ⋙ colim ≅ G :=
       NatIso.ofComponents
-       
+        (fun j => (colimit.isColimit (h.diag.flip.obj j)).coconePointUniqueUpToIso
+          (isColimitOfPreserves ((evaluation _ _).obj j) h.isColimit))
+    exact preservesLimitsOfShape_of_natIso e
 -/
 instance [HasColimitsOfShape K' C]
     [PreservesLimitsOfShape K (colim (J := K') (C := C))] :

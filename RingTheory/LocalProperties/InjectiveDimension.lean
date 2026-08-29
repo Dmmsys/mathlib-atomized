@@ -77,7 +77,23 @@ lemma localizedModule_hasInjectiveDimensionLE
   | zero =>
     have injle : HasInjectiveDimensionLE M 0 := ‹_›
     simp only [HasInjectiveDimensionLE, zero_add, ← injective_iff_hasInjectiveDimensionLT_one]
-      at injle 
+      at injle ⊢
+    rw [← Module.injective_iff_injective_object] at injle ⊢
+    exact Module.injective_of_isLocalizedModule S (M.localizedModuleMkLinearMap S)
+  | succ n ih =>
+    have ei : EnoughInjectives (ModuleCat.{v} R) := inferInstance
+    rcases ei.1 M with ⟨I, inj, f, monof⟩
+    let T := ShortComplex.mk f (cokernel.π f) (cokernel.condition f)
+    have T_exact : T.ShortExact := { exact := ShortComplex.exact_cokernel f }
+    have T_exact' : Function.Exact (ConcreteCategory.hom T.f) (ConcreteCategory.hom T.g) :=
+      (ShortComplex.ShortExact.moduleCat_exact_iff_function_exact _).mp T_exact.1
+    have TS_exact' := IsLocalizedModule.map_exact S (T.X₁.localizedModuleMkLinearMap S)
+      (T.X₂.localizedModuleMkLinearMap S) (T.X₃.localizedModuleMkLinearMap S) _ _ T_exact'
+    let TS := T.map (ModuleCat.localizedModuleFunctor S)
+    have TS_exact : TS.ShortExact := T_exact.map_of_exact (ModuleCat.localizedModuleFunctor S)
+    let _ := (T_exact.hasInjectiveDimensionLT_X₃_iff n ‹_›).mpr ‹_›
+    let _ : Injective TS.X₂ := (ModuleCat.localizedModuleFunctor.{v} S).injective_obj _
+    exact (TS_exact.hasInjectiveDimensionLT_X₃_iff n ‹_›).mp (ih T.X₃)
 
 中文:
 引理 localizedModule_hasInjectiveDimensionLE
@@ -88,7 +104,23 @@ lemma localizedModule_hasInjectiveDimensionLE
   | zero =>
     have injle : HasInjectiveDimensionLE M 0 := ‹_›
     simp only [HasInjectiveDimensionLE, zero_add, ← injective_iff_hasInjectiveDimensionLT_one]
-      at injle 
+      at injle ⊢
+    rw [← Module.injective_iff_injective_object] at injle ⊢
+    exact Module.injective_of_isLocalizedModule S (M.localizedModuleMkLinearMap S)
+  | succ n ih =>
+    have ei : EnoughInjectives (ModuleCat.{v} R) := inferInstance
+    rcases ei.1 M with ⟨I, inj, f, monof⟩
+    let T := ShortComplex.mk f (cokernel.π f) (cokernel.condition f)
+    have T_exact : T.ShortExact := { exact := ShortComplex.exact_cokernel f }
+    have T_exact' : Function.Exact (ConcreteCategory.hom T.f) (ConcreteCategory.hom T.g) :=
+      (ShortComplex.ShortExact.moduleCat_exact_iff_function_exact _).mp T_exact.1
+    have TS_exact' := IsLocalizedModule.map_exact S (T.X₁.localizedModuleMkLinearMap S)
+      (T.X₂.localizedModuleMkLinearMap S) (T.X₃.localizedModuleMkLinearMap S) _ _ T_exact'
+    let TS := T.map (ModuleCat.localizedModuleFunctor S)
+    have TS_exact : TS.ShortExact := T_exact.map_of_exact (ModuleCat.localizedModuleFunctor S)
+    let _ := (T_exact.hasInjectiveDimensionLT_X₃_iff n ‹_›).mpr ‹_›
+    let _ : Injective TS.X₂ := (ModuleCat.localizedModuleFunctor.{v} S).injective_obj _
+    exact (TS_exact.hasInjectiveDimensionLT_X₃_iff n ‹_›).mp (ih T.X₃)
 
 Depends on / 依赖: EnoughInjectives, HasInjectiveDimensionLE, Localization, Localization.mkHom_surjective, M.localizedModuleMkLinearMap, Module, Module.injective_iff_injective_object, Module.injective_of_isLocalizedModule, ModuleCat, generalizing, injective_iff_hasInjectiveDimensionLT_one, injective_iff_injective_object, injective_of_isLocalizedModule, localizedModuleMkLinearMap, mkHom_surjective, small_of_surjective, zero_add
 -/
@@ -133,7 +165,14 @@ lemma injectiveDimension_le_injectiveDimension_of_isLocalizedModule
   refine le_of_forall_ge (fun N => ?_)
   induction N with
   | bot =>
-    simp only 
+    simp only [le_bot_iff, injectiveDimension_eq_bot_iff, ModuleCat.isZero_iff_subsingleton,
+      ModuleCat.localizedModule, ← Equiv.subsingleton_congr (equivShrink _)]
+    intro _
+    apply LocalizedModule.instSubsingleton _
+  | coe N =>
+    induction N with
+    | top => simp
+    | coe n => simpa using aux n
 
 中文:
 引理 injectiveDimension_le_injectiveDimension_of_isLocalizedModule
@@ -146,7 +185,14 @@ lemma injectiveDimension_le_injectiveDimension_of_isLocalizedModule
   refine le_of_forall_ge (fun N => ?_)
   induction N with
   | bot =>
-    simp only 
+    simp only [le_bot_iff, injectiveDimension_eq_bot_iff, ModuleCat.isZero_iff_subsingleton,
+      ModuleCat.localizedModule, ← Equiv.subsingleton_congr (equivShrink _)]
+    intro _
+    apply LocalizedModule.instSubsingleton _
+  | coe N =>
+    induction N with
+    | top => simp
+    | coe n => simpa using aux n
 
 Depends on / 依赖: Equiv.subsingleton_congr, LocalizedModule, LocalizedModule.instSubsingleton, M.localizedModule, M.localizedModule_hasInjectiveDimensionLE, ModuleCat, ModuleCat.isZero_iff_subsingleton, ModuleCat.localizedModule, equivShrink, injectiveDimension, injectiveDimension_eq_bot_iff, injectiveDimension_le_iff, instSubsingleton, isZero_iff_subsingleton, le_bot_iff, le_of_forall_ge, localizedModule, localizedModule_hasInjectiveDimensionLE, subsingleton_congr
 -/
@@ -182,7 +228,34 @@ lemma hasInjectiveDimensionLE_iff_forall_maximalSpectrum
     refine ⟨fun h m => ?_, fun h => ?_⟩
     · let _ : Small.{v} (Localization m.1.primeCompl) :=
         small_of_surjective Localization.mkHom_surjective
- 
+      let _ : Module.Injective R M := Module.injective_module_of_injective_object R M
+      rw [← Module.injective_iff_injective_object]
+      exact Module.injective_of_isLocalizedModule m.1.primeCompl
+        (M.localizedModuleMkLinearMap m.1.primeCompl)
+    · rw [← Module.injective_iff_injective_object]
+      apply Module.injective_of_localization_maximal (fun p hp => ?_)
+      let : Small.{v} (Localization.AtPrime p) := small_of_surjective Localization.mkHom_surjective
+      have : Module.Injective (Localization.AtPrime p) (M.localizedModule p.primeCompl) := by
+        simpa [Module.injective_iff_injective_object] using h ⟨p, hp⟩
+      rw [← Module.Baer.iff_injective] at this ⊢
+      exact Module.Baer.of_equiv (LinearEquiv.extendScalarsOfIsLocalization p.primeCompl
+        (Localization.AtPrime p) (IsLocalizedModule.linearEquiv p.primeCompl
+        (M.localizedModuleMkLinearMap p.primeCompl)
+        (LocalizedModule.mkLinearMap p.primeCompl M))) this
+  | succ n ih =>
+    have ei : EnoughInjectives (ModuleCat.{v} R) := inferInstance
+    rcases ei.1 M with ⟨I, inj, f, monof⟩
+    let S := ShortComplex.mk f (cokernel.π f) (cokernel.condition f)
+    have S_exact : S.ShortExact := { exact := ShortComplex.exact_cokernel f }
+    let Sp (m : MaximalSpectrum R) := S.map (ModuleCat.localizedModuleFunctor m.1.primeCompl)
+    have Sp_exact (m : MaximalSpectrum R) : (Sp m).ShortExact :=
+      S_exact.map_of_exact (ModuleCat.localizedModuleFunctor m.1.primeCompl)
+    have ih' := ih S.X₃
+    simp only [HasInjectiveDimensionLE] at ih' ⊢
+    rw [← S_exact.hasInjectiveDimensionLT_X₃_iff n inj]; rw [ih']
+    have injp (m : MaximalSpectrum R) : Injective (Sp m).X₂ :=
+      (ModuleCat.localizedModuleFunctor.{v} m.1.primeCompl).injective_obj _
+    exact (forall_congr' (fun p => (Sp_exact p).hasInjectiveDimensionLT_X₃_iff n (injp p)))
 
 中文:
 引理 hasInjectiveDimensionLE_iff_对任意_maximalSpectrum
@@ -194,7 +267,34 @@ lemma hasInjectiveDimensionLE_iff_forall_maximalSpectrum
     refine ⟨fun h m => ?_, fun h => ?_⟩
     · let _ : Small.{v} (Localization m.1.primeCompl) :=
         small_of_surjective Localization.mkHom_surjective
- 
+      let _ : Module.Injective R M := Module.injective_module_of_injective_object R M
+      rw [← Module.injective_iff_injective_object]
+      exact Module.injective_of_isLocalizedModule m.1.primeCompl
+        (M.localizedModuleMkLinearMap m.1.primeCompl)
+    · rw [← Module.injective_iff_injective_object]
+      apply Module.injective_of_localization_maximal (fun p hp => ?_)
+      let : Small.{v} (Localization.AtPrime p) := small_of_surjective Localization.mkHom_surjective
+      have : Module.Injective (Localization.AtPrime p) (M.localizedModule p.primeCompl) := by
+        simpa [Module.injective_iff_injective_object] using h ⟨p, hp⟩
+      rw [← Module.Baer.iff_injective] at this ⊢
+      exact Module.Baer.of_equiv (LinearEquiv.extendScalarsOfIsLocalization p.primeCompl
+        (Localization.AtPrime p) (IsLocalizedModule.linearEquiv p.primeCompl
+        (M.localizedModuleMkLinearMap p.primeCompl)
+        (LocalizedModule.mkLinearMap p.primeCompl M))) this
+  | succ n ih =>
+    have ei : EnoughInjectives (ModuleCat.{v} R) := inferInstance
+    rcases ei.1 M with ⟨I, inj, f, monof⟩
+    let S := ShortComplex.mk f (cokernel.π f) (cokernel.condition f)
+    have S_exact : S.ShortExact := { exact := ShortComplex.exact_cokernel f }
+    let Sp (m : MaximalSpectrum R) := S.map (ModuleCat.localizedModuleFunctor m.1.primeCompl)
+    have Sp_exact (m : MaximalSpectrum R) : (Sp m).ShortExact :=
+      S_exact.map_of_exact (ModuleCat.localizedModuleFunctor m.1.primeCompl)
+    have ih' := ih S.X₃
+    simp only [HasInjectiveDimensionLE] at ih' ⊢
+    rw [← S_exact.hasInjectiveDimensionLT_X₃_iff n inj]; rw [ih']
+    have injp (m : MaximalSpectrum R) : Injective (Sp m).X₂ :=
+      (ModuleCat.localizedModuleFunctor.{v} m.1.primeCompl).injective_obj _
+    exact (forall_congr' (fun p => (Sp_exact p).hasInjectiveDimensionLT_X₃_iff n (injp p)))
 
 Depends on / 依赖: HasInjectiveDimensionLE, Injective, IsScalarTower, IsScalarTower.continuousConstSMul, Localization, Localization.mkHom_surjective, M.localizedModuleMkLinearMap, Module, Module.Injective, Module.injective_iff_injective_object, Module.injective_module_of_injective_object, Module.injective_of_isLocalizedModule, Monoid, continuousConstSMul, generalizing, injective_iff_hasInjectiveDimensionLT_one, injective_iff_injective_object, injective_module_of_injective_object, injective_of_isLocalizedModule, localizedModuleMkLinearMap
 -/
@@ -273,7 +373,20 @@ lemma injectiveDimension_eq_iSup_localizedModule_prime
     (M.localizedModule p.1.primeCompl) <= n := by
     simp only [injectiveDimension_le_iff, iSup_le_iff]
     exact M.hasInjectiveDimensionLE_iff_forall_primeSpectrum n
-  refine eq_of_forall_ge_iff (fun 
+  refine eq_of_forall_ge_iff (fun N => ?_)
+  induction N with
+  | bot =>
+    simp only [le_bot_iff, injectiveDimension_eq_bot_iff, ModuleCat.isZero_iff_subsingleton,
+      iSup_eq_bot, ModuleCat.localizedModule, ← Equiv.subsingleton_congr (equivShrink _)]
+    refine ⟨fun h p => LocalizedModule.instSubsingleton _, fun h => ?_⟩
+    apply Module.subsingleton_of_localization_maximal (R := R)
+      (fun p => LocalizedModule p.primeCompl M) (fun p => LocalizedModule.mkLinearMap p.primeCompl M)
+    intro p hp
+    exact h ⟨p, hp.isPrime⟩
+  | coe N =>
+    induction N with
+    | top => simp
+    | coe n => simpa using aux n
 
 中文:
 引理 injectiveDimension_eq_iSup_localizedModule_prime
@@ -283,7 +396,20 @@ lemma injectiveDimension_eq_iSup_localizedModule_prime
     (M.localizedModule p.1.primeCompl) <= n := by
     simp only [injectiveDimension_le_iff, iSup_le_iff]
     exact M.hasInjectiveDimensionLE_iff_forall_primeSpectrum n
-  refine eq_of_forall_ge_iff (fun 
+  refine eq_of_forall_ge_iff (fun N => ?_)
+  induction N with
+  | bot =>
+    simp only [le_bot_iff, injectiveDimension_eq_bot_iff, ModuleCat.isZero_iff_subsingleton,
+      iSup_eq_bot, ModuleCat.localizedModule, ← Equiv.subsingleton_congr (equivShrink _)]
+    refine ⟨fun h p => LocalizedModule.instSubsingleton _, fun h => ?_⟩
+    apply Module.subsingleton_of_localization_maximal (R := R)
+      (fun p => LocalizedModule p.primeCompl M) (fun p => LocalizedModule.mkLinearMap p.primeCompl M)
+    intro p hp
+    exact h ⟨p, hp.isPrime⟩
+  | coe N =>
+    induction N with
+    | top => simp
+    | coe n => simpa using aux n
 
 Depends on / 依赖: Equiv.subsingleton_congr, M.hasInjectiveDimensionLE_iff_forall_primeSpectrum, M.localizedModule, ModuleCat, ModuleCat.isZero_iff_subsingleton, ModuleCat.localizedModule, PrimeSpectrum, eq_of_forall_ge_iff, equivShrink, hasInjectiveDimensionLE_iff_forall_primeSpectrum, iSup_eq_bot, iSup_le_iff, injectiveDimension, injectiveDimension_eq_bot_iff, injectiveDimension_le_iff, isZero_iff_subsingleton, le_bot_iff, localizedModule, primeCompl, subsingleton_congr
 -/
@@ -320,7 +446,20 @@ lemma injectiveDimension_eq_iSup_localizedModule_maximal
     (M.localizedModule m.1.primeCompl) <= n := by
     simp only [injectiveDimension_le_iff, iSup_le_iff]
     exact M.hasInjectiveDimensionLE_iff_forall_maximalSpectrum n
-  refine eq_of_forall_ge_iff (
+  refine eq_of_forall_ge_iff (fun N => ?_)
+  induction N with
+  | bot =>
+    simp only [le_bot_iff, injectiveDimension_eq_bot_iff, ModuleCat.isZero_iff_subsingleton,
+      iSup_eq_bot, ModuleCat.localizedModule, ← Equiv.subsingleton_congr (equivShrink _)]
+    refine ⟨fun h p => LocalizedModule.instSubsingleton _, fun h => ?_⟩
+    apply Module.subsingleton_of_localization_maximal (R := R)
+      (fun p => LocalizedModule p.primeCompl M) (fun p => LocalizedModule.mkLinearMap p.primeCompl M)
+    intro p hp
+    exact h ⟨p, hp⟩
+  | coe N =>
+    induction N with
+    | top => simp
+    | coe n => simpa using aux n
 
 中文:
 引理 injectiveDimension_eq_iSup_localizedModule_maximal
@@ -330,7 +469,20 @@ lemma injectiveDimension_eq_iSup_localizedModule_maximal
     (M.localizedModule m.1.primeCompl) <= n := by
     simp only [injectiveDimension_le_iff, iSup_le_iff]
     exact M.hasInjectiveDimensionLE_iff_forall_maximalSpectrum n
-  refine eq_of_forall_ge_iff (
+  refine eq_of_forall_ge_iff (fun N => ?_)
+  induction N with
+  | bot =>
+    simp only [le_bot_iff, injectiveDimension_eq_bot_iff, ModuleCat.isZero_iff_subsingleton,
+      iSup_eq_bot, ModuleCat.localizedModule, ← Equiv.subsingleton_congr (equivShrink _)]
+    refine ⟨fun h p => LocalizedModule.instSubsingleton _, fun h => ?_⟩
+    apply Module.subsingleton_of_localization_maximal (R := R)
+      (fun p => LocalizedModule p.primeCompl M) (fun p => LocalizedModule.mkLinearMap p.primeCompl M)
+    intro p hp
+    exact h ⟨p, hp⟩
+  | coe N =>
+    induction N with
+    | top => simp
+    | coe n => simpa using aux n
 
 Depends on / 依赖: Equiv.subsingleton_congr, M.hasInjectiveDimensionLE_iff_forall_maximalSpectrum, M.localizedModule, MaximalSpectrum, ModuleCat, ModuleCat.isZero_iff_subsingleton, ModuleCat.localizedModule, eq_of_forall_ge_iff, equivShrink, hasInjectiveDimensionLE_iff_forall_maximalSpectrum, iSup_eq_bot, iSup_le_iff, injectiveDimension, injectiveDimension_eq_bot_iff, injectiveDimension_le_iff, isZero_iff_subsingleton, le_bot_iff, localizedModule, primeCompl, subsingleton_congr
 -/

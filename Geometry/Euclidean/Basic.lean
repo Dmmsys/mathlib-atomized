@@ -99,7 +99,11 @@ theorem dist_affineCombination
       exact dist a₁ a₂ * dist a₁ a₂ = (-∑ i₁ in s, ∑ i₂ in s,
         (w₁ - w₂) i₁ * (w₁ - w₂) i₂ * (dist (p i₁) (p i₂) * dist (p i₁) (p i₂))) / 2 := by
   dsimp only
-  rw [dist_eq_norm_vsub V (s.affineCombination Real p w₁)
+  rw [dist_eq_norm_vsub V (s.affineCombination Real p w₁) (s.affineCombination Real p w₂)]; rw [←
+    @inner_self_eq_norm_mul_norm Real]; rw [Finset.affineCombination_vsub]
+  have h : (∑ i in s, (w₁ - w₂) i) = 0 := by
+    simp_rw [Pi.sub_apply, Finset.sum_sub_distrib, h₁, h₂, sub_self]
+  exact inner_weightedVSub p h p h
 
 中文:
 定理 dist_affineCombination
@@ -109,7 +113,11 @@ theorem dist_affineCombination
       exact dist a₁ a₂ * dist a₁ a₂ = (-∑ i₁ in s, ∑ i₂ in s,
         (w₁ - w₂) i₁ * (w₁ - w₂) i₂ * (dist (p i₁) (p i₂) * dist (p i₁) (p i₂))) / 2 := by
   dsimp only
-  rw [dist_eq_norm_vsub V (s.affineCombination Real p w₁)
+  rw [dist_eq_norm_vsub V (s.affineCombination Real p w₁) (s.affineCombination Real p w₂)]; rw [←
+    @inner_self_eq_norm_mul_norm Real]; rw [Finset.affineCombination_vsub]
+  have h : (∑ i in s, (w₁ - w₂) i) = 0 := by
+    simp_rw [Pi.sub_apply, Finset.sum_sub_distrib, h₁, h₂, sub_self]
+  exact inner_weightedVSub p h p h
 
 Depends on / 依赖: affineCombination, s.affineCombination
 -/
@@ -161,7 +169,12 @@ theorem dist_smul_vadd_eq_dist
   conv_lhs =>
     rw [← mul_self_inj_of_nonneg dist_nonneg dist_nonneg]; rw [dist_smul_vadd_sq]; rw [mul_assoc]; rw [← sub_eq_zero]; rw [add_sub_assoc]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [← real_inner_self_eq_norm_mul_norm]; rw [sub_self]
   have hvi : ⟪v, v⟫ != 0 := by simpa using hv
-  have hd :
+  have hd : discrim ⟪v, v⟫ (2 * ⟪v, p₁ -ᵥ p₂⟫) 0 = 2 * ⟪v, p₁ -ᵥ p₂⟫ * (2 * ⟪v, p₁ -ᵥ p₂⟫) := by
+    rw [discrim]
+    ring
+  rw [quadratic_eq_zero_iff hvi hd]; rw [neg_add_cancel]; rw [zero_div]; rw [neg_mul_eq_neg_mul]; rw [←
+    mul_sub_right_distrib]; rw [sub_eq_add_neg]; rw [← mul_two]; rw [mul_assoc]; rw [mul_div_assoc]; rw [mul_div_mul_left]; rw [mul_div_assoc]
+  simp
 
 中文:
 定理 dist_smul_vadd_eq_dist
@@ -170,7 +183,12 @@ theorem dist_smul_vadd_eq_dist
   conv_lhs =>
     rw [← mul_self_inj_of_nonneg dist_nonneg dist_nonneg]; rw [dist_smul_vadd_sq]; rw [mul_assoc]; rw [← sub_eq_zero]; rw [add_sub_assoc]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [← real_inner_self_eq_norm_mul_norm]; rw [sub_self]
   have hvi : ⟪v, v⟫ != 0 := by simpa using hv
-  have hd :
+  have hd : discrim ⟪v, v⟫ (2 * ⟪v, p₁ -ᵥ p₂⟫) 0 = 2 * ⟪v, p₁ -ᵥ p₂⟫ * (2 * ⟪v, p₁ -ᵥ p₂⟫) := by
+    rw [discrim]
+    ring
+  rw [quadratic_eq_zero_iff hvi hd]; rw [neg_add_cancel]; rw [zero_div]; rw [neg_mul_eq_neg_mul]; rw [←
+    mul_sub_right_distrib]; rw [sub_eq_add_neg]; rw [← mul_two]; rw [mul_assoc]; rw [mul_div_assoc]; rw [mul_div_mul_left]; rw [mul_div_assoc]
+  simp
 
 Depends on / 依赖: add_sub_assoc, conv_lhs, discrim, dist_eq_norm_vsub, dist_nonneg, dist_smul_vadd_sq, mul_, mul_assoc, mul_self_inj_of_nonneg, neg_add_cancel, neg_mul_eq_neg_mul, quadratic_eq_zero_iff, real_inner_self_eq_norm_mul_norm, sub_eq_zero, sub_self, zero_div
 -/
@@ -199,7 +217,47 @@ theorem eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two
     inner_vsub_vsub_of_dist_eq_of_dist_eq (hp₁c₁.trans hp₂c₁.symm) (hp₁c₂.trans hp₂c₂.symm)
   have hop : ⟪c₂ -ᵥ c₁, p -ᵥ p₁⟫ = 0 :=
     inner_vsub_vsub_of_dist_eq_of_dist_eq (hp₁c₁.trans hpc₁.symm) (hp₁c₂.trans hpc₂.symm)
-  let b : Fin 2 -> V := ![c₂ -ᵥ c₁,
+  let b : Fin 2 -> V := ![c₂ -ᵥ c₁, p₂ -ᵥ p₁]
+  have hb : LinearIndependent Real b := by
+    refine linearIndependent_of_ne_zero_of_inner_eq_zero ?_ ?_
+    · intro i
+      fin_cases i <;> simp [b, hc.symm, hp.symm]
+    · intro i j hij
+      fin_cases i <;> fin_cases j <;> try exact False.elim (hij rfl)
+      · exact ho
+      · rw [real_inner_comm]
+        exact ho
+  have hbs : Submodule.span Real (Set.range b) = s.direction := by
+    refine Submodule.eq_of_le_of_finrank_eq ?_ ?_
+    · rw [Submodule.span_le, Set.range_subset_iff]
+      intro i
+      fin_cases i
+      · exact vsub_mem_direction hc₂s hc₁s
+      · exact vsub_mem_direction hp₂s hp₁s
+    · rw [finrank_span_eq_card hb, Fintype.card_fin, hd]
+  have hv : forall v in s.direction, exists t₁ t₂ : Real, v = t₁ • (c₂ -ᵥ c₁) + t₂ • (p₂ -ᵥ p₁) := by
+    intro v hv
+    have hr : Set.range b = {c₂ -ᵥ c₁, p₂ -ᵥ p₁} := by
+      have hu : (Finset.univ : Finset (Fin 2)) = {0, 1} := by decide
+      classical
+      rw [← Fintype.coe_image_univ]; rw [hu]
+      simp [b]
+    rw [← hbs]; rw [hr]; rw [Submodule.mem_span_insert] at hv
+    rcases hv with ⟨t₁, v', hv', hv⟩
+    rw [Submodule.mem_span_singleton] at hv'
+    rcases hv' with ⟨t₂, rfl⟩
+    exact ⟨t₁, t₂, hv⟩
+  rcases hv (p -ᵥ p₁) (vsub_mem_direction hps hp₁s) with ⟨t₁, t₂, hpt⟩
+  simp only [hpt, inner_add_right, inner_smul_right, ho, mul_zero, add_zero,
+    mul_eq_zero, inner_self_eq_zero, vsub_eq_zero_iff_eq, hc.symm, or_false] at hop
+  rw [hop]; rw [zero_smul]; rw [zero_add]; rw [← eq_vadd_iff_vsub_eq] at hpt
+  subst hpt
+  have hp' : (p₂ -ᵥ p₁ : V) != 0 := by simp [hp.symm]
+  have hp₂ : dist ((1 : Real) • (p₂ -ᵥ p₁) +ᵥ p₁) c₁ = r₁ := by simp [hp₂c₁]
+  rw [← hp₁c₁]; rw [dist_smul_vadd_eq_dist _ _ hp'] at hpc₁ hp₂
+  simp only [one_ne_zero, false_or] at hp₂
+  rw [hp₂.symm] at hpc₁
+  rcases hpc₁ with hpc₁ | hpc₁ <;> simp [hpc₁]
 
 中文:
 定理 eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two
@@ -209,7 +267,47 @@ theorem eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two
     inner_vsub_vsub_of_dist_eq_of_dist_eq (hp₁c₁.trans hp₂c₁.symm) (hp₁c₂.trans hp₂c₂.symm)
   have hop : ⟪c₂ -ᵥ c₁, p -ᵥ p₁⟫ = 0 :=
     inner_vsub_vsub_of_dist_eq_of_dist_eq (hp₁c₁.trans hpc₁.symm) (hp₁c₂.trans hpc₂.symm)
-  let b : Fin 2 -> V := ![c₂ -ᵥ c₁,
+  let b : Fin 2 -> V := ![c₂ -ᵥ c₁, p₂ -ᵥ p₁]
+  have hb : LinearIndependent Real b := by
+    refine linearIndependent_of_ne_zero_of_inner_eq_zero ?_ ?_
+    · intro i
+      fin_cases i <;> simp [b, hc.symm, hp.symm]
+    · intro i j hij
+      fin_cases i <;> fin_cases j <;> try exact False.elim (hij rfl)
+      · exact ho
+      · rw [real_inner_comm]
+        exact ho
+  have hbs : Submodule.span Real (Set.range b) = s.direction := by
+    refine Submodule.eq_of_le_of_finrank_eq ?_ ?_
+    · rw [Submodule.span_le, Set.range_subset_iff]
+      intro i
+      fin_cases i
+      · exact vsub_mem_direction hc₂s hc₁s
+      · exact vsub_mem_direction hp₂s hp₁s
+    · rw [finrank_span_eq_card hb, Fintype.card_fin, hd]
+  have hv : forall v in s.direction, exists t₁ t₂ : Real, v = t₁ • (c₂ -ᵥ c₁) + t₂ • (p₂ -ᵥ p₁) := by
+    intro v hv
+    have hr : Set.range b = {c₂ -ᵥ c₁, p₂ -ᵥ p₁} := by
+      have hu : (Finset.univ : Finset (Fin 2)) = {0, 1} := by decide
+      classical
+      rw [← Fintype.coe_image_univ]; rw [hu]
+      simp [b]
+    rw [← hbs]; rw [hr]; rw [Submodule.mem_span_insert] at hv
+    rcases hv with ⟨t₁, v', hv', hv⟩
+    rw [Submodule.mem_span_singleton] at hv'
+    rcases hv' with ⟨t₂, rfl⟩
+    exact ⟨t₁, t₂, hv⟩
+  rcases hv (p -ᵥ p₁) (vsub_mem_direction hps hp₁s) with ⟨t₁, t₂, hpt⟩
+  simp only [hpt, inner_add_right, inner_smul_right, ho, mul_zero, add_zero,
+    mul_eq_zero, inner_self_eq_zero, vsub_eq_zero_iff_eq, hc.symm, or_false] at hop
+  rw [hop]; rw [zero_smul]; rw [zero_add]; rw [← eq_vadd_iff_vsub_eq] at hpt
+  subst hpt
+  have hp' : (p₂ -ᵥ p₁ : V) != 0 := by simp [hp.symm]
+  have hp₂ : dist ((1 : Real) • (p₂ -ᵥ p₁) +ᵥ p₁) c₁ = r₁ := by simp [hp₂c₁]
+  rw [← hp₁c₁]; rw [dist_smul_vadd_eq_dist _ _ hp'] at hpc₁ hp₂
+  simp only [one_ne_zero, false_or] at hp₂
+  rw [hp₂.symm] at hpc₁
+  rcases hpc₁ with hpc₁ | hpc₁ <;> simp [hpc₁]
 
 Depends on / 依赖: LinearIndependent, fin_cases, hc.symm, hp.symm, inner_vsub_vsub_of_dist_eq_of_dist_eq, linearIndependent_of_ne_zero_of_inner_eq_zero
 -/
@@ -275,7 +373,7 @@ theorem eq_of_dist_eq_of_dist_eq_of_finrank_eq_two
     rw [direction_top]; rw [finrank_top]
     exact hd
   eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two hd' (mem_top Real V _) (mem_top Real V _)
-    (mem_top Real V _) (mem_top Real V _) (mem_top Real V _) hc hp hp₁c₁ hp₂c₁ 
+    (mem_top Real V _) (mem_top Real V _) (mem_top Real V _) hc hp hp₁c₁ hp₂c₁ hpc₁ hp₁c₂ hp₂c₂ hpc₂
 
 中文:
 定理 eq_of_dist_eq_of_dist_eq_of_finrank_eq_two
@@ -284,7 +382,7 @@ theorem eq_of_dist_eq_of_dist_eq_of_finrank_eq_two
     rw [direction_top]; rw [finrank_top]
     exact hd
   eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two hd' (mem_top Real V _) (mem_top Real V _)
-    (mem_top Real V _) (mem_top Real V _) (mem_top Real V _) hc hp hp₁c₁ hp₂c₁ 
+    (mem_top Real V _) (mem_top Real V _) (mem_top Real V _) hc hp hp₁c₁ hp₂c₁ hpc₁ hp₁c₂ hp₂c₂ hpc₂
 
 Depends on / 依赖: AffineSubspace, direction, direction_top, eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two, finrank, finrank_top, mem_top
 -/

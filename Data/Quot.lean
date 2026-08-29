@@ -150,7 +150,9 @@ definition hrecOn₂
       Quot.induction_on qb fun b =>
         have h₁ : @Quot.hrecOn _ _ (φ _) ⟦b⟧ (f a₁) (@cb _) ≍ f a₁ b := by
           simp
-        have h₂ : f a₂ b ≍ @Quot.hrecOn _ _ (φ _) ⟦
+        have h₂ : f a₂ b ≍ @Quot.hrecOn _ _ (φ _) ⟦b⟧ (f a₂) (@cb _) := by
+          simp
+        (h₁.trans (ca pa)).trans h₂
 
 中文:
 定义 hrecOn₂
@@ -161,7 +163,9 @@ definition hrecOn₂
       Quot.induction_on qb fun b =>
         have h₁ : @Quot.hrecOn _ _ (φ _) ⟦b⟧ (f a₁) (@cb _) ≍ f a₁ b := by
           simp
-        have h₂ : f a₂ b ≍ @Quot.hrecOn _ _ (φ _) ⟦
+        have h₂ : f a₂ b ≍ @Quot.hrecOn _ _ (φ _) ⟦b⟧ (f a₂) (@cb _) := by
+          simp
+        (h₁.trans (ca pa)).trans h₂
 -/
 protected def hrecOn₂ (qa : Quot ra) (qb : Quot rb) (f : forall a b, φ ⟦a⟧ ⟦b⟧)
     (ca : forall {b a₁ a₂}, ra a₁ a₂ -> f a₁ b ≍ f a₂ b)

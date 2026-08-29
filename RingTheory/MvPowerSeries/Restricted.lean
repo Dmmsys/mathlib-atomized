@@ -174,7 +174,7 @@ lemma isRestricted.add
   refine tendsto_const_nhds.squeeze (add_zero (0 : Real) ▸ hf.add hg) (fun n => ?_) fun n => ?_
   · dsimp [Finsupp.prod]; positivity -- TODO: add positivity extension for Finsupp.prod
   rw [← add_mul]
-  exact mul_le_mul_of_nonneg_right (norm_a
+  exact mul_le_mul_of_nonneg_right (norm_add_le ..) (by dsimp [Finsupp.prod]; positivity)
 
 中文:
 引理 isRestricted.add
@@ -184,7 +184,7 @@ lemma isRestricted.add
   refine tendsto_const_nhds.squeeze (add_zero (0 : Real) ▸ hf.add hg) (fun n => ?_) fun n => ?_
   · dsimp [Finsupp.prod]; positivity -- TODO: add positivity extension for Finsupp.prod
   rw [← add_mul]
-  exact mul_le_mul_of_nonneg_right (norm_a
+  exact mul_le_mul_of_nonneg_right (norm_add_le ..) (by dsimp [Finsupp.prod]; positivity)
 
 Depends on / 依赖: Finsupp, Finsupp.prod, IsRestricted, add_mul, add_zero, extension, hf.add, isRestricted_abs_iff, mul_le_mul_of_nonneg_right, norm_add_le, squeeze, tendsto_const_nhds, tendsto_const_nhds.squeeze
 -/
@@ -235,7 +235,12 @@ lemma tendsto_antidiagonal
     simpa using this (C := |C|) (by simp [hC]) (by simpa using hf.norm)
       (by simpa using hg.norm) (fun _ => by simp)
   refine .squeeze tendsto_const_nhds
-    (tendsto_sup'_antidiagonal_cofinite (tendsto_mul_cofini
+    (tendsto_sup'_antidiagonal_cofinite (tendsto_mul_cofinite_nhds_zero hf hg))
+    (fun x => mul_nonneg (by simp) (hC' x)) fun a => ?_
+  have : 0 <= C a := hC' a
+  grw [(nonempty_antidiagonal _).norm_sum_le_sup'_norm, Finset.sup'_mul₀ this]
+  refine Finset.sup'_mono_fun fun x hx => ?_
+  grw [mul_mul_mul_comm, ← hC, Finset.mem_antidiagonal.mp hx, ← norm_mul_le]
 
 中文:
 引理 tendsto_antidiagonal
@@ -246,7 +251,12 @@ lemma tendsto_antidiagonal
     simpa using this (C := |C|) (by simp [hC]) (by simpa using hf.norm)
       (by simpa using hg.norm) (fun _ => by simp)
   refine .squeeze tendsto_const_nhds
-    (tendsto_sup'_antidiagonal_cofinite (tendsto_mul_cofini
+    (tendsto_sup'_antidiagonal_cofinite (tendsto_mul_cofinite_nhds_zero hf hg))
+    (fun x => mul_nonneg (by simp) (hC' x)) fun a => ?_
+  have : 0 <= C a := hC' a
+  grw [(nonempty_antidiagonal _).norm_sum_le_sup'_norm, Finset.sup'_mul₀ this]
+  refine Finset.sup'_mono_fun fun x hx => ?_
+  grw [mul_mul_mul_comm, ← hC, Finset.mem_antidiagonal.mp hx, ← norm_mul_le]
 
 Depends on / 依赖: Finset, Finset.sup, _antidiagonal_cofinite, _mono_fun, _norm, generalizing, hf.norm, hg.norm, mul_nonneg, nonempty_antidiagonal, norm_sum_le_sup, squeeze, tendsto_const_nhds, tendsto_mul_cofinite_nhds_zero, tendsto_sup, tendsto_zero_iff_norm_tendsto_zero
 -/

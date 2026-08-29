@@ -1046,7 +1046,9 @@ definition inverse'
       rw [← f.map_zero]; rw [h₁]
     map_add' := fun x y => by
       simp only [MulHom.toFun_eq_coe, MulHom.inverse_apply]
-      rw [← h₂ x]; rw
+      rw [← h₂ x]; rw [← h₂ y]; rw [← map_add]; rw [h₁]; rw [h₂]; rw [h₂] }
+
+@[simp]
 
 中文:
 定义 inverse'
@@ -1057,7 +1059,9 @@ definition inverse'
       rw [← f.map_zero]; rw [h₁]
     map_add' := fun x y => by
       simp only [MulHom.toFun_eq_coe, MulHom.inverse_apply]
-      rw [← h₂ x]; rw
+      rw [← h₂ x]; rw [← h₂ y]; rw [← map_add]; rw [h₁]; rw [h₂]; rw [h₂] }
+
+@[simp]
 
 Depends on / 依赖: MulHom, MulHom.inverse_apply, MulHom.toFun_eq_coe, f.map_zero, inverse, inverse_apply, map_add, map_zero, toFun_eq_coe
 -/
@@ -1183,7 +1187,7 @@ definition prod
   map_zero' := by simp only [Function.prod_apply, Prod.mk_zero_zero, map_zero]
   map_add' x y := by simp only [Function.prod_apply, Prod.mk_add_mk, map_add]
   map_mul' x y := by simp only [Function.prod_apply, Prod.mk_mul_mk, map_mul]
-  map_smul' c x := by simp only [Function.prod_
+  map_smul' c x := by simp only [Function.prod_apply, map_smul, MonoidHom.id_apply, Prod.smul_mk]
 
 中文:
 定义 乘积
@@ -1192,7 +1196,7 @@ definition prod
   map_zero' := by simp only [Function.prod_apply, Prod.mk_zero_zero, map_zero]
   map_add' x y := by simp only [Function.prod_apply, Prod.mk_add_mk, map_add]
   map_mul' x y := by simp only [Function.prod_apply, Prod.mk_mul_mk, map_mul]
-  map_smul' c x := by simp only [Function.prod_
+  map_smul' c x := by simp only [Function.prod_apply, map_smul, MonoidHom.id_apply, Prod.smul_mk]
 
 Depends on / 依赖: Function, Function.prod
 -/

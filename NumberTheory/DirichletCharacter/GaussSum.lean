@@ -27,7 +27,16 @@ lemma gaussSum_aux_of_mulShift
   suffices e.mulShift u = e by conv_lhs => rw [← this, gaussSum_mulShift]
   rw [(by ring : u.val = (u - 1) + 1)]; rw [← mulShift_mul]; rw [mulShift_one]; rw [mul_eq_right]
   rsuffices ⟨a, ha⟩ : (d : Int) ∣ (u.val.val - 1 : Int)
-  · have : u.val - 1 = ↑(u.val.val - 1 : Int) := by simp only [ZMod.n
+  · have : u.val - 1 = ↑(u.val.val - 1 : Int) := by simp only [ZMod.natCast_val, Int.cast_sub,
+      ZMod.intCast_cast, ZMod.cast_id', id_eq, Int.cast_one]
+    rw [this]; rw [ha]
+    ext1 y
+    simpa only [Int.cast_mul, Int.cast_natCast, mulShift_apply, mul_assoc, one_apply]
+      using DFunLike.ext_iff.mp he (a * y)
+  rw [← Units.val_inj]; rw [Units.val_one]; rw [ZMod.unitsMap_def]; rw [Units.coe_map] at hu
+  have : ZMod.castHom hd (ZMod d) u.val = ((u.val.val : Int) : ZMod d) := by simp
+  rwa [MonoidHom.coe_coe, this, ← Int.cast_one, eq_comm,
+    ZMod.intCast_eq_intCast_iff_dvd_sub] at hu
 
 中文:
 引理 gaussSum_aux_of_mulShift
@@ -36,7 +45,16 @@ lemma gaussSum_aux_of_mulShift
   suffices e.mulShift u = e by conv_lhs => rw [← this, gaussSum_mulShift]
   rw [(by ring : u.val = (u - 1) + 1)]; rw [← mulShift_mul]; rw [mulShift_one]; rw [mul_eq_right]
   rsuffices ⟨a, ha⟩ : (d : Int) ∣ (u.val.val - 1 : Int)
-  · have : u.val - 1 = ↑(u.val.val - 1 : Int) := by simp only [ZMod.n
+  · have : u.val - 1 = ↑(u.val.val - 1 : Int) := by simp only [ZMod.natCast_val, Int.cast_sub,
+      ZMod.intCast_cast, ZMod.cast_id', id_eq, Int.cast_one]
+    rw [this]; rw [ha]
+    ext1 y
+    simpa only [Int.cast_mul, Int.cast_natCast, mulShift_apply, mul_assoc, one_apply]
+      using DFunLike.ext_iff.mp he (a * y)
+  rw [← Units.val_inj]; rw [Units.val_one]; rw [ZMod.unitsMap_def]; rw [Units.coe_map] at hu
+  have : ZMod.castHom hd (ZMod d) u.val = ((u.val.val : Int) : ZMod d) := by simp
+  rwa [MonoidHom.coe_coe, this, ← Int.cast_one, eq_comm,
+    ZMod.intCast_eq_intCast_iff_dvd_sub] at hu
 
 Depends on / 依赖: DFunLike, DFunLike.ext_, Int.cast_mul, Int.cast_natCast, Int.cast_one, Int.cast_sub, ZMod.cast_id, ZMod.intCast_cast, ZMod.natCast_val, cast_id, cast_mul, cast_natCast, cast_one, cast_sub, conv_lhs, e.mulShift, ext_, gaussSum_mulShift, id_eq, intCast_cast
 -/

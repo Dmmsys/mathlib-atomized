@@ -106,7 +106,7 @@ definition IsSplitCoequalizer.map
   condition := by rw [← F.map_comp, q.condition, F.map_comp]
   rightSection_π := by rw [← F.map_comp, q.rightSection_π, F.map_id]
   leftSection_bottom := by rw [← F.map_comp, q.leftSection_bottom, F.map_id]
-  leftSection_top := by rw [← F.map
+  leftSection_top := by rw [← F.map_comp, q.leftSection_top, F.map_comp]
 
 中文:
 定义 是SplitCoequalizer.map
@@ -116,7 +116,7 @@ definition IsSplitCoequalizer.map
   condition := by rw [← F.map_comp, q.condition, F.map_comp]
   rightSection_π := by rw [← F.map_comp, q.rightSection_π, F.map_id]
   leftSection_bottom := by rw [← F.map_comp, q.leftSection_bottom, F.map_id]
-  leftSection_top := by rw [← F.map
+  leftSection_top := by rw [← F.map_comp, q.leftSection_top, F.map_comp]
 
 Depends on / 依赖: F.map, q.rightSection, rightSection
 -/

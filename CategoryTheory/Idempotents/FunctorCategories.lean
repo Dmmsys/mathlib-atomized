@@ -136,7 +136,26 @@ instance functor_category_isIdempotentComplete
   have hC := (isIdempotentComplete_iff_hasEqualizer_of_id_and_idempotent C).mp inferInstance
   have : forall j : J, HasEqualizer (𝟙 _) (p.app j) := fun j => hC _ _ (congr_app hp j)
   /- We construct the direct factor `Y` associated to `p : F ⟶ F` by computing
-      the
+      the equalizer of the identity and `p.app j` on each object `(j : J)`. -/
+  let Y : J ⥤ C :=
+    { obj := fun j => Limits.equalizer (𝟙 _) (p.app j)
+      map := fun {j j'} φ =>
+        equalizer.lift (Limits.equalizer.ι (𝟙 _) (p.app j) ≫ F.map φ)
+          (by rw [comp_id, assoc, p.naturality φ, ← assoc, ← Limits.equalizer.condition, comp_id]) }
+  let i : Y ⟶ F :=
+    { app := fun j => equalizer.ι _ _
+      naturality := fun _ _ _ => by rw [equalizer.lift_ι] }
+  let e : F ⟶ Y :=
+    { app := fun j =>
+        equalizer.lift (p.app j) (by simpa only [comp_id] using! (congr_app hp j).symm)
+      naturality := fun j j' φ => equalizer.hom_ext (by simp [Y]) }
+  use Y, i, e
+  constructor
+  · ext j
+    dsimp
+    rw [assoc]; rw [equalizer.lift_ι]; rw [← equalizer.condition]; rw [id_comp]; rw [comp_id]
+  · ext j
+    simp [Y, i, e]
 
 中文:
 实例 functor_category_isIdempotentComplete
@@ -146,7 +165,26 @@ instance functor_category_isIdempotentComplete
   have hC := (isIdempotentComplete_iff_hasEqualizer_of_id_and_idempotent C).mp inferInstance
   have : forall j : J, HasEqualizer (𝟙 _) (p.app j) := fun j => hC _ _ (congr_app hp j)
   /- We construct the direct factor `Y` associated to `p : F ⟶ F` by computing
-      the
+      the equalizer of the identity and `p.app j` on each object `(j : J)`. -/
+  let Y : J ⥤ C :=
+    { obj := fun j => Limits.equalizer (𝟙 _) (p.app j)
+      map := fun {j j'} φ =>
+        equalizer.lift (Limits.equalizer.ι (𝟙 _) (p.app j) ≫ F.map φ)
+          (by rw [comp_id, assoc, p.naturality φ, ← assoc, ← Limits.equalizer.condition, comp_id]) }
+  let i : Y ⟶ F :=
+    { app := fun j => equalizer.ι _ _
+      naturality := fun _ _ _ => by rw [equalizer.lift_ι] }
+  let e : F ⟶ Y :=
+    { app := fun j =>
+        equalizer.lift (p.app j) (by simpa only [comp_id] using! (congr_app hp j).symm)
+      naturality := fun j j' φ => equalizer.hom_ext (by simp [Y]) }
+  use Y, i, e
+  constructor
+  · ext j
+    dsimp
+    rw [assoc]; rw [equalizer.lift_ι]; rw [← equalizer.condition]; rw [id_comp]; rw [comp_id]
+  · ext j
+    simp [Y, i, e]
 
 Depends on / 依赖: HasEqualizer, congr_app, isIdempotentComplete_iff_hasEqualizer_of_id_and_idempotent, p.app
 -/
@@ -285,7 +323,13 @@ instance :
             rw [← Karoubi.comp_p_assoc]
             have h := hom_ext_iff.mp (f.naturality φ)
             dsimp [karoubiFunctorCategoryEmbedding] at h
-            simp only [assoc, h.symm, karoubiFunctorCategoryEmb
+            simp only [assoc, h.symm, karoubiFunctorCategoryEmbedding_obj,
+              KaroubiFunctorCategoryEmbedding.obj_obj_p]
+            rw [← P.p.naturality_assoc]
+            exact congrArg _ (p_comp (f.app _)).symm }
+      comm := by
+        ext j
+        exact (f.app j).comm }, rfl⟩
 
 中文:
 实例 :
@@ -296,7 +340,13 @@ instance :
             rw [← Karoubi.comp_p_assoc]
             have h := hom_ext_iff.mp (f.naturality φ)
             dsimp [karoubiFunctorCategoryEmbedding] at h
-            simp only [assoc, h.symm, karoubiFunctorCategoryEmb
+            simp only [assoc, h.symm, karoubiFunctorCategoryEmbedding_obj,
+              KaroubiFunctorCategoryEmbedding.obj_obj_p]
+            rw [← P.p.naturality_assoc]
+            exact congrArg _ (p_comp (f.app _)).symm }
+      comm := by
+        ext j
+        exact (f.app j).comm }, rfl⟩
 
 Depends on / 依赖: Karoubi, Karoubi.comp_p_assoc, KaroubiFunctorCategoryEmbedding, KaroubiFunctorCategoryEmbedding.obj_obj_p, P.p.naturality_assoc, comp_p_assoc, f.app, f.naturality, h.symm, hom_ext_iff, hom_ext_iff.mp, karoubiFunctorCategoryEmbedding, karoubiFunctorCategoryEmbedding_obj, naturality, naturality_assoc, obj_obj_p, p_comp
 -/

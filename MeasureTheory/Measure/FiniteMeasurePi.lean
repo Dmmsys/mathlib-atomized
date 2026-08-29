@@ -215,7 +215,38 @@ theorem continuous_pi
   refine continuous_iff_continuousAt.2 (fun μ => ?_)
   /- It suffices to check the convergence along elements of a π-system containing arbitrarily
   small neighborhoods of any point, by `tendsto_probabilityMeasure_of_tendsto_of_mem`.
-  We take as a π-system the sets of the form `s₁ × ... × sₙ` wh
+  We take as a π-system the sets of the form `s₁ × ... × sₙ` where all the `sᵢ` have
+  null frontier. -/
+  let S : Set (Set (Π i, α i)) := {t | exists (s : Π i, Set (α i)), t = univ.pi s ∧
+    (forall i, MeasurableSet (s i)) ∧ (forall i, μ i (frontier (s i)) = 0)}
+  have : IsPiSystem S := by
+    rintro - ⟨s, rfl, smeas, hs⟩ - ⟨s', rfl, s'meas, hs'⟩ -
+    refine ⟨fun i => s i inter s' i, pi_inter_distrib.symm, fun i => (smeas i).inter (s'meas i),
+      fun i => ?_⟩
+    simp_rw [null_iff_toMeasure_null] at hs hs' ⊢
+    exact null_frontier_inter (hs i) (hs' i)
+  apply this.tendsto_probabilityMeasure_of_tendsto_of_mem
+  · rintro - ⟨s, rfl, smeas, hs⟩
+    exact MeasurableSet.univ_pi smeas
+  · let : forall i, PseudoMetricSpace (α i) :=
+      fun i => TopologicalSpace.pseudoMetrizableSpacePseudoMetric (α i)
+    intro u u_open x xu
+    obtain ⟨ε, εpos, hε⟩ : exists ε > 0, ball x ε subseteq u := Metric.isOpen_iff.1 u_open x xu
+    have A (i) : exists r in Ioo 0 ε, (μ i : Measure (α i)) (frontier (Metric.thickening r {x i})) = 0 :=
+      exists_null_frontier_thickening _ _ εpos
+    choose! r rpos hr using A
+    refine ⟨univ.pi (fun i => ball (x i) (r i)), ⟨fun i => ball (x i) (r i), rfl,
+      fun i => measurableSet_ball, fun i => by simpa using hr i⟩, ?_, ?_⟩
+    · apply IsOpen.mem_nhds
+      · exact isOpen_set_pi finite_univ (by simp)
+      · simpa using fun i => (rpos i).1
+    · calc univ.pi fun i => ball (x i) (r i)
+      _ subseteq univ.pi fun i => ball (x i) ε := by gcongr with i hi; exact (rpos i).2.le
+      _ subseteq u := by rwa [← ball_pi _ εpos]
+  · rintro - ⟨s, rfl, smeas, hs⟩
+    simp only [pi_pi]
+    apply tendsto_finsetProd _ (fun i hi => ?_)
+    exact tendsto_measure_of_null_frontier_of_tendsto (Tendsto.apply_nhds (fun ⦃U⦄ a => a) i) (hs i)
 
 中文:
 定理 continuous_pi
@@ -224,7 +255,38 @@ theorem continuous_pi
   refine continuous_iff_continuousAt.2 (fun μ => ?_)
   /- It suffices to check the convergence along elements of a π-system containing arbitrarily
   small neighborhoods of any point, by `tendsto_probabilityMeasure_of_tendsto_of_mem`.
-  We take as a π-system the sets of the form `s₁ × ... × sₙ` wh
+  We take as a π-system the sets of the form `s₁ × ... × sₙ` where all the `sᵢ` have
+  null frontier. -/
+  let S : Set (Set (Π i, α i)) := {t | exists (s : Π i, Set (α i)), t = univ.pi s ∧
+    (forall i, MeasurableSet (s i)) ∧ (forall i, μ i (frontier (s i)) = 0)}
+  have : IsPiSystem S := by
+    rintro - ⟨s, rfl, smeas, hs⟩ - ⟨s', rfl, s'meas, hs'⟩ -
+    refine ⟨fun i => s i inter s' i, pi_inter_distrib.symm, fun i => (smeas i).inter (s'meas i),
+      fun i => ?_⟩
+    simp_rw [null_iff_toMeasure_null] at hs hs' ⊢
+    exact null_frontier_inter (hs i) (hs' i)
+  apply this.tendsto_probabilityMeasure_of_tendsto_of_mem
+  · rintro - ⟨s, rfl, smeas, hs⟩
+    exact MeasurableSet.univ_pi smeas
+  · let : forall i, PseudoMetricSpace (α i) :=
+      fun i => TopologicalSpace.pseudoMetrizableSpacePseudoMetric (α i)
+    intro u u_open x xu
+    obtain ⟨ε, εpos, hε⟩ : exists ε > 0, ball x ε subseteq u := Metric.isOpen_iff.1 u_open x xu
+    have A (i) : exists r in Ioo 0 ε, (μ i : Measure (α i)) (frontier (Metric.thickening r {x i})) = 0 :=
+      exists_null_frontier_thickening _ _ εpos
+    choose! r rpos hr using A
+    refine ⟨univ.pi (fun i => ball (x i) (r i)), ⟨fun i => ball (x i) (r i), rfl,
+      fun i => measurableSet_ball, fun i => by simpa using hr i⟩, ?_, ?_⟩
+    · apply IsOpen.mem_nhds
+      · exact isOpen_set_pi finite_univ (by simp)
+      · simpa using fun i => (rpos i).1
+    · calc univ.pi fun i => ball (x i) (r i)
+      _ subseteq univ.pi fun i => ball (x i) ε := by gcongr with i hi; exact (rpos i).2.le
+      _ subseteq u := by rwa [← ball_pi _ εpos]
+  · rintro - ⟨s, rfl, smeas, hs⟩
+    simp only [pi_pi]
+    apply tendsto_finsetProd _ (fun i hi => ?_)
+    exact tendsto_measure_of_null_frontier_of_tendsto (Tendsto.apply_nhds (fun ⦃U⦄ a => a) i) (hs i)
 
 Depends on / 依赖: continuous_iff_continuousAt
 -/

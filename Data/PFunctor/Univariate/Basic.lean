@@ -652,7 +652,11 @@ theorem liftr_iff
     intro i
     exact (f i).property
   rintro ⟨a, f₀, f₁, xeq, yeq, h⟩
-  use ⟨a
+  use ⟨a, fun i => ⟨(f₀ i, f₁ i), h i⟩⟩
+  constructor
+  · rw [xeq]
+    rfl
+  rw [yeq]; rfl
 
 中文:
 定理 liftr_iff
@@ -671,7 +675,11 @@ theorem liftr_iff
     intro i
     exact (f i).property
   rintro ⟨a, f₀, f₁, xeq, yeq, h⟩
-  use ⟨a
+  use ⟨a, fun i => ⟨(f₀ i, f₁ i), h i⟩⟩
+  constructor
+  · rw [xeq]
+    rfl
+  rw [yeq]; rfl
 
 Depends on / 依赖: property, val.fst, val.snd
 -/

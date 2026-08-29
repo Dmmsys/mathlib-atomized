@@ -43,7 +43,23 @@ theorem radius_eq_liminf
     intro r n hn
     have : 0 < (n : Real) := Nat.cast_pos.2 hn
     conv_lhs =>
-      rw [one_div]; rw [ENNReal.le_inv_iff_mul_le]; rw [← ENNReal.coe_mul]; rw [EN
+      rw [one_div]; rw [ENNReal.le_inv_iff_mul_le]; rw [← ENNReal.coe_mul]; rw [ENNReal.coe_le_one_iff]; rw [one_div]; rw [←
+        NNReal.rpow_one r]; rw [← mul_inv_cancel₀ this.ne']; rw [NNReal.rpow_mul]; rw [← NNReal.mul_rpow]; rw [←
+        NNReal.one_rpow n⁻¹]; rw [NNReal.rpow_le_rpow_iff (inv_pos.2 this)]; rw [mul_comm]; rw [NNReal.rpow_natCast]
+  apply le_antisymm <;> refine ENNReal.le_of_forall_nnreal_lt fun r hr => ?_
+  · have := ((TFAE_exists_lt_isLittleO_pow (fun n => ‖p n‖ * r ^ n) 1).out 1 7).1
+      (p.isLittleO_of_lt_radius hr)
+    obtain ⟨a, ha, H⟩ := this
+    apply le_liminf_of_le
+    · infer_param
+    · rw [← eventually_map]
+      refine
+        H.mp ((eventually_gt_atTop 0).mono fun n hn₀ hn => (this _ hn₀).2 (NNReal.coe_le_coe.1 ?_))
+      push_cast
+      exact (le_abs_self _).trans (hn.trans (pow_le_one₀ ha.1.le ha.2.le))
+· refine p.le_radius_of_isBigO .of_norm_eventuallyLE ?_
+    filter_upwards [eventually_lt_of_lt_liminf hr, eventually_gt_atTop 0] with n hn hn₀
+    simpa using NNReal.coe_le_coe.2 ((this _ hn₀).1 hn.le)
 
 中文:
 定理 radius_eq_liminf
@@ -54,7 +70,23 @@ theorem radius_eq_liminf
     intro r n hn
     have : 0 < (n : Real) := Nat.cast_pos.2 hn
     conv_lhs =>
-      rw [one_div]; rw [ENNReal.le_inv_iff_mul_le]; rw [← ENNReal.coe_mul]; rw [EN
+      rw [one_div]; rw [ENNReal.le_inv_iff_mul_le]; rw [← ENNReal.coe_mul]; rw [ENNReal.coe_le_one_iff]; rw [one_div]; rw [←
+        NNReal.rpow_one r]; rw [← mul_inv_cancel₀ this.ne']; rw [NNReal.rpow_mul]; rw [← NNReal.mul_rpow]; rw [←
+        NNReal.one_rpow n⁻¹]; rw [NNReal.rpow_le_rpow_iff (inv_pos.2 this)]; rw [mul_comm]; rw [NNReal.rpow_natCast]
+  apply le_antisymm <;> refine ENNReal.le_of_forall_nnreal_lt fun r hr => ?_
+  · have := ((TFAE_exists_lt_isLittleO_pow (fun n => ‖p n‖ * r ^ n) 1).out 1 7).1
+      (p.isLittleO_of_lt_radius hr)
+    obtain ⟨a, ha, H⟩ := this
+    apply le_liminf_of_le
+    · infer_param
+    · rw [← eventually_map]
+      refine
+        H.mp ((eventually_gt_atTop 0).mono fun n hn₀ hn => (this _ hn₀).2 (NNReal.coe_le_coe.1 ?_))
+      push_cast
+      exact (le_abs_self _).trans (hn.trans (pow_le_one₀ ha.1.le ha.2.le))
+· refine p.le_radius_of_isBigO .of_norm_eventuallyLE ?_
+    filter_upwards [eventually_lt_of_lt_liminf hr, eventually_gt_atTop 0] with n hn hn₀
+    simpa using NNReal.coe_le_coe.2 ((this _ hn₀).1 hn.le)
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_one_iff, ENNReal.coe_mul, ENNReal.le_inv_iff_mul_le, NNReal, NNReal.mul_rpow, NNReal.one_rpow, NNReal.rpow_le_rpow_iff, NNReal.rpow_mul, NNReal.rpow_one, Nat.cast_pos, cast_pos, coe_le_one_iff, coe_mul, conv_lhs, inv_pos, le_inv_iff_mul_le, mul_comm, mul_rpow, one_div
 -/

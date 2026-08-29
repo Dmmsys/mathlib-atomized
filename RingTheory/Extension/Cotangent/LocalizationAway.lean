@@ -51,7 +51,9 @@ lemma comp_localizationAway_ker
   proof: by
   have : (localizationAway T g).ker = Ideal.map ((localizationAway T g).ofComp P).toAlgHom
       (Ideal.span {MvPolynomial.rename Sum.inr f * MvPolynomial.X (Sum.inl ()) - 1}) := by
-    rw [Ideal.map_span]; rw [Set.image_singleton]; rw [map_sub]; rw [map_mul]; rw [map_one]; rw [ker_localizationAw
+    rw [Ideal.map_span]; rw [Set.image_singleton]; rw [map_sub]; rw [map_mul]; rw [map_one]; rw [ker_localizationAway]; rw [Hom.toAlgHom_X]; rw [toAlgHom_ofComp_rename]; rw [h]; rw [ofComp_val]; rw [Sum.elim_inl]
+  rw [ker_comp_eq_sup]; rw [Algebra.Generators.map_toComp_ker]; rw [this]; rw [Ideal.comap_map_of_surjective _ (toAlgHom_ofComp_surjective _ P)]; rw [← RingHom.ker_eq_comap_bot]; rw [← sup_assoc]
+  simp
 
 中文:
 引理 comp_localizationAway_ker
@@ -59,7 +61,9 @@ lemma comp_localizationAway_ker
   证明: by
   have : (localizationAway T g).ker = Ideal.map ((localizationAway T g).ofComp P).toAlgHom
       (Ideal.span {MvPolynomial.rename Sum.inr f * MvPolynomial.X (Sum.inl ()) - 1}) := by
-    rw [Ideal.map_span]; rw [Set.image_singleton]; rw [map_sub]; rw [map_mul]; rw [map_one]; rw [ker_localizationAw
+    rw [Ideal.map_span]; rw [Set.image_singleton]; rw [map_sub]; rw [map_mul]; rw [map_one]; rw [ker_localizationAway]; rw [Hom.toAlgHom_X]; rw [toAlgHom_ofComp_rename]; rw [h]; rw [ofComp_val]; rw [Sum.elim_inl]
+  rw [ker_comp_eq_sup]; rw [Algebra.Generators.map_toComp_ker]; rw [this]; rw [Ideal.comap_map_of_surjective _ (toAlgHom_ofComp_surjective _ P)]; rw [← RingHom.ker_eq_comap_bot]; rw [← sup_assoc]
+  simp
 
 Depends on / 依赖: Algebra, Algebra.Generators.map_toComp_ker, Generators, Hom.toAlgHom_X, Ideal.comap_map_of_surjective, Ideal.map, Ideal.map_span, Ideal.span, MvPolynomial, MvPolynomial.X, MvPolynomial.rename, Set.image_singleton, Sum.elim_inl, Sum.inl, Sum.inr, comap_map_of_surjective, elim_inl, image_singleton, ker_comp_eq_sup, ker_localizationAway
 -/
@@ -175,7 +179,8 @@ lemma compLocalizationAwayAlgHom_relation_eq_zero
   rw [map_sub]; rw [map_one]; rw [map_mul]; rw [← toComp_toAlgHom (Generators.localizationAway T g) P]
   change (compLocalizationAwayAlgHom T g P)
     (((localizationAway T g).toComp P).toAlgHom _) * _ - _ = _
-  rw [compLocalizationAwayAlgHom_toAlgHom_toComp]; rw [compLocalizationAwayAlgHom_X_inl
+  rw [compLocalizationAwayAlgHom_toAlgHom_toComp]; rw [compLocalizationAwayAlgHom_X_inl]; rw [IsScalarTower.algebraMap_apply P.Ring (P.Ring ⧸ P.ker ^ 2) (Localization.Away _)]
+  simp
 
 中文:
 引理 compLocalizationAwayAlgHom_relation_eq_zero
@@ -183,7 +188,8 @@ lemma compLocalizationAwayAlgHom_relation_eq_zero
   rw [map_sub]; rw [map_one]; rw [map_mul]; rw [← toComp_toAlgHom (Generators.localizationAway T g) P]
   change (compLocalizationAwayAlgHom T g P)
     (((localizationAway T g).toComp P).toAlgHom _) * _ - _ = _
-  rw [compLocalizationAwayAlgHom_toAlgHom_toComp]; rw [compLocalizationAwayAlgHom_X_inl
+  rw [compLocalizationAwayAlgHom_toAlgHom_toComp]; rw [compLocalizationAwayAlgHom_X_inl]; rw [IsScalarTower.algebraMap_apply P.Ring (P.Ring ⧸ P.ker ^ 2) (Localization.Away _)]
+  simp
 
 Depends on / 依赖: Generators, Generators.localizationAway, IsScalarTower, IsScalarTower.algebraMap_apply, Localization, Localization.Away, P.Ring, P.ker, algebraMap_apply, compLocalizationAwayAlgHom, compLocalizationAwayAlgHom_X_inl, compLocalizationAwayAlgHom_toAlgHom_toComp, localizationAway, map_mul, map_one, map_sub, toAlgHom, toComp, toComp_toAlgHom
 -/
@@ -205,7 +211,21 @@ lemma sq_ker_comp_le_ker_compLocalizationAwayAlgHom
         (compLocalizationAwayAlgHom T g P) x = 0 := by
     obtain ⟨a, rfl⟩ := Ideal.mem_span_singleton.mp hx
     rw [map_mul]; rw [compLocalizationAwayAlgHom_relation_eq_zero]; rw [zero_mul]
-  rw [comp_local
+  rw [comp_localizationAway_ker _ _ (P.σ g) (by simp)]; rw [sq]; rw [Ideal.sup_mul]; rw [Ideal.mul_sup]; rw [Ideal.mul_sup]
+  apply sup_le
+  · apply sup_le
+    · rw [← Ideal.map_mul, Ideal.map_le_iff_le_comap, ← sq]
+      intro x hx
+      simp only [Ideal.mem_comap, RingHom.mem_ker,
+        compLocalizationAwayAlgHom_toAlgHom_toComp (T := T) g P x]
+      rw [IsScalarTower.algebraMap_apply P.Ring (P.Ring ⧸ P.ker ^ 2) (Localization.Away _)]; rw [Ideal.Quotient.algebraMap_eq]; rw [Ideal.Quotient.eq_zero_iff_mem.mpr hx]; rw [map_zero]
+    · rw [Ideal.mul_le]
+      intro x hx y hy
+      simp [hsple hy]
+  · apply sup_le <;>
+    · rw [Ideal.mul_le]
+      intro x hx y hy
+      simp [hsple hx]
 
 中文:
 引理 sq_ker_comp_le_ker_compLocalizationAwayAlgHom
@@ -214,7 +234,21 @@ lemma sq_ker_comp_le_ker_compLocalizationAwayAlgHom
         (compLocalizationAwayAlgHom T g P) x = 0 := by
     obtain ⟨a, rfl⟩ := Ideal.mem_span_singleton.mp hx
     rw [map_mul]; rw [compLocalizationAwayAlgHom_relation_eq_zero]; rw [zero_mul]
-  rw [comp_local
+  rw [comp_localizationAway_ker _ _ (P.σ g) (by simp)]; rw [sq]; rw [Ideal.sup_mul]; rw [Ideal.mul_sup]; rw [Ideal.mul_sup]
+  apply sup_le
+  · apply sup_le
+    · rw [← Ideal.map_mul, Ideal.map_le_iff_le_comap, ← sq]
+      intro x hx
+      simp only [Ideal.mem_comap, RingHom.mem_ker,
+        compLocalizationAwayAlgHom_toAlgHom_toComp (T := T) g P x]
+      rw [IsScalarTower.algebraMap_apply P.Ring (P.Ring ⧸ P.ker ^ 2) (Localization.Away _)]; rw [Ideal.Quotient.algebraMap_eq]; rw [Ideal.Quotient.eq_zero_iff_mem.mpr hx]; rw [map_zero]
+    · rw [Ideal.mul_le]
+      intro x hx y hy
+      simp [hsple hy]
+  · apply sup_le <;>
+    · rw [Ideal.mul_le]
+      intro x hx y hy
+      simp [hsple hx]
 
 Depends on / 依赖: Ideal.map_le_iff_le_comap, Ideal.map_mul, Ideal.mem_span_singleton.mp, Ideal.mul_sup, Ideal.span, Ideal.sup_mul, Sum.inl, Sum.inr, compLocalizationAwayAlgHom, compLocalizationAwayAlgHom_relation_eq_zero, comp_localizationAway_ker, map_le_iff_le_comap, map_mul, mem_span_singleton, mul_sup, sup_le, sup_mul, zero_mul
 -/
@@ -260,7 +294,24 @@ lemma liftBaseChange_injective_of_isLocalizationAway
   let f : P.Ring ⧸ P.ker ^ 2 := P.σ g
   let π := compLocalizationAwayAlgHom T g P
   refine IsLocalizedModule.injective_of_map_zero (Submonoid.powers g)
-    (TensorProduct.mk S
+    (TensorProduct.mk S T P.toExtension.Cotangent 1) (fun x hx => ?_)
+  obtain ⟨x, rfl⟩ := Algebra.Extension.Cotangent.mk_surjective x
+  suffices h : algebraMap P.Ring (Localization.Away f) x.val = 0 by
+    rw [IsScalarTower.algebraMap_apply _ (P.Ring ⧸ P.ker ^ 2) _]; rw [IsLocalization.map_eq_zero_iff (Submonoid.powers f) (Localization.Away f)] at h
+    obtain ⟨⟨m, ⟨n, rfl⟩⟩, hm⟩ := h
+    rw [IsLocalizedModule.eq_zero_iff (Submonoid.powers g)]
+    use ⟨g ^ n, n, rfl⟩
+    dsimp [f] at hm
+    rw [← map_pow]; rw [← map_mul]; rw [Ideal.Quotient.eq_zero_iff_mem] at hm
+    simp only [Submonoid.smul_def]
+    rw [show g = algebraMap P.Ring S (P.σ g) by simp]; rw [← map_pow]; rw [algebraMap_smul]; rw [← map_smul]; rw [Extension.Cotangent.mk_eq_zero_iff]
+    simpa using! hm
+  rw [← compLocalizationAwayAlgHom_toAlgHom_toComp (T := T)]
+  apply sq_ker_comp_le_ker_compLocalizationAwayAlgHom
+  simpa only [LinearEquiv.coe_coe, LinearMap.ringLmapEquivSelf_symm_apply,
+    mk_apply, lift.tmul, LinearMap.coe_restrictScalars, LinearMap.coe_smulRight,
+    Module.End.one_apply, LinearMap.smul_apply, one_smul, Algebra.Extension.Cotangent.map_mk,
+    Extension.Cotangent.mk_eq_zero_iff] using! hx
 
 中文:
 引理 liftBaseChange_injective_of_isLocalizationAway
@@ -270,7 +321,24 @@ lemma liftBaseChange_injective_of_isLocalizationAway
   let f : P.Ring ⧸ P.ker ^ 2 := P.σ g
   let π := compLocalizationAwayAlgHom T g P
   refine IsLocalizedModule.injective_of_map_zero (Submonoid.powers g)
-    (TensorProduct.mk S
+    (TensorProduct.mk S T P.toExtension.Cotangent 1) (fun x hx => ?_)
+  obtain ⟨x, rfl⟩ := Algebra.Extension.Cotangent.mk_surjective x
+  suffices h : algebraMap P.Ring (Localization.Away f) x.val = 0 by
+    rw [IsScalarTower.algebraMap_apply _ (P.Ring ⧸ P.ker ^ 2) _]; rw [IsLocalization.map_eq_zero_iff (Submonoid.powers f) (Localization.Away f)] at h
+    obtain ⟨⟨m, ⟨n, rfl⟩⟩, hm⟩ := h
+    rw [IsLocalizedModule.eq_zero_iff (Submonoid.powers g)]
+    use ⟨g ^ n, n, rfl⟩
+    dsimp [f] at hm
+    rw [← map_pow]; rw [← map_mul]; rw [Ideal.Quotient.eq_zero_iff_mem] at hm
+    simp only [Submonoid.smul_def]
+    rw [show g = algebraMap P.Ring S (P.σ g) by simp]; rw [← map_pow]; rw [algebraMap_smul]; rw [← map_smul]; rw [Extension.Cotangent.mk_eq_zero_iff]
+    simpa using! hm
+  rw [← compLocalizationAwayAlgHom_toAlgHom_toComp (T := T)]
+  apply sq_ker_comp_le_ker_compLocalizationAwayAlgHom
+  simpa only [LinearEquiv.coe_coe, LinearMap.ringLmapEquivSelf_symm_apply,
+    mk_apply, lift.tmul, LinearMap.coe_restrictScalars, LinearMap.coe_smulRight,
+    Module.End.one_apply, LinearMap.smul_apply, one_smul, Algebra.Extension.Cotangent.map_mk,
+    Extension.Cotangent.mk_eq_zero_iff] using! hx
 
 Depends on / 依赖: Algebra, Algebra.Extension.Cotangent.mk_surjective, Cotangent, Extension, Generators, Generators.localizationAway, IsLocalizedModule, IsLocalizedModule.injective_of_map_zero, IsScalarTower, IsScalarTower.algebraMap_apply, Localization, Localization.Away, P.Ring, P.ker, P.toExtension.Cotangent, Submonoid, Submonoid.powers, TensorProduct, TensorProduct.mk, algebraMap
 -/

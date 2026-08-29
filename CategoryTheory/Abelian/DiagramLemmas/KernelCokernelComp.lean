@@ -355,7 +355,10 @@ definition isLimit
     all_goals
       obtain ⟨k₁, k₂, rfl⟩ := biprod.decomp_hom_to k
       simp only [biprod.ext_to_iff, add_comp, assoc, inl_φ, BinaryBicone.inl_fst,
-        comp_id, inr_φ_fst, comp_neg, zero_comp, Bin
+        comp_id, inr_φ_fst, comp_neg, zero_comp, BinaryBicone.inl_snd, comp_zero, φ_snd,
+        BinaryBicone.inr_snd_assoc, zero_add, add_neg_eq_zero] at hk
+      obtain ⟨rfl, hk⟩ := hk
+      aesop)
 
 中文:
 定义 isLimit
@@ -365,7 +368,10 @@ definition isLimit
     all_goals
       obtain ⟨k₁, k₂, rfl⟩ := biprod.decomp_hom_to k
       simp only [biprod.ext_to_iff, add_comp, assoc, inl_φ, BinaryBicone.inl_fst,
-        comp_id, inr_φ_fst, comp_neg, zero_comp, Bin
+        comp_id, inr_φ_fst, comp_neg, zero_comp, BinaryBicone.inl_snd, comp_zero, φ_snd,
+        BinaryBicone.inr_snd_assoc, zero_add, add_neg_eq_zero] at hk
+      obtain ⟨rfl, hk⟩ := hk
+      aesop)
 
 Depends on / 依赖: BinaryBicone, BinaryBicone.inl_fst, BinaryBicone.inl_snd, BinaryBicone.inr_snd_assoc, IsLimit, KernelFork, KernelFork.IsLimit.of, add_comp, add_neg_eq_zero, all_goals, biprod, biprod.decomp_hom_to, biprod.ext_to_iff, biprod.fst, comp_id, comp_neg, comp_zero, decomp_hom_to, ext_to_iff, inl_fst
 -/
@@ -391,7 +397,10 @@ definition isColimit
     all_goals
       obtain ⟨k₁, k₂, rfl⟩ := biprod.decomp_hom_from k
       simp only [comp_add, φ_snd_assoc, biprod.ext_from_iff, inl_φ_assoc,
-        BinaryBicone.inl_fst_assoc, BinaryBicone.i
+        BinaryBicone.inl_fst_assoc, BinaryBicone.inl_snd_assoc, zero_comp, add_zero, comp_zero,
+        inr_φ_fst_assoc, neg_comp, id_comp, BinaryBicone.inr_snd_assoc, neg_add_eq_zero] at hk
+      obtain ⟨hk, rfl⟩ := hk
+      aesop)
 
 中文:
 定义 isColimit
@@ -401,7 +410,10 @@ definition isColimit
     all_goals
       obtain ⟨k₁, k₂, rfl⟩ := biprod.decomp_hom_from k
       simp only [comp_add, φ_snd_assoc, biprod.ext_from_iff, inl_φ_assoc,
-        BinaryBicone.inl_fst_assoc, BinaryBicone.i
+        BinaryBicone.inl_fst_assoc, BinaryBicone.inl_snd_assoc, zero_comp, add_zero, comp_zero,
+        inr_φ_fst_assoc, neg_comp, id_comp, BinaryBicone.inr_snd_assoc, neg_add_eq_zero] at hk
+      obtain ⟨hk, rfl⟩ := hk
+      aesop)
 
 Depends on / 依赖: BinaryBicone, BinaryBicone.inl_fst_assoc, BinaryBicone.inl_snd_assoc, BinaryBicone.inr_snd_assoc, CokernelCofork, CokernelCofork.IsColimit.of, IsColimit, add_zero, all_goals, biprod, biprod.decomp_hom_from, biprod.ext_from_iff, biprod.inr, cokernel, cokernel.desc, comp_add, comp_zero, decomp_hom_from, ext_from_iff, id_comp
 -/
@@ -432,7 +444,37 @@ definition snakeInput
   L₁ := ShortComplex.mk (biprod.inl : X ⟶ _) (biprod.snd : _ ⟶ Y) (by simp)
   L₂ := ShortComplex.mk (biprod.inl : Y ⟶ _) (biprod.snd : _ ⟶ Z) (by simp)
   L₃ :=
-    { f := cokernel
+    { f := cokernel.map f (f ≫ g) (𝟙 _) g (by simp)
+      g := cokernel.map (f ≫ g) g f (𝟙 _) (by simp)
+      zero := by aesop }
+  v₀₁ :=
+    { τ₁ := kernel.ι f
+      τ₂ := ι f g
+      τ₃ := kernel.ι g }
+  v₁₂ :=
+    { τ₁ := f
+      τ₂ := φ f g
+      τ₃ := g }
+  v₂₃ :=
+    { τ₁ := cokernel.π f
+      τ₂ := π f g
+      τ₃ := cokernel.π g }
+  h₀ := by
+    apply ShortComplex.isLimitOfIsLimitπ <;>
+      apply (KernelFork.isLimitMapConeEquiv _ _).2
+    · exact kernelIsKernel _
+    · exact isLimit f g
+    · exact kernelIsKernel _
+  h₃ := by
+    apply ShortComplex.isColimitOfIsColimitπ <;>
+      apply (CokernelCofork.isColimitMapCoconeEquiv _ _).2
+    · exact cokernelIsCokernel _
+    · exact isColimit f g
+    · exact cokernelIsCokernel _
+  epi_L₁_g := by dsimp; infer_instance
+  mono_L₂_f := by dsimp; infer_instance
+  L₁_exact := (ShortComplex.Splitting.ofHasBinaryBiproduct X Y).exact
+  L₂_exact := (ShortComplex.Splitting.ofHasBinaryBiproduct Y Z).exact
 
 中文:
 定义 snakeInput
@@ -443,7 +485,37 @@ definition snakeInput
   L₁ := ShortComplex.mk (biprod.inl : X ⟶ _) (biprod.snd : _ ⟶ Y) (by simp)
   L₂ := ShortComplex.mk (biprod.inl : Y ⟶ _) (biprod.snd : _ ⟶ Z) (by simp)
   L₃ :=
-    { f := cokernel
+    { f := cokernel.map f (f ≫ g) (𝟙 _) g (by simp)
+      g := cokernel.map (f ≫ g) g f (𝟙 _) (by simp)
+      zero := by aesop }
+  v₀₁ :=
+    { τ₁ := kernel.ι f
+      τ₂ := ι f g
+      τ₃ := kernel.ι g }
+  v₁₂ :=
+    { τ₁ := f
+      τ₂ := φ f g
+      τ₃ := g }
+  v₂₃ :=
+    { τ₁ := cokernel.π f
+      τ₂ := π f g
+      τ₃ := cokernel.π g }
+  h₀ := by
+    apply ShortComplex.isLimitOfIsLimitπ <;>
+      apply (KernelFork.isLimitMapConeEquiv _ _).2
+    · exact kernelIsKernel _
+    · exact isLimit f g
+    · exact kernelIsKernel _
+  h₃ := by
+    apply ShortComplex.isColimitOfIsColimitπ <;>
+      apply (CokernelCofork.isColimitMapCoconeEquiv _ _).2
+    · exact cokernelIsCokernel _
+    · exact isColimit f g
+    · exact cokernelIsCokernel _
+  epi_L₁_g := by dsimp; infer_instance
+  mono_L₂_f := by dsimp; infer_instance
+  L₁_exact := (ShortComplex.Splitting.ofHasBinaryBiproduct X Y).exact
+  L₂_exact := (ShortComplex.Splitting.ofHasBinaryBiproduct Y Z).exact
 
 Depends on / 依赖: ShortComplex, ShortComplex.mk, biprod, biprod.inl, biprod.snd, cokernel, cokernel.map, kernel, kernel.map
 -/

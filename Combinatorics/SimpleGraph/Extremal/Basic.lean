@@ -84,7 +84,7 @@ theorem exists_isExtremal_iff_exists
     apply exists_max_image { G | p G } (#·.edgeFinset)
     use G, by simpa using hp
   use G', inferInstanceAs (DecidableRel G'.Adj)
-  exact ⟨by simpa using hp', fun _ _ hp => by convert! h _ (by simpa 
+  exact ⟨by simpa using hp', fun _ _ hp => by convert! h _ (by simpa using hp)⟩
 
 中文:
 定理 存在_isExtremal_iff_存在
@@ -96,7 +96,7 @@ theorem exists_isExtremal_iff_exists
     apply exists_max_image { G | p G } (#·.edgeFinset)
     use G, by simpa using hp
   use G', inferInstanceAs (DecidableRel G'.Adj)
-  exact ⟨by simpa using hp', fun _ _ hp => by convert! h _ (by simpa 
+  exact ⟨by simpa using hp', fun _ _ hp => by convert! h _ (by simpa using hp)⟩
 
 Depends on / 依赖: DecidableRel, classical, convert, edgeFinset, exists_max_image
 -/
@@ -194,7 +194,9 @@ theorem extremalNumber_of_fintypeCard_eq
   intro G h
   have h' : G.map e in univ.filter (H.Free ·) := by
     rw [mem_filter]; rw [← free_congr .refl (.map e G)]
-    s
+    simpa using h
+  rw [Iso.card_edgeFinset_eq (.map e G)]
+  convert! @le_sup _ _ _ _ {G | H.Free G} (#·.edgeFinset) _ h'
 
 中文:
 定理 extremalNumber_of_fintypeCard_eq
@@ -210,7 +212,9 @@ theorem extremalNumber_of_fintypeCard_eq
   intro G h
   have h' : G.map e in univ.filter (H.Free ·) := by
     rw [mem_filter]; rw [← free_congr .refl (.map e G)]
-    s
+    simpa using h
+  rw [Iso.card_edgeFinset_eq (.map e G)]
+  convert! @le_sup _ _ _ _ {G | H.Free G} (#·.edgeFinset) _ h'
 
 Depends on / 依赖: Finset, Finset.sup_le_iff, Fintype, Fintype.equivFinOfCardEq, G.map, H.Free, Iso.card_edgeFinset_eq, all_goals, and_intros, card_edgeFinset_eq, convert, e.symm, edgeFinset, equivFinOfCardEq, extremalNumber, filter, free_congr, le_antisymm_iff, le_sup, mem_filter
 -/

@@ -106,7 +106,9 @@ definition linearEquiv
     map_smul' := fun r x => by
       apply e.symm.injective
       simp only [toFun_as_coe, RingHom.id_apply, EmbeddingLike.apply_eq_iff_eq]
+      exact Iff.mp (eq_symm_apply _) rfl }
 
+@[simp]
 
 中文:
 定义 linearEquiv
@@ -120,7 +122,9 @@ definition linearEquiv
     map_smul' := fun r x => by
       apply e.symm.injective
       simp only [toFun_as_coe, RingHom.id_apply, EmbeddingLike.apply_eq_iff_eq]
+      exact Iff.mp (eq_symm_apply _) rfl }
 
+@[simp]
 
 Depends on / 依赖: Equiv.addCommMonoid, addCommMonoid
 -/

@@ -153,7 +153,16 @@ definition ofIso
   s'_comp_ε := by
     simpa [w₀] using dsimp% (point.mapIso e).inv_hom_id
   s₀_comp_δ₁ := by
-    simp [← SimplicialObject.δ_naturality, s₀_comp_δ₁
+    simp [← SimplicialObject.δ_naturality, s₀_comp_δ₁_assoc, w₀_assoc]
+  s_comp_δ₀ n := by
+    simpa [← SimplicialObject.δ_naturality] using
+      congr_app (drop.mapIso e).inv_hom_id (op ⦋n⦌)
+  s_comp_δ n i := by
+    simp [← SimplicialObject.δ_naturality, s_comp_δ_assoc,
+      ← SimplicialObject.δ_naturality_assoc]
+  s_comp_σ n i := by
+    simp [← SimplicialObject.σ_naturality, s_comp_σ_assoc,
+      ← SimplicialObject.σ_naturality_assoc]
 
 中文:
 定义 ofIso
@@ -163,7 +172,16 @@ definition ofIso
   s'_comp_ε := by
     simpa [w₀] using dsimp% (point.mapIso e).inv_hom_id
   s₀_comp_δ₁ := by
-    simp [← SimplicialObject.δ_naturality, s₀_comp_δ₁
+    simp [← SimplicialObject.δ_naturality, s₀_comp_δ₁_assoc, w₀_assoc]
+  s_comp_δ₀ n := by
+    simpa [← SimplicialObject.δ_naturality] using
+      congr_app (drop.mapIso e).inv_hom_id (op ⦋n⦌)
+  s_comp_δ n i := by
+    simp [← SimplicialObject.δ_naturality, s_comp_δ_assoc,
+      ← SimplicialObject.δ_naturality_assoc]
+  s_comp_σ n i := by
+    simp [← SimplicialObject.σ_naturality, s_comp_σ_assoc,
+      ← SimplicialObject.σ_naturality_assoc]
 
 Depends on / 依赖: drop.mapIso, ed.s, hom.app, mapIso, point.mapIso
 -/
@@ -399,7 +417,42 @@ definition homotopy
     dsimp
     rw [h_eq_assoc _ _ 0]; rw [X.left.σ₀Iter_δ' _ _ 1 (by grind)]; rw [ed.s₀_comp_δ₁_assoc]; rw [X.δ₀Iter_hom_app_assoc _ (by grind)]
     simp
-  h_succ_comp_δ_castSucc_of_lt {n
+  h_succ_comp_δ_castSucc_of_lt {n} i j hij := by
+    generalize hk : j.succ.rev = k
+    dsimp
+    rw [h_eq_assoc _ _ k]; rw [h_eq _ _ k]
+    dsimp
+    rw [X.left.σ₀Iter_δ _ _ (by grind)]; rw [X.left.δ_δ₀Iter_assoc _ _ (by grind)]
+  h_castSucc_comp_δ_succ_of_lt {n} i j hij := by
+    generalize hk : j.rev = k
+    obtain ⟨l, hl⟩ : exists l, i.val = j + 1 + l := by
+      rw [Fin.castSucc_lt_iff_succ_le]; rw [Fin.le_def] at hij
+      obtain ⟨l, hl⟩ := Nat.le.dest hij
+      exact ⟨l, by grind⟩
+    have := ed.s_comp_δ k ⟨l + 1, by grind⟩
+    dsimp at this ⊢
+    rw [h_eq_assoc _ _ (k + 1)]; rw [h_eq _ _ k]; rw [X.left.σ₀Iter_δ' _ _ ⟨l + 2]; rw [by grind⟩ (by grind)]; rw [reassoc_of% this]; rw [← X.left.δ_δ₀Iter'_assoc _ _ i (by grind)]
+    dsimp
+  h_succ_comp_δ_castSucc_succ {n} i := by
+    generalize hk : i.succ.rev = k
+    dsimp
+    rw [h_eq_assoc _ _ k]; rw [h_eq_assoc _ _ (k + 1)]
+    dsimp
+    rw [X.left.δ₀Iter_succ'_assoc _ (by grind)]; rw [X.left.σ₀Iter_δ' i.castSucc.succ i.val (m := k.val + 1)
+        (i' := 1) (by grind) (by grind) (by simp; grind)]; rw [dsimp% ed.s_comp_δ_assoc k.val 0]; rw [X.left.σ₀Iter_δ _ _ (by grind)]
+  h_comp_σ_castSucc_of_le {n} i j hij := by
+    generalize hk : j.rev = k
+    dsimp
+    rw [h_eq_assoc _ _ k]; rw [h_eq _ _ k]
+    dsimp
+    rw [X.left.σ_δ₀Iter_assoc _ _ (by grind)]; rw [X.left.σ₀Iter_σ _ _ (by grind)]
+  h_comp_σ_succ_of_lt {n} i j hij := by
+    generalize hk : j.rev = k
+    obtain ⟨l, hl⟩ := Nat.le.dest (Fin.le_def.1 hij)
+    dsimp
+    rw [h_eq_assoc _ _ k]; rw [h_eq _ _ (k + 1)]; rw [X.left.σ_δ₀Iter'_assoc _ _ ⟨l]; rw [by grind⟩
+        (by grind)]; rw [← ed.s_comp_σ_assoc]; rw [X.left.σ₀Iter_σ' j i.succ ⟨l + 1]; rw [by grind⟩ (by grind)]
+    dsimp
 
 中文:
 定义 homotopy
@@ -410,7 +463,42 @@ definition homotopy
     dsimp
     rw [h_eq_assoc _ _ 0]; rw [X.left.σ₀Iter_δ' _ _ 1 (by grind)]; rw [ed.s₀_comp_δ₁_assoc]; rw [X.δ₀Iter_hom_app_assoc _ (by grind)]
     simp
-  h_succ_comp_δ_castSucc_of_lt {n
+  h_succ_comp_δ_castSucc_of_lt {n} i j hij := by
+    generalize hk : j.succ.rev = k
+    dsimp
+    rw [h_eq_assoc _ _ k]; rw [h_eq _ _ k]
+    dsimp
+    rw [X.left.σ₀Iter_δ _ _ (by grind)]; rw [X.left.δ_δ₀Iter_assoc _ _ (by grind)]
+  h_castSucc_comp_δ_succ_of_lt {n} i j hij := by
+    generalize hk : j.rev = k
+    obtain ⟨l, hl⟩ : exists l, i.val = j + 1 + l := by
+      rw [Fin.castSucc_lt_iff_succ_le]; rw [Fin.le_def] at hij
+      obtain ⟨l, hl⟩ := Nat.le.dest hij
+      exact ⟨l, by grind⟩
+    have := ed.s_comp_δ k ⟨l + 1, by grind⟩
+    dsimp at this ⊢
+    rw [h_eq_assoc _ _ (k + 1)]; rw [h_eq _ _ k]; rw [X.left.σ₀Iter_δ' _ _ ⟨l + 2]; rw [by grind⟩ (by grind)]; rw [reassoc_of% this]; rw [← X.left.δ_δ₀Iter'_assoc _ _ i (by grind)]
+    dsimp
+  h_succ_comp_δ_castSucc_succ {n} i := by
+    generalize hk : i.succ.rev = k
+    dsimp
+    rw [h_eq_assoc _ _ k]; rw [h_eq_assoc _ _ (k + 1)]
+    dsimp
+    rw [X.left.δ₀Iter_succ'_assoc _ (by grind)]; rw [X.left.σ₀Iter_δ' i.castSucc.succ i.val (m := k.val + 1)
+        (i' := 1) (by grind) (by grind) (by simp; grind)]; rw [dsimp% ed.s_comp_δ_assoc k.val 0]; rw [X.left.σ₀Iter_δ _ _ (by grind)]
+  h_comp_σ_castSucc_of_le {n} i j hij := by
+    generalize hk : j.rev = k
+    dsimp
+    rw [h_eq_assoc _ _ k]; rw [h_eq _ _ k]
+    dsimp
+    rw [X.left.σ_δ₀Iter_assoc _ _ (by grind)]; rw [X.left.σ₀Iter_σ _ _ (by grind)]
+  h_comp_σ_succ_of_lt {n} i j hij := by
+    generalize hk : j.rev = k
+    obtain ⟨l, hl⟩ := Nat.le.dest (Fin.le_def.1 hij)
+    dsimp
+    rw [h_eq_assoc _ _ k]; rw [h_eq _ _ (k + 1)]; rw [X.left.σ_δ₀Iter'_assoc _ _ ⟨l]; rw [by grind⟩
+        (by grind)]; rw [← ed.s_comp_σ_assoc]; rw [X.left.σ₀Iter_σ' j i.succ ⟨l + 1]; rw [by grind⟩ (by grind)]
+    dsimp
 -/
 def homotopy : SimplicialObject.Homotopy (X.hom ≫ ed.section_) (𝟙 X.left) where
   h := h ed
@@ -550,7 +638,11 @@ definition shift
           simp only [shiftFun_zero, Fin.zero_le]
         · have h₂ : i₂ != 0 := by
             rintro rfl
-            exact h₁ (le_antisymm hi (Fin.zero_l
+            exact h₁ (le_antisymm hi (Fin.zero_le _))
+          obtain ⟨j₁, hj₁⟩ := Fin.eq_succ_of_ne_zero h₁
+          obtain ⟨j₂, hj₂⟩ := Fin.eq_succ_of_ne_zero h₂
+          subst hj₁ hj₂
+          simpa only [shiftFun_succ] using f.toOrderHom.monotone (Fin.succ_le_succ_iff.mp hi) }
 
 中文:
 定义 shift
@@ -563,7 +655,11 @@ definition shift
           simp only [shiftFun_zero, Fin.zero_le]
         · have h₂ : i₂ != 0 := by
             rintro rfl
-            exact h₁ (le_antisymm hi (Fin.zero_l
+            exact h₁ (le_antisymm hi (Fin.zero_le _))
+          obtain ⟨j₁, hj₁⟩ := Fin.eq_succ_of_ne_zero h₁
+          obtain ⟨j₂, hj₂⟩ := Fin.eq_succ_of_ne_zero h₂
+          subst hj₁ hj₂
+          simpa only [shiftFun_succ] using f.toOrderHom.monotone (Fin.succ_le_succ_iff.mp hi) }
 
 Depends on / 依赖: Fin.eq_succ_of_ne_zero, Fin.succ_le_succ_iff.mp, Fin.zero_le, SimplexCategory, SimplexCategory.Hom.mk, eq_succ_of_ne_zero, f.toOrderHom, f.toOrderHom.monotone, le_antisymm, monotone, shiftFun, shiftFun_succ, shiftFun_zero, succ_le_succ_iff, toOrderHom, zero_le
 -/
@@ -605,7 +701,26 @@ definition noncomputable
   s_comp_δ₀ n := by
     ext φ
     apply objEquiv.injective
-   
+    apply SimplexCategory.Hom.ext
+    ext i : 2
+    dsimp [SimplicialObject.δ, SimplexCategory.δ, SSet.stdSimplex,
+      objEquiv, Equiv.ulift, uliftFunctor]
+  s_comp_δ n i := by
+    ext φ
+    apply objEquiv.injective
+    apply SimplexCategory.Hom.ext
+    ext j : 2
+    dsimp [SimplicialObject.δ, SimplexCategory.δ, SSet.stdSimplex,
+      objEquiv, Equiv.ulift, uliftFunctor]
+    cases j using Fin.cases <;> simp
+  s_comp_σ n i := by
+    ext φ
+    apply objEquiv.injective
+    apply SimplexCategory.Hom.ext
+    ext j : 2
+    dsimp [SimplicialObject.σ, SimplexCategory.σ, SSet.stdSimplex, objEquiv, Equiv.ulift,
+      uliftFunctor, Function.comp_def]
+    cases j using Fin.cases <;> simp
 
 中文:
 定义 noncomputable
@@ -625,7 +740,26 @@ definition noncomputable
   s_comp_δ₀ n := by
     ext φ
     apply objEquiv.injective
-   
+    apply SimplexCategory.Hom.ext
+    ext i : 2
+    dsimp [SimplicialObject.δ, SimplexCategory.δ, SSet.stdSimplex,
+      objEquiv, Equiv.ulift, uliftFunctor]
+  s_comp_δ n i := by
+    ext φ
+    apply objEquiv.injective
+    apply SimplexCategory.Hom.ext
+    ext j : 2
+    dsimp [SimplicialObject.δ, SimplexCategory.δ, SSet.stdSimplex,
+      objEquiv, Equiv.ulift, uliftFunctor]
+    cases j using Fin.cases <;> simp
+  s_comp_σ n i := by
+    ext φ
+    apply objEquiv.injective
+    apply SimplexCategory.Hom.ext
+    ext j : 2
+    dsimp [SimplicialObject.σ, SimplexCategory.σ, SSet.stdSimplex, objEquiv, Equiv.ulift,
+      uliftFunctor, Function.comp_def]
+    cases j using Fin.cases <;> simp
 -/
 protected noncomputable def extraDegeneracy (Δ : SimplexCategory) :
     SimplicialObject.Augmented.ExtraDegeneracy (stdSimplex.obj Δ) where
@@ -822,7 +956,16 @@ definition extraDegeneracy
   s_comp_δ₀ n := by
     dsimp [SimplicialObject.δ, SimplexCategory.δ]
     cat_disch
-  
+  s_comp_δ n i := by
+    dsimp [SimplicialObject.δ, SimplexCategory.δ]
+    ext j
+    · induction j using Fin.cases <;> simp
+    · simp
+  s_comp_σ n i := by
+    dsimp [SimplicialObject.σ, SimplexCategory.σ]
+    ext j
+    · induction j using Fin.cases <;> simp
+    · simp
 
 中文:
 定义 extraDegeneracy
@@ -838,7 +981,16 @@ definition extraDegeneracy
   s_comp_δ₀ n := by
     dsimp [SimplicialObject.δ, SimplexCategory.δ]
     cat_disch
-  
+  s_comp_δ n i := by
+    dsimp [SimplicialObject.δ, SimplexCategory.δ]
+    ext j
+    · induction j using Fin.cases <;> simp
+    · simp
+  s_comp_σ n i := by
+    dsimp [SimplicialObject.σ, SimplexCategory.σ]
+    ext j
+    · induction j using Fin.cases <;> simp
+    · simp
 
 Depends on / 依赖: S.section_, WidePullback, WidePullback.lift, f.hom, section_
 -/
@@ -914,7 +1066,19 @@ definition homotopyEquiv
     simp [dsimp% ChainComplex.fromSingle₀Equiv_symm_apply_f_zero
       (C := AlternatingFaceMapComplex.obj X.left)])
   homotopyHomInvId :=
-    { hom i 
+    { hom i := Pi.single (i + 1) (-ed.s i)
+      zero i j hij := Pi.single_eq_of_ne (Ne.symm hij) _
+      comm i := by
+        cases i with
+        | zero =>
+          rw [Homotopy.prevD_chainComplex]; rw [Homotopy.dNext_zero_chainComplex]
+          simp [dsimp% ChainComplex.fromSingle₀Equiv_symm_apply_f_zero
+            (C := AlternatingFaceMapComplex.obj X.left), s_comp_δ₀, s₀_comp_δ₁]
+        | succ i =>
+          rw [Homotopy.prevD_chainComplex]; rw [Homotopy.dNext_succ_chainComplex]
+          simp [Fin.sum_univ_succ (n := i + 2), s_comp_δ₀, Preadditive.sum_comp,
+            Preadditive.comp_sum,
+            s_comp_δ, pow_succ] }
 
 中文:
 定义 homotopyEquiv
@@ -926,7 +1090,19 @@ definition homotopyEquiv
     simp [dsimp% ChainComplex.fromSingle₀Equiv_symm_apply_f_zero
       (C := AlternatingFaceMapComplex.obj X.left)])
   homotopyHomInvId :=
-    { hom i 
+    { hom i := Pi.single (i + 1) (-ed.s i)
+      zero i j hij := Pi.single_eq_of_ne (Ne.symm hij) _
+      comm i := by
+        cases i with
+        | zero =>
+          rw [Homotopy.prevD_chainComplex]; rw [Homotopy.dNext_zero_chainComplex]
+          simp [dsimp% ChainComplex.fromSingle₀Equiv_symm_apply_f_zero
+            (C := AlternatingFaceMapComplex.obj X.left), s_comp_δ₀, s₀_comp_δ₁]
+        | succ i =>
+          rw [Homotopy.prevD_chainComplex]; rw [Homotopy.dNext_succ_chainComplex]
+          simp [Fin.sum_univ_succ (n := i + 2), s_comp_δ₀, Preadditive.sum_comp,
+            Preadditive.comp_sum,
+            s_comp_δ, pow_succ] }
 
 Depends on / 依赖: AlternatingFaceMapComplex
 -/

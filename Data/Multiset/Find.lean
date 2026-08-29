@@ -33,7 +33,9 @@ definition find?
     · congr!
       exact congrArg _ (Quotient.sound h)
     refine List.find?_eq_find?_of_perm h ?_
-    simpa using
+    simpa using hp₁
+
+@[simp, grind =]
 
 中文:
 定义 find?
@@ -45,7 +47,9 @@ definition find?
     · congr!
       exact congrArg _ (Quotient.sound h)
     refine List.find?_eq_find?_of_perm h ?_
-    simpa using
+    simpa using hp₁
+
+@[simp, grind =]
 -/
 @[expose] def find? (s : Multiset α) : {x in s | p x}.Subsingleton -> Option α :=
   Quotient.recOn s (fun l _ => l.find? p) fun l₁ l₂ h => by

@@ -211,7 +211,9 @@ lemma mem_grothendieckTopology_iff
   refine ⟨fun ⟨R, hR, hle⟩ => ?_, fun ⟨𝒰, hle⟩ => ⟨.ofArrows 𝒰.X 𝒰.f, 𝒰.mem_pretopology, hle⟩⟩
   rw [Precoverage.mem_iff_exists_zeroHypercover] at hR
   obtain ⟨(𝒰 : Scheme.Cover _ _), rfl⟩ := hR
-  use
+  use 𝒰.ulift, le_trans (fun Y g ⟨i⟩ => .mk _) hle
+
+alias ⟨exists_cover_of_mem_grothendieckTopology, _⟩ := mem_grothendieckTopology_iff
 
 中文:
 引理 mem_grothendieckTopology_iff
@@ -221,7 +223,9 @@ lemma mem_grothendieckTopology_iff
   refine ⟨fun ⟨R, hR, hle⟩ => ?_, fun ⟨𝒰, hle⟩ => ⟨.ofArrows 𝒰.X 𝒰.f, 𝒰.mem_pretopology, hle⟩⟩
   rw [Precoverage.mem_iff_exists_zeroHypercover] at hR
   obtain ⟨(𝒰 : Scheme.Cover _ _), rfl⟩ := hR
-  use
+  use 𝒰.ulift, le_trans (fun Y g ⟨i⟩ => .mk _) hle
+
+alias ⟨exists_cover_of_mem_grothendieckTopology, _⟩ := mem_grothendieckTopology_iff
 
 Depends on / 依赖: Precoverage, Precoverage.mem_iff_exists_zeroHypercover, Precoverage.mem_toGrothendieck_iff_of_isStableUnderComposition, Scheme, Scheme.Cover, grothendieckTopology, le_trans, mem_iff_exists_zeroHypercover, mem_pretopology, mem_toGrothendieck_iff_of_isStableUnderComposition, ofArrows, simp_rw
 -/

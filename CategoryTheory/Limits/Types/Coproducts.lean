@@ -134,7 +134,8 @@ lemma isColimit_mk
       obtain rfl := h₂ _ h
       rfl
     · intro x
-      obt
+      obtain ⟨i, y, rfl⟩ := h₁ x
+      exact ⟨(Discrete.functor F).ιColimitType ⟨i⟩ y, rfl⟩
 
 中文:
 引理 isColimit_mk
@@ -148,7 +149,8 @@ lemma isColimit_mk
       obtain rfl := h₂ _ h
       rfl
     · intro x
-      obt
+      obtain ⟨i, y, rfl⟩ := h₁ x
+      exact ⟨(Discrete.functor F).ιColimitType ⟨i⟩ y, rfl⟩
 
 Depends on / 依赖: Discrete, Discrete.functor, functor
 -/
@@ -901,7 +903,44 @@ theorem binaryCofan_isColimit_iff
       rw [← show _ = c.inl from
           h.comp_coconePointUniqueUpToIso_inv (binaryCoproductColimit X Y) ⟨WalkingPair.left⟩]; rw [← show _ = c.inr from
           h.comp_coconePointUniqueUpToIso_inv (binaryCoproductColimit X Y) ⟨WalkingPair.right⟩]
-  
+      dsimp [binaryCoproductCocone]
+      refine
+        ⟨(h.coconePointUniqueUpToIso (binaryCoproductColimit X Y)).symm.toEquiv.injective.comp
+            Sum.inl_injective,
+          (h.coconePointUniqueUpToIso (binaryCoproductColimit X Y)).symm.toEquiv.injective.comp
+            Sum.inr_injective, ?_⟩
+      rw [types_comp]; rw [Set.range_comp]; rw [← eq_compl_iff_isCompl]; rw [types_comp]
+      dsimp
+      rw [Set.range_comp _ Sum.inr]; rw [← dsimp% [Iso.toEquiv] Set.image_compl_eq
+          (h.coconePointUniqueUpToIso (binaryCoproductColimit X Y)).symm.toEquiv.bijective]
+      simp
+    · rintro ⟨h₁, h₂, h₃⟩
+      have : forall x, x in Set.range c.inl ∨ x in Set.range c.inr := by
+        rw [eq_compl_iff_isCompl.mpr h₃.symm]
+        exact fun _ => or_not
+      refine ⟨BinaryCofan.IsColimit.mk _ ?_ ?_ ?_ ?_⟩
+      · intro T f g
+        refine ↾fun x => ?_
+        exact
+          if h : x in Set.range c.inl then f ((Equiv.ofInjective _ h₁).symm ⟨x, h⟩)
+          else g ((Equiv.ofInjective _ h₂).symm ⟨x, (this x).resolve_left h⟩)
+      · intro T f g
+        ext x
+        simp
+      · intro T f g
+        ext x
+        dsimp
+        simp only [Set.mem_range, Equiv.ofInjective_symm_apply, dite_eq_right_iff,
+          forall_exists_index]
+        intro y e
+        have : c.inr x in Set.range c.inl ⊓ Set.range c.inr := ⟨⟨_, e⟩, ⟨_, rfl⟩⟩
+        rw [disjoint_iff.mp h₃.1] at this
+        exact this.elim
+      · rintro T _ _ m rfl rfl
+        ext x
+        simp only [TypeCat.Fun.toFun_apply, Functor.const_obj_obj, pair_obj_left, Set.mem_range,
+          comp_apply, pair_obj_right, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk]
+        split_ifs <;> exact congr_arg _ (Equiv.apply_ofInjective_symm _ ⟨_, _⟩).symm
 
 中文:
 定理 binaryCofan_isColimit_iff
@@ -913,7 +952,44 @@ theorem binaryCofan_isColimit_iff
       rw [← show _ = c.inl from
           h.comp_coconePointUniqueUpToIso_inv (binaryCoproductColimit X Y) ⟨WalkingPair.left⟩]; rw [← show _ = c.inr from
           h.comp_coconePointUniqueUpToIso_inv (binaryCoproductColimit X Y) ⟨WalkingPair.right⟩]
-  
+      dsimp [binaryCoproductCocone]
+      refine
+        ⟨(h.coconePointUniqueUpToIso (binaryCoproductColimit X Y)).symm.toEquiv.injective.comp
+            Sum.inl_injective,
+          (h.coconePointUniqueUpToIso (binaryCoproductColimit X Y)).symm.toEquiv.injective.comp
+            Sum.inr_injective, ?_⟩
+      rw [types_comp]; rw [Set.range_comp]; rw [← eq_compl_iff_isCompl]; rw [types_comp]
+      dsimp
+      rw [Set.range_comp _ Sum.inr]; rw [← dsimp% [Iso.toEquiv] Set.image_compl_eq
+          (h.coconePointUniqueUpToIso (binaryCoproductColimit X Y)).symm.toEquiv.bijective]
+      simp
+    · rintro ⟨h₁, h₂, h₃⟩
+      have : forall x, x in Set.range c.inl ∨ x in Set.range c.inr := by
+        rw [eq_compl_iff_isCompl.mpr h₃.symm]
+        exact fun _ => or_not
+      refine ⟨BinaryCofan.IsColimit.mk _ ?_ ?_ ?_ ?_⟩
+      · intro T f g
+        refine ↾fun x => ?_
+        exact
+          if h : x in Set.range c.inl then f ((Equiv.ofInjective _ h₁).symm ⟨x, h⟩)
+          else g ((Equiv.ofInjective _ h₂).symm ⟨x, (this x).resolve_left h⟩)
+      · intro T f g
+        ext x
+        simp
+      · intro T f g
+        ext x
+        dsimp
+        simp only [Set.mem_range, Equiv.ofInjective_symm_apply, dite_eq_right_iff,
+          forall_exists_index]
+        intro y e
+        have : c.inr x in Set.range c.inl ⊓ Set.range c.inr := ⟨⟨_, e⟩, ⟨_, rfl⟩⟩
+        rw [disjoint_iff.mp h₃.1] at this
+        exact this.elim
+      · rintro T _ _ m rfl rfl
+        ext x
+        simp only [TypeCat.Fun.toFun_apply, Functor.const_obj_obj, pair_obj_left, Set.mem_range,
+          comp_apply, pair_obj_right, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk]
+        split_ifs <;> exact congr_arg _ (Equiv.apply_ofInjective_symm _ ⟨_, _⟩).symm
 
 Depends on / 依赖: Sum.inl_injective, Sum.inr_i, WalkingPair, WalkingPair.left, WalkingPair.right, binaryCoproductCocone, binaryCoproductColimit, c.inl, c.inr, classical, coconePointUniqueUpToIso, comp_coconePointUniqueUpToIso_inv, h.coconePointUniqueUpToIso, h.comp_coconePointUniqueUpToIso_inv, injective, inl_injective, inr_i, symm.toEquiv.injective.comp, toEquiv
 -/

@@ -39,7 +39,9 @@ definition evalEven
     return .ofBoolResult r
   | 0, ~q(Prop), ~q(@Even Int _ $a) =>
     assertInstancesCommute
-    let ⟨b, r⟩ ← deriveBoolOfIf
+    let ⟨b, r⟩ ← deriveBoolOfIff q($a % 2 = 0) q(Even $a) q((@Int.even_iff $a).symm)
+    return .ofBoolResult r
+  | _, _, _ => failure
 
 中文:
 定义 evalEven
@@ -52,7 +54,9 @@ definition evalEven
     return .ofBoolResult r
   | 0, ~q(Prop), ~q(@Even Int _ $a) =>
     assertInstancesCommute
-    let ⟨b, r⟩ ← deriveBoolOfIf
+    let ⟨b, r⟩ ← deriveBoolOfIff q($a % 2 = 0) q(Even $a) q((@Int.even_iff $a).symm)
+    return .ofBoolResult r
+  | _, _, _ => failure
 
 Depends on / 依赖: CompletelyNormalSpace, CompletelyNormalSpace.toNormalSpace, toNormalSpace
 -/
@@ -86,7 +90,9 @@ definition evalOdd
     return .ofBoolResult r
   | 0, ~q(Prop), ~q(@Odd Int $inst $a) =>
     assertInstancesCommute
-    let ⟨b, r⟩ ← deriveBool
+    let ⟨b, r⟩ ← deriveBoolOfIff q($a % 2 = 1) q(Odd $a) q((@Int.odd_iff $a).symm)
+    return .ofBoolResult r
+  | _ => failure
 
 中文:
 定义 evalOdd
@@ -99,7 +105,9 @@ definition evalOdd
     return .ofBoolResult r
   | 0, ~q(Prop), ~q(@Odd Int $inst $a) =>
     assertInstancesCommute
-    let ⟨b, r⟩ ← deriveBool
+    let ⟨b, r⟩ ← deriveBoolOfIff q($a % 2 = 1) q(Odd $a) q((@Int.odd_iff $a).symm)
+    return .ofBoolResult r
+  | _ => failure
 -/
 def evalOdd : NormNumExt where eval {u αP} e := do
   match u, αP, e with

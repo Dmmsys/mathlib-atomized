@@ -98,7 +98,8 @@ definition Submonoid.toAddSubmonoid
       one_mem' := S.zero_mem'
       mul_mem' := fun ha hb => S.add_mem' ha hb }
   left_inv x := by cases x; rfl
-  right_inv x := by ca
+  right_inv x := by cases x; rfl
+  map_rel_iff' := Iff.rfl
 
 中文:
 定义 子幺半群.toAddSubmonoid
@@ -111,7 +112,8 @@ definition Submonoid.toAddSubmonoid
       one_mem' := S.zero_mem'
       mul_mem' := fun ha hb => S.add_mem' ha hb }
   left_inv x := by cases x; rfl
-  right_inv x := by ca
+  right_inv x := by cases x; rfl
+  map_rel_iff' := Iff.rfl
 
 Depends on / 依赖: Additive, Additive.ofMul, Additive.toMul, Iff.rfl, S.add_mem, S.mul_mem, S.one_mem, S.zero_mem, add_mem, carrier, invFun, left_inv, map_rel_iff, mul_mem, one_mem, right_inv, zero_mem
 -/
@@ -225,7 +227,8 @@ definition AddSubmonoid.toSubmonoid
       zero_mem' := S.one_mem'
       add_mem' := fun ha hb => S.mul_mem' ha hb }
   left_inv x := by cases x; rfl
-  right_in
+  right_inv x := by cases x; rfl
+  map_rel_iff' := Iff.rfl
 
 中文:
 定义 加法子幺半群.toSubmonoid
@@ -238,7 +241,8 @@ definition AddSubmonoid.toSubmonoid
       zero_mem' := S.one_mem'
       add_mem' := fun ha hb => S.mul_mem' ha hb }
   left_inv x := by cases x; rfl
-  right_in
+  right_inv x := by cases x; rfl
+  map_rel_iff' := Iff.rfl
 
 Depends on / 依赖: Iff.rfl, Multiplicative, Multiplicative.ofAdd, Multiplicative.toAdd, S.add_mem, S.mul_mem, S.one_mem, S.zero_mem, add_mem, carrier, invFun, left_inv, map_rel_iff, mul_mem, one_mem, right_inv, zero_mem
 -/
@@ -2089,7 +2093,9 @@ theorem prod_bot_sup_bot_prod
   proof: (le_antisymm (sup_le (prod_mono (le_refl s) bot_le) (prod_mono bot_le (le_refl t))))
     fun p hp => Prod.fst_mul_snd p ▸ mul_mem
         ((le_sup_left : prod s ⊥ <= prod s ⊥ ⊔ prod ⊥ t) ⟨hp.1, Set.mem_singleton 1⟩)
-        ((le_sup_right : prod ⊥ t <= prod s ⊥ ⊔ prod ⊥ t) ⟨Set.mem_singleton 1, hp.2
+        ((le_sup_right : prod ⊥ t <= prod s ⊥ ⊔ prod ⊥ t) ⟨Set.mem_singleton 1, hp.2⟩)
+
+@[to_additive]
 
 中文:
 定理 prod_bot_sup_bot_prod
@@ -2097,7 +2103,9 @@ theorem prod_bot_sup_bot_prod
   证明: (le_antisymm (sup_le (prod_mono (le_refl s) bot_le) (prod_mono bot_le (le_refl t))))
     fun p hp => Prod.fst_mul_snd p ▸ mul_mem
         ((le_sup_left : prod s ⊥ <= prod s ⊥ ⊔ prod ⊥ t) ⟨hp.1, Set.mem_singleton 1⟩)
-        ((le_sup_right : prod ⊥ t <= prod s ⊥ ⊔ prod ⊥ t) ⟨Set.mem_singleton 1, hp.2
+        ((le_sup_right : prod ⊥ t <= prod s ⊥ ⊔ prod ⊥ t) ⟨Set.mem_singleton 1, hp.2⟩)
+
+@[to_additive]
 
 Depends on / 依赖: Prod.fst_mul_snd, Set.mem_singleton, bot_le, fst_mul_snd, le_antisymm, le_refl, le_sup_left, le_sup_right, mem_singleton, mul_mem, prod_mono, sup_le
 -/
@@ -2273,7 +2281,13 @@ theorem prod_le_iff
   · rintro ⟨hH, hK⟩ ⟨x1, x2⟩ ⟨h1, h2⟩
     have h1' : inl M N x1 in u := by
       apply hH
-     
+      simpa using h1
+    have h2' : inr M N x2 in u := by
+      apply hK
+      simpa using h2
+    simpa using Submonoid.mul_mem _ h1' h2'
+
+@[to_additive closure_prod]
 
 中文:
 定理 prod_le_iff
@@ -2291,7 +2305,13 @@ theorem prod_le_iff
   · rintro ⟨hH, hK⟩ ⟨x1, x2⟩ ⟨h1, h2⟩
     have h1' : inl M N x1 in u := by
       apply hH
-     
+      simpa using h1
+    have h2' : inr M N x2 in u := by
+      apply hK
+      simpa using h2
+    simpa using Submonoid.mul_mem _ h1' h2'
+
+@[to_additive closure_prod]
 
 Depends on / 依赖: Submonoid, Submonoid.mul_mem, Submonoid.one_mem, mul_mem, one_mem
 -/
@@ -2328,7 +2348,7 @@ theorem closure_prod
 map_le_of_le_comap _ closure_le.2 fun _x hx => subset_closure ⟨hx, ht⟩,
 map_le_of_le_comap _ closure_le.2 fun _y hy => subset_closure ⟨hs, hy⟩⟩)
 
-@[to_additive (attr := simp) cl
+@[to_additive (attr := simp) closure_prod_zero]
 
 中文:
 定理 closure_prod
@@ -2339,7 +2359,7 @@ map_le_of_le_comap _ closure_le.2 fun _y hy => subset_closure ⟨hs, hy⟩⟩)
 map_le_of_le_comap _ closure_le.2 fun _x hx => subset_closure ⟨hx, ht⟩,
 map_le_of_le_comap _ closure_le.2 fun _y hy => subset_closure ⟨hs, hy⟩⟩)
 
-@[to_additive (attr := simp) cl
+@[to_additive (attr := simp) closure_prod_zero]
 
 Depends on / 依赖: Set.prod_subset_prod_iff, closure_le, le_antisymm, map_le_of_le_comap, prod_le_iff, prod_subset_prod_iff, subset_closure
 -/
@@ -2963,7 +2983,9 @@ definition domRestrictHom
 @[deprecated (since := "2026-07-19")] alias restrictHom := domRestrictHom
 @[deprecated (since := "2026-07-19")]
 alias _root_.AddMonoidHom.restrictHom := _root_.AddMonoidHom.domRestrictHom
-@[deprecated (since := "2026-07-19")
+@[deprecated (since := "2026-07-19")] alias restrictHom_apply := domRestrictHom_apply
+@[deprecated (since := "2026-07-19")]
+alias _root_.AddMonoidHom.restrictHom_apply := _root_.AddMonoidHom.domRestrictHom_apply
 
 中文:
 定义 domRestrictHom
@@ -2975,7 +2997,9 @@ alias _root_.AddMonoidHom.restrictHom := _root_.AddMonoidHom.domRestrictHom
 @[deprecated (since := "2026-07-19")] alias restrictHom := domRestrictHom
 @[deprecated (since := "2026-07-19")]
 alias _root_.AddMonoidHom.restrictHom := _root_.AddMonoidHom.domRestrictHom
-@[deprecated (since := "2026-07-19")
+@[deprecated (since := "2026-07-19")] alias restrictHom_apply := domRestrictHom_apply
+@[deprecated (since := "2026-07-19")]
+alias _root_.AddMonoidHom.restrictHom_apply := _root_.AddMonoidHom.domRestrictHom_apply
 
 Depends on / 依赖: domRestrict, f.domRestrict
 -/

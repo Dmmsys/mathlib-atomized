@@ -155,7 +155,24 @@ theorem unitsMap_surjective
     have ⟨k, hk⟩ := this x.val.val (val_coe_unit_coprime x)
     refine ⟨unitOfCoprime _ hk, Units.ext ?_⟩
     have : NeZero n := ⟨fun hn => hm.out (eq_zero_of_zero_dvd (hn ▸ h))⟩
-    simp [unitsMap_def,
+    simp [unitsMap_def, -castHom_apply]
+  intro x hx
+  let ps : Finset Nat := {p in m.primeFactors | ¬p ∣ x}
+  use ps.prod id
+  apply Nat.coprime_of_dvd
+  intro p pp hp hpn
+  by_cases hpx : p ∣ x
+  · have h := Nat.dvd_sub hp hpx
+    rw [add_comm]; rw [Nat.add_sub_cancel] at h
+    rcases pp.dvd_mul.mp h with h | h
+    · have ⟨q, hq, hq'⟩ := (pp.prime.dvd_finsetProd_iff id).mp h
+      rw [Finset.mem_filter]; rw [Nat.mem_primeFactors]; rw [← (Nat.prime_dvd_prime_iff_eq pp hq.1.1).mp hq'] at hq
+      exact hq.2 hpx
+    · exact Nat.Prime.not_coprime_iff_dvd.mpr ⟨p, pp, hpx, h⟩ hx
+  · have pps : p in ps := Finset.mem_filter.mpr ⟨Nat.mem_primeFactors.mpr ⟨pp, hpn, hm.out⟩, hpx⟩
+    have h := Nat.dvd_sub hp ((Finset.dvd_prod_of_mem id pps).mul_right n)
+    rw [Nat.add_sub_cancel] at h
+    contradiction
 
 中文:
 定理 unitsMap_surjective
@@ -166,7 +183,24 @@ theorem unitsMap_surjective
     have ⟨k, hk⟩ := this x.val.val (val_coe_unit_coprime x)
     refine ⟨unitOfCoprime _ hk, Units.ext ?_⟩
     have : NeZero n := ⟨fun hn => hm.out (eq_zero_of_zero_dvd (hn ▸ h))⟩
-    simp [unitsMap_def,
+    simp [unitsMap_def, -castHom_apply]
+  intro x hx
+  let ps : Finset Nat := {p in m.primeFactors | ¬p ∣ x}
+  use ps.prod id
+  apply Nat.coprime_of_dvd
+  intro p pp hp hpn
+  by_cases hpx : p ∣ x
+  · have h := Nat.dvd_sub hp hpx
+    rw [add_comm]; rw [Nat.add_sub_cancel] at h
+    rcases pp.dvd_mul.mp h with h | h
+    · have ⟨q, hq, hq'⟩ := (pp.prime.dvd_finsetProd_iff id).mp h
+      rw [Finset.mem_filter]; rw [Nat.mem_primeFactors]; rw [← (Nat.prime_dvd_prime_iff_eq pp hq.1.1).mp hq'] at hq
+      exact hq.2 hpx
+    · exact Nat.Prime.not_coprime_iff_dvd.mpr ⟨p, pp, hpx, h⟩ hx
+  · have pps : p in ps := Finset.mem_filter.mpr ⟨Nat.mem_primeFactors.mpr ⟨pp, hpn, hm.out⟩, hpx⟩
+    have h := Nat.dvd_sub hp ((Finset.dvd_prod_of_mem id pps).mul_right n)
+    rw [Nat.add_sub_cancel] at h
+    contradiction
 
 Depends on / 依赖: Coprime, Finset, Nat.add_sub, Nat.coprime_of_dvd, Nat.dvd_sub, NeZero, Units.ext, add_comm, add_sub, castHom_apply, coprime_of_dvd, dvd_sub, eq_zero_of_zero_dvd, hm.out, m.primeFactors, primeFactors, ps.prod, unitOfCoprime, unitsMap_def, val_coe_unit_coprime
 -/
@@ -235,7 +269,31 @@ lemma eq_unit_mul_divisor
   · change Int at a
     rcases eq_or_ne a 0 with rfl | ha
     · refine ⟨0, dvd_zero _, 1, isUnit_one, by rw [Nat.cast_zero, mul_zero]⟩
-    refine ⟨a.natAbs, dvd_zero _, I
+    refine ⟨a.natAbs, dvd_zero _, Int.sign a, ?_, (Int.sign_mul_natAbs a).symm⟩
+    rcases lt_or_gt_of_ne ha with h | h
+    · simp only [Int.sign_eq_neg_one_of_neg h, IsUnit.neg_iff, isUnit_one]
+    · simp only [Int.sign_eq_one_of_pos h, isUnit_one]
+  -- now the interesting case
+  have : NeZero N := ⟨hN⟩
+  -- Define `d` as the GCD of a lift of `a` and `N`.
+  let d := a.val.gcd N
+  have hd : d != 0 := Nat.gcd_ne_zero_right hN
+  obtain ⟨a₀, (ha₀ : _ = d * _)⟩ := a.val.gcd_dvd_left N
+  obtain ⟨N₀, (hN₀ : _ = d * _)⟩ := a.val.gcd_dvd_right N
+  refine ⟨d, ⟨N₀, hN₀⟩, ?_⟩
+  -- Show `a` is a unit mod `N / d`.
+  have hu₀ : IsUnit (a₀ : ZMod N₀) := by
+    refine (isUnit_iff_coprime _ _).mpr (Nat.isCoprime_iff_coprime.mp ?_)
+    obtain ⟨p, q, hpq⟩ : exists (p q : Int), d = a.val * p + N * q := ⟨_, _, Nat.gcd_eq_gcd_ab _ _⟩
+    rw [ha₀]; rw [hN₀]; rw [Nat.cast_mul]; rw [Nat.cast_mul]; rw [mul_assoc]; rw [mul_assoc]; rw [← mul_add]; rw [eq_comm]; rw [mul_comm _ p]; rw [mul_comm _ q] at hpq
+    exact ⟨p, q, Int.eq_one_of_mul_eq_self_right (Nat.cast_ne_zero.mpr hd) hpq⟩
+  -- Lift it arbitrarily to a unit mod `N`.
+  obtain ⟨u, hu⟩ := (unitsMap_surjective (⟨d, mul_comm d N₀ ▸ hN₀⟩ : N₀ ∣ N)) hu₀.unit
+  rw [unitsMap_def]; rw [← Units.val_inj]; rw [Units.coe_map]; rw [IsUnit.unit_spec]; rw [MonoidHom.coe_coe] at hu
+  refine ⟨u.val, u.isUnit, ?_⟩
+  rw [← natCast_zmod_val a]; rw [← natCast_zmod_val u.1]; rw [ha₀]; rw [← Nat.cast_mul]; rw [natCast_eq_natCast_iff]; rw [mul_comm _ d]; rw [Nat.ModEq]
+  simp only [hN₀, Nat.mul_mod_mul_left, Nat.mul_right_inj hd]
+  rw [← Nat.ModEq]; rw [← natCast_eq_natCast_iff]; rw [← hu]; rw [natCast_val]; rw [castHom_apply]
 
 中文:
 引理 eq_unit_mul_divisor
@@ -246,7 +304,31 @@ lemma eq_unit_mul_divisor
   · change Int at a
     rcases eq_or_ne a 0 with rfl | ha
     · refine ⟨0, dvd_zero _, 1, isUnit_one, by rw [Nat.cast_zero, mul_zero]⟩
-    refine ⟨a.natAbs, dvd_zero _, I
+    refine ⟨a.natAbs, dvd_zero _, Int.sign a, ?_, (Int.sign_mul_natAbs a).symm⟩
+    rcases lt_or_gt_of_ne ha with h | h
+    · simp only [Int.sign_eq_neg_one_of_neg h, IsUnit.neg_iff, isUnit_one]
+    · simp only [Int.sign_eq_one_of_pos h, isUnit_one]
+  -- now the interesting case
+  have : NeZero N := ⟨hN⟩
+  -- Define `d` as the GCD of a lift of `a` and `N`.
+  let d := a.val.gcd N
+  have hd : d != 0 := Nat.gcd_ne_zero_right hN
+  obtain ⟨a₀, (ha₀ : _ = d * _)⟩ := a.val.gcd_dvd_left N
+  obtain ⟨N₀, (hN₀ : _ = d * _)⟩ := a.val.gcd_dvd_right N
+  refine ⟨d, ⟨N₀, hN₀⟩, ?_⟩
+  -- Show `a` is a unit mod `N / d`.
+  have hu₀ : IsUnit (a₀ : ZMod N₀) := by
+    refine (isUnit_iff_coprime _ _).mpr (Nat.isCoprime_iff_coprime.mp ?_)
+    obtain ⟨p, q, hpq⟩ : exists (p q : Int), d = a.val * p + N * q := ⟨_, _, Nat.gcd_eq_gcd_ab _ _⟩
+    rw [ha₀]; rw [hN₀]; rw [Nat.cast_mul]; rw [Nat.cast_mul]; rw [mul_assoc]; rw [mul_assoc]; rw [← mul_add]; rw [eq_comm]; rw [mul_comm _ p]; rw [mul_comm _ q] at hpq
+    exact ⟨p, q, Int.eq_one_of_mul_eq_self_right (Nat.cast_ne_zero.mpr hd) hpq⟩
+  -- Lift it arbitrarily to a unit mod `N`.
+  obtain ⟨u, hu⟩ := (unitsMap_surjective (⟨d, mul_comm d N₀ ▸ hN₀⟩ : N₀ ∣ N)) hu₀.unit
+  rw [unitsMap_def]; rw [← Units.val_inj]; rw [Units.coe_map]; rw [IsUnit.unit_spec]; rw [MonoidHom.coe_coe] at hu
+  refine ⟨u.val, u.isUnit, ?_⟩
+  rw [← natCast_zmod_val a]; rw [← natCast_zmod_val u.1]; rw [ha₀]; rw [← Nat.cast_mul]; rw [natCast_eq_natCast_iff]; rw [mul_comm _ d]; rw [Nat.ModEq]
+  simp only [hN₀, Nat.mul_mod_mul_left, Nat.mul_right_inj hd]
+  rw [← Nat.ModEq]; rw [← natCast_eq_natCast_iff]; rw [← hu]; rw [natCast_val]; rw [castHom_apply]
 
 Depends on / 依赖: eq_or_ne
 -/
@@ -470,7 +552,8 @@ theorem coe_int_isUnit_iff_isCoprime
   · have : NeZero m := ⟨hm⟩
     obtain ⟨u, hu⟩ := h
     have h_coprime := val_coe_unit_coprime u
-    rw [hu]; rw [
+    rw [hu]; rw [Nat.coprime_iff_gcd_eq_one]; rw [← Int.gcd_natCast_natCast]; rw [val_intCast]; rw [Int.gcd_emod] at h_coprime
+    rwa [isCoprime_comm, Int.isCoprime_iff_gcd_eq_one]
 
 中文:
 定理 coe_int_isUnit_iff_isCoprime
@@ -483,7 +566,8 @@ theorem coe_int_isUnit_iff_isCoprime
   · have : NeZero m := ⟨hm⟩
     obtain ⟨u, hu⟩ := h
     have h_coprime := val_coe_unit_coprime u
-    rw [hu]; rw [
+    rw [hu]; rw [Nat.coprime_iff_gcd_eq_one]; rw [← Int.gcd_natCast_natCast]; rw [val_intCast]; rw [Int.gcd_emod] at h_coprime
+    rwa [isCoprime_comm, Int.isCoprime_iff_gcd_eq_one]
 
 Depends on / 依赖: Int.gcd_emod, Int.gcd_natCast_natCast, Int.isCoprime_iff_gcd_eq_one, Nat.cast_zero, Nat.coprime_iff_gcd_eq_one, NeZero, cast_zero, coprime_iff_gcd_eq_one, eq_or_ne, gcd_emod, gcd_natCast_natCast, h_coprime, isCoprime_comm, isCoprime_comm.mp, isCoprime_iff_gcd_eq_one, isCoprime_zero_left, unitOfIsCoprime, val_coe_unit_coprime, val_intCast
 -/

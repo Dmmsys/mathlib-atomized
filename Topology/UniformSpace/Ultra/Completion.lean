@@ -140,7 +140,14 @@ instance IsUltraUniformity.separationQuotient
   · exact fun _ ⟨_, hU, _⟩ => by rw [id_eq]; infer_instance
   · rintro U ⟨hU', _, hU⟩
     constructor
-    ri
+    rintro x y z
+    simp only [id_eq, Set.mem_image, Prod.exists, Prod.map_apply, Prod.mk.injEq,
+      forall_exists_index, and_imp]
+    rintro a b hab rfl rfl c d hcd hc rfl
+    have hbc : (b, c) in U := by
+      rw [eq_comm]; rw [SeparationQuotient.mk_eq_mk]; rw [inseparable_iff_ker_uniformity]; rw [Filter.mem_ker] at hc
+      exact hc _ hU'
+    exact ⟨a, d, U.trans (U.trans hab hbc) hcd, by simp, by simp⟩
 
 中文:
 实例 是UltraUniformity.separationQuotient
@@ -153,7 +160,14 @@ instance IsUltraUniformity.separationQuotient
   · exact fun _ ⟨_, hU, _⟩ => by rw [id_eq]; infer_instance
   · rintro U ⟨hU', _, hU⟩
     constructor
-    ri
+    rintro x y z
+    simp only [id_eq, Set.mem_image, Prod.exists, Prod.map_apply, Prod.mk.injEq,
+      forall_exists_index, and_imp]
+    rintro a b hab rfl rfl c d hcd hc rfl
+    have hbc : (b, c) in U := by
+      rw [eq_comm]; rw [SeparationQuotient.mk_eq_mk]; rw [inseparable_iff_ker_uniformity]; rw [Filter.mem_ker] at hc
+      exact hc _ hU'
+    exact ⟨a, d, U.trans (U.trans hab hbc) hcd, by simp, by simp⟩
 
 Depends on / 依赖: IsUltraUniformity, IsUltraUniformity.hasBasis.map, Prod.exists, Prod.map, Prod.map_apply, Prod.mk.injEq, SeparationQuotient, SeparationQuotient.mk, SeparationQuotient.uniformity_eq, Set.mem_image, and_imp, eq_comm, forall_exists_index, hasBasis, id_eq, infer_instance, map_apply, mem_image, mk_of_hasBasis, uniformity_eq
 -/

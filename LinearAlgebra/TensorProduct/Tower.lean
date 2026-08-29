@@ -1511,7 +1511,9 @@ lemma cancelBaseChange_self_eq_lid
     | zero => simp
     | tmul a m =>
       simp only [cancelBaseChange_tmul, lid_tmul, smul_tmul', smul_eq_mul, mul_comm]
-    | add x 
+    | add x y hx hy =>
+      simp only [tmul_add, map_add, lid_tmul, hx, hy]
+  | add x y hx hy => simp [hx, hy]
 
 中文:
 引理 cancelBaseChange_self_eq_lid
@@ -1524,7 +1526,9 @@ lemma cancelBaseChange_self_eq_lid
     | zero => simp
     | tmul a m =>
       simp only [cancelBaseChange_tmul, lid_tmul, smul_tmul', smul_eq_mul, mul_comm]
-    | add x 
+    | add x y hx hy =>
+      simp only [tmul_add, map_add, lid_tmul, hx, hy]
+  | add x y hx hy => simp [hx, hy]
 
 Depends on / 依赖: TensorProduct, TensorProduct.induction_on, cancelBaseChange_tmul, induction_on, lid_tmul, map_add, map_zero, mul_comm, smul_eq_mul, smul_tmul, tmul_add
 -/
@@ -1651,7 +1655,7 @@ definition rightComm
       (AlgebraTensorModule.mk _ _ _ _).compr₂ (AlgebraTensorModule.mk _ _ _ _))))
     (lift (lift (LinearMap.lflip.toLinearMap ∘ₗ
       (AlgebraTensorModule.mk _ _ _ _).compr₂ (AlgebraTensorModule.mk _ _ _ _))))
-    (by ext; sim
+    (by ext; simp) (by ext; simp)
 
 中文:
 定义 rightComm
@@ -1661,7 +1665,7 @@ definition rightComm
       (AlgebraTensorModule.mk _ _ _ _).compr₂ (AlgebraTensorModule.mk _ _ _ _))))
     (lift (lift (LinearMap.lflip.toLinearMap ∘ₗ
       (AlgebraTensorModule.mk _ _ _ _).compr₂ (AlgebraTensorModule.mk _ _ _ _))))
-    (by ext; sim
+    (by ext; simp) (by ext; simp)
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.mk, LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.lflip.toLinearMap, ofLinearMap, toLinearMap
 -/
@@ -2672,7 +2676,11 @@ lemma baseChange_eq_span
   · rw [baseChange, LinearMap.range_le_iff_comap, eq_top_iff,
       ← span_eq_top_of_span_eq_top R A _ (span_tmul_eq_top R ..), span_le]
     refine fun _ ⟨a, m, h⟩ => ?_
-    rw [← h]; rw [SetLike.mem_coe]; rw [mem_comap]; rw [LinearMap.baseChange_tmul]; rw [← mul_one a]
+    rw [← h]; rw [SetLike.mem_coe]; rw [mem_comap]; rw [LinearMap.baseChange_tmul]; rw [← mul_one a]; rw [← smul_eq_mul]; rw [← smul_tmul']
+    exact smul_mem _ a (subset_span ⟨m, m.2, rfl⟩)
+  · refine span_le.2 fun _ ⟨m, hm, h⟩ => h ▸ ⟨1 otimesₜ[R] ⟨m, hm⟩, rfl⟩
+
+@[simp]
 
 中文:
 引理 baseChange_eq_span
@@ -2682,7 +2690,11 @@ lemma baseChange_eq_span
   · rw [baseChange, LinearMap.range_le_iff_comap, eq_top_iff,
       ← span_eq_top_of_span_eq_top R A _ (span_tmul_eq_top R ..), span_le]
     refine fun _ ⟨a, m, h⟩ => ?_
-    rw [← h]; rw [SetLike.mem_coe]; rw [mem_comap]; rw [LinearMap.baseChange_tmul]; rw [← mul_one a]
+    rw [← h]; rw [SetLike.mem_coe]; rw [mem_comap]; rw [LinearMap.baseChange_tmul]; rw [← mul_one a]; rw [← smul_eq_mul]; rw [← smul_tmul']
+    exact smul_mem _ a (subset_span ⟨m, m.2, rfl⟩)
+  · refine span_le.2 fun _ ⟨m, hm, h⟩ => h ▸ ⟨1 otimesₜ[R] ⟨m, hm⟩, rfl⟩
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.baseChange_tmul, LinearMap.range_le_iff_comap, S.subtype, SetLike, SetLike.mem_coe, baseChange, baseChange_tmul, eq_top_iff, le_antisymm, mem_coe, mem_comap, mul_one, range_le_iff_comap, relMap_leSymb, smul_eq_mul, smul_mem, smul_tmul, span_eq_top_of_span_eq_top, span_le
 -/

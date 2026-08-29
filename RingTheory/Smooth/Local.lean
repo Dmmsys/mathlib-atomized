@@ -32,7 +32,7 @@ theorem FormallySmooth.iff_injective_lTensor_residueField.{u}
     have : Module.Finite P.Ring P.ker := .of_fg h'
     .of_surjective _ Extension.Cotangent.mk_surjective
   have : Module.Finite S P.Cotangent := Module.Finite.of_restrictScalars_finite P.Ring _ _
-  rw [← IsLocalRing.split_injective_iff_lTensor_residue
+  rw [← IsLocalRing.split_injective_iff_lTensor_residueField_injective]; rw [P.formallySmooth_iff_split_injection]
 
 中文:
 定理 形式光滑.iff_injective_lTensor_residueField.{u}
@@ -41,7 +41,7 @@ theorem FormallySmooth.iff_injective_lTensor_residueField.{u}
     have : Module.Finite P.Ring P.ker := .of_fg h'
     .of_surjective _ Extension.Cotangent.mk_surjective
   have : Module.Finite S P.Cotangent := Module.Finite.of_restrictScalars_finite P.Ring _ _
-  rw [← IsLocalRing.split_injective_iff_lTensor_residue
+  rw [← IsLocalRing.split_injective_iff_lTensor_residueField_injective]; rw [P.formallySmooth_iff_split_injection]
 
 Depends on / 依赖: Cotangent, Extension, Extension.Cotangent.mk_surjective, Finite, IsLocalRing, IsLocalRing.split_injective_iff_lTensor_residueField_injective, Module, Module.Finite, Module.Finite.of_restrictScalars_finite, P.Cotangent, P.Ring, P.formallySmooth_iff_split_injection, P.ker, formallySmooth_iff_split_injection, mk_surjective, of_fg, of_restrictScalars_finite, of_surjective, split_injective_iff_lTensor_residueField_injective
 -/
@@ -67,7 +67,10 @@ theorem FormallySmooth.iff_injective_cotangentComplexBaseChange_residueField
   let P' : Extension R S := { Ring := P, σ := _, algebraMap_σ := Function.surjInv_eq h₁ }
   rw [Algebra.FormallySmooth.iff_injective_lTensor_residueField P' h₂]
   rw [P'.cotangentComplexBaseChange_eq_lTensor_cotangentComplex (ResidueField S)]
-  refine .trans ?_ ((AlgebraTensorModule.cancelBaseCha
+  refine .trans ?_ ((AlgebraTensorModule.cancelBaseChange P'.Ring S _ _
+    Ω[P'.Ring⁄R]).comp_injective _).symm
+  exact (((AlgebraTensorModule.cancelBaseChange P'.Ring S _ _ P'.ker).symm ≪≫ₗ
+    P'.cotangentEquiv.baseChange (A := _)).injective_comp _).symm
 
 中文:
 定理 形式光滑.iff_injective_cotangentComplexBaseChange_residueField
@@ -75,7 +78,10 @@ theorem FormallySmooth.iff_injective_cotangentComplexBaseChange_residueField
   let P' : Extension R S := { Ring := P, σ := _, algebraMap_σ := Function.surjInv_eq h₁ }
   rw [Algebra.FormallySmooth.iff_injective_lTensor_residueField P' h₂]
   rw [P'.cotangentComplexBaseChange_eq_lTensor_cotangentComplex (ResidueField S)]
-  refine .trans ?_ ((AlgebraTensorModule.cancelBaseCha
+  refine .trans ?_ ((AlgebraTensorModule.cancelBaseChange P'.Ring S _ _
+    Ω[P'.Ring⁄R]).comp_injective _).symm
+  exact (((AlgebraTensorModule.cancelBaseChange P'.Ring S _ _ P'.ker).symm ≪≫ₗ
+    P'.cotangentEquiv.baseChange (A := _)).injective_comp _).symm
 
 Depends on / 依赖: Algebra, Algebra.FormallySmooth.iff_injective_lTensor_residueField, AlgebraTensorModule, AlgebraTensorModule.cancelBaseChange, Extension, FormallySmooth, Function, Function.surjInv_eq, ResidueField, baseChange, cancelBaseChange, comp_injective, cotangentComplexBaseChange_eq_lTensor_cotangentComplex, cotangentEquiv, cotangentEquiv.baseChange, iff_injective_lTensor_residueField, injective_comp, surjInv_eq
 -/
@@ -103,7 +109,22 @@ theorem FormallySmooth.iff_injective_cotangentComplexBaseChange
   let := f.toAlgebra
   have := IsScalarTower.of_algebraMap_eq' f.comp_algebraMap.symm
   have : IsScalarTower P (ResidueField S) K := .to₁₃₄ _ S _ _
-  rw [FormallySmooth.iff_injective_cotangentComplexBaseChange_resid
+  rw [FormallySmooth.iff_injective_cotangentComplexBaseChange_residueField P h₁ h₂]; rw [← Module.FaithfullyFlat.lTensor_injective_iff_injective _ K]
+  have : (AlgebraTensorModule.cancelBaseChange _ _ _ _ _).toLinearMap ∘ₗ
+      (cotangentComplexBaseChange R S P (ResidueField S)).baseChange K ∘ₗ
+      (AlgebraTensorModule.cancelBaseChange _ _ _ _ _).symm.toLinearMap =
+      (cotangentComplexBaseChange R S P K) := by
+    ext
+    #adaptation_note /-- Prior to nightly-2026-04-06, this was just `simp`. -/
+    simp_rw [AlgebraTensorModule.curry_apply, LinearMap.restrictScalars_comp, curry_apply,
+      LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearEquiv.coe_coe, Function.comp_apply,
+      AlgebraTensorModule.cancelBaseChange_symm_tmul, LinearMap.baseChange_tmul,
+      cotangentComplexBaseChange_tmul, kerToTensor_apply, one_smul,
+      AlgebraTensorModule.cancelBaseChange_tmul]
+    simp
+  rw [← this]
+  refine .trans ?_ ((AlgebraTensorModule.cancelBaseChange _ _ _ _ _).comp_injective _).symm
+  exact ((AlgebraTensorModule.cancelBaseChange _ _ _ _ _).symm.injective_comp _).symm
 
 中文:
 定理 形式光滑.iff_injective_cotangentComplexBaseChange
@@ -112,7 +133,22 @@ theorem FormallySmooth.iff_injective_cotangentComplexBaseChange
   let := f.toAlgebra
   have := IsScalarTower.of_algebraMap_eq' f.comp_algebraMap.symm
   have : IsScalarTower P (ResidueField S) K := .to₁₃₄ _ S _ _
-  rw [FormallySmooth.iff_injective_cotangentComplexBaseChange_resid
+  rw [FormallySmooth.iff_injective_cotangentComplexBaseChange_residueField P h₁ h₂]; rw [← Module.FaithfullyFlat.lTensor_injective_iff_injective _ K]
+  have : (AlgebraTensorModule.cancelBaseChange _ _ _ _ _).toLinearMap ∘ₗ
+      (cotangentComplexBaseChange R S P (ResidueField S)).baseChange K ∘ₗ
+      (AlgebraTensorModule.cancelBaseChange _ _ _ _ _).symm.toLinearMap =
+      (cotangentComplexBaseChange R S P K) := by
+    ext
+    #adaptation_note /-- Prior to nightly-2026-04-06, this was just `simp`. -/
+    simp_rw [AlgebraTensorModule.curry_apply, LinearMap.restrictScalars_comp, curry_apply,
+      LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearEquiv.coe_coe, Function.comp_apply,
+      AlgebraTensorModule.cancelBaseChange_symm_tmul, LinearMap.baseChange_tmul,
+      cotangentComplexBaseChange_tmul, kerToTensor_apply, one_smul,
+      AlgebraTensorModule.cancelBaseChange_tmul]
+    simp
+  rw [← this]
+  refine .trans ?_ ((AlgebraTensorModule.cancelBaseChange _ _ _ _ _).comp_injective _).symm
+  exact ((AlgebraTensorModule.cancelBaseChange _ _ _ _ _).symm.injective_comp _).symm
 
 Depends on / 依赖: Algebra, Algebra.ofId, AlgebraTensorModule, AlgebraTensorModule.cancelBaseChange, FaithfullyFlat, FormallySmooth, FormallySmooth.iff_injective_cotangentComplexBaseChange_residueField, Ideal.Quotient.lift, IsScalarTower, IsScalarTower.of_algebraMap_eq, Module, Module.FaithfullyFlat.lTensor_injective_iff_injective, Quotient, ResidueField, cancelBaseChange, comp_algebraMap, cotangentComplexBaseChange, f.comp_algebraMap.symm, f.toAlgebra, iff_injective_cotangentComplexBaseChange_residueField
 -/

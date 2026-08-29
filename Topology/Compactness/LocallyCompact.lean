@@ -131,7 +131,7 @@ theorem exists_compact_superset
   choose s hc hmem using fun x : X => exists_compact_mem_nhds x
   rcases hK.elim_nhds_subcover _ fun x _ => interior_mem_nhds.2 (hmem x) with ⟨I, -, hIK⟩
   refine ⟨⋃ x in I, s x, I.isCompact_biUnion fun _ _ => hc _, hIK.trans ?_⟩
-exact iUnion₂_subset fun x hx => interior_mono subset_iUnion₂ (s :=
+exact iUnion₂_subset fun x hx => interior_mono subset_iUnion₂ (s := fun x _ => s x) x hx
 
 中文:
 定理 存在_compact_superset
@@ -140,7 +140,7 @@ exact iUnion₂_subset fun x hx => interior_mono subset_iUnion₂ (s :=
   choose s hc hmem using fun x : X => exists_compact_mem_nhds x
   rcases hK.elim_nhds_subcover _ fun x _ => interior_mem_nhds.2 (hmem x) with ⟨I, -, hIK⟩
   refine ⟨⋃ x in I, s x, I.isCompact_biUnion fun _ _ => hc _, hIK.trans ?_⟩
-exact iUnion₂_subset fun x hx => interior_mono subset_iUnion₂ (s :=
+exact iUnion₂_subset fun x hx => interior_mono subset_iUnion₂ (s := fun x _ => s x) x hx
 
 Depends on / 依赖: I.isCompact_biUnion, elim_nhds_subcover, exists_compact_mem_nhds, hIK.trans, hK.elim_nhds_subcover, interior_mem_nhds, interior_mono, isCompact_biUnion
 -/
@@ -275,7 +275,9 @@ instance Pi.locallyCompactSpace_of_finite
     obtain ⟨s, -, n', hn', hsub⟩ := hn
     choose n'' hn'' hsub' hc using fun i =>
       LocallyCompactSpace.local_compact_nhds (t i) (n' i) (hn' i)
-    refine ⟨(Set.univ : Set ι).pi n'', ?_, subset_trans (fun _ h => ?_) hsub, isCompact_un
+    refine ⟨(Set.univ : Set ι).pi n'', ?_, subset_trans (fun _ h => ?_) hsub, isCompact_univ_pi hc⟩
+    · exact (set_pi_mem_nhds_iff (@Set.finite_univ ι _) _).mpr fun i _ => hn'' i
+    · exact fun i _ => hsub' i (h i trivial)⟩
 
 中文:
 实例 依赖函数类型.locallyCompactSpace_of_finite
@@ -285,7 +287,9 @@ instance Pi.locallyCompactSpace_of_finite
     obtain ⟨s, -, n', hn', hsub⟩ := hn
     choose n'' hn'' hsub' hc using fun i =>
       LocallyCompactSpace.local_compact_nhds (t i) (n' i) (hn' i)
-    refine ⟨(Set.univ : Set ι).pi n'', ?_, subset_trans (fun _ h => ?_) hsub, isCompact_un
+    refine ⟨(Set.univ : Set ι).pi n'', ?_, subset_trans (fun _ h => ?_) hsub, isCompact_univ_pi hc⟩
+    · exact (set_pi_mem_nhds_iff (@Set.finite_univ ι _) _).mpr fun i _ => hn'' i
+    · exact fun i _ => hsub' i (h i trivial)⟩
 
 Depends on / 依赖: Filter, Filter.mem_pi, LocallyCompactSpace, LocallyCompactSpace.local_compact_nhds, Set.finite_univ, Set.univ, finite_univ, isCompact_univ_pi, local_compact_nhds, mem_pi, nhds_pi, set_pi_mem_nhds_iff, subset_trans
 -/
@@ -311,7 +315,16 @@ instance Pi.locallyCompactSpace
     choose n'' hn'' hsub' hc using fun i =>
       LocallyCompactSpace.local_compact_nhds (t i) (n' i) (hn' i)
     refine ⟨s.pi n'', ?_, subset_trans (fun _ => ?_) hsub, ?_⟩
-    · exact (set_pi_mem_nh
+    · exact (set_pi_mem_nhds_iff hs _).mpr fun i _ => hn'' i
+    · exact forall₂_imp fun i _ hi' => hsub' i hi'
+    · classical
+      rw [← Set.univ_pi_ite]
+      refine isCompact_univ_pi fun i => ?_
+      by_cases h : i in s
+      · rw [if_pos h]
+        exact hc i
+      · rw [if_neg h]
+        exact CompactSpace.isCompact_univ⟩
 
 中文:
 实例 依赖函数类型.locallyCompactSpace
@@ -322,7 +335,16 @@ instance Pi.locallyCompactSpace
     choose n'' hn'' hsub' hc using fun i =>
       LocallyCompactSpace.local_compact_nhds (t i) (n' i) (hn' i)
     refine ⟨s.pi n'', ?_, subset_trans (fun _ => ?_) hsub, ?_⟩
-    · exact (set_pi_mem_nh
+    · exact (set_pi_mem_nhds_iff hs _).mpr fun i _ => hn'' i
+    · exact forall₂_imp fun i _ hi' => hsub' i hi'
+    · classical
+      rw [← Set.univ_pi_ite]
+      refine isCompact_univ_pi fun i => ?_
+      by_cases h : i in s
+      · rw [if_pos h]
+        exact hc i
+      · rw [if_neg h]
+        exact CompactSpace.isCompact_univ⟩
 
 Depends on / 依赖: Filter, Filter.mem_pi, LocallyCompactSpace, LocallyCompactSpace.local_compact_nhds, Set.univ_pi_ite, classical, if_neg, if_pos, isCompact_univ_pi, local_compact_nhds, mem_pi, nhds_pi, s.pi, set_pi_mem_nhds_iff, subset_trans, univ_pi_ite
 -/
@@ -541,7 +563,11 @@ theorem Topology.IsInducing.locallyCompactSpace
   have (x : X) : (𝓝 x).HasBasis (fun s => (s in 𝓝 (f x) ∧ IsCompact s) ∧ s subseteq U)
       (fun s => f ⁻¹' (s inter Z)) := by
     have H : U in 𝓝 (f x) := hU.mem_nhds (hUZ.subset <| mem_range_self _).1
-    rw [hf.nhds_eq_comap]; rw [← comap_nhdsWithin_range];
+    rw [hf.nhds_eq_comap]; rw [← comap_nhdsWithin_range]; rw [hUZ]; rw [nhdsWithin_inter_of_mem (nhdsWithin_le_nhds H)]
+    exact (nhdsWithin_hasBasis ((compact_basis_nhds (f x)).restrict_subset H) _).comap _
+  refine .of_hasBasis this fun x s ⟨⟨_, hs⟩, hsU⟩ => ?_
+  rw [hf.isCompact_preimage_iff]
+  exacts [hs.inter_right hZ, hUZ ▸ by gcongr]
 
 中文:
 定理 拓扑.是Inducing.locallyCompactSpace
@@ -551,7 +577,11 @@ theorem Topology.IsInducing.locallyCompactSpace
   have (x : X) : (𝓝 x).HasBasis (fun s => (s in 𝓝 (f x) ∧ IsCompact s) ∧ s subseteq U)
       (fun s => f ⁻¹' (s inter Z)) := by
     have H : U in 𝓝 (f x) := hU.mem_nhds (hUZ.subset <| mem_range_self _).1
-    rw [hf.nhds_eq_comap]; rw [← comap_nhdsWithin_range];
+    rw [hf.nhds_eq_comap]; rw [← comap_nhdsWithin_range]; rw [hUZ]; rw [nhdsWithin_inter_of_mem (nhdsWithin_le_nhds H)]
+    exact (nhdsWithin_hasBasis ((compact_basis_nhds (f x)).restrict_subset H) _).comap _
+  refine .of_hasBasis this fun x s ⟨⟨_, hs⟩, hsU⟩ => ?_
+  rw [hf.isCompact_preimage_iff]
+  exacts [hs.inter_right hZ, hUZ ▸ by gcongr]
 
 Depends on / 依赖: HasBasis, IsCompact, comap_nhdsWithin_range, compact_basis_nhds, hU.mem_nhds, hUZ.subset, hf.isCompact, hf.nhds_eq_comap, isCompact, mem_nhds, mem_range_self, nhdsWithin_hasBasis, nhdsWithin_inter_of_mem, nhdsWithin_le_nhds, nhds_eq_comap, of_hasBasis, restrict_subset, subset, subseteq
 -/

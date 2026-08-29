@@ -977,7 +977,8 @@ theorem of.injective_of_degree_ne_zero
   · exact C_eq_zero.mp (eq_zero_of_zero_dvd (by rwa [h] at hp))
   · contrapose! hf with h_contra
     rw [← degree_C h_contra]
-    apply le_antisymm (d
+    apply le_antisymm (degree_le_of_dvd hp (by rwa [Ne, C_eq_zero])) _
+    rwa [degree_C h_contra, zero_le_degree_iff]
 
 中文:
 定理 of.injective_of_degree_ne_zero
@@ -990,7 +991,8 @@ theorem of.injective_of_degree_ne_zero
   · exact C_eq_zero.mp (eq_zero_of_zero_dvd (by rwa [h] at hp))
   · contrapose! hf with h_contra
     rw [← degree_C h_contra]
-    apply le_antisymm (d
+    apply le_antisymm (degree_le_of_dvd hp (by rwa [Ne, C_eq_zero])) _
+    rwa [degree_C h_contra, zero_le_degree_iff]
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.mk_eq_zero, AdjoinRoot.of, C_eq_zero, C_eq_zero.mp, RingHom, RingHom.comp_apply, comp_apply, contrapose, degree_C, degree_le_of_dvd, eq_zero_of_zero_dvd, h_contra, injective_iff_map_eq_zero, le_antisymm, mk_eq_zero, zero_le_degree_iff
 -/
@@ -1642,7 +1644,9 @@ definition mapAlgEquiv
     (mapAlgHom f.symm q p <| by
       -- FIXME: Coercion hell. See https://github.com/leanprover-community/mathlib4/issues/31365.
       have : (RingHomClass.toRingHom f.toRingEquiv.symm).comp (RingHomClass.toRingHom f) =
-        .id S := by ext; exact f.sym
+        .id S := by ext; exact f.symm_apply_apply _
+      simpa [Polynomial.map_map, -RingEquiv.symm_mk, this] using! map_dvd f.symm.toRingHom h.dvd)
+    (by ext <;> simp) (by ext <;> simp)
 
 中文:
 定义 mapAlgEquiv
@@ -1652,7 +1656,9 @@ definition mapAlgEquiv
     (mapAlgHom f.symm q p <| by
       -- FIXME: Coercion hell. See https://github.com/leanprover-community/mathlib4/issues/31365.
       have : (RingHomClass.toRingHom f.toRingEquiv.symm).comp (RingHomClass.toRingHom f) =
-        .id S := by ext; exact f.sym
+        .id S := by ext; exact f.symm_apply_apply _
+      simpa [Polynomial.map_map, -RingEquiv.symm_mk, this] using! map_dvd f.symm.toRingHom h.dvd)
+    (by ext <;> simp) (by ext <;> simp)
 
 Depends on / 依赖: f.symm, h.symm.dvd, mapAlgHom, ofAlgHom
 -/
@@ -1993,7 +1999,14 @@ instance instField
   nnratCast_def q := by
     rw [← map_natCast (of f)]; rw [← map_natCast (of f)]; rw [← map_div₀]; rw [← NNRat.cast_def]; rfl
   ratCast_def q := by
-    rw [← map_natCast (of f)]; rw [← map_intCast (of f)]; rw [← map_div
+    rw [← map_natCast (of f)]; rw [← map_intCast (of f)]; rw [← map_div₀]; rw [← Rat.cast_def]; rfl
+  nnqsmul_def q x :=
+    AdjoinRoot.induction_on f (C := fun y => q • y = (of f) q * y) x fun p => by
+      simp only [smul_mk, of, RingHom.comp_apply, ← (mk f).map_mul, Polynomial.nnqsmul_eq_C_mul]
+  qsmul_def q x :=
+    -- Porting note: I gave the explicit motive and changed `rw` to `simp`.
+    AdjoinRoot.induction_on f (C := fun y => q • y = (of f) q * y) x fun p => by
+      simp only [smul_mk, of, RingHom.comp_apply, ← (mk f).map_mul, Polynomial.qsmul_eq_C_mul]
 
 中文:
 实例 instField
@@ -2005,7 +2018,14 @@ instance instField
   nnratCast_def q := by
     rw [← map_natCast (of f)]; rw [← map_natCast (of f)]; rw [← map_div₀]; rw [← NNRat.cast_def]; rfl
   ratCast_def q := by
-    rw [← map_natCast (of f)]; rw [← map_intCast (of f)]; rw [← map_div
+    rw [← map_natCast (of f)]; rw [← map_intCast (of f)]; rw [← map_div₀]; rw [← Rat.cast_def]; rfl
+  nnqsmul_def q x :=
+    AdjoinRoot.induction_on f (C := fun y => q • y = (of f) q * y) x fun p => by
+      simp only [smul_mk, of, RingHom.comp_apply, ← (mk f).map_mul, Polynomial.nnqsmul_eq_C_mul]
+  qsmul_def q x :=
+    -- Porting note: I gave the explicit motive and changed `rw` to `simp`.
+    AdjoinRoot.induction_on f (C := fun y => q • y = (of f) q * y) x fun p => by
+      simp only [smul_mk, of, RingHom.comp_apply, ← (mk f).map_mul, Polynomial.qsmul_eq_C_mul]
 
 Depends on / 依赖: instCommRing
 -/
@@ -2247,7 +2267,20 @@ invFun := fun c => mk g ∑ i : Fin g.natDegree, monomial i (c i)
       map_add' := fun f₁ f₂ =>
         funext fun i => by simp only [(modByMonicHom hg).map_add, coeff_add, Pi.add_apply]
       map_smul' := fun f₁ f₂ =>
-        funext 
+        funext fun i => by
+          simp only [(modByMonicHom hg).map_smul, coeff_smul, Pi.smul_apply, RingHom.id_apply]
+left_inv f := AdjoinRoot.induction_on _ f fun f => Eq.symm mk_eq_mk.mpr by
+        simp only [modByMonicHom_mk, sum_modByMonic_coeff hg degree_le_natDegree]
+        rw [modByMonic_eq_sub_mul_div]; rw [sub_sub_cancel]
+        exact dvd_mul_right _ _
+      right_inv := fun x =>
+        funext fun i => by
+          nontriviality R
+          simp only [modByMonicHom_mk]
+          rw [(modByMonic_eq_self_iff hg).mpr]; rw [finsetSum_coeff]
+          · simp_rw [coeff_monomial, Fin.val_eq_val, Finset.sum_ite_eq', if_pos (Finset.mem_univ _)]
+          · simp_rw [← C_mul_X_pow_eq_monomial]
+            exact (degree_eq_natDegree <| hg.ne_zero).symm ▸ degree_sum_fin_lt _ }
 
 中文:
 定义 powerBasisAux'
@@ -2258,7 +2291,20 @@ invFun := fun c => mk g ∑ i : Fin g.natDegree, monomial i (c i)
       map_add' := fun f₁ f₂ =>
         funext fun i => by simp only [(modByMonicHom hg).map_add, coeff_add, Pi.add_apply]
       map_smul' := fun f₁ f₂ =>
-        funext 
+        funext fun i => by
+          simp only [(modByMonicHom hg).map_smul, coeff_smul, Pi.smul_apply, RingHom.id_apply]
+left_inv f := AdjoinRoot.induction_on _ f fun f => Eq.symm mk_eq_mk.mpr by
+        simp only [modByMonicHom_mk, sum_modByMonic_coeff hg degree_le_natDegree]
+        rw [modByMonic_eq_sub_mul_div]; rw [sub_sub_cancel]
+        exact dvd_mul_right _ _
+      right_inv := fun x =>
+        funext fun i => by
+          nontriviality R
+          simp only [modByMonicHom_mk]
+          rw [(modByMonic_eq_self_iff hg).mpr]; rw [finsetSum_coeff]
+          · simp_rw [coeff_monomial, Fin.val_eq_val, Finset.sum_ite_eq', if_pos (Finset.mem_univ _)]
+          · simp_rw [← C_mul_X_pow_eq_monomial]
+            exact (degree_eq_natDegree <| hg.ne_zero).symm ▸ degree_sum_fin_lt _ }
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.induction_on, Eq.symm, Pi.add_apply, Pi.smul_apply, RingHom, RingHom.id_apply, add_apply, coeff_add, coeff_smul, degree_, g.natDegree, id_apply, induction_on, invFun, left_inv, map_add, map_smul, mk_eq_mk, mk_eq_mk.mpr
 -/
@@ -2342,7 +2388,11 @@ definition powerBasis'
     rw [Finset.sum_eq_single i]
     · rw [Pi.single_eq_same, monomial_one_right_eq_X_pow, (mk g).map_pow, mk_X]
     · intro j _ hj
-      rw [←
+      rw [← monomial_zero_right _]; rw [Pi.single_eq_of_ne hj]
+    -- Fix `DecidableEq` mismatch
+    · intros
+      have := Finset.mem_univ i
+      contradiction
 
 中文:
 定义 powerBasis'
@@ -2355,7 +2405,11 @@ definition powerBasis'
     rw [Finset.sum_eq_single i]
     · rw [Pi.single_eq_same, monomial_one_right_eq_X_pow, (mk g).map_pow, mk_X]
     · intro j _ hj
-      rw [←
+      rw [← monomial_zero_right _]; rw [Pi.single_eq_of_ne hj]
+    -- Fix `DecidableEq` mismatch
+    · intros
+      have := Finset.mem_univ i
+      contradiction
 -/
 def powerBasis' (hg : g.Monic) : PowerBasis R (AdjoinRoot g) where
   gen := root g
@@ -2487,7 +2541,15 @@ theorem minpoly_root
   intro q q_monic q_aeval
   have commutes : (lift (algebraMap K (AdjoinRoot f)) (root f) q_aeval).comp (mk q) = mk f := by
     ext
-    · simp 
+    · simp only [RingHom.comp_apply, mk_C, lift_of]
+      rfl
+    · simp only [RingHom.comp_apply, mk_X, lift_root]
+  rw [degree_eq_natDegree f'_monic.ne_zero]; rw [degree_eq_natDegree q_monic.ne_zero]; rw [Nat.cast_le]; rw [natDegree_mul hf]; rw [natDegree_C]; rw [add_zero]
+  · apply natDegree_le_of_dvd
+    · have : mk f q = 0 := by rw [← commutes, RingHom.comp_apply, mk_self, map_zero]
+      exact mk_eq_zero.1 this
+    · exact q_monic.ne_zero
+  · rwa [Ne, C_eq_zero, inv_eq_zero, leadingCoeff_eq_zero]
 
 中文:
 定理 minpoly_root
@@ -2500,7 +2562,15 @@ theorem minpoly_root
   intro q q_monic q_aeval
   have commutes : (lift (algebraMap K (AdjoinRoot f)) (root f) q_aeval).comp (mk q) = mk f := by
     ext
-    · simp 
+    · simp only [RingHom.comp_apply, mk_C, lift_of]
+      rfl
+    · simp only [RingHom.comp_apply, mk_X, lift_root]
+  rw [degree_eq_natDegree f'_monic.ne_zero]; rw [degree_eq_natDegree q_monic.ne_zero]; rw [Nat.cast_le]; rw [natDegree_mul hf]; rw [natDegree_C]; rw [add_zero]
+  · apply natDegree_le_of_dvd
+    · have : mk f q = 0 := by rw [← commutes, RingHom.comp_apply, mk_self, map_zero]
+      exact mk_eq_zero.1 this
+    · exact q_monic.ne_zero
+  · rwa [Ne, C_eq_zero, inv_eq_zero, leadingCoeff_eq_zero]
 
 Depends on / 依赖: AdjoinRoot, Nat.cast_le, RingHom, RingHom.comp_apply, _monic, _monic.ne_zero, aeval_eq, algebraMap, cast_le, commutes, comp_apply, degree_eq_natDegree, lift_of, lift_root, map_mul, minpoly, minpoly.unique, mk_C, mk_X, mk_self
 -/
@@ -2533,7 +2603,16 @@ definition powerBasisAux
     rw [natDegree_mul hf]; rw [natDegree_C]; rw [add_zero]
     · rwa [Ne, C_eq_zero, inv_eq_zero, leadingCoeff_eq_zero]
   have minpoly_eq : minpoly K (root f) = f' := minpoly_root hf
-  apply Basis.mk (v := fun i :
+  apply Basis.mk (v := fun i : Fin f.natDegree => root f ^ i.val)
+  · rw [← deg_f', ← minpoly_eq]
+    exact linearIndependent_pow (root f)
+  · rintro y -
+    rw [← deg_f']; rw [← minpoly_eq]
+    apply (isIntegral_root hf).mem_span_pow
+    obtain ⟨g⟩ := y
+    use g
+    rw [aeval_eq]
+    rfl
 
 中文:
 定义 powerBasisAux
@@ -2544,7 +2623,16 @@ definition powerBasisAux
     rw [natDegree_mul hf]; rw [natDegree_C]; rw [add_zero]
     · rwa [Ne, C_eq_zero, inv_eq_zero, leadingCoeff_eq_zero]
   have minpoly_eq : minpoly K (root f) = f' := minpoly_root hf
-  apply Basis.mk (v := fun i :
+  apply Basis.mk (v := fun i : Fin f.natDegree => root f ^ i.val)
+  · rw [← deg_f', ← minpoly_eq]
+    exact linearIndependent_pow (root f)
+  · rintro y -
+    rw [← deg_f']; rw [← minpoly_eq]
+    apply (isIntegral_root hf).mem_span_pow
+    obtain ⟨g⟩ := y
+    use g
+    rw [aeval_eq]
+    rfl
 
 Depends on / 依赖: Basis.mk, C_eq_zero, add_zero, deg_f, f.leadingCoeff, f.natDegree, i.val, inv_eq_zero, isIntegral_root, leadingCoeff, leadingCoeff_eq_zero, linearIndependent_pow, mem_span_pow, minpoly, minpoly_eq, minpoly_root, natDegree, natDegree_C, natDegree_mul
 -/
@@ -2789,7 +2877,8 @@ definition equiv'
     change pb.lift _ _ (aeval _ _) = _; rw [pb.lift_aeval, aeval_eq]
   right_inv x := by
     nontriviality S
-    obtain ⟨f, _hf, 
+    obtain ⟨f, _hf, rfl⟩ := pb.exists_eq_aeval x
+    rw [pb.lift_aeval]; rw [aeval_eq]; rw [liftAlgHom_mk]; rw [Polynomial.aeval_def]; rw [Algebra.toRingHom_ofId]
 
 中文:
 定义 equiv'
@@ -2801,7 +2890,8 @@ definition equiv'
     change pb.lift _ _ (aeval _ _) = _; rw [pb.lift_aeval, aeval_eq]
   right_inv x := by
     nontriviality S
-    obtain ⟨f, _hf, 
+    obtain ⟨f, _hf, rfl⟩ := pb.exists_eq_aeval x
+    rw [pb.lift_aeval]; rw [aeval_eq]; rw [liftAlgHom_mk]; rw [Polynomial.aeval_def]; rw [Algebra.toRingHom_ofId]
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.liftAlgHom, liftAlgHom, pb.gen
 -/
@@ -3097,7 +3187,9 @@ definition Polynomial.quotQuotEquivComm
   body: quotientEquiv (span ({f.map (Ideal.Quotient.mk I)} : Set (Polynomial (R ⧸ I))))
     (span {Ideal.Quotient.mk (I.map Polynomial.C) f}) (polynomialQuotientEquivQuotientPolynomial I)
     (by
-      rw [map_span]; rw [Set.image_singleton]; rw [RingEquiv.coe_toRingHom]; rw [polynomialQuotientEquivQuotient
+      rw [map_span]; rw [Set.image_singleton]; rw [RingEquiv.coe_toRingHom]; rw [polynomialQuotientEquivQuotientPolynomial_map_mk I f])
+
+@[simp]
 
 中文:
 定义 多项式.quotQuotEquivComm
@@ -3105,7 +3197,9 @@ definition Polynomial.quotQuotEquivComm
   定义体: quotientEquiv (span ({f.map (Ideal.Quotient.mk I)} : Set (Polynomial (R ⧸ I))))
     (span {Ideal.Quotient.mk (I.map Polynomial.C) f}) (polynomialQuotientEquivQuotientPolynomial I)
     (by
-      rw [map_span]; rw [Set.image_singleton]; rw [RingEquiv.coe_toRingHom]; rw [polynomialQuotientEquivQuotient
+      rw [map_span]; rw [Set.image_singleton]; rw [RingEquiv.coe_toRingHom]; rw [polynomialQuotientEquivQuotientPolynomial_map_mk I f])
+
+@[simp]
 
 Depends on / 依赖: I.map, Ideal.Quotient.mk, Polynomial, Polynomial.C, Quotient, RingEquiv, RingEquiv.coe_toRingHom, Set.image_singleton, coe_toRingHom, f.map, image_singleton, map_span, polynomialQuotientEquivQuotientPolynomial, polynomialQuotientEquivQuotientPolynomial_map_mk, quotientEquiv
 -/
@@ -3237,14 +3331,14 @@ theorem quotAdjoinRootEquivQuotPolynomialQuot_symm_mk_mk
   given: (p : R[X])
   proof: by
   rw [quotAdjoinRootEquivQuotPolynomialQuot]; rw [RingEquiv.symm_trans_apply]; rw [RingEquiv.symm_trans_apply]; rw [RingEquiv.symm_trans_apply]; rw [RingEquiv.symm_symm]; rw [Polynomial.quotQuotEquivComm_mk]; rw [Ideal.quotEquivOfEq_symm]; rw [Ideal.quotEquivOfEq_mk]; rw [←
-    RingHom.comp_apply
+    RingHom.comp_apply]; rw [← DoubleQuot.quotQuotMk]; rw [quotMapCMapSpanMkEquivQuotMapCQuotMapMk_symm_quotQuotMk]; rw [quotMapOfEquivQuotMapCMapMk_symm_mk]
 
 中文:
 定理 quotAdjoinRootEquivQuotPolynomialQuot_symm_mk_mk
   条件: (p : R[X])
   证明: by
   rw [quotAdjoinRootEquivQuotPolynomialQuot]; rw [RingEquiv.symm_trans_apply]; rw [RingEquiv.symm_trans_apply]; rw [RingEquiv.symm_trans_apply]; rw [RingEquiv.symm_symm]; rw [Polynomial.quotQuotEquivComm_mk]; rw [Ideal.quotEquivOfEq_symm]; rw [Ideal.quotEquivOfEq_mk]; rw [←
-    RingHom.comp_apply
+    RingHom.comp_apply]; rw [← DoubleQuot.quotQuotMk]; rw [quotMapCMapSpanMkEquivQuotMapCQuotMapMk_symm_quotQuotMk]; rw [quotMapOfEquivQuotMapCMapMk_symm_mk]
 
 Depends on / 依赖: DoubleQuot, DoubleQuot.quotQuotMk, Ideal.quotEquivOfEq_mk, Ideal.quotEquivOfEq_symm, Polynomial, Polynomial.quotQuotEquivComm_mk, RingEquiv, RingEquiv.symm_symm, RingEquiv.symm_trans_apply, RingHom, RingHom.comp_apply, comp_apply, quotAdjoinRootEquivQuotPolynomialQuot, quotEquivOfEq_mk, quotEquivOfEq_symm, quotMapCMapSpanMkEquivQuotMapCQuotMapMk_symm_quotQuotMk, quotMapOfEquivQuotMapCMapMk_symm_mk, quotQuotEquivComm_mk, quotQuotMk, symm_symm
 -/
@@ -3270,7 +3364,9 @@ definition quotEquivQuotMap
       have :
         algebraMap R (AdjoinRoot f ⧸ Ideal.map (of f) I) x =
           Ideal.Quotient.mk (Ideal.map (AdjoinRoot.of f) I) ((mk f) (C x)) :=
-  
+        rfl
+      rw [this]; rw [quotAdjoinRootEquivQuotPolynomialQuot_mk_of]; rw [map_C]; rw [Quotient.alg_map_eq]
+      simp only [RingHom.comp_apply, Quotient.algebraMap_eq, Polynomial.algebraMap_apply])
 
 中文:
 定义 quotEquivQuotMap
@@ -3281,7 +3377,9 @@ definition quotEquivQuotMap
       have :
         algebraMap R (AdjoinRoot f ⧸ Ideal.map (of f) I) x =
           Ideal.Quotient.mk (Ideal.map (AdjoinRoot.of f) I) ((mk f) (C x)) :=
-  
+        rfl
+      rw [this]; rw [quotAdjoinRootEquivQuotPolynomialQuot_mk_of]; rw [map_C]; rw [Quotient.alg_map_eq]
+      simp only [RingHom.comp_apply, Quotient.algebraMap_eq, Polynomial.algebraMap_apply])
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.of, AlgEquiv, AlgEquiv.ofRingEquiv, Ideal.Quotient.mk, Ideal.map, Polynomial, Polynomial.algebraMap_apply, Quotient, Quotient.alg_map_eq, Quotient.algebraMap_eq, RingHom, RingHom.comp_apply, alg_map_eq, algebraMap, algebraMap_apply, algebraMap_eq, comp_apply, map_C, ofRingEquiv
 -/
@@ -3365,7 +3463,18 @@ definition tensorAlgEquiv
       (mapAlgHom includeRight p q <| by exact h.symm.dvd) fun _ _ => .all ..)
     (liftAlgHom _ (Algebra.TensorProduct.map (AlgHom.id T T)
       (((Algebra.ofId S (AdjoinRoot p))).restrictScalars R)) (1 otimesₜ root _) ?_) ?_ ?_
-  
+  · simp only [← h, AlgHom.toRingHom_eq_coe]
+    rw [Polynomial.eval₂_map]
+    change Polynomial.eval₂ ((Algebra.TensorProduct.map (AlgHom.id R T) _).comp _).toRingHom _ _ = _
+    simp only [map_comp_includeRight, AlgHom.toRingHom_eq_coe, AlgHom.comp_toRingHom,
+      AlgHom.coe_restrictScalars, ← Polynomial.eval₂_map]
+    change Polynomial.eval₂ _ ((RingHomClass.toRingHom includeRight) (root p)) (p.map (of _)) = _
+    rw [Polynomial.eval₂_hom]
+    simp [Polynomial.eval_map]
+  · ext
+    · simp [Algebra.ofId_apply]
+    simp
+  · ext : 3 <;> simp
 
 中文:
 定义 tensorAlgEquiv
@@ -3376,7 +3485,18 @@ definition tensorAlgEquiv
       (mapAlgHom includeRight p q <| by exact h.symm.dvd) fun _ _ => .all ..)
     (liftAlgHom _ (Algebra.TensorProduct.map (AlgHom.id T T)
       (((Algebra.ofId S (AdjoinRoot p))).restrictScalars R)) (1 otimesₜ root _) ?_) ?_ ?_
-  
+  · simp only [← h, AlgHom.toRingHom_eq_coe]
+    rw [Polynomial.eval₂_map]
+    change Polynomial.eval₂ ((Algebra.TensorProduct.map (AlgHom.id R T) _).comp _).toRingHom _ _ = _
+    simp only [map_comp_includeRight, AlgHom.toRingHom_eq_coe, AlgHom.comp_toRingHom,
+      AlgHom.coe_restrictScalars, ← Polynomial.eval₂_map]
+    change Polynomial.eval₂ _ ((RingHomClass.toRingHom includeRight) (root p)) (p.map (of _)) = _
+    rw [Polynomial.eval₂_hom]
+    simp [Polynomial.eval_map]
+  · ext
+    · simp [Algebra.ofId_apply]
+    simp
+  · ext : 3 <;> simp
 
 Depends on / 依赖: AdjoinRoot, AlgHom, AlgHom.id, AlgHom.toRingHom_eq_coe, Algebra, Algebra.TensorProduct.lift, Algebra.TensorProduct.map, Algebra.ofId, Polynomial, Polynomial.eval, TensorProduct, algHom, h.symm.dvd, includeRight, liftAlgHom, mapAlgHom, map_comp_includeRight, ofAlgHom, restrictScalars, toRingHom
 -/
@@ -3457,7 +3577,12 @@ definition quotientEquivQuotientMinpolyMap
             (Ideal.quotientEquiv _ (Ideal.map (AdjoinRoot.of (minpoly R pb.gen)) I)
                   (AdjoinRoot.equiv' (minpoly R pb.gen) pb
                         (by rw [AdjoinRoot.aeval_eq, AdjoinRoot.mk_self])
-                        (minpoly.aeval _ _)).s
+                        (minpoly.aeval _ _)).symm.toRingEquiv
+                  (by rw [Ideal.map_map,
+                      ← AlgEquiv.coe_ringHom_commutes, ← AdjoinRoot.algebraMap_eq,
+                      AlgHom.comp_algebraMap]))
+                (algebraMap R (S ⧸ I.map (algebraMap R S)) x) = algebraMap R _ x from fun x => by
+                  rw [← Ideal.Quotient.mk_algebraMap]; rw [Ideal.quotientEquiv_apply]; rw [RingHom.toFun_eq_coe]; rw [Ideal.quotientMap_mk]; rw [RingEquiv.coe_toRingHom]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]; rw [Quotient.mk_algebraMap])).trans (AdjoinRoot.quotEquivQuotMap _ _)
 
 中文:
 定义 quotientEquivQuotientMinpolyMap
@@ -3467,7 +3592,12 @@ definition quotientEquivQuotientMinpolyMap
             (Ideal.quotientEquiv _ (Ideal.map (AdjoinRoot.of (minpoly R pb.gen)) I)
                   (AdjoinRoot.equiv' (minpoly R pb.gen) pb
                         (by rw [AdjoinRoot.aeval_eq, AdjoinRoot.mk_self])
-                        (minpoly.aeval _ _)).s
+                        (minpoly.aeval _ _)).symm.toRingEquiv
+                  (by rw [Ideal.map_map,
+                      ← AlgEquiv.coe_ringHom_commutes, ← AdjoinRoot.algebraMap_eq,
+                      AlgHom.comp_algebraMap]))
+                (algebraMap R (S ⧸ I.map (algebraMap R S)) x) = algebraMap R _ x from fun x => by
+                  rw [← Ideal.Quotient.mk_algebraMap]; rw [Ideal.quotientEquiv_apply]; rw [RingHom.toFun_eq_coe]; rw [Ideal.quotientMap_mk]; rw [RingEquiv.coe_toRingHom]; rw [AlgEquiv.coe_ringEquiv]; rw [AlgEquiv.commutes]; rw [Quotient.mk_algebraMap])).trans (AdjoinRoot.quotEquivQuotMap _ _)
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.aeval_eq, AdjoinRoot.algebraMap_eq, AdjoinRoot.equiv, AdjoinRoot.mk_self, AdjoinRoot.of, AlgEquiv, AlgEquiv.coe_ringHom_commutes, AlgHom, AlgHom.comp_algebraMap, I.map, Ideal.Quotient.mk_algebraMap, Ideal.map, Ideal.map_map, Ideal.quotientEquiv, Ideal.quotientEquiv_apply, Quotient, aeval_eq, algebraMap, algebraMap_eq
 -/
@@ -3585,7 +3715,19 @@ lemma Polynomial.Monic.exists_splits_map.{u}
   by_cases hpu : IsUnit p
   · obtain rfl := hp.eq_one_of_isUnit hpu
     exact ⟨R, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance, by simp⟩
-  obtain ⟨q, hq⟩ : X - C (AdjoinRoot.roo
+  obtain ⟨q, hq⟩ : X - C (AdjoinRoot.root p) ∣ p.map (algebraMap _ _) := by
+    simp [dvd_iff_isRoot, -AdjoinRoot.algebraMap_eq]
+  have hqm : q.Monic := .of_mul_monic_left (monic_X_sub_C (.root _)) (hq ▸ hp.map _)
+  have := hp.free_adjoinRoot
+  have := hp.finite_adjoinRoot
+  have : Nontrivial (AdjoinRoot p) := Ideal.Quotient.nontrivial_iff.mpr (by simpa)
+  obtain ⟨S, _, _, _, _, _, hS⟩ := IH _
+    (by rw [← hn, ← hp.natDegree_map (algebraMap R (AdjoinRoot p)), hq,
+      Monic.natDegree_mul (monic_X_sub_C _) hqm]; simp) hqm rfl
+  algebraize [(algebraMap (AdjoinRoot p) S).comp (algebraMap R (AdjoinRoot p))]
+  refine ⟨S, ‹_›, ‹_›, .trans (AdjoinRoot p) _, .trans (S := AdjoinRoot p), ‹_›, ?_⟩
+  rw [IsScalarTower.algebraMap_eq R (AdjoinRoot p)]; rw [← Polynomial.map_map]; rw [hq]; rw [Polynomial.map_mul]
+  exact .mul (by simp) hS
 
 中文:
 引理 多项式.Monic.存在_splits_map.{u}
@@ -3594,7 +3736,19 @@ lemma Polynomial.Monic.exists_splits_map.{u}
   by_cases hpu : IsUnit p
   · obtain rfl := hp.eq_one_of_isUnit hpu
     exact ⟨R, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance, by simp⟩
-  obtain ⟨q, hq⟩ : X - C (AdjoinRoot.roo
+  obtain ⟨q, hq⟩ : X - C (AdjoinRoot.root p) ∣ p.map (algebraMap _ _) := by
+    simp [dvd_iff_isRoot, -AdjoinRoot.algebraMap_eq]
+  have hqm : q.Monic := .of_mul_monic_left (monic_X_sub_C (.root _)) (hq ▸ hp.map _)
+  have := hp.free_adjoinRoot
+  have := hp.finite_adjoinRoot
+  have : Nontrivial (AdjoinRoot p) := Ideal.Quotient.nontrivial_iff.mpr (by simpa)
+  obtain ⟨S, _, _, _, _, _, hS⟩ := IH _
+    (by rw [← hn, ← hp.natDegree_map (algebraMap R (AdjoinRoot p)), hq,
+      Monic.natDegree_mul (monic_X_sub_C _) hqm]; simp) hqm rfl
+  algebraize [(algebraMap (AdjoinRoot p) S).comp (algebraMap R (AdjoinRoot p))]
+  refine ⟨S, ‹_›, ‹_›, .trans (AdjoinRoot p) _, .trans (S := AdjoinRoot p), ‹_›, ?_⟩
+  rw [IsScalarTower.algebraMap_eq R (AdjoinRoot p)]; rw [← Polynomial.map_map]; rw [hq]; rw [Polynomial.map_mul]
+  exact .mul (by simp) hS
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.algebraMap_eq, AdjoinRoot.root, IsUnit, Nat.strong_induction_on, algebraMap, algebraMap_eq, dvd_iff_isRoot, eq_one_of_isUnit, finite, free_adjoinRoot, generalizing, hp.eq_one_of_isUnit, hp.finite, hp.free_adjoinRoot, hp.map, monic_X_sub_C, natDegree, of_mul_monic_left, p.map
 -/

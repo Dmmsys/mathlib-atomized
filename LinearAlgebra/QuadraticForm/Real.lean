@@ -42,7 +42,16 @@ definition isometryEquivSignWeightedSumSquares
     by positivity
   have hwu : forall i, w i / |(u i : Real)| = sign (w i) := fun i => by
     by_cases hi : w i = 0
-    
+    · simp [hi]
+    · simp only [hi, ↓reduceDIte, Units.val_mk0, u]; field_simp; simp
+  convert!
+    QuadraticMap.isometryEquivBasisRepr (weightedSumSquares Real w)
+      ((Pi.basisFun Real ι).unitsSMul fun i => .mk0 _ (hu i))
+  ext1 v
+  classical
+  suffices ∑ i, (w i / |(u i : Real)|) * v i ^ 2 = ∑ i, w i * (v i ^ 2 * |(u i : Real)|⁻¹) by
+    simpa [basisRepr_apply, Basis.unitsSMul_apply, ← _root_.sq, mul_pow, ← hwu, Pi.single_apply]
+  exact sum_congr rfl fun j _ => by ring
 
 中文:
 定义 isometryEquivSignWeightedSumSquares
@@ -54,7 +63,16 @@ definition isometryEquivSignWeightedSumSquares
     by positivity
   have hwu : forall i, w i / |(u i : Real)| = sign (w i) := fun i => by
     by_cases hi : w i = 0
-    
+    · simp [hi]
+    · simp only [hi, ↓reduceDIte, Units.val_mk0, u]; field_simp; simp
+  convert!
+    QuadraticMap.isometryEquivBasisRepr (weightedSumSquares Real w)
+      ((Pi.basisFun Real ι).unitsSMul fun i => .mk0 _ (hu i))
+  ext1 v
+  classical
+  suffices ∑ i, (w i / |(u i : Real)|) * v i ^ 2 = ∑ i, w i * (v i ^ 2 * |(u i : Real)|⁻¹) by
+    simpa [basisRepr_apply, Basis.unitsSMul_apply, ← _root_.sq, mul_pow, ← hwu, Pi.single_apply]
+  exact sum_congr rfl fun j _ => by ring
 
 Depends on / 依赖: Pi.basisFun, QuadraticMap, QuadraticMap.isometryEquivBasisRepr, Units.mk0, Units.val_mk0, basisFun, classica, convert, isometryEquivBasisRepr, ne_zero, reduceDIte, unitsSMul, val_mk0, weightedSumSquares
 -/

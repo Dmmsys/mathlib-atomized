@@ -93,7 +93,47 @@ theorem ae_le_of_forall_setLIntegral_le_of_sigmaFinite₀
     intro ε N p εpos
     let s := {x | g x + ε <= f x ∧ g x <= N} inter spanningSets μ p
     have s_lt_top : μ s < ∞ :=
-      (measure_mono (Set.inter_subset_right)).tr
+      (measure_mono (Set.inter_subset_right)).trans_lt (measure_spanningSets_lt_top μ p)
+    have A : (∫⁻ x in s, g x ∂μ) + ε * μ s <= (∫⁻ x in s, g x ∂μ) + 0 :=
+      calc
+        (∫⁻ x in s, g x ∂μ) + ε * μ s = (∫⁻ x in s, g x ∂μ) + ∫⁻ _ in s, ε ∂μ := by
+          simp only [lintegral_const, Set.univ_inter, MeasurableSet.univ, Measure.restrict_apply]
+        _ = ∫⁻ x in s, g x + ε ∂μ := (lintegral_add_right _ measurable_const).symm
+        _ <= ∫⁻ x in s, f x ∂μ :=
+setLIntegral_mono_ae hf.restrict ae_of_all _ fun x hx => hx.1.1
+        _ <= (∫⁻ x in s, g x ∂μ) + 0 := by
+          rw [add_zero]; rw [← Measure.restrict_toMeasurable s_lt_top.ne]
+          refine h _ (measurableSet_toMeasurable ..) ?_
+          rwa [measure_toMeasurable]
+    have B : (∫⁻ x in s, g x ∂μ) != ∞ :=
+      (setLIntegral_lt_top_of_le_nnreal s_lt_top.ne ⟨N, fun _ h => h.1.2⟩).ne
+    have : (ε : Real>=0∞) * μ s <= 0 := ENNReal.le_of_add_le_add_left B A
+    simpa only [ENNReal.coe_eq_zero, nonpos_iff_eq_zero, mul_eq_zero, εpos.ne', false_or]
+  obtain ⟨u, _, u_pos, u_lim⟩ :
+    exists u : Nat -> Real>=0, StrictAnti u ∧ (forall n, 0 < u n) ∧ Tendsto u atTop (𝓝 0) :=
+    exists_seq_strictAnti_tendsto (0 : Real>=0)
+  let s := fun n : Nat => {x | g x + u n <= f x ∧ g x <= (n : Real>=0)} inter spanningSets μ n
+  have μs : forall n, μ (s n) = 0 := fun n => A _ _ _ (u_pos n)
+  have B : {x | f x <= g x}ᶜ subseteq ⋃ n, s n := by
+    intro x hx
+    simp only [Set.mem_compl_iff, Set.mem_ofPred, not_le] at hx
+    have L1 : forallᶠ n in atTop, g x + u n <= f x := by
+      have : Tendsto (fun n => g x + u n) atTop (𝓝 (g x + (0 : Real>=0))) :=
+        tendsto_const_nhds.add (ENNReal.tendsto_coe.2 u_lim)
+      simp only [ENNReal.coe_zero, add_zero] at this
+      exact this.eventually_le_const hx
+    have L2 : forallᶠ n : Nat in (atTop : Filter Nat), g x <= (n : Real>=0) :=
+      have : Tendsto (fun n : Nat => ((n : Real>=0) : Real>=0∞)) atTop (𝓝 ∞) := by
+        simp only [ENNReal.coe_natCast]
+        exact ENNReal.tendsto_nat_nhds_top
+      this.eventually_const_le (hx.trans_le le_top)
+    apply Set.mem_iUnion.2
+    exact ((L1.and L2).and (eventually_mem_spanningSets μ x)).exists
+  refine le_antisymm ?_ bot_le
+  calc
+    μ {x : α | (fun x : α => f x <= g x) x}ᶜ <= μ (⋃ n, s n) := measure_mono B
+    _ <= ∑' n, μ (s n) := measure_iUnion_le _
+    _ = 0 := by simp only [μs, tsum_zero]
 
 中文:
 定理 ae_le_of_对任意_setL整数egral_le_of_sigmaFinite₀
@@ -104,7 +144,47 @@ theorem ae_le_of_forall_setLIntegral_le_of_sigmaFinite₀
     intro ε N p εpos
     let s := {x | g x + ε <= f x ∧ g x <= N} inter spanningSets μ p
     have s_lt_top : μ s < ∞ :=
-      (measure_mono (Set.inter_subset_right)).tr
+      (measure_mono (Set.inter_subset_right)).trans_lt (measure_spanningSets_lt_top μ p)
+    have A : (∫⁻ x in s, g x ∂μ) + ε * μ s <= (∫⁻ x in s, g x ∂μ) + 0 :=
+      calc
+        (∫⁻ x in s, g x ∂μ) + ε * μ s = (∫⁻ x in s, g x ∂μ) + ∫⁻ _ in s, ε ∂μ := by
+          simp only [lintegral_const, Set.univ_inter, MeasurableSet.univ, Measure.restrict_apply]
+        _ = ∫⁻ x in s, g x + ε ∂μ := (lintegral_add_right _ measurable_const).symm
+        _ <= ∫⁻ x in s, f x ∂μ :=
+setLIntegral_mono_ae hf.restrict ae_of_all _ fun x hx => hx.1.1
+        _ <= (∫⁻ x in s, g x ∂μ) + 0 := by
+          rw [add_zero]; rw [← Measure.restrict_toMeasurable s_lt_top.ne]
+          refine h _ (measurableSet_toMeasurable ..) ?_
+          rwa [measure_toMeasurable]
+    have B : (∫⁻ x in s, g x ∂μ) != ∞ :=
+      (setLIntegral_lt_top_of_le_nnreal s_lt_top.ne ⟨N, fun _ h => h.1.2⟩).ne
+    have : (ε : Real>=0∞) * μ s <= 0 := ENNReal.le_of_add_le_add_left B A
+    simpa only [ENNReal.coe_eq_zero, nonpos_iff_eq_zero, mul_eq_zero, εpos.ne', false_or]
+  obtain ⟨u, _, u_pos, u_lim⟩ :
+    exists u : Nat -> Real>=0, StrictAnti u ∧ (forall n, 0 < u n) ∧ Tendsto u atTop (𝓝 0) :=
+    exists_seq_strictAnti_tendsto (0 : Real>=0)
+  let s := fun n : Nat => {x | g x + u n <= f x ∧ g x <= (n : Real>=0)} inter spanningSets μ n
+  have μs : forall n, μ (s n) = 0 := fun n => A _ _ _ (u_pos n)
+  have B : {x | f x <= g x}ᶜ subseteq ⋃ n, s n := by
+    intro x hx
+    simp only [Set.mem_compl_iff, Set.mem_ofPred, not_le] at hx
+    have L1 : forallᶠ n in atTop, g x + u n <= f x := by
+      have : Tendsto (fun n => g x + u n) atTop (𝓝 (g x + (0 : Real>=0))) :=
+        tendsto_const_nhds.add (ENNReal.tendsto_coe.2 u_lim)
+      simp only [ENNReal.coe_zero, add_zero] at this
+      exact this.eventually_le_const hx
+    have L2 : forallᶠ n : Nat in (atTop : Filter Nat), g x <= (n : Real>=0) :=
+      have : Tendsto (fun n : Nat => ((n : Real>=0) : Real>=0∞)) atTop (𝓝 ∞) := by
+        simp only [ENNReal.coe_natCast]
+        exact ENNReal.tendsto_nat_nhds_top
+      this.eventually_const_le (hx.trans_le le_top)
+    apply Set.mem_iUnion.2
+    exact ((L1.and L2).and (eventually_mem_spanningSets μ x)).exists
+  refine le_antisymm ?_ bot_le
+  calc
+    μ {x : α | (fun x : α => f x <= g x) x}ᶜ <= μ (⋃ n, s n) := measure_mono B
+    _ <= ∑' n, μ (s n) := measure_iUnion_le _
+    _ = 0 := by simp only [μs, tsum_zero]
 
 Depends on / 依赖: Set.inter_subset_right, Set.uni, inter_subset_right, lintegral_const, measure_mono, measure_spanningSets_lt_top, s_lt_top, spanningSets, trans_lt
 -/
@@ -246,7 +326,21 @@ theorem AEMeasurable.ae_eq_of_forall_setLIntegral_eq
     ENNReal.aefinStronglyMeasurable_of_aemeasurable hgi hg
   let s := hf'.sigmaFiniteSet
   let t := hg'.sigmaFiniteSet
-  suffices f =ᵐ[μ.restrict (s u
+  suffices f =ᵐ[μ.restrict (s union t)] g by
+    refine ae_of_ae_restrict_of_ae_restrict_compl _ this ?_
+    simp only [Set.compl_union]
+    have h1 : f =ᵐ[μ.restrict sᶜ] 0 := hf'.ae_eq_zero_compl
+    have h2 : g =ᵐ[μ.restrict tᶜ] 0 := hg'.ae_eq_zero_compl
+    rw [ae_restrict_iff' (hf'.measurableSet.compl.inter hg'.measurableSet.compl)]
+    rw [EventuallyEq]; rw [ae_restrict_iff' hf'.measurableSet.compl] at h1
+    rw [EventuallyEq]; rw [ae_restrict_iff' hg'.measurableSet.compl] at h2
+    filter_upwards [h1, h2] with x h1 h2 hx
+    rw [h1 (Set.inter_subset_left hx)]; rw [h2 (Set.inter_subset_right hx)]
+  refine ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite₀ hf.restrict hg.restrict
+    fun u hu huμ => ?_
+  rw [Measure.restrict_restrict hu]
+  rw [Measure.restrict_apply hu] at huμ
+  exact hfg (hu.inter (hf'.measurableSet.union hg'.measurableSet)) huμ
 
 中文:
 定理 几乎处处可测.ae_eq_of_对任意_setL整数egral_eq
@@ -258,7 +352,21 @@ theorem AEMeasurable.ae_eq_of_forall_setLIntegral_eq
     ENNReal.aefinStronglyMeasurable_of_aemeasurable hgi hg
   let s := hf'.sigmaFiniteSet
   let t := hg'.sigmaFiniteSet
-  suffices f =ᵐ[μ.restrict (s u
+  suffices f =ᵐ[μ.restrict (s union t)] g by
+    refine ae_of_ae_restrict_of_ae_restrict_compl _ this ?_
+    simp only [Set.compl_union]
+    have h1 : f =ᵐ[μ.restrict sᶜ] 0 := hf'.ae_eq_zero_compl
+    have h2 : g =ᵐ[μ.restrict tᶜ] 0 := hg'.ae_eq_zero_compl
+    rw [ae_restrict_iff' (hf'.measurableSet.compl.inter hg'.measurableSet.compl)]
+    rw [EventuallyEq]; rw [ae_restrict_iff' hf'.measurableSet.compl] at h1
+    rw [EventuallyEq]; rw [ae_restrict_iff' hg'.measurableSet.compl] at h2
+    filter_upwards [h1, h2] with x h1 h2 hx
+    rw [h1 (Set.inter_subset_left hx)]; rw [h2 (Set.inter_subset_right hx)]
+  refine ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite₀ hf.restrict hg.restrict
+    fun u hu huμ => ?_
+  rw [Measure.restrict_restrict hu]
+  rw [Measure.restrict_apply hu] at huμ
+  exact hfg (hu.inter (hf'.measurableSet.union hg'.measurableSet)) huμ
 
 Depends on / 依赖: AEFinStronglyMeasurable, ENNReal, ENNReal.aefinStronglyMeasurable_of_aemeasurable, Set.compl_union, ae_eq_zero_compl, ae_of_ae_restrict_of_ae_restrict_compl, ae_r, aefinStronglyMeasurable_of_aemeasurable, compl_union, restrict, sigmaFiniteSet
 -/
@@ -305,7 +413,13 @@ theorem lintegral_eq_lintegral_of_isPiSystem
     · refine ne_of_lt ?_
       calc ∫⁻ x in t, g x ∂μ
       _ <= ∫⁻ x, g x ∂μ := setLIntegral_le_lintegral t _
-  
+      _ < ∞ := by rw [← h_univ]; exact hf_int.lt_top
+    · refine ne_of_lt ?_
+      calc ∫⁻ x in t, f x ∂μ
+      _ <= ∫⁻ x, f x ∂μ := setLIntegral_le_lintegral t _
+      _ < ∞ := hf_int.lt_top
+  · intro t htd htm h
+    simp_rw [lintegral_iUnion htm htd, h]
 
 中文:
 定理 lintegral_eq_lintegral_of_isPiSystem
@@ -317,7 +431,13 @@ theorem lintegral_eq_lintegral_of_isPiSystem
     · refine ne_of_lt ?_
       calc ∫⁻ x in t, g x ∂μ
       _ <= ∫⁻ x, g x ∂μ := setLIntegral_le_lintegral t _
-  
+      _ < ∞ := by rw [← h_univ]; exact hf_int.lt_top
+    · refine ne_of_lt ?_
+      calc ∫⁻ x in t, f x ∂μ
+      _ <= ∫⁻ x, f x ∂μ := setLIntegral_le_lintegral t _
+      _ < ∞ := hf_int.lt_top
+  · intro t htd htm h
+    simp_rw [lintegral_iUnion htm htd, h]
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.induction_on_inter, h_eq, h_inter, h_univ, hf_int, hf_int.lt_top, induction_on_inter, lintegral_iUnion, lt_top, ne_of_lt, setLIntegral_compl, setLIntegral_le_lintegral, simp_rw
 -/
@@ -380,7 +500,11 @@ lemma ae_eq_of_setLIntegral_prod_eq
     rwa [← setLIntegral_univ, ← Set.univ_prod_univ, ← h .univ .univ, Set.univ_prod_univ,
       setLIntegral_univ]
   refine AEMeasurable.ae_eq_of_forall_setLIntegral_eq hf hg hf_int hg_int fun s hs _ => ?_
-  refine lintegral_eq_lintegral_of_isPiSystem_of_uni
+  refine lintegral_eq_lintegral_of_isPiSystem_of_univ_mem generateFrom_prod.symm isPiSystem_prod
+    ?_ ?_ hf_int hs
+  · exact ⟨Set.univ, .univ, Set.univ, .univ, Set.univ_prod_univ⟩
+  · rintro _ ⟨s, hs, t, ht, rfl⟩
+    exact h hs ht
 
 中文:
 引理 ae_eq_of_setL整数egral_prod_eq
@@ -390,7 +514,11 @@ lemma ae_eq_of_setLIntegral_prod_eq
     rwa [← setLIntegral_univ, ← Set.univ_prod_univ, ← h .univ .univ, Set.univ_prod_univ,
       setLIntegral_univ]
   refine AEMeasurable.ae_eq_of_forall_setLIntegral_eq hf hg hf_int hg_int fun s hs _ => ?_
-  refine lintegral_eq_lintegral_of_isPiSystem_of_uni
+  refine lintegral_eq_lintegral_of_isPiSystem_of_univ_mem generateFrom_prod.symm isPiSystem_prod
+    ?_ ?_ hf_int hs
+  · exact ⟨Set.univ, .univ, Set.univ, .univ, Set.univ_prod_univ⟩
+  · rintro _ ⟨s, hs, t, ht, rfl⟩
+    exact h hs ht
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.ae_eq_of_forall_setLIntegral_eq, Set.univ, Set.univ_prod_univ, ae_eq_of_forall_setLIntegral_eq, generateFrom_prod, generateFrom_prod.symm, hf_int, hg_int, isPiSystem_prod, lintegral_eq_lintegral_of_isPiSystem_of_univ_mem, setLIntegral_univ, univ_prod_univ
 -/
@@ -451,7 +579,7 @@ theorem withDensity_eq_iff
     refine AEMeasurable.ae_eq_of_forall_setLIntegral_eq hf hg hfi ?_ fun s hs _ => ?_
     · rwa [← setLIntegral_univ, ← withDensity_apply g MeasurableSet.univ, ← hfg,
         withDensity_apply f MeasurableSet.univ, setLIntegral_univ]
-    · rw [← withDensity_apply f hs, ← withDensity_a
+    · rw [← withDensity_apply f hs, ← withDensity_apply g hs, ← hfg], withDensity_congr_ae⟩
 
 中文:
 定理 withDensity_eq_iff
@@ -460,7 +588,7 @@ theorem withDensity_eq_iff
     refine AEMeasurable.ae_eq_of_forall_setLIntegral_eq hf hg hfi ?_ fun s hs _ => ?_
     · rwa [← setLIntegral_univ, ← withDensity_apply g MeasurableSet.univ, ← hfg,
         withDensity_apply f MeasurableSet.univ, setLIntegral_univ]
-    · rw [← withDensity_apply f hs, ← withDensity_a
+    · rw [← withDensity_apply f hs, ← withDensity_apply g hs, ← hfg], withDensity_congr_ae⟩
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.ae_eq_of_forall_setLIntegral_eq, HasDetOne, HasDetOne.det_eq, MeasurableSet, MeasurableSet.univ, ae_eq_of_forall_setLIntegral_eq, det_eq, setLIntegral_univ, withDensity_apply, withDensity_congr_ae
 -/

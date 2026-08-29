@@ -378,7 +378,9 @@ theorem range_linearCombination
   · apply span_le.2
     intro x hx
     rcases hx with ⟨i, hi⟩
-    rw
+    rw [SetLike.mem_coe]; rw [LinearMap.mem_range]
+    use single i 1
+    simp [hi]
 
 中文:
 定理 range_linearCombination
@@ -395,7 +397,9 @@ theorem range_linearCombination
   · apply span_le.2
     intro x hx
     rcases hx with ⟨i, hi⟩
-    rw
+    rw [SetLike.mem_coe]; rw [LinearMap.mem_range]
+    use single i 1
+    simp [hi]
 
 Depends on / 依赖: LinearMap, LinearMap.mem_range, SetLike, SetLike.mem_coe, Submodule, Submodule.smul_mem, linearCombination_apply, mem_coe, mem_range, mem_range_self, single, smul_mem, span_le, subset_span, sum_mem
 -/
@@ -635,7 +639,13 @@ theorem span_image_eq_map_linearCombination
   · refine map_le_iff_le_comap.2 fun z hz => ?_
     have : forall i, z i • v i in span R (v '' s) := by
       intro c
-    
+      have := Classical.decPred fun x => x in s
+      by_cases h : c in s
+      · exact smul_mem _ _ (subset_span (Set.mem_image_of_mem _ h))
+      · simp [(Finsupp.mem_supported' R _).1 hz _ h]
+    rw [mem_comap]; rw [linearCombination_apply]
+    refine sum_mem ?_
+    simp [this]
 
 中文:
 定理 span_image_eq_map_linearCombination
@@ -650,7 +660,13 @@ theorem span_image_eq_map_linearCombination
   · refine map_le_iff_le_comap.2 fun z hz => ?_
     have : forall i, z i • v i in span R (v '' s) := by
       intro c
-    
+      have := Classical.decPred fun x => x in s
+      by_cases h : c in s
+      · exact smul_mem _ _ (subset_span (Set.mem_image_of_mem _ h))
+      · simp [(Finsupp.mem_supported' R _).1 hz _ h]
+    rw [mem_comap]; rw [linearCombination_apply]
+    refine sum_mem ?_
+    simp [this]
 
 Depends on / 依赖: Classical, Classical.decPred, Exists, Exists.elim, Finsupp, Finsupp.mem_supported, Finsupp.single_mem_supported, Set.mem_image, Set.mem_image_of_mem, decPred, linearCombination_apply, map_le_iff_le_comap, mem_comap, mem_image, mem_image_of_mem, mem_supported, single_mem_supported, smul_mem, span_eq_of_le, subset_span
 -/
@@ -1317,7 +1333,7 @@ theorem Submodule.mem_span_image_iff_exists_fun
     rw [← hx]
     exact l.support.sum_coe_sort fun a => l a • v a
   · rw [← hx]
-exact sum_smul_mem (span R (v '' s)) c fun a _ =
+exact sum_smul_mem (span R (v '' s)) c fun a _ => subset_span by aesop
 
 中文:
 定理 子模.mem_span_image_iff_存在_fun
@@ -1329,7 +1345,7 @@ exact sum_smul_mem (span R (v '' s)) c fun a _ =
     rw [← hx]
     exact l.support.sum_coe_sort fun a => l a • v a
   · rw [← hx]
-exact sum_smul_mem (span R (v '' s)) c fun a _ =
+exact sum_smul_mem (span R (v '' s)) c fun a _ => subset_span by aesop
 
 Depends on / 依赖: Finsupp, Finsupp.mem_span_image_iff_linearCombination, l.support, l.support.sum_coe_sort, mem_span_image_iff_linearCombination, subset_span, sum_coe_sort, sum_smul_mem, support
 -/
@@ -1381,7 +1397,7 @@ theorem Submodule.mem_span_image_finset_iff_exists_fun'
     rw [← hc]; rw [← Finset.sum_coe_sort (s := s)]
     simp
   · refine ⟨fun i => c i, ?_⟩
-    rw [← hc]; rw [← Finset.sum_
+    rw [← hc]; rw [← Finset.sum_coe_sort (s := s)]
 
 中文:
 定理 子模.mem_span_image_finset_iff_存在_fun'
@@ -1394,7 +1410,7 @@ theorem Submodule.mem_span_image_finset_iff_exists_fun'
     rw [← hc]; rw [← Finset.sum_coe_sort (s := s)]
     simp
   · refine ⟨fun i => c i, ?_⟩
-    rw [← hc]; rw [← Finset.sum_
+    rw [← hc]; rw [← Finset.sum_coe_sort (s := s)]
 
 Depends on / 依赖: Finset, Finset.sum_coe_sort, Submodule, Submodule.mem_span_image_finset_iff_exists_fun, classical, mem_span_image_finset_iff_exists_fun, sum_coe_sort
 -/
@@ -1644,7 +1660,9 @@ lemma Submodule.mem_span_set'
     have A : c.support ≃ Fin c.support.card := Finset.equivFin _
     refine ⟨_, fun i => c (A.symm i), fun i => ⟨A.symm i, cs (A.symm i).2⟩, ?_⟩
     rw [Finsupp.sum]; rw [← Finset.sum_coe_sort c.support]
-    exact Fintype.su
+    exact Fintype.sum_equiv A.symm _ (fun j => c j • (j : M)) (fun i => rfl)
+  · rintro ⟨n, f, g, rfl⟩
+    exact Submodule.sum_mem _ (fun i _ => Submodule.smul_mem _ _ (Submodule.subset_span (g i).2))
 
 中文:
 引理 子模.mem_span_set'
@@ -1655,7 +1673,9 @@ lemma Submodule.mem_span_set'
     have A : c.support ≃ Fin c.support.card := Finset.equivFin _
     refine ⟨_, fun i => c (A.symm i), fun i => ⟨A.symm i, cs (A.symm i).2⟩, ?_⟩
     rw [Finsupp.sum]; rw [← Finset.sum_coe_sort c.support]
-    exact Fintype.su
+    exact Fintype.sum_equiv A.symm _ (fun j => c j • (j : M)) (fun i => rfl)
+  · rintro ⟨n, f, g, rfl⟩
+    exact Submodule.sum_mem _ (fun i _ => Submodule.smul_mem _ _ (Submodule.subset_span (g i).2))
 
 Depends on / 依赖: A.symm, Finset, Finset.equivFin, Finset.sum_coe_sort, Finsupp, Finsupp.sum, Fintype, Fintype.sum_equiv, Submodule, Submodule.smul_mem, Submodule.subset_span, Submodule.sum_mem, c.support, c.support.card, equivFin, mem_span_set, smul_mem, subset_span, sum_coe_sort, sum_equiv
 -/

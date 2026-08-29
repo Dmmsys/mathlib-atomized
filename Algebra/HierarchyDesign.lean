@@ -158,7 +158,8 @@ instance ULift.Z
   injective or surjective functions that agree on the data fields,
   like `Function.Injective.monoid` and `Function.Surjective.monoid`.
   We make these definitions `abbrev`, see note [reducible non-instances].
-  See `Mathli
+  See `Mathlib/Algebra/Group/InjSurj.lean` for more examples.
+  ```
 
 中文:
 实例 类型层提升.Z
@@ -169,7 +170,8 @@ instance ULift.Z
   injective or surjective functions that agree on the data fields,
   like `Function.Injective.monoid` and `Function.Surjective.monoid`.
   We make these definitions `abbrev`, see note [reducible non-instances].
-  See `Mathli
+  See `Mathlib/Algebra/Group/InjSurj.lean` for more examples.
+  ```
 -/
   instance ULift.Z [Z M] : Z (ULift M) := ...
   ```
@@ -307,7 +309,16 @@ you should also create a new `SubZ` `structure` with a `carrier` field.
 
 This can be a lot of work; for now try to closely follow the existing examples
 (e.g. `Submonoid`, `Subring`, `Subalgebra`).
-We would very much like to pro
+We would very much like to provide some automation here, but a prerequisite will be making
+all the existing APIs more uniform.
+
+If `Z` extends `Y`, then `SubZ` should usually extend `SubY`.
+
+When `Z` adds only new proof fields to an existing structure `Y`,
+you should provide instances transferring
+`Z α` to `Z (SubY α)`, like `Submonoid.toCommMonoid`.
+Typically this is done using the `Function.Injective.Z` definition mentioned above.
+```
 
 中文:
 定义 等价.ZEquiv
@@ -322,7 +333,16 @@ you should also create a new `SubZ` `structure` with a `carrier` field.
 
 This can be a lot of work; for now try to closely follow the existing examples
 (e.g. `Submonoid`, `Subring`, `Subalgebra`).
-We would very much like to pro
+We would very much like to provide some automation here, but a prerequisite will be making
+all the existing APIs more uniform.
+
+If `Z` extends `Y`, then `SubZ` should usually extend `SubY`.
+
+When `Z` adds only new proof fields to an existing structure `Y`,
+you should provide instances transferring
+`Z α` to `Z (SubY α)`, like `Submonoid.toCommMonoid`.
+Typically this is done using the `Function.Injective.Z` definition mentioned above.
+```
 
 Depends on / 依赖: Equiv.Z
 -/
@@ -362,7 +382,82 @@ instance SubY.toZ
 For many algebraic structures, particularly ones used in representation theory, algebraic geometry,
 etc., we also define "bundled" versions, which carry `category` instances.
 
-These bundled versions are usually named by 
+These bundled versions are usually named by appending `Cat`,
+so for example we have `AddCommGrpCat` as a bundled `AddCommGroup`, and `TopCommRingCat`
+(which bundles together `CommRing`, `TopologicalSpace`, and `IsTopologicalRing`).
+
+These bundled versions have many appealing features:
+* a uniform notation for morphisms `X ⟶ Y`
+* a uniform notation (and definition) for isomorphisms `X ≅ Y`
+* a uniform API for subobjects, via the partial order `Subobject X`
+* interoperability with unbundled structures, via coercions to `Type`
+  (so if `G : AddCommGrpCat`, you can treat `G` as a type,
+  and it automatically has an `AddCommGroup` instance)
+  and lifting maps `AddCommGrpCat.of G`, when `G` is a type with an `AddCommGroup` instance.
+
+If, for example you do the work of proving that a typeclass `Z` has a good notion of tensor product,
+you are strongly encouraged to provide the corresponding `MonoidalCategory` instance
+on a bundled version.
+This ensures that the API for tensor products is complete, and enables use of general machinery.
+Similarly if you prove universal properties, or adjunctions, you are encouraged to state these
+using categorical language!
+
+One disadvantage of the bundled approach is that we can only speak of morphisms between
+objects living in the same type-theoretic universe.
+In practice this is rarely a problem.
+
+# Making a pull request
+
+With so many moving parts, how do you actually go about changing the algebraic hierarchy?
+
+We're still evolving how to handle this, but the current suggestion is:
+
+* If you're adding a new "leaf" class, the requirements are lower,
+  and an initial PR can just add whatever is immediately needed.
+* A new "intermediate" class, especially low down in the hierarchy,
+  needs to be careful about leaving gaps.
+
+In a perfect world, there would be a group of simultaneous PRs that basically cover everything!
+(Or at least an expectation that PRs may not be merged immediately while waiting on other
+PRs that fill out the API.)
+
+However "perfect is the enemy of good", and it would also be completely reasonable
+to add a TODO list in the main module doc-string for the new class,
+briefly listing the parts of the API which still need to be provided.
+Hopefully this document makes it easy to assemble this list.
+
+Another alternative to a TODO list in the doc-strings is adding Github issues.
+-/
+
+library_note «reducible non-instances» /--
+Some definitions that define objects of a class cannot be instances, because they have an
+explicit argument that does not occur in the conclusion. An example is `Preorder.lift` that has a
+function `f : α → β` as an explicit argument to lift a preorder on `β` to a preorder on `α`.
+
+If these definitions are used to define instances of this class *and* this class is an argument to
+some other type-class so that type-class inference will have to unfold these instances to check
+for definitional equality, then these definitions should be marked `@[reducible]`.
+
+For example, `Preorder.lift` is used to define `Units.Preorder` and `PartialOrder.lift` is used
+to define `Units.PartialOrder`. In some cases it is important that type-class inference can
+recognize that `Units.Preorder` and `Units.PartialOrder` give rise to the same `LE` instance.
+For example, you might have another class that takes `[LE α]` as an argument, and this argument
+sometimes comes from `Units.Preorder` and sometimes from `Units.PartialOrder`.
+Therefore, `Preorder.lift` and `PartialOrder.lift` are marked `@[reducible]`.
+-/
+
+library_note «implicit instance arguments» /--
+There are places where typeclass arguments are specified with implicit `{}` brackets instead of
+the usual `[]` brackets. This is done when the instances can be inferred because they are implicit
+arguments to the type of one of the other arguments. There are several reasons for doing so.
+
+When they can be inferred from these other arguments,
+it is faster to use this method than to use type class inference.
+For example, when writing lemmas about `(f : α →+* β)`, it is faster to specify the fact that `α`
+and `β` are `Semiring`s as `{rα : Semiring α} {rβ : Semiring β}` rather than the usual
+`[Semiring α] [Semiring β]`.
+
+When handling non-canonical instances, it is necessary that the relevant declarations take these
 
 中文:
 实例 SubY.toZ
@@ -377,7 +472,82 @@ These bundled versions are usually named by
 For many algebraic structures, particularly ones used in representation theory, algebraic geometry,
 etc., we also define "bundled" versions, which carry `category` instances.
 
-These bundled versions are usually named by 
+These bundled versions are usually named by appending `Cat`,
+so for example we have `AddCommGrpCat` as a bundled `AddCommGroup`, and `TopCommRingCat`
+(which bundles together `CommRing`, `TopologicalSpace`, and `IsTopologicalRing`).
+
+These bundled versions have many appealing features:
+* a uniform notation for morphisms `X ⟶ Y`
+* a uniform notation (and definition) for isomorphisms `X ≅ Y`
+* a uniform API for subobjects, via the partial order `Subobject X`
+* interoperability with unbundled structures, via coercions to `Type`
+  (so if `G : AddCommGrpCat`, you can treat `G` as a type,
+  and it automatically has an `AddCommGroup` instance)
+  and lifting maps `AddCommGrpCat.of G`, when `G` is a type with an `AddCommGroup` instance.
+
+If, for example you do the work of proving that a typeclass `Z` has a good notion of tensor product,
+you are strongly encouraged to provide the corresponding `MonoidalCategory` instance
+on a bundled version.
+This ensures that the API for tensor products is complete, and enables use of general machinery.
+Similarly if you prove universal properties, or adjunctions, you are encouraged to state these
+using categorical language!
+
+One disadvantage of the bundled approach is that we can only speak of morphisms between
+objects living in the same type-theoretic universe.
+In practice this is rarely a problem.
+
+# Making a pull request
+
+With so many moving parts, how do you actually go about changing the algebraic hierarchy?
+
+We're still evolving how to handle this, but the current suggestion is:
+
+* If you're adding a new "leaf" class, the requirements are lower,
+  and an initial PR can just add whatever is immediately needed.
+* A new "intermediate" class, especially low down in the hierarchy,
+  needs to be careful about leaving gaps.
+
+In a perfect world, there would be a group of simultaneous PRs that basically cover everything!
+(Or at least an expectation that PRs may not be merged immediately while waiting on other
+PRs that fill out the API.)
+
+However "perfect is the enemy of good", and it would also be completely reasonable
+to add a TODO list in the main module doc-string for the new class,
+briefly listing the parts of the API which still need to be provided.
+Hopefully this document makes it easy to assemble this list.
+
+Another alternative to a TODO list in the doc-strings is adding Github issues.
+-/
+
+library_note «reducible non-instances» /--
+Some definitions that define objects of a class cannot be instances, because they have an
+explicit argument that does not occur in the conclusion. An example is `Preorder.lift` that has a
+function `f : α → β` as an explicit argument to lift a preorder on `β` to a preorder on `α`.
+
+If these definitions are used to define instances of this class *and* this class is an argument to
+some other type-class so that type-class inference will have to unfold these instances to check
+for definitional equality, then these definitions should be marked `@[reducible]`.
+
+For example, `Preorder.lift` is used to define `Units.Preorder` and `PartialOrder.lift` is used
+to define `Units.PartialOrder`. In some cases it is important that type-class inference can
+recognize that `Units.Preorder` and `Units.PartialOrder` give rise to the same `LE` instance.
+For example, you might have another class that takes `[LE α]` as an argument, and this argument
+sometimes comes from `Units.Preorder` and sometimes from `Units.PartialOrder`.
+Therefore, `Preorder.lift` and `PartialOrder.lift` are marked `@[reducible]`.
+-/
+
+library_note «implicit instance arguments» /--
+There are places where typeclass arguments are specified with implicit `{}` brackets instead of
+the usual `[]` brackets. This is done when the instances can be inferred because they are implicit
+arguments to the type of one of the other arguments. There are several reasons for doing so.
+
+When they can be inferred from these other arguments,
+it is faster to use this method than to use type class inference.
+For example, when writing lemmas about `(f : α →+* β)`, it is faster to specify the fact that `α`
+and `β` are `Semiring`s as `{rα : Semiring α} {rβ : Semiring β}` rather than the usual
+`[Semiring α] [Semiring β]`.
+
+When handling non-canonical instances, it is necessary that the relevant declarations take these
 
 Depends on / 依赖: coe_injective, coe_injective.Z
 -/

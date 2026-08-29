@@ -50,7 +50,9 @@ lemma CFC.tendsto_cfc_rpow_sub_one_log
   case tendsto =>
     let s := {a : A | IsStrictlyPositive a}
     let f (p : Real) (x : Real) := if p > 0 then p⁻¹ * (x ^ p - 1) else Real.log x
-    have hmain := Real.
+    have hmain := Real.tendstoLocallyUniformlyOn_rpow_sub_one_log
+    rw [tendstoLocallyUniformlyOn_iff_forall_isCompact isOpen_Ioi] at hmain
+    exact hmain (spectrum Real a) (by grind) (by grind)
 
 中文:
 引理 CFC.tendsto_cfc_rpow_sub_one_log
@@ -62,7 +64,9 @@ lemma CFC.tendsto_cfc_rpow_sub_one_log
   case tendsto =>
     let s := {a : A | IsStrictlyPositive a}
     let f (p : Real) (x : Real) := if p > 0 then p⁻¹ * (x ^ p - 1) else Real.log x
-    have hmain := Real.
+    have hmain := Real.tendstoLocallyUniformlyOn_rpow_sub_one_log
+    rw [tendstoLocallyUniformlyOn_iff_forall_isCompact isOpen_Ioi] at hmain
+    exact hmain (spectrum Real a) (by grind) (by grind)
 
 Depends on / 依赖: CFC.log, IsStrictlyPositive, Real.log, Real.tendstoLocallyUniformlyOn_rpow_sub_one_log, Tendsto, abstractProof, cfc_tac, fun_prop, isOpen_Ioi, of_forall, tendsto, tendstoLocallyUniformlyOn_iff_forall_isCompact, tendstoLocallyUniformlyOn_rpow_sub_one_log, tendsto_cfc_fun
 -/
@@ -151,7 +155,22 @@ lemma CFC.log_monotoneOn
   /- We have that `log x = lim_{p → 0} p⁻¹ * (x ^ p - 1)` with uniform convergence on the spectrum
   of any positive definite operator, which means that `CFC.log a = lim_{p → 0} p⁻¹ * (a ^ p - 1)`
   by the continuity of the continuous functional calculus (`tendsto_cfc_fun`). Then, we use the
-  fa
+  fact that `x^p` is monotone for `p ∈ [0,1]` (`CFC.monotone_nnrpow`) and that the set of
+  monotone functions is closed (`isClosed_monotoneOn`) to conclude the proof. -/
+  let s := {a : A | IsStrictlyPositive a}
+  let f (p : Real) := fun a => if a in s then cfc (A := A) (fun x => p⁻¹ * (x ^ p - 1)) a else 0
+  let g := fun a => if a in s then log (A := A) a else 0
+  have hg : s.EqOn g (log (A := A)) := by simp +contextual [g, Set.EqOn]
+  refine MonotoneOn.congr ?_ hg
+  refine isClosed_monotoneOn.mem_of_tendsto (f := f) (b := (𝓝[>] 0))
+    tendsto_ite_cfc_rpow_sub_one_ite_log ?_
+.mem_of_mem zero_lt_one have h₁ : forallᶠ (p : Real) in 𝓝[>] 0, 0 < p ∧ p < 1 := nhdsGT_basis 0
+  filter_upwards [h₁] with p ⟨hp, hp'⟩
+  refine MonotoneOn.congr (fun a ha b hb hab => ?_) CFC.cfc_rpow_sub_one_eqOn.symm
+  gcongr
+  grind
+
+@[gcongr]
 
 中文:
 引理 CFC.log_monotoneOn
@@ -160,7 +179,22 @@ lemma CFC.log_monotoneOn
   /- We have that `log x = lim_{p → 0} p⁻¹ * (x ^ p - 1)` with uniform convergence on the spectrum
   of any positive definite operator, which means that `CFC.log a = lim_{p → 0} p⁻¹ * (a ^ p - 1)`
   by the continuity of the continuous functional calculus (`tendsto_cfc_fun`). Then, we use the
-  fa
+  fact that `x^p` is monotone for `p ∈ [0,1]` (`CFC.monotone_nnrpow`) and that the set of
+  monotone functions is closed (`isClosed_monotoneOn`) to conclude the proof. -/
+  let s := {a : A | IsStrictlyPositive a}
+  let f (p : Real) := fun a => if a in s then cfc (A := A) (fun x => p⁻¹ * (x ^ p - 1)) a else 0
+  let g := fun a => if a in s then log (A := A) a else 0
+  have hg : s.EqOn g (log (A := A)) := by simp +contextual [g, Set.EqOn]
+  refine MonotoneOn.congr ?_ hg
+  refine isClosed_monotoneOn.mem_of_tendsto (f := f) (b := (𝓝[>] 0))
+    tendsto_ite_cfc_rpow_sub_one_ite_log ?_
+.mem_of_mem zero_lt_one have h₁ : forallᶠ (p : Real) in 𝓝[>] 0, 0 < p ∧ p < 1 := nhdsGT_basis 0
+  filter_upwards [h₁] with p ⟨hp, hp'⟩
+  refine MonotoneOn.congr (fun a ha b hb hab => ?_) CFC.cfc_rpow_sub_one_eqOn.symm
+  gcongr
+  grind
+
+@[gcongr]
 -/
 lemma CFC.log_monotoneOn : MonotoneOn log {a : A | IsStrictlyPositive a} := by
   /- We have that `log x = lim_{p → 0} p⁻¹ * (x ^ p - 1)` with uniform convergence on the spectrum
@@ -212,7 +246,23 @@ lemma CFC.concaveOn_log
   /- We have that `log x = lim_{p → 0} p⁻¹ * (x ^ p - 1)` with uniform convergence on the spectrum
   of any positive definite operator, which means that `CFC.log a = lim_{p → 0} p⁻¹ * (a ^ p - 1)`
   by the continuity of the continuous functional calculus (`tendsto_cfc_fun`). Then, we use the
-  fa
+  fact that `x^p` is concave for `p ∈ [0,1]` (`CFC.concaveOn_rpow`) and that the set of
+  concave functions is closed (`isClosed_setOfPred_concaveOn`) to conclude the proof. -/
+  set s := {a : A | IsStrictlyPositive a}
+  let f (p : Real) := fun a => if a in s then cfc (A := A) (fun x => p⁻¹ * (x ^ p - 1)) a else 0
+  let g := fun a => if a in s then log (A := A) a else 0
+  have hg : s.EqOn g (log (A := A)) := by simp +contextual [g, Set.EqOn]
+  refine ConcaveOn.congr ?_ hg
+  apply isClosed_setOfPred_concaveOn.mem_of_tendsto (f := f) (b := (𝓝[>] (0 : Real)))
+    tendsto_ite_cfc_rpow_sub_one_ite_log ?_
+.mem_of_mem zero_lt_one have h₁ : forallᶠ (p : Real) in 𝓝[>] 0, 0 < p ∧ p < 1 := nhdsGT_basis 0
+  filter_upwards [h₁] with p ⟨hp, hp'⟩
+  refine ConcaveOn.congr ?_ CFC.cfc_rpow_sub_one_eqOn.symm
+  refine ConcaveOn.smul (by positivity) ?_
+  have h_convex : Convex Real s := by grind [convex_iff_forall_pos]
+  refine ConcaveOn.sub ?_ (convexOn_const _ h_convex)
+  refine ConcaveOn.subset (t := Ici 0) ?_ (by grind) h_convex
+  exact CFC.concaveOn_rpow (by grind)
 
 中文:
 引理 CFC.concaveOn_log
@@ -221,7 +271,23 @@ lemma CFC.concaveOn_log
   /- We have that `log x = lim_{p → 0} p⁻¹ * (x ^ p - 1)` with uniform convergence on the spectrum
   of any positive definite operator, which means that `CFC.log a = lim_{p → 0} p⁻¹ * (a ^ p - 1)`
   by the continuity of the continuous functional calculus (`tendsto_cfc_fun`). Then, we use the
-  fa
+  fact that `x^p` is concave for `p ∈ [0,1]` (`CFC.concaveOn_rpow`) and that the set of
+  concave functions is closed (`isClosed_setOfPred_concaveOn`) to conclude the proof. -/
+  set s := {a : A | IsStrictlyPositive a}
+  let f (p : Real) := fun a => if a in s then cfc (A := A) (fun x => p⁻¹ * (x ^ p - 1)) a else 0
+  let g := fun a => if a in s then log (A := A) a else 0
+  have hg : s.EqOn g (log (A := A)) := by simp +contextual [g, Set.EqOn]
+  refine ConcaveOn.congr ?_ hg
+  apply isClosed_setOfPred_concaveOn.mem_of_tendsto (f := f) (b := (𝓝[>] (0 : Real)))
+    tendsto_ite_cfc_rpow_sub_one_ite_log ?_
+.mem_of_mem zero_lt_one have h₁ : forallᶠ (p : Real) in 𝓝[>] 0, 0 < p ∧ p < 1 := nhdsGT_basis 0
+  filter_upwards [h₁] with p ⟨hp, hp'⟩
+  refine ConcaveOn.congr ?_ CFC.cfc_rpow_sub_one_eqOn.symm
+  refine ConcaveOn.smul (by positivity) ?_
+  have h_convex : Convex Real s := by grind [convex_iff_forall_pos]
+  refine ConcaveOn.sub ?_ (convexOn_const _ h_convex)
+  refine ConcaveOn.subset (t := Ici 0) ?_ (by grind) h_convex
+  exact CFC.concaveOn_rpow (by grind)
 -/
 lemma CFC.concaveOn_log : ConcaveOn Real {a : A | IsStrictlyPositive a} log := by
   /- We have that `log x = lim_{p → 0} p⁻¹ * (x ^ p - 1)` with uniform convergence on the spectrum

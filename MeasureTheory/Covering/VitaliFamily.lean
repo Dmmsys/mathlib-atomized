@@ -376,7 +376,8 @@ theorem measure_le_tsum_of_absolutelyContinuous
       measure_mono (by simp only [subset_union_left, sdiff_union_self])
     _ <= ρ (s \ ⋃ p in h.index, h.covering p) + ρ (⋃ p in h.index, h.covering p) :=
       (measure_union_le _ _)
-    _ = ∑' p : h.index
+    _ = ∑' p : h.index, ρ (h.covering p) := by
+      rw [hρ h.measure_sdiff_biUnion]; rw [zero_add]; rw [measure_biUnion h.index_countable h.covering_disjoint fun x hx => h.measurableSet_u hx]
 
 中文:
 定理 measure_le_tsum_of_absolutelyContinuous
@@ -386,7 +387,8 @@ theorem measure_le_tsum_of_absolutelyContinuous
       measure_mono (by simp only [subset_union_left, sdiff_union_self])
     _ <= ρ (s \ ⋃ p in h.index, h.covering p) + ρ (⋃ p in h.index, h.covering p) :=
       (measure_union_le _ _)
-    _ = ∑' p : h.index
+    _ = ∑' p : h.index, ρ (h.covering p) := by
+      rw [hρ h.measure_sdiff_biUnion]; rw [zero_add]; rw [measure_biUnion h.index_countable h.covering_disjoint fun x hx => h.measurableSet_u hx]
 
 Depends on / 依赖: covering, covering_disjoint, h.covering, h.covering_disjoint, h.index, h.index_countable, h.measurableSet_u, h.measure_sdiff_biUnion, index_countable, measurableSet_u, measure_biUnion, measure_mono, measure_sdiff_biUnion, measure_union_le, sdiff_union_self, subset_union_left, zero_add
 -/
@@ -436,7 +438,22 @@ definition enlarge
     rintro x s (hs | hs)
     exacts [v.nonempty_interior _ _ hs, hs.2.1]
   nontrivial := by
- 
+    intro x ε εpos
+    rcases v.nontrivial x ε εpos with ⟨s, hs, h's⟩
+    exact ⟨s, mem_union_left _ hs, h's⟩
+  covering := by
+    intro s f fset ffine
+    let g : X -> Set (Set X) := fun x => f x inter v.setsAt x
+    have : forall x in s, forall ε : Real, ε > 0 -> exists t in g x, t subseteq closedBall x ε := by
+      intro x hx ε εpos
+      obtain ⟨t, tf, ht⟩ : exists t in f x, t subseteq closedBall x (min ε δ) :=
+        ffine x hx (min ε δ) (lt_min εpos δpos)
+      rcases fset x hx tf with (h't | h't)
+      · exact ⟨t, ⟨tf, h't⟩, ht.trans (closedBall_subset_closedBall (min_le_left _ _))⟩
+      · refine False.elim (h't.2.2 ?_)
+        exact ht.trans (closedBall_subset_closedBall (min_le_right _ _))
+    rcases v.covering s g (fun x _ => inter_subset_right) this with ⟨t, ts, tdisj, tg, μt⟩
+    exact ⟨t, ts, tdisj, fun p hp => (tg p hp).1, μt⟩
 
 中文:
 定义 enlarge
@@ -449,7 +466,22 @@ definition enlarge
     rintro x s (hs | hs)
     exacts [v.nonempty_interior _ _ hs, hs.2.1]
   nontrivial := by
- 
+    intro x ε εpos
+    rcases v.nontrivial x ε εpos with ⟨s, hs, h's⟩
+    exact ⟨s, mem_union_left _ hs, h's⟩
+  covering := by
+    intro s f fset ffine
+    let g : X -> Set (Set X) := fun x => f x inter v.setsAt x
+    have : forall x in s, forall ε : Real, ε > 0 -> exists t in g x, t subseteq closedBall x ε := by
+      intro x hx ε εpos
+      obtain ⟨t, tf, ht⟩ : exists t in f x, t subseteq closedBall x (min ε δ) :=
+        ffine x hx (min ε δ) (lt_min εpos δpos)
+      rcases fset x hx tf with (h't | h't)
+      · exact ⟨t, ⟨tf, h't⟩, ht.trans (closedBall_subset_closedBall (min_le_left _ _))⟩
+      · refine False.elim (h't.2.2 ?_)
+        exact ht.trans (closedBall_subset_closedBall (min_le_right _ _))
+    rcases v.covering s g (fun x _ => inter_subset_right) this with ⟨t, ts, tdisj, tg, μt⟩
+    exact ⟨t, ts, tdisj, fun p hp => (tg p hp).1, μt⟩
 
 Depends on / 依赖: MeasurableSet, Nonempty, closedBall, interior, setsAt, subseteq, v.setsAt
 -/
@@ -739,7 +771,8 @@ theorem filterAt_enlarge
       t in v.setsAt x} in (𝓝 x).smallSets by
     simpa [VitaliFamily.filterAt, VitaliFamily.enlarge, ← sup_principal, inf_sup_left,
       mem_inf_principal]
-  filter_upwards [eventually_smallSets_su
+  filter_upwards [eventually_smallSets_subset.mpr (closedBall_mem_nhds _ δpos)]
+  simp +contextual
 
 中文:
 定理 filterAt_enlarge
@@ -750,7 +783,8 @@ theorem filterAt_enlarge
       t in v.setsAt x} in (𝓝 x).smallSets by
     simpa [VitaliFamily.filterAt, VitaliFamily.enlarge, ← sup_principal, inf_sup_left,
       mem_inf_principal]
-  filter_upwards [eventually_smallSets_su
+  filter_upwards [eventually_smallSets_subset.mpr (closedBall_mem_nhds _ δpos)]
+  simp +contextual
 
 Depends on / 依赖: MeasurableSet, Nonempty, VitaliFamily, VitaliFamily.enlarge, VitaliFamily.filterAt, closedBall, closedBall_mem_nhds, contextual, enlarge, eventually_smallSets_subset, eventually_smallSets_subset.mpr, filterAt, filter_upwards, inf_sup_left, interior, mem_inf_principal, setsAt, smallSets, subseteq, sup_principal
 -/

@@ -281,7 +281,10 @@ definition ofIsInitialLeft
     let hX₂ := IsInitial.isInitialObj (F.flip.obj X₂) _ h
     let hY₂ := IsInitial.isInitialObj (F.flip.obj Y₂) _ h
     apply +allowSynthFailures IsPushout.of_vert_isIso
-    · exact isIso_of_is
+    · exact isIso_of_isInitial hX₂ hY₂ _
+    · exact ⟨hX₂.hom_ext _ _⟩
+  ι := (F.obj Y₁).map f₂
+  inr_ι := (IsInitial.isInitialObj (F.flip.obj Y₂) _ h).hom_ext ..
 
 中文:
 定义 ofIsInitialLeft
@@ -293,7 +296,10 @@ definition ofIsInitialLeft
     let hX₂ := IsInitial.isInitialObj (F.flip.obj X₂) _ h
     let hY₂ := IsInitial.isInitialObj (F.flip.obj Y₂) _ h
     apply +allowSynthFailures IsPushout.of_vert_isIso
-    · exact isIso_of_is
+    · exact isIso_of_isInitial hX₂ hY₂ _
+    · exact ⟨hX₂.hom_ext _ _⟩
+  ι := (F.obj Y₁).map f₂
+  inr_ι := (IsInitial.isInitialObj (F.flip.obj Y₂) _ h).hom_ext ..
 
 Depends on / 依赖: F.obj
 -/
@@ -336,7 +342,10 @@ definition ofIsInitialRight
     let hX₁ := IsInitial.isInitialObj (F.obj X₁) _ h
     let hY₁ := IsInitial.isInitialObj (F.obj Y₁) _ h
     apply +allowSynthFailures IsPushout.of_horiz_isIso
-    · exact isIso_of_isInitial hX₁ hY
+    · exact isIso_of_isInitial hX₁ hY₁ _
+    · exact ⟨hX₁.hom_ext _ _⟩
+  ι := (F.map f₁).app Y₂
+  inl_ι := (IsInitial.isInitialObj (F.obj Y₁) _ h).hom_ext ..
 
 中文:
 定义 ofIsInitialRight
@@ -348,7 +357,10 @@ definition ofIsInitialRight
     let hX₁ := IsInitial.isInitialObj (F.obj X₁) _ h
     let hY₁ := IsInitial.isInitialObj (F.obj Y₁) _ h
     apply +allowSynthFailures IsPushout.of_horiz_isIso
-    · exact isIso_of_isInitial hX₁ hY
+    · exact isIso_of_isInitial hX₁ hY₁ _
+    · exact ⟨hX₁.hom_ext _ _⟩
+  ι := (F.map f₁).app Y₂
+  inl_ι := (IsInitial.isInitialObj (F.obj Y₁) _ h).hom_ext ..
 
 Depends on / 依赖: F.obj
 -/
@@ -390,7 +402,14 @@ definition mapArrowLeft
     (by
       #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
       (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-    
+      goal without the `simp only`. It is not yet clear whether this is due to defeq abuse in
+      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
+      proof was: `by grind [sq.w, sq₁₂'.isPushout.w]` -/
+      simp only [Arrow.mk_left]; grind [sq.w, sq₁₂'.isPushout.w])
+  right := (F.map sq.right).app f₂.right
+  w := by
+    apply PushoutObjObj.hom_ext
+    all_goals simp [← NatTrans.comp_app, ← Functor.map_comp]
 
 中文:
 定义 mapArrowLeft
@@ -401,7 +420,14 @@ definition mapArrowLeft
     (by
       #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
       (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-    
+      goal without the `simp only`. It is not yet clear whether this is due to defeq abuse in
+      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
+      proof was: `by grind [sq.w, sq₁₂'.isPushout.w]` -/
+      simp only [Arrow.mk_left]; grind [sq.w, sq₁₂'.isPushout.w])
+  right := (F.map sq.right).app f₂.right
+  w := by
+    apply PushoutObjObj.hom_ext
+    all_goals simp [← NatTrans.comp_app, ← Functor.map_comp]
 
 Depends on / 依赖: isPushout, isPushout.desc
 -/
@@ -509,7 +535,15 @@ definition mapArrowRight
     (by
       #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
       (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-
+      goal without the `simp only`. It is not yet clear whether this is due to defeq abuse in
+      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
+      proof was: `by grind [sq.w, sq₁₂'.isPushout.w]` -/
+      simp only [Arrow.mk_left]; grind [sq.w, sq₁₂'.isPushout.w])
+  right := (F.obj f₁.right).map sq.right
+  w := by
+    apply PushoutObjObj.hom_ext
+    · simp [← map_comp]
+    · cat_disch
 
 中文:
 定义 mapArrowRight
@@ -520,7 +554,15 @@ definition mapArrowRight
     (by
       #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
       (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-
+      goal without the `simp only`. It is not yet clear whether this is due to defeq abuse in
+      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
+      proof was: `by grind [sq.w, sq₁₂'.isPushout.w]` -/
+      simp only [Arrow.mk_left]; grind [sq.w, sq₁₂'.isPushout.w])
+  right := (F.obj f₁.right).map sq.right
+  w := by
+    apply PushoutObjObj.hom_ext
+    · simp [← map_comp]
+    · cat_disch
 
 Depends on / 依赖: isPushout, isPushout.desc
 -/
@@ -643,7 +685,8 @@ definition leibnizPushout
   map sq :=
     { app f₂ :=
         PushoutObjObj.mapArrowLeft
-          (PushoutObjObj
+          (PushoutObjObj.ofHasPushout F ..)
+          (PushoutObjObj.ofHasPushout F ..) sq }
 
 中文:
 定义 leibnizPushout
@@ -656,7 +699,8 @@ definition leibnizPushout
   map sq :=
     { app f₂ :=
         PushoutObjObj.mapArrowLeft
-          (PushoutObjObj
+          (PushoutObjObj.ofHasPushout F ..)
+          (PushoutObjObj.ofHasPushout F ..) sq }
 
 Depends on / 依赖: Arrow.mk, PushoutObjObj, PushoutObjObj.mapArrowLeft, PushoutObjObj.mapArrowRight, PushoutObjObj.ofHasPushout, mapArrowLeft, mapArrowRight, ofHasPushout
 -/
@@ -803,7 +847,11 @@ definition ofIsInitial
   isPullback := by
     let hX₃ := IsTerminal.isTerminalObj (G.flip.obj X₃) _ h.op
     let hY₃ := IsTerminal.isTerminalObj (G.flip.obj Y₃) _ h.op
-    apply +allowSynthFailures IsPullback.of_vert_isIs
+    apply +allowSynthFailures IsPullback.of_vert_isIso
+    · exact isIso_of_isTerminal hX₃ hY₃ _
+    · exact ⟨hY₃.hom_ext _ _⟩
+  π := (G.obj (op Y₁)).map f₃
+  π_fst := (IsTerminal.isTerminalObj (G.flip.obj X₃) _ h.op).hom_ext _ _
 
 中文:
 定义 ofIsInitial
@@ -814,7 +862,11 @@ definition ofIsInitial
   isPullback := by
     let hX₃ := IsTerminal.isTerminalObj (G.flip.obj X₃) _ h.op
     let hY₃ := IsTerminal.isTerminalObj (G.flip.obj Y₃) _ h.op
-    apply +allowSynthFailures IsPullback.of_vert_isIs
+    apply +allowSynthFailures IsPullback.of_vert_isIso
+    · exact isIso_of_isTerminal hX₃ hY₃ _
+    · exact ⟨hY₃.hom_ext _ _⟩
+  π := (G.obj (op Y₁)).map f₃
+  π_fst := (IsTerminal.isTerminalObj (G.flip.obj X₃) _ h.op).hom_ext _ _
 
 Depends on / 依赖: G.obj
 -/
@@ -857,7 +909,10 @@ definition ofIsTerminal
     let hX₁ := IsTerminal.isTerminalObj (G.obj (op X₁)) _ h
     let hY₁ := IsTerminal.isTerminalObj (G.obj (op Y₁)) _ h
     apply +allowSynthFailures IsPullback.of_horiz_isIso
-    · exact 
+    · exact isIso_of_isTerminal hY₁ hX₁ _
+    · exact ⟨hX₁.hom_ext _ _⟩
+  π := (G.map f₁.op).app X₃
+  π_snd := (IsTerminal.isTerminalObj (G.obj (op Y₁)) _ h).hom_ext _ _
 
 中文:
 定义 ofIsTerminal
@@ -869,7 +924,10 @@ definition ofIsTerminal
     let hX₁ := IsTerminal.isTerminalObj (G.obj (op X₁)) _ h
     let hY₁ := IsTerminal.isTerminalObj (G.obj (op Y₁)) _ h
     apply +allowSynthFailures IsPullback.of_horiz_isIso
-    · exact 
+    · exact isIso_of_isTerminal hY₁ hX₁ _
+    · exact ⟨hX₁.hom_ext _ _⟩
+  π := (G.map f₁.op).app X₃
+  π_snd := (IsTerminal.isTerminalObj (G.obj (op Y₁)) _ h).hom_ext _ _
 
 Depends on / 依赖: G.obj
 -/
@@ -911,7 +969,15 @@ definition mapArrowLeft
     (sq₁₃.snd ≫ (G.map sq.right.op).app f₃.right)
     (by
       #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer with a ty
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal without the `simp`. It is not yet clear whether this is due to defeq abuse in
+      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
+      proof was: `by simp only [id_obj, Category.assoc]; grind [sq.w, sq₁₃.isPullback.w]` -/
+      simp [Arrow.mk_right]; grind [sq.w, sq₁₃.isPullback.w])
+  w := by
+    apply PullbackObjObj.hom_ext
+    · simp [← NatTrans.comp_app, ← map_comp, ← op_comp]
+    · cat_disch
 
 中文:
 定义 mapArrowLeft
@@ -922,7 +988,15 @@ definition mapArrowLeft
     (sq₁₃.snd ≫ (G.map sq.right.op).app f₃.right)
     (by
       #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer with a ty
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal without the `simp`. It is not yet clear whether this is due to defeq abuse in
+      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
+      proof was: `by simp only [id_obj, Category.assoc]; grind [sq.w, sq₁₃.isPullback.w]` -/
+      simp [Arrow.mk_right]; grind [sq.w, sq₁₃.isPullback.w])
+  w := by
+    apply PullbackObjObj.hom_ext
+    · simp [← NatTrans.comp_app, ← map_comp, ← op_comp]
+    · cat_disch
 
 Depends on / 依赖: G.map, sq.right.op
 -/
@@ -1031,7 +1105,14 @@ definition mapArrowRight
     (sq₁₃.snd ≫ (G.obj (.op f₁.right)).map sq.right)
     (by
       #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer 
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal without the `simp`. It is not yet clear whether this is due to defeq abuse in
+      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
+      proof was: `by grind [sq.w, sq₁₃.isPullback.w]` -/
+      simp [Arrow.mk_right]; grind [sq.w, sq₁₃.isPullback.w])
+  w := by
+    apply PullbackObjObj.hom_ext
+    all_goals simp [← Functor.map_comp]
 
 中文:
 定义 mapArrowRight
@@ -1042,7 +1123,14 @@ definition mapArrowRight
     (sq₁₃.snd ≫ (G.obj (.op f₁.right)).map sq.right)
     (by
       #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer 
+      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+      goal without the `simp`. It is not yet clear whether this is due to defeq abuse in
+      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
+      proof was: `by grind [sq.w, sq₁₃.isPullback.w]` -/
+      simp [Arrow.mk_right]; grind [sq.w, sq₁₃.isPullback.w])
+  w := by
+    apply PullbackObjObj.hom_ext
+    all_goals simp [← Functor.map_comp]
 
 Depends on / 依赖: G.obj, sq.left
 -/
@@ -1165,7 +1253,10 @@ definition leibnizPullback
   map sq :=
     { app f₃ :=
         PullbackObjObj.mapArrowLeft
-          (
+          (PullbackObjObj.ofHasPullback G ..)
+          (PullbackObjObj.ofHasPullback G ..) sq.unop }
+
+noncomputable section
 
 中文:
 定义 leibnizPullback
@@ -1178,7 +1269,10 @@ definition leibnizPullback
   map sq :=
     { app f₃ :=
         PullbackObjObj.mapArrowLeft
-          (
+          (PullbackObjObj.ofHasPullback G ..)
+          (PullbackObjObj.ofHasPullback G ..) sq.unop }
+
+noncomputable section
 
 Depends on / 依赖: Arrow.mk, PullbackObjObj, PullbackObjObj.mapArrowLeft, PullbackObjObj.mapArrowRight, PullbackObjObj.ofHasPullback, mapArrowLeft, mapArrowRight, ofHasPullback, sq.unop, unop.hom
 -/
@@ -1219,7 +1313,33 @@ definition adj
     (pullback.lift (adj₂.homEquiv (pushout.inr ..)) (adj₂.homEquiv (𝟙 _))
       (by simp [← homEquiv_naturality_one, ← homEquiv_naturality_three])) (by
       apply pullback.hom_ext
-      · simp [← homEquiv_naturality_one, ← homEquiv_naturality_two, pushou
+      · simp [← homEquiv_naturality_one, ← homEquiv_naturality_two, pushout.condition]
+      · simp [← homEquiv_naturality_two, ← homEquiv_naturality_three])
+  unit.naturality _ _ _ := by
+    ext
+    · simp [← homEquiv_naturality_two, ← homEquiv_naturality_three]
+    · apply pullback.hom_ext <;> simp [← homEquiv_naturality_two, ← homEquiv_naturality_three]
+  counit.app X₃ := Arrow.homMk
+    (pushout.desc (adj₂.homEquiv.symm (𝟙 _)) (adj₂.homEquiv.symm (pullback.fst ..))
+        (by simp [← homEquiv_symm_naturality_one, ← homEquiv_symm_naturality_two]))
+    (adj₂.homEquiv.symm (pullback.snd ..)) (by
+    apply pushout.hom_ext
+    · simp [← homEquiv_symm_naturality_two, ← homEquiv_symm_naturality_three]
+    · simp [← homEquiv_symm_naturality_one, ← homEquiv_symm_naturality_three,
+      pullback.condition])
+  counit.naturality _ _ _ := by
+    ext
+    · apply pushout.hom_ext <;> simp [← homEquiv_symm_naturality_two,
+        ← homEquiv_symm_naturality_three]
+    · simp [← homEquiv_symm_naturality_two, ← homEquiv_symm_naturality_three]
+  left_triangle_components _ := by
+    ext
+    · apply pushout.hom_ext <;> simp [← homEquiv_symm_naturality_two, ofHasPushout_pt]
+    · simp [← homEquiv_symm_naturality_two]
+  right_triangle_components _ := by
+    ext
+    · simp [← homEquiv_naturality_three]
+    · apply pullback.hom_ext <;> simp [← homEquiv_naturality_three]
 
 中文:
 定义 adj
@@ -1228,7 +1348,33 @@ definition adj
     (pullback.lift (adj₂.homEquiv (pushout.inr ..)) (adj₂.homEquiv (𝟙 _))
       (by simp [← homEquiv_naturality_one, ← homEquiv_naturality_three])) (by
       apply pullback.hom_ext
-      · simp [← homEquiv_naturality_one, ← homEquiv_naturality_two, pushou
+      · simp [← homEquiv_naturality_one, ← homEquiv_naturality_two, pushout.condition]
+      · simp [← homEquiv_naturality_two, ← homEquiv_naturality_three])
+  unit.naturality _ _ _ := by
+    ext
+    · simp [← homEquiv_naturality_two, ← homEquiv_naturality_three]
+    · apply pullback.hom_ext <;> simp [← homEquiv_naturality_two, ← homEquiv_naturality_three]
+  counit.app X₃ := Arrow.homMk
+    (pushout.desc (adj₂.homEquiv.symm (𝟙 _)) (adj₂.homEquiv.symm (pullback.fst ..))
+        (by simp [← homEquiv_symm_naturality_one, ← homEquiv_symm_naturality_two]))
+    (adj₂.homEquiv.symm (pullback.snd ..)) (by
+    apply pushout.hom_ext
+    · simp [← homEquiv_symm_naturality_two, ← homEquiv_symm_naturality_three]
+    · simp [← homEquiv_symm_naturality_one, ← homEquiv_symm_naturality_three,
+      pullback.condition])
+  counit.naturality _ _ _ := by
+    ext
+    · apply pushout.hom_ext <;> simp [← homEquiv_symm_naturality_two,
+        ← homEquiv_symm_naturality_three]
+    · simp [← homEquiv_symm_naturality_two, ← homEquiv_symm_naturality_three]
+  left_triangle_components _ := by
+    ext
+    · apply pushout.hom_ext <;> simp [← homEquiv_symm_naturality_two, ofHasPushout_pt]
+    · simp [← homEquiv_symm_naturality_two]
+  right_triangle_components _ := by
+    ext
+    · simp [← homEquiv_naturality_three]
+    · apply pullback.hom_ext <;> simp [← homEquiv_naturality_three]
 
 Depends on / 依赖: Arrow.homMk, homEquiv, pushout, pushout.inl
 -/

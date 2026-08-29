@@ -103,7 +103,30 @@ instance instStarOrderedRing
         StarOrderedRing.le_iff]
       rintro ⟨p, hp_mem, hp⟩
       induction hp_mem using AddSubmonoid.closure_induction_left generalizing f g with
-      | zero => exact ⟨0, zero_mem _, b
+      | zero => exact ⟨0, zero_mem _, by ext x; congrm($(hp) x)⟩
+      | add_left s s_mem p p_mem hp' =>
+        obtain ⟨s, rfl⟩ := s_mem
+        simp only at *
+        have h₀ : (star s * s + p) 0 = 0 := by simpa using congr($(hp) 0).symm
+        rw [← add_assoc] at hp
+        have p'₀ : 0 <= p 0 := by rw [← StarOrderedRing.nonneg_iff] at p_mem; exact p_mem 0
+        have s₉ : (star s * s) 0 = 0 := le_antisymm ((le_add_of_nonneg_right p'₀).trans_eq h₀)
+          (star_mul_self_nonneg (s 0))
+        have s₀' : s 0 = 0 := by aesop
+        let s' : C(α, R)₀ := ⟨s, s₀'⟩
+        obtain ⟨p', hp'_mem, rfl⟩ := hp' (f + star s' * s') g hp
+        refine ⟨star s' * s' + p', ?_, by rw [add_assoc]⟩
+        exact add_mem (AddSubmonoid.subset_closure ⟨s', rfl⟩) hp'_mem
+    · rintro ⟨p, hp, rfl⟩
+      induction hp using AddSubmonoid.closure_induction generalizing f with
+      | mem s s_mem =>
+        obtain ⟨s, rfl⟩ := s_mem
+        exact fun x => le_add_of_nonneg_right (star_mul_self_nonneg (s x))
+      | zero => simp
+      | add g₁ g₂ _ _ h₁ h₂ => calc
+          f <= f + g₁ := h₁ f
+          _ <= (f + g₁) + g₂ := h₂ (f + g₁)
+          _ = f + (g₁ + g₂) := add_assoc _ _ _
 
 中文:
 实例 instStarOrderedRing
@@ -114,7 +137,30 @@ instance instStarOrderedRing
         StarOrderedRing.le_iff]
       rintro ⟨p, hp_mem, hp⟩
       induction hp_mem using AddSubmonoid.closure_induction_left generalizing f g with
-      | zero => exact ⟨0, zero_mem _, b
+      | zero => exact ⟨0, zero_mem _, by ext x; congrm($(hp) x)⟩
+      | add_left s s_mem p p_mem hp' =>
+        obtain ⟨s, rfl⟩ := s_mem
+        simp only at *
+        have h₀ : (star s * s + p) 0 = 0 := by simpa using congr($(hp) 0).symm
+        rw [← add_assoc] at hp
+        have p'₀ : 0 <= p 0 := by rw [← StarOrderedRing.nonneg_iff] at p_mem; exact p_mem 0
+        have s₉ : (star s * s) 0 = 0 := le_antisymm ((le_add_of_nonneg_right p'₀).trans_eq h₀)
+          (star_mul_self_nonneg (s 0))
+        have s₀' : s 0 = 0 := by aesop
+        let s' : C(α, R)₀ := ⟨s, s₀'⟩
+        obtain ⟨p', hp'_mem, rfl⟩ := hp' (f + star s' * s') g hp
+        refine ⟨star s' * s' + p', ?_, by rw [add_assoc]⟩
+        exact add_mem (AddSubmonoid.subset_closure ⟨s', rfl⟩) hp'_mem
+    · rintro ⟨p, hp, rfl⟩
+      induction hp using AddSubmonoid.closure_induction generalizing f with
+      | mem s s_mem =>
+        obtain ⟨s, rfl⟩ := s_mem
+        exact fun x => le_add_of_nonneg_right (star_mul_self_nonneg (s x))
+      | zero => simp
+      | add g₁ g₂ _ _ h₁ h₂ => calc
+          f <= f + g₁ := h₁ f
+          _ <= (f + g₁) + g₂ := h₂ (f + g₁)
+          _ = f + (g₁ + g₂) := add_assoc _ _ _
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure_induction_left, ContinuousMap, ContinuousMap.coe_coe, ContinuousMap.le_def, StarOrde, StarOrderedRing, StarOrderedRing.le_iff, add_assoc, add_left, closure_induction_left, coe_coe, congrm, generalizing, hp_mem, le_def, le_iff, p_mem, s_mem, zero_mem
 -/

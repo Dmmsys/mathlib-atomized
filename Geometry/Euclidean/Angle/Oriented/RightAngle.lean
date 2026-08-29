@@ -102,7 +102,7 @@ theorem oangle_add_right_eq_arcsin_of_oangle_eq_pi_div_two
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [InnerProductGeometry.angle_add_eq_arcsin_of_inner_eq_zero
       (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
-      (Or.inl (o.
+      (Or.inl (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 oangle_add_right_eq_arcsin_of_oangle_eq_pi_div_two
@@ -112,7 +112,7 @@ theorem oangle_add_right_eq_arcsin_of_oangle_eq_pi_div_two
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [InnerProductGeometry.angle_add_eq_arcsin_of_inner_eq_zero
       (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
-      (Or.inl (o.
+      (Or.inl (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.angle_add_eq_arcsin_of_inner_eq_zero, Or.inl, Real.Angle.sign_coe_pi_div_two, angle_add_eq_arcsin_of_inner_eq_zero, inner_eq_zero_of_oangle_eq_pi_div_two, left_ne_zero_of_oangle_eq_pi_div_two, o.inner_eq_zero_of_oangle_eq_pi_div_two, o.left_ne_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_add_right, sign_coe_pi_div_two
 -/
@@ -161,7 +161,7 @@ theorem oangle_add_right_eq_arctan_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [InnerProductGeometry.angle_add_eq_arctan_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_div_two h) (o.left_ne_zero_o
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h) (o.left_ne_zero_of_oangle_eq_pi_div_two h)]
 
 中文:
 定理 oangle_add_right_eq_arctan_of_oangle_eq_pi_div_two
@@ -170,7 +170,7 @@ theorem oangle_add_right_eq_arctan_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [InnerProductGeometry.angle_add_eq_arctan_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_div_two h) (o.left_ne_zero_o
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h) (o.left_ne_zero_of_oangle_eq_pi_div_two h)]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.angle_add_eq_arctan_of_inner_eq_zero, Real.Angle.sign_coe_pi_div_two, angle_add_eq_arctan_of_inner_eq_zero, inner_eq_zero_of_oangle_eq_pi_div_two, left_ne_zero_of_oangle_eq_pi_div_two, o.inner_eq_zero_of_oangle_eq_pi_div_two, o.left_ne_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_add_right, sign_coe_pi_div_two
 -/
@@ -272,7 +272,7 @@ theorem sin_oangle_add_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.sin_angle_add_of_inner_eq_zero (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
-    
+      (Or.inl (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 sin_oangle_add_right_of_oangle_eq_pi_div_two
@@ -281,7 +281,7 @@ theorem sin_oangle_add_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.sin_angle_add_of_inner_eq_zero (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
-    
+      (Or.inl (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.sin_angle_add_of_inner_eq_zero, Or.inl, Real.Angle.sign_coe_pi_div_two, Real.Angle.sin_coe, inner_eq_zero_of_oangle_eq_pi_div_two, left_ne_zero_of_oangle_eq_pi_div_two, o.inner_eq_zero_of_oangle_eq_pi_div_two, o.left_ne_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_add_right, sign_coe_pi_div_two, sin_angle_add_of_inner_eq_zero, sin_coe
 -/
@@ -383,7 +383,7 @@ theorem cos_oangle_add_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [InnerProductGeometry.cos_angle_add_mul_norm_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)]
 
 中文:
 定理 cos_oangle_add_right_mul_norm_of_oangle_eq_pi_div_two
@@ -392,7 +392,7 @@ theorem cos_oangle_add_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [InnerProductGeometry.cos_angle_add_mul_norm_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.cos_angle_add_mul_norm_of_inner_eq_zero, Real.Angle.cos_coe, Real.Angle.sign_coe_pi_div_two, cos_angle_add_mul_norm_of_inner_eq_zero, cos_coe, inner_eq_zero_of_oangle_eq_pi_div_two, o.inner_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_add_right, sign_coe_pi_div_two
 -/
@@ -440,7 +440,7 @@ theorem sin_oangle_add_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.sin_angle_add_mul_norm_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)]
 
 中文:
 定理 sin_oangle_add_right_mul_norm_of_oangle_eq_pi_div_two
@@ -449,7 +449,7 @@ theorem sin_oangle_add_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.sin_angle_add_mul_norm_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.sin_angle_add_mul_norm_of_inner_eq_zero, Real.Angle.sign_coe_pi_div_two, Real.Angle.sin_coe, inner_eq_zero_of_oangle_eq_pi_div_two, o.inner_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_add_right, sign_coe_pi_div_two, sin_angle_add_mul_norm_of_inner_eq_zero, sin_coe
 -/
@@ -497,7 +497,8 @@ theorem tan_oangle_add_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [InnerProductGeometry.tan_angle_add_mul_norm_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inl (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 tan_oangle_add_right_mul_norm_of_oangle_eq_pi_div_two
@@ -506,7 +507,8 @@ theorem tan_oangle_add_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [InnerProductGeometry.tan_angle_add_mul_norm_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inl (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.tan_angle_add_mul_norm_of_inner_eq_zero, Or.inl, Real.Angle.sign_coe_pi_div_two, Real.Angle.tan_coe, inner_eq_zero_of_oangle_eq_pi_div_two, left_ne_zero_of_oangle_eq_pi_div_two, o.inner_eq_zero_of_oangle_eq_pi_div_two, o.left_ne_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_add_right, sign_coe_pi_div_two, tan_angle_add_mul_norm_of_inner_eq_zero, tan_coe
 -/
@@ -555,7 +557,8 @@ theorem norm_div_cos_oangle_add_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [InnerProductGeometry.norm_div_cos_angle_add_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inl (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 norm_div_cos_oangle_add_right_of_oangle_eq_pi_div_two
@@ -564,7 +567,8 @@ theorem norm_div_cos_oangle_add_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [InnerProductGeometry.norm_div_cos_angle_add_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inl (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.norm_div_cos_angle_add_of_inner_eq_zero, Or.inl, Real.Angle.cos_coe, Real.Angle.sign_coe_pi_div_two, cos_coe, inner_eq_zero_of_oangle_eq_pi_div_two, left_ne_zero_of_oangle_eq_pi_div_two, norm_div_cos_angle_add_of_inner_eq_zero, o.inner_eq_zero_of_oangle_eq_pi_div_two, o.left_ne_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_add_right, sign_coe_pi_div_two
 -/
@@ -613,7 +617,8 @@ theorem norm_div_sin_oangle_add_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.norm_div_sin_angle_add_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inr (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 norm_div_sin_oangle_add_right_of_oangle_eq_pi_div_two
@@ -622,7 +627,8 @@ theorem norm_div_sin_oangle_add_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.norm_div_sin_angle_add_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inr (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.norm_div_sin_angle_add_of_inner_eq_zero, Or.inr, Real.Angle.sign_coe_pi_div_two, Real.Angle.sin_coe, inner_eq_zero_of_oangle_eq_pi_div_two, norm_div_sin_angle_add_of_inner_eq_zero, o.inner_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, o.right_ne_zero_of_oangle_eq_pi_div_two, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_add_right, right_ne_zero_of_oangle_eq_pi_div_two, sign_coe_pi_div_two, sin_coe
 -/
@@ -671,7 +677,8 @@ theorem norm_div_tan_oangle_add_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [InnerProductGeometry.norm_div_tan_angle_add_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inr (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 norm_div_tan_oangle_add_right_of_oangle_eq_pi_div_two
@@ -680,7 +687,8 @@ theorem norm_div_tan_oangle_add_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle x (x + y)).sign = 1 := by
     rw [oangle_sign_add_right]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [InnerProductGeometry.norm_div_tan_angle_add_of_inner_eq_zero
-      (o.inner_eq_zero_of_oangle_eq_pi_
+      (o.inner_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inr (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.norm_div_tan_angle_add_of_inner_eq_zero, Or.inr, Real.Angle.sign_coe_pi_div_two, Real.Angle.tan_coe, inner_eq_zero_of_oangle_eq_pi_div_two, norm_div_tan_angle_add_of_inner_eq_zero, o.inner_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, o.right_ne_zero_of_oangle_eq_pi_div_two, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_add_right, right_ne_zero_of_oangle_eq_pi_div_two, sign_coe_pi_div_two, tan_coe
 -/
@@ -784,7 +792,7 @@ theorem oangle_sub_right_eq_arcsin_of_oangle_eq_pi_div_two
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [InnerProductGeometry.angle_sub_eq_arcsin_of_inner_eq_zero
       (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
-      (O
+      (Or.inl (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 oangle_sub_right_eq_arcsin_of_oangle_eq_pi_div_two
@@ -794,7 +802,7 @@ theorem oangle_sub_right_eq_arcsin_of_oangle_eq_pi_div_two
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [InnerProductGeometry.angle_sub_eq_arcsin_of_inner_eq_zero
       (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
-      (O
+      (Or.inl (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.angle_sub_eq_arcsin_of_inner_eq_zero, Or.inl, Real.Angle.sign_coe_pi_div_two, angle_sub_eq_arcsin_of_inner_eq_zero, inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, o.right_ne_zero_of_oangle_eq_pi_div_two, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_sub_right_swap, right_ne_zero_of_oangle_eq_pi_div_two, sign_coe_pi_div_two
 -/
@@ -840,7 +848,7 @@ theorem oangle_sub_right_eq_arctan_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [InnerProductGeometry.angle_sub_eq_arctan_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h) (o.right
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h) (o.right_ne_zero_of_oangle_eq_pi_div_two h)]
 
 中文:
 定理 oangle_sub_right_eq_arctan_of_oangle_eq_pi_div_two
@@ -849,7 +857,7 @@ theorem oangle_sub_right_eq_arctan_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [InnerProductGeometry.angle_sub_eq_arctan_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h) (o.right
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h) (o.right_ne_zero_of_oangle_eq_pi_div_two h)]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.angle_sub_eq_arctan_of_inner_eq_zero, Real.Angle.sign_coe_pi_div_two, angle_sub_eq_arctan_of_inner_eq_zero, inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, o.right_ne_zero_of_oangle_eq_pi_div_two, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_sub_right_swap, right_ne_zero_of_oangle_eq_pi_div_two, sign_coe_pi_div_two
 -/
@@ -894,7 +902,7 @@ theorem cos_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [InnerProductGeometry.cos_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oangle_eq_pi_
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)]
 
 中文:
 定理 cos_oangle_sub_right_of_oangle_eq_pi_div_two
@@ -903,7 +911,7 @@ theorem cos_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [InnerProductGeometry.cos_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oangle_eq_pi_
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.cos_angle_sub_of_inner_eq_zero, Real.Angle.cos_coe, Real.Angle.sign_coe_pi_div_two, cos_angle_sub_of_inner_eq_zero, cos_coe, inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_sub_right_swap, sign_coe_pi_div_two
 -/
@@ -948,7 +956,8 @@ theorem sin_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.sin_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oangle_eq_pi_
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inl (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 sin_oangle_sub_right_of_oangle_eq_pi_div_two
@@ -957,7 +966,8 @@ theorem sin_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.sin_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oangle_eq_pi_
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inl (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.sin_angle_sub_of_inner_eq_zero, Or.inl, Real.Angle.sign_coe_pi_div_two, Real.Angle.sin_coe, inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, o.right_ne_zero_of_oangle_eq_pi_div_two, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_sub_right_swap, right_ne_zero_of_oangle_eq_pi_div_two, sign_coe_pi_div_two, sin_angle_sub_of_inner_eq_zero, sin_coe
 -/
@@ -1003,7 +1013,7 @@ theorem tan_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [InnerProductGeometry.tan_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oangle_eq_pi_
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)]
 
 中文:
 定理 tan_oangle_sub_right_of_oangle_eq_pi_div_two
@@ -1012,7 +1022,7 @@ theorem tan_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [InnerProductGeometry.tan_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oangle_eq_pi_
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.tan_angle_sub_of_inner_eq_zero, Real.Angle.sign_coe_pi_div_two, Real.Angle.tan_coe, inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_sub_right_swap, sign_coe_pi_div_two, tan_angle_sub_of_inner_eq_zero, tan_coe
 -/
@@ -1057,7 +1067,7 @@ theorem cos_oangle_sub_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [InnerProductGeometry.cos_angle_sub_mul_norm_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)]
 
 中文:
 定理 cos_oangle_sub_right_mul_norm_of_oangle_eq_pi_div_two
@@ -1066,7 +1076,7 @@ theorem cos_oangle_sub_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [InnerProductGeometry.cos_angle_sub_mul_norm_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.cos_angle_sub_mul_norm_of_inner_eq_zero, Real.Angle.cos_coe, Real.Angle.sign_coe_pi_div_two, cos_angle_sub_mul_norm_of_inner_eq_zero, cos_coe, inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_sub_right_swap, sign_coe_pi_div_two
 -/
@@ -1111,7 +1121,7 @@ theorem sin_oangle_sub_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.sin_angle_sub_mul_norm_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)]
 
 中文:
 定理 sin_oangle_sub_right_mul_norm_of_oangle_eq_pi_div_two
@@ -1120,7 +1130,7 @@ theorem sin_oangle_sub_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.sin_angle_sub_mul_norm_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.sin_angle_sub_mul_norm_of_inner_eq_zero, Real.Angle.sign_coe_pi_div_two, Real.Angle.sin_coe, inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_sub_right_swap, sign_coe_pi_div_two, sin_angle_sub_mul_norm_of_inner_eq_zero, sin_coe
 -/
@@ -1165,7 +1175,8 @@ theorem tan_oangle_sub_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [InnerProductGeometry.tan_angle_sub_mul_norm_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inl (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 tan_oangle_sub_right_mul_norm_of_oangle_eq_pi_div_two
@@ -1174,7 +1185,8 @@ theorem tan_oangle_sub_right_mul_norm_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [InnerProductGeometry.tan_angle_sub_mul_norm_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inl (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.tan_angle_sub_mul_norm_of_inner_eq_zero, Or.inl, Real.Angle.sign_coe_pi_div_two, Real.Angle.tan_coe, inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, o.right_ne_zero_of_oangle_eq_pi_div_two, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_sub_right_swap, right_ne_zero_of_oangle_eq_pi_div_two, sign_coe_pi_div_two, tan_angle_sub_mul_norm_of_inner_eq_zero, tan_coe
 -/
@@ -1220,7 +1232,8 @@ theorem norm_div_cos_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [InnerProductGeometry.norm_div_cos_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inl (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 norm_div_cos_oangle_sub_right_of_oangle_eq_pi_div_two
@@ -1229,7 +1242,8 @@ theorem norm_div_cos_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [InnerProductGeometry.norm_div_cos_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inl (o.right_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.norm_div_cos_angle_sub_of_inner_eq_zero, Or.inl, Real.Angle.cos_coe, Real.Angle.sign_coe_pi_div_two, cos_coe, inner_rev_eq_zero_of_oangle_eq_pi_div_two, norm_div_cos_angle_sub_of_inner_eq_zero, o.inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, o.right_ne_zero_of_oangle_eq_pi_div_two, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_sub_right_swap, right_ne_zero_of_oangle_eq_pi_div_two, sign_coe_pi_div_two
 -/
@@ -1275,7 +1289,8 @@ theorem norm_div_sin_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.norm_div_sin_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inr (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 norm_div_sin_oangle_sub_right_of_oangle_eq_pi_div_two
@@ -1284,7 +1299,8 @@ theorem norm_div_sin_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [InnerProductGeometry.norm_div_sin_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inr (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.norm_div_sin_angle_sub_of_inner_eq_zero, Or.inr, Real.Angle.sign_coe_pi_div_two, Real.Angle.sin_coe, inner_rev_eq_zero_of_oangle_eq_pi_div_two, left_ne_zero_of_oangle_eq_pi_div_two, norm_div_sin_angle_sub_of_inner_eq_zero, o.inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.left_ne_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_sub_right_swap, sign_coe_pi_div_two, sin_coe
 -/
@@ -1330,7 +1346,8 @@ theorem norm_div_tan_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [InnerProductGeometry.norm_div_tan_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inr (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 norm_div_tan_oangle_sub_right_of_oangle_eq_pi_div_two
@@ -1339,7 +1356,8 @@ theorem norm_div_tan_oangle_sub_right_of_oangle_eq_pi_div_two
   have hs : (o.oangle y (y - x)).sign = 1 := by
     rw [oangle_sign_sub_right_swap]; rw [h]; rw [Real.Angle.sign_coe_pi_div_two]
   rw [o.oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [InnerProductGeometry.norm_div_tan_angle_sub_of_inner_eq_zero
-      (o.inner_rev_eq_zero_of_oang
+      (o.inner_rev_eq_zero_of_oangle_eq_pi_div_two h)
+      (Or.inr (o.left_ne_zero_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.norm_div_tan_angle_sub_of_inner_eq_zero, Or.inr, Real.Angle.sign_coe_pi_div_two, Real.Angle.tan_coe, inner_rev_eq_zero_of_oangle_eq_pi_div_two, left_ne_zero_of_oangle_eq_pi_div_two, norm_div_tan_angle_sub_of_inner_eq_zero, o.inner_rev_eq_zero_of_oangle_eq_pi_div_two, o.left_ne_zero_of_oangle_eq_pi_div_two, o.oangle, o.oangle_eq_angle_of_sign_eq_one, oangle, oangle_eq_angle_of_sign_eq_one, oangle_sign_sub_right_swap, sign_coe_pi_div_two, tan_coe
 -/
@@ -1385,7 +1403,14 @@ theorem oangle_add_right_smul_rotation_pi_div_two
   rcases lt_trichotomy r 0 with (hr | rfl | hr)
   · have ha : o.oangle x (r • o.rotation (π / 2 : Real) x) = -(π / 2 : Real) := by
       rw [o.oangle_smul_right_of_neg _ _ hr]; rw [o.oangle_neg_right h]; rw [o.oangle_rotation_self_right h]; rw [←
-        sub_eq_zero]; rw [add_comm]; rw [sub_neg_e
+        sub_eq_zero]; rw [add_comm]; rw [sub_neg_eq_add]; rw [← Real.Angle.coe_add]; rw [← Real.Angle.coe_add]; rw [add_assoc]; rw [add_halves]; rw [← two_mul]; rw [Real.Angle.coe_two_pi]
+      simpa using h
+    rw [← neg_inj]; rw [← oangle_neg_orientation_eq_neg]; rw [neg_neg] at ha
+    rw [← neg_inj]; rw [oangle_rev]; rw [← oangle_neg_orientation_eq_neg]; rw [neg_inj]; rw [oangle_rev]; rw [(-o).oangle_add_right_eq_arctan_of_oangle_eq_pi_div_two ha]; rw [norm_smul]; rw [LinearIsometryEquiv.norm_map]; rw [mul_div_assoc]; rw [div_self (norm_ne_zero_iff.2 h)]; rw [mul_one]; rw [Real.norm_eq_abs]; rw [abs_of_neg hr]; rw [Real.arctan_neg]; rw [Real.Angle.coe_neg]; rw [neg_neg]
+  · simp
+  · have ha : o.oangle x (r • o.rotation (π / 2 : Real) x) = (π / 2 : Real) := by
+      rw [o.oangle_smul_right_of_pos _ _ hr]; rw [o.oangle_rotation_self_right h]
+    rw [o.oangle_add_right_eq_arctan_of_oangle_eq_pi_div_two ha]; rw [norm_smul]; rw [LinearIsometryEquiv.norm_map]; rw [mul_div_assoc]; rw [div_self (norm_ne_zero_iff.2 h)]; rw [mul_one]; rw [Real.norm_eq_abs]; rw [abs_of_pos hr]
 
 中文:
 定理 oangle_add_right_smul_rotation_pi_div_two
@@ -1394,7 +1419,14 @@ theorem oangle_add_right_smul_rotation_pi_div_two
   rcases lt_trichotomy r 0 with (hr | rfl | hr)
   · have ha : o.oangle x (r • o.rotation (π / 2 : Real) x) = -(π / 2 : Real) := by
       rw [o.oangle_smul_right_of_neg _ _ hr]; rw [o.oangle_neg_right h]; rw [o.oangle_rotation_self_right h]; rw [←
-        sub_eq_zero]; rw [add_comm]; rw [sub_neg_e
+        sub_eq_zero]; rw [add_comm]; rw [sub_neg_eq_add]; rw [← Real.Angle.coe_add]; rw [← Real.Angle.coe_add]; rw [add_assoc]; rw [add_halves]; rw [← two_mul]; rw [Real.Angle.coe_two_pi]
+      simpa using h
+    rw [← neg_inj]; rw [← oangle_neg_orientation_eq_neg]; rw [neg_neg] at ha
+    rw [← neg_inj]; rw [oangle_rev]; rw [← oangle_neg_orientation_eq_neg]; rw [neg_inj]; rw [oangle_rev]; rw [(-o).oangle_add_right_eq_arctan_of_oangle_eq_pi_div_two ha]; rw [norm_smul]; rw [LinearIsometryEquiv.norm_map]; rw [mul_div_assoc]; rw [div_self (norm_ne_zero_iff.2 h)]; rw [mul_one]; rw [Real.norm_eq_abs]; rw [abs_of_neg hr]; rw [Real.arctan_neg]; rw [Real.Angle.coe_neg]; rw [neg_neg]
+  · simp
+  · have ha : o.oangle x (r • o.rotation (π / 2 : Real) x) = (π / 2 : Real) := by
+      rw [o.oangle_smul_right_of_pos _ _ hr]; rw [o.oangle_rotation_self_right h]
+    rw [o.oangle_add_right_eq_arctan_of_oangle_eq_pi_div_two ha]; rw [norm_smul]; rw [LinearIsometryEquiv.norm_map]; rw [mul_div_assoc]; rw [div_self (norm_ne_zero_iff.2 h)]; rw [mul_one]; rw [Real.norm_eq_abs]; rw [abs_of_pos hr]
 
 Depends on / 依赖: Real.Angle.coe_add, Real.Angle.coe_two_pi, add_assoc, add_comm, add_halves, coe_add, coe_two_pi, lt_trichotomy, neg_inj, neg_neg, o.oangle, o.oangle_neg_right, o.oangle_rotation_self_right, o.oangle_smul_right_of_neg, o.rotation, oangle, oangle_neg_orientation_eq_neg, oangle_neg_right, oangle_rotation_self_right, oangle_smul_right_of_neg
 -/
@@ -1422,7 +1454,10 @@ theorem oangle_add_left_smul_rotation_pi_div_two
   by_cases hr : r = 0; · simp [hr]
   rw [← neg_inj]; rw [oangle_rev]; rw [← oangle_neg_orientation_eq_neg]; rw [neg_inj]; rw [←
     neg_neg ((π / 2 : Real) : Real.Angle)]; rw [← rotation_neg_orientation_eq_neg]; rw [add_comm]
-  have hx : x = r⁻¹ • (-o).rotation (π / 2 : Real) (r • (-o).rotation (
+  have hx : x = r⁻¹ • (-o).rotation (π / 2 : Real) (r • (-o).rotation (-(π / 2 : Real)) x) := by simp [hr]
+  nth_rw 3 [hx]
+  refine (-o).oangle_add_right_smul_rotation_pi_div_two ?_ _
+  simp [hr, h]
 
 中文:
 定理 oangle_add_left_smul_rotation_pi_div_two
@@ -1431,7 +1466,10 @@ theorem oangle_add_left_smul_rotation_pi_div_two
   by_cases hr : r = 0; · simp [hr]
   rw [← neg_inj]; rw [oangle_rev]; rw [← oangle_neg_orientation_eq_neg]; rw [neg_inj]; rw [←
     neg_neg ((π / 2 : Real) : Real.Angle)]; rw [← rotation_neg_orientation_eq_neg]; rw [add_comm]
-  have hx : x = r⁻¹ • (-o).rotation (π / 2 : Real) (r • (-o).rotation (
+  have hx : x = r⁻¹ • (-o).rotation (π / 2 : Real) (r • (-o).rotation (-(π / 2 : Real)) x) := by simp [hr]
+  nth_rw 3 [hx]
+  refine (-o).oangle_add_right_smul_rotation_pi_div_two ?_ _
+  simp [hr, h]
 
 Depends on / 依赖: Real.Angle, add_comm, neg_inj, neg_neg, nth_rw, oangle_add_right_smul_rotation_pi_div_two, oangle_neg_orientation_eq_neg, oangle_rev, rotation, rotation_neg_orientation_eq_neg
 -/
@@ -1537,7 +1575,7 @@ theorem oangle_sub_left_smul_rotation_pi_div_two
   nth_rw 3 [hx]
   nth_rw 2 [hx]
   rw [o.oangle_add_left_smul_rotation_pi_div_two]; rw [inv_inv]
-  
+  simpa [hr] using h
 
 中文:
 定理 oangle_sub_left_smul_rotation_pi_div_two
@@ -1550,7 +1588,7 @@ theorem oangle_sub_left_smul_rotation_pi_div_two
   nth_rw 3 [hx]
   nth_rw 2 [hx]
   rw [o.oangle_add_left_smul_rotation_pi_div_two]; rw [inv_inv]
-  
+  simpa [hr] using h
 
 Depends on / 依赖: Real.Angle.coe_add, add_comm, coe_add, inv_inv, nth_rw, o.oangle_add_left_smul_rotation_pi_div_two, o.rotation, oangle_add_left_smul_rotation_pi_div_two, rotation, sub_eq_add_neg
 -/
@@ -1658,7 +1696,7 @@ theorem oangle_left_eq_arcsin_of_oangle_eq_pi_div_two
   proof: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [angle_eq_arcsin_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inr (left_ne_of_oangle_eq_pi_div
+      (Or.inr (left_ne_of_oangle_eq_pi_div_two h))]; rw [dist_comm p₁ p₃]
 
 中文:
 定理 oangle_left_eq_arcsin_of_oangle_eq_pi_div_two
@@ -1666,7 +1704,7 @@ theorem oangle_left_eq_arcsin_of_oangle_eq_pi_div_two
   证明: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [angle_eq_arcsin_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inr (left_ne_of_oangle_eq_pi_div
+      (Or.inr (left_ne_of_oangle_eq_pi_div_two h))]; rw [dist_comm p₁ p₃]
 
 Depends on / 依赖: Or.inr, Real.Angle.sign_coe_pi_div_two, angle_comm, angle_eq_arcsin_of_angle_eq_pi_div_two, angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two, dist_comm, left_ne_of_oangle_eq_pi_div_two, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, sign_coe_pi_div_two
 -/
@@ -1882,7 +1920,7 @@ theorem sin_oangle_right_of_oangle_eq_pi_div_two
   proof: by
   have hs : (∡ p₂ p₃ p₁).sign = 1 := by rw [oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [sin_angle_of_angle_eq_pi_div_two (angle_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inl (left_ne_of_oangle_eq_pi_div_two
+      (Or.inl (left_ne_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 sin_oangle_right_of_oangle_eq_pi_div_two
@@ -1890,7 +1928,7 @@ theorem sin_oangle_right_of_oangle_eq_pi_div_two
   证明: by
   have hs : (∡ p₂ p₃ p₁).sign = 1 := by rw [oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [sin_angle_of_angle_eq_pi_div_two (angle_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inl (left_ne_of_oangle_eq_pi_div_two
+      (Or.inl (left_ne_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: Or.inl, Real.Angle.sign_coe_pi_div_two, Real.Angle.sin_coe, angle_eq_pi_div_two_of_oangle_eq_pi_div_two, left_ne_of_oangle_eq_pi_div_two, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, sign_coe_pi_div_two, sin_angle_of_angle_eq_pi_div_two, sin_coe
 -/
@@ -1909,7 +1947,7 @@ theorem sin_oangle_left_of_oangle_eq_pi_div_two
   proof: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.sin_coe]; rw [sin_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inr (left_ne_
+      (Or.inr (left_ne_of_oangle_eq_pi_div_two h))]; rw [dist_comm p₁ p₃]
 
 中文:
 定理 sin_oangle_left_of_oangle_eq_pi_div_two
@@ -1917,7 +1955,7 @@ theorem sin_oangle_left_of_oangle_eq_pi_div_two
   证明: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.sin_coe]; rw [sin_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inr (left_ne_
+      (Or.inr (left_ne_of_oangle_eq_pi_div_two h))]; rw [dist_comm p₁ p₃]
 
 Depends on / 依赖: Or.inr, Real.Angle.sign_coe_pi_div_two, Real.Angle.sin_coe, angle_comm, angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two, dist_comm, left_ne_of_oangle_eq_pi_div_two, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, sign_coe_pi_div_two, sin_angle_of_angle_eq_pi_div_two, sin_coe
 -/
@@ -2007,14 +2045,14 @@ theorem cos_oangle_left_mul_dist_of_oangle_eq_pi_div_two
   statement: {p₁ p₂ p₃ : P}
   proof: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
-  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.cos_coe]; rw [dist_comm p₁ p₃]; rw [cos_angle_mul_dist_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div
+  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.cos_coe]; rw [dist_comm p₁ p₃]; rw [cos_angle_mul_dist_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)]
 
 中文:
 定理 cos_oangle_left_mul_dist_of_oangle_eq_pi_div_two
   结论: {p₁ p₂ p₃ : P}
   证明: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
-  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.cos_coe]; rw [dist_comm p₁ p₃]; rw [cos_angle_mul_dist_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div
+  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.cos_coe]; rw [dist_comm p₁ p₃]; rw [cos_angle_mul_dist_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)]
 
 Depends on / 依赖: Real.Angle.cos_coe, Real.Angle.sign_coe_pi_div_two, angle_comm, angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two, cos_angle_mul_dist_of_angle_eq_pi_div_two, cos_coe, dist_comm, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, sign_coe_pi_div_two
 -/
@@ -2055,14 +2093,14 @@ theorem sin_oangle_left_mul_dist_of_oangle_eq_pi_div_two
   statement: {p₁ p₂ p₃ : P}
   proof: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
-  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.sin_coe]; rw [dist_comm p₁ p₃]; rw [sin_angle_mul_dist_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div
+  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.sin_coe]; rw [dist_comm p₁ p₃]; rw [sin_angle_mul_dist_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)]
 
 中文:
 定理 sin_oangle_left_mul_dist_of_oangle_eq_pi_div_two
   结论: {p₁ p₂ p₃ : P}
   证明: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
-  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.sin_coe]; rw [dist_comm p₁ p₃]; rw [sin_angle_mul_dist_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div
+  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.sin_coe]; rw [dist_comm p₁ p₃]; rw [sin_angle_mul_dist_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)]
 
 Depends on / 依赖: Real.Angle.sign_coe_pi_div_two, Real.Angle.sin_coe, angle_comm, angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two, dist_comm, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, sign_coe_pi_div_two, sin_angle_mul_dist_of_angle_eq_pi_div_two, sin_coe
 -/
@@ -2080,7 +2118,7 @@ theorem tan_oangle_right_mul_dist_of_oangle_eq_pi_div_two
   proof: by
   have hs : (∡ p₂ p₃ p₁).sign = 1 := by rw [oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [tan_angle_mul_dist_of_angle_eq_pi_div_two (angle_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inr (right_ne_of_oangle_eq_
+      (Or.inr (right_ne_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 tan_oangle_right_mul_dist_of_oangle_eq_pi_div_two
@@ -2088,7 +2126,7 @@ theorem tan_oangle_right_mul_dist_of_oangle_eq_pi_div_two
   证明: by
   have hs : (∡ p₂ p₃ p₁).sign = 1 := by rw [oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [tan_angle_mul_dist_of_angle_eq_pi_div_two (angle_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inr (right_ne_of_oangle_eq_
+      (Or.inr (right_ne_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: Or.inr, Real.Angle.sign_coe_pi_div_two, Real.Angle.tan_coe, angle_eq_pi_div_two_of_oangle_eq_pi_div_two, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, right_ne_of_oangle_eq_pi_div_two, sign_coe_pi_div_two, tan_angle_mul_dist_of_angle_eq_pi_div_two, tan_coe
 -/
@@ -2107,7 +2145,7 @@ theorem tan_oangle_left_mul_dist_of_oangle_eq_pi_div_two
   proof: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.tan_coe]; rw [tan_angle_mul_dist_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inr 
+      (Or.inr (left_ne_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 tan_oangle_left_mul_dist_of_oangle_eq_pi_div_two
@@ -2115,7 +2153,7 @@ theorem tan_oangle_left_mul_dist_of_oangle_eq_pi_div_two
   证明: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.tan_coe]; rw [tan_angle_mul_dist_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inr 
+      (Or.inr (left_ne_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: Or.inr, Real.Angle.sign_coe_pi_div_two, Real.Angle.tan_coe, angle_comm, angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two, left_ne_of_oangle_eq_pi_div_two, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, sign_coe_pi_div_two, tan_angle_mul_dist_of_angle_eq_pi_div_two, tan_coe
 -/
@@ -2134,7 +2172,7 @@ theorem dist_div_cos_oangle_right_of_oangle_eq_pi_div_two
   proof: by
   have hs : (∡ p₂ p₃ p₁).sign = 1 := by rw [oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [dist_div_cos_angle_of_angle_eq_pi_div_two (angle_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inr (right_ne_of_oangle_eq_
+      (Or.inr (right_ne_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 dist_div_cos_oangle_right_of_oangle_eq_pi_div_two
@@ -2142,7 +2180,7 @@ theorem dist_div_cos_oangle_right_of_oangle_eq_pi_div_two
   证明: by
   have hs : (∡ p₂ p₃ p₁).sign = 1 := by rw [oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.cos_coe]; rw [dist_div_cos_angle_of_angle_eq_pi_div_two (angle_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inr (right_ne_of_oangle_eq_
+      (Or.inr (right_ne_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: Or.inr, Real.Angle.cos_coe, Real.Angle.sign_coe_pi_div_two, angle_eq_pi_div_two_of_oangle_eq_pi_div_two, cos_coe, dist_div_cos_angle_of_angle_eq_pi_div_two, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, right_ne_of_oangle_eq_pi_div_two, sign_coe_pi_div_two
 -/
@@ -2160,14 +2198,16 @@ theorem dist_div_cos_oangle_left_of_oangle_eq_pi_div_two
   statement: {p₁ p₂ p₃ : P}
   proof: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
-  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.cos_coe]; rw [dist_comm p₁ p₃]; rw [dist_div_cos_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div
+  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.cos_coe]; rw [dist_comm p₁ p₃]; rw [dist_div_cos_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
+      (Or.inr (left_ne_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 dist_div_cos_oangle_left_of_oangle_eq_pi_div_two
   结论: {p₁ p₂ p₃ : P}
   证明: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
-  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.cos_coe]; rw [dist_comm p₁ p₃]; rw [dist_div_cos_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div
+  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.cos_coe]; rw [dist_comm p₁ p₃]; rw [dist_div_cos_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
+      (Or.inr (left_ne_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: Or.inr, Real.Angle.cos_coe, Real.Angle.sign_coe_pi_div_two, angle_comm, angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two, cos_coe, dist_comm, dist_div_cos_angle_of_angle_eq_pi_div_two, left_ne_of_oangle_eq_pi_div_two, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, sign_coe_pi_div_two
 -/
@@ -2186,7 +2226,7 @@ theorem dist_div_sin_oangle_right_of_oangle_eq_pi_div_two
   proof: by
   have hs : (∡ p₂ p₃ p₁).sign = 1 := by rw [oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [dist_div_sin_angle_of_angle_eq_pi_div_two (angle_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inl (left_ne_of_oangle_eq_p
+      (Or.inl (left_ne_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 dist_div_sin_oangle_right_of_oangle_eq_pi_div_two
@@ -2194,7 +2234,7 @@ theorem dist_div_sin_oangle_right_of_oangle_eq_pi_div_two
   证明: by
   have hs : (∡ p₂ p₃ p₁).sign = 1 := by rw [oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.sin_coe]; rw [dist_div_sin_angle_of_angle_eq_pi_div_two (angle_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inl (left_ne_of_oangle_eq_p
+      (Or.inl (left_ne_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: Or.inl, Real.Angle.sign_coe_pi_div_two, Real.Angle.sin_coe, angle_eq_pi_div_two_of_oangle_eq_pi_div_two, dist_div_sin_angle_of_angle_eq_pi_div_two, left_ne_of_oangle_eq_pi_div_two, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, sign_coe_pi_div_two, sin_coe
 -/
@@ -2212,14 +2252,16 @@ theorem dist_div_sin_oangle_left_of_oangle_eq_pi_div_two
   statement: {p₁ p₂ p₃ : P}
   proof: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
-  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.sin_coe]; rw [dist_comm p₁ p₃]; rw [dist_div_sin_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div
+  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.sin_coe]; rw [dist_comm p₁ p₃]; rw [dist_div_sin_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
+      (Or.inl (right_ne_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 dist_div_sin_oangle_left_of_oangle_eq_pi_div_two
   结论: {p₁ p₂ p₃ : P}
   证明: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
-  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.sin_coe]; rw [dist_comm p₁ p₃]; rw [dist_div_sin_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div
+  rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.sin_coe]; rw [dist_comm p₁ p₃]; rw [dist_div_sin_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
+      (Or.inl (right_ne_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: Or.inl, Real.Angle.sign_coe_pi_div_two, Real.Angle.sin_coe, angle_comm, angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two, dist_comm, dist_div_sin_angle_of_angle_eq_pi_div_two, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, right_ne_of_oangle_eq_pi_div_two, sign_coe_pi_div_two, sin_coe
 -/
@@ -2238,7 +2280,7 @@ theorem dist_div_tan_oangle_right_of_oangle_eq_pi_div_two
   proof: by
   have hs : (∡ p₂ p₃ p₁).sign = 1 := by rw [oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [dist_div_tan_angle_of_angle_eq_pi_div_two (angle_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inl (left_ne_of_oangle_eq_p
+      (Or.inl (left_ne_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 dist_div_tan_oangle_right_of_oangle_eq_pi_div_two
@@ -2246,7 +2288,7 @@ theorem dist_div_tan_oangle_right_of_oangle_eq_pi_div_two
   证明: by
   have hs : (∡ p₂ p₃ p₁).sign = 1 := by rw [oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [Real.Angle.tan_coe]; rw [dist_div_tan_angle_of_angle_eq_pi_div_two (angle_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inl (left_ne_of_oangle_eq_p
+      (Or.inl (left_ne_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: Or.inl, Real.Angle.sign_coe_pi_div_two, Real.Angle.tan_coe, angle_eq_pi_div_two_of_oangle_eq_pi_div_two, dist_div_tan_angle_of_angle_eq_pi_div_two, left_ne_of_oangle_eq_pi_div_two, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, sign_coe_pi_div_two, tan_coe
 -/
@@ -2265,7 +2307,7 @@ theorem dist_div_tan_oangle_left_of_oangle_eq_pi_div_two
   proof: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.tan_coe]; rw [dist_div_tan_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inl 
+      (Or.inl (right_ne_of_oangle_eq_pi_div_two h))]
 
 中文:
 定理 dist_div_tan_oangle_left_of_oangle_eq_pi_div_two
@@ -2273,7 +2315,7 @@ theorem dist_div_tan_oangle_left_of_oangle_eq_pi_div_two
   证明: by
   have hs : (∡ p₃ p₁ p₂).sign = 1 := by rw [← oangle_rotate_sign, h, Real.Angle.sign_coe_pi_div_two]
   rw [oangle_eq_angle_of_sign_eq_one hs]; rw [angle_comm]; rw [Real.Angle.tan_coe]; rw [dist_div_tan_angle_of_angle_eq_pi_div_two (angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two h)
-      (Or.inl 
+      (Or.inl (right_ne_of_oangle_eq_pi_div_two h))]
 
 Depends on / 依赖: Or.inl, Real.Angle.sign_coe_pi_div_two, Real.Angle.tan_coe, angle_comm, angle_rev_eq_pi_div_two_of_oangle_eq_pi_div_two, dist_div_tan_angle_of_angle_eq_pi_div_two, oangle_eq_angle_of_sign_eq_one, oangle_rotate_sign, right_ne_of_oangle_eq_pi_div_two, sign_coe_pi_div_two, tan_coe
 -/

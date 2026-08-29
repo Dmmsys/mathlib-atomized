@@ -169,7 +169,8 @@ theorem measurable_measure_mul_right
       μ ((fun x => (x, y)) ⁻¹' ((fun z : G × G => ((1 : G), z.1 * z.2)) ⁻¹' univ ×ˢ s))
     by convert! this using 1; ext1 x; congr 1 with y : 1; simp
   apply measurable_measure_prodMk_right
-  apply measurable_const.prodMk measurable_mul (MeasurableSet.univ.prod
+  apply measurable_const.prodMk measurable_mul (MeasurableSet.univ.prod hs)
+  infer_instance
 
 中文:
 定理 measurable_measure_mul_right
@@ -180,7 +181,8 @@ theorem measurable_measure_mul_right
       μ ((fun x => (x, y)) ⁻¹' ((fun z : G × G => ((1 : G), z.1 * z.2)) ⁻¹' univ ×ˢ s))
     by convert! this using 1; ext1 x; congr 1 with y : 1; simp
   apply measurable_measure_prodMk_right
-  apply measurable_const.prodMk measurable_mul (MeasurableSet.univ.prod
+  apply measurable_const.prodMk measurable_mul (MeasurableSet.univ.prod hs)
+  infer_instance
 
 Depends on / 依赖: Measurable, MeasurableSet, MeasurableSet.univ.prod, convert, infer_instance, measurable_const, measurable_const.prodMk, measurable_measure_prodMk_right, measurable_mul, prodMk
 -/
@@ -295,7 +297,15 @@ theorem quasiMeasurePreserving_inv
   rw [map_apply measurable_inv hsm]; rw [inv_preimage]
   have hf : Measurable fun z : G × G => (z.2 * z.1, z.1⁻¹) :=
     (measurable_snd.mul measurable_fst).prodMk measurable_fst.inv
-  suffices map (fun z : G × G => (z.2 * z.1
+  suffices map (fun z : G × G => (z.2 * z.1, z.1⁻¹)) (μ.prod μ) (s⁻¹ ×ˢ s⁻¹) = 0 by
+    simpa only [(measurePreserving_mul_prod_inv μ μ).map_eq, prod_prod, mul_eq_zero (M₀ := Real>=0∞),
+      or_self_iff] using this
+  have hsm' : MeasurableSet (s⁻¹ ×ˢ s⁻¹) := hsm.inv.prod hsm.inv
+  simp_rw [map_apply hf hsm', prod_apply_symm (μ := μ) (ν := μ) (hf hsm'), preimage_preimage,
+    mk_preimage_prod, inv_preimage, inv_inv, measure_mono_null inter_subset_right hμs,
+    lintegral_zero]
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 quasiMeasurePreserving_inv
@@ -305,7 +315,15 @@ theorem quasiMeasurePreserving_inv
   rw [map_apply measurable_inv hsm]; rw [inv_preimage]
   have hf : Measurable fun z : G × G => (z.2 * z.1, z.1⁻¹) :=
     (measurable_snd.mul measurable_fst).prodMk measurable_fst.inv
-  suffices map (fun z : G × G => (z.2 * z.1
+  suffices map (fun z : G × G => (z.2 * z.1, z.1⁻¹)) (μ.prod μ) (s⁻¹ ×ˢ s⁻¹) = 0 by
+    simpa only [(measurePreserving_mul_prod_inv μ μ).map_eq, prod_prod, mul_eq_zero (M₀ := Real>=0∞),
+      or_self_iff] using this
+  have hsm' : MeasurableSet (s⁻¹ ×ˢ s⁻¹) := hsm.inv.prod hsm.inv
+  simp_rw [map_apply hf hsm', prod_apply_symm (μ := μ) (ν := μ) (hf hsm'), preimage_preimage,
+    mk_preimage_prod, inv_preimage, inv_inv, measure_mono_null inter_subset_right hμs,
+    lintegral_zero]
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.mk, Measurable, MeasurableSet, hsm.inv, inv_preimage, map_apply, map_eq, measurable_fst, measurable_fst.inv, measurable_inv, measurable_snd, measurable_snd.mul, measurePreserving_mul_prod_inv, mul_eq_zero, or_self_iff, prodMk, prod_prod
 -/
@@ -471,7 +489,14 @@ theorem lintegral_lintegral_mul_inv
     (measurable_snd.mul measurable_fst).prodMk measurable_fst.inv
   have h2f : AEMeasurable (uncurry fun x y => f (y * x) x⁻¹) (μ.prod ν) :=
     hf.comp_quasiMeasurePreserving (measurePreserving_mul_prod_inv μ ν).quasiMeasurePreserving
+  simp_rw [lintegral_lintegral h2f, lintegral_lintegral hf]
+  conv_rhs => rw [← (measurePreserving_mul_prod_inv μ ν).map_eq]
+  symm
+  exact
+    lintegral_map' (hf.mono' (measurePreserving_mul_prod_inv μ ν).map_eq.absolutelyContinuous)
+      h.aemeasurable
 
+@[to_additive]
 
 中文:
 定理 lintegral_lintegral_mul_inv
@@ -481,7 +506,14 @@ theorem lintegral_lintegral_mul_inv
     (measurable_snd.mul measurable_fst).prodMk measurable_fst.inv
   have h2f : AEMeasurable (uncurry fun x y => f (y * x) x⁻¹) (μ.prod ν) :=
     hf.comp_quasiMeasurePreserving (measurePreserving_mul_prod_inv μ ν).quasiMeasurePreserving
+  simp_rw [lintegral_lintegral h2f, lintegral_lintegral hf]
+  conv_rhs => rw [← (measurePreserving_mul_prod_inv μ ν).map_eq]
+  symm
+  exact
+    lintegral_map' (hf.mono' (measurePreserving_mul_prod_inv μ ν).map_eq.absolutelyContinuous)
+      h.aemeasurable
 
+@[to_additive]
 
 Depends on / 依赖: AEMeasurable, Measurable, absolutelyC, comp_quasiMeasurePreserving, conv_rhs, hf.comp_quasiMeasurePreserving, hf.mono, lintegral_lintegral, lintegral_map, map_eq, map_eq.absolutelyC, measurable_fst, measurable_fst.inv, measurable_snd, measurable_snd.mul, measurePreserving_mul_prod_inv, prodMk, quasiMeasurePreserving, simp_rw, uncurry
 -/
@@ -638,7 +670,15 @@ theorem measure_mul_lintegral_eq
   rw [← setLIntegral_one]; rw [← lintegral_indicator sm]; rw [← lintegral_lintegral_mul (measurable_const.indicator sm).aemeasurable hf.aemeasurable]; rw [← lintegral_lintegral_mul_inv μ ν]
   swap
   · exact (((measurable_const.indicator sm).comp measurable_fst).mul
-      (hf.comp measurable_snd))
+      (hf.comp measurable_snd)).aemeasurable
+  have ms :
+    forall x : G, Measurable fun y => ((fun z => z * x) ⁻¹' s).indicator (fun _ => (1 : Real>=0∞)) y :=
+    fun x => measurable_const.indicator (measurable_mul_const _ sm)
+  have : forall x y, s.indicator (fun _ : G => (1 : Real>=0∞)) (y * x) =
+      ((fun z => z * x) ⁻¹' s).indicator (fun b : G => 1) y := by
+    intro x y; symm; convert! indicator_comp_right (M := Real>=0∞) fun y => y * x using 2; ext1; rfl
+  simp_rw [this, lintegral_mul_const _ (ms _), lintegral_indicator (measurable_mul_const _ sm),
+    setLIntegral_one]
 
 中文:
 定理 measure_mul_lintegral_eq
@@ -647,7 +687,15 @@ theorem measure_mul_lintegral_eq
   rw [← setLIntegral_one]; rw [← lintegral_indicator sm]; rw [← lintegral_lintegral_mul (measurable_const.indicator sm).aemeasurable hf.aemeasurable]; rw [← lintegral_lintegral_mul_inv μ ν]
   swap
   · exact (((measurable_const.indicator sm).comp measurable_fst).mul
-      (hf.comp measurable_snd))
+      (hf.comp measurable_snd)).aemeasurable
+  have ms :
+    forall x : G, Measurable fun y => ((fun z => z * x) ⁻¹' s).indicator (fun _ => (1 : Real>=0∞)) y :=
+    fun x => measurable_const.indicator (measurable_mul_const _ sm)
+  have : forall x y, s.indicator (fun _ : G => (1 : Real>=0∞)) (y * x) =
+      ((fun z => z * x) ⁻¹' s).indicator (fun b : G => 1) y := by
+    intro x y; symm; convert! indicator_comp_right (M := Real>=0∞) fun y => y * x using 2; ext1; rfl
+  simp_rw [this, lintegral_mul_const _ (ms _), lintegral_indicator (measurable_mul_const _ sm),
+    setLIntegral_one]
 
 Depends on / 依赖: Measurable, aemeasurable, hf.aemeasurable, hf.comp, indicator, lintegral_indicator, lintegral_lintegral_mul, lintegral_lintegral_mul_inv, measurable_const, measurable_const.indicator, measurable_fst, measurable_mul_const, measurable_snd, s.ind, setLIntegral_one
 -/
@@ -680,7 +728,8 @@ theorem absolutelyContinuous_of_isMulLeftInvariant
   refine AbsolutelyContinuous.mk fun s sm hνs => ?_
   have h1 := measure_mul_lintegral_eq μ ν sm 1 measurable_one
   simp_rw [Pi.one_apply, lintegral_one, mul_one, (measure_mul_right_null ν _).mpr hνs,
-    lintegral_zero, mul_eq_zero (M₀ := Real>=0∞), measure_univ_eq_zero.not.mpr hν, or_false] at 
+    lintegral_zero, mul_eq_zero (M₀ := Real>=0∞), measure_univ_eq_zero.not.mpr hν, or_false] at h1
+  exact h1
 
 中文:
 定理 absolutelyContinuous_of_isMulLeftInvariant
@@ -690,7 +739,8 @@ theorem absolutelyContinuous_of_isMulLeftInvariant
   refine AbsolutelyContinuous.mk fun s sm hνs => ?_
   have h1 := measure_mul_lintegral_eq μ ν sm 1 measurable_one
   simp_rw [Pi.one_apply, lintegral_one, mul_one, (measure_mul_right_null ν _).mpr hνs,
-    lintegral_zero, mul_eq_zero (M₀ := Real>=0∞), measure_univ_eq_zero.not.mpr hν, or_false] at 
+    lintegral_zero, mul_eq_zero (M₀ := Real>=0∞), measure_univ_eq_zero.not.mpr hν, or_false] at h1
+  exact h1
 
 Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.mk, Pi.one_apply, lintegral_one, lintegral_zero, measurable_one, measure_mul_lintegral_eq, measure_mul_right_null, measure_univ_eq_zero, measure_univ_eq_zero.not.mpr, mul_eq_zero, mul_one, one_apply, or_false, simp_rw
 -/
@@ -718,7 +768,18 @@ theorem ae_measure_preimage_mul_right_lt_top
   · filter_upwards [this ((measure_toMeasurable _).trans_ne hμs) (measurableSet_toMeasurable ..)]
       with x hx using lt_of_le_of_lt (by gcongr; apply subset_toMeasurable) hx
   refine ae_of_forall_measure_lt_top_ae_restrict' ν'.inv _ ?_
-  intro A hA _ 
+  intro A hA _ h3A
+  simp only [ν'.inv_apply] at h3A
+  apply ae_lt_top (measurable_measure_mul_right ν' sm)
+  have h1 := measure_mul_lintegral_eq μ' ν' sm (A⁻¹.indicator 1) (measurable_one.indicator hA.inv)
+  rw [lintegral_indicator hA.inv] at h1
+  simp_rw [Pi.one_apply, setLIntegral_one, ← image_inv_eq_inv, indicator_image inv_injective,
+    image_inv_eq_inv, ← indicator_mul_right _ fun x => ν' ((· * x) ⁻¹' s), Function.comp,
+    Pi.one_apply, mul_one] at h1
+  rw [← lintegral_indicator hA]; rw [← h1]
+  finiteness
+
+@[to_additive]
 
 中文:
 定理 ae_measure_preimage_mul_right_lt_top
@@ -728,7 +789,18 @@ theorem ae_measure_preimage_mul_right_lt_top
   · filter_upwards [this ((measure_toMeasurable _).trans_ne hμs) (measurableSet_toMeasurable ..)]
       with x hx using lt_of_le_of_lt (by gcongr; apply subset_toMeasurable) hx
   refine ae_of_forall_measure_lt_top_ae_restrict' ν'.inv _ ?_
-  intro A hA _ 
+  intro A hA _ h3A
+  simp only [ν'.inv_apply] at h3A
+  apply ae_lt_top (measurable_measure_mul_right ν' sm)
+  have h1 := measure_mul_lintegral_eq μ' ν' sm (A⁻¹.indicator 1) (measurable_one.indicator hA.inv)
+  rw [lintegral_indicator hA.inv] at h1
+  simp_rw [Pi.one_apply, setLIntegral_one, ← image_inv_eq_inv, indicator_image inv_injective,
+    image_inv_eq_inv, ← indicator_mul_right _ fun x => ν' ((· * x) ⁻¹' s), Function.comp,
+    Pi.one_apply, mul_one] at h1
+  rw [← lintegral_indicator hA]; rw [← h1]
+  finiteness
+
+@[to_additive]
 
 Depends on / 依赖: MeasurableSet, ae_lt_top, ae_of_forall_measure_lt_top_ae_restrict, filter_upwards, generalizing, hA.i, hA.inv, indicator, inv_apply, lintegral_indicator, lt_of_le_of_lt, measurableSet_toMeasurable, measurable_measure_mul_right, measurable_one, measurable_one.indicator, measure_mul_lintegral_eq, measure_toMeasurable, subset_toMeasurable, trans_ne
 -/
@@ -813,7 +885,10 @@ theorem measure_lintegral_div_measure
     (hf.comp measurable_inv).div ((measurable_measure_mul_right ν' sm).comp measurable_inv)
   simp_rw [measure_mul_lintegral_eq μ' ν' sm g hg, g, inv_inv]
   refine lintegral_congr_ae ?_
-  refine (ae_measure_prei
+  refine (ae_measure_preimage_mul_right_lt_top_of_ne_zero μ' ν' h2s h3s).mono fun x hx => ?_
+  simp_rw [ENNReal.mul_div_cancel (measure_mul_right_ne_zero ν' h2s _) hx.ne]
+
+@[to_additive]
 
 中文:
 定理 measure_lintegral_div_measure
@@ -824,7 +899,10 @@ theorem measure_lintegral_div_measure
     (hf.comp measurable_inv).div ((measurable_measure_mul_right ν' sm).comp measurable_inv)
   simp_rw [measure_mul_lintegral_eq μ' ν' sm g hg, g, inv_inv]
   refine lintegral_congr_ae ?_
-  refine (ae_measure_prei
+  refine (ae_measure_preimage_mul_right_lt_top_of_ne_zero μ' ν' h2s h3s).mono fun x hx => ?_
+  simp_rw [ENNReal.mul_div_cancel (measure_mul_right_ne_zero ν' h2s _) hx.ne]
+
+@[to_additive]
 
 Depends on / 依赖: ENNReal, ENNReal.mul_div_cancel, Measurable, ae_measure_preimage_mul_right_lt_top_of_ne_zero, hf.comp, hx.ne, inv_inv, lintegral_congr_ae, measurable_inv, measurable_measure_mul_right, measure_mul_lintegral_eq, measure_mul_right_ne_zero, mul_div_cancel, simp_rw
 -/
@@ -852,7 +930,13 @@ theorem measure_mul_measure_eq
     rw [← hμ]; rw [← hν]; rw [this s' _ _ hm] <;> rwa [hν]
   wlog ht : MeasurableSet t generalizing t
   · rcases exists_measurable_superset₂ μ' ν' t with ⟨t', -, hm, hμ, hν⟩
-    rw [
+    rw [← hμ]; rw [← hν]; rw [this _ hm]
+  have h1 := measure_lintegral_div_measure ν' ν' hs h2s h3s (t.indicator fun _ => 1)
+    (measurable_const.indicator ht)
+  have h2 := measure_lintegral_div_measure μ' ν' hs h2s h3s (t.indicator fun _ => 1)
+    (measurable_const.indicator ht)
+  rw [lintegral_indicator ht]; rw [setLIntegral_one] at h1 h2
+  rw [← h1]; rw [mul_left_comm]; rw [h2]
 
 中文:
 定理 measure_mul_measure_eq
@@ -863,7 +947,13 @@ theorem measure_mul_measure_eq
     rw [← hμ]; rw [← hν]; rw [this s' _ _ hm] <;> rwa [hν]
   wlog ht : MeasurableSet t generalizing t
   · rcases exists_measurable_superset₂ μ' ν' t with ⟨t', -, hm, hμ, hν⟩
-    rw [
+    rw [← hμ]; rw [← hν]; rw [this _ hm]
+  have h1 := measure_lintegral_div_measure ν' ν' hs h2s h3s (t.indicator fun _ => 1)
+    (measurable_const.indicator ht)
+  have h2 := measure_lintegral_div_measure μ' ν' hs h2s h3s (t.indicator fun _ => 1)
+    (measurable_const.indicator ht)
+  rw [lintegral_indicator ht]; rw [setLIntegral_one] at h1 h2
+  rw [← h1]; rw [mul_left_comm]; rw [h2]
 
 Depends on / 依赖: MeasurableSet, generalizing, indicat, indicator, measurable_const, measurable_const.indicator, measure_lintegral_div_measure, t.indicat, t.indicator
 -/
@@ -1381,6 +1471,8 @@ theorem quasiMeasurePreserving_mul_left
   have :=
     (quasiMeasurePreserving_inv_of_right_invariant μ).comp
       (this.comp (quasiMeasurePreserving_inv_of_right_invariant μ))
+  simp_rw [Function.comp_def, mul_inv_rev, inv_inv] at this
+  exact this
 
 中文:
 定理 quasiMeasurePreserving_mul_left
@@ -1393,6 +1485,8 @@ theorem quasiMeasurePreserving_mul_left
   have :=
     (quasiMeasurePreserving_inv_of_right_invariant μ).comp
       (this.comp (quasiMeasurePreserving_inv_of_right_invariant μ))
+  simp_rw [Function.comp_def, mul_inv_rev, inv_inv] at this
+  exact this
 
 Depends on / 依赖: Function, Function.comp_def, absolutelyContinuous_inv, comp_def, inv_absolutelyContinuous, inv_inv, mul_inv_rev, quasiMeasurePreserving_inv_of_right_invariant, quasiMeasurePreserving_mul_right, simp_rw, this.comp
 -/

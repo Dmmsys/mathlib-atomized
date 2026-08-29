@@ -215,7 +215,10 @@ theorem mem_essImage_of_unit_isSplitMono
     Functor.essImage.unit_isIso ((i.obj_mem_essImage _))
   have : Epi (η.app A) := by
     refine @epi_of_epi _ _ _ _ _ (retraction (η.app A)) (η.app A) ?_
-    rw [show retractio
+    rw [show retraction _ ≫ η.app A = _ from η.naturality (retraction (η.app A))]
+    apply epi_comp (η.app (i.obj ((reflector i).obj A)))
+  have := isIso_of_epi_of_isSplitMono (η.app A)
+  exact (reflectorAdjunction i).mem_essImage_of_unit_isIso A
 
 中文:
 定理 mem_essImage_of_unit_isSplitMono
@@ -226,7 +229,10 @@ theorem mem_essImage_of_unit_isSplitMono
     Functor.essImage.unit_isIso ((i.obj_mem_essImage _))
   have : Epi (η.app A) := by
     refine @epi_of_epi _ _ _ _ _ (retraction (η.app A)) (η.app A) ?_
-    rw [show retractio
+    rw [show retraction _ ≫ η.app A = _ from η.naturality (retraction (η.app A))]
+    apply epi_comp (η.app (i.obj ((reflector i).obj A)))
+  have := isIso_of_epi_of_isSplitMono (η.app A)
+  exact (reflectorAdjunction i).mem_essImage_of_unit_isIso A
 
 Depends on / 依赖: Functor, Functor.essImage.unit_isIso, epi_comp, epi_of_epi, essImage, i.obj, i.obj_mem_essImage, isIso_of_epi_of_isSplitMono, mem_essImage_of_unit_isIso, naturality, obj_mem_essImage, reflector, reflectorAdjunction, retraction, unit_isIso
 -/
@@ -318,7 +324,7 @@ definition unitCompPartialBijective
     (A ⟶ B) ≃ (A ⟶ i.obj (Functor.essImage.witness hB)) := Iso.homCongr (Iso.refl _) hB.getIso.symm
     _ ≃ (i.obj _ ⟶ i.obj (Functor.essImage.witness hB)) := unitCompPartialBijectiveAux _ _
     _ ≃ (i.obj ((reflector i).obj A) ⟶ B) :=
-      Iso.homCongr (Iso.refl _) (Functor.essImage.getIso hB
+      Iso.homCongr (Iso.refl _) (Functor.essImage.getIso hB)
 
 中文:
 定义 unitCompPartialBijective
@@ -327,7 +333,7 @@ definition unitCompPartialBijective
     (A ⟶ B) ≃ (A ⟶ i.obj (Functor.essImage.witness hB)) := Iso.homCongr (Iso.refl _) hB.getIso.symm
     _ ≃ (i.obj _ ⟶ i.obj (Functor.essImage.witness hB)) := unitCompPartialBijectiveAux _ _
     _ ≃ (i.obj ((reflector i).obj A) ⟶ B) :=
-      Iso.homCongr (Iso.refl _) (Functor.essImage.getIso hB
+      Iso.homCongr (Iso.refl _) (Functor.essImage.getIso hB)
 
 Depends on / 依赖: Functor, Functor.essImage.getIso, Functor.essImage.witness, Iso.homCongr, Iso.refl, essImage, getIso, hB.getIso.symm, homCongr, i.obj, reflector, unitCompPartialBijectiveAux, witness
 -/
@@ -646,7 +652,10 @@ lemma mem_essImage_of_counit_isSplitEpi
     Functor.essImage.counit_isIso ((j.obj_mem_essImage _))
   have : Mono (ε.app A) := by
     refine @mono_of_mono _ _ _ _ _ (ε.app A) (section_ (ε.app A)) ?_
-    rw [sho
+    rw [show ε.app A ≫ section_ _ = _ from (ε.naturality (section_ (ε.app A))).symm]
+    apply mono_comp _ (ε.app (j.obj ((coreflector j).obj A)))
+  have := isIso_of_mono_of_isSplitEpi (ε.app A)
+  exact (coreflectorAdjunction j).mem_essImage_of_counit_isIso A
 
 中文:
 引理 mem_essImage_of_counit_isSplitEpi
@@ -657,7 +666,10 @@ lemma mem_essImage_of_counit_isSplitEpi
     Functor.essImage.counit_isIso ((j.obj_mem_essImage _))
   have : Mono (ε.app A) := by
     refine @mono_of_mono _ _ _ _ _ (ε.app A) (section_ (ε.app A)) ?_
-    rw [sho
+    rw [show ε.app A ≫ section_ _ = _ from (ε.naturality (section_ (ε.app A))).symm]
+    apply mono_comp _ (ε.app (j.obj ((coreflector j).obj A)))
+  have := isIso_of_mono_of_isSplitEpi (ε.app A)
+  exact (coreflectorAdjunction j).mem_essImage_of_counit_isIso A
 
 Depends on / 依赖: Functor, Functor.essImage.counit_isIso, coreflector, coreflectorAdjunction, counit, counit_isIso, essImage, isIso_of_mono_of_isSplitEpi, j.obj, j.obj_mem_essImage, mem_essI, mono_comp, mono_of_mono, naturality, obj_mem_essImage, section_
 -/

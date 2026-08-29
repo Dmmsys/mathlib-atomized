@@ -154,7 +154,10 @@ definition productEquiv
     ⟨ULift (Fin (Fintype.card ι)), ⟨(Fintype.equivFin ι).trans Equiv.ulift.symm⟩⟩
   let is₁ : FintypeCat.incl.obj (∏ᶜ fun i => X i) ≅ (∏ᶜ fun i => X i) :=
     PreservesProduct.iso FintypeCat.incl (fun i => X i)
-  let is₂ : (∏ᶜ fun i => 
+  let is₂ : (∏ᶜ fun i => X i : Type _) ≅ (Shrink.{u} (forall i, X i)) :=
+    Types.Small.productIso (fun i => X i)
+  let e : (forall i, X i) ≃ Shrink.{u} (forall i, X i) := equivShrink _
+  (equivEquivIso.symm is₁).trans ((equivEquivIso.symm is₂).trans e.symm)
 
 中文:
 定义 productEquiv
@@ -164,7 +167,10 @@ definition productEquiv
     ⟨ULift (Fin (Fintype.card ι)), ⟨(Fintype.equivFin ι).trans Equiv.ulift.symm⟩⟩
   let is₁ : FintypeCat.incl.obj (∏ᶜ fun i => X i) ≅ (∏ᶜ fun i => X i) :=
     PreservesProduct.iso FintypeCat.incl (fun i => X i)
-  let is₂ : (∏ᶜ fun i => 
+  let is₂ : (∏ᶜ fun i => X i : Type _) ≅ (Shrink.{u} (forall i, X i)) :=
+    Types.Small.productIso (fun i => X i)
+  let e : (forall i, X i) ≃ Shrink.{u} (forall i, X i) := equivShrink _
+  (equivEquivIso.symm is₁).trans ((equivEquivIso.symm is₂).trans e.symm)
 
 Depends on / 依赖: Equiv.ulift.symm, Fintype, Fintype.card, Fintype.equivFin, Fintype.ofFinite, FintypeCat, FintypeCat.incl, FintypeCat.incl.obj, PreservesProduct, PreservesProduct.iso, Shrink, Types.Small.productIso, equivEquivIso, equivEquivIso.symm, equivFin, equivShrink, ofFinite, productIso
 -/

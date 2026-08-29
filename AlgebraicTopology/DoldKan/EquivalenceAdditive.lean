@@ -92,7 +92,7 @@ definition equivalence
     symm
     change 𝟙 _ = α.hom ≫ β.hom
     rw [← Iso.inv_comp_eq]; rw [comp_id]; rw [← comp_id β.hom]; rw [← Iso.inv_comp_eq]
-    exact AlgebraicT
+    exact AlgebraicTopology.DoldKan.identity_N₂_objectwise P
 
 中文:
 定义 equivalence
@@ -107,7 +107,7 @@ definition equivalence
     symm
     change 𝟙 _ = α.hom ≫ β.hom
     rw [← Iso.inv_comp_eq]; rw [comp_id]; rw [← comp_id β.hom]; rw [← Iso.inv_comp_eq]
-    exact AlgebraicT
+    exact AlgebraicTopology.DoldKan.identity_N₂_objectwise P
 -/
 def equivalence : Karoubi (SimplicialObject C) ≌ Karoubi (ChainComplex C Nat) where
   functor := N

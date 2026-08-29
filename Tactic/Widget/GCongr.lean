@@ -33,7 +33,15 @@ unless goalType.isAppOf ``LE.le || goalType.isAppOf ``LT.lt || goalType.isAppOf 
   panic! "The goal must be a <= or < or ≡."
 let mut goalTypeWithMetaVars := goalType
 for pos in subexprPos do
-  goalTypeWithMetaVars ← insertMetaVar goalTypeWithMet
+  goalTypeWithMetaVars ← insertMetaVar goalTypeWithMetaVars pos
+
+let side := if goalType.isAppOf `Int.ModEq then
+              if subexprPos[0]!.toArray[0]! = 0 then 1 else 2
+            else
+              if subexprPos[0]!.toArray[0]! = 0 then 2 else 3
+let sideExpr := goalTypeWithMetaVars.getAppArgs[side]!
+let res := "gcongr " ++ (toString (← Meta.ppExpr sideExpr)).renameMetaVar
+return (res, res, none)
 
 中文:
 定义 makeGCongrString
@@ -44,7 +52,15 @@ unless goalType.isAppOf ``LE.le || goalType.isAppOf ``LT.lt || goalType.isAppOf 
   panic! "The goal must be a <= or < or ≡."
 let mut goalTypeWithMetaVars := goalType
 for pos in subexprPos do
-  goalTypeWithMetaVars ← insertMetaVar goalTypeWithMet
+  goalTypeWithMetaVars ← insertMetaVar goalTypeWithMetaVars pos
+
+let side := if goalType.isAppOf `Int.ModEq then
+              if subexprPos[0]!.toArray[0]! = 0 then 1 else 2
+            else
+              if subexprPos[0]!.toArray[0]! = 0 then 2 else 3
+let sideExpr := goalTypeWithMetaVars.getAppArgs[side]!
+let res := "gcongr " ++ (toString (← Meta.ppExpr sideExpr)).renameMetaVar
+return (res, res, none)
 -/
 def makeGCongrString (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr)
     (_ : SelectInsertParams) :

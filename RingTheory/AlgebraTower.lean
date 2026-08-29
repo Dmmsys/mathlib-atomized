@@ -588,6 +588,9 @@ definition algHomEquivSigma
   right_inv := by
     rintro ⟨⟨⟨⟨⟨f, _⟩, _⟩, _⟩, _⟩, ⟨⟨⟨⟨g, _⟩, _⟩, _⟩, hg⟩⟩
     obtain rfl : f = fun x => g (algebraMap B C x) := by
+      ext x
+      exact (hg x).symm
+    rfl
 
 中文:
 定义 algHomEquivSigma
@@ -603,6 +606,9 @@ definition algHomEquivSigma
   right_inv := by
     rintro ⟨⟨⟨⟨⟨f, _⟩, _⟩, _⟩, _⟩, ⟨⟨⟨⟨g, _⟩, _⟩, _⟩, hg⟩⟩
     obtain rfl : f = fun x => g (algebraMap B C x) := by
+      ext x
+      exact (hg x).symm
+    rfl
 
 Depends on / 依赖: domRestrict, extendScalars, f.domRestrict, f.extendScalars
 -/

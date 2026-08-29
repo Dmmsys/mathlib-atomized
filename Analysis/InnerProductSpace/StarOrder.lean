@@ -45,7 +45,14 @@ lemma IsPositive.spectrumRestricts
   rw [← neg_pos] at hc
   set c := -c
   exact isUnit_of_forall_le_norm_inner_map _ (c := ⟨c, hc.le⟩) hc fun x => calc
-    ‖x‖ ^ 2 * c = re ⟪algebra
+    ‖x‖ ^ 2 * c = re ⟪algebraMap Real (H ->L[𝕜] H) c x, x⟫_𝕜 := by
+      rw [Algebra.algebraMap_eq_smul_one]; rw [← algebraMap_smul 𝕜 c (1 : (H ->L[𝕜] H)), smul_apply,
+        one_apply_eq_self, inner_smul_left, RCLike.algebraMap_eq_ofReal, conj_ofReal, re_ofReal_mul,
+        inner_self_eq_norm_sq, mul_comm]
+    _ <= re ⟪(f + (algebraMap Real (H ->L[𝕜] H)) c) x, x⟫_𝕜 := by
+      simpa only [add_apply, inner_add_left, map_add, le_add_iff_nonneg_left]
+        using hf.re_inner_nonneg_left x
+    _ <= ‖⟪(f + (algebraMap Real (H ->L[𝕜] H)) c) x, x⟫_𝕜‖ := RCLike.re_le_norm _
 
 中文:
 引理 IsPositive.spectrumRestricts
@@ -58,7 +65,14 @@ lemma IsPositive.spectrumRestricts
   rw [← neg_pos] at hc
   set c := -c
   exact isUnit_of_forall_le_norm_inner_map _ (c := ⟨c, hc.le⟩) hc fun x => calc
-    ‖x‖ ^ 2 * c = re ⟪algebra
+    ‖x‖ ^ 2 * c = re ⟪algebraMap Real (H ->L[𝕜] H) c x, x⟫_𝕜 := by
+      rw [Algebra.algebraMap_eq_smul_one]; rw [← algebraMap_smul 𝕜 c (1 : (H ->L[𝕜] H)), smul_apply,
+        one_apply_eq_self, inner_smul_left, RCLike.algebraMap_eq_ofReal, conj_ofReal, re_ofReal_mul,
+        inner_self_eq_norm_sq, mul_comm]
+    _ <= re ⟪(f + (algebraMap Real (H ->L[𝕜] H)) c) x, x⟫_𝕜 := by
+      simpa only [add_apply, inner_add_left, map_add, le_add_iff_nonneg_left]
+        using hf.re_inner_nonneg_left x
+    _ <= ‖⟪(f + (algebraMap Real (H ->L[𝕜] H)) c) x, x⟫_𝕜‖ := RCLike.re_le_norm _
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, IsUnit, IsUnit.sub_iff, RCLike, RCLike.algebraMap_eq_ofReal, SpectrumRestricts, SpectrumRestricts.nnreal_iff, algebraMap, algebraMap_eq_ofReal, algebraMap_eq_smul_one, algebraMap_smul, conj_ofReal, contrapose, hc.le, inner_smul_left, isUnit_of_forall_le_norm_inner_map, map_neg, neg_pos, nnreal_iff
 -/
@@ -111,7 +125,15 @@ lemma instStarOrderedRingRCLike
       obtain ⟨p, hp₁, -, hp₃⟩ := CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts
         h.isSelfAdjoint h.spectrumRestricts
       refine ⟨p ^ 2, ?_, by symm; rwa [add_comm, ← eq_sub_iff_add_eq]⟩
-      exact AddSubmonoid.subset_closu
+      exact AddSubmonoid.subset_closure ⟨p, by simp only [hp₁.star_eq, sq]⟩
+    · rintro ⟨p, hp, rfl⟩
+      rw [le_def]; rw [add_sub_cancel_left]
+      induction hp using AddSubmonoid.closure_induction with
+      | mem _ hf =>
+        obtain ⟨f, rfl⟩ := hf
+        simpa using! ContinuousLinearMap.IsPositive.adjoint_conj isPositive_one f
+      | zero => exact isPositive_zero
+      | add f g _ _ hf hg => exact hf.add hg
 
 中文:
 引理 instStarOrderedRingRCLike
@@ -122,7 +144,15 @@ lemma instStarOrderedRingRCLike
       obtain ⟨p, hp₁, -, hp₃⟩ := CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts
         h.isSelfAdjoint h.spectrumRestricts
       refine ⟨p ^ 2, ?_, by symm; rwa [add_comm, ← eq_sub_iff_add_eq]⟩
-      exact AddSubmonoid.subset_closu
+      exact AddSubmonoid.subset_closure ⟨p, by simp only [hp₁.star_eq, sq]⟩
+    · rintro ⟨p, hp, rfl⟩
+      rw [le_def]; rw [add_sub_cancel_left]
+      induction hp using AddSubmonoid.closure_induction with
+      | mem _ hf =>
+        obtain ⟨f, rfl⟩ := hf
+        simpa using! ContinuousLinearMap.IsPositive.adjoint_conj isPositive_one f
+      | zero => exact isPositive_zero
+      | add f g _ _ hf hg => exact hf.add hg
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure_induction, AddSubmonoid.subset_closure, CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts, ContinuousLinearMap, ContinuousLinearMap.IsPositive.adjoin, IsPositive, add_comm, add_sub_cancel_left, adjoin, closure_induction, eq_sub_iff_add_eq, exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts, h.isSelfAdjoint, h.spectrumRestricts, isSelfAdjoint, le_def, spectrumRestricts, star_eq, subset_closure
 -/

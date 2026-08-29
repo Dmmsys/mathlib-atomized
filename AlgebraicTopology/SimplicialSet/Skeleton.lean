@@ -86,7 +86,7 @@ lemma mem_skeleton
     (X.skeleton n).map _ (this _ (Subcomplex.mem_ofSimplex_obj _))
   exact le_trans (by exact le_trans (by rfl) (le_iSup _ y))
     (le_iSup _ ⟨j, lt_of_le_of_lt
-      (SimplexCategory.l
+      (SimplexCategory.len_le_of_epi f) hi⟩)
 
 中文:
 引理 mem_skeleton
@@ -97,7 +97,7 @@ lemma mem_skeleton
     (X.skeleton n).map _ (this _ (Subcomplex.mem_ofSimplex_obj _))
   exact le_trans (by exact le_trans (by rfl) (le_iSup _ y))
     (le_iSup _ ⟨j, lt_of_le_of_lt
-      (SimplexCategory.l
+      (SimplexCategory.len_le_of_epi f) hi⟩)
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.len_le_of_epi, Subcomplex, Subcomplex.mem_ofSimplex_obj, Subcomplex.ofSimplex, X.exists_nonDegenerate, X.skeleton, exists_nonDegenerate, le_iSup, le_trans, len_le_of_epi, lt_of_le_of_lt, mem_ofSimplex_obj, ofSimplex, skeleton
 -/
@@ -171,7 +171,8 @@ lemma mem_skeleton_obj_iff_of_nonDegenerate
     Set.iUnion_coe_set, Set.mem_iUnion, exists_prop] at h
   obtain ⟨⟨i, hi⟩, y, hy, ⟨f⟩, rfl⟩ := h
   have := X.mono_of_nonDegenerate ⟨_, hx⟩ f y rfl
-  have : d <= i
+  have : d <= i := SimplexCategory.len_le_of_mono f
+  lia
 
 中文:
 引理 mem_skeleton_obj_iff_of_nonDegenerate
@@ -182,7 +183,8 @@ lemma mem_skeleton_obj_iff_of_nonDegenerate
     Set.iUnion_coe_set, Set.mem_iUnion, exists_prop] at h
   obtain ⟨⟨i, hi⟩, y, hy, ⟨f⟩, rfl⟩ := h
   have := X.mono_of_nonDegenerate ⟨_, hx⟩ f y rfl
-  have : d <= i
+  have : d <= i := SimplexCategory.len_le_of_mono f
+  lia
 
 Depends on / 依赖: OrderHom, OrderHom.coe_mk, Set.iUnion_coe_set, Set.mem_iUnion, SimplexCategory, SimplexCategory.len_le_of_mono, Subfunctor, Subfunctor.iSup_obj, X.mem_skeleton, X.mono_of_nonDegenerate, coe_mk, exists_prop, iSup_obj, iUnion_coe_set, len_le_of_mono, mem_iUnion, mem_skeleton, mono_of_nonDegenerate, skeleton
 -/
@@ -265,7 +267,11 @@ lemma skeleton_succ
     obtain hd | rfl := hd.lt_or_eq
     · exact (X.ofSimplex_le_skeleton _ hd).trans le_sup_left
     · exact le_trans (le_trans (by rfl) (le_iSup _ x)) le_sup_right
-
+  · simp only [sup_le_iff, iSup_le_iff]
+    constructor
+    · exact X.skeleton.monotone (by simp)
+    · intro x
+      apply X.ofSimplex_le_skeleton _ (by simp)
 
 中文:
 引理 skeleton_succ
@@ -279,7 +285,11 @@ lemma skeleton_succ
     obtain hd | rfl := hd.lt_or_eq
     · exact (X.ofSimplex_le_skeleton _ hd).trans le_sup_left
     · exact le_trans (le_trans (by rfl) (le_iSup _ x)) le_sup_right
-
+  · simp only [sup_le_iff, iSup_le_iff]
+    constructor
+    · exact X.skeleton.monotone (by simp)
+    · intro x
+      apply X.ofSimplex_le_skeleton _ (by simp)
 
 Depends on / 依赖: Nat.lt_succ_iff, X.ofSimplex_le_skeleton, X.skeleton.monotone, conv_lhs, hd.lt_or_eq, iSup_le_iff, le_antisymm, le_iSup, le_sup_left, le_sup_right, le_trans, lt_or_eq, lt_succ_iff, monotone, ofSimplex_le_skeleton, skeleton, sup_le_iff
 -/
@@ -461,7 +471,12 @@ lemma skeletonOfMono_succ
     refine ⟨le_sup_left.trans le_sup_left,
       le_sup_right.trans le_sup_left, fun x => ?_⟩
     by_cases hx : x.1 in (Subcomplex.range i).obj _
-    · exact le_trans (le_tran
+    · exact le_trans (le_trans (by simpa) le_sup_left) le_sup_left
+    · exact (le_trans (by exact le_trans (by rfl) (le_iSup _ hx))
+        (le_iSup _ x)).trans le_sup_right
+  · simp only [sup_le_iff, iSup_le_iff]
+    exact ⟨⟨le_sup_left, (Y.skeleton.monotone (by simp)).trans le_sup_right⟩,
+      fun _ _ => (Y.ofSimplex_le_skeleton _ (by simp)).trans le_sup_right⟩
 
 中文:
 引理 skeletonOfMono_succ
@@ -473,7 +488,12 @@ lemma skeletonOfMono_succ
     refine ⟨le_sup_left.trans le_sup_left,
       le_sup_right.trans le_sup_left, fun x => ?_⟩
     by_cases hx : x.1 in (Subcomplex.range i).obj _
-    · exact le_trans (le_tran
+    · exact le_trans (le_trans (by simpa) le_sup_left) le_sup_left
+    · exact (le_trans (by exact le_trans (by rfl) (le_iSup _ hx))
+        (le_iSup _ x)).trans le_sup_right
+  · simp only [sup_le_iff, iSup_le_iff]
+    exact ⟨⟨le_sup_left, (Y.skeleton.monotone (by simp)).trans le_sup_right⟩,
+      fun _ _ => (Y.ofSimplex_le_skeleton _ (by simp)).trans le_sup_right⟩
 
 Depends on / 依赖: OrderHom, OrderHom.coe_mk, Subcomplex, Subcomplex.range, Y.skeleton.monotone, coe_mk, iSup_le_iff, le_antisymm, le_iSup, le_sup_left, le_sup_left.trans, le_sup_right, le_sup_right.trans, le_trans, monotone, skeleton, skeletonOfMono, skeleton_succ, sup_le_iff
 -/
@@ -689,7 +709,9 @@ lemma preimage_map
     rintro n ⟨y, hy₁⟩ hy₂
     have : n < d := dim_lt_of_nonDegenerate (X := ∂Δ[d])
       ⟨⟨y, hy₂⟩, by simpa [Subcomplex.mem_nonDegenerate_iff]⟩ d
-    simp [skeletonOfMono_obj_e
+    simp [skeletonOfMono_obj_eq_top i this]
+  · have := h.symm.le _ (show stdSimplex.objEquiv.symm (𝟙 ⦋d⦌) in _ by simp)
+    simpa [mem_skeletonOfMono_obj_iff]
 
 中文:
 引理 preimage_map
@@ -701,7 +723,9 @@ lemma preimage_map
     rintro n ⟨y, hy₁⟩ hy₂
     have : n < d := dim_lt_of_nonDegenerate (X := ∂Δ[d])
       ⟨⟨y, hy₂⟩, by simpa [Subcomplex.mem_nonDegenerate_iff]⟩ d
-    simp [skeletonOfMono_obj_e
+    simp [skeletonOfMono_obj_eq_top i this]
+  · have := h.symm.le _ (show stdSimplex.objEquiv.symm (𝟙 ⦋d⦌) in _ by simp)
+    simpa [mem_skeletonOfMono_obj_iff]
 
 Depends on / 依赖: Subcomplex, Subcomplex.le_iff_contains_nonDegenerate, Subcomplex.mem_nonDegenerate_iff, c.notMem, dim_lt_of_nonDegenerate, eq_boundary_iff, h.symm.le, le_iff_contains_nonDegenerate, mem_nonDegenerate_iff, mem_skeletonOfMono_obj_iff, notMem, objEquiv, skeletonOfMono_obj_eq_top, stdSimplex, stdSimplex.eq_boundary_iff, stdSimplex.objEquiv.symm
 -/
@@ -973,7 +997,18 @@ lemma isPullback
     dsimp
     rw [Types.isPullback_iff]
     refine ⟨NatTrans.congr_app (w i d) _,
-      fun x₁ x₂ ⟨_, h⟩ => injective_of_mono ((l i d).app (op ⦋n⦌)
+      fun x₁ x₂ ⟨_, h⟩ => injective_of_mono ((l i d).app (op ⦋n⦌)) h,
+      fun ⟨x, hx⟩ y h => ?_⟩
+    rw [Subtype.ext_iff] at h
+    dsimp at h
+    subst h
+    obtain ⟨c, y, rfl⟩ := ιSigmaStdSimplex_jointly_surjective y
+    refine ⟨c.ιSigmaBoundary.app _ ⟨y, ?_⟩, ?_, ?_⟩
+    · rw [dsimp% congr($(c.ι_b_ι).app (op ⦋n⦌) y)] at hx
+      rwa [← c.preimage_map, Subcomplex.preimage_obj, Set.mem_preimage]
+    · rw [Subtype.ext_iff]
+      exact congr($(c.ι_t_ι_eq_ι_l_b_ι).app _ ⟨y, _⟩)
+    · exact congr($(c.ι_l).app _ ⟨y, _⟩))⟩
 
 中文:
 引理 isPullback
@@ -985,7 +1020,18 @@ lemma isPullback
     dsimp
     rw [Types.isPullback_iff]
     refine ⟨NatTrans.congr_app (w i d) _,
-      fun x₁ x₂ ⟨_, h⟩ => injective_of_mono ((l i d).app (op ⦋n⦌)
+      fun x₁ x₂ ⟨_, h⟩ => injective_of_mono ((l i d).app (op ⦋n⦌)) h,
+      fun ⟨x, hx⟩ y h => ?_⟩
+    rw [Subtype.ext_iff] at h
+    dsimp at h
+    subst h
+    obtain ⟨c, y, rfl⟩ := ιSigmaStdSimplex_jointly_surjective y
+    refine ⟨c.ιSigmaBoundary.app _ ⟨y, ?_⟩, ?_, ?_⟩
+    · rw [dsimp% congr($(c.ι_b_ι).app (op ⦋n⦌) y)] at hx
+      rwa [← c.preimage_map, Subcomplex.preimage_obj, Set.mem_preimage]
+    · rw [Subtype.ext_iff]
+      exact congr($(c.ι_t_ι_eq_ι_l_b_ι).app _ ⟨y, _⟩)
+    · exact congr($(c.ι_l).app _ ⟨y, _⟩))⟩
 -/
 lemma isPullback : IsPullback (t i d) (l i d) (r i d) (b i d) where
   w := w i d
@@ -1020,7 +1066,14 @@ lemma sup_range_r_range_b
   simp only [skeletonOfMono_succ, Subfunctor.range_obj, Set.mem_range, not_exists,
     Subfunctor.max_obj, Subfunctor.iSup_obj, Set.iUnion_coe_set, Set.mem_union, Set.mem_iUnion,
     exists_prop] at hx
-  simp only [Subfunctor.toFunctor_obj, Subfunctor.ma
+  simp only [Subfunctor.toFunctor_obj, Subfunctor.max_obj, Subfunctor.range_obj,
+    Subfunctor.homOfLe_app, TypeCat.hom_ofHom]
+  obtain hx | ⟨y, hy₁, hy₂, f, rfl⟩ := hx
+  · exact Or.inl ⟨⟨x, hx⟩, rfl⟩
+  · let c : Cell i d := { simplex := y, nonDegenerate := hy₁, notMem := by simpa }
+    refine Or.inr ⟨c.ιSigmaStdSimplex.app _ (stdSimplex.objEquiv.symm f.unop), ?_⟩
+    rw [Subtype.ext_iff]
+    exact c.b_app_ι_app_objEquiv_symm_val _
 
 中文:
 引理 sup_range_r_range_b
@@ -1030,7 +1083,14 @@ lemma sup_range_r_range_b
   simp only [skeletonOfMono_succ, Subfunctor.range_obj, Set.mem_range, not_exists,
     Subfunctor.max_obj, Subfunctor.iSup_obj, Set.iUnion_coe_set, Set.mem_union, Set.mem_iUnion,
     exists_prop] at hx
-  simp only [Subfunctor.toFunctor_obj, Subfunctor.ma
+  simp only [Subfunctor.toFunctor_obj, Subfunctor.max_obj, Subfunctor.range_obj,
+    Subfunctor.homOfLe_app, TypeCat.hom_ofHom]
+  obtain hx | ⟨y, hy₁, hy₂, f, rfl⟩ := hx
+  · exact Or.inl ⟨⟨x, hx⟩, rfl⟩
+  · let c : Cell i d := { simplex := y, nonDegenerate := hy₁, notMem := by simpa }
+    refine Or.inr ⟨c.ιSigmaStdSimplex.app _ (stdSimplex.objEquiv.symm f.unop), ?_⟩
+    rw [Subtype.ext_iff]
+    exact c.b_app_ι_app_objEquiv_symm_val _
 
 Depends on / 依赖: Or.inl, Set.iUnion_coe_set, Set.mem_iUnion, Set.mem_range, Set.mem_union, Subfunctor, Subfunctor.homOfLe_app, Subfunctor.iSup_obj, Subfunctor.max_obj, Subfunctor.range_obj, Subfunctor.toFunctor_obj, TypeCat, TypeCat.hom_ofHom, exists_prop, homOfLe_app, hom_ofHom, iSup_obj, iUnion_coe_set, max_obj, mem_iUnion
 -/
@@ -1119,7 +1179,23 @@ lemma isPushout
       (IsPushout.isColimit ?_)
     refine Types.isPushout_of_isPullback_of_mono' ?_ ?_ ?_
     · exact (isPullback i d).map ((evaluation _ _).obj _)
-    · exact range_r_
+    · exact range_r_app_union_range_b_app _ _ _
+    · dsimp
+      intro x₁ x₂ hx₁ hx₂ h
+      obtain ⟨c₁, f₁, _, rfl⟩ := isPushout_aux x₁ hx₁
+      obtain ⟨c₂, f₂, _, rfl⟩ := isPushout_aux x₂ hx₂
+      rw [Subtype.ext_iff] at h
+      replace h : Y.map f₁.op c₁.simplex = Y.map f₂.op c₂.simplex := by
+        rwa [← c₁.b_app_ι_app_objEquiv_symm_val f₁, ← c₂.b_app_ι_app_objEquiv_symm_val f₂]
+      obtain rfl : c₁ = c₂ := by
+        ext
+        exact Subtype.ext_iff.mp
+          (Y.unique_nonDegenerate_simplex _ f₁ ⟨_, c₁.nonDegenerate⟩ rfl
+            f₂ ⟨_, c₂.nonDegenerate⟩ h)
+      obtain rfl : f₁ = f₂ :=
+        Y.unique_nonDegenerate_map _ f₁ ⟨_, c₁.nonDegenerate⟩ rfl
+          f₂ ⟨_, c₁.nonDegenerate⟩ h
+      rfl)⟩
 
 中文:
 引理 isPushout
@@ -1130,7 +1206,23 @@ lemma isPushout
       (IsPushout.isColimit ?_)
     refine Types.isPushout_of_isPullback_of_mono' ?_ ?_ ?_
     · exact (isPullback i d).map ((evaluation _ _).obj _)
-    · exact range_r_
+    · exact range_r_app_union_range_b_app _ _ _
+    · dsimp
+      intro x₁ x₂ hx₁ hx₂ h
+      obtain ⟨c₁, f₁, _, rfl⟩ := isPushout_aux x₁ hx₁
+      obtain ⟨c₂, f₂, _, rfl⟩ := isPushout_aux x₂ hx₂
+      rw [Subtype.ext_iff] at h
+      replace h : Y.map f₁.op c₁.simplex = Y.map f₂.op c₂.simplex := by
+        rwa [← c₁.b_app_ι_app_objEquiv_symm_val f₁, ← c₂.b_app_ι_app_objEquiv_symm_val f₂]
+      obtain rfl : c₁ = c₂ := by
+        ext
+        exact Subtype.ext_iff.mp
+          (Y.unique_nonDegenerate_simplex _ f₁ ⟨_, c₁.nonDegenerate⟩ rfl
+            f₂ ⟨_, c₂.nonDegenerate⟩ h)
+      obtain rfl : f₁ = f₂ :=
+        Y.unique_nonDegenerate_map _ f₁ ⟨_, c₁.nonDegenerate⟩ rfl
+          f₂ ⟨_, c₁.nonDegenerate⟩ h
+      rfl)⟩
 -/
 lemma isPushout : IsPushout (t i d) (l i d) (r i d) (b i d) where
   w := w i d
@@ -1176,7 +1268,19 @@ definition relativeCellComplexOfMono
   incl.app _ := Subcomplex.ι _
   isColimit :=
     IsColimit.ofIsoColimit (isColimitOfPreserves (Subcomplex.toSSetFunctor)
-      ((CompleteLattice.colimitCoco
+      ((CompleteLattice.colimitCocone ((skeletonOfMono i).monotone.functor)).isColimit))
+        (Cocone.ext (Subcomplex.eqToIso (iSup_skeletonOfMono i) ≪≫ Subcomplex.topIso Y) )
+  attachCells d _ :=
+    { ι := Cell i d
+      π _ := .unit
+      cofan₁ := _
+      cofan₂ := _
+      isColimit₁ := coproductIsCoproduct _
+      isColimit₂ := coproductIsCoproduct _
+      m := l i d
+      g₁ := t i d
+      g₂ := b i d
+      isPushout := isPushout i d }
 
 中文:
 定义 relativeCellComplexOfMono
@@ -1186,7 +1290,19 @@ definition relativeCellComplexOfMono
   incl.app _ := Subcomplex.ι _
   isColimit :=
     IsColimit.ofIsoColimit (isColimitOfPreserves (Subcomplex.toSSetFunctor)
-      ((CompleteLattice.colimitCoco
+      ((CompleteLattice.colimitCocone ((skeletonOfMono i).monotone.functor)).isColimit))
+        (Cocone.ext (Subcomplex.eqToIso (iSup_skeletonOfMono i) ≪≫ Subcomplex.topIso Y) )
+  attachCells d _ :=
+    { ι := Cell i d
+      π _ := .unit
+      cofan₁ := _
+      cofan₂ := _
+      isColimit₁ := coproductIsCoproduct _
+      isColimit₂ := coproductIsCoproduct _
+      m := l i d
+      g₁ := t i d
+      g₂ := b i d
+      isPushout := isPushout i d }
 -/
 noncomputable def relativeCellComplexOfMono [Mono i] :
     RelativeCellComplex.{u} (basicCell := fun (n : Nat) (_ : Unit) => ∂Δ[n].ι) i where

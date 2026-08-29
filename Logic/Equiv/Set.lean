@@ -842,7 +842,8 @@ definition union'
     | Sum.inl x => ⟨x, Or.inl x.2⟩
     | Sum.inr x => ⟨x, Or.inr x.2⟩
   left_inv := fun ⟨x, h'⟩ => by by_cases h : p x <;> simp [h]
-  righ
+  right_inv o := by
+    rcases o with (⟨x, h⟩ | ⟨x, h⟩) <;> [simp [hs _ h]; simp [ht _ h]]
 
 中文:
 定义 union'
@@ -854,7 +855,8 @@ definition union'
     | Sum.inl x => ⟨x, Or.inl x.2⟩
     | Sum.inr x => ⟨x, Or.inr x.2⟩
   left_inv := fun ⟨x, h'⟩ => by by_cases h : p x <;> simp [h]
-  righ
+  right_inv o := by
+    rcases o with (⟨x, h⟩ | ⟨x, h⟩) <;> [simp [hs _ h]; simp [ht _ h]]
 -/
 protected def union' {α} {s t : Set α} (p : α -> Prop) [DecidablePred p] (hs : forall x in s, p x)
     (ht : forall x in t, ¬p x) : (s union t : Set α) ≃ s oplus t where
@@ -1402,7 +1404,15 @@ definition unionSumInter
       ≃ (s union t \ s : Set α) oplus (s inter t : Set α) := by rw [union_sdiff_self]
     _ ≃ (s oplus (t \ s : Set α)) oplus (s inter t : Set α) :=
       sumCongr (Set.union disjoint_sdiff_self_right) (Equiv.refl _)
-    _ ≃ s oplus ((t \ s : Se
+    _ ≃ s oplus ((t \ s : Set α) oplus (s inter t : Set α)) := sumAssoc _ _ _
+    _ ≃ s oplus (t \ s union s inter t : Set α) :=
+      sumCongr (Equiv.refl _)
+        (by
+          refine (Set.union' (· ∉ s) ?_ ?_).symm
+          exacts [fun x hx => hx.2, fun x hx => not_not_intro hx.1])
+    _ ≃ s oplus t := by
+      { rw [(_ : t \ s union s inter t = t)]
+        rw [union_comm]; rw [inter_comm]; rw [inter_union_sdiff] }
 
 中文:
 定义 unionSum整数er
@@ -1412,7 +1422,15 @@ definition unionSumInter
       ≃ (s union t \ s : Set α) oplus (s inter t : Set α) := by rw [union_sdiff_self]
     _ ≃ (s oplus (t \ s : Set α)) oplus (s inter t : Set α) :=
       sumCongr (Set.union disjoint_sdiff_self_right) (Equiv.refl _)
-    _ ≃ s oplus ((t \ s : Se
+    _ ≃ s oplus ((t \ s : Set α) oplus (s inter t : Set α)) := sumAssoc _ _ _
+    _ ≃ s oplus (t \ s union s inter t : Set α) :=
+      sumCongr (Equiv.refl _)
+        (by
+          refine (Set.union' (· ∉ s) ?_ ?_).symm
+          exacts [fun x hx => hx.2, fun x hx => not_not_intro hx.1])
+    _ ≃ s oplus t := by
+      { rw [(_ : t \ s union s inter t = t)]
+        rw [union_comm]; rw [inter_comm]; rw [inter_union_sdiff] }
 -/
 protected def unionSumInter {α : Type u} (s t : Set α) [DecidablePred (· in s)] :
     (s union t : Set α) oplus (s inter t : Set α) ≃ s oplus t :=
@@ -1447,7 +1465,25 @@ Iff.symm
               e.1.injective)
   invFun e₁ :=
     Subtype.mk
-     
+      (calc
+        α ≃ s oplus (sᶜ : Set α) := (Set.sumCompl s).symm
+        _ ≃ t oplus (tᶜ : Set β) := e₀.sumCongr e₁
+        _ ≃ β := Set.sumCompl t)
+      fun x => by
+      simp only [Sum.map_inl, trans_apply, sumCongr_apply, Set.sumCompl_apply_inl,
+        Set.sumCompl_symm_apply, Trans.trans]
+  left_inv e := by
+    ext x
+    by_cases hx : x in s
+    · simp only [Set.sumCompl_symm_apply_of_mem hx, ← e.prop ⟨x, hx⟩, Sum.map_inl, sumCongr_apply,
+        trans_apply, Set.sumCompl_apply_inl, Trans.trans]
+    · simp only [Set.sumCompl_symm_apply_of_notMem hx, Sum.map_inr, subtypeEquiv_apply,
+        Set.sumCompl_apply_inr, trans_apply, sumCongr_apply, Trans.trans]
+  right_inv e :=
+    Equiv.ext fun x => by
+      simp only [Sum.map_inr, subtypeEquiv_apply, Set.sumCompl_apply_inr, Function.comp_apply,
+        sumCongr_apply, Equiv.coe_trans, Subtype.coe_eta, Trans.trans,
+        Set.sumCompl_symm_apply_compl]
 
 中文:
 定义 compl
@@ -1461,7 +1497,25 @@ Iff.symm
               e.1.injective)
   invFun e₁ :=
     Subtype.mk
-     
+      (calc
+        α ≃ s oplus (sᶜ : Set α) := (Set.sumCompl s).symm
+        _ ≃ t oplus (tᶜ : Set β) := e₀.sumCongr e₁
+        _ ≃ β := Set.sumCompl t)
+      fun x => by
+      simp only [Sum.map_inl, trans_apply, sumCongr_apply, Set.sumCompl_apply_inl,
+        Set.sumCompl_symm_apply, Trans.trans]
+  left_inv e := by
+    ext x
+    by_cases hx : x in s
+    · simp only [Set.sumCompl_symm_apply_of_mem hx, ← e.prop ⟨x, hx⟩, Sum.map_inl, sumCongr_apply,
+        trans_apply, Set.sumCompl_apply_inl, Trans.trans]
+    · simp only [Set.sumCompl_symm_apply_of_notMem hx, Sum.map_inr, subtypeEquiv_apply,
+        Set.sumCompl_apply_inr, trans_apply, sumCongr_apply, Trans.trans]
+  right_inv e :=
+    Equiv.ext fun x => by
+      simp only [Sum.map_inr, subtypeEquiv_apply, Set.sumCompl_apply_inr, Function.comp_apply,
+        sumCongr_apply, Equiv.coe_trans, Subtype.coe_eta, Trans.trans,
+        Set.sumCompl_symm_apply_compl]
 -/
 protected def compl {α : Type u} {β : Type v} {s : Set α} {t : Set β} [DecidablePred (· in s)]
     [DecidablePred (· in t)] (e₀ : s ≃ t) :
@@ -1545,7 +1599,7 @@ definition noncomputable
     Subtype.ext
       (H (Classical.choose_spec (mem_image_of_mem f h)).1 h
         (Classical.choose_spec (mem_image_of_mem f h)).2),
-    fun ⟨_, h⟩ => Subtype.ext (Classical.c
+    fun ⟨_, h⟩ => Subtype.ext (Classical.choose_spec h).2⟩
 
 中文:
 定义 noncomputable
@@ -1555,7 +1609,7 @@ definition noncomputable
     Subtype.ext
       (H (Classical.choose_spec (mem_image_of_mem f h)).1 h
         (Classical.choose_spec (mem_image_of_mem f h)).2),
-    fun ⟨_, h⟩ => Subtype.ext (Classical.c
+    fun ⟨_, h⟩ => Subtype.ext (Classical.choose_spec h).2⟩
 -/
 protected noncomputable def imageOfInjOn {α β} (f : α -> β) (s : Set α) (H : InjOn f s) :
     s ≃ f '' s :=

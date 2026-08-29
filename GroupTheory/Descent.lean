@@ -78,7 +78,22 @@ theorem Group.fg_of_descent
   -- Main proof idea: `s` together with elements of sufficiently small "height" `h` generates `G`.
   let S : Set G := s union {x : G | h x <= 2 * c / (b - a)}
   let U := closure S
-suffices U = ⊤ from Group.fg_iff.mpr ⟨S, this, hs.union Northcott.finite_l
+suffices U = ⊤ from Group.fg_iff.mpr ⟨S, this, hs.union Northcott.finite_le _⟩
+  by_contra! H -- Assume for contradiction that these elements generate a proper subgroup `U`.
+  rw [← SetLike.coe_ne_coe]; rw [coe_top]; rw [← Set.nonempty_compl] at H
+  -- Then we can find an element `x : G` not in `U` and of minimal height.
+  obtain ⟨x, hx₁, hx₂⟩ := Northcott.exists_min_image h Uᶜ H
+  -- Now we construct an element `y` of smaller height and not in `U`.
+obtain ⟨g, hg, z, ⟨y, rfl⟩, rfl⟩ := Set.mem_mul.mp H₁ ▸ Set.mem_univ x
+  have H' : h y < h (g * f y) := by
+    suffices a * h (g * f y) + 2 * c < b * h (g * f y) by nlinarith [H₂ g hg (f y), H₃ y]
+    suffices 2 * c / (b - a) < h (g * f y) by field_simp [sub_pos.mpr H₀] at this; grind
+    suffices g * f y ∉ S by grind
+    exact notMem_of_notMem_closure hx₁
+  -- To obtain a contradiction, we do cases on whether `y ∈ U`.
+  by_cases hy : y in U
+· exact hx₁ U.mul_mem (mem_closure_of_mem <| .inl hg) hf U mem_map_of_mem f hy
+· exact H'.not_ge hx₂ y hy
 
 中文:
 定理 群.fg_of_descent
@@ -88,7 +103,22 @@ suffices U = ⊤ from Group.fg_iff.mpr ⟨S, this, hs.union Northcott.finite_l
   -- Main proof idea: `s` together with elements of sufficiently small "height" `h` generates `G`.
   let S : Set G := s union {x : G | h x <= 2 * c / (b - a)}
   let U := closure S
-suffices U = ⊤ from Group.fg_iff.mpr ⟨S, this, hs.union Northcott.finite_l
+suffices U = ⊤ from Group.fg_iff.mpr ⟨S, this, hs.union Northcott.finite_le _⟩
+  by_contra! H -- Assume for contradiction that these elements generate a proper subgroup `U`.
+  rw [← SetLike.coe_ne_coe]; rw [coe_top]; rw [← Set.nonempty_compl] at H
+  -- Then we can find an element `x : G` not in `U` and of minimal height.
+  obtain ⟨x, hx₁, hx₂⟩ := Northcott.exists_min_image h Uᶜ H
+  -- Now we construct an element `y` of smaller height and not in `U`.
+obtain ⟨g, hg, z, ⟨y, rfl⟩, rfl⟩ := Set.mem_mul.mp H₁ ▸ Set.mem_univ x
+  have H' : h y < h (g * f y) := by
+    suffices a * h (g * f y) + 2 * c < b * h (g * f y) by nlinarith [H₂ g hg (f y), H₃ y]
+    suffices 2 * c / (b - a) < h (g * f y) by field_simp [sub_pos.mpr H₀] at this; grind
+    suffices g * f y ∉ S by grind
+    exact notMem_of_notMem_closure hx₁
+  -- To obtain a contradiction, we do cases on whether `y ∈ U`.
+  by_cases hy : y in U
+· exact hx₁ U.mul_mem (mem_closure_of_mem <| .inl hg) hf U mem_map_of_mem f hy
+· exact H'.not_ge hx₂ y hy
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.mk
 -/
@@ -148,7 +178,16 @@ theorem CommGroup.fg_of_descent
   let s : Set G := Set.range qi
 obtain ⟨g, hg₁, hg₂⟩ := s.exists_max_image c s.toFinite Set.range_nonempty qi
   have H₁' : s * f.range = .univ := by
-    ref
+    refine Set.eq_univ_iff_forall.mpr fun x => Set.mem_mul.mpr ⟨qi (q x), by simp [s], ?_⟩
+    conv => enter [1, y]; rw [eq_comm, ← div_eq_iff_eq_mul', SetLike.mem_coe]
+    simp only [↓existsAndEq, and_true]
+    exact eq_iff_div_mem.mp (Function.surjInv_eq mk_surjective _).symm
+  let c' : Real := max c₀ (c g)
+  have H₃' x : b * h x - c' <= h (f x) := by grind [powMonoidHom_apply]
+  refine Group.fg_of_descent (fun U u hu => ?_) ha H₀ s.toFinite H₁' (fun g' hg' x => ?_) H₃'
+  · obtain ⟨u', hu₁, rfl⟩ := mem_map.mp hu
+    exact U.pow_mem hu₁ n
+  · grind
 
 中文:
 定理 交换群.fg_of_descent
@@ -160,7 +199,16 @@ obtain ⟨g, hg₁, hg₂⟩ := s.exists_max_image c s.toFinite Set.range_nonemp
   let s : Set G := Set.range qi
 obtain ⟨g, hg₁, hg₂⟩ := s.exists_max_image c s.toFinite Set.range_nonempty qi
   have H₁' : s * f.range = .univ := by
-    ref
+    refine Set.eq_univ_iff_forall.mpr fun x => Set.mem_mul.mpr ⟨qi (q x), by simp [s], ?_⟩
+    conv => enter [1, y]; rw [eq_comm, ← div_eq_iff_eq_mul', SetLike.mem_coe]
+    simp only [↓existsAndEq, and_true]
+    exact eq_iff_div_mem.mp (Function.surjInv_eq mk_surjective _).symm
+  let c' : Real := max c₀ (c g)
+  have H₃' x : b * h x - c' <= h (f x) := by grind [powMonoidHom_apply]
+  refine Group.fg_of_descent (fun U u hu => ?_) ha H₀ s.toFinite H₁' (fun g' hg' x => ?_) H₃'
+  · obtain ⟨u', hu₁, rfl⟩ := mem_map.mp hu
+    exact U.pow_mem hu₁ n
+  · grind
 
 Depends on / 依赖: FiniteIndex, range.FiniteIndex
 -/
@@ -254,7 +302,11 @@ theorem Monoid.finite_set_isOfFiniteOrder_of_descent
   have : Finite ↥(Submonoid.powers t) := ht.finite_powers
   let C : Real := ⨆ g : Submonoid.powers t, h g
   have hC : forall g in Submonoid.powers t, h g <= C :=
-    fun g hg => Finite.le_ciSup (fun g : Submonoid.powers 
+    fun g hg => Finite.le_ciSup (fun g : Submonoid.powers t => h g) ⟨g, hg⟩
+  refine (hC t (Submonoid.mem_powers t)).trans ?_
+  obtain ⟨t₀, ht₀⟩ : exists g : Submonoid.powers t, h g = C := exists_eq_ciSup_of_finite
+  rw [le_div_iff₀' (by grind)]
+  grind [Submonoid.pow_mem]
 
 中文:
 定理 幺半群.finite_set_isOfFiniteOrder_of_descent
@@ -264,7 +316,11 @@ theorem Monoid.finite_set_isOfFiniteOrder_of_descent
   have : Finite ↥(Submonoid.powers t) := ht.finite_powers
   let C : Real := ⨆ g : Submonoid.powers t, h g
   have hC : forall g in Submonoid.powers t, h g <= C :=
-    fun g hg => Finite.le_ciSup (fun g : Submonoid.powers 
+    fun g hg => Finite.le_ciSup (fun g : Submonoid.powers t => h g) ⟨g, hg⟩
+  refine (hC t (Submonoid.mem_powers t)).trans ?_
+  obtain ⟨t₀, ht₀⟩ : exists g : Submonoid.powers t, h g = C := exists_eq_ciSup_of_finite
+  rw [le_div_iff₀' (by grind)]
+  grind [Submonoid.pow_mem]
 
 Depends on / 依赖: Finite, Finite.le_ciSup, Northcott, Northcott.finite_le, Submonoid, Submonoid.mem_powers, Submonoid.pow_mem, Submonoid.powers, exists_eq_ciSup_of_finite, finite_le, finite_powers, ht.finite_powers, le_ciSup, mem_powers, pow_mem, powers, subset
 -/

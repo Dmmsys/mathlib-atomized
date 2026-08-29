@@ -33,6 +33,15 @@ definition getAllFiles
     if git then
       let mlDir := ml.push pathSeparator -- for example, `Mathlib/`
       let allLean ← IO.Process.run { cmd := "git", args := #["ls-files", mlDir ++ "*.lean"] }
+      return (((allLean.dropEndWhile (· == '\n')).copy.splitOn "\n").map (⟨·⟩)).toArray
+    else do
+      let all ← walkDir ml
+      return all.filter (·.extension == some "lean"))
+  -- Filter out all files which do not exist.
+  -- This check is helpful in case the `git` option is on and a local file has been removed.
+  return ← (allModules.erase ml.lean).filterMapM (fun f => do
+    if ← pathExists f then pure (some f) else pure none
+  )
 
 中文:
 定义 getAllFiles
@@ -43,6 +52,15 @@ definition getAllFiles
     if git then
       let mlDir := ml.push pathSeparator -- for example, `Mathlib/`
       let allLean ← IO.Process.run { cmd := "git", args := #["ls-files", mlDir ++ "*.lean"] }
+      return (((allLean.dropEndWhile (· == '\n')).copy.splitOn "\n").map (⟨·⟩)).toArray
+    else do
+      let all ← walkDir ml
+      return all.filter (·.extension == some "lean"))
+  -- Filter out all files which do not exist.
+  -- This check is helpful in case the `git` option is on and a local file has been removed.
+  return ← (allModules.erase ml.lean).filterMapM (fun f => do
+    if ← pathExists f then pure (some f) else pure none
+  )
 -/
 def getAllFiles (git : Bool) (ml : String) : IO (Array System.FilePath) := do
   let ml.lean := addExtension ⟨ml⟩ "lean" -- for example, `Mathlib.lean`

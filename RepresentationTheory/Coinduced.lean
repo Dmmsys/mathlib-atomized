@@ -462,7 +462,11 @@ definition coindVEquiv
 map_add' _ _ := coind'_ext φ by simp [Rep.add_hom]
 map_smul' _ _ := coind'_ext φ by simp [smul_hom]
   invFun f := ⟨fun h => f.hom.toLinearMap (.single h 1), fun g h => by
- 
+    simp only [res_obj_V, res_obj_ρ, Representation.IntertwiningMap.toLinearMap_apply]
+    have := by simpa using (hom_comm_apply f g (.single h 1)).symm
+    rw [← this]⟩
+  left_inv x := by simp
+  right_inv x := coind'_ext φ fun _ => by simp
 
 中文:
 定义 coindVEquiv
@@ -472,7 +476,11 @@ map_smul' _ _ := coind'_ext φ by simp [smul_hom]
 map_add' _ _ := coind'_ext φ by simp [Rep.add_hom]
 map_smul' _ _ := coind'_ext φ by simp [smul_hom]
   invFun f := ⟨fun h => f.hom.toLinearMap (.single h 1), fun g h => by
- 
+    simp only [res_obj_V, res_obj_ρ, Representation.IntertwiningMap.toLinearMap_apply]
+    have := by simpa using (hom_comm_apply f g (.single h 1)).symm
+    rw [← this]⟩
+  left_inv x := by simp
+  right_inv x := coind'_ext φ fun _ => by simp
 
 Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.coeffLinearEquiv, Rep.ofHom, coeffLinearEquiv, linearCombination, toLinearMap
 -/
@@ -626,7 +634,12 @@ definition resCoindHomEquiv
       have := ((f.hom x).2 g 1).symm
       have := hom_comm_apply f (φ g) x
       simp_all⟩
-  left_inv x := by ext;
+  left_inv x := by ext; simp
+  right_inv z := by ext; simp [resCoindToHom, hom_comm_apply z]
+
+#adaptation_note /-- After https://github.com/leanprover/lean4/pull/12179
+the simpNF linter complains about `@[simps! counit_app_hom_hom unit_app_hom_hom]`,
+but removing it seems to be harmless. -/
 
 中文:
 定义 resCoindHomEquiv
@@ -640,7 +653,12 @@ definition resCoindHomEquiv
       have := ((f.hom x).2 g 1).symm
       have := hom_comm_apply f (φ g) x
       simp_all⟩
-  left_inv x := by ext;
+  left_inv x := by ext; simp
+  right_inv z := by ext; simp [resCoindToHom, hom_comm_apply z]
+
+#adaptation_note /-- After https://github.com/leanprover/lean4/pull/12179
+the simpNF linter complains about `@[simps! counit_app_hom_hom unit_app_hom_hom]`,
+but removing it seems to be harmless. -/
 
 Depends on / 依赖: resCoindToHom
 -/

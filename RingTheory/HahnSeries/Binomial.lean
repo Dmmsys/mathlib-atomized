@@ -123,7 +123,9 @@ theorem binomialFamily_orderTop_pos
   have : n != 0 := by exact Nat.ne_zero_of_lt hn
   calc
     0 < n • (x - 1).orderTop := (nsmul_pos_iff (Nat.ne_zero_of_lt hn)).mpr hx
-    _ <= ((x - 1) ^ n).ord
+    _ <= ((x - 1) ^ n).orderTop := orderTop_nsmul_le_orderTop_pow
+    _ <= ((Ring.choose r n) • ((x - 1) ^ n)).orderTop :=
+      orderTop_le_orderTop_smul (Ring.choose r n) ((x - 1) ^ n)
 
 中文:
 定理 binomialFamily_orderTop_pos
@@ -134,7 +136,9 @@ theorem binomialFamily_orderTop_pos
   have : n != 0 := by exact Nat.ne_zero_of_lt hn
   calc
     0 < n • (x - 1).orderTop := (nsmul_pos_iff (Nat.ne_zero_of_lt hn)).mpr hx
-    _ <= ((x - 1) ^ n).ord
+    _ <= ((x - 1) ^ n).orderTop := orderTop_nsmul_le_orderTop_pow
+    _ <= ((Ring.choose r n) • ((x - 1) ^ n)).orderTop :=
+      orderTop_le_orderTop_smul (Ring.choose r n) ((x - 1) ^ n)
 
 Depends on / 依赖: Nat.ne_zero_of_lt, PowerSeries, PowerSeries.binomialSeries_coeff, Ring.choose, binomialFamily, binomialSeries_coeff, ne_zero_of_lt, nsmul_pos_iff, one_smul, orderTop, orderTop_le_orderTop_smul, orderTop_nsmul_le_orderTop_pow, powers_toFun, reduceIte, smulFamily_toFun, smul_assoc
 -/
@@ -190,7 +194,16 @@ theorem orderTop_hsum_binomialFamily_pos
   · refine (orderTop_self_sub_one_pos_iff (binomialFamily x r).hsum).mpr ?_
     constructor
     · exact hsum_orderTop_of_le (by simp [hx]) (fun b g hg => binomialFamily_mem_support
-   
+        hx r b hg) fun b hb => coeff_eq_zero_of_lt_orderTop <| binomialFamily_orderTop_pos hx r <|
+        Nat.zero_lt_of_ne_zero hb
+    · have : (binomialFamily x r 0).coeff 0 = 1 := by simp [hx]
+      rw [← this]
+      refine hsum_leadingCoeff_of_le (g := 0) (a := 0) (by simp [hx]) ?_ ?_
+      · intro b g' hg'
+        exact binomialFamily_mem_support hx r b hg'
+      · intro b hb
+exact coeff_eq_zero_of_lt_orderTop binomialFamily_orderTop_pos hx r
+        Nat.zero_lt_of_ne_zero hb
 
 中文:
 定理 orderTop_hsum_binomialFamily_pos
@@ -201,7 +214,16 @@ theorem orderTop_hsum_binomialFamily_pos
   · refine (orderTop_self_sub_one_pos_iff (binomialFamily x r).hsum).mpr ?_
     constructor
     · exact hsum_orderTop_of_le (by simp [hx]) (fun b g hg => binomialFamily_mem_support
-   
+        hx r b hg) fun b hb => coeff_eq_zero_of_lt_orderTop <| binomialFamily_orderTop_pos hx r <|
+        Nat.zero_lt_of_ne_zero hb
+    · have : (binomialFamily x r 0).coeff 0 = 1 := by simp [hx]
+      rw [← this]
+      refine hsum_leadingCoeff_of_le (g := 0) (a := 0) (by simp [hx]) ?_ ?_
+      · intro b g' hg'
+        exact binomialFamily_mem_support hx r b hg'
+      · intro b hb
+exact coeff_eq_zero_of_lt_orderTop binomialFamily_orderTop_pos hx r
+        Nat.zero_lt_of_ne_zero hb
 
 Depends on / 依赖: Nat.zero_lt_of_ne_zero, Subsingleton, Subsingleton.eq_zero, binomialFamily, binomialFamily_mem_support, binomialFamily_orderTop_pos, coeff_eq_zero_of_lt_orderTop, eq_zero, hsum_leadingCoeff_of_, hsum_orderTop_of_le, orderTop_self_sub_one_pos_iff, subsingleton_or_nontrivial, zero_lt_of_ne_zero
 -/
@@ -305,7 +327,10 @@ theorem coeff_toOrderTopSubOnePos_pow
   simp only [val_toOrderTopSubOnePos_coe, binomial_power, coeff_hsum, smul_eq_mul]
   rw [finsum_eq_single _ k]; rw [binomialFamily_apply (orderTop_sub_pos hg r)]; rw [add_sub_cancel_left]; rw [single_pow]; rw [coeff_smul]; rw [coeff_single_same (k • g) (r ^ k)]; rw [smul_eq_mul]
   intro n hn
-  rw
+  rw [binomialFamily_apply]; rw [add_sub_cancel_left]; rw [coeff_smul]; rw [single_pow]; rw [coeff_single_of_ne]; rw [smul_zero]
+  · contrapose hn
+    apply (StrictMono.injective (nsmul_left_strictMono hg)) hn.symm
+  · by_cases hr : r = 0 <;> simp [hr, hg]
 
 中文:
 定理 coeff_toOrderTopSubOnePos_pow
@@ -314,7 +339,10 @@ theorem coeff_toOrderTopSubOnePos_pow
   simp only [val_toOrderTopSubOnePos_coe, binomial_power, coeff_hsum, smul_eq_mul]
   rw [finsum_eq_single _ k]; rw [binomialFamily_apply (orderTop_sub_pos hg r)]; rw [add_sub_cancel_left]; rw [single_pow]; rw [coeff_smul]; rw [coeff_single_same (k • g) (r ^ k)]; rw [smul_eq_mul]
   intro n hn
-  rw
+  rw [binomialFamily_apply]; rw [add_sub_cancel_left]; rw [coeff_smul]; rw [single_pow]; rw [coeff_single_of_ne]; rw [smul_zero]
+  · contrapose hn
+    apply (StrictMono.injective (nsmul_left_strictMono hg)) hn.symm
+  · by_cases hr : r = 0 <;> simp [hr, hg]
 
 Depends on / 依赖: StrictMono, StrictMono.injective, add_sub_cancel_left, binomialFamily_apply, binomial_power, coeff_hsum, coeff_single_of_ne, coeff_single_same, coeff_smul, contrapose, finsum_eq_single, hn.symm, injective, nsmul_left_strictMono, orderTop_sub_pos, single_pow, smul_eq_mul, smul_zero, val_toOrderTopSubOnePos_coe
 -/

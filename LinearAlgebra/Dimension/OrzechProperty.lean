@@ -34,7 +34,7 @@ theorem linearIndependent_of_top_le_span_of_card_le_finrank
   have := Module.Finite.of_surjective _ spans
   have ⟨f, hf⟩ := exists_linearIndependent_of_le_finrank card_le
   exact OrzechProperty.injective_of_surjective_of_injective
-    _ _ (hf.comp _ (Fintype.eq
+    _ _ (hf.comp _ (Fintype.equivFin _).injective) spans
 
 中文:
 定理 linearIndependent_of_top_le_span_of_card_le_finrank
@@ -44,7 +44,7 @@ theorem linearIndependent_of_top_le_span_of_card_le_finrank
   have := Module.Finite.of_surjective _ spans
   have ⟨f, hf⟩ := exists_linearIndependent_of_le_finrank card_le
   exact OrzechProperty.injective_of_surjective_of_injective
-    _ _ (hf.comp _ (Fintype.eq
+    _ _ (hf.comp _ (Fintype.equivFin _).injective) spans
 
 Depends on / 依赖: Finite, Finsupp, Finsupp.range_linearCombination, Fintype, Fintype.equivFin, LinearMap, LinearMap.range_eq_top, Module, Module.Finite.of_surjective, OrzechProperty, OrzechProperty.injective_of_surjective_of_injective, card_le, equivFin, exists_linearIndependent_of_le_finrank, hf.comp, injective, injective_of_surjective_of_injective, of_surjective, range_eq_top, range_linearCombination
 -/
@@ -87,7 +87,8 @@ theorem linearIndependent_iff_card_eq_finrank_span
   mpr hc := by
 refine (LinearMap.linearIndependent_iff_of_injOn _ (subtype_injective _).injOn).mpr
       linearIndependent_of_top_le_span_of_card_eq_finrank (b := fun i => ⟨b i, subset_span ⟨i, rfl⟩⟩)
-        (fun ⟨_, _⟩ _ => (subtype_injective _).mem_set_image.mp ?_) h
+        (fun ⟨_, _⟩ _ => (subtype_injective _).mem_set_image.mp ?_) hc
+    rwa [← map_coe, ← span_image, ← Set.range_comp]
 
 中文:
 定理 linearIndependent_iff_card_eq_finrank_span
@@ -96,7 +97,8 @@ refine (LinearMap.linearIndependent_iff_of_injOn _ (subtype_injective _).injOn).
   mpr hc := by
 refine (LinearMap.linearIndependent_iff_of_injOn _ (subtype_injective _).injOn).mpr
       linearIndependent_of_top_le_span_of_card_eq_finrank (b := fun i => ⟨b i, subset_span ⟨i, rfl⟩⟩)
-        (fun ⟨_, _⟩ _ => (subtype_injective _).mem_set_image.mp ?_) h
+        (fun ⟨_, _⟩ _ => (subtype_injective _).mem_set_image.mp ?_) hc
+    rwa [← map_coe, ← span_image, ← Set.range_comp]
 
 Depends on / 依赖: finrank_span_eq_card
 -/

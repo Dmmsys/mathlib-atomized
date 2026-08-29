@@ -244,7 +244,8 @@ instance baseChange
   let := Localization.AtPrime.algebraOfLiesOver p P
   let e : P.Fiber (A otimes[R] S) ≃ₐ[P.ResidueField] P.ResidueField otimes[p.ResidueField] (p.Fiber S) :=
     (Algebra.TensorProduct.cancelBaseChange _ _ _ _ _).trans
-      (Algebra.TensorProduct.ca
+      (Algebra.TensorProduct.cancelBaseChange _ _ _ _ _).symm
+  exact .of_surjective e.symm.toLinearMap e.symm.surjective
 
 中文:
 实例 baseChange
@@ -255,7 +256,8 @@ instance baseChange
   let := Localization.AtPrime.algebraOfLiesOver p P
   let e : P.Fiber (A otimes[R] S) ≃ₐ[P.ResidueField] P.ResidueField otimes[p.ResidueField] (p.Fiber S) :=
     (Algebra.TensorProduct.cancelBaseChange _ _ _ _ _).trans
-      (Algebra.TensorProduct.ca
+      (Algebra.TensorProduct.cancelBaseChange _ _ _ _ _).symm
+  exact .of_surjective e.symm.toLinearMap e.symm.surjective
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.cancelBaseChange, AtPrime, Localization, Localization.AtPrime.algebraOfLiesOver, P.Fiber, P.ResidueField, P.under, ResidueField, TensorProduct, algebraOfLiesOver, cancelBaseChange, e.symm.surjective, e.symm.toLinearMap, of_surjective, otimes, p.Fiber, p.ResidueField, surjective, toLinearMap
 -/
@@ -281,7 +283,18 @@ lemma finite_of_isArtinianRing_of_isLocalRing
     (Algebra.TensorProduct.congr (.symm <| .ofBijective _
       (Ideal.bijective_algebraMap_quotient_residueField (maximalIdeal R))) .refl).trans <|
     (Algebra.TensorProduct.comm _ _ _).trans
-    ((Algebra.Ten
+    ((Algebra.TensorProduct.quotIdealMapEquivTensorQuot S (maximalIdeal R)).symm.restrictScalars _)
+  have : Module.Finite R (S ⧸ (maximalIdeal R).map (algebraMap R S)) :=
+    have : Module.Finite R ((maximalIdeal R).Fiber S) :=
+      .trans (maximalIdeal R).ResidueField _
+    .of_surjective e.toLinearMap e.surjective
+  refine Module.finite_of_surjective_of_ker_le_nilradical (Ideal.Quotient.mkₐ R
+    ((maximalIdeal R).map (algebraMap R S))) Ideal.Quotient.mk_surjective ?_ ?_
+  · refine Ideal.mk_ker.trans_le ?_
+    rw [Ideal.map_le_iff_le_comap]; rw [← Ring.KrullDimLE.nilradical_eq_maximalIdeal]
+    exact fun x hx => IsNilpotent.map hx _
+  · rw [← RingHom.ker_coe_toRingHom, Ideal.Quotient.mkₐ_ker]
+    exact Ideal.FG.map (IsNoetherian.noetherian _) _
 
 中文:
 引理 finite_of_isArtinianRing_of_isLocalRing
@@ -290,7 +303,18 @@ lemma finite_of_isArtinianRing_of_isLocalRing
     (Algebra.TensorProduct.congr (.symm <| .ofBijective _
       (Ideal.bijective_algebraMap_quotient_residueField (maximalIdeal R))) .refl).trans <|
     (Algebra.TensorProduct.comm _ _ _).trans
-    ((Algebra.Ten
+    ((Algebra.TensorProduct.quotIdealMapEquivTensorQuot S (maximalIdeal R)).symm.restrictScalars _)
+  have : Module.Finite R (S ⧸ (maximalIdeal R).map (algebraMap R S)) :=
+    have : Module.Finite R ((maximalIdeal R).Fiber S) :=
+      .trans (maximalIdeal R).ResidueField _
+    .of_surjective e.toLinearMap e.surjective
+  refine Module.finite_of_surjective_of_ker_le_nilradical (Ideal.Quotient.mkₐ R
+    ((maximalIdeal R).map (algebraMap R S))) Ideal.Quotient.mk_surjective ?_ ?_
+  · refine Ideal.mk_ker.trans_le ?_
+    rw [Ideal.map_le_iff_le_comap]; rw [← Ring.KrullDimLE.nilradical_eq_maximalIdeal]
+    exact fun x hx => IsNilpotent.map hx _
+  · rw [← RingHom.ker_coe_toRingHom, Ideal.Quotient.mkₐ_ker]
+    exact Ideal.FG.map (IsNoetherian.noetherian _) _
 -/
 private lemma finite_of_isArtinianRing_of_isLocalRing
     [QuasiFinite R S] [IsArtinianRing R] [IsLocalRing R] : Module.Finite R S := by
@@ -323,7 +347,18 @@ lemma _root_.Module.Finite.of_quasiFinite
     .ofBijective (IsScalarTower.toAlgHom _ _ _)
       (PrimeSpectrum.discreteTopology_iff_toPiLocalization_bijective.mp inferInstance)
   have : Fintype (PrimeSpectrum R) := .ofFinite _
-  let e' : S ≃ₐ[R] Π p : PrimeSpectrum R, Locali
+  let e' : S ≃ₐ[R] Π p : PrimeSpectrum R, Localization p.asIdeal.primeCompl otimes[R] S :=
+(Algebra.TensorProduct.rid R R S).symm.trans (Algebra.TensorProduct.congr .refl e).trans
+(Algebra.TensorProduct.piRight _ _ _ _).trans AlgEquiv.piCongrRight
+      fun _ => Algebra.TensorProduct.comm _ _ _
+  have (p : PrimeSpectrum R) : Module.Finite R (Localization p.asIdeal.primeCompl otimes[R] S) :=
+    have : Module.Finite R (Localization.AtPrime p.asIdeal) :=
+      .of_surjective (Algebra.linearMap _ _)
+        (IsArtinianRing.localization_surjective p.asIdeal.primeCompl _)
+    have : Module.Finite (Localization.AtPrime p.asIdeal)
+      (Localization.AtPrime p.asIdeal otimes[R] S) := finite_of_isArtinianRing_of_isLocalRing
+    .trans (Localization.AtPrime p.asIdeal) _
+  exact .of_surjective e'.symm.toLinearMap e'.symm.surjective
 
 中文:
 引理 _root_.模.有限.of_quasiFinite
@@ -334,7 +369,18 @@ lemma _root_.Module.Finite.of_quasiFinite
     .ofBijective (IsScalarTower.toAlgHom _ _ _)
       (PrimeSpectrum.discreteTopology_iff_toPiLocalization_bijective.mp inferInstance)
   have : Fintype (PrimeSpectrum R) := .ofFinite _
-  let e' : S ≃ₐ[R] Π p : PrimeSpectrum R, Locali
+  let e' : S ≃ₐ[R] Π p : PrimeSpectrum R, Localization p.asIdeal.primeCompl otimes[R] S :=
+(Algebra.TensorProduct.rid R R S).symm.trans (Algebra.TensorProduct.congr .refl e).trans
+(Algebra.TensorProduct.piRight _ _ _ _).trans AlgEquiv.piCongrRight
+      fun _ => Algebra.TensorProduct.comm _ _ _
+  have (p : PrimeSpectrum R) : Module.Finite R (Localization p.asIdeal.primeCompl otimes[R] S) :=
+    have : Module.Finite R (Localization.AtPrime p.asIdeal) :=
+      .of_surjective (Algebra.linearMap _ _)
+        (IsArtinianRing.localization_surjective p.asIdeal.primeCompl _)
+    have : Module.Finite (Localization.AtPrime p.asIdeal)
+      (Localization.AtPrime p.asIdeal otimes[R] S) := finite_of_isArtinianRing_of_isLocalRing
+    .trans (Localization.AtPrime p.asIdeal) _
+  exact .of_surjective e'.symm.toLinearMap e'.symm.surjective
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.piCongrRight, Algebra, Algebra.T, Algebra.TensorProduct.congr, Algebra.TensorProduct.piRight, Algebra.TensorProduct.rid, Fintype, IsScalarTower, IsScalarTower.toAlgHom, Localization, PiLocalization, PrimeSpectrum, PrimeSpectrum.PiLocalization, PrimeSpectrum.discreteTopology_iff_toPiLocalization_bijective.mp, TensorProduct, asIdeal, classical, discreteTopology_iff_toPiLocalization_bijective, ofBijective
 -/
@@ -394,7 +440,17 @@ lemma trans
   have : Module.Finite P.ResidueField ((P.Fiber S) otimes[S] T) :=
     .trans (P.Fiber S) _
   let e : P.Fiber S ≃ₐ[S] S otimes[R] P.ResidueField :=
-    { __ := Alge
+    { __ := Algebra.TensorProduct.comm _ _ _, commutes' _ := rfl }
+  let e' : (P.Fiber S) otimes[S] T ≃ₐ[R] P.Fiber T :=
+((Algebra.TensorProduct.congr e .refl).restrictScalars R).trans
+((Algebra.TensorProduct.comm _ _ _).restrictScalars R).trans
+    ((Algebra.TensorProduct.cancelBaseChange _ _ T _ _).restrictScalars R).trans
+    (Algebra.TensorProduct.comm _ _ _)
+  let e'' : (P.Fiber S) otimes[S] T ≃ₐ[P.ResidueField] P.Fiber T :=
+    { __ := e', commutes' _ := by simp [e', e] }
+  exact .of_surjective e''.toLinearMap e''.surjective
+
+omit [Algebra S T] in
 
 中文:
 引理 trans
@@ -407,7 +463,17 @@ lemma trans
   have : Module.Finite P.ResidueField ((P.Fiber S) otimes[S] T) :=
     .trans (P.Fiber S) _
   let e : P.Fiber S ≃ₐ[S] S otimes[R] P.ResidueField :=
-    { __ := Alge
+    { __ := Algebra.TensorProduct.comm _ _ _, commutes' _ := rfl }
+  let e' : (P.Fiber S) otimes[S] T ≃ₐ[R] P.Fiber T :=
+((Algebra.TensorProduct.congr e .refl).restrictScalars R).trans
+((Algebra.TensorProduct.comm _ _ _).restrictScalars R).trans
+    ((Algebra.TensorProduct.cancelBaseChange _ _ T _ _).restrictScalars R).trans
+    (Algebra.TensorProduct.comm _ _ _)
+  let e'' : (P.Fiber S) otimes[S] T ≃ₐ[P.ResidueField] P.Fiber T :=
+    { __ := e', commutes' _ := by simp [e', e] }
+  exact .of_surjective e''.toLinearMap e''.surjective
+
+omit [Algebra S T] in
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.comm, Algebra.TensorProduct.congr, Finite, Module, Module.Finite, P.Fiber, P.ResidueField, ResidueField, TensorProduct, commutes, iff_of_isArtinianRing, iff_of_isArtinianRing.mp, otimes, restrictScalars
 -/
@@ -492,7 +558,17 @@ lemma of_isLocalization
   proof: letI : QuasiFinite S T := by
     refine ⟨fun P hP => .of_surjective (Algebra.linearMap P.ResidueField (P.Fiber T)) ?_⟩
     rw [← LinearMap.coe_restrictScalars (R := S)]; rw [← LinearMap.range_eq_top]; rw [← top_le_iff]; rw [← TensorProduct.span_tmul_eq_top]; rw [Submodule.span_le]
-    rintro _ ⟨p, s
+    rintro _ ⟨p, s, rfl⟩
+    obtain ⟨s, t, rfl⟩ := IsLocalization.exists_mk'_eq M s
+    use s • p / algebraMap _ _ t.1
+    apply ((IsLocalization.map_units T t).map
+      Algebra.TensorProduct.includeRight).mul_left_injective
+    by_cases ht : algebraMap _ P.ResidueField t.1 = 0
+    · simp [ht]
+    trans (s • p) otimesₜ[S] 1
+    · simp [div_mul_cancel₀ _ ht]
+    · dsimp; simp [Algebra.algebraMap_eq_smul_one, smul_tmul]
+  trans R S T
 
 中文:
 引理 of_isLocalization
@@ -500,7 +576,17 @@ lemma of_isLocalization
   证明: letI : QuasiFinite S T := by
     refine ⟨fun P hP => .of_surjective (Algebra.linearMap P.ResidueField (P.Fiber T)) ?_⟩
     rw [← LinearMap.coe_restrictScalars (R := S)]; rw [← LinearMap.range_eq_top]; rw [← top_le_iff]; rw [← TensorProduct.span_tmul_eq_top]; rw [Submodule.span_le]
-    rintro _ ⟨p, s
+    rintro _ ⟨p, s, rfl⟩
+    obtain ⟨s, t, rfl⟩ := IsLocalization.exists_mk'_eq M s
+    use s • p / algebraMap _ _ t.1
+    apply ((IsLocalization.map_units T t).map
+      Algebra.TensorProduct.includeRight).mul_left_injective
+    by_cases ht : algebraMap _ P.ResidueField t.1 = 0
+    · simp [ht]
+    trans (s • p) otimesₜ[S] 1
+    · simp [div_mul_cancel₀ _ ht]
+    · dsimp; simp [Algebra.algebraMap_eq_smul_one, smul_tmul]
+  trans R S T
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRight, Algebra.linearMap, IsLocalization, IsLocalization.exists_mk, IsLocalization.map_units, LinearMap, LinearMap.coe_restrictScalars, LinearMap.range_eq_top, P.Fiber, P.ResidueField, QuasiFinite, ResidueField, Submodule, Submodule.span_le, TensorProduct, TensorProduct.span_tmul_eq_top, algebraM, algebraMap, coe_restrictScalars
 -/
@@ -562,7 +648,11 @@ lemma of_restrictScalars
     Algebra.TensorProduct.lift (Algebra.ofId _ _)
       (Algebra.TensorProduct.includeRight.restrictScalars R) fun _ _ => .all _ _
   have hf : Function.Surjective f := by
-    rw [← AlgHom.coe_restrictS
+    rw [← AlgHom.coe_restrictScalars' (R := S)]; rw [← AlgHom.coe_toLinearMap]; rw [← LinearMap.range_eq_top]; rw [← top_le_iff]; rw [← TensorProduct.span_tmul_eq_top]; rw [Submodule.span_le]
+    rintro _ ⟨a, b, rfl⟩
+    exact ⟨a otimesₜ b, by simp [f]⟩
+  have : Module.Finite P.ResidueField (P.ResidueField otimes[R] T) := .of_quasiFinite
+  exact .of_surjective f.toLinearMap hf
 
 中文:
 引理 of_restrictScalars
@@ -574,7 +664,11 @@ lemma of_restrictScalars
     Algebra.TensorProduct.lift (Algebra.ofId _ _)
       (Algebra.TensorProduct.includeRight.restrictScalars R) fun _ _ => .all _ _
   have hf : Function.Surjective f := by
-    rw [← AlgHom.coe_restrictS
+    rw [← AlgHom.coe_restrictScalars' (R := S)]; rw [← AlgHom.coe_toLinearMap]; rw [← LinearMap.range_eq_top]; rw [← top_le_iff]; rw [← TensorProduct.span_tmul_eq_top]; rw [Submodule.span_le]
+    rintro _ ⟨a, b, rfl⟩
+    exact ⟨a otimesₜ b, by simp [f]⟩
+  have : Module.Finite P.ResidueField (P.ResidueField otimes[R] T) := .of_quasiFinite
+  exact .of_surjective f.toLinearMap hf
 
 Depends on / 依赖: AlgHom, AlgHom.coe_restrictScalars, AlgHom.coe_toLinearMap, Algebra, Algebra.TensorProduct.includeRight.restrictScalars, Algebra.TensorProduct.lift, Algebra.ofId, Function, Function.Surjective, LinearMap, LinearMap.range_eq_top, P.Fiber, P.ResidueField, ResidueField, Submodule, Submodule.span_le, Surjective, TensorProduct, TensorProduct.span_tmul_eq_top, coe_restrictScalars
 -/
@@ -654,7 +748,10 @@ lemma of_forall_exists_mul_mem_range
   suffices Function.Surjective φ from .of_surjective_algHom φ this
   intro x
   obtain ⟨s, hs, t, ht⟩ := H x
-  ref
+  refine ⟨IsLocalization.mk' (M := (IsUnit.submonoid T).comap f) _ t ⟨s, hs⟩, ?_⟩
+  simpa [φ, IsLocalization.lift_mk', Units.mul_inv_eq_iff_eq_mul, IsUnit.coe_liftRight]
+
+omit [Algebra S T] in
 
 中文:
 引理 of_对任意_存在_mul_mem_range
@@ -666,7 +763,10 @@ lemma of_forall_exists_mul_mem_range
   suffices Function.Surjective φ from .of_surjective_algHom φ this
   intro x
   obtain ⟨s, hs, t, ht⟩ := H x
-  ref
+  refine ⟨IsLocalization.mk' (M := (IsUnit.submonoid T).comap f) _ t ⟨s, hs⟩, ?_⟩
+  simpa [φ, IsLocalization.lift_mk', Units.mul_inv_eq_iff_eq_mul, IsUnit.coe_liftRight]
+
+omit [Algebra S T] in
 
 Depends on / 依赖: Function, Function.Surjective, IsLocalization, IsLocalization.liftAlgHom, IsLocalization.lift_mk, IsLocalization.mk, IsUnit, IsUnit.coe_liftRight, IsUnit.mem_submonoid_iff, IsUnit.submonoid, Localization, Surjective, Units.mul_inv_eq_iff_eq_mul, coe_liftRight, liftAlgHom, lift_mk, mem_submonoid_iff, mul_inv_eq_iff_eq_mul, of_surjective_algHom, submonoid
 -/
@@ -744,7 +844,10 @@ lemma iff_finite_comap_preimage_singleton
   refine ⟨fun H _ => finite_comap_preimage_singleton _, fun H => ⟨fun P _ => ?_⟩⟩
   rw [Module.finite_iff_isArtinianRing]; rw [isArtinianRing_iff_isNoetherianRing_krullDimLE_zero]
   have : IsJacobsonRing (P.Fiber S) := isJacobsonRing_of_finiteType (A := P.ResidueField)
-  have : Finite (PrimeSpect
+  have : Finite (PrimeSpectrum (P.Fiber S)) :=
+    (PrimeSpectrum.preimageEquivFiber R S ⟨P, ‹_›⟩).finite_iff.mp (H ⟨P, ‹_›⟩)
+  exact ⟨Algebra.FiniteType.isNoetherianRing P.ResidueField _,
+    (PrimeSpectrum.discreteTopology_iff_finite_and_krullDimLE_zero.mp inferInstance).right⟩
 
 中文:
 引理 iff_finite_comap_preimage_singleton
@@ -753,7 +856,10 @@ lemma iff_finite_comap_preimage_singleton
   refine ⟨fun H _ => finite_comap_preimage_singleton _, fun H => ⟨fun P _ => ?_⟩⟩
   rw [Module.finite_iff_isArtinianRing]; rw [isArtinianRing_iff_isNoetherianRing_krullDimLE_zero]
   have : IsJacobsonRing (P.Fiber S) := isJacobsonRing_of_finiteType (A := P.ResidueField)
-  have : Finite (PrimeSpect
+  have : Finite (PrimeSpectrum (P.Fiber S)) :=
+    (PrimeSpectrum.preimageEquivFiber R S ⟨P, ‹_›⟩).finite_iff.mp (H ⟨P, ‹_›⟩)
+  exact ⟨Algebra.FiniteType.isNoetherianRing P.ResidueField _,
+    (PrimeSpectrum.discreteTopology_iff_finite_and_krullDimLE_zero.mp inferInstance).right⟩
 
 Depends on / 依赖: Algebra, Algebra.FiniteType.isNoetherianRing, Finite, FiniteType, IsJacobsonRing, Module, Module.finite_iff_isArtinianRing, P.Fiber, P.ResidueField, PrimeSpectrum, PrimeSpectrum.discreteTopology_iff_finite_and_krull, PrimeSpectrum.preimageEquivFiber, ResidueField, discreteTopology_iff_finite_and_krull, finite_comap_preimage_singleton, finite_iff, finite_iff.mp, finite_iff_isArtinianRing, isArtinianRing_iff_isNoetherianRing_krullDimLE_zero, isJacobsonRing_of_finiteType
 -/
@@ -780,7 +886,8 @@ lemma iff_finite_primesOver
   rw [← Set.finite_image_iff (Function.Injective.injOn fun _ _ => PrimeSpectrum.ext)]
   congr!
   ext J
-  simp [(PrimeSpectrum.equivSubtype S
+  simp [(PrimeSpectrum.equivSubtype S).exists_congr_left, PrimeSpectrum.ext_iff, eq_comm,
+    PrimeSpectrum.equivSubtype, Ideal.primesOver, and_comm, Ideal.liesOver_iff, Ideal.under]
 
 中文:
 引理 iff_finite_primesOver
@@ -791,7 +898,8 @@ lemma iff_finite_primesOver
   rw [← Set.finite_image_iff (Function.Injective.injOn fun _ _ => PrimeSpectrum.ext)]
   congr!
   ext J
-  simp [(PrimeSpectrum.equivSubtype S
+  simp [(PrimeSpectrum.equivSubtype S).exists_congr_left, PrimeSpectrum.ext_iff, eq_comm,
+    PrimeSpectrum.equivSubtype, Ideal.primesOver, and_comm, Ideal.liesOver_iff, Ideal.under]
 
 Depends on / 依赖: Function, Function.Injective.injOn, Ideal.liesOver_iff, Ideal.primesOver, Ideal.under, Injective, PrimeSpectrum, PrimeSpectrum.equivSubtype, PrimeSpectrum.ext, PrimeSpectrum.ext_iff, Set.finite_image_iff, Subtype, Subtype.forall, and_comm, eq_comm, equivSubtype, exists_congr_left, ext_iff, finite_image_iff, forall_congr_left
 -/
@@ -818,7 +926,33 @@ lemma of_isIntegral_of_finiteType
   let f : Localization.Away sA ->+* T := IsLocalization.Away.lift sA (g := algebraMap _ _)
     (IsLocalization.Away.algebraMap_isUnit s)
   let := f.toAlgebra
-  let : Algebra A (Localization.Away sA) := OreLocaliz
+  let : Algebra A (Localization.Away sA) := OreLocalization.instAlgebra
+  let : SMul A (Localization.Away sA) := Algebra.toSMul
+  let : MulAction A (Localization.Away sA) := Algebra.toModule.toDistribMulAction.toMulAction
+  have : IsScalarTower R A (Localization.Away sA) := OreLocalization.instIsScalarTower
+  have : IsScalarTower A (Localization.Away sA) T :=
+    .of_algebraMap_eq (by simp [f, RingHom.algebraMap_toAlgebra, A])
+  have : IsScalarTower R (Localization.Away sA) T := .to₁₃₄ R A (Localization.Away sA) T
+  have : Algebra.IsIntegral (Localization.Away sA) T := by
+    refine ⟨fun x => ?_⟩
+    obtain ⟨x, ⟨_, n, rfl⟩, rfl⟩ := IsLocalization.exists_mk'_eq (.powers s) x
+    have : _root_.IsIntegral (Localization.Away sA) (algebraMap S T x) :=
+      (Algebra.IsIntegral.isIntegral (R := R) x).algebraMap.tower_top
+    convert! this.smul (Localization.Away.invSelf sA ^ n)
+    rw [IsLocalization.mk'_eq_iff_eq_mul]
+    simp only [map_pow, Algebra.smul_mul_assoc]
+    trans (sA • Localization.Away.invSelf sA) ^ n • (algebraMap S T x)
+    · simp [Algebra.smul_def, -map_pow, Localization.Away.invSelf, Localization.mk_eq_mk']
+    · simp only [Algebra.smul_def, map_pow, map_mul, mul_pow,
+        ← IsScalarTower.algebraMap_apply, Subalgebra.algebraMap_def, sA]
+      ring
+  have : Module.Finite (Localization.Away sA) T :=
+    have : Algebra.FiniteType (Localization.Away sA) T := .of_restrictScalars_finiteType R _ _
+    Algebra.IsIntegral.finite
+  have : Module.Finite R A :=
+    Algebra.finite_adjoin_simple_of_isIntegral (Algebra.IsIntegral.isIntegral _)
+  have : Algebra.QuasiFinite R (Localization.Away sA) := .of_isLocalization (.powers sA)
+  exact .trans _ (Localization.Away sA) _
 
 中文:
 引理 of_is整数egral_of_finiteType
@@ -829,7 +963,33 @@ lemma of_isIntegral_of_finiteType
   let f : Localization.Away sA ->+* T := IsLocalization.Away.lift sA (g := algebraMap _ _)
     (IsLocalization.Away.algebraMap_isUnit s)
   let := f.toAlgebra
-  let : Algebra A (Localization.Away sA) := OreLocaliz
+  let : Algebra A (Localization.Away sA) := OreLocalization.instAlgebra
+  let : SMul A (Localization.Away sA) := Algebra.toSMul
+  let : MulAction A (Localization.Away sA) := Algebra.toModule.toDistribMulAction.toMulAction
+  have : IsScalarTower R A (Localization.Away sA) := OreLocalization.instIsScalarTower
+  have : IsScalarTower A (Localization.Away sA) T :=
+    .of_algebraMap_eq (by simp [f, RingHom.algebraMap_toAlgebra, A])
+  have : IsScalarTower R (Localization.Away sA) T := .to₁₃₄ R A (Localization.Away sA) T
+  have : Algebra.IsIntegral (Localization.Away sA) T := by
+    refine ⟨fun x => ?_⟩
+    obtain ⟨x, ⟨_, n, rfl⟩, rfl⟩ := IsLocalization.exists_mk'_eq (.powers s) x
+    have : _root_.IsIntegral (Localization.Away sA) (algebraMap S T x) :=
+      (Algebra.IsIntegral.isIntegral (R := R) x).algebraMap.tower_top
+    convert! this.smul (Localization.Away.invSelf sA ^ n)
+    rw [IsLocalization.mk'_eq_iff_eq_mul]
+    simp only [map_pow, Algebra.smul_mul_assoc]
+    trans (sA • Localization.Away.invSelf sA) ^ n • (algebraMap S T x)
+    · simp [Algebra.smul_def, -map_pow, Localization.Away.invSelf, Localization.mk_eq_mk']
+    · simp only [Algebra.smul_def, map_pow, map_mul, mul_pow,
+        ← IsScalarTower.algebraMap_apply, Subalgebra.algebraMap_def, sA]
+      ring
+  have : Module.Finite (Localization.Away sA) T :=
+    have : Algebra.FiniteType (Localization.Away sA) T := .of_restrictScalars_finiteType R _ _
+    Algebra.IsIntegral.finite
+  have : Module.Finite R A :=
+    Algebra.finite_adjoin_simple_of_isIntegral (Algebra.IsIntegral.isIntegral _)
+  have : Algebra.QuasiFinite R (Localization.Away sA) := .of_isLocalization (.powers sA)
+  exact .trans _ (Localization.Away sA) _
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.subset_adjoin, Algebra.toModule.toDistribMulAction.toMulAction, Algebra.toSMul, IsLocalization, IsLocalization.Away.algebraMap_isUnit, IsLocalization.Away.lift, IsScalarTower, Localization, Localization.Away, MulAction, OreLocalization, OreLocalization.instAlgebra, adjoin, algebraMap, algebraMap_isUnit, f.toAlgebra, instAlgebra, subset_adjoin
 -/
@@ -903,7 +1063,16 @@ lemma QuasiFiniteAt.baseChange
   let f : A otimes[R] Localization.AtPrime p ->ₐ[A] Localization.AtPrime q :=
     Algebra.TensorProduct.lift (Algebra.ofId _ _) ⟨Localization.localRingHom _ _ _ hq, by
       simp [IsScalarTower.algebraMap_apply R S (Localization.AtPrime p),
-        IsScalarTower.algebraMap_apply R (A otimes[R] S)
+        IsScalarTower.algebraMap_apply R (A otimes[R] S) (Localization.AtPrime q)]⟩ fun _ _ => .all _ _
+  let g : A otimes[R] S ->ₐ[A] A otimes[R] Localization.AtPrime p :=
+    Algebra.TensorProduct.map (.id _ _) (IsScalarTower.toAlgHom _ _ _)
+  have : f.comp g = IsScalarTower.toAlgHom _ _ _ := by ext; simp [f, g]
+  replace this (x : _) : f (g x) = algebraMap _ _ x := DFunLike.congr_fun this x
+  refine .of_forall_exists_mul_mem_range f fun x => ?_
+  obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq q.primeCompl x
+  refine ⟨g s, this s ▸ IsLocalization.map_units _ ⟨s, hs⟩, ?_⟩
+  rw [this]; rw [IsLocalization.mk'_spec_mk]
+  exact ⟨g x, this x⟩
 
 中文:
 引理 QuasiFiniteAt.baseChange
@@ -912,7 +1081,16 @@ lemma QuasiFiniteAt.baseChange
   let f : A otimes[R] Localization.AtPrime p ->ₐ[A] Localization.AtPrime q :=
     Algebra.TensorProduct.lift (Algebra.ofId _ _) ⟨Localization.localRingHom _ _ _ hq, by
       simp [IsScalarTower.algebraMap_apply R S (Localization.AtPrime p),
-        IsScalarTower.algebraMap_apply R (A otimes[R] S)
+        IsScalarTower.algebraMap_apply R (A otimes[R] S) (Localization.AtPrime q)]⟩ fun _ _ => .all _ _
+  let g : A otimes[R] S ->ₐ[A] A otimes[R] Localization.AtPrime p :=
+    Algebra.TensorProduct.map (.id _ _) (IsScalarTower.toAlgHom _ _ _)
+  have : f.comp g = IsScalarTower.toAlgHom _ _ _ := by ext; simp [f, g]
+  replace this (x : _) : f (g x) = algebraMap _ _ x := DFunLike.congr_fun this x
+  refine .of_forall_exists_mul_mem_range f fun x => ?_
+  obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq q.primeCompl x
+  refine ⟨g s, this s ▸ IsLocalization.map_units _ ⟨s, hs⟩, ?_⟩
+  rw [this]; rw [IsLocalization.mk'_spec_mk]
+  exact ⟨g x, this x⟩
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lift, Algebra.TensorProduct.map, Algebra.ofId, AtPrime, IsScalarTower, IsScalarTower.algebraMap_apply, IsScalarTower.toAlgH, IsScalarTower.toAlgHom, Localization, Localization.AtPrime, Localization.localRingHom, TensorProduct, algebraMap_apply, f.comp, localRingHom, otimes, toAlgH, toAlgHom
 -/
@@ -1025,7 +1203,13 @@ lemma QuasiFiniteAt.of_le
   let f : Localization.AtPrime Q ->ₐ[R] Localization.AtPrime P :=
 IsLocalization.liftAlgHom (M := Q.primeCompl) (f := IsScalarTower.toAlgHom _ _ _) by
       simp only [IsScalarTower.coe_toAlgHom', Subtype.forall, Ideal.mem_primeCompl_iff]
-      exact fun a ha => IsLocalization.map_units (M := P.p
+      exact fun a ha => IsLocalization.map_units (M := P.primeCompl) _ ⟨a, fun h => ha (h₁ h)⟩
+  refine .of_forall_exists_mul_mem_range f fun x => ?_
+  obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq P.primeCompl x
+  exact ⟨algebraMap _ _ s, by simpa [f] using IsLocalization.map_units _ ⟨s, hs⟩,
+    algebraMap _ _ x, by simp [f]⟩
+
+omit [Algebra S T] in
 
 中文:
 引理 QuasiFiniteAt.of_le
@@ -1034,7 +1218,13 @@ IsLocalization.liftAlgHom (M := Q.primeCompl) (f := IsScalarTower.toAlgHom _ _ _
   let f : Localization.AtPrime Q ->ₐ[R] Localization.AtPrime P :=
 IsLocalization.liftAlgHom (M := Q.primeCompl) (f := IsScalarTower.toAlgHom _ _ _) by
       simp only [IsScalarTower.coe_toAlgHom', Subtype.forall, Ideal.mem_primeCompl_iff]
-      exact fun a ha => IsLocalization.map_units (M := P.p
+      exact fun a ha => IsLocalization.map_units (M := P.primeCompl) _ ⟨a, fun h => ha (h₁ h)⟩
+  refine .of_forall_exists_mul_mem_range f fun x => ?_
+  obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq P.primeCompl x
+  exact ⟨algebraMap _ _ s, by simpa [f] using IsLocalization.map_units _ ⟨s, hs⟩,
+    algebraMap _ _ x, by simp [f]⟩
+
+omit [Algebra S T] in
 
 Depends on / 依赖: AtPrime, Ideal.mem_primeCompl_iff, IsLocali, IsLocalization, IsLocalization.exists_mk, IsLocalization.liftAlgHom, IsLocalization.map_units, IsScalarTower, IsScalarTower.coe_toAlgHom, IsScalarTower.toAlgHom, Localization, Localization.AtPrime, P.primeCompl, Q.primeCompl, Subtype, Subtype.forall, algebraMap, coe_toAlgHom, exists_mk, liftAlgHom
 -/
@@ -1062,7 +1252,10 @@ lemma QuasiFiniteAt.eq_of_le_of_under_eq
   have H := QuasiFinite.eq_of_le_of_under_eq (R := R)
     (Ideal.map (algebraMap S (Localization.AtPrime Q)) P) _
     (IsLocalRing.le_maximalIdeal_of_isPrime _) (by
-      convert! h₂ <;> rw [← Ideal.under_under (B :
+      convert! h₂ <;> rw [← Ideal.under_under (B := S)]
+      · rw [Q.under_map_of_isLocalizationAtPrime h₁]
+      · rw [Localization.AtPrime.under_maximalIdeal])
+  rw [← Localization.AtPrime.under_maximalIdeal (I := Q)]; rw [← H]; rw [Q.under_map_of_isLocalizationAtPrime h₁]
 
 中文:
 引理 QuasiFiniteAt.eq_of_le_of_under_eq
@@ -1072,7 +1265,10 @@ lemma QuasiFiniteAt.eq_of_le_of_under_eq
   have H := QuasiFinite.eq_of_le_of_under_eq (R := R)
     (Ideal.map (algebraMap S (Localization.AtPrime Q)) P) _
     (IsLocalRing.le_maximalIdeal_of_isPrime _) (by
-      convert! h₂ <;> rw [← Ideal.under_under (B :
+      convert! h₂ <;> rw [← Ideal.under_under (B := S)]
+      · rw [Q.under_map_of_isLocalizationAtPrime h₁]
+      · rw [Localization.AtPrime.under_maximalIdeal])
+  rw [← Localization.AtPrime.under_maximalIdeal (I := Q)]; rw [← H]; rw [Q.under_map_of_isLocalizationAtPrime h₁]
 
 Depends on / 依赖: AtPrime, Ideal.map, Ideal.under_under, IsLocalRing, IsLocalRing.le_maximalIdeal_of_isPrime, Localization, Localization.AtPrime, Localization.AtPrime.under_maximalIdeal, Q.isPrime_map_of_isLocalizationAtPrime, Q.under_map_of_isLocalizationAtPrime, QuasiFinite, QuasiFinite.eq_of_le_of_under_eq, algebraMap, convert, eq_of_le_of_under_eq, isPrime_map_of_isLocalizationAtPrime, le_maximalIdeal_of_isPrime, under_map_of_isLocalizationAtPrime, under_maximalIdeal, under_under
 -/
@@ -1111,7 +1307,27 @@ lemma QuasiFiniteAt.exists_basicOpen_eq_singleton
   have : IsLocalizedModule p.primeCompl (.id (R := S) (M := Localization.AtPrime p)) :=
     ⟨IsLocalizedModule.map_units (Algebra.linearMap S (Localization.AtPrime p)),
       fun y => ⟨⟨y, 1⟩, by simp⟩, by simpa using ⟨1, p.primeCompl.one_mem⟩⟩
-  have : Module.Finite R (Localization.AtPrime p) :=
+  have : Module.Finite R (Localization.AtPrime p) := .of_quasiFinite
+  have : Module.Finite S (Localization.AtPrime p) := .of_restrictScalars_finite R _ _
+  have : IsArtinianRing (Localization.AtPrime p) := .of_finite R _
+  have : IsNoetherianRing S := Algebra.EssFiniteType.isNoetherianRing R S
+  have : Module.FinitePresentation S (Localization.AtPrime p) :=
+    Module.finitePresentation_of_finite _ _
+  obtain ⟨r, hrp, H⟩ := IsLocalizedModule.exists_isLocalizedModule_powers_of_finitePresentation
+    p.primeCompl (Algebra.linearMap S (Localization.AtPrime p))
+  have : IsLocalization (.powers r) (Localization.AtPrime p) :=
+    (isLocalizedModule_iff_isLocalization' _ _).mp H
+  let φ : Localization.Away r ≃ₐ[S] Localization.AtPrime p :=
+    IsLocalization.algEquiv (.powers r) _ _
+  refine ⟨r, hrp, subset_antisymm (fun q hrq => ?_) (Set.singleton_subset_iff.mpr hrp)⟩
+  obtain ⟨q, rfl⟩ := (PrimeSpectrum.localization_away_comap_range (Localization.Away r) r).ge hrq
+  obtain ⟨q, rfl⟩ := (PrimeSpectrum.comapEquiv φ.toRingEquiv).symm.surjective q
+  -- As Sₚ is an artinian local ring, its prime spectrum is a singleton.
+  obtain rfl : q = IsLocalRing.closedPoint _ := Subsingleton.elim _ _
+  ext1
+  dsimp [-RingEquiv.symm_mk]
+  rw [Ideal.comap_comap]; rw [← AlgEquiv.toAlgHom_toRingHom]; rw [AlgHom.comp_algebraMap]
+  exact IsLocalization.AtPrime.under_maximalIdeal _ _
 
 中文:
 引理 QuasiFiniteAt.存在_basicOpen_eq_singleton
@@ -1119,7 +1335,27 @@ lemma QuasiFiniteAt.exists_basicOpen_eq_singleton
   have : IsLocalizedModule p.primeCompl (.id (R := S) (M := Localization.AtPrime p)) :=
     ⟨IsLocalizedModule.map_units (Algebra.linearMap S (Localization.AtPrime p)),
       fun y => ⟨⟨y, 1⟩, by simp⟩, by simpa using ⟨1, p.primeCompl.one_mem⟩⟩
-  have : Module.Finite R (Localization.AtPrime p) :=
+  have : Module.Finite R (Localization.AtPrime p) := .of_quasiFinite
+  have : Module.Finite S (Localization.AtPrime p) := .of_restrictScalars_finite R _ _
+  have : IsArtinianRing (Localization.AtPrime p) := .of_finite R _
+  have : IsNoetherianRing S := Algebra.EssFiniteType.isNoetherianRing R S
+  have : Module.FinitePresentation S (Localization.AtPrime p) :=
+    Module.finitePresentation_of_finite _ _
+  obtain ⟨r, hrp, H⟩ := IsLocalizedModule.exists_isLocalizedModule_powers_of_finitePresentation
+    p.primeCompl (Algebra.linearMap S (Localization.AtPrime p))
+  have : IsLocalization (.powers r) (Localization.AtPrime p) :=
+    (isLocalizedModule_iff_isLocalization' _ _).mp H
+  let φ : Localization.Away r ≃ₐ[S] Localization.AtPrime p :=
+    IsLocalization.algEquiv (.powers r) _ _
+  refine ⟨r, hrp, subset_antisymm (fun q hrq => ?_) (Set.singleton_subset_iff.mpr hrp)⟩
+  obtain ⟨q, rfl⟩ := (PrimeSpectrum.localization_away_comap_range (Localization.Away r) r).ge hrq
+  obtain ⟨q, rfl⟩ := (PrimeSpectrum.comapEquiv φ.toRingEquiv).symm.surjective q
+  -- As Sₚ is an artinian local ring, its prime spectrum is a singleton.
+  obtain rfl : q = IsLocalRing.closedPoint _ := Subsingleton.elim _ _
+  ext1
+  dsimp [-RingEquiv.symm_mk]
+  rw [Ideal.comap_comap]; rw [← AlgEquiv.toAlgHom_toRingHom]; rw [AlgHom.comp_algebraMap]
+  exact IsLocalization.AtPrime.under_maximalIdeal _ _
 
 Depends on / 依赖: Algebra, Algebra.EssFiniteTy, Algebra.linearMap, AtPrime, EssFiniteTy, Finite, IsArtinianRing, IsLocalizedModule, IsLocalizedModule.map_units, IsNoetherianRing, Localization, Localization.AtPrime, Module, Module.Finite, linearMap, map_units, of_finite, of_quasiFinite, of_restrictScalars_finite, one_mem
 -/
@@ -1161,7 +1397,8 @@ lemma QuasiFiniteAt.isClopen_singleton
   have : IsJacobsonRing S := isJacobsonRing_of_finiteType (A := R)
   have : IsNoetherianRing S := Algebra.FiniteType.isNoetherianRing R S
   refine ((PrimeSpectrum.isOpen_singleton_tfae_of_isNoetherian_of_isJacobsonRing p).out 0 1).mp ?_
-  obtain ⟨f, hf, e⟩ := exists_basicOpen_eq_singleton (R := R
+  obtain ⟨f, hf, e⟩ := exists_basicOpen_eq_singleton (R := R) p.asIdeal
+  exact e ▸ (PrimeSpectrum.basicOpen f).isOpen
 
 中文:
 引理 QuasiFiniteAt.isClopen_singleton
@@ -1169,7 +1406,8 @@ lemma QuasiFiniteAt.isClopen_singleton
   have : IsJacobsonRing S := isJacobsonRing_of_finiteType (A := R)
   have : IsNoetherianRing S := Algebra.FiniteType.isNoetherianRing R S
   refine ((PrimeSpectrum.isOpen_singleton_tfae_of_isNoetherian_of_isJacobsonRing p).out 0 1).mp ?_
-  obtain ⟨f, hf, e⟩ := exists_basicOpen_eq_singleton (R := R
+  obtain ⟨f, hf, e⟩ := exists_basicOpen_eq_singleton (R := R) p.asIdeal
+  exact e ▸ (PrimeSpectrum.basicOpen f).isOpen
 
 Depends on / 依赖: Algebra, Algebra.FiniteType.isNoetherianRing, FiniteType, IsJacobsonRing, IsNoetherianRing, PrimeSpectrum, PrimeSpectrum.basicOpen, PrimeSpectrum.isOpen_singleton_tfae_of_isNoetherian_of_isJacobsonRing, asIdeal, basicOpen, exists_basicOpen_eq_singleton, isJacobsonRing_of_finiteType, isNoetherianRing, isOpen, isOpen_singleton_tfae_of_isNoetherian_of_isJacobsonRing, p.asIdeal
 -/
@@ -1192,7 +1430,35 @@ lemma QuasiFiniteAt.of_isOpen_singleton
   have : IsJacobsonRing S := isJacobsonRing_of_finiteType (A := R)
   rw [(PrimeSpectrum.isOpen_singleton_tfae_of_isNoetherian_of_isJacobsonRing p).out
     0 1 rfl rfl] at H
-  obtain ⟨e, he, H⟩ := PrimeSpectrum.isClopen_iff.mp 
+  obtain ⟨e, he, H⟩ := PrimeSpectrum.isClopen_iff.mp H
+  have hep : e ∉ p.asIdeal := H.le rfl
+  let f : Localization.Away e ->ₐ[S] Localization.AtPrime p.asIdeal :=
+    IsLocalization.Away.liftAlgHom e (f := Algebra.ofId _ _)
+      (IsLocalization.map_units (M := p.asIdeal.primeCompl) _ ⟨e, hep⟩)
+  have h₁ := (PrimeSpectrum.localization_away_comap_range (Localization.Away e) e).trans H.symm
+  have : Subsingleton (PrimeSpectrum (Localization.Away e)) :=
+    Function.Injective.subsingleton
+    (f := Set.codRestrict (PrimeSpectrum.comap (algebraMap S (Localization.Away e))) {p} fun x =>
+      h₁.le ⟨x, rfl⟩)
+    ((Set.injective_codRestrict ..).mpr (PrimeSpectrum.localization_comap_injective _ (.powers e)))
+  have hf : Function.Surjective f := by
+    intro x
+    obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq p.asIdeal.primeCompl x
+    suffices IsUnit (algebraMap _ (Localization.Away e) s.1) by
+      refine ⟨algebraMap _ _ x * this.unit⁻¹, (this.map f).mul_right_cancel ?_⟩
+      simp only [← map_mul, mul_assoc, IsUnit.val_inv_mul]
+      simp
+    by_contra H
+    obtain ⟨M, hM, H⟩ :=
+      Ideal.exists_le_maximal (.span {algebraMap _ (Localization.Away e) s.1}) (by simpa)
+    have := Subsingleton.elim ((IsLocalRing.closedPoint _).comap f.toRingHom) ⟨M, inferInstance⟩
+    have := congr(($this).1).ge (H (Ideal.mem_span_singleton_self _))
+    simp [IsLocalRing.closedPoint, IsLocalization.AtPrime.isUnit_to_map_iff _ p.asIdeal] at this
+  have : Algebra.FiniteType R (Localization.AtPrime p.asIdeal) :=
+    .of_surjective (f.restrictScalars R) hf
+  have := (PrimeSpectrum.comap_injective_of_surjective f.toRingHom hf).subsingleton
+  exact QuasiFinite.iff_finite_comap_preimage_singleton.mpr fun _ =>
+    Set.subsingleton_of_subsingleton.finite
 
 中文:
 引理 QuasiFiniteAt.of_isOpen_singleton
@@ -1201,7 +1467,35 @@ lemma QuasiFiniteAt.of_isOpen_singleton
   have : IsJacobsonRing S := isJacobsonRing_of_finiteType (A := R)
   rw [(PrimeSpectrum.isOpen_singleton_tfae_of_isNoetherian_of_isJacobsonRing p).out
     0 1 rfl rfl] at H
-  obtain ⟨e, he, H⟩ := PrimeSpectrum.isClopen_iff.mp 
+  obtain ⟨e, he, H⟩ := PrimeSpectrum.isClopen_iff.mp H
+  have hep : e ∉ p.asIdeal := H.le rfl
+  let f : Localization.Away e ->ₐ[S] Localization.AtPrime p.asIdeal :=
+    IsLocalization.Away.liftAlgHom e (f := Algebra.ofId _ _)
+      (IsLocalization.map_units (M := p.asIdeal.primeCompl) _ ⟨e, hep⟩)
+  have h₁ := (PrimeSpectrum.localization_away_comap_range (Localization.Away e) e).trans H.symm
+  have : Subsingleton (PrimeSpectrum (Localization.Away e)) :=
+    Function.Injective.subsingleton
+    (f := Set.codRestrict (PrimeSpectrum.comap (algebraMap S (Localization.Away e))) {p} fun x =>
+      h₁.le ⟨x, rfl⟩)
+    ((Set.injective_codRestrict ..).mpr (PrimeSpectrum.localization_comap_injective _ (.powers e)))
+  have hf : Function.Surjective f := by
+    intro x
+    obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq p.asIdeal.primeCompl x
+    suffices IsUnit (algebraMap _ (Localization.Away e) s.1) by
+      refine ⟨algebraMap _ _ x * this.unit⁻¹, (this.map f).mul_right_cancel ?_⟩
+      simp only [← map_mul, mul_assoc, IsUnit.val_inv_mul]
+      simp
+    by_contra H
+    obtain ⟨M, hM, H⟩ :=
+      Ideal.exists_le_maximal (.span {algebraMap _ (Localization.Away e) s.1}) (by simpa)
+    have := Subsingleton.elim ((IsLocalRing.closedPoint _).comap f.toRingHom) ⟨M, inferInstance⟩
+    have := congr(($this).1).ge (H (Ideal.mem_span_singleton_self _))
+    simp [IsLocalRing.closedPoint, IsLocalization.AtPrime.isUnit_to_map_iff _ p.asIdeal] at this
+  have : Algebra.FiniteType R (Localization.AtPrime p.asIdeal) :=
+    .of_surjective (f.restrictScalars R) hf
+  have := (PrimeSpectrum.comap_injective_of_surjective f.toRingHom hf).subsingleton
+  exact QuasiFinite.iff_finite_comap_preimage_singleton.mpr fun _ =>
+    Set.subsingleton_of_subsingleton.finite
 
 Depends on / 依赖: Algebra, Algebra.FiniteType.isNoetherianRing, Algebra.ofId, AtPrime, FiniteType, H.le, IsJacobsonRing, IsLocalization, IsLocalization.Away.liftAlgHom, IsLocalization.map_units, IsNoetherianRing, Localization, Localization.AtPrime, Localization.Away, PrimeSpectrum, PrimeSpectrum.isClopen_iff.mp, PrimeSpectrum.isOpen_singleton_tfae_of_isNoetherian_of_isJacobsonRing, asIdeal, isClopen_iff, isJacobsonRing_of_finiteType
 -/
@@ -1252,7 +1546,26 @@ lemma _root_.Ideal.exists_not_mem_forall_mem_of_ne_of_liesOver
   let e := PrimeSpectrum.preimageHomeomorphFiber _ S ⟨p, inferInstance⟩
   let qF : PrimeSpectrum (p.Fiber S) := e ⟨⟨q, ‹_›⟩, PrimeSpectrum.ext (q.over_def p).symm⟩
   have : Algebra.QuasiFiniteAt p.ResidueField qF.asIdeal := .baseChange q _
-    congr($(e.symm_apply_apply ⟨⟨q, ‹_›⟩, PrimeSpectrum.e
+    congr($(e.symm_apply_apply ⟨⟨q, ‹_›⟩, PrimeSpectrum.ext (q.over_def p).symm⟩).1.1).symm
+  obtain ⟨r, hr, hrq⟩ := Algebra.QuasiFiniteAt.exists_basicOpen_eq_singleton
+    (R := p.ResidueField) qF.asIdeal
+  obtain ⟨s, hs, x, hsx⟩ := Ideal.Fiber.exists_smul_eq_one_tmul _ r
+  have : x ∉ q := by
+    have : r ∉ _ := hrq.ge rfl
+    simp only [PrimeSpectrum.preimageHomeomorphFiber, PrimeSpectrum.preimageOrderIsoFiber,
+      Homeomorph.homeomorph_mk_coe, qF, e] at this
+    rw [PrimeSpectrum.preimageEquivFiber_apply_asIdeal]; rw [← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ s)]; rw [← Algebra.smul_def]; rw [hsx] at this
+    · simpa using this
+    · simpa [IsScalarTower.algebraMap_apply R S q.ResidueField, q.over_def p] using hs
+  refine ⟨x, this, fun q' _ hq' _ => not_not.mp fun hxq' => hq' ?_⟩
+  refine congr($(e.injective (a₁ := ⟨⟨q', ‹_›⟩, PrimeSpectrum.ext (q'.over_def p).symm⟩)
+    (a₂ := ⟨⟨q, ‹_›⟩, PrimeSpectrum.ext (q.over_def p).symm⟩) (hrq.le ?_)).1.1)
+  simp only [PrimeSpectrum.basicOpen_eq_zeroLocus_compl, PrimeSpectrum.preimageHomeomorphFiber,
+    PrimeSpectrum.preimageOrderIsoFiber, Homeomorph.homeomorph_mk_coe, Set.mem_compl_iff,
+    PrimeSpectrum.mem_zeroLocus, Set.singleton_subset_iff, SetLike.mem_coe, e]
+  rw [PrimeSpectrum.preimageEquivFiber_apply_asIdeal]; rw [← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ s)]; rw [← Algebra.smul_def]; rw [hsx]
+  · simpa
+  · simpa [IsScalarTower.algebraMap_apply R S q'.ResidueField, ← Ideal.mem_comap, ← q'.over_def p]
 
 中文:
 引理 _root_.理想.存在_not_mem_对任意_mem_of_ne_of_liesOver
@@ -1260,7 +1573,26 @@ lemma _root_.Ideal.exists_not_mem_forall_mem_of_ne_of_liesOver
   let e := PrimeSpectrum.preimageHomeomorphFiber _ S ⟨p, inferInstance⟩
   let qF : PrimeSpectrum (p.Fiber S) := e ⟨⟨q, ‹_›⟩, PrimeSpectrum.ext (q.over_def p).symm⟩
   have : Algebra.QuasiFiniteAt p.ResidueField qF.asIdeal := .baseChange q _
-    congr($(e.symm_apply_apply ⟨⟨q, ‹_›⟩, PrimeSpectrum.e
+    congr($(e.symm_apply_apply ⟨⟨q, ‹_›⟩, PrimeSpectrum.ext (q.over_def p).symm⟩).1.1).symm
+  obtain ⟨r, hr, hrq⟩ := Algebra.QuasiFiniteAt.exists_basicOpen_eq_singleton
+    (R := p.ResidueField) qF.asIdeal
+  obtain ⟨s, hs, x, hsx⟩ := Ideal.Fiber.exists_smul_eq_one_tmul _ r
+  have : x ∉ q := by
+    have : r ∉ _ := hrq.ge rfl
+    simp only [PrimeSpectrum.preimageHomeomorphFiber, PrimeSpectrum.preimageOrderIsoFiber,
+      Homeomorph.homeomorph_mk_coe, qF, e] at this
+    rw [PrimeSpectrum.preimageEquivFiber_apply_asIdeal]; rw [← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ s)]; rw [← Algebra.smul_def]; rw [hsx] at this
+    · simpa using this
+    · simpa [IsScalarTower.algebraMap_apply R S q.ResidueField, q.over_def p] using hs
+  refine ⟨x, this, fun q' _ hq' _ => not_not.mp fun hxq' => hq' ?_⟩
+  refine congr($(e.injective (a₁ := ⟨⟨q', ‹_›⟩, PrimeSpectrum.ext (q'.over_def p).symm⟩)
+    (a₂ := ⟨⟨q, ‹_›⟩, PrimeSpectrum.ext (q.over_def p).symm⟩) (hrq.le ?_)).1.1)
+  simp only [PrimeSpectrum.basicOpen_eq_zeroLocus_compl, PrimeSpectrum.preimageHomeomorphFiber,
+    PrimeSpectrum.preimageOrderIsoFiber, Homeomorph.homeomorph_mk_coe, Set.mem_compl_iff,
+    PrimeSpectrum.mem_zeroLocus, Set.singleton_subset_iff, SetLike.mem_coe, e]
+  rw [PrimeSpectrum.preimageEquivFiber_apply_asIdeal]; rw [← Ideal.IsPrime.mul_mem_left_iff (x := algebraMap _ _ s)]; rw [← Algebra.smul_def]; rw [hsx]
+  · simpa
+  · simpa [IsScalarTower.algebraMap_apply R S q'.ResidueField, ← Ideal.mem_comap, ← q'.over_def p]
 
 Depends on / 依赖: Algebra, Algebra.QuasiFiniteAt, Algebra.QuasiFiniteAt.exists_basicOpen_eq_singleton, Ideal.Fiber.exists_smul_eq_one_tmul, PrimeSpectrum, PrimeSpectrum.ext, PrimeSpectrum.preimageHomeomorphFiber, QuasiFiniteAt, ResidueField, asIdeal, baseChange, e.symm_apply_apply, exists_basicOpen_eq_singleton, exists_smul_eq_one_tmul, over_def, p.Fiber, p.ResidueField, preimageHomeomorphFiber, q.over_def, qF.asIdeal
 -/
@@ -1302,7 +1634,14 @@ lemma _root_.Ideal.Fiber.lift_residueField_surjective
   let q' : Ideal (p.Fiber S) := (PrimeSpectrum.primesOverOrderIsoFiber R S p ⟨q, ‹_›, ‹_›⟩).asIdeal
   have hq' : q = q'.comap Algebra.TensorProduct.includeRight.toRingHom :=
     congr($((PrimeSpectrum.primesOverOrderIsoFiber R S p).symm_apply_apply ⟨q, ‹_›, ‹_›⟩).1).symm
-  have : Algebra.QuasiFin
+  have : Algebra.QuasiFiniteAt p.ResidueField q' := .baseChange q _ hq'
+  have : q'.IsMaximal := (PrimeSpectrum.isClosed_singleton_iff_isMaximal _).mp
+    (QuasiFiniteAt.isClopen_singleton (R := p.ResidueField) _).isClosed
+  refine .of_comp_left ?_
+    (p.surjectiveOnStalks_residueField.baseChange'.residueFieldMap_bijective q q' hq').1
+  rw [← AlgHom.coe_toRingHom]; rw [← RingHom.coe_comp]
+  convert! q'.algebraMap_residueField_surjective
+  ext <;> simp [IsScalarTower.algebraMap_apply R S q.ResidueField]
 
 中文:
 引理 _root_.理想.Fiber.lift_residueField_surjective
@@ -1311,7 +1650,14 @@ lemma _root_.Ideal.Fiber.lift_residueField_surjective
   let q' : Ideal (p.Fiber S) := (PrimeSpectrum.primesOverOrderIsoFiber R S p ⟨q, ‹_›, ‹_›⟩).asIdeal
   have hq' : q = q'.comap Algebra.TensorProduct.includeRight.toRingHom :=
     congr($((PrimeSpectrum.primesOverOrderIsoFiber R S p).symm_apply_apply ⟨q, ‹_›, ‹_›⟩).1).symm
-  have : Algebra.QuasiFin
+  have : Algebra.QuasiFiniteAt p.ResidueField q' := .baseChange q _ hq'
+  have : q'.IsMaximal := (PrimeSpectrum.isClosed_singleton_iff_isMaximal _).mp
+    (QuasiFiniteAt.isClopen_singleton (R := p.ResidueField) _).isClosed
+  refine .of_comp_left ?_
+    (p.surjectiveOnStalks_residueField.baseChange'.residueFieldMap_bijective q q' hq').1
+  rw [← AlgHom.coe_toRingHom]; rw [← RingHom.coe_comp]
+  convert! q'.algebraMap_residueField_surjective
+  ext <;> simp [IsScalarTower.algebraMap_apply R S q.ResidueField]
 
 Depends on / 依赖: Algebra, Algebra.QuasiFiniteAt, Algebra.TensorProduct.includeRight.toRingHom, IsMaximal, PrimeSpectrum, PrimeSpectrum.isClosed_singleton_iff_isMaximal, PrimeSpectrum.primesOverOrderIsoFiber, QuasiFiniteAt, QuasiFiniteAt.isClopen_singleton, ResidueField, TensorProduct, asIdeal, baseChange, includeRight, isClopen_singleton, isClosed, isClosed_singleton_iff_isMaximal, of_comp_le, p.Fiber, p.ResidueField
 -/

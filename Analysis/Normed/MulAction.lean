@@ -603,7 +603,7 @@ lemma NormedDivisionRing.toNormSMulClass
       calc
       ‖r‖ * ‖x‖ = ‖r‖ * ‖r⁻¹ • r • x‖ := by rw [inv_smul_smul₀ h]
       _ <= ‖r‖ * (‖r⁻¹‖ * ‖r • x‖) := by gcongr; apply norm_smul_le
-      _ = ‖r • x‖ := by rw [norm_inv, ← mul_assoc, m
+      _ = ‖r • x‖ := by rw [norm_inv, ← mul_assoc, mul_inv_cancel₀ (mt norm_eq_zero.1 h), one_mul]
 
 中文:
 引理 NormedDivision环.toNormSMulClass
@@ -615,7 +615,7 @@ lemma NormedDivisionRing.toNormSMulClass
       calc
       ‖r‖ * ‖x‖ = ‖r‖ * ‖r⁻¹ • r • x‖ := by rw [inv_smul_smul₀ h]
       _ <= ‖r‖ * (‖r⁻¹‖ * ‖r • x‖) := by gcongr; apply norm_smul_le
-      _ = ‖r • x‖ := by rw [norm_inv, ← mul_assoc, m
+      _ = ‖r • x‖ := by rw [norm_inv, ← mul_assoc, mul_inv_cancel₀ (mt norm_eq_zero.1 h), one_mul]
 
 Depends on / 依赖: le_antisymm, mul_assoc, norm_eq_zero, norm_inv, norm_smul_le, one_mul, zero_smul
 -/
@@ -648,7 +648,8 @@ theorem Metric.smul_image_ball
     simpa [dist_smul₀] using mul_lt_mul_of_pos_left h1 (norm_pos_iff.mpr hs)
   · refine fun h => ⟨s⁻¹ • p, ?_, by simp [smul_smul, hs]⟩
     refine lt_of_mul_lt_mul_of_nonneg_left ?_ (norm_nonneg s)
-    rw [← dist_sm
+    rw [← dist_smul₀]
+    simpa [smul_smul, hs] using h
 
 中文:
 定理 Metric.smul_image_ball
@@ -661,7 +662,8 @@ theorem Metric.smul_image_ball
     simpa [dist_smul₀] using mul_lt_mul_of_pos_left h1 (norm_pos_iff.mpr hs)
   · refine fun h => ⟨s⁻¹ • p, ?_, by simp [smul_smul, hs]⟩
     refine lt_of_mul_lt_mul_of_nonneg_left ?_ (norm_nonneg s)
-    rw [← dist_sm
+    rw [← dist_smul₀]
+    simpa [smul_smul, hs] using h
 
 Depends on / 依赖: Set.mem_image, lt_of_mul_lt_mul_of_nonneg_left, mem_ball, mem_image, mul_lt_mul_of_pos_left, norm_nonneg, norm_pos_iff, norm_pos_iff.mpr, simp_rw, smul_smul
 -/
@@ -691,7 +693,8 @@ theorem Metric.smul_image_closedBall
     simpa [dist_smul₀] using mul_le_mul_of_nonneg_left h1 (norm_nonneg s)
   · refine fun h => ⟨s⁻¹ • p, ?_, by simp [smul_smul, hs]⟩
     refine le_of_mul_le_mul_of_pos_left ?_ (norm_pos_iff.mpr hs)
-    rw [← d
+    rw [← dist_smul₀]
+    simpa [smul_smul, hs] using h
 
 中文:
 定理 Metric.smul_image_closedBall
@@ -704,7 +707,8 @@ theorem Metric.smul_image_closedBall
     simpa [dist_smul₀] using mul_le_mul_of_nonneg_left h1 (norm_nonneg s)
   · refine fun h => ⟨s⁻¹ • p, ?_, by simp [smul_smul, hs]⟩
     refine le_of_mul_le_mul_of_pos_left ?_ (norm_pos_iff.mpr hs)
-    rw [← d
+    rw [← dist_smul₀]
+    simpa [smul_smul, hs] using h
 
 Depends on / 依赖: Set.mem_image, le_of_mul_le_mul_of_pos_left, mem_closedBall, mem_image, mul_le_mul_of_nonneg_left, norm_nonneg, norm_pos_iff, norm_pos_iff.mpr, simp_rw, smul_smul
 -/

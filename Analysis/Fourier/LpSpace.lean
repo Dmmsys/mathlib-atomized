@@ -56,7 +56,8 @@ definition fourierTransformₗᵢ
   body: (fourierEquiv Complex 𝓢(E, F)).extendOfIsometry
     (toLpCLM Complex (E := E) F 2 volume) (toLpCLM Complex (E := E) F 2 volume)
     -- Not explicitly stating the measure as being the volume causes time-outs in the proofs below
-    (denseRange_toLpCLM ENNReal.ofNat_ne_top) (denseRange_toLpCLM ENNReal
+    (denseRange_toLpCLM ENNReal.ofNat_ne_top) (denseRange_toLpCLM ENNReal.ofNat_ne_top)
+    norm_fourier_toL2_eq
 
 中文:
 定义 fourierTransformₗᵢ
@@ -64,7 +65,8 @@ definition fourierTransformₗᵢ
   定义体: (fourierEquiv Complex 𝓢(E, F)).extendOfIsometry
     (toLpCLM Complex (E := E) F 2 volume) (toLpCLM Complex (E := E) F 2 volume)
     -- Not explicitly stating the measure as being the volume causes time-outs in the proofs below
-    (denseRange_toLpCLM ENNReal.ofNat_ne_top) (denseRange_toLpCLM ENNReal
+    (denseRange_toLpCLM ENNReal.ofNat_ne_top) (denseRange_toLpCLM ENNReal.ofNat_ne_top)
+    norm_fourier_toL2_eq
 -/
 def fourierTransformₗᵢ : (Lp (α := E) F 2) ≃ₗᵢ[Complex] (Lp (α := E) F 2) :=
   (fourierEquiv Complex 𝓢(E, F)).extendOfIsometry
@@ -374,7 +376,10 @@ theorem fourier_toTemperedDistribution_eq
   apply DenseRange.induction_on (p := p)
     (SchwartzMap.denseRange_toLpCLM (p := 2) ENNReal.ofNat_ne_top) f
   · apply isClosed_eq
-    · exact (fourierCLM Complex 𝓢'(E, F) ∘L toTemperedDistributionCLM F volume 2).co
+    · exact (fourierCLM Complex 𝓢'(E, F) ∘L toTemperedDistributionCLM F volume 2).continuous
+    · exact (toTemperedDistributionCLM F volume 2 ∘L fourierCLM Complex (Lp (α := E) F 2)).continuous
+  intro f
+  simp [p, TemperedDistribution.fourier_toTemperedDistributionCLM_eq]
 
 中文:
 定理 fourier_toTemperedDistribution_eq
@@ -384,7 +389,10 @@ theorem fourier_toTemperedDistribution_eq
   apply DenseRange.induction_on (p := p)
     (SchwartzMap.denseRange_toLpCLM (p := 2) ENNReal.ofNat_ne_top) f
   · apply isClosed_eq
-    · exact (fourierCLM Complex 𝓢'(E, F) ∘L toTemperedDistributionCLM F volume 2).co
+    · exact (fourierCLM Complex 𝓢'(E, F) ∘L toTemperedDistributionCLM F volume 2).continuous
+    · exact (toTemperedDistributionCLM F volume 2 ∘L fourierCLM Complex (Lp (α := E) F 2)).continuous
+  intro f
+  simp [p, TemperedDistribution.fourier_toTemperedDistributionCLM_eq]
 -/
 theorem fourier_toTemperedDistribution_eq (f : Lp (α := E) F 2) :
     𝓕 (f : 𝓢'(E, F)) = (𝓕 f : Lp (α := E) F 2) := by

@@ -83,7 +83,7 @@ theorem dist_le_tsum_of_dist_le_of_tendsto
   refine le_trans (dist_le_Ico_sum_of_dist_le hnm fun _ _ => hf _) ?_
   rw [sum_Ico_eq_sum_range]
   refine Summable.sum_le_tsum (range _) (fun _ _ => le_trans dist_nonneg (hf _)) ?_
-  exact hd.comp_injec
+  exact hd.comp_injective (add_right_injective n)
 
 中文:
 定理 dist_le_tsum_of_dist_le_of_tendsto
@@ -93,7 +93,7 @@ theorem dist_le_tsum_of_dist_le_of_tendsto
   refine le_trans (dist_le_Ico_sum_of_dist_le hnm fun _ _ => hf _) ?_
   rw [sum_Ico_eq_sum_range]
   refine Summable.sum_le_tsum (range _) (fun _ _ => le_trans dist_nonneg (hf _)) ?_
-  exact hd.comp_injec
+  exact hd.comp_injective (add_right_injective n)
 
 Depends on / 依赖: Summable, Summable.sum_le_tsum, add_right_injective, comp_injective, dist_le_Ico_sum_of_dist_le, dist_nonneg, eventually_atTop, hd.comp_injective, le_of_tendsto, le_trans, sum_Ico_eq_sum_range, sum_le_tsum, tendsto_const_nhds, tendsto_const_nhds.dist
 -/

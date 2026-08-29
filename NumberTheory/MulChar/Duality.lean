@@ -101,7 +101,7 @@ theorem exists_apply_ne_one_of_hasEnoughRootsOfUnity
     refine CommGroup.exists_apply_ne_one_of_hasEnoughRootsOfUnity Mˣ R ?_
     contrapose ha
     rw [← hu.unit_spec]; rw [ha]; rw [Units.val_eq_one]
-  · exact ⟨1, by simpa only [map_nonunit _ hu] using ze
+  · exact ⟨1, by simpa only [map_nonunit _ hu] using zero_ne_one⟩
 
 中文:
 定理 存在_apply_ne_one_of_hasEnoughRootsOfUnity
@@ -112,7 +112,7 @@ theorem exists_apply_ne_one_of_hasEnoughRootsOfUnity
     refine CommGroup.exists_apply_ne_one_of_hasEnoughRootsOfUnity Mˣ R ?_
     contrapose ha
     rw [← hu.unit_spec]; rw [ha]; rw [Units.val_eq_one]
-  · exact ⟨1, by simpa only [map_nonunit _ hu] using ze
+  · exact ⟨1, by simpa only [map_nonunit _ hu] using zero_ne_one⟩
 
 Depends on / 依赖: CommGroup, CommGroup.exists_apply_ne_one_of_hasEnoughRootsOfUnity, IsUnit, Units.val_eq_one, contrapose, exists_apply_ne_one_iff_exists_monoidHom, exists_apply_ne_one_of_hasEnoughRootsOfUnity, hu.unit, hu.unit_spec, map_nonunit, unit_spec, val_eq_one, zero_ne_one
 -/
@@ -179,7 +179,7 @@ theorem domRestrictHom_surjective
   rw [domRestrictHom_apply]; rw [domRestrict_ofUnitHom]
   simp [hψ]
 
-@[deprecated (since := "2026-07-
+@[deprecated (since := "2026-07-19")] alias restrictHom_surjective := domRestrictHom_surjective
 
 中文:
 定理 domRestrictHom_surjective
@@ -192,7 +192,7 @@ theorem domRestrictHom_surjective
   rw [domRestrictHom_apply]; rw [domRestrict_ofUnitHom]
   simp [hψ]
 
-@[deprecated (since := "2026-07-
+@[deprecated (since := "2026-07-19")] alias restrictHom_surjective := domRestrictHom_surjective
 
 Depends on / 依赖: MonoidHom, MonoidHom.domRestrictHom_apply, MulChar, MulChar.ofUnitHom, N.units, N.unitsEquivUnitsType, domRestrictHom_apply, domRestrict_ofUnitHom, domRestrict_surjective, ofUnitHom, toUnitHom, toUnitHom.comp, unitsEquivUnitsType
 -/

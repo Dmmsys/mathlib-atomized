@@ -131,7 +131,12 @@ theorem wittPolyProdRemainder_vars
   refine union_subset ?_ ?_
   · apply Subset.trans (vars_pow _ _)
     have : (p : 𝕄) = C (p : Int) := by simp only [Int.cast_natCast, eq_intCast]
-    
+    rw [this]; rw [vars_C]
+    apply empty_subset
+  · apply Subset.trans (vars_pow _ _)
+    apply Subset.trans (wittMul_vars _ _)
+    apply product_subset_product (Subset.refl _)
+    simpa using hx
 
 中文:
 定理 wittPolyProdRemainder_vars
@@ -145,7 +150,12 @@ theorem wittPolyProdRemainder_vars
   refine union_subset ?_ ?_
   · apply Subset.trans (vars_pow _ _)
     have : (p : 𝕄) = C (p : Int) := by simp only [Int.cast_natCast, eq_intCast]
-    
+    rw [this]; rw [vars_C]
+    apply empty_subset
+  · apply Subset.trans (vars_pow _ _)
+    apply Subset.trans (wittMul_vars _ _)
+    apply product_subset_product (Subset.refl _)
+    simpa using hx
 
 Depends on / 依赖: Int.cast_natCast, Subset, Subset.refl, Subset.trans, biUnion_subset, cast_natCast, empty_subset, eq_intCast, h.symm, product_subset_product, union_subset, vars_C, vars_mul, vars_pow, vars_sum_subset, wittMul_vars, wittPolyProdRemainder
 -/
@@ -208,7 +218,10 @@ theorem remainder_vars
     rw [biUnion_subset]
     intro x hx
     rw [rename_monomial]; rw [vars_monomial]; rw [Finsupp.mapDomain_single]
-    · apply Subset.trans Finsupp.support_single_
+    · apply Subset.trans Finsupp.support_single_subset
+      simpa using mem_range.mp hx
+    · apply pow_ne_zero
+      exact mod_cast hp.out.ne_zero
 
 中文:
 定理 remainder_vars
@@ -222,7 +235,10 @@ theorem remainder_vars
     rw [biUnion_subset]
     intro x hx
     rw [rename_monomial]; rw [vars_monomial]; rw [Finsupp.mapDomain_single]
-    · apply Subset.trans Finsupp.support_single_
+    · apply Subset.trans Finsupp.support_single_subset
+      simpa using mem_range.mp hx
+    · apply pow_ne_zero
+      exact mod_cast hp.out.ne_zero
 
 Depends on / 依赖: Finsupp, Finsupp.mapDomain_single, Finsupp.support_single_subset, Subset, Subset.trans, biUnion_subset, hp.out.ne_zero, mapDomain_single, mem_range, mem_range.mp, mod_cast, ne_zero, pow_ne_zero, remainder, rename_monomial, support_single_subset, union_subset, vars_monomial, vars_mul, vars_sum_subset
 -/
@@ -278,7 +294,11 @@ theorem mul_polyOfInterest_aux1
     congr 1
     have hsupp : (Finsupp.single i (p ^ (n - i))).support = {i} := by
       rw [Finsupp.support_eq_singleton]
-     
+      simp only [and_true, Finsupp.single_eq_same, Ne]
+      exact pow_ne_zero _ hp.out.ne_zero
+    simp only [bind₁_monomial, hsupp, Int.cast_natCast, prod_singleton, eq_intCast,
+      Finsupp.single_eq_same, Int.cast_pow]
+  · simp only [map_mul, bind₁_X_right]
 
 中文:
 定理 mul_polyOf整数erest_aux1
@@ -292,7 +312,11 @@ theorem mul_polyOfInterest_aux1
     congr 1
     have hsupp : (Finsupp.single i (p ^ (n - i))).support = {i} := by
       rw [Finsupp.support_eq_singleton]
-     
+      simp only [and_true, Finsupp.single_eq_same, Ne]
+      exact pow_ne_zero _ hp.out.ne_zero
+    simp only [bind₁_monomial, hsupp, Int.cast_natCast, prod_singleton, eq_intCast,
+      Finsupp.single_eq_same, Int.cast_pow]
+  · simp only [map_mul, bind₁_X_right]
 
 Depends on / 依赖: Finsupp, Finsupp.single, Finsupp.single_eq_same, Finsupp.support_eq_singleton, Int.cast_natCast, Int.cast_pow, and_true, cast_natCast, cast_pow, convert, eq_intCast, hp.out.ne_zero, map_mul, map_sum, ne_zero, pow_ne_zero, prod_singleton, single, single_eq_same, support
 -/
@@ -353,7 +377,21 @@ theorem mul_polyOfInterest_aux3
   rw [wittPolyProd]; rw [wittPolynomial]; rw [map_sum]; rw [map_sum]
   conv_lhs =>
     arg 1
-    rw [sum_range_succ]; rw [← C_mul_X_pow_eq_monomial]; rw [tsub_self]; rw [pow_zero]; 
+    rw [sum_range_succ]; rw [← C_mul_X_pow_eq_monomial]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [map_mul]; rw [rename_C]; rw [rename_X]; rw [← mvpz]
+  conv_lhs =>
+    arg 2
+    rw [sum_range_succ]; rw [← C_mul_X_pow_eq_monomial]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [map_mul]; rw [rename_C]; rw [rename_X]; rw [← mvpz]
+  conv_rhs =>
+    enter [1, 1, 2, 2]
+    rw [sum_range_succ]; rw [← C_mul_X_pow_eq_monomial]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [map_mul]; rw [rename_C]; rw [rename_X]; rw [← mvpz]
+  conv_rhs =>
+    enter [1, 2, 2]
+    rw [sum_range_succ]; rw [← C_mul_X_pow_eq_monomial]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [map_mul]; rw [rename_C]; rw [rename_X]; rw [← mvpz]
+  simp only [add_mul, mul_add]
+  rw [add_comm _ (remainder p n)]
+  simp only [add_assoc]
+  apply congrArg (Add.add _)
+  ring
 
 中文:
 定理 mul_polyOf整数erest_aux3
@@ -365,7 +403,21 @@ theorem mul_polyOfInterest_aux3
   rw [wittPolyProd]; rw [wittPolynomial]; rw [map_sum]; rw [map_sum]
   conv_lhs =>
     arg 1
-    rw [sum_range_succ]; rw [← C_mul_X_pow_eq_monomial]; rw [tsub_self]; rw [pow_zero]; 
+    rw [sum_range_succ]; rw [← C_mul_X_pow_eq_monomial]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [map_mul]; rw [rename_C]; rw [rename_X]; rw [← mvpz]
+  conv_lhs =>
+    arg 2
+    rw [sum_range_succ]; rw [← C_mul_X_pow_eq_monomial]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [map_mul]; rw [rename_C]; rw [rename_X]; rw [← mvpz]
+  conv_rhs =>
+    enter [1, 1, 2, 2]
+    rw [sum_range_succ]; rw [← C_mul_X_pow_eq_monomial]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [map_mul]; rw [rename_C]; rw [rename_X]; rw [← mvpz]
+  conv_rhs =>
+    enter [1, 2, 2]
+    rw [sum_range_succ]; rw [← C_mul_X_pow_eq_monomial]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [map_mul]; rw [rename_C]; rw [rename_X]; rw [← mvpz]
+  simp only [add_mul, mul_add]
+  rw [add_comm _ (remainder p n)]
+  simp only [add_assoc]
+  apply congrArg (Add.add _)
+  ring
 -/
 theorem mul_polyOfInterest_aux3 (p n : Nat) : wittPolyProd p (n + 1) =
     -((p : 𝕄) ^ (n + 1) * X (0, n + 1)) * ((p : 𝕄) ^ (n + 1) * X (1, n + 1)) +
@@ -549,7 +601,7 @@ theorem peval_polyOfInterest
     map_sub]
   rw [sub_sub]; rw [add_comm (_ * _)]; rw [← sub_sub]
   simp [wittPolynomial_eq_sum_C_mul_X_pow, aeval, mul_coeff, peval, map_natCast,
-    map_add, map_po
+    map_add, map_pow, map_mul]
 
 中文:
 定理 peval_polyOf整数erest
@@ -560,7 +612,7 @@ theorem peval_polyOfInterest
     map_sub]
   rw [sub_sub]; rw [add_comm (_ * _)]; rw [← sub_sub]
   simp [wittPolynomial_eq_sum_C_mul_X_pow, aeval, mul_coeff, peval, map_natCast,
-    map_add, map_po
+    map_add, map_pow, map_mul]
 
 Depends on / 依赖: Function, Function.uncurry_apply_pair, Matrix, Matrix.cons_val_one, Matrix.cons_val_zero, add_comm, aeval_X, cons_val_one, cons_val_zero, map_add, map_mul, map_natCast, map_pow, map_sub, mul_coeff, polyOfInterest, sub_sub, uncurry_apply_pair, wittPolynomial_eq_sum_C_mul_X_pow
 -/
@@ -590,7 +642,9 @@ theorem peval_polyOfInterest'
   simp only [this, ne_eq, add_eq_zero, and_false, zero_pow, zero_mul, add_zero,
     not_false_eq_true, reduceCtorEq]
   have sum_zero_pow_mul_pow_p (y : 𝕎 k) : ∑ x in range (n + 1 + 1),
-      (0 : k) ^ x * y.coeff x ^ p ^ (
+      (0 : k) ^ x * y.coeff x ^ p ^ (n + 1 - x) = y.coeff 0 ^ p ^ (n + 1) := by
+    rw [Finset.sum_eq_single_of_mem 0] <;> simp +contextual
+  congr <;> apply sum_zero_pow_mul_pow_p
 
 中文:
 定理 peval_polyOf整数erest'
@@ -601,7 +655,9 @@ theorem peval_polyOfInterest'
   simp only [this, ne_eq, add_eq_zero, and_false, zero_pow, zero_mul, add_zero,
     not_false_eq_true, reduceCtorEq]
   have sum_zero_pow_mul_pow_p (y : 𝕎 k) : ∑ x in range (n + 1 + 1),
-      (0 : k) ^ x * y.coeff x ^ p ^ (
+      (0 : k) ^ x * y.coeff x ^ p ^ (n + 1 - x) = y.coeff 0 ^ p ^ (n + 1) := by
+    rw [Finset.sum_eq_single_of_mem 0] <;> simp +contextual
+  congr <;> apply sum_zero_pow_mul_pow_p
 
 Depends on / 依赖: CharP.cast_eq_zero, Finset, Finset.sum_eq_single_of_mem, add_eq_zero, add_zero, and_false, cast_eq_zero, contextual, ne_eq, not_false_eq_true, peval_polyOfInterest, reduceCtorEq, sum_eq_single_of_mem, sum_zero_pow_mul_pow_p, y.coeff, zero_mul, zero_pow
 -/
@@ -634,7 +690,20 @@ theorem nth_mul_coeff'
     intro x y
     apply f₀
     rintro ⟨a, ha⟩
-    
+    apply Function.uncurry ![x, y]
+    let S : Set (Fin 2 × Nat) := { a | a.2 = n ∨ a.2 < n }
+    have ha' : a in S := by grind
+    refine ⟨a.fst, ⟨a.snd, ?_⟩⟩
+    obtain ⟨ha, ha⟩ := ha' <;> lia
+  use f
+  intro x y
+  dsimp [f, peval]
+  rw [← hf₀]
+  congr
+  ext a
+  obtain ⟨a, ha⟩ := a
+  obtain ⟨i, m⟩ := a
+  fin_cases i <;> rfl -- surely this case split is not necessary
 
 中文:
 定理 nth_mul_coeff'
@@ -647,7 +716,20 @@ theorem nth_mul_coeff'
     intro x y
     apply f₀
     rintro ⟨a, ha⟩
-    
+    apply Function.uncurry ![x, y]
+    let S : Set (Fin 2 × Nat) := { a | a.2 = n ∨ a.2 < n }
+    have ha' : a in S := by grind
+    refine ⟨a.fst, ⟨a.snd, ?_⟩⟩
+    obtain ⟨ha, ha⟩ := ha' <;> lia
+  use f
+  intro x y
+  dsimp [f, peval]
+  rw [← hf₀]
+  congr
+  ext a
+  obtain ⟨a, ha⟩ := a
+  obtain ⟨i, m⟩ := a
+  fin_cases i <;> rfl -- surely this case split is not necessary
 
 Depends on / 依赖: Function, Function.uncurry, SetLike, SetLike.coe, TruncatedWittVector, a.fst, a.snd, exists_restrict_to_vars, peval_polyOfInterest, polyOfInterest_vars, uncurry
 -/

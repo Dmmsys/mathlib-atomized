@@ -37,7 +37,19 @@ theorem deriv_arcsin_aux
     rw [sqrt_eq_zero'.2 this.le]; rw [div_zero]
     have : arcsin =ᶠ[𝓝 x] fun _ => -(π / 2) :=
       (gt_mem_nhds h₁).mono fun y hy => arcsin_of_le_neg_one hy.le
-    exact ⟨(hasStrictDerivAt_const x _).congr_of_eventu
+    exact ⟨(hasStrictDerivAt_const x _).congr_of_eventuallyEq this.symm,
+      contDiffAt_const.congr_of_eventuallyEq this⟩
+  rcases h₂.lt_or_gt with h₂ | h₂
+  · have : 0 < √(1 - x ^ 2) := sqrt_pos.2 (by nlinarith [h₁, h₂])
+    simp only [← cos_arcsin, one_div] at this ⊢
+    exact ⟨sinPartialHomeomorph.hasStrictDerivAt_symm ⟨h₁, h₂⟩ this.ne' (hasStrictDerivAt_sin _),
+      sinPartialHomeomorph.contDiffAt_symm_deriv this.ne' ⟨h₁, h₂⟩ (hasDerivAt_sin _)
+        contDiff_sin.contDiffAt⟩
+  · have : 1 - x ^ 2 < 0 := by nlinarith [h₂]
+    rw [sqrt_eq_zero'.2 this.le]; rw [div_zero]
+    have : arcsin =ᶠ[𝓝 x] fun _ => π / 2 := (lt_mem_nhds h₂).mono fun y hy => arcsin_of_one_le hy.le
+    exact ⟨(hasStrictDerivAt_const x _).congr_of_eventuallyEq this.symm,
+      contDiffAt_const.congr_of_eventuallyEq this⟩
 
 中文:
 定理 deriv_arcsin_aux
@@ -48,7 +60,19 @@ theorem deriv_arcsin_aux
     rw [sqrt_eq_zero'.2 this.le]; rw [div_zero]
     have : arcsin =ᶠ[𝓝 x] fun _ => -(π / 2) :=
       (gt_mem_nhds h₁).mono fun y hy => arcsin_of_le_neg_one hy.le
-    exact ⟨(hasStrictDerivAt_const x _).congr_of_eventu
+    exact ⟨(hasStrictDerivAt_const x _).congr_of_eventuallyEq this.symm,
+      contDiffAt_const.congr_of_eventuallyEq this⟩
+  rcases h₂.lt_or_gt with h₂ | h₂
+  · have : 0 < √(1 - x ^ 2) := sqrt_pos.2 (by nlinarith [h₁, h₂])
+    simp only [← cos_arcsin, one_div] at this ⊢
+    exact ⟨sinPartialHomeomorph.hasStrictDerivAt_symm ⟨h₁, h₂⟩ this.ne' (hasStrictDerivAt_sin _),
+      sinPartialHomeomorph.contDiffAt_symm_deriv this.ne' ⟨h₁, h₂⟩ (hasDerivAt_sin _)
+        contDiff_sin.contDiffAt⟩
+  · have : 1 - x ^ 2 < 0 := by nlinarith [h₂]
+    rw [sqrt_eq_zero'.2 this.le]; rw [div_zero]
+    have : arcsin =ᶠ[𝓝 x] fun _ => π / 2 := (lt_mem_nhds h₂).mono fun y hy => arcsin_of_one_le hy.le
+    exact ⟨(hasStrictDerivAt_const x _).congr_of_eventuallyEq this.symm,
+      contDiffAt_const.congr_of_eventuallyEq this⟩
 
 Depends on / 依赖: arcsin, arcsin_of_le_neg_one, congr_of_eventuallyEq, contDiffAt_const, contDiffAt_const.congr_of_eventuallyEq, cos_arcsin, div_zero, gt_mem_nhds, hasStrictDerivAt_const, hy.le, lt_or_gt, one_div, sinPartialHo, sqrt_eq_zero, sqrt_pos, this.le, this.symm
 -/
@@ -201,7 +225,8 @@ theorem differentiableWithinAt_arcsin_Ici
   rintro h rfl
   have : sin ∘ arcsin =ᶠ[𝓝[>=] (-1 : Real)] id := by
     filter_upwards [Icc_mem_nhdsGE (neg_lt_self zero_lt_one)] with x using sin_arcsin'
-  have := h.hasDerivWithinAt.sin.congr_of_eventuallyEq this.sym
+  have := h.hasDerivWithinAt.sin.congr_of_eventuallyEq this.symm (by simp)
+  simpa using (uniqueDiffOn_Ici _ _ self_mem_Ici).eq_deriv _ this (hasDerivWithinAt_id _ _)
 
 中文:
 定理 differentiableWithinAt_arcsin_Ici
@@ -211,7 +236,8 @@ theorem differentiableWithinAt_arcsin_Ici
   rintro h rfl
   have : sin ∘ arcsin =ᶠ[𝓝[>=] (-1 : Real)] id := by
     filter_upwards [Icc_mem_nhdsGE (neg_lt_self zero_lt_one)] with x using sin_arcsin'
-  have := h.hasDerivWithinAt.sin.congr_of_eventuallyEq this.sym
+  have := h.hasDerivWithinAt.sin.congr_of_eventuallyEq this.symm (by simp)
+  simpa using (uniqueDiffOn_Ici _ _ self_mem_Ici).eq_deriv _ this (hasDerivWithinAt_id _ _)
 
 Depends on / 依赖: Icc_mem_nhdsGE, arcsin, congr_of_eventuallyEq, differentiableWithinAt, eq_deriv, filter_upwards, h.hasDerivWithinAt.sin.congr_of_eventuallyEq, hasDerivWithinAt, hasDerivWithinAt_arcsin_Ici, hasDerivWithinAt_id, neg_lt_self, self_mem_Ici, sin_arcsin, this.symm, uniqueDiffOn_Ici, zero_lt_one
 -/

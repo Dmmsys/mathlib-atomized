@@ -89,7 +89,15 @@ theorem commutator_le
   have ntα : Nontrivial α := nontrivial_of_fixedPoints_ne_univ hNX
   obtain a : α := Nontrivial.to_nonempty.some
   apply nN.commutator_le_of_self_sup_commutative_eq_top ?_ (IwaS.is_comm a)
-  -- We have to prove that N ⊔ IwaS.T 
+  -- We have to prove that N ⊔ IwaS.T x = ⊤
+  rw [eq_top_iff]; rw [← IwaS.is_generator]; rw [iSup_le_iff]
+  intro x
+  obtain ⟨g, rfl⟩ := MulAction.exists_smul_eq N a x
+  rw [Subgroup.smul_def]; rw [IwaS.is_conj g a]
+  rintro _ ⟨k, hk, rfl⟩
+  have hg' : ↑g in N ⊔ IwaS.T a := Subgroup.mem_sup_left (Subtype.mem g)
+  have hk' : k in N ⊔ IwaS.T a := Subgroup.mem_sup_right hk
+  exact (N ⊔ IwaS.T a).mul_mem ((N ⊔ IwaS.T a).mul_mem hg' hk') ((N ⊔ IwaS.T a).inv_mem hg')
 
 中文:
 定理 commutator_le
@@ -99,7 +107,15 @@ theorem commutator_le
   have ntα : Nontrivial α := nontrivial_of_fixedPoints_ne_univ hNX
   obtain a : α := Nontrivial.to_nonempty.some
   apply nN.commutator_le_of_self_sup_commutative_eq_top ?_ (IwaS.is_comm a)
-  -- We have to prove that N ⊔ IwaS.T 
+  -- We have to prove that N ⊔ IwaS.T x = ⊤
+  rw [eq_top_iff]; rw [← IwaS.is_generator]; rw [iSup_le_iff]
+  intro x
+  obtain ⟨g, rfl⟩ := MulAction.exists_smul_eq N a x
+  rw [Subgroup.smul_def]; rw [IwaS.is_conj g a]
+  rintro _ ⟨k, hk, rfl⟩
+  have hg' : ↑g in N ⊔ IwaS.T a := Subgroup.mem_sup_left (Subtype.mem g)
+  have hk' : k in N ⊔ IwaS.T a := Subgroup.mem_sup_right hk
+  exact (N ⊔ IwaS.T a).mul_mem ((N ⊔ IwaS.T a).mul_mem hg' hk') ((N ⊔ IwaS.T a).inv_mem hg')
 
 Depends on / 依赖: IsQuasiPreprimitive, IsQuasiPreprimitive.isPretransitive_of_normal, IwaS.is_comm, Nontrivial, Nontrivial.to_nonempty.some, commutator_le_of_self_sup_commutative_eq_top, isPretransitive_of_normal, is_comm, is_transN, nN.commutator_le_of_self_sup_commutative_eq_top, nontrivial_of_fixedPoints_ne_univ, to_nonempty
 -/
@@ -136,7 +152,7 @@ theorem isSimpleGroup
     intro x
     rw [one_smul]
     exact Set.eq_univ_iff_forall.mp h x ⟨n, hn⟩
-  | inr 
+  | inr h => exact Or.inr (top_le_iff.mp (le_trans (ge_of_eq is_perfect) h))
 
 中文:
 定理 isSimpleGroup
@@ -151,7 +167,7 @@ theorem isSimpleGroup
     intro x
     rw [one_smul]
     exact Set.eq_univ_iff_forall.mp h x ⟨n, hn⟩
-  | inr 
+  | inr h => exact Or.inr (top_le_iff.mp (le_trans (ge_of_eq is_perfect) h))
 
 Depends on / 依赖: IsSimpleGroup, IsSimpleGroup.mk, IwaS.commutator_le, N.eq_bot_iff_forall.mpr, Or.inl, Or.inr, Set.eq_univ_iff_forall.mp, commutator_le, eq_bot_iff_forall, eq_of_smul_eq_smul, eq_univ_iff_forall, ge_of_eq, is_faithful, is_faithful.eq_of_smul_eq_smul, is_perfect, le_trans, one_smul, or_iff_not_imp_left, or_iff_not_imp_left.mpr, top_le_iff
 -/

@@ -366,7 +366,8 @@ theorem uniformContinuousOn
   refine EMetric.uniformContinuousOn_iff.2 fun ε εpos => ?_
   have : Tendsto (fun d : Real>=0∞ => (C : Real>=0∞) * d ^ (r : Real)) (𝓝 0) (𝓝 0) :=
     ENNReal.tendsto_const_mul_rpow_nhds_zero_of_pos ENNReal.coe_ne_top h0
-  rcases ENNReal.nhds_zero_basis.mem_iff.1 (this (gt_mem_nhds εpos)) with ⟨δ,
+  rcases ENNReal.nhds_zero_basis.mem_iff.1 (this (gt_mem_nhds εpos)) with ⟨δ, δ0, H⟩
+  exact ⟨δ, δ0, fun hx y hy h => (hf.edist_le hx hy).trans_lt (H h)⟩
 
 中文:
 定理 uniformContinuousOn
@@ -375,7 +376,8 @@ theorem uniformContinuousOn
   refine EMetric.uniformContinuousOn_iff.2 fun ε εpos => ?_
   have : Tendsto (fun d : Real>=0∞ => (C : Real>=0∞) * d ^ (r : Real)) (𝓝 0) (𝓝 0) :=
     ENNReal.tendsto_const_mul_rpow_nhds_zero_of_pos ENNReal.coe_ne_top h0
-  rcases ENNReal.nhds_zero_basis.mem_iff.1 (this (gt_mem_nhds εpos)) with ⟨δ,
+  rcases ENNReal.nhds_zero_basis.mem_iff.1 (this (gt_mem_nhds εpos)) with ⟨δ, δ0, H⟩
+  exact ⟨δ, δ0, fun hx y hy h => (hf.edist_le hx hy).trans_lt (H h)⟩
 -/
 protected theorem uniformContinuousOn (hf : HolderOnWith C r f s) (h0 : 0 < r) :
     UniformContinuousOn f s := by
@@ -552,7 +554,13 @@ lemma interpolate
   calc edist (f x) (f y)
       = (edist (f x) (f y)) ^ (t₁ : Real) * (edist (f x) (f y)) ^ (t₂ : Real) := by
         simp [← ENNReal.rpow_add_of_nonneg, ← NNReal.coe_add, ht]
-    _ <= (C₁ * (edist x y) ^ (r : Real)) ^ (t₁ : Real) * (C₂ * (edist x y) ^ (s : Real)) ^ (t₂ : Real) :
+    _ <= (C₁ * (edist x y) ^ (r : Real)) ^ (t₁ : Real) * (C₂ * (edist x y) ^ (s : Real)) ^ (t₂ : Real) := by
+        nth_grw 1 [hf₁ x hx y hy, hf₂ x hx y hy]
+    _ = ↑(C₁ ^ (t₁ : Real) * C₂ ^ (t₂ : Real)) * (edist x y) ^ (↑(r * t₁ + s * t₂) : Real) := by
+        push_cast
+        simp (discharger := positivity) only [ENNReal.mul_rpow_of_nonneg,
+          ENNReal.rpow_add_of_nonneg, ENNReal.rpow_mul, ENNReal.coe_rpow_of_nonneg]
+        ring
 
 中文:
 引理 interpolate
@@ -562,7 +570,13 @@ lemma interpolate
   calc edist (f x) (f y)
       = (edist (f x) (f y)) ^ (t₁ : Real) * (edist (f x) (f y)) ^ (t₂ : Real) := by
         simp [← ENNReal.rpow_add_of_nonneg, ← NNReal.coe_add, ht]
-    _ <= (C₁ * (edist x y) ^ (r : Real)) ^ (t₁ : Real) * (C₂ * (edist x y) ^ (s : Real)) ^ (t₂ : Real) :
+    _ <= (C₁ * (edist x y) ^ (r : Real)) ^ (t₁ : Real) * (C₂ * (edist x y) ^ (s : Real)) ^ (t₂ : Real) := by
+        nth_grw 1 [hf₁ x hx y hy, hf₂ x hx y hy]
+    _ = ↑(C₁ ^ (t₁ : Real) * C₂ ^ (t₂ : Real)) * (edist x y) ^ (↑(r * t₁ + s * t₂) : Real) := by
+        push_cast
+        simp (discharger := positivity) only [ENNReal.mul_rpow_of_nonneg,
+          ENNReal.rpow_add_of_nonneg, ENNReal.rpow_mul, ENNReal.coe_rpow_of_nonneg]
+        ring
 
 Depends on / 依赖: ENNReal, ENNReal.mul_rpow_of_nonneg, ENNReal.rpow_add_of_nonneg, NNReal, NNReal.coe_add, coe_add, discharger, mul_rpow_of_nonneg, nth_grw, rpow_add_of_nonneg
 -/
@@ -622,7 +636,17 @@ lemma of_le
   rw [← NNReal.coe_le_coe] at hsr
   rw [← NNReal.coe_pos] at hr
   set θ₁ : Real>=0 := .mk (s / r) (by positivity)
-  set θ₂ : Real>=0 := .mk (1 - s / r) (by simpa using div
+  set θ₂ : Real>=0 := .mk (1 - s / r) (by simpa using div_le_one_of_le₀ hsr (by positivity))
+  have hθ : θ₁ + θ₂ = 1 := by ext; simp [θ₁, θ₂]
+  have hθt : r * θ₁ + 0 * θ₂ = s := by ext; simp [θ₁, mul_div_cancel₀ _ hr.ne']
+  have hθC : C * D ^ (r - s : Real) = C ^ (θ₁ : Real) * (C * D ^ (r : Real)) ^ (θ₂ : Real) := by
+    simp (discharger := positivity) only [NNReal.mul_rpow, ← mul_assoc,
+      ← NNReal.rpow_add_of_nonneg, ← NNReal.rpow_mul, ← NNReal.coe_add, hθ, NNReal.coe_one,
+      NNReal.rpow_one]
+    congr
+    simp [mul_sub, θ₂, mul_div_cancel₀ _ hr.ne']
+  rw [hθC]; rw [← hθt]
+  exact hf.interpolate (hf.holderOnWith_zero_of_bounded hA) hθ
 
 中文:
 引理 of_le
@@ -634,7 +658,17 @@ lemma of_le
   rw [← NNReal.coe_le_coe] at hsr
   rw [← NNReal.coe_pos] at hr
   set θ₁ : Real>=0 := .mk (s / r) (by positivity)
-  set θ₂ : Real>=0 := .mk (1 - s / r) (by simpa using div
+  set θ₂ : Real>=0 := .mk (1 - s / r) (by simpa using div_le_one_of_le₀ hsr (by positivity))
+  have hθ : θ₁ + θ₂ = 1 := by ext; simp [θ₁, θ₂]
+  have hθt : r * θ₁ + 0 * θ₂ = s := by ext; simp [θ₁, mul_div_cancel₀ _ hr.ne']
+  have hθC : C * D ^ (r - s : Real) = C ^ (θ₁ : Real) * (C * D ^ (r : Real)) ^ (θ₂ : Real) := by
+    simp (discharger := positivity) only [NNReal.mul_rpow, ← mul_assoc,
+      ← NNReal.rpow_add_of_nonneg, ← NNReal.rpow_mul, ← NNReal.coe_add, hθ, NNReal.coe_one,
+      NNReal.rpow_one]
+    congr
+    simp [mul_sub, θ₂, mul_div_cancel₀ _ hr.ne']
+  rw [hθC]; rw [← hθt]
+  exact hf.interpolate (hf.holderOnWith_zero_of_bounded hA) hθ
 
 Depends on / 依赖: NNReal, NNReal.coe_le_coe, NNReal.coe_pos, coe_le_coe, coe_pos, eq_zero_or_pos, hf.holderOnWith_zero_of_bounded, holderOnWith_zero_of_bounded, hr.ne, ht.trans_le, trans_le
 -/

@@ -309,7 +309,7 @@ definition IsConstant
   body: P.liftOn (fun f => exists b : β, f =ᶠ[l] (fun _ => b)) by
     suffices forall f g : α -> β, forall b : β, f =ᶠ[l] g -> (f =ᶠ[l] fun _ => b) -> (g =ᶠ[l] fun _ => b) from
       fun f g h => propext ⟨fun ⟨b, hb⟩ => ⟨b, this f g b h hb⟩, fun ⟨b, hb⟩ => ⟨b, h.trans hb⟩⟩
-    exact fun f g b hfg hf => (hfg
+    exact fun f g b hfg hf => (hfg.symm).trans hf
 
 中文:
 定义 是常数
@@ -317,7 +317,7 @@ definition IsConstant
   定义体: P.liftOn (fun f => exists b : β, f =ᶠ[l] (fun _ => b)) by
     suffices forall f g : α -> β, forall b : β, f =ᶠ[l] g -> (f =ᶠ[l] fun _ => b) -> (g =ᶠ[l] fun _ => b) from
       fun f g h => propext ⟨fun ⟨b, hb⟩ => ⟨b, this f g b h hb⟩, fun ⟨b, hb⟩ => ⟨b, h.trans hb⟩⟩
-    exact fun f g b hfg hf => (hfg
+    exact fun f g b hfg hf => (hfg.symm).trans hf
 
 Depends on / 依赖: Algebra, Algebra.adjoin_image, Finset, Finset.coe_image, P.liftOn, adjoin_image, classical, coe_image, h.trans, hfg.symm, liftOn, propext, s.image
 -/
@@ -2131,7 +2131,10 @@ zpow_zero' := Quotient.ind' fun _ => congrArg ofFun
 zpow_succ' _ := Quotient.ind' fun _ => congrArg ofFun
     funext fun _ => DivInvMonoid.zpow_succ' ..
 zpow_neg' _ := Quotient.ind' fun _ => congrArg ofFun
-    funext fun _ => DivInvMonoid.zpow_neg'
+    funext fun _ => DivInvMonoid.zpow_neg' ..
+div_eq_mul_inv := Quotient.ind₂' fun _ _ => congrArg ofFun div_eq_mul_inv ..
+
+@[to_additive]
 
 中文:
 实例 instDivInvMonoid
@@ -2142,7 +2145,10 @@ zpow_zero' := Quotient.ind' fun _ => congrArg ofFun
 zpow_succ' _ := Quotient.ind' fun _ => congrArg ofFun
     funext fun _ => DivInvMonoid.zpow_succ' ..
 zpow_neg' _ := Quotient.ind' fun _ => congrArg ofFun
-    funext fun _ => DivInvMonoid.zpow_neg'
+    funext fun _ => DivInvMonoid.zpow_neg' ..
+div_eq_mul_inv := Quotient.ind₂' fun _ _ => congrArg ofFun div_eq_mul_inv ..
+
+@[to_additive]
 -/
 instance instDivInvMonoid [DivInvMonoid G] : DivInvMonoid (Germ l G) where
   zpow z f := f ^ z

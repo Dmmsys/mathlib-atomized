@@ -228,7 +228,8 @@ theorem treesOfNumNodesEq_card_eq_catalan
     · apply sum_congr rfl
       rintro ⟨i, j⟩ H
       rw [card_map]; rw [card_product]; rw [ih _ (fst_le H)]; rw [ih _ (snd_le H)]
-    · simp_
+    · simp_rw [Set.PairwiseDisjoint, Set.Pairwise, disjoint_left]
+      aesop
 
 中文:
 定理 treesOfNumNodesEq_card_eq_catalan
@@ -242,7 +243,8 @@ theorem treesOfNumNodesEq_card_eq_catalan
     · apply sum_congr rfl
       rintro ⟨i, j⟩ H
       rw [card_map]; rw [card_product]; rw [ih _ (fst_le H)]; rw [ih _ (snd_le H)]
-    · simp_
+    · simp_rw [Set.PairwiseDisjoint, Set.Pairwise, disjoint_left]
+      aesop
 
 Depends on / 依赖: Nat.case_strong_induction_on, Pairwise, PairwiseDisjoint, Set.Pairwise, Set.PairwiseDisjoint, card_biUnion, card_map, card_product, case_strong_induction_on, catalan_succ, disjoint_left, fst_le, simp_rw, snd_le, sum_congr, treesOfNumNodesEq_succ
 -/

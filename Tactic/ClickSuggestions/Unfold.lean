@@ -75,7 +75,17 @@ definition unfoldProjDefaultInst?
   let some { fromClass := true, ctorName, .. } ← getProjectionFnInfo? declName | return none
   -- get the list of default instances of the class
   let some (ConstantInfo.ctorInfo ci) := (← getEnv).find? ctorName | return none
-  let defaults ← ge
+  let defaults ← getDefaultInstances ci.induct
+  if defaults.isEmpty then return none
+
+let some e ← withDefault unfoldDefinition? e | return none
+  let .proj _ i c := e.getAppFn | return none
+  -- check that the structure `c` comes from one of the default instances
+  let .const inst _ := c.getAppFn | return none
+  unless defaults.any (·.1 == inst) do return none
+
+let some r ← withReducibleAndInstances project? c i | return none
+.headBeta return mkAppN r e.getAppArgs
 
 中文:
 定义 unfoldProjDefaultInst?
@@ -85,7 +95,17 @@ definition unfoldProjDefaultInst?
   let some { fromClass := true, ctorName, .. } ← getProjectionFnInfo? declName | return none
   -- get the list of default instances of the class
   let some (ConstantInfo.ctorInfo ci) := (← getEnv).find? ctorName | return none
-  let defaults ← ge
+  let defaults ← getDefaultInstances ci.induct
+  if defaults.isEmpty then return none
+
+let some e ← withDefault unfoldDefinition? e | return none
+  let .proj _ i c := e.getAppFn | return none
+  -- check that the structure `c` comes from one of the default instances
+  let .const inst _ := c.getAppFn | return none
+  unless defaults.any (·.1 == inst) do return none
+
+let some r ← withReducibleAndInstances project? c i | return none
+.headBeta return mkAppN r e.getAppArgs
 -/
 def unfoldProjDefaultInst? (e : Expr) : MetaM (Option Expr) := do
   let .const declName _ := e.getAppFn | return none
@@ -163,7 +183,8 @@ definition isUserFriendly
     (isUserFriendly f) <&&> do
       let finfo ← getFunInfoNArgs f e.getAppNumArgs
       e.getAppNumArgs.allM fun i _ =>
-        if finfo.paramInfo[i]?.all 
+        if finfo.paramInfo[i]?.all (·.isExplicit) then isUserFriendly args[i]! else return true
+  | _ => return true
 
 中文:
 定义 isUserFriendly
@@ -177,7 +198,8 @@ definition isUserFriendly
     (isUserFriendly f) <&&> do
       let finfo ← getFunInfoNArgs f e.getAppNumArgs
       e.getAppNumArgs.allM fun i _ =>
-        if finfo.paramInfo[i]?.all 
+        if finfo.paramInfo[i]?.all (·.isExplicit) then isUserFriendly args[i]! else return true
+  | _ => return true
 -/
 partial def isUserFriendly (e : Expr) : MetaM Bool := do
   match e with

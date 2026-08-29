@@ -101,6 +101,7 @@ theorem isAddQuotientCoveringMap_zsmul
     (f := zsmulAddGroupHom (α := AddCircle p) n)
     (Set.Finite.isDiscrete <| finite_torsion_of_isSMulRegular_int _ _ fun _ => ?_)
   simp_rw [zsmul_eq_mul]
+  apply hn.isSMulRegular 𝕜
 
 中文:
 定理 isAddQuotientCoveringMap_zsmul
@@ -111,6 +112,7 @@ theorem isAddQuotientCoveringMap_zsmul
     (f := zsmulAddGroupHom (α := AddCircle p) n)
     (Set.Finite.isDiscrete <| finite_torsion_of_isSMulRegular_int _ _ fun _ => ?_)
   simp_rw [zsmul_eq_mul]
+  apply hn.isSMulRegular 𝕜
 
 Depends on / 依赖: AddCircle, Finite, QuotientAddGroup, QuotientAddGroup.mk, Set.Finite.isDiscrete, finite_torsion_of_isSMulRegular_int, hn.isQuotientMap_zsmul, hn.isSMulRegular, isAddQuotientCoveringMap_of_isDiscrete_ker_addMonoidHom, isDiscrete, isQuotientMap_quotient_mk, isQuotientMap_zsmul, isSMulRegular, simp_rw, zsmulAddGroupHom, zsmul_eq_mul
 -/

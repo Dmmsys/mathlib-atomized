@@ -117,7 +117,8 @@ instance pseudoMetrizableSpace_prod
     pseudoMetrizableSpaceUniformity_countably_generated X
   let : UniformSpace Y := pseudoMetrizableSpaceUniformity Y
   have : (uniformity Y).IsCountablyGenerated :=
-    pseudoMetrizableSpaceUni
+    pseudoMetrizableSpaceUniformity_countably_generated Y
+  inferInstance
 
 中文:
 实例 pseudoMetrizableSpace_prod
@@ -127,7 +128,8 @@ instance pseudoMetrizableSpace_prod
     pseudoMetrizableSpaceUniformity_countably_generated X
   let : UniformSpace Y := pseudoMetrizableSpaceUniformity Y
   have : (uniformity Y).IsCountablyGenerated :=
-    pseudoMetrizableSpaceUni
+    pseudoMetrizableSpaceUniformity_countably_generated Y
+  inferInstance
 
 Depends on / 依赖: IsCountablyGenerated, UniformSpace, pseudoMetrizableSpaceUniformity, pseudoMetrizableSpaceUniformity_countably_generated, uniformity
 -/
@@ -151,7 +153,7 @@ theorem _root_.Topology.IsInducing.pseudoMetrizableSpace
   have : (uniformity Y).IsCountablyGenerated :=
     pseudoMetrizableSpaceUniformity_countably_generated Y
   ⟨⟨u.comap f, u.toTopologicalSpace_comap.trans hf.eq_induced.symm,
-    Filter.comap.isCountablyGenerated (uniformity Y) (Prod.map f f
+    Filter.comap.isCountablyGenerated (uniformity Y) (Prod.map f f)⟩⟩
 
 中文:
 定理 _root_.拓扑.是Inducing.pseudoMetrizableSpace
@@ -160,7 +162,7 @@ theorem _root_.Topology.IsInducing.pseudoMetrizableSpace
   have : (uniformity Y).IsCountablyGenerated :=
     pseudoMetrizableSpaceUniformity_countably_generated Y
   ⟨⟨u.comap f, u.toTopologicalSpace_comap.trans hf.eq_induced.symm,
-    Filter.comap.isCountablyGenerated (uniformity Y) (Prod.map f f
+    Filter.comap.isCountablyGenerated (uniformity Y) (Prod.map f f)⟩⟩
 
 Depends on / 依赖: Filter, Filter.comap.isCountablyGenerated, IsCountablyGenerated, Prod.map, UniformSpace, eq_induced, hf.eq_induced.symm, isCountablyGenerated, pseudoMetrizableSpaceUniformity, pseudoMetrizableSpaceUniformity_countably_generated, toTopologicalSpace_comap, u.comap, u.toTopologicalSpace_comap.trans, uniformity
 -/
@@ -355,7 +357,10 @@ theorem IsSeparable.secondCountableTopology
   have : SeparableSpace (closure u) :=
     ⟨Set.range (u.inclusion subset_closure), Set.countable_range (u.inclusion subset_closure),
 Subtype.dense_iff.2 by rw [← Set.range_comp, Set.val_comp_inclusion, Subtype.range_coe]⟩
-  let := pseudoMetrizableSpaceU
+  let := pseudoMetrizableSpaceUniformity (closure u)
+  have := pseudoMetrizableSpaceUniformity_countably_generated (closure u)
+  have := secondCountable_of_separable (closure u)
+  (Topology.IsEmbedding.inclusion hs).secondCountableTopology
 
 中文:
 定理 是可分.secondCountableTopology
@@ -365,7 +370,10 @@ Subtype.dense_iff.2 by rw [← Set.range_comp, Set.val_comp_inclusion, Subtype.r
   have : SeparableSpace (closure u) :=
     ⟨Set.range (u.inclusion subset_closure), Set.countable_range (u.inclusion subset_closure),
 Subtype.dense_iff.2 by rw [← Set.range_comp, Set.val_comp_inclusion, Subtype.range_coe]⟩
-  let := pseudoMetrizableSpaceU
+  let := pseudoMetrizableSpaceUniformity (closure u)
+  have := pseudoMetrizableSpaceUniformity_countably_generated (closure u)
+  have := secondCountable_of_separable (closure u)
+  (Topology.IsEmbedding.inclusion hs).secondCountableTopology
 
 Depends on / 依赖: IsEmbedding, SeparableSpace, Set.countable_range, Set.range, Set.range_comp, Set.val_comp_inclusion, Subtype, Subtype.dense_iff, Subtype.range_coe, Topology, Topology.IsEmbedding.inclusion, closure, countable_range, dense_iff, hu.to_subtype, inclusion, pseudoMetrizableSpaceUniformity, pseudoMetrizableSpaceUniformity_countably_generated, range_coe, range_comp
 -/
@@ -410,7 +418,8 @@ theorem IsSeparable.exists_countable_dense_subset
   intro U hU
   obtain ⟨t, htc, hst⟩ := hs
   refine ⟨t, htc, fun x hx => ?_⟩
-  obtain ⟨y, hyx, hyt⟩ := mem_closure_iff_ball.1 (hst hx) (sy
+  obtain ⟨y, hyx, hyt⟩ := mem_closure_iff_ball.1 (hst hx) (symmetrize_mem_uniformity hU)
+  exact mem_biUnion hyt (ball_mono SetRel.symmetrize_subset_inv x hyx)
 
 中文:
 定理 是可分.存在_countable_dense_subset
@@ -422,7 +431,8 @@ theorem IsSeparable.exists_countable_dense_subset
   intro U hU
   obtain ⟨t, htc, hst⟩ := hs
   refine ⟨t, htc, fun x hx => ?_⟩
-  obtain ⟨y, hyx, hyt⟩ := mem_closure_iff_ball.1 (hst hx) (sy
+  obtain ⟨y, hyx, hyt⟩ := mem_closure_iff_ball.1 (hst hx) (symmetrize_mem_uniformity hU)
+  exact mem_biUnion hyt (ball_mono SetRel.symmetrize_subset_inv x hyx)
 
 Depends on / 依赖: SetRel, SetRel.symmetrize_subset_inv, ball_mono, mem_biUnion, mem_closure_iff_ball, pseudoMetrizableSpaceUniformity, pseudoMetrizableSpaceUniformity_countably_generated, subset_countable_closure_of_almost_dense_set, symmetrize_mem_uniformity, symmetrize_subset_inv
 -/

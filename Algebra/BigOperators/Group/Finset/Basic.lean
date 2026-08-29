@@ -1257,7 +1257,10 @@ theorem prod_filter
       prod_congr rfl fun a h => by rw [if_pos]; simpa using (mem_filter.1 h).2
     _ = ∏ a in s, if p a then f a else 1 := by
       { refine prod_subset (filter_subset _ s) fun x hs h => ?_
-        rw [mem_filter]; rw [no
+        rw [mem_filter]; rw [not_and] at h
+        exact if_neg (by simpa using h hs) }
+
+@[to_additive]
 
 中文:
 定理 prod_filter
@@ -1267,7 +1270,10 @@ theorem prod_filter
       prod_congr rfl fun a h => by rw [if_pos]; simpa using (mem_filter.1 h).2
     _ = ∏ a in s, if p a then f a else 1 := by
       { refine prod_subset (filter_subset _ s) fun x hs h => ?_
-        rw [mem_filter]; rw [no
+        rw [mem_filter]; rw [not_and] at h
+        exact if_neg (by simpa using h hs) }
+
+@[to_additive]
 
 Depends on / 依赖: filter_subset, if_neg, if_pos, mem_filter, not_and, prod_congr, prod_subset
 -/
@@ -1560,7 +1566,14 @@ theorem prod_eq_mul
     apply prod_eq_single_of_mem a h₁
     exact fun c hc hca => h₀ c hc ⟨hca, ne_of_mem_of_not_mem hc h₂⟩
   · rw [ha h₁, one_mul]
-    apply prod_eq_single
+    apply prod_eq_single_of_mem b h₂
+    exact fun c hc hcb => h₀ c hc ⟨ne_of_mem_of_not_mem hc h₁, hcb⟩
+  · rw [ha h₁, hb h₂, mul_one]
+    exact
+      _root_.trans
+        (prod_congr rfl fun c hc =>
+          h₀ c hc ⟨ne_of_mem_of_not_mem hc h₁, ne_of_mem_of_not_mem hc h₂⟩)
+        prod_const_one
 
 中文:
 定理 prod_eq_mul
@@ -1572,7 +1585,14 @@ theorem prod_eq_mul
     apply prod_eq_single_of_mem a h₁
     exact fun c hc hca => h₀ c hc ⟨hca, ne_of_mem_of_not_mem hc h₂⟩
   · rw [ha h₁, one_mul]
-    apply prod_eq_single
+    apply prod_eq_single_of_mem b h₂
+    exact fun c hc hcb => h₀ c hc ⟨ne_of_mem_of_not_mem hc h₁, hcb⟩
+  · rw [ha h₁, hb h₂, mul_one]
+    exact
+      _root_.trans
+        (prod_congr rfl fun c hc =>
+          h₀ c hc ⟨ne_of_mem_of_not_mem hc h₁, ne_of_mem_of_not_mem hc h₂⟩)
+        prod_const_one
 
 Depends on / 依赖: Classical, Classical.decEq, _root_, _root_.trans, mul_one, ne_of_mem_of_not_mem, one_mul, prod_congr, prod_eq_mul_of_mem, prod_eq_single_of_mem
 -/
@@ -1886,7 +1906,15 @@ theorem prod_bij_ne_one
       prod_bij (fun a ha => i a (mem_filter.mp ha).1 <| by simpa using (mem_filter.mp ha).2)
         ?_ ?_ ?_ ?_
     _ = ∏ x in t, g x := prod_filter_ne_one _
-  
+  · grind
+  · solve_by_elim
+  · intro b hb
+    refine (mem_filter.mp hb).elim fun h₁ h₂ => ?_
+    obtain ⟨a, ha₁, ha₂, eq⟩ := i_surj b h₁ fun H => by rw [H] at h₂; simp at h₂
+    exact ⟨a, mem_filter.mpr ⟨ha₁, ha₂⟩, eq⟩
+  · solve_by_elim
+
+@[to_additive]
 
 中文:
 定理 prod_bij_ne_one
@@ -1899,7 +1927,15 @@ theorem prod_bij_ne_one
       prod_bij (fun a ha => i a (mem_filter.mp ha).1 <| by simpa using (mem_filter.mp ha).2)
         ?_ ?_ ?_ ?_
     _ = ∏ x in t, g x := prod_filter_ne_one _
-  
+  · grind
+  · solve_by_elim
+  · intro b hb
+    refine (mem_filter.mp hb).elim fun h₁ h₂ => ?_
+    obtain ⟨a, ha₁, ha₂, eq⟩ := i_surj b h₁ fun H => by rw [H] at h₂; simp at h₂
+    exact ⟨a, mem_filter.mpr ⟨ha₁, ha₂⟩, eq⟩
+  · solve_by_elim
+
+@[to_additive]
 
 Depends on / 依赖: classical, i_surj, mem_filter, mem_filter.mp, mem_filter.mpr, prod_bij, prod_filter_ne_one, solve_by_elim
 -/
@@ -2131,7 +2167,14 @@ theorem prod_list_map_count
   simp only [List.map, List.prod_cons, toFinset_cons, IH]
   by_cases has : a in s.toFinset
   · rw [insert_eq_of_mem has, ← insert_erase has, prod_insert (notMem_erase _ _),
-      pr
+      prod_insert (notMem_erase _ _), ← mul_assoc, count_cons_self, pow_succ']
+    congr 1
+    refine prod_congr rfl fun x hx => ?_
+    rw [count_cons_of_ne (ne_of_mem_erase hx).symm]
+  rw [prod_insert has]; rw [count_cons_self]; rw [count_eq_zero_of_not_mem (mt mem_toFinset.2 has)]; rw [pow_one]
+  grind [Finset.prod_congr]
+
+@[to_additive]
 
 中文:
 定理 prod_list_map_count
@@ -2143,7 +2186,14 @@ theorem prod_list_map_count
   simp only [List.map, List.prod_cons, toFinset_cons, IH]
   by_cases has : a in s.toFinset
   · rw [insert_eq_of_mem has, ← insert_erase has, prod_insert (notMem_erase _ _),
-      pr
+      prod_insert (notMem_erase _ _), ← mul_assoc, count_cons_self, pow_succ']
+    congr 1
+    refine prod_congr rfl fun x hx => ?_
+    rw [count_cons_of_ne (ne_of_mem_erase hx).symm]
+  rw [prod_insert has]; rw [count_cons_self]; rw [count_eq_zero_of_not_mem (mt mem_toFinset.2 has)]; rw [pow_one]
+  grind [Finset.prod_congr]
+
+@[to_additive]
 
 Depends on / 依赖: List.map, List.prod_cons, count_, count_cons_of_ne, count_cons_self, count_nil, insert_eq_of_mem, insert_erase, map_nil, mul_assoc, ne_of_mem_erase, notMem_erase, pow_succ, pow_zero, prod_congr, prod_cons, prod_const_one, prod_insert, prod_nil, s.toFinset
 -/
@@ -2551,7 +2601,14 @@ lemma prod_involution
   · simp
   have : {x, g x hx} subseteq s := by simp [insert_subset_iff, hx, g_mem]
   suffices h : ∏ x in s \ {x, g x hx}, f x = 1 by
-    rw [← prod_sdiff this]; rw [h]; rw [
+    rw [← prod_sdiff this]; rw [h]; rw [one_mul]
+    cases eq_or_ne (g x hx) x with
+    | inl hx' => simpa [hx'] using hg₃ x hx
+    | inr hx' => grind
+  suffices h₃ : forall a (ha : a in s \ {x, g x hx}), g a (sdiff_subset ha) in s \ {x, g x hx} from
+    ih (s \ {x, g x hx}) (ssubset_iff.2 ⟨x, by simp [insert_subset_iff, hx]⟩) _
+      (by simp [hg₁]) (fun _ _ => hg₃ _ _) h₃ (fun _ _ => hg₄ _ _)
+  grind
 
 中文:
 引理 prod_involution
@@ -2563,7 +2620,14 @@ lemma prod_involution
   · simp
   have : {x, g x hx} subseteq s := by simp [insert_subset_iff, hx, g_mem]
   suffices h : ∏ x in s \ {x, g x hx}, f x = 1 by
-    rw [← prod_sdiff this]; rw [h]; rw [
+    rw [← prod_sdiff this]; rw [h]; rw [one_mul]
+    cases eq_or_ne (g x hx) x with
+    | inl hx' => simpa [hx'] using hg₃ x hx
+    | inr hx' => grind
+  suffices h₃ : forall a (ha : a in s \ {x, g x hx}), g a (sdiff_subset ha) in s \ {x, g x hx} from
+    ih (s \ {x, g x hx}) (ssubset_iff.2 ⟨x, by simp [insert_subset_iff, hx]⟩) _
+      (by simp [hg₁]) (fun _ _ => hg₃ _ _) h₃ (fun _ _ => hg₄ _ _)
+  grind
 
 Depends on / 依赖: Finset, Finset.strongInduction, classical, eq_empty_or_nonempty, eq_or_ne, g_mem, insert_subset_iff, one_mul, prod_sdiff, s.eq_empty_or_nonempty, sdiff_subset, strongInduction, subseteq
 -/
@@ -2954,7 +3018,12 @@ theorem prod_biUnion_of_pairwise_eq_one
   swap
   · intro i hi j hj hij a hai haj k hk
     have hki : k in t' i := hai hk
-    have hkj : k in 
+    have hkj : k in t' j := haj hk
+    simp only [ne_eq, mem_filter, t'] at hki hkj
+    exact (hki.2 (hs hi hj hij k (by grind))).elim
+  exact Finset.prod_congr rfl (fun i hi => prod_filter_ne_one (t i))
+
+@[to_additive]
 
 中文:
 定理 prod_biUnion_of_pairwise_eq_one
@@ -2967,7 +3036,12 @@ theorem prod_biUnion_of_pairwise_eq_one
   swap
   · intro i hi j hj hij a hai haj k hk
     have hki : k in t' i := hai hk
-    have hkj : k in 
+    have hkj : k in t' j := haj hk
+    simp only [ne_eq, mem_filter, t'] at hki hkj
+    exact (hki.2 (hs hi hj hij k (by grind))).elim
+  exact Finset.prod_congr rfl (fun i hi => prod_filter_ne_one (t i))
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.prod_congr, biUnion, classical, filter, mem_filter, ne_eq, prod_biUnion, prod_congr, prod_filter_ne_one, s.biUnion
 -/
@@ -2998,7 +3072,7 @@ lemma prod_filter_of_pairwise_eq_one
   have h j (hj : j in {i in I | f i = f n}.erase n) : g (f j) = 1 := by
     simp only [mem_erase, mem_filter] at hj
     exact hf hj.2.1 hn hj.1 hj.2.2
-  rw [← mul_one (g (f n))]; rw [← prod_eq_one h]; rw [← mul_prod_erase {i in I | f i = f n} (fun i => g (f i)) mem_filter.mpr ⟨hn]; rw
+  rw [← mul_one (g (f n))]; rw [← prod_eq_one h]; rw [← mul_prod_erase {i in I | f i = f n} (fun i => g (f i)) mem_filter.mpr ⟨hn]; rw [by rfl⟩]
 
 中文:
 引理 prod_filter_of_pairwise_eq_one
@@ -3008,7 +3082,7 @@ lemma prod_filter_of_pairwise_eq_one
   have h j (hj : j in {i in I | f i = f n}.erase n) : g (f j) = 1 := by
     simp only [mem_erase, mem_filter] at hj
     exact hf hj.2.1 hn hj.1 hj.2.2
-  rw [← mul_one (g (f n))]; rw [← prod_eq_one h]; rw [← mul_prod_erase {i in I | f i = f n} (fun i => g (f i)) mem_filter.mpr ⟨hn]; rw
+  rw [← mul_one (g (f n))]; rw [← prod_eq_one h]; rw [← mul_prod_erase {i in I | f i = f n} (fun i => g (f i)) mem_filter.mpr ⟨hn]; rw [by rfl⟩]
 
 Depends on / 依赖: classical, mem_erase, mem_filter, mem_filter.mpr, mul_one, mul_prod_erase, prod_eq_one
 -/
@@ -4135,7 +4209,9 @@ theorem exists_smul_of_dvd_count
     apply Finset.sum_congr rfl
     intro x hx
     rw [← mul_nsmul']; rw [Nat.mul_div_cancel' (h x (mem_toFinset.mp hx))]
-  
+  rw [← Finset.sum_nsmul]; rw [h₂]; rw [toFinset_sum_count_nsmul_eq]
+
+@[to_additive]
 
 中文:
 定理 存在_smul_of_dvd_count
@@ -4148,7 +4224,9 @@ theorem exists_smul_of_dvd_count
     apply Finset.sum_congr rfl
     intro x hx
     rw [← mul_nsmul']; rw [Nat.mul_div_cancel' (h x (mem_toFinset.mp hx))]
-  
+  rw [← Finset.sum_nsmul]; rw [h₂]; rw [toFinset_sum_count_nsmul_eq]
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.sum_congr, Finset.sum_nsmul, Multiset, Nat.mul_div_cancel, mem_toFinset, mem_toFinset.mp, mul_div_cancel, mul_nsmul, s.count, s.toFinset, sum_congr, sum_nsmul, toFinset, toFinset_sum_count_nsmul_eq
 -/

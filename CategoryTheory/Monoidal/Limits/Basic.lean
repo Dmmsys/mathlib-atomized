@@ -55,7 +55,49 @@ instance :
         { pt := limit F otimes limit G
           π :=
             { app := fun j => limit.π F j otimesₘ limit.π G j
-            
+              naturality := fun j j' f => by
+                dsimp
+                simp only [Category.id_comp, tensorHom_comp_tensorHom, limit.w] } })
+    (μ_natural := fun f g => limit.hom_ext (fun j => by
+      dsimp
+      simp only [limit.lift_π, Cone.postcompose_obj_π, Monoidal.tensorHom_app, limit.lift_map,
+        NatTrans.comp_app, Category.assoc, tensorHom_comp_tensorHom, limMap_π]))
+    (associativity := fun F G H => limit.hom_ext (fun j => by
+      dsimp
+      simp only [tensorHom_id, limit.lift_map, Category.assoc, limit.lift_π,
+        id_tensorHom]
+      dsimp
+      conv_lhs => rw [tensorHom_def, Category.assoc, ← comp_whiskerRight_assoc,
+        limit.lift_π, tensor_whiskerLeft, Category.assoc, Category.assoc,
+        Iso.inv_hom_id, Category.comp_id,
+        ← associator_naturality_right, ← tensorHom_def_assoc]
+      dsimp
+      conv_rhs => rw [tensorHom_def, ← whisker_exchange,
+        ← whiskerLeft_comp_assoc, limit.lift_π,
+        whisker_exchange, ← associator_naturality_left_assoc]
+      dsimp only
+      conv_rhs => rw [tensorHom_def, whiskerLeft_comp,
+        ← associator_naturality_middle_assoc,
+        ← associator_naturality_right, ← comp_whiskerRight_assoc,
+        ← tensorHom_def, ← tensorHom_def_assoc]))
+    (left_unitality := fun F => limit.hom_ext (fun j => by
+      dsimp
+      simp only [tensorHom_id, limit.lift_map, Category.assoc, limit.lift_π]
+      dsimp
+      simp only [tensorHom_def, id_whiskerLeft, Category.assoc,
+        Iso.inv_hom_id, Category.comp_id, ← comp_whiskerRight_assoc]
+      erw [limit.lift_π]
+      rw [id_whiskerRight]; rw [Category.id_comp]))
+    (right_unitality := fun F => limit.hom_ext (fun j => by
+      dsimp
+      simp only [id_tensorHom, limit.lift_map, Category.assoc, limit.lift_π]
+      dsimp
+      simp only [tensorHom_def, ← whisker_exchange, whiskerRight_id, Category.assoc, Iso.inv_hom_id,
+        Category.comp_id, ← whiskerLeft_comp_assoc]
+      erw [limit.lift_π]
+      rw [whiskerLeft_id]; rw [Category.id_comp]))
+
+#adaptation_note
 
 中文:
 实例 :
@@ -70,7 +112,49 @@ instance :
         { pt := limit F otimes limit G
           π :=
             { app := fun j => limit.π F j otimesₘ limit.π G j
-            
+              naturality := fun j j' f => by
+                dsimp
+                simp only [Category.id_comp, tensorHom_comp_tensorHom, limit.w] } })
+    (μ_natural := fun f g => limit.hom_ext (fun j => by
+      dsimp
+      simp only [limit.lift_π, Cone.postcompose_obj_π, Monoidal.tensorHom_app, limit.lift_map,
+        NatTrans.comp_app, Category.assoc, tensorHom_comp_tensorHom, limMap_π]))
+    (associativity := fun F G H => limit.hom_ext (fun j => by
+      dsimp
+      simp only [tensorHom_id, limit.lift_map, Category.assoc, limit.lift_π,
+        id_tensorHom]
+      dsimp
+      conv_lhs => rw [tensorHom_def, Category.assoc, ← comp_whiskerRight_assoc,
+        limit.lift_π, tensor_whiskerLeft, Category.assoc, Category.assoc,
+        Iso.inv_hom_id, Category.comp_id,
+        ← associator_naturality_right, ← tensorHom_def_assoc]
+      dsimp
+      conv_rhs => rw [tensorHom_def, ← whisker_exchange,
+        ← whiskerLeft_comp_assoc, limit.lift_π,
+        whisker_exchange, ← associator_naturality_left_assoc]
+      dsimp only
+      conv_rhs => rw [tensorHom_def, whiskerLeft_comp,
+        ← associator_naturality_middle_assoc,
+        ← associator_naturality_right, ← comp_whiskerRight_assoc,
+        ← tensorHom_def, ← tensorHom_def_assoc]))
+    (left_unitality := fun F => limit.hom_ext (fun j => by
+      dsimp
+      simp only [tensorHom_id, limit.lift_map, Category.assoc, limit.lift_π]
+      dsimp
+      simp only [tensorHom_def, id_whiskerLeft, Category.assoc,
+        Iso.inv_hom_id, Category.comp_id, ← comp_whiskerRight_assoc]
+      erw [limit.lift_π]
+      rw [id_whiskerRight]; rw [Category.id_comp]))
+    (right_unitality := fun F => limit.hom_ext (fun j => by
+      dsimp
+      simp only [id_tensorHom, limit.lift_map, Category.assoc, limit.lift_π]
+      dsimp
+      simp only [tensorHom_def, ← whisker_exchange, whiskerRight_id, Category.assoc, Iso.inv_hom_id,
+        Category.comp_id, ← whiskerLeft_comp_assoc]
+      erw [limit.lift_π]
+      rw [whiskerLeft_id]; rw [Category.id_comp]))
+
+#adaptation_note
 
 Depends on / 依赖: LaxMonoidal
 -/

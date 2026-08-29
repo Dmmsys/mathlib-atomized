@@ -1592,7 +1592,11 @@ definition equivUnitsAffineMap
     { toFun := (u : P₁ ->ᵃ[k] P₁)
       invFun := (↑u⁻¹ : P₁ ->ᵃ[k] P₁)
       left_inv := AffineMap.congr_fun u.inv_mul
-      right_inv := Affi
+      right_inv := AffineMap.congr_fun u.mul_inv
+      linear :=
+LinearMap.GeneralLinearGroup.generalLinearEquiv _ _ Units.map AffineMap.linearHom u
+      map_vadd' := fun _ _ => (u : P₁ ->ᵃ[k] P₁).map_vadd _ _ }
+  map_mul' _ _ := rfl
 
 中文:
 定义 equivUnitsAffineMap
@@ -1604,7 +1608,11 @@ definition equivUnitsAffineMap
     { toFun := (u : P₁ ->ᵃ[k] P₁)
       invFun := (↑u⁻¹ : P₁ ->ᵃ[k] P₁)
       left_inv := AffineMap.congr_fun u.inv_mul
-      right_inv := Affi
+      right_inv := AffineMap.congr_fun u.mul_inv
+      linear :=
+LinearMap.GeneralLinearGroup.generalLinearEquiv _ _ Units.map AffineMap.linearHom u
+      map_vadd' := fun _ _ => (u : P₁ ->ᵃ[k] P₁).map_vadd _ _ }
+  map_mul' _ _ := rfl
 
 Depends on / 依赖: AffineMap, AffineMap.congr_fun, AffineMap.linearHom, GeneralLinearGroup, LinearMap, LinearMap.GeneralLinearGroup.generalLinearEquiv, Units.map, congr_arg, congr_fun, e.self_trans_symm, e.symm, e.symm_trans_self, generalLinearEquiv, invFun, inv_mul, inv_val, left_inv, linear, linearHom, map_mul
 -/

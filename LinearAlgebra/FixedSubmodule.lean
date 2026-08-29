@@ -205,7 +205,9 @@ theorem mem_stabilizer_submodule_of_le_fixedSubmodule
     exact hW hx
   · intro x hx
     refine ⟨x, hx, ?_⟩
-    simp only [DistribSMul.toLinearMap_ap
+    simp only [DistribSMul.toLinearMap_apply, LinearEquiv.smul_def]
+    rw [← coe_toLinearMap]; rw [← mem_fixedSubmodule_iff]
+    exact hW hx
 
 中文:
 定理 mem_stabilizer_submodule_of_le_fixedSubmodule
@@ -218,7 +220,9 @@ theorem mem_stabilizer_submodule_of_le_fixedSubmodule
     exact hW hx
   · intro x hx
     refine ⟨x, hx, ?_⟩
-    simp only [DistribSMul.toLinearMap_ap
+    simp only [DistribSMul.toLinearMap_apply, LinearEquiv.smul_def]
+    rw [← coe_toLinearMap]; rw [← mem_fixedSubmodule_iff]
+    exact hW hx
 
 Depends on / 依赖: DistribSMul, DistribSMul.toLinearMap_apply, LinearEquiv, LinearEquiv.smul_def, coe_coe, coe_toLinearMap, le_antisymm, mem_fixedSubmodule_iff, mem_stabilizer_submodule_iff_map_eq, smul_def, toLinearMap_apply
 -/

@@ -83,7 +83,9 @@ lemma covariance_eq_sub
 .integrable (by simp) · exact hY.const_mul _
    · exact integrable_const _
    · exact hX.integrable_mul hY
-.integra
+.integrable (by simp) · exact hX.mul_const _
+   · exact (hX.integrable_mul hY).sub (hX.mul_const _ |>.integrable (by simp))
+   · exact (hY.const_mul _ |>.integrable (by simp)).sub (integrable_const _)
 
 中文:
 引理 covariance_eq_sub
@@ -97,7 +99,9 @@ lemma covariance_eq_sub
 .integrable (by simp) · exact hY.const_mul _
    · exact integrable_const _
    · exact hX.integrable_mul hY
-.integra
+.integrable (by simp) · exact hX.mul_const _
+   · exact (hX.integrable_mul hY).sub (hX.mul_const _ |>.integrable (by simp))
+   · exact (hY.const_mul _ |>.integrable (by simp)).sub (integrable_const _)
 
 Depends on / 依赖: const_mul, covariance, hX.integrable_mul, hX.mul_const, hY.const_mul, integrable, integrable_const, integrable_mul, integral_const, integral_const_mul, integral_mul_const, integral_sub, mul_const, mul_sub, one_smul, probReal_univ, repeat, simp_rw, sub_mul
 -/
@@ -373,7 +377,7 @@ lemma covariance_add_left
     rw [integral_add (hX.integrable (by simp)) (hY.integrable (by simp))]
     ring
   · exact (hX.sub (memLp_const _)).integrable_mul (hZ.sub (memLp_const _))
-  · exact (hY.sub (memLp_const _)).integrable_mul (hZ.sub (memL
+  · exact (hY.sub (memLp_const _)).integrable_mul (hZ.sub (memLp_const _))
 
 中文:
 引理 covariance_add_left
@@ -385,7 +389,7 @@ lemma covariance_add_left
     rw [integral_add (hX.integrable (by simp)) (hY.integrable (by simp))]
     ring
   · exact (hX.sub (memLp_const _)).integrable_mul (hZ.sub (memLp_const _))
-  · exact (hY.sub (memLp_const _)).integrable_mul (hZ.sub (memL
+  · exact (hY.sub (memLp_const _)).integrable_mul (hZ.sub (memLp_const _))
 
 Depends on / 依赖: Pi.add_apply, add_apply, covariance, hX.integrable, hX.sub, hY.integrable, hY.sub, hZ.sub, integrable, integrable_mul, integral_add, memLp_const, simp_rw
 -/
@@ -953,7 +957,8 @@ lemma covariance_sum_left'
     rw [Finset.sum_insert hi]; rw [Finset.sum_insert hi]; rw [covariance_add_left]; rw [h_ind]
     · exact fun j hj => hX j (by simp [hj])
     · exact hX i (by simp)
-    · exact memLp_finsetSum' s (
+    · exact memLp_finsetSum' s (fun j hj => hX j (by simp [hj]))
+    · exact hY
 
 中文:
 引理 covariance_sum_left'
@@ -966,7 +971,8 @@ lemma covariance_sum_left'
     rw [Finset.sum_insert hi]; rw [Finset.sum_insert hi]; rw [covariance_add_left]; rw [h_ind]
     · exact fun j hj => hX j (by simp [hj])
     · exact hX i (by simp)
-    · exact memLp_finsetSum' s (
+    · exact memLp_finsetSum' s (fun j hj => hX j (by simp [hj]))
+    · exact hY
 
 Depends on / 依赖: Finset, Finset.induction, Finset.sum_insert, classical, covariance_add_left, h_ind, insert, memLp_finsetSum, sum_insert
 -/
@@ -1322,6 +1328,7 @@ lemma IndepFun.covariance_eq_zero
      simp [hω, integral_eq_zero_of_ae h']
    have := hX.isProbabilityMeasure_of_indepFun X Y (by simp) (by simp) h' h
    rw [covariance_eq_sub hX hY]; rw [h.integral_mul_eq_mul_integral
+       hX.aestronglyMeasurable hY.aestronglyMeasurable]; rw [sub_self]
 
 中文:
 引理 IndepFun.covariance_eq_zero
@@ -1333,6 +1340,7 @@ lemma IndepFun.covariance_eq_zero
      simp [hω, integral_eq_zero_of_ae h']
    have := hX.isProbabilityMeasure_of_indepFun X Y (by simp) (by simp) h' h
    rw [covariance_eq_sub hX hY]; rw [h.integral_mul_eq_mul_integral
+       hX.aestronglyMeasurable hY.aestronglyMeasurable]; rw [sub_self]
 
 Depends on / 依赖: aestronglyMeasurable, covariance_eq_sub, filter_upwards, h.integral_mul_eq_mul_integral, hX.aestronglyMeasurable, hX.isProbabilityMeasure_of_indepFun, hY.aestronglyMeasurable, integral_eq_zero_of_ae, integral_mul_eq_mul_integral, isProbabilityMeasure_of_indepFun, sub_self
 -/

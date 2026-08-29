@@ -186,7 +186,14 @@ definition dgoToHomologicalComplex
       shape := fun i j w => by dsimp at w; convert! dif_neg w
       d_comp_d' := fun i j k hij hjk => by
         dsimp at hij hjk; subst hij hjk
-        si
+        simp [objEqToHom_d_assoc] }
+  map {X Y} f :=
+    { f := f.f
+      comm' := fun i j h => by
+        dsimp at h ⊢
+        subst h
+        have : f.f i ≫ Y.d i = X.d i ≫ f.f _ := (congr_fun f.comm i).symm
+        simp only [dite_true, Category.assoc, eqToHom_f', reassoc_of% this] }
 
 中文:
 定义 dgoToHomologicalComplex
@@ -197,7 +204,14 @@ definition dgoToHomologicalComplex
       shape := fun i j w => by dsimp at w; convert! dif_neg w
       d_comp_d' := fun i j k hij hjk => by
         dsimp at hij hjk; subst hij hjk
-        si
+        simp [objEqToHom_d_assoc] }
+  map {X Y} f :=
+    { f := f.f
+      comm' := fun i j h => by
+        dsimp at h ⊢
+        subst h
+        have : f.f i ≫ Y.d i = X.d i ≫ f.f _ := (congr_fun f.comm i).symm
+        simp only [dite_true, Category.assoc, eqToHom_f', reassoc_of% this] }
 
 Depends on / 依赖: Category, Category.assoc, X.obj, X.objEqToHom, congr_fun, convert, d_comp_d, dif_neg, dite_true, eqToHom_f, f.comm, objEqToHom, objEqToHom_d_assoc, reassoc_of
 -/

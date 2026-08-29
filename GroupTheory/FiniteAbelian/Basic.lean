@@ -56,7 +56,20 @@ definition directSumNeZeroMulEquiv
     induction x using DirectSum.induction_on with
     | zero => simp
     | of i x =>
-      rw [directSumNeZeroMulHo
+      rw [directSumNeZeroMulHom]; rw [DirectSum.toAddMonoid_of]; rw [DirectSum.toAddMonoid_of]; rw [dif_neg i.prop]
+    | add x y hx hy => rw [map_add, map_add, hx, hy]
+  right_inv x := by
+    induction x using DirectSum.induction_on with
+    | zero => rw [map_zero, map_zero]
+    | of i x =>
+      rw [DirectSum.toAddMonoid_of]
+      split_ifs with h
+      · simp [(ZMod.subsingleton_iff.2 <| by rw [h, pow_zero]).elim x 0]
+      · simp_rw [directSumNeZeroMulHom, DirectSum.toAddMonoid_of]
+    | add x y hx hy => rw [map_add, map_add, hx, hy]
+  map_add' := map_add (directSumNeZeroMulHom p n)
+
+universe u
 
 中文:
 定义 directSumNeZeroMulEquiv
@@ -68,7 +81,20 @@ definition directSumNeZeroMulEquiv
     induction x using DirectSum.induction_on with
     | zero => simp
     | of i x =>
-      rw [directSumNeZeroMulHo
+      rw [directSumNeZeroMulHom]; rw [DirectSum.toAddMonoid_of]; rw [DirectSum.toAddMonoid_of]; rw [dif_neg i.prop]
+    | add x y hx hy => rw [map_add, map_add, hx, hy]
+  right_inv x := by
+    induction x using DirectSum.induction_on with
+    | zero => rw [map_zero, map_zero]
+    | of i x =>
+      rw [DirectSum.toAddMonoid_of]
+      split_ifs with h
+      · simp [(ZMod.subsingleton_iff.2 <| by rw [h, pow_zero]).elim x 0]
+      · simp_rw [directSumNeZeroMulHom, DirectSum.toAddMonoid_of]
+    | add x y hx hy => rw [map_add, map_add, hx, hy]
+  map_add' := map_add (directSumNeZeroMulHom p n)
+
+universe u
 -/
 private def directSumNeZeroMulEquiv (ι : Type) [DecidableEq ι] (p : ι -> Nat) (n : ι -> Nat) :
     (⨁ i : {i // n i != 0}, ZMod (p i ^ n i)) ≃+ ⨁ i, ZMod (p i ^ n i) where
@@ -109,7 +135,10 @@ theorem finite_of_fg_torsion
   have : forall i : ι, NeZero (p i ^ e i).natAbs := fun i =>
 ⟨Int.natAbs_ne_zero.mpr pow_ne_zero (e i) (h i).ne_zero⟩
 have : forall i : ι, _root_.Finite Int ⧸ Submodule.span Int {p i ^ e i} := fun i =>
-    Finite.of_equiv _
+    Finite.of_equiv _ (p i ^ e i).quotientSpanEquivZMod.symm.toEquiv
+  have : _root_.Finite (⨁ i, Int ⧸ (Submodule.span Int {p i ^ e i} : Submodule Int Int)) :=
+    Finite.of_equiv _ DFinsupp.equivFunOnFintype.symm
+  exact Finite.of_equiv _ l.symm.toEquiv
 
 中文:
 定理 finite_of_fg_torsion
@@ -119,7 +148,10 @@ have : forall i : ι, _root_.Finite Int ⧸ Submodule.span Int {p i ^ e i} := fu
   have : forall i : ι, NeZero (p i ^ e i).natAbs := fun i =>
 ⟨Int.natAbs_ne_zero.mpr pow_ne_zero (e i) (h i).ne_zero⟩
 have : forall i : ι, _root_.Finite Int ⧸ Submodule.span Int {p i ^ e i} := fun i =>
-    Finite.of_equiv _
+    Finite.of_equiv _ (p i ^ e i).quotientSpanEquivZMod.symm.toEquiv
+  have : _root_.Finite (⨁ i, Int ⧸ (Submodule.span Int {p i ^ e i} : Submodule Int Int)) :=
+    Finite.of_equiv _ DFinsupp.equivFunOnFintype.symm
+  exact Finite.of_equiv _ l.symm.toEquiv
 
 Depends on / 依赖: DFinsupp, DFinsupp.equivFunOnFintype.symm, Finite, Finite.of_equi, Finite.of_equiv, Int.natAbs_ne_zero.mpr, Module, Module.equiv_directSum_of_isTorsion, NeZero, Submodule, Submodule.span, _root_, _root_.Finite, equivFunOnFintype, equiv_directSum_of_isTorsion, natAbs, natAbs_ne_zero, ne_zero, of_equi, of_equiv
 -/
@@ -154,7 +186,11 @@ theorem equiv_free_prod_directSum_zmod
   refine ⟨n, ι, fι, fun i => (p i).natAbs, fun i => ?_, e, ⟨?_⟩⟩
   · rw [← Int.prime_iff_natAbs_prime, ← irreducible_iff_prime]; exact hp i
   exact
-    f.toAddEquiv.tra
+    f.toAddEquiv.trans
+      ((AddEquiv.refl _).prodCongr <|
+        DFinsupp.mapRange.addEquiv fun i =>
+          ((Int.quotientSpanEquivZMod _).trans <|
+ZMod.ringEquivCongr (p i).natAbs_pow _).toAddEquiv)
 
 中文:
 定理 equiv_free_prod_directSum_zmod
@@ -165,7 +201,11 @@ theorem equiv_free_prod_directSum_zmod
   refine ⟨n, ι, fι, fun i => (p i).natAbs, fun i => ?_, e, ⟨?_⟩⟩
   · rw [← Int.prime_iff_natAbs_prime, ← irreducible_iff_prime]; exact hp i
   exact
-    f.toAddEquiv.tra
+    f.toAddEquiv.trans
+      ((AddEquiv.refl _).prodCongr <|
+        DFinsupp.mapRange.addEquiv fun i =>
+          ((Int.quotientSpanEquivZMod _).trans <|
+ZMod.ringEquivCongr (p i).natAbs_pow _).toAddEquiv)
 
 Depends on / 依赖: AddEquiv, AddEquiv.refl, DFinsupp, DFinsupp.mapRange.addEquiv, Finite, Int.prime_iff_natAbs_prime, Int.quotientSpanEquivZMod, Module, Module.Finite.iff_addGroup_fg.mpr, Module.equiv_free_prod_directSum, ZMod.ringEquivCongr, addEquiv, equiv_free_prod_directSum, f.toAddEquiv.trans, iff_addGroup_fg, irreducible_iff_prime, mapRange, natAbs, natAbs_pow, prime_iff_natAbs_prime
 -/
@@ -196,7 +236,10 @@ theorem equiv_directSum_zmod_of_finite
   · have : Unique (Fin Nat.zero ->₀ Int) :=
       { uniq := by subsingleton }
     exact ⟨ι, fι, p, hp, e, ⟨f.trans AddEquiv.uniqueProd⟩⟩
-  · have := @Fintype.prodLeft _ _ _ (Fin
+  · have := @Fintype.prodLeft _ _ _ (Fintype.ofEquiv G f.toEquiv) _
+    exact
+      (Fintype.ofSurjective (fun f : Fin n.succ ->₀ Int => f 0) fun a =>
+            ⟨Finsupp.single 0 a, Finsupp.single_eq_same⟩).false.elim
 
 中文:
 定理 equiv_directSum_zmod_of_finite
@@ -208,7 +251,10 @@ theorem equiv_directSum_zmod_of_finite
   · have : Unique (Fin Nat.zero ->₀ Int) :=
       { uniq := by subsingleton }
     exact ⟨ι, fι, p, hp, e, ⟨f.trans AddEquiv.uniqueProd⟩⟩
-  · have := @Fintype.prodLeft _ _ _ (Fin
+  · have := @Fintype.prodLeft _ _ _ (Fintype.ofEquiv G f.toEquiv) _
+    exact
+      (Fintype.ofSurjective (fun f : Fin n.succ ->₀ Int => f 0) fun a =>
+            ⟨Finsupp.single 0 a, Finsupp.single_eq_same⟩).false.elim
 
 Depends on / 依赖: AddEquiv, AddEquiv.uniqueProd, Finsupp, Finsupp.single, Finsupp.single_eq_same, Fintype, Fintype.ofEquiv, Fintype.ofSurjective, Fintype.prodLeft, Nat.zero, Unique, equiv_free_prod_directSum_zmod, f.toEquiv, f.trans, false.elim, n.succ, nonempty_fintype, ofEquiv, ofSurjective, prodLeft
 -/
@@ -361,7 +407,8 @@ theorem equiv_free_prod_prod_multiplicative_zmod
   obtain ⟨n, ι, inst, x, p, e, equiv⟩ := AddCommGroup.equiv_free_prod_directSum_zmod (Additive G)
 exact ⟨ι, Fin n, inst, inferInstance, x, p, e, ⟨MulEquiv.toAdditive.symm equiv.some.trans
     ((Finsupp.addEquivFunOnFinite.trans <| ((AddEquiv.piAdditive _).trans <|
-        (AddEquiv.additiveMultip
+        (AddEquiv.additiveMultiplicative Int).arrowCongr (Equiv.refl _)).symm).prodCongr
+          (DirectSum.addEquivProd _ )).trans <| (AddEquiv.prodAdditive _ _).symm⟩⟩
 
 中文:
 定理 equiv_free_prod_prod_multiplicative_zmod
@@ -370,7 +417,8 @@ exact ⟨ι, Fin n, inst, inferInstance, x, p, e, ⟨MulEquiv.toAdditive.symm eq
   obtain ⟨n, ι, inst, x, p, e, equiv⟩ := AddCommGroup.equiv_free_prod_directSum_zmod (Additive G)
 exact ⟨ι, Fin n, inst, inferInstance, x, p, e, ⟨MulEquiv.toAdditive.symm equiv.some.trans
     ((Finsupp.addEquivFunOnFinite.trans <| ((AddEquiv.piAdditive _).trans <|
-        (AddEquiv.additiveMultip
+        (AddEquiv.additiveMultiplicative Int).arrowCongr (Equiv.refl _)).symm).prodCongr
+          (DirectSum.addEquivProd _ )).trans <| (AddEquiv.prodAdditive _ _).symm⟩⟩
 
 Depends on / 依赖: AddCommGroup, AddCommGroup.equiv_free_prod_directSum_zmod, AddEquiv, AddEquiv.additiveMultiplicative, AddEquiv.piAdditive, AddEquiv.prodAdditive, Additive, DirectSum, DirectSum.addEquivProd, Equiv.refl, Finsupp, Finsupp.addEquivFunOnFinite.trans, MulEquiv, MulEquiv.toAdditive.symm, addEquivFunOnFinite, addEquivProd, additiveMultiplicative, arrowCongr, equiv.some.trans, equiv_free_prod_directSum_zmod
 -/
@@ -430,7 +478,7 @@ lemma isFiniteRelIndex_map_powMonoidHom_of_fg
     simp [mem_subgroupOf, Subtype.ext_iff]
   rw [this]
   have := (Group.fg_iff_subgroup_fg B).mpr hB
-  exact finiteIndex
+  exact finiteIndex_range_powMonoidHom_of_fg B hn
 
 中文:
 引理 isFiniteRelIndex_map_powMonoidHom_of_fg
@@ -442,7 +490,7 @@ lemma isFiniteRelIndex_map_powMonoidHom_of_fg
     simp [mem_subgroupOf, Subtype.ext_iff]
   rw [this]
   have := (Group.fg_iff_subgroup_fg B).mpr hB
-  exact finiteIndex
+  exact finiteIndex_range_powMonoidHom_of_fg B hn
 
 Depends on / 依赖: B.map, Group.fg_iff_subgroup_fg, Subtype, Subtype.ext_iff, ext_iff, fg_iff_subgroup_fg, finiteIndex_range_powMonoidHom_of_fg, isFiniteRelIndex_iff_finiteIndex, mem_subgroupOf, powMonoidHom, subgroupOf
 -/

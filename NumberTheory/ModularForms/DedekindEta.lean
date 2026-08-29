@@ -188,7 +188,12 @@ lemma multipliableLocallyUniformlyOn_one_sub_pow
   intro K hK hcK
   rcases K.eq_empty_or_nonempty with hN | hN
   · simpa [hasProdUniformlyOn_iff_tendstoUniformlyOn, hN] using tendstoUniformlyOn_empty
-  · obtai
+  · obtain ⟨q₀, hq₀, _, HB⟩ := hcK.exists_sSup_image_eq_and_ge hN
+      (show ContinuousOn (fun q : Complex => ‖q‖) K by fun_prop)
+    refine ((summable_nat_add_iff 1).mpr (summable_geometric_of_lt_one (norm_nonneg _)
+      (by simpa [Metric.mem_ball, dist_zero_right] using hK hq₀))).hasProdUniformlyOn_nat_one_add
+      hcK (.of_forall fun n x hx => ?_) (fun _ => by fun_prop)
+    simpa using pow_le_pow_left₀ (norm_nonneg _) (HB x hx) (n + 1)
 
 中文:
 引理 multipliableLocallyUniformlyOn_one_sub_pow
@@ -199,7 +204,12 @@ lemma multipliableLocallyUniformlyOn_one_sub_pow
   intro K hK hcK
   rcases K.eq_empty_or_nonempty with hN | hN
   · simpa [hasProdUniformlyOn_iff_tendstoUniformlyOn, hN] using tendstoUniformlyOn_empty
-  · obtai
+  · obtain ⟨q₀, hq₀, _, HB⟩ := hcK.exists_sSup_image_eq_and_ge hN
+      (show ContinuousOn (fun q : Complex => ‖q‖) K by fun_prop)
+    refine ((summable_nat_add_iff 1).mpr (summable_geometric_of_lt_one (norm_nonneg _)
+      (by simpa [Metric.mem_ball, dist_zero_right] using hK hq₀))).hasProdUniformlyOn_nat_one_add
+      hcK (.of_forall fun n x hx => ?_) (fun _ => by fun_prop)
+    simpa using pow_le_pow_left₀ (norm_nonneg _) (HB x hx) (n + 1)
 
 Depends on / 依赖: ContinuousOn, K.eq_empty_or_nonempty, Metric, Metric.isOpen_ball, eq_empty_or_nonempty, exists_sSup_image_eq_and_ge, fun_prop, hasProdLocallyUniformlyOn_of_forall_compact, hasProdUniformlyOn_iff_tendstoUniformlyOn, hcK.exists_sSup_image_eq_and_ge, isOpen_ball, norm_nonneg, simp_rw, sub_eq_add_neg, summable_geometric_of_lt_one, summable_nat_add_iff, tendstoUniformlyOn_empty
 -/
@@ -588,7 +598,14 @@ lemma logDeriv_eta_eq_E2
     (differentiableAt_eta_tprod z.2)]
   have HG := logDeriv_tprod_eq_tsum isOpen_upperHalfPlaneSet z.2
     (one_sub_eta_q_ne_zero · z.2) (by fun_prop) (summable_logDeriv_one_sub_eta_q z.2)
-    mult
+    multipliableLocallyUniformlyOn_eta (eta_tprod_ne_zero z.2)
+  simp only [logDeriv_qParam 24 z, HG, tsum_logDeriv_eta_q z, E2, one_div,
+    mul_inv_rev, Pi.smul_apply, smul_eq_mul]
+  rw [G2_eq_tsum_cexp]; rw [riemannZeta_two]; rw [← tsum_pow_div_one_sub_eq_tsum_sigma
+    (norm_exp_two_pi_I_lt_one z)]; rw [mul_sub]; rw [sub_eq_add_neg]; rw [mul_add]
+  simp [eta_q_eq_pow, ← tsum_mul_left, tsum_pnat_eq_tsum_succ (f := fun n =>
+        n * cexp (2 * π * I * z) ^ n / (1 - cexp (2 * π * I * z) ^ n)), ← tsum_neg]
+  grind
 
 中文:
 引理 logDeriv_eta_eq_E2
@@ -600,7 +617,14 @@ lemma logDeriv_eta_eq_E2
     (differentiableAt_eta_tprod z.2)]
   have HG := logDeriv_tprod_eq_tsum isOpen_upperHalfPlaneSet z.2
     (one_sub_eta_q_ne_zero · z.2) (by fun_prop) (summable_logDeriv_one_sub_eta_q z.2)
-    mult
+    multipliableLocallyUniformlyOn_eta (eta_tprod_ne_zero z.2)
+  simp only [logDeriv_qParam 24 z, HG, tsum_logDeriv_eta_q z, E2, one_div,
+    mul_inv_rev, Pi.smul_apply, smul_eq_mul]
+  rw [G2_eq_tsum_cexp]; rw [riemannZeta_two]; rw [← tsum_pow_div_one_sub_eq_tsum_sigma
+    (norm_exp_two_pi_I_lt_one z)]; rw [mul_sub]; rw [sub_eq_add_neg]; rw [mul_add]
+  simp [eta_q_eq_pow, ← tsum_mul_left, tsum_pnat_eq_tsum_succ (f := fun n =>
+        n * cexp (2 * π * I * z) ^ n / (1 - cexp (2 * π * I * z) ^ n)), ← tsum_neg]
+  grind
 
 Depends on / 依赖: G2_eq_tsum_cexp, Periodic, Periodic.qParam_ne_zero, Pi.smul_apply, differentiableAt_eta_tprod, eta_tprod_ne_zero, fun_prop, isOpen_upperHalfPlaneSet, logDeriv_mul, logDeriv_qParam, logDeriv_tprod_eq_tsum, mul_inv_rev, multipliableLocallyUniformlyOn_eta, one_div, one_sub_eta_q_ne_zero, qParam_ne_zero, riemannZeta_two, smul_apply, smul_eq_mul, summable_logDeriv_one_sub_eta_q
 -/

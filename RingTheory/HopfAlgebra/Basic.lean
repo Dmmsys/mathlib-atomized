@@ -284,7 +284,7 @@ lemma counit_antipode
         counit (antipode R a)
     _ = counit (∑ i in (ℛ R a).index, (ℛ R a).left i * antipode R ((ℛ R a).right i)) := by
       simp_rw [map_sum, counit_mul, ← smul_eq_mul, ← map_smul, ← map_sum, sum_counit_smul]
-    _ = counit a := by simpa using congr(counit (R := R) $(sum_mul_antipode_eq
+    _ = counit a := by simpa using congr(counit (R := R) $(sum_mul_antipode_eq_smul (ℛ R a)))
 
 中文:
 引理 counit_antipode
@@ -295,7 +295,7 @@ lemma counit_antipode
         counit (antipode R a)
     _ = counit (∑ i in (ℛ R a).index, (ℛ R a).left i * antipode R ((ℛ R a).right i)) := by
       simp_rw [map_sum, counit_mul, ← smul_eq_mul, ← map_smul, ← map_sum, sum_counit_smul]
-    _ = counit a := by simpa using congr(counit (R := R) $(sum_mul_antipode_eq
+    _ = counit a := by simpa using congr(counit (R := R) $(sum_mul_antipode_eq_smul (ℛ R a)))
 -/
 @[simp] lemma counit_antipode (a : A) : counit (R := R) (antipode R a) = counit a := by
   calc
@@ -420,7 +420,7 @@ abbreviation ofAlgHom
         using! congr(($mul_antipode_rTensor_comul).toLinearMap))
     (WithConv.ext <| by
       simpa [← Algebra.TensorProduct.lmul'_comp_map]
-        using! congr(($mul_antipode_lTensor_co
+        using! congr(($mul_antipode_lTensor_comul).toLinearMap))
 
 中文:
 缩写 ofAlgHom
@@ -431,7 +431,7 @@ abbreviation ofAlgHom
         using! congr(($mul_antipode_rTensor_comul).toLinearMap))
     (WithConv.ext <| by
       simpa [← Algebra.TensorProduct.lmul'_comp_map]
-        using! congr(($mul_antipode_lTensor_co
+        using! congr(($mul_antipode_lTensor_comul).toLinearMap))
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lmul, TensorProduct, WithConv, WithConv.ext, _comp_map, antipode, antipode.toLinearMap, mul_antipode_lTensor_comul, mul_antipode_rTensor_comul, ofConvInverse, toLinearMap
 -/

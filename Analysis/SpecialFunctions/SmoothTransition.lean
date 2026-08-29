@@ -198,7 +198,7 @@ theorem not_analyticAt_zero
   suffices expNegInvGlue (r / 2) = 0 by simpa [hr, not_le_of_gt]
   exact h.eqOn_zero_of_preconnected_of_mem_closure (z₀ := 0)
     (Real.ball_eq_Ioo 0 r ▸ isPreconnected_Ioo)
-    (by simp [hr]) (by simp [Set.Iic_def]) (by simp [abs_of_po
+    (by simp [hr]) (by simp [Set.Iic_def]) (by simp [abs_of_pos, hr])
 
 中文:
 定理 not_analyticAt_zero
@@ -209,7 +209,7 @@ theorem not_analyticAt_zero
   suffices expNegInvGlue (r / 2) = 0 by simpa [hr, not_le_of_gt]
   exact h.eqOn_zero_of_preconnected_of_mem_closure (z₀ := 0)
     (Real.ball_eq_Ioo 0 r ▸ isPreconnected_Ioo)
-    (by simp [hr]) (by simp [Set.Iic_def]) (by simp [abs_of_po
+    (by simp [hr]) (by simp [Set.Iic_def]) (by simp [abs_of_pos, hr])
 
 Depends on / 依赖: Iic_def, Real.ball_eq_Ioo, Set.Iic_def, abs_of_pos, ball_eq_Ioo, eqOn_zero_of_preconnected_of_mem_closure, exists_ball_analyticOnNhd, expNegInvGlue, h.eqOn_zero_of_preconnected_of_mem_closure, h.exists_ball_analyticOnNhd, isPreconnected_Ioo, not_le_of_gt
 -/
@@ -244,7 +244,7 @@ theorem tendsto_polynomial_inv_mul_zero
   have : Tendsto (fun x => p.eval x⁻¹ / exp x⁻¹) (𝓝[>] 0) (𝓝 0) :=
     p.tendsto_div_exp_atTop.comp tendsto_inv_nhdsGT_zero
 refine this.congr' mem_of_superset self_mem_nhdsWithin fun x hx => ?_
- 
+  simp [exp_neg, div_eq_mul_inv]
 
 中文:
 定理 tendsto_polynomial_inv_mul_zero
@@ -256,7 +256,7 @@ refine this.congr' mem_of_superset self_mem_nhdsWithin fun x hx => ?_
   have : Tendsto (fun x => p.eval x⁻¹ / exp x⁻¹) (𝓝[>] 0) (𝓝 0) :=
     p.tendsto_div_exp_atTop.comp tendsto_inv_nhdsGT_zero
 refine this.congr' mem_of_superset self_mem_nhdsWithin fun x hx => ?_
- 
+  simp [exp_neg, div_eq_mul_inv]
 
 Depends on / 依赖: Tendsto, div_eq_mul_inv, expNegInvGlue, exp_neg, mem_of_superset, mul_ite, mul_zero, not_le, p.eval, p.tendsto_div_exp_atTop.comp, self_mem_nhdsWithin, tendsto_const_nhds, tendsto_const_nhds.if, tendsto_div_exp_atTop, tendsto_inv_nhdsGT_zero, this.congr
 -/
@@ -282,7 +282,15 @@ theorem hasDerivAt_polynomial_eval_inv_mul
     refine (hasDerivAt_const _ 0).congr_of_eventuallyEq ?_
     filter_upwards [gt_mem_nhds hx] with y hy
     rw [zero_of_nonpos hy.le]; rw [mul_zero]
-  · rw [expNegInvGlue.zero, mul_zero, hasDerivAt_iff_tendsto_
+  · rw [expNegInvGlue.zero, mul_zero, hasDerivAt_iff_tendsto_slope]
+    refine ((tendsto_polynomial_inv_mul_zero (p * X)).mono_left inf_le_left).congr fun x => ?_
+    simp [slope_def_field, div_eq_mul_inv, mul_right_comm]
+  · have := ((p.hasDerivAt x⁻¹).mul (hasDerivAt_neg _).exp).comp x (hasDerivAt_inv hx.ne')
+    convert! this.congr_of_eventuallyEq _ using 1
+    · simp [expNegInvGlue, hx.not_ge]
+      ring
+    · filter_upwards [lt_mem_nhds hx] with y hy
+      simp [expNegInvGlue, hy.not_ge]
 
 中文:
 定理 hasDerivAt_polynomial_eval_inv_mul
@@ -293,7 +301,15 @@ theorem hasDerivAt_polynomial_eval_inv_mul
     refine (hasDerivAt_const _ 0).congr_of_eventuallyEq ?_
     filter_upwards [gt_mem_nhds hx] with y hy
     rw [zero_of_nonpos hy.le]; rw [mul_zero]
-  · rw [expNegInvGlue.zero, mul_zero, hasDerivAt_iff_tendsto_
+  · rw [expNegInvGlue.zero, mul_zero, hasDerivAt_iff_tendsto_slope]
+    refine ((tendsto_polynomial_inv_mul_zero (p * X)).mono_left inf_le_left).congr fun x => ?_
+    simp [slope_def_field, div_eq_mul_inv, mul_right_comm]
+  · have := ((p.hasDerivAt x⁻¹).mul (hasDerivAt_neg _).exp).comp x (hasDerivAt_inv hx.ne')
+    convert! this.congr_of_eventuallyEq _ using 1
+    · simp [expNegInvGlue, hx.not_ge]
+      ring
+    · filter_upwards [lt_mem_nhds hx] with y hy
+      simp [expNegInvGlue, hy.not_ge]
 
 Depends on / 依赖: congr_of_eventuallyEq, div_eq_mul_inv, expNegInvGlue, expNegInvGlue.zero, filter_upwards, gt_mem_nhds, hasDeriv, hasDerivAt_const, hasDerivAt_iff_tendsto_slope, hx.le, hy.le, inf_le_left, lt_trichotomy, mono_left, mul_right_comm, mul_zero, p.hasDeriv, slope_def_field, tendsto_polynomial_inv_mul_zero, zero_of_nonpos
 -/
@@ -365,7 +381,9 @@ theorem contDiff_polynomial_eval_inv_mul
 | zero => exact contDiff_zero.2 continuous_polynomial_eval_inv_mul _
   | succ m ihm =>
     rw [show ((m + 1 : Nat) : WithTop Nat∞) = m + 1 from rfl]
-    refine contDiff_succ_iff_deriv.2 ⟨differentiable_polynomial_eva
+    refine contDiff_succ_iff_deriv.2 ⟨differentiable_polynomial_eval_inv_mul _, by simp, ?_⟩
+    convert! ihm (X ^ 2 * (p - derivative (R := Real) p)) using 2
+    exact (hasDerivAt_polynomial_eval_inv_mul p _).deriv
 
 中文:
 定理 contDiff_polynomial_eval_inv_mul
@@ -376,7 +394,9 @@ theorem contDiff_polynomial_eval_inv_mul
 | zero => exact contDiff_zero.2 continuous_polynomial_eval_inv_mul _
   | succ m ihm =>
     rw [show ((m + 1 : Nat) : WithTop Nat∞) = m + 1 from rfl]
-    refine contDiff_succ_iff_deriv.2 ⟨differentiable_polynomial_eva
+    refine contDiff_succ_iff_deriv.2 ⟨differentiable_polynomial_eval_inv_mul _, by simp, ?_⟩
+    convert! ihm (X ^ 2 * (p - derivative (R := Real) p)) using 2
+    exact (hasDerivAt_polynomial_eval_inv_mul p _).deriv
 
 Depends on / 依赖: WithTop, contDiff_all_iff_nat, contDiff_succ_iff_deriv, contDiff_zero, continuous_polynomial_eval_inv_mul, convert, derivative, differentiable_polynomial_eval_inv_mul, generalizing, hasDerivAt_polynomial_eval_inv_mul
 -/
@@ -798,7 +818,8 @@ theorem monotone
   gcongr
   · exact expNegInvGlue.nonneg _
   · exact expNegInvGlue.nonneg _
-  · apply expNegInvGlue.monotone hx
+  · apply expNegInvGlue.monotone hxy
+  · apply expNegInvGlue.monotone (by linarith)
 
 中文:
 定理 monotone
@@ -811,7 +832,8 @@ theorem monotone
   gcongr
   · exact expNegInvGlue.nonneg _
   · exact expNegInvGlue.nonneg _
-  · apply expNegInvGlue.monotone hx
+  · apply expNegInvGlue.monotone hxy
+  · apply expNegInvGlue.monotone (by linarith)
 -/
 protected theorem monotone : Monotone smoothTransition := by
   intro x y hxy

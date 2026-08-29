@@ -1462,7 +1462,18 @@ definition mapLeftIso
   inverse := Comma.mapLeft R e.hom (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
   unitIso := (mapLeftId _ _).symm ≪≫
     mapLeftEq _ _ _ e.hom_inv_id.symm (fun X => by simpa using X.prop) ≪≫
-    mapLeftComp _ 
+    mapLeftComp _ _ _
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+  counitIso :=
+    (mapLeftComp _ _ _
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)).symm ≪≫
+    mapLeftEq _ _ _ e.inv_hom_id
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop) ≪≫
+    mapLeftId _ _
 
 中文:
 定义 mapLeftIso
@@ -1471,7 +1482,18 @@ definition mapLeftIso
   inverse := Comma.mapLeft R e.hom (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
   unitIso := (mapLeftId _ _).symm ≪≫
     mapLeftEq _ _ _ e.hom_inv_id.symm (fun X => by simpa using X.prop) ≪≫
-    mapLeftComp _ 
+    mapLeftComp _ _ _
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+  counitIso :=
+    (mapLeftComp _ _ _
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)).symm ≪≫
+    mapLeftEq _ _ _ e.inv_hom_id
+      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop) ≪≫
+    mapLeftId _ _
 
 Depends on / 依赖: Comma.mapLeft, P.cancel_left_of_respectsIso, X.prop, cancel_left_of_respectsIso, e.inv, mapLeft
 -/
@@ -1611,7 +1633,18 @@ definition mapRightIso
   inverse := Comma.mapRight L e.inv (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
   unitIso := (mapRightId _ _).symm ≪≫
     mapRightEq _ _ _ e.hom_inv_id.symm (fun X => by simpa using X.prop) ≪≫
-    mapRight
+    mapRightComp _ _ _
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+  counitIso :=
+    (mapRightComp _ _ _
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)).symm ≪≫
+    mapRightEq _ _ _ e.inv_hom_id
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop) ≪≫
+    mapRightId _ _
 
 中文:
 定义 mapRightIso
@@ -1620,7 +1653,18 @@ definition mapRightIso
   inverse := Comma.mapRight L e.inv (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
   unitIso := (mapRightId _ _).symm ≪≫
     mapRightEq _ _ _ e.hom_inv_id.symm (fun X => by simpa using X.prop) ≪≫
-    mapRight
+    mapRightComp _ _ _
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+  counitIso :=
+    (mapRightComp _ _ _
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)).symm ≪≫
+    mapRightEq _ _ _ e.inv_hom_id
+      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop) ≪≫
+    mapRightId _ _
 
 Depends on / 依赖: Comma.mapRight, P.cancel_right_of_respectsIso, X.prop, cancel_right_of_respectsIso, e.hom, mapRight
 -/

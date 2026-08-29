@@ -52,7 +52,11 @@ theorem sub_one_dvd_natCast_of_pow_eq_one
       have := geom_sum_mul ζ n
       rw [hζ]; rw [sub_self] at this
       exact (mul_eq_zero.1 this).resolve_right fun h => hζ1 (sub_eq_zero.1 h)
-    rw [Finset.sum_sub_distrib]; rw [hgs]; rw [
+    rw [Finset.sum_sub_distrib]; rw [hgs]; rw [sub_zero]; rw [Finset.sum_const]; rw [card_range]; rw [nsmul_eq_mul]; rw [mul_one]
+  rw [key]
+  refine Finset.dvd_sum fun i _ => ?_
+  have h : ζ - 1 ∣ ζ ^ i - 1 := by simpa using sub_dvd_pow_sub_pow ζ 1 i
+  rwa [← dvd_neg, neg_sub] at h
 
 中文:
 定理 sub_one_dvd_natCast_of_pow_eq_one
@@ -64,7 +68,11 @@ theorem sub_one_dvd_natCast_of_pow_eq_one
       have := geom_sum_mul ζ n
       rw [hζ]; rw [sub_self] at this
       exact (mul_eq_zero.1 this).resolve_right fun h => hζ1 (sub_eq_zero.1 h)
-    rw [Finset.sum_sub_distrib]; rw [hgs]; rw [
+    rw [Finset.sum_sub_distrib]; rw [hgs]; rw [sub_zero]; rw [Finset.sum_const]; rw [card_range]; rw [nsmul_eq_mul]; rw [mul_one]
+  rw [key]
+  refine Finset.dvd_sum fun i _ => ?_
+  have h : ζ - 1 ∣ ζ ^ i - 1 := by simpa using sub_dvd_pow_sub_pow ζ 1 i
+  rwa [← dvd_neg, neg_sub] at h
 
 Depends on / 依赖: Finset, Finset.dvd_sum, Finset.sum_const, Finset.sum_sub_distrib, card_range, dvd_neg, dvd_sum, geom_sum_mul, mul_eq_zero, mul_one, neg_sub, nsmul_eq_mul, resolve_right, sub_dvd_pow_sub_pow, sub_eq_zero, sub_self, sub_zero, sum_const, sum_sub_distrib
 -/
@@ -96,7 +104,7 @@ theorem associated_sub_one_pow_sub_one_of_coprime
   | n + 2 =>
       obtain ⟨m, -, hm⟩ := exists_mul_mod_eq_one_of_coprime hj (by lia)
       use ∑ i in range m, (ζ ^ j) ^ i
-      rw [mul_geom_sum]; rw [← pow_mul];
+      rw [mul_geom_sum]; rw [← pow_mul]; rw [← pow_mod_orderOf]; rw [← hζ.eq_orderOf]; rw [hm]; rw [pow_one]
 
 中文:
 定理 associated_sub_one_pow_sub_one_of_coprime
@@ -109,7 +117,7 @@ theorem associated_sub_one_pow_sub_one_of_coprime
   | n + 2 =>
       obtain ⟨m, -, hm⟩ := exists_mul_mod_eq_one_of_coprime hj (by lia)
       use ∑ i in range m, (ζ ^ j) ^ i
-      rw [mul_geom_sum]; rw [← pow_mul];
+      rw [mul_geom_sum]; rw [← pow_mul]; rw [← pow_mod_orderOf]; rw [← hζ.eq_orderOf]; rw [hm]; rw [pow_one]
 
 Depends on / 依赖: associated_of_dvd_dvd, eq_orderOf, exists_mul_mod_eq_one_of_coprime, mul_geom_sum, pow_mod_orderOf, pow_mul, pow_one
 -/
@@ -330,7 +338,15 @@ lemma nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
   obtain ⟨i, hi, rfl⟩ := hζ.eq_pow_of_pow_eq_one ((Polynomial.mem_nthRootsFinset hp.pos 1).1 hη₁)
   obtain ⟨j, hj, rfl⟩ := hζ.eq_pow_of_pow_eq_one ((Polynomial.mem_nthRootsFinset hp.pos 1).1 hη₂)
   wlog hij : j <= i
-  · simpa using (this h
+  · simpa using (this hζ ‹_› ‹_› _ hj ‹_› _ hi ‹_› e.symm (by lia)).neg_right
+  have H : (i - j).Coprime p := (coprime_of_lt_prime (by grind) (by grind) hp).symm
+  obtain ⟨u, h⟩ := hζ.associated_pow_add_sub_sub_one hp.two_le j H
+  simp only [hij, add_tsub_cancel_of_le] at h
+  rw [← h]; rw [associated_mul_unit_right_iff]
+
+@[deprecated (since := "2026-06-23")]
+alias ntRootsFinset_pairwise_associated_sub_one_sub_of_prime :=
+  nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
 
 中文:
 引理 nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
@@ -341,7 +357,15 @@ lemma nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
   obtain ⟨i, hi, rfl⟩ := hζ.eq_pow_of_pow_eq_one ((Polynomial.mem_nthRootsFinset hp.pos 1).1 hη₁)
   obtain ⟨j, hj, rfl⟩ := hζ.eq_pow_of_pow_eq_one ((Polynomial.mem_nthRootsFinset hp.pos 1).1 hη₂)
   wlog hij : j <= i
-  · simpa using (this h
+  · simpa using (this hζ ‹_› ‹_› _ hj ‹_› _ hi ‹_› e.symm (by lia)).neg_right
+  have H : (i - j).Coprime p := (coprime_of_lt_prime (by grind) (by grind) hp).symm
+  obtain ⟨u, h⟩ := hζ.associated_pow_add_sub_sub_one hp.two_le j H
+  simp only [hij, add_tsub_cancel_of_le] at h
+  rw [← h]; rw [associated_mul_unit_right_iff]
+
+@[deprecated (since := "2026-06-23")]
+alias ntRootsFinset_pairwise_associated_sub_one_sub_of_prime :=
+  nthRootsFinset_pairwise_associated_sub_one_sub_of_prime
 
 Depends on / 依赖: Coprime, NeZero, Polynomial, Polynomial.mem_nthRootsFinset, associated_pow_add_sub_sub_one, coprime_of_lt_prime, e.symm, eq_pow_of_pow_eq_one, hp.ne_zero, hp.pos, hp.two_le, mem_nthRootsFinset, ne_zero, neg_right, two_le
 -/

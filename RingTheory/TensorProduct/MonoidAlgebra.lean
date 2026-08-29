@@ -149,7 +149,15 @@ refine .restrictScalars S .ofAlgHom
       ((IsScalarTower.toAlgHom A (A otimes[R] B) _).comp Algebra.TensorProduct.includeLeft)
       (mapAlgHom _ Algebra.TensorProduct.includeRight) fun p n => .all ..)
       rTensorEquivAlgEquiv.invFun ?_ ?_
-  · apply AlgHom.toLin
+  · apply AlgHom.toLinearMap_injective
+    ext
+    simp
+  · ext : 1
+    apply AlgHom.toLinearMap_injective
+    ext
+    simp
+
+@[to_additive (dont_translate := R A B) (attr := simp)]
 
 中文:
 定义 rTensorEquivAlgEquiv
@@ -160,7 +168,15 @@ refine .restrictScalars S .ofAlgHom
       ((IsScalarTower.toAlgHom A (A otimes[R] B) _).comp Algebra.TensorProduct.includeLeft)
       (mapAlgHom _ Algebra.TensorProduct.includeRight) fun p n => .all ..)
       rTensorEquivAlgEquiv.invFun ?_ ?_
-  · apply AlgHom.toLin
+  · apply AlgHom.toLinearMap_injective
+    ext
+    simp
+  · ext : 1
+    apply AlgHom.toLinearMap_injective
+    ext
+    simp
+
+@[to_additive (dont_translate := R A B) (attr := simp)]
 
 Depends on / 依赖: AlgHom, AlgHom.toLinearMap_injective, Algebra, Algebra.TensorProduct.includeLeft, Algebra.TensorProduct.includeRight, Algebra.TensorProduct.lift, IsScalarTower, IsScalarTower.toAlgHom, TensorProduct, includeLeft, includeRight, invFun, mapAlgHom, ofAlgHom, otimes, rTensorEquivAlgEquiv, rTensorEquivAlgEquiv.invFun, restrictScalars, toAlgHom, toLinearMap_injective
 -/

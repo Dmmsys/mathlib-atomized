@@ -6463,7 +6463,12 @@ lemma biUnion_compl_eq_of_pairwise_disjoint_of_iUnion_eq_univ
   have obs : forall (J : Set ι), x in ⋃ j in J, Es j ↔ i in J := by
     refine fun J => ⟨?_, fun i_in_J => by simpa only [mem_iUnion, exists_prop] using ⟨i, i_in_J, hix⟩⟩
     intro x_in_U
-    simp only [mem_iUnion
+    simp only [mem_iUnion, exists_prop] at x_in_U
+    obtain ⟨j, j_in_J, hjx⟩ := x_in_U
+    rwa [show i = j by by_contra i_ne_j; exact Disjoint.ne_of_mem (Es_disj i_ne_j) hix hjx rfl]
+  have obs' : forall (J : Set ι), x in (⋃ j in J, Es j)ᶜ ↔ i ∉ J :=
+    fun J => by simpa only [mem_compl_iff, not_iff_not] using obs J
+  rw [obs]; rw [obs']; rw [mem_compl_iff]
 
 中文:
 引理 biUnion_compl_eq_of_pairwise_disjoint_of_iUnion_eq_univ
@@ -6474,7 +6479,12 @@ lemma biUnion_compl_eq_of_pairwise_disjoint_of_iUnion_eq_univ
   have obs : forall (J : Set ι), x in ⋃ j in J, Es j ↔ i in J := by
     refine fun J => ⟨?_, fun i_in_J => by simpa only [mem_iUnion, exists_prop] using ⟨i, i_in_J, hix⟩⟩
     intro x_in_U
-    simp only [mem_iUnion
+    simp only [mem_iUnion, exists_prop] at x_in_U
+    obtain ⟨j, j_in_J, hjx⟩ := x_in_U
+    rwa [show i = j by by_contra i_ne_j; exact Disjoint.ne_of_mem (Es_disj i_ne_j) hix hjx rfl]
+  have obs' : forall (J : Set ι), x in (⋃ j in J, Es j)ᶜ ↔ i ∉ J :=
+    fun J => by simpa only [mem_compl_iff, not_iff_not] using obs J
+  rw [obs]; rw [obs']; rw [mem_compl_iff]
 
 Depends on / 依赖: Disjoint, Disjoint.ne_of_mem, Es_disj, Es_union, exists_prop, i_in_J, i_ne_j, j_in_J, mem_iUnion, ne_of_mem, x_in_U
 -/

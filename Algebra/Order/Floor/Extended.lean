@@ -362,7 +362,7 @@ lemma le_ceil
   · simp only [ne_eq, Nat.cast_eq_zero, ceil_coe, Nat.cast_le, toENNReal_coe] at hn₀ ⊢
     norm_cast
     rw [← Nat.add_one_le_ceil_iff]; rw [Nat.sub_add_cancel]
-
+    lia
 
 中文:
 引理 le_ceil
@@ -377,7 +377,7 @@ lemma le_ceil
   · simp only [ne_eq, Nat.cast_eq_zero, ceil_coe, Nat.cast_le, toENNReal_coe] at hn₀ ⊢
     norm_cast
     rw [← Nat.add_one_le_ceil_iff]; rw [Nat.sub_add_cancel]
-
+    lia
 -/
 @[simp] lemma le_ceil (hn₀ : n != 0) (hn : n != ⊤) : n <= ⌈r⌉ₑ ↔ n - 1 < r := by
   lift n to Nat using hn

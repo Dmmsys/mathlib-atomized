@@ -571,7 +571,7 @@ theorem EMetric.mk_uniformity_basis_le
     rcases exists_between ε₀ with ⟨ε', hε'⟩
     rcases hf ε' hε'.1 with ⟨i, hi, H⟩
 exact ⟨i, hi, fun x hx => hε lt_of_le_of_lt (le_trans hx.out H) hε'.2⟩
-  · exact fun ⟨i, hi, H⟩ => ⟨f i, hf₀ i hi, fu
+  · exact fun ⟨i, hi, H⟩ => ⟨f i, hf₀ i hi, fun x hx => H (le_of_lt hx.out)⟩
 
 中文:
 定理 EMetric.mk_uniformity_basis_le
@@ -583,7 +583,7 @@ exact ⟨i, hi, fun x hx => hε lt_of_le_of_lt (le_trans hx.out H) hε'.2⟩
     rcases exists_between ε₀ with ⟨ε', hε'⟩
     rcases hf ε' hε'.1 with ⟨i, hi, H⟩
 exact ⟨i, hi, fun x hx => hε lt_of_le_of_lt (le_trans hx.out H) hε'.2⟩
-  · exact fun ⟨i, hi, H⟩ => ⟨f i, hf₀ i hi, fu
+  · exact fun ⟨i, hi, H⟩ => ⟨f i, hf₀ i hi, fun x hx => H (le_of_lt hx.out)⟩
 -/
 protected theorem EMetric.mk_uniformity_basis_le {β : Type*} {p : β -> Prop} {f : β -> Real>=0∞}
     (hf₀ : forall x, p x -> 0 < f x) (hf : forall ε, 0 < ε -> exists x, p x ∧ f x <= ε) :
@@ -947,7 +947,7 @@ definition PseudoEMetricSpace.ofEDistOfTopology
   uniformity_edist := rfl
 
 @[deprecated (since := "2026-01-08")]
-alias PseudoEmetricSpace.ofEdistOfTopology := PseudoEMetricSpace.ofEDis
+alias PseudoEmetricSpace.ofEdistOfTopology := PseudoEMetricSpace.ofEDistOfTopology
 
 中文:
 定义 PseudoEMetric空间.ofEDistOfTopology
@@ -960,7 +960,7 @@ alias PseudoEmetricSpace.ofEdistOfTopology := PseudoEMetricSpace.ofEDis
   uniformity_edist := rfl
 
 @[deprecated (since := "2026-01-08")]
-alias PseudoEmetricSpace.ofEdistOfTopology := PseudoEMetricSpace.ofEDis
+alias PseudoEmetricSpace.ofEdistOfTopology := PseudoEMetricSpace.ofEDistOfTopology
 -/
 @[reducible] noncomputable def PseudoEMetricSpace.ofEDistOfTopology {α : Type*} [TopologicalSpace α]
     (d : α -> α -> Real>=0∞) (h_self : forall x, d x x = 0) (h_comm : forall x y, d x y = d y x)
@@ -1098,7 +1098,10 @@ instance Prod.pseudoEMetricSpaceMax
   edist_comm x y := by simp [edist_comm]
   edist_triangle _ _ _ :=
     max_le (le_trans (edist_triangle _ _ _) (add_le_add (le_max_left _ _) (le_max_left _ _)))
-      (le_trans (edist_triangle _ _ _) (add_le_add (le_max_right _ _) (le_max_right
+      (le_trans (edist_triangle _ _ _) (add_le_add (le_max_right _ _) (le_max_right _ _)))
+uniformity_edist := uniformity_prod.trans by
+    simp [PseudoEMetricSpace.uniformity_edist, ← iInf_inf_eq, ofPred_and]
+  toUniformSpace := inferInstance
 
 中文:
 实例 积类型.pseudoEMetricSpaceMax
@@ -1108,7 +1111,10 @@ instance Prod.pseudoEMetricSpaceMax
   edist_comm x y := by simp [edist_comm]
   edist_triangle _ _ _ :=
     max_le (le_trans (edist_triangle _ _ _) (add_le_add (le_max_left _ _) (le_max_left _ _)))
-      (le_trans (edist_triangle _ _ _) (add_le_add (le_max_right _ _) (le_max_right
+      (le_trans (edist_triangle _ _ _) (add_le_add (le_max_right _ _) (le_max_right _ _)))
+uniformity_edist := uniformity_prod.trans by
+    simp [PseudoEMetricSpace.uniformity_edist, ← iInf_inf_eq, ofPred_and]
+  toUniformSpace := inferInstance
 -/
 instance Prod.pseudoEMetricSpaceMax [PseudoEMetricSpace β] :
     PseudoEMetricSpace (α × β) where
@@ -3100,7 +3106,21 @@ abbreviation WeakPseudoEMetricSpace.IsInducing
   edist_triangle x y z := edist_triangle (f x) (f y) (f z)
   topology_le := by
     let hα := PseudoEMetricSpace.ofEDist (fun x y => edist (f x) (f y))
-      (fun x => edist_self (f x)) (fun x y
+      (fun x => edist_self (f x)) (fun x y => edist_comm (f x) (f y))
+      (fun x y z => edist_triangle (f x) (f y) (f z))
+    let hβ := PseudoEMetricSpace.ofEDist m.edist edist_self edist_comm edist_triangle
+    rw [(isInducing_iff f).mp hf]
+    refine (continuous_le_rng m.topology_le ?_).le_induced
+    refine @Continuous.mk α β hα.toUniformSpace.toTopologicalSpace
+      hβ.toUniformSpace.toTopologicalSpace f fun s hs => ?_
+    rw [isOpen_iff] at hs ⊢
+    intro x (hx : f x in s)
+    obtain ⟨ε, hε, hεs⟩ := hs (f x) hx
+    exact ⟨ε, hε, fun y hy => hεs hy⟩
+  topology_eq_on_restrict x r := by
+    obtain ⟨u, hu, uy⟩ := m.topology_eq_on_restrict (f x) r
+    rw [(isInducing_iff f).mp hf]
+    exact ⟨f ⁻¹' u, isOpen_induced hu, by aesop (add simp [Set.ext_iff])⟩
 
 中文:
 缩写 WeakPseudoEMetric空间.是Inducing
@@ -3111,7 +3131,21 @@ abbreviation WeakPseudoEMetricSpace.IsInducing
   edist_triangle x y z := edist_triangle (f x) (f y) (f z)
   topology_le := by
     let hα := PseudoEMetricSpace.ofEDist (fun x y => edist (f x) (f y))
-      (fun x => edist_self (f x)) (fun x y
+      (fun x => edist_self (f x)) (fun x y => edist_comm (f x) (f y))
+      (fun x y z => edist_triangle (f x) (f y) (f z))
+    let hβ := PseudoEMetricSpace.ofEDist m.edist edist_self edist_comm edist_triangle
+    rw [(isInducing_iff f).mp hf]
+    refine (continuous_le_rng m.topology_le ?_).le_induced
+    refine @Continuous.mk α β hα.toUniformSpace.toTopologicalSpace
+      hβ.toUniformSpace.toTopologicalSpace f fun s hs => ?_
+    rw [isOpen_iff] at hs ⊢
+    intro x (hx : f x in s)
+    obtain ⟨ε, hε, hεs⟩ := hs (f x) hx
+    exact ⟨ε, hε, fun y hy => hεs hy⟩
+  topology_eq_on_restrict x r := by
+    obtain ⟨u, hu, uy⟩ := m.topology_eq_on_restrict (f x) r
+    rw [(isInducing_iff f).mp hf]
+    exact ⟨f ⁻¹' u, isOpen_induced hu, by aesop (add simp [Set.ext_iff])⟩
 -/
 abbrev WeakPseudoEMetricSpace.IsInducing {α β : Type*} [e : TopologicalSpace α]
   [n : TopologicalSpace β] {f : α -> β} (hf : IsInducing f) (m : WeakPseudoEMetricSpace β) :

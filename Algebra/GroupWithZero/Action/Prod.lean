@@ -231,6 +231,18 @@ definition DistribMulAction.prodEquiv
   invFun _insts :=
     letI := _insts.1; letI := _insts.2.1; have := _insts.2.2
     DistribMulAction.prodOfSMulCommClass M N α
+  left_inv _ := by
+    dsimp only; ext ⟨m, n⟩ a
+    change (m, (1 : N)) • ((1 : M), n) • a = _
+    rw [smul_smul]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rfl
+  right_inv := by
+    rintro ⟨_, x, _⟩
+    dsimp only; congr 1
+    · ext m a; (conv_rhs => rw [← one_smul N a]); rfl
+    congr 1
+    · funext i; congr; ext m a; clear i; (conv_rhs => rw [← one_smul N a]); rfl
+    · ext n a; (conv_rhs => rw [← one_smul M (SMul.smul n a)]); rfl
+    · exact proof_irrel_heq ..
 
 中文:
 定义 分配乘法作用.prodEquiv
@@ -241,6 +253,18 @@ definition DistribMulAction.prodEquiv
   invFun _insts :=
     letI := _insts.1; letI := _insts.2.1; have := _insts.2.2
     DistribMulAction.prodOfSMulCommClass M N α
+  left_inv _ := by
+    dsimp only; ext ⟨m, n⟩ a
+    change (m, (1 : N)) • ((1 : M), n) • a = _
+    rw [smul_smul]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rfl
+  right_inv := by
+    rintro ⟨_, x, _⟩
+    dsimp only; congr 1
+    · ext m a; (conv_rhs => rw [← one_smul N a]); rfl
+    congr 1
+    · funext i; congr; ext m a; clear i; (conv_rhs => rw [← one_smul N a]); rfl
+    · ext n a; (conv_rhs => rw [← one_smul M (SMul.smul n a)]); rfl
+    · exact proof_irrel_heq ..
 
 Depends on / 依赖: DistribMulAction, DistribMulAction.compHom, DistribMulAction.prodOfSMulCommClass, MulAction, MulAction.prodEquiv, Prod.mk_mul_mk, _insts, compHom, invFun, left_inv, mk_mul_mk, mul_one, one_mul, prodEquiv, prodOfSMulCommClass, right_inv, smul_smul
 -/

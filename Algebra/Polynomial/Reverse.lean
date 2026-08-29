@@ -609,7 +609,28 @@ theorem reflect_mul_induction
     | zero =>
       rw [← C_mul_X_pow_eq_self Cf]; rw [← C_mul_X_pow_eq_self Cg]
       simp_rw [mul_assoc, X_pow_mul, mul_assoc, ← pow_add (X : R[X]), reflect_C_mul,
-        reflect_monomial, add_comm, revAt_add N
+        reflect_monomial, add_comm, revAt_add Nf Og, mul_assoc, X_pow_mul, mul_assoc, ←
+        pow_add (X : R[X]), add_comm]
+    | succ cg hcg =>
+      by_cases g0 : g = 0
+      · rw [g0, reflect_zero, mul_zero, mul_zero, reflect_zero]
+      rw [← eraseLead_add_C_mul_X_pow g]; rw [mul_add]; rw [reflect_add]; rw [reflect_add]; rw [mul_add]; rw [hcg]; rw [hcg] <;>
+        try assumption
+      · exact le_add_left card_support_C_mul_X_pow_le_one
+      · exact le_trans (natDegree_C_mul_X_pow_le g.leadingCoeff g.natDegree) Og
+      · exact Nat.lt_succ_iff.mp (lt_of_lt_of_le (eraseLead_support_card_lt g0) Cg)
+      · exact le_trans eraseLead_natDegree_le_aux Og
+  | succ cf hcf =>
+    by_cases f0 : f = 0
+    · rw [f0, reflect_zero, zero_mul, zero_mul, reflect_zero]
+    rw [← eraseLead_add_C_mul_X_pow f]; rw [add_mul]; rw [reflect_add]; rw [reflect_add]; rw [add_mul]; rw [hcf]; rw [hcf] <;>
+      try assumption
+    · exact le_add_left card_support_C_mul_X_pow_le_one
+    · exact le_trans (natDegree_C_mul_X_pow_le f.leadingCoeff f.natDegree) Nf
+    · exact Nat.lt_succ_iff.mp (lt_of_lt_of_le (eraseLead_support_card_lt f0) Cf)
+    · exact le_trans eraseLead_natDegree_le_aux Nf
+
+@[simp]
 
 中文:
 定理 reflect_mul_induction
@@ -621,7 +642,28 @@ theorem reflect_mul_induction
     | zero =>
       rw [← C_mul_X_pow_eq_self Cf]; rw [← C_mul_X_pow_eq_self Cg]
       simp_rw [mul_assoc, X_pow_mul, mul_assoc, ← pow_add (X : R[X]), reflect_C_mul,
-        reflect_monomial, add_comm, revAt_add N
+        reflect_monomial, add_comm, revAt_add Nf Og, mul_assoc, X_pow_mul, mul_assoc, ←
+        pow_add (X : R[X]), add_comm]
+    | succ cg hcg =>
+      by_cases g0 : g = 0
+      · rw [g0, reflect_zero, mul_zero, mul_zero, reflect_zero]
+      rw [← eraseLead_add_C_mul_X_pow g]; rw [mul_add]; rw [reflect_add]; rw [reflect_add]; rw [mul_add]; rw [hcg]; rw [hcg] <;>
+        try assumption
+      · exact le_add_left card_support_C_mul_X_pow_le_one
+      · exact le_trans (natDegree_C_mul_X_pow_le g.leadingCoeff g.natDegree) Og
+      · exact Nat.lt_succ_iff.mp (lt_of_lt_of_le (eraseLead_support_card_lt g0) Cg)
+      · exact le_trans eraseLead_natDegree_le_aux Og
+  | succ cf hcf =>
+    by_cases f0 : f = 0
+    · rw [f0, reflect_zero, zero_mul, zero_mul, reflect_zero]
+    rw [← eraseLead_add_C_mul_X_pow f]; rw [add_mul]; rw [reflect_add]; rw [reflect_add]; rw [add_mul]; rw [hcf]; rw [hcf] <;>
+      try assumption
+    · exact le_add_left card_support_C_mul_X_pow_le_one
+    · exact le_trans (natDegree_C_mul_X_pow_le f.leadingCoeff f.natDegree) Nf
+    · exact Nat.lt_succ_iff.mp (lt_of_lt_of_le (eraseLead_support_card_lt f0) Cf)
+    · exact le_trans eraseLead_natDegree_le_aux Nf
+
+@[simp]
 
 Depends on / 依赖: C_mul_X_pow_eq_self, X_pow_mul, add_comm, eraseLead_add_C_mul_X_pow, generalizing, mul_add, mul_assoc, mul_zero, pow_add, reflect_C_mul, reflect_add, reflect_monomial, reflect_zero, revAt_add, simp_rw
 -/
@@ -718,7 +760,9 @@ theorem eval₂_reflect_mul_pow
   · intro n r _ hnN
     simp only [revAt_le hnN, reflect_C_mul_X_pow, eval₂_X_pow, eval₂_C, eval₂_mul]
     conv in x ^ N => rw [← Nat.sub_add_cancel hnN]
-    rw [pow
+    rw [pow_add]; rw [← mul_assoc]; rw [mul_assoc (i r)]; rw [← mul_pow]; rw [invOf_mul_self]; rw [one_pow]; rw [mul_one]
+  · intros
+    simp [*, add_mul]
 
 中文:
 定理 eval₂_reflect_mul_pow
@@ -731,7 +775,9 @@ theorem eval₂_reflect_mul_pow
   · intro n r _ hnN
     simp only [revAt_le hnN, reflect_C_mul_X_pow, eval₂_X_pow, eval₂_C, eval₂_mul]
     conv in x ^ N => rw [← Nat.sub_add_cancel hnN]
-    rw [pow
+    rw [pow_add]; rw [← mul_assoc]; rw [mul_assoc (i r)]; rw [← mul_pow]; rw [invOf_mul_self]; rw [one_pow]; rw [mul_one]
+  · intros
+    simp [*, add_mul]
 
 Depends on / 依赖: Nat.sub_add_cancel, add_mul, induction_with_natDegree_le, intros, invOf_mul_self, mul_assoc, mul_one, mul_pow, one_pow, pow_add, reflect, reflect_C_mul_X_pow, revAt_le, sub_add_cancel
 -/
@@ -941,7 +987,11 @@ theorem natDegree_eq_reverse_natDegree_add_natTrailingDegree
   · refine tsub_le_iff_right.mp ?_
     apply le_natDegree_of_ne_zero
     rw [reverse]; rw [coeff_reflect]; rw [← revAt_le f.natTrailingDegree_le_natDegree]; rw [revAt_invol]
-    exact trail
+    exact trailingCoeff_nonzero_iff_nonzero.mpr hf
+  · rw [← le_tsub_iff_left f.reverse_natDegree_le]
+    apply natTrailingDegree_le_of_ne_zero
+    have key := mt leadingCoeff_eq_zero.mp (mt reverse_eq_zero.mp hf)
+    rwa [leadingCoeff, coeff_reverse, revAt_le f.reverse_natDegree_le] at key
 
 中文:
 定理 natDegree_eq_reverse_natDegree_add_natTrailingDegree
@@ -953,7 +1003,11 @@ theorem natDegree_eq_reverse_natDegree_add_natTrailingDegree
   · refine tsub_le_iff_right.mp ?_
     apply le_natDegree_of_ne_zero
     rw [reverse]; rw [coeff_reflect]; rw [← revAt_le f.natTrailingDegree_le_natDegree]; rw [revAt_invol]
-    exact trail
+    exact trailingCoeff_nonzero_iff_nonzero.mpr hf
+  · rw [← le_tsub_iff_left f.reverse_natDegree_le]
+    apply natTrailingDegree_le_of_ne_zero
+    have key := mt leadingCoeff_eq_zero.mp (mt reverse_eq_zero.mp hf)
+    rwa [leadingCoeff, coeff_reverse, revAt_le f.reverse_natDegree_le] at key
 
 Depends on / 依赖: coeff_reflect, coeff_revers, f.natTrailingDegree_le_natDegree, f.reverse_natDegree_le, le_antisymm, le_natDegree_of_ne_zero, le_tsub_iff_left, leadingCoeff, leadingCoeff_eq_zero, leadingCoeff_eq_zero.mp, natDegree_zero, natTrailingDegree_le_natDegree, natTrailingDegree_le_of_ne_zero, natTrailingDegree_zero, revAt_invol, revAt_le, reverse, reverse_eq_zero, reverse_eq_zero.mp, reverse_natDegree_le
 -/

@@ -55,6 +55,12 @@ lemma IsBaseChange.of_left_exact
   refine LinearMap.bijective_of_bijective_of_injective_of_left_exact
     ((f.baseChange S).restrictScalars R) ((g.baseChange S).restrictScalars R)
     (f'.restrictScalars R) (g'.restrictScalars R) _ _ _ ?_ ?_ ?_ exact₂ isb₂ isb₃.1 ?_ inj₂
+  · ext s m
+    simpa using congr(s • ($comm₁ m)).symm
+  · ext s m
+    simpa using congr(s • ($comm₂ m)).symm
+  · exact Module.Flat.lTensor_exact S exact₁
+  · exact Module.Flat.lTensor_preserves_injective_linearMap f inj₁
 
 中文:
 引理 IsBaseChange.of_left_exact
@@ -64,6 +70,12 @@ lemma IsBaseChange.of_left_exact
   refine LinearMap.bijective_of_bijective_of_injective_of_left_exact
     ((f.baseChange S).restrictScalars R) ((g.baseChange S).restrictScalars R)
     (f'.restrictScalars R) (g'.restrictScalars R) _ _ _ ?_ ?_ ?_ exact₂ isb₂ isb₃.1 ?_ inj₂
+  · ext s m
+    simpa using congr(s • ($comm₁ m)).symm
+  · ext s m
+    simpa using congr(s • ($comm₂ m)).symm
+  · exact Module.Flat.lTensor_exact S exact₁
+  · exact Module.Flat.lTensor_preserves_injective_linearMap f inj₁
 
 Depends on / 依赖: IsBaseChange, IsTensorProduct, LinearMap, LinearMap.bijective_of_bijective_of_injective_of_left_exact, Module, Module.Flat.lTensor_exact, Module.Flat.lTensor_preserves_injective_linearMap, baseChange, bijective_of_bijective_of_injective_of_left_exact, f.baseChange, g.baseChange, lTensor_exact, lTensor_preserves_injective_linearMap, restrictScalars
 -/

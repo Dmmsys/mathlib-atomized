@@ -108,7 +108,15 @@ lemma continuous_mul_log
   rw [ContinuousAt]; rw [zero_mul]
   simp_rw [mul_comm _ (log _)]
   nth_rewrite 1 [← nhdsWithin_univ]
-  have : (Set.univ : Set Real) = Set.Iio 0 union S
+  have : (Set.univ : Set Real) = Set.Iio 0 union Set.Ioi 0 union {0} := by ext; simp [em]
+  rw [this]; rw [nhdsWithin_union]; rw [nhdsWithin_union]
+  simp only [nhdsWithin_singleton, Filter.tendsto_sup]
+  refine ⟨⟨tendsto_log_mul_self_nhdsLT_zero, ?_⟩, ?_⟩
+  · simpa only [rpow_one] using tendsto_log_mul_rpow_nhdsGT_zero zero_lt_one
+  · convert! tendsto_pure_nhds (fun x => log x * x) 0
+    simp
+
+@[fun_prop]
 
 中文:
 引理 continuous_mul_log
@@ -121,7 +129,15 @@ lemma continuous_mul_log
   rw [ContinuousAt]; rw [zero_mul]
   simp_rw [mul_comm _ (log _)]
   nth_rewrite 1 [← nhdsWithin_univ]
-  have : (Set.univ : Set Real) = Set.Iio 0 union S
+  have : (Set.univ : Set Real) = Set.Iio 0 union Set.Ioi 0 union {0} := by ext; simp [em]
+  rw [this]; rw [nhdsWithin_union]; rw [nhdsWithin_union]
+  simp only [nhdsWithin_singleton, Filter.tendsto_sup]
+  refine ⟨⟨tendsto_log_mul_self_nhdsLT_zero, ?_⟩, ?_⟩
+  · simpa only [rpow_one] using tendsto_log_mul_rpow_nhdsGT_zero zero_lt_one
+  · convert! tendsto_pure_nhds (fun x => log x * x) 0
+    simp
+
+@[fun_prop]
 
 Depends on / 依赖: ContinuousAt, Filter, Filter.tendsto_sup, Set.Iio, Set.Ioi, Set.univ, continuousAt, continuousAt_log, continuous_id, continuous_iff_continuousAt, mul_comm, ne_or_eq, nhdsWithin_singleton, nhdsWithin_union, nhdsWithin_univ, nth_rewrite, simp_rw, tendsto_log_mul_self_nhdsLT_zero, tendsto_sup, zero_mul
 -/
@@ -430,7 +446,10 @@ lemma deriv2_mul_log
   · rw [hx, inv_zero]
     exact deriv_zero_of_not_differentiableAt
       (fun h => not_continuousAt_deriv_mul_log_zero h.continuousAt)
-  · suffices forallᶠ y in (𝓝 x), deriv (fu
+  · suffices forallᶠ y in (𝓝 x), deriv (fun x => x * log x) y = log y + 1 by
+      refine (Filter.EventuallyEq.deriv_eq this).trans ?_
+      rw [deriv_add_const]; rw [deriv_log x]
+    filter_upwards [eventually_ne_nhds hx] with y hy using deriv_mul_log hy
 
 中文:
 引理 deriv2_mul_log
@@ -442,7 +461,10 @@ lemma deriv2_mul_log
   · rw [hx, inv_zero]
     exact deriv_zero_of_not_differentiableAt
       (fun h => not_continuousAt_deriv_mul_log_zero h.continuousAt)
-  · suffices forallᶠ y in (𝓝 x), deriv (fu
+  · suffices forallᶠ y in (𝓝 x), deriv (fun x => x * log x) y = log y + 1 by
+      refine (Filter.EventuallyEq.deriv_eq this).trans ?_
+      rw [deriv_add_const]; rw [deriv_log x]
+    filter_upwards [eventually_ne_nhds hx] with y hy using deriv_mul_log hy
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.deriv_eq, Function, Function.comp_apply, Function.id_comp, Function.iterate_succ, Function.iterate_zero, comp_apply, continuousAt, deriv_add_const, deriv_eq, deriv_log, deriv_mul_log, deriv_zero_of_not_differentiableAt, eventually_ne_nhds, filter_upwards, h.continuousAt, id_comp, inv_zero
 -/
@@ -783,7 +805,13 @@ lemma differentiableAt_negMulLog_iff
     exact not_DifferentiableAt_log_mul_zero h
   · intro hx
     have : x in ({0} : Set Real)ᶜ := by
-      simp_all only [ne_eq, Set.mem_compl_iff, Set.mem_singleton_iff, not_false_eq_
+      simp_all only [ne_eq, Set.mem_compl_iff, Set.mem_singleton_iff, not_false_eq_true]
+    have := differentiableOn_negMulLog x this
+    apply DifferentiableWithinAt.differentiableAt (s := {0}ᶜ) <;>
+    simp_all only [ne_eq, Set.mem_compl_iff, Set.mem_singleton_iff, not_false_eq_true,
+      compl_singleton_mem_nhds_iff]
+
+@[fun_prop] alias ⟨_, differentiableAt_negMulLog⟩ := differentiableAt_negMulLog_iff
 
 中文:
 引理 differentiableAt_negMulLog_iff
@@ -797,7 +825,13 @@ lemma differentiableAt_negMulLog_iff
     exact not_DifferentiableAt_log_mul_zero h
   · intro hx
     have : x in ({0} : Set Real)ᶜ := by
-      simp_all only [ne_eq, Set.mem_compl_iff, Set.mem_singleton_iff, not_false_eq_
+      simp_all only [ne_eq, Set.mem_compl_iff, Set.mem_singleton_iff, not_false_eq_true]
+    have := differentiableOn_negMulLog x this
+    apply DifferentiableWithinAt.differentiableAt (s := {0}ᶜ) <;>
+    simp_all only [ne_eq, Set.mem_compl_iff, Set.mem_singleton_iff, not_false_eq_true,
+      compl_singleton_mem_nhds_iff]
+
+@[fun_prop] alias ⟨_, differentiableAt_negMulLog⟩ := differentiableAt_negMulLog_iff
 
 Depends on / 依赖: DifferentiableWithinAt, DifferentiableWithinAt.differentiableAt, Set.mem_compl_iff, Set.mem_singleton_iff, compl_singleton_mem_nhds_iff, differentiableAt, differentiableAt_fun_neg_iff, differentiableOn_negMulLog, mem_compl_iff, mem_singleton_iff, ne_eq, negMulLog, neg_mul, not_DifferentiableAt_log_mul_zero, not_false_eq_true
 -/

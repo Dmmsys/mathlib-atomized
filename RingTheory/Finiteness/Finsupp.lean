@@ -154,7 +154,64 @@ theorem fg_of_fg_map_of_fg_inf_ker
     have : y in s.map f := by
       rw [← ht1]
       exact subset_span hy
-    rcases mem_map
+    rcases mem_map.1 this with ⟨x, hx1, hx2⟩
+    exact ⟨x, hx1, hx2⟩
+  have : exists g : P -> M, forall y in t1, g y in s ∧ f (g y) = y := by
+    choose g hg1 hg2 using this
+    exists fun y => if H : y in t1 then g y H else 0
+    intro y H
+    constructor
+    · simp only [dif_pos H]
+      apply hg1
+    · simp only [dif_pos H]
+      apply hg2
+  obtain ⟨g, hg⟩ := this
+  clear this
+  exists t1.image g union t2
+  rw [Finset.coe_union]; rw [span_union]; rw [Finset.coe_image]
+  apply le_antisymm
+  · refine sup_le (span_le.2 <| image_subset_iff.2 ?_) (span_le.2 ?_)
+    · intro y hy
+      exact (hg y hy).1
+    · intro x hx
+      have : x in span R t2 := subset_span hx
+      rw [ht2] at this
+      exact this.1
+  intro x hx
+  have : f x in s.map f := by
+    rw [mem_map]
+    exact ⟨x, hx, rfl⟩
+  rw [← ht1]; rw [← Set.image_id (t1 : Set P)]; rw [Finsupp.mem_span_image_iff_linearCombination] at this
+  rcases this with ⟨l, hl1, hl2⟩
+  refine
+    mem_sup.2
+      ⟨(linearCombination R id).toFun ((lmapDomain R R g : (P ->₀ R) -> M ->₀ R) l), ?_,
+        x - linearCombination R id ((lmapDomain R R g : (P ->₀ R) -> M ->₀ R) l), ?_,
+        add_sub_cancel _ _⟩
+  · rw [← Set.image_id (g '' ↑t1), Finsupp.mem_span_image_iff_linearCombination]
+    refine ⟨_, ?_, rfl⟩
+    have : Inhabited P := ⟨0⟩
+    rw [← Finsupp.lmapDomain_supported _ _ g]; rw [mem_map]
+    refine ⟨l, hl1, ?_⟩
+    rfl
+  rw [ht2]; rw [mem_inf]
+  constructor
+  · apply s.sub_mem hx
+    rw [Finsupp.linearCombination_apply]; rw [Finsupp.lmapDomain_apply]; rw [Finsupp.sum_mapDomain_index]
+    · refine s.sum_mem ?_
+      intro y hy
+      exact s.smul_mem _ (hg y (hl1 hy)).1
+    · exact zero_smul _
+    · exact fun _ _ _ => add_smul _ _ _
+  · rw [LinearMap.mem_ker, f.map_sub, ← hl2]
+    rw [Finsupp.linearCombination_apply]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.lmapDomain_apply]
+    rw [Finsupp.sum_mapDomain_index]; rw [Finsupp.sum]; rw [Finsupp.sum]; rw [map_sum]
+    · rw [sub_eq_zero]
+      refine Finset.sum_congr rfl fun y hy => ?_
+      unfold id
+      rw [f.map_smul]; rw [(hg y (hl1 hy)).2]
+    · exact zero_smul _
+    · exact fun _ _ _ => add_smul _ _ _
 
 中文:
 定理 fg_of_fg_map_of_fg_inf_ker
@@ -170,7 +227,64 @@ theorem fg_of_fg_map_of_fg_inf_ker
     have : y in s.map f := by
       rw [← ht1]
       exact subset_span hy
-    rcases mem_map
+    rcases mem_map.1 this with ⟨x, hx1, hx2⟩
+    exact ⟨x, hx1, hx2⟩
+  have : exists g : P -> M, forall y in t1, g y in s ∧ f (g y) = y := by
+    choose g hg1 hg2 using this
+    exists fun y => if H : y in t1 then g y H else 0
+    intro y H
+    constructor
+    · simp only [dif_pos H]
+      apply hg1
+    · simp only [dif_pos H]
+      apply hg2
+  obtain ⟨g, hg⟩ := this
+  clear this
+  exists t1.image g union t2
+  rw [Finset.coe_union]; rw [span_union]; rw [Finset.coe_image]
+  apply le_antisymm
+  · refine sup_le (span_le.2 <| image_subset_iff.2 ?_) (span_le.2 ?_)
+    · intro y hy
+      exact (hg y hy).1
+    · intro x hx
+      have : x in span R t2 := subset_span hx
+      rw [ht2] at this
+      exact this.1
+  intro x hx
+  have : f x in s.map f := by
+    rw [mem_map]
+    exact ⟨x, hx, rfl⟩
+  rw [← ht1]; rw [← Set.image_id (t1 : Set P)]; rw [Finsupp.mem_span_image_iff_linearCombination] at this
+  rcases this with ⟨l, hl1, hl2⟩
+  refine
+    mem_sup.2
+      ⟨(linearCombination R id).toFun ((lmapDomain R R g : (P ->₀ R) -> M ->₀ R) l), ?_,
+        x - linearCombination R id ((lmapDomain R R g : (P ->₀ R) -> M ->₀ R) l), ?_,
+        add_sub_cancel _ _⟩
+  · rw [← Set.image_id (g '' ↑t1), Finsupp.mem_span_image_iff_linearCombination]
+    refine ⟨_, ?_, rfl⟩
+    have : Inhabited P := ⟨0⟩
+    rw [← Finsupp.lmapDomain_supported _ _ g]; rw [mem_map]
+    refine ⟨l, hl1, ?_⟩
+    rfl
+  rw [ht2]; rw [mem_inf]
+  constructor
+  · apply s.sub_mem hx
+    rw [Finsupp.linearCombination_apply]; rw [Finsupp.lmapDomain_apply]; rw [Finsupp.sum_mapDomain_index]
+    · refine s.sum_mem ?_
+      intro y hy
+      exact s.smul_mem _ (hg y (hl1 hy)).1
+    · exact zero_smul _
+    · exact fun _ _ _ => add_smul _ _ _
+  · rw [LinearMap.mem_ker, f.map_sub, ← hl2]
+    rw [Finsupp.linearCombination_apply]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.lmapDomain_apply]
+    rw [Finsupp.sum_mapDomain_index]; rw [Finsupp.sum]; rw [Finsupp.sum]; rw [map_sum]
+    · rw [sub_eq_zero]
+      refine Finset.sum_congr rfl fun y hy => ?_
+      unfold id
+      rw [f.map_smul]; rw [(hg y (hl1 hy)).2]
+    · exact zero_smul _
+    · exact fun _ _ _ => add_smul _ _ _
 
 Depends on / 依赖: Classical, Classical.decEq, dif_po, mem_map, s.map, subset_span
 -/

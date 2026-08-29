@@ -607,7 +607,13 @@ definition sumSumSumComm
       ∘ (sumAssoc (α oplus β) γ δ).symm
   invFun :=
     (sumAssoc (α oplus β) γ δ) ∘ (Sum.map (sumAssoc α β γ).symm (@id δ))
-     
+      ∘ (Sum.map (Sum.map (@id α) (sumComm β γ).symm) (@id δ))
+      ∘ (Sum.map (sumAssoc α γ β) (@id δ))
+      ∘ (sumAssoc (α oplus γ) β δ).symm
+  left_inv x := by rcases x with ((a | b) | (c | d)) <;> simp
+  right_inv x := by rcases x with ((a | c) | (b | d)) <;> simp
+
+@[simp]
 
 中文:
 定义 sumSumSumComm
@@ -618,7 +624,13 @@ definition sumSumSumComm
       ∘ (sumAssoc (α oplus β) γ δ).symm
   invFun :=
     (sumAssoc (α oplus β) γ δ) ∘ (Sum.map (sumAssoc α β γ).symm (@id δ))
-     
+      ∘ (Sum.map (Sum.map (@id α) (sumComm β γ).symm) (@id δ))
+      ∘ (Sum.map (sumAssoc α γ β) (@id δ))
+      ∘ (sumAssoc (α oplus γ) β δ).symm
+  left_inv x := by rcases x with ((a | b) | (c | d)) <;> simp
+  right_inv x := by rcases x with ((a | c) | (b | d)) <;> simp
+
+@[simp]
 
 Depends on / 依赖: Sum.map, invFun, left_inv, right_inv, sumAssoc, sumComm
 -/

@@ -97,7 +97,7 @@ lemma isSigmaCompact_iUnion_of_isCompact
   · simp only [iUnion_of_empty, isSigmaCompact_empty]
   · -- If ι is non-empty, choose a surjection f : ℕ → ι, this yields a map ℕ → Set X.
     obtain ⟨f, hf⟩ := countable_iff_exists_surjective.mp hι
-    exact ⟨s ∘ f, fun n => hcomp (f n), Function.Surjective.iUnion
+    exact ⟨s ∘ f, fun n => hcomp (f n), Function.Surjective.iUnion_comp hf _⟩
 
 中文:
 引理 isSigmaCompact_iUnion_of_isCompact
@@ -107,7 +107,7 @@ lemma isSigmaCompact_iUnion_of_isCompact
   · simp only [iUnion_of_empty, isSigmaCompact_empty]
   · -- If ι is non-empty, choose a surjection f : ℕ → ι, this yields a map ℕ → Set X.
     obtain ⟨f, hf⟩ := countable_iff_exists_surjective.mp hι
-    exact ⟨s ∘ f, fun n => hcomp (f n), Function.Surjective.iUnion
+    exact ⟨s ∘ f, fun n => hcomp (f n), Function.Surjective.iUnion_comp hf _⟩
 
 Depends on / 依赖: Function, Function.Surjective.iUnion_comp, Surjective, countable_iff_exists_surjective, countable_iff_exists_surjective.mp, iUnion_comp, iUnion_of_empty, isEmpty_or_nonempty, isSigmaCompact_empty, surjection, yields
 -/
@@ -159,7 +159,10 @@ lemma isSigmaCompact_iUnion
   have := calc
     ⋃ i, s i
     _ = ⋃ i, ⋃ n, (K i n) := by simp_rw [hcov]
-    _ = ⋃ (i) (n : Nat), (K.
+    _ = ⋃ (i) (n : Nat), (K.uncurry ⟨i, n⟩) := by rw [Function.uncurry_def]
+    _ = ⋃ x, K.uncurry x := by rw [← iUnion_prod']
+  rw [this]
+  exact isSigmaCompact_iUnion_of_isCompact K.uncurry fun x => (hcomp x.1 x.2)
 
 中文:
 引理 isSigmaCompact_iUnion
@@ -171,7 +174,10 @@ lemma isSigmaCompact_iUnion
   have := calc
     ⋃ i, s i
     _ = ⋃ i, ⋃ n, (K i n) := by simp_rw [hcov]
-    _ = ⋃ (i) (n : Nat), (K.
+    _ = ⋃ (i) (n : Nat), (K.uncurry ⟨i, n⟩) := by rw [Function.uncurry_def]
+    _ = ⋃ x, K.uncurry x := by rw [← iUnion_prod']
+  rw [this]
+  exact isSigmaCompact_iUnion_of_isCompact K.uncurry fun x => (hcomp x.1 x.2)
 -/
 lemma isSigmaCompact_iUnion [Countable ι] (s : ι -> Set X)
     (hcomp : forall i, IsSigmaCompact (s i)) : IsSigmaCompact (⋃ i, s i) := by
@@ -326,6 +332,16 @@ lemma Topology.IsInducing.isSigmaCompact_iff
     -- Suppose f(s) is σ-compact; we want to show s is σ-compact.
     -- Write f(s) as a union of compact sets L n, so s = ⋃ K n with K n := f⁻¹(L n) ∩ s.
     -- Since f is inducing, each K n is compact iff L n is.
+    refine ⟨fun n => f ⁻¹' (L n) inter s, ?_, ?_⟩
+    · intro n
+      have : f '' (f ⁻¹' (L n) inter s) = L n := by
+        rw [image_preimage_inter]; rw [inter_eq_left.mpr]
+        exact (subset_iUnion _ n).trans hcov.le
+      apply hf.isCompact_iff.mpr (this.symm ▸ (hcomp n))
+    · calc ⋃ n, f ⁻¹' L n inter s
+        _ = f ⁻¹' (⋃ n, L n) inter s := by rw [preimage_iUnion, iUnion_inter]
+        _ = f ⁻¹' (f '' s) inter s := by rw [hcov]
+        _ = s := inter_eq_right.mpr (subset_preimage_image _ _)
 
 中文:
 引理 拓扑.是Inducing.isSigmaCompact_iff
@@ -337,6 +353,16 @@ lemma Topology.IsInducing.isSigmaCompact_iff
     -- Suppose f(s) is σ-compact; we want to show s is σ-compact.
     -- Write f(s) as a union of compact sets L n, so s = ⋃ K n with K n := f⁻¹(L n) ∩ s.
     -- Since f is inducing, each K n is compact iff L n is.
+    refine ⟨fun n => f ⁻¹' (L n) inter s, ?_, ?_⟩
+    · intro n
+      have : f '' (f ⁻¹' (L n) inter s) = L n := by
+        rw [image_preimage_inter]; rw [inter_eq_left.mpr]
+        exact (subset_iUnion _ n).trans hcov.le
+      apply hf.isCompact_iff.mpr (this.symm ▸ (hcomp n))
+    · calc ⋃ n, f ⁻¹' L n inter s
+        _ = f ⁻¹' (⋃ n, L n) inter s := by rw [preimage_iUnion, iUnion_inter]
+        _ = f ⁻¹' (f '' s) inter s := by rw [hcov]
+        _ = s := inter_eq_right.mpr (subset_preimage_image _ _)
 
 Depends on / 依赖: continuous, h.image, hf.continuous
 -/
@@ -784,7 +810,8 @@ instance [SigmaCompactSpace
   body: ⟨⟨fun n => Sum.inl '' compactCovering X n union Sum.inr '' compactCovering Y n, fun n =>
       ((isCompact_compactCovering X n).image continuous_inl).union
         ((isCompact_compactCovering Y n).image continuous_inr),
-      by simp only [iUnion_union_distrib, ← image_iUnion, iUnion_compactCovering
+      by simp only [iUnion_union_distrib, ← image_iUnion, iUnion_compactCovering, image_univ,
+        range_inl_union_range_inr]⟩⟩
 
 中文:
 实例 [SigmaCompact空间
@@ -792,7 +819,8 @@ instance [SigmaCompactSpace
   定义体: ⟨⟨fun n => Sum.inl '' compactCovering X n union Sum.inr '' compactCovering Y n, fun n =>
       ((isCompact_compactCovering X n).image continuous_inl).union
         ((isCompact_compactCovering Y n).image continuous_inr),
-      by simp only [iUnion_union_distrib, ← image_iUnion, iUnion_compactCovering
+      by simp only [iUnion_union_distrib, ← image_iUnion, iUnion_compactCovering, image_univ,
+        range_inl_union_range_inr]⟩⟩
 
 Depends on / 依赖: Sum.inl, Sum.inr, compactCovering, continuous_inl, continuous_inr, iUnion_compactCovering, iUnion_union_distrib, image_iUnion, image_univ, isCompact_compactCovering, range_inl_union_range_inr
 -/
@@ -815,7 +843,12 @@ instance [Countable
   · rcases exists_surjective_nat ι with ⟨f, hf⟩
     refine ⟨⟨fun n => ⋃ k <= n, Sigma.mk (f k) '' compactCovering (X (f k)) n, fun n => ?_, ?_⟩⟩
     · refine (finite_le_nat _).isCompact_biUnion fun k _ => ?_
-      exact (isCompact_compactCovering _
+      exact (isCompact_compactCovering _ _).image continuous_sigmaMk
+    · simp only [iUnion_eq_univ_iff, Sigma.forall, mem_iUnion, hf.forall]
+      intro k y
+      rcases exists_mem_compactCovering y with ⟨n, hn⟩
+      refine ⟨max k n, k, le_max_left _ _, mem_image_of_mem _ ?_⟩
+      exact compactCovering_subset _ (le_max_right _ _) hn
 
 中文:
 实例 [可数
@@ -826,7 +859,12 @@ instance [Countable
   · rcases exists_surjective_nat ι with ⟨f, hf⟩
     refine ⟨⟨fun n => ⋃ k <= n, Sigma.mk (f k) '' compactCovering (X (f k)) n, fun n => ?_, ?_⟩⟩
     · refine (finite_le_nat _).isCompact_biUnion fun k _ => ?_
-      exact (isCompact_compactCovering _
+      exact (isCompact_compactCovering _ _).image continuous_sigmaMk
+    · simp only [iUnion_eq_univ_iff, Sigma.forall, mem_iUnion, hf.forall]
+      intro k y
+      rcases exists_mem_compactCovering y with ⟨n, hn⟩
+      refine ⟨max k n, k, le_max_left _ _, mem_image_of_mem _ ?_⟩
+      exact compactCovering_subset _ (le_max_right _ _) hn
 
 Depends on / 依赖: Sigma.forall, Sigma.mk, compactCovering, continuous_sigmaMk, exists_mem_compactCovering, exists_surjective_nat, finite_le_nat, hf.forall, iUnion_eq_univ_iff, infer_instance, isCompact_biUnion, isCompact_compactCovering, isEmpty_or_nonempty, le_max_left, mem_iUnion, mem_image_of_mem
 -/
@@ -968,7 +1006,10 @@ theorem countable_cover_nhdsWithin_of_sigmaCompact
     ((isCompact_compactCovering X n).inter_right hs).elim_nhds_subcover _ fun x hx => hf x hx.right
   refine
     ⟨⋃ n, (t n : Set X), iUnion_subset fun n x hx => (ht n x hx).2,
-      countable_iUnion fun n => (t n
+      countable_iUnion fun n => (t n).countable_toSet, fun x hx => mem_iUnion₂.2 ?_⟩
+  rcases exists_mem_compactCovering x with ⟨n, hn⟩
+  rcases mem_iUnion₂.1 (hsub n ⟨hn, hx⟩) with ⟨y, hyt : y in t n, hyf : x in s -> x in f y⟩
+  exact ⟨y, mem_iUnion.2 ⟨n, hyt⟩, hyf hx⟩
 
 中文:
 定理 countable_cover_nhdsWithin_of_sigmaCompact
@@ -979,7 +1020,10 @@ theorem countable_cover_nhdsWithin_of_sigmaCompact
     ((isCompact_compactCovering X n).inter_right hs).elim_nhds_subcover _ fun x hx => hf x hx.right
   refine
     ⟨⋃ n, (t n : Set X), iUnion_subset fun n x hx => (ht n x hx).2,
-      countable_iUnion fun n => (t n
+      countable_iUnion fun n => (t n).countable_toSet, fun x hx => mem_iUnion₂.2 ?_⟩
+  rcases exists_mem_compactCovering x with ⟨n, hn⟩
+  rcases mem_iUnion₂.1 (hsub n ⟨hn, hx⟩) with ⟨y, hyt : y in t n, hyf : x in s -> x in f y⟩
+  exact ⟨y, mem_iUnion.2 ⟨n, hyt⟩, hyf hx⟩
 
 Depends on / 依赖: countable_iUnion, countable_toSet, elim_nhds_subcover, exists_mem_compactCovering, hx.right, iUnion_subset, inter_right, isCompact_compactCovering, mem_iUnion, mem_inf_principal, nhdsWithin
 -/
@@ -1294,7 +1338,7 @@ theorem exists_superset_of_isCompact
   · intro x _
     rcases K.exists_mem x with ⟨k, hk⟩
     exact mem_iUnion.2 ⟨k + 1, K.subset_interior_succ _ hk⟩
-·
+· exact Monotone.directed_le fun _ _ h => interior_mono K.subset h
 
 中文:
 定理 存在_superset_of_isCompact
@@ -1306,7 +1350,7 @@ theorem exists_superset_of_isCompact
   · intro x _
     rcases K.exists_mem x with ⟨k, hk⟩
     exact mem_iUnion.2 ⟨k + 1, K.subset_interior_succ _ hk⟩
-·
+· exact Monotone.directed_le fun _ _ h => interior_mono K.subset h
 
 Depends on / 依赖: K.exists_mem, K.subset, K.subset_interior_succ, Monotone, Monotone.directed_le, Subset, Subset.trans, directed_le, elim_directed_cover, exists_mem, hs.elim_directed_cover, interior, interior_mono, interior_subset, isOpen_interior, mem_iUnion, subset, subset_interior_succ, subseteq, this.imp
 -/
@@ -1483,7 +1527,11 @@ definition choice
     Nat.recOn n ⟨∅, isCompact_empty⟩ fun n s =>
       ⟨(exists_compact_superset s.2).choose union compactCovering X n,
         (exists_compact_superset s.2).choose_spec.1.union (isCompact_compactCovering _ _)⟩
-  re
+  refine ⟨⟨fun n => (K n).1, fun n => (K n).2, fun n => ?_, ?_⟩⟩
+  · exact Subset.trans (exists_compact_superset (K n).2).choose_spec.2
+      (interior_mono subset_union_left)
+  · refine univ_subset_iff.1 (iUnion_compactCovering X ▸ ?_)
+    exact iUnion_mono' fun n => ⟨n + 1, subset_union_right⟩
 
 中文:
 定义 choice
@@ -1494,7 +1542,11 @@ definition choice
     Nat.recOn n ⟨∅, isCompact_empty⟩ fun n s =>
       ⟨(exists_compact_superset s.2).choose union compactCovering X n,
         (exists_compact_superset s.2).choose_spec.1.union (isCompact_compactCovering _ _)⟩
-  re
+  refine ⟨⟨fun n => (K n).1, fun n => (K n).2, fun n => ?_, ?_⟩⟩
+  · exact Subset.trans (exists_compact_superset (K n).2).choose_spec.2
+      (interior_mono subset_union_left)
+  · refine univ_subset_iff.1 (iUnion_compactCovering X ▸ ?_)
+    exact iUnion_mono' fun n => ⟨n + 1, subset_union_right⟩
 
 Depends on / 依赖: Classical, Classical.choice, IsCompact, Nat.recOn, Subset, Subset.trans, choice, choose_spec, compactCovering, exists_compact_superset, iUnion_compactCovering, interior_mono, isCompact_compactCovering, isCompact_empty, subset_union_left, univ_subset_iff
 -/

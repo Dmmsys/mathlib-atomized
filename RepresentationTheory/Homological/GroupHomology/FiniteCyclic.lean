@@ -65,7 +65,11 @@ definition coinvariantsTensorResolutionIso
       MonoidAlgebra.lhom_ext' fun g => LinearMap.ext_ring (by
     subst h
     by_cases hj : Even (j + 1)
-    · simpa [hj, coi
+    · simpa [hj, coinvariantsTensorMk, ofCoinvariantsTprodLeftRegular, Rep.norm,
+        Representation.norm, ← Module.End.mul_apply, ← map_mul, mul_comm g⁻¹] using
+        Finset.sum_bijective _ (MulEquiv.inv G).bijective (by simp) (by simp)
+    · simp [sub_hom, hj, Rep.applyAsHom, coinvariantsTensorMk, TensorProduct.tmul_sub,
+        ← Module.End.mul_apply, ← map_mul, mul_comm g⁻¹, Module.End.mul_eq_comp]))
 
 中文:
 定义 coinvariantsTensorResolutionIso
@@ -76,7 +80,11 @@ definition coinvariantsTensorResolutionIso
       MonoidAlgebra.lhom_ext' fun g => LinearMap.ext_ring (by
     subst h
     by_cases hj : Even (j + 1)
-    · simpa [hj, coi
+    · simpa [hj, coinvariantsTensorMk, ofCoinvariantsTprodLeftRegular, Rep.norm,
+        Representation.norm, ← Module.End.mul_apply, ← map_mul, mul_comm g⁻¹] using
+        Finset.sum_bijective _ (MulEquiv.inv G).bijective (by simp) (by simp)
+    · simp [sub_hom, hj, Rep.applyAsHom, coinvariantsTensorMk, TensorProduct.tmul_sub,
+        ← Module.End.mul_apply, ← map_mul, mul_comm g⁻¹, Module.End.mul_eq_comp]))
 
 Depends on / 依赖: Finset, Finset.sum_bijective, HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, LinearMap, LinearMap.ext, LinearMap.ext_ring, Module, Module.End.mul_apply, MonoidAlgebra, MonoidAlgebra.lhom_ext, MulEquiv, MulEquiv.inv, Rep.norm, Representation, Representation.norm, bijective, coinvariantsTensorMk, coinvariantsTensor_hom_ext, coinvariantsTprodLeftRegularLEquiv
 -/
@@ -131,14 +139,18 @@ definition groupHomologyIsoEven
   body: groupHomologyIso A i (resolution k g⁻¹ <| (@Subgroup.zpowers_inv G ..).symm ▸ hg) ≪≫
   (HomologicalComplex.homologyMapIso (coinvariantsTensorResolutionIso A g hg) i) ≪≫
   HomologicalComplex.alternatingConstHomologyIsoEven (ModuleCat.of k A.V) (by ext; simp [sub_hom,
-    Rep.applyAsHom, Rep.norm]) (b
+    Rep.applyAsHom, Rep.norm]) (by ext; simp [sub_hom, Rep.applyAsHom, Rep.norm]) _ (by simp)
+    (by induction i generalizing h₀ with | zero => exact (NeZero.ne 0 rfl).elim | succ n _ => simp)
+    hi
 
 中文:
 定义 groupHomologyIsoEven
   定义体: groupHomologyIso A i (resolution k g⁻¹ <| (@Subgroup.zpowers_inv G ..).symm ▸ hg) ≪≫
   (HomologicalComplex.homologyMapIso (coinvariantsTensorResolutionIso A g hg) i) ≪≫
   HomologicalComplex.alternatingConstHomologyIsoEven (ModuleCat.of k A.V) (by ext; simp [sub_hom,
-    Rep.applyAsHom, Rep.norm]) (b
+    Rep.applyAsHom, Rep.norm]) (by ext; simp [sub_hom, Rep.applyAsHom, Rep.norm]) _ (by simp)
+    (by induction i generalizing h₀ with | zero => exact (NeZero.ne 0 rfl).elim | succ n _ => simp)
+    hi
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.alternatingConstHomologyIsoEven, HomologicalComplex.homologyMapIso, ModuleCat, ModuleCat.of, NeZero, NeZero.ne, Rep.applyAsHom, Rep.norm, Subgroup, Subgroup.zpowers_inv, alternatingConstHomologyIsoEven, applyAsHom, coinvariantsTensorResolutionIso, generalizing, groupHomologyIso, homologyMapIso, resolution, sub_hom, zpowers_inv
 -/
@@ -236,7 +248,8 @@ definition groupHomologyIsoOdd
   body: groupHomologyIso A i (resolution k g⁻¹ <| (@Subgroup.zpowers_inv G ..).symm ▸ hg) ≪≫
   (HomologicalComplex.homologyMapIso (coinvariantsTensorResolutionIso A g hg) i) ≪≫
   HomologicalComplex.alternatingConstHomologyIsoOdd (ModuleCat.of k A.V) (by ext; simp [sub_hom,
-    Rep.applyAsHom, Rep.norm]) (by
+    Rep.applyAsHom, Rep.norm]) (by ext; simp [sub_hom, Rep.applyAsHom, Rep.norm]) (by aesop)
+    (by simp) (by rcases hi with ⟨j, rfl⟩; simp) hi
 
 中文:
 定义 groupHomologyIsoOdd
@@ -244,7 +257,8 @@ definition groupHomologyIsoOdd
   定义体: groupHomologyIso A i (resolution k g⁻¹ <| (@Subgroup.zpowers_inv G ..).symm ▸ hg) ≪≫
   (HomologicalComplex.homologyMapIso (coinvariantsTensorResolutionIso A g hg) i) ≪≫
   HomologicalComplex.alternatingConstHomologyIsoOdd (ModuleCat.of k A.V) (by ext; simp [sub_hom,
-    Rep.applyAsHom, Rep.norm]) (by
+    Rep.applyAsHom, Rep.norm]) (by ext; simp [sub_hom, Rep.applyAsHom, Rep.norm]) (by aesop)
+    (by simp) (by rcases hi with ⟨j, rfl⟩; simp) hi
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.alternatingConstHomologyIsoOdd, HomologicalComplex.homologyMapIso, ModuleCat, ModuleCat.of, Rep.applyAsHom, Rep.norm, Subgroup, Subgroup.zpowers_inv, alternatingConstHomologyIsoOdd, applyAsHom, coinvariantsTensorResolutionIso, groupHomologyIso, homologyMapIso, resolution, sub_hom, zpowers_inv
 -/

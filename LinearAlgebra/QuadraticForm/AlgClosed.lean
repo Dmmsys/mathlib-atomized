@@ -39,7 +39,8 @@ definition isometryEquivSumSquares
       rw [← mul_self_eq_zero.ne]; rw [← (IsAlgClosed.exists_eq_mul_self (w i)).choose_spec]
       simpa using h)) ?_
   intro i
-  split_if
+  split_ifs with h <;>
+    simp [h, pow_two, ← (IsAlgClosed.exists_eq_mul_self (w i : K)).choose_spec]
 
 中文:
 定义 isometryEquivSumSquares
@@ -50,7 +51,8 @@ definition isometryEquivSumSquares
       rw [← mul_self_eq_zero.ne]; rw [← (IsAlgClosed.exists_eq_mul_self (w i)).choose_spec]
       simpa using h)) ?_
   intro i
-  split_if
+  split_ifs with h <;>
+    simp [h, pow_two, ← (IsAlgClosed.exists_eq_mul_self (w i : K)).choose_spec]
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.exists_eq_mul_self, Units.mk0, choose_spec, exists_eq_mul_self, isometryEquivWeightedSumSquaresWeightedSumSquares, mul_self_eq_zero, mul_self_eq_zero.ne, pow_two, split_ifs
 -/

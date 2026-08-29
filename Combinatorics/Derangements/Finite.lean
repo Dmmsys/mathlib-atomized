@@ -101,7 +101,15 @@ theorem card_derangements_fin_add_two
     intro a
     rw [Fintype.card_compl_set]
     simp
-  have h2 : card (Fin (n + 2)) = card (Option (Fin (n + 1))) := by simp on
+  have h2 : card (Fin (n + 2)) = card (Option (Fin (n + 1))) := by simp only [card_fin, card_option]
+  -- rewrite the LHS and substitute in our fintype-level equivalence
+  simp only [card_derangements_invariant h2,
+    card_congr
+      (@derangementsRecursionEquiv (Fin (n + 1))
+        _), -- push the cardinality through the Σ and ⊕ so that we can use `card_n`
+    card_sigma,
+    card_sum, card_derangements_invariant (h1 _), Finset.sum_const, nsmul_eq_mul, Finset.card_fin,
+    mul_add, Nat.cast_id]
 
 中文:
 定理 card_derangements_fin_add_two
@@ -112,7 +120,15 @@ theorem card_derangements_fin_add_two
     intro a
     rw [Fintype.card_compl_set]
     simp
-  have h2 : card (Fin (n + 2)) = card (Option (Fin (n + 1))) := by simp on
+  have h2 : card (Fin (n + 2)) = card (Option (Fin (n + 1))) := by simp only [card_fin, card_option]
+  -- rewrite the LHS and substitute in our fintype-level equivalence
+  simp only [card_derangements_invariant h2,
+    card_congr
+      (@derangementsRecursionEquiv (Fin (n + 1))
+        _), -- push the cardinality through the Σ and ⊕ so that we can use `card_n`
+    card_sigma,
+    card_sum, card_derangements_invariant (h1 _), Finset.sum_const, nsmul_eq_mul, Finset.card_fin,
+    mul_add, Nat.cast_id]
 -/
 theorem card_derangements_fin_add_two (n : Nat) :
     card (derangements (Fin (n + 2))) =
@@ -250,7 +266,7 @@ theorem card_derangements_fin_eq_numDerangements
   · rfl
   -- now we have n ≥ 2. rewrite everything in terms of card_derangements, so that we can use
   -- `card_derangements_fin_add_two`
-  rw [numDerangements_add_two]; rw [ca
+  rw [numDerangements_add_two]; rw [card_derangements_fin_add_two]; rw [mul_add]; rw [hyp]; rw [hyp] <;> lia
 
 中文:
 定理 card_derangements_fin_eq_numDerangements
@@ -263,7 +279,7 @@ theorem card_derangements_fin_eq_numDerangements
   · rfl
   -- now we have n ≥ 2. rewrite everything in terms of card_derangements, so that we can use
   -- `card_derangements_fin_add_two`
-  rw [numDerangements_add_two]; rw [ca
+  rw [numDerangements_add_two]; rw [card_derangements_fin_add_two]; rw [mul_add]; rw [hyp]; rw [hyp] <;> lia
 
 Depends on / 依赖: Nat.strongRecOn, strongRecOn
 -/
@@ -312,7 +328,11 @@ theorem numDerangements_sum
   induction n with
   | zero => rfl
   | succ n hn =>
-    rw [Finset.sum_range_succ]; rw [numDerangements_succ]; rw [hn]; rw [Finset.mul_sum]; rw [tsub_self]; rw [Nat.ascFactorial_zero]; rw [Int.ofNat_one]; rw [mul_one]; rw [pow_succ']; rw [neg_one_mul]; rw [sub_eq_add_neg]; rw [add_left_inj]; rw [
+    rw [Finset.sum_range_succ]; rw [numDerangements_succ]; rw [hn]; rw [Finset.mul_sum]; rw [tsub_self]; rw [Nat.ascFactorial_zero]; rw [Int.ofNat_one]; rw [mul_one]; rw [pow_succ']; rw [neg_one_mul]; rw [sub_eq_add_neg]; rw [add_left_inj]; rw [Finset.sum_congr rfl]
+    -- show that (n + 1) * (-1)^x * asc_fac x (n - x) = (-1)^x * asc_fac x (n.succ - x)
+    intro x hx
+    have h_le : x <= n := Finset.mem_range_succ_iff.mp hx
+    rw [Nat.succ_sub h_le]; rw [Nat.ascFactorial_succ]; rw [add_right_comm]; rw [add_tsub_cancel_of_le h_le]; rw [Int.natCast_mul]; rw [Int.natCast_add]; rw [mul_left_comm]; rw [Nat.cast_one]
 
 中文:
 定理 numDerangements_sum
@@ -321,7 +341,11 @@ theorem numDerangements_sum
   induction n with
   | zero => rfl
   | succ n hn =>
-    rw [Finset.sum_range_succ]; rw [numDerangements_succ]; rw [hn]; rw [Finset.mul_sum]; rw [tsub_self]; rw [Nat.ascFactorial_zero]; rw [Int.ofNat_one]; rw [mul_one]; rw [pow_succ']; rw [neg_one_mul]; rw [sub_eq_add_neg]; rw [add_left_inj]; rw [
+    rw [Finset.sum_range_succ]; rw [numDerangements_succ]; rw [hn]; rw [Finset.mul_sum]; rw [tsub_self]; rw [Nat.ascFactorial_zero]; rw [Int.ofNat_one]; rw [mul_one]; rw [pow_succ']; rw [neg_one_mul]; rw [sub_eq_add_neg]; rw [add_left_inj]; rw [Finset.sum_congr rfl]
+    -- show that (n + 1) * (-1)^x * asc_fac x (n - x) = (-1)^x * asc_fac x (n.succ - x)
+    intro x hx
+    have h_le : x <= n := Finset.mem_range_succ_iff.mp hx
+    rw [Nat.succ_sub h_le]; rw [Nat.ascFactorial_succ]; rw [add_right_comm]; rw [add_tsub_cancel_of_le h_le]; rw [Int.natCast_mul]; rw [Int.natCast_add]; rw [mul_left_comm]; rw [Nat.cast_one]
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_congr, Finset.sum_range_succ, Int.ofNat_one, Nat.ascFactorial_zero, add_left_inj, ascFactorial_zero, mul_one, mul_sum, neg_one_mul, numDerangements_succ, ofNat_one, pow_succ, sub_eq_add_neg, sum_congr, sum_range_succ, tsub_self
 -/

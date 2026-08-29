@@ -44,7 +44,12 @@ lemma essSurj_mapComposableArrows_of_hasRightCalculusOfFractions
     | succ n hn =>
       obtain ⟨Y, Z, f, rfl⟩ := ComposableArrows.precomp_surjective Y
       obtain ⟨Y', ⟨e⟩⟩ := hn Y
-      obtain ⟨f', hf'⟩ 
+      obtain ⟨f', hf'⟩ := exists_rightFraction L W
+        ((L.objObjPreimageIso Z).hom ≫ f ≫ (e.app 0).inv)
+      refine ⟨Y'.precomp f'.f,
+        ⟨isoMkSucc (isoOfHom L W _ f'.hs ≪≫ L.objObjPreimageIso Z) e ?_⟩⟩
+      dsimp at hf' ⊢
+      simp [← cancel_mono (e.inv.app 0), hf']
 
 中文:
 引理 essSurj_mapComposableArrows_of_hasRightCalculusOfFractions
@@ -57,7 +62,12 @@ lemma essSurj_mapComposableArrows_of_hasRightCalculusOfFractions
     | succ n hn =>
       obtain ⟨Y, Z, f, rfl⟩ := ComposableArrows.precomp_surjective Y
       obtain ⟨Y', ⟨e⟩⟩ := hn Y
-      obtain ⟨f', hf'⟩ 
+      obtain ⟨f', hf'⟩ := exists_rightFraction L W
+        ((L.objObjPreimageIso Z).hom ≫ f ≫ (e.app 0).inv)
+      refine ⟨Y'.precomp f'.f,
+        ⟨isoMkSucc (isoOfHom L W _ f'.hs ≪≫ L.objObjPreimageIso Z) e ?_⟩⟩
+      dsimp at hf' ⊢
+      simp [← cancel_mono (e.inv.app 0), hf']
 
 Depends on / 依赖: ComposableArrows, ComposableArrows.precomp_surjective, L.objObjPreimageIso, cancel_mono, e.app, e.inv.app, essSurj, exists_rightFraction, isoMkSucc, isoOfHom, objObjPreimageIso, precomp, precomp_surjective
 -/

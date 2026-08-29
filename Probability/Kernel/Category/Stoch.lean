@@ -72,7 +72,14 @@ instance :
   comp_mem κ η hκ hη := by dsimp [StochHom]; infer_instance
   whiskerLeft X Y Z κ hκ := by dsimp [StochHom]; infer_instance
   whiskerRight κ hκ Y := by dsimp [StochHom]; infer_instance
-associator_hom_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measur
+associator_hom_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measurable _
+associator_inv_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measurable _
+  leftUnitor_hom_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
+  leftUnitor_inv_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
+  rightUnitor_hom_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
+  rightUnitor_inv_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
+  braiding_hom_mem X Y := instIsMarkovKernelProdSwap
+  braiding_inv_mem X Y := instIsMarkovKernelProdSwap
 
 中文:
 实例 :
@@ -81,7 +88,14 @@ associator_hom_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measur
   comp_mem κ η hκ hη := by dsimp [StochHom]; infer_instance
   whiskerLeft X Y Z κ hκ := by dsimp [StochHom]; infer_instance
   whiskerRight κ hκ Y := by dsimp [StochHom]; infer_instance
-associator_hom_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measur
+associator_hom_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measurable _
+associator_inv_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measurable _
+  leftUnitor_hom_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
+  leftUnitor_inv_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
+  rightUnitor_hom_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
+  rightUnitor_inv_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
+  braiding_hom_mem X Y := instIsMarkovKernelProdSwap
+  braiding_inv_mem X Y := instIsMarkovKernelProdSwap
 
 Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.map, Kernel, Kernel.id, MeasurableEquiv, MeasurableEquiv.measurable, StochHom, associator_hom_mem, associator_inv_mem, comp_mem, fun_prop, infer_instance, isMarkovKernel_deterministic, leftUnitor_hom_mem, leftUnitor_inv_mem, measurable, whiskerLeft, whiskerRight
 -/

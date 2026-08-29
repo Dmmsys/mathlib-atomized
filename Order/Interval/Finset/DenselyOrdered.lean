@@ -84,7 +84,25 @@ lemma WithBot.denselyOrdered_set_iff_subsingleton
   suffices DenselyOrdered (WithBot.some ⁻¹' s) by
     rintro ⟨x, y, H⟩
     rw [_root_.denselyOrdered_set_iff_subsingleton] at this
-    obtain ⟨z, hz, hz'
+    obtain ⟨z, hz, hz'⟩ := exists_between H
+    have hz0 : (⊥ : WithBot X) < z := by simp [(Subtype.coe_lt_coe.mpr hz).trans_le']
+    replace hz' : WithBot.unbot z.val hz0.ne' < WithBot.unbot y (hz0.trans hz').ne' := by
+      rwa [← WithBot.coe_lt_coe, WithBot.coe_unbot, WithBot.coe_unbot]
+    refine absurd (this ?_ ?_) hz'.ne <;>
+    simp
+  constructor
+  simp only [Subtype.exists, Set.mem_preimage, Subtype.forall, Subtype.mk_lt_mk, exists_and_right,
+    exists_prop]
+  intro x hx y hy hxy
+  have : (⟨_, hx⟩ : s) < ⟨_, hy⟩ := by simp [hxy]
+  obtain ⟨z, hz, hz'⟩ := exists_between this
+  simp only [← Subtype.coe_lt_coe] at hz hz'
+  refine ⟨WithBot.unbot z (hz.trans_le' (by simp)).ne', ⟨?_, ?_⟩, ?_⟩
+  · simp
+  · rw [← WithBot.coe_lt_coe]
+    simp [hz.trans_le]
+  · rw [← WithBot.coe_lt_coe]
+    simp [hz'.trans_le']
 
 中文:
 引理 WithBot.denselyOrdered_set_iff_subsingleton
@@ -95,7 +113,25 @@ lemma WithBot.denselyOrdered_set_iff_subsingleton
   suffices DenselyOrdered (WithBot.some ⁻¹' s) by
     rintro ⟨x, y, H⟩
     rw [_root_.denselyOrdered_set_iff_subsingleton] at this
-    obtain ⟨z, hz, hz'
+    obtain ⟨z, hz, hz'⟩ := exists_between H
+    have hz0 : (⊥ : WithBot X) < z := by simp [(Subtype.coe_lt_coe.mpr hz).trans_le']
+    replace hz' : WithBot.unbot z.val hz0.ne' < WithBot.unbot y (hz0.trans hz').ne' := by
+      rwa [← WithBot.coe_lt_coe, WithBot.coe_unbot, WithBot.coe_unbot]
+    refine absurd (this ?_ ?_) hz'.ne <;>
+    simp
+  constructor
+  simp only [Subtype.exists, Set.mem_preimage, Subtype.forall, Subtype.mk_lt_mk, exists_and_right,
+    exists_prop]
+  intro x hx y hy hxy
+  have : (⟨_, hx⟩ : s) < ⟨_, hy⟩ := by simp [hxy]
+  obtain ⟨z, hz, hz'⟩ := exists_between this
+  simp only [← Subtype.coe_lt_coe] at hz hz'
+  refine ⟨WithBot.unbot z (hz.trans_le' (by simp)).ne', ⟨?_, ?_⟩, ?_⟩
+  · simp
+  · rw [← WithBot.coe_lt_coe]
+    simp [hz.trans_le]
+  · rw [← WithBot.coe_lt_coe]
+    simp [hz'.trans_le']
 
 Depends on / 依赖: DenselyOrdered, Set.subsingleton_coe, Subtype, Subtype.coe_lt_coe.mpr, WithBot, WithBot.coe_lt_coe, WithBot.some, WithBot.unbot, _root_, _root_.denselyOrdered_set_iff_subsingleton, coe_lt_coe, denselyOrdered, denselyOrdered_set_iff_subsingleton, exists_between, h.denselyOrdered, hz0.ne, hz0.trans, nontrivial_iff_lt, not_nontrivial_iff_subsingleton, replace
 -/

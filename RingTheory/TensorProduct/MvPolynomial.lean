@@ -329,7 +329,7 @@ lemma aeval_one_tmul
     simp only [algHom_C, Algebra.TensorProduct.algebraMap_apply]
     rw [← mul_one ((algebraMap R N) a)]; rw [← Algebra.smul_def]; rw [smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
   | add p q hp hq => simp [hp, hq, tmul_add]
-  | mul
+  | mul_X p i h => simp [h]
 
 中文:
 引理 aeval_one_tmul
@@ -340,7 +340,7 @@ lemma aeval_one_tmul
     simp only [algHom_C, Algebra.TensorProduct.algebraMap_apply]
     rw [← mul_one ((algebraMap R N) a)]; rw [← Algebra.smul_def]; rw [smul_tmul]; rw [Algebra.smul_def]; rw [mul_one]
   | add p q hp hq => simp [hp, hq, tmul_add]
-  | mul
+  | mul_X p i h => simp [h]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.algebraMap_apply, Algebra.smul_def, MvPolynomial, MvPolynomial.induction_on, TensorProduct, algHom_C, algebraMap, algebraMap_apply, induction_on, mul_X, mul_one, smul_def, smul_tmul, tmul_add
 -/

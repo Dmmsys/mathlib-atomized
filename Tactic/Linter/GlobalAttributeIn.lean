@@ -176,7 +176,9 @@ definition globalAttributeIn
   for s in stx.topDown do
     if let some (id, nonScopedNorLocal) := getGlobalAttributesIn? s then
       for attr in nonScopedNorLocal do
-  
+        Linter.logLint linter.globalAttributeIn attr m!
+          "Despite the `in`, the attribute '{attr}' is added globally to '{id}'\n\
+          please remove the `in` or make this a `local {attr}`"
 
 中文:
 定义 globalAttributeIn
@@ -189,7 +191,9 @@ definition globalAttributeIn
   for s in stx.topDown do
     if let some (id, nonScopedNorLocal) := getGlobalAttributesIn? s then
       for attr in nonScopedNorLocal do
-  
+        Linter.logLint linter.globalAttributeIn attr m!
+          "Despite the `in`, the attribute '{attr}' is added globally to '{id}'\n\
+          please remove the `in` or make this a `local {attr}`"
 
 Depends on / 依赖: withSetOptionIn
 -/

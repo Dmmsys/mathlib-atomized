@@ -55,7 +55,33 @@ definition OpenPartialHomeomorph.univUnitBall
   target := ball 0 1
   map_source' x _ := by
     have : 0 < 1 + ‖x‖ ^ 2 := by positivity
-    rw [mem_ball_zero_iff]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [abs_inv]; rw [← _root_.div_eq_inv_mul]; rw [div_lt_
+    rw [mem_ball_zero_iff]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [abs_inv]; rw [← _root_.div_eq_inv_mul]; rw [div_lt_one (abs_pos.mpr <| Real.sqrt_ne_zero'.mpr this)]; rw [← abs_norm x]; rw [← sq_lt_sq]; rw [abs_norm]; rw [Real.sq_sqrt this.le]
+    exact lt_one_add _
+  map_target' _ _ := trivial
+  left_inv' x _ := by
+    match_scalars
+    simp [norm_smul]
+    field_simp
+    simp [sq_abs, Real.sq_sqrt (zero_lt_one_add_norm_sq x).le]
+  right_inv' y hy := by
+    have : 0 < 1 - ‖y‖ ^ 2 := by nlinarith [norm_nonneg y, mem_ball_zero_iff.1 hy]
+    match_scalars
+    simp [norm_smul]
+    field_simp
+    simp [field, sq_abs, Real.sq_sqrt this.le]
+  open_source := isOpen_univ
+  open_target := isOpen_ball
+  continuousOn_toFun := by
+    suffices Continuous fun (x : E) => (√(1 + ‖x‖ ^ 2))⁻¹ by fun_prop
+    exact Continuous.inv₀ (by fun_prop) fun x => Real.sqrt_ne_zero'.mpr (by positivity)
+  continuousOn_invFun := by
+    have : forall y in ball (0 : E) 1, √(1 - ‖(y : E)‖ ^ 2) != 0 := fun y hy => by
+      rw [Real.sqrt_ne_zero']
+      nlinarith [norm_nonneg y, mem_ball_zero_iff.1 hy]
+    exact ContinuousOn.smul (ContinuousOn.inv₀
+      (continuousOn_const.sub (continuous_norm.continuousOn.pow _)).sqrt this) continuousOn_id
+
+@[simp]
 
 中文:
 定义 OpenPartialHomeomorph.univUnitBall
@@ -66,7 +92,33 @@ definition OpenPartialHomeomorph.univUnitBall
   target := ball 0 1
   map_source' x _ := by
     have : 0 < 1 + ‖x‖ ^ 2 := by positivity
-    rw [mem_ball_zero_iff]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [abs_inv]; rw [← _root_.div_eq_inv_mul]; rw [div_lt_
+    rw [mem_ball_zero_iff]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [abs_inv]; rw [← _root_.div_eq_inv_mul]; rw [div_lt_one (abs_pos.mpr <| Real.sqrt_ne_zero'.mpr this)]; rw [← abs_norm x]; rw [← sq_lt_sq]; rw [abs_norm]; rw [Real.sq_sqrt this.le]
+    exact lt_one_add _
+  map_target' _ _ := trivial
+  left_inv' x _ := by
+    match_scalars
+    simp [norm_smul]
+    field_simp
+    simp [sq_abs, Real.sq_sqrt (zero_lt_one_add_norm_sq x).le]
+  right_inv' y hy := by
+    have : 0 < 1 - ‖y‖ ^ 2 := by nlinarith [norm_nonneg y, mem_ball_zero_iff.1 hy]
+    match_scalars
+    simp [norm_smul]
+    field_simp
+    simp [field, sq_abs, Real.sq_sqrt this.le]
+  open_source := isOpen_univ
+  open_target := isOpen_ball
+  continuousOn_toFun := by
+    suffices Continuous fun (x : E) => (√(1 + ‖x‖ ^ 2))⁻¹ by fun_prop
+    exact Continuous.inv₀ (by fun_prop) fun x => Real.sqrt_ne_zero'.mpr (by positivity)
+  continuousOn_invFun := by
+    have : forall y in ball (0 : E) 1, √(1 - ‖(y : E)‖ ^ 2) != 0 := fun y hy => by
+      rw [Real.sqrt_ne_zero']
+      nlinarith [norm_nonneg y, mem_ball_zero_iff.1 hy]
+    exact ContinuousOn.smul (ContinuousOn.inv₀
+      (continuousOn_const.sub (continuous_norm.continuousOn.pow _)).sqrt this) continuousOn_id
+
+@[simp]
 -/
 def OpenPartialHomeomorph.univUnitBall : OpenPartialHomeomorph E E where
   toFun x := (√(1 + ‖x‖ ^ 2))⁻¹ • x
@@ -213,7 +265,8 @@ definition unitBallBall
       (IsometryEquiv.vaddConst c).toHomeomorph).toOpenPartialHomeomorphOfImageEq
 (ball 0 1) isOpen_ball (ball c r) by
     change (IsometryEquiv.vaddConst c) ∘ (r • ·) '' ball (0 : E) 1 = ball c r
-    rw [image_comp]; rw [image_smul]; rw [smul_unitBall hr.ne'
+    rw [image_comp]; rw [image_smul]; rw [smul_unitBall hr.ne']; rw [IsometryEquiv.image_ball]
+    simp [abs_of_pos hr]
 
 中文:
 定义 unitBallBall
@@ -222,7 +275,8 @@ definition unitBallBall
       (IsometryEquiv.vaddConst c).toHomeomorph).toOpenPartialHomeomorphOfImageEq
 (ball 0 1) isOpen_ball (ball c r) by
     change (IsometryEquiv.vaddConst c) ∘ (r • ·) '' ball (0 : E) 1 = ball c r
-    rw [image_comp]; rw [image_smul]; rw [smul_unitBall hr.ne'
+    rw [image_comp]; rw [image_smul]; rw [smul_unitBall hr.ne']; rw [IsometryEquiv.image_ball]
+    simp [abs_of_pos hr]
 
 Depends on / 依赖: Homeomorph, Homeomorph.smulOfNeZero, IsometryEquiv, IsometryEquiv.image_ball, IsometryEquiv.vaddConst, abs_of_pos, hr.ne, image_ball, image_comp, image_smul, isOpen_ball, smulOfNeZero, smul_unitBall, toHomeomorph, toOpenPartialHomeomorphOfImageEq, vaddConst
 -/

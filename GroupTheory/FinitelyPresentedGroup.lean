@@ -149,7 +149,7 @@ theorem comap
   clear hS_fin
   obtain ⟨S, hS_fin, rfl⟩ := this
   refine ⟨S union T, hS_fin.union hT_fin, ?_⟩
-  rw [← 
+  rw [← hS]; rw [← map_normalClosure S f hf]; rw [comap_map_eq]; rw [← hT]; rw [normalClosure_union]
 
 中文:
 定理 comap
@@ -162,7 +162,7 @@ theorem comap
   clear hS_fin
   obtain ⟨S, hS_fin, rfl⟩ := this
   refine ⟨S union T, hS_fin.union hT_fin, ?_⟩
-  rw [← 
+  rw [← hS]; rw [← map_normalClosure S f hf]; rw [comap_map_eq]; rw [← hT]; rw [normalClosure_union]
 -/
 protected theorem comap {N : Subgroup H} (hN : N.IsFinitelyNormallyGenerated)
     {f : G ->* H} (hf : Surjective f) (hf' : f.ker.IsFinitelyNormallyGenerated) :

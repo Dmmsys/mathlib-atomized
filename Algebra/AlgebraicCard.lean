@@ -88,7 +88,9 @@ theorem cardinalMk_lift_le_mul
   refine lift_mk_le_lift_mk_mul_of_lift_mk_preimage_le g fun f => ?_
   rw [lift_le_aleph0]; rw [le_aleph0_iff_set_countable]
   suffices MapsTo (↑) (g ⁻¹' {f}) (f.rootSet A) from
-    this.
+    this.countable_of_injOn Subtype.coe_injective.injOn (f.rootSet_finite A).countable
+  rintro x (rfl : g x = f)
+  exact mem_rootSet.2 ⟨hg₁ x, hg₂ x⟩
 
 中文:
 定理 cardinalMk_lift_le_mul
@@ -98,7 +100,9 @@ theorem cardinalMk_lift_le_mul
   refine lift_mk_le_lift_mk_mul_of_lift_mk_preimage_le g fun f => ?_
   rw [lift_le_aleph0]; rw [le_aleph0_iff_set_countable]
   suffices MapsTo (↑) (g ⁻¹' {f}) (f.rootSet A) from
-    this.
+    this.countable_of_injOn Subtype.coe_injective.injOn (f.rootSet_finite A).countable
+  rintro x (rfl : g x = f)
+  exact mem_rootSet.2 ⟨hg₁ x, hg₂ x⟩
 
 Depends on / 依赖: IsAlgebraic, MapsTo, Subtype, Subtype.coe_injective.injOn, coe_injective, coe_prop, countable, countable_of_injOn, f.rootSet, f.rootSet_finite, le_aleph0_iff_set_countable, lift_le_aleph0, lift_mk_le_lift_mk_mul_of_lift_mk_preimage_le, mem_rootSet, mk_uLift, rootSet, rootSet_finite, this.countable_of_injOn, x.coe_prop
 -/

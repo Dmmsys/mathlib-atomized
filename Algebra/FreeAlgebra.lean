@@ -480,7 +480,7 @@ instance instMonoidWithZero
     exact Quot.sound Rel.zero_mul
   mul_zero := by
     rintro ⟨⟩
-    exact Quot.sound
+    exact Quot.sound Rel.mul_zero
 
 中文:
 实例 instMonoidWithZero
@@ -499,7 +499,7 @@ instance instMonoidWithZero
     exact Quot.sound Rel.zero_mul
   mul_zero := by
     rintro ⟨⟩
-    exact Quot.sound
+    exact Quot.sound Rel.mul_zero
 
 Depends on / 依赖: Quot.sound, Rel.mul_assoc, Rel.mul_one, Rel.mul_zero, Rel.one_mul, Rel.zero_mul, mul_assoc, mul_one, mul_zero, one_mul, zero_mul
 -/
@@ -572,7 +572,18 @@ instance instAddCommMonoid
     rw [Quot.sound Rel.add_comm]; rw [Quot.sound Rel.zero_add]
   add_comm := by
     rintro ⟨⟩ ⟨⟩
-    exact Quot.sound R
+    exact Quot.sound Rel.add_comm
+  nsmul_zero := by
+    rintro ⟨⟩
+    change Quot.mk _ (_ * _) = _
+    rw [map_zero]
+    exact Quot.sound Rel.zero_mul
+  nsmul_succ n := by
+    rintro ⟨a⟩
+    dsimp only [HSMul.hSMul, SMul.smul, NSMul.nsmul, Quot.map]
+    rw [map_add]; rw [map_one]; rw [mk_mul]; rw [mk_mul]; rw [← add_one_mul (_ : FreeAlgebra R X)]
+    congr 1
+    exact Quot.sound Rel.add_scalar
 
 中文:
 实例 instAddCommMonoid
@@ -589,7 +600,18 @@ instance instAddCommMonoid
     rw [Quot.sound Rel.add_comm]; rw [Quot.sound Rel.zero_add]
   add_comm := by
     rintro ⟨⟩ ⟨⟩
-    exact Quot.sound R
+    exact Quot.sound Rel.add_comm
+  nsmul_zero := by
+    rintro ⟨⟩
+    change Quot.mk _ (_ * _) = _
+    rw [map_zero]
+    exact Quot.sound Rel.zero_mul
+  nsmul_succ n := by
+    rintro ⟨a⟩
+    dsimp only [HSMul.hSMul, SMul.smul, NSMul.nsmul, Quot.map]
+    rw [map_add]; rw [map_one]; rw [mk_mul]; rw [mk_mul]; rw [← add_one_mul (_ : FreeAlgebra R X)]
+    congr 1
+    exact Quot.sound Rel.add_scalar
 
 Depends on / 依赖: HSMul.hSMul, NSMul.nsmul, Quot.map, Quot.mk, Quot.sound, Rel.add_assoc, Rel.add_comm, Rel.zero_add, Rel.zero_mul, SMul.smul, add_assoc, add_comm, add_zero, map_add, map_one, map_zero, mk_mul, nsmul_succ, nsmul_zero, zero_add
 -/
@@ -683,7 +705,8 @@ instance instAlgebra
       (algebraMap R A)
   commutes' _ := by
     rintro ⟨⟩
-    exact Quot.s
+    exact Quot.sound Rel.central_scalar
+  smul_def' _ _ := rfl
 
 中文:
 实例 instAlgebra
@@ -697,7 +720,8 @@ instance instAlgebra
       (algebraMap R A)
   commutes' _ := by
     rintro ⟨⟩
-    exact Quot.s
+    exact Quot.sound Rel.central_scalar
+  smul_def' _ _ := rfl
 -/
 instance instAlgebra {A} [CommSemiring A] [Algebra R A] : Algebra R (FreeAlgebra A X) where
   algebraMap := ({
@@ -781,7 +805,43 @@ definition liftAux
         rw [add_assoc]
       · change _ + _ = _ + _
         rw [add_comm]
-      
+      · change algebraMap _ _ _ + liftFun R X f _ = liftFun R X f _
+        simp
+      · change _ * _ * _ = _ * (_ * _)
+        rw [mul_assoc]
+      · change algebraMap _ _ _ * liftFun R X f _ = liftFun R X f _
+        simp
+      · change liftFun R X f _ * algebraMap _ _ _ = liftFun R X f _
+        simp
+      · change _ * (_ + _) = _ * _ + _ * _
+        rw [left_distrib]
+      · change (_ + _) * _ = _ * _ + _ * _
+        rw [right_distrib]
+      · change algebraMap _ _ _ * _ = algebraMap _ _ _
+        simp
+      · change _ * algebraMap _ _ _ = algebraMap _ _ _
+        simp
+      repeat
+        change liftFun R X f _ + liftFun R X f _ = _
+        simp only [*]
+        rfl
+      repeat
+        change liftFun R X f _ * liftFun R X f _ = _
+        simp only [*]
+        rfl
+  map_one' := by
+    change algebraMap _ _ _ = _
+    simp
+  map_mul' := by
+    rintro ⟨⟩ ⟨⟩
+    rfl
+  map_zero' := by
+    change algebraMap _ _ _ = _
+    simp
+  map_add' := by
+    rintro ⟨⟩ ⟨⟩
+    rfl
+  commutes' := by tauto
 
 中文:
 定义 liftAux
@@ -795,7 +855,43 @@ definition liftAux
         rw [add_assoc]
       · change _ + _ = _ + _
         rw [add_comm]
-      
+      · change algebraMap _ _ _ + liftFun R X f _ = liftFun R X f _
+        simp
+      · change _ * _ * _ = _ * (_ * _)
+        rw [mul_assoc]
+      · change algebraMap _ _ _ * liftFun R X f _ = liftFun R X f _
+        simp
+      · change liftFun R X f _ * algebraMap _ _ _ = liftFun R X f _
+        simp
+      · change _ * (_ + _) = _ * _ + _ * _
+        rw [left_distrib]
+      · change (_ + _) * _ = _ * _ + _ * _
+        rw [right_distrib]
+      · change algebraMap _ _ _ * _ = algebraMap _ _ _
+        simp
+      · change _ * algebraMap _ _ _ = algebraMap _ _ _
+        simp
+      repeat
+        change liftFun R X f _ + liftFun R X f _ = _
+        simp only [*]
+        rfl
+      repeat
+        change liftFun R X f _ * liftFun R X f _ = _
+        simp only [*]
+        rfl
+  map_one' := by
+    change algebraMap _ _ _ = _
+    simp
+  map_mul' := by
+    rintro ⟨⟩ ⟨⟩
+    rfl
+  map_zero' := by
+    change algebraMap _ _ _ = _
+    simp
+  map_add' := by
+    rintro ⟨⟩ ⟨⟩
+    rfl
+  commutes' := by tauto
 -/
 private def liftAux (f : X -> A) : FreeAlgebra R X ->ₐ[R] A where
   toFun a :=
@@ -868,7 +964,23 @@ definition lift
       rcases t with ⟨x⟩
       induction x with
       | of =>
-        change ((F : FreeAlgebra R X -> A) ∘ ι R) _ =
+        change ((F : FreeAlgebra R X -> A) ∘ ι R) _ = _
+        simp only [Function.comp_apply, ι_def]
+      | ofScalar x =>
+        change algebraMap _ _ x = F (algebraMap _ _ x)
+        rw [AlgHom.commutes F _]
+      | add a b ha hb =>
+        -- Porting note: it is necessary to declare fa and fb explicitly otherwise Lean refuses
+        -- to consider `Quot.mk (Rel R X) ·` as element of FreeAlgebra R X
+        let fa : FreeAlgebra R X := Quot.mk (Rel R X) a
+        let fb : FreeAlgebra R X := Quot.mk (Rel R X) b
+        change liftAux R (F ∘ ι R) (fa + fb) = F (fa + fb)
+        grind
+      | mul a b ha hb =>
+        let fa : FreeAlgebra R X := Quot.mk (Rel R X) a
+        let fb : FreeAlgebra R X := Quot.mk (Rel R X) b
+        change liftAux R (F ∘ ι R) (fa * fb) = F (fa * fb)
+        grind }
 
 中文:
 定义 lift
@@ -884,7 +996,23 @@ definition lift
       rcases t with ⟨x⟩
       induction x with
       | of =>
-        change ((F : FreeAlgebra R X -> A) ∘ ι R) _ =
+        change ((F : FreeAlgebra R X -> A) ∘ ι R) _ = _
+        simp only [Function.comp_apply, ι_def]
+      | ofScalar x =>
+        change algebraMap _ _ x = F (algebraMap _ _ x)
+        rw [AlgHom.commutes F _]
+      | add a b ha hb =>
+        -- Porting note: it is necessary to declare fa and fb explicitly otherwise Lean refuses
+        -- to consider `Quot.mk (Rel R X) ·` as element of FreeAlgebra R X
+        let fa : FreeAlgebra R X := Quot.mk (Rel R X) a
+        let fb : FreeAlgebra R X := Quot.mk (Rel R X) b
+        change liftAux R (F ∘ ι R) (fa + fb) = F (fa + fb)
+        grind
+      | mul a b ha hb =>
+        let fa : FreeAlgebra R X := Quot.mk (Rel R X) a
+        let fb : FreeAlgebra R X := Quot.mk (Rel R X) b
+        change liftAux R (F ∘ ι R) (fa * fb) = F (fa * fb)
+        grind }
 
 Depends on / 依赖: AlgHom, AlgHom.commutes, FreeAlgebra, Function, Function.comp_apply, algebraMap, commutes, comp_apply, invFun, left_inv, liftAux, ofScalar, right_inv
 -/
@@ -1321,7 +1449,10 @@ by_contradiction by
         let f : FreeAlgebra R X ->ₐ[R] R := lift R fun z => if x = z then (1 : R) else 0
 have hfx1 : f (ι R x) = 1 := (lift_ι_apply _ _).trans if_pos rfl
         have hfy1 : f (ι R y) = 1 := hoxy ▸ hfx1
-have hfy0 : f (ι R y)
+have hfy0 : f (ι R y) = 0 := (lift_ι_apply _ _).trans if_neg hxy
+one_ne_zero hfy1.symm.trans hfy0
+
+@[simp]
 
 中文:
 定理 ι_injective
@@ -1333,7 +1464,10 @@ by_contradiction by
         let f : FreeAlgebra R X ->ₐ[R] R := lift R fun z => if x = z then (1 : R) else 0
 have hfx1 : f (ι R x) = 1 := (lift_ι_apply _ _).trans if_pos rfl
         have hfy1 : f (ι R y) = 1 := hoxy ▸ hfx1
-have hfy0 : f (ι R y)
+have hfy0 : f (ι R y) = 0 := (lift_ι_apply _ _).trans if_neg hxy
+one_ne_zero hfy1.symm.trans hfy0
+
+@[simp]
 
 Depends on / 依赖: FreeAlgebra, by_contradiction, classical, hfy1.symm.trans, if_neg, if_pos, one_ne_zero
 -/
@@ -1386,7 +1520,10 @@ theorem ι_ne_algebraMap
   have hf0 : f0 (ι R x) = 0 := lift_ι_apply _ _
   have hf1 : f1 (ι R x) = 1 := lift_ι_apply _ _
   rw [h]; rw [f0.commutes]; rw [Algebra.algebraMap_self_apply] at hf0
-  rw [h]; rw [f1.commutes]
+  rw [h]; rw [f1.commutes]; rw [Algebra.algebraMap_self_apply] at hf1
+  exact zero_ne_one (hf0.symm.trans hf1)
+
+@[simp]
 
 中文:
 定理 ι_ne_algebraMap
@@ -1398,7 +1535,10 @@ theorem ι_ne_algebraMap
   have hf0 : f0 (ι R x) = 0 := lift_ι_apply _ _
   have hf1 : f1 (ι R x) = 1 := lift_ι_apply _ _
   rw [h]; rw [f0.commutes]; rw [Algebra.algebraMap_self_apply] at hf0
-  rw [h]; rw [f1.commutes]
+  rw [h]; rw [f1.commutes]; rw [Algebra.algebraMap_self_apply] at hf1
+  exact zero_ne_one (hf0.symm.trans hf1)
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_self_apply, FreeAlgebra, algebraMap_self_apply, commutes, f0.commutes, f1.commutes, hf0.symm.trans, zero_ne_one
 -/
@@ -1482,7 +1622,19 @@ theorem induction
       add_mem' := add _ _
       algebraMap_mem' := grade0 }
   let of : X -> s := Subtype.coind (ι R) grade1
- 
+  -- the mapping through the subalgebra is the identity
+  have of_id : AlgHom.id R (FreeAlgebra R X) = s.val.comp (lift R of) := by
+    ext
+    simp [of]
+  -- finding a proof is finding an element of the subalgebra
+  suffices a = lift R of a by
+    rw [this]
+    exact Subtype.prop (lift R of a)
+  simp only [AlgHom.ext_iff, AlgHom.coe_id, id_eq, AlgHom.coe_comp, Subalgebra.coe_val,
+    Function.comp_apply] at of_id
+  exact of_id a
+
+@[simp]
 
 中文:
 定理 induction
@@ -1495,7 +1647,19 @@ theorem induction
       add_mem' := add _ _
       algebraMap_mem' := grade0 }
   let of : X -> s := Subtype.coind (ι R) grade1
- 
+  -- the mapping through the subalgebra is the identity
+  have of_id : AlgHom.id R (FreeAlgebra R X) = s.val.comp (lift R of) := by
+    ext
+    simp [of]
+  -- finding a proof is finding an element of the subalgebra
+  suffices a = lift R of a by
+    rw [this]
+    exact Subtype.prop (lift R of a)
+  simp only [AlgHom.ext_iff, AlgHom.coe_id, id_eq, AlgHom.coe_comp, Subalgebra.coe_val,
+    Function.comp_apply] at of_id
+  exact of_id a
+
+@[simp]
 -/
 theorem induction {motive : FreeAlgebra R X -> Prop}
     (grade0 : forall r, motive (algebraMap R (FreeAlgebra R X) r)) (grade1 : forall x, motive (ι R x))
@@ -1535,7 +1699,7 @@ theorem adjoin_range_ι
   | grade0 => exact S.algebraMap_mem _
   | add x y hx hy => exact S.add_mem hx hy
   | mul x y hx hy => exact S.mul_mem hx hy
-  | grade1 x => exact Algebra.subset_ad
+  | grade1 x => exact Algebra.subset_adjoin (Set.mem_range_self _)
 
 中文:
 定理 adjoin_range_ι
@@ -1547,7 +1711,7 @@ theorem adjoin_range_ι
   | grade0 => exact S.algebraMap_mem _
   | add x y hx hy => exact S.add_mem hx hy
   | mul x y hx hy => exact S.mul_mem hx hy
-  | grade1 x => exact Algebra.subset_ad
+  | grade1 x => exact Algebra.subset_adjoin (Set.mem_range_self _)
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.subset_adjoin, FreeAlgebra, S.add_mem, S.algebraMap_mem, S.mul_mem, Set.mem_range_self, Set.range, add_mem, adjoin, algebraMap_mem, grade0, grade1, mem_range_self, mul_mem, subset_adjoin, top_unique
 -/

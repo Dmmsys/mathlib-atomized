@@ -47,7 +47,7 @@ definition mapBifunctor
       map := fun φ ij => (F.obj (X ij.1)).map (φ ij.2) }
   map φ :=
     set_option backward.isDefEq.respectTransparency.types false in
-    { app := fun Y ij => (F.map (φ ij.1)).app (
+    { app := fun Y ij => (F.map (φ ij.1)).app (Y ij.2) }
 
 中文:
 定义 mapBifunctor
@@ -57,7 +57,7 @@ definition mapBifunctor
       map := fun φ ij => (F.obj (X ij.1)).map (φ ij.2) }
   map φ :=
     set_option backward.isDefEq.respectTransparency.types false in
-    { app := fun Y ij => (F.map (φ ij.1)).app (
+    { app := fun Y ij => (F.map (φ ij.1)).app (Y ij.2) }
 
 Depends on / 依赖: F.map, F.obj, HasColimit, HasColimit.mk, backward, backward.isDefEq.respectTransparency.types, cocone, initial, initial.to, isColimit, isDefEq, respectTransparency, set_option
 -/
@@ -317,7 +317,7 @@ definition mapBifunctorMap
       naturality := fun {Y₁ Y₂} ψ => by
         dsimp
         simp only [Functor.map_id, NatTrans.id_app, id_comp, comp_id,
-    
+          ← mapMap_comp, NatTrans.naturality] }
 
 中文:
 定义 mapBifunctorMap
@@ -329,7 +329,7 @@ definition mapBifunctorMap
       naturality := fun {Y₁ Y₂} ψ => by
         dsimp
         simp only [Functor.map_id, NatTrans.id_app, id_comp, comp_id,
-    
+          ← mapMap_comp, NatTrans.naturality] }
 
 Depends on / 依赖: Functor, Functor.map_id, NatTrans, NatTrans.id_app, NatTrans.naturality, comp_id, id_app, id_comp, mapBifunctorMapMap, mapBifunctorMapObj, mapMap_comp, map_id, naturality
 -/

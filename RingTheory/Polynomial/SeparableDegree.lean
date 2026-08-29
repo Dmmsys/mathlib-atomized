@@ -278,7 +278,9 @@ theorem contraction_degree_eq_or_insep
   obtain ⟨s, rfl⟩ := exists_add_of_le hm
   rw [pow_add]; rw [expand_mul]; rw [expand_inj (pow_pos (NeZero.pos q) m)] at h_expand
   subst h_expand
-  rcases isUnit_or_eq_zero_of_separable_expand q s (NeZero
+  rcases isUnit_or_eq_zero_of_separable_expand q s (NeZero.pos q) hg with (h | rfl)
+  · rw [natDegree_expand, natDegree_eq_zero_of_isUnit h, zero_mul]
+  · rw [natDegree_expand, pow_zero, mul_one]
 
 中文:
 定理 contraction_degree_eq_or_insep
@@ -289,7 +291,9 @@ theorem contraction_degree_eq_or_insep
   obtain ⟨s, rfl⟩ := exists_add_of_le hm
   rw [pow_add]; rw [expand_mul]; rw [expand_inj (pow_pos (NeZero.pos q) m)] at h_expand
   subst h_expand
-  rcases isUnit_or_eq_zero_of_separable_expand q s (NeZero
+  rcases isUnit_or_eq_zero_of_separable_expand q s (NeZero.pos q) hg with (h | rfl)
+  · rw [natDegree_expand, natDegree_eq_zero_of_isUnit h, zero_mul]
+  · rw [natDegree_expand, pow_zero, mul_one]
 
 Depends on / 依赖: NeZero, NeZero.pos, exists_add_of_le, expand_inj, expand_mul, h_expand, h_expand.symm, isUnit_or_eq_zero_of_separable_expand, le_of_not_ge, mul_one, natDegree_eq_zero_of_isUnit, natDegree_expand, pow_add, pow_pos, pow_zero, zero_mul
 -/
@@ -320,7 +324,8 @@ theorem IsSeparableContraction.degree_eq
     let g' := Classical.choose hf
     obtain ⟨hg', m', hm'⟩ := Classical.choose_spec hf
     have : Fact q.Prime := ⟨by assumption⟩
-    refine contraction_
+    refine contraction_degree_eq_or_insep q g g' m m' ?_ hg hg'
+    rw [hm]; rw [hm']
 
 中文:
 定理 IsSeparableContraction.degree_eq
@@ -334,7 +339,8 @@ theorem IsSeparableContraction.degree_eq
     let g' := Classical.choose hf
     obtain ⟨hg', m', hm'⟩ := Classical.choose_spec hf
     have : Fact q.Prime := ⟨by assumption⟩
-    refine contraction_
+    refine contraction_degree_eq_or_insep q g g' m m' ?_ hg hg'
+    rw [hm]; rw [hm']
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, IsTopologicalRing, IsValuativeTopology, ValuativeRel, ValuativeRel.nonarchimedeanRing, _root_, _root_.IsValuativeTopology.isTopologicalRing, choose_spec, contraction_degree_eq_or_insep, convert, eq_degree, expand_one, hf.eq_degree, isTopologicalRing, nonarchimedeanRing, one_pow, q.Prime, toIsTopologicalRing
 -/

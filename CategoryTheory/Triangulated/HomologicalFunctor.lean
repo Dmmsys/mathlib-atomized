@@ -241,7 +241,10 @@ instance :
   toIsStableUnderShift := ⟨fun a => ⟨fun X hX b =>
     (hX (a + b)).of_iso (F.mapIso ((shiftFunctorAdd C a b).app X).symm)⟩⟩
   toIsTriangulatedClosed₂ :=
-    ObjectProperty.IsTriangulatedClosed₂.mk' (fun T hT h₁ h₃ n 
+    ObjectProperty.IsTriangulatedClosed₂.mk' (fun T hT h₁ h₃ n =>
+      (F.map_distinguished_exact _
+        (Triangle.shift_distinguished T hT n)).isZero_of_both_zeros
+          ((h₁ n).eq_of_src _ _) ((h₃ n).eq_of_tgt _ _))
 
 中文:
 实例 :
@@ -251,7 +254,10 @@ instance :
   toIsStableUnderShift := ⟨fun a => ⟨fun X hX b =>
     (hX (a + b)).of_iso (F.mapIso ((shiftFunctorAdd C a b).app X).symm)⟩⟩
   toIsTriangulatedClosed₂ :=
-    ObjectProperty.IsTriangulatedClosed₂.mk' (fun T hT h₁ h₃ n 
+    ObjectProperty.IsTriangulatedClosed₂.mk' (fun T hT h₁ h₃ n =>
+      (F.map_distinguished_exact _
+        (Triangle.shift_distinguished T hT n)).isZero_of_both_zeros
+          ((h₁ n).eq_of_src _ _) ((h₃ n).eq_of_tgt _ _))
 
 Depends on / 依赖: isZero_zero
 -/
@@ -306,7 +312,8 @@ lemma isHomological_of_localization
   have : (L ⋙ F).IsHomological := IsHomological.of_iso e.symm
   refine IsHomological.mk' _ (fun T hT => ?_)
   rw [L.distTriang_iff] at hT
-  obtain ⟨T₀, 
+  obtain ⟨T₀, e, hT₀⟩ := hT
+  exact ⟨L.mapTriangle.obj T₀, e, (L ⋙ F).map_distinguished_exact _ hT₀⟩
 
 中文:
 引理 isHomological_of_localization
@@ -317,7 +324,8 @@ lemma isHomological_of_localization
   have : (L ⋙ F).IsHomological := IsHomological.of_iso e.symm
   refine IsHomological.mk' _ (fun T hT => ?_)
   rw [L.distTriang_iff] at hT
-  obtain ⟨T₀, 
+  obtain ⟨T₀, e, hT₀⟩ := hT
+  exact ⟨L.mapTriangle.obj T₀, e, (L ⋙ F).map_distinguished_exact _ hT₀⟩
 
 Depends on / 依赖: F.PreservesZeroMorphisms, F.mapIso, G.mapZeroObject, IsHomological, IsHomological.mk, IsHomological.of_iso, L.distTriang_iff, L.mapTriangle.obj, L.mapZeroObject.symm, PreservesZeroMorphisms, distTriang_iff, e.app, e.symm, mapIso, mapTriangle, mapZeroObject, map_distinguished_exact, of_iso, preservesZeroMorphisms_of_map_zero_object
 -/
@@ -538,7 +546,8 @@ lemma homologySequence_exact₁
     (Iso.refl _) (Iso.refl _) ?_ (by simp)
   dsimp
   simp only [homologySequenceδ, neg_comp, map_neg, comp_id,
-    F.shiftIso
+    F.shiftIso_hom_app_comp_shiftMap_of_add_eq_zero T.mor₃ (-1) (neg_add_cancel 1) n₀ n₁
+      (by lia)]
 
 中文:
 引理 homologySequence_exact₁
@@ -548,7 +557,8 @@ lemma homologySequence_exact₁
     (Iso.refl _) (Iso.refl _) ?_ (by simp)
   dsimp
   simp only [homologySequenceδ, neg_comp, map_neg, comp_id,
-    F.shiftIso
+    F.shiftIso_hom_app_comp_shiftMap_of_add_eq_zero T.mor₃ (-1) (neg_add_cancel 1) n₀ n₁
+      (by lia)]
 
 Depends on / 依赖: F.homologySequence_exact, F.shiftIso, F.shiftIso_hom_app_comp_shiftMap_of_add_eq_zero, Iso.refl, ShortComplex, ShortComplex.exact_of_iso, ShortComplex.isoMk, T.mor, comp_id, exact_of_iso, inv_rot_of_distTriang, map_neg, neg_add_cancel, neg_comp, shiftIso, shiftIso_hom_app_comp_shiftMap_of_add_eq_zero
 -/
@@ -643,7 +653,17 @@ lemma mem_homologicalKernel_trW_iff
   apply (F.homologicalKernel.trW_iff_of_distinguished _ hT).trans
   have h₁ := fun n => (F.homologySequence_exact₃ _ hT n _ rfl).isZero_X₂_iff
   have h₂ := fun n => F.homologySequence_mono_shift_map_mor₁_iff _ hT n _ rfl
-  have h₃ := fun n
+  have h₃ := fun n => F.homologySequence_epi_shift_map_mor₁_iff _ hT n
+  dsimp at h₁ h₂ h₃ ⊢
+  simp only [mem_homologicalKernel_iff, h₁, ← h₂, ← h₃]
+  constructor
+  · intro h n
+    obtain ⟨m, rfl⟩ : exists (m : Int), n = m + 1 := ⟨n - 1, by simp⟩
+    have := (h (m + 1)).1
+    have := (h m).2
+    apply isIso_of_mono_of_epi
+  · intros
+    constructor <;> infer_instance
 
 中文:
 引理 mem_homologicalKernel_trW_iff
@@ -653,7 +673,17 @@ lemma mem_homologicalKernel_trW_iff
   apply (F.homologicalKernel.trW_iff_of_distinguished _ hT).trans
   have h₁ := fun n => (F.homologySequence_exact₃ _ hT n _ rfl).isZero_X₂_iff
   have h₂ := fun n => F.homologySequence_mono_shift_map_mor₁_iff _ hT n _ rfl
-  have h₃ := fun n
+  have h₃ := fun n => F.homologySequence_epi_shift_map_mor₁_iff _ hT n
+  dsimp at h₁ h₂ h₃ ⊢
+  simp only [mem_homologicalKernel_iff, h₁, ← h₂, ← h₃]
+  constructor
+  · intro h n
+    obtain ⟨m, rfl⟩ : exists (m : Int), n = m + 1 := ⟨n - 1, by simp⟩
+    have := (h (m + 1)).1
+    have := (h m).2
+    apply isIso_of_mono_of_epi
+  · intros
+    constructor <;> infer_instance
 
 Depends on / 依赖: F.homologicalKernel.trW_iff_of_distinguished, F.homologySequence_epi_shift_map_mor, F.homologySequence_exact, F.homologySequence_mono_shift_map_mor, distinguished_cocone_triangle, homologicalKernel, mem_homologicalKernel_iff, trW_iff_of_distinguished
 -/
@@ -709,14 +739,14 @@ lemma homologySequenceComposableArrows₅_exact
   proof: exact_of_δ₀ (F.homologySequence_exact₂ T hT n₀).exact_toComposableArrows
     (exact_of_δ₀ (F.homologySequence_exact₃ T hT n₀ n₁ h).exact_toComposableArrows
       (exact_of_δ₀ (F.homologySequence_exact₁ T hT n₀ n₁ h).exact_toComposableArrows
-        (F.homologySequence_exact₂ T hT n₁).exact_toComposa
+        (F.homologySequence_exact₂ T hT n₁).exact_toComposableArrows))
 
 中文:
 引理 homologySequenceComposableArrows₅_exact
   证明: exact_of_δ₀ (F.homologySequence_exact₂ T hT n₀).exact_toComposableArrows
     (exact_of_δ₀ (F.homologySequence_exact₃ T hT n₀ n₁ h).exact_toComposableArrows
       (exact_of_δ₀ (F.homologySequence_exact₁ T hT n₀ n₁ h).exact_toComposableArrows
-        (F.homologySequence_exact₂ T hT n₁).exact_toComposa
+        (F.homologySequence_exact₂ T hT n₁).exact_toComposableArrows))
 
 Depends on / 依赖: F.homologySequence_exact, exact_toComposableArrows
 -/

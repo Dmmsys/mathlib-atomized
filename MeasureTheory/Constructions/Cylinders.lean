@@ -110,7 +110,40 @@ theorem isPiSystem_squareCylinders
   let t₂' := s₂.piecewise t₂ (fun i => univ)
   have h1 : forall i in (s₁ : Set ι), t₁ i = t₁' i :=
     fun i hi => (Finset.piecewise_eq_of_mem _ _ _ hi).symm
-  have h1' : foral
+  have h1' : forall i ∉ (s₁ : Set ι), t₁' i = univ :=
+    fun i hi => Finset.piecewise_eq_of_notMem _ _ _ hi
+  have h2 : forall i in (s₂ : Set ι), t₂ i = t₂' i :=
+    fun i hi => (Finset.piecewise_eq_of_mem _ _ _ hi).symm
+  have h2' : forall i ∉ (s₂ : Set ι), t₂' i = univ :=
+    fun i hi => Finset.piecewise_eq_of_notMem _ _ _ hi
+  rw [Set.pi_congr rfl h1]; rw [Set.pi_congr rfl h2]; rw [← union_pi_inter h1' h2']
+  refine ⟨s₁ union s₂, fun i => t₁' i inter t₂' i, ?_, ?_⟩
+  · rw [mem_univ_pi]
+    intro i
+    have : (t₁' i inter t₂' i).Nonempty := by
+      obtain ⟨f, hf⟩ := hst_nonempty
+      rw [Set.pi_congr rfl h1]; rw [Set.pi_congr rfl h2]; rw [mem_inter_iff]; rw [mem_pi]; rw [mem_pi] at hf
+      refine ⟨f i, ⟨?_, ?_⟩⟩
+      · by_cases hi₁ : i in s₁
+        · exact hf.1 i hi₁
+        · rw [h1' i hi₁]
+          exact mem_univ _
+      · by_cases hi₂ : i in s₂
+        · exact hf.2 i hi₂
+        · rw [h2' i hi₂]
+          exact mem_univ _
+    refine hC i _ ?_ _ ?_ this
+    · by_cases hi₁ : i in s₁
+      · rw [← h1 i hi₁]
+        exact h₁ i (mem_univ _)
+      · rw [h1' i hi₁]
+        exact hC_univ i
+    · by_cases hi₂ : i in s₂
+      · rw [← h2 i hi₂]
+        exact h₂ i (mem_univ _)
+      · rw [h2' i hi₂]
+        exact hC_univ i
+  · rw [Finset.coe_union]
 
 中文:
 定理 isPiSystem_squareCylinders
@@ -122,7 +155,40 @@ theorem isPiSystem_squareCylinders
   let t₂' := s₂.piecewise t₂ (fun i => univ)
   have h1 : forall i in (s₁ : Set ι), t₁ i = t₁' i :=
     fun i hi => (Finset.piecewise_eq_of_mem _ _ _ hi).symm
-  have h1' : foral
+  have h1' : forall i ∉ (s₁ : Set ι), t₁' i = univ :=
+    fun i hi => Finset.piecewise_eq_of_notMem _ _ _ hi
+  have h2 : forall i in (s₂ : Set ι), t₂ i = t₂' i :=
+    fun i hi => (Finset.piecewise_eq_of_mem _ _ _ hi).symm
+  have h2' : forall i ∉ (s₂ : Set ι), t₂' i = univ :=
+    fun i hi => Finset.piecewise_eq_of_notMem _ _ _ hi
+  rw [Set.pi_congr rfl h1]; rw [Set.pi_congr rfl h2]; rw [← union_pi_inter h1' h2']
+  refine ⟨s₁ union s₂, fun i => t₁' i inter t₂' i, ?_, ?_⟩
+  · rw [mem_univ_pi]
+    intro i
+    have : (t₁' i inter t₂' i).Nonempty := by
+      obtain ⟨f, hf⟩ := hst_nonempty
+      rw [Set.pi_congr rfl h1]; rw [Set.pi_congr rfl h2]; rw [mem_inter_iff]; rw [mem_pi]; rw [mem_pi] at hf
+      refine ⟨f i, ⟨?_, ?_⟩⟩
+      · by_cases hi₁ : i in s₁
+        · exact hf.1 i hi₁
+        · rw [h1' i hi₁]
+          exact mem_univ _
+      · by_cases hi₂ : i in s₂
+        · exact hf.2 i hi₂
+        · rw [h2' i hi₂]
+          exact mem_univ _
+    refine hC i _ ?_ _ ?_ this
+    · by_cases hi₁ : i in s₁
+      · rw [← h1 i hi₁]
+        exact h₁ i (mem_univ _)
+      · rw [h1' i hi₁]
+        exact hC_univ i
+    · by_cases hi₂ : i in s₂
+      · rw [← h2 i hi₂]
+        exact h₂ i (mem_univ _)
+      · rw [h2' i hi₂]
+        exact hC_univ i
+  · rw [Finset.coe_union]
 
 Depends on / 依赖: Finset, Finset.piecewise_eq_of_mem, Finset.piecewise_eq_of_notMem, classical, hst_nonempty, piecewise, piecewise_eq_of_mem, piecewise_eq_of_notMem
 -/
@@ -182,7 +248,17 @@ theorem comap_eval_le_generateFrom_squareCylinders_singleton
   simp only [mem_ofPred_eq, mem_image, mem_univ_pi, forall_exists_index, and_imp]
   intro t ht h
   classical
-  refine ⟨fun j => if hji : j = i then by convert! t else uni
+  refine ⟨fun j => if hji : j = i then by convert! t else univ, fun j => ?_, ?_⟩
+  · by_cases hji : j = i
+    · simp only [hji, eq_mpr_eq_cast, dif_pos]
+      convert! ht
+      simp only [cast_heq]
+    · simp only [hji, not_false_iff, dif_neg, MeasurableSet.univ]
+  · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was: `grind` -/
+    simp [h]
 
 中文:
 定理 comap_eval_le_generateFrom_squareCylinders_singleton
@@ -193,7 +269,17 @@ theorem comap_eval_le_generateFrom_squareCylinders_singleton
   simp only [mem_ofPred_eq, mem_image, mem_univ_pi, forall_exists_index, and_imp]
   intro t ht h
   classical
-  refine ⟨fun j => if hji : j = i then by convert! t else uni
+  refine ⟨fun j => if hji : j = i then by convert! t else univ, fun j => ?_, ?_⟩
+  · by_cases hji : j = i
+    · simp only [hji, eq_mpr_eq_cast, dif_pos]
+      convert! ht
+      simp only [cast_heq]
+    · simp only [hji, not_false_iff, dif_neg, MeasurableSet.univ]
+  · #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was: `grind` -/
+    simp [h]
 
 Depends on / 依赖: Before, MeasurableSet, MeasurableSet.univ, MeasurableSpace, MeasurableSpace.comap_eq_generateFrom, MeasurableSpace.generateFrom_mono, adaptation_note, and_imp, cast_heq, classical, comap_eq_generateFrom, convert, dif_neg, dif_pos, eq_mpr_eq_cast, forall_exists_index, generateFrom_mono, mem_image, mem_ofPred_eq, mem_univ_pi
 -/
@@ -233,7 +319,13 @@ theorem generateFrom_squareCylinders
     simp only [mem_univ_pi, mem_ofPred_eq] at h
     exact MeasurableSet.pi (Finset.countable_toSet _) (fun i _ => h i)
   · refine iSup_le fun i => ?_
-    refine (comap_eval_le_generateFrom_squareCylinders
+    refine (comap_eval_le_generateFrom_squareCylinders_singleton α i).trans ?_
+    refine MeasurableSpace.generateFrom_mono ?_
+    rw [← Finset.coe_singleton]; rw [squareCylinders_eq_iUnion_image]
+    exact subset_iUnion
+      (fun (s : Finset ι) =>
+        (fun t : forall i, Set (α i) => (s : Set ι).pi t) '' univ.pi (fun i => Set.ofPred MeasurableSet))
+      ({i} : Finset ι)
 
 中文:
 定理 generateFrom_squareCylinders
@@ -245,7 +337,13 @@ theorem generateFrom_squareCylinders
     simp only [mem_univ_pi, mem_ofPred_eq] at h
     exact MeasurableSet.pi (Finset.countable_toSet _) (fun i _ => h i)
   · refine iSup_le fun i => ?_
-    refine (comap_eval_le_generateFrom_squareCylinders
+    refine (comap_eval_le_generateFrom_squareCylinders_singleton α i).trans ?_
+    refine MeasurableSpace.generateFrom_mono ?_
+    rw [← Finset.coe_singleton]; rw [squareCylinders_eq_iUnion_image]
+    exact subset_iUnion
+      (fun (s : Finset ι) =>
+        (fun t : forall i, Set (α i) => (s : Set ι).pi t) '' univ.pi (fun i => Set.ofPred MeasurableSet))
+      ({i} : Finset ι)
 
 Depends on / 依赖: Finset, Finset.coe_singleton, Finset.countable_toSet, MeasurableSet, MeasurableSet.pi, MeasurableSpace, MeasurableSpace.generateFrom_le_iff, MeasurableSpace.generateFrom_mono, coe_singleton, comap_eval_le_generateFrom_squareCylinders_singleton, countable_toSet, generateFrom_le_iff, generateFrom_mono, iSup_le, le_antisymm, mem_ofPred_eq, mem_univ_pi, squareCylinders_eq_iUnion_image, subset_iUnion
 -/
@@ -385,7 +483,11 @@ theorem cylinder_eq_empty_iff
   have hf : f in S := hS.choose_spec
   classical
   let f' : forall i, α i := fun i => if hi : i in s then f ⟨i, hi⟩ else h_nonempty.some i
-  have 
+  have hf' : f' in cylinder s S := by
+    rw [mem_cylinder]
+    simpa only [Finset.restrict_def, Finset.coe_mem, dif_pos, f']
+  rw [h] at hf'
+  exact notMem_empty _ hf'
 
 中文:
 定理 cylinder_eq_empty_iff
@@ -398,7 +500,11 @@ theorem cylinder_eq_empty_iff
   have hf : f in S := hS.choose_spec
   classical
   let f' : forall i, α i := fun i => if hi : i in s then f ⟨i, hi⟩ else h_nonempty.some i
-  have 
+  have hf' : f' in cylinder s S := by
+    rw [mem_cylinder]
+    simpa only [Finset.restrict_def, Finset.coe_mem, dif_pos, f']
+  rw [h] at hf'
+  exact notMem_empty _ hf'
 
 Depends on / 依赖: Finset, Finset.coe_mem, Finset.restrict_def, choose_spec, classical, coe_mem, cylinder, cylinder_empty, dif_pos, hS.choose_spec, hS.some, h_nonempty, h_nonempty.some, mem_cylinder, nonempty_iff_ne_empty, notMem_empty, restrict_def
 -/
@@ -552,7 +658,7 @@ theorem eq_of_cylinder_eq_of_subset
   classical
   specialize h_eq fun i => if hi : i in I then f ⟨i, hi⟩ else h_nonempty.some i
   have h_mem : forall j : J, ↑j in I := fun j => hJI j.prop
-  simpa only [Finset.restrict_def, Finset.coe_m
+  simpa only [Finset.restrict_def, Finset.coe_mem, dite_true, h_mem] using! h_eq
 
 中文:
 定理 eq_of_cylinder_eq_of_subset
@@ -565,7 +671,7 @@ theorem eq_of_cylinder_eq_of_subset
   classical
   specialize h_eq fun i => if hi : i in I then f ⟨i, hi⟩ else h_nonempty.some i
   have h_mem : forall j : J, ↑j in I := fun j => hJI j.prop
-  simpa only [Finset.restrict_def, Finset.coe_m
+  simpa only [Finset.restrict_def, Finset.coe_mem, dite_true, h_mem] using! h_eq
 
 Depends on / 依赖: Finset, Finset.coe_mem, Finset.restrict_def, Set.ext_iff, classical, coe_mem, dite_true, ext_iff, h_eq, h_mem, h_nonempty, h_nonempty.some, j.prop, mem_cylinder, mem_preimage, restrict_def, specialize
 -/
@@ -901,7 +1007,10 @@ theorem inter_mem_measurableCylinders
   refine ⟨s₁ union s₂,
     Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ inter
       {f | Finset.restrict₂ Finset.subset_union_right f in S₂}, ?_, ?_⟩
-  · refine MeasurableSet.in
+  · refine MeasurableSet.inter ?_ ?_
+    · exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS₁
+    · exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS₂
+  · exact inter_cylinder _ _ _ _
 
 中文:
 定理 inter_mem_measurableCylinders
@@ -914,7 +1023,10 @@ theorem inter_mem_measurableCylinders
   refine ⟨s₁ union s₂,
     Finset.restrict₂ Finset.subset_union_left ⁻¹' S₁ inter
       {f | Finset.restrict₂ Finset.subset_union_right f in S₂}, ?_, ?_⟩
-  · refine MeasurableSet.in
+  · refine MeasurableSet.inter ?_ ?_
+    · exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS₁
+    · exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _) hS₂
+  · exact inter_cylinder _ _ _ _
 
 Depends on / 依赖: Finset, Finset.restrict, Finset.subset_union_left, Finset.subset_union_right, MeasurableSet, MeasurableSet.inter, classical, inter_cylinder, measurable_pi_apply, measurable_pi_lambda, mem_measurableCylinders, subset_union_left, subset_union_right
 -/
@@ -1076,7 +1188,13 @@ theorem generateFrom_measurableCylinders
     exact hSm.cylinder
   · refine iSup_le fun i => ?_
     refine (comap_eval_le_generateFrom_squareCylinders_singleton α i).trans ?_
-    refine Measurab
+    refine MeasurableSpace.generateFrom_mono (fun x => ?_)
+    simp only [singleton_pi, mem_image, mem_pi, mem_univ, mem_ofPred_eq,
+      forall_true_left, mem_measurableCylinders, forall_exists_index, and_imp]
+    rintro t ht rfl
+    refine ⟨{i}, {f | f ⟨i, Finset.mem_singleton_self i⟩ in t i}, measurable_pi_apply _ (ht i), ?_⟩
+    ext1 x
+    simp only [mem_preimage, Function.eval, mem_cylinder, mem_ofPred_eq, Finset.restrict]
 
 中文:
 定理 generateFrom_measurableCylinders
@@ -1087,7 +1205,13 @@ theorem generateFrom_measurableCylinders
     exact hSm.cylinder
   · refine iSup_le fun i => ?_
     refine (comap_eval_le_generateFrom_squareCylinders_singleton α i).trans ?_
-    refine Measurab
+    refine MeasurableSpace.generateFrom_mono (fun x => ?_)
+    simp only [singleton_pi, mem_image, mem_pi, mem_univ, mem_ofPred_eq,
+      forall_true_left, mem_measurableCylinders, forall_exists_index, and_imp]
+    rintro t ht rfl
+    refine ⟨{i}, {f | f ⟨i, Finset.mem_singleton_self i⟩ in t i}, measurable_pi_apply _ (ht i), ?_⟩
+    ext1 x
+    simp only [mem_preimage, Function.eval, mem_cylinder, mem_ofPred_eq, Finset.restrict]
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.generateFrom_le, MeasurableSpace.generateFrom_mono, and_imp, comap_eval_le_generateFrom_squareCylinders_singleton, cylinder, forall_exists_index, forall_true_left, generateFrom_le, generateFrom_mono, hSm.cylinder, iSup_le, le_antisymm, mem_image, mem_measurableCylinders, mem_ofPred_eq, mem_pi, mem_univ, singleton_pi
 -/
@@ -1121,7 +1245,8 @@ theorem measurableCylinders_nat
   refine ⟨t.sup id, Finset.restrict₂ t.subset_Iic_sup_id ⁻¹' S,
     Finset.measurable_restrict₂ _ mS, ?_⟩
   unfold cylinder
-  rw [← pr
+  rw [← preimage_comp]; rw [Finset.restrict₂_comp_restrict]
+  exact mem_singleton _
 
 中文:
 定理 measurableCylinders_nat
@@ -1134,7 +1259,8 @@ theorem measurableCylinders_nat
   refine ⟨t.sup id, Finset.restrict₂ t.subset_Iic_sup_id ⁻¹' S,
     Finset.measurable_restrict₂ _ mS, ?_⟩
   unfold cylinder
-  rw [← pr
+  rw [← preimage_comp]; rw [Finset.restrict₂_comp_restrict]
+  exact mem_singleton _
 
 Depends on / 依赖: Finset, Finset.Iic, Finset.measurable_restrict, Finset.restrict, cylinder, exists_prop, mem_iUnion, mem_measurableCylinders, mem_singleton, preimage_comp, s_eq, subset_Iic_sup_id, t.subset_Iic_sup_id, t.sup
 -/
@@ -1471,7 +1597,18 @@ lemma MeasurableSet.eq_preimage_restrict_countable
     ⟨∅, ∅, by simp⟩ ?_ ?_ ?_ s hs
   · rintro - ⟨I, t, -, rfl⟩
     exact ⟨I, univ.pi (fun i => t i), I.countable_toSet, by ext; simp⟩
-  · rintro - - ⟨I, t, h
+  · rintro - - ⟨I, t, hI, rfl⟩
+    exact ⟨I, tᶜ, hI, by simp⟩
+  intro f df mf hf
+  choose! I t hI hf using hf
+  refine ⟨⋃ n, I n, ⋃ n, (⋃ k, I k).domRestrict '' (f n), countable_iUnion hI, ?_⟩
+  ext x
+  simp only [hf, mem_iUnion, mem_preimage, preimage_iUnion, mem_image]
+  refine ⟨fun ⟨i, hi⟩ => ⟨i, x, hi, rfl⟩, fun ⟨n, x', hn, hx⟩ => ⟨n, ?_⟩⟩
+  have (x : Π i, α i) : (I n).domRestrict x =
+      (fun (x : Π (i : ⋃ k, I k), α i) (i : I n) => x ⟨i.1, subset_iUnion I n i.2⟩)
+      ((⋃ k, I k).domRestrict x) := rfl
+  rwa [this, ← hx, ← this]
 
 中文:
 引理 可测集.eq_preimage_restrict_countable
@@ -1481,7 +1618,18 @@ lemma MeasurableSet.eq_preimage_restrict_countable
     ⟨∅, ∅, by simp⟩ ?_ ?_ ?_ s hs
   · rintro - ⟨I, t, -, rfl⟩
     exact ⟨I, univ.pi (fun i => t i), I.countable_toSet, by ext; simp⟩
-  · rintro - - ⟨I, t, h
+  · rintro - - ⟨I, t, hI, rfl⟩
+    exact ⟨I, tᶜ, hI, by simp⟩
+  intro f df mf hf
+  choose! I t hI hf using hf
+  refine ⟨⋃ n, I n, ⋃ n, (⋃ k, I k).domRestrict '' (f n), countable_iUnion hI, ?_⟩
+  ext x
+  simp only [hf, mem_iUnion, mem_preimage, preimage_iUnion, mem_image]
+  refine ⟨fun ⟨i, hi⟩ => ⟨i, x, hi, rfl⟩, fun ⟨n, x', hn, hx⟩ => ⟨n, ?_⟩⟩
+  have (x : Π i, α i) : (I n).domRestrict x =
+      (fun (x : Π (i : ⋃ k, I k), α i) (i : I n) => x ⟨i.1, subset_iUnion I n i.2⟩)
+      ((⋃ k, I k).domRestrict x) := rfl
+  rwa [this, ← hx, ← this]
 
 Depends on / 依赖: I.countable_toSet, countable_iUnion, countable_toSet, domRestrict, generateFrom_squareCylinders, generateFrom_squareCylinders.symm, induction_on_inter, isPiSystem_measurableSet, isPiSystem_squareCylinders, mem_iUnion, mem_preimage, preimage_iU, univ.pi
 -/

@@ -200,7 +200,8 @@ lemma add_eq_right_of_lt
     _ <= max (f (-x)) (f (x + y)) := hna (-x) (x + y)
     _ < max (f y) (f y) := by
       rw [max_self]; rw [map_neg_eq_map]
-exact max_l
+exact max_lt h_lt lt_of_le_of_ne h1 h
+    _ = f y := max_self (f y)
 
 中文:
 引理 add_eq_right_of_lt
@@ -214,7 +215,8 @@ exact max_l
     _ <= max (f (-x)) (f (x + y)) := hna (-x) (x + y)
     _ < max (f y) (f y) := by
       rw [max_self]; rw [map_neg_eq_map]
-exact max_l
+exact max_lt h_lt lt_of_le_of_ne h1 h
+    _ = f y := max_self (f y)
 
 Depends on / 依赖: h_lt, lt_irrefl, lt_of_le_of_ne, map_neg_eq_map, max_eq_right_of_lt, max_lt, max_self, trans_eq
 -/
@@ -248,7 +250,8 @@ lemma add_eq_left_of_lt
     _ <= max (f (x + y)) (f (-y)) := hna (x + y) (-y)
     _ < max (f x) (f x) := by
       rw [max_self]; rw [map_neg_eq_map]
-      apply ma
+      apply max_lt (lt_of_le_of_ne h1 h) h_lt
+    _ = f x := max_self (f x)
 
 中文:
 引理 add_eq_left_of_lt
@@ -262,7 +265,8 @@ lemma add_eq_left_of_lt
     _ <= max (f (x + y)) (f (-y)) := hna (x + y) (-y)
     _ < max (f x) (f x) := by
       rw [max_self]; rw [map_neg_eq_map]
-      apply ma
+      apply max_lt (lt_of_le_of_ne h1 h) h_lt
+    _ = f x := max_self (f x)
 
 Depends on / 依赖: h_lt, lt_irrefl, lt_of_le_of_ne, map_neg_eq_map, max_eq_left_of_lt, max_lt, max_self, trans_eq
 -/
@@ -327,7 +331,9 @@ lemma add_eq_max_of_ne'
   apply le_antisymm (fna a b)
   rcases le_max_iff.mp (fna (a + b) (-b)) with h | h
   · simpa [max_eq_left (le_of_lt hab)] using h
-  · exact absurd h (not_le.mpr (by simp
+  · exact absurd h (not_le.mpr (by simpa [Neg b] using hab))
+
+omit [Semiring R] in
 
 中文:
 引理 add_eq_max_of_ne'
@@ -338,7 +344,9 @@ lemma add_eq_max_of_ne'
   apply le_antisymm (fna a b)
   rcases le_max_iff.mp (fna (a + b) (-b)) with h | h
   · simpa [max_eq_left (le_of_lt hab)] using h
-  · exact absurd h (not_le.mpr (by simp
+  · exact absurd h (not_le.mpr (by simpa [Neg b] using hab))
+
+omit [Semiring R] in
 
 Depends on / 依赖: absurd, add_comm, generalizing, hne.symm, le_antisymm, le_max_iff, le_max_iff.mp, le_of_lt, lt_of_ne, max_comm, max_eq_left, not_le, not_le.mpr, not_lt, not_lt.mp
 -/
@@ -368,7 +376,12 @@ lemma apply_sum_le_sup
     rw [← le_sup'_iff hs]
 rcases le_max_iff.mp nonarch (l i) (∑ i in s, l i) with h₁ | h₂
     · exact .inl h₁
-· exact .inr l
+· exact .inr le_trans h₂ hind
+
+@[deprecated (since := "2026-04-27")]
+alias apply_sum_le_sup_of_isNonarchimedean := apply_sum_le_sup
+
+omit [Semiring R] in
 
 中文:
 引理 apply_sum_le_sup
@@ -381,7 +394,12 @@ rcases le_max_iff.mp nonarch (l i) (∑ i in s, l i) with h₁ | h₂
     rw [← le_sup'_iff hs]
 rcases le_max_iff.mp nonarch (l i) (∑ i in s, l i) with h₁ | h₂
     · exact .inl h₁
-· exact .inr l
+· exact .inr le_trans h₂ hind
+
+@[deprecated (since := "2026-04-27")]
+alias apply_sum_le_sup_of_isNonarchimedean := apply_sum_le_sup
+
+omit [Semiring R] in
 
 Depends on / 依赖: Nonempty, Nonempty.cons_induction, _iff, cons_induction, exists_eq_or_imp, hnonempty, le_max_iff, le_max_iff.mp, le_sup, le_trans, mem_cons, nonarch, singleton, sum_cons
 -/
@@ -415,7 +433,11 @@ theorem multiset_image_add_of_nonempty
     by_cases h1 : s = 0
     · simp [h1]
     · obtain ⟨w, h2, h3⟩ := h h1
-rcases le_max_iff.mp hna (g a) (Multiset.m
+rcases le_max_iff.mp hna (g a) (Multiset.map g s).sum with h4 | h4
+      · exact .inl h4
+      · exact .inr ⟨w, h2, le_trans h4 h3⟩
+
+omit [Semiring R] in
 
 中文:
 定理 multiset_image_add_of_nonempty
@@ -428,7 +450,11 @@ rcases le_max_iff.mp hna (g a) (Multiset.m
     by_cases h1 : s = 0
     · simp [h1]
     · obtain ⟨w, h2, h3⟩ := h h1
-rcases le_max_iff.mp hna (g a) (Multiset.m
+rcases le_max_iff.mp hna (g a) (Multiset.map g s).sum with h4 | h4
+      · exact .inl h4
+      · exact .inr ⟨w, h2, le_trans h4 h3⟩
+
+omit [Semiring R] in
 
 Depends on / 依赖: Multiset, Multiset.induction_on, Multiset.map, Multiset.map_cons, Multiset.mem_cons, Multiset.sum_cons, exists_eq_or_imp, induction_on, le_max_iff, le_max_iff.mp, le_trans, map_cons, mem_cons, sum_cons
 -/
@@ -550,7 +576,8 @@ theorem multiset_powerset_image_add
   have hb : b <= s ∧ card b = card s - m := by
     rw [← mem_powersetCard]
     exact hb_in (card_pos.mp
-      (card_powersetCard (s.card - m) s ▸ Nat.choose_pos ((card s)
+      (card_powersetCard (s.card - m) s ▸ Nat.choose_pos ((card s).sub_le m)))
+  exact ⟨b, hb.2, fun x hx => mem_of_le hb.left hx, hb_le⟩
 
 中文:
 定理 multiset_powerset_image_add
@@ -561,7 +588,8 @@ theorem multiset_powerset_image_add
   have hb : b <= s ∧ card b = card s - m := by
     rw [← mem_powersetCard]
     exact hb_in (card_pos.mp
-      (card_powersetCard (s.card - m) s ▸ Nat.choose_pos ((card s)
+      (card_powersetCard (s.card - m) s ▸ Nat.choose_pos ((card s).sub_le m)))
+  exact ⟨b, hb.2, fun x hx => mem_of_le hb.left hx, hb_le⟩
 
 Depends on / 依赖: Multiset, Nat.choose_pos, card_pos, card_pos.mp, card_powersetCard, choose_pos, hb.left, hb_in, hb_le, hf_na, hf_na.multiset_image_add, mem_of_le, mem_powersetCard, multiset_image_add, powersetCard, s.card, sub_le, t.prod
 -/
@@ -632,7 +660,9 @@ lemma apply_sum_eq_of_lt
     rw [← Finset.add_sum_erase _ _ hk]
     have hNonempty : (s.erase k).Nonempty :=
       Finset.Nontrivial.erase_nonempty (Finset.one_lt_card_iff_nontrivial.mp (by grind))
-    have hrest_le := IsNonarchimedean.ap
+    have hrest_le := IsNonarchimedean.apply_sum_le_sup fna hNonempty (l := l)
+    simp only [Finset.le_sup'_iff, Finset.mem_erase, ne_eq] at hrest_le
+    rw [add_eq_max_of_ne' f fna f_neg (by grind)]; rw [max_eq_left (le_of_lt (by grind))]
 
 中文:
 引理 apply_sum_eq_of_lt
@@ -644,7 +674,9 @@ lemma apply_sum_eq_of_lt
     rw [← Finset.add_sum_erase _ _ hk]
     have hNonempty : (s.erase k).Nonempty :=
       Finset.Nontrivial.erase_nonempty (Finset.one_lt_card_iff_nontrivial.mp (by grind))
-    have hrest_le := IsNonarchimedean.ap
+    have hrest_le := IsNonarchimedean.apply_sum_le_sup fna hNonempty (l := l)
+    simp only [Finset.le_sup'_iff, Finset.mem_erase, ne_eq] at hrest_le
+    rw [add_eq_max_of_ne' f fna f_neg (by grind)]; rw [max_eq_left (le_of_lt (by grind))]
 
 Depends on / 依赖: Finset, Finset.Nontrivial.erase_nonempty, Finset.add_sum_erase, Finset.card_eq_one.mp, Finset.le_sup, Finset.mem_erase, Finset.one_lt_card_iff_nontrivial.mp, IsNonarchimedean, IsNonarchimedean.apply_sum_le_sup, Nonempty, Nontrivial, _iff, add_eq_max_of_ne, add_sum_erase, apply_sum_le_sup, card_eq_one, classical, erase_nonempty, f_neg, hNonempty
 -/
@@ -673,7 +705,9 @@ theorem add_pow_le
   simp only [Finset.nonempty_range_iff, ne_eq, Nat.succ_ne_zero, not_false_iff, Finset.mem_range,
     forall_true_left] at hm_lt
   refine ⟨m, hm_lt, ?_⟩
-
+  simp only [← add_pow] at hM
+  rw [mul_comm] at hM
+  exact le_trans hM (le_trans (nmul_le hna) (map_mul_le_mul _ _ _))
 
 中文:
 定理 add_pow_le
@@ -684,7 +718,9 @@ theorem add_pow_le
   simp only [Finset.nonempty_range_iff, ne_eq, Nat.succ_ne_zero, not_false_iff, Finset.mem_range,
     forall_true_left] at hm_lt
   refine ⟨m, hm_lt, ?_⟩
-
+  simp only [← add_pow] at hM
+  rw [mul_comm] at hM
+  exact le_trans hM (le_trans (nmul_le hna) (map_mul_le_mul _ _ _))
 
 Depends on / 依赖: Finset, Finset.mem_range, Finset.nonempty_range_iff, Finset.range, Nat.succ_ne_zero, add_pow, finset_image_add, forall_true_left, hm_lt, le_trans, map_mul_le_mul, mem_range, mul_comm, n.choose, ne_eq, nmul_le, nonempty_range_iff, not_false_iff, succ_ne_zero
 -/

@@ -481,7 +481,9 @@ definition NormalExpr.strands
     let ys := (y.map (fun n => n.srcList)).flatten
     -- sanity check
     if xs.length != ys.length then
-      throwError "The number of the start and end points of a string does not
+      throwError "The number of the start and end points of a string does not match."
+    (xs.zip ys).mapIdxM fun k ((n₁, f₁), (n₂, _)) => do
+      return ⟨n₁.hPosTar + k, n₁, n₂, f₁⟩
 
 中文:
 定义 NormalExpr.strands
@@ -493,7 +495,9 @@ definition NormalExpr.strands
     let ys := (y.map (fun n => n.srcList)).flatten
     -- sanity check
     if xs.length != ys.length then
-      throwError "The number of the start and end points of a string does not
+      throwError "The number of the start and end points of a string does not match."
+    (xs.zip ys).mapIdxM fun k ((n₁, f₁), (n₂, _)) => do
+      return ⟨n₁.hPosTar + k, n₁, n₂, f₁⟩
 -/
 def NormalExpr.strands (e : NormalExpr) : CoherenceM ρ (List (List Strand)) := do
   let l ← e.nodes
@@ -656,7 +660,17 @@ definition mkStringDiagram
   /- Add constraints. -/
   for l in nodes do
     for (x₁, x₂) in l.consecutivePairs do
-      addInstruction s!"Left({x₁
+      addInstruction s!"Left({x₁.toPenroseVar}, {x₂.toPenroseVar})"
+  /- Add constraints. -/
+  for (l₁, l₂) in nodes.consecutivePairs do
+    if let some x₁ := l₁.head? then
+      if let some x₂ := l₂.head? then
+        addInstruction s!"Above({x₁.toPenroseVar}, {x₂.toPenroseVar})"
+  /- Add 1-morphisms as strings. -/
+  for l in strands do
+    for s in l do
+      addConstructor "Mor1" s.toPenroseVar
+        "MakeString" [s.startPoint.toPenroseVar, s.endPoint.toPenroseVar]
 
 中文:
 定义 mkStringDiagram
@@ -670,7 +684,17 @@ definition mkStringDiagram
   /- Add constraints. -/
   for l in nodes do
     for (x₁, x₂) in l.consecutivePairs do
-      addInstruction s!"Left({x₁
+      addInstruction s!"Left({x₁.toPenroseVar}, {x₂.toPenroseVar})"
+  /- Add constraints. -/
+  for (l₁, l₂) in nodes.consecutivePairs do
+    if let some x₁ := l₁.head? then
+      if let some x₂ := l₂.head? then
+        addInstruction s!"Above({x₁.toPenroseVar}, {x₂.toPenroseVar})"
+  /- Add 1-morphisms as strings. -/
+  for l in strands do
+    for s in l do
+      addConstructor "Mor1" s.toPenroseVar
+        "MakeString" [s.startPoint.toPenroseVar, s.endPoint.toPenroseVar]
 -/
 def mkStringDiagram (nodes : List (List Node)) (strands : List (List Strand)) :
     DiagramBuilderM PUnit := do
@@ -781,7 +805,10 @@ definition mkKind
   match ctx? with
   | some _ => return .bicategory
   | none =>
-    let ctx? ← BicategoryLike.mkContext
+    let ctx? ← BicategoryLike.mkContext? (ρ := Monoidal.Context) e
+    match ctx? with
+    | some _ => return .monoidal
+    | none => return .none
 
 中文:
 定义 mkKind
@@ -795,7 +822,10 @@ definition mkKind
   match ctx? with
   | some _ => return .bicategory
   | none =>
-    let ctx? ← BicategoryLike.mkContext
+    let ctx? ← BicategoryLike.mkContext? (ρ := Monoidal.Context) e
+    match ctx? with
+    | some _ => return .monoidal
+    | none => return .none
 -/
 def mkKind (e : Expr) : MetaM Kind := do
   let e ← instantiateMVars e
@@ -825,7 +855,23 @@ definition stringM?
     | .monoidal => do
       let some ctx ← BicategoryLike.mkContext? (ρ := Monoidal.Context) e | return none
       CoherenceM.run (ctx := ctx) do
-        let e' := (← Bicategor
+        let e' := (← BicategoryLike.eval k.name (← MkMor₂.ofExpr e)).expr
+        return some (← e'.nodes, ← e'.strands)
+    | .bicategory => do
+      let some ctx ← BicategoryLike.mkContext? (ρ := Bicategory.Context) e | return none
+      CoherenceM.run (ctx := ctx) do
+        let e' := (← BicategoryLike.eval k.name (← MkMor₂.ofExpr e)).expr
+        return some (← e'.nodes, ← e'.strands)
+    | .none => return none)
+  match x with
+  | none => return none
+  | some (nodes, strands) => do
+    DiagramBuilderM.run do
+      mkStringDiagram nodes strands
+      trace[string_diagram] "Penrose substance: \n{(← get).sub}"
+      match ← DiagramBuilderM.buildDiagram dsl sty with
+      | some html => return html
+      | none => return <span>No non-structural morphisms found.</span>
 
 中文:
 定义 stringM?
@@ -837,7 +883,23 @@ definition stringM?
     | .monoidal => do
       let some ctx ← BicategoryLike.mkContext? (ρ := Monoidal.Context) e | return none
       CoherenceM.run (ctx := ctx) do
-        let e' := (← Bicategor
+        let e' := (← BicategoryLike.eval k.name (← MkMor₂.ofExpr e)).expr
+        return some (← e'.nodes, ← e'.strands)
+    | .bicategory => do
+      let some ctx ← BicategoryLike.mkContext? (ρ := Bicategory.Context) e | return none
+      CoherenceM.run (ctx := ctx) do
+        let e' := (← BicategoryLike.eval k.name (← MkMor₂.ofExpr e)).expr
+        return some (← e'.nodes, ← e'.strands)
+    | .none => return none)
+  match x with
+  | none => return none
+  | some (nodes, strands) => do
+    DiagramBuilderM.run do
+      mkStringDiagram nodes strands
+      trace[string_diagram] "Penrose substance: \n{(← get).sub}"
+      match ← DiagramBuilderM.buildDiagram dsl sty with
+      | some html => return html
+      | none => return <span>No non-structural morphisms found.</span>
 -/
 def stringM? (e : Expr) : MetaM (Option Html) := do
   let e ← instantiateMVars e
@@ -879,7 +941,10 @@ definition mkEqHtml
     </div>
     <div className="w-50">
       <details «open»={true}>
-        <summary className="mv2 pointer">String diagram
+        <summary className="mv2 pointer">String diagram for RHS</summary> {rhs}
+      </details>
+    </div>
+  </div>
 
 中文:
 定义 mkEqHtml
@@ -892,7 +957,10 @@ definition mkEqHtml
     </div>
     <div className="w-50">
       <details «open»={true}>
-        <summary className="mv2 pointer">String diagram
+        <summary className="mv2 pointer">String diagram for RHS</summary> {rhs}
+      </details>
+    </div>
+  </div>
 
 Depends on / 依赖: className, details, diagram, pointer, summary
 -/
@@ -1029,7 +1097,9 @@ definition rpc
         g.mvarId.withContext do
           let type ← g.mvarId.getType
           stringEqM? type)
-    match html 
+    match html with
+    | none => return <span>No String Diagram.</span>
+    | some inner => return inner
 
 中文:
 定义 rpc
@@ -1043,7 +1113,9 @@ definition rpc
         g.mvarId.withContext do
           let type ← g.mvarId.getType
           stringEqM? type)
-    match html 
+    match html with
+    | none => return <span>No String Diagram.</span>
+    | some inner => return inner
 
 Depends on / 依赖: Diagram, RequestM, RequestM.asTask, asTask, g.ctx.val.runMetaM, g.mvarId.getType, g.mvarId.withContext, getType, isEmpty, mvarId, props.goals, props.goals.isEmpty, return, runMetaM, stringEqM, unreachable, withContext
 -/
@@ -1114,7 +1186,14 @@ definition elabStringDiagramCmd
     let html ← runTermElabM fun _ => do
       let e ← try mkConstWithFreshMVarLevels (← realizeGlobalConstNoOverloadWithInfo t)
         catch _ => Term.levelMVarToParam (← instantiateMVars (← Term.elabTerm t none))
-      match ← StringDiagram.stringMorOrE
+      match ← StringDiagram.stringMorOrEqM? e with
+      | some html => return html
+      | none => throwError "could not find a morphism or equality: {e}"
+liftCoreM Widget.savePanelWidgetInfo
+      (hash HtmlDisplay.javascript)
+      (return json% { html: $(← Server.RpcEncodable.rpcEncode html) })
+      stx
+  | stx => throwError "Unexpected syntax {stx}."
 
 中文:
 定义 elabStringDiagramCmd
@@ -1124,7 +1203,14 @@ definition elabStringDiagramCmd
     let html ← runTermElabM fun _ => do
       let e ← try mkConstWithFreshMVarLevels (← realizeGlobalConstNoOverloadWithInfo t)
         catch _ => Term.levelMVarToParam (← instantiateMVars (← Term.elabTerm t none))
-      match ← StringDiagram.stringMorOrE
+      match ← StringDiagram.stringMorOrEqM? e with
+      | some html => return html
+      | none => throwError "could not find a morphism or equality: {e}"
+liftCoreM Widget.savePanelWidgetInfo
+      (hash HtmlDisplay.javascript)
+      (return json% { html: $(← Server.RpcEncodable.rpcEncode html) })
+      stx
+  | stx => throwError "Unexpected syntax {stx}."
 -/
 def elabStringDiagramCmd : CommandElab := fun
   | stx@`(#string_diagram $t:term) => do

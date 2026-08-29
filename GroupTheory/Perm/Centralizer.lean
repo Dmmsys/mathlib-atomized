@@ -125,7 +125,10 @@ lemma Subgroup.Centralizer.toConjAct_smul_mem_cycleFactorsFinset
     rw [← Finset.mem_coe]; rw [this]
     simp only [Set.smul_mem_smul_set_iff, Finset.mem_coe, c_mem]
   have := cycleFactorsFinset_conj_eq (ConjAct.toConjAct (k : Perm α)) g
-  rw [ConjAct.toConj
+  rw [ConjAct.toConjAct_smul]; rw [mem_centralizer_singleton_iff.mp k_mem]; rw [mul_assoc] at this
+  simp only [mul_inv_cancel, mul_one] at this
+  conv_lhs => rw [this]
+  simp only [Finset.coe_smul_finset]
 
 中文:
 引理 子群.中心化子.toConjAct_smul_mem_cycleFactorsFinset
@@ -136,7 +139,10 @@ lemma Subgroup.Centralizer.toConjAct_smul_mem_cycleFactorsFinset
     rw [← Finset.mem_coe]; rw [this]
     simp only [Set.smul_mem_smul_set_iff, Finset.mem_coe, c_mem]
   have := cycleFactorsFinset_conj_eq (ConjAct.toConjAct (k : Perm α)) g
-  rw [ConjAct.toConj
+  rw [ConjAct.toConjAct_smul]; rw [mem_centralizer_singleton_iff.mp k_mem]; rw [mul_assoc] at this
+  simp only [mul_inv_cancel, mul_one] at this
+  conv_lhs => rw [this]
+  simp only [Finset.coe_smul_finset]
 
 Depends on / 依赖: ConjAct, ConjAct.toConjAct, ConjAct.toConjAct_smul, Finset, Finset.coe_smul_finset, Finset.mem_coe, Set.smul_mem_smul_set_iff, c_mem, coe_smul_finset, conv_lhs, cycleFactorsFinset, cycleFactorsFinset_conj_eq, g.cycleFactorsFinset, k_mem, mem_centralizer_singleton_iff, mem_centralizer_singleton_iff.mp, mem_coe, mul_assoc, mul_inv_cancel, mul_one
 -/
@@ -169,7 +175,10 @@ definition Subgroup.Centralizer.cycleFactorsFinset_mulAction
     change ConjAct.toConjAct (1 : Perm α) • c.val = c
     simp only [map_one, one_smul]
   mul_smul k l c := by
-    simp only [← Subtype
+    simp only [← Subtype.coe_inj]
+    change ConjAct.toConjAct (k * l : Perm α) • c.val =
+      ConjAct.toConjAct (k : Perm α) • (ConjAct.toConjAct (l : Perm α)) • c.val
+    simp only [map_mul, mul_smul]
 
 中文:
 定义 子群.中心化子.cycleFactorsFinset_mulAction
@@ -181,7 +190,10 @@ definition Subgroup.Centralizer.cycleFactorsFinset_mulAction
     change ConjAct.toConjAct (1 : Perm α) • c.val = c
     simp only [map_one, one_smul]
   mul_smul k l c := by
-    simp only [← Subtype
+    simp only [← Subtype.coe_inj]
+    change ConjAct.toConjAct (k * l : Perm α) • c.val =
+      ConjAct.toConjAct (k : Perm α) • (ConjAct.toConjAct (l : Perm α)) • c.val
+    simp only [map_mul, mul_smul]
 
 Depends on / 依赖: ConjAct, ConjAct.toConjAct, c.val, toConjAct
 -/
@@ -304,6 +316,9 @@ definition range_toPermHom'
     intro c hc
     rw [hσ]; rw [hτ]
   inv_mem' hσ := by
+    simp only [Subtype.forall, Set.mem_ofPred_eq] at hσ ⊢
+    intro c hc
+    rw [← hσ _ (by simp)]
     simp
 
 中文:
@@ -317,6 +332,9 @@ definition range_toPermHom'
     intro c hc
     rw [hσ]; rw [hτ]
   inv_mem' hσ := by
+    simp only [Subtype.forall, Set.mem_ofPred_eq] at hσ ⊢
+    intro c hc
+    rw [← hσ _ (by simp)]
     simp
 
 Depends on / 依赖: c.val.support, support, val.support
@@ -580,7 +598,7 @@ theorem mem_fixedPoints_or_exists_zpow_eq
   rw [Function.mem_fixedPoints_iff]; rw [← ne_eq]; rw [← mem_support]; rw [← cycleOf_mem_cycleFactorsFinset_iff] at hx
   refine ⟨⟨g.cycleOf x, hx⟩, ?_, (a.sameCycle hx)⟩
   rw [mem_support_cycleOf_iff]; rw [← cycleOf_mem_cycleFactorsFinset_iff]
-  sim
+  simp [SameCycle.rfl, hx, and_self]
 
 中文:
 定理 mem_fixedPoints_or_存在_zpow_eq
@@ -591,7 +609,7 @@ theorem mem_fixedPoints_or_exists_zpow_eq
   rw [Function.mem_fixedPoints_iff]; rw [← ne_eq]; rw [← mem_support]; rw [← cycleOf_mem_cycleFactorsFinset_iff] at hx
   refine ⟨⟨g.cycleOf x, hx⟩, ?_, (a.sameCycle hx)⟩
   rw [mem_support_cycleOf_iff]; rw [← cycleOf_mem_cycleFactorsFinset_iff]
-  sim
+  simp [SameCycle.rfl, hx, and_self]
 
 Depends on / 依赖: Classical, Classical.or_iff_not_imp_left, Function, Function.mem_fixedPoints_iff, SameCycle, SameCycle.rfl, a.sameCycle, and_self, cycleOf, cycleOf_mem_cycleFactorsFinset_iff, g.cycleOf, mem_fixedPoints_iff, mem_support, mem_support_cycleOf_iff, ne_eq, or_iff_not_imp_left, sameCycle
 -/
@@ -616,7 +634,20 @@ theorem ofPermHomFun_apply_of_cycleOf_mem
   have hx'' : g.cycleOf x in g.cycleFactorsFinset := hx' ▸ c.prop
   set n := Nat.find (a.sameCycle hx'').exists_nat_pow_eq
   have hn : (g ^ (n : Int)) (a c) = x := by
-    rw [← Nat.find_spec (a.sameCycle hx'').exists_nat_pow_eq]
+    rw [← Nat.find_spec (a.sameCycle hx'').exists_nat_pow_eq]; rw [zpow_natCast]
+    congr
+    rw [← Subtype.coe_inj]; rw [hx']
+  suffices ofPermHomFun a τ x = (g ^ (n : Int)) (a ((τ : Perm g.cycleFactorsFinset) c)) by
+    rw [this]; rw [IsCycleOn.zpow_apply_eq_zpow_apply
+      (isCycleOn_support_of_mem_cycleFactorsFinset ((τ : Perm g.cycleFactorsFinset) c).prop)
+      (mem_support_self a ((τ : Perm g.cycleFactorsFinset) c))]
+    simp only [τ.prop c]
+    rw [← IsCycleOn.zpow_apply_eq_zpow_apply
+      (isCycleOn_support_of_mem_cycleFactorsFinset c.prop) (mem_support_self a c)]
+    rw [hn]; rw [hm]
+  simp only [ofPermHomFun, dif_pos hx'']
+  congr
+  exact hx'.symm
 
 中文:
 定理 ofPermHomFun_apply_of_cycleOf_mem
@@ -626,7 +657,20 @@ theorem ofPermHomFun_apply_of_cycleOf_mem
   have hx'' : g.cycleOf x in g.cycleFactorsFinset := hx' ▸ c.prop
   set n := Nat.find (a.sameCycle hx'').exists_nat_pow_eq
   have hn : (g ^ (n : Int)) (a c) = x := by
-    rw [← Nat.find_spec (a.sameCycle hx'').exists_nat_pow_eq]
+    rw [← Nat.find_spec (a.sameCycle hx'').exists_nat_pow_eq]; rw [zpow_natCast]
+    congr
+    rw [← Subtype.coe_inj]; rw [hx']
+  suffices ofPermHomFun a τ x = (g ^ (n : Int)) (a ((τ : Perm g.cycleFactorsFinset) c)) by
+    rw [this]; rw [IsCycleOn.zpow_apply_eq_zpow_apply
+      (isCycleOn_support_of_mem_cycleFactorsFinset ((τ : Perm g.cycleFactorsFinset) c).prop)
+      (mem_support_self a ((τ : Perm g.cycleFactorsFinset) c))]
+    simp only [τ.prop c]
+    rw [← IsCycleOn.zpow_apply_eq_zpow_apply
+      (isCycleOn_support_of_mem_cycleFactorsFinset c.prop) (mem_support_self a c)]
+    rw [hn]; rw [hm]
+  simp only [ofPermHomFun, dif_pos hx'']
+  congr
+  exact hx'.symm
 
 Depends on / 依赖: IsCycleOn, IsCycleOn.zpow_apply_eq_zpow_apply, Nat.find, Nat.find_spec, Subtype, Subtype.coe_inj, Subtype.prop, a.sameCycle, c.prop, coe_inj, cycleFactorsFinset, cycleOf, cycle_is_cycleOf, exists_nat_pow_eq, find_spec, g.cycleFactorsFinset, g.cycleOf, isCycleOn_sup, ofPermHomFun, sameCycle
 -/
@@ -691,7 +735,23 @@ theorem ofPermHomFun_apply_mem_support_cycle_iff
     suffices forall (d : g.cycleFactorsFinset), x ∉ (d : Perm α).support by
       simp only [this]
     intro d hx'
-    rw [Function.mem_fixedPoints_iff]; rw [← no
+    rw [Function.mem_fixedPoints_iff]; rw [← notMem_support] at hx
+    apply hx
+    exact mem_cycleFactorsFinset_support_le d.prop hx'
+  · rw [ofPermHomFun_apply_of_cycleOf_mem a τ hd hm] --
+    rw [zpow_apply_mem_support_of_mem_cycleFactorsFinset_iff]
+    by_cases h : c = d
+    · simp only [h, hd, mem_support_self]
+    · have H : Disjoint c.val d.val :=
+        cycleFactorsFinset_pairwise_disjoint g c.prop d.prop (Subtype.coe_ne_coe.mpr h)
+      have H' : Disjoint ((τ : Perm g.cycleFactorsFinset) c : Perm α)
+        ((τ : Perm g.cycleFactorsFinset) d : Perm α) :=
+        cycleFactorsFinset_pairwise_disjoint g ((τ : Perm g.cycleFactorsFinset) c).prop
+          ((τ : Perm g.cycleFactorsFinset) d).prop (by
+          intro h'; apply h
+          simpa only [Subtype.coe_inj, EmbeddingLike.apply_eq_iff_eq] using h')
+      rw [disjoint_iff_disjoint_support]; rw [Finset.disjoint_right] at H H'
+      simp only [H hd, H' (mem_support_self a _)]
 
 中文:
 定理 ofPermHomFun_apply_mem_support_cycle_iff
@@ -702,7 +762,23 @@ theorem ofPermHomFun_apply_mem_support_cycle_iff
     suffices forall (d : g.cycleFactorsFinset), x ∉ (d : Perm α).support by
       simp only [this]
     intro d hx'
-    rw [Function.mem_fixedPoints_iff]; rw [← no
+    rw [Function.mem_fixedPoints_iff]; rw [← notMem_support] at hx
+    apply hx
+    exact mem_cycleFactorsFinset_support_le d.prop hx'
+  · rw [ofPermHomFun_apply_of_cycleOf_mem a τ hd hm] --
+    rw [zpow_apply_mem_support_of_mem_cycleFactorsFinset_iff]
+    by_cases h : c = d
+    · simp only [h, hd, mem_support_self]
+    · have H : Disjoint c.val d.val :=
+        cycleFactorsFinset_pairwise_disjoint g c.prop d.prop (Subtype.coe_ne_coe.mpr h)
+      have H' : Disjoint ((τ : Perm g.cycleFactorsFinset) c : Perm α)
+        ((τ : Perm g.cycleFactorsFinset) d : Perm α) :=
+        cycleFactorsFinset_pairwise_disjoint g ((τ : Perm g.cycleFactorsFinset) c).prop
+          ((τ : Perm g.cycleFactorsFinset) d).prop (by
+          intro h'; apply h
+          simpa only [Subtype.coe_inj, EmbeddingLike.apply_eq_iff_eq] using h')
+      rw [disjoint_iff_disjoint_support]; rw [Finset.disjoint_right] at H H'
+      simp only [H hd, H' (mem_support_self a _)]
 
 Depends on / 依赖: Function, Function.mem_fixedPoints_iff, cycleFactorsFinset, d.prop, g.cycleFactorsFinset, mem_cycleFactorsFinset_support_le, mem_fixedPoints_iff, mem_fixedPoints_or_exists_zpow_eq, notMem_support, ofPermHomFun_apply_of_cycleOf_mem, ofPermHomFun_apply_of_mem_fixedPoints, support, zpow_apply_mem_support_of_mem_cycleFactorsFinset_iff
 -/
@@ -743,7 +819,11 @@ theorem ofPermHomFun_commute_zpow_apply
   · rw [ofPermHomFun_apply_of_mem_fixedPoints a τ hx, ofPermHomFun_apply_of_mem_fixedPoints]
     rw [Function.mem_fixedPoints_iff]
     simp only [← mul_apply, ← zpow_one_add, add_comm]
-    conv_rhs => rw [← hx, ← mul_apply, ← zpow_add_
+    conv_rhs => rw [← hx, ← mul_apply, ← zpow_add_one]
+  · obtain ⟨c, hc, m, hm⟩ := hx
+    have hm' : (g ^ (j + m)) (a c) = (g ^ j) x := by rw [zpow_add, mul_apply, hm]
+    rw [ofPermHomFun_apply_of_cycleOf_mem a τ hc hm]; rw [ofPermHomFun_apply_of_cycleOf_mem a τ _ hm']; rw [← mul_apply]; rw [← zpow_add]
+    exact zpow_apply_mem_support_of_mem_cycleFactorsFinset_iff.mpr hc
 
 中文:
 定理 ofPermHomFun_commute_zpow_apply
@@ -753,7 +833,11 @@ theorem ofPermHomFun_commute_zpow_apply
   · rw [ofPermHomFun_apply_of_mem_fixedPoints a τ hx, ofPermHomFun_apply_of_mem_fixedPoints]
     rw [Function.mem_fixedPoints_iff]
     simp only [← mul_apply, ← zpow_one_add, add_comm]
-    conv_rhs => rw [← hx, ← mul_apply, ← zpow_add_
+    conv_rhs => rw [← hx, ← mul_apply, ← zpow_add_one]
+  · obtain ⟨c, hc, m, hm⟩ := hx
+    have hm' : (g ^ (j + m)) (a c) = (g ^ j) x := by rw [zpow_add, mul_apply, hm]
+    rw [ofPermHomFun_apply_of_cycleOf_mem a τ hc hm]; rw [ofPermHomFun_apply_of_cycleOf_mem a τ _ hm']; rw [← mul_apply]; rw [← zpow_add]
+    exact zpow_apply_mem_support_of_mem_cycleFactorsFinset_iff.mpr hc
 
 Depends on / 依赖: Function, Function.mem_fixedPoints_iff, add_comm, conv_rhs, mem_fixedPoints_iff, mem_fixedPoints_or_exists_zpow_eq, mul_apply, ofPermHomFun_apply_of_cycleOf_mem, ofPermHomFun_apply_of_mem_fixedPoints, zpow_add, zpow_add_one, zpow_one_add
 -/
@@ -781,7 +865,8 @@ theorem ofPermHomFun_mul
   · simp only [ofPermHomFun_apply_of_cycleOf_mem a _ hc hm]
     rw [ofPermHomFun_apply_of_cycleOf_mem a _ _ rfl]
     · rfl
-    · rw [zpow_apply_mem_support_of_mem
+    · rw [zpow_apply_mem_support_of_mem_cycleFactorsFinset_iff]
+      apply mem_support_self
 
 中文:
 定理 ofPermHomFun_mul
@@ -792,7 +877,8 @@ theorem ofPermHomFun_mul
   · simp only [ofPermHomFun_apply_of_cycleOf_mem a _ hc hm]
     rw [ofPermHomFun_apply_of_cycleOf_mem a _ _ rfl]
     · rfl
-    · rw [zpow_apply_mem_support_of_mem
+    · rw [zpow_apply_mem_support_of_mem_cycleFactorsFinset_iff]
+      apply mem_support_self
 
 Depends on / 依赖: mem_fixedPoints_or_exists_zpow_eq, mem_support_self, ofPermHomFun_apply_of_cycleOf_mem, ofPermHomFun_apply_of_mem_fixedPoints, zpow_apply_mem_support_of_mem_cycleFactorsFinset_iff
 -/
@@ -847,7 +933,7 @@ definition ofPermHom
     left_inv := fun x => by rw [← ofPermHomFun_mul, inv_mul_cancel, ofPermHomFun_one]
     right_inv := fun x => by rw [← ofPermHomFun_mul, mul_inv_cancel, ofPermHomFun_one] }
   map_one' := ext fun x => ofPermHomFun_one a x
-  map_mul' :
+  map_mul' := fun σ τ => ext fun x => by simp [mul_apply, ofPermHomFun_mul a σ τ x]
 
 中文:
 定义 ofPermHom
@@ -858,7 +944,7 @@ definition ofPermHom
     left_inv := fun x => by rw [← ofPermHomFun_mul, inv_mul_cancel, ofPermHomFun_one]
     right_inv := fun x => by rw [← ofPermHomFun_mul, mul_inv_cancel, ofPermHomFun_one] }
   map_one' := ext fun x => ofPermHomFun_one a x
-  map_mul' :
+  map_mul' := fun σ τ => ext fun x => by simp [mul_apply, ofPermHomFun_mul a σ τ x]
 -/
 noncomputable def ofPermHom : range_toPermHom' g ->* Perm α where
   toFun τ := {
@@ -898,7 +984,20 @@ theorem ofPermHom_support
   · simp only [ofPermHomFun_apply_of_mem_fixedPoints a τ hx, ne_eq, not_true_eq_false, false_iff,
       ← mem_support]
     rintro ⟨c, -, hc⟩
-    rw [Fun
+    rw [Function.mem_fixedPoints_iff] at hx
+    exact mem_support.mp ((mem_cycleFactorsFinset_support_le c.prop) hc) hx
+  · rw [ofPermHomFun_apply_of_cycleOf_mem a τ hc hm]
+    conv_lhs => rw [← hm]
+    rw [(g ^ m).injective.ne_iff]; rw [a.injective.ne_iff]; rw [not_iff_comm]
+    by_cases H : (τ : Perm g.cycleFactorsFinset) c = c
+    · simp only [H, iff_true]
+      push Not
+      intro d hd
+      rw [← notMem_support]
+      have := g.cycleFactorsFinset_pairwise_disjoint c.prop d.prop
+      rw [disjoint_iff_disjoint_support]; rw [Finset.disjoint_left] at this
+      exact this (by lia) hc
+    · simpa only [H, iff_false, not_not] using ⟨c, H, mem_support.mp hc⟩
 
 中文:
 定理 ofPermHom_support
@@ -909,7 +1008,20 @@ theorem ofPermHom_support
   · simp only [ofPermHomFun_apply_of_mem_fixedPoints a τ hx, ne_eq, not_true_eq_false, false_iff,
       ← mem_support]
     rintro ⟨c, -, hc⟩
-    rw [Fun
+    rw [Function.mem_fixedPoints_iff] at hx
+    exact mem_support.mp ((mem_cycleFactorsFinset_support_le c.prop) hc) hx
+  · rw [ofPermHomFun_apply_of_cycleOf_mem a τ hc hm]
+    conv_lhs => rw [← hm]
+    rw [(g ^ m).injective.ne_iff]; rw [a.injective.ne_iff]; rw [not_iff_comm]
+    by_cases H : (τ : Perm g.cycleFactorsFinset) c = c
+    · simp only [H, iff_true]
+      push Not
+      intro d hd
+      rw [← notMem_support]
+      have := g.cycleFactorsFinset_pairwise_disjoint c.prop d.prop
+      rw [disjoint_iff_disjoint_support]; rw [Finset.disjoint_left] at this
+      exact this (by lia) hc
+    · simpa only [H, iff_false, not_not] using ⟨c, H, mem_support.mp hc⟩
 
 Depends on / 依赖: Finset, Finset.mem_biUnion, Function, Function.mem_fixedPoints_iff, a.injecti, c.prop, conv_lhs, false_iff, injecti, injective, injective.ne_iff, mem_biUnion, mem_cycleFactorsFinset_support_le, mem_fixedPoints_iff, mem_fixedPoints_or_exists_zpow_eq, mem_support, mem_support.mp, ne_eq, ne_iff, not_true_eq_false
 -/
@@ -1047,7 +1159,13 @@ theorem toCentralizer_equivariant
   by_cases hx : x in c.val.support
   · rw [(mem_cycleFactorsFinset_iff.mp c.prop).2 x hx]
     have := ofPermHomFun_commute_zpow_apply a τ x 1
-    
+    simp only [zpow_one] at this
+    rw [this]; rw [← (mem_cycleFactorsFinset_iff.mp ((τ : Perm g.cycleFactorsFinset) c).prop).2]
+    rw [ofPermHomFun_apply_mem_support_cycle_iff]
+    exact hx
+  · rw [notMem_support.mp hx, eq_comm, ← notMem_support,
+      ofPermHomFun_apply_mem_support_cycle_iff]
+    exact hx
 
 中文:
 定理 toCentralizer_equivariant
@@ -1058,7 +1176,13 @@ theorem toCentralizer_equivariant
   by_cases hx : x in c.val.support
   · rw [(mem_cycleFactorsFinset_iff.mp c.prop).2 x hx]
     have := ofPermHomFun_commute_zpow_apply a τ x 1
-    
+    simp only [zpow_one] at this
+    rw [this]; rw [← (mem_cycleFactorsFinset_iff.mp ((τ : Perm g.cycleFactorsFinset) c).prop).2]
+    rw [ofPermHomFun_apply_mem_support_cycle_iff]
+    exact hx
+  · rw [notMem_support.mp hx, eq_comm, ← notMem_support,
+      ofPermHomFun_apply_mem_support_cycle_iff]
+    exact hx
 
 Depends on / 依赖: InvMemClass, InvMemClass.coe_inv, Quotient, RingCon, RingCon.Quotient, SMulCommClass, Subtype, Subtype.coe_inj, c.prop, c.val.support, coe_inj, coe_inv, cycleFactorsFinset, eq_comm, g.cycleFactorsFinset, mem_cycleFactorsFinset_iff, mem_cycleFactorsFinset_iff.mp, mul_apply, mul_inv_eq_iff_eq_mul, notMem_support
 -/
@@ -1208,7 +1332,17 @@ theorem nat_card_range_toPermHom
   suffices Fintype.card (toPermHom g).range =
     Fintype.card { k : Perm g.cycleFactorsFinset | sc ∘ k = sc } by
     simp only [Nat.card_eq_fintype_card, this, Set.coe_ofPred, DomMulAct.stabilizer_card', hsc,
-     
+      Finset.univ_eq_attach]
+    simp_rw [← CycleType.count_def]
+    apply Finset.prod_congr _ (fun _ _ => rfl)
+    ext n
+    simp only [Finset.mem_image, Finset.mem_attach,
+        true_and, Subtype.exists, exists_prop, Multiset.mem_toFinset]
+    simp only [cycleType_def, Function.comp_apply, Multiset.mem_map, Finset.mem_val]
+  simp only [Fintype.card_eq_nat_card]
+  congr
+  ext
+  rw [mem_range_toPermHom_iff']; rw [Set.mem_ofPred_eq]
 
 中文:
 定理 nat_card_range_toPermHom
@@ -1218,7 +1352,17 @@ theorem nat_card_range_toPermHom
   suffices Fintype.card (toPermHom g).range =
     Fintype.card { k : Perm g.cycleFactorsFinset | sc ∘ k = sc } by
     simp only [Nat.card_eq_fintype_card, this, Set.coe_ofPred, DomMulAct.stabilizer_card', hsc,
-     
+      Finset.univ_eq_attach]
+    simp_rw [← CycleType.count_def]
+    apply Finset.prod_congr _ (fun _ _ => rfl)
+    ext n
+    simp only [Finset.mem_image, Finset.mem_attach,
+        true_and, Subtype.exists, exists_prop, Multiset.mem_toFinset]
+    simp only [cycleType_def, Function.comp_apply, Multiset.mem_map, Finset.mem_val]
+  simp only [Fintype.card_eq_nat_card]
+  congr
+  ext
+  rw [mem_range_toPermHom_iff']; rw [Set.mem_ofPred_eq]
 
 Depends on / 依赖: CycleType, CycleType.count_def, DomMulAct, DomMulAct.stabilizer_card, Finset, Finset.mem_attach, Finset.mem_image, Finset.prod_congr, Finset.univ_eq_attach, Fintype, Fintype.card, Multiset, Multiset.mem_toFinset, Nat.card_eq_fintype_card, Set.coe_ofPred, Subtype, Subtype.exists, c.val.support, card_eq_fintype_card, classical
 -/
@@ -1279,7 +1423,22 @@ theorem kerParam_apply
   split_ifs with hx
   · have hx' := hx
     rw [cycleOf_mem_cycleFactorsFinset_iff]; rw [mem_support]; rw [Ne]; rw [← Function.mem_fixedPoints_iff] at hx'
-    rw [kerParam]; rw [MonoidHom.noncommCoprod_apply']; rw [mul_apply]; rw [ofSubtype_apply_of_not_mem u hx']; rw [noncommPiCoprod_apply]; rw [
+    rw [kerParam]; rw [MonoidHom.noncommCoprod_apply']; rw [mul_apply]; rw [ofSubtype_apply_of_not_mem u hx']; rw [noncommPiCoprod_apply]; rw [← Finset.noncommProd_erase_mul _ (Finset.mem_univ ⟨g.cycleOf x]; rw [hx⟩)]; rw [mul_apply]; rw [← notMem_support]
+    contrapose hx'
+    obtain ⟨a, ha1, ha2⟩ := mem_support_of_mem_noncommProd_support hx'
+    simp only [Finset.mem_erase, Finset.mem_univ, and_true, Ne, Subtype.ext_iff] at ha1
+    have key := cycleFactorsFinset_pairwise_disjoint g a.2 hx ha1
+    rw [disjoint_iff_disjoint_support]; rw [Finset.disjoint_left] at key
+    obtain ⟨k, hk⟩ := mem_zpowers_iff.mp (v a).2
+    replace ha2 := key (support_zpow_le a.1 k (hk ▸ ha2))
+    obtain ⟨k, hk⟩ := mem_zpowers_iff.mp (v ⟨g.cycleOf x, hx⟩).2
+    rwa [← hk, zpow_apply_mem_support, notMem_support, cycleOf_apply_self] at ha2
+  · rw [cycleOf_mem_cycleFactorsFinset_iff] at hx
+    rw [kerParam]; rw [MonoidHom.noncommCoprod_apply]; rw [mul_apply]; rw [Equiv.apply_eq_iff_eq]; rw [← notMem_support]
+    contrapose hx
+    obtain ⟨a, -, ha⟩ := mem_support_of_mem_noncommProd_support
+      (comm := fun a ha b hb h => g.pairwise_commute_of_mem_zpowers h (v a) (v b) (v a).2 (v b).2) hx
+    exact support_zpowers_of_mem_cycleFactorsFinset_le (v a) ha
 
 中文:
 定理 kerParam_apply
@@ -1288,7 +1447,22 @@ theorem kerParam_apply
   split_ifs with hx
   · have hx' := hx
     rw [cycleOf_mem_cycleFactorsFinset_iff]; rw [mem_support]; rw [Ne]; rw [← Function.mem_fixedPoints_iff] at hx'
-    rw [kerParam]; rw [MonoidHom.noncommCoprod_apply']; rw [mul_apply]; rw [ofSubtype_apply_of_not_mem u hx']; rw [noncommPiCoprod_apply]; rw [
+    rw [kerParam]; rw [MonoidHom.noncommCoprod_apply']; rw [mul_apply]; rw [ofSubtype_apply_of_not_mem u hx']; rw [noncommPiCoprod_apply]; rw [← Finset.noncommProd_erase_mul _ (Finset.mem_univ ⟨g.cycleOf x]; rw [hx⟩)]; rw [mul_apply]; rw [← notMem_support]
+    contrapose hx'
+    obtain ⟨a, ha1, ha2⟩ := mem_support_of_mem_noncommProd_support hx'
+    simp only [Finset.mem_erase, Finset.mem_univ, and_true, Ne, Subtype.ext_iff] at ha1
+    have key := cycleFactorsFinset_pairwise_disjoint g a.2 hx ha1
+    rw [disjoint_iff_disjoint_support]; rw [Finset.disjoint_left] at key
+    obtain ⟨k, hk⟩ := mem_zpowers_iff.mp (v a).2
+    replace ha2 := key (support_zpow_le a.1 k (hk ▸ ha2))
+    obtain ⟨k, hk⟩ := mem_zpowers_iff.mp (v ⟨g.cycleOf x, hx⟩).2
+    rwa [← hk, zpow_apply_mem_support, notMem_support, cycleOf_apply_self] at ha2
+  · rw [cycleOf_mem_cycleFactorsFinset_iff] at hx
+    rw [kerParam]; rw [MonoidHom.noncommCoprod_apply]; rw [mul_apply]; rw [Equiv.apply_eq_iff_eq]; rw [← notMem_support]
+    contrapose hx
+    obtain ⟨a, -, ha⟩ := mem_support_of_mem_noncommProd_support
+      (comm := fun a ha b hb h => g.pairwise_commute_of_mem_zpowers h (v a) (v b) (v a).2 (v b).2) hx
+    exact support_zpowers_of_mem_cycleFactorsFinset_le (v a) ha
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.noncommProd_erase_mul, Function, Function.mem_fixedPoints_iff, MonoidHom, MonoidHom.noncommCoprod_apply, contrapose, cycleOf, cycleOf_mem_cycleFactorsFinset_iff, g.cycleOf, kerParam, mem_fixedPoints_iff, mem_support, mem_support_of_mem_noncommProd_support, mem_univ, mul_apply, noncommCoprod_apply, noncommPiCoprod_apply, noncommProd_erase_mul
 -/
@@ -1332,7 +1506,18 @@ theorem kerParam_injective
     · intro a
       simp only [range_subtype, ne_eq]
       simp only [zpowers_eq_closure, ← closure_iUnion]
-      apply disjoint_closure_of_dis
+      apply disjoint_closure_of_disjoint_support
+      rintro - ⟨-⟩ - ⟨-, ⟨b, rfl⟩, -, ⟨h, rfl⟩, ⟨-⟩⟩
+      rw [← disjoint_iff_disjoint_support]
+      apply cycleFactorsFinset_pairwise_disjoint g a.2 b.2
+      simp only [ne_eq, ← Subtype.ext_iff]
+      exact ne_comm.mp h
+    · exact fun i => subtype_injective _
+  · rw [noncommPiCoprod_range, ← ofSubtype.range.closure_eq]
+    simp only [zpowers_eq_closure, ← closure_iUnion]
+    apply disjoint_closure_of_disjoint_support
+    rintro - ⟨a, rfl⟩ - ⟨-, ⟨b, rfl⟩, ⟨-⟩⟩
+    exact (ofSubtype_support_disjoint a).mono_right (mem_cycleFactorsFinset_support_le b.2)
 
 中文:
 定理 kerParam_injective
@@ -1345,7 +1530,18 @@ theorem kerParam_injective
     · intro a
       simp only [range_subtype, ne_eq]
       simp only [zpowers_eq_closure, ← closure_iUnion]
-      apply disjoint_closure_of_dis
+      apply disjoint_closure_of_disjoint_support
+      rintro - ⟨-⟩ - ⟨-, ⟨b, rfl⟩, -, ⟨h, rfl⟩, ⟨-⟩⟩
+      rw [← disjoint_iff_disjoint_support]
+      apply cycleFactorsFinset_pairwise_disjoint g a.2 b.2
+      simp only [ne_eq, ← Subtype.ext_iff]
+      exact ne_comm.mp h
+    · exact fun i => subtype_injective _
+  · rw [noncommPiCoprod_range, ← ofSubtype.range.closure_eq]
+    simp only [zpowers_eq_closure, ← closure_iUnion]
+    apply disjoint_closure_of_disjoint_support
+    rintro - ⟨a, rfl⟩ - ⟨-, ⟨b, rfl⟩, ⟨-⟩⟩
+    exact (ofSubtype_support_disjoint a).mono_right (mem_cycleFactorsFinset_support_le b.2)
 
 Depends on / 依赖: MonoidHom, MonoidHom.injective_noncommPiCoprod_of_iSupIndep, MonoidHom.noncommCoprod_injective, Subtype, Subtype.ext_iff, closure_iUnion, cycleFactorsFinset_pairwise_disjoint, disjoint_closure_of_disjoint_support, disjoint_iff_disjoint_support, ext_iff, injective_noncommPiCoprod_of_iSupIndep, kerParam, ne_comm, ne_comm.mp, ne_eq, noncommCoprod_injective, ofSubtype_injective, range_subtype, zpowers_eq_closure
 -/
@@ -1382,7 +1578,31 @@ theorem kerParam_range_eq
     · rintro - ⟨a, rfl⟩
       refine ⟨⟨ofSubtype a, ?_⟩, ?_, rfl⟩
       · rw [mem_centralizer_singleton_iff]
-        exact Disjoint.commu
+        exact Disjoint.commute (disjoint_iff_disjoint_support.mpr (ofSubtype_support_disjoint a))
+      · exact Perm.ext fun x => Subtype.ext (disjoint_iff_disjoint_support.mpr
+          ((ofSubtype_support_disjoint a).mono_right
+            (mem_cycleFactorsFinset_support_le x.2))).commute.mul_inv_cancel
+    · intro i
+      refine ⟨⟨i, mem_centralizer_singleton_iff.mpr (self_mem_cycle_factors_commute i.2)⟩, ?_, rfl⟩
+      exact Perm.ext fun x => Subtype.ext (cycleFactorsFinset_mem_commute' g i.2 x.2).mul_inv_cancel
+  · rintro - ⟨p, hp, rfl⟩
+    simp only [coe_subtype]
+    set u : Perm (Function.fixedPoints g) :=
+      subtypePerm p (fun x => apply_mem_fixedPoints_iff_mem_of_mem_centralizer p.2)
+    simp only [SetLike.mem_coe, mem_ker_toPermHom_iff, IsCycle.forall_commute_iff] at hp
+    set v : (c : g.cycleFactorsFinset) -> (Subgroup.zpowers c.val) :=
+      fun c => ⟨ofSubtype
+          (p.1.subtypePerm (Classical.choose (hp c.val c.prop))),
+            Classical.choose_spec (hp c.val c.prop)⟩
+    use (u, v)
+    ext x
+    rw [kerParam_apply]
+    split_ifs with hx
+    · rw [cycleOf_mem_cycleFactorsFinset_iff, mem_support] at hx
+      rw [ofSubtype_apply_of_mem]; rw [subtypePerm_apply]
+      rwa [mem_support, cycleOf_apply_self, ne_eq]
+    · rw [cycleOf_mem_cycleFactorsFinset_iff, notMem_support] at hx
+      rwa [ofSubtype_apply_of_mem, subtypePerm_apply]
 
 中文:
 定理 kerParam_range_eq
@@ -1394,7 +1614,31 @@ theorem kerParam_range_eq
     · rintro - ⟨a, rfl⟩
       refine ⟨⟨ofSubtype a, ?_⟩, ?_, rfl⟩
       · rw [mem_centralizer_singleton_iff]
-        exact Disjoint.commu
+        exact Disjoint.commute (disjoint_iff_disjoint_support.mpr (ofSubtype_support_disjoint a))
+      · exact Perm.ext fun x => Subtype.ext (disjoint_iff_disjoint_support.mpr
+          ((ofSubtype_support_disjoint a).mono_right
+            (mem_cycleFactorsFinset_support_le x.2))).commute.mul_inv_cancel
+    · intro i
+      refine ⟨⟨i, mem_centralizer_singleton_iff.mpr (self_mem_cycle_factors_commute i.2)⟩, ?_, rfl⟩
+      exact Perm.ext fun x => Subtype.ext (cycleFactorsFinset_mem_commute' g i.2 x.2).mul_inv_cancel
+  · rintro - ⟨p, hp, rfl⟩
+    simp only [coe_subtype]
+    set u : Perm (Function.fixedPoints g) :=
+      subtypePerm p (fun x => apply_mem_fixedPoints_iff_mem_of_mem_centralizer p.2)
+    simp only [SetLike.mem_coe, mem_ker_toPermHom_iff, IsCycle.forall_commute_iff] at hp
+    set v : (c : g.cycleFactorsFinset) -> (Subgroup.zpowers c.val) :=
+      fun c => ⟨ofSubtype
+          (p.1.subtypePerm (Classical.choose (hp c.val c.prop))),
+            Classical.choose_spec (hp c.val c.prop)⟩
+    use (u, v)
+    ext x
+    rw [kerParam_apply]
+    split_ifs with hx
+    · rw [cycleOf_mem_cycleFactorsFinset_iff, mem_support] at hx
+      rw [ofSubtype_apply_of_mem]; rw [subtypePerm_apply]
+      rwa [mem_support, cycleOf_apply_self, ne_eq]
+    · rw [cycleOf_mem_cycleFactorsFinset_iff, notMem_support] at hx
+      rwa [ofSubtype_apply_of_mem, subtypePerm_apply]
 
 Depends on / 依赖: Disjoint, Disjoint.commute, MonoidHom, MonoidHom.noncommCoprod_range, Perm.ext, Subtype, Subtype.ext, commute, disjoint_iff_disjoint_support, disjoint_iff_disjoint_support.mpr, iSup_le_iff, kerParam, le_antisymm, mem_centralizer_singleton_iff, mem_cycleFactorsFinset_support_le, mono_right, noncommCoprod_range, noncommPiCoprod_range, ofSubtype, ofSubtype_support_disjoint
 -/
@@ -1465,7 +1709,9 @@ theorem kerParam_range_card
   rw [Fintype.card_coeSort_range (kerParam_injective g)]
   rw [Fintype.card_prod]; rw [Fintype.card_perm]; rw [Fintype.card_pi]; rw [card_fixedPoints]
   apply congr_arg
-  rw [Finset.univ_eq_attach]; rw [g.cycleFactorsFinset.prod_attach (fun i => Fintype.card (zpowers i))]; rw [cycleType]; rw [Fin
+  rw [Finset.univ_eq_attach]; rw [g.cycleFactorsFinset.prod_attach (fun i => Fintype.card (zpowers i))]; rw [cycleType]; rw [Finset.prod_map_val]
+  refine Finset.prod_congr rfl (fun x hx => ?_)
+  rw [Fintype.card_zpowers]; rw [(mem_cycleFactorsFinset_iff.mp hx).1.orderOf]; rw [Function.comp_apply]
 
 中文:
 定理 kerParam_range_card
@@ -1474,7 +1720,9 @@ theorem kerParam_range_card
   rw [Fintype.card_coeSort_range (kerParam_injective g)]
   rw [Fintype.card_prod]; rw [Fintype.card_perm]; rw [Fintype.card_pi]; rw [card_fixedPoints]
   apply congr_arg
-  rw [Finset.univ_eq_attach]; rw [g.cycleFactorsFinset.prod_attach (fun i => Fintype.card (zpowers i))]; rw [cycleType]; rw [Fin
+  rw [Finset.univ_eq_attach]; rw [g.cycleFactorsFinset.prod_attach (fun i => Fintype.card (zpowers i))]; rw [cycleType]; rw [Finset.prod_map_val]
+  refine Finset.prod_congr rfl (fun x hx => ?_)
+  rw [Fintype.card_zpowers]; rw [(mem_cycleFactorsFinset_iff.mp hx).1.orderOf]; rw [Function.comp_apply]
 
 Depends on / 依赖: Finset, Finset.prod_congr, Finset.prod_map_val, Finset.univ_eq_attach, Fintype, Fintype.card, Fintype.card_coeSort_range, Fintype.card_perm, Fintype.card_pi, Fintype.card_prod, Fintype.card_zpowers, Function, Function.comp_apply, card_coeSort_range, card_fixedPoints, card_perm, card_pi, card_prod, card_zpowers, comp_apply
 -/
@@ -1503,12 +1751,14 @@ theorem `sign_kerParam_apply_apply` / 定理 `sign_kerParam_apply_apply`
 English:
 theorem sign_kerParam_apply_apply
   proof: by
-  rw [kerParam]; rw [MonoidHom.noncommCoprod_apply]; rw [← Prod.fst_mul_snd ⟨k]; rw [v⟩]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rw [map_mul]; rw [sign_ofSubtype]; rw [Finset.univ_eq_attach]; rw [mul_right_inj]; rw [← MonoidHom.comp_apply]; rw [Subgroup.noncommPiCoprod]; rw [MonoidHom.c
+  rw [kerParam]; rw [MonoidHom.noncommCoprod_apply]; rw [← Prod.fst_mul_snd ⟨k]; rw [v⟩]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rw [map_mul]; rw [sign_ofSubtype]; rw [Finset.univ_eq_attach]; rw [mul_right_inj]; rw [← MonoidHom.comp_apply]; rw [Subgroup.noncommPiCoprod]; rw [MonoidHom.comp_noncommPiCoprod _]; rw [MonoidHom.noncommPiCoprod_apply]; rw [Finset.univ_eq_attach]; rw [Finset.noncommProd_eq_prod]
+  simp
 
 中文:
 定理 sign_kerParam_apply_apply
   证明: by
-  rw [kerParam]; rw [MonoidHom.noncommCoprod_apply]; rw [← Prod.fst_mul_snd ⟨k]; rw [v⟩]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rw [map_mul]; rw [sign_ofSubtype]; rw [Finset.univ_eq_attach]; rw [mul_right_inj]; rw [← MonoidHom.comp_apply]; rw [Subgroup.noncommPiCoprod]; rw [MonoidHom.c
+  rw [kerParam]; rw [MonoidHom.noncommCoprod_apply]; rw [← Prod.fst_mul_snd ⟨k]; rw [v⟩]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rw [map_mul]; rw [sign_ofSubtype]; rw [Finset.univ_eq_attach]; rw [mul_right_inj]; rw [← MonoidHom.comp_apply]; rw [Subgroup.noncommPiCoprod]; rw [MonoidHom.comp_noncommPiCoprod _]; rw [MonoidHom.noncommPiCoprod_apply]; rw [Finset.univ_eq_attach]; rw [Finset.noncommProd_eq_prod]
+  simp
 
 Depends on / 依赖: Finset, Finset.noncommProd_eq_prod, Finset.univ_eq_attach, MonoidHom, MonoidHom.comp_apply, MonoidHom.comp_noncommPiCoprod, MonoidHom.noncommCoprod_apply, MonoidHom.noncommPiCoprod_apply, Prod.fst_mul_snd, Prod.mk_mul_mk, Subgroup, Subgroup.noncommPiCoprod, comp_apply, comp_noncommPiCoprod, fst_mul_snd, kerParam, map_mul, mk_mul_mk, mul_one, mul_right_inj
 -/
@@ -1529,6 +1779,10 @@ theorem cycleType_kerParam_apply_apply
     obtain ⟨n, hn⟩ := (v d).prop
     simp only [← hm, ← hn]
     apply Disjoint.zpow_disjoint_zpow
+    apply cycleFactorsFinset_pairwise_disjoint g c.prop d.prop
+    exact Subtype.coe_ne_coe.mpr h
+  rw [kerParam]; rw [MonoidHom.noncommCoprod_apply]; rw [← Prod.fst_mul_snd ⟨k]; rw [v⟩]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rw [Finset.univ_eq_attach]; rw [Disjoint.cycleType_mul (disjoint_ofSubtype_noncommPiCoprod g k v)]; rw [Subgroup.noncommPiCoprod_apply]; rw [Disjoint.cycleType_noncommProd hU]; rw [Finset.univ_eq_attach]
+  exact congr_arg₂ _ cycleType_ofSubtype rfl
 
 中文:
 定理 cycleType_kerParam_apply_apply
@@ -1539,6 +1793,10 @@ theorem cycleType_kerParam_apply_apply
     obtain ⟨n, hn⟩ := (v d).prop
     simp only [← hm, ← hn]
     apply Disjoint.zpow_disjoint_zpow
+    apply cycleFactorsFinset_pairwise_disjoint g c.prop d.prop
+    exact Subtype.coe_ne_coe.mpr h
+  rw [kerParam]; rw [MonoidHom.noncommCoprod_apply]; rw [← Prod.fst_mul_snd ⟨k]; rw [v⟩]; rw [Prod.mk_mul_mk]; rw [mul_one]; rw [one_mul]; rw [Finset.univ_eq_attach]; rw [Disjoint.cycleType_mul (disjoint_ofSubtype_noncommPiCoprod g k v)]; rw [Subgroup.noncommPiCoprod_apply]; rw [Disjoint.cycleType_noncommProd hU]; rw [Finset.univ_eq_attach]
+  exact congr_arg₂ _ cycleType_ofSubtype rfl
 
 Depends on / 依赖: Disjoint, Disjoint.zpow_disjoint_zpow, Finset, Finset.univ, MonoidHom, MonoidHom.noncommCoprod_apply, Pairwise, Prod.fst_mul_snd, Prod.mk_mul_mk, SetLike, SetLike.coe, Subtype, Subtype.coe_ne_coe.mpr, U.Pairwise, c.prop, coe_ne_coe, cycleFactorsFinset, cycleFactorsFinset_pairwise_disjoint, d.prop, fst_mul_snd
 -/
@@ -1596,7 +1854,8 @@ theorem card_isConj_mul_eq
   rw [Subgroup.nat_card_centralizer_nat_card_stabilizer]; rw [Nat.card_eq_fintype_card]
   convert! MulAction.card_orbit_mul_card_stabilizer_eq_card_group (ConjAct (Perm α)) g
   · ext h
-    simp only [Set.mem_ofPred_eq, Con
+    simp only [Set.mem_ofPred_eq, ConjAct.mem_orbit_conjAct, isConj_comm]
+  · rw [ConjAct.card, Fintype.card_perm]
 
 中文:
 定理 card_isConj_mul_eq
@@ -1606,7 +1865,8 @@ theorem card_isConj_mul_eq
   rw [Subgroup.nat_card_centralizer_nat_card_stabilizer]; rw [Nat.card_eq_fintype_card]
   convert! MulAction.card_orbit_mul_card_stabilizer_eq_card_group (ConjAct (Perm α)) g
   · ext h
-    simp only [Set.mem_ofPred_eq, Con
+    simp only [Set.mem_ofPred_eq, ConjAct.mem_orbit_conjAct, isConj_comm]
+  · rw [ConjAct.card, Fintype.card_perm]
 
 Depends on / 依赖: ConjAct, ConjAct.card, ConjAct.mem_orbit_conjAct, Fintype, Fintype.card_perm, MulAction, MulAction.card_orbit_mul_card_stabilizer_eq_card_group, Nat.card_eq_fintype_card, Set.mem_ofPred_eq, Subgroup, Subgroup.nat_card_centralizer_nat_card_stabilizer, card_eq_fintype_card, card_orbit_mul_card_stabilizer_eq_card_group, card_perm, classical, convert, isConj_comm, mem_ofPred_eq, mem_orbit_conjAct, nat_card_centralizer
 -/
@@ -1699,7 +1959,9 @@ theorem card_of_cycleType_mul_eq
     obtain ⟨g, rfl⟩ := (exists_with_cycleType_iff α).mpr hm
     convert! card_isConj_mul_eq g
     simp_rw [Set.coe_ofPred, Nat.card_eq_fintype_card, ← Fintype.card_coe, Finset.mem_filter,
-      Finset.mem_univ, true_and, ← isConj_iff_cycleTyp
+      Finset.mem_univ, true_and, ← isConj_iff_cycleType_eq, isConj_comm (g := g)]
+  · -- empty case
+    rw [(card_of_cycleType_eq_zero_iff α).mpr hm]; rw [zero_mul]
 
 中文:
 定理 card_of_cycleType_mul_eq
@@ -1711,7 +1973,9 @@ theorem card_of_cycleType_mul_eq
     obtain ⟨g, rfl⟩ := (exists_with_cycleType_iff α).mpr hm
     convert! card_isConj_mul_eq g
     simp_rw [Set.coe_ofPred, Nat.card_eq_fintype_card, ← Fintype.card_coe, Finset.mem_filter,
-      Finset.mem_univ, true_and, ← isConj_iff_cycleTyp
+      Finset.mem_univ, true_and, ← isConj_iff_cycleType_eq, isConj_comm (g := g)]
+  · -- empty case
+    rw [(card_of_cycleType_eq_zero_iff α).mpr hm]; rw [zero_mul]
 
 Depends on / 依赖: Finset, Finset.mem_filter, Finset.mem_univ, Fintype, Fintype.card_coe, Nat.card_eq_fintype_card, Set.coe_ofPred, card_coe, card_eq_fintype_card, card_isConj_mul_eq, card_of_cycleType_eq_zero_iff, classical, coe_ofPred, convert, exists_with_cycleType_iff, isConj_comm, isConj_iff_cycleType_eq, mem_filter, mem_univ, nonempty
 -/
@@ -1744,7 +2008,7 @@ theorem card_of_cycleType
       positivity
     rw [card_of_cycleType_mul_eq]; rw [if_pos hm]
   · -- empty case
-    exact (card_of_cycleType_eq_ze
+    exact (card_of_cycleType_eq_zero_iff α).mpr hm
 
 中文:
 定理 card_of_cycleType
@@ -1758,7 +2022,7 @@ theorem card_of_cycleType
       positivity
     rw [card_of_cycleType_mul_eq]; rw [if_pos hm]
   · -- empty case
-    exact (card_of_cycleType_eq_ze
+    exact (card_of_cycleType_eq_zero_iff α).mpr hm
 
 Depends on / 依赖: Multiset, Multiset.prod_pos, Nat.div_eq_of_eq_mul_left, card_of_cycleType_eq_zero_iff, card_of_cycleType_mul_eq, div_eq_of_eq_mul_left, if_pos, m.prod, nonempty, prod_pos, split_ifs, trans_le, zero_lt_two, zero_lt_two.trans_le
 -/
@@ -1790,7 +2054,8 @@ lemma card_of_cycleType_singleton
   have hn₀ : n != 0 := by lia
   have aux : n ! = (n - 1)! * n := by rw [mul_comm, mul_factorial_pred hn₀]
   rw [mul_comm]; rw [← Nat.mul_left_inj hn₀]; rw [mul_assoc]; rw [← aux]; rw [← Nat.mul_left_inj (factorial_ne_zero _)]; rw [Nat.choose_mul_factorial_mul_factorial hα]; rw [mul_assoc]
-  simpa
+  simpa [ite_and, if_pos hα, if_pos hn', mul_comm _ n, mul_assoc]
+    using card_of_cycleType_mul_eq α {n}
 
 中文:
 引理 card_of_cycleType_singleton
@@ -1799,7 +2064,8 @@ lemma card_of_cycleType_singleton
   have hn₀ : n != 0 := by lia
   have aux : n ! = (n - 1)! * n := by rw [mul_comm, mul_factorial_pred hn₀]
   rw [mul_comm]; rw [← Nat.mul_left_inj hn₀]; rw [mul_assoc]; rw [← aux]; rw [← Nat.mul_left_inj (factorial_ne_zero _)]; rw [Nat.choose_mul_factorial_mul_factorial hα]; rw [mul_assoc]
-  simpa
+  simpa [ite_and, if_pos hα, if_pos hn', mul_comm _ n, mul_assoc]
+    using card_of_cycleType_mul_eq α {n}
 
 Depends on / 依赖: Nat.choose_mul_factorial_mul_factorial, Nat.mul_left_inj, card_of_cycleType_mul_eq, choose_mul_factorial_mul_factorial, factorial_ne_zero, if_pos, ite_and, mul_assoc, mul_comm, mul_factorial_pred, mul_left_inj
 -/

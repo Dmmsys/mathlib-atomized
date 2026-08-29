@@ -519,7 +519,9 @@ theorem isPreconnected_of_equivalent
         F ≅ e.inverse ⋙ e.functor ⋙ F := (e.invFunIdAssoc F).symm
         _ ≅ e.inverse ⋙ (Functor.const J).obj ((e.functor ⋙ F).obj (e.inverse.obj k)) :=
           isoWhiskerLeft e.inverse (isoConstant (e.functor ⋙ F) (e.inverse.obj k))
-        _ ≅ e.inverse ⋙ (Functor.const J).obj (F.obj k) 
+        _ ≅ e.inverse ⋙ (Functor.const J).obj (F.obj k) :=
+          isoWhiskerLeft _ ((F ⋙ Functor.const J).mapIso (e.counitIso.app k))
+        _ ≅ (Functor.const K).obj (F.obj k) := NatIso.ofComponents fun _ => Iso.refl _⟩
 
 中文:
 定理 isPreconnected_of_equivalent
@@ -528,7 +530,9 @@ theorem isPreconnected_of_equivalent
         F ≅ e.inverse ⋙ e.functor ⋙ F := (e.invFunIdAssoc F).symm
         _ ≅ e.inverse ⋙ (Functor.const J).obj ((e.functor ⋙ F).obj (e.inverse.obj k)) :=
           isoWhiskerLeft e.inverse (isoConstant (e.functor ⋙ F) (e.inverse.obj k))
-        _ ≅ e.inverse ⋙ (Functor.const J).obj (F.obj k) 
+        _ ≅ e.inverse ⋙ (Functor.const J).obj (F.obj k) :=
+          isoWhiskerLeft _ ((F ⋙ Functor.const J).mapIso (e.counitIso.app k))
+        _ ≅ (Functor.const K).obj (F.obj k) := NatIso.ofComponents fun _ => Iso.refl _⟩
 
 Depends on / 依赖: F.obj, Functor, Functor.const, Iso.refl, NatIso, NatIso.ofComponents, counitIso, e.counitIso.app, e.functor, e.invFunIdAssoc, e.inverse, e.inverse.obj, functor, invFunIdAssoc, inverse, isoConstant, isoWhiskerLeft, mapIso, ofComponents
 -/

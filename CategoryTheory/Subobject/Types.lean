@@ -70,7 +70,11 @@ definition Types.monoOverEquivalenceSet
   inverse :=
     { obj := fun s => MonoOver.mk <| ↾(Subtype.val : s -> α)
       map := fun {s t} b => MonoOver.homMk (↾
-  
+        fun w => ⟨w.1, Set.mem_of_mem_of_subset w.2 b.le⟩) }
+  unitIso :=
+    NatIso.ofComponents fun f =>
+      MonoOver.isoMk (Equiv.ofInjective f.1.hom ((mono_iff_injective _).mp f.2)).toIso
+  counitIso := NatIso.ofComponents fun _ => eqToIso Subtype.range_val
 
 中文:
 定义 Types.monoOverEquivalenceSet
@@ -84,7 +88,11 @@ definition Types.monoOverEquivalenceSet
   inverse :=
     { obj := fun s => MonoOver.mk <| ↾(Subtype.val : s -> α)
       map := fun {s t} b => MonoOver.homMk (↾
-  
+        fun w => ⟨w.1, Set.mem_of_mem_of_subset w.2 b.le⟩) }
+  unitIso :=
+    NatIso.ofComponents fun f =>
+      MonoOver.isoMk (Equiv.ofInjective f.1.hom ((mono_iff_injective _).mp f.2)).toIso
+  counitIso := NatIso.ofComponents fun _ => eqToIso Subtype.range_val
 
 Depends on / 依赖: Equiv.ofInjective, MonoOver, MonoOver.homMk, MonoOver.isoMk, MonoOver.mk, NatIso, NatIso.ofComponents, Set.mem_of_mem_of_subset, Set.range, Subtype, Subtype.range_val, Subtype.val, b.le, congr_hom, counitIso, eqToIso, homOfLE, inverse, mem_of_mem_of_subset, mono_iff_injective
 -/

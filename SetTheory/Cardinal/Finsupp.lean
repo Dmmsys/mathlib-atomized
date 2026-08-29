@@ -73,7 +73,11 @@ theorem mk_finsupp_lift_of_infinite
       _ = #(α × β) := mk_finset_of_infinite _
       _ = max (lift.{v} #α) (lift.{u} #β) := by
         rw [mk_prod]; rw [mul_eq_max_of_aleph0_le_left] <;> simp
-  · apply max_le <;
+  · apply max_le <;> rw [← lift_id #(α ->₀ β), ← lift_umax]
+    · obtain ⟨b, hb⟩ := exists_ne (0 : β)
+      exact lift_mk_le.{v}.2 ⟨⟨_, Finsupp.single_left_injective hb⟩⟩
+    · inhabit α
+      exact lift_mk_le.{u}.2 ⟨⟨_, Finsupp.single_injective default⟩⟩
 
 中文:
 定理 mk_finsupp_lift_of_infinite
@@ -85,7 +89,11 @@ theorem mk_finsupp_lift_of_infinite
       _ = #(α × β) := mk_finset_of_infinite _
       _ = max (lift.{v} #α) (lift.{u} #β) := by
         rw [mk_prod]; rw [mul_eq_max_of_aleph0_le_left] <;> simp
-  · apply max_le <;
+  · apply max_le <;> rw [← lift_id #(α ->₀ β), ← lift_umax]
+    · obtain ⟨b, hb⟩ := exists_ne (0 : β)
+      exact lift_mk_le.{v}.2 ⟨⟨_, Finsupp.single_left_injective hb⟩⟩
+    · inhabit α
+      exact lift_mk_le.{u}.2 ⟨⟨_, Finsupp.single_injective default⟩⟩
 
 Depends on / 依赖: Finset, Finsupp, Finsupp.graph_injective, Finsupp.single_injective, Finsupp.single_left_injective, exists_ne, graph_injective, inhabit, le_antisymm, lift_id, lift_mk_le, lift_umax, max_le, mk_finset_of_infinite, mk_le_of_injective, mk_prod, mul_eq_max_of_aleph0_le_left, single_injective, single_left_injective
 -/
@@ -136,7 +144,7 @@ theorem mk_finsupp_lift_of_infinite'
     have : ℵ₀ <= (#β).lift := aleph0_le_lift.2 (aleph0_le_mk β)
     rw [max_eq_right (le_trans _ this)]; rw [power_nat_eq this]
     exacts [Fintype.card_pos, lift_le_aleph0.2 (lt_aleph0_of_finite _).le]
-  · apply mk_finsupp_lift_of_i
+  · apply mk_finsupp_lift_of_infinite
 
 中文:
 定理 mk_finsupp_lift_of_infinite'
@@ -147,7 +155,7 @@ theorem mk_finsupp_lift_of_infinite'
     have : ℵ₀ <= (#β).lift := aleph0_le_lift.2 (aleph0_le_mk β)
     rw [max_eq_right (le_trans _ this)]; rw [power_nat_eq this]
     exacts [Fintype.card_pos, lift_le_aleph0.2 (lt_aleph0_of_finite _).le]
-  · apply mk_finsupp_lift_of_i
+  · apply mk_finsupp_lift_of_infinite
 
 Depends on / 依赖: Fintype, Fintype.card_pos, aleph0_le_lift, aleph0_le_mk, card_pos, exacts, fintypeOrInfinite, le_trans, lift_le_aleph0, lt_aleph0_of_finite, max_eq_right, mk_finsupp_lift_of_fintype, mk_finsupp_lift_of_infinite, power_nat_eq
 -/

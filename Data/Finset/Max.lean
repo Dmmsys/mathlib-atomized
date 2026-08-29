@@ -2030,7 +2030,23 @@ theorem card_le_of_interleaved
     intro x hx y hy hxy
     rcases exists_next_right ⟨y, hy, hxy⟩ with ⟨a, has, hxa, ha⟩
 rcases h x hx a has hxa fun z hzs hz => hz.2.not_ge ha _ hzs hz.1 with ⟨b, hbt, hxb, hba⟩
-exact ⟨b, hbt, hxb, hba.trans_le 
+exact ⟨b, hbt, hxb, hba.trans_le ha _ hy hxy⟩
+  set f : α -> WithTop α := fun x => (t.filter fun y => x < y).min
+  have f_mono : StrictMonoOn f s := by
+    intro x hx y hy hxy
+    rcases h x hx y hy hxy with ⟨a, hat, hxa, hay⟩
+    calc
+      f x <= a := min_le (mem_filter.2 ⟨hat, by simpa⟩)
+      _ < f y :=
+        (Finset.lt_inf_iff <| WithTop.coe_lt_top a).2 fun b hb =>
+WithTop.coe_lt_coe.2 hay.trans (by simpa using (mem_filter.1 hb).2)
+  calc
+    s.card = (s.image f).card := (card_image_of_injOn f_mono.injOn).symm
+    _ <= (insert ⊤ (t.image (↑)) : Finset (WithTop α)).card :=
+card_mono image_subset_iff.2 fun x _ =>
+          insert_subset_insert _ (image_subset_image <| filter_subset _ _)
+            (min_mem_insert_top_image_coe _)
+    _ <= t.card + 1 := (card_insert_le _ _).trans (Nat.add_le_add_right card_image_le _)
 
 中文:
 定理 card_le_of_interleaved
@@ -2040,7 +2056,23 @@ exact ⟨b, hbt, hxb, hba.trans_le
     intro x hx y hy hxy
     rcases exists_next_right ⟨y, hy, hxy⟩ with ⟨a, has, hxa, ha⟩
 rcases h x hx a has hxa fun z hzs hz => hz.2.not_ge ha _ hzs hz.1 with ⟨b, hbt, hxb, hba⟩
-exact ⟨b, hbt, hxb, hba.trans_le 
+exact ⟨b, hbt, hxb, hba.trans_le ha _ hy hxy⟩
+  set f : α -> WithTop α := fun x => (t.filter fun y => x < y).min
+  have f_mono : StrictMonoOn f s := by
+    intro x hx y hy hxy
+    rcases h x hx y hy hxy with ⟨a, hat, hxa, hay⟩
+    calc
+      f x <= a := min_le (mem_filter.2 ⟨hat, by simpa⟩)
+      _ < f y :=
+        (Finset.lt_inf_iff <| WithTop.coe_lt_top a).2 fun b hb =>
+WithTop.coe_lt_coe.2 hay.trans (by simpa using (mem_filter.1 hb).2)
+  calc
+    s.card = (s.image f).card := (card_image_of_injOn f_mono.injOn).symm
+    _ <= (insert ⊤ (t.image (↑)) : Finset (WithTop α)).card :=
+card_mono image_subset_iff.2 fun x _ =>
+          insert_subset_insert _ (image_subset_image <| filter_subset _ _)
+            (min_mem_insert_top_image_coe _)
+    _ <= t.card + 1 := (card_insert_le _ _).trans (Nat.add_le_add_right card_image_le _)
 
 Depends on / 依赖: StrictMonoOn, WithTop, exists_next_right, f_mono, filter, hba.trans_le, min_le, not_ge, replace, t.filter, trans_le
 -/
@@ -2199,7 +2231,11 @@ theorem induction_on_max_value
     simp only [hne, empty]
   · have H : (s.image f).max' hne in s.image f := max'_mem (s.image f) hne
     simp only [mem_image] at H
-    rcases
+    rcases H with ⟨a, has, hfa⟩
+    rw [← insert_erase has]
+    refine insert _ _ (notMem_erase a s) (fun x hx => ?_) (ihs a has)
+    rw [hfa]
+    exact le_max' _ _ (mem_image_of_mem _ <| mem_of_mem_erase hx)
 
 中文:
 定理 induction_on_max_value
@@ -2210,7 +2246,11 @@ theorem induction_on_max_value
     simp only [hne, empty]
   · have H : (s.image f).max' hne in s.image f := max'_mem (s.image f) hne
     simp only [mem_image] at H
-    rcases
+    rcases H with ⟨a, has, hfa⟩
+    rw [← insert_erase has]
+    refine insert _ _ (notMem_erase a s) (fun x hx => ?_) (ihs a has)
+    rw [hfa]
+    exact le_max' _ _ (mem_image_of_mem _ <| mem_of_mem_erase hx)
 
 Depends on / 依赖: Finset, Finset.eraseInduction, _mem, eq_empty_or_nonempty, eraseInduction, image_eq_empty, insert, insert_erase, le_max, mem_image, mem_image_of_mem, mem_of_mem_erase, notMem_erase, s.image
 -/

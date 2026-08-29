@@ -136,7 +136,9 @@ definition ofOrderIso
     rw [← W.arrow_mk_mem_toSet_iff] at this ⊢
     have eq : Arrow.mk (homOfLE (e.monotone (Order.le_succ j))) =
       Arrow.mk (homOfLE (Order.le_succ (e j))) :=
-        Ar
+        Arrow.ext rfl (e.map_succ j) rfl
+    replace eq := congr_arg h.F.mapArrow.obj eq
+    convert! this using 1
 
 中文:
 定义 ofOrderIso
@@ -147,7 +149,9 @@ definition ofOrderIso
     rw [← W.arrow_mk_mem_toSet_iff] at this ⊢
     have eq : Arrow.mk (homOfLE (e.monotone (Order.le_succ j))) =
       Arrow.mk (homOfLE (Order.le_succ (e j))) :=
-        Ar
+        Arrow.ext rfl (e.map_succ j) rfl
+    replace eq := congr_arg h.F.mapArrow.obj eq
+    convert! this using 1
 
 Depends on / 依赖: h.toTransfiniteCompositionOfShape.ofOrderIso, ofOrderIso, toTransfiniteCompositionOfShape
 -/
@@ -206,7 +210,11 @@ definition iic
       obtain ⟨i', hi'⟩ := hi
       exact ⟨j, lt_of_lt_of_le hi' i'.2⟩)
     rw [← W.arrow_mk_mem_toSet_iff] at this ⊢
-    have eq : Arrow.mk ((Subtype.mono_coe _).functor.map (h
+    have eq : Arrow.mk ((Subtype.mono_coe _).functor.map (homOfLE (Order.le_succ i))) =
+      Arrow.mk (homOfLE (Order.le_succ i.1)) :=
+        Arrow.ext rfl (Set.Iic.coe_succ_of_not_isMax hi) rfl
+    replace eq := congr_arg h.F.mapArrow.obj eq
+    convert! this using 1
 
 中文:
 定义 iic
@@ -218,7 +226,11 @@ definition iic
       obtain ⟨i', hi'⟩ := hi
       exact ⟨j, lt_of_lt_of_le hi' i'.2⟩)
     rw [← W.arrow_mk_mem_toSet_iff] at this ⊢
-    have eq : Arrow.mk ((Subtype.mono_coe _).functor.map (h
+    have eq : Arrow.mk ((Subtype.mono_coe _).functor.map (homOfLE (Order.le_succ i))) =
+      Arrow.mk (homOfLE (Order.le_succ i.1)) :=
+        Arrow.ext rfl (Set.Iic.coe_succ_of_not_isMax hi) rfl
+    replace eq := congr_arg h.F.mapArrow.obj eq
+    convert! this using 1
 
 Depends on / 依赖: h.toTransfiniteCompositionOfShape.iic, toTransfiniteCompositionOfShape
 -/
@@ -249,7 +261,9 @@ definition ici
     rw [← W.arrow_mk_mem_toSet_iff] at this ⊢
     have eq : Arrow.mk ((Subtype.mono_coe _).functor.map (homOfLE (Order.le_succ i))) =
       Arrow.mk (homOfLE (Order.le_succ i.1)) :=
-      
+        Arrow.ext rfl (coe_succ_of_mem (i.2.trans (Order.le_succ _))) rfl
+    replace eq := congr_arg h.F.mapArrow.obj eq
+    convert! this using 1
 
 中文:
 定义 ici
@@ -260,7 +274,9 @@ definition ici
     rw [← W.arrow_mk_mem_toSet_iff] at this ⊢
     have eq : Arrow.mk ((Subtype.mono_coe _).functor.map (homOfLE (Order.le_succ i))) =
       Arrow.mk (homOfLE (Order.le_succ i.1)) :=
-      
+        Arrow.ext rfl (coe_succ_of_mem (i.2.trans (Order.le_succ _))) rfl
+    replace eq := congr_arg h.F.mapArrow.obj eq
+    convert! this using 1
 
 Depends on / 依赖: h.toTransfiniteCompositionOfShape.ici, toTransfiniteCompositionOfShape
 -/
@@ -295,7 +311,11 @@ definition ofComposableArrows
       rw [← W.arrow_mk_mem_toSet_iff] at hF ⊢
       have eq : Arrow.mk (homOfLE (Order.le_succ j.castSucc)) =
         Arrow.mk (homOfLE j.castSucc_le_succ) :=
-          Arrow.ext
+          Arrow.ext rfl j.orderSucc_castSucc rfl
+      replace eq := congr_arg F.mapArrow.obj eq
+      convert! hF using 1
+    · rw [isMax_iff_eq_top] at hj
+      exact (hj rfl).elim
 
 中文:
 定义 ofComposableArrows
@@ -307,7 +327,11 @@ definition ofComposableArrows
       rw [← W.arrow_mk_mem_toSet_iff] at hF ⊢
       have eq : Arrow.mk (homOfLE (Order.le_succ j.castSucc)) =
         Arrow.mk (homOfLE j.castSucc_le_succ) :=
-          Arrow.ext
+          Arrow.ext rfl j.orderSucc_castSucc rfl
+      replace eq := congr_arg F.mapArrow.obj eq
+      convert! hF using 1
+    · rw [isMax_iff_eq_top] at hj
+      exact (hj rfl).elim
 
 Depends on / 依赖: ofComposableArrows
 -/
@@ -611,7 +635,12 @@ lemma mem_map_bot_le
   | succ j hj hj' =>
     rw [← homOfLE_comp bot_le (Order.le_succ j)]; rw [hf.F.map_comp]
     exact W.comp_mem _ _ hj' (hf.map_mem j hj)
-
+  | isSuccLimit j hj hj' =>
+    let : OrderBot (Set.Iio j) :=
+      { bot := ⟨⊥, Order.IsSuccLimit.bot_lt hj⟩
+        bot_le j := bot_le }
+    exact MorphismProperty.colimitsOfShape_le _
+      (.of_isColimit (hf.F.isColimitOfIsWellOrderContinuous j hj) (fun k => hj' _ k.2))
 
 中文:
 引理 mem_map_bot_le
@@ -626,7 +655,12 @@ lemma mem_map_bot_le
   | succ j hj hj' =>
     rw [← homOfLE_comp bot_le (Order.le_succ j)]; rw [hf.F.map_comp]
     exact W.comp_mem _ _ hj' (hf.map_mem j hj)
-
+  | isSuccLimit j hj hj' =>
+    let : OrderBot (Set.Iio j) :=
+      { bot := ⟨⊥, Order.IsSuccLimit.bot_lt hj⟩
+        bot_le j := bot_le }
+    exact MorphismProperty.colimitsOfShape_le _
+      (.of_isColimit (hf.F.isColimitOfIsWellOrderContinuous j hj) (fun k => hj' _ k.2))
 
 Depends on / 依赖: IsSuccLimit, MorphismProperty, MorphismProperty.colimitsOfShape_le, Order.IsSuccLimit.bot_lt, Order.le_succ, OrderBot, Set.Iio, SuccOrder, SuccOrder.limitRecOn, W.comp_mem, W.id_mem, bot_le, bot_lt, colimitsOfShape_le, comp_mem, eq_bot, hf.F.isColimitOfIsWellOrderContinuous, hf.F.map_comp, hf.map_mem, hj.eq_bot
 -/

@@ -354,7 +354,9 @@ abbreviation pullbackDiagonalMapIso.inv
         (Category.id_comp _).symm) (by
         ext
         · simp only [Category.assoc, diagonal_fst, Category.comp_id, limit.lift_π,
-          PullbackCone.m
+          PullbackCone.mk_π_app, limit.lift_π_assoc, cospan_left]
+        · simp only [condition_assoc, Category.assoc, diagonal_snd, Category.comp_id, limit.lift_π,
+          PullbackCone.mk_π_app, limit.lift_π_assoc, cospan_right])
 
 中文:
 缩写 pullbackDiagonalMapIso.inv
@@ -364,7 +366,9 @@ abbreviation pullbackDiagonalMapIso.inv
         (Category.id_comp _).symm) (by
         ext
         · simp only [Category.assoc, diagonal_fst, Category.comp_id, limit.lift_π,
-          PullbackCone.m
+          PullbackCone.mk_π_app, limit.lift_π_assoc, cospan_left]
+        · simp only [condition_assoc, Category.assoc, diagonal_snd, Category.comp_id, limit.lift_π,
+          PullbackCone.mk_π_app, limit.lift_π_assoc, cospan_right])
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, PullbackCone, PullbackCone.mk_, comp_id, condition_assoc, cospan_left, cospan_right, diagonal_fst, diagonal_snd, id_comp, limit.lift_, pullback, pullback.fst, pullback.lift, pullback.map, pullback.snd
 -/
@@ -585,7 +589,15 @@ definition pullbackDiagonalMapIdIso
     pullbackDiagonalMapIso i (𝟙 _) (f ≫ inv (pullback.fst _ _)) (g ≫ inv (pullback.fst _ _)) ≪≫ ?_
   · refine @asIso _ _ _ _ (pullback.map _ _ _ _ (𝟙 T) ((pullback.congrHom ?_ ?_).hom) (𝟙 _) ?_ ?_)
       ?_
-    · rw [← Category.comp_id (pullback.snd ..), ← condition, Category.assoc
+    · rw [← Category.comp_id (pullback.snd ..), ← condition, Category.assoc, IsIso.inv_hom_id_assoc]
+    · rw [← Category.comp_id (pullback.snd ..), ← condition, Category.assoc, IsIso.inv_hom_id_assoc]
+    · rw [Category.comp_id, Category.id_comp]
+    · ext <;> simp
+    · infer_instance
+  · refine @asIso _ _ _ _ (pullback.map _ _ _ _ (𝟙 _) (𝟙 _) (pullback.fst _ _) ?_ ?_) ?_
+    · rw [Category.assoc, IsIso.inv_hom_id, Category.comp_id, Category.id_comp]
+    · rw [Category.assoc, IsIso.inv_hom_id, Category.comp_id, Category.id_comp]
+    · infer_instance
 
 中文:
 定义 pullbackDiagonalMapIdIso
@@ -595,7 +607,15 @@ definition pullbackDiagonalMapIdIso
     pullbackDiagonalMapIso i (𝟙 _) (f ≫ inv (pullback.fst _ _)) (g ≫ inv (pullback.fst _ _)) ≪≫ ?_
   · refine @asIso _ _ _ _ (pullback.map _ _ _ _ (𝟙 T) ((pullback.congrHom ?_ ?_).hom) (𝟙 _) ?_ ?_)
       ?_
-    · rw [← Category.comp_id (pullback.snd ..), ← condition, Category.assoc
+    · rw [← Category.comp_id (pullback.snd ..), ← condition, Category.assoc, IsIso.inv_hom_id_assoc]
+    · rw [← Category.comp_id (pullback.snd ..), ← condition, Category.assoc, IsIso.inv_hom_id_assoc]
+    · rw [Category.comp_id, Category.id_comp]
+    · ext <;> simp
+    · infer_instance
+  · refine @asIso _ _ _ _ (pullback.map _ _ _ _ (𝟙 _) (𝟙 _) (pullback.fst _ _) ?_ ?_) ?_
+    · rw [Category.assoc, IsIso.inv_hom_id, Category.comp_id, Category.id_comp]
+    · rw [Category.assoc, IsIso.inv_hom_id, Category.comp_id, Category.id_comp]
+    · infer_instance
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, IsIso.inv_hom_id_assoc, comp_id, condition, congrHom, id_comp, infer_instance, inv_hom_id_assoc, pullback, pullback.congrHom, pullback.fst, pullback.map, pullback.snd, pullbackDiagonalMapIso
 -/
@@ -1074,7 +1094,13 @@ lemma pullback_lift_diagonal_isPullback
   let i : pullback (g ≫ f) f ≅ pullback (g ≫ f) (𝟙 X ≫ f) := congrHom rfl (by simp)
   let e : pullback (diagonal f) (map (g ≫ f) f f f g (𝟙 X) (𝟙 S) (by simp) (by simp)) ≅
       pullback (diagonal f) (map (g ≫ f) (𝟙 X ≫ f) f f g (𝟙 X) (𝟙 S) (by simp) (by simp)) :=
-    (asIso (map _ _ _ _ (𝟙 _) i.
+    (asIso (map _ _ _ _ (𝟙 _) i.inv (𝟙 _) (by simp) (by ext <;> simp [i]))).symm
+  apply IsPullback.of_iso_pullback _
+      (e ≪≫ pullbackDiagonalMapIdIso (T := X) (S := S) g (𝟙 X) f ≪≫ asIso (pullback.fst _ _)).symm
+  · simp [e]
+  · ext <;> simp [e, i]
+  · constructor
+    ext <;> simp
 
 中文:
 引理 pullback_lift_diagonal_isPullback
@@ -1083,7 +1109,13 @@ lemma pullback_lift_diagonal_isPullback
   let i : pullback (g ≫ f) f ≅ pullback (g ≫ f) (𝟙 X ≫ f) := congrHom rfl (by simp)
   let e : pullback (diagonal f) (map (g ≫ f) f f f g (𝟙 X) (𝟙 S) (by simp) (by simp)) ≅
       pullback (diagonal f) (map (g ≫ f) (𝟙 X ≫ f) f f g (𝟙 X) (𝟙 S) (by simp) (by simp)) :=
-    (asIso (map _ _ _ _ (𝟙 _) i.
+    (asIso (map _ _ _ _ (𝟙 _) i.inv (𝟙 _) (by simp) (by ext <;> simp [i]))).symm
+  apply IsPullback.of_iso_pullback _
+      (e ≪≫ pullbackDiagonalMapIdIso (T := X) (S := S) g (𝟙 X) f ≪≫ asIso (pullback.fst _ _)).symm
+  · simp [e]
+  · ext <;> simp [e, i]
+  · constructor
+    ext <;> simp
 
 Depends on / 依赖: IsPullback, IsPullback.of_iso_pullback, congrHom, diagonal, i.inv, of_iso_pullback, pullback, pullback.fst, pullbackDiagonalMapIdIso
 -/
@@ -1136,14 +1168,66 @@ definition pullbackFstFstIso
   signature: {X Y S X' Y' S' : C} (f : X ⟶ S) (g : Y ⟶ S) (f' : X' ⟶ S') (g' : Y' ⟶ S')
   body: pullback.lift (pullback.fst _ _ ≫ pullback.snd _ _) (pullback.snd _ _ ≫ pullback.snd _ _)
       (by
-        rw [← cancel_mono i₃]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [e₁]; rw [e₂]; rw [← pullback.condition_assoc]; rw [pullback.condition_assoc]; rw 
+        rw [← cancel_mono i₃]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [e₁]; rw [e₂]; rw [← pullback.condition_assoc]; rw [pullback.condition_assoc]; rw [pullback.condition]; rw [pullback.condition_assoc])
+  inv :=
+    pullback.lift
+      (pullback.lift (pullback.map _ _ _ _ _ _ _ e₁ e₂) (pullback.fst _ _) (pullback.lift_fst ..))
+      (pullback.lift (pullback.map _ _ _ _ _ _ _ e₁ e₂) (pullback.snd _ _) (pullback.lift_snd ..))
+      (by rw [pullback.lift_fst, pullback.lift_fst])
+  hom_inv_id := by
+    -- We could use `ext` here to immediately descend to the leaf goals,
+    -- but it only obscures the structure.
+    apply pullback.hom_ext
+    · apply pullback.hom_ext
+      · apply pullback.hom_ext
+        · simp only [Category.assoc, lift_fst, lift_fst_assoc, Category.id_comp]
+          rw [condition]
+        · simp [Category.assoc, condition]
+      · simp only [Category.assoc, lift_snd, lift_fst, Category.id_comp]
+    · apply pullback.hom_ext
+      · apply pullback.hom_ext
+        · simp only [Category.assoc, lift_snd_assoc, lift_fst_assoc, lift_fst, Category.id_comp]
+          rw [← condition_assoc]; rw [condition]
+        · simp only [Category.assoc, lift_snd, lift_fst_assoc, lift_snd_assoc, Category.id_comp]
+          rw [condition]
+      · simp only [Category.assoc, lift_snd, Category.id_comp]
+  inv_hom_id := by
+    apply pullback.hom_ext
+    · simp only [Category.assoc, lift_fst, lift_fst_assoc, lift_snd, Category.id_comp]
+    · simp only [Category.assoc, lift_snd, lift_snd_assoc, Category.id_comp]
 
 中文:
 定义 pullbackFstFstIso
   签名: {X Y S X' Y' S' : C} (f : X ⟶ S) (g : Y ⟶ S) (f' : X' ⟶ S') (g' : Y' ⟶ S')
   定义体: pullback.lift (pullback.fst _ _ ≫ pullback.snd _ _) (pullback.snd _ _ ≫ pullback.snd _ _)
       (by
-        rw [← cancel_mono i₃]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [e₁]; rw [e₂]; rw [← pullback.condition_assoc]; rw [pullback.condition_assoc]; rw 
+        rw [← cancel_mono i₃]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [e₁]; rw [e₂]; rw [← pullback.condition_assoc]; rw [pullback.condition_assoc]; rw [pullback.condition]; rw [pullback.condition_assoc])
+  inv :=
+    pullback.lift
+      (pullback.lift (pullback.map _ _ _ _ _ _ _ e₁ e₂) (pullback.fst _ _) (pullback.lift_fst ..))
+      (pullback.lift (pullback.map _ _ _ _ _ _ _ e₁ e₂) (pullback.snd _ _) (pullback.lift_snd ..))
+      (by rw [pullback.lift_fst, pullback.lift_fst])
+  hom_inv_id := by
+    -- We could use `ext` here to immediately descend to the leaf goals,
+    -- but it only obscures the structure.
+    apply pullback.hom_ext
+    · apply pullback.hom_ext
+      · apply pullback.hom_ext
+        · simp only [Category.assoc, lift_fst, lift_fst_assoc, Category.id_comp]
+          rw [condition]
+        · simp [Category.assoc, condition]
+      · simp only [Category.assoc, lift_snd, lift_fst, Category.id_comp]
+    · apply pullback.hom_ext
+      · apply pullback.hom_ext
+        · simp only [Category.assoc, lift_snd_assoc, lift_fst_assoc, lift_fst, Category.id_comp]
+          rw [← condition_assoc]; rw [condition]
+        · simp only [Category.assoc, lift_snd, lift_fst_assoc, lift_snd_assoc, Category.id_comp]
+          rw [condition]
+      · simp only [Category.assoc, lift_snd, Category.id_comp]
+  inv_hom_id := by
+    apply pullback.hom_ext
+    · simp only [Category.assoc, lift_fst, lift_fst_assoc, lift_snd, Category.id_comp]
+    · simp only [Category.assoc, lift_snd, lift_snd_assoc, Category.id_comp]
 
 Depends on / 依赖: Category, Category.assoc, cancel_mono, condition, condition_assoc, lift_fst, pullback, pullback.condition, pullback.condition_assoc, pullback.fst, pullback.lift, pullback.lift_fst, pullback.map, pullback.snd
 -/
@@ -1250,7 +1334,12 @@ lemma isPullback_map_snd_snd
     · simp [pullback.condition, ← c.condition_assoc]
     · simp
   · intro c
-    apply pullback.hom_ext <;> s
+    apply pullback.hom_ext <;> simp [c.condition]
+  · intro c
+    apply pullback.hom_ext <;> simp
+  · intro c m hfst hsnd
+    refine pullback.hom_ext (by simpa) ?_
+    apply pullback.hom_ext <;> simp [← hsnd, pullback.condition, ← hfst]
 
 中文:
 引理 isPullback_map_snd_snd
@@ -1263,7 +1352,12 @@ lemma isPullback_map_snd_snd
     · simp [pullback.condition, ← c.condition_assoc]
     · simp
   · intro c
-    apply pullback.hom_ext <;> s
+    apply pullback.hom_ext <;> simp [c.condition]
+  · intro c
+    apply pullback.hom_ext <;> simp
+  · intro c m hfst hsnd
+    refine pullback.hom_ext (by simpa) ?_
+    apply pullback.hom_ext <;> simp [← hsnd, pullback.condition, ← hfst]
 
 Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.mk, c.condition, c.condition_assoc, c.fst, c.snd, condition, condition_assoc, hom_ext, pullback, pullback.condition, pullback.fst, pullback.hom_ext, pullback.lift, pullback.snd
 -/
@@ -1513,7 +1607,7 @@ theorem isPushout_map_codiagonal
   simp only [op_pushoutMap, Quiver.Hom.unop_op, op_comp, unop_comp, op_id, pushout.op_codiagonal]
   exact .of_iso (pullback_map_diagonal_isPullback f.op g.op i.op)
     (pullbackIsoOpPushout _ _) (.refl _) (pullbackIsoOpPushout _ _) (pullbackIsoOpPushout _ _)
-    (by sim
+    (by simp [← Iso.inv_comp_eq]) (by simp) (by simp) (by simp)
 
 中文:
 定理 isPushout_map_codiagonal
@@ -1523,7 +1617,7 @@ theorem isPushout_map_codiagonal
   simp only [op_pushoutMap, Quiver.Hom.unop_op, op_comp, unop_comp, op_id, pushout.op_codiagonal]
   exact .of_iso (pullback_map_diagonal_isPullback f.op g.op i.op)
     (pullbackIsoOpPushout _ _) (.refl _) (pullbackIsoOpPushout _ _) (pullbackIsoOpPushout _ _)
-    (by sim
+    (by simp [← Iso.inv_comp_eq]) (by simp) (by simp) (by simp)
 
 Depends on / 依赖: IsPullback, IsPullback.op_iff, Iso.inv_comp_eq, Quiver, Quiver.Hom.unop_op, f.op, g.op, i.op, inv_comp_eq, of_iso, op_codiagonal, op_comp, op_id, op_iff, op_pushoutMap, pullbackIsoOpPushout, pullback_map_diagonal_isPullback, pushout, pushout.op_codiagonal, unop_comp
 -/

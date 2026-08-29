@@ -232,7 +232,19 @@ instance :
   rw [essentiallySmall_iff]
   refine ⟨?_, ?_⟩
   · let f := toSkeleton ∘ (FGAlgCat.uliftFunctor R).obj ∘ FGAlgCatSkeleton.eval R
-    refine small_of_surjective (f :=
+    refine small_of_surjective (f := f) fun A => ?_
+    simp only [Function.comp_apply, f, toSkeleton_eq_iff]
+    obtain ⟨P, ⟨e⟩⟩ := Algebra.FiniteType.exists_fgAlgCatSkeleton R
+      ((fromSkeleton (FGAlgCat R)).obj A).obj
+    exact ⟨P, ⟨ObjectProperty.isoMk _ (CommAlgCat.isoMk <| ULift.algEquiv.trans e.symm)⟩⟩
+  · refine ⟨fun A B => ?_⟩
+    obtain ⟨PA, ⟨eA⟩⟩ := Algebra.FiniteType.exists_fgAlgCatSkeleton R A.obj
+    obtain ⟨PB, ⟨eB⟩⟩ := Algebra.FiniteType.exists_fgAlgCatSkeleton R B.obj
+    let f (g : A ⟶ B) (x : PA.eval.obj) : PB.eval.obj := eB (g.hom (eA.symm x))
+    refine small_of_injective (f := f) fun u v h => ?_
+    ext a
+    obtain ⟨a, rfl⟩ := eA.symm.surjective a
+    exact eB.injective (congr_fun h a)
 
 中文:
 实例 :
@@ -243,7 +255,19 @@ instance :
   rw [essentiallySmall_iff]
   refine ⟨?_, ?_⟩
   · let f := toSkeleton ∘ (FGAlgCat.uliftFunctor R).obj ∘ FGAlgCatSkeleton.eval R
-    refine small_of_surjective (f :=
+    refine small_of_surjective (f := f) fun A => ?_
+    simp only [Function.comp_apply, f, toSkeleton_eq_iff]
+    obtain ⟨P, ⟨e⟩⟩ := Algebra.FiniteType.exists_fgAlgCatSkeleton R
+      ((fromSkeleton (FGAlgCat R)).obj A).obj
+    exact ⟨P, ⟨ObjectProperty.isoMk _ (CommAlgCat.isoMk <| ULift.algEquiv.trans e.symm)⟩⟩
+  · refine ⟨fun A B => ?_⟩
+    obtain ⟨PA, ⟨eA⟩⟩ := Algebra.FiniteType.exists_fgAlgCatSkeleton R A.obj
+    obtain ⟨PB, ⟨eB⟩⟩ := Algebra.FiniteType.exists_fgAlgCatSkeleton R B.obj
+    let f (g : A ⟶ B) (x : PA.eval.obj) : PB.eval.obj := eB (g.hom (eA.symm x))
+    refine small_of_injective (f := f) fun u v h => ?_
+    ext a
+    obtain ⟨a, rfl⟩ := eA.symm.surjective a
+    exact eB.injective (congr_fun h a)
 
 Depends on / 依赖: Algebra, Algebra.FiniteType.exists_fgAlgCatSkeleton, CommAlg, EssentiallySmall, FGAlgCat, FGAlgCat.uliftFunctor, FGAlgCatSkeleton, FGAlgCatSkeleton.eval, FiniteType, Function, Function.comp_apply, ObjectProperty, ObjectProperty.isoMk, comp_apply, essentiallySmall_iff, essentiallySmall_of_fully_faithful, exists_fgAlgCatSkeleton, fromSkeleton, small_of_surjective, toSkeleton
 -/
@@ -281,7 +305,10 @@ definition FGAlgCat.equivUnder
     (RingHom.finiteType_algebraMap (A := R) (B := A.obj)).mpr A.2⟩
   functor.map {A B} f := ⟨(commAlgCatEquivUnder R).functor.map f.hom, trivial, trivial⟩
   inverse.obj A := ⟨(commAlgCatEquivUnder R).inverse.obj A.1, A.2⟩
-  inverse.map {A B} f := ObjectPr
+  inverse.map {A B} f := ObjectProperty.homMk ((commAlgCatEquivUnder R).inverse.map f.hom)
+  unitIso := NatIso.ofComponents fun A =>
+    ObjectProperty.isoMk _ (CommAlgCat.isoMk { toRingEquiv := .refl A.1, commutes' _ := rfl })
+  counitIso := .refl _
 
 中文:
 定义 FGAlgCat.equivUnder
@@ -290,7 +317,10 @@ definition FGAlgCat.equivUnder
     (RingHom.finiteType_algebraMap (A := R) (B := A.obj)).mpr A.2⟩
   functor.map {A B} f := ⟨(commAlgCatEquivUnder R).functor.map f.hom, trivial, trivial⟩
   inverse.obj A := ⟨(commAlgCatEquivUnder R).inverse.obj A.1, A.2⟩
-  inverse.map {A B} f := ObjectPr
+  inverse.map {A B} f := ObjectProperty.homMk ((commAlgCatEquivUnder R).inverse.map f.hom)
+  unitIso := NatIso.ofComponents fun A =>
+    ObjectProperty.isoMk _ (CommAlgCat.isoMk { toRingEquiv := .refl A.1, commutes' _ := rfl })
+  counitIso := .refl _
 
 Depends on / 依赖: A.obj, commAlgCatEquivUnder, functor, functor.obj
 -/

@@ -135,7 +135,11 @@ theorem ramificationIdx'_spec
     refine le_of_not_gt fun hnk => ?_
     exact hgt (hk.trans (Ideal.pow_le_pow_right hnk))
   rw [ramificationIdx'_eq_find ⟨n]; rw [this⟩]
-  refine le_antisymm (Nat.find_min'
+  refine le_antisymm (Nat.find_min' _ this) (le_of_not_gt fun h : Nat.find _ < n => ?_)
+  obtain this' := Nat.find_spec ⟨n, this⟩
+  exact h.not_ge (this' _ hle)
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_spec := ramificationIdx'_spec
 
 中文:
 定理 ramificationIdx'_spec
@@ -148,7 +152,11 @@ theorem ramificationIdx'_spec
     refine le_of_not_gt fun hnk => ?_
     exact hgt (hk.trans (Ideal.pow_le_pow_right hnk))
   rw [ramificationIdx'_eq_find ⟨n]; rw [this⟩]
-  refine le_antisymm (Nat.find_min'
+  refine le_antisymm (Nat.find_min' _ this) (le_of_not_gt fun h : Nat.find _ < n => ?_)
+  obtain this' := Nat.find_spec ⟨n, this⟩
+  exact h.not_ge (this' _ hle)
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_spec := ramificationIdx'_spec
 -/
 theorem ramificationIdx'_spec {n : Nat} (hle : map f p <= P ^ n) (hgt : ¬map f p <= P ^ (n + 1)) :
     ramificationIdx' p P = n := by
@@ -181,7 +189,11 @@ theorem ramificationIdx'_lt
       refine fun k hk => le_of_not_gt fun hnk => ?_
       exact hgt (hk.trans (Ideal.pow_le_pow_right hnk))
     rw [ramificationIdx'_eq_find ⟨n]; rw [this⟩]
-    exact N
+    exact Nat.find_min' ⟨n, this⟩ this
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_lt := ramificationIdx'_lt
+
+@[simp]
 
 中文:
 定理 ramificationIdx'_lt
@@ -196,7 +208,11 @@ theorem ramificationIdx'_lt
       refine fun k hk => le_of_not_gt fun hnk => ?_
       exact hgt (hk.trans (Ideal.pow_le_pow_right hnk))
     rw [ramificationIdx'_eq_find ⟨n]; rw [this⟩]
-    exact N
+    exact Nat.find_min' ⟨n, this⟩ this
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_lt := ramificationIdx'_lt
+
+@[simp]
 -/
 theorem ramificationIdx'_lt {n : Nat} (hgt : ¬map f p <= P ^ n) : ramificationIdx' p P < n := by
   classical
@@ -438,7 +454,9 @@ lemma ramificationIdx'_comap_eq
   congr 1
   ext n
   simp only [Set.mem_ofPred_eq, Ideal.map_le_iff_le_comap]
-  rw [← comap_coe e]; rw [← e.toRingEquiv_toRingHom]; rw [comap_coe]; rw [← RingEquiv.symm_symm (e : S ≃+* S₁)]; rw [← map_comap_of_equiv]; rw [← Ideal.map_pow]; rw [map_comap_of_equiv]; r
+  rw [← comap_coe e]; rw [← e.toRingEquiv_toRingHom]; rw [comap_coe]; rw [← RingEquiv.symm_symm (e : S ≃+* S₁)]; rw [← map_comap_of_equiv]; rw [← Ideal.map_pow]; rw [map_comap_of_equiv]; rw [← comap_coe (RingEquiv.symm _)]; rw [comap_comap]; rw [RingEquiv.symm_symm]; rw [e.toRingEquiv_toRingHom]; rw [← e.toAlgHom_toRingHom]; rw [AlgHom.comp_algebraMap]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_comap_eq := ramificationIdx'_comap_eq
 
 中文:
 引理 ramificationIdx'_comap_eq
@@ -448,7 +466,9 @@ lemma ramificationIdx'_comap_eq
   congr 1
   ext n
   simp only [Set.mem_ofPred_eq, Ideal.map_le_iff_le_comap]
-  rw [← comap_coe e]; rw [← e.toRingEquiv_toRingHom]; rw [comap_coe]; rw [← RingEquiv.symm_symm (e : S ≃+* S₁)]; rw [← map_comap_of_equiv]; rw [← Ideal.map_pow]; rw [map_comap_of_equiv]; r
+  rw [← comap_coe e]; rw [← e.toRingEquiv_toRingHom]; rw [comap_coe]; rw [← RingEquiv.symm_symm (e : S ≃+* S₁)]; rw [← map_comap_of_equiv]; rw [← Ideal.map_pow]; rw [map_comap_of_equiv]; rw [← comap_coe (RingEquiv.symm _)]; rw [comap_comap]; rw [RingEquiv.symm_symm]; rw [e.toRingEquiv_toRingHom]; rw [← e.toAlgHom_toRingHom]; rw [AlgHom.comp_algebraMap]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_comap_eq := ramificationIdx'_comap_eq
 -/
 lemma ramificationIdx'_comap_eq (e : S ≃ₐ[R] S₁) (P : Ideal S₁) :
     ramificationIdx' p (P.comap e) = ramificationIdx' p P := by
@@ -504,7 +524,17 @@ lemma ramificationIdx'_ne_one_iff
   rw [Ideal.ramificationIdx'_eq_find H]
   constructor
   · intro he
-    have : 1 <= Nat.find H := Nat.
+    have : 1 <= Nat.find H := Nat.find_spec H 1 (by simpa)
+    have := Nat.find_min H (m := 1) (by lia)
+    push Not at this
+    obtain ⟨k, hk, h1k⟩ := this
+    exact hk.trans (Ideal.pow_le_pow_right (Nat.succ_le_iff.mpr h1k))
+  · intro he
+    have := Nat.find_spec H 2 he
+    lia
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_ne_one_iff :=
+  ramificationIdx'_ne_one_iff
 
 中文:
 引理 ramificationIdx'_ne_one_iff
@@ -517,7 +547,17 @@ lemma ramificationIdx'_ne_one_iff
   rw [Ideal.ramificationIdx'_eq_find H]
   constructor
   · intro he
-    have : 1 <= Nat.find H := Nat.
+    have : 1 <= Nat.find H := Nat.find_spec H 1 (by simpa)
+    have := Nat.find_min H (m := 1) (by lia)
+    push Not at this
+    obtain ⟨k, hk, h1k⟩ := this
+    exact hk.trans (Ideal.pow_le_pow_right (Nat.succ_le_iff.mpr h1k))
+  · intro he
+    have := Nat.find_spec H 2 he
+    lia
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_ne_one_iff :=
+  ramificationIdx'_ne_one_iff
 -/
 lemma ramificationIdx'_ne_one_iff (hp : map f p <= P) :
     ramificationIdx' p P != 1 ↔ p.map f <= P ^ 2 := by
@@ -550,7 +590,15 @@ lemma ramificationIdx'_eq_one_of_map_localization
   rw [← not_ne_iff (b := 1)]; rw [Ideal.ramificationIdx'_ne_one_iff hpP]
   intro h₂
   replace h₂ := Ideal.map_mono («f» := algebraMap S (Localization.AtPrime P)) h₂
-  rw [Ideal.map_pow]; rw [Localization.AtPrime.map_eq_maximalIdeal]; rw [Ideal.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [H];
+  rw [Ideal.map_pow]; rw [Localization.AtPrime.map_eq_maximalIdeal]; rw [Ideal.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [H]; rw [pow_two] at h₂
+  have := Submodule.eq_bot_of_le_smul_of_le_jacobson_bot _ _ (IsNoetherian.noetherian _) h₂
+    (maximalIdeal_le_jacobson _)
+  rw [← Localization.AtPrime.map_eq_maximalIdeal]; rw [Ideal.map_eq_bot_iff_of_injective] at this
+  · exact hp this
+  · exact IsLocalization.injective _ hp'
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_eq_one_of_map_localization :=
+  ramificationIdx'_eq_one_of_map_localization
 
 中文:
 引理 ramificationIdx'_eq_one_of_map_localization
@@ -558,7 +606,15 @@ lemma ramificationIdx'_eq_one_of_map_localization
   rw [← not_ne_iff (b := 1)]; rw [Ideal.ramificationIdx'_ne_one_iff hpP]
   intro h₂
   replace h₂ := Ideal.map_mono («f» := algebraMap S (Localization.AtPrime P)) h₂
-  rw [Ideal.map_pow]; rw [Localization.AtPrime.map_eq_maximalIdeal]; rw [Ideal.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [H];
+  rw [Ideal.map_pow]; rw [Localization.AtPrime.map_eq_maximalIdeal]; rw [Ideal.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [H]; rw [pow_two] at h₂
+  have := Submodule.eq_bot_of_le_smul_of_le_jacobson_bot _ _ (IsNoetherian.noetherian _) h₂
+    (maximalIdeal_le_jacobson _)
+  rw [← Localization.AtPrime.map_eq_maximalIdeal]; rw [Ideal.map_eq_bot_iff_of_injective] at this
+  · exact hp this
+  · exact IsLocalization.injective _ hp'
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_eq_one_of_map_localization :=
+  ramificationIdx'_eq_one_of_map_localization
 -/
 lemma ramificationIdx'_eq_one_of_map_localization
     {p : Ideal R} {P : Ideal S} [P.IsPrime] [IsNoetherianRing S]
@@ -592,7 +648,8 @@ exact le_antisymm h pow_le_self two_ne_zero
   have := IsMulTorsionFree.pow_right_injective₀ (by rwa [one_eq_top]) h₂ this
   simp_all
 
-@[deprecated (since := "2026-07-01")] alias ramifi
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_map_self_eq_one :=
+  ramificationIdx'_map_self_eq_one
 
 中文:
 定理 ramificationIdx'_map_self_eq_one
@@ -605,7 +662,8 @@ exact le_antisymm h pow_le_self two_ne_zero
   have := IsMulTorsionFree.pow_right_injective₀ (by rwa [one_eq_top]) h₂ this
   simp_all
 
-@[deprecated (since := "2026-07-01")] alias ramifi
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_map_self_eq_one :=
+  ramificationIdx'_map_self_eq_one
 -/
 theorem ramificationIdx'_map_self_eq_one [IsDedekindDomain S]
     (h₁ : map f p != ⊤) (h₂ : map f p != ⊥) : ramificationIdx' p (map f p) = 1 := by
@@ -632,7 +690,8 @@ theorem ramificationIdx'_le_ramificationIdx'
   simp_rw [hp, IsScalarTower.algebraMap_eq R S T, ← map_map, map_le_iff_le_comap]
 exact comap_mono by rwa [← map_le_iff_le_comap]
 
-@[deprecated (since := "2026-07-01")] alias ramifi
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_le_ramificationIdx :=
+  ramificationIdx'_le_ramificationIdx'
 
 中文:
 定理 ramificationIdx'_le_ramificationIdx'
@@ -643,7 +702,8 @@ exact comap_mono by rwa [← map_le_iff_le_comap]
   simp_rw [hp, IsScalarTower.algebraMap_eq R S T, ← map_map, map_le_iff_le_comap]
 exact comap_mono by rwa [← map_le_iff_le_comap]
 
-@[deprecated (since := "2026-07-01")] alias ramifi
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_le_ramificationIdx :=
+  ramificationIdx'_le_ramificationIdx'
 -/
 theorem ramificationIdx'_le_ramificationIdx' {T : Type*} [CommRing T] [Algebra R T]
     [Algebra S T] [IsScalarTower R S T] (Q : Ideal T) (hp : p = comap f P)
@@ -668,14 +728,16 @@ theorem ramificationIdx'_eq_normalizedFactors_count
   proof: by
   have hPirr := (Ideal.prime_of_isPrime hP0 hP).irreducible
   refine ramificationIdx'_spec (Ideal.le_of_dvd ?_) (mt Ideal.dvd_iff_le.mpr ?_) <;>
-    rw [dvd_iff_normalizedFactors_le_normalizedFactors (pow_ne_zero _ hP0) hp0]; rw [normalizedFactors_pow]; rw [normalizedFactors_irreducible hPirr]; r
+    rw [dvd_iff_normalizedFactors_le_normalizedFactors (pow_ne_zero _ hP0) hp0]; rw [normalizedFactors_pow]; rw [normalizedFactors_irreducible hPirr]; rw [normalize_eq]; rw [Multiset.nsmul_singleton]; rw [← Multiset.le_count_iff_replicate_le]
+  exact (Nat.lt_succ_self _).not_ge
 
 中文:
 定理 ramificationIdx'_eq_normalizedFactors_count
   证明: by
   have hPirr := (Ideal.prime_of_isPrime hP0 hP).irreducible
   refine ramificationIdx'_spec (Ideal.le_of_dvd ?_) (mt Ideal.dvd_iff_le.mpr ?_) <;>
-    rw [dvd_iff_normalizedFactors_le_normalizedFactors (pow_ne_zero _ hP0) hp0]; rw [normalizedFactors_pow]; rw [normalizedFactors_irreducible hPirr]; r
+    rw [dvd_iff_normalizedFactors_le_normalizedFactors (pow_ne_zero _ hP0) hp0]; rw [normalizedFactors_pow]; rw [normalizedFactors_irreducible hPirr]; rw [normalize_eq]; rw [Multiset.nsmul_singleton]; rw [← Multiset.le_count_iff_replicate_le]
+  exact (Nat.lt_succ_self _).not_ge
 
 Depends on / 依赖: Ideal.dvd_iff_le.mpr, Ideal.le_of_dvd, Ideal.prime_of_isPrime, Multiset, Multiset.le_count_iff_replicate_le, Multiset.nsmul_singleton, Nat.lt_succ_self, _spec, dvd_iff_le, dvd_iff_normalizedFactors_le_normalizedFactors, irreducible, le_count_iff_replicate_le, le_of_dvd, lt_succ_self, normalize_eq, normalizedFactors_irreducible, normalizedFactors_pow, not_ge, nsmul_singleton, pow_ne_zero
 -/
@@ -698,7 +760,8 @@ theorem ramificationIdx'_eq_multiplicity
   · rw [hP₂, ← Ideal.zero_eq_bot, multiplicity_zero_eq_zero_of_ne_zero _ hp]
     exact Ideal.ramificationIdx'_of_not_le (mt le_bot_iff.mp hp)
   rw [multiplicity_eq_of_emultiplicity_eq_some]
-  rw [ramificationIdx'_eq_normalizedFactors_count hp hP hP₂]; rw [← normalize_eq P];
+  rw [ramificationIdx'_eq_normalizedFactors_count hp hP hP₂]; rw [← normalize_eq P]; rw [← UniqueFactorizationMonoid.emultiplicity_eq_count_normalizedFactors _ hp]; rw [normalize_eq]
+exact irreducible_iff_prime.mpr prime_of_isPrime hP₂ hP
 
 中文:
 定理 ramificationIdx'_eq_multiplicity
@@ -708,7 +771,8 @@ theorem ramificationIdx'_eq_multiplicity
   · rw [hP₂, ← Ideal.zero_eq_bot, multiplicity_zero_eq_zero_of_ne_zero _ hp]
     exact Ideal.ramificationIdx'_of_not_le (mt le_bot_iff.mp hp)
   rw [multiplicity_eq_of_emultiplicity_eq_some]
-  rw [ramificationIdx'_eq_normalizedFactors_count hp hP hP₂]; rw [← normalize_eq P];
+  rw [ramificationIdx'_eq_normalizedFactors_count hp hP hP₂]; rw [← normalize_eq P]; rw [← UniqueFactorizationMonoid.emultiplicity_eq_count_normalizedFactors _ hp]; rw [normalize_eq]
+exact irreducible_iff_prime.mpr prime_of_isPrime hP₂ hP
 -/
 theorem ramificationIdx'_eq_multiplicity (hp : map f p != ⊥) (hP : P.IsPrime) :
     ramificationIdx' p P = multiplicity P (Ideal.map f p) := by
@@ -750,7 +814,10 @@ theorem ramificationIdx'_ne_zero
   have hPirr := (Ideal.prime_of_isPrime hP0 hP).irreducible
   rw [IsDedekindDomain.ramificationIdx'_eq_normalizedFactors_count hp0 hP hP0]
   obtain ⟨P', hP', P'_eq⟩ :=
-    exists_mem_normalizedFactors_of_dvd hp0 hPirr (Idea
+    exists_mem_normalizedFactors_of_dvd hp0 hPirr (Ideal.dvd_iff_le.mpr le)
+  rwa [Multiset.count_ne_zero, associated_iff_eq.mp P'_eq]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_ne_zero := ramificationIdx'_ne_zero
 
 中文:
 定理 ramificationIdx'_ne_zero
@@ -762,7 +829,10 @@ theorem ramificationIdx'_ne_zero
   have hPirr := (Ideal.prime_of_isPrime hP0 hP).irreducible
   rw [IsDedekindDomain.ramificationIdx'_eq_normalizedFactors_count hp0 hP hP0]
   obtain ⟨P', hP', P'_eq⟩ :=
-    exists_mem_normalizedFactors_of_dvd hp0 hPirr (Idea
+    exists_mem_normalizedFactors_of_dvd hp0 hPirr (Ideal.dvd_iff_le.mpr le)
+  rwa [Multiset.count_ne_zero, associated_iff_eq.mp P'_eq]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_ne_zero := ramificationIdx'_ne_zero
 -/
 theorem ramificationIdx'_ne_zero (hp0 : map f p != ⊥) (hP : P.IsPrime) (le : map f p <= P) :
     ramificationIdx' p P != 0 := by
@@ -819,7 +889,16 @@ lemma ramificationIdx'_eq_one_iff
   let Sₚ := Localization.AtPrime P
   rw [← not_ne_iff (b := 1)]; rw [ramificationIdx'_ne_one_iff hpP]; rw [pow_two]
   intro H₁
-  obtain ⟨a, ha⟩ : P ∣ p.map (algebraMap R S) := Ideal.dvd_iff_le.mpr 
+  obtain ⟨a, ha⟩ : P ∣ p.map (algebraMap R S) := Ideal.dvd_iff_le.mpr hpP
+  have ha' : ¬ a <= P := fun h => H₁ (ha.trans_le (Ideal.mul_mono_right h))
+  rw [IsScalarTower.algebraMap_eq _ S]; rw [← Ideal.map_map]; rw [ha]; rw [Ideal.map_mul]; rw [Localization.AtPrime.map_eq_maximalIdeal]
+  convert! Ideal.mul_top _
+  on_goal 2 => infer_instance
+  rw [← not_ne_iff]; rw [IsLocalization.map_algebraMap_ne_top_iff_disjoint P.primeCompl]
+  simpa [primeCompl, Set.disjoint_compl_left_iff_subset]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_eq_one_iff :=
+  ramificationIdx'_eq_one_iff
 
 中文:
 引理 ramificationIdx'_eq_one_iff
@@ -828,7 +907,16 @@ lemma ramificationIdx'_eq_one_iff
   let Sₚ := Localization.AtPrime P
   rw [← not_ne_iff (b := 1)]; rw [ramificationIdx'_ne_one_iff hpP]; rw [pow_two]
   intro H₁
-  obtain ⟨a, ha⟩ : P ∣ p.map (algebraMap R S) := Ideal.dvd_iff_le.mpr 
+  obtain ⟨a, ha⟩ : P ∣ p.map (algebraMap R S) := Ideal.dvd_iff_le.mpr hpP
+  have ha' : ¬ a <= P := fun h => H₁ (ha.trans_le (Ideal.mul_mono_right h))
+  rw [IsScalarTower.algebraMap_eq _ S]; rw [← Ideal.map_map]; rw [ha]; rw [Ideal.map_mul]; rw [Localization.AtPrime.map_eq_maximalIdeal]
+  convert! Ideal.mul_top _
+  on_goal 2 => infer_instance
+  rw [← not_ne_iff]; rw [IsLocalization.map_algebraMap_ne_top_iff_disjoint P.primeCompl]
+  simpa [primeCompl, Set.disjoint_compl_left_iff_subset]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_eq_one_iff :=
+  ramificationIdx'_eq_one_iff
 -/
 lemma ramificationIdx'_eq_one_iff
     {p : Ideal R} {P : Ideal S} [P.IsPrime]
@@ -920,7 +1008,9 @@ theorem emultiplicity_map_eq_ramificationIdx'_mul_of_prime
   by_cases hvp : v = p
   · simp [hvp, (FiniteMultiplicity.of_prime_left hp hp.ne_zero).emultiplicity_self,
       ramificationIdx'_eq_normalizedFactors_count hp_bot (isPrime_of_prime hw.prime) hw_bot,
-      emultiplicit
+      emultiplicity_eq_count_normalizedFactors hw hp_bot]
+  · rw [emultiplicity_eq_zero_of_irreducible_ne hv hp.irreducible hvp, mul_zero,
+      emultiplicity_map_eq_zero_of_ne hv hp hvp]
 
 中文:
 定理 emultiplicity_map_eq_ramificationIdx'_mul_of_prime
@@ -930,7 +1020,9 @@ theorem emultiplicity_map_eq_ramificationIdx'_mul_of_prime
   by_cases hvp : v = p
   · simp [hvp, (FiniteMultiplicity.of_prime_left hp hp.ne_zero).emultiplicity_self,
       ramificationIdx'_eq_normalizedFactors_count hp_bot (isPrime_of_prime hw.prime) hw_bot,
-      emultiplicit
+      emultiplicity_eq_count_normalizedFactors hw hp_bot]
+  · rw [emultiplicity_eq_zero_of_irreducible_ne hv hp.irreducible hvp, mul_zero,
+      emultiplicity_map_eq_zero_of_ne hv hp hvp]
 -/
 private theorem emultiplicity_map_eq_ramificationIdx'_mul_of_prime [IsDedekindDomain R]
     [FaithfulSMul R S] {v : Ideal R} {w : Ideal S} {p : Ideal R}
@@ -957,7 +1049,13 @@ theorem emultiplicity_map_eq_ramificationIdx'_mul
   | h₂ I hI =>
     obtain rfl : I = ⊤ := by simpa using hI
     simp_rw [Ideal.map_top, emultiplicity_eq_count_normalizedFactors hw top_ne_bot,
-      emultiplicity_eq_count_normalizedFactors hv h, ← Ideal.one_eq_top, normalizedFactors_one
+      emultiplicity_eq_count_normalizedFactors hv h, ← Ideal.one_eq_top, normalizedFactors_one]
+    simp
+  | h₃ I p hI hp IH =>
+    rw [Ideal.map_mul]; rw [emultiplicity_mul hw.prime]; rw [emultiplicity_mul hv.prime]; rw [IH hI]; rw [mul_add]; rw [emultiplicity_map_eq_ramificationIdx'_mul_of_prime hv hp hw hw_bot]
+
+@[deprecated (since := "2026-07-01")] alias emultiplicity_map_eq_ramificationIdx_mul :=
+  emultiplicity_map_eq_ramificationIdx'_mul
 
 中文:
 定理 emultiplicity_map_eq_ramificationIdx'_mul
@@ -968,7 +1066,13 @@ theorem emultiplicity_map_eq_ramificationIdx'_mul
   | h₂ I hI =>
     obtain rfl : I = ⊤ := by simpa using hI
     simp_rw [Ideal.map_top, emultiplicity_eq_count_normalizedFactors hw top_ne_bot,
-      emultiplicity_eq_count_normalizedFactors hv h, ← Ideal.one_eq_top, normalizedFactors_one
+      emultiplicity_eq_count_normalizedFactors hv h, ← Ideal.one_eq_top, normalizedFactors_one]
+    simp
+  | h₃ I p hI hp IH =>
+    rw [Ideal.map_mul]; rw [emultiplicity_mul hw.prime]; rw [emultiplicity_mul hv.prime]; rw [IH hI]; rw [mul_add]; rw [emultiplicity_map_eq_ramificationIdx'_mul_of_prime hv hp hw hw_bot]
+
+@[deprecated (since := "2026-07-01")] alias emultiplicity_map_eq_ramificationIdx_mul :=
+  emultiplicity_map_eq_ramificationIdx'_mul
 
 Depends on / 依赖: Ideal.map_mul, Ideal.map_top, Ideal.one_eq_top, _mul_of_prime, emultiplicity_eq_count_normalizedFactors, emultiplicity_map_eq_ramificationIdx, emultiplicity_mul, hv.prime, hw.prime, hw_bot, induction_on_prime, map_mul, map_top, mul_add, normalizedFactors_one, one_eq_top, simp_rw, top_ne_bot
 -/
@@ -1011,7 +1115,20 @@ theorem ramificationIdx'_algebra_tower
     exact ne_bot_of_map_ne_bot hfg
   have hp0 : P != ⊥ := ne_bot_of_map_ne_bot hg0
   have hq0 : Q != ⊥ := ne_bot_of_le_ne_bot hg0 hg
-  let : P.IsMaximal := Ring.DimensionLEOne.maximalO
+  let : P.IsMaximal := Ring.DimensionLEOne.maximalOfPrime hp0 hpm
+  rw [IsDedekindDomain.ramificationIdx'_eq_normalizedFactors_count hf0 hpm hp0]; rw [IsDedekindDomain.ramificationIdx'_eq_normalizedFactors_count hg0 hqm hq0]; rw [IsDedekindDomain.ramificationIdx'_eq_normalizedFactors_count hfg hqm hq0]; rw [IsScalarTower.algebraMap_eq R S T]; rw [← map_map]
+  rcases eq_prime_pow_mul_coprime hf0 P with ⟨I, hcp, heq⟩
+  have hcp : ⊤ = map (algebraMap S T) P ⊔ map (algebraMap S T) I := by rw [← map_sup, hcp, map_top]
+  have hntq : ¬ ⊤ <= Q := fun ht => IsPrime.ne_top hqm (Iff.mpr (eq_top_iff_one Q) (ht trivial))
+  nth_rw 1 [heq, Ideal.map_mul, Ideal.map_pow, normalizedFactors_mul (pow_ne_zero _ hg0) <| by
+    by_contra h
+    simp only [h, Submodule.zero_eq_bot, bot_le, sup_of_le_left] at hcp
+    exact hntq (hcp.trans_le hg), Multiset.count_add, normalizedFactors_pow, Multiset.count_nsmul]
+exact add_eq_left.mpr Decidable.byContradiction fun h => hntq hcp.trans_le
+sup_le hg le_of_dvd dvd_of_mem_normalizedFactors Multiset.count_ne_zero.mp h
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_algebra_tower :=
+  ramificationIdx'_algebra_tower
 
 中文:
 定理 ramificationIdx'_algebra_tower
@@ -1022,7 +1139,20 @@ theorem ramificationIdx'_algebra_tower
     exact ne_bot_of_map_ne_bot hfg
   have hp0 : P != ⊥ := ne_bot_of_map_ne_bot hg0
   have hq0 : Q != ⊥ := ne_bot_of_le_ne_bot hg0 hg
-  let : P.IsMaximal := Ring.DimensionLEOne.maximalO
+  let : P.IsMaximal := Ring.DimensionLEOne.maximalOfPrime hp0 hpm
+  rw [IsDedekindDomain.ramificationIdx'_eq_normalizedFactors_count hf0 hpm hp0]; rw [IsDedekindDomain.ramificationIdx'_eq_normalizedFactors_count hg0 hqm hq0]; rw [IsDedekindDomain.ramificationIdx'_eq_normalizedFactors_count hfg hqm hq0]; rw [IsScalarTower.algebraMap_eq R S T]; rw [← map_map]
+  rcases eq_prime_pow_mul_coprime hf0 P with ⟨I, hcp, heq⟩
+  have hcp : ⊤ = map (algebraMap S T) P ⊔ map (algebraMap S T) I := by rw [← map_sup, hcp, map_top]
+  have hntq : ¬ ⊤ <= Q := fun ht => IsPrime.ne_top hqm (Iff.mpr (eq_top_iff_one Q) (ht trivial))
+  nth_rw 1 [heq, Ideal.map_mul, Ideal.map_pow, normalizedFactors_mul (pow_ne_zero _ hg0) <| by
+    by_contra h
+    simp only [h, Submodule.zero_eq_bot, bot_le, sup_of_le_left] at hcp
+    exact hntq (hcp.trans_le hg), Multiset.count_add, normalizedFactors_pow, Multiset.count_nsmul]
+exact add_eq_left.mpr Decidable.byContradiction fun h => hntq hcp.trans_le
+sup_le hg le_of_dvd dvd_of_mem_normalizedFactors Multiset.count_ne_zero.mp h
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_algebra_tower :=
+  ramificationIdx'_algebra_tower
 -/
 theorem ramificationIdx'_algebra_tower [IsDedekindDomain S] [IsDedekindDomain T]
     {p : Ideal R} {P : Ideal S} {Q : Ideal T} [hpm : P.IsPrime] [hqm : Q.IsPrime]
@@ -1063,7 +1193,12 @@ theorem ramificationIdx'_algebra_tower'
   have : Module.IsTorsionFree R T := by
     refine Module.IsTorsionFree.of_smul_eq_zero fun r m h => ?_
     rwa [algebra_compatible_smul S, smul_eq_zero, FaithfulSMul.algebraMap_eq_zero_iff] at h
-  have hP : 
+  have hP : P != ⊥ := ne_bot_of_liesOver_of_ne_bot hp _
+  exact ramificationIdx'_algebra_tower (map_ne_bot_of_ne_bot hP) (map_ne_bot_of_ne_bot hp)
+ map_le_iff_le_comap.mpr le_of_eq over_def Q P
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_algebra_tower' :=
+  ramificationIdx'_algebra_tower'
 
 中文:
 定理 ramificationIdx'_algebra_tower'
@@ -1075,7 +1210,12 @@ theorem ramificationIdx'_algebra_tower'
   have : Module.IsTorsionFree R T := by
     refine Module.IsTorsionFree.of_smul_eq_zero fun r m h => ?_
     rwa [algebra_compatible_smul S, smul_eq_zero, FaithfulSMul.algebraMap_eq_zero_iff] at h
-  have hP : 
+  have hP : P != ⊥ := ne_bot_of_liesOver_of_ne_bot hp _
+  exact ramificationIdx'_algebra_tower (map_ne_bot_of_ne_bot hP) (map_ne_bot_of_ne_bot hp)
+ map_le_iff_le_comap.mpr le_of_eq over_def Q P
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_algebra_tower' :=
+  ramificationIdx'_algebra_tower'
 -/
 theorem ramificationIdx'_algebra_tower' [IsDedekindDomain S] [IsDedekindDomain T] [IsDomain R]
     [Module.IsTorsionFree R S] [Module.IsTorsionFree S T] (p : Ideal R) (P : Ideal S) (Q : Ideal T)

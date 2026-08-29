@@ -243,7 +243,7 @@ theorem is_one_preprimitive_iff
     rw [isMultiplyPreprimitive_iff]
     constructor
     · exact is_one_pretransitive_iff.mpr h.toIsPretransitive
-    · simpa using isPreprimitive_of_
+    · simpa using isPreprimitive_of_fixingSubgroup_empty_iff.mpr h
 
 中文:
 定理 is_one_preprimitive_iff
@@ -256,7 +256,7 @@ theorem is_one_preprimitive_iff
     rw [isMultiplyPreprimitive_iff]
     constructor
     · exact is_one_pretransitive_iff.mpr h.toIsPretransitive
-    · simpa using isPreprimitive_of_
+    · simpa using isPreprimitive_of_fixingSubgroup_empty_iff.mpr h
 
 Depends on / 依赖: H1.isPreprimitive_ofFixingSubgroup, h.toIsPretransitive, isMultiplyPreprimitive_iff, isPreprimitive_ofFixingSubgroup, isPreprimitive_of_fixingSubgroup_empty_iff, isPreprimitive_of_fixingSubgroup_empty_iff.mpr, is_one_pretransitive_iff, is_one_pretransitive_iff.mpr, toIsPretransitive
 -/
@@ -289,7 +289,12 @@ theorem isMultiplyPreprimitive_ofStabilizer
   · rw [← ofStabilizer.isMultiplyPretransitive]
     exact IsMultiplyPreprimitive.isMultiplyPretransitive M α n.succ
   · intro s hs
-    ha
+    have : IsPreprimitive ↥(fixingSubgroup M (insert a (Subtype.val '' s)))
+      ↥(ofFixingSubgroup M (insert a (Subtype.val '' s))) := by
+      apply IsMultiplyPreprimitive.isPreprimitive_ofFixingSubgroup M n.succ
+      rw [Set.encard_insert_of_notMem]; rw [Subtype.coe_injective.encard_image]; rw [hs]; rw [Nat.cast_succ]
+      aesop
+    exact IsPreprimitive.of_surjective ofFixingSubgroup_insert_map_bijective.surjective
 
 中文:
 定理 isMultiplyPreprimitive_ofStabilizer
@@ -303,7 +308,12 @@ theorem isMultiplyPreprimitive_ofStabilizer
   · rw [← ofStabilizer.isMultiplyPretransitive]
     exact IsMultiplyPreprimitive.isMultiplyPretransitive M α n.succ
   · intro s hs
-    ha
+    have : IsPreprimitive ↥(fixingSubgroup M (insert a (Subtype.val '' s)))
+      ↥(ofFixingSubgroup M (insert a (Subtype.val '' s))) := by
+      apply IsMultiplyPreprimitive.isPreprimitive_ofFixingSubgroup M n.succ
+      rw [Set.encard_insert_of_notMem]; rw [Subtype.coe_injective.encard_image]; rw [hs]; rw [Nat.cast_succ]
+      aesop
+    exact IsPreprimitive.of_surjective ofFixingSubgroup_insert_map_bijective.surjective
 
 Depends on / 依赖: IsMultiplyPreprimitive, IsMultiplyPreprimitive.isMultiplyPretransitive, IsMultiplyPreprimitive.isPreprimitive_ofFixingSubgroup, IsPreprimitive, LinearMap, LinearMap.toMatrix, Nat.lt_one_iff, Nat.lt_or_ge, QuadraticMap, QuadraticMap.associated_comp, Set.encard_insert_of_notMe, Subtype, Subtype.val, associated_comp, encard_insert_of_notMe, fixingSubgroup, insert, isMultiplyPreprimitive_iff, isMultiplyPretransitive, isPreprimitive_ofFixingSubgroup
 -/
@@ -344,7 +354,38 @@ theorem isMultiplyPreprimitive_succ_iff_ofStabilizer
     · exact ofStabilizer.isMultiplyPretransitive.mpr H.isMultiplyPretransitive
     · intro s hs
       have : exists b : α, b in s := by
-        rw [← Set.nonempty_def]; rw [
+        rw [← Set.nonempty_def]; rw [Set.nonempty_iff_ne_empty]
+        intro h
+        apply not_lt.mpr hn
+        rw [h]; rw [Set.encard_empty]; rw [zero_add]; rw [← Nat.cast_one]; rw [Nat.cast_inj]; rw [Nat.succ_inj] at hs
+        simp only [← hs, zero_lt_one]
+      obtain ⟨b, hb⟩ := this
+      obtain ⟨g, hg : g • b = a⟩ := exists_smul_eq M b a
+      rw [isPreprimitive_ofFixingSubgroup_conj_iff (g := g)]
+      set s' := g • s with hs'
+      let t : Set (SubMulAction.ofStabilizer M a) := Subtype.val ⁻¹' s'
+      have hst : s' = insert a (Subtype.val '' t) := by
+        ext x
+        constructor
+        · intro hxs
+          by_cases hxa : x = a
+          · simp [hxa]
+          · exact Set.mem_insert_of_mem _
+              ⟨⟨x, hxa⟩, by simp only [t, Set.mem_preimage]; exact hxs, rfl⟩
+        · rw [Set.mem_insert_iff]
+          rintro (⟨rfl⟩ | ⟨y, hy, rfl⟩)
+          · simpa [s', ← hg]
+          · simpa only using! hy
+      rw [hst]; rw [isPreprimitive_fixingSubgroup_insert_iff]
+      apply IsMultiplyPreprimitive.isPreprimitive_ofFixingSubgroup _ n
+      apply ENat.add_left_injective_of_ne_top ENat.one_ne_top
+      simp only
+      rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← hs]
+      apply congr_arg₂ _ _ rfl
+      rw [show s = g⁻¹ • s' by simp [hs'],
+        ← Set.image_smul, (MulAction.injective g⁻¹).encard_image, hst]
+      rw [Set.encard_insert_of_notMem]; rw [Subtype.coe_injective.encard_image]; rw [ENat.natCast_one]
+      exact notMem_val_image M t
 
 中文:
 定理 isMultiplyPreprimitive_succ_iff_ofStabilizer
@@ -357,7 +398,38 @@ theorem isMultiplyPreprimitive_succ_iff_ofStabilizer
     · exact ofStabilizer.isMultiplyPretransitive.mpr H.isMultiplyPretransitive
     · intro s hs
       have : exists b : α, b in s := by
-        rw [← Set.nonempty_def]; rw [
+        rw [← Set.nonempty_def]; rw [Set.nonempty_iff_ne_empty]
+        intro h
+        apply not_lt.mpr hn
+        rw [h]; rw [Set.encard_empty]; rw [zero_add]; rw [← Nat.cast_one]; rw [Nat.cast_inj]; rw [Nat.succ_inj] at hs
+        simp only [← hs, zero_lt_one]
+      obtain ⟨b, hb⟩ := this
+      obtain ⟨g, hg : g • b = a⟩ := exists_smul_eq M b a
+      rw [isPreprimitive_ofFixingSubgroup_conj_iff (g := g)]
+      set s' := g • s with hs'
+      let t : Set (SubMulAction.ofStabilizer M a) := Subtype.val ⁻¹' s'
+      have hst : s' = insert a (Subtype.val '' t) := by
+        ext x
+        constructor
+        · intro hxs
+          by_cases hxa : x = a
+          · simp [hxa]
+          · exact Set.mem_insert_of_mem _
+              ⟨⟨x, hxa⟩, by simp only [t, Set.mem_preimage]; exact hxs, rfl⟩
+        · rw [Set.mem_insert_iff]
+          rintro (⟨rfl⟩ | ⟨y, hy, rfl⟩)
+          · simpa [s', ← hg]
+          · simpa only using! hy
+      rw [hst]; rw [isPreprimitive_fixingSubgroup_insert_iff]
+      apply IsMultiplyPreprimitive.isPreprimitive_ofFixingSubgroup _ n
+      apply ENat.add_left_injective_of_ne_top ENat.one_ne_top
+      simp only
+      rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← hs]
+      apply congr_arg₂ _ _ rfl
+      rw [show s = g⁻¹ • s' by simp [hs'],
+        ← Set.image_smul, (MulAction.injective g⁻¹).encard_image, hst]
+      rw [Set.encard_insert_of_notMem]; rw [Subtype.coe_injective.encard_image]; rw [ENat.natCast_one]
+      exact notMem_val_image M t
 
 Depends on / 依赖: H.isMultiplyPretransitive, Nat.cast_inj, Nat.cast_one, Nat.succ_inj, Set.encard_empty, Set.nonempty_def, Set.nonempty_iff_ne_empty, cast_inj, cast_one, encard_empty, isMultiplyPreprimitive_iff, isMultiplyPreprimitive_ofStabilizer, isMultiplyPretransitive, nonempty_def, nonempty_iff_ne_empty, not_lt, not_lt.mpr, ofStabilizer, ofStabilizer.isMultiplyPretransitive.mpr, succ_inj
 -/
@@ -423,7 +495,14 @@ theorem ofFixingSubgroup.isMultiplyPreprimitive
     have htt' : t = Subtype.val ⁻¹' t' :=
       (Set.preimage_image_eq _ Subtype.coe_injective).symm
     rw [htt']
-    suffices IsPreprimitive (fixingSub
+    suffices IsPreprimitive (fixingSubgroup M (s union t')) (ofFixingSubgroup M (s union t')) by
+      apply IsPreprimitive.of_surjective map_ofFixingSubgroupUnion_bijective.surjective
+    apply IsMultiplyPreprimitive.isPreprimitive_ofFixingSubgroup _ n
+    rw [Set.encard_union_eq _]
+    · rw [Subtype.coe_injective.encard_image, add_assoc, ht,
+        ← hs, Nat.cast_add, Set.Finite.cast_ncard_eq]
+      exact Set.toFinite s
+    · apply disjoint_val_image
 
 中文:
 定理 ofFixingSubgroup.isMultiplyPreprimitive
@@ -434,7 +513,14 @@ theorem ofFixingSubgroup.isMultiplyPreprimitive
     have htt' : t = Subtype.val ⁻¹' t' :=
       (Set.preimage_image_eq _ Subtype.coe_injective).symm
     rw [htt']
-    suffices IsPreprimitive (fixingSub
+    suffices IsPreprimitive (fixingSubgroup M (s union t')) (ofFixingSubgroup M (s union t')) by
+      apply IsPreprimitive.of_surjective map_ofFixingSubgroupUnion_bijective.surjective
+    apply IsMultiplyPreprimitive.isPreprimitive_ofFixingSubgroup _ n
+    rw [Set.encard_union_eq _]
+    · rw [Subtype.coe_injective.encard_image, add_assoc, ht,
+        ← hs, Nat.cast_add, Set.Finite.cast_ncard_eq]
+      exact Set.toFinite s
+    · apply disjoint_val_image
 
 Depends on / 依赖: IsMultiplyPreprimitive, IsMultiplyPreprimitive.isPreprimitive_ofFixingSubgroup, IsPreprimitive, IsPreprimitive.of_surjective, Set.encard_union_e, Set.preimage_image_eq, Subtype, Subtype.coe_injective, Subtype.val, coe_injective, encard_union_e, fixingSubgroup, isMultiplyPretransitive, isPreprimitive_ofFixingSubgroup, map_ofFixingSubgroupUnion_bijective, map_ofFixingSubgroupUnion_bijective.surjective, ofFixingSubgroup, ofFixingSubgroup.isMultiplyPretransitive, of_surjective, preimage_image_eq
 -/
@@ -474,7 +560,13 @@ theorem isMultiplyPreprimitive_of_isMultiplyPretransitive_succ
   · exact isMultiplyPretransitive_of_le' (Nat.le_succ n) hα
   · intro s hs
     obtain ⟨m, hm⟩ := Nat.exists_eq_add_of_le hn
-    apply isPreprimitive_of_is_two_
+    apply isPreprimitive_of_is_two_pretransitive
+    have hs' : s.encard = m := by
+      simp only [hm, Nat.succ_eq_add_one, zero_add, add_comm 1] at hs
+      exact ENat.add_left_injective_of_ne_top ENat.one_ne_top hs
+    have : Finite s := Set.finite_of_encard_eq_coe hs'
+    apply ofFixingSubgroup.isMultiplyPretransitive (G := M) s (n := n.succ)
+    simp [Set.ncard, hs', hm, add_comm 1]
 
 中文:
 定理 isMultiplyPreprimitive_of_isMultiplyPretransitive_succ
@@ -488,7 +580,13 @@ theorem isMultiplyPreprimitive_of_isMultiplyPretransitive_succ
   · exact isMultiplyPretransitive_of_le' (Nat.le_succ n) hα
   · intro s hs
     obtain ⟨m, hm⟩ := Nat.exists_eq_add_of_le hn
-    apply isPreprimitive_of_is_two_
+    apply isPreprimitive_of_is_two_pretransitive
+    have hs' : s.encard = m := by
+      simp only [hm, Nat.succ_eq_add_one, zero_add, add_comm 1] at hs
+      exact ENat.add_left_injective_of_ne_top ENat.one_ne_top hs
+    have : Finite s := Set.finite_of_encard_eq_coe hs'
+    apply ofFixingSubgroup.isMultiplyPretransitive (G := M) s (n := n.succ)
+    simp [Set.ncard, hs', hm, add_comm 1]
 
 Depends on / 依赖: ENat.add_left_injective_of_ne_top, ENat.one_ne_top, Finite, Nat.eq_zero_or_pos, Nat.exists_eq_add_of_le, Nat.le_succ, Nat.succ_eq_add_one, Set.finite_of_encard_eq_coe, add_comm, add_left_injective_of_ne_top, encard, eq_zero_or_pos, exists_eq_add_of_le, finite_of_encard_eq_coe, isMultiplyPreprimitive_iff, isMultiplyPretransitive_of_le, isPreprimitive_of_is_two_pretransitive, is_zero_preprimitive, le_succ, one_ne_top
 -/
@@ -527,7 +625,7 @@ theorem isMultiplyPreprimitive_of_le
     · apply hrec
         (isMultiplyPreprimitive_of_isMultiplyPretransitive_succ M α hα)
         (Nat.lt_succ_iff.mp hmn')
-      ·
+      · refine le_trans ?_ hα; rw [ENat.natCast_le_natCast]; exact Nat.le_succ n
 
 中文:
 定理 isMultiplyPreprimitive_of_le
@@ -540,7 +638,7 @@ theorem isMultiplyPreprimitive_of_le
     · apply hrec
         (isMultiplyPreprimitive_of_isMultiplyPretransitive_succ M α hα)
         (Nat.lt_succ_iff.mp hmn')
-      ·
+      · refine le_trans ?_ hα; rw [ENat.natCast_le_natCast]; exact Nat.le_succ n
 
 Depends on / 依赖: ENat.natCast_le_natCast, Nat.eq_or_lt_of_le, Nat.eq_zero_of_le_zero, Nat.le_succ, Nat.lt_succ_iff.mp, eq_or_lt_of_le, eq_zero_of_le_zero, isMultiplyPreprimitive_of_isMultiplyPretransitive_succ, le_succ, le_trans, lt_succ_iff, natCast_le_natCast
 -/
@@ -572,7 +670,34 @@ theorem IsMultiplyPreprimitive.of_bijective_map
     have hs' : f '' s = t := Set.image_preimage_eq t hf.surjective
     let φ' : fixingSubgroup M s -> fixingSubgroup N t := fun ⟨m, hm⟩ =>
       ⟨φ m, fun ⟨y, hy⟩ => by
-        rw [← hs']; 
+        rw [← hs']; rw [Set.mem_image] at hy
+        obtain ⟨x, hx, hx'⟩ := hy
+        simp only
+        rw [← hx']; rw [← map_smulₛₗ]
+        apply congr_arg
+        rw [mem_fixingSubgroup_iff] at hm
+        exact hm x hx⟩
+    let f' : SubMulAction.ofFixingSubgroup M s ->ₑ[φ'] SubMulAction.ofFixingSubgroup N t :=
+      { toFun := fun ⟨x, hx⟩ => ⟨f.toFun x, fun h => hx (Set.mem_preimage.mp h)⟩
+        map_smul' := fun ⟨m, hm⟩ ⟨x, hx⟩ =>
+          by
+          rw [← SetLike.coe_eq_coe]
+          exact f.map_smul' m x }
+    have hf' : Function.Surjective f' := by
+      rintro ⟨y, hy⟩
+      obtain ⟨x, hx⟩ := hf.right y
+      use ⟨x, ?_⟩
+      · simpa only [f', ← Subtype.coe_inj] using! hx
+      · intro h
+        apply hy
+        rw [← hs']
+        exact ⟨x, h, hx⟩
+    have : IsPreprimitive (fixingSubgroup M s) (ofFixingSubgroup M s) :=
+      IsMultiplyPreprimitive.isPreprimitive_ofFixingSubgroup _ n
+        (by rw [← ht, ← hs', hf.injective.encard_image])
+    exact IsPreprimitive.of_surjective (f := f') (φ := φ') hf'
+
+@[to_additive]
 
 中文:
 定理 是MultiplyPreprimitive.of_bijective_map
@@ -582,7 +707,34 @@ theorem IsMultiplyPreprimitive.of_bijective_map
     have hs' : f '' s = t := Set.image_preimage_eq t hf.surjective
     let φ' : fixingSubgroup M s -> fixingSubgroup N t := fun ⟨m, hm⟩ =>
       ⟨φ m, fun ⟨y, hy⟩ => by
-        rw [← hs']; 
+        rw [← hs']; rw [Set.mem_image] at hy
+        obtain ⟨x, hx, hx'⟩ := hy
+        simp only
+        rw [← hx']; rw [← map_smulₛₗ]
+        apply congr_arg
+        rw [mem_fixingSubgroup_iff] at hm
+        exact hm x hx⟩
+    let f' : SubMulAction.ofFixingSubgroup M s ->ₑ[φ'] SubMulAction.ofFixingSubgroup N t :=
+      { toFun := fun ⟨x, hx⟩ => ⟨f.toFun x, fun h => hx (Set.mem_preimage.mp h)⟩
+        map_smul' := fun ⟨m, hm⟩ ⟨x, hx⟩ =>
+          by
+          rw [← SetLike.coe_eq_coe]
+          exact f.map_smul' m x }
+    have hf' : Function.Surjective f' := by
+      rintro ⟨y, hy⟩
+      obtain ⟨x, hx⟩ := hf.right y
+      use ⟨x, ?_⟩
+      · simpa only [f', ← Subtype.coe_inj] using! hx
+      · intro h
+        apply hy
+        rw [← hs']
+        exact ⟨x, h, hx⟩
+    have : IsPreprimitive (fixingSubgroup M s) (ofFixingSubgroup M s) :=
+      IsMultiplyPreprimitive.isPreprimitive_ofFixingSubgroup _ n
+        (by rw [← ht, ← hs', hf.injective.encard_image])
+    exact IsPreprimitive.of_surjective (f := f') (φ := φ') hf'
+
+@[to_additive]
 
 Depends on / 依赖: IsPretransitive, IsPretransitive.of_embedding, hf.surjective, of_embedding, surjective
 -/
@@ -638,7 +790,42 @@ theorem isMultiplyPreprimitive_congr
   · exact (IsPretransitive.of_embedding_congr hφ hf).mpr H.isMultiplyPretransitive
   · intro s hs
     let t := f '' s
-    let ψ : fixingSubgroup M s -> fixingSubgroup N t := fun ⟨g,
+    let ψ : fixingSubgroup M s -> fixingSubgroup N t := fun ⟨g, hg⟩ => ⟨φ g, by
+      simp only [mem_fixingSubgroup_iff] at hg ⊢
+      intro y hy
+      suffices exists x in s, y = f x by
+        obtain ⟨x, hx, rfl⟩ := this
+        rwa [← map_smulₛₗ, hg]
+      obtain ⟨x, rfl⟩ := hf.surjective y
+      simpa only [Set.mem_image, t, eq_comm] using! hy⟩
+    let g : ofFixingSubgroup M s ->ₑ[ψ] ofFixingSubgroup N t := {
+      toFun x := ⟨f x.val, by
+        simp only [mem_ofFixingSubgroup_iff, Set.mem_image, hf.injective.eq_iff, exists_eq_right, t]
+        exact x.prop⟩
+      map_smul' m x := by simp [subgroup_smul_def, map_smulₛₗ, ψ] }
+    rw [isPreprimitive_congr (f := g)]
+    · apply H.isPreprimitive_ofFixingSubgroup
+      simp [← hs, t, hf.injective.injOn.encard_image]
+    · rintro ⟨k, hk⟩
+      obtain ⟨k, rfl⟩ := hφ k
+      suffices k in fixingSubgroup M s by
+        use ⟨k, this⟩
+      simp only [mem_fixingSubgroup_iff, t] at hk ⊢
+      intro y hy
+      apply hf.injective
+      rw [map_smulₛₗ]; rw [hk]
+      exact Set.mem_image_of_mem (⇑f) hy
+    · constructor
+      · rintro ⟨x, hx⟩ ⟨y, hy⟩ h
+        suffices f x = f y by
+          simpa [← Subtype.coe_inj, hf.injective.eq_iff] using! this
+        simpa only [g, ← Subtype.coe_inj] using! h
+      · rintro ⟨x, hx⟩
+        obtain ⟨y, rfl⟩ := hf.surjective x
+        suffices y in ofFixingSubgroup M s by
+          exact ⟨⟨y, this⟩, rfl⟩
+        simp only [mem_ofFixingSubgroup_iff, Set.mem_image, not_exists, not_and, t] at hx ⊢
+        exact fun hy => hx y hy rfl
 
 中文:
 定理 isMultiplyPreprimitive_congr
@@ -650,7 +837,42 @@ theorem isMultiplyPreprimitive_congr
   · exact (IsPretransitive.of_embedding_congr hφ hf).mpr H.isMultiplyPretransitive
   · intro s hs
     let t := f '' s
-    let ψ : fixingSubgroup M s -> fixingSubgroup N t := fun ⟨g,
+    let ψ : fixingSubgroup M s -> fixingSubgroup N t := fun ⟨g, hg⟩ => ⟨φ g, by
+      simp only [mem_fixingSubgroup_iff] at hg ⊢
+      intro y hy
+      suffices exists x in s, y = f x by
+        obtain ⟨x, hx, rfl⟩ := this
+        rwa [← map_smulₛₗ, hg]
+      obtain ⟨x, rfl⟩ := hf.surjective y
+      simpa only [Set.mem_image, t, eq_comm] using! hy⟩
+    let g : ofFixingSubgroup M s ->ₑ[ψ] ofFixingSubgroup N t := {
+      toFun x := ⟨f x.val, by
+        simp only [mem_ofFixingSubgroup_iff, Set.mem_image, hf.injective.eq_iff, exists_eq_right, t]
+        exact x.prop⟩
+      map_smul' m x := by simp [subgroup_smul_def, map_smulₛₗ, ψ] }
+    rw [isPreprimitive_congr (f := g)]
+    · apply H.isPreprimitive_ofFixingSubgroup
+      simp [← hs, t, hf.injective.injOn.encard_image]
+    · rintro ⟨k, hk⟩
+      obtain ⟨k, rfl⟩ := hφ k
+      suffices k in fixingSubgroup M s by
+        use ⟨k, this⟩
+      simp only [mem_fixingSubgroup_iff, t] at hk ⊢
+      intro y hy
+      apply hf.injective
+      rw [map_smulₛₗ]; rw [hk]
+      exact Set.mem_image_of_mem (⇑f) hy
+    · constructor
+      · rintro ⟨x, hx⟩ ⟨y, hy⟩ h
+        suffices f x = f y by
+          simpa [← Subtype.coe_inj, hf.injective.eq_iff] using! this
+        simpa only [g, ← Subtype.coe_inj] using! h
+      · rintro ⟨x, hx⟩
+        obtain ⟨y, rfl⟩ := hf.surjective x
+        suffices y in ofFixingSubgroup M s by
+          exact ⟨⟨y, this⟩, rfl⟩
+        simp only [mem_ofFixingSubgroup_iff, Set.mem_image, not_exists, not_and, t] at hx ⊢
+        exact fun hy => hx y hy rfl
 
 Depends on / 依赖: H.isMultiplyPretransitive, IsMultiplyPreprimitive, IsMultiplyPreprimitive.of_bijective_map, IsPretransitive, IsPretransitive.of_embedding_congr, Set.mem_image, fixingSubgroup, hf.surjective, isMultiplyPreprimitive_iff, isMultiplyPretransitive, mem_fixingSubgroup_iff, mem_image, of_bijective_map, of_embedding_congr, surjective
 -/

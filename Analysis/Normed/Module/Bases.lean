@@ -337,7 +337,7 @@ theorem range_proj_eq_span
   · rw [Submodule.span_le]
     rintro _ ⟨i, hi, rfl⟩
     use b i
-    rw [ContinuousLinearMap.
+    rw [ContinuousLinearMap.coe_coe]; rw [proj_apply_basis_mem]; rw [if_pos (Finset.mem_coe.mp hi)]
 
 中文:
 定理 range_proj_eq_span
@@ -351,7 +351,7 @@ theorem range_proj_eq_span
   · rw [Submodule.span_le]
     rintro _ ⟨i, hi, rfl⟩
     use b i
-    rw [ContinuousLinearMap.
+    rw [ContinuousLinearMap.coe_coe]; rw [proj_apply_basis_mem]; rw [if_pos (Finset.mem_coe.mp hi)]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_coe, Finset, Finset.mem_coe.mp, Submodule, Submodule.smul_mem, Submodule.span_le, Submodule.subset_span, Submodule.sum_mem, coe_coe, if_pos, le_antisymm, mem_coe, proj_apply, proj_apply_basis_mem, smul_mem, span_le, subset_span, sum_mem
 -/
@@ -489,7 +489,18 @@ theorem exists_norm_proj_le
   obtain ⟨A₀, hA₀⟩ := summable_iff_vanishing_norm.mp (b.expansion x).summable 1 zero_lt_one
   use (A₀.powerset.image fun B => ‖b.proj B x‖).sup' ((Finset.powerset_nonempty A₀).image _) id + 1
   intro A
-  have hdecomp : b.proj A x = b.proj (A inter A₀
+  have hdecomp : b.proj A x = b.proj (A inter A₀) x + b.proj (A \ A₀) x := by
+    simp only [GeneralSchauderBasis.proj_apply]
+    rw [← Finset.sum_union (Finset.disjoint_sdiff_inter A A₀).symm]; rw [Finset.union_comm]; rw [Finset.sdiff_union_inter]
+  rw [hdecomp]
+  -- -- The projection on the tail (A \ A₀) at `x` is bounded by 1
+  have htail : ‖b.proj (A \ A₀) x‖ < 1 := by
+    rw [GeneralSchauderBasis.proj_apply]
+    exact hA₀ (A \ A₀) Finset.sdiff_disjoint
+  apply (norm_add_le _ _).trans (add_le_add _ htail.le)
+  -- The projection on (A ∩ A₀) at `x` is bounded by the `sup'`.
+exact Finset.le_sup' id Finset.mem_image_of_mem (fun B => ‖b.proj B x‖)
+      (Finset.mem_powerset.2 Finset.inter_subset_right)
 
 中文:
 定理 存在_norm_proj_le
@@ -502,7 +513,18 @@ theorem exists_norm_proj_le
   obtain ⟨A₀, hA₀⟩ := summable_iff_vanishing_norm.mp (b.expansion x).summable 1 zero_lt_one
   use (A₀.powerset.image fun B => ‖b.proj B x‖).sup' ((Finset.powerset_nonempty A₀).image _) id + 1
   intro A
-  have hdecomp : b.proj A x = b.proj (A inter A₀
+  have hdecomp : b.proj A x = b.proj (A inter A₀) x + b.proj (A \ A₀) x := by
+    simp only [GeneralSchauderBasis.proj_apply]
+    rw [← Finset.sum_union (Finset.disjoint_sdiff_inter A A₀).symm]; rw [Finset.union_comm]; rw [Finset.sdiff_union_inter]
+  rw [hdecomp]
+  -- -- The projection on the tail (A \ A₀) at `x` is bounded by 1
+  have htail : ‖b.proj (A \ A₀) x‖ < 1 := by
+    rw [GeneralSchauderBasis.proj_apply]
+    exact hA₀ (A \ A₀) Finset.sdiff_disjoint
+  apply (norm_add_le _ _).trans (add_le_add _ htail.le)
+  -- The projection on (A ∩ A₀) at `x` is bounded by the `sup'`.
+exact Finset.le_sup' id Finset.mem_image_of_mem (fun B => ‖b.proj B x‖)
+      (Finset.mem_powerset.2 Finset.inter_subset_right)
 
 Depends on / 依赖: Finset, Finset.disjoint_sdiff_inter, Finset.powerset_nonempty, Finset.sdiff_union_inter, Finset.sum_union, Finset.union_comm, GeneralSchauderBasis, GeneralSchauderBasis.proj_apply, b.expansion, b.proj, banach_steinhaus, classical, disjoint_sdiff_inter, expansion, hdecomp, powerset, powerset.image, powerset_nonempty, proj_apply, sdiff_union_inter
 -/
@@ -1039,7 +1061,12 @@ lemma succSub_ortho
   · rw [h, min_self, min_eq_right (Nat.le_succ j), Nat.min_eq_left (Nat.le_succ j)]
     abel
   · rcases Nat.lt_or_gt_of_ne h with h' | h'
-    · rw [min_eq_left_of_lt h', min_eq_left (Nat.succ_le_
+    · rw [min_eq_left_of_lt h', min_eq_left (Nat.succ_le_of_lt h'),
+        min_eq_left_of_lt (Nat.lt_succ_of_lt h')]
+      abel
+    · rw [min_eq_right_of_lt h', min_eq_right (Nat.succ_le_of_lt h'),
+        min_eq_right_of_lt (Nat.lt_succ_of_lt h')]
+      abel
 
 中文:
 引理 succSub_ortho
@@ -1051,7 +1078,12 @@ lemma succSub_ortho
   · rw [h, min_self, min_eq_right (Nat.le_succ j), Nat.min_eq_left (Nat.le_succ j)]
     abel
   · rcases Nat.lt_or_gt_of_ne h with h' | h'
-    · rw [min_eq_left_of_lt h', min_eq_left (Nat.succ_le_
+    · rw [min_eq_left_of_lt h', min_eq_left (Nat.succ_le_of_lt h'),
+        min_eq_left_of_lt (Nat.lt_succ_of_lt h')]
+      abel
+    · rw [min_eq_right_of_lt h', min_eq_right (Nat.succ_le_of_lt h'),
+        min_eq_right_of_lt (Nat.lt_succ_of_lt h')]
+      abel
 
 Depends on / 依赖: Nat.add_min_add_right, Nat.le_succ, Nat.lt_or_gt_of_ne, Nat.lt_succ_of_lt, Nat.min_eq_left, Nat.succ_le_of_lt, _root_, _root_.sub_apply, add_min_add_right, le_succ, lt_or_gt_of_ne, lt_succ_of_lt, map_sub, min_eq_left, min_eq_left_of_lt, min_eq_right, min_eq_right_of_lt, min_self, split_ifs, sub_apply
 -/
@@ -1085,7 +1117,23 @@ lemma finrank_range_succSub_eq_one
     exact ⟨P n y, by simp [ContinuousLinearMap.coe_coe, hcomp]⟩
   have hUW : U <= W := by
     rintro _ ⟨y, rfl⟩
-    exact Submodule
+    exact Submodule.sub_mem W ⟨y, rfl⟩ (hV ⟨y, rfl⟩)
+  have hW : W = U ⊔ V := by
+    apply le_antisymm
+    · rintro x ⟨y, hy⟩
+      rw [← hy]; rw [ContinuousLinearMap.coe_coe]; rw [← sub_add_cancel ((P (n + 1)) y) ((P n) y)]
+      exact Submodule.add_mem_sup ⟨y, rfl⟩ ⟨y, rfl⟩
+    · exact sup_le hUW hV
+  have hdisj : U ⊓ V = ⊥ := eq_bot_iff.mpr fun x ⟨⟨y, hy⟩, ⟨z, hz⟩⟩ => by
+    simp only [Submodule.mem_bot]
+    calc x = (P n) x := by rw [← hz, ContinuousLinearMap.coe_coe, hcomp, min_self]
+         _ = 0 := by rw [← hy, ContinuousLinearMap.coe_coe]; simp [succSub, map_sub, hcomp]
+  have : FiniteDimensional 𝕜 W := .of_finrank_pos (by rw [hrank]; exact Nat.succ_pos n)
+  have : FiniteDimensional 𝕜 U := Submodule.finiteDimensional_of_le hUW
+  have : FiniteDimensional 𝕜 V := Submodule.finiteDimensional_of_le hV
+  have h_dim := Submodule.finrank_sup_add_finrank_inf_eq U V
+  rw [hdisj]; rw [finrank_bot]; rw [add_zero]; rw [← hW]; rw [hrank]; rw [hrank]; rw [Nat.add_comm] at h_dim
+  exact Nat.add_right_cancel h_dim.symm
 
 中文:
 引理 finrank_range_succSub_eq_one
@@ -1099,7 +1147,23 @@ lemma finrank_range_succSub_eq_one
     exact ⟨P n y, by simp [ContinuousLinearMap.coe_coe, hcomp]⟩
   have hUW : U <= W := by
     rintro _ ⟨y, rfl⟩
-    exact Submodule
+    exact Submodule.sub_mem W ⟨y, rfl⟩ (hV ⟨y, rfl⟩)
+  have hW : W = U ⊔ V := by
+    apply le_antisymm
+    · rintro x ⟨y, hy⟩
+      rw [← hy]; rw [ContinuousLinearMap.coe_coe]; rw [← sub_add_cancel ((P (n + 1)) y) ((P n) y)]
+      exact Submodule.add_mem_sup ⟨y, rfl⟩ ⟨y, rfl⟩
+    · exact sup_le hUW hV
+  have hdisj : U ⊓ V = ⊥ := eq_bot_iff.mpr fun x ⟨⟨y, hy⟩, ⟨z, hz⟩⟩ => by
+    simp only [Submodule.mem_bot]
+    calc x = (P n) x := by rw [← hz, ContinuousLinearMap.coe_coe, hcomp, min_self]
+         _ = 0 := by rw [← hy, ContinuousLinearMap.coe_coe]; simp [succSub, map_sub, hcomp]
+  have : FiniteDimensional 𝕜 W := .of_finrank_pos (by rw [hrank]; exact Nat.succ_pos n)
+  have : FiniteDimensional 𝕜 U := Submodule.finiteDimensional_of_le hUW
+  have : FiniteDimensional 𝕜 V := Submodule.finiteDimensional_of_le hV
+  have h_dim := Submodule.finrank_sup_add_finrank_inf_eq U V
+  rw [hdisj]; rw [finrank_bot]; rw [add_zero]; rw [← hW]; rw [hrank]; rw [hrank]; rw [Nat.add_comm] at h_dim
+  exact Nat.add_right_cancel h_dim.symm
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_coe, Submodule, Submodule.add_mem_sup, Submodule.sub_mem, add_mem_sup, coe_coe, le_antisymm, sub_add_cancel, sub_mem, succSub, toLinearMap, toLinearMap.range
 -/
@@ -1197,7 +1261,10 @@ lemma exists_coeff
     finrank_range_succSub_eq_one D.finrank_range D.proj_comp n
   have : FiniteDimensional 𝕜 S.range := .of_finrank_pos (hrank.symm ▸ zero_lt_one)
   have hspan : Submodule.span 𝕜 {D.e n} = S.range := by
-    apply
+    apply Submodule.eq_of_le_of_finrank_eq
+    · exact (Submodule.span_singleton_le_iff_mem _ _).mpr (D.e_mem_range n)
+    · simp [hrank, finrank_span_singleton (D.e_ne_zero n)]
+  exact Submodule.mem_span_singleton.mp (hspan.symm ▸ LinearMap.mem_range_self S x)
 
 中文:
 引理 存在_coeff
@@ -1208,7 +1275,10 @@ lemma exists_coeff
     finrank_range_succSub_eq_one D.finrank_range D.proj_comp n
   have : FiniteDimensional 𝕜 S.range := .of_finrank_pos (hrank.symm ▸ zero_lt_one)
   have hspan : Submodule.span 𝕜 {D.e n} = S.range := by
-    apply
+    apply Submodule.eq_of_le_of_finrank_eq
+    · exact (Submodule.span_singleton_le_iff_mem _ _).mpr (D.e_mem_range n)
+    · simp [hrank, finrank_span_singleton (D.e_ne_zero n)]
+  exact Submodule.mem_span_singleton.mp (hspan.symm ▸ LinearMap.mem_range_self S x)
 
 Depends on / 依赖: D.e_mem_range, D.e_ne_zero, D.finrank_range, D.proj_comp, FiniteDimensional, Module, Module.finrank, S.range, Submodule, Submodule.eq_of_le_of_finrank_eq, Submodule.mem_span_singleton.mp, Submodule.span, Submodule.span_singleton_le_iff_mem, e_mem_range, e_ne_zero, eq_of_le_of_finrank_eq, finrank, finrank_range, finrank_range_succSub_eq_one, finrank_span_singleton
 -/
@@ -1276,7 +1346,28 @@ definition basis
     coord := fun n => LinearMap.mkContinuous
       { toFun := coeff n
 map_add' := fun x y => smul_left_injective 𝕜 (D.e_ne_zero n) by
-          
+          simp only [add_smul, ← hcoeff, map_add]
+map_smul' := fun c x => smul_left_injective 𝕜 (D.e_ne_zero n) by
+          dsimp only [RingHom.id_apply]
+          rw [smul_eq_mul]; rw [← smul_smul]; rw [← hcoeff]; rw [← hcoeff]; rw [map_smul] }
+      (‖succSub D.P n‖ / ‖D.e n‖)
+      (fun x => by
+        rw [div_mul_eq_mul_div]; rw [le_div_iff₀ (norm_pos_iff.mpr (D.e_ne_zero n))]
+        calc ‖coeff n x‖ * ‖D.e n‖ = ‖coeff n x • D.e n‖ := (norm_smul _ _).symm
+          _ = ‖(succSub D.P n) x‖ := by rw [hcoeff]
+          _ <= ‖succSub D.P n‖ * ‖x‖ := ContinuousLinearMap.le_opNorm _ _)
+ortho := fun i j => smul_left_injective 𝕜 (D.e_ne_zero i) by
+      obtain ⟨x, hx⟩ : exists x, (succSub D.P j) x = D.e j := D.e_mem_range j
+      simp only [mkContinuous_apply, LinearMap.coe_mk, AddHom.coe_mk]
+      rw [← hcoeff]; rw [← hx]; rw [succSub_ortho D.proj_comp]; rw [hx]
+      simp only [Pi.single_apply]
+      split_ifs with h <;> simp [h]
+    expansion := fun x => by
+      rw [HasSum]; rw [SummationFilter.conditional_filter_eq_map_range]; rw [tendsto_map'_iff]
+      exact (D.proj_tendsto x).congr fun n => by
+        simp only [Function.comp, LinearMap.coe_mk, AddHom.coe_mk,
+                   LinearMap.mkContinuous_apply, ← hcoeff]
+        rw [← _root_.sum_apply]; rw [sum_succSub D.P D.proj_zero] }
 
 中文:
 定义 basis
@@ -1288,7 +1379,28 @@ map_add' := fun x y => smul_left_injective 𝕜 (D.e_ne_zero n) by
     coord := fun n => LinearMap.mkContinuous
       { toFun := coeff n
 map_add' := fun x y => smul_left_injective 𝕜 (D.e_ne_zero n) by
-          
+          simp only [add_smul, ← hcoeff, map_add]
+map_smul' := fun c x => smul_left_injective 𝕜 (D.e_ne_zero n) by
+          dsimp only [RingHom.id_apply]
+          rw [smul_eq_mul]; rw [← smul_smul]; rw [← hcoeff]; rw [← hcoeff]; rw [map_smul] }
+      (‖succSub D.P n‖ / ‖D.e n‖)
+      (fun x => by
+        rw [div_mul_eq_mul_div]; rw [le_div_iff₀ (norm_pos_iff.mpr (D.e_ne_zero n))]
+        calc ‖coeff n x‖ * ‖D.e n‖ = ‖coeff n x • D.e n‖ := (norm_smul _ _).symm
+          _ = ‖(succSub D.P n) x‖ := by rw [hcoeff]
+          _ <= ‖succSub D.P n‖ * ‖x‖ := ContinuousLinearMap.le_opNorm _ _)
+ortho := fun i j => smul_left_injective 𝕜 (D.e_ne_zero i) by
+      obtain ⟨x, hx⟩ : exists x, (succSub D.P j) x = D.e j := D.e_mem_range j
+      simp only [mkContinuous_apply, LinearMap.coe_mk, AddHom.coe_mk]
+      rw [← hcoeff]; rw [← hx]; rw [succSub_ortho D.proj_comp]; rw [hx]
+      simp only [Pi.single_apply]
+      split_ifs with h <;> simp [h]
+    expansion := fun x => by
+      rw [HasSum]; rw [SummationFilter.conditional_filter_eq_map_range]; rw [tendsto_map'_iff]
+      exact (D.proj_tendsto x).congr fun n => by
+        simp only [Function.comp, LinearMap.coe_mk, AddHom.coe_mk,
+                   LinearMap.mkContinuous_apply, ← hcoeff]
+        rw [← _root_.sum_apply]; rw [sum_succSub D.P D.proj_zero] }
 
 Depends on / 依赖: D.e_ne_zero, LinearMap, LinearMap.mkContinuous, RingHom, RingHom.id_apply, add_smul, basisCoeff, basisCoeff_spec, e_ne_zero, hcoeff, id_apply, map_add, map_smul, mkContinuous, smul_eq_mul, smul_left_injective, smul_smul, succSub
 -/

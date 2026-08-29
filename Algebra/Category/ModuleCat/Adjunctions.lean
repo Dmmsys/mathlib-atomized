@@ -498,7 +498,17 @@ instance :
       μIso_hom_natural_right := fun {X Y} X' f => by
         rw [← cancel_epi (μIso R X' X).inv]
         aesop
-     
+      associativity := fun X Y Z => by
+        rw [← cancel_epi ((μIso R X Y).inv ▷ _)]; rw [← cancel_epi (μIso R _ _).inv]
+        ext ⟨⟨x, y⟩, z⟩
+        dsimp
+        rw [μIso_inv_freeMk]; rw [MonoidalCategory.whiskerRight_apply]; rw [μIso_inv_freeMk]; rw [MonoidalCategory.whiskerRight_apply]; rw [μIso_hom_freeMk_tmul_freeMk]; rw [μIso_hom_freeMk_tmul_freeMk]; rw [free_map_apply]; rw [CategoryTheory.associator_hom_apply]; rw [MonoidalCategory.associator_hom_apply]; rw [MonoidalCategory.whiskerLeft_apply]; rw [μIso_hom_freeMk_tmul_freeMk]; rw [μIso_hom_freeMk_tmul_freeMk]
+      left_unitality := fun X => by
+        rw [← cancel_epi (fun_ _).inv]; rw [Iso.inv_hom_id]
+        aesop
+      right_unitality := fun X => by
+        rw [← cancel_epi (ρ_ _).inv]; rw [Iso.inv_hom_id]
+        aesop }
 
 中文:
 实例 :
@@ -512,7 +522,17 @@ instance :
       μIso_hom_natural_right := fun {X Y} X' f => by
         rw [← cancel_epi (μIso R X' X).inv]
         aesop
-     
+      associativity := fun X Y Z => by
+        rw [← cancel_epi ((μIso R X Y).inv ▷ _)]; rw [← cancel_epi (μIso R _ _).inv]
+        ext ⟨⟨x, y⟩, z⟩
+        dsimp
+        rw [μIso_inv_freeMk]; rw [MonoidalCategory.whiskerRight_apply]; rw [μIso_inv_freeMk]; rw [MonoidalCategory.whiskerRight_apply]; rw [μIso_hom_freeMk_tmul_freeMk]; rw [μIso_hom_freeMk_tmul_freeMk]; rw [free_map_apply]; rw [CategoryTheory.associator_hom_apply]; rw [MonoidalCategory.associator_hom_apply]; rw [MonoidalCategory.whiskerLeft_apply]; rw [μIso_hom_freeMk_tmul_freeMk]; rw [μIso_hom_freeMk_tmul_freeMk]
+      left_unitality := fun X => by
+        rw [← cancel_epi (fun_ _).inv]; rw [Iso.inv_hom_id]
+        aesop
+      right_unitality := fun X => by
+        rw [← cancel_epi (ρ_ _).inv]; rw [Iso.inv_hom_id]
+        aesop }
 
 Depends on / 依赖: CoreMonoidal, Functor, Functor.CoreMonoidal.toMonoidal, MonoidalCategory, MonoidalCategory.whiskerRight_apply, associativity, cancel_epi, toMonoidal, whiskerRight_apply
 -/
@@ -698,7 +718,7 @@ instance categoryFree
     (f.sum (fun f' s => g.sum (fun g' t => Finsupp.single (f' ≫ g') (s * t))) : (X ⟶ Z) ->₀ R)
   assoc {W X Y Z} f g h := by
     -- This imitates the proof of associativity for `MonoidAlgebra`.
-    sim
+    simp [sum_sum_index, add_mul, mul_add, Category.assoc, mul_assoc]
 
 中文:
 实例 categoryFree
@@ -709,7 +729,7 @@ instance categoryFree
     (f.sum (fun f' s => g.sum (fun g' t => Finsupp.single (f' ≫ g') (s * t))) : (X ⟶ Z) ->₀ R)
   assoc {W X Y Z} f g h := by
     -- This imitates the proof of associativity for `MonoidAlgebra`.
-    sim
+    simp [sum_sum_index, add_mul, mul_add, Category.assoc, mul_assoc]
 -/
 instance categoryFree : Category (Free R C) where
   Hom := fun X Y : C => (X ⟶ Y) ->₀ R
@@ -739,7 +759,7 @@ instance :
     dsimp +instances [CategoryTheory.categoryFree]
     rw [← Finsupp.sum_add]
     congr; ext r h
-    rw [Finsup
+    rw [Finsupp.sum_add_index'] <;> · simp [mul_add]
 
 中文:
 实例 :
@@ -752,7 +772,7 @@ instance :
     dsimp +instances [CategoryTheory.categoryFree]
     rw [← Finsupp.sum_add]
     congr; ext r h
-    rw [Finsup
+    rw [Finsupp.sum_add_index'] <;> · simp [mul_add]
 
 Depends on / 依赖: Finsupp, Finsupp.instAddCommGroup, instAddCommGroup
 -/
@@ -781,7 +801,8 @@ instance :
   comp_smul X Y Z f r g := by
     dsimp +instances [CategoryTheory.categoryFree]
     simp_rw [Finsupp.smul_sum]
-    congr; ext h 
+    congr; ext h s
+    rw [Finsupp.sum_smul_index] <;> simp [mul_left_comm]
 
 中文:
 实例 :
@@ -793,7 +814,8 @@ instance :
   comp_smul X Y Z f r g := by
     dsimp +instances [CategoryTheory.categoryFree]
     simp_rw [Finsupp.smul_sum]
-    congr; ext h 
+    congr; ext h s
+    rw [Finsupp.sum_smul_index] <;> simp [mul_left_comm]
 
 Depends on / 依赖: Finsupp, Finsupp.module, module
 -/
@@ -896,7 +918,26 @@ definition lift
     | zero => simp
     | add f₁ f₂ w₁ w₂ =>
       rw [add_comp]
-      rw [Finsupp.sum_ad
+      rw [Finsupp.sum_add_index']; rw [Finsupp.sum_add_index']
+      · simp only [w₁, w₂, add_comp]
+      · intros; rw [zero_smul]
+      · intros; simp only [add_smul]
+      · intros; rw [zero_smul]
+      · intros; simp only [add_smul]
+    | single f' r =>
+      induction g using Finsupp.induction_linear with
+      | zero => simp
+      | add f₁ f₂ w₁ w₂ =>
+        rw [comp_add]
+        rw [Finsupp.sum_add_index']; rw [Finsupp.sum_add_index']
+        · simp only [w₁, w₂, comp_add]
+        · intros; rw [zero_smul]
+        · intros; simp only [add_smul]
+        · intros; rw [zero_smul]
+        · intros; simp only [add_smul]
+      | single g' s =>
+        rw [single_comp_single _ _ f' g' r s]
+        simp [mul_comm r s, mul_smul]
 
 中文:
 定义 lift
@@ -911,7 +952,26 @@ definition lift
     | zero => simp
     | add f₁ f₂ w₁ w₂ =>
       rw [add_comp]
-      rw [Finsupp.sum_ad
+      rw [Finsupp.sum_add_index']; rw [Finsupp.sum_add_index']
+      · simp only [w₁, w₂, add_comp]
+      · intros; rw [zero_smul]
+      · intros; simp only [add_smul]
+      · intros; rw [zero_smul]
+      · intros; simp only [add_smul]
+    | single f' r =>
+      induction g using Finsupp.induction_linear with
+      | zero => simp
+      | add f₁ f₂ w₁ w₂ =>
+        rw [comp_add]
+        rw [Finsupp.sum_add_index']; rw [Finsupp.sum_add_index']
+        · simp only [w₁, w₂, comp_add]
+        · intros; rw [zero_smul]
+        · intros; simp only [add_smul]
+        · intros; rw [zero_smul]
+        · intros; simp only [add_smul]
+      | single g' s =>
+        rw [single_comp_single _ _ f' g' r s]
+        simp [mul_comm r s, mul_smul]
 
 Depends on / 依赖: F.obj
 -/
@@ -1051,7 +1111,9 @@ definition ext
       | add f₁ f₂ w₁ w₂ =>
         rw [Functor.map_add]; rw [add_comp]; rw [w₁]; rw [w₂]; rw [Functor.map_add]; rw [comp_add]
       | single f' r =>
-        rw 
+        rw [Iso.app_hom]; rw [Iso.app_hom]; rw [← smul_single_one]; rw [F.map_smul]; rw [G.map_smul]; rw [smul_comp]; rw [comp_smul]
+        change r • (embedding R C ⋙ F).map f' ≫ _ = r • _ ≫ (embedding R C ⋙ G).map f'
+        rw [α.hom.naturality f'])
 
 中文:
 定义 ext
@@ -1064,7 +1126,9 @@ definition ext
       | add f₁ f₂ w₁ w₂ =>
         rw [Functor.map_add]; rw [add_comp]; rw [w₁]; rw [w₂]; rw [Functor.map_add]; rw [comp_add]
       | single f' r =>
-        rw 
+        rw [Iso.app_hom]; rw [Iso.app_hom]; rw [← smul_single_one]; rw [F.map_smul]; rw [G.map_smul]; rw [smul_comp]; rw [comp_smul]
+        change r • (embedding R C ⋙ F).map f' ≫ _ = r • _ ≫ (embedding R C ⋙ G).map f'
+        rw [α.hom.naturality f'])
 
 Depends on / 依赖: F.map_smul, Finsupp, Finsupp.induction_linear, Functor, Functor.map_add, G.map_smul, Iso.app_hom, NatIso, NatIso.ofComponents, add_comp, app_hom, comp_add, comp_smul, embedding, hom.naturality, induction_linear, map_add, map_smul, naturality, ofComponents
 -/

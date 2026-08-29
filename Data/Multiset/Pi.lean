@@ -118,7 +118,7 @@ theorem cons_swap
   on_goal 1 => rcases Decidable.eq_or_ne a'' a' with (rfl | h₂)
   all_goals simp [*, Pi.cons_same, Pi.cons_ne]
 
-@[sim
+@[simp]
 
 中文:
 定理 cons_swap
@@ -132,7 +132,7 @@ theorem cons_swap
   on_goal 1 => rcases Decidable.eq_or_ne a'' a' with (rfl | h₂)
   all_goals simp [*, Pi.cons_same, Pi.cons_ne]
 
-@[sim
+@[simp]
 
 Depends on / 依赖: Decidable, Decidable.eq_or_ne, Decidable.ne_or_eq, Multiset, Multiset.cons_swap, Pi.cons_ne, Pi.cons_same, all_goals, cons_ne, cons_same, cons_swap, eq_or_ne, heq_iff_eq, hfunext, ne_or_eq, on_goal
 -/
@@ -263,7 +263,7 @@ have ne : a != a' := fun h => hs h.symm ▸ h'
       calc
         f₁ a' h' = Pi.cons s a b f₁ a' this := by rw [Pi.cons_ne this ne.symm]
                _ = Pi.cons s a b f₂ a' this := by rw [eq]
-  
+               _ = f₂ a' h' := by rw [Pi.cons_ne this ne.symm]
 
 中文:
 定理 cons_injective
@@ -276,7 +276,7 @@ have ne : a != a' := fun h => hs h.symm ▸ h'
       calc
         f₁ a' h' = Pi.cons s a b f₁ a' this := by rw [Pi.cons_ne this ne.symm]
                _ = Pi.cons s a b f₂ a' this := by rw [eq]
-  
+               _ = f₂ a' h' := by rw [Pi.cons_ne this ne.symm]
 -/
 theorem cons_injective {a : α} {b : δ a} {s : Multiset α} (hs : a ∉ s) :
     Function.Injective (Pi.cons s a b) := fun f₁ f₂ eq =>
@@ -308,7 +308,17 @@ definition pi
       · subst eq; rfl
       · simp only [map_bind, map_map, comp_apply, bind_bind (t a') (t a)]
         apply bind_hcongr
-     
+        · rw [cons_swap a a']
+        intro b _
+        apply bind_hcongr
+        · rw [cons_swap a a']
+        intro b' _
+        apply map_hcongr
+        · rw [cons_swap a a']
+        intro f _
+        exact Pi.cons_swap eq)
+
+@[simp]
 
 中文:
 定义 pi
@@ -321,7 +331,17 @@ definition pi
       · subst eq; rfl
       · simp only [map_bind, map_map, comp_apply, bind_bind (t a') (t a)]
         apply bind_hcongr
-     
+        · rw [cons_swap a a']
+        intro b _
+        apply bind_hcongr
+        · rw [cons_swap a a']
+        intro b' _
+        apply map_hcongr
+        · rw [cons_swap a a']
+        intro f _
+        exact Pi.cons_swap eq)
+
+@[simp]
 
 Depends on / 依赖: Multiset, Pi.cons, Pi.cons_swap, Pi.empty, bind_bind, bind_hcongr, comp_apply, cons_swap, m.recOn, map_bind, map_hcongr, map_map, p.map
 -/
@@ -419,7 +439,14 @@ theorem Nodup.pi
       have hs : Nodup s := by simp only [nodup_cons] at hs; exact hs.2
       simp only [pi_cons, nodup_bind]
       refine
-        ⟨fun b _ => 
+        ⟨fun b _ => ((ih hs) fun a' h' => ht a' <| mem_cons_of_mem h').map (Pi.cons_injective has),
+          ?_⟩
+      refine (ht a <| mem_cons_self _ _).pairwise ?_
+      exact fun b₁ _ b₂ _ neb =>
+        disjoint_map_map.2 fun f _ g _ eq =>
+          have : Pi.cons s a b₁ f a (mem_cons_self _ _) =
+            Pi.cons s a b₂ g a (mem_cons_self _ _) := by rw [eq]
+neb show b₁ = b₂ by rwa [Pi.cons_same, Pi.cons_same] at this)
 
 中文:
 定理 Nodup.pi
@@ -431,7 +458,14 @@ theorem Nodup.pi
       have hs : Nodup s := by simp only [nodup_cons] at hs; exact hs.2
       simp only [pi_cons, nodup_bind]
       refine
-        ⟨fun b _ => 
+        ⟨fun b _ => ((ih hs) fun a' h' => ht a' <| mem_cons_of_mem h').map (Pi.cons_injective has),
+          ?_⟩
+      refine (ht a <| mem_cons_self _ _).pairwise ?_
+      exact fun b₁ _ b₂ _ neb =>
+        disjoint_map_map.2 fun f _ g _ eq =>
+          have : Pi.cons s a b₁ f a (mem_cons_self _ _) =
+            Pi.cons s a b₂ g a (mem_cons_self _ _) := by rw [eq]
+neb show b₁ = b₂ by rwa [Pi.cons_same, Pi.cons_same] at this)
 -/
 protected theorem Nodup.pi {s : Multiset α} {t : forall a, Multiset (β a)} :
     Nodup s -> (forall a in s, Nodup (t a)) -> Nodup (pi s t) :=
@@ -464,7 +498,17 @@ theorem mem_pi
     simp only [this, pi_zero, mem_singleton, true_iff]
     intro _ h; exact (notMem_zero _ h).elim
   | cons a m ih => ?_
-  simp_rw [pi_cons, mem_bind, 
+  simp_rw [pi_cons, mem_bind, mem_map, ih]
+  constructor
+  · rintro ⟨b, hb, f', hf', rfl⟩ a' ha'
+    by_cases h : a' = a
+    · subst h
+      rwa [Pi.cons_same]
+    · rw [Pi.cons_ne _ h]
+      apply hf'
+  · intro hf
+    refine ⟨_, hf a (mem_cons_self _ _), _, fun a ha => hf a (mem_cons_of_mem ha), ?_⟩
+    rw [Pi.cons_eta]
 
 中文:
 定理 mem_pi
@@ -476,7 +520,17 @@ theorem mem_pi
     simp only [this, pi_zero, mem_singleton, true_iff]
     intro _ h; exact (notMem_zero _ h).elim
   | cons a m ih => ?_
-  simp_rw [pi_cons, mem_bind, 
+  simp_rw [pi_cons, mem_bind, mem_map, ih]
+  constructor
+  · rintro ⟨b, hb, f', hf', rfl⟩ a' ha'
+    by_cases h : a' = a
+    · subst h
+      rwa [Pi.cons_same]
+    · rw [Pi.cons_ne _ h]
+      apply hf'
+  · intro hf
+    refine ⟨_, hf a (mem_cons_self _ _), _, fun a ha => hf a (mem_cons_of_mem ha), ?_⟩
+    rw [Pi.cons_eta]
 
 Depends on / 依赖: Multiset, Multiset.induction_on, Pi.cons_ne, Pi.cons_same, Pi.empty, cons_ne, cons_same, induction_on, mem_bind, mem_con, mem_cons_self, mem_map, mem_singleton, notMem_zero, pi_cons, pi_zero, simp_rw, true_iff
 -/

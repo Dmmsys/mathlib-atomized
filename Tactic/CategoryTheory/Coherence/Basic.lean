@@ -65,7 +65,15 @@ let e ← instantiateMVars ← mvarId.getType
       let some (_, e₁, e₂) := (← whnfR <| ← instantiateMVars <| e).eq?
         | throwError "{nm}_nf requires an equality goal"
       let ctx : ρ ← mkContext e₁
-      Coh
+      CoherenceM.run (ctx := ctx) do
+        let e₁' ← MkMor₂.ofExpr e₁
+        let e₂' ← MkMor₂.ofExpr e₂
+        let e₁'' ← eval nm e₁'
+        let e₂'' ← eval nm e₂'
+        let H ← mkAppM ``mk_eq #[e₁, e₂, e₁''.expr.e.e, e₂''.expr.e.e, e₁''.proof, e₂''.proof]
+        mvarId.apply H
+
+universe v u
 
 中文:
 定义 normalForm
@@ -77,7 +85,15 @@ let e ← instantiateMVars ← mvarId.getType
       let some (_, e₁, e₂) := (← whnfR <| ← instantiateMVars <| e).eq?
         | throwError "{nm}_nf requires an equality goal"
       let ctx : ρ ← mkContext e₁
-      Coh
+      CoherenceM.run (ctx := ctx) do
+        let e₁' ← MkMor₂.ofExpr e₁
+        let e₂' ← MkMor₂.ofExpr e₂
+        let e₁'' ← eval nm e₁'
+        let e₂'' ← eval nm e₂'
+        let H ← mkAppM ``mk_eq #[e₁, e₂, e₁''.expr.e.e, e₂''.expr.e.e, e₁''.proof, e₂''.proof]
+        mvarId.apply H
+
+universe v u
 -/
 def normalForm (ρ : Type) [Context ρ]
     [MonadMor₁ (CoherenceM ρ)]
@@ -136,7 +152,17 @@ let e ← instantiateMVars ← mvarId.getType
     let some (_, e₁, e₂) := (← whnfR e).eq? | throwError "requires an equality goal"
     match (← whnfR e₁).getAppFnArgs, (← whnfR e₂).getAppFnArgs with
     | (``CategoryStruct.comp, #[_, _, _, _, _, α, η]),
-      (``CategoryStruct
+      (``CategoryStruct.comp, #[_, _, _, _, _, α', η']) =>
+      match (← whnfR η).getAppFnArgs, (← whnfR η').getAppFnArgs with
+      | (``CategoryStruct.comp, #[_, _, _, _, _, η, ηs]),
+        (``CategoryStruct.comp, #[_, _, _, _, _, η', ηs']) =>
+        let e_α ← mkFreshExprMVar (← Meta.mkEq α α')
+        let e_η ← mkFreshExprMVar (← Meta.mkEq η η')
+        let e_ηs ← mkFreshExprMVar (← Meta.mkEq ηs ηs')
+        let x ← mvarId.apply (← mkAppM ``mk_eq_of_cons #[α, α', η, η', ηs, ηs', e_α, e_η, e_ηs])
+        return x
+      | _, _ => throwError "failed to make a normalized equality for {e}"
+    | _, _ => throwError "failed to make a normalized equality for {e}"
 
 中文:
 定义 ofNormalizedEq
@@ -147,7 +173,17 @@ let e ← instantiateMVars ← mvarId.getType
     let some (_, e₁, e₂) := (← whnfR e).eq? | throwError "requires an equality goal"
     match (← whnfR e₁).getAppFnArgs, (← whnfR e₂).getAppFnArgs with
     | (``CategoryStruct.comp, #[_, _, _, _, _, α, η]),
-      (``CategoryStruct
+      (``CategoryStruct.comp, #[_, _, _, _, _, α', η']) =>
+      match (← whnfR η).getAppFnArgs, (← whnfR η').getAppFnArgs with
+      | (``CategoryStruct.comp, #[_, _, _, _, _, η, ηs]),
+        (``CategoryStruct.comp, #[_, _, _, _, _, η', ηs']) =>
+        let e_α ← mkFreshExprMVar (← Meta.mkEq α α')
+        let e_η ← mkFreshExprMVar (← Meta.mkEq η η')
+        let e_ηs ← mkFreshExprMVar (← Meta.mkEq ηs ηs')
+        let x ← mvarId.apply (← mkAppM ``mk_eq_of_cons #[α, α', η, η', ηs, ηs', e_α, e_η, e_ηs])
+        return x
+      | _, _ => throwError "failed to make a normalized equality for {e}"
+    | _, _ => throwError "failed to make a normalized equality for {e}"
 -/
 def ofNormalizedEq (mvarId : MVarId) : MetaM (List MVarId) := do
   mvarId.withContext do
@@ -202,7 +238,11 @@ definition main
     let (mvarIdsCoherence, mvarIdsRefl) := List.splitEvenOdd (← repeat' ofNormalizedEq mvarIds)
     for mvarId in mvarIdsRefl do mvarId.refl
     let mvarIds'' ← mvarIdsCoherence.mapM fun mvarId => do
-      withTraceNode nm (fun _ => do r
+      withTraceNode nm (fun _ => do return m!"goal: {← mvarId.getType}") do
+        try
+          pureCoherence ρ nm mvarId
+        catch _ => return [mvarId]
+    return mvarIds''.flatten
 
 中文:
 定义 main
@@ -212,7 +252,11 @@ definition main
     let (mvarIdsCoherence, mvarIdsRefl) := List.splitEvenOdd (← repeat' ofNormalizedEq mvarIds)
     for mvarId in mvarIdsRefl do mvarId.refl
     let mvarIds'' ← mvarIdsCoherence.mapM fun mvarId => do
-      withTraceNode nm (fun _ => do r
+      withTraceNode nm (fun _ => do return m!"goal: {← mvarId.getType}") do
+        try
+          pureCoherence ρ nm mvarId
+        catch _ => return [mvarId]
+    return mvarIds''.flatten
 
 Depends on / 依赖: List.splitEvenOdd, flatten, getType, mvarId, mvarId.getType, mvarId.refl, mvarId.withContext, mvarIds, mvarIdsCoherence, mvarIdsCoherence.mapM, mvarIdsRefl, normalForm, ofNormalizedEq, pureCoherence, repeat, return, splitEvenOdd, withContext, withTraceNode
 -/

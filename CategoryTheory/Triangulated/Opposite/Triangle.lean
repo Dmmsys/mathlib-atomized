@@ -53,7 +53,12 @@ definition functor
     { hom₁ := φ.unop.hom₃.op
       hom₂ := φ.unop.hom₂.op
       hom₃ := φ.unop.hom₁.op
-      comm₁ := Quiver.Hom.unop_
+      comm₁ := Quiver.Hom.unop_inj φ.unop.comm₂.symm
+      comm₂ := Quiver.Hom.unop_inj φ.unop.comm₁.symm
+      comm₃ := by
+        dsimp
+        rw [assoc]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← φ.unop.comm₃]; rw [op_comp]; rw [Functor.map_comp]; rw [opShiftFunctorEquivalence_counitIso_inv_naturality_assoc]
+        rfl }
 
 中文:
 定义 functor
@@ -65,7 +70,12 @@ definition functor
     { hom₁ := φ.unop.hom₃.op
       hom₂ := φ.unop.hom₂.op
       hom₃ := φ.unop.hom₁.op
-      comm₁ := Quiver.Hom.unop_
+      comm₁ := Quiver.Hom.unop_inj φ.unop.comm₂.symm
+      comm₂ := Quiver.Hom.unop_inj φ.unop.comm₁.symm
+      comm₃ := by
+        dsimp
+        rw [assoc]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← φ.unop.comm₃]; rw [op_comp]; rw [Functor.map_comp]; rw [opShiftFunctorEquivalence_counitIso_inv_naturality_assoc]
+        rfl }
 
 Depends on / 依赖: T.unop.mor, Triangle, Triangle.mk
 -/
@@ -101,7 +111,11 @@ definition inverse
     { hom₁ := φ.hom₃.unop
       hom₂ := φ.hom₂.unop
       hom₃ := φ.hom₁.unop
-      comm₁ := Quiver.Hom.op_inj φ.comm₂.sy
+      comm₁ := Quiver.Hom.op_inj φ.comm₂.symm
+      comm₂ := Quiver.Hom.op_inj φ.comm₁.symm
+      comm₃ := Quiver.Hom.op_inj (by
+        dsimp
+        rw [assoc]; rw [← opShiftFunctorEquivalence_unitIso_inv_naturality]; rw [← op_comp_assoc]; rw [← Functor.map_comp]; rw [← unop_comp]; rw [← φ.comm₃]; rw [unop_comp]; rw [Functor.map_comp]; rw [op_comp]; rw [assoc]) }
 
 中文:
 定义 inverse
@@ -112,7 +126,11 @@ definition inverse
     { hom₁ := φ.hom₃.unop
       hom₂ := φ.hom₂.unop
       hom₃ := φ.hom₁.unop
-      comm₁ := Quiver.Hom.op_inj φ.comm₂.sy
+      comm₁ := Quiver.Hom.op_inj φ.comm₂.symm
+      comm₂ := Quiver.Hom.op_inj φ.comm₁.symm
+      comm₃ := Quiver.Hom.op_inj (by
+        dsimp
+        rw [assoc]; rw [← opShiftFunctorEquivalence_unitIso_inv_naturality]; rw [← op_comp_assoc]; rw [← Functor.map_comp]; rw [← unop_comp]; rw [← φ.comm₃]; rw [unop_comp]; rw [Functor.map_comp]; rw [op_comp]; rw [assoc]) }
 
 Depends on / 依赖: Opposite, Opposite.op, T.mor, Triangle, Triangle.mk
 -/
@@ -180,7 +198,9 @@ definition counitIso
     · simp
     · simp
     · dsimp
-      rw [Functor.map_id]; rw [comp_id]; rw [id_comp]; rw [Functor.map_comp]; rw [← opShiftFunctorEquivalence_counitIso_inv_naturality_assoc]; rw [opShiftF
+      rw [Functor.map_id]; rw [comp_id]; rw [id_comp]; rw [Functor.map_comp]; rw [← opShiftFunctorEquivalence_counitIso_inv_naturality_assoc]; rw [opShiftFunctorEquivalence_counitIso_inv_app_shift]; rw [← Functor.map_comp]; rw [Iso.hom_inv_id_app]; rw [Functor.map_id]
+      simp only [Functor.id_obj, comp_id])
+    (by cat_disch)
 
 中文:
 定义 counitIso
@@ -190,7 +210,9 @@ definition counitIso
     · simp
     · simp
     · dsimp
-      rw [Functor.map_id]; rw [comp_id]; rw [id_comp]; rw [Functor.map_comp]; rw [← opShiftFunctorEquivalence_counitIso_inv_naturality_assoc]; rw [opShiftF
+      rw [Functor.map_id]; rw [comp_id]; rw [id_comp]; rw [Functor.map_comp]; rw [← opShiftFunctorEquivalence_counitIso_inv_naturality_assoc]; rw [opShiftFunctorEquivalence_counitIso_inv_app_shift]; rw [← Functor.map_comp]; rw [Iso.hom_inv_id_app]; rw [Functor.map_id]
+      simp only [Functor.id_obj, comp_id])
+    (by cat_disch)
 
 Depends on / 依赖: Functor, Functor.id_obj, Functor.map_comp, Functor.map_id, Iso.hom_inv_id_app, Iso.refl, NatIso, NatIso.ofComponents, Triangle, Triangle.isoMk, cat_disch, comp_id, hom_inv_id_app, id_comp, id_obj, map_comp, map_id, ofComponents, opShiftFunctorEquivalence_counitIso_inv_app_shift, opShiftFunctorEquivalence_counitIso_inv_naturality_assoc
 -/

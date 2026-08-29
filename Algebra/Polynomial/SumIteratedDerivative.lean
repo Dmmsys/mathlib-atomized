@@ -292,7 +292,7 @@ theorem exists_iterate_derivative_eq_factorial_smul
   refine ⟨Nat.zero_le _, fun i hi => ?_⟩
   dsimp only [Function.comp]
 exact (natDegree_C_mul_le _ _).trans (natDegree_X_pow_le _).trans
-(le_natDegree_of_mem_supp _ hi).trans natDegree_it
+(le_natDegree_of_mem_supp _ hi).trans natDegree_iterate_derivative _ _
 
 中文:
 定理 存在_iterate_derivative_eq_factorial_smul
@@ -303,7 +303,7 @@ exact (natDegree_C_mul_le _ _).trans (natDegree_X_pow_le _).trans
   refine ⟨Nat.zero_le _, fun i hi => ?_⟩
   dsimp only [Function.comp]
 exact (natDegree_C_mul_le _ _).trans (natDegree_X_pow_le _).trans
-(le_natDegree_of_mem_supp _ hi).trans natDegree_it
+(le_natDegree_of_mem_supp _ hi).trans natDegree_iterate_derivative _ _
 
 Depends on / 依赖: Function, Function.comp, Nat.zero_le, fold_max_le, iterate_derivative_eq_factorial_smul_sum, le_natDegree_of_mem_supp, natDegree_C_mul_le, natDegree_X_pow_le, natDegree_iterate_derivative, natDegree_sum_le, zero_le
 -/
@@ -333,7 +333,10 @@ theorem aeval_iterate_derivative_of_lt
     rw [← pow_add]; rw [add_tsub_cancel_of_le]
     rw [Nat.lt_iff_add_one_le] at hk
     exact (le_tsub_of_add_le_left hk).trans (tsub_le_tsub_left (tsub_le_self : _ <= k) _)
-  rw [aeval_def]; rw [eval₂_
+  rw [aeval_def]; rw [eval₂_eq_eval_map]; rw [← iterate_derivative_map]
+  simp_rw [hp, iterate_derivative_mul, iterate_derivative_X_sub_pow, ← smul_mul_assoc, smul_smul,
+    h, ← mul_smul_comm, mul_assoc, ← mul_sum, eval_mul, pow_one, eval_sub, eval_X, eval_C, sub_self,
+    zero_mul]
 
 中文:
 定理 aeval_iterate_derivative_of_lt
@@ -343,7 +346,10 @@ theorem aeval_iterate_derivative_of_lt
     rw [← pow_add]; rw [add_tsub_cancel_of_le]
     rw [Nat.lt_iff_add_one_le] at hk
     exact (le_tsub_of_add_le_left hk).trans (tsub_le_tsub_left (tsub_le_self : _ <= k) _)
-  rw [aeval_def]; rw [eval₂_
+  rw [aeval_def]; rw [eval₂_eq_eval_map]; rw [← iterate_derivative_map]
+  simp_rw [hp, iterate_derivative_mul, iterate_derivative_X_sub_pow, ← smul_mul_assoc, smul_smul,
+    h, ← mul_smul_comm, mul_assoc, ← mul_sum, eval_mul, pow_one, eval_sub, eval_X, eval_C, sub_self,
+    zero_mul]
 
 Depends on / 依赖: Nat.lt_iff_add_one_le, add_tsub_cancel_of_le, aeval_def, eval_, eval_mul, eval_sub, iterate_derivative_X_sub_pow, iterate_derivative_map, iterate_derivative_mul, le_tsub_of_add_le_left, lt_iff_add_one_le, mul_assoc, mul_smul_comm, mul_sum, pow_add, pow_one, simp_rw, smul_mul_assoc, smul_smul, tsub_le_self
 -/
@@ -371,7 +377,13 @@ theorem aeval_iterate_derivative_self
     rw [← pow_add]; rw [add_tsub_cancel_of_le]
     rwa [tsub_tsub_cancel_of_le h']
   rw [aeval_def]; rw [eval₂_eq_eval_map]; rw [← iterate_derivative_map]
-  simp_rw [hp,
+  simp_rw [hp, iterate_derivative_mul, iterate_derivative_X_sub_pow, ← smul_mul_assoc, smul_smul]
+  rw [sum_range_succ']; rw [Nat.choose_zero_right]; rw [one_mul]; rw [tsub_zero]; rw [Nat.descFactorial_self]; rw [tsub_self]; rw [pow_zero]; rw [smul_mul_assoc]; rw [one_mul]; rw [Function.iterate_zero_apply]; rw [eval_add]; rw [eval_smul]
+  convert! zero_add _
+  rw [eval_finsetSum]
+  apply sum_eq_zero
+  intro x hx
+  rw [h (x + 1) le_add_self (Nat.add_one_le_iff.mpr (mem_range.mp hx))]; rw [pow_one]; rw [eval_mul]; rw [eval_smul]; rw [eval_mul]; rw [eval_sub]; rw [eval_X]; rw [eval_C]; rw [sub_self]; rw [zero_mul]; rw [smul_zero]; rw [zero_mul]
 
 中文:
 定理 aeval_iterate_derivative_self
@@ -382,7 +394,13 @@ theorem aeval_iterate_derivative_self
     rw [← pow_add]; rw [add_tsub_cancel_of_le]
     rwa [tsub_tsub_cancel_of_le h']
   rw [aeval_def]; rw [eval₂_eq_eval_map]; rw [← iterate_derivative_map]
-  simp_rw [hp,
+  simp_rw [hp, iterate_derivative_mul, iterate_derivative_X_sub_pow, ← smul_mul_assoc, smul_smul]
+  rw [sum_range_succ']; rw [Nat.choose_zero_right]; rw [one_mul]; rw [tsub_zero]; rw [Nat.descFactorial_self]; rw [tsub_self]; rw [pow_zero]; rw [smul_mul_assoc]; rw [one_mul]; rw [Function.iterate_zero_apply]; rw [eval_add]; rw [eval_smul]
+  convert! zero_add _
+  rw [eval_finsetSum]
+  apply sum_eq_zero
+  intro x hx
+  rw [h (x + 1) le_add_self (Nat.add_one_le_iff.mpr (mem_range.mp hx))]; rw [pow_one]; rw [eval_mul]; rw [eval_smul]; rw [eval_mul]; rw [eval_sub]; rw [eval_X]; rw [eval_C]; rw [sub_self]; rw [zero_mul]; rw [smul_zero]; rw [zero_mul]
 
 Depends on / 依赖: Nat.choose_zero_right, Nat.descFactorial_self, add_tsub_cancel_of_le, aeval_def, choose_zero_right, descFactorial_self, iterate_derivative_X_sub_pow, iterate_derivative_map, iterate_derivative_mul, one_mul, pow_add, pow_zer, simp_rw, smul_mul_assoc, smul_smul, sum_range_succ, tsub_self, tsub_tsub_cancel_of_le, tsub_zero
 -/
@@ -414,7 +432,8 @@ theorem aeval_iterate_derivative_of_ge
   obtain ⟨p', p'_le, hp'⟩ := exists_iterate_derivative_eq_factorial_smul p k
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hk
   refine ⟨((q + k).descFactorial k : R[X]) * p', (natDegree_C_mul_le _ _).trans p'_le, fun r => ?_⟩
-  simp_rw [hp', nsmul_eq_mul, map_mul, map_natCast, ← mul_assoc, ← Nat.c
+  simp_rw [hp', nsmul_eq_mul, map_mul, map_natCast, ← mul_assoc, ← Nat.cast_mul,
+    Nat.add_descFactorial_eq_ascFactorial, Nat.factorial_mul_ascFactorial]
 
 中文:
 定理 aeval_iterate_derivative_of_ge
@@ -423,7 +442,8 @@ theorem aeval_iterate_derivative_of_ge
   obtain ⟨p', p'_le, hp'⟩ := exists_iterate_derivative_eq_factorial_smul p k
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hk
   refine ⟨((q + k).descFactorial k : R[X]) * p', (natDegree_C_mul_le _ _).trans p'_le, fun r => ?_⟩
-  simp_rw [hp', nsmul_eq_mul, map_mul, map_natCast, ← mul_assoc, ← Nat.c
+  simp_rw [hp', nsmul_eq_mul, map_mul, map_natCast, ← mul_assoc, ← Nat.cast_mul,
+    Nat.add_descFactorial_eq_ascFactorial, Nat.factorial_mul_ascFactorial]
 
 Depends on / 依赖: Nat.add_descFactorial_eq_ascFactorial, Nat.cast_mul, Nat.exists_eq_add_of_le, Nat.factorial_mul_ascFactorial, add_descFactorial_eq_ascFactorial, cast_mul, descFactorial, exists_eq_add_of_le, exists_iterate_derivative_eq_factorial_smul, factorial_mul_ascFactorial, map_mul, map_natCast, mul_assoc, natDegree_C_mul_le, nsmul_eq_mul, simp_rw
 -/
@@ -472,7 +492,20 @@ theorem aeval_sumIDeriv
     | inl hk =>
       use 0
       rw [natDegree_zero]
-      use Nat.
+      use Nat.zero_le _
+      intro r ⟨p', hp⟩
+      rw [map_zero]; rw [smul_zero]; rw [aeval_iterate_derivative_of_lt p q r hp hk]
+    | inr hk =>
+      obtain ⟨gp, gp_le, h⟩ := aeval_iterate_derivative_of_ge A p q hk
+      exact ⟨gp, gp_le.trans (tsub_le_tsub_left hk _), fun r _ => h r⟩
+  choose c h using h
+  choose c_le hc using h
+  refine ⟨(range (p.natDegree + 1)).sum c, ?_, ?_⟩
+  · refine (natDegree_sum_le _ _).trans ?_
+    rw [fold_max_le]
+    exact ⟨Nat.zero_le _, fun i _ => c_le i⟩
+  intro r ⟨p', hp⟩
+  rw [sumIDeriv_apply]; rw [map_sum]; simp_rw [hc _ r ⟨_, hp⟩, map_sum, smul_sum]
 
 中文:
 定理 aeval_sumIDeriv
@@ -486,7 +519,20 @@ theorem aeval_sumIDeriv
     | inl hk =>
       use 0
       rw [natDegree_zero]
-      use Nat.
+      use Nat.zero_le _
+      intro r ⟨p', hp⟩
+      rw [map_zero]; rw [smul_zero]; rw [aeval_iterate_derivative_of_lt p q r hp hk]
+    | inr hk =>
+      obtain ⟨gp, gp_le, h⟩ := aeval_iterate_derivative_of_ge A p q hk
+      exact ⟨gp, gp_le.trans (tsub_le_tsub_left hk _), fun r _ => h r⟩
+  choose c h using h
+  choose c_le hc using h
+  refine ⟨(range (p.natDegree + 1)).sum c, ?_, ?_⟩
+  · refine (natDegree_sum_le _ _).trans ?_
+    rw [fold_max_le]
+    exact ⟨Nat.zero_le _, fun i _ => c_le i⟩
+  intro r ⟨p', hp⟩
+  rw [sumIDeriv_apply]; rw [map_sum]; simp_rw [hc _ r ⟨_, hp⟩, map_sum, smul_sum]
 
 Depends on / 依赖: Nat.zero_le, aeval_iterate_derivative_of_ge, aeval_iterate_derivative_of_lt, algebraMap, derivative, gp.natDegree, gp_le, gp_le.trans, lt_or_ge, map_zero, natDegree, natDegree_zero, p.map, p.natDegree, smul_zero, tsub_le_tsub_left, zero_le
 -/
@@ -532,7 +578,49 @@ theorem aeval_sumIDeriv_of_pos
     rw [map_zero]; rw [map_zero]; rw [smul_zero]; rw [add_zero]
     rw [Polynomial.map_zero] at hp
     replace hp := (mul_eq_zero.mp hp.symm).resolve_left ?_
-    · rw [hp, eval_zero, sm
+    · rw [hp, eval_zero, smul_zero]
+    exact fun h => X_sub_C_ne_zero r (eq_zero_of_pow_eq_zero h)
+  let c k := if hk : q <= k then (aeval_iterate_derivative_of_ge A p q hk).choose else 0
+  have c_le (k) : (c k).natDegree <= p.natDegree - k := by
+    dsimp only [c]
+    split_ifs with h
+    · exact (aeval_iterate_derivative_of_ge A p q h).choose_spec.1
+    · rw [natDegree_zero]; exact Nat.zero_le _
+  have hc (k) (hk : q <= k) : forall (r : A), aeval r (derivative^[k] p) = q ! • aeval r (c k) := by
+    simp_rw [c, dif_pos hk]
+    exact (aeval_iterate_derivative_of_ge A p q hk).choose_spec.2
+  refine ⟨∑ x in Ico q (p.natDegree + 1), c x, ?_, ?_⟩
+  · refine (natDegree_sum_le _ _).trans ?_
+    rw [fold_max_le]
+    exact ⟨Nat.zero_le _, fun i hi => (c_le i).trans (tsub_le_tsub_left (mem_Ico.mp hi).1 _)⟩
+  intro r p' hp
+  have : range (p.natDegree + 1) = range q union Ico q (p.natDegree + 1) := by
+    rw [range_eq_Ico]; rw [range_eq_Ico]; rw [Ico_union_Ico_eq_Ico hq.le]
+    rw [← tsub_le_iff_right]
+    calc
+      q - 1 <= q - 1 + p'.natDegree := le_self_add
+      _ = (p.map <| algebraMap R A).natDegree := by
+        rw [hp]; rw [natDegree_mul]; rw [natDegree_pow]; rw [natDegree_X_sub_C]; rw [mul_one]; rw [← Nat.sub_add_comm (Nat.one_le_of_lt hq)]
+        · exact pow_ne_zero _ (X_sub_C_ne_zero r)
+        · rintro rfl
+          rw [mul_zero]; rw [Polynomial.map_eq_zero_iff inj_amap] at hp
+          exact p0 hp
+      _ <= p.natDegree := natDegree_map_le
+  rw [← zero_add ((q - 1)! • p'.eval r)]
+  rw [sumIDeriv_apply]; rw [map_sum]; rw [map_sum]; rw [this]
+  have : range q = range (q - 1 + 1) := by rw [tsub_add_cancel_of_le (Nat.one_le_of_lt hq)]
+  rw [sum_union]; rw [this]; rw [sum_range_succ]
+  · congr 2
+    · apply sum_eq_zero
+      exact fun x hx => aeval_iterate_derivative_of_lt p _ r hp (mem_range.mp hx)
+    · rw [← aeval_iterate_derivative_self _ _ _ hp]
+    · rw [smul_sum, sum_congr rfl]
+      intro k hk
+      exact hc k (mem_Ico.mp hk).1 r
+  · rw [range_eq_Ico, disjoint_iff_inter_eq_empty, eq_empty_iff_forall_notMem]
+    intro x hx
+    rw [mem_inter]; rw [mem_Ico]; rw [mem_Ico] at hx
+    exact hx.1.2.not_ge hx.2.1
 
 中文:
 定理 aeval_sumIDeriv_of_pos
@@ -546,7 +634,49 @@ theorem aeval_sumIDeriv_of_pos
     rw [map_zero]; rw [map_zero]; rw [smul_zero]; rw [add_zero]
     rw [Polynomial.map_zero] at hp
     replace hp := (mul_eq_zero.mp hp.symm).resolve_left ?_
-    · rw [hp, eval_zero, sm
+    · rw [hp, eval_zero, smul_zero]
+    exact fun h => X_sub_C_ne_zero r (eq_zero_of_pow_eq_zero h)
+  let c k := if hk : q <= k then (aeval_iterate_derivative_of_ge A p q hk).choose else 0
+  have c_le (k) : (c k).natDegree <= p.natDegree - k := by
+    dsimp only [c]
+    split_ifs with h
+    · exact (aeval_iterate_derivative_of_ge A p q h).choose_spec.1
+    · rw [natDegree_zero]; exact Nat.zero_le _
+  have hc (k) (hk : q <= k) : forall (r : A), aeval r (derivative^[k] p) = q ! • aeval r (c k) := by
+    simp_rw [c, dif_pos hk]
+    exact (aeval_iterate_derivative_of_ge A p q hk).choose_spec.2
+  refine ⟨∑ x in Ico q (p.natDegree + 1), c x, ?_, ?_⟩
+  · refine (natDegree_sum_le _ _).trans ?_
+    rw [fold_max_le]
+    exact ⟨Nat.zero_le _, fun i hi => (c_le i).trans (tsub_le_tsub_left (mem_Ico.mp hi).1 _)⟩
+  intro r p' hp
+  have : range (p.natDegree + 1) = range q union Ico q (p.natDegree + 1) := by
+    rw [range_eq_Ico]; rw [range_eq_Ico]; rw [Ico_union_Ico_eq_Ico hq.le]
+    rw [← tsub_le_iff_right]
+    calc
+      q - 1 <= q - 1 + p'.natDegree := le_self_add
+      _ = (p.map <| algebraMap R A).natDegree := by
+        rw [hp]; rw [natDegree_mul]; rw [natDegree_pow]; rw [natDegree_X_sub_C]; rw [mul_one]; rw [← Nat.sub_add_comm (Nat.one_le_of_lt hq)]
+        · exact pow_ne_zero _ (X_sub_C_ne_zero r)
+        · rintro rfl
+          rw [mul_zero]; rw [Polynomial.map_eq_zero_iff inj_amap] at hp
+          exact p0 hp
+      _ <= p.natDegree := natDegree_map_le
+  rw [← zero_add ((q - 1)! • p'.eval r)]
+  rw [sumIDeriv_apply]; rw [map_sum]; rw [map_sum]; rw [this]
+  have : range q = range (q - 1 + 1) := by rw [tsub_add_cancel_of_le (Nat.one_le_of_lt hq)]
+  rw [sum_union]; rw [this]; rw [sum_range_succ]
+  · congr 2
+    · apply sum_eq_zero
+      exact fun x hx => aeval_iterate_derivative_of_lt p _ r hp (mem_range.mp hx)
+    · rw [← aeval_iterate_derivative_self _ _ _ hp]
+    · rw [smul_sum, sum_congr rfl]
+      intro k hk
+      exact hc k (mem_Ico.mp hk).1 r
+  · rw [range_eq_Ico, disjoint_iff_inter_eq_empty, eq_empty_iff_forall_notMem]
+    intro x hx
+    rw [mem_inter]; rw [mem_Ico]; rw [mem_Ico] at hx
+    exact hx.1.2.not_ge hx.2.1
 
 Depends on / 依赖: Nat.zero_le, Polynomial, Polynomial.map_zero, X_sub_C_ne_zero, add_zero, aeval_iterate_derivative_of_ge, c_le, eq_or_ne, eq_zero_of_pow_eq_zero, eval_zero, hp.symm, map_zero, mul_eq_zero, mul_eq_zero.mp, natDegree, natDegree_zero, p.natDegree, replace, resolve_left, smul_zero
 -/

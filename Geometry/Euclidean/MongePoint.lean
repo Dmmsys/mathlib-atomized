@@ -174,7 +174,11 @@ theorem smul_mongePoint_vsub_circumcenter_eq_sum_vsub
   simp only [Nat.cast_add, Nat.cast_ofNat, Nat.cast_one, Nat.add_one_sub_one, nsmul_eq_mul]
   field_simp
   have h : Invertible (n + 2 + 1 : Real) := by norm_cast; apply invertibleOfPos
-  rw [smul_eq_iff_eq_invOf_s
+  rw [smul_eq_iff_eq_invOf_smul]; rw [smul_sum]
+  rw [univ_centroid_eq]; rw [centroid_eq_affineCombination]
+  rw [← Finset.sum_smul_vsub_const_eq_affineCombination_vsub _ _ _ _ (by simp)]
+  simp only [centroidWeights_apply, card_univ, Fintype.card_fin, Nat.cast_add, Nat.cast_ofNat,
+    Nat.cast_one, invOf_eq_inv]
 
 中文:
 定理 smul_mongePoint_vsub_circumcenter_eq_sum_vsub
@@ -184,7 +188,11 @@ theorem smul_mongePoint_vsub_circumcenter_eq_sum_vsub
   simp only [Nat.cast_add, Nat.cast_ofNat, Nat.cast_one, Nat.add_one_sub_one, nsmul_eq_mul]
   field_simp
   have h : Invertible (n + 2 + 1 : Real) := by norm_cast; apply invertibleOfPos
-  rw [smul_eq_iff_eq_invOf_s
+  rw [smul_eq_iff_eq_invOf_smul]; rw [smul_sum]
+  rw [univ_centroid_eq]; rw [centroid_eq_affineCombination]
+  rw [← Finset.sum_smul_vsub_const_eq_affineCombination_vsub _ _ _ _ (by simp)]
+  simp only [centroidWeights_apply, card_univ, Fintype.card_fin, Nat.cast_add, Nat.cast_ofNat,
+    Nat.cast_one, invOf_eq_inv]
 
 Depends on / 依赖: Finset, Finset.sum_smul_vsub_const_eq_affineCombination_vsub, Fintype, Fintype.c, Invertible, Nat.add_one_sub_one, Nat.cast_add, Nat.cast_ofNat, Nat.cast_one, add_one_sub_one, card_univ, cast_add, cast_ofNat, cast_one, centroidWeights_apply, centroid_eq_affineCombination, invertibleOfPos, mongePoint_eq_smul_vsub_vadd_circumcenter, nsmul_eq_mul, smul_assoc
 -/
@@ -238,7 +246,7 @@ theorem mongePoint_restrict
   have := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
   simp_rw [mongePoint]
   rw [← Simplex.centroid]; rw [← Simplex.centroid]
-  simp [centroid_restrict, circumcenter_restrict
+  simp [centroid_restrict, circumcenter_restrict]
 
 中文:
 定理 mongePoint_restrict
@@ -248,7 +256,7 @@ theorem mongePoint_restrict
   have := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
   simp_rw [mongePoint]
   rw [← Simplex.centroid]; rw [← Simplex.centroid]
-  simp [centroid_restrict, circumcenter_restrict
+  simp [centroid_restrict, circumcenter_restrict]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.inclusion, Nonempty, Nonempty.map, inclusion
 -/
@@ -341,7 +349,15 @@ theorem mongePoint_eq_affineCombination_of_pointsWithCircumcenter
   proof: by
   rw [mongePoint_eq_smul_vsub_vadd_circumcenter]; rw [centroid_eq_affineCombination_of_pointsWithCircumcenter]; rw [circumcenter_eq_affineCombination_of_pointsWithCircumcenter]; rw [affineCombination_vsub]; rw [← map_smul]; rw [weightedVSub_vadd_affineCombination]
   congr with i
-  rw [Pi.add_appl
+  rw [Pi.add_apply]; rw [Pi.smul_apply]; rw [smul_eq_mul]; rw [Pi.sub_apply]
+  cases i <;>
+      simp_rw [centroidWeightsWithCircumcenter, circumcenterWeightsWithCircumcenter,
+        mongePointWeightsWithCircumcenter] <;>
+    rw [add_tsub_assoc_of_le (by decide : 1 <= 2)]; rw [(by decide : 2 - 1 = 1)]
+  · rw [if_pos (mem_univ _), card_fin]
+    field
+  · simp [field]
+    ring
 
 中文:
 定理 mongePoint_eq_affineCombination_of_pointsWithCircumcenter
@@ -349,7 +365,15 @@ theorem mongePoint_eq_affineCombination_of_pointsWithCircumcenter
   证明: by
   rw [mongePoint_eq_smul_vsub_vadd_circumcenter]; rw [centroid_eq_affineCombination_of_pointsWithCircumcenter]; rw [circumcenter_eq_affineCombination_of_pointsWithCircumcenter]; rw [affineCombination_vsub]; rw [← map_smul]; rw [weightedVSub_vadd_affineCombination]
   congr with i
-  rw [Pi.add_appl
+  rw [Pi.add_apply]; rw [Pi.smul_apply]; rw [smul_eq_mul]; rw [Pi.sub_apply]
+  cases i <;>
+      simp_rw [centroidWeightsWithCircumcenter, circumcenterWeightsWithCircumcenter,
+        mongePointWeightsWithCircumcenter] <;>
+    rw [add_tsub_assoc_of_le (by decide : 1 <= 2)]; rw [(by decide : 2 - 1 = 1)]
+  · rw [if_pos (mem_univ _), card_fin]
+    field
+  · simp [field]
+    ring
 
 Depends on / 依赖: Pi.add_apply, Pi.smul_apply, Pi.sub_apply, add_apply, add_tsub_ass, affineCombination_vsub, centroidWeightsWithCircumcenter, centroid_eq_affineCombination_of_pointsWithCircumcenter, circumcenterWeightsWithCircumcenter, circumcenter_eq_affineCombination_of_pointsWithCircumcenter, map_smul, mongePointWeightsWithCircumcenter, mongePoint_eq_smul_vsub_vadd_circumcenter, simp_rw, smul_apply, smul_eq_mul, sub_apply, weightedVSub_vadd_affineCombination
 -/
@@ -400,7 +424,9 @@ theorem mongePointVSubFaceCentroidWeightsWithCircumcenter_eq_sub
     have hu : #{i₁, i₂}ᶜ = n + 1 := by
       simp [card_compl, Fintype.card_fin, h]
     rw [hu]
-    by_cases hi : i = i₁ ∨
+    by_cases hi : i = i₁ ∨ i = i₂ <;> simp [compl_eq_univ_sdiff, hi]
+  · simp [mongePointWeightsWithCircumcenter, centroidWeightsWithCircumcenter,
+      mongePointVSubFaceCentroidWeightsWithCircumcenter]
 
 中文:
 定理 mongePointVSubFaceCentroidWeightsWithCircumcenter_eq_sub
@@ -413,7 +439,9 @@ theorem mongePointVSubFaceCentroidWeightsWithCircumcenter_eq_sub
     have hu : #{i₁, i₂}ᶜ = n + 1 := by
       simp [card_compl, Fintype.card_fin, h]
     rw [hu]
-    by_cases hi : i = i₁ ∨
+    by_cases hi : i = i₁ ∨ i = i₂ <;> simp [compl_eq_univ_sdiff, hi]
+  · simp [mongePointWeightsWithCircumcenter, centroidWeightsWithCircumcenter,
+      mongePointVSubFaceCentroidWeightsWithCircumcenter]
 
 Depends on / 依赖: Fintype, Fintype.card_fin, Pi.sub_apply, card_compl, card_fin, centroidWeightsWithCircumcenter, compl_eq_univ_sdiff, mongePointVSubFaceCentroidWeightsWithCircumcenter, mongePointWeightsWithCircumcenter, sub_apply
 -/
@@ -505,7 +533,27 @@ theorem inner_mongePoint_vsub_face_centroid_vsub
   · simp [h]
   simp_rw [mongePoint_vsub_face_centroid_eq_weightedVSub_of_pointsWithCircumcenter s h,
     point_eq_affineCombination_of_pointsWithCircumcenter, affineCombination_vsub]
-  have hs : ∑ i, (pointWeightsWithCircumcenter i₁ - pointWeightsWithCircumcenter i₂) i = 0 
+  have hs : ∑ i, (pointWeightsWithCircumcenter i₁ - pointWeightsWithCircumcenter i₂) i = 0 := by
+    simp
+  rw [inner_weightedVSub _ (sum_mongePointVSubFaceCentroidWeightsWithCircumcenter h) _ hs]; rw [sum_pointsWithCircumcenter]; rw [pointsWithCircumcenter_eq_circumcenter]
+  simp only [mongePointVSubFaceCentroidWeightsWithCircumcenter, pointsWithCircumcenter_point]
+  let fs : Finset (Fin (n + 3)) := {i₁, i₂}
+  have hfs : forall i : Fin (n + 3), i ∉ fs -> i != i₁ ∧ i != i₂ := by
+    intro i hi
+    constructor <;> · intro hj; simp [fs, ← hj] at hi
+  rw [← sum_subset fs.subset_univ _]
+  · simp_rw [sum_pointsWithCircumcenter, pointsWithCircumcenter_eq_circumcenter,
+      pointsWithCircumcenter_point, Pi.sub_apply, pointWeightsWithCircumcenter]
+    rw [← sum_subset fs.subset_univ _]
+    · simp_rw [fs, sum_insert (notMem_singleton.2 h), sum_singleton]
+      repeat rw [← sum_subset fs.subset_univ _]
+      · simp_rw [fs, sum_insert (notMem_singleton.2 h), sum_singleton]
+        simp [h, Ne.symm h, dist_comm (s.points i₁)]
+      all_goals intro i _ hi; simp [hfs i hi]
+    · intro i _ hi
+      simp [hfs i hi]
+  · intro i _ hi
+    simp [hfs i hi]
 
 中文:
 定理 inner_mongePoint_vsub_face_centroid_vsub
@@ -515,7 +563,27 @@ theorem inner_mongePoint_vsub_face_centroid_vsub
   · simp [h]
   simp_rw [mongePoint_vsub_face_centroid_eq_weightedVSub_of_pointsWithCircumcenter s h,
     point_eq_affineCombination_of_pointsWithCircumcenter, affineCombination_vsub]
-  have hs : ∑ i, (pointWeightsWithCircumcenter i₁ - pointWeightsWithCircumcenter i₂) i = 0 
+  have hs : ∑ i, (pointWeightsWithCircumcenter i₁ - pointWeightsWithCircumcenter i₂) i = 0 := by
+    simp
+  rw [inner_weightedVSub _ (sum_mongePointVSubFaceCentroidWeightsWithCircumcenter h) _ hs]; rw [sum_pointsWithCircumcenter]; rw [pointsWithCircumcenter_eq_circumcenter]
+  simp only [mongePointVSubFaceCentroidWeightsWithCircumcenter, pointsWithCircumcenter_point]
+  let fs : Finset (Fin (n + 3)) := {i₁, i₂}
+  have hfs : forall i : Fin (n + 3), i ∉ fs -> i != i₁ ∧ i != i₂ := by
+    intro i hi
+    constructor <;> · intro hj; simp [fs, ← hj] at hi
+  rw [← sum_subset fs.subset_univ _]
+  · simp_rw [sum_pointsWithCircumcenter, pointsWithCircumcenter_eq_circumcenter,
+      pointsWithCircumcenter_point, Pi.sub_apply, pointWeightsWithCircumcenter]
+    rw [← sum_subset fs.subset_univ _]
+    · simp_rw [fs, sum_insert (notMem_singleton.2 h), sum_singleton]
+      repeat rw [← sum_subset fs.subset_univ _]
+      · simp_rw [fs, sum_insert (notMem_singleton.2 h), sum_singleton]
+        simp [h, Ne.symm h, dist_comm (s.points i₁)]
+      all_goals intro i _ hi; simp [hfs i hi]
+    · intro i _ hi
+      simp [hfs i hi]
+  · intro i _ hi
+    simp [hfs i hi]
 
 Depends on / 依赖: affineCombination_vsub, inner_weightedVSub, mongePointVSubFaceCentr, mongePoint_vsub_face_centroid_eq_weightedVSub_of_pointsWithCircumcenter, pointWeightsWithCircumcenter, point_eq_affineCombination_of_pointsWithCircumcenter, pointsWithCircumcenter_eq_circumcenter, simp_rw, sum_mongePointVSubFaceCentroidWeightsWithCircumcenter, sum_pointsWithCircumcenter
 -/
@@ -605,7 +673,10 @@ lemma mongePlane_reindex
   convert! Finset.affineCombination_map {e.symm i₁, e.symm i₂}ᶜ e.toEmbedding _ _ using 3
   · ext i
     simp
-  · simp
+  · simp [Function.comp_assoc]
+  · simp_rw [centroidWeights, Function.const_comp, Finset.card_compl]
+    congr 4
+    by_cases h : i₁ = i₂ <;> simp [h]
 
 中文:
 引理 mongePlane_reindex
@@ -618,7 +689,10 @@ lemma mongePlane_reindex
   convert! Finset.affineCombination_map {e.symm i₁, e.symm i₂}ᶜ e.toEmbedding _ _ using 3
   · ext i
     simp
-  · simp
+  · simp [Function.comp_assoc]
+  · simp_rw [centroidWeights, Function.const_comp, Finset.card_compl]
+    congr 4
+    by_cases h : i₁ = i₂ <;> simp [h]
 
 Depends on / 依赖: Finset, Finset.affineCombination_map, Finset.card_compl, Fintype, Fintype.card_eq, Function, Function.comp_apply, Function.comp_assoc, Function.const_comp, affineCombination_map, card_compl, card_eq, centroidWeights, centroid_def, comp_apply, comp_assoc, const_comp, convert, e.symm, e.toEmbedding
 -/
@@ -690,7 +764,7 @@ theorem mongePoint_mem_mongePlane
   refine ⟨?_, s.mongePoint_mem_affineSpan⟩
   intro v hv
   rcases Submodule.mem_span_singleton.mp hv with ⟨r, rfl⟩
-  rw [inner_smul_right]; rw [s.
+  rw [inner_smul_right]; rw [s.inner_mongePoint_vsub_face_centroid_vsub]; rw [mul_zero]
 
 中文:
 定理 mongePoint_mem_mongePlane
@@ -700,7 +774,7 @@ theorem mongePoint_mem_mongePlane
   refine ⟨?_, s.mongePoint_mem_affineSpan⟩
   intro v hv
   rcases Submodule.mem_span_singleton.mp hv with ⟨r, rfl⟩
-  rw [inner_smul_right]; rw [s.
+  rw [inner_smul_right]; rw [s.inner_mongePoint_vsub_face_centroid_vsub]; rw [mul_zero]
 
 Depends on / 依赖: Submodule, Submodule.mem_orthogonal, Submodule.mem_span_singleton.mp, direction_mk, inner_mongePoint_vsub_face_centroid_vsub, inner_smul_right, mem_inf_iff, mem_orthogonal, mem_span_singleton, mongePlane_def, mongePoint_mem_affineSpan, mul_zero, s.inner_mongePoint_vsub_face_centroid_vsub, s.mongePoint_mem_affineSpan, self_mem_mk, vsub_right_mem_direction_iff_mem
 -/
@@ -746,7 +820,29 @@ theorem eq_mongePoint_of_forall_mem_mongePlane
       (Real ∙ (s.points i₁ -ᵥ s.points i₂))ᗮ ⊓ vectorSpan Real (Set.range s.points) := by
     intro i₂ hne
     rw [← s.direction_mongePlane]; rw [vsub_right_mem_direction_iff_mem s.mongePoint_mem_mongePlane]
- 
+    exact h i₂ hne
+  have hi : p -ᵥ s.mongePoint in ⨅ i₂ : { i // i₁ != i }, (Real ∙ (s.points i₁ -ᵥ s.points i₂))ᗮ := by
+    rw [Submodule.mem_iInf]
+    exact fun i => (Submodule.mem_inf.1 (h' i i.property)).1
+  rw [Submodule.iInf_orthogonal]; rw [← Submodule.span_iUnion] at hi
+  have hu :
+    ⋃ i : { i // i₁ != i }, ({s.points i₁ -ᵥ s.points i} : Set V) =
+      (s.points i₁ -ᵥ ·) '' s.points '' (Set.univ \ {i₁}) := by
+    rw [Set.image_image]
+    ext x
+    simp_rw [Set.mem_iUnion, Set.mem_image, Set.mem_singleton_iff, Set.mem_sdiff_singleton]
+    constructor
+    · rintro ⟨i, rfl⟩
+      use i, ⟨Set.mem_univ _, i.property.symm⟩
+    · rintro ⟨i, ⟨-, hi⟩, rfl⟩
+      use ⟨i, hi.symm⟩
+  rw [hu]; rw [← vectorSpan_image_eq_span_vsub_set_left_ne Real _ (Set.mem_univ _)]; rw [Set.image_univ] at hi
+  have hv : p -ᵥ s.mongePoint in vectorSpan Real (Set.range s.points) := by
+    let s₁ : Finset (Fin (n + 3)) := univ.erase i₁
+    obtain ⟨i₂, h₂⟩ := card_pos.1 (show 0 < #s₁ by simp [s₁, card_erase_of_mem])
+    have h₁₂ : i₁ != i₂ := (ne_of_mem_erase h₂).symm
+    exact (Submodule.mem_inf.1 (h' i₂ h₁₂)).2
+  exact Submodule.disjoint_def.1 (vectorSpan Real (Set.range s.points)).orthogonal_disjoint _ hv hi
 
 中文:
 定理 eq_mongePoint_of_对任意_mem_mongePlane
@@ -757,7 +853,29 @@ theorem eq_mongePoint_of_forall_mem_mongePlane
       (Real ∙ (s.points i₁ -ᵥ s.points i₂))ᗮ ⊓ vectorSpan Real (Set.range s.points) := by
     intro i₂ hne
     rw [← s.direction_mongePlane]; rw [vsub_right_mem_direction_iff_mem s.mongePoint_mem_mongePlane]
- 
+    exact h i₂ hne
+  have hi : p -ᵥ s.mongePoint in ⨅ i₂ : { i // i₁ != i }, (Real ∙ (s.points i₁ -ᵥ s.points i₂))ᗮ := by
+    rw [Submodule.mem_iInf]
+    exact fun i => (Submodule.mem_inf.1 (h' i i.property)).1
+  rw [Submodule.iInf_orthogonal]; rw [← Submodule.span_iUnion] at hi
+  have hu :
+    ⋃ i : { i // i₁ != i }, ({s.points i₁ -ᵥ s.points i} : Set V) =
+      (s.points i₁ -ᵥ ·) '' s.points '' (Set.univ \ {i₁}) := by
+    rw [Set.image_image]
+    ext x
+    simp_rw [Set.mem_iUnion, Set.mem_image, Set.mem_singleton_iff, Set.mem_sdiff_singleton]
+    constructor
+    · rintro ⟨i, rfl⟩
+      use i, ⟨Set.mem_univ _, i.property.symm⟩
+    · rintro ⟨i, ⟨-, hi⟩, rfl⟩
+      use ⟨i, hi.symm⟩
+  rw [hu]; rw [← vectorSpan_image_eq_span_vsub_set_left_ne Real _ (Set.mem_univ _)]; rw [Set.image_univ] at hi
+  have hv : p -ᵥ s.mongePoint in vectorSpan Real (Set.range s.points) := by
+    let s₁ : Finset (Fin (n + 3)) := univ.erase i₁
+    obtain ⟨i₂, h₂⟩ := card_pos.1 (show 0 < #s₁ by simp [s₁, card_erase_of_mem])
+    have h₁₂ : i₁ != i₂ := (ne_of_mem_erase h₂).symm
+    exact (Submodule.mem_inf.1 (h' i₂ h₁₂)).2
+  exact Submodule.disjoint_def.1 (vectorSpan Real (Set.range s.points)).orthogonal_disjoint _ hv hi
 
 Depends on / 依赖: Set.range, Submodule, Submodule.iInf_ort, Submodule.mem_iInf, Submodule.mem_inf, direction_mongePlane, i.property, iInf_ort, mem_iInf, mem_inf, mongePoint, mongePoint_mem_mongePlane, points, property, s.direction_mongePlane, s.mongePoint, s.mongePoint_mem_mongePlane, s.points, vectorSpan, vsub_eq_zero_iff_eq
 -/
@@ -948,7 +1066,8 @@ theorem altitude_eq_mongePlane
   proof: by
   have hs : ({i₂, i₃}ᶜ : Finset (Fin 3)) = {i₁} := by decide +revert
   have he : ({i₁}ᶜ : Set (Fin 3)) = {i₂, i₃} := by grind
-  rw [mongePlane_def]; rw [altitude_def]; rw [direction_affineSpan]; rw [hs]; rw [he]; rw [centroid_singleton]; rw [vectorSpan_image_eq_span_vsub_set_left_ne Real _ (Set.m
+  rw [mongePlane_def]; rw [altitude_def]; rw [direction_affineSpan]; rw [hs]; rw [he]; rw [centroid_singleton]; rw [vectorSpan_image_eq_span_vsub_set_left_ne Real _ (Set.mem_insert i₂ _)]
+  simp [h₂₃]
 
 中文:
 定理 altitude_eq_mongePlane
@@ -956,7 +1075,8 @@ theorem altitude_eq_mongePlane
   证明: by
   have hs : ({i₂, i₃}ᶜ : Finset (Fin 3)) = {i₁} := by decide +revert
   have he : ({i₁}ᶜ : Set (Fin 3)) = {i₂, i₃} := by grind
-  rw [mongePlane_def]; rw [altitude_def]; rw [direction_affineSpan]; rw [hs]; rw [he]; rw [centroid_singleton]; rw [vectorSpan_image_eq_span_vsub_set_left_ne Real _ (Set.m
+  rw [mongePlane_def]; rw [altitude_def]; rw [direction_affineSpan]; rw [hs]; rw [he]; rw [centroid_singleton]; rw [vectorSpan_image_eq_span_vsub_set_left_ne Real _ (Set.mem_insert i₂ _)]
+  simp [h₂₃]
 
 Depends on / 依赖: Finset, Set.mem_insert, altitude_def, centroid_singleton, direction_affineSpan, mem_insert, mongePlane_def, revert, vectorSpan_image_eq_span_vsub_set_left_ne
 -/
@@ -1010,7 +1130,11 @@ theorem eq_orthocenter_of_forall_mem_altitude
   rw [t.altitude_eq_mongePlane h₁₃ h₁₂ h₂₃.symm] at h₁
   rw [t.altitude_eq_mongePlane h₂₃ h₁₂.symm h₁₃.symm] at h₂
   rw [orthocenter_eq_mongePoint]
-  have ha : forall i, i₃ != i -> p in t.mongePlane 
+  have ha : forall i, i₃ != i -> p in t.mongePlane i₃ i := by
+    intro i hi
+    obtain rfl | rfl : i₁ = i ∨ i₂ = i := by lia
+    all_goals assumption
+  exact eq_mongePoint_of_forall_mem_mongePlane ha
 
 中文:
 定理 eq_orthocenter_of_对任意_mem_altitude
@@ -1022,7 +1146,11 @@ theorem eq_orthocenter_of_forall_mem_altitude
   rw [t.altitude_eq_mongePlane h₁₃ h₁₂ h₂₃.symm] at h₁
   rw [t.altitude_eq_mongePlane h₂₃ h₁₂.symm h₁₃.symm] at h₂
   rw [orthocenter_eq_mongePoint]
-  have ha : forall i, i₃ != i -> p in t.mongePlane 
+  have ha : forall i, i₃ != i -> p in t.mongePlane i₃ i := by
+    intro i hi
+    obtain rfl | rfl : i₁ = i ∨ i₂ = i := by lia
+    all_goals assumption
+  exact eq_mongePoint_of_forall_mem_mongePlane ha
 
 Depends on / 依赖: all_goals, altitude_eq_mongePlane, eq_mongePoint_of_forall_mem_mongePlane, mongePlane, orthocenter_eq_mongePoint, revert, t.altitude_eq_mongePlane, t.mongePlane
 -/
@@ -1047,13 +1175,31 @@ English:
 theorem dist_orthocenter_reflection_circumcenter
   given: (t : Triangle Real P) {i₁ i₂ : Fin 3} (h : i₁ != i₂)
   proof: by
-  rw [← mul_self_inj_of_nonneg dist_nonneg t.circumradius_nonneg]; rw [t.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter h]; rw [t.orthocenter_eq_mongePoint]; rw [mongePoint_eq_affineCombination_of_pointsWithCircumcenter]; rw [dist_affineCombination t.pointsWithCircumcenter
+  rw [← mul_self_inj_of_nonneg dist_nonneg t.circumradius_nonneg]; rw [t.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter h]; rw [t.orthocenter_eq_mongePoint]; rw [mongePoint_eq_affineCombination_of_pointsWithCircumcenter]; rw [dist_affineCombination t.pointsWithCircumcenter (sum_mongePointWeightsWithCircumcenter _)
+      (sum_reflectionCircumcenterWeightsWithCircumcenter h)]
+  simp_rw [sum_pointsWithCircumcenter, Pi.sub_apply, mongePointWeightsWithCircumcenter,
+    reflectionCircumcenterWeightsWithCircumcenter]
+  have hu : ({i₁, i₂} : Finset (Fin 3)) subseteq univ := subset_univ _
+  obtain ⟨i₃, hi₃, hi₃₁, hi₃₂⟩ :
+      exists i₃, univ \ ({i₁, i₂} : Finset (Fin 3)) = {i₃} ∧ i₃ != i₁ ∧ i₃ != i₂ := by
+    decide +revert
+  simp_rw [← sum_sdiff hu, hi₃]
+  norm_num [hi₃₁, hi₃₂]
 
 中文:
 定理 dist_orthocenter_reflection_circumcenter
   条件: (t : Triangle 实数 P) {i₁ i₂ : 有限集 3} (h : i₁ != i₂)
   证明: by
-  rw [← mul_self_inj_of_nonneg dist_nonneg t.circumradius_nonneg]; rw [t.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter h]; rw [t.orthocenter_eq_mongePoint]; rw [mongePoint_eq_affineCombination_of_pointsWithCircumcenter]; rw [dist_affineCombination t.pointsWithCircumcenter
+  rw [← mul_self_inj_of_nonneg dist_nonneg t.circumradius_nonneg]; rw [t.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter h]; rw [t.orthocenter_eq_mongePoint]; rw [mongePoint_eq_affineCombination_of_pointsWithCircumcenter]; rw [dist_affineCombination t.pointsWithCircumcenter (sum_mongePointWeightsWithCircumcenter _)
+      (sum_reflectionCircumcenterWeightsWithCircumcenter h)]
+  simp_rw [sum_pointsWithCircumcenter, Pi.sub_apply, mongePointWeightsWithCircumcenter,
+    reflectionCircumcenterWeightsWithCircumcenter]
+  have hu : ({i₁, i₂} : Finset (Fin 3)) subseteq univ := subset_univ _
+  obtain ⟨i₃, hi₃, hi₃₁, hi₃₂⟩ :
+      exists i₃, univ \ ({i₁, i₂} : Finset (Fin 3)) = {i₃} ∧ i₃ != i₁ ∧ i₃ != i₂ := by
+    decide +revert
+  simp_rw [← sum_sdiff hu, hi₃]
+  norm_num [hi₃₁, hi₃₂]
 
 Depends on / 依赖: Pi.sub_apply, circumradius_nonneg, dist_affineCombination, dist_nonneg, mongePointWeightsWithCircumcenter, mongePoint_eq_affineCombination_of_pointsWithCircumcenter, mul_self_inj_of_nonneg, orthocenter_eq_mongePoint, pointsWithCircumcenter, reflectionCircumce, reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter, simp_rw, sub_apply, sum_mongePointWeightsWithCircumcenter, sum_pointsWithCircumcenter, sum_reflectionCircumcenterWeightsWithCircumcenter, t.circumradius_nonneg, t.orthocenter_eq_mongePoint, t.pointsWithCircumcenter, t.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter
 -/
@@ -1187,7 +1333,27 @@ theorem altitude_replace_orthocenter_eq_affineSpan
   use t₁.independent.injective.ne hi₁₂
   have he : affineSpan Real (Set.range t₂.points) = affineSpan Real (Set.range t₁.points) := by
     refine ext_of_direction_eq ?_
-      ⟨t₁.points i₃, mem_affineSpan Real ⟨j₃, h₃⟩, mem_aff
+      ⟨t₁.points i₃, mem_affineSpan Real ⟨j₃, h₃⟩, mem_affineSpan Real (Set.mem_range_self _)⟩
+    refine Submodule.eq_of_le_of_finrank_eq (direction_le (affineSpan_le_of_subset_coe ?_))
+      ?_
+    · have hu : (Set.univ : Set (Fin 3)) = {j₁, j₂, j₃} := by grind
+      rw [← Set.image_univ]; rw [hu]; rw [Set.image_insert_eq]; rw [Set.image_insert_eq]; rw [Set.image_singleton]; rw [h₁]; rw [h₂]; rw [h₃]; rw [Set.insert_subset_iff]; rw [Set.insert_subset_iff]; rw [Set.singleton_subset_iff]
+      exact
+        ⟨t₁.orthocenter_mem_affineSpan, mem_affineSpan Real (Set.mem_range_self _),
+          mem_affineSpan Real (Set.mem_range_self _)⟩
+    · rw [direction_affineSpan, direction_affineSpan,
+        t₁.independent.finrank_vectorSpan (Fintype.card_fin _),
+        t₂.independent.finrank_vectorSpan (Fintype.card_fin _)]
+  rw [he]
+  use mem_affineSpan Real (Set.mem_range_self _)
+  have hu : ({j₂}ᶜ : Set _) = {j₁, j₃} := by grind
+  rw [hu]; rw [Set.image_insert_eq]; rw [Set.image_singleton]; rw [h₁]; rw [h₃]
+  have hle : (t₁.altitude i₃).directionᗮ <= line[Real, t₁.orthocenter, t₁.points i₃].directionᗮ :=
+    Submodule.orthogonal_le (direction_le (affineSpan_orthocenter_point_le_altitude _ _))
+  refine hle ((t₁.vectorSpan_isOrtho_altitude_direction i₃) ?_)
+  have hui : ({i₃}ᶜ : Set _) = {i₁, i₂} := by grind
+  rw [hui]; rw [Set.image_insert_eq]; rw [Set.image_singleton]
+  exact vsub_mem_vectorSpan Real (Set.mem_insert _ _) (Set.mem_insert_of_mem _ (Set.mem_singleton _))
 
 中文:
 定理 altitude_replace_orthocenter_eq_affineSpan
@@ -1199,7 +1365,27 @@ theorem altitude_replace_orthocenter_eq_affineSpan
   use t₁.independent.injective.ne hi₁₂
   have he : affineSpan Real (Set.range t₂.points) = affineSpan Real (Set.range t₁.points) := by
     refine ext_of_direction_eq ?_
-      ⟨t₁.points i₃, mem_affineSpan Real ⟨j₃, h₃⟩, mem_aff
+      ⟨t₁.points i₃, mem_affineSpan Real ⟨j₃, h₃⟩, mem_affineSpan Real (Set.mem_range_self _)⟩
+    refine Submodule.eq_of_le_of_finrank_eq (direction_le (affineSpan_le_of_subset_coe ?_))
+      ?_
+    · have hu : (Set.univ : Set (Fin 3)) = {j₁, j₂, j₃} := by grind
+      rw [← Set.image_univ]; rw [hu]; rw [Set.image_insert_eq]; rw [Set.image_insert_eq]; rw [Set.image_singleton]; rw [h₁]; rw [h₂]; rw [h₃]; rw [Set.insert_subset_iff]; rw [Set.insert_subset_iff]; rw [Set.singleton_subset_iff]
+      exact
+        ⟨t₁.orthocenter_mem_affineSpan, mem_affineSpan Real (Set.mem_range_self _),
+          mem_affineSpan Real (Set.mem_range_self _)⟩
+    · rw [direction_affineSpan, direction_affineSpan,
+        t₁.independent.finrank_vectorSpan (Fintype.card_fin _),
+        t₂.independent.finrank_vectorSpan (Fintype.card_fin _)]
+  rw [he]
+  use mem_affineSpan Real (Set.mem_range_self _)
+  have hu : ({j₂}ᶜ : Set _) = {j₁, j₃} := by grind
+  rw [hu]; rw [Set.image_insert_eq]; rw [Set.image_singleton]; rw [h₁]; rw [h₃]
+  have hle : (t₁.altitude i₃).directionᗮ <= line[Real, t₁.orthocenter, t₁.points i₃].directionᗮ :=
+    Submodule.orthogonal_le (direction_le (affineSpan_orthocenter_point_le_altitude _ _))
+  refine hle ((t₁.vectorSpan_isOrtho_altitude_direction i₃) ?_)
+  have hui : ({i₃}ᶜ : Set _) = {i₁, i₂} := by grind
+  rw [hui]; rw [Set.image_insert_eq]; rw [Set.image_singleton]
+  exact vsub_mem_vectorSpan Real (Set.mem_insert _ _) (Set.mem_insert_of_mem _ (Set.mem_singleton _))
 
 Depends on / 依赖: Set.image_univ, Set.mem_range_self, Set.range, Set.univ, Submodule, Submodule.eq_of_le_of_finrank_eq, affineSpan, affineSpan_le_of_subset_coe, affineSpan_pair_eq_altitude_iff, direction_le, eq_of_le_of_finrank_eq, ext_of_direction_eq, image_univ, independent, independent.injective.ne, injective, mem_affineSpan, mem_range_self, points
 -/
@@ -1246,7 +1432,8 @@ theorem orthocenter_replace_orthocenter_eq_point
   refine (Triangle.eq_orthocenter_of_forall_mem_altitude hj₂₃ ?_ ?_).symm
   · rw [altitude_replace_orthocenter_eq_affineSpan hi₁₂ hi₁₃ hi₂₃ hj₁₂ hj₁₃ hj₂₃ h₁ h₂ h₃]
     exact mem_affineSpan Real (Set.mem_insert _ _)
-  · rw [altitude_replace_orthocenter_eq_affineSpan hi₁₃ hi₁₂ hi₂₃.symm hj₁₃ hj₁₂ 
+  · rw [altitude_replace_orthocenter_eq_affineSpan hi₁₃ hi₁₂ hi₂₃.symm hj₁₃ hj₁₂ hj₂₃.symm h₁ h₃ h₂]
+    exact mem_affineSpan Real (Set.mem_insert _ _)
 
 中文:
 定理 orthocenter_replace_orthocenter_eq_point
@@ -1255,7 +1442,8 @@ theorem orthocenter_replace_orthocenter_eq_point
   refine (Triangle.eq_orthocenter_of_forall_mem_altitude hj₂₃ ?_ ?_).symm
   · rw [altitude_replace_orthocenter_eq_affineSpan hi₁₂ hi₁₃ hi₂₃ hj₁₂ hj₁₃ hj₂₃ h₁ h₂ h₃]
     exact mem_affineSpan Real (Set.mem_insert _ _)
-  · rw [altitude_replace_orthocenter_eq_affineSpan hi₁₃ hi₁₂ hi₂₃.symm hj₁₃ hj₁₂ 
+  · rw [altitude_replace_orthocenter_eq_affineSpan hi₁₃ hi₁₂ hi₂₃.symm hj₁₃ hj₁₂ hj₂₃.symm h₁ h₃ h₂]
+    exact mem_affineSpan Real (Set.mem_insert _ _)
 
 Depends on / 依赖: Set.mem_insert, Triangle, Triangle.eq_orthocenter_of_forall_mem_altitude, altitude_replace_orthocenter_eq_affineSpan, eq_orthocenter_of_forall_mem_altitude, mem_affineSpan, mem_insert
 -/
@@ -1315,7 +1503,24 @@ theorem exists_of_range_subset_orthocentricSystem
         exists i₂ i₃ : Fin 3, i₁ != i₂ ∧ i₁ != i₃ ∧ i₂ != i₃ ∧ forall i : Fin 3, i = i₁ ∨ i = i₂ ∨ i = i₃ := by
       clear h₁
       decide +revert
-    have h : forall i, i₁ 
+    have h : forall i, i₁ != i -> exists j : Fin 3, t.points j = p i := by
+      intro i hi
+      replace hps := Set.mem_of_mem_insert_of_ne
+        (Set.mem_of_mem_of_subset (Set.mem_range_self i) hps) (h₁ ▸ hpi.ne hi.symm)
+      exact hps
+    rcases h i₂ h₁₂ with ⟨j₂, h₂⟩
+    rcases h i₃ h₁₃ with ⟨j₃, h₃⟩
+    have hj₂₃ : j₂ != j₃ := by
+      intro he
+      rw [he]; rw [h₃] at h₂
+      exact h₂₃.symm (hpi h₂)
+    exact ⟨i₁, i₂, i₃, j₂, j₃, h₁₂, h₁₃, h₂₃, h₁₂₃, h₁, hj₂₃, h₂, h₃⟩
+  · right
+    have hs := Set.subset_sdiff_singleton hps h
+    rw [Set.insert_sdiff_self_of_notMem ho] at hs
+    classical
+    refine Set.eq_of_subset_of_card_le hs ?_
+    rw [Set.card_range_of_injective hpi]; rw [Set.card_range_of_injective t.independent.injective]
 
 中文:
 定理 存在_of_range_subset_orthocentricSystem
@@ -1328,7 +1533,24 @@ theorem exists_of_range_subset_orthocentricSystem
         exists i₂ i₃ : Fin 3, i₁ != i₂ ∧ i₁ != i₃ ∧ i₂ != i₃ ∧ forall i : Fin 3, i = i₁ ∨ i = i₂ ∨ i = i₃ := by
       clear h₁
       decide +revert
-    have h : forall i, i₁ 
+    have h : forall i, i₁ != i -> exists j : Fin 3, t.points j = p i := by
+      intro i hi
+      replace hps := Set.mem_of_mem_insert_of_ne
+        (Set.mem_of_mem_of_subset (Set.mem_range_self i) hps) (h₁ ▸ hpi.ne hi.symm)
+      exact hps
+    rcases h i₂ h₁₂ with ⟨j₂, h₂⟩
+    rcases h i₃ h₁₃ with ⟨j₃, h₃⟩
+    have hj₂₃ : j₂ != j₃ := by
+      intro he
+      rw [he]; rw [h₃] at h₂
+      exact h₂₃.symm (hpi h₂)
+    exact ⟨i₁, i₂, i₃, j₂, j₃, h₁₂, h₁₃, h₂₃, h₁₂₃, h₁, hj₂₃, h₂, h₃⟩
+  · right
+    have hs := Set.subset_sdiff_singleton hps h
+    rw [Set.insert_sdiff_self_of_notMem ho] at hs
+    classical
+    refine Set.eq_of_subset_of_card_le hs ?_
+    rw [Set.card_range_of_injective hpi]; rw [Set.card_range_of_injective t.independent.injective]
 
 Depends on / 依赖: Set.mem_of_mem_insert_of_ne, Set.mem_of_mem_of_subset, Set.mem_range_self, Set.range, hi.symm, hpi.ne, mem_of_mem_insert_of_ne, mem_of_mem_of_subset, mem_range_self, orthocenter, points, replace, revert, t.orthocenter, t.points
 -/
@@ -1376,7 +1598,25 @@ theorem exists_dist_eq_circumradius_of_subset_insert_orthocenter
     (⟨i₁, i₂, i₃, j₂, j₃, _, _, _, h₁₂₃, h₁, hj₂₃, h₂, h₃⟩ | hs)
   · use reflection (affineSpan Real (t.points '' {j₂, j₃})) t.circumcenter,
       reflection_mem_of_le_of_mem (affineSpan_mono Real (Set.image_subset_range _ _))
-   
+        t.circumcenter_mem_affineSpan
+    intro p₁ hp₁
+    rcases hp₁ with ⟨i, rfl⟩
+    have h₁₂₃ := h₁₂₃ i
+    repeat' rcases h₁₂₃ with h₁₂₃ | h₁₂₃
+    · convert! Triangle.dist_orthocenter_reflection_circumcenter t hj₂₃
+    · rw [← h₂, dist_reflection_eq_of_mem _
+       (mem_affineSpan Real (Set.mem_image_of_mem _ (Set.mem_insert _ _)))]
+      exact t.dist_circumcenter_eq_circumradius _
+    · rw [← h₃,
+        dist_reflection_eq_of_mem _
+          (mem_affineSpan Real
+            (Set.mem_image_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_singleton _))))]
+      exact t.dist_circumcenter_eq_circumradius _
+  · use t.circumcenter, t.circumcenter_mem_affineSpan
+    intro p₁ hp₁
+    rw [hs] at hp₁
+    rcases hp₁ with ⟨i, rfl⟩
+    exact t.dist_circumcenter_eq_circumradius _
 
 中文:
 定理 存在_dist_eq_circumradius_of_subset_insert_orthocenter
@@ -1386,7 +1626,25 @@ theorem exists_dist_eq_circumradius_of_subset_insert_orthocenter
     (⟨i₁, i₂, i₃, j₂, j₃, _, _, _, h₁₂₃, h₁, hj₂₃, h₂, h₃⟩ | hs)
   · use reflection (affineSpan Real (t.points '' {j₂, j₃})) t.circumcenter,
       reflection_mem_of_le_of_mem (affineSpan_mono Real (Set.image_subset_range _ _))
-   
+        t.circumcenter_mem_affineSpan
+    intro p₁ hp₁
+    rcases hp₁ with ⟨i, rfl⟩
+    have h₁₂₃ := h₁₂₃ i
+    repeat' rcases h₁₂₃ with h₁₂₃ | h₁₂₃
+    · convert! Triangle.dist_orthocenter_reflection_circumcenter t hj₂₃
+    · rw [← h₂, dist_reflection_eq_of_mem _
+       (mem_affineSpan Real (Set.mem_image_of_mem _ (Set.mem_insert _ _)))]
+      exact t.dist_circumcenter_eq_circumradius _
+    · rw [← h₃,
+        dist_reflection_eq_of_mem _
+          (mem_affineSpan Real
+            (Set.mem_image_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_singleton _))))]
+      exact t.dist_circumcenter_eq_circumradius _
+  · use t.circumcenter, t.circumcenter_mem_affineSpan
+    intro p₁ hp₁
+    rw [hs] at hp₁
+    rcases hp₁ with ⟨i, rfl⟩
+    exact t.dist_circumcenter_eq_circumradius _
 
 Depends on / 依赖: Set.image_subset_range, Triangle, Triangle.dist_orthocenter_reflection_circumcenter, affineSpan, affineSpan_mono, circumcenter, circumcenter_mem_affineSpan, convert, dist_orthocenter_reflection_circumcenter, dist_reflect, exists_of_range_subset_orthocentricSystem, image_subset_range, points, reflection, reflection_mem_of_le_of_mem, repeat, t.circumcenter, t.circumcenter_mem_affineSpan, t.points
 -/
@@ -1460,7 +1718,10 @@ theorem affineSpan_of_orthocentricSystem
   have hs : affineSpan Real s = affineSpan Real (Set.range t.points) := by
     rw [hts]; rw [affineSpan_insert_eq_affineSpan Real t.orthocenter_mem_affineSpan]
   refine ext_of_direction_eq ?_
-    ⟨p 0, mem_affineSpan Real (Set
+    ⟨p 0, mem_affineSpan Real (Set.mem_range_self _), mem_affineSpan Real (hps (Set.mem_range_self _))⟩
+  have hfd : FiniteDimensional Real (affineSpan Real s).direction := by rw [hs]; infer_instance
+  refine Submodule.eq_of_le_of_finrank_eq (direction_le (affineSpan_mono Real hps)) ?_
+  rw [hs]; rw [direction_affineSpan]; rw [direction_affineSpan]; rw [ha.finrank_vectorSpan (Fintype.card_fin _)]; rw [t.independent.finrank_vectorSpan (Fintype.card_fin _)]
 
 中文:
 定理 affineSpan_of_orthocentricSystem
@@ -1471,7 +1732,10 @@ theorem affineSpan_of_orthocentricSystem
   have hs : affineSpan Real s = affineSpan Real (Set.range t.points) := by
     rw [hts]; rw [affineSpan_insert_eq_affineSpan Real t.orthocenter_mem_affineSpan]
   refine ext_of_direction_eq ?_
-    ⟨p 0, mem_affineSpan Real (Set
+    ⟨p 0, mem_affineSpan Real (Set.mem_range_self _), mem_affineSpan Real (hps (Set.mem_range_self _))⟩
+  have hfd : FiniteDimensional Real (affineSpan Real s).direction := by rw [hs]; infer_instance
+  refine Submodule.eq_of_le_of_finrank_eq (direction_le (affineSpan_mono Real hps)) ?_
+  rw [hs]; rw [direction_affineSpan]; rw [direction_affineSpan]; rw [ha.finrank_vectorSpan (Fintype.card_fin _)]; rw [t.independent.finrank_vectorSpan (Fintype.card_fin _)]
 
 Depends on / 依赖: FiniteDimensional, Set.mem_range_self, Set.range, Submodule, Submodule.eq_of_le_of_finrank_eq, affineIndependent, affineSpan, affineSpan_insert_eq_affineSpan, direction, direction_l, eq_of_le_of_finrank_eq, ext_of_direction_eq, ho.affineIndependent, infer_instance, mem_affineSpan, mem_range_self, orthocenter_mem_affineSpan, points, t.orthocenter_mem_affineSpan, t.points
 -/
@@ -1504,7 +1768,11 @@ theorem OrthocentricSystem.exists_circumradius_eq
       t₂.independent.injective with
     ⟨c, hc, h⟩
   rw [Set.forall_mem_range] at h
-  have hs : Set.range t.points subs
+  have hs : Set.range t.points subseteq s := by
+    rw [hts]
+    exact Set.subset_insert _ _
+  rw [affineSpan_of_orthocentricSystem ⟨t]; rw [hto]; rw [hts⟩ hs t.independent.injective]; rw [← affineSpan_of_orthocentricSystem ⟨t]; rw [hto]; rw [hts⟩ ht₂s t₂.independent.injective] at hc
+  exact (t₂.eq_circumradius_of_dist_eq hc h).symm
 
 中文:
 定理 OrthocentricSystem.存在_circumradius_eq
@@ -1519,7 +1787,11 @@ theorem OrthocentricSystem.exists_circumradius_eq
       t₂.independent.injective with
     ⟨c, hc, h⟩
   rw [Set.forall_mem_range] at h
-  have hs : Set.range t.points subs
+  have hs : Set.range t.points subseteq s := by
+    rw [hts]
+    exact Set.subset_insert _ _
+  rw [affineSpan_of_orthocentricSystem ⟨t]; rw [hto]; rw [hts⟩ hs t.independent.injective]; rw [← affineSpan_of_orthocentricSystem ⟨t]; rw [hto]; rw [hts⟩ ht₂s t₂.independent.injective] at hc
+  exact (t₂.eq_circumradius_of_dist_eq hc h).symm
 
 Depends on / 依赖: Set.forall_mem_range, Set.range, Set.subset_insert, affineSpan_of_orthocentricSystem, circumradius, exists_dist_eq_circumradius_of_subset_insert_orthocenter, forall_mem_range, independent, independent.inj, independent.injective, injective, points, subset_insert, subseteq, t.circumradius, t.independent.injective, t.points
 -/
@@ -1552,7 +1824,21 @@ theorem OrthocentricSystem.eq_insert_orthocenter
   rcases exists_of_range_subset_orthocentricSystem ht₀o ht t.independent.injective with
     (⟨i₁, i₂, i₃, j₂, j₃, h₁₂, h₁₃, h₂₃, h₁₂₃, h₁, hj₂₃, h₂, h₃⟩ | hs)
   · obtain ⟨j₁, hj₁₂, hj₁₃, hj₁₂₃⟩ :
-        exists j₁ : Fin 3, j₁ != j₂ ∧ j₁ != j₃ ∧ 
+        exists j₁ : Fin 3, j₁ != j₂ ∧ j₁ != j₃ ∧ forall j : Fin 3, j = j₁ ∨ j = j₂ ∨ j = j₃ := by
+      clear h₂ h₃
+      decide +revert
+    suffices h : t₀.points j₁ = t.orthocenter by
+      have hui : (Set.univ : Set (Fin 3)) = {i₁, i₂, i₃} := by ext x; simpa using h₁₂₃ x
+      have huj : (Set.univ : Set (Fin 3)) = {j₁, j₂, j₃} := by ext x; simpa using hj₁₂₃ x
+      rw [← h]; rw [ht₀s]; rw [← Set.image_univ]; rw [huj]; rw [← Set.image_univ]; rw [hui]
+      simp_rw [Set.image_insert_eq, Set.image_singleton, h₁, ← h₂, ← h₃]
+      rw [Set.insert_comm]
+    exact
+      (Triangle.orthocenter_replace_orthocenter_eq_point hj₁₂ hj₁₃ hj₂₃ h₁₂ h₁₃ h₂₃ h₁ h₂.symm
+          h₃.symm).symm
+  · rw [hs]
+    convert! ht₀s using 2
+    exact Triangle.orthocenter_eq_of_range_eq hs
 
 中文:
 定理 OrthocentricSystem.eq_insert_orthocenter
@@ -1563,7 +1849,21 @@ theorem OrthocentricSystem.eq_insert_orthocenter
   rcases exists_of_range_subset_orthocentricSystem ht₀o ht t.independent.injective with
     (⟨i₁, i₂, i₃, j₂, j₃, h₁₂, h₁₃, h₂₃, h₁₂₃, h₁, hj₂₃, h₂, h₃⟩ | hs)
   · obtain ⟨j₁, hj₁₂, hj₁₃, hj₁₂₃⟩ :
-        exists j₁ : Fin 3, j₁ != j₂ ∧ j₁ != j₃ ∧ 
+        exists j₁ : Fin 3, j₁ != j₂ ∧ j₁ != j₃ ∧ forall j : Fin 3, j = j₁ ∨ j = j₂ ∨ j = j₃ := by
+      clear h₂ h₃
+      decide +revert
+    suffices h : t₀.points j₁ = t.orthocenter by
+      have hui : (Set.univ : Set (Fin 3)) = {i₁, i₂, i₃} := by ext x; simpa using h₁₂₃ x
+      have huj : (Set.univ : Set (Fin 3)) = {j₁, j₂, j₃} := by ext x; simpa using hj₁₂₃ x
+      rw [← h]; rw [ht₀s]; rw [← Set.image_univ]; rw [huj]; rw [← Set.image_univ]; rw [hui]
+      simp_rw [Set.image_insert_eq, Set.image_singleton, h₁, ← h₂, ← h₃]
+      rw [Set.insert_comm]
+    exact
+      (Triangle.orthocenter_replace_orthocenter_eq_point hj₁₂ hj₁₃ hj₂₃ h₁₂ h₁₃ h₂₃ h₁ h₂.symm
+          h₃.symm).symm
+  · rw [hs]
+    convert! ht₀s using 2
+    exact Triangle.orthocenter_eq_of_range_eq hs
 
 Depends on / 依赖: Set.univ, exists_of_range_subset_orthocentricSystem, independent, injective, orthocenter, points, revert, t.independent.injective, t.orthocenter
 -/

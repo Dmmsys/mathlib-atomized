@@ -217,7 +217,8 @@ theorem eleven_dvd_of_palindrome
   replace h : Even dig.length := by rwa [List.length_map]
   refine eleven_dvd_iff.2 ⟨0, (?_ : dig.alternatingSum = 0)⟩
   have := dig.alternatingSum_reverse
-  rw [(p.map _).reverse_eq]; rw [_root_.pow_succ']; rw [h.neg_one_pow]; rw [mul_one];
+  rw [(p.map _).reverse_eq]; rw [_root_.pow_succ']; rw [h.neg_one_pow]; rw [mul_one]; rw [neg_one_zsmul] at this
+  exact eq_zero_of_neg_eq this.symm
 
 中文:
 定理 eleven_dvd_of_palindrome
@@ -227,7 +228,8 @@ theorem eleven_dvd_of_palindrome
   replace h : Even dig.length := by rwa [List.length_map]
   refine eleven_dvd_iff.2 ⟨0, (?_ : dig.alternatingSum = 0)⟩
   have := dig.alternatingSum_reverse
-  rw [(p.map _).reverse_eq]; rw [_root_.pow_succ']; rw [h.neg_one_pow]; rw [mul_one];
+  rw [(p.map _).reverse_eq]; rw [_root_.pow_succ']; rw [h.neg_one_pow]; rw [mul_one]; rw [neg_one_zsmul] at this
+  exact eq_zero_of_neg_eq this.symm
 
 Depends on / 依赖: List.length_map, _root_, _root_.pow_succ, alternatingSum, alternatingSum_reverse, dig.alternatingSum, dig.alternatingSum_reverse, dig.length, digits, eleven_dvd_iff, eq_zero_of_neg_eq, h.neg_one_pow, length, length_map, mul_one, neg_one_pow, neg_one_zsmul, p.map, pow_succ, replace
 -/

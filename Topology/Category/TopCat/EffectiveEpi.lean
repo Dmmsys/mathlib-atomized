@@ -43,7 +43,24 @@ definition effectiveEpiStructOfQuotientMap
     (by ext; exact hab)) a
   /- `IsQuotientMap.lift_comp` gives the factorisation -/
   fac e h := hom_ext (hπ.lift_comp e.hom
-    fun a b hab =
+    fun a b hab => CategoryTheory.congr_fun (h
+      (ofHom ⟨fun _ => a, continuous_const⟩)
+      (ofHom ⟨fun _ => b, continuous_const⟩)
+    (by ext; exact hab)) a)
+  /- Uniqueness follows from the fact that `IsQuotientMap.lift` is an equivalence (given by
+  `IsQuotientMap.liftEquiv`). -/
+  uniq e h g hm := by
+    suffices g = ofHom (hπ.liftEquiv ⟨e.hom,
+      fun a b hab => CategoryTheory.congr_fun (h
+          (ofHom ⟨fun _ => a, continuous_const⟩)
+          (ofHom ⟨fun _ => b, continuous_const⟩)
+          (by ext; exact hab))
+        a⟩) by assumption
+    apply hom_ext
+    rw [hom_ofHom]; rw [← Equiv.symm_apply_eq hπ.liftEquiv]
+    ext
+    simp only [IsQuotientMap.liftEquiv_symm_apply_coe, ContinuousMap.comp_apply, ← hm]
+    rfl
 
 中文:
 定义 effectiveEpiStructOfQuotientMap
@@ -55,7 +72,24 @@ definition effectiveEpiStructOfQuotientMap
     (by ext; exact hab)) a
   /- `IsQuotientMap.lift_comp` gives the factorisation -/
   fac e h := hom_ext (hπ.lift_comp e.hom
-    fun a b hab =
+    fun a b hab => CategoryTheory.congr_fun (h
+      (ofHom ⟨fun _ => a, continuous_const⟩)
+      (ofHom ⟨fun _ => b, continuous_const⟩)
+    (by ext; exact hab)) a)
+  /- Uniqueness follows from the fact that `IsQuotientMap.lift` is an equivalence (given by
+  `IsQuotientMap.liftEquiv`). -/
+  uniq e h g hm := by
+    suffices g = ofHom (hπ.liftEquiv ⟨e.hom,
+      fun a b hab => CategoryTheory.congr_fun (h
+          (ofHom ⟨fun _ => a, continuous_const⟩)
+          (ofHom ⟨fun _ => b, continuous_const⟩)
+          (by ext; exact hab))
+        a⟩) by assumption
+    apply hom_ext
+    rw [hom_ofHom]; rw [← Equiv.symm_apply_eq hπ.liftEquiv]
+    ext
+    simp only [IsQuotientMap.liftEquiv_symm_apply_coe, ContinuousMap.comp_apply, ← hm]
+    rfl
 
 Depends on / 依赖: e.hom
 -/
@@ -98,7 +132,9 @@ theorem effectiveEpi_iff_isQuotientMap
   /- The backward direction is given by `effectiveEpiStructOfQuotientMap` above. -/
   refine ⟨fun _ => ?_, fun hπ => ⟨⟨effectiveEpiStructOfQuotientMap π hπ⟩⟩⟩
   /- Since `TopCat` has pullbacks, `π` is in fact a `RegularEpi`. This means that it exhibits `B` as
-    a coequalizer of two maps into `X
+    a coequalizer of two maps into `X`. It suffices to prove that `π` followed by the isomorphism to
+    an arbitrary coequalizer is a quotient map. -/
+  exact isQuotientMap_of_isColimit_cofork _ (IsRegularEpi.isColimit π)
 
 中文:
 定理 effectiveEpi_iff_isQuotientMap
@@ -107,7 +143,9 @@ theorem effectiveEpi_iff_isQuotientMap
   /- The backward direction is given by `effectiveEpiStructOfQuotientMap` above. -/
   refine ⟨fun _ => ?_, fun hπ => ⟨⟨effectiveEpiStructOfQuotientMap π hπ⟩⟩⟩
   /- Since `TopCat` has pullbacks, `π` is in fact a `RegularEpi`. This means that it exhibits `B` as
-    a coequalizer of two maps into `X
+    a coequalizer of two maps into `X`. It suffices to prove that `π` followed by the isomorphism to
+    an arbitrary coequalizer is a quotient map. -/
+  exact isQuotientMap_of_isColimit_cofork _ (IsRegularEpi.isColimit π)
 -/
 theorem effectiveEpi_iff_isQuotientMap {B X : TopCat.{u}} (π : X ⟶ B) :
     EffectiveEpi π ↔ IsQuotientMap π := by

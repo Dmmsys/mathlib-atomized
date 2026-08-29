@@ -117,7 +117,8 @@ lemma HasExactColimitsOfShape.domain_of_functor
       apply isLimitOfReflects F
       refine (IsLimit.equivOfNatIsoOfIso (isoWhiskerLeft G (preservesColimitNatIso F).symm)
         ((_ ⋙ colim).mapCone c) _ ?_) (isLimitOfPreserves _ hc)
-      exact 
+      exact Cone.ext ((preservesColimitNatIso F).symm.app _)
+        fun i => (preservesColimitNatIso F).inv.naturality _ } } }
 
 中文:
 引理 有ExactColimitsOfShape.domain_of_functor
@@ -128,7 +129,8 @@ lemma HasExactColimitsOfShape.domain_of_functor
       apply isLimitOfReflects F
       refine (IsLimit.equivOfNatIsoOfIso (isoWhiskerLeft G (preservesColimitNatIso F).symm)
         ((_ ⋙ colim).mapCone c) _ ?_) (isLimitOfPreserves _ hc)
-      exact 
+      exact Cone.ext ((preservesColimitNatIso F).symm.app _)
+        fun i => (preservesColimitNatIso F).inv.naturality _ } } }
 
 Depends on / 依赖: preservesFiniteLimits, preservesLimit
 -/
@@ -160,7 +162,14 @@ lemma HasExactLimitsOfShape.domain_of_functor
       apply isColimitOfReflects F
       refine (IsColimit.equivOfNatIsoOfIso (isoWhiskerLeft G (preservesLimitNatIso F).symm)
         ((_ ⋙ lim).mapCocone c) _ ?_) (isColimitOfPreserves _ hc)
-    
+      refine Cocone.ext ((preservesLimitNatIso F).symm.app _) fun i => ?_
+      simp only [Functor.comp_obj, lim_obj, Functor.mapCocone_pt, isoWhiskerLeft_inv, Iso.symm_inv,
+        Cocone.precompose_obj_pt, whiskeringRight_obj_obj, Functor.const_obj_obj,
+        Cocone.precompose_obj_ι, NatTrans.comp_app, whiskerLeft_app, preservesLimitNatIso_hom_app,
+        Functor.mapCocone_ι_app, Functor.comp_map, whiskeringRight_obj_map, lim_map, Iso.app_hom,
+        Iso.symm_hom, preservesLimitNatIso_inv_app, Category.assoc]
+      rw [← Iso.eq_inv_comp]
+      exact (preservesLimitNatIso F).inv.naturality _ } } }
 
 中文:
 引理 有ExactLimitsOfShape.domain_of_functor
@@ -171,7 +180,14 @@ lemma HasExactLimitsOfShape.domain_of_functor
       apply isColimitOfReflects F
       refine (IsColimit.equivOfNatIsoOfIso (isoWhiskerLeft G (preservesLimitNatIso F).symm)
         ((_ ⋙ lim).mapCocone c) _ ?_) (isColimitOfPreserves _ hc)
-    
+      refine Cocone.ext ((preservesLimitNatIso F).symm.app _) fun i => ?_
+      simp only [Functor.comp_obj, lim_obj, Functor.mapCocone_pt, isoWhiskerLeft_inv, Iso.symm_inv,
+        Cocone.precompose_obj_pt, whiskeringRight_obj_obj, Functor.const_obj_obj,
+        Cocone.precompose_obj_ι, NatTrans.comp_app, whiskerLeft_app, preservesLimitNatIso_hom_app,
+        Functor.mapCocone_ι_app, Functor.comp_map, whiskeringRight_obj_map, lim_map, Iso.app_hom,
+        Iso.symm_hom, preservesLimitNatIso_inv_app, Category.assoc]
+      rw [← Iso.eq_inv_comp]
+      exact (preservesLimitNatIso F).inv.naturality _ } } }
 
 Depends on / 依赖: preservesColimit, preservesFiniteColimits
 -/
@@ -233,7 +249,9 @@ lemma HasExactColimitsOfShape.of_codomain_equivalence
     HasExactColimitsOfShape J D := by
   have : HasColimitsOfShape J D := Adjunction.hasColimitsOfShape_of_equivalence e.inverse
   refine ⟨⟨fun _ _ _ => ⟨@fun K => ?_⟩⟩⟩
-  refine preservesLimit_of_natIso K (?_ : e.congrRight.inverse ⋙ colim ⋙ e.f
+  refine preservesLimit_of_natIso K (?_ : e.congrRight.inverse ⋙ colim ⋙ e.functor ≅ colim)
+  apply e.symm.congrRight.fullyFaithfulFunctor.preimageIso
+  exact isoWhiskerLeft (_ ⋙ colim) e.unitIso.symm ≪≫ (preservesColimitNatIso e.inverse).symm
 
 中文:
 引理 有ExactColimitsOfShape.of_codomain_equivalence
@@ -242,7 +260,9 @@ lemma HasExactColimitsOfShape.of_codomain_equivalence
     HasExactColimitsOfShape J D := by
   have : HasColimitsOfShape J D := Adjunction.hasColimitsOfShape_of_equivalence e.inverse
   refine ⟨⟨fun _ _ _ => ⟨@fun K => ?_⟩⟩⟩
-  refine preservesLimit_of_natIso K (?_ : e.congrRight.inverse ⋙ colim ⋙ e.f
+  refine preservesLimit_of_natIso K (?_ : e.congrRight.inverse ⋙ colim ⋙ e.functor ≅ colim)
+  apply e.symm.congrRight.fullyFaithfulFunctor.preimageIso
+  exact isoWhiskerLeft (_ ⋙ colim) e.unitIso.symm ≪≫ (preservesColimitNatIso e.inverse).symm
 
 Depends on / 依赖: Adjunction, Adjunction.hasColimitsOfShape_of_equivalence, e.inverse, hasColimitsOfShape_of_equivalence, inverse
 -/
@@ -295,7 +315,9 @@ lemma HasExactLimitsOfShape.of_codomain_equivalence
     HasExactLimitsOfShape J D := by
   have : HasLimitsOfShape J D := Adjunction.hasLimitsOfShape_of_equivalence e.inverse
   refine ⟨⟨fun _ _ _ => ⟨@fun K => ?_⟩⟩⟩
-  refine preservesColimit_of_natIso K (?_ : e.congrRight.inverse ⋙ lim ⋙ e.functor ≅
+  refine preservesColimit_of_natIso K (?_ : e.congrRight.inverse ⋙ lim ⋙ e.functor ≅ lim)
+  apply e.symm.congrRight.fullyFaithfulFunctor.preimageIso
+  exact isoWhiskerLeft (_ ⋙ lim) e.unitIso.symm ≪≫ (preservesLimitNatIso e.inverse).symm
 
 中文:
 引理 有ExactLimitsOfShape.of_codomain_equivalence
@@ -304,7 +326,9 @@ lemma HasExactLimitsOfShape.of_codomain_equivalence
     HasExactLimitsOfShape J D := by
   have : HasLimitsOfShape J D := Adjunction.hasLimitsOfShape_of_equivalence e.inverse
   refine ⟨⟨fun _ _ _ => ⟨@fun K => ?_⟩⟩⟩
-  refine preservesColimit_of_natIso K (?_ : e.congrRight.inverse ⋙ lim ⋙ e.functor ≅
+  refine preservesColimit_of_natIso K (?_ : e.congrRight.inverse ⋙ lim ⋙ e.functor ≅ lim)
+  apply e.symm.congrRight.fullyFaithfulFunctor.preimageIso
+  exact isoWhiskerLeft (_ ⋙ lim) e.unitIso.symm ≪≫ (preservesLimitNatIso e.inverse).symm
 
 Depends on / 依赖: Adjunction, Adjunction.hasLimitsOfShape_of_equivalence, e.inverse, hasLimitsOfShape_of_equivalence, inverse
 -/
@@ -332,7 +356,11 @@ lemma hasExactColimitsOfShape
     have : PreservesLimitsOfSize.{0, 0} G := adj.rightAdjoint_preservesLimits
     have : PreservesColimitsOfSize.{v', u'} F := adj.leftAdjoint_preservesColimits
     let e : (whiskeringRight J D C).obj G ⋙ colim ⋙ F ≅ colim :=
-      isoWhiskerLeft _ (preservesColimitNatIs
+      isoWhiskerLeft _ (preservesColimitNatIso F) ≪≫ (Functor.associator _ _ _).symm ≪≫
+        isoWhiskerRight (whiskeringRightObjCompIso G F) _ ≪≫
+        isoWhiskerRight ((whiskeringRight J D D).mapIso (asIso adj.counit)) _ ≪≫
+        isoWhiskerRight whiskeringRightObjIdIso _ ≪≫ colim.leftUnitor
+    exact preservesLimit_of_natIso _ e⟩⟩
 
 中文:
 引理 hasExactColimitsOfShape
@@ -341,7 +369,11 @@ lemma hasExactColimitsOfShape
     have : PreservesLimitsOfSize.{0, 0} G := adj.rightAdjoint_preservesLimits
     have : PreservesColimitsOfSize.{v', u'} F := adj.leftAdjoint_preservesColimits
     let e : (whiskeringRight J D C).obj G ⋙ colim ⋙ F ≅ colim :=
-      isoWhiskerLeft _ (preservesColimitNatIs
+      isoWhiskerLeft _ (preservesColimitNatIso F) ≪≫ (Functor.associator _ _ _).symm ≪≫
+        isoWhiskerRight (whiskeringRightObjCompIso G F) _ ≪≫
+        isoWhiskerRight ((whiskeringRight J D D).mapIso (asIso adj.counit)) _ ≪≫
+        isoWhiskerRight whiskeringRightObjIdIso _ ≪≫ colim.leftUnitor
+    exact preservesLimit_of_natIso _ e⟩⟩
 
 Depends on / 依赖: Functor, Functor.associator, PreservesColimitsOfSize, PreservesLimitsOfSize, adj.counit, adj.leftAdjoint_preservesColimits, adj.rightAdjoint_preservesLimits, associator, counit, isoWhiskerLeft, isoWhiskerRight, leftAdjoint_preservesColimits, mapIso, preservesColimitNatIso, rightAdjoint_preservesLimits, whiskeringRight, whiskeringRightObjCompIso, whiskeringRightObjIdIso
 -/
@@ -369,7 +401,12 @@ lemma hasExactLimitsOfShape
     have : PreservesLimitsOfSize.{v', u'} G := adj.rightAdjoint_preservesLimits
     have : PreservesColimitsOfSize.{0, 0} F := adj.leftAdjoint_preservesColimits
     let e : (whiskeringRight J _ _).obj F ⋙ lim ⋙ G ≅ lim :=
-      isoWhiskerLeft _ (preservesLimitNatIso G) ≪
+      isoWhiskerLeft _ (preservesLimitNatIso G) ≪≫
+        (Functor.associator _ _ _).symm ≪≫
+        isoWhiskerRight (whiskeringRightObjCompIso F G) _ ≪≫
+        isoWhiskerRight ((whiskeringRight J C C).mapIso (asIso adj.unit).symm) _ ≪≫
+        isoWhiskerRight whiskeringRightObjIdIso _ ≪≫ lim.leftUnitor
+    exact preservesColimit_of_natIso _ e⟩⟩
 
 中文:
 引理 hasExactLimitsOfShape
@@ -378,7 +415,12 @@ lemma hasExactLimitsOfShape
     have : PreservesLimitsOfSize.{v', u'} G := adj.rightAdjoint_preservesLimits
     have : PreservesColimitsOfSize.{0, 0} F := adj.leftAdjoint_preservesColimits
     let e : (whiskeringRight J _ _).obj F ⋙ lim ⋙ G ≅ lim :=
-      isoWhiskerLeft _ (preservesLimitNatIso G) ≪
+      isoWhiskerLeft _ (preservesLimitNatIso G) ≪≫
+        (Functor.associator _ _ _).symm ≪≫
+        isoWhiskerRight (whiskeringRightObjCompIso F G) _ ≪≫
+        isoWhiskerRight ((whiskeringRight J C C).mapIso (asIso adj.unit).symm) _ ≪≫
+        isoWhiskerRight whiskeringRightObjIdIso _ ≪≫ lim.leftUnitor
+    exact preservesColimit_of_natIso _ e⟩⟩
 
 Depends on / 依赖: Functor, Functor.associator, PreservesColimitsOfSize, PreservesLimitsOfSize, adj.leftAdjoint_preservesColimits, adj.rightAdjoint_preservesLimits, adj.unit, associator, isoWhiskerLeft, isoWhiskerRight, leftAdjoint_preservesColimits, lim.lef, mapIso, preservesLimitNatIso, rightAdjoint_preservesLimits, whiskeringRight, whiskeringRightObjCompIso, whiskeringRightObjIdIso
 -/
@@ -660,7 +702,9 @@ lemma AB5OfSize_of_univLE
   constructor
   intro J _ _
   have := IsFiltered.of_equivalence ((ShrinkHoms.equivalence.{w₂} J).trans <|
-    Shrink.equivalence.{w₂', w₂} (Sh
+    Shrink.equivalence.{w₂', w₂} (ShrinkHoms.{w'} J))
+  exact HasExactColimitsOfShape.of_domain_equivalence _ ((ShrinkHoms.equivalence.{w₂} J).trans <|
+    Shrink.equivalence.{w₂', w₂} (ShrinkHoms.{w'} J)).symm
 
 中文:
 引理 AB5OfSize_of_univLE
@@ -671,7 +715,9 @@ lemma AB5OfSize_of_univLE
   constructor
   intro J _ _
   have := IsFiltered.of_equivalence ((ShrinkHoms.equivalence.{w₂} J).trans <|
-    Shrink.equivalence.{w₂', w₂} (Sh
+    Shrink.equivalence.{w₂', w₂} (ShrinkHoms.{w'} J))
+  exact HasExactColimitsOfShape.of_domain_equivalence _ ((ShrinkHoms.equivalence.{w₂} J).trans <|
+    Shrink.equivalence.{w₂', w₂} (ShrinkHoms.{w'} J)).symm
 
 Depends on / 依赖: hasFilteredColimitsOfSize_of_univLE
 -/
@@ -766,7 +812,9 @@ lemma AB5StarOfSize_of_univLE
   constructor
   intro J _ _
   have := IsCofiltered.of_equivalence ((ShrinkHoms.equivalence.{w₂} J).trans <|
-    Shrink.equivalence.{w₂', w
+    Shrink.equivalence.{w₂', w₂} (ShrinkHoms.{w'} J))
+  exact HasExactLimitsOfShape.of_domain_equivalence _ ((ShrinkHoms.equivalence.{w₂} J).trans <|
+    Shrink.equivalence.{w₂', w₂} (ShrinkHoms.{w'} J)).symm
 
 中文:
 引理 AB5StarOfSize_of_univLE
@@ -777,7 +825,9 @@ lemma AB5StarOfSize_of_univLE
   constructor
   intro J _ _
   have := IsCofiltered.of_equivalence ((ShrinkHoms.equivalence.{w₂} J).trans <|
-    Shrink.equivalence.{w₂', w
+    Shrink.equivalence.{w₂', w₂} (ShrinkHoms.{w'} J))
+  exact HasExactLimitsOfShape.of_domain_equivalence _ ((ShrinkHoms.equivalence.{w₂} J).trans <|
+    Shrink.equivalence.{w₂', w₂} (ShrinkHoms.{w'} J)).symm
 
 Depends on / 依赖: hasCofilteredLimitsOfSize_of_univLE
 -/
@@ -889,7 +939,12 @@ instance preservesFiniteLimits_liftToFinset
     letI : PreservesFiniteLimits (colim (J := Discrete I) (C := C)) :=
       preservesFiniteLimits_of_natIso HasBiproductsOfShape.colimIsoLim.symm
     letI : PreservesFiniteLimits ((whiskeringLeft (Discrete I) (Discrete α) C).obj
-        (Discrete.funct
+        (Discrete.functor fun x => ↑x)) :=
+      ⟨fun J _ _ => whiskeringLeft_preservesLimitsOfShape J _⟩
+    letI : PreservesFiniteLimits ((whiskeringLeft (Discrete I) (Discrete α) C).obj
+        (Discrete.functor (·.val)) ⋙ colim) :=
+      comp_preservesFiniteLimits _ _
+    preservesFiniteLimits_of_natIso (liftToFinsetEvaluationIso I).symm
 
 中文:
 实例 preservesFiniteLimits_liftToFinset
@@ -898,7 +953,12 @@ instance preservesFiniteLimits_liftToFinset
     letI : PreservesFiniteLimits (colim (J := Discrete I) (C := C)) :=
       preservesFiniteLimits_of_natIso HasBiproductsOfShape.colimIsoLim.symm
     letI : PreservesFiniteLimits ((whiskeringLeft (Discrete I) (Discrete α) C).obj
-        (Discrete.funct
+        (Discrete.functor fun x => ↑x)) :=
+      ⟨fun J _ _ => whiskeringLeft_preservesLimitsOfShape J _⟩
+    letI : PreservesFiniteLimits ((whiskeringLeft (Discrete I) (Discrete α) C).obj
+        (Discrete.functor (·.val)) ⋙ colim) :=
+      comp_preservesFiniteLimits _ _
+    preservesFiniteLimits_of_natIso (liftToFinsetEvaluationIso I).symm
 
 Depends on / 依赖: Discrete, Discrete.functor, HasBiproductsOfShape, HasBiproductsOfShape.colimIsoLim.symm, PreservesFiniteLimits, colimIsoLim, comp_preservesFiniteLimits, functor, preservesFiniteLimits_of_evaluation, preservesFiniteLimits_of_natIso, whiskeringLeft, whiskeringLeft_preservesLimitsOfShape
 -/
@@ -971,7 +1031,7 @@ lemma CountableAB4.of_countableAB5
       Functor.Final.hasColimitsOfShape_of_final
         (IsFiltered.sequentialFunctor (Finset (Discrete J)))
     have := hasExactColimitsOfShape_of_final C (IsFiltered.sequentialFunctor (Finset (Discrete J)))
-    hasExactColimitsOfShape_discrete_o
+    hasExactColimitsOfShape_discrete_of_hasExactColimitsOfShape_finset_discrete _ _
 
 中文:
 引理 余untableAB4.of_countableAB5
@@ -980,7 +1040,7 @@ lemma CountableAB4.of_countableAB5
       Functor.Final.hasColimitsOfShape_of_final
         (IsFiltered.sequentialFunctor (Finset (Discrete J)))
     have := hasExactColimitsOfShape_of_final C (IsFiltered.sequentialFunctor (Finset (Discrete J)))
-    hasExactColimitsOfShape_discrete_o
+    hasExactColimitsOfShape_discrete_of_hasExactColimitsOfShape_finset_discrete _ _
 
 Depends on / 依赖: Discrete, Finset, Functor, Functor.Final.hasColimitsOfShape_of_final, HasColimitsOfShape, IsFiltered, IsFiltered.sequentialFunctor, hasColimitsOfShape_of_final, hasExactColimitsOfShape_discrete_of_hasExactColimitsOfShape_finset_discrete, hasExactColimitsOfShape_of_final, sequentialFunctor
 -/
@@ -1011,7 +1071,11 @@ instance preservesFiniteColimits_liftToFinset
     letI : PreservesFiniteColimits (lim (J := Discrete I) (C := C)) :=
       preservesFiniteColimits_of_natIso HasBiproductsOfShape.colimIsoLim
     letI : PreservesFiniteColimits ((whiskeringLeft (Discrete I) (Discrete α) C).obj
-        (Discrete.fu
+        (Discrete.functor fun x => ↑x)) := ⟨fun _ _ _ => inferInstance⟩
+    letI : PreservesFiniteColimits ((whiskeringLeft (Discrete I) (Discrete α) C).obj
+        (Discrete.functor (·.val)) ⋙ lim) :=
+      comp_preservesFiniteColimits _ _
+    preservesFiniteColimits_of_natIso (liftToFinsetEvaluationIso _ _ I).symm
 
 中文:
 实例 preservesFiniteColimits_liftToFinset
@@ -1020,7 +1084,11 @@ instance preservesFiniteColimits_liftToFinset
     letI : PreservesFiniteColimits (lim (J := Discrete I) (C := C)) :=
       preservesFiniteColimits_of_natIso HasBiproductsOfShape.colimIsoLim
     letI : PreservesFiniteColimits ((whiskeringLeft (Discrete I) (Discrete α) C).obj
-        (Discrete.fu
+        (Discrete.functor fun x => ↑x)) := ⟨fun _ _ _ => inferInstance⟩
+    letI : PreservesFiniteColimits ((whiskeringLeft (Discrete I) (Discrete α) C).obj
+        (Discrete.functor (·.val)) ⋙ lim) :=
+      comp_preservesFiniteColimits _ _
+    preservesFiniteColimits_of_natIso (liftToFinsetEvaluationIso _ _ I).symm
 
 Depends on / 依赖: Discrete, Discrete.functor, HasBiproductsOfShape, HasBiproductsOfShape.colimIsoLim, PreservesFiniteColimits, colimIsoLim, comp_preservesFiniteColimits, functor, preservesFiniteColi, preservesFiniteColimits_of_evaluation, preservesFiniteColimits_of_natIso, whiskeringLeft
 -/
@@ -1094,7 +1162,7 @@ lemma CountableAB4Star.of_countableAB5Star
         (IsFiltered.sequentialFunctor (Finset (Discrete J))).op
     have := hasExactLimitsOfShape_of_initial C
       (IsFiltered.sequentialFunctor (Finset (Discrete J))).op
-    hasExactLimitsOfShap
+    hasExactLimitsOfShape_discrete_of_hasExactLimitsOfShape_finset_discrete_op _ _
 
 中文:
 引理 余untableAB4Star.of_countableAB5Star
@@ -1104,7 +1172,7 @@ lemma CountableAB4Star.of_countableAB5Star
         (IsFiltered.sequentialFunctor (Finset (Discrete J))).op
     have := hasExactLimitsOfShape_of_initial C
       (IsFiltered.sequentialFunctor (Finset (Discrete J))).op
-    hasExactLimitsOfShap
+    hasExactLimitsOfShape_discrete_of_hasExactLimitsOfShape_finset_discrete_op _ _
 
 Depends on / 依赖: Discrete, Finset, Functor, Functor.Initial.hasLimitsOfShape_of_initial, HasLimitsOfShape, Initial, IsFiltered, IsFiltered.sequentialFunctor, hasExactLimitsOfShape_discrete_of_hasExactLimitsOfShape_finset_discrete_op, hasExactLimitsOfShape_of_initial, hasLimitsOfShape_of_initial, sequentialFunctor
 -/

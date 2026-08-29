@@ -789,6 +789,10 @@ theorem finsuppTensorFinsupp_apply
     | add g₁ g₂ hg₁ hg₂ => simp [tmul_add, hg₁, hg₂]
     | single k' n =>
       classical
+      simp_rw [finsuppTensorFinsupp_single, Finsupp.single_apply, Prod.mk_inj, ite_and]
+      split_ifs <;> simp
+
+@[simp]
 
 中文:
 定理 finsuppTensorFinsupp_apply
@@ -803,6 +807,10 @@ theorem finsuppTensorFinsupp_apply
     | add g₁ g₂ hg₁ hg₂ => simp [tmul_add, hg₁, hg₂]
     | single k' n =>
       classical
+      simp_rw [finsuppTensorFinsupp_single, Finsupp.single_apply, Prod.mk_inj, ite_and]
+      split_ifs <;> simp
+
+@[simp]
 
 Depends on / 依赖: Finsupp, Finsupp.induction_linear, Finsupp.single_apply, Prod.mk_inj, add_tmul, classical, finsuppTensorFinsupp_single, induction_linear, ite_and, mk_inj, simp_rw, single, single_apply, split_ifs, tmul_add
 -/

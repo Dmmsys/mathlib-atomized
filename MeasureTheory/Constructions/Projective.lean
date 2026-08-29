@@ -177,7 +177,9 @@ lemma congr_cylinder_of_subset
     simpa using eq_zero_of_isEmpty hP
   | inr h =>
     have : S = Finset.restrict₂ hJI ⁻¹' T :=
-      eq_of_cylinder_eq_of_
+      eq_of_cylinder_eq_of_subset h_eq hJI
+    rw [hP I J hJI]; rw [Measure.map_apply _ hT]; rw [this]
+    exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _)
 
 中文:
 引理 congr_cylinder_of_subset
@@ -191,7 +193,9 @@ lemma congr_cylinder_of_subset
     simpa using eq_zero_of_isEmpty hP
   | inr h =>
     have : S = Finset.restrict₂ hJI ⁻¹' T :=
-      eq_of_cylinder_eq_of_
+      eq_of_cylinder_eq_of_subset h_eq hJI
+    rw [hP I J hJI]; rw [Measure.map_apply _ hT]; rw [this]
+    exact measurable_pi_lambda _ (fun _ => measurable_pi_apply _)
 
 Depends on / 依赖: Finset, Finset.restrict, Measure, Measure.map_apply, Measure.measure_univ_eq_zero, eq_of_cylinder_eq_of_subset, eq_zero_of_isEmpty, h_eq, isEmpty_or_nonempty, map_apply, measurable_pi_apply, measurable_pi_lambda, measure_univ_eq_zero
 -/
@@ -223,7 +227,12 @@ lemma congr_cylinder
       Finset.restrict₂ Finset.subset_union_right ⁻¹' T
   suffices P (I union J) U = P I S ∧ P (I union J) U = P J T from this.1.symm.trans this.2
   constructor
-  · have h_eq_union : cylinder I S = cylinder (I union J) U 
+  · have h_eq_union : cylinder I S = cylinder (I union J) U := by
+      rw [← inter_cylinder]; rw [h_eq]; rw [inter_self]
+    exact hP.congr_cylinder_of_subset hS h_eq_union.symm Finset.subset_union_left
+  · have h_eq_union : cylinder J T = cylinder (I union J) U := by
+      rw [← inter_cylinder]; rw [h_eq]; rw [inter_self]
+    exact hP.congr_cylinder_of_subset hT h_eq_union.symm Finset.subset_union_right
 
 中文:
 引理 congr_cylinder
@@ -234,7 +243,12 @@ lemma congr_cylinder
       Finset.restrict₂ Finset.subset_union_right ⁻¹' T
   suffices P (I union J) U = P I S ∧ P (I union J) U = P J T from this.1.symm.trans this.2
   constructor
-  · have h_eq_union : cylinder I S = cylinder (I union J) U 
+  · have h_eq_union : cylinder I S = cylinder (I union J) U := by
+      rw [← inter_cylinder]; rw [h_eq]; rw [inter_self]
+    exact hP.congr_cylinder_of_subset hS h_eq_union.symm Finset.subset_union_left
+  · have h_eq_union : cylinder J T = cylinder (I union J) U := by
+      rw [← inter_cylinder]; rw [h_eq]; rw [inter_self]
+    exact hP.congr_cylinder_of_subset hT h_eq_union.symm Finset.subset_union_right
 
 Depends on / 依赖: Finset, Finset.restrict, Finset.subset_union_left, Finset.subset_union_right, classical, congr_cylinder_of_subset, cylinder, hP.congr_cylinder_of_subset, h_eq, h_eq_union, h_eq_union.symm, inter_cylind, inter_cylinder, inter_self, subset_union_left, subset_union_right, symm.trans
 -/
@@ -411,7 +425,7 @@ theorem unique
   refine ext_of_generate_finite (measurableCylinders α) generateFrom_measurableCylinders.symm
     isPiSystem_measurableCylinders (fun s hs => ?_) (hμ.measure_univ_unique hν)
   obtain ⟨I, S, hS, rfl⟩ := (mem_measurableCylinders _).mp hs
-  rw [hμ.mea
+  rw [hμ.measure_cylinder _ hS]; rw [hν.measure_cylinder _ hS]
 
 中文:
 定理 unique
@@ -421,7 +435,7 @@ theorem unique
   refine ext_of_generate_finite (measurableCylinders α) generateFrom_measurableCylinders.symm
     isPiSystem_measurableCylinders (fun s hs => ?_) (hμ.measure_univ_unique hν)
   obtain ⟨I, S, hS, rfl⟩ := (mem_measurableCylinders _).mp hs
-  rw [hμ.mea
+  rw [hμ.measure_cylinder _ hS]; rw [hν.measure_cylinder _ hS]
 
 Depends on / 依赖: IsFiniteMeasure, ext_of_generate_finite, generateFrom_measurableCylinders, generateFrom_measurableCylinders.symm, isFiniteMeasure, isPiSystem_measurableCylinders, measurableCylinders, measure_cylinder, measure_univ_unique, mem_measurableCylinders
 -/

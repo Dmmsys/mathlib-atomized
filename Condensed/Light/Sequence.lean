@@ -132,7 +132,11 @@ lemma fibres_compl_eq_iUnion
     Set.mem_inter_iff, Set.mem_range, Set.mem_preimage, Function.comp_apply,
     Set.mem_singleton_iff]
   refine ⟨fun ⟨h₁, h₂⟩ => ?_, fun ⟨n, hn, hn'⟩ => ?_⟩
-  · obtain ⟨n, hn⟩ := Option.n
+  · obtain ⟨n, hn⟩ := Option.ne_none_iff_exists'.mp h₁
+    exact ⟨n, h₂ n, hn⟩
+  · refine ⟨by simpa [hn'] using Option.isSome_iff_ne_none.mp rfl, fun i s h => hn s ?_⟩
+    rw [← h]; rw [hσ'] at hn'
+    rw [← h]; rw [Option.some_injective _ hn'.symm]
 
 中文:
 引理 fibres_compl_eq_iUnion
@@ -144,7 +148,11 @@ lemma fibres_compl_eq_iUnion
     Set.mem_inter_iff, Set.mem_range, Set.mem_preimage, Function.comp_apply,
     Set.mem_singleton_iff]
   refine ⟨fun ⟨h₁, h₂⟩ => ?_, fun ⟨n, hn, hn'⟩ => ?_⟩
-  · obtain ⟨n, hn⟩ := Option.n
+  · obtain ⟨n, hn⟩ := Option.ne_none_iff_exists'.mp h₁
+    exact ⟨n, h₂ n, hn⟩
+  · refine ⟨by simpa [hn'] using Option.isSome_iff_ne_none.mp rfl, fun i s h => hn s ?_⟩
+    rw [← h]; rw [hσ'] at hn'
+    rw [← h]; rw [Option.some_injective _ hn'.symm]
 -/
 lemma fibres_compl_eq_iUnion (π : T -> S × Option X) (σ : Option X -> S -> T)
     (hσ' : forall (x : Option X) (s : S), (π (σ x s)).2 = x) :
@@ -545,7 +553,9 @@ lemma S'_compactSpace
   rw [← isCompact_iff_compactSpace]; rw [show S' π =
     ⋂ (n : OnePoint X) (m : OnePoint X)]; rw [{x | (π (x n).val).1 = (π (x m).val).1} by aesop]
 have (x : OnePoint X) : CompactSpace (Prod.snd ∘ π) ⁻¹' {x} :=
-    isCompact_iff_compactSpace.mp (IsClosed.preimage (by fun_prop) isClosed_singleton
+    isCompact_iff_compactSpace.mp (IsClosed.preimage (by fun_prop) isClosed_singleton).isCompact
+  refine (isClosed_iInter fun n => isClosed_iInter fun m => isClosed_eq ?_ ?_).isCompact
+  all_goals fun_prop
 
 中文:
 引理 S'_compactSpace
@@ -554,7 +564,9 @@ have (x : OnePoint X) : CompactSpace (Prod.snd ∘ π) ⁻¹' {x} :=
   rw [← isCompact_iff_compactSpace]; rw [show S' π =
     ⋂ (n : OnePoint X) (m : OnePoint X)]; rw [{x | (π (x n).val).1 = (π (x m).val).1} by aesop]
 have (x : OnePoint X) : CompactSpace (Prod.snd ∘ π) ⁻¹' {x} :=
-    isCompact_iff_compactSpace.mp (IsClosed.preimage (by fun_prop) isClosed_singleton
+    isCompact_iff_compactSpace.mp (IsClosed.preimage (by fun_prop) isClosed_singleton).isCompact
+  refine (isClosed_iInter fun n => isClosed_iInter fun m => isClosed_eq ?_ ?_).isCompact
+  all_goals fun_prop
 -/
 lemma S'_compactSpace [TopologicalSpace S] [T2Space S] [TopologicalSpace T]
     [CompactSpace T] [TopologicalSpace X] [T1Space (OnePoint X)]
@@ -613,7 +625,31 @@ definition cocone
       (r_inf ≫ LightProfinite.fibreIncl ∞ (π ≫ snd _ _)) ≫ g +
     (lightProfiniteToLightCondSet ⋙ free R).map
       (r_inf ≫ LightProfinite.fibreIncl ∞ (π ≫ snd _ _) ≫ π ≫ fst _ _ ≫ σ ≫
-        LightProfini
+        LightProfinite.fibreIncl ∞ (π ≫ snd _ _)) ≫ g) ?_)
+  rw [← cancel_epi ((lightProfiniteToLightCondSet ⋙ free R).map <| cover π)]
+  apply (isColimitOfPreserves (lightProfiniteToLightCondSet ⋙ free R)
+      (coproductIsColimit _ _)).hom_ext
+  rintro ⟨⟨⟩⟩
+  · simp [← map_comp_assoc, -Functor.map_comp]
+    rfl
+  · -- simp? [← map_comp_assoc, -Functor.map_comp] says:
+    simp only [pair_obj_right, mapCocone_ι_app,
+      Functor.comp_map, parallelPair_obj_zero, parallelPair_obj_one, parallelPair_map_left,
+      Preadditive.comp_add, Preadditive.comp_sub, ← map_comp_assoc, parallelPair_map_right]
+    have : cover π = (BinaryCofan.IsColimit.desc' (coproductIsColimit _ _)
+        (CompHausLike.pullback.lift _ _ (𝟙 T) (𝟙 T) (by simp))
+        (CompHausLike.pullback.lift _ _
+          ((CompHausLike.pullback.fst _ _) ≫ LightProfinite.fibreIncl _ _)
+          ((pullback.snd _ _) ≫ LightProfinite.fibreIncl _ _)
+          (by simp [pullback.condition]))).val := rfl
+    -- simp? [this, ← Functor.map_comp] says:
+    simp only [this, pair_obj_left, pair_obj_right, BinaryCofan.IsColimit.desc'_coe,
+      IsColimit.fac, BinaryCofan.mk_inr, ← Functor.map_comp,
+      pullback.lift_fst, IsColimit.fac_assoc, assoc,
+      pullback.lift_snd]
+    -- simp? [-Functor.map_comp, ← assoc, hr] says:
+    simp only [← assoc, hr, id_comp, sub_self, zero_add]
+    simp [pullback.condition]
 
 中文:
 定义 cocone
@@ -624,7 +660,31 @@ definition cocone
       (r_inf ≫ LightProfinite.fibreIncl ∞ (π ≫ snd _ _)) ≫ g +
     (lightProfiniteToLightCondSet ⋙ free R).map
       (r_inf ≫ LightProfinite.fibreIncl ∞ (π ≫ snd _ _) ≫ π ≫ fst _ _ ≫ σ ≫
-        LightProfini
+        LightProfinite.fibreIncl ∞ (π ≫ snd _ _)) ≫ g) ?_)
+  rw [← cancel_epi ((lightProfiniteToLightCondSet ⋙ free R).map <| cover π)]
+  apply (isColimitOfPreserves (lightProfiniteToLightCondSet ⋙ free R)
+      (coproductIsColimit _ _)).hom_ext
+  rintro ⟨⟨⟩⟩
+  · simp [← map_comp_assoc, -Functor.map_comp]
+    rfl
+  · -- simp? [← map_comp_assoc, -Functor.map_comp] says:
+    simp only [pair_obj_right, mapCocone_ι_app,
+      Functor.comp_map, parallelPair_obj_zero, parallelPair_obj_one, parallelPair_map_left,
+      Preadditive.comp_add, Preadditive.comp_sub, ← map_comp_assoc, parallelPair_map_right]
+    have : cover π = (BinaryCofan.IsColimit.desc' (coproductIsColimit _ _)
+        (CompHausLike.pullback.lift _ _ (𝟙 T) (𝟙 T) (by simp))
+        (CompHausLike.pullback.lift _ _
+          ((CompHausLike.pullback.fst _ _) ≫ LightProfinite.fibreIncl _ _)
+          ((pullback.snd _ _) ≫ LightProfinite.fibreIncl _ _)
+          (by simp [pullback.condition]))).val := rfl
+    -- simp? [this, ← Functor.map_comp] says:
+    simp only [this, pair_obj_left, pair_obj_right, BinaryCofan.IsColimit.desc'_coe,
+      IsColimit.fac, BinaryCofan.mk_inr, ← Functor.map_comp,
+      pullback.lift_fst, IsColimit.fac_assoc, assoc,
+      pullback.lift_snd]
+    -- simp? [-Functor.map_comp, ← assoc, hr] says:
+    simp only [← assoc, hr, id_comp, sub_self, zero_add]
+    simp [pullback.condition]
 
 Depends on / 依赖: Cocone, Cocone.ofCofork, Cofork, Cofork.of, LightProfinite, LightProfinite.fibreIncl, cancel_epi, coproductIsColimit, fibreIncl, hom_ext, isColimitOfPreserves, lightProfiniteToLightCondSet, ofCofork, r_inf
 -/
@@ -682,7 +742,35 @@ lemma aux
   let S'π (n : Natunion{∞}) : LightProfinite.of (S' π) ⟶ LightProfinite.fibre n (π ≫ snd _ _) :=
     ⟨TopCat.ofHom {
       toFun x := x.val n,
-      continuous_to
+      continuous_toFun := by refine (continuous_apply _).comp ?_; fun_prop }⟩
+  let y' : LightProfinite.of (S' π) ⟶ S := ConcreteCategory.ofHom ⟨y π, y_continuous π⟩
+  let π' := pullback.snd π (y' ▷ Natunion{∞})
+  let σ' : Natunion{∞} -> LightProfinite.of (S' π) -> pullback π (y' ▷ Natunion{∞}) := fun n =>
+pullback.lift _ _ (S'π n ≫ LightProfinite.fibreIncl _ _) (lift (𝟙 _) (const _ n)) by
+      apply CartesianMonoidalCategory.hom_ext<;> ext x; exacts [x.prop n ∞, (x.val n).prop]
+  have hσ (x : Natunion{∞}) (s : LightProfinite.of (S' π)) : (π' (σ' x s)).1 = s := rfl
+  have hσ' (x : Natunion{∞}) (s : LightProfinite.of (S' π)) : (π' (σ' x s)).2 = x := rfl
+  -- The space `T'` is given by the union of the images of the `σ'` together
+  -- with the whole fibre over `∞`. Here `cover` is an epimorphism
+  -- because the projection is an isomorphism away from the fibre at `∞`.
+  have : CompactSpace (fibres π' σ') := isCompact_iff_compactSpace.mp
+    (fibres_closed π' (by fun_prop) σ' (by fun_prop) hσ').isCompact
+  refine ⟨LightProfinite.of (S' π), LightProfinite.of (fibres π' σ'), y',
+    ⟨TopCat.ofHom ⟨Subtype.val, by fun_prop⟩⟩ ≫ π',
+    ⟨TopCat.ofHom ⟨Subtype.val, by fun_prop⟩⟩ ≫ pullback.fst _ _, ?_, ?_, ?_, ?_, ?_⟩
+  · rw [LightProfinite.epi_iff_surjective]
+    refine fibres_surjective _ ?_ _ hσ hσ'
+    rw [← LightProfinite.epi_iff_surjective]
+    dsimp [π']
+    infer_instance
+  · rw [LightProfinite.epi_iff_surjective]
+    apply y_surjective
+    rwa [← LightProfinite.epi_iff_surjective]
+  · simp [π', pullback.condition]
+  · exact ⟨ConcreteCategory.ofHom ⟨(sectionOfFibreIncl π' σ' hσ'),
+      (.subtype_mk (by fun_prop) _)⟩, rfl⟩
+  · rw [LightProfinite.epi_iff_surjective]
+    exact coverToFun_surjective _ _ hσ hσ'
 
 中文:
 引理 aux
@@ -694,7 +782,35 @@ lemma aux
   let S'π (n : Natunion{∞}) : LightProfinite.of (S' π) ⟶ LightProfinite.fibre n (π ≫ snd _ _) :=
     ⟨TopCat.ofHom {
       toFun x := x.val n,
-      continuous_to
+      continuous_toFun := by refine (continuous_apply _).comp ?_; fun_prop }⟩
+  let y' : LightProfinite.of (S' π) ⟶ S := ConcreteCategory.ofHom ⟨y π, y_continuous π⟩
+  let π' := pullback.snd π (y' ▷ Natunion{∞})
+  let σ' : Natunion{∞} -> LightProfinite.of (S' π) -> pullback π (y' ▷ Natunion{∞}) := fun n =>
+pullback.lift _ _ (S'π n ≫ LightProfinite.fibreIncl _ _) (lift (𝟙 _) (const _ n)) by
+      apply CartesianMonoidalCategory.hom_ext<;> ext x; exacts [x.prop n ∞, (x.val n).prop]
+  have hσ (x : Natunion{∞}) (s : LightProfinite.of (S' π)) : (π' (σ' x s)).1 = s := rfl
+  have hσ' (x : Natunion{∞}) (s : LightProfinite.of (S' π)) : (π' (σ' x s)).2 = x := rfl
+  -- The space `T'` is given by the union of the images of the `σ'` together
+  -- with the whole fibre over `∞`. Here `cover` is an epimorphism
+  -- because the projection is an isomorphism away from the fibre at `∞`.
+  have : CompactSpace (fibres π' σ') := isCompact_iff_compactSpace.mp
+    (fibres_closed π' (by fun_prop) σ' (by fun_prop) hσ').isCompact
+  refine ⟨LightProfinite.of (S' π), LightProfinite.of (fibres π' σ'), y',
+    ⟨TopCat.ofHom ⟨Subtype.val, by fun_prop⟩⟩ ≫ π',
+    ⟨TopCat.ofHom ⟨Subtype.val, by fun_prop⟩⟩ ≫ pullback.fst _ _, ?_, ?_, ?_, ?_, ?_⟩
+  · rw [LightProfinite.epi_iff_surjective]
+    refine fibres_surjective _ ?_ _ hσ hσ'
+    rw [← LightProfinite.epi_iff_surjective]
+    dsimp [π']
+    infer_instance
+  · rw [LightProfinite.epi_iff_surjective]
+    apply y_surjective
+    rwa [← LightProfinite.epi_iff_surjective]
+  · simp [π', pullback.condition]
+  · exact ⟨ConcreteCategory.ofHom ⟨(sectionOfFibreIncl π' σ' hσ'),
+      (.subtype_mk (by fun_prop) _)⟩, rfl⟩
+  · rw [LightProfinite.epi_iff_surjective]
+    exact coverToFun_surjective _ _ hσ hσ'
 -/
 lemma aux {S T : LightProfinite} (π : T ⟶ S otimes Natunion{∞}) [Epi π] :
     exists (S' T' : LightProfinite) (y' : S' ⟶ S) (π' : T' ⟶ S' otimes Natunion{∞}) (g' : T' ⟶ T),

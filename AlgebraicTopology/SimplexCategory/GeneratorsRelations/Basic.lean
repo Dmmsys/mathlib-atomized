@@ -406,7 +406,8 @@ lemma multiplicativeClosure_isGenerator_eq_top
   | id => exact generators.multiplicativeClosure.id_mem _
   | comp _ k h =>
     cases k
-· exact generators.multiplicativeClosure.comp_mem _ _ h 
+· exact generators.multiplicativeClosure.comp_mem _ _ h .of _ .δ _
+· exact generators.multiplicativeClosure.comp_mem _ _ h .of _ .σ _
 
 中文:
 引理 multiplicativeClosure_isGenerator_eq_top
@@ -419,7 +420,8 @@ lemma multiplicativeClosure_isGenerator_eq_top
   | id => exact generators.multiplicativeClosure.id_mem _
   | comp _ k h =>
     cases k
-· exact generators.multiplicativeClosure.comp_mem _ _ h 
+· exact generators.multiplicativeClosure.comp_mem _ _ h .of _ .δ _
+· exact generators.multiplicativeClosure.comp_mem _ _ h .of _ .σ _
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.induction, Paths.induction, Quotient, comp_mem, generators, generators.multiplicativeClosure.comp_mem, generators.multiplicativeClosure.id_mem, id_mem, le_antisymm, multiplicativeClosure
 -/
@@ -451,7 +453,13 @@ lemma hom_induction
   induction hf with
   | of f h =>
     rcases h with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
-    · simpa using! (comp_δ (𝟙 _) i i
+    · simpa using! (comp_δ (𝟙 _) i id)
+    · simpa using! (comp_σ (𝟙 _) i id)
+  | id n => exact id
+  | comp_of f g hf hg hrec =>
+    rcases hg with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
+    · simpa using! (comp_δ f i hrec)
+    · simpa using! (comp_σ f i hrec)
 
 中文:
 引理 hom_induction
@@ -465,7 +473,13 @@ lemma hom_induction
   induction hf with
   | of f h =>
     rcases h with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
-    · simpa using! (comp_δ (𝟙 _) i i
+    · simpa using! (comp_δ (𝟙 _) i id)
+    · simpa using! (comp_σ (𝟙 _) i id)
+  | id n => exact id
+  | comp_of f g hf hg hrec =>
+    rcases hg with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
+    · simpa using! (comp_δ f i hrec)
+    · simpa using! (comp_σ f i hrec)
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.top_apply, comp_of, generators, generators.multiplicativeClosure, multiplicativeClosure, multiplicativeClosure_isGenerator_eq_top, top_apply, top_le_iff
 -/
@@ -503,7 +517,15 @@ lemma hom_induction'
     apply MorphismProperty.top_apply
   intro _ _ f hf
   induction hf with
-  | of f
+  | of f h =>
+    rcases h with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
+    · simpa using! (δ_comp (𝟙 _) i id)
+    · simpa using! (σ_comp (𝟙 _) i id)
+  | id n => exact id
+  | of_comp f g hf hg hrec =>
+    rcases hf with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
+    · simpa using! (δ_comp g i hrec)
+    · simpa using! (σ_comp g i hrec)
 
 中文:
 引理 hom_induction'
@@ -515,7 +537,15 @@ lemma hom_induction'
     apply MorphismProperty.top_apply
   intro _ _ f hf
   induction hf with
-  | of f
+  | of f h =>
+    rcases h with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
+    · simpa using! (δ_comp (𝟙 _) i id)
+    · simpa using! (σ_comp (𝟙 _) i id)
+  | id n => exact id
+  | of_comp f g hf hg hrec =>
+    rcases hf with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
+    · simpa using! (δ_comp g i hrec)
+    · simpa using! (σ_comp g i hrec)
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.multiplicativeClosure_eq_multiplicativeClosure, MorphismProperty.top_apply, generators, generators.multiplicativeClosure, multiplicativeClosure, multiplicativeClosure_eq_multiplicativeClosure, multiplicativeClosure_isGenerator_eq_top, of_comp, top_apply, top_le_iff
 -/
@@ -825,7 +855,14 @@ definition toSimplexCategory
           | FreeSimplexQuiver.Hom.δ i => SimplexCategory.δ i
           | FreeSimplexQuiver.Hom.σ i => SimplexCategory.σ i })
     (fun _ _ _ _ h => match h with
-      | .δ_comp_δ H => SimplexCategory.δ_com
+      | .δ_comp_δ H => SimplexCategory.δ_comp_δ H
+      | .δ_comp_σ_of_le H => SimplexCategory.δ_comp_σ_of_le H
+      | .δ_comp_σ_self => SimplexCategory.δ_comp_σ_self
+      | .δ_comp_σ_succ => SimplexCategory.δ_comp_σ_succ
+      | .δ_comp_σ_of_gt H => SimplexCategory.δ_comp_σ_of_gt H
+      | .σ_comp_σ H => SimplexCategory.σ_comp_σ H)
+
+@[simp]
 
 中文:
 定义 toSimplexCategory
@@ -837,7 +874,14 @@ definition toSimplexCategory
           | FreeSimplexQuiver.Hom.δ i => SimplexCategory.δ i
           | FreeSimplexQuiver.Hom.σ i => SimplexCategory.σ i })
     (fun _ _ _ _ h => match h with
-      | .δ_comp_δ H => SimplexCategory.δ_com
+      | .δ_comp_δ H => SimplexCategory.δ_comp_δ H
+      | .δ_comp_σ_of_le H => SimplexCategory.δ_comp_σ_of_le H
+      | .δ_comp_σ_self => SimplexCategory.δ_comp_σ_self
+      | .δ_comp_σ_succ => SimplexCategory.δ_comp_σ_succ
+      | .δ_comp_σ_of_gt H => SimplexCategory.δ_comp_σ_of_gt H
+      | .σ_comp_σ H => SimplexCategory.σ_comp_σ H)
+
+@[simp]
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.lift, FreeSimplexQuiver, FreeSimplexQuiver.Hom, Paths.lift, Quotient, SimplexCatego, SimplexCategory
 -/

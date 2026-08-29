@@ -581,7 +581,8 @@ theorem IsVonNBounded.image
   have : map σ (𝓝 0) = 𝓝 0 := by
     rw [σ.isometry.isEmbedding.map_nhds_eq]; rw [σ.surjective.range_eq]; rw [nhdsWithin_univ]; rw [map_zero]
   have hf₀ : Tendsto f (𝓝 0) (𝓝 0) := f.continuous.tendsto' 0 0 (map_zero f)
-  simp only [isVonNBounded_iff_tendsto_smallSets_nhds, ← this, tendsto_map'_if
+  simp only [isVonNBounded_iff_tendsto_smallSets_nhds, ← this, tendsto_map'_iff] at hs ⊢
+  simpa only [comp_def, image_smul_setₛₗ] using hf₀.image_smallSets.comp hs
 
 中文:
 定理 IsVonNBounded.像
@@ -590,7 +591,8 @@ theorem IsVonNBounded.image
   have : map σ (𝓝 0) = 𝓝 0 := by
     rw [σ.isometry.isEmbedding.map_nhds_eq]; rw [σ.surjective.range_eq]; rw [nhdsWithin_univ]; rw [map_zero]
   have hf₀ : Tendsto f (𝓝 0) (𝓝 0) := f.continuous.tendsto' 0 0 (map_zero f)
-  simp only [isVonNBounded_iff_tendsto_smallSets_nhds, ← this, tendsto_map'_if
+  simp only [isVonNBounded_iff_tendsto_smallSets_nhds, ← this, tendsto_map'_iff] at hs ⊢
+  simpa only [comp_def, image_smul_setₛₗ] using hf₀.image_smallSets.comp hs
 -/
 protected theorem IsVonNBounded.image {σ : 𝕜₁ ->+* 𝕜₂} [RingHomSurjective σ] [RingHomIsometric σ]
     {s : Set E} (hs : IsVonNBounded 𝕜₁ s) (f : E ->SL[σ] F) : IsVonNBounded 𝕜₂ (f '' s) := by
@@ -643,7 +645,14 @@ theorem isVonNBounded_of_smul_tendsto_zero
     rw [absorbs_iff_norm] at hVS
     push Not at hVS
     rcases hVS ‖(ε n)⁻¹‖ with ⟨a, haε, haS⟩
-    rcases Set.not_
+    rcases Set.not_subset.mp haS with ⟨x, hxS, hx⟩
+    refine ⟨⟨x, hxS⟩, fun hnx => ?_⟩
+    rw [← Set.mem_inv_smul_set_iff₀ hn] at hnx
+    exact hx (hVb.smul_mono haε hnx)
+  rcases this.choice with ⟨x, hx⟩
+  refine Filter.frequently_false l (Filter.Eventually.frequently ?_)
+  filter_upwards [hx,
+    (H (_ ∘ x) fun n => (x n).2).eventually (eventually_mem_set.mpr hV)] using fun n => id
 
 中文:
 定理 isVonNBounded_of_smul_tendsto_zero
@@ -656,7 +665,14 @@ theorem isVonNBounded_of_smul_tendsto_zero
     rw [absorbs_iff_norm] at hVS
     push Not at hVS
     rcases hVS ‖(ε n)⁻¹‖ with ⟨a, haε, haS⟩
-    rcases Set.not_
+    rcases Set.not_subset.mp haS with ⟨x, hxS, hx⟩
+    refine ⟨⟨x, hxS⟩, fun hnx => ?_⟩
+    rw [← Set.mem_inv_smul_set_iff₀ hn] at hnx
+    exact hx (hVb.smul_mono haε hnx)
+  rcases this.choice with ⟨x, hx⟩
+  refine Filter.frequently_false l (Filter.Eventually.frequently ?_)
+  filter_upwards [hx,
+    (H (_ ∘ x) fun n => (x n).2).eventually (eventually_mem_set.mpr hV)] using fun n => id
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually.f, Filter.frequently_false, Set.mem_inv_smul_set_iff, Set.not_subset.mp, absorbs_iff_norm, choice, filter_upwards, frequently_false, hVb.smul_mono, isVonNBounded_iff, nhds_basis_balanced, not_subset, smul_mono, this.choice
 -/
@@ -714,7 +730,8 @@ theorem IsVonNBounded.extend_scalars
   obtain ⟨ε, hε, hε₀⟩ : exists ε : Nat -> 𝕜, Tendsto ε atTop (𝓝 0) ∧ forallᶠ n in atTop, ε n != 0 := by
     simpa only [tendsto_nhdsWithin_iff] using! exists_seq_tendsto (𝓝[!=] (0 : 𝕜))
   refine isVonNBounded_of_smul_tendsto_zero (ε := (ε · • 1)) (by simpa) fun x hx => ?_
-  have := h.smul_tendsto
+  have := h.smul_tendsto_zero (.of_forall hx) hε
+  simpa only [Pi.smul_def', smul_one_smul]
 
 中文:
 定理 IsVonNBounded.extend_scalars
@@ -723,7 +740,8 @@ theorem IsVonNBounded.extend_scalars
   obtain ⟨ε, hε, hε₀⟩ : exists ε : Nat -> 𝕜, Tendsto ε atTop (𝓝 0) ∧ forallᶠ n in atTop, ε n != 0 := by
     simpa only [tendsto_nhdsWithin_iff] using! exists_seq_tendsto (𝓝[!=] (0 : 𝕜))
   refine isVonNBounded_of_smul_tendsto_zero (ε := (ε · • 1)) (by simpa) fun x hx => ?_
-  have := h.smul_tendsto
+  have := h.smul_tendsto_zero (.of_forall hx) hε
+  simpa only [Pi.smul_def', smul_one_smul]
 
 Depends on / 依赖: Pi.smul_def, Tendsto, exists_seq_tendsto, h.smul_tendsto_zero, isVonNBounded_of_smul_tendsto_zero, of_forall, smul_def, smul_one_smul, smul_tendsto_zero, tendsto_nhdsWithin_iff
 -/
@@ -1188,7 +1206,19 @@ theorem TotallyBounded.isVonNBounded
     intro U hU
     have h : Filter.Tendsto (fun x : E × E => x.fst + x.snd) (𝓝 0) (𝓝 0) :=
       continuous_add.tendsto' _ _ (zero_add _)
-    have h' := 
+    have h' := (nhds_basis_balanced 𝕜 E).prod (nhds_basis_balanced 𝕜 E)
+    simp_rw [← nhds_prod_eq, id] at h'
+    rcases h.basis_left h' U hU with ⟨x, hx, h''⟩
+    rcases hs x.snd hx.2.1 with ⟨t, ht, hs⟩
+    refine Absorbs.mono_right ?_ hs
+    rw [ht.absorbs_biUnion]
+    have hx_fstsnd : x.fst + x.snd subseteq U := add_subset_iff.mpr fun z1 hz1 z2 hz2 =>
+h'' mk_mem_prod hz1 hz2
+    refine fun y _ => Absorbs.mono_left ?_ hx_fstsnd
+    exact (absorbent_nhds_zero hx.1.1).vadd_absorbs hx.2.2.absorbs_self
+  else
+    have : BoundedSpace 𝕜 := ⟨Metric.isBounded_iff.2 ⟨1, by simp_all [dist_eq_norm]⟩⟩
+    exact Bornology.IsVonNBounded.of_boundedSpace
 
 中文:
 定理 全有界.isVonNBounded
@@ -1200,7 +1230,19 @@ theorem TotallyBounded.isVonNBounded
     intro U hU
     have h : Filter.Tendsto (fun x : E × E => x.fst + x.snd) (𝓝 0) (𝓝 0) :=
       continuous_add.tendsto' _ _ (zero_add _)
-    have h' := 
+    have h' := (nhds_basis_balanced 𝕜 E).prod (nhds_basis_balanced 𝕜 E)
+    simp_rw [← nhds_prod_eq, id] at h'
+    rcases h.basis_left h' U hU with ⟨x, hx, h''⟩
+    rcases hs x.snd hx.2.1 with ⟨t, ht, hs⟩
+    refine Absorbs.mono_right ?_ hs
+    rw [ht.absorbs_biUnion]
+    have hx_fstsnd : x.fst + x.snd subseteq U := add_subset_iff.mpr fun z1 hz1 z2 hz2 =>
+h'' mk_mem_prod hz1 hz2
+    refine fun y _ => Absorbs.mono_left ?_ hx_fstsnd
+    exact (absorbent_nhds_zero hx.1.1).vadd_absorbs hx.2.2.absorbs_self
+  else
+    have : BoundedSpace 𝕜 := ⟨Metric.isBounded_iff.2 ⟨1, by simp_all [dist_eq_norm]⟩⟩
+    exact Bornology.IsVonNBounded.of_boundedSpace
 
 Depends on / 依赖: Absorbs, Absorbs.mono_right, CommRing, Filter, Filter.Tendsto, NontriviallyNormedField, SubalgebraClass, SubalgebraClass.normedRing, Tendsto, absorbs_biU, basis_left, continuous_add, continuous_add.tendsto, h.basis_left, ht.absorbs_biU, mono_right, nhds_basis_balanced, nhds_prod_eq, normedRing, simp_rw
 -/
@@ -1292,7 +1334,7 @@ theorem Bornology.IsVonNBounded.restrict_scalars_of_nontrivial
   intro V hV
 refine (h hV).restrict_scalars AntilipschitzWith.tendsto_cobounded (K := ‖(1 : 𝕜')‖₊⁻¹) ?_
   refine AntilipschitzWith.of_le_mul_nndist fun x y => ?_
-  rw [nndist_eq_nnnorm]; rw [nndist_eq_nnnorm]; rw [← sub_smul]; rw [nnnorm_smul]; rw [← div_eq_inv_mul]; rw [mul_div_cancel_right₀ _ (
+  rw [nndist_eq_nnnorm]; rw [nndist_eq_nnnorm]; rw [← sub_smul]; rw [nnnorm_smul]; rw [← div_eq_inv_mul]; rw [mul_div_cancel_right₀ _ (nnnorm_ne_zero_iff.2 one_ne_zero)]
 
 中文:
 定理 有界结构.IsVonNBounded.restrict_scalars_of_nontrivial
@@ -1300,7 +1342,7 @@ refine (h hV).restrict_scalars AntilipschitzWith.tendsto_cobounded (K := ‖(1 :
   intro V hV
 refine (h hV).restrict_scalars AntilipschitzWith.tendsto_cobounded (K := ‖(1 : 𝕜')‖₊⁻¹) ?_
   refine AntilipschitzWith.of_le_mul_nndist fun x y => ?_
-  rw [nndist_eq_nnnorm]; rw [nndist_eq_nnnorm]; rw [← sub_smul]; rw [nnnorm_smul]; rw [← div_eq_inv_mul]; rw [mul_div_cancel_right₀ _ (
+  rw [nndist_eq_nnnorm]; rw [nndist_eq_nnnorm]; rw [← sub_smul]; rw [nnnorm_smul]; rw [← div_eq_inv_mul]; rw [mul_div_cancel_right₀ _ (nnnorm_ne_zero_iff.2 one_ne_zero)]
 -/
 protected theorem Bornology.IsVonNBounded.restrict_scalars_of_nontrivial
     [NormedField 𝕜] [NormedRing 𝕜'] [NormedAlgebra 𝕜 𝕜'] [Nontrivial 𝕜']
@@ -1443,7 +1485,8 @@ theorem isVonNBounded_iff
   rcases (h (Metric.ball_mem_nhds 0 zero_lt_one)).exists_pos with ⟨ρ, hρ, hρball⟩
   rcases NormedField.exists_lt_norm 𝕜 ρ with ⟨a, ha⟩
   specialize hρball a ha.le
-  rw [← ball_normSeminorm 𝕜 E]; rw [Seminorm.smul_ball_zero (norm_pos_iff.1 <| hρ
+  rw [← ball_normSeminorm 𝕜 E]; rw [Seminorm.smul_ball_zero (norm_pos_iff.1 <| hρ.trans ha)]; rw [ball_normSeminorm] at hρball
+  exact Metric.isBounded_ball.subset hρball
 
 中文:
 定理 isVonNBounded_iff
@@ -1454,7 +1497,8 @@ theorem isVonNBounded_iff
   rcases (h (Metric.ball_mem_nhds 0 zero_lt_one)).exists_pos with ⟨ρ, hρ, hρball⟩
   rcases NormedField.exists_lt_norm 𝕜 ρ with ⟨a, ha⟩
   specialize hρball a ha.le
-  rw [← ball_normSeminorm 𝕜 E]; rw [Seminorm.smul_ball_zero (norm_pos_iff.1 <| hρ
+  rw [← ball_normSeminorm 𝕜 E]; rw [Seminorm.smul_ball_zero (norm_pos_iff.1 <| hρ.trans ha)]; rw [ball_normSeminorm] at hρball
+  exact Metric.isBounded_ball.subset hρball
 
 Depends on / 依赖: Metric, Metric.ball_mem_nhds, Metric.isBounded_ball.subset, NormedField, NormedField.exists_lt_norm, Seminorm, Seminorm.smul_ball_zero, ball_mem_nhds, ball_normSeminorm, exists_lt_norm, exists_pos, ha.le, isBounded_ball, isVonNBounded_of_isBounded, norm_pos_iff, smul_ball_zero, specialize, subset, zero_lt_one
 -/
@@ -1551,7 +1595,7 @@ theorem isBounded_iff_subset_smul_ball
     rcases NormedField.exists_lt_norm 𝕜 ρ with ⟨a, ha⟩
     exact ⟨a, hρball a ha.le⟩
   · rintro ⟨a, ha⟩
-    exact ((isVonNBounded_ball 𝕜 E 1).image (a • (1 : E
+    exact ((isVonNBounded_ball 𝕜 E 1).image (a • (1 : E ->L[𝕜] E))).subset ha
 
 中文:
 定理 isBounded_iff_subset_smul_ball
@@ -1564,7 +1608,7 @@ theorem isBounded_iff_subset_smul_ball
     rcases NormedField.exists_lt_norm 𝕜 ρ with ⟨a, ha⟩
     exact ⟨a, hρball a ha.le⟩
   · rintro ⟨a, ha⟩
-    exact ((isVonNBounded_ball 𝕜 E 1).image (a • (1 : E
+    exact ((isVonNBounded_ball 𝕜 E 1).image (a • (1 : E ->L[𝕜] E))).subset ha
 
 Depends on / 依赖: Metric, Metric.ball_mem_nhds, NormedField, NormedField.exists_lt_norm, ball_mem_nhds, exists_lt_norm, exists_pos, ha.le, isVonNBounded_ball, isVonNBounded_iff, subset, zero_lt_one
 -/

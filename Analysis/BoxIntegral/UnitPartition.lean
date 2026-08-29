@@ -97,7 +97,14 @@ theorem BoxIntegral.le_hasIntegralVertices_of_isBounded
   have hC := Nat.ceil_pos.mpr hR₁
   let I : Box ι := Box.mk (fun _ => -C) (fun _ => C)
     (fun _ => by simp [C, neg_lt_self_iff, Nat.cast_pos, hC])
-  refine ⟨I, ⟨fun _ => - C, fun _ => C, 
+  refine ⟨I, ⟨fun _ => - C, fun _ => C, fun i => (Int.cast_neg_natCast C).symm, fun _ => rfl⟩,
+    le_trans hR₂ ?_⟩
+  suffices Metric.ball (0 : ι -> Real) C <= I from
+    le_trans (Metric.ball_subset_ball (Nat.le_ceil R)) this
+  intro x hx
+  simp_rw [C, mem_ball_zero_iff, pi_norm_lt_iff (Nat.cast_pos.mpr hC),
+    Real.norm_eq_abs, abs_lt] at hx
+  exact fun i => ⟨(hx i).1, le_of_lt (hx i).2⟩
 
 中文:
 定理 Box整数egral.le_has整数egralVertices_of_isBounded
@@ -109,7 +116,14 @@ theorem BoxIntegral.le_hasIntegralVertices_of_isBounded
   have hC := Nat.ceil_pos.mpr hR₁
   let I : Box ι := Box.mk (fun _ => -C) (fun _ => C)
     (fun _ => by simp [C, neg_lt_self_iff, Nat.cast_pos, hC])
-  refine ⟨I, ⟨fun _ => - C, fun _ => C, 
+  refine ⟨I, ⟨fun _ => - C, fun _ => C, fun i => (Int.cast_neg_natCast C).symm, fun _ => rfl⟩,
+    le_trans hR₂ ?_⟩
+  suffices Metric.ball (0 : ι -> Real) C <= I from
+    le_trans (Metric.ball_subset_ball (Nat.le_ceil R)) this
+  intro x hx
+  simp_rw [C, mem_ball_zero_iff, pi_norm_lt_iff (Nat.cast_pos.mpr hC),
+    Real.norm_eq_abs, abs_lt] at hx
+  exact fun i => ⟨(hx i).1, le_of_lt (hx i).2⟩
 
 Depends on / 依赖: Box.mk, Fintype, Fintype.ofFinite, Int.cast_neg_natCast, IsBounded, IsBounded.subset_ball_lt, Metric, Metric.ball, Metric.ball_subset_ball, Nat.cast_pos, Nat.ceil_pos.mpr, Nat.le_ceil, ball_subset_ball, cast_neg_natCast, cast_pos, ceil_pos, le_ceil, le_trans, mem_ball_zero_if, neg_lt_self_iff
 -/
@@ -588,7 +602,11 @@ theorem setFinite_index
     (by simp) (As := fun ν : ι -> Int => (box n ν) inter s) (fun ν => ?_) (fun _ _ h => ?_) ?_).subset
       (fun _ hν => ?_)
   · refine NullMeasurableSet.inter ?_ hs₁
-    exact (box n ν).measurableSet_coe.nul
+    exact (box n ν).measurableSet_coe.nullMeasurableSet
+  · exact ((Disjoint.inter_right _ (disjoint.mp h)).inter_left _).aedisjoint
+· exact lt_top_iff_ne_top.mp measure_lt_top_of_subset
+      (by simp only [Set.iUnion_subset_iff, Set.inter_subset_right, implies_true]) hs₂
+  · rw [Set.mem_ofPred, Set.inter_eq_self_of_subset_left hν, volume_box]
 
 中文:
 定理 setFinite_index
@@ -598,7 +616,11 @@ theorem setFinite_index
     (by simp) (As := fun ν : ι -> Int => (box n ν) inter s) (fun ν => ?_) (fun _ _ h => ?_) ?_).subset
       (fun _ hν => ?_)
   · refine NullMeasurableSet.inter ?_ hs₁
-    exact (box n ν).measurableSet_coe.nul
+    exact (box n ν).measurableSet_coe.nullMeasurableSet
+  · exact ((Disjoint.inter_right _ (disjoint.mp h)).inter_left _).aedisjoint
+· exact lt_top_iff_ne_top.mp measure_lt_top_of_subset
+      (by simp only [Set.iUnion_subset_iff, Set.inter_subset_right, implies_true]) hs₂
+  · rw [Set.mem_ofPred, Set.inter_eq_self_of_subset_left hν, volume_box]
 
 Depends on / 依赖: Disjoint, Disjoint.inter_right, Measure, Measure.finite_const_le_meas_of_disjoint_iUnion, NullMeasurableSet, NullMeasurableSet.inter, Set.iUnion_subset_iff, Set.inter_subset_right, aedisjoint, disjoint, disjoint.mp, iUnion_subset_iff, implies_true, inter_left, inter_right, inter_subset_right, lt_top_iff_ne_top, lt_top_iff_ne_top.mp, measurableSet_coe, measurableSet_coe.nullMeasurableSet
 -/
@@ -672,7 +694,16 @@ definition prepartition
     exact mem_admissibleIndex_iff.mp hν
   pairwiseDisjoint _ hI₁ _ hI₂ h := by
     obtain ⟨_, _, rfl⟩ := Finset.mem_image.mp hI₁
-    obtain ⟨_, _, rfl⟩ := Finset.mem_image.
+    obtain ⟨_, _, rfl⟩ := Finset.mem_image.mp hI₂
+    exact disjoint.mp fun x => h (congrArg (box n) x)
+  tag I :=
+    if hI : exists ν in admissibleIndex n B, I = box n ν then tag n hI.choose else B.exists_mem.choose
+  tag_mem_Icc I := by
+    by_cases hI : exists ν in admissibleIndex n B, I = box n ν
+    · simp_rw [dif_pos hI]
+exact Box.coe_subset_Icc (mem_admissibleIndex_iff.mp hI.choose_spec.1) (tag_mem n _)
+    · simp_rw [dif_neg hI]
+      exact Box.coe_subset_Icc B.exists_mem.choose_spec
 
 中文:
 定义 prepartition
@@ -683,7 +714,16 @@ definition prepartition
     exact mem_admissibleIndex_iff.mp hν
   pairwiseDisjoint _ hI₁ _ hI₂ h := by
     obtain ⟨_, _, rfl⟩ := Finset.mem_image.mp hI₁
-    obtain ⟨_, _, rfl⟩ := Finset.mem_image.
+    obtain ⟨_, _, rfl⟩ := Finset.mem_image.mp hI₂
+    exact disjoint.mp fun x => h (congrArg (box n) x)
+  tag I :=
+    if hI : exists ν in admissibleIndex n B, I = box n ν then tag n hI.choose else B.exists_mem.choose
+  tag_mem_Icc I := by
+    by_cases hI : exists ν in admissibleIndex n B, I = box n ν
+    · simp_rw [dif_pos hI]
+exact Box.coe_subset_Icc (mem_admissibleIndex_iff.mp hI.choose_spec.1) (tag_mem n _)
+    · simp_rw [dif_neg hI]
+      exact Box.coe_subset_Icc B.exists_mem.choose_spec
 
 Depends on / 依赖: Finset, Finset.image, admissibleIndex
 -/
@@ -880,14 +920,14 @@ theorem mem_admissibleIndex_of_mem_box_aux₁
   given: (x : Real) (a : Int)
   proof: by
 have h : 0 < (n : Real) := Nat.cast_pos.mpr n.pos_of_neZero
-  rw [le_div_iff₀' h]; rw [le_sub_iff_add_le]; rw [show (n : Real) * a + 1 = (n * a + 1 : Int) by norm_cast]; rw [Int.cast_le]; rw [Int.add_one_le_iff]; rw [Int.lt_ceil]; rw [Int.cast_mul]; rw [Int.cast_natCast]; rw [mul_lt_mul_iff_right
+  rw [le_div_iff₀' h]; rw [le_sub_iff_add_le]; rw [show (n : Real) * a + 1 = (n * a + 1 : Int) by norm_cast]; rw [Int.cast_le]; rw [Int.add_one_le_iff]; rw [Int.lt_ceil]; rw [Int.cast_mul]; rw [Int.cast_natCast]; rw [mul_lt_mul_iff_right₀ h]
 
 中文:
 定理 mem_admissibleIndex_of_mem_box_aux₁
   条件: (x : 实数) (a : 整数)
   证明: by
 have h : 0 < (n : Real) := Nat.cast_pos.mpr n.pos_of_neZero
-  rw [le_div_iff₀' h]; rw [le_sub_iff_add_le]; rw [show (n : Real) * a + 1 = (n * a + 1 : Int) by norm_cast]; rw [Int.cast_le]; rw [Int.add_one_le_iff]; rw [Int.lt_ceil]; rw [Int.cast_mul]; rw [Int.cast_natCast]; rw [mul_lt_mul_iff_right
+  rw [le_div_iff₀' h]; rw [le_sub_iff_add_le]; rw [show (n : Real) * a + 1 = (n * a + 1 : Int) by norm_cast]; rw [Int.cast_le]; rw [Int.add_one_le_iff]; rw [Int.lt_ceil]; rw [Int.cast_mul]; rw [Int.cast_natCast]; rw [mul_lt_mul_iff_right₀ h]
 -/
 private theorem mem_admissibleIndex_of_mem_box_aux₁ (x : Real) (a : Int) :
     a < x ↔ a <= (⌈n * x⌉ - 1) / (n : Real) := by
@@ -929,7 +969,7 @@ theorem mem_admissibleIndex_of_mem_box
   push_cast
   refine fun i => ⟨?_, ?_⟩
   · exact (mem_admissibleIndex_of_mem_box_aux₁ n (x i) (l i)).mp ((hl i) ▸ (hx i).1)
-  · exact (mem_a
+  · exact (mem_admissibleIndex_of_mem_box_aux₂ n (x i) (u i)).mp ((hu i) ▸ (hx i).2)
 
 中文:
 定理 mem_admissibleIndex_of_mem_box
@@ -941,7 +981,7 @@ theorem mem_admissibleIndex_of_mem_box
   push_cast
   refine fun i => ⟨?_, ?_⟩
   · exact (mem_admissibleIndex_of_mem_box_aux₁ n (x i) (l i)).mp ((hl i) ▸ (hx i).1)
-  · exact (mem_a
+  · exact (mem_admissibleIndex_of_mem_box_aux₂ n (x i) (u i)).mp ((hu i) ▸ (hx i).2)
 
 Depends on / 依赖: Box.le_iff_bounds, Pi.le_def, box_lower, box_upper, forall_and, index_apply, le_def, le_iff_bounds, mem_admissibleIndex_iff, simp_rw
 -/
@@ -1180,7 +1220,25 @@ theorem integralSum_eq_tsum_div
     apply Set.Finite.fintype
     rw [← coe_pointwise_smul]; rw [ZSpan.smul _ (inv_ne_zero (NeZero.ne _))]
     exact ZSpan.setFinite_inter _ (B.isBounded.subset hs₀)
-  rw [tsum_fintype]; rw [Finset.sum_set_coe]; rw
+  rw [tsum_fintype]; rw [Finset.sum_set_coe]; rw [Finset.sum_div]; rw [eq_comm]
+  simp_rw [Set.indicator_apply, apply_ite, BoxAdditiveMap.toSMul_apply, Measure.toBoxAdditive_apply,
+    smul_eq_mul, mul_zero, Finset.sum_ite, Finset.sum_const_zero, add_zero]
+  refine Finset.sum_bij (fun x _ => box n (index n x)) (fun _ hx => Finset.mem_filter.mpr ?_)
+    (fun _ hx _ hy h => ?_) (fun I hI => ?_) (fun _ hx => ?_)
+  · rw [Set.mem_toFinset] at hx
+    refine ⟨mem_prepartition_boxes_iff.mpr
+      ⟨index n _, mem_admissibleIndex_of_mem_box n hB (hs₀ hx.1), rfl⟩, ?_⟩
+    simp_rw [prepartition_tag n (mem_admissibleIndex_of_mem_box n hB (hs₀ hx.1)),
+      tag_index_eq_self_of_mem_smul_span n hx.2, hx.1]
+  · rw [Set.mem_toFinset] at hx hy
+    exact eq_of_mem_smul_span_of_index_eq_index n hx.2 hy.2 (box_injective n h)
+  · rw [Finset.mem_filter] at hI
+    refine ⟨(prepartition n B).tag I, Set.mem_toFinset.mpr ⟨hI.2, ?_⟩, box_index_tag_eq_self n hI.1⟩
+    rw [← box_index_tag_eq_self n hI.1]; rw [prepartition_tag n
+      (mem_admissibleIndex_of_mem_box n hB (hs₀ hI.2))]
+    exact tag_mem_smul_span _ _
+  · rw [Set.mem_toFinset] at hx
+    rw [measureReal_def]; rw [volume_box]; rw [prepartition_tag n (mem_admissibleIndex_of_mem_box n hB (hs₀ hx.1))]; rw [tag_index_eq_self_of_mem_smul_span n hx.2]; rw [ENNReal.toReal_div]; rw [ENNReal.toReal_one]; rw [ENNReal.toReal_pow]; rw [ENNReal.toReal_natCast]; rw [mul_comm_div]; rw [one_mul]
 
 中文:
 定理 integralSum_eq_tsum_div
@@ -1192,7 +1250,25 @@ theorem integralSum_eq_tsum_div
     apply Set.Finite.fintype
     rw [← coe_pointwise_smul]; rw [ZSpan.smul _ (inv_ne_zero (NeZero.ne _))]
     exact ZSpan.setFinite_inter _ (B.isBounded.subset hs₀)
-  rw [tsum_fintype]; rw [Finset.sum_set_coe]; rw
+  rw [tsum_fintype]; rw [Finset.sum_set_coe]; rw [Finset.sum_div]; rw [eq_comm]
+  simp_rw [Set.indicator_apply, apply_ite, BoxAdditiveMap.toSMul_apply, Measure.toBoxAdditive_apply,
+    smul_eq_mul, mul_zero, Finset.sum_ite, Finset.sum_const_zero, add_zero]
+  refine Finset.sum_bij (fun x _ => box n (index n x)) (fun _ hx => Finset.mem_filter.mpr ?_)
+    (fun _ hx _ hy h => ?_) (fun I hI => ?_) (fun _ hx => ?_)
+  · rw [Set.mem_toFinset] at hx
+    refine ⟨mem_prepartition_boxes_iff.mpr
+      ⟨index n _, mem_admissibleIndex_of_mem_box n hB (hs₀ hx.1), rfl⟩, ?_⟩
+    simp_rw [prepartition_tag n (mem_admissibleIndex_of_mem_box n hB (hs₀ hx.1)),
+      tag_index_eq_self_of_mem_smul_span n hx.2, hx.1]
+  · rw [Set.mem_toFinset] at hx hy
+    exact eq_of_mem_smul_span_of_index_eq_index n hx.2 hy.2 (box_injective n h)
+  · rw [Finset.mem_filter] at hI
+    refine ⟨(prepartition n B).tag I, Set.mem_toFinset.mpr ⟨hI.2, ?_⟩, box_index_tag_eq_self n hI.1⟩
+    rw [← box_index_tag_eq_self n hI.1]; rw [prepartition_tag n
+      (mem_admissibleIndex_of_mem_box n hB (hs₀ hI.2))]
+    exact tag_mem_smul_span _ _
+  · rw [Set.mem_toFinset] at hx
+    rw [measureReal_def]; rw [volume_box]; rw [prepartition_tag n (mem_admissibleIndex_of_mem_box n hB (hs₀ hx.1))]; rw [tag_index_eq_self_of_mem_smul_span n hx.2]; rw [ENNReal.toReal_div]; rw [ENNReal.toReal_one]; rw [ENNReal.toReal_pow]; rw [ENNReal.toReal_natCast]; rw [mul_comm_div]; rw [one_mul]
 
 Depends on / 依赖: B.isBounded.subset, BoxAdditiveMap, BoxAdditiveMap.toSMul_apply, Finite, Finset, Finset.sum, Finset.sum_const_zero, Finset.sum_div, Finset.sum_ite, Finset.sum_set_coe, Fintype, Measure, Measure.toBoxAdditive_apply, NeZero, NeZero.ne, Set.Finite.fintype, Set.indicator_apply, ZSpan.setFinite_inter, ZSpan.smul, add_zero
 -/
@@ -1238,7 +1314,29 @@ theorem _root_.tendsto_tsum_div_pow_atTop_integral
   refine Metric.tendsto_atTop.mpr fun ε hε => ?_
   have h₁ : exists C, forall x in Box.Icc B, ‖Set.indicator s F x‖ <= C := by
     obtain ⟨C₀, h₀⟩ := (Box.isCompact_Icc B).exists_bound_of_continuousOn hF.continuousOn
-    refine ⟨max
+    refine ⟨max 0 C₀, fun x hx => ?_⟩
+    rw [Set.indicator]
+    split_ifs with hs
+    · exact le_max_of_le_right (h₀ x hx)
+· exact norm_zero.trans_le le_max_left 0 _
+  have h₂ : forallᵐ x, ContinuousAt (s.indicator F) x := by
+    filter_upwards [compl_mem_ae_iff.mpr hs₃] with _ h
+      using (hF.continuousOn).continuousAt_indicator h
+  obtain ⟨r, hr₁, hr₂⟩ := (hasIntegral_iff.mp <|
+      AEContinuous.hasBoxIntegral (volume : Measure (ι -> Real)) h₁ h₂
+        IntegrationParams.Riemann) (ε / 2) (half_pos hε)
+  refine ⟨⌈(r 0 0 : Real)⁻¹⌉₊, fun n hn => lt_of_le_of_lt ?_ (half_lt_self_iff.mpr hε)⟩
+  have : NeZero n :=
+⟨Nat.ne_zero_iff_zero_lt.mpr (Nat.ceil_pos.mpr (inv_pos.mpr (r 0 0).prop)).trans_le hn⟩
+  rw [← integralSum_eq_tsum_div _ s F hB hs₀]; rw [← Measure.restrict_restrict_of_subset hs₀]; rw [← integral_indicator hs₂]
+  refine hr₂ 0 _ ⟨?_, fun _ => ?_, fun h => ?_, fun h => ?_⟩ (prepartition_isPartition _ hB)
+  · rw [show r 0 = fun _ => r 0 0 from funext_iff.mpr (hr₁ 0 rfl)]
+    apply prepartition_isSubordinate n B
+    rw [one_div]; rw [inv_le_comm₀ (mod_cast (Nat.pos_of_neZero n)) (r 0 0).prop]
+    exact le_trans (Nat.le_ceil _) (Nat.cast_le.mpr hn)
+  · exact prepartition_isHenstock n B
+  · simp only [IntegrationParams.Riemann, Bool.false_eq_true] at h
+  · simp only [IntegrationParams.Riemann, Bool.false_eq_true] at h
 
 中文:
 定理 _root_.tendsto_tsum_div_pow_atTop_integral
@@ -1248,7 +1346,29 @@ theorem _root_.tendsto_tsum_div_pow_atTop_integral
   refine Metric.tendsto_atTop.mpr fun ε hε => ?_
   have h₁ : exists C, forall x in Box.Icc B, ‖Set.indicator s F x‖ <= C := by
     obtain ⟨C₀, h₀⟩ := (Box.isCompact_Icc B).exists_bound_of_continuousOn hF.continuousOn
-    refine ⟨max
+    refine ⟨max 0 C₀, fun x hx => ?_⟩
+    rw [Set.indicator]
+    split_ifs with hs
+    · exact le_max_of_le_right (h₀ x hx)
+· exact norm_zero.trans_le le_max_left 0 _
+  have h₂ : forallᵐ x, ContinuousAt (s.indicator F) x := by
+    filter_upwards [compl_mem_ae_iff.mpr hs₃] with _ h
+      using (hF.continuousOn).continuousAt_indicator h
+  obtain ⟨r, hr₁, hr₂⟩ := (hasIntegral_iff.mp <|
+      AEContinuous.hasBoxIntegral (volume : Measure (ι -> Real)) h₁ h₂
+        IntegrationParams.Riemann) (ε / 2) (half_pos hε)
+  refine ⟨⌈(r 0 0 : Real)⁻¹⌉₊, fun n hn => lt_of_le_of_lt ?_ (half_lt_self_iff.mpr hε)⟩
+  have : NeZero n :=
+⟨Nat.ne_zero_iff_zero_lt.mpr (Nat.ceil_pos.mpr (inv_pos.mpr (r 0 0).prop)).trans_le hn⟩
+  rw [← integralSum_eq_tsum_div _ s F hB hs₀]; rw [← Measure.restrict_restrict_of_subset hs₀]; rw [← integral_indicator hs₂]
+  refine hr₂ 0 _ ⟨?_, fun _ => ?_, fun h => ?_, fun h => ?_⟩ (prepartition_isPartition _ hB)
+  · rw [show r 0 = fun _ => r 0 0 from funext_iff.mpr (hr₁ 0 rfl)]
+    apply prepartition_isSubordinate n B
+    rw [one_div]; rw [inv_le_comm₀ (mod_cast (Nat.pos_of_neZero n)) (r 0 0).prop]
+    exact le_trans (Nat.le_ceil _) (Nat.cast_le.mpr hn)
+  · exact prepartition_isHenstock n B
+  · simp only [IntegrationParams.Riemann, Bool.false_eq_true] at h
+  · simp only [IntegrationParams.Riemann, Bool.false_eq_true] at h
 
 Depends on / 依赖: Box.Icc, Box.isCompact_Icc, ContinuousAt, Metric, Metric.tendsto_atTop.mpr, Set.indicator, continuousOn, exists_bound_of_continuousOn, filter_upwards, hF.continuousOn, indicator, isCompact_Icc, le_hasIntegralVertices_of_isBounded, le_max_left, le_max_of_le_right, norm_zero, norm_zero.trans_le, s.indicator, split_ifs, tendsto_atTop
 -/
@@ -1426,7 +1546,11 @@ theorem _root_.tendsto_card_div_pow_atTop_volume'
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' ?_ ?_
     (tendsto_card_div_pow₃ s hs₁ hs₄) (tendsto_card_div_pow₄ s hs₁ hs₄)
   · refine Tendsto.congr' (tendsto_card_div_pow₅ s) (Tendsto.mul ?_ (Tendsto.pow ?_ _))
-    · exact Tend
+    · exact Tendsto.comp (tendsto_card_div_pow_atTop_volume s hs₁ hs₂ hs₃) tendsto_nat_floor_atTop
+    · exact tendsto_nat_floor_div_atTop
+  · refine Tendsto.congr' (tendsto_card_div_pow₆ s) (Tendsto.mul ?_ (Tendsto.pow ?_ _))
+    · exact Tendsto.comp (tendsto_card_div_pow_atTop_volume s hs₁ hs₂ hs₃) tendsto_nat_ceil_atTop
+    · exact tendsto_nat_ceil_div_atTop
 
 中文:
 定理 _root_.tendsto_card_div_pow_atTop_volume'
@@ -1436,7 +1560,11 @@ theorem _root_.tendsto_card_div_pow_atTop_volume'
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' ?_ ?_
     (tendsto_card_div_pow₃ s hs₁ hs₄) (tendsto_card_div_pow₄ s hs₁ hs₄)
   · refine Tendsto.congr' (tendsto_card_div_pow₅ s) (Tendsto.mul ?_ (Tendsto.pow ?_ _))
-    · exact Tend
+    · exact Tendsto.comp (tendsto_card_div_pow_atTop_volume s hs₁ hs₂ hs₃) tendsto_nat_floor_atTop
+    · exact tendsto_nat_floor_div_atTop
+  · refine Tendsto.congr' (tendsto_card_div_pow₆ s) (Tendsto.mul ?_ (Tendsto.pow ?_ _))
+    · exact Tendsto.comp (tendsto_card_div_pow_atTop_volume s hs₁ hs₂ hs₃) tendsto_nat_ceil_atTop
+    · exact tendsto_nat_ceil_div_atTop
 
 Depends on / 依赖: Tendsto, Tendsto.comp, Tendsto.congr, Tendsto.mul, Tendsto.pow, tendsto_card_div_pow_atTop_volume, tendsto_nat_floor_atTop, tendsto_nat_floor_div_atTop, tendsto_of_tendsto_of_tendsto_of_le_of_le, volume, volume.real
 -/

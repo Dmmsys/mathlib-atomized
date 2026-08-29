@@ -185,7 +185,8 @@ lemma range_liftBaseChange
     · rw [map_add]
       exact add_mem ‹_› ‹_›
   · rw [Submodule.span_le]
-    rintro _
+    rintro _ ⟨x, rfl⟩
+    exact ⟨1 otimesₜ x, by simp⟩
 
 中文:
 引理 range_liftBaseChange
@@ -200,7 +201,8 @@ lemma range_liftBaseChange
     · rw [map_add]
       exact add_mem ‹_› ‹_›
   · rw [Submodule.span_le]
-    rintro _
+    rintro _ ⟨x, rfl⟩
+    exact ⟨1 otimesₜ x, by simp⟩
 
 Depends on / 依赖: LinearMap, LinearMap.liftBaseChange_tmul, Submodule, Submodule.smul_mem, Submodule.span_le, Submodule.subset_span, TensorProduct, TensorProduct.induction_on, add_mem, induction_on, le_antisymm, liftBaseChange_tmul, map_add, smul_mem, span_le, subset_span
 -/
@@ -625,7 +627,9 @@ theorem mul_assoc
   suffices LinearMap.llcomp R _ _ _ mul ∘ₗ mul =
       (LinearMap.llcomp R _ _ _ LinearMap.lflip.toLinearMap <|
         LinearMap.llcomp R _ _ _ mul.flip ∘ₗ mul).flip by
-    exact DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.co
+    exact DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.congr_fun this x) y) z
+  ext xa xb ya yb za zb
+  exact congr_arg₂ (· otimesₜ ·) (mul_assoc xa ya za) (mul_assoc xb yb zb)
 
 中文:
 定理 mul_assoc
@@ -636,7 +640,9 @@ theorem mul_assoc
   suffices LinearMap.llcomp R _ _ _ mul ∘ₗ mul =
       (LinearMap.llcomp R _ _ _ LinearMap.lflip.toLinearMap <|
         LinearMap.llcomp R _ _ _ mul.flip ∘ₗ mul).flip by
-    exact DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.co
+    exact DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.congr_fun this x) y) z
+  ext xa xb ya yb za zb
+  exact congr_arg₂ (· otimesₜ ·) (mul_assoc xa ya za) (mul_assoc xb yb zb)
 -/
 protected theorem mul_assoc (x y z : A otimes[R] B) : mul (mul x y) z = mul x (mul y z) := by
   -- restate as an equality of morphisms so that we can use `ext`
@@ -685,7 +691,11 @@ instance instSemiring
   mul_zero a := by simp [HMul.hMul, Mul.mul]
   mul_assoc := Algebra.TensorProduct.mul_assoc
   one_mul := Algebra.TensorProduct.one_mul
-  mul_one := Algebra.TensorProduct.mu
+  mul_one := Algebra.TensorProduct.mul_one
+  natCast_zero := AddMonoidWithOne.natCast_zero
+  natCast_succ := AddMonoidWithOne.natCast_succ
+
+@[simp]
 
 中文:
 实例 instSemiring
@@ -696,7 +706,11 @@ instance instSemiring
   mul_zero a := by simp [HMul.hMul, Mul.mul]
   mul_assoc := Algebra.TensorProduct.mul_assoc
   one_mul := Algebra.TensorProduct.one_mul
-  mul_one := Algebra.TensorProduct.mu
+  mul_one := Algebra.TensorProduct.mul_one
+  natCast_zero := AddMonoidWithOne.natCast_zero
+  natCast_succ := AddMonoidWithOne.natCast_succ
+
+@[simp]
 
 Depends on / 依赖: AddMonoidWithOne, AddMonoidWithOne.natCast_succ, AddMonoidWithOne.natCast_zero, Algebra, Algebra.TensorProduct.mul_assoc, Algebra.TensorProduct.mul_one, Algebra.TensorProduct.one_mul, HMul.hMul, Mul.mul, TensorProduct, mul_assoc, mul_one, mul_zero, natCast_succ, natCast_zero, one_mul, right_distrib, zero_mul
 -/
@@ -779,7 +793,9 @@ instance leftAlgebra
       dsimp only [RingHom.toFun_eq_coe, RingHom.comp_apply, includeLeftRingHom_apply]
       rw [algebraMap_eq_smul_one]; rw [← smul_tmul']; rw [← one_def]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [mul_one]; rw [one_mul]
     smul_def' := fun r x => by
-      dsimp only
+      dsimp only [RingHom.toFun_eq_coe, RingHom.comp_apply, includeLeftRingHom_apply]
+      rw [algebraMap_eq_smul_one]; rw [← smul_tmul']; rw [smul_mul_assoc]; rw [← one_def]; rw [one_mul]
+    algebraMap := TensorProduct.includeLeftRingHom.comp (algebraMap S A) }
 
 中文:
 实例 leftAlgebra
@@ -788,7 +804,9 @@ instance leftAlgebra
       dsimp only [RingHom.toFun_eq_coe, RingHom.comp_apply, includeLeftRingHom_apply]
       rw [algebraMap_eq_smul_one]; rw [← smul_tmul']; rw [← one_def]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [mul_one]; rw [one_mul]
     smul_def' := fun r x => by
-      dsimp only
+      dsimp only [RingHom.toFun_eq_coe, RingHom.comp_apply, includeLeftRingHom_apply]
+      rw [algebraMap_eq_smul_one]; rw [← smul_tmul']; rw [smul_mul_assoc]; rw [← one_def]; rw [one_mul]
+    algebraMap := TensorProduct.includeLeftRingHom.comp (algebraMap S A) }
 
 Depends on / 依赖: RingHom, RingHom.comp_apply, RingHom.toFun_eq_coe, TensorProduct, TensorProduct.includeLeftRingHom.comp, algebraMap, algebraMap_eq_smul_one, commutes, comp_apply, includeLeftRingHom, includeLeftRingHom_apply, mul_one, mul_smul_comm, one_def, one_mul, smul_def, smul_mul_assoc, smul_tmul, toFun_eq_coe
 -/
@@ -1300,7 +1318,8 @@ instance instCommSemiring
         simp [mul_comm]
       · intro a₂ b₂ ha hb
         simp [mul_add, add_mul, ha, hb]
-    · intro x
+    · intro x₁ x₂ h₁ h₂
+      simp [mul_add, add_mul, h₁, h₂]
 
 中文:
 实例 instCommSemiring
@@ -1316,7 +1335,8 @@ instance instCommSemiring
         simp [mul_comm]
       · intro a₂ b₂ ha hb
         simp [mul_add, add_mul, ha, hb]
-    · intro x
+    · intro x₁ x₂ h₁ h₂
+      simp [mul_add, add_mul, h₁, h₂]
 
 Depends on / 依赖: fast_instance
 -/
@@ -1586,7 +1606,8 @@ lemma closure_range_union_range_eq_top
       (Algebra.TensorProduct.includeRight y) in _
     · simp
     · exact mul_mem (Subring.subset_closure (.inl ⟨x, rfl⟩))
-       
+        (Subring.subset_closure (.inr ⟨_, rfl⟩))
+  | add x y _ _ => exact add_mem ‹_› ‹_›
 
 中文:
 引理 closure_range_union_range_eq_top
@@ -1601,7 +1622,8 @@ lemma closure_range_union_range_eq_top
       (Algebra.TensorProduct.includeRight y) in _
     · simp
     · exact mul_mem (Subring.subset_closure (.inl ⟨x, rfl⟩))
-       
+        (Subring.subset_closure (.inr ⟨_, rfl⟩))
+  | add x y _ _ => exact add_mem ‹_› ‹_›
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeLeftRingHom, Algebra.TensorProduct.includeRight, Subring, Subring.subset_closure, TensorProduct, add_mem, convert_to, includeLeftRingHom, includeRight, mul_mem, subset_closure, top_le_iff, zero_mem
 -/
@@ -1631,7 +1653,8 @@ lemma adjoin_one_tmul_image_eq_top
   proof: by
   suffices h : adjoin A ((⊤ : Subalgebra R B).map (includeRight (A := A)) : Set (A otimes[R] B)) = ⊤ by
     simp [← h, ← hs, AlgHom.map_adjoin, adjoin_adjoin_of_tower]
-  rw [← Algebra.toSubmodule_eq_top]; rw [← top_le_iff]; rw [Algebra.map_top]; rw [← Submodule.baseChange_top]; rw [Submodule.base
+  rw [← Algebra.toSubmodule_eq_top]; rw [← top_le_iff]; rw [Algebra.map_top]; rw [← Submodule.baseChange_top]; rw [Submodule.baseChange_eq_span]; rw [Submodule.map_top]
+  exact span_le_adjoin _ _
 
 中文:
 引理 adjoin_one_tmul_image_eq_top
@@ -1639,7 +1662,8 @@ lemma adjoin_one_tmul_image_eq_top
   证明: by
   suffices h : adjoin A ((⊤ : Subalgebra R B).map (includeRight (A := A)) : Set (A otimes[R] B)) = ⊤ by
     simp [← h, ← hs, AlgHom.map_adjoin, adjoin_adjoin_of_tower]
-  rw [← Algebra.toSubmodule_eq_top]; rw [← top_le_iff]; rw [Algebra.map_top]; rw [← Submodule.baseChange_top]; rw [Submodule.base
+  rw [← Algebra.toSubmodule_eq_top]; rw [← top_le_iff]; rw [Algebra.map_top]; rw [← Submodule.baseChange_top]; rw [Submodule.baseChange_eq_span]; rw [Submodule.map_top]
+  exact span_le_adjoin _ _
 
 Depends on / 依赖: AlgHom, AlgHom.map_adjoin, Algebra, Algebra.map_top, Algebra.toSubmodule_eq_top, Subalgebra, Submodule, Submodule.baseChange_eq_span, Submodule.baseChange_top, Submodule.map_top, adjoin, adjoin_adjoin_of_tower, baseChange_eq_span, baseChange_top, includeRight, map_adjoin, map_top, otimes, span_le_adjoin, toSubmodule_eq_top
 -/
@@ -1729,7 +1753,7 @@ definition moduleAux
         simp only [add_smul, LinearMap.add_apply]
       map_smul' := fun n r => by
         ext
-        simp only [RingHom.id_apply, LinearMap.smul_ap
+        simp only [RingHom.id_apply, LinearMap.smul_apply, smul_assoc] }
 
 中文:
 定义 moduleAux
@@ -1741,7 +1765,7 @@ definition moduleAux
         simp only [add_smul, LinearMap.add_apply]
       map_smul' := fun n r => by
         ext
-        simp only [RingHom.id_apply, LinearMap.smul_ap
+        simp only [RingHom.id_apply, LinearMap.smul_apply, smul_assoc] }
 
 Depends on / 依赖: Algebra, Algebra.lsmul, LinearMap, LinearMap.add_apply, LinearMap.smul_apply, Module, Module.End, RingHom, RingHom.id_apply, TensorProduct, TensorProduct.lift, add_apply, add_smul, id_apply, map_add, map_smul, smul_apply, smul_assoc, toLinearMap
 -/
@@ -1802,7 +1826,35 @@ definition module
   smul_add x m₁ m₂ := by simp only [(· • ·), map_add]
   add_smul x y m := by simp only [(· • ·), map_add, LinearMap.add_apply]
   one_smul m := by
-    -- Porting not
+    -- Porting note: was one `simp only`, not two
+    simp only [(· • ·), Algebra.TensorProduct.one_def]
+    simp only [moduleAux_apply, one_smul]
+  mul_smul x y m := by
+    refine TensorProduct.induction_on x ?_ ?_ ?_ <;> refine TensorProduct.induction_on y ?_ ?_ ?_
+    · simp only [(· • ·), mul_zero, map_zero, LinearMap.zero_apply]
+    · intro a b
+      simp only [(· • ·), zero_mul, map_zero, LinearMap.zero_apply]
+    · intro z w _ _
+      simp only [(· • ·), zero_mul, map_zero, LinearMap.zero_apply]
+    · intro a b
+      simp only [(· • ·), mul_zero, map_zero, LinearMap.zero_apply]
+    · intro a₁ b₁ a₂ b₂
+      -- Porting note: was one `simp only`, not two
+      simp only [(· • ·), Algebra.TensorProduct.tmul_mul_tmul]
+      simp only [moduleAux_apply, mul_smul, smul_comm a₁ b₂]
+    · intro z w hz hw a b
+      -- Porting note: was one `simp only`, but random stuff doesn't work
+      simp only [(· • ·)] at hz hw ⊢
+      simp only [moduleAux_apply, mul_add, map_add,
+        LinearMap.add_apply, moduleAux_apply, hz, hw]
+    · intro z w _ _
+      simp only [(· • ·), mul_zero, map_zero, LinearMap.zero_apply]
+    · intro a b z w hz hw
+      simp only [(· • ·)] at hz hw ⊢
+      simp only [map_add, add_mul, LinearMap.add_apply, hz, hw]
+    · intro u v _ _ z w hz hw
+      simp only [(· • ·)] at hz hw ⊢
+      simp only [add_mul, map_add, LinearMap.add_apply, hz, hw, add_add_add_comm]
 
 中文:
 定义 module
@@ -1813,7 +1865,35 @@ definition module
   smul_add x m₁ m₂ := by simp only [(· • ·), map_add]
   add_smul x y m := by simp only [(· • ·), map_add, LinearMap.add_apply]
   one_smul m := by
-    -- Porting not
+    -- Porting note: was one `simp only`, not two
+    simp only [(· • ·), Algebra.TensorProduct.one_def]
+    simp only [moduleAux_apply, one_smul]
+  mul_smul x y m := by
+    refine TensorProduct.induction_on x ?_ ?_ ?_ <;> refine TensorProduct.induction_on y ?_ ?_ ?_
+    · simp only [(· • ·), mul_zero, map_zero, LinearMap.zero_apply]
+    · intro a b
+      simp only [(· • ·), zero_mul, map_zero, LinearMap.zero_apply]
+    · intro z w _ _
+      simp only [(· • ·), zero_mul, map_zero, LinearMap.zero_apply]
+    · intro a b
+      simp only [(· • ·), mul_zero, map_zero, LinearMap.zero_apply]
+    · intro a₁ b₁ a₂ b₂
+      -- Porting note: was one `simp only`, not two
+      simp only [(· • ·), Algebra.TensorProduct.tmul_mul_tmul]
+      simp only [moduleAux_apply, mul_smul, smul_comm a₁ b₂]
+    · intro z w hz hw a b
+      -- Porting note: was one `simp only`, but random stuff doesn't work
+      simp only [(· • ·)] at hz hw ⊢
+      simp only [moduleAux_apply, mul_add, map_add,
+        LinearMap.add_apply, moduleAux_apply, hz, hw]
+    · intro z w _ _
+      simp only [(· • ·), mul_zero, map_zero, LinearMap.zero_apply]
+    · intro a b z w hz hw
+      simp only [(· • ·)] at hz hw ⊢
+      simp only [map_add, add_mul, LinearMap.add_apply, hz, hw]
+    · intro u v _ _ z w hz hw
+      simp only [(· • ·)] at hz hw ⊢
+      simp only [add_mul, map_add, LinearMap.add_apply, hz, hw, add_add_add_comm]
 -/
 protected def module : Module (A otimes[R] B) M where
   smul x m := moduleAux x m
@@ -1919,7 +1999,8 @@ lemma Submodule.map_range_rTensor_subtype_lid
   refine le_antisymm ?_ fun q h => Submodule.smul_induction_on h
     (fun r hr q _ => ⟨⟨r, hr⟩ otimesₜ q, by simp⟩) (by simp +contextual [add_mem])
   rintro _ ⟨t, rfl⟩
-  exact t.induction_on (by simp) (by simp +contextual [Submodule.smul_m
+  exact t.induction_on (by simp) (by simp +contextual [Submodule.smul_mem_smul])
+    (by simp +contextual [add_mem])
 
 中文:
 引理 子模.map_range_rTensor_subtype_lid
@@ -1929,7 +2010,8 @@ lemma Submodule.map_range_rTensor_subtype_lid
   refine le_antisymm ?_ fun q h => Submodule.smul_induction_on h
     (fun r hr q _ => ⟨⟨r, hr⟩ otimesₜ q, by simp⟩) (by simp +contextual [add_mem])
   rintro _ ⟨t, rfl⟩
-  exact t.induction_on (by simp) (by simp +contextual [Submodule.smul_m
+  exact t.induction_on (by simp) (by simp +contextual [Submodule.smul_mem_smul])
+    (by simp +contextual [add_mem])
 
 Depends on / 依赖: Submodule, Submodule.map_comp, Submodule.smul_induction_on, Submodule.smul_mem_smul, add_mem, contextual, induction_on, le_antisymm, map_comp, map_top, smul_induction_on, smul_mem_smul, t.induction_on
 -/
@@ -2203,7 +2285,9 @@ definition liftEquiv
   body: .ofLinearMap (.liftBaseChange S f) (by simp [Algebra.TensorProduct.one_def]) fun x y => by
       rw [← LinearMap.mul_apply_apply S]; rw [← LinearMap.compr₂_apply]; rw [← LinearMap.mul_apply_apply S]; rw [← LinearMap.compl₁₂_apply]
       congr; ext; simp
-.comp Algebra.TensorProduct.includeRight invFu
+.comp Algebra.TensorProduct.includeRight invFun f := f.restrictScalars R
+  left_inv f := by ext; simp
+right_inv f := Algebra.TensorProduct.ext (Subsingleton.elim _ _) by ext; simp
 
 中文:
 定义 liftEquiv
@@ -2211,7 +2295,9 @@ definition liftEquiv
   定义体: .ofLinearMap (.liftBaseChange S f) (by simp [Algebra.TensorProduct.one_def]) fun x y => by
       rw [← LinearMap.mul_apply_apply S]; rw [← LinearMap.compr₂_apply]; rw [← LinearMap.mul_apply_apply S]; rw [← LinearMap.compl₁₂_apply]
       congr; ext; simp
-.comp Algebra.TensorProduct.includeRight invFu
+.comp Algebra.TensorProduct.includeRight invFun f := f.restrictScalars R
+  left_inv f := by ext; simp
+right_inv f := Algebra.TensorProduct.ext (Subsingleton.elim _ _) by ext; simp
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.ext, Algebra.TensorProduct.includeRight, Algebra.TensorProduct.one_def, LinearMap, LinearMap.compl, LinearMap.compr, LinearMap.mul_apply_apply, Subsingleton, Subsingleton.elim, TensorProduct, f.restrictScalars, includeRight, invFun, left_inv, liftBaseChange, mul_apply_apply, ofLinearMap, one_def, restrictScalars
 -/

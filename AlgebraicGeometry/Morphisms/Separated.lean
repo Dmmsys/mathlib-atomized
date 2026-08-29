@@ -269,6 +269,8 @@ lemma of_isAffineHom
     have H : IsAffineHom (f ∣_ U) := IsZariskiLocalAtTarget.restrict h U
     exact this _ U.2
   have : IsAffine X := HasAffineProperty.iff_of_isAffine.mp h
+  rw [MorphismProperty.arrow_mk_iso_iff @IsSeparated (arrowIsoSpecΓOfIsAffine f)]
+  infer_instance
 
 中文:
 引理 of_isAffineHom
@@ -282,6 +284,8 @@ lemma of_isAffineHom
     have H : IsAffineHom (f ∣_ U) := IsZariskiLocalAtTarget.restrict h U
     exact this _ U.2
   have : IsAffine X := HasAffineProperty.iff_of_isAffine.mp h
+  rw [MorphismProperty.arrow_mk_iso_iff @IsSeparated (arrowIsoSpecΓOfIsAffine f)]
+  infer_instance
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine.mp, IsAffine, IsAffineHom, IsSeparated, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_iSup_eq_top, IsZariskiLocalAtTarget.restrict, MorphismProperty, MorphismProperty.arrow_mk_iso_iff, arrow_mk_iso_iff, iSup_affineOpens_eq_top, iff_of_iSup_eq_top, iff_of_isAffine, infer_instance, restrict
 -/
@@ -313,6 +317,7 @@ instance [IsSeparated
   rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _
     (pullback.congrHom rfl (Category.id_comp g)).inv]
   convert (inferInstance : IsClosedImmersion (pullback.mapDesc f (𝟙 _) g))
+  ext : 1 <;> simp [pullback.condition]
 
 中文:
 实例 [是分离
@@ -322,6 +327,7 @@ instance [IsSeparated
   rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _
     (pullback.congrHom rfl (Category.id_comp g)).inv]
   convert (inferInstance : IsClosedImmersion (pullback.mapDesc f (𝟙 _) g))
+  ext : 1 <;> simp [pullback.condition]
 
 Depends on / 依赖: Category, Category.id_comp, IsClosedImmersion, MorphismProperty, MorphismProperty.cancel_left_of_respectsIso, MorphismProperty.cancel_right_of_respectsIso, cancel_left_of_respectsIso, cancel_right_of_respectsIso, condition, congrHom, convert, id_comp, mapDesc, pullback, pullback.condition, pullback.congrHom, pullback.fst, pullback.mapDesc
 -/
@@ -354,7 +360,23 @@ lemma Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_injective
   simp only [diagonalCoverDiagonalRange, openCoverOfBase_I₀, openCoverOfBase_X,
     openCoverOfLeftRight_I₀, Opens.iSup_mk, Opens.carrier_eq_coe, Hom.coe_opensRange, Opens.mem_mk,
     Set.mem_iUnion, Set.mem_range, Sigma.exists]
-  have H : pullback.fst f f x = pul
+  have H : pullback.fst f f x = pullback.snd f f x :=
+    hf (by rw [← Scheme.Hom.comp_apply, ← Scheme.Hom.comp_apply, pullback.condition])
+  let i := 𝒰.idx (f (pullback.fst f f x))
+  obtain ⟨y : 𝒰.X i, hy : 𝒰.f i y = f _⟩ :=
+    𝒰.covers (f (pullback.fst f f x))
+  obtain ⟨z, hz₁, hz₂⟩ := exists_preimage_pullback _ _ hy.symm
+  let j := (𝒱 i).idx z
+  obtain ⟨w : (𝒱 i).X j, hy : (𝒱 i).f j w = z⟩ := (𝒱 i).covers z
+  refine ⟨i, j, ?_⟩
+  simp_rw [diagonalCover_map]
+  change x in Set.range _
+  simp only [diagonalCover, openCoverOfBase_I₀,
+    Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover, PreZeroHypercover.pullback₁_X,
+    Precoverage.ZeroHypercover.bind_toPreZeroHypercover, openCoverOfBase_X,
+    PreZeroHypercover.bind_X, openCoverOfLeftRight_I₀, openCoverOfLeftRight_X]
+  rw [range_map]
+  simp [← H, ← hz₁, ← hy]
 
 中文:
 引理 概形.拉回.diagonalCoverDiagonalRange_eq_top_of_injective
@@ -364,7 +386,23 @@ lemma Scheme.Pullback.diagonalCoverDiagonalRange_eq_top_of_injective
   simp only [diagonalCoverDiagonalRange, openCoverOfBase_I₀, openCoverOfBase_X,
     openCoverOfLeftRight_I₀, Opens.iSup_mk, Opens.carrier_eq_coe, Hom.coe_opensRange, Opens.mem_mk,
     Set.mem_iUnion, Set.mem_range, Sigma.exists]
-  have H : pullback.fst f f x = pul
+  have H : pullback.fst f f x = pullback.snd f f x :=
+    hf (by rw [← Scheme.Hom.comp_apply, ← Scheme.Hom.comp_apply, pullback.condition])
+  let i := 𝒰.idx (f (pullback.fst f f x))
+  obtain ⟨y : 𝒰.X i, hy : 𝒰.f i y = f _⟩ :=
+    𝒰.covers (f (pullback.fst f f x))
+  obtain ⟨z, hz₁, hz₂⟩ := exists_preimage_pullback _ _ hy.symm
+  let j := (𝒱 i).idx z
+  obtain ⟨w : (𝒱 i).X j, hy : (𝒱 i).f j w = z⟩ := (𝒱 i).covers z
+  refine ⟨i, j, ?_⟩
+  simp_rw [diagonalCover_map]
+  change x in Set.range _
+  simp only [diagonalCover, openCoverOfBase_I₀,
+    Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover, PreZeroHypercover.pullback₁_X,
+    Precoverage.ZeroHypercover.bind_toPreZeroHypercover, openCoverOfBase_X,
+    PreZeroHypercover.bind_X, openCoverOfLeftRight_I₀, openCoverOfLeftRight_X]
+  rw [range_map]
+  simp [← H, ← hz₁, ← hy]
 
 Depends on / 依赖: Hom.coe_opensRange, Opens.carrier_eq_coe, Opens.iSup_mk, Opens.mem_mk, Scheme, Scheme.Hom.comp_apply, Set.mem_iUnion, Set.mem_range, Sigma.exists, carrier_eq_coe, coe_opensRange, comp_apply, condition, covers, diagonalCoverDiagonalRange, iSup_mk, mem_iUnion, mem_mk, mem_range, openCoverOfBase_X
 -/
@@ -407,7 +445,21 @@ lemma Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange
     openCoverOfLeftRight_I₀, Opens.iSup_mk, Opens.carrier_eq_coe, Hom.coe_opensRange, Opens.coe_mk,
     Set.mem_iUnion, Set.mem_range, Sigma.exists]
   let i := 𝒰.idx (f x)
-  obtain ⟨y : 𝒰.X i, hy :
+  obtain ⟨y : 𝒰.X i, hy : 𝒰.f i y = f x⟩ := 𝒰.covers (f x)
+  obtain ⟨z, hz₁, hz₂⟩ := exists_preimage_pullback _ _ hy.symm
+  let j := (𝒱 i).idx z
+  obtain ⟨w : (𝒱 i).X j, hy : (𝒱 i).f j w = z⟩ := (𝒱 i).covers z
+  refine ⟨i, j, pullback.diagonal ((𝒱 i).f j ≫ pullback.snd f (𝒰.f i)) w, ?_⟩
+  rw [← hz₁]; rw [← hy]; rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]
+  simp only [diagonalCover, openCoverOfBase_I₀,
+    Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover, PreZeroHypercover.pullback₁_X,
+    Cover.pullbackHom, Precoverage.ZeroHypercover.bind_toPreZeroHypercover, openCoverOfBase_X,
+    PreZeroHypercover.bind_X, openCoverOfLeftRight_I₀, openCoverOfLeftRight_X,
+    PreZeroHypercover.bind_f, openCoverOfLeftRight_f, openCoverOfBase_f, Hom.comp_base,
+    TopCat.hom_comp, ContinuousMap.comp_apply, ContinuousMap.comp_assoc]
+  simp_rw [← Scheme.Hom.comp_apply]
+  congr 5
+  apply pullback.hom_ext <;> simp
 
 中文:
 引理 概形.拉回.range_diagonal_subset_diagonalCoverDiagonalRange
@@ -417,7 +469,21 @@ lemma Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange
     openCoverOfLeftRight_I₀, Opens.iSup_mk, Opens.carrier_eq_coe, Hom.coe_opensRange, Opens.coe_mk,
     Set.mem_iUnion, Set.mem_range, Sigma.exists]
   let i := 𝒰.idx (f x)
-  obtain ⟨y : 𝒰.X i, hy :
+  obtain ⟨y : 𝒰.X i, hy : 𝒰.f i y = f x⟩ := 𝒰.covers (f x)
+  obtain ⟨z, hz₁, hz₂⟩ := exists_preimage_pullback _ _ hy.symm
+  let j := (𝒱 i).idx z
+  obtain ⟨w : (𝒱 i).X j, hy : (𝒱 i).f j w = z⟩ := (𝒱 i).covers z
+  refine ⟨i, j, pullback.diagonal ((𝒱 i).f j ≫ pullback.snd f (𝒰.f i)) w, ?_⟩
+  rw [← hz₁]; rw [← hy]; rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]
+  simp only [diagonalCover, openCoverOfBase_I₀,
+    Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover, PreZeroHypercover.pullback₁_X,
+    Cover.pullbackHom, Precoverage.ZeroHypercover.bind_toPreZeroHypercover, openCoverOfBase_X,
+    PreZeroHypercover.bind_X, openCoverOfLeftRight_I₀, openCoverOfLeftRight_X,
+    PreZeroHypercover.bind_f, openCoverOfLeftRight_f, openCoverOfBase_f, Hom.comp_base,
+    TopCat.hom_comp, ContinuousMap.comp_apply, ContinuousMap.comp_assoc]
+  simp_rw [← Scheme.Hom.comp_apply]
+  congr 5
+  apply pullback.hom_ext <;> simp
 
 Depends on / 依赖: Hom.coe_opensRange, Opens.carrier_eq_coe, Opens.coe_mk, Opens.iSup_mk, Set.mem_iUnion, Set.mem_range, Sigma.exists, carrier_eq_coe, coe_mk, coe_opensRange, covers, diagonal, diagonalCoverDiagonalRange, exists_preimage_pullback, hy.symm, iSup_mk, mem_iUnion, mem_range, openCoverOfBase_X, pullback
 -/
@@ -454,7 +520,17 @@ lemma isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange
   let U : (Σ i, (𝒱 i).I₀) -> (diagonalCoverDiagonalRange f 𝒰 𝒱).toScheme.Opens := fun i =>
     (diagonalCoverDiagonalRange f 𝒰 𝒱).ι ⁻¹ᵁ ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange
   have hU (i) : (diagonalCoverDiagonalRange f 𝒰 𝒱).ι ''ᵁ U i =
-      ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2
+      ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange := by
+    rw [Scheme.Hom.image_preimage_eq_opensRange_inf]; rw [inf_eq_right]; rw [Opens.opensRange_ι]
+    exact le_iSup (fun i : Σ i, (𝒱 i).I₀ => ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange) i
+  have hf : iSup U = ⊤ := (TopologicalSpace.Opens.map_iSup _ _).symm.trans
+    (diagonalCoverDiagonalRange f 𝒰 𝒱).ι_preimage_self
+  rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := @IsClosedImmersion) _ hf]
+  intro i
+  rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictRestrict _ _ _)]; rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictEq _ (hU i))]; rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (diagonalRestrictIsoDiagonal ..)]
+  infer_instance
+
+@[stacks 0DVA]
 
 中文:
 引理 isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange
@@ -462,7 +538,17 @@ lemma isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange
   let U : (Σ i, (𝒱 i).I₀) -> (diagonalCoverDiagonalRange f 𝒰 𝒱).toScheme.Opens := fun i =>
     (diagonalCoverDiagonalRange f 𝒰 𝒱).ι ⁻¹ᵁ ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange
   have hU (i) : (diagonalCoverDiagonalRange f 𝒰 𝒱).ι ''ᵁ U i =
-      ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2
+      ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange := by
+    rw [Scheme.Hom.image_preimage_eq_opensRange_inf]; rw [inf_eq_right]; rw [Opens.opensRange_ι]
+    exact le_iSup (fun i : Σ i, (𝒱 i).I₀ => ((diagonalCover f 𝒰 𝒱).f ⟨i.1, i.2, i.2⟩).opensRange) i
+  have hf : iSup U = ⊤ := (TopologicalSpace.Opens.map_iSup _ _).symm.trans
+    (diagonalCoverDiagonalRange f 𝒰 𝒱).ι_preimage_self
+  rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := @IsClosedImmersion) _ hf]
+  intro i
+  rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictRestrict _ _ _)]; rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (morphismRestrictEq _ (hU i))]; rw [MorphismProperty.arrow_mk_iso_iff (P := @IsClosedImmersion) (diagonalRestrictIsoDiagonal ..)]
+  infer_instance
+
+@[stacks 0DVA]
 
 Depends on / 依赖: Opens.opensRange_, Scheme, Scheme.Hom.image_preimage_eq_opensRange_inf, diagonalCover, diagonalCoverDiagonalRange, image_preimage_eq_opensRange_inf, inf_eq_right, le_iSup, opensRange, toScheme, toScheme.Opens
 -/
@@ -495,7 +581,7 @@ lemma isSeparated_of_injective
   let 𝒱 (i) := (pullback f (𝒰.f i)).affineCover
   refine IsZariskiLocalAtTarget.of_iSup_eq_top (fun i : PUnit.{0} => ⊤) (by simp) fun _ => ?_
   rw [← diagonalCoverDiagonalRange_eq_top_of_injective f 𝒰 𝒱 hf]
-  exact isClosedImmersion_diagonal_restrict_diagona
+  exact isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange f 𝒰 𝒱
 
 中文:
 引理 isSeparated_of_injective
@@ -506,7 +592,7 @@ lemma isSeparated_of_injective
   let 𝒱 (i) := (pullback f (𝒰.f i)).affineCover
   refine IsZariskiLocalAtTarget.of_iSup_eq_top (fun i : PUnit.{0} => ⊤) (by simp) fun _ => ?_
   rw [← diagonalCoverDiagonalRange_eq_top_of_injective f 𝒰 𝒱 hf]
-  exact isClosedImmersion_diagonal_restrict_diagona
+  exact isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange f 𝒰 𝒱
 
 Depends on / 依赖: IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.of_iSup_eq_top, Y.affineCover, affineCover, diagonalCoverDiagonalRange_eq_top_of_injective, isClosedImmersion_diagonal_restrict_diagonalCoverDiagonalRange, of_iSup_eq_top, pullback
 -/
@@ -726,7 +812,8 @@ instance isClosedImmersion_equalizer_ι_left
     ((Limits.isPullback_equalizer_prod f g).map (Over.forget _)).flip ?_
   rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _
     (Over.prodLeftIsoPullback Y Y).hom]
-  convert! (inferInstance : IsClosedImmersion (pullback.diagonal Y.hom
+  convert! (inferInstance : IsClosedImmersion (pullback.diagonal Y.hom))
+  ext1 <;> simp [← Over.comp_left]
 
 中文:
 实例 isClosedImmersion_equalizer_ι_left
@@ -736,7 +823,8 @@ instance isClosedImmersion_equalizer_ι_left
     ((Limits.isPullback_equalizer_prod f g).map (Over.forget _)).flip ?_
   rw [← MorphismProperty.cancel_right_of_respectsIso @IsClosedImmersion _
     (Over.prodLeftIsoPullback Y Y).hom]
-  convert! (inferInstance : IsClosedImmersion (pullback.diagonal Y.hom
+  convert! (inferInstance : IsClosedImmersion (pullback.diagonal Y.hom))
+  ext1 <;> simp [← Over.comp_left]
 
 Depends on / 依赖: IsClosedImmersion, Limits, Limits.isPullback_equalizer_prod, MorphismProperty, MorphismProperty.cancel_right_of_respectsIso, MorphismProperty.of_isPullback, Over.comp_left, Over.forget, Over.prodLeftIsoPullback, Y.hom, cancel_right_of_respectsIso, comp_left, convert, diagonal, forget, isPullback_equalizer_prod, of_isPullback, prodLeftIsoPullback, pullback, pullback.diagonal
 -/
@@ -764,7 +852,15 @@ lemma ext_of_isDominant_of_isSeparated
   let g' : X' ⟶ Y' := Over.homMk g
   let ι' : U' ⟶ X' := Over.homMk ι
   have : IsSeparated Y'.hom := ‹_›
-  have : IsDominant (equalizer.ι f' g').left := 
+  have : IsDominant (equalizer.ι f' g').left := by
+    apply +allowSynthFailures IsDominant.of_comp (equalizer.lift ι' ?_).left
+    · rwa [← Over.comp_left, equalizer.lift_ι]
+    · ext1; exact hU
+  have : Surjective (equalizer.ι f' g').left :=
+    surjective_of_isDominant_of_isClosed_range _ (Scheme.Hom.isClosedEmbedding _).isClosed_range
+  have := isIso_of_isClosedImmersion_of_surjective (Y := X) (equalizer.ι f' g').left
+  rw [← cancel_epi (equalizer.ι f' g').left]
+  exact congr($(equalizer.condition f' g').left)
 
 中文:
 引理 ext_of_isDominant_of_isSeparated
@@ -777,7 +873,15 @@ lemma ext_of_isDominant_of_isSeparated
   let g' : X' ⟶ Y' := Over.homMk g
   let ι' : U' ⟶ X' := Over.homMk ι
   have : IsSeparated Y'.hom := ‹_›
-  have : IsDominant (equalizer.ι f' g').left := 
+  have : IsDominant (equalizer.ι f' g').left := by
+    apply +allowSynthFailures IsDominant.of_comp (equalizer.lift ι' ?_).left
+    · rwa [← Over.comp_left, equalizer.lift_ι]
+    · ext1; exact hU
+  have : Surjective (equalizer.ι f' g').left :=
+    surjective_of_isDominant_of_isClosed_range _ (Scheme.Hom.isClosedEmbedding _).isClosed_range
+  have := isIso_of_isClosedImmersion_of_surjective (Y := X) (equalizer.ι f' g').left
+  rw [← cancel_epi (equalizer.ι f' g').left]
+  exact congr($(equalizer.condition f' g').left)
 
 Depends on / 依赖: IsDominant, IsDominant.of_comp, IsSeparated, Over.comp_left, Over.homMk, Over.mk, Surjective, allowSynthFailures, comp_left, equalizer, equalizer.lift, equalizer.lift_, of_comp, surjective_of_isDominant_of_isClos
 -/
@@ -811,7 +915,7 @@ lemma ext_of_fromSpecResidueField_eq
   suffices IsDominant (equalizer.ι f g) from
     ext_of_isDominant_of_isSeparated i H' (equalizer.ι f g) (equalizer.condition _ _)
   refine ⟨.mono (fun x hx => ⟨equalizer.lift _ (H _ hx) default, ?_⟩) hS'⟩
-  rw [← Scheme.Hom.comp_apply]; rw [equalizer.lift_ι]; rw [Scheme.fromSpecResidueField_appl
+  rw [← Scheme.Hom.comp_apply]; rw [equalizer.lift_ι]; rw [Scheme.fromSpecResidueField_apply]
 
 中文:
 引理 ext_of_fromSpecResidueField_eq
@@ -820,7 +924,7 @@ lemma ext_of_fromSpecResidueField_eq
   suffices IsDominant (equalizer.ι f g) from
     ext_of_isDominant_of_isSeparated i H' (equalizer.ι f g) (equalizer.condition _ _)
   refine ⟨.mono (fun x hx => ⟨equalizer.lift _ (H _ hx) default, ?_⟩) hS'⟩
-  rw [← Scheme.Hom.comp_apply]; rw [equalizer.lift_ι]; rw [Scheme.fromSpecResidueField_appl
+  rw [← Scheme.Hom.comp_apply]; rw [equalizer.lift_ι]; rw [Scheme.fromSpecResidueField_apply]
 
 Depends on / 依赖: IsDominant, Scheme, Scheme.Hom.comp_apply, Scheme.fromSpecResidueField_apply, comp_apply, condition, equalizer, equalizer.condition, equalizer.lift, equalizer.lift_, ext_of_isDominant_of_isSeparated, fromSpecResidueField_apply
 -/

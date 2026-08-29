@@ -58,7 +58,14 @@ lemma isSMulRegular_of_isRegular
   -- Flatness implies that corresponding map `R ⊗[R] M →ₗ[R] R ⊗[R] M` is injective
   have h := Flat.rTensor_preserves_injective_linearMap (M := M)
 (toSpanSingleton R R r) hr.right
-  -- But precomposing and po
+  -- But precomposing and postcomposing with the isomorphism `M ≃ₗ[R] (R ⊗[R] M)`
+  -- we get a map `M →ₗ[R] M` which is just `(r • ·)`.
+  have h2 : (fun (x : M) => r • x) = ((TensorProduct.lid R M) ∘ₗ
+            (rTensor M (toSpanSingleton R R r)) ∘ₗ
+            (TensorProduct.lid R M).symm) := by ext; simp
+  -- Hence `(r • ·) : M → M` is also injective
+  rw [IsSMulRegular]; rw [h2]
+  simp [h, LinearEquiv.injective]
 
 中文:
 引理 isSMulRegular_of_isRegular
@@ -68,7 +75,14 @@ lemma isSMulRegular_of_isRegular
   -- Flatness implies that corresponding map `R ⊗[R] M →ₗ[R] R ⊗[R] M` is injective
   have h := Flat.rTensor_preserves_injective_linearMap (M := M)
 (toSpanSingleton R R r) hr.right
-  -- But precomposing and po
+  -- But precomposing and postcomposing with the isomorphism `M ≃ₗ[R] (R ⊗[R] M)`
+  -- we get a map `M →ₗ[R] M` which is just `(r • ·)`.
+  have h2 : (fun (x : M) => r • x) = ((TensorProduct.lid R M) ∘ₗ
+            (rTensor M (toSpanSingleton R R r)) ∘ₗ
+            (TensorProduct.lid R M).symm) := by ext; simp
+  -- Hence `(r • ·) : M → M` is also injective
+  rw [IsSMulRegular]; rw [h2]
+  simp [h, LinearEquiv.injective]
 -/
 lemma isSMulRegular_of_isRegular {r : R} (hr : IsRegular r) [Flat R M] :
     IsSMulRegular M r := by
@@ -186,7 +200,24 @@ theorem flat_iff_torsion_eq_bot_of_isBezout
   intro htors
   -- we need to show that if I is an ideal of R then the natural map I ⊗ M → M is injective
   rw [iff_lift_lsmul_comp_subtype_injective]
-  rint
+  rintro I hFG
+  -- If I = 0 this is obvious because I ⊗ M is a subsingleton (i.e. has ≤1 element)
+  obtain (rfl | h) := eq_or_ne I ⊥
+  · rintro x y -
+    apply Subsingleton.elim
+  · -- If I ≠ 0 then I ≅ R because R is Bezout and I is finitely generated
+    have hprinc : I.IsPrincipal := IsBezout.isPrincipal_of_FG I hFG
+    have : IsPrincipal.generator I != 0 := by
+      rwa [ne_eq, ← IsPrincipal.eq_bot_iff_generator_eq_zero]
+    apply Function.Injective.of_comp_right _
+      (LinearEquiv.rTensor M (Ideal.isoBaseOfIsPrincipal h)).surjective
+    rw [← LinearEquiv.coe_toLinearMap]; rw [← LinearMap.coe_comp]; rw [LinearEquiv.coe_rTensor]; rw [rTensor]; rw [lift_comp_map]; rw [LinearMap.compl₂_id]; rw [LinearMap.comp_assoc]; rw [Ideal.subtype_isoBaseOfIsPrincipal_eq_mul]; rw [LinearMap.lift_lsmul_mul_eq_lsmul_lift_lsmul]; rw [LinearMap.coe_comp]
+    rw [← Submodule.isTorsionFree_iff_torsion_eq_bot] at htors
+    refine Function.Injective.comp (LinearMap.lsmul_injective this) ?_
+    rw [← Equiv.injective_comp (TensorProduct.lid R M).symm.toEquiv]
+    convert! Function.injective_id
+    ext
+    simp
 
 中文:
 定理 flat_iff_torsion_eq_bot_of_isBezout
@@ -198,7 +229,24 @@ theorem flat_iff_torsion_eq_bot_of_isBezout
   intro htors
   -- we need to show that if I is an ideal of R then the natural map I ⊗ M → M is injective
   rw [iff_lift_lsmul_comp_subtype_injective]
-  rint
+  rintro I hFG
+  -- If I = 0 this is obvious because I ⊗ M is a subsingleton (i.e. has ≤1 element)
+  obtain (rfl | h) := eq_or_ne I ⊥
+  · rintro x y -
+    apply Subsingleton.elim
+  · -- If I ≠ 0 then I ≅ R because R is Bezout and I is finitely generated
+    have hprinc : I.IsPrincipal := IsBezout.isPrincipal_of_FG I hFG
+    have : IsPrincipal.generator I != 0 := by
+      rwa [ne_eq, ← IsPrincipal.eq_bot_iff_generator_eq_zero]
+    apply Function.Injective.of_comp_right _
+      (LinearEquiv.rTensor M (Ideal.isoBaseOfIsPrincipal h)).surjective
+    rw [← LinearEquiv.coe_toLinearMap]; rw [← LinearMap.coe_comp]; rw [LinearEquiv.coe_rTensor]; rw [rTensor]; rw [lift_comp_map]; rw [LinearMap.compl₂_id]; rw [LinearMap.comp_assoc]; rw [Ideal.subtype_isoBaseOfIsPrincipal_eq_mul]; rw [LinearMap.lift_lsmul_mul_eq_lsmul_lift_lsmul]; rw [LinearMap.coe_comp]
+    rw [← Submodule.isTorsionFree_iff_torsion_eq_bot] at htors
+    refine Function.Injective.comp (LinearMap.lsmul_injective this) ?_
+    rw [← Equiv.injective_comp (TensorProduct.lid R M).symm.toEquiv]
+    convert! Function.injective_id
+    ext
+    simp
 -/
 theorem flat_iff_torsion_eq_bot_of_isBezout [IsBezout R] [IsDomain R] :
     Flat R M ↔ torsion R M = ⊥ := by
@@ -238,7 +286,8 @@ theorem flat_iff_torsion_eq_bot_of_valuationRing_localization_isMaximal
   apply flat_of_localized_maximal
   intro P hP
   rw [← Submodule.isTorsionFree_iff_torsion_eq_bot] at h
-  rw [← flat_iff_of_isLocalization (Localization P.primeCompl) P.primeCompl]; rw [Flat.flat_iff_torsion_eq_bot_of_isBezout]; rw [← Submodule
+  rw [← flat_iff_of_isLocalization (Localization P.primeCompl) P.primeCompl]; rw [Flat.flat_iff_torsion_eq_bot_of_isBezout]; rw [← Submodule.isTorsionFree_iff_torsion_eq_bot]
+  infer_instance
 
 中文:
 定理 flat_iff_torsion_eq_bot_of_valuationRing_localization_isMaximal
@@ -248,7 +297,8 @@ theorem flat_iff_torsion_eq_bot_of_valuationRing_localization_isMaximal
   apply flat_of_localized_maximal
   intro P hP
   rw [← Submodule.isTorsionFree_iff_torsion_eq_bot] at h
-  rw [← flat_iff_of_isLocalization (Localization P.primeCompl) P.primeCompl]; rw [Flat.flat_iff_torsion_eq_bot_of_isBezout]; rw [← Submodule
+  rw [← flat_iff_of_isLocalization (Localization P.primeCompl) P.primeCompl]; rw [Flat.flat_iff_torsion_eq_bot_of_isBezout]; rw [← Submodule.isTorsionFree_iff_torsion_eq_bot]
+  infer_instance
 
 Depends on / 依赖: Flat.flat_iff_torsion_eq_bot_of_isBezout, Flat.torsion_eq_bot, Localization, P.primeCompl, Submodule, Submodule.isTorsionFree_iff_torsion_eq_bot, flat_iff_of_isLocalization, flat_iff_torsion_eq_bot_of_isBezout, flat_of_localized_maximal, infer_instance, isTorsionFree_iff_torsion_eq_bot, primeCompl, torsion_eq_bot
 -/

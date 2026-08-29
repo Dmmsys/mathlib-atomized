@@ -90,7 +90,10 @@ lemma eventuallyEq_log_trailingCoeff_of_meromorphicOrderAt_eq_zero
   congr
   rw [h₁.meromorphicTrailingCoeffAt_fun_sub_eq_sub
     (by fun_prop)]; rw [meromorphicTrailingCoeffAt_const]; rw [sub_eq_add_neg]
- 
+  · simp only [meromorphicOrderAt_const]
+    aesop
+  · simp only [meromorphicTrailingCoeffAt_const, ne_eq]
+    grind
 
 中文:
 引理 eventuallyEq_log_trailingCoeff_of_meromorphicOrderAt_eq_zero
@@ -101,7 +104,10 @@ lemma eventuallyEq_log_trailingCoeff_of_meromorphicOrderAt_eq_zero
   congr
   rw [h₁.meromorphicTrailingCoeffAt_fun_sub_eq_sub
     (by fun_prop)]; rw [meromorphicTrailingCoeffAt_const]; rw [sub_eq_add_neg]
- 
+  · simp only [meromorphicOrderAt_const]
+    aesop
+  · simp only [meromorphicTrailingCoeffAt_const, ne_eq]
+    grind
 -/
 private lemma eventuallyEq_log_trailingCoeff_of_meromorphicOrderAt_eq_zero (h₁ : MeromorphicAt f 0)
     (h₂ : meromorphicOrderAt f 0 = 0) :
@@ -128,7 +134,16 @@ theorem circleIntegrable_log_meromorphicTrailingCoeffAt
       rwa [MeromorphicAt.meromorphicAt_fun_sub_iff_meromorphicAt₂ (by fun_prop)]
     simp_all
   rcases lt_trichotomy (meromorphicOrderAt f 0) 0 with hneg | hzero | hpos
-  · refine (circleIntegrable
+  · refine (circleIntegrable_congr fun a ha => ?_).2 (circleIntegrable_const
+      (log ‖meromorphicTrailingCoeffAt f 0‖) 0 1)
+    rw [(MeromorphicAt.const a 0).meromorphicTrailingCoeffAt_fun_sub_eq_left_of_lt]
+    rw [meromorphicOrderAt_const]
+    aesop
+  · apply CircleIntegrable.congr_codiscreteWithin
+     (eventuallyEq_log_trailingCoeff_of_meromorphicOrderAt_eq_zero (not_not.1 h) hzero)
+    simpa [norm_sub_rev] using circleIntegrable_log_norm_sub_const 1
+  · apply (circleIntegrable_congr _).2 (circleIntegrable_const 0 0 1)
+    exact fun _ => log_trailingCoeff_eq_zero_on_unitSphere hpos
 
 中文:
 定理 circle整数egrable_log_meromorphicTrailingCoeffAt
@@ -138,7 +153,16 @@ theorem circleIntegrable_log_meromorphicTrailingCoeffAt
       rwa [MeromorphicAt.meromorphicAt_fun_sub_iff_meromorphicAt₂ (by fun_prop)]
     simp_all
   rcases lt_trichotomy (meromorphicOrderAt f 0) 0 with hneg | hzero | hpos
-  · refine (circleIntegrable
+  · refine (circleIntegrable_congr fun a ha => ?_).2 (circleIntegrable_const
+      (log ‖meromorphicTrailingCoeffAt f 0‖) 0 1)
+    rw [(MeromorphicAt.const a 0).meromorphicTrailingCoeffAt_fun_sub_eq_left_of_lt]
+    rw [meromorphicOrderAt_const]
+    aesop
+  · apply CircleIntegrable.congr_codiscreteWithin
+     (eventuallyEq_log_trailingCoeff_of_meromorphicOrderAt_eq_zero (not_not.1 h) hzero)
+    simpa [norm_sub_rev] using circleIntegrable_log_norm_sub_const 1
+  · apply (circleIntegrable_congr _).2 (circleIntegrable_const 0 0 1)
+    exact fun _ => log_trailingCoeff_eq_zero_on_unitSphere hpos
 
 Depends on / 依赖: MeromorphicAt, MeromorphicAt.const, MeromorphicAt.meromorphicAt_fun_sub_iff_meromorphicAt, circleIntegrable_congr, circleIntegrable_const, fun_prop, lt_trichotomy, meromorphicOrderAt, meromorphicOrderAt_const, meromorphicTrailingCoeffAt, meromorphicTrailingCoeffAt_fun_sub_eq_left_of_lt
 -/
@@ -189,7 +213,9 @@ theorem circleAverage_log_norm_meromorphicTrailingCoeffAt_of_meromorphicOrderAt_
       (eventuallyEq_log_trailingCoeff_of_meromorphicOrderAt_eq_zero hf h) zero_ne_one.symm]
     simp_rw [norm_sub_rev]
     rw [circleAverage_log_norm_sub_const_eq_posLog]
-  have {a : Complex} : ¬ MeromorphicAt (fun x
+  have {a : Complex} : ¬ MeromorphicAt (fun x => f x - a) 0 := by
+    rwa [MeromorphicAt.meromorphicAt_fun_sub_iff_meromorphicAt₂ (by fun_prop)]
+  simp_all [circleAverage_const]
 
 中文:
 定理 circleAverage_log_norm_meromorphicTrailingCoeffAt_of_meromorphicOrderAt_eq_zero
@@ -199,7 +225,9 @@ theorem circleAverage_log_norm_meromorphicTrailingCoeffAt_of_meromorphicOrderAt_
       (eventuallyEq_log_trailingCoeff_of_meromorphicOrderAt_eq_zero hf h) zero_ne_one.symm]
     simp_rw [norm_sub_rev]
     rw [circleAverage_log_norm_sub_const_eq_posLog]
-  have {a : Complex} : ¬ MeromorphicAt (fun x
+  have {a : Complex} : ¬ MeromorphicAt (fun x => f x - a) 0 := by
+    rwa [MeromorphicAt.meromorphicAt_fun_sub_iff_meromorphicAt₂ (by fun_prop)]
+  simp_all [circleAverage_const]
 
 Depends on / 依赖: MeromorphicAt, MeromorphicAt.meromorphicAt_fun_sub_iff_meromorphicAt, circleAverage_congr_codiscreteWithin, circleAverage_const, circleAverage_log_norm_sub_const_eq_posLog, eventuallyEq_log_trailingCoeff_of_meromorphicOrderAt_eq_zero, fun_prop, norm_sub_rev, simp_rw, zero_ne_one, zero_ne_one.symm
 -/
@@ -264,7 +292,8 @@ lemma logCounting_add_log_trailingCoeff_eq_circleAverage_add_logCounting_top
   have : logCounting f a R - logCounting f ⊤ R = circleAverage (log ‖f · - a‖) 0 R
         - log ‖meromorphicTrailingCoeffAt (f · - a) 0‖ := by
     rw [logCounting_coe_eq_logCounting_sub_const_zero]; rw [← logCounting_sub_const h]
-    exact logCounting_zero_sub_logCounting_top_eq_circleAverage_su
+    exact logCounting_zero_sub_logCounting_top_eq_circleAverage_sub_const (by fun_prop) hR
+  linarith
 
 中文:
 引理 logCounting_add_log_trailingCoeff_eq_circleAverage_add_logCounting_top
@@ -272,7 +301,8 @@ lemma logCounting_add_log_trailingCoeff_eq_circleAverage_add_logCounting_top
   have : logCounting f a R - logCounting f ⊤ R = circleAverage (log ‖f · - a‖) 0 R
         - log ‖meromorphicTrailingCoeffAt (f · - a) 0‖ := by
     rw [logCounting_coe_eq_logCounting_sub_const_zero]; rw [← logCounting_sub_const h]
-    exact logCounting_zero_sub_logCounting_top_eq_circleAverage_su
+    exact logCounting_zero_sub_logCounting_top_eq_circleAverage_sub_const (by fun_prop) hR
+  linarith
 -/
 private lemma logCounting_add_log_trailingCoeff_eq_circleAverage_add_logCounting_top
     (h : Meromorphic f) (hR : R != 0) (a : Complex) :
@@ -297,7 +327,7 @@ theorem circleIntegrable_logCounting
 .sub (circleIntegrable_const (logCounting f ⊤ R) 0 1)
     circleIntegrable_log_meromorphicTrailingCoeffAt
   simpa using eq_sub_of_add_eq
-    (logCounting_add_log
+    (logCounting_add_log_trailingCoeff_eq_circleAverage_add_logCounting_top h hR _)
 
 中文:
 定理 circle整数egrable_logCounting
@@ -309,7 +339,7 @@ theorem circleIntegrable_logCounting
 .sub (circleIntegrable_const (logCounting f ⊤ R) 0 1)
     circleIntegrable_log_meromorphicTrailingCoeffAt
   simpa using eq_sub_of_add_eq
-    (logCounting_add_log
+    (logCounting_add_log_trailingCoeff_eq_circleAverage_add_logCounting_top h hR _)
 
 Depends on / 依赖: ValueDistribution, ValueDistribution.logCounting_eval_zero, circleIntegrable_circleAverage_log_norm_sub, circleIntegrable_const, circleIntegrable_log_meromorphicTrailingCoeffAt, convert, eq_sub_of_add_eq, logCounting, logCounting_add_log_trailingCoeff_eq_circleAverage_add_logCounting_top, logCounting_eval_zero
 -/
@@ -337,7 +367,14 @@ theorem characteristic_top_eq_circleAverage_add_circleAverage
   characteristic f ⊤ R
       = circleAverage (fun a => circleAverage (log ‖f · - a‖) 0 R + logCounting f ⊤ R) 0 1 := by
       simp only [characteristic, proximity, ↓reduceDIte, Pi.add_apply]
-      rw [← proximity_top]; rw [← circleAverage_circleAverage_eq_proximity_top h]; rw [circleAverage_fun
+      rw [← proximity_top]; rw [← circleAverage_circleAverage_eq_proximity_top h]; rw [circleAverage_fun_add (circleIntegrable_circleAverage_log_norm_sub h)
+          (circleIntegrable_const (logCounting f ⊤ R) 0 1)]; rw [circleAverage_const]
+    _ = circleAverage (logCounting f · R) 0 1
+          + circleAverage (fun a => log ‖meromorphicTrailingCoeffAt (f · - a) 0‖) 0 1 := by
+      rw [← circleAverage_add (circleIntegrable_logCounting h)
+        circleIntegrable_log_meromorphicTrailingCoeffAt]; rw [circleAverage_congr_sphere]
+      intro a ha
+      simp [logCounting_add_log_trailingCoeff_eq_circleAverage_add_logCounting_top h hR a]
 
 中文:
 定理 characteristic_top_eq_circleAverage_add_circleAverage
@@ -346,7 +383,14 @@ theorem characteristic_top_eq_circleAverage_add_circleAverage
   characteristic f ⊤ R
       = circleAverage (fun a => circleAverage (log ‖f · - a‖) 0 R + logCounting f ⊤ R) 0 1 := by
       simp only [characteristic, proximity, ↓reduceDIte, Pi.add_apply]
-      rw [← proximity_top]; rw [← circleAverage_circleAverage_eq_proximity_top h]; rw [circleAverage_fun
+      rw [← proximity_top]; rw [← circleAverage_circleAverage_eq_proximity_top h]; rw [circleAverage_fun_add (circleIntegrable_circleAverage_log_norm_sub h)
+          (circleIntegrable_const (logCounting f ⊤ R) 0 1)]; rw [circleAverage_const]
+    _ = circleAverage (logCounting f · R) 0 1
+          + circleAverage (fun a => log ‖meromorphicTrailingCoeffAt (f · - a) 0‖) 0 1 := by
+      rw [← circleAverage_add (circleIntegrable_logCounting h)
+        circleIntegrable_log_meromorphicTrailingCoeffAt]; rw [circleAverage_congr_sphere]
+      intro a ha
+      simp [logCounting_add_log_trailingCoeff_eq_circleAverage_add_logCounting_top h hR a]
 -/
 theorem characteristic_top_eq_circleAverage_add_circleAverage (h : Meromorphic f) (hR : R != 0) :
     characteristic f ⊤ R = circleAverage (logCounting f · R) 0 1

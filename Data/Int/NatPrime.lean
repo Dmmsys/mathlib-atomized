@@ -49,7 +49,9 @@ theorem succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
 have hpn' : p ^ l ∣ n.natAbs := Int.natCast_dvd_natCast.1 Int.dvd_natAbs.2 hpn
   have hpmn' : p ^ (k + l + 1) ∣ m.natAbs * n.natAbs := by
 rw [← Int.natAbs_mul]; apply Int.natCast_dvd_natCast.1 Int.dvd_natAbs.2 hpmn
-  let 
+  let hsd := Nat.succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul p_prime hpm' hpn' hpmn'
+  hsd.elim (fun hsd1 => Or.inl (by apply Int.dvd_natAbs.1; apply Int.natCast_dvd_natCast.2 hsd1))
+    fun hsd2 => Or.inr (by apply Int.dvd_natAbs.1; apply Int.natCast_dvd_natCast.2 hsd2)
 
 中文:
 定理 succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
@@ -58,7 +60,9 @@ rw [← Int.natAbs_mul]; apply Int.natCast_dvd_natCast.1 Int.dvd_natAbs.2 hpmn
 have hpn' : p ^ l ∣ n.natAbs := Int.natCast_dvd_natCast.1 Int.dvd_natAbs.2 hpn
   have hpmn' : p ^ (k + l + 1) ∣ m.natAbs * n.natAbs := by
 rw [← Int.natAbs_mul]; apply Int.natCast_dvd_natCast.1 Int.dvd_natAbs.2 hpmn
-  let 
+  let hsd := Nat.succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul p_prime hpm' hpn' hpmn'
+  hsd.elim (fun hsd1 => Or.inl (by apply Int.dvd_natAbs.1; apply Int.natCast_dvd_natCast.2 hsd1))
+    fun hsd2 => Or.inr (by apply Int.dvd_natAbs.1; apply Int.natCast_dvd_natCast.2 hsd2)
 
 Depends on / 依赖: Int.dvd_natAbs, Int.natAbs_mul, Int.natCast_dvd_natCast, Nat.succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul, Or.inl, Or.inr, dvd_natAbs, hsd.elim, m.natAbs, n.natAbs, natAbs, natAbs_mul, natCast_dvd_natCast, p_prime, succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
 -/

@@ -496,7 +496,7 @@ lemma HomologyData.exact_iff_i_p_zero
     rw [IsZero.eq_of_src z h.iso.hom 0]; rw [zero_comp]; rw [comp_zero]
   · intro eq
     simp only [IsZero.iff_id_eq_zero, ← cancel_mono h.iso.hom, id_comp, ← cancel_mono h.right.ι,
-      ← cancel_epi h.l
+      ← cancel_epi h.left.π, eq, zero_comp, comp_zero]
 
 中文:
 引理 同调数据.exact_iff_i_p_zero
@@ -509,7 +509,7 @@ lemma HomologyData.exact_iff_i_p_zero
     rw [IsZero.eq_of_src z h.iso.hom 0]; rw [zero_comp]; rw [comp_zero]
   · intro eq
     simp only [IsZero.iff_id_eq_zero, ← cancel_mono h.iso.hom, id_comp, ← cancel_mono h.right.ι,
-      ← cancel_epi h.l
+      ← cancel_epi h.left.π, eq, zero_comp, comp_zero]
 
 Depends on / 依赖: HasHomology, HasHomology.mk, IsZero, IsZero.eq_of_src, IsZero.iff_id_eq_zero, cancel_epi, cancel_mono, comp_zero, eq_of_src, exact_iff, h.comm, h.iso.hom, h.left, h.left.exact_iff, h.right, id_comp, iff_id_eq_zero, zero_comp
 -/
@@ -833,7 +833,7 @@ lemma exact_map_iff_of_faithful
     apply F.map_injective
     rw [F.map_id]; rw [F.map_zero]; rw [h]
   · intro h
-    exact h.map 
+    exact h.map F
 
 中文:
 引理 exact_map_iff_of_faithful
@@ -846,7 +846,7 @@ lemma exact_map_iff_of_faithful
     apply F.map_injective
     rw [F.map_id]; rw [F.map_zero]; rw [h]
   · intro h
-    exact h.map 
+    exact h.map F
 
 Depends on / 依赖: F.map_id, F.map_injective, F.map_zero, IsZero, IsZero.iff_id_eq_zero, LeftHomologyData, LeftHomologyData.map_H, S.leftHomologyData.exact_iff, S.leftHomologyData.map, exact_iff, h.map, iff_id_eq_zero, leftHomologyData, map_H, map_id, map_injective, map_zero
 -/
@@ -957,7 +957,9 @@ lemma exact_iff_mono
     apply mono_comp
   · intro
     rw [(HomologyData.ofIsLimitKernelFork S hf _
-
+      (KernelFork.IsLimit.ofMonoOfIsZero (KernelFork.ofι (0 : 0 ⟶ S.X₂) zero_comp)
+        inferInstance (isZero_zero C))).exact_iff]
+    exact isZero_zero C
 
 中文:
 引理 exact_iff_mono
@@ -973,7 +975,9 @@ lemma exact_iff_mono
     apply mono_comp
   · intro
     rw [(HomologyData.ofIsLimitKernelFork S hf _
-
+      (KernelFork.IsLimit.ofMonoOfIsZero (KernelFork.ofι (0 : 0 ⟶ S.X₂) zero_comp)
+        inferInstance (isZero_zero C))).exact_iff]
+    exact isZero_zero C
 
 Depends on / 依赖: HomologyData, HomologyData.ofIsLimitKernelFork, IsLimit, KernelFork, KernelFork.IsLimit.ofMonoOfIsZero, KernelFork.of, S.homologyIsKernel, S.isIso_pOpcycles, S.p_fromOpcycles, exact_iff, exact_iff_isZero_homology, h.hasHomology, hasHomology, homologyIsKernel, isIso_pOpcycles, isZero_zero, mono_comp, mono_of_isZero_kernel, ofIsLimitKernelFork, ofMonoOfIsZero
 -/
@@ -1009,7 +1013,10 @@ lemma exact_iff_epi
     rw [← S.toCycles_i]
     apply epi_comp
   · intro
-    rw [(HomologyData.ofIsColimitCok
+    rw [(HomologyData.ofIsColimitCokernelCofork S hg _
+      (CokernelCofork.IsColimit.ofEpiOfIsZero (CokernelCofork.ofπ (0 : S.X₂ ⟶ 0) comp_zero)
+        inferInstance (isZero_zero C))).exact_iff]
+    exact isZero_zero C
 
 中文:
 引理 exact_iff_epi
@@ -1024,7 +1031,10 @@ lemma exact_iff_epi
     rw [← S.toCycles_i]
     apply epi_comp
   · intro
-    rw [(HomologyData.ofIsColimitCok
+    rw [(HomologyData.ofIsColimitCokernelCofork S hg _
+      (CokernelCofork.IsColimit.ofEpiOfIsZero (CokernelCofork.ofπ (0 : S.X₂ ⟶ 0) comp_zero)
+        inferInstance (isZero_zero C))).exact_iff]
+    exact isZero_zero C
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.ofEpiOfIsZero, CokernelCofork.of, HomologyData, HomologyData.ofIsColimitCokernelCofork, IsColimit, S.homologyIsCokernel, S.isIso_iCycles, S.toCycles, S.toCycles_i, comp_zero, epi_comp, epi_of_isZero_cokernel, exact_iff, exact_iff_isZero_homology, h.hasHomology, hasHomology, homologyIsCokernel, isIso_iCycles, isZero_zero
 -/
@@ -1237,7 +1247,11 @@ definition Exact.leftHomologyDataOfIsLimitKernelFork
   hπ := CokernelCofork.IsColimit.ofEpiOfIsZero _ (by
     have := hS.hasHomology
     refine ((MorphismProperty.epimorphisms C).arrow_mk_iso_iff ?_).1
-      hS.ep
+      hS.epi_toCycles
+    refine Arrow.isoMk (Iso.refl _)
+      (IsLimit.conePointUniqueUpToIso S.cyclesIsKernel hkf) ?_
+    apply Fork.IsLimit.hom_ext hkf
+    simp [IsLimit.conePointUniqueUpToIso]) (isZero_zero C)
 
 中文:
 定义 正合.leftHomologyDataOfIsLimitKernelFork
@@ -1251,7 +1265,11 @@ definition Exact.leftHomologyDataOfIsLimitKernelFork
   hπ := CokernelCofork.IsColimit.ofEpiOfIsZero _ (by
     have := hS.hasHomology
     refine ((MorphismProperty.epimorphisms C).arrow_mk_iso_iff ?_).1
-      hS.ep
+      hS.epi_toCycles
+    refine Arrow.isoMk (Iso.refl _)
+      (IsLimit.conePointUniqueUpToIso S.cyclesIsKernel hkf) ?_
+    apply Fork.IsLimit.hom_ext hkf
+    simp [IsLimit.conePointUniqueUpToIso]) (isZero_zero C)
 
 Depends on / 依赖: kf.pt
 -/
@@ -1294,7 +1312,11 @@ definition Exact.rightHomologyDataOfIsColimitCokernelCofork
   hι := KernelFork.IsLimit.ofMonoOfIsZero _ (by
     have := hS.hasHomology
     refine ((MorphismProperty.monomorphisms C).arrow_mk_iso_iff ?_).2
-      hS.
+      hS.mono_fromOpcycles
+    refine Arrow.isoMk (IsColimit.coconePointUniqueUpToIso hcc S.opcyclesIsCokernel)
+      (Iso.refl _) ?_
+    apply Cofork.IsColimit.hom_ext hcc
+    simp [IsColimit.coconePointUniqueUpToIso]) (isZero_zero C)
 
 中文:
 定义 正合.rightHomologyDataOfIsColimitCokernelCofork
@@ -1308,7 +1330,11 @@ definition Exact.rightHomologyDataOfIsColimitCokernelCofork
   hι := KernelFork.IsLimit.ofMonoOfIsZero _ (by
     have := hS.hasHomology
     refine ((MorphismProperty.monomorphisms C).arrow_mk_iso_iff ?_).2
-      hS.
+      hS.mono_fromOpcycles
+    refine Arrow.isoMk (IsColimit.coconePointUniqueUpToIso hcc S.opcyclesIsCokernel)
+      (Iso.refl _) ?_
+    apply Cofork.IsColimit.hom_ext hcc
+    simp [IsColimit.coconePointUniqueUpToIso]) (isZero_zero C)
 
 Depends on / 依赖: cc.pt
 -/
@@ -1545,7 +1571,7 @@ lemma exact_of_g_is_cokernel
         id := by
           rw [← cancel_epi S.pOpcycles]; rw [p_fromOpcycles_assoc]; rw [comp_id]
           exact Cofork.IsColimit.π_desc hS }⟩⟩
- 
+  infer_instance
 
 中文:
 引理 exact_of_g_is_cokernel
@@ -1557,7 +1583,7 @@ lemma exact_of_g_is_cokernel
         id := by
           rw [← cancel_epi S.pOpcycles]; rw [p_fromOpcycles_assoc]; rw [comp_id]
           exact Cofork.IsColimit.π_desc hS }⟩⟩
- 
+  infer_instance
 
 Depends on / 依赖: Cofork, Cofork.IsColimit, CokernelCofork, CokernelCofork.of, IsColimit, IsSplitMono, S.f_pOpcycles, S.fromOpcycles, S.pOpcycles, cancel_epi, comp_id, exact_iff_mono_fromOpcycles, f_pOpcycles, fromOpcycles, hS.desc, infer_instance, pOpcycles, p_fromOpcycles_assoc, retraction
 -/
@@ -2091,7 +2117,19 @@ definition leftHomologyData
       sub_eq_self, reassoc_of% hx, zero_comp])
     (fun x _ b hb => by simp only [← hb, assoc, f_r, comp_id])
   let f' := hi.lift (KernelFork.ofι S.f S.zero)
-  h
+  have hf' : f' = 𝟙 _ := by simp [f']
+  have wπ : f' ≫ (0 : S.X₁ ⟶ 0) = 0 := comp_zero
+  have hπ : IsColimit (CokernelCofork.ofπ 0 wπ) := CokernelCofork.IsColimit.ofEpiOfIsZero _
+      (by rw [hf']; infer_instance) (isZero_zero _)
+  exact
+    { K := S.X₁
+      H := 0
+      i := S.f
+      wi := S.zero
+      hi := hi
+      π := 0
+      wπ := wπ
+      hπ := hπ }
 
 中文:
 定义 leftHomologyData
@@ -2103,7 +2141,19 @@ definition leftHomologyData
       sub_eq_self, reassoc_of% hx, zero_comp])
     (fun x _ b hb => by simp only [← hb, assoc, f_r, comp_id])
   let f' := hi.lift (KernelFork.ofι S.f S.zero)
-  h
+  have hf' : f' = 𝟙 _ := by simp [f']
+  have wπ : f' ≫ (0 : S.X₁ ⟶ 0) = 0 := comp_zero
+  have hπ : IsColimit (CokernelCofork.ofπ 0 wπ) := CokernelCofork.IsColimit.ofEpiOfIsZero _
+      (by rw [hf']; infer_instance) (isZero_zero _)
+  exact
+    { K := S.X₁
+      H := 0
+      i := S.f
+      wi := S.zero
+      hi := hi
+      π := 0
+      wπ := wπ
+      hπ := hπ }
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.ofEpiOfIsZero, CokernelCofork.of, IsColimit, IsLimit, KernelFork, KernelFork.IsLimit.of, KernelFork.of, S.zero, ShortComplex, ShortComplex.exact_iff_mono_cokernel_desc, X.exact, comp_id, comp_sub, comp_zero, exact_iff_mono_cokernel_desc, hi.lift, infer_instance, isZero_zero, ofEpiOfIsZero
 -/
@@ -2144,7 +2194,19 @@ definition rightHomologyData
     (fun x hx => by simp only [s.g_s_assoc, sub_comp, id_comp, sub_eq_self, assoc, hx, comp_zero])
     (fun x _ b hb => by simp only [← hb, s.s_g_assoc])
   let g' := hp.desc (CokernelCofork.ofπ S.g S.zero)
-  have hg' : 
+  have hg' : g' = 𝟙 _ := by simp [g']
+  have wι : (0 : 0 ⟶ S.X₃) ≫ g' = 0 := zero_comp
+  have hι : IsLimit (KernelFork.ofι 0 wι) := KernelFork.IsLimit.ofMonoOfIsZero _
+      (by rw [hg']; dsimp; infer_instance) (isZero_zero _)
+  exact
+    { Q := S.X₃
+      H := 0
+      p := S.g
+      wp := S.zero
+      hp := hp
+      ι := 0
+      wι := wι
+      hι := hι }
 
 中文:
 定义 rightHomologyData
@@ -2155,7 +2217,19 @@ definition rightHomologyData
     (fun x hx => by simp only [s.g_s_assoc, sub_comp, id_comp, sub_eq_self, assoc, hx, comp_zero])
     (fun x _ b hb => by simp only [← hb, s.s_g_assoc])
   let g' := hp.desc (CokernelCofork.ofπ S.g S.zero)
-  have hg' : 
+  have hg' : g' = 𝟙 _ := by simp [g']
+  have wι : (0 : 0 ⟶ S.X₃) ≫ g' = 0 := zero_comp
+  have hι : IsLimit (KernelFork.ofι 0 wι) := KernelFork.IsLimit.ofMonoOfIsZero _
+      (by rw [hg']; dsimp; infer_instance) (isZero_zero _)
+  exact
+    { Q := S.X₃
+      H := 0
+      p := S.g
+      wp := S.zero
+      hp := hp
+      ι := 0
+      wι := wι
+      hι := hι }
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.of, CokernelCofork.of, IsColimit, IsLimit, KernelFork, KernelFork.IsLimit.ofMonoOfIsZero, KernelFork.of, S.zero, comp_zero, g_s_assoc, hp.desc, id_comp, infer_instance, isZero_zero, ofMonoOfIsZero, s.g_s_assoc, s.s_g_assoc, s_g_assoc, sub_comp
 -/
@@ -2285,7 +2359,7 @@ definition map
     simp only [← F.map_comp, s_g, F.map_id]
   id := by
     dsimp [ShortComplex.map]
-    simp only [← F.map_id, ← s.id, Functor.map_comp, Functor
+    simp only [← F.map_id, ← s.id, Functor.map_comp, Functor.map_add]
 
 中文:
 定义 map
@@ -2300,7 +2374,7 @@ definition map
     simp only [← F.map_comp, s_g, F.map_id]
   id := by
     dsimp [ShortComplex.map]
-    simp only [← F.map_id, ← s.id, Functor.map_comp, Functor
+    simp only [← F.map_id, ← s.id, Functor.map_comp, Functor.map_add]
 
 Depends on / 依赖: F.map
 -/
@@ -2331,7 +2405,8 @@ definition ofIso
   s_g := by rw [assoc, assoc, e.hom.comm₂₃, s.s_g_assoc, ← comp_τ₃, e.inv_hom_id, id_τ₃]
   id := by
     have eq := e.inv.τ₂ ≫= s.id =≫ e.hom.τ₂
-    rw [id_com
+    rw [id_comp]; rw [← comp_τ₂]; rw [e.inv_hom_id]; rw [id_τ₂] at eq
+    rw [← eq]; rw [assoc]; rw [assoc]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [comp_add]; rw [e.hom.comm₁₂]; rw [e.inv.comm₂₃_assoc]
 
 中文:
 定义 ofIso
@@ -2342,7 +2417,8 @@ definition ofIso
   s_g := by rw [assoc, assoc, e.hom.comm₂₃, s.s_g_assoc, ← comp_τ₃, e.inv_hom_id, id_τ₃]
   id := by
     have eq := e.inv.τ₂ ≫= s.id =≫ e.hom.τ₂
-    rw [id_com
+    rw [id_comp]; rw [← comp_τ₂]; rw [e.inv_hom_id]; rw [id_τ₂] at eq
+    rw [← eq]; rw [assoc]; rw [assoc]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [comp_add]; rw [e.hom.comm₁₂]; rw [e.inv.comm₂₃_assoc]
 
 Depends on / 依赖: e.hom, e.inv, infer_instance
 -/
@@ -2879,7 +2955,8 @@ lemma mono_τ₂_of_exact_of_mono
   obtain ⟨x₁, hx₁⟩ : exists x₁, x₁ ≫ S₁.f = x₂ := ⟨_, h₁.lift_f x₂
     (by simp only [← cancel_mono φ.τ₃, assoc, zero_comp, ← φ.comm₂₃, reassoc_of% hx₂])⟩
   suffices x₁ = 0 by rw [← hx₁, this, zero_comp]
-  simp only [← cancel_mono φ.τ₁, ← cancel_mono S
+  simp only [← cancel_mono φ.τ₁, ← cancel_mono S₂.f, assoc, φ.comm₁₂, zero_comp,
+    reassoc_of% hx₁, hx₂]
 
 中文:
 引理 mono_τ₂_of_exact_of_mono
@@ -2890,7 +2967,8 @@ lemma mono_τ₂_of_exact_of_mono
   obtain ⟨x₁, hx₁⟩ : exists x₁, x₁ ≫ S₁.f = x₂ := ⟨_, h₁.lift_f x₂
     (by simp only [← cancel_mono φ.τ₃, assoc, zero_comp, ← φ.comm₂₃, reassoc_of% hx₂])⟩
   suffices x₁ = 0 by rw [← hx₁, this, zero_comp]
-  simp only [← cancel_mono φ.τ₁, ← cancel_mono S
+  simp only [← cancel_mono φ.τ₁, ← cancel_mono S₂.f, assoc, φ.comm₁₂, zero_comp,
+    reassoc_of% hx₁, hx₂]
 
 Depends on / 依赖: cancel_mono, lift_f, mono_iff_cancel_zero, reassoc_of, zero_comp
 -/
@@ -2919,7 +2997,7 @@ lemma epi_τ₂_of_exact_of_epi
   have : Mono (opMap φ).τ₁ := by dsimp; infer_instance
   have : Mono (opMap φ).τ₃ := by dsimp; infer_instance
   have := mono_τ₂_of_exact_of_mono (opMap φ) h₂.op
-  exact unop_epi_of_mono (opMap φ).τ
+  exact unop_epi_of_mono (opMap φ).τ₂
 
 中文:
 引理 epi_τ₂_of_exact_of_epi
@@ -2930,7 +3008,7 @@ lemma epi_τ₂_of_exact_of_epi
   have : Mono (opMap φ).τ₁ := by dsimp; infer_instance
   have : Mono (opMap φ).τ₃ := by dsimp; infer_instance
   have := mono_τ₂_of_exact_of_mono (opMap φ) h₂.op
-  exact unop_epi_of_mono (opMap φ).τ
+  exact unop_epi_of_mono (opMap φ).τ₂
 
 Depends on / 依赖: infer_instance, op.f, unop_epi_of_mono
 -/
@@ -3166,7 +3244,12 @@ lemma quasiIso_iff_of_zeros
       apply mono_comp
     refine ⟨?_, this⟩
     apply exact_of_f_is_kernel
-    exact IsLimit.o
+    exact IsLimit.ofIsoLimit S₂.cyclesIsKernel
+      (Fork.ext (asIso (S₂.liftCycles φ.τ₂ w)).symm (by simp))
+  · rintro ⟨h₁, h₂⟩
+    refine ⟨⟨h₁.lift S₂.iCycles (by simp), ?_, ?_⟩⟩
+    · rw [← cancel_mono φ.τ₂, assoc, h₁.lift_f, liftCycles_i, id_comp]
+    · rw [← cancel_mono S₂.iCycles, assoc, liftCycles_i, h₁.lift_f, id_comp]
 
 中文:
 引理 quasiIso_iff_of_zeros
@@ -3181,7 +3264,12 @@ lemma quasiIso_iff_of_zeros
       apply mono_comp
     refine ⟨?_, this⟩
     apply exact_of_f_is_kernel
-    exact IsLimit.o
+    exact IsLimit.ofIsoLimit S₂.cyclesIsKernel
+      (Fork.ext (asIso (S₂.liftCycles φ.τ₂ w)).symm (by simp))
+  · rintro ⟨h₁, h₂⟩
+    refine ⟨⟨h₁.lift S₂.iCycles (by simp), ?_, ?_⟩⟩
+    · rw [← cancel_mono φ.τ₂, assoc, h₁.lift_f, liftCycles_i, id_comp]
+    · rw [← cancel_mono S₂.iCycles, assoc, liftCycles_i, h₁.lift_f, id_comp]
 
 Depends on / 依赖: Fork.ext, IsLimit, IsLimit.ofIsoLimit, cancel_mon, cancel_mono, cyclesIsKernel, exact_of_f_is_kernel, iCycles, id_comp, liftCycles, liftCycles_i, lift_f, mono_comp, ofIsoLimit, quasiIso_iff_isIso_liftCycles, zero_comp
 -/
@@ -3224,7 +3312,8 @@ lemma quasiIso_iff_of_zeros'
     rw [hg₁]; rw [op_zero]
   rw [← exact_unop_iff]
   have : Mono φ.τ₂.op ↔ Epi φ.τ₂ :=
-    ⟨fun _ => unop_epi_of_mono φ.τ₂.op, fun _ => op_mono
+    ⟨fun _ => unop_epi_of_mono φ.τ₂.op, fun _ => op_mono_of_epi _⟩
+  tauto
 
 中文:
 引理 quasiIso_iff_of_zeros'
@@ -3240,7 +3329,8 @@ lemma quasiIso_iff_of_zeros'
     rw [hg₁]; rw [op_zero]
   rw [← exact_unop_iff]
   have : Mono φ.τ₂.op ↔ Epi φ.τ₂ :=
-    ⟨fun _ => unop_epi_of_mono φ.τ₂.op, fun _ => op_mono
+    ⟨fun _ => unop_epi_of_mono φ.τ₂.op, fun _ => op_mono_of_epi _⟩
+  tauto
 
 Depends on / 依赖: exact_unop_iff, op_mono_of_epi, op_zero, quasiIso_iff_of_zeros, quasiIso_opMap_iff, rotate_left, unop_epi_of_mono
 -/

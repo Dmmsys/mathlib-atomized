@@ -607,7 +607,9 @@ lemma nhdsKer_prod
   _ = ⋃ (p in s ×ˢ t), nhdsKer {p.1} ×ˢ nhdsKer {p.2} := by
     congr! with ⟨x, y⟩ _; rw [nhdsKer_pair]
   _ = (⋃ x in s, nhdsKer {x}) ×ˢ (⋃ y in t, nhdsKer {y}) :=
-    biUnion_prod s t
+    biUnion_prod s t (fun x => nhdsKer {x}) (fun y => nhdsKer {y})
+  _ = nhdsKer s ×ˢ nhdsKer t := by
+    simp_rw [← nhdsKer_biUnion, biUnion_of_singleton]
 
 中文:
 引理 nhdsKer_prod
@@ -618,7 +620,9 @@ lemma nhdsKer_prod
   _ = ⋃ (p in s ×ˢ t), nhdsKer {p.1} ×ˢ nhdsKer {p.2} := by
     congr! with ⟨x, y⟩ _; rw [nhdsKer_pair]
   _ = (⋃ x in s, nhdsKer {x}) ×ˢ (⋃ y in t, nhdsKer {y}) :=
-    biUnion_prod s t
+    biUnion_prod s t (fun x => nhdsKer {x}) (fun y => nhdsKer {y})
+  _ = nhdsKer s ×ˢ nhdsKer t := by
+    simp_rw [← nhdsKer_biUnion, biUnion_of_singleton]
 -/
 lemma nhdsKer_prod {Y : Type*} [TopologicalSpace Y] (s : Set X) (t : Set Y) :
     nhdsKer (s ×ˢ t) = nhdsKer s ×ˢ nhdsKer t := calc
@@ -664,7 +668,9 @@ lemma nhdsKer_pi
   _ = ⋃ (p in univ.pi s), univ.pi fun i => nhdsKer {p i} := by
     congr! with p _; rw [nhdsKer_singleton_pi]
   _ = univ.pi fun i => ⋃ x in s i, nhdsKer {x} :=
-    biUnion_univ_p
+    biUnion_univ_pi s fun i x => nhdsKer {x}
+  _ = univ.pi (fun i => nhdsKer (s i)) := by
+    simp_rw [← nhdsKer_biUnion, biUnion_of_singleton]
 
 中文:
 引理 nhdsKer_pi
@@ -675,7 +681,9 @@ lemma nhdsKer_pi
   _ = ⋃ (p in univ.pi s), univ.pi fun i => nhdsKer {p i} := by
     congr! with p _; rw [nhdsKer_singleton_pi]
   _ = univ.pi fun i => ⋃ x in s i, nhdsKer {x} :=
-    biUnion_univ_p
+    biUnion_univ_pi s fun i x => nhdsKer {x}
+  _ = univ.pi (fun i => nhdsKer (s i)) := by
+    simp_rw [← nhdsKer_biUnion, biUnion_of_singleton]
 -/
 lemma nhdsKer_pi {ι : Type*} {X : ι -> Type*} [Π (i : ι), TopologicalSpace (X i)]
     (s : Π (i : ι), Set (X i)) : nhdsKer (univ.pi s) = univ.pi (fun i => nhdsKer (s i)) := calc

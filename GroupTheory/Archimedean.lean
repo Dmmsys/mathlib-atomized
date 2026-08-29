@@ -60,7 +60,12 @@ theorem Subgroup.cyclic_of_min
   have h_zero : g / (a ^ k) = 1 := by
     by_contra h
     have h : a <= g / (a ^ k) := by
-      refine a_min 
+      refine a_min ⟨?_, ?_⟩
+      · exact Subgroup.div_mem H g_in (Subgroup.zpow_mem H a_in k)
+      · exact lt_of_le_of_ne (by simpa using nonneg) (Ne.symm h)
+    have h' : ¬a <= g / (a ^ k) := not_le.mpr (by simpa [zpow_add_one, div_lt_iff_lt_mul'] using lt)
+    contradiction
+  simp [div_eq_one.mp h_zero, mem_closure_singleton]
 
 中文:
 定理 子群.cyclic_of_min
@@ -73,7 +78,12 @@ theorem Subgroup.cyclic_of_min
   have h_zero : g / (a ^ k) = 1 := by
     by_contra h
     have h : a <= g / (a ^ k) := by
-      refine a_min 
+      refine a_min ⟨?_, ?_⟩
+      · exact Subgroup.div_mem H g_in (Subgroup.zpow_mem H a_in k)
+      · exact lt_of_le_of_ne (by simpa using nonneg) (Ne.symm h)
+    have h' : ¬a <= g / (a ^ k) := not_le.mpr (by simpa [zpow_add_one, div_lt_iff_lt_mul'] using lt)
+    contradiction
+  simp [div_eq_one.mp h_zero, mem_closure_singleton]
 
 Depends on / 依赖: H.closure_le.mpr, Ne.symm, Subgroup, Subgroup.div_mem, Subgroup.zpow_mem, a_in, a_min, a_pos, closure_le, div_lt_iff_lt_mul, div_mem, existsUnique_zpow_near_of_one_lt, g_in, h_zero, le_antisymm, lt_of_le_of_ne, nonneg, not_le, not_le.mpr, zpow_add_one
 -/
@@ -110,7 +120,28 @@ theorem Subgroup.exists_isLeast_one_lt
   have hex : forall g > 1, exists n : Nat, g in Ioc (a ^ n) (a ^ (n + 1)) := fun g hg => by
     rcases existsUnique_mul_zpow_mem_Ico h₀ 1 (g / a) with ⟨m, ⟨hm, hm'⟩, -⟩
     simp only [one_mul, div_le_iff_le_mul, div_mul_cancel, ← zpow_add_one] at hm hm'
-    lift m to N
+    lift m to Nat
+    · rw [← Int.lt_add_one_iff, ← zpow_lt_zpow_iff_right h₀, zpow_zero]
+      exact hg.trans_le hm
+    · simp only [← Nat.cast_succ, zpow_natCast] at hm hm'
+      exact ⟨m, hm', hm⟩
+  have : exists n : Nat, Set.Nonempty (H inter Ioc (a ^ n) (a ^ (n + 1))) := by
+    rcases (bot_or_exists_ne_one H).resolve_left hbot with ⟨g, hgH, hg₀⟩
+    rcases hex |g|ₘ (one_lt_mabs.2 hg₀) with ⟨n, hn⟩
+    exact ⟨n, _, (@mabs_mem_iff (Subgroup G) G _ _).2 hgH, hn⟩
+  classical rcases Nat.findX this with ⟨n, ⟨x, hxH, hnx, hxn⟩, hmin⟩
+  by_contra hxmin
+  simp only [IsLeast, not_and, mem_ofPred_eq, mem_lowerBounds, not_exists, not_forall,
+    not_le] at hxmin
+  rcases hxmin x ⟨hxH, (one_le_pow_of_one_le' h₀.le _).trans_lt hnx⟩ with ⟨y, ⟨hyH, hy₀⟩, hxy⟩
+  obtain ⟨m, hm, hya⟩ := hex y hy₀
+  rcases lt_or_ge m n with hmn | hnm
+  · exact hmin m hmn ⟨y, hyH, hm, hya⟩
+  · refine disjoint_left.1 hd (div_mem hxH hyH) ⟨one_lt_div'.2 hxy, div_lt_iff_lt_mul'.2 ?_⟩
+    calc x <= a ^ (n + 1) := hxn
+    _ <= a ^ (m + 1) := by grw [hnm]; exact h₀.le
+    _ = a ^ m * a := pow_succ _ _
+    _ < y * a := by gcongr
 
 中文:
 定理 子群.存在_isLeast_one_lt
@@ -120,7 +151,28 @@ theorem Subgroup.exists_isLeast_one_lt
   have hex : forall g > 1, exists n : Nat, g in Ioc (a ^ n) (a ^ (n + 1)) := fun g hg => by
     rcases existsUnique_mul_zpow_mem_Ico h₀ 1 (g / a) with ⟨m, ⟨hm, hm'⟩, -⟩
     simp only [one_mul, div_le_iff_le_mul, div_mul_cancel, ← zpow_add_one] at hm hm'
-    lift m to N
+    lift m to Nat
+    · rw [← Int.lt_add_one_iff, ← zpow_lt_zpow_iff_right h₀, zpow_zero]
+      exact hg.trans_le hm
+    · simp only [← Nat.cast_succ, zpow_natCast] at hm hm'
+      exact ⟨m, hm', hm⟩
+  have : exists n : Nat, Set.Nonempty (H inter Ioc (a ^ n) (a ^ (n + 1))) := by
+    rcases (bot_or_exists_ne_one H).resolve_left hbot with ⟨g, hgH, hg₀⟩
+    rcases hex |g|ₘ (one_lt_mabs.2 hg₀) with ⟨n, hn⟩
+    exact ⟨n, _, (@mabs_mem_iff (Subgroup G) G _ _).2 hgH, hn⟩
+  classical rcases Nat.findX this with ⟨n, ⟨x, hxH, hnx, hxn⟩, hmin⟩
+  by_contra hxmin
+  simp only [IsLeast, not_and, mem_ofPred_eq, mem_lowerBounds, not_exists, not_forall,
+    not_le] at hxmin
+  rcases hxmin x ⟨hxH, (one_le_pow_of_one_le' h₀.le _).trans_lt hnx⟩ with ⟨y, ⟨hyH, hy₀⟩, hxy⟩
+  obtain ⟨m, hm, hya⟩ := hex y hy₀
+  rcases lt_or_ge m n with hmn | hnm
+  · exact hmin m hmn ⟨y, hyH, hm, hya⟩
+  · refine disjoint_left.1 hd (div_mem hxH hyH) ⟨one_lt_div'.2 hxy, div_lt_iff_lt_mul'.2 ?_⟩
+    calc x <= a ^ (n + 1) := hxn
+    _ <= a ^ (m + 1) := by grw [hnm]; exact h₀.le
+    _ = a ^ m * a := pow_succ _ _
+    _ < y * a := by gcongr
 -/
 theorem Subgroup.exists_isLeast_one_lt {H : Subgroup G} (hbot : H != ⊥) {a : G} (h₀ : 1 < a)
     (hd : Disjoint (H : Set G) (Ioo 1 a)) : exists b, IsLeast { g : G | g in H ∧ 1 < g } b := by

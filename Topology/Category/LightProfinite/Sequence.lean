@@ -58,7 +58,12 @@ lemma isClosedEmbedding_natUnionInftyEmbedding
     · rfl
     · simp only [natUnionInftyEmbedding, one_div, ContinuousMap.coe_mk, zero_eq_inv] at h
       assumption_mod_cast
-    · simp only [natUnionInftyEmbedding, one_div, Co
+    · simp only [natUnionInftyEmbedding, one_div, ContinuousMap.coe_mk, inv_eq_zero] at h
+      assumption_mod_cast
+    · simp only [natUnionInftyEmbedding, one_div, ContinuousMap.coe_mk, inv_inj, add_left_inj,
+        Nat.cast_inj] at h
+      rw [h]
+  · exact fun _ hC => (hC.isCompact.image natUnionInftyEmbedding.continuous).isClosed
 
 中文:
 引理 isClosedEmbedding_natUnionInftyEmbedding
@@ -70,7 +75,12 @@ lemma isClosedEmbedding_natUnionInftyEmbedding
     · rfl
     · simp only [natUnionInftyEmbedding, one_div, ContinuousMap.coe_mk, zero_eq_inv] at h
       assumption_mod_cast
-    · simp only [natUnionInftyEmbedding, one_div, Co
+    · simp only [natUnionInftyEmbedding, one_div, ContinuousMap.coe_mk, inv_eq_zero] at h
+      assumption_mod_cast
+    · simp only [natUnionInftyEmbedding, one_div, ContinuousMap.coe_mk, inv_inj, add_left_inj,
+        Nat.cast_inj] at h
+      rw [h]
+  · exact fun _ hC => (hC.isCompact.image natUnionInftyEmbedding.continuous).isClosed
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, Nat.cast_inj, add_left_inj, assumption_mod_cast, cast_inj, coe_mk, continuous, hC.isCompact.image, inv_eq_zero, inv_inj, isCompact, natUnionInf, natUnionInftyEmbedding, natUnionInftyEmbedding.continuous, of_continuous_injective_isClosedMap, one_div, zero_eq_inv
 -/

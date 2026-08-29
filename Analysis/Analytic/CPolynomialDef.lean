@@ -766,7 +766,8 @@ theorem HasFiniteFPowerSeriesOnBall.bound_zero_of_eq_zero
     rw [hf (x + y)]
     · convert! hasSum_zero
       rw [hp]; rw [zero_apply]
-    · rwa [Metric.mem_eball, edist_eq_enorm_sub,
+    · rwa [Metric.mem_eball, edist_eq_enorm_sub, add_comm, add_sub_cancel_right,
+        ← edist_zero_right, ← Metric.mem_eball]
 
 中文:
 定理 有FiniteFPowerSeriesOnBall.bound_zero_of_eq_zero
@@ -779,7 +780,8 @@ theorem HasFiniteFPowerSeriesOnBall.bound_zero_of_eq_zero
     rw [hf (x + y)]
     · convert! hasSum_zero
       rw [hp]; rw [zero_apply]
-    · rwa [Metric.mem_eball, edist_eq_enorm_sub,
+    · rwa [Metric.mem_eball, edist_eq_enorm_sub, add_comm, add_sub_cancel_right,
+        ← edist_zero_right, ← Metric.mem_eball]
 
 Depends on / 依赖: Metric, Metric.mem_eball, add_comm, add_sub_cancel_right, add_zero, convert, edist_eq_enorm_sub, edist_zero_right, hasSum_zero, le_top, mem_eball, p.radius_eq_top_of_forall_image_add_eq_zero, r_pos, radius_eq_top_of_forall_image_add_eq_zero, zero_apply
 -/
@@ -1138,7 +1140,8 @@ lemma changeOriginSeries_sum_eq_partialSum_of_finite
   rw [partialSum]; rw [FormalMultilinearSeries.sum]; rw [tsum_eq_sum (f := fun m => p.changeOriginSeries k m (fun _ => x)) (s := Finset.range (n - k))]
   intro m hm
   rw [Finset.mem_range]; rw [not_lt] at hm
-  rw [p.changeOriginSeries_finite_of_finite hn k (by rw [add_comm]; exact Nat.le_
+  rw [p.changeOriginSeries_finite_of_finite hn k (by rw [add_comm]; exact Nat.le_add_of_sub_le hm),
+    _root_.zero_apply]
 
 中文:
 引理 changeOriginSeries_sum_eq_partialSum_of_finite
@@ -1148,7 +1151,8 @@ lemma changeOriginSeries_sum_eq_partialSum_of_finite
   rw [partialSum]; rw [FormalMultilinearSeries.sum]; rw [tsum_eq_sum (f := fun m => p.changeOriginSeries k m (fun _ => x)) (s := Finset.range (n - k))]
   intro m hm
   rw [Finset.mem_range]; rw [not_lt] at hm
-  rw [p.changeOriginSeries_finite_of_finite hn k (by rw [add_comm]; exact Nat.le_
+  rw [p.changeOriginSeries_finite_of_finite hn k (by rw [add_comm]; exact Nat.le_add_of_sub_le hm),
+    _root_.zero_apply]
 
 Depends on / 依赖: Finset, Finset.mem_range, Finset.range, FormalMultilinearSeries, FormalMultilinearSeries.sum, Nat.le_add_of_sub_le, _root_, _root_.zero_apply, add_comm, changeOriginSeries, changeOriginSeries_finite_of_finite, le_add_of_sub_le, mem_range, not_lt, p.changeOriginSeries, p.changeOriginSeries_finite_of_finite, partialSum, tsum_eq_sum, zero_apply
 -/
@@ -1230,7 +1234,32 @@ theorem changeOrigin_eval_of_finite
     p.changeOriginSeriesTerm s.1 s.2.1 s.2.2 s.2.2.2 (fun _ => x) fun _ => y
   have finsupp : f.support.Finite := by
     apply Set.Finite.subset (s := changeOriginIndexEquiv ⁻¹' Sigma.fst ⁻¹' {m | m < n})
-    · apply Set
+    · apply Set.Finite.preimage (Equiv.injective _).injOn
+      simp_rw [← {m | m < n}.iUnion_of_singleton_coe, preimage_iUnion, ← range_sigmaMk]
+      exact finite_iUnion fun _ => finite_range _
+    · refine fun s => Not.imp_symm fun hs => ?_
+      simp only [preimage_ofPred_eq, changeOriginIndexEquiv_apply_fst, mem_ofPred, not_lt] at hs
+      dsimp only [f]
+      rw [changeOriginSeriesTerm_bound p hn _ _ _ hs]; rw [_root_.zero_apply]; rw [_root_.zero_apply]
+  have hfkl k l : HasSum (f ⟨k, l, ·⟩) (changeOriginSeries p k l (fun _ => x) fun _ => y) := by
+    simp_rw [changeOriginSeries, sum_apply]; apply hasSum_fintype
+  have hfk k : HasSum (f ⟨k, ·⟩) (changeOrigin p x k fun _ => y) := by
+    have (m) (hm : m ∉ Finset.range n) : changeOriginSeries p k m (fun _ => x) = 0 := by
+      rw [Finset.mem_range]; rw [not_lt] at hm
+      rw [changeOriginSeries_finite_of_finite _ hn _ (le_add_of_le_right hm)]; rw [_root_.zero_apply]
+    rw [changeOrigin]; rw [FormalMultilinearSeries.sum]; rw [ContinuousMultilinearMap.tsum_eval (summable_of_ne_finset_zero this)]
+    refine (summable_of_ne_finset_zero (s := Finset.range n) fun m hm => ?_).hasSum.sigma_of_hasSum
+      (hfkl k) (summable_of_hasFiniteSupport <| finsupp.preimage sigma_mk_injective.injOn)
+    rw [this m hm]; rw [_root_.zero_apply]
+  have hf : HasSum f ((p.changeOrigin x).sum y) :=
+    ((p.changeOrigin x).hasSum_of_finite (fun _ => changeOrigin_finite_of_finite p hn) _)
+.sigma_of_hasSum hfk (summable_of_hasFiniteSupport finsupp)
+  refine hf.unique (changeOriginIndexEquiv.symm.hasSum_iff.1 ?_)
+  refine (p.hasSum_of_finite hn (x + y)).sigma_of_hasSum (fun n => ?_)
+    (changeOriginIndexEquiv.symm.summable_iff.2 hf.summable)
+  rw [← Pi.add_def]; rw [(p n).map_add_univ (fun _ => x) fun _ => y]
+  simp_rw [← changeOriginSeriesTerm_changeOriginIndexEquiv_symm]
+  exact hasSum_fintype fun c => f (changeOriginIndexEquiv.symm ⟨n, c⟩)
 
 中文:
 定理 changeOrigin_eval_of_finite
@@ -1240,7 +1269,32 @@ theorem changeOrigin_eval_of_finite
     p.changeOriginSeriesTerm s.1 s.2.1 s.2.2 s.2.2.2 (fun _ => x) fun _ => y
   have finsupp : f.support.Finite := by
     apply Set.Finite.subset (s := changeOriginIndexEquiv ⁻¹' Sigma.fst ⁻¹' {m | m < n})
-    · apply Set
+    · apply Set.Finite.preimage (Equiv.injective _).injOn
+      simp_rw [← {m | m < n}.iUnion_of_singleton_coe, preimage_iUnion, ← range_sigmaMk]
+      exact finite_iUnion fun _ => finite_range _
+    · refine fun s => Not.imp_symm fun hs => ?_
+      simp only [preimage_ofPred_eq, changeOriginIndexEquiv_apply_fst, mem_ofPred, not_lt] at hs
+      dsimp only [f]
+      rw [changeOriginSeriesTerm_bound p hn _ _ _ hs]; rw [_root_.zero_apply]; rw [_root_.zero_apply]
+  have hfkl k l : HasSum (f ⟨k, l, ·⟩) (changeOriginSeries p k l (fun _ => x) fun _ => y) := by
+    simp_rw [changeOriginSeries, sum_apply]; apply hasSum_fintype
+  have hfk k : HasSum (f ⟨k, ·⟩) (changeOrigin p x k fun _ => y) := by
+    have (m) (hm : m ∉ Finset.range n) : changeOriginSeries p k m (fun _ => x) = 0 := by
+      rw [Finset.mem_range]; rw [not_lt] at hm
+      rw [changeOriginSeries_finite_of_finite _ hn _ (le_add_of_le_right hm)]; rw [_root_.zero_apply]
+    rw [changeOrigin]; rw [FormalMultilinearSeries.sum]; rw [ContinuousMultilinearMap.tsum_eval (summable_of_ne_finset_zero this)]
+    refine (summable_of_ne_finset_zero (s := Finset.range n) fun m hm => ?_).hasSum.sigma_of_hasSum
+      (hfkl k) (summable_of_hasFiniteSupport <| finsupp.preimage sigma_mk_injective.injOn)
+    rw [this m hm]; rw [_root_.zero_apply]
+  have hf : HasSum f ((p.changeOrigin x).sum y) :=
+    ((p.changeOrigin x).hasSum_of_finite (fun _ => changeOrigin_finite_of_finite p hn) _)
+.sigma_of_hasSum hfk (summable_of_hasFiniteSupport finsupp)
+  refine hf.unique (changeOriginIndexEquiv.symm.hasSum_iff.1 ?_)
+  refine (p.hasSum_of_finite hn (x + y)).sigma_of_hasSum (fun n => ?_)
+    (changeOriginIndexEquiv.symm.summable_iff.2 hf.summable)
+  rw [← Pi.add_def]; rw [(p n).map_add_univ (fun _ => x) fun _ => y]
+  simp_rw [← changeOriginSeriesTerm_changeOriginIndexEquiv_symm]
+  exact hasSum_fintype fun c => f (changeOriginIndexEquiv.symm ⟨n, c⟩)
 
 Depends on / 依赖: Equiv.injective, Finite, Finset, Not.imp_symm, Set.Finite.preimage, Set.Finite.subset, Sigma.fst, changeOriginIndexEquiv, changeOriginSeriesTerm, f.support.Finite, finite_iUnion, finite_range, finsupp, iUnion_of_singleton_coe, imp_symm, injective, p.changeOriginSeriesTerm, preimage, preimage_iUnion, range_sigmaMk
 -/
@@ -1318,7 +1372,11 @@ theorem HasFiniteFPowerSeriesOnBall.changeOrigin
   hasSum {z} hz := by
     have : f (x + y + z) =
         FormalMultilinearSeries.sum (FormalMultilinearSeries.changeOrigin p y) z := by
-      rw [mem_eball_
+      rw [mem_eball_zero_iff]; rw [lt_tsub_iff_right]; rw [add_comm] at hz
+      rw [p.changeOrigin_eval_of_finite hf.finite]; rw [add_assoc]; rw [hf.sum]
+      exact mem_eball_zero_iff.2 ((enorm_add_le _ _).trans_lt hz)
+    rw [this]
+    apply (p.changeOrigin y).hasSum_of_finite fun _ => p.changeOrigin_finite_of_finite hf.finite
 
 中文:
 定理 有FiniteFPowerSeriesOnBall.changeOrigin
@@ -1329,7 +1387,11 @@ theorem HasFiniteFPowerSeriesOnBall.changeOrigin
   hasSum {z} hz := by
     have : f (x + y + z) =
         FormalMultilinearSeries.sum (FormalMultilinearSeries.changeOrigin p y) z := by
-      rw [mem_eball_
+      rw [mem_eball_zero_iff]; rw [lt_tsub_iff_right]; rw [add_comm] at hz
+      rw [p.changeOrigin_eval_of_finite hf.finite]; rw [add_assoc]; rw [hf.sum]
+      exact mem_eball_zero_iff.2 ((enorm_add_le _ _).trans_lt hz)
+    rw [this]
+    apply (p.changeOrigin y).hasSum_of_finite fun _ => p.changeOrigin_finite_of_finite hf.finite
 
 Depends on / 依赖: changeOrigin_radius, hf.r_le, p.changeOrigin_radius, r_le, tsub_le_tsub_right
 -/

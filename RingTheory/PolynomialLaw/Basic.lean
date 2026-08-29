@@ -457,7 +457,10 @@ instance :
   add_zero f := by ext; simp only [add_def, add_zero, zero_def]
   nsmul n f := (n : R) • f
   nsmul_zero f := by simp_rw [HSMul.hSMul, SMul.smul]; simp only [Nat.cast_zero, zero_smul f]
-  nsmul_succ
+  nsmul_succ n f := by
+    simp_rw [HSMul.hSMul, SMul.smul]
+    simp only [Nat.cast_add, Nat.cast_one, add_smul, one_smul]
+  add_comm f g := by ext; simp only [add_def, add_comm]
 
 中文:
 实例 :
@@ -467,7 +470,10 @@ instance :
   add_zero f := by ext; simp only [add_def, add_zero, zero_def]
   nsmul n f := (n : R) • f
   nsmul_zero f := by simp_rw [HSMul.hSMul, SMul.smul]; simp only [Nat.cast_zero, zero_smul f]
-  nsmul_succ
+  nsmul_succ n f := by
+    simp_rw [HSMul.hSMul, SMul.smul]
+    simp only [Nat.cast_add, Nat.cast_one, add_smul, one_smul]
+  add_comm f g := by ext; simp only [add_def, add_comm]
 
 Depends on / 依赖: HSMul.hSMul, Nat.cast_add, Nat.cast_one, Nat.cast_zero, SMul.smul, add_assoc, add_comm, add_def, add_smul, add_zero, cast_add, cast_one, cast_zero, nsmul_succ, nsmul_zero, one_smul, simp_rw, zero_add, zero_def, zero_smul
 -/
@@ -581,7 +587,21 @@ instance :
     simp_rw [HSMul.hSMul, SMul.smul]
     simp only [Nat.cast_succ, Int.cast_add, Int.cast_natCast, Int.cast_one, add_smul, one_smul]
   zsmul_neg' n f := by
-    simp_rw [HS
+    simp_rw [HSMul.hSMul, SMul.smul]
+    ext S _ _ m
+    rw [neg_def]
+    simp only [Int.cast_negSucc, Nat.cast_add, Nat.cast_one, neg_add_rev, add_smul,
+      add_def_apply, smul_def_apply, Nat.succ_eq_add_one, Int.cast_add, Int.cast_natCast,
+      Int.cast_one, one_smul, add_def, smul_def, Pi.smul_apply, Pi.add_apply, smul_add,
+      smul_smul, neg_mul, one_mul]
+    rw [add_comm]
+  neg_add_cancel f := by
+    ext S _ _ m
+    simp only [add_def_apply, neg_def, Pi.smul_apply, zero_def, Pi.zero_apply]
+    nth_rewrite 2 [← _root_.one_smul (M := R) (b := f.toFun' S m)]
+    rw [← _root_.add_smul]
+    simp only [neg_add_cancel, _root_.zero_smul]
+  add_comm f g := by ext; simp only [add_def, add_comm]
 
 中文:
 实例 :
@@ -592,7 +612,21 @@ instance :
     simp_rw [HSMul.hSMul, SMul.smul]
     simp only [Nat.cast_succ, Int.cast_add, Int.cast_natCast, Int.cast_one, add_smul, one_smul]
   zsmul_neg' n f := by
-    simp_rw [HS
+    simp_rw [HSMul.hSMul, SMul.smul]
+    ext S _ _ m
+    rw [neg_def]
+    simp only [Int.cast_negSucc, Nat.cast_add, Nat.cast_one, neg_add_rev, add_smul,
+      add_def_apply, smul_def_apply, Nat.succ_eq_add_one, Int.cast_add, Int.cast_natCast,
+      Int.cast_one, one_smul, add_def, smul_def, Pi.smul_apply, Pi.add_apply, smul_add,
+      smul_smul, neg_mul, one_mul]
+    rw [add_comm]
+  neg_add_cancel f := by
+    ext S _ _ m
+    simp only [add_def_apply, neg_def, Pi.smul_apply, zero_def, Pi.zero_apply]
+    nth_rewrite 2 [← _root_.one_smul (M := R) (b := f.toFun' S m)]
+    rw [← _root_.add_smul]
+    simp only [neg_add_cancel, _root_.zero_smul]
+  add_comm f g := by ext; simp only [add_def, add_comm]
 -/
 instance : AddCommGroup (M ->ₚₗ[R] N) where
   zsmul n f := (n : R) • f
@@ -1054,7 +1088,16 @@ theorem toFun'_eq_of_diagram
     (h'.comp (quotientKerEquivRangeₐ φ).toAlgHom)
   have ht : (h.comp φ.range.val).comp (quotientKerEquivRangeₐ φ).toAlgHom =
       ψ.range.val.comp ((quotientKerEquivRangeₐ ψ).toAlgHom.comp θ) := by
-    simp only [θ, ← AlgHom.comp
+    simp only [θ, ← AlgHom.comp_assoc, ← hh']
+    simp [AlgHom.comp_assoc]
+  rw [← φ.val_comp_rangeRestrict]; rw [← quotientKerEquivRangeₐ_comp_mkₐ φ]; rw [← ψ.val_comp_rangeRestrict]; rw [← quotientKerEquivRangeₐ_comp_mkₐ ψ]; rw [← AlgHom.comp_assoc]; rw [← AlgHom.comp_assoc _]; rw [ht]
+  simp only [AlgHom.comp_toLinearMap, rTensor_comp_apply]
+  apply congr_arg
+  rw [← rTensor_comp_apply]; rw [← AlgHom.comp_toLinearMap]; rw [isCompat_apply']; rw [isCompat_apply']; rw [AlgHom.comp_toLinearMap]; rw [rTensor_comp_apply]; rw [isCompat_apply']
+  apply congr_arg
+  simp only [θ, ← LinearMap.comp_apply, ← rTensor_comp, ← comp_toLinearMap, AlgHom.comp_assoc]
+  rw [quotientKerEquivRangeₐ_comp_mkₐ]; rw [comp_toLinearMap]; rw [rTensor_comp_apply]; rw [hpq]; rw [← rTensor_comp_apply]; rw [← comp_toLinearMap]; rw [← quotientKerEquivRangeₐ_comp_mkₐ]; rw [← AlgHom.comp_assoc]
+  simp
 
 中文:
 定理 toFun'_eq_of_diagram
@@ -1063,7 +1106,16 @@ theorem toFun'_eq_of_diagram
     (h'.comp (quotientKerEquivRangeₐ φ).toAlgHom)
   have ht : (h.comp φ.range.val).comp (quotientKerEquivRangeₐ φ).toAlgHom =
       ψ.range.val.comp ((quotientKerEquivRangeₐ ψ).toAlgHom.comp θ) := by
-    simp only [θ, ← AlgHom.comp
+    simp only [θ, ← AlgHom.comp_assoc, ← hh']
+    simp [AlgHom.comp_assoc]
+  rw [← φ.val_comp_rangeRestrict]; rw [← quotientKerEquivRangeₐ_comp_mkₐ φ]; rw [← ψ.val_comp_rangeRestrict]; rw [← quotientKerEquivRangeₐ_comp_mkₐ ψ]; rw [← AlgHom.comp_assoc]; rw [← AlgHom.comp_assoc _]; rw [ht]
+  simp only [AlgHom.comp_toLinearMap, rTensor_comp_apply]
+  apply congr_arg
+  rw [← rTensor_comp_apply]; rw [← AlgHom.comp_toLinearMap]; rw [isCompat_apply']; rw [isCompat_apply']; rw [AlgHom.comp_toLinearMap]; rw [rTensor_comp_apply]; rw [isCompat_apply']
+  apply congr_arg
+  simp only [θ, ← LinearMap.comp_apply, ← rTensor_comp, ← comp_toLinearMap, AlgHom.comp_assoc]
+  rw [quotientKerEquivRangeₐ_comp_mkₐ]; rw [comp_toLinearMap]; rw [rTensor_comp_apply]; rw [hpq]; rw [← rTensor_comp_apply]; rw [← comp_toLinearMap]; rw [← quotientKerEquivRangeₐ_comp_mkₐ]; rw [← AlgHom.comp_assoc]
+  simp
 
 Depends on / 依赖: AlgHom, AlgHom.comp_assoc, comp_assoc, h.comp, range.val, range.val.comp, symm.toAlgHom.comp, toAlgHom, toAlgHom.comp, val_comp_rangeRestrict
 -/
@@ -1122,7 +1174,32 @@ theorem factorsThrough_toFunLifted_π
   have uFG : Subalgebra.FG (R := R) (φ R s).range := by
     rw [← Algebra.map_top]
     exact Subalgebra.FG.map _ Algebra.FiniteType.out
-  set u' := rTensor M (φ R s').rangeRestric
+  set u' := rTensor M (φ R s').rangeRestrict.toLinearMap p' with hu'
+  have u'FG : Subalgebra.FG (R := R) (φ R s').range := by
+    rw [← Algebra.map_top]
+    exact Subalgebra.FG.map _ Algebra.FiniteType.out
+  have huu' : rTensor M (Subalgebra.val _).toLinearMap u =
+    rTensor M (Subalgebra.val _).toLinearMap u' := by
+    simp only [π] at h
+    simp only [hu, hu', ← LinearMap.comp_apply, ← rTensor_comp, ← comp_toLinearMap,
+      val_comp_rangeRestrict, h]
+  obtain ⟨B, hAB, hA'B, ⟨t, hB⟩, h⟩ :=
+    TensorProduct.Algebra.eq_of_fg_of_subtype_eq' (R := R) uFG u'FG huu'
+  rw [← range_φ R t]; rw [eq_comm] at hB
+  have hAB' : (φ R s).range <= (φ R t).range := le_trans hAB (le_of_eq hB)
+  have hA'B' : (φ R s').range <= (φ R t).range := le_trans hA'B (le_of_eq hB)
+  have : exists q : MvPolynomial (Fin t.card) R otimes[R] M, rTensor M (toLinearMap (φ R t).rangeRestrict) q =
+      rTensor M ((Subalgebra.inclusion (le_of_eq hB)).comp
+        (Subalgebra.inclusion hAB)).toLinearMap u :=
+    rTensor_surjective _ (rangeRestrict_surjective _) _
+  obtain ⟨q, hq⟩ := this
+  rw [toFun'_eq_of_inclusion f p q hAB']; rw [toFun'_eq_of_inclusion f p' q hA'B']
+  · simp only [hq, comp_toLinearMap, rTensor_comp, LinearMap.comp_apply]
+    rw [← hu']; rw [h]
+    simp only [← LinearMap.comp_apply, ← rTensor_comp, ← comp_toLinearMap]
+    rfl
+  · simp only [hq, hu, ← LinearMap.comp_apply, comp_toLinearMap, rTensor_comp]
+    congr; ext; rfl
 
 中文:
 定理 factorsThrough_toFunLifted_π
@@ -1133,7 +1210,32 @@ theorem factorsThrough_toFunLifted_π
   have uFG : Subalgebra.FG (R := R) (φ R s).range := by
     rw [← Algebra.map_top]
     exact Subalgebra.FG.map _ Algebra.FiniteType.out
-  set u' := rTensor M (φ R s').rangeRestric
+  set u' := rTensor M (φ R s').rangeRestrict.toLinearMap p' with hu'
+  have u'FG : Subalgebra.FG (R := R) (φ R s').range := by
+    rw [← Algebra.map_top]
+    exact Subalgebra.FG.map _ Algebra.FiniteType.out
+  have huu' : rTensor M (Subalgebra.val _).toLinearMap u =
+    rTensor M (Subalgebra.val _).toLinearMap u' := by
+    simp only [π] at h
+    simp only [hu, hu', ← LinearMap.comp_apply, ← rTensor_comp, ← comp_toLinearMap,
+      val_comp_rangeRestrict, h]
+  obtain ⟨B, hAB, hA'B, ⟨t, hB⟩, h⟩ :=
+    TensorProduct.Algebra.eq_of_fg_of_subtype_eq' (R := R) uFG u'FG huu'
+  rw [← range_φ R t]; rw [eq_comm] at hB
+  have hAB' : (φ R s).range <= (φ R t).range := le_trans hAB (le_of_eq hB)
+  have hA'B' : (φ R s').range <= (φ R t).range := le_trans hA'B (le_of_eq hB)
+  have : exists q : MvPolynomial (Fin t.card) R otimes[R] M, rTensor M (toLinearMap (φ R t).rangeRestrict) q =
+      rTensor M ((Subalgebra.inclusion (le_of_eq hB)).comp
+        (Subalgebra.inclusion hAB)).toLinearMap u :=
+    rTensor_surjective _ (rangeRestrict_surjective _) _
+  obtain ⟨q, hq⟩ := this
+  rw [toFun'_eq_of_inclusion f p q hAB']; rw [toFun'_eq_of_inclusion f p' q hA'B']
+  · simp only [hq, comp_toLinearMap, rTensor_comp, LinearMap.comp_apply]
+    rw [← hu']; rw [h]
+    simp only [← LinearMap.comp_apply, ← rTensor_comp, ← comp_toLinearMap]
+    rfl
+  · simp only [hq, hu, ← LinearMap.comp_apply, comp_toLinearMap, rTensor_comp]
+    congr; ext; rfl
 
 Depends on / 依赖: Algebra, Algebra.FiniteType.out, Algebra.map_top, FiniteType, Subalgebra, Subalgebra.FG, Subalgebra.FG.map, Subalgebra.val, map_top, rTensor, rangeRestrict, rangeRestrict.toLinearMap, toFunLifted, toLinearMap
 -/
@@ -1205,7 +1307,9 @@ theorem exists_lift_of_mem_range_rTensor
   suffices h_surj : Function.Surjective ((φ.rangeRestrict.toLinearMap).rTensor M) by
     obtain ⟨p, hp⟩ := h_surj ((Subalgebra.inclusion hφ).toLinearMap.rTensor M u)
     use p
-    rw [← hu]; rw [← Subalgebra.val_comp_inclusion hφ]; rw [comp_toLinearMap]; rw [rTensor_comp]; 
+    rw [← hu]; rw [← Subalgebra.val_comp_inclusion hφ]; rw [comp_toLinearMap]; rw [rTensor_comp]; rw [LinearMap.comp_apply]; rw [← hp]; rw [← LinearMap.comp_apply]; rw [← rTensor_comp]; rw [← comp_toLinearMap]
+    simp
+  exact rTensor_surjective M (rangeRestrict_surjective φ)
 
 中文:
 定理 存在_lift_of_mem_range_rTensor
@@ -1214,7 +1318,9 @@ theorem exists_lift_of_mem_range_rTensor
   suffices h_surj : Function.Surjective ((φ.rangeRestrict.toLinearMap).rTensor M) by
     obtain ⟨p, hp⟩ := h_surj ((Subalgebra.inclusion hφ).toLinearMap.rTensor M u)
     use p
-    rw [← hu]; rw [← Subalgebra.val_comp_inclusion hφ]; rw [comp_toLinearMap]; rw [rTensor_comp]; 
+    rw [← hu]; rw [← Subalgebra.val_comp_inclusion hφ]; rw [comp_toLinearMap]; rw [rTensor_comp]; rw [LinearMap.comp_apply]; rw [← hp]; rw [← LinearMap.comp_apply]; rw [← rTensor_comp]; rw [← comp_toLinearMap]
+    simp
+  exact rTensor_surjective M (rangeRestrict_surjective φ)
 
 Depends on / 依赖: Function, Function.Surjective, LinearMap, LinearMap.comp_apply, Subalgebra, Subalgebra.inclusion, Subalgebra.val_comp_inclusion, Surjective, comp_apply, comp_toLinearMap, h_surj, inclusion, rTensor, rTensor_comp, rTensor_surjective, rangeRestrict, rangeRestrict.toLinearMap, rangeRestrict_surjective, toLinearMap, toLinearMap.rTensor
 -/
@@ -1242,7 +1348,7 @@ theorem π_surjective
   obtain ⟨B : Subalgebra R S, hB : B.FG, ht : t in range _⟩ := TensorProduct.Algebra.exists_of_fg t
   obtain ⟨s : Finset S, hs : (PolynomialLaw.φ R s).range = B⟩ := exists_range_φ_eq_of_fg hB
   obtain ⟨p, hp⟩ := exists_lift_of_mem_range_rTensor B (le_of_eq hs.symm) ht
-  exact ⟨⟨s, p⟩, h
+  exact ⟨⟨s, p⟩, hp⟩
 
 中文:
 定理 π_surjective
@@ -1252,7 +1358,7 @@ theorem π_surjective
   obtain ⟨B : Subalgebra R S, hB : B.FG, ht : t in range _⟩ := TensorProduct.Algebra.exists_of_fg t
   obtain ⟨s : Finset S, hs : (PolynomialLaw.φ R s).range = B⟩ := exists_range_φ_eq_of_fg hB
   obtain ⟨p, hp⟩ := exists_lift_of_mem_range_rTensor B (le_of_eq hs.symm) ht
-  exact ⟨⟨s, p⟩, h
+  exact ⟨⟨s, p⟩, hp⟩
 
 Depends on / 依赖: Algebra, B.FG, Finset, PolynomialLaw, Subalgebra, TensorProduct, TensorProduct.Algebra.exists_of_fg, exists_lift_of_mem_range_rTensor, exists_of_fg, hs.symm, le_of_eq
 -/
@@ -1301,7 +1407,15 @@ theorem exists_lift'
   have hB : Subalgebra.FG (A ⊔ Algebra.adjoin R ({s} : Finset S)) :=
     Subalgebra.FG.sup hA (Subalgebra.fg_adjoin_finset _)
   obtain ⟨gen, hgen⟩ := exists_range_φ_eq_of_fg hB
-  have hAB : A <= A ⊔ Algebra.adjoin R ({s} : Finset S) := 
+  have hAB : A <= A ⊔ Algebra.adjoin R ({s} : Finset S) := le_sup_left
+  rw [← hgen] at hAB
+  obtain ⟨p, hp⟩ := exists_lift_of_mem_range_rTensor _ hAB ht
+  have hs : s in (φ R gen).range := by
+    rw [hgen]
+    apply Algebra.subset_adjoin
+    simp only [Finset.coe_singleton, Set.sup_eq_union, Set.mem_union, SetLike.mem_coe]
+    exact Or.inr (Algebra.subset_adjoin rfl)
+  use gen.card, φ R gen, p, hs.choose, hp, hs.choose_spec
 
 中文:
 定理 存在_lift'
@@ -1312,7 +1426,15 @@ theorem exists_lift'
   have hB : Subalgebra.FG (A ⊔ Algebra.adjoin R ({s} : Finset S)) :=
     Subalgebra.FG.sup hA (Subalgebra.fg_adjoin_finset _)
   obtain ⟨gen, hgen⟩ := exists_range_φ_eq_of_fg hB
-  have hAB : A <= A ⊔ Algebra.adjoin R ({s} : Finset S) := 
+  have hAB : A <= A ⊔ Algebra.adjoin R ({s} : Finset S) := le_sup_left
+  rw [← hgen] at hAB
+  obtain ⟨p, hp⟩ := exists_lift_of_mem_range_rTensor _ hAB ht
+  have hs : s in (φ R gen).range := by
+    rw [hgen]
+    apply Algebra.subset_adjoin
+    simp only [Finset.coe_singleton, Set.sup_eq_union, Set.mem_union, SetLike.mem_coe]
+    exact Or.inr (Algebra.subset_adjoin rfl)
+  use gen.card, φ R gen, p, hs.choose, hp, hs.choose_spec
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.subset_adjoin, Finset, Finset.coe_singleton, Set.sup_eq_un, Subalgebra, Subalgebra.FG, Subalgebra.FG.sup, Subalgebra.fg_adjoin_finset, TensorProduct, TensorProduct.Algebra.exists_of_fg, adjoin, coe_singleton, exists_lift_of_mem_range_rTensor, exists_of_fg, fg_adjoin_finset, le_sup_left, subset_adjoin, sup_eq_un
 -/
@@ -1380,7 +1502,29 @@ theorem isCompat_apply
     (h.comp (Subalgebra.val _)).codRestrict (φ R s').range (by
     rintro ⟨x, hx⟩
     simp only [range_φ] at hx ⊢
-    simp only [AlgHom.coe_comp, Subalgebra.coe_val, Functio
+    simp only [AlgHom.coe_comp, Subalgebra.coe_val, Function.comp_apply, Finset.coe_image,
+      Algebra.adjoin_image, s']
+    exact ⟨x, hx, rfl⟩)
+  let j : Fin s.card -> Fin s'.card :=
+    (s'.equivFin) ∘ (fun ⟨x, hx⟩ => ⟨h x, Finset.mem_image_of_mem h hx⟩) ∘ (s.equivFin).symm
+  have eq_h_comp : (φ R s').comp (rename j) = h.comp (φ R s) := by
+    ext p
+    simp only [φ, AlgHom.comp_apply, aeval_rename, comp_aeval]
+    congr
+    ext n
+    simp only [Function.comp_apply, Equiv.symm_apply_apply, j]
+  let p' := rTensor M (rename j).toLinearMap p
+  have ha' : π R M T (⟨s', p'⟩ : lifts R M T) = rTensor M h.toLinearMap t := by
+    simp only [← ha, π, p', ← LinearMap.comp_apply, ← rTensor_comp, ← comp_toLinearMap, eq_h_comp]
+  rw [toFun_eq_rTensor_φ_toFun' f ha]; rw [toFun_eq_rTensor_φ_toFun' f ha']; rw [← LinearMap.comp_apply]; rw [← rTensor_comp]; rw [← comp_toLinearMap]
+  apply toFun'_eq_of_diagram f p p' h h'
+  · simp only [val_comp_codRestrict, h']
+  · simp only [p', ← LinearMap.comp_apply, ← rTensor_comp, ← comp_toLinearMap]
+    congr
+    ext n
+    simp only [AlgHom.coe_comp, Function.comp_apply, coe_codRestrict,
+      Subalgebra.coe_val, rename_X, h', j]
+    simp only [φ, aeval_X, Equiv.symm_apply_apply]
 
 中文:
 定理 isCompat_apply
@@ -1393,7 +1537,29 @@ theorem isCompat_apply
     (h.comp (Subalgebra.val _)).codRestrict (φ R s').range (by
     rintro ⟨x, hx⟩
     simp only [range_φ] at hx ⊢
-    simp only [AlgHom.coe_comp, Subalgebra.coe_val, Functio
+    simp only [AlgHom.coe_comp, Subalgebra.coe_val, Function.comp_apply, Finset.coe_image,
+      Algebra.adjoin_image, s']
+    exact ⟨x, hx, rfl⟩)
+  let j : Fin s.card -> Fin s'.card :=
+    (s'.equivFin) ∘ (fun ⟨x, hx⟩ => ⟨h x, Finset.mem_image_of_mem h hx⟩) ∘ (s.equivFin).symm
+  have eq_h_comp : (φ R s').comp (rename j) = h.comp (φ R s) := by
+    ext p
+    simp only [φ, AlgHom.comp_apply, aeval_rename, comp_aeval]
+    congr
+    ext n
+    simp only [Function.comp_apply, Equiv.symm_apply_apply, j]
+  let p' := rTensor M (rename j).toLinearMap p
+  have ha' : π R M T (⟨s', p'⟩ : lifts R M T) = rTensor M h.toLinearMap t := by
+    simp only [← ha, π, p', ← LinearMap.comp_apply, ← rTensor_comp, ← comp_toLinearMap, eq_h_comp]
+  rw [toFun_eq_rTensor_φ_toFun' f ha]; rw [toFun_eq_rTensor_φ_toFun' f ha']; rw [← LinearMap.comp_apply]; rw [← rTensor_comp]; rw [← comp_toLinearMap]
+  apply toFun'_eq_of_diagram f p p' h h'
+  · simp only [val_comp_codRestrict, h']
+  · simp only [p', ← LinearMap.comp_apply, ← rTensor_comp, ← comp_toLinearMap]
+    congr
+    ext n
+    simp only [AlgHom.coe_comp, Function.comp_apply, coe_codRestrict,
+      Subalgebra.coe_val, rename_X, h', j]
+    simp only [φ, aeval_X, Equiv.symm_apply_apply]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_comp, Algebra, Algebra.adjoin_image, Finset, Finset.coe_image, Finset.mem_image_of_mem, Function, Function.comp_apply, Subalgebra, Subalgebra.coe_val, Subalgebra.val, adjoin_image, classical, codRestrict, coe_comp, coe_image, coe_val, comp_apply, eq_h_comp
 -/
@@ -1675,7 +1841,7 @@ theorem toFun_comp
   obtain ⟨⟨s, p⟩, ha⟩ := π_surjective t
   have hb : PolynomialLaw.π R N S ⟨s, f.toFun' _ p⟩ = f.toFun S t := by
     simp only [toFun_eq_rTensor_φ_toFun' _ ha, π]
-  rw [Function.comp_apply]; rw [toFun_eq_rTensor_φ_toFun' _ hb]; rw [toFun_eq_rTensor_φ_toFun' _ ha]; rw [comp_toFun']; rw [Fun
+  rw [Function.comp_apply]; rw [toFun_eq_rTensor_φ_toFun' _ hb]; rw [toFun_eq_rTensor_φ_toFun' _ ha]; rw [comp_toFun']; rw [Function.comp_apply]
 
 中文:
 定理 toFun_comp
@@ -1685,7 +1851,7 @@ theorem toFun_comp
   obtain ⟨⟨s, p⟩, ha⟩ := π_surjective t
   have hb : PolynomialLaw.π R N S ⟨s, f.toFun' _ p⟩ = f.toFun S t := by
     simp only [toFun_eq_rTensor_φ_toFun' _ ha, π]
-  rw [Function.comp_apply]; rw [toFun_eq_rTensor_φ_toFun' _ hb]; rw [toFun_eq_rTensor_φ_toFun' _ ha]; rw [comp_toFun']; rw [Fun
+  rw [Function.comp_apply]; rw [toFun_eq_rTensor_φ_toFun' _ hb]; rw [toFun_eq_rTensor_φ_toFun' _ ha]; rw [comp_toFun']; rw [Function.comp_apply]
 
 Depends on / 依赖: Function, Function.comp_apply, PolynomialLaw, comp_apply, comp_toFun, f.toFun
 -/

@@ -1219,7 +1219,10 @@ theorem closure_induction
       one_mem' := ⟨_, one⟩
       add_mem' := by rintro _ _ ⟨_, hx⟩ ⟨_, hy⟩; exact ⟨_, add _ _ _ _ hx hy⟩
       zero_mem' := ⟨zero_mem _, by
-        simp_rw [← @
+        simp_rw [← @add_neg_cancel K _ 1]; exact add _ _ _ _ one (neg _ _ one)⟩
+      neg_mem' := by rintro _ ⟨_, hx⟩; exact ⟨_, neg _ _ hx⟩
+      inv_mem' := by rintro _ ⟨_, hx⟩; exact ⟨_, inv _ _ hx⟩ }
+  ((closure_le (t := this)).2 (fun x hx => ⟨_, mem x hx⟩) h).2
 
 中文:
 定理 closure_induction
@@ -1230,7 +1233,10 @@ theorem closure_induction
       one_mem' := ⟨_, one⟩
       add_mem' := by rintro _ _ ⟨_, hx⟩ ⟨_, hy⟩; exact ⟨_, add _ _ _ _ hx hy⟩
       zero_mem' := ⟨zero_mem _, by
-        simp_rw [← @
+        simp_rw [← @add_neg_cancel K _ 1]; exact add _ _ _ _ one (neg _ _ one)⟩
+      neg_mem' := by rintro _ ⟨_, hx⟩; exact ⟨_, neg _ _ hx⟩
+      inv_mem' := by rintro _ ⟨_, hx⟩; exact ⟨_, inv _ _ hx⟩ }
+  ((closure_le (t := this)).2 (fun x hx => ⟨_, mem x hx⟩) h).2
 
 Depends on / 依赖: Subfield, add_mem, add_neg_cancel, carrier, closure_le, inv_mem, mul_mem, neg_mem, one_mem, simp_rw, zero_mem
 -/
@@ -1589,7 +1595,8 @@ theorem mem_iSup_of_directed
       inv_mem' := fun _ hx => have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
         Set.mem_iUnion.mpr ⟨i, (S i).inv_mem hi⟩ }
   have : iSup S = s := le_antisymm
-    (iSup_le fun i => le_iSup (fun i => (S i : Set K
+    (iSup_le fun i => le_iSup (fun i => (S i : Set K)) i) (Set.iUnion_subset fun _ => le_iSup S _)
+  exact this ▸ Set.mem_iUnion
 
 中文:
 定理 mem_iSup_of_directed
@@ -1600,7 +1607,8 @@ theorem mem_iSup_of_directed
       inv_mem' := fun _ hx => have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
         Set.mem_iUnion.mpr ⟨i, (S i).inv_mem hi⟩ }
   have : iSup S = s := le_antisymm
-    (iSup_le fun i => le_iSup (fun i => (S i : Set K
+    (iSup_le fun i => le_iSup (fun i => (S i : Set K)) i) (Set.iUnion_subset fun _ => le_iSup S _)
+  exact this ▸ Set.mem_iUnion
 
 Depends on / 依赖: DivisionSemiring, DivisionSemiring.nnqsmul, Set.iUnion_subset, Set.mem_iUnion, Set.mem_iUnion.mp, Set.mem_iUnion.mpr, Subfield, Subring, Subring.coe_iSup_of_directed, Subring.copy, coe_iSup_of_directed, iSup_le, iUnion_subset, inv_mem, le_antisymm, le_iSup, mem_iUnion, nnqsmul, smulDivisionSemiring
 -/
@@ -2153,7 +2161,21 @@ definition commClosure
   one_mem' := ⟨1, Subring.one_mem _, 1, Subring.one_mem _, div_one _⟩
   neg_mem' {x} := by
     rintro ⟨y, hy, z, hz, x_eq⟩
-    exact ⟨-y, Subring.
+    exact ⟨-y, Subring.neg_mem _ hy, z, hz, x_eq ▸ neg_div _ _⟩
+  inv_mem' x := by rintro ⟨y, hy, z, hz, x_eq⟩; exact ⟨z, hz, y, hy, x_eq ▸ (inv_div _ _).symm⟩
+  add_mem' x_mem y_mem := by
+    -- Use `id` in the next 2 `obtain`s so that assumptions stay there for the `rwa`s below
+    obtain ⟨nx, hnx, dx, hdx, rfl⟩ := id x_mem
+    obtain ⟨ny, hny, dy, hdy, rfl⟩ := id y_mem
+    by_cases hx0 : dx = 0; · rwa [hx0, div_zero, zero_add]
+    by_cases hy0 : dy = 0; · rwa [hy0, div_zero, add_zero]
+    exact
+      ⟨nx * dy + dx * ny, Subring.add_mem _ (Subring.mul_mem _ hnx hdy) (Subring.mul_mem _ hdx hny),
+        dx * dy, Subring.mul_mem _ hdx hdy, (div_add_div nx ny hx0 hy0).symm⟩
+  mul_mem' := by
+    rintro _ _ ⟨nx, hnx, dx, hdx, rfl⟩ ⟨ny, hny, dy, hdy, rfl⟩
+    exact ⟨nx * ny, Subring.mul_mem _ hnx hny, dx * dy, Subring.mul_mem _ hdx hdy,
+      (div_mul_div_comm _ _ _ _).symm⟩
 
 中文:
 定义 commClosure
@@ -2163,7 +2185,21 @@ definition commClosure
   one_mem' := ⟨1, Subring.one_mem _, 1, Subring.one_mem _, div_one _⟩
   neg_mem' {x} := by
     rintro ⟨y, hy, z, hz, x_eq⟩
-    exact ⟨-y, Subring.
+    exact ⟨-y, Subring.neg_mem _ hy, z, hz, x_eq ▸ neg_div _ _⟩
+  inv_mem' x := by rintro ⟨y, hy, z, hz, x_eq⟩; exact ⟨z, hz, y, hy, x_eq ▸ (inv_div _ _).symm⟩
+  add_mem' x_mem y_mem := by
+    -- Use `id` in the next 2 `obtain`s so that assumptions stay there for the `rwa`s below
+    obtain ⟨nx, hnx, dx, hdx, rfl⟩ := id x_mem
+    obtain ⟨ny, hny, dy, hdy, rfl⟩ := id y_mem
+    by_cases hx0 : dx = 0; · rwa [hx0, div_zero, zero_add]
+    by_cases hy0 : dy = 0; · rwa [hy0, div_zero, add_zero]
+    exact
+      ⟨nx * dy + dx * ny, Subring.add_mem _ (Subring.mul_mem _ hnx hdy) (Subring.mul_mem _ hdx hny),
+        dx * dy, Subring.mul_mem _ hdx hdy, (div_add_div nx ny hx0 hy0).symm⟩
+  mul_mem' := by
+    rintro _ _ ⟨nx, hnx, dx, hdx, rfl⟩ ⟨ny, hny, dy, hdy, rfl⟩
+    exact ⟨nx * ny, Subring.mul_mem _ hnx hny, dx * dy, Subring.mul_mem _ hdx hdy,
+      (div_mul_div_comm _ _ _ _).symm⟩
 -/
 private def commClosure (s : Set K) : Subfield K where
   carrier := {z : K | exists x in Subring.closure s, exists y in Subring.closure s, x / y = z}

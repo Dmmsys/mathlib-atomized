@@ -66,7 +66,11 @@ definition derivCLM
     (fun a f _ => deriv_const_smul a f.differentiableAt)
     (fun f => (contDiff_succ_iff_deriv.mp (f.smooth ⊤)).2.2) fun ⟨k, n⟩ =>
     ⟨{⟨k, n + 1⟩}, 1, zero_le_one, fun f x => by
-      simpa only [Real.norm_eq_abs, Fins
+      simpa only [Real.norm_eq_abs, Finset.sup_singleton, schwartzSeminormFamily_apply, one_mul,
+        norm_iteratedFDeriv_eq_norm_iteratedDeriv, ← iteratedDeriv_succ'] using
+        f.le_seminorm' 𝕜 k (n + 1) x⟩
+
+@[simp]
 
 中文:
 定义 derivCLM
@@ -75,7 +79,11 @@ definition derivCLM
     (fun a f _ => deriv_const_smul a f.differentiableAt)
     (fun f => (contDiff_succ_iff_deriv.mp (f.smooth ⊤)).2.2) fun ⟨k, n⟩ =>
     ⟨{⟨k, n + 1⟩}, 1, zero_le_one, fun f x => by
-      simpa only [Real.norm_eq_abs, Fins
+      simpa only [Real.norm_eq_abs, Finset.sup_singleton, schwartzSeminormFamily_apply, one_mul,
+        norm_iteratedFDeriv_eq_norm_iteratedDeriv, ← iteratedDeriv_succ'] using
+        f.le_seminorm' 𝕜 k (n + 1) x⟩
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.sup_singleton, Real.norm_eq_abs, contDiff_succ_iff_deriv, contDiff_succ_iff_deriv.mp, deriv_add, deriv_const_smul, differentiableAt, f.differentiableAt, f.le_seminorm, f.smooth, g.differentiableAt, iteratedDeriv_succ, le_seminorm, norm_eq_abs, norm_iteratedFDeriv_eq_norm_iteratedDeriv, one_mul, schwartzSeminormFamily_apply, smooth, sup_singleton
 -/
@@ -144,7 +152,10 @@ definition fderivCLM
     (fun a f _ => fderiv_const_smul f.differentiableAt a)
     (fun f => (contDiff_succ_iff_fderiv.mp (f.smooth ⊤)).2.2) fun ⟨k, n⟩ =>
     ⟨{⟨k, n + 1⟩}, 1, zero_le_one, fun f x => by
-      simpa only [schwartzSemin
+      simpa only [schwartzSeminormFamily_apply, Seminorm.comp_apply, Finset.sup_singleton,
+        one_smul, norm_iteratedFDeriv_fderiv, one_mul] using f.le_seminorm 𝕜 k (n + 1) x⟩
+
+@[simp]
 
 中文:
 定义 fderivCLM
@@ -153,7 +164,10 @@ definition fderivCLM
     (fun a f _ => fderiv_const_smul f.differentiableAt a)
     (fun f => (contDiff_succ_iff_fderiv.mp (f.smooth ⊤)).2.2) fun ⟨k, n⟩ =>
     ⟨{⟨k, n + 1⟩}, 1, zero_le_one, fun f x => by
-      simpa only [schwartzSemin
+      simpa only [schwartzSeminormFamily_apply, Seminorm.comp_apply, Finset.sup_singleton,
+        one_smul, norm_iteratedFDeriv_fderiv, one_mul] using f.le_seminorm 𝕜 k (n + 1) x⟩
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.sup_singleton, Seminorm, Seminorm.comp_apply, comp_apply, contDiff_succ_iff_fderiv, contDiff_succ_iff_fderiv.mp, differentiableAt, f.differentiableAt, f.le_seminorm, f.smooth, fderiv, fderiv_add, fderiv_const_smul, g.differentiableAt, le_seminorm, norm_iteratedFDeriv_fderiv, one_mul, one_smul, schwartzSeminormFamily_apply
 -/
@@ -375,7 +389,7 @@ theorem iteratedLineDerivOp_eq_iteratedFDeriv
   | succ n ih =>
     rw [iteratedLineDerivOp_succ_left]; rw [iteratedFDeriv_succ_apply_left]; rw [← fderiv_continuousMultilinear_apply_const_apply]
     · simp only [lineDerivOp_apply_eq_fderiv, ← ih]
-    · exact (f.smooth ⊤).differentiable_iterat
+    · exact (f.smooth ⊤).differentiable_iteratedFDeriv (mod_cast ENat.natCast_lt_top n) x
 
 中文:
 定理 iteratedLineDerivOp_eq_iteratedFDeriv
@@ -386,7 +400,7 @@ theorem iteratedLineDerivOp_eq_iteratedFDeriv
   | succ n ih =>
     rw [iteratedLineDerivOp_succ_left]; rw [iteratedFDeriv_succ_apply_left]; rw [← fderiv_continuousMultilinear_apply_const_apply]
     · simp only [lineDerivOp_apply_eq_fderiv, ← ih]
-    · exact (f.smooth ⊤).differentiable_iterat
+    · exact (f.smooth ⊤).differentiable_iteratedFDeriv (mod_cast ENat.natCast_lt_top n) x
 
 Depends on / 依赖: ENat.natCast_lt_top, differentiable_iteratedFDeriv, f.smooth, fderiv_continuousMultilinear_apply_const_apply, generalizing, iteratedFDeriv_succ_apply_left, iteratedLineDerivOp_succ_left, lineDerivOp_apply_eq_fderiv, mod_cast, natCast_lt_top, smooth
 -/
@@ -774,7 +788,7 @@ theorem integral_bilinear_lineDerivOp_right_eq_neg_left
     (bilinLeftCLM L g.hasTemperateGrowth _).integrable
     (bilinLeftCLM L (∂_{v} g).hasTemperateGrowth _).integrable
     (bilinLeftCLM L g.hasTemperateGrowth _).integrable
-  all_goals exact fun x _ => (hasFDerivAt 
+  all_goals exact fun x _ => (hasFDerivAt _ x).hasLineDerivAt v
 
 中文:
 定理 integral_bilinear_lineDerivOp_right_eq_neg_left
@@ -784,7 +798,7 @@ theorem integral_bilinear_lineDerivOp_right_eq_neg_left
     (bilinLeftCLM L g.hasTemperateGrowth _).integrable
     (bilinLeftCLM L (∂_{v} g).hasTemperateGrowth _).integrable
     (bilinLeftCLM L g.hasTemperateGrowth _).integrable
-  all_goals exact fun x _ => (hasFDerivAt 
+  all_goals exact fun x _ => (hasFDerivAt _ x).hasLineDerivAt v
 
 Depends on / 依赖: all_goals, bilinLeftCLM, g.hasTemperateGrowth, hasFDerivAt, hasLineDerivAt, hasTemperateGrowth, integrable, integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable
 -/
@@ -885,7 +899,8 @@ theorem integral_bilinear_laplacian_right_eq_left
     _root_.sum_apply]
   rw [MeasureTheory.integral_finsetSum]; rw [MeasureTheory.integral_finsetSum]
   · simp [integral_bilinear_lineDerivOp_right_eq_neg_left]
-  · exact fun _ _ => (pairing L (∂_{_} <| ∂_{_} f) g).integ
+  · exact fun _ _ => (pairing L (∂_{_} <| ∂_{_} f) g).integrable
+  · exact fun _ _ => (pairing L f (∂_{_} <| ∂_{_} g)).integrable
 
 中文:
 定理 integral_bilinear_laplacian_right_eq_left
@@ -895,7 +910,8 @@ theorem integral_bilinear_laplacian_right_eq_left
     _root_.sum_apply]
   rw [MeasureTheory.integral_finsetSum]; rw [MeasureTheory.integral_finsetSum]
   · simp [integral_bilinear_lineDerivOp_right_eq_neg_left]
-  · exact fun _ _ => (pairing L (∂_{_} <| ∂_{_} f) g).integ
+  · exact fun _ _ => (pairing L (∂_{_} <| ∂_{_} f) g).integrable
+  · exact fun _ _ => (pairing L f (∂_{_} <| ∂_{_} g)).integrable
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.integral_finsetSum, _root_, _root_.sum_apply, integrable, integral_bilinear_lineDerivOp_right_eq_neg_left, integral_finsetSum, laplacian_eq_sum, map_sum, pairing, simp_rw, stdOrthonormalBasis, sum_apply
 -/

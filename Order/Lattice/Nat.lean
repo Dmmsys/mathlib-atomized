@@ -463,7 +463,8 @@ theorem sInf_upward_closed_eq_succ_iff
     · exact k
     · assumption
   · rintro ⟨H, H'⟩
-    rw [sInf_def (⟨_]; rw [H⟩ : s.Nonempty)]; rw [find_
+    rw [sInf_def (⟨_]; rw [H⟩ : s.Nonempty)]; rw [find_eq_iff]
+exact ⟨H, fun n hnk hns => H' hs n k (Nat.lt_succ_iff.mp hnk) hns⟩
 
 中文:
 定理 sInf_upward_closed_eq_succ_iff
@@ -477,7 +478,8 @@ theorem sInf_upward_closed_eq_succ_iff
     · exact k
     · assumption
   · rintro ⟨H, H'⟩
-    rw [sInf_def (⟨_]; rw [H⟩ : s.Nonempty)]; rw [find_
+    rw [sInf_def (⟨_]; rw [H⟩ : s.Nonempty)]; rw [find_eq_iff]
+exact ⟨H, fun n hnk hns => H' hs n k (Nat.lt_succ_iff.mp hnk) hns⟩
 
 Depends on / 依赖: Nat.lt_succ_iff.mp, Nonempty, classical, eq_Ici_of_nonempty_of_upward_closed, find_eq_iff, k.not_succ_le_self, le_rfl, lt_succ_iff, mem_Ici, nonempty_of_sInf_eq_succ, not_succ_le_self, s.Nonempty, sInf_def
 -/
@@ -524,7 +526,18 @@ instance :
     isLUB_csSup _ hn hb := sSup_def hb ▸ Nat.isLeast_find hb
     isGLB_csInf _ hn hb := sInf_def hn ▸ (Nat.isLeast_find hn).isGLB
     csSup_empty := by
-      simp only [sSup_def, Set.m
+      simp only [sSup_def, Set.mem_empty_iff_false, forall_const, forall_prop_of_false,
+        not_false_iff, exists_const]
+      apply bot_unique (Nat.find_min' _ _)
+      trivial
+    csSup_of_not_bddAbove := by
+      intro s hs
+      simp only [sSup,
+        mem_empty_iff_false, IsEmpty.forall_iff, forall_const, exists_const, dite_true]
+      rw [dif_neg]
+      · exact le_antisymm (zero_le _) (find_le trivial)
+      · exact hs
+    csInf_of_not_bddBelow := fun s hs => by simp at hs }
 
 中文:
 实例 :
@@ -534,7 +547,18 @@ instance :
     isLUB_csSup _ hn hb := sSup_def hb ▸ Nat.isLeast_find hb
     isGLB_csInf _ hn hb := sInf_def hn ▸ (Nat.isLeast_find hn).isGLB
     csSup_empty := by
-      simp only [sSup_def, Set.m
+      simp only [sSup_def, Set.mem_empty_iff_false, forall_const, forall_prop_of_false,
+        not_false_iff, exists_const]
+      apply bot_unique (Nat.find_min' _ _)
+      trivial
+    csSup_of_not_bddAbove := by
+      intro s hs
+      simp only [sSup,
+        mem_empty_iff_false, IsEmpty.forall_iff, forall_const, exists_const, dite_true]
+      rw [dif_neg]
+      · exact le_antisymm (zero_le _) (find_le trivial)
+      · exact hs
+    csInf_of_not_bddBelow := fun s hs => by simp at hs }
 
 Depends on / 依赖: IsEmpty, IsEmpty.forall_, Lattice, LinearOrder, LinearOrder.toLattice, Nat.find_min, Nat.isLeast_find, OrderBot, Set.mem_empty_iff_false, bot_unique, csSup_empty, csSup_of_not_bddAbove, exists_const, find_min, forall_, forall_const, forall_prop_of_false, isGLB_csInf, isLUB_csSup, isLeast_find
 -/
@@ -594,7 +618,11 @@ theorem sInf_add
     · exact hnp
     suffices hp : p (sInf { m | p m } - n + n) from (h.subset hp).elim
     rw [Nat.sub_add_cancel hn]
-    exact csInf_mem (nonempty_o
+    exact csInf_mem (nonempty_of_pos_sInf <| n.zero_le.trans_lt hnp)
+  · have hp : exists n, n in { m | p m } := ⟨_, hm⟩
+    rw [Nat.sInf_def ⟨m]; rw [hm⟩]; rw [Nat.sInf_def hp]
+    rw [Nat.sInf_def hp] at hn
+    exact find_add hn
 
 中文:
 定理 sInf_add
@@ -607,7 +635,11 @@ theorem sInf_add
     · exact hnp
     suffices hp : p (sInf { m | p m } - n + n) from (h.subset hp).elim
     rw [Nat.sub_add_cancel hn]
-    exact csInf_mem (nonempty_o
+    exact csInf_mem (nonempty_of_pos_sInf <| n.zero_le.trans_lt hnp)
+  · have hp : exists n, n in { m | p m } := ⟨_, hm⟩
+    rw [Nat.sInf_def ⟨m]; rw [hm⟩]; rw [Nat.sInf_def hp]
+    rw [Nat.sInf_def hp] at hn
+    exact find_add hn
 
 Depends on / 依赖: Nat.sInf_def, Nat.sInf_empty, Nat.sub_add_cancel, classical, csInf_mem, eq_empty_or_nonempty, eq_or_lt, find_add, h.subset, hn.eq_or_lt, n.zero_le.trans_lt, nonempty_of_pos_sInf, sInf_def, sInf_empty, sub_add_cancel, subset, trans_lt, zero_add, zero_le
 -/
@@ -640,7 +672,10 @@ theorem sInf_add'
   refine
     le_csInf ⟨m + n, ?_⟩ fun b hb =>
       le_of_not_gt fun hbn =>
-        ne_of_mem_of_not_mem ?_ (notMem_of_lt_sInf h) (Nat.sub_eq_zer
+        ne_of_mem_of_not_mem ?_ (notMem_of_lt_sInf h) (Nat.sub_eq_zero_of_le hbn.le)
+  · dsimp
+    rwa [Nat.add_sub_cancel_right]
+  · exact hb
 
 中文:
 定理 sInf_add'
@@ -653,7 +688,10 @@ theorem sInf_add'
   refine
     le_csInf ⟨m + n, ?_⟩ fun b hb =>
       le_of_not_gt fun hbn =>
-        ne_of_mem_of_not_mem ?_ (notMem_of_lt_sInf h) (Nat.sub_eq_zer
+        ne_of_mem_of_not_mem ?_ (notMem_of_lt_sInf h) (Nat.sub_eq_zero_of_le hbn.le)
+  · dsimp
+    rwa [Nat.add_sub_cancel_right]
+  · exact hb
 
 Depends on / 依赖: Nat.add_sub_cancel_right, Nat.sub_eq_zero_of_le, add_sub_cancel_right, convert, hbn.le, le_csInf, le_of_not_gt, ne_of_mem_of_not_mem, nonempty_of_pos_sInf, notMem_of_lt_sInf, sInf_add, simp_rw, sub_eq_zero_of_le
 -/

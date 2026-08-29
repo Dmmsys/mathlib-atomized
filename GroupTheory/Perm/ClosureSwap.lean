@@ -74,7 +74,8 @@ theorem exists_smul_notMem_of_subset_orbit_closure
     exact smul_mem_smul_set_iff.mp ((h σ.2).symm ▸ hb)
   contrapose! key0
   refine (closure_le _).mpr fun σ hσ => ?_
-  simp_rw [SetLike.mem_coe, mem_stabili
+  simp_rw [SetLike.mem_coe, mem_stabilizer_iff, Set.ext_iff, mem_smul_set_iff_inv_smul_mem]
+  exact fun a => ⟨fun h => smul_inv_smul σ a ▸ key0 σ hσ (σ⁻¹ • a) h, key0 σ⁻¹ (hS σ hσ) a⟩
 
 中文:
 定理 存在_smul_notMem_of_subset_orbit_closure
@@ -87,7 +88,8 @@ theorem exists_smul_notMem_of_subset_orbit_closure
     exact smul_mem_smul_set_iff.mp ((h σ.2).symm ▸ hb)
   contrapose! key0
   refine (closure_le _).mpr fun σ hσ => ?_
-  simp_rw [SetLike.mem_coe, mem_stabili
+  simp_rw [SetLike.mem_coe, mem_stabilizer_iff, Set.ext_iff, mem_smul_set_iff_inv_smul_mem]
+  exact fun a => ⟨fun h => smul_inv_smul σ a ▸ key0 σ hσ (σ⁻¹ • a) h, key0 σ⁻¹ (hS σ hσ) a⟩
 
 Depends on / 依赖: Set.ext_iff, SetLike, SetLike.mem_coe, closure, closure_le, contrapose, ext_iff, mem_coe, mem_smul_set_iff_inv_smul_mem, mem_stabilizer_iff, nonempty, notMem, simp_rw, smul_inv_smul, smul_mem_smul_set_iff, smul_mem_smul_set_iff.mp, stabilizer, subset
 -/
@@ -204,7 +206,13 @@ theorem swap_mem_closure_isSwap
     (fun f hf => ?_) (fun z hz => ?_) h ⟨y, ?_⟩
   · obtain ⟨σ, hσ, a, ha, hσa⟩ := this
     obtain ⟨z, w, hzw, rfl⟩ := hS σ hσ
-  
+    have := ne_of_mem_of_not_mem ha hσa
+    rw [Perm.smul_def]; rw [ne_comm]; rw [swap_apply_ne_self_iff]; rw [and_iff_right hzw] at this
+    refine hσa (SubmonoidClass.swap_mem_trans (closure S) ?_ ha)
+    obtain rfl | rfl := this <;> simpa [Equiv.swap_comm] using subset_closure hσ
+  · obtain ⟨x, y, -, rfl⟩ := hS f hf; rwa [swap_inv]
+  · exact orbit_eq_iff.mpr hf ▸ ⟨⟨swap z y, hz⟩, swap_apply_right z y⟩
+  · rw [mem_ofPred, Equiv.swap_self]; apply one_mem
 
 中文:
 定理 swap_mem_closure_isSwap
@@ -216,7 +224,13 @@ theorem swap_mem_closure_isSwap
     (fun f hf => ?_) (fun z hz => ?_) h ⟨y, ?_⟩
   · obtain ⟨σ, hσ, a, ha, hσa⟩ := this
     obtain ⟨z, w, hzw, rfl⟩ := hS σ hσ
-  
+    have := ne_of_mem_of_not_mem ha hσa
+    rw [Perm.smul_def]; rw [ne_comm]; rw [swap_apply_ne_self_iff]; rw [and_iff_right hzw] at this
+    refine hσa (SubmonoidClass.swap_mem_trans (closure S) ?_ ha)
+    obtain rfl | rfl := this <;> simpa [Equiv.swap_comm] using subset_closure hσ
+  · obtain ⟨x, y, -, rfl⟩ := hS f hf; rwa [swap_inv]
+  · exact orbit_eq_iff.mpr hf ▸ ⟨⟨swap z y, hz⟩, swap_apply_right z y⟩
+  · rw [mem_ofPred, Equiv.swap_self]; apply one_mem
 
 Depends on / 依赖: Perm.smul_def, SubmonoidClass, SubmonoidClass.swap_mem_trans, and_iff_right, closure, exists_smul_notMem_of_subset_orbit_closure, ne_comm, ne_of_mem_of_not_mem, smul_def, swap_apply_ne_self_iff, swap_apply_right, swap_mem_trans
 -/
@@ -247,7 +261,23 @@ theorem mem_closure_isSwap
   · exact finite_compl_fixedBy_closure_iff.mpr (fun f hf => (hS f hf).finite_compl_fixedBy) _ hf
   rintro ⟨fin, hf⟩
   set supp := (fixedBy α f)ᶜ with supp_eq
-  suffices h : (fixedBy α f)ᶜ subseteq supp -> f in closure S from
+  suffices h : (fixedBy α f)ᶜ subseteq supp -> f in closure S from h supp_eq.symm.subset
+  clear_value supp; clear supp_eq; revert f
+  apply fin.induction_on ..
+  · rintro f - emp; convert! (closure S).one_mem; ext; by_contra h; exact emp h
+  rintro a s - - ih f hf supp_subset
+  refine (mul_mem_cancel_left ((swap_mem_closure_isSwap hS).2 (hf a))).1
+    (ih (fun b => ?_) fun b hb => ?_)
+  · rw [Perm.mul_apply, swap_apply_def]; split_ifs with h1 h2
+    · rw [← orbit_eq_iff.mpr (hf b), h1, orbit_eq_iff.mpr (hf a)]; apply mem_orbit_self
+    · rw [← orbit_eq_iff.mpr (hf b), h2]; apply hf
+    · exact hf b
+  · contrapose hb
+    simp_rw [notMem_compl_iff, mem_fixedBy, Perm.smul_def, Perm.mul_apply, swap_apply_def,
+      apply_eq_iff_eq]
+    by_cases hb' : f b = b
+    · rw [hb']; split_ifs with h <;> simp only [h]
+    simp [show b = a by simpa [hb] using supp_subset hb']
 
 中文:
 定理 mem_closure_isSwap
@@ -257,7 +287,23 @@ theorem mem_closure_isSwap
   · exact finite_compl_fixedBy_closure_iff.mpr (fun f hf => (hS f hf).finite_compl_fixedBy) _ hf
   rintro ⟨fin, hf⟩
   set supp := (fixedBy α f)ᶜ with supp_eq
-  suffices h : (fixedBy α f)ᶜ subseteq supp -> f in closure S from
+  suffices h : (fixedBy α f)ᶜ subseteq supp -> f in closure S from h supp_eq.symm.subset
+  clear_value supp; clear supp_eq; revert f
+  apply fin.induction_on ..
+  · rintro f - emp; convert! (closure S).one_mem; ext; by_contra h; exact emp h
+  rintro a s - - ih f hf supp_subset
+  refine (mul_mem_cancel_left ((swap_mem_closure_isSwap hS).2 (hf a))).1
+    (ih (fun b => ?_) fun b hb => ?_)
+  · rw [Perm.mul_apply, swap_apply_def]; split_ifs with h1 h2
+    · rw [← orbit_eq_iff.mpr (hf b), h1, orbit_eq_iff.mpr (hf a)]; apply mem_orbit_self
+    · rw [← orbit_eq_iff.mpr (hf b), h2]; apply hf
+    · exact hf b
+  · contrapose hb
+    simp_rw [notMem_compl_iff, mem_fixedBy, Perm.smul_def, Perm.mul_apply, swap_apply_def,
+      apply_eq_iff_eq]
+    by_cases hb' : f b = b
+    · rw [hb']; split_ifs with h <;> simp only [h]
+    simp [show b = a by simpa [hb] using supp_subset hb']
 
 Depends on / 依赖: clear_value, closure, convert, fin.induction_on, finite_compl_fixedBy, finite_compl_fixedBy_closure_iff, finite_compl_fixedBy_closure_iff.mpr, fixedBy, induction_on, mem_orbit_iff, mem_orbit_iff.mpr, one_mem, revert, subset, subseteq, supp_eq, supp_eq.symm.subset, supp_subset
 -/
@@ -354,7 +400,9 @@ theorem surjective_of_isSwap_of_isPretransitive'
     rw [closure_sdiff_one]; rw [← MonoidHom.map_closure]; rw [hS2]; rw [← MonoidHom.range_eq_map]
   have := IsPretransitive.of_compHom (α := α) (toPermHom G α).rangeRestrict
   rw [← h] at this
-  rw [← MonoidHom.range_eq
+  rw [← MonoidHom.range_eq_top]; rw [← h]; rw [closure_of_isSwap_of_isPretransitive]
+  rintro - ⟨⟨σ, hσ, rfl⟩, hσ1⟩
+  exact (hS1 σ hσ).resolve_left hσ1
 
 中文:
 定理 surjective_of_isSwap_of_isPretransitive'
@@ -364,7 +412,9 @@ theorem surjective_of_isSwap_of_isPretransitive'
     rw [closure_sdiff_one]; rw [← MonoidHom.map_closure]; rw [hS2]; rw [← MonoidHom.range_eq_map]
   have := IsPretransitive.of_compHom (α := α) (toPermHom G α).rangeRestrict
   rw [← h] at this
-  rw [← MonoidHom.range_eq
+  rw [← MonoidHom.range_eq_top]; rw [← h]; rw [closure_of_isSwap_of_isPretransitive]
+  rintro - ⟨⟨σ, hσ, rfl⟩, hσ1⟩
+  exact (hS1 σ hσ).resolve_left hσ1
 
 Depends on / 依赖: IsPretransitive, IsPretransitive.of_compHom, MonoidHom, MonoidHom.map_closure, MonoidHom.range_eq_map, MonoidHom.range_eq_top, closure, closure_of_isSwap_of_isPretransitive, closure_sdiff_one, map_closure, of_compHom, rangeRestrict, range_eq_map, range_eq_top, resolve_left, toPermHom
 -/

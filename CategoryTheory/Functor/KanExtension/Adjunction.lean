@@ -284,7 +284,10 @@ definition leftKanExtensionIsoFiberwiseColimit
 fun X => hasColimit_of_iso Iso.symm
         isoWhiskerRight (eqToIso congr($((functor L).map_id X).toFunctor)) _ ≪≫
         Functor.leftUnitor (Grothendieck.ι (functor L) X ⋙ grothendieckProj L ⋙ F)
-Iso.symm NatIs
+Iso.symm NatIso.ofComponents
+    (fun X => HasColimit.isoOfNatIso (isoWhiskerRight (ιCompGrothendieckProj L X) F) ≪≫
+      (leftKanExtensionObjIsoColimit L F X).symm)
+    fun f => colimit.hom_ext (by simp)
 
 中文:
 定义 leftKanExtensionIsoFiberwiseColimit
@@ -293,7 +296,10 @@ Iso.symm NatIs
 fun X => hasColimit_of_iso Iso.symm
         isoWhiskerRight (eqToIso congr($((functor L).map_id X).toFunctor)) _ ≪≫
         Functor.leftUnitor (Grothendieck.ι (functor L) X ⋙ grothendieckProj L ⋙ F)
-Iso.symm NatIs
+Iso.symm NatIso.ofComponents
+    (fun X => HasColimit.isoOfNatIso (isoWhiskerRight (ιCompGrothendieckProj L X) F) ≪≫
+      (leftKanExtensionObjIsoColimit L F X).symm)
+    fun f => colimit.hom_ext (by simp)
 
 Depends on / 依赖: Functor, Functor.leftUnitor, Grothendieck, HasColimit, HasColimit.isoOfNatIso, Iso.symm, NatIso, NatIso.ofComponents, colimit, colimit.hom_ext, eqToIso, functor, grothendieckProj, hasColimit_of_iso, hom_ext, isoOfNatIso, isoWhiskerRight, leftKanExtensionObjIsoColimit, leftUnitor, map_id
 -/
@@ -328,7 +334,13 @@ definition lanAdjunction
         hom_ext_of_isLeftKanExtension _ (L.lanUnit.app F₁) _ _ (by
           ext X
           dsimp [homEquivOfIsLeftKanExtension]
-      
+          rw [descOfIsLeftKanExtension_fac_app]; rw [NatTrans.comp_app]; rw [← assoc]
+          have h := congr_app (L.lanUnit.naturality f) X
+          dsimp at h ⊢
+          rw [← h]; rw [assoc]; rw [descOfIsLeftKanExtension_fac_app])
+      homEquiv_naturality_right := fun {F G₁ G₂} β f => by
+        dsimp [homEquivOfIsLeftKanExtension]
+        rw [assoc] }
 
 中文:
 定义 lanAdjunction
@@ -339,7 +351,13 @@ definition lanAdjunction
         hom_ext_of_isLeftKanExtension _ (L.lanUnit.app F₁) _ _ (by
           ext X
           dsimp [homEquivOfIsLeftKanExtension]
-      
+          rw [descOfIsLeftKanExtension_fac_app]; rw [NatTrans.comp_app]; rw [← assoc]
+          have h := congr_app (L.lanUnit.naturality f) X
+          dsimp at h ⊢
+          rw [← h]; rw [assoc]; rw [descOfIsLeftKanExtension_fac_app])
+      homEquiv_naturality_right := fun {F G₁ G₂} β f => by
+        dsimp [homEquivOfIsLeftKanExtension]
+        rw [assoc] }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, L.lanUnit.app, L.lanUnit.naturality, NatTrans, NatTrans.comp_app, comp_app, congr_app, descOfIsLeftKanExtension_fac_app, homEquiv, homEquivOfIsLeftKanExtension, homEquiv_naturality_left_symm, homEquiv_naturality_right, hom_ext_of_isLeftKanExtension, lanUnit, mkOfHomEquiv, naturality
 -/
@@ -511,7 +529,9 @@ definition lanCompColimIso
     (fun G => (colimitIsoOfIsLeftKanExtension _ (L.lanUnit.app G)).symm)
     (fun f => colimit.hom_ext (fun i => by
       dsimp
-      rw [ι_colimMap_assoc]; rw [ι_colimitIsoOfIsLeftKanExtension_inv]; rw [ι_colimitIsoOfIsLeftKanExtension_inv_assoc]; rw [ι_colimMap]; rw [←
+      rw [ι_colimMap_assoc]; rw [ι_colimitIsoOfIsLeftKanExtension_inv]; rw [ι_colimitIsoOfIsLeftKanExtension_inv_assoc]; rw [ι_colimMap]; rw [← assoc]; rw [← assoc]
+      congr 1
+      exact congr_app (L.lanUnit.naturality f) i))
 
 中文:
 定义 lanCompColimIso
@@ -520,7 +540,9 @@ definition lanCompColimIso
     (fun G => (colimitIsoOfIsLeftKanExtension _ (L.lanUnit.app G)).symm)
     (fun f => colimit.hom_ext (fun i => by
       dsimp
-      rw [ι_colimMap_assoc]; rw [ι_colimitIsoOfIsLeftKanExtension_inv]; rw [ι_colimitIsoOfIsLeftKanExtension_inv_assoc]; rw [ι_colimMap]; rw [←
+      rw [ι_colimMap_assoc]; rw [ι_colimitIsoOfIsLeftKanExtension_inv]; rw [ι_colimitIsoOfIsLeftKanExtension_inv_assoc]; rw [ι_colimMap]; rw [← assoc]; rw [← assoc]
+      congr 1
+      exact congr_app (L.lanUnit.naturality f) i))
 -/
 noncomputable def lanCompColimIso [HasColimitsOfShape C H] [HasColimitsOfShape D H] :
     L.lan ⋙ colim ≅ colim (C := H) :=
@@ -572,7 +594,8 @@ definition colimitIsoColimitGrothendieck
         (colimitIsoOfIsLeftKanExtension _ (L.leftKanExtensionUnit G)).symm
   _ ≅ colimit (fiberwiseColimit (CostructuredArrow.grothendieckProj L ⋙ G)) :=
         HasColimit.isoOfNatIso (leftKanExtensionIsoFiberwiseColimit L G)
-  _ ≅ colimit (C
+  _ ≅ colimit (CostructuredArrow.grothendieckProj L ⋙ G) :=
+        colimitFiberwiseColimitIso _
 
 中文:
 定义 colimitIsoColimitGrothendieck
@@ -583,7 +606,8 @@ definition colimitIsoColimitGrothendieck
         (colimitIsoOfIsLeftKanExtension _ (L.leftKanExtensionUnit G)).symm
   _ ≅ colimit (fiberwiseColimit (CostructuredArrow.grothendieckProj L ⋙ G)) :=
         HasColimit.isoOfNatIso (leftKanExtensionIsoFiberwiseColimit L G)
-  _ ≅ colimit (C
+  _ ≅ colimit (CostructuredArrow.grothendieckProj L ⋙ G) :=
+        colimitFiberwiseColimitIso _
 -/
 noncomputable def colimitIsoColimitGrothendieck :
     colimit G ≅ colimit (CostructuredArrow.grothendieckProj L ⋙ G) := calc
@@ -875,7 +899,14 @@ definition ranAdjunction
       homEquiv_naturality_right := fun {F G₁ G₂} β f =>
         hom_ext_of_isRightKanExtension _ (L.ranCounit.app G₂) _ _ (by
         ext X
-        dsimp [homEquivOfIsRightK
+        dsimp [homEquivOfIsRightKanExtension]
+        rw [liftOfIsRightKanExtension_fac_app]; rw [NatTrans.comp_app]; rw [assoc]
+        have h := congr_app (L.ranCounit.naturality f) X
+        dsimp at h ⊢
+        rw [h]; rw [liftOfIsRightKanExtension_fac_app_assoc])
+      homEquiv_naturality_left_symm := fun {F₁ F₂ G} β f => by
+        dsimp [homEquivOfIsRightKanExtension]
+        rw [assoc] }
 
 中文:
 定义 ranAdjunction
@@ -886,7 +917,14 @@ definition ranAdjunction
       homEquiv_naturality_right := fun {F G₁ G₂} β f =>
         hom_ext_of_isRightKanExtension _ (L.ranCounit.app G₂) _ _ (by
         ext X
-        dsimp [homEquivOfIsRightK
+        dsimp [homEquivOfIsRightKanExtension]
+        rw [liftOfIsRightKanExtension_fac_app]; rw [NatTrans.comp_app]; rw [assoc]
+        have h := congr_app (L.ranCounit.naturality f) X
+        dsimp at h ⊢
+        rw [h]; rw [liftOfIsRightKanExtension_fac_app_assoc])
+      homEquiv_naturality_left_symm := fun {F₁ F₂ G} β f => by
+        dsimp [homEquivOfIsRightKanExtension]
+        rw [assoc] }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, L.ranCounit.app, L.ranCounit.naturality, NatTrans, NatTrans.comp_app, comp_app, congr_app, homEquiv, homEquivOfIsRightKanExtension, homEquiv_naturality_left_symm, homEquiv_naturality_right, hom_ext_of_isRightKanExtension, liftOfIsRightKanExtension_fac_app, liftOfIsRightKanExtension_fac_app_assoc, mkOfHomEquiv, naturality, ranCounit
 -/
@@ -1060,7 +1098,8 @@ definition ranCompLimIso
     (fun f => limit.hom_ext (fun i => by
       dsimp
       rw [assoc]; rw [assoc]; rw [limMap_π]; rw [limitIsoOfIsRightKanExtension_hom_π_assoc]; rw [limitIsoOfIsRightKanExtension_hom_π]; rw [limMap_π_assoc]
-     
+      congr 1
+      exact congr_app (L.ranCounit.naturality f) i))
 
 中文:
 定义 ranCompLimIso
@@ -1070,7 +1109,8 @@ definition ranCompLimIso
     (fun f => limit.hom_ext (fun i => by
       dsimp
       rw [assoc]; rw [assoc]; rw [limMap_π]; rw [limitIsoOfIsRightKanExtension_hom_π_assoc]; rw [limitIsoOfIsRightKanExtension_hom_π]; rw [limMap_π_assoc]
-     
+      congr 1
+      exact congr_app (L.ranCounit.naturality f) i))
 -/
 noncomputable def ranCompLimIso (L : C ⥤ D) [forall (G : C ⥤ H), L.HasRightKanExtension G]
     [HasLimitsOfShape C H] [HasLimitsOfShape D H] : L.ran ⋙ lim ≅ lim (C := H) :=

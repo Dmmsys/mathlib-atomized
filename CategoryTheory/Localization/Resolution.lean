@@ -882,7 +882,7 @@ lemma isIso_iff_of_hasRightResolutions
       have := Φ.essSurj_of_hasRightResolutions L₂
       rw [← NatTrans.isIso_app_iff_of_iso α ((Φ.functor ⋙ L₂).objObjPreimageIso X₂)]
       apply hα
-    exact NatIso.isIso_of_is
+    exact NatIso.isIso_of_isIso_app α
 
 中文:
 引理 isIso_iff_of_hasRightResolutions
@@ -896,7 +896,7 @@ lemma isIso_iff_of_hasRightResolutions
       have := Φ.essSurj_of_hasRightResolutions L₂
       rw [← NatTrans.isIso_app_iff_of_iso α ((Φ.functor ⋙ L₂).objObjPreimageIso X₂)]
       apply hα
-    exact NatIso.isIso_of_is
+    exact NatIso.isIso_of_isIso_app α
 
 Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, NatTrans, NatTrans.isIso_app_iff_of_iso, essSurj_of_hasRightResolutions, functor, infer_instance, intros, isIso_app_iff_of_iso, isIso_of_isIso_app, objObjPreimageIso
 -/
@@ -956,7 +956,7 @@ lemma isIso_iff_of_hasLeftResolutions
       have := Φ.essSurj_of_hasLeftResolutions L₂
       rw [← NatTrans.isIso_app_iff_of_iso α ((Φ.functor ⋙ L₂).objObjPreimageIso X₂)]
       apply hα
-    exact NatIso.isIso_of_isI
+    exact NatIso.isIso_of_isIso_app α
 
 中文:
 引理 isIso_iff_of_hasLeftResolutions
@@ -970,7 +970,7 @@ lemma isIso_iff_of_hasLeftResolutions
       have := Φ.essSurj_of_hasLeftResolutions L₂
       rw [← NatTrans.isIso_app_iff_of_iso α ((Φ.functor ⋙ L₂).objObjPreimageIso X₂)]
       apply hα
-    exact NatIso.isIso_of_isI
+    exact NatIso.isIso_of_isIso_app α
 
 Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, NatTrans, NatTrans.isIso_app_iff_of_iso, essSurj_of_hasLeftResolutions, functor, infer_instance, intros, isIso_app_iff_of_iso, isIso_of_isIso_app, objObjPreimageIso
 -/
@@ -1006,7 +1006,7 @@ lemma hasRightResolutions_of_iso_of_essSurj
   exact ⟨{
     X₁ := L.functor.obj ρ.X₁
     w := e.inv ≫ R.functor.map ρ.w ≫ iso.hom.app _
-    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk e (iso.app _))).1 (R.ma
+    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk e (iso.app _))).1 (R.map _ ρ.hw) }⟩
 
 中文:
 引理 hasRightResolutions_of_iso_of_essSurj
@@ -1017,7 +1017,7 @@ lemma hasRightResolutions_of_iso_of_essSurj
   exact ⟨{
     X₁ := L.functor.obj ρ.X₁
     w := e.inv ≫ R.functor.map ρ.w ≫ iso.hom.app _
-    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk e (iso.app _))).1 (R.ma
+    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk e (iso.app _))).1 (R.map _ ρ.hw) }⟩
 
 Depends on / 依赖: Arrow.isoMk, Classical, Classical.arbitrary, EssSurj, Functor, Functor.EssSurj.mem_essImage, L.functor.obj, R.functor, R.functor.map, R.map, RightResolution, T.RightResolution, arbitrary, arrow_mk_iso_iff, e.inv, functor, iso.app, iso.hom.app, mem_essImage
 -/
@@ -1046,7 +1046,7 @@ lemma hasLeftResolutions_of_iso_of_essSurj
   exact ⟨{
     X₁ := L.functor.obj ρ.X₁
     w := iso.inv.app _ ≫ R.functor.map ρ.w ≫ e.hom
-    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk (iso.app _) e)).1 (R.map
+    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk (iso.app _) e)).1 (R.map _ ρ.hw) }⟩
 
 中文:
 引理 hasLeftResolutions_of_iso_of_essSurj
@@ -1057,7 +1057,7 @@ lemma hasLeftResolutions_of_iso_of_essSurj
   exact ⟨{
     X₁ := L.functor.obj ρ.X₁
     w := iso.inv.app _ ≫ R.functor.map ρ.w ≫ e.hom
-    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk (iso.app _) e)).1 (R.map
+    hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk (iso.app _) e)).1 (R.map _ ρ.hw) }⟩
 
 Depends on / 依赖: Arrow.isoMk, Classical, Classical.arbitrary, EssSurj, Functor, Functor.EssSurj.mem_essImage, L.functor.obj, LeftResolution, R.functor, R.functor.map, R.map, T.LeftResolution, arbitrary, arrow_mk_iso_iff, e.hom, functor, iso.app, iso.inv.app, mem_essImage
 -/
@@ -1087,7 +1087,9 @@ lemma hasRightResolutions_of_iso_of_essSurj_of_full
     X₁ := X₁
     w := R.functor.preimage (ρ.w ≫ B.functor.map e.inv ≫ iso.inv.app X₁)
     hw := by
-      simp only [← R.inverseImage_eq, 
+      simp only [← R.inverseImage_eq, MorphismProperty.inverseImage_iff, Functor.map_preimage]
+      refine (W₂'.arrow_mk_iso_iff ?_).2 ρ.hw
+      exact Arrow.isoMk (Iso.refl _) (iso.app _ ≪≫ B.functor.mapIso e)}⟩
 
 中文:
 引理 hasRightResolutions_of_iso_of_essSurj_of_full
@@ -1099,7 +1101,9 @@ lemma hasRightResolutions_of_iso_of_essSurj_of_full
     X₁ := X₁
     w := R.functor.preimage (ρ.w ≫ B.functor.map e.inv ≫ iso.inv.app X₁)
     hw := by
-      simp only [← R.inverseImage_eq, 
+      simp only [← R.inverseImage_eq, MorphismProperty.inverseImage_iff, Functor.map_preimage]
+      refine (W₂'.arrow_mk_iso_iff ?_).2 ρ.hw
+      exact Arrow.isoMk (Iso.refl _) (iso.app _ ≪≫ B.functor.mapIso e)}⟩
 
 Depends on / 依赖: Arrow.isoMk, B.RightResolution, B.functor.map, B.functor.mapIso, Classical, Classical.arbitrary, EssSurj, Functor, Functor.EssSurj.mem_essImage, Functor.map_preimage, Iso.refl, L.functor, MorphismProperty, MorphismProperty.inverseImage_iff, R.functor.obj, R.functor.preimage, R.inverseImage_eq, RightResolution, arbitrary, arrow_mk_iso_iff
 -/
@@ -1132,7 +1136,9 @@ lemma hasLeftResolutions_of_iso_of_essSurj_of_full
     X₁ := X₁
     w := R.functor.preimage (iso.hom.app X₁ ≫ B.functor.map e.hom ≫ ρ.w)
     hw := by
-      simp only [← R.inverseImage_eq, M
+      simp only [← R.inverseImage_eq, MorphismProperty.inverseImage_iff, Functor.map_preimage]
+      refine (W₂'.arrow_mk_iso_iff ?_).2 ρ.hw
+      exact Arrow.isoMk (iso.app _ ≪≫ B.functor.mapIso e) (Iso.refl _) }⟩
 
 中文:
 引理 hasLeftResolutions_of_iso_of_essSurj_of_full
@@ -1144,7 +1150,9 @@ lemma hasLeftResolutions_of_iso_of_essSurj_of_full
     X₁ := X₁
     w := R.functor.preimage (iso.hom.app X₁ ≫ B.functor.map e.hom ≫ ρ.w)
     hw := by
-      simp only [← R.inverseImage_eq, M
+      simp only [← R.inverseImage_eq, MorphismProperty.inverseImage_iff, Functor.map_preimage]
+      refine (W₂'.arrow_mk_iso_iff ?_).2 ρ.hw
+      exact Arrow.isoMk (iso.app _ ≪≫ B.functor.mapIso e) (Iso.refl _) }⟩
 
 Depends on / 依赖: Arrow.isoMk, B.LeftResolution, B.functor.map, B.functor.mapIso, Classical, Classical.arbitrary, EssSurj, Functor, Functor.EssSurj.mem_essImage, Functor.map_comp, Functor.map_preimage, Iso.refl, L.functor, LeftResolution, MorphismProperty, MorphismProperty.inverseImage_iff, Opposite, Opposite.op, Quiver, Quiver.Hom.op_inj
 -/

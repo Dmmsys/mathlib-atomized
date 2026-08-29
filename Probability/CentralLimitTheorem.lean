@@ -85,7 +85,17 @@ lemma tendsto_charFun_inv_sqrt_mul_pow
   apply tendsto_pow_exp_of_isLittleO_sub_add_div
   suffices (fun (n : Nat) => charFun (Measure.map X P) ((√n)⁻¹ * t) -
       (1 + (-(((√n)⁻¹ * t) ^ 2 / 2) : Complex))) =o[atTop] fun n => ((√n)⁻¹ * t) ^ 2 by
-    have aux : (fun (n : Nat) => ‖(1 / n : Complex)‖) = fun (n : Nat) => ‖(1 / n : Real)‖ 
+    have aux : (fun (n : Nat) => ‖(1 / n : Complex)‖) = fun (n : Nat) => ‖(1 / n : Real)‖ := by simp
+    rw [← Asymptotics.isLittleO_norm_right]; rw [aux]; rw [Asymptotics.isLittleO_norm_right]
+    refine .of_const_mul_right (c := t ^ 2) ?_
+    convert! this using 4 with n <;> norm_cast <;> simp [field]
+  have : Tendsto (fun (n : Nat) => (√n)⁻¹ * t) atTop (𝓝 0) := by
+    rw [← zero_mul t]
+    exact .mul_const t (tendsto_inv_atTop_zero.comp <| Real.tendsto_sqrt_atTop.comp <|
+      tendsto_natCast_atTop_atTop)
+  convert! (taylor_charFun_two hX h0 h1).comp_tendsto this using 2
+  simp
+  ring
 
 中文:
 引理 tendsto_charFun_inv_sqrt_mul_pow
@@ -94,7 +104,17 @@ lemma tendsto_charFun_inv_sqrt_mul_pow
   apply tendsto_pow_exp_of_isLittleO_sub_add_div
   suffices (fun (n : Nat) => charFun (Measure.map X P) ((√n)⁻¹ * t) -
       (1 + (-(((√n)⁻¹ * t) ^ 2 / 2) : Complex))) =o[atTop] fun n => ((√n)⁻¹ * t) ^ 2 by
-    have aux : (fun (n : Nat) => ‖(1 / n : Complex)‖) = fun (n : Nat) => ‖(1 / n : Real)‖ 
+    have aux : (fun (n : Nat) => ‖(1 / n : Complex)‖) = fun (n : Nat) => ‖(1 / n : Real)‖ := by simp
+    rw [← Asymptotics.isLittleO_norm_right]; rw [aux]; rw [Asymptotics.isLittleO_norm_right]
+    refine .of_const_mul_right (c := t ^ 2) ?_
+    convert! this using 4 with n <;> norm_cast <;> simp [field]
+  have : Tendsto (fun (n : Nat) => (√n)⁻¹ * t) atTop (𝓝 0) := by
+    rw [← zero_mul t]
+    exact .mul_const t (tendsto_inv_atTop_zero.comp <| Real.tendsto_sqrt_atTop.comp <|
+      tendsto_natCast_atTop_atTop)
+  convert! (taylor_charFun_two hX h0 h1).comp_tendsto this using 2
+  simp
+  ring
 
 Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_norm_right, Measure, Measure.map, charFun, convert, isLittleO_norm_right, of_const_mul_right, tendsto_pow_exp_of_isLittleO_sub_add_div
 -/
@@ -129,7 +149,7 @@ theorem tendstoInDistribution_inv_sqrt_mul_sum
     refine ProbabilityMeasure.tendsto_iff_tendsto_charFun.2 fun t => ?_
     rw! [hY.map_eq]
     simpa [charFun_inv_sqrt_mul_sum hindep hident, charFun_gaussianReal, neg_div] using
-      tendsto_charFu
+      tendsto_charFun_inv_sqrt_mul_pow (hident 0).aemeasurable_fst h0 h1 t
 
 中文:
 定理 tendstoInDistribution_inv_sqrt_mul_sum
@@ -139,7 +159,7 @@ theorem tendstoInDistribution_inv_sqrt_mul_sum
     refine ProbabilityMeasure.tendsto_iff_tendsto_charFun.2 fun t => ?_
     rw! [hY.map_eq]
     simpa [charFun_inv_sqrt_mul_sum hindep hident, charFun_gaussianReal, neg_div] using
-      tendsto_charFu
+      tendsto_charFun_inv_sqrt_mul_pow (hident 0).aemeasurable_fst h0 h1 t
 
 Depends on / 依赖: Finset, Finset.aemeasurable_fun_sum, ProbabilityMeasure, ProbabilityMeasure.tendsto_iff_tendsto_charFun, aemeasurable_fst, aemeasurable_fun_sum, charFun_gaussianReal, charFun_inv_sqrt_mul_sum, const_mul, hY.map_eq, hident, hindep, map_eq, neg_div, tendsto, tendsto_charFun_inv_sqrt_mul_pow, tendsto_iff_tendsto_charFun
 -/
@@ -166,7 +186,17 @@ theorem tendstoInDistribution_inv_sqrt_mul_var_mul_sum_sub
 have intX0 : Integrable (X 0) P := memLp_one_iff_integrable.1
     (memLp_two_of_variance_ne_zero mX0.aestronglyMeasurable hX).mono_exponent (by simp)
   have (n : Nat) ω : (√(n * Var[X 0; P]))⁻¹ * (∑ k in Finset.range n, X k ω - n * P[X 0]) =
-      (√n)⁻¹ 
+      (√n)⁻¹ * ∑ k in Finset.range n, (X k ω - P[X 0]) / √Var[X 0; P] := by
+    rw [← Finset.sum_div]; rw [Finset.sum_sub_distrib]
+    simp [field]
+  simp_rw [this]
+  convert! tendstoInDistribution_inv_sqrt_mul_sum hY ?_ ?_ ?_ ?_
+  · rw [integral_div, integral_sub intX0 (by simp)]
+    simp
+  · simp only [Pi.pow_apply, div_pow]
+    rw [integral_div]; rw [← variance_eq_integral mX0]; rw [Real.sq_sqrt (variance_nonneg _ _)]; rw [div_self hX]
+  · exact hindep.comp (fun _ x => (x - P[X 0]) / √Var[X 0; P]) (by fun_prop)
+  · convert! fun n => (hident n).comp (u := fun x => (x - P[X 0]) / √Var[X 0; P]) (by fun_prop)
 
 中文:
 定理 tendstoInDistribution_inv_sqrt_mul_var_mul_sum_sub
@@ -175,7 +205,17 @@ have intX0 : Integrable (X 0) P := memLp_one_iff_integrable.1
 have intX0 : Integrable (X 0) P := memLp_one_iff_integrable.1
     (memLp_two_of_variance_ne_zero mX0.aestronglyMeasurable hX).mono_exponent (by simp)
   have (n : Nat) ω : (√(n * Var[X 0; P]))⁻¹ * (∑ k in Finset.range n, X k ω - n * P[X 0]) =
-      (√n)⁻¹ 
+      (√n)⁻¹ * ∑ k in Finset.range n, (X k ω - P[X 0]) / √Var[X 0; P] := by
+    rw [← Finset.sum_div]; rw [Finset.sum_sub_distrib]
+    simp [field]
+  simp_rw [this]
+  convert! tendstoInDistribution_inv_sqrt_mul_sum hY ?_ ?_ ?_ ?_
+  · rw [integral_div, integral_sub intX0 (by simp)]
+    simp
+  · simp only [Pi.pow_apply, div_pow]
+    rw [integral_div]; rw [← variance_eq_integral mX0]; rw [Real.sq_sqrt (variance_nonneg _ _)]; rw [div_self hX]
+  · exact hindep.comp (fun _ x => (x - P[X 0]) / √Var[X 0; P]) (by fun_prop)
+  · convert! fun n => (hident n).comp (u := fun x => (x - P[X 0]) / √Var[X 0; P]) (by fun_prop)
 -/
 private theorem tendstoInDistribution_inv_sqrt_mul_var_mul_sum_sub
     (hY : HasLaw Y (gaussianReal 0 1) P')
@@ -216,7 +256,25 @@ theorem tendstoInDistribution_inv_sqrt_mul_sum_sub
       refine ae_all_iff.2 fun n => ?_
       convert! (ae_eq_integral_of_variance_eq_zero ((hident n).memLp_iff.2 hX)) ?_ using 3
       · rw [(hident n).integral_eq]
-      · rwa [(hident n).variance_eq
+      · rwa [(hident n).variance_eq]
+    have mX (n : Nat) := (hident n).aemeasurable_fst
+    refine tendstoInDistribution_of_identDistrib 0 (fun n => ?_) ?_
+    · refine ⟨by fun_prop, by fun_prop, Measure.map_congr ?_⟩
+      filter_upwards [this] with ω hω
+      simp [hω]
+    · exact ⟨by fun_prop, by fun_prop, by simp [hY.map_eq, h]⟩
+  have : HasLaw (fun ω => Y ω / √Var[X 0; P]) (gaussianReal 0 1) P' := by
+    convert! gaussianReal_div_const hY _
+    · simp
+    · ext; simp [h]
+  convert!
+    (tendstoInDistribution_inv_sqrt_mul_var_mul_sum_sub this h hindep hident).continuous_comp (g :=
+      (√Var[X 0; P] * ·)) (by fun_prop)
+  · simp [field] -- simp [field, hX] triggers the unused simp arguments linter
+    field_simp [h]
+  · ext
+    simp [field] -- simp [field, hX] triggers the unused simp arguments linter
+    field_simp [h]
 
 中文:
 定理 tendstoInDistribution_inv_sqrt_mul_sum_sub
@@ -226,7 +284,25 @@ theorem tendstoInDistribution_inv_sqrt_mul_sum_sub
       refine ae_all_iff.2 fun n => ?_
       convert! (ae_eq_integral_of_variance_eq_zero ((hident n).memLp_iff.2 hX)) ?_ using 3
       · rw [(hident n).integral_eq]
-      · rwa [(hident n).variance_eq
+      · rwa [(hident n).variance_eq]
+    have mX (n : Nat) := (hident n).aemeasurable_fst
+    refine tendstoInDistribution_of_identDistrib 0 (fun n => ?_) ?_
+    · refine ⟨by fun_prop, by fun_prop, Measure.map_congr ?_⟩
+      filter_upwards [this] with ω hω
+      simp [hω]
+    · exact ⟨by fun_prop, by fun_prop, by simp [hY.map_eq, h]⟩
+  have : HasLaw (fun ω => Y ω / √Var[X 0; P]) (gaussianReal 0 1) P' := by
+    convert! gaussianReal_div_const hY _
+    · simp
+    · ext; simp [h]
+  convert!
+    (tendstoInDistribution_inv_sqrt_mul_var_mul_sum_sub this h hindep hident).continuous_comp (g :=
+      (√Var[X 0; P] * ·)) (by fun_prop)
+  · simp [field] -- simp [field, hX] triggers the unused simp arguments linter
+    field_simp [h]
+  · ext
+    simp [field] -- simp [field, hX] triggers the unused simp arguments linter
+    field_simp [h]
 
 Depends on / 依赖: Measure, Measure.map_congr, ae_all_iff, ae_eq_integral_of_variance_eq_zero, aemeasurable_fst, convert, eq_or_ne, filter_upwards, fun_prop, hident, integral_eq, map_congr, memLp_iff, tendstoInDistribution_of_identDistrib, variance_eq
 -/

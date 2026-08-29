@@ -35,7 +35,7 @@ theorem vAdd_apply_of_mem_strictPeriods
     simp_rw [slash_def, this]
     simp [σ, denom, GeneralLinearGroup.val_det_apply, denom]
   ext
-  simp [σ, num, denom, coe_vadd, UpperHalfPlane.coe_smul, num
+  simp [σ, num, denom, coe_vadd, UpperHalfPlane.coe_smul, num, add_comm]
 
 中文:
 定理 vAdd_apply_of_mem_strictPeriods
@@ -46,7 +46,7 @@ theorem vAdd_apply_of_mem_strictPeriods
     simp_rw [slash_def, this]
     simp [σ, denom, GeneralLinearGroup.val_det_apply, denom]
   ext
-  simp [σ, num, denom, coe_vadd, UpperHalfPlane.coe_smul, num
+  simp [σ, num, denom, coe_vadd, UpperHalfPlane.coe_smul, num, add_comm]
 
 Depends on / 依赖: GeneralLinearGroup, GeneralLinearGroup.upperRightHom, GeneralLinearGroup.val_det_apply, UpperHalfPlane, UpperHalfPlane.coe_smul, add_comm, coe_smul, coe_vadd, congr_fun, mem_strictPeriods_iff, mem_strictPeriods_iff.mp, simp_rw, slash_action_eqn, slash_def, upperRightHom, val_det_apply
 -/
@@ -150,7 +150,7 @@ theorem slash_action_generators
     · intro x hx hf
       rw [← hf]; rw [← SlashAction.slash_mul]
       simp [hf]
-    ·
+    · simpa [← hΓ]
 
 中文:
 定理 slash_action_generators
@@ -163,7 +163,7 @@ theorem slash_action_generators
     · intro x hx hf
       rw [← hf]; rw [← SlashAction.slash_mul]
       simp [hf]
-    ·
+    · simpa [← hΓ]
 
 Depends on / 依赖: SlashAction, SlashAction.slash_mul, Subgroup, Subgroup.closure_induction, Subgroup.mem_closure_of_mem, closure_induction, contextual, mem_closure_of_mem, slash_mul
 -/

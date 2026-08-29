@@ -609,7 +609,11 @@ theorem isSymmetric_iff_inner_map_self_real
     rw [inner_map_polarization T x y]
     simp only [starRingEnd_apply, star_div₀, star_sub, star_add, star_mul]
     simp only [← starRingEnd_apply]
-    rw [h (x + y)]; rw [h (x
+    rw [h (x + y)]; rw [h (x - y)]; rw [h (x + Complex.I • y)]; rw [h (x - Complex.I • y)]
+    simp only [Complex.conj_I]
+    rw [inner_map_polarization']
+    norm_num
+    ring
 
 中文:
 定理 isSymmetric_iff_inner_map_self_real
@@ -623,7 +627,11 @@ theorem isSymmetric_iff_inner_map_self_real
     rw [inner_map_polarization T x y]
     simp only [starRingEnd_apply, star_div₀, star_sub, star_add, star_mul]
     simp only [← starRingEnd_apply]
-    rw [h (x + y)]; rw [h (x
+    rw [h (x + y)]; rw [h (x - y)]; rw [h (x + Complex.I • y)]; rw [h (x - Complex.I • y)]
+    simp only [Complex.conj_I]
+    rw [inner_map_polarization']
+    norm_num
+    ring
 
 Depends on / 依赖: Complex.I, Complex.conj_I, IsSymmetric, IsSymmetric.conj_inner_sym, conj_I, conj_inner_sym, inner_conj_symm, inner_map_polarization, starRingEnd_apply, star_add, star_mul, star_sub
 -/
@@ -659,6 +667,13 @@ theorem IsSymmetric.inner_map_polarization
     suffices (re ⟪T y, x⟫ : 𝕜) = ⟪T y, x⟫ by
       rw [conj_eq_iff_re.mpr this]
       ring
+    rw [← re_add_im ⟪T y]; rw [x⟫]
+    simp_rw [h, mul_zero, add_zero]
+    norm_cast
+  · simp_rw [map_add, map_sub, inner_add_left, inner_add_right, inner_sub_left, inner_sub_right,
+      map_smul, inner_smul_left, inner_smul_right, RCLike.conj_I, mul_add, mul_sub, sub_sub,
+      ← mul_assoc, mul_neg, h, neg_neg, one_mul, neg_one_mul]
+    ring
 
 中文:
 定理 IsSymmetric.inner_map_polarization
@@ -670,6 +685,13 @@ theorem IsSymmetric.inner_map_polarization
     suffices (re ⟪T y, x⟫ : 𝕜) = ⟪T y, x⟫ by
       rw [conj_eq_iff_re.mpr this]
       ring
+    rw [← re_add_im ⟪T y]; rw [x⟫]
+    simp_rw [h, mul_zero, add_zero]
+    norm_cast
+  · simp_rw [map_add, map_sub, inner_add_left, inner_add_right, inner_sub_left, inner_sub_right,
+      map_smul, inner_smul_left, inner_smul_right, RCLike.conj_I, mul_add, mul_sub, sub_sub,
+      ← mul_assoc, mul_neg, h, neg_neg, one_mul, neg_one_mul]
+    ring
 
 Depends on / 依赖: I_mul_I_ax, RCLike, RCLike.conj_, add_zero, conj_, conj_eq_iff_re, conj_eq_iff_re.mpr, inner_add_left, inner_add_right, inner_conj_symm, inner_smul_left, inner_smul_right, inner_sub_left, inner_sub_right, map_add, map_smul, map_sub, mul_zero, re_add_im, simp_rw
 -/
@@ -819,7 +841,12 @@ theorem IsSymmetric.continuous
   have hlhs : forall k : Nat, ⟪T (u k) - T x, y - T x⟫ = ⟪u k - x, T (y - T x)⟫ := by
     intro k
     rw [← T.map_sub]; rw [hT]
-  
+  refine tendsto_nhds_unique ((hTu.sub_const _).inner tendsto_const_nhds) ?_
+  simp_rw [Function.comp_apply, hlhs]
+  rw [← inner_zero_left (T (y - T x))]
+  refine Filter.Tendsto.inner ?_ tendsto_const_nhds
+  rw [← sub_self x]
+  exact hu.sub_const _
 
 中文:
 定理 IsSymmetric.continuous
@@ -831,7 +858,12 @@ theorem IsSymmetric.continuous
   have hlhs : forall k : Nat, ⟪T (u k) - T x, y - T x⟫ = ⟪u k - x, T (y - T x)⟫ := by
     intro k
     rw [← T.map_sub]; rw [hT]
-  
+  refine tendsto_nhds_unique ((hTu.sub_const _).inner tendsto_const_nhds) ?_
+  simp_rw [Function.comp_apply, hlhs]
+  rw [← inner_zero_left (T (y - T x))]
+  refine Filter.Tendsto.inner ?_ tendsto_const_nhds
+  rw [← sub_self x]
+  exact hu.sub_const _
 -/
 theorem IsSymmetric.continuous [CompleteSpace E] {T : E ->ₗ[𝕜] E} (hT : IsSymmetric T) :
     Continuous T := by
@@ -923,7 +955,14 @@ theorem _root_.Submodule.isSymmetric_projection_iff
   · rw [← Subtype.coe_mk u hu, ← Subtype.coe_mk v hv,
       ← Submodule.projectionOnto_apply_left hUV ⟨u, hu⟩, ← U.subtype_apply, ← comp_apply,
       ← h, comp_apply, Submodule.projectionOnto_apply_right hUV ⟨v, hv⟩,
-      map_ze
+      map_zero, inner_zero_left]
+  · nth_rw 2 [← projection_add_projection_eq_self hUV x]
+    nth_rw 1 [← projection_add_projection_eq_self hUV y]
+    rw [isOrtho_iff_inner_eq] at h
+    simp [inner_add_right, inner_add_left, h, inner_eq_zero_symm]
+
+@[deprecated (since := "2026-05-05")] alias _root_.Submodule.IsCompl.projection_isSymmetric_iff :=
+  _root_.Submodule.isSymmetric_projection_iff
 
 中文:
 定理 _root_.子模.isSymmetric_projection_iff
@@ -933,7 +972,14 @@ theorem _root_.Submodule.isSymmetric_projection_iff
   · rw [← Subtype.coe_mk u hu, ← Subtype.coe_mk v hv,
       ← Submodule.projectionOnto_apply_left hUV ⟨u, hu⟩, ← U.subtype_apply, ← comp_apply,
       ← h, comp_apply, Submodule.projectionOnto_apply_right hUV ⟨v, hv⟩,
-      map_ze
+      map_zero, inner_zero_left]
+  · nth_rw 2 [← projection_add_projection_eq_self hUV x]
+    nth_rw 1 [← projection_add_projection_eq_self hUV y]
+    rw [isOrtho_iff_inner_eq] at h
+    simp [inner_add_right, inner_add_left, h, inner_eq_zero_symm]
+
+@[deprecated (since := "2026-05-05")] alias _root_.Submodule.IsCompl.projection_isSymmetric_iff :=
+  _root_.Submodule.isSymmetric_projection_iff
 
 Depends on / 依赖: Submodule, Submodule.projectionOnto_apply_left, Submodule.projectionOnto_apply_right, Subtype, Subtype.coe_mk, U.subtype_apply, coe_mk, comp_apply, inner_add_left, inner_add_right, inner_eq_zero_symm, inner_zero_left, isOrtho_iff_inner_eq, map_zero, nth_rw, projection, projectionOnto_apply_left, projectionOnto_apply_right, projection_add_projection_eq_self, subtype_apply
 -/
@@ -967,7 +1013,12 @@ theorem _root_.Submodule.isSymmetricProjection_projection_iff
   _root_.Submodule.IsCompl.projection_isSymmetricProjection_iff :=
   _root_.Submodule.isSymmetricProjection_projection_iff
 
-alias ⟨_, _root_.Submodule.isSymmetr
+alias ⟨_, _root_.Submodule.isSymmetricProjection_projection_of_isOrtho⟩ :=
+  _root_.Submodule.isSymmetricProjection_projection_iff
+
+@[deprecated (since := "2026-05-05")] alias
+  _root_.Submodule.IsCompl.projection_isSymmetricProjection_of_isOrtho :=
+  _root_.Submodule.isSymmetricProjection_projection_of_isOrtho
 
 中文:
 定理 _root_.子模.isSymmetricProjection_projection_iff
@@ -978,7 +1029,12 @@ alias ⟨_, _root_.Submodule.isSymmetr
   _root_.Submodule.IsCompl.projection_isSymmetricProjection_iff :=
   _root_.Submodule.isSymmetricProjection_projection_iff
 
-alias ⟨_, _root_.Submodule.isSymmetr
+alias ⟨_, _root_.Submodule.isSymmetricProjection_projection_of_isOrtho⟩ :=
+  _root_.Submodule.isSymmetricProjection_projection_iff
+
+@[deprecated (since := "2026-05-05")] alias
+  _root_.Submodule.IsCompl.projection_isSymmetricProjection_of_isOrtho :=
+  _root_.Submodule.isSymmetricProjection_projection_of_isOrtho
 
 Depends on / 依赖: isIdempotentElem_projection, isSymmetricProjection_iff, isSymmetric_projection_iff
 -/
@@ -1085,7 +1141,7 @@ theorem IsSymmetricProjection.ext_iff
   rw [hS.isIdempotentElem.ext_iff hT.isIdempotentElem]; rw [← hT.isIdempotentElem.isSymmetric_iff_orthogonal_range.mp hT.isSymmetric]; rw [← hS.isIdempotentElem.isSymmetric_iff_orthogonal_range.mp hS.isSymmetric]
   simp [h]
 
-alias ⟨_, IsSymmetricProjection
+alias ⟨_, IsSymmetricProjection.ext⟩ := IsSymmetricProjection.ext_iff
 
 中文:
 定理 是SymmetricProjection.ext_iff
@@ -1095,7 +1151,7 @@ alias ⟨_, IsSymmetricProjection
   rw [hS.isIdempotentElem.ext_iff hT.isIdempotentElem]; rw [← hT.isIdempotentElem.isSymmetric_iff_orthogonal_range.mp hT.isSymmetric]; rw [← hS.isIdempotentElem.isSymmetric_iff_orthogonal_range.mp hS.isSymmetric]
   simp [h]
 
-alias ⟨_, IsSymmetricProjection
+alias ⟨_, IsSymmetricProjection.ext⟩ := IsSymmetricProjection.ext_iff
 
 Depends on / 依赖: ext_iff, hS.isIdempotentElem.ext_iff, hS.isIdempotentElem.isSymmetric_iff_orthogonal_range.mp, hS.isSymmetric, hT.isIdempotentElem, hT.isIdempotentElem.isSymmetric_iff_orthogonal_range.mp, hT.isSymmetric, isIdempotentElem, isSymmetric, isSymmetric_iff_orthogonal_range
 -/

@@ -49,7 +49,21 @@ theorem exists_between_finsets
       -- both sets are nonempty, use `DenselyOrdered`
         Exists.elim
         (exists_between (lo_lt_hi _ (Finset.max'_mem _ nlo) _ (Finset.min'_mem _ nhi))) fun m hm =>
-        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm.1, 
+        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm.1, fun y hy =>
+          lt_of_lt_of_le hm.2 (Finset.min'_le hi y hy)⟩
+    else -- upper set is empty, use `NoMaxOrder`
+        Exists.elim
+        (exists_gt (Finset.max' lo nlo)) fun m hm =>
+        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm, fun y hy => (nhi ⟨y, hy⟩).elim⟩
+  else
+    if nhi : hi.Nonempty then
+      -- lower set is empty, use `NoMinOrder`
+        Exists.elim
+        (exists_lt (Finset.min' hi nhi)) fun m hm =>
+        ⟨m, fun x hx => (nlo ⟨x, hx⟩).elim, fun y hy => lt_of_lt_of_le hm (Finset.min'_le hi y hy)⟩
+    else -- both sets are empty, use `Nonempty`
+          nonem.elim
+        fun m => ⟨m, fun x hx => (nlo ⟨x, hx⟩).elim, fun y hy => (nhi ⟨y, hy⟩).elim⟩
 
 中文:
 定理 存在_between_finsets
@@ -59,7 +73,21 @@ theorem exists_between_finsets
       -- both sets are nonempty, use `DenselyOrdered`
         Exists.elim
         (exists_between (lo_lt_hi _ (Finset.max'_mem _ nlo) _ (Finset.min'_mem _ nhi))) fun m hm =>
-        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm.1, 
+        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm.1, fun y hy =>
+          lt_of_lt_of_le hm.2 (Finset.min'_le hi y hy)⟩
+    else -- upper set is empty, use `NoMaxOrder`
+        Exists.elim
+        (exists_gt (Finset.max' lo nlo)) fun m hm =>
+        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm, fun y hy => (nhi ⟨y, hy⟩).elim⟩
+  else
+    if nhi : hi.Nonempty then
+      -- lower set is empty, use `NoMinOrder`
+        Exists.elim
+        (exists_lt (Finset.min' hi nhi)) fun m hm =>
+        ⟨m, fun x hx => (nlo ⟨x, hx⟩).elim, fun y hy => lt_of_lt_of_le hm (Finset.min'_le hi y hy)⟩
+    else -- both sets are empty, use `Nonempty`
+          nonem.elim
+        fun m => ⟨m, fun x hx => (nlo ⟨x, hx⟩).elim, fun y hy => (nhi ⟨y, hy⟩).elim⟩
 
 Depends on / 依赖: Nonempty, hi.Nonempty, lo.Nonempty
 -/
@@ -99,7 +127,30 @@ lemma exists_orderEmbedding_insert
   let Sgt := {x in S.attach | a < x.val}.image f
   obtain ⟨b, hb, hb'⟩ := Order.exists_between_finsets Slt Sgt (fun x hx y hy => by
     simp only [Finset.mem_image, Finset.mem_filter, Finset.mem_attach, true_and, Subtype.exists,
-      exists_and_le
+      exists_and_left, Slt, Sgt] at hx hy
+    obtain ⟨_, hx, _, rfl⟩ := hx
+    obtain ⟨_, hy, _, rfl⟩ := hy
+    exact f.strictMono (hx.trans hy))
+  refine ⟨OrderEmbedding.ofStrictMono
+    (fun (x : (insert a S : Finset α)) => if hx : x.1 in S then f ⟨x.1, hx⟩ else b) ?_, ?_⟩
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩ hxy
+    if hxS : x in S
+    then if hyS : y in S
+      then simpa only [hxS, hyS, ↓reduceDIte, OrderEmbedding.lt_iff_lt, Subtype.mk_lt_mk]
+      else
+        obtain rfl := Finset.eq_of_mem_insert_of_notMem hy hyS
+        simp only [hxS, hyS, ↓reduceDIte]
+        exact hb _ (Finset.mem_image_of_mem _ (Finset.mem_filter.2 ⟨Finset.mem_attach _ _, hxy⟩))
+    else
+      obtain rfl := Finset.eq_of_mem_insert_of_notMem hx hxS
+      if hyS : y in S
+      then
+        simp only [hxS, hyS, ↓reduceDIte]
+        exact hb' _ (Finset.mem_image_of_mem _ (Finset.mem_filter.2 ⟨Finset.mem_attach _ _, hxy⟩))
+      else simp only [Finset.eq_of_mem_insert_of_notMem hy hyS, lt_self_iff_false] at hxy
+  · ext x
+    simp only [OrderEmbedding.coe_ofStrictMono,
+      Function.comp_apply, Finset.coe_mem, ↓reduceDIte, Subtype.coe_eta]
 
 中文:
 引理 存在_orderEmbedding_insert
@@ -109,7 +160,30 @@ lemma exists_orderEmbedding_insert
   let Sgt := {x in S.attach | a < x.val}.image f
   obtain ⟨b, hb, hb'⟩ := Order.exists_between_finsets Slt Sgt (fun x hx y hy => by
     simp only [Finset.mem_image, Finset.mem_filter, Finset.mem_attach, true_and, Subtype.exists,
-      exists_and_le
+      exists_and_left, Slt, Sgt] at hx hy
+    obtain ⟨_, hx, _, rfl⟩ := hx
+    obtain ⟨_, hy, _, rfl⟩ := hy
+    exact f.strictMono (hx.trans hy))
+  refine ⟨OrderEmbedding.ofStrictMono
+    (fun (x : (insert a S : Finset α)) => if hx : x.1 in S then f ⟨x.1, hx⟩ else b) ?_, ?_⟩
+  · rintro ⟨x, hx⟩ ⟨y, hy⟩ hxy
+    if hxS : x in S
+    then if hyS : y in S
+      then simpa only [hxS, hyS, ↓reduceDIte, OrderEmbedding.lt_iff_lt, Subtype.mk_lt_mk]
+      else
+        obtain rfl := Finset.eq_of_mem_insert_of_notMem hy hyS
+        simp only [hxS, hyS, ↓reduceDIte]
+        exact hb _ (Finset.mem_image_of_mem _ (Finset.mem_filter.2 ⟨Finset.mem_attach _ _, hxy⟩))
+    else
+      obtain rfl := Finset.eq_of_mem_insert_of_notMem hx hxS
+      if hyS : y in S
+      then
+        simp only [hxS, hyS, ↓reduceDIte]
+        exact hb' _ (Finset.mem_image_of_mem _ (Finset.mem_filter.2 ⟨Finset.mem_attach _ _, hxy⟩))
+      else simp only [Finset.eq_of_mem_insert_of_notMem hy hyS, lt_self_iff_false] at hxy
+  · ext x
+    simp only [OrderEmbedding.coe_ofStrictMono,
+      Function.comp_apply, Finset.coe_mem, ↓reduceDIte, Subtype.coe_eta]
 
 Depends on / 依赖: Finset, Finset.mem_attach, Finset.mem_filter, Finset.mem_image, Order.exists_between_finsets, OrderEmbedding, OrderEmbedding.ofStrictMono, S.attach, Subtype, Subtype.exists, attach, exists_and_left, exists_between_finsets, f.strictMono, hx.trans, insert, mem_attach, mem_filter, mem_image, ofStrictMono
 -/
@@ -210,7 +284,25 @@ theorem exists_across
     forall x in {p in f.val | p.fst < a}.image Prod.snd,
       forall y in {p in f.val | a < p.fst}.image Prod.snd, x < y := by
     intro x hx y hy
-    rw [Finset.mem_image] at hx
+    rw [Finset.mem_image] at hx hy
+    rcases hx with ⟨p, hp1, rfl⟩
+    rcases hy with ⟨q, hq1, rfl⟩
+    rw [Finset.mem_filter] at hp1 hq1
+    rw [← lt_iff_lt_of_cmp_eq_cmp (f.prop _ hp1.1 _ hq1.1)]
+    exact lt_trans hp1.right hq1.right
+  obtain ⟨b, hb⟩ := exists_between_finsets _ _ this
+  use b
+  rintro ⟨p1, p2⟩ hp
+  have : p1 != a := fun he => h ⟨p2, he ▸ hp⟩
+  rcases lt_or_gt_of_ne this with hl | hr
+  · have : p1 < a ∧ p2 < b :=
+      ⟨hl, hb.1 _ (Finset.mem_image.mpr ⟨(p1, p2), Finset.mem_filter.mpr ⟨hp, hl⟩, rfl⟩)⟩
+    rw [← cmp_eq_lt_iff]; rw [← cmp_eq_lt_iff] at this
+    exact this.1.trans this.2.symm
+  · have : a < p1 ∧ b < p2 :=
+      ⟨hr, hb.2 _ (Finset.mem_image.mpr ⟨(p1, p2), Finset.mem_filter.mpr ⟨hp, hr⟩, rfl⟩)⟩
+    rw [← cmp_eq_gt_iff]; rw [← cmp_eq_gt_iff] at this
+    exact this.1.trans this.2.symm
 
 中文:
 定理 存在_across
@@ -223,7 +315,25 @@ theorem exists_across
     forall x in {p in f.val | p.fst < a}.image Prod.snd,
       forall y in {p in f.val | a < p.fst}.image Prod.snd, x < y := by
     intro x hx y hy
-    rw [Finset.mem_image] at hx
+    rw [Finset.mem_image] at hx hy
+    rcases hx with ⟨p, hp1, rfl⟩
+    rcases hy with ⟨q, hq1, rfl⟩
+    rw [Finset.mem_filter] at hp1 hq1
+    rw [← lt_iff_lt_of_cmp_eq_cmp (f.prop _ hp1.1 _ hq1.1)]
+    exact lt_trans hp1.right hq1.right
+  obtain ⟨b, hb⟩ := exists_between_finsets _ _ this
+  use b
+  rintro ⟨p1, p2⟩ hp
+  have : p1 != a := fun he => h ⟨p2, he ▸ hp⟩
+  rcases lt_or_gt_of_ne this with hl | hr
+  · have : p1 < a ∧ p2 < b :=
+      ⟨hl, hb.1 _ (Finset.mem_image.mpr ⟨(p1, p2), Finset.mem_filter.mpr ⟨hp, hl⟩, rfl⟩)⟩
+    rw [← cmp_eq_lt_iff]; rw [← cmp_eq_lt_iff] at this
+    exact this.1.trans this.2.symm
+  · have : a < p1 ∧ b < p2 :=
+      ⟨hr, hb.2 _ (Finset.mem_image.mpr ⟨(p1, p2), Finset.mem_filter.mpr ⟨hp, hr⟩, rfl⟩)⟩
+    rw [← cmp_eq_gt_iff]; rw [← cmp_eq_gt_iff] at this
+    exact this.1.trans this.2.symm
 
 Depends on / 依赖: Finset, Finset.mem_filter, Finset.mem_image, Prod.snd, exists_between_finsets, f.prop, f.val, hp1.right, hq1.right, lt_iff_lt_of_cmp_eq_cmp, lt_trans, mem_filter, mem_image, p.fst
 -/
@@ -270,7 +380,9 @@ Eq.symm
           rw [← Finset.mem_coe]; rw [Finset.coe_image]; rw [Equiv.image_eq_preimage_symm] at hp
           rwa [← Finset.mem_coe])
         ((Equiv.prodComm α β).symm q)
-   
+        (by
+          rw [← Finset.mem_coe]; rw [Finset.coe_image]; rw [Equiv.image_eq_preimage_symm] at hq
+          rwa [← Finset.mem_coe])
 
 中文:
 定义 comm
@@ -282,7 +394,9 @@ Eq.symm
           rw [← Finset.mem_coe]; rw [Finset.coe_image]; rw [Equiv.image_eq_preimage_symm] at hp
           rwa [← Finset.mem_coe])
         ((Equiv.prodComm α β).symm q)
-   
+        (by
+          rw [← Finset.mem_coe]; rw [Finset.coe_image]; rw [Equiv.image_eq_preimage_symm] at hq
+          rwa [← Finset.mem_coe])
 -/
 protected def comm : PartialIso α β -> PartialIso β α :=
   Subtype.map (Finset.image (Equiv.prodComm _ _)) fun f hf p hp q hq =>
@@ -311,7 +425,12 @@ definition definedAtLeft
       ⟨⟨insert (a, b) f.val, fun p hp q hq => ?_⟩, ⟨b, Finset.mem_insert_self _ _⟩,
         Finset.subset_insert _ _⟩
     rw [Finset.mem_insert] at hp hq
-    rcases hp with (rfl | pf) <;> rcas
+    rcases hp with (rfl | pf) <;> rcases hq with (rfl | qf)
+    · simp only [cmp_self_eq_eq]
+    · rw [cmp_eq_cmp_symm]
+      exact a_b _ qf
+    · exact a_b _ pf
+    · exact f.prop _ pf _ qf
 
 中文:
 定义 definedAtLeft
@@ -323,7 +442,12 @@ definition definedAtLeft
       ⟨⟨insert (a, b) f.val, fun p hp q hq => ?_⟩, ⟨b, Finset.mem_insert_self _ _⟩,
         Finset.subset_insert _ _⟩
     rw [Finset.mem_insert] at hp hq
-    rcases hp with (rfl | pf) <;> rcas
+    rcases hp with (rfl | pf) <;> rcases hq with (rfl | qf)
+    · simp only [cmp_self_eq_eq]
+    · rw [cmp_eq_cmp_symm]
+      exact a_b _ qf
+    · exact a_b _ pf
+    · exact f.prop _ pf _ qf
 
 Depends on / 依赖: f.val
 -/
@@ -357,7 +481,9 @@ definition definedAtRight
     refine ⟨f'.comm, ⟨a, ?_⟩, ?_⟩
     · change (a, b) in f'.val.image _
       rwa [← Finset.mem_coe, Finset.coe_image, Equiv.image_eq_preimage_symm]
-    · change _ subseteq f'.v
+    · change _ subseteq f'.val.image _
+      rwa [← Finset.coe_subset, Finset.coe_image, ← Equiv.symm_image_subset, ← Finset.coe_image,
+        Finset.coe_subset]
 
 中文:
 定义 definedAtRight
@@ -368,7 +494,9 @@ definition definedAtRight
     refine ⟨f'.comm, ⟨a, ?_⟩, ?_⟩
     · change (a, b) in f'.val.image _
       rwa [← Finset.mem_coe, Finset.coe_image, Equiv.image_eq_preimage_symm]
-    · change _ subseteq f'.v
+    · change _ subseteq f'.val.image _
+      rwa [← Finset.coe_subset, Finset.coe_image, ← Equiv.symm_image_subset, ← Finset.coe_image,
+        Finset.coe_subset]
 
 Depends on / 依赖: f.val
 -/
@@ -445,7 +573,14 @@ theorem embedding_from_countable_to_dense
   have : Nonempty (Set.Ioo x y) := ⟨⟨a, ha⟩⟩
   let our_ideal : Ideal (PartialIso α _) :=
     idealOfCofinals default (definedAtLeft (Set.Ioo x y))
-  let F a := funOfIdeal a our_ideal (co
+  let F a := funOfIdeal a our_ideal (cofinal_meets_idealOfCofinals _ _ a)
+  refine
+    ⟨RelEmbedding.trans (OrderEmbedding.ofStrictMono (fun a => (F a).val) fun a₁ a₂ => ?_)
+        (OrderEmbedding.subtype _)⟩
+  rcases (F a₁).prop with ⟨f, hf, ha₁⟩
+  rcases (F a₂).prop with ⟨g, hg, ha₂⟩
+  rcases our_ideal.directed _ hf _ hg with ⟨m, _hm, fm, gm⟩
+  exact (lt_iff_lt_of_cmp_eq_cmp <| m.prop (a₁, _) (fm ha₁) (a₂, _) (gm ha₂)).mp
 
 中文:
 定理 embedding_from_countable_to_dense
@@ -457,7 +592,14 @@ theorem embedding_from_countable_to_dense
   have : Nonempty (Set.Ioo x y) := ⟨⟨a, ha⟩⟩
   let our_ideal : Ideal (PartialIso α _) :=
     idealOfCofinals default (definedAtLeft (Set.Ioo x y))
-  let F a := funOfIdeal a our_ideal (co
+  let F a := funOfIdeal a our_ideal (cofinal_meets_idealOfCofinals _ _ a)
+  refine
+    ⟨RelEmbedding.trans (OrderEmbedding.ofStrictMono (fun a => (F a).val) fun a₁ a₂ => ?_)
+        (OrderEmbedding.subtype _)⟩
+  rcases (F a₁).prop with ⟨f, hf, ha₁⟩
+  rcases (F a₂).prop with ⟨g, hg, ha₂⟩
+  rcases our_ideal.directed _ hf _ hg with ⟨m, _hm, fm, gm⟩
+  exact (lt_iff_lt_of_cmp_eq_cmp <| m.prop (a₁, _) (fm ha₁) (a₂, _) (gm ha₂)).mp
 
 Depends on / 依赖: Nonempty, OrderEmbedding, OrderEmbedding.ofStrictMono, OrderEmbedding.subtype, PartialIso, RelEmbedding, RelEmbedding.trans, Set.Ioo, cofinal_meets_idealOfCofinals, definedAtLeft, exists_between, exists_pair_lt, funOfIdeal, idealOfCofinals, nonempty_encodable, ofStrictMono, our_ideal, subtype
 -/
@@ -490,7 +632,13 @@ theorem iso_of_countable_dense
   let to_cofinal : α oplus β -> Cofinal (PartialIso α β) := fun p =>
     Sum.recOn p (definedAtLeft β) (definedAtRight α)
   let our_ideal : Ideal (PartialIso α β) := idealOfCofinals default to_cofinal
-  let F a := funOfIdeal a our_ideal (c
+  let F a := funOfIdeal a our_ideal (cofinal_meets_idealOfCofinals _ to_cofinal (Sum.inl a))
+  let G b := invOfIdeal b our_ideal (cofinal_meets_idealOfCofinals _ to_cofinal (Sum.inr b))
+  exact ⟨OrderIso.ofCmpEqCmp (fun a => (F a).val) (fun b => (G b).val) fun a b => by
+      rcases (F a).prop with ⟨f, hf, ha⟩
+      rcases (G b).prop with ⟨g, hg, hb⟩
+      rcases our_ideal.directed _ hf _ hg with ⟨m, _, fm, gm⟩
+      exact m.prop (a, _) (fm ha) (_, b) (gm hb)⟩
 
 中文:
 定理 iso_of_countable_dense
@@ -501,7 +649,13 @@ theorem iso_of_countable_dense
   let to_cofinal : α oplus β -> Cofinal (PartialIso α β) := fun p =>
     Sum.recOn p (definedAtLeft β) (definedAtRight α)
   let our_ideal : Ideal (PartialIso α β) := idealOfCofinals default to_cofinal
-  let F a := funOfIdeal a our_ideal (c
+  let F a := funOfIdeal a our_ideal (cofinal_meets_idealOfCofinals _ to_cofinal (Sum.inl a))
+  let G b := invOfIdeal b our_ideal (cofinal_meets_idealOfCofinals _ to_cofinal (Sum.inr b))
+  exact ⟨OrderIso.ofCmpEqCmp (fun a => (F a).val) (fun b => (G b).val) fun a b => by
+      rcases (F a).prop with ⟨f, hf, ha⟩
+      rcases (G b).prop with ⟨g, hg, hb⟩
+      rcases our_ideal.directed _ hf _ hg with ⟨m, _, fm, gm⟩
+      exact m.prop (a, _) (fm ha) (_, b) (gm hb)⟩
 
 Depends on / 依赖: Cofinal, OrderIso, OrderIso.ofCmpEqCmp, PartialIso, Sum.inl, Sum.inr, Sum.recOn, cofinal_meets_idealOfCofinals, definedAtLeft, definedAtRight, funOfIdeal, idealOfCofinals, invOfIdeal, nonempty_encodable, ofCmpEqCmp, our_ideal, to_cofinal
 -/

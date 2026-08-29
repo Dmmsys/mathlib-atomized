@@ -177,7 +177,19 @@ instance [P.IsStableUnderBaseChange]
     | of_iso f' g' e hf' ih =>
       exact ih _ (g ≫ e.inv.right) (fst ≫ e.inv.left) _ (h.paste_horiz (.of_horiz_isIso ⟨e.inv.w⟩))
     | comp f' hf' R hR g' hg' ih =>
-      let u : W ⟶ pullback g f' :=
+      let u : W ⟶ pullback g f' := pullback.lift snd (fst ≫ g') (by simp [h.w.symm])
+      have : snd = u ≫ pullback.fst g f' := by simp [u]
+      rw [this] at h ⊢
+      let e : W ≅ pullback g' (pullback.snd g f') :=
+        IsPullback.isoPullback (.of_bot h (by simp [u]) (.flip <| .of_hasPullback _ _))
+      rw [← (sourceLocalClosure K P).cancel_left_of_respectsIso e.inv]; rw [← Category.assoc]
+      refine .comp _ (ih _ _ _ _ (.flip (.of_hasPullback _ _))) _
+        (K.pullbackArrows_mem (pullback.snd _ _) hR) _ ?_
+      simpa [e, u] using .mk _ _ hg'
+    | of_presieve f R hR h ih =>
+      refine .of_presieve _ _ (K.pullbackArrows_mem fst hR) ?_
+      intro U v ⟨Z, u, hu⟩
+      exact ih _ _ hu _ g (pullback.fst _ _) _ (.paste_vert (.of_hasPullback _ _) h)
 
 中文:
 实例 [P.是StableUnderBaseChange]
@@ -188,7 +200,19 @@ instance [P.IsStableUnderBaseChange]
     | of_iso f' g' e hf' ih =>
       exact ih _ (g ≫ e.inv.right) (fst ≫ e.inv.left) _ (h.paste_horiz (.of_horiz_isIso ⟨e.inv.w⟩))
     | comp f' hf' R hR g' hg' ih =>
-      let u : W ⟶ pullback g f' :=
+      let u : W ⟶ pullback g f' := pullback.lift snd (fst ≫ g') (by simp [h.w.symm])
+      have : snd = u ≫ pullback.fst g f' := by simp [u]
+      rw [this] at h ⊢
+      let e : W ≅ pullback g' (pullback.snd g f') :=
+        IsPullback.isoPullback (.of_bot h (by simp [u]) (.flip <| .of_hasPullback _ _))
+      rw [← (sourceLocalClosure K P).cancel_left_of_respectsIso e.inv]; rw [← Category.assoc]
+      refine .comp _ (ih _ _ _ _ (.flip (.of_hasPullback _ _))) _
+        (K.pullbackArrows_mem (pullback.snd _ _) hR) _ ?_
+      simpa [e, u] using .mk _ _ hg'
+    | of_presieve f R hR h ih =>
+      refine .of_presieve _ _ (K.pullbackArrows_mem fst hR) ?_
+      intro U v ⟨Z, u, hu⟩
+      exact ih _ _ hu _ g (pullback.fst _ _) _ (.paste_vert (.of_hasPullback _ _) h)
 
 Depends on / 依赖: IsPullback, IsPullback.isoPullback, P.of_isPullback, ShortComplex, ShortComplex.ab_exact_iff, T.mor, T.obj, Triangle, Triangle.yoneda_exact, ab_exact_iff, e.inv.left, e.inv.right, e.inv.w, generalizing, h.paste_horiz, h.w.symm, isoPullback, of_bot, of_h, of_horiz_isIso
 -/
@@ -231,7 +255,37 @@ lemma sourceLocalClosure_iff_of_respectsLeft
       obtain ⟨R, hR, h⟩ := h
       rw [K.mem_iff_exists_zeroHypercover] at hR
       obtain ⟨E, rfl⟩ := hR
-      refine ⟨_, (E
+      refine ⟨_, (E.pushforward e.hom.left (K.mem_coverings_of_isIso _)).mem₀, ?_⟩
+      intro U v ⟨i⟩
+      dsimp
+      simp only [Category.assoc, Arrow.w_mk_right, Arrow.mk_left, Arrow.mk_right, Arrow.mk_hom]
+      rw [← Category.assoc]; rw [P.cancel_right_of_respectsIso]
+      exact h _ _ ⟨i⟩
+    | comp f hf R hR g hg ih =>
+      obtain ⟨S, hS, h⟩ := ih
+      rw [K.mem_iff_exists_zeroHypercover] at hS hR
+      obtain ⟨E, rfl⟩ := hS
+      obtain ⟨F, rfl⟩ := hR
+      refine ⟨(E.pullback₁ g).presieve₀, (E.pullback₁ g).mem₀, ?_⟩
+      intro U v ⟨i⟩
+      dsimp
+      rw [pullback.condition_assoc]
+      refine RespectsLeft.precomp (Q := K.morphismProperty) _ ?_ _ ?_
+      · obtain ⟨j⟩ := hg
+        exact (F.pullback₂ (E.f i)).morphismProperty j
+      · exact h _ _ ⟨i⟩
+    | of_presieve f R hR h ih =>
+      rw [K.mem_iff_exists_zeroHypercover] at hR
+      obtain ⟨E, rfl⟩ := hR
+      choose S hS h' using fun i : E.I₀ => ih _ _ ⟨i⟩
+      simp_rw [K.mem_iff_exists_zeroHypercover] at hS
+      choose F hF using hS
+      refine ⟨_, (E.bind F).mem₀, fun U g ⟨j⟩ => ?_⟩
+      dsimp
+      rw [Category.assoc]
+      exact h' _ _ _ (by simp [hF])
+  · intro ⟨R, hR, h⟩
+    exact .of_presieve _ _ hR (by grind)
 
 中文:
 引理 sourceLocalClosure_iff_of_respectsLeft
@@ -245,7 +299,37 @@ lemma sourceLocalClosure_iff_of_respectsLeft
       obtain ⟨R, hR, h⟩ := h
       rw [K.mem_iff_exists_zeroHypercover] at hR
       obtain ⟨E, rfl⟩ := hR
-      refine ⟨_, (E
+      refine ⟨_, (E.pushforward e.hom.left (K.mem_coverings_of_isIso _)).mem₀, ?_⟩
+      intro U v ⟨i⟩
+      dsimp
+      simp only [Category.assoc, Arrow.w_mk_right, Arrow.mk_left, Arrow.mk_right, Arrow.mk_hom]
+      rw [← Category.assoc]; rw [P.cancel_right_of_respectsIso]
+      exact h _ _ ⟨i⟩
+    | comp f hf R hR g hg ih =>
+      obtain ⟨S, hS, h⟩ := ih
+      rw [K.mem_iff_exists_zeroHypercover] at hS hR
+      obtain ⟨E, rfl⟩ := hS
+      obtain ⟨F, rfl⟩ := hR
+      refine ⟨(E.pullback₁ g).presieve₀, (E.pullback₁ g).mem₀, ?_⟩
+      intro U v ⟨i⟩
+      dsimp
+      rw [pullback.condition_assoc]
+      refine RespectsLeft.precomp (Q := K.morphismProperty) _ ?_ _ ?_
+      · obtain ⟨j⟩ := hg
+        exact (F.pullback₂ (E.f i)).morphismProperty j
+      · exact h _ _ ⟨i⟩
+    | of_presieve f R hR h ih =>
+      rw [K.mem_iff_exists_zeroHypercover] at hR
+      obtain ⟨E, rfl⟩ := hR
+      choose S hS h' using fun i : E.I₀ => ih _ _ ⟨i⟩
+      simp_rw [K.mem_iff_exists_zeroHypercover] at hS
+      choose F hF using hS
+      refine ⟨_, (E.bind F).mem₀, fun U g ⟨j⟩ => ?_⟩
+      dsimp
+      rw [Category.assoc]
+      exact h' _ _ _ (by simp [hF])
+  · intro ⟨R, hR, h⟩
+    exact .of_presieve _ _ hR (by grind)
 
 Depends on / 依赖: Arrow.mk_hom, Arrow.mk_left, Arrow.mk_right, Arrow.w_mk_right, Category, Category.assoc, E.pushforward, K.mem_coverings_of_isIso, K.mem_iff_exists_zeroHypercover, P.cancel_right_of_respectsIso, cancel_right_of_respectsIso, e.hom.left, mem_coverings_of_isIso, mem_iff_exists_zeroHypercover, mk_hom, mk_left, mk_right, of_iso, pushforward, singleton
 -/

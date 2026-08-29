@@ -68,7 +68,10 @@ definition lift
     exact Algebra.commutes _ _
   left_inv f := by
     ext
-    simp [liftNC
+    simp [liftNCAlgHom, liftNCRingHom]
+  right_inv F := by
+    ext
+    simp [liftNCAlgHom, liftNCRingHom]
 
 中文:
 定义 lift
@@ -81,7 +84,10 @@ definition lift
     exact Algebra.commutes _ _
   left_inv f := by
     ext
-    simp [liftNC
+    simp [liftNCAlgHom, liftNCRingHom]
+  right_inv F := by
+    ext
+    simp [liftNCAlgHom, liftNCRingHom]
 
 Depends on / 依赖: SkewMonoidAlgebra
 -/
@@ -518,7 +524,7 @@ definition domCongrAlg
     (domLCongr e : SkewMonoidAlgebra A G ≃ₗ[k] SkewMonoidAlgebra A H)
     ((equivMapDomain_eq_mapDomain _ _).trans <| mapDomain_one e)
     (fun f g => (equivMapDomain_eq_mapDomain _ _).trans <| (mapDomain_mul f g he).trans <|
-        congr_arg₂ _ (equivMapDomain_eq_mapDomain _
+        congr_arg₂ _ (equivMapDomain_eq_mapDomain _ _).symm (equivMapDomain_eq_mapDomain _ _).symm)
 
 中文:
 定义 domCongrAlg
@@ -527,7 +533,7 @@ definition domCongrAlg
     (domLCongr e : SkewMonoidAlgebra A G ≃ₗ[k] SkewMonoidAlgebra A H)
     ((equivMapDomain_eq_mapDomain _ _).trans <| mapDomain_one e)
     (fun f g => (equivMapDomain_eq_mapDomain _ _).trans <| (mapDomain_mul f g he).trans <|
-        congr_arg₂ _ (equivMapDomain_eq_mapDomain _
+        congr_arg₂ _ (equivMapDomain_eq_mapDomain _ _).symm (equivMapDomain_eq_mapDomain _ _).symm)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofLinearEquiv, SkewMonoidAlgebra, domLCongr, equivMapDomain_eq_mapDomain, mapDomain_mul, mapDomain_one, ofLinearEquiv
 -/

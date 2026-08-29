@@ -227,7 +227,14 @@ lemma IsPullback.iff_of_equiv
   refine iff_of_iso (Square.isoMk
     (((Equiv.trans Equiv.ulift e₁).trans Equiv.ulift.symm).toIso)
     (((Equiv.trans Equiv.ulift e₂).trans Equiv.ulift.symm).toIso)
-    (((Equiv.trans Equ
+    (((Equiv.trans Equiv.ulift e₃).trans Equiv.ulift.symm).toIso)
+    (((Equiv.trans Equiv.ulift e₄).trans Equiv.ulift.symm).toIso)
+    ?_ ?_ ?_ ?_)
+  all_goals ext; apply ULift.down_injective
+  · simpa [types_comp, uliftFunctor_map] using congrFun comm₁₂ _
+  · simpa [types_comp, uliftFunctor_map] using congrFun comm₁₃ _
+  · simpa [types_comp, uliftFunctor_map] using congrFun comm₂₄ _
+  · simpa [types_comp, uliftFunctor_map] using congrFun comm₃₄ _
 
 中文:
 引理 是拉回.iff_of_equiv
@@ -237,7 +244,14 @@ lemma IsPullback.iff_of_equiv
   refine iff_of_iso (Square.isoMk
     (((Equiv.trans Equiv.ulift e₁).trans Equiv.ulift.symm).toIso)
     (((Equiv.trans Equiv.ulift e₂).trans Equiv.ulift.symm).toIso)
-    (((Equiv.trans Equ
+    (((Equiv.trans Equiv.ulift e₃).trans Equiv.ulift.symm).toIso)
+    (((Equiv.trans Equiv.ulift e₄).trans Equiv.ulift.symm).toIso)
+    ?_ ?_ ?_ ?_)
+  all_goals ext; apply ULift.down_injective
+  · simpa [types_comp, uliftFunctor_map] using congrFun comm₁₂ _
+  · simpa [types_comp, uliftFunctor_map] using congrFun comm₁₃ _
+  · simpa [types_comp, uliftFunctor_map] using congrFun comm₂₄ _
+  · simpa [types_comp, uliftFunctor_map] using congrFun comm₃₄ _
 
 Depends on / 依赖: Equiv.trans, Equiv.ulift, Equiv.ulift.symm, IsPullback, IsPullback.map_iff, Square, Square.isoMk, ULift.down_injective, all_goals, down_injective, iff_of_iso, map_iff, types_comp, uliftFunctor, uliftFunctor_map
 -/

@@ -189,7 +189,10 @@ theorem minFacHelper_1
   · exact (np rfl).elim
   rcases (succ_le_of_lt h2).eq_or_lt with h2|h2
   · refine ((h.1.trans_le h.2.2).ne ?_).elim
-    have h3 : 2 ∣ minFac n 
+    have h3 : 2 ∣ minFac n := by
+      rw [Nat.dvd_iff_mod_eq_zero]; rw [← h2]; rw [succ_eq_add_one]; rw [add_mod]; rw [h.2.1]
+    simpa [dvd_prime <| minFac_prime h.one_lt.ne'] using h3
+  exact h2
 
 中文:
 定理 minFacHelper_1
@@ -203,7 +206,10 @@ theorem minFacHelper_1
   · exact (np rfl).elim
   rcases (succ_le_of_lt h2).eq_or_lt with h2|h2
   · refine ((h.1.trans_le h.2.2).ne ?_).elim
-    have h3 : 2 ∣ minFac n 
+    have h3 : 2 ∣ minFac n := by
+      rw [Nat.dvd_iff_mod_eq_zero]; rw [← h2]; rw [succ_eq_add_one]; rw [add_mod]; rw [h.2.1]
+    simpa [dvd_prime <| minFac_prime h.one_lt.ne'] using h3
+  exact h2
 
 Depends on / 依赖: IsCompact, IsCompact.isClosed, IsCompact.of_isClosed_subset, K.isCompact, Monotone, Monotone.initial_functor_iff, Nat.dvd_iff_mod_eq_zero, Nat.lt_add_right, Subset, Subset.trans, U.property, U.val.isOpen, add_mod, add_zero, closure_minimal, dvd_iff_mod_eq_zero, dvd_prime, eq_or_lt, exists_compact_between, h.one_lt.ne
 -/
@@ -367,7 +373,43 @@ definition evalMinFac
   let ⟨nn, pn⟩ ← deriveNat n sNat
   let n' := nn.natLit!
   let rec aux (ek : Q(Nat)) (prf : Q(MinFacHelper $nn $ek)) :
-      (c : Q(Nat)) × Q(IsNat (Nat.minFac $
+      (c : Q(Nat)) × Q(IsNat (Nat.minFac $n) $c) :=
+    let k := ek.natLit!
+    -- remark: `deriveBool q($nn < $ek * $ek)` is 2x slower than the following test.
+    if n' < k * k then
+      let r : Q(Nat.ble ($ek * $ek) $nn = false) := (q(Eq.refl false) : Expr)
+      ⟨nn, q(isNat_minFac_4 $pn $prf $r)⟩
+    else
+      let d : Nat := k.minFac
+      -- the following branch is not necessary for the correctness,
+      -- but makes the algorithm 2x faster
+      if d < k then
+have ek' : Q(Nat) := mkRawNatLit k + 2
+        let pk' : Q($ek + 2 = $ek') := (q(Eq.refl $ek') : Expr)
+        let pd := deriveNotPrime k d ek
+        aux ek' q(minFacHelper_2 $pk' $pd $prf)
+      -- remark: `deriveBool q($nn % $ek = 0)` is 5x slower than the following test
+      else if n' % k = 0 then
+        let r : Q(nat_lit 0 = $nn % $ek) := (q(Eq.refl 0) : Expr)
+        let r' : Q(IsNat (minFac $n) $ek) := q(isNat_minFac_3 _ $pn $prf $r)
+        ⟨ek, r'⟩
+      else
+        let r : Q(Nat.beq ($nn % $ek) 0 = false) := (q(Eq.refl false) : Expr)
+have ek' : Q(Nat) := mkRawNatLit k + 2
+        let pk' : Q($ek + 2 = $ek') := (q(Eq.refl $ek') : Expr)
+        aux ek' q(minFacHelper_3 $pk' $r $prf)
+let rec core : MetaM Result q(Nat.minFac $n) := do
+    if n' = 1 then
+      let pn : Q(IsNat $n (nat_lit 1)) := pn
+      return .isNat sNat q(nat_lit 1) q(isNat_minFac_1 $pn)
+    if n' % 2 = 0 then
+      let pq : Q($nn % 2 = 0) := (q(Eq.refl 0) : Expr)
+      return .isNat sNat q(nat_lit 2) q(isNat_minFac_2 $pn $pq)
+    let pp : Q(Nat.ble 2 $nn = true) := (q(Eq.refl true) : Expr)
+    let pq : Q(1 = $nn % 2) := (q(Eq.refl (nat_lit 1)) : Expr)
+    let ⟨c, pc⟩ := aux q(nat_lit 3) q(minFacHelper_0 $nn $pp $pq)
+    return .isNat sNat c pc
+  core
 
 中文:
 定义 evalMinFac
@@ -378,7 +420,43 @@ definition evalMinFac
   let ⟨nn, pn⟩ ← deriveNat n sNat
   let n' := nn.natLit!
   let rec aux (ek : Q(Nat)) (prf : Q(MinFacHelper $nn $ek)) :
-      (c : Q(Nat)) × Q(IsNat (Nat.minFac $
+      (c : Q(Nat)) × Q(IsNat (Nat.minFac $n) $c) :=
+    let k := ek.natLit!
+    -- remark: `deriveBool q($nn < $ek * $ek)` is 2x slower than the following test.
+    if n' < k * k then
+      let r : Q(Nat.ble ($ek * $ek) $nn = false) := (q(Eq.refl false) : Expr)
+      ⟨nn, q(isNat_minFac_4 $pn $prf $r)⟩
+    else
+      let d : Nat := k.minFac
+      -- the following branch is not necessary for the correctness,
+      -- but makes the algorithm 2x faster
+      if d < k then
+have ek' : Q(Nat) := mkRawNatLit k + 2
+        let pk' : Q($ek + 2 = $ek') := (q(Eq.refl $ek') : Expr)
+        let pd := deriveNotPrime k d ek
+        aux ek' q(minFacHelper_2 $pk' $pd $prf)
+      -- remark: `deriveBool q($nn % $ek = 0)` is 5x slower than the following test
+      else if n' % k = 0 then
+        let r : Q(nat_lit 0 = $nn % $ek) := (q(Eq.refl 0) : Expr)
+        let r' : Q(IsNat (minFac $n) $ek) := q(isNat_minFac_3 _ $pn $prf $r)
+        ⟨ek, r'⟩
+      else
+        let r : Q(Nat.beq ($nn % $ek) 0 = false) := (q(Eq.refl false) : Expr)
+have ek' : Q(Nat) := mkRawNatLit k + 2
+        let pk' : Q($ek + 2 = $ek') := (q(Eq.refl $ek') : Expr)
+        aux ek' q(minFacHelper_3 $pk' $r $prf)
+let rec core : MetaM Result q(Nat.minFac $n) := do
+    if n' = 1 then
+      let pn : Q(IsNat $n (nat_lit 1)) := pn
+      return .isNat sNat q(nat_lit 1) q(isNat_minFac_1 $pn)
+    if n' % 2 = 0 then
+      let pq : Q($nn % 2 = 0) := (q(Eq.refl 0) : Expr)
+      return .isNat sNat q(nat_lit 2) q(isNat_minFac_2 $pn $pq)
+    let pp : Q(Nat.ble 2 $nn = true) := (q(Eq.refl true) : Expr)
+    let pq : Q(1 = $nn % 2) := (q(Eq.refl (nat_lit 1)) : Expr)
+    let ⟨c, pc⟩ := aux q(nat_lit 3) q(minFacHelper_0 $nn $pp $pq)
+    return .isNat sNat c pc
+  core
 -/
 @[norm_num Nat.minFac _] partial def evalMinFac : NormNumExt where eval {_ _} e := do
   let .app (.const ``Nat.minFac _) (n : Q(Nat)) ← whnfR e | failure
@@ -498,7 +576,20 @@ definition evalNatPrime
   let n' := nn.natLit!
   -- note: if `n` is not prime, we don't have to verify the calculation of `n.minFac`, we just have
   -- to compute it, which is a lot quicker
-  let rec core : MetaM (Result q(N
+  let rec core : MetaM (Result q(Nat.Prime $n)) := do
+    match n' with
+| 0 => haveI' : nn =Q 0 := ⟨⟩; return .isFalse q(isNat_prime_0 $pn)
+| 1 => haveI' : nn =Q 1 := ⟨⟩; return .isFalse q(isNat_prime_1 $pn)
+    | _ =>
+      let d := n'.minFac
+      if d < n' then
+        let prf : Q(¬ Nat.Prime $nn) := deriveNotPrime n' d nn
+        return .isFalse q(isNat_not_prime $pn $prf)
+      let r : Q(Nat.ble 2 $nn = true) := (q(Eq.refl true) : Expr)
+      let .isNat _ _lit (p2n : Q(IsNat (minFac $nn) $nn)) ←
+        evalMinFac.core nn _ nn q(.raw_refl _) nn.natLit! | failure
+      return .isTrue q(isNat_prime_2 $pn $r $p2n)
+  core
 
 中文:
 定义 eval自然数Prime
@@ -509,7 +600,20 @@ definition evalNatPrime
   let n' := nn.natLit!
   -- note: if `n` is not prime, we don't have to verify the calculation of `n.minFac`, we just have
   -- to compute it, which is a lot quicker
-  let rec core : MetaM (Result q(N
+  let rec core : MetaM (Result q(Nat.Prime $n)) := do
+    match n' with
+| 0 => haveI' : nn =Q 0 := ⟨⟩; return .isFalse q(isNat_prime_0 $pn)
+| 1 => haveI' : nn =Q 1 := ⟨⟩; return .isFalse q(isNat_prime_1 $pn)
+    | _ =>
+      let d := n'.minFac
+      if d < n' then
+        let prf : Q(¬ Nat.Prime $nn) := deriveNotPrime n' d nn
+        return .isFalse q(isNat_not_prime $pn $prf)
+      let r : Q(Nat.ble 2 $nn = true) := (q(Eq.refl true) : Expr)
+      let .isNat _ _lit (p2n : Q(IsNat (minFac $nn) $nn)) ←
+        evalMinFac.core nn _ nn q(.raw_refl _) nn.natLit! | failure
+      return .isTrue q(isNat_prime_2 $pn $r $p2n)
+  core
 -/
 @[norm_num Nat.Prime _] def evalNatPrime : NormNumExt where eval {_ _} e := do
   let .app (.const `Nat.Prime _) (n : Q(Nat)) ← whnfR e | failure

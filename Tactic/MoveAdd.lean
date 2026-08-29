@@ -211,7 +211,9 @@ definition reorderUsing
   let reorder := uToReorder.qsort fun x y =>
     match uInstructions.find? (Prod.fst · == x), uInstructions.find? (Prod.fst · == y) with
       | none, none =>
-     
+        (uToReorder.idxOf? x).get! <= (uToReorder.idxOf? y).get!
+      | _, _ => weight uInstructions x <= weight uInstructions y
+  (reorder.map Prod.fst).toList
 
 中文:
 定义 reorderUsing
@@ -223,7 +225,9 @@ definition reorderUsing
   let reorder := uToReorder.qsort fun x y =>
     match uInstructions.find? (Prod.fst · == x), uInstructions.find? (Prod.fst · == y) with
       | none, none =>
-     
+        (uToReorder.idxOf? x).get! <= (uToReorder.idxOf? y).get!
+      | _, _ => weight uInstructions x <= weight uInstructions y
+  (reorder.map Prod.fst).toList
 
 Depends on / 依赖: Prod.fst, instructions, instructions.unzip, reorder, reorder.map, toArray, toList, toReorder, uInstructions, uInstructions.find, uToReorder, uToReorder.idxOf, uToReorder.qsort, uniquify, weight
 -/
@@ -373,7 +377,10 @@ definition rankSums
   let candidates := sums.map fun (addends, sum) => do
     let reord := reorderUsing addends.toList instructions
     let left_assoc? := sum.getAppFn.isConstOf `And || sum.getAppFn.isConstOf `Or
-    let resummed := sumList (prepareOp sum) left_assoc? 
+    let resummed := sumList (prepareOp sum) left_assoc? reord
+    if (resummed != sum) then some (sum, resummed) else none
+  return (candidates.toList.reduceOption.toArray.qsort
+    (fun x y : Expr × Expr => (y.1.sizeWithoutSharing <= x.1.sizeWithoutSharing))).toList
 
 中文:
 定义 rankSums
@@ -383,7 +390,10 @@ definition rankSums
   let candidates := sums.map fun (addends, sum) => do
     let reord := reorderUsing addends.toList instructions
     let left_assoc? := sum.getAppFn.isConstOf `And || sum.getAppFn.isConstOf `Or
-    let resummed := sumList (prepareOp sum) left_assoc? 
+    let resummed := sumList (prepareOp sum) left_assoc? reord
+    if (resummed != sum) then some (sum, resummed) else none
+  return (candidates.toList.reduceOption.toArray.qsort
+    (fun x y : Expr × Expr => (y.1.sizeWithoutSharing <= x.1.sizeWithoutSharing))).toList
 -/
 def rankSums (tgt : Expr) (instructions : List (Expr × Bool)) : MetaM (List (Expr × Expr)) := do
   let sums ← getOps op (← instantiateMVars tgt)
@@ -407,7 +417,9 @@ definition permuteExpr
   let mut permTgt := tgt
   -- We cannot do `Expr.replace` all at once here, we need to follow
   -- the order of the instructions.
-  for (old, new) in permIn
+  for (old, new) in permInstructions do
+    permTgt := permTgt.replace (if · == old then new else none)
+  return permTgt
 
 中文:
 定义 permuteExpr
@@ -418,7 +430,9 @@ definition permuteExpr
   let mut permTgt := tgt
   -- We cannot do `Expr.replace` all at once here, we need to follow
   -- the order of the instructions.
-  for (old, new) in permIn
+  for (old, new) in permInstructions do
+    permTgt := permTgt.replace (if · == old then new else none)
+  return permTgt
 -/
 def permuteExpr (tgt : Expr) (instructions : List (Expr × Bool)) : MetaM Expr := do
   let permInstructions ← rankSums op tgt instructions
@@ -478,7 +492,11 @@ definition moveOperSimpCtx
     ``mul_comm, ``mul_assoc, ``mul_left_comm, -- for `HMul.hMul`
     ``and_comm, ``and_assoc, ``and_left_comm, -- for `and`
     ``or_comm, ``or_assoc, ``or_left_comm, -- for `or`
-
+    ``max_comm, ``max_assoc, ``max_left_comm, -- for `max`
+    ``min_comm, ``min_assoc, ``min_left_comm -- for `min`
+    ]
+  let simpThms ← simpNames.foldlM (·.addConst ·) ({} : SimpTheorems)
+  Simp.mkContext {} (simpTheorems := #[simpThms])
 
 中文:
 定义 moveOperSimpCtx
@@ -489,7 +507,11 @@ definition moveOperSimpCtx
     ``mul_comm, ``mul_assoc, ``mul_left_comm, -- for `HMul.hMul`
     ``and_comm, ``and_assoc, ``and_left_comm, -- for `and`
     ``or_comm, ``or_assoc, ``or_left_comm, -- for `or`
-
+    ``max_comm, ``max_assoc, ``max_left_comm, -- for `max`
+    ``min_comm, ``min_assoc, ``min_left_comm -- for `min`
+    ]
+  let simpThms ← simpNames.foldlM (·.addConst ·) ({} : SimpTheorems)
+  Simp.mkContext {} (simpTheorems := #[simpThms])
 -/
 def moveOperSimpCtx : MetaM Simp.Context := do
   let simpNames := Elab.Tactic.simpOnlyBuiltins ++ [
@@ -515,7 +537,12 @@ definition reorderAndSimp
   let eqmpr ← mkAppM ``Eq.mpr #[← mkFreshExprMVar (← mkEq (← mv.getType) permExpr)]
   let twoGoals ← mv.apply eqmpr
 guard (twoGoals.length == 2) >
-    throwError
+    throwError m!"There should only be 2 goals, instead of {twoGoals.length}"
+  -- `permGoal` is the single goal `mv_permuted`, possibly more operations will be permuted later on
+  let permGoal ← twoGoals.filterM fun v => return !(← v.isAssigned)
+  match ← (simpGoal (permGoal[1]!) (← moveOperSimpCtx)) with
+    | (some x, _) => throwError m!"'move_oper' could not solve {indentD x.2}"
+    | (none, _) => return permGoal
 
 中文:
 定义 reorderAndSimp
@@ -526,7 +553,12 @@ guard (twoGoals.length == 2) >
   let eqmpr ← mkAppM ``Eq.mpr #[← mkFreshExprMVar (← mkEq (← mv.getType) permExpr)]
   let twoGoals ← mv.apply eqmpr
 guard (twoGoals.length == 2) >
-    throwError
+    throwError m!"There should only be 2 goals, instead of {twoGoals.length}"
+  -- `permGoal` is the single goal `mv_permuted`, possibly more operations will be permuted later on
+  let permGoal ← twoGoals.filterM fun v => return !(← v.isAssigned)
+  match ← (simpGoal (permGoal[1]!) (← moveOperSimpCtx)) with
+    | (some x, _) => throwError m!"'move_oper' could not solve {indentD x.2}"
+    | (none, _) => return permGoal
 
 Depends on / 依赖: mv.withContext, withContext
 -/
@@ -556,7 +588,12 @@ definition unifyMovements
   -- `instr` are the unified user-provided terms, `neverMatched` are non-unified ones
   let (instr, neverMatched) ← pairUp data.toList atoms
   let dbgMsg := #[m!"Matching of input variables:\n\
-    * pre
+    * pre-match: {data.map (Prod.snd ∘ Prod.snd)}\n\
+    * post-match: {instr}",
+    m!"\nMaximum number of iterations: {ops.size}"]
+  -- if there are `neverMatched` terms, return the parsed terms and the syntax
+  let errMsg := neverMatched.map fun (t, a, stx) => (if a then m!"← {t}" else m!"{t}", stx)
+  return (instr, errMsg.unzip, dbgMsg)
 
 中文:
 定义 unifyMovements
@@ -567,7 +604,12 @@ definition unifyMovements
   -- `instr` are the unified user-provided terms, `neverMatched` are non-unified ones
   let (instr, neverMatched) ← pairUp data.toList atoms
   let dbgMsg := #[m!"Matching of input variables:\n\
-    * pre
+    * pre-match: {data.map (Prod.snd ∘ Prod.snd)}\n\
+    * post-match: {instr}",
+    m!"\nMaximum number of iterations: {ops.size}"]
+  -- if there are `neverMatched` terms, return the parsed terms and the syntax
+  let errMsg := neverMatched.map fun (t, a, stx) => (if a then m!"← {t}" else m!"{t}", stx)
+  return (instr, errMsg.unzip, dbgMsg)
 -/
 def unifyMovements (data : Array (Expr × Bool × Syntax)) (tgt : Expr) :
     MetaM (List (Expr × Bool) × (List MessageData × List Syntax) × Array MessageData) := do

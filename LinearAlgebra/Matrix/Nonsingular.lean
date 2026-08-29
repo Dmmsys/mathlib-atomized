@@ -118,7 +118,24 @@ theorem Nonsingular.of_linearIndependent_col
   let P (r : Nat) : Prop := forall f g : Fin r -> n, (A.submatrix f g).IsDetpBalanced a b
   suffices h : P 0 by simpa [IsDetpBalanced] using h Fin.elim0 Fin.elim0
 refine Nat.decreasingInduction' (n := Fintype.card n) (fun r _ _ ih f g => ?_) (Nat.zero_le _)
-    bal.submatrix_of_ca
+    bal.submatrix_of_card_le (Fintype.card_fin _).ge
+  by_cases hg : g.Surjective
+  · exact bal.submatrix_of_card_le (Fintype.card_le_of_surjective g hg) f g
+  obtain ⟨j₀, h₀⟩ := by simpa [Function.Surjective] using hg
+  let D := A.submatrix f g
+  let Aj (j : Fin r) := A.submatrix f (Function.update g j j₀)
+  let v (a b : R) : n ->₀ R := ∑ j, .single (g j) (a * (Aj j).detp (-1) + b * (Aj j).detp 1) +
+    .single j₀ (a * D.detp 1 + b * D.detp (-1))
+  suffices h : v a b = v b a by simpa [IsDetpBalanced, v, h₀] using congr($h j₀)
+  refine ind (funext fun i => ?_)
+  let Ai := A.submatrix (Option.rec i f) (Option.rec j₀ g)
+  have (s : Intˣ) : Ai.detp s = ∑ j, (Aj j).detp (-s) * A.col (g j) i + D.detp s * A.col j₀ i := by
+    simp_rw [mul_comm]; rw [detp_option_expand_row_none, add_comm]
+    congr!; aesop (add simp Function.update)
+  have (a b : R) : (v a b).linearCombination R A.col i = a * Ai.detp 1 + b * Ai.detp (-1) := by
+    simp [v, Finset.sum_add_distrib, mul_assoc, ← Finset.mul_sum, add_add_add_comm, mul_add, this]
+  simpa [this, IsDetpBalanced, ← submatrix_submatrix] using
+    ih (Option.rec i f ∘ finSuccEquiv r) (Option.rec j₀ g ∘ finSuccEquiv r)
 
 中文:
 定理 非奇异.of_linearIndependent_col
@@ -129,7 +146,24 @@ refine Nat.decreasingInduction' (n := Fintype.card n) (fun r _ _ ih f g => ?_) (
   let P (r : Nat) : Prop := forall f g : Fin r -> n, (A.submatrix f g).IsDetpBalanced a b
   suffices h : P 0 by simpa [IsDetpBalanced] using h Fin.elim0 Fin.elim0
 refine Nat.decreasingInduction' (n := Fintype.card n) (fun r _ _ ih f g => ?_) (Nat.zero_le _)
-    bal.submatrix_of_ca
+    bal.submatrix_of_card_le (Fintype.card_fin _).ge
+  by_cases hg : g.Surjective
+  · exact bal.submatrix_of_card_le (Fintype.card_le_of_surjective g hg) f g
+  obtain ⟨j₀, h₀⟩ := by simpa [Function.Surjective] using hg
+  let D := A.submatrix f g
+  let Aj (j : Fin r) := A.submatrix f (Function.update g j j₀)
+  let v (a b : R) : n ->₀ R := ∑ j, .single (g j) (a * (Aj j).detp (-1) + b * (Aj j).detp 1) +
+    .single j₀ (a * D.detp 1 + b * D.detp (-1))
+  suffices h : v a b = v b a by simpa [IsDetpBalanced, v, h₀] using congr($h j₀)
+  refine ind (funext fun i => ?_)
+  let Ai := A.submatrix (Option.rec i f) (Option.rec j₀ g)
+  have (s : Intˣ) : Ai.detp s = ∑ j, (Aj j).detp (-s) * A.col (g j) i + D.detp s * A.col j₀ i := by
+    simp_rw [mul_comm]; rw [detp_option_expand_row_none, add_comm]
+    congr!; aesop (add simp Function.update)
+  have (a b : R) : (v a b).linearCombination R A.col i = a * Ai.detp 1 + b * Ai.detp (-1) := by
+    simp [v, Finset.sum_add_distrib, mul_assoc, ← Finset.mul_sum, add_add_add_comm, mul_add, this]
+  simpa [this, IsDetpBalanced, ← submatrix_submatrix] using
+    ih (Option.rec i f ∘ finSuccEquiv r) (Option.rec j₀ g ∘ finSuccEquiv r)
 
 Depends on / 依赖: A.submatrix, Fin.elim0, Fintype, Fintype.card, Fintype.card_fin, Fintype.card_le_of_surjective, Function, Function.Surjective, IsDetpBalanced, Nat.decreasingInduction, Nat.zero_le, Surjective, bal.submatrix_of_card_le, card_fin, card_le_of_surjective, decreasingInduction, g.Surjective, submatrix, submatrix_of_card_le, zero_le
 -/
@@ -232,7 +266,8 @@ theorem Nonsingular.linearIndependent_col
     have h v : ((A.adjp 1 * A + A.detp (-1) • 1) *ᵥ v) k =
         ((A.adjp (-1) * A + A.detp 1 • 1) *ᵥ v) k := by
       congr 1; ext k i
-      obtain (h | h) := eq_or_ne k i <;> simp [adjp_mul_apply_eq, add_comm, adjp_mul_ap
+      obtain (h | h) := eq_or_ne k i <;> simp [adjp_mul_apply_eq, add_comm, adjp_mul_apply_ne, h]
+    simp [add_mulVec, smul_mulVec, ← mulVec_mulVec] at h; grind
 
 中文:
 定理 非奇异.linearIndependent_col
@@ -242,7 +277,8 @@ theorem Nonsingular.linearIndependent_col
     have h v : ((A.adjp 1 * A + A.detp (-1) • 1) *ᵥ v) k =
         ((A.adjp (-1) * A + A.detp 1 • 1) *ᵥ v) k := by
       congr 1; ext k i
-      obtain (h | h) := eq_or_ne k i <;> simp [adjp_mul_apply_eq, add_comm, adjp_mul_ap
+      obtain (h | h) := eq_or_ne k i <;> simp [adjp_mul_apply_eq, add_comm, adjp_mul_apply_ne, h]
+    simp [add_mulVec, smul_mulVec, ← mulVec_mulVec] at h; grind
 
 Depends on / 依赖: A.adjp, A.detp, add_comm, add_mulVec, adjp_mul_apply_eq, adjp_mul_apply_ne, eq_or_ne, mulVec_injective_iff, mulVec_injective_iff.mp, mulVec_mulVec, smul_mulVec
 -/

@@ -345,7 +345,7 @@ instance [Mul
   body: ⟨((continuous_fst.comp continuous_fst).mul (continuous_fst.comp continuous_snd)).prodMk
       ((continuous_fst.comp continuous_fst).smul (continuous_snd.comp continuous_snd)).add
         ((MulOpposite.continuous_op.comp <| continuous_fst.comp <| continuous_snd).smul
-          (continuous_snd.comp co
+          (continuous_snd.comp continuous_fst))⟩
 
 中文:
 实例 [乘法
@@ -353,7 +353,7 @@ instance [Mul
   定义体: ⟨((continuous_fst.comp continuous_fst).mul (continuous_fst.comp continuous_snd)).prodMk
       ((continuous_fst.comp continuous_fst).smul (continuous_snd.comp continuous_snd)).add
         ((MulOpposite.continuous_op.comp <| continuous_fst.comp <| continuous_snd).smul
-          (continuous_snd.comp co
+          (continuous_snd.comp continuous_fst))⟩
 
 Depends on / 依赖: MulOpposite, MulOpposite.continuous_op.comp, continuous_fst, continuous_fst.comp, continuous_op, continuous_snd, continuous_snd.comp, prodMk
 -/

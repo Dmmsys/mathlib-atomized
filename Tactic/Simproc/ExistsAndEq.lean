@@ -204,7 +204,15 @@ definition findEqPath
   | And L R =>
     if let some path ← findEqPath a L then
       return some (.left :: path)
-    if let 
+    if let some path ← findEqPath a R then
+      return some (.right :: path)
+    return none
+  | Exists tb pb =>
+    if (tb.containsFVar a.fvarId!) then
+      return none
+    let .lam _ _ body _ := pb | return none
+    findEqPath a body
+  | _ => return none
 
 中文:
 定义 findEqPath
@@ -220,7 +228,15 @@ definition findEqPath
   | And L R =>
     if let some path ← findEqPath a L then
       return some (.left :: path)
-    if let 
+    if let some path ← findEqPath a R then
+      return some (.right :: path)
+    return none
+  | Exists tb pb =>
+    if (tb.containsFVar a.fvarId!) then
+      return none
+    let .lam _ _ body _ := pb | return none
+    findEqPath a body
+  | _ => return none
 -/
 partial def findEqPath {u : Level} {α : Q(Sort u)} (a : Q($α)) (P : Q(Prop)) :
 MetaM Option Path := do
@@ -308,7 +324,10 @@ let _ : P =Q body := ⟨⟩
 | assertUnreachable "withNestedExistsElim: exs is not empty but P is not `Exists`.\n" ++
           s!"P = {← ppExpr P}"
 let _ : β =Q γ := ⟨⟩
-    withLocalDeclQ .anonymous .de
+    withLocalDeclQ .anonymous .default q($p $b) fun hb => do
+      let pf1 ← withNestedExistsElim tl hb act
+      let pf2 : Q(forall b, $p b -> $goal) ← mkLambdaFVars #[b, hb] pf1
+      return q(Exists.elim $h $pf2)
 
 中文:
 定义 withNestedExistsElim
@@ -323,7 +342,10 @@ let _ : P =Q body := ⟨⟩
 | assertUnreachable "withNestedExistsElim: exs is not empty but P is not `Exists`.\n" ++
           s!"P = {← ppExpr P}"
 let _ : β =Q γ := ⟨⟩
-    withLocalDeclQ .anonymous .de
+    withLocalDeclQ .anonymous .default q($p $b) fun hb => do
+      let pf1 ← withNestedExistsElim tl hb act
+      let pf2 : Q(forall b, $p b -> $goal) ← mkLambdaFVars #[b, hb] pf1
+      return q(Exists.elim $h $pf2)
 -/
 def withNestedExistsElim {P body goal : Q(Prop)} (exs : List VarQ) (h : Q($P))
     (act : Q($body) -> MetaM Q($goal)) : MetaM Q($goal) := do
@@ -423,7 +445,32 @@ definition withExistsElimAlongPathImp
     let _ : u_1 =QL v := ⟨⟩
 let _ : γ =Q β := ⟨⟩
     withLocalDeclQ .anonymous .default q($pb $b) fun hb => do
- 
+      let newHs := hs ++ [⟨_, hb⟩]
+      let pf1 ← withExistsElimAlongPathImp (P := q($pb $b)) hb exsTail path newHs act
+      let pf2 : Q(forall b, $pb b -> $goal) ← mkLambdaFVars #[b, hb] pf1
+      return q(Exists.elim $h $pf2)
+  | ~q(And $L' $R') =>
+      match path with
+      | [] => assertUnreachable "withExistsElimAlongPathImp: `P` is `And` but `path` is empty"
+      | .left :: tl =>
+        withExistsElimAlongPathImp q(And.left $h) exs tl hs act
+      | .right :: tl =>
+        withExistsElimAlongPathImp q(And.right $h) exs tl hs act
+  | ~q(@Eq.{u} $γ $x $y) =>
+let _ : γ =Q α := ⟨⟩
+    if !path.isEmpty then
+      assertUnreachable "withExistsElimAlongPathImp: `P` is equality but `path` is not empty"
+    if a == x then
+let _ : a =Q x := ⟨⟩
+let _ : a' =Q y := ⟨⟩
+      act q($h) hs
+    else if a == y then
+let _ : a =Q y := ⟨⟩
+let _ : a' =Q x := ⟨⟩
+      act q(Eq.symm $h) hs
+    else
+      assertUnreachable "withExistsElimAlongPathImp: `P` is equality but neither of sides is `a`"
+  | _ => assertUnreachable s!"withExistsElimAlongPathImp: unexpected P = {← ppExpr P}"
 
 中文:
 定义 withExistsElimAlongPathImp
@@ -437,7 +484,32 @@ let _ : γ =Q β := ⟨⟩
     let _ : u_1 =QL v := ⟨⟩
 let _ : γ =Q β := ⟨⟩
     withLocalDeclQ .anonymous .default q($pb $b) fun hb => do
- 
+      let newHs := hs ++ [⟨_, hb⟩]
+      let pf1 ← withExistsElimAlongPathImp (P := q($pb $b)) hb exsTail path newHs act
+      let pf2 : Q(forall b, $pb b -> $goal) ← mkLambdaFVars #[b, hb] pf1
+      return q(Exists.elim $h $pf2)
+  | ~q(And $L' $R') =>
+      match path with
+      | [] => assertUnreachable "withExistsElimAlongPathImp: `P` is `And` but `path` is empty"
+      | .left :: tl =>
+        withExistsElimAlongPathImp q(And.left $h) exs tl hs act
+      | .right :: tl =>
+        withExistsElimAlongPathImp q(And.right $h) exs tl hs act
+  | ~q(@Eq.{u} $γ $x $y) =>
+let _ : γ =Q α := ⟨⟩
+    if !path.isEmpty then
+      assertUnreachable "withExistsElimAlongPathImp: `P` is equality but `path` is not empty"
+    if a == x then
+let _ : a =Q x := ⟨⟩
+let _ : a' =Q y := ⟨⟩
+      act q($h) hs
+    else if a == y then
+let _ : a =Q y := ⟨⟩
+let _ : a' =Q x := ⟨⟩
+      act q(Eq.symm $h) hs
+    else
+      assertUnreachable "withExistsElimAlongPathImp: `P` is equality but neither of sides is `a`"
+  | _ => assertUnreachable s!"withExistsElimAlongPathImp: unexpected P = {← ppExpr P}"
 -/
 partial def withExistsElimAlongPathImp {u : Level} {α : Q(Sort u)}
     {P goal : Q(Prop)} (h : Q($P)) {a a' : Q($α)} (exs : List VarQ) (path : Path)
@@ -516,7 +588,7 @@ let _ : P =Q body := ⟨⟩
       | assertUnreachable "withNestedExistsIntro: `exs` is not empty but `P` is not `Exists`"
 let _ : β =Q γ := ⟨⟩
     let pf ← withNestedExistsIntro tl act
-    return q(Exists.int
+    return q(Exists.intro $b $pf)
 
 中文:
 定义 withNestedExists整数ro
@@ -531,7 +603,7 @@ let _ : P =Q body := ⟨⟩
       | assertUnreachable "withNestedExistsIntro: `exs` is not empty but `P` is not `Exists`"
 let _ : β =Q γ := ⟨⟩
     let pf ← withNestedExistsIntro tl act
-    return q(Exists.int
+    return q(Exists.intro $b $pf)
 -/
 def withNestedExistsIntro {P body : Q(Prop)} (exs : List VarQ)
     (act : MetaM Q($body)) : MetaM Q($P) := do
@@ -557,7 +629,13 @@ definition mkBeforeToAfter
   withLocalDeclQ .anonymous .default q($α) fun a => do
   withLocalDeclQ .anonymous .default q($p $a) fun ha => do
     let pf1 ← withExistsElimAlongPath ha fvars path fun (h_eq : Q($a = $a')) hs => do
-      let pf1 : Q($P') ← withN
+      let pf1 : Q($P') ← withNestedExistsIntro fvars (body := newBody) do
+        let pf ← go ha fvars hs path h_eq
+        pure pf
+      pure pf1
+    let pf2 : Q(forall a : $α, $p a -> $P') ← mkLambdaFVars #[a, ha] pf1
+    let pf3 : Q($P') := q(Exists.elim $h $pf2)
+    mkLambdaFVars #[h] pf3
 
 中文:
 定义 mkBeforeToAfter
@@ -567,7 +645,13 @@ definition mkBeforeToAfter
   withLocalDeclQ .anonymous .default q($α) fun a => do
   withLocalDeclQ .anonymous .default q($p $a) fun ha => do
     let pf1 ← withExistsElimAlongPath ha fvars path fun (h_eq : Q($a = $a')) hs => do
-      let pf1 : Q($P') ← withN
+      let pf1 : Q($P') ← withNestedExistsIntro fvars (body := newBody) do
+        let pf ← go ha fvars hs path h_eq
+        pure pf
+      pure pf1
+    let pf2 : Q(forall a : $α, $p a -> $P') ← mkLambdaFVars #[a, ha] pf1
+    let pf3 : Q($P') := q(Exists.elim $h $pf2)
+    mkLambdaFVars #[h] pf3
 -/
 partial def mkBeforeToAfter {u : Level} {α : Q(Sort u)} {p : Q($α -> Prop)}
     {P' : Q(Prop)} (a' : Q($α)) (newBody : Q(Prop)) (fvars : List VarQ) (path : Path) :

@@ -500,7 +500,20 @@ lemma map_eq_iff
     obtain ⟨Z', t₁', t₂', hst', hft', ht'⟩ := h'
     dsimp at t₁ t₂ t₁' t₂' hst hft hst' hft' ht ht'
     have ⟨α, hα⟩ := (RightFraction.mk _ ht (φ.s ≫ t₁')).exists_leftFraction
-    
+    simp only [Category.assoc] at hα
+    obtain ⟨Z'', u, hu, fac⟩ := HasLeftCalculusOfFractions.ext _ _ _ φ.hs hα
+    have hα' : ψ.s ≫ t₂ ≫ α.f ≫ u = ψ.s ≫ t₂' ≫ α.s ≫ u := by
+      rw [← reassoc_of% hst]; rw [← reassoc_of% hα]; rw [← reassoc_of% hst']
+    obtain ⟨Z''', u', hu', fac'⟩ := HasLeftCalculusOfFractions.ext _ _ _ ψ.hs hα'
+    simp only [Category.assoc] at fac fac'
+    refine ⟨Z''', t₁' ≫ α.s ≫ u ≫ u', t₂' ≫ α.s ≫ u ≫ u', ?_, ?_, ?_, ?_⟩
+    · rw [reassoc_of% hst']
+    · rw [reassoc_of% fac, reassoc_of% hft, fac']
+    · rw [reassoc_of% hft']
+    · rw [← Category.assoc]
+      exact W.comp_mem _ _ ht' (W.comp_mem _ _ α.hs (W.comp_mem _ _ hu hu'))
+  · intro h
+    exact ⟨h.fst, h.snd⟩
 
 中文:
 引理 map_eq_iff
@@ -513,7 +526,20 @@ lemma map_eq_iff
     obtain ⟨Z', t₁', t₂', hst', hft', ht'⟩ := h'
     dsimp at t₁ t₂ t₁' t₂' hst hft hst' hft' ht ht'
     have ⟨α, hα⟩ := (RightFraction.mk _ ht (φ.s ≫ t₁')).exists_leftFraction
-    
+    simp only [Category.assoc] at hα
+    obtain ⟨Z'', u, hu, fac⟩ := HasLeftCalculusOfFractions.ext _ _ _ φ.hs hα
+    have hα' : ψ.s ≫ t₂ ≫ α.f ≫ u = ψ.s ≫ t₂' ≫ α.s ≫ u := by
+      rw [← reassoc_of% hst]; rw [← reassoc_of% hα]; rw [← reassoc_of% hst']
+    obtain ⟨Z''', u', hu', fac'⟩ := HasLeftCalculusOfFractions.ext _ _ _ ψ.hs hα'
+    simp only [Category.assoc] at fac fac'
+    refine ⟨Z''', t₁' ≫ α.s ≫ u ≫ u', t₂' ≫ α.s ≫ u ≫ u', ?_, ?_, ?_, ?_⟩
+    · rw [reassoc_of% hst']
+    · rw [reassoc_of% fac, reassoc_of% hft, fac']
+    · rw [reassoc_of% hft']
+    · rw [← Category.assoc]
+      exact W.comp_mem _ _ ht' (W.comp_mem _ _ α.hs (W.comp_mem _ _ hu hu'))
+  · intro h
+    exact ⟨h.fst, h.snd⟩
 
 Depends on / 依赖: Category, Category.assoc, HasLeftCalculusOfFractions, HasLeftCalculusOfFractions.ext, LeftFraction, LeftFraction.map_eq_iff, RightFraction, RightFraction.mk, exists_leftFraction, map_eq_iff, reassoc_o, reassoc_of
 -/
@@ -612,7 +638,10 @@ lemma exists_leftFraction₂
   obtain ⟨α, hα⟩ := (RightFraction.mk _ ψ₁.hs ψ₂.s).exists_leftFraction
   dsimp at hψ₁ hψ₂ hα
   refine ⟨LeftFraction₂.mk (ψ₁.f ≫ α.f) (ψ₂.f ≫ α.s) (ψ₂.s ≫ α.s)
-      (W.comp_mem _ _ ψ₂.hs α.hs), ?_, ?_
+      (W.comp_mem _ _ ψ₂.hs α.hs), ?_, ?_⟩
+  · dsimp
+    rw [hα]; rw [reassoc_of% hψ₁]
+  · rw [reassoc_of% hψ₂]
 
 中文:
 引理 存在_leftFraction₂
@@ -623,7 +652,10 @@ lemma exists_leftFraction₂
   obtain ⟨α, hα⟩ := (RightFraction.mk _ ψ₁.hs ψ₂.s).exists_leftFraction
   dsimp at hψ₁ hψ₂ hα
   refine ⟨LeftFraction₂.mk (ψ₁.f ≫ α.f) (ψ₂.f ≫ α.s) (ψ₂.s ≫ α.s)
-      (W.comp_mem _ _ ψ₂.hs α.hs), ?_, ?_
+      (W.comp_mem _ _ ψ₂.hs α.hs), ?_, ?_⟩
+  · dsimp
+    rw [hα]; rw [reassoc_of% hψ₁]
+  · rw [reassoc_of% hψ₂]
 
 Depends on / 依赖: RightFraction, RightFraction.mk, W.comp_mem, comp_mem, exists_leftFraction, fst.exists_leftFraction, reassoc_of, snd.exists_leftFraction
 -/
@@ -665,7 +697,17 @@ lemma exists_leftFraction₂
       f := φ.f ≫ α.f
       f' := φ'.f ≫ α.s
       s := φ'.s ≫ α.s
-      hs := W.comp_
+      hs := W.comp_mem _ _ φ'.hs α.hs }
+  have : IsIso (L.map (φ'.s ≫ α.s)) := by
+    rw [L.map_comp]
+    infer_instance
+  refine ⟨ψ, ?_, ?_⟩
+  · rw [← cancel_mono (L.map (φ'.s ≫ α.s)), LeftFraction.map_comp_map_s,
+      hα, L.map_comp, hφ, LeftFraction.map_comp_map_s_assoc,
+      L.map_comp]
+  · rw [← cancel_mono (L.map (φ'.s ≫ α.s)), hφ']
+    nth_rw 1 [L.map_comp]
+    rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s]; rw [L.map_comp]
 
 中文:
 引理 存在_leftFraction₂
@@ -679,7 +721,17 @@ lemma exists_leftFraction₂
       f := φ.f ≫ α.f
       f' := φ'.f ≫ α.s
       s := φ'.s ≫ α.s
-      hs := W.comp_
+      hs := W.comp_mem _ _ φ'.hs α.hs }
+  have : IsIso (L.map (φ'.s ≫ α.s)) := by
+    rw [L.map_comp]
+    infer_instance
+  refine ⟨ψ, ?_, ?_⟩
+  · rw [← cancel_mono (L.map (φ'.s ≫ α.s)), LeftFraction.map_comp_map_s,
+      hα, L.map_comp, hφ, LeftFraction.map_comp_map_s_assoc,
+      L.map_comp]
+  · rw [← cancel_mono (L.map (φ'.s ≫ α.s)), hφ']
+    nth_rw 1 [L.map_comp]
+    rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s]; rw [L.map_comp]
 
 Depends on / 依赖: L.map, L.map_comp, LeftFraction, LeftFraction.map_comp_map_s, LeftFraction.map_comp_map_s_assoc, RightFraction, RightFraction.mk, W.LeftFraction, W.comp_mem, cancel_mono, comp_mem, exists_leftFraction, infer_instance, map_comp, map_comp_map_s, map_comp_map_s_assoc
 -/
@@ -721,7 +773,20 @@ lemma exists_leftFraction₃
     { Y' := γ.Y'
       f := α.f ≫ γ.f
       f' := α.f' ≫ γ.f
-      f'' := β.f ≫
+      f'' := β.f ≫ γ.s
+      s := β.s ≫ γ.s
+      hs := W.comp_mem _ _ β.hs γ.hs }
+  have : IsIso (L.map (β.s ≫ γ.s)) := by
+    rw [L.map_comp]
+    infer_instance
+  refine ⟨ψ, ?_, ?_, ?_⟩
+  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), LeftFraction.map_comp_map_s, hα, hγ,
+      L.map_comp, LeftFraction.map_comp_map_s_assoc, L.map_comp]
+  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), LeftFraction.map_comp_map_s, hα', hγ,
+      L.map_comp, LeftFraction.map_comp_map_s_assoc, L.map_comp]
+  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), hβ]
+    nth_rw 1 [L.map_comp]
+    rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s]; rw [L.map_comp]
 
 中文:
 引理 存在_leftFraction₃
@@ -735,7 +800,20 @@ lemma exists_leftFraction₃
     { Y' := γ.Y'
       f := α.f ≫ γ.f
       f' := α.f' ≫ γ.f
-      f'' := β.f ≫
+      f'' := β.f ≫ γ.s
+      s := β.s ≫ γ.s
+      hs := W.comp_mem _ _ β.hs γ.hs }
+  have : IsIso (L.map (β.s ≫ γ.s)) := by
+    rw [L.map_comp]
+    infer_instance
+  refine ⟨ψ, ?_, ?_, ?_⟩
+  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), LeftFraction.map_comp_map_s, hα, hγ,
+      L.map_comp, LeftFraction.map_comp_map_s_assoc, L.map_comp]
+  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), LeftFraction.map_comp_map_s, hα', hγ,
+      L.map_comp, LeftFraction.map_comp_map_s_assoc, L.map_comp]
+  · rw [← cancel_mono (L.map (β.s ≫ γ.s)), hβ]
+    nth_rw 1 [L.map_comp]
+    rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s]; rw [L.map_comp]
 
 Depends on / 依赖: L.map, L.map_co, L.map_comp, LeftFraction, LeftFraction.map_comp_map_s, RightFraction, RightFraction.mk, W.LeftFraction, W.comp_mem, cancel_mono, comp_mem, exists_leftFraction, infer_instance, map_co, map_comp, map_comp_map_s
 -/
@@ -779,7 +857,8 @@ lemma Functor.faithful_of_comp_of_hasLeftCalculusOfFractions
   obtain ⟨φ, rfl, rfl⟩ := Localization.exists_leftFraction₂ L W f g
   rw [← cancel_mono (L.map φ.s)]; rw [φ.fst.map_comp_map_s L]; rw [φ.snd.map_comp_map_s L]
   apply h
-  simpa only [← F.map_comp, φ
+  simpa only [← F.map_comp, φ.fst.map_comp_map_s, φ.snd.map_comp_map_s] using
+    hfg =≫ F.map (L.map φ.s)
 
 中文:
 引理 函子.faithful_of_comp_of_hasLeftCalculusOfFractions
@@ -789,7 +868,8 @@ lemma Functor.faithful_of_comp_of_hasLeftCalculusOfFractions
   obtain ⟨φ, rfl, rfl⟩ := Localization.exists_leftFraction₂ L W f g
   rw [← cancel_mono (L.map φ.s)]; rw [φ.fst.map_comp_map_s L]; rw [φ.snd.map_comp_map_s L]
   apply h
-  simpa only [← F.map_comp, φ
+  simpa only [← F.map_comp, φ.fst.map_comp_map_s, φ.snd.map_comp_map_s] using
+    hfg =≫ F.map (L.map φ.s)
 
 Depends on / 依赖: F.faithful_of_comp_essSurj, F.map, F.map_comp, L.map, Localization, Localization.essSurj, Localization.exists_leftFraction, cancel_mono, essSurj, faithful_of_comp_essSurj, fst.map_comp_map_s, map_comp, map_comp_map_s, snd.map_comp_map_s
 -/

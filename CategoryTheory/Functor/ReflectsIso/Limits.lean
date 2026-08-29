@@ -41,7 +41,12 @@ definition jointlyReflectsLimit
   intro i
   let H := isLimitOfPreserves (F i) (limit.isLimit G)
   let e := IsLimit.conePointUniqueUpToIso (hc i) H
-  have : e.hom = (F i).map (limit
+  have : e.hom = (F i).map (limit.lift G c) :=
+    H.hom_ext (fun j => by
+      simpa [← Functor.map_comp] using
+        IsLimit.conePointUniqueUpToIso_hom_comp (hc i) H j)
+  rw [← this]
+  infer_instance
 
 中文:
 定义 jointlyReflectsLimit
@@ -53,7 +58,12 @@ definition jointlyReflectsLimit
   intro i
   let H := isLimitOfPreserves (F i) (limit.isLimit G)
   let e := IsLimit.conePointUniqueUpToIso (hc i) H
-  have : e.hom = (F i).map (limit
+  have : e.hom = (F i).map (limit.lift G c) :=
+    H.hom_ext (fun j => by
+      simpa [← Functor.map_comp] using
+        IsLimit.conePointUniqueUpToIso_hom_comp (hc i) H j)
+  rw [← this]
+  infer_instance
 
 Depends on / 依赖: Cone.ext, Functor, Functor.map_comp, H.hom_ext, IsLimit, IsLimit.conePointUniqueUpToIso, IsLimit.conePointUniqueUpToIso_hom_comp, IsLimit.ofIsoLimit, conePointUniqueUpToIso, conePointUniqueUpToIso_hom_comp, e.hom, hF.isIso_iff, hom_ext, infer_instance, isIso_iff, isLimit, isLimitOfPreserves, limit.isLimit, limit.lift, map_comp
 -/
@@ -90,7 +100,12 @@ definition jointlyReflectsColimit
   intro i
   let H := isColimitOfPreserves (F i) (colimit.isColimit G)
   let e := IsColimit.coconePointUniqueUpToIso H (hc i)
-  have : e.hom
+  have : e.hom = (F i).map (colimit.desc G c) :=
+    H.hom_ext (fun j => by
+      simpa [← Functor.map_comp] using
+        IsColimit.comp_coconePointUniqueUpToIso_hom H (hc i) j)
+  rw [← this]
+  infer_instance
 
 中文:
 定义 jointlyReflectsColimit
@@ -102,7 +117,12 @@ definition jointlyReflectsColimit
   intro i
   let H := isColimitOfPreserves (F i) (colimit.isColimit G)
   let e := IsColimit.coconePointUniqueUpToIso H (hc i)
-  have : e.hom
+  have : e.hom = (F i).map (colimit.desc G c) :=
+    H.hom_ext (fun j => by
+      simpa [← Functor.map_comp] using
+        IsColimit.comp_coconePointUniqueUpToIso_hom H (hc i) j)
+  rw [← this]
+  infer_instance
 
 Depends on / 依赖: Cocone, Cocone.ext, Functor, Functor.map_comp, H.hom_ext, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.comp_coconePointUniqueUpToIso_hom, IsColimit.ofIsoColimit, coconePointUniqueUpToIso, colimit, colimit.desc, colimit.isColimit, comp_coconePointUniqueUpToIso_hom, e.hom, hF.isIso_iff, hom_ext, infer_instance, isColimit, isColimitOfPreserves
 -/

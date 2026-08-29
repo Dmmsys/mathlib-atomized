@@ -52,7 +52,7 @@ definition eventuallyMeasurableSpace
   measurableSet_compl := fun _ ⟨t, ht, hts⟩ => ⟨tᶜ, ht.compl, hts.compl⟩
   measurableSet_iUnion s hs := by
     choose t ht hts using hs
-    exact ⟨⋃ i, t i, MeasurableSet.iUnion ht, .count
+    exact ⟨⋃ i, t i, MeasurableSet.iUnion ht, .countable_iUnion hts⟩
 
 中文:
 定义 eventuallyMeasurableSpace
@@ -62,7 +62,7 @@ definition eventuallyMeasurableSpace
   measurableSet_compl := fun _ ⟨t, ht, hts⟩ => ⟨tᶜ, ht.compl, hts.compl⟩
   measurableSet_iUnion s hs := by
     choose t ht hts using hs
-    exact ⟨⋃ i, t i, MeasurableSet.iUnion ht, .count
+    exact ⟨⋃ i, t i, MeasurableSet.iUnion ht, .countable_iUnion hts⟩
 
 Depends on / 依赖: MeasurableSet
 -/

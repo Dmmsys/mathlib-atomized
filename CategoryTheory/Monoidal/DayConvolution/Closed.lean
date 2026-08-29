@@ -55,7 +55,13 @@ definition dayConvolutionInternalHomDiagramFunctor
 .app (Functor.whiskerRight (curriedTensor C |>.flip.map f) G)
           MonoidalClosed.internalHom }
   map {G G'} η :=
-    { app c := F
+    { app c := Functor.whiskeringLeft₂ _ |>.obj F.op |>.map
+.app MonoidalClosed.internalHom (Functor.whiskerLeft _ η)
+      naturality {c c'} f := by
+        ext j k
+        dsimp
+        simpa [-NatTrans.naturality] using!
+          congr_arg (ihom <| F.obj <| unop j).map (η.naturality <| k ◁ f) }
 
 中文:
 定义 dayConvolution整数ernalHomDiagramFunctor
@@ -66,7 +72,13 @@ definition dayConvolutionInternalHomDiagramFunctor
 .app (Functor.whiskerRight (curriedTensor C |>.flip.map f) G)
           MonoidalClosed.internalHom }
   map {G G'} η :=
-    { app c := F
+    { app c := Functor.whiskeringLeft₂ _ |>.obj F.op |>.map
+.app MonoidalClosed.internalHom (Functor.whiskerLeft _ η)
+      naturality {c c'} f := by
+        ext j k
+        dsimp
+        simpa [-NatTrans.naturality] using!
+          congr_arg (ihom <| F.obj <| unop j).map (η.naturality <| k ◁ f) }
 
 Depends on / 依赖: F.obj, F.op, Functor, Functor.whiskerLeft, Functor.whiskerRight, Functor.whiskeringLeft, MonoidalClosed, MonoidalClosed.internalHom, NatTrans, NatTrans.naturality, congr_arg, curriedTensor, flip.map, internalHom, naturality, tensorRight, whiskerLeft, whiskerRight
 -/
@@ -152,7 +164,20 @@ definition map
 have := congrArg (fun t => t.app j')
         dayConvolutionInternalHomDiagramFunctor
 .naturality φ.op .app c .map f F
-      dsi
+      dsimp at this ⊢
+      rw [Category.assoc]; rw [← (ihom (F.obj j)).map_comp]; rw [← f.naturality]; rw [Functor.map_comp]; rw [reassoc_of% ℌ.hπ]
+      simp)
+  naturality {c c'} f := by
+    apply Wedge.IsLimit.hom_ext (ℌ'.isLimitWedge c')
+    intro j
+    dsimp
+    simp only [Category.assoc, map_comp_π]
+    rw [← Wedge.mk_ι
+        (F := dayConvolutionInternalHomDiagramFunctor F |>.obj _ |>.obj c')
+        (H'.obj c') (ℌ'.π c') (ℌ'.hπ c')]; rw [← Wedge.mk_ι
+        (F := dayConvolutionInternalHomDiagramFunctor F |>.obj _ |>.obj c)
+        (H'.obj c) (ℌ'.π c) (ℌ'.hπ c)]; rw [Wedge.IsLimit.lift_ι (ℌ'.isLimitWedge c')]; rw [Wedge.IsLimit.lift_ι_assoc (ℌ'.isLimitWedge c)]
+    simp [← Functor.map_comp]
 
 中文:
 定义 map
@@ -165,7 +190,20 @@ have := congrArg (fun t => t.app j')
 have := congrArg (fun t => t.app j')
         dayConvolutionInternalHomDiagramFunctor
 .naturality φ.op .app c .map f F
-      dsi
+      dsimp at this ⊢
+      rw [Category.assoc]; rw [← (ihom (F.obj j)).map_comp]; rw [← f.naturality]; rw [Functor.map_comp]; rw [reassoc_of% ℌ.hπ]
+      simp)
+  naturality {c c'} f := by
+    apply Wedge.IsLimit.hom_ext (ℌ'.isLimitWedge c')
+    intro j
+    dsimp
+    simp only [Category.assoc, map_comp_π]
+    rw [← Wedge.mk_ι
+        (F := dayConvolutionInternalHomDiagramFunctor F |>.obj _ |>.obj c')
+        (H'.obj c') (ℌ'.π c') (ℌ'.hπ c')]; rw [← Wedge.mk_ι
+        (F := dayConvolutionInternalHomDiagramFunctor F |>.obj _ |>.obj c)
+        (H'.obj c) (ℌ'.π c) (ℌ'.hπ c)]; rw [Wedge.IsLimit.lift_ι (ℌ'.isLimitWedge c')]; rw [Wedge.IsLimit.lift_ι_assoc (ℌ'.isLimitWedge c)]
+    simp [← Functor.map_comp]
 
 Depends on / 依赖: IsLimit, NatTrans, NatTrans.isIso_iff_isIso_app, ReflectsIsomorphisms, ReflectsIsomorphisms.reflects, Wedge.IsLimit.lift, allowSynthFailures, isIso_iff_isIso_app, isIso_ranCounit_app_of_isDenseSubsite, isLimitWedge, reflects, sheafAdjunctionCocontinuous_counit_app_hom, sheafToPresheaf, yoneda
 -/
@@ -248,7 +286,14 @@ definition ev_app
 have := congrArg (fun t => F.obj x.1 ◁ t) ℌ.hπ x.2 f.1
         dsimp at this ⊢
         simp only [whiskerLeft_comp] at this
-        simp only [Category.assoc, Monoi
+        simp only [Category.assoc, MonoidalClosed.uncurry_eq, Functor.id_obj,
+          ← whiskerLeft_comp_assoc, map_comp_π]
+        simp only [whiskerLeft_comp, Category.assoc, ihom.ev_naturality,
+          Functor.comp_obj, curriedTensor_obj_obj, Functor.id_obj,
+          ← whisker_exchange_assoc, tensorHom_def, Functor.map_comp,
+          ← ihom.ev_naturality_assoc]
+        rw [reassoc_of% this]
+        simp }
 
 中文:
 定义 ev_app
@@ -259,7 +304,14 @@ have := congrArg (fun t => F.obj x.1 ◁ t) ℌ.hπ x.2 f.1
 have := congrArg (fun t => F.obj x.1 ◁ t) ℌ.hπ x.2 f.1
         dsimp at this ⊢
         simp only [whiskerLeft_comp] at this
-        simp only [Category.assoc, Monoi
+        simp only [Category.assoc, MonoidalClosed.uncurry_eq, Functor.id_obj,
+          ← whiskerLeft_comp_assoc, map_comp_π]
+        simp only [whiskerLeft_comp, Category.assoc, ihom.ev_naturality,
+          Functor.comp_obj, curriedTensor_obj_obj, Functor.id_obj,
+          ← whisker_exchange_assoc, tensorHom_def, Functor.map_comp,
+          ← ihom.ev_naturality_assoc]
+        rw [reassoc_of% this]
+        simp }
 
 Depends on / 依赖: Category, Category.assoc, DayConvolution, DayConvolution.corepresentableBy, F.obj, Functor, Functor.comp_obj, Functor.id_obj, MonoidalClosed, MonoidalClosed.uncurry, MonoidalClosed.uncurry_eq, comp_obj, corepresentableBy, curriedTensor_obj_obj, ev_naturality, homEquiv, homEquiv.symm, id_obj, ihom.ev_naturality, naturality
 -/
@@ -367,7 +419,29 @@ definition coev_app
         (fun {c' c''} f => by
           have := DayConvolution.unit_naturality F G f (𝟙 c)
           simp only [Functor.map_id, tensorHom_id] at this
-          replace this :
+          replace this := congrArg MonoidalClosed.curry this
+          simp only [MonoidalClosed.curry_natural_right] at this
+          dsimp
+          rw [← this]
+          simp [MonoidalClosed.curry_eq])
+  naturality {c c'} f := by
+    dsimp
+apply Wedge.IsLimit.hom_ext ℌ.isLimitWedge c'
+    intro (j : C)
+    simp only [multicospanIndexEnd_left,
+      dayConvolutionInternalHomDiagramFunctor_obj_obj_obj_obj, Multifork.ofι_pt,
+      Wedge.mk_ι, Category.assoc, map_comp_π]
+    rw [← Wedge.mk_ι
+        (F := dayConvolutionInternalHomDiagramFunctor F |>.obj _ |>.obj c)
+        (H.obj c) (ℌ.π c) (ℌ.hπ c)]; rw [← Wedge.mk_ι
+        (F := dayConvolutionInternalHomDiagramFunctor F |>.obj _ |>.obj c')
+        (H.obj c') (ℌ.π c') (ℌ.hπ c')]; rw [Wedge.IsLimit.lift_ι_assoc]; rw [Wedge.IsLimit.lift_ι]
+    have := DayConvolution.unit_naturality F G (𝟙 j) f
+    simp only [Functor.map_id, id_tensorHom] at this
+    replace this := congrArg MonoidalClosed.curry this
+    simp only [MonoidalClosed.curry_natural_right] at this
+    rw [← this]
+    simp [MonoidalClosed.curry_eq]
 
 中文:
 定义 coev_app
@@ -378,7 +452,29 @@ definition coev_app
         (fun {c' c''} f => by
           have := DayConvolution.unit_naturality F G f (𝟙 c)
           simp only [Functor.map_id, tensorHom_id] at this
-          replace this :
+          replace this := congrArg MonoidalClosed.curry this
+          simp only [MonoidalClosed.curry_natural_right] at this
+          dsimp
+          rw [← this]
+          simp [MonoidalClosed.curry_eq])
+  naturality {c c'} f := by
+    dsimp
+apply Wedge.IsLimit.hom_ext ℌ.isLimitWedge c'
+    intro (j : C)
+    simp only [multicospanIndexEnd_left,
+      dayConvolutionInternalHomDiagramFunctor_obj_obj_obj_obj, Multifork.ofι_pt,
+      Wedge.mk_ι, Category.assoc, map_comp_π]
+    rw [← Wedge.mk_ι
+        (F := dayConvolutionInternalHomDiagramFunctor F |>.obj _ |>.obj c)
+        (H.obj c) (ℌ.π c) (ℌ.hπ c)]; rw [← Wedge.mk_ι
+        (F := dayConvolutionInternalHomDiagramFunctor F |>.obj _ |>.obj c')
+        (H.obj c') (ℌ.π c') (ℌ.hπ c')]; rw [Wedge.IsLimit.lift_ι_assoc]; rw [Wedge.IsLimit.lift_ι]
+    have := DayConvolution.unit_naturality F G (𝟙 j) f
+    simp only [Functor.map_id, id_tensorHom] at this
+    replace this := congrArg MonoidalClosed.curry this
+    simp only [MonoidalClosed.curry_natural_right] at this
+    rw [← this]
+    simp [MonoidalClosed.curry_eq]
 
 Depends on / 依赖: DayConvolution, DayConvolution.unit, DayConvolution.unit_naturality, Functor, Functor.map_id, IsLimit, MonoidalClosed, MonoidalClosed.curry, MonoidalClosed.curry_eq, MonoidalClosed.curry_natural_right, Wedge.IsLimit.hom_ext, Wedge.IsLimit.lift, curry_eq, curry_natural_right, hom_ext, isLimitWedge, map_id, multico, naturality, replace
 -/
@@ -464,7 +560,9 @@ apply Wedge.IsLimit.hom_ext ℌ'.isLimitWedge c
   dsimp
   simp only [Category.assoc, coev_app_π, Functor.comp_obj, tensor_obj,
     map_app_comp_π, coev_app_π_assoc, MonoidalClosed.uncurry_natural_right,
-    MonoidalClosed.uncurry_cu
+    MonoidalClosed.uncurry_curry, DayConvolution.unit_app_map_app,
+    NatTrans.id_app, id_tensorHom]
+  simp [MonoidalClosed.uncurry_natural_left]
 
 中文:
 引理 coev_naturality_app
@@ -478,7 +576,9 @@ apply Wedge.IsLimit.hom_ext ℌ'.isLimitWedge c
   dsimp
   simp only [Category.assoc, coev_app_π, Functor.comp_obj, tensor_obj,
     map_app_comp_π, coev_app_π_assoc, MonoidalClosed.uncurry_natural_right,
-    MonoidalClosed.uncurry_cu
+    MonoidalClosed.uncurry_curry, DayConvolution.unit_app_map_app,
+    NatTrans.id_app, id_tensorHom]
+  simp [MonoidalClosed.uncurry_natural_left]
 
 Depends on / 依赖: Category, Category.assoc, DayConvolution, DayConvolution.unit_app_map_app, Functor, Functor.comp_obj, IsLimit, MonoidalClosed, MonoidalClosed.uncurry_curry, MonoidalClosed.uncurry_injective, MonoidalClosed.uncurry_natural_left, MonoidalClosed.uncurry_natural_right, NatTrans, NatTrans.id_app, Wedge.IsLimit.hom_ext, comp_obj, hom_ext, id_app, id_tensorHom, isLimitWedge
 -/

@@ -1478,7 +1478,9 @@ instance :
       hom_inv_id := by
         simp only [comp_zsmul, zsmul_comp, smul_smul, Units.inv_mul, one_smul, e.hom_inv_id]
       inv_hom_id := by
-        simp only [comp_zsmul, zsmul_comp, smul_smul, Units.mul_inv, one_smul, e.inv_ho
+        simp only [comp_zsmul, zsmul_comp, smul_smul, Units.mul_inv, one_smul, e.inv_hom_id] }
+
+@[simp]
 
 中文:
 实例 :
@@ -1488,7 +1490,9 @@ instance :
       hom_inv_id := by
         simp only [comp_zsmul, zsmul_comp, smul_smul, Units.inv_mul, one_smul, e.hom_inv_id]
       inv_hom_id := by
-        simp only [comp_zsmul, zsmul_comp, smul_smul, Units.mul_inv, one_smul, e.inv_ho
+        simp only [comp_zsmul, zsmul_comp, smul_smul, Units.mul_inv, one_smul, e.inv_hom_id] }
+
+@[simp]
 
 Depends on / 依赖: Units.inv_mul, Units.mul_inv, comp_zsmul, e.hom, e.hom_inv_id, e.inv, e.inv_hom_id, hom_inv_id, inv_hom_id, inv_mul, mul_inv, one_smul, smul_smul, zsmul_comp
 -/

@@ -108,7 +108,15 @@ theorem tsum_powMulProdOneSubPow
   rw [← (hsum _).tsum_mul_left]; rw [← (hsum _).tsum_add ((hsum _).mul_left _)]
   apply HasSum.tsum_eq
   rw [((hsum _).add ((hsum _).mul_left _)).hasSum_iff_tendsto_nat]
-  simp_rw [aux_sub_aux, Finset.sum_range_
+  simp_rw [aux_sub_aux, Finset.sum_range_sub (aux k · x)]
+  apply Tendsto.sub_const
+  rw [show 𝓝 0 = 𝓝 (0 * (0 - 1) * ∏' i]; rw [(1 - x ^ (k + i + 2))) by simp]
+  refine (Tendsto.mul ?_ ?_).mul ?_
+  · exact hx.comp (strictMono_mul_left_of_pos (by simp)).tendsto_atTop
+  · exact (hx.comp (add_right_strictMono.add_monotone monotone_const).tendsto_atTop).sub_const _
+  · apply Multipliable.tendsto_prod_tprod_nat
+    convert h (k + 1) using 4
+    ring
 
 中文:
 定理 tsum_powMulProdOneSubPow
@@ -118,7 +126,15 @@ theorem tsum_powMulProdOneSubPow
   rw [← (hsum _).tsum_mul_left]; rw [← (hsum _).tsum_add ((hsum _).mul_left _)]
   apply HasSum.tsum_eq
   rw [((hsum _).add ((hsum _).mul_left _)).hasSum_iff_tendsto_nat]
-  simp_rw [aux_sub_aux, Finset.sum_range_
+  simp_rw [aux_sub_aux, Finset.sum_range_sub (aux k · x)]
+  apply Tendsto.sub_const
+  rw [show 𝓝 0 = 𝓝 (0 * (0 - 1) * ∏' i]; rw [(1 - x ^ (k + i + 2))) by simp]
+  refine (Tendsto.mul ?_ ?_).mul ?_
+  · exact hx.comp (strictMono_mul_left_of_pos (by simp)).tendsto_atTop
+  · exact (hx.comp (add_right_strictMono.add_monotone monotone_const).tendsto_atTop).sub_const _
+  · apply Multipliable.tendsto_prod_tprod_nat
+    convert h (k + 1) using 4
+    ring
 
 Depends on / 依赖: Finset, Finset.sum_range_sub, HasSum, HasSum.tsum_eq, Tendsto, Tendsto.mul, Tendsto.sub_const, aux_sub_aux, eq_sub_iff_add_eq, hasSum_iff_tendsto_nat, hx.comp, mul_left, simp_rw, strictMono_mul_left_of_pos, sub_const, sum_range_sub, tsum_add, tsum_eq, tsum_mul_left
 -/
@@ -154,7 +170,14 @@ theorem tprod_one_sub_pow_eq_powMulProdOneSubPow_zero
     apply Summable.comp_nat_add (k := 1)
     conv in fun k => _ =>
       ext k
-      rw [pow_add]; rw [pow_add]; rw [mul_a
+      rw [pow_add]; rw [pow_add]; rw [mul_assoc (x ^ k)]; rw [mul_comm (x ^ k)]; rw [mul_assoc (x ^ 1 * x ^ 1)]
+    exact hsum.mul_left _
+  rw [tprod_one_sub_ordered (by simpa [Nat.Iio_eq_range] using hsum') (by simpa using h 0)]
+  simp_rw [Nat.Iio_eq_range, sub_sub, sub_right_inj, hsum'.tsum_eq_zero_add]
+  conv in fun k => x ^ (k + 1 + 1) * _ =>
+    ext k
+    rw [pow_add]; rw [pow_add]; rw [mul_assoc (x ^ k)]; rw [mul_comm (x ^ k)]; rw [← pow_add x 1 1]; rw [one_add_one_eq_two]; rw [mul_assoc (x ^ 2)]
+  simp [hsum.tsum_mul_left, powMulProdOneSubPow]
 
 中文:
 定理 tprod_one_sub_pow_eq_powMulProdOneSubPow_zero
@@ -166,7 +189,14 @@ theorem tprod_one_sub_pow_eq_powMulProdOneSubPow_zero
     apply Summable.comp_nat_add (k := 1)
     conv in fun k => _ =>
       ext k
-      rw [pow_add]; rw [pow_add]; rw [mul_a
+      rw [pow_add]; rw [pow_add]; rw [mul_assoc (x ^ k)]; rw [mul_comm (x ^ k)]; rw [mul_assoc (x ^ 1 * x ^ 1)]
+    exact hsum.mul_left _
+  rw [tprod_one_sub_ordered (by simpa [Nat.Iio_eq_range] using hsum') (by simpa using h 0)]
+  simp_rw [Nat.Iio_eq_range, sub_sub, sub_right_inj, hsum'.tsum_eq_zero_add]
+  conv in fun k => x ^ (k + 1 + 1) * _ =>
+    ext k
+    rw [pow_add]; rw [pow_add]; rw [mul_assoc (x ^ k)]; rw [mul_comm (x ^ k)]; rw [← pow_add x 1 1]; rw [one_add_one_eq_two]; rw [mul_assoc (x ^ 2)]
+  simp [hsum.tsum_mul_left, powMulProdOneSubPow]
 
 Depends on / 依赖: Finset, Finset.range, Iio_eq_range, Nat.Iio_eq_range, Summable, Summable.comp_nat_add, comp_nat_add, hsum.mul_left, mul_assoc, mul_comm, mul_left, one_mul, powMulProdOneSubPow, pow_add, simp_rw, sub_right, sub_sub, tprod_one_sub_ordered, zero_add
 -/
@@ -202,7 +232,17 @@ theorem tprod_one_sub_pow_eq_powMulProdOneSubPow
       ← sub_eq_add_neg]
   | succ n ih =>
     rw [ih]; rw [tsum_powMulProdOneSubPow _ hx hsum h]; rw [Finset.sum_range_succ _ (n + 1)]
-    have h (n) : (n + 1 + 1) * (3 * (n + 1) + 2
+    have h (n) : (n + 1 + 1) * (3 * (n + 1) + 2) / 2 =
+        (n + 1) * (3 * n + 4) / 2 + (2 * n + 3) := by
+      rw [← Nat.add_mul_div_left _ _ (by simp)]
+      ring_nf
+    simp_rw [h]
+    have h (n) : (n + 1 + 1) * (3 * (n + 1) + 4) / 2 =
+        (n + 1) * (3 * n + 4) / 2 + (3 * n + 5) := by
+      rw [← Nat.add_mul_div_left _ _ (by simp)]
+      ring_nf
+    simp_rw [h]
+    ring_nf
 
 中文:
 定理 tprod_one_sub_pow_eq_powMulProdOneSubPow
@@ -214,7 +254,17 @@ theorem tprod_one_sub_pow_eq_powMulProdOneSubPow
       ← sub_eq_add_neg]
   | succ n ih =>
     rw [ih]; rw [tsum_powMulProdOneSubPow _ hx hsum h]; rw [Finset.sum_range_succ _ (n + 1)]
-    have h (n) : (n + 1 + 1) * (3 * (n + 1) + 2
+    have h (n) : (n + 1 + 1) * (3 * (n + 1) + 2) / 2 =
+        (n + 1) * (3 * n + 4) / 2 + (2 * n + 3) := by
+      rw [← Nat.add_mul_div_left _ _ (by simp)]
+      ring_nf
+    simp_rw [h]
+    have h (n) : (n + 1 + 1) * (3 * (n + 1) + 4) / 2 =
+        (n + 1) * (3 * n + 4) / 2 + (3 * n + 5) := by
+      rw [← Nat.add_mul_div_left _ _ (by simp)]
+      ring_nf
+    simp_rw [h]
+    ring_nf
 
 Depends on / 依赖: Finset, Finset.sum_range_succ, Nat.a, Nat.add_mul_div_left, add_mul_div_left, powMulProdOneSubPow, ring_nf, simp_rw, sub_eq_add_neg, sum_range_succ, tprod_one_sub_pow_eq_powMulProdOneSubPow_zero, tsum_powMulProdOneSubPow
 -/

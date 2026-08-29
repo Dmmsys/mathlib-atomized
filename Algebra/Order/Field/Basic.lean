@@ -1243,7 +1243,9 @@ theorem IsLUB.mul_left
     · simp only [Set.image_empty, isLUB_empty_iff] at hs ⊢
       have hb := hs (b + b)
       rw [le_add_iff_nonneg_right] at hb
-      exact hs
+      exact hs.mono hb
+    rw [ne.image_const]
+    exact isLUB_singleton
 
 中文:
 定理 IsLUB.mul_left
@@ -1256,7 +1258,9 @@ theorem IsLUB.mul_left
     · simp only [Set.image_empty, isLUB_empty_iff] at hs ⊢
       have hb := hs (b + b)
       rw [le_add_iff_nonneg_right] at hb
-      exact hs
+      exact hs.mono hb
+    rw [ne.image_const]
+    exact isLUB_singleton
 
 Depends on / 依赖: OrderIso, OrderIso.mulLeft, Set.image_empty, eq_empty_or_nonempty, ha.lt_or_eq, hs.mono, image_const, image_empty, isLUB_empty_iff, isLUB_image, isLUB_singleton, le_add_iff_nonneg_right, lt_or_eq, ne.image_const, s.eq_empty_or_nonempty, simp_rw, zero_mul
 -/
@@ -2597,7 +2601,12 @@ theorem sub_one_div_inv_le_two
   refine (inv_anti₀ (inv_pos.2 <| zero_lt_two' α) ?_).trans_eq (inv_inv (2 : α))
   -- move `1 / a` to the left and `2⁻¹` to the right.
   rw [le_sub_iff_add_le]; rw [add_comm]; rw [← le_sub_iff_add_le]
-  -- take inverses on both sides an
+  -- take inverses on both sides and use the assumption `2 ≤ a`.
+  convert (one_div a).le.trans (inv_anti₀ zero_lt_two a2)
+    -- show `1 - 1 / 2 = 1 / 2`.
+
+  -- show `1 - 1 / 2 = 1 / 2`.
+  rw [sub_eq_iff_eq_add]; rw [← two_mul]; rw [mul_inv_cancel₀ two_ne_zero]
 
 中文:
 定理 sub_one_div_inv_le_two
@@ -2608,7 +2617,12 @@ theorem sub_one_div_inv_le_two
   refine (inv_anti₀ (inv_pos.2 <| zero_lt_two' α) ?_).trans_eq (inv_inv (2 : α))
   -- move `1 / a` to the left and `2⁻¹` to the right.
   rw [le_sub_iff_add_le]; rw [add_comm]; rw [← le_sub_iff_add_le]
-  -- take inverses on both sides an
+  -- take inverses on both sides and use the assumption `2 ≤ a`.
+  convert (one_div a).le.trans (inv_anti₀ zero_lt_two a2)
+    -- show `1 - 1 / 2 = 1 / 2`.
+
+  -- show `1 - 1 / 2 = 1 / 2`.
+  rw [sub_eq_iff_eq_add]; rw [← two_mul]; rw [mul_inv_cancel₀ two_ne_zero]
 -/
 theorem sub_one_div_inv_le_two (a2 : 2 <= a) : (1 - 1 / a)⁻¹ <= 2 := by
   -- Take inverses on both sides to obtain `2⁻¹ ≤ 1 - 1 / a`
@@ -3083,7 +3097,10 @@ lemma mul_le_of_forall_lt_of_nonneg
   · exact hd.le.trans hc
   obtain ⟨a', ha', d_ab⟩ := exists_lt_mul_left_of_nonneg ha hd d_ab
   obtain ⟨b', hb', d_ab⟩ := exists_lt_mul_right_of_nonneg ha'.1 hd d_ab
-  exact d_ab.le.trans (h a' ha'.1 ha'.2
+  exact d_ab.le.trans (h a' ha'.1 ha'.2 b' hb'.1 hb'.2)
+
+  -- surely there is an easier proof of this, or we already have something like it somewhere.
+  -- It doesn't even need `α` to be a field, so it doesn't belong in this file.
 
 中文:
 引理 mul_le_of_对任意_lt_of_nonneg
@@ -3094,7 +3111,10 @@ lemma mul_le_of_forall_lt_of_nonneg
   · exact hd.le.trans hc
   obtain ⟨a', ha', d_ab⟩ := exists_lt_mul_left_of_nonneg ha hd d_ab
   obtain ⟨b', hb', d_ab⟩ := exists_lt_mul_right_of_nonneg ha'.1 hd d_ab
-  exact d_ab.le.trans (h a' ha'.1 ha'.2
+  exact d_ab.le.trans (h a' ha'.1 ha'.2 b' hb'.1 hb'.2)
+
+  -- surely there is an easier proof of this, or we already have something like it somewhere.
+  -- It doesn't even need `α` to be a field, so it doesn't belong in this file.
 
 Depends on / 依赖: d_ab, d_ab.le.trans, exists_lt_mul_left_of_nonneg, exists_lt_mul_right_of_nonneg, hd.le.trans, le_of_forall_lt_imp_le_of_dense, lt_or_ge
 -/
@@ -3254,7 +3274,18 @@ theorem uniform_continuous_npow_on_bounded
   · have ⟨δ, δ_pos, cont⟩ := this 1 zero_lt_one
     exact ⟨δ, δ_pos, fun q r hr => cont q r (hr.trans (B_pos.trans zero_le_one))⟩
 have pos : 0 < 1 + ↑n * (B + 1) ^ (n - 1) := zero_lt_one.trans_le le_add_of_nonneg_right
-mul_nonneg n.cast_nonneg (pow_pos (B_pos.
+mul_nonneg n.cast_nonneg (pow_pos (B_pos.trans <| lt_add_of_pos_right _ zero_lt_one) _).le
+  refine ⟨min 1 (ε / (1 + n * (B + 1) ^ (n - 1))), lt_min zero_lt_one (div_pos hε pos),
+    fun q r hr hqr => (abs_pow_sub_pow_le ..).trans_lt ?_⟩
+  rw [le_inf_iff]; rw [le_div_iff₀ pos]; rw [mul_one_add]; rw [← mul_assoc] at hqr
+  obtain h | h := (abs_nonneg (q - r)).eq_or_lt
+  · simpa only [← h, zero_mul] using hε
+  refine (lt_of_le_of_lt ?_ <| lt_add_of_pos_left _ h).trans_le hqr.2
+  gcongr
+  · exact mul_nonneg (abs_nonneg _) n.cast_nonneg
+  · exact (abs_nonneg _).trans le_sup_left
+  refine max_le ?_ (hr.trans <| le_add_of_nonneg_right zero_le_one)
+  exact add_sub_cancel r q ▸ (abs_add_le ..).trans (add_le_add hr hqr.1)
 
 中文:
 定理 uniform_continuous_npow_on_bounded
@@ -3264,7 +3295,18 @@ mul_nonneg n.cast_nonneg (pow_pos (B_pos.
   · have ⟨δ, δ_pos, cont⟩ := this 1 zero_lt_one
     exact ⟨δ, δ_pos, fun q r hr => cont q r (hr.trans (B_pos.trans zero_le_one))⟩
 have pos : 0 < 1 + ↑n * (B + 1) ^ (n - 1) := zero_lt_one.trans_le le_add_of_nonneg_right
-mul_nonneg n.cast_nonneg (pow_pos (B_pos.
+mul_nonneg n.cast_nonneg (pow_pos (B_pos.trans <| lt_add_of_pos_right _ zero_lt_one) _).le
+  refine ⟨min 1 (ε / (1 + n * (B + 1) ^ (n - 1))), lt_min zero_lt_one (div_pos hε pos),
+    fun q r hr hqr => (abs_pow_sub_pow_le ..).trans_lt ?_⟩
+  rw [le_inf_iff]; rw [le_div_iff₀ pos]; rw [mul_one_add]; rw [← mul_assoc] at hqr
+  obtain h | h := (abs_nonneg (q - r)).eq_or_lt
+  · simpa only [← h, zero_mul] using hε
+  refine (lt_of_le_of_lt ?_ <| lt_add_of_pos_left _ h).trans_le hqr.2
+  gcongr
+  · exact mul_nonneg (abs_nonneg _) n.cast_nonneg
+  · exact (abs_nonneg _).trans le_sup_left
+  refine max_le ?_ (hr.trans <| le_add_of_nonneg_right zero_le_one)
+  exact add_sub_cancel r q ▸ (abs_add_le ..).trans (add_le_add hr hqr.1)
 
 Depends on / 依赖: B_pos, B_pos.trans, abs_pow_sub_pow_le, cast_nonneg, div_pos, generalizing, hr.trans, le_add_of_nonneg_right, le_inf_iff, lt_add_of_pos_right, lt_min, mul_nonneg, n.cast_nonneg, pow_pos, trans_le, trans_lt, zero_le_one, zero_lt_one, zero_lt_one.trans_le
 -/
@@ -3298,7 +3340,9 @@ lemma two_mul_le_add_mul_sq
   calc 2 * a * b
   _ = 2 * a * b * (ε * ε⁻¹) := by rw [mul_inv_cancel₀ hε.ne', mul_one]
   _ = (2 * (ε * a) * b) * ε⁻¹ := by simp_rw [mul_assoc, mul_comm ε, mul_assoc]
-  _ <= ((ε * a) ^ 2 + b ^ 2) * ε⁻¹ := by gcongr; 
+  _ <= ((ε * a) ^ 2 + b ^ 2) * ε⁻¹ := by gcongr; exact inv_nonneg.mpr hε.le
+  _ = ε * a ^ 2 + ε⁻¹ * b ^ 2 := by
+    rw [mul_comm _ ε⁻¹]; rw [mul_pow]; rw [mul_add]; rw [← mul_assoc]; rw [pow_two]; rw [← mul_assoc]; rw [inv_mul_cancel₀ hε.ne']; rw [one_mul]
 
 中文:
 引理 two_mul_le_add_mul_sq
@@ -3308,7 +3352,9 @@ lemma two_mul_le_add_mul_sq
   calc 2 * a * b
   _ = 2 * a * b * (ε * ε⁻¹) := by rw [mul_inv_cancel₀ hε.ne', mul_one]
   _ = (2 * (ε * a) * b) * ε⁻¹ := by simp_rw [mul_assoc, mul_comm ε, mul_assoc]
-  _ <= ((ε * a) ^ 2 + b ^ 2) * ε⁻¹ := by gcongr; 
+  _ <= ((ε * a) ^ 2 + b ^ 2) * ε⁻¹ := by gcongr; exact inv_nonneg.mpr hε.le
+  _ = ε * a ^ 2 + ε⁻¹ * b ^ 2 := by
+    rw [mul_comm _ ε⁻¹]; rw [mul_pow]; rw [mul_add]; rw [← mul_assoc]; rw [pow_two]; rw [← mul_assoc]; rw [inv_mul_cancel₀ hε.ne']; rw [one_mul]
 
 Depends on / 依赖: inv_nonneg, inv_nonneg.mpr, mul_add, mul_assoc, mul_comm, mul_one, mul_pow, one_mul, pow_two, simp_rw, two_mul_le_add_sq
 -/

@@ -159,7 +159,26 @@ theorem Nat.exists_add_mul_eq_of_gcd_dvd_of_mul_pred_le
   obtain _ | q := q
   · have ⟨a, eq⟩ := p.gcd_zero_right ▸ dvd
     exact ⟨a, 0, by simpa [mul_comm, eq_comm] using eq⟩
-  rw [← Int.gcd_natCast_natCast]; rw [Int.gcd_dvd_iff] at dv
+  rw [← Int.gcd_natCast_natCast]; rw [Int.gcd_dvd_iff] at dvd
+  have ⟨a_n, b_n, eq⟩ := dvd
+  let a := a_n % q.succ
+  let b := b_n + a_n / q.succ * p.succ
+  refine ⟨a.toNat, b.toNat, Nat.cast_injective (R := Int) ?_⟩
+  have : a * p.succ + b * q.succ = n := by rw [add_mul, ← add_assoc,
+    add_right_comm, mul_right_comm, ← add_mul, Int.emod_add_ediv_mul, eq, mul_comm, mul_comm b_n]
+  rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [Nat.cast_mul]; rw [Int.natCast_toNat_eq_self.mpr
+    (Int.emod_nonneg _ <| by lia)]; rw [Int.natCast_toNat_eq_self.mpr]; rw [this]
+  -- show b ≥ 0 by contradiction
+  by_contra hb
+  replace hb : b <= -1 := by lia
+  apply lt_irrefl (n : Int)
+  have ha := Int.emod_lt a_n (by lia : (q.succ : Int) != 0)
+  rw [p.pred_succ]; rw [q.pred_succ] at le
+  calc n = a * p.succ + b * q.succ := this.symm
+       _ <= q * p.succ + -1 * q.succ := by gcongr <;> lia
+       _ = p * q - 1 := by simp_rw [Nat.cast_succ, mul_add, mul_comm]; lia
+       _ <= n - 1 := by rwa [sub_le_sub_iff_right, ← Nat.cast_mul, Nat.cast_le]
+       _ < n := by lia
 
 中文:
 定理 自然数.存在_add_mul_eq_of_gcd_dvd_of_mul_pred_le
@@ -171,7 +190,26 @@ theorem Nat.exists_add_mul_eq_of_gcd_dvd_of_mul_pred_le
   obtain _ | q := q
   · have ⟨a, eq⟩ := p.gcd_zero_right ▸ dvd
     exact ⟨a, 0, by simpa [mul_comm, eq_comm] using eq⟩
-  rw [← Int.gcd_natCast_natCast]; rw [Int.gcd_dvd_iff] at dv
+  rw [← Int.gcd_natCast_natCast]; rw [Int.gcd_dvd_iff] at dvd
+  have ⟨a_n, b_n, eq⟩ := dvd
+  let a := a_n % q.succ
+  let b := b_n + a_n / q.succ * p.succ
+  refine ⟨a.toNat, b.toNat, Nat.cast_injective (R := Int) ?_⟩
+  have : a * p.succ + b * q.succ = n := by rw [add_mul, ← add_assoc,
+    add_right_comm, mul_right_comm, ← add_mul, Int.emod_add_ediv_mul, eq, mul_comm, mul_comm b_n]
+  rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [Nat.cast_mul]; rw [Int.natCast_toNat_eq_self.mpr
+    (Int.emod_nonneg _ <| by lia)]; rw [Int.natCast_toNat_eq_self.mpr]; rw [this]
+  -- show b ≥ 0 by contradiction
+  by_contra hb
+  replace hb : b <= -1 := by lia
+  apply lt_irrefl (n : Int)
+  have ha := Int.emod_lt a_n (by lia : (q.succ : Int) != 0)
+  rw [p.pred_succ]; rw [q.pred_succ] at le
+  calc n = a * p.succ + b * q.succ := this.symm
+       _ <= q * p.succ + -1 * q.succ := by gcongr <;> lia
+       _ = p * q - 1 := by simp_rw [Nat.cast_succ, mul_add, mul_comm]; lia
+       _ <= n - 1 := by rwa [sub_le_sub_iff_right, ← Nat.cast_mul, Nat.cast_le]
+       _ < n := by lia
 
 Depends on / 依赖: Int.gcd_dvd_iff, Int.gcd_natCast_natCast, Nat.cast_injective, a.toNat, add_assoc, add_mul, b.toNat, cast_injective, eq_comm, gcd_dvd_iff, gcd_natCast_natCast, gcd_zero_left, gcd_zero_right, mul_comm, p.gcd_zero_right, p.succ, q.gcd_zero_left, q.succ
 -/

@@ -1837,7 +1837,9 @@ theorem rpow_pos
     exact rpow_lt_rpow hx_pos hp_pos
   rcases lt_trichotomy (0 : Real) p with (hp_pos | rfl | hp_neg)
   · exact rpow_pos_of_nonneg hp_pos
-  · simp only [zero_lt_one, rpow_zer
+  · simp only [zero_lt_one, rpow_zero]
+  · rw [← neg_neg p, rpow_neg, inv_pos]
+    exact rpow_pos_of_nonneg (neg_pos.mpr hp_neg)
 
 中文:
 定理 rpow_pos
@@ -1850,7 +1852,9 @@ theorem rpow_pos
     exact rpow_lt_rpow hx_pos hp_pos
   rcases lt_trichotomy (0 : Real) p with (hp_pos | rfl | hp_neg)
   · exact rpow_pos_of_nonneg hp_pos
-  · simp only [zero_lt_one, rpow_zer
+  · simp only [zero_lt_one, rpow_zero]
+  · rw [← neg_neg p, rpow_neg, inv_pos]
+    exact rpow_pos_of_nonneg (neg_pos.mpr hp_neg)
 
 Depends on / 依赖: hp_neg, hp_pos, hp_pos.ne, hx_pos, inv_pos, lt_trichotomy, neg_neg, neg_pos, neg_pos.mpr, rpow_lt_rpow, rpow_neg, rpow_pos_of_nonneg, rpow_zero, zero_lt_one, zero_rpow
 -/
@@ -3069,7 +3073,7 @@ theorem rpow_eq_zero_iff
     by_cases h : x = 0
     · rcases lt_trichotomy y 0 with (H | H | H) <;>
         simp [h, H, zero_rpow_of_neg, zero_rpow_of_pos, le_of_lt]
-    · si
+    · simp [← coe_rpow_of_ne_zero h, h]
 
 中文:
 定理 rpow_eq_zero_iff
@@ -3084,7 +3088,7 @@ theorem rpow_eq_zero_iff
     by_cases h : x = 0
     · rcases lt_trichotomy y 0 with (H | H | H) <;>
         simp [h, H, zero_rpow_of_neg, zero_rpow_of_pos, le_of_lt]
-    · si
+    · simp [← coe_rpow_of_ne_zero h, h]
 
 Depends on / 依赖: coe_rpow_of_ne_zero, le_of_lt, lt_trichotomy, top_rpow_of_neg, top_rpow_of_pos, zero_rpow_of_neg, zero_rpow_of_pos
 -/
@@ -3142,7 +3146,7 @@ theorem rpow_eq_top_iff
     by_cases h : x = 0
     · rcases lt_trichotomy y 0 with (H | H | H) <;>
         simp [h, H, zero_rpow_of_neg, zero_rpow_of_pos, le_of_lt]
-    · si
+    · simp [← coe_rpow_of_ne_zero h, h]
 
 中文:
 定理 rpow_eq_top_iff
@@ -3157,7 +3161,7 @@ theorem rpow_eq_top_iff
     by_cases h : x = 0
     · rcases lt_trichotomy y 0 with (H | H | H) <;>
         simp [h, H, zero_rpow_of_neg, zero_rpow_of_pos, le_of_lt]
-    · si
+    · simp [← coe_rpow_of_ne_zero h, h]
 
 Depends on / 依赖: coe_rpow_of_ne_zero, le_of_lt, lt_trichotomy, top_rpow_of_neg, top_rpow_of_pos, zero_rpow_of_neg, zero_rpow_of_pos
 -/
@@ -3373,7 +3377,7 @@ theorem rpow_add_of_nonneg
     rcases hz.eq_or_lt with rfl | hz
     · rw [rpow_zero, mul_one, add_zero]
     simp [top_rpow_of_pos, hy, hz, add_pos hy hz]
-  simp [← coe_rpow_of_nonneg, hy, hz, add_nonneg hy hz, NNReal.
+  simp [← coe_rpow_of_nonneg, hy, hz, add_nonneg hy hz, NNReal.rpow_add_of_nonneg _ hy hz]
 
 中文:
 定理 rpow_add_of_nonneg
@@ -3385,7 +3389,7 @@ theorem rpow_add_of_nonneg
     rcases hz.eq_or_lt with rfl | hz
     · rw [rpow_zero, mul_one, add_zero]
     simp [top_rpow_of_pos, hy, hz, add_pos hy hz]
-  simp [← coe_rpow_of_nonneg, hy, hz, add_nonneg hy hz, NNReal.
+  simp [← coe_rpow_of_nonneg, hy, hz, add_nonneg hy hz, NNReal.rpow_add_of_nonneg _ hy hz]
 
 Depends on / 依赖: NNReal, NNReal.rpow_add_of_nonneg, add_nonneg, add_pos, add_zero, coe_rpow_of_nonneg, eq_or_lt, hy.eq_or_lt, hz.eq_or_lt, mul_one, one_mul, recTopCoe, rpow_add_of_nonneg, rpow_zero, top_rpow_of_pos, zero_add
 -/
@@ -3451,7 +3455,8 @@ theorem rpow_neg
     by_cases h : x = 0
     · rcases lt_trichotomy y 0 with (H | H | H) <;>
         simp [h, zero_rpow_of_pos, zero_rpow_of_neg, H, neg_pos.mpr]
-  
+    · have A : x ^ y != 0 := by simp [h]
+      simp [← coe_rpow_of_ne_zero h, ← coe_inv A, NNReal.rpow_neg]
 
 中文:
 定理 rpow_neg
@@ -3466,7 +3471,8 @@ theorem rpow_neg
     by_cases h : x = 0
     · rcases lt_trichotomy y 0 with (H | H | H) <;>
         simp [h, zero_rpow_of_pos, zero_rpow_of_neg, H, neg_pos.mpr]
-  
+    · have A : x ^ y != 0 := by simp [h]
+      simp [← coe_rpow_of_ne_zero h, ← coe_inv A, NNReal.rpow_neg]
 
 Depends on / 依赖: NNReal, NNReal.rpow_neg, coe_inv, coe_rpow_of_ne_zero, lt_trichotomy, neg_pos, neg_pos.mpr, rpow_neg, top_rpow_of_neg, top_rpow_of_pos, zero_rpow_of_neg, zero_rpow_of_pos
 -/
@@ -3536,7 +3542,17 @@ theorem rpow_mul
     rcases lt_trichotomy y 0 with (Hy | Hy | Hy) <;>
         rcases lt_trichotomy z 0 with (Hz | Hz | Hz) <;>
       simp [Hy, Hz, zero_rpow_of_neg, zero_rpow_of_pos, top_rpow_of_neg, top_rpow_of_pos,
-        mul_pos_of_neg_of_neg, mul_neg_of_neg_of_pos, mul_neg_of_pos_of
+        mul_pos_of_neg_of_neg, mul_neg_of_neg_of_pos, mul_neg_of_pos_of_neg]
+  | coe x =>
+    by_cases h : x = 0
+    · rcases lt_trichotomy y 0 with (Hy | Hy | Hy) <;>
+          rcases lt_trichotomy z 0 with (Hz | Hz | Hz) <;>
+        simp [h, Hy, Hz, zero_rpow_of_neg, zero_rpow_of_pos, top_rpow_of_neg, top_rpow_of_pos,
+          mul_pos_of_neg_of_neg, mul_neg_of_neg_of_pos, mul_neg_of_pos_of_neg]
+    · have : x ^ y != 0 := by simp [h]
+      simp [← coe_rpow_of_ne_zero, h, this, NNReal.rpow_mul]
+
+@[simp, norm_cast]
 
 中文:
 定理 rpow_mul
@@ -3548,7 +3564,17 @@ theorem rpow_mul
     rcases lt_trichotomy y 0 with (Hy | Hy | Hy) <;>
         rcases lt_trichotomy z 0 with (Hz | Hz | Hz) <;>
       simp [Hy, Hz, zero_rpow_of_neg, zero_rpow_of_pos, top_rpow_of_neg, top_rpow_of_pos,
-        mul_pos_of_neg_of_neg, mul_neg_of_neg_of_pos, mul_neg_of_pos_of
+        mul_pos_of_neg_of_neg, mul_neg_of_neg_of_pos, mul_neg_of_pos_of_neg]
+  | coe x =>
+    by_cases h : x = 0
+    · rcases lt_trichotomy y 0 with (Hy | Hy | Hy) <;>
+          rcases lt_trichotomy z 0 with (Hz | Hz | Hz) <;>
+        simp [h, Hy, Hz, zero_rpow_of_neg, zero_rpow_of_pos, top_rpow_of_neg, top_rpow_of_pos,
+          mul_pos_of_neg_of_neg, mul_neg_of_neg_of_pos, mul_neg_of_pos_of_neg]
+    · have : x ^ y != 0 := by simp [h]
+      simp [← coe_rpow_of_ne_zero, h, this, NNReal.rpow_mul]
+
+@[simp, norm_cast]
 
 Depends on / 依赖: lt_trichotomy, mul_neg_of_neg_of_pos, mul_neg_of_pos_of_neg, mul_pos, mul_pos_of_neg_of_neg, top_rpow_of_neg, top_rpow_of_pos, zero_rpow_of_neg, zero_rpow_of_pos
 -/
@@ -3683,6 +3709,17 @@ theorem mul_rpow_eq_ite
   · convert! this y x z hz (le_of_not_ge hxy) using 2 <;> simp only [mul_comm, and_comm, or_comm]
   rcases eq_or_ne x 0 with (rfl | hx0)
   · induction y <;> rcases hz with hz | hz <;> simp [*, hz.not_gt]
+  rcases eq_or_ne y 0 with (rfl | hy0)
+  · exact (hx0 (bot_unique hxy)).elim
+  induction x
+  · rcases hz with hz | hz <;> simp [hz, top_unique hxy]
+  induction y
+  · rw [ne_eq, coe_eq_zero] at hx0
+    rcases hz with hz | hz <;> simp [*]
+  simp only [*]
+  norm_cast at *
+  rw [← coe_rpow_of_ne_zero (mul_ne_zero hx0 hy0)]; rw [NNReal.mul_rpow]
+  norm_cast
 
 中文:
 定理 mul_rpow_eq_ite
@@ -3694,6 +3731,17 @@ theorem mul_rpow_eq_ite
   · convert! this y x z hz (le_of_not_ge hxy) using 2 <;> simp only [mul_comm, and_comm, or_comm]
   rcases eq_or_ne x 0 with (rfl | hx0)
   · induction y <;> rcases hz with hz | hz <;> simp [*, hz.not_gt]
+  rcases eq_or_ne y 0 with (rfl | hy0)
+  · exact (hx0 (bot_unique hxy)).elim
+  induction x
+  · rcases hz with hz | hz <;> simp [hz, top_unique hxy]
+  induction y
+  · rw [ne_eq, coe_eq_zero] at hx0
+    rcases hz with hz | hz <;> simp [*]
+  simp only [*]
+  norm_cast at *
+  rw [← coe_rpow_of_ne_zero (mul_ne_zero hx0 hy0)]; rw [NNReal.mul_rpow]
+  norm_cast
 
 Depends on / 依赖: and_comm, bot_unique, coe_eq_zero, convert, eq_or_ne, hz.lt_or_gt, hz.not_gt, le_of_not_ge, lt_or_gt, mul_comm, ne_eq, not_gt, or_comm, replace, top_unique
 -/
@@ -3843,7 +3891,7 @@ theorem prod_rpow_of_ne_top
   | insert i s hi ih =>
 have h2f : forall i in s, f i != ∞ := fun i hi => hf i mem_insert_of_mem hi
     rw [prod_insert hi]; rw [prod_insert hi]; rw [ih h2f]; rw [← mul_rpow_of_ne_top <| hf i <| mem_insert_self ..]
-    apply 
+    apply prod_ne_top h2f
 
 中文:
 定理 prod_rpow_of_ne_top
@@ -3855,7 +3903,7 @@ have h2f : forall i in s, f i != ∞ := fun i hi => hf i mem_insert_of_mem hi
   | insert i s hi ih =>
 have h2f : forall i in s, f i != ∞ := fun i hi => hf i mem_insert_of_mem hi
     rw [prod_insert hi]; rw [prod_insert hi]; rw [ih h2f]; rw [← mul_rpow_of_ne_top <| hf i <| mem_insert_self ..]
-    apply 
+    apply prod_ne_top h2f
 
 Depends on / 依赖: Finset, Finset.induction, classical, insert, mem_insert_of_mem, mem_insert_self, mul_rpow_of_ne_top, prod_insert, prod_ne_top
 -/
@@ -3912,7 +3960,7 @@ theorem inv_rpow
   rcases eq_or_ne x 0 with (rfl | h0); · cases hy <;> simp [*]
   rcases eq_or_ne x ⊤ with (rfl | h_top); · cases hy <;> simp [*]
   apply ENNReal.eq_inv_of_mul_eq_one_left
-  rw [← mul_rpow_of_ne_zer
+  rw [← mul_rpow_of_ne_zero (ENNReal.inv_ne_zero.2 h_top) h0]; rw [ENNReal.inv_mul_cancel h0 h_top]; rw [one_rpow]
 
 中文:
 定理 inv_rpow
@@ -3924,7 +3972,7 @@ theorem inv_rpow
   rcases eq_or_ne x 0 with (rfl | h0); · cases hy <;> simp [*]
   rcases eq_or_ne x ⊤ with (rfl | h_top); · cases hy <;> simp [*]
   apply ENNReal.eq_inv_of_mul_eq_one_left
-  rw [← mul_rpow_of_ne_zer
+  rw [← mul_rpow_of_ne_zero (ENNReal.inv_ne_zero.2 h_top) h0]; rw [ENNReal.inv_mul_cancel h0 h_top]; rw [one_rpow]
 
 Depends on / 依赖: Bicategory, Bicategory.Strict, Category, ENNReal, ENNReal.eq_inv_of_mul_eq_one_left, ENNReal.inv_mul_cancel, ENNReal.inv_ne_zero, Strict, StrictBicategory, StrictBicategory.category, category, eq_inv_of_mul_eq_one_left, eq_or_ne, h_top, hy.lt_or_gt, inv_mul_cancel, inv_ne_zero, inv_one, lt_or_gt, mul_rpow_of_ne_zero
 -/
@@ -3971,7 +4019,7 @@ theorem strictMono_rpow_of_pos
   rcases eq_or_ne y ∞ with (rfl | hy)
   · simp only [top_rpow_of_pos h, ← coe_rpow_of_nonneg _ h.le, coe_lt_top]
   · lift y to Real>=0 using hy
-    simp only [← coe_rpow_of_nonneg _ h.le, NNReal.rpow_lt_rpow (coe_lt_coe.1 hxy) h, coe_lt_c
+    simp only [← coe_rpow_of_nonneg _ h.le, NNReal.rpow_lt_rpow (coe_lt_coe.1 hxy) h, coe_lt_coe]
 
 中文:
 定理 strictMono_rpow_of_pos
@@ -3983,7 +4031,7 @@ theorem strictMono_rpow_of_pos
   rcases eq_or_ne y ∞ with (rfl | hy)
   · simp only [top_rpow_of_pos h, ← coe_rpow_of_nonneg _ h.le, coe_lt_top]
   · lift y to Real>=0 using hy
-    simp only [← coe_rpow_of_nonneg _ h.le, NNReal.rpow_lt_rpow (coe_lt_coe.1 hxy) h, coe_lt_c
+    simp only [← coe_rpow_of_nonneg _ h.le, NNReal.rpow_lt_rpow (coe_lt_coe.1 hxy) h, coe_lt_coe]
 
 Depends on / 依赖: NNReal, NNReal.rpow_lt_rpow, coe_lt_coe, coe_lt_top, coe_rpow_of_nonneg, eq_or_ne, h.le, ne_top_of_lt, rpow_lt_rpow, top_rpow_of_pos
 -/
@@ -4335,6 +4383,7 @@ theorem rpow_le_rpow_of_exponent_le
     linarith
   · simp only [one_le_coe_iff] at hx
     simp [← coe_rpow_of_ne_zero (ne_of_gt (lt_of_lt_of_le zero_lt_one hx)),
+      NNReal.rpow_le_rpow_of_exponent_le hx hyz]
 
 中文:
 定理 rpow_le_rpow_of_exponent_le
@@ -4347,6 +4396,7 @@ theorem rpow_le_rpow_of_exponent_le
     linarith
   · simp only [one_le_coe_iff] at hx
     simp [← coe_rpow_of_ne_zero (ne_of_gt (lt_of_lt_of_le zero_lt_one hx)),
+      NNReal.rpow_le_rpow_of_exponent_le hx hyz]
 
 Depends on / 依赖: _hom_whiskerRight_assoc, mapComp
 -/
@@ -4401,7 +4451,9 @@ theorem rpow_le_rpow_of_exponent_ge
     rcases lt_trichotomy z 0 with (Hz | Hz | Hz) <;>
     simp [Hy, Hz, h, zero_rpow_of_neg, zero_rpow_of_pos] <;>
     linarith
-  · rw [coe_le_one_iff] at hx
+  · rw [coe_le_one_iff] at hx1
+    simp [← coe_rpow_of_ne_zero h,
+      NNReal.rpow_le_rpow_of_exponent_ge (bot_lt_iff_ne_bot.mpr h) hx1 hyz]
 
 中文:
 定理 rpow_le_rpow_of_exponent_ge
@@ -4413,7 +4465,9 @@ theorem rpow_le_rpow_of_exponent_ge
     rcases lt_trichotomy z 0 with (Hz | Hz | Hz) <;>
     simp [Hy, Hz, h, zero_rpow_of_neg, zero_rpow_of_pos] <;>
     linarith
-  · rw [coe_le_one_iff] at hx
+  · rw [coe_le_one_iff] at hx1
+    simp [← coe_rpow_of_ne_zero h,
+      NNReal.rpow_le_rpow_of_exponent_ge (bot_lt_iff_ne_bot.mpr h) hx1 hyz]
 
 Depends on / 依赖: NNReal, NNReal.rpow_le_rpow_of_exponent_ge, bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mpr, coe_le_one_iff, coe_lt_top, coe_rpow_of_ne_zero, lt_of_le_of_lt, lt_trichotomy, mapComp, ne_of_lt, rpow_le_rpow_of_exponent_ge, zero_rpow_of_neg, zero_rpow_of_pos
 -/
@@ -4808,7 +4862,7 @@ lemma toNNReal_rpow
   · simp [H]
   · cases x
     · simp [H, ne_of_gt]
-    simp [← coe_rpow_of_nonneg _ (le_of_lt
+    simp [← coe_rpow_of_nonneg _ (le_of_lt H)]
 
 中文:
 引理 toNN实数_rpow
@@ -4825,7 +4879,7 @@ lemma toNNReal_rpow
   · simp [H]
   · cases x
     · simp [H, ne_of_gt]
-    simp [← coe_rpow_of_nonneg _ (le_of_lt
+    simp [← coe_rpow_of_nonneg _ (le_of_lt H)]
 -/
 @[simp] lemma toNNReal_rpow (x : Real>=0∞) (z : Real) : (x ^ z).toNNReal = x.toNNReal ^ z := by
   rcases lt_trichotomy z 0 with (H | H | H)

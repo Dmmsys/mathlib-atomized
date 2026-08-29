@@ -35,7 +35,16 @@ lemma LinearMap.isSymm_iff_basis
     obtain ⟨fx, tx, ix, -, hx⟩ := Submodule.mem_span_iff_exists_finset_subset.1
       (by simp : x in Submodule.span R (Set.range b))
     obtain ⟨fy, ty, iy, -, hy⟩ := Submodule.mem_span_iff_exists_finset_subset.1
-      (by simp : y in Submodu
+      (by simp : y in Submodule.span R (Set.range b))
+    rw [← hx]; rw [← hy]
+    simp only [map_sum, LinearMap.map_smulₛₗ, starRingEnd_apply, map_smul, coe_sum,
+      Finset.sum_apply, smul_apply, smul_eq_mul, Finset.mul_sum, map_mul, star_star]
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl (fun b₁ h₁ => Finset.sum_congr rfl fun b₂ h₂ => ?_)
+    rw [mul_left_comm]
+    obtain ⟨i, rfl⟩ := ix h₁
+    obtain ⟨j, rfl⟩ := iy h₂
+    rw [h]
 
 中文:
 引理 线性映射.isSymm_iff_basis
@@ -46,7 +55,16 @@ lemma LinearMap.isSymm_iff_basis
     obtain ⟨fx, tx, ix, -, hx⟩ := Submodule.mem_span_iff_exists_finset_subset.1
       (by simp : x in Submodule.span R (Set.range b))
     obtain ⟨fy, ty, iy, -, hy⟩ := Submodule.mem_span_iff_exists_finset_subset.1
-      (by simp : y in Submodu
+      (by simp : y in Submodule.span R (Set.range b))
+    rw [← hx]; rw [← hy]
+    simp only [map_sum, LinearMap.map_smulₛₗ, starRingEnd_apply, map_smul, coe_sum,
+      Finset.sum_apply, smul_apply, smul_eq_mul, Finset.mul_sum, map_mul, star_star]
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl (fun b₁ h₁ => Finset.sum_congr rfl fun b₂ h₂ => ?_)
+    rw [mul_left_comm]
+    obtain ⟨i, rfl⟩ := ix h₁
+    obtain ⟨j, rfl⟩ := iy h₂
+    rw [h]
 
 Depends on / 依赖: h.eq
 -/
@@ -142,7 +160,7 @@ lemma LinearMap.isPosSemidef_iff_posSemidef_toMatrix
   · rw [star_dotProduct_toMatrix₂_mulVec]
     exact h _
   · rw [apply_eq_star_dotProduct_toMatrix₂_mulVec b]
-  
+    exact h _
 
 中文:
 引理 线性映射.isPosSemidef_iff_posSemidef_toMatrix
@@ -154,7 +172,7 @@ lemma LinearMap.isPosSemidef_iff_posSemidef_toMatrix
   · rw [star_dotProduct_toMatrix₂_mulVec]
     exact h _
   · rw [apply_eq_star_dotProduct_toMatrix₂_mulVec b]
-  
+    exact h _
 
 Depends on / 依赖: B.isSymm_iff_isHermitian_toMatrix, Matrix, Matrix.posSemidef_iff_dotProduct_mulVec, and_congr, isNonneg_def, isPosSemidef_def, isSymm_iff_isHermitian_toMatrix, posSemidef_iff_dotProduct_mulVec
 -/

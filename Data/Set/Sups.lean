@@ -1605,7 +1605,9 @@ theorem upperClosure_sups
   · rintro ⟨_, ⟨b, hb, c, hc, rfl⟩, ha⟩
     exact ⟨⟨b, hb, le_sup_left.trans ha⟩, c, hc, le_sup_right.trans ha⟩
   · rintro ⟨⟨b, hb, hab⟩, c, hc, hac⟩
-    exact ⟨_, ⟨b, hb, 
+    exact ⟨_, ⟨b, hb, c, hc, rfl⟩, sup_le hab hac⟩
+
+@[simp]
 
 中文:
 定理 upperClosure_sups
@@ -1618,7 +1620,9 @@ theorem upperClosure_sups
   · rintro ⟨_, ⟨b, hb, c, hc, rfl⟩, ha⟩
     exact ⟨⟨b, hb, le_sup_left.trans ha⟩, c, hc, le_sup_right.trans ha⟩
   · rintro ⟨⟨b, hb, hab⟩, c, hc, hac⟩
-    exact ⟨_, ⟨b, hb, 
+    exact ⟨_, ⟨b, hb, c, hc, rfl⟩, sup_le hab hac⟩
+
+@[simp]
 
 Depends on / 依赖: Set.mem_inter_iff, Set.mem_sups, SetLike, SetLike.mem_coe, UpperSet, UpperSet.coe_sup, coe_sup, le_sup_left, le_sup_left.trans, le_sup_right, le_sup_right.trans, mem_coe, mem_inter_iff, mem_sups, mem_upperClosure, sup_le
 -/

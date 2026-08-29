@@ -98,7 +98,23 @@ definition String.splitCase
     let r := s::r
     return r.reverse
   /- We split the string in three cases
-  * We split on both sides of `_` to keep them there when 
+  * We split on both sides of `_` to keep them there when rejoining the string;
+  * We split after a name in `endCapitalNames`;
+  * We split after a lower-case letter that is followed by an upper-case letter
+    (unless it is part of a name in `endCapitalNames`). -/
+  if i₀.get s == '_' || i₁.get s == '_' then
+return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0
+      (String.Pos.Raw.extract s 0 i₁)::r
+  if (i₁.get s).isUpper then
+    if let some strs := endCapitalNames[String.Pos.Raw.extract s 0 i₁]? then
+      if let some (pref, newS) := strs.findSome?
+        fun x : String => (String.Pos.Raw.extract s i₁ s.rawEndPos).dropPrefix? x
+.map (x, ·.toString) then
+return splitCase newS 0 (String.Pos.Raw.extract s 0 i₁ ++ pref)::r
+    if !(i₀.get s).isUpper then
+return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0
+        (String.Pos.Raw.extract s 0 i₁)::r
+  return splitCase s i₁ r
 
 中文:
 定义 String.splitCase
@@ -111,7 +127,23 @@ definition String.splitCase
     let r := s::r
     return r.reverse
   /- We split the string in three cases
-  * We split on both sides of `_` to keep them there when 
+  * We split on both sides of `_` to keep them there when rejoining the string;
+  * We split after a name in `endCapitalNames`;
+  * We split after a lower-case letter that is followed by an upper-case letter
+    (unless it is part of a name in `endCapitalNames`). -/
+  if i₀.get s == '_' || i₁.get s == '_' then
+return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0
+      (String.Pos.Raw.extract s 0 i₁)::r
+  if (i₁.get s).isUpper then
+    if let some strs := endCapitalNames[String.Pos.Raw.extract s 0 i₁]? then
+      if let some (pref, newS) := strs.findSome?
+        fun x : String => (String.Pos.Raw.extract s i₁ s.rawEndPos).dropPrefix? x
+.map (x, ·.toString) then
+return splitCase newS 0 (String.Pos.Raw.extract s 0 i₁ ++ pref)::r
+    if !(i₀.get s).isUpper then
+return splitCase (String.Pos.Raw.extract s i₁ s.rawEndPos) 0
+        (String.Pos.Raw.extract s 0 i₁)::r
+  return splitCase s i₁ r
 -/
 partial def String.splitCase (s : String) (i₀ : Pos.Raw := 0) (r : List String := []) :
     List String := Id.run do
@@ -239,7 +271,15 @@ definition fixAbbreviationAux
     let t := String.join s
     /- If a name starts with upper-case, and contains an underscore, it cannot match anything in
     the abbreviation dictionary. This is necessary to correctly translate something like
-    `fixAbbreviation ["eventually", "LE", "_", "one"]` to `"eventuallyLE_on
+    `fixAbbreviation ["eventually", "LE", "_", "one"]` to `"eventuallyLE_one"`, since otherwise the
+    substring `LE_zero` gets replaced by `Nonpos`. -/
+    if pre == "_" && (String.Pos.Raw.get t 0).isUpper then
+      s[0]! ++ fixAbbreviationAux g (s.drop 1 ++ l) []
+    else match g.abbreviationDict.get? t.decapitalizeSeq with
+    | some post => decapitalizeLike t post ++ fixAbbreviationAux g l []
+    | none => fixAbbreviationAux g l s
+  termination_by l s => (l.length + s.length, l.length)
+  decreasing_by all_goals grind
 
 中文:
 定义 fixAbbreviationAux
@@ -248,7 +288,15 @@ definition fixAbbreviationAux
     let t := String.join s
     /- If a name starts with upper-case, and contains an underscore, it cannot match anything in
     the abbreviation dictionary. This is necessary to correctly translate something like
-    `fixAbbreviation ["eventually", "LE", "_", "one"]` to `"eventuallyLE_on
+    `fixAbbreviation ["eventually", "LE", "_", "one"]` to `"eventuallyLE_one"`, since otherwise the
+    substring `LE_zero` gets replaced by `Nonpos`. -/
+    if pre == "_" && (String.Pos.Raw.get t 0).isUpper then
+      s[0]! ++ fixAbbreviationAux g (s.drop 1 ++ l) []
+    else match g.abbreviationDict.get? t.decapitalizeSeq with
+    | some post => decapitalizeLike t post ++ fixAbbreviationAux g l []
+    | none => fixAbbreviationAux g l s
+  termination_by l s => (l.length + s.length, l.length)
+  decreasing_by all_goals grind
 -/
 def fixAbbreviationAux (g : GuessNameData) : List String -> List String -> String
   | [], [] => ""
@@ -361,7 +409,11 @@ definition GuessNameExt.addTranslation
   unless src.front.isUpper do throwErrorAt srcId "`{src}` should be capitalized"
   unless tgt.front.isUpper do throwErrorAt tgtId "`{tgt}` should be capitalized"
   modifyEnv fun env => ext.modifyState env fun data =>
-    let src 
+    let src := src.decapitalizeSeq
+    if src.splitCase matches [_] then
+      { data with nameDict := data.nameDict.insert src tgt.splitCase }
+    else
+      { data with abbreviationDict := data.abbreviationDict.insert src tgt }
 
 中文:
 定义 GuessNameExt.addTranslation
@@ -372,7 +424,11 @@ definition GuessNameExt.addTranslation
   unless src.front.isUpper do throwErrorAt srcId "`{src}` should be capitalized"
   unless tgt.front.isUpper do throwErrorAt tgtId "`{tgt}` should be capitalized"
   modifyEnv fun env => ext.modifyState env fun data =>
-    let src 
+    let src := src.decapitalizeSeq
+    if src.splitCase matches [_] then
+      { data with nameDict := data.nameDict.insert src tgt.splitCase }
+    else
+      { data with abbreviationDict := data.abbreviationDict.insert src tgt }
 -/
 def GuessNameExt.addTranslation (ext : GuessNameExt) (srcId tgtId : Ident) :
     Elab.Command.CommandElabM Unit := do

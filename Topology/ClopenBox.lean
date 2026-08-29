@@ -53,7 +53,8 @@ theorem exists_prod_subset
   have hV : IsCompact V := (W.2.1.preimage hp).isCompact
   let U : Set X := {x | MapsTo (Prod.mk x) V W}
   have hUV : U ×ˢ V subseteq W := fun ⟨_, _⟩ hw => hw.1 hw.2
-  exact ⟨⟨U, (ContinuousMa
+  exact ⟨⟨U, (ContinuousMap.isClopen_setOfPred_mapsTo hV W.2).preimage
+    (ContinuousMap.id (X × Y)).curry.2⟩, by simp [U, V, MapsTo], ⟨V, W.2.preimage hp⟩, h, hUV⟩
 
 中文:
 定理 存在_prod_subset
@@ -64,7 +65,8 @@ theorem exists_prod_subset
   have hV : IsCompact V := (W.2.1.preimage hp).isCompact
   let U : Set X := {x | MapsTo (Prod.mk x) V W}
   have hUV : U ×ˢ V subseteq W := fun ⟨_, _⟩ hw => hw.1 hw.2
-  exact ⟨⟨U, (ContinuousMa
+  exact ⟨⟨U, (ContinuousMap.isClopen_setOfPred_mapsTo hV W.2).preimage
+    (ContinuousMap.id (X × Y)).curry.2⟩, by simp [U, V, MapsTo], ⟨V, W.2.preimage hp⟩, h, hUV⟩
 
 Depends on / 依赖: Continuous, ContinuousMap, ContinuousMap.id, ContinuousMap.isClopen_setOfPred_mapsTo, IsCompact, MapsTo, Prod.mk, isClopen_setOfPred_mapsTo, isCompact, preimage, prodMk_right, subseteq
 -/
@@ -93,7 +95,10 @@ theorem exists_finset_eq_sup_prod
   classical
   use I.image fun x => (U x, V x)
   rw [Finset.sup_image]
- 
+  refine le_antisymm (fun x hx => ?_) (Finset.sup_le fun x hx => ?_)
+  · rcases Set.mem_iUnion₂.1 (hWI hx) with ⟨i, hi, hxi⟩
+    exact SetLike.le_def.1 (Finset.le_sup hi) hxi
+· exact hUV _ hIW _ hx
 
 中文:
 定理 存在_finset_eq_sup_prod
@@ -105,7 +110,10 @@ theorem exists_finset_eq_sup_prod
   classical
   use I.image fun x => (U x, V x)
   rw [Finset.sup_image]
- 
+  refine le_antisymm (fun x hx => ?_) (Finset.sup_le fun x hx => ?_)
+  · rcases Set.mem_iUnion₂.1 (hWI hx) with ⟨i, hi, hxi⟩
+    exact SetLike.le_def.1 (Finset.le_sup hi) hxi
+· exact hUV _ hIW _ hx
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.sup_image, Finset.sup_le, I.image, Set.mem_iUnion, SetLike, SetLike.le_def, W.exists_prod_subset, classical, elim_nhds_subcover, exists_prod_subset, isCompact, isCompact.elim_nhds_subcover, isOpen, isOpen.mem_nhds, le_antisymm, le_def, le_sup, mem_nhds
 -/
@@ -197,7 +205,15 @@ lemma countable_iff_secondCountable
 .countable exact Injective.of_eq_imp_le (f := f) (·.le)
   · apply IsTopologicalBasis.eq_generateFrom
     exact loc_compact_Haus_tot_disc_of_zero_dim
-  · hav
+  · have : forall (s : Clopens X), exists (t : Finset (countableBasis X)), s.1 = (SetLike.coe t).sUnion :=
+      fun s => eq_sUnion_finset_of_isTopologicalBasis_of_isCompact_open _
+        (isBasis_countableBasis X) s.1 s.2.1.isCompact s.2.2
+    let f : Clopens X -> Finset (countableBasis X) := fun s => (this s).choose
+    have hf : f.Injective := by
+      intro s t (h : Exists.choose _ = Exists.choose _)
+      ext1; change s.carrier = t.carrier
+      rw [(this s).choose_spec]; rw [(this t).choose_spec]; rw [h]
+    exact hf.countable
 
 中文:
 引理 countable_iff_secondCountable
@@ -208,7 +224,15 @@ lemma countable_iff_secondCountable
 .countable exact Injective.of_eq_imp_le (f := f) (·.le)
   · apply IsTopologicalBasis.eq_generateFrom
     exact loc_compact_Haus_tot_disc_of_zero_dim
-  · hav
+  · have : forall (s : Clopens X), exists (t : Finset (countableBasis X)), s.1 = (SetLike.coe t).sUnion :=
+      fun s => eq_sUnion_finset_of_isTopologicalBasis_of_isCompact_open _
+        (isBasis_countableBasis X) s.1 s.2.1.isCompact s.2.2
+    let f : Clopens X -> Finset (countableBasis X) := fun s => (this s).choose
+    have hf : f.Injective := by
+      intro s t (h : Exists.choose _ = Exists.choose _)
+      ext1; change s.carrier = t.carrier
+      rw [(this s).choose_spec]; rw [(this t).choose_spec]; rw [h]
+    exact hf.countable
 
 Depends on / 依赖: Clopens, Finset, Injective, Injective.of_eq_imp_le, IsClopen, IsTopologicalBasis, IsTopologicalBasis.eq_generateFrom, SetLike, SetLike.coe, countable, countableBasis, eq_generateFrom, eq_sUnion_finset_of_isTopologicalBasis_of_isCompact_open, isBasis_countableBasis, isCompa, loc_compact_Haus_tot_disc_of_zero_dim, of_eq_imp_le, sUnion
 -/

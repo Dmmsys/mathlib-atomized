@@ -698,7 +698,13 @@ lemma mulShift_apply_mul_left_of_mem
   -- existential used in the branch
   have ex : exists w', w' in p.support ∧ v * w' = v * w := by
     simpa [Finset.mem_image] using hmem
-  -- open the `
+  -- open the `if` branch as returned by the definition
+  have h1 : p.mulShift v (v * w) = p.config (Classical.choose ex) := by
+    simp [Pattern.mulShift, hmem]
+  -- the chosen witness equals w by left-cancellation
+  have hwv' : v * Classical.choose ex = v * w := (Classical.choose_spec ex).2
+  have h_eq : Classical.choose ex = w := mul_left_cancel hwv'
+  rw [h1]; rw [h_eq]
 
 中文:
 引理 mulShift_apply_mul_left_of_mem
@@ -710,7 +716,13 @@ lemma mulShift_apply_mul_left_of_mem
   -- existential used in the branch
   have ex : exists w', w' in p.support ∧ v * w' = v * w := by
     simpa [Finset.mem_image] using hmem
-  -- open the `
+  -- open the `if` branch as returned by the definition
+  have h1 : p.mulShift v (v * w) = p.config (Classical.choose ex) := by
+    simp [Pattern.mulShift, hmem]
+  -- the chosen witness equals w by left-cancellation
+  have hwv' : v * Classical.choose ex = v * w := (Classical.choose_spec ex).2
+  have h_eq : Classical.choose ex = w := mul_left_cancel hwv'
+  rw [h1]; rw [h_eq]
 
 Depends on / 依赖: classical
 -/
@@ -845,7 +857,14 @@ lemma mulOccursInAt_eq_cylinder
     rcases Finset.mem_image.mp hu with ⟨w, hw, rfl⟩
     -- want: x ( w * g) = Pattern.mulShift p g ( w * g)
     have hx : x (g * w) = p.config w := H w hw
-    simpa [Pattern.mulShift_apply_mul_left_
+    simpa [Pattern.mulShift_apply_mul_left_of_mem (p := p) (v := g) (w := w) hw] using hx
+  · -- ⇐: from the cylinder, recover an occurrence
+    intro H u hu
+    -- H gives equality with the translated pattern on the image
+    have hx : x (g * u) = p.mulShift g (g * u) :=
+      H (g * u) (Finset.mem_image_of_mem (g * ·) hu)
+    -- rewrite the RHS by the “apply_of_mem” lemma
+    simpa [Pattern.mulShift_apply_mul_left_of_mem (p := p) (v := g) (w := u) hu] using hx
 
 中文:
 引理 mulOccursInAt_eq_cylinder
@@ -856,7 +875,14 @@ lemma mulOccursInAt_eq_cylinder
     rcases Finset.mem_image.mp hu with ⟨w, hw, rfl⟩
     -- want: x ( w * g) = Pattern.mulShift p g ( w * g)
     have hx : x (g * w) = p.config w := H w hw
-    simpa [Pattern.mulShift_apply_mul_left_
+    simpa [Pattern.mulShift_apply_mul_left_of_mem (p := p) (v := g) (w := w) hw] using hx
+  · -- ⇐: from the cylinder, recover an occurrence
+    intro H u hu
+    -- H gives equality with the translated pattern on the image
+    have hx : x (g * u) = p.mulShift g (g * u) :=
+      H (g * u) (Finset.mem_image_of_mem (g * ·) hu)
+    -- rewrite the RHS by the “apply_of_mem” lemma
+    simpa [Pattern.mulShift_apply_mul_left_of_mem (p := p) (v := g) (w := u) hu] using hx
 
 Depends on / 依赖: Finset, Finset.mem_image.mp, cylinder, mem_image, membership, occurrence
 -/
@@ -932,7 +958,13 @@ lemma isClosed_mulForbidden
   have h_eq : {x | forall p in F, forall v : G, ¬ p.mulOccursInAt x v}
     = ⋂ (p : Pattern A G) (hp : p in F) (v : G), {x | ¬ p.mulOccursInAt x v} := by ext; simp
   rw [h_eq]
-  -- Now prove that this big intersec
+  -- Now prove that this big intersection is closed.
+  refine isClosed_iInter (fun p => ?_)
+  refine isClosed_iInter (fun hp => ?_)
+  refine isClosed_iInter (fun v => ?_)
+  -- For each `p, hp, v`, the section is the complement of an open occurrence set.
+  have : {x | ¬ p.mulOccursInAt x v} = {x | p.mulOccursInAt x v}ᶜ := by ext; simp
+  simpa [this, isClosed_compl_iff] using isOpen_mulOccursInAt (A := A) (G := G) p v
 
 中文:
 引理 isClosed_mulForbidden
@@ -943,7 +975,13 @@ lemma isClosed_mulForbidden
   have h_eq : {x | forall p in F, forall v : G, ¬ p.mulOccursInAt x v}
     = ⋂ (p : Pattern A G) (hp : p in F) (v : G), {x | ¬ p.mulOccursInAt x v} := by ext; simp
   rw [h_eq]
-  -- Now prove that this big intersec
+  -- Now prove that this big intersection is closed.
+  refine isClosed_iInter (fun p => ?_)
+  refine isClosed_iInter (fun hp => ?_)
+  refine isClosed_iInter (fun v => ?_)
+  -- For each `p, hp, v`, the section is the complement of an open occurrence set.
+  have : {x | ¬ p.mulOccursInAt x v} = {x | p.mulOccursInAt x v}ᶜ := by ext; simp
+  simpa [this, isClosed_compl_iff] using isOpen_mulOccursInAt (A := A) (G := G) p v
 
 Depends on / 依赖: mulForbidden
 -/
@@ -1048,7 +1086,24 @@ lemma finite_setOfPred_pattern_support_eq
   -- Patterns with support U biject with (U → A) via restriction/extension
   let e : { p : Pattern A G // p.support = U } ≃ (U -> A) :=
   { toFun := fun p i => p.1.config i.1
-    invFun := fun f => ⟨{ config := f
+    invFun := fun f => ⟨{ config := fun g => if h : g in U then f ⟨g, h⟩ else default,
+                           support := U,
+                           condition := fun g hg => by simp [hg] }, rfl⟩
+    left_inv := by
+      rintro ⟨⟨cfg, dom, cond⟩, hU⟩
+      simp only at hU; subst hU
+      apply Subtype.ext
+      simp only [Pattern.mk.injEq, and_true]
+      funext g
+      by_cases hg : g in dom
+      · simp [hg]
+      · simp [hg, cond g hg]
+    right_inv := fun f => by ext i; simp [i.2] }
+  let : Fintype { p : Pattern A G | p.support = U } := Fintype.ofEquiv (U -> A) e.symm
+  apply toFinite
+
+@[deprecated (since := "2026-07-09")]
+alias finite_setOf_pattern_support_eq := finite_setOfPred_pattern_support_eq
 
 中文:
 引理 finite_setOfPred_pattern_support_eq
@@ -1059,7 +1114,24 @@ lemma finite_setOfPred_pattern_support_eq
   -- Patterns with support U biject with (U → A) via restriction/extension
   let e : { p : Pattern A G // p.support = U } ≃ (U -> A) :=
   { toFun := fun p i => p.1.config i.1
-    invFun := fun f => ⟨{ config := f
+    invFun := fun f => ⟨{ config := fun g => if h : g in U then f ⟨g, h⟩ else default,
+                           support := U,
+                           condition := fun g hg => by simp [hg] }, rfl⟩
+    left_inv := by
+      rintro ⟨⟨cfg, dom, cond⟩, hU⟩
+      simp only at hU; subst hU
+      apply Subtype.ext
+      simp only [Pattern.mk.injEq, and_true]
+      funext g
+      by_cases hg : g in dom
+      · simp [hg]
+      · simp [hg, cond g hg]
+    right_inv := fun f => by ext i; simp [i.2] }
+  let : Fintype { p : Pattern A G | p.support = U } := Fintype.ofEquiv (U -> A) e.symm
+  apply toFinite
+
+@[deprecated (since := "2026-07-09")]
+alias finite_setOf_pattern_support_eq := finite_setOfPred_pattern_support_eq
 -/
 lemma finite_setOfPred_pattern_support_eq
     {A G : Type*} [Finite A] [Inhabited A]

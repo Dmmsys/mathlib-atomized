@@ -1841,7 +1841,16 @@ definition isoOfComponents
       comm' := fun i j hij =>
         calc
           (f i).inv ≫ C₁.d i j = (f i).inv ≫ (C₁.d i j ≫ (f j).hom) ≫ (f j).inv := by simp
-          _ = (f i).inv ≫ ((f i).hom ≫ C₂.d i j) ≫ (f j).inv := by rw [hf i j hij
+          _ = (f i).inv ≫ ((f i).hom ≫ C₂.d i j) ≫ (f j).inv := by rw [hf i j hij]
+          _ = C₂.d i j ≫ (f j).inv := by simp }
+  hom_inv_id := by
+    ext i
+    exact (f i).hom_inv_id
+  inv_hom_id := by
+    ext i
+    exact (f i).inv_hom_id
+
+@[simp]
 
 中文:
 定义 isoOfComponents
@@ -1853,7 +1862,16 @@ definition isoOfComponents
       comm' := fun i j hij =>
         calc
           (f i).inv ≫ C₁.d i j = (f i).inv ≫ (C₁.d i j ≫ (f j).hom) ≫ (f j).inv := by simp
-          _ = (f i).inv ≫ ((f i).hom ≫ C₂.d i j) ≫ (f j).inv := by rw [hf i j hij
+          _ = (f i).inv ≫ ((f i).hom ≫ C₂.d i j) ≫ (f j).inv := by rw [hf i j hij]
+          _ = C₂.d i j ≫ (f j).inv := by simp }
+  hom_inv_id := by
+    ext i
+    exact (f i).hom_inv_id
+  inv_hom_id := by
+    ext i
+    exact (f i).inv_hom_id
+
+@[simp]
 
 Depends on / 依赖: cat_disch, hom_inv_id, inv_hom_id
 -/
@@ -2710,7 +2728,8 @@ lemma mk_d
     rw [eqToHom_refl]; rw [comp_id] at eq
   refine Eq.trans ?_ eq
   dsimp only [mk, of, of.d]
-  rw [dif_pos (by rfl)]; rw [eqToHom_refl]; r
+  rw [dif_pos (by rfl)]; rw [eqToHom_refl]; rw [id_comp]
+  rfl
 
 中文:
 引理 mk_d
@@ -2722,7 +2741,8 @@ lemma mk_d
     rw [eqToHom_refl]; rw [comp_id] at eq
   refine Eq.trans ?_ eq
   dsimp only [mk, of, of.d]
-  rw [dif_pos (by rfl)]; rw [eqToHom_refl]; r
+  rw [dif_pos (by rfl)]; rw [eqToHom_refl]; rw [id_comp]
+  rfl
 
 Depends on / 依赖: Eq.trans, backward, backward.isDefEq.respectTransparency, comp_id, dif_pos, eqToHom_refl, id_comp, isDefEq, mkAux_eq_shortComplex_mk_d_comp_d, of.d, respectTransparency, set_option
 -/

@@ -248,7 +248,7 @@ lemma sbtw_triple
   simp only [List.Sbtw, wbtw_triple, ne_eq, pairwise_cons, mem_cons, not_mem_nil, or_false,
     forall_eq_or_imp, forall_eq, IsEmpty.forall_iff, implies_true, Pairwise.nil, and_self, and_true]
   exact ⟨fun ⟨hw, ⟨h₁₂, h₁₃⟩, h₂₃⟩ => ⟨hw, Ne.symm h₁₂, h₂₃⟩,
-         fun h => ⟨h.1, ⟨h.2.1.symm, h.lef
+         fun h => ⟨h.1, ⟨h.2.1.symm, h.left_ne_right⟩, h.2.2⟩⟩
 
 中文:
 引理 sbtw_triple
@@ -258,7 +258,7 @@ lemma sbtw_triple
   simp only [List.Sbtw, wbtw_triple, ne_eq, pairwise_cons, mem_cons, not_mem_nil, or_false,
     forall_eq_or_imp, forall_eq, IsEmpty.forall_iff, implies_true, Pairwise.nil, and_self, and_true]
   exact ⟨fun ⟨hw, ⟨h₁₂, h₁₃⟩, h₂₃⟩ => ⟨hw, Ne.symm h₁₂, h₂₃⟩,
-         fun h => ⟨h.1, ⟨h.2.1.symm, h.lef
+         fun h => ⟨h.1, ⟨h.2.1.symm, h.left_ne_right⟩, h.2.2⟩⟩
 
 Depends on / 依赖: IsEmpty, IsEmpty.forall_iff, List.Sbtw, Ne.symm, Pairwise, Pairwise.nil, and_self, and_true, forall_eq, forall_eq_or_imp, forall_iff, h.left_ne_right, implies_true, left_ne_right, mem_cons, ne_eq, not_mem_nil, or_false, pairwise_cons, wbtw_triple
 -/
@@ -368,7 +368,36 @@ lemma sbtw_iff_triplewise_and_ne_pair
     refine ⟨fun h => ?_,
             fun ⟨⟨hp, ht⟩, ha⟩ => ⟨⟨hp.imp _root_.Sbtw.wbtw, ht.imp _root_.Sbtw.wbtw⟩, ?_⟩⟩
     · rcases h with ⟨⟨hp, ht⟩, hpne⟩
-      refine ⟨⟨?_, ?_⟩, ?
+      refine ⟨⟨?_, ?_⟩, ?_⟩
+      · clear ih
+        induction tail with
+        | nil => simp
+        | cons head2 tail ih' =>
+          rw [pairwise_cons] at hp hpne hpne ⊢
+          refine ⟨fun a ha => ⟨hp.1 a ha, ?_⟩, ?_⟩
+          · refine ⟨(hpne.1 head2 ?_).symm, hpne.2.1 a ha⟩
+            simp
+          · rw [wbtw_cons] at ht
+            grind [List.pairwise_iff_forall_sublist]
+      · rw [pairwise_cons] at hpne
+        exact (ih.1 ⟨ht, hpne.2⟩).1
+      · grind
+    · have ht' : tail.Wbtw R := ht.imp _root_.Sbtw.wbtw
+      simp only [ht', true_and, ht] at ih
+      rw [pairwise_cons]; rw [ih]
+      refine ⟨fun a ha' => ?_, fun a => ?_⟩
+      · rintro rfl
+        cases tail with
+        | nil => simp at ha'
+        | cons head2 tail =>
+          rw [pairwise_cons] at hp
+          rcases mem_cons.1 ha' with rfl | hat
+          · cases tail with
+            | nil => simp at ha
+            | cons head3 tail => simpa using hp.1 head3
+          · simpa using hp.1 head hat
+      · rintro rfl
+        simp at hp
 
 中文:
 引理 sbtw_iff_triplewise_and_ne_pair
@@ -382,7 +411,36 @@ lemma sbtw_iff_triplewise_and_ne_pair
     refine ⟨fun h => ?_,
             fun ⟨⟨hp, ht⟩, ha⟩ => ⟨⟨hp.imp _root_.Sbtw.wbtw, ht.imp _root_.Sbtw.wbtw⟩, ?_⟩⟩
     · rcases h with ⟨⟨hp, ht⟩, hpne⟩
-      refine ⟨⟨?_, ?_⟩, ?
+      refine ⟨⟨?_, ?_⟩, ?_⟩
+      · clear ih
+        induction tail with
+        | nil => simp
+        | cons head2 tail ih' =>
+          rw [pairwise_cons] at hp hpne hpne ⊢
+          refine ⟨fun a ha => ⟨hp.1 a ha, ?_⟩, ?_⟩
+          · refine ⟨(hpne.1 head2 ?_).symm, hpne.2.1 a ha⟩
+            simp
+          · rw [wbtw_cons] at ht
+            grind [List.pairwise_iff_forall_sublist]
+      · rw [pairwise_cons] at hpne
+        exact (ih.1 ⟨ht, hpne.2⟩).1
+      · grind
+    · have ht' : tail.Wbtw R := ht.imp _root_.Sbtw.wbtw
+      simp only [ht', true_and, ht] at ih
+      rw [pairwise_cons]; rw [ih]
+      refine ⟨fun a ha' => ?_, fun a => ?_⟩
+      · rintro rfl
+        cases tail with
+        | nil => simp at ha'
+        | cons head2 tail =>
+          rw [pairwise_cons] at hp
+          rcases mem_cons.1 ha' with rfl | hat
+          · cases tail with
+            | nil => simp at ha
+            | cons head3 tail => simpa using hp.1 head3
+          · simpa using hp.1 head hat
+      · rintro rfl
+        simp at hp
 
 Depends on / 依赖: List.Sbtw, _root_, _root_.Sbtw.wbtw, hp.imp, ht.imp, pairwise_cons, triplewise_cons, wbtw_cons
 -/
@@ -439,7 +497,10 @@ lemma sbtw_cons
   intro hp hne
   rw [sbtw_iff_triplewise_and_ne_pair]; rw [iff_self_and]; rw [← not_exists]
   rintro hl ⟨a, rfl⟩
-  s
+  simp at hp
+
+protected nonrec lemma Wbtw.map {l : List P} (h : l.Wbtw R) (f : P ->ᵃ[R] P') : (l.map f).Wbtw R :=
+  Triplewise.map (fun h => Wbtw.map h f) h
 
 中文:
 引理 sbtw_cons
@@ -450,7 +511,10 @@ lemma sbtw_cons
   intro hp hne
   rw [sbtw_iff_triplewise_and_ne_pair]; rw [iff_self_and]; rw [← not_exists]
   rintro hl ⟨a, rfl⟩
-  s
+  simp at hp
+
+protected nonrec lemma Wbtw.map {l : List P} (h : l.Wbtw R) (f : P ->ᵃ[R] P') : (l.map f).Wbtw R :=
+  Triplewise.map (fun h => Wbtw.map h f) h
 
 Depends on / 依赖: and_assoc, and_congr_left_iff, and_congr_right_iff, cons.injEq, exists_eq_left, iff_self_and, ne_eq, not_exists, sbtw_iff_triplewise_and_ne_pair, triplewise_cons
 -/
@@ -631,7 +695,44 @@ lemma exists_map_eq_of_sorted_nonempty_iff_wbtw
         l'.map (lineMap (l.head hl) (l.getLast hl)) = l by
       rcases this with ⟨l', -, hl'⟩
       exact ⟨l', hl'⟩
-    indu
+    induction l with
+    | nil => simp at hl
+    | cons head tail ih =>
+      by_cases ht : tail = []
+      · refine ⟨[0], ?_⟩
+        simp [ht, sortedLE_iff_pairwise]
+      · rw [wbtw_cons] at h
+        replace ih := ih ht h.2
+        rcases ih with ⟨l'', hl''0, hl''s, hl''⟩
+        simp only [head_cons, getLast_cons ht]
+        cases tail with
+        | nil => simp at ht
+        | cons head2 tail =>
+          by_cases ht2 : tail = []
+          · exact ⟨[0, 1], by simp [ht2, sortedLE_iff_pairwise]⟩
+          · simp only [head_cons, getLast_cons ht2] at hl'' ⊢
+            rw [pairwise_cons] at h
+            have hw := h.1.1 _ (getLast_mem ht2)
+            rcases hw with ⟨r, ⟨hr0, hr1⟩, rfl⟩
+            refine ⟨0 :: l''.map fun x => r + (1 - r) * x, ?_, ?_, ?_⟩
+            · simp only [mem_cons, mem_map, forall_eq_or_imp, le_refl, forall_exists_index,
+                and_imp, forall_apply_eq_imp_iff₂, true_and]
+              intro a ha
+              have := hl''0 a ha
+              nlinarith
+            · simp only [sortedLE_iff_pairwise, pairwise_cons, mem_map,
+                forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+              refine ⟨?_, ?_⟩
+              · intro a ha
+                have := hl''0 a ha
+                nlinarith
+              · refine hl''s.pairwise.map _ fun a b hab => ?_
+                gcongr
+            · simp only [map_cons, lineMap_apply_zero, map_map, ← hl'', cons.injEq,
+                map_inj_left, Function.comp_apply, lineMap_lineMap_left, lineMap_eq_lineMap_iff,
+                true_and]
+              ring_nf
+              simp
 
 中文:
 引理 存在_map_eq_of_sorted_nonempty_iff_wbtw
@@ -644,7 +745,44 @@ lemma exists_map_eq_of_sorted_nonempty_iff_wbtw
         l'.map (lineMap (l.head hl) (l.getLast hl)) = l by
       rcases this with ⟨l', -, hl'⟩
       exact ⟨l', hl'⟩
-    indu
+    induction l with
+    | nil => simp at hl
+    | cons head tail ih =>
+      by_cases ht : tail = []
+      · refine ⟨[0], ?_⟩
+        simp [ht, sortedLE_iff_pairwise]
+      · rw [wbtw_cons] at h
+        replace ih := ih ht h.2
+        rcases ih with ⟨l'', hl''0, hl''s, hl''⟩
+        simp only [head_cons, getLast_cons ht]
+        cases tail with
+        | nil => simp at ht
+        | cons head2 tail =>
+          by_cases ht2 : tail = []
+          · exact ⟨[0, 1], by simp [ht2, sortedLE_iff_pairwise]⟩
+          · simp only [head_cons, getLast_cons ht2] at hl'' ⊢
+            rw [pairwise_cons] at h
+            have hw := h.1.1 _ (getLast_mem ht2)
+            rcases hw with ⟨r, ⟨hr0, hr1⟩, rfl⟩
+            refine ⟨0 :: l''.map fun x => r + (1 - r) * x, ?_, ?_, ?_⟩
+            · simp only [mem_cons, mem_map, forall_eq_or_imp, le_refl, forall_exists_index,
+                and_imp, forall_apply_eq_imp_iff₂, true_and]
+              intro a ha
+              have := hl''0 a ha
+              nlinarith
+            · simp only [sortedLE_iff_pairwise, pairwise_cons, mem_map,
+                forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
+              refine ⟨?_, ?_⟩
+              · intro a ha
+                have := hl''0 a ha
+                nlinarith
+              · refine hl''s.pairwise.map _ fun a b hab => ?_
+                gcongr
+            · simp only [map_cons, lineMap_apply_zero, map_map, ← hl'', cons.injEq,
+                map_inj_left, Function.comp_apply, lineMap_lineMap_left, lineMap_eq_lineMap_iff,
+                true_and]
+              ring_nf
+              simp
 
 Depends on / 依赖: SortedLE, Wbtw.map, getLast, l.getLast, l.head, lineMap, replace, s.wbtw, sortedLE_iff_pairwise, wbtw_cons
 -/
@@ -711,7 +849,7 @@ lemma exists_map_eq_of_sorted_iff_wbtw
   · by_cases hl : l = []
     · exact ⟨AddTorsor.nonempty.some, AddTorsor.nonempty.some, [], by
         simp [hl, sortedLE_iff_pairwise]⟩
-    · exact ⟨l.head hl, l.getLast hl, (exists_map_eq_of
+    · exact ⟨l.head hl, l.getLast hl, (exists_map_eq_of_sorted_nonempty_iff_wbtw hl).2 h⟩
 
 中文:
 引理 存在_map_eq_of_sorted_iff_wbtw
@@ -723,7 +861,7 @@ lemma exists_map_eq_of_sorted_iff_wbtw
   · by_cases hl : l = []
     · exact ⟨AddTorsor.nonempty.some, AddTorsor.nonempty.some, [], by
         simp [hl, sortedLE_iff_pairwise]⟩
-    · exact ⟨l.head hl, l.getLast hl, (exists_map_eq_of
+    · exact ⟨l.head hl, l.getLast hl, (exists_map_eq_of_sorted_nonempty_iff_wbtw hl).2 h⟩
 
 Depends on / 依赖: AddTorsor, AddTorsor.nonempty.some, Wbtw.map, exists_map_eq_of_sorted_nonempty_iff_wbtw, getLast, l.getLast, l.head, nonempty, s.wbtw, sortedLE_iff_pairwise
 -/
@@ -752,7 +890,24 @@ lemma exists_map_eq_of_sorted_nonempty_iff_sbtw
   · rw [← hl'l]
     rcases hla with hla | hla
     · grind [List.pairwise_iff_forall_sublist]
-    · exact 
+    · exact (hl's.pairwise.imp LT.lt.ne).map _ fun _ _ => (lineMap_injective _ hla).ne
+  · rw [List.Sbtw, ← exists_map_eq_of_sorted_nonempty_iff_wbtw hl] at h
+    rcases h with ⟨⟨l', hl's, hl'l⟩, hp⟩
+    refine ⟨l', ?_, hl'l, ?_⟩
+    · rw [← hl'l] at hp
+      have hp' : l'.Pairwise (· != ·) := hp.of_map _ (by simp)
+      exact ((pairwise_and_iff.2 ⟨hl's.pairwise, hp'⟩).imp lt_iff_le_and_ne.2).sortedLT
+    · cases l with
+      | nil => simp at hl
+      | cons head tail =>
+        simp only [length_cons, add_eq_right, length_eq_zero_iff, head_cons]
+        cases tail with
+        | nil => simp
+        | cons head2 tail =>
+          simp only [reduceCtorEq, false_or]
+          rw [pairwise_cons] at hp
+          refine hp.1 ((head :: head2 :: tail).getLast hl) ?_
+          simp
 
 中文:
 引理 存在_map_eq_of_sorted_nonempty_iff_sbtw
@@ -765,7 +920,24 @@ lemma exists_map_eq_of_sorted_nonempty_iff_sbtw
   · rw [← hl'l]
     rcases hla with hla | hla
     · grind [List.pairwise_iff_forall_sublist]
-    · exact 
+    · exact (hl's.pairwise.imp LT.lt.ne).map _ fun _ _ => (lineMap_injective _ hla).ne
+  · rw [List.Sbtw, ← exists_map_eq_of_sorted_nonempty_iff_wbtw hl] at h
+    rcases h with ⟨⟨l', hl's, hl'l⟩, hp⟩
+    refine ⟨l', ?_, hl'l, ?_⟩
+    · rw [← hl'l] at hp
+      have hp' : l'.Pairwise (· != ·) := hp.of_map _ (by simp)
+      exact ((pairwise_and_iff.2 ⟨hl's.pairwise, hp'⟩).imp lt_iff_le_and_ne.2).sortedLT
+    · cases l with
+      | nil => simp at hl
+      | cons head tail =>
+        simp only [length_cons, add_eq_right, length_eq_zero_iff, head_cons]
+        cases tail with
+        | nil => simp
+        | cons head2 tail =>
+          simp only [reduceCtorEq, false_or]
+          rw [pairwise_cons] at hp
+          refine hp.1 ((head :: head2 :: tail).getLast hl) ?_
+          simp
 
 Depends on / 依赖: LT.lt.le, LT.lt.ne, List.Sbtw, List.pairwise_iff_forall_sublist, Pairwise, exists_map_eq_of_sorted_nonempty_iff_wbtw, lineMap_injective, pairwise, pairwise_iff_forall_sublist, s.pairwise.imp, sortedLE
 -/
@@ -813,7 +985,16 @@ lemma exists_map_eq_of_sorted_iff_sbtw
   · by_cases hl : l = []
     · rcases exists_pair_ne P with ⟨p₁, p₂, hp₁p₂⟩
       exact ⟨p₁, p₂, hp₁p₂, by simp [hl, sortedLT_iff_pairwise]⟩
-
+    · by_cases hlen : l.length = 1
+      · rw [length_eq_one_iff] at hlen
+        rcases hlen with ⟨p₁, rfl⟩
+        rcases exists_ne p₁ with ⟨p₂, hp₂p₁⟩
+        exact ⟨p₁, p₂, hp₂p₁.symm, [0], by simp [sortedLT_iff_pairwise]⟩
+      · refine ⟨l.head hl, l.getLast hl, ?_⟩
+        rw [← exists_map_eq_of_sorted_nonempty_iff_sbtw hl] at h
+        simp only [hlen, false_or] at h
+        rcases h with ⟨l', hl's, hl'l, hl⟩
+        exact ⟨hl, l', hl's, hl'l⟩
 
 中文:
 引理 存在_map_eq_of_sorted_iff_sbtw
@@ -826,7 +1007,16 @@ lemma exists_map_eq_of_sorted_iff_sbtw
   · by_cases hl : l = []
     · rcases exists_pair_ne P with ⟨p₁, p₂, hp₁p₂⟩
       exact ⟨p₁, p₂, hp₁p₂, by simp [hl, sortedLT_iff_pairwise]⟩
-
+    · by_cases hlen : l.length = 1
+      · rw [length_eq_one_iff] at hlen
+        rcases hlen with ⟨p₁, rfl⟩
+        rcases exists_ne p₁ with ⟨p₂, hp₂p₁⟩
+        exact ⟨p₁, p₂, hp₂p₁.symm, [0], by simp [sortedLT_iff_pairwise]⟩
+      · refine ⟨l.head hl, l.getLast hl, ?_⟩
+        rw [← exists_map_eq_of_sorted_nonempty_iff_sbtw hl] at h
+        simp only [hlen, false_or] at h
+        rcases h with ⟨l', hl's, hl'l, hl⟩
+        exact ⟨hl, l', hl's, hl'l⟩
 
 Depends on / 依赖: exists_ne, exists_pair_ne, getLast, l.getLast, l.head, l.length, length, length_eq_one_iff, lineMap_injective, list_sbtw_map_iff, s.sbtw, sortedLT_iff_pairwise
 -/

@@ -781,7 +781,22 @@ theorem eval₂Hom_eq_constantCoeff_of_vars
   on_goal 2 =>
     rw [Finset.sum_eq_single (0 : σ ->₀ Nat)]
     · rw [Finsupp.prod_zero_index, mul_one]
-   
+      rfl
+    on_goal 1 => intro d hd hd0
+  on_goal 3 =>
+    rw [constantCoeff_eq]; rw [coeff]; rw [← Ne]; rw [← Finsupp.mem_support_iff] at h0
+    intro
+    contradiction
+  repeat'
+    obtain ⟨i, hi⟩ : Finset.Nonempty (Finsupp.support d) := by
+      rw [constantCoeff_eq]; rw [coeff]; rw [← Finsupp.notMem_support_iff] at h0
+      rw [Finset.nonempty_iff_ne_empty]; rw [Ne]; rw [Finsupp.support_eq_empty]
+      rintro rfl
+      contradiction
+    rw [Finsupp.prod]; rw [Finset.prod_eq_zero hi]; rw [mul_zero]
+    rw [hp]; rw [zero_pow (Finsupp.mem_support_iff.1 hi)]
+    rw [mem_vars_iff_mem_support]
+    exact ⟨d, hd, hi⟩
 
 中文:
 定理 eval₂Hom_eq_constantCoeff_of_vars
@@ -796,7 +811,22 @@ theorem eval₂Hom_eq_constantCoeff_of_vars
   on_goal 2 =>
     rw [Finset.sum_eq_single (0 : σ ->₀ Nat)]
     · rw [Finsupp.prod_zero_index, mul_one]
-   
+      rfl
+    on_goal 1 => intro d hd hd0
+  on_goal 3 =>
+    rw [constantCoeff_eq]; rw [coeff]; rw [← Ne]; rw [← Finsupp.mem_support_iff] at h0
+    intro
+    contradiction
+  repeat'
+    obtain ⟨i, hi⟩ : Finset.Nonempty (Finsupp.support d) := by
+      rw [constantCoeff_eq]; rw [coeff]; rw [← Finsupp.notMem_support_iff] at h0
+      rw [Finset.nonempty_iff_ne_empty]; rw [Ne]; rw [Finsupp.support_eq_empty]
+      rintro rfl
+      contradiction
+    rw [Finsupp.prod]; rw [Finset.prod_eq_zero hi]; rw [mul_zero]
+    rw [hp]; rw [zero_pow (Finsupp.mem_support_iff.1 hi)]
+    rw [mem_vars_iff_mem_support]
+    exact ⟨d, hd, hi⟩
 
 Depends on / 依赖: Finset, Finset.Nonempty, Finset.sum_eq_single, Finset.sum_eq_zero, Finsupp, Finsupp.mem_support_iff, Finsupp.prod_zero_index, Finsupp.support, Nonempty, as_sum, constantCo, constantCoeff, constantCoeff_eq, conv_lhs, f.map_zero, map_sum, map_zero, mem_support_iff, mul_one, on_goal
 -/
@@ -864,7 +894,7 @@ theorem eval₂Hom_congr'
   have : i in p₁.vars := by
     rw [mem_vars_iff_mem_support]
     exact ⟨d, hd, hi⟩
-  rw [h i this
+  rw [h i this this]
 
 中文:
 定理 eval₂Hom_congr'
@@ -882,7 +912,7 @@ theorem eval₂Hom_congr'
   have : i in p₁.vars := by
     rw [mem_vars_iff_mem_support]
     exact ⟨d, hd, hi⟩
-  rw [h i this
+  rw [h i this this]
 
 Depends on / 依赖: Finset, Finset.prod_congr, Finset.sum_congr, Finsupp, Finsupp.prod, as_sum, map_sum, mem_vars_iff_mem_support, prod_congr, sum_congr
 -/
@@ -948,7 +978,7 @@ theorem exists_rename_eq_of_vars_subset_range
       · intro i hip _
         rcases hf hip with ⟨i, rfl⟩
         simp [partialInv_left hfi]
- 
+      · rfl⟩
 
 中文:
 定理 存在_rename_eq_of_vars_subset_range
@@ -962,7 +992,7 @@ theorem exists_rename_eq_of_vars_subset_range
       · intro i hip _
         rcases hf hip with ⟨i, rfl⟩
         simp [partialInv_left hfi]
- 
+      · rfl⟩
 
 Depends on / 依赖: Option.elim, RingHom, RingHom.id, algebraMap_eq, hom_congr_vars, partialInv, partialInv_left, toRingHom, toRingHom.comp
 -/

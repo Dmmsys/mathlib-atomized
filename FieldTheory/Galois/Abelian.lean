@@ -47,7 +47,11 @@ lemma IsAbelianGalois.tower_bot
     ((AlgEquiv.ofBijective (IsScalarTower.toAlgHom K L M).rangeRestrict
       ⟨RingHom.injective _, AlgHom.rangeRestrict_surjective _⟩).transfer_galois
         (E' := (IsScalarTower.toAlgHom K L M).fieldRange)).mpr
-      ((InfiniteGalois.normal_iff_isGalois _).mp inferInstance
+      ((InfiniteGalois.normal_iff_isGalois _).mp inferInstance)
+  { is_comm.comm x y := by
+      obtain ⟨x, rfl⟩ := AlgEquiv.restrictNormalHom_surjective M x
+      obtain ⟨y, rfl⟩ := AlgEquiv.restrictNormalHom_surjective M y
+      rw [← map_mul]; rw [← map_mul]; rw [mul_comm] }
 
 中文:
 引理 是AbelianGalois.tower_bot
@@ -56,7 +60,11 @@ lemma IsAbelianGalois.tower_bot
     ((AlgEquiv.ofBijective (IsScalarTower.toAlgHom K L M).rangeRestrict
       ⟨RingHom.injective _, AlgHom.rangeRestrict_surjective _⟩).transfer_galois
         (E' := (IsScalarTower.toAlgHom K L M).fieldRange)).mpr
-      ((InfiniteGalois.normal_iff_isGalois _).mp inferInstance
+      ((InfiniteGalois.normal_iff_isGalois _).mp inferInstance)
+  { is_comm.comm x y := by
+      obtain ⟨x, rfl⟩ := AlgEquiv.restrictNormalHom_surjective M x
+      obtain ⟨y, rfl⟩ := AlgEquiv.restrictNormalHom_surjective M y
+      rw [← map_mul]; rw [← map_mul]; rw [mul_comm] }
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, AlgEquiv.restrictNormalHom_surjective, AlgHom, AlgHom.rangeRestrict_surjective, InfiniteGalois, InfiniteGalois.normal_iff_isGalois, IsGalois, IsScalarTower, IsScalarTower.toAlgHom, RingHom, RingHom.injective, fieldRange, injective, is_comm, is_comm.comm, map_mul, mul_comm, normal_iff_isGalois, ofBijective
 -/

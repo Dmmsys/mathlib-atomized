@@ -161,7 +161,12 @@ instance pseudoEMetricSpacePi
   edist_triangle _ g _ := edist_pi_le_iff.2 fun b => le_trans (edist_triangle _ (g b) _)
     (add_le_add (edist_le_pi_edist _ _ _) (edist_le_pi_edist _ _ _))
   toUniformSpace := Pi.uniformSpace _
-  uniformity_edi
+  uniformity_edist := by
+    simp only [Pi.uniformity, PseudoEMetricSpace.uniformity_edist, comap_iInf, gt_iff_lt,
+      preimage_ofPred_eq, comap_principal, edist_pi_def]
+    rw [iInf_comm]; congr; funext ε
+    rw [iInf_comm]; congr; funext εpos
+    simp [ofPred_forall, εpos]
 
 中文:
 实例 pseudoEMetricSpacePi
@@ -171,7 +176,12 @@ instance pseudoEMetricSpacePi
   edist_triangle _ g _ := edist_pi_le_iff.2 fun b => le_trans (edist_triangle _ (g b) _)
     (add_le_add (edist_le_pi_edist _ _ _) (edist_le_pi_edist _ _ _))
   toUniformSpace := Pi.uniformSpace _
-  uniformity_edi
+  uniformity_edist := by
+    simp only [Pi.uniformity, PseudoEMetricSpace.uniformity_edist, comap_iInf, gt_iff_lt,
+      preimage_ofPred_eq, comap_principal, edist_pi_def]
+    rw [iInf_comm]; congr; funext ε
+    rw [iInf_comm]; congr; funext εpos
+    simp [ofPred_forall, εpos]
 
 Depends on / 依赖: Finset, Finset.sup_le, bot_unique, sup_le
 -/

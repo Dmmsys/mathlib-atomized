@@ -122,7 +122,7 @@ theorem Finset.prod_nonneg_of_card_nonpos_even
         · simp [hx]
         linarith
     _ = _ := by
-      rw [Finset.prod_mul_distrib]; rw [Finset.prod_ite]; rw [Finset.prod_const_one]; rw [mul_one]; rw [Finset.pro
+      rw [Finset.prod_mul_distrib]; rw [Finset.prod_ite]; rw [Finset.prod_const_one]; rw [mul_one]; rw [Finset.prod_const]; rw [neg_one_pow_eq_pow_mod_two]; rw [Nat.even_iff.1 h0]; rw [pow_zero]; rw [one_mul]
 
 中文:
 定理 有限集.prod_nonneg_of_card_nonpos_even
@@ -134,7 +134,7 @@ theorem Finset.prod_nonneg_of_card_nonpos_even
         · simp [hx]
         linarith
     _ = _ := by
-      rw [Finset.prod_mul_distrib]; rw [Finset.prod_ite]; rw [Finset.prod_const_one]; rw [mul_one]; rw [Finset.pro
+      rw [Finset.prod_mul_distrib]; rw [Finset.prod_ite]; rw [Finset.prod_const_one]; rw [mul_one]; rw [Finset.prod_const]; rw [neg_one_pow_eq_pow_mod_two]; rw [Nat.even_iff.1 h0]; rw [pow_zero]; rw [one_mul]
 
 Depends on / 依赖: Finset, Finset.prod_const, Finset.prod_const_one, Finset.prod_ite, Finset.prod_mul_distrib, Finset.prod_nonneg, Nat.even_iff, even_iff, mul_one, neg_one_pow_eq_pow_mod_two, one_mul, pow_zero, prod_const, prod_const_one, prod_ite, prod_mul_distrib, prod_nonneg, split_ifs
 -/
@@ -164,7 +164,12 @@ theorem int_prod_range_nonneg
   | succ n ihn =>
     rw [← two_mul] at ihn
     rw [← two_mul]; rw [mul_add]; rw [mul_one]; rw [← one_add_one_eq_two]; rw [← add_assoc]; rw [Finset.prod_range_succ]; rw [Finset.prod_range_succ]; rw [mul_assoc]
-    refine mul_nonneg ihn
+    refine mul_nonneg ihn ?_; generalize (1 + 1) * n = k
+    rcases le_or_gt m k with hmk | hmk
+    · have : m <= k + 1 := hmk.trans (lt_add_one (k : Int)).le
+      convert! mul_nonneg_of_nonpos_of_nonpos (sub_nonpos_of_le hmk) _
+      convert! sub_nonpos_of_le this
+    · exact mul_nonneg (sub_nonneg_of_le hmk.le) (sub_nonneg_of_le hmk)
 
 中文:
 定理 int_prod_range_nonneg
@@ -176,7 +181,12 @@ theorem int_prod_range_nonneg
   | succ n ihn =>
     rw [← two_mul] at ihn
     rw [← two_mul]; rw [mul_add]; rw [mul_one]; rw [← one_add_one_eq_two]; rw [← add_assoc]; rw [Finset.prod_range_succ]; rw [Finset.prod_range_succ]; rw [mul_assoc]
-    refine mul_nonneg ihn
+    refine mul_nonneg ihn ?_; generalize (1 + 1) * n = k
+    rcases le_or_gt m k with hmk | hmk
+    · have : m <= k + 1 := hmk.trans (lt_add_one (k : Int)).le
+      convert! mul_nonneg_of_nonpos_of_nonpos (sub_nonpos_of_le hmk) _
+      convert! sub_nonpos_of_le this
+    · exact mul_nonneg (sub_nonneg_of_le hmk.le) (sub_nonneg_of_le hmk)
 
 Depends on / 依赖: Finset, Finset.prod_range_succ, add_assoc, convert, generalize, hmk.trans, le_or_gt, lt_add_one, mul_add, mul_assoc, mul_nonneg, mul_nonneg_of_nonpos_of_nonpos, mul_one, one_add_one_eq_two, prod_range_succ, sub_nonpos_of_le, two_mul
 -/
@@ -243,7 +253,9 @@ theorem strictConvexOn_zpow
   refine mul_pos ?_ (zpow_pos hx _)
   norm_cast
   refine int_prod_range_pos (by decide) fun hm => ?_
-  rw [← Finset.coe_Ico] 
+  rw [← Finset.coe_Ico] at hm
+  norm_cast at hm
+  fin_cases hm <;> simp_all
 
 中文:
 定理 strictConvexOn_zpow
@@ -257,7 +269,9 @@ theorem strictConvexOn_zpow
   refine mul_pos ?_ (zpow_pos hx _)
   norm_cast
   refine int_prod_range_pos (by decide) fun hm => ?_
-  rw [← Finset.coe_Ico] 
+  rw [← Finset.coe_Ico] at hm
+  norm_cast at hm
+  fin_cases hm <;> simp_all
 
 Depends on / 依赖: Finset, Finset.coe_Ico, coe_Ico, convex_Ioi, fin_cases, int_prod_range_pos, iter_deriv_zpow, mem_Ioi, mul_pos, ne_of_gt, strictConvexOn_of_deriv2_pos, zpow_pos
 -/
@@ -313,7 +327,7 @@ theorem deriv_sqrt_mul_log
   · rw [sqrt_eq_zero_of_nonpos hx, mul_zero, div_zero]
     refine HasDerivWithinAt.deriv_eq_zero ?_ (uniqueDiffOn_Iic 0 x hx)
     refine (hasDerivWithinAt_const x _ 0).congr_of_mem (fun x hx => ?_) hx
-    rw [sqrt
+    rw [sqrt_eq_zero_of_nonpos hx]; rw [zero_mul]
 
 中文:
 定理 deriv_sqrt_mul_log
@@ -324,7 +338,7 @@ theorem deriv_sqrt_mul_log
   · rw [sqrt_eq_zero_of_nonpos hx, mul_zero, div_zero]
     refine HasDerivWithinAt.deriv_eq_zero ?_ (uniqueDiffOn_Iic 0 x hx)
     refine (hasDerivWithinAt_const x _ 0).congr_of_mem (fun x hx => ?_) hx
-    rw [sqrt
+    rw [sqrt_eq_zero_of_nonpos hx]; rw [zero_mul]
 
 Depends on / 依赖: HasDerivWithinAt, HasDerivWithinAt.deriv_eq_zero, congr_of_mem, deriv_eq_zero, div_zero, hasDerivAt_sqrt_mul_log, hasDerivWithinAt_const, hx.ne, lt_or_ge, mul_zero, sqrt_eq_zero_of_nonpos, uniqueDiffOn_Iic, zero_mul
 -/
@@ -365,7 +379,14 @@ theorem deriv2_sqrt_mul_log
   rcases le_or_gt x 0 with hx | hx
   · rw [sqrt_eq_zero_of_nonpos hx, zero_pow three_ne_zero, mul_zero, div_zero]
     refine HasDerivWithinAt.deriv_eq_zero ?_ (uniqueDiffOn_Iic 0 x hx)
-    refine (hasDerivWithinAt_const _ _ 0).congr_of_mem (fun x hx 
+    refine (hasDerivWithinAt_const _ _ 0).congr_of_mem (fun x hx => ?_) hx
+    rw [sqrt_eq_zero_of_nonpos hx]; rw [mul_zero]; rw [div_zero]
+  · have h₀ : √x != 0 := sqrt_ne_zero'.2 hx
+    convert!
+      (((hasDerivAt_log hx.ne').const_add 2).div ((hasDerivAt_sqrt hx.ne').const_mul 2) <|
+          mul_ne_zero two_ne_zero h₀).deriv using 1
+    nth_rw 3 [← mul_self_sqrt hx.le]
+    field
 
 中文:
 定理 deriv2_sqrt_mul_log
@@ -375,7 +396,14 @@ theorem deriv2_sqrt_mul_log
   rcases le_or_gt x 0 with hx | hx
   · rw [sqrt_eq_zero_of_nonpos hx, zero_pow three_ne_zero, mul_zero, div_zero]
     refine HasDerivWithinAt.deriv_eq_zero ?_ (uniqueDiffOn_Iic 0 x hx)
-    refine (hasDerivWithinAt_const _ _ 0).congr_of_mem (fun x hx 
+    refine (hasDerivWithinAt_const _ _ 0).congr_of_mem (fun x hx => ?_) hx
+    rw [sqrt_eq_zero_of_nonpos hx]; rw [mul_zero]; rw [div_zero]
+  · have h₀ : √x != 0 := sqrt_ne_zero'.2 hx
+    convert!
+      (((hasDerivAt_log hx.ne').const_add 2).div ((hasDerivAt_sqrt hx.ne').const_mul 2) <|
+          mul_ne_zero two_ne_zero h₀).deriv using 1
+    nth_rw 3 [← mul_self_sqrt hx.le]
+    field
 
 Depends on / 依赖: HasDerivWithinAt, HasDerivWithinAt.deriv_eq_zero, Nat.iterate, congr_of_mem, const_add, const_mul, convert, deriv_eq_zero, deriv_sqrt_mul_log, div_zero, hasDerivAt_log, hasDerivAt_sqrt, hasDerivWithinAt_const, hx.ne, iterate, le_or_gt, mul_ne_, mul_zero, sqrt_eq_zero_of_nonpos, sqrt_ne_zero
 -/
@@ -405,7 +433,7 @@ theorem strictConcaveOn_sqrt_mul_log_Ioi
       (continuousOn_log.mono fun x hx => ne_of_gt (zero_lt_one.trans hx))
   · rw [deriv2_sqrt_mul_log x]
     exact div_neg_of_neg_of_pos (neg_neg_of_pos (log_pos hx))
-      (mul_pos f
+      (mul_pos four_pos (pow_pos (sqrt_pos.mpr (zero_lt_one.trans hx)) 3))
 
 中文:
 定理 strictConcaveOn_sqrt_mul_log_Ioi
@@ -415,7 +443,7 @@ theorem strictConcaveOn_sqrt_mul_log_Ioi
       (continuousOn_log.mono fun x hx => ne_of_gt (zero_lt_one.trans hx))
   · rw [deriv2_sqrt_mul_log x]
     exact div_neg_of_neg_of_pos (neg_neg_of_pos (log_pos hx))
-      (mul_pos f
+      (mul_pos four_pos (pow_pos (sqrt_pos.mpr (zero_lt_one.trans hx)) 3))
 
 Depends on / 依赖: continuousOn, continuousOn_log, continuousOn_log.mono, continuous_sqrt, continuous_sqrt.continuousOn.mul, convex_Ioi, deriv2_sqrt_mul_log, div_neg_of_neg_of_pos, four_pos, log_pos, mul_pos, ne_of_gt, neg_neg_of_pos, pow_pos, sqrt_pos, sqrt_pos.mpr, strictConcaveOn_of_deriv2_neg, zero_lt_one, zero_lt_one.trans
 -/

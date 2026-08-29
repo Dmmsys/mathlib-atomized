@@ -210,7 +210,10 @@ definition Giry
 fun _ _ ⟨_, hf⟩ => Subtype.ext funext fun a => (Measure.map_dirac' hf a).symm }
   μ :=
     { app := fun X => ⟨@Measure.join X.1 X.2, Measure.measurable_join⟩
-naturality := fun _ _ ⟨_, hf⟩ => S
+naturality := fun _ _ ⟨_, hf⟩ => Subtype.ext funext fun μ => Measure.join_map_map hf μ }
+assoc _ := Subtype.ext funext fun _ => Measure.join_map_join _
+left_unit _ := Subtype.ext funext fun _ => Measure.join_dirac _
+right_unit _ := Subtype.ext funext fun _ => Measure.join_map_dirac _
 
 中文:
 定义 Giry
@@ -222,7 +225,10 @@ naturality := fun _ _ ⟨_, hf⟩ => S
 fun _ _ ⟨_, hf⟩ => Subtype.ext funext fun a => (Measure.map_dirac' hf a).symm }
   μ :=
     { app := fun X => ⟨@Measure.join X.1 X.2, Measure.measurable_join⟩
-naturality := fun _ _ ⟨_, hf⟩ => S
+naturality := fun _ _ ⟨_, hf⟩ => Subtype.ext funext fun μ => Measure.join_map_map hf μ }
+assoc _ := Subtype.ext funext fun _ => Measure.join_map_join _
+left_unit _ := Subtype.ext funext fun _ => Measure.join_dirac _
+right_unit _ := Subtype.ext funext fun _ => Measure.join_map_dirac _
 
 Depends on / 依赖: Measure
 -/
@@ -249,7 +255,9 @@ definition Integral
   a := ⟨fun m : MeasureTheory.Measure Real>=0∞ => ∫⁻ x, x ∂m, Measure.measurable_lintegral measurable_id⟩
 unit := Subtype.ext funext fun _ : Real>=0∞ => lintegral_dirac' _ measurable_id
 assoc := Subtype.ext funext fun μ : MeasureTheory.Measure (MeasureTheory.Measure Real>=0∞) =>
-
+    show ∫⁻ x, x ∂μ.join = ∫⁻ x, x ∂Measure.map (fun m => ∫⁻ x, x ∂m) μ by
+      rw [Measure.lintegral_join]; rw [lintegral_map] <;>
+        apply_rules [Measurable.aemeasurable, measurable_id, Measure.measurable_lintegral]
 
 中文:
 定义 积分
@@ -258,7 +266,9 @@ assoc := Subtype.ext funext fun μ : MeasureTheory.Measure (MeasureTheory.Measur
   a := ⟨fun m : MeasureTheory.Measure Real>=0∞ => ∫⁻ x, x ∂m, Measure.measurable_lintegral measurable_id⟩
 unit := Subtype.ext funext fun _ : Real>=0∞ => lintegral_dirac' _ measurable_id
 assoc := Subtype.ext funext fun μ : MeasureTheory.Measure (MeasureTheory.Measure Real>=0∞) =>
-
+    show ∫⁻ x, x ∂μ.join = ∫⁻ x, x ∂Measure.map (fun m => ∫⁻ x, x ∂m) μ by
+      rw [Measure.lintegral_join]; rw [lintegral_map] <;>
+        apply_rules [Measurable.aemeasurable, measurable_id, Measure.measurable_lintegral]
 
 Depends on / 依赖: MeasCat, MeasCat.of, Solution, lambda_sq_dvd_c, le_multiplicity_of_pow_dvd, multiplicity, multiplicity_lambda_c_finite, multiplicity_lambda_c_finite.le_multiplicity_of_pow_dvd
 -/

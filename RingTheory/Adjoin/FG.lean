@@ -55,7 +55,38 @@ theorem fg_trans
     intro x hx y hy
     change x * y in adjoin R (s union t)
     refine Subalgebra.mul_mem _ ?_ ?_
-    · have : x in Subalgebr
+    · have : x in Subalgebra.toSubmodule (adjoin R s) := by
+        rw [← hp']
+        exact subset_span hx
+      exact adjoin_mono Set.subset_union_left this
+    have : y in Subalgebra.toSubmodule (adjoin (adjoin R s) t) := by
+      rw [← hq']
+      exact subset_span hy
+    change y in adjoin R (s union t)
+    rwa [adjoin_union_eq_adjoin_adjoin]
+  · intro r hr
+    change r in adjoin R (s union t) at hr
+    rw [adjoin_union_eq_adjoin_adjoin] at hr
+    change r in Subalgebra.toSubmodule (adjoin (adjoin R s) t) at hr
+    rw [← hq']; rw [← Set.image_id q]; rw [Finsupp.mem_span_image_iff_linearCombination (adjoin R s)] at hr
+    rcases hr with ⟨l, hlq, rfl⟩
+    have := @Finsupp.linearCombination_apply A A (adjoin R s)
+    rw [this]; rw [Finsupp.sum]
+    refine sum_mem ?_
+    intro z hz
+    change (l z).1 * _ in _
+    have : (l z).1 in Subalgebra.toSubmodule (adjoin R s) := (l z).2
+    rw [← hp']; rw [← Set.image_id p]; rw [Finsupp.mem_span_image_iff_linearCombination R] at this
+    rcases this with ⟨l2, hlp, hl⟩
+    have := @Finsupp.linearCombination_apply A A R
+    rw [this] at hl
+    rw [← hl]; rw [Finsupp.sum_mul]
+    refine sum_mem ?_
+    intro t ht
+    change _ * _ in _
+    rw [smul_mul_assoc]
+    refine smul_mem _ _ ?_
+    exact subset_span ⟨t, hlp ht, z, hlq hz, rfl⟩
 
 中文:
 定理 fg_trans
@@ -68,7 +99,38 @@ theorem fg_trans
     intro x hx y hy
     change x * y in adjoin R (s union t)
     refine Subalgebra.mul_mem _ ?_ ?_
-    · have : x in Subalgebr
+    · have : x in Subalgebra.toSubmodule (adjoin R s) := by
+        rw [← hp']
+        exact subset_span hx
+      exact adjoin_mono Set.subset_union_left this
+    have : y in Subalgebra.toSubmodule (adjoin (adjoin R s) t) := by
+      rw [← hq']
+      exact subset_span hy
+    change y in adjoin R (s union t)
+    rwa [adjoin_union_eq_adjoin_adjoin]
+  · intro r hr
+    change r in adjoin R (s union t) at hr
+    rw [adjoin_union_eq_adjoin_adjoin] at hr
+    change r in Subalgebra.toSubmodule (adjoin (adjoin R s) t) at hr
+    rw [← hq']; rw [← Set.image_id q]; rw [Finsupp.mem_span_image_iff_linearCombination (adjoin R s)] at hr
+    rcases hr with ⟨l, hlq, rfl⟩
+    have := @Finsupp.linearCombination_apply A A (adjoin R s)
+    rw [this]; rw [Finsupp.sum]
+    refine sum_mem ?_
+    intro z hz
+    change (l z).1 * _ in _
+    have : (l z).1 in Subalgebra.toSubmodule (adjoin R s) := (l z).2
+    rw [← hp']; rw [← Set.image_id p]; rw [Finsupp.mem_span_image_iff_linearCombination R] at this
+    rcases this with ⟨l2, hlp, hl⟩
+    have := @Finsupp.linearCombination_apply A A R
+    rw [this] at hl
+    rw [← hl]; rw [Finsupp.sum_mul]
+    refine sum_mem ?_
+    intro t ht
+    change _ * _ in _
+    rw [smul_mul_assoc]
+    refine smul_mem _ _ ?_
+    exact subset_span ⟨t, hlp ht, z, hlq hz, rfl⟩
 
 Depends on / 依赖: Set.mul_subset_iff, Set.subset_union_left, Subalgebra, Subalgebra.mul_mem, Subalgebra.toSubmodule, adjoin, adjoin_mono, fg_def, hp.mul, le_antisymm, mul_mem, mul_subset_iff, span_le, subset_span, subset_union_left, toSubmodule
 -/
@@ -206,7 +268,9 @@ theorem fg_of_fg_toSubmodule
 (Algebra.adjoin_le fun x hx => show x in Subalgebra.toSubmodule S from ht ▸ subset_span hx)
     show Subalgebra.toSubmodule S <= Subalgebra.toSubmodule (Algebra.adjoin R ↑t) from fun x hx =>
       span_le.mpr (fun _ hx => Algebra.subset_adjoin hx)
-        (show x in sp
+        (show x in span R ↑t by
+          rw [ht]
+          exact hx)⟩
 
 中文:
 定理 fg_of_fg_toSubmodule
@@ -216,7 +280,9 @@ theorem fg_of_fg_toSubmodule
 (Algebra.adjoin_le fun x hx => show x in Subalgebra.toSubmodule S from ht ▸ subset_span hx)
     show Subalgebra.toSubmodule S <= Subalgebra.toSubmodule (Algebra.adjoin R ↑t) from fun x hx =>
       span_le.mpr (fun _ hx => Algebra.subset_adjoin hx)
-        (show x in sp
+        (show x in span R ↑t by
+          rw [ht]
+          exact hx)⟩
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_le, Algebra.subset_adjoin, Subalgebra, Subalgebra.toSubmodule, adjoin, adjoin_le, le_antisymm, span_le, span_le.mpr, subset_adjoin, subset_span, toSubmodule
 -/
@@ -290,7 +356,8 @@ theorem FG.prod
   rw [← hs.2]; rw [← ht.2]
   exact fg_def.2 ⟨LinearMap.inl R A B '' (s union {1}) union LinearMap.inr R A B '' (t union {1}),
     Set.Finite.union (Set.Finite.image _ (Set.Finite.union hs.1 (Set.finite_singleton _)))
-      (Set.Finit
+      (Set.Finite.image _ (Set.Finite.union ht.1 (Set.finite_singleton _))),
+    Algebra.adjoin_inl_union_inr_eq_prod R s t⟩
 
 中文:
 定理 FG.乘积
@@ -301,7 +368,8 @@ theorem FG.prod
   rw [← hs.2]; rw [← ht.2]
   exact fg_def.2 ⟨LinearMap.inl R A B '' (s union {1}) union LinearMap.inr R A B '' (t union {1}),
     Set.Finite.union (Set.Finite.image _ (Set.Finite.union hs.1 (Set.finite_singleton _)))
-      (Set.Finit
+      (Set.Finite.image _ (Set.Finite.union ht.1 (Set.finite_singleton _))),
+    Algebra.adjoin_inl_union_inr_eq_prod R s t⟩
 
 Depends on / 依赖: Algebra, Algebra.adjoin_inl_union_inr_eq_prod, Finite, LinearMap, LinearMap.inl, LinearMap.inr, Set.Finite.image, Set.Finite.union, Set.finite_singleton, adjoin_inl_union_inr_eq_prod, fg_def, finite_singleton
 -/
@@ -357,7 +425,7 @@ theorem fg_of_fg_map
 map_injective hf by
       rw [← Algebra.adjoin_image]; rw [Finset.coe_preimage]; rw [Set.image_preimage_eq_of_subset]; rw [hs]
       rw [← AlgHom.coe_range]; rw [← Algebra.adjoin_le_iff]; rw [hs]; rw [← Algebra.map_top]
-      exact map_mono le
+      exact map_mono le_top⟩
 
 中文:
 定理 fg_of_fg_map
@@ -367,7 +435,7 @@ map_injective hf by
 map_injective hf by
       rw [← Algebra.adjoin_image]; rw [Finset.coe_preimage]; rw [Set.image_preimage_eq_of_subset]; rw [hs]
       rw [← AlgHom.coe_range]; rw [← Algebra.adjoin_le_iff]; rw [hs]; rw [← Algebra.map_top]
-      exact map_mono le
+      exact map_mono le_top⟩
 
 Depends on / 依赖: AlgHom, AlgHom.coe_range, Algebra, Algebra.adjoin_image, Algebra.adjoin_le_iff, Algebra.map_top, Finset, Finset.coe_preimage, Set.image_preimage_eq_of_subset, adjoin_image, adjoin_le_iff, coe_preimage, coe_range, image_preimage_eq_of_subset, le_top, map_injective, map_mono, map_top, preimage, s.preimage
 -/

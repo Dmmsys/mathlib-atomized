@@ -42,7 +42,13 @@ definition isBinaryProductOfIsTerminalIsPullback
       WalkingPair.casesOn j (hc.fac _ WalkingCospan.left) (hc.fac _ WalkingCospan.right)
   uniq s m J := by
     let c' :=
-      PullbackCone.mk (m 
+      PullbackCone.mk (m ≫ c.π.app ⟨WalkingPair.left⟩) (m ≫ c.π.app ⟨WalkingPair.right⟩ :)
+        (hX.hom_ext (_ ≫ f) (_ ≫ g))
+    dsimp; rw [← J, ← J]
+    apply hc.hom_ext
+    rintro (_ | (_ | _)) <;> simp only [PullbackCone.mk_π_app]
+    exacts [(Category.assoc _ _ _).symm.trans (hc.fac_assoc c' WalkingCospan.left f).symm,
+      (hc.fac c' WalkingCospan.left).symm, (hc.fac c' WalkingCospan.right).symm]
 
 中文:
 定义 isBinaryProductOfIsTerminalIsPullback
@@ -54,7 +60,13 @@ definition isBinaryProductOfIsTerminalIsPullback
       WalkingPair.casesOn j (hc.fac _ WalkingCospan.left) (hc.fac _ WalkingCospan.right)
   uniq s m J := by
     let c' :=
-      PullbackCone.mk (m 
+      PullbackCone.mk (m ≫ c.π.app ⟨WalkingPair.left⟩) (m ≫ c.π.app ⟨WalkingPair.right⟩ :)
+        (hX.hom_ext (_ ≫ f) (_ ≫ g))
+    dsimp; rw [← J, ← J]
+    apply hc.hom_ext
+    rintro (_ | (_ | _)) <;> simp only [PullbackCone.mk_π_app]
+    exacts [(Category.assoc _ _ _).symm.trans (hc.fac_assoc c' WalkingCospan.left f).symm,
+      (hc.fac c' WalkingCospan.left).symm, (hc.fac c' WalkingCospan.right).symm]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, Discrete, Discrete.casesOn, H.isLimit, IsLimit, IsLimit.equivOfNatIsoOfIso, Iso.refl, PullbackCone, PullbackCone.mk, PullbackCone.mk_, WalkingCospan, WalkingCospan.ext, WalkingCospan.left, WalkingCospan.right, WalkingPair, WalkingPair.casesOn, WalkingPair.left
 -/
@@ -121,7 +133,7 @@ definition isPullbackOfIsTerminalIsProduct
   apply H₂.hom_ext
   rintro ⟨⟨⟩⟩
   · exact h₁.trans (H₂.fac (BinaryFan.mk s.fst s.snd) ⟨WalkingPair.left⟩).symm
-  · 
+  · exact h₂.trans (H₂.fac (BinaryFan.mk s.fst s.snd) ⟨WalkingPair.right⟩).symm
 
 中文:
 定义 isPullbackOfIsTerminalIsProduct
@@ -136,7 +148,7 @@ definition isPullbackOfIsTerminalIsProduct
   apply H₂.hom_ext
   rintro ⟨⟨⟩⟩
   · exact h₁.trans (H₂.fac (BinaryFan.mk s.fst s.snd) ⟨WalkingPair.left⟩).symm
-  · 
+  · exact h₂.trans (H₂.fac (BinaryFan.mk s.fst s.snd) ⟨WalkingPair.right⟩).symm
 
 Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.lift, BinaryFan.IsLimit.lift_fst, BinaryFan.IsLimit.lift_snd, BinaryFan.mk, IsLimit, PullbackCone, PullbackCone.isLimitAux, WalkingPair, WalkingPair.left, WalkingPair.right, h.map, h.of_map, hom_ext, isLimitAux, lift_fst, lift_snd, of_map, s.fst, s.snd
 -/
@@ -167,7 +179,7 @@ definition limitConeOfTerminalAndPullbacks
         Discrete.natTrans fun x =>
           Discrete.casesOn x fun x => WalkingPair.casesOn x (pullback.fst _ _) (pullback.snd _ _) }
   isLimit :=
-    isBinaryProduct
+    isBinaryProductOfIsTerminalIsPullback F _ terminalIsTerminal _ _ (pullbackIsPullback _ _)
 
 中文:
 定义 limitConeOfTerminalAndPullbacks
@@ -179,7 +191,7 @@ definition limitConeOfTerminalAndPullbacks
         Discrete.natTrans fun x =>
           Discrete.casesOn x fun x => WalkingPair.casesOn x (pullback.fst _ _) (pullback.snd _ _) }
   isLimit :=
-    isBinaryProduct
+    isBinaryProductOfIsTerminalIsPullback F _ terminalIsTerminal _ _ (pullbackIsPullback _ _)
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, Discrete, Discrete.casesOn, Discrete.natTrans, F.obj, H.isColimit, IsColimit, IsColimit.equivOfNatIsoOfIso, Iso.refl, WalkingPair, WalkingPair.casesOn, WalkingPair.left, WalkingPair.right, WalkingSpan, WalkingSpan.ext, casesOn, comp_id, equivOfNatIsoOfIso
 -/
@@ -381,7 +393,15 @@ definition isBinaryCoproductOfIsInitialIsPushout
       WalkingPair.casesOn j (hc.fac _ WalkingSpan.left) (hc.fac _ WalkingSpan.right)
   uniq s m J := by
     let c' :=
-      PushoutCocone.mk (c.ι.
+      PushoutCocone.mk (c.ι.app ⟨WalkingPair.left⟩ ≫ m) (c.ι.app ⟨WalkingPair.right⟩ ≫ m)
+        (hX.hom_ext (f ≫ _) (g ≫ _))
+    dsimp; rw [← J, ← J]
+    apply hc.hom_ext
+    rintro (_ | (_ | _)) <;>
+      simp only [PushoutCocone.mk_ι_app, Category.assoc]
+    on_goal 1 => congr 1
+    exacts [(hc.fac c' WalkingSpan.left).symm, (hc.fac c' WalkingSpan.left).symm,
+      (hc.fac c' WalkingSpan.right).symm]
 
 中文:
 定义 isBinaryCoproductOfIsInitialIsPushout
@@ -393,7 +413,15 @@ definition isBinaryCoproductOfIsInitialIsPushout
       WalkingPair.casesOn j (hc.fac _ WalkingSpan.left) (hc.fac _ WalkingSpan.right)
   uniq s m J := by
     let c' :=
-      PushoutCocone.mk (c.ι.
+      PushoutCocone.mk (c.ι.app ⟨WalkingPair.left⟩ ≫ m) (c.ι.app ⟨WalkingPair.right⟩ ≫ m)
+        (hX.hom_ext (f ≫ _) (g ≫ _))
+    dsimp; rw [← J, ← J]
+    apply hc.hom_ext
+    rintro (_ | (_ | _)) <;>
+      simp only [PushoutCocone.mk_ι_app, Category.assoc]
+    on_goal 1 => congr 1
+    exacts [(hc.fac c' WalkingSpan.left).symm, (hc.fac c' WalkingSpan.left).symm,
+      (hc.fac c' WalkingSpan.right).symm]
 
 Depends on / 依赖: Category, Category.assoc, Discrete, Discrete.casesOn, PushoutCocone, PushoutCocone.mk, PushoutCocone.mk_, WalkingPair, WalkingPair.casesOn, WalkingPair.left, WalkingPair.right, WalkingSpan, WalkingSpan.left, WalkingSpan.right, casesOn, hX.hom_ext, hc.desc, hc.fac, hc.hom_ext, hom_ext
 -/
@@ -463,7 +491,8 @@ definition isPushoutOfIsInitialIsCoproduct
   intro m h₁ h₂
   apply H₂.hom_ext
   rintro ⟨⟨⟩⟩
-  · exact h₁.trans (H₂.fac (BinaryCofan.mk s.inl s.inr) ⟨WalkingPa
+  · exact h₁.trans (H₂.fac (BinaryCofan.mk s.inl s.inr) ⟨WalkingPair.left⟩).symm
+  · exact h₂.trans (H₂.fac (BinaryCofan.mk s.inl s.inr) ⟨WalkingPair.right⟩).symm
 
 中文:
 定义 isPushoutOfIsInitialIsCoproduct
@@ -477,7 +506,8 @@ definition isPushoutOfIsInitialIsCoproduct
   intro m h₁ h₂
   apply H₂.hom_ext
   rintro ⟨⟨⟩⟩
-  · exact h₁.trans (H₂.fac (BinaryCofan.mk s.inl s.inr) ⟨WalkingPa
+  · exact h₁.trans (H₂.fac (BinaryCofan.mk s.inl s.inr) ⟨WalkingPair.left⟩).symm
+  · exact h₂.trans (H₂.fac (BinaryCofan.mk s.inl s.inr) ⟨WalkingPair.right⟩).symm
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.desc, BinaryCofan.IsColimit.inl_desc, BinaryCofan.IsColimit.inr_desc, BinaryCofan.mk, IsColimit, PushoutCocone, PushoutCocone.isColimitAux, WalkingPair, WalkingPair.left, WalkingPair.right, hom_ext, inl_desc, inr_desc, isColimitAux, s.inl, s.inr
 -/
@@ -505,7 +535,7 @@ definition colimitCoconeOfInitialAndPushouts
       ι :=
         Discrete.natTrans fun x =>
           Discrete.casesOn x fun x => WalkingPair.casesOn x (pushout.inl _ _) (pushout.inr _ _) }
-  isColimit := isBinaryCoproductOfIsInitialIsPushout F _ in
+  isColimit := isBinaryCoproductOfIsInitialIsPushout F _ initialIsInitial _ _ (pushoutIsPushout _ _)
 
 中文:
 定义 colimitCoconeOfInitialAndPushouts
@@ -514,7 +544,7 @@ definition colimitCoconeOfInitialAndPushouts
       ι :=
         Discrete.natTrans fun x =>
           Discrete.casesOn x fun x => WalkingPair.casesOn x (pushout.inl _ _) (pushout.inr _ _) }
-  isColimit := isBinaryCoproductOfIsInitialIsPushout F _ in
+  isColimit := isBinaryCoproductOfIsInitialIsPushout F _ initialIsInitial _ _ (pushoutIsPushout _ _)
 
 Depends on / 依赖: Discrete, Discrete.casesOn, Discrete.natTrans, F.obj, WalkingPair, WalkingPair.casesOn, WalkingPair.left, WalkingPair.right, casesOn, initial, initial.to, initialIsInitial, isBinaryCoproductOfIsInitialIsPushout, isColimit, natTrans, pushout, pushout.inl, pushout.inr, pushoutIsPushout
 -/

@@ -307,7 +307,7 @@ definition domainUniqueUpToIso
   inv_hom_id := by
     subst_hom_lift p f φ
     apply IsCartesian.ext p (p.map φ) φ
-    simp only [assoc, fac, id_comp
+    simp only [assoc, fac, id_comp]
 
 中文:
 定义 domainUniqueUpToIso
@@ -321,7 +321,7 @@ definition domainUniqueUpToIso
   inv_hom_id := by
     subst_hom_lift p f φ
     apply IsCartesian.ext p (p.map φ) φ
-    simp only [assoc, fac, id_comp
+    simp only [assoc, fac, id_comp]
 
 Depends on / 依赖: IsCartesian, IsCartesian.map
 -/
@@ -717,7 +717,15 @@ lemma of_comp
     have h₁ : IsHomLift p (h ≫ f ≫ g) (τ ≫ ψ) := by simpa using IsHomLift.comp p (h ≫ f) _ τ ψ
     /- We get a morphism `π : a' ⟶ a` such that `π ≫ φ ≫ ψ = τ ≫ ψ` from the universal property
     of `φ ≫ ψ`. This will be the morphism induced by `φ`. -/
-    use map p (f ≫ g) (φ 
+    use map p (f ≫ g) (φ ≫ ψ) (f' := h ≫ f ≫ g) rfl (τ ≫ ψ)
+    refine ⟨⟨inferInstance, ?_⟩, ?_⟩
+    /- The fact that `π ≫ φ = τ` follows from `π ≫ φ ≫ ψ = τ ≫ ψ` and the universal property of
+    `ψ`. -/
+    · apply IsStronglyCartesian.ext p g ψ (h ≫ f) (by simp)
+    -- Finally, the uniqueness of `π` comes from the universal property of `φ ≫ ψ`.
+    · intro π' ⟨hπ'₁, hπ'₂⟩
+      apply map_uniq
+      simp [hπ'₂.symm]
 
 中文:
 引理 of_comp
@@ -727,7 +735,15 @@ lemma of_comp
     have h₁ : IsHomLift p (h ≫ f ≫ g) (τ ≫ ψ) := by simpa using IsHomLift.comp p (h ≫ f) _ τ ψ
     /- We get a morphism `π : a' ⟶ a` such that `π ≫ φ ≫ ψ = τ ≫ ψ` from the universal property
     of `φ ≫ ψ`. This will be the morphism induced by `φ`. -/
-    use map p (f ≫ g) (φ 
+    use map p (f ≫ g) (φ ≫ ψ) (f' := h ≫ f ≫ g) rfl (τ ≫ ψ)
+    refine ⟨⟨inferInstance, ?_⟩, ?_⟩
+    /- The fact that `π ≫ φ = τ` follows from `π ≫ φ ≫ ψ = τ ≫ ψ` and the universal property of
+    `ψ`. -/
+    · apply IsStronglyCartesian.ext p g ψ (h ≫ f) (by simp)
+    -- Finally, the uniqueness of `π` comes from the universal property of `φ ≫ ψ`.
+    · intro π' ⟨hπ'₁, hπ'₂⟩
+      apply map_uniq
+      simp [hπ'₂.symm]
 -/
 protected lemma of_comp [IsStronglyCartesian p g ψ] [IsStronglyCartesian p (f ≫ g) (φ ≫ ψ)]
     [IsHomLift p f φ] : IsStronglyCartesian p f φ where
@@ -813,7 +829,14 @@ lemma isIso_of_base_isIso
   let φ' := map p (p.map φ) φ (IsIso.inv_hom_id (p.map φ)).symm (𝟙 b)
   use φ'
   -- `φ' ≫ φ = 𝟙 b` follows immediately from the universal property.
-  have inv_h
+  have inv_hom : φ' ≫ φ = 𝟙 b := fac p (p.map φ) φ _ (𝟙 b)
+  refine ⟨?_, inv_hom⟩
+  -- We will now show that `φ ≫ φ' = 𝟙 a` by showing that `(φ ≫ φ') ≫ φ = 𝟙 a ≫ φ`.
+  have h₁ : IsHomLift p (𝟙 (p.obj a)) (φ ≫ φ') := by
+    rw [← IsIso.hom_inv_id (p.map φ)]
+    apply IsHomLift.comp
+  apply IsStronglyCartesian.ext p (p.map φ) φ (𝟙 (p.obj a))
+  simp only [assoc, inv_hom, comp_id, id_comp]
 
 中文:
 引理 isIso_of_base_isIso
@@ -825,7 +848,14 @@ lemma isIso_of_base_isIso
   let φ' := map p (p.map φ) φ (IsIso.inv_hom_id (p.map φ)).symm (𝟙 b)
   use φ'
   -- `φ' ≫ φ = 𝟙 b` follows immediately from the universal property.
-  have inv_h
+  have inv_hom : φ' ≫ φ = 𝟙 b := fac p (p.map φ) φ _ (𝟙 b)
+  refine ⟨?_, inv_hom⟩
+  -- We will now show that `φ ≫ φ' = 𝟙 a` by showing that `(φ ≫ φ') ≫ φ = 𝟙 a ≫ φ`.
+  have h₁ : IsHomLift p (𝟙 (p.obj a)) (φ ≫ φ') := by
+    rw [← IsIso.hom_inv_id (p.map φ)]
+    apply IsHomLift.comp
+  apply IsStronglyCartesian.ext p (p.map φ) φ (𝟙 (p.obj a))
+  simp only [assoc, inv_hom, comp_id, id_comp]
 
 Depends on / 依赖: subst_hom_lift
 -/

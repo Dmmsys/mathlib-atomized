@@ -840,7 +840,11 @@ lemma exists_iso_single
         (K.isZero_of_isStrictlyLE n i (by lia)).eq_of_tgt _ _)
       hom_inv_id := by
         ext i
-    
+        obtain hi | rfl | hi := lt_trichotomy i n
+        · apply (K.isZero_of_isStrictlyGE n i (by lia)).eq_of_src
+        · simp
+        · apply (K.isZero_of_isStrictlyLE n i (by lia)).eq_of_tgt
+      inv_hom_id := by aesop }⟩⟩
 
 中文:
 引理 存在_iso_single
@@ -852,7 +856,11 @@ lemma exists_iso_single
         (K.isZero_of_isStrictlyLE n i (by lia)).eq_of_tgt _ _)
       hom_inv_id := by
         ext i
-    
+        obtain hi | rfl | hi := lt_trichotomy i n
+        · apply (K.isZero_of_isStrictlyGE n i (by lia)).eq_of_src
+        · simp
+        · apply (K.isZero_of_isStrictlyLE n i (by lia)).eq_of_tgt
+      inv_hom_id := by aesop }⟩⟩
 
 Depends on / 依赖: K.isZero_of_isStrictlyGE, K.isZero_of_isStrictlyLE, eq_of_src, eq_of_tgt, hom_inv_id, inv_hom_id, isZero_of_isStrictlyGE, isZero_of_isStrictlyLE, lt_trichotomy, mkHomFromSingle, mkHomToSingle
 -/
@@ -1614,7 +1622,11 @@ lemma injective_opcycles
     let T := K.sc' (n₀ - 1) n₀ n₁
     have hT : T.Exact := by
       rwa [← K.exactAt_iff' (n₀ - 1) n₀ n₁ (by simp) (by simpa)]
-    exact hT.mono_g ((K.isZero_of_isStrictlyGE n₀ _).eq_of_src 
+    exact hT.mono_g ((K.isZero_of_isStrictlyGE n₀ _).eq_of_src ..)
+  have hS : S.ShortExact :=
+    { exact := S.exact_of_g_is_cokernel (K.opcyclesIsCokernel n₀ n₁ (by simp [← h])) }
+  exact Retract.injective
+    { i := _, r := _, retract := (hS.splittingOfInjective).s_g }
 
 中文:
 引理 injective_opcycles
@@ -1625,7 +1637,11 @@ lemma injective_opcycles
     let T := K.sc' (n₀ - 1) n₀ n₁
     have hT : T.Exact := by
       rwa [← K.exactAt_iff' (n₀ - 1) n₀ n₁ (by simp) (by simpa)]
-    exact hT.mono_g ((K.isZero_of_isStrictlyGE n₀ _).eq_of_src 
+    exact hT.mono_g ((K.isZero_of_isStrictlyGE n₀ _).eq_of_src ..)
+  have hS : S.ShortExact :=
+    { exact := S.exact_of_g_is_cokernel (K.opcyclesIsCokernel n₀ n₁ (by simp [← h])) }
+  exact Retract.injective
+    { i := _, r := _, retract := (hS.splittingOfInjective).s_g }
 
 Depends on / 依赖: Injective, Iso.hom_inv_id_assoc, K.exactAt_iff, K.isZero_of_isStrictlyGE, K.opcycles, K.opcyclesIsCokernel, K.pOpcycles, K.sc, Map_f_eq_opcyclesMap, Quiver, Quiver.Hom.op_inj, Retract, Retract.injective, S.ShortExact, S.exact_of_g_is_cokernel, ShortComplex, ShortComplex.mk, ShortExact, T.Exact, XIsoCycles
 -/

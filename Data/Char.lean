@@ -30,7 +30,11 @@ le_antisymm := fun _ _ h₁ h₂ => Char.ext UInt32.eq_of_toBitVec_eq
     BitVec.le_antisymm h₁ h₂
   lt_iff_le_not_ge := fun _ _ => @lt_iff_le_not_ge Nat _ _ _
   le_total := fun _ _ => @le_total Nat _ _ _
-  min := fun a b => if a
+  min := fun a b => if a <= b then a else b
+  max := fun a b => if a <= b then b else a
+  toDecidableLE := inferInstance
+  toDecidableEq := inferInstance
+  toDecidableLT := inferInstance
 
 中文:
 实例 :
@@ -41,7 +45,11 @@ le_antisymm := fun _ _ h₁ h₂ => Char.ext UInt32.eq_of_toBitVec_eq
     BitVec.le_antisymm h₁ h₂
   lt_iff_le_not_ge := fun _ _ => @lt_iff_le_not_ge Nat _ _ _
   le_total := fun _ _ => @le_total Nat _ _ _
-  min := fun a b => if a
+  min := fun a b => if a <= b then a else b
+  max := fun a b => if a <= b then b else a
+  toDecidableLE := inferInstance
+  toDecidableEq := inferInstance
+  toDecidableLT := inferInstance
 
 Depends on / 依赖: le_refl
 -/

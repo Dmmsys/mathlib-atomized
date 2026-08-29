@@ -411,7 +411,13 @@ lemma μ_comp_assoc
   -- experiment with monoidal structure of `Action` on `Type`
   simp only [Action.tensorObj_V, types_tensorObj_def, comp_toLinearMap, μ_toLinearMap,
     toLinearMap_rTensor, LinearMap.coe_comp, Function.comp_apply,
-    TensorProduct.AlgebraTensorModule.curry_apply, LinearMap.restr
+    TensorProduct.AlgebraTensorModule.curry_apply, LinearMap.restrictScalars_self,
+    TensorProduct.curry_apply, LinearEquiv.coe_coe, LinearMap.rTensor_tmul, toLinearMap_apply,
+    toLinearMap_lTensor, toLinearMap_assoc, TensorProduct.assoc_tmul, LinearMap.lTensor_tmul]
+  -- after fixing the defeq problems in `Action` and in the monoidal category structure of `types`
+  -- this line should close the goal so this is left as an indicator.
+  convert dsimp% linearizeMap_single (α_ X Y Z).hom ((x, y), z) (1 : k)
+  all_goals with_reducible simp
 
 中文:
 引理 μ_comp_assoc
@@ -421,7 +427,13 @@ lemma μ_comp_assoc
   -- experiment with monoidal structure of `Action` on `Type`
   simp only [Action.tensorObj_V, types_tensorObj_def, comp_toLinearMap, μ_toLinearMap,
     toLinearMap_rTensor, LinearMap.coe_comp, Function.comp_apply,
-    TensorProduct.AlgebraTensorModule.curry_apply, LinearMap.restr
+    TensorProduct.AlgebraTensorModule.curry_apply, LinearMap.restrictScalars_self,
+    TensorProduct.curry_apply, LinearEquiv.coe_coe, LinearMap.rTensor_tmul, toLinearMap_apply,
+    toLinearMap_lTensor, toLinearMap_assoc, TensorProduct.assoc_tmul, LinearMap.lTensor_tmul]
+  -- after fixing the defeq problems in `Action` and in the monoidal category structure of `types`
+  -- this line should close the goal so this is left as an indicator.
+  convert dsimp% linearizeMap_single (α_ X Y Z).hom ((x, y), z) (1 : k)
+  all_goals with_reducible simp
 -/
 lemma μ_comp_assoc : ((linearizeMap (α_ X Y Z).hom).comp
     (μ (X otimes Y) Z)).comp ((μ X Y).rTensor (linearize k G Z)) = ((μ X (Y otimes Z)).comp

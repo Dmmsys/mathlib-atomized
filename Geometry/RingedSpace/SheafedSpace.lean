@@ -806,7 +806,8 @@ lemma hom_stalk_ext
   ext U s
   refine section_ext X.sheaf _ _ _ fun x hx =>
     show X.presheaf.germ _ x _ _ = X.presheaf.germ _ x _ _ from ?_
-  erw [← PresheafedSpace.stalkMap_germ_apply ⟨f, fc⟩, ← PresheafedSpace.stalkMap_germ_apply ⟨f,
+  erw [← PresheafedSpace.stalkMap_germ_apply ⟨f, fc⟩, ← PresheafedSpace.stalkMap_germ_apply ⟨f, gc⟩]
+  simp [h']
 
 中文:
 引理 hom_stalk_ext
@@ -819,7 +820,8 @@ lemma hom_stalk_ext
   ext U s
   refine section_ext X.sheaf _ _ _ fun x hx =>
     show X.presheaf.germ _ x _ _ = X.presheaf.germ _ x _ _ from ?_
-  erw [← PresheafedSpace.stalkMap_germ_apply ⟨f, fc⟩, ← PresheafedSpace.stalkMap_germ_apply ⟨f,
+  erw [← PresheafedSpace.stalkMap_germ_apply ⟨f, fc⟩, ← PresheafedSpace.stalkMap_germ_apply ⟨f, gc⟩]
+  simp [h']
 
 Depends on / 依赖: PresheafedSpace, PresheafedSpace.stalkMap_germ_apply, X.presheaf.germ, X.sheaf, presheaf, section_ext, stalkMap_germ_apply
 -/
@@ -849,7 +851,9 @@ lemma mono_of_base_injective_of_stalk_epi
   intro Z ⟨g, gc⟩ ⟨h, hc⟩ e
   obtain rfl : g = h := ConcreteCategory.hom_ext _ _ fun x => h₁ congr(($e).hom.base x)
   refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun x => ?_
-  rw [← cancel_epi (f.hom.stalkMap (g x))]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Ca
+  rw [← cancel_epi (f.hom.stalkMap (g x))]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Category.id_comp]; rw [← PresheafedSpace.stalkMap.comp ⟨g]; rw [gc⟩ f.hom]; rw [← PresheafedSpace.stalkMap.comp ⟨g]; rw [hc⟩ f.hom]
+  replace e := congr_arg InducedCategory.Hom.hom e
+  congr 1
 
 中文:
 引理 mono_of_base_injective_of_stalk_epi
@@ -859,7 +863,9 @@ lemma mono_of_base_injective_of_stalk_epi
   intro Z ⟨g, gc⟩ ⟨h, hc⟩ e
   obtain rfl : g = h := ConcreteCategory.hom_ext _ _ fun x => h₁ congr(($e).hom.base x)
   refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun x => ?_
-  rw [← cancel_epi (f.hom.stalkMap (g x))]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Ca
+  rw [← cancel_epi (f.hom.stalkMap (g x))]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Category.id_comp]; rw [← PresheafedSpace.stalkMap.comp ⟨g]; rw [gc⟩ f.hom]; rw [← PresheafedSpace.stalkMap.comp ⟨g]; rw [hc⟩ f.hom]
+  replace e := congr_arg InducedCategory.Hom.hom e
+  congr 1
 
 Depends on / 依赖: Category, Category.id_comp, ConcreteCategory, ConcreteCategory.hom_ext, InducedCategory, InducedCategory.Hom.hom, PresheafedSpace, PresheafedSpace.stalkMap.comp, SheafedSpace, SheafedSpace.hom_stalk_ext, cancel_epi, congr_arg, f.hom, f.hom.stalkMap, hom.base, hom_ext, hom_stalk_ext, id_comp, replace, stalkCongr_hom
 -/
@@ -891,7 +897,8 @@ lemma epi_of_base_surjective_of_stalk_mono
     rw [← (h₁ y).choose_spec]
     simpa using congr(($e).base.hom (h₁ y).choose)
   refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun y => ?_
-
+  rw [← (h₁ y).choose_spec]; rw [← cancel_mono (f.hom.stalkMap (h₁ y).choose)]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Category.id_comp]; rw [← PresheafedSpace.stalkMap.comp f.hom ⟨g]; rw [gc⟩]; rw [← PresheafedSpace.stalkMap.comp f.hom ⟨g]; rw [hc⟩]
+  congr 1
 
 中文:
 引理 epi_of_base_surjective_of_stalk_mono
@@ -904,7 +911,8 @@ lemma epi_of_base_surjective_of_stalk_mono
     rw [← (h₁ y).choose_spec]
     simpa using congr(($e).base.hom (h₁ y).choose)
   refine SheafedSpace.hom_stalk_ext ⟨g, gc⟩ ⟨g, hc⟩ rfl fun y => ?_
-
+  rw [← (h₁ y).choose_spec]; rw [← cancel_mono (f.hom.stalkMap (h₁ y).choose)]; rw [stalkCongr_hom]; rw [stalkSpecializes_refl]; rw [Category.id_comp]; rw [← PresheafedSpace.stalkMap.comp f.hom ⟨g]; rw [gc⟩]; rw [← PresheafedSpace.stalkMap.comp f.hom ⟨g]; rw [hc⟩]
+  congr 1
 
 Depends on / 依赖: Category, Category.id_comp, ConcreteCategory, ConcreteCategory.hom_ext, InducedCategory, InducedCategory.Hom.hom, PresheafedSpace, PresheafedSpace.stalkMap.comp, SheafedSpace, SheafedSpace.hom_stalk_ext, apply_fun, base.hom, cancel_mono, choose_spec, f.hom, f.hom.stalkMap, hom_ext, hom_stalk_ext, id_comp, stalkCongr_hom
 -/

@@ -197,7 +197,8 @@ instance biconeCategoryStruct
       apply BiconeHom.left
     · cases g
       apply BiconeHom.right
-    · rcases g with (_ | 
+    · rcases g with (_ | _ | _ | _ | g)
+      exact BiconeHom.diagram (f ≫ g)
 
 中文:
 实例 biconeCategoryStruct
@@ -212,7 +213,8 @@ instance biconeCategoryStruct
       apply BiconeHom.left
     · cases g
       apply BiconeHom.right
-    · rcases g with (_ | 
+    · rcases g with (_ | _ | _ | _ | g)
+      exact BiconeHom.diagram (f ≫ g)
 
 Depends on / 依赖: BiconeHom
 -/
@@ -280,7 +282,14 @@ definition biconeMk
   map_id X := by cases X <;> simp
   map_comp f g := by
     rcases f with (_ | _ | _ | _ | _)
-    · exact
+    · exact (Category.id_comp _).symm
+    · exact (Category.id_comp _).symm
+    · cases g
+      exact (Category.id_comp _).symm.trans (c₁.π.naturality _)
+    · cases g
+      exact (Category.id_comp _).symm.trans (c₂.π.naturality _)
+    · cases g
+      apply F.map_comp
 
 中文:
 定义 biconeMk
@@ -296,7 +305,14 @@ definition biconeMk
   map_id X := by cases X <;> simp
   map_comp f g := by
     rcases f with (_ | _ | _ | _ | _)
-    · exact
+    · exact (Category.id_comp _).symm
+    · exact (Category.id_comp _).symm
+    · cases g
+      exact (Category.id_comp _).symm.trans (c₁.π.naturality _)
+    · cases g
+      exact (Category.id_comp _).symm.trans (c₂.π.naturality _)
+    · cases g
+      apply F.map_comp
 
 Depends on / 依赖: Bicone, Bicone.casesOn, F.obj, casesOn
 -/
@@ -340,7 +356,27 @@ instance finBiconeHom
     { elems := {BiconeHom.left _}
       complete := fun f => by cases f; simp }
   · exact
-    { elems :
+    { elems := ∅
+      complete := fun f => by cases f }
+  · exact
+      { elems := {BiconeHom.right_id}
+        complete := fun f => by cases f; simp }
+  · exact
+    { elems := {BiconeHom.right _}
+      complete := fun f => by cases f; simp }
+  · exact
+    { elems := ∅
+      complete := fun f => by cases f }
+  · exact
+    { elems := ∅
+      complete := fun f => by cases f }
+  · exact
+    { elems := Finset.image BiconeHom.diagram Fintype.elems
+      complete := fun f => by
+        rcases f with (_ | _ | _ | _ | f)
+        simp only [Finset.mem_image]
+        use f
+        simpa using Fintype.complete _ }
 
 中文:
 实例 finBiconeHom
@@ -357,7 +393,27 @@ instance finBiconeHom
     { elems := {BiconeHom.left _}
       complete := fun f => by cases f; simp }
   · exact
-    { elems :
+    { elems := ∅
+      complete := fun f => by cases f }
+  · exact
+      { elems := {BiconeHom.right_id}
+        complete := fun f => by cases f; simp }
+  · exact
+    { elems := {BiconeHom.right _}
+      complete := fun f => by cases f; simp }
+  · exact
+    { elems := ∅
+      complete := fun f => by cases f }
+  · exact
+    { elems := ∅
+      complete := fun f => by cases f }
+  · exact
+    { elems := Finset.image BiconeHom.diagram Fintype.elems
+      complete := fun f => by
+        rcases f with (_ | _ | _ | _ | f)
+        simp only [Finset.mem_image]
+        use f
+        simpa using Fintype.complete _ }
 
 Depends on / 依赖: BiconeHom, BiconeHom.left, BiconeHom.left_id, BiconeHom.right, BiconeHom.right_id, complete, left_id, right_id
 -/

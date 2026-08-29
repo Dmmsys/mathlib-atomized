@@ -510,7 +510,7 @@ lemma isZero_H_map_mk₁_of_isIso
     rw [isIso_iff₁]
     constructor <;> dsimp [φ] <;> infer_instance
   rw [IsZero.iff_id_eq_zero]
-  rw [← cancel_mono ((X.H n).map φ)]; rw [Category.id_comp]; rw [zero_comp]; rw [← X.zero₂ f (inv f
+  rw [← cancel_mono ((X.H n).map φ)]; rw [Category.id_comp]; rw [zero_comp]; rw [← X.zero₂ f (inv f) (𝟙 _) (by simp)]; rw [← Functor.map_comp]
 
 中文:
 引理 isZero_H_map_mk₁_of_isIso
@@ -521,7 +521,7 @@ lemma isZero_H_map_mk₁_of_isIso
     rw [isIso_iff₁]
     constructor <;> dsimp [φ] <;> infer_instance
   rw [IsZero.iff_id_eq_zero]
-  rw [← cancel_mono ((X.H n).map φ)]; rw [Category.id_comp]; rw [zero_comp]; rw [← X.zero₂ f (inv f
+  rw [← cancel_mono ((X.H n).map φ)]; rw [Category.id_comp]; rw [zero_comp]; rw [← X.zero₂ f (inv f) (𝟙 _) (by simp)]; rw [← Functor.map_comp]
 
 Depends on / 依赖: Category, Category.id_comp, Functor, Functor.map_comp, IsZero, IsZero.iff_id_eq_zero, X.zero, cancel_mono, id_comp, iff_id_eq_zero, infer_instance, map_comp, zero_comp
 -/

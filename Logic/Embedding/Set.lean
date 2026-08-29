@@ -223,7 +223,14 @@ definition subtypeOrEquiv
     cases x with
     | inl x => grind
     | inr x =>
-      simp only [S
+      simp only [Sum.elim_inr]
+      rw [subtypeOrLeftEmbedding_apply_right]
+      · grind
+      · suffices ¬p x by simpa
+        intro hp
+        simpa using h.le_bot x ⟨hp, x.prop⟩
+
+@[simp, grind =]
 
 中文:
 定义 subtypeOrEquiv
@@ -237,7 +244,14 @@ definition subtypeOrEquiv
     cases x with
     | inl x => grind
     | inr x =>
-      simp only [S
+      simp only [Sum.elim_inr]
+      rw [subtypeOrLeftEmbedding_apply_right]
+      · grind
+      · suffices ¬p x by simpa
+        intro hp
+        simpa using h.le_bot x ⟨hp, x.prop⟩
+
+@[simp, grind =]
 
 Depends on / 依赖: subtypeOrLeftEmbedding
 -/

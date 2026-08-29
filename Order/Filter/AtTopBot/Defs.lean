@@ -312,7 +312,11 @@ lemma atTop_eq_generate_of_forall_exists_le
   · rw [le_generate_iff]
     rintro - ⟨x, -, -, rfl⟩
     rcases hs x with ⟨y, ys, hy⟩
-    have A : Ici y in generate (Ici '' s) := mem_generate_of_mem (mem_ima
+    have A : Ici y in generate (Ici '' s) := mem_generate_of_mem (mem_image_of_mem _ ys)
+    have B : Ici y subseteq Ici x := Ici_subset_Ici.2 hy
+    exact sets_of_superset (generate (Ici '' s)) A B
+
+@[to_dual]
 
 中文:
 引理 atTop_eq_generate_of_对任意_存在_le
@@ -326,7 +330,11 @@ lemma atTop_eq_generate_of_forall_exists_le
   · rw [le_generate_iff]
     rintro - ⟨x, -, -, rfl⟩
     rcases hs x with ⟨y, ys, hy⟩
-    have A : Ici y in generate (Ici '' s) := mem_generate_of_mem (mem_ima
+    have A : Ici y in generate (Ici '' s) := mem_generate_of_mem (mem_image_of_mem _ ys)
+    have B : Ici y subseteq Ici x := Ici_subset_Ici.2 hy
+    exact sets_of_superset (generate (Ici '' s)) A B
+
+@[to_dual]
 
 Depends on / 依赖: Ici_subset_Ici, atTop_eq_generate_Ici, generate, le_antisymm, le_generate_iff, mem_generate_of_mem, mem_image_of_mem, sets_of_superset, subseteq
 -/
@@ -388,7 +396,7 @@ theorem Monotone.piecewise_eventually_eq_iUnion
     simp only [Set.piecewise_eq_of_mem, hs hij hi, subset_iUnion _ _ hi]
   · filter_upwards with i
     simp only [Set.piecewise_eq_of_notMem, not_exists.1 ha i, mt mem_iUnion.1 ha,
-      not
+      not_false_eq_true]
 
 中文:
 定理 递增.piecewise_eventually_eq_iUnion
@@ -399,7 +407,7 @@ theorem Monotone.piecewise_eventually_eq_iUnion
     simp only [Set.piecewise_eq_of_mem, hs hij hi, subset_iUnion _ _ hi]
   · filter_upwards with i
     simp only [Set.piecewise_eq_of_notMem, not_exists.1 ha i, mt mem_iUnion.1 ha,
-      not
+      not_false_eq_true]
 
 Depends on / 依赖: Set.piecewise_eq_of_mem, Set.piecewise_eq_of_notMem, eventually_ge_atTop, filter_upwards, mem_iUnion, not_exists, not_false_eq_true, piecewise_eq_of_mem, piecewise_eq_of_notMem, subset_iUnion
 -/

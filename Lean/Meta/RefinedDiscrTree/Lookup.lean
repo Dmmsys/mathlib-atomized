@@ -142,6 +142,8 @@ definition processPending
       for (key, entry) in entries do
         newEntries := newEntries.push (key, entry, value)
     | none =>
+      values := values.push value
+  return (values, newEntries)
 
 中文:
 定义 processPending
@@ -156,6 +158,8 @@ definition processPending
       for (key, entry) in entries do
         newEntries := newEntries.push (key, entry, value)
     | none =>
+      values := values.push value
+  return (values, newEntries)
 -/
 private def processPending (pending : Array (LazyEntry × α)) (start stop : Nat) :
     MetaM (Array α × Array (Key × LazyEntry × α)) := do
@@ -185,7 +189,34 @@ definition evalNode
   Core.checkInterrupted
   let tasks ← numTasks.foldM (init := #[]) fun i _ tasks => do
 return tasks.push ← EIO.asTask
-      Core.withCurrHeartbeats (processPending node.pendi
+      Core.withCurrHeartbeats (processPending node.pending (i * 5000) ((i + 1) * 5000))
+.run' (← readThe _) (← getThe _)
+.run' (← readThe _) (← getThe _)
+  setTrie trie default -- reduce the reference count to `node` to be 1
+  let mut { values, star, labelledStars, children, .. } := node
+  for task in tasks do
+    let (values', newEntries) ← MonadExcept.ofExcept task.get
+    values := values ++ values'
+    for (key, entry) in newEntries do
+      match key with
+      | .labelledStar label =>
+        if let some trie := labelledStars[label]? then
+          addLazyEntryToTrie trie entry
+        else
+          labelledStars := labelledStars.insert label (← newTrie entry)
+      | .star =>
+        if let some trie := star then
+          addLazyEntryToTrie trie entry
+        else
+          star := some (← newTrie entry)
+      | _ =>
+        if let some trie := children[key]? then
+          addLazyEntryToTrie trie entry
+        else
+          children := children.insert key (← newTrie entry)
+  let node := { values, star, labelledStars, children, pending := #[] }
+  setTrie trie node
+  return node
 
 中文:
 定义 evalNode
@@ -198,7 +229,34 @@ return tasks.push ← EIO.asTask
   Core.checkInterrupted
   let tasks ← numTasks.foldM (init := #[]) fun i _ tasks => do
 return tasks.push ← EIO.asTask
-      Core.withCurrHeartbeats (processPending node.pendi
+      Core.withCurrHeartbeats (processPending node.pending (i * 5000) ((i + 1) * 5000))
+.run' (← readThe _) (← getThe _)
+.run' (← readThe _) (← getThe _)
+  setTrie trie default -- reduce the reference count to `node` to be 1
+  let mut { values, star, labelledStars, children, .. } := node
+  for task in tasks do
+    let (values', newEntries) ← MonadExcept.ofExcept task.get
+    values := values ++ values'
+    for (key, entry) in newEntries do
+      match key with
+      | .labelledStar label =>
+        if let some trie := labelledStars[label]? then
+          addLazyEntryToTrie trie entry
+        else
+          labelledStars := labelledStars.insert label (← newTrie entry)
+      | .star =>
+        if let some trie := star then
+          addLazyEntryToTrie trie entry
+        else
+          star := some (← newTrie entry)
+      | _ =>
+        if let some trie := children[key]? then
+          addLazyEntryToTrie trie entry
+        else
+          children := children.insert key (← newTrie entry)
+  let node := { values, star, labelledStars, children, pending := #[] }
+  setTrie trie node
+  return node
 -/
 private def evalNode (trie : TrieIndex) : TreeM α (Trie α) := do
   let node := (← get)[trie]!
@@ -363,7 +421,12 @@ definition matchQueryStar
     if let some trie := star then
       todo ← matchQueryStar trie pMatch todo skip
     todo ← labelledStars.foldM (init := todo) fun todo _ trie =>
-      matchQueryStar trie pMa
+      matchQueryStar trie pMatch todo skip
+    todo ← children.foldM (init := todo) fun todo key trie =>
+      matchQueryStar trie pMatch todo (skip + key.arity)
+    return todo
+  | 0 =>
+    return todo.push { pMatch with trie }
 
 中文:
 定义 matchQueryStar
@@ -376,7 +439,12 @@ definition matchQueryStar
     if let some trie := star then
       todo ← matchQueryStar trie pMatch todo skip
     todo ← labelledStars.foldM (init := todo) fun todo _ trie =>
-      matchQueryStar trie pMa
+      matchQueryStar trie pMatch todo skip
+    todo ← children.foldM (init := todo) fun todo key trie =>
+      matchQueryStar trie pMatch todo (skip + key.arity)
+    return todo
+  | 0 =>
+    return todo.push { pMatch with trie }
 -/
 private partial def matchQueryStar (trie : TrieIndex) (pMatch : PartialMatch)
     (todo : Array PartialMatch) (skip : Nat := 1) : TreeM α (Array PartialMatch) := do
@@ -490,7 +558,19 @@ definition matchTreeStars
     let mut todo := todo
     if let some trie := star then
       todo := todo.push { pMatch with keys, trie }
-    todo ← node
+    todo ← node.labelledStars.foldM (init := todo) fun todo id trie => do
+      if let some assignment := pMatch.treeStars[id]? then
+        let eq lhs rhs := if unify then (isEq lhs.reverse rhs.reverse).isSome else lhs == rhs
+        if eq dropped assignment then
+          return todo.push { pMatch with
+            keys, trie
+            score := (← dropped.mapM (·.score)).foldl (· + ·) pMatch.score }
+        else
+          return todo
+      else
+        let treeStars := pMatch.treeStars.insert id dropped
+        return todo.push { pMatch with keys, trie, treeStars }
+    return todo
 
 中文:
 定义 matchTreeStars
@@ -504,7 +584,19 @@ definition matchTreeStars
     let mut todo := todo
     if let some trie := star then
       todo := todo.push { pMatch with keys, trie }
-    todo ← node
+    todo ← node.labelledStars.foldM (init := todo) fun todo id trie => do
+      if let some assignment := pMatch.treeStars[id]? then
+        let eq lhs rhs := if unify then (isEq lhs.reverse rhs.reverse).isSome else lhs == rhs
+        if eq dropped assignment then
+          return todo.push { pMatch with
+            keys, trie
+            score := (← dropped.mapM (·.score)).foldl (· + ·) pMatch.score }
+        else
+          return todo
+      else
+        let treeStars := pMatch.treeStars.insert id dropped
+        return todo.push { pMatch with keys, trie, treeStars }
+    return todo
 -/
 private partial def matchTreeStars (key : Key) (node : Trie α) (pMatch : PartialMatch)
     (todo : Array PartialMatch) (unify : Bool) : MetaM (Array PartialMatch) := do
@@ -597,7 +689,20 @@ definition getMatchLoop
     | [] =>
       getMatchLoop todo (result.push (score := pMatch.score) node.values) unify
     | key :: keys =>
-      let pMatc
+      let pMatch := { pMatch with keys }
+      match key with
+      -- `key` is not a `.labelledStar`
+      | .star =>
+        if unify then
+          let todo ← matchQueryStar pMatch.trie pMatch todo
+          getMatchLoop todo result unify
+        else
+          let todo ← matchTreeStars key node pMatch todo unify
+          getMatchLoop todo result unify
+      | _ =>
+        let todo ← matchTreeStars key node pMatch todo unify
+        let todo := matchKey key node.children pMatch todo
+        getMatchLoop todo result unify
 
 中文:
 定义 getMatchLoop
@@ -613,7 +718,20 @@ definition getMatchLoop
     | [] =>
       getMatchLoop todo (result.push (score := pMatch.score) node.values) unify
     | key :: keys =>
-      let pMatc
+      let pMatch := { pMatch with keys }
+      match key with
+      -- `key` is not a `.labelledStar`
+      | .star =>
+        if unify then
+          let todo ← matchQueryStar pMatch.trie pMatch todo
+          getMatchLoop todo result unify
+        else
+          let todo ← matchTreeStars key node pMatch todo unify
+          getMatchLoop todo result unify
+      | _ =>
+        let todo ← matchTreeStars key node pMatch todo unify
+        let todo := matchKey key node.children pMatch todo
+        getMatchLoop todo result unify
 -/
 private partial def getMatchLoop (todo : Array PartialMatch) (result : MatchResult α)
     (unify : Bool) : TreeM α (MatchResult α) := do
@@ -656,7 +774,7 @@ definition matchTreeRootStar
   if let some trie := root[Key.star]? then
     let { values, .. } ← evalNode trie
     result := result.push (score := 0) values
-  return
+  return result
 
 中文:
 定义 matchTreeRootStar
@@ -669,7 +787,7 @@ definition matchTreeRootStar
   if let some trie := root[Key.star]? then
     let { values, .. } ← evalNode trie
     result := result.push (score := 0) values
-  return
+  return result
 -/
 private def matchTreeRootStar (root : Std.HashMap Key TrieIndex) : TreeM α (MatchResult α) := do
   let mut result := {}
@@ -696,7 +814,15 @@ definition getMatch
         if unify then
           matchEverything d.root
         else
-          ma
+          matchTreeRootStar d.root
+      else
+        return {}
+    else
+      let todo := matchKey key d.root pMatch #[]
+      if matchRootStar then
+        getMatchLoop todo (← matchTreeRootStar d.root) unify
+      else
+        getMatchLoop todo {} unify
 
 中文:
 定义 getMatch
@@ -710,7 +836,15 @@ definition getMatch
         if unify then
           matchEverything d.root
         else
-          ma
+          matchTreeRootStar d.root
+      else
+        return {}
+    else
+      let todo := matchKey key d.root pMatch #[]
+      if matchRootStar then
+        getMatchLoop todo (← matchTreeRootStar d.root) unify
+      else
+        getMatchLoop todo {} unify
 -/
 def getMatch (d : RefinedDiscrTree α) (e : Expr) (unify matchRootStar : Bool) :
     MetaM (MatchResult α × RefinedDiscrTree α) := do

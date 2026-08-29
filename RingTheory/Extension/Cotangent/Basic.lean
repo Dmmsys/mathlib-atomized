@@ -285,7 +285,8 @@ definition map
   letI := f.toAlgHom.toAlgebra
   haveI : IsScalarTower P.Ring P'.Ring S' :=
     IsScalarTower.of_algebraMap_eq (fun x => (f.algebraMap_toRingHom x).symm)
- 
+  apply LinearMap.liftBaseChange
+  refine (TensorProduct.mk _ _ _ 1).restrictScalars _ ∘ₗ KaehlerDifferential.map R R' P.Ring P'.Ring
 
 中文:
 定义 map
@@ -296,7 +297,8 @@ definition map
   letI := f.toAlgHom.toAlgebra
   haveI : IsScalarTower P.Ring P'.Ring S' :=
     IsScalarTower.of_algebraMap_eq (fun x => (f.algebraMap_toRingHom x).symm)
- 
+  apply LinearMap.liftBaseChange
+  refine (TensorProduct.mk _ _ _ 1).restrictScalars _ ∘ₗ KaehlerDifferential.map R R' P.Ring P'.Ring
 -/
 protected def map (f : Hom P P') : P.CotangentSpace ->ₗ[S] P'.CotangentSpace := by
   letI := ((algebraMap S S').comp (algebraMap P.Ring S)).toAlgebra
@@ -348,7 +350,9 @@ lemma map_tmul_eq_tmul_map
   proof: f.toAlgHom.toAlgebra
     (CotangentSpace.map f) (x otimesₜ[P.Ring] y) =
       (algebraMap S S') x otimesₜ[P'.Ring] KaehlerDifferential.map _ _ _ _ y := by
-  rw [CotangentSpace.map]; rw [LinearMap.liftBaseChange_tmul]; rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [LinearMap.restrictScalars_a
+  rw [CotangentSpace.map]; rw [LinearMap.liftBaseChange_tmul]; rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [LinearMap.restrictScalars_apply]; rw [mk_apply]; rw [smul_tmul']; rw [Algebra.smul_def]; rw [mul_one]
+
+@[simp]
 
 中文:
 引理 map_tmul_eq_tmul_map
@@ -356,7 +360,9 @@ lemma map_tmul_eq_tmul_map
   证明: f.toAlgHom.toAlgebra
     (CotangentSpace.map f) (x otimesₜ[P.Ring] y) =
       (algebraMap S S') x otimesₜ[P'.Ring] KaehlerDifferential.map _ _ _ _ y := by
-  rw [CotangentSpace.map]; rw [LinearMap.liftBaseChange_tmul]; rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [LinearMap.restrictScalars_a
+  rw [CotangentSpace.map]; rw [LinearMap.liftBaseChange_tmul]; rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [LinearMap.restrictScalars_apply]; rw [mk_apply]; rw [smul_tmul']; rw [Algebra.smul_def]; rw [mul_one]
+
+@[simp]
 
 Depends on / 依赖: f.toAlgHom.toAlgebra, toAlgHom, toAlgebra
 -/
@@ -395,7 +401,15 @@ lemma map_comp
   | add =>
     simp only [map_add, LinearMap.coe_comp, LinearMap.coe_restrictScalars, Function.comp_apply, *]
   | tmul x y =>
-    obtain ⟨y, rfl⟩ := KaehlerDifferential.tensorProductTo_surjective _ _ 
+    obtain ⟨y, rfl⟩ := KaehlerDifferential.tensorProductTo_surjective _ _ y
+    induction y with
+    | zero => simp only [map_zero, tmul_zero]
+    | add => simp only [map_add, tmul_add, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
+      Function.comp_apply, *]
+    | tmul => simp only [Derivation.tensorProductTo_tmul, tmul_smul, smul_tmul', map_tmul,
+        Hom.toAlgHom_apply, Hom.comp_toRingHom, RingHom.coe_comp, Function.comp_apply,
+        LinearMap.coe_comp, LinearMap.coe_restrictScalars,
+        ← IsScalarTower.algebraMap_apply S S' S'']
 
 中文:
 引理 map_comp
@@ -408,7 +422,15 @@ lemma map_comp
   | add =>
     simp only [map_add, LinearMap.coe_comp, LinearMap.coe_restrictScalars, Function.comp_apply, *]
   | tmul x y =>
-    obtain ⟨y, rfl⟩ := KaehlerDifferential.tensorProductTo_surjective _ _ 
+    obtain ⟨y, rfl⟩ := KaehlerDifferential.tensorProductTo_surjective _ _ y
+    induction y with
+    | zero => simp only [map_zero, tmul_zero]
+    | add => simp only [map_add, tmul_add, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
+      Function.comp_apply, *]
+    | tmul => simp only [Derivation.tensorProductTo_tmul, tmul_smul, smul_tmul', map_tmul,
+        Hom.toAlgHom_apply, Hom.comp_toRingHom, RingHom.coe_comp, Function.comp_apply,
+        LinearMap.coe_comp, LinearMap.coe_restrictScalars,
+        ← IsScalarTower.algebraMap_apply S S' S'']
 
 Depends on / 依赖: Derivation, Derivation.tensorProductTo, Function, Function.comp_apply, KaehlerDifferential, KaehlerDifferential.tensorProductTo_surjective, LinearMap, LinearMap.coe_comp, LinearMap.coe_restrictScalars, TensorProduct, TensorProduct.induction_on, coe_comp, coe_restrictScalars, comp_apply, induction_on, map_add, map_zero, tensorProductTo, tensorProductTo_surjective, tmul_add
 -/
@@ -510,7 +532,20 @@ lemma Hom.sub_aux
         (P'.σ ((algebraMap P.Ring S') x) * (f.toAlgHom y - g.toAlgHom y) +
           P'.σ ((algebraMap P.Ring S') y) * (f.toAlgHom x - g.toAlgHom x)) in
       P'.ker ^ 2 := by
-  let := ((algebraMap
+  let := ((algebraMap S S').comp (algebraMap P.Ring S)).toAlgebra
+  have :
+      (f.toAlgHom x - P'.σ (algebraMap P.Ring S' x)) * (f.toAlgHom y - g.toAlgHom y) +
+      (g.toAlgHom y - P'.σ (algebraMap P.Ring S' y)) * (f.toAlgHom x - g.toAlgHom x)
+        in P'.ker ^ 2 := by
+    rw [pow_two]
+    refine Ideal.add_mem _ (Ideal.mul_mem_mul ?_ ?_) (Ideal.mul_mem_mul ?_ ?_) <;>
+      simp only [RingHom.algebraMap_toAlgebra, RingHom.coe_comp,
+        Function.comp_apply,
+        ker, RingHom.mem_ker, map_sub, algebraMap_toRingHom,
+        algebraMap_σ, sub_self, toAlgHom_apply]
+  convert! this using 1
+  simp only [map_mul]
+  ring
 
 中文:
 引理 态射.sub_aux
@@ -520,7 +555,20 @@ lemma Hom.sub_aux
         (P'.σ ((algebraMap P.Ring S') x) * (f.toAlgHom y - g.toAlgHom y) +
           P'.σ ((algebraMap P.Ring S') y) * (f.toAlgHom x - g.toAlgHom x)) in
       P'.ker ^ 2 := by
-  let := ((algebraMap
+  let := ((algebraMap S S').comp (algebraMap P.Ring S)).toAlgebra
+  have :
+      (f.toAlgHom x - P'.σ (algebraMap P.Ring S' x)) * (f.toAlgHom y - g.toAlgHom y) +
+      (g.toAlgHom y - P'.σ (algebraMap P.Ring S' y)) * (f.toAlgHom x - g.toAlgHom x)
+        in P'.ker ^ 2 := by
+    rw [pow_two]
+    refine Ideal.add_mem _ (Ideal.mul_mem_mul ?_ ?_) (Ideal.mul_mem_mul ?_ ?_) <;>
+      simp only [RingHom.algebraMap_toAlgebra, RingHom.coe_comp,
+        Function.comp_apply,
+        ker, RingHom.mem_ker, map_sub, algebraMap_toRingHom,
+        algebraMap_σ, sub_self, toAlgHom_apply]
+  convert! this using 1
+  simp only [map_mul]
+  ring
 
 Depends on / 依赖: P.Ring, algebraMap, toAlgebra
 -/
@@ -598,7 +646,23 @@ definition Hom.sub
   letI := f.toAlgHom.toAlgebra
   haveI : IsScalarTower P.Ring P'.Ring S' :=
     IsScalarTower.of_algebraMap_eq fun x => (f.algebraMap_toRingHom x).symm
-  h
+  haveI : IsScalarTower R P.Ring S' :=
+    IsScalarTower.of_algebraMap_eq fun x =>
+      show algebraMap R S' x = algebraMap S S' (algebraMap P.Ring S (algebraMap R P.Ring x)) by
+        rw [← IsScalarTower.algebraMap_apply R P.Ring S]; rw [← IsScalarTower.algebraMap_apply]
+  refine (Derivation.liftKaehlerDifferential ?_).liftBaseChange S
+  refine
+  { __ := Cotangent.mk.restrictScalars R ∘ₗ f.subToKer g
+    map_one_eq_zero' := ?_
+    leibniz' := ?_ }
+  · ext
+    simp [Ideal.toCotangent_eq_zero]
+  · intro x y
+    ext
+    simp only [LinearMap.coe_comp, LinearMap.coe_restrictScalars, Function.comp_apply,
+      Cotangent.val_mk, Cotangent.val_add, Cotangent.val_smul''', ← map_smul, ← map_add,
+      Ideal.toCotangent_eq]
+    exact Hom.sub_aux f g x y
 
 中文:
 定义 态射.sub
@@ -609,7 +673,23 @@ definition Hom.sub
   letI := f.toAlgHom.toAlgebra
   haveI : IsScalarTower P.Ring P'.Ring S' :=
     IsScalarTower.of_algebraMap_eq fun x => (f.algebraMap_toRingHom x).symm
-  h
+  haveI : IsScalarTower R P.Ring S' :=
+    IsScalarTower.of_algebraMap_eq fun x =>
+      show algebraMap R S' x = algebraMap S S' (algebraMap P.Ring S (algebraMap R P.Ring x)) by
+        rw [← IsScalarTower.algebraMap_apply R P.Ring S]; rw [← IsScalarTower.algebraMap_apply]
+  refine (Derivation.liftKaehlerDifferential ?_).liftBaseChange S
+  refine
+  { __ := Cotangent.mk.restrictScalars R ∘ₗ f.subToKer g
+    map_one_eq_zero' := ?_
+    leibniz' := ?_ }
+  · ext
+    simp [Ideal.toCotangent_eq_zero]
+  · intro x y
+    ext
+    simp only [LinearMap.coe_comp, LinearMap.coe_restrictScalars, Function.comp_apply,
+      Cotangent.val_mk, Cotangent.val_add, Cotangent.val_smul''', ← map_smul, ← map_add,
+      Ideal.toCotangent_eq]
+    exact Hom.sub_aux f g x y
 -/
 def Hom.sub (f g : Hom P P') : P.CotangentSpace ->ₗ[S] P'.Cotangent := by
   letI := ((algebraMap S S').comp (algebraMap P.Ring S)).toAlgebra
@@ -707,7 +787,16 @@ lemma CotangentSpace.map_sub_map
   | add =>
     simp only [map_add, LinearMap.coe_comp, LinearMap.coe_restrictScalars, Function.comp_apply, *]
   | tmul x y =>
-    obtain ⟨y, rfl⟩ := KaehlerDifferential.tensorProductTo_surjective _ _ 
+    obtain ⟨y, rfl⟩ := KaehlerDifferential.tensorProductTo_surjective _ _ y
+    induction y with
+    | zero => simp only [map_zero, tmul_zero]
+    | add => simp only [map_add, tmul_add, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
+      Function.comp_apply, *]
+    | tmul =>
+      simp only [Derivation.tensorProductTo_tmul, tmul_smul, smul_tmul', LinearMap.sub_apply,
+        map_tmul, Hom.toAlgHom_apply, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
+        Function.comp_apply, Hom.sub_tmul, LinearMap.map_smul_of_tower, cotangentComplex_mk,
+        Hom.subToKer_apply_coe, map_sub, ← algebraMap_eq_smul_one, tmul_sub, smul_sub]
 
 中文:
 引理 CotangentSpace.map_sub_map
@@ -720,7 +809,16 @@ lemma CotangentSpace.map_sub_map
   | add =>
     simp only [map_add, LinearMap.coe_comp, LinearMap.coe_restrictScalars, Function.comp_apply, *]
   | tmul x y =>
-    obtain ⟨y, rfl⟩ := KaehlerDifferential.tensorProductTo_surjective _ _ 
+    obtain ⟨y, rfl⟩ := KaehlerDifferential.tensorProductTo_surjective _ _ y
+    induction y with
+    | zero => simp only [map_zero, tmul_zero]
+    | add => simp only [map_add, tmul_add, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
+      Function.comp_apply, *]
+    | tmul =>
+      simp only [Derivation.tensorProductTo_tmul, tmul_smul, smul_tmul', LinearMap.sub_apply,
+        map_tmul, Hom.toAlgHom_apply, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
+        Function.comp_apply, Hom.sub_tmul, LinearMap.map_smul_of_tower, cotangentComplex_mk,
+        Hom.subToKer_apply_coe, map_sub, ← algebraMap_eq_smul_one, tmul_sub, smul_sub]
 
 Depends on / 依赖: Derivation, Derivation.tensorProductTo, Function, Function.comp_apply, KaehlerDifferential, KaehlerDifferential.tensorProductTo_surjective, LinearMap, LinearMap.coe_comp, LinearMap.coe_restrictScalars, TensorProduct, TensorProduct.induction_on, coe_comp, coe_restrictScalars, comp_apply, induction_on, map_add, map_zero, tensorProductTo, tensorProductTo_surjective, tmul_add
 -/
@@ -758,7 +856,9 @@ lemma Cotangent.map_sub_map
     cotangentComplex_mk, Hom.sub_tmul, one_smul, val_mk]
   apply (Ideal.cotangentEquivIdeal _).injective
   ext
-  simp only [val_sub, val_mk, map_sub, AddSubgroupClass.co
+  simp only [val_sub, val_mk, map_sub, AddSubgroupClass.coe_sub, Ideal.cotangentEquivIdeal_apply,
+    Ideal.toCotangent_to_quotient_square, Submodule.mkQ_apply, Ideal.Quotient.mk_eq_mk,
+    Hom.subToKer_apply_coe, Hom.toAlgHom_apply]
 
 中文:
 引理 余切.map_sub_map
@@ -770,7 +870,9 @@ lemma Cotangent.map_sub_map
     cotangentComplex_mk, Hom.sub_tmul, one_smul, val_mk]
   apply (Ideal.cotangentEquivIdeal _).injective
   ext
-  simp only [val_sub, val_mk, map_sub, AddSubgroupClass.co
+  simp only [val_sub, val_mk, map_sub, AddSubgroupClass.coe_sub, Ideal.cotangentEquivIdeal_apply,
+    Ideal.toCotangent_to_quotient_square, Submodule.mkQ_apply, Ideal.Quotient.mk_eq_mk,
+    Hom.subToKer_apply_coe, Hom.toAlgHom_apply]
 
 Depends on / 依赖: AddSubgroupClass, AddSubgroupClass.coe_sub, Function, Function.comp_apply, Hom.subToKer_apply_coe, Hom.sub_tmul, Hom.toAlgHom_apply, Ideal.Quotient.mk_eq_mk, Ideal.cotangentEquivIdeal, Ideal.cotangentEquivIdeal_apply, Ideal.toCotangent_to_quotient_square, LinearMap, LinearMap.coe_comp, LinearMap.sub_apply, Quotient, Submodule, Submodule.mkQ_apply, coe_comp, coe_sub, comp_apply
 -/
@@ -1029,7 +1131,9 @@ definition H1Cotangent.map
     (q := (LinearMap.ker P'.cotangentComplex).restrictScalars S) fun x hx => ?_
   simp only [LinearMap.mem_ker, Submodule.restrictScalars_mem] at hx ⊢
   apply_fun (CotangentSpace.map f) at hx
-  rw [CotangentSpace.map_cota
+  rw [CotangentSpace.map_cotangentComplex] at hx
+  rw [hx]
+  exact LinearMap.map_zero _
 
 中文:
 定义 H1Cotangent.map
@@ -1039,7 +1143,9 @@ definition H1Cotangent.map
     (q := (LinearMap.ker P'.cotangentComplex).restrictScalars S) fun x hx => ?_
   simp only [LinearMap.mem_ker, Submodule.restrictScalars_mem] at hx ⊢
   apply_fun (CotangentSpace.map f) at hx
-  rw [CotangentSpace.map_cota
+  rw [CotangentSpace.map_cotangentComplex] at hx
+  rw [hx]
+  exact LinearMap.map_zero _
 
 Depends on / 依赖: Cotangent, Cotangent.map, CotangentSpace, CotangentSpace.map, CotangentSpace.map_cotangentComplex, LinearMap, LinearMap.ker, LinearMap.map_zero, LinearMap.mem_ker, P.cotangentComplex, Submodule, Submodule.restrictScalars_mem, apply_fun, cotangentComplex, map_cotangentComplex, map_zero, mem_ker, restrict, restrictScalars, restrictScalars_mem
 -/
@@ -1168,6 +1274,9 @@ definition H1Cotangent.equiv
     rw [← Extension.H1Cotangent.map_id]; rw [eq_comm]; rw [map_eq _ (f₂.comp f₁)]; rw [Extension.H1Cotangent.map_comp]; rfl
   right_inv x :=
     show (map f₁ ∘ₗ map f₂) x = LinearMap.id (R := S) x by
+    rw [← Extension.H1Cotangent.map_id]; rw [eq_comm]; rw [map_eq _ (f₁.comp f₂)]; rw [Extension.H1Cotangent.map_comp]; rfl
+
+omit [IsScalarTower R S S'] in
 
 中文:
 定义 H1Cotangent.equiv
@@ -1179,6 +1288,9 @@ definition H1Cotangent.equiv
     rw [← Extension.H1Cotangent.map_id]; rw [eq_comm]; rw [map_eq _ (f₂.comp f₁)]; rw [Extension.H1Cotangent.map_comp]; rfl
   right_inv x :=
     show (map f₁ ∘ₗ map f₂) x = LinearMap.id (R := S) x by
+    rw [← Extension.H1Cotangent.map_id]; rw [eq_comm]; rw [map_eq _ (f₁.comp f₂)]; rw [Extension.H1Cotangent.map_comp]; rfl
+
+omit [IsScalarTower R S S'] in
 -/
 def H1Cotangent.equiv {P₁ P₂ : Extension R S} (f₁ : P₁.Hom P₂) (f₂ : P₂.Hom P₁) :
     P₁.H1Cotangent ≃ₗ[S] P₂.H1Cotangent where
@@ -1489,7 +1601,8 @@ instance [Algebra.FinitePresentation
   let P := Algebra.Presentation.ofFinitePresentation R S
   have : Algebra.FiniteType R P.toExtension.Ring := by simp [P]; infer_instance
   refine Module.finitePresentation_of_surjective _ P.toExtension.toKaehler_surjective ?_
-  rw [LinearMap.exact_iff.mp P.toExtension.exact_cotangentComplex_toKae
+  rw [LinearMap.exact_iff.mp P.toExtension.exact_cotangentComplex_toKaehler]; rw [← Submodule.map_top]
+  exact (Extension.Cotangent.finite P.fg_ker).1.map P.toExtension.cotangentComplex
 
 中文:
 实例 [代数.有限呈现
@@ -1498,7 +1611,8 @@ instance [Algebra.FinitePresentation
   let P := Algebra.Presentation.ofFinitePresentation R S
   have : Algebra.FiniteType R P.toExtension.Ring := by simp [P]; infer_instance
   refine Module.finitePresentation_of_surjective _ P.toExtension.toKaehler_surjective ?_
-  rw [LinearMap.exact_iff.mp P.toExtension.exact_cotangentComplex_toKae
+  rw [LinearMap.exact_iff.mp P.toExtension.exact_cotangentComplex_toKaehler]; rw [← Submodule.map_top]
+  exact (Extension.Cotangent.finite P.fg_ker).1.map P.toExtension.cotangentComplex
 
 Depends on / 依赖: Algebra, Algebra.FiniteType, Algebra.Presentation.ofFinitePresentation, Cotangent, Extension, Extension.Cotangent.finite, FiniteType, LinearMap, LinearMap.exact_iff.mp, Module, Module.finitePresentation_of_surjective, P.fg_ker, P.toExtension.Ring, P.toExtension.cotangentComplex, P.toExtension.exact_cotangentComplex_toKaehler, P.toExtension.toKaehler_surjective, Presentation, Submodule, Submodule.map_top, cotangentComplex
 -/
@@ -1586,6 +1700,18 @@ definition H1Cotangent.mapEquiv
   letI := e.symm.toRingHom.toAlgebra
   have : IsScalarTower R S S' := .of_algebraMap_eq' e.toAlgHom.comp_algebraMap.symm
   have : IsScalarTower R S' S := .of_algebraMap_eq' e.symm.toAlgHom.comp_algebraMap.symm
+  have : IsScalarTower S S' S := .of_algebraMap_eq fun _ => (e.symm_apply_apply _).symm
+  have : IsScalarTower S' S S' := .of_algebraMap_eq fun _ => (e.apply_symm_apply _).symm
+  { toFun := map R R S S'
+    invFun := map R R S' S
+    left_inv x := by
+      change ((map R R S' S).restrictScalars S ∘ₗ map R R S S') x = x
+      rw [map]; rw [map]; rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq]; rw [Extension.H1Cotangent.map_id]; rw [LinearMap.id_apply]
+    right_inv x := by
+      change ((map R R S S').restrictScalars S' ∘ₗ map R R S' S) x = x
+      rw [map]; rw [map]; rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq]; rw [Extension.H1Cotangent.map_id]; rw [LinearMap.id_apply]
+    map_add' := map_add (map R R S S')
+    map_smul' := LinearMap.CompatibleSMul.map_smul (map R R S S') }
 
 中文:
 定义 H1Cotangent.mapEquiv
@@ -1595,6 +1721,18 @@ definition H1Cotangent.mapEquiv
   letI := e.symm.toRingHom.toAlgebra
   have : IsScalarTower R S S' := .of_algebraMap_eq' e.toAlgHom.comp_algebraMap.symm
   have : IsScalarTower R S' S := .of_algebraMap_eq' e.symm.toAlgHom.comp_algebraMap.symm
+  have : IsScalarTower S S' S := .of_algebraMap_eq fun _ => (e.symm_apply_apply _).symm
+  have : IsScalarTower S' S S' := .of_algebraMap_eq fun _ => (e.apply_symm_apply _).symm
+  { toFun := map R R S S'
+    invFun := map R R S' S
+    left_inv x := by
+      change ((map R R S' S).restrictScalars S ∘ₗ map R R S S') x = x
+      rw [map]; rw [map]; rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq]; rw [Extension.H1Cotangent.map_id]; rw [LinearMap.id_apply]
+    right_inv x := by
+      change ((map R R S S').restrictScalars S' ∘ₗ map R R S' S) x = x
+      rw [map]; rw [map]; rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq]; rw [Extension.H1Cotangent.map_id]; rw [LinearMap.id_apply]
+    map_add' := map_add (map R R S S')
+    map_smul' := LinearMap.CompatibleSMul.map_smul (map R R S S') }
 -/
 def H1Cotangent.mapEquiv (e : S ≃ₐ[R] S') :
     H1Cotangent R S ≃ₗ[R] H1Cotangent R S' :=
@@ -1653,7 +1791,15 @@ instance [FinitePresentation
   have : Algebra.FiniteType R P.toExtension.Ring := by simp [P]; infer_instance
   suffices Module.Finite S P.toExtension.H1Cotangent from
     .of_surjective P.equivH1Cotangent.toLinearMap P.equivH1Cotangent.surjective
-  rw [Module.finite_de
+  rw [Module.finite_def]; rw [Submodule.fg_top]; rw [← LinearMap.ker_rangeRestrict]
+  have := Extension.Cotangent.finite P.fg_ker
+  have : Module.FinitePresentation S (LinearMap.range P.toExtension.cotangentComplex) := by
+    rw [← LinearMap.exact_iff.mp P.toExtension.exact_cotangentComplex_toKaehler]
+    exact Module.finitePresentation_of_projective_of_exact
+      _ _ (Subtype.val_injective) P.toExtension.toKaehler_surjective
+      (LinearMap.exact_subtype_ker_map _)
+  exact Module.FinitePresentation.fg_ker (N := LinearMap.range P.toExtension.cotangentComplex)
+    _ P.toExtension.cotangentComplex.surjective_rangeRestrict
 
 中文:
 实例 [有限呈现
@@ -1663,7 +1809,15 @@ instance [FinitePresentation
   have : Algebra.FiniteType R P.toExtension.Ring := by simp [P]; infer_instance
   suffices Module.Finite S P.toExtension.H1Cotangent from
     .of_surjective P.equivH1Cotangent.toLinearMap P.equivH1Cotangent.surjective
-  rw [Module.finite_de
+  rw [Module.finite_def]; rw [Submodule.fg_top]; rw [← LinearMap.ker_rangeRestrict]
+  have := Extension.Cotangent.finite P.fg_ker
+  have : Module.FinitePresentation S (LinearMap.range P.toExtension.cotangentComplex) := by
+    rw [← LinearMap.exact_iff.mp P.toExtension.exact_cotangentComplex_toKaehler]
+    exact Module.finitePresentation_of_projective_of_exact
+      _ _ (Subtype.val_injective) P.toExtension.toKaehler_surjective
+      (LinearMap.exact_subtype_ker_map _)
+  exact Module.FinitePresentation.fg_ker (N := LinearMap.range P.toExtension.cotangentComplex)
+    _ P.toExtension.cotangentComplex.surjective_rangeRestrict
 
 Depends on / 依赖: Algebra, Algebra.FiniteType, Algebra.Presentation.ofFinitePresentation, Cotangent, Extension, Extension.Cotangent.finite, Finite, FinitePresentation, FiniteType, H1Cotangent, LinearMap, LinearMap.ker_rangeRestrict, LinearMap.range, Module, Module.Finite, Module.FinitePresentation, Module.finite_def, P.equivH1Cotangent.surjective, P.equivH1Cotangent.toLinearMap, P.fg_ker
 -/

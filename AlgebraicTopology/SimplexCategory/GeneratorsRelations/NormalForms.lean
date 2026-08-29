@@ -160,7 +160,8 @@ theorem isAdmissible_iff_isChain_and_le
   | cons_cons _ _ _ _ IH =>
     simp_rw [isAdmissible_cons_cons_iff, IH, List.length_cons, and_assoc,
       List.isChain_cons_cons, and_assoc, and_congr_right_iff, and_comm]
-    exact fun _ _ =>
+    exact fun _ _ => ⟨fun h => by grind,
+      fun h => ⟨h 0 (by grind), fun k _ => (h (k + 1) (by grind)).trans (by grind)⟩⟩
 
 中文:
 定理 isAdmissible_iff_isChain_and_le
@@ -172,7 +173,8 @@ theorem isAdmissible_iff_isChain_and_le
   | cons_cons _ _ _ _ IH =>
     simp_rw [isAdmissible_cons_cons_iff, IH, List.length_cons, and_assoc,
       List.isChain_cons_cons, and_assoc, and_congr_right_iff, and_comm]
-    exact fun _ _ =>
+    exact fun _ _ => ⟨fun h => by grind,
+      fun h => ⟨h 0 (by grind), fun k _ => (h (k + 1) (by grind)).trans (by grind)⟩⟩
 
 Depends on / 依赖: List.isChain_cons_cons, List.length_cons, List.twoStepInduction, and_assoc, and_comm, and_congr_right_iff, cons_cons, generalizing, isAdmissible_cons_cons_iff, isChain_cons_cons, length_cons, simp_rw, singleton, twoStepInduction
 -/
@@ -587,7 +589,7 @@ lemma standardσ_comp_standardσ
     dsimp at h' ⊢
     obtain rfl : m₂ = (m₃ + t.length) + 1 := by grind
     simp [reassoc_of% (H L₁ (m₁ := m₁) (m₂ := m₃ + t.length + 1) (m₃ := m₃ + 1)
-      (by grind) (by grin
+      (by grind) (by grind))]
 
 中文:
 引理 standardσ_comp_standardσ
@@ -601,7 +603,7 @@ lemma standardσ_comp_standardσ
     dsimp at h' ⊢
     obtain rfl : m₂ = (m₃ + t.length) + 1 := by grind
     simp [reassoc_of% (H L₁ (m₁ := m₁) (m₂ := m₃ + t.length + 1) (m₃ := m₃ + 1)
-      (by grind) (by grin
+      (by grind) (by grind))]
 
 Depends on / 依赖: generalizing, length, reassoc_of, t.length
 -/
@@ -716,7 +718,19 @@ lemma simplicialEvalσ_of_isAdmissible
     subst hk
     set a₀ := hL.head
     have aux (t : Fin (m₂ + 2)) :
-        (a₀.predAbove t : Nat) = if a < ↑t then (t : N
+        (a₀.predAbove t : Nat) = if a < ↑t then (t : Nat) - 1 else ↑t := by
+      simp only [Fin.predAbove, a₀]
+      split_ifs with h₁ h₂ h₂
+      · rfl
+      · simp only [Fin.lt_def, Fin.val_castSucc, IsAdmissible.head_val] at h₁; grind
+      · simp only [Fin.lt_def, Fin.val_castSucc, IsAdmissible.head_val, not_lt] at h₁; grind
+      · rfl
+    have := h_rec _ _ hL.of_cons (by grind) hj
+    have ha₀ : Fin.ofNat (m₂ + 1) a = a₀ := by ext; simpa [a₀] using hL.head.prop
+    simpa only [toSimplexCategory_obj_mk, SimplexCategory.len_mk, standardσ_cons, Functor.map_comp,
+      toSimplexCategory_map_σ, SimplexCategory.σ, SimplexCategory.mkHom,
+      SimplexCategory.comp_toOrderHom, SimplexCategory.Hom.toOrderHom_mk, OrderHom.comp_coe,
+      Function.comp_apply, Fin.predAboveOrderHom_coe, simplicialEvalσ, ha₀, ← this] using aux _
 
 中文:
 引理 simplicialEvalσ_of_isAdmissible
@@ -730,7 +744,19 @@ lemma simplicialEvalσ_of_isAdmissible
     subst hk
     set a₀ := hL.head
     have aux (t : Fin (m₂ + 2)) :
-        (a₀.predAbove t : Nat) = if a < ↑t then (t : N
+        (a₀.predAbove t : Nat) = if a < ↑t then (t : Nat) - 1 else ↑t := by
+      simp only [Fin.predAbove, a₀]
+      split_ifs with h₁ h₂ h₂
+      · rfl
+      · simp only [Fin.lt_def, Fin.val_castSucc, IsAdmissible.head_val] at h₁; grind
+      · simp only [Fin.lt_def, Fin.val_castSucc, IsAdmissible.head_val, not_lt] at h₁; grind
+      · rfl
+    have := h_rec _ _ hL.of_cons (by grind) hj
+    have ha₀ : Fin.ofNat (m₂ + 1) a = a₀ := by ext; simpa [a₀] using hL.head.prop
+    simpa only [toSimplexCategory_obj_mk, SimplexCategory.len_mk, standardσ_cons, Functor.map_comp,
+      toSimplexCategory_map_σ, SimplexCategory.σ, SimplexCategory.mkHom,
+      SimplexCategory.comp_toOrderHom, SimplexCategory.Hom.toOrderHom_mk, OrderHom.comp_coe,
+      Function.comp_apply, Fin.predAboveOrderHom_coe, simplicialEvalσ, ha₀, ← this] using aux _
 
 Depends on / 依赖: Fin.lt_def, Fin.predAbove, Fin.val_castSucc, IsAdmissible, IsAdmissible.head_val, List.length_cons, generalizing, hL.head, h_rec, head_val, length_cons, lt_def, not_lt, predAbove, split_ifs, val_castSucc
 -/
@@ -776,7 +802,10 @@ lemma standardσ_simplicialInsert
     split_ifs
     · simp
     · have : forall (j k : Nat) (h : j < (k + 1)), Fin.ofNat (k + 1) j = j := by simp -- helps grind below
-      have : a < m + 2 := by
+      have : a < m + 2 := by grind -- helps grind below
+      have : σ (Fin.ofNat (m + 2) a) ≫ σ (.ofNat _ j) = σ (.ofNat _ (j + 1)) ≫ σ (.ofNat _ a) := by
+        convert! σ_comp_σ_nat (n := m) a j (by grind) (by grind) (by grind) <;> grind
+      grind [standardσ_cons]
 
 中文:
 引理 standardσ_simplicialInsert
@@ -789,7 +818,10 @@ lemma standardσ_simplicialInsert
     split_ifs
     · simp
     · have : forall (j k : Nat) (h : j < (k + 1)), Fin.ofNat (k + 1) j = j := by simp -- helps grind below
-      have : a < m + 2 := by
+      have : a < m + 2 := by grind -- helps grind below
+      have : σ (Fin.ofNat (m + 2) a) ≫ σ (.ofNat _ j) = σ (.ofNat _ (j + 1)) ≫ σ (.ofNat _ a) := by
+        convert! σ_comp_σ_nat (n := m) a j (by grind) (by grind) (by grind) <;> grind
+      grind [standardσ_cons]
 
 Depends on / 依赖: simplicialInsert
 -/
@@ -828,7 +860,15 @@ theorem exists_normal_form_P_σ
     use [k.val], m, 1, rfl, rfl, rfl, IsAdmissible.singleton k.is_le
     simp [standardσ]
   | @comp_of _ j x' g g' hg hg' h_rec =>
-    cases hg' with | @σ m
+    cases hg' with | @σ m k =>
+    obtain ⟨L₁, m₁, b₁, h₁', rfl, h', hL₁, e₁⟩ := h_rec
+    obtain rfl : m₁ = m + 1 := congrArg (fun x => x.len) h₁'
+    use simplicialInsert k.val L₁, m, b₁ + 1, rfl, by grind, by grind, by grind
+    subst_vars
+    have := standardσ (m₁ := m + 1 + L₁.length) [] (by grind) ≫=
+      (standardσ_simplicialInsert L₁ hL₁ k k.prop _ rfl).symm
+    simp_all [Fin.ofNat_eq_cast, Fin.cast_val_eq_self, standardσ_comp_standardσ_assoc,
+      standardσ_comp_standardσ]
 
 中文:
 定理 存在_normal_form_P_σ
@@ -843,7 +883,15 @@ theorem exists_normal_form_P_σ
     use [k.val], m, 1, rfl, rfl, rfl, IsAdmissible.singleton k.is_le
     simp [standardσ]
   | @comp_of _ j x' g g' hg hg' h_rec =>
-    cases hg' with | @σ m
+    cases hg' with | @σ m k =>
+    obtain ⟨L₁, m₁, b₁, h₁', rfl, h', hL₁, e₁⟩ := h_rec
+    obtain rfl : m₁ = m + 1 := congrArg (fun x => x.len) h₁'
+    use simplicialInsert k.val L₁, m, b₁ + 1, rfl, by grind, by grind, by grind
+    subst_vars
+    have := standardσ (m₁ := m + 1 + L₁.length) [] (by grind) ≫=
+      (standardσ_simplicialInsert L₁ hL₁ k k.prop _ rfl).symm
+    simp_all [Fin.ofNat_eq_cast, Fin.cast_val_eq_self, standardσ_comp_standardσ_assoc,
+      standardσ_comp_standardσ]
 
 Depends on / 依赖: IsAdmissible, IsAdmissible.nil, IsAdmissible.singleton, comp_of, h_rec, is_le, k.is_le, k.val, n.len, simplicialInsert, singleton, x.len
 -/

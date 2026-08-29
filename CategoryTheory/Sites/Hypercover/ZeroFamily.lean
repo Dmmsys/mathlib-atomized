@@ -271,7 +271,9 @@ lemma Precoverage.IsStableUnderBaseChange.of_preZeroHypercoverFamily_of_isClosed
     let e : F ≅ E.pullback₁ g :=
       PreZeroHypercover.isoMk (Equiv.refl _) (fun i => (h i).isoPullback)
     change F.presieve₀ in _
-    rw
+    rw [F.presieve₀_mem_precoverage_iff]; rw [(P (X := Y)).prop_iff_of_iso e]
+    refine h₂ _ _ ?_
+    rwa [← E.presieve₀_mem_precoverage_iff]
 
 中文:
 引理 Precoverage.是StableUnderBaseChange.of_preZeroHypercoverFamily_of_isClosedUnderIsomorphisms
@@ -282,7 +284,9 @@ lemma Precoverage.IsStableUnderBaseChange.of_preZeroHypercoverFamily_of_isClosed
     let e : F ≅ E.pullback₁ g :=
       PreZeroHypercover.isoMk (Equiv.refl _) (fun i => (h i).isoPullback)
     change F.presieve₀ in _
-    rw
+    rw [F.presieve₀_mem_precoverage_iff]; rw [(P (X := Y)).prop_iff_of_iso e]
+    refine h₂ _ _ ?_
+    rwa [← E.presieve₀_mem_precoverage_iff]
 
 Depends on / 依赖: IsClosedUnderIsomorphisms
 -/

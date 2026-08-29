@@ -48,7 +48,8 @@ definition cokernelCocone
       f.hom.1.range.normedMk (NormedAddGroupHom.isQuotientQuotient _).norm_le)
     (by
       ext x
-      rw [Limits.zero_comp]; rw [comp_apply]; rw [SemiNormedGrp₁.mkHom_apply]; rw [SemiNormedGrp₁.zero_apply]; rw [← Normed
+      rw [Limits.zero_comp]; rw [comp_apply]; rw [SemiNormedGrp₁.mkHom_apply]; rw [SemiNormedGrp₁.zero_apply]; rw [← NormedAddGroupHom.mem_ker]; rw [f.hom.1.range.ker_normedMk]; rw [f.hom.1.mem_range]
+      use x)
 
 中文:
 定义 cokernelCocone
@@ -58,7 +59,8 @@ definition cokernelCocone
       f.hom.1.range.normedMk (NormedAddGroupHom.isQuotientQuotient _).norm_le)
     (by
       ext x
-      rw [Limits.zero_comp]; rw [comp_apply]; rw [SemiNormedGrp₁.mkHom_apply]; rw [SemiNormedGrp₁.zero_apply]; rw [← Normed
+      rw [Limits.zero_comp]; rw [comp_apply]; rw [SemiNormedGrp₁.mkHom_apply]; rw [SemiNormedGrp₁.zero_apply]; rw [← NormedAddGroupHom.mem_ker]; rw [f.hom.1.range.ker_normedMk]; rw [f.hom.1.mem_range]
+      use x)
 
 Depends on / 依赖: Cofork, Cofork.of, Limits, Limits.zero_comp, NormedAddGroupHom, NormedAddGroupHom.isQuotientQuotient, NormedAddGroupHom.mem_ker, NormedAddGroupHom.range, comp_apply, f.hom, isQuotientQuotient, ker_normedMk, mem_ker, mem_range, mkHom_apply, norm_le, normedMk, range.ker_normedMk, range.normedMk, zero_apply
 -/
@@ -131,7 +133,10 @@ instance :
               rintro _ ⟨b, rfl⟩
               change (f ≫ s.π) b = 0
               simp)
-
+            fun _ _ w =>
+SemiNormedGrp₁.hom_ext Subtype.ext
+              (NormedAddGroupHom.lift_unique f.1.range _ _ _
+                (congr_arg Subtype.val (congr_arg Hom.hom w))) }
 
 中文:
 实例 :
@@ -146,7 +151,10 @@ instance :
               rintro _ ⟨b, rfl⟩
               change (f ≫ s.π) b = 0
               simp)
-
+            fun _ _ w =>
+SemiNormedGrp₁.hom_ext Subtype.ext
+              (NormedAddGroupHom.lift_unique f.1.range _ _ _
+                (congr_arg Subtype.val (congr_arg Hom.hom w))) }
 
 Depends on / 依赖: HasColimit, HasColimit.mk, Hom.hom, NormedAddGroupHom, NormedAddGroupHom.lift_mk, NormedAddGroupHom.lift_unique, Subtype, Subtype.ext, Subtype.val, cocone, cokernelCocone, cokernelLift, congr_arg, hom_ext, isColimit, isColimitAux, lift_mk, lift_unique
 -/
@@ -225,7 +233,12 @@ instance hasLimit_parallelPair
           have := fun (c : Fork f g) =>
             show NormedAddGroupHom.compHom (f - g).hom c.ι.hom = 0 by
               rw [hom_sub]; rw [map_sub]; rw [AddMonoidHom.sub_apply]; rw [sub_eq_zero]
-              exact congr_arg Hom.hom c.con
+              exact congr_arg Hom.hom c.condition
+          Fork.IsLimit.mk _
+            (fun c => ofHom <|
+NormedAddGroupHom.ker.lift (Fork.ι c).hom _ this c)
+            (fun _ => SemiNormedGrp.hom_ext <| NormedAddGroupHom.ker.incl_comp_lift _ _ (this _))
+            fun c g h => by ext x; dsimp; simp_rw [← h]; rfl }
 
 中文:
 实例 hasLimit_parallelPair
@@ -236,7 +249,12 @@ instance hasLimit_parallelPair
           have := fun (c : Fork f g) =>
             show NormedAddGroupHom.compHom (f - g).hom c.ι.hom = 0 by
               rw [hom_sub]; rw [map_sub]; rw [AddMonoidHom.sub_apply]; rw [sub_eq_zero]
-              exact congr_arg Hom.hom c.con
+              exact congr_arg Hom.hom c.condition
+          Fork.IsLimit.mk _
+            (fun c => ofHom <|
+NormedAddGroupHom.ker.lift (Fork.ι c).hom _ this c)
+            (fun _ => SemiNormedGrp.hom_ext <| NormedAddGroupHom.ker.incl_comp_lift _ _ (this _))
+            fun c g h => by ext x; dsimp; simp_rw [← h]; rfl }
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.sub_apply, Fork.IsLimit.mk, Hom.hom, IsLimit, Nonempty, Nonempty.intro, NormedAddGroupHom, NormedAddGroupHom.compHom, NormedAddGroupHom.ker.incl_comp_lift, NormedAddGroupHom.ker.lift, SemiNormedGrp, SemiNormedGrp.hom_ext, c.condition, compHom, condition, congr_arg, hom_ext, hom_sub, incl_comp_lift
 -/

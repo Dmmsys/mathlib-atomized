@@ -2948,7 +2948,8 @@ theorem le_minDegree_induce_of_support_subset
   · simp [minDegree_eq_zero_iff_support_ne, Set.subset_empty_iff.mp h, Set.empty_ne_univ]
   have := hs.to_subtype
   refine le_minDegree_of_forall_le_degree _ _ fun v => ?_
-  grw [G.minDegree_le_degree v, degree
+  grw [G.minDegree_le_degree v, degree_induce_of_neighborSet_subset]
+  grw [neighborSet_subset_support, h]
 
 中文:
 定理 le_minDegree_induce_of_support_subset
@@ -2960,7 +2961,8 @@ theorem le_minDegree_induce_of_support_subset
   · simp [minDegree_eq_zero_iff_support_ne, Set.subset_empty_iff.mp h, Set.empty_ne_univ]
   have := hs.to_subtype
   refine le_minDegree_of_forall_le_degree _ _ fun v => ?_
-  grw [G.minDegree_le_degree v, degree
+  grw [G.minDegree_le_degree v, degree_induce_of_neighborSet_subset]
+  grw [neighborSet_subset_support, h]
 
 Depends on / 依赖: G.minDegree_le_degree, Set.empty_ne_univ, Set.subset_empty_iff.mp, degree_induce_of_neighborSet_subset, empty_ne_univ, eq_empty_or_nonempty, hs.to_subtype, isEmpty_or_nonempty, le_minDegree_of_forall_le_degree, minDegree_eq_zero_iff_support_ne, minDegree_le_degree, neighborSet_subset_support, s.eq_empty_or_nonempty, subset_empty_iff, to_subtype
 -/

@@ -580,7 +580,8 @@ nonrec theorem zero_mul {α : Type} [MulZeroClass α] (x : Holor α ds₂) : (0 
   funext fun t => zero_mul (x (HolorIndex.drop t))
 
 @[simp]
-nonrec theorem mul_zero {α : Type} [MulZeroClass α] (x : Holor α ds₁
+nonrec theorem mul_zero {α : Type} [MulZeroClass α] (x : Holor α ds₁) : x otimes (0 : Holor α ds₂) = 0 :=
+  funext fun t => mul_zero (x (HolorIndex.take t))
 
 中文:
 定理 mul_right_distrib
@@ -592,7 +593,8 @@ nonrec theorem zero_mul {α : Type} [MulZeroClass α] (x : Holor α ds₂) : (0 
   funext fun t => zero_mul (x (HolorIndex.drop t))
 
 @[simp]
-nonrec theorem mul_zero {α : Type} [MulZeroClass α] (x : Holor α ds₁
+nonrec theorem mul_zero {α : Type} [MulZeroClass α] (x : Holor α ds₁) : x otimes (0 : Holor α ds₂) = 0 :=
+  funext fun t => mul_zero (x (HolorIndex.take t))
 
 Depends on / 依赖: add_mul, t.drop, t.take
 -/
@@ -699,7 +701,11 @@ theorem slice_eq
     holor_index_cons_decomp (fun t => x t = y t) t fun i is hiis =>
       have hiisdds : Forall₂ (· < ·) (i :: is) (d :: ds) := by rw [← hiis]; exact t.2
       have hid : i < d := (forall₂_cons.1 hiisdds).1
-      have hisds : Forall₂ (· < ·) is ds := (forall₂_c
+      have hisds : Forall₂ (· < ·) is ds := (forall₂_cons.1 hiisdds).2
+      calc
+        x ⟨i :: is, _⟩ = slice x i hid ⟨is, hisds⟩ := congr_arg x (Subtype.ext rfl)
+        _ = slice y i hid ⟨is, hisds⟩ := by rw [h]
+        _ = y ⟨i :: is, _⟩ := congr_arg y (Subtype.ext rfl)
 
 中文:
 定理 slice_eq
@@ -709,7 +715,11 @@ theorem slice_eq
     holor_index_cons_decomp (fun t => x t = y t) t fun i is hiis =>
       have hiisdds : Forall₂ (· < ·) (i :: is) (d :: ds) := by rw [← hiis]; exact t.2
       have hid : i < d := (forall₂_cons.1 hiisdds).1
-      have hisds : Forall₂ (· < ·) is ds := (forall₂_c
+      have hisds : Forall₂ (· < ·) is ds := (forall₂_cons.1 hiisdds).2
+      calc
+        x ⟨i :: is, _⟩ = slice x i hid ⟨is, hisds⟩ := congr_arg x (Subtype.ext rfl)
+        _ = slice y i hid ⟨is, hisds⟩ := by rw [h]
+        _ = y ⟨i :: is, _⟩ := congr_arg y (Subtype.ext rfl)
 
 Depends on / 依赖: HolorIndex, Subtype, Subtype.ext, congr_arg, hiisdds, holor_index_cons_decomp, nonempty_subtype
 -/
@@ -838,7 +848,11 @@ theorem sum_unitVec_mul_slice
   rw [Finset.sum_eq_single (Subtype.mk i <| Finset.mem_range.2 hid)]
   · simp
   · intro (b : { x // x in Finset.range d }) (_ : b in (Finset.range d).attach) (hbi : b != ⟨i, _⟩)
-    have hbi' : i != b := by 
+    have hbi' : i != b := by simpa only [Ne, Subtype.ext_iff, Subtype.coe_mk] using hbi.symm
+    simp [hbi']
+  · intro (hid' : Subtype.mk i _ ∉ Finset.attach (Finset.range d))
+    exfalso
+    exact absurd (Finset.mem_attach _ _) hid'
 
 中文:
 定理 sum_unitVec_mul_slice
@@ -851,7 +865,11 @@ theorem sum_unitVec_mul_slice
   rw [Finset.sum_eq_single (Subtype.mk i <| Finset.mem_range.2 hid)]
   · simp
   · intro (b : { x // x in Finset.range d }) (_ : b in (Finset.range d).attach) (hbi : b != ⟨i, _⟩)
-    have hbi' : i != b := by 
+    have hbi' : i != b := by simpa only [Ne, Subtype.ext_iff, Subtype.coe_mk] using hbi.symm
+    simp [hbi']
+  · intro (hid' : Subtype.mk i _ ∉ Finset.attach (Finset.range d))
+    exfalso
+    exact absurd (Finset.mem_attach _ _) hid'
 
 Depends on / 依赖: Finset, Finset.attach, Finset.mem_attach, Finset.mem_range, Finset.range, Finset.sum_eq_single, Subtype, Subtype.coe_mk, Subtype.ext_iff, Subtype.mk, absurd, attach, coe_mk, ext_iff, hbi.symm, mem_attach, mem_range, slice_eq, slice_sum, slice_unitVec_mul
 -/
@@ -1025,7 +1043,8 @@ theorem cprankMax_sum
       simp only [Finset.sum_insert h_x_notin_s, Finset.card_insert_of_notMem h_x_notin_s]
       rw [Nat.right_distrib]
       simp only [Nat.one_mul, Nat.add_comm]
-  
+      have ih' : CPRankMax (Finset.card s * n) (∑ x in s, f x) := by grind
+      exact cprankMax_add (h_cprank x (Finset.mem_insert_self x s)) ih')
 
 中文:
 定理 cprankMax_sum
@@ -1037,7 +1056,8 @@ theorem cprankMax_sum
       simp only [Finset.sum_insert h_x_notin_s, Finset.card_insert_of_notMem h_x_notin_s]
       rw [Nat.right_distrib]
       simp only [Nat.one_mul, Nat.add_comm]
-  
+      have ih' : CPRankMax (Finset.card s * n) (∑ x in s, f x) := by grind
+      exact cprankMax_add (h_cprank x (Finset.mem_insert_self x s)) ih')
 
 Depends on / 依赖: CPRankMax, CPRankMax.zero, Classical, Classical.decEq, Finset, Finset.card, Finset.card_insert_of_notMem, Finset.induction_on, Finset.mem_insert_self, Finset.sum_insert, Nat.add_comm, Nat.one_mul, Nat.right_distrib, add_comm, card_insert_of_notMem, cprankMax_add, h_cprank, h_x_notin_s, induction_on, mem_insert_self
 -/
@@ -1065,7 +1085,16 @@ theorem cprankMax_upper_bound
       simp [Finset.card_range]
     have :
       CPRankMax (Finset.card (Finset.attach (Finset.range d)) * prod ds)
-        (
+        (∑ i in Finset.attach (Finset.range d),
+          unitVec d i.val otimes slice x i.val (mem_range.1 i.2)) :=
+      cprankMax_sum (Finset.range d).attach _ fun i _ => h_summands i
+    have h_cprankMax_sum :
+      CPRankMax (Finset.card (Finset.range d) * prod ds)
+        (∑ i in Finset.attach (Finset.range d),
+          unitVec d i.val otimes slice x i.val (mem_range.1 i.2)) := by rwa [Finset.card_attach] at this
+    rw [← sum_unitVec_mul_slice x]
+    rw [h_dds_prod]
+    exact h_cprankMax_sum
 
 中文:
 定理 cprankMax_upper_bound
@@ -1076,7 +1105,16 @@ theorem cprankMax_upper_bound
       simp [Finset.card_range]
     have :
       CPRankMax (Finset.card (Finset.attach (Finset.range d)) * prod ds)
-        (
+        (∑ i in Finset.attach (Finset.range d),
+          unitVec d i.val otimes slice x i.val (mem_range.1 i.2)) :=
+      cprankMax_sum (Finset.range d).attach _ fun i _ => h_summands i
+    have h_cprankMax_sum :
+      CPRankMax (Finset.card (Finset.range d) * prod ds)
+        (∑ i in Finset.attach (Finset.range d),
+          unitVec d i.val otimes slice x i.val (mem_range.1 i.2)) := by rwa [Finset.card_attach] at this
+    rw [← sum_unitVec_mul_slice x]
+    rw [h_dds_prod]
+    exact h_cprankMax_sum
 
 Depends on / 依赖: CPRankMax, Finset, Finset.attach, Finset.card, Finset.card_range, Finset.range, List.cons, attach, card_range, cprankMax_mul, cprankMax_sum, cprankMax_upper_bound, h_cprankMax_sum, h_dds_prod, h_summands, i.val, mem_range, otimes, unitVec
 -/

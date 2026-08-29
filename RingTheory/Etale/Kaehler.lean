@@ -47,7 +47,7 @@ definition KaehlerDifferential.tensorKaehlerEquivOfFormallyEtale
   rw [injective_iff_map_eq_zero]
   intro x hx
   obtain ⟨x, rfl⟩ := (Algebra.H1Cotangent.exact_δ_mapBaseChange R S T x).mp hx
-  rw [Subsingleto
+  rw [Subsingleton.elim x 0]; rw [map_zero]
 
 中文:
 定义 KaehlerDifferential.tensorKaehlerEquivOfFormallyEtale
@@ -58,7 +58,7 @@ definition KaehlerDifferential.tensorKaehlerEquivOfFormallyEtale
   rw [injective_iff_map_eq_zero]
   intro x hx
   obtain ⟨x, rfl⟩ := (Algebra.H1Cotangent.exact_δ_mapBaseChange R S T x).mp hx
-  rw [Subsingleto
+  rw [Subsingleton.elim x 0]; rw [map_zero]
 
 Depends on / 依赖: Algebra, Algebra.H1Cotangent.exact_, H1Cotangent, KaehlerDifferential, KaehlerDifferential.exact_mapBaseChange_map, LinearEquiv, LinearEquiv.ofBijective, Subsingleton, Subsingleton.elim, exact_mapBaseChange_map, injective_iff_map_eq_zero, mapBaseChange, map_zero, ofBijective
 -/
@@ -212,7 +212,41 @@ definition tensorCotangentSpaceOfFormallyEtale
     .of_algebraMap_eq fun r => (f.toRingHom_algebraMap r).symm
   letI := ((algebraMap S T).comp (algebraMap P.Ring S)).toAlgebra
   haveI : IsScalarTower P.Ring S T := .of_algebraMap_eq' rfl
-  haveI : IsScalarTower P.Ring Q.Ring
+  haveI : IsScalarTower P.Ring Q.Ring T :=
+    .of_algebraMap_eq fun r => (f.algebraMap_toRingHom r).symm
+  haveI : FormallyEtale P.Ring Q.Ring := ‹_›
+  { __ := (CotangentSpace.map f).liftBaseChange T
+    invFun := LinearMap.liftBaseChange T (by
+      refine LinearMap.liftBaseChange _ ?_ ∘ₗ
+        (tensorKaehlerEquivOfFormallyEtale R P.Ring Q.Ring).symm.toLinearMap
+      exact (TensorProduct.mk _ _ _ 1).restrictScalars P.Ring ∘ₗ
+        (TensorProduct.mk _ _ _ 1).restrictScalars P.Ring)
+    left_inv x := by
+      change (LinearMap.liftBaseChange _ _ ∘ₗ LinearMap.liftBaseChange _ _) x =
+        LinearMap.id (R := T) x
+      congr 1
+      ext : 4
+      refine Derivation.liftKaehlerDifferential_unique
+        (R := R) (S := P.Ring) (M := T otimes[S] P.CotangentSpace) _ _ ?_
+      ext a
+      have : (tensorKaehlerEquivOfFormallyEtale R P.Ring Q.Ring).symm
+          ((D R Q.Ring) (f.toRingHom a)) = 1 otimesₜ D _ _ a :=
+        tensorKaehlerEquivOfFormallyEtale_symm_D_algebraMap R P.Ring Q.Ring a
+      simp [this]
+    right_inv x := by
+      change (LinearMap.liftBaseChange _ _ ∘ₗ LinearMap.liftBaseChange _ _) x =
+        LinearMap.id (R := T) x
+      congr 1
+      ext a
+      dsimp
+      obtain ⟨x, hx⟩ := (tensorKaehlerEquivOfFormallyEtale R P.Ring _).surjective (D R Q.Ring a)
+      simp only [one_smul, ← hx, LinearEquiv.symm_apply_apply]
+      change (((CotangentSpace.map f).liftBaseChange T).restrictScalars Q.Ring ∘ₗ
+        LinearMap.liftBaseChange _ _) x = ((TensorProduct.mk _ _ _ 1) ∘ₗ
+          (tensorKaehlerEquivOfFormallyEtale R P.Ring Q.Ring).toLinearMap) x
+      congr 1
+      ext a
+      simp; rfl }
 
 中文:
 定义 tensorCotangentSpaceOfFormallyEtale
@@ -221,7 +255,41 @@ definition tensorCotangentSpaceOfFormallyEtale
     .of_algebraMap_eq fun r => (f.toRingHom_algebraMap r).symm
   letI := ((algebraMap S T).comp (algebraMap P.Ring S)).toAlgebra
   haveI : IsScalarTower P.Ring S T := .of_algebraMap_eq' rfl
-  haveI : IsScalarTower P.Ring Q.Ring
+  haveI : IsScalarTower P.Ring Q.Ring T :=
+    .of_algebraMap_eq fun r => (f.algebraMap_toRingHom r).symm
+  haveI : FormallyEtale P.Ring Q.Ring := ‹_›
+  { __ := (CotangentSpace.map f).liftBaseChange T
+    invFun := LinearMap.liftBaseChange T (by
+      refine LinearMap.liftBaseChange _ ?_ ∘ₗ
+        (tensorKaehlerEquivOfFormallyEtale R P.Ring Q.Ring).symm.toLinearMap
+      exact (TensorProduct.mk _ _ _ 1).restrictScalars P.Ring ∘ₗ
+        (TensorProduct.mk _ _ _ 1).restrictScalars P.Ring)
+    left_inv x := by
+      change (LinearMap.liftBaseChange _ _ ∘ₗ LinearMap.liftBaseChange _ _) x =
+        LinearMap.id (R := T) x
+      congr 1
+      ext : 4
+      refine Derivation.liftKaehlerDifferential_unique
+        (R := R) (S := P.Ring) (M := T otimes[S] P.CotangentSpace) _ _ ?_
+      ext a
+      have : (tensorKaehlerEquivOfFormallyEtale R P.Ring Q.Ring).symm
+          ((D R Q.Ring) (f.toRingHom a)) = 1 otimesₜ D _ _ a :=
+        tensorKaehlerEquivOfFormallyEtale_symm_D_algebraMap R P.Ring Q.Ring a
+      simp [this]
+    right_inv x := by
+      change (LinearMap.liftBaseChange _ _ ∘ₗ LinearMap.liftBaseChange _ _) x =
+        LinearMap.id (R := T) x
+      congr 1
+      ext a
+      dsimp
+      obtain ⟨x, hx⟩ := (tensorKaehlerEquivOfFormallyEtale R P.Ring _).surjective (D R Q.Ring a)
+      simp only [one_smul, ← hx, LinearEquiv.symm_apply_apply]
+      change (((CotangentSpace.map f).liftBaseChange T).restrictScalars Q.Ring ∘ₗ
+        LinearMap.liftBaseChange _ _) x = ((TensorProduct.mk _ _ _ 1) ∘ₗ
+          (tensorKaehlerEquivOfFormallyEtale R P.Ring Q.Ring).toLinearMap) x
+      congr 1
+      ext a
+      simp; rfl }
 
 Depends on / 依赖: CotangentSpace, CotangentSpace.map, FormallyEtale, IsScalarTower, LinearMa, LinearMap, LinearMap.liftBaseChange, P.Ring, Q.Ring, algebraMap, algebraMap_toRingHom, f.algebraMap_toRingHom, f.toRingHom.toAlgebra, f.toRingHom_algebraMap, invFun, liftBaseChange, of_algebraMap_eq, toAlgebra, toRingHom, toRingHom_algebraMap
 -/
@@ -283,7 +351,37 @@ definition tensorCotangentInvFun
   haveI : IsScalarTower P.Ring Q.Ring T :=
     .of_algebraMap_eq fun r => halg ▸ (f.algebraMap_toRingHom r).symm
   letI e := LinearEquiv.ofBijective _ H
-  letI f' : Q.ker ->ₗ[
+  letI f' : Q.ker ->ₗ[Q.Ring] T otimes[S] P.Cotangent :=
+    (LinearMap.liftBaseChange _
+      ((TensorProduct.mk _ _ _ 1).restrictScalars _ ∘ₗ Cotangent.mk)) ∘ₗ e.symm.toLinearMap
+QuotientAddGroup.lift _ f' by
+    intro x hx
+    refine Submodule.smul_induction_on hx ?_ fun _ _ => add_mem
+    clear x hx
+    rintro a ha b -
+    obtain ⟨x, hx⟩ := e.surjective ⟨a, ha⟩
+    obtain rfl : (e x).1 = a := congr_arg Subtype.val hx
+    obtain ⟨y, rfl⟩ := e.surjective b
+    simp only [AddMonoidHom.mem_ker, AddMonoidHom.coe_coe, map_smul,
+      LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
+      LinearEquiv.symm_apply_apply, f']
+    clear hx ha
+    induction x with
+    | zero => simp only [map_zero, ZeroMemClass.coe_zero, zero_smul]
+    | add x y _ _ =>
+      simp only [map_add, Submodule.coe_add, add_smul, zero_add, *]
+    | tmul a b =>
+      induction y with
+      | zero => simp only [map_zero, smul_zero]
+      | add x y hx hy => simp only [LinearMap.map_add, smul_add, hx, hy, zero_add]
+      | tmul c d =>
+        simp only [LinearMap.liftBaseChange_tmul, LinearMap.coe_comp, SetLike.val_smul,
+          LinearMap.coe_restrictScalars, Function.comp_apply, mk_apply, smul_eq_mul, e,
+          LinearMap.liftBaseChange_tmul, LinearEquiv.ofBijective_apply]
+        have h₂ : b.1 • Cotangent.mk d = 0 := by ext; simp [Cotangent.smul_eq_zero_of_mem _ b.2]
+        rw [TensorProduct.smul_tmul']; rw [mul_smul]; rw [f.mapKer_apply_coe]; rw [← halg]; rw [algebraMap_smul]; rw [← TensorProduct.tmul_smul]; rw [h₂]; rw [tmul_zero]; rw [smul_zero]
+
+omit [IsScalarTower R S T] in
 
 中文:
 定义 tensorCotangentInvFun
@@ -292,7 +390,37 @@ definition tensorCotangentInvFun
   haveI : IsScalarTower P.Ring Q.Ring T :=
     .of_algebraMap_eq fun r => halg ▸ (f.algebraMap_toRingHom r).symm
   letI e := LinearEquiv.ofBijective _ H
-  letI f' : Q.ker ->ₗ[
+  letI f' : Q.ker ->ₗ[Q.Ring] T otimes[S] P.Cotangent :=
+    (LinearMap.liftBaseChange _
+      ((TensorProduct.mk _ _ _ 1).restrictScalars _ ∘ₗ Cotangent.mk)) ∘ₗ e.symm.toLinearMap
+QuotientAddGroup.lift _ f' by
+    intro x hx
+    refine Submodule.smul_induction_on hx ?_ fun _ _ => add_mem
+    clear x hx
+    rintro a ha b -
+    obtain ⟨x, hx⟩ := e.surjective ⟨a, ha⟩
+    obtain rfl : (e x).1 = a := congr_arg Subtype.val hx
+    obtain ⟨y, rfl⟩ := e.surjective b
+    simp only [AddMonoidHom.mem_ker, AddMonoidHom.coe_coe, map_smul,
+      LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
+      LinearEquiv.symm_apply_apply, f']
+    clear hx ha
+    induction x with
+    | zero => simp only [map_zero, ZeroMemClass.coe_zero, zero_smul]
+    | add x y _ _ =>
+      simp only [map_add, Submodule.coe_add, add_smul, zero_add, *]
+    | tmul a b =>
+      induction y with
+      | zero => simp only [map_zero, smul_zero]
+      | add x y hx hy => simp only [LinearMap.map_add, smul_add, hx, hy, zero_add]
+      | tmul c d =>
+        simp only [LinearMap.liftBaseChange_tmul, LinearMap.coe_comp, SetLike.val_smul,
+          LinearMap.coe_restrictScalars, Function.comp_apply, mk_apply, smul_eq_mul, e,
+          LinearMap.liftBaseChange_tmul, LinearEquiv.ofBijective_apply]
+        have h₂ : b.1 • Cotangent.mk d = 0 := by ext; simp [Cotangent.smul_eq_zero_of_mem _ b.2]
+        rw [TensorProduct.smul_tmul']; rw [mul_smul]; rw [f.mapKer_apply_coe]; rw [← halg]; rw [algebraMap_smul]; rw [← TensorProduct.tmul_smul]; rw [h₂]; rw [tmul_zero]; rw [smul_zero]
+
+omit [IsScalarTower R S T] in
 
 Depends on / 依赖: Cotangent, Cotangent.mk, IsScalarTower, LinearEquiv, LinearEquiv.ofBijective, LinearMap, LinearMap.liftBaseChange, P.Cotangent, P.Ring, Q.Ring, Q.ker, QuotientAddGroup, QuotientAddGroup.lift, Submodule, Submodule.smul_, TensorProduct, TensorProduct.mk, algebraMap, algebraMap_toRingHom, e.symm.toLinearMap
 -/
@@ -347,7 +475,12 @@ lemma tensorCotangentInvFun_smul_mk
   have : IsScalarTower P.Ring Q.Ring T :=
     .of_algebraMap_eq fun r => halg ▸ (f.algebraMap_toRingHom r).symm
   let e := LinearEquiv.ofBijective _ H
-  trans tensorCotange
+  trans tensorCotangentInvFun f halg H (.mk ((f.mapKer halg).liftBaseChange Q.Ring (x otimesₜ y)))
+  · simp; rfl
+  change ((TensorProduct.mk _ _ _ 1).restrictScalars _ ∘ₗ Cotangent.mk).liftBaseChange _
+    (e.symm (e (x otimesₜ y))) = _
+  rw [e.symm_apply_apply]
+  simp
 
 中文:
 引理 tensorCotangentInvFun_smul_mk
@@ -357,7 +490,12 @@ lemma tensorCotangentInvFun_smul_mk
   have : IsScalarTower P.Ring Q.Ring T :=
     .of_algebraMap_eq fun r => halg ▸ (f.algebraMap_toRingHom r).symm
   let e := LinearEquiv.ofBijective _ H
-  trans tensorCotange
+  trans tensorCotangentInvFun f halg H (.mk ((f.mapKer halg).liftBaseChange Q.Ring (x otimesₜ y)))
+  · simp; rfl
+  change ((TensorProduct.mk _ _ _ 1).restrictScalars _ ∘ₗ Cotangent.mk).liftBaseChange _
+    (e.symm (e (x otimesₜ y))) = _
+  rw [e.symm_apply_apply]
+  simp
 
 Depends on / 依赖: Cotangent, Cotangent.mk, IsScalarTower, LinearEquiv, LinearEquiv.ofBijective, P.Ring, Q.Ring, TensorProduct, TensorProduct.mk, algebraMap, algebraMap_toRingHom, e.symm, f.algebraMap_toRingHom, f.mapKer, liftBaseChange, mapKer, ofBijective, of_algebraMap_eq, restrictScalars, tensorCotangentInvFun
 -/
@@ -394,7 +532,22 @@ definition tensorCotangent
       | zero => simp only [map_zero]
       | add x y _ _ => simp only [map_add, *]
       | tmul a b =>
-   
+        obtain ⟨b, rfl⟩ := Cotangent.mk_surjective b
+        obtain ⟨a, rfl⟩ := Q.algebraMap_surjective a
+        simp only [LinearMap.liftBaseChange_tmul, Cotangent.map_mk, Hom.toAlgHom_apply,
+          algebraMap_smul]
+        refine (tensorCotangentInvFun_smul_mk f halg H a b).trans ?_
+        simp [algebraMap_eq_smul_one, TensorProduct.smul_tmul']
+    right_inv x := by
+      obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
+      obtain ⟨x, rfl⟩ := H.surjective x
+      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom]
+      induction x with
+      | zero => simp only [map_zero]
+      | add x y _ _ => simp only [map_add, *]
+      | tmul a b =>
+        simp only [LinearMap.liftBaseChange_tmul, map_smul]
+        simp [Hom.mapKer, tensorCotangentInvFun_smul_mk] }
 
 中文:
 定义 tensorCotangent
@@ -407,7 +560,22 @@ definition tensorCotangent
       | zero => simp only [map_zero]
       | add x y _ _ => simp only [map_add, *]
       | tmul a b =>
-   
+        obtain ⟨b, rfl⟩ := Cotangent.mk_surjective b
+        obtain ⟨a, rfl⟩ := Q.algebraMap_surjective a
+        simp only [LinearMap.liftBaseChange_tmul, Cotangent.map_mk, Hom.toAlgHom_apply,
+          algebraMap_smul]
+        refine (tensorCotangentInvFun_smul_mk f halg H a b).trans ?_
+        simp [algebraMap_eq_smul_one, TensorProduct.smul_tmul']
+    right_inv x := by
+      obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
+      obtain ⟨x, rfl⟩ := H.surjective x
+      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom]
+      induction x with
+      | zero => simp only [map_zero]
+      | add x y _ _ => simp only [map_add, *]
+      | tmul a b =>
+        simp only [LinearMap.liftBaseChange_tmul, map_smul]
+        simp [Hom.mapKer, tensorCotangentInvFun_smul_mk] }
 
 Depends on / 依赖: AddHom, AddHom.toFun_eq_coe, Cotangent, Cotangent.map, Cotangent.map_mk, Cotangent.mk_surjective, Hom.toAlgHom_apply, LinearMap, LinearMap.coe_toAddHom, LinearMap.liftBaseChange_tmul, MyFunLike, MyFunLike.toFun, Q.algebraMap_surjective, algebraMap_smul, algebraMap_surjective, coe_toAddHom, invFun, left_inv, liftBaseChange, liftBaseChange_tmul
 -/
@@ -457,7 +625,30 @@ definition tensorH1CotangentOfFormallyEtale
     apply Module.Flat.lTensor_preserves_injective_linearMap _ h1Cotangentι_injective
     apply (Extension.tensorCotangent f halg H₂).injective
     simp only [map_zero]
- 
+    rw [← h1Cotangentι.map_zero]; rw [← hx]
+    change ((Cotangent.map f).liftBaseChange T ∘ₗ h1Cotangentι.baseChange T) x =
+      (h1Cotangentι ∘ₗ _) x
+    congr 1
+    ext x
+    simp
+  · intro x
+    have : Function.Exact (h1Cotangentι.baseChange T) (P.cotangentComplex.baseChange T) :=
+      Module.Flat.lTensor_exact T (LinearMap.exact_subtype_ker_map _)
+    obtain ⟨a, ha⟩ := (this ((Extension.tensorCotangent f halg H₂).symm x.1)).mp (by
+      apply (Extension.tensorCotangentSpaceOfFormallyEtale f H₁).injective
+      rw [LinearEquiv.map_zero]; rw [← x.2]
+      have : (CotangentSpace.map f).liftBaseChange T ∘ₗ P.cotangentComplex.baseChange T =
+          Q.cotangentComplex ∘ₗ (Cotangent.map f).liftBaseChange T := by
+        ext x; obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x; dsimp
+        simp only [CotangentSpace.map_tmul,
+          map_one, Hom.toAlgHom_apply, one_smul, cotangentComplex_mk]
+      exact (DFunLike.congr_fun this _).trans (DFunLike.congr_arg Q.cotangentComplex
+        ((tensorCotangent f halg H₂).apply_symm_apply x.1)))
+    refine ⟨a, Subtype.ext (.trans ?_ ((LinearEquiv.eq_symm_apply _).mp ha))⟩
+    change (h1Cotangentι ∘ₗ (H1Cotangent.map f).liftBaseChange T) _ =
+      ((Cotangent.map f).liftBaseChange T ∘ₗ h1Cotangentι.baseChange T) _
+    congr 1
+    ext; dsimp
 
 中文:
 定义 tensorH1CotangentOfFormallyEtale
@@ -470,7 +661,30 @@ definition tensorH1CotangentOfFormallyEtale
     apply Module.Flat.lTensor_preserves_injective_linearMap _ h1Cotangentι_injective
     apply (Extension.tensorCotangent f halg H₂).injective
     simp only [map_zero]
- 
+    rw [← h1Cotangentι.map_zero]; rw [← hx]
+    change ((Cotangent.map f).liftBaseChange T ∘ₗ h1Cotangentι.baseChange T) x =
+      (h1Cotangentι ∘ₗ _) x
+    congr 1
+    ext x
+    simp
+  · intro x
+    have : Function.Exact (h1Cotangentι.baseChange T) (P.cotangentComplex.baseChange T) :=
+      Module.Flat.lTensor_exact T (LinearMap.exact_subtype_ker_map _)
+    obtain ⟨a, ha⟩ := (this ((Extension.tensorCotangent f halg H₂).symm x.1)).mp (by
+      apply (Extension.tensorCotangentSpaceOfFormallyEtale f H₁).injective
+      rw [LinearEquiv.map_zero]; rw [← x.2]
+      have : (CotangentSpace.map f).liftBaseChange T ∘ₗ P.cotangentComplex.baseChange T =
+          Q.cotangentComplex ∘ₗ (Cotangent.map f).liftBaseChange T := by
+        ext x; obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x; dsimp
+        simp only [CotangentSpace.map_tmul,
+          map_one, Hom.toAlgHom_apply, one_smul, cotangentComplex_mk]
+      exact (DFunLike.congr_fun this _).trans (DFunLike.congr_arg Q.cotangentComplex
+        ((tensorCotangent f halg H₂).apply_symm_apply x.1)))
+    refine ⟨a, Subtype.ext (.trans ?_ ((LinearEquiv.eq_symm_apply _).mp ha))⟩
+    change (h1Cotangentι ∘ₗ (H1Cotangent.map f).liftBaseChange T) _ =
+      ((Cotangent.map f).liftBaseChange T ∘ₗ h1Cotangentι.baseChange T) _
+    congr 1
+    ext; dsimp
 
 Depends on / 依赖: Cotangent, Cotangent.map, Extension, Extension.tensorCotangent, Function, Function.Exact, H1Cotangent, H1Cotangent.map, Module, Module.Flat.lTensor_preserves_injective_linearMap, P.co, baseChange, injective, injective_iff_map_eq_zero, lTensor_preserves_injective_linearMap, liftBaseChange, map_zero, ofBijective, tensorCotangent
 -/
@@ -529,7 +743,61 @@ definition tensorH1CotangentOfIsLocalization
   letI M' := M.comap (algebraMap P.Ring S)
   letI fQ : Localization M' ->ₐ[R] T := IsLocalization.liftAlgHom (M := M')
     (f := (IsScalarTower.toAlgHom R S T).comp (IsScalarTower.toAlgHom R P.Ring S)) (fun ⟨y, hy⟩ =>
-    by simpa usin
+    by simpa using IsLocalization.map_units T ⟨algebraMap P.Ring S y, hy⟩)
+  letI Q : Extension R T := .ofSurjective fQ (by
+    intro x
+    obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq M x
+    obtain ⟨x, rfl⟩ := P.algebraMap_surjective x
+    obtain ⟨s, rfl⟩ := P.algebraMap_surjective s
+    refine ⟨IsLocalization.mk' _ x ⟨s, show s in M' from hs⟩, ?_⟩
+    simp only [fQ, IsLocalization.coe_liftAlgHom, AlgHom.toRingHom_eq_coe]
+    rw [IsLocalization.lift_mk'_spec]
+    simp)
+  letI f : P.Hom Q :=
+  { toRingHom := algebraMap P.Ring (Localization M')
+    toRingHom_algebraMap x := (IsScalarTower.algebraMap_apply R P.Ring (Localization M') _).symm
+    algebraMap_toRingHom x := @IsLocalization.lift_eq .. }
+  haveI : FormallySmooth R P.Ring := inferInstanceAs (FormallySmooth R (MvPolynomial _ _))
+  haveI : FormallySmooth P.Ring (Localization M') := .of_isLocalization M'
+  haveI : FormallySmooth R Q.Ring := .comp R P.Ring (Localization M')
+  haveI : Module.Flat S T := IsLocalization.flat T M
+  letI : Algebra P.Ring Q.Ring := (inferInstance : Algebra P.Ring (Localization M'))
+  letI := ((algebraMap S T).comp (algebraMap P.Ring S)).toAlgebra
+  letI := fQ.toRingHom.toAlgebra
+  haveI : IsScalarTower P.Ring S T := .of_algebraMap_eq' rfl
+  haveI : IsScalarTower P.Ring (Localization M') T :=
+    .of_algebraMap_eq fun r => (f.algebraMap_toRingHom r).symm
+  haveI : IsLocalizedModule M' (IsScalarTower.toAlgHom P.Ring S T).toLinearMap := by
+    rw [isLocalizedModule_iff_isLocalization]
+    convert! ‹IsLocalization M T› using 1
+    exact Submonoid.map_comap_eq_of_surjective P.algebraMap_surjective _
+  refine Extension.tensorH1CotangentOfFormallyEtale f rfl ?_ ?_ ≪≫ₗ
+      Extension.equivH1CotangentOfFormallySmooth _
+  · exact RingHom.formallyEtale_algebraMap.mpr
+      (FormallyEtale.of_isLocalization (M := M') (Rₘ := Localization M'))
+  · let F : P.ker ->ₗ[P.Ring] RingHom.ker fQ := f.mapKer rfl
+    refine (isLocalizedModule_iff_isBaseChange M' (Localization M') F).mp ?_
+    have : (LinearMap.ker <| Algebra.linearMap P.Ring S).localized' (Localization M') M'
+        (Algebra.linearMap P.Ring (Localization M')) = RingHom.ker fQ := by
+      rw [LinearMap.localized'_ker_eq_ker_localizedMap (Localization M') M'
+        (Algebra.linearMap P.Ring (Localization M'))
+        (f' := (IsScalarTower.toAlgHom P.Ring S T).toLinearMap)]
+      ext x
+      obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq M' x
+      simp only [LinearMap.mem_ker, LinearMap.extendScalarsOfIsLocalization_apply', RingHom.mem_ker,
+        IsLocalization.coe_liftAlgHom, AlgHom.toRingHom_eq_coe, IsLocalization.lift_mk'_spec,
+        RingHom.coe_coe, AlgHom.coe_comp, IsScalarTower.coe_toAlgHom', Function.comp_apply,
+        mul_zero, fQ]
+      have : IsLocalization.mk' (Localization M') x ⟨s, hs⟩ =
+          IsLocalizedModule.mk' (Algebra.linearMap P.Ring (Localization M')) x ⟨s, hs⟩ := by
+        rw [IsLocalization.mk'_eq_iff_eq_mul]; rw [mul_comm]; rw [← Algebra.smul_def]; rw [← Submonoid.smul_def]; rw [IsLocalizedModule.mk'_cancel']
+        rfl
+      simp [this, ← IsScalarTower.algebraMap_apply]
+    have : F = ((LinearEquiv.ofEq _ _ this).restrictScalars P.Ring).toLinearMap ∘ₗ
+      P.ker.toLocalized' (Localization M') M' (Algebra.linearMap P.Ring (Localization M')) := by
+      ext; rfl
+    rw [this]
+    exact IsLocalizedModule.of_linearEquiv _ _ _
 
 中文:
 定义 tensorH1CotangentOfIsLocalization
@@ -539,7 +807,61 @@ definition tensorH1CotangentOfIsLocalization
   letI M' := M.comap (algebraMap P.Ring S)
   letI fQ : Localization M' ->ₐ[R] T := IsLocalization.liftAlgHom (M := M')
     (f := (IsScalarTower.toAlgHom R S T).comp (IsScalarTower.toAlgHom R P.Ring S)) (fun ⟨y, hy⟩ =>
-    by simpa usin
+    by simpa using IsLocalization.map_units T ⟨algebraMap P.Ring S y, hy⟩)
+  letI Q : Extension R T := .ofSurjective fQ (by
+    intro x
+    obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq M x
+    obtain ⟨x, rfl⟩ := P.algebraMap_surjective x
+    obtain ⟨s, rfl⟩ := P.algebraMap_surjective s
+    refine ⟨IsLocalization.mk' _ x ⟨s, show s in M' from hs⟩, ?_⟩
+    simp only [fQ, IsLocalization.coe_liftAlgHom, AlgHom.toRingHom_eq_coe]
+    rw [IsLocalization.lift_mk'_spec]
+    simp)
+  letI f : P.Hom Q :=
+  { toRingHom := algebraMap P.Ring (Localization M')
+    toRingHom_algebraMap x := (IsScalarTower.algebraMap_apply R P.Ring (Localization M') _).symm
+    algebraMap_toRingHom x := @IsLocalization.lift_eq .. }
+  haveI : FormallySmooth R P.Ring := inferInstanceAs (FormallySmooth R (MvPolynomial _ _))
+  haveI : FormallySmooth P.Ring (Localization M') := .of_isLocalization M'
+  haveI : FormallySmooth R Q.Ring := .comp R P.Ring (Localization M')
+  haveI : Module.Flat S T := IsLocalization.flat T M
+  letI : Algebra P.Ring Q.Ring := (inferInstance : Algebra P.Ring (Localization M'))
+  letI := ((algebraMap S T).comp (algebraMap P.Ring S)).toAlgebra
+  letI := fQ.toRingHom.toAlgebra
+  haveI : IsScalarTower P.Ring S T := .of_algebraMap_eq' rfl
+  haveI : IsScalarTower P.Ring (Localization M') T :=
+    .of_algebraMap_eq fun r => (f.algebraMap_toRingHom r).symm
+  haveI : IsLocalizedModule M' (IsScalarTower.toAlgHom P.Ring S T).toLinearMap := by
+    rw [isLocalizedModule_iff_isLocalization]
+    convert! ‹IsLocalization M T› using 1
+    exact Submonoid.map_comap_eq_of_surjective P.algebraMap_surjective _
+  refine Extension.tensorH1CotangentOfFormallyEtale f rfl ?_ ?_ ≪≫ₗ
+      Extension.equivH1CotangentOfFormallySmooth _
+  · exact RingHom.formallyEtale_algebraMap.mpr
+      (FormallyEtale.of_isLocalization (M := M') (Rₘ := Localization M'))
+  · let F : P.ker ->ₗ[P.Ring] RingHom.ker fQ := f.mapKer rfl
+    refine (isLocalizedModule_iff_isBaseChange M' (Localization M') F).mp ?_
+    have : (LinearMap.ker <| Algebra.linearMap P.Ring S).localized' (Localization M') M'
+        (Algebra.linearMap P.Ring (Localization M')) = RingHom.ker fQ := by
+      rw [LinearMap.localized'_ker_eq_ker_localizedMap (Localization M') M'
+        (Algebra.linearMap P.Ring (Localization M'))
+        (f' := (IsScalarTower.toAlgHom P.Ring S T).toLinearMap)]
+      ext x
+      obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq M' x
+      simp only [LinearMap.mem_ker, LinearMap.extendScalarsOfIsLocalization_apply', RingHom.mem_ker,
+        IsLocalization.coe_liftAlgHom, AlgHom.toRingHom_eq_coe, IsLocalization.lift_mk'_spec,
+        RingHom.coe_coe, AlgHom.coe_comp, IsScalarTower.coe_toAlgHom', Function.comp_apply,
+        mul_zero, fQ]
+      have : IsLocalization.mk' (Localization M') x ⟨s, hs⟩ =
+          IsLocalizedModule.mk' (Algebra.linearMap P.Ring (Localization M')) x ⟨s, hs⟩ := by
+        rw [IsLocalization.mk'_eq_iff_eq_mul]; rw [mul_comm]; rw [← Algebra.smul_def]; rw [← Submonoid.smul_def]; rw [IsLocalizedModule.mk'_cancel']
+        rfl
+      simp [this, ← IsScalarTower.algebraMap_apply]
+    have : F = ((LinearEquiv.ofEq _ _ this).restrictScalars P.Ring).toLinearMap ∘ₗ
+      P.ker.toLocalized' (Localization M') M' (Algebra.linearMap P.Ring (Localization M')) := by
+      ext; rfl
+    rw [this]
+    exact IsLocalizedModule.of_linearEquiv _ _ _
 
 Depends on / 依赖: Extension, Generators, Generators.self, IsLocalization, IsLocalization.exists_mk, IsLocalization.liftAlgHom, IsLocalization.map_units, IsScalarTower, IsScalarTower.toAlgHom, Localization, M.comap, P.Ring, P.algebraMap_surjecti, algebraMap, algebraMap_surjecti, exists_mk, liftAlgHom, map_units, ofSurjective, toAlgHom
 -/
@@ -617,7 +939,33 @@ lemma tensorH1CotangentOfIsLocalization_toLinearMap
     LinearEquiv.coe_coe, LinearMap.liftBaseChange_tmul, one_smul]
   simp only [tensorH1CotangentOfIsLocalization,
     Extension.tensorH1CotangentOfFormallyEtale,
-    LinearEquiv.ofBijective_apply
+    LinearEquiv.ofBijective_apply, LinearMap.liftBaseChange_tmul, one_smul,
+    Extension.equivH1CotangentOfFormallySmooth, LinearEquiv.trans_apply]
+  let P : Extension R S := (Generators.self R S).toExtension
+  let M' := M.comap (algebraMap P.Ring S)
+  let fQ : Localization M' ->ₐ[R] T := IsLocalization.liftAlgHom (M := M')
+    (f := (IsScalarTower.toAlgHom R S T).comp (IsScalarTower.toAlgHom R P.Ring S)) (fun ⟨y, hy⟩ =>
+    by simpa using IsLocalization.map_units T ⟨algebraMap P.Ring S y, hy⟩)
+  let Q : Extension R T := .ofSurjective fQ (by
+    intro x
+    obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq M x
+    obtain ⟨x, rfl⟩ := P.algebraMap_surjective x
+    obtain ⟨s, rfl⟩ := P.algebraMap_surjective s
+    refine ⟨IsLocalization.mk' _ x ⟨s, show s in M' from hs⟩, ?_⟩
+    simp only [fQ, IsLocalization.coe_liftAlgHom, AlgHom.toRingHom_eq_coe]
+    rw [IsLocalization.lift_mk'_spec]
+    simp)
+  let f : (Generators.self R T).toExtension.Hom Q :=
+  { toRingHom := (MvPolynomial.aeval Q.σ).toRingHom
+    toRingHom_algebraMap := (MvPolynomial.aeval Q.σ).commutes
+    algebraMap_toRingHom := by
+      have : (IsScalarTower.toAlgHom R Q.Ring T).comp (MvPolynomial.aeval Q.σ) =
+          IsScalarTower.toAlgHom _ (Generators.self R T).toExtension.Ring _ := by
+        ext i
+        change _ = algebraMap (Generators.self R T).Ring _ (.X i)
+        simp
+      exact DFunLike.congr_fun this }
+  rw [← Extension.H1Cotangent.equivOfFormallySmooth_symm]; rw [LinearEquiv.symm_apply_eq]; rw [@Extension.H1Cotangent.equivOfFormallySmooth_apply (f := f)]; rw [Algebra.H1Cotangent.map]; rw [← (Extension.H1Cotangent.map f).coe_restrictScalars S]; rw [← LinearMap.comp_apply]; rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq]
 
 中文:
 引理 tensorH1CotangentOfIsLocalization_toLinearMap
@@ -627,7 +975,33 @@ lemma tensorH1CotangentOfIsLocalization_toLinearMap
     LinearEquiv.coe_coe, LinearMap.liftBaseChange_tmul, one_smul]
   simp only [tensorH1CotangentOfIsLocalization,
     Extension.tensorH1CotangentOfFormallyEtale,
-    LinearEquiv.ofBijective_apply
+    LinearEquiv.ofBijective_apply, LinearMap.liftBaseChange_tmul, one_smul,
+    Extension.equivH1CotangentOfFormallySmooth, LinearEquiv.trans_apply]
+  let P : Extension R S := (Generators.self R S).toExtension
+  let M' := M.comap (algebraMap P.Ring S)
+  let fQ : Localization M' ->ₐ[R] T := IsLocalization.liftAlgHom (M := M')
+    (f := (IsScalarTower.toAlgHom R S T).comp (IsScalarTower.toAlgHom R P.Ring S)) (fun ⟨y, hy⟩ =>
+    by simpa using IsLocalization.map_units T ⟨algebraMap P.Ring S y, hy⟩)
+  let Q : Extension R T := .ofSurjective fQ (by
+    intro x
+    obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq M x
+    obtain ⟨x, rfl⟩ := P.algebraMap_surjective x
+    obtain ⟨s, rfl⟩ := P.algebraMap_surjective s
+    refine ⟨IsLocalization.mk' _ x ⟨s, show s in M' from hs⟩, ?_⟩
+    simp only [fQ, IsLocalization.coe_liftAlgHom, AlgHom.toRingHom_eq_coe]
+    rw [IsLocalization.lift_mk'_spec]
+    simp)
+  let f : (Generators.self R T).toExtension.Hom Q :=
+  { toRingHom := (MvPolynomial.aeval Q.σ).toRingHom
+    toRingHom_algebraMap := (MvPolynomial.aeval Q.σ).commutes
+    algebraMap_toRingHom := by
+      have : (IsScalarTower.toAlgHom R Q.Ring T).comp (MvPolynomial.aeval Q.σ) =
+          IsScalarTower.toAlgHom _ (Generators.self R T).toExtension.Ring _ := by
+        ext i
+        change _ = algebraMap (Generators.self R T).Ring _ (.X i)
+        simp
+      exact DFunLike.congr_fun this }
+  rw [← Extension.H1Cotangent.equivOfFormallySmooth_symm]; rw [LinearEquiv.symm_apply_eq]; rw [@Extension.H1Cotangent.equivOfFormallySmooth_apply (f := f)]; rw [Algebra.H1Cotangent.map]; rw [← (Extension.H1Cotangent.map f).coe_restrictScalars S]; rw [← LinearMap.comp_apply]; rw [← Extension.H1Cotangent.map_comp]; rw [Extension.H1Cotangent.map_eq]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.curry_apply, Extension, Extension.equivH1CotangentOfFormallySmooth, Extension.tensorH1CotangentOfFormallyEtale, Generators, Generators.self, LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.ofBijective_apply, LinearEquiv.trans_apply, LinearMap, LinearMap.coe_restrictScalars, LinearMap.liftBaseChange_tmul, M.comap, P.Ring, algebraMap, coe_coe, coe_restrictScalars, curry_apply
 -/

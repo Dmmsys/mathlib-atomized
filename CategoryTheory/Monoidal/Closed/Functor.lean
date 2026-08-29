@@ -127,7 +127,7 @@ theorem expComparison_ev
   convert! mateEquiv_counit _ _ (prodComparisonNatIso F A).inv B using 2
   apply IsIso.inv_eq_of_hom_inv_id -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): was `ext`
   simp only [prodComparisonNatTrans_app, prodComparisonNatIso_inv, NatIso.isIso_inv_app,
-    IsIso
+    IsIso.hom_inv_id]
 
 中文:
 定理 expComparison_ev
@@ -136,7 +136,7 @@ theorem expComparison_ev
   convert! mateEquiv_counit _ _ (prodComparisonNatIso F A).inv B using 2
   apply IsIso.inv_eq_of_hom_inv_id -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): was `ext`
   simp only [prodComparisonNatTrans_app, prodComparisonNatIso_inv, NatIso.isIso_inv_app,
-    IsIso
+    IsIso.hom_inv_id]
 
 Depends on / 依赖: IsIso.hom_inv_id, IsIso.inv_eq_of_hom_inv_id, NatIso, NatIso.isIso_inv_app, Porting, community, convert, github, github.com, hom_inv_id, inv_eq_of_hom_inv_id, isIso_inv_app, issues, leanprover, mateEquiv_counit, mathlib4, prodComparisonNatIso, prodComparisonNatIso_inv, prodComparisonNatTrans_app
 -/
@@ -212,7 +212,18 @@ theorem expComparison_whiskerLeft
     (ihom.adjunction A) (ihom.adjunction (F.obj A)) (ihom.adjunction (F.obj A'))
     ((prodComparisonNatIso F A).inv) (((curriedTensor D).map (F.map f)))
   have vcomp2 := conjugateEquiv_mateEquiv_vcomp
-    (
+    (ihom.adjunction A) (ihom.adjunction A') (ihom.adjunction (F.obj A'))
+    (((curriedTensor C).map f)) ((prodComparisonNatIso F A').inv)
+  rw [← vcomp1]; rw [← vcomp2]
+  unfold TwoSquare.whiskerLeft TwoSquare.whiskerRight
+  congr 1
+  apply congr_arg
+  ext B
+  simp only [Functor.comp_obj, curriedTensor_obj_obj, prodComparisonNatIso_inv,
+    NatTrans.comp_app, Functor.whiskerLeft_app, curriedTensor_map_app, NatIso.isIso_inv_app,
+    Functor.whiskerRight_app, IsIso.eq_inv_comp, prodComparisonNatTrans_app]
+  rw [← prodComparison_inv_natural_whiskerRight F f]
+  simp
 
 中文:
 定理 expComparison_whiskerLeft
@@ -223,7 +234,18 @@ theorem expComparison_whiskerLeft
     (ihom.adjunction A) (ihom.adjunction (F.obj A)) (ihom.adjunction (F.obj A'))
     ((prodComparisonNatIso F A).inv) (((curriedTensor D).map (F.map f)))
   have vcomp2 := conjugateEquiv_mateEquiv_vcomp
-    (
+    (ihom.adjunction A) (ihom.adjunction A') (ihom.adjunction (F.obj A'))
+    (((curriedTensor C).map f)) ((prodComparisonNatIso F A').inv)
+  rw [← vcomp1]; rw [← vcomp2]
+  unfold TwoSquare.whiskerLeft TwoSquare.whiskerRight
+  congr 1
+  apply congr_arg
+  ext B
+  simp only [Functor.comp_obj, curriedTensor_obj_obj, prodComparisonNatIso_inv,
+    NatTrans.comp_app, Functor.whiskerLeft_app, curriedTensor_map_app, NatIso.isIso_inv_app,
+    Functor.whiskerRight_app, IsIso.eq_inv_comp, prodComparisonNatTrans_app]
+  rw [← prodComparison_inv_natural_whiskerRight F f]
+  simp
 
 Depends on / 依赖: F.map, F.obj, MonoidalClosed, MonoidalClosed.pre, TwoSquare, TwoSquare.whiskerLeft, TwoSquare.whiskerRight, adjunction, conjugateEquiv_mateEquiv_vcomp, curriedTensor, expComparison, ihom.adjunction, mateEquiv_conjugateEquiv_vcomp, prodComparisonNatIso, vcomp1, vcomp2, whiskerLeft, whiskerRight
 -/
@@ -284,7 +306,24 @@ theorem frobeniusMorphism_mate
       Functor.whiskerLeft L ((curriedTensor C).map (h.counit.app A)))
   rw [← conjeq]
   congr 1
-  apply con
+  apply congr_arg
+  ext B
+  unfold mateEquiv
+  simp only [Functor.comp_obj, curriedTensor_obj_obj, Equiv.coe_fn_mk, Functor.whiskerRight_comp,
+    Functor.whiskerLeft_comp, Category.assoc, NatTrans.comp_app, Functor.id_obj,
+    Functor.rightUnitor_inv_app, Functor.whiskerLeft_app, Functor.associator_hom_app,
+    Functor.associator_inv_app, Functor.whiskerRight_app, prodComparisonNatTrans_app,
+    curriedTensor_map_app, Functor.comp_map, curriedTensor_obj_map, Functor.leftUnitor_hom_app,
+    Category.comp_id, Category.id_comp, prodComparisonNatIso_inv, NatIso.isIso_inv_app]
+  rw [← F.map_comp]; rw [← F.map_comp]
+  simp only [Functor.map_comp]
+  apply IsIso.eq_inv_of_inv_hom_id
+  simp only [Category.assoc]
+  rw [prodComparison_natural_whiskerLeft]; rw [prodComparison_natural_whiskerRight_assoc]
+  slice_lhs 2 3 => rw [← prodComparison_comp]
+  simp only [Category.assoc]
+  unfold prodComparison
+  simp
 
 中文:
 定理 frobeniusMorphism_mate
@@ -297,7 +336,24 @@ theorem frobeniusMorphism_mate
       Functor.whiskerLeft L ((curriedTensor C).map (h.counit.app A)))
   rw [← conjeq]
   congr 1
-  apply con
+  apply congr_arg
+  ext B
+  unfold mateEquiv
+  simp only [Functor.comp_obj, curriedTensor_obj_obj, Equiv.coe_fn_mk, Functor.whiskerRight_comp,
+    Functor.whiskerLeft_comp, Category.assoc, NatTrans.comp_app, Functor.id_obj,
+    Functor.rightUnitor_inv_app, Functor.whiskerLeft_app, Functor.associator_hom_app,
+    Functor.associator_inv_app, Functor.whiskerRight_app, prodComparisonNatTrans_app,
+    curriedTensor_map_app, Functor.comp_map, curriedTensor_obj_map, Functor.leftUnitor_hom_app,
+    Category.comp_id, Category.id_comp, prodComparisonNatIso_inv, NatIso.isIso_inv_app]
+  rw [← F.map_comp]; rw [← F.map_comp]
+  simp only [Functor.map_comp]
+  apply IsIso.eq_inv_of_inv_hom_id
+  simp only [Category.assoc]
+  rw [prodComparison_natural_whiskerLeft]; rw [prodComparison_natural_whiskerRight_assoc]
+  slice_lhs 2 3 => rw [← prodComparison_comp]
+  simp only [Category.assoc]
+  unfold prodComparison
+  simp
 
 Depends on / 依赖: Category, Category.assoc, Equiv.coe_fn_mk, F.obj, Functor, Functor.comp_obj, Functor.id_obj, Functor.rightUnitor_i, Functor.whiskerLeft, Functor.whiskerLeft_comp, Functor.whiskerRight_comp, NatTrans, NatTrans.comp_app, adjunction, coe_fn_mk, comp_app, comp_obj, congr_arg, conjeq, counit
 -/

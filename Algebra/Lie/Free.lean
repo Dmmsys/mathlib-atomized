@@ -406,7 +406,8 @@ instance :
   body: Quot.map₂ (· * ·) (fun _ _ _ => Rel.mul_left _) fun _ _ _ => Rel.mul_right _
   add_lie := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; change Quot.mk _ _ = Quot.mk _ _; simp_rw [add_mul]
   lie_add := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; change Quot.mk _ _ = Quot.mk _ _; simp_rw [mul_add]
-  lie_self := by rintro ⟨a⟩; exact Quot.sound (
+  lie_self := by rintro ⟨a⟩; exact Quot.sound (Rel.lie_self a)
+  leibniz_lie := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; exact Quot.sound (Rel.leibniz_lie a b c)
 
 中文:
 实例 :
@@ -414,7 +415,8 @@ instance :
   定义体: Quot.map₂ (· * ·) (fun _ _ _ => Rel.mul_left _) fun _ _ _ => Rel.mul_right _
   add_lie := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; change Quot.mk _ _ = Quot.mk _ _; simp_rw [add_mul]
   lie_add := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; change Quot.mk _ _ = Quot.mk _ _; simp_rw [mul_add]
-  lie_self := by rintro ⟨a⟩; exact Quot.sound (
+  lie_self := by rintro ⟨a⟩; exact Quot.sound (Rel.lie_self a)
+  leibniz_lie := by rintro ⟨a⟩ ⟨b⟩ ⟨c⟩; exact Quot.sound (Rel.leibniz_lie a b c)
 
 Depends on / 依赖: Quot.map, Rel.mul_left, Rel.mul_right, mul_left, mul_right
 -/
@@ -561,6 +563,8 @@ theorem liftAux_spec
     simp only [liftAux_map_mul, liftAux_map_add, sub_add_cancel, lie_lie]
   | smul b' _ h₂ => simp only [liftAux_map_smul, h₂]
   | add_right c' _ h₂ => simp only [liftAux_map_add, h₂]
+  | mul_left c' _ h₂ => simp only [liftAux_map_mul, h₂]
+  | mul_right c' _ h₂ => simp only [liftAux_map_mul, h₂]
 
 中文:
 定理 liftAux_spec
@@ -572,6 +576,8 @@ theorem liftAux_spec
     simp only [liftAux_map_mul, liftAux_map_add, sub_add_cancel, lie_lie]
   | smul b' _ h₂ => simp only [liftAux_map_smul, h₂]
   | add_right c' _ h₂ => simp only [liftAux_map_add, h₂]
+  | mul_left c' _ h₂ => simp only [liftAux_map_mul, h₂]
+  | mul_right c' _ h₂ => simp only [liftAux_map_mul, h₂]
 
 Depends on / 依赖: add_right, leibniz_lie, lie_lie, lie_self, liftAux_map_add, liftAux_map_mul, liftAux_map_smul, map_zero, mul_left, mul_right, sub_add_cancel
 -/
@@ -628,7 +634,15 @@ definition lift
       map_smul' := by rintro t ⟨a⟩; rw [← liftAux_map_smul]; rfl
       map_lie' := by rintro ⟨a⟩ ⟨b⟩; rw [← liftAux_map_mul]; rfl }
   invFun F := F ∘ of R
-  left_inv f 
+  left_inv f := by
+    ext x
+    simp only [liftAux, of, LieHom.coe_mk, Function.comp_apply, lib.lift_of_apply]
+  right_inv F := by
+    ext ⟨a⟩
+    let F' := F.toNonUnitalAlgHom.comp (mk R)
+    exact NonUnitalAlgHom.congr_fun (lib.lift_comp_of R F') a
+
+@[simp]
 
 中文:
 定义 lift
@@ -638,7 +652,15 @@ definition lift
       map_smul' := by rintro t ⟨a⟩; rw [← liftAux_map_smul]; rfl
       map_lie' := by rintro ⟨a⟩ ⟨b⟩; rw [← liftAux_map_mul]; rfl }
   invFun F := F ∘ of R
-  left_inv f 
+  left_inv f := by
+    ext x
+    simp only [liftAux, of, LieHom.coe_mk, Function.comp_apply, lib.lift_of_apply]
+  right_inv F := by
+    ext ⟨a⟩
+    let F' := F.toNonUnitalAlgHom.comp (mk R)
+    exact NonUnitalAlgHom.congr_fun (lib.lift_comp_of R F') a
+
+@[simp]
 
 Depends on / 依赖: F.toNonUnitalAlgHom.comp, Function, Function.comp_apply, LieHom, LieHom.coe_mk, NonUnitalAlgHom, NonUnitalAlgHom.congr_fun, Quot.liftOn, coe_mk, comp_apply, congr_fun, invFun, left_inv, lib.lift_comp_of, lib.lift_of_apply, liftAux, liftAux_map_add, liftAux_map_mul, liftAux_map_smul, liftAux_spec
 -/

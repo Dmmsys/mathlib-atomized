@@ -618,7 +618,17 @@ theorem extremePoints_prod
   · rintro x₁ hx₁ x₂ hx₂ ⟨a, b, ha, hb, hab, hx'⟩
     ext
     · exact h.1 hx₁.1 hx₂.1 ⟨a, b, ha, hb, hab, congrArg Prod.fst hx'⟩
-    · exact h.2 hx₁.2 hx₂.2 ⟨a, b, ha, hb, hab, congrArg Prod.
+    · exact h.2 hx₁.2 hx₂.2 ⟨a, b, ha, hb, hab, congrArg Prod.snd hx'⟩
+  · rintro x₁ hx₁ x₂ hx₂ hx_fst
+    refine congrArg Prod.fst (h (mk_mem_prod hx₁ hx.2) (mk_mem_prod hx₂ hx.2) ?_)
+    rw [← Prod.image_mk_openSegment_left]
+    exact mem_image_of_mem _ hx_fst
+  · rintro x₁ hx₁ x₂ hx₂ hx_snd
+    refine congrArg Prod.snd (h (mk_mem_prod hx.1 hx₁) (mk_mem_prod hx.1 hx₂) ?_)
+    rw [← Prod.image_mk_openSegment_right]
+    exact mem_image_of_mem _ hx_snd
+
+@[simp]
 
 中文:
 定理 extremePoints_prod
@@ -629,7 +639,17 @@ theorem extremePoints_prod
   · rintro x₁ hx₁ x₂ hx₂ ⟨a, b, ha, hb, hab, hx'⟩
     ext
     · exact h.1 hx₁.1 hx₂.1 ⟨a, b, ha, hb, hab, congrArg Prod.fst hx'⟩
-    · exact h.2 hx₁.2 hx₂.2 ⟨a, b, ha, hb, hab, congrArg Prod.
+    · exact h.2 hx₁.2 hx₂.2 ⟨a, b, ha, hb, hab, congrArg Prod.snd hx'⟩
+  · rintro x₁ hx₁ x₂ hx₂ hx_fst
+    refine congrArg Prod.fst (h (mk_mem_prod hx₁ hx.2) (mk_mem_prod hx₂ hx.2) ?_)
+    rw [← Prod.image_mk_openSegment_left]
+    exact mem_image_of_mem _ hx_fst
+  · rintro x₁ hx₁ x₂ hx₂ hx_snd
+    refine congrArg Prod.snd (h (mk_mem_prod hx.1 hx₁) (mk_mem_prod hx.1 hx₂) ?_)
+    rw [← Prod.image_mk_openSegment_right]
+    exact mem_image_of_mem _ hx_snd
+
+@[simp]
 
 Depends on / 依赖: Prod.fst, Prod.image_mk_openSegment_left, Prod.snd, and_and_and_comm, and_congr_right, hx_fst, hx_snd, image_mk_openSegment_left, mem_image_of_mem, mk_mem_prod
 -/
@@ -665,7 +685,14 @@ theorem extremePoints_pi
   · rintro x₁ hx₁ x₂ hx₂ hi
     rw [← update_self i x₁ x]; rw [h (update x i x₁) _ (update x i x₂)]
     · rintro j
-      obtain rfl | hji := eq_
+      obtain rfl | hji := eq_or_ne j i <;> simp [*]
+    · rw [← Pi.image_update_openSegment]
+      exact ⟨_, hi, update_eq_self _ _⟩
+    · rintro j
+      obtain rfl | hji := eq_or_ne j i <;> simp [*]
+  · rintro x₁ hx₁ x₂ hx₂ ⟨a, b, ha, hb, hab, rfl⟩
+    ext i
+    exact h _ _ (hx₁ _) _ (hx₂ _) ⟨a, b, ha, hb, hab, rfl⟩
 
 中文:
 定理 extremePoints_pi
@@ -678,7 +705,14 @@ theorem extremePoints_pi
   · rintro x₁ hx₁ x₂ hx₂ hi
     rw [← update_self i x₁ x]; rw [h (update x i x₁) _ (update x i x₂)]
     · rintro j
-      obtain rfl | hji := eq_
+      obtain rfl | hji := eq_or_ne j i <;> simp [*]
+    · rw [← Pi.image_update_openSegment]
+      exact ⟨_, hi, update_eq_self _ _⟩
+    · rintro j
+      obtain rfl | hji := eq_or_ne j i <;> simp [*]
+  · rintro x₁ hx₁ x₂ hx₂ ⟨a, b, ha, hb, hab, rfl⟩
+    ext i
+    exact h _ _ (hx₁ _) _ (hx₂ _) ⟨a, b, ha, hb, hab, rfl⟩
 
 Depends on / 依赖: Pi.image_update_openSegment, and_congr_right, classical, eq_or_ne, forall_and, image_update_openSegment, mem_extremePoints_iff_left, mem_univ_pi, update, update_eq_self, update_self
 -/
@@ -719,7 +753,7 @@ lemma image_extremePoints
   have : forall x y, f '' openSegment 𝕜 x y = openSegment 𝕜 (f x) (f y) :=
     image_openSegment _ (LinearMapClass.linearMap f).toAffineMap
   simp only [mem_extremePoints, (EquivLike.surjective f).forall,
-    (EquivLike.injective f).mem_set_im
+    (EquivLike.injective f).mem_set_image, (EquivLike.injective f).eq_iff, ← this]
 
 中文:
 引理 image_extremePoints
@@ -730,7 +764,7 @@ lemma image_extremePoints
   have : forall x y, f '' openSegment 𝕜 x y = openSegment 𝕜 (f x) (f y) :=
     image_openSegment _ (LinearMapClass.linearMap f).toAffineMap
   simp only [mem_extremePoints, (EquivLike.surjective f).forall,
-    (EquivLike.injective f).mem_set_im
+    (EquivLike.injective f).mem_set_image, (EquivLike.injective f).eq_iff, ← this]
 
 Depends on / 依赖: EquivLike, EquivLike.injective, EquivLike.surjective, LinearMapClass, LinearMapClass.linearMap, eq_iff, image_openSegment, injective, linearMap, mem_extremePoints, mem_set_image, openSegment, surjective, toAffineMap
 -/
@@ -764,7 +798,8 @@ theorem mem_extremePoints_iff_forall_segment
     rintro H (rfl | rfl | hx)
     exacts [Or.inl rfl, Or.inr rfl, Or.inl <| (H hx).1]
   · intro H hx
-    rcases H (openSegment_subset_segment _ _ 
+    rcases H (openSegment_subset_segment _ _ _ hx) with (rfl | rfl)
+    exacts [⟨rfl, (left_mem_openSegment_iff.1 hx).symm⟩, ⟨right_mem_openSegment_iff.1 hx, rfl⟩]
 
 中文:
 定理 mem_extremePoints_iff_对任意_segment
@@ -777,7 +812,8 @@ theorem mem_extremePoints_iff_forall_segment
     rintro H (rfl | rfl | hx)
     exacts [Or.inl rfl, Or.inr rfl, Or.inl <| (H hx).1]
   · intro H hx
-    rcases H (openSegment_subset_segment _ _ 
+    rcases H (openSegment_subset_segment _ _ _ hx) with (rfl | rfl)
+    exacts [⟨rfl, (left_mem_openSegment_iff.1 hx).symm⟩, ⟨right_mem_openSegment_iff.1 hx, rfl⟩]
 
 Depends on / 依赖: Or.inl, Or.inr, and_congr_right, exacts, insert_endpoints_openSegment, left_mem_openSegment_iff, mem_extremePoints, openSegment_subset_segment, right_mem_openSegment_iff
 -/
@@ -806,7 +842,10 @@ theorem Convex.mem_extremePoints_iff_convex_sdiff
   rw [convex_iff_segment_subset] at hAx
   by_contra! h
   exact (hAx ⟨hx₁, fun hx₁ => h.1 (mem_singleton_iff.2 hx₁)⟩
-      ⟨hx₂, 
+      ⟨hx₂, fun hx₂ => h.2 (mem_singleton_iff.2 hx₂)⟩ hx).2 rfl
+
+@[deprecated (since := "2026-06-03")]
+alias Convex.mem_extremePoints_iff_convex_diff := Convex.mem_extremePoints_iff_convex_sdiff
 
 中文:
 定理 凸.mem_extremePoints_iff_convex_sdiff
@@ -818,7 +857,10 @@ theorem Convex.mem_extremePoints_iff_convex_sdiff
   rw [convex_iff_segment_subset] at hAx
   by_contra! h
   exact (hAx ⟨hx₁, fun hx₁ => h.1 (mem_singleton_iff.2 hx₁)⟩
-      ⟨hx₂, 
+      ⟨hx₂, fun hx₂ => h.2 (mem_singleton_iff.2 hx₂)⟩ hx).2 rfl
+
+@[deprecated (since := "2026-06-03")]
+alias Convex.mem_extremePoints_iff_convex_diff := Convex.mem_extremePoints_iff_convex_sdiff
 
 Depends on / 依赖: convex_iff_segment_subset, convex_sdiff, isExtreme_singleton, mem_extremePoints_iff_forall_segment, mem_singleton_iff
 -/

@@ -218,7 +218,13 @@ theorem mem_sublists'
   simp only [sublists'_cons, mem_append, IH, mem_map]
   constructor <;> intro h
   · rcases h with (h | ⟨s, h, rfl⟩)
-    · exact sub
+    · exact sublist_cons_of_sublist _ h
+    · exact h.cons_cons _
+  · obtain - | ⟨-, h⟩ | ⟨-, h⟩ := h
+    · exact Or.inl h
+    · exact Or.inr ⟨_, h, rfl⟩
+
+@[simp]
 
 中文:
 定理 mem_sublists'
@@ -233,7 +239,13 @@ theorem mem_sublists'
   simp only [sublists'_cons, mem_append, IH, mem_map]
   constructor <;> intro h
   · rcases h with (h | ⟨s, h, rfl⟩)
-    · exact sub
+    · exact sublist_cons_of_sublist _ h
+    · exact h.cons_cons _
+  · obtain - | ⟨-, h⟩ | ⟨-, h⟩ := h
+    · exact Or.inl h
+    · exact Or.inr ⟨_, h, rfl⟩
+
+@[simp]
 
 Depends on / 依赖: Or.inl, Or.inr, _cons, _nil, cons_cons, eq_nil_of_sublist_nil, generalizing, h.cons_cons, mem_append, mem_map, mem_singleton, sublist_cons_of_sublist, sublists
 -/
@@ -641,7 +653,7 @@ theorem map_pure_sublist_sublists
   case append_singleton l a ih =>
     exact ((append_sublist_append_left _).2 <|
 singleton_sublist.2 mem_map.2 ⟨[], mem_sublists.2 (nil_sublist _), by rfl⟩).trans
-    
+          ((append_sublist_append_right _).2 ih)
 
 中文:
 定理 map_pure_sublist_sublists
@@ -653,7 +665,7 @@ singleton_sublist.2 mem_map.2 ⟨[], mem_sublists.2 (nil_sublist _), by rfl⟩).
   case append_singleton l a ih =>
     exact ((append_sublist_append_left _).2 <|
 singleton_sublist.2 mem_map.2 ⟨[], mem_sublists.2 (nil_sublist _), by rfl⟩).trans
-    
+          ((append_sublist_append_right _).2 ih)
 
 Depends on / 依赖: append_singleton, append_sublist_append_left, append_sublist_append_right, map_append, mem_map, mem_sublists, nil_sublist, reverseRecOn, singleton_sublist, sublist_cons_self, sublists_concat, sublists_nil
 -/
@@ -912,7 +924,7 @@ theorem sublistsLen_sublist_of_sublist
     refine IH.trans ?_
     rw [sublistsLen_succ_cons]
     apply sublist_append_left
-  | cons_cons a s IH => simpa only [sublistsLen_succ_cons] using IH.append ((IHn s).ma
+  | cons_cons a s IH => simpa only [sublistsLen_succ_cons] using IH.append ((IHn s).map _)
 
 中文:
 定理 sublistsLen_sublist_of_sublist
@@ -925,7 +937,7 @@ theorem sublistsLen_sublist_of_sublist
     refine IH.trans ?_
     rw [sublistsLen_succ_cons]
     apply sublist_append_left
-  | cons_cons a s IH => simpa only [sublistsLen_succ_cons] using IH.append ((IHn s).ma
+  | cons_cons a s IH => simpa only [sublistsLen_succ_cons] using IH.append ((IHn s).map _)
 
 Depends on / 依赖: IH.append, IH.trans, append, cons_cons, generalizing, sublist_append_left, sublistsLen_succ_cons
 -/
@@ -974,7 +986,9 @@ theorem mem_sublistsLen_self
       exact mem_append_left _ IH
   | cons_cons a s IH =>
     rw [length]; rw [sublistsLen_succ_cons]
-    exact mem_append_right _ (mem_map.2 ⟨_, IH, rf
+    exact mem_append_right _ (mem_map.2 ⟨_, IH, rfl⟩)
+
+@[simp]
 
 中文:
 定理 mem_sublistsLen_self
@@ -989,7 +1003,9 @@ theorem mem_sublistsLen_self
       exact mem_append_left _ IH
   | cons_cons a s IH =>
     rw [length]; rw [sublistsLen_succ_cons]
-    exact mem_append_right _ (mem_map.2 ⟨_, IH, rf
+    exact mem_append_right _ (mem_map.2 ⟨_, IH, rfl⟩)
+
+@[simp]
 
 Depends on / 依赖: cons_cons, length, mem_append_left, mem_append_right, mem_map, sublistsLen_succ_cons
 -/
@@ -1421,7 +1437,15 @@ theorem revzip_sublists
     have : l₁ = [] ∧ l₂ = [] := by simpa using h
     simp [this]
   | append_singleton l' a ih =>
-    rw [sublists_concat]; rw [reverse_append]; rw [zip_append (by simp)]; rw [← map_reverse]; rw [zip_map_ri
+    rw [sublists_concat]; rw [reverse_append]; rw [zip_append (by simp)]; rw [← map_reverse]; rw [zip_map_right]; rw [zip_map_left] at *
+    simp only [Prod.mk_inj, mem_map, mem_append, Prod.map_apply, Prod.exists] at h
+    rcases h with (⟨l₁, l₂', h, rfl, rfl⟩ | ⟨l₁', l₂, h, rfl, rfl⟩)
+    · rw [← append_assoc]
+      exact (ih _ _ h).append_right _
+    · rw [append_assoc]
+      apply (perm_append_comm.append_left _).trans
+      rw [← append_assoc]
+      exact (ih _ _ h).append_right _
 
 中文:
 定理 revzip_sublists
@@ -1434,7 +1458,15 @@ theorem revzip_sublists
     have : l₁ = [] ∧ l₂ = [] := by simpa using h
     simp [this]
   | append_singleton l' a ih =>
-    rw [sublists_concat]; rw [reverse_append]; rw [zip_append (by simp)]; rw [← map_reverse]; rw [zip_map_ri
+    rw [sublists_concat]; rw [reverse_append]; rw [zip_append (by simp)]; rw [← map_reverse]; rw [zip_map_right]; rw [zip_map_left] at *
+    simp only [Prod.mk_inj, mem_map, mem_append, Prod.map_apply, Prod.exists] at h
+    rcases h with (⟨l₁, l₂', h, rfl, rfl⟩ | ⟨l₁', l₂, h, rfl, rfl⟩)
+    · rw [← append_assoc]
+      exact (ih _ _ h).append_right _
+    · rw [append_assoc]
+      apply (perm_append_comm.append_left _).trans
+      rw [← append_assoc]
+      exact (ih _ _ h).append_right _
 
 Depends on / 依赖: List.reverseRecOn, Prod.exists, Prod.map_apply, Prod.mk_inj, append_assoc, append_ri, append_singleton, generalizing, map_apply, map_reverse, mem_append, mem_map, mk_inj, reverseRecOn, reverse_append, revzip, sublists_concat, zip_append, zip_map_left, zip_map_right
 -/
@@ -1469,7 +1501,12 @@ theorem revzip_sublists'
     simp_all only [sublists'_nil, reverse_cons, reverse_nil, nil_append, zip_cons_cons,
       zip_nil_right, mem_singleton, Prod.mk.injEq, append_nil, Perm.refl]
   | cons a l IH =>
-    rw [sublists'_cons]; rw [reverse_append]; rw
+    rw [sublists'_cons]; rw [reverse_append]; rw [zip_append]; rw [← map_reverse]; rw [zip_map_right]; rw [zip_map_left] at *
+      <;> [simp only [mem_append, mem_map, Prod.map_apply, id_eq, Prod.mk.injEq, Prod.exists,
+        exists_eq_right_right] at h; simp]
+    rcases h with (⟨l₁, l₂', h, rfl, rfl⟩ | ⟨l₁', h, rfl⟩)
+    · exact perm_middle.trans ((IH _ _ h).cons _)
+    · exact (IH _ _ h).cons _
 
 中文:
 定理 revzip_sublists'
@@ -1482,7 +1519,12 @@ theorem revzip_sublists'
     simp_all only [sublists'_nil, reverse_cons, reverse_nil, nil_append, zip_cons_cons,
       zip_nil_right, mem_singleton, Prod.mk.injEq, append_nil, Perm.refl]
   | cons a l IH =>
-    rw [sublists'_cons]; rw [reverse_append]; rw
+    rw [sublists'_cons]; rw [reverse_append]; rw [zip_append]; rw [← map_reverse]; rw [zip_map_right]; rw [zip_map_left] at *
+      <;> [simp only [mem_append, mem_map, Prod.map_apply, id_eq, Prod.mk.injEq, Prod.exists,
+        exists_eq_right_right] at h; simp]
+    rcases h with (⟨l₁, l₂', h, rfl, rfl⟩ | ⟨l₁', h, rfl⟩)
+    · exact perm_middle.trans ((IH _ _ h).cons _)
+    · exact (IH _ _ h).cons _
 
 Depends on / 依赖: Perm.refl, Prod.exists, Prod.map_apply, Prod.mk.injEq, _cons, _nil, append_nil, exists_eq_right_right, generalizing, id_eq, map_apply, map_reverse, mem_append, mem_map, mem_singleton, nil_append, reverse_append, reverse_cons, reverse_nil, revzip
 -/
@@ -1512,7 +1554,12 @@ theorem range_bind_sublistsLen_perm
   | cons h tl l_ih =>
     simp_rw [range_succ_eq_map, length, flatMap_cons, flatMap_map, sublistsLen_succ_cons,
       sublists'_cons, List.sublistsLen_zero, List.singleton_append]
-    refine ((flatMap_append_perm (range (tl.length + 1)) _ _).symm.co
+    refine ((flatMap_append_perm (range (tl.length + 1)) _ _).symm.cons _).trans ?_
+    simp_rw [← List.map_flatMap, ← cons_append]
+    rw [← List.singleton_append]; rw [← List.sublistsLen_zero tl]
+    refine Perm.append ?_ (l_ih.map _)
+    rw [List.range_succ]; rw [flatMap_append]; rw [flatMap_singleton]; rw [sublistsLen_of_length_lt (Nat.lt_succ_self _)]; rw [append_nil]; rw [← List.flatMap_map Nat.succ fun n => sublistsLen n tl]; rw [← flatMap_cons (f := fun n => sublistsLen n tl)]; rw [← range_succ_eq_map]
+    exact l_ih
 
 中文:
 定理 range_bind_sublistsLen_perm
@@ -1523,7 +1570,12 @@ theorem range_bind_sublistsLen_perm
   | cons h tl l_ih =>
     simp_rw [range_succ_eq_map, length, flatMap_cons, flatMap_map, sublistsLen_succ_cons,
       sublists'_cons, List.sublistsLen_zero, List.singleton_append]
-    refine ((flatMap_append_perm (range (tl.length + 1)) _ _).symm.co
+    refine ((flatMap_append_perm (range (tl.length + 1)) _ _).symm.cons _).trans ?_
+    simp_rw [← List.map_flatMap, ← cons_append]
+    rw [← List.singleton_append]; rw [← List.sublistsLen_zero tl]
+    refine Perm.append ?_ (l_ih.map _)
+    rw [List.range_succ]; rw [flatMap_append]; rw [flatMap_singleton]; rw [sublistsLen_of_length_lt (Nat.lt_succ_self _)]; rw [append_nil]; rw [← List.flatMap_map Nat.succ fun n => sublistsLen n tl]; rw [← flatMap_cons (f := fun n => sublistsLen n tl)]; rw [← range_succ_eq_map]
+    exact l_ih
 
 Depends on / 依赖: List.map_flatMap, List.range_succ, List.singleton_append, List.sublistsLen_zero, Perm.append, _cons, append, cons_append, flatMap_append, flatMap_append_perm, flatMap_cons, flatMap_map, flatMap_singleton, l_ih, l_ih.map, length, map_flatMap, range_succ, range_succ_eq_map, simp_rw
 -/

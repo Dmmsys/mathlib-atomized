@@ -506,7 +506,8 @@ lemma map_target_subset_target
   proof: by
   rw [← h.writtenInCharts.image_eq]; rw [Set.image_comp]; rw [Set.image_comp]; rw [PartialEquiv.symm_image_target_eq_source]; rw [OpenPartialHomeomorph.extend_source]; rw [← PartialEquiv.image_source_eq_target]
   have : f '' h.domChart.source subseteq h.codChart.source := by
-    simp [h.source_su
+    simp [h.source_subset_preimage_source]
+  grw [this, OpenPartialHomeomorph.extend_source]
 
 中文:
 引理 map_target_subset_target
@@ -514,7 +515,8 @@ lemma map_target_subset_target
   证明: by
   rw [← h.writtenInCharts.image_eq]; rw [Set.image_comp]; rw [Set.image_comp]; rw [PartialEquiv.symm_image_target_eq_source]; rw [OpenPartialHomeomorph.extend_source]; rw [← PartialEquiv.image_source_eq_target]
   have : f '' h.domChart.source subseteq h.codChart.source := by
-    simp [h.source_su
+    simp [h.source_subset_preimage_source]
+  grw [this, OpenPartialHomeomorph.extend_source]
 
 Depends on / 依赖: OpenPartialHomeomorph, OpenPartialHomeomorph.extend_source, PartialEquiv, PartialEquiv.image_source_eq_target, PartialEquiv.symm_image_target_eq_source, Set.image_comp, codChart, domChart, extend_source, h.codChart.source, h.domChart.source, h.source_subset_preimage_source, h.writtenInCharts.image_eq, image_comp, image_eq, image_source_eq_target, source, source_subset_preimage_source, subseteq, symm_image_target_eq_source
 -/
@@ -669,7 +671,8 @@ lemma trans_F
     h.domChart_mem_maximalAtlas, h.codChart_mem_maximalAtlas, h.source_subset_preimage_source, ?_⟩
   use ((ContinuousLinearEquiv.refl 𝕜 E).prodCongr e.symm).trans h.equiv
   apply Set.EqOn.trans h.writtenInCharts
-  int
+  intro x hx
+  simp
 
 中文:
 引理 trans_F
@@ -679,7 +682,8 @@ lemma trans_F
     h.domChart_mem_maximalAtlas, h.codChart_mem_maximalAtlas, h.source_subset_preimage_source, ?_⟩
   use ((ContinuousLinearEquiv.refl 𝕜 E).prodCongr e.symm).trans h.equiv
   apply Set.EqOn.trans h.writtenInCharts
-  int
+  intro x hx
+  simp
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.refl, Set.EqOn.trans, codChart, codChart_mem_maximalAtlas, domChart, domChart_mem_maximalAtlas, e.symm, h.codChart, h.codChart_mem_maximalAtlas, h.domChart, h.domChart_mem_maximalAtlas, h.equiv, h.mem_codChart_source, h.mem_domChart_source, h.source_subset_preimage_source, h.writtenInCharts, mem_codChart_source, mem_domChart_source, prodCongr
 -/
@@ -738,7 +742,8 @@ theorem prodMap
   apply LiftSourceTargetPropertyAt.prodMap hf.property hg.property
   rintro f φ₁ ψ₁ g φ₂ ψ₂ ⟨equiv₁, hfprop⟩ ⟨equiv₂, hgprop⟩
   use (ContinuousLinearEquiv.prodProdProdComm 𝕜 E E' F F').trans (equiv₁.prodCongr equiv₂)
-  rw [φ₁.extend_prod φ₂]; rw [ψ₁.extend_prod]; rw [PartialEquiv.prod_target]; rw
+  rw [φ₁.extend_prod φ₂]; rw [ψ₁.extend_prod]; rw [PartialEquiv.prod_target]; rw [eqOn_prod_iff]
+  exact ⟨fun x ⟨hx, hx'⟩ => by simpa using hfprop hx, fun x ⟨hx, hx'⟩ => by simpa using hgprop hx'⟩
 
 中文:
 定理 prodMap
@@ -747,7 +752,8 @@ theorem prodMap
   apply LiftSourceTargetPropertyAt.prodMap hf.property hg.property
   rintro f φ₁ ψ₁ g φ₂ ψ₂ ⟨equiv₁, hfprop⟩ ⟨equiv₂, hgprop⟩
   use (ContinuousLinearEquiv.prodProdProdComm 𝕜 E E' F F').trans (equiv₁.prodCongr equiv₂)
-  rw [φ₁.extend_prod φ₂]; rw [ψ₁.extend_prod]; rw [PartialEquiv.prod_target]; rw
+  rw [φ₁.extend_prod φ₂]; rw [ψ₁.extend_prod]; rw [PartialEquiv.prod_target]; rw [eqOn_prod_iff]
+  exact ⟨fun x ⟨hx, hx'⟩ => by simpa using hfprop hx, fun x ⟨hx, hx'⟩ => by simpa using hgprop hx'⟩
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.prodProdProdComm, LiftSourceTargetPropertyAt, LiftSourceTargetPropertyAt.prodMap, PartialEquiv, PartialEquiv.prod_target, eqOn_prod_iff, extend_prod, hf.property, hfprop, hg.property, hgprop, prodCongr, prodMap, prodProdProdComm, prod_target, property
 -/
@@ -797,7 +803,8 @@ lemma of_opens
     (chartAt H y) (chartAt H y.val) (mem_chart_source H y) (mem_chart_source H y.val)
     (chart_mem_maximalAtlas y) (chart_mem_maximalAtlas y.val)
   intro x hx
-  suffices I ((chartAt H ↑y) ((chartAt H y).symm 
+  suffices I ((chartAt H ↑y) ((chartAt H y).symm (I.symm x))) = x by simpa +contextual
+  simp_all
 
 中文:
 引理 of_opens
@@ -807,7 +814,8 @@ lemma of_opens
     (chartAt H y) (chartAt H y.val) (mem_chart_source H y) (mem_chart_source H y.val)
     (chart_mem_maximalAtlas y) (chart_mem_maximalAtlas y.val)
   intro x hx
-  suffices I ((chartAt H ↑y) ((chartAt H y).symm 
+  suffices I ((chartAt H ↑y) ((chartAt H y).symm (I.symm x))) = x by simpa +contextual
+  simp_all
 
 Depends on / 依赖: I.symm, IsImmersionAtOfComplement, IsImmersionAtOfComplement.mk_of_continuousAt, chartAt, chart_mem_maximalAtlas, contextual, fun_prop, mem_chart_source, mk_of_continuousAt, prodUnique, y.val
 -/
@@ -856,7 +864,7 @@ theorem continuousOn
   rw [← h.domChart.continuousOn_writtenInExtend_iff le_rfl
       h.mapsto_domChart_source_codChart_source (I' := J) (I := I)]; rw [← h.domChart.extend_target_eq_image_source]
   have : ContinuousOn (h.equiv ∘ fun x => (x, 0)) (h.domChart.extend I).target := by fun_prop
-  exact this.congr h.written
+  exact this.congr h.writtenInCharts
 
 中文:
 定理 continuousOn
@@ -865,7 +873,7 @@ theorem continuousOn
   rw [← h.domChart.continuousOn_writtenInExtend_iff le_rfl
       h.mapsto_domChart_source_codChart_source (I' := J) (I := I)]; rw [← h.domChart.extend_target_eq_image_source]
   have : ContinuousOn (h.equiv ∘ fun x => (x, 0)) (h.domChart.extend I).target := by fun_prop
-  exact this.congr h.written
+  exact this.congr h.writtenInCharts
 
 Depends on / 依赖: ContinuousOn, continuousOn_writtenInExtend_iff, domChart, extend, extend_target_eq_image_source, fun_prop, h.domChart.continuousOn_writtenInExtend_iff, h.domChart.extend, h.domChart.extend_target_eq_image_source, h.equiv, h.mapsto_domChart_source_codChart_source, h.writtenInCharts, le_rfl, mapsto_domChart_source_codChart_source, target, this.congr, writtenInCharts
 -/
@@ -906,7 +914,8 @@ theorem contMDiffOn
   rw [← h.domChart.contMDiffOn_writtenInExtend_iff h.domChart_mem_maximalAtlas
     h.codChart_mem_maximalAtlas le_rfl h.mapsto_domChart_source_codChart_source]; rw [← h.domChart.extend_target_eq_image_source]
   have : CMDiff n (h.equiv ∘ fun x => (x, 0)) := by
-    rw [contMDiff_iff_contDiff]; fun
+    rw [contMDiff_iff_contDiff]; fun_prop
+  exact this.contMDiffOn.congr h.writtenInCharts
 
 中文:
 定理 contMDiffOn
@@ -915,7 +924,8 @@ theorem contMDiffOn
   rw [← h.domChart.contMDiffOn_writtenInExtend_iff h.domChart_mem_maximalAtlas
     h.codChart_mem_maximalAtlas le_rfl h.mapsto_domChart_source_codChart_source]; rw [← h.domChart.extend_target_eq_image_source]
   have : CMDiff n (h.equiv ∘ fun x => (x, 0)) := by
-    rw [contMDiff_iff_contDiff]; fun
+    rw [contMDiff_iff_contDiff]; fun_prop
+  exact this.contMDiffOn.congr h.writtenInCharts
 
 Depends on / 依赖: CMDiff, codChart_mem_maximalAtlas, contMDiffOn, contMDiffOn_writtenInExtend_iff, contMDiff_iff_contDiff, domChart, domChart_mem_maximalAtlas, extend_target_eq_image_source, fun_prop, h.codChart_mem_maximalAtlas, h.domChart.contMDiffOn_writtenInExtend_iff, h.domChart.extend_target_eq_image_source, h.domChart_mem_maximalAtlas, h.equiv, h.mapsto_domChart_source_codChart_source, h.writtenInCharts, le_rfl, mapsto_domChart_source_codChart_source, this.contMDiffOn.congr, writtenInCharts
 -/
@@ -958,7 +968,34 @@ lemma aux
   set f' := (h.domChart.extend J) ∘ f ∘ (extChartAt I x).symm
   set φ' := (h.codChart.extend J') ∘ φ ∘ (h.domChart.extend J).symm
   set x' := (extChartAt I x) x
-  set s := (extChartAt I x).symm ⁻¹' t in
+  set s := (extChartAt I x).symm ⁻¹' t inter range I
+  have hx' : extChartAt I x x in s := ⟨by simp [mem_chart_source H x, hxt], mem_range_self _⟩
+  have h'loc : ContDiffWithinAt 𝕜 n ((h.codChart.extend J') ∘ (φ ∘ f) ∘ (extChartAt I x).symm)
+      ((extChartAt I x).symm ⁻¹' t inter range I) (extChartAt I x x) := by
+    replace h' : CMDiffAt[t] n (φ ∘ f) x := h'.contMDiffWithinAt
+    rw [contMDiffWithinAt_iff_of_mem_maximalAtlas' h.codChart_mem_maximalAtlas] at h'
+    exacts [h'.2, h.mem_codChart_source]
+  -- By hypothesis, `φ ∘ f` (read in our charts) is `C^n` at `x'` within `s`.
+  have h'' : ContDiffWithinAt 𝕜 n (φ' ∘ f') s x' := by
+    apply h'loc.congr_of_mem (fun y hy => ?_) hx'
+    simp only [mfld_simps, φ', f']
+    rw [h.domChart.left_inv]
+    apply ht hy.1
+  -- On the other hand, composing `f'` with the inclusion `u ↦ (u, 0)` is also `C^n`
+  -- (as a composition of `C^n` functions); this locally equals `φ ∘ f` in coordinates
+  -- (since `f` is an immersion).
+  set f'' := (h.equiv ∘ fun x => (x, 0)) ∘ f'
+  have h''' : ContDiffWithinAt 𝕜 n f'' s x' := by
+    refine h''.congr_of_mem (fun y hy => ?_) hx'
+    simp only [f'', φ', f']
+    nth_rw 2 [comp_apply]
+    rw [Function.comp_apply]; rw [h.writtenInCharts]
+    rw [h.domChart.extend_target_eq_image_source]
+    exact ⟨(f ∘ (extChartAt I x).symm) y, ht hy.1, by simp⟩
+  -- Composing with a suitable projection to cancel the inclusion, we deduce that `f` is `C^n`.
+  have h'''' : ContDiffWithinAt 𝕜 n ((Prod.fst ∘ h.equiv.symm) ∘ f'') s x' :=
+    ContDiffWithinAt.comp x' (by fun_prop) h''' (mapsTo_univ _ _)
+  exact h''''.congr_of_mem (fun y hy => by simp [f'']) hx'
 
 中文:
 引理 aux
@@ -968,7 +1005,34 @@ lemma aux
   set f' := (h.domChart.extend J) ∘ f ∘ (extChartAt I x).symm
   set φ' := (h.codChart.extend J') ∘ φ ∘ (h.domChart.extend J).symm
   set x' := (extChartAt I x) x
-  set s := (extChartAt I x).symm ⁻¹' t in
+  set s := (extChartAt I x).symm ⁻¹' t inter range I
+  have hx' : extChartAt I x x in s := ⟨by simp [mem_chart_source H x, hxt], mem_range_self _⟩
+  have h'loc : ContDiffWithinAt 𝕜 n ((h.codChart.extend J') ∘ (φ ∘ f) ∘ (extChartAt I x).symm)
+      ((extChartAt I x).symm ⁻¹' t inter range I) (extChartAt I x x) := by
+    replace h' : CMDiffAt[t] n (φ ∘ f) x := h'.contMDiffWithinAt
+    rw [contMDiffWithinAt_iff_of_mem_maximalAtlas' h.codChart_mem_maximalAtlas] at h'
+    exacts [h'.2, h.mem_codChart_source]
+  -- By hypothesis, `φ ∘ f` (read in our charts) is `C^n` at `x'` within `s`.
+  have h'' : ContDiffWithinAt 𝕜 n (φ' ∘ f') s x' := by
+    apply h'loc.congr_of_mem (fun y hy => ?_) hx'
+    simp only [mfld_simps, φ', f']
+    rw [h.domChart.left_inv]
+    apply ht hy.1
+  -- On the other hand, composing `f'` with the inclusion `u ↦ (u, 0)` is also `C^n`
+  -- (as a composition of `C^n` functions); this locally equals `φ ∘ f` in coordinates
+  -- (since `f` is an immersion).
+  set f'' := (h.equiv ∘ fun x => (x, 0)) ∘ f'
+  have h''' : ContDiffWithinAt 𝕜 n f'' s x' := by
+    refine h''.congr_of_mem (fun y hy => ?_) hx'
+    simp only [f'', φ', f']
+    nth_rw 2 [comp_apply]
+    rw [Function.comp_apply]; rw [h.writtenInCharts]
+    rw [h.domChart.extend_target_eq_image_source]
+    exact ⟨(f ∘ (extChartAt I x).symm) y, ht hy.1, by simp⟩
+  -- Composing with a suitable projection to cancel the inclusion, we deduce that `f` is `C^n`.
+  have h'''' : ContDiffWithinAt 𝕜 n ((Prod.fst ∘ h.equiv.symm) ∘ f'') s x' :=
+    ContDiffWithinAt.comp x' (by fun_prop) h''' (mapsTo_univ _ _)
+  exact h''''.congr_of_mem (fun y hy => by simp [f'']) hx'
 -/
 private lemma aux {f : M -> N} {φ : N -> N'}
     (h : IsImmersionAtOfComplement F J J' n φ (f x)) (h' : CMDiffAt n (φ ∘ f) x)
@@ -1018,7 +1082,14 @@ lemma _root_.ContMDiffAt.iff_comp_isImmersionAtOfComplement
   -- Since `f` is continuous at `x`, some neighbourhood `t` of `x` is mapped
   -- into `hφ.domChart.source` under `f`. By restriction, we may assume `t` is open,
   -- so it suffices to test smoothness on `t`.
-  h
+  have : hφ.domChart.source in 𝓝 (f x) := hφ.domChart.open_source.mem_nhds hφ.mem_domChart_source
+  obtain ⟨t, ht, htopen, hxt⟩ := mem_nhds_iff.mp (hf this)
+suffices CMDiffAt[t] n f x from this.contMDiffAt htopen.mem_nhds hxt
+  -- We test smoothness of `f` on `t` in the preferred chart at `x` and `hφ.codChart`.
+  rw [contMDiffWithinAt_iff_of_mem_maximalAtlas'
+    hφ.domChart_mem_maximalAtlas hφ.mem_domChart_source]
+  refine ⟨hf.continuousWithinAt, ?_⟩
+  exact aux hφ h' ht hxt
 
 中文:
 引理 _root_.ContMDiffAt.iff_comp_isImmersionAtOfComplement
@@ -1027,7 +1098,14 @@ lemma _root_.ContMDiffAt.iff_comp_isImmersionAtOfComplement
   -- Since `f` is continuous at `x`, some neighbourhood `t` of `x` is mapped
   -- into `hφ.domChart.source` under `f`. By restriction, we may assume `t` is open,
   -- so it suffices to test smoothness on `t`.
-  h
+  have : hφ.domChart.source in 𝓝 (f x) := hφ.domChart.open_source.mem_nhds hφ.mem_domChart_source
+  obtain ⟨t, ht, htopen, hxt⟩ := mem_nhds_iff.mp (hf this)
+suffices CMDiffAt[t] n f x from this.contMDiffAt htopen.mem_nhds hxt
+  -- We test smoothness of `f` on `t` in the preferred chart at `x` and `hφ.codChart`.
+  rw [contMDiffWithinAt_iff_of_mem_maximalAtlas'
+    hφ.domChart_mem_maximalAtlas hφ.mem_domChart_source]
+  refine ⟨hf.continuousWithinAt, ?_⟩
+  exact aux hφ h' ht hxt
 
 Depends on / 依赖: contMDiffAt, contMDiffAt.comp, continuousAt, hf.continuousAt
 -/
@@ -1799,7 +1877,7 @@ lemma isImmersion
   inhabit M
   let x : M := Inhabited.default
   use (h x).smallComplement, by infer_instance, by infer_instance
-  exact (IsImmersionOfComplement.congr_F (h 
+  exact (IsImmersionOfComplement.congr_F (h x).smallEquiv).mp h
 
 中文:
 引理 isImmersion
@@ -1813,7 +1891,7 @@ lemma isImmersion
   inhabit M
   let x : M := Inhabited.default
   use (h x).smallComplement, by infer_instance, by infer_instance
-  exact (IsImmersionOfComplement.congr_F (h 
+  exact (IsImmersionOfComplement.congr_F (h x).smallEquiv).mp h
 
 Depends on / 依赖: Inhabited, Inhabited.default, IsEmpty, IsEmpty.false, IsImmersion, IsImmersionOfComplement, IsImmersionOfComplement.congr_F, congr_F, infer_instance, inhabit, smallComplement, smallEquiv
 -/
@@ -1841,7 +1919,9 @@ lemma id
     (chartAt H x) (chartAt H x) (mem_chart_source H x) (mem_chart_source H x)
     (chart_mem_maximalAtlas x) (chart_mem_maximalAtlas x)
   intro y hy
-  have : I ((chartAt H x) ((chartAt H x).symm (
+  have : I ((chartAt H x) ((chartAt H x).symm (I.symm y))) = y := by
+    rw [(chartAt H x).right_inv (by simp_all)]; rw [I.right_inv (by simp_all)]
+  simpa
 
 中文:
 引理 id
@@ -1853,7 +1933,9 @@ lemma id
     (chartAt H x) (chartAt H x) (mem_chart_source H x) (mem_chart_source H x)
     (chart_mem_maximalAtlas x) (chart_mem_maximalAtlas x)
   intro y hy
-  have : I ((chartAt H x) ((chartAt H x).symm (
+  have : I ((chartAt H x) ((chartAt H x).symm (I.symm y))) = y := by
+    rw [(chartAt H x).right_inv (by simp_all)]; rw [I.right_inv (by simp_all)]
+  simpa
 -/
 protected lemma id [IsManifold I n M] : IsImmersionOfComplement PUnit I I n (@id M) := by
   intro x
@@ -1913,7 +1995,9 @@ lemma sumInl
     (by fun_prop) _ _ (mem_chart_source H x) (mem_chart_source H (Sum.inl x))
     (IsManifold.chart_mem_maximalAtlas x) (IsManifold.chart_mem_maximalAtlas (Sum.inl x))
   intro y hy
-  have : I ((chartAt H
+  have : I ((chartAt H x) ((chartAt H x).symm (I.symm y))) = y := by
+    rw [(chartAt H x).right_inv (by simp_all)]; rw [I.right_inv (by simp_all)]
+  simpa
 
 中文:
 引理 sumInl
@@ -1924,7 +2008,9 @@ lemma sumInl
     (by fun_prop) _ _ (mem_chart_source H x) (mem_chart_source H (Sum.inl x))
     (IsManifold.chart_mem_maximalAtlas x) (IsManifold.chart_mem_maximalAtlas (Sum.inl x))
   intro y hy
-  have : I ((chartAt H
+  have : I ((chartAt H x) ((chartAt H x).symm (I.symm y))) = y := by
+    rw [(chartAt H x).right_inv (by simp_all)]; rw [I.right_inv (by simp_all)]
+  simpa
 
 Depends on / 依赖: I.right_inv, I.symm, IsImmersionAtOfComplement, IsImmersionAtOfComplement.mk_of_continuousAt, IsManifold, IsManifold.chart_mem_maximalAtlas, Sum.inl, chartAt, chart_mem_maximalAtlas, fun_prop, mem_chart_source, mk_of_continuousAt, prodUnique, right_inv
 -/
@@ -1951,7 +2037,9 @@ lemma sumInr
     (by fun_prop) _ _ (mem_chart_source H x) (mem_chart_source H (Sum.inr x))
     (IsManifold.chart_mem_maximalAtlas x) (IsManifold.chart_mem_maximalAtlas (Sum.inr x))
   intro y hy
-  have : I ((chartAt H
+  have : I ((chartAt H x) ((chartAt H x).symm (I.symm y))) = y := by
+    rw [(chartAt H x).right_inv (by simp_all)]; rw [I.right_inv (by simp_all)]
+  simpa
 
 中文:
 引理 sumInr
@@ -1962,7 +2050,9 @@ lemma sumInr
     (by fun_prop) _ _ (mem_chart_source H x) (mem_chart_source H (Sum.inr x))
     (IsManifold.chart_mem_maximalAtlas x) (IsManifold.chart_mem_maximalAtlas (Sum.inr x))
   intro y hy
-  have : I ((chartAt H
+  have : I ((chartAt H x) ((chartAt H x).symm (I.symm y))) = y := by
+    rw [(chartAt H x).right_inv (by simp_all)]; rw [I.right_inv (by simp_all)]
+  simpa
 
 Depends on / 依赖: I.right_inv, I.symm, IsImmersionAtOfComplement, IsImmersionAtOfComplement.mk_of_continuousAt, IsManifold, IsManifold.chart_mem_maximalAtlas, Sum.inr, chartAt, chart_mem_maximalAtlas, fun_prop, mem_chart_source, mk_of_continuousAt, prodUnique, right_inv
 -/

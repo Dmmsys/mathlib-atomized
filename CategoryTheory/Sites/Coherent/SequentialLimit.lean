@@ -175,7 +175,12 @@ definition noncomputable
     (fun n => (coherentTopology C).yoneda.map
       (limit.π _ ⟨n⟩) ≫ ((coherentTopology C).yonedaEquiv).symm ((preimageStruct hF X y).x n)) (by
     intro n
-    simp only [Functor.const_obj_obj, homOfLE_l
+    simp only [Functor.const_obj_obj, homOfLE_leOfHom, Functor.const_obj_map, Category.id_comp,
+      Category.assoc, ← limit.w (preimageDiagram hF X y) (homOfLE (n.le_add_right 1)).op,
+      homOfLE_leOfHom, Functor.map_comp]
+    simp [GrothendieckTopology.yonedaEquiv_symm_naturality_left,
+      GrothendieckTopology.yonedaEquiv_symm_naturality_right,
+      preimageDiagram, (preimageStruct hF X y).w n])
 
 中文:
 定义 noncomputable
@@ -185,7 +190,12 @@ definition noncomputable
     (fun n => (coherentTopology C).yoneda.map
       (limit.π _ ⟨n⟩) ≫ ((coherentTopology C).yonedaEquiv).symm ((preimageStruct hF X y).x n)) (by
     intro n
-    simp only [Functor.const_obj_obj, homOfLE_l
+    simp only [Functor.const_obj_obj, homOfLE_leOfHom, Functor.const_obj_map, Category.id_comp,
+      Category.assoc, ← limit.w (preimageDiagram hF X y) (homOfLE (n.le_add_right 1)).op,
+      homOfLE_leOfHom, Functor.map_comp]
+    simp [GrothendieckTopology.yonedaEquiv_symm_naturality_left,
+      GrothendieckTopology.yonedaEquiv_symm_naturality_right,
+      preimageDiagram, (preimageStruct hF X y).w n])
 -/
 private noncomputable def cone (X : C) (y : (F.obj ⟨0⟩).obj.obj ⟨X⟩) : Cone F where
   pt := ((coherentTopology C).yoneda).obj (limit (preimageDiagram hF X y))
@@ -215,7 +225,15 @@ lemma isLocallySurjective_π_app_zero_of_isLocallySurjective_map
   intro X y
   have hh : EffectiveEpi (limit.π (preimageDiagram hF X y) ⟨0⟩) :=
     h _ fun n => by simpa [preimageDiagram] using (preimageStruct hF X y).effectiveEpi n
-  refine ⟨limit (preimageDiagram hF
+  refine ⟨limit (preimageDiagram hF X y), limit.π (preimageDiagram hF X y) ⟨0⟩, hh,
+    (coherentTopology C).yonedaEquiv (hc.lift (cone hF X y )),
+    (?_ : (c.π.app (op 0)).hom.app _ _ = _)⟩
+  simp only [← (coherentTopology C).yonedaEquiv_comp, cone,
+    IsLimit.fac, NatTrans.ofOpSequence_app, (coherentTopology C).yonedaEquiv_comp,
+    (coherentTopology C).yonedaEquiv_yoneda_map]
+  rfl
+
+include h in
 
 中文:
 引理 isLocallySurjective_π_app_zero_of_isLocallySurjective_map
@@ -224,7 +242,15 @@ lemma isLocallySurjective_π_app_zero_of_isLocallySurjective_map
   intro X y
   have hh : EffectiveEpi (limit.π (preimageDiagram hF X y) ⟨0⟩) :=
     h _ fun n => by simpa [preimageDiagram] using (preimageStruct hF X y).effectiveEpi n
-  refine ⟨limit (preimageDiagram hF
+  refine ⟨limit (preimageDiagram hF X y), limit.π (preimageDiagram hF X y) ⟨0⟩, hh,
+    (coherentTopology C).yonedaEquiv (hc.lift (cone hF X y )),
+    (?_ : (c.π.app (op 0)).hom.app _ _ = _)⟩
+  simp only [← (coherentTopology C).yonedaEquiv_comp, cone,
+    IsLimit.fac, NatTrans.ofOpSequence_app, (coherentTopology C).yonedaEquiv_comp,
+    (coherentTopology C).yonedaEquiv_yoneda_map]
+  rfl
+
+include h in
 
 Depends on / 依赖: EffectiveEpi, coherentTopology, coherentTopology.isLocallySurjective_iff, effectiveEpi, hc.lift, hom.app, isLocallySurjective_iff, preimageDiagram, preimageStruct, regularTopology, regularTopology.isLocallySurjective_iff, yonedaEquiv, yonedaEquiv_comp
 -/

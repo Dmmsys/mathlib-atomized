@@ -74,7 +74,12 @@ instance [Algebra.IsSeparable
     (.symm <| .ofBijective _ q.bijective_algebraMap_quotient_residueField) ?_
   apply RingHom.ext fun x => ?_
   obtain ⟨x, rfl⟩ :=
-    (RingEquiv.ofBijective _ p.bijective_algebr
+    (RingEquiv.ofBijective _ p.bijective_algebraMap_quotient_residueField).surjective x
+  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+  apply (RingEquiv.ofBijective _ q.bijective_algebraMap_quotient_residueField).injective
+  simp only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, RingEquiv.symm_apply_apply,
+    RingEquiv.apply_symm_apply]
+  simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
 
 中文:
 实例 [代数.是可分
@@ -85,7 +90,12 @@ instance [Algebra.IsSeparable
     (.symm <| .ofBijective _ q.bijective_algebraMap_quotient_residueField) ?_
   apply RingHom.ext fun x => ?_
   obtain ⟨x, rfl⟩ :=
-    (RingEquiv.ofBijective _ p.bijective_algebr
+    (RingEquiv.ofBijective _ p.bijective_algebraMap_quotient_residueField).surjective x
+  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+  apply (RingEquiv.ofBijective _ q.bijective_algebraMap_quotient_residueField).injective
+  simp only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, RingEquiv.symm_apply_apply,
+    RingEquiv.apply_symm_apply]
+  simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.of_equiv_equiv, Ideal.Quotient.mk_surjective, IsSeparable, Quotient, RingEquiv, RingEquiv.ofBijective, RingHom, RingHom.coe, RingHom.coe_comp, RingHom.ext, bijective_algebraMap_quotient_residueField, coe_comp, injective, mk_surjective, ofBijective, of_equiv_equiv, p.bijective_algebraMap_quotient_residueField, q.bijective_algebraMap_quotient_residueField, surjective
 -/
@@ -156,7 +166,12 @@ instance [Algebra.IsIntegral
     .tower_top A
   let := ((algebraMap (B ⧸ q) q.ResidueField).comp (algebraMap (A ⧸ p) (B ⧸ q))).toAlgebra
   have : IsScalarTower (A ⧸ p) (B ⧸ q) q.ResidueField := .of_algebraMap_eq' rfl
-  have : Algebra.IsAlgebraic (A ⧸ p) q.ResidueField := .trans 
+  have : Algebra.IsAlgebraic (A ⧸ p) q.ResidueField := .trans _ (B ⧸ q) _
+  have : IsScalarTower (A ⧸ p) p.ResidueField q.ResidueField := by
+    refine .of_algebraMap_eq fun x => ?_
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
+  refine .extendScalars (Ideal.injective_algebraMap_quotient_residueField p)
 
 中文:
 实例 [代数.是整
@@ -166,7 +181,12 @@ instance [Algebra.IsIntegral
     .tower_top A
   let := ((algebraMap (B ⧸ q) q.ResidueField).comp (algebraMap (A ⧸ p) (B ⧸ q))).toAlgebra
   have : IsScalarTower (A ⧸ p) (B ⧸ q) q.ResidueField := .of_algebraMap_eq' rfl
-  have : Algebra.IsAlgebraic (A ⧸ p) q.ResidueField := .trans 
+  have : Algebra.IsAlgebraic (A ⧸ p) q.ResidueField := .trans _ (B ⧸ q) _
+  have : IsScalarTower (A ⧸ p) p.ResidueField q.ResidueField := by
+    refine .of_algebraMap_eq fun x => ?_
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
+  refine .extendScalars (Ideal.injective_algebraMap_quotient_residueField p)
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Algebra.IsIntegral, Ideal.Quotient.mk_surjective, IsAlgebraic, IsIntegral, IsScalarTo, IsScalarTower, Quotient, ResidueField, RingHom, RingHom.algebraMap_toAlgebra, algebraMap, algebraMap_toAlgebra, mk_surjective, of_algebraMap_eq, p.ResidueField, q.ResidueField, toAlgebra, tower_top
 -/

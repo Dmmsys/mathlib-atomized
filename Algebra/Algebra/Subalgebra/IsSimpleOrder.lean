@@ -30,7 +30,10 @@ theorem Subalgebra.isSimpleOrder_of_finrank_prime
     eq_bot_or_eq_top := fun K => by
       have : FiniteDimensional _ _ := .of_finrank_pos hp.pos
       let := divisionRingOfFiniteDimensional F K
-      refine (hp.eq_one
+      refine (hp.eq_one_or_self_of_dvd _ ⟨_, (finrank_mul_finrank F K A).symm⟩).imp ?_ fun h => ?_
+      · exact fun h' => Subalgebra.eq_bot_of_finrank_one h'
+      · exact
+          Algebra.toSubmodule_eq_top.1 (eq_top_of_finrank_eq <| K.finrank_toSubmodule.trans h) }
 
 中文:
 定理 子代数.isSimpleOrder_of_finrank_prime
@@ -41,7 +44,10 @@ theorem Subalgebra.isSimpleOrder_of_finrank_prime
     eq_bot_or_eq_top := fun K => by
       have : FiniteDimensional _ _ := .of_finrank_pos hp.pos
       let := divisionRingOfFiniteDimensional F K
-      refine (hp.eq_one
+      refine (hp.eq_one_or_self_of_dvd _ ⟨_, (finrank_mul_finrank F K A).symm⟩).imp ?_ fun h => ?_
+      · exact fun h' => Subalgebra.eq_bot_of_finrank_one h'
+      · exact
+          Algebra.toSubmodule_eq_top.1 (eq_top_of_finrank_eq <| K.finrank_toSubmodule.trans h) }
 
 Depends on / 依赖: Algebra, Algebra.toSubmodule_eq_top, FiniteDimensional, K.finrank_toSubmodule.trans, Nat.not_prime_one, Subalgebra, Subalgebra.bot_eq_top_iff_finrank_eq_one, Subalgebra.eq_bot_of_finrank_one, bot_eq_top_iff_finrank_eq_one, divisionRingOfFiniteDimensional, eq_bot_of_finrank_one, eq_bot_or_eq_top, eq_one_or_self_of_dvd, eq_top_of_finrank_eq, finrank_mul_finrank, finrank_toSubmodule, hp.eq_one_or_self_of_dvd, hp.pos, not_prime_one, of_finrank_pos
 -/

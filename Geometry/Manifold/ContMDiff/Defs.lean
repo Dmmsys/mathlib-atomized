@@ -166,7 +166,36 @@ theorem contDiffWithinAt_localInvariantProp_of_le
     rw [ContDiffWithinAtProp]; rw [ContDiffWithinAtProp]; rw [this]
     symm
     apply contDiffWithinAt_inter
-    have : u in 𝓝 (I.symm (I x)) :
+    have : u in 𝓝 (I.symm (I x)) := by
+      rw [ModelWithCorners.left_inv]
+      exact u_open.mem_nhds xu
+    apply ContinuousAt.preimage_mem_nhds I.continuous_symm.continuousAt this
+  right_invariance' {s x f e} he hx h := by
+    rw [ContDiffWithinAtProp] at h ⊢
+    have : I x = (I ∘ e.symm ∘ I.symm) (I (e x)) := by simp only [hx, mfld_simps]
+    rw [this] at h
+    have : I (e x) in I.symm ⁻¹' e.target inter range I := by simp only [hx, mfld_simps]
+    have := (mem_groupoid_of_pregroupoid.2 he).2.contDiffWithinAt this
+    convert! (h.comp_inter _ (this.of_le hmn)).mono_of_mem_nhdsWithin _ using 1
+    · ext y; simp only [mfld_simps]
+    refine mem_nhdsWithin.mpr
+      ⟨I.symm ⁻¹' e.target, e.open_target.preimage I.continuous_symm, by
+        simp_rw [mem_preimage, I.left_inv, e.mapsTo hx], ?_⟩
+    mfld_set_tac
+  congr_of_forall {s x f g} h hx hf := by
+    apply hf.congr
+    · intro y hy
+      simp only [mfld_simps] at hy
+      simp only [h, hy, mfld_simps]
+    · simp only [hx, mfld_simps]
+  left_invariance' {s x f e'} he' hs hx h := by
+    rw [ContDiffWithinAtProp] at h ⊢
+    have A : (I' ∘ f ∘ I.symm) (I x) in I'.symm ⁻¹' e'.source inter range I' := by
+      simp only [hx, mfld_simps]
+    have := (mem_groupoid_of_pregroupoid.2 he').1.contDiffWithinAt A
+    convert! (this.of_le hmn).comp _ h _
+    · ext y; simp only [mfld_simps]
+    · intro y hy; simp only [mfld_simps] at hy; simpa only [hy, mfld_simps] using hs hy.1
 
 中文:
 定理 contDiffWithinAt_localInvariantProp_of_le
@@ -177,7 +206,36 @@ theorem contDiffWithinAt_localInvariantProp_of_le
     rw [ContDiffWithinAtProp]; rw [ContDiffWithinAtProp]; rw [this]
     symm
     apply contDiffWithinAt_inter
-    have : u in 𝓝 (I.symm (I x)) :
+    have : u in 𝓝 (I.symm (I x)) := by
+      rw [ModelWithCorners.left_inv]
+      exact u_open.mem_nhds xu
+    apply ContinuousAt.preimage_mem_nhds I.continuous_symm.continuousAt this
+  right_invariance' {s x f e} he hx h := by
+    rw [ContDiffWithinAtProp] at h ⊢
+    have : I x = (I ∘ e.symm ∘ I.symm) (I (e x)) := by simp only [hx, mfld_simps]
+    rw [this] at h
+    have : I (e x) in I.symm ⁻¹' e.target inter range I := by simp only [hx, mfld_simps]
+    have := (mem_groupoid_of_pregroupoid.2 he).2.contDiffWithinAt this
+    convert! (h.comp_inter _ (this.of_le hmn)).mono_of_mem_nhdsWithin _ using 1
+    · ext y; simp only [mfld_simps]
+    refine mem_nhdsWithin.mpr
+      ⟨I.symm ⁻¹' e.target, e.open_target.preimage I.continuous_symm, by
+        simp_rw [mem_preimage, I.left_inv, e.mapsTo hx], ?_⟩
+    mfld_set_tac
+  congr_of_forall {s x f g} h hx hf := by
+    apply hf.congr
+    · intro y hy
+      simp only [mfld_simps] at hy
+      simp only [h, hy, mfld_simps]
+    · simp only [hx, mfld_simps]
+  left_invariance' {s x f e'} he' hs hx h := by
+    rw [ContDiffWithinAtProp] at h ⊢
+    have A : (I' ∘ f ∘ I.symm) (I x) in I'.symm ⁻¹' e'.source inter range I' := by
+      simp only [hx, mfld_simps]
+    have := (mem_groupoid_of_pregroupoid.2 he').1.contDiffWithinAt A
+    convert! (this.of_le hmn).comp _ h _
+    · ext y; simp only [mfld_simps]
+    · intro y hy; simp only [mfld_simps] at hy; simpa only [hy, mfld_simps] using hs hy.1
 
 Depends on / 依赖: ContDiffWithinAtProp, ContinuousAt, ContinuousAt.preimage_mem_nhds, I.continuous_symm.continuousAt, I.symm, ModelWithCorners, ModelWithCorners.left_inv, contDiffWithinAt_inter, continuousAt, continuous_symm, inter_right_comm, left_inv, mem_nhds, preimage_inter, preimage_mem_nhds, right_invariance, u_open, u_open.mem_nhds
 -/
@@ -626,7 +684,11 @@ theorem contMDiffWithinAt_iff_target
     ContinuousWithinAt f s x ∧ ContinuousWithinAt (extChartAt I' (f x) ∘ f) s x ↔
         ContinuousWithinAt f s x :=
 and_iff_left_of_imp (continuousAt_extChartAt _).comp_continuousWithinAt
-  simp_rw [cont, ContDiffWi
+  simp_rw [cont, ContDiffWithinAtProp, extChartAt, OpenPartialHomeomorph.extend,
+    PartialEquiv.coe_trans, ModelWithCorners.toPartialEquiv_coe,
+    OpenPartialHomeomorph.coe_toPartialEquiv, modelWithCornersSelf_coe, chartAt_self_eq,
+    OpenPartialHomeomorph.refl_apply, id_comp]
+  rfl
 
 中文:
 定理 contMDiffWithinAt_iff_target
@@ -636,7 +698,11 @@ and_iff_left_of_imp (continuousAt_extChartAt _).comp_continuousWithinAt
     ContinuousWithinAt f s x ∧ ContinuousWithinAt (extChartAt I' (f x) ∘ f) s x ↔
         ContinuousWithinAt f s x :=
 and_iff_left_of_imp (continuousAt_extChartAt _).comp_continuousWithinAt
-  simp_rw [cont, ContDiffWi
+  simp_rw [cont, ContDiffWithinAtProp, extChartAt, OpenPartialHomeomorph.extend,
+    PartialEquiv.coe_trans, ModelWithCorners.toPartialEquiv_coe,
+    OpenPartialHomeomorph.coe_toPartialEquiv, modelWithCornersSelf_coe, chartAt_self_eq,
+    OpenPartialHomeomorph.refl_apply, id_comp]
+  rfl
 
 Depends on / 依赖: ContDiffWithinAtProp, ContMDiffWithinAt, ContinuousWithinAt, ModelWithCorners, ModelWithCorners.toPartialEquiv_coe, OpenPartialHomeomo, OpenPartialHomeomorph, OpenPartialHomeomorph.coe_toPartialEquiv, OpenPartialHomeomorph.extend, PartialEquiv, PartialEquiv.coe_trans, and_assoc, and_iff_left_of_imp, chartAt_self_eq, coe_toPartialEquiv, coe_trans, comp_continuousWithinAt, continuousAt_extChartAt, extChartAt, extend
 -/
@@ -688,7 +754,19 @@ theorem continuousWithinAt_iff_source
     · exact (mapsTo_preimage _ _).mono_left inter_subset_left
     · exact extChartAt_to_inv x
   · rw [← continuousWithinAt_inter (extChartAt_source_mem_nhds (I := I) x)]
-    
+    have : ContinuousWithinAt ((f ∘ ↑(extChartAt I x).symm) ∘ ↑(extChartAt I x))
+        (s inter (extChartAt I x).source) x := by
+      apply h.comp (continuousAt_extChartAt x).continuousWithinAt
+      intro y hy
+      have : (chartAt H x).symm ((chartAt H x) y) = y :=
+        OpenPartialHomeomorph.left_inv _ (by simpa using hy.2)
+      simpa [this] using hy.1
+    apply this.congr
+    · intro y hy
+      have : (chartAt H x).symm ((chartAt H x) y) = y :=
+        OpenPartialHomeomorph.left_inv _ (by simpa using hy.2)
+      simp [this]
+    · simp
 
 中文:
 定理 continuousWithinAt_iff_source
@@ -699,7 +777,19 @@ theorem continuousWithinAt_iff_source
     · exact (mapsTo_preimage _ _).mono_left inter_subset_left
     · exact extChartAt_to_inv x
   · rw [← continuousWithinAt_inter (extChartAt_source_mem_nhds (I := I) x)]
-    
+    have : ContinuousWithinAt ((f ∘ ↑(extChartAt I x).symm) ∘ ↑(extChartAt I x))
+        (s inter (extChartAt I x).source) x := by
+      apply h.comp (continuousAt_extChartAt x).continuousWithinAt
+      intro y hy
+      have : (chartAt H x).symm ((chartAt H x) y) = y :=
+        OpenPartialHomeomorph.left_inv _ (by simpa using hy.2)
+      simpa [this] using hy.1
+    apply this.congr
+    · intro y hy
+      have : (chartAt H x).symm ((chartAt H x) y) = y :=
+        OpenPartialHomeomorph.left_inv _ (by simpa using hy.2)
+      simp [this]
+    · simp
 
 Depends on / 依赖: ContinuousWithinAt, chartAt, comp_of_eq, continuousAt_extChartAt, continuousAt_extChartAt_symm, continuousWithinAt, continuousWithinAt_inter, extChartAt, extChartAt_source_mem_nhds, extChartAt_to_inv, h.comp, h.comp_of_eq, inter_subset_left, mapsTo_preimage, mono_left, source
 -/
@@ -787,7 +877,9 @@ theorem contMDiffWithinAt_iff_source_of_mem_maximalAtlas
   simp_rw [ContMDiffWithinAt,
     (contDiffWithinAt_localInvariantProp n).liftPropWithinAt_indep_chart_source he hx,
     StructureGroupoid.liftPropWithinAt_self_source,
-    e.extend_symm_continuousWithinAt_comp_right_iff, contDiffWithinAtPr
+    e.extend_symm_continuousWithinAt_comp_right_iff, contDiffWithinAtProp_self_source,
+    ContDiffWithinAtProp, Function.comp, e.left_inv hx, (e.extend I).left_inv h2x]
+  rfl
 
 中文:
 定理 contMDiffWithinAt_iff_source_of_mem_maximalAtlas
@@ -796,7 +888,9 @@ theorem contMDiffWithinAt_iff_source_of_mem_maximalAtlas
   simp_rw [ContMDiffWithinAt,
     (contDiffWithinAt_localInvariantProp n).liftPropWithinAt_indep_chart_source he hx,
     StructureGroupoid.liftPropWithinAt_self_source,
-    e.extend_symm_continuousWithinAt_comp_right_iff, contDiffWithinAtPr
+    e.extend_symm_continuousWithinAt_comp_right_iff, contDiffWithinAtProp_self_source,
+    ContDiffWithinAtProp, Function.comp, e.left_inv hx, (e.extend I).left_inv h2x]
+  rfl
 
 Depends on / 依赖: ContDiffWithinAtProp, ContMDiffWithinAt, Function, Function.comp, StructureGroupoid, StructureGroupoid.liftPropWithinAt_self_source, contDiffWithinAtProp_self_source, contDiffWithinAt_localInvariantProp, e.extend, e.extend_source, e.extend_symm_continuousWithinAt_comp_right_iff, e.left_inv, extend, extend_source, extend_symm_continuousWithinAt_comp_right_iff, left_inv, liftPropWithinAt_indep_chart_source, liftPropWithinAt_self_source, simp_rw
 -/
@@ -865,7 +959,9 @@ theorem contMDiffWithinAt_iff_target_of_mem_maximalAtlas
   apply and_congr_right (fun h => ?_)
   have A : ContinuousWithinAt ((e'.extend I') ∘ f) s x :=
     (e'.continuousAt_extend hx).comp_continuousWithinAt h
-  have A' : ContinuousWit
+  have A' : ContinuousWithinAt (e' ∘ f) s x := (e'.continuousAt hx).comp_continuousWithinAt h
+  simp_rw [StructureGroupoid.liftPropWithinAt_self_target, A, A']
+  simp [ContDiffWithinAtProp, comp_assoc]
 
 中文:
 定理 contMDiffWithinAt_iff_target_of_mem_maximalAtlas
@@ -875,7 +971,9 @@ theorem contMDiffWithinAt_iff_target_of_mem_maximalAtlas
   apply and_congr_right (fun h => ?_)
   have A : ContinuousWithinAt ((e'.extend I') ∘ f) s x :=
     (e'.continuousAt_extend hx).comp_continuousWithinAt h
-  have A' : ContinuousWit
+  have A' : ContinuousWithinAt (e' ∘ f) s x := (e'.continuousAt hx).comp_continuousWithinAt h
+  simp_rw [StructureGroupoid.liftPropWithinAt_self_target, A, A']
+  simp [ContDiffWithinAtProp, comp_assoc]
 
 Depends on / 依赖: ContDiffWithinAtProp, ContMDiffWithinAt, ContinuousWithinAt, StructureGroupoid, StructureGroupoid.liftPropWithinAt_self_target, and_congr_right, comp_assoc, comp_continuousWithinAt, contDiffWithinAt_localInvariantProp, continuousAt, continuousAt_extend, extend, liftPropWithinAt_indep_chart_target, liftPropWithinAt_self_target, simp_rw
 -/
@@ -970,7 +1068,9 @@ theorem contMDiffWithinAt_iff_of_mem_maximalAtlas'
   apply and_congr continuousWithinAt_iff_source.symm
   -- TODO: this is `contMDiffWithinAt_iff_contDiffWithinAt` copied,
   -- which is not put here for import reasons
-  simp +contextual only 
+  simp +contextual only [ContMDiffWithinAt, liftPropWithinAt_iff',
+    ContDiffWithinAtProp, iff_def, mfld_simps]
+  exact ContDiffWithinAt.continuousWithinAt
 
 中文:
 定理 contMDiffWithinAt_iff_of_mem_maximalAtlas'
@@ -979,7 +1079,9 @@ theorem contMDiffWithinAt_iff_of_mem_maximalAtlas'
   apply and_congr continuousWithinAt_iff_source.symm
   -- TODO: this is `contMDiffWithinAt_iff_contDiffWithinAt` copied,
   -- which is not put here for import reasons
-  simp +contextual only 
+  simp +contextual only [ContMDiffWithinAt, liftPropWithinAt_iff',
+    ContDiffWithinAtProp, iff_def, mfld_simps]
+  exact ContDiffWithinAt.continuousWithinAt
 
 Depends on / 依赖: and_congr, contMDiffWithinAt_iff_source, contMDiffWithinAt_iff_target_of_mem_maximalAtlas, continuousWithinAt_iff_source, continuousWithinAt_iff_source.symm
 -/
@@ -1090,7 +1192,8 @@ theorem contMDiffWithinAt_iff_of_mem_source'
   rw [and_congr_right_iff]
   set e := extChartAt I x; set e' := extChartAt I' (f x)
   refine fun hc => contDiffWithinAt_congr_set ?_
-  rw [← nhdsWithin_eq_iff_event
+  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← e.image_source_inter_eq']; rw [← map_extChartAt_nhdsWithin_eq_image' hx]; rw [← map_extChartAt_nhdsWithin' hx]; rw [inter_comm]; rw [nhdsWithin_inter_of_mem]
+  exact hc (extChartAt_source_mem_nhds' hy)
 
 中文:
 定理 contMDiffWithinAt_iff_of_mem_source'
@@ -1102,7 +1205,8 @@ theorem contMDiffWithinAt_iff_of_mem_source'
   rw [and_congr_right_iff]
   set e := extChartAt I x; set e' := extChartAt I' (f x)
   refine fun hc => contDiffWithinAt_congr_set ?_
-  rw [← nhdsWithin_eq_iff_event
+  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← e.image_source_inter_eq']; rw [← map_extChartAt_nhdsWithin_eq_image' hx]; rw [← map_extChartAt_nhdsWithin' hx]; rw [inter_comm]; rw [nhdsWithin_inter_of_mem]
+  exact hc (extChartAt_source_mem_nhds' hy)
 
 Depends on / 依赖: and_congr_right_iff, contDiffWithinAt_congr_set, contMDiffWithinAt_iff_of_mem_source, e.image_source_inter_eq, extChartAt, extChartAt_source, extChartAt_source_mem_nhds, image_source_inter_eq, inter_comm, map_extChartAt_nhdsWithin, map_extChartAt_nhdsWithin_eq_image, nhdsWithin_eq_iff_eventuallyEq, nhdsWithin_inter_of_mem
 -/
@@ -1268,7 +1372,17 @@ theorem contMDiffOn_iff
     let w := (extChartAt I x).symm z
     have : w in s := by simp only [w, hz, mfld_simps]
     specialize h w this
-    have w1 : w in (chartAt H x).source := by simp only [w, hz, mfl
+    have w1 : w in (chartAt H x).source := by simp only [w, hz, mfld_simps]
+    have w2 : f w in (chartAt H' y).source := by simp only [w, hz, mfld_simps]
+    convert! ((contMDiffWithinAt_iff_of_mem_source w1 w2).mp h).2.mono _
+    · simp only [w, hz, mfld_simps]
+    · mfld_set_tac
+  · rintro ⟨hcont, hdiff⟩ x hx
+    refine (contDiffWithinAt_localInvariantProp n).liftPropWithinAt_iff.mpr ?_
+    refine ⟨hcont x hx, ?_⟩
+    dsimp [ContDiffWithinAtProp]
+    convert! hdiff x (f x) (extChartAt I x x) (by simp only [hx, mfld_simps]) using 1
+    mfld_set_tac
 
 中文:
 定理 contMDiffOn_iff
@@ -1281,7 +1395,17 @@ theorem contMDiffOn_iff
     let w := (extChartAt I x).symm z
     have : w in s := by simp only [w, hz, mfld_simps]
     specialize h w this
-    have w1 : w in (chartAt H x).source := by simp only [w, hz, mfl
+    have w1 : w in (chartAt H x).source := by simp only [w, hz, mfld_simps]
+    have w2 : f w in (chartAt H' y).source := by simp only [w, hz, mfld_simps]
+    convert! ((contMDiffWithinAt_iff_of_mem_source w1 w2).mp h).2.mono _
+    · simp only [w, hz, mfld_simps]
+    · mfld_set_tac
+  · rintro ⟨hcont, hdiff⟩ x hx
+    refine (contDiffWithinAt_localInvariantProp n).liftPropWithinAt_iff.mpr ?_
+    refine ⟨hcont x hx, ?_⟩
+    dsimp [ContDiffWithinAtProp]
+    convert! hdiff x (f x) (extChartAt I x x) (by simp only [hx, mfld_simps]) using 1
+    mfld_set_tac
 
 Depends on / 依赖: chartAt, contMDiffWithinAt_iff_of_mem_source, convert, extChartAt, mfld_set_tac, mfld_simps, source, specialize
 -/
@@ -1324,7 +1448,11 @@ theorem contMDiffOn_zero_iff
   rw [contDiffOn_zero]
   apply (continuousOn_extChartAt _).comp
   · apply h.comp ((continuousOn_extChartAt_symm _).mono inter_subset_left) (fun z hz => ?_)
-    simp only [preimage_inter, mem_inter_iff, mem_preimage] at h
+    simp only [preimage_inter, mem_inter_iff, mem_preimage] at hz
+    exact hz.2.1
+  · intro z hz
+    simp only [preimage_inter, mem_inter_iff, mem_preimage] at hz
+    exact hz.2.2
 
 中文:
 定理 contMDiffOn_zero_iff
@@ -1336,7 +1464,11 @@ theorem contMDiffOn_zero_iff
   rw [contDiffOn_zero]
   apply (continuousOn_extChartAt _).comp
   · apply h.comp ((continuousOn_extChartAt_symm _).mono inter_subset_left) (fun z hz => ?_)
-    simp only [preimage_inter, mem_inter_iff, mem_preimage] at h
+    simp only [preimage_inter, mem_inter_iff, mem_preimage] at hz
+    exact hz.2.1
+  · intro z hz
+    simp only [preimage_inter, mem_inter_iff, mem_preimage] at hz
+    exact hz.2.2
 
 Depends on / 依赖: contDiffOn_zero, contMDiffOn_iff, continuousOn_extChartAt, continuousOn_extChartAt_symm, h.comp, inter_subset_left, mem_inter_iff, mem_preimage, preimage_inter
 -/
@@ -1365,7 +1497,11 @@ theorem contMDiffOn_iff_target
     OpenPartialHomeomorph.extend, Set.preimage_univ, Set.inter_univ, and_congr_right_iff]
   intro h
   constructor
-  · refine fun h' y => ⟨?_
+  · refine fun h' y => ⟨?_, fun x _ => h' x y⟩
+    have h'' : ContinuousOn _ univ := (ModelWithCorners.continuous I').continuousOn
+    convert! (h''.comp_inter (chartAt H' y).continuousOn_toFun).comp_inter h
+    simp
+  · exact fun h' x y => (h' y).2 x 0
 
 中文:
 定理 contMDiffOn_iff_target
@@ -1376,7 +1512,11 @@ theorem contMDiffOn_iff_target
     OpenPartialHomeomorph.extend, Set.preimage_univ, Set.inter_univ, and_congr_right_iff]
   intro h
   constructor
-  · refine fun h' y => ⟨?_
+  · refine fun h' y => ⟨?_, fun x _ => h' x y⟩
+    have h'' : ContinuousOn _ univ := (ModelWithCorners.continuous I').continuousOn
+    convert! (h''.comp_inter (chartAt H' y).continuousOn_toFun).comp_inter h
+    simp
+  · exact fun h' x y => (h' y).2 x 0
 
 Depends on / 依赖: ContinuousOn, ModelWithCorners, ModelWithCorners.continuous, ModelWithCorners.source_eq, OpenPartialHomeomorph, OpenPartialHomeomorph.extend, OpenPartialHomeomorph.refl_partialEquiv, PartialEquiv, PartialEquiv.refl_trans, Set.inter_univ, Set.preimage_univ, and_congr_right_iff, chartAt, chartAt_self_eq, comp_inter, contMDiffOn_iff, continuous, continuousOn, continuousOn_toFun, convert
 -/
@@ -1905,7 +2045,7 @@ refine Iff.rfl.and (contDiffWithinAt_congr_set ?_).trans contDiffWithinAt_insert
   simp only [← map_extChartAt_nhdsWithin, nhdsWithin_insert, Filter.map_sup, Filter.map_pure,
     ← nhdsWithin_eq_iff_eventuallyEq]
 
-alias ⟨Con
+alias ⟨ContMDiffWithinAt.of_insert, _⟩ := contMDiffWithinAt_insert_self
 
 中文:
 定理 contMDiffWithinAt_insert_self
@@ -1915,7 +2055,7 @@ refine Iff.rfl.and (contDiffWithinAt_congr_set ?_).trans contDiffWithinAt_insert
   simp only [← map_extChartAt_nhdsWithin, nhdsWithin_insert, Filter.map_sup, Filter.map_pure,
     ← nhdsWithin_eq_iff_eventuallyEq]
 
-alias ⟨Con
+alias ⟨ContMDiffWithinAt.of_insert, _⟩ := contMDiffWithinAt_insert_self
 
 Depends on / 依赖: Filter, Filter.map_pure, Filter.map_sup, Iff.rfl.and, contDiffWithinAt_congr_set, contDiffWithinAt_insert_self, contMDiffWithinAt_iff, continuousWithinAt_insert_self, map_extChartAt_nhdsWithin, map_pure, map_sup, nhdsWithin_eq_iff_eventuallyEq, nhdsWithin_insert
 -/
@@ -2142,7 +2282,27 @@ theorem contMDiffWithinAt_iff_contMDiffOn_nhds
   rw [insert_eq_of_mem hxs]
   -- The `←` implication is trivial
   refine ⟨fun h => ?_, fun ⟨u, hmem, hu⟩ =>
-    (hu _ (mem_of_mem_nhdsWit
+    (hu _ (mem_of_mem_nhdsWithin hxs hmem)).mono_of_mem_nhdsWithin hmem⟩
+  -- The property is true in charts. Let `v` be a good neighborhood in the chart where the function
+  -- is `Cⁿ`.
+  rcases (contMDiffWithinAt_iff'.1 h).2.contDiffOn le_rfl (by simp [hn]) with ⟨v, hmem, hsub, hv⟩
+  have hxs' : extChartAt I x x in (extChartAt I x).target inter
+      (extChartAt I x).symm ⁻¹' (s inter f ⁻¹' (extChartAt I' (f x)).source) :=
+    ⟨(extChartAt I x).map_source (mem_extChartAt_source _), by rwa [extChartAt_to_inv], by
+      rw [extChartAt_to_inv]; apply mem_extChartAt_source⟩
+  rw [insert_eq_of_mem hxs'] at hmem hsub
+  -- Then `(extChartAt I x).symm '' v` is the neighborhood we are looking for.
+  refine ⟨(extChartAt I x).symm '' v, ?_, ?_⟩
+  · rw [← map_extChartAt_symm_nhdsWithin (I := I),
+      h.1.nhdsWithin_extChartAt_symm_preimage_inter_range (I := I) (I' := I')]
+    exact image_mem_map hmem
+  · have hv₁ : (extChartAt I x).symm '' v subseteq (extChartAt I x).source :=
+      image_subset_iff.2 fun y hy => (extChartAt I x).map_target (hsub hy).1
+    have hv₂ : MapsTo f ((extChartAt I x).symm '' v) (extChartAt I' (f x)).source := by
+      rintro _ ⟨y, hy, rfl⟩
+      exact (hsub hy).2.2
+    rwa [contMDiffOn_iff_of_subset_source' hv₁ hv₂, PartialEquiv.image_symm_image_of_subset_target]
+    exact hsub.trans inter_subset_left
 
 中文:
 定理 contMDiffWithinAt_iff_contMDiffOn_nhds
@@ -2153,7 +2313,27 @@ theorem contMDiffWithinAt_iff_contMDiffOn_nhds
   rw [insert_eq_of_mem hxs]
   -- The `←` implication is trivial
   refine ⟨fun h => ?_, fun ⟨u, hmem, hu⟩ =>
-    (hu _ (mem_of_mem_nhdsWit
+    (hu _ (mem_of_mem_nhdsWithin hxs hmem)).mono_of_mem_nhdsWithin hmem⟩
+  -- The property is true in charts. Let `v` be a good neighborhood in the chart where the function
+  -- is `Cⁿ`.
+  rcases (contMDiffWithinAt_iff'.1 h).2.contDiffOn le_rfl (by simp [hn]) with ⟨v, hmem, hsub, hv⟩
+  have hxs' : extChartAt I x x in (extChartAt I x).target inter
+      (extChartAt I x).symm ⁻¹' (s inter f ⁻¹' (extChartAt I' (f x)).source) :=
+    ⟨(extChartAt I x).map_source (mem_extChartAt_source _), by rwa [extChartAt_to_inv], by
+      rw [extChartAt_to_inv]; apply mem_extChartAt_source⟩
+  rw [insert_eq_of_mem hxs'] at hmem hsub
+  -- Then `(extChartAt I x).symm '' v` is the neighborhood we are looking for.
+  refine ⟨(extChartAt I x).symm '' v, ?_, ?_⟩
+  · rw [← map_extChartAt_symm_nhdsWithin (I := I),
+      h.1.nhdsWithin_extChartAt_symm_preimage_inter_range (I := I) (I' := I')]
+    exact image_mem_map hmem
+  · have hv₁ : (extChartAt I x).symm '' v subseteq (extChartAt I x).source :=
+      image_subset_iff.2 fun y hy => (extChartAt I x).map_target (hsub hy).1
+    have hv₂ : MapsTo f ((extChartAt I x).symm '' v) (extChartAt I' (f x)).source := by
+      rintro _ ⟨y, hy, rfl⟩
+      exact (hsub hy).2.2
+    rwa [contMDiffOn_iff_of_subset_source' hv₁ hv₂, PartialEquiv.image_symm_image_of_subset_target]
+    exact hsub.trans inter_subset_left
 -/
 theorem contMDiffWithinAt_iff_contMDiffOn_nhds
     [IsManifold I n M] [IsManifold I' n M'] (hn : n != ∞) :
@@ -2199,7 +2379,12 @@ theorem ContMDiffWithinAt.contMDiffOn'
     rcases (contMDiffWithinAt_iff_contMDiffOn_nhds (by simp)).1 (h.of_le hm) with ⟨t, ht, h't⟩
     rcases mem_nhdsWithin.1 ht with ⟨u, u_open, xu, hu⟩
     rw [inter_comm] at hu
-    
+    exact ⟨u, u_open, xu, h't.mono hu⟩
+  | ∞ =>
+    rcases (contMDiffWithinAt_iff_contMDiffOn_nhds (by simp [h'])).1 h with ⟨t, ht, h't⟩
+    rcases mem_nhdsWithin.1 ht with ⟨u, u_open, xu, hu⟩
+    rw [inter_comm] at hu
+    exact ⟨u, u_open, xu, (h't.mono hu).of_le hm⟩
 
 中文:
 定理 ContMDiffWithinAt.contMDiffOn'
@@ -2211,7 +2396,12 @@ theorem ContMDiffWithinAt.contMDiffOn'
     rcases (contMDiffWithinAt_iff_contMDiffOn_nhds (by simp)).1 (h.of_le hm) with ⟨t, ht, h't⟩
     rcases mem_nhdsWithin.1 ht with ⟨u, u_open, xu, hu⟩
     rw [inter_comm] at hu
-    
+    exact ⟨u, u_open, xu, h't.mono hu⟩
+  | ∞ =>
+    rcases (contMDiffWithinAt_iff_contMDiffOn_nhds (by simp [h'])).1 h with ⟨t, ht, h't⟩
+    rcases mem_nhdsWithin.1 ht with ⟨u, u_open, xu, hu⟩
+    rw [inter_comm] at hu
+    exact ⟨u, u_open, xu, (h't.mono hu).of_le hm⟩
 
 Depends on / 依赖: IsManifold, contMDiffWithinAt_iff_contMDiffOn_nhds, h.of_le, inter_comm, mem_nhdsWithin, of_le, t.mono, u_open
 -/
@@ -2322,7 +2512,7 @@ theorem contMDiffWithinAt_iff_contMDiffWithinAt_nhdsWithin
   rintro ⟨u, hu, h⟩
   filter_upwards [hu, eventually_mem_nhdsWithin_iff.mpr hu] with x' h'x' hx'
   apply (h x' h'x').mono_of_mem_nhdsWithin
-  exact nhdsWithin_mono _ (subset_insert x 
+  exact nhdsWithin_mono _ (subset_insert x s) hx'
 
 中文:
 定理 contMDiffWithinAt_iff_contMDiffWithinAt_nhdsWithin
@@ -2332,7 +2522,7 @@ theorem contMDiffWithinAt_iff_contMDiffWithinAt_nhdsWithin
   rintro ⟨u, hu, h⟩
   filter_upwards [hu, eventually_mem_nhdsWithin_iff.mpr hu] with x' h'x' hx'
   apply (h x' h'x').mono_of_mem_nhdsWithin
-  exact nhdsWithin_mono _ (subset_insert x 
+  exact nhdsWithin_mono _ (subset_insert x s) hx'
 
 Depends on / 依赖: contMDiffWithinAt_iff_contMDiffOn_nhds, eventually_mem_nhdsWithin_iff, eventually_mem_nhdsWithin_iff.mpr, filter_upwards, mem_insert, mem_of_mem_nhdsWithin, mono_of_mem_nhdsWithin, nhdsWithin_mono, subset_insert
 -/

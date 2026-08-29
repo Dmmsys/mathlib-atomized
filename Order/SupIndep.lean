@@ -494,7 +494,10 @@ apply Disjoint.mono_right calc
     a.sup f <= (t.biUnion g union u).sup f := by grind
     _ <= (t.sup fun i => (g i).sup f) ⊔ (u.sup f) := by grind
   symm
-  apply Disjoint
+  apply Disjoint.disjoint_sup_left_of_disjoint_sup_right
+  · exact (supIndep_iff_disjoint_erase.mp (hg i' hi') b hb).symm
+  · rw [← sup_singleton (f := f) (b := b), ← sup_union, show u union {b} = g i' by grind]
+    exact (supIndep_iff_disjoint_erase.mp hs i' hi').symm
 
 中文:
 定理 SupIndep.biUnion
@@ -509,7 +512,10 @@ apply Disjoint.mono_right calc
     a.sup f <= (t.biUnion g union u).sup f := by grind
     _ <= (t.sup fun i => (g i).sup f) ⊔ (u.sup f) := by grind
   symm
-  apply Disjoint
+  apply Disjoint.disjoint_sup_left_of_disjoint_sup_right
+  · exact (supIndep_iff_disjoint_erase.mp (hg i' hi') b hb).symm
+  · rw [← sup_singleton (f := f) (b := b), ← sup_union, show u union {b} = g i' by grind]
+    exact (supIndep_iff_disjoint_erase.mp hs i' hi').symm
 -/
 protected theorem SupIndep.biUnion [DecidableEq ι] {s : Finset ι'} {g : ι' -> Finset ι} {f : ι -> α}
     (hs : s.SupIndep fun i => (g i).sup f) (hg : forall i' in s, (g i').SupIndep f) :
@@ -658,7 +664,10 @@ theorem supIndep_sigma_iff'
   refine ⟨fun h => ⟨fun t _ i _ _ => ?_, fun i _ t _ j _ _ => ?_⟩, fun h => h.1.sigma h.2⟩
   · let u := (g i).map (Function.Embedding.sigmaMk i)
     let v := t.biUnion (fun j => (g j).map (Function.Embedding.sigmaMk j))
-    suffices Disjoint (u.sup f) (v.sup f) by simpa only [sup_map,
+    suffices Disjoint (u.sup f) (v.sup f) by simpa only [sup_map, sup_biUnion, u, v]
+    apply SupIndep.disjoint_sup_sup h <;> grind [disjoint_left]
+  · suffices Disjoint (f ⟨i, j⟩) ((t.image fun b => ⟨i, b⟩).sup f) by simpa only [sup_image]
+    grind [= SupIndep]
 
 中文:
 定理 supIndep_sigma_iff'
@@ -668,7 +677,10 @@ theorem supIndep_sigma_iff'
   refine ⟨fun h => ⟨fun t _ i _ _ => ?_, fun i _ t _ j _ _ => ?_⟩, fun h => h.1.sigma h.2⟩
   · let u := (g i).map (Function.Embedding.sigmaMk i)
     let v := t.biUnion (fun j => (g j).map (Function.Embedding.sigmaMk j))
-    suffices Disjoint (u.sup f) (v.sup f) by simpa only [sup_map,
+    suffices Disjoint (u.sup f) (v.sup f) by simpa only [sup_map, sup_biUnion, u, v]
+    apply SupIndep.disjoint_sup_sup h <;> grind [disjoint_left]
+  · suffices Disjoint (f ⟨i, j⟩) ((t.image fun b => ⟨i, b⟩).sup f) by simpa only [sup_image]
+    grind [= SupIndep]
 
 Depends on / 依赖: Disjoint, Embedding, Function, Function.Embedding.sigmaMk, SupIndep, SupIndep.disjoint_sup_sup, biUnion, classical, disjoint_left, disjoint_sup_sup, sigmaMk, sup_biUnion, sup_image, sup_map, t.biUnion, t.image, u.sup, v.sup
 -/
@@ -695,7 +707,10 @@ theorem supIndep_product_iff
   refine ⟨fun h => ⟨fun u _ i _ _ => ?_, fun u _ i _ _ => ?_⟩, fun h => h.1.product h.2⟩
   · suffices Disjoint ((t.image ((i, ·))).sup f) ((u ×ˢ t).sup f) by
       simpa only [sup_image, sup_product_left]
-    grind [Finset.SupIndep.disjoint_sup_sup, = product_eq_sprod, = disjoint_left
+    grind [Finset.SupIndep.disjoint_sup_sup, = product_eq_sprod, = disjoint_left]
+  · suffices Disjoint ((s.image ((·, i))).sup f) ((s ×ˢ u).sup f) by
+      simpa only [sup_image, sup_product_right]
+    grind [Finset.SupIndep.disjoint_sup_sup, = product_eq_sprod, = disjoint_left]
 
 中文:
 定理 supIndep_product_iff
@@ -705,7 +720,10 @@ theorem supIndep_product_iff
   refine ⟨fun h => ⟨fun u _ i _ _ => ?_, fun u _ i _ _ => ?_⟩, fun h => h.1.product h.2⟩
   · suffices Disjoint ((t.image ((i, ·))).sup f) ((u ×ˢ t).sup f) by
       simpa only [sup_image, sup_product_left]
-    grind [Finset.SupIndep.disjoint_sup_sup, = product_eq_sprod, = disjoint_left
+    grind [Finset.SupIndep.disjoint_sup_sup, = product_eq_sprod, = disjoint_left]
+  · suffices Disjoint ((s.image ((·, i))).sup f) ((s ×ˢ u).sup f) by
+      simpa only [sup_image, sup_product_right]
+    grind [Finset.SupIndep.disjoint_sup_sup, = product_eq_sprod, = disjoint_left]
 
 Depends on / 依赖: Disjoint, Finset, Finset.SupIndep.disjoint_sup_sup, SupIndep, classical, disjoint_left, disjoint_sup_sup, product, product_eq_sprod, s.image, sup_image, sup_product_left, sup_product_right, t.image
 -/
@@ -930,7 +948,7 @@ theorem sSupIndep_pair
     · convert! h.symm using 1
       simp [hab, sSup_singleton]
 
-include hs i
+include hs in
 
 中文:
 定理 sSupIndep_pair
@@ -945,7 +963,7 @@ include hs i
     · convert! h.symm using 1
       simp [hab, sSup_singleton]
 
-include hs i
+include hs in
 
 Depends on / 依赖: convert, h.pairwiseDisjoint, h.symm, mem_insert, mem_insert_of_mem, mem_singleton, pairwiseDisjoint, sSup_singleton
 -/
@@ -1266,7 +1284,9 @@ theorem iSupIndep_ne_bot
   | inr hi => ?_
   convert! h ⟨i, hi⟩
   have : forall j, ⨆ (_ : t j = ⊥), t j = ⊥ := fun j => by simp only [iSup_eq_bot, imp_self]
-  rw 
+  rw [iSup_split _ (fun j => t j = ⊥)]; rw [iSup_subtype]
+  simp only [iSup_comm (ι' := _ != i), this, ne_eq, sup_of_le_right, Subtype.mk.injEq, iSup_bot,
+    bot_le]
 
 中文:
 定理 iSupIndep_ne_bot
@@ -1279,7 +1299,9 @@ theorem iSupIndep_ne_bot
   | inr hi => ?_
   convert! h ⟨i, hi⟩
   have : forall j, ⨆ (_ : t j = ⊥), t j = ⊥ := fun j => by simp only [iSup_eq_bot, imp_self]
-  rw 
+  rw [iSup_split _ (fun j => t j = ⊥)]; rw [iSup_subtype]
+  simp only [iSup_comm (ι' := _ != i), this, ne_eq, sup_of_le_right, Subtype.mk.injEq, iSup_bot,
+    bot_le]
 
 Depends on / 依赖: Subtype, Subtype.mk.injEq, Subtype.val_injective, bot_le, convert, eq_or_ne, h.comp, iSupIndep_def, iSup_bot, iSup_comm, iSup_eq_bot, iSup_split, iSup_subtype, imp_self, ne_eq, sup_of_le_right, val_injective
 -/
@@ -1313,7 +1335,7 @@ theorem iSupIndep.injOn
     rwa [h, disjoint_self] at ht
   replace contra : j != i := Ne.symm contra
   -- Porting note: needs explicit `f`
-  exact le_iSup₂ (f := fun x _ =
+  exact le_iSup₂ (f := fun x _ => t x) j contra
 
 中文:
 定理 iSupIndep.injOn
@@ -1328,7 +1350,7 @@ theorem iSupIndep.injOn
     rwa [h, disjoint_self] at ht
   replace contra : j != i := Ne.symm contra
   -- Porting note: needs explicit `f`
-  exact le_iSup₂ (f := fun x _ =
+  exact le_iSup₂ (f := fun x _ => t x) j contra
 
 Depends on / 依赖: Ne.symm, contra, disjoint_self, mono_right, replace
 -/
@@ -1356,7 +1378,8 @@ lemma iSupIndep.injOn_iInf
   obtain ⟨i, hi⟩ : exists i, b₁ i != b₂ i := Function.ne_iff.mp h_ne
   have := calc
     ⨅ i, t i (b₁ i) <= t i (b₁ i) ⊓ t i (b₂ i) := le_inf (iInf_le ..) (h_eq ▸ iInf_le ..)
-    _ = ⊥ := (ht i (b₁ i) |>.mono_right <| le_iSup₂_of_le
+    _ = ⊥ := (ht i (b₁ i) |>.mono_right <| le_iSup₂_of_le (b₂ i) hi.symm le_rfl).eq_bot
+  simp_all
 
 中文:
 引理 iSupIndep.injOn_iInf
@@ -1368,7 +1391,8 @@ lemma iSupIndep.injOn_iInf
   obtain ⟨i, hi⟩ : exists i, b₁ i != b₂ i := Function.ne_iff.mp h_ne
   have := calc
     ⨅ i, t i (b₁ i) <= t i (b₁ i) ⊓ t i (b₂ i) := le_inf (iInf_le ..) (h_eq ▸ iInf_le ..)
-    _ = ⊥ := (ht i (b₁ i) |>.mono_right <| le_iSup₂_of_le
+    _ = ⊥ := (ht i (b₁ i) |>.mono_right <| le_iSup₂_of_le (b₂ i) hi.symm le_rfl).eq_bot
+  simp_all
 
 Depends on / 依赖: Function, Function.ne_iff.mp, beta_reduce, eq_bot, h_eq, h_ne, hi.symm, iInf_le, le_inf, le_rfl, mono_right, ne_iff
 -/
@@ -1422,7 +1446,9 @@ theorem iSupIndep_pair
     · refine h.mono_right (iSup_le fun i => iSup_le fun hi => Eq.le ?_)
       rw [(huniv i).resolve_left hi]
     · refine h.symm.mono_right (iSup_le fun j => iSup_le fun hj => Eq.le ?_)
-      rw
+      rw [(huniv j).resolve_right hj]
+
+@[simp]
 
 中文:
 定理 iSupIndep_pair
@@ -1435,7 +1461,9 @@ theorem iSupIndep_pair
     · refine h.mono_right (iSup_le fun i => iSup_le fun hi => Eq.le ?_)
       rw [(huniv i).resolve_left hi]
     · refine h.symm.mono_right (iSup_le fun j => iSup_le fun hj => Eq.le ?_)
-      rw
+      rw [(huniv j).resolve_right hj]
+
+@[simp]
 
 Depends on / 依赖: Eq.le, h.mono_right, h.pairwiseDisjoint, h.symm.mono_right, iSup_le, mono_right, pairwiseDisjoint, resolve_left, resolve_right
 -/
@@ -1634,7 +1662,7 @@ theorem iSupIndep_comp_coe_iff_supIndep
     congr! 1
     simp [iSup_and, @iSup_comm _ (_ in s)]
 
-alias ⟨iSupIndep.supIndep, Finset.SupIndep.indep
+alias ⟨iSupIndep.supIndep, Finset.SupIndep.independent⟩ := iSupIndep_comp_coe_iff_supIndep
 
 中文:
 定理 iSupIndep_comp_coe_iff_supIndep
@@ -1649,7 +1677,7 @@ alias ⟨iSupIndep.supIndep, Finset.SupIndep.indep
     congr! 1
     simp [iSup_and, @iSup_comm _ (_ in s)]
 
-alias ⟨iSupIndep.supIndep, Finset.SupIndep.indep
+alias ⟨iSupIndep.supIndep, Finset.SupIndep.independent⟩ := iSupIndep_comp_coe_iff_supIndep
 
 Depends on / 依赖: Finset, Finset.supIndep_iff_disjoint_erase, Finset.sup_eq_iSup, Subtype, Subtype.forall.trans, classical, iSup_and, iSup_comm, iSup_subtype, iSup_subtype.trans, supIndep_iff_disjoint_erase, sup_eq_iSup
 -/
@@ -1727,7 +1755,8 @@ lemma iSupIndep.le_iff_eq_of_iSup_eq_top
   replace h₁ : Disjoint (⨆ (j) (_ : j != i), f j) (g i) :=
     Disjoint.mono_left (iSup₂_mono fun j _ => h₃ j) (h₁ i).symm
   replace h₂ : Codisjoint (f i) (⨆ (j) (_ : j != i), f j) := by
-    rw [codisjoint_iff]; rw [← iSup_split_single f i]; rw [h
+    rw [codisjoint_iff]; rw [← iSup_split_single f i]; rw [h₂]
+  exact (le_iff_eq_of_codisjoint_of_disjoint h₂ h₁).mp (h₃ i)
 
 中文:
 引理 iSupIndep.le_iff_eq_of_iSup_eq_top
@@ -1737,7 +1766,8 @@ lemma iSupIndep.le_iff_eq_of_iSup_eq_top
   replace h₁ : Disjoint (⨆ (j) (_ : j != i), f j) (g i) :=
     Disjoint.mono_left (iSup₂_mono fun j _ => h₃ j) (h₁ i).symm
   replace h₂ : Codisjoint (f i) (⨆ (j) (_ : j != i), f j) := by
-    rw [codisjoint_iff]; rw [← iSup_split_single f i]; rw [h
+    rw [codisjoint_iff]; rw [← iSup_split_single f i]; rw [h₂]
+  exact (le_iff_eq_of_codisjoint_of_disjoint h₂ h₁).mp (h₃ i)
 
 Depends on / 依赖: Codisjoint, Disjoint, Disjoint.mono_left, codisjoint_iff, iSup_split_single, le_iff_eq_of_codisjoint_of_disjoint, le_of_eq, mono_left, replace
 -/
@@ -1767,7 +1797,16 @@ lemma iSupIndep.disjoint_biSup_biSup'
   induction s using Finset.induction_on generalizing t with
   | empty => simp
   | insert j s₀ hj ih =>
-    have hjt : 
+    have hjt : j ∉ t := by aesop
+    replace hst : Disjoint ↑s₀ (insert j t) := by aesop
+    replace ih : Disjoint (⨆ i in s₀, f i) (f j ⊔ ⨆ i in t, f i) := by
+      specialize ih hst
+      rwa [iSup_insert] at ih
+    have : Disjoint (f j) ((⨆ i in t, f i) ⊔ (⨆ i in (s₀ : Set ι), f i)) := by
+      rw [← iSup_union]
+exact disjoint_biSup hf by aesop
+    rw [s₀.iSup_insert j f]; rw [disjoint_comm]; rw [sup_comm]
+    exact disjoint_sup_right_of_disjoint_sup_right ih this
 
 中文:
 引理 iSupIndep.disjoint_biSup_biSup'
@@ -1782,7 +1821,16 @@ lemma iSupIndep.disjoint_biSup_biSup'
   induction s using Finset.induction_on generalizing t with
   | empty => simp
   | insert j s₀ hj ih =>
-    have hjt : 
+    have hjt : j ∉ t := by aesop
+    replace hst : Disjoint ↑s₀ (insert j t) := by aesop
+    replace ih : Disjoint (⨆ i in s₀, f i) (f j ⊔ ⨆ i in t, f i) := by
+      specialize ih hst
+      rwa [iSup_insert] at ih
+    have : Disjoint (f j) ((⨆ i in t, f i) ⊔ (⨆ i in (s₀ : Set ι), f i)) := by
+      rw [← iSup_union]
+exact disjoint_biSup hf by aesop
+    rw [s₀.iSup_insert j f]; rw [disjoint_comm]; rw [sup_comm]
+    exact disjoint_sup_right_of_disjoint_sup_right ih this
 
 Depends on / 依赖: Disjoint, Finset, Finset.induction_on, classical, generalizing, hs.toFinset, iSup_insert, induction_on, insert, replace, specialize, toFinset
 -/

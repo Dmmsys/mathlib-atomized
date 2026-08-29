@@ -303,7 +303,8 @@ theorem integral_exp_mul_complex_Ioi
     (integrableOn_exp_mul_complex_Ioi ha c) tendsto_id) ?_
   simp_rw [integral_exp_mul_complex (c := a) (by aesop), id_eq]
   suffices Tendsto (fun x : Real => Complex.exp (a * x)) atTop (𝓝 0) by
-.div_const _ simpa using this.su
+.div_const _ simpa using this.sub_const _
+  simpa [Complex.tendsto_exp_nhds_zero_iff] using tendsto_const_nhds.neg_mul_atTop ha tendsto_id
 
 中文:
 定理 integral_exp_mul_complex_Ioi
@@ -313,7 +314,8 @@ theorem integral_exp_mul_complex_Ioi
     (integrableOn_exp_mul_complex_Ioi ha c) tendsto_id) ?_
   simp_rw [integral_exp_mul_complex (c := a) (by aesop), id_eq]
   suffices Tendsto (fun x : Real => Complex.exp (a * x)) atTop (𝓝 0) by
-.div_const _ simpa using this.su
+.div_const _ simpa using this.sub_const _
+  simpa [Complex.tendsto_exp_nhds_zero_iff] using tendsto_const_nhds.neg_mul_atTop ha tendsto_id
 
 Depends on / 依赖: Complex.exp, Complex.tendsto_exp_nhds_zero_iff, Tendsto, div_const, id_eq, integrableOn_exp_mul_complex_Ioi, integral_exp_mul_complex, intervalIntegral_tendsto_integral_Ioi, neg_mul_atTop, simp_rw, sub_const, tendsto_const_nhds, tendsto_const_nhds.neg_mul_atTop, tendsto_exp_nhds_zero_iff, tendsto_id, tendsto_nhds_unique, this.sub_const
 -/
@@ -362,7 +364,7 @@ theorem integral_exp_mul_Ioi
   proof: by
   simp_rw [Real.exp, ← RCLike.re_to_complex, Complex.ofReal_mul]
   rw [integral_re]; rw [integral_exp_mul_complex_Ioi (by simpa using ha)]; rw [RCLike.re_to_complex]; rw [RCLike.re_to_complex]; rw [Complex.div_ofReal_re]; rw [Complex.neg_re]
-  exact integrableOn_exp_mul_complex_Ioi (by simpa usin
+  exact integrableOn_exp_mul_complex_Ioi (by simpa using ha) _
 
 中文:
 定理 integral_exp_mul_Ioi
@@ -370,7 +372,7 @@ theorem integral_exp_mul_Ioi
   证明: by
   simp_rw [Real.exp, ← RCLike.re_to_complex, Complex.ofReal_mul]
   rw [integral_re]; rw [integral_exp_mul_complex_Ioi (by simpa using ha)]; rw [RCLike.re_to_complex]; rw [RCLike.re_to_complex]; rw [Complex.div_ofReal_re]; rw [Complex.neg_re]
-  exact integrableOn_exp_mul_complex_Ioi (by simpa usin
+  exact integrableOn_exp_mul_complex_Ioi (by simpa using ha) _
 
 Depends on / 依赖: Complex.div_ofReal_re, Complex.neg_re, Complex.ofReal_mul, RCLike, RCLike.re_to_complex, Real.exp, div_ofReal_re, integrableOn_exp_mul_complex_Ioi, integral_exp_mul_complex_Ioi, integral_re, neg_re, ofReal_mul, re_to_complex, simp_rw
 -/
@@ -416,7 +418,12 @@ theorem integrableOn_add_rpow_Ioi_of_lt
     convert! (((hasDerivAt_id _).add_const _).rpow_const _).div_const _ using 1
     · simp [show a + 1 != 0 by linarith]
     left; linarith [mem_Ici.mp hx, id_eq x]
-  have ht : Te
+  have ht : Tendsto (fun t => ((t + m) ^ (a + 1)) / (a + 1)) atTop (nhds (0 / (a + 1))) := by
+    rw [← neg_neg (a + 1)]
+    exact (tendsto_rpow_neg_atTop (by linarith)).comp
+.div_const _ (tendsto_atTop_add_const_right _ m tendsto_id)
+  exact integrableOn_Ioi_deriv_of_nonneg' hd
+    (fun t ht => rpow_nonneg (by linarith [mem_Ioi.mp ht]) a) ht
 
 中文:
 定理 integrableOn_add_rpow_Ioi_of_lt
@@ -427,7 +434,12 @@ theorem integrableOn_add_rpow_Ioi_of_lt
     convert! (((hasDerivAt_id _).add_const _).rpow_const _).div_const _ using 1
     · simp [show a + 1 != 0 by linarith]
     left; linarith [mem_Ici.mp hx, id_eq x]
-  have ht : Te
+  have ht : Tendsto (fun t => ((t + m) ^ (a + 1)) / (a + 1)) atTop (nhds (0 / (a + 1))) := by
+    rw [← neg_neg (a + 1)]
+    exact (tendsto_rpow_neg_atTop (by linarith)).comp
+.div_const _ (tendsto_atTop_add_const_right _ m tendsto_id)
+  exact integrableOn_Ioi_deriv_of_nonneg' hd
+    (fun t ht => rpow_nonneg (by linarith [mem_Ioi.mp ht]) a) ht
 
 Depends on / 依赖: HasDerivAt, Tendsto, add_const, convert, div_const, hasDerivAt_id, id_eq, mem_Ici, mem_Ici.mp, neg_neg, rpow_const, tendsto_atTop_add_const_right, tendsto_id, tendsto_rpow_neg_atTop
 -/
@@ -479,7 +491,13 @@ theorem integrableOn_Ioi_rpow_iff
   have H' : IntegrableOn (fun x => x ^ s) (Ioi (max 1 t)) :=
     H.mono (Set.Ioi_subset_Ioi (le_max_right _ _)) le_rfl
   have : IntegrableOn (fun x => x⁻¹) (Ioi (max 1 t)) := by
-    apply H'.mono' measurab
+    apply H'.mono' measurable_inv.aestronglyMeasurable
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with x hx
+    have x_one : 1 <= x := ((le_max_left _ _).trans_lt (mem_Ioi.1 hx)).le
+    simp only [norm_inv, Real.norm_eq_abs, abs_of_nonneg (zero_le_one.trans x_one)]
+    rw [← Real.rpow_neg_one x]
+    exact Real.rpow_le_rpow_of_exponent_le x_one h
+  exact not_integrableOn_Ioi_inv this
 
 中文:
 定理 integrableOn_Ioi_rpow_iff
@@ -491,7 +509,13 @@ theorem integrableOn_Ioi_rpow_iff
   have H' : IntegrableOn (fun x => x ^ s) (Ioi (max 1 t)) :=
     H.mono (Set.Ioi_subset_Ioi (le_max_right _ _)) le_rfl
   have : IntegrableOn (fun x => x⁻¹) (Ioi (max 1 t)) := by
-    apply H'.mono' measurab
+    apply H'.mono' measurable_inv.aestronglyMeasurable
+    filter_upwards [ae_restrict_mem measurableSet_Ioi] with x hx
+    have x_one : 1 <= x := ((le_max_left _ _).trans_lt (mem_Ioi.1 hx)).le
+    simp only [norm_inv, Real.norm_eq_abs, abs_of_nonneg (zero_le_one.trans x_one)]
+    rw [← Real.rpow_neg_one x]
+    exact Real.rpow_le_rpow_of_exponent_le x_one h
+  exact not_integrableOn_Ioi_inv this
 
 Depends on / 依赖: H.mono, IntegrableOn, Ioi_subset_Ioi, Real.norm_eq_abs, Set.Ioi_subset_Ioi, abs_of_nonneg, ae_restrict_mem, aestronglyMeasurable, contrapose, filter_upwards, integrableOn_Ioi_rpow_of_lt, le_max_left, le_max_right, le_rfl, measurableSet_Ioi, measurable_inv, measurable_inv.aestronglyMeasurable, mem_Ioi, norm_eq_abs, norm_inv
 -/
@@ -522,7 +546,7 @@ theorem integrableAtFilter_rpow_atTop_iff
     ⟨Set.Ioi 1, Ioi_mem_atTop 1, (integrableOn_Ioi_rpow_iff zero_lt_one).mpr h⟩⟩
   obtain ⟨a, ha⟩ := mem_atTop_sets.mp ht
   refine (integrableOn_Ioi_rpow_iff (zero_lt_one.trans_le (le_max_right a 1))).mp ?_
-exact hint.mono_set fun x hx => ha _ (le_max_l
+exact hint.mono_set fun x hx => ha _ (le_max_left a 1).trans hx.le
 
 中文:
 定理 integrableAtFilter_rpow_atTop_iff
@@ -532,7 +556,7 @@ exact hint.mono_set fun x hx => ha _ (le_max_l
     ⟨Set.Ioi 1, Ioi_mem_atTop 1, (integrableOn_Ioi_rpow_iff zero_lt_one).mpr h⟩⟩
   obtain ⟨a, ha⟩ := mem_atTop_sets.mp ht
   refine (integrableOn_Ioi_rpow_iff (zero_lt_one.trans_le (le_max_right a 1))).mp ?_
-exact hint.mono_set fun x hx => ha _ (le_max_l
+exact hint.mono_set fun x hx => ha _ (le_max_left a 1).trans hx.le
 
 Depends on / 依赖: Ioi_mem_atTop, Set.Ioi, hint.mono_set, hx.le, integrableOn_Ioi_rpow_iff, le_max_left, le_max_right, mem_atTop_sets, mem_atTop_sets.mp, mono_set, trans_le, zero_lt_one, zero_lt_one.trans_le
 -/
@@ -557,7 +581,9 @@ theorem not_integrableOn_Ioi_rpow
   · have : IntegrableOn (fun x => x ^ s) (Ioo (0 : Real) 1) := h.mono Ioo_subset_Ioi_self le_rfl
     rw [integrableOn_Ioo_rpow_iff zero_lt_one] at this
     exact hs.not_gt this
-  · have : IntegrableOn (fun x => x ^ s) (Ioi (1 : Real)) := h.mono (Ioi
+  · have : IntegrableOn (fun x => x ^ s) (Ioi (1 : Real)) := h.mono (Ioi_subset_Ioi zero_le_one) le_rfl
+    rw [integrableOn_Ioi_rpow_iff zero_lt_one] at this
+    exact hs.not_gt this
 
 中文:
 定理 not_integrableOn_Ioi_rpow
@@ -569,7 +595,9 @@ theorem not_integrableOn_Ioi_rpow
   · have : IntegrableOn (fun x => x ^ s) (Ioo (0 : Real) 1) := h.mono Ioo_subset_Ioi_self le_rfl
     rw [integrableOn_Ioo_rpow_iff zero_lt_one] at this
     exact hs.not_gt this
-  · have : IntegrableOn (fun x => x ^ s) (Ioi (1 : Real)) := h.mono (Ioi
+  · have : IntegrableOn (fun x => x ^ s) (Ioi (1 : Real)) := h.mono (Ioi_subset_Ioi zero_le_one) le_rfl
+    rw [integrableOn_Ioi_rpow_iff zero_lt_one] at this
+    exact hs.not_gt this
 
 Depends on / 依赖: IntegrableOn, Ioi_subset_Ioi, Ioo_subset_Ioi_self, h.mono, hs.not_gt, integrableOn_Ioi_rpow_iff, integrableOn_Ioo_rpow_iff, le_or_gt, le_rfl, not_gt, zero_le_one, zero_lt_one
 -/
@@ -614,7 +642,11 @@ theorem integral_Ioi_rpow_of_lt
     intro x hx
     convert! (hasDerivAt_rpow_const (p := a + 1) (Or.inl (hc.trans_le hx).ne')).div_const _ using 1
     simp [show a + 1 != 0 from ne_of_lt (by linarith), mul_comm]
-  have ht : Tendsto (fun t
+  have ht : Tendsto (fun t => t ^ (a + 1) / (a + 1)) atTop (𝓝 (0 / (a + 1))) := by
+    apply Tendsto.div_const
+    simpa only [neg_neg] using tendsto_rpow_neg_atTop (by linarith : 0 < -(a + 1))
+  convert! integral_Ioi_of_hasDerivAt_of_tendsto' hd (integrableOn_Ioi_rpow_of_lt ha hc) ht using 1
+  simp only [neg_div, zero_div, zero_sub]
 
 中文:
 定理 integral_Ioi_rpow_of_lt
@@ -624,7 +656,11 @@ theorem integral_Ioi_rpow_of_lt
     intro x hx
     convert! (hasDerivAt_rpow_const (p := a + 1) (Or.inl (hc.trans_le hx).ne')).div_const _ using 1
     simp [show a + 1 != 0 from ne_of_lt (by linarith), mul_comm]
-  have ht : Tendsto (fun t
+  have ht : Tendsto (fun t => t ^ (a + 1) / (a + 1)) atTop (𝓝 (0 / (a + 1))) := by
+    apply Tendsto.div_const
+    simpa only [neg_neg] using tendsto_rpow_neg_atTop (by linarith : 0 < -(a + 1))
+  convert! integral_Ioi_of_hasDerivAt_of_tendsto' hd (integrableOn_Ioi_rpow_of_lt ha hc) ht using 1
+  simp only [neg_div, zero_div, zero_sub]
 
 Depends on / 依赖: HasDerivAt, Or.inl, Tendsto, Tendsto.div_const, convert, div_const, hasDerivAt_rpow_const, hc.trans_le, integral_Ioi_of_hasDerivAt_of_tendsto, mul_comm, ne_of_lt, neg_neg, tendsto_rpow_neg_atTop, trans_le
 -/
@@ -701,7 +737,11 @@ theorem integrableOn_Ioi_norm_cpow_iff
   refine ⟨fun h => ?_, fun h => integrableOn_Ioi_norm_cpow_of_lt h ht⟩
 refine (integrableOn_Ioi_rpow_iff ht).mp h.congr_fun (fun a ha => ?_) measurableSet_Ioi
   #adaptation_note /-- 2026-05-17(kmill) added `dsimp only` because a slightly different
-  instantiation order leads to a term with a beta
+  instantiation order leads to a term with a beta redex.
+  https://github.com/leanprover/lean4/pull/13762
+  This will be removed once app elaboration itself does beta reduction. -/
+  dsimp only
+  rw [Complex.norm_cpow_eq_rpow_re_of_pos (ht.trans ha)]
 
 中文:
 定理 integrableOn_Ioi_norm_cpow_iff
@@ -710,7 +750,11 @@ refine (integrableOn_Ioi_rpow_iff ht).mp h.congr_fun (fun a ha => ?_) measurable
   refine ⟨fun h => ?_, fun h => integrableOn_Ioi_norm_cpow_of_lt h ht⟩
 refine (integrableOn_Ioi_rpow_iff ht).mp h.congr_fun (fun a ha => ?_) measurableSet_Ioi
   #adaptation_note /-- 2026-05-17(kmill) added `dsimp only` because a slightly different
-  instantiation order leads to a term with a beta
+  instantiation order leads to a term with a beta redex.
+  https://github.com/leanprover/lean4/pull/13762
+  This will be removed once app elaboration itself does beta reduction. -/
+  dsimp only
+  rw [Complex.norm_cpow_eq_rpow_re_of_pos (ht.trans ha)]
 
 Depends on / 依赖: Complex.norm_cpow_eq_rpow_re_of_pos, adaptation_note, because, congr_fun, different, elaboration, github, github.com, h.congr_fun, ht.trans, instantiation, integrableOn_Ioi_norm_cpow_of_lt, integrableOn_Ioi_rpow_iff, itself, leanprover, measurableSet_Ioi, norm_cpow_eq_rpow_re_of_pos, reduction, removed, slightly
 -/
@@ -755,7 +799,7 @@ theorem integrableOn_Ioi_deriv_ofReal_cpow
     refine (integrableOn_Ioi_cpow_of_lt ?_ ht).const_mul _
     rwa [Complex.sub_re, Complex.one_re, sub_lt_iff_lt_add, neg_add_cancel]
   refine h.congr_fun (fun x hx => ?_) measurableSet_Ioi
-  rw [Complex.deriv_ofReal_cpo
+  rw [Complex.deriv_ofReal_cpow_const (ht.trans hx).ne' (fun h => (Complex.zero_re ▸ h ▸ hs).false)]
 
 中文:
 定理 integrableOn_Ioi_deriv_of实数_cpow
@@ -765,7 +809,7 @@ theorem integrableOn_Ioi_deriv_ofReal_cpow
     refine (integrableOn_Ioi_cpow_of_lt ?_ ht).const_mul _
     rwa [Complex.sub_re, Complex.one_re, sub_lt_iff_lt_add, neg_add_cancel]
   refine h.congr_fun (fun x hx => ?_) measurableSet_Ioi
-  rw [Complex.deriv_ofReal_cpo
+  rw [Complex.deriv_ofReal_cpow_const (ht.trans hx).ne' (fun h => (Complex.zero_re ▸ h ▸ hs).false)]
 
 Depends on / 依赖: Complex.deriv_ofReal_cpow_const, Complex.one_re, Complex.sub_re, Complex.zero_re, IntegrableOn, Set.Ioi, congr_fun, const_mul, deriv_ofReal_cpow_const, h.congr_fun, ht.trans, integrableOn_Ioi_cpow_of_lt, measurableSet_Ioi, neg_add_cancel, one_re, sub_lt_iff_lt_add, sub_re, zero_re
 -/
@@ -790,7 +834,7 @@ theorem integrableOn_Ioi_deriv_norm_ofReal_cpow
   · simp_rw [hs, zero_mul]
     exact integrableOn_zero
   · replace hs : s.re - 1 < -1 := by rwa [sub_lt_iff_lt_add, neg_add_cancel]
-    exact (int
+    exact (integrableOn_Ioi_rpow_of_lt hs ht).const_mul s.re
 
 中文:
 定理 integrableOn_Ioi_deriv_norm_of实数_cpow
@@ -802,7 +846,7 @@ theorem integrableOn_Ioi_deriv_norm_ofReal_cpow
   · simp_rw [hs, zero_mul]
     exact integrableOn_zero
   · replace hs : s.re - 1 < -1 := by rwa [sub_lt_iff_lt_add, neg_add_cancel]
-    exact (int
+    exact (integrableOn_Ioi_rpow_of_lt hs ht).const_mul s.re
 
 Depends on / 依赖: const_mul, deriv_norm_ofReal_cpow, eq_or_lt_of_le, ht.trans, integrableOn_Ioi_rpow_of_lt, integrableOn_congr_fun, integrableOn_zero, measurableSet_Ioi, neg_add_cancel, replace, s.re, simp_rw, sub_lt_iff_lt_add, zero_mul
 -/
@@ -829,7 +873,10 @@ theorem not_integrableOn_Ioi_cpow
       h.mono Ioo_subset_Ioi_self le_rfl
     rw [integrableOn_Ioo_cpow_iff zero_lt_one] at this
     exact hs.not_gt this
-  · have : IntegrableOn (fun x : Real => (x 
+  · have : IntegrableOn (fun x : Real => (x : Complex) ^ s) (Ioi 1) :=
+      h.mono (Ioi_subset_Ioi zero_le_one) le_rfl
+    rw [integrableOn_Ioi_cpow_iff zero_lt_one] at this
+    exact hs.not_gt this
 
 中文:
 定理 not_integrableOn_Ioi_cpow
@@ -841,7 +888,10 @@ theorem not_integrableOn_Ioi_cpow
       h.mono Ioo_subset_Ioi_self le_rfl
     rw [integrableOn_Ioo_cpow_iff zero_lt_one] at this
     exact hs.not_gt this
-  · have : IntegrableOn (fun x : Real => (x 
+  · have : IntegrableOn (fun x : Real => (x : Complex) ^ s) (Ioi 1) :=
+      h.mono (Ioi_subset_Ioi zero_le_one) le_rfl
+    rw [integrableOn_Ioi_cpow_iff zero_lt_one] at this
+    exact hs.not_gt this
 
 Depends on / 依赖: IntegrableOn, Ioi_subset_Ioi, Ioo_subset_Ioi_self, h.mono, hs.not_gt, integrableOn_Ioi_cpow_iff, integrableOn_Ioo_cpow_iff, le_or_gt, le_rfl, not_gt, s.re, zero_le_one, zero_lt_one
 -/
@@ -891,7 +941,20 @@ theorem integral_Ioi_cpow_of_lt
   suffices
     Tendsto (fun x : Real => ((x : Complex) ^ (a + 1) - (c : Complex) ^ (a + 1)) / (a + 1)) atTop
       (𝓝 <| -c ^ (a + 1) / (a + 1)) by
-    refine this.co
+    refine this.congr' ((eventually_gt_atTop 0).mp (Eventually.of_forall fun x hx => ?_))
+    dsimp only
+    rw [integral_cpow]; rw [id]
+    refine Or.inr ⟨?_, notMem_uIcc_of_lt hc hx⟩
+    apply_fun Complex.re
+    rw [Complex.neg_re]; rw [Complex.one_re]
+    exact ha.ne
+  simp_rw [← zero_sub, sub_div]
+  refine (Tendsto.div_const ?_ _).sub_const _
+  rw [tendsto_zero_iff_norm_tendsto_zero]
+  refine
+    (tendsto_rpow_neg_atTop (by linarith : 0 < -(a.re + 1))).congr'
+      ((eventually_gt_atTop 0).mp (Eventually.of_forall fun x hx => ?_))
+  simp_rw [neg_neg, Complex.norm_cpow_eq_rpow_re_of_pos hx, Complex.add_re, Complex.one_re]
 
 中文:
 定理 integral_Ioi_cpow_of_lt
@@ -903,7 +966,20 @@ theorem integral_Ioi_cpow_of_lt
   suffices
     Tendsto (fun x : Real => ((x : Complex) ^ (a + 1) - (c : Complex) ^ (a + 1)) / (a + 1)) atTop
       (𝓝 <| -c ^ (a + 1) / (a + 1)) by
-    refine this.co
+    refine this.congr' ((eventually_gt_atTop 0).mp (Eventually.of_forall fun x hx => ?_))
+    dsimp only
+    rw [integral_cpow]; rw [id]
+    refine Or.inr ⟨?_, notMem_uIcc_of_lt hc hx⟩
+    apply_fun Complex.re
+    rw [Complex.neg_re]; rw [Complex.one_re]
+    exact ha.ne
+  simp_rw [← zero_sub, sub_div]
+  refine (Tendsto.div_const ?_ _).sub_const _
+  rw [tendsto_zero_iff_norm_tendsto_zero]
+  refine
+    (tendsto_rpow_neg_atTop (by linarith : 0 < -(a.re + 1))).congr'
+      ((eventually_gt_atTop 0).mp (Eventually.of_forall fun x hx => ?_))
+  simp_rw [neg_neg, Complex.norm_cpow_eq_rpow_re_of_pos hx, Complex.add_re, Complex.one_re]
 
 Depends on / 依赖: Complex.neg_re, Complex.one_re, Complex.re, Eventually, Eventually.of_forall, Or.inr, Tendsto, apply_fun, eventually_gt_atTop, ha.ne, integrableOn_Ioi_cpow_of_lt, integral_cpow, intervalIntegral_tendsto_integral_Ioi, neg_re, notMem_uIcc_of_lt, of_forall, one_re, tendsto_id, tendsto_nhds_unique, this.congr
 -/
@@ -1101,7 +1177,8 @@ theorem integral_inv_div_log_sq_Ioi
   · intro t _
     convert! (hasDerivAt_inv_log (by grind : t != 0) (by grind) (by grind)).neg using 1
     field
-  convert! tendsto_log_atTop.inv_te
+  convert! tendsto_log_atTop.inv_tendsto_atTop.neg using 1
+  simp
 
 中文:
 定理 integral_inv_div_log_sq_Ioi
@@ -1113,7 +1190,8 @@ theorem integral_inv_div_log_sq_Ioi
   · intro t _
     convert! (hasDerivAt_inv_log (by grind : t != 0) (by grind) (by grind)).neg using 1
     field
-  convert! tendsto_log_atTop.inv_te
+  convert! tendsto_log_atTop.inv_tendsto_atTop.neg using 1
+  simp
 
 Depends on / 依赖: convert, hasDerivAt_inv_log, integrableOn_inv_div_log_sq_Ioi, integral_Ioi_of_hasDerivAt_of_tendsto, inv_tendsto_atTop, tendsto_log_atTop, tendsto_log_atTop.inv_tendsto_atTop.neg
 -/

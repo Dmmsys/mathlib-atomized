@@ -668,7 +668,11 @@ theorem det_kroneckerMapBilinear
         det (kroneckerMapBilinear f A 1 * kroneckerMapBilinear f 1 B) := by
       rw [← kroneckerMapBilinear_mul_mul f h_comm]; rw [Matrix.mul_one]; rw [Matrix.one_mul]
     _ = det (blockDiagonal fun (_ : n) => A.map fun a => f a 1) *
-        det (blockDia
+        det (blockDiagonal fun (_ : m) => B.map fun b => f 1 b) := by
+      rw [det_mul]; rw [← diagonal_one]; rw [← diagonal_one]; rw [kroneckerMapBilinear_apply_apply]; rw [kroneckerMap_diagonal_right _ fun _ => _]; rw [kroneckerMapBilinear_apply_apply]; rw [kroneckerMap_diagonal_left _ fun _ => _]; rw [det_reindex_self]
+      · intro; exact LinearMap.map_zero₂ _ _
+      · intro; exact map_zero _
+    _ = _ := by simp_rw [det_blockDiagonal, Finset.prod_const, Finset.card_univ]
 
 中文:
 定理 det_kroneckerMapBilinear
@@ -678,7 +682,11 @@ theorem det_kroneckerMapBilinear
         det (kroneckerMapBilinear f A 1 * kroneckerMapBilinear f 1 B) := by
       rw [← kroneckerMapBilinear_mul_mul f h_comm]; rw [Matrix.mul_one]; rw [Matrix.one_mul]
     _ = det (blockDiagonal fun (_ : n) => A.map fun a => f a 1) *
-        det (blockDia
+        det (blockDiagonal fun (_ : m) => B.map fun b => f 1 b) := by
+      rw [det_mul]; rw [← diagonal_one]; rw [← diagonal_one]; rw [kroneckerMapBilinear_apply_apply]; rw [kroneckerMap_diagonal_right _ fun _ => _]; rw [kroneckerMapBilinear_apply_apply]; rw [kroneckerMap_diagonal_left _ fun _ => _]; rw [det_reindex_self]
+      · intro; exact LinearMap.map_zero₂ _ _
+      · intro; exact map_zero _
+    _ = _ := by simp_rw [det_blockDiagonal, Finset.prod_const, Finset.card_univ]
 
 Depends on / 依赖: A.map, B.map, Matrix, Matrix.mul_one, Matrix.one_mul, blockDiagonal, det_mul, diagonal_one, h_comm, kroneckerMapBilinear, kroneckerMapBilinear_apply_apply, kroneckerMapBilinear_mul_mul, kroneckerMap_diagonal_right, mul_one, one_mul
 -/
@@ -1782,7 +1790,8 @@ theorem det_kroneckerTMul
   refine (det_kroneckerMapBilinear (TensorProduct.mk R α β) tmul_mul_tmul _ _).trans ?_
   simp -eta only [mk_apply, ← includeLeft_apply (S := R), ← includeRight_apply]
   simp only [← AlgHom.mapMatrix_apply, ← AlgHom.map_det]
-  simp only [includeLeft_apply, includeRight_apply, tmul_pow, tmul_mul_t
+  simp only [includeLeft_apply, includeRight_apply, tmul_pow, tmul_mul_tmul, one_pow,
+    _root_.mul_one, _root_.one_mul]
 
 中文:
 定理 det_kroneckerTMul
@@ -1791,7 +1800,8 @@ theorem det_kroneckerTMul
   refine (det_kroneckerMapBilinear (TensorProduct.mk R α β) tmul_mul_tmul _ _).trans ?_
   simp -eta only [mk_apply, ← includeLeft_apply (S := R), ← includeRight_apply]
   simp only [← AlgHom.mapMatrix_apply, ← AlgHom.map_det]
-  simp only [includeLeft_apply, includeRight_apply, tmul_pow, tmul_mul_t
+  simp only [includeLeft_apply, includeRight_apply, tmul_pow, tmul_mul_tmul, one_pow,
+    _root_.mul_one, _root_.one_mul]
 
 Depends on / 依赖: AlgHom, AlgHom.mapMatrix_apply, AlgHom.map_det, TensorProduct, TensorProduct.mk, _root_, _root_.mul_one, _root_.one_mul, det_kroneckerMapBilinear, includeLeft_apply, includeRight_apply, mapMatrix_apply, map_det, mk_apply, mul_one, one_mul, one_pow, tmul_mul_tmul, tmul_pow
 -/

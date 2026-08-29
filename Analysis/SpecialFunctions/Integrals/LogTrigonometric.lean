@@ -33,7 +33,8 @@ lemma integral_log_sin_zero_pi_eq_two_mul_integral_log_sin_zero_pi_div_two
     left; right; arg 1
     intro x
     rw [← sin_pi_sub]
-  rw [intervalIntegral.integral_comp_sub_left (fun x => log (
+  rw [intervalIntegral.integral_comp_sub_left (fun x => log (sin x))]; rw [sub_self]; rw [(by linarith : π - π / 2 = π / 2)]
+  ring!
 
 中文:
 引理 integral_log_sin_zero_pi_eq_two_mul_integral_log_sin_zero_pi_div_two
@@ -44,7 +45,8 @@ lemma integral_log_sin_zero_pi_eq_two_mul_integral_log_sin_zero_pi_div_two
     left; right; arg 1
     intro x
     rw [← sin_pi_sub]
-  rw [intervalIntegral.integral_comp_sub_left (fun x => log (
+  rw [intervalIntegral.integral_comp_sub_left (fun x => log (sin x))]; rw [sub_self]; rw [(by linarith : π - π / 2 = π / 2)]
+  ring!
 -/
 private lemma integral_log_sin_zero_pi_eq_two_mul_integral_log_sin_zero_pi_div_two :
     ∫ x in 0..π, log (sin x) = 2 * ∫ x in 0..(π / 2), log (sin x) := by
@@ -68,7 +70,34 @@ theorem integral_log_sin_zero_pi_div_two
     _ = ∫ x in 0..(π / 2), (log (sin (2 * x)) - log 2 - log (cos x)) := by
       apply intervalIntegral.integral_congr_codiscreteWithin
       apply Filter.codiscreteWithin_mono (by tauto : Ι 0 (π / 2) subseteq Set.univ)
-      have t₀ : sin ⁻¹' {0}ᶜ in Filter.
+      have t₀ : sin ⁻¹' {0}ᶜ in Filter.codiscrete Real := by
+        apply analyticOnNhd_sin.preimage_zero_mem_codiscrete (x := π / 2)
+        simp
+      have t₁ : cos ⁻¹' {0}ᶜ in Filter.codiscrete Real := by
+        apply analyticOnNhd_cos.preimage_zero_mem_codiscrete (x := 0)
+        simp
+      filter_upwards [t₀, t₁] with y h₁y h₂y
+      simp_all only [Set.preimage_compl, Set.mem_compl_iff, Set.mem_preimage, Set.mem_singleton_iff,
+        sin_two_mul, ne_eq, mul_eq_zero, OfNat.ofNat_ne_zero, or_self, not_false_eq_true, log_mul]
+      ring
+    _ = (∫ x in 0..(π / 2), log (sin (2 * x))) - π / 2 * log 2
+        - ∫ x in 0..(π / 2), log (cos x) := by
+      rw [intervalIntegral.integral_sub _ _]; rw [intervalIntegral.integral_sub _ intervalIntegrable_const]; rw [intervalIntegral.integral_const]
+      · simp
+      · simpa using (intervalIntegrable_log_sin (a := 0) (b := π)).comp_mul_left
+      · apply IntervalIntegrable.sub _ intervalIntegrable_const
+        simpa using (intervalIntegrable_log_sin (a := 0) (b := π)).comp_mul_left
+      · exact intervalIntegrable_log_cos
+    _ = (∫ x in 0..(π / 2), log (sin (2 * x)))
+        - π / 2 * log 2 - ∫ x in 0..(π / 2), log (sin x) := by
+      simp [← sin_pi_div_two_sub,
+        intervalIntegral.integral_comp_sub_left (fun x => log (sin x)) (π / 2)]
+    _ = -log 2 * π / 2 := by
+      simp only [intervalIntegral.integral_comp_mul_left (f := fun x => log (sin x)) two_ne_zero,
+        mul_zero, (by linarith : 2 * (π / 2) = π),
+        integral_log_sin_zero_pi_eq_two_mul_integral_log_sin_zero_pi_div_two, smul_eq_mul, ne_eq,
+        OfNat.ofNat_ne_zero, not_false_eq_true, inv_mul_cancel_left₀, sub_sub_cancel_left, neg_mul]
+      linarith
 
 中文:
 定理 integral_log_sin_zero_pi_div_two
@@ -78,7 +107,34 @@ theorem integral_log_sin_zero_pi_div_two
     _ = ∫ x in 0..(π / 2), (log (sin (2 * x)) - log 2 - log (cos x)) := by
       apply intervalIntegral.integral_congr_codiscreteWithin
       apply Filter.codiscreteWithin_mono (by tauto : Ι 0 (π / 2) subseteq Set.univ)
-      have t₀ : sin ⁻¹' {0}ᶜ in Filter.
+      have t₀ : sin ⁻¹' {0}ᶜ in Filter.codiscrete Real := by
+        apply analyticOnNhd_sin.preimage_zero_mem_codiscrete (x := π / 2)
+        simp
+      have t₁ : cos ⁻¹' {0}ᶜ in Filter.codiscrete Real := by
+        apply analyticOnNhd_cos.preimage_zero_mem_codiscrete (x := 0)
+        simp
+      filter_upwards [t₀, t₁] with y h₁y h₂y
+      simp_all only [Set.preimage_compl, Set.mem_compl_iff, Set.mem_preimage, Set.mem_singleton_iff,
+        sin_two_mul, ne_eq, mul_eq_zero, OfNat.ofNat_ne_zero, or_self, not_false_eq_true, log_mul]
+      ring
+    _ = (∫ x in 0..(π / 2), log (sin (2 * x))) - π / 2 * log 2
+        - ∫ x in 0..(π / 2), log (cos x) := by
+      rw [intervalIntegral.integral_sub _ _]; rw [intervalIntegral.integral_sub _ intervalIntegrable_const]; rw [intervalIntegral.integral_const]
+      · simp
+      · simpa using (intervalIntegrable_log_sin (a := 0) (b := π)).comp_mul_left
+      · apply IntervalIntegrable.sub _ intervalIntegrable_const
+        simpa using (intervalIntegrable_log_sin (a := 0) (b := π)).comp_mul_left
+      · exact intervalIntegrable_log_cos
+    _ = (∫ x in 0..(π / 2), log (sin (2 * x)))
+        - π / 2 * log 2 - ∫ x in 0..(π / 2), log (sin x) := by
+      simp [← sin_pi_div_two_sub,
+        intervalIntegral.integral_comp_sub_left (fun x => log (sin x)) (π / 2)]
+    _ = -log 2 * π / 2 := by
+      simp only [intervalIntegral.integral_comp_mul_left (f := fun x => log (sin x)) two_ne_zero,
+        mul_zero, (by linarith : 2 * (π / 2) = π),
+        integral_log_sin_zero_pi_eq_two_mul_integral_log_sin_zero_pi_div_two, smul_eq_mul, ne_eq,
+        OfNat.ofNat_ne_zero, not_false_eq_true, inv_mul_cancel_left₀, sub_sub_cancel_left, neg_mul]
+      linarith
 
 Depends on / 依赖: Filter, Filter.codiscrete, Filter.codiscreteWithin_mono, Set.univ, analyticOnNhd_cos, analyticOnNhd_cos.preimage_zero_mem_codiscrete, analyticOnNhd_sin, analyticOnNhd_sin.preimage_zero_mem_codiscrete, codiscrete, codiscreteWithin_mono, filter_up, integral_congr_codiscreteWithin, intervalIntegral, intervalIntegral.integral_congr_codiscreteWithin, preimage_zero_mem_codiscrete, subseteq
 -/

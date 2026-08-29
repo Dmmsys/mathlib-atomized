@@ -105,7 +105,7 @@ instance instContinuousSMulSL2R
       simpa [continuous_induced_rng, continuous_iff_continuousAt, Function.comp_def,
         coe_specialLinearGroup_apply]
     intro g τ
-    fun_prop
+    fun_prop (disch := exact denom_ne_zero g τ)
 
 中文:
 实例 instContinuousSMulSL2R
@@ -116,7 +116,7 @@ instance instContinuousSMulSL2R
       simpa [continuous_induced_rng, continuous_iff_continuousAt, Function.comp_def,
         coe_specialLinearGroup_apply]
     intro g τ
-    fun_prop
+    fun_prop (disch := exact denom_ne_zero g τ)
 
 Depends on / 依赖: ContinuousAt, Function, Function.comp_def, coe_specialLinearGroup_apply, comp_def, continuous_iff_continuousAt, continuous_induced_rng, denom_ne_zero, fun_prop
 -/
@@ -143,7 +143,9 @@ lemma σ_eventuallyEq
       filter_upwards [this] with h hh using by simp only [σ, hh, ↓reduceIte, hg]
 .mem_nhds hg .preimage (by fun_prop) exact isOpen_Ioi (a := (0 : Real))
   · suffices {h | ¬0 < h.det.val} in 𝓝 g by
-      filter_upwards [this]
+      filter_upwards [this] with h hh using by simp only [σ, hh, ↓reduceIte, hg]
+    simp only [not_lt, le_iff_lt_or_eq, Units.ne_zero, or_false] at hg ⊢
+.mem_nhds hg .preimage (by fun_prop) exact isOpen_Iio (a := (0 : Real))
 
 中文:
 引理 σ_eventuallyEq
@@ -155,7 +157,9 @@ lemma σ_eventuallyEq
       filter_upwards [this] with h hh using by simp only [σ, hh, ↓reduceIte, hg]
 .mem_nhds hg .preimage (by fun_prop) exact isOpen_Ioi (a := (0 : Real))
   · suffices {h | ¬0 < h.det.val} in 𝓝 g by
-      filter_upwards [this]
+      filter_upwards [this] with h hh using by simp only [σ, hh, ↓reduceIte, hg]
+    simp only [not_lt, le_iff_lt_or_eq, Units.ne_zero, or_false] at hg ⊢
+.mem_nhds hg .preimage (by fun_prop) exact isOpen_Iio (a := (0 : Real))
 
 Depends on / 依赖: Units.ne_zero, filter_upwards, fun_prop, g.det.val, h.det.val, isOpen_Iio, isOpen_Ioi, le_iff_lt_or_eq, mem_nhds, ne_zero, not_lt, or_false, preimage, reduceIte
 -/
@@ -181,7 +185,7 @@ instance instContinuousSMulGL2R
     Prod.forall]
   refine fun g τ => .congr ?_ (f := fun x => (σ g) (num x.1 x.2 / denom x.1 x.2))
     (by filter_upwards [(σ_eventuallyEq g).prod_inl_nhds _] using by simp +contextual)
-  
+  fun_prop (disch := apply denom_ne_zero)
 
 中文:
 实例 instContinuousSMulGL2R
@@ -192,7 +196,7 @@ instance instContinuousSMulGL2R
     Prod.forall]
   refine fun g τ => .congr ?_ (f := fun x => (σ g) (num x.1 x.2 / denom x.1 x.2))
     (by filter_upwards [(σ_eventuallyEq g).prod_inl_nhds _] using by simp +contextual)
-  
+  fun_prop (disch := apply denom_ne_zero)
 
 Depends on / 依赖: Function, Function.comp_def, Prod.forall, coe_smul, comp_def, contextual, continuous_iff_continuousAt, continuous_induced_rng, denom_ne_zero, filter_upwards, fun_prop, prod_inl_nhds
 -/
@@ -218,7 +222,10 @@ lemma cdsq_le
     match hK.exists_isMinOn hKne continuous_im.continuousOn with | ⟨z, _, h⟩ => ⟨_, z.im_pos, h⟩
   refine ⟨1 / δ, fun g hg => ?_⟩
   specialize hδK (g • I) hg
-  simp only [MulA
+  simp only [MulAction.compHom_smul_def, im_smul_eq_div_normSq, Matrix.SpecialLinearGroup.det_mapGL,
+    Units.val_one, abs_one, I_im, mul_one] at hδK
+  rw [le_div_iff₀ (normSq_denom_pos (Matrix.SpecialLinearGroup.mapGL Real g) (show I.im != 0 by simp))]; rw [mul_comm]; rw [← le_div_iff₀ hδ] at hδK
+  simpa [Complex.normSq, add_comm, denom, sq] using hδK
 
 中文:
 引理 cdsq_le
@@ -229,7 +236,10 @@ lemma cdsq_le
     match hK.exists_isMinOn hKne continuous_im.continuousOn with | ⟨z, _, h⟩ => ⟨_, z.im_pos, h⟩
   refine ⟨1 / δ, fun g hg => ?_⟩
   specialize hδK (g • I) hg
-  simp only [MulA
+  simp only [MulAction.compHom_smul_def, im_smul_eq_div_normSq, Matrix.SpecialLinearGroup.det_mapGL,
+    Units.val_one, abs_one, I_im, mul_one] at hδK
+  rw [le_div_iff₀ (normSq_denom_pos (Matrix.SpecialLinearGroup.mapGL Real g) (show I.im != 0 by simp))]; rw [mul_comm]; rw [← le_div_iff₀ hδ] at hδK
+  simpa [Complex.normSq, add_comm, denom, sq] using hδK
 -/
 private lemma cdsq_le {K : Set ℍ} (hK : IsCompact K) :
     exists A, forall g : SL(2, Real), g • I in K -> g 1 0 ^ 2 + g 1 1 ^ 2 <= A := by
@@ -254,7 +264,8 @@ lemma absq_le
   obtain ⟨A, hA⟩ := cdsq_le (K := S • K) (hK.image <| continuous_const_smul S)
   refine ⟨A, fun g hg => ?_⟩
   convert! hA (S * g) (by rwa [mul_smul, Set.smul_mem_smul_set_iff]) using 1
-  rw [Matrix.SpecialLinearGroup.coe_mul]; rw [Matrix.eta_fin
+  rw [Matrix.SpecialLinearGroup.coe_mul]; rw [Matrix.eta_fin_two g.val]; rw [Matrix.mul_fin_two]
+  simp
 
 中文:
 引理 absq_le
@@ -264,7 +275,8 @@ lemma absq_le
   obtain ⟨A, hA⟩ := cdsq_le (K := S • K) (hK.image <| continuous_const_smul S)
   refine ⟨A, fun g hg => ?_⟩
   convert! hA (S * g) (by rwa [mul_smul, Set.smul_mem_smul_set_iff]) using 1
-  rw [Matrix.SpecialLinearGroup.coe_mul]; rw [Matrix.eta_fin
+  rw [Matrix.SpecialLinearGroup.coe_mul]; rw [Matrix.eta_fin_two g.val]; rw [Matrix.mul_fin_two]
+  simp
 -/
 private lemma absq_le {K : Set ℍ} (hK : IsCompact K) :
     exists A : Real, forall g : SL(2, Real), g • I in K -> g 0 0 ^ 2 + g 0 1 ^ 2 <= A := by
@@ -287,7 +299,23 @@ lemma isProperMap_smul_I
   obtain ⟨A', hA'⟩ := cdsq_le hK
   -- activate the sup-norm on matrices
   let : SeminormedAddCommGroup (Matrix (Fin 2) (Fin 2) Real) := Matrix.seminormedAddCommGroup
-  have : ProperSpace (
+  have : ProperSpace (Matrix (Fin 2) (Fin 2) Real) := pi_properSpace
+  have : IsCompact {m : Matrix (Fin 2) (Fin 2) Real | forall i j, |m i j| <= max √A √A'} := by
+    convert! ProperSpace.isCompact_closedBall (0 : Matrix (Fin 2) (Fin 2) Real) (max √A √A')
+    simp only [le_sup_iff, Fin.forall_fin_two, Fin.isValue, Metric.closedBall, dist_zero_right,
+      Matrix.norm_def, pi_norm_le_iff_of_nonempty, Real.norm_eq_abs]
+    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `ext` was not necessary.
+    The cause of this might be `Matrix` function application defeq abuse. -/
+    ext; grind
+  have := Matrix.SpecialLinearGroup.isClosedEmbedding_val.isCompact_preimage this
+  refine this.of_isClosed_subset (hK.isClosed.preimage <| by fun_prop) (fun g hg => ?_)
+  intro i j
+  fin_cases i
+· refine le_trans ?_ le_max_left √A √A'
+exact Real.le_sqrt_of_sq_le le_trans (by fin_cases j <;> simp [sq_nonneg]) (hA g hg)
+· refine le_trans ?_ le_max_right √A √A'
+exact Real.le_sqrt_of_sq_le le_trans (by fin_cases j <;> simp [sq_nonneg]) (hA' g hg)
 
 中文:
 引理 isProperMap_smul_I
@@ -298,7 +326,23 @@ lemma isProperMap_smul_I
   obtain ⟨A', hA'⟩ := cdsq_le hK
   -- activate the sup-norm on matrices
   let : SeminormedAddCommGroup (Matrix (Fin 2) (Fin 2) Real) := Matrix.seminormedAddCommGroup
-  have : ProperSpace (
+  have : ProperSpace (Matrix (Fin 2) (Fin 2) Real) := pi_properSpace
+  have : IsCompact {m : Matrix (Fin 2) (Fin 2) Real | forall i j, |m i j| <= max √A √A'} := by
+    convert! ProperSpace.isCompact_closedBall (0 : Matrix (Fin 2) (Fin 2) Real) (max √A √A')
+    simp only [le_sup_iff, Fin.forall_fin_two, Fin.isValue, Metric.closedBall, dist_zero_right,
+      Matrix.norm_def, pi_norm_le_iff_of_nonempty, Real.norm_eq_abs]
+    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `ext` was not necessary.
+    The cause of this might be `Matrix` function application defeq abuse. -/
+    ext; grind
+  have := Matrix.SpecialLinearGroup.isClosedEmbedding_val.isCompact_preimage this
+  refine this.of_isClosed_subset (hK.isClosed.preimage <| by fun_prop) (fun g hg => ?_)
+  intro i j
+  fin_cases i
+· refine le_trans ?_ le_max_left √A √A'
+exact Real.le_sqrt_of_sq_le le_trans (by fin_cases j <;> simp [sq_nonneg]) (hA g hg)
+· refine le_trans ?_ le_max_right √A √A'
+exact Real.le_sqrt_of_sq_le le_trans (by fin_cases j <;> simp [sq_nonneg]) (hA' g hg)
 
 Depends on / 依赖: absq_le, cdsq_le, fun_prop, isProperMap_iff_isCompact_preimage, isProperMap_iff_isCompact_preimage.mpr
 -/

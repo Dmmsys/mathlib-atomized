@@ -47,7 +47,9 @@ definition restrict
   isLink_symm e he := { symm x y h := ⟨h.1, h.2.symm⟩ }
   eq_or_eq_of_isLink_of_isLink _ _ _ _ _ h h' := h.2.left_eq_or_eq h'.2
   edge_mem_iff_exists_isLink e := ⟨fun h => by simp [G.exists_isLink_of_mem_edgeSet h.1, h.2],
-  
+    fun ⟨x, y, h⟩ => ⟨h.2.edge_mem, h.1⟩⟩
+
+@[simp]
 
 中文:
 定义 restrict
@@ -58,7 +60,9 @@ definition restrict
   isLink_symm e he := { symm x y h := ⟨h.1, h.2.symm⟩ }
   eq_or_eq_of_isLink_of_isLink _ _ _ _ _ h h' := h.2.left_eq_or_eq h'.2
   edge_mem_iff_exists_isLink e := ⟨fun h => by simp [G.exists_isLink_of_mem_edgeSet h.1, h.2],
-  
+    fun ⟨x, y, h⟩ => ⟨h.2.edge_mem, h.1⟩⟩
+
+@[simp]
 -/
 def restrict (G : Graph α β) (E₀ : Set β) : Graph α β where
   vertexSet := V(G)
@@ -577,7 +581,7 @@ lemma deleteEdges_deleteEdges
   proof: by
   simp only [← restrict_edgeSet_sdiff_eq_deleteEdges, sdiff_eq_compl_inter, restrict_inter_edgeSet,
     edgeSet_restrict, restrict_restrict, compl_union]
-  rw [← inter_comm]; rw [inter_comm F₁ᶜ]; rw [inter_assoc]; rw [inter_assoc]; rw [inter_self]; rw [inter_comm]; rw [inter_assoc]; rw [inter_com
+  rw [← inter_comm]; rw [inter_comm F₁ᶜ]; rw [inter_assoc]; rw [inter_assoc]; rw [inter_self]; rw [inter_comm]; rw [inter_assoc]; rw [inter_comm]; rw [restrict_inter_edgeSet]; rw [inter_comm]
 
 中文:
 引理 deleteEdges_deleteEdges
@@ -585,7 +589,7 @@ lemma deleteEdges_deleteEdges
   证明: by
   simp only [← restrict_edgeSet_sdiff_eq_deleteEdges, sdiff_eq_compl_inter, restrict_inter_edgeSet,
     edgeSet_restrict, restrict_restrict, compl_union]
-  rw [← inter_comm]; rw [inter_comm F₁ᶜ]; rw [inter_assoc]; rw [inter_assoc]; rw [inter_self]; rw [inter_comm]; rw [inter_assoc]; rw [inter_com
+  rw [← inter_comm]; rw [inter_comm F₁ᶜ]; rw [inter_assoc]; rw [inter_assoc]; rw [inter_self]; rw [inter_comm]; rw [inter_assoc]; rw [inter_comm]; rw [restrict_inter_edgeSet]; rw [inter_comm]
 
 Depends on / 依赖: compl_union, edgeSet_restrict, inter_assoc, inter_comm, inter_self, restrict_edgeSet_sdiff_eq_deleteEdges, restrict_inter_edgeSet, restrict_restrict, sdiff_eq_compl_inter
 -/

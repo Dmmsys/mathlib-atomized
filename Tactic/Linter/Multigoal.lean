@@ -75,7 +75,45 @@ abbreviation exclusions
     `then,
     `else,
     ``Lean.Parser.Tactic.«tacticNext_=>_»,
-   
+    ``Lean.Parser.Tactic.tacticSeq1Indented,
+    ``Lean.Parser.Tactic.tacticSeq,
+    `focus,
+    ``Lean.Parser.Tactic.focus,
+    -- grind interactive mode
+    ``Lean.Parser.Tactic.Grind.grindSeq1Indented,
+    ``Lean.Parser.Tactic.Grind.grindSeq,
+    ``Lean.Parser.Tactic.Grind.«grind·_»,
+    ``Lean.Parser.Tactic.Grind.grindSeqBracketed,
+    ``Lean.Parser.Tactic.Grind.«grind_<;>_»,
+    ``Lean.Parser.Tactic.Grind.skip,
+    ``Lean.Parser.Tactic.Grind.focus,
+    ``Lean.Parser.Tactic.Grind.next,
+    ``Lean.Parser.Tactic.Grind.cases,
+    -- re-ordering goals
+    `Batteries.Tactic.tacticSwap,
+    ``Lean.Parser.Tactic.rotateLeft,
+    ``Lean.Parser.Tactic.rotateRight,
+    ``Lean.Parser.Tactic.skip,
+    `Batteries.Tactic.«tacticOn_goal-_=>_»,
+    `Mathlib.Tactic.«tacticSwap_var__,,»,
+    -- tactic combinators
+    ``Lean.Parser.Tactic.tacticRepeat_,
+    ``Lean.Parser.Tactic.tacticTry_,
+    -- creating new goals
+    ``Lean.Parser.Tactic.paren,
+    ``Lean.Parser.Tactic.case,
+    ``Lean.Parser.Tactic.constructor,
+    `Mathlib.Tactic.tacticAssumption',
+    ``Lean.Parser.Tactic.induction,
+    ``Lean.Parser.Tactic.cases,
+    ``Lean.Parser.Tactic.intros,
+    ``Lean.Parser.Tactic.injections,
+    ``Lean.Parser.Tactic.substVars,
+    `Batteries.Tactic.«tacticPick_goal-_»,
+    ``Lean.Parser.Tactic.case',
+    `«tactic#adaptation_note_»,
+    `tacticSleep_heartbeats_
+  ]
 
 中文:
 缩写 exclusions
@@ -95,7 +133,45 @@ abbreviation exclusions
     `then,
     `else,
     ``Lean.Parser.Tactic.«tacticNext_=>_»,
-   
+    ``Lean.Parser.Tactic.tacticSeq1Indented,
+    ``Lean.Parser.Tactic.tacticSeq,
+    `focus,
+    ``Lean.Parser.Tactic.focus,
+    -- grind interactive mode
+    ``Lean.Parser.Tactic.Grind.grindSeq1Indented,
+    ``Lean.Parser.Tactic.Grind.grindSeq,
+    ``Lean.Parser.Tactic.Grind.«grind·_»,
+    ``Lean.Parser.Tactic.Grind.grindSeqBracketed,
+    ``Lean.Parser.Tactic.Grind.«grind_<;>_»,
+    ``Lean.Parser.Tactic.Grind.skip,
+    ``Lean.Parser.Tactic.Grind.focus,
+    ``Lean.Parser.Tactic.Grind.next,
+    ``Lean.Parser.Tactic.Grind.cases,
+    -- re-ordering goals
+    `Batteries.Tactic.tacticSwap,
+    ``Lean.Parser.Tactic.rotateLeft,
+    ``Lean.Parser.Tactic.rotateRight,
+    ``Lean.Parser.Tactic.skip,
+    `Batteries.Tactic.«tacticOn_goal-_=>_»,
+    `Mathlib.Tactic.«tacticSwap_var__,,»,
+    -- tactic combinators
+    ``Lean.Parser.Tactic.tacticRepeat_,
+    ``Lean.Parser.Tactic.tacticTry_,
+    -- creating new goals
+    ``Lean.Parser.Tactic.paren,
+    ``Lean.Parser.Tactic.case,
+    ``Lean.Parser.Tactic.constructor,
+    `Mathlib.Tactic.tacticAssumption',
+    ``Lean.Parser.Tactic.induction,
+    ``Lean.Parser.Tactic.cases,
+    ``Lean.Parser.Tactic.intros,
+    ``Lean.Parser.Tactic.injections,
+    ``Lean.Parser.Tactic.substVars,
+    `Batteries.Tactic.«tacticPick_goal-_»,
+    ``Lean.Parser.Tactic.case',
+    `«tactic#adaptation_note_»,
+    `tacticSleep_heartbeats_
+  ]
 
 Depends on / 依赖: ofArray
 -/
@@ -169,6 +245,15 @@ abbreviation ignoreBranch
     ``Lean.Parser.Tactic.repeat',
     ``Lean.Parser.Tactic.tacticIterate____,
     ``Lean.Parser.Tactic.anyGoals,
+    ``Lean.Parser.Tactic.allGoals,
+    ``Lean.Parser.Tactic.failIfSuccess,
+    ``Lean.Parser.Tactic.Grind.anyGoals,
+    ``Lean.Parser.Tactic.Grind.allGoals,
+    ``Lean.Parser.Tactic.Grind.first,
+    ``Lean.Parser.Tactic.Grind.failIfSuccess,
+    ``Lean.Parser.Tactic.Grind.grindRepeat_,
+    `Mathlib.Tactic.successIfFailWithMsg
+  ]
 
 中文:
 缩写 ignoreBranch
@@ -182,6 +267,15 @@ abbreviation ignoreBranch
     ``Lean.Parser.Tactic.repeat',
     ``Lean.Parser.Tactic.tacticIterate____,
     ``Lean.Parser.Tactic.anyGoals,
+    ``Lean.Parser.Tactic.allGoals,
+    ``Lean.Parser.Tactic.failIfSuccess,
+    ``Lean.Parser.Tactic.Grind.anyGoals,
+    ``Lean.Parser.Tactic.Grind.allGoals,
+    ``Lean.Parser.Tactic.Grind.first,
+    ``Lean.Parser.Tactic.Grind.failIfSuccess,
+    ``Lean.Parser.Tactic.Grind.grindRepeat_,
+    `Mathlib.Tactic.successIfFailWithMsg
+  ]
 
 Depends on / 依赖: ofArray
 -/
@@ -225,7 +319,18 @@ definition getManyGoals
       if ignoreBranch.contains info.stx.getKind then #[]
       -- Ideal case: one goal, and it might or might not be closed.
       else if info.goalsBefore.length == 1 && info.goalsAfter.length <= 1 then kargs
-      e
+      else if let .original .. := info.stx.getHeadInfo then
+        let backgroundGoals := info.goalsAfter.filter (info.goalsBefore.contains ·)
+        if backgroundGoals.length != 0 && !exclusions.contains info.stx.getKind then
+          kargs.push (info.stx,
+                      info.goalsBefore.length, info.goalsAfter.length, backgroundGoals.length)
+        else kargs
+      else kargs
+    else kargs
+  | .context _ t => getManyGoals t
+  | _ => default
+
+@[inherit_doc Mathlib.Linter.linter.style.multiGoal]
 
 中文:
 定义 getManyGoals
@@ -235,7 +340,18 @@ definition getManyGoals
       if ignoreBranch.contains info.stx.getKind then #[]
       -- Ideal case: one goal, and it might or might not be closed.
       else if info.goalsBefore.length == 1 && info.goalsAfter.length <= 1 then kargs
-      e
+      else if let .original .. := info.stx.getHeadInfo then
+        let backgroundGoals := info.goalsAfter.filter (info.goalsBefore.contains ·)
+        if backgroundGoals.length != 0 && !exclusions.contains info.stx.getKind then
+          kargs.push (info.stx,
+                      info.goalsBefore.length, info.goalsAfter.length, backgroundGoals.length)
+        else kargs
+      else kargs
+    else kargs
+  | .context _ t => getManyGoals t
+  | _ => default
+
+@[inherit_doc Mathlib.Linter.linter.style.multiGoal]
 
 Depends on / 依赖: args.map, flatten, getManyGoals, toArray, toArray.flatten
 -/
@@ -272,7 +388,14 @@ definition multiGoalLinter
     let trees ← getInfoTrees
     for t in trees do
       for (s, before, after, n) in getManyGoals t do
-        let goals (k : Nat)
+        let goals (k : Nat) := if k == 1 then f!"1 goal" else f!"{k} goals"
+        let fmt ← Command.liftCoreM
+          try PrettyPrinter.ppTactic ⟨s⟩ catch _ => pure f!"(failed to pretty print)"
+        Linter.logLint linter.style.multiGoal s m!"\
+          The following tactic starts with {goals before} and ends with {goals after}, \
+          {n} of which {if n == 1 then "is" else "are"} not operated on.\
+          {indentD fmt}\n\
+          Please focus on the current goal, for instance using `·` (typed as \"\\.\")."
 
 中文:
 定义 multiGoalLinter
@@ -285,7 +408,14 @@ definition multiGoalLinter
     let trees ← getInfoTrees
     for t in trees do
       for (s, before, after, n) in getManyGoals t do
-        let goals (k : Nat)
+        let goals (k : Nat) := if k == 1 then f!"1 goal" else f!"{k} goals"
+        let fmt ← Command.liftCoreM
+          try PrettyPrinter.ppTactic ⟨s⟩ catch _ => pure f!"(failed to pretty print)"
+        Linter.logLint linter.style.multiGoal s m!"\
+          The following tactic starts with {goals before} and ends with {goals after}, \
+          {n} of which {if n == 1 then "is" else "are"} not operated on.\
+          {indentD fmt}\n\
+          Please focus on the current goal, for instance using `·` (typed as \"\\.\")."
 
 Depends on / 依赖: _stx, withSetOptionIn
 -/

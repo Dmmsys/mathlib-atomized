@@ -539,7 +539,8 @@ theorem Acc.sym2_gameAdd
   · exact ihb d rd
   · rw [Sym2.eq_swap]
     exact iha d rd ⟨b, hb⟩
- 
+  · rw [Sym2.eq_swap]
+    exact ihb c rc
 
 中文:
 定理 Acc.sym2_gameAdd
@@ -556,7 +557,8 @@ theorem Acc.sym2_gameAdd
   · exact ihb d rd
   · rw [Sym2.eq_swap]
     exact iha d rd ⟨b, hb⟩
- 
+  · rw [Sym2.eq_swap]
+    exact ihb c rc
 
 Depends on / 依赖: Acc.intro, GameAdd, Sym2.GameAdd, Sym2.eq_swap, eq_swap, generalizing
 -/
@@ -613,7 +615,7 @@ definition GameAdd.recursion
     (by simpa [← Sym2.gameAdd_iff] using hr.sym2_gameAdd.onFun)
     (fun ⟨x₁, x₂⟩ IH' => IH x₁ x₂ fun a' b' => IH' ⟨a', b'⟩) (a, b)
 
-@[deprecated (since := "2026-03-13")] alias GameAdd
+@[deprecated (since := "2026-03-13")] alias GameAdd.fix := GameAdd.recursion
 
 中文:
 定义 GameAdd.recursion
@@ -623,7 +625,7 @@ definition GameAdd.recursion
     (by simpa [← Sym2.gameAdd_iff] using hr.sym2_gameAdd.onFun)
     (fun ⟨x₁, x₂⟩ IH' => IH x₁ x₂ fun a' b' => IH' ⟨a', b'⟩) (a, b)
 
-@[deprecated (since := "2026-03-13")] alias GameAdd
+@[deprecated (since := "2026-03-13")] alias GameAdd.fix := GameAdd.recursion
 -/
 def GameAdd.recursion {C : α -> α -> Sort*} (hr : WellFounded rα)
     (IH : forall a₁ b₁, (forall a₂ b₂, Sym2.GameAdd rα s(a₂, b₂) s(a₁, b₁) -> C a₂ b₂) -> C a₁ b₁) (a b : α) :

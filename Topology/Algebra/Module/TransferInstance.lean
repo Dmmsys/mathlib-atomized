@@ -50,7 +50,10 @@ definition continuousLinearEquiv
   { toLinearEquiv := e.linearEquiv _
     continuous_toFun := continuous_induced_dom
     continuous_invFun := by
-      simp +instances onl
+      simp +instances only [Equiv.topologicalSpace, toFun_as_coe, ← coinduced_symm]
+      exact continuous_coinduced_rng }
+
+@[simp]
 
 中文:
 定义 continuousLinearEquiv
@@ -65,7 +68,10 @@ definition continuousLinearEquiv
   { toLinearEquiv := e.linearEquiv _
     continuous_toFun := continuous_induced_dom
     continuous_invFun := by
-      simp +instances onl
+      simp +instances only [Equiv.topologicalSpace, toFun_as_coe, ← coinduced_symm]
+      exact continuous_coinduced_rng }
+
+@[simp]
 
 Depends on / 依赖: e.topologicalSpace, topologicalSpace
 -/
@@ -133,7 +139,7 @@ lemma ContinuousMulEquiv.isTopologicalGroup
 exact this.congr fun p => by simp [f]
   continuous_inv := by
     have : Continuous (e.symm ∘ (fun q => q⁻¹) ∘ e) := by fun_prop
-    exact this.congr (fun p => b
+    exact this.congr (fun p => by simp)
 
 中文:
 引理 连续乘法等价.isTopologicalGroup
@@ -143,7 +149,7 @@ exact this.congr fun p => by simp [f]
 exact this.congr fun p => by simp [f]
   continuous_inv := by
     have : Continuous (e.symm ∘ (fun q => q⁻¹) ∘ e) := by fun_prop
-    exact this.congr (fun p => b
+    exact this.congr (fun p => by simp)
 
 Depends on / 依赖: Continuous, continuous_inv, e.symm, fun_prop, this.congr
 -/

@@ -46,7 +46,13 @@ definition unitsLift
       inv_val := ext fun _ => Units.inv_mul _ }
   invFun f :=
     { toFun := fun x =>
-        ⟨
+        ⟨(f : C(X, M)) x, (↑f⁻¹ : C(X, M)) x,
+          ContinuousMap.congr_fun f.mul_inv x, ContinuousMap.congr_fun f.inv_mul x⟩
+continuous_toFun := continuous_induced_rng.2
+(f : C(X, M)).continuous.prodMk
+        MulOpposite.continuous_op.comp (↑f⁻¹ : C(X, M)).continuous }
+
+@[to_additive (attr := simp)]
 
 中文:
 定义 unitsLift
@@ -57,7 +63,13 @@ definition unitsLift
       inv_val := ext fun _ => Units.inv_mul _ }
   invFun f :=
     { toFun := fun x =>
-        ⟨
+        ⟨(f : C(X, M)) x, (↑f⁻¹ : C(X, M)) x,
+          ContinuousMap.congr_fun f.mul_inv x, ContinuousMap.congr_fun f.inv_mul x⟩
+continuous_toFun := continuous_induced_rng.2
+(f : C(X, M)).continuous.prodMk
+        MulOpposite.continuous_op.comp (↑f⁻¹ : C(X, M)).continuous }
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.congr_fun, MulOpposite, MulOpposite.continuous_op.comp, Units.continuous_val.comp, Units.inv_mul, Units.mul_inv, congr_fun, continuous, continuous.prodMk, continuous_induced_rng, continuous_inv, continuous_inv.comp, continuous_op, continuous_toFun, continuous_val, f.continuous, f.inv_mul, f.mul_inv, invFun
 -/
@@ -137,7 +149,7 @@ theorem continuous_isUnit_unit
   have := NormedRing.inverse_continuousAt (h x).unit
   simp only
   simp only [← Ring.inverse_unit, IsUnit.unit_spec] at this ⊢
-  exac
+  exact this.comp (f.continuousAt x)
 
 中文:
 定理 continuous_isUnit_unit
@@ -150,7 +162,7 @@ theorem continuous_isUnit_unit
   have := NormedRing.inverse_continuousAt (h x).unit
   simp only
   simp only [← Ring.inverse_unit, IsUnit.unit_spec] at this ⊢
-  exac
+  exact this.comp (f.continuousAt x)
 
 Depends on / 依赖: Continuous, Continuous.prodMk, IsUnit, IsUnit.unit_spec, MulOpposite, MulOpposite.continuous_op.comp, NormedRing, NormedRing.inverse_continuousAt, Ring.inverse_unit, continuous, continuousAt, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, continuous_induced_rng, continuous_op, f.continuous, f.continuousAt, inverse_continuousAt, inverse_unit, prodMk
 -/

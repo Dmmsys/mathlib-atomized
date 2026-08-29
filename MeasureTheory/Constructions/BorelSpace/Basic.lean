@@ -116,7 +116,13 @@ theorem borel_eq_generateFrom_of_subbasis
       induction hu with
       | basic u hu => exact GenerateMeasurable.basic u hu
       | univ => exact @MeasurableSet.univ α (generateFrom s)
-      | inter s₁ s₂ _ _ hs₁ hs₂ => exact @MeasurableSet.inter α (generateF
+      | inter s₁ s₂ _ _ hs₁ hs₂ => exact @MeasurableSet.inter α (generateFrom s) _ _ hs₁ hs₂
+      | sUnion f hf ih =>
+        rcases isOpen_sUnion_countable f (by rwa [hs]) with ⟨v, hv, vf, vu⟩
+        rw [← vu]
+        exact @MeasurableSet.sUnion α (generateFrom s) _ hv fun x xv => ih _ (vf xv))
+    (generateFrom_le fun u hu =>
+GenerateMeasurable.basic _ show t.IsOpen u by rw [hs]; exact GenerateOpen.basic _ hu)
 
 中文:
 定理 borel_eq_generateFrom_of_subbasis
@@ -127,7 +133,13 @@ theorem borel_eq_generateFrom_of_subbasis
       induction hu with
       | basic u hu => exact GenerateMeasurable.basic u hu
       | univ => exact @MeasurableSet.univ α (generateFrom s)
-      | inter s₁ s₂ _ _ hs₁ hs₂ => exact @MeasurableSet.inter α (generateF
+      | inter s₁ s₂ _ _ hs₁ hs₂ => exact @MeasurableSet.inter α (generateFrom s) _ _ hs₁ hs₂
+      | sUnion f hf ih =>
+        rcases isOpen_sUnion_countable f (by rwa [hs]) with ⟨v, hv, vf, vu⟩
+        rw [← vu]
+        exact @MeasurableSet.sUnion α (generateFrom s) _ hv fun x xv => ih _ (vf xv))
+    (generateFrom_le fun u hu =>
+GenerateMeasurable.basic _ show t.IsOpen u by rw [hs]; exact GenerateOpen.basic _ hu)
 
 Depends on / 依赖: GenerateMe, GenerateMeasurable, GenerateMeasurable.basic, IsOpen, MeasurableSet, MeasurableSet.inter, MeasurableSet.sUnion, MeasurableSet.univ, generateFrom, generateFrom_le, isOpen_sUnion_countable, le_antisymm, sUnion, t.IsOpen
 -/
@@ -218,7 +230,7 @@ theorem borel_eq_generateFrom_isClosed
       @MeasurableSet.of_compl α _ (generateFrom { s | IsClosed s })
         (GenerateMeasurable.basic _ <| isClosed_compl_iff.2 ht))
     (generateFrom_le fun _t ht =>
-      @MeasurableSet.of_compl α _ (borel α) (GenerateMeasurable.basic _ <| isOpen_compl
+      @MeasurableSet.of_compl α _ (borel α) (GenerateMeasurable.basic _ <| isOpen_compl_iff.2 ht))
 
 中文:
 定理 borel_eq_generateFrom_isClosed
@@ -228,7 +240,7 @@ theorem borel_eq_generateFrom_isClosed
       @MeasurableSet.of_compl α _ (generateFrom { s | IsClosed s })
         (GenerateMeasurable.basic _ <| isClosed_compl_iff.2 ht))
     (generateFrom_le fun _t ht =>
-      @MeasurableSet.of_compl α _ (borel α) (GenerateMeasurable.basic _ <| isOpen_compl
+      @MeasurableSet.of_compl α _ (borel α) (GenerateMeasurable.basic _ <| isOpen_compl_iff.2 ht))
 
 Depends on / 依赖: GenerateMeasurable, GenerateMeasurable.basic, IsClosed, MeasurableSet, MeasurableSet.of_compl, generateFrom, generateFrom_le, isClosed_compl_iff, isOpen_compl_iff, le_antisymm, of_compl
 -/
@@ -1021,7 +1033,13 @@ instance Pi.opensMeasurableSpace
   have : Pi.topologicalSpace = .generateFrom { t | exists (s : forall a, Set (X a)) (i : Finset ι),
       (forall a in i, s a in countableBasis (X a)) ∧ t = pi (↑i) s } := by
     simp +instances only [funext fun a => @eq_generateFrom_countableBasis (X a) _ _,
-      pi_generateFrom_e
+      pi_generateFrom_eq]
+  rw [borel_eq_generateFrom_of_subbasis this]
+  apply generateFrom_le
+  rintro _ ⟨s, i, hi, rfl⟩
+  refine MeasurableSet.pi i.countable_toSet fun a ha => IsOpen.measurableSet ?_
+  rw [eq_generateFrom_countableBasis (X a)]
+  exact .basic _ (hi a ha)
 
 中文:
 实例 依赖函数类型.opensMeasurableSpace
@@ -1031,7 +1049,13 @@ instance Pi.opensMeasurableSpace
   have : Pi.topologicalSpace = .generateFrom { t | exists (s : forall a, Set (X a)) (i : Finset ι),
       (forall a in i, s a in countableBasis (X a)) ∧ t = pi (↑i) s } := by
     simp +instances only [funext fun a => @eq_generateFrom_countableBasis (X a) _ _,
-      pi_generateFrom_e
+      pi_generateFrom_eq]
+  rw [borel_eq_generateFrom_of_subbasis this]
+  apply generateFrom_le
+  rintro _ ⟨s, i, hi, rfl⟩
+  refine MeasurableSet.pi i.countable_toSet fun a ha => IsOpen.measurableSet ?_
+  rw [eq_generateFrom_countableBasis (X a)]
+  exact .basic _ (hi a ha)
 
 Depends on / 依赖: Finset, IsOpen, IsOpen.measurableSet, MeasurableSet, MeasurableSet.pi, Pi.topologicalSpace, borel_eq_generateFrom_of_subbasis, countableBasis, countable_toSet, eq_generateFrom_countableBasis, generateFrom, generateFrom_le, i.countable_toSet, instances, measurableSet, pi_generateFrom_eq, topologicalSpace
 -/
@@ -1062,7 +1086,11 @@ instance Pi.opensMeasurableSpace_of_subsingleton
     · exact fun s _ => Subsingleton.set_cases .empty .univ s
     have := Classical.choice (nonempty_unique ι)
     rw [borel]; rw [MeasurableSpace.pi]; rw [ciSup_unique]
-    refine MeasurableSpace.generateFrom_le fun s hs => MeasurableSpace.measurableSet_c
+    refine MeasurableSpace.generateFrom_le fun s hs => MeasurableSpace.measurableSet_comap.2 ?_
+    simp +instances only [Pi.topologicalSpace, ciInf_unique, isOpen_induced_eq, Set.mem_image,
+      Set.mem_ofPred_eq] at hs
+    obtain ⟨t, ht, rfl⟩ := hs
+    exact ⟨t, ht.measurableSet, rfl⟩
 
 中文:
 实例 依赖函数类型.opensMeasurableSpace_of_subsingleton
@@ -1072,7 +1100,11 @@ instance Pi.opensMeasurableSpace_of_subsingleton
     · exact fun s _ => Subsingleton.set_cases .empty .univ s
     have := Classical.choice (nonempty_unique ι)
     rw [borel]; rw [MeasurableSpace.pi]; rw [ciSup_unique]
-    refine MeasurableSpace.generateFrom_le fun s hs => MeasurableSpace.measurableSet_c
+    refine MeasurableSpace.generateFrom_le fun s hs => MeasurableSpace.measurableSet_comap.2 ?_
+    simp +instances only [Pi.topologicalSpace, ciInf_unique, isOpen_induced_eq, Set.mem_image,
+      Set.mem_ofPred_eq] at hs
+    obtain ⟨t, ht, rfl⟩ := hs
+    exact ⟨t, ht.measurableSet, rfl⟩
 
 Depends on / 依赖: Classical, Classical.choice, MeasurableSpace, MeasurableSpace.generateFrom_le, MeasurableSpace.measurableSet_comap, MeasurableSpace.pi, Pi.topologicalSpace, Set.mem_image, Set.mem_ofPred_eq, Subsingleton, Subsingleton.set_cases, choice, ciInf_unique, ciSup_unique, generateFrom_le, ht.measurableSet, instances, isEmpty_or_nonempty, isOpen_induced_eq, measurableSet
 -/
@@ -1132,7 +1164,44 @@ instance Prod.opensMeasurableSpace
     have A : forall a, IsOpen (F a) := by
       intro a
       apply isOpen_iff_forall_mem_open.2
-      
+      rintro y ⟨b, b_open, yb, hb⟩
+      exact ⟨b, fun z zb => ⟨b, b_open, zb, hb⟩, b_open, yb⟩
+    have : s = ⋃ a in countableBasis α, a ×ˢ F a := by
+      apply Subset.antisymm
+      · rintro ⟨y1, y2⟩ hy
+        rcases isOpen_prod_iff.1 hs y1 y2 hy with ⟨u, v, u_open, v_open, yu, yv, huv⟩
+        obtain ⟨a, ha, ya, au⟩ : exists a in countableBasis α, y1 in a ∧ a subseteq u :=
+          IsTopologicalBasis.exists_subset_of_mem_open (isBasis_countableBasis α) yu u_open
+        simp only [mem_iUnion, mem_prod, exists_and_left, exists_prop]
+        exact ⟨a, ya, ha, v, v_open, yv, (Set.prod_mono_left au).trans huv⟩
+      · rintro ⟨y1, y2⟩ hy
+        simp only [mem_iUnion, mem_prod, exists_and_left, exists_prop] at hy
+        rcases hy with ⟨a, ya, -, b, -, yb, hb⟩
+        exact hb (mem_prod.2 ⟨ya, yb⟩)
+    rw [this]
+    apply MeasurableSet.biUnion (countable_countableBasis α) (fun a ha => ?_)
+    exact (isOpen_of_mem_countableBasis ha).measurableSet.prod (A a).measurableSet
+  · let F : Set β -> Set α := fun a => {y | exists b, IsOpen b ∧ y in b ∧ b ×ˢ a subseteq s}
+    have A : forall a, IsOpen (F a) := by
+      intro a
+      apply isOpen_iff_forall_mem_open.2
+      rintro y ⟨b, b_open, yb, hb⟩
+      exact ⟨b, fun z zb => ⟨b, b_open, zb, hb⟩, b_open, yb⟩
+    have : s = ⋃ a in countableBasis β, F a ×ˢ a := by
+      apply Subset.antisymm
+      · rintro ⟨y1, y2⟩ hy
+        rcases isOpen_prod_iff.1 hs y1 y2 hy with ⟨u, v, u_open, v_open, yu, yv, huv⟩
+        obtain ⟨a, ha, ya, au⟩ : exists a in countableBasis β, y2 in a ∧ a subseteq v :=
+          IsTopologicalBasis.exists_subset_of_mem_open (isBasis_countableBasis β) yv v_open
+        simp only [mem_iUnion, mem_prod, exists_and_left, exists_prop]
+        exact ⟨a, ⟨u, u_open, yu, (Set.prod_mono_right au).trans huv⟩, ha, ya⟩
+      · rintro ⟨y1, y2⟩ hy
+        simp only [mem_iUnion, mem_prod, exists_and_left, exists_prop] at hy
+        rcases hy with ⟨a, ⟨b, -, yb, hb⟩, -, ya⟩
+        exact hb (mem_prod.2 ⟨yb, ya⟩)
+    rw [this]
+    apply MeasurableSet.biUnion (countable_countableBasis β) (fun a ha => ?_)
+    exact (A a).measurableSet.prod (isOpen_of_mem_countableBasis ha).measurableSet
 
 中文:
 实例 积类型.opensMeasurableSpace
@@ -1144,7 +1213,44 @@ instance Prod.opensMeasurableSpace
     have A : forall a, IsOpen (F a) := by
       intro a
       apply isOpen_iff_forall_mem_open.2
-      
+      rintro y ⟨b, b_open, yb, hb⟩
+      exact ⟨b, fun z zb => ⟨b, b_open, zb, hb⟩, b_open, yb⟩
+    have : s = ⋃ a in countableBasis α, a ×ˢ F a := by
+      apply Subset.antisymm
+      · rintro ⟨y1, y2⟩ hy
+        rcases isOpen_prod_iff.1 hs y1 y2 hy with ⟨u, v, u_open, v_open, yu, yv, huv⟩
+        obtain ⟨a, ha, ya, au⟩ : exists a in countableBasis α, y1 in a ∧ a subseteq u :=
+          IsTopologicalBasis.exists_subset_of_mem_open (isBasis_countableBasis α) yu u_open
+        simp only [mem_iUnion, mem_prod, exists_and_left, exists_prop]
+        exact ⟨a, ya, ha, v, v_open, yv, (Set.prod_mono_left au).trans huv⟩
+      · rintro ⟨y1, y2⟩ hy
+        simp only [mem_iUnion, mem_prod, exists_and_left, exists_prop] at hy
+        rcases hy with ⟨a, ya, -, b, -, yb, hb⟩
+        exact hb (mem_prod.2 ⟨ya, yb⟩)
+    rw [this]
+    apply MeasurableSet.biUnion (countable_countableBasis α) (fun a ha => ?_)
+    exact (isOpen_of_mem_countableBasis ha).measurableSet.prod (A a).measurableSet
+  · let F : Set β -> Set α := fun a => {y | exists b, IsOpen b ∧ y in b ∧ b ×ˢ a subseteq s}
+    have A : forall a, IsOpen (F a) := by
+      intro a
+      apply isOpen_iff_forall_mem_open.2
+      rintro y ⟨b, b_open, yb, hb⟩
+      exact ⟨b, fun z zb => ⟨b, b_open, zb, hb⟩, b_open, yb⟩
+    have : s = ⋃ a in countableBasis β, F a ×ˢ a := by
+      apply Subset.antisymm
+      · rintro ⟨y1, y2⟩ hy
+        rcases isOpen_prod_iff.1 hs y1 y2 hy with ⟨u, v, u_open, v_open, yu, yv, huv⟩
+        obtain ⟨a, ha, ya, au⟩ : exists a in countableBasis β, y2 in a ∧ a subseteq v :=
+          IsTopologicalBasis.exists_subset_of_mem_open (isBasis_countableBasis β) yv v_open
+        simp only [mem_iUnion, mem_prod, exists_and_left, exists_prop]
+        exact ⟨a, ⟨u, u_open, yu, (Set.prod_mono_right au).trans huv⟩, ha, ya⟩
+      · rintro ⟨y1, y2⟩ hy
+        simp only [mem_iUnion, mem_prod, exists_and_left, exists_prop] at hy
+        rcases hy with ⟨a, ⟨b, -, yb, hb⟩, -, ya⟩
+        exact hb (mem_prod.2 ⟨yb, ya⟩)
+    rw [this]
+    apply MeasurableSet.biUnion (countable_countableBasis β) (fun a ha => ?_)
+    exact (A a).measurableSet.prod (isOpen_of_mem_countableBasis ha).measurableSet
 
 Depends on / 依赖: IsOpen, Subset, Subset.antisymm, antisymm, b_open, countableBasis, h.out, isOpen_iff_forall_mem_open, isOpen_prod_iff, opensMeasurableSpace_iff_forall_measurableSet, subseteq
 -/
@@ -1486,7 +1592,11 @@ theorem ContinuousOn.measurable_piecewise
   · rcases _root_.continuousOn_iff'.1 hf t ht with ⟨u, u_open, hu⟩
     rw [hu]
     exact u_open.measurableSet.inter hs
-  · rcases _root_.continuousOn_iff'.1 hg t ht with ⟨u, u_open, hu
+  · rcases _root_.continuousOn_iff'.1 hg t ht with ⟨u, u_open, hu⟩
+    rw [sdiff_eq_compl_inter]; rw [inter_comm]; rw [hu]
+    exact u_open.measurableSet.inter hs.compl
+
+@[to_additive]
 
 中文:
 定理 ContinuousOn.measurable_piecewise
@@ -1498,7 +1608,11 @@ theorem ContinuousOn.measurable_piecewise
   · rcases _root_.continuousOn_iff'.1 hf t ht with ⟨u, u_open, hu⟩
     rw [hu]
     exact u_open.measurableSet.inter hs
-  · rcases _root_.continuousOn_iff'.1 hg t ht with ⟨u, u_open, hu
+  · rcases _root_.continuousOn_iff'.1 hg t ht with ⟨u, u_open, hu⟩
+    rw [sdiff_eq_compl_inter]; rw [inter_comm]; rw [hu]
+    exact u_open.measurableSet.inter hs.compl
+
+@[to_additive]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.union, S.lambda_not_dvd_X, S.multiplicity, Set.ite, Solution, _descent, _root_, _root_.continuousOn_iff, continuousOn_iff, false_and, hs.compl, inter_comm, lambda_not_dvd_X, measurableSet, measurable_of_isOpen, mul_assoc, mul_eq_mul_left_iff, multiplicity, multiplicity_eq_of_dvd_of_not_dvd
 -/

@@ -1303,7 +1303,7 @@ instance :
       edge_vert := by
         rintro a b ⟨G', hG', hab⟩
         exact Set.mem_iUnion₂_of_mem hG' (G'.edge_vert hab)
-      symm.symm a b h
+      symm.symm a b h := by simpa [adj_comm] using h }
 
 中文:
 实例 :
@@ -1316,7 +1316,7 @@ instance :
       edge_vert := by
         rintro a b ⟨G', hG', hab⟩
         exact Set.mem_iUnion₂_of_mem hG' (G'.edge_vert hab)
-      symm.symm a b h
+      symm.symm a b h := by simpa [adj_comm] using h }
 
 Depends on / 依赖: Set.mem_iUnion, adj_comm, adj_sub, edge_vert, symm.symm
 -/
@@ -1344,7 +1344,7 @@ instance :
 edge_vert := fun hab => Set.mem_iInter₂_of_mem fun G' hG' => G'.edge_vert hab.1 hG'
       symm.symm _ _ := And.imp (forall₂_imp fun _ _ => Adj.symm) G.adj_symm }
 
-@[simp
+@[simp]
 
 中文:
 实例 :
@@ -1355,7 +1355,7 @@ edge_vert := fun hab => Set.mem_iInter₂_of_mem fun G' hG' => G'.edge_vert hab.
 edge_vert := fun hab => Set.mem_iInter₂_of_mem fun G' hG' => G'.edge_vert hab.1 hG'
       symm.symm _ _ := And.imp (forall₂_imp fun _ _ => Adj.symm) G.adj_symm }
 
-@[simp
+@[simp]
 
 Depends on / 依赖: Adj.symm, And.imp, And.right, G.Adj, G.adj_symm, Set.mem_iInter, adj_sub, adj_symm, edge_vert, symm.symm
 -/
@@ -1988,7 +1988,9 @@ instance :
         ⟨Set.iUnion₂_subset fun _ hH => (hG' hH).1, fun a b ⟨H, hH, hab⟩ => (hG' hH).2 hab⟩⟩
   isGLB_sInf _ :=
     ⟨fun G' hG' => ⟨Set.iInter₂_subset G' hG', fun _ _ hab => hab.1 hG'⟩,
-      fun G' hG'
+      fun G' hG' =>
+        ⟨Set.subset_iInter₂ fun _ hH => (hG' hH).1, fun _ _ hab =>
+         ⟨fun _ hH => (hG' hH).2 hab, G'.adj_sub hab⟩⟩⟩
 
 中文:
 实例 :
@@ -1998,7 +2000,9 @@ instance :
         ⟨Set.iUnion₂_subset fun _ hH => (hG' hH).1, fun a b ⟨H, hH, hab⟩ => (hG' hH).2 hab⟩⟩
   isGLB_sInf _ :=
     ⟨fun G' hG' => ⟨Set.iInter₂_subset G' hG', fun _ _ hab => hab.1 hG'⟩,
-      fun G' hG'
+      fun G' hG' =>
+        ⟨Set.subset_iInter₂ fun _ hH => (hG' hH).1, fun _ _ hab =>
+         ⟨fun _ hH => (hG' hH).2 hab, G'.adj_sub hab⟩⟩⟩
 
 Depends on / 依赖: Set.iInter, Set.iUnion, Set.subset_biUnion_of_mem, Set.subset_iInter, adj_sub, isGLB_sInf, subset_biUnion_of_mem
 -/
@@ -2743,7 +2747,9 @@ lemma disjoint_verts_iff_disjoint
     · grind [verts_bot]
     · exact ⟨(hdisj hsub₀ hsub₁ <| M'.edge_vert · :), False.elim⟩
   · intro hdisj S h₀ h₁ v hvS
-    let M' : Subgraph G := { verts := {v}, Adj := ⊥, adj_sub := by simp, edge_vert := by simp
+    let M' : Subgraph G := { verts := {v}, Adj := ⊥, adj_sub := by simp, edge_vert := by simp }
+    have hle {M : Subgraph G} (h : v in M.verts) : M' <= M := by constructor <;> simp [h, M']
+.left Set.mem_singleton v exact hdisj (hle <| h₀ hvS) (hle <| h₁ hvS)
 
 中文:
 引理 disjoint_verts_iff_disjoint
@@ -2756,7 +2762,9 @@ lemma disjoint_verts_iff_disjoint
     · grind [verts_bot]
     · exact ⟨(hdisj hsub₀ hsub₁ <| M'.edge_vert · :), False.elim⟩
   · intro hdisj S h₀ h₁ v hvS
-    let M' : Subgraph G := { verts := {v}, Adj := ⊥, adj_sub := by simp, edge_vert := by simp
+    let M' : Subgraph G := { verts := {v}, Adj := ⊥, adj_sub := by simp, edge_vert := by simp }
+    have hle {M : Subgraph G} (h : v in M.verts) : M' <= M := by constructor <;> simp [h, M']
+.left Set.mem_singleton v exact hdisj (hle <| h₀ hvS) (hle <| h₁ hvS)
 
 Depends on / 依赖: False.elim, M.verts, Set.mem_singleton, Subgraph, adj_sub, edge_vert, le_bot_iff, mem_singleton, verts_bot
 -/
@@ -2794,7 +2802,7 @@ definition map
     exact Set.mem_image_of_mem _ (H.edge_vert h)
   symm.symm := by
     rintro _ _ ⟨u, v, h, rfl, rfl⟩
-    exact ⟨v, u
+    exact ⟨v, u, h.symm, rfl, rfl⟩
 
 中文:
 定义 map
@@ -2809,7 +2817,7 @@ definition map
     exact Set.mem_image_of_mem _ (H.edge_vert h)
   symm.symm := by
     rintro _ _ ⟨u, v, h, rfl, rfl⟩
-    exact ⟨v, u
+    exact ⟨v, u, h.symm, rfl, rfl⟩
 
 Depends on / 依赖: _mem, ne_of_mem_erase
 -/
@@ -3086,7 +3094,12 @@ theorem map_le_iff_le_comap
     exact h.1 ⟨v, hv, rfl⟩
   · simp only [H.adj_sub hvw, comap_adj, true_and]
     exact h.2 ⟨v, w, hvw, rfl, rfl⟩
-  · simp only [map_verts, Set.mem_image, f
+  · simp only [map_verts, Set.mem_image, forall_exists_index, and_imp]
+    rintro w hw rfl
+    exact h.1 hw
+  · simp only [Relation.Map, map_adj, forall_exists_index, and_imp]
+    rintro u u' hu rfl rfl
+    exact (h.2 hu).2
 
 中文:
 定理 map_le_iff_le_comap
@@ -3097,7 +3110,12 @@ theorem map_le_iff_le_comap
     exact h.1 ⟨v, hv, rfl⟩
   · simp only [H.adj_sub hvw, comap_adj, true_and]
     exact h.2 ⟨v, w, hvw, rfl, rfl⟩
-  · simp only [map_verts, Set.mem_image, f
+  · simp only [map_verts, Set.mem_image, forall_exists_index, and_imp]
+    rintro w hw rfl
+    exact h.1 hw
+  · simp only [Relation.Map, map_adj, forall_exists_index, and_imp]
+    rintro u u' hu rfl rfl
+    exact (h.2 hu).2
 
 Depends on / 依赖: H.adj_sub, Relation, Relation.Map, Set.mem_image, Set.mem_preimage, adj_sub, and_imp, comap_adj, comap_verts, forall_exists_index, map_adj, map_verts, mem_image, mem_preimage, true_and
 -/
@@ -3127,7 +3145,11 @@ instance [DecidableEq
       (forall a b, H.2 a b -> G.Adj a b) ∧ (forall a b, H.2 a b -> a in H.1) ∧ forall a b, H.2 a b = H.2 b a})
     (fun H => ⟨H.1.1, fun a b => H.1.2 a b, @H.2.1, @H.2.2.1, by simp [symm_def, H.2.2.2]⟩)
     ⟨?_, fun H => ?_⟩
-  · 
+  · rintro ⟨⟨_, _⟩, -⟩ ⟨⟨_, _⟩, -⟩
+    simp [funext_iff]
+  · classical
+    exact ⟨⟨(H.verts.toFinset, fun a b => H.Adj a b), fun a b => by simpa using H.adj_sub,
+      fun a b => by simpa using H.edge_vert, by simp [H.adj_comm]⟩, by simp⟩
 
 中文:
 实例 [DecidableEq
@@ -3138,7 +3160,11 @@ instance [DecidableEq
       (forall a b, H.2 a b -> G.Adj a b) ∧ (forall a b, H.2 a b -> a in H.1) ∧ forall a b, H.2 a b = H.2 b a})
     (fun H => ⟨H.1.1, fun a b => H.1.2 a b, @H.2.1, @H.2.2.1, by simp [symm_def, H.2.2.2]⟩)
     ⟨?_, fun H => ?_⟩
-  · 
+  · rintro ⟨⟨_, _⟩, -⟩ ⟨⟨_, _⟩, -⟩
+    simp [funext_iff]
+  · classical
+    exact ⟨⟨(H.verts.toFinset, fun a b => H.Adj a b), fun a b => by simpa using H.adj_sub,
+      fun a b => by simpa using H.edge_vert, by simp [H.adj_comm]⟩, by simp⟩
 
 Depends on / 依赖: Finset, G.Adj, H.Adj, H.adj_comm, H.adj_sub, H.edge_vert, H.verts.toFinset, adj_comm, adj_sub, classical, edge_vert, funext_iff, ofBijective, symm_def, toFinset
 -/
@@ -3979,7 +4005,9 @@ theorem eq_singletonSubgraph_iff_verts_eq
     intro ha
     have ha1 := ha.fst_mem
     have ha2 := ha.snd_mem
-    rw [h]; rw [Set.mem_singleton_iff]
+    rw [h]; rw [Set.mem_singleton_iff] at ha1 ha2
+    subst_vars
+    exact ha.ne rfl
 
 中文:
 定理 eq_singletonSubgraph_iff_verts_eq
@@ -3992,7 +4020,9 @@ theorem eq_singletonSubgraph_iff_verts_eq
     intro ha
     have ha1 := ha.fst_mem
     have ha2 := ha.snd_mem
-    rw [h]; rw [Set.mem_singleton_iff]
+    rw [h]; rw [Set.mem_singleton_iff] at ha1 ha2
+    subst_vars
+    exact ha.ne rfl
 
 Depends on / 依赖: Pi.bot_apply, Prop.bot_eq_false, Set.mem_singleton_iff, bot_apply, bot_eq_false, fst_mem, ha.fst_mem, ha.ne, ha.snd_mem, iff_false, mem_singleton_iff, singletonSubgraph_adj, singletonSubgraph_verts, snd_mem
 -/
@@ -4366,7 +4396,7 @@ lemma support_subgraphOfAdj
   simp only [subgraphOfAdj_adj, Sym2.eq, Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk]
   refine ⟨?_, fun h => h.elim (fun hl => ⟨v, .inl ⟨hl.symm, rfl⟩⟩) fun hr => ⟨u, .inr ⟨rfl, hr.symm⟩⟩⟩
   rintro ⟨_, hw⟩
-  exact hw.elim (fun h1 => .inl h1.1.symm) fun hr => 
+  exact hw.elim (fun h1 => .inl h1.1.symm) fun hr => .inr hr.2.symm
 
 中文:
 引理 support_subgraphOfAdj
@@ -4377,7 +4407,7 @@ lemma support_subgraphOfAdj
   simp only [subgraphOfAdj_adj, Sym2.eq, Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk]
   refine ⟨?_, fun h => h.elim (fun hl => ⟨v, .inl ⟨hl.symm, rfl⟩⟩) fun hr => ⟨u, .inr ⟨rfl, hr.symm⟩⟩⟩
   rintro ⟨_, hw⟩
-  exact hw.elim (fun h1 => .inl h1.1.symm) fun hr => 
+  exact hw.elim (fun h1 => .inl h1.1.symm) fun hr => .inr hr.2.symm
 
 Depends on / 依赖: Prod.mk.injEq, Prod.swap_prod_mk, Subgraph, Subgraph.mem_support, Sym2.eq, Sym2.rel_iff, h.elim, hl.symm, hr.symm, hw.elim, mem_support, rel_iff, subgraphOfAdj_adj, swap_prod_mk
 -/
@@ -4776,7 +4806,9 @@ theorem deleteEdges_coe_eq
     rintro ⟨v', hv'⟩ ⟨w', hw'⟩
     simp only [Sym2.map_mk, Sym2.eq]
     contrapose
-    r
+    rintro (_ | _) <;> simpa only [Sym2.eq_swap]
+  · intro h' hs
+    exact h' _ hs rfl
 
 中文:
 定理 deleteEdges_coe_eq
@@ -4792,7 +4824,9 @@ theorem deleteEdges_coe_eq
     rintro ⟨v', hv'⟩ ⟨w', hw'⟩
     simp only [Sym2.map_mk, Sym2.eq]
     contrapose
-    r
+    rintro (_ | _) <;> simpa only [Sym2.eq_swap]
+  · intro h' hs
+    exact h' _ hs rfl
 
 Depends on / 依赖: Set.mem_image, SimpleGraph, SimpleGraph.deleteEdges_adj, Sym2.eq, Sym2.eq_swap, Sym2.ind, Sym2.map_mk, and_congr_right_iff, coe_adj, contrapose, deleteEdges_adj, eq_swap, map_mk, mem_image, not_and, not_exists
 -/
@@ -5046,7 +5080,10 @@ lemma _root_.SimpleGraph.spanningCoe_induce_top
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
   It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization w
+  canonicalizer; a minimization would help. The original proof was:
+  `grind [induce_eq_coe_induce_top, Subgraph.spanningCoe_coe]` -/
+  rw [induce_eq_coe_induce_top]
+  exact (Subgraph.spanningCoe_coe _).symm
 
 中文:
 引理 _root_.简单图.spanningCoe_induce_top
@@ -5055,7 +5092,10 @@ lemma _root_.SimpleGraph.spanningCoe_induce_top
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
   It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization w
+  canonicalizer; a minimization would help. The original proof was:
+  `grind [induce_eq_coe_induce_top, Subgraph.spanningCoe_coe]` -/
+  rw [induce_eq_coe_induce_top]
+  exact (Subgraph.spanningCoe_coe _).symm
 
 Depends on / 依赖: Before, Mathlib, Subgraph, Subgraph.spanningCoe_coe, adaptation_note, canonicalizer, closed, directed, github, github.com, induce_eq_coe_induce_top, leanprover, minimization, normalizer, original, problem, replacing, spanningCoe_coe, whether
 -/
@@ -5399,7 +5439,7 @@ theorem subgraphOfAdj_eq_induce
       obtain ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ := h <;> simp [hvw, hvw.symm]
     · intro h
       simp only [induce_adj, Set.mem_insert_iff, Set.mem_singleton_iff, top_adj] at h
-      obtain ⟨rfl | r
+      obtain ⟨rfl | rfl, rfl | rfl, ha⟩ := h <;> first | exact (ha.ne rfl).elim | simp
 
 中文:
 定理 subgraphOfAdj_eq_induce
@@ -5413,7 +5453,7 @@ theorem subgraphOfAdj_eq_induce
       obtain ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ := h <;> simp [hvw, hvw.symm]
     · intro h
       simp only [induce_adj, Set.mem_insert_iff, Set.mem_singleton_iff, top_adj] at h
-      obtain ⟨rfl | r
+      obtain ⟨rfl | rfl, rfl | rfl, ha⟩ := h <;> first | exact (ha.ne rfl).elim | simp
 
 Depends on / 依赖: Set.mem_insert_iff, Set.mem_singleton_iff, Sym2.eq, Sym2.rel_iff, ha.ne, hvw.symm, induce_adj, mem_insert_iff, mem_singleton_iff, rel_iff, subgraphOfAdj_adj, top_adj
 -/

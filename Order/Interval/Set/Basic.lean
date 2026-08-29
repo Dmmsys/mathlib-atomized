@@ -3042,7 +3042,18 @@ theorem mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset
     rwa [← Ico_sdiff_left, sdiff_singleton_subset_iff, insert_eq_of_mem ha, ← Icc_sdiff_right,
       sdiff_singleton_subset_iff, insert_eq_of_mem hb] at ho
 · refine Or.inr Or.inl Subset.antisymm ?_ ?_
-    · 
+    · rw [← Icc_sdiff_right]
+      exact subset_sdiff_singleton hc hb
+    · rwa [← Ico_sdiff_left, sdiff_singleton_subset_iff, insert_eq_of_mem ha] at ho
+· refine Or.inr Or.inr Or.inl Subset.antisymm ?_ ?_
+    · rw [← Icc_sdiff_left]
+      exact subset_sdiff_singleton hc ha
+    · rwa [← Ioc_sdiff_right, sdiff_singleton_subset_iff, insert_eq_of_mem hb] at ho
+· refine Or.inr Or.inr Or.inr Subset.antisymm ?_ ho
+    rw [← Ico_sdiff_left]; rw [← Icc_sdiff_right]
+    apply_rules [subset_sdiff_singleton]
+
+@[to_dual]
 
 中文:
 定理 mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset
@@ -3053,7 +3064,18 @@ theorem mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset
     rwa [← Ico_sdiff_left, sdiff_singleton_subset_iff, insert_eq_of_mem ha, ← Icc_sdiff_right,
       sdiff_singleton_subset_iff, insert_eq_of_mem hb] at ho
 · refine Or.inr Or.inl Subset.antisymm ?_ ?_
-    · 
+    · rw [← Icc_sdiff_right]
+      exact subset_sdiff_singleton hc hb
+    · rwa [← Ico_sdiff_left, sdiff_singleton_subset_iff, insert_eq_of_mem ha] at ho
+· refine Or.inr Or.inr Or.inl Subset.antisymm ?_ ?_
+    · rw [← Icc_sdiff_left]
+      exact subset_sdiff_singleton hc ha
+    · rwa [← Ioc_sdiff_right, sdiff_singleton_subset_iff, insert_eq_of_mem hb] at ho
+· refine Or.inr Or.inr Or.inr Subset.antisymm ?_ ho
+    rw [← Ico_sdiff_left]; rw [← Icc_sdiff_right]
+    apply_rules [subset_sdiff_singleton]
+
+@[to_dual]
 
 Depends on / 依赖: Icc_sdiff_left, Icc_sdiff_right, Ico_sdiff_left, Or.inl, Or.inr, Subset, Subset.antisymm, antisymm, insert_eq_of_mem, sdiff_singleton_subset_iff, subset_sdiff_singleton
 -/
@@ -3238,7 +3260,10 @@ lemma Icc_eq_Icc_iff
     by_contra contra; rw [Icc_eq_empty_iff.mpr contra, Icc_eq_empty_iff] at heq; contradiction
   simp only [Set.ext_iff, mem_Icc] at heq
   obtain ⟨-, h₁⟩ := (heq b).mp ⟨h, le_refl _⟩
-  obtain ⟨h₂, -⟩ := (heq a).mp ⟨le_re
+  obtain ⟨h₂, -⟩ := (heq a).mp ⟨le_refl _, h⟩
+  obtain ⟨h₃, -⟩ := (heq c).mpr ⟨le_refl _, h'⟩
+  obtain ⟨-, h₄⟩ := (heq d).mpr ⟨h', le_refl _⟩
+  exact ⟨le_antisymm h₃ h₂, le_antisymm h₁ h₄⟩
 
 中文:
 引理 Icc_eq_Icc_iff
@@ -3249,7 +3274,10 @@ lemma Icc_eq_Icc_iff
     by_contra contra; rw [Icc_eq_empty_iff.mpr contra, Icc_eq_empty_iff] at heq; contradiction
   simp only [Set.ext_iff, mem_Icc] at heq
   obtain ⟨-, h₁⟩ := (heq b).mp ⟨h, le_refl _⟩
-  obtain ⟨h₂, -⟩ := (heq a).mp ⟨le_re
+  obtain ⟨h₂, -⟩ := (heq a).mp ⟨le_refl _, h⟩
+  obtain ⟨h₃, -⟩ := (heq c).mpr ⟨le_refl _, h'⟩
+  obtain ⟨-, h₄⟩ := (heq d).mpr ⟨h', le_refl _⟩
+  exact ⟨le_antisymm h₃ h₂, le_antisymm h₁ h₄⟩
 
 Depends on / 依赖: Icc_eq_empty_iff, Icc_eq_empty_iff.mpr, Set.ext_iff, contra, ext_iff, le_antisymm, le_refl, mem_Icc
 -/

@@ -882,7 +882,8 @@ theorem exists_ne_zero_dotProduct_eq_zero
   split_ifs with h h2
   · simp [h]
   · simp [h2]
-  · refine ⟨Function.ne_if
+  · refine ⟨Function.ne_iff.mpr ⟨i, by simp [h2]⟩, ?_⟩
+    simp [dotProduct, Finset.sum_ite, Finset.sum_eq_ite i, hij.symm, mul_comm (a i)]
 
 中文:
 定理 存在_ne_zero_dotProduct_eq_zero
@@ -896,7 +897,8 @@ theorem exists_ne_zero_dotProduct_eq_zero
   split_ifs with h h2
   · simp [h]
   · simp [h2]
-  · refine ⟨Function.ne_if
+  · refine ⟨Function.ne_iff.mpr ⟨i, by simp [h2]⟩, ?_⟩
+    simp [dotProduct, Finset.sum_ite, Finset.sum_eq_ite i, hij.symm, mul_comm (a i)]
 
 Depends on / 依赖: Finset, Finset.sum_eq_ite, Finset.sum_ite, Function, Function.ne_iff.mpr, Pi.single, classical, dotProduct, hij.symm, mul_comm, ne_iff, nontrivial_iff, nontrivial_iff.mp, single, split_ifs, sum_eq_ite, sum_ite
 -/
@@ -4741,7 +4743,8 @@ theorem mul_submatrix_one
   have : M = A.submatrix id e₁ := by
     simp only [A, submatrix_submatrix, Function.comp_id, submatrix_id_id, Equiv.symm_comp_self]
   rw [this]; rw [submatrix_mul_equiv]
-  simp only [A, Matrix.mul_one, submatrix_submatrix, Function.com
+  simp only [A, Matrix.mul_one, submatrix_submatrix, Function.comp_id, submatrix_id_id,
+    Equiv.symm_comp_self]
 
 中文:
 定理 mul_submatrix_one
@@ -4752,7 +4755,8 @@ theorem mul_submatrix_one
   have : M = A.submatrix id e₁ := by
     simp only [A, submatrix_submatrix, Function.comp_id, submatrix_id_id, Equiv.symm_comp_self]
   rw [this]; rw [submatrix_mul_equiv]
-  simp only [A, Matrix.mul_one, submatrix_submatrix, Function.com
+  simp only [A, Matrix.mul_one, submatrix_submatrix, Function.comp_id, submatrix_id_id,
+    Equiv.symm_comp_self]
 
 Depends on / 依赖: A.submatrix, Equiv.symm_comp_self, Function, Function.comp_id, M.submatrix, Matrix, Matrix.mul_one, comp_id, mul_one, nonempty_fintype, submatrix, submatrix_id_id, submatrix_mul_equiv, submatrix_submatrix, symm_comp_self
 -/
@@ -4779,7 +4783,8 @@ theorem one_submatrix_mul
   have : M = A.submatrix e₂ id := by
     simp only [A, submatrix_submatrix, Function.comp_id, submatrix_id_id, Equiv.symm_comp_self]
   rw [this]; rw [submatrix_mul_equiv]
-  simp only [A, Matrix.one_mul, submatrix_submatrix, Function.com
+  simp only [A, Matrix.one_mul, submatrix_submatrix, Function.comp_id, submatrix_id_id,
+    Equiv.symm_comp_self]
 
 中文:
 定理 one_submatrix_mul
@@ -4790,7 +4795,8 @@ theorem one_submatrix_mul
   have : M = A.submatrix e₂ id := by
     simp only [A, submatrix_submatrix, Function.comp_id, submatrix_id_id, Equiv.symm_comp_self]
   rw [this]; rw [submatrix_mul_equiv]
-  simp only [A, Matrix.one_mul, submatrix_submatrix, Function.com
+  simp only [A, Matrix.one_mul, submatrix_submatrix, Function.comp_id, submatrix_id_id,
+    Equiv.symm_comp_self]
 
 Depends on / 依赖: A.submatrix, Equiv.symm_comp_self, Function, Function.comp_id, M.submatrix, Matrix, Matrix.one_mul, comp_id, nonempty_fintype, one_mul, submatrix, submatrix_id_id, submatrix_mul_equiv, submatrix_submatrix, symm_comp_self
 -/

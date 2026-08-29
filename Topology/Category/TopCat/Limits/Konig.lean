@@ -120,7 +120,9 @@ theorem partialSections.nonempty
   use fun j : J =>
     if hj : j in G then F.map (IsCofiltered.infTo G H hj) (h (IsCofiltered.inf G H)).some
     else (h _).some
-  rintro ⟨X, Y, hX, hY, f⟩ h
+  rintro ⟨X, Y, hX, hY, f⟩ hf
+  dsimp only
+  rwa [dif_pos hX, dif_pos hY, ← comp_app, ← F.map_comp, @IsCofiltered.infTo_commutes _ _ _ G H]
 
 中文:
 定理 partialSections.nonempty
@@ -133,7 +135,9 @@ theorem partialSections.nonempty
   use fun j : J =>
     if hj : j in G then F.map (IsCofiltered.infTo G H hj) (h (IsCofiltered.inf G H)).some
     else (h _).some
-  rintro ⟨X, Y, hX, hY, f⟩ h
+  rintro ⟨X, Y, hX, hY, f⟩ hf
+  dsimp only
+  rwa [dif_pos hX, dif_pos hY, ← comp_app, ← F.map_comp, @IsCofiltered.infTo_commutes _ _ _ G H]
 
 Depends on / 依赖: F.map, F.map_comp, IsCofiltered, IsCofiltered.inf, IsCofiltered.infTo, IsCofiltered.infTo_commutes, IsEmpty, IsEmpty.elim, classical, comp_app, dif_pos, infTo_commutes, isEmptyElim, isEmpty_or_nonempty, map_comp
 -/
@@ -163,7 +167,20 @@ theorem partialSections.directed
   let ιA : FiniteDiagramArrow A.1 -> FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
     ⟨f.1, f.2.1, Finset.mem_union_left _ f.2.2.1, Finset.mem_union_left _ f.2.2.2.1, f.2.2.2.2⟩
   let ιB : FiniteDiagramArrow B.1 -> FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
-    ⟨f.1, f.2.1, 
+    ⟨f.1, f.2.1, Finset.mem_union_right _ f.2.2.1, Finset.mem_union_right _ f.2.2.2.1, f.2.2.2.2⟩
+  refine ⟨⟨A.1 ⊔ B.1, A.2.image ιA ⊔ B.2.image ιB⟩, ?_, ?_⟩
+  · rintro u hu f hf
+    have : ιA f in A.2.image ιA ⊔ B.2.image ιB := by
+      apply Finset.mem_union_left
+      rw [Finset.mem_image]
+      exact ⟨f, hf, rfl⟩
+    exact hu this
+  · rintro u hu f hf
+    have : ιB f in A.2.image ιA ⊔ B.2.image ιB := by
+      apply Finset.mem_union_right
+      rw [Finset.mem_image]
+      exact ⟨f, hf, rfl⟩
+    exact hu this
 
 中文:
 定理 partialSections.directed
@@ -173,7 +190,20 @@ theorem partialSections.directed
   let ιA : FiniteDiagramArrow A.1 -> FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
     ⟨f.1, f.2.1, Finset.mem_union_left _ f.2.2.1, Finset.mem_union_left _ f.2.2.2.1, f.2.2.2.2⟩
   let ιB : FiniteDiagramArrow B.1 -> FiniteDiagramArrow (A.1 ⊔ B.1) := fun f =>
-    ⟨f.1, f.2.1, 
+    ⟨f.1, f.2.1, Finset.mem_union_right _ f.2.2.1, Finset.mem_union_right _ f.2.2.2.1, f.2.2.2.2⟩
+  refine ⟨⟨A.1 ⊔ B.1, A.2.image ιA ⊔ B.2.image ιB⟩, ?_, ?_⟩
+  · rintro u hu f hf
+    have : ιA f in A.2.image ιA ⊔ B.2.image ιB := by
+      apply Finset.mem_union_left
+      rw [Finset.mem_image]
+      exact ⟨f, hf, rfl⟩
+    exact hu this
+  · rintro u hu f hf
+    have : ιB f in A.2.image ιA ⊔ B.2.image ιB := by
+      apply Finset.mem_union_right
+      rw [Finset.mem_image]
+      exact ⟨f, hf, rfl⟩
+    exact hu this
 
 Depends on / 依赖: FiniteDiagramArrow, Finset, Finset.mem_union_left, Finset.mem_union_right, classical, mem_union_left, mem_union_right
 -/
@@ -261,7 +291,11 @@ theorem nonempty_limitCone_of_compact_t2_cofiltered_system
     IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed (fun G => partialSections F _)
       (partialSections.directed F) (fun G => partialSections.nonempty F _)
       (fun G => IsClosed.isCompact (partialSections.closed F _)) fun G =>
-      partialSe
+      partialSections.closed F _
+  use u
+  intro X Y f
+  let G : FiniteDiagram J := ⟨{X, Y}, {⟨X, Y, by grind, by grind, f⟩}⟩
+  exact hu _ ⟨G, rfl⟩ (Finset.mem_singleton_self _)
 
 中文:
 定理 nonempty_limitCone_of_compact_t2_cofiltered_system
@@ -272,7 +306,11 @@ theorem nonempty_limitCone_of_compact_t2_cofiltered_system
     IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed (fun G => partialSections F _)
       (partialSections.directed F) (fun G => partialSections.nonempty F _)
       (fun G => IsClosed.isCompact (partialSections.closed F _)) fun G =>
-      partialSe
+      partialSections.closed F _
+  use u
+  intro X Y f
+  let G : FiniteDiagram J := ⟨{X, Y}, {⟨X, Y, by grind, by grind, f⟩}⟩
+  exact hu _ ⟨G, rfl⟩ (Finset.mem_singleton_self _)
 
 Depends on / 依赖: FiniteDiagram, Finset, Finset.mem_singleton_self, IsClosed, IsClosed.isCompact, IsCompact, IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed, classical, closed, directed, isCompact, mem_singleton_self, nonempty, nonempty_iInter_of_directed_nonempty_isCompact_isClosed, partialSections, partialSections.closed, partialSections.directed, partialSections.nonempty
 -/

@@ -436,7 +436,7 @@ theorem prod_induction_nonempty
     by_cases hs_empty : s = ∅
     · simp [hs_empty, p_s a]
     have hps : forall x, x in s -> p x := fun x hxs => p_s x (mem_cons_of_mem hxs)
-    exact p_mul a s.prod (p_s a (mem_cons_sel
+    exact p_mul a s.prod (p_s a (mem_cons_self a s)) (hsa hs_empty hps)
 
 中文:
 定理 prod_induction_nonempty
@@ -449,7 +449,7 @@ theorem prod_induction_nonempty
     by_cases hs_empty : s = ∅
     · simp [hs_empty, p_s a]
     have hps : forall x, x in s -> p x := fun x hxs => p_s x (mem_cons_of_mem hxs)
-    exact p_mul a s.prod (p_s a (mem_cons_sel
+    exact p_mul a s.prod (p_s a (mem_cons_self a s)) (hsa hs_empty hps)
 
 Depends on / 依赖: Multiset, Multiset.induction_on, hs_empty, induction_on, mem_cons_of_mem, mem_cons_self, p_mul, prod_cons, s.prod
 -/

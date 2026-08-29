@@ -307,7 +307,33 @@ lemma preservesLimit_of_preservesEqualizers_and_product
     let s : P ⟶ Q := Pi.lift fun f => limit.π (Discrete.functor K.obj) ⟨_⟩ ≫ K.map f.2
     let t : P ⟶ Q := Pi.lift fun f => limit.π (Discrete.functor K.obj) ⟨f.1.2⟩
     let I := equalizer s t
-    let i : I ⟶ 
+    let i : I ⟶ P := equalizer.ι s t
+    apply preservesLimit_of_preserves_limit_cone
+        (buildIsLimit s t (by simp [P, s]) (by simp [P, t]) (limit.isLimit _)
+          (limit.isLimit _) (limit.isLimit _))
+    apply IsLimit.ofIsoLimit (buildIsLimit _ _ _ _ _ _ _) _
+    · exact Fan.mk _ fun j => G.map (Pi.π _ j)
+    · exact Fan.mk (G.obj Q) fun f => G.map (Pi.π _ f)
+    · apply G.map s
+    · apply G.map t
+    · intro f
+      dsimp [P, Q, s, Fan.mk]
+      simp only [← G.map_comp, limit.lift_π]
+      congr
+    · intro f
+      dsimp [P, Q, t, Fan.mk]
+      simp only [← G.map_comp, limit.lift_π]
+      dsimp
+    · apply Fork.ofι (G.map i)
+      rw [← G.map_comp]; rw [← G.map_comp]
+      apply congrArg G.map
+      exact equalizer.condition s t
+    · apply isLimitOfHasProductOfPreservesLimit
+    · apply isLimitOfHasProductOfPreservesLimit
+    · apply isLimitForkMapOfIsLimit
+      apply equalizerIsEqualizer
+    · refine Cone.ext (Iso.refl _) ?_
+      intro j; dsimp [P, Q, I, i]; simp
 
 中文:
 引理 preservesLimit_of_preservesEqualizers_and_product
@@ -317,7 +343,33 @@ lemma preservesLimit_of_preservesEqualizers_and_product
     let s : P ⟶ Q := Pi.lift fun f => limit.π (Discrete.functor K.obj) ⟨_⟩ ≫ K.map f.2
     let t : P ⟶ Q := Pi.lift fun f => limit.π (Discrete.functor K.obj) ⟨f.1.2⟩
     let I := equalizer s t
-    let i : I ⟶ 
+    let i : I ⟶ P := equalizer.ι s t
+    apply preservesLimit_of_preserves_limit_cone
+        (buildIsLimit s t (by simp [P, s]) (by simp [P, t]) (limit.isLimit _)
+          (limit.isLimit _) (limit.isLimit _))
+    apply IsLimit.ofIsoLimit (buildIsLimit _ _ _ _ _ _ _) _
+    · exact Fan.mk _ fun j => G.map (Pi.π _ j)
+    · exact Fan.mk (G.obj Q) fun f => G.map (Pi.π _ f)
+    · apply G.map s
+    · apply G.map t
+    · intro f
+      dsimp [P, Q, s, Fan.mk]
+      simp only [← G.map_comp, limit.lift_π]
+      congr
+    · intro f
+      dsimp [P, Q, t, Fan.mk]
+      simp only [← G.map_comp, limit.lift_π]
+      dsimp
+    · apply Fork.ofι (G.map i)
+      rw [← G.map_comp]; rw [← G.map_comp]
+      apply congrArg G.map
+      exact equalizer.condition s t
+    · apply isLimitOfHasProductOfPreservesLimit
+    · apply isLimitOfHasProductOfPreservesLimit
+    · apply isLimitForkMapOfIsLimit
+      apply equalizerIsEqualizer
+    · refine Cone.ext (Iso.refl _) ?_
+      intro j; dsimp [P, Q, I, i]; simp
 
 Depends on / 依赖: Discrete, Discrete.functor, IsLimit, IsLimit.ofIsoLimit, K.map, K.obj, Pi.lift, buildIsLimit, equalizer, functor, isLimit, limit.isLimit, ofIsoLimit, p.fst, p.snd, preservesLimit_of_preserves_limit_cone
 -/
@@ -434,7 +486,9 @@ definition createsLimitsOfShapeOfCreatesEqualizersAndProducts
     have : HasLimitsOfShape (Discrete (Σ p : J × J, p.1 ⟶ p.2)) C :=
       hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape G
     have : HasEqualizers C :=
-      hasLimitsOfShape_of_h
+      hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape G
+    have : HasLimit K := hasLimit_of_equalizer_and_product K
+    createsLimitOfReflectsIsomorphismsOfPreserves
 
 中文:
 定义 createsLimitsOfShapeOfCreatesEqualizersAndProducts
@@ -444,7 +498,9 @@ definition createsLimitsOfShapeOfCreatesEqualizersAndProducts
     have : HasLimitsOfShape (Discrete (Σ p : J × J, p.1 ⟶ p.2)) C :=
       hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape G
     have : HasEqualizers C :=
-      hasLimitsOfShape_of_h
+      hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape G
+    have : HasLimit K := hasLimit_of_equalizer_and_product K
+    createsLimitOfReflectsIsomorphismsOfPreserves
 
 Depends on / 依赖: Discrete, HasEqualizers, HasLimit, HasLimitsOfShape, createsLimitOfReflectsIsomorphismsOfPreserves, hasLimit_of_equalizer_and_product, hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
 -/
@@ -528,7 +584,7 @@ theorem hasFiniteLimits_of_hasTerminal_and_pullbacks
     (@hasFiniteProducts_of_has_binary_and_terminal C _
       (hasBinaryProducts_of_hasTerminal_and_pullbacks C) inferInstance)
     (@hasEqualizers_of_hasPullbacks_and_binary_products C _
-      (hasBinaryProducts_of_hasTerminal_and_pullbacks C
+      (hasBinaryProducts_of_hasTerminal_and_pullbacks C) inferInstance)
 
 中文:
 定理 hasFiniteLimits_of_hasTerminal_and_pullbacks
@@ -537,7 +593,7 @@ theorem hasFiniteLimits_of_hasTerminal_and_pullbacks
     (@hasFiniteProducts_of_has_binary_and_terminal C _
       (hasBinaryProducts_of_hasTerminal_and_pullbacks C) inferInstance)
     (@hasEqualizers_of_hasPullbacks_and_binary_products C _
-      (hasBinaryProducts_of_hasTerminal_and_pullbacks C
+      (hasBinaryProducts_of_hasTerminal_and_pullbacks C) inferInstance)
 
 Depends on / 依赖: hasBinaryProducts_of_hasTerminal_and_pullbacks, hasEqualizers_of_hasPullbacks_and_binary_products, hasFiniteLimits_of_hasEqualizers_and_finite_products, hasFiniteProducts_of_has_binary_and_terminal
 -/
@@ -560,7 +616,9 @@ lemma preservesFiniteLimits_of_preservesTerminal_and_pullbacks
   have : PreservesLimitsOfShape (Discrete WalkingPair) G :=
     preservesBinaryProducts_of_preservesTerminal_and_pullbacks G
   have : PreservesLimitsOfShape WalkingParallelPair G :=
-    preservesEqualizers_of_preservesPull
+    preservesEqualizers_of_preservesPullbacks_and_binaryProducts G
+  have : PreservesFiniteProducts G := .of_preserves_binary_and_terminal _
+  exact preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts G
 
 中文:
 引理 preservesFiniteLimits_of_preservesTerminal_and_pullbacks
@@ -570,7 +628,9 @@ lemma preservesFiniteLimits_of_preservesTerminal_and_pullbacks
   have : PreservesLimitsOfShape (Discrete WalkingPair) G :=
     preservesBinaryProducts_of_preservesTerminal_and_pullbacks G
   have : PreservesLimitsOfShape WalkingParallelPair G :=
-    preservesEqualizers_of_preservesPull
+    preservesEqualizers_of_preservesPullbacks_and_binaryProducts G
+  have : PreservesFiniteProducts G := .of_preserves_binary_and_terminal _
+  exact preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts G
 
 Depends on / 依赖: Discrete, HasFiniteLimits, PreservesFiniteProducts, PreservesLimitsOfShape, WalkingPair, WalkingParallelPair, hasFiniteLimits_of_hasTerminal_and_pullbacks, of_preserves_binary_and_terminal, preservesBinaryProducts_of_preservesTerminal_and_pullbacks, preservesEqualizers_of_preservesPullbacks_and_binaryProducts, preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts
 -/
@@ -603,7 +663,7 @@ definition createsFiniteLimitsOfCreatesTerminalAndPullbacks
         have : HasTerminal C := hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape G
         have : HasPullbacks C := hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape G
         have : HasFiniteLimits C := hasFiniteLimits_of_hasTerminal_and_pullbacks
-        createsL
+        createsLimitOfReflectsIsomorphismsOfPreserves }
 
 中文:
 定义 createsFiniteLimitsOfCreatesTerminalAndPullbacks
@@ -612,7 +672,7 @@ definition createsFiniteLimitsOfCreatesTerminalAndPullbacks
         have : HasTerminal C := hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape G
         have : HasPullbacks C := hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape G
         have : HasFiniteLimits C := hasFiniteLimits_of_hasTerminal_and_pullbacks
-        createsL
+        createsLimitOfReflectsIsomorphismsOfPreserves }
 
 Depends on / 依赖: CreatesLimit, HasFiniteLimits, HasPullbacks, HasTerminal, createsLimitOfReflectsIsomorphismsOfPreserves, hasFiniteLimits_of_hasTerminal_and_pullbacks, hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
 -/
@@ -656,7 +716,8 @@ definition buildColimit
         dsimp
         have reassoced (f : (p : J × J) × (p.fst ⟶ p.snd)) {W : C} {h : _ ⟶ W} :
           c₁.ι.app ⟨f⟩ ≫ s ≫ h = F.map f.snd ≫ c₂.ι.app ⟨f.fst.snd⟩ ≫ h := by
-            simp only [← Category.as
+            simp only [← Category.assoc, eq_whisker (hs f)]
+        rw [Category.comp_id]; rw [← reassoced ⟨⟨_]; rw [_⟩]; rw [f⟩]; rw [i.condition]; rw [← Category.assoc]; rw [ht] }
 
 中文:
 定义 buildColimit
@@ -667,7 +728,8 @@ definition buildColimit
         dsimp
         have reassoced (f : (p : J × J) × (p.fst ⟶ p.snd)) {W : C} {h : _ ⟶ W} :
           c₁.ι.app ⟨f⟩ ≫ s ≫ h = F.map f.snd ≫ c₂.ι.app ⟨f.fst.snd⟩ ≫ h := by
-            simp only [← Category.as
+            simp only [← Category.assoc, eq_whisker (hs f)]
+        rw [Category.comp_id]; rw [← reassoced ⟨⟨_]; rw [_⟩]; rw [f⟩]; rw [i.condition]; rw [← Category.assoc]; rw [ht] }
 
 Depends on / 依赖: i.pt
 -/
@@ -705,7 +767,16 @@ definition buildIsColimit
     · apply t₁.hom_ext
       intro ⟨j⟩
       have reassoced_s (f : (p : J × J) × (p.fst ⟶ p.snd)) {W : C} (h : _ ⟶ W) :
-        c₁.ι.app ⟨f⟩ ≫ s ≫ h = F.map f.snd ≫ c₂.ι.app ⟨f.fst.snd⟩ ≫ h :
+        c₁.ι.app ⟨f⟩ ≫ s ≫ h = F.map f.snd ≫ c₂.ι.app ⟨f.fst.snd⟩ ≫ h := by
+          simp only [← Category.assoc]
+          apply eq_whisker (hs f)
+      have reassoced_t (f : (p : J × J) × (p.fst ⟶ p.snd)) {W : C} (h : _ ⟶ W) :
+        c₁.ι.app ⟨f⟩ ≫ t ≫ h = c₂.ι.app ⟨f.fst.fst⟩ ≫ h := by
+          simp only [← Category.assoc]
+          apply eq_whisker (ht f)
+      simp [reassoced_s, reassoced_t]
+  uniq q m w := hi.hom_ext (i.coequalizer_ext (t₂.hom_ext fun j => by simpa using w j.1))
+  fac s j := by simp
 
 中文:
 定义 buildIsColimit
@@ -717,7 +788,16 @@ definition buildIsColimit
     · apply t₁.hom_ext
       intro ⟨j⟩
       have reassoced_s (f : (p : J × J) × (p.fst ⟶ p.snd)) {W : C} (h : _ ⟶ W) :
-        c₁.ι.app ⟨f⟩ ≫ s ≫ h = F.map f.snd ≫ c₂.ι.app ⟨f.fst.snd⟩ ≫ h :
+        c₁.ι.app ⟨f⟩ ≫ s ≫ h = F.map f.snd ≫ c₂.ι.app ⟨f.fst.snd⟩ ≫ h := by
+          simp only [← Category.assoc]
+          apply eq_whisker (hs f)
+      have reassoced_t (f : (p : J × J) × (p.fst ⟶ p.snd)) {W : C} (h : _ ⟶ W) :
+        c₁.ι.app ⟨f⟩ ≫ t ≫ h = c₂.ι.app ⟨f.fst.fst⟩ ≫ h := by
+          simp only [← Category.assoc]
+          apply eq_whisker (ht f)
+      simp [reassoced_s, reassoced_t]
+  uniq q m w := hi.hom_ext (i.coequalizer_ext (t₂.hom_ext fun j => by simpa using w j.1))
+  fac s j := by simp
 
 Depends on / 依赖: Category, Category.assoc, Cofan.mk, Cofork, Cofork.of, F.map, eq_whisker, f.fst.fst, f.fst.snd, f.snd, hi.desc, hom_ext, p.fst, p.snd, reassoced_s, reassoced_t
 -/
@@ -904,7 +984,36 @@ lemma preservesColimit_of_preservesCoequalizers_and_coproduct
     let s : Q ⟶ P := Sigma.desc fun f => K.map f.2 ≫ colimit.ι (Discrete.functor K.obj) ⟨_⟩
     let t : Q ⟶ P := Sigma.desc fun f => colimit.ι (Discrete.functor K.obj) ⟨f.1.1⟩
     let I := coequalizer s t
-    le
+    let i : P ⟶ I := coequalizer.π s t
+    apply preservesColimit_of_preserves_colimit_cocone
+        (buildIsColimit s t (by simp [P, s]) (by simp [P, t]) (colimit.isColimit _)
+          (colimit.isColimit _) (colimit.isColimit _))
+    apply IsColimit.ofIsoColimit (buildIsColimit _ _ _ _ _ _ _) _
+    · refine Cofan.mk (G.obj Q) fun j => G.map ?_
+      apply Sigma.ι _ j
+    -- fun j => G.map (Sigma.ι _ j)
+    · exact Cofan.mk _ fun f => G.map (Sigma.ι _ f)
+    · apply G.map s
+    · apply G.map t
+    · intro f
+      dsimp [P, Q, s, Cofan.mk]
+      simp only [← G.map_comp, colimit.ι_desc]
+      congr
+    · intro f
+      dsimp [P, Q, t, Cofan.mk]
+      simp only [← G.map_comp, colimit.ι_desc]
+      dsimp
+    · refine Cofork.ofπ (G.map i) ?_
+      rw [← G.map_comp]; rw [← G.map_comp]
+      apply congrArg G.map
+      apply coequalizer.condition
+    · apply isColimitOfHasCoproductOfPreservesColimit
+    · apply isColimitOfHasCoproductOfPreservesColimit
+    · apply isColimitCoforkMapOfIsColimit
+      apply coequalizerIsCoequalizer
+    refine Cocone.ext (Iso.refl _) ?_
+    dsimp [i]
+    simp
 
 中文:
 引理 preservesColimit_of_preservesCoequalizers_and_coproduct
@@ -914,7 +1023,36 @@ lemma preservesColimit_of_preservesCoequalizers_and_coproduct
     let s : Q ⟶ P := Sigma.desc fun f => K.map f.2 ≫ colimit.ι (Discrete.functor K.obj) ⟨_⟩
     let t : Q ⟶ P := Sigma.desc fun f => colimit.ι (Discrete.functor K.obj) ⟨f.1.1⟩
     let I := coequalizer s t
-    le
+    let i : P ⟶ I := coequalizer.π s t
+    apply preservesColimit_of_preserves_colimit_cocone
+        (buildIsColimit s t (by simp [P, s]) (by simp [P, t]) (colimit.isColimit _)
+          (colimit.isColimit _) (colimit.isColimit _))
+    apply IsColimit.ofIsoColimit (buildIsColimit _ _ _ _ _ _ _) _
+    · refine Cofan.mk (G.obj Q) fun j => G.map ?_
+      apply Sigma.ι _ j
+    -- fun j => G.map (Sigma.ι _ j)
+    · exact Cofan.mk _ fun f => G.map (Sigma.ι _ f)
+    · apply G.map s
+    · apply G.map t
+    · intro f
+      dsimp [P, Q, s, Cofan.mk]
+      simp only [← G.map_comp, colimit.ι_desc]
+      congr
+    · intro f
+      dsimp [P, Q, t, Cofan.mk]
+      simp only [← G.map_comp, colimit.ι_desc]
+      dsimp
+    · refine Cofork.ofπ (G.map i) ?_
+      rw [← G.map_comp]; rw [← G.map_comp]
+      apply congrArg G.map
+      apply coequalizer.condition
+    · apply isColimitOfHasCoproductOfPreservesColimit
+    · apply isColimitOfHasCoproductOfPreservesColimit
+    · apply isColimitCoforkMapOfIsColimit
+      apply coequalizerIsCoequalizer
+    refine Cocone.ext (Iso.refl _) ?_
+    dsimp [i]
+    simp
 
 Depends on / 依赖: Discrete, Discrete.functor, IsColimit, IsColimit.ofI, K.map, K.obj, Sigma.desc, buildIsColimit, coequalizer, colimit, colimit.isColimit, functor, isColimit, p.fst, p.snd, preservesColimit_of_preserves_colimit_cocone
 -/
@@ -1032,7 +1170,9 @@ definition createsColimitsOfShapeOfCreatesCoequalizersAndCoproducts
     have : HasColimitsOfShape (Discrete (Σ p : J × J, p.1 ⟶ p.2)) C :=
       hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape G
     have : HasCoequalizers C :=
-      has
+      hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape G
+    have : HasColimit K := hasColimit_of_coequalizer_and_coproduct K
+    createsColimitOfReflectsIsomorphismsOfPreserves
 
 中文:
 定义 createsColimitsOfShapeOfCreatesCoequalizersAndCoproducts
@@ -1042,7 +1182,9 @@ definition createsColimitsOfShapeOfCreatesCoequalizersAndCoproducts
     have : HasColimitsOfShape (Discrete (Σ p : J × J, p.1 ⟶ p.2)) C :=
       hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape G
     have : HasCoequalizers C :=
-      has
+      hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape G
+    have : HasColimit K := hasColimit_of_coequalizer_and_coproduct K
+    createsColimitOfReflectsIsomorphismsOfPreserves
 
 Depends on / 依赖: Discrete, HasCoequalizers, HasColimit, HasColimitsOfShape, createsColimitOfReflectsIsomorphismsOfPreserves, hasColimit_of_coequalizer_and_coproduct, hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape
 -/
@@ -1126,7 +1268,7 @@ theorem hasFiniteColimits_of_hasInitial_and_pushouts
     (@hasFiniteCoproducts_of_has_binary_and_initial C _
       (hasBinaryCoproducts_of_hasInitial_and_pushouts C) inferInstance)
     (@hasCoequalizers_of_hasPushouts_and_binary_coproducts C _
-      (hasBinaryCoproducts_of_hasInitial_and_
+      (hasBinaryCoproducts_of_hasInitial_and_pushouts C) inferInstance)
 
 中文:
 定理 hasFiniteColimits_of_hasInitial_and_pushouts
@@ -1135,7 +1277,7 @@ theorem hasFiniteColimits_of_hasInitial_and_pushouts
     (@hasFiniteCoproducts_of_has_binary_and_initial C _
       (hasBinaryCoproducts_of_hasInitial_and_pushouts C) inferInstance)
     (@hasCoequalizers_of_hasPushouts_and_binary_coproducts C _
-      (hasBinaryCoproducts_of_hasInitial_and_
+      (hasBinaryCoproducts_of_hasInitial_and_pushouts C) inferInstance)
 
 Depends on / 依赖: hasBinaryCoproducts_of_hasInitial_and_pushouts, hasCoequalizers_of_hasPushouts_and_binary_coproducts, hasFiniteColimits_of_hasCoequalizers_and_finite_coproducts, hasFiniteCoproducts_of_has_binary_and_initial
 -/
@@ -1158,7 +1300,11 @@ lemma preservesFiniteColimits_of_preservesInitial_and_pushouts
   have : PreservesColimitsOfShape (Discrete WalkingPair) G :=
     preservesBinaryCoproducts_of_preservesInitial_and_pushouts G
   have : PreservesColimitsOfShape (WalkingParallelPair) G :=
-      (preservesCoequalizers_of_
+      (preservesCoequalizers_of_preservesPushouts_and_binaryCoproducts G)
+  refine
+    @preservesFiniteColimits_of_preservesCoequalizers_and_finiteCoproducts _ _ _ _ _ _ G _ ?_
+  refine ⟨fun _ => ?_⟩
+  apply PreservesFiniteCoproducts.of_preserves_binary_and_initial G
 
 中文:
 引理 preservesFiniteColimits_of_preservesInitial_and_pushouts
@@ -1168,7 +1314,11 @@ lemma preservesFiniteColimits_of_preservesInitial_and_pushouts
   have : PreservesColimitsOfShape (Discrete WalkingPair) G :=
     preservesBinaryCoproducts_of_preservesInitial_and_pushouts G
   have : PreservesColimitsOfShape (WalkingParallelPair) G :=
-      (preservesCoequalizers_of_
+      (preservesCoequalizers_of_preservesPushouts_and_binaryCoproducts G)
+  refine
+    @preservesFiniteColimits_of_preservesCoequalizers_and_finiteCoproducts _ _ _ _ _ _ G _ ?_
+  refine ⟨fun _ => ?_⟩
+  apply PreservesFiniteCoproducts.of_preserves_binary_and_initial G
 
 Depends on / 依赖: Discrete, HasFiniteColimits, PreservesColimitsOfShape, PreservesFiniteCoproducts, PreservesFiniteCoproducts.of_preserves_binary_and_, WalkingPair, WalkingParallelPair, hasFiniteColimits_of_hasInitial_and_pushouts, of_preserves_binary_and_, preservesBinaryCoproducts_of_preservesInitial_and_pushouts, preservesCoequalizers_of_preservesPushouts_and_binaryCoproducts, preservesFiniteColimits_of_preservesCoequalizers_and_finiteCoproducts
 -/
@@ -1203,7 +1353,7 @@ definition createsFiniteColimitsOfCreatesInitialAndPushouts
         have : HasInitial C := hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape G
         have : HasPushouts C := hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape G
         have : HasFiniteColimits C := hasFiniteColimits_of_hasInitial_and_pushouts
-  
+        createsColimitOfReflectsIsomorphismsOfPreserves }
 
 中文:
 定义 createsFiniteColimitsOfCreatesInitialAndPushouts
@@ -1212,7 +1362,7 @@ definition createsFiniteColimitsOfCreatesInitialAndPushouts
         have : HasInitial C := hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape G
         have : HasPushouts C := hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape G
         have : HasFiniteColimits C := hasFiniteColimits_of_hasInitial_and_pushouts
-  
+        createsColimitOfReflectsIsomorphismsOfPreserves }
 
 Depends on / 依赖: CreatesColimit, HasFiniteColimits, HasInitial, HasPushouts, createsColimitOfReflectsIsomorphismsOfPreserves, hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape, hasFiniteColimits_of_hasInitial_and_pushouts
 -/

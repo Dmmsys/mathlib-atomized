@@ -49,7 +49,8 @@ theorem isConj_of_support_equiv
   by_cases hx : x in σ.support
   · rw [Equiv.extendSubtype_apply_of_mem, Equiv.extendSubtype_apply_of_mem]
     · exact hf x (Finset.mem_coe.2 hx)
-  · rwa [Classical.not_not.1 ((not_
+  · rwa [Classical.not_not.1 ((not_congr mem_support).1 (Equiv.extendSubtype_not_mem f _ _)),
+      Classical.not_not.1 ((not_congr mem_support).mp hx)]
 
 中文:
 定理 isConj_of_support_equiv
@@ -61,7 +62,8 @@ theorem isConj_of_support_equiv
   by_cases hx : x in σ.support
   · rw [Equiv.extendSubtype_apply_of_mem, Equiv.extendSubtype_apply_of_mem]
     · exact hf x (Finset.mem_coe.2 hx)
-  · rwa [Classical.not_not.1 ((not_
+  · rwa [Classical.not_not.1 ((not_congr mem_support).1 (Equiv.extendSubtype_not_mem f _ _)),
+      Classical.not_not.1 ((not_congr mem_support).mp hx)]
 
 Depends on / 依赖: Classical, Classical.not_not, Equiv.extendSubtype, Equiv.extendSubtype_apply_of_mem, Equiv.extendSubtype_not_mem, Finset, Finset.mem_coe, Perm.mul_apply, extendSubtype, extendSubtype_apply_of_mem, extendSubtype_not_mem, isConj_iff, mem_coe, mem_support, mul_apply, mul_inv_eq_iff_eq_mul, not_congr, not_not, support
 -/
@@ -92,7 +94,8 @@ theorem perm_symm_on_of_perm_on_finset
   have h0 : forall y in s, exists (x : _) (hx : x in s), y = (fun i (_ : i in s) => f i) x hx :=
     Finset.surj_on_of_inj_on_of_card_le (fun x hx => (fun i _ => f i) x hx) (fun a ha => h a ha)
       (fun a₁ a₂ ha₁ ha₂ heq => (Equiv.apply_eq_iff_eq f).mp heq) rfl.ge
-  obtain ⟨y2, hy2, rfl⟩ := h0 
+  obtain ⟨y2, hy2, rfl⟩ := h0 y hy
+  simpa using hy2
 
 中文:
 定理 perm_symm_on_of_perm_on_finset
@@ -101,7 +104,8 @@ theorem perm_symm_on_of_perm_on_finset
   have h0 : forall y in s, exists (x : _) (hx : x in s), y = (fun i (_ : i in s) => f i) x hx :=
     Finset.surj_on_of_inj_on_of_card_le (fun x hx => (fun i _ => f i) x hx) (fun a ha => h a ha)
       (fun a₁ a₂ ha₁ ha₂ heq => (Equiv.apply_eq_iff_eq f).mp heq) rfl.ge
-  obtain ⟨y2, hy2, rfl⟩ := h0 
+  obtain ⟨y2, hy2, rfl⟩ := h0 y hy
+  simpa using hy2
 
 Depends on / 依赖: Equiv.apply_eq_iff_eq, Finset, Finset.surj_on_of_inj_on_of_card_le, apply_eq_iff_eq, rfl.ge, surj_on_of_inj_on_of_card_le
 -/
@@ -274,7 +278,8 @@ theorem perm_mapsTo_inl_iff_mapsTo_inr
   · rintro _; exact ⟨r, rfl⟩
   · rintro _; exact ⟨l, rfl⟩
   · rintro ⟨a, rfl⟩
-    obta
+    obtain ⟨y, hy⟩ := h ⟨r, rfl⟩
+    grind
 
 中文:
 定理 perm_mapsTo_inl_iff_mapsTo_inr
@@ -292,7 +297,8 @@ theorem perm_mapsTo_inl_iff_mapsTo_inr
   · rintro _; exact ⟨r, rfl⟩
   · rintro _; exact ⟨l, rfl⟩
   · rintro ⟨a, rfl⟩
-    obta
+    obtain ⟨y, hy⟩ := h ⟨r, rfl⟩
+    grind
 
 Depends on / 依赖: classical, perm_symm_mapsTo_iff_mapsTo
 -/
@@ -325,7 +331,30 @@ theorem mem_sumCongrHom_range_of_perm_mapsTo_inl
   have h1 : forall x : m oplus n, (exists a : m, Sum.inl a = x) -> exists a : m, Sum.inl a = σ x := by
     rintro _ ⟨a, rfl⟩; exact h ⟨a, rfl⟩
   have h3 : forall x : m oplus n, (exists b : n, Sum.inr b = x) -> exists b : n, Sum.inr b = σ x := by
-    rintro _ ⟨b, rfl⟩; exact (perm_mapsTo_inl_iff_m
+    rintro _ ⟨b, rfl⟩; exact (perm_mapsTo_inl_iff_mapsTo_inr σ).mp h ⟨b, rfl⟩
+  let σ₁' := subtypePermOfFintype σ h1
+  let σ₂' := subtypePermOfFintype σ h3
+  let σ₁ := permCongr (Equiv.ofInjective _ Sum.inl_injective).symm σ₁'
+  let σ₂ := permCongr (Equiv.ofInjective _ Sum.inr_injective).symm σ₂'
+  rw [MonoidHom.mem_range]; rw [Prod.exists]
+  use σ₁, σ₂
+  rw [Perm.sumCongrHom_apply]
+  ext (a | b)
+  · rw [Equiv.sumCongr_apply, Sum.map_inl, permCongr_apply, Equiv.symm_symm,
+      apply_ofInjective_symm Sum.inl_injective, ofInjective_apply]
+    rfl
+  · rw [Equiv.sumCongr_apply, Sum.map_inr, permCongr_apply, Equiv.symm_symm,
+      apply_ofInjective_symm Sum.inr_injective, ofInjective_apply]
+    rfl
+
+nonrec theorem Disjoint.orderOf {σ τ : Perm α} (hστ : Disjoint σ τ) :
+    orderOf (σ * τ) = Nat.lcm (orderOf σ) (orderOf τ) :=
+  haveI h : forall n : Nat, (σ * τ) ^ n = 1 ↔ σ ^ n = 1 ∧ τ ^ n = 1 := fun n => by
+    rw [hστ.commute.mul_pow]; rw [Disjoint.mul_eq_one_iff (hστ.pow_disjoint_pow n n)]
+  Nat.dvd_antisymm hστ.commute.orderOf_mul_dvd_lcm
+    (Nat.lcm_dvd
+      (orderOf_dvd_of_pow_eq_one ((h (orderOf (σ * τ))).mp (pow_orderOf_eq_one (σ * τ))).1)
+      (orderOf_dvd_of_pow_eq_one ((h (orderOf (σ * τ))).mp (pow_orderOf_eq_one (σ * τ))).2))
 
 中文:
 定理 mem_sumCongrHom_range_of_perm_mapsTo_inl
@@ -334,7 +363,30 @@ theorem mem_sumCongrHom_range_of_perm_mapsTo_inl
   have h1 : forall x : m oplus n, (exists a : m, Sum.inl a = x) -> exists a : m, Sum.inl a = σ x := by
     rintro _ ⟨a, rfl⟩; exact h ⟨a, rfl⟩
   have h3 : forall x : m oplus n, (exists b : n, Sum.inr b = x) -> exists b : n, Sum.inr b = σ x := by
-    rintro _ ⟨b, rfl⟩; exact (perm_mapsTo_inl_iff_m
+    rintro _ ⟨b, rfl⟩; exact (perm_mapsTo_inl_iff_mapsTo_inr σ).mp h ⟨b, rfl⟩
+  let σ₁' := subtypePermOfFintype σ h1
+  let σ₂' := subtypePermOfFintype σ h3
+  let σ₁ := permCongr (Equiv.ofInjective _ Sum.inl_injective).symm σ₁'
+  let σ₂ := permCongr (Equiv.ofInjective _ Sum.inr_injective).symm σ₂'
+  rw [MonoidHom.mem_range]; rw [Prod.exists]
+  use σ₁, σ₂
+  rw [Perm.sumCongrHom_apply]
+  ext (a | b)
+  · rw [Equiv.sumCongr_apply, Sum.map_inl, permCongr_apply, Equiv.symm_symm,
+      apply_ofInjective_symm Sum.inl_injective, ofInjective_apply]
+    rfl
+  · rw [Equiv.sumCongr_apply, Sum.map_inr, permCongr_apply, Equiv.symm_symm,
+      apply_ofInjective_symm Sum.inr_injective, ofInjective_apply]
+    rfl
+
+nonrec theorem Disjoint.orderOf {σ τ : Perm α} (hστ : Disjoint σ τ) :
+    orderOf (σ * τ) = Nat.lcm (orderOf σ) (orderOf τ) :=
+  haveI h : forall n : Nat, (σ * τ) ^ n = 1 ↔ σ ^ n = 1 ∧ τ ^ n = 1 := fun n => by
+    rw [hστ.commute.mul_pow]; rw [Disjoint.mul_eq_one_iff (hστ.pow_disjoint_pow n n)]
+  Nat.dvd_antisymm hστ.commute.orderOf_mul_dvd_lcm
+    (Nat.lcm_dvd
+      (orderOf_dvd_of_pow_eq_one ((h (orderOf (σ * τ))).mp (pow_orderOf_eq_one (σ * τ))).1)
+      (orderOf_dvd_of_pow_eq_one ((h (orderOf (σ * τ))).mp (pow_orderOf_eq_one (σ * τ))).2))
 
 Depends on / 依赖: Equiv.ofInjective, Sum.inl, Sum.inl_injective, Sum.inr, inl_injective, ofInjective, permCongr, perm_mapsTo_inl_iff_mapsTo_inr, subtypePermOfFintype
 -/
@@ -424,7 +476,40 @@ theorem Disjoint.isConj_mul
   have hd2' := coe_inj.2 hd2.support_mul
   rw [coe_union] at *
   have hd1'' := disjoint_coe.2 (disjoint_iff_disjoint_support.1 hd1)
-  have hd
+  have hd2'' := disjoint_coe.2 (disjoint_iff_disjoint_support.1 hd2)
+  refine isConj_of_support_equiv ?_ ?_
+· refine ((Equiv.setCongr hd1').trans (Equiv.Set.union hd1'')).trans
+      (Equiv.sumCongr (subtypeEquiv f fun a => ?_) <| subtypeEquiv g fun a => ?_).trans
+        ((Equiv.setCongr hd2').trans (Equiv.Set.union hd2'')).symm <;>
+      simp only [Set.mem_image, toEmbedding_apply, exists_eq_right, support_conj, coe_map,
+        apply_eq_iff_eq]
+  intro x hx
+  simp only [trans_apply, symm_trans_apply, Equiv.setCongr_apply, Equiv.setCongr_symm_apply,
+    Equiv.sumCongr_apply]
+  rw [hd1']; rw [Set.mem_union] at hx
+  rcases hx with hxσ | hxτ
+  · rw [mem_coe, mem_support] at hxσ
+    rw [Set.union_apply_left]; rw [Set.union_apply_left]
+    · simp only [subtypeEquiv_apply, Perm.coe_mul, Sum.map_inl, comp_apply,
+        Set.union_symm_apply_left, Subtype.coe_mk, apply_eq_iff_eq, coe_inv]
+      have h := (hd2 (f x)).resolve_left ?_
+      · rw [mul_apply, mul_apply, coe_inv] at h
+        rw [h]; rw [symm_apply_apply]; rw [(hd1 x).resolve_left hxσ]
+      · rwa [mul_apply, mul_apply, coe_inv, symm_apply_apply, apply_eq_iff_eq]
+    · rwa [Subtype.coe_mk, mem_coe, mem_support]
+    · rwa [Subtype.coe_mk, Perm.mul_apply, (hd1 x).resolve_left hxσ, mem_coe,
+        apply_mem_support, mem_support]
+  · rw [mem_coe, ← apply_mem_support, mem_support] at hxτ
+    rw [Set.union_apply_right]; rw [Set.union_apply_right]
+    · simp only [subtypeEquiv_apply, Perm.coe_mul, Sum.map_inr, comp_apply,
+        Set.union_symm_apply_right, Subtype.coe_mk]
+      have h := (hd2 (g (τ x))).resolve_right ?_
+      · rw [mul_apply, mul_apply, coe_inv] at h
+        rw [coe_inv]; rw [coe_inv]; rw [symm_apply_apply]; rw [h]; rw [(hd1 (τ x)).resolve_right hxτ]
+      · rwa [mul_apply, mul_apply, coe_inv, symm_apply_apply, apply_eq_iff_eq]
+    · rwa [Subtype.coe_mk, mem_coe, ← apply_mem_support, mem_support]
+    · rwa [Subtype.coe_mk, Perm.mul_apply, (hd1 (τ x)).resolve_right hxτ,
+        mem_coe, mem_support]
 
 中文:
 定理 Disjoint.isConj_mul
@@ -438,7 +523,40 @@ theorem Disjoint.isConj_mul
   have hd2' := coe_inj.2 hd2.support_mul
   rw [coe_union] at *
   have hd1'' := disjoint_coe.2 (disjoint_iff_disjoint_support.1 hd1)
-  have hd
+  have hd2'' := disjoint_coe.2 (disjoint_iff_disjoint_support.1 hd2)
+  refine isConj_of_support_equiv ?_ ?_
+· refine ((Equiv.setCongr hd1').trans (Equiv.Set.union hd1'')).trans
+      (Equiv.sumCongr (subtypeEquiv f fun a => ?_) <| subtypeEquiv g fun a => ?_).trans
+        ((Equiv.setCongr hd2').trans (Equiv.Set.union hd2'')).symm <;>
+      simp only [Set.mem_image, toEmbedding_apply, exists_eq_right, support_conj, coe_map,
+        apply_eq_iff_eq]
+  intro x hx
+  simp only [trans_apply, symm_trans_apply, Equiv.setCongr_apply, Equiv.setCongr_symm_apply,
+    Equiv.sumCongr_apply]
+  rw [hd1']; rw [Set.mem_union] at hx
+  rcases hx with hxσ | hxτ
+  · rw [mem_coe, mem_support] at hxσ
+    rw [Set.union_apply_left]; rw [Set.union_apply_left]
+    · simp only [subtypeEquiv_apply, Perm.coe_mul, Sum.map_inl, comp_apply,
+        Set.union_symm_apply_left, Subtype.coe_mk, apply_eq_iff_eq, coe_inv]
+      have h := (hd2 (f x)).resolve_left ?_
+      · rw [mul_apply, mul_apply, coe_inv] at h
+        rw [h]; rw [symm_apply_apply]; rw [(hd1 x).resolve_left hxσ]
+      · rwa [mul_apply, mul_apply, coe_inv, symm_apply_apply, apply_eq_iff_eq]
+    · rwa [Subtype.coe_mk, mem_coe, mem_support]
+    · rwa [Subtype.coe_mk, Perm.mul_apply, (hd1 x).resolve_left hxσ, mem_coe,
+        apply_mem_support, mem_support]
+  · rw [mem_coe, ← apply_mem_support, mem_support] at hxτ
+    rw [Set.union_apply_right]; rw [Set.union_apply_right]
+    · simp only [subtypeEquiv_apply, Perm.coe_mul, Sum.map_inr, comp_apply,
+        Set.union_symm_apply_right, Subtype.coe_mk]
+      have h := (hd2 (g (τ x))).resolve_right ?_
+      · rw [mul_apply, mul_apply, coe_inv] at h
+        rw [coe_inv]; rw [coe_inv]; rw [symm_apply_apply]; rw [h]; rw [(hd1 (τ x)).resolve_right hxτ]
+      · rwa [mul_apply, mul_apply, coe_inv, symm_apply_apply, apply_eq_iff_eq]
+    · rwa [Subtype.coe_mk, mem_coe, ← apply_mem_support, mem_support]
+    · rwa [Subtype.coe_mk, Perm.mul_apply, (hd1 (τ x)).resolve_right hxτ,
+        mem_coe, mem_support]
 
 Depends on / 依赖: Equiv.Set.union, Equiv.setCongr, Equiv.sumCongr, classical, coe_inj, coe_union, disjoint_coe, disjoint_iff_disjoint_support, hd1.support_mul, hd2.support_mul, isConj_iff, isConj_of_support_equiv, nonempty_fintype, setCongr, subtypeEquiv, sumCongr, support_mul
 -/
@@ -662,7 +780,7 @@ lemma support_closure_subset_union
     refine (Finset.coe_subset.mpr (support_mul_le a b)).trans ?_
     rw [Finset.sup_eq_union]; rw [Finset.coe_union]; rw [Set.union_subset_iff]
     exact ⟨hc, hd⟩
-  · si
+  · simp only [support_inv, imp_self, implies_true]
 
 中文:
 引理 support_closure_subset_union
@@ -675,7 +793,7 @@ lemma support_closure_subset_union
     refine (Finset.coe_subset.mpr (support_mul_le a b)).trans ?_
     rw [Finset.sup_eq_union]; rw [Finset.coe_union]; rw [Set.union_subset_iff]
     exact ⟨hc, hd⟩
-  · si
+  · simp only [support_inv, imp_self, implies_true]
 
 Depends on / 依赖: Finset, Finset.coe_subset.mpr, Finset.coe_union, Finset.sup_eq_union, Set.subset_iUnion, Set.union_subset_iff, closure_induction, coe_subset, coe_union, imp_self, implies_true, subset_rfl, sup_eq_union, support_inv, support_mul_le, union_subset_iff
 -/
@@ -770,7 +888,7 @@ theorem mem_range_ofSubtype_iff
     refine ⟨g.subtypePerm fun x => ?_, ofSubtype_subtypePerm _ fun x hx => hg (mem_support.mpr hx)⟩
     by_cases hx : g x = x
     · rw [hx]
-    · r
+    · refine iff_of_true (hg ?_) (hg ?_) <;> simpa
 
 中文:
 定理 mem_range_ofSubtype_iff
@@ -784,7 +902,7 @@ theorem mem_range_ofSubtype_iff
     refine ⟨g.subtypePerm fun x => ?_, ofSubtype_subtypePerm _ fun x hx => hg (mem_support.mpr hx)⟩
     by_cases hx : g x = x
     · rw [hx]
-    · r
+    · refine iff_of_true (hg ?_) (hg ?_) <;> simpa
 
 Depends on / 依赖: Finset, Finset.mem_coe, Set.mem_ofPred_eq, g.subtypePerm, iff_of_true, mem_coe, mem_ofPred_eq, mem_support, mem_support.mpr, mem_support_ofSubtype, ofSubtype_subtypePerm, subtypePerm
 -/

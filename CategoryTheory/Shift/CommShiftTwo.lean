@@ -86,7 +86,8 @@ definition CommShift₂Setup.int
     #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
     we need to re-enable model-based theory combination in `lia` for this to go through. -/
     lia +mbtc
-  commShift _ _ := ⟨by cat_dis
+  commShift _ _ := ⟨by cat_disch⟩
+  ε p q := (-1) ^ (p * q)
 
 中文:
 定义 交换Shift₂Setup.int
@@ -98,7 +99,8 @@ definition CommShift₂Setup.int
     #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
     we need to re-enable model-based theory combination in `lia` for this to go through. -/
     lia +mbtc
-  commShift _ _ := ⟨by cat_dis
+  commShift _ _ := ⟨by cat_disch⟩
+  ε p q := (-1) ^ (p * q)
 -/
 noncomputable def CommShift₂Setup.int [Preadditive D] [HasShift D Int]
     [forall (n : Int), (shiftFunctor D n).Additive] :
@@ -195,7 +197,13 @@ instance precomp₁
   commShift_map {X₁' Y₁' : C₁'} (f : X₁' ⟶ Y₁') := by dsimp; infer_instance
   commShiftFlipObj (X₂ : C₂) := CommShift.comp F (G.flip.obj X₂)
   commShift_flip_map {X₂ Y₂ : C₂} (g : X₂ ⟶ Y₂) :=
-    inferInstanceAs (NatTrans.CommShift (whiskerLeft F (G.
+    inferInstanceAs (NatTrans.CommShift (whiskerLeft F (G.flip.map g)) M)
+  comm X₁' X₂ m n := by
+    have := G.commShift₂_comm h (F.obj X₁') X₂ m n
+    dsimp [commShiftIso] at this ⊢
+    simp only [Category.comp_id, Category.id_comp, map_comp, Category.assoc]
+    rw [NatTrans.shift_app (G.map ((F.commShiftIso m).hom.app X₁')) n X₂]
+    simp [this]
 
 中文:
 实例 precomp₁
@@ -204,7 +212,13 @@ instance precomp₁
   commShift_map {X₁' Y₁' : C₁'} (f : X₁' ⟶ Y₁') := by dsimp; infer_instance
   commShiftFlipObj (X₂ : C₂) := CommShift.comp F (G.flip.obj X₂)
   commShift_flip_map {X₂ Y₂ : C₂} (g : X₂ ⟶ Y₂) :=
-    inferInstanceAs (NatTrans.CommShift (whiskerLeft F (G.
+    inferInstanceAs (NatTrans.CommShift (whiskerLeft F (G.flip.map g)) M)
+  comm X₁' X₂ m n := by
+    have := G.commShift₂_comm h (F.obj X₁') X₂ m n
+    dsimp [commShiftIso] at this ⊢
+    simp only [Category.comp_id, Category.id_comp, map_comp, Category.assoc]
+    rw [NatTrans.shift_app (G.map ((F.commShiftIso m).hom.app X₁')) n X₂]
+    simp [this]
 
 Depends on / 依赖: CommShift, F.obj, G.obj
 -/
@@ -236,7 +250,14 @@ instance precomp₂
   commShift_map {X₁ Y₁ : C₁} (f : X₁ ⟶ Y₁) := by dsimp; infer_instance
   commShiftFlipObj (X₂' : C₂') := inferInstanceAs ((G.flip.obj (F.obj X₂')).CommShift M)
   commShift_flip_map {X₂' Y₂' : C₂'} (g : X₂' ⟶ Y₂') :=
-    inferInstanceAs (NatTrans.CommShift (G.flip.map (F.m
+    inferInstanceAs (NatTrans.CommShift (G.flip.map (F.map g)) M)
+  comm X₁ X₂' m n := by
+    have := G.commShift₂_comm h X₁ (F.obj X₂') m n
+    dsimp [commShiftIso] at this ⊢
+    simp only [Category.comp_id, Category.id_comp, Category.assoc, map_comp]
+    refine ((G.obj _).map _ ≫= this).trans ?_
+    simp only [← Category.assoc]; congr 3
+    exact (NatTrans.shift_app_comm (G.flip.map ((F.commShiftIso n).hom.app X₂')) m X₁).symm
 
 中文:
 实例 precomp₂
@@ -245,7 +266,14 @@ instance precomp₂
   commShift_map {X₁ Y₁ : C₁} (f : X₁ ⟶ Y₁) := by dsimp; infer_instance
   commShiftFlipObj (X₂' : C₂') := inferInstanceAs ((G.flip.obj (F.obj X₂')).CommShift M)
   commShift_flip_map {X₂' Y₂' : C₂'} (g : X₂' ⟶ Y₂') :=
-    inferInstanceAs (NatTrans.CommShift (G.flip.map (F.m
+    inferInstanceAs (NatTrans.CommShift (G.flip.map (F.map g)) M)
+  comm X₁ X₂' m n := by
+    have := G.commShift₂_comm h X₁ (F.obj X₂') m n
+    dsimp [commShiftIso] at this ⊢
+    simp only [Category.comp_id, Category.id_comp, Category.assoc, map_comp]
+    refine ((G.obj _).map _ ≫= this).trans ?_
+    simp only [← Category.assoc]; congr 3
+    exact (NatTrans.shift_app_comm (G.flip.map ((F.commShiftIso n).hom.app X₂')) m X₁).symm
 
 Depends on / 依赖: CommShift, CommShift.comp, G.obj
 -/

@@ -51,7 +51,18 @@ theorem natDegree_det_X_add_C_le
     Multiset.mem_map, exists_imp, Finset.mem_univ_val]
   intro g
   calc
-    natDegree (sign g • ∏ i : n, (X • A.map C + B.map
+    natDegree (sign g • ∏ i : n, (X • A.map C + B.map C : Matrix n n α[X]) (g i) i) <=
+        natDegree (∏ i : n, (X • A.map C + B.map C : Matrix n n α[X]) (g i) i) := by
+      rcases Int.units_eq_one_or (sign g) with sg | sg
+      · rw [sg, one_smul]
+      · rw [sg, Units.neg_smul, one_smul, natDegree_neg]
+    _ <= ∑ i : n, natDegree (((X : α[X]) • A.map C + B.map C : Matrix n n α[X]) (g i) i) :=
+      (natDegree_prod_le (Finset.univ : Finset n) fun i : n =>
+        (X • A.map C + B.map C : Matrix n n α[X]) (g i) i)
+    _ <= Finset.univ.card • 1 := (Finset.sum_le_card_nsmul _ _ 1 fun (i : n) _ => ?_)
+    _ <= Fintype.card n := by simp [mul_one, Finset.card_univ]
+  dsimp only [Matrix.add_apply, Matrix.smul_apply, map_apply, smul_eq_mul]
+  compute_degree
 
 中文:
 定理 natDegree_det_X_add_C_le
@@ -64,7 +75,18 @@ theorem natDegree_det_X_add_C_le
     Multiset.mem_map, exists_imp, Finset.mem_univ_val]
   intro g
   calc
-    natDegree (sign g • ∏ i : n, (X • A.map C + B.map
+    natDegree (sign g • ∏ i : n, (X • A.map C + B.map C : Matrix n n α[X]) (g i) i) <=
+        natDegree (∏ i : n, (X • A.map C + B.map C : Matrix n n α[X]) (g i) i) := by
+      rcases Int.units_eq_one_or (sign g) with sg | sg
+      · rw [sg, one_smul]
+      · rw [sg, Units.neg_smul, one_smul, natDegree_neg]
+    _ <= ∑ i : n, natDegree (((X : α[X]) • A.map C + B.map C : Matrix n n α[X]) (g i) i) :=
+      (natDegree_prod_le (Finset.univ : Finset n) fun i : n =>
+        (X • A.map C + B.map C : Matrix n n α[X]) (g i) i)
+    _ <= Finset.univ.card • 1 := (Finset.sum_le_card_nsmul _ _ 1 fun (i : n) _ => ?_)
+    _ <= Fintype.card n := by simp [mul_one, Finset.card_univ]
+  dsimp only [Matrix.add_apply, Matrix.smul_apply, map_apply, smul_eq_mul]
+  compute_degree
 
 Depends on / 依赖: A.map, B.map, Finset, Finset.mem_univ_val, Function, Function.comp_apply, Int.units_eq_one_or, Matrix, MeasurableSingletonClass, MeasurableSingletonClass.of_separatesPoints, MeasurableSpace, Multiset, Multiset.max_le_of_forall_le, Multiset.mem_map, Units.neg_smul, comp_apply, det_apply, exists_imp, forall_apply_eq_imp_iff, max_le_of_forall_le
 -/
@@ -143,7 +165,10 @@ theorem coeff_det_X_add_C_card
   convert! coeff_smul (R := α) (sign g) _ _
   rw [← mul_one (Fintype.card n)]
   convert! (coeff_prod_of_natDegree_le (R := α) _ _ _ _).symm
-  · simp [c
+  · simp [coeff_C]
+  · rintro p -
+    dsimp only [Matrix.add_apply, Matrix.smul_apply, map_apply, smul_eq_mul]
+    compute_degree
 
 中文:
 定理 coeff_det_X_add_C_card
@@ -156,7 +181,10 @@ theorem coeff_det_X_add_C_card
   convert! coeff_smul (R := α) (sign g) _ _
   rw [← mul_one (Fintype.card n)]
   convert! (coeff_prod_of_natDegree_le (R := α) _ _ _ _).symm
-  · simp [c
+  · simp [coeff_C]
+  · rintro p -
+    dsimp only [Matrix.add_apply, Matrix.smul_apply, map_apply, smul_eq_mul]
+    compute_degree
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum_congr, Fintype, Fintype.card, Matrix, Matrix.add_apply, Matrix.smul_apply, add_apply, coeff_C, coeff_prod_of_natDegree_le, coeff_smul, compute_degree, convert, det_apply, finsetSum_coeff, forall_true_left, map_apply, mem_univ, mul_one
 -/
@@ -186,7 +214,13 @@ theorem leadingCoeff_det_X_one_add_C
   rw [← @det_one n]; rw [← coeff_det_X_add_C_card _ A]; rw [leadingCoeff]
   simp only [Matrix.map_one, C_eq_zero, map_one]
   rcases (natDegree_det_X_add_C_le 1 A).eq_or_lt with h | h
-  · simp only [map_one, Matrix.map_one
+  · simp only [map_one, Matrix.map_one, C_eq_zero] at h
+    rw [h]
+  · -- contradiction. we have a hypothesis that the degree is less than |n|
+    -- but we know that coeff _ n = 1
+    have H := coeff_eq_zero_of_natDegree_lt h
+    rw [coeff_det_X_add_C_card] at H
+    simp at H
 
 中文:
 定理 leadingCoeff_det_X_one_add_C
@@ -197,7 +231,13 @@ theorem leadingCoeff_det_X_one_add_C
   rw [← @det_one n]; rw [← coeff_det_X_add_C_card _ A]; rw [leadingCoeff]
   simp only [Matrix.map_one, C_eq_zero, map_one]
   rcases (natDegree_det_X_add_C_le 1 A).eq_or_lt with h | h
-  · simp only [map_one, Matrix.map_one
+  · simp only [map_one, Matrix.map_one, C_eq_zero] at h
+    rw [h]
+  · -- contradiction. we have a hypothesis that the degree is less than |n|
+    -- but we know that coeff _ n = 1
+    have H := coeff_eq_zero_of_natDegree_lt h
+    rw [coeff_det_X_add_C_card] at H
+    simp at H
 
 Depends on / 依赖: C_eq_zero, Matrix, Matrix.map_one, coeff_det_X_add_C_card, degree, det_one, eq_iff_true_of_subsingleton, eq_or_lt, hypothesis, leadingCoeff, map_one, natDegree_det_X_add_C_le, subsingleton_or_nontrivial
 -/

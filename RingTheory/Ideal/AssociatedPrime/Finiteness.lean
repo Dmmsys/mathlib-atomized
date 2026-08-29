@@ -76,7 +76,28 @@ theorem Submodule.isQuotientEquivQuotientPrime_iff
   let f := mapQ (N₁.submoduleOf N₂) N₁ N₂.subtype le_rfl
   have hf₁ : ker f = ⊥ := ker_liftQ_eq_bot _ _ _ (by simp [ker_comp, submoduleOf])
   have hf₂ : range f = N₂.map N₁.mkQ := by simp [f, mapQ, range_liftQ, range_comp]
-  refine ⟨fun ⟨h, p, ⟨e⟩⟩ => ?_, fun ⟨x, hx, hx'⟩ => ⟨le_sup_left.trans_eq
+  refine ⟨fun ⟨h, p, ⟨e⟩⟩ => ?_, fun ⟨x, hx, hx'⟩ => ⟨le_sup_left.trans_eq hx'.symm, ⟨_, hx⟩, ?_⟩⟩
+  · obtain ⟨⟨x, hx⟩, hx'⟩ := Submodule.mkQ_surjective _ (e.symm 1)
+    have hx'' : N₁.mkQ x = f (e.symm 1) := by simp [f, ← hx']
+    refine ⟨x, ?_, ?_⟩
+    · convert! p.2
+      ext r
+      simp [hx'', ← map_smul, Algebra.smul_def, show f _ = 0 ↔ _ from congr(_ in $hf₁),
+        Ideal.Quotient.eq_zero_iff_mem]
+    · refine le_antisymm ?_ (sup_le h ((span_singleton_le_iff_mem _ _).mpr hx))
+      have : (span A {x}).map N₁.mkQ = ((span A {1}).map e.symm.toLinearMap).map f := by
+        simp only [map_span, Set.image_singleton, hx'', LinearEquiv.coe_coe]
+      rw [← N₁.ker_mkQ]; rw [sup_comm]; rw [← comap_map_eq]; rw [← map_le_iff_le_comap]; rw [this]
+      simp [hf₂, Ideal.Quotient.span_singleton_one]
+  · have hxN₂ : x in N₂ := (le_sup_right.trans_eq hx'.symm) (mem_span_singleton_self x)
+    refine ⟨.symm (.ofBijective (Submodule.mapQ _ _ (toSpanSingleton A _ ⟨x, hxN₂⟩) ?_) ⟨?_, ?_⟩)⟩
+    · simp [SetLike.le_def, ← Quotient.mk_smul, submoduleOf]
+    · refine ker_eq_bot.mp (ker_liftQ_eq_bot _ _ _ ?_)
+      simp [← Quotient.mk_smul, SetLike.le_def, submoduleOf]
+    · rw [mapQ, ← range_eq_top, range_liftQ, range_comp]
+      have := congr($(hx').submoduleOf N₂)
+      rw [submoduleOf_self]; rw [submoduleOf_sup_of_le (by simp_all) (by simp_all)]; rw [submoduleOf_span_singleton_of_mem _ hxN₂] at this
+      simpa [← span_singleton_eq_range, LinearMap.range_toSpanSingleton] using this.symm
 
 中文:
 定理 子模.isQuotientEquivQuotientPrime_iff
@@ -85,7 +106,28 @@ theorem Submodule.isQuotientEquivQuotientPrime_iff
   let f := mapQ (N₁.submoduleOf N₂) N₁ N₂.subtype le_rfl
   have hf₁ : ker f = ⊥ := ker_liftQ_eq_bot _ _ _ (by simp [ker_comp, submoduleOf])
   have hf₂ : range f = N₂.map N₁.mkQ := by simp [f, mapQ, range_liftQ, range_comp]
-  refine ⟨fun ⟨h, p, ⟨e⟩⟩ => ?_, fun ⟨x, hx, hx'⟩ => ⟨le_sup_left.trans_eq
+  refine ⟨fun ⟨h, p, ⟨e⟩⟩ => ?_, fun ⟨x, hx, hx'⟩ => ⟨le_sup_left.trans_eq hx'.symm, ⟨_, hx⟩, ?_⟩⟩
+  · obtain ⟨⟨x, hx⟩, hx'⟩ := Submodule.mkQ_surjective _ (e.symm 1)
+    have hx'' : N₁.mkQ x = f (e.symm 1) := by simp [f, ← hx']
+    refine ⟨x, ?_, ?_⟩
+    · convert! p.2
+      ext r
+      simp [hx'', ← map_smul, Algebra.smul_def, show f _ = 0 ↔ _ from congr(_ in $hf₁),
+        Ideal.Quotient.eq_zero_iff_mem]
+    · refine le_antisymm ?_ (sup_le h ((span_singleton_le_iff_mem _ _).mpr hx))
+      have : (span A {x}).map N₁.mkQ = ((span A {1}).map e.symm.toLinearMap).map f := by
+        simp only [map_span, Set.image_singleton, hx'', LinearEquiv.coe_coe]
+      rw [← N₁.ker_mkQ]; rw [sup_comm]; rw [← comap_map_eq]; rw [← map_le_iff_le_comap]; rw [this]
+      simp [hf₂, Ideal.Quotient.span_singleton_one]
+  · have hxN₂ : x in N₂ := (le_sup_right.trans_eq hx'.symm) (mem_span_singleton_self x)
+    refine ⟨.symm (.ofBijective (Submodule.mapQ _ _ (toSpanSingleton A _ ⟨x, hxN₂⟩) ?_) ⟨?_, ?_⟩)⟩
+    · simp [SetLike.le_def, ← Quotient.mk_smul, submoduleOf]
+    · refine ker_eq_bot.mp (ker_liftQ_eq_bot _ _ _ ?_)
+      simp [← Quotient.mk_smul, SetLike.le_def, submoduleOf]
+    · rw [mapQ, ← range_eq_top, range_liftQ, range_comp]
+      have := congr($(hx').submoduleOf N₂)
+      rw [submoduleOf_self]; rw [submoduleOf_sup_of_le (by simp_all) (by simp_all)]; rw [submoduleOf_span_singleton_of_mem _ hxN₂] at this
+      simpa [← span_singleton_eq_range, LinearMap.range_toSpanSingleton] using this.symm
 
 Depends on / 依赖: Submodule, Submodule.mkQ_surjective, convert, e.symm, ker_comp, ker_liftQ_eq_bot, le_rfl, le_sup_left, le_sup_left.trans_eq, map_sm, mkQ_surjective, range_comp, range_liftQ, submoduleOf, subtype, trans_eq
 -/
@@ -135,7 +177,11 @@ theorem IsNoetherianRing.exists_relSeries_isQuotientEquivQuotientPrime
   have := Submodule.Quotient.nontrivial_iff.mpr hN
   obtain ⟨p, hp⟩ := associatedPrimes.nonempty A (M ⧸ N)
   rw [AssociatedPrimes.mem_iff]; rw [isAssociatedPrime_iff] at hp
-  obtain ⟨hp, x, rfl⟩ := h
+  obtain ⟨hp, x, rfl⟩ := hp
+  obtain ⟨x, rfl⟩ := Submodule.mkQ_surjective _ x
+  have hxN : x ∉ N := fun h => hp.ne_top (by rw [show N.mkQ x = 0 by simpa]; simp)
+  have := Submodule.isQuotientEquivQuotientPrime_iff.mpr ⟨x, hp, rfl⟩
+  refine ⟨_, by simpa [hs₂], s.snoc _ (hs₂ ▸ this), by simpa, rfl⟩
 
 中文:
 定理 是Noether环.存在_relSeries_isQuotientEquivQuotientPrime
@@ -145,7 +191,11 @@ theorem IsNoetherianRing.exists_relSeries_isQuotientEquivQuotientPrime
   have := Submodule.Quotient.nontrivial_iff.mpr hN
   obtain ⟨p, hp⟩ := associatedPrimes.nonempty A (M ⧸ N)
   rw [AssociatedPrimes.mem_iff]; rw [isAssociatedPrime_iff] at hp
-  obtain ⟨hp, x, rfl⟩ := h
+  obtain ⟨hp, x, rfl⟩ := hp
+  obtain ⟨x, rfl⟩ := Submodule.mkQ_surjective _ x
+  have hxN : x ∉ N := fun h => hp.ne_top (by rw [show N.mkQ x = 0 by simpa]; simp)
+  have := Submodule.isQuotientEquivQuotientPrime_iff.mpr ⟨x, hp, rfl⟩
+  refine ⟨_, by simpa [hs₂], s.snoc _ (hs₂ ▸ this), by simpa, rfl⟩
 -/
 theorem IsNoetherianRing.exists_relSeries_isQuotientEquivQuotientPrime :
     exists s : RelSeries {(N₁, N₂) | Submodule.IsQuotientEquivQuotientPrime (A := A) (M := M) N₁ N₂},
@@ -184,7 +234,24 @@ theorem IsNoetherianRing.induction_on_isQuotientEquivQuotientPrime
       (N₂ : Type v) [AddCommGroup N₂] [Module A N₂] [Module.Finite A N₂]
       (f : N₁ ≃ₗ[A] N₂) (h : motive N₁) : motive N₂ :=
     exact N₁ N₂ PUnit.{v + 1} f 0 f.injective (Function.surjective_to_subsingleton _)
-   
+      ((f.exact_zero_iff_surjective _).2 f.surjective) h (subsingleton _)
+  obtain ⟨s, hs1, hs2⟩ := IsNoetherianRing.exists_relSeries_isQuotientEquivQuotientPrime A M
+  suffices H : forall n, (h : n < s.length + 1) -> motive (s ⟨n, h⟩) by
+    replace H : motive s.last := H s.length s.length.lt_add_one
+    rw [hs2] at H
+    exact equiv _ _ Submodule.topEquiv H
+  intro n h
+  induction n with
+  | zero =>
+    change motive s.head
+    rw [hs1]
+    exact subsingleton _
+  | succ n ih =>
+    specialize ih (n.lt_add_one.trans h)
+    obtain ⟨hle, p, ⟨f⟩⟩ := s.step ⟨n, (add_lt_add_iff_right _).1 h⟩
+    replace ih := equiv _ _ (Submodule.submoduleOfEquivOfLe hle).symm ih
+    exact exact _ _ _ _ _ (Submodule.injective_subtype _) (Submodule.mkQ_surjective _)
+      (LinearMap.exact_subtype_mkQ _) ih (quotient _ p f)
 
 中文:
 定理 是Noether环.induction_on_isQuotientEquivQuotientPrime
@@ -193,7 +260,24 @@ theorem IsNoetherianRing.induction_on_isQuotientEquivQuotientPrime
       (N₂ : Type v) [AddCommGroup N₂] [Module A N₂] [Module.Finite A N₂]
       (f : N₁ ≃ₗ[A] N₂) (h : motive N₁) : motive N₂ :=
     exact N₁ N₂ PUnit.{v + 1} f 0 f.injective (Function.surjective_to_subsingleton _)
-   
+      ((f.exact_zero_iff_surjective _).2 f.surjective) h (subsingleton _)
+  obtain ⟨s, hs1, hs2⟩ := IsNoetherianRing.exists_relSeries_isQuotientEquivQuotientPrime A M
+  suffices H : forall n, (h : n < s.length + 1) -> motive (s ⟨n, h⟩) by
+    replace H : motive s.last := H s.length s.length.lt_add_one
+    rw [hs2] at H
+    exact equiv _ _ Submodule.topEquiv H
+  intro n h
+  induction n with
+  | zero =>
+    change motive s.head
+    rw [hs1]
+    exact subsingleton _
+  | succ n ih =>
+    specialize ih (n.lt_add_one.trans h)
+    obtain ⟨hle, p, ⟨f⟩⟩ := s.step ⟨n, (add_lt_add_iff_right _).1 h⟩
+    replace ih := equiv _ _ (Submodule.submoduleOfEquivOfLe hle).symm ih
+    exact exact _ _ _ _ _ (Submodule.injective_subtype _) (Submodule.mkQ_surjective _)
+      (LinearMap.exact_subtype_mkQ _) ih (quotient _ p f)
 
 Depends on / 依赖: AddCommGroup, Finite, Function, Function.surjective_to_subsingleton, IsNoetherianRing, IsNoetherianRing.exists_relSeries_isQuotientEquivQuotientPrime, Module, Module.Finite, exact_zero_iff_surjective, exists_relSeries_isQuotientEquivQuotientPrime, f.exact_zero_iff_surjective, f.injective, f.surjective, injective, length, motive, s.length, subsingleton, surjective, surjective_to_subsingleton
 -/
@@ -248,7 +332,9 @@ theorem associatedPrimes.finite
   | subsingleton N => simp [associatedPrimes.eq_empty_of_subsingleton]
   | quotient N p f =>
     have := associatedPrimes.eq_singleton_of_isPrimary p.2.isPrimary
-    simp [LinearEquiv.Assoc
+    simp [LinearEquiv.AssociatedPrimes.eq f, this]
+  | exact N₁ N₂ N₃ f g hf _ hfg h₁ h₃ =>
+    exact (h₁.union h₃).subset (associatedPrimes.subset_union_of_exact hf hfg)
 
 中文:
 定理 associatedPrimes.finite
@@ -259,7 +345,9 @@ theorem associatedPrimes.finite
   | subsingleton N => simp [associatedPrimes.eq_empty_of_subsingleton]
   | quotient N p f =>
     have := associatedPrimes.eq_singleton_of_isPrimary p.2.isPrimary
-    simp [LinearEquiv.Assoc
+    simp [LinearEquiv.AssociatedPrimes.eq f, this]
+  | exact N₁ N₂ N₃ f g hf _ hfg h₁ h₃ =>
+    exact (h₁.union h₃).subset (associatedPrimes.subset_union_of_exact hf hfg)
 
 Depends on / 依赖: AssociatedPrimes, Finite, IsNoetherianRing, IsNoetherianRing.induction_on_isQuotientEquivQuotientPrime, LinearEquiv, LinearEquiv.AssociatedPrimes.eq, Module, Module.Finite, associatedPrimes, associatedPrimes.eq_empty_of_subsingleton, associatedPrimes.eq_singleton_of_isPrimary, associatedPrimes.subset_union_of_exact, eq_empty_of_subsingleton, eq_singleton_of_isPrimary, induction_on_isQuotientEquivQuotientPrime, isPrimary, quotient, subset, subset_union_of_exact, subsingleton
 -/
@@ -283,7 +371,8 @@ theorem Ideal.IsMaximal.mem_associatedPrimes_of_isFractionRing
 have ⟨P, hP⟩ := (I.subset_union_prime_finite fin (f := id) 0 0 fun _ h _ _ => h.isPrime).1 by
     simp_rw [id, biUnion_associatedPrimes_eq_compl_nonZeroDivisors]
 exact fun x hx h => hI.ne_top I.eq_top_of_isUnit_mem hx
-      (IsFractionRing.self_iff_nonZeroDivi
+      (IsFractionRing.self_iff_nonZeroDivisors_le_isUnit.mp ‹_› h)
+  hI.eq_of_le hP.1.isPrime.ne_top hP.2 ▸ hP.1
 
 中文:
 定理 理想.是极大.mem_associatedPrimes_of_isFractionRing
@@ -292,7 +381,8 @@ exact fun x hx h => hI.ne_top I.eq_top_of_isUnit_mem hx
 have ⟨P, hP⟩ := (I.subset_union_prime_finite fin (f := id) 0 0 fun _ h _ _ => h.isPrime).1 by
     simp_rw [id, biUnion_associatedPrimes_eq_compl_nonZeroDivisors]
 exact fun x hx h => hI.ne_top I.eq_top_of_isUnit_mem hx
-      (IsFractionRing.self_iff_nonZeroDivi
+      (IsFractionRing.self_iff_nonZeroDivisors_le_isUnit.mp ‹_› h)
+  hI.eq_of_le hP.1.isPrime.ne_top hP.2 ▸ hP.1
 
 Depends on / 依赖: I.eq_top_of_isUnit_mem, I.subset_union_prime_finite, IsFractionRing, IsFractionRing.self_iff_nonZeroDivisors_le_isUnit.mp, associatedPrimes, associatedPrimes.finite, biUnion_associatedPrimes_eq_compl_nonZeroDivisors, eq_of_le, eq_top_of_isUnit_mem, finite, h.isPrime, hI.eq_of_le, hI.ne_top, isPrime, isPrime.ne_top, ne_top, self_iff_nonZeroDivisors_le_isUnit, simp_rw, subset_union_prime_finite
 -/
@@ -338,7 +428,11 @@ theorem Ideal.bot_lt_annihilator_of_disjoint_nonZeroDivisors
   obtain ⟨P, h, hP⟩ : exists P in associatedPrimes A A, I <= P :=
 (I.subset_union_prime_finite (associatedPrimes.finite ..) (f := id) 0 0 fun _ h _ _ => h.1).1
     biUnion_associatedPrimes_eq_compl_nonZeroDivisors A ▸ h.subset_compl_right
-  rw [AssociatedPrimes.mem_iff]; rw [isAssociatedPrime_iff
+  rw [AssociatedPrimes.mem_iff]; rw [isAssociatedPrime_iff] at h
+  obtain ⟨prime, x, rfl⟩ := h
+exact SetLike.lt_iff_le_and_exists.mpr ⟨bot_le, x, Submodule.mem_annihilator.mpr by
+    simpa only [smul_eq_mul, mul_comm x, SetLike.le_def, Submodule.mem_colon_singleton] using! hP,
+fun h : x = 0 => prime.ne_top by simp [h]⟩
 
 中文:
 定理 理想.bot_lt_annihilator_of_disjoint_nonZeroDivisors
@@ -347,7 +441,11 @@ theorem Ideal.bot_lt_annihilator_of_disjoint_nonZeroDivisors
   obtain ⟨P, h, hP⟩ : exists P in associatedPrimes A A, I <= P :=
 (I.subset_union_prime_finite (associatedPrimes.finite ..) (f := id) 0 0 fun _ h _ _ => h.1).1
     biUnion_associatedPrimes_eq_compl_nonZeroDivisors A ▸ h.subset_compl_right
-  rw [AssociatedPrimes.mem_iff]; rw [isAssociatedPrime_iff
+  rw [AssociatedPrimes.mem_iff]; rw [isAssociatedPrime_iff] at h
+  obtain ⟨prime, x, rfl⟩ := h
+exact SetLike.lt_iff_le_and_exists.mpr ⟨bot_le, x, Submodule.mem_annihilator.mpr by
+    simpa only [smul_eq_mul, mul_comm x, SetLike.le_def, Submodule.mem_colon_singleton] using! hP,
+fun h : x = 0 => prime.ne_top by simp [h]⟩
 
 Depends on / 依赖: AssociatedPrimes, AssociatedPrimes.mem_iff, I.subset_union_prime_finite, SetLike, SetLike.le_def, SetLike.lt_iff_le_and_exists.mpr, Submodule, Submodule.mem_annihilator.mpr, Submodule.mem_colon_singleton, associatedPrimes, associatedPrimes.finite, biUnion_associatedPrimes_eq_compl_nonZeroDivisors, bot_le, finite, h.subset_compl_right, isAssociatedPrime_iff, le_def, lt_iff_le_and_exists, mem_annihilator, mem_colon_singleton
 -/

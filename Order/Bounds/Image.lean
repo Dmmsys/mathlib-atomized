@@ -1204,7 +1204,12 @@ theorem isLUB_prod
       fun H => ⟨?_, ?_⟩⟩
   · suffices h : (a, p.2) in upperBounds s from (H.2 h).1
 exact fun q hq => ⟨ha mem_image_of_mem _ hq, (H.1 hq).2⟩
-  
+  · suffices h : (p.1, a) in upperBounds s from (H.2 h).2
+exact fun q hq => ⟨(H.1 hq).1, ha mem_image_of_mem _ hq⟩
+· exact fun q hq => ⟨H.1.1 mem_image_of_mem _ hq, H.2.1 mem_image_of_mem _ hq⟩
+  · exact fun q hq =>
+⟨H.1.2 monotone_fst.mem_upperBounds_image hq,
+H.2.2 monotone_snd.mem_upperBounds_image hq⟩
 
 中文:
 定理 isLUB_prod
@@ -1217,7 +1222,12 @@ exact fun q hq => ⟨ha mem_image_of_mem _ hq, (H.1 hq).2⟩
       fun H => ⟨?_, ?_⟩⟩
   · suffices h : (a, p.2) in upperBounds s from (H.2 h).1
 exact fun q hq => ⟨ha mem_image_of_mem _ hq, (H.1 hq).2⟩
-  
+  · suffices h : (p.1, a) in upperBounds s from (H.2 h).2
+exact fun q hq => ⟨(H.1 hq).1, ha mem_image_of_mem _ hq⟩
+· exact fun q hq => ⟨H.1.1 mem_image_of_mem _ hq, H.2.1 mem_image_of_mem _ hq⟩
+  · exact fun q hq =>
+⟨H.1.2 monotone_fst.mem_upperBounds_image hq,
+H.2.2 monotone_snd.mem_upperBounds_image hq⟩
 
 Depends on / 依赖: mem_image_of_mem, mem_upperBounds_image, monotone_fs, monotone_fst, monotone_fst.mem_upperBounds_image, monotone_snd, monotone_snd.mem_upperBounds_image, upperBounds
 -/
@@ -1338,7 +1348,9 @@ theorem isLUB_pi
       ⟨fun H a => ⟨(Function.monotone_eval a).mem_upperBounds_image H.1, fun b hb => ?_⟩, fun H =>
         ⟨?_, ?_⟩⟩
     · suffices h : Function.update f a b in upperBounds s from Function.update_self a b f ▸ H.2 h a
-exact fun g hg => le_update_iff.2 ⟨hb mem_image_of_mem _ 
+exact fun g hg => le_update_iff.2 ⟨hb mem_image_of_mem _ hg, fun i _ => H.1 hg i⟩
+    · exact fun g hg a => (H a).1 (mem_image_of_mem _ hg)
+    · exact fun g hg a => (H a).2 ((Function.monotone_eval a).mem_upperBounds_image hg)
 
 中文:
 定理 isLUB_pi
@@ -1349,7 +1361,9 @@ exact fun g hg => le_update_iff.2 ⟨hb mem_image_of_mem _
       ⟨fun H a => ⟨(Function.monotone_eval a).mem_upperBounds_image H.1, fun b hb => ?_⟩, fun H =>
         ⟨?_, ?_⟩⟩
     · suffices h : Function.update f a b in upperBounds s from Function.update_self a b f ▸ H.2 h a
-exact fun g hg => le_update_iff.2 ⟨hb mem_image_of_mem _ 
+exact fun g hg => le_update_iff.2 ⟨hb mem_image_of_mem _ hg, fun i _ => H.1 hg i⟩
+    · exact fun g hg a => (H a).1 (mem_image_of_mem _ hg)
+    · exact fun g hg a => (H a).2 ((Function.monotone_eval a).mem_upperBounds_image hg)
 
 Depends on / 依赖: Function, Function.monotone_eval, Function.update, Function.update_self, classical, le_update_iff, mem_image_of_mem, mem_upperBounds_image, monotone_eval, update, update_self, upperBounds
 -/
@@ -1443,7 +1457,7 @@ lemma BddAbove.range_comp_left
 alias BddAbove.range_comp := BddAbove.range_comp_left
 
 @[deprecated BddBelow.range_comp_left (since := "2026-06-07")]
-alias BddBelow.range_comp 
+alias BddBelow.range_comp := BddBelow.range_comp_left
 
 中文:
 引理 BddAbove.range_comp_left
@@ -1456,7 +1470,7 @@ alias BddBelow.range_comp
 alias BddAbove.range_comp := BddAbove.range_comp_left
 
 @[deprecated BddBelow.range_comp_left (since := "2026-06-07")]
-alias BddBelow.range_comp 
+alias BddBelow.range_comp := BddBelow.range_comp_left
 
 Depends on / 依赖: BddAbove, Set.range_comp, hg.map_bddAbove, map_bddAbove, range_comp
 -/

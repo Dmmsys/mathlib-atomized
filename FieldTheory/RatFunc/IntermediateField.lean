@@ -320,7 +320,11 @@ theorem natDegree_num_le_natDegree_minpolyX
   intro H
   replace H := congr($(H).val)
   simp only [coeff_sub, coeff_map, coeff_natDegree, coeff_C_mul, AddSubgroupClass.coe_sub,
-    SubalgebraClass.coe_algebraMap, algebr
+    SubalgebraClass.coe_algebraMap, algebraMap_eq_C, MulMemClass.coe_mul, coe_algebraMap,
+    ZeroMemClass.coe_zero] at H
+  rw [sub_eq_zero]; rw [← mul_right_inj' (inv_ne_zero f_ne_zero)]; rw [← mul_assoc]; rw [inv_mul_cancel₀ f_ne_zero]; rw [one_mul]; rw [← eq_div_iff (_root_.map_ne_zero C).mpr Polynomial.leadingCoeff_ne_zero.mpr
+    (num_ne_zero f_ne_zero)]; rw [← inv_inj]; rw [inv_inv]; rw [← map_div₀]; rw [← map_inv₀] at H
+  exact hf ⟨_, H⟩
 
 中文:
 定理 natDegree_num_le_natDegree_minpolyX
@@ -333,7 +337,11 @@ theorem natDegree_num_le_natDegree_minpolyX
   intro H
   replace H := congr($(H).val)
   simp only [coeff_sub, coeff_map, coeff_natDegree, coeff_C_mul, AddSubgroupClass.coe_sub,
-    SubalgebraClass.coe_algebraMap, algebr
+    SubalgebraClass.coe_algebraMap, algebraMap_eq_C, MulMemClass.coe_mul, coe_algebraMap,
+    ZeroMemClass.coe_zero] at H
+  rw [sub_eq_zero]; rw [← mul_right_inj' (inv_ne_zero f_ne_zero)]; rw [← mul_assoc]; rw [inv_mul_cancel₀ f_ne_zero]; rw [one_mul]; rw [← eq_div_iff (_root_.map_ne_zero C).mpr Polynomial.leadingCoeff_ne_zero.mpr
+    (num_ne_zero f_ne_zero)]; rw [← inv_inj]; rw [inv_inv]; rw [← map_div₀]; rw [← map_inv₀] at H
+  exact hf ⟨_, H⟩
 
 Depends on / 依赖: AddSubgroupClass, AddSubgroupClass.coe_sub, MulMemClass, MulMemClass.coe_mul, RingHom, RingHom.map_zero, SubalgebraClass, SubalgebraClass.coe_algebraMap, ZeroMemClass, ZeroMemClass.coe_zero, algebraMap_eq_C, coe_algebraMap, coe_mul, coe_sub, coe_zero, coeff_C_mul, coeff_map, coeff_natDegree, coeff_sub, eq_div_iff
 -/
@@ -365,7 +373,9 @@ theorem natDegree_minpolyX
   · have : (f.minpolyX K⟮f⟯).natDegree <= _ := natDegree_sub_le _ _
     rw [natDegree_map]; rw [natDegree_C_mul fun H => hf ⟨0]; rw [by simpa [map_zero] using congr($(H).val)⟩,
       natDegree_map] at this
-  
+    exact this
+· exact max_le (natDegree_num_le_natDegree_minpolyX f hf) le_natDegree_of_ne_zero
+      fun H => hf (f.eq_C_of_minpolyX_coeff_eq_zero congr($(H).val))
 
 中文:
 定理 natDegree_minpolyX
@@ -377,7 +387,9 @@ theorem natDegree_minpolyX
   · have : (f.minpolyX K⟮f⟯).natDegree <= _ := natDegree_sub_le _ _
     rw [natDegree_map]; rw [natDegree_C_mul fun H => hf ⟨0]; rw [by simpa [map_zero] using congr($(H).val)⟩,
       natDegree_map] at this
-  
+    exact this
+· exact max_le (natDegree_num_le_natDegree_minpolyX f hf) le_natDegree_of_ne_zero
+      fun H => hf (f.eq_C_of_minpolyX_coeff_eq_zero congr($(H).val))
 
 Depends on / 依赖: eq_C_of_minpolyX_coeff_eq_zero, f.eq_C_of_minpolyX_coeff_eq_zero, f.minpolyX, le_antisymm, le_natDegree_of_ne_zero, map_zero, max_le, minpolyX, natDegree, natDegree_C_mul, natDegree_map, natDegree_num_le_natDegree_minpolyX, natDegree_sub_le
 -/
@@ -441,7 +453,25 @@ theorem irreducible_minpolyX'
   let φ : K[X][X] := f.num.map (algebraMap ..) -
     Polynomial.C Polynomial.X * f.denom.map (algebraMap ..)
   have φ_map : φ.mapEquiv e.toRingEquiv = (f.minpolyX K[f]) := by
-    simp only [algebraMap_eq, map_sub, ma
+    simp only [algebraMap_eq, map_sub, mapEquiv_apply,
+      AlgEquiv.toRingEquiv_toRingHom, algEquivOfTranscendental_coe, Polynomial.map_map, map_mul,
+      map_C, RingHom.coe_coe, aeval_X, e, φ]
+    congr 2 <;> ext <;> simp
+  rw [← φ_map]; rw [MulEquiv.irreducible_iff]
+  have : φ = Bivariate.swap
+      (Polynomial.C f.num - Polynomial.X * Polynomial.C f.denom) := by
+    simp only [X_mul_C, Bivariate.swap_apply, aevalAeval, aevalAevalEquiv, Equiv.coe_fn_mk,
+      AlgHom.coe_comp, AlgHom.coe_restrictScalars', coe_aeval_eq_eval, Function.comp_apply,
+      aeval_sub, aeval_C, algebraMap_def, coe_mapRingHom, map_mul, aeval_X, eval_sub,
+      eval_map_algebraMap, Polynomial.eval_mul, Polynomial.eval_C]
+    rw [mul_comm]
+    rfl
+  rw [this]; rw [MulEquiv.irreducible_iff]
+  convert!
+    irreducible_C_mul_X_add_C (neg_ne_zero.mpr f.denom_ne_zero)
+      ((IsCoprime.neg_right_iff _ _).mpr f.isCoprime_num_denom).symm.isRelPrime using 1
+  rw [add_comm]; rw [X_mul_C]; rw [map_neg]; rw [neg_mul]
+  exact sub_eq_add_neg (Polynomial.C f.num) (Polynomial.C f.denom * Polynomial.X)
 
 中文:
 定理 irreducible_minpolyX'
@@ -452,7 +482,25 @@ theorem irreducible_minpolyX'
   let φ : K[X][X] := f.num.map (algebraMap ..) -
     Polynomial.C Polynomial.X * f.denom.map (algebraMap ..)
   have φ_map : φ.mapEquiv e.toRingEquiv = (f.minpolyX K[f]) := by
-    simp only [algebraMap_eq, map_sub, ma
+    simp only [algebraMap_eq, map_sub, mapEquiv_apply,
+      AlgEquiv.toRingEquiv_toRingHom, algEquivOfTranscendental_coe, Polynomial.map_map, map_mul,
+      map_C, RingHom.coe_coe, aeval_X, e, φ]
+    congr 2 <;> ext <;> simp
+  rw [← φ_map]; rw [MulEquiv.irreducible_iff]
+  have : φ = Bivariate.swap
+      (Polynomial.C f.num - Polynomial.X * Polynomial.C f.denom) := by
+    simp only [X_mul_C, Bivariate.swap_apply, aevalAeval, aevalAevalEquiv, Equiv.coe_fn_mk,
+      AlgHom.coe_comp, AlgHom.coe_restrictScalars', coe_aeval_eq_eval, Function.comp_apply,
+      aeval_sub, aeval_C, algebraMap_def, coe_mapRingHom, map_mul, aeval_X, eval_sub,
+      eval_map_algebraMap, Polynomial.eval_mul, Polynomial.eval_C]
+    rw [mul_comm]
+    rfl
+  rw [this]; rw [MulEquiv.irreducible_iff]
+  convert!
+    irreducible_C_mul_X_add_C (neg_ne_zero.mpr f.denom_ne_zero)
+      ((IsCoprime.neg_right_iff _ _).mpr f.isCoprime_num_denom).symm.isRelPrime using 1
+  rw [add_comm]; rw [X_mul_C]; rw [map_neg]; rw [neg_mul]
+  exact sub_eq_add_neg (Polynomial.C f.num) (Polynomial.C f.denom * Polynomial.X)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.toRingEquiv_toRingHom, MulEquiv, MulEquiv.irreducible_iff, Polynomial, Polynomial.C, Polynomial.X, Polynomial.algEquivOfTranscendental, Polynomial.map_map, RingHom, RingHom.coe_coe, aeval_X, algEquivOfTranscendental, algEquivOfTranscendental_coe, algebraMap, algebraMap_eq, coe_coe, e.toRingEquiv, f.denom.map, f.minpolyX
 -/
@@ -495,7 +543,11 @@ theorem irreducible_minpolyX
     ← IsPrimitive.irreducible_iff_irreducible_map_fraction_map]
   · exact f.irreducible_minpolyX' hf
   · apply (f.irreducible_minpolyX' hf).isPrimitive
- 
+    intro H
+    have := natDegree_map_le (f := algebraMap K[f] K⟮f⟯) (p := f.minpolyX K[f])
+    rw [f.minpolyX_map K[f] K⟮f⟯, H, nonpos_iff_eq_zero, f.natDegree_minpolyX,
+      Nat.max_eq_zero_iff, ← f.eq_C_iff] at this
+    exact hf this
 
 中文:
 定理 irreducible_minpolyX
@@ -508,7 +560,11 @@ theorem irreducible_minpolyX
     ← IsPrimitive.irreducible_iff_irreducible_map_fraction_map]
   · exact f.irreducible_minpolyX' hf
   · apply (f.irreducible_minpolyX' hf).isPrimitive
- 
+    intro H
+    have := natDegree_map_le (f := algebraMap K[f] K⟮f⟯) (p := f.minpolyX K[f])
+    rw [f.minpolyX_map K[f] K⟮f⟯, H, nonpos_iff_eq_zero, f.natDegree_minpolyX,
+      Nat.max_eq_zero_iff, ← f.eq_C_iff] at this
+    exact hf this
 
 Depends on / 依赖: IsPrimitive, IsPrimitive.irreducible_iff_irreducible_map_fraction_map, Nat.max_eq_zero_iff, UniqueFactorizationMonoid, algebraMap, eq_C_iff, f.eq_C_iff, f.irreducible_minpolyX, f.minpolyX, f.minpolyX_map, f.natDegree_minpolyX, f.transcendental_of_ne_C, irreducible_iff_irreducible_map_fraction_map, irreducible_minpolyX, isPrimitive, max_eq_zero_iff, minpolyX, minpolyX_map, natDegree_map_le, natDegree_minpolyX
 -/
@@ -535,7 +591,9 @@ theorem finrank_eq_max_natDegree
   · obtain ⟨c, rfl⟩ := hf
     rw [adjoin_simple_eq_bot_iff.mpr (show C c in ⊥ from ⟨c]; rw [rfl⟩)]; rw [finrank_bot']; rw [Module.finrank_of_not_finite fun H => Algebra.transcendental_iff_not_isAlgebraic.mp
 transcendental Algebra.IsAlgebraic.of_finite K K⟮X⟯]
-   
+    simp
+  rw [← (IntermediateField.adjoinXEquiv K⟮f⟯).toLinearEquiv.finrank_eq]; rw [adjoin.finrank (f.isAlgebraic_adjoin_simple_X hf).isIntegral]; rw [← minpoly.eq_of_irreducible (f.irreducible_minpolyX hf) f.minpolyX_aeval_X]; rw [mul_comm]; rw [natDegree_C_mul inv_ne_zero leadingCoeff_ne_zero.mpr fun H =>
+    hf ((minpolyX_eq_zero_iff f).mp H)]; rw [natDegree_minpolyX]
 
 中文:
 定理 finrank_eq_max_natDegree
@@ -544,7 +602,9 @@ transcendental Algebra.IsAlgebraic.of_finite K K⟮X⟯]
   · obtain ⟨c, rfl⟩ := hf
     rw [adjoin_simple_eq_bot_iff.mpr (show C c in ⊥ from ⟨c]; rw [rfl⟩)]; rw [finrank_bot']; rw [Module.finrank_of_not_finite fun H => Algebra.transcendental_iff_not_isAlgebraic.mp
 transcendental Algebra.IsAlgebraic.of_finite K K⟮X⟯]
-   
+    simp
+  rw [← (IntermediateField.adjoinXEquiv K⟮f⟯).toLinearEquiv.finrank_eq]; rw [adjoin.finrank (f.isAlgebraic_adjoin_simple_X hf).isIntegral]; rw [← minpoly.eq_of_irreducible (f.irreducible_minpolyX hf) f.minpolyX_aeval_X]; rw [mul_comm]; rw [natDegree_C_mul inv_ne_zero leadingCoeff_ne_zero.mpr fun H =>
+    hf ((minpolyX_eq_zero_iff f).mp H)]; rw [natDegree_minpolyX]
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.of_finite, Algebra.transcendental_iff_not_isAlgebraic.mp, IntermediateField, IntermediateField.adjoinXEquiv, IsAlgebraic, Module, Module.finrank_of_not_finite, adjoin, adjoin.finrank, adjoinXEquiv, adjoin_simple_eq_bot_iff, adjoin_simple_eq_bot_iff.mpr, eq_of_irreducible, f.irreducible_minpolyX, f.isAlgebraic_adjoin_simple_X, f.minpol, finrank, finrank_bot, finrank_eq
 -/

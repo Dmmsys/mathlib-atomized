@@ -234,7 +234,8 @@ instance lieRing
     apply lie_self
   leibniz_lie := by
     intros
-    apply SetCoe.
+    apply SetCoe.ext
+    apply leibniz_lie
 
 中文:
 实例 lieRing
@@ -254,7 +255,8 @@ instance lieRing
     apply lie_self
   leibniz_lie := by
     intros
-    apply SetCoe.
+    apply SetCoe.ext
+    apply leibniz_lie
 
 Depends on / 依赖: lie_mem, property, x.property, x.val, y.property, y.val
 -/
@@ -1847,7 +1849,9 @@ instance :
         simp only [Submodule.mem_carrier, mem_iInter, Submodule.coe_sInf, mem_ofPred_eq,
           forall_apply_eq_imp_iff₂, exists_imp, and_imp] at hx hy ⊢
         intro K hK
-        exact K.lie_mem (hx 
+        exact K.lie_mem (hx K hK) (hy K hK) }⟩
+
+@[simp]
 
 中文:
 实例 :
@@ -1858,7 +1862,9 @@ instance :
         simp only [Submodule.mem_carrier, mem_iInter, Submodule.coe_sInf, mem_ofPred_eq,
           forall_apply_eq_imp_iff₂, exists_imp, and_imp] at hx hy ⊢
         intro K hK
-        exact K.lie_mem (hx 
+        exact K.lie_mem (hx K hK) (hy K hK) }⟩
+
+@[simp]
 
 Depends on / 依赖: K.lie_mem, Submodule, Submodule.coe_sInf, Submodule.mem_carrier, and_imp, coe_sInf, exists_imp, lie_mem, mem_carrier, mem_iInter, mem_ofPred_eq
 -/
@@ -1996,7 +2002,8 @@ instance completeLattice
     le_top := fun _ _ _ => trivial
     inf := (· ⊓ ·)
     le_inf := fun _ _ _ h₁₂ h₁₃ _ hm => ⟨h₁₂ hm, h₁₃ hm⟩
-    inf_le_left := fun _ _ _ => A
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 中文:
 实例 completeLattice
@@ -2011,7 +2018,8 @@ instance completeLattice
     le_top := fun _ _ _ => trivial
     inf := (· ⊓ ·)
     le_inf := fun _ _ _ h₁₂ h₁₃ _ hm => ⟨h₁₂ hm, h₁₃ hm⟩
-    inf_le_left := fun _ _ _ => A
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 Depends on / 依赖: And.left, And.right, N.zero_mem, bot_le, completeLatticeOfInf, inf_le_left, inf_le_right, le_inf, le_top, mem_bot, sInf_glb, zero_mem
 -/
@@ -2819,7 +2827,14 @@ theorem coe_lieSpan_eq_span_of_forall_lie_eq_zero
     rw [lieSpan_le]
     exact subset_span
   intro x y hx hy
-  induction hx, hy using span_i
+  induction hx, hy using span_induction₂ with
+  | mem_mem x y hx hy => simp [hs x hx y hy]
+  | zero_left y hy => simp
+  | zero_right x hx => simp
+  | add_left x y z _ _ _ hx hy => simp [add_mem hx hy]
+  | add_right x y z _ _ _ hx hy => simp [add_mem hx hy]
+  | smul_left r x y _ _ h => simp [smul_mem _ r h]
+  | smul_right r x y _ _ h => simp [smul_mem _ r h]
 
 中文:
 定理 coe_lieSpan_eq_span_of_对任意_lie_eq_zero
@@ -2830,7 +2845,14 @@ theorem coe_lieSpan_eq_span_of_forall_lie_eq_zero
     rw [lieSpan_le]
     exact subset_span
   intro x y hx hy
-  induction hx, hy using span_i
+  induction hx, hy using span_induction₂ with
+  | mem_mem x y hx hy => simp [hs x hx y hy]
+  | zero_left y hy => simp
+  | zero_right x hx => simp
+  | add_left x y z _ _ _ hx hy => simp [add_mem hx hy]
+  | add_right x y z _ _ _ hx hy => simp [add_mem hx hy]
+  | smul_left r x y _ _ h => simp [smul_mem _ r h]
+  | smul_right r x y _ _ h => simp [smul_mem _ r h]
 
 Depends on / 依赖: LieSubalgebra, add_left, add_mem, add_right, le_antisymm, lieSpan_le, lie_mem, mem_mem, submodule_span_le_lieSpan, subset_span, zero_left, zero_right
 -/
@@ -3011,7 +3033,8 @@ theorem lieSpan_induction
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       zero_mem' := ⟨_, zero⟩
       smul_mem' := fun r => fun ⟨_, hpx⟩ => ⟨_, smul r _ _ hpx⟩
-      lie_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, lie _ _ _ _ hpx
+      lie_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, lie _ _ _ _ hpx hpy⟩ }
+.elim fun _ => id .mpr (fun y hy => ⟨subset_lieSpan hy, mem y hy⟩) hx exact lieSpan_le (K := p)
 
 中文:
 定理 lieSpan_induction
@@ -3022,7 +3045,8 @@ theorem lieSpan_induction
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       zero_mem' := ⟨_, zero⟩
       smul_mem' := fun r => fun ⟨_, hpx⟩ => ⟨_, smul r _ _ hpx⟩
-      lie_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, lie _ _ _ _ hpx
+      lie_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, lie _ _ _ _ hpx hpy⟩ }
+.elim fun _ => id .mpr (fun y hy => ⟨subset_lieSpan hy, mem y hy⟩) hx exact lieSpan_le (K := p)
 
 Depends on / 依赖: LieSubalgebra, add_mem, carrier, lieSpan_le, lie_mem, smul_mem, subset_lieSpan, zero_mem
 -/
@@ -3054,7 +3078,9 @@ le_antisymm (this s) by simpa using (this (-s))
   induction hx using lieSpan_induction with
 | mem y h => exact neg_mem_iff.mp subset_lieSpan Set.mem_neg.mp h
   | zero => exact zero_mem _
-  | add _ _ _ _ hu hv => ex
+  | add _ _ _ _ hu hv => exact add_mem hu hv
+  | smul t _ _ hu => exact SMulMemClass.smul_mem t hu
+  | lie _ _ _ _ hu hv => exact lie_mem _ hu hv
 
 中文:
 引理 lieSpan_neg
@@ -3066,7 +3092,9 @@ le_antisymm (this s) by simpa using (this (-s))
   induction hx using lieSpan_induction with
 | mem y h => exact neg_mem_iff.mp subset_lieSpan Set.mem_neg.mp h
   | zero => exact zero_mem _
-  | add _ _ _ _ hu hv => ex
+  | add _ _ _ _ hu hv => exact add_mem hu hv
+  | smul t _ _ hu => exact SMulMemClass.smul_mem t hu
+  | lie _ _ _ _ hu hv => exact lie_mem _ hu hv
 -/
 @[simp] lemma lieSpan_neg : lieSpan R L (-s) = lieSpan R L s := by
   suffices forall s : Set L, lieSpan R L (-s) <= lieSpan R L s from
@@ -3094,7 +3122,7 @@ lemma lieSpan_lieSpan_coe_preimage
   | zero => exact zero_mem _
   | add u v _ _ hu hv => revert hu hv; exact add_mem
   | smul t u _ hu => revert hu; exact LieSubalgebra.smul_mem _ _
-  | lie u v _ _ hu hv => 
+  | lie u v _ _ hu hv => revert hu hv; exact LieSubalgebra.lie_mem _
 
 中文:
 引理 lieSpan_lieSpan_coe_preimage
@@ -3107,7 +3135,7 @@ lemma lieSpan_lieSpan_coe_preimage
   | zero => exact zero_mem _
   | add u v _ _ hu hv => revert hu hv; exact add_mem
   | smul t u _ hu => revert hu; exact LieSubalgebra.smul_mem _ _
-  | lie u v _ _ hu hv => 
+  | lie u v _ _ hu hv => revert hu hv; exact LieSubalgebra.lie_mem _
 -/
 @[simp] lemma lieSpan_lieSpan_coe_preimage : lieSpan R _ (((↑) : lieSpan R L s -> L) ⁻¹' s) = ⊤ := by
   rw [eq_top_iff]
@@ -3133,7 +3161,16 @@ lemma comap_lieSpan_range_eq
     clear hx
     induction hx' using lieSpan_induction with
     | mem u hu =>
-have (i : ι) : f i in lieSpan R K (range f) := subset_lieSpan mem_range_
+have (i : ι) : f i in lieSpan R K (range f) := subset_lieSpan mem_range_self i
+      aesop
+    | zero => exact zero_mem _
+    | add u v _ _ hu hv => revert hu hv; exact add_mem
+    | smul t u _ hu => revert hu; exact LieSubalgebra.smul_mem _ _
+    | lie u v _ _ hu hv => revert hu hv; exact lie_mem _
+  · rw [lieSpan_le]
+    rintro - ⟨i, rfl⟩
+    simp only [SetLike.mem_coe, mem_comap, coe_incl]
+exact subset_lieSpan by simp
 
 中文:
 引理 comap_lieSpan_range_eq
@@ -3146,7 +3183,16 @@ have (i : ι) : f i in lieSpan R K (range f) := subset_lieSpan mem_range_
     clear hx
     induction hx' using lieSpan_induction with
     | mem u hu =>
-have (i : ι) : f i in lieSpan R K (range f) := subset_lieSpan mem_range_
+have (i : ι) : f i in lieSpan R K (range f) := subset_lieSpan mem_range_self i
+      aesop
+    | zero => exact zero_mem _
+    | add u v _ _ hu hv => revert hu hv; exact add_mem
+    | smul t u _ hu => revert hu; exact LieSubalgebra.smul_mem _ _
+    | lie u v _ _ hu hv => revert hu hv; exact lie_mem _
+  · rw [lieSpan_le]
+    rintro - ⟨i, rfl⟩
+    simp only [SetLike.mem_coe, mem_comap, coe_incl]
+exact subset_lieSpan by simp
 
 Depends on / 依赖: K.incl, LieSubalgebra, LieSubalgebra.smul_mem, add_mem, coe_incl, le_antisymm, lieSpan, lieSpan_induction, lieSpan_le, lie_mem, mem_comap, mem_range_self, revert, smul_mem, subset_lieSpan, zero_mem
 -/

@@ -56,7 +56,62 @@ theorem existsUnique_dist_eq_of_insert
   simp only at hcc hcr hcccru
   let x := dist cc (orthogonalProjection s p)
   let y := dist p (orthogonalProjection s p)
-  have hy0 : y != 0 := dist_orthogonalProjection_ne_zero_of_notMe
+  have hy0 : y != 0 := dist_orthogonalProjection_ne_zero_of_notMem hp
+  let ycc₂ := (x * x + y * y - cr * cr) / (2 * y)
+  let cc₂ := (ycc₂ / y) • (p -ᵥ orthogonalProjection s p : V) +ᵥ cc
+  let cr₂ := √(cr * cr + ycc₂ * ycc₂)
+  use ⟨cc₂, cr₂⟩
+  simp -zeta -proj only
+  have hpo : p = (1 : Real) • (p -ᵥ orthogonalProjection s p : V) +ᵥ
+    (orthogonalProjection s p : P) := by
+    simp
+  constructor
+  · constructor
+    · refine vadd_mem_of_mem_direction ?_ (mem_affineSpan Real (Set.mem_insert_of_mem _ hcc))
+      rw [direction_affineSpan]
+      exact
+        Submodule.smul_mem _ _
+          (vsub_mem_vectorSpan Real (Set.mem_insert _ _)
+            (Set.mem_insert_of_mem _ (orthogonalProjection_mem _)))
+    · intro p₁ hp₁
+      rw [Sphere.mem_coe]; rw [mem_sphere]; rw [← mul_self_inj_of_nonneg dist_nonneg (Real.sqrt_nonneg _)]; rw [Real.mul_self_sqrt (add_nonneg (mul_self_nonneg _) (mul_self_nonneg _))]
+      rcases hp₁ with hp₁ | hp₁
+      · rw [hp₁, hpo,
+          dist_sq_smul_orthogonal_vadd_smul_orthogonal_vadd (orthogonalProjection_mem p) hcc _ _
+            (vsub_orthogonalProjection_mem_direction_orthogonal s p),
+          Real.norm_eq_abs, abs_mul_abs_self, ← dist_eq_norm_vsub V p, dist_comm _ cc]
+        simp only [ycc₂]
+        field
+      · rw [dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq _ (hps hp₁),
+          orthogonalProjection_vadd_smul_vsub_orthogonalProjection _ _ hcc, Subtype.coe_mk,
+          dist_of_mem_subset_mk_sphere hp₁ hcr, dist_eq_norm_vsub V cc₂ cc, vadd_vsub, norm_smul, ←
+          dist_eq_norm_vsub V, Real.norm_eq_abs, abs_div, abs_of_nonneg dist_nonneg,
+          div_mul_cancel₀ _ hy0, abs_mul_abs_self]
+  · rintro ⟨cc₃, cr₃⟩ ⟨hcc₃, hcr₃⟩
+    simp only at hcc₃ hcr₃
+    obtain ⟨t₃, cc₃', hcc₃', hcc₃''⟩ :
+      exists r : Real, exists p0 in s, cc₃ = r • (p -ᵥ ↑((orthogonalProjection s) p)) +ᵥ p0 := by
+      rwa [mem_affineSpan_insert_iff (orthogonalProjection_mem p)] at hcc₃
+    have hcr₃' : exists r, forall p₁ in ps, dist p₁ cc₃ = r :=
+      ⟨cr₃, fun p₁ hp₁ => dist_of_mem_subset_mk_sphere (Set.mem_insert_of_mem _ hp₁) hcr₃⟩
+    rw [exists_dist_eq_iff_exists_dist_orthogonalProjection_eq hps cc₃]; rw [hcc₃'']; rw [orthogonalProjection_vadd_smul_vsub_orthogonalProjection _ _ hcc₃'] at hcr₃'
+    obtain ⟨cr₃', hcr₃'⟩ := hcr₃'
+    have hu := hcccru ⟨cc₃', cr₃'⟩
+    simp only at hu
+    replace hu := hu ⟨hcc₃', hcr₃'⟩
+    cases hu
+    have hcr₃val : cr₃ = √(cr * cr + t₃ * y * (t₃ * y)) := by
+      obtain ⟨p0, hp0⟩ := hnps
+      have h' : ↑(⟨cc, hcc₃'⟩ : s) = cc := rfl
+      rw [← dist_of_mem_subset_mk_sphere (Set.mem_insert_of_mem _ hp0) hcr₃]; rw [hcc₃'']; rw [←
+        mul_self_inj_of_nonneg dist_nonneg (Real.sqrt_nonneg _)]; rw [Real.mul_self_sqrt (add_nonneg (mul_self_nonneg _) (mul_self_nonneg _))]; rw [dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq _ (hps hp0)]; rw [orthogonalProjection_vadd_smul_vsub_orthogonalProjection _ _ hcc₃']; rw [h']; rw [dist_of_mem_subset_mk_sphere hp0 hcr]; rw [dist_eq_norm_vsub V _ cc]; rw [vadd_vsub]; rw [norm_smul]; rw [←
+        dist_eq_norm_vsub V p]; rw [Real.norm_eq_abs]; rw [← mul_assoc]; rw [mul_comm _ |t₃|]; rw [← mul_assoc]; rw [abs_mul_abs_self]
+      ring
+    replace hcr₃ := dist_of_mem_subset_mk_sphere (Set.mem_insert _ _) hcr₃
+    rw [hpo]; rw [hcc₃'']; rw [hcr₃val]; rw [← mul_self_inj_of_nonneg dist_nonneg (Real.sqrt_nonneg _)]; rw [dist_sq_smul_orthogonal_vadd_smul_orthogonal_vadd (orthogonalProjection_mem p) hcc₃' _ _
+        (vsub_orthogonalProjection_mem_direction_orthogonal s p)]; rw [Real.norm_eq_abs]; rw [abs_mul_abs_self]; rw [dist_comm]; rw [← dist_eq_norm_vsub V p]; rw [Real.mul_self_sqrt (add_nonneg (mul_self_nonneg _) (mul_self_nonneg _))] at hcr₃
+    have : t₃ * y = ycc₂ := by grind
+    grind
 
 中文:
 定理 存在Unique_dist_eq_of_insert
@@ -67,7 +122,62 @@ theorem existsUnique_dist_eq_of_insert
   simp only at hcc hcr hcccru
   let x := dist cc (orthogonalProjection s p)
   let y := dist p (orthogonalProjection s p)
-  have hy0 : y != 0 := dist_orthogonalProjection_ne_zero_of_notMe
+  have hy0 : y != 0 := dist_orthogonalProjection_ne_zero_of_notMem hp
+  let ycc₂ := (x * x + y * y - cr * cr) / (2 * y)
+  let cc₂ := (ycc₂ / y) • (p -ᵥ orthogonalProjection s p : V) +ᵥ cc
+  let cr₂ := √(cr * cr + ycc₂ * ycc₂)
+  use ⟨cc₂, cr₂⟩
+  simp -zeta -proj only
+  have hpo : p = (1 : Real) • (p -ᵥ orthogonalProjection s p : V) +ᵥ
+    (orthogonalProjection s p : P) := by
+    simp
+  constructor
+  · constructor
+    · refine vadd_mem_of_mem_direction ?_ (mem_affineSpan Real (Set.mem_insert_of_mem _ hcc))
+      rw [direction_affineSpan]
+      exact
+        Submodule.smul_mem _ _
+          (vsub_mem_vectorSpan Real (Set.mem_insert _ _)
+            (Set.mem_insert_of_mem _ (orthogonalProjection_mem _)))
+    · intro p₁ hp₁
+      rw [Sphere.mem_coe]; rw [mem_sphere]; rw [← mul_self_inj_of_nonneg dist_nonneg (Real.sqrt_nonneg _)]; rw [Real.mul_self_sqrt (add_nonneg (mul_self_nonneg _) (mul_self_nonneg _))]
+      rcases hp₁ with hp₁ | hp₁
+      · rw [hp₁, hpo,
+          dist_sq_smul_orthogonal_vadd_smul_orthogonal_vadd (orthogonalProjection_mem p) hcc _ _
+            (vsub_orthogonalProjection_mem_direction_orthogonal s p),
+          Real.norm_eq_abs, abs_mul_abs_self, ← dist_eq_norm_vsub V p, dist_comm _ cc]
+        simp only [ycc₂]
+        field
+      · rw [dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq _ (hps hp₁),
+          orthogonalProjection_vadd_smul_vsub_orthogonalProjection _ _ hcc, Subtype.coe_mk,
+          dist_of_mem_subset_mk_sphere hp₁ hcr, dist_eq_norm_vsub V cc₂ cc, vadd_vsub, norm_smul, ←
+          dist_eq_norm_vsub V, Real.norm_eq_abs, abs_div, abs_of_nonneg dist_nonneg,
+          div_mul_cancel₀ _ hy0, abs_mul_abs_self]
+  · rintro ⟨cc₃, cr₃⟩ ⟨hcc₃, hcr₃⟩
+    simp only at hcc₃ hcr₃
+    obtain ⟨t₃, cc₃', hcc₃', hcc₃''⟩ :
+      exists r : Real, exists p0 in s, cc₃ = r • (p -ᵥ ↑((orthogonalProjection s) p)) +ᵥ p0 := by
+      rwa [mem_affineSpan_insert_iff (orthogonalProjection_mem p)] at hcc₃
+    have hcr₃' : exists r, forall p₁ in ps, dist p₁ cc₃ = r :=
+      ⟨cr₃, fun p₁ hp₁ => dist_of_mem_subset_mk_sphere (Set.mem_insert_of_mem _ hp₁) hcr₃⟩
+    rw [exists_dist_eq_iff_exists_dist_orthogonalProjection_eq hps cc₃]; rw [hcc₃'']; rw [orthogonalProjection_vadd_smul_vsub_orthogonalProjection _ _ hcc₃'] at hcr₃'
+    obtain ⟨cr₃', hcr₃'⟩ := hcr₃'
+    have hu := hcccru ⟨cc₃', cr₃'⟩
+    simp only at hu
+    replace hu := hu ⟨hcc₃', hcr₃'⟩
+    cases hu
+    have hcr₃val : cr₃ = √(cr * cr + t₃ * y * (t₃ * y)) := by
+      obtain ⟨p0, hp0⟩ := hnps
+      have h' : ↑(⟨cc, hcc₃'⟩ : s) = cc := rfl
+      rw [← dist_of_mem_subset_mk_sphere (Set.mem_insert_of_mem _ hp0) hcr₃]; rw [hcc₃'']; rw [←
+        mul_self_inj_of_nonneg dist_nonneg (Real.sqrt_nonneg _)]; rw [Real.mul_self_sqrt (add_nonneg (mul_self_nonneg _) (mul_self_nonneg _))]; rw [dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq _ (hps hp0)]; rw [orthogonalProjection_vadd_smul_vsub_orthogonalProjection _ _ hcc₃']; rw [h']; rw [dist_of_mem_subset_mk_sphere hp0 hcr]; rw [dist_eq_norm_vsub V _ cc]; rw [vadd_vsub]; rw [norm_smul]; rw [←
+        dist_eq_norm_vsub V p]; rw [Real.norm_eq_abs]; rw [← mul_assoc]; rw [mul_comm _ |t₃|]; rw [← mul_assoc]; rw [abs_mul_abs_self]
+      ring
+    replace hcr₃ := dist_of_mem_subset_mk_sphere (Set.mem_insert _ _) hcr₃
+    rw [hpo]; rw [hcc₃'']; rw [hcr₃val]; rw [← mul_self_inj_of_nonneg dist_nonneg (Real.sqrt_nonneg _)]; rw [dist_sq_smul_orthogonal_vadd_smul_orthogonal_vadd (orthogonalProjection_mem p) hcc₃' _ _
+        (vsub_orthogonalProjection_mem_direction_orthogonal s p)]; rw [Real.norm_eq_abs]; rw [abs_mul_abs_self]; rw [dist_comm]; rw [← dist_eq_norm_vsub V p]; rw [Real.mul_self_sqrt (add_nonneg (mul_self_nonneg _) (mul_self_nonneg _))] at hcr₃
+    have : t₃ * y = ycc₂ := by grind
+    grind
 
 Depends on / 依赖: Nonempty, Set.Nonempty.to_subtype, dist_orthogonalProjection_ne_zero_of_notMem, hcccru, hnps.mono, orthogonalProjection, to_subtype
 -/
@@ -156,7 +266,39 @@ theorem _root_.AffineIndependent.existsUnique_dist_eq
     · rw [Fintype.card_eq_one_iff] at hn
       obtain ⟨i, hi⟩ := hn
       have : Unique ι := ⟨⟨i⟩, hi⟩
- 
+      use ⟨p i, 0⟩
+      simp only [Set.range_unique, AffineSubspace.mem_affineSpan_singleton]
+      constructor
+      · simp_rw [hi default, Set.singleton_subset_iff]
+        exact ⟨⟨⟩, by simp only [Metric.sphere_zero, Set.mem_singleton_iff]⟩
+      · rintro ⟨cc, cr⟩
+        rintro ⟨rfl, hdist⟩
+        replace hdist : 0 = cr := by simpa using hdist
+        rw [hi default]; rw [hdist]
+    · have i := hne.some
+      let ι2 := { x // x != i }
+      classical
+      have hc : Fintype.card ι2 = m + 1 := by
+        rw [Fintype.card_of_subtype {x | x != i}]
+        · rw [Finset.filter_not, Finset.filter_eq' _ i, if_pos (Finset.mem_univ _),
+            Finset.card_sdiff, Finset.card_univ, hn]
+          simp
+        · simp
+      have : Nonempty ι2 := Fintype.card_pos_iff.1 (hc.symm ▸ Nat.zero_lt_succ _)
+      have ha2 : AffineIndependent Real fun i2 : ι2 => p i2 := ha.subtype _
+      replace hm := hm ha2 _ hc
+      have hr : Set.range p = insert (p i) (Set.range fun i2 : ι2 => p i2) := by
+        change _ = insert _ (Set.range fun i2 : { x | x != i } => p i2)
+        rw [← Set.image_eq_range]; rw [← Set.image_univ]; rw [← Set.image_insert_eq]
+        congr with j
+        simp [Classical.em]
+      rw [hr]; rw [← affineSpan_insert_affineSpan]
+      refine existsUnique_dist_eq_of_insert (Set.range_nonempty _) (subset_affineSpan Real _) ?_ hm
+      convert! ha.notMem_affineSpan_sdiff i Set.univ
+      change (Set.range fun i2 : { x | x != i } => p i2) = _
+      rw [← Set.image_eq_range]
+      congr 1 with j
+      simp
 
 中文:
 定理 _root_.AffineIndependent.存在Unique_dist_eq
@@ -173,7 +315,39 @@ theorem _root_.AffineIndependent.existsUnique_dist_eq
     · rw [Fintype.card_eq_one_iff] at hn
       obtain ⟨i, hi⟩ := hn
       have : Unique ι := ⟨⟨i⟩, hi⟩
- 
+      use ⟨p i, 0⟩
+      simp only [Set.range_unique, AffineSubspace.mem_affineSpan_singleton]
+      constructor
+      · simp_rw [hi default, Set.singleton_subset_iff]
+        exact ⟨⟨⟩, by simp only [Metric.sphere_zero, Set.mem_singleton_iff]⟩
+      · rintro ⟨cc, cr⟩
+        rintro ⟨rfl, hdist⟩
+        replace hdist : 0 = cr := by simpa using hdist
+        rw [hi default]; rw [hdist]
+    · have i := hne.some
+      let ι2 := { x // x != i }
+      classical
+      have hc : Fintype.card ι2 = m + 1 := by
+        rw [Fintype.card_of_subtype {x | x != i}]
+        · rw [Finset.filter_not, Finset.filter_eq' _ i, if_pos (Finset.mem_univ _),
+            Finset.card_sdiff, Finset.card_univ, hn]
+          simp
+        · simp
+      have : Nonempty ι2 := Fintype.card_pos_iff.1 (hc.symm ▸ Nat.zero_lt_succ _)
+      have ha2 : AffineIndependent Real fun i2 : ι2 => p i2 := ha.subtype _
+      replace hm := hm ha2 _ hc
+      have hr : Set.range p = insert (p i) (Set.range fun i2 : ι2 => p i2) := by
+        change _ = insert _ (Set.range fun i2 : { x | x != i } => p i2)
+        rw [← Set.image_eq_range]; rw [← Set.image_univ]; rw [← Set.image_insert_eq]
+        congr with j
+        simp [Classical.em]
+      rw [hr]; rw [← affineSpan_insert_affineSpan]
+      refine existsUnique_dist_eq_of_insert (Set.range_nonempty _) (subset_affineSpan Real _) ?_ hm
+      convert! ha.notMem_affineSpan_sdiff i Set.univ
+      change (Set.range fun i2 : { x | x != i } => p i2) = _
+      rw [← Set.image_eq_range]
+      congr 1 with j
+      simp
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.mem_affineSpan_singleton, Fintype, Fintype.card, Fintype.card_eq_one_iff, Fintype.card_pos_iff, Metric, Metric.sphere_zero, Set.mem_singleton_iff, Set.range_unique, Set.singleton_subset_iff, Unique, card_eq_one_iff, card_pos_iff, generalizing, mem_affineSpan_singleton, mem_singleton_iff, nonempty_fintype, range_unique, simp_rw
 -/
@@ -635,7 +809,15 @@ theorem circumcenter_eq_centroid
       dist (s.points i) (Finset.univ.centroid Real s.points) =
         dist (s.points j) (Finset.univ.centroid Real s.points) := by
     intro i hi j hj hij
-    rw [Finset.centroid_pair_fin]; rw [dist_eq_norm_vsub V (s.points i)]; rw [dist_e
+    rw [Finset.centroid_pair_fin]; rw [dist_eq_norm_vsub V (s.points i)]; rw [dist_eq_norm_vsub V (s.points j)]; rw [vsub_vadd_eq_vsub_sub]; rw [vsub_vadd_eq_vsub_sub]; rw [←
+      one_smul Real (s.points i -ᵥ s.points 0)]; rw [← one_smul Real (s.points j -ᵥ s.points 0)]
+    fin_cases i <;> fin_cases j <;> simp [-one_smul, ← sub_smul] <;> norm_num
+  rw [Set.pairwise_eq_iff_exists_eq] at hr
+  obtain ⟨r, hr⟩ := hr
+  exact
+    (s.eq_circumcenter_of_dist_eq
+        (centroid_mem_affineSpan_of_card_eq_add_one Real _ (Finset.card_fin 2)) fun i =>
+        hr i (Set.mem_univ _)).symm
 
 中文:
 定理 circumcenter_eq_centroid
@@ -646,7 +828,15 @@ theorem circumcenter_eq_centroid
       dist (s.points i) (Finset.univ.centroid Real s.points) =
         dist (s.points j) (Finset.univ.centroid Real s.points) := by
     intro i hi j hj hij
-    rw [Finset.centroid_pair_fin]; rw [dist_eq_norm_vsub V (s.points i)]; rw [dist_e
+    rw [Finset.centroid_pair_fin]; rw [dist_eq_norm_vsub V (s.points i)]; rw [dist_eq_norm_vsub V (s.points j)]; rw [vsub_vadd_eq_vsub_sub]; rw [vsub_vadd_eq_vsub_sub]; rw [←
+      one_smul Real (s.points i -ᵥ s.points 0)]; rw [← one_smul Real (s.points j -ᵥ s.points 0)]
+    fin_cases i <;> fin_cases j <;> simp [-one_smul, ← sub_smul] <;> norm_num
+  rw [Set.pairwise_eq_iff_exists_eq] at hr
+  obtain ⟨r, hr⟩ := hr
+  exact
+    (s.eq_circumcenter_of_dist_eq
+        (centroid_mem_affineSpan_of_card_eq_add_one Real _ (Finset.card_fin 2)) fun i =>
+        hr i (Set.mem_univ _)).symm
 
 Depends on / 依赖: Finset, Finset.centroid_pair_fin, Finset.univ.centroid, Pairwise, Set.Pairwise, Set.univ, centroid, centroid_pair_fin, dist_eq_norm_vsub, fin_cases, one_smu, one_smul, points, s.points, vsub_vadd_eq_vsub_sub
 -/
@@ -899,7 +1089,10 @@ theorem orthogonalProjection_eq_circumcenter_of_exists_dist_eq
     use r
     refine Set.forall_mem_range.mpr ?_
     exact hr
-  r
+  rw [exists_dist_eq_iff_exists_dist_orthogonalProjection_eq (subset_affineSpan Real _) p] at hr
+  obtain ⟨r, hr⟩ := hr
+  exact
+    s.eq_circumcenter_of_dist_eq (orthogonalProjection_mem p) fun i => hr _ (Set.mem_range_self i)
 
 中文:
 定理 orthogonalProjection_eq_circumcenter_of_存在_dist_eq
@@ -912,7 +1105,10 @@ theorem orthogonalProjection_eq_circumcenter_of_exists_dist_eq
     use r
     refine Set.forall_mem_range.mpr ?_
     exact hr
-  r
+  rw [exists_dist_eq_iff_exists_dist_orthogonalProjection_eq (subset_affineSpan Real _) p] at hr
+  obtain ⟨r, hr⟩ := hr
+  exact
+    s.eq_circumcenter_of_dist_eq (orthogonalProjection_mem p) fun i => hr _ (Set.mem_range_self i)
 
 Depends on / 依赖: Set.forall_mem_range.mpr, Set.mem_range_self, Set.range, eq_circumcenter_of_dist_eq, exists_dist_eq_iff_exists_dist_orthogonalProjection_eq, forall_mem_range, mem_range_self, orthogonalProjection_mem, points, s.eq_circumcenter_of_dist_eq, s.points, subset_affineSpan
 -/
@@ -991,7 +1187,10 @@ theorem circumcenter_eq_of_range_eq
   have hr : forall i, dist (s₂.points i) s₁.circumcenter = s₁.circumradius := by
     intro i
     have hi : s₂.points i in Set.range s₂.points := Set.mem_range_self _
-    rw [← h]; rw [Se
+    rw [← h]; rw [Set.mem_range] at hi
+    rcases hi with ⟨j, hj⟩
+    rw [← hj]; rw [s₁.dist_circumcenter_eq_circumradius j]
+  exact s₂.eq_circumcenter_of_dist_eq hs hr
 
 中文:
 定理 circumcenter_eq_of_range_eq
@@ -1002,7 +1201,10 @@ theorem circumcenter_eq_of_range_eq
   have hr : forall i, dist (s₂.points i) s₁.circumcenter = s₁.circumradius := by
     intro i
     have hi : s₂.points i in Set.range s₂.points := Set.mem_range_self _
-    rw [← h]; rw [Se
+    rw [← h]; rw [Set.mem_range] at hi
+    rcases hi with ⟨j, hj⟩
+    rw [← hj]; rw [s₁.dist_circumcenter_eq_circumradius j]
+  exact s₂.eq_circumcenter_of_dist_eq hs hr
 
 Depends on / 依赖: Set.mem_range, Set.mem_range_self, Set.range, affineSpan, circumcenter, circumcenter_mem_affineSpan, circumradius, dist_circumcenter_eq_circumradius, eq_circumcenter_of_dist_eq, mem_range, mem_range_self, points
 -/
@@ -1092,7 +1294,11 @@ theorem sum_pointsWithCircumcenter
     obtain i | - := x
     · exact mem_insert_of_mem (mem_map_of_mem _ (mem_univ i))
     · exact mem_insert_self _ _
-  change _ = (∑ i, f (pointIn
+  change _ = (∑ i, f (pointIndexEmbedding n i)) + _
+  rw [add_comm]; rw [h]; rw [← sum_map]; rw [sum_insert]
+  simp_rw [Finset.mem_map, not_exists]
+  rintro x ⟨_, h⟩
+  injection h
 
 中文:
 定理 sum_pointsWithCircumcenter
@@ -1105,7 +1311,11 @@ theorem sum_pointsWithCircumcenter
     obtain i | - := x
     · exact mem_insert_of_mem (mem_map_of_mem _ (mem_univ i))
     · exact mem_insert_self _ _
-  change _ = (∑ i, f (pointIn
+  change _ = (∑ i, f (pointIndexEmbedding n i)) + _
+  rw [add_comm]; rw [h]; rw [← sum_map]; rw [sum_insert]
+  simp_rw [Finset.mem_map, not_exists]
+  rintro x ⟨_, h⟩
+  injection h
 
 Depends on / 依赖: Finset, Finset.mem_map, add_comm, circumcenterIndex, classical, injection, insert, mem_insert_of_mem, mem_insert_self, mem_map, mem_map_of_mem, mem_univ, not_exists, pointIndexEmbedding, simp_rw, sum_insert, sum_map, univ.map
 -/
@@ -1334,6 +1544,10 @@ theorem centroid_eq_affineCombination_of_pointsWithCircumcenter
     sum_pointsWithCircumcenter, centroidWeightsWithCircumcenter,
     pointsWithCircumcenter_point, zero_smul, add_zero, centroidWeights,
     ← sum_indicator_subset_of_eq_zero (Function.const (Fin (n + 1)) (#fs : Real)⁻¹)
+      (fun i wi => wi • (s.points i -ᵥ Classical.choice AddTorsor.nonempty)) fs.subset_univ fun _ =>
+      zero_smul Real _,
+    Set.indicator_apply]
+  congr
 
 中文:
 定理 centroid_eq_affineCombination_of_pointsWithCircumcenter
@@ -1343,6 +1557,10 @@ theorem centroid_eq_affineCombination_of_pointsWithCircumcenter
     sum_pointsWithCircumcenter, centroidWeightsWithCircumcenter,
     pointsWithCircumcenter_point, zero_smul, add_zero, centroidWeights,
     ← sum_indicator_subset_of_eq_zero (Function.const (Fin (n + 1)) (#fs : Real)⁻¹)
+      (fun i wi => wi • (s.points i -ᵥ Classical.choice AddTorsor.nonempty)) fs.subset_univ fun _ =>
+      zero_smul Real _,
+    Set.indicator_apply]
+  congr
 
 Depends on / 依赖: AddTorsor, AddTorsor.nonempty, Classical, Classical.choice, Function, Function.const, Set.indicator_apply, add_zero, affineCombination_apply, centroidWeights, centroidWeightsWithCircumcenter, centroid_def, choice, fs.subset_univ, indicator_apply, nonempty, points, pointsWithCircumcenter_point, s.points, simp_rw
 -/
@@ -1502,7 +1720,16 @@ theorem reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter
   set W : AffineSubspace Real P := affineSpan Real (s.points '' {i₁, i₂})
   have h_faces :
     (orthogonalProjection W s.circumcenter : P) =
-      ↑((s.face hc).orthogonalProjectionSpan 
+      ↑((s.face hc).orthogonalProjectionSpan s.circumcenter) := by
+    apply eq_orthogonalProjection_of_eq_subspace
+    simp [W]
+  rw [reflection_apply']; rw [h_faces]; rw [s.orthogonalProjection_circumcenter hc]; rw [circumcenter_eq_centroid]; rw [s.face_centroid_eq_centroid hc]; rw [centroid_eq_affineCombination_of_pointsWithCircumcenter]; rw [circumcenter_eq_affineCombination_of_pointsWithCircumcenter]; rw [← @vsub_eq_zero_iff_eq V]; rw [affineCombination_vsub]; rw [weightedVSub_vadd_affineCombination]; rw [affineCombination_vsub]; rw [weightedVSub_apply]; rw [sum_pointsWithCircumcenter]
+  simp_rw [Pi.sub_apply, Pi.add_apply, Pi.sub_apply, sub_smul, add_smul, sub_smul,
+    centroidWeightsWithCircumcenter, circumcenterWeightsWithCircumcenter,
+    reflectionCircumcenterWeightsWithCircumcenter, ite_smul, zero_smul, sub_zero,
+    apply_ite₂ (· + ·), add_zero, ← add_smul, hc, zero_sub, neg_smul, sub_self, add_zero]
+  convert! sum_const_zero
+  norm_num
 
 中文:
 定理 reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter
@@ -1513,7 +1740,16 @@ theorem reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter
   set W : AffineSubspace Real P := affineSpan Real (s.points '' {i₁, i₂})
   have h_faces :
     (orthogonalProjection W s.circumcenter : P) =
-      ↑((s.face hc).orthogonalProjectionSpan 
+      ↑((s.face hc).orthogonalProjectionSpan s.circumcenter) := by
+    apply eq_orthogonalProjection_of_eq_subspace
+    simp [W]
+  rw [reflection_apply']; rw [h_faces]; rw [s.orthogonalProjection_circumcenter hc]; rw [circumcenter_eq_centroid]; rw [s.face_centroid_eq_centroid hc]; rw [centroid_eq_affineCombination_of_pointsWithCircumcenter]; rw [circumcenter_eq_affineCombination_of_pointsWithCircumcenter]; rw [← @vsub_eq_zero_iff_eq V]; rw [affineCombination_vsub]; rw [weightedVSub_vadd_affineCombination]; rw [affineCombination_vsub]; rw [weightedVSub_apply]; rw [sum_pointsWithCircumcenter]
+  simp_rw [Pi.sub_apply, Pi.add_apply, Pi.sub_apply, sub_smul, add_smul, sub_smul,
+    centroidWeightsWithCircumcenter, circumcenterWeightsWithCircumcenter,
+    reflectionCircumcenterWeightsWithCircumcenter, ite_smul, zero_smul, sub_zero,
+    apply_ite₂ (· + ·), add_zero, ← add_smul, hc, zero_sub, neg_smul, sub_self, add_zero]
+  convert! sum_const_zero
+  norm_num
 -/
 theorem reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter {n : Nat}
     (s : Simplex Real P n) {i₁ i₂ : Fin (n + 1)} (h : i₁ != i₂) :
@@ -1615,7 +1851,12 @@ theorem exists_circumradius_eq_of_cospherical_subset
   have hsx : affineSpan Real (Set.range sx.points) = s := by
     refine
       sx.independent.affineSpan_eq_of_le_of_card_eq_finrank_add_one
-        (affineSpan_le_of_subset_coe
+        (affineSpan_le_of_subset_coe (hsxps.trans h)) ?_
+    simp [hd]
+  have hc : c in affineSpan Real (Set.range sx.points) := hsx.symm ▸ hc
+  exact
+    (sx.eq_circumradius_of_dist_eq hc fun i =>
+        hcr (sx.points i) (hsxps (Set.mem_range_self i))).symm
 
 中文:
 定理 存在_circumradius_eq_of_cospherical_subset
@@ -1628,7 +1869,12 @@ theorem exists_circumradius_eq_of_cospherical_subset
   have hsx : affineSpan Real (Set.range sx.points) = s := by
     refine
       sx.independent.affineSpan_eq_of_le_of_card_eq_finrank_add_one
-        (affineSpan_le_of_subset_coe
+        (affineSpan_le_of_subset_coe (hsxps.trans h)) ?_
+    simp [hd]
+  have hc : c in affineSpan Real (Set.range sx.points) := hsx.symm ▸ hc
+  exact
+    (sx.eq_circumradius_of_dist_eq hc fun i =>
+        hcr (sx.points i) (hsxps (Set.mem_range_self i))).symm
 
 Depends on / 依赖: Set.mem_range_self, Set.range, affineSpan, affineSpan_eq_of_le_of_card_eq_finrank_add_one, affineSpan_le_of_subset_coe, cospherical_iff_exists_mem_of_finiteDimensional, eq_circumradius_of_dist_eq, hsx.symm, hsxps.trans, independent, mem_range_self, points, sx.eq_circumradius_of_dist_eq, sx.independent.affineSpan_eq_of_le_of_card_eq_finrank_add_one, sx.points
 -/
@@ -1744,7 +1990,12 @@ theorem exists_circumcenter_eq_of_cospherical_subset
   have hsx : affineSpan Real (Set.range sx.points) = s := by
     refine
       sx.independent.affineSpan_eq_of_le_of_card_eq_finrank_add_one
-        (affineSpan_le_of_subset_coe
+        (affineSpan_le_of_subset_coe (hsxps.trans h)) ?_
+    simp [hd]
+  have hc : c in affineSpan Real (Set.range sx.points) := hsx.symm ▸ hc
+  exact
+    (sx.eq_circumcenter_of_dist_eq hc fun i =>
+        hcr (sx.points i) (hsxps (Set.mem_range_self i))).symm
 
 中文:
 定理 存在_circumcenter_eq_of_cospherical_subset
@@ -1757,7 +2008,12 @@ theorem exists_circumcenter_eq_of_cospherical_subset
   have hsx : affineSpan Real (Set.range sx.points) = s := by
     refine
       sx.independent.affineSpan_eq_of_le_of_card_eq_finrank_add_one
-        (affineSpan_le_of_subset_coe
+        (affineSpan_le_of_subset_coe (hsxps.trans h)) ?_
+    simp [hd]
+  have hc : c in affineSpan Real (Set.range sx.points) := hsx.symm ▸ hc
+  exact
+    (sx.eq_circumcenter_of_dist_eq hc fun i =>
+        hcr (sx.points i) (hsxps (Set.mem_range_self i))).symm
 
 Depends on / 依赖: Set.mem_range_self, Set.range, affineSpan, affineSpan_eq_of_le_of_card_eq_finrank_add_one, affineSpan_le_of_subset_coe, cospherical_iff_exists_mem_of_finiteDimensional, eq_circumcenter_of_dist_eq, hsx.symm, hsxps.trans, independent, mem_range_self, points, sx.eq_circumcenter_of_dist_eq, sx.independent.affineSpan_eq_of_le_of_card_eq_finrank_add_one, sx.points
 -/
@@ -1979,7 +2235,39 @@ theorem eq_or_eq_reflection_of_dist_eq
   have h₁' := s.orthogonalProjection_eq_circumcenter_of_dist_eq h₁
   have h₂' := s.orthogonalProjection_eq_circumcenter_of_dist_eq h₂
   rw [← affineSpan_insert_affineSpan]; rw [mem_affineSpan_insert_iff (orthogonalProjection_mem p)]
-    at hp₁ 
+    at hp₁ hp₂
+  obtain ⟨r₁, p₁o, hp₁o, hp₁⟩ := hp₁
+  obtain ⟨r₂, p₂o, hp₂o, hp₂⟩ := hp₂
+  obtain rfl : ↑(s.orthogonalProjectionSpan p₁) = p₁o := by
+    subst hp₁
+    exact s.coe_orthogonalProjection_vadd_smul_vsub_orthogonalProjection hp₁o
+  rw [h₁'] at hp₁
+  obtain rfl : ↑(s.orthogonalProjectionSpan p₂) = p₂o := by
+    subst hp₂
+    exact s.coe_orthogonalProjection_vadd_smul_vsub_orthogonalProjection hp₂o
+  rw [h₂'] at hp₂
+  have h : s.points 0 in span_s := mem_affineSpan Real (Set.mem_range_self _)
+  have hd₁ :
+    dist p₁ s.circumcenter * dist p₁ s.circumcenter = r * r - s.circumradius * s.circumradius :=
+    s.dist_circumcenter_sq_eq_sq_sub_circumradius h₁ h₁' h
+  have hd₂ :
+    dist p₂ s.circumcenter * dist p₂ s.circumcenter = r * r - s.circumradius * s.circumradius :=
+    s.dist_circumcenter_sq_eq_sq_sub_circumradius h₂ h₂' h
+  rw [← hd₂]; rw [hp₁]; rw [hp₂]; rw [dist_eq_norm_vsub V _ s.circumcenter]; rw [dist_eq_norm_vsub V _ s.circumcenter]; rw [vadd_vsub]; rw [vadd_vsub]; rw [← real_inner_self_eq_norm_mul_norm]; rw [← real_inner_self_eq_norm_mul_norm]; rw [real_inner_smul_left]; rw [real_inner_smul_left]; rw [real_inner_smul_right]; rw [real_inner_smul_right]; rw [←
+    mul_assoc]; rw [← mul_assoc] at hd₁
+  by_cases hp : p = s.orthogonalProjectionSpan p
+  · rw [Simplex.orthogonalProjectionSpan] at hp
+    rw [hp₁]; rw [hp₂]; rw [← hp]
+    simp only [true_or, smul_zero, vsub_self]
+  · have hz : ⟪p -ᵥ orthogonalProjection span_s p, p -ᵥ orthogonalProjection span_s p⟫ != 0 := by
+      simpa only [Ne, vsub_eq_zero_iff_eq, inner_self_eq_zero] using! hp
+    rw [mul_left_inj' hz]; rw [mul_self_eq_mul_self_iff] at hd₁
+    rw [hp₁]; rw [hp₂]
+    rcases hd₁ with hd₁ | hd₁
+    · left
+      rw [hd₁]
+    · right
+      rw [hd₁]; rw [reflection_vadd_smul_vsub_orthogonalProjection p r₂ s.circumcenter_mem_affineSpan]; rw [neg_smul]
 
 中文:
 定理 eq_or_eq_reflection_of_dist_eq
@@ -1989,7 +2277,39 @@ theorem eq_or_eq_reflection_of_dist_eq
   have h₁' := s.orthogonalProjection_eq_circumcenter_of_dist_eq h₁
   have h₂' := s.orthogonalProjection_eq_circumcenter_of_dist_eq h₂
   rw [← affineSpan_insert_affineSpan]; rw [mem_affineSpan_insert_iff (orthogonalProjection_mem p)]
-    at hp₁ 
+    at hp₁ hp₂
+  obtain ⟨r₁, p₁o, hp₁o, hp₁⟩ := hp₁
+  obtain ⟨r₂, p₂o, hp₂o, hp₂⟩ := hp₂
+  obtain rfl : ↑(s.orthogonalProjectionSpan p₁) = p₁o := by
+    subst hp₁
+    exact s.coe_orthogonalProjection_vadd_smul_vsub_orthogonalProjection hp₁o
+  rw [h₁'] at hp₁
+  obtain rfl : ↑(s.orthogonalProjectionSpan p₂) = p₂o := by
+    subst hp₂
+    exact s.coe_orthogonalProjection_vadd_smul_vsub_orthogonalProjection hp₂o
+  rw [h₂'] at hp₂
+  have h : s.points 0 in span_s := mem_affineSpan Real (Set.mem_range_self _)
+  have hd₁ :
+    dist p₁ s.circumcenter * dist p₁ s.circumcenter = r * r - s.circumradius * s.circumradius :=
+    s.dist_circumcenter_sq_eq_sq_sub_circumradius h₁ h₁' h
+  have hd₂ :
+    dist p₂ s.circumcenter * dist p₂ s.circumcenter = r * r - s.circumradius * s.circumradius :=
+    s.dist_circumcenter_sq_eq_sq_sub_circumradius h₂ h₂' h
+  rw [← hd₂]; rw [hp₁]; rw [hp₂]; rw [dist_eq_norm_vsub V _ s.circumcenter]; rw [dist_eq_norm_vsub V _ s.circumcenter]; rw [vadd_vsub]; rw [vadd_vsub]; rw [← real_inner_self_eq_norm_mul_norm]; rw [← real_inner_self_eq_norm_mul_norm]; rw [real_inner_smul_left]; rw [real_inner_smul_left]; rw [real_inner_smul_right]; rw [real_inner_smul_right]; rw [←
+    mul_assoc]; rw [← mul_assoc] at hd₁
+  by_cases hp : p = s.orthogonalProjectionSpan p
+  · rw [Simplex.orthogonalProjectionSpan] at hp
+    rw [hp₁]; rw [hp₂]; rw [← hp]
+    simp only [true_or, smul_zero, vsub_self]
+  · have hz : ⟪p -ᵥ orthogonalProjection span_s p, p -ᵥ orthogonalProjection span_s p⟫ != 0 := by
+      simpa only [Ne, vsub_eq_zero_iff_eq, inner_self_eq_zero] using! hp
+    rw [mul_left_inj' hz]; rw [mul_self_eq_mul_self_iff] at hd₁
+    rw [hp₁]; rw [hp₂]
+    rcases hd₁ with hd₁ | hd₁
+    · left
+      rw [hd₁]
+    · right
+      rw [hd₁]; rw [reflection_vadd_smul_vsub_orthogonalProjection p r₂ s.circumcenter_mem_affineSpan]; rw [neg_smul]
 
 Depends on / 依赖: Set.range, affineSpan, affineSpan_insert_affineSpan, coe_orthogonalProjection_vadd_smul_vsub_orthogonalProjection, mem_affineSpan_insert_iff, orthogonalProjectionSpan, orthogonalProjection_eq_circumcenter_of_dist_eq, orthogonalProjection_mem, points, s.coe_orthogonalProjection_vadd_smul_vsub_orthogonalProjection, s.orthogonalProjectionSpan, s.orthogonalProjection_eq_circumcenter_of_dist_eq, s.points, span_s
 -/

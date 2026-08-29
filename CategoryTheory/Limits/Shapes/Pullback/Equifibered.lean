@@ -190,7 +190,7 @@ theorem Equifibered.of_discrete
 @[deprecated (since := "2026-01-23")]
 alias _root_.CategoryTheory.mapPair_equifibered := Equifibered.of_discrete
 
-@[deprecated (since := "2026-01-
+@[deprecated (since := "2026-01-23")] alias equifibered_of_discrete := Equifibered.of_discrete
 
 中文:
 定理 Equifibered.of_discrete
@@ -204,7 +204,7 @@ alias _root_.CategoryTheory.mapPair_equifibered := Equifibered.of_discrete
 @[deprecated (since := "2026-01-23")]
 alias _root_.CategoryTheory.mapPair_equifibered := Equifibered.of_discrete
 
-@[deprecated (since := "2026-01-
+@[deprecated (since := "2026-01-23")] alias equifibered_of_discrete := Equifibered.of_discrete
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, Discrete, Discrete.functor_map_id, IsPullback, IsPullback.of_horiz_isIso, comp_id, functor_map_id, id_comp, of_horiz_isIso
 -/

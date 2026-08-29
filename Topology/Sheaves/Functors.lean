@@ -304,7 +304,16 @@ definition sheafPullbackIso
   · exact (presheafToSheaf (Opens.grothendieckTopology ↑X) A).mapIso
       (hf.isOpenMap.pullbackIso.app _) ≪≫
       (fullyFaithfulSheafToPresheaf (Opens.grothendieckTopology X) A).preimageIso
-      (isoSheafify (Op
+      (isoSheafify (Opens.grothendieckTopology X)
+      (TopCat.Presheaf.isSheaf_of_isOpenEmbedding hf F.2)).symm
+  · dsimp
+    rw [← Functor.map_comp_assoc]; rw [hf.isOpenMap.pullbackIso.hom.naturality]; rw [Sheaf.hom_ext_iff]
+    simp only [Functor.whiskeringLeft_obj_obj, Functor.whiskeringLeft_obj_map, Functor.map_comp,
+      isoSheafify_inv, Category.assoc]
+    rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]
+    dsimp [sheafPullback, Functor.sheafPushforwardContinuous, Sheaf.forget]
+    simp only [sheafifyMap_sheafifyLift, Category.comp_id, sheafifyMap_sheafifyLift_assoc]
+    rw [CategoryTheory.sheafifyLift_comp]
 
 中文:
 定义 sheafPullbackIso
@@ -314,7 +323,16 @@ definition sheafPullbackIso
   · exact (presheafToSheaf (Opens.grothendieckTopology ↑X) A).mapIso
       (hf.isOpenMap.pullbackIso.app _) ≪≫
       (fullyFaithfulSheafToPresheaf (Opens.grothendieckTopology X) A).preimageIso
-      (isoSheafify (Op
+      (isoSheafify (Opens.grothendieckTopology X)
+      (TopCat.Presheaf.isSheaf_of_isOpenEmbedding hf F.2)).symm
+  · dsimp
+    rw [← Functor.map_comp_assoc]; rw [hf.isOpenMap.pullbackIso.hom.naturality]; rw [Sheaf.hom_ext_iff]
+    simp only [Functor.whiskeringLeft_obj_obj, Functor.whiskeringLeft_obj_map, Functor.map_comp,
+      isoSheafify_inv, Category.assoc]
+    rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]; rw [ObjectProperty.FullSubcategory.comp_hom]
+    dsimp [sheafPullback, Functor.sheafPushforwardContinuous, Sheaf.forget]
+    simp only [sheafifyMap_sheafifyLift, Category.comp_id, sheafifyMap_sheafifyLift_assoc]
+    rw [CategoryTheory.sheafifyLift_comp]
 
 Depends on / 依赖: Functor, Functor.map_comp_assoc, Functor.whiskerin, NatIso, NatIso.ofComponents, Opens.grothendieckTopology, Presheaf, Sheaf.hom_ext_iff, Sheaf.pullbackIso, TopCat, TopCat.Presheaf.isSheaf_of_isOpenEmbedding, fullyFaithfulSheafToPresheaf, grothendieckTopology, hf.isOpenMap.pullbackIso.app, hf.isOpenMap.pullbackIso.hom.naturality, hom_ext_iff, isOpenMap, isSheaf_of_isOpenEmbedding, isoSheafify, mapIso
 -/

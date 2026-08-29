@@ -97,7 +97,8 @@ definition typeToCatObjectsAdj
       app C := (typeToCatObjectsAdjCounitApp C).toCatHom
 naturality := fun _ _ _ => Hom.ext Functor.hext (fun _ => rfl)
         (by intro ⟨_⟩ ⟨_⟩ f
-            obtain rfl := Disc
+            obtain rfl := Discrete.eq_of_hom f
+            cat_disch) } }
 
 中文:
 定义 typeToCatObjectsAdj
@@ -109,7 +110,8 @@ naturality := fun _ _ _ => Hom.ext Functor.hext (fun _ => rfl)
       app C := (typeToCatObjectsAdjCounitApp C).toCatHom
 naturality := fun _ _ _ => Hom.ext Functor.hext (fun _ => rfl)
         (by intro ⟨_⟩ ⟨_⟩ f
-            obtain rfl := Disc
+            obtain rfl := Discrete.eq_of_hom f
+            cat_disch) } }
 
 Depends on / 依赖: Adjunction, Adjunction.mk, Discrete, Discrete.eq_of_hom, Discrete.mk, Functor, Functor.hext, Hom.ext, cat_disch, counit, eq_of_hom, homEquiv, naturality, toCatHom, typeToCatObjectsAdjCounitApp, typeToCatObjectsAdjHomEquiv
 -/
@@ -164,7 +166,18 @@ definition connectedComponentsTypeToCatAdj
         (Functor.equivCatHom _ _)
     unit :=
       { app := fun C => Functor.toCatHom <|
-          ConnectedComponents.functorToDiscrete _ (𝟙 (connecte
+          ConnectedComponents.functorToDiscrete _ (𝟙 (connectedComponents.obj C)) }
+    counit := {
+        app := fun X => ↾(ConnectedComponents.liftFunctor _
+          (𝟙 typeToCat.obj X).toFunctor)
+        naturality := fun _ _ _ => by
+          ext xcc
+          obtain ⟨x, h⟩ := Quotient.exists_rep xcc
+          cat_disch }
+    homEquiv_counit := fun {C X G} => by
+      ext cc
+      obtain ⟨_, _⟩ := Quotient.exists_rep cc
+      cat_disch }
 
 中文:
 定义 connectedComponentsTypeToCatAdj
@@ -176,7 +189,18 @@ definition connectedComponentsTypeToCatAdj
         (Functor.equivCatHom _ _)
     unit :=
       { app := fun C => Functor.toCatHom <|
-          ConnectedComponents.functorToDiscrete _ (𝟙 (connecte
+          ConnectedComponents.functorToDiscrete _ (𝟙 (connectedComponents.obj C)) }
+    counit := {
+        app := fun X => ↾(ConnectedComponents.liftFunctor _
+          (𝟙 typeToCat.obj X).toFunctor)
+        naturality := fun _ _ _ => by
+          ext xcc
+          obtain ⟨x, h⟩ := Quotient.exists_rep xcc
+          cat_disch }
+    homEquiv_counit := fun {C X G} => by
+      ext cc
+      obtain ⟨_, _⟩ := Quotient.exists_rep cc
+      cat_disch }
 
 Depends on / 依赖: Adjunction, Adjunction.mk, ConnectedComponents, ConnectedComponents.functorToDiscrete, ConnectedComponents.liftFunctor, ConnectedComponents.typeToCatHomEquiv, Functor, Functor.equivCatHom, Functor.toCatHom, Quotient, Quotient.exists_rep, TypeCat, TypeCat.homEquiv.trans, cat_disch, connectedComponents, connectedComponents.obj, counit, equivCatHom, exists_rep, functorToDiscrete
 -/

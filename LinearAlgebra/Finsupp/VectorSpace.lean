@@ -92,7 +92,7 @@ theorem linearIndependent_single
     DFinsupp.mapRange.linearMap (fun i => linearCombination R (f i)) ∘ₗ
     (sigmaFinsuppLequivDFinsupp R).toLinearMap := by ext; simp
   rw [LinearIndependent]; rw [this]
-  exact ((DFinsupp.mapRange_injective _ fun _ 
+  exact ((DFinsupp.mapRange_injective _ fun _ => map_zero _).mpr hf).comp (Equiv.injective _)
 
 中文:
 定理 linearIndependent_single
@@ -102,7 +102,7 @@ theorem linearIndependent_single
     DFinsupp.mapRange.linearMap (fun i => linearCombination R (f i)) ∘ₗ
     (sigmaFinsuppLequivDFinsupp R).toLinearMap := by ext; simp
   rw [LinearIndependent]; rw [this]
-  exact ((DFinsupp.mapRange_injective _ fun _ 
+  exact ((DFinsupp.mapRange_injective _ fun _ => map_zero _).mpr hf).comp (Equiv.injective _)
 
 Depends on / 依赖: DFinsupp, DFinsupp.mapRange.linearMap, DFinsupp.mapRange_injective, Equiv.injective, LinearIndependent, injective, linearCombination, linearMap, mapRange, mapRange_injective, map_zero, sigmaFinsuppLequivDFinsupp, single, toLinearMap
 -/
@@ -432,7 +432,15 @@ lemma lcomapDomain_eq_linearProjOfIsCompl
   refine Finsupp.basisSingleOne.ext fun i => ?_
   obtain ⟨i, rfl⟩ | ⟨i, rfl⟩ : i in Set.range u ⊔ .range v := by rw [codisjoint_iff.mp h.2]; trivial
   · have : single (u i) 1 = lmapDomain R R u (.single i 1) := by simp
-    simp only [coe_basisSingleOne, lcomapDomain_apply, comapDomain
+    simp only [coe_basisSingleOne, lcomapDomain_apply, comapDomain_single]
+    rw [this]; rw [LinearMap.linearProjOfIsCompl_apply_left]
+  · rw [LinearMap.linearProjOfIsCompl_apply_right']
+    · ext j
+      simp only [coe_basisSingleOne, lcomapDomain_apply, comapDomain_apply, single_apply,
+        coe_zero, Pi.zero_apply, ite_eq_right_iff]
+      intro hij
+      exact (Set.disjoint_range_iff.mp h.1 j i hij.symm).elim
+    · exact Submodule.subset_span ⟨i, rfl⟩
 
 中文:
 引理 lcomapDomain_eq_linearProjOfIsCompl
@@ -442,7 +450,15 @@ lemma lcomapDomain_eq_linearProjOfIsCompl
   refine Finsupp.basisSingleOne.ext fun i => ?_
   obtain ⟨i, rfl⟩ | ⟨i, rfl⟩ : i in Set.range u ⊔ .range v := by rw [codisjoint_iff.mp h.2]; trivial
   · have : single (u i) 1 = lmapDomain R R u (.single i 1) := by simp
-    simp only [coe_basisSingleOne, lcomapDomain_apply, comapDomain
+    simp only [coe_basisSingleOne, lcomapDomain_apply, comapDomain_single]
+    rw [this]; rw [LinearMap.linearProjOfIsCompl_apply_left]
+  · rw [LinearMap.linearProjOfIsCompl_apply_right']
+    · ext j
+      simp only [coe_basisSingleOne, lcomapDomain_apply, comapDomain_apply, single_apply,
+        coe_zero, Pi.zero_apply, ite_eq_right_iff]
+      intro hij
+      exact (Set.disjoint_range_iff.mp h.1 j i hij.symm).elim
+    · exact Submodule.subset_span ⟨i, rfl⟩
 
 Depends on / 依赖: Finsupp, Finsupp.basisSingleOne.ext, LinearMap, LinearMap.linearProjOfIsCompl_apply_left, LinearMap.linearProjOfIsCompl_apply_right, Set.range, basisSingleOne, classical, codisjoint_iff, codisjoint_iff.mp, coe_, coe_basisSingleOne, comapDomain_apply, comapDomain_single, lcomapDomain_apply, linearProjOfIsCompl_apply_left, linearProjOfIsCompl_apply_right, lmapDomain, single, single_apply
 -/

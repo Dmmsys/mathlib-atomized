@@ -180,7 +180,9 @@ theorem charpoly_leftMulMatrix
   · apply (injective_iff_map_eq_zero (G := S) (leftMulMatrix _)).mp
       (leftMulMatrix_injective h.basis)
     rw [← Polynomial.aeval_algHom_apply]; rw [aeval_self_charpoly]
-  refine fun q hq 
+  refine fun q hq => or_iff_not_imp_left.2 fun h0 => ?_
+  rw [Matrix.charpoly_degree_eq_dim]; rw [Fintype.card_fin] at hq
+  contrapose! hq; exact h.dim_le_degree_of_root h0 hq
 
 中文:
 定理 charpoly_leftMulMatrix
@@ -191,7 +193,9 @@ theorem charpoly_leftMulMatrix
   · apply (injective_iff_map_eq_zero (G := S) (leftMulMatrix _)).mp
       (leftMulMatrix_injective h.basis)
     rw [← Polynomial.aeval_algHom_apply]; rw [aeval_self_charpoly]
-  refine fun q hq 
+  refine fun q hq => or_iff_not_imp_left.2 fun h0 => ?_
+  rw [Matrix.charpoly_degree_eq_dim]; rw [Fintype.card_fin] at hq
+  contrapose! hq; exact h.dim_le_degree_of_root h0 hq
 
 Depends on / 依赖: Fintype, Fintype.card_fin, Matrix, Matrix.charpoly_degree_eq_dim, Polynomial, Polynomial.aeval_algHom_apply, aeval_algHom_apply, aeval_self_charpoly, card_fin, charpoly_degree_eq_dim, charpoly_monic, contrapose, dim_le_degree_of_root, h.basis, h.dim_le_degree_of_root, h.gen, injective_iff_map_eq_zero, leftMulMatrix, leftMulMatrix_injective, minpoly
 -/

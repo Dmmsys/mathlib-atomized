@@ -28,7 +28,7 @@ definition CoreM.withImportModules
       let ctx := {fileName, options, fileMap := default}
       let state := {env}
 Prod.fst < > (CoreM.toIO · ctx state) do
-   
+        run
 
 中文:
 定义 CoreM.withImportModules
@@ -40,7 +40,7 @@ Prod.fst < > (CoreM.toIO · ctx state) do
       let ctx := {fileName, options, fileMap := default}
       let state := {env}
 Prod.fst < > (CoreM.toIO · ctx state) do
-   
+        run
 
 Depends on / 依赖: Options, options
 -/

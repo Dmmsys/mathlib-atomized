@@ -584,7 +584,9 @@ lemma Pointed.of_nonempty_of_isClosed
   have hfS : closure (f '' Set.Ioi 0) subseteq C :=
 hSclos.closure_subset_iff.2 by rintro _ ⟨_, h, rfl⟩; exact C.smul_mem h hx
   -- `f` is continuous at `0` from the right
-  have fc : ContinuousWi
+  have fc : ContinuousWithinAt f (Set.Ioi (0 : 𝕜)) 0 := by fun_prop
+  -- `0 ∈ closure f (0, ∞) ⊆ C, 0 ∈ C`
+simpa [f, Pointed, ← SetLike.mem_coe] using hfS fc.mem_closure_image by simp
 
 中文:
 引理 Pointed.of_nonempty_of_isClosed
@@ -596,7 +598,9 @@ hSclos.closure_subset_iff.2 by rintro _ ⟨_, h, rfl⟩; exact C.smul_mem h hx
   have hfS : closure (f '' Set.Ioi 0) subseteq C :=
 hSclos.closure_subset_iff.2 by rintro _ ⟨_, h, rfl⟩; exact C.smul_mem h hx
   -- `f` is continuous at `0` from the right
-  have fc : ContinuousWi
+  have fc : ContinuousWithinAt f (Set.Ioi (0 : 𝕜)) 0 := by fun_prop
+  -- `0 ∈ closure f (0, ∞) ⊆ C, 0 ∈ C`
+simpa [f, Pointed, ← SetLike.mem_coe] using hfS fc.mem_closure_image by simp
 -/
 lemma Pointed.of_nonempty_of_isClosed (hC : (C : Set E).Nonempty) (hSclos : IsClosed (C : Set E)) :
     C.Pointed := by

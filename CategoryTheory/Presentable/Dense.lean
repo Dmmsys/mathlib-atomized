@@ -73,7 +73,9 @@ instance final_toCostructuredArrow
   refine ⟨fun f => ?_, fun {f j} g₁ g₂ => ?_⟩
   · obtain ⟨j, g, hg⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit f.hom
     exact ⟨j, ⟨CostructuredArrow.homMk (ObjectProperty.homMk g)⟩⟩
-  · obta
+  · obtain ⟨k, a, h⟩ := IsCardinalPresentable.exists_eq_of_isColimit' κ p.isColimit
+      g₁.left.hom g₂.left.hom ((CostructuredArrow.w g₁).trans (CostructuredArrow.w g₂).symm)
+    exact ⟨k, a, by cat_disch⟩
 
 中文:
 实例 final_toCostructuredArrow
@@ -83,7 +85,9 @@ instance final_toCostructuredArrow
   refine ⟨fun f => ?_, fun {f j} g₁ g₂ => ?_⟩
   · obtain ⟨j, g, hg⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit f.hom
     exact ⟨j, ⟨CostructuredArrow.homMk (ObjectProperty.homMk g)⟩⟩
-  · obta
+  · obtain ⟨k, a, h⟩ := IsCardinalPresentable.exists_eq_of_isColimit' κ p.isColimit
+      g₁.left.hom g₂.left.hom ((CostructuredArrow.w g₁).trans (CostructuredArrow.w g₂).symm)
+    exact ⟨k, a, by cat_disch⟩
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.w, Functor, Functor.final_iff_of_isFiltered, IsCardinalPresentable, IsCardinalPresentable.exists_eq_of_isColimit, IsCardinalPresentable.exists_hom_of_isColimit, ObjectProperty, ObjectProperty.homMk, cat_disch, exists_eq_of_isColimit, exists_hom_of_isColimit, f.hom, final_iff_of_isFiltered, isColimit, isFiltered_of_isCardinalFiltered, left.hom, p.isColimit
 -/

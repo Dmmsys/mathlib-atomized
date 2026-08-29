@@ -41,7 +41,7 @@ lemma div_linear_zpow_differentiableOn
       exact fun z hz => linear_ne_zero ⟨z, hz⟩
         ((comp_ne_zero_iff _ Int.cast_injective Int.cast_zero).mpr ha)
   · simp only [Pi.zero_apply, Int.cast_zero, zero_mul, add_zero]
-    apply differenti
+    apply differentiableOn_const
 
 中文:
 引理 div_linear_zpow_differentiableOn
@@ -54,7 +54,7 @@ lemma div_linear_zpow_differentiableOn
       exact fun z hz => linear_ne_zero ⟨z, hz⟩
         ((comp_ne_zero_iff _ Int.cast_injective Int.cast_zero).mpr ha)
   · simp only [Pi.zero_apply, Int.cast_zero, zero_mul, add_zero]
-    apply differenti
+    apply differentiableOn_const
 
 Depends on / 依赖: DifferentiableOn, DifferentiableOn.zpow, Int.cast_injective, Int.cast_zero, Pi.zero_apply, add_zero, cast_injective, cast_zero, comp_ne_zero_iff, differentiableOn_const, fun_prop, linear_ne_zero, ne_or_eq, zero_apply, zero_mul
 -/
@@ -111,7 +111,13 @@ theorem eisensteinSeriesSIF_mdifferentiable
     convert!
       MDifferentiableAt.comp τ (DifferentiableAt.mdifferentiableAt this) τ.mdifferentiable_coe
     exact funext fun z => (comp_ofComplex (eisensteinSeriesSIF a k) z).symm
-  refine DifferentiableOn.differ
+  refine DifferentiableOn.differentiableAt ?_ (isOpen_upperHalfPlaneSet.mem_nhds τ.2)
+  exact (eisensteinSeries_tendstoLocallyUniformlyOn hk a).differentiableOn
+    (Eventually.of_forall fun s => DifferentiableOn.fun_sum
+    fun _ _ => eisSummand_extension_differentiableOn _ _) isOpen_upperHalfPlaneSet
+
+@[deprecated (since := "2026-02-09")]
+alias eisensteinSeries_SIF_MDifferentiable := eisensteinSeriesSIF_mdifferentiable
 
 中文:
 定理 eisensteinSeriesSIF_mdifferentiable
@@ -122,7 +128,13 @@ theorem eisensteinSeriesSIF_mdifferentiable
     convert!
       MDifferentiableAt.comp τ (DifferentiableAt.mdifferentiableAt this) τ.mdifferentiable_coe
     exact funext fun z => (comp_ofComplex (eisensteinSeriesSIF a k) z).symm
-  refine DifferentiableOn.differ
+  refine DifferentiableOn.differentiableAt ?_ (isOpen_upperHalfPlaneSet.mem_nhds τ.2)
+  exact (eisensteinSeries_tendstoLocallyUniformlyOn hk a).differentiableOn
+    (Eventually.of_forall fun s => DifferentiableOn.fun_sum
+    fun _ _ => eisSummand_extension_differentiableOn _ _) isOpen_upperHalfPlaneSet
+
+@[deprecated (since := "2026-02-09")]
+alias eisensteinSeries_SIF_MDifferentiable := eisensteinSeriesSIF_mdifferentiable
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.mdifferentiableAt, DifferentiableOn, DifferentiableOn.differentiableAt, DifferentiableOn.fun_sum, Eventually, Eventually.of_forall, MDifferentiableAt, MDifferentiableAt.comp, comp_ofComplex, convert, differentiableAt, differentiableOn, eisSummand_extension_diffe, eisensteinSeriesSIF, eisensteinSeries_tendstoLocallyUniformlyOn, fun_sum, isOpen_upperHalfPlaneSet, isOpen_upperHalfPlaneSet.mem_nhds, mdifferentiableAt
 -/

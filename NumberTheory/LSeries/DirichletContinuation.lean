@@ -267,7 +267,17 @@ lemma LFunction_changeLevel_aux
 .isPreconnected
   have hne : 2 in ({1}ᶜ : Set Complex) := by simp
   refine AnalyticOnNhd.eqOn_of_preconnected_of_eventuallyEq (𝕜 := Complex)
-    (g := fun 
+    (g := fun s => LFunction χ s * ∏ p in N.primeFactors, (1 - χ p * p ^ (-s))) ?_ ?_ hpc hne ?_ hs
+  · refine DifferentiableOn.analyticOnNhd (fun s hs => ?_) isOpen_compl_singleton
+    exact (differentiableAt_LFunction _ _ (.inl hs)).differentiableWithinAt
+  · refine DifferentiableOn.analyticOnNhd (fun s hs => ?_) isOpen_compl_singleton
+    refine ((differentiableAt_LFunction _ _ (.inl hs)).mul ?_).differentiableWithinAt
+    refine .fun_finsetProd fun i h => ?_
+    have : NeZero i := ⟨(Nat.pos_of_mem_primeFactors h).ne'⟩
+    fun_prop
+  · refine eventually_of_mem ?_ (fun t (ht : 1 < t.re) => ?_)
+    · exact (continuous_re.isOpen_preimage _ isOpen_Ioi).mem_nhds (by simp : 1 < (2 : Complex).re)
+    · simpa [LFunction_eq_LSeries _ ht] using LSeries_changeLevel hMN χ ht
 
 中文:
 引理 LFunction_changeLevel_aux
@@ -278,7 +288,17 @@ lemma LFunction_changeLevel_aux
 .isPreconnected
   have hne : 2 in ({1}ᶜ : Set Complex) := by simp
   refine AnalyticOnNhd.eqOn_of_preconnected_of_eventuallyEq (𝕜 := Complex)
-    (g := fun 
+    (g := fun s => LFunction χ s * ∏ p in N.primeFactors, (1 - χ p * p ^ (-s))) ?_ ?_ hpc hne ?_ hs
+  · refine DifferentiableOn.analyticOnNhd (fun s hs => ?_) isOpen_compl_singleton
+    exact (differentiableAt_LFunction _ _ (.inl hs)).differentiableWithinAt
+  · refine DifferentiableOn.analyticOnNhd (fun s hs => ?_) isOpen_compl_singleton
+    refine ((differentiableAt_LFunction _ _ (.inl hs)).mul ?_).differentiableWithinAt
+    refine .fun_finsetProd fun i h => ?_
+    have : NeZero i := ⟨(Nat.pos_of_mem_primeFactors h).ne'⟩
+    fun_prop
+  · refine eventually_of_mem ?_ (fun t (ht : 1 < t.re) => ?_)
+    · exact (continuous_re.isOpen_preimage _ isOpen_Ioi).mem_nhds (by simp : 1 < (2 : Complex).re)
+    · simpa [LFunction_eq_LSeries _ ht] using LSeries_changeLevel hMN χ ht
 -/
 private lemma LFunction_changeLevel_aux {M N : Nat} [NeZero M] [NeZero N] (hMN : M ∣ N)
     (χ : DirichletCharacter Complex M) {s : Complex} (hs : s != 1) :
@@ -312,7 +332,11 @@ lemma LFunction_changeLevel
   · have hχ : changeLevel hMN χ != 1 := h ∘ (changeLevel_eq_one_iff hMN).mp
     have h' : Continuous fun s => LFunction χ s * ∏ p in N.primeFactors, (1 - χ p * ↑p ^ (-s)) :=
 (differentiable_LFunction h).continuous.mul continuous_finsetProd _ fun p hp => by
-        have : NeZ
+        have : NeZero p := ⟨(Nat.prime_of_mem_primeFactors hp).ne_zero⟩
+        fun_prop
+    exact congrFun ((differentiable_LFunction hχ).continuous.ext_on
+      (dense_compl_singleton 1) h' (fun _ h => LFunction_changeLevel_aux hMN χ h)) s
+  · exact LFunction_changeLevel_aux hMN χ h
 
 中文:
 引理 LFunction_changeLevel
@@ -322,7 +346,11 @@ lemma LFunction_changeLevel
   · have hχ : changeLevel hMN χ != 1 := h ∘ (changeLevel_eq_one_iff hMN).mp
     have h' : Continuous fun s => LFunction χ s * ∏ p in N.primeFactors, (1 - χ p * ↑p ^ (-s)) :=
 (differentiable_LFunction h).continuous.mul continuous_finsetProd _ fun p hp => by
-        have : NeZ
+        have : NeZero p := ⟨(Nat.prime_of_mem_primeFactors hp).ne_zero⟩
+        fun_prop
+    exact congrFun ((differentiable_LFunction hχ).continuous.ext_on
+      (dense_compl_singleton 1) h' (fun _ h => LFunction_changeLevel_aux hMN χ h)) s
+  · exact LFunction_changeLevel_aux hMN χ h
 
 Depends on / 依赖: Continuous, LFunction, LFunction_changeLevel_aux, N.primeFactors, Nat.prime_of_mem_primeFactors, NeZero, changeLevel, changeLevel_eq_one_iff, continuous, continuous.ext_on, continuous.mul, continuous_finsetProd, dense_compl_singleton, differentiable_LFunction, ext_on, fun_prop, ne_zero, primeFactors, prime_of_mem_primeFactors
 -/
@@ -399,7 +427,13 @@ lemma LFunctionTrivChar_residue_one
         fun s => (∏ p in N.primeFactors, (1 - (p : Complex) ^ (-s))) * ((s - 1) * riemannZeta s) := by
     refine Set.EqOn.eventuallyEq_nhdsWithin fun s hs => ?_
     rw [mul_left_comm]; rw [LFunctionTrivChar_eq_mul_riemannZeta hs]
-
+  rw [tendsto_congr' H]
+  conv => enter [3, 1]; rw [← mul_one <| Finset.prod ..]; enter [1, 2, p]; rw [← cpow_neg_one]
+  refine .mul (f := fun s => ∏ p in N.primeFactors, _) ?_ riemannZeta_residue_one
+refine tendsto_nhdsWithin_of_tendsto_nhds Continuous.tendsto ?_ 1
+  exact continuous_finsetProd _ fun p hp => by
+    have : NeZero p := ⟨(Nat.prime_of_mem_primeFactors hp).ne_zero⟩
+    fun_prop
 
 中文:
 引理 LFunctionTrivChar_residue_one
@@ -408,7 +442,13 @@ lemma LFunctionTrivChar_residue_one
         fun s => (∏ p in N.primeFactors, (1 - (p : Complex) ^ (-s))) * ((s - 1) * riemannZeta s) := by
     refine Set.EqOn.eventuallyEq_nhdsWithin fun s hs => ?_
     rw [mul_left_comm]; rw [LFunctionTrivChar_eq_mul_riemannZeta hs]
-
+  rw [tendsto_congr' H]
+  conv => enter [3, 1]; rw [← mul_one <| Finset.prod ..]; enter [1, 2, p]; rw [← cpow_neg_one]
+  refine .mul (f := fun s => ∏ p in N.primeFactors, _) ?_ riemannZeta_residue_one
+refine tendsto_nhdsWithin_of_tendsto_nhds Continuous.tendsto ?_ 1
+  exact continuous_finsetProd _ fun p hp => by
+    have : NeZero p := ⟨(Nat.prime_of_mem_primeFactors hp).ne_zero⟩
+    fun_prop
 
 Depends on / 依赖: Finset, Finset.prod, LFunctionTrivChar, LFunctionTrivChar_eq_mul_riemannZeta, N.primeFactors, Set.EqOn.eventuallyEq_nhdsWithin, cpow_neg_one, eventuallyEq_nhdsWithin, mul_left_comm, mul_one, primeFactors, riemannZeta, riemannZeta_residue_one, tendsto_congr, tendsto_nhdsWith
 -/
@@ -674,7 +714,27 @@ theorem completedLFunction_one_sub
   · simp [completedLFunction_modOne_eq, completedRiemannZeta_one_sub, rootNumber_modOne]
   -- facts about `χ` as function
   have h_sum : ∑ j, χ j = 0 := by
-    refine χ.sum_eq_zero_of_ne_one (fun h => h
+    refine χ.sum_eq_zero_of_ne_one (fun h => hN.symm ?_)
+    rwa [IsPrimitive, h, conductor_one] at hχ
+  let ε := I ^ (if χ.Even then 0 else 1)
+  -- gather up powers of N
+  rw [rootNumber]; rw [← mul_comm_div]; rw [← mul_comm_div]; rw [← cpow_sub _ _ (NeZero.ne _)]; rw [sub_sub]; rw [add_halves]
+  calc completedLFunction χ (1 - s)
+  _ = N ^ (s - 1) * χ (-1) / ε * ZMod.completedLFunction (𝓕 χ) s := by
+    simp only [ε]
+    split_ifs with h
+    · rw [pow_zero, div_one, h, mul_one, completedLFunction,
+        completedLFunction_one_sub_even h.to_fun _ (.inr h_sum) (.inr <| χ.map_zero' hN)]
+    · replace h : χ.Odd := χ.even_or_odd.resolve_left h
+      rw [completedLFunction]; rw [completedLFunction_one_sub_odd h.to_fun]; rw [pow_one]; rw [h]; rw [div_I]; rw [mul_neg_one]; rw [← neg_mul]; rw [neg_neg]
+  _ = (_) * ZMod.completedLFunction (fun j => χ⁻¹ (-1) * gaussSum χ stdAddChar * χ⁻¹ j) s := by
+    congr 2 with j
+    rw [hχ.fourierTransform_eq_inv_mul_gaussSum]; rw [← neg_one_mul j]; rw [map_mul]; rw [mul_right_comm]
+  _ = N ^ (s - 1) / ε * gaussSum χ stdAddChar * completedLFunction χ⁻¹ s * (χ (-1) * χ⁻¹ (-1)) := by
+    rw [completedLFunction]; rw [completedLFunction_const_mul]
+    ring
+  _ = N ^ (s - 1) / ε * gaussSum χ stdAddChar * completedLFunction χ⁻¹ s := by
+    rw [← MulChar.mul_apply]; rw [mul_inv_cancel]; rw [MulChar.one_apply (isUnit_one.neg)]; rw [mul_one]
 
 中文:
 定理 completedLFunction_one_sub
@@ -686,7 +746,27 @@ theorem completedLFunction_one_sub
   · simp [completedLFunction_modOne_eq, completedRiemannZeta_one_sub, rootNumber_modOne]
   -- facts about `χ` as function
   have h_sum : ∑ j, χ j = 0 := by
-    refine χ.sum_eq_zero_of_ne_one (fun h => h
+    refine χ.sum_eq_zero_of_ne_one (fun h => hN.symm ?_)
+    rwa [IsPrimitive, h, conductor_one] at hχ
+  let ε := I ^ (if χ.Even then 0 else 1)
+  -- gather up powers of N
+  rw [rootNumber]; rw [← mul_comm_div]; rw [← mul_comm_div]; rw [← cpow_sub _ _ (NeZero.ne _)]; rw [sub_sub]; rw [add_halves]
+  calc completedLFunction χ (1 - s)
+  _ = N ^ (s - 1) * χ (-1) / ε * ZMod.completedLFunction (𝓕 χ) s := by
+    simp only [ε]
+    split_ifs with h
+    · rw [pow_zero, div_one, h, mul_one, completedLFunction,
+        completedLFunction_one_sub_even h.to_fun _ (.inr h_sum) (.inr <| χ.map_zero' hN)]
+    · replace h : χ.Odd := χ.even_or_odd.resolve_left h
+      rw [completedLFunction]; rw [completedLFunction_one_sub_odd h.to_fun]; rw [pow_one]; rw [h]; rw [div_I]; rw [mul_neg_one]; rw [← neg_mul]; rw [neg_neg]
+  _ = (_) * ZMod.completedLFunction (fun j => χ⁻¹ (-1) * gaussSum χ stdAddChar * χ⁻¹ j) s := by
+    congr 2 with j
+    rw [hχ.fourierTransform_eq_inv_mul_gaussSum]; rw [← neg_one_mul j]; rw [map_mul]; rw [mul_right_comm]
+  _ = N ^ (s - 1) / ε * gaussSum χ stdAddChar * completedLFunction χ⁻¹ s * (χ (-1) * χ⁻¹ (-1)) := by
+    rw [completedLFunction]; rw [completedLFunction_const_mul]
+    ring
+  _ = N ^ (s - 1) / ε * gaussSum χ stdAddChar * completedLFunction χ⁻¹ s := by
+    rw [← MulChar.mul_apply]; rw [mul_inv_cancel]; rw [MulChar.one_apply (isUnit_one.neg)]; rw [mul_one]
 
 Depends on / 依赖: classical
 -/
@@ -797,7 +877,9 @@ lemma differentiable_LFunctionTrivChar₁
   rw [← differentiableOn_univ]; rw [← differentiableOn_compl_singleton_and_continuousAt_iff (c := 1) Filter.univ_mem]
   refine ⟨DifferentiableOn.congr (f := fun s => (s - 1) * LFunctionTrivChar n s)
     (fun _ hs => DifferentiableAt.differentiableWithinAt <| by fun_prop (disch := simp_all))
-    f
+    fun _ hs => Function.update_of_ne (Set.mem_sdiff_singleton.mp hs).2 ..,
+    continuousWithinAt_compl_self.mp ?_⟩
+  simpa using LFunctionTrivChar_residue_one
 
 中文:
 引理 differentiable_LFunctionTrivChar₁
@@ -806,7 +888,9 @@ lemma differentiable_LFunctionTrivChar₁
   rw [← differentiableOn_univ]; rw [← differentiableOn_compl_singleton_and_continuousAt_iff (c := 1) Filter.univ_mem]
   refine ⟨DifferentiableOn.congr (f := fun s => (s - 1) * LFunctionTrivChar n s)
     (fun _ hs => DifferentiableAt.differentiableWithinAt <| by fun_prop (disch := simp_all))
-    f
+    fun _ hs => Function.update_of_ne (Set.mem_sdiff_singleton.mp hs).2 ..,
+    continuousWithinAt_compl_self.mp ?_⟩
+  simpa using LFunctionTrivChar_residue_one
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.differentiableWithinAt, DifferentiableOn, DifferentiableOn.congr, Filter, Filter.univ_mem, Function, Function.update_of_ne, LFunctionTrivChar, LFunctionTrivChar_residue_one, Set.mem_sdiff_singleton.mp, continuousWithinAt_compl_self, continuousWithinAt_compl_self.mp, differentiableOn_compl_singleton_and_continuousAt_iff, differentiableOn_univ, differentiableWithinAt, fun_prop, mem_sdiff_singleton, univ_mem, update_of_ne
 -/
@@ -829,7 +913,7 @@ lemma deriv_LFunctionTrivChar₁_apply_of_ne_one
       deriv (fun w => (w - 1) * LFunctionTrivChar n w) s := by
 .deriv_eq refine eventuallyEq_iff_exists_mem.mpr ?_
     exact ⟨_, isOpen_ne.mem_nhds hs, fun _ hw => Function.update_of_ne (Set.mem_ofPred.mp hw) ..⟩
-  rw [H]; rw [deriv_fun_mul (by fun_prop
+  rw [H]; rw [deriv_fun_mul (by fun_prop) (differentiableAt_LFunction _ s (.inl hs))]; rw [deriv_sub_const]; rw [deriv_id'']; rw [one_mul]; rw [add_comm]
 
 中文:
 引理 deriv_LFunctionTrivChar₁_apply_of_ne_one
@@ -839,7 +923,7 @@ lemma deriv_LFunctionTrivChar₁_apply_of_ne_one
       deriv (fun w => (w - 1) * LFunctionTrivChar n w) s := by
 .deriv_eq refine eventuallyEq_iff_exists_mem.mpr ?_
     exact ⟨_, isOpen_ne.mem_nhds hs, fun _ hw => Function.update_of_ne (Set.mem_ofPred.mp hw) ..⟩
-  rw [H]; rw [deriv_fun_mul (by fun_prop
+  rw [H]; rw [deriv_fun_mul (by fun_prop) (differentiableAt_LFunction _ s (.inl hs))]; rw [deriv_sub_const]; rw [deriv_id'']; rw [one_mul]; rw [add_comm]
 
 Depends on / 依赖: Function, Function.update_of_ne, LFunctionTrivChar, Set.mem_ofPred.mp, add_comm, deriv_eq, deriv_fun_mul, deriv_id, deriv_sub_const, differentiableAt_LFunction, eventuallyEq_iff_exists_mem, eventuallyEq_iff_exists_mem.mpr, fun_prop, isOpen_ne, isOpen_ne.mem_nhds, mem_nhds, mem_ofPred, one_mul, update_of_ne
 -/
@@ -864,7 +948,8 @@ lemma continuousOn_neg_logDeriv_LFunctionTrivChar₁
     h.continuous.continuousOn fun w hw => ?_).neg
   rcases eq_or_ne w 1 with rfl | hw'
   · exact LFunctionTrivChar₁_apply_one_ne_zero _
-  · rw [LFunctionTrivChar₁, F
+  · rw [LFunctionTrivChar₁, Function.update_of_ne hw', mul_ne_zero_iff]
+    exact ⟨sub_ne_zero_of_ne hw', (Set.mem_ofPred.mp hw).resolve_left hw'⟩
 
 中文:
 引理 continuousOn_neg_logDeriv_LFunctionTrivChar₁
@@ -875,7 +960,8 @@ lemma continuousOn_neg_logDeriv_LFunctionTrivChar₁
     h.continuous.continuousOn fun w hw => ?_).neg
   rcases eq_or_ne w 1 with rfl | hw'
   · exact LFunctionTrivChar₁_apply_one_ne_zero _
-  · rw [LFunctionTrivChar₁, F
+  · rw [LFunctionTrivChar₁, Function.update_of_ne hw', mul_ne_zero_iff]
+    exact ⟨sub_ne_zero_of_ne hw', (Set.mem_ofPred.mp hw).resolve_left hw'⟩
 
 Depends on / 依赖: Function, Function.update_of_ne, Set.mem_ofPred.mp, contDiff, continuous, continuousOn, continuousOn.div, continuous_deriv, eq_or_ne, h.contDiff.continuous_deriv, h.continuous.continuousOn, le_rfl, mem_ofPred, mul_ne_zero_iff, neg_div, resolve_left, simp_rw, sub_ne_zero_of_ne, update_of_ne
 -/

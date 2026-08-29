@@ -122,7 +122,9 @@ definition toTopCatMap
       intro ⟨S, x⟩
       simp only [Function.comp_apply, coinducingCoprod]
       rw [show (fun (a : S) =>
-          f.hom.app ⟨of PUnit⟩ (X.obj.map ((of PUnit.{u
+          f.hom.app ⟨of PUnit⟩ (X.obj.map ((of PUnit.{u + 1}).const a).op x)) = _
+        from funext fun a => NatTrans.naturality_apply f.hom ((of PUnit.{u + 1}).const a).op x]
+      exact continuous_coinducingCoprod Y _ }
 
 中文:
 定义 toTopCatMap
@@ -135,7 +137,9 @@ definition toTopCatMap
       intro ⟨S, x⟩
       simp only [Function.comp_apply, coinducingCoprod]
       rw [show (fun (a : S) =>
-          f.hom.app ⟨of PUnit⟩ (X.obj.map ((of PUnit.{u
+          f.hom.app ⟨of PUnit⟩ (X.obj.map ((of PUnit.{u + 1}).const a).op x)) = _
+        from funext fun a => NatTrans.naturality_apply f.hom ((of PUnit.{u + 1}).const a).op x]
+      exact continuous_coinducingCoprod Y _ }
 
 Depends on / 依赖: Function, Function.comp_apply, NatTrans, NatTrans.naturality_apply, TopCat, TopCat.ofHom, X.obj.map, coinducingCoprod, comp_apply, continuous_coinduced_dom, continuous_coinducingCoprod, continuous_sigma, continuous_toFun, f.hom, f.hom.app, naturality_apply
 -/
@@ -288,7 +292,14 @@ definition topCatAdjunctionUnit
       continuous_toFun := by
         suffices forall (i : (T : CompHaus.{u}) × X.obj.obj ⟨T⟩),
           Continuous (fun (a : i.fst) => X.coinducingCoprod ⟨i, a⟩) from this ⟨_, _⟩
-        rw [← continuous_
+        rw [← continuous_sigma_iff]
+        apply continuous_coinduced_rng }
+    naturality := fun _ _ _ => by
+      ext
+      simp only [TypeCat.Fun.toFun_apply,
+        comp_apply, TopCat.toSheafCompHausLike_obj_map, ConcreteCategory.hom_ofHom,
+        TypeCat.Fun.coe_mk, ← Functor.map_comp_apply]
+      rfl }
 
 中文:
 定义 topCatAdjunctionUnit
@@ -299,7 +310,14 @@ definition topCatAdjunctionUnit
       continuous_toFun := by
         suffices forall (i : (T : CompHaus.{u}) × X.obj.obj ⟨T⟩),
           Continuous (fun (a : i.fst) => X.coinducingCoprod ⟨i, a⟩) from this ⟨_, _⟩
-        rw [← continuous_
+        rw [← continuous_sigma_iff]
+        apply continuous_coinduced_rng }
+    naturality := fun _ _ _ => by
+      ext
+      simp only [TypeCat.Fun.toFun_apply,
+        comp_apply, TopCat.toSheafCompHausLike_obj_map, ConcreteCategory.hom_ofHom,
+        TypeCat.Fun.coe_mk, ← Functor.map_comp_apply]
+      rfl }
 -/
 noncomputable def topCatAdjunctionUnit (X : CondensedSet.{u}) : X ⟶ X.toTopCat.toCondensedSet where
   hom := {

@@ -60,7 +60,13 @@ theorem ofFunction_eq
   rw [OuterMeasure.ofFunction_eq_iInf_mem _ _ m_top]
   refine le_iInf fun f => le_iInf fun hf => le_iInf fun hs_subset => ?_
   calc m s = m (s inter ⋃ i, f i) := by rw [inter_eq_self_of_subset_left hs_subset]
-    _ = m (⋃ i, s inter f i) := b
+    _ = m (⋃ i, s inter f i) := by rw [inter_iUnion]
+    _ <= ∑' i, m (s inter f i) := by
+      refine m_sigma_subadd (fun i => hC.inter_mem _ hs _ (hf i)) ?_
+      rwa [← inter_iUnion, inter_eq_self_of_subset_left hs_subset]
+    _ <= ∑' i, m (f i) := by
+      refine ENNReal.summable.tsum_le_tsum (fun i => ?_) ENNReal.summable
+      exact addContent_mono hC (hC.inter_mem _ hs _ (hf i)) (hf i) Set.inter_subset_right
 
 中文:
 定理 ofFunction_eq
@@ -70,7 +76,13 @@ theorem ofFunction_eq
   rw [OuterMeasure.ofFunction_eq_iInf_mem _ _ m_top]
   refine le_iInf fun f => le_iInf fun hf => le_iInf fun hs_subset => ?_
   calc m s = m (s inter ⋃ i, f i) := by rw [inter_eq_self_of_subset_left hs_subset]
-    _ = m (⋃ i, s inter f i) := b
+    _ = m (⋃ i, s inter f i) := by rw [inter_iUnion]
+    _ <= ∑' i, m (s inter f i) := by
+      refine m_sigma_subadd (fun i => hC.inter_mem _ hs _ (hf i)) ?_
+      rwa [← inter_iUnion, inter_eq_self_of_subset_left hs_subset]
+    _ <= ∑' i, m (f i) := by
+      refine ENNReal.summable.tsum_le_tsum (fun i => ?_) ENNReal.summable
+      exact addContent_mono hC (hC.inter_mem _ hs _ (hf i)) (hf i) Set.inter_subset_right
 
 Depends on / 依赖: H.to_set.image, OuterMeasure, OuterMeasure.ofFunction_eq_iInf_mem, OuterMeasure.ofFunction_le, bddAbove, csSup_le_iff, eq_of_forall_ge_iff, finite_toSet, hC.inter_mem, hs_subset, inter_eq_self_of_subset_left, inter_iUnion, inter_mem, le_antisymm, le_iInf, m_sigma_subadd, m_top, ofFunction_eq_iInf_mem, ofFunction_le, s.finite_toSet.image
 -/
@@ -102,7 +114,10 @@ theorem inducedOuterMeasure_eq
   · congr
   · intro f hf hf_mem
     rw [m.extend_eq hC hf_mem]
-    refine (m_sigma_subadd hf hf_mem
+    refine (m_sigma_subadd hf hf_mem).trans_eq ?_
+    congr with i
+    rw [m.extend_eq hC (hf i)]
+  · exact fun _ => m.extend_eq_top _
 
 中文:
 定理 inducedOuterMeasure_eq
@@ -114,7 +129,10 @@ theorem inducedOuterMeasure_eq
   · congr
   · intro f hf hf_mem
     rw [m.extend_eq hC hf_mem]
-    refine (m_sigma_subadd hf hf_mem
+    refine (m_sigma_subadd hf hf_mem).trans_eq ?_
+    congr with i
+    rw [m.extend_eq hC (hf i)]
+  · exact fun _ => m.extend_eq_top _
 
 Depends on / 依赖: Eq.trans, _eq_csSup_image, addContent_empty, empty_mem, extend, extend_eq, extend_eq_top, hC.empty_mem, hf_mem, inducedOuterMeasure, m.extend, m.extend_eq, m.extend_eq_top, m_sigma_subadd, ofFunction_eq, trans_eq
 -/
@@ -144,7 +162,28 @@ theorem isCaratheodory_ofFunction_of_mem
   conv_rhs => rw [OuterMeasure.ofFunction_eq_iInf_mem _ _ m_top]
   refine le_iInf fun f => le_iInf fun hf => le_iInf fun hf_subset => ?_
   let A : Nat -> Finset (Set α) := fun i => hC.disjointOfDiff (hf i) (hC.inter_mem _ (hf i) _ hs)
-  have h_
+  have h_diff_eq_sUnion i : f i \ s = ⋃₀ A i := by simp [A, IsSetSemiring.sUnion_disjointOfDiff]
+  have h_m_eq i : m (f i) = m (f i inter s) + ∑ u in A i, m u :=
+    eq_add_disjointOfDiff_of_subset hC (hC.inter_mem (f i) (hf i) s hs) (hf i) inter_subset_left
+  simp_rw [h_m_eq]
+  rw [ENNReal.tsum_add]
+  refine add_le_add ?_ ?_
+· refine iInf_le_of_le (fun i => f i inter s) iInf_le_of_le ?_ le_rfl
+    rw [← iUnion_inter]
+    exact Set.inter_subset_inter_left _ hf_subset
+· apply le_trans (OuterMeasure.ofFunction m addContent_empty).mono
+ (iUnion_sdiff s f) ▸ sdiff_subset_sdiff_left hf_subset
+    simp only [OuterMeasure.measureOf_eq_coe, A]
+apply le_trans measure_iUnion_le (μ := OuterMeasure.ofFunction m addContent_empty)
+      (fun i => f i \ s)
+    apply ENNReal.tsum_le_tsum
+    intro i
+    simp_rw [sUnion_eq_biUnion] at h_diff_eq_sUnion
+    rw [h_diff_eq_sUnion]
+    obtain h6 := MeasureTheory.measure_biUnion_finset_le
+      (μ := OuterMeasure.ofFunction m addContent_empty) (A i) id
+    simp only [id_eq] at h6
+exact le_trans h6 Finset.sum_le_sum fun b _ => OuterMeasure.ofFunction_le b
 
 中文:
 定理 isCaratheodory_ofFunction_of_mem
@@ -155,7 +194,28 @@ theorem isCaratheodory_ofFunction_of_mem
   conv_rhs => rw [OuterMeasure.ofFunction_eq_iInf_mem _ _ m_top]
   refine le_iInf fun f => le_iInf fun hf => le_iInf fun hf_subset => ?_
   let A : Nat -> Finset (Set α) := fun i => hC.disjointOfDiff (hf i) (hC.inter_mem _ (hf i) _ hs)
-  have h_
+  have h_diff_eq_sUnion i : f i \ s = ⋃₀ A i := by simp [A, IsSetSemiring.sUnion_disjointOfDiff]
+  have h_m_eq i : m (f i) = m (f i inter s) + ∑ u in A i, m u :=
+    eq_add_disjointOfDiff_of_subset hC (hC.inter_mem (f i) (hf i) s hs) (hf i) inter_subset_left
+  simp_rw [h_m_eq]
+  rw [ENNReal.tsum_add]
+  refine add_le_add ?_ ?_
+· refine iInf_le_of_le (fun i => f i inter s) iInf_le_of_le ?_ le_rfl
+    rw [← iUnion_inter]
+    exact Set.inter_subset_inter_left _ hf_subset
+· apply le_trans (OuterMeasure.ofFunction m addContent_empty).mono
+ (iUnion_sdiff s f) ▸ sdiff_subset_sdiff_left hf_subset
+    simp only [OuterMeasure.measureOf_eq_coe, A]
+apply le_trans measure_iUnion_le (μ := OuterMeasure.ofFunction m addContent_empty)
+      (fun i => f i \ s)
+    apply ENNReal.tsum_le_tsum
+    intro i
+    simp_rw [sUnion_eq_biUnion] at h_diff_eq_sUnion
+    rw [h_diff_eq_sUnion]
+    obtain h6 := MeasureTheory.measure_biUnion_finset_le
+      (μ := OuterMeasure.ofFunction m addContent_empty) (A i) id
+    simp only [id_eq] at h6
+exact le_trans h6 Finset.sum_le_sum fun b _ => OuterMeasure.ofFunction_le b
 
 Depends on / 依赖: Finset, IsSetSemiring, IsSetSemiring.sUnion_disjointOfDiff, OuterMeasure, OuterMeasure.isCaratheodory_iff_le, OuterMeasure.ofFunction_eq_iInf_mem, Set.image_id, _eq_csSup_image, conv_rhs, disjointOfDiff, eq_add_disjointOfDiff_of_subset, hC.disjointOfDiff, hC.inter_mem, h_diff_eq_sUnion, h_m_eq, hf_subset, image_id, inter_mem, isCaratheodory_iff_le, le_iInf
 -/
@@ -255,7 +315,12 @@ definition measureCaratheodory
   { inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty with
     m_iUnion := fun f hf hd => OuterMeasure.iUnion_eq_of_caratheodory _ hf hd
     trim_le := by
-      apply le
+      apply le_inducedOuterMeasure.mpr fun s hs => ?_
+      have hs_meas : MeasurableSet[(inducedOuterMeasure (fun x _ => m x) hC.empty_mem
+          addContent_empty).caratheodory] s := by
+        change (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).IsCaratheodory s
+        exact isCaratheodory_inducedOuterMeasure_of_mem hC m hs
+      rw [OuterMeasure.trim_eq _ hs_meas]; rw [m.inducedOuterMeasure_eq hC m_sigma_subadd hs] }
 
 中文:
 定义 measureCaratheodory
@@ -265,7 +330,12 @@ definition measureCaratheodory
   { inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty with
     m_iUnion := fun f hf hd => OuterMeasure.iUnion_eq_of_caratheodory _ hf hd
     trim_le := by
-      apply le
+      apply le_inducedOuterMeasure.mpr fun s hs => ?_
+      have hs_meas : MeasurableSet[(inducedOuterMeasure (fun x _ => m x) hC.empty_mem
+          addContent_empty).caratheodory] s := by
+        change (inducedOuterMeasure (fun x _ => m x) hC.empty_mem addContent_empty).IsCaratheodory s
+        exact isCaratheodory_inducedOuterMeasure_of_mem hC m hs
+      rw [OuterMeasure.trim_eq _ hs_meas]; rw [m.inducedOuterMeasure_eq hC m_sigma_subadd hs] }
 
 Depends on / 依赖: MeasurableSet, MeasurableSpace, OuterMeasure, OuterMeasure.iUnion_eq_of_caratheodory, _eq_csInf_image, addContent_empty, caratheodory, empty_mem, hC.empty_mem, hs_meas, iUnion_eq_of_caratheodory, inducedOuterMeasure, le_inducedOuterMeasure, le_inducedOuterMeasure.mpr, m_iUnion, trim_le
 -/

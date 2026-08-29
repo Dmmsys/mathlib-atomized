@@ -95,7 +95,13 @@ theorem isFiltered_structuredArrow_of_isFiltered_of_exists
   suffices IsFilteredOrEmpty (StructuredArrow d F) from IsFiltered.mk
   refine ⟨fun f g => ?_, fun f g η μ => ?_⟩
   · obtain ⟨c, ⟨t, ht⟩⟩ := h₂ (f.hom ≫ F.map (IsFiltered.leftToMax f.right g.right))
-        
+        (g.hom ≫ F.map (IsFiltered.rightToMax f.right g.right))
+    refine ⟨.mk (f.hom ≫ F.map (IsFiltered.leftToMax f.right g.right ≫ t)), ?_, ?_, trivial⟩
+    · exact StructuredArrow.homMk (IsFiltered.leftToMax _ _ ≫ t) rfl
+    · exact StructuredArrow.homMk (IsFiltered.rightToMax _ _ ≫ t) (by simpa using ht.symm)
+  · refine ⟨.mk (f.hom ≫ F.map (η.right ≫ IsFiltered.coeqHom η.right μ.right)),
+      StructuredArrow.homMk (IsFiltered.coeqHom η.right μ.right) (by simp), ?_⟩
+    simpa using IsFiltered.coeq_condition _ _
 
 中文:
 定理 isFiltered_structuredArrow_of_isFiltered_of_存在
@@ -107,7 +113,13 @@ theorem isFiltered_structuredArrow_of_isFiltered_of_exists
   suffices IsFilteredOrEmpty (StructuredArrow d F) from IsFiltered.mk
   refine ⟨fun f g => ?_, fun f g η μ => ?_⟩
   · obtain ⟨c, ⟨t, ht⟩⟩ := h₂ (f.hom ≫ F.map (IsFiltered.leftToMax f.right g.right))
-        
+        (g.hom ≫ F.map (IsFiltered.rightToMax f.right g.right))
+    refine ⟨.mk (f.hom ≫ F.map (IsFiltered.leftToMax f.right g.right ≫ t)), ?_, ?_, trivial⟩
+    · exact StructuredArrow.homMk (IsFiltered.leftToMax _ _ ≫ t) rfl
+    · exact StructuredArrow.homMk (IsFiltered.rightToMax _ _ ≫ t) (by simpa using ht.symm)
+  · refine ⟨.mk (f.hom ≫ F.map (η.right ≫ IsFiltered.coeqHom η.right μ.right)),
+      StructuredArrow.homMk (IsFiltered.coeqHom η.right μ.right) (by simp), ?_⟩
+    simpa using IsFiltered.coeq_condition _ _
 
 Depends on / 依赖: F.map, IsFiltered, IsFiltered.leftToMax, IsFiltered.mk, IsFiltered.rightToMax, IsFilteredOrEmpty, Nonempty, Struct, StructuredArrow, StructuredArrow.homMk, f.hom, f.right, g.hom, g.right, leftToMax, rightToMax
 -/
@@ -140,7 +152,11 @@ theorem isCofiltered_costructuredArrow_of_isCofiltered_of_exists
   suffices IsFiltered (StructuredArrow (op d) F.op) from
     IsFiltered.of_equivalence (costructuredArrowOpEquivalence _ _).symm
   apply isFiltered_structuredArrow_of_isFiltered_of_exists
-  · obtain ⟨c, ⟨t⟩⟩ := h
+  · obtain ⟨c, ⟨t⟩⟩ := h₁
+    exact ⟨op c, ⟨Quiver.Hom.op t⟩⟩
+  · intro c s s'
+    obtain ⟨c', t, ht⟩ := h₂ s.unop s'.unop
+    exact ⟨op c', Quiver.Hom.op t, Quiver.Hom.unop_inj ht⟩
 
 中文:
 定理 isCofiltered_costructuredArrow_of_isCofiltered_of_存在
@@ -150,7 +166,11 @@ theorem isCofiltered_costructuredArrow_of_isCofiltered_of_exists
   suffices IsFiltered (StructuredArrow (op d) F.op) from
     IsFiltered.of_equivalence (costructuredArrowOpEquivalence _ _).symm
   apply isFiltered_structuredArrow_of_isFiltered_of_exists
-  · obtain ⟨c, ⟨t⟩⟩ := h
+  · obtain ⟨c, ⟨t⟩⟩ := h₁
+    exact ⟨op c, ⟨Quiver.Hom.op t⟩⟩
+  · intro c s s'
+    obtain ⟨c', t, ht⟩ := h₂ s.unop s'.unop
+    exact ⟨op c', Quiver.Hom.op t, Quiver.Hom.unop_inj ht⟩
 
 Depends on / 依赖: CostructuredArrow, F.op, IsFiltered, IsFiltered.of_equivalence, Quiver, Quiver.Hom.op, Quiver.Hom.unop_inj, StructuredArrow, costructuredArrowOpEquivalence, isCofiltered_of_isFiltered_op, isFiltered_structuredArrow_of_isFiltered_of_exists, of_equivalence, s.unop, unop_inj
 -/
@@ -344,7 +364,8 @@ theorem IsFilteredOrEmpty.of_exists_of_isFiltered_of_fullyFaithful
       F.preimage (IsFiltered.rightToMax _ _ ≫ f), trivial⟩
   cocone_maps {c c'} f g := by
     obtain ⟨c₀, ⟨f₀⟩⟩ := h (IsFiltered.coeq (F.map f) (F.map g))
-    refine ⟨_, F.pre
+    refine ⟨_, F.preimage (IsFiltered.coeqHom (F.map f) (F.map g) ≫ f₀), F.map_injective ?_⟩
+    simp [reassoc_of% (IsFiltered.coeq_condition (F.map f) (F.map g))]
 
 中文:
 定理 是FilteredOrEmpty.of_存在_of_isFiltered_of_fullyFaithful
@@ -355,7 +376,8 @@ theorem IsFilteredOrEmpty.of_exists_of_isFiltered_of_fullyFaithful
       F.preimage (IsFiltered.rightToMax _ _ ≫ f), trivial⟩
   cocone_maps {c c'} f g := by
     obtain ⟨c₀, ⟨f₀⟩⟩ := h (IsFiltered.coeq (F.map f) (F.map g))
-    refine ⟨_, F.pre
+    refine ⟨_, F.preimage (IsFiltered.coeqHom (F.map f) (F.map g) ≫ f₀), F.map_injective ?_⟩
+    simp [reassoc_of% (IsFiltered.coeq_condition (F.map f) (F.map g))]
 
 Depends on / 依赖: F.map, F.map_injective, F.obj, F.preimage, IsFiltered, IsFiltered.coeq, IsFiltered.coeqHom, IsFiltered.coeq_condition, IsFiltered.leftToMax, IsFiltered.max, IsFiltered.rightToMax, cocone_maps, coeqHom, coeq_condition, leftToMax, map_injective, preimage, reassoc_of, rightToMax
 -/
@@ -473,7 +495,7 @@ theorem Functor.final_of_exists_of_isFiltered_of_fullyFaithful
   refine Functor.final_of_exists_of_isFiltered F h (fun {d c} s s' => ?_)
   obtain ⟨c₀, ⟨f⟩⟩ := h (IsFiltered.coeq s s')
   refine ⟨c₀, F.preimage (IsFiltered.coeqHom s s' ≫ f), ?_⟩
-  simp [reassoc_of% (IsFiltered.coeq_condit
+  simp [reassoc_of% (IsFiltered.coeq_condition s s')]
 
 中文:
 定理 函子.final_of_存在_of_isFiltered_of_fullyFaithful
@@ -483,7 +505,7 @@ theorem Functor.final_of_exists_of_isFiltered_of_fullyFaithful
   refine Functor.final_of_exists_of_isFiltered F h (fun {d c} s s' => ?_)
   obtain ⟨c₀, ⟨f⟩⟩ := h (IsFiltered.coeq s s')
   refine ⟨c₀, F.preimage (IsFiltered.coeqHom s s' ≫ f), ?_⟩
-  simp [reassoc_of% (IsFiltered.coeq_condit
+  simp [reassoc_of% (IsFiltered.coeq_condition s s')]
 
 Depends on / 依赖: F.preimage, Functor, Functor.final_of_exists_of_isFiltered, IsFiltered, IsFiltered.coeq, IsFiltered.coeqHom, IsFiltered.coeq_condition, IsFilteredOrEmpty, IsFilteredOrEmpty.of_exists_of_isFiltered_of_fullyFaithful, coeqHom, coeq_condition, final_of_exists_of_isFiltered, of_exists_of_isFiltered_of_fullyFaithful, preimage, reassoc_of
 -/
@@ -580,7 +602,8 @@ instance Under.final_forget
     (fun {_} {x} s s' => by
       use mk (x.hom ≫ IsFiltered.coeqHom s s')
       use homMk (IsFiltered.coeqHom s s') (by simp)
-      simp only [forget_obj, mk_right, forget_map, homMk_right
+      simp only [forget_obj, mk_right, forget_map, homMk_right]
+      rw [IsFiltered.coeq_condition])
 
 中文:
 实例 Under.final_forget
@@ -590,7 +613,8 @@ instance Under.final_forget
     (fun {_} {x} s s' => by
       use mk (x.hom ≫ IsFiltered.coeqHom s s')
       use homMk (IsFiltered.coeqHom s s') (by simp)
-      simp only [forget_obj, mk_right, forget_map, homMk_right
+      simp only [forget_obj, mk_right, forget_map, homMk_right]
+      rw [IsFiltered.coeq_condition])
 
 Depends on / 依赖: IsFiltered, IsFiltered.coeqHom, IsFiltered.coeq_condition, IsFiltered.leftToMax, IsFiltered.rightToMax, coeqHom, coeq_condition, final_of_exists_of_isFiltered, forget_map, forget_obj, homMk_right, leftToMax, mk_right, rightToMax, x.hom
 -/
@@ -616,7 +640,8 @@ instance Over.initial_forget
     (fun {_} {x} s s' => by
       use mk (IsCofiltered.eqHom s s' ≫ x.hom)
       use homMk (IsCofiltered.eqHom s s') (by simp)
-      simp only [forget_obj, mk_left, forget_map, homM
+      simp only [forget_obj, mk_left, forget_map, homMk_left]
+      rw [IsCofiltered.eq_condition])
 
 中文:
 实例 Over.initial_forget
@@ -626,7 +651,8 @@ instance Over.initial_forget
     (fun {_} {x} s s' => by
       use mk (IsCofiltered.eqHom s s' ≫ x.hom)
       use homMk (IsCofiltered.eqHom s s') (by simp)
-      simp only [forget_obj, mk_left, forget_map, homM
+      simp only [forget_obj, mk_left, forget_map, homMk_left]
+      rw [IsCofiltered.eq_condition])
 
 Depends on / 依赖: IsCofiltered, IsCofiltered.eqHom, IsCofiltered.eq_condition, IsCofiltered.minToLeft, IsCofiltered.minToRight, eq_condition, forget_map, forget_obj, homMk_left, initial_of_exists_of_isCofiltered, minToLeft, minToRight, mk_left, x.hom
 -/
@@ -655,7 +681,10 @@ theorem Functor.Final.exists_coeq_of_locally_small
     apply (Final.colimitCompCoyonedaIso F d).toEquiv.injective
     subsingleton
   obtain ⟨c', t₁, t₂, h⟩ := (Types.FilteredColimit.colimit_eq_iff.{v₁, v₁, v₁} _).mp this
-  refine ⟨IsFiltered.coeq t₁ 
+  refine ⟨IsFiltered.coeq t₁ t₂, t₁ ≫ IsFiltered.coeqHom t₁ t₂, ?_⟩
+  conv_rhs => rw [IsFiltered.coeq_condition t₁ t₂]
+  dsimp at h
+  simp [reassoc_of% h]
 
 中文:
 定理 函子.终.存在_coeq_of_locally_small
@@ -665,7 +694,10 @@ theorem Functor.Final.exists_coeq_of_locally_small
     apply (Final.colimitCompCoyonedaIso F d).toEquiv.injective
     subsingleton
   obtain ⟨c', t₁, t₂, h⟩ := (Types.FilteredColimit.colimit_eq_iff.{v₁, v₁, v₁} _).mp this
-  refine ⟨IsFiltered.coeq t₁ 
+  refine ⟨IsFiltered.coeq t₁ t₂, t₁ ≫ IsFiltered.coeqHom t₁ t₂, ?_⟩
+  conv_rhs => rw [IsFiltered.coeq_condition t₁ t₂]
+  dsimp at h
+  simp [reassoc_of% h]
 
 Depends on / 依赖: FilteredColimit, Final.colimitCompCoyonedaIso, IsFiltered, IsFiltered.coeq, IsFiltered.coeqHom, IsFiltered.coeq_condition, Types.FilteredColimit.colimit_eq_iff, coeqHom, coeq_condition, colimit, colimitCompCoyonedaIso, colimit_eq_iff, conv_rhs, coyoneda, coyoneda.obj, injective, reassoc_of, subsingleton, toEquiv, toEquiv.injective
 -/
@@ -696,7 +728,12 @@ theorem Functor.final_iff_of_isFiltered
     obtain ⟨f⟩ : Nonempty (StructuredArrow d F) := IsConnected.is_nonempty
     exact ⟨_, ⟨f.hom⟩⟩
   · let s₁ : C ≌ AsSmall.{max u₁ v₁ u₂ v₂} C := AsSmall.equiv
-    let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂} D 
+    let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂} D := AsSmall.equiv
+    have : IsFilteredOrEmpty (AsSmall.{max u₁ v₁ u₂ v₂} C) := .of_equivalence s₁
+    intro d c s s'
+    obtain ⟨c', t, ht⟩ := Functor.Final.exists_coeq_of_locally_small (s₁.inverse ⋙ F ⋙ s₂.functor)
+      (AsSmall.up.map s) (AsSmall.up.map s')
+    exact ⟨AsSmall.down.obj c', AsSmall.down.map t, s₂.functor.map_injective (by simp_all [s₁, s₂])⟩
 
 中文:
 定理 函子.final_iff_of_isFiltered
@@ -707,7 +744,12 @@ theorem Functor.final_iff_of_isFiltered
     obtain ⟨f⟩ : Nonempty (StructuredArrow d F) := IsConnected.is_nonempty
     exact ⟨_, ⟨f.hom⟩⟩
   · let s₁ : C ≌ AsSmall.{max u₁ v₁ u₂ v₂} C := AsSmall.equiv
-    let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂} D 
+    let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂} D := AsSmall.equiv
+    have : IsFilteredOrEmpty (AsSmall.{max u₁ v₁ u₂ v₂} C) := .of_equivalence s₁
+    intro d c s s'
+    obtain ⟨c', t, ht⟩ := Functor.Final.exists_coeq_of_locally_small (s₁.inverse ⋙ F ⋙ s₂.functor)
+      (AsSmall.up.map s) (AsSmall.up.map s')
+    exact ⟨AsSmall.down.obj c', AsSmall.down.map t, s₂.functor.map_injective (by simp_all [s₁, s₂])⟩
 
 Depends on / 依赖: AsSmall, AsSmall.equiv, AsSmall.up.ma, Functor, Functor.Final.exists_coeq_of_locally_small, IsConnected, IsConnected.is_nonempty, IsFilteredOrEmpty, Nonempty, StructuredArrow, exists_coeq_of_locally_small, f.hom, final_of_exists_of_isFiltered, functor, inverse, is_nonempty, of_equivalence
 -/
@@ -740,7 +782,8 @@ theorem Functor.initial_iff_of_isCofiltered
     obtain ⟨c, ⟨t⟩⟩ := h₁ (op d)
     exact ⟨c.unop, ⟨t.unop⟩⟩
   · intro d c s s'
-    obtain ⟨c', t, ht⟩ := h₂ (Quiver.Hom.
+    obtain ⟨c', t, ht⟩ := h₂ (Quiver.Hom.op s) (Quiver.Hom.op s')
+    exact ⟨c'.unop, t.unop, Quiver.Hom.op_inj ht⟩
 
 中文:
 定理 函子.initial_iff_of_isCofiltered
@@ -753,7 +796,8 @@ theorem Functor.initial_iff_of_isCofiltered
     obtain ⟨c, ⟨t⟩⟩ := h₁ (op d)
     exact ⟨c.unop, ⟨t.unop⟩⟩
   · intro d c s s'
-    obtain ⟨c', t, ht⟩ := h₂ (Quiver.Hom.
+    obtain ⟨c', t, ht⟩ := h₂ (Quiver.Hom.op s) (Quiver.Hom.op s')
+    exact ⟨c'.unop, t.unop, Quiver.Hom.op_inj ht⟩
 
 Depends on / 依赖: F.op.final_iff_of_isFiltered.mp, Quiver, Quiver.Hom.op, Quiver.Hom.op_inj, c.unop, final_iff_of_isFiltered, initial_of_exists_of_isCofiltered, op_inj, t.unop
 -/
@@ -1260,7 +1304,10 @@ instance final_eval
   · intro d c f g
     let c't : (forall s, (c' : I s) × (c s ⟶ c')) := Function.update (fun t => ⟨c t, 𝟙 (c t)⟩)
       s ⟨coeq f g, coeqHom f g⟩
-    re
+    refine ⟨fun t => (c't t).1, fun t => (c't t).2, ?_⟩
+    dsimp only [Pi.eval_obj, Pi.eval_map, c't]
+    rw [Function.update_self]
+    simpa using coeq_condition _ _
 
 中文:
 实例 final_eval
@@ -1272,7 +1319,10 @@ instance final_eval
   · intro d c f g
     let c't : (forall s, (c' : I s) × (c s ⟶ c')) := Function.update (fun t => ⟨c t, 𝟙 (c t)⟩)
       s ⟨coeq f g, coeqHom f g⟩
-    re
+    refine ⟨fun t => (c't t).1, fun t => (c't t).2, ?_⟩
+    dsimp only [Pi.eval_obj, Pi.eval_map, c't]
+    rw [Function.update_self]
+    simpa using coeq_condition _ _
 
 Depends on / 依赖: Function, Function.update, Function.update_self, Functor, Functor.final_of_exists_of_isFiltered, Pi.eval_map, Pi.eval_obj, classical, coeqHom, coeq_condition, eval_map, eval_obj, final_of_exists_of_isFiltered, nonempty, nonempty.some, update, update_self
 -/
@@ -1303,7 +1353,10 @@ instance initial_eval
   · intro d c f g
     let c't : (forall s, (c' : I s) × (c' ⟶ c s)) := Function.update (fun t => ⟨c t, 𝟙 (c t)⟩)
       s ⟨eq f g, eqHom f g⟩
-    re
+    refine ⟨fun t => (c't t).1, fun t => (c't t).2, ?_⟩
+    dsimp only [Pi.eval_obj, Pi.eval_map, c't]
+    rw [Function.update_self]
+    simpa using eq_condition _ _
 
 中文:
 实例 initial_eval
@@ -1315,7 +1368,10 @@ instance initial_eval
   · intro d c f g
     let c't : (forall s, (c' : I s) × (c' ⟶ c s)) := Function.update (fun t => ⟨c t, 𝟙 (c t)⟩)
       s ⟨eq f g, eqHom f g⟩
-    re
+    refine ⟨fun t => (c't t).1, fun t => (c't t).2, ?_⟩
+    dsimp only [Pi.eval_obj, Pi.eval_map, c't]
+    rw [Function.update_self]
+    simpa using eq_condition _ _
 
 Depends on / 依赖: Function, Function.update, Function.update_self, Functor, Functor.initial_of_exists_of_isCofiltered, Pi.eval_map, Pi.eval_obj, classical, eq_condition, eval_map, eval_obj, initial_of_exists_of_isCofiltered, nonempty, nonempty.some, update, update_self
 -/

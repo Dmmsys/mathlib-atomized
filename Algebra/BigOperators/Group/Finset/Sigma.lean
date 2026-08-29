@@ -297,7 +297,11 @@ theorem prod_comm'
       rintro ⟨x, y⟩
       simp only [mem_biUnion, mem_map, Function.Embedding.sectR_apply, Prod.mk.injEq,
         exists_eq_right, ← and_assoc]
-    ex
+    exact
+      (prod_finset_product' _ _ _ this).symm.trans
+        ((prod_finset_product_right' _ _ _) fun ⟨x, y⟩ => (this _).trans ((h x y).trans and_comm))
+
+@[to_additive]
 
 中文:
 定理 prod_comm'
@@ -309,7 +313,11 @@ theorem prod_comm'
       rintro ⟨x, y⟩
       simp only [mem_biUnion, mem_map, Function.Embedding.sectR_apply, Prod.mk.injEq,
         exists_eq_right, ← and_assoc]
-    ex
+    exact
+      (prod_finset_product' _ _ _ this).symm.trans
+        ((prod_finset_product_right' _ _ _) fun ⟨x, y⟩ => (this _).trans ((h x y).trans and_comm))
+
+@[to_additive]
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.sectR, Function.Embedding.sectR_apply, Prod.mk.injEq, and_assoc, and_comm, biUnion, classical, exists_eq_right, mem_biUnion, mem_map, prod_finset_product, prod_finset_product_right, s.biUnion, sectR_apply, symm.trans
 -/

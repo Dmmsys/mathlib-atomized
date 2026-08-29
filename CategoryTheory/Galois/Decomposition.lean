@@ -127,7 +127,31 @@ lemma has_decomp_connected_components_aux
   · exact has_decomp_connected_components_aux_conn X
   by_cases nhi : IsInitial X -> False
   · obtain ⟨Y, v, hni, hvmono, hvnoiso⟩ :=
-      has_non_trivial_subobject_of_not_isConnected_of_not_initial X h n
+      has_non_trivial_subobject_of_not_isConnected_of_not_initial X h nhi
+    obtain ⟨Z, u, ⟨c⟩⟩ := PreGaloisCategory.monoInducesIsoOnDirectSummand v
+    let t : ColimitCocone (pair Y Z) := { cocone := BinaryCofan.mk v u, isColimit := c }
+    have hn1 : Nat.card (F.obj Y) < n := by
+      rw [hn]
+      exact lt_card_fiber_of_mono_of_notIso F v hvnoiso
+    have i : X ≅ Y ⨿ Z := (colimit.isoColimitCocone t).symm
+    have hnn : Nat.card (F.obj X) = Nat.card (F.obj Y) + Nat.card (F.obj Z) := by
+      rw [card_fiber_eq_of_iso F i]
+      exact card_fiber_coprod_eq_sum F Y Z
+    have hn2 : Nat.card (F.obj Z) < n := by
+      rw [hn]; rw [hnn]; rw [lt_add_iff_pos_left]
+      exact Nat.pos_of_ne_zero (non_zero_card_fiber_of_not_initial F Y hni)
+    let ⟨ι₁, f₁, g₁, hc₁, hf₁, he₁⟩ := hi (Nat.card (F.obj Y)) hn1 Y rfl
+    let ⟨ι₂, f₂, g₂, hc₂, hf₂, he₂⟩ := hi (Nat.card (F.obj Z)) hn2 Z rfl
+    refine ⟨ι₁ oplus ι₂, Sum.elim f₁ f₂,
+      Cofan.combPairHoms (Cofan.mk Y g₁) (Cofan.mk Z g₂) (BinaryCofan.mk v u), ?_⟩
+    use Cofan.combPairIsColimit hc₁ hc₂ c
+    refine ⟨fun i => ?_, inferInstance⟩
+    cases i
+    · exact hf₁ _
+    · exact hf₂ _
+  · simp only [not_forall, not_false_eq_true] at nhi
+    obtain ⟨hi⟩ := nhi
+    exact has_decomp_connected_components_aux_initial X hi
 
 中文:
 引理 has_decomp_connected_components_aux
@@ -139,7 +163,31 @@ lemma has_decomp_connected_components_aux
   · exact has_decomp_connected_components_aux_conn X
   by_cases nhi : IsInitial X -> False
   · obtain ⟨Y, v, hni, hvmono, hvnoiso⟩ :=
-      has_non_trivial_subobject_of_not_isConnected_of_not_initial X h n
+      has_non_trivial_subobject_of_not_isConnected_of_not_initial X h nhi
+    obtain ⟨Z, u, ⟨c⟩⟩ := PreGaloisCategory.monoInducesIsoOnDirectSummand v
+    let t : ColimitCocone (pair Y Z) := { cocone := BinaryCofan.mk v u, isColimit := c }
+    have hn1 : Nat.card (F.obj Y) < n := by
+      rw [hn]
+      exact lt_card_fiber_of_mono_of_notIso F v hvnoiso
+    have i : X ≅ Y ⨿ Z := (colimit.isoColimitCocone t).symm
+    have hnn : Nat.card (F.obj X) = Nat.card (F.obj Y) + Nat.card (F.obj Z) := by
+      rw [card_fiber_eq_of_iso F i]
+      exact card_fiber_coprod_eq_sum F Y Z
+    have hn2 : Nat.card (F.obj Z) < n := by
+      rw [hn]; rw [hnn]; rw [lt_add_iff_pos_left]
+      exact Nat.pos_of_ne_zero (non_zero_card_fiber_of_not_initial F Y hni)
+    let ⟨ι₁, f₁, g₁, hc₁, hf₁, he₁⟩ := hi (Nat.card (F.obj Y)) hn1 Y rfl
+    let ⟨ι₂, f₂, g₂, hc₂, hf₂, he₂⟩ := hi (Nat.card (F.obj Z)) hn2 Z rfl
+    refine ⟨ι₁ oplus ι₂, Sum.elim f₁ f₂,
+      Cofan.combPairHoms (Cofan.mk Y g₁) (Cofan.mk Z g₂) (BinaryCofan.mk v u), ?_⟩
+    use Cofan.combPairIsColimit hc₁ hc₂ c
+    refine ⟨fun i => ?_, inferInstance⟩
+    cases i
+    · exact hf₁ _
+    · exact hf₂ _
+  · simp only [not_forall, not_false_eq_true] at nhi
+    obtain ⟨hi⟩ := nhi
+    exact has_decomp_connected_components_aux_initial X hi
 -/
 private lemma has_decomp_connected_components_aux (F : C ⥤ FintypeCat.{w}) [FiberFunctor F]
     (n : Nat) : forall (X : C), n = Nat.card (F.obj X) -> exists (ι : Type) (f : ι -> C)
@@ -240,7 +288,9 @@ lemma fiber_in_connected_component
   let s : Cocone (Discrete.functor f ⋙ F) := F.mapCocone (Cofan.mk X g)
   let s' : IsColimit s := isColimitOfPreserves F hl
   obtain ⟨⟨j⟩, z, h⟩ := Concrete.isColimit_exists_rep _ s' x
-  refine ⟨f j, g j, z, ⟨?_, hc j, MonoCoprod
+  refine ⟨f j, g j, z, ⟨?_, hc j, MonoCoprod.mono_inj _ (Cofan.mk X g) hl j⟩⟩
+  subst h
+  rfl
 
 中文:
 引理 fiber_in_connected_component
@@ -251,7 +301,9 @@ lemma fiber_in_connected_component
   let s : Cocone (Discrete.functor f ⋙ F) := F.mapCocone (Cofan.mk X g)
   let s' : IsColimit s := isColimitOfPreserves F hl
   obtain ⟨⟨j⟩, z, h⟩ := Concrete.isColimit_exists_rep _ s' x
-  refine ⟨f j, g j, z, ⟨?_, hc j, MonoCoprod
+  refine ⟨f j, g j, z, ⟨?_, hc j, MonoCoprod.mono_inj _ (Cofan.mk X g) hl j⟩⟩
+  subst h
+  rfl
 
 Depends on / 依赖: Cocone, Cofan.mk, Concrete, Concrete.isColimit_exists_rep, Discrete, Discrete.functor, F.mapCocone, IsColimit, MonoCoprod, MonoCoprod.mono_inj, functor, has_decomp_connected_components, isColimitOfPreserves, isColimit_exists_rep, mapCocone, mono_inj
 -/
@@ -277,7 +329,20 @@ lemma connected_component_unique
   let Y : C := pullback i j
   let u : Y ⟶ A := pullback.fst i j
   let v : Y ⟶ B := pullback.snd i j
-  let G := F ⋙ Fintype
+  let G := F ⋙ FintypeCat.incl
+  let e : F.obj Y ≃ { p : F.obj A × F.obj B // F.map i p.1 = F.map j p.2 } :=
+    fiberPullbackEquiv F i j
+  let y : F.obj Y := e.symm ⟨(a, b), h⟩
+  have hn : IsInitial Y -> False := not_initial_of_inhabited F y
+  have : IsIso u := IsConnected.noTrivialComponent Y u hn
+  have : IsIso v := IsConnected.noTrivialComponent Y v hn
+  use (asIso u).symm ≪≫ asIso v
+  have hu : G.map u y = a := fiberPullbackEquiv_symm_fst_apply _ _ _ h
+  have hv : G.map v y = b := fiberPullbackEquiv_symm_snd_apply _ _ _ h
+  rw [← hu]; rw [← hv]
+  change (F.map u ≫ F.map _) y = F.map v y
+  simp only [← F.map_comp, Iso.trans_hom, Iso.symm_hom, asIso_inv, asIso_hom,
+    IsIso.hom_inv_id_assoc]
 
 中文:
 引理 connected_component_unique
@@ -288,7 +353,20 @@ lemma connected_component_unique
   let Y : C := pullback i j
   let u : Y ⟶ A := pullback.fst i j
   let v : Y ⟶ B := pullback.snd i j
-  let G := F ⋙ Fintype
+  let G := F ⋙ FintypeCat.incl
+  let e : F.obj Y ≃ { p : F.obj A × F.obj B // F.map i p.1 = F.map j p.2 } :=
+    fiberPullbackEquiv F i j
+  let y : F.obj Y := e.symm ⟨(a, b), h⟩
+  have hn : IsInitial Y -> False := not_initial_of_inhabited F y
+  have : IsIso u := IsConnected.noTrivialComponent Y u hn
+  have : IsIso v := IsConnected.noTrivialComponent Y v hn
+  use (asIso u).symm ≪≫ asIso v
+  have hu : G.map u y = a := fiberPullbackEquiv_symm_fst_apply _ _ _ h
+  have hv : G.map v y = b := fiberPullbackEquiv_symm_snd_apply _ _ _ h
+  rw [← hu]; rw [← hv]
+  change (F.map u ≫ F.map _) y = F.map v y
+  simp only [← F.map_comp, Iso.trans_hom, Iso.symm_hom, asIso_inv, asIso_hom,
+    IsIso.hom_inv_id_assoc]
 
 Depends on / 依赖: IsIso.id, convert
 -/
@@ -464,7 +542,8 @@ definition noncomputable
   apply Finite.injective_iff_bijective.mp
   intro t s (hs : F.map (selfProdProj u t) b = F.map (selfProdProj u s) b)
   change id t = id s
-  have h' : selfProdProj u t = selfProdProj u s := evaluation_injecti
+  have h' : selfProdProj u t = selfProdProj u s := evaluation_injective_of_isConnected F A X b hs
+  rw [← selfProdProj_fiber h s]; rw [← selfProdProj_fiber h t]; rw [h']
 
 中文:
 定义 noncomputable
@@ -475,7 +554,8 @@ definition noncomputable
   apply Finite.injective_iff_bijective.mp
   intro t s (hs : F.map (selfProdProj u t) b = F.map (selfProdProj u s) b)
   change id t = id s
-  have h' : selfProdProj u t = selfProdProj u s := evaluation_injecti
+  have h' : selfProdProj u t = selfProdProj u s := evaluation_injective_of_isConnected F A X b hs
+  rw [← selfProdProj_fiber h s]; rw [← selfProdProj_fiber h t]; rw [h']
 -/
 private noncomputable def fiberPerm (b : F.obj A) : F.obj X ≃ F.obj X := by
   let σ (t : F.obj X) : F.obj X := F.map (selfProdProj u t) b
@@ -535,7 +615,11 @@ lemma selfProdTermIncl_fib_eq
   · simp only [selfProdProj, map_comp, FintypeCat.comp_apply]; rfl
   · dsimp only [selfProdPermIncl, Pi.whiskerEquiv]
     rw [map_comp]; rw [FintypeCat.comp_apply]; rw [h]
-    convert_to! F.map (self
+    convert_to! F.map (selfProdProj u t) b =
+      (F.map (Pi.map' (fiberPerm h b) fun _ => 𝟙 X) ≫
+      F.map (Pi.π (fun _ => X) t)) (mkSelfProdFib F X)
+    rw [← map_comp]; rw [Pi.map'_comp_π]; rw [Category.comp_id]; rw [mkSelfProdFib_map_π F X (fiberPerm h b t)]
+    rfl
 
 中文:
 引理 selfProdTermIncl_fib_eq
@@ -547,7 +631,11 @@ lemma selfProdTermIncl_fib_eq
   · simp only [selfProdProj, map_comp, FintypeCat.comp_apply]; rfl
   · dsimp only [selfProdPermIncl, Pi.whiskerEquiv]
     rw [map_comp]; rw [FintypeCat.comp_apply]; rw [h]
-    convert_to! F.map (self
+    convert_to! F.map (selfProdProj u t) b =
+      (F.map (Pi.map' (fiberPerm h b) fun _ => 𝟙 X) ≫
+      F.map (Pi.π (fun _ => X) t)) (mkSelfProdFib F X)
+    rw [← map_comp]; rw [Pi.map'_comp_π]; rw [Category.comp_id]; rw [mkSelfProdFib_map_π F X (fiberPerm h b t)]
+    rfl
 -/
 private lemma selfProdTermIncl_fib_eq (b : F.obj A) :
     F.map u b = F.map (selfProdPermIncl h b) a := by
@@ -604,7 +692,16 @@ lemma exists_galois_representative
   constructor
   · refine (isGalois_iff_pretransitive F A).mpr ⟨fun x y => ?_⟩
     obtain ⟨fi1, hfi1⟩ := subobj_selfProd_trans h1 x
-    obtain ⟨fi2, hfi2⟩ := subobj_selfProd_tran
+    obtain ⟨fi2, hfi2⟩ := subobj_selfProd_trans h1 y
+    use fi1 ≪≫ fi2.symm
+    change F.map (fi1.hom ≫ fi2.inv) x = y
+    simp only [map_comp, FintypeCat.comp_apply]
+    rw [hfi1]; rw [← hfi2]
+    exact ConcreteCategory.congr_hom (F.mapIso fi2).hom_inv_id y
+  · refine ⟨evaluation_injective_of_isConnected F A X a, ?_⟩
+    intro x
+    use u ≫ Pi.π _ x
+    exact (selfProdProj_fiber h1) x
 
 中文:
 引理 存在_galois_representative
@@ -618,7 +715,16 @@ lemma exists_galois_representative
   constructor
   · refine (isGalois_iff_pretransitive F A).mpr ⟨fun x y => ?_⟩
     obtain ⟨fi1, hfi1⟩ := subobj_selfProd_trans h1 x
-    obtain ⟨fi2, hfi2⟩ := subobj_selfProd_tran
+    obtain ⟨fi2, hfi2⟩ := subobj_selfProd_trans h1 y
+    use fi1 ≪≫ fi2.symm
+    change F.map (fi1.hom ≫ fi2.inv) x = y
+    simp only [map_comp, FintypeCat.comp_apply]
+    rw [hfi1]; rw [← hfi2]
+    exact ConcreteCategory.congr_hom (F.mapIso fi2).hom_inv_id y
+  · refine ⟨evaluation_injective_of_isConnected F A X a, ?_⟩
+    intro x
+    use u ≫ Pi.π _ x
+    exact (selfProdProj_fiber h1) x
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.map, F.mapIso, FintypeCat, FintypeCat.comp_apply, comp_apply, congr_hom, evaluation_injecti, fi1.hom, fi2.inv, fi2.symm, fiber_in_connected_component, hom_inv_id, isGalois_iff_pretransitive, limit.lift_, mapIso, map_comp, mkSelfProdFib, selfProd
 -/

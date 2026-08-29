@@ -53,7 +53,32 @@ theorem PInfty_comp_map_mono_eq_zero
     subst hk
     obtain ⟨j, rfl⟩ := eq_δ_of_mono i
     rw [Isδ₀.iff] at h₂
-  
+    have h₃ : 1 <= (j : Nat) := by
+      by_contra h
+      exact h₂ (by simpa only [Fin.ext_iff, not_le, Nat.lt_one_iff] using! h)
+    exact (HigherFacesVanish.of_P (m + 1) m).comp_δ_eq_zero j h₂ (by lia)
+  · simp only [← add_assoc] at hk
+    clear h₂ hi
+    subst hk
+    obtain ⟨j₁ : Fin (_ + 1), i, rfl⟩ :=
+      eq_comp_δ_of_not_surjective i fun h => by
+        rw [← SimplexCategory.epi_iff_surjective] at h
+        grind [-> le_of_epi]
+    obtain ⟨j₂, i, rfl⟩ :=
+      eq_comp_δ_of_not_surjective i fun h => by
+        rw [← SimplexCategory.epi_iff_surjective] at h
+        grind [-> le_of_epi]
+    by_cases hj₁ : j₁ = 0
+    · subst hj₁
+      rw [assoc]; rw [← SimplexCategory.δ_comp_δ'' (Fin.zero_le _)]
+      simp only [op_comp, X.map_comp, assoc, PInfty_f]
+      erw [(HigherFacesVanish.of_P _ _).comp_δ_eq_zero_assoc _ j₂.succ_ne_zero, zero_comp]
+      simp only [Fin.succ]
+      lia
+    · simp only [op_comp, X.map_comp, assoc, PInfty_f]
+      erw [(HigherFacesVanish.of_P _ _).comp_δ_eq_zero_assoc _ hj₁, zero_comp]
+      by_contra
+      exact hj₁ (by simp only [Fin.ext_iff, Fin.val_zero]; lia)
 
 中文:
 定理 PInfty_comp_map_mono_eq_zero
@@ -68,7 +93,32 @@ theorem PInfty_comp_map_mono_eq_zero
     subst hk
     obtain ⟨j, rfl⟩ := eq_δ_of_mono i
     rw [Isδ₀.iff] at h₂
-  
+    have h₃ : 1 <= (j : Nat) := by
+      by_contra h
+      exact h₂ (by simpa only [Fin.ext_iff, not_le, Nat.lt_one_iff] using! h)
+    exact (HigherFacesVanish.of_P (m + 1) m).comp_δ_eq_zero j h₂ (by lia)
+  · simp only [← add_assoc] at hk
+    clear h₂ hi
+    subst hk
+    obtain ⟨j₁ : Fin (_ + 1), i, rfl⟩ :=
+      eq_comp_δ_of_not_surjective i fun h => by
+        rw [← SimplexCategory.epi_iff_surjective] at h
+        grind [-> le_of_epi]
+    obtain ⟨j₂, i, rfl⟩ :=
+      eq_comp_δ_of_not_surjective i fun h => by
+        rw [← SimplexCategory.epi_iff_surjective] at h
+        grind [-> le_of_epi]
+    by_cases hj₁ : j₁ = 0
+    · subst hj₁
+      rw [assoc]; rw [← SimplexCategory.δ_comp_δ'' (Fin.zero_le _)]
+      simp only [op_comp, X.map_comp, assoc, PInfty_f]
+      erw [(HigherFacesVanish.of_P _ _).comp_δ_eq_zero_assoc _ j₂.succ_ne_zero, zero_comp]
+      simp only [Fin.succ]
+      lia
+    · simp only [op_comp, X.map_comp, assoc, PInfty_f]
+      erw [(HigherFacesVanish.of_P _ _).comp_δ_eq_zero_assoc _ hj₁, zero_comp]
+      by_contra
+      exact hj₁ (by simp only [Fin.ext_iff, Fin.val_zero]; lia)
 
 Depends on / 依赖: Fin.ext_iff, HigherFacesVanish, HigherFacesVanish.of_P, Nat.exists_eq_add_of_lt, Nat.lt_one_iff, SimplexCategory, SimplexCategory.rec, add_assoc, exists_eq_add_of_lt, ext_iff, len_lt_of_mono, lt_one_iff, not_le, of_P
 -/
@@ -128,7 +178,33 @@ theorem Γ₀_obj_termwise_mapMono_comp_PInfty
   · subst h
     simp only [SimplexCategory.eq_id_of_mono i, Γ₀.Obj.Termwise.mapMono_id, op_id, X.map_id]
     dsimp
- 
+    simp only [id_comp, comp_id]
+  by_cases hi : Isδ₀ i
+  -- The case `i = δ 0`
+  · have h' : n' = n + 1 := hi.left
+    subst h'
+    simp only [Γ₀.Obj.Termwise.mapMono_δ₀' _ i hi]
+    rw [← PInfty.comm _ n]; rw [AlternatingFaceMapComplex.obj_d_eq]
+    simp only [Preadditive.comp_sum]
+    rw [Finset.sum_eq_single (0 : Fin (n + 2))]
+    rotate_left
+    · intro b _ hb
+      rw [Preadditive.comp_zsmul]; rw [SimplicialObject.δ]; rw [PInfty_comp_map_mono_eq_zero X (SimplexCategory.δ b) h
+          (by
+            rw [Isδ₀.iff]
+            exact hb),
+        zsmul_zero]
+    · simp only [Finset.mem_univ, not_true, IsEmpty.forall_iff]
+    · simp only [hi.eq_δ₀, Fin.val_zero, pow_zero, one_zsmul]
+      rfl
+  -- The case `i ≠ δ 0`
+  · rw [Γ₀.Obj.Termwise.mapMono_eq_zero _ i _ hi, zero_comp]
+    swap
+    · by_contra h'
+      exact h (congr_arg SimplexCategory.len h'.symm)
+    rw [PInfty_comp_map_mono_eq_zero]
+    · exact h
+    · assumption
 
 中文:
 定理 Γ₀_obj_termwise_mapMono_comp_PInfty
@@ -142,7 +218,33 @@ theorem Γ₀_obj_termwise_mapMono_comp_PInfty
   · subst h
     simp only [SimplexCategory.eq_id_of_mono i, Γ₀.Obj.Termwise.mapMono_id, op_id, X.map_id]
     dsimp
- 
+    simp only [id_comp, comp_id]
+  by_cases hi : Isδ₀ i
+  -- The case `i = δ 0`
+  · have h' : n' = n + 1 := hi.left
+    subst h'
+    simp only [Γ₀.Obj.Termwise.mapMono_δ₀' _ i hi]
+    rw [← PInfty.comm _ n]; rw [AlternatingFaceMapComplex.obj_d_eq]
+    simp only [Preadditive.comp_sum]
+    rw [Finset.sum_eq_single (0 : Fin (n + 2))]
+    rotate_left
+    · intro b _ hb
+      rw [Preadditive.comp_zsmul]; rw [SimplicialObject.δ]; rw [PInfty_comp_map_mono_eq_zero X (SimplexCategory.δ b) h
+          (by
+            rw [Isδ₀.iff]
+            exact hb),
+        zsmul_zero]
+    · simp only [Finset.mem_univ, not_true, IsEmpty.forall_iff]
+    · simp only [hi.eq_δ₀, Fin.val_zero, pow_zero, one_zsmul]
+      rfl
+  -- The case `i ≠ δ 0`
+  · rw [Γ₀.Obj.Termwise.mapMono_eq_zero _ i _ hi, zero_comp]
+    swap
+    · by_contra h'
+      exact h (congr_arg SimplexCategory.len h'.symm)
+    rw [PInfty_comp_map_mono_eq_zero]
+    · exact h
+    · assumption
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.rec
 -/
@@ -206,7 +308,28 @@ definition natTrans
             apply (Γ₀.splitting K[X]).hom_ext'
             intro A
             change _ ≫ (Γ₀.obj K[X]).map θ ≫ _ = _
-            simp only [Splitting.ι_
+            simp only [Splitting.ι_desc_assoc, assoc, Γ₀.Obj.map_on_summand'_assoc,
+              Splitting.ι_desc]
+            erw [Γ₀_obj_termwise_mapMono_comp_PInfty_assoc X (image.ι (θ.unop ≫ A.e))]
+            dsimp only [toKaroubi]
+            simp only [← X.map_comp]
+            congr 2
+            simp only [← op_comp]
+            exact Quiver.Hom.unop_inj (A.fac_pull θ) }
+      comm := by
+        apply (Γ₀.splitting K[X]).hom_ext
+        intro n
+        dsimp [N₁]
+        simp only [← Splitting.cofan_inj_id, Splitting.ι_desc, comp_id, Splitting.ι_desc_assoc,
+          assoc, PInfty_f_idem_assoc] }
+  naturality {X Y} f := by
+    ext1
+    apply (Γ₀.splitting K[X]).hom_ext
+    intro n
+    dsimp [N₁, toKaroubi]
+    simp only [← Splitting.cofan_inj_id, Splitting.ι_desc, Splitting.ι_desc_assoc, assoc,
+      PInfty_f_idem_assoc, PInfty_f_naturality_assoc,
+      NatTrans.naturality, Splitting.IndexSet.id_fst, unop_op, len_mk]
 
 中文:
 定义 natTrans
@@ -217,7 +340,28 @@ definition natTrans
             apply (Γ₀.splitting K[X]).hom_ext'
             intro A
             change _ ≫ (Γ₀.obj K[X]).map θ ≫ _ = _
-            simp only [Splitting.ι_
+            simp only [Splitting.ι_desc_assoc, assoc, Γ₀.Obj.map_on_summand'_assoc,
+              Splitting.ι_desc]
+            erw [Γ₀_obj_termwise_mapMono_comp_PInfty_assoc X (image.ι (θ.unop ≫ A.e))]
+            dsimp only [toKaroubi]
+            simp only [← X.map_comp]
+            congr 2
+            simp only [← op_comp]
+            exact Quiver.Hom.unop_inj (A.fac_pull θ) }
+      comm := by
+        apply (Γ₀.splitting K[X]).hom_ext
+        intro n
+        dsimp [N₁]
+        simp only [← Splitting.cofan_inj_id, Splitting.ι_desc, comp_id, Splitting.ι_desc_assoc,
+          assoc, PInfty_f_idem_assoc] }
+  naturality {X Y} f := by
+    ext1
+    apply (Γ₀.splitting K[X]).hom_ext
+    intro n
+    dsimp [N₁, toKaroubi]
+    simp only [← Splitting.cofan_inj_id, Splitting.ι_desc, Splitting.ι_desc_assoc, assoc,
+      PInfty_f_idem_assoc, PInfty_f_naturality_assoc,
+      NatTrans.naturality, Splitting.IndexSet.id_fst, unop_op, len_mk]
 
 Depends on / 依赖: A.e.op, A.fac_pull, Obj.map_on_summand, PInfty, PInfty.f, Quiver, Quiver.Hom.unop_inj, Splitting, X.map, X.map_comp, _assoc, fac_pull, hom_ext, map_comp, map_on_summand, naturality, op_comp, splitting, toKaroubi, unop.len
 -/
@@ -381,7 +525,17 @@ theorem identity_N₂_objectwise
   have eq₁ : (N₂Γ₂.inv.app (N₂.obj P)).f.f n = PInfty.f n ≫ P.p.app (op ⦋n⦌) ≫
       ((Γ₀.splitting (N₂.obj P).X).cofan _).inj (Splitting.IndexSet.id (op ⦋n⦌)) := by
     simp only [N₂Γ₂_inv_app_f_f, N₂_obj_p_f, assoc]
-  have eq₂ : ((Γ₀.splitting (N₂.obj P).X).cofan _).inj (Splitting.Index
+  have eq₂ : ((Γ₀.splitting (N₂.obj P).X).cofan _).inj (Splitting.IndexSet.id (op ⦋n⦌)) ≫
+      (N₂.map (Γ₂N₂.natTrans.app P)).f.f n = PInfty.f n ≫ P.p.app (op ⦋n⦌) := by
+    dsimp
+    rw [PInfty_on_Γ₀_splitting_summand_eq_self_assoc]; rw [Γ₂N₂.natTrans_app_f_app]
+    dsimp
+    rw [Γ₂N₂ToKaroubiIso_hom_app]; rw [assoc]; rw [Splitting.ι_desc_assoc]; rw [assoc]; rw [assoc]
+    dsimp [toKaroubi]
+    rw [Splitting.ι_desc_assoc]
+    simp [Splitting.IndexSet.e]
+  simp only [Karoubi.comp_f, HomologicalComplex.comp_f, Karoubi.id_f, N₂_obj_p_f, assoc,
+    eq₁, eq₂, PInfty_f_naturality_assoc, app_idem, PInfty_f_idem_assoc]
 
 中文:
 定理 identity_N₂_objectwise
@@ -391,7 +545,17 @@ theorem identity_N₂_objectwise
   have eq₁ : (N₂Γ₂.inv.app (N₂.obj P)).f.f n = PInfty.f n ≫ P.p.app (op ⦋n⦌) ≫
       ((Γ₀.splitting (N₂.obj P).X).cofan _).inj (Splitting.IndexSet.id (op ⦋n⦌)) := by
     simp only [N₂Γ₂_inv_app_f_f, N₂_obj_p_f, assoc]
-  have eq₂ : ((Γ₀.splitting (N₂.obj P).X).cofan _).inj (Splitting.Index
+  have eq₂ : ((Γ₀.splitting (N₂.obj P).X).cofan _).inj (Splitting.IndexSet.id (op ⦋n⦌)) ≫
+      (N₂.map (Γ₂N₂.natTrans.app P)).f.f n = PInfty.f n ≫ P.p.app (op ⦋n⦌) := by
+    dsimp
+    rw [PInfty_on_Γ₀_splitting_summand_eq_self_assoc]; rw [Γ₂N₂.natTrans_app_f_app]
+    dsimp
+    rw [Γ₂N₂ToKaroubiIso_hom_app]; rw [assoc]; rw [Splitting.ι_desc_assoc]; rw [assoc]; rw [assoc]
+    dsimp [toKaroubi]
+    rw [Splitting.ι_desc_assoc]
+    simp [Splitting.IndexSet.e]
+  simp only [Karoubi.comp_f, HomologicalComplex.comp_f, Karoubi.id_f, N₂_obj_p_f, assoc,
+    eq₁, eq₂, PInfty_f_naturality_assoc, app_idem, PInfty_f_idem_assoc]
 
 Depends on / 依赖: IndexSet, P.p.app, PInfty, PInfty.f, Splitting, Splitting.IndexSet.id, inv.app, natTrans, natTrans.app, natTrans_app_f_app, splitting
 -/
@@ -458,7 +622,9 @@ instance :
       dsimp only [Functor.id_obj, Functor.comp_obj] at h
       rw [hom_comp_eq_id] at h
       rw [h]
-     
+      infer_instance
+    exact isIso_of_reflects_iso _ N₂
+  apply NatIso.isIso_of_isIso_app
 
 中文:
 实例 :
@@ -471,7 +637,9 @@ instance :
       dsimp only [Functor.id_obj, Functor.comp_obj] at h
       rw [hom_comp_eq_id] at h
       rw [h]
-     
+      infer_instance
+    exact isIso_of_reflects_iso _ N₂
+  apply NatIso.isIso_of_isIso_app
 
 Depends on / 依赖: Functor, Functor.comp_obj, Functor.id_obj, Karoubi, NatIso, NatIso.isIso_of_isIso_app, SimplicialObject, comp_obj, hom_comp_eq_id, id_obj, infer_instance, isIso_of_isIso_app, isIso_of_reflects_iso, natTrans, natTrans.app
 -/

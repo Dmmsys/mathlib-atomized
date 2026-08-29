@@ -78,7 +78,27 @@ lemma has_decomp_quotients
   have (i : ι) : DiscreteTopology (f i).V := ⟨rfl⟩
 have (i : ι) : ContinuousSMul G (f i).V := ContinuousSMul.mk by
     let r : f i ⟶ X := Sigma.ι f i ≫ u.hom
-    let r'' (p : G × (f i).V
+    let r'' (p : G × (f i).V) : G × X.V := (p.1, r.hom p.2)
+    let q (p : G × X.V) : X.V := (X.ρ p.1).hom p.2
+    let q' (p : G × (f i).V) : (f i).V := ((f i).ρ p.1).hom p.2
+    have heq : q ∘ r'' = r.hom ∘ q' := by
+      ext (p : G × (f i).V)
+      exact (ConcreteCategory.congr_hom (r.comm p.1) p.2).symm
+    have hrinj : Function.Injective r.hom :=
+(ConcreteCategory.mono_iff_injective_of_preservesPullback r).mp mono_comp _ _
+    let t₁ : TopologicalSpace (G × (f i).V) := inferInstance
+    change @Continuous _ _ _ ⊥ q'
+    have : TopologicalSpace.induced r.hom inferInstance = ⊥ := by
+      rw [← le_bot_iff]
+      exact fun s _ => ⟨r.hom '' s, ⟨isOpen_discrete (r.hom '' s), Set.preimage_image_eq s hrinj⟩⟩
+    rw [← this]; rw [continuous_induced_rng]; rw [← heq]
+    exact Continuous.comp continuous_smul (by fun_prop)
+  have (i : ι) : exists (U : OpenSubgroup (G)), (Nonempty ((f i) ≅ G ⧸ₐ U.toSubgroup)) := by
+    obtain ⟨(x : (f i).V)⟩ := nonempty_fiber_of_isConnected (forget₂ _ _) (f i)
+    let U : OpenSubgroup (G) := ⟨MulAction.stabilizer (G) x, stabilizer_isOpen (G) x⟩
+    exact ⟨U, ⟨FintypeCat.isoQuotientStabilizerOfIsConnected (f i) x⟩⟩
+  choose g ui using this
+  exact ⟨ι, hf, g, ⟨(Sigma.mapIso (fun i => (ui i).some)).symm ≪≫ u⟩⟩
 
 中文:
 引理 has_decomp_quotients
@@ -89,7 +109,27 @@ have (i : ι) : ContinuousSMul G (f i).V := ContinuousSMul.mk by
   have (i : ι) : DiscreteTopology (f i).V := ⟨rfl⟩
 have (i : ι) : ContinuousSMul G (f i).V := ContinuousSMul.mk by
     let r : f i ⟶ X := Sigma.ι f i ≫ u.hom
-    let r'' (p : G × (f i).V
+    let r'' (p : G × (f i).V) : G × X.V := (p.1, r.hom p.2)
+    let q (p : G × X.V) : X.V := (X.ρ p.1).hom p.2
+    let q' (p : G × (f i).V) : (f i).V := ((f i).ρ p.1).hom p.2
+    have heq : q ∘ r'' = r.hom ∘ q' := by
+      ext (p : G × (f i).V)
+      exact (ConcreteCategory.congr_hom (r.comm p.1) p.2).symm
+    have hrinj : Function.Injective r.hom :=
+(ConcreteCategory.mono_iff_injective_of_preservesPullback r).mp mono_comp _ _
+    let t₁ : TopologicalSpace (G × (f i).V) := inferInstance
+    change @Continuous _ _ _ ⊥ q'
+    have : TopologicalSpace.induced r.hom inferInstance = ⊥ := by
+      rw [← le_bot_iff]
+      exact fun s _ => ⟨r.hom '' s, ⟨isOpen_discrete (r.hom '' s), Set.preimage_image_eq s hrinj⟩⟩
+    rw [← this]; rw [continuous_induced_rng]; rw [← heq]
+    exact Continuous.comp continuous_smul (by fun_prop)
+  have (i : ι) : exists (U : OpenSubgroup (G)), (Nonempty ((f i) ≅ G ⧸ₐ U.toSubgroup)) := by
+    obtain ⟨(x : (f i).V)⟩ := nonempty_fiber_of_isConnected (forget₂ _ _) (f i)
+    let U : OpenSubgroup (G) := ⟨MulAction.stabilizer (G) x, stabilizer_isOpen (G) x⟩
+    exact ⟨U, ⟨FintypeCat.isoQuotientStabilizerOfIsConnected (f i) x⟩⟩
+  choose g ui using this
+  exact ⟨ι, hf, g, ⟨(Sigma.mapIso (fun i => (ui i).some)).symm ≪≫ u⟩⟩
 
 Depends on / 依赖: Concrete, ContinuousSMul, ContinuousSMul.mk, DiscreteTopology, TopologicalSpace, has_decomp_connected_components, r.hom, u.hom
 -/
@@ -240,7 +280,16 @@ definition coconeQuotientDiag
     intro (m : V ⧸ Subgroup.subgroupOf U V)
     simp only [const_obj_obj, Functor.comp_map, const_obj_map, Category.comp_id]
     rw [← cancel_epi (u.inv)]; rw [Iso.inv_hom_id_assoc]
-    
+    apply Action.hom_ext
+    ext (x : Aut F ⧸ U.toSubgroup)
+    induction m, x using Quotient.inductionOn₂ with | _ σ μ
+    suffices h : ⟦μ * σ⁻¹⟧ = ⟦μ⟧ by
+      simp only [quotientToQuotientOfLE_hom_mk, quotientDiag_map,
+        functorToAction_map_quotientToEndObjectHom V _ u]
+      simpa
+    apply Quotient.sound
+    apply (QuotientGroup.leftRel_apply).mpr
+    simp
 
 中文:
 定义 coconeQuotientDiag
@@ -250,7 +299,16 @@ definition coconeQuotientDiag
     intro (m : V ⧸ Subgroup.subgroupOf U V)
     simp only [const_obj_obj, Functor.comp_map, const_obj_map, Category.comp_id]
     rw [← cancel_epi (u.inv)]; rw [Iso.inv_hom_id_assoc]
-    
+    apply Action.hom_ext
+    ext (x : Aut F ⧸ U.toSubgroup)
+    induction m, x using Quotient.inductionOn₂ with | _ σ μ
+    suffices h : ⟦μ * σ⁻¹⟧ = ⟦μ⟧ by
+      simp only [quotientToQuotientOfLE_hom_mk, quotientDiag_map,
+        functorToAction_map_quotientToEndObjectHom V _ u]
+      simpa
+    apply Quotient.sound
+    apply (QuotientGroup.leftRel_apply).mpr
+    simp
 -/
 private def coconeQuotientDiag :
     Cocone (quotientDiag V h u ⋙ functorToAction F) where
@@ -282,7 +340,24 @@ definition coconeQuotientDiagDesc
     (Quotient.lift (fun σ => (u.inv ≫ s.ι.app (SingleObj.star _)).hom ⟦σ⟧) <| fun σ τ hst => by
       let J' := quotientDiag V h u ⋙ functorToAction F
       let m : End (SingleObj.star (V.toSubgroup ⧸ Subgroup.subgroupOf U V)) :=
-        ⟦⟨σ⁻¹ * τ, (QuotientGroup.leftRel_apply).mp h
+        ⟦⟨σ⁻¹ * τ, (QuotientGroup.leftRel_apply).mp hst⟩⟧
+      have h1 : J'.map m ≫ s.ι.app (SingleObj.star _) = s.ι.app (SingleObj.star _) :=
+        s.ι.naturality m
+      conv_rhs => rw [← h1]
+      have h2 : (J'.map m).hom (u.inv.hom ⟦τ⟧) = u.inv.hom ⟦σ⟧ := by
+        simp [J', functorToAction_map_quotientToEndObjectHom V h u m, ← comp_apply, m]
+      simp [← h2, J'])
+  comm g := by
+    ext (x : Aut F ⧸ V.toSubgroup)
+    induction x using Quotient.inductionOn with | _ σ
+    simp only [const_obj_obj]
+    change (((Aut F ⧸ₐ U.toSubgroup).ρ g ≫ u.inv.hom) ≫ (s.ι.app (SingleObj.star _)).hom) ⟦σ⟧ =
+      ((s.ι.app (SingleObj.star _)).hom ≫ s.pt.ρ g) (u.inv.hom ⟦σ⟧)
+    have : ((functorToAction F).obj A).ρ g ≫ (s.ι.app (SingleObj.star _)).hom =
+        (s.ι.app (SingleObj.star _)).hom ≫ s.pt.ρ g :=
+      (s.ι.app (SingleObj.star _)).comm g
+    rw [← this]; rw [u.inv.comm g]
+    rfl
 
 中文:
 定义 coconeQuotientDiagDesc
@@ -290,7 +365,24 @@ definition coconeQuotientDiagDesc
     (Quotient.lift (fun σ => (u.inv ≫ s.ι.app (SingleObj.star _)).hom ⟦σ⟧) <| fun σ τ hst => by
       let J' := quotientDiag V h u ⋙ functorToAction F
       let m : End (SingleObj.star (V.toSubgroup ⧸ Subgroup.subgroupOf U V)) :=
-        ⟦⟨σ⁻¹ * τ, (QuotientGroup.leftRel_apply).mp h
+        ⟦⟨σ⁻¹ * τ, (QuotientGroup.leftRel_apply).mp hst⟩⟧
+      have h1 : J'.map m ≫ s.ι.app (SingleObj.star _) = s.ι.app (SingleObj.star _) :=
+        s.ι.naturality m
+      conv_rhs => rw [← h1]
+      have h2 : (J'.map m).hom (u.inv.hom ⟦τ⟧) = u.inv.hom ⟦σ⟧ := by
+        simp [J', functorToAction_map_quotientToEndObjectHom V h u m, ← comp_apply, m]
+      simp [← h2, J'])
+  comm g := by
+    ext (x : Aut F ⧸ V.toSubgroup)
+    induction x using Quotient.inductionOn with | _ σ
+    simp only [const_obj_obj]
+    change (((Aut F ⧸ₐ U.toSubgroup).ρ g ≫ u.inv.hom) ≫ (s.ι.app (SingleObj.star _)).hom) ⟦σ⟧ =
+      ((s.ι.app (SingleObj.star _)).hom ≫ s.pt.ρ g) (u.inv.hom ⟦σ⟧)
+    have : ((functorToAction F).obj A).ρ g ≫ (s.ι.app (SingleObj.star _)).hom =
+        (s.ι.app (SingleObj.star _)).hom ≫ s.pt.ρ g :=
+      (s.ι.app (SingleObj.star _)).comm g
+    rw [← this]; rw [u.inv.comm g]
+    rfl
 -/
 private def coconeQuotientDiagDesc
     (s : Cocone (quotientDiag V h u ⋙ functorToAction F)) :
@@ -337,7 +429,8 @@ definition coconeQuotientDiagIsColimit
   uniq s f hf := by
     apply Action.hom_ext
     ext (x : Aut F ⧸ V.toSubgroup)
-    induction x usi
+    induction x using Quotient.inductionOn with | _ σ
+    simp [← hf (SingleObj.star _), ← ConcreteCategory.comp_apply]
 
 中文:
 定义 coconeQuotientDiagIsColimit
@@ -353,7 +446,8 @@ definition coconeQuotientDiagIsColimit
   uniq s f hf := by
     apply Action.hom_ext
     ext (x : Aut F ⧸ V.toSubgroup)
-    induction x usi
+    induction x using Quotient.inductionOn with | _ σ
+    simp [← hf (SingleObj.star _), ← ConcreteCategory.comp_apply]
 -/
 private def coconeQuotientDiagIsColimit :
     IsColimit (coconeQuotientDiag h u hUinV) where
@@ -384,7 +478,35 @@ lemma exists_lift_of_quotient_openSubgroup
   obtain ⟨I, hf, hc, hi⟩ := exists_set_ker_evaluation_subset_of_isOpen F (one_mem V) V.isOpen'
   have (X : I) : IsConnected X.val := hc X X.property
   have (X : I) : Nonempty (F.obj X.val) := nonempty_fiber_of_isConnected F X
-  have hn : Nonempty (F.obj <| (∏ᶜ fun X : I => X)) := nonempty_fiber_p
+  have hn : Nonempty (F.obj <| (∏ᶜ fun X : I => X)) := nonempty_fiber_pi_of_nonempty_of_finite F _
+  obtain ⟨A, f, hgal⟩ := exists_hom_from_galois_of_fiber_nonempty F (∏ᶜ fun X : I => X) hn
+  obtain ⟨a⟩ := nonempty_fiber_of_isConnected F A
+  let U : OpenSubgroup (Aut F) := ⟨MulAction.stabilizer (Aut F) a, stabilizer_isOpen (Aut F) a⟩
+  let u := fiberIsoQuotientStabilizer A a
+  have hUnormal : U.toSubgroup.Normal := stabilizer_normal_of_isGalois F A a
+  have h1 (σ : Aut F) (σinU : σ in U) : σ.hom.app A = 𝟙 (F.obj A) := by
+    have hi : (Aut F ⧸ₐ MulAction.stabilizer (Aut F) a).ρ σ = 𝟙 _ := by
+      refine FintypeCat.hom_ext _ _ (fun x => ?_)
+      induction x using Quotient.inductionOn with | _ τ
+      change ⟦σ * τ⟧ = ⟦τ⟧
+      apply Quotient.sound
+      apply (QuotientGroup.leftRel_apply).mpr
+      simp only [mul_inv_rev]
+      exact Subgroup.Normal.conj_mem hUnormal _ (Subgroup.inv_mem U.toSubgroup σinU) _
+    simp [← cancel_mono u.hom.hom, show σ.hom.app A ≫ u.hom.hom = _ from u.hom.comm σ, hi]
+  have h2 (σ : Aut F) (σinU : σ in U) : forall X : I, σ.hom.app X = 𝟙 (F.obj X) := by
+    intro ⟨X, hX⟩
+    ext (x : F.obj X)
+    let p : A ⟶ X := f ≫ Pi.π (fun Z : I => (Z : C)) ⟨X, hX⟩
+    have : IsConnected X := hc X hX
+    obtain ⟨a, rfl⟩ := surjective_of_nonempty_fiber_of_isConnected F p x
+    simp only [FintypeCat.id_apply, NatTrans.naturality_apply, h1 σ σinU]
+  have hUinV : (U : Set (Aut F)) <= V := fun u uinU => hi u (h2 u uinU)
+  have := V.quotient_finite_of_isOpen' (U.subgroupOf V) V.isOpen (V.subgroupOf_isOpen U U.isOpen)
+  exact ⟨colimit (quotientDiag V hUnormal u),
+    ⟨preservesColimitIso (functorToAction F) (quotientDiag V hUnormal u) ≪≫
+    colimit.isoColimitCocone ⟨coconeQuotientDiag hUnormal u hUinV,
+    coconeQuotientDiagIsColimit hUnormal u hUinV⟩⟩⟩
 
 中文:
 引理 存在_lift_of_quotient_openSubgroup
@@ -393,7 +515,35 @@ lemma exists_lift_of_quotient_openSubgroup
   obtain ⟨I, hf, hc, hi⟩ := exists_set_ker_evaluation_subset_of_isOpen F (one_mem V) V.isOpen'
   have (X : I) : IsConnected X.val := hc X X.property
   have (X : I) : Nonempty (F.obj X.val) := nonempty_fiber_of_isConnected F X
-  have hn : Nonempty (F.obj <| (∏ᶜ fun X : I => X)) := nonempty_fiber_p
+  have hn : Nonempty (F.obj <| (∏ᶜ fun X : I => X)) := nonempty_fiber_pi_of_nonempty_of_finite F _
+  obtain ⟨A, f, hgal⟩ := exists_hom_from_galois_of_fiber_nonempty F (∏ᶜ fun X : I => X) hn
+  obtain ⟨a⟩ := nonempty_fiber_of_isConnected F A
+  let U : OpenSubgroup (Aut F) := ⟨MulAction.stabilizer (Aut F) a, stabilizer_isOpen (Aut F) a⟩
+  let u := fiberIsoQuotientStabilizer A a
+  have hUnormal : U.toSubgroup.Normal := stabilizer_normal_of_isGalois F A a
+  have h1 (σ : Aut F) (σinU : σ in U) : σ.hom.app A = 𝟙 (F.obj A) := by
+    have hi : (Aut F ⧸ₐ MulAction.stabilizer (Aut F) a).ρ σ = 𝟙 _ := by
+      refine FintypeCat.hom_ext _ _ (fun x => ?_)
+      induction x using Quotient.inductionOn with | _ τ
+      change ⟦σ * τ⟧ = ⟦τ⟧
+      apply Quotient.sound
+      apply (QuotientGroup.leftRel_apply).mpr
+      simp only [mul_inv_rev]
+      exact Subgroup.Normal.conj_mem hUnormal _ (Subgroup.inv_mem U.toSubgroup σinU) _
+    simp [← cancel_mono u.hom.hom, show σ.hom.app A ≫ u.hom.hom = _ from u.hom.comm σ, hi]
+  have h2 (σ : Aut F) (σinU : σ in U) : forall X : I, σ.hom.app X = 𝟙 (F.obj X) := by
+    intro ⟨X, hX⟩
+    ext (x : F.obj X)
+    let p : A ⟶ X := f ≫ Pi.π (fun Z : I => (Z : C)) ⟨X, hX⟩
+    have : IsConnected X := hc X hX
+    obtain ⟨a, rfl⟩ := surjective_of_nonempty_fiber_of_isConnected F p x
+    simp only [FintypeCat.id_apply, NatTrans.naturality_apply, h1 σ σinU]
+  have hUinV : (U : Set (Aut F)) <= V := fun u uinU => hi u (h2 u uinU)
+  have := V.quotient_finite_of_isOpen' (U.subgroupOf V) V.isOpen (V.subgroupOf_isOpen U U.isOpen)
+  exact ⟨colimit (quotientDiag V hUnormal u),
+    ⟨preservesColimitIso (functorToAction F) (quotientDiag V hUnormal u) ≪≫
+    colimit.isoColimitCocone ⟨coconeQuotientDiag hUnormal u hUinV,
+    coconeQuotientDiagIsColimit hUnormal u hUinV⟩⟩⟩
 
 Depends on / 依赖: F.obj, IsConnected, MulAction, Nonempty, OpenSubgroup, V.isOpen, X.property, X.val, exists_hom_from_galois_of_fiber_nonempty, exists_set_ker_evaluation_subset_of_isOpen, isOpen, nonempty_fiber_of_isConnected, nonempty_fiber_pi_of_nonempty_of_finite, one_mem, property
 -/

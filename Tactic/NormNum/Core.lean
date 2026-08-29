@@ -171,7 +171,17 @@ definition derive
   profileitM Exception "norm_num" (← getOptions) do
     let s ← saveState
     let normNums := normNumExt.getState (← getEnv)
-    le
+    let arr ← normNums.tree.getMatch e
+    for ext in arr do
+      if (bif post then ext.post else ext.pre) && ! normNums.erased.contains ext.name then
+        try
+let new ← withReducibleAndInstances ext.eval e
+          trace[Tactic.norm_num] "{ext.name}:\n{e} ==> {new}"
+          return new
+        catch err =>
+          trace[Tactic.norm_num] "{ext.name} failed {e}: {err.toMessageData}"
+          s.restore
+    throwError "{e}: no norm_nums apply"
 
 中文:
 定义 derive
@@ -184,7 +194,17 @@ definition derive
   profileitM Exception "norm_num" (← getOptions) do
     let s ← saveState
     let normNums := normNumExt.getState (← getEnv)
-    le
+    let arr ← normNums.tree.getMatch e
+    for ext in arr do
+      if (bif post then ext.post else ext.pre) && ! normNums.erased.contains ext.name then
+        try
+let new ← withReducibleAndInstances ext.eval e
+          trace[Tactic.norm_num] "{ext.name}:\n{e} ==> {new}"
+          return new
+        catch err =>
+          trace[Tactic.norm_num] "{ext.name} failed {e}: {err.toMessageData}"
+          s.restore
+    throwError "{e}: no norm_nums apply"
 
 Depends on / 依赖: Result
 -/
@@ -557,7 +577,9 @@ definition getSimpContext
     if simpOnly then simpOnlyBuiltins.foldlM (·.addConst ·) {} else getSimpTheorems
   let { ctx, .. } ←
     elabSimpArgs args[0] (eraseLocal := false) (kind := .simp) (simprocs := {})
-      (← Simp.mkContext config (simpTh
+      (← Simp.mkContext config (simpTheorems := #[simpTheorems])
+        (congrTheorems := ← getSimpCongrTheorems) (userConfig := userConfig))
+  return ctx
 
 中文:
 定义 getSimpContext
@@ -568,7 +590,9 @@ definition getSimpContext
     if simpOnly then simpOnlyBuiltins.foldlM (·.addConst ·) {} else getSimpTheorems
   let { ctx, .. } ←
     elabSimpArgs args[0] (eraseLocal := false) (kind := .simp) (simprocs := {})
-      (← Simp.mkContext config (simpTh
+      (← Simp.mkContext config (simpTheorems := #[simpTheorems])
+        (congrTheorems := ← getSimpCongrTheorems) (userConfig := userConfig))
+  return ctx
 
 Depends on / 依赖: Context, Simp.Context, TacticM
 -/

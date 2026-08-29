@@ -797,7 +797,13 @@ theorem toList_spec
           FreeMonoid.toList (foldMap FreeMonoid.of xs).reverse.reverse := by
           simp only [FreeMonoid.reverse_reverse]
       _ = (List.foldr cons [] (foldMap FreeMonoid.of xs).toList.reverse).reverse := by simp
-      _ = (C
+      _ = (ConcreteCategory.hom
+          (unop (Foldl.ofFreeMonoid (flip cons) (foldMap FreeMonoid.of xs))) []).reverse := by
+            simp [Function.flip_def, List.foldr_reverse, Foldl.ofFreeMonoid, unop_op]
+      _ = toList xs := by
+            rw [foldMap_hom_free (Foldl.ofFreeMonoid (flip <| @cons α))]
+            simp only [toList, foldl, Foldl.get, foldl.ofFreeMonoid_comp_of,
+              Function.comp_apply]
 
 中文:
 定理 toList_spec
@@ -809,7 +815,13 @@ theorem toList_spec
           FreeMonoid.toList (foldMap FreeMonoid.of xs).reverse.reverse := by
           simp only [FreeMonoid.reverse_reverse]
       _ = (List.foldr cons [] (foldMap FreeMonoid.of xs).toList.reverse).reverse := by simp
-      _ = (C
+      _ = (ConcreteCategory.hom
+          (unop (Foldl.ofFreeMonoid (flip cons) (foldMap FreeMonoid.of xs))) []).reverse := by
+            simp [Function.flip_def, List.foldr_reverse, Foldl.ofFreeMonoid, unop_op]
+      _ = toList xs := by
+            rw [foldMap_hom_free (Foldl.ofFreeMonoid (flip <| @cons α))]
+            simp only [toList, foldl, Foldl.get, foldl.ofFreeMonoid_comp_of,
+              Function.comp_apply]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, Eq.symm, Foldl.ofFreeMonoid, FreeMonoid, FreeMonoid.of, FreeMonoid.reverse_reverse, FreeMonoid.toList, Function, Function.flip_def, List.foldr, List.foldr_reverse, flip_def, foldMap, foldMap_hom_free, foldr_reverse, ofFreeMonoid, reverse, reverse.reverse, reverse_reverse
 -/
@@ -1070,7 +1082,7 @@ theorem foldlm_toList
     _ = unop (foldlM.ofFreeMonoid f (FreeMonoid.ofList <| toList xs)) x := by
       simp only [foldlm, toList_spec, foldMap_hom_free (foldlM.ofFreeMonoid f),
         foldlm.ofFreeMonoid_comp_of, foldlM.get, FreeMonoid.ofList_toList]
-    _ = List.foldlM f x (toList xs) := by simp [
+    _ = List.foldlM f x (toList xs) := by simp [foldlM.ofFreeMonoid, unop_op, flip]
 
 中文:
 定理 foldlm_toList
@@ -1079,7 +1091,7 @@ theorem foldlm_toList
     _ = unop (foldlM.ofFreeMonoid f (FreeMonoid.ofList <| toList xs)) x := by
       simp only [foldlm, toList_spec, foldMap_hom_free (foldlM.ofFreeMonoid f),
         foldlm.ofFreeMonoid_comp_of, foldlM.get, FreeMonoid.ofList_toList]
-    _ = List.foldlM f x (toList xs) := by simp [
+    _ = List.foldlM f x (toList xs) := by simp [foldlM.ofFreeMonoid, unop_op, flip]
 
 Depends on / 依赖: FreeMonoid, FreeMonoid.ofList, FreeMonoid.ofList_toList, List.foldlM, foldMap_hom_free, foldlM, foldlM.get, foldlM.ofFreeMonoid, foldlm, foldlm.ofFreeMonoid_comp_of, ofFreeMonoid, ofFreeMonoid_comp_of, ofList, ofList_toList, toList, toList_spec, unop_op
 -/

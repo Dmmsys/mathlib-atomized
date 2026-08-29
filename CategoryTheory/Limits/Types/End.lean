@@ -393,7 +393,7 @@ definition wedgeIsLimit
     ext x
     apply Subtype.ext
     funext j
-    exact ConcreteCategory.congr_hom (h (.
+    exact ConcreteCategory.congr_hom (h (.left j)) x
 
 中文:
 定义 wedgeIsLimit
@@ -406,7 +406,7 @@ definition wedgeIsLimit
     ext x
     apply Subtype.ext
     funext j
-    exact ConcreteCategory.congr_hom (h (.
+    exact ConcreteCategory.congr_hom (h (.left j)) x
 
 Depends on / 依赖: TypeCat, TypeCat.ofHom
 -/

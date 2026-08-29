@@ -187,7 +187,13 @@ lemma isLocal_trW
   refine ⟨fun hY X f hX => ?_, fun hY X₁ X₂ f ⟨X₃, g, h, hT, hX₃⟩ => ⟨?_, fun α => ?_⟩⟩
   · exact (hY _ (trW.mk P (contractible_distinguished₁ X) hX)).injective (by simp)
   · suffices forall (α : X₂ ⟶ Y), f ≫ α = 0 -> α = 0 from fun α₁ α₂ hα => by
-      simpa [sub_eq_zero] using this (α₁ 
+      simpa [sub_eq_zero] using this (α₁ - α₂) (by simpa [sub_eq_zero] using hα)
+    intro α hα
+    obtain ⟨β, rfl⟩ := Triangle.yoneda_exact₂ _ hT α hα
+    simp [hY β hX₃]
+  · obtain ⟨β, rfl⟩ := Triangle.yoneda_exact₂ _ (inv_rot_of_distTriang _ hT)
+      α (hY _ (P.le_shift _ _ hX₃))
+    exact ⟨β, rfl⟩
 
 中文:
 引理 isLocal_trW
@@ -197,7 +203,13 @@ lemma isLocal_trW
   refine ⟨fun hY X f hX => ?_, fun hY X₁ X₂ f ⟨X₃, g, h, hT, hX₃⟩ => ⟨?_, fun α => ?_⟩⟩
   · exact (hY _ (trW.mk P (contractible_distinguished₁ X) hX)).injective (by simp)
   · suffices forall (α : X₂ ⟶ Y), f ≫ α = 0 -> α = 0 from fun α₁ α₂ hα => by
-      simpa [sub_eq_zero] using this (α₁ 
+      simpa [sub_eq_zero] using this (α₁ - α₂) (by simpa [sub_eq_zero] using hα)
+    intro α hα
+    obtain ⟨β, rfl⟩ := Triangle.yoneda_exact₂ _ hT α hα
+    simp [hY β hX₃]
+  · obtain ⟨β, rfl⟩ := Triangle.yoneda_exact₂ _ (inv_rot_of_distTriang _ hT)
+      α (hY _ (P.le_shift _ _ hX₃))
+    exact ⟨β, rfl⟩
 
 Depends on / 依赖: P.le_shift, Triangle, Triangle.yoneda_exact, injective, inv_rot_of_distTriang, le_shift, sub_eq_zero, trW.mk
 -/
@@ -229,7 +241,14 @@ lemma isColocal_trW
   · rw [trW_iff'] at hh
     obtain ⟨Y₁, f, g, hT, hY₁⟩ := hh
     refine ⟨?_, fun α => ?_⟩
-    · suffices forall (α : X ⟶ Y₂), α ≫ h =
+    · suffices forall (α : X ⟶ Y₂), α ≫ h = 0 -> α = 0 from fun α₁ α₂ hα => by
+        simpa [sub_eq_zero] using this (α₁ - α₂) (by simpa [sub_eq_zero])
+      intro α hα
+      obtain ⟨β, rfl⟩ := Triangle.coyoneda_exact₂ _ hT α hα
+      simp [hX β hY₁]
+    · obtain ⟨β, rfl⟩ := Triangle.coyoneda_exact₂ _ (rot_of_distTriang _ hT)
+        α (hX _ (P.le_shift _ _ hY₁))
+      exact ⟨β, rfl⟩
 
 中文:
 引理 isColocal_trW
@@ -241,7 +260,14 @@ lemma isColocal_trW
   · rw [trW_iff'] at hh
     obtain ⟨Y₁, f, g, hT, hY₁⟩ := hh
     refine ⟨?_, fun α => ?_⟩
-    · suffices forall (α : X ⟶ Y₂), α ≫ h =
+    · suffices forall (α : X ⟶ Y₂), α ≫ h = 0 -> α = 0 from fun α₁ α₂ hα => by
+        simpa [sub_eq_zero] using this (α₁ - α₂) (by simpa [sub_eq_zero])
+      intro α hα
+      obtain ⟨β, rfl⟩ := Triangle.coyoneda_exact₂ _ hT α hα
+      simp [hX β hY₁]
+    · obtain ⟨β, rfl⟩ := Triangle.coyoneda_exact₂ _ (rot_of_distTriang _ hT)
+        α (hX _ (P.le_shift _ _ hY₁))
+      exact ⟨β, rfl⟩
 
 Depends on / 依赖: P.le_shift, Triangle, Triangle.coyoned, Triangle.coyoneda_exact, coyoned, injective, le_shift, sub_eq_zero, trW.mk, trW_iff
 -/
@@ -276,7 +302,8 @@ lemma rightOrthogonal.map_bijective_of_isTriangulated
     exact (hY _ hs).1 eq
   · obtain ⟨φ, hφ⟩ := Localization.exists_rightFraction L P.trW g
     obtain ⟨α, hα⟩ := (hY _ φ.hs).2 φ.f
-    r
+    refine ⟨α, ?_⟩
+    rw [hφ]; rw [← cancel_epi (L.map φ.s)]; rw [MorphismProperty.RightFraction.map_s_comp_map]; rw [← hα]; rw [Functor.map_comp]
 
 中文:
 引理 rightOrthogonal.map_bijective_of_isTriangulated
@@ -288,7 +315,8 @@ lemma rightOrthogonal.map_bijective_of_isTriangulated
     exact (hY _ hs).1 eq
   · obtain ⟨φ, hφ⟩ := Localization.exists_rightFraction L P.trW g
     obtain ⟨α, hα⟩ := (hY _ φ.hs).2 φ.f
-    r
+    refine ⟨α, ?_⟩
+    rw [hφ]; rw [← cancel_epi (L.map φ.s)]; rw [MorphismProperty.RightFraction.map_s_comp_map]; rw [← hα]; rw [Functor.map_comp]
 
 Depends on / 依赖: Functor, Functor.map_comp, L.map, Localization, Localization.exists_rightFraction, MorphismProperty, MorphismProperty.RightFraction.map_s_comp_map, MorphismProperty.map_eq_iff_precomp, P.trW, RightFraction, cancel_epi, exists_rightFraction, isLocal_trW, map_comp, map_eq_iff_precomp, map_s_comp_map
 -/
@@ -320,7 +348,8 @@ lemma leftOrthogonal.map_bijective_of_isTriangulated
     exact (hX _ hs).1 eq
   · obtain ⟨φ, hφ⟩ := Localization.exists_leftFraction L P.trW g
     obtain ⟨α, hα⟩ := (hX _ φ.hs).2 φ.f
-   
+    refine ⟨α, ?_⟩
+    rw [hφ]; rw [← cancel_mono (L.map φ.s)]; rw [MorphismProperty.LeftFraction.map_comp_map_s]; rw [← hα]; rw [Functor.map_comp]
 
 中文:
 引理 leftOrthogonal.map_bijective_of_isTriangulated
@@ -332,7 +361,8 @@ lemma leftOrthogonal.map_bijective_of_isTriangulated
     exact (hX _ hs).1 eq
   · obtain ⟨φ, hφ⟩ := Localization.exists_leftFraction L P.trW g
     obtain ⟨α, hα⟩ := (hX _ φ.hs).2 φ.f
-   
+    refine ⟨α, ?_⟩
+    rw [hφ]; rw [← cancel_mono (L.map φ.s)]; rw [MorphismProperty.LeftFraction.map_comp_map_s]; rw [← hα]; rw [Functor.map_comp]
 
 Depends on / 依赖: Functor, Functor.map_comp, L.map, LeftFraction, Localization, Localization.exists_leftFraction, MorphismProperty, MorphismProperty.LeftFraction.map_comp_map_s, MorphismProperty.map_eq_iff_postcomp, P.trW, cancel_mono, exists_leftFraction, isColocal_trW, map_comp, map_comp_map_s, map_eq_iff_postcomp
 -/

@@ -74,7 +74,10 @@ theorem le_sum_schlomilch'
       rw [sum_range_succ]; rw [← sum_Ico_consecutive]
       · exact add_le_add ihn this
       exacts [hu n.zero_le, hu n.le_succ]
-    have : forall k in Ico (u 
+    have : forall k in Ico (u n) (u (n + 1)), f k <= f (u n) := fun k hk =>
+      hf (Nat.succ_le_of_lt (h_pos n)) (mem_Ico.mp hk).1
+    convert! sum_le_sum this
+    simp
 
 中文:
 定理 le_sum_schlomilch'
@@ -87,7 +90,10 @@ theorem le_sum_schlomilch'
       rw [sum_range_succ]; rw [← sum_Ico_consecutive]
       · exact add_le_add ihn this
       exacts [hu n.zero_le, hu n.le_succ]
-    have : forall k in Ico (u 
+    have : forall k in Ico (u n) (u (n + 1)), f k <= f (u n) := fun k hk =>
+      hf (Nat.succ_le_of_lt (h_pos n)) (mem_Ico.mp hk).1
+    convert! sum_le_sum this
+    simp
 
 Depends on / 依赖: Nat.succ_le_of_lt, add_le_add, convert, exacts, h_pos, le_succ, mem_Ico, mem_Ico.mp, n.le_succ, n.zero_le, succ_le_of_lt, sum_Ico_consecutive, sum_le_sum, sum_range_succ, zero_le
 -/
@@ -196,7 +202,13 @@ theorem sum_schlomilch_le'
     suffices (u (n + 1) - u n) • f (u (n + 1)) <= ∑ k in Ico (u n + 1) (u (n + 1) + 1), f k by
       rw [sum_range_succ]; rw [← sum_Ico_consecutive]
       exacts [add_le_add ihn this,
-        (add_le_add_left (hu n.zero_le) _ : u 0 + 1 <= u n 
+        (add_le_add_left (hu n.zero_le) _ : u 0 + 1 <= u n + 1),
+        add_le_add_left (hu n.le_succ) _]
+    have : forall k in Ico (u n + 1) (u (n + 1) + 1), f (u (n + 1)) <= f k := fun k hk =>
+      hf (Nat.lt_of_le_of_lt (Nat.succ_le_of_lt (h_pos n)) <| (Nat.lt_succ_of_le le_rfl).trans_le
+(mem_Ico.mp hk).1) (Nat.le_of_lt_succ (mem_Ico.mp hk).2)
+    convert! sum_le_sum this
+    simp
 
 中文:
 定理 sum_schlomilch_le'
@@ -208,7 +220,13 @@ theorem sum_schlomilch_le'
     suffices (u (n + 1) - u n) • f (u (n + 1)) <= ∑ k in Ico (u n + 1) (u (n + 1) + 1), f k by
       rw [sum_range_succ]; rw [← sum_Ico_consecutive]
       exacts [add_le_add ihn this,
-        (add_le_add_left (hu n.zero_le) _ : u 0 + 1 <= u n 
+        (add_le_add_left (hu n.zero_le) _ : u 0 + 1 <= u n + 1),
+        add_le_add_left (hu n.le_succ) _]
+    have : forall k in Ico (u n + 1) (u (n + 1) + 1), f (u (n + 1)) <= f k := fun k hk =>
+      hf (Nat.lt_of_le_of_lt (Nat.succ_le_of_lt (h_pos n)) <| (Nat.lt_succ_of_le le_rfl).trans_le
+(mem_Ico.mp hk).1) (Nat.le_of_lt_succ (mem_Ico.mp hk).2)
+    convert! sum_le_sum this
+    simp
 
 Depends on / 依赖: EssentiallySmall, EssentiallySmall.mk, Nat.lt_of_le_of_lt, Nat.lt_succ_of_le, Nat.succ_le_of_lt, add_le_add, add_le_add_left, equivSmallModel, exacts, h_pos, le_rfl, le_succ, lt_of_le_of_lt, lt_succ_of_le, mem_Ico, mem_Ico.mp, n.le_succ, n.zero_le, succ_le_of_lt, sum_Ico_consecutive
 -/
@@ -272,7 +290,15 @@ theorem sum_schlomilch_le
   C • ∑ k in range n, ((u (k + 1) - u k) • f (u (k + 1))) by
     refine this.trans (nsmul_le_nsmul_right ?_ _)
     exact sum_schlomilch_le' hf h_pos hu n
-  have : forall k in range
+  have : forall k in range n, (u (k + 2) - u (k + 1)) • f (u (k + 1)) <=
+    C • ((u (k + 1) - u k) • f (u (k + 1))) := by
+    intro k _
+    rw [smul_smul]
+    gcongr
+    · exact h_nonneg (u (k + 1))
+    exact mod_cast h_succ_diff k
+  convert! sum_le_sum this
+  simp [smul_sum]
 
 中文:
 定理 sum_schlomilch_le
@@ -284,7 +310,15 @@ theorem sum_schlomilch_le
   C • ∑ k in range n, ((u (k + 1) - u k) • f (u (k + 1))) by
     refine this.trans (nsmul_le_nsmul_right ?_ _)
     exact sum_schlomilch_le' hf h_pos hu n
-  have : forall k in range
+  have : forall k in range n, (u (k + 2) - u (k + 1)) • f (u (k + 1)) <=
+    C • ((u (k + 1) - u k) • f (u (k + 1))) := by
+    intro k _
+    rw [smul_smul]
+    gcongr
+    · exact h_nonneg (u (k + 1))
+    exact mod_cast h_succ_diff k
+  convert! sum_le_sum this
+  simp [smul_sum]
 
 Depends on / 依赖: add_comm, convert, h_nonneg, h_pos, h_succ_diff, mod_cast, nsmul_le_nsmul_right, smul_smul, sum_le_sum, sum_range_succ, sum_schlomilch_le, this.trans
 -/
@@ -490,7 +524,14 @@ theorem summable_schlomilch_iff
   constructor <;> intro h
   · replace hf : forall m n, 1 < m -> m <= n -> (f n : Real>=0∞) <= f m := fun m n hm hmn =>
       ENNReal.coe_le_coe.2 (hf (zero_lt_one.trans hm) hmn)
-    have h_nonneg : forall n, 0 <= (f n 
+    have h_nonneg : forall n, 0 <= (f n : Real>=0∞) := fun n =>
+      ENNReal.coe_le_coe.2 (f n).2
+    obtain hC := tsum_schlomilch_le hf h_pos h_nonneg hu_strict.monotone h_succ_diff
+    simpa [add_eq_top, mul_ne_top, mul_eq_top, hC_nonzero] using eq_top_mono hC h
+  · replace hf : forall m n, 0 < m -> m <= n -> (f n : Real>=0∞) <= f m := fun m n hm hmn =>
+      ENNReal.coe_le_coe.2 (hf hm hmn)
+    have : ∑ k in range (u 0), (f k : Real>=0∞) != ∞ := sum_ne_top.2 fun a _ => coe_ne_top
+    simpa [h, add_eq_top, this] using le_tsum_schlomilch hf h_pos hu_strict
 
 中文:
 定理 summable_schlomilch_iff
@@ -500,7 +541,14 @@ theorem summable_schlomilch_iff
   constructor <;> intro h
   · replace hf : forall m n, 1 < m -> m <= n -> (f n : Real>=0∞) <= f m := fun m n hm hmn =>
       ENNReal.coe_le_coe.2 (hf (zero_lt_one.trans hm) hmn)
-    have h_nonneg : forall n, 0 <= (f n 
+    have h_nonneg : forall n, 0 <= (f n : Real>=0∞) := fun n =>
+      ENNReal.coe_le_coe.2 (f n).2
+    obtain hC := tsum_schlomilch_le hf h_pos h_nonneg hu_strict.monotone h_succ_diff
+    simpa [add_eq_top, mul_ne_top, mul_eq_top, hC_nonzero] using eq_top_mono hC h
+  · replace hf : forall m n, 0 < m -> m <= n -> (f n : Real>=0∞) <= f m := fun m n hm hmn =>
+      ENNReal.coe_le_coe.2 (hf hm hmn)
+    have : ∑ k in range (u 0), (f k : Real>=0∞) != ∞ := sum_ne_top.2 fun a _ => coe_ne_top
+    simpa [h, add_eq_top, this] using le_tsum_schlomilch hf h_pos hu_strict
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, ENNReal.coe_mul, add_eq_top, coe_le_coe, coe_mul, eq_top_mono, hC_nonzero, h_nonneg, h_pos, h_succ_diff, hu_strict, hu_strict.monotone, monotone, mul_eq_top, mul_ne_top, not_iff_not, replace, tsum_coe_ne_top_iff_summable, tsum_schlomilch_le
 -/
@@ -577,7 +625,8 @@ theorem summable_schlomilch_iff_of_nonneg
   have (k : Nat) : (u (k + 1) - (u k : Real)) = ((u (k + 1) : Real>=0) - (u k : Real>=0) : Real>=0) := by
 have := Nat.cast_le (α := Real>=0).mpr (hu_strict k.lt_succ_self).le
     simp [NNReal.coe_sub this]
-  simp_rw [t
+  simp_rw [this]
+  exact_mod_cast NNReal.summable_schlomilch_iff hf h_pos hu_strict hC_nonzero h_succ_diff
 
 中文:
 定理 summable_schlomilch_iff_of_nonneg
@@ -588,7 +637,8 @@ have := Nat.cast_le (α := Real>=0).mpr (hu_strict k.lt_succ_self).le
   have (k : Nat) : (u (k + 1) - (u k : Real)) = ((u (k + 1) : Real>=0) - (u k : Real>=0) : Real>=0) := by
 have := Nat.cast_le (α := Real>=0).mpr (hu_strict k.lt_succ_self).le
     simp [NNReal.coe_sub this]
-  simp_rw [t
+  simp_rw [this]
+  exact_mod_cast NNReal.summable_schlomilch_iff hf h_pos hu_strict hC_nonzero h_succ_diff
 
 Depends on / 依赖: Category, NNReal, NNReal.coe_le_coe, NNReal.coe_sub, NNReal.summable_schlomilch_iff, Nat.cast_le, cast_le, coe_le_coe, coe_sub, hC_nonzero, h_nonneg, h_pos, h_succ_diff, hu_strict, k.lt_succ_self, locallySmall_self, lt_succ_self, simp_rw, summable_schlomilch_iff
 -/
@@ -657,7 +707,13 @@ theorem summable_condensed_iff_of_eventually_nonneg
   rcases h_mono with ⟨m, hm⟩
   convert! summable_condensed_iff_of_nonneg (f := fun k => f (max k (n + m))) _ _ using 1
   · rw [summable_congr_atTop]
-    hav
+    have h_pow := tendsto_pow_atTop_atTop_of_one_lt (r := 2) (by simp)
+    filter_upwards [h_pow.eventually_ge_atTop (n + m)] with _ hk using by simp [max_eq_left hk]
+  · rw [summable_congr_atTop]
+    filter_upwards [Filter.eventually_ge_atTop (n + m)] with _ hk using by simp [max_eq_left hk]
+  · simp_all
+  · intro _ _ _ _
+    exact antitoneOn_nat_Ici_of_succ_le (k := n + m) (by grind) (by simp) (by simp) (by grind)
 
 中文:
 定理 summable_condensed_iff_of_eventually_nonneg
@@ -669,7 +725,13 @@ theorem summable_condensed_iff_of_eventually_nonneg
   rcases h_mono with ⟨m, hm⟩
   convert! summable_condensed_iff_of_nonneg (f := fun k => f (max k (n + m))) _ _ using 1
   · rw [summable_congr_atTop]
-    hav
+    have h_pow := tendsto_pow_atTop_atTop_of_one_lt (r := 2) (by simp)
+    filter_upwards [h_pow.eventually_ge_atTop (n + m)] with _ hk using by simp [max_eq_left hk]
+  · rw [summable_congr_atTop]
+    filter_upwards [Filter.eventually_ge_atTop (n + m)] with _ hk using by simp [max_eq_left hk]
+  · simp_all
+  · intro _ _ _ _
+    exact antitoneOn_nat_Ici_of_succ_le (k := n + m) (by grind) (by simp) (by simp) (by grind)
 
 Depends on / 依赖: EventuallyLE, Filter, Filter.EventuallyLE, Filter.eventuall, Filter.eventually_atTop, convert, eventuall, eventually_atTop, eventually_ge_atTop, filter_upwards, h_mono, h_nonneg, h_pow, h_pow.eventually_ge_atTop, max_eq_left, summable_condensed_iff_of_nonneg, summable_congr_atTop, tendsto_pow_atTop_atTop_of_one_lt
 -/
@@ -719,7 +781,30 @@ theorem summable_nat_rpow_inv
   /- Cauchy condensation test applies only to antitone sequences, so we consider the
     cases `0 ≤ p` and `p < 0` separately. -/
   · rw [← summable_condensed_iff_of_nonneg]
-    · simp_rw [Nat.cast_pow, Nat.cast_two, ← rpow_natCast, ← rpow_mul zero_lt_two.le, mu
+    · simp_rw [Nat.cast_pow, Nat.cast_two, ← rpow_natCast, ← rpow_mul zero_lt_two.le, mul_comm _ p,
+        rpow_mul zero_lt_two.le, rpow_natCast, ← inv_pow, ← mul_pow,
+        summable_geometric_iff_norm_lt_one]
+      nth_rw 1 [← rpow_one 2]
+      rw [← division_def]; rw [← rpow_sub zero_lt_two]; rw [norm_eq_abs]; rw [abs_of_pos (rpow_pos_of_pos zero_lt_two _)]; rw [rpow_lt_one_iff zero_lt_two.le]
+      simp
+    · intro n
+      positivity
+    · intro m n hm hmn
+      gcongr
+  -- If `p < 0`, then `1 / n ^ p` tends to infinity, thus the series diverges.
+  · suffices ¬Summable (fun n => ((n : Real) ^ p)⁻¹ : Nat -> Real) by
+      have : ¬1 < p := fun hp₁ => hp.not_ge (zero_le_one.trans hp₁.le)
+      simpa only [this, iff_false]
+    intro h
+    obtain ⟨k : Nat, hk₁ : ((k : Real) ^ p)⁻¹ < 1, hk₀ : k != 0⟩ :=
+      ((h.tendsto_cofinite_zero.eventually (gt_mem_nhds zero_lt_one)).and
+          (eventually_cofinite_ne 0)).exists
+    apply hk₀
+    rw [← pos_iff_ne_zero]; rw [← @Nat.cast_pos Real] at hk₀
+    simpa [inv_lt_one₀ (rpow_pos_of_pos hk₀ _), one_lt_rpow_iff_of_pos hk₀, hp,
+      hp.not_gt, hk₀] using hk₁
+
+@[simp]
 
 中文:
 定理 summable_nat_rpow_inv
@@ -729,7 +814,30 @@ theorem summable_nat_rpow_inv
   /- Cauchy condensation test applies only to antitone sequences, so we consider the
     cases `0 ≤ p` and `p < 0` separately. -/
   · rw [← summable_condensed_iff_of_nonneg]
-    · simp_rw [Nat.cast_pow, Nat.cast_two, ← rpow_natCast, ← rpow_mul zero_lt_two.le, mu
+    · simp_rw [Nat.cast_pow, Nat.cast_two, ← rpow_natCast, ← rpow_mul zero_lt_two.le, mul_comm _ p,
+        rpow_mul zero_lt_two.le, rpow_natCast, ← inv_pow, ← mul_pow,
+        summable_geometric_iff_norm_lt_one]
+      nth_rw 1 [← rpow_one 2]
+      rw [← division_def]; rw [← rpow_sub zero_lt_two]; rw [norm_eq_abs]; rw [abs_of_pos (rpow_pos_of_pos zero_lt_two _)]; rw [rpow_lt_one_iff zero_lt_two.le]
+      simp
+    · intro n
+      positivity
+    · intro m n hm hmn
+      gcongr
+  -- If `p < 0`, then `1 / n ^ p` tends to infinity, thus the series diverges.
+  · suffices ¬Summable (fun n => ((n : Real) ^ p)⁻¹ : Nat -> Real) by
+      have : ¬1 < p := fun hp₁ => hp.not_ge (zero_le_one.trans hp₁.le)
+      simpa only [this, iff_false]
+    intro h
+    obtain ⟨k : Nat, hk₁ : ((k : Real) ^ p)⁻¹ < 1, hk₀ : k != 0⟩ :=
+      ((h.tendsto_cofinite_zero.eventually (gt_mem_nhds zero_lt_one)).and
+          (eventually_cofinite_ne 0)).exists
+    apply hk₀
+    rw [← pos_iff_ne_zero]; rw [← @Nat.cast_pos Real] at hk₀
+    simpa [inv_lt_one₀ (rpow_pos_of_pos hk₀ _), one_lt_rpow_iff_of_pos hk₀, hp,
+      hp.not_gt, hk₀] using hk₁
+
+@[simp]
 
 Depends on / 依赖: Category, le_or_gt, locallySmall_of_essentiallySmall
 -/
@@ -862,7 +970,7 @@ theorem summable_one_div_int_pow
   refine ⟨fun h => summable_one_div_nat_pow.mp (h.comp_injective Nat.cast_injective),
     fun h => .of_nat_of_neg (summable_one_div_nat_pow.mpr h)
       (((summable_one_div_nat_pow.mpr h).mul_left <| 1 / (-1 : Real) ^ p).congr fun n => ?_)⟩
-  rw [Int.cast_neg]; rw [Int.cast_natCast]; rw [neg_eq_n
+  rw [Int.cast_neg]; rw [Int.cast_natCast]; rw [neg_eq_neg_one_mul (n : Real)]; rw [mul_pow]; rw [mul_one_div]; rw [div_div]
 
 中文:
 定理 summable_one_div_int_pow
@@ -871,7 +979,7 @@ theorem summable_one_div_int_pow
   refine ⟨fun h => summable_one_div_nat_pow.mp (h.comp_injective Nat.cast_injective),
     fun h => .of_nat_of_neg (summable_one_div_nat_pow.mpr h)
       (((summable_one_div_nat_pow.mpr h).mul_left <| 1 / (-1 : Real) ^ p).congr fun n => ?_)⟩
-  rw [Int.cast_neg]; rw [Int.cast_natCast]; rw [neg_eq_n
+  rw [Int.cast_neg]; rw [Int.cast_natCast]; rw [neg_eq_neg_one_mul (n : Real)]; rw [mul_pow]; rw [mul_one_div]; rw [div_div]
 
 Depends on / 依赖: Int.cast_natCast, Int.cast_neg, Nat.cast_injective, cast_injective, cast_natCast, cast_neg, comp_injective, div_div, h.comp_injective, mul_left, mul_one_div, mul_pow, neg_eq_neg_one_mul, of_nat_of_neg, summable_one_div_nat_pow, summable_one_div_nat_pow.mp, summable_one_div_nat_pow.mpr
 -/
@@ -1129,7 +1237,22 @@ theorem sum_Ioo_inv_sq_le
         simp only [mem_Ioo] at hx
         simp only [hx, hx.2.le, mem_Ioc, le_max_iff, or_true, and_self_iff]
       · intro i _hi _hident
-  
+        positivity
+    _ <= ((k + 1 : α) ^ 2)⁻¹ + ∑ i in Ioc k.succ (max (k + 1) n), ((i : α) ^ 2)⁻¹ := by
+      rw [← Icc_add_one_left_eq_Ioc]; rw [← Ico_add_one_right_eq_Icc]; rw [sum_eq_sum_Ico_succ_bot]
+      swap; · exact Nat.succ_lt_succ ((Nat.lt_succ_self k).trans_le (le_max_left _ _))
+      rw [Ico_add_one_right_eq_Icc]; rw [Icc_add_one_left_eq_Ioc]
+      norm_cast
+    _ <= ((k + 1 : α) ^ 2)⁻¹ + (k + 1 : α)⁻¹ := by
+      refine add_le_add le_rfl ((sum_Ioc_inv_sq_le_sub ?_ (le_max_left _ _)).trans ?_)
+      · simp only [Ne, Nat.succ_ne_zero, not_false_iff]
+      · simp only [Nat.cast_succ, sub_le_self_iff, inv_nonneg, Nat.cast_nonneg]
+    _ <= 1 / (k + 1) + 1 / (k + 1) := by
+      have A : (1 : α) <= k + 1 := by simp only [le_add_iff_nonneg_left, Nat.cast_nonneg]
+      simp_rw [← one_div]
+      gcongr
+      simpa using pow_right_mono₀ A one_le_two
+    _ = 2 / (k + 1) := by ring
 
 中文:
 定理 sum_Ioo_inv_sq_le
@@ -1142,7 +1265,22 @@ theorem sum_Ioo_inv_sq_le
         simp only [mem_Ioo] at hx
         simp only [hx, hx.2.le, mem_Ioc, le_max_iff, or_true, and_self_iff]
       · intro i _hi _hident
-  
+        positivity
+    _ <= ((k + 1 : α) ^ 2)⁻¹ + ∑ i in Ioc k.succ (max (k + 1) n), ((i : α) ^ 2)⁻¹ := by
+      rw [← Icc_add_one_left_eq_Ioc]; rw [← Ico_add_one_right_eq_Icc]; rw [sum_eq_sum_Ico_succ_bot]
+      swap; · exact Nat.succ_lt_succ ((Nat.lt_succ_self k).trans_le (le_max_left _ _))
+      rw [Ico_add_one_right_eq_Icc]; rw [Icc_add_one_left_eq_Ioc]
+      norm_cast
+    _ <= ((k + 1 : α) ^ 2)⁻¹ + (k + 1 : α)⁻¹ := by
+      refine add_le_add le_rfl ((sum_Ioc_inv_sq_le_sub ?_ (le_max_left _ _)).trans ?_)
+      · simp only [Ne, Nat.succ_ne_zero, not_false_iff]
+      · simp only [Nat.cast_succ, sub_le_self_iff, inv_nonneg, Nat.cast_nonneg]
+    _ <= 1 / (k + 1) + 1 / (k + 1) := by
+      have A : (1 : α) <= k + 1 := by simp only [le_add_iff_nonneg_left, Nat.cast_nonneg]
+      simp_rw [← one_div]
+      gcongr
+      simpa using pow_right_mono₀ A one_le_two
+    _ = 2 / (k + 1) := by ring
 
 Depends on / 依赖: Icc_add_one_left_eq_Ioc, Ico_add_one_right_eq_Icc, Nat.lt_succ_self, Nat.succ_lt_succ, _hident, and_self_iff, k.succ, le_max_iff, lt_succ_self, mem_Ioc, mem_Ioo, or_true, succ_lt_succ, sum_eq_sum_Ico_succ_bot, sum_le_sum_of_subset_of_nonneg
 -/
@@ -1184,7 +1322,11 @@ lemma Real.not_summable_indicator_one_div_natCast
   have : NeZero m := ⟨hm⟩ -- instance is needed below
   rw [← summable_nat_add_iff 1] -- shift by one to avoid non-monotonicity at zero
   have h (n : Nat) : {n : Nat | (n : ZMod m) = k - 1}.indicator (fun n : Nat => (1 / (n + 1 :) : Real)) n =
-      if (n : ZMod m) = k - 1 then (1 / (n + 1) : Rea
+      if (n : ZMod m) = k - 1 then (1 / (n + 1) : Real) else (0 : Real) := by
+    simp only [indicator_apply, mem_ofPred_eq, cast_add, cast_one]
+  simp_rw [indicator_apply, mem_ofPred, cast_add, cast_one, ← eq_sub_iff_add_eq, ← h]
+  rw [summable_indicator_mod_iff (fun n₁ n₂ h => by gcongr) (k - 1)]
+  exact mt (summable_nat_add_iff (f := fun n : Nat => 1 / (n : Real)) 1).mp not_summable_one_div_natCast
 
 中文:
 引理 实数.not_summable_indicator_one_div_natCast
@@ -1193,7 +1335,11 @@ lemma Real.not_summable_indicator_one_div_natCast
   have : NeZero m := ⟨hm⟩ -- instance is needed below
   rw [← summable_nat_add_iff 1] -- shift by one to avoid non-monotonicity at zero
   have h (n : Nat) : {n : Nat | (n : ZMod m) = k - 1}.indicator (fun n : Nat => (1 / (n + 1 :) : Real)) n =
-      if (n : ZMod m) = k - 1 then (1 / (n + 1) : Rea
+      if (n : ZMod m) = k - 1 then (1 / (n + 1) : Real) else (0 : Real) := by
+    simp only [indicator_apply, mem_ofPred_eq, cast_add, cast_one]
+  simp_rw [indicator_apply, mem_ofPred, cast_add, cast_one, ← eq_sub_iff_add_eq, ← h]
+  rw [summable_indicator_mod_iff (fun n₁ n₂ h => by gcongr) (k - 1)]
+  exact mt (summable_nat_add_iff (f := fun n : Nat => 1 / (n : Real)) 1).mp not_summable_one_div_natCast
 
 Depends on / 依赖: NeZero, cast_add, cast_one, eq_sub_iff_add_eq, indicator, indicator_apply, instance, mem_ofPred, mem_ofPred_eq, monotonicity, needed, simp_rw, summable_indicator_mod_iff, summable_nat_add_iff
 -/
@@ -1226,7 +1372,11 @@ lemma Real.summable_one_div_nat_add_rpow
     tendsto_natCast_atTop_atTop.congr' (by simp)
   have h_abs : (fun n : Nat => |n + a|) ~[atTop] (·) := by
     apply (IsEquivalent.refl.add_const_of_norm_tendsto_atTop hnorm).congr_left
-    · filter_upwards [eventually_gt_atTop 
+    · filter_upwards [eventually_gt_atTop (Nat.ceil |a|)] with _ hn
+      rw [abs_of_pos]
+      linarith [lt_of_abs_lt ((abs_neg a).symm ▸ Nat.lt_of_ceil_lt hn)]
+  rw [← summable_one_div_nat_rpow]; rw [Asymptotics.IsEquivalent.summable_iff_nat]
+  simpa [one_div] using! (IsEquivalent.rpow (fun n => by positivity) h_abs).inv
 
 中文:
 引理 实数.summable_one_div_nat_add_rpow
@@ -1236,7 +1386,11 @@ lemma Real.summable_one_div_nat_add_rpow
     tendsto_natCast_atTop_atTop.congr' (by simp)
   have h_abs : (fun n : Nat => |n + a|) ~[atTop] (·) := by
     apply (IsEquivalent.refl.add_const_of_norm_tendsto_atTop hnorm).congr_left
-    · filter_upwards [eventually_gt_atTop 
+    · filter_upwards [eventually_gt_atTop (Nat.ceil |a|)] with _ hn
+      rw [abs_of_pos]
+      linarith [lt_of_abs_lt ((abs_neg a).symm ▸ Nat.lt_of_ceil_lt hn)]
+  rw [← summable_one_div_nat_rpow]; rw [Asymptotics.IsEquivalent.summable_iff_nat]
+  simpa [one_div] using! (IsEquivalent.rpow (fun n => by positivity) h_abs).inv
 
 Depends on / 依赖: Asymptotics, Asymptotics.IsEquivalent.summable_iff_nat, IsEquivalent, IsEquivalent.refl.add_const_of_norm_tendsto_atTop, Nat.ceil, Nat.lt_of_ceil_lt, Tendsto, abs_neg, abs_of_pos, add_const_of_norm_tendsto_atTop, congr_left, eventually_gt_atTop, filter_upwards, h_abs, lt_of_abs_lt, lt_of_ceil_lt, one_div, summable_iff_nat, summable_one_div_nat_rpow, tendsto_natCast_atTop_atTop
 -/

@@ -203,7 +203,34 @@ lemma homologySequenceδ_triangleh
   /- We proceed by diagram chase. We test the identity on
      cocycles `x' : A' ⟶ (mappingCone S.f).X n₀` -/
   dsimp
-  rw [← cancel_mono ((homologyFunctorFactors C (up Int) n₁).hom.app _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app]; rw [← cancel_epi ((homologyFunctorFactors C (
+  rw [← cancel_mono ((homologyFunctorFactors C (up Int) n₁).hom.app _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app]; rw [← cancel_epi ((homologyFunctorFactors C (up Int) n₀).inv.app _)]; rw [Iso.inv_hom_id_app_assoc]
+  apply yoneda.map_injective
+  ext ⟨A⟩ (x : A ⟶ _)
+  obtain ⟨A', π, _, x', w, hx'⟩ :=
+    (mappingCone S.f).eq_liftCycles_homologyπ_up_to_refinements x n₁ (by simpa using h)
+  erw [homologySequenceδ_quotient_mapTriangle_obj_assoc _ _ _ h]
+  dsimp
+  -- simp? says
+  simp only [Iso.inv_hom_id_app, HomologicalComplex.homologyFunctor_obj, Iso.inv_hom_id_app_assoc,
+    comp_id]
+  erw [comp_id]
+  rw [← cancel_epi π]; rw [reassoc_of% hx']; rw [reassoc_of% hx']; rw [HomologicalComplex.homologyπ_naturality_assoc]; rw [HomologicalComplex.liftCycles_comp_cyclesMap_assoc]
+  /- We decompose the cocycle `x'` into two morphisms `a : A' ⟶ S.X₁.X n₁`
+     and `b : A' ⟶ S.X₂.X n₀` satisfying certain relations. -/
+  obtain ⟨a, b, hab⟩ := decomp_to _ x' n₁ h
+  rw [hab]; rw [ext_to_iff _ n₁ (n₁ + 1) rfl]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [inr_f_d]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [inr_f_fst_v]; rw [comp_zero]; rw [comp_zero]; rw [add_zero]; rw [zero_comp]; rw [d_fst_v _ _ _ _ h]; rw [comp_neg]; rw [inl_v_fst_v_assoc]; rw [comp_neg]; rw [neg_eq_zero]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [inr_f_snd_v]; rw [comp_id]; rw [zero_comp]; rw [d_snd_v _ _ _ h]; rw [comp_add]; rw [inl_v_fst_v_assoc]; rw [inl_v_snd_v_assoc]; rw [zero_comp]; rw [add_zero] at w
+  /- We simplify the RHS. -/
+  conv_rhs => simp only [hab, add_comp, assoc, inr_f_descShortComplex_f,
+    inl_v_descShortComplex_f, comp_zero, zero_add]
+  rw [hS.δ_eq n₀ n₁ (by simpa using h) (b ≫ S.g.f n₀) _ b rfl (-a)
+    (by simp only [neg_comp]; rw [neg_eq_iff_add_eq_zero]; rw [w.2]) (n₁ + 1) (by simp)]
+  /- We simplify the LHS. -/
+  dsimp [Functor.shiftMap, homologyFunctor_shift]
+  rw [HomologicalComplex.homologyπ_naturality_assoc]; rw [HomologicalComplex.liftCycles_comp_cyclesMap_assoc]; rw [S.X₁.liftCycles_shift_homologyπ_assoc _ _ _ _ n₁ (by lia) (n₁ + 1) (by simp)]; rw [Iso.inv_hom_id_app]
+  dsimp [homologyFunctor_shift]
+  simp only [hab, add_comp, assoc, inl_v_triangle_mor₃_f_assoc,
+    shiftFunctorObjXIso, neg_comp, Iso.inv_hom_id, comp_neg, comp_id,
+    inr_f_triangle_mor₃_f_assoc, zero_comp, comp_zero, add_zero]
 
 中文:
 引理 homologySequenceδ_triangleh
@@ -212,7 +239,34 @@ lemma homologySequenceδ_triangleh
   /- We proceed by diagram chase. We test the identity on
      cocycles `x' : A' ⟶ (mappingCone S.f).X n₀` -/
   dsimp
-  rw [← cancel_mono ((homologyFunctorFactors C (up Int) n₁).hom.app _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app]; rw [← cancel_epi ((homologyFunctorFactors C (
+  rw [← cancel_mono ((homologyFunctorFactors C (up Int) n₁).hom.app _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app]; rw [← cancel_epi ((homologyFunctorFactors C (up Int) n₀).inv.app _)]; rw [Iso.inv_hom_id_app_assoc]
+  apply yoneda.map_injective
+  ext ⟨A⟩ (x : A ⟶ _)
+  obtain ⟨A', π, _, x', w, hx'⟩ :=
+    (mappingCone S.f).eq_liftCycles_homologyπ_up_to_refinements x n₁ (by simpa using h)
+  erw [homologySequenceδ_quotient_mapTriangle_obj_assoc _ _ _ h]
+  dsimp
+  -- simp? says
+  simp only [Iso.inv_hom_id_app, HomologicalComplex.homologyFunctor_obj, Iso.inv_hom_id_app_assoc,
+    comp_id]
+  erw [comp_id]
+  rw [← cancel_epi π]; rw [reassoc_of% hx']; rw [reassoc_of% hx']; rw [HomologicalComplex.homologyπ_naturality_assoc]; rw [HomologicalComplex.liftCycles_comp_cyclesMap_assoc]
+  /- We decompose the cocycle `x'` into two morphisms `a : A' ⟶ S.X₁.X n₁`
+     and `b : A' ⟶ S.X₂.X n₀` satisfying certain relations. -/
+  obtain ⟨a, b, hab⟩ := decomp_to _ x' n₁ h
+  rw [hab]; rw [ext_to_iff _ n₁ (n₁ + 1) rfl]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [inr_f_d]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [inr_f_fst_v]; rw [comp_zero]; rw [comp_zero]; rw [add_zero]; rw [zero_comp]; rw [d_fst_v _ _ _ _ h]; rw [comp_neg]; rw [inl_v_fst_v_assoc]; rw [comp_neg]; rw [neg_eq_zero]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [inr_f_snd_v]; rw [comp_id]; rw [zero_comp]; rw [d_snd_v _ _ _ h]; rw [comp_add]; rw [inl_v_fst_v_assoc]; rw [inl_v_snd_v_assoc]; rw [zero_comp]; rw [add_zero] at w
+  /- We simplify the RHS. -/
+  conv_rhs => simp only [hab, add_comp, assoc, inr_f_descShortComplex_f,
+    inl_v_descShortComplex_f, comp_zero, zero_add]
+  rw [hS.δ_eq n₀ n₁ (by simpa using h) (b ≫ S.g.f n₀) _ b rfl (-a)
+    (by simp only [neg_comp]; rw [neg_eq_iff_add_eq_zero]; rw [w.2]) (n₁ + 1) (by simp)]
+  /- We simplify the LHS. -/
+  dsimp [Functor.shiftMap, homologyFunctor_shift]
+  rw [HomologicalComplex.homologyπ_naturality_assoc]; rw [HomologicalComplex.liftCycles_comp_cyclesMap_assoc]; rw [S.X₁.liftCycles_shift_homologyπ_assoc _ _ _ _ n₁ (by lia) (n₁ + 1) (by simp)]; rw [Iso.inv_hom_id_app]
+  dsimp [homologyFunctor_shift]
+  simp only [hab, add_comp, assoc, inl_v_triangle_mor₃_f_assoc,
+    shiftFunctorObjXIso, neg_comp, Iso.inv_hom_id, comp_neg, comp_id,
+    inr_f_triangle_mor₃_f_assoc, zero_comp, comp_zero, add_zero]
 -/
 lemma homologySequenceδ_triangleh (n₀ : Int) (n₁ : Int) (h : n₀ + 1 = n₁) :
     (homologyFunctor C (up Int) 0).homologySequenceδ (triangleh S.f) n₀ n₁ h =
@@ -267,7 +321,34 @@ lemma quasiIso_descShortComplex
     let φ : ((homologyFunctor C (up Int) 0).homologySequenceComposableArrows₅
         (triangleh S.f) n _ rfl).δlast ⟶ (composableArrows₅ hS n _ rfl).δlast :=
       homMk₄ ((homologyFunctorFactors C (up Int) _).hom.app _)
-        ((homologyFunctorFactors 
+        ((homologyFunctorFactors C (up Int) _).hom.app _)
+        ((homologyFunctorFactors C (up Int) _).hom.app _ ≫
+          HomologicalComplex.homologyMap (descShortComplex S) n)
+        ((homologyFunctorFactors C (up Int) _).hom.app _)
+        ((homologyFunctorFactors C (up Int) _).hom.app _)
+        ((homologyFunctorFactors C (up Int) _).hom.naturality S.f)
+        (by
+          erw [(homologyFunctorFactors C (up Int) n).hom.naturality_assoc]
+          -- Disable `Fin.reduceFinMk`, otherwise `Precomp.obj_succ` does not fire. (https://github.com/leanprover-community/mathlib4/issues/27382)
+          dsimp [-Fin.reduceFinMk]
+          rw [← HomologicalComplex.homologyMap_comp]; rw [inr_descShortComplex])
+        (by
+          -- Disable `Fin.reduceFinMk`, otherwise `Precomp.obj_succ` does not fire. (https://github.com/leanprover-community/mathlib4/issues/27382)
+          dsimp [-Fin.reduceFinMk]
+          erw [homologySequenceδ_triangleh hS]
+          simp only [Functor.comp_obj, HomologicalComplex.homologyFunctor_obj, assoc,
+            Iso.inv_hom_id_app, comp_id])
+        ((homologyFunctorFactors C (up Int) _).hom.naturality S.f)
+    have : IsIso ((homologyFunctorFactors C (up Int) n).hom.app (mappingCone S.f) ≫
+        HomologicalComplex.homologyMap (descShortComplex S) n) := by
+      apply Abelian.isIso_of_epi_of_isIso_of_isIso_of_mono
+        ((homologyFunctor C (up Int) 0).homologySequenceComposableArrows₅_exact _
+          (mappingCone_triangleh_distinguished S.f) n _ rfl).δlast
+        (composableArrows₅_exact hS n _ rfl).δlast φ
+      all_goals dsimp [φ]; infer_instance
+    apply IsIso.of_isIso_comp_left ((homologyFunctorFactors C (up Int) n).hom.app (mappingCone S.f))
+
+@[reassoc]
 
 中文:
 引理 quasiIso_descShortComplex
@@ -277,7 +358,34 @@ lemma quasiIso_descShortComplex
     let φ : ((homologyFunctor C (up Int) 0).homologySequenceComposableArrows₅
         (triangleh S.f) n _ rfl).δlast ⟶ (composableArrows₅ hS n _ rfl).δlast :=
       homMk₄ ((homologyFunctorFactors C (up Int) _).hom.app _)
-        ((homologyFunctorFactors 
+        ((homologyFunctorFactors C (up Int) _).hom.app _)
+        ((homologyFunctorFactors C (up Int) _).hom.app _ ≫
+          HomologicalComplex.homologyMap (descShortComplex S) n)
+        ((homologyFunctorFactors C (up Int) _).hom.app _)
+        ((homologyFunctorFactors C (up Int) _).hom.app _)
+        ((homologyFunctorFactors C (up Int) _).hom.naturality S.f)
+        (by
+          erw [(homologyFunctorFactors C (up Int) n).hom.naturality_assoc]
+          -- Disable `Fin.reduceFinMk`, otherwise `Precomp.obj_succ` does not fire. (https://github.com/leanprover-community/mathlib4/issues/27382)
+          dsimp [-Fin.reduceFinMk]
+          rw [← HomologicalComplex.homologyMap_comp]; rw [inr_descShortComplex])
+        (by
+          -- Disable `Fin.reduceFinMk`, otherwise `Precomp.obj_succ` does not fire. (https://github.com/leanprover-community/mathlib4/issues/27382)
+          dsimp [-Fin.reduceFinMk]
+          erw [homologySequenceδ_triangleh hS]
+          simp only [Functor.comp_obj, HomologicalComplex.homologyFunctor_obj, assoc,
+            Iso.inv_hom_id_app, comp_id])
+        ((homologyFunctorFactors C (up Int) _).hom.naturality S.f)
+    have : IsIso ((homologyFunctorFactors C (up Int) n).hom.app (mappingCone S.f) ≫
+        HomologicalComplex.homologyMap (descShortComplex S) n) := by
+      apply Abelian.isIso_of_epi_of_isIso_of_isIso_of_mono
+        ((homologyFunctor C (up Int) 0).homologySequenceComposableArrows₅_exact _
+          (mappingCone_triangleh_distinguished S.f) n _ rfl).δlast
+        (composableArrows₅_exact hS n _ rfl).δlast φ
+      all_goals dsimp [φ]; infer_instance
+    apply IsIso.of_isIso_comp_left ((homologyFunctorFactors C (up Int) n).hom.app (mappingCone S.f))
+
+@[reassoc]
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.homologyMap, descShortComplex, hom.app, homologyFunctor, homologyFunctorFactors, homologyMap, quasiIsoAt_iff_isIso_homologyMap, triangleh
 -/

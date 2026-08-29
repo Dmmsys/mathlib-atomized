@@ -196,7 +196,9 @@ theorem flatten_replicate
     rw [isCyclicallyReduced_iff]; rw [IsReduced]; rw [List.isChain_flatten (by simp)]
     refine ⟨⟨by simpa [IsReduced] using h.isReduced, List.isChain_replicate_of_rel _ h.2⟩,
       fun _ ha _ hb => ?_⟩
-    rw [O
+    rw [Option.mem_def]; rw [List.getLast?_flatten_replicate (h := by simp +arith)] at ha
+    rw [Option.mem_def]; rw [List.head?_flatten_replicate (h := by simp +arith)] at hb
+    exact h.2 _ ha _ hb
 
 中文:
 定理 flatten_replicate
@@ -208,7 +210,9 @@ theorem flatten_replicate
     rw [isCyclicallyReduced_iff]; rw [IsReduced]; rw [List.isChain_flatten (by simp)]
     refine ⟨⟨by simpa [IsReduced] using h.isReduced, List.isChain_replicate_of_rel _ h.2⟩,
       fun _ ha _ hb => ?_⟩
-    rw [O
+    rw [Option.mem_def]; rw [List.getLast?_flatten_replicate (h := by simp +arith)] at ha
+    rw [Option.mem_def]; rw [List.head?_flatten_replicate (h := by simp +arith)] at hb
+    exact h.2 _ ha _ hb
 
 Depends on / 依赖: IsReduced, List.getLast, List.head, List.isChain_flatten, List.isChain_replicate_of_rel, Option.mem_def, _flatten_replicate, getLast, h.isReduced, isChain_flatten, isChain_replicate_of_rel, isCyclicallyReduced_iff, isReduced, mem_def
 -/
@@ -241,7 +245,13 @@ theorem IsReduced.append_flatten_replicate_append
     have h' : (replicate (n + 1) L₂).flatten != [] := by simp [h]
     refine IsReduced.append_overlap ?_ ?_ (hn := h')
     · rw [replicate_succ, flatten_cons, ← append_assoc]
-      refine IsReduced.append_ove
+      refine IsReduced.append_overlap (h₂.infix ⟨[], L₃, by simp⟩) ?_ h
+      rw [← flatten_cons]; rw [← replicate_succ]
+      exact (h₁.flatten_replicate _).isReduced
+    · rw [replicate_succ', flatten_concat]
+      refine IsReduced.append_overlap ?_ (h₂.infix ⟨L₁, [], by simp⟩) h
+      rw [← flatten_concat]; rw [← replicate_succ']
+      exact (h₁.flatten_replicate _).isReduced
 
 中文:
 定理 是既约.append_flatten_replicate_append
@@ -254,7 +264,13 @@ theorem IsReduced.append_flatten_replicate_append
     have h' : (replicate (n + 1) L₂).flatten != [] := by simp [h]
     refine IsReduced.append_overlap ?_ ?_ (hn := h')
     · rw [replicate_succ, flatten_cons, ← append_assoc]
-      refine IsReduced.append_ove
+      refine IsReduced.append_overlap (h₂.infix ⟨[], L₃, by simp⟩) ?_ h
+      rw [← flatten_cons]; rw [← replicate_succ]
+      exact (h₁.flatten_replicate _).isReduced
+    · rw [replicate_succ', flatten_concat]
+      refine IsReduced.append_overlap ?_ (h₂.infix ⟨L₁, [], by simp⟩) h
+      rw [← flatten_concat]; rw [← replicate_succ']
+      exact (h₁.flatten_replicate _).isReduced
 
 Depends on / 依赖: IsReduced, IsReduced.append_overlap, append_assoc, append_overlap, flatten, flatten_concat, flatten_cons, flatten_replicate, isReduced, replicate, replicate_succ
 -/
@@ -402,7 +418,7 @@ theorem isCyclicallyReduced
     case isTrue => exact ih (h.infix ⟨[a], [b], rfl⟩)
     case isFalse h' =>
       rw [isCyclicallyReduced_cons_append_iff]
-      ex
+      exact ⟨h, by simpa using h'⟩
 
 中文:
 定理 isCyclicallyReduced
@@ -418,7 +434,7 @@ theorem isCyclicallyReduced
     case isTrue => exact ih (h.infix ⟨[a], [b], rfl⟩)
     case isFalse h' =>
       rw [isCyclicallyReduced_cons_append_iff]
-      ex
+      exact ⟨h, by simpa using h'⟩
 
 Depends on / 依赖: List.bidirectionalRec, bidirectionalRec, cons_append, h.infix, isCyclicallyReduced_cons_append_iff, isFalse, isTrue, reduceCyclically, reduceCyclically.cons_append, singleton
 -/
@@ -552,7 +568,9 @@ theorem conj_conjugator_reduceCyclically
     case isTrue h =>
       nth_rw 4 [← eq]
       simp [invRev, h.1.symm, h.2.symm]
-    case isFalse => 
+    case isFalse => simp
+
+@[to_additive]
 
 中文:
 定理 conj_conjugator_reduceCyclically
@@ -567,7 +585,9 @@ theorem conj_conjugator_reduceCyclically
     case isTrue h =>
       nth_rw 4 [← eq]
       simp [invRev, h.1.symm, h.2.symm]
-    case isFalse => 
+    case isFalse => simp
+
+@[to_additive]
 
 Depends on / 依赖: List.bidirectionalRec, bidirectionalRec, conjugator, conjugator.cons_append, cons_append, invRev, isFalse, isTrue, nth_rw, reduceCyclically, reduceCyclically.cons_append, singleton
 -/
@@ -597,7 +617,19 @@ theorem reduce_flatten_replicate_succ
     simpa [← append_assoc, conj_conjugator_reduceCyclically, ← isReduced_iff_reduce_eq]
   case succ n ih =>
     rw [replicate_succ]; rw [flatten_cons]; rw [← reduce_append_reduce_reduce]; rw [ih]; rw [h.reduce_eq]
-    nth_rewrite 1 [← conj_conjugator_reduceCyclically 
+    nth_rewrite 1 [← conj_conjugator_reduceCyclically L]
+    have {L₁ L₂ L₃ L₄ L₅ : List (α × Bool)} : reduce (L₁ ++ L₂ ++ invRev L₃ ++ (L₃ ++ L₄ ++ L₅)) =
+        reduce (L₁ ++ (L₂ ++ L₄) ++ L₅) := by
+      apply reduce.sound
+      repeat rw [← mul_mk]
+      rw [← inv_mk]
+      group
+    rw [this]; rw [← flatten_cons]; rw [← replicate_succ]; rw [← isReduced_iff_reduce_eq]
+    apply IsReduced.append_flatten_replicate_append (hn := by simp)
+    · exact isCyclicallyReduced h
+    · rwa [conj_conjugator_reduceCyclically]
+
+@[to_additive]
 
 中文:
 定理 reduce_flatten_replicate_succ
@@ -608,7 +640,19 @@ theorem reduce_flatten_replicate_succ
     simpa [← append_assoc, conj_conjugator_reduceCyclically, ← isReduced_iff_reduce_eq]
   case succ n ih =>
     rw [replicate_succ]; rw [flatten_cons]; rw [← reduce_append_reduce_reduce]; rw [ih]; rw [h.reduce_eq]
-    nth_rewrite 1 [← conj_conjugator_reduceCyclically 
+    nth_rewrite 1 [← conj_conjugator_reduceCyclically L]
+    have {L₁ L₂ L₃ L₄ L₅ : List (α × Bool)} : reduce (L₁ ++ L₂ ++ invRev L₃ ++ (L₃ ++ L₄ ++ L₅)) =
+        reduce (L₁ ++ (L₂ ++ L₄) ++ L₅) := by
+      apply reduce.sound
+      repeat rw [← mul_mk]
+      rw [← inv_mk]
+      group
+    rw [this]; rw [← flatten_cons]; rw [← replicate_succ]; rw [← isReduced_iff_reduce_eq]
+    apply IsReduced.append_flatten_replicate_append (hn := by simp)
+    · exact isCyclicallyReduced h
+    · rwa [conj_conjugator_reduceCyclically]
+
+@[to_additive]
 
 Depends on / 依赖: append_assoc, conj_conjugator_reduceCyclically, flatten_cons, h.reduce_eq, invRev, inv_mk, isReduced_iff_reduce_eq, mul_mk, nth_rewrite, reduce.sound, reduce_append_reduce_reduce, reduce_eq, repeat, replicate_succ
 -/
@@ -684,7 +728,22 @@ instance :
         (conjugator a.toWord).length + (n * (reduceCyclically a.toWord).length +
           (conjugator a.toWord).length)
     let g (a : FreeGroup α) (k : Nat) : List (α × Bool) :=
-        conjugator a.toWord ++ ((replicate k (reduceCycl
+        conjugator a.toWord ++ ((replicate k (reduceCyclically a.toWord)).flatten ++
+          invRev (conjugator a.toWord))
+    have heq₂ : x ^ (2 * n) = y ^ (2 * n) := by simp_rw [mul_comm, pow_mul, heq]
+    replace heq : g x n = g y n := by
+      simpa [toWord_pow, reduce_flatten_replicate, isReduced_toWord, hn] using congr_arg toWord heq
+    replace heq₂ : g x (2 * n) = g y (2 * n) := by
+      simpa [toWord_pow, reduce_flatten_replicate, isReduced_toWord, hn] using congr_arg toWord heq₂
+    have leq : f x n = f y n := by simpa [g] using congr_arg List.length heq
+    have leq₂ : f x (2 * n) = f y (2 * n) := by simpa [g] using congr_arg List.length heq₂
+    obtain ⟨hc, heq'⟩ := List.append_inj heq (by grind)
+    obtain ⟨n, rfl⟩ := Nat.exists_eq_add_one_of_ne_zero hn
+    have hm : reduceCyclically x.toWord = reduceCyclically y.toWord := by
+      simp only [replicate_succ, flatten_cons, append_assoc] at heq'
+      exact (List.append_inj heq' <| mul_left_cancel₀ hn <| by grind).1
+have := congr_arg mk (conj_conjugator_reduceCyclically x.toWord).symm
+    rwa [hc, hm, conj_conjugator_reduceCyclically, mk_toWord, mk_toWord] at this
 
 中文:
 实例 :
@@ -695,7 +754,22 @@ instance :
         (conjugator a.toWord).length + (n * (reduceCyclically a.toWord).length +
           (conjugator a.toWord).length)
     let g (a : FreeGroup α) (k : Nat) : List (α × Bool) :=
-        conjugator a.toWord ++ ((replicate k (reduceCycl
+        conjugator a.toWord ++ ((replicate k (reduceCyclically a.toWord)).flatten ++
+          invRev (conjugator a.toWord))
+    have heq₂ : x ^ (2 * n) = y ^ (2 * n) := by simp_rw [mul_comm, pow_mul, heq]
+    replace heq : g x n = g y n := by
+      simpa [toWord_pow, reduce_flatten_replicate, isReduced_toWord, hn] using congr_arg toWord heq
+    replace heq₂ : g x (2 * n) = g y (2 * n) := by
+      simpa [toWord_pow, reduce_flatten_replicate, isReduced_toWord, hn] using congr_arg toWord heq₂
+    have leq : f x n = f y n := by simpa [g] using congr_arg List.length heq
+    have leq₂ : f x (2 * n) = f y (2 * n) := by simpa [g] using congr_arg List.length heq₂
+    obtain ⟨hc, heq'⟩ := List.append_inj heq (by grind)
+    obtain ⟨n, rfl⟩ := Nat.exists_eq_add_one_of_ne_zero hn
+    have hm : reduceCyclically x.toWord = reduceCyclically y.toWord := by
+      simp only [replicate_succ, flatten_cons, append_assoc] at heq'
+      exact (List.append_inj heq' <| mul_left_cancel₀ hn <| by grind).1
+have := congr_arg mk (conj_conjugator_reduceCyclically x.toWord).symm
+    rwa [hc, hm, conj_conjugator_reduceCyclically, mk_toWord, mk_toWord] at this
 
 Depends on / 依赖: FreeGroup, a.toWord, classical, conjugator, flatten, invRev, isReduced_toWord, length, mul_comm, pow_mul, reduceCyclically, reduce_flatten_replicate, replace, replicate, simp_rw, toWord, toWord_pow
 -/

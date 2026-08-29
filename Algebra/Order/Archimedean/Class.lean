@@ -382,7 +382,13 @@ instance :
     exact hn.trans (pow_le_pow_left' hm n)
   lt_iff_le_not_ge a b := by
     rw [lt_def]; rw [le_def]; rw [le_def]
-    suffices (forall (n : Nat), |b.val|ₘ ^ n < |a.val|ₘ) -> exists n, |b.val|ₘ <= |a.val|ₘ ^ 
+    suffices (forall (n : Nat), |b.val|ₘ ^ n < |a.val|ₘ) -> exists n, |b.val|ₘ <= |a.val|ₘ ^ n by
+      simpa using this
+    intro h
+    obtain h := (h 1).le
+    exact ⟨1, by simpa using h⟩
+
+@[to_additive]
 
 中文:
 实例 :
@@ -395,7 +401,13 @@ instance :
     exact hn.trans (pow_le_pow_left' hm n)
   lt_iff_le_not_ge a b := by
     rw [lt_def]; rw [le_def]; rw [le_def]
-    suffices (forall (n : Nat), |b.val|ₘ ^ n < |a.val|ₘ) -> exists n, |b.val|ₘ <= |a.val|ₘ ^ 
+    suffices (forall (n : Nat), |b.val|ₘ ^ n < |a.val|ₘ) -> exists n, |b.val|ₘ <= |a.val|ₘ ^ n by
+      simpa using this
+    intro h
+    obtain h := (h 1).le
+    exact ⟨1, by simpa using h⟩
+
+@[to_additive]
 -/
 instance : Preorder (MulArchimedeanOrder M) where
   le_refl a := ⟨1, by simp⟩
@@ -1302,7 +1314,10 @@ theorem min_le_mk_of_le_of_le
   obtain h | h := le_total |y|ₘ |z|ₘ
   · rw [max_eq_right h, min_eq_right, mk_mabs]
     exact mk_le_mk_of_mabs h
-  · rw [max_eq_left h, min_eq_left, mk_mabs
+  · rw [max_eq_left h, min_eq_left, mk_mabs]
+    exact mk_le_mk_of_mabs h
+
+@[to_additive]
 
 中文:
 定理 min_le_mk_of_le_of_le
@@ -1315,7 +1330,10 @@ theorem min_le_mk_of_le_of_le
   obtain h | h := le_total |y|ₘ |z|ₘ
   · rw [max_eq_right h, min_eq_right, mk_mabs]
     exact mk_le_mk_of_mabs h
-  · rw [max_eq_left h, min_eq_left, mk_mabs
+  · rw [max_eq_left h, min_eq_left, mk_mabs]
+    exact mk_le_mk_of_mabs h
+
+@[to_additive]
 
 Depends on / 依赖: le_max_of_le_left, le_total, mabs_le_max_mabs_mabs, mabs_of_one_le, max_eq_left, max_eq_right, min_eq_left, min_eq_right, mk_le_mk_of_mabs, mk_mabs, one_le_mabs
 -/
@@ -1715,7 +1733,9 @@ theorem mk_mul_eq_mk_left
   rw [mul_comm b a]; rw [pow_two]; rw [mul_le_mul_iff_right]
   apply le_of_mul_le_mul_left' (a := |b|ₘ)
   rw [mul_comm a b]
-  exact (pow_two |b|ₘ ▸ (h 2).le).trans (mabs_mul' a 
+  exact (pow_two |b|ₘ ▸ (h 2).le).trans (mabs_mul' a b)
+
+@[to_additive]
 
 中文:
 定理 mk_mul_eq_mk_left
@@ -1728,7 +1748,9 @@ theorem mk_mul_eq_mk_left
   rw [mul_comm b a]; rw [pow_two]; rw [mul_le_mul_iff_right]
   apply le_of_mul_le_mul_left' (a := |b|ₘ)
   rw [mul_comm a b]
-  exact (pow_two |b|ₘ ▸ (h 2).le).trans (mabs_mul' a 
+  exact (pow_two |b|ₘ ▸ (h 2).le).trans (mabs_mul' a b)
+
+@[to_additive]
 
 Depends on / 依赖: h.le, le_antisymm, le_of_mul_le_mul_left, mabs_mul, mk_le_mk, mk_le_mk.mpr, mk_left_le_mk_mul, mk_lt_mk, mul_comm, mul_le_mul_iff_right, pow_two
 -/
@@ -1832,7 +1854,35 @@ theorem mk_prod
     obtain ih := ih (hmono.mono (by simp))
     rw [Finset.prod_cons]
     have hminmem : s.min' hs in (Finset.cons i s hi) :=
-      Finset.mem_cons_of_mem (Finset.min'_m
+      Finset.mem_cons_of_mem (Finset.min'_mem _ _)
+    have hne : mk (a i) != mk (a (s.min' hs)) := by
+      by_contra h
+      obtain eq := hmono.injOn (by simp) hminmem h
+      rw [eq] at hi
+      exact hi (Finset.min'_mem _ hs)
+    rw [← ih] at hne
+    obtain hlt | hlt := lt_or_gt_of_ne hne
+    · rw [mk_mul_eq_mk_left hlt]
+      congr
+      apply le_antisymm (Finset.le_min' _ _ _ ?_) (Finset.min'_le _ _ (by simp))
+      intro y hy
+      obtain rfl | hmem := Finset.mem_cons.mp hy
+      · rfl
+      · refine (lt_of_lt_of_le ?_ (Finset.min'_le _ _ hmem)).le
+        apply (hmono.lt_iff_lt (by simp) hminmem).mp
+        rw [ih] at hlt
+        exact hlt
+    · rw [mul_comm, mk_mul_eq_mk_left hlt, ih]
+      congr 2
+      refine le_antisymm (Finset.le_min' _ _ _ ?_) (Finset.min'_le _ _ hminmem)
+      intro y hy
+      obtain rfl | hmem := Finset.mem_cons.mp hy
+      · apply ((hmono.lt_iff_lt hminmem (by simp)).mp ?_).le
+        rw [ih] at hlt
+        exact hlt
+      · exact Finset.min'_le _ _ hmem
+
+@[to_additive]
 
 中文:
 定理 mk_prod
@@ -1845,7 +1895,35 @@ theorem mk_prod
     obtain ih := ih (hmono.mono (by simp))
     rw [Finset.prod_cons]
     have hminmem : s.min' hs in (Finset.cons i s hi) :=
-      Finset.mem_cons_of_mem (Finset.min'_m
+      Finset.mem_cons_of_mem (Finset.min'_mem _ _)
+    have hne : mk (a i) != mk (a (s.min' hs)) := by
+      by_contra h
+      obtain eq := hmono.injOn (by simp) hminmem h
+      rw [eq] at hi
+      exact hi (Finset.min'_mem _ hs)
+    rw [← ih] at hne
+    obtain hlt | hlt := lt_or_gt_of_ne hne
+    · rw [mk_mul_eq_mk_left hlt]
+      congr
+      apply le_antisymm (Finset.le_min' _ _ _ ?_) (Finset.min'_le _ _ (by simp))
+      intro y hy
+      obtain rfl | hmem := Finset.mem_cons.mp hy
+      · rfl
+      · refine (lt_of_lt_of_le ?_ (Finset.min'_le _ _ hmem)).le
+        apply (hmono.lt_iff_lt (by simp) hminmem).mp
+        rw [ih] at hlt
+        exact hlt
+    · rw [mul_comm, mk_mul_eq_mk_left hlt, ih]
+      congr 2
+      refine le_antisymm (Finset.le_min' _ _ _ ?_) (Finset.min'_le _ _ hminmem)
+      intro y hy
+      obtain rfl | hmem := Finset.mem_cons.mp hy
+      · apply ((hmono.lt_iff_lt hminmem (by simp)).mp ?_).le
+        rw [ih] at hlt
+        exact hlt
+      · exact Finset.min'_le _ _ hmem
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Finset.cons, Finset.mem_cons_of_mem, Finset.min, Finset.prod_cons, Nonempty, _mem, cons_induction, hminmem, hmono.injOn, hmono.mono, hnonempty, lt_or_gt_of_ne, mem_cons_of_mem, mk_mul_, prod_cons, s.min, singleton
 -/
@@ -2185,7 +2263,9 @@ theorem orderHom_injective
   simp_rw [orderHom_mk, mk_eq_mk, ← map_mabs, ← map_pow]
   obtain hmono := (OrderHomClass.monotone f).strictMono_of_injective h
   intro ⟨⟨m, hm⟩, ⟨n, hn⟩⟩
-  exact ⟨⟨m, hmono.le_iff_le.mp hm⟩, ⟨n, hmono.le_iff_le.m
+  exact ⟨⟨m, hmono.le_iff_le.mp hm⟩, ⟨n, hmono.le_iff_le.mp hn⟩⟩
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 orderHom_injective
@@ -2197,7 +2277,9 @@ theorem orderHom_injective
   simp_rw [orderHom_mk, mk_eq_mk, ← map_mabs, ← map_pow]
   obtain hmono := (OrderHomClass.monotone f).strictMono_of_injective h
   intro ⟨⟨m, hm⟩, ⟨n, hn⟩⟩
-  exact ⟨⟨m, hmono.le_iff_le.mp hm⟩, ⟨n, hmono.le_iff_le.m
+  exact ⟨⟨m, hmono.le_iff_le.mp hm⟩, ⟨n, hmono.le_iff_le.mp hn⟩⟩
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: OrderHomClass, OrderHomClass.monotone, hmono.le_iff_le.mp, le_iff_le, map_mabs, map_pow, mk_eq_mk, monotone, orderHom_mk, simp_rw, strictMono_of_injective
 -/
@@ -2518,7 +2600,11 @@ theorem subgroup_strictAntiOn
   rw [← subsemigroup_eq_subgroup_of_ne_top (Set.mem_Iio.mp hs).ne_top]
   rw [← subsemigroup_eq_subgroup_of_ne_top (Set.mem_Iio.mp ht).ne_top]
   refine Set.ssubset_iff_subset_ne.mpr ⟨by simpa [subsemigroup] using hst.le, ?_⟩
-  contrapose! hst 
+  contrapose! hst with heq
+  apply le_of_eq
+  simpa [mk_surjective, subsemigroup] using heq
+
+@[to_additive]
 
 中文:
 定理 subgroup_strictAntiOn
@@ -2529,7 +2615,11 @@ theorem subgroup_strictAntiOn
   rw [← subsemigroup_eq_subgroup_of_ne_top (Set.mem_Iio.mp hs).ne_top]
   rw [← subsemigroup_eq_subgroup_of_ne_top (Set.mem_Iio.mp ht).ne_top]
   refine Set.ssubset_iff_subset_ne.mpr ⟨by simpa [subsemigroup] using hst.le, ?_⟩
-  contrapose! hst 
+  contrapose! hst with heq
+  apply le_of_eq
+  simpa [mk_surjective, subsemigroup] using heq
+
+@[to_additive]
 
 Depends on / 依赖: Set.Iio, Set.mem_Iio.mp, Set.ssubset_iff_subset_ne.mpr, SetLike, SetLike.coe_ssubset_coe, coe_ssubset_coe, contrapose, hst.le, le_of_eq, mem_Iio, mk_surjective, ne_top, ssubset_iff_subset_ne, subsemigroup, subsemigroup_eq_subgroup_of_ne_top
 -/
@@ -2998,7 +3088,12 @@ definition lift
   · split_ifs with ha hb hb
     · rfl
     · exact (hb (MulArchimedeanClass.mk_eq_top_iff.mp (ha ▸ h').symm)).elim
-    · exact (ha (MulArchimedeanClass.m
+    · exact (ha (MulArchimedeanClass.mk_eq_top_iff.mp (by apply hb ▸ h'))).elim
+    · rw [h ⟨a, ha⟩ ⟨b, hb⟩ (by simpa [mk] using h')]
+  · induction A using MulArchimedeanClass.ind with | mk a
+    simpa using MulArchimedeanClass.mk_eq_top_iff.not.mp hA
+
+@[to_additive (attr := simp)]
 
 中文:
 定义 lift
@@ -3009,7 +3104,12 @@ definition lift
   · split_ifs with ha hb hb
     · rfl
     · exact (hb (MulArchimedeanClass.mk_eq_top_iff.mp (ha ▸ h').symm)).elim
-    · exact (ha (MulArchimedeanClass.m
+    · exact (ha (MulArchimedeanClass.mk_eq_top_iff.mp (by apply hb ▸ h'))).elim
+    · rw [h ⟨a, ha⟩ ⟨b, hb⟩ (by simpa [mk] using h')]
+  · induction A using MulArchimedeanClass.ind with | mk a
+    simpa using MulArchimedeanClass.mk_eq_top_iff.not.mp hA
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: MulArchimedeanClass, MulArchimedeanClass.ind, MulArchimedeanClass.lift, MulArchimedeanClass.mk_eq_top_iff.mp, MulArchimedeanClass.mk_eq_top_iff.not.mp, WithTop, WithTop.some, mk_eq_top_iff, split_ifs
 -/
@@ -3264,7 +3364,7 @@ definition toUpperSetMulArchimedeanClass
       upper' _ _ le mem ne := s.upper le (mem <| ne_top_of_le_ne_top ne le) })
   fun s t lt => by
     simp_rw [lt_iff_le_not_ge] at lt ⊢
-    exact ⟨fun _ mem ne => lt.1 (mem _), fun hst => lt.2 fun x mem => hst (fun _ => m
+    exact ⟨fun _ mem ne => lt.1 (mem _), fun hst => lt.2 fun x mem => hst (fun _ => mem) x.2⟩
 
 中文:
 定义 toUpperSetMulArchimedeanClass
@@ -3274,7 +3374,7 @@ definition toUpperSetMulArchimedeanClass
       upper' _ _ le mem ne := s.upper le (mem <| ne_top_of_le_ne_top ne le) })
   fun s t lt => by
     simp_rw [lt_iff_le_not_ge] at lt ⊢
-    exact ⟨fun _ mem ne => lt.1 (mem _), fun hst => lt.2 fun x mem => hst (fun _ => m
+    exact ⟨fun _ mem ne => lt.1 (mem _), fun hst => lt.2 fun x mem => hst (fun _ => mem) x.2⟩
 
 Depends on / 依赖: carrier, lt_iff_le_not_ge, ne_top_of_le_ne_top, ofStrictMono, s.upper, simp_rw
 -/

@@ -156,7 +156,21 @@ lemma isVerdierRightLocalizing_iff
     obtain ⟨W, a, b, hT, hW⟩ := hs
     obtain ⟨W', c, d, h₁, h₂, fac⟩ := IsVerdierRightLocalizing.fac a hW hX
     obtain ⟨U, hU, e, f, hT'⟩ := A.distinguished_cocone_triangle d h₁ hX
-   
+    obtain ⟨g, hg, _⟩ := Pretriangulated.complete_distinguished_triangle_morphism _ _ hT hT'
+      c (𝟙 _) (by cat_disch)
+    refine ⟨U, e, g, hU, ?_, by cat_disch⟩
+    rw [ObjectProperty.trW_iff']
+    exact ⟨_, _, _, hT', h₁, h₂⟩
+  · obtain ⟨Z, s, b, hT⟩ := Pretriangulated.distinguished_cocone_triangle f
+    have hs : B.trW s := by
+      rw [trW_iff']
+      exact ⟨_, _, _, hT, hX⟩
+    obtain ⟨W, s', g, hW, hs', fac⟩ := hA s hY hs
+    obtain ⟨U, hU, a, c, hT'⟩ := A.distinguished_cocone_triangle₁ s' hY hW
+    obtain ⟨t, ht, ht'⟩ :=
+      complete_distinguished_triangle_morphism₁ _ _ hT hT' (𝟙 Y) g (by cat_disch)
+    exact ⟨U, t, a, hU, (B.trW_iff_of_distinguished' _ hT').1 (trW_monotone (by simp) _ hs'),
+      by cat_disch⟩
 
 中文:
 引理 isVerdierRightLocalizing_iff
@@ -167,7 +181,21 @@ lemma isVerdierRightLocalizing_iff
     obtain ⟨W, a, b, hT, hW⟩ := hs
     obtain ⟨W', c, d, h₁, h₂, fac⟩ := IsVerdierRightLocalizing.fac a hW hX
     obtain ⟨U, hU, e, f, hT'⟩ := A.distinguished_cocone_triangle d h₁ hX
-   
+    obtain ⟨g, hg, _⟩ := Pretriangulated.complete_distinguished_triangle_morphism _ _ hT hT'
+      c (𝟙 _) (by cat_disch)
+    refine ⟨U, e, g, hU, ?_, by cat_disch⟩
+    rw [ObjectProperty.trW_iff']
+    exact ⟨_, _, _, hT', h₁, h₂⟩
+  · obtain ⟨Z, s, b, hT⟩ := Pretriangulated.distinguished_cocone_triangle f
+    have hs : B.trW s := by
+      rw [trW_iff']
+      exact ⟨_, _, _, hT, hX⟩
+    obtain ⟨W, s', g, hW, hs', fac⟩ := hA s hY hs
+    obtain ⟨U, hU, a, c, hT'⟩ := A.distinguished_cocone_triangle₁ s' hY hW
+    obtain ⟨t, ht, ht'⟩ :=
+      complete_distinguished_triangle_morphism₁ _ _ hT hT' (𝟙 Y) g (by cat_disch)
+    exact ⟨U, t, a, hU, (B.trW_iff_of_distinguished' _ hT').1 (trW_monotone (by simp) _ hs'),
+      by cat_disch⟩
 
 Depends on / 依赖: A.distinguished_cocone_triangle, IsVerdierRightLocalizing, IsVerdierRightLocalizing.fac, ObjectProperty, ObjectProperty.trW_iff, Pretriangulated, Pretriangulated.complete_distinguished_triangle_morphism, cat_disch, complete_distinguished_triangle_morphism, distinguished_cocone_triangle, trW_iff
 -/
@@ -229,7 +257,8 @@ lemma isVerdierLeftLocalizing_iff
   refine ⟨fun hA X Y s hY hs => ?_, fun hA X Y s hX hs => ?_⟩
   · obtain ⟨Z', s', b, hZ', hs', fac⟩ := hA s.op hY (by simpa [trW_op_iff])
     exact ⟨Z'.unop, s'.unop, b.unop, hZ', trW_of_op _ hs', by cat_disch⟩
-  · obtain
+  · obtain ⟨Z', s', b, hZ', hs', fac⟩ := hA s.unop hX (trW_of_op _ hs)
+    exact ⟨_, s'.op, b.op, hZ', trW_of_unop _ hs', by cat_disch⟩
 
 中文:
 引理 isVerdierLeftLocalizing_iff
@@ -239,7 +268,8 @@ lemma isVerdierLeftLocalizing_iff
   refine ⟨fun hA X Y s hY hs => ?_, fun hA X Y s hX hs => ?_⟩
   · obtain ⟨Z', s', b, hZ', hs', fac⟩ := hA s.op hY (by simpa [trW_op_iff])
     exact ⟨Z'.unop, s'.unop, b.unop, hZ', trW_of_op _ hs', by cat_disch⟩
-  · obtain
+  · obtain ⟨Z', s', b, hZ', hs', fac⟩ := hA s.unop hX (trW_of_op _ hs)
+    exact ⟨_, s'.op, b.op, hZ', trW_of_unop _ hs', by cat_disch⟩
 
 Depends on / 依赖: b.op, b.unop, cat_disch, isVerdierRightLocalizing_iff, isVerdierRightLocalizing_op_iff, s.op, s.unop, trW_of_op, trW_of_unop, trW_op_iff
 -/
@@ -365,7 +395,11 @@ lemma trW_inverseImage_ι_iff
   · rintro ⟨Z, a, b, h, hZ⟩
     refine ⟨⟨Z, hZ.1⟩, A.homMk a, A.homMk (b ≫ (A.ι.commShiftIso 1).inv.app _), ?_, hZ.2⟩
     rw [← A.ι.map_distinguished_iff]
-    refine isom
+    refine isomorphic_distinguished _ h _
+      (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_)
+    · cat_disch
+    · cat_disch
+    · simp [dsimp% (A.ι.commShiftIso (1 : Int)).inv_hom_id_app X]
 
 中文:
 引理 trW_inverseImage_ι_iff
@@ -378,7 +412,11 @@ lemma trW_inverseImage_ι_iff
   · rintro ⟨Z, a, b, h, hZ⟩
     refine ⟨⟨Z, hZ.1⟩, A.homMk a, A.homMk (b ≫ (A.ι.commShiftIso 1).inv.app _), ?_, hZ.2⟩
     rw [← A.ι.map_distinguished_iff]
-    refine isom
+    refine isomorphic_distinguished _ h _
+      (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_)
+    · cat_disch
+    · cat_disch
+    · simp [dsimp% (A.ι.commShiftIso (1 : Int)).inv_hom_id_app X]
 
 Depends on / 依赖: A.homMk, Iso.refl, Triangle, Triangle.isoMk, Z.property, cat_disch, commShiftIso, inv.app, inv_hom_id_app, isomorphic_distinguished, map_distinguished, map_distinguished_iff, property, trW_iff
 -/
@@ -447,6 +485,22 @@ instance :
   let e : A.ι ⋙ L₂ ≅ L₁ ⋙ F := CatCommSq.iso
     (A.triangulatedLocalizerMorphism B).functor L₁ L₂ F
   refine F.full_of_comp_essSurj L₁ (fun X₁ X₂ φ => ?_)
+  obtain ⟨φ', hφ'⟩ : exists φ', φ = e.inv.app X₁ ≫ φ' ≫ e.hom.app X₂ :=
+    ⟨e.hom.app X₁ ≫ φ ≫ e.inv.app X₂, by
+      simp [dsimp% e.inv_hom_id_app_assoc, dsimp% e.inv_hom_id_app]⟩
+  obtain ⟨f, hf⟩ := Localization.exists_leftFraction L₂ B.trW φ'
+  obtain ⟨X₃, s', a, hX₃, hs', fac⟩ :=
+    IsVerdierRightLocalizing.fac' f.s X₂.property f.hs
+  let g : (B.inverseImage A.ι).trW.LeftFraction X₁ X₂ :=
+    { Y' := ⟨X₃, hX₃⟩
+      f := A.homMk (f.f ≫ a)
+      s := A.homMk s'
+      hs := by rwa [trW_inverseImage_ι_iff] }
+  have := Localization.inverts L₁ _ _ g.hs
+  refine ⟨g.map L₁ (Localization.inverts _ _), ?_⟩
+  rw [← cancel_mono (F.map (L₁.map g.s))]; rw [← Functor.map_comp]; rw [MorphismProperty.LeftFraction.map_comp_map_s]
+  simp [g, ← fac, hφ', hf, ← dsimp% NatIso.naturality_1 e,
+    dsimp% e.hom_inv_id_app_assoc]
 
 中文:
 实例 :
@@ -457,6 +511,22 @@ instance :
   let e : A.ι ⋙ L₂ ≅ L₁ ⋙ F := CatCommSq.iso
     (A.triangulatedLocalizerMorphism B).functor L₁ L₂ F
   refine F.full_of_comp_essSurj L₁ (fun X₁ X₂ φ => ?_)
+  obtain ⟨φ', hφ'⟩ : exists φ', φ = e.inv.app X₁ ≫ φ' ≫ e.hom.app X₂ :=
+    ⟨e.hom.app X₁ ≫ φ ≫ e.inv.app X₂, by
+      simp [dsimp% e.inv_hom_id_app_assoc, dsimp% e.inv_hom_id_app]⟩
+  obtain ⟨f, hf⟩ := Localization.exists_leftFraction L₂ B.trW φ'
+  obtain ⟨X₃, s', a, hX₃, hs', fac⟩ :=
+    IsVerdierRightLocalizing.fac' f.s X₂.property f.hs
+  let g : (B.inverseImage A.ι).trW.LeftFraction X₁ X₂ :=
+    { Y' := ⟨X₃, hX₃⟩
+      f := A.homMk (f.f ≫ a)
+      s := A.homMk s'
+      hs := by rwa [trW_inverseImage_ι_iff] }
+  have := Localization.inverts L₁ _ _ g.hs
+  refine ⟨g.map L₁ (Localization.inverts _ _), ?_⟩
+  rw [← cancel_mono (F.map (L₁.map g.s))]; rw [← Functor.map_comp]; rw [MorphismProperty.LeftFraction.map_comp_map_s]
+  simp [g, ← fac, hφ', hf, ← dsimp% NatIso.naturality_1 e,
+    dsimp% e.hom_inv_id_app_assoc]
 
 Depends on / 依赖: A.triangulatedLocalizerMorphism, B.inverseImage, CatCommSq, CatCommSq.iso, EssSurj, F.full_of_comp_essSurj, Localization, Localization.essSurj, Localization.exists_lef, e.hom.app, e.inv.app, e.inv_hom_id_app, e.inv_hom_id_app_assoc, essSurj, exists_lef, full_of_comp_essSurj, functor, inv_hom_id_app, inv_hom_id_app_assoc, inverseImage
 -/
@@ -530,7 +600,23 @@ instance :
   have := Localization.functor_additive L₁ (B.inverseImage A.ι).trW
   have := Localization.functor_additive L₂ B.trW
   let F := (A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂
-  let
+  let e : A.ι ⋙ L₂ ≅ L₁ ⋙ F :=
+    CatCommSq.iso (A.triangulatedLocalizerMorphism B).functor L₁ L₂ F
+  refine Functor.faithful_of_comp_cancel_zero_of_hasLeftCalculusOfFractions L₁
+    (B.inverseImage A.ι).trW F (fun X₁ X₂ f hf => ?_)
+  replace hf : L₂.map f.hom = L₂.map 0 := by
+    simp [← dsimp% NatIso.naturality_2 e f, hf]
+  rw [MorphismProperty.map_eq_iff_postcomp L₂ B.trW] at hf
+  obtain ⟨X₃, s, hs, fac⟩ := hf
+  obtain ⟨X₄, t, a, hX₄, ht, fac'⟩ :=
+    IsVerdierRightLocalizing.fac' s X₂.property hs
+  let t' : X₂ ⟶ ⟨X₄, hX₄⟩ := A.homMk t
+  have := Localization.inverts L₁ (B.inverseImage A.ι).trW t'
+    (by rwa [trW_inverseImage_ι_iff])
+  rw [← cancel_mono (L₁.map t')]; rw [zero_comp]; rw [← L₁.map_comp]; rw [← L₁.map_zero]
+  congr 1
+  ext
+  simp [t', ← fac', reassoc_of% fac]
 
 中文:
 实例 :
@@ -541,7 +627,23 @@ instance :
   have := Localization.functor_additive L₁ (B.inverseImage A.ι).trW
   have := Localization.functor_additive L₂ B.trW
   let F := (A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂
-  let
+  let e : A.ι ⋙ L₂ ≅ L₁ ⋙ F :=
+    CatCommSq.iso (A.triangulatedLocalizerMorphism B).functor L₁ L₂ F
+  refine Functor.faithful_of_comp_cancel_zero_of_hasLeftCalculusOfFractions L₁
+    (B.inverseImage A.ι).trW F (fun X₁ X₂ f hf => ?_)
+  replace hf : L₂.map f.hom = L₂.map 0 := by
+    simp [← dsimp% NatIso.naturality_2 e f, hf]
+  rw [MorphismProperty.map_eq_iff_postcomp L₂ B.trW] at hf
+  obtain ⟨X₃, s, hs, fac⟩ := hf
+  obtain ⟨X₄, t, a, hX₄, ht, fac'⟩ :=
+    IsVerdierRightLocalizing.fac' s X₂.property hs
+  let t' : X₂ ⟶ ⟨X₄, hX₄⟩ := A.homMk t
+  have := Localization.inverts L₁ (B.inverseImage A.ι).trW t'
+    (by rwa [trW_inverseImage_ι_iff])
+  rw [← cancel_mono (L₁.map t')]; rw [zero_comp]; rw [← L₁.map_comp]; rw [← L₁.map_zero]
+  congr 1
+  ext
+  simp [t', ← fac', reassoc_of% fac]
 
 Depends on / 依赖: A.triangulatedLocalizerMorphism, B.inverseImage, B.trW, CatCommSq, CatCommSq.iso, Functor, Functor.faithful_of_comp_cancel_zero_of_hasLeftCalculusOfFractions, Localization, Localization.functor_additive, Localization.preadditive, faithful_of_comp_cancel_zero_of_hasLeftCalculusOfFractions, functor, functor_additive, inverseImage, localizedFunctor, preadditive, triangulatedLocalizerMorphism
 -/
@@ -602,7 +704,24 @@ instance [A.IsVerdierLeftLocalizing
   let F : (B.inverseImage A.ι).trW.Localization ⥤ B.trW.Localization :=
     (A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂
   let : CatCommSq (A.op.triangulatedLocalizerMorphism B.op).functor
-    (A.opEquivalence.functor ⋙ L₁.o
+    (A.opEquivalence.functor ⋙ L₁.op) L₂.op F.op :=
+    ⟨Functor.isoWhiskerLeft A.opEquivalence.functor
+      (NatIso.op (CatCommSq.iso (A.triangulatedLocalizerMorphism B).functor L₁ L₂ F).symm)⟩
+  have : L₂.op.IsLocalization B.op.trW := by rw [trW_op]; infer_instance
+  have : (A.opEquivalence.functor ⋙ L₁.op).IsLocalization (B.op.inverseImage A.op.ι).trW := by
+    refine Functor.IsLocalization.of_equivalence_source L₁.op (B.inverseImage A.ι).trW.op
+      _ _ A.opEquivalence.symm ?_ ?_
+      ((Functor.associator _ _ _).symm ≪≫
+        Functor.isoWhiskerRight A.opEquivalence.counitIso _ ≪≫ Functor.leftUnitor _)
+    · rw [← trW_op, ← inverseImage_opEquivalence_inverse_trW_inverseImage_ι_op]
+      intro _ _ f hf
+      simp only [MorphismProperty.inverseImage_iff, Equivalence.symm_functor] at hf ⊢
+      exact MorphismProperty.le_isoClosure _ _ hf
+    · refine fun _ _ _ hf => Localization.inverts L₁.op (B.inverseImage A.ι).trW.op _ ?_
+      simpa [trW_inverseImage_ι_iff, ← op_inf, trW_op] using! hf
+  exact LocalizerMorphism.IsLocalizedFullyFaithful.mk' (A.triangulatedLocalizerMorphism B)
+    L₁ L₂ F (((A.op.triangulatedLocalizerMorphism B.op).fullyFaithful
+    (A.opEquivalence.functor ⋙ L₁.op) L₂.op F.op).unop)
 
 中文:
 实例 [A.是VerdierLeftLocalizing
@@ -613,7 +732,24 @@ instance [A.IsVerdierLeftLocalizing
   let F : (B.inverseImage A.ι).trW.Localization ⥤ B.trW.Localization :=
     (A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂
   let : CatCommSq (A.op.triangulatedLocalizerMorphism B.op).functor
-    (A.opEquivalence.functor ⋙ L₁.o
+    (A.opEquivalence.functor ⋙ L₁.op) L₂.op F.op :=
+    ⟨Functor.isoWhiskerLeft A.opEquivalence.functor
+      (NatIso.op (CatCommSq.iso (A.triangulatedLocalizerMorphism B).functor L₁ L₂ F).symm)⟩
+  have : L₂.op.IsLocalization B.op.trW := by rw [trW_op]; infer_instance
+  have : (A.opEquivalence.functor ⋙ L₁.op).IsLocalization (B.op.inverseImage A.op.ι).trW := by
+    refine Functor.IsLocalization.of_equivalence_source L₁.op (B.inverseImage A.ι).trW.op
+      _ _ A.opEquivalence.symm ?_ ?_
+      ((Functor.associator _ _ _).symm ≪≫
+        Functor.isoWhiskerRight A.opEquivalence.counitIso _ ≪≫ Functor.leftUnitor _)
+    · rw [← trW_op, ← inverseImage_opEquivalence_inverse_trW_inverseImage_ι_op]
+      intro _ _ f hf
+      simp only [MorphismProperty.inverseImage_iff, Equivalence.symm_functor] at hf ⊢
+      exact MorphismProperty.le_isoClosure _ _ hf
+    · refine fun _ _ _ hf => Localization.inverts L₁.op (B.inverseImage A.ι).trW.op _ ?_
+      simpa [trW_inverseImage_ι_iff, ← op_inf, trW_op] using! hf
+  exact LocalizerMorphism.IsLocalizedFullyFaithful.mk' (A.triangulatedLocalizerMorphism B)
+    L₁ L₂ F (((A.op.triangulatedLocalizerMorphism B.op).fullyFaithful
+    (A.opEquivalence.functor ⋙ L₁.op) L₂.op F.op).unop)
 
 Depends on / 依赖: A.op.triangulatedLocalizerMorphism, A.opEquivalence.functor, A.triangulatedLocalizerMorphism, B.inverseImage, B.op, B.op.trW, B.trW.Localization, B.trW.Q, CatCommSq, CatCommSq.iso, F.op, Functor, Functor.isoWhiskerLeft, IsLocalization, Localization, NatIso, NatIso.op, functor, infer_ins, inverseImage
 -/

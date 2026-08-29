@@ -54,7 +54,8 @@ theorem span_eq_top_of_isLocalizedModule
   obtain ⟨⟨m, s⟩, h⟩ := IsLocalizedModule.surj S f x
   rw [Submonoid.smul_def]; rw [← algebraMap_smul Rₛ]; rw [← Units.smul_isUnit (IsLocalization.map_units Rₛ s)]; rw [eq_comm]; rw [← inv_smul_eq_iff] at h
   refine h ▸ smul_mem _ _ (span_subset_span R Rₛ _ ?_)
-  rw [← Linea
+  rw [← LinearMap.coe_restrictScalars R]; rw [← LinearMap.map_span]; rw [hv]
+  exact mem_map_of_mem mem_top
 
 中文:
 定理 span_eq_top_of_isLocalizedModule
@@ -63,7 +64,8 @@ theorem span_eq_top_of_isLocalizedModule
   obtain ⟨⟨m, s⟩, h⟩ := IsLocalizedModule.surj S f x
   rw [Submonoid.smul_def]; rw [← algebraMap_smul Rₛ]; rw [← Units.smul_isUnit (IsLocalization.map_units Rₛ s)]; rw [eq_comm]; rw [← inv_smul_eq_iff] at h
   refine h ▸ smul_mem _ _ (span_subset_span R Rₛ _ ?_)
-  rw [← Linea
+  rw [← LinearMap.coe_restrictScalars R]; rw [← LinearMap.map_span]; rw [hv]
+  exact mem_map_of_mem mem_top
 
 Depends on / 依赖: IsLocalization, IsLocalization.map_units, IsLocalizedModule, IsLocalizedModule.surj, LinearMap, LinearMap.coe_restrictScalars, LinearMap.map_span, Submonoid, Submonoid.smul_def, Units.smul_isUnit, algebraMap_smul, coe_restrictScalars, eq_comm, inv_smul_eq_iff, map_span, map_units, mem_map_of_mem, mem_top, smul_def, smul_isUnit
 -/
@@ -88,7 +90,16 @@ theorem LinearIndependent.of_isLocalizedModule
   choose! a fg hfg using IsLocalization.exist_integer_multiples S (t.disjSum t) (Sum.elim g₁ g₂)
   simp_rw [Sum.forall, Finset.inl_mem_disjSum, Sum.elim_inl, Finset.inr_mem_disjSum, Sum.elim_inr,
     Subtype.forall'] at hfg
-  apply_fu
+  apply_fun ((a : R) • ·) at eq
+  simp_rw [← t.sum_coe_sort, Finset.smul_sum, ← smul_assoc, ← hfg,
+    algebraMap_smul, Function.comp_def, ← map_smul, ← map_sum,
+    t.sum_coe_sort (f := fun x => fg (Sum.inl x) • v x),
+    t.sum_coe_sort (f := fun x => fg (Sum.inr x) • v x)] at eq
+  have ⟨s, eq⟩ := IsLocalizedModule.exists_of_eq (S := S) eq
+  simp_rw [Finset.smul_sum, Submonoid.smul_def, smul_smul] at eq
+  have := congr(algebraMap R Rₛ $(hv t _ _ eq i hi))
+  simpa only [map_mul, (IsLocalization.map_units Rₛ s).mul_right_inj, hfg.1 ⟨i, hi⟩, hfg.2 ⟨i, hi⟩,
+    Algebra.smul_def, (IsLocalization.map_units Rₛ a).mul_right_inj] using this
 
 中文:
 定理 LinearIndependent.of_isLocalizedModule
@@ -99,7 +110,16 @@ theorem LinearIndependent.of_isLocalizedModule
   choose! a fg hfg using IsLocalization.exist_integer_multiples S (t.disjSum t) (Sum.elim g₁ g₂)
   simp_rw [Sum.forall, Finset.inl_mem_disjSum, Sum.elim_inl, Finset.inr_mem_disjSum, Sum.elim_inr,
     Subtype.forall'] at hfg
-  apply_fu
+  apply_fun ((a : R) • ·) at eq
+  simp_rw [← t.sum_coe_sort, Finset.smul_sum, ← smul_assoc, ← hfg,
+    algebraMap_smul, Function.comp_def, ← map_smul, ← map_sum,
+    t.sum_coe_sort (f := fun x => fg (Sum.inl x) • v x),
+    t.sum_coe_sort (f := fun x => fg (Sum.inr x) • v x)] at eq
+  have ⟨s, eq⟩ := IsLocalizedModule.exists_of_eq (S := S) eq
+  simp_rw [Finset.smul_sum, Submonoid.smul_def, smul_smul] at eq
+  have := congr(algebraMap R Rₛ $(hv t _ _ eq i hi))
+  simpa only [map_mul, (IsLocalization.map_units Rₛ s).mul_right_inj, hfg.1 ⟨i, hi⟩, hfg.2 ⟨i, hi⟩,
+    Algebra.smul_def, (IsLocalization.map_units Rₛ a).mul_right_inj] using this
 
 Depends on / 依赖: Finset, Finset.inl_mem_disjSum, Finset.inr_mem_disjSum, Finset.smul_sum, Function, Function.comp_def, IsLocalization, IsLocalization.exist_integer_multiples, Subtype, Subtype.forall, Sum.elim, Sum.elim_inl, Sum.elim_inr, Sum.forall, Sum.inl, algebraMap_smul, apply_fun, comp_def, disjSum, elim_inl
 -/
@@ -200,7 +220,9 @@ lemma IsLocalizedModule.linearIndependent_lift
   use fun i => (sec (v i)).1
   rw [linearIndependent_iff'ₛ] at hf ⊢
   intro t g g' eq i hit
-refine (isRegular_of_smul_l
+refine (isRegular_of_smul_left_injective f inj (sec (v i)).2).2
+    hf t (fun i => _ * (sec (v i)).2) (fun i => _ * (sec (v i)).2) ?_ i hit
+  simp_rw [mul_smul, ← Submonoid.smul_def, hsec, ← map_smul, ← map_sum, eq]
 
 中文:
 引理 是Localized模.linearIndependent_lift
@@ -213,7 +235,9 @@ refine (isRegular_of_smul_l
   use fun i => (sec (v i)).1
   rw [linearIndependent_iff'ₛ] at hf ⊢
   intro t g g' eq i hit
-refine (isRegular_of_smul_l
+refine (isRegular_of_smul_left_injective f inj (sec (v i)).2).2
+    hf t (fun i => _ * (sec (v i)).2) (fun i => _ * (sec (v i)).2) ?_ i hit
+  simp_rw [mul_smul, ← Submonoid.smul_def, hsec, ← map_smul, ← map_sum, eq]
 
 Depends on / 依赖: Classical, Classical.arbitrary, Submonoid, Submonoid.smul_def, arbitrary, hf.smul_left_injective, isEmptyElim, isEmpty_or_nonempty, isRegular_of_smul_left_injective, linearIndependent_empty_type, linearIndependent_iff, map_smul, map_sum, mul_smul, simp_rw, smul_def, smul_left_injective
 -/
@@ -298,7 +322,7 @@ theorem ofIsLocalizedModule_repr_apply
       Finsupp.mapRange.linearMap (Algebra.linearMap R Rₛ) ∘ₗ b.repr.toLinearMap by
     exact DFunLike.congr_fun (LinearMap.congr_fun this m) i
   refine ext b fun i => ?_
-  rw [LinearMap.coe_comp]; rw [Function.c
+  rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [LinearMap.coe_restrictScalars]; rw [LinearEquiv.coe_coe]; rw [← b.ofIsLocalizedModule_apply Rₛ S f]; rw [repr_self]; rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [LinearEquiv.coe_coe]; rw [repr_self]; rw [Finsupp.mapRange.linearMap_apply]; rw [Finsupp.mapRange_single]; rw [Algebra.linearMap_apply]; rw [map_one]
 
 中文:
 定理 ofIsLocalizedModule_repr_apply
@@ -308,7 +332,7 @@ theorem ofIsLocalizedModule_repr_apply
       Finsupp.mapRange.linearMap (Algebra.linearMap R Rₛ) ∘ₗ b.repr.toLinearMap by
     exact DFunLike.congr_fun (LinearMap.congr_fun this m) i
   refine ext b fun i => ?_
-  rw [LinearMap.coe_comp]; rw [Function.c
+  rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [LinearMap.coe_restrictScalars]; rw [LinearEquiv.coe_coe]; rw [← b.ofIsLocalizedModule_apply Rₛ S f]; rw [repr_self]; rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [LinearEquiv.coe_coe]; rw [repr_self]; rw [Finsupp.mapRange.linearMap_apply]; rw [Finsupp.mapRange_single]; rw [Algebra.linearMap_apply]; rw [map_one]
 
 Depends on / 依赖: Algebra, Algebra.linearMap, DFunLike, DFunLike.congr_fun, Finsupp, Finsupp.mapRange.linearMap, Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearMap.congr_fun, b.ofIsLocalizedModule, b.ofIsLocalizedModule_apply, b.repr.toLinearMap, coe_coe, coe_comp, coe_restrictScalars
 -/
@@ -748,7 +772,9 @@ definition mapEquiv
       apply IsLocalizedModule.linearMap_ext S g g
       ext; simp)
     (by
-      apply LinearMap.restrictScal
+      apply LinearMap.restrictScalars_injective R
+      apply IsLocalizedModule.linearMap_ext S f f
+      ext; simp)
 
 中文:
 定义 mapEquiv
@@ -761,7 +787,9 @@ definition mapEquiv
       apply IsLocalizedModule.linearMap_ext S g g
       ext; simp)
     (by
-      apply LinearMap.restrictScal
+      apply LinearMap.restrictScalars_injective R
+      apply IsLocalizedModule.linearMap_ext S f f
+      ext; simp)
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.linearMap_ext, IsLocalizedModule.mapExtendScalars, LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.restrictScalars_injective, e.symm, linearMap_ext, mapExtendScalars, ofLinearMap, restrictScalars_injective
 -/

@@ -98,6 +98,7 @@ theorem mod_eq_zero
     · simp only [b0, zero_mul]
     · rw [mul_div_cancel_left₀ _ b0]⟩
 
+@[simp]
 
 中文:
 定理 mod_eq_zero
@@ -112,6 +113,7 @@ theorem mod_eq_zero
     · simp only [b0, zero_mul]
     · rw [mul_div_cancel_left₀ _ b0]⟩
 
+@[simp]
 
 Depends on / 依赖: Classical, Classical.dec, add_left_cancel_iff, add_zero, div_add_mod, dvd_mul_right, zero_mul
 -/
@@ -815,7 +817,7 @@ theorem xgcdAux_P
     refine IH ?_ p
     unfold P at p p' ⊢
     dsimp
-    rw [mul_sub]; rw [mul_sub]; rw [add_sub]; rw [sub_add_eq_add_sub]; rw [← p']; rw [sub_sub]; r
+    rw [mul_sub]; rw [mul_sub]; rw [add_sub]; rw [sub_add_eq_add_sub]; rw [← p']; rw [sub_sub]; rw [mul_comm _ s]; rw [← mul_assoc]; rw [mul_comm _ t]; rw [← mul_assoc]; rw [← add_mul]; rw [← p]; rw [mod_eq_sub_mul_div]
 
 中文:
 定理 xgcdAux_P
@@ -828,7 +830,7 @@ theorem xgcdAux_P
     refine IH ?_ p
     unfold P at p p' ⊢
     dsimp
-    rw [mul_sub]; rw [mul_sub]; rw [add_sub]; rw [sub_add_eq_add_sub]; rw [← p']; rw [sub_sub]; r
+    rw [mul_sub]; rw [mul_sub]; rw [add_sub]; rw [sub_add_eq_add_sub]; rw [← p']; rw [sub_sub]; rw [mul_comm _ s]; rw [← mul_assoc]; rw [mul_comm _ t]; rw [← mul_assoc]; rw [← add_mul]; rw [← p]; rw [mod_eq_sub_mul_div]
 
 Depends on / 依赖: GCD.induction, add_mul, add_sub, generalizing, mod_eq_sub_mul_div, mul_assoc, mul_comm, mul_sub, sub_add_eq_add_sub, sub_sub, xgcdAux_rec, xgcd_zero_left
 -/
@@ -1012,7 +1014,20 @@ theorem lcm_dvd
     obtain ⟨p, hp⟩ := this
     use p
     generalize gcd x y = g at hxy hs hp ⊢
-    s
+    subst hs
+    rw [mul_left_comm]; rw [mul_div_cancel_left₀ _ hxy]; rw [← mul_left_inj' hxy]; rw [hp]
+    rw [← mul_assoc]
+    simp only [mul_right_comm]
+  rw [gcd_eq_gcd_ab]; rw [mul_add]
+  apply dvd_add
+  · rw [mul_left_comm]
+    gcongr
+    apply hyz.mul_right
+  · rw [mul_left_comm, mul_comm]
+    gcongr
+    apply hxz.mul_right
+
+@[simp]
 
 中文:
 定理 lcm_dvd
@@ -1029,7 +1044,20 @@ theorem lcm_dvd
     obtain ⟨p, hp⟩ := this
     use p
     generalize gcd x y = g at hxy hs hp ⊢
-    s
+    subst hs
+    rw [mul_left_comm]; rw [mul_div_cancel_left₀ _ hxy]; rw [← mul_left_inj' hxy]; rw [hp]
+    rw [← mul_assoc]
+    simp only [mul_right_comm]
+  rw [gcd_eq_gcd_ab]; rw [mul_add]
+  apply dvd_add
+  · rw [mul_left_comm]
+    gcongr
+    apply hyz.mul_right
+  · rw [mul_left_comm, mul_comm]
+    gcongr
+    apply hxz.mul_right
+
+@[simp]
 
 Depends on / 依赖: EuclideanDomain, EuclideanDomain.gcd_eq_zero_iff, div_zero, dvd_add, gcd_dvd, gcd_eq_gcd_ab, gcd_eq_zero_iff, generalize, hyz.mul_right, mul_add, mul_assoc, mul_left_comm, mul_left_inj, mul_right, mul_right_comm
 -/
@@ -1150,7 +1178,16 @@ theorem lcm_eq_zero_iff
     by_cases hgxy : gcd x y = 0
     · rw [EuclideanDomain.gcd_eq_zero_iff] at hgxy
       exact hgxy.2
-    · rcases gcd_dvd x y with ⟨⟨r, hr⟩, ⟨s, h
+    · rcases gcd_dvd x y with ⟨⟨r, hr⟩, ⟨s, hs⟩⟩
+      generalize gcd x y = g at hr hs hy hgxy ⊢
+      subst hs
+      rw [mul_div_cancel_left₀ _ hgxy] at hy
+      rw [hy]; rw [mul_zero]
+  rintro (hx | hy)
+  · rw [hx, lcm_zero_left]
+  · rw [hy, lcm_zero_right]
+
+@[simp]
 
 中文:
 定理 lcm_eq_zero_iff
@@ -1165,7 +1202,16 @@ theorem lcm_eq_zero_iff
     by_cases hgxy : gcd x y = 0
     · rw [EuclideanDomain.gcd_eq_zero_iff] at hgxy
       exact hgxy.2
-    · rcases gcd_dvd x y with ⟨⟨r, hr⟩, ⟨s, h
+    · rcases gcd_dvd x y with ⟨⟨r, hr⟩, ⟨s, hs⟩⟩
+      generalize gcd x y = g at hr hs hy hgxy ⊢
+      subst hs
+      rw [mul_div_cancel_left₀ _ hgxy] at hy
+      rw [hy]; rw [mul_zero]
+  rintro (hx | hy)
+  · rw [hx, lcm_zero_left]
+  · rw [hy, lcm_zero_right]
+
+@[simp]
 
 Depends on / 依赖: EuclideanDomain, EuclideanDomain.gcd_eq_zero_iff, Or.imp_right, gcd_dvd, gcd_dvd_right, gcd_eq_zero_iff, generalize, imp_right, lcm_zero_left, lcm_zero_right, mul_div_assoc, mul_eq_zero, mul_zero
 -/
@@ -1713,7 +1759,13 @@ abbreviation RingEquiv.euclideanDomain
   quotient_zero a := by simp
   quotient_mul_add_remainder_eq a b := by
     apply e.injective
-    simpa using
+    simpa using! EuclideanDomain.quotient_mul_add_remainder_eq (e a) (e b)
+  remainder_lt a b hb := by
+    have hb' : e b != 0 := by simpa using hb
+    simpa using! EuclideanDomain.remainder_lt (e a) hb'
+  mul_left_not_lt a b hb := by
+    have hb' : e b != 0 := by simpa using hb
+    simpa using! EuclideanDomain.mul_left_not_lt (e a) hb'
 
 中文:
 缩写 环等价.euclideanDomain
@@ -1726,7 +1778,13 @@ abbreviation RingEquiv.euclideanDomain
   quotient_zero a := by simp
   quotient_mul_add_remainder_eq a b := by
     apply e.injective
-    simpa using
+    simpa using! EuclideanDomain.quotient_mul_add_remainder_eq (e a) (e b)
+  remainder_lt a b hb := by
+    have hb' : e b != 0 := by simpa using hb
+    simpa using! EuclideanDomain.remainder_lt (e a) hb'
+  mul_left_not_lt a b hb := by
+    have hb' : e b != 0 := by simpa using hb
+    simpa using! EuclideanDomain.mul_left_not_lt (e a) hb'
 -/
 protected abbrev RingEquiv.euclideanDomain (e : S ≃+* R) : EuclideanDomain S where
   toNontrivial := e.nontrivial

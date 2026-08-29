@@ -137,7 +137,24 @@ lemma FormalGroup.assoc'
   have : HasSubst ![f₀, f₁, f₂] :=
     hasSubst_of_constantCoeff_nilpotent fun s => by fin_cases s <;> simpa
   calc
-    _ = (F.t
+    _ = (F.toPowerSeries.subst ![F.toPowerSeries.subst ![Y₀, Y₁], Y₂]).subst ![f₀, f₁, f₂] := by
+      rw [subst_comp_subst_apply aux₁ this]
+      congr! 2 with s
+      fin_cases s
+      · simp only [Nat.succ_eq_add_one, Nat.reduceAdd, Fin.zero_eta, Fin.isValue,
+          Matrix.cons_val_zero, subst_comp_subst_apply HasSubst.X_X this]
+        congr! 2 with s
+        fin_cases s <;> simp [subst_X this]
+      · simp [subst_X this]
+    _ = _ := by
+      rw [F.assoc]; rw [subst_comp_subst_apply aux₂ this]
+      congr! 2 with s
+      fin_cases s
+      · simp [subst_X this]
+      · simp only [Fin.mk_one, Matrix.cons_val_one, Matrix.cons_val_fin_one,
+          subst_comp_subst_apply HasSubst.X_X this]
+        congr! 2 with s
+        fin_cases s <;> simp [subst]
 
 中文:
 引理 Formal群.assoc'
@@ -148,7 +165,24 @@ lemma FormalGroup.assoc'
   have : HasSubst ![f₀, f₁, f₂] :=
     hasSubst_of_constantCoeff_nilpotent fun s => by fin_cases s <;> simpa
   calc
-    _ = (F.t
+    _ = (F.toPowerSeries.subst ![F.toPowerSeries.subst ![Y₀, Y₁], Y₂]).subst ![f₀, f₁, f₂] := by
+      rw [subst_comp_subst_apply aux₁ this]
+      congr! 2 with s
+      fin_cases s
+      · simp only [Nat.succ_eq_add_one, Nat.reduceAdd, Fin.zero_eta, Fin.isValue,
+          Matrix.cons_val_zero, subst_comp_subst_apply HasSubst.X_X this]
+        congr! 2 with s
+        fin_cases s <;> simp [subst_X this]
+      · simp [subst_X this]
+    _ = _ := by
+      rw [F.assoc]; rw [subst_comp_subst_apply aux₂ this]
+      congr! 2 with s
+      fin_cases s
+      · simp [subst_X this]
+      · simp only [Fin.mk_one, Matrix.cons_val_one, Matrix.cons_val_fin_one,
+          subst_comp_subst_apply HasSubst.X_X this]
+        congr! 2 with s
+        fin_cases s <;> simp [subst]
 
 Depends on / 依赖: F.toPowerSeries.subst, F.zero_constantCoeff, Fin.zero_eta, HasSubst, HasSubst.cons_subst_zero_left, HasSubst.cons_subst_zero_right, Nat.reduceAdd, Nat.succ_eq_add_one, cons_subst_zero_left, cons_subst_zero_right, fin_cases, hasSubst_of_constantCoeff_nilpotent, reduceAdd, subst_comp_subst_apply, succ_eq_add_one, toPowerSeries, zero_constantCoeff, zero_eta
 -/
@@ -342,7 +376,9 @@ definition 𝔾ₐ
   lin_coeff_Y := by simp [coeff_index_single_X]
   assoc := by
     obtain aux₁ := HasSubst.cons_subst_zero_left (f := X₀ + X₁) (0 : Fin 3) 1 2 (by simp)
-    obtain aux₂ := HasSubst.cons_subst_zero_right (f := X₀ +
+    obtain aux₂ := HasSubst.cons_subst_zero_right (f := X₀ + X₁) (0 : Fin 3) 1 2 (by simp)
+    simp_rw [subst_add aux₁, subst_X aux₁, subst_add aux₂, subst_X aux₂]
+    simp [subst_add .X_X, subst_X .X_X, add_assoc]
 
 中文:
 定义 𝔾ₐ
@@ -353,7 +389,9 @@ definition 𝔾ₐ
   lin_coeff_Y := by simp [coeff_index_single_X]
   assoc := by
     obtain aux₁ := HasSubst.cons_subst_zero_left (f := X₀ + X₁) (0 : Fin 3) 1 2 (by simp)
-    obtain aux₂ := HasSubst.cons_subst_zero_right (f := X₀ +
+    obtain aux₂ := HasSubst.cons_subst_zero_right (f := X₀ + X₁) (0 : Fin 3) 1 2 (by simp)
+    simp_rw [subst_add aux₁, subst_X aux₁, subst_add aux₂, subst_X aux₂]
+    simp [subst_add .X_X, subst_X .X_X, add_assoc]
 -/
 def 𝔾ₐ : FormalGroup R where
   toPowerSeries := X₀ + X₁
@@ -398,7 +436,14 @@ definition 𝔾ₘ
     simp [X, monomial_mul_monomial, coeff_monomial, single_left_inj (one_ne_zero : (1 : Nat) != 0)]
   lin_coeff_Y := by
     simp [X, monomial_mul_monomial, coeff_monomial, single_left_inj (one_ne_zero : (1 : Nat) != 0)]
-  assoc :=
+  assoc := by
+    obtain aux₁ := HasSubst.cons_subst_zero_left (f := X₀ + X₁ + X₀ * X₁) (0 : Fin 3) 1 2 (by simp)
+    obtain aux₂ := HasSubst.cons_subst_zero_right (f := X₀ + X₁ + X₀ * X₁) (0 : Fin 3) 1 2 (by simp)
+    simp_rw [subst_add aux₁, subst_mul aux₁, subst_X aux₁, subst_add aux₂, subst_mul aux₂,
+      subst_X aux₂]
+    simp only [Nat.succ_eq_add_one, Nat.reduceAdd, subst_add .X_X, Fin.isValue, subst_X .X_X,
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one, subst_mul .X_X]
+    ring
 
 中文:
 定义 𝔾ₘ
@@ -409,7 +454,14 @@ definition 𝔾ₘ
     simp [X, monomial_mul_monomial, coeff_monomial, single_left_inj (one_ne_zero : (1 : Nat) != 0)]
   lin_coeff_Y := by
     simp [X, monomial_mul_monomial, coeff_monomial, single_left_inj (one_ne_zero : (1 : Nat) != 0)]
-  assoc :=
+  assoc := by
+    obtain aux₁ := HasSubst.cons_subst_zero_left (f := X₀ + X₁ + X₀ * X₁) (0 : Fin 3) 1 2 (by simp)
+    obtain aux₂ := HasSubst.cons_subst_zero_right (f := X₀ + X₁ + X₀ * X₁) (0 : Fin 3) 1 2 (by simp)
+    simp_rw [subst_add aux₁, subst_mul aux₁, subst_X aux₁, subst_add aux₂, subst_mul aux₂,
+      subst_X aux₂]
+    simp only [Nat.succ_eq_add_one, Nat.reduceAdd, subst_add .X_X, Fin.isValue, subst_X .X_X,
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_fin_one, subst_mul .X_X]
+    ring
 -/
 def 𝔾ₘ : FormalGroup R where
   toPowerSeries := X₀ + X₁ + X₀ * X₁
@@ -461,7 +513,10 @@ definition map
   lin_coeff_Y := by simp [F.lin_coeff_Y]
   assoc := by
     have (g₁ g₂ : MvPowerSeries (Fin 3) R) : ![g₁.map f, g₂.map f] =
-      fun i => 
+      fun i => (![g₁, g₂] i).map f := by ext1 i; fin_cases i <;> simp
+    simp_rw [(map_X f _).symm, this, ← map_subst .X_X, this, ← map_subst
+      (HasSubst.cons_subst_zero_left (0 : Fin 3) 1 2 F.zero_constantCoeff), F.assoc,
+      ← map_subst (HasSubst.cons_subst_zero_right (0 : Fin 3) 1 2 F.zero_constantCoeff)]
 
 中文:
 定义 map
@@ -472,7 +527,10 @@ definition map
   lin_coeff_Y := by simp [F.lin_coeff_Y]
   assoc := by
     have (g₁ g₂ : MvPowerSeries (Fin 3) R) : ![g₁.map f, g₂.map f] =
-      fun i => 
+      fun i => (![g₁, g₂] i).map f := by ext1 i; fin_cases i <;> simp
+    simp_rw [(map_X f _).symm, this, ← map_subst .X_X, this, ← map_subst
+      (HasSubst.cons_subst_zero_left (0 : Fin 3) 1 2 F.zero_constantCoeff), F.assoc,
+      ← map_subst (HasSubst.cons_subst_zero_right (0 : Fin 3) 1 2 F.zero_constantCoeff)]
 
 Depends on / 依赖: MvPowerSeries
 -/
@@ -601,7 +659,19 @@ lemma Xzero_subst_Xzero
     _ = F.toPowerSeries.subst ![F.toPowerSeries.subst ![PowerSeries.X, 0], 0] := by
       have : PowerSeries.HasSubst (subst ![PowerSeries.X (R := R), 0] F.toPowerSeries) := by
         refine PowerSeries.HasSubst.of_constantCoeff_zero' ?_
-        rw [PowerSeries.constantCoeff]; rw [PowerSe
+        rw [PowerSeries.constantCoeff]; rw [PowerSeries.X]; rw [constantCoeff_subst_eq_zero HasSubst.X_zero
+          (by simp) F.zero_constantCoeff]
+      rw [PowerSeries.subst]; rw [subst_comp_subst_apply _ this.const]
+      · congr! 2 with d
+        fin_cases d
+        · simp [← PowerSeries.subst_def, PowerSeries.subst_X this]
+        · simp [← PowerSeries.subst_def, ← PowerSeries.coe_substAlgHom this]
+      · exact HasSubst.X_zero
+    _ = _ := by
+      have : ![0, 0] = (0 : Fin 2 -> PowerSeries R) := by
+        ext x : 1; fin_cases x <;> rfl
+      simp [F.assoc', this, subst_zero_of_constantCoeff_zero F.zero_constantCoeff,
+        PowerSeries.HasSubst.X', PowerSeries.HasSubst]
 
 中文:
 引理 Xzero_subst_Xzero
@@ -611,7 +681,19 @@ lemma Xzero_subst_Xzero
     _ = F.toPowerSeries.subst ![F.toPowerSeries.subst ![PowerSeries.X, 0], 0] := by
       have : PowerSeries.HasSubst (subst ![PowerSeries.X (R := R), 0] F.toPowerSeries) := by
         refine PowerSeries.HasSubst.of_constantCoeff_zero' ?_
-        rw [PowerSeries.constantCoeff]; rw [PowerSe
+        rw [PowerSeries.constantCoeff]; rw [PowerSeries.X]; rw [constantCoeff_subst_eq_zero HasSubst.X_zero
+          (by simp) F.zero_constantCoeff]
+      rw [PowerSeries.subst]; rw [subst_comp_subst_apply _ this.const]
+      · congr! 2 with d
+        fin_cases d
+        · simp [← PowerSeries.subst_def, PowerSeries.subst_X this]
+        · simp [← PowerSeries.subst_def, ← PowerSeries.coe_substAlgHom this]
+      · exact HasSubst.X_zero
+    _ = _ := by
+      have : ![0, 0] = (0 : Fin 2 -> PowerSeries R) := by
+        ext x : 1; fin_cases x <;> rfl
+      simp [F.assoc', this, subst_zero_of_constantCoeff_zero F.zero_constantCoeff,
+        PowerSeries.HasSubst.X', PowerSeries.HasSubst]
 
 Depends on / 依赖: F.toPowerSeries, F.toPowerSeries.subst, F.zero_constantCoeff, HasSubst, HasSubst.X_zero, PowerSeries, PowerSeries.HasSubst, PowerSeries.HasSubst.of_constantCoeff_zero, PowerSeries.X, PowerSeries.constantCoeff, PowerSeries.subst, PowerSeries.subst_def, X_zero, constantCoeff, constantCoeff_subst_eq_zero, fin_cases, of_constantCoeff_zero, subst_comp_subst_apply, subst_def, this.const
 -/
@@ -646,7 +728,10 @@ lemma Xzero_eq_X
     _ = F.Xzero.substInv.subst (F.Xzero.subst F.Xzero) := by
       have aux₀ : PowerSeries.HasSubst F.Xzero :=
 PowerSeries.HasSubst.of_constantCoeff_zero' constantCoeff_Xzero F
-      rw [← PowerSeries.subst_comp_s
+      rw [← PowerSeries.subst_comp_subst_apply aux₀ aux₀]; rw [PowerSeries.subst_substInv_left _
+        F.constantCoeff_Xzero]; rw [PowerSeries.subst_X aux₀]; rw [Xzero]
+    _ = _ := by
+      rw [Xzero_subst_Xzero]; rw [F.Xzero.subst_substInv_left F.constantCoeff_Xzero]
 
 中文:
 引理 Xzero_eq_X
@@ -657,7 +742,10 @@ PowerSeries.HasSubst.of_constantCoeff_zero' constantCoeff_Xzero F
     _ = F.Xzero.substInv.subst (F.Xzero.subst F.Xzero) := by
       have aux₀ : PowerSeries.HasSubst F.Xzero :=
 PowerSeries.HasSubst.of_constantCoeff_zero' constantCoeff_Xzero F
-      rw [← PowerSeries.subst_comp_s
+      rw [← PowerSeries.subst_comp_subst_apply aux₀ aux₀]; rw [PowerSeries.subst_substInv_left _
+        F.constantCoeff_Xzero]; rw [PowerSeries.subst_X aux₀]; rw [Xzero]
+    _ = _ := by
+      rw [Xzero_subst_Xzero]; rw [F.Xzero.subst_substInv_left F.constantCoeff_Xzero]
 
 Depends on / 依赖: F.Xzero, F.Xzero.coeff, F.Xzero.subst, F.Xzero.substInv.subst, F.Xzero.subst_substInv_left, F.constantCoeff_Xzero, HasSubst, Invertible, PowerSeries, PowerSeries.HasSubst, PowerSeries.HasSubst.of_constantCoeff_zero, PowerSeries.subst_X, PowerSeries.subst_comp_subst_apply, PowerSeries.subst_substInv_left, Xzero_subst_Xzero, coeff_one_Xzero, constantCoeff_Xzero, invertibleOne, of_constantCoeff_zero, substInv
 -/
@@ -777,7 +865,18 @@ lemma zeroX_subst_zeroX
     _ = F.toPowerSeries.subst ![0, F.toPowerSeries.subst ![0, PowerSeries.X]] := by
       have : PowerSeries.HasSubst (subst ![0, PowerSeries.X (R := R)] F.toPowerSeries) := by
         refine PowerSeries.HasSubst.of_constantCoeff_zero' ?_
-        rw [PowerSeries.constantCoeff]; rw [PowerSe
+        rw [PowerSeries.constantCoeff]; rw [PowerSeries.X]; rw [constantCoeff_subst_eq_zero HasSubst.zero_X
+          (by simp) F.zero_constantCoeff]
+      rw [PowerSeries.subst]; rw [subst_comp_subst_apply _ this.const]
+      · congr! 2 with d
+        fin_cases d
+        · simp [← PowerSeries.subst_def, ← PowerSeries.coe_substAlgHom this]
+        · simp [← PowerSeries.subst_def, PowerSeries.subst_X this]
+      · exact HasSubst.zero_X
+    _ = _ := by
+      have : ![0, 0] = (0 : Fin 2 -> PowerSeries R) := by ext x : 1; fin_cases x <;> rfl
+      simp [← F.assoc', this, subst_zero_of_constantCoeff_zero F.zero_constantCoeff,
+        PowerSeries.HasSubst.X', PowerSeries.HasSubst]
 
 中文:
 引理 zeroX_subst_zeroX
@@ -787,7 +886,18 @@ lemma zeroX_subst_zeroX
     _ = F.toPowerSeries.subst ![0, F.toPowerSeries.subst ![0, PowerSeries.X]] := by
       have : PowerSeries.HasSubst (subst ![0, PowerSeries.X (R := R)] F.toPowerSeries) := by
         refine PowerSeries.HasSubst.of_constantCoeff_zero' ?_
-        rw [PowerSeries.constantCoeff]; rw [PowerSe
+        rw [PowerSeries.constantCoeff]; rw [PowerSeries.X]; rw [constantCoeff_subst_eq_zero HasSubst.zero_X
+          (by simp) F.zero_constantCoeff]
+      rw [PowerSeries.subst]; rw [subst_comp_subst_apply _ this.const]
+      · congr! 2 with d
+        fin_cases d
+        · simp [← PowerSeries.subst_def, ← PowerSeries.coe_substAlgHom this]
+        · simp [← PowerSeries.subst_def, PowerSeries.subst_X this]
+      · exact HasSubst.zero_X
+    _ = _ := by
+      have : ![0, 0] = (0 : Fin 2 -> PowerSeries R) := by ext x : 1; fin_cases x <;> rfl
+      simp [← F.assoc', this, subst_zero_of_constantCoeff_zero F.zero_constantCoeff,
+        PowerSeries.HasSubst.X', PowerSeries.HasSubst]
 
 Depends on / 依赖: F.toPowerSeries, F.toPowerSeries.subst, F.zero_constantCoeff, HasSubst, HasSubst.zero_X, PowerSeri, PowerSeries, PowerSeries.HasSubst, PowerSeries.HasSubst.of_constantCoeff_zero, PowerSeries.X, PowerSeries.constantCoeff, PowerSeries.subst, PowerSeries.subst_def, constantCoeff, constantCoeff_subst_eq_zero, fin_cases, of_constantCoeff_zero, subst_comp_subst_apply, subst_def, this.const
 -/
@@ -821,7 +931,10 @@ lemma zeroX_eq_X
     _ = F.zeroX.substInv.subst (F.zeroX.subst F.zeroX) := by
       have aux₀ : PowerSeries.HasSubst F.zeroX :=
 PowerSeries.HasSubst.of_constantCoeff_zero' F.constantCoeff_zeroX
-      rw [← PowerSeries.subst_comp_s
+      rw [← PowerSeries.subst_comp_subst_apply aux₀ aux₀]; rw [PowerSeries.subst_substInv_left _
+        F.constantCoeff_zeroX]; rw [PowerSeries.subst_X aux₀]; rw [zeroX]
+    _ = _ := by
+      rw [zeroX_subst_zeroX]; rw [F.zeroX.subst_substInv_left F.constantCoeff_zeroX]
 
 中文:
 引理 zeroX_eq_X
@@ -832,7 +945,10 @@ PowerSeries.HasSubst.of_constantCoeff_zero' F.constantCoeff_zeroX
     _ = F.zeroX.substInv.subst (F.zeroX.subst F.zeroX) := by
       have aux₀ : PowerSeries.HasSubst F.zeroX :=
 PowerSeries.HasSubst.of_constantCoeff_zero' F.constantCoeff_zeroX
-      rw [← PowerSeries.subst_comp_s
+      rw [← PowerSeries.subst_comp_subst_apply aux₀ aux₀]; rw [PowerSeries.subst_substInv_left _
+        F.constantCoeff_zeroX]; rw [PowerSeries.subst_X aux₀]; rw [zeroX]
+    _ = _ := by
+      rw [zeroX_subst_zeroX]; rw [F.zeroX.subst_substInv_left F.constantCoeff_zeroX]
 
 Depends on / 依赖: F.constantCoeff_zeroX, F.zeroX, F.zeroX.coeff, F.zeroX.subst, F.zeroX.substInv.subst, F.zeroX.subst_substInv_left, HasSubst, Invertible, PowerSeries, PowerSeries.HasSubst, PowerSeries.HasSubst.of_constantCoeff_zero, PowerSeries.subst_X, PowerSeries.subst_comp_subst_apply, PowerSeries.subst_substInv_left, coeff_one_zeroX, constantCoeff_zeroX, invertibleOne, of_constantCoeff_zero, substInv, subst_X
 -/
@@ -861,7 +977,9 @@ theorem add_zero
         fin_cases s
         · simp [PowerSeries.X, subst]
         · simp [subst, eval₂]
-      exact HasSubst.X
+      exact HasSubst.X_zero
+    _ = _ := by
+      simp [Xzero_eq_X, PowerSeries.subst_X hf]
 
 中文:
 定理 add_zero
@@ -874,7 +992,9 @@ theorem add_zero
         fin_cases s
         · simp [PowerSeries.X, subst]
         · simp [subst, eval₂]
-      exact HasSubst.X
+      exact HasSubst.X_zero
+    _ = _ := by
+      simp [Xzero_eq_X, PowerSeries.subst_X hf]
 
 Depends on / 依赖: F.toPowerSeries.subst, HasSubst, HasSubst.X_zero, PowerSeries, PowerSeries.X, PowerSeries.subst, PowerSeries.subst_X, X_zero, Xzero_eq_X, fin_cases, hf.const, subst_X, subst_comp_subst_apply, toPowerSeries
 -/
@@ -905,7 +1025,9 @@ theorem zero_add
         fin_cases s
         · simp [subst, eval₂]
         · simp [PowerSeries.X, subst]
-      · exact HasSubst
+      · exact HasSubst.zero_X
+    _ = _ := by
+      simp [zeroX_eq_X, PowerSeries.subst_X hf]
 
 中文:
 定理 zero_add
@@ -918,7 +1040,9 @@ theorem zero_add
         fin_cases s
         · simp [subst, eval₂]
         · simp [PowerSeries.X, subst]
-      · exact HasSubst
+      · exact HasSubst.zero_X
+    _ = _ := by
+      simp [zeroX_eq_X, PowerSeries.subst_X hf]
 
 Depends on / 依赖: F.toPowerSeries.subst, HasSubst, HasSubst.zero_X, PowerSeries, PowerSeries.X, PowerSeries.subst, PowerSeries.subst_X, fin_cases, hf.const, subst_X, subst_comp_subst_apply, toPowerSeries, zeroX_eq_X, zero_X
 -/

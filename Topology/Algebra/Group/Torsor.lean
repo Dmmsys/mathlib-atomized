@@ -114,7 +114,12 @@ nonrec theorem ContinuousAt.sdiv {f g : α -> P} {x : α} (hf : ContinuousAt f x
   hf.sdiv hg
 
 @[to_additive (attr := fun_prop)]
-nonrec theorem ContinuousWithinAt.s
+nonrec theorem ContinuousWithinAt.sdiv {f g : α -> P} {x : α} {s : Set α}
+    (hf : ContinuousWithinAt f s x) (hg : ContinuousWithinAt g s x) :
+    ContinuousWithinAt (fun x => f x /ₛ g x) s x :=
+  hf.sdiv hg
+
+@[to_additive (attr := fun_prop)]
 
 中文:
 定理 连续.sdiv
@@ -128,7 +133,12 @@ nonrec theorem ContinuousAt.sdiv {f g : α -> P} {x : α} (hf : ContinuousAt f x
   hf.sdiv hg
 
 @[to_additive (attr := fun_prop)]
-nonrec theorem ContinuousWithinAt.s
+nonrec theorem ContinuousWithinAt.sdiv {f g : α -> P} {x : α} {s : Set α}
+    (hf : ContinuousWithinAt f s x) (hg : ContinuousWithinAt g s x) :
+    ContinuousWithinAt (fun x => f x /ₛ g x) s x :=
+  hf.sdiv hg
+
+@[to_additive (attr := fun_prop)]
 
 Depends on / 依赖: continuous_sdiv, continuous_sdiv.comp
 -/
@@ -194,7 +204,8 @@ theorem IsTopologicalTorsor.to_isTopologicalGroup
     have ⟨p⟩ : Nonempty P := inferInstance
     conv =>
       enter [1, v]
-      equals p /ₛ (v • p) => rw [sdiv_smul_eq_sdiv
+      equals p /ₛ (v • p) => rw [sdiv_smul_eq_sdiv_div, sdiv_self, one_div]
+    fun_prop
 
 中文:
 定理 是TopologicalTorsor.to_isTopologicalGroup
@@ -209,7 +220,8 @@ theorem IsTopologicalTorsor.to_isTopologicalGroup
     have ⟨p⟩ : Nonempty P := inferInstance
     conv =>
       enter [1, v]
-      equals p /ₛ (v • p) => rw [sdiv_smul_eq_sdiv
+      equals p /ₛ (v • p) => rw [sdiv_smul_eq_sdiv_div, sdiv_self, one_div]
+    fun_prop
 
 Depends on / 依赖: Nonempty, Trivialization, VectorBundle, continuous_inv, equals, fun_prop, one_div, sdiv_self, sdiv_smul_eq_sdiv_div, smul_sdiv, smul_smul, trivialization_linear
 -/

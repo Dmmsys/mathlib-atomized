@@ -125,7 +125,18 @@ lemma MeasureTheory.QuotientMeasureEqMeasurePreimage.smulInvariantMeasure_quotie
     obtain ⟨𝓕, h𝓕⟩ := hasFun.ExistsIsFundamentalDomain
     have h𝓕_translate_fundom : IsFundamentalDomain Γ.op (g • 𝓕) ν := h𝓕.smul_of_comm g
     rw [h𝓕.projection_respects_measure_apply (μ := μ)
-      (meas_π (measurableSet_pre
+      (meas_π (measurableSet_preimage (measurable_const_smul g) hA))]; rw [h𝓕_translate_fundom.projection_respects_measure_apply (μ := μ) hA]
+    change ν ((π ⁻¹' _) inter _) = ν ((π ⁻¹' _) inter _)
+    set π_preA := π ⁻¹' A
+    have : π ⁻¹' ((fun x : G ⧸ Γ => g • x) ⁻¹' A) = (g * ·) ⁻¹' π_preA := by ext1; simp [π_preA]
+    rw [this]
+    have : ν ((g * ·) ⁻¹' π_preA inter 𝓕) = ν (π_preA inter (g⁻¹ * ·) ⁻¹' 𝓕) := by
+      trans ν ((g * ·) ⁻¹' (π_preA inter (g⁻¹ * ·) ⁻¹' 𝓕))
+      · rw [preimage_inter]
+        congr 2
+        simp [Set.preimage]
+      rw [measure_preimage_mul]
+    rw [this]; rw [← preimage_smul_inv]; rfl
 
 中文:
 引理 测度论.QuotientMeasureEqMeasurePreimage.smulInvariantMeasure_quotient
@@ -134,7 +145,18 @@ lemma MeasureTheory.QuotientMeasureEqMeasurePreimage.smulInvariantMeasure_quotie
     obtain ⟨𝓕, h𝓕⟩ := hasFun.ExistsIsFundamentalDomain
     have h𝓕_translate_fundom : IsFundamentalDomain Γ.op (g • 𝓕) ν := h𝓕.smul_of_comm g
     rw [h𝓕.projection_respects_measure_apply (μ := μ)
-      (meas_π (measurableSet_pre
+      (meas_π (measurableSet_preimage (measurable_const_smul g) hA))]; rw [h𝓕_translate_fundom.projection_respects_measure_apply (μ := μ) hA]
+    change ν ((π ⁻¹' _) inter _) = ν ((π ⁻¹' _) inter _)
+    set π_preA := π ⁻¹' A
+    have : π ⁻¹' ((fun x : G ⧸ Γ => g • x) ⁻¹' A) = (g * ·) ⁻¹' π_preA := by ext1; simp [π_preA]
+    rw [this]
+    have : ν ((g * ·) ⁻¹' π_preA inter 𝓕) = ν (π_preA inter (g⁻¹ * ·) ⁻¹' 𝓕) := by
+      trans ν ((g * ·) ⁻¹' (π_preA inter (g⁻¹ * ·) ⁻¹' 𝓕))
+      · rw [preimage_inter]
+        congr 2
+        simp [Set.preimage]
+      rw [measure_preimage_mul]
+    rw [this]; rw [← preimage_smul_inv]; rfl
 
 Depends on / 依赖: ExistsIsFundamentalDomain, IsFundamentalDomain, Measurable, _translate_fundom.projection_respects_measure_apply, continuous_quotient_mk, hasFun, hasFun.ExistsIsFundamentalDomain, measurable, measurableSet_preimage, measurable_const_smul, projection_respects_measure_apply, smul_of_comm
 -/
@@ -188,7 +210,7 @@ lemma MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotien
     convert! measure_preimage_smul μ x₁ A using 1
     · rw [← h, Measure.map_apply (measurable_const_mul _) hA]
       simp [← MulAction.Quotient.coe_smul_out, ← Quotient.mk''_eq_mk]
-    exact smulInvariantMeasur
+    exact smulInvariantMeasure_quotient ν
 
 中文:
 引理 测度论.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient
@@ -198,7 +220,7 @@ lemma MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotien
     convert! measure_preimage_smul μ x₁ A using 1
     · rw [← h, Measure.map_apply (measurable_const_mul _) hA]
       simp [← MulAction.Quotient.coe_smul_out, ← Quotient.mk''_eq_mk]
-    exact smulInvariantMeasur
+    exact smulInvariantMeasure_quotient ν
 
 Depends on / 依赖: Measure, Measure.map_apply, MulAction, MulAction.Quotient.coe_smul_out, Quotient, Quotient.exists_rep, Quotient.mk, QuotientGroup, QuotientGroup.leftRel, _eq_mk, coe_smul_out, convert, exists_rep, leftRel, map_apply, measurable_const_mul, measure_preimage_smul, smulInvariantMeasure_quotient
 -/
@@ -241,7 +263,22 @@ theorem MeasureTheory.Measure.IsMulLeftInvariant.quotientMeasureEqMeasurePreimag
   have meas_π : Measurable (QuotientGroup.mk : G -> G ⧸ Γ) := continuous_quotient_mk'.measurable
   let μ' : Measure (G ⧸ Γ) := (ν.restrict s).map π
   have has_fund : HasFundamentalDomain Γ.op G ν := ⟨⟨s, fund_dom_s⟩⟩
-  have i : Quotien
+  have i : QuotientMeasureEqMeasurePreimage ν μ' :=
+    fund_dom_s.quotientMeasureEqMeasurePreimage_quotientMeasure
+  have : μ'.IsMulLeftInvariant :=
+    MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient ν
+  suffices μ = μ' by
+    rw [this]
+    rfl
+  have : SigmaFinite μ' := i.sigmaFiniteQuotient
+  rw [measure_eq_div_smul μ' μ neZeroV neTopV]; rw [hV]
+  symm
+  suffices (μ' V / ν (QuotientGroup.mk ⁻¹' V inter s)) = 1 by rw [this, one_smul]
+  rw [Measure.map_apply meas_π meas_V]; rw [Measure.restrict_apply]
+  · convert! ENNReal.div_self ..
+    · exact trans hV.symm neZeroV
+    · exact trans hV.symm neTopV
+  exact measurableSet_quotient.mp meas_V
 
 中文:
 定理 测度论.测度.是MulLeftInvariant.quotientMeasureEqMeasurePreimage_of_set
@@ -252,7 +289,22 @@ theorem MeasureTheory.Measure.IsMulLeftInvariant.quotientMeasureEqMeasurePreimag
   have meas_π : Measurable (QuotientGroup.mk : G -> G ⧸ Γ) := continuous_quotient_mk'.measurable
   let μ' : Measure (G ⧸ Γ) := (ν.restrict s).map π
   have has_fund : HasFundamentalDomain Γ.op G ν := ⟨⟨s, fund_dom_s⟩⟩
-  have i : Quotien
+  have i : QuotientMeasureEqMeasurePreimage ν μ' :=
+    fund_dom_s.quotientMeasureEqMeasurePreimage_quotientMeasure
+  have : μ'.IsMulLeftInvariant :=
+    MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient ν
+  suffices μ = μ' by
+    rw [this]
+    rfl
+  have : SigmaFinite μ' := i.sigmaFiniteQuotient
+  rw [measure_eq_div_smul μ' μ neZeroV neTopV]; rw [hV]
+  symm
+  suffices (μ' V / ν (QuotientGroup.mk ⁻¹' V inter s)) = 1 by rw [this, one_smul]
+  rw [Measure.map_apply meas_π meas_V]; rw [Measure.restrict_apply]
+  · convert! ENNReal.div_self ..
+    · exact trans hV.symm neZeroV
+    · exact trans hV.symm neTopV
+  exact measurableSet_quotient.mp meas_V
 
 Depends on / 依赖: HasFundamentalDomain, IsMulLeftInvariant, Measurable, Measure, MeasureTheory, MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient, QuotientGroup, QuotientGroup.mk, QuotientMeasureEqMeasurePreimage, continuous_quotient_mk, fund_dom_s, fund_dom_s.quotientMeasureEqMeasurePreimage, fund_dom_s.quotientMeasureEqMeasurePreimage_quotientMeasure, has_fund, measurable, mulInvariantMeasure_quotient, quotientMeasureEqMeasurePreimage, quotientMeasureEqMeasurePreimage_quotientMeasure, restrict
 -/
@@ -299,7 +351,15 @@ theorem MeasureTheory.leftInvariantIsQuotientMeasureEqMeasurePreimage
   rw [fund_dom_s.covolume_eq_volume] at h
   by_cases meas_s_ne_zero : ν s = 0
   · convert! fund_dom_s.quotientMeasureEqMeasurePreimage_of_zero meas_s_ne_zero
-    rw [← @measure_un
+    rw [← @measure_univ_eq_zero]; rw [← h]; rw [meas_s_ne_zero]
+  apply IsMulLeftInvariant.quotientMeasureEqMeasurePreimage_of_set (fund_dom_s := fund_dom_s)
+    (meas_V := MeasurableSet.univ)
+  · rw [← h]
+    exact meas_s_ne_zero
+  · rw [← h]
+    simp
+  · rw [← h]
+    convert! finiteCovol.ne
 
 中文:
 定理 测度论.leftInvariantIsQuotientMeasureEqMeasurePreimage
@@ -310,7 +370,15 @@ theorem MeasureTheory.leftInvariantIsQuotientMeasureEqMeasurePreimage
   rw [fund_dom_s.covolume_eq_volume] at h
   by_cases meas_s_ne_zero : ν s = 0
   · convert! fund_dom_s.quotientMeasureEqMeasurePreimage_of_zero meas_s_ne_zero
-    rw [← @measure_un
+    rw [← @measure_univ_eq_zero]; rw [← h]; rw [meas_s_ne_zero]
+  apply IsMulLeftInvariant.quotientMeasureEqMeasurePreimage_of_set (fund_dom_s := fund_dom_s)
+    (meas_V := MeasurableSet.univ)
+  · rw [← h]
+    exact meas_s_ne_zero
+  · rw [← h]
+    simp
+  · rw [← h]
+    convert! finiteCovol.ne
 
 Depends on / 依赖: ExistsIsFundamentalDomain, IsMulLeftInvariant, IsMulLeftInvariant.quotientMeasureEqMeasurePreimage_of_set, MeasurableSet, MeasurableSet.univ, convert, covolume_eq_volume, finiteCovol, fund_dom_s, fund_dom_s.covolume_eq_volume, fund_dom_s.quotientMeasureEqMeasurePreimage_of_zero, hasFun, hasFun.ExistsIsFundamentalDomain, meas_V, meas_s_ne_zero, measure_lt_top, measure_univ_eq_zero, quotientMeasureEqMeasurePreimage_of_set, quotientMeasureEqMeasurePreimage_of_zero
 -/
@@ -360,7 +428,28 @@ theorem MeasureTheory.QuotientMeasureEqMeasurePreimage.haarMeasure_quotient
     K.map π QuotientGroup.continuous_mk QuotientGroup.isOpenMap_coe
   have : IsMulLeftInvariant μ :=
     MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient ν
-  rw [haarMeasure_uniqu
+  rw [haarMeasure_unique μ K']
+  have finiteCovol : covolume Γ.op G ν != ⊤ :=
+ne_top_of_lt QuotientMeasureEqMeasurePreimage.covolume_ne_top μ (ν := ν)
+  obtain ⟨s, fund_dom_s⟩ := i
+  rw [fund_dom_s.covolume_eq_volume] at finiteCovol
+  rw [fund_dom_s.projection_respects_measure_apply μ K'.isCompact.measurableSet]
+  apply IsHaarMeasure.smul
+  · intro h
+    have i' : IsOpenPosMeasure (ν : Measure G) := inferInstance
+    apply IsOpenPosMeasure.open_pos (interior K) (μ := ν) (self := i')
+    · exact isOpen_interior
+    · exact K.interior_nonempty
+refine measure_mono_null (interior_subset.trans ?_)
+      fund_dom_s.measure_zero_of_invariant _ (fun g => QuotientGroup.sound _ _ g) h
+    rw [QuotientGroup.coe_mk']
+    change (K : Set G) subseteq π ⁻¹' π '' K
+    exact subset_preimage_image π K
+  · change ν (π ⁻¹' (π '' K) inter s) != ⊤
+    apply ne_of_lt
+    refine lt_of_le_of_lt ?_ finiteCovol.lt_top
+    apply measure_mono
+    exact inter_subset_right
 
 中文:
 定理 测度论.QuotientMeasureEqMeasurePreimage.haarMeasure_quotient
@@ -371,7 +460,28 @@ theorem MeasureTheory.QuotientMeasureEqMeasurePreimage.haarMeasure_quotient
     K.map π QuotientGroup.continuous_mk QuotientGroup.isOpenMap_coe
   have : IsMulLeftInvariant μ :=
     MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient ν
-  rw [haarMeasure_uniqu
+  rw [haarMeasure_unique μ K']
+  have finiteCovol : covolume Γ.op G ν != ⊤ :=
+ne_top_of_lt QuotientMeasureEqMeasurePreimage.covolume_ne_top μ (ν := ν)
+  obtain ⟨s, fund_dom_s⟩ := i
+  rw [fund_dom_s.covolume_eq_volume] at finiteCovol
+  rw [fund_dom_s.projection_respects_measure_apply μ K'.isCompact.measurableSet]
+  apply IsHaarMeasure.smul
+  · intro h
+    have i' : IsOpenPosMeasure (ν : Measure G) := inferInstance
+    apply IsOpenPosMeasure.open_pos (interior K) (μ := ν) (self := i')
+    · exact isOpen_interior
+    · exact K.interior_nonempty
+refine measure_mono_null (interior_subset.trans ?_)
+      fund_dom_s.measure_zero_of_invariant _ (fun g => QuotientGroup.sound _ _ g) h
+    rw [QuotientGroup.coe_mk']
+    change (K : Set G) subseteq π ⁻¹' π '' K
+    exact subset_preimage_image π K
+  · change ν (π ⁻¹' (π '' K) inter s) != ⊤
+    apply ne_of_lt
+    refine lt_of_le_of_lt ?_ finiteCovol.lt_top
+    apply measure_mono
+    exact inter_subset_right
 
 Depends on / 依赖: IsMulLeftInvariant, K.map, MeasureTheory, MeasureTheory.QuotientMeasureEqMeasurePreimage.mulInvariantMeasure_quotient, PositiveCompacts, PositiveCompacts.nonempty, QuotientGroup, QuotientGroup.continuous_mk, QuotientGroup.isOpenMap_coe, QuotientMeasureEqMeasurePreimage, QuotientMeasureEqMeasurePreimage.covolume_ne_top, continuous_mk, covolume, covolume_eq_volume, covolume_ne_top, finiteCovol, fund_dom, fund_dom_s, fund_dom_s.covolume_eq_volume, haarMeasure_unique
 -/
@@ -428,7 +538,14 @@ theorem IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure
     intro c_eq_zero
     apply IsOpenPosMeasure.open_pos (interior (π ⁻¹' V)) (μ := ν)
     · simp
-    · apply Set.Nonempty.mono (preimage_interior_subset_interior_preimage cont
+    · apply Set.Nonempty.mono (preimage_interior_subset_interior_preimage continuous_coinduced_rng)
+      apply hV.preimage'
+      simp
+    · apply measure_mono_null (h := interior_subset)
+      apply h𝓕.measure_zero_of_invariant (ht := fun g => QuotientGroup.sound _ _ g)
+      exact c_eq_zero
+  · exact hμK
+  · exact neTopV
 
 中文:
 定理 是FundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure
@@ -440,7 +557,14 @@ theorem IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure
     intro c_eq_zero
     apply IsOpenPosMeasure.open_pos (interior (π ⁻¹' V)) (μ := ν)
     · simp
-    · apply Set.Nonempty.mono (preimage_interior_subset_interior_preimage cont
+    · apply Set.Nonempty.mono (preimage_interior_subset_interior_preimage continuous_coinduced_rng)
+      apply hV.preimage'
+      simp
+    · apply measure_mono_null (h := interior_subset)
+      apply h𝓕.measure_zero_of_invariant (ht := fun g => QuotientGroup.sound _ _ g)
+      exact c_eq_zero
+  · exact hμK
+  · exact neTopV
 
 Depends on / 依赖: IsMulLeftInvariant, IsMulLeftInvariant.quotientMeasureEqMeasurePreimage_of_set, IsOpenPosMeasure, IsOpenPosMeasure.open_pos, Nonempty, QuotientGroup, QuotientGroup.sound, Set.Nonempty.mono, c_eq_zero, continuous_coinduced_rng, fund_dom_s, hV.preimage, interior, interior_subset, meas_V, measure_mono_null, measure_zero_of_invariant, neTopV, open_pos, preimage
 -/
@@ -487,7 +611,13 @@ theorem IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_smulHaarMeasure
   have : SigmaFinite μ := by
     clear_value c
     lift c to NNReal using c_ne_top
-    exa
+    exact SMul.sigmaFinite c
+  apply IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure (h𝓕 := h𝓕)
+    (meas_V := K.isCompact.measurableSet) (μ := μ)
+  · exact K.interior_nonempty
+  · exact hμK
+  · rw [hμK]
+    exact c_ne_top
 
 中文:
 定理 是FundamentalDomain.QuotientMeasureEqMeasurePreimage_smulHaarMeasure
@@ -500,7 +630,13 @@ theorem IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_smulHaarMeasure
   have : SigmaFinite μ := by
     clear_value c
     lift c to NNReal using c_ne_top
-    exa
+    exact SMul.sigmaFinite c
+  apply IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure (h𝓕 := h𝓕)
+    (meas_V := K.isCompact.measurableSet) (μ := μ)
+  · exact K.interior_nonempty
+  · exact hμK
+  · rw [hμK]
+    exact c_ne_top
 
 Depends on / 依赖: IsFundamentalDomain, IsFundamentalDomain.QuotientMeasureEqMeasurePreimage_HaarMeasure, K.interior_nonempty, K.isCompact.measurableSet, NNReal, QuotientMeasureEqMeasurePreimage_HaarMeasure, SMul.sigmaFinite, SigmaFinite, c_ne_top, clear_value, haarMeasure, haarMeasure_self, interior_nonempty, isCompact, meas_V, measurableSet, measure_inter_ne_top_of_right_ne_top, sigmaFinite
 -/
@@ -609,7 +745,11 @@ lemma _root_.MeasureTheory.IsFundamentalDomain.absolutelyContinuous_map
   rw [Measure.restrict_apply] at hs
   · apply h𝓕.measure_zero_of_invariant _ _ hs
     intro γ
-    
+    ext g
+    rw [Set.mem_smul_set_iff_inv_smul_mem]; rw [mem_preimage]; rw [mem_preimage]
+    congr! 1
+    convert! QuotientGroup.mk_mul_of_mem g (γ⁻¹).2 using 1
+  exact MeasurableSet.preimage s_meas meas_π
 
 中文:
 引理 _root_.测度论.是FundamentalDomain.absolutelyContinuous_map
@@ -622,7 +762,11 @@ lemma _root_.MeasureTheory.IsFundamentalDomain.absolutelyContinuous_map
   rw [Measure.restrict_apply] at hs
   · apply h𝓕.measure_zero_of_invariant _ _ hs
     intro γ
-    
+    ext g
+    rw [Set.mem_smul_set_iff_inv_smul_mem]; rw [mem_preimage]; rw [mem_preimage]
+    congr! 1
+    convert! QuotientGroup.mk_mul_of_mem g (γ⁻¹).2 using 1
+  exact MeasurableSet.preimage s_meas meas_π
 
 Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.mk, Measurable, MeasurableSet, MeasurableSet.preimage, Measure, Measure.restrict_apply, QuotientGroup, QuotientGroup.mk, QuotientGroup.mk_mul_of_mem, Set.mem_smul_set_iff_inv_smul_mem, continuous_quotient_mk, convert, map_apply, measurable, measure_zero_of_invariant, mem_preimage, mem_smul_set_iff_inv_smul_mem, mk_mul_of_mem, preimage
 -/
@@ -664,7 +808,10 @@ lemma QuotientGroup.integral_eq_integral_automorphize
     _ = ∫ x : G ⧸ Γ, automorphize f x ∂μ_𝓕 :=
       (integral_map continuous_quotient_mk'.aemeasurable hf₂).symm
   rw [integral_tsum]
-  · exact fun i =
+  · exact fun i => (hf₁.1.comp_quasiMeasurePreserving
+      (measurePreserving_smul i μ).quasiMeasurePreserving).restrict
+  · rw [← h𝓕.lintegral_eq_tsum'' (‖f ·‖ₑ)]
+    exact ne_of_lt hf₁.2
 
 中文:
 引理 商群.integral_eq_integral_automorphize
@@ -676,7 +823,10 @@ lemma QuotientGroup.integral_eq_integral_automorphize
     _ = ∫ x : G ⧸ Γ, automorphize f x ∂μ_𝓕 :=
       (integral_map continuous_quotient_mk'.aemeasurable hf₂).symm
   rw [integral_tsum]
-  · exact fun i =
+  · exact fun i => (hf₁.1.comp_quasiMeasurePreserving
+      (measurePreserving_smul i μ).quasiMeasurePreserving).restrict
+  · rw [← h𝓕.lintegral_eq_tsum'' (‖f ·‖ₑ)]
+    exact ne_of_lt hf₁.2
 
 Depends on / 依赖: aemeasurable, automorphize, comp_quasiMeasurePreserving, continuous_quotient_mk, integral_eq_tsum, integral_map, integral_tsum, lintegral_eq_tsum, measurePreserving_smul, ne_of_lt, quasiMeasurePreserving, restrict
 -/
@@ -708,7 +858,19 @@ lemma QuotientGroup.integral_mul_eq_integral_automorphize_mul
   have H₀ : QuotientGroup.automorphize ((g ∘ π) * f) = g * (QuotientGroup.automorphize f) := by
     exact QuotientGroup.automorphize_smul_left f g
   calc ∫ (x : G), g (π x) * (f x) ∂μ =
-   
+        ∫ (x : G ⧸ Γ), QuotientGroup.automorphize ((g ∘ π) * f) x ∂μ_𝓕 := ?_
+    _ = ∫ (x : G ⧸ Γ), g x * (QuotientGroup.automorphize f x) ∂μ_𝓕 := by simp [H₀]
+  have H₁ : Integrable ((g ∘ π) * f) μ := by
+    have : AEStronglyMeasurable (fun (x : G) => g (x : (G ⧸ Γ))) μ :=
+      (hg.mono_ac h𝓕.absolutelyContinuous_map).comp_measurable meas_π
+    refine Integrable.essSup_smul f_ℒ_1 this ?_
+    have hg' : AEStronglyMeasurable (‖g ·‖ₑ) μ_𝓕 := continuous_enorm.comp_aestronglyMeasurable hg
+    rw [← essSup_comp_quotientGroup_mk h𝓕 hg'.aemeasurable]
+    exact g_ℒ_infinity
+  have H₂ : AEStronglyMeasurable (QuotientGroup.automorphize ((g ∘ π) * f)) μ_𝓕 := by
+    simp_rw [H₀]
+    exact hg.mul F_ae_measurable
+  apply QuotientGroup.integral_eq_integral_automorphize h𝓕 H₁ H₂
 
 中文:
 引理 商群.integral_mul_eq_integral_automorphize_mul
@@ -719,7 +881,19 @@ lemma QuotientGroup.integral_mul_eq_integral_automorphize_mul
   have H₀ : QuotientGroup.automorphize ((g ∘ π) * f) = g * (QuotientGroup.automorphize f) := by
     exact QuotientGroup.automorphize_smul_left f g
   calc ∫ (x : G), g (π x) * (f x) ∂μ =
-   
+        ∫ (x : G ⧸ Γ), QuotientGroup.automorphize ((g ∘ π) * f) x ∂μ_𝓕 := ?_
+    _ = ∫ (x : G ⧸ Γ), g x * (QuotientGroup.automorphize f x) ∂μ_𝓕 := by simp [H₀]
+  have H₁ : Integrable ((g ∘ π) * f) μ := by
+    have : AEStronglyMeasurable (fun (x : G) => g (x : (G ⧸ Γ))) μ :=
+      (hg.mono_ac h𝓕.absolutelyContinuous_map).comp_measurable meas_π
+    refine Integrable.essSup_smul f_ℒ_1 this ?_
+    have hg' : AEStronglyMeasurable (‖g ·‖ₑ) μ_𝓕 := continuous_enorm.comp_aestronglyMeasurable hg
+    rw [← essSup_comp_quotientGroup_mk h𝓕 hg'.aemeasurable]
+    exact g_ℒ_infinity
+  have H₂ : AEStronglyMeasurable (QuotientGroup.automorphize ((g ∘ π) * f)) μ_𝓕 := by
+    simp_rw [H₀]
+    exact hg.mul F_ae_measurable
+  apply QuotientGroup.integral_eq_integral_automorphize h𝓕 H₁ H₂
 
 Depends on / 依赖: AEStronglyMeasura, Integrable, Measurable, QuotientGroup, QuotientGroup.automorphize, QuotientGroup.automorphize_smul_left, QuotientGroup.mk, automorphize, automorphize_smul_left, continuous_quotient_mk, measurable
 -/
@@ -772,7 +946,20 @@ lemma QuotientAddGroup.integral_mul_eq_integral_automorphize_mul
   have meas_π : Measurable π := continuous_quotient_mk'.measurable
   have H₀ : QuotientAddGroup.automorphize ((g ∘ π) * f) = g * (QuotientAddGroup.automorphize f) :=
     QuotientAddGroup.automorphize_smul_left f g
-  calc ∫ (x : G'), g (π x) * f x ∂μ'
+  calc ∫ (x : G'), g (π x) * f x ∂μ' =
+    ∫ (x : G' ⧸ Γ'), QuotientAddGroup.automorphize ((g ∘ π) * f) x ∂μ_𝓕 := ?_
+    _ = ∫ (x : G' ⧸ Γ'), g x * (QuotientAddGroup.automorphize f x) ∂μ_𝓕 := by simp [H₀]
+  have H₁ : Integrable ((g ∘ π) * f) μ' := by
+    have : AEStronglyMeasurable (fun (x : G') => g (x : (G' ⧸ Γ'))) μ' :=
+      (hg.mono_ac h𝓕.absolutelyContinuous_map).comp_measurable meas_π
+    refine Integrable.essSup_smul f_ℒ_1 this ?_
+    have hg' : AEStronglyMeasurable (‖g ·‖ₑ) μ_𝓕 := continuous_enorm.comp_aestronglyMeasurable hg
+    rw [← essSup_comp_quotientAddGroup_mk h𝓕 hg'.aemeasurable]
+    exact g_ℒ_infinity
+  have H₂ : AEStronglyMeasurable (QuotientAddGroup.automorphize ((g ∘ π) * f)) μ_𝓕 := by
+    simp_rw [H₀]
+    exact hg.mul F_ae_measurable
+  apply QuotientAddGroup.integral_eq_integral_automorphize h𝓕 H₁ H₂
 
 中文:
 引理 QuotientAddGroup.integral_mul_eq_integral_automorphize_mul
@@ -782,7 +969,20 @@ lemma QuotientAddGroup.integral_mul_eq_integral_automorphize_mul
   have meas_π : Measurable π := continuous_quotient_mk'.measurable
   have H₀ : QuotientAddGroup.automorphize ((g ∘ π) * f) = g * (QuotientAddGroup.automorphize f) :=
     QuotientAddGroup.automorphize_smul_left f g
-  calc ∫ (x : G'), g (π x) * f x ∂μ'
+  calc ∫ (x : G'), g (π x) * f x ∂μ' =
+    ∫ (x : G' ⧸ Γ'), QuotientAddGroup.automorphize ((g ∘ π) * f) x ∂μ_𝓕 := ?_
+    _ = ∫ (x : G' ⧸ Γ'), g x * (QuotientAddGroup.automorphize f x) ∂μ_𝓕 := by simp [H₀]
+  have H₁ : Integrable ((g ∘ π) * f) μ' := by
+    have : AEStronglyMeasurable (fun (x : G') => g (x : (G' ⧸ Γ'))) μ' :=
+      (hg.mono_ac h𝓕.absolutelyContinuous_map).comp_measurable meas_π
+    refine Integrable.essSup_smul f_ℒ_1 this ?_
+    have hg' : AEStronglyMeasurable (‖g ·‖ₑ) μ_𝓕 := continuous_enorm.comp_aestronglyMeasurable hg
+    rw [← essSup_comp_quotientAddGroup_mk h𝓕 hg'.aemeasurable]
+    exact g_ℒ_infinity
+  have H₂ : AEStronglyMeasurable (QuotientAddGroup.automorphize ((g ∘ π) * f)) μ_𝓕 := by
+    simp_rw [H₀]
+    exact hg.mul F_ae_measurable
+  apply QuotientAddGroup.integral_eq_integral_automorphize h𝓕 H₁ H₂
 
 Depends on / 依赖: Integrable, Measurable, QuotientAddGroup, QuotientAddGroup.automorphize, QuotientAddGroup.automorphize_smul_left, QuotientAddGroup.mk, automorphize, automorphize_smul_left, continuous_quotient_mk, measurable
 -/

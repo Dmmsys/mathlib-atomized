@@ -584,7 +584,9 @@ instance oppositeRack
     rw [self_distrib_inv]
   invAct x y := op (Shelf.act (unop x) (unop y))
   left_inv := MulOpposite.rec' fun x => MulOpposite.rec' fun y => by simp
-  ri
+  right_inv := MulOpposite.rec' fun x => MulOpposite.rec' fun y => by simp
+
+@[simp]
 
 中文:
 实例 oppositeRack
@@ -599,7 +601,9 @@ instance oppositeRack
     rw [self_distrib_inv]
   invAct x y := op (Shelf.act (unop x) (unop y))
   left_inv := MulOpposite.rec' fun x => MulOpposite.rec' fun y => by simp
-  ri
+  right_inv := MulOpposite.rec' fun x => MulOpposite.rec' fun y => by simp
+
+@[simp]
 
 Depends on / 依赖: invAct
 -/
@@ -1845,7 +1849,27 @@ definition toEnvelGroup.map
       map_one' := by
         change Quotient.liftOn ⟦Rack.PreEnvelGroup.unit⟧ (toEnvelGroup.mapAux f) _ = 1
         simp only [Quotient.lift_mk, mapAux]
-      map_mul' 
+      map_mul' := fun x y =>
+        Quotient.inductionOn₂ x y fun x y => by
+          change Quotient.liftOn ⟦mul x y⟧ (toEnvelGroup.mapAux f) _ = _
+          simp [toEnvelGroup.mapAux] }
+  invFun F := (Quandle.Conj.map F).comp (toEnvelGroup R)
+  right_inv F :=
+    MonoidHom.ext fun x =>
+      Quotient.inductionOn x fun x => by
+        induction x with
+        | unit => exact F.map_one.symm
+        | incl => rfl
+        | mul x y ih_x ih_y =>
+          have hm : ⟦x.mul y⟧ = @Mul.mul (EnvelGroup R) _ ⟦x⟧ ⟦y⟧ := rfl
+          simp only [MonoidHom.coe_mk, OneHom.coe_mk, Quotient.lift_mk]
+          suffices forall x y, F (Mul.mul x y) = F (x) * F (y) by
+            simp_all only [MonoidHom.coe_mk, OneHom.coe_mk, Quotient.lift_mk]
+            rw [← ih_x]; rw [← ih_y]; rw [mapAux]
+          exact F.map_mul
+        | inv x ih_x =>
+          have hm : ⟦x.inv⟧ = @Inv.inv (EnvelGroup R) _ ⟦x⟧ := rfl
+          rw [hm]; rw [map_inv]; rw [map_inv]; rw [ih_x]
 
 中文:
 定义 toEnvelGroup.map
@@ -1856,7 +1880,27 @@ definition toEnvelGroup.map
       map_one' := by
         change Quotient.liftOn ⟦Rack.PreEnvelGroup.unit⟧ (toEnvelGroup.mapAux f) _ = 1
         simp only [Quotient.lift_mk, mapAux]
-      map_mul' 
+      map_mul' := fun x y =>
+        Quotient.inductionOn₂ x y fun x y => by
+          change Quotient.liftOn ⟦mul x y⟧ (toEnvelGroup.mapAux f) _ = _
+          simp [toEnvelGroup.mapAux] }
+  invFun F := (Quandle.Conj.map F).comp (toEnvelGroup R)
+  right_inv F :=
+    MonoidHom.ext fun x =>
+      Quotient.inductionOn x fun x => by
+        induction x with
+        | unit => exact F.map_one.symm
+        | incl => rfl
+        | mul x y ih_x ih_y =>
+          have hm : ⟦x.mul y⟧ = @Mul.mul (EnvelGroup R) _ ⟦x⟧ ⟦y⟧ := rfl
+          simp only [MonoidHom.coe_mk, OneHom.coe_mk, Quotient.lift_mk]
+          suffices forall x y, F (Mul.mul x y) = F (x) * F (y) by
+            simp_all only [MonoidHom.coe_mk, OneHom.coe_mk, Quotient.lift_mk]
+            rw [← ih_x]; rw [← ih_y]; rw [mapAux]
+          exact F.map_mul
+        | inv x ih_x =>
+          have hm : ⟦x.inv⟧ = @Inv.inv (EnvelGroup R) _ ⟦x⟧ := rfl
+          rw [hm]; rw [map_inv]; rw [map_inv]; rw [ih_x]
 
 Depends on / 依赖: MonoidHom, MonoidHom.ext, PreEnvelGroup, Quandle, Quandle.Conj.map, Quotien, Quotient, Quotient.inductionOn, Quotient.liftOn, Quotient.lift_mk, Rack.PreEnvelGroup.unit, invFun, liftOn, lift_mk, mapAux, map_mul, map_one, right_inv, toEnvelGroup, toEnvelGroup.mapAux
 -/

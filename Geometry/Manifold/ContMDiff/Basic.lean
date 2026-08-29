@@ -66,7 +66,25 @@ theorem ContMDiffWithinAt.comp
   set e' := extChartAt I' (f x)
   have : e' (f x) = (writtenInExtChartAt I I' x f) (e x) := by simp only [e, e', mfld_simps]
   rw [this] at hg
-  have A : forallᶠ y in 𝓝[e.symm ⁻¹' s inter range I] e
+  have A : forallᶠ y in 𝓝[e.symm ⁻¹' s inter range I] e x, f (e.symm y) in t ∧ f (e.symm y) in e'.source := by
+    simp only [e, ← map_extChartAt_nhdsWithin, eventually_map]
+    filter_upwards [hf.1.tendsto (extChartAt_source_mem_nhds (I := I') (f x)),
+      inter_mem_nhdsWithin s (extChartAt_source_mem_nhds (I := I) x)]
+    rintro x' (hfx' : f x' in e'.source) ⟨hx's, hx'⟩
+    simp only [e, true_and, e.left_inv hx', st hx's, *]
+  refine ((hg.2.comp _ (hf.2.mono inter_subset_right)
+      ((mapsTo_preimage _ _).mono_left inter_subset_left)).mono_of_mem_nhdsWithin
+      (inter_mem ?_ self_mem_nhdsWithin)).congr_of_eventuallyEq ?_ ?_
+  · filter_upwards [A]
+    rintro x' ⟨ht, hfx'⟩
+    simp only [*, e, e', mem_preimage, writtenInExtChartAt, (· ∘ ·), mem_inter_iff, e'.left_inv,
+      true_and]
+    exact mem_range_self _
+  · filter_upwards [A]
+    rintro x' ⟨-, hfx'⟩
+    simp only [*, e, e', (· ∘ ·), writtenInExtChartAt, e'.left_inv]
+  · simp only [e, e', writtenInExtChartAt, (· ∘ ·), mem_extChartAt_source,
+      e.left_inv, e'.left_inv]
 
 中文:
 定理 ContMDiffWithinAt.comp
@@ -78,7 +96,25 @@ theorem ContMDiffWithinAt.comp
   set e' := extChartAt I' (f x)
   have : e' (f x) = (writtenInExtChartAt I I' x f) (e x) := by simp only [e, e', mfld_simps]
   rw [this] at hg
-  have A : forallᶠ y in 𝓝[e.symm ⁻¹' s inter range I] e
+  have A : forallᶠ y in 𝓝[e.symm ⁻¹' s inter range I] e x, f (e.symm y) in t ∧ f (e.symm y) in e'.source := by
+    simp only [e, ← map_extChartAt_nhdsWithin, eventually_map]
+    filter_upwards [hf.1.tendsto (extChartAt_source_mem_nhds (I := I') (f x)),
+      inter_mem_nhdsWithin s (extChartAt_source_mem_nhds (I := I) x)]
+    rintro x' (hfx' : f x' in e'.source) ⟨hx's, hx'⟩
+    simp only [e, true_and, e.left_inv hx', st hx's, *]
+  refine ((hg.2.comp _ (hf.2.mono inter_subset_right)
+      ((mapsTo_preimage _ _).mono_left inter_subset_left)).mono_of_mem_nhdsWithin
+      (inter_mem ?_ self_mem_nhdsWithin)).congr_of_eventuallyEq ?_ ?_
+  · filter_upwards [A]
+    rintro x' ⟨ht, hfx'⟩
+    simp only [*, e, e', mem_preimage, writtenInExtChartAt, (· ∘ ·), mem_inter_iff, e'.left_inv,
+      true_and]
+    exact mem_range_self _
+  · filter_upwards [A]
+    rintro x' ⟨-, hfx'⟩
+    simp only [*, e, e', (· ∘ ·), writtenInExtChartAt, e'.left_inv]
+  · simp only [e, e', writtenInExtChartAt, (· ∘ ·), mem_extChartAt_source,
+      e.left_inv, e'.left_inv]
 
 Depends on / 依赖: contMDiffWithinAt_iff, e.symm, eventually_map, extChartAt, extChartAt_source_mem_nhds, filter_upwards, inter_mem_nhdsWithin, map_extChartAt_nhdsWithin, mfld_simps, source, tendsto, writtenInExtChartAt
 -/
@@ -890,7 +926,14 @@ lemma ContMDiff.piecewise
     apply interior_subset hy
   by_cases h'x : x in closure s
   · have : x in frontier s := ⟨h'x, hx⟩
-    apply (hf x).congr_of_e
+    apply (hf x).congr_of_eventuallyEq
+    filter_upwards [hfg x this] with y hy
+    simp [Set.piecewise, hy]
+  · apply (hg x).congr_of_eventuallyEq
+    filter_upwards [isClosed_closure.isOpen_compl.mem_nhds h'x] with y hy
+    rw [piecewise_eq_of_notMem]
+    contrapose hy
+    simpa using subset_closure hy
 
 中文:
 引理 ContMDiff.piecewise
@@ -903,7 +946,14 @@ lemma ContMDiff.piecewise
     apply interior_subset hy
   by_cases h'x : x in closure s
   · have : x in frontier s := ⟨h'x, hx⟩
-    apply (hf x).congr_of_e
+    apply (hf x).congr_of_eventuallyEq
+    filter_upwards [hfg x this] with y hy
+    simp [Set.piecewise, hy]
+  · apply (hg x).congr_of_eventuallyEq
+    filter_upwards [isClosed_closure.isOpen_compl.mem_nhds h'x] with y hy
+    rw [piecewise_eq_of_notMem]
+    contrapose hy
+    simpa using subset_closure hy
 
 Depends on / 依赖: Set.piecewise, closure, congr_of_eventuallyEq, contrapose, filter_upwards, frontier, interior, interior_subset, isClosed_closure, isClosed_closure.isOpen_compl.mem_nhds, isOpen_compl, isOpen_interior, isOpen_interior.mem_nhds, mem_nhds, piecewise, piecewise_eq_of_mem, piecewise_eq_of_notMem
 -/
@@ -1314,7 +1364,19 @@ lemma contMDiff_isOpenEmbedding
   intro x y
   -- show the function is actually the identity on the range of I ∘ e
   apply contDiffOn_id.congr
-  int
+  intro z hz
+  -- factorise into the chart `e` and the model `id`
+  simp only [mfld_simps]
+  rw [h.toOpenPartialHomeomorph_right_inv]
+  · rw [I.right_inv]
+    apply mem_of_subset_of_mem _ hz.1
+    exact letI := h.singletonChartedSpace; extChartAt_target_subset_range (I := I) x
+  · -- `hz` implies that `z ∈ range (I ∘ e)`
+    have := hz.1
+    rw [@extChartAt_target _ _ _ _ _ _ _ _ _ _ h.singletonChartedSpace] at this
+    have := this.1
+    rw [mem_preimage]; rw [OpenPartialHomeomorph.singletonChartedSpace_chartAt_eq]; rw [h.toOpenPartialHomeomorph_target] at this
+    exact this
 
 中文:
 引理 contMDiff_isOpenEmbedding
@@ -1326,7 +1388,19 @@ lemma contMDiff_isOpenEmbedding
   intro x y
   -- show the function is actually the identity on the range of I ∘ e
   apply contDiffOn_id.congr
-  int
+  intro z hz
+  -- factorise into the chart `e` and the model `id`
+  simp only [mfld_simps]
+  rw [h.toOpenPartialHomeomorph_right_inv]
+  · rw [I.right_inv]
+    apply mem_of_subset_of_mem _ hz.1
+    exact letI := h.singletonChartedSpace; extChartAt_target_subset_range (I := I) x
+  · -- `hz` implies that `z ∈ range (I ∘ e)`
+    have := hz.1
+    rw [@extChartAt_target _ _ _ _ _ _ _ _ _ _ h.singletonChartedSpace] at this
+    have := this.1
+    rw [mem_preimage]; rw [OpenPartialHomeomorph.singletonChartedSpace_chartAt_eq]; rw [h.toOpenPartialHomeomorph_target] at this
+    exact this
 
 Depends on / 依赖: ContMDiff, contMDiff_iff, continuous, h.continuous, h.isManifold_singleton, h.singletonChartedSpace, isManifold_singleton, singletonChartedSpace
 -/
@@ -1365,7 +1439,19 @@ lemma contMDiffOn_isOpenEmbedding_symm
   rw [@contMDiffOn_iff]
   constructor
   · rw [← h.toOpenPartialHomeomorph_target]
-    exact (h.toOpenPartialHomeomorph e).continuousO
+    exact (h.toOpenPartialHomeomorph e).continuousOn_symm
+  · intro z hz
+    -- show the function is actually the identity on the range of I ∘ e
+    apply contDiffOn_id.congr
+    intro z hz
+    -- factorise into the chart `e` and the model `id`
+    simp only [mfld_simps]
+    have : I.symm z in range e := by
+      rw [ModelWithCorners.symm]; rw [← mem_preimage]
+      exact hz.2.1
+    rw [h.toOpenPartialHomeomorph_right_inv e this]
+    apply I.right_inv
+    exact mem_of_subset_of_mem (extChartAt_target_subset_range _) hz.1
 
 中文:
 引理 contMDiffOn_isOpenEmbedding_symm
@@ -1376,7 +1462,19 @@ lemma contMDiffOn_isOpenEmbedding_symm
   rw [@contMDiffOn_iff]
   constructor
   · rw [← h.toOpenPartialHomeomorph_target]
-    exact (h.toOpenPartialHomeomorph e).continuousO
+    exact (h.toOpenPartialHomeomorph e).continuousOn_symm
+  · intro z hz
+    -- show the function is actually the identity on the range of I ∘ e
+    apply contDiffOn_id.congr
+    intro z hz
+    -- factorise into the chart `e` and the model `id`
+    simp only [mfld_simps]
+    have : I.symm z in range e := by
+      rw [ModelWithCorners.symm]; rw [← mem_preimage]
+      exact hz.2.1
+    rw [h.toOpenPartialHomeomorph_right_inv e this]
+    apply I.right_inv
+    exact mem_of_subset_of_mem (extChartAt_target_subset_range _) hz.1
 
 Depends on / 依赖: ContMDiffOn, h.singletonChartedSpace, singletonChartedSpace
 -/
@@ -1415,7 +1513,9 @@ lemma ContMDiff.of_comp_isOpenEmbedding
     ext
     rw [Function.comp_apply]; rw [Function.comp_apply]; rw [IsOpenEmbedding.toOpenPartialHomeomorph_left_inv]
   rw [this]
-  apply @ContMDiffOn.comp_contMDiff _ _ _ _ _ _ _ _ _ 
+  apply @ContMDiffOn.comp_contMDiff _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+    h'.singletonChartedSpace _ _ (range e') _ (contMDiffOn_isOpenEmbedding_symm h') hf
+  simp
 
 中文:
 引理 ContMDiff.of_comp_isOpenEmbedding
@@ -1425,7 +1525,9 @@ lemma ContMDiff.of_comp_isOpenEmbedding
     ext
     rw [Function.comp_apply]; rw [Function.comp_apply]; rw [IsOpenEmbedding.toOpenPartialHomeomorph_left_inv]
   rw [this]
-  apply @ContMDiffOn.comp_contMDiff _ _ _ _ _ _ _ _ _ 
+  apply @ContMDiffOn.comp_contMDiff _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+    h'.singletonChartedSpace _ _ (range e') _ (contMDiffOn_isOpenEmbedding_symm h') hf
+  simp
 
 Depends on / 依赖: ContMDiff, ContMDiffOn, ContMDiffOn.comp_contMDiff, Function, Function.comp_apply, IsOpenEmbedding, IsOpenEmbedding.toOpenPartialHomeomorph_left_inv, comp_apply, comp_contMDiff, contMDiffOn_isOpenEmbedding_symm, singletonChartedSpace, toOpenPartialHomeomorph, toOpenPartialHomeomorph_left_inv
 -/

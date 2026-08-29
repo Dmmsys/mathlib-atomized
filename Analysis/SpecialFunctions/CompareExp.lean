@@ -75,7 +75,7 @@ IsLittleO.isBigO
         _ =ᶠ[l] fun z => z.re ^ (r * n) :=
           ((hre.eventually_ge_atTop 0).mono fun z hz => by
             simp only [Real.rpow_mul hz r n, Real.rpow_natCast])
-        _ 
+        _ =o[l] fun z => Real.exp z.re := (isLittleO_rpow_exp_atTop _).comp_tendsto hre ⟩
 
 中文:
 定理 of_isBigO_im_re_rpow
@@ -87,7 +87,7 @@ IsLittleO.isBigO
         _ =ᶠ[l] fun z => z.re ^ (r * n) :=
           ((hre.eventually_ge_atTop 0).mono fun z hz => by
             simp only [Real.rpow_mul hz r n, Real.rpow_natCast])
-        _ 
+        _ =o[l] fun z => Real.exp z.re := (isLittleO_rpow_exp_atTop _).comp_tendsto hre ⟩
 
 Depends on / 依赖: IsLittleO, IsLittleO.isBigO, Real.exp, Real.rpow_mul, Real.rpow_natCast, comp_tendsto, eventually_ge_atTop, hr.pow, hre.eventually_ge_atTop, isBigO, isLittleO_rpow_exp_atTop, rpow_mul, rpow_natCast, z.im, z.re
 -/
@@ -255,7 +255,9 @@ theorem isLittleO_im_pow_exp_re
       (fun z : Complex => (z.im ^ n) ^ 2) = (fun z => z.im ^ (2 * n)) := by simp only [pow_mul']
       _ =O[l] fun z => Real.exp z.re := hl.isBigO_im_pow_re _
       _ = fun z => (Real.exp z.re) ^ 1 := by simp only [pow_one]
-      _ =o[l] fun z => (Real.exp 
+      _ =o[l] fun z => (Real.exp z.re) ^ 2 :=
+(isLittleO_pow_pow_atTop_of_lt one_lt_two).comp_tendsto
+          Real.tendsto_exp_atTop.comp hl.tendsto_re
 
 中文:
 定理 isLittleO_im_pow_exp_re
@@ -265,7 +267,9 @@ theorem isLittleO_im_pow_exp_re
       (fun z : Complex => (z.im ^ n) ^ 2) = (fun z => z.im ^ (2 * n)) := by simp only [pow_mul']
       _ =O[l] fun z => Real.exp z.re := hl.isBigO_im_pow_re _
       _ = fun z => (Real.exp z.re) ^ 1 := by simp only [pow_one]
-      _ =o[l] fun z => (Real.exp 
+      _ =o[l] fun z => (Real.exp z.re) ^ 2 :=
+(isLittleO_pow_pow_atTop_of_lt one_lt_two).comp_tendsto
+          Real.tendsto_exp_atTop.comp hl.tendsto_re
 
 Depends on / 依赖: IsLittleO, IsLittleO.of_pow, Real.exp, Real.tendsto_exp_atTop.comp, comp_tendsto, hl.isBigO_im_pow_re, hl.tendsto_re, isBigO_im_pow_re, isLittleO_pow_pow_atTop_of_lt, of_pow, one_lt_two, pow_mul, pow_one, tendsto_exp_atTop, tendsto_re, two_ne_zero, z.im, z.re
 -/
@@ -314,7 +318,23 @@ theorem isLittleO_log_norm_re
         (hl.tendsto_re.eventually_ge_atTop 1).mono fun z hz => by
           have h2 : 0 < √2 := by simp
           have hz' : 1 <= ‖z‖ := hz.trans (re_le_norm z)
-          have hm₀ : 0 
+          have hm₀ : 0 < max z.re |z.im| := lt_max_iff.2 (Or.inl <| one_pos.trans_le hz)
+          simp only [Real.norm_of_nonneg (Real.log_nonneg hz')]
+          rw [← Real.log_mul]; rw [Real.log_le_log_iff]; rw [← abs_of_nonneg (le_trans zero_le_one hz)]
+          exacts [norm_le_sqrt_two_mul_max z, one_pos.trans_le hz', mul_pos h2 hm₀, h2.ne', hm₀.ne']
+    _ =o[l] re :=
+IsLittleO.add (isLittleO_const_left.2 <| Or.inr <| hl.tendsto_abs_re)
+        isLittleO_iff_nat_mul_le.2 fun n => by
+          filter_upwards [isLittleO_iff_nat_mul_le'.1 hl.isLittleO_log_re_re n,
+            hl.abs_im_pow_eventuallyLE_exp_re n,
+            hl.tendsto_re.eventually_gt_atTop 1] with z hre him h₁
+          rcases le_total |z.im| z.re with hle | hle
+          · rwa [max_eq_left hle]
+          · have H : 1 < |z.im| := h₁.trans_le hle
+            norm_cast at *
+            rwa [max_eq_right hle, Real.norm_eq_abs, Real.norm_eq_abs, abs_of_pos (Real.log_pos H),
+              ← Real.log_pow, Real.log_le_iff_le_exp (pow_pos (one_pos.trans H) _),
+              abs_of_pos (one_pos.trans h₁)]
 
 中文:
 定理 isLittleO_log_norm_re
@@ -326,7 +346,23 @@ theorem isLittleO_log_norm_re
         (hl.tendsto_re.eventually_ge_atTop 1).mono fun z hz => by
           have h2 : 0 < √2 := by simp
           have hz' : 1 <= ‖z‖ := hz.trans (re_le_norm z)
-          have hm₀ : 0 
+          have hm₀ : 0 < max z.re |z.im| := lt_max_iff.2 (Or.inl <| one_pos.trans_le hz)
+          simp only [Real.norm_of_nonneg (Real.log_nonneg hz')]
+          rw [← Real.log_mul]; rw [Real.log_le_log_iff]; rw [← abs_of_nonneg (le_trans zero_le_one hz)]
+          exacts [norm_le_sqrt_two_mul_max z, one_pos.trans_le hz', mul_pos h2 hm₀, h2.ne', hm₀.ne']
+    _ =o[l] re :=
+IsLittleO.add (isLittleO_const_left.2 <| Or.inr <| hl.tendsto_abs_re)
+        isLittleO_iff_nat_mul_le.2 fun n => by
+          filter_upwards [isLittleO_iff_nat_mul_le'.1 hl.isLittleO_log_re_re n,
+            hl.abs_im_pow_eventuallyLE_exp_re n,
+            hl.tendsto_re.eventually_gt_atTop 1] with z hre him h₁
+          rcases le_total |z.im| z.re with hle | hle
+          · rwa [max_eq_left hle]
+          · have H : 1 < |z.im| := h₁.trans_le hle
+            norm_cast at *
+            rwa [max_eq_right hle, Real.norm_eq_abs, Real.norm_eq_abs, abs_of_pos (Real.log_pos H),
+              ← Real.log_pow, Real.log_le_iff_le_exp (pow_pos (one_pos.trans H) _),
+              abs_of_pos (one_pos.trans h₁)]
 
 Depends on / 依赖: Or.inl, Real.log, Real.log_le_log_iff, Real.log_mul, Real.log_nonneg, Real.norm_of_nonneg, abs_of_nonneg, eventually_ge_atTop, exacts, hl.tendsto_re.eventually_ge_atTop, hz.trans, le_trans, log_le_log_iff, log_mul, log_nonneg, lt_max_iff, norm_le_sqrt_two_mul, norm_of_nonneg, of_norm_eventuallyLE, one_pos
 -/
@@ -402,7 +438,9 @@ theorem isLittleO_cpow_exp
     _ =o[l] fun z => exp (b * z) :=
 IsLittleO.of_norm_right by
         simp only [norm_exp, re_ofReal_mul, Real.isLittleO_exp_comp_exp_comp]
-        refine (IsEquivalent.refl.sub_isLittl
+        refine (IsEquivalent.refl.sub_isLittleO ?_).symm.tendsto_atTop
+          (hl.tendsto_re.const_mul_atTop hb)
+        exact (hl.isLittleO_log_norm_re.const_mul_left _).const_mul_right hb.ne'
 
 中文:
 定理 isLittleO_cpow_exp
@@ -413,7 +451,9 @@ IsLittleO.of_norm_right by
     _ =o[l] fun z => exp (b * z) :=
 IsLittleO.of_norm_right by
         simp only [norm_exp, re_ofReal_mul, Real.isLittleO_exp_comp_exp_comp]
-        refine (IsEquivalent.refl.sub_isLittl
+        refine (IsEquivalent.refl.sub_isLittleO ?_).symm.tendsto_atTop
+          (hl.tendsto_re.const_mul_atTop hb)
+        exact (hl.isLittleO_log_norm_re.const_mul_left _).const_mul_right hb.ne'
 
 Depends on / 依赖: IsEquivalent, IsEquivalent.refl.sub_isLittleO, IsLittleO, IsLittleO.of_norm_right, Real.exp, Real.isLittleO_exp_comp_exp_comp, Real.log, const_mul_atTop, const_mul_left, const_mul_right, hb.ne, hl.isLittleO_log_norm_re.const_mul_left, hl.isTheta_cpow_exp_re_mul_log, hl.tendsto_re.const_mul_atTop, isLittleO_exp_comp_exp_comp, isLittleO_log_norm_re, isTheta_cpow_exp_re_mul_log, norm_exp, of_norm_right, re_ofReal_mul
 -/
@@ -441,6 +481,11 @@ theorem isLittleO_cpow_mul_exp
         simp only
         rw [mul_right_comm]; rw [← cpow_add _ _ hz]; rw [add_sub_cancel]
     _ =o[l] fun z => z ^ a₂ * exp (b₁ * z) * exp (↑(b₂ - b₁) * z) :=
+      ((isBigO_refl (fun z => z ^ a₂ * exp (b₁ * z)) l).mul_isLittleO <|
+        hl.isLittleO_cpow_exp _ (sub_pos.2 hb))
+    _ =ᶠ[l] fun z => z ^ a₂ * exp (b₂ * z) := by
+      simp only [ofReal_sub, sub_mul, mul_assoc, ← exp_add, add_sub_cancel]
+      norm_cast
 
 中文:
 定理 isLittleO_cpow_mul_exp
@@ -451,6 +496,11 @@ theorem isLittleO_cpow_mul_exp
         simp only
         rw [mul_right_comm]; rw [← cpow_add _ _ hz]; rw [add_sub_cancel]
     _ =o[l] fun z => z ^ a₂ * exp (b₁ * z) * exp (↑(b₂ - b₁) * z) :=
+      ((isBigO_refl (fun z => z ^ a₂ * exp (b₁ * z)) l).mul_isLittleO <|
+        hl.isLittleO_cpow_exp _ (sub_pos.2 hb))
+    _ =ᶠ[l] fun z => z ^ a₂ * exp (b₂ * z) := by
+      simp only [ofReal_sub, sub_mul, mul_assoc, ← exp_add, add_sub_cancel]
+      norm_cast
 
 Depends on / 依赖: add_sub_cancel, cpow_add, eventually_ne, exp_add, hl.eventually_ne.mono, hl.isLittleO_cpow_exp, isBigO_refl, isLittleO_cpow_exp, mul_assoc, mul_isLittleO, mul_right_comm, norm_ca, ofReal_sub, sub_mul, sub_pos
 -/

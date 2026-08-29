@@ -35,7 +35,10 @@ abbreviation PseudoMetricSpace.induced
   edist x y := edist (f x) (f y)
   edist_dist _ _ := edist_dist _ _
   toUniformSpace := UniformSpace.comap f m.toUniformSpace
-  uniformity_dist := (uniformity_basis_dist.comap 
+  uniformity_dist := (uniformity_basis_dist.comap _).eq_biInf
+  toBornology := Bornology.induced f
+cobounded_sets := Set.ext fun s => mem_comap_iff_compl.trans by
+    simp only [← isBounded_def, isBounded_iff, forall_mem_image, mem_ofPred]
 
 中文:
 缩写 伪度量空间.induced
@@ -47,7 +50,10 @@ abbreviation PseudoMetricSpace.induced
   edist x y := edist (f x) (f y)
   edist_dist _ _ := edist_dist _ _
   toUniformSpace := UniformSpace.comap f m.toUniformSpace
-  uniformity_dist := (uniformity_basis_dist.comap 
+  uniformity_dist := (uniformity_basis_dist.comap _).eq_biInf
+  toBornology := Bornology.induced f
+cobounded_sets := Set.ext fun s => mem_comap_iff_compl.trans by
+    simp only [← isBounded_def, isBounded_iff, forall_mem_image, mem_ofPred]
 -/
 abbrev PseudoMetricSpace.induced {α β} (f : α -> β) (m : PseudoMetricSpace β) :
     PseudoMetricSpace α where
@@ -722,7 +728,9 @@ instance Prod.pseudoMetricSpaceMax
     (fun x y => by positivity) fun x y => by
       simp only [ENNReal.ofReal_max, Prod.edist_eq, edist_dist]
   i.replaceBornology fun s => by
-    simp only [← isBounded_image_fst_and_snd, isBou
+    simp only [← isBounded_image_fst_and_snd, isBounded_iff_eventually, forall_mem_image, ←
+      eventually_and, ← forall_and, ← max_le_iff]
+    rfl
 
 中文:
 实例 积类型.pseudoMetricSpaceMax
@@ -732,7 +740,9 @@ instance Prod.pseudoMetricSpaceMax
     (fun x y => by positivity) fun x y => by
       simp only [ENNReal.ofReal_max, Prod.edist_eq, edist_dist]
   i.replaceBornology fun s => by
-    simp only [← isBounded_image_fst_and_snd, isBou
+    simp only [← isBounded_image_fst_and_snd, isBounded_iff_eventually, forall_mem_image, ←
+      eventually_and, ← forall_and, ← max_le_iff]
+    rfl
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_max, Prod.edist_eq, PseudoEMetricSpace, PseudoEMetricSpace.toPseudoMetricSpaceOfDist, edist_dist, edist_eq, eventually_and, forall_and, forall_mem_image, i.replaceBornology, isBounded_iff_eventually, isBounded_image_fst_and_snd, max_le_iff, ofReal_max, replaceBornology, toPseudoMetricSpaceOfDist
 -/
@@ -869,7 +879,8 @@ lemma sphere_prod
   · ext ⟨x', y'⟩
     simp_rw [Set.mem_union, Set.mem_prod, Metric.mem_closedBall, Metric.mem_sphere, Prod.dist_eq,
       max_eq_iff]
-    re
+    refine or_congr (and_congr_right ?_) (and_comm.trans (and_congr_left ?_))
+    all_goals rintro rfl; rfl
 
 中文:
 引理 sphere_prod
@@ -882,7 +893,8 @@ lemma sphere_prod
   · ext ⟨x', y'⟩
     simp_rw [Set.mem_union, Set.mem_prod, Metric.mem_closedBall, Metric.mem_sphere, Prod.dist_eq,
       max_eq_iff]
-    re
+    refine or_congr (and_congr_right ?_) (and_comm.trans (and_congr_left ?_))
+    all_goals rintro rfl; rfl
 
 Depends on / 依赖: Metric, Metric.mem_closedBall, Metric.mem_sphere, Prod.dist_eq, Set.mem_prod, Set.mem_union, all_goals, and_comm, and_comm.trans, and_congr_left, and_congr_right, closedBall_eq_sphere_of_nonpos, closedBall_prod_same, dist_eq, le_rfl, lt_trichotomy, max_eq_iff, mem_closedBall, mem_prod, mem_sphere
 -/
@@ -911,7 +923,8 @@ lemma uniformContinuous_dist
       calc dist (dist a.1 a.2) (dist b.1 b.2) <= dist a.1 b.1 + dist a.2 b.2 :=
         dist_dist_dist_le _ _ _ _
       _ <= dist a b + dist a b := add_le_add (le_max_left _ _) (le_max_right _ _)
-      _ < ε / 2 + ε /
+      _ < ε / 2 + ε / 2 := add_lt_add h h
+      _ = ε := add_halves ε⟩
 
 中文:
 引理 uniformContinuous_dist
@@ -921,7 +934,8 @@ lemma uniformContinuous_dist
       calc dist (dist a.1 a.2) (dist b.1 b.2) <= dist a.1 b.1 + dist a.2 b.2 :=
         dist_dist_dist_le _ _ _ _
       _ <= dist a b + dist a b := add_le_add (le_max_left _ _) (le_max_right _ _)
-      _ < ε / 2 + ε /
+      _ < ε / 2 + ε / 2 := add_lt_add h h
+      _ = ε := add_halves ε⟩
 
 Depends on / 依赖: Metric, Metric.uniformContinuous_iff, add_halves, add_le_add, add_lt_add, dist_dist_dist_le, half_pos, le_max_left, le_max_right, uniformContinuous_iff
 -/

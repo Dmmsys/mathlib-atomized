@@ -208,7 +208,7 @@ theorem FactorSet.prod_eq_zero_iff
   · simp only [Associates.prod_top]
   · rw [prod_coe, Multiset.prod_eq_zero_iff, Multiset.mem_map, eq_false WithTop.coe_ne_top,
       iff_false, not_exists]
-    exact fun a => not_and_of_not_right _ a
+    exact fun a => not_and_of_not_right _ a.prop.ne_zero
 
 中文:
 定理 FactorSet.prod_eq_zero_iff
@@ -219,7 +219,7 @@ theorem FactorSet.prod_eq_zero_iff
   · simp only [Associates.prod_top]
   · rw [prod_coe, Multiset.prod_eq_zero_iff, Multiset.mem_map, eq_false WithTop.coe_ne_top,
       iff_false, not_exists]
-    exact fun a => not_and_of_not_right _ a
+    exact fun a => not_and_of_not_right _ a.prop.ne_zero
 
 Depends on / 依赖: Associates, Associates.prod_top, FactorSet, Multiset, Multiset.mem_map, Multiset.prod_eq_zero_iff, WithTop, WithTop.coe_ne_top, a.prop.ne_zero, abbrev, coe_ne_top, eq_false, iff_false, induction_eliminator, mem_map, ne_zero, not_and_of_not_right, not_exists, prod_coe, prod_eq_zero_iff
 -/
@@ -528,7 +528,11 @@ theorem FactorSet.unique
   · rw [eq_comm, ← FactorSet.prod_eq_zero_iff, ← h, Associates.prod_top]
   · rw [← FactorSet.prod_eq_zero_iff, h, Associates.prod_top]
   · congr 1
-    rw [← Multiset.map_eq
+    rw [← Multiset.map_eq_map Subtype.coe_injective]
+    apply unique' _ _ h <;>
+      · intro a ha
+        obtain ⟨⟨a', irred⟩, -, rfl⟩ := Multiset.mem_map.mp ha
+        rwa [Subtype.coe_mk]
 
 中文:
 定理 FactorSet.unique
@@ -542,7 +546,11 @@ theorem FactorSet.unique
   · rw [eq_comm, ← FactorSet.prod_eq_zero_iff, ← h, Associates.prod_top]
   · rw [← FactorSet.prod_eq_zero_iff, h, Associates.prod_top]
   · congr 1
-    rw [← Multiset.map_eq
+    rw [← Multiset.map_eq_map Subtype.coe_injective]
+    apply unique' _ _ h <;>
+      · intro a ha
+        obtain ⟨⟨a', irred⟩, -, rfl⟩ := Multiset.mem_map.mp ha
+        rwa [Subtype.coe_mk]
 -/
 theorem FactorSet.unique [Nontrivial α] {p q : FactorSet α} (h : p.prod = q.prod) : p = q := by
   -- TODO: `induction_eliminator` doesn't work with `abbrev`
@@ -617,7 +625,10 @@ theorem factors'_cong
     contrapose hb with ha
     rw [← associated_zero_iff_eq_zero]; rw [← ha]
     exact h.symm
-  rw [← Multiset.map_eq_map Subtype.coe_injective]; rw [map_subtype_coe_factors']; rw [map_s
+  rw [← Multiset.map_eq_map Subtype.coe_injective]; rw [map_subtype_coe_factors']; rw [map_subtype_coe_factors']; rw [← rel_associated_iff_map_eq_map]
+  exact
+    factors_unique irreducible_of_factor irreducible_of_factor
+      ((factors_prod ha).trans <| h.trans <| (factors_prod hb).symm)
 
 中文:
 定理 factors'_cong
@@ -631,7 +642,10 @@ theorem factors'_cong
     contrapose hb with ha
     rw [← associated_zero_iff_eq_zero]; rw [← ha]
     exact h.symm
-  rw [← Multiset.map_eq_map Subtype.coe_injective]; rw [map_subtype_coe_factors']; rw [map_s
+  rw [← Multiset.map_eq_map Subtype.coe_injective]; rw [map_subtype_coe_factors']; rw [map_subtype_coe_factors']; rw [← rel_associated_iff_map_eq_map]
+  exact
+    factors_unique irreducible_of_factor irreducible_of_factor
+      ((factors_prod ha).trans <| h.trans <| (factors_prod hb).symm)
 -/
 theorem factors'_cong {a b : α} (h : a ~ᵤ b) : factors' a = factors' b := by
   obtain rfl | hb := eq_or_ne b 0
@@ -658,7 +672,10 @@ definition factors
   apply Function.hfunext
   · have : a ~ᵤ 0 ↔ b ~ᵤ 0 := Iff.intro (fun ha0 => hab.symm.trans ha0) fun hb0 => hab.trans hb0
     simp only [associated_zero_iff_eq_zero] at this
-    simp only [q
+    simp only [quotient_mk_eq_mk, this, mk_eq_zero]
+exact fun ha hb _ => heq_of_eq congr_arg some factors'_cong hab
+
+@[simp]
 
 中文:
 定义 factors
@@ -669,7 +686,10 @@ definition factors
   apply Function.hfunext
   · have : a ~ᵤ 0 ↔ b ~ᵤ 0 := Iff.intro (fun ha0 => hab.symm.trans ha0) fun hb0 => hab.trans hb0
     simp only [associated_zero_iff_eq_zero] at this
-    simp only [q
+    simp only [quotient_mk_eq_mk, this, mk_eq_zero]
+exact fun ha hb _ => heq_of_eq congr_arg some factors'_cong hab
+
+@[simp]
 
 Depends on / 依赖: Function, Function.hfunext, Iff.intro, Quotient, Quotient.hrecOn, _cong, associated_zero_iff_eq_zero, classical, congr_arg, factors, hab.symm.trans, hab.trans, heq_of_eq, hfunext, hrecOn, mk_eq_zero, quotient_mk_eq_mk
 -/
@@ -1176,7 +1196,12 @@ instance :
     sup_le := fun _ _ c hac hbc =>
       factors_prod c ▸ prod_mono (sup_le (factors_mono hac) (factors_mono hbc))
 le_sup_left := fun a _ => le_trans (le_of_eq (factors_prod a).symm) prod_mono le_sup_left
-    le_sup_right := fu
+    le_sup_right := fun _ b =>
+le_trans (le_of_eq (factors_prod b).symm) prod_mono le_sup_right
+    le_inf := fun a _ _ hac hbc =>
+      factors_prod a ▸ prod_mono (le_inf (factors_mono hac) (factors_mono hbc))
+    inf_le_left := fun a _ => le_trans (prod_mono inf_le_left) (le_of_eq (factors_prod a))
+    inf_le_right := fun _ b => le_trans (prod_mono inf_le_right) (le_of_eq (factors_prod b)) }
 
 中文:
 实例 :
@@ -1187,7 +1212,12 @@ le_sup_left := fun a _ => le_trans (le_of_eq (factors_prod a).symm) prod_mono le
     sup_le := fun _ _ c hac hbc =>
       factors_prod c ▸ prod_mono (sup_le (factors_mono hac) (factors_mono hbc))
 le_sup_left := fun a _ => le_trans (le_of_eq (factors_prod a).symm) prod_mono le_sup_left
-    le_sup_right := fu
+    le_sup_right := fun _ b =>
+le_trans (le_of_eq (factors_prod b).symm) prod_mono le_sup_right
+    le_inf := fun a _ _ hac hbc =>
+      factors_prod a ▸ prod_mono (le_inf (factors_mono hac) (factors_mono hbc))
+    inf_le_left := fun a _ => le_trans (prod_mono inf_le_left) (le_of_eq (factors_prod a))
+    inf_le_right := fun _ b => le_trans (prod_mono inf_le_right) (le_of_eq (factors_prod b)) }
 
 Depends on / 依赖: Associates, Associates.instPartialOrder, factors_mono, factors_prod, inf_le_left, instPartialOrder, le_inf, le_of_eq, le_sup_left, le_sup_right, le_trans, prod_mo, prod_mono, sup_le
 -/
@@ -1249,7 +1279,7 @@ theorem dvd_of_mem_factors
   rw [← ha']; rw [factors_mk a0 nza] at hm ⊢
   rw [prod_coe]
   apply Multiset.dvd_prod; apply Multiset.mem_map.mpr
-  exact ⟨⟨p, irreducible_of_mem_factor
+  exact ⟨⟨p, irreducible_of_mem_factorSet hm⟩, mem_factorSet_some.mp hm, rfl⟩
 
 中文:
 定理 dvd_of_mem_factors
@@ -1262,7 +1292,7 @@ theorem dvd_of_mem_factors
   rw [← ha']; rw [factors_mk a0 nza] at hm ⊢
   rw [prod_coe]
   apply Multiset.dvd_prod; apply Multiset.mem_map.mpr
-  exact ⟨⟨p, irreducible_of_mem_factor
+  exact ⟨⟨p, irreducible_of_mem_factorSet hm⟩, mem_factorSet_some.mp hm, rfl⟩
 
 Depends on / 依赖: Associates, Associates.factors_prod, Multiset, Multiset.dvd_prod, Multiset.mem_map.mpr, dvd_prod, dvd_zero, eq_or_ne, exists_non_zero_rep, factors_mk, factors_prod, irreducible_of_mem_factorSet, mem_factorSet_some, mem_factorSet_some.mp, mem_map, prod_coe
 -/
@@ -1432,7 +1462,19 @@ theorem exists_prime_dvd_of_not_inf_one
     change (factors (Associates.mk a) ⊓ factors (Associates.mk b)).prod = 1
     rw [hf]
     exact Multiset.prod_zero
-  rw [factors_mk a ha]; rw [factors_mk b hb]; rw [← WithTop.coe_in
+  rw [factors_mk a ha]; rw [factors_mk b hb]; rw [← WithTop.coe_inf] at hz
+  obtain ⟨⟨p0, p0_irr⟩, p0_mem⟩ := Multiset.exists_mem_of_ne_zero ((mt WithTop.coe_eq_coe.mpr) hz)
+  rw [Multiset.inf_eq_inter] at p0_mem
+  obtain ⟨p, rfl⟩ : exists p, Associates.mk p = p0 := Quot.exists_rep p0
+  refine ⟨p, ?_, ?_, ?_⟩
+  · rw [← UniqueFactorizationMonoid.irreducible_iff_prime, ← irreducible_mk]
+    exact p0_irr
+  · apply dvd_of_mk_le_mk
+    apply dvd_of_mem_factors' (Multiset.mem_inter.mp p0_mem).left
+    apply ha
+  · apply dvd_of_mk_le_mk
+    apply dvd_of_mem_factors' (Multiset.mem_inter.mp p0_mem).right
+    apply hb
 
 中文:
 定理 存在_prime_dvd_of_not_inf_one
@@ -1444,7 +1486,19 @@ theorem exists_prime_dvd_of_not_inf_one
     change (factors (Associates.mk a) ⊓ factors (Associates.mk b)).prod = 1
     rw [hf]
     exact Multiset.prod_zero
-  rw [factors_mk a ha]; rw [factors_mk b hb]; rw [← WithTop.coe_in
+  rw [factors_mk a ha]; rw [factors_mk b hb]; rw [← WithTop.coe_inf] at hz
+  obtain ⟨⟨p0, p0_irr⟩, p0_mem⟩ := Multiset.exists_mem_of_ne_zero ((mt WithTop.coe_eq_coe.mpr) hz)
+  rw [Multiset.inf_eq_inter] at p0_mem
+  obtain ⟨p, rfl⟩ : exists p, Associates.mk p = p0 := Quot.exists_rep p0
+  refine ⟨p, ?_, ?_, ?_⟩
+  · rw [← UniqueFactorizationMonoid.irreducible_iff_prime, ← irreducible_mk]
+    exact p0_irr
+  · apply dvd_of_mk_le_mk
+    apply dvd_of_mem_factors' (Multiset.mem_inter.mp p0_mem).left
+    apply ha
+  · apply dvd_of_mk_le_mk
+    apply dvd_of_mem_factors' (Multiset.mem_inter.mp p0_mem).right
+    apply hb
 
 Depends on / 依赖: Associates, Associates.mk, Multiset, Multiset.exists_mem_of_ne_zero, Multiset.inf_eq_inter, Multiset.prod_zero, Quot.exists_rep, WithTop, WithTop.coe_eq_coe.mpr, WithTop.coe_inf, classical, coe_eq_coe, coe_inf, contrapose, exists_mem_of_ne_zero, exists_rep, factors, factors_mk, inf_eq_inter, p0_irr
 -/
@@ -1485,7 +1539,7 @@ theorem coprime_iff_inf_one
   · contrapose
     intro hg hc
     obtain ⟨p, hp, hpa, hpb⟩ := exists_prime_dvd_of_not_inf_one ha0 hb0 hg
-    ex
+    exact hc hpa hpb hp
 
 中文:
 定理 coprime_iff_inf_one
@@ -1499,7 +1553,7 @@ theorem coprime_iff_inf_one
   · contrapose
     intro hg hc
     obtain ⟨p, hp, hpa, hpb⟩ := exists_prime_dvd_of_not_inf_one ha0 hb0 hg
-    ex
+    exact hc hpa hpb hp
 
 Depends on / 依赖: Associates, Associates.prime_mk.mpr, contrapose, exists_prime_dvd_of_not_inf_one, isUnit_of_dvd_one, le_inf, mk_le_mk_of_dvd, not_isUnit, prime_mk
 -/
@@ -1729,6 +1783,8 @@ theorem count_ne_zero_iff_dvd
         (Associates.irreducible_mk.mpr hp) h,
       fun h => ?_⟩
   rw [← pow_one (Associates.mk p)]; rw [Associates.prime_pow_dvd_iff_le (Associates.mk_ne_zero.mpr ha0)
+      (Associates.irreducible_mk.mpr hp)] at h
+  exact (zero_lt_one.trans_le h).ne'
 
 中文:
 定理 count_ne_zero_iff_dvd
@@ -1741,6 +1797,8 @@ theorem count_ne_zero_iff_dvd
         (Associates.irreducible_mk.mpr hp) h,
       fun h => ?_⟩
   rw [← pow_one (Associates.mk p)]; rw [Associates.prime_pow_dvd_iff_le (Associates.mk_ne_zero.mpr ha0)
+      (Associates.irreducible_mk.mpr hp)] at h
+  exact (zero_lt_one.trans_le h).ne'
 
 Depends on / 依赖: Associates, Associates.irreducible_mk.mpr, Associates.le_of_count_ne_zero, Associates.mk, Associates.mk_le_mk_iff_dvd, Associates.mk_ne_zero.mpr, Associates.prime_pow_dvd_iff_le, irreducible_mk, le_of_count_ne_zero, mk_le_mk_iff_dvd, mk_ne_zero, pow_one, prime_pow_dvd_iff_le, trans_le, zero_lt_one, zero_lt_one.trans_le
 -/
@@ -2050,7 +2108,12 @@ theorem is_pow_of_dvd_count
     rintro p -
     have pp : p = ⟨p.val, p.2⟩ := by simp only [Subtype.coe_eta]
     rw [pp]; rw [← count_some p.2]
-    exact 
+    exact hk p.val p.2
+  obtain ⟨u, hu⟩ := Multiset.exists_smul_of_dvd_count _ hk'
+  use FactorSet.prod (u : FactorSet α)
+  apply eq_of_factors_eq_factors
+  rw [pow_factors]; rw [prod_factors]; rw [factors_mk a0 hz]; rw [hu]
+  exact WithBot.coe_nsmul u k
 
 中文:
 定理 is_pow_of_dvd_count
@@ -2063,7 +2126,12 @@ theorem is_pow_of_dvd_count
     rintro p -
     have pp : p = ⟨p.val, p.2⟩ := by simp only [Subtype.coe_eta]
     rw [pp]; rw [← count_some p.2]
-    exact 
+    exact hk p.val p.2
+  obtain ⟨u, hu⟩ := Multiset.exists_smul_of_dvd_count _ hk'
+  use FactorSet.prod (u : FactorSet α)
+  apply eq_of_factors_eq_factors
+  rw [pow_factors]; rw [prod_factors]; rw [factors_mk a0 hz]; rw [hu]
+  exact WithBot.coe_nsmul u k
 
 Depends on / 依赖: FactorSet, FactorSet.prod, Multiset, Multiset.exists_smul_of_dvd_count, Subtype, Subtype.coe_eta, WithBot, WithBot.coe, coe_eta, count_some, eq_of_factors_eq_factors, exists_non_zero_rep, exists_smul_of_dvd_count, factors, factors_mk, nontriviality, p.val, pow_factors, prod_factors
 -/
@@ -2097,7 +2165,14 @@ theorem eq_pow_count_factors_of_dvd_pow
   apply eq_of_eq_counts ha (pow_ne_zero _ hp.ne_zero)
   have eq_zero_of_ne : forall q : Associates α, Irreducible q -> q != p -> _ = 0 := fun q hq h' =>
 Nat.eq_zero_of_le_zero by
-      convert! coun
+      convert! count_le_count_of_le hph hq h
+      symm
+      rw [count_pow hp.ne_zero hq]; rw [count_eq_zero_of_ne hq hp h']; rw [mul_zero]
+  intro q hq
+  rw [count_pow hp.ne_zero hq]
+  by_cases h : q = p
+  · rw [h, count_self hp, mul_one]
+  · rw [count_eq_zero_of_ne hq hp h, mul_zero, eq_zero_of_ne q hq h]
 
 中文:
 定理 eq_pow_count_factors_of_dvd_pow
@@ -2109,7 +2184,14 @@ Nat.eq_zero_of_le_zero by
   apply eq_of_eq_counts ha (pow_ne_zero _ hp.ne_zero)
   have eq_zero_of_ne : forall q : Associates α, Irreducible q -> q != p -> _ = 0 := fun q hq h' =>
 Nat.eq_zero_of_le_zero by
-      convert! coun
+      convert! count_le_count_of_le hph hq h
+      symm
+      rw [count_pow hp.ne_zero hq]; rw [count_eq_zero_of_ne hq hp h']; rw [mul_zero]
+  intro q hq
+  rw [count_pow hp.ne_zero hq]
+  by_cases h : q = p
+  · rw [h, count_self hp, mul_one]
+  · rw [count_eq_zero_of_ne hq hp h, mul_zero, eq_zero_of_ne q hq h]
 
 Depends on / 依赖: Associates, Irreducible, Nat.eq_zero_of_le_zero, convert, count_eq, count_eq_zero_of_ne, count_le_count_of_le, count_pow, count_self, eq_of_eq_counts, eq_zero_of_le_zero, eq_zero_of_ne, hp.ne_zero, mul_one, mul_zero, ne_zero, ne_zero_of_dvd_ne_zero, nontriviality, pow_ne_zero
 -/
@@ -2144,7 +2226,9 @@ theorem count_factors_eq_find_of_dvd_pow
     exact eq_pow_count_factors_of_dvd_pow hp h
   · have hph := pow_ne_zero (@Nat.find (fun n => a ∣ p ^ n) _ ⟨n, h⟩) hp.ne_zero
     rcases subsingleton_or_nontrivial α with hα | hα
-    · simp [eq_iff_true_of_subsingleton
+    · simp [eq_iff_true_of_subsingleton] at hph
+    convert! count_le_count_of_le hph hp (@Nat.find_spec (fun n => a ∣ p ^ n) _ ⟨n, h⟩)
+    rw [count_pow hp.ne_zero hp]; rw [count_self hp]; rw [mul_one]
 
 中文:
 定理 count_factors_eq_find_of_dvd_pow
@@ -2157,7 +2241,9 @@ theorem count_factors_eq_find_of_dvd_pow
     exact eq_pow_count_factors_of_dvd_pow hp h
   · have hph := pow_ne_zero (@Nat.find (fun n => a ∣ p ^ n) _ ⟨n, h⟩) hp.ne_zero
     rcases subsingleton_or_nontrivial α with hα | hα
-    · simp [eq_iff_true_of_subsingleton
+    · simp [eq_iff_true_of_subsingleton] at hph
+    convert! count_le_count_of_le hph hp (@Nat.find_spec (fun n => a ∣ p ^ n) _ ⟨n, h⟩)
+    rw [count_pow hp.ne_zero hp]; rw [count_self hp]; rw [mul_one]
 
 Depends on / 依赖: Nat.find, Nat.find_le, Nat.find_spec, convert, count_le_count_of_le, count_pow, count_self, eq_iff_true_of_subsingleton, eq_pow_count_factors_of_dvd_pow, find_le, find_spec, hp.ne_zero, le_antisymm, mul_one, ne_zero, pow_ne_zero, subsingleton_or_nontrivial
 -/
@@ -2195,7 +2281,8 @@ theorem eq_pow_of_mul_eq_pow
     rw [h]
     apply dvd_count_pow _ hp
     rintro rfl
-    rw [zero_pow hk
+    rw [zero_pow hk0] at h
+    cases mul_eq_zero.mp h <;> contradiction
 
 中文:
 定理 eq_pow_of_mul_eq_pow
@@ -2212,7 +2299,8 @@ theorem eq_pow_of_mul_eq_pow
     rw [h]
     apply dvd_count_pow _ hp
     rintro rfl
-    rw [zero_pow hk
+    rw [zero_pow hk0] at h
+    cases mul_eq_zero.mp h <;> contradiction
 
 Depends on / 依赖: classical, dvd_count_of_dvd_count_mul, dvd_count_pow, is_pow_of_dvd_count, mul_eq_one, mul_eq_zero, mul_eq_zero.mp, nontriviality, pow_zero, zero_pow
 -/

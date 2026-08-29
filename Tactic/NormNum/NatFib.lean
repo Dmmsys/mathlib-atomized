@@ -136,7 +136,22 @@ have : en' =Q nat_lit 1 := ⟨⟩;
   | n' =>
 have en : Q(Nat) := mkRawNatLit n' / 2
     let ⟨ea, eb, H⟩ := proveNatFibAux en
-    le
+    let a := ea.natLit!
+    let b := eb.natLit!
+    if n' % 2 == 0 then
+      have hn : Q(2 * $en = $en') := (q(Eq.refl $en') : Expr)
+have ea' : Q(Nat) := mkRawNatLit a * (2 * b - a)
+have eb' : Q(Nat) := mkRawNatLit a * a + b * b
+      have h1 : Q($ea * (2 * $eb - $ea) = $ea') := (q(Eq.refl $ea') : Expr)
+      have h2 : Q($ea * $ea + $eb * $eb = $eb') := (q(Eq.refl $eb') : Expr)
+      ⟨ea', eb', q(isFibAux_two_mul $H $hn $h1 $h2)⟩
+    else
+      have hn : Q(2 * $en + 1 = $en') := (q(Eq.refl $en') : Expr)
+have ea' : Q(Nat) := mkRawNatLit a * a + b * b
+have eb' : Q(Nat) := mkRawNatLit b * (2 * a + b)
+      have h1 : Q($ea * $ea + $eb * $eb = $ea') := (q(Eq.refl $ea') : Expr)
+      have h2 : Q($eb * (2 * $ea + $eb) = $eb') := (q(Eq.refl $eb') : Expr)
+      ⟨ea', eb', q(isFibAux_two_mul_add_one $H $hn $h1 $h2)⟩
 
 中文:
 定义 prove自然数FibAux
@@ -151,7 +166,22 @@ have : en' =Q nat_lit 1 := ⟨⟩;
   | n' =>
 have en : Q(Nat) := mkRawNatLit n' / 2
     let ⟨ea, eb, H⟩ := proveNatFibAux en
-    le
+    let a := ea.natLit!
+    let b := eb.natLit!
+    if n' % 2 == 0 then
+      have hn : Q(2 * $en = $en') := (q(Eq.refl $en') : Expr)
+have ea' : Q(Nat) := mkRawNatLit a * (2 * b - a)
+have eb' : Q(Nat) := mkRawNatLit a * a + b * b
+      have h1 : Q($ea * (2 * $eb - $ea) = $ea') := (q(Eq.refl $ea') : Expr)
+      have h2 : Q($ea * $ea + $eb * $eb = $eb') := (q(Eq.refl $eb') : Expr)
+      ⟨ea', eb', q(isFibAux_two_mul $H $hn $h1 $h2)⟩
+    else
+      have hn : Q(2 * $en + 1 = $en') := (q(Eq.refl $en') : Expr)
+have ea' : Q(Nat) := mkRawNatLit a * a + b * b
+have eb' : Q(Nat) := mkRawNatLit b * (2 * a + b)
+      have h1 : Q($ea * $ea + $eb * $eb = $ea') := (q(Eq.refl $ea') : Expr)
+      have h2 : Q($eb * (2 * $ea + $eb) = $eb') := (q(Eq.refl $eb') : Expr)
+      ⟨ea', eb', q(isFibAux_two_mul_add_one $H $hn $h1 $h2)⟩
 -/
 partial def proveNatFibAux (en' : Q(Nat)) : (ea' eb' : Q(Nat)) × Q(IsFibAux $en' $ea' $eb') :=
   match en'.natLit! with
@@ -231,7 +261,19 @@ definition proveNatFib
 | 2 => have : en' =Q nat_lit 2 := ⟨⟩; ⟨q(nat_lit 1), q(Nat.fib_two)⟩
   | n' =>
 have en : Q(Nat) := mkRawNatLit n' / 2
-    let ⟨ea, eb, H⟩ 
+    let ⟨ea, eb, H⟩ := proveNatFibAux en
+    let a := ea.natLit!
+    let b := eb.natLit!
+    if n' % 2 == 0 then
+      have hn : Q(2 * $en = $en') := (q(Eq.refl $en') : Expr)
+have ea' : Q(Nat) := mkRawNatLit a * (2 * b - a)
+      have h1 : Q($ea * (2 * $eb - $ea) = $ea') := (q(Eq.refl $ea') : Expr)
+      ⟨ea', q(isFibAux_two_mul_done $H $hn $h1)⟩
+    else
+      have hn : Q(2 * $en + 1 = $en') := (q(Eq.refl $en') : Expr)
+have ea' : Q(Nat) := mkRawNatLit a * a + b * b
+      have h1 : Q($ea * $ea + $eb * $eb = $ea') := (q(Eq.refl $ea') : Expr)
+      ⟨ea', q(isFibAux_two_mul_add_one_done $H $hn $h1)⟩
 
 中文:
 定义 prove自然数Fib
@@ -242,7 +284,19 @@ have en : Q(Nat) := mkRawNatLit n' / 2
 | 2 => have : en' =Q nat_lit 2 := ⟨⟩; ⟨q(nat_lit 1), q(Nat.fib_two)⟩
   | n' =>
 have en : Q(Nat) := mkRawNatLit n' / 2
-    let ⟨ea, eb, H⟩ 
+    let ⟨ea, eb, H⟩ := proveNatFibAux en
+    let a := ea.natLit!
+    let b := eb.natLit!
+    if n' % 2 == 0 then
+      have hn : Q(2 * $en = $en') := (q(Eq.refl $en') : Expr)
+have ea' : Q(Nat) := mkRawNatLit a * (2 * b - a)
+      have h1 : Q($ea * (2 * $eb - $ea) = $ea') := (q(Eq.refl $ea') : Expr)
+      ⟨ea', q(isFibAux_two_mul_done $H $hn $h1)⟩
+    else
+      have hn : Q(2 * $en + 1 = $en') := (q(Eq.refl $en') : Expr)
+have ea' : Q(Nat) := mkRawNatLit a * a + b * b
+      have h1 : Q($ea * $ea + $eb * $eb = $ea') := (q(Eq.refl $ea') : Expr)
+      ⟨ea', q(isFibAux_two_mul_add_one_done $H $hn $h1)⟩
 
 Depends on / 依赖: Eq.refl, IsEmbedding, IsEmbedding.subtypeVal.isInducing.regularSpace, Nat.fib_one, Nat.fib_two, Nat.fib_zero, ea.natLit, eb.natLit, fib_one, fib_two, fib_zero, isInducing, mkRawNatLit, natLit, nat_lit, proveNatFibAux, regularSpace, subtypeVal
 -/

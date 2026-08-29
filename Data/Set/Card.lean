@@ -965,7 +965,7 @@ theorem encard_eq_encard_iff_encard_sdiff_eq_encard_sdiff
 
 @[deprecated (since := "2026-06-03")]
 alias encard_eq_encard_iff_encard_diff_eq_encard_diff :=
-  encard_eq_encard_iff_encard_
+  encard_eq_encard_iff_encard_sdiff_eq_encard_sdiff
 
 中文:
 定理 encard_eq_encard_iff_encard_sdiff_eq_encard_sdiff
@@ -975,7 +975,7 @@ alias encard_eq_encard_iff_encard_diff_eq_encard_diff :=
 
 @[deprecated (since := "2026-06-03")]
 alias encard_eq_encard_iff_encard_diff_eq_encard_diff :=
-  encard_eq_encard_iff_encard_
+  encard_eq_encard_iff_encard_sdiff_eq_encard_sdiff
 
 Depends on / 依赖: ENat.addLECancellable_of_lt_top, addLECancellable_of_lt_top, encard_lt_top, encard_sdiff_add_encard_inter, h.encard_lt_top, inj_left, inter_comm
 -/
@@ -998,7 +998,7 @@ theorem encard_le_encard_iff_encard_sdiff_le_encard_sdiff
 
 @[deprecated (since := "2026-06-03")]
 alias encard_le_encard_iff_encard_diff_le_encard_diff :=
-  encard_le_encard_iff_encard_sdiff_le_encar
+  encard_le_encard_iff_encard_sdiff_le_encard_sdiff
 
 中文:
 定理 encard_le_encard_iff_encard_sdiff_le_encard_sdiff
@@ -1008,7 +1008,7 @@ alias encard_le_encard_iff_encard_diff_le_encard_diff :=
 
 @[deprecated (since := "2026-06-03")]
 alias encard_le_encard_iff_encard_diff_le_encard_diff :=
-  encard_le_encard_iff_encard_sdiff_le_encar
+  encard_le_encard_iff_encard_sdiff_le_encard_sdiff
 
 Depends on / 依赖: ENat.add_le_add_iff_right, add_le_add_iff_right, encard_lt_top, encard_sdiff_add_encard_inter, h.encard_lt_top.ne, inter_comm
 -/
@@ -1031,7 +1031,7 @@ theorem encard_lt_encard_iff_encard_sdiff_lt_encard_sdiff
 
 @[deprecated (since := "2026-06-03")]
 alias encard_lt_encard_iff_encard_diff_lt_encard_diff :=
-  encard_lt_encard_iff_encard_sdiff_lt_encar
+  encard_lt_encard_iff_encard_sdiff_lt_encard_sdiff
 
 中文:
 定理 encard_lt_encard_iff_encard_sdiff_lt_encard_sdiff
@@ -1041,7 +1041,7 @@ alias encard_lt_encard_iff_encard_diff_lt_encard_diff :=
 
 @[deprecated (since := "2026-06-03")]
 alias encard_lt_encard_iff_encard_diff_lt_encard_diff :=
-  encard_lt_encard_iff_encard_sdiff_lt_encar
+  encard_lt_encard_iff_encard_sdiff_lt_encard_sdiff
 
 Depends on / 依赖: ENat.add_lt_add_iff_right, add_lt_add_iff_right, encard_lt_top, encard_sdiff_add_encard_inter, h.encard_lt_top.ne, inter_comm
 -/
@@ -1145,7 +1145,7 @@ lemma Finite.eq_of_subset_of_encard_le'
   have hdiff :=
     (ENat.addLECancellable_of_lt_top (ht.subset hst).encard_lt_top).add_le_add_iff_right.mp hts
   rw [nonpos_iff_eq_zero]; rw [encard_eq_zero]; rw [sdiff_eq_empty] at hdiff
-  exact hst.antisymm 
+  exact hst.antisymm hdiff
 
 中文:
 引理 有限.eq_of_subset_of_encard_le'
@@ -1155,7 +1155,7 @@ lemma Finite.eq_of_subset_of_encard_le'
   have hdiff :=
     (ENat.addLECancellable_of_lt_top (ht.subset hst).encard_lt_top).add_le_add_iff_right.mp hts
   rw [nonpos_iff_eq_zero]; rw [encard_eq_zero]; rw [sdiff_eq_empty] at hdiff
-  exact hst.antisymm 
+  exact hst.antisymm hdiff
 
 Depends on / 依赖: ENat.addLECancellable_of_lt_top, addLECancellable_of_lt_top, add_le_add_iff_right, add_le_add_iff_right.mp, antisymm, encard, encard_eq_zero, encard_lt_top, encard_sdiff_add_encard_of_subset, hst.antisymm, ht.subset, nonpos_iff_eq_zero, sdiff_eq_empty, subset, zero_add
 -/
@@ -1591,7 +1591,9 @@ theorem encard_eq_add_one_iff
   refine ⟨fun h => ?_, ?_⟩
   · obtain ⟨a, ha⟩ := nonempty_of_encard_ne_zero (s := s) (by simp [h])
     refine ⟨a, s \ {a}, fun h => h.2 rfl, by rwa [insert_sdiff_singleton, insert_eq_of_mem], ?_⟩
-    rw [encard_sdiff_singleton_of_mem ha]; rw [h]; rw [(ENat.addLECancellable_of_ne_top ENat.one_ne_t
+    rw [encard_sdiff_singleton_of_mem ha]; rw [h]; rw [(ENat.addLECancellable_of_ne_top ENat.one_ne_top).add_tsub_cancel_right]
+  rintro ⟨a, t, h, rfl, rfl⟩
+  rw [encard_insert_of_notMem h]
 
 中文:
 定理 encard_eq_add_one_iff
@@ -1600,7 +1602,9 @@ theorem encard_eq_add_one_iff
   refine ⟨fun h => ?_, ?_⟩
   · obtain ⟨a, ha⟩ := nonempty_of_encard_ne_zero (s := s) (by simp [h])
     refine ⟨a, s \ {a}, fun h => h.2 rfl, by rwa [insert_sdiff_singleton, insert_eq_of_mem], ?_⟩
-    rw [encard_sdiff_singleton_of_mem ha]; rw [h]; rw [(ENat.addLECancellable_of_ne_top ENat.one_ne_t
+    rw [encard_sdiff_singleton_of_mem ha]; rw [h]; rw [(ENat.addLECancellable_of_ne_top ENat.one_ne_top).add_tsub_cancel_right]
+  rintro ⟨a, t, h, rfl, rfl⟩
+  rw [encard_insert_of_notMem h]
 
 Depends on / 依赖: ENat.addLECancellable_of_ne_top, ENat.one_ne_top, addLECancellable_of_ne_top, add_tsub_cancel_right, encard_insert_of_notMem, encard_sdiff_singleton_of_mem, insert_eq_of_mem, insert_sdiff_singleton, nonempty_of_encard_ne_zero, one_ne_top
 -/
@@ -1623,7 +1627,11 @@ theorem eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt
   refine s.eq_empty_or_nonempty.elim Or.inl (Or.inr ∘ fun ⟨a,ha⟩ =>
     (s.finite_or_infinite.elim (fun hfin => Or.inr ⟨a, ha, ?_⟩) (Or.inl ∘ Infinite.encard_eq)))
   rw [← encard_sdiff_singleton_add_one ha]; nth_rw 1 [← add_zero (encard _)]
-  exact ENat.add_lt_add_of_le_of_lt hfin.sdiff.encard_lt
+  exact ENat.add_lt_add_of_le_of_lt hfin.sdiff.encard_lt_top.ne le_rfl zero_lt_one
+
+@[deprecated (since := "2026-06-03")]
+alias eq_empty_or_encard_eq_top_or_encard_diff_singleton_lt :=
+  eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt
 
 中文:
 定理 eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt
@@ -1632,7 +1640,11 @@ theorem eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt
   refine s.eq_empty_or_nonempty.elim Or.inl (Or.inr ∘ fun ⟨a,ha⟩ =>
     (s.finite_or_infinite.elim (fun hfin => Or.inr ⟨a, ha, ?_⟩) (Or.inl ∘ Infinite.encard_eq)))
   rw [← encard_sdiff_singleton_add_one ha]; nth_rw 1 [← add_zero (encard _)]
-  exact ENat.add_lt_add_of_le_of_lt hfin.sdiff.encard_lt
+  exact ENat.add_lt_add_of_le_of_lt hfin.sdiff.encard_lt_top.ne le_rfl zero_lt_one
+
+@[deprecated (since := "2026-06-03")]
+alias eq_empty_or_encard_eq_top_or_encard_diff_singleton_lt :=
+  eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt
 
 Depends on / 依赖: ENat.add_lt_add_of_le_of_lt, Infinite, Infinite.encard_eq, Or.inl, Or.inr, add_lt_add_of_le_of_lt, add_zero, encard, encard_eq, encard_lt_top, encard_sdiff_singleton_add_one, eq_empty_or_nonempty, finite_or_infinite, hfin.sdiff.encard_lt_top.ne, le_rfl, nth_rw, s.eq_empty_or_nonempty.elim, s.finite_or_infinite.elim, zero_lt_one
 -/
@@ -1854,7 +1866,10 @@ theorem encard_eq_two
   proof: by
   refine ⟨fun h => ?_, fun ⟨x, y, hne, hs⟩ => by rw [hs, encard_pair hne]⟩
   obtain ⟨x, hx⟩ := nonempty_of_encard_ne_zero (s := s) (by rw [h]; simp)
-  rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [← one_add_one_eq_two]; rw [(ENat.a
+  rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [← one_add_one_eq_two]; rw [(ENat.addLECancellable_of_ne_top ENat.one_ne_top).inj_left]; rw [encard_eq_one] at h
+  obtain ⟨y, h⟩ := h
+  refine ⟨x, y, by rintro rfl; exact (h.symm.subset rfl).2 rfl, ?_⟩
+  rw [← h]; rw [insert_sdiff_singleton]; rw [insert_eq_of_mem hx]
 
 中文:
 定理 encard_eq_two
@@ -1862,7 +1877,10 @@ theorem encard_eq_two
   证明: by
   refine ⟨fun h => ?_, fun ⟨x, y, hne, hs⟩ => by rw [hs, encard_pair hne]⟩
   obtain ⟨x, hx⟩ := nonempty_of_encard_ne_zero (s := s) (by rw [h]; simp)
-  rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [← one_add_one_eq_two]; rw [(ENat.a
+  rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [← one_add_one_eq_two]; rw [(ENat.addLECancellable_of_ne_top ENat.one_ne_top).inj_left]; rw [encard_eq_one] at h
+  obtain ⟨y, h⟩ := h
+  refine ⟨x, y, by rintro rfl; exact (h.symm.subset rfl).2 rfl, ?_⟩
+  rw [← h]; rw [insert_sdiff_singleton]; rw [insert_eq_of_mem hx]
 
 Depends on / 依赖: ENat.addLECancellable_of_ne_top, ENat.one_ne_top, addLECancellable_of_ne_top, encard_eq_one, encard_insert_of_notMem, encard_pair, h.symm.subset, inj_left, insert_eq_of_mem, insert_sdiff_singleton, nonempty_of_encard_ne_zero, one_add_one_eq_two, one_ne_top, subset
 -/
@@ -1883,7 +1901,13 @@ theorem encard_eq_three
   proof: by
   refine ⟨fun h => ?_, fun ⟨x, y, z, hxy, hyz, hxz, hs⟩ => ?_⟩
   · obtain ⟨x, hx⟩ := nonempty_of_encard_ne_zero (s := s) (by rw [h]; simp)
-    rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [(by exact rfl : (3 : Nat∞) = 2 + 1)]; rw [
+    rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [(by exact rfl : (3 : Nat∞) = 2 + 1)]; rw [(ENat.addLECancellable_of_ne_top ENat.one_ne_top).inj_left]; rw [encard_eq_two] at h
+    obtain ⟨y, z, hne, hs⟩ := h
+    refine ⟨x, y, z, ?_, ?_, hne, ?_⟩
+    · rintro rfl; exact (hs.symm.subset (Or.inl rfl)).2 rfl
+    · rintro rfl; exact (hs.symm.subset (Or.inr rfl)).2 rfl
+    rw [← hs]; rw [insert_sdiff_singleton]; rw [insert_eq_of_mem hx]
+  rw [hs]; rw [encard_insert_of_notMem]; rw [encard_insert_of_notMem]; rw [encard_singleton] <;> aesop
 
 中文:
 定理 encard_eq_three
@@ -1891,7 +1915,13 @@ theorem encard_eq_three
   证明: by
   refine ⟨fun h => ?_, fun ⟨x, y, z, hxy, hyz, hxz, hs⟩ => ?_⟩
   · obtain ⟨x, hx⟩ := nonempty_of_encard_ne_zero (s := s) (by rw [h]; simp)
-    rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [(by exact rfl : (3 : Nat∞) = 2 + 1)]; rw [
+    rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [(by exact rfl : (3 : Nat∞) = 2 + 1)]; rw [(ENat.addLECancellable_of_ne_top ENat.one_ne_top).inj_left]; rw [encard_eq_two] at h
+    obtain ⟨y, z, hne, hs⟩ := h
+    refine ⟨x, y, z, ?_, ?_, hne, ?_⟩
+    · rintro rfl; exact (hs.symm.subset (Or.inl rfl)).2 rfl
+    · rintro rfl; exact (hs.symm.subset (Or.inr rfl)).2 rfl
+    rw [← hs]; rw [insert_sdiff_singleton]; rw [insert_eq_of_mem hx]
+  rw [hs]; rw [encard_insert_of_notMem]; rw [encard_insert_of_notMem]; rw [encard_singleton] <;> aesop
 
 Depends on / 依赖: ENat.addLECancellable_of_ne_top, ENat.one_ne_top, Or.inl, addLECancellable_of_ne_top, encard_eq_two, encard_insert_of_notMem, hs.symm.subset, inj_left, insert_eq_of_mem, insert_sdiff_singleton, nonempty_of_encard_ne_zero, one_ne_top, subset
 -/
@@ -1916,7 +1946,14 @@ theorem encard_eq_four
   proof: by
   refine ⟨fun h => ?_, fun ⟨x, y, z, w, hxy, hxz, hxw, hyz, hyw, hzw, hs⟩ => ?_⟩
   · obtain ⟨x, hx⟩ := nonempty_of_encard_ne_zero (s := s) (by rw [h]; simp)
-    rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [(by exact rfl : (4 : Nat
+    rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [(by exact rfl : (4 : Nat∞) = 3 + 1)]; rw [(ENat.addLECancellable_of_ne_top ENat.one_ne_top).inj_left]; rw [encard_eq_three] at h
+    obtain ⟨y, z, w, hyz, hyw, hzw, hs⟩ := h
+    refine ⟨x, y, z, w, ?_, ?_, ?_, hyz, hyw, hzw, ?_⟩
+    · rintro rfl; exact (hs.symm.subset (Or.inl rfl)).2 rfl
+    · rintro rfl; exact (hs.symm.subset (Or.inr (Or.inl rfl))).2 rfl
+    · rintro rfl; exact (hs.symm.subset (Or.inr (Or.inr rfl))).2 rfl
+    rw [← hs]; rw [insert_sdiff_singleton]; rw [insert_eq_of_mem hx]
+  rw [hs]; rw [encard_insert_of_notMem]; rw [encard_insert_of_notMem]; rw [encard_insert_of_notMem]; rw [encard_singleton] <;> grind
 
 中文:
 定理 encard_eq_four
@@ -1924,7 +1961,14 @@ theorem encard_eq_four
   证明: by
   refine ⟨fun h => ?_, fun ⟨x, y, z, w, hxy, hxz, hxw, hyz, hyw, hzw, hs⟩ => ?_⟩
   · obtain ⟨x, hx⟩ := nonempty_of_encard_ne_zero (s := s) (by rw [h]; simp)
-    rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [(by exact rfl : (4 : Nat
+    rw [← insert_eq_of_mem hx]; rw [← insert_sdiff_singleton]; rw [encard_insert_of_notMem (fun h => h.2 rfl)]; rw [(by exact rfl : (4 : Nat∞) = 3 + 1)]; rw [(ENat.addLECancellable_of_ne_top ENat.one_ne_top).inj_left]; rw [encard_eq_three] at h
+    obtain ⟨y, z, w, hyz, hyw, hzw, hs⟩ := h
+    refine ⟨x, y, z, w, ?_, ?_, ?_, hyz, hyw, hzw, ?_⟩
+    · rintro rfl; exact (hs.symm.subset (Or.inl rfl)).2 rfl
+    · rintro rfl; exact (hs.symm.subset (Or.inr (Or.inl rfl))).2 rfl
+    · rintro rfl; exact (hs.symm.subset (Or.inr (Or.inr rfl))).2 rfl
+    rw [← hs]; rw [insert_sdiff_singleton]; rw [insert_eq_of_mem hx]
+  rw [hs]; rw [encard_insert_of_notMem]; rw [encard_insert_of_notMem]; rw [encard_insert_of_notMem]; rw [encard_singleton] <;> grind
 
 Depends on / 依赖: ENat.addLECancellable_of_ne_top, ENat.one_ne_top, addLECancellable_of_ne_top, encard_eq_three, encard_insert_of_notMem, inj_left, insert_eq_of_mem, insert_sdiff_singleton, nonempty_of_encard_ne_zero, one_ne_top
 -/
@@ -2009,7 +2053,10 @@ theorem exists_subset_encard_eq
     obtain ⟨t₀, ht₀s, ht₀⟩ := IH (le_trans (by simp) hk)
     simp only [Nat.cast_succ] at *
     have hne : t₀ != s := by
-      rintro rfl; rw [ht₀, ← Nat.cast_one, ← Nat.cast_add, Nat.cast_
+      rintro rfl; rw [ht₀, ← Nat.cast_one, ← Nat.cast_add, Nat.cast_le] at hk; simp at hk
+    obtain ⟨x, hx⟩ := exists_of_ssubset (ht₀s.ssubset_of_ne hne)
+    exact ⟨insert x t₀, insert_subset hx.1 ht₀s, by rw [encard_insert_of_notMem hx.2, ht₀]⟩
+  | top => rw [top_le_iff] at hk; exact ⟨s, Subset.rfl, hk⟩
 
 中文:
 定理 存在_subset_encard_eq
@@ -2022,7 +2069,10 @@ theorem exists_subset_encard_eq
     obtain ⟨t₀, ht₀s, ht₀⟩ := IH (le_trans (by simp) hk)
     simp only [Nat.cast_succ] at *
     have hne : t₀ != s := by
-      rintro rfl; rw [ht₀, ← Nat.cast_one, ← Nat.cast_add, Nat.cast_
+      rintro rfl; rw [ht₀, ← Nat.cast_one, ← Nat.cast_add, Nat.cast_le] at hk; simp at hk
+    obtain ⟨x, hx⟩ := exists_of_ssubset (ht₀s.ssubset_of_ne hne)
+    exact ⟨insert x t₀, insert_subset hx.1 ht₀s, by rw [encard_insert_of_notMem hx.2, ht₀]⟩
+  | top => rw [top_le_iff] at hk; exact ⟨s, Subset.rfl, hk⟩
 
 Depends on / 依赖: ENat.nat_induction, Nat.cast_add, Nat.cast_le, Nat.cast_one, Nat.cast_succ, Subset, Subset.rfl, cast_add, cast_le, cast_one, cast_succ, empty_subset, encard_insert_of_notMem, exists_of_ssubset, insert, insert_subset, le_trans, nat_induction, s.ssubset_of_ne, ssubset_of_ne
 -/
@@ -2050,7 +2100,11 @@ theorem exists_superset_subset_encard_eq
   obtain ⟨k, rfl⟩ := exists_add_of_le hsk
   obtain ⟨k', hk'⟩ := exists_add_of_le hkt
   have hk : k <= encard (t \ s) := by
-    rw [← encard_sdiff_add_encard_of_subset hst]; rw [add_
+    rw [← encard_sdiff_add_encard_of_subset hst]; rw [add_comm] at hkt
+    exact WithTop.le_of_add_le_add_right hs hkt
+  obtain ⟨r', hr', rfl⟩ := exists_subset_encard_eq hk
+  refine ⟨s union r', subset_union_left, union_subset hst (hr'.trans sdiff_subset), ?_⟩
+  rw [encard_union_eq (disjoint_of_subset_right hr' disjoint_sdiff_right)]
 
 中文:
 定理 存在_superset_subset_encard_eq
@@ -2061,7 +2115,11 @@ theorem exists_superset_subset_encard_eq
   obtain ⟨k, rfl⟩ := exists_add_of_le hsk
   obtain ⟨k', hk'⟩ := exists_add_of_le hkt
   have hk : k <= encard (t \ s) := by
-    rw [← encard_sdiff_add_encard_of_subset hst]; rw [add_
+    rw [← encard_sdiff_add_encard_of_subset hst]; rw [add_comm] at hkt
+    exact WithTop.le_of_add_le_add_right hs hkt
+  obtain ⟨r', hr', rfl⟩ := exists_subset_encard_eq hk
+  refine ⟨s union r', subset_union_left, union_subset hst (hr'.trans sdiff_subset), ?_⟩
+  rw [encard_union_eq (disjoint_of_subset_right hr' disjoint_sdiff_right)]
 
 Depends on / 依赖: Subset, Subset.rfl, WithTop, WithTop.le_of_add_le_add_right, add_comm, encard, encard_sdiff_add_encard_of_subset, encard_union_eq, eq_or_ne, exists_add_of_le, exists_subset_encard_eq, le_of_add_le_add_right, s.encard, sdiff_subset, subset_union_left, top_le_iff, union_subset
 -/
@@ -2366,7 +2424,22 @@ theorem Finite.exists_injOn_of_encard_le
   · exact (encard_ne_top_iff.mpr hs h).elim
   obtain ⟨b, hbt⟩ := encard_pos.1 ((encard_pos.2 ⟨_, has⟩).trans_le hle)
   have hle' : (s \ {a}).encard <= (t \ {b}).encard := by
-    rwa [
+    rwa [← ENat.add_le_add_iff_right ENat.one_ne_top,
+    encard_sdiff_singleton_add_one has, encard_sdiff_singleton_add_one hbt]
+  obtain ⟨f₀, hf₀s, hinj⟩ := exists_injOn_of_encard_le hs.sdiff hle'
+  simp only [preimage_sdiff, subset_def, mem_sdiff, mem_singleton_iff, mem_preimage, and_imp]
+    at hf₀s
+  use Function.update f₀ a b
+  rw [← insert_eq_of_mem has]; rw [← insert_sdiff_singleton]; rw [injOn_insert (fun h => h.2 rfl)]
+  simp only [mem_sdiff, mem_singleton_iff, insert_sdiff_singleton, subset_def,
+    mem_insert_iff, mem_preimage, Function.update_apply, forall_eq_or_imp, ite_true, and_imp,
+    mem_image, ite_eq_left_iff, not_exists, not_and, not_forall, exists_prop, and_iff_right hbt]
+  refine ⟨?_, ?_, fun x hxs hxa => ⟨hxa, (hf₀s x hxs hxa).2⟩⟩
+  · rintro x hx; split_ifs with h
+    · assumption
+    · exact (hf₀s x hx h).1
+  exact InjOn.congr hinj (fun x ⟨_, hxa⟩ => by rwa [Function.update_of_ne])
+termination_by encard s
 
 中文:
 定理 有限.存在_injOn_of_encard_le
@@ -2378,7 +2451,22 @@ theorem Finite.exists_injOn_of_encard_le
   · exact (encard_ne_top_iff.mpr hs h).elim
   obtain ⟨b, hbt⟩ := encard_pos.1 ((encard_pos.2 ⟨_, has⟩).trans_le hle)
   have hle' : (s \ {a}).encard <= (t \ {b}).encard := by
-    rwa [
+    rwa [← ENat.add_le_add_iff_right ENat.one_ne_top,
+    encard_sdiff_singleton_add_one has, encard_sdiff_singleton_add_one hbt]
+  obtain ⟨f₀, hf₀s, hinj⟩ := exists_injOn_of_encard_le hs.sdiff hle'
+  simp only [preimage_sdiff, subset_def, mem_sdiff, mem_singleton_iff, mem_preimage, and_imp]
+    at hf₀s
+  use Function.update f₀ a b
+  rw [← insert_eq_of_mem has]; rw [← insert_sdiff_singleton]; rw [injOn_insert (fun h => h.2 rfl)]
+  simp only [mem_sdiff, mem_singleton_iff, insert_sdiff_singleton, subset_def,
+    mem_insert_iff, mem_preimage, Function.update_apply, forall_eq_or_imp, ite_true, and_imp,
+    mem_image, ite_eq_left_iff, not_exists, not_and, not_forall, exists_prop, and_iff_right hbt]
+  refine ⟨?_, ?_, fun x hxs hxa => ⟨hxa, (hf₀s x hxs hxa).2⟩⟩
+  · rintro x hx; split_ifs with h
+    · assumption
+    · exact (hf₀s x hx h).1
+  exact InjOn.congr hinj (fun x ⟨_, hxa⟩ => by rwa [Function.update_of_ne])
+termination_by encard s
 
 Depends on / 依赖: ENat.add_le_add_iff_right, ENat.one_ne_top, add_le_add_iff_right, classical, encard, encard_ne_top_iff, encard_ne_top_iff.mpr, encard_pos, encard_sdiff_singleton_add_one, eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt, exists_injOn_of_encard_le, hs.sdiff, one_ne_top, preimage_sdiff, s.eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt, trans_le
 -/
@@ -3947,7 +4035,10 @@ theorem ncard_eq_of_bijective
     rw [← Fintype.card_fin n]; rw [← Nat.card_eq_fintype_card]; rw [← Set.ncard_univ]; rw [himage]
 exact InjOn.ncard_image fun i _hi j _hj h => Fin.ext f_inj i.val j.val i.is_lt j.is_lt h
   ext x
-  simp on
+  simp only [image_univ, mem_range]
+  refine ⟨fun hx => ?_, fun ⟨⟨i, hi⟩, hx⟩ => hx ▸ hf' i hi⟩
+  obtain ⟨i, hi, rfl⟩ := hf x hx
+  use ⟨i, hi⟩
 
 中文:
 定理 ncard_eq_of_bijective
@@ -3958,7 +4049,10 @@ exact InjOn.ncard_image fun i _hi j _hj h => Fin.ext f_inj i.val j.val i.is_lt j
     rw [← Fintype.card_fin n]; rw [← Nat.card_eq_fintype_card]; rw [← Set.ncard_univ]; rw [himage]
 exact InjOn.ncard_image fun i _hi j _hj h => Fin.ext f_inj i.val j.val i.is_lt j.is_lt h
   ext x
-  simp on
+  simp only [image_univ, mem_range]
+  refine ⟨fun hx => ?_, fun ⟨⟨i, hi⟩, hx⟩ => hx ▸ hf' i hi⟩
+  obtain ⟨i, hi, rfl⟩ := hf x hx
+  use ⟨i, hi⟩
 
 Depends on / 依赖: Fin.ext, Fintype, Fintype.card_fin, InjOn.ncard_image, Nat.card_eq_fintype_card, Set.ncard_univ, Set.univ, card_eq_fintype_card, card_fin, f_inj, himage, i.is_lt, i.val, image_univ, is_lt, j.is_lt, j.val, mem_range, ncard_image, ncard_univ
 -/
@@ -3991,7 +4085,9 @@ theorem ncard_congr
     rintro ⟨y, hy⟩
     obtain ⟨a, ha, rfl⟩ := h₃ y hy
     simp only [Subtype.exists]
-   
+    exact ⟨_, ha, rfl⟩
+  simp_rw [← _root_.Nat.card_coe_set_eq]
+  exact Nat.card_congr (Equiv.ofBijective f' hbij)
 
 中文:
 定理 ncard_congr
@@ -4006,7 +4102,9 @@ theorem ncard_congr
     rintro ⟨y, hy⟩
     obtain ⟨a, ha, rfl⟩ := h₃ y hy
     simp only [Subtype.exists]
-   
+    exact ⟨_, ha, rfl⟩
+  simp_rw [← _root_.Nat.card_coe_set_eq]
+  exact Nat.card_congr (Equiv.ofBijective f' hbij)
 
 Depends on / 依赖: Bijective, Equiv.ofBijective, Nat.card_congr, Subtype, Subtype.exists, Subtype.mk.injEq, _root_, _root_.Nat.card_coe_set_eq, card_coe_set_eq, card_congr, ofBijective, simp_rw
 -/
@@ -4179,7 +4277,14 @@ theorem surj_on_of_inj_on_of_ncard_le
     apply hinj _ _ hx hy hxy
   have hft := ht.fintype
   have hft' := Fintype.ofInjective f' finj
-  set f'' : forall a, a in 
+  set f'' : forall a, a in s.toFinset -> β := fun a h => f a (by simpa using h)
+  convert! @Finset.surj_on_of_inj_on_of_card_le _ _ _ t.toFinset f'' _ _ _ _ (by simpa) using 1
+  · simp [f'']
+  · simp [f'', hf]
+  · intro a₁ a₂ ha₁ ha₂ h
+    rw [mem_toFinset] at ha₁ ha₂
+    exact hinj _ _ ha₁ ha₂ h
+  rwa [← ncard_eq_toFinset_card', ← ncard_eq_toFinset_card']
 
 中文:
 定理 surj_on_of_inj_on_of_ncard_le
@@ -4193,7 +4298,14 @@ theorem surj_on_of_inj_on_of_ncard_le
     apply hinj _ _ hx hy hxy
   have hft := ht.fintype
   have hft' := Fintype.ofInjective f' finj
-  set f'' : forall a, a in 
+  set f'' : forall a, a in s.toFinset -> β := fun a h => f a (by simpa using h)
+  convert! @Finset.surj_on_of_inj_on_of_card_le _ _ _ t.toFinset f'' _ _ _ _ (by simpa) using 1
+  · simp [f'']
+  · simp [f'', hf]
+  · intro a₁ a₂ ha₁ ha₂ h
+    rw [mem_toFinset] at ha₁ ha₂
+    exact hinj _ _ ha₁ ha₂ h
+  rwa [← ncard_eq_toFinset_card', ← ncard_eq_toFinset_card']
 
 Depends on / 依赖: Finset, Finset.surj_on_of_inj_on_of_card_le, Fintype, Fintype.ofInjective, Injective, Subtype, Subtype.mk.injEq, convert, fintype, ht.fintype, ofInjective, s.toFinset, surj_on_of_inj_on_of_card_le, t.toFinset, toFinite_tac, toFinset
 -/
@@ -4234,7 +4346,12 @@ theorem inj_on_of_surj_on_of_ncard_le
     exact ⟨_, ha, rfl⟩
   have := hs.fintype
   have := Fintype.ofSurjective _ hsurj
-  set f'' : forall a, a in s.
+  set f'' : forall a, a in s.toFinset -> β := fun a h => f a (by simpa using h)
+  exact
+    @Finset.inj_on_of_surj_on_of_card_le _ _ _ t.toFinset f''
+      (fun a ha => by { rw [mem_toFinset] at ha ⊢; exact hf a ha }) (by simpa)
+      (by { rwa [← ncard_eq_toFinset_card', ← ncard_eq_toFinset_card'] }) a₁
+      (by simpa) a₂ (by simpa) (by simpa)
 
 中文:
 定理 inj_on_of_surj_on_of_ncard_le
@@ -4249,7 +4366,12 @@ theorem inj_on_of_surj_on_of_ncard_le
     exact ⟨_, ha, rfl⟩
   have := hs.fintype
   have := Fintype.ofSurjective _ hsurj
-  set f'' : forall a, a in s.
+  set f'' : forall a, a in s.toFinset -> β := fun a h => f a (by simpa using h)
+  exact
+    @Finset.inj_on_of_surj_on_of_card_le _ _ _ t.toFinset f''
+      (fun a ha => by { rw [mem_toFinset] at ha ⊢; exact hf a ha }) (by simpa)
+      (by { rwa [← ncard_eq_toFinset_card', ← ncard_eq_toFinset_card'] }) a₁
+      (by simpa) a₂ (by simpa) (by simpa)
 
 Depends on / 依赖: Finset, Finset.inj_on_of_surj_on_of_card_le, Fintype, Fintype.ofSurjective, Subtype, Subtype.exists, Surjective, classical, fintype, hs.fintype, inj_on_of_surj_on_of_card_le, mem_toFinset, ofSurjective, s.toFinset, t.toFinset, toFinite_tac, toFinset
 -/
@@ -4321,7 +4443,10 @@ lemma ncard_powerset_ncard
     intro t ht
     rw [Finset.mem_range_coe_iff]
     exact s.finite_toSet.subset ht.1
-  have h₂ : (↑) ⁻¹' {t subseteq (s : Set α) | t.ncard = n} = (s.powersetCard n : Se
+  have h₂ : (↑) ⁻¹' {t subseteq (s : Set α) | t.ncard = n} = (s.powersetCard n : Set (Finset α)) := by
+    ext t
+    simp
+  grind [ncard_coe_finset, ncard_preimage_of_injective_subset_range, Finset.card_powersetCard]
 
 中文:
 引理 ncard_powerset_ncard
@@ -4332,7 +4457,10 @@ lemma ncard_powerset_ncard
     intro t ht
     rw [Finset.mem_range_coe_iff]
     exact s.finite_toSet.subset ht.1
-  have h₂ : (↑) ⁻¹' {t subseteq (s : Set α) | t.ncard = n} = (s.powersetCard n : Se
+  have h₂ : (↑) ⁻¹' {t subseteq (s : Set α) | t.ncard = n} = (s.powersetCard n : Set (Finset α)) := by
+    ext t
+    simp
+  grind [ncard_coe_finset, ncard_preimage_of_injective_subset_range, Finset.card_powersetCard]
 
 Depends on / 依赖: Finset, Finset.card_powersetCard, Finset.mem_range_coe_iff, card_powersetCard, finite_toSet, mem_range_coe_iff, ncard_coe_finset, ncard_preimage_of_injective_subset_range, powersetCard, s.finite_toSet.subset, s.powersetCard, subset, subseteq, t.ncard
 -/
@@ -4626,7 +4754,7 @@ theorem ncard_le_ncard_sdiff_add_ncard
   rw [hs.ncard]
 
 @[deprecated (since := "2026-06-03")]
-alias ncard_le_ncard_diff_add_ncar
+alias ncard_le_ncard_diff_add_ncard := ncard_le_ncard_sdiff_add_ncard
 
 中文:
 定理 ncard_le_ncard_sdiff_add_ncard
@@ -4640,7 +4768,7 @@ alias ncard_le_ncard_diff_add_ncar
   rw [hs.ncard]
 
 @[deprecated (since := "2026-06-03")]
-alias ncard_le_ncard_diff_add_ncar
+alias ncard_le_ncard_diff_add_ncard := ncard_le_ncard_sdiff_add_ncard
 
 Depends on / 依赖: Nat.zero_le, cast_ncard_eq, convert, encard_le_encard_sdiff_add_encard, finite_or_infinite, hs.cast_ncard_eq, hs.ncard, hs.sdiff.cast_ncard_eq, ht.cast_ncard_eq, s.finite_or_infinite, s.ncard, t.ncard, toFinite_tac, to_encard_tac, zero_le
 -/
@@ -5146,7 +5274,9 @@ lemma exists_subsuperset_card_eq
     exact ⟨t, hst, Subset.rfl, hnt.symm⟩
   lift s to Finset α using ht.subset hst
   lift t to Finset α using ht
-  obtain ⟨u, hsu, hut, hu⟩ := Finset.exists_subsuperset_card_eq (mod_cast hst) (by simpa using
+  obtain ⟨u, hsu, hut, hu⟩ := Finset.exists_subsuperset_card_eq (mod_cast hst) (by simpa using hsn)
+    (mod_cast hnt)
+  exact ⟨u, mod_cast hsu, mod_cast hut, mod_cast hu⟩
 
 中文:
 引理 存在_subsuperset_card_eq
@@ -5157,7 +5287,9 @@ lemma exists_subsuperset_card_eq
     exact ⟨t, hst, Subset.rfl, hnt.symm⟩
   lift s to Finset α using ht.subset hst
   lift t to Finset α using ht
-  obtain ⟨u, hsu, hut, hu⟩ := Finset.exists_subsuperset_card_eq (mod_cast hst) (by simpa using
+  obtain ⟨u, hsu, hut, hu⟩ := Finset.exists_subsuperset_card_eq (mod_cast hst) (by simpa using hsn)
+    (mod_cast hnt)
+  exact ⟨u, mod_cast hsu, mod_cast hut, mod_cast hu⟩
 
 Depends on / 依赖: Finset, Finset.exists_subsuperset_card_eq, Nat.le_zero, Subset, Subset.rfl, exists_subsuperset_card_eq, hnt.symm, ht.ncard, ht.subset, infinite_or_finite, le_zero, mod_cast, subset, t.infinite_or_finite
 -/
@@ -5237,7 +5369,7 @@ theorem Infinite.exists_superset_ncard_eq
   obtain ⟨s₁, hs₁, hs₁fin, hs₁card⟩ := (ht.sdiff hs).exists_subset_ncard_eq (k - s.ncard)
   refine ⟨s union s₁, subset_union_left, union_subset hst (hs₁.trans sdiff_subset), ?_⟩
   rwa [ncard_union_eq (disjoint_of_subset_right hs₁ disjoint_sdiff_right) hs hs₁fin, hs₁card,
-    add_tsub_cancel_of_le
+    add_tsub_cancel_of_le]
 
 中文:
 定理 无限.存在_superset_ncard_eq
@@ -5246,7 +5378,7 @@ theorem Infinite.exists_superset_ncard_eq
   obtain ⟨s₁, hs₁, hs₁fin, hs₁card⟩ := (ht.sdiff hs).exists_subset_ncard_eq (k - s.ncard)
   refine ⟨s union s₁, subset_union_left, union_subset hst (hs₁.trans sdiff_subset), ?_⟩
   rwa [ncard_union_eq (disjoint_of_subset_right hs₁ disjoint_sdiff_right) hs hs₁fin, hs₁card,
-    add_tsub_cancel_of_le
+    add_tsub_cancel_of_le]
 
 Depends on / 依赖: add_tsub_cancel_of_le, disjoint_of_subset_right, disjoint_sdiff_right, exists_subset_ncard_eq, ht.sdiff, ncard_union_eq, s.ncard, sdiff_subset, subset_union_left, union_subset
 -/
@@ -5268,7 +5400,8 @@ theorem exists_subset_or_subset_of_two_mul_lt_ncard
   have hu := finite_of_ncard_ne_zero ((Nat.zero_le _).trans_lt hst).ne.symm
   rw [ncard_eq_toFinset_card _ hu]; rw [Finite.toFinset_union (hu.subset subset_union_left)
       (hu.subset subset_union_right)] at hst
-  obtain ⟨r', hnr', hr'⟩ := Finset.exists_subset_or_subset_of_two_mul_lt
+  obtain ⟨r', hnr', hr'⟩ := Finset.exists_subset_or_subset_of_two_mul_lt_card hst
+  exact ⟨r', by simpa, by simpa using hr'⟩
 
 中文:
 定理 存在_subset_or_subset_of_two_mul_lt_ncard
@@ -5278,7 +5411,8 @@ theorem exists_subset_or_subset_of_two_mul_lt_ncard
   have hu := finite_of_ncard_ne_zero ((Nat.zero_le _).trans_lt hst).ne.symm
   rw [ncard_eq_toFinset_card _ hu]; rw [Finite.toFinset_union (hu.subset subset_union_left)
       (hu.subset subset_union_right)] at hst
-  obtain ⟨r', hnr', hr'⟩ := Finset.exists_subset_or_subset_of_two_mul_lt
+  obtain ⟨r', hnr', hr'⟩ := Finset.exists_subset_or_subset_of_two_mul_lt_card hst
+  exact ⟨r', by simpa, by simpa using hr'⟩
 
 Depends on / 依赖: Finite, Finite.toFinset_union, Finset, Finset.exists_subset_or_subset_of_two_mul_lt_card, Nat.zero_le, classical, exists_subset_or_subset_of_two_mul_lt_card, finite_of_ncard_ne_zero, hu.subset, ncard_eq_toFinset_card, ne.symm, subset, subset_union_left, subset_union_right, toFinset_union, trans_lt, zero_le
 -/
@@ -5328,7 +5462,8 @@ theorem ncard_eq_one
   simp_rw [ncard_eq_toFinset_card', @Finset.card_eq_one _ (toFinset s)] at h
   refine h.imp fun a ha => ?_
   simp_rw [Set.ext_iff, mem_singleton_iff]
-  simp only 
+  simp only [Finset.ext_iff, mem_toFinset, Finset.mem_singleton] at ha
+  exact ha
 
 中文:
 定理 ncard_eq_one
@@ -5339,7 +5474,8 @@ theorem ncard_eq_one
   simp_rw [ncard_eq_toFinset_card', @Finset.card_eq_one _ (toFinset s)] at h
   refine h.imp fun a ha => ?_
   simp_rw [Set.ext_iff, mem_singleton_iff]
-  simp only 
+  simp only [Finset.ext_iff, mem_toFinset, Finset.mem_singleton] at ha
+  exact ha
 -/
 @[simp] theorem ncard_eq_one : s.ncard = 1 ↔ exists a, s = {a} := by
   refine ⟨fun h => ?_, by rintro ⟨a, rfl⟩; rw [ncard_singleton]⟩
@@ -5363,7 +5499,11 @@ theorem exists_eq_insert_iff_ncard
       ← @Finite.toFinset_subset_toFinset _ _ _ hs ht, ← Finset.exists_eq_insert_iff]
     convert! Iff.rfl using 2; simp only [Finite.mem_toFinset]
     ext x
-    simp [Finset.ex
+    simp [Finset.ext_iff, Set.ext_iff]
+  simp only [ht.ncard, add_eq_zero, and_false, iff_false, not_exists, not_and,
+    reduceCtorEq]
+  rintro x - rfl
+  exact ht (hs.insert x)
 
 中文:
 定理 存在_eq_insert_iff_ncard
@@ -5375,7 +5515,11 @@ theorem exists_eq_insert_iff_ncard
       ← @Finite.toFinset_subset_toFinset _ _ _ hs ht, ← Finset.exists_eq_insert_iff]
     convert! Iff.rfl using 2; simp only [Finite.mem_toFinset]
     ext x
-    simp [Finset.ex
+    simp [Finset.ext_iff, Set.ext_iff]
+  simp only [ht.ncard, add_eq_zero, and_false, iff_false, not_exists, not_and,
+    reduceCtorEq]
+  rintro x - rfl
+  exact ht (hs.insert x)
 
 Depends on / 依赖: Finite, Finite.mem_toFinset, Finite.toFinset_subset_toFinset, Finset, Finset.exists_eq_insert_iff, Finset.ext_iff, Iff.rfl, Set.ext_iff, add_eq_zero, and_false, classical, convert, exists_eq_insert_iff, ext_iff, finite_or_infinite, ht.ncard, iff_false, insert, mem_toFinset, ncard_eq_toFinset_card
 -/
@@ -5792,7 +5936,8 @@ theorem eq_insert_of_ncard_eq_succ
   obtain ⟨a, t, hat, hts, rfl⟩ := h
   simp only [Finset.ext_iff, Finset.mem_insert, Finite.mem_toFinset] at hts
   refine ⟨a, t, hat, ?_, ?_⟩
-  · simp [
+  · simp [Set.ext_iff, hts]
+  · simp
 
 中文:
 定理 eq_insert_of_ncard_eq_succ
@@ -5804,7 +5949,8 @@ theorem eq_insert_of_ncard_eq_succ
   obtain ⟨a, t, hat, hts, rfl⟩ := h
   simp only [Finset.ext_iff, Finset.mem_insert, Finite.mem_toFinset] at hts
   refine ⟨a, t, hat, ?_, ?_⟩
-  · simp [
+  · simp [Set.ext_iff, hts]
+  · simp
 
 Depends on / 依赖: Finite, Finite.mem_toFinset, Finset, Finset.card_eq_succ, Finset.ext_iff, Finset.mem_insert, Set.ext_iff, card_eq_succ, classical, ext_iff, finite_of_ncard_pos, h.symm, mem_insert, mem_toFinset, n.zero_lt_succ.trans_eq, ncard_eq_toFinset_card, trans_eq, zero_lt_succ
 -/
@@ -5926,7 +6072,7 @@ theorem ncard_sumEquiv_symm_apply
   by_cases hs : s.Finite
   · simp [(ncard_union_eq_iff (.image _ hs) (.image _ hs)).2 disjoint_image_inl_image_inr,
       ncard_image_of_injective _ Sum.inl_injective, ncard_image_of_injective _ Sum.inr_injective]
-  · simp [(infinite_union.2 <| .inl <| .image Sum.inl_injective.injOn hs).ncard, In
+  · simp [(infinite_union.2 <| .inl <| .image Sum.inl_injective.injOn hs).ncard, Infinite.ncard hs]
 
 中文:
 定理 ncard_sumEquiv_symm_apply
@@ -5935,7 +6081,7 @@ theorem ncard_sumEquiv_symm_apply
   by_cases hs : s.Finite
   · simp [(ncard_union_eq_iff (.image _ hs) (.image _ hs)).2 disjoint_image_inl_image_inr,
       ncard_image_of_injective _ Sum.inl_injective, ncard_image_of_injective _ Sum.inr_injective]
-  · simp [(infinite_union.2 <| .inl <| .image Sum.inl_injective.injOn hs).ncard, In
+  · simp [(infinite_union.2 <| .inl <| .image Sum.inl_injective.injOn hs).ncard, Infinite.ncard hs]
 
 Depends on / 依赖: Finite, Infinite, Infinite.ncard, Sum.inl_injective, Sum.inl_injective.injOn, Sum.inr_injective, disjoint_image_inl_image_inr, infinite_union, inl_injective, inr_injective, ncard_image_of_injective, ncard_union_eq_iff, s.Finite
 -/
@@ -5960,7 +6106,24 @@ theorem Function.Surjective.card_le_card_add_one_iff
   -- pick an inverse `g` to `f`
   let g := Function.surjInv hf
   -- the "decreases cardinality by at most one condition" becomes "`g` misses at most one element"
-  rw [← Set.ncard_range_of_injective (Function.injective_surjInv hf)]; rw [← Set.ncard_add_ncar
+  rw [← Set.ncard_range_of_injective (Function.injective_surjInv hf)]; rw [← Set.ncard_add_ncard_compl (Set.range g)]; rw [add_le_add_iff_left]
+  replace hf : forall b, f (g b) = b := Function.surjInv_eq hf
+  refine ⟨fun h => ?_, fun h => ?_⟩
+  · rw [Set.ncard_le_one_iff_subset_singleton] at h
+    -- if `g` misses at most one element, let `x` be this element
+    obtain ⟨x, hx⟩ := h
+    simp only [Set.subset_def, Set.mem_compl_iff] at hx
+    -- we show that the only possible collision is between `x` and `g (f x)`
+    suffices forall a b : α, f a = f b -> a != b -> a = x ∨ a = g (f x) by grind
+    intro a b
+    by_cases ha : a in Set.range g <;> by_cases hb : b in Set.range g <;> grind
+  · -- we must show that any two elements `a` and `b` missed by `g` are equal
+    rw [Set.ncard_le_one]
+    simp only [Set.mem_compl_iff, Set.mem_range, not_exists, ← ne_eq]
+    intro a ha b hb
+    -- there is a collision between `a` and `g (f a)`, and between `b` and `g (f b)`
+    simpa [(ha (f b)).symm] using congrArg (a in ·) (h a (g (f a)) b (g (f b))
+      (hf (f a)).symm (hf (f b)).symm (ha (f a)).symm (hb (f b)).symm)
 
 中文:
 定理 函数.满射.card_le_card_add_one_iff
@@ -5970,7 +6133,24 @@ theorem Function.Surjective.card_le_card_add_one_iff
   -- pick an inverse `g` to `f`
   let g := Function.surjInv hf
   -- the "decreases cardinality by at most one condition" becomes "`g` misses at most one element"
-  rw [← Set.ncard_range_of_injective (Function.injective_surjInv hf)]; rw [← Set.ncard_add_ncar
+  rw [← Set.ncard_range_of_injective (Function.injective_surjInv hf)]; rw [← Set.ncard_add_ncard_compl (Set.range g)]; rw [add_le_add_iff_left]
+  replace hf : forall b, f (g b) = b := Function.surjInv_eq hf
+  refine ⟨fun h => ?_, fun h => ?_⟩
+  · rw [Set.ncard_le_one_iff_subset_singleton] at h
+    -- if `g` misses at most one element, let `x` be this element
+    obtain ⟨x, hx⟩ := h
+    simp only [Set.subset_def, Set.mem_compl_iff] at hx
+    -- we show that the only possible collision is between `x` and `g (f x)`
+    suffices forall a b : α, f a = f b -> a != b -> a = x ∨ a = g (f x) by grind
+    intro a b
+    by_cases ha : a in Set.range g <;> by_cases hb : b in Set.range g <;> grind
+  · -- we must show that any two elements `a` and `b` missed by `g` are equal
+    rw [Set.ncard_le_one]
+    simp only [Set.mem_compl_iff, Set.mem_range, not_exists, ← ne_eq]
+    intro a ha b hb
+    -- there is a collision between `a` and `g (f a)`, and between `b` and `g (f b)`
+    simpa [(ha (f b)).symm] using congrArg (a in ·) (h a (g (f a)) b (g (f b))
+      (hf (f a)).symm (hf (f b)).symm (ha (f a)).symm (hb (f b)).symm)
 
 Depends on / 依赖: isEmpty_or_nonempty
 -/

@@ -90,7 +90,14 @@ theorem natDegree_cancelLeads_lt_of_natDegree_le_natDegree_of_comm
   rw [cancelLeads]; rw [sub_eq_add_neg]; rw [tsub_eq_zero_iff_le.mpr h]; rw [pow_zero]; rw [mul_one]
   by_cases h0 :
     C p.leadingCoeff * q + -(C q.leadingCoeff * X ^ (q.natDegree - p.natDegree) * p) = 0
-  · exact (le_of_eq (by si
+  · exact (le_of_eq (by simp only [h0, natDegree_zero])).trans_lt hq
+  apply lt_of_le_of_ne
+  · compute_degree!
+    rwa [Nat.sub_add_cancel]
+  · contrapose h0
+    rw [← leadingCoeff_eq_zero]; rw [leadingCoeff]; rw [h0]; rw [mul_assoc]; rw [X_pow_mul]; rw [← tsub_add_cancel_of_le h]; rw [add_comm _ p.natDegree]
+    simp only [coeff_mul_X_pow, coeff_neg, coeff_C_mul, add_tsub_cancel_left, coeff_add]
+    rw [add_comm p.natDegree]; rw [tsub_add_cancel_of_le h]; rw [← leadingCoeff]; rw [← leadingCoeff]; rw [comm]; rw [add_neg_cancel]
 
 中文:
 定理 natDegree_cancelLeads_lt_of_natDegree_le_natDegree_of_comm
@@ -101,7 +108,14 @@ theorem natDegree_cancelLeads_lt_of_natDegree_le_natDegree_of_comm
   rw [cancelLeads]; rw [sub_eq_add_neg]; rw [tsub_eq_zero_iff_le.mpr h]; rw [pow_zero]; rw [mul_one]
   by_cases h0 :
     C p.leadingCoeff * q + -(C q.leadingCoeff * X ^ (q.natDegree - p.natDegree) * p) = 0
-  · exact (le_of_eq (by si
+  · exact (le_of_eq (by simp only [h0, natDegree_zero])).trans_lt hq
+  apply lt_of_le_of_ne
+  · compute_degree!
+    rwa [Nat.sub_add_cancel]
+  · contrapose h0
+    rw [← leadingCoeff_eq_zero]; rw [leadingCoeff]; rw [h0]; rw [mul_assoc]; rw [X_pow_mul]; rw [← tsub_add_cancel_of_le h]; rw [add_comm _ p.natDegree]
+    simp only [coeff_mul_X_pow, coeff_neg, coeff_C_mul, add_tsub_cancel_left, coeff_add]
+    rw [add_comm p.natDegree]; rw [tsub_add_cancel_of_le h]; rw [← leadingCoeff]; rw [← leadingCoeff]; rw [comm]; rw [add_neg_cancel]
 
 Depends on / 依赖: Nat.sub_add_cancel, X_pow_mul, cancelLeads, compute_degree, contrapose, convert, le_of_eq, leadingCoeff, leadingCoeff_eq_zero, lt_of_le_of_ne, mul_assoc, mul_one, natDegree, natDegree_zero, p.leadingCoeff, p.natDegree, pow_zero, q.leadingCoeff, q.natDegree, sub_add_cancel
 -/

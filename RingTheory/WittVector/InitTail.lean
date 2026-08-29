@@ -156,7 +156,25 @@ theorem select_add_select_not
   proof: by
   -- Porting note: TC search was insufficient to find this instance, even though all required
   -- instances exist. See zulip: [https://leanprover.zulipchat.com/#narrow/stream/287929-mathlib4/topic/WittVector.20saga/near/370073526]
-  have : IsPoly p fun {R} [CommRing R] x => select P x + select (
+  have : IsPoly p fun {R} [CommRing R] x => select P x + select (fun i => ¬P i) x :=
+    IsPoly₂.diag (hf := IsPoly₂.comp)
+  ghost_calc x
+  intro n
+  simp only [map_add]
+  suffices
+    (bind₁ (selectPoly P)) (wittPolynomial p Int n) +
+        (bind₁ (selectPoly fun i => ¬P i)) (wittPolynomial p Int n) =
+      wittPolynomial p Int n by
+    apply_fun aeval x.coeff at this
+    simpa only [map_add, aeval_bind₁, ← coeff_select]
+  simp only [wittPolynomial_eq_sum_C_mul_X_pow, selectPoly, map_sum, map_pow, map_mul,
+    bind₁_X_right, bind₁_C_right, ← Finset.sum_add_distrib, ← mul_add]
+  apply Finset.sum_congr rfl
+  refine fun m _ => mul_eq_mul_left_iff.mpr (Or.inl ?_)
+  rw [ite_pow]; rw [zero_pow (pow_ne_zero _ hp.out.ne_zero)]
+  by_cases Pm : P m
+  · rw [if_pos Pm, if_neg <| not_not_intro Pm, zero_pow Fin.pos'.ne', add_zero]
+  · rwa [if_neg Pm, if_pos, zero_add]
 
 中文:
 定理 select_add_select_not
@@ -164,7 +182,25 @@ theorem select_add_select_not
   证明: by
   -- Porting note: TC search was insufficient to find this instance, even though all required
   -- instances exist. See zulip: [https://leanprover.zulipchat.com/#narrow/stream/287929-mathlib4/topic/WittVector.20saga/near/370073526]
-  have : IsPoly p fun {R} [CommRing R] x => select P x + select (
+  have : IsPoly p fun {R} [CommRing R] x => select P x + select (fun i => ¬P i) x :=
+    IsPoly₂.diag (hf := IsPoly₂.comp)
+  ghost_calc x
+  intro n
+  simp only [map_add]
+  suffices
+    (bind₁ (selectPoly P)) (wittPolynomial p Int n) +
+        (bind₁ (selectPoly fun i => ¬P i)) (wittPolynomial p Int n) =
+      wittPolynomial p Int n by
+    apply_fun aeval x.coeff at this
+    simpa only [map_add, aeval_bind₁, ← coeff_select]
+  simp only [wittPolynomial_eq_sum_C_mul_X_pow, selectPoly, map_sum, map_pow, map_mul,
+    bind₁_X_right, bind₁_C_right, ← Finset.sum_add_distrib, ← mul_add]
+  apply Finset.sum_congr rfl
+  refine fun m _ => mul_eq_mul_left_iff.mpr (Or.inl ?_)
+  rw [ite_pow]; rw [zero_pow (pow_ne_zero _ hp.out.ne_zero)]
+  by_cases Pm : P m
+  · rw [if_pos Pm, if_neg <| not_not_intro Pm, zero_pow Fin.pos'.ne', add_zero]
+  · rwa [if_neg Pm, if_pos, zero_add]
 -/
 theorem select_add_select_not : forall x : 𝕎 R, select P x + select (fun i => ¬P i) x = x := by
   -- Porting note: TC search was insufficient to find this instance, even though all required
@@ -203,7 +239,19 @@ theorem coeff_add_of_disjoint
     ext1 n; rw [select, coeff_mk, coeff_mk]
     split_ifs with hn
     · rfl
-    · rw [(h n).resolve_right 
+    · rw [(h n).resolve_right hn]
+  have hy : select (fun i => ¬P i) z = y := by
+    ext1 n; rw [select, coeff_mk, coeff_mk]
+    split_ifs with hn
+    · exact hn.symm
+    · rfl
+  calc
+    (x + y).coeff n = z.coeff n := by rw [← hx, ← hy, select_add_select_not P z]
+    _ = x.coeff n + y.coeff n := by
+      simp only [z, mk.eq_1]
+      split_ifs with y0
+      · rw [y0, add_zero]
+      · rw [h n |>.resolve_right y0, zero_add]
 
 中文:
 定理 coeff_add_of_disjoint
@@ -216,7 +264,19 @@ theorem coeff_add_of_disjoint
     ext1 n; rw [select, coeff_mk, coeff_mk]
     split_ifs with hn
     · rfl
-    · rw [(h n).resolve_right 
+    · rw [(h n).resolve_right hn]
+  have hy : select (fun i => ¬P i) z = y := by
+    ext1 n; rw [select, coeff_mk, coeff_mk]
+    split_ifs with hn
+    · exact hn.symm
+    · rfl
+  calc
+    (x + y).coeff n = z.coeff n := by rw [← hx, ← hy, select_add_select_not P z]
+    _ = x.coeff n + y.coeff n := by
+      simp only [z, mk.eq_1]
+      split_ifs with y0
+      · rw [y0, add_zero]
+      · rw [h n |>.resolve_right y0, zero_add]
 
 Depends on / 依赖: Classical, Classical.decPred, DecidablePred, coeff_mk, decPred, hn.symm, resolve_right, select, select_add_select_not, split_ifs, x.coeff, y.coeff, z.coeff
 -/

@@ -329,7 +329,8 @@ theorem hasSum_of_disjoint_iUnion
   convert! m_iUnion v (f := Function.extend e f fun _ => ∅) _ _
   · simp only [Pi.zero_def, Function.apply_extend v, Function.comp_def, empty]
   · exact (iSup_extend_bot he _).symm
-  · simp [Function.apply_exten
+  · simp [Function.apply_extend MeasurableSet, Function.comp_def, hm]
+  · exact hd.disjoint_extend_bot (he.factorsThrough _)
 
 中文:
 定理 hasSum_of_disjoint_iUnion
@@ -340,7 +341,8 @@ theorem hasSum_of_disjoint_iUnion
   convert! m_iUnion v (f := Function.extend e f fun _ => ∅) _ _
   · simp only [Pi.zero_def, Function.apply_extend v, Function.comp_def, empty]
   · exact (iSup_extend_bot he _).symm
-  · simp [Function.apply_exten
+  · simp [Function.apply_extend MeasurableSet, Function.comp_def, hm]
+  · exact hd.disjoint_extend_bot (he.factorsThrough _)
 
 Depends on / 依赖: Countable, Countable.exists_injective_nat, Function, Function.apply_extend, Function.comp_def, Function.extend, MeasurableSet, Pi.zero_def, apply_extend, comp_def, convert, disjoint_extend_bot, exists_injective_nat, extend, factorsThrough, hasSum_extend_zero, hd.disjoint_extend_bot, he.factorsThrough, iSup_extend_bot, m_iUnion
 -/
@@ -570,7 +572,15 @@ theorem of_sdiff_of_sdiff_eq_zero
       · rw [disjoint_comm]
         exact Set.disjoint_of_subset_left A.inter_subset_right disjoint_sdiff_self_right
       · exact hA.diff hB
-      
+      · exact hA.inter hB
+    _ = v (A \ B) + v (A inter B union B \ A) := by
+      rw [of_union]; rw [h']; rw [add_zero]
+      · exact Set.disjoint_of_subset_left A.inter_subset_left disjoint_sdiff_self_right
+      · exact hA.inter hB
+      · exact hB.diff hA
+    _ = v (A \ B) + v B := by rw [Set.union_comm, Set.inter_comm, Set.sdiff_union_inter]
+
+@[deprecated (since := "2026-06-03")] alias of_diff_of_diff_eq_zero := of_sdiff_of_sdiff_eq_zero
 
 中文:
 定理 of_sdiff_of_sdiff_eq_zero
@@ -584,7 +594,15 @@ theorem of_sdiff_of_sdiff_eq_zero
       · rw [disjoint_comm]
         exact Set.disjoint_of_subset_left A.inter_subset_right disjoint_sdiff_self_right
       · exact hA.diff hB
-      
+      · exact hA.inter hB
+    _ = v (A \ B) + v (A inter B union B \ A) := by
+      rw [of_union]; rw [h']; rw [add_zero]
+      · exact Set.disjoint_of_subset_left A.inter_subset_left disjoint_sdiff_self_right
+      · exact hA.inter hB
+      · exact hB.diff hA
+    _ = v (A \ B) + v B := by rw [Set.union_comm, Set.inter_comm, Set.sdiff_union_inter]
+
+@[deprecated (since := "2026-06-03")] alias of_diff_of_diff_eq_zero := of_sdiff_of_sdiff_eq_zero
 
 Depends on / 依赖: A.inter_subset_left, A.inter_subset_right, Set.disjoint_of_subset_left, Set.sdiff_union_inter, Std.Refl, Std.Total, Std.Total.to_refl, add_zero, disjoint_comm, disjoint_of_subset_left, disjoint_sdiff_self_right, hA.diff, hA.inter, hB.diff, inter_subset_left, inter_subset_right, of_union, sdiff_union_inter, to_refl
 -/
@@ -711,7 +729,12 @@ theorem tendsto_vectorMeasure_iUnion_atTop_nat
   have : HasSum (fun n => v (t n)) (v (⋃ n, s n)) := by
     rw [← iUnion_disjointed]
     apply m_iUnion _ ht (disjoint_disjointed _)
-  convert! (HasSum.tendsto_sum_nat this).comp (tendsto_add
+  convert! (HasSum.tendsto_sum_nat this).comp (tendsto_add_atTop_nat 1) with n
+  dsimp
+  rw [← of_biUnion_finset]
+  · rw [biUnion_range_succ_disjointed, Monotone.partialSups_eq hm]
+  · exact fun i hi j hj hij => disjoint_disjointed _ hij
+  · exact fun b hb => ht _
 
 中文:
 定理 tendsto_vectorMeasure_iUnion_atTop_nat
@@ -721,7 +744,12 @@ theorem tendsto_vectorMeasure_iUnion_atTop_nat
   have : HasSum (fun n => v (t n)) (v (⋃ n, s n)) := by
     rw [← iUnion_disjointed]
     apply m_iUnion _ ht (disjoint_disjointed _)
-  convert! (HasSum.tendsto_sum_nat this).comp (tendsto_add
+  convert! (HasSum.tendsto_sum_nat this).comp (tendsto_add_atTop_nat 1) with n
+  dsimp
+  rw [← of_biUnion_finset]
+  · rw [biUnion_range_succ_disjointed, Monotone.partialSups_eq hm]
+  · exact fun i hi j hj hij => disjoint_disjointed _ hij
+  · exact fun b hb => ht _
 
 Depends on / 依赖: HasSum, HasSum.tendsto_sum_nat, MeasurableSet, Monotone, Monotone.partialSups_eq, biUnion_range_succ_disjointed, convert, disjoint_disjointed, disjointed, iUnion_disjointed, m_iUnion, of_biUnion_finset, partialSups_eq, tendsto_add_atTop_nat, tendsto_sum_nat
 -/
@@ -752,7 +780,8 @@ theorem tendsto_vectorMeasure_iInter_atTop_nat
     simp
   simp_rw [I, J]
   apply tendsto_const_nhds.sub
-  exact tendsto_vectorMeasure_iUnion_atTop_nat
+  exact tendsto_vectorMeasure_iUnion_atTop_nat (fun i j hij => by simpa using hm hij)
+    (fun i => (hs i).compl)
 
 中文:
 定理 tendsto_vectorMeasure_i整数er_atTop_nat
@@ -763,7 +792,8 @@ theorem tendsto_vectorMeasure_iInter_atTop_nat
     simp
   simp_rw [I, J]
   apply tendsto_const_nhds.sub
-  exact tendsto_vectorMeasure_iUnion_atTop_nat
+  exact tendsto_vectorMeasure_iUnion_atTop_nat (fun i j hij => by simpa using hm hij)
+    (fun i => (hs i).compl)
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iUnion, iUnion, of_compl, simp_rw, tendsto_const_nhds, tendsto_const_nhds.sub, tendsto_vectorMeasure_iUnion_atTop_nat
 -/
@@ -1119,7 +1149,7 @@ instance instAddCommMonoid
 
 @[deprecated (since := "2026-06-10")] alias coeFnAddMonoidHom_apply := FunLike.coeAddMonoidHom_apply
 
-@[deprecated (since := "2026-06-10")] alias coe_finsetSum := FunLike.c
+@[deprecated (since := "2026-06-10")] alias coe_finsetSum := FunLike.coe_sum
 
 中文:
 实例 instAddCommMonoid
@@ -1130,7 +1160,7 @@ instance instAddCommMonoid
 
 @[deprecated (since := "2026-06-10")] alias coeFnAddMonoidHom_apply := FunLike.coeAddMonoidHom_apply
 
-@[deprecated (since := "2026-06-10")] alias coe_finsetSum := FunLike.c
+@[deprecated (since := "2026-06-10")] alias coe_finsetSum := FunLike.coe_sum
 
 Depends on / 依赖: FunLike, FunLike.addCommMonoid, addCommMonoid, fast_instance
 -/
@@ -1376,7 +1406,14 @@ definition dirac
     · simp only [mem_iUnion, not_exists] at hx
       simp [hx, hasSum_zero]
     have : MeasurableSet (⋃ i, f i) := by
-      a
+      apply MeasurableSet.iUnion f_meas
+    simp only [f_meas, true_and, MeasurableSet.iUnion f_meas, hx, and_self, ↓reduceIte]
+    obtain ⟨j, hj⟩ : exists j, x in f j := by simpa using hx
+    nth_rewrite 2 [show v = if x in f j then v else 0 by simp [hj]]
+    apply hasSum_single
+    intro i hi
+    have : Disjoint (f i) (f j) := f_disj hi
+    grind
 
 中文:
 定义 dirac
@@ -1389,7 +1426,14 @@ definition dirac
     · simp only [mem_iUnion, not_exists] at hx
       simp [hx, hasSum_zero]
     have : MeasurableSet (⋃ i, f i) := by
-      a
+      apply MeasurableSet.iUnion f_meas
+    simp only [f_meas, true_and, MeasurableSet.iUnion f_meas, hx, and_self, ↓reduceIte]
+    obtain ⟨j, hj⟩ : exists j, x in f j := by simpa using hx
+    nth_rewrite 2 [show v = if x in f j then v else 0 by simp [hj]]
+    apply hasSum_single
+    intro i hi
+    have : Disjoint (f i) (f j) := f_disj hi
+    grind
 
 Depends on / 依赖: MeasurableSet
 -/
@@ -1489,7 +1533,7 @@ definition toSignedMeasure
   m_iUnion' f hf₁ hf₂ := by
     simp only [*, MeasurableSet.iUnion hf₁, if_true, measure_iUnion hf₂ hf₁, measureReal_def]
     rw [ENNReal.tsum_toReal_eq]
-    exacts [(summable_measure_toReal hf₁ hf₂).hasS
+    exacts [(summable_measure_toReal hf₁ hf₂).hasSum, fun _ => measure_ne_top _ _]
 
 中文:
 定义 toSignedMeasure
@@ -1500,7 +1544,7 @@ definition toSignedMeasure
   m_iUnion' f hf₁ hf₂ := by
     simp only [*, MeasurableSet.iUnion hf₁, if_true, measure_iUnion hf₂ hf₁, measureReal_def]
     rw [ENNReal.tsum_toReal_eq]
-    exacts [(summable_measure_toReal hf₁ hf₂).hasS
+    exacts [(summable_measure_toReal hf₁ hf₂).hasSum, fun _ => measure_ne_top _ _]
 
 Depends on / 依赖: MeasurableSet
 -/
@@ -2018,6 +2062,9 @@ definition map
       m_iUnion' := by
         intro g hg₁ hg₂
         convert! v.m_iUnion (fun i => hf (hg₁ i)) fun i j hij => (hg₂ hij).preimage _
+        · rw [if_pos (hg₁ _)]
+        · rw [Set.preimage_iUnion, if_pos (MeasurableSet.iUnion hg₁)] }
+  else 0
 
 中文:
 定义 map
@@ -2029,6 +2076,9 @@ definition map
       m_iUnion' := by
         intro g hg₁ hg₂
         convert! v.m_iUnion (fun i => hf (hg₁ i)) fun i j hij => (hg₂ hij).preimage _
+        · rw [if_pos (hg₁ _)]
+        · rw [Set.preimage_iUnion, if_pos (MeasurableSet.iUnion hg₁)] }
+  else 0
 
 Depends on / 依赖: Measurable, MeasurableSet, MeasurableSet.iUnion, Set.preimage_iUnion, convert, iUnion, if_neg, if_pos, m_iUnion, measureOf, not_measurable, preimage, preimage_iUnion, v.m_iUnion
 -/
@@ -2380,7 +2430,10 @@ definition restrict
         intro f hf₁ hf₂
         convert!
           v.m_iUnion (fun n => (hf₁ n).inter hi)
-            (h
+            (hf₂.mono fun i j => Disjoint.mono inf_le_left inf_le_left)
+        · rw [if_pos (hf₁ _)]
+        · rw [Set.iUnion_inter, if_pos (MeasurableSet.iUnion hf₁)] }
+  else 0
 
 中文:
 定义 restrict
@@ -2393,7 +2446,10 @@ definition restrict
         intro f hf₁ hf₂
         convert!
           v.m_iUnion (fun n => (hf₁ n).inter hi)
-            (h
+            (hf₂.mono fun i j => Disjoint.mono inf_le_left inf_le_left)
+        · rw [if_pos (hf₁ _)]
+        · rw [Set.iUnion_inter, if_pos (MeasurableSet.iUnion hf₁)] }
+  else 0
 -/
 @[no_expose] def restrict (v : VectorMeasure α M) (i : Set α) : VectorMeasure α M :=
   if hi : MeasurableSet i then
@@ -3531,7 +3587,21 @@ theorem restrict_le_restrict_iUnion
   have ha₃ : ⋃ n, a inter disjointed f n = a := by
     rwa [← Set.inter_iUnion, iUnion_disjointed, Set.inter_eq_left]
   have ha₄ : Pairwise (Disjoint on fun n => a inter disjointed f n) :=
-    (disjoint_disjointed _).mono fun i j 
+    (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
+  rw [← ha₃]; rw [v.of_disjoint_iUnion _ ha₄]; rw [w.of_disjoint_iUnion _ ha₄]
+  · refine Summable.tsum_le_tsum (fun n => (restrict_le_restrict_iff v w (hf₁ n)).1 (hf₂ n) ?_ ?_)
+      ?_ ?_
+    · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
+    · exact Set.Subset.trans Set.inter_subset_right (disjointed_subset _ _)
+    · refine (v.m_iUnion (fun n => ?_) ?_).summable
+      · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
+      · exact (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
+    · refine (w.m_iUnion (fun n => ?_) ?_).summable
+      · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
+      · exact (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
+  · intro n
+    exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
+  · exact fun n => ha₁.inter (MeasurableSet.disjointed hf₁ n)
 
 中文:
 定理 restrict_le_restrict_iUnion
@@ -3541,7 +3611,21 @@ theorem restrict_le_restrict_iUnion
   have ha₃ : ⋃ n, a inter disjointed f n = a := by
     rwa [← Set.inter_iUnion, iUnion_disjointed, Set.inter_eq_left]
   have ha₄ : Pairwise (Disjoint on fun n => a inter disjointed f n) :=
-    (disjoint_disjointed _).mono fun i j 
+    (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
+  rw [← ha₃]; rw [v.of_disjoint_iUnion _ ha₄]; rw [w.of_disjoint_iUnion _ ha₄]
+  · refine Summable.tsum_le_tsum (fun n => (restrict_le_restrict_iff v w (hf₁ n)).1 (hf₂ n) ?_ ?_)
+      ?_ ?_
+    · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
+    · exact Set.Subset.trans Set.inter_subset_right (disjointed_subset _ _)
+    · refine (v.m_iUnion (fun n => ?_) ?_).summable
+      · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
+      · exact (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
+    · refine (w.m_iUnion (fun n => ?_) ?_).summable
+      · exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
+      · exact (disjoint_disjointed _).mono fun i j => Disjoint.mono inf_le_right inf_le_right
+  · intro n
+    exact ha₁.inter (MeasurableSet.disjointed hf₁ n)
+  · exact fun n => ha₁.inter (MeasurableSet.disjointed hf₁ n)
 
 Depends on / 依赖: Disjoint, Disjoint.mono, Pairwise, Set.inter_eq_left, Set.inter_iUnion, Summable, Summable.tsum_le_tsum, disjoint_disjointed, disjointed, iUnion_disjointed, inf_le_right, inter_eq_left, inter_iUnion, of_disjoint_iUnion, restrict_le_restrict_iff, restrict_le_restrict_of_subset_le, tsum_le_tsum, v.of_disjoint_iUnion, w.of_disjoint_iUnion
 -/
@@ -4397,7 +4481,16 @@ theorem add_left
   · rw [_root_.add_apply, hu₁ _ (Set.subset_inter_iff.1 ht).1, hv₁ _ (Set.subset_inter_iff.1 ht).2,
       zero_add]
   · rw [Set.compl_inter] at ht
-    
+    rw [(_ : t = uᶜ inter t union vᶜ \ uᶜ inter t)]; rw [of_union _ (hmu.compl.inter hmt) ((hmv.compl.diff hmu.compl).inter hmt)]; rw [hu₂]; rw [hv₂]; rw [add_zero]
+    · exact Set.Subset.trans Set.inter_subset_left sdiff_subset
+    · exact Set.inter_subset_left
+    · exact disjoint_sdiff_self_right.mono Set.inter_subset_left Set.inter_subset_left
+    · apply Set.Subset.antisymm <;> intro x hx
+      · by_cases hxu' : x in uᶜ
+        · exact Or.inl ⟨hxu', hx⟩
+        rcases ht hx with (hxu | hxv)
+        exacts [False.elim (hxu' hxu), Or.inr ⟨⟨hxv, hxu'⟩, hx⟩]
+      · rcases hx with hx | hx <;> exact hx.2
 
 中文:
 定理 add_left
@@ -4410,7 +4503,16 @@ theorem add_left
   · rw [_root_.add_apply, hu₁ _ (Set.subset_inter_iff.1 ht).1, hv₁ _ (Set.subset_inter_iff.1 ht).2,
       zero_add]
   · rw [Set.compl_inter] at ht
-    
+    rw [(_ : t = uᶜ inter t union vᶜ \ uᶜ inter t)]; rw [of_union _ (hmu.compl.inter hmt) ((hmv.compl.diff hmu.compl).inter hmt)]; rw [hu₂]; rw [hv₂]; rw [add_zero]
+    · exact Set.Subset.trans Set.inter_subset_left sdiff_subset
+    · exact Set.inter_subset_left
+    · exact disjoint_sdiff_self_right.mono Set.inter_subset_left Set.inter_subset_left
+    · apply Set.Subset.antisymm <;> intro x hx
+      · by_cases hxu' : x in uᶜ
+        · exact Or.inl ⟨hxu', hx⟩
+        rcases ht hx with (hxu | hxv)
+        exacts [False.elim (hxu' hxu), Or.inr ⟨⟨hxv, hxu'⟩, hx⟩]
+      · rcases hx with hx | hx <;> exact hx.2
 
 Depends on / 依赖: Set.Subset.trans, Set.compl_inter, Set.inter_subset_left, Set.subset_inter_iff, Subset, _root_, _root_.add_apply, add_apply, add_zero, compl_inter, hmu.compl, hmu.compl.inter, hmu.inter, hmv.compl.diff, inter_subset_left, of_union, sdiff_subset, subset_inter_iff, zero_add
 -/
@@ -4609,7 +4711,10 @@ definition trim
     (fun i hi => by rw [if_neg hi])
     (fun f hf₁ hf₂ => by
       have hf₁' : forall k, MeasurableSet[n] (f k) := fun k => hle _ (hf₁ k)
-      convert! v.m_iUnio
+      convert! v.m_iUnion hf₁' hf₂ using 1
+      · ext n
+        rw [if_pos (hf₁ n)]
+      · rw [if_pos (@MeasurableSet.iUnion _ _ m _ _ hf₁)])
 
 中文:
 定义 trim
@@ -4620,7 +4725,10 @@ definition trim
     (fun i hi => by rw [if_neg hi])
     (fun f hf₁ hf₂ => by
       have hf₁' : forall k, MeasurableSet[n] (f k) := fun k => hle _ (hf₁ k)
-      convert! v.m_iUnio
+      convert! v.m_iUnion hf₁' hf₂ using 1
+      · ext n
+        rw [if_pos (hf₁ n)]
+      · rw [if_pos (@MeasurableSet.iUnion _ _ m _ _ hf₁)])
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.empty, MeasurableSet.iUnion, VectorMeasure, VectorMeasure.mk, convert, iUnion, if_neg, if_pos, m_iUnion, v.empty, v.m_iUnion
 -/
@@ -4782,7 +4890,17 @@ definition toMeasureOfZeroLE
     rfl
   · intro f hf₁ hf₂
     have h₁ : forall n, MeasurableSet (i inter f n) := fun n => hi₁.inter (hf₁ n)
-    have h₂ :
+    have h₂ : Pairwise (Disjoint on fun n : Nat => i inter f n) := by
+      intro n m hnm
+      exact ((hf₂ hnm).inf_left' i).inf_right' i
+    simp only [toMeasureOfZeroLE', s.restrict_apply hi₁ (MeasurableSet.iUnion hf₁), Set.inter_comm,
+      Set.inter_iUnion, s.of_disjoint_iUnion h₁ h₂]
+    have h : forall n, 0 <= s (i inter f n) := fun n =>
+      s.nonneg_of_zero_le_restrict (s.zero_le_restrict_subset hi₁ Set.inter_subset_left hi₂)
+    rw [NNReal.coe_tsum_of_nonneg h]; rw [ENNReal.coe_tsum]
+    · refine tsum_congr fun n => ?_
+      simp_rw [s.restrict_apply hi₁ (hf₁ n), Set.inter_comm]
+    · exact (NNReal.summable_mk h).2 (s.m_iUnion h₁ h₂).summable
 
 中文:
 定义 toMeasureOfZeroLE
@@ -4794,7 +4912,17 @@ definition toMeasureOfZeroLE
     rfl
   · intro f hf₁ hf₂
     have h₁ : forall n, MeasurableSet (i inter f n) := fun n => hi₁.inter (hf₁ n)
-    have h₂ :
+    have h₂ : Pairwise (Disjoint on fun n : Nat => i inter f n) := by
+      intro n m hnm
+      exact ((hf₂ hnm).inf_left' i).inf_right' i
+    simp only [toMeasureOfZeroLE', s.restrict_apply hi₁ (MeasurableSet.iUnion hf₁), Set.inter_comm,
+      Set.inter_iUnion, s.of_disjoint_iUnion h₁ h₂]
+    have h : forall n, 0 <= s (i inter f n) := fun n =>
+      s.nonneg_of_zero_le_restrict (s.zero_le_restrict_subset hi₁ Set.inter_subset_left hi₂)
+    rw [NNReal.coe_tsum_of_nonneg h]; rw [ENNReal.coe_tsum]
+    · refine tsum_congr fun n => ?_
+      simp_rw [s.restrict_apply hi₁ (hf₁ n), Set.inter_comm]
+    · exact (NNReal.summable_mk h).2 (s.m_iUnion h₁ h₂).summable
 
 Depends on / 依赖: Disjoint, MeasurableSet, MeasurableSet.empty, MeasurableSet.iUnion, Measure, Measure.ofMeasurable, Pairwise, Set.empty_inter, Set.inter_comm, Set.inter_iUni, empty_inter, iUnion, inf_left, inf_right, inter_comm, inter_iUni, ofMeasurable, restrict_apply, s.empty, s.restrict_apply
 -/

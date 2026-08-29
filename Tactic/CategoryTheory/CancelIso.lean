@@ -102,7 +102,13 @@ definition tryCancelPair
   -- Run `push` on both sides.
   let inv_f ← try mkAppOptM ``CategoryTheory.inv #[C, none, x, y, f, none] catch _ => return none
   let pushed_inv ← Push.pushCore (.const ``CategoryTheory.inv) {} none inv_f
-  let
+  let pushed_g ← Push.pushCore (.const ``CategoryTheory.inv) {} none g
+  -- Check if the "inv"-normal forms match
+  unless ← withNewMCtxDepth (isDefEq pushed_inv.expr pushed_g.expr) do return none
+  -- builds and return the proof of `inv f = g`.
+  return ← mkEqTrans
+    (← pushed_inv.proof?.getDM (mkEqRefl inv_f))
+    (← (← pushed_g.proof?.mapM mkEqSymm).getDM (mkEqRefl g))
 
 中文:
 定义 tryCancelPair
@@ -113,7 +119,13 @@ definition tryCancelPair
   -- Run `push` on both sides.
   let inv_f ← try mkAppOptM ``CategoryTheory.inv #[C, none, x, y, f, none] catch _ => return none
   let pushed_inv ← Push.pushCore (.const ``CategoryTheory.inv) {} none inv_f
-  let
+  let pushed_g ← Push.pushCore (.const ``CategoryTheory.inv) {} none g
+  -- Check if the "inv"-normal forms match
+  unless ← withNewMCtxDepth (isDefEq pushed_inv.expr pushed_g.expr) do return none
+  -- builds and return the proof of `inv f = g`.
+  return ← mkEqTrans
+    (← pushed_inv.proof?.getDM (mkEqRefl inv_f))
+    (← (← pushed_g.proof?.mapM mkEqSymm).getDM (mkEqRefl g))
 -/
 def tryCancelPair (C x y z f g : Expr) : MetaM (Option Expr) := do
   -- Check the objects match
@@ -141,7 +153,16 @@ definition cancelIsoSimproc
   -- Right-associated expressions needs their own logic.
   | CategoryStruct.comp _ _ _ z _ g h =>
     let some p₀ ← tryCancelPair C x y z f g | return .continue
-    -- Builds the proof that `f 
+    -- Builds the proof that `f ≫ g ≫ h = h.
+    let P ← mkAppOptM ``hom_inv_id_of_eq_assoc #[C, none, x, y, f, none, g, p₀, none, h]
+    return .done {expr := h, proof? := P}
+  -- Otherwise, same logic but with hom_inv_id_of_eq instead of hom_inv_id_of_eq_assoc
+  | _ =>
+    let some p₀ ← tryCancelPair C x y t f g | return .continue
+    let P ← mkAppOptM ``hom_inv_id_of_eq #[C, none, x, y, f, none, g, p₀]
+    return .done {expr := ← mkAppOptM ``CategoryStruct.id #[C, instCat, x], proof? := P}
+
+simproc _root_.cancelIso (CategoryStruct.comp (self := _) _ _) := cancelIsoSimproc
 
 中文:
 定义 cancelIsoSimproc
@@ -152,7 +173,16 @@ definition cancelIsoSimproc
   -- Right-associated expressions needs their own logic.
   | CategoryStruct.comp _ _ _ z _ g h =>
     let some p₀ ← tryCancelPair C x y z f g | return .continue
-    -- Builds the proof that `f 
+    -- Builds the proof that `f ≫ g ≫ h = h.
+    let P ← mkAppOptM ``hom_inv_id_of_eq_assoc #[C, none, x, y, f, none, g, p₀, none, h]
+    return .done {expr := h, proof? := P}
+  -- Otherwise, same logic but with hom_inv_id_of_eq instead of hom_inv_id_of_eq_assoc
+  | _ =>
+    let some p₀ ← tryCancelPair C x y t f g | return .continue
+    let P ← mkAppOptM ``hom_inv_id_of_eq #[C, none, x, y, f, none, g, p₀]
+    return .done {expr := ← mkAppOptM ``CategoryStruct.id #[C, instCat, x], proof? := P}
+
+simproc _root_.cancelIso (CategoryStruct.comp (self := _) _ _) := cancelIsoSimproc
 -/
 def cancelIsoSimproc : Simp.Simproc := fun e => do
   let_expr CategoryStruct.comp C instCat x y t f g := e | return .continue

@@ -872,7 +872,11 @@ instance :
     -- `UniformFun.postcomp_uniformContinuous` tells us that
     -- `((/) ∘ —) : (α →ᵤ G × G) → (α →ᵤ G)` is uniformly continuous too. By precomposing with
     -- `UniformFun.uniformEquivProdArrow`, this gives that
-    -- `(/) : (α →ᵤ G) × (α →ᵤ 
+    -- `(/) : (α →ᵤ G) × (α →ᵤ G) → (α →ᵤ G)` is also uniformly continuous
+    UniformFun.postcomp_uniformContinuous uniformContinuous_div).comp
+    UniformFun.uniformEquivProdArrow.symm.uniformContinuous⟩
+
+@[to_additive]
 
 中文:
 实例 :
@@ -881,7 +885,11 @@ instance :
     -- `UniformFun.postcomp_uniformContinuous` tells us that
     -- `((/) ∘ —) : (α →ᵤ G × G) → (α →ᵤ G)` is uniformly continuous too. By precomposing with
     -- `UniformFun.uniformEquivProdArrow`, this gives that
-    -- `(/) : (α →ᵤ G) × (α →ᵤ 
+    -- `(/) : (α →ᵤ G) × (α →ᵤ G) → (α →ᵤ G)` is also uniformly continuous
+    UniformFun.postcomp_uniformContinuous uniformContinuous_div).comp
+    UniformFun.uniformEquivProdArrow.symm.uniformContinuous⟩
+
+@[to_additive]
 
 Depends on / 依赖: continuous, uniformly
 -/
@@ -953,7 +961,11 @@ instance :
     -- `UniformOnFun.postcomp_uniformContinuous` tells us that
     -- `((/) ∘ —) : (α →ᵤ[𝔖] G × G) → (α →ᵤ[𝔖] G)` is uniformly continuous too. By precomposing with
     -- `UniformOnFun.uniformEquivProdArrow`, this gives that
-    -- `(/) : (α →ᵤ[𝔖
+    -- `(/) : (α →ᵤ[𝔖] G) × (α →ᵤ[𝔖] G) → (α →ᵤ[𝔖] G)` is also uniformly continuous
+    UniformOnFun.postcomp_uniformContinuous uniformContinuous_div).comp
+    UniformOnFun.uniformEquivProdArrow.symm.uniformContinuous⟩
+
+@[to_additive]
 
 中文:
 实例 :
@@ -962,7 +974,11 @@ instance :
     -- `UniformOnFun.postcomp_uniformContinuous` tells us that
     -- `((/) ∘ —) : (α →ᵤ[𝔖] G × G) → (α →ᵤ[𝔖] G)` is uniformly continuous too. By precomposing with
     -- `UniformOnFun.uniformEquivProdArrow`, this gives that
-    -- `(/) : (α →ᵤ[𝔖
+    -- `(/) : (α →ᵤ[𝔖] G) × (α →ᵤ[𝔖] G) → (α →ᵤ[𝔖] G)` is also uniformly continuous
+    UniformOnFun.postcomp_uniformContinuous uniformContinuous_div).comp
+    UniformOnFun.uniformEquivProdArrow.symm.uniformContinuous⟩
+
+@[to_additive]
 
 Depends on / 依赖: continuous, uniformly
 -/

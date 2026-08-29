@@ -505,7 +505,10 @@ lemma LSeriesSummable.congr'
   have : term f s =ᶠ[cofinite] term g s := by
     rw [eventuallyEq_iff_exists_mem] at h ⊢
     obtain ⟨S, hS, hS'⟩ := h
-refine ⟨S \ {0}, sdiff_mem hS (Set.finite_singleton 0).compl_mem_cofinite, f
+refine ⟨S \ {0}, sdiff_mem hS (Set.finite_singleton 0).compl_mem_cofinite, fun n hn => ?_⟩
+    rw [Set.mem_sdiff]; rw [Set.mem_singleton_iff] at hn
+    simp [hn.2, hS' hn.1]
+  exact this.symm.mono fun n hn => by simp [hn]
 
 中文:
 引理 LSeriesSummable.congr'
@@ -516,7 +519,10 @@ refine ⟨S \ {0}, sdiff_mem hS (Set.finite_singleton 0).compl_mem_cofinite, f
   have : term f s =ᶠ[cofinite] term g s := by
     rw [eventuallyEq_iff_exists_mem] at h ⊢
     obtain ⟨S, hS, hS'⟩ := h
-refine ⟨S \ {0}, sdiff_mem hS (Set.finite_singleton 0).compl_mem_cofinite, f
+refine ⟨S \ {0}, sdiff_mem hS (Set.finite_singleton 0).compl_mem_cofinite, fun n hn => ?_⟩
+    rw [Set.mem_sdiff]; rw [Set.mem_singleton_iff] at hn
+    simp [hn.2, hS' hn.1]
+  exact this.symm.mono fun n hn => by simp [hn]
 
 Depends on / 依赖: Nat.cofinite_eq_atTop, Set.finite_singleton, Set.mem_sdiff, Set.mem_singleton_iff, cofinite, cofinite_eq_atTop, compl_mem_cofinite, eventuallyEq_iff_exists_mem, finite_singleton, mem_sdiff, mem_singleton_iff, of_norm_bounded_eventually, sdiff_mem, summable_norm_iff, summable_norm_iff.mpr, this.symm.mono
 -/
@@ -1057,7 +1063,21 @@ have hC₀ : 0 <= C := (norm_nonneg <| f 1).trans by simpa using hC 1 one_ne_zer
   have hsum : Summable fun n : Nat => ‖(C : Complex) / n ^ (s + (1 - x))‖ := by
     simp_rw [div_eq_mul_inv, norm_mul, ← cpow_neg]
     have hsx : -s.re + x - 1 < -1 := by linarith only [hs]
-refin
+refine Summable.mul_left _
+      Summable.of_norm_bounded_eventually_nat (g := fun n => (n : Real) ^ (-s.re + x - 1)) ?_ ?_
+    · simpa
+    · simp only [norm_norm, Filter.eventually_atTop]
+      refine ⟨1, fun n hn => le_of_eq ?_⟩
+      simp only [norm_natCast_cpow_of_pos hn, add_re, sub_re, neg_re, ofReal_re, one_re]
+      ring_nf
+refine Summable.of_norm hsum.of_nonneg_of_le (fun _ => norm_nonneg _) (fun n => ?_)
+  rcases n.eq_zero_or_pos with rfl | hn
+  · simpa only [term_zero, norm_zero] using norm_nonneg _
+  have hn' : 0 < (n : Real) ^ s.re := Real.rpow_pos_of_pos (Nat.cast_pos.mpr hn) _
+  simp_rw [term_of_ne_zero hn.ne', norm_div, norm_natCast_cpow_of_pos hn, div_le_iff₀ hn',
+    norm_real, Real.norm_of_nonneg hC₀, div_eq_mul_inv, mul_assoc,
+← Real.rpow_neg Nat.cast_nonneg _, ← Real.rpow_add Nat.cast_pos.mpr hn]
+simpa using hC n Nat.pos_iff_ne_zero.mp hn
 
 中文:
 引理 LSeriesSummable_of_le_const_mul_rpow
@@ -1068,7 +1088,21 @@ have hC₀ : 0 <= C := (norm_nonneg <| f 1).trans by simpa using hC 1 one_ne_zer
   have hsum : Summable fun n : Nat => ‖(C : Complex) / n ^ (s + (1 - x))‖ := by
     simp_rw [div_eq_mul_inv, norm_mul, ← cpow_neg]
     have hsx : -s.re + x - 1 < -1 := by linarith only [hs]
-refin
+refine Summable.mul_left _
+      Summable.of_norm_bounded_eventually_nat (g := fun n => (n : Real) ^ (-s.re + x - 1)) ?_ ?_
+    · simpa
+    · simp only [norm_norm, Filter.eventually_atTop]
+      refine ⟨1, fun n hn => le_of_eq ?_⟩
+      simp only [norm_natCast_cpow_of_pos hn, add_re, sub_re, neg_re, ofReal_re, one_re]
+      ring_nf
+refine Summable.of_norm hsum.of_nonneg_of_le (fun _ => norm_nonneg _) (fun n => ?_)
+  rcases n.eq_zero_or_pos with rfl | hn
+  · simpa only [term_zero, norm_zero] using norm_nonneg _
+  have hn' : 0 < (n : Real) ^ s.re := Real.rpow_pos_of_pos (Nat.cast_pos.mpr hn) _
+  simp_rw [term_of_ne_zero hn.ne', norm_div, norm_natCast_cpow_of_pos hn, div_le_iff₀ hn',
+    norm_real, Real.norm_of_nonneg hC₀, div_eq_mul_inv, mul_assoc,
+← Real.rpow_neg Nat.cast_nonneg _, ← Real.rpow_add Nat.cast_pos.mpr hn]
+simpa using hC n Nat.pos_iff_ne_zero.mp hn
 
 Depends on / 依赖: Filter, Filter.eventually_atTop, Summable, Summable.mul_left, Summable.of_norm_bounded_eventually_nat, cpow_neg, div_eq_mul_inv, eventually_atTop, le_of_eq, mul_left, norm_mul, norm_nonneg, norm_norm, of_norm_bounded_eventually_nat, one_ne_zero, s.re, simp_rw
 -/
@@ -1108,7 +1142,18 @@ lemma LSeriesSummable_of_isBigO_rpow
   obtain ⟨m, hm⟩ := eventually_atTop.mp hC
   let C' := max C (max' (insert 0 (image (fun n : Nat => ‖f n‖ / (n : Real) ^ (x - 1)) (range m)))
     (insert_nonempty 0 _))
-have hC'₀ : 0 <= C' := (le_max' _ _ (mem_insert.mpr (Or.inl rfl))).trans le_max_
+have hC'₀ : 0 <= C' := (le_max' _ _ (mem_insert.mpr (Or.inl rfl))).trans le_max_right ..
+  have hCC' : C <= C' := le_max_left ..
+  refine LSeriesSummable_of_le_const_mul_rpow hs ⟨C', fun n hn₀ => ?_⟩
+  rcases le_or_gt m n with hn | hn
+  · refine (hm n hn).trans ?_
+    have hn₀ : (0 : Real) <= n := cast_nonneg _
+    gcongr
+    rw [Real.norm_eq_abs]; rw [abs_rpow_of_nonneg hn₀]; rw [abs_of_nonneg hn₀]
+  · have hn' : 0 < n := Nat.pos_of_ne_zero hn₀
+    refine (div_le_iff₀ <| rpow_pos_of_pos (cast_pos.mpr hn') _).mp ?_
+refine (le_max' _ _ <| mem_insert_of_mem ?_).trans le_max_right ..
+    exact mem_image.mpr ⟨n, mem_range.mpr hn, rfl⟩
 
 中文:
 引理 LSeriesSummable_of_isBigO_rpow
@@ -1118,7 +1163,18 @@ have hC'₀ : 0 <= C' := (le_max' _ _ (mem_insert.mpr (Or.inl rfl))).trans le_ma
   obtain ⟨m, hm⟩ := eventually_atTop.mp hC
   let C' := max C (max' (insert 0 (image (fun n : Nat => ‖f n‖ / (n : Real) ^ (x - 1)) (range m)))
     (insert_nonempty 0 _))
-have hC'₀ : 0 <= C' := (le_max' _ _ (mem_insert.mpr (Or.inl rfl))).trans le_max_
+have hC'₀ : 0 <= C' := (le_max' _ _ (mem_insert.mpr (Or.inl rfl))).trans le_max_right ..
+  have hCC' : C <= C' := le_max_left ..
+  refine LSeriesSummable_of_le_const_mul_rpow hs ⟨C', fun n hn₀ => ?_⟩
+  rcases le_or_gt m n with hn | hn
+  · refine (hm n hn).trans ?_
+    have hn₀ : (0 : Real) <= n := cast_nonneg _
+    gcongr
+    rw [Real.norm_eq_abs]; rw [abs_rpow_of_nonneg hn₀]; rw [abs_of_nonneg hn₀]
+  · have hn' : 0 < n := Nat.pos_of_ne_zero hn₀
+    refine (div_le_iff₀ <| rpow_pos_of_pos (cast_pos.mpr hn') _).mp ?_
+refine (le_max' _ _ <| mem_insert_of_mem ?_).trans le_max_right ..
+    exact mem_image.mpr ⟨n, mem_range.mpr hn, rfl⟩
 
 Depends on / 依赖: Asymptotics, Asymptotics.isBigO_iff.mp, LSeriesSummable_of_le_const_mul_rpow, Or.inl, eventually_atTop, eventually_atTop.mp, insert, insert_nonempty, isBigO_iff, le_max, le_max_left, le_max_right, le_or_gt, mem_insert, mem_insert.mpr
 -/

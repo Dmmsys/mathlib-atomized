@@ -40,7 +40,11 @@ theorem det_toLinearMap_eq_norm
   ext1 w
 .repr.injective apply basis ..
   apply DFunLike.coe_injective
-  rw [LinearMap.toMatrix_symm]; r
+  rw [LinearMap.toMatrix_symm]; rw [Matrix.repr_toLin]
+  ext i
+  fin_cases i
+    <;> simp
+    <;> ring
 
 中文:
 定理 det_toLinearMap_eq_norm
@@ -55,7 +59,11 @@ theorem det_toLinearMap_eq_norm
   ext1 w
 .repr.injective apply basis ..
   apply DFunLike.coe_injective
-  rw [LinearMap.toMatrix_symm]; r
+  rw [LinearMap.toMatrix_symm]; rw [Matrix.repr_toLin]
+  ext i
+  fin_cases i
+    <;> simp
+    <;> ring
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, LinearEquiv, LinearEquiv.eq_symm_apply, LinearMap, LinearMap.det_toMatrix, LinearMap.toMatrix_symm, Matrix, Matrix.repr_toLin, coe_injective, convert, det_toMatrix, eq_symm_apply, fin_cases, injective, repr.injective, repr_toLin, toMatrix_symm, z.im, z.norm
 -/

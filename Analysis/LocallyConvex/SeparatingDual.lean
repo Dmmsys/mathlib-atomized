@@ -373,7 +373,8 @@ theorem exists_eq_one_ne_zero_of_ne_zero_pair
   · exact ⟨u, ux, uy⟩
   obtain ⟨v, vy⟩ : exists v : StrongDual R V, v y = 1 := exists_eq_one hy
   rcases ne_or_eq (v x) 0 with vx | vx
-  · exact ⟨(v x)⁻¹ • v, inv_mul_cancel₀ vx, show 
+  · exact ⟨(v x)⁻¹ • v, inv_mul_cancel₀ vx, show (v x)⁻¹ * v y != 0 by simp [vx, vy]⟩
+  · exact ⟨u + v, by simp [ux, vx], by simp [uy, vy]⟩
 
 中文:
 定理 存在_eq_one_ne_zero_of_ne_zero_pair
@@ -384,7 +385,8 @@ theorem exists_eq_one_ne_zero_of_ne_zero_pair
   · exact ⟨u, ux, uy⟩
   obtain ⟨v, vy⟩ : exists v : StrongDual R V, v y = 1 := exists_eq_one hy
   rcases ne_or_eq (v x) 0 with vx | vx
-  · exact ⟨(v x)⁻¹ • v, inv_mul_cancel₀ vx, show 
+  · exact ⟨(v x)⁻¹ • v, inv_mul_cancel₀ vx, show (v x)⁻¹ * v y != 0 by simp [vx, vy]⟩
+  · exact ⟨u + v, by simp [ux, vx], by simp [uy, vy]⟩
 
 Depends on / 依赖: StrongDual, exists_eq_one, ne_or_eq
 -/
@@ -417,7 +419,8 @@ instance _root_.Algebra.IsCentral.instContinuousLinearMap
     nontriviality V
     obtain ⟨x, hx⟩ := exists_ne (0 : V)
     obtain ⟨g, hg⟩ := exists_eq_one (R := R) hx
-    have (y : V) := by simpa
+    have (y : V) := by simpa [hg] using congr($(Subalgebra.mem_center_iff.mp hf (g.smulRight y)) x)
+    exact ⟨g (f x), by simp [this, ContinuousLinearMap.ext_iff]⟩
 
 中文:
 实例 _root_.代数.是中心.instContinuousLinearMap
@@ -429,7 +432,8 @@ instance _root_.Algebra.IsCentral.instContinuousLinearMap
     nontriviality V
     obtain ⟨x, hx⟩ := exists_ne (0 : V)
     obtain ⟨g, hg⟩ := exists_eq_one (R := R) hx
-    have (y : V) := by simpa
+    have (y : V) := by simpa [hg] using congr($(Subalgebra.mem_center_iff.mp hf (g.smulRight y)) x)
+    exact ⟨g (f x), by simp [this, ContinuousLinearMap.ext_iff]⟩
 
 Depends on / 依赖: Algebra, Algebra.IsCentral.center_eq_bot, ContinuousLinearMap, ContinuousLinearMap.ext_iff, IsCentral, Subalgebra, Subalgebra.center, Subalgebra.mem_center_iff.mp, center, center_eq_bot, exists_eq_one, exists_ne, ext_iff, g.smulRight, mem_center_iff, nontriviality, smulRight
 -/
@@ -456,7 +460,12 @@ theorem _root_.ContinuousLinearEquiv.conjContinuousAlgEquiv_ext_iff
   simp_rw [ContinuousAlgEquiv.ext_iff, funext_iff, conjContinuousAlgEquiv_apply,
     ← eq_toContinuousLinearMap_symm_comp, ← ContinuousLinearMap.comp_assoc,
     eq_comp_toContinuousLinearMap_symm, ContinuousLinearMap.comp_assoc,
-    ← ContinuousLinearMap.comp_assoc _ f.
+    ← ContinuousLinearMap.comp_assoc _ f.toContinuousLinearMap, comp_coe, ← mul_def,
+    ← Subalgebra.mem_center_iff (R := R), Algebra.IsCentral.center_eq_bot, ← comp_coe,
+    Algebra.mem_bot, Set.mem_range, Algebra.algebraMap_eq_smul_one, ContinuousLinearEquiv.ext_iff]
+  refine ⟨fun ⟨y, h⟩ => ?_, fun ⟨y, h⟩ => ⟨(y : R), by ext; simp [h]⟩⟩
+  if hy : y = 0 then exact ⟨1, funext fun x => by simp [by simpa [hy] using congr($h x).symm]⟩
+  else exact ⟨.mk0 y hy, funext fun x => by simp [by simpa [eq_symm_apply] using congr($h x)]⟩
 
 中文:
 定理 _root_.连续线性等价.conjContinuousAlgEquiv_ext_iff
@@ -465,7 +474,12 @@ theorem _root_.ContinuousLinearEquiv.conjContinuousAlgEquiv_ext_iff
   simp_rw [ContinuousAlgEquiv.ext_iff, funext_iff, conjContinuousAlgEquiv_apply,
     ← eq_toContinuousLinearMap_symm_comp, ← ContinuousLinearMap.comp_assoc,
     eq_comp_toContinuousLinearMap_symm, ContinuousLinearMap.comp_assoc,
-    ← ContinuousLinearMap.comp_assoc _ f.
+    ← ContinuousLinearMap.comp_assoc _ f.toContinuousLinearMap, comp_coe, ← mul_def,
+    ← Subalgebra.mem_center_iff (R := R), Algebra.IsCentral.center_eq_bot, ← comp_coe,
+    Algebra.mem_bot, Set.mem_range, Algebra.algebraMap_eq_smul_one, ContinuousLinearEquiv.ext_iff]
+  refine ⟨fun ⟨y, h⟩ => ?_, fun ⟨y, h⟩ => ⟨(y : R), by ext; simp [h]⟩⟩
+  if hy : y = 0 then exact ⟨1, funext fun x => by simp [by simpa [hy] using congr($h x).symm]⟩
+  else exact ⟨.mk0 y hy, funext fun x => by simp [by simpa [eq_symm_apply] using congr($h x)]⟩
 
 Depends on / 依赖: Algebra, Algebra.IsCentral.center_eq_bot, Algebra.algebraMap_eq_smul_one, Algebra.mem_bot, ContinuousAlgEquiv, ContinuousAlgEquiv.ext_iff, ContinuousLinearEquiv, ContinuousLinearEquiv.ext, ContinuousLinearMap, ContinuousLinearMap.comp_assoc, IsCentral, Set.mem_range, Subalgebra, Subalgebra.mem_center_iff, algebraMap_eq_smul_one, center_eq_bot, comp_assoc, comp_coe, conjContinuousAlgEquiv_apply, conv_lhs
 -/
@@ -500,7 +514,22 @@ theorem exists_continuousLinearEquiv_apply_eq
   { toFun := fun z => z + G z • (y - x)
     invFun := fun z => z + ((G y)⁻¹ * G z) • (x - y)
     map_add' := fun a b => by simp [add_smul]; abel
-    map_s
+    map_smul' := by simp [smul_smul]
+    left_inv := fun z => by
+      simp only [RingHom.id_apply, smul_eq_mul,
+        -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to change `map_smulₛₗ` into `map_smulₛₗ _`
+        map_add, map_smulₛₗ _, map_sub, Gx, mul_sub, mul_one, add_sub_cancel]
+      rw [mul_comm (G z)]; rw [← mul_assoc]; rw [inv_mul_cancel₀ Gy]
+      simp only [smul_sub, one_mul]
+      abel
+    right_inv := fun z => by
+        -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to change `map_smulₛₗ` into `map_smulₛₗ _`
+      simp only [map_add, map_smulₛₗ _, map_mul, map_inv₀, RingHom.id_apply, map_sub, Gx,
+        smul_eq_mul, mul_sub, mul_one]
+      rw [mul_comm _ (G y)]; rw [← mul_assoc]; rw [mul_inv_cancel₀ Gy]
+      simp only [smul_sub, one_mul, add_sub_cancel]
+      abel }
+  exact ⟨A, show x + G x • (y - x) = y by simp [Gx]⟩
 
 中文:
 定理 存在_continuousLinearEquiv_apply_eq
@@ -511,7 +540,22 @@ theorem exists_continuousLinearEquiv_apply_eq
   { toFun := fun z => z + G z • (y - x)
     invFun := fun z => z + ((G y)⁻¹ * G z) • (x - y)
     map_add' := fun a b => by simp [add_smul]; abel
-    map_s
+    map_smul' := by simp [smul_smul]
+    left_inv := fun z => by
+      simp only [RingHom.id_apply, smul_eq_mul,
+        -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to change `map_smulₛₗ` into `map_smulₛₗ _`
+        map_add, map_smulₛₗ _, map_sub, Gx, mul_sub, mul_one, add_sub_cancel]
+      rw [mul_comm (G z)]; rw [← mul_assoc]; rw [inv_mul_cancel₀ Gy]
+      simp only [smul_sub, one_mul]
+      abel
+    right_inv := fun z => by
+        -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to change `map_smulₛₗ` into `map_smulₛₗ _`
+      simp only [map_add, map_smulₛₗ _, map_mul, map_inv₀, RingHom.id_apply, map_sub, Gx,
+        smul_eq_mul, mul_sub, mul_one]
+      rw [mul_comm _ (G y)]; rw [← mul_assoc]; rw [mul_inv_cancel₀ Gy]
+      simp only [smul_sub, one_mul, add_sub_cancel]
+      abel }
+  exact ⟨A, show x + G x • (y - x) = y by simp [Gx]⟩
 
 Depends on / 依赖: RingHom, RingHom.id_apply, StrongDual, add_smul, exists_eq_one_ne_zero_of_ne_zero_pair, id_apply, invFun, left_inv, map_add, map_smul, smul_eq_mul, smul_smul
 -/

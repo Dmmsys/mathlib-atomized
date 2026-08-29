@@ -186,7 +186,7 @@ lemma pairwise_primeFactors_isRelPrime
   rw [hx.1.isRelPrime_iff_not_dvd]
   contrapose hxy
   have : Associated x y := hx.1.associated_of_dvd hy.1 hxy
-  exact this.eq_of_normalized hx
+  exact this.eq_of_normalized hx.2.1 hy.2.1
 
 中文:
 引理 pairwise_primeFactors_isRelPrime
@@ -198,7 +198,7 @@ lemma pairwise_primeFactors_isRelPrime
   rw [hx.1.isRelPrime_iff_not_dvd]
   contrapose hxy
   have : Associated x y := hx.1.associated_of_dvd hy.1 hxy
-  exact this.eq_of_normalized hx
+  exact this.eq_of_normalized hx.2.1 hy.2.1
 
 Depends on / 依赖: Associated, Finset, Finset.mem_coe, associated_of_dvd, contrapose, eq_of_normalized, eq_or_ne, isRelPrime_iff_not_dvd, mem_coe, mem_normalizedFactors_iff, mem_primeFactors, this.eq_of_normalized
 -/
@@ -426,7 +426,9 @@ theorem primeFactors_mul_eq_disjUnion
     simp only [zero_mul, primeFactors_zero, Finset.empty_disjUnion, primeFactors_of_isUnit hc]
   obtain rfl | hb := eq_or_ne b 0
   · rw [isRelPrime_zero_right] at hc
-    simp only [mul_zero, primeFactors_zero, primeFactors_of_i
+    simp only [mul_zero, primeFactors_zero, primeFactors_of_isUnit hc, Finset.disjUnion_empty]
+  classical
+  rw [Finset.disjUnion_eq_union]; rw [primeFactors_mul_eq_union ha hb]
 
 中文:
 定理 primeFactors_mul_eq_disjUnion
@@ -437,7 +439,9 @@ theorem primeFactors_mul_eq_disjUnion
     simp only [zero_mul, primeFactors_zero, Finset.empty_disjUnion, primeFactors_of_isUnit hc]
   obtain rfl | hb := eq_or_ne b 0
   · rw [isRelPrime_zero_right] at hc
-    simp only [mul_zero, primeFactors_zero, primeFactors_of_i
+    simp only [mul_zero, primeFactors_zero, primeFactors_of_isUnit hc, Finset.disjUnion_empty]
+  classical
+  rw [Finset.disjUnion_eq_union]; rw [primeFactors_mul_eq_union ha hb]
 
 Depends on / 依赖: Finset, Finset.disjUnion_empty, Finset.disjUnion_eq_union, Finset.empty_disjUnion, classical, disjUnion_empty, disjUnion_eq_union, empty_disjUnion, eq_or_ne, isRelPrime_zero_left, isRelPrime_zero_right, mul_zero, primeFactors_mul_eq_union, primeFactors_of_isUnit, primeFactors_zero, zero_mul
 -/
@@ -852,7 +856,10 @@ lemma isRadical_radical
   have : i ∣ radical a := by
     rw [dvd_radical_iff_of_irreducible]
     · exact dvd_of_mem_normalizedFactors hi
-    · exact irreducible
+    · exact irreducible_of_normalized_factor i hi
+    · rintro rfl
+      simp only [normalizedFactors_zero, Multiset.notMem_zero] at hi
+  exact (prime_of_normalized_factor i hi).isRadical n p (this.trans ha)
 
 中文:
 引理 isRadical_radical
@@ -867,7 +874,10 @@ lemma isRadical_radical
   have : i ∣ radical a := by
     rw [dvd_radical_iff_of_irreducible]
     · exact dvd_of_mem_normalizedFactors hi
-    · exact irreducible
+    · exact irreducible_of_normalized_factor i hi
+    · rintro rfl
+      simp only [normalizedFactors_zero, Multiset.notMem_zero] at hi
+  exact (prime_of_normalized_factor i hi).isRadical n p (this.trans ha)
 
 Depends on / 依赖: Finset, Finset.prod_dvd_of_isRelPrime, Multiset, Multiset.notMem_zero, dvd_of_mem_normalizedFactors, dvd_radical_iff_of_irreducible, irreducible_of_normalized_factor, isRadical, mem_primeFactors, normalizedFactors_zero, notMem_zero, pairwise_primeFactors_isRelPrime, prime_of_normalized_factor, prod_dvd_of_isRelPrime, radical, this.trans
 -/
@@ -1030,7 +1040,7 @@ lemma radical_dvd_radical_iff_normalizedFactors_subset_normalizedFactors
   · simp
   have : Nontrivial M := ⟨a, 0, ha₀⟩
   rw [dvd_iff_normalizedFactors_le_normalizedFactors radical_ne_zero radical_ne_zero]; rw [Multiset.le_iff_subset (normalizedFactors_nodup isRadical_radical)]
-  simp only [Multiset.subset_iff, ← mem_primeFactors, pri
+  simp only [Multiset.subset_iff, ← mem_primeFactors, primeFactors_radical]
 
 中文:
 引理 radical_dvd_radical_iff_normalizedFactors_subset_normalizedFactors
@@ -1039,7 +1049,7 @@ lemma radical_dvd_radical_iff_normalizedFactors_subset_normalizedFactors
   · simp
   have : Nontrivial M := ⟨a, 0, ha₀⟩
   rw [dvd_iff_normalizedFactors_le_normalizedFactors radical_ne_zero radical_ne_zero]; rw [Multiset.le_iff_subset (normalizedFactors_nodup isRadical_radical)]
-  simp only [Multiset.subset_iff, ← mem_primeFactors, pri
+  simp only [Multiset.subset_iff, ← mem_primeFactors, primeFactors_radical]
 
 Depends on / 依赖: Multiset, Multiset.le_iff_subset, Multiset.subset_iff, Nontrivial, dvd_iff_normalizedFactors_le_normalizedFactors, eq_or_ne, f.hom, isRadical_radical, le_iff_subset, mem_primeFactors, normalizedFactors_nodup, primeFactors_radical, radical_ne_zero, subset_iff
 -/
@@ -1172,7 +1182,12 @@ theorem exists_dvd_pow_iff_radical_dvd
 .card, ?_⟩⟩ refine ⟨fun ⟨n, hdvd⟩ => ?_, fun h => ⟨normalizedFactors a
   · rcases eq_or_ne n 0 with (rfl | hn)
     · simp [radical_of_isUnit <| isUnit_of_dvd_one <| pow_zero b ▸ hdvd]
-    grw [radical_dvd_radical hdv
+    grw [radical_dvd_radical hdvd <| pow_ne_zero _ hb, radical_pow b hn, radical_dvd_self]
+  · classical
+    rwa [dvd_iff_normalizedFactors_le_normalizedFactors ha <| pow_ne_zero _ hb,
+      normalizedFactors_pow, Multiset.le_card_smul_iff_subset, ← Multiset.toFinset_subset,
+      toFinset_normalizedFactors, toFinset_normalizedFactors,
+      ← radical_dvd_iff_primeFactors_subset hb]
 
 中文:
 定理 存在_dvd_pow_iff_radical_dvd
@@ -1184,7 +1199,12 @@ theorem exists_dvd_pow_iff_radical_dvd
 .card, ?_⟩⟩ refine ⟨fun ⟨n, hdvd⟩ => ?_, fun h => ⟨normalizedFactors a
   · rcases eq_or_ne n 0 with (rfl | hn)
     · simp [radical_of_isUnit <| isUnit_of_dvd_one <| pow_zero b ▸ hdvd]
-    grw [radical_dvd_radical hdv
+    grw [radical_dvd_radical hdvd <| pow_ne_zero _ hb, radical_pow b hn, radical_dvd_self]
+  · classical
+    rwa [dvd_iff_normalizedFactors_le_normalizedFactors ha <| pow_ne_zero _ hb,
+      normalizedFactors_pow, Multiset.le_card_smul_iff_subset, ← Multiset.toFinset_subset,
+      toFinset_normalizedFactors, toFinset_normalizedFactors,
+      ← radical_dvd_iff_primeFactors_subset hb]
 
 Depends on / 依赖: Multiset, Multiset.le_card_smul_iff_subset, classical, dvd_iff_normalizedFactors_le_normalizedFactors, eq_or_ne, isUnit_of_dvd_one, le_card_smul_iff_subset, normalizedFactors, normalizedFactors_pow, pow_ne_zero, pow_zero, radical_dvd_radical, radical_dvd_self, radical_of_isUnit, radical_pow
 -/

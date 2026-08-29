@@ -27,7 +27,12 @@ definition injectIntoBaseIO
 unsafe def memoFixImpl [Nonempty β] (f : (α -> β) -> (α -> β)) : α -> β := unsafeBaseIO do
   let cache : IO.Ref (Lean.PtrMap α β) ← ST.mkRef Lean.mkPtrMap
   let rec fix (a) : β := unsafeBaseIO do
-    if let some b := (← c
+    if let some b := (← cache.get).find? a then
+      return b
+    let b ← injectIntoBaseIO (f fix a)
+    cache.modify (·.insert a b)
+    return b
+  return fix
 
 中文:
 定义 inject整数oBaseIO
@@ -38,7 +43,12 @@ unsafe def memoFixImpl [Nonempty β] (f : (α -> β) -> (α -> β)) : α -> β :
 unsafe def memoFixImpl [Nonempty β] (f : (α -> β) -> (α -> β)) : α -> β := unsafeBaseIO do
   let cache : IO.Ref (Lean.PtrMap α β) ← ST.mkRef Lean.mkPtrMap
   let rec fix (a) : β := unsafeBaseIO do
-    if let some b := (← c
+    if let some b := (← cache.get).find? a then
+      return b
+    let b ← injectIntoBaseIO (f fix a)
+    cache.modify (·.insert a b)
+    return b
+  return fix
 -/
 def injectIntoBaseIO {α : Type} (a : α) : BaseIO α := pure a
 

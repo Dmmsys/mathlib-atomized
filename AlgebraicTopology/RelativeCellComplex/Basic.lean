@@ -149,7 +149,10 @@ lemma hom_ext
     apply (c.attachCells j hj).hom_ext
     · simpa using hj'
     · intro i
-      simpa
+      simpa only [Category.assoc, Cells.ι] using h ({ hj := hj, k := i, .. })
+  | isSuccLimit j hj hj' =>
+    exact (c.F.isColimitOfIsWellOrderContinuous j hj).hom_ext
+      (fun ⟨k, hk⟩ => by simpa using hj' k hk)
 
 中文:
 引理 hom_ext
@@ -165,7 +168,10 @@ lemma hom_ext
     apply (c.attachCells j hj).hom_ext
     · simpa using hj'
     · intro i
-      simpa
+      simpa only [Category.assoc, Cells.ι] using h ({ hj := hj, k := i, .. })
+  | isSuccLimit j hj hj' =>
+    exact (c.F.isColimitOfIsWellOrderContinuous j hj).hom_ext
+      (fun ⟨k, hk⟩ => by simpa using hj' k hk)
 
 Depends on / 依赖: Category, Category.assoc, SuccOrder, SuccOrder.limitRecOn, attachCells, c.F.isColimitOfIsWellOrderContinuous, c.attachCells, c.isColimit.hom_ext, c.isoBot.inv, cancel_epi, eq_bot, hj.eq_bot, hom_ext, isColimit, isColimitOfIsWellOrderContinuous, isSuccLimit, isoBot, limitRecOn
 -/
@@ -232,7 +238,9 @@ definition transfiniteCompositionOfShape'
       colimitsOfShape_le_coproducts _ a.ι _
         (colimitsOfShape.mk' _ _ _ _ a.isColimit₁ a.isColimit₂
         (Discrete.natTrans (fun _ => basicCell _ _))
-        (fun ⟨k⟩ => hc { j 
+        (fun ⟨k⟩ => hc { j := j, hj := hj, k := k }) _
+        (fun _ => a.hm _)),
+      a.isPushout⟩
 
 中文:
 定义 transfiniteCompositionOfShape'
@@ -244,7 +252,9 @@ definition transfiniteCompositionOfShape'
       colimitsOfShape_le_coproducts _ a.ι _
         (colimitsOfShape.mk' _ _ _ _ a.isColimit₁ a.isColimit₂
         (Discrete.natTrans (fun _ => basicCell _ _))
-        (fun ⟨k⟩ => hc { j 
+        (fun ⟨k⟩ => hc { j := j, hj := hj, k := k }) _
+        (fun _ => a.hm _)),
+      a.isPushout⟩
 
 Depends on / 依赖: c.toTransfiniteCompositionOfShape, toTransfiniteCompositionOfShape
 -/

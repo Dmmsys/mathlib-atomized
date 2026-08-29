@@ -114,7 +114,13 @@ lemma opEquiv_symm_comp
   rw [opEquiv_symm_apply]; rw [opEquiv_symm_apply]; rw [opShiftFunctorEquivalence_add_unitIso_inv_app_eq _ _ _ _ (show a + b = c by lia)]; rw [comp]; rw [comp]
   dsimp
   rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [← unop_comp_assoc]; rw [Iso.inv_hom_id_app]
-  dsim
+  dsimp
+  rw [assoc]; rw [id_comp]; rw [Functor.map_comp]; rw [← NatTrans.naturality_assoc]; rw [← NatTrans.naturality]; rw [opEquiv_symm_apply]
+  dsimp
+  rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]
+  rw [← unop_comp_assoc]
+  erw [← NatTrans.naturality]
+  rfl
 
 中文:
 引理 opEquiv_symm_comp
@@ -123,7 +129,13 @@ lemma opEquiv_symm_comp
   rw [opEquiv_symm_apply]; rw [opEquiv_symm_apply]; rw [opShiftFunctorEquivalence_add_unitIso_inv_app_eq _ _ _ _ (show a + b = c by lia)]; rw [comp]; rw [comp]
   dsimp
   rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [← unop_comp_assoc]; rw [Iso.inv_hom_id_app]
-  dsim
+  dsimp
+  rw [assoc]; rw [id_comp]; rw [Functor.map_comp]; rw [← NatTrans.naturality_assoc]; rw [← NatTrans.naturality]; rw [opEquiv_symm_apply]
+  dsimp
+  rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]
+  rw [← unop_comp_assoc]
+  erw [← NatTrans.naturality]
+  rfl
 
 Depends on / 依赖: Functor, Functor.map_comp, Functor.map_comp_assoc, Iso.inv_hom_id_app, NatTrans, NatTrans.naturality, NatTrans.naturality_assoc, id_comp, inv_hom_id_app, map_comp, map_comp_assoc, naturality, naturality_assoc, opEquiv_symm_apply, opShiftFunctorEquivalence_add_unitIso_inv_app_eq, unop_comp_assoc
 -/
@@ -214,7 +226,7 @@ lemma opEquiv'_symm_op_opShiftFunctorEquivalence_counitIso_inv_app_op_shift
   apply Quiver.Hom.op_inj
   simp only [assoc, Functor.map_comp, op_comp, Quiver.Hom.op_unop,
     opShiftFunctorEquivalence_unitIso_inv_naturality]
-  erw [(opShiftFunctorEquivalence C n).inverse_counitInv_comp_assoc (Opposite.op Y)
+  erw [(opShiftFunctorEquivalence C n).inverse_counitInv_comp_assoc (Opposite.op Y)]
 
 中文:
 引理 opEquiv'_symm_op_opShiftFunctorEquivalence_counitIso_inv_app_op_shift
@@ -224,7 +236,7 @@ lemma opEquiv'_symm_op_opShiftFunctorEquivalence_counitIso_inv_app_op_shift
   apply Quiver.Hom.op_inj
   simp only [assoc, Functor.map_comp, op_comp, Quiver.Hom.op_unop,
     opShiftFunctorEquivalence_unitIso_inv_naturality]
-  erw [(opShiftFunctorEquivalence C n).inverse_counitInv_comp_assoc (Opposite.op Y)
+  erw [(opShiftFunctorEquivalence C n).inverse_counitInv_comp_assoc (Opposite.op Y)]
 -/
 lemma opEquiv'_symm_op_opShiftFunctorEquivalence_counitIso_inv_app_op_shift
     {n m : Int} (f : ShiftedHom X Y n) (g : ShiftedHom Y Z m)
@@ -295,7 +307,8 @@ lemma opEquiv'_add_symm
   dsimp
   simp only [assoc, Functor.map_comp, ← shiftFunctorAdd'_eq_shiftFunctorAdd,
     ← NatTrans.naturality_assoc,
-    shiftFunctorAdd'_assoc_inv_app a n m a' (m +
+    shiftFunctorAdd'_assoc_inv_app a n m a' (m + n) a'' (by lia) (by lia) (by lia)]
+  rfl
 
 中文:
 引理 opEquiv'_add_symm
@@ -306,7 +319,8 @@ lemma opEquiv'_add_symm
   dsimp
   simp only [assoc, Functor.map_comp, ← shiftFunctorAdd'_eq_shiftFunctorAdd,
     ← NatTrans.naturality_assoc,
-    shiftFunctorAdd'_assoc_inv_app a n m a' (m +
+    shiftFunctorAdd'_assoc_inv_app a n m a' (m + n) a'' (by lia) (by lia) (by lia)]
+  rfl
 -/
 lemma opEquiv'_add_symm (n m a a' a'' : Int) (ha' : n + a = a') (ha'' : m + a' = a'')
     (x : (Opposite.op (Y⟦a⟧) ⟶ (Opposite.op X)⟦m + n⟧)) :

@@ -139,7 +139,10 @@ theorem IsUnramifiedAt.residueField
     Localization.localAlgHom Q Q' _ hQ'
   have hf₀ : Function.Surjective f₀ := by
     subst hQ'; exact P.surjectiveOnStalks_residueField.baseChange' _ _
-  let f : P.Fiber (Localization.AtPrime Q) ->ₐ[P.ResidueField] Localization.
+  let f : P.Fiber (Localization.AtPrime Q) ->ₐ[P.ResidueField] Localization.AtPrime Q' :=
+    Algebra.TensorProduct.lift (Algebra.ofId _ _) f₀ fun _ _ => .all _ _
+  have hf : Function.Surjective f := hf₀.forall.mpr fun x => ⟨1 otimesₜ x, by simp [f]⟩
+  exact .of_surjective _ hf
 
 中文:
 定理 IsUnramifiedAt.residueField
@@ -148,7 +151,10 @@ theorem IsUnramifiedAt.residueField
     Localization.localAlgHom Q Q' _ hQ'
   have hf₀ : Function.Surjective f₀ := by
     subst hQ'; exact P.surjectiveOnStalks_residueField.baseChange' _ _
-  let f : P.Fiber (Localization.AtPrime Q) ->ₐ[P.ResidueField] Localization.
+  let f : P.Fiber (Localization.AtPrime Q) ->ₐ[P.ResidueField] Localization.AtPrime Q' :=
+    Algebra.TensorProduct.lift (Algebra.ofId _ _) f₀ fun _ _ => .all _ _
+  have hf : Function.Surjective f := hf₀.forall.mpr fun x => ⟨1 otimesₜ x, by simp [f]⟩
+  exact .of_surjective _ hf
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lift, Algebra.ofId, AtPrime, Function, Function.Surjective, Localization, Localization.AtPrime, Localization.localAlgHom, P.Fiber, P.ResidueField, P.surjectiveOnStalks_residueField.baseChange, ResidueField, Surjective, TensorProduct, baseChange, forall.mpr, localAlgHom, of_surjective, surjectiveOnStalks_residueField
 -/
@@ -256,7 +262,7 @@ lemma basicOpen_subset_unramifiedLocus_iff
   proof: by
   rw [unramifiedLocus_eq_compl_support]; rw [Set.subset_compl_comm]; rw [PrimeSpectrum.basicOpen_eq_zeroLocus_compl]; rw [compl_compl]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [Algebra.formallyUnramified_iff]
   exact (IsLocalizedModule.iso (.powers f)
-    (KaehlerDifferential.m
+    (KaehlerDifferential.map R R A (Localization.Away f))).subsingleton_congr
 
 中文:
 引理 basicOpen_subset_unramifiedLocus_iff
@@ -264,7 +270,7 @@ lemma basicOpen_subset_unramifiedLocus_iff
   证明: by
   rw [unramifiedLocus_eq_compl_support]; rw [Set.subset_compl_comm]; rw [PrimeSpectrum.basicOpen_eq_zeroLocus_compl]; rw [compl_compl]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [Algebra.formallyUnramified_iff]
   exact (IsLocalizedModule.iso (.powers f)
-    (KaehlerDifferential.m
+    (KaehlerDifferential.map R R A (Localization.Away f))).subsingleton_congr
 
 Depends on / 依赖: Algebra, Algebra.formallyUnramified_iff, IsLocalizedModule, IsLocalizedModule.iso, KaehlerDifferential, KaehlerDifferential.map, Localization, Localization.Away, LocalizedModule, LocalizedModule.subsingleton_iff_support_subset, PrimeSpectrum, PrimeSpectrum.basicOpen_eq_zeroLocus_compl, Set.subset_compl_comm, basicOpen_eq_zeroLocus_compl, compl_compl, formallyUnramified_iff, powers, subset_compl_comm, subsingleton_congr, subsingleton_iff_support_subset
 -/

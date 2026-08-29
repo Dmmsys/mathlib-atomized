@@ -113,7 +113,8 @@ definition vertexGroupIsomOfMap
   right_inv δ := by
     simp_rw [Category.assoc, inv_comp, ← Category.assoc, inv_comp, Category.id_comp,
       Category.comp_id]
- 
+  map_mul' γ₁ γ₂ := by
+    simp only [vertexGroup_mul, inv_eq_inv, Category.assoc, IsIso.hom_inv_id_assoc]
 
 中文:
 定义 vertexGroupIsomOfMap
@@ -126,7 +127,8 @@ definition vertexGroupIsomOfMap
   right_inv δ := by
     simp_rw [Category.assoc, inv_comp, ← Category.assoc, inv_comp, Category.id_comp,
       Category.comp_id]
- 
+  map_mul' γ₁ γ₂ := by
+    simp only [vertexGroup_mul, inv_eq_inv, Category.assoc, IsIso.hom_inv_id_assoc]
 -/
 def vertexGroupIsomOfMap {c d : C} (f : c ⟶ d) : (c ⟶ c) ≃* (d ⟶ d) where
   toFun γ := inv f ≫ γ ≫ f

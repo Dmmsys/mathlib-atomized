@@ -871,7 +871,7 @@ lemma interior_inter_support
   rintro u ⟨hxu, hu⟩
 .trans_le apply hxμ (u inter interior s) ⟨⟨hxu, hxs⟩, hu.inter isOpen_interior⟩
   gcongr
-  exact interior_su
+  exact interior_subset
 
 中文:
 引理 interior_inter_support
@@ -883,7 +883,7 @@ lemma interior_inter_support
   rintro u ⟨hxu, hu⟩
 .trans_le apply hxμ (u inter interior s) ⟨⟨hxu, hxs⟩, hu.inter isOpen_interior⟩
   gcongr
-  exact interior_su
+  exact interior_subset
 
 Depends on / 依赖: frequently_smallSets, hu.inter, interior, interior_subset, isOpen_interior, mem_measureSupport, mem_support_restrict, nhdsWithin_basis_open, nhds_basis_opens, pos_mono, trans_le
 -/

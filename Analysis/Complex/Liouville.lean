@@ -47,7 +47,19 @@ theorem norm_iteratedDeriv_le_of_forall_mem_sphere_norm_le
   have hp (z) (hz : z in sphere c R) : ‖(z - c)⁻¹ ^ (n + 1) • f z‖ <= C / (R ^ n * R) := by
     simpa [norm_smul, norm_pow, norm_inv, ← div_eq_inv_mul, mem_sphere_iff_norm.1 hz] using!
       (div_le_div_iff_of_pos_right (mul_pos (pow_pos hR n) hR)).2 (hC z hz)
-  have hq : iteratedDeriv n f c = n.
+  have hq : iteratedDeriv n f c = n.factorial • (2 * π * I)⁻¹ •
+    ∮ z in C(c, R), (z - c)⁻¹ ^ (n + 1) • f z := by
+    have : (2 * π * I / n.factorial) != 0 := by simp [Nat.factorial_ne_zero]
+    rw [← inv_smul_smul₀ this (iteratedDeriv n f c)]; rw [inv_div]; rw [div_eq_inv_mul]; rw [mul_comm]; rw [← nsmul_eq_mul]; rw [smul_assoc]
+    simp [← DiffContOnCl.circleIntegral_one_div_sub_center_pow_smul hR n hf]
+  calc
+    ‖iteratedDeriv n f c‖ = ‖n.factorial • (2 * π * I)⁻¹ •
+      ∮ z in C(c, R), (z - c)⁻¹ ^ (n + 1) • f z‖ := by rw [hq]
+    _ <= n.factorial * (R * (C / (R ^ (n + 1)))) := by
+      rw [RCLike.norm_nsmul (K := Complex)]; rw [nsmul_eq_mul]; rw [mul_le_mul_iff_right₀ (by positivity)]
+      exact circleIntegral.norm_two_pi_i_inv_smul_integral_le_of_norm_le_const hR.le hp
+    _ = n.factorial * C / R ^ n := by
+      grind
 
 中文:
 定理 norm_iteratedDeriv_le_of_对任意_mem_sphere_norm_le
@@ -56,7 +68,19 @@ theorem norm_iteratedDeriv_le_of_forall_mem_sphere_norm_le
   have hp (z) (hz : z in sphere c R) : ‖(z - c)⁻¹ ^ (n + 1) • f z‖ <= C / (R ^ n * R) := by
     simpa [norm_smul, norm_pow, norm_inv, ← div_eq_inv_mul, mem_sphere_iff_norm.1 hz] using!
       (div_le_div_iff_of_pos_right (mul_pos (pow_pos hR n) hR)).2 (hC z hz)
-  have hq : iteratedDeriv n f c = n.
+  have hq : iteratedDeriv n f c = n.factorial • (2 * π * I)⁻¹ •
+    ∮ z in C(c, R), (z - c)⁻¹ ^ (n + 1) • f z := by
+    have : (2 * π * I / n.factorial) != 0 := by simp [Nat.factorial_ne_zero]
+    rw [← inv_smul_smul₀ this (iteratedDeriv n f c)]; rw [inv_div]; rw [div_eq_inv_mul]; rw [mul_comm]; rw [← nsmul_eq_mul]; rw [smul_assoc]
+    simp [← DiffContOnCl.circleIntegral_one_div_sub_center_pow_smul hR n hf]
+  calc
+    ‖iteratedDeriv n f c‖ = ‖n.factorial • (2 * π * I)⁻¹ •
+      ∮ z in C(c, R), (z - c)⁻¹ ^ (n + 1) • f z‖ := by rw [hq]
+    _ <= n.factorial * (R * (C / (R ^ (n + 1)))) := by
+      rw [RCLike.norm_nsmul (K := Complex)]; rw [nsmul_eq_mul]; rw [mul_le_mul_iff_right₀ (by positivity)]
+      exact circleIntegral.norm_two_pi_i_inv_smul_integral_le_of_norm_le_const hR.le hp
+    _ = n.factorial * C / R ^ n := by
+      grind
 
 Depends on / 依赖: Nat.factorial_ne_zero, div_eq_inv_mul, div_le_div_iff_of_pos_right, factorial, factorial_ne_zero, inv_div, iteratedDeriv, mem_sphere_iff_norm, mul_pos, n.factorial, norm_inv, norm_pow, norm_smul, pow_pos, sphere
 -/
@@ -115,7 +139,10 @@ theorem norm_deriv_le_of_forall_mem_sphere_norm_le
   calc
     ‖deriv f c‖ = ‖deriv (e ∘ f) c‖ := by
       rw [this.deriv]
-      
+      exact (UniformSpace.Completion.norm_coe _).symm
+    _ <= C / R :=
+      norm_deriv_le_aux hR (e.differentiable.comp_diffContOnCl hd) fun z hz =>
+        (UniformSpace.Completion.norm_coe _).trans_le (hC z hz)
 
 中文:
 定理 norm_deriv_le_of_对任意_mem_sphere_norm_le
@@ -128,7 +155,10 @@ theorem norm_deriv_le_of_forall_mem_sphere_norm_le
   calc
     ‖deriv f c‖ = ‖deriv (e ∘ f) c‖ := by
       rw [this.deriv]
-      
+      exact (UniformSpace.Completion.norm_coe _).symm
+    _ <= C / R :=
+      norm_deriv_le_aux hR (e.differentiable.comp_diffContOnCl hd) fun z hz =>
+        (UniformSpace.Completion.norm_coe _).trans_le (hC z hz)
 
 Depends on / 依赖: Completion, HasDerivAt, UniformSpace, UniformSpace.Completion.norm_coe, UniformSpace.Completion.toComplL, comp_diffContOnCl, comp_hasDerivAt, differentiable, differentiableAt, e.differentiable.comp_diffContOnCl, e.hasFDerivAt.comp_hasDerivAt, hasDerivAt, hasFDerivAt, hd.differentiableAt, isOpen_ball, mem_ball_self, norm_coe, norm_deriv_le_aux, this.deriv, toComplL
 -/
@@ -159,7 +189,13 @@ theorem liouville_theorem_aux
   obtain ⟨C, C₀, hC⟩ : exists C > (0 : Real), forall z, ‖f z‖ <= C := by
     rcases isBounded_iff_forall_norm_le.1 hb with ⟨C, hC⟩
     exact
-      ⟨max C 1, lt_max_iff.2 (Or.inr zero_lt_one), fun z 
+      ⟨max C 1, lt_max_iff.2 (Or.inr zero_lt_one), fun z =>
+        (hC (f z) (mem_range_self _)).trans (le_max_left _ _)⟩
+  refine norm_le_zero_iff.1 (le_of_forall_gt_imp_ge_of_dense fun ε ε₀ => ?_)
+  calc
+    ‖deriv f c‖ <= C / (C / ε) :=
+      norm_deriv_le_of_forall_mem_sphere_norm_le (div_pos C₀ ε₀) hf.diffContOnCl fun z _ => hC z
+    _ = ε := div_div_cancel₀ C₀.lt.ne'
 
 中文:
 定理 liouville_theorem_aux
@@ -170,7 +206,13 @@ theorem liouville_theorem_aux
   obtain ⟨C, C₀, hC⟩ : exists C > (0 : Real), forall z, ‖f z‖ <= C := by
     rcases isBounded_iff_forall_norm_le.1 hb with ⟨C, hC⟩
     exact
-      ⟨max C 1, lt_max_iff.2 (Or.inr zero_lt_one), fun z 
+      ⟨max C 1, lt_max_iff.2 (Or.inr zero_lt_one), fun z =>
+        (hC (f z) (mem_range_self _)).trans (le_max_left _ _)⟩
+  refine norm_le_zero_iff.1 (le_of_forall_gt_imp_ge_of_dense fun ε ε₀ => ?_)
+  calc
+    ‖deriv f c‖ <= C / (C / ε) :=
+      norm_deriv_le_of_forall_mem_sphere_norm_le (div_pos C₀ ε₀) hf.diffContOnCl fun z _ => hC z
+    _ = ε := div_div_cancel₀ C₀.lt.ne'
 
 Depends on / 依赖: Or.inr, div_pos, isBounded_iff_forall_norm_le, is_const_of_deriv_eq_zero, le_max_left, le_of_forall_gt_imp_ge_of_dense, lt_max_iff, mem_range_self, norm_deriv_le_of_forall_mem_sphere_norm_le, norm_le_zero_iff, zero_lt_one
 -/
@@ -278,7 +320,12 @@ theorem eq_const_of_tendsto_cocompact
     obtain ⟨s, hs, hs_bdd⟩ := Metric.exists_isBounded_image_of_tendsto hb
     obtain ⟨t, ht, hts⟩ := mem_cocompact.mp hs
 .subset .isBounded.union hs_bdd apply ht.image hf.continuous
-simpa [Set.image_union, Set.image_univ] using! Set.image_mon
+simpa [Set.image_union, Set.image_univ] using! Set.image_mono calc
+      Set.univ = t union tᶜ := t.union_compl_self.symm
+      _ subseteq t union s := by gcongr
+  obtain ⟨c', hc'⟩ := hf.exists_eq_const_of_bounded h_bdd
+  convert hc'
+  exact tendsto_nhds_unique hb (by simpa [hc'] using! tendsto_const_nhds)
 
 中文:
 定理 eq_const_of_tendsto_cocompact
@@ -288,7 +335,12 @@ simpa [Set.image_union, Set.image_univ] using! Set.image_mon
     obtain ⟨s, hs, hs_bdd⟩ := Metric.exists_isBounded_image_of_tendsto hb
     obtain ⟨t, ht, hts⟩ := mem_cocompact.mp hs
 .subset .isBounded.union hs_bdd apply ht.image hf.continuous
-simpa [Set.image_union, Set.image_univ] using! Set.image_mon
+simpa [Set.image_union, Set.image_univ] using! Set.image_mono calc
+      Set.univ = t union tᶜ := t.union_compl_self.symm
+      _ subseteq t union s := by gcongr
+  obtain ⟨c', hc'⟩ := hf.exists_eq_const_of_bounded h_bdd
+  convert hc'
+  exact tendsto_nhds_unique hb (by simpa [hc'] using! tendsto_const_nhds)
 
 Depends on / 依赖: Bornology, Bornology.IsBounded, IsBounded, Metric, Metric.exists_isBounded_image_of_tendsto, Set.image_mono, Set.image_union, Set.image_univ, Set.range, Set.univ, continuous, convert, exists_eq_const_of_bounded, exists_isBounded_image_of_tendsto, h_bdd, hf.continuous, hf.exists_eq_const_of_bounded, hs_bdd, ht.image, image_mono
 -/

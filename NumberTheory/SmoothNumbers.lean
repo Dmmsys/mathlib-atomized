@@ -156,7 +156,9 @@ lemma mem_factoredNumbers'
   refine ⟨fun ⟨H₀, H₁⟩ => fun p hp₁ hp₂ => H₁ p (le_of_dvd (Nat.pos_of_ne_zero H₀) hp₂) hp₁ hp₂,
          fun H => ⟨fun h => lt_irrefl p ?_, fun p _ => H p⟩⟩
   calc
-p <= s.sup id := Fin
+p <= s.sup id := Finset.le_sup (f := @id Nat) H p hp₂ h.symm ▸ dvd_zero p
+    _ < 1 + s.sup id := lt_one_add _
+    _ <= p := hp₁
 
 中文:
 引理 mem_factoredNumbers'
@@ -167,7 +169,9 @@ p <= s.sup id := Fin
   refine ⟨fun ⟨H₀, H₁⟩ => fun p hp₁ hp₂ => H₁ p (le_of_dvd (Nat.pos_of_ne_zero H₀) hp₂) hp₁ hp₂,
          fun H => ⟨fun h => lt_irrefl p ?_, fun p _ => H p⟩⟩
   calc
-p <= s.sup id := Fin
+p <= s.sup id := Finset.le_sup (f := @id Nat) H p hp₂ h.symm ▸ dvd_zero p
+    _ < 1 + s.sup id := lt_one_add _
+    _ <= p := hp₁
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.sup, Nat.pos_of_ne_zero, dvd_zero, exists_infinite_primes, h.symm, le_of_dvd, le_sup, lt_irrefl, lt_one_add, mem_factoredNumbers_iff_forall_le, pos_of_ne_zero, s.sup
 -/
@@ -348,7 +352,8 @@ lemma prod_mem_factoredNumbers
     List.prod_ne_zero fun h => (pos_of_mem_primeFactorsList (List.mem_of_mem_filter h)).false
   refine ⟨h₀, fun p hp => ?_⟩
   obtain ⟨H₁, H₂⟩ := (mem_primeFactorsList h₀).mp hp
-simpa only [decide_eq_true_eq] using List.of_mem_filter me
+simpa only [decide_eq_true_eq] using List.of_mem_filter mem_list_primes_of_dvd_prod H₁.prime
+    (fun _ hq => (prime_of_mem_primeFactorsList (List.mem_of_mem_filter hq)).prime) H₂
 
 中文:
 引理 prod_mem_factoredNumbers
@@ -358,7 +363,8 @@ simpa only [decide_eq_true_eq] using List.of_mem_filter me
     List.prod_ne_zero fun h => (pos_of_mem_primeFactorsList (List.mem_of_mem_filter h)).false
   refine ⟨h₀, fun p hp => ?_⟩
   obtain ⟨H₁, H₂⟩ := (mem_primeFactorsList h₀).mp hp
-simpa only [decide_eq_true_eq] using List.of_mem_filter me
+simpa only [decide_eq_true_eq] using List.of_mem_filter mem_list_primes_of_dvd_prod H₁.prime
+    (fun _ hq => (prime_of_mem_primeFactorsList (List.mem_of_mem_filter hq)).prime) H₂
 
 Depends on / 依赖: List.mem_of_mem_filter, List.of_mem_filter, List.prod_ne_zero, decide_eq_true_eq, filter, mem_list_primes_of_dvd_prod, mem_of_mem_filter, mem_primeFactorsList, n.primeFactorsList.filter, of_mem_filter, pos_of_mem_primeFactorsList, primeFactorsList, prime_of_mem_primeFactorsList, prod_ne_zero
 -/
@@ -435,7 +441,8 @@ lemma factoredNumbers_compl
   obtain ⟨p, hp₁, hp₂⟩ := hn.1 hn.2
   have : N <= p := by
     contrapose! hp₂
-exact h mem_primesBelow.mpr ⟨hp₂
+exact h mem_primesBelow.mpr ⟨hp₂, prime_of_mem_primeFactorsList hp₁⟩
+exact this.trans le_of_mem_primeFactorsList hp₁
 
 中文:
 引理 factoredNumbers_compl
@@ -448,7 +455,8 @@ exact h mem_primesBelow.mpr ⟨hp₂
   obtain ⟨p, hp₁, hp₂⟩ := hn.1 hn.2
   have : N <= p := by
     contrapose! hp₂
-exact h mem_primesBelow.mpr ⟨hp₂
+exact h mem_primesBelow.mpr ⟨hp₂, prime_of_mem_primeFactorsList hp₁⟩
+exact this.trans le_of_mem_primeFactorsList hp₁
 
 Depends on / 依赖: Set.mem_compl_iff, Set.mem_ofPred_eq, Set.mem_sdiff, Set.mem_singleton_iff, contrapose, exists_prop, le_of_mem_primeFactorsList, mem_compl_iff, mem_factoredNumbers, mem_ofPred_eq, mem_primesBelow, mem_primesBelow.mpr, mem_sdiff, mem_singleton_iff, ne_eq, not_and, not_forall, prime_of_mem_primeFactorsList, this.trans
 -/
@@ -477,7 +485,7 @@ lemma pow_mul_mem_factoredNumbers
   · rw [mem_primeFactorsList hp'] at H
     rw [(prime_dvd_prime_iff_eq H.1 hp).mp <| H.1.dvd_of_dvd_pow H.2]
     exact Finset.mem_insert_self p s
-· 
+· exact Finset.mem_insert_of_mem hn.2 _ H
 
 中文:
 引理 pow_mul_mem_factoredNumbers
@@ -489,7 +497,7 @@ lemma pow_mul_mem_factoredNumbers
   · rw [mem_primeFactorsList hp'] at H
     rw [(prime_dvd_prime_iff_eq H.1 hp).mp <| H.1.dvd_of_dvd_pow H.2]
     exact Finset.mem_insert_self p s
-· 
+· exact Finset.mem_insert_of_mem hn.2 _ H
 
 Depends on / 依赖: Finset, Finset.mem_insert_of_mem, Finset.mem_insert_self, dvd_of_dvd_pow, hp.ne_zero, mem_insert_of_mem, mem_insert_self, mem_primeFactorsList, mem_primeFactorsList_mul, mul_ne_zero, ne_zero, pow_ne_zero, prime_dvd_prime_iff_eq
 -/
@@ -563,7 +571,26 @@ definition equivProdNatFactoredNumbers
                             ⟨(m.primeFactorsList.filter (· in s)).prod, prod_mem_factoredNumbers ..⟩)
   left_inv := by
     rintro ⟨e, m, hm₀, hm⟩
-    have hpm : ¬ p ∣ m := by grind [mem_prim
+    have hpm : ¬ p ∣ m := by grind [mem_primeFactorsList]
+    simp only [Prod.mk.injEq, Subtype.mk.injEq]
+    constructor
+    · rw [factorization_mul (pow_ne_zero e hp.ne_zero) hm₀, Finsupp.add_apply,
+        factorization_pow_self hp, factorization_eq_zero_of_not_dvd hpm, add_zero]
+    · conv_rhs => rw [← prod_primeFactorsList hm₀]
+refine prod_eq
+        (filter _ <| perm_primeFactorsList_mul (pow_ne_zero e hp.ne_zero) hm₀).trans ?_
+      rw [filter_append]; rw [hp.primeFactorsList_pow]; rw [filter_eq_nil_iff.mpr <| by grind]; rw [nil_append]; rw [filter_eq_self.mpr by grind]
+  right_inv := by
+    rintro ⟨m, hm₀, hm⟩
+    rw [Subtype.mk.injEq]; rw [← primeFactorsList_count_eq]; rw [← prod_replicate]; rw [← prod_append]
+    conv_rhs => rw [← prod_primeFactorsList hm₀]
+    have : m.primeFactorsList.filter (· = p) = m.primeFactorsList.filter (· ∉ s) :=
+filter_congr by grind
+refine prod_eq (filter_eq p).symm ▸ this ▸ perm_append_comm.trans ?_
+    simp only [decide_not]
+    exact filter_append_perm (· in s) (primeFactorsList m)
+
+@[simp]
 
 中文:
 定义 equivProd自然数FactoredNumbers
@@ -573,7 +600,26 @@ definition equivProdNatFactoredNumbers
                             ⟨(m.primeFactorsList.filter (· in s)).prod, prod_mem_factoredNumbers ..⟩)
   left_inv := by
     rintro ⟨e, m, hm₀, hm⟩
-    have hpm : ¬ p ∣ m := by grind [mem_prim
+    have hpm : ¬ p ∣ m := by grind [mem_primeFactorsList]
+    simp only [Prod.mk.injEq, Subtype.mk.injEq]
+    constructor
+    · rw [factorization_mul (pow_ne_zero e hp.ne_zero) hm₀, Finsupp.add_apply,
+        factorization_pow_self hp, factorization_eq_zero_of_not_dvd hpm, add_zero]
+    · conv_rhs => rw [← prod_primeFactorsList hm₀]
+refine prod_eq
+        (filter _ <| perm_primeFactorsList_mul (pow_ne_zero e hp.ne_zero) hm₀).trans ?_
+      rw [filter_append]; rw [hp.primeFactorsList_pow]; rw [filter_eq_nil_iff.mpr <| by grind]; rw [nil_append]; rw [filter_eq_self.mpr by grind]
+  right_inv := by
+    rintro ⟨m, hm₀, hm⟩
+    rw [Subtype.mk.injEq]; rw [← primeFactorsList_count_eq]; rw [← prod_replicate]; rw [← prod_append]
+    conv_rhs => rw [← prod_primeFactorsList hm₀]
+    have : m.primeFactorsList.filter (· = p) = m.primeFactorsList.filter (· ∉ s) :=
+filter_congr by grind
+refine prod_eq (filter_eq p).symm ▸ this ▸ perm_append_comm.trans ?_
+    simp only [decide_not]
+    exact filter_append_perm (· in s) (primeFactorsList m)
+
+@[simp]
 
 Depends on / 依赖: pow_mul_mem_factoredNumbers
 -/
@@ -1077,7 +1123,10 @@ lemma pow_mul_mem_smoothNumbers
   have : NoZeroDivisors Nat := inferInstance -- this is needed twice --> speed-up
   have hp' := pow_ne_zero e hp
   refine ⟨mul_ne_zero hp' hn.1, fun q hq => ?_⟩
-  rcases (mem_primeFactorsList_mul hp
+  rcases (mem_primeFactorsList_mul hp' hn.1).mp hq with H | H
+  · rw [mem_primeFactorsList hp'] at H
+exact Nat.lt_succ_of_le le_of_dvd hp.bot_lt H.1.dvd_of_dvd_pow H.2
+· exact (hn.2 q H).trans lt_succ_self p
 
 中文:
 引理 pow_mul_mem_smoothNumbers
@@ -1087,7 +1136,10 @@ lemma pow_mul_mem_smoothNumbers
   have : NoZeroDivisors Nat := inferInstance -- this is needed twice --> speed-up
   have hp' := pow_ne_zero e hp
   refine ⟨mul_ne_zero hp' hn.1, fun q hq => ?_⟩
-  rcases (mem_primeFactorsList_mul hp
+  rcases (mem_primeFactorsList_mul hp' hn.1).mp hq with H | H
+  · rw [mem_primeFactorsList hp'] at H
+exact Nat.lt_succ_of_le le_of_dvd hp.bot_lt H.1.dvd_of_dvd_pow H.2
+· exact (hn.2 q H).trans lt_succ_self p
 -/
 lemma pow_mul_mem_smoothNumbers {p n : Nat} (hp : p != 0) (e : Nat) (hn : n in smoothNumbers p) :
     p ^ e * n in smoothNumbers (succ p) := by
@@ -1287,7 +1339,13 @@ lemma smoothNumbersUpTo_card_add_roughNumbersUpTo_card
   proof: by
   rw [smoothNumbersUpTo]; rw [roughNumbersUpTo]; rw [← Finset.card_union_of_disjoint Finset.disjoint_filter.mpr fun n _ hn₂ h => h.2 hn₂]; rw [Finset.filter_union_right]
   suffices #{x in Finset.range (N + 1) | x != 0} = N by
-    have hn' (n) : n in smoothNumbers k ∨ n != 0 ∧ n ∉ smoothNumbers k 
+    have hn' (n) : n in smoothNumbers k ∨ n != 0 ∧ n ∉ smoothNumbers k ↔ n != 0 := by
+      have : n in smoothNumbers k -> n != 0 := ne_zero_of_mem_smoothNumbers
+      refine ⟨fun H => Or.elim H this fun H => H.1, fun H => ?_⟩
+      simp only [ne_eq, H, not_false_eq_true, true_and, or_not]
+    rwa [Finset.filter_congr (s := Finset.range (succ N)) fun n _ => hn' n]
+  rw [Finset.filter_ne']; rw [Finset.card_erase_of_mem <| Finset.mem_range_succ_iff.mpr <| zero_le N]
+  simp only [Finset.card_range, succ_sub_succ_eq_sub, Nat.sub_zero]
 
 中文:
 引理 smoothNumbersUpTo_card_add_roughNumbersUpTo_card
@@ -1295,7 +1353,13 @@ lemma smoothNumbersUpTo_card_add_roughNumbersUpTo_card
   证明: by
   rw [smoothNumbersUpTo]; rw [roughNumbersUpTo]; rw [← Finset.card_union_of_disjoint Finset.disjoint_filter.mpr fun n _ hn₂ h => h.2 hn₂]; rw [Finset.filter_union_right]
   suffices #{x in Finset.range (N + 1) | x != 0} = N by
-    have hn' (n) : n in smoothNumbers k ∨ n != 0 ∧ n ∉ smoothNumbers k 
+    have hn' (n) : n in smoothNumbers k ∨ n != 0 ∧ n ∉ smoothNumbers k ↔ n != 0 := by
+      have : n in smoothNumbers k -> n != 0 := ne_zero_of_mem_smoothNumbers
+      refine ⟨fun H => Or.elim H this fun H => H.1, fun H => ?_⟩
+      simp only [ne_eq, H, not_false_eq_true, true_and, or_not]
+    rwa [Finset.filter_congr (s := Finset.range (succ N)) fun n _ => hn' n]
+  rw [Finset.filter_ne']; rw [Finset.card_erase_of_mem <| Finset.mem_range_succ_iff.mpr <| zero_le N]
+  simp only [Finset.card_range, succ_sub_succ_eq_sub, Nat.sub_zero]
 
 Depends on / 依赖: Finset, Finset.card_union_of_disjoint, Finset.disjoint_filter.mpr, Finset.filter_union_right, Finset.range, Or.elim, card_union_of_disjoint, disjoint_filter, filter_union_right, ne_eq, ne_zero_of_mem_smoothNumbers, not_false_eq_true, or_not, roughNumbersUpTo, smoothNumbers, smoothNumbersUpTo, true_and
 -/
@@ -1322,7 +1386,13 @@ lemma eq_prod_primes_mul_sq_of_mem_smoothNumbers
   have hl : l in smoothNumbers k := mem_smoothNumbers_of_dvd h (Dvd.intro_left (m ^ 2) H₁)
   refine ⟨l.primeFactorsList.toFinset, ?_, m, ?_⟩
   · simp only [toFinset_factors, Finset.mem_powerset]
-    refine fun p hp => mem_primesBelow.mpr ⟨?_, (mem_pr
+    refine fun p hp => mem_primesBelow.mpr ⟨?_, (mem_primeFactors.mp hp).1⟩
+    rw [mem_primeFactors] at hp
+    exact mem_smoothNumbers'.mp hl p hp.1 hp.2.1
+  rw [← H₁]
+  congr
+  simp only [toFinset_factors]
+  exact (prod_primeFactors_of_squarefree H₂).symm
 
 中文:
 引理 eq_prod_primes_mul_sq_of_mem_smoothNumbers
@@ -1332,7 +1402,13 @@ lemma eq_prod_primes_mul_sq_of_mem_smoothNumbers
   have hl : l in smoothNumbers k := mem_smoothNumbers_of_dvd h (Dvd.intro_left (m ^ 2) H₁)
   refine ⟨l.primeFactorsList.toFinset, ?_, m, ?_⟩
   · simp only [toFinset_factors, Finset.mem_powerset]
-    refine fun p hp => mem_primesBelow.mpr ⟨?_, (mem_pr
+    refine fun p hp => mem_primesBelow.mpr ⟨?_, (mem_primeFactors.mp hp).1⟩
+    rw [mem_primeFactors] at hp
+    exact mem_smoothNumbers'.mp hl p hp.1 hp.2.1
+  rw [← H₁]
+  congr
+  simp only [toFinset_factors]
+  exact (prod_primeFactors_of_squarefree H₂).symm
 
 Depends on / 依赖: Dvd.intro_left, Finset, Finset.mem_powerset, intro_left, l.primeFactorsList.toFinset, mem_powerset, mem_primeFactors, mem_primeFactors.mp, mem_primesBelow, mem_primesBelow.mpr, mem_smoothNumbers, mem_smoothNumbers_of_dvd, primeFactorsList, prod_primeFactors_of_squarefree, smoothNumbers, sq_mul_squarefree, toFinset, toFinset_factors
 -/
@@ -1362,7 +1438,16 @@ lemma smoothNumbersUpTo_subset_image
   obtain ⟨s, hs, m, hm⟩ := eq_prod_primes_mul_sq_of_mem_smoothNumbers hn₂
   simp only [id_eq, Finset.mem_range, Finset.mem_image,
     Finset.mem_product, Finset.mem_powerset, Finset.mem_erase, Prod.exists]
-  refine ⟨s, m, ⟨Finset.mem
+  refine ⟨s, m, ⟨Finset.mem_powerset.mp hs, ?_, ?_⟩, hm.symm⟩
+  · have := hm ▸ ne_zero_of_mem_smoothNumbers hn₂
+    simp only [ne_eq, _root_.mul_eq_zero, sq_eq_zero_iff, not_or] at this
+    exact this.1
+  · rw [Nat.lt_succ_iff, le_sqrt']
+    refine LE.le.trans ?_ (hm ▸ hn₁)
+    nth_rw 1 [← mul_one (m ^ 2)]
+    gcongr
+    exact Finset.one_le_prod' fun p hp =>
+      (prime_of_mem_primesBelow <| Finset.mem_powerset.mp hs hp).one_le
 
 中文:
 引理 smoothNumbersUpTo_subset_image
@@ -1373,7 +1458,16 @@ lemma smoothNumbersUpTo_subset_image
   obtain ⟨s, hs, m, hm⟩ := eq_prod_primes_mul_sq_of_mem_smoothNumbers hn₂
   simp only [id_eq, Finset.mem_range, Finset.mem_image,
     Finset.mem_product, Finset.mem_powerset, Finset.mem_erase, Prod.exists]
-  refine ⟨s, m, ⟨Finset.mem
+  refine ⟨s, m, ⟨Finset.mem_powerset.mp hs, ?_, ?_⟩, hm.symm⟩
+  · have := hm ▸ ne_zero_of_mem_smoothNumbers hn₂
+    simp only [ne_eq, _root_.mul_eq_zero, sq_eq_zero_iff, not_or] at this
+    exact this.1
+  · rw [Nat.lt_succ_iff, le_sqrt']
+    refine LE.le.trans ?_ (hm ▸ hn₁)
+    nth_rw 1 [← mul_one (m ^ 2)]
+    gcongr
+    exact Finset.one_le_prod' fun p hp =>
+      (prime_of_mem_primesBelow <| Finset.mem_powerset.mp hs hp).one_le
 
 Depends on / 依赖: Finset, Finset.mem_erase, Finset.mem_image, Finset.mem_powerset, Finset.mem_powerset.mp, Finset.mem_product, Finset.mem_range, LE.le.tr, Nat.lt_succ_iff, Prod.exists, _root_, _root_.mul_eq_zero, eq_prod_primes_mul_sq_of_mem_smoothNumbers, hm.symm, id_eq, le_sqrt, lt_succ_iff, mem_erase, mem_image, mem_powerset
 -/
@@ -1435,7 +1529,11 @@ lemma roughNumbersUpTo_eq_biUnion
     not_lt, exists_prop, Finset.mem_range, Finset.mem_filter,
     Finset.mem_biUnion, Finset.mem_sdiff, mem_primesBelow,
     show forall P Q : Prop, P ∧ (P -> Q) ↔ P ∧ Q by tauto]
-  simp_rw [← exists_and_
+  simp_rw [← exists_and_left, ← not_lt]
+  refine exists_congr fun p => ?_
+  have H : m != 0 -> p ∣ m -> ¬ m < p :=
+fun h₁ h₂ => not_lt.mpr le_of_dvd (Nat.pos_of_ne_zero h₁) h₂
+  grind
 
 中文:
 引理 roughNumbersUpTo_eq_biUnion
@@ -1446,7 +1544,11 @@ lemma roughNumbersUpTo_eq_biUnion
     not_lt, exists_prop, Finset.mem_range, Finset.mem_filter,
     Finset.mem_biUnion, Finset.mem_sdiff, mem_primesBelow,
     show forall P Q : Prop, P ∧ (P -> Q) ↔ P ∧ Q by tauto]
-  simp_rw [← exists_and_
+  simp_rw [← exists_and_left, ← not_lt]
+  refine exists_congr fun p => ?_
+  have H : m != 0 -> p ∣ m -> ¬ m < p :=
+fun h₁ h₂ => not_lt.mpr le_of_dvd (Nat.pos_of_ne_zero h₁) h₂
+  grind
 
 Depends on / 依赖: Finset, Finset.mem_biUnion, Finset.mem_filter, Finset.mem_range, Finset.mem_sdiff, Nat.pos_of_ne_zero, exists_and_left, exists_congr, exists_prop, le_of_dvd, mem_biUnion, mem_filter, mem_primesBelow, mem_range, mem_sdiff, mem_smoothNumbers_iff_forall_le, not_and, not_forall, not_lt, not_lt.mpr
 -/

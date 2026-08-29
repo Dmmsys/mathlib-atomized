@@ -2764,7 +2764,12 @@ theorem map_linearDependent
   suffices f (update v i (g i • v i)) = 0 by
     rw [f.map_update_smul]; rw [Function.update_eq_self]; rw [smul_eq_zero] at this
     exact Or.resolve_left this hz
-  rw [← Finset.insert_erase hi]; rw [Finset
+  rw [← Finset.insert_erase hi]; rw [Finset.sum_insert (s.notMem_erase i)]; rw [add_eq_zero_iff_eq_neg] at h
+  rw [h]; rw [f.map_update_neg]; rw [f.map_update_sum]; rw [neg_eq_zero]
+  apply Finset.sum_eq_zero
+  intro j hj
+  obtain ⟨hij, _⟩ := Finset.mem_erase.mp hj
+  rw [f.map_update_smul]; rw [f.map_update_self _ hij.symm]; rw [smul_zero]
 
 中文:
 定理 map_linearDependent
@@ -2775,7 +2780,12 @@ theorem map_linearDependent
   suffices f (update v i (g i • v i)) = 0 by
     rw [f.map_update_smul]; rw [Function.update_eq_self]; rw [smul_eq_zero] at this
     exact Or.resolve_left this hz
-  rw [← Finset.insert_erase hi]; rw [Finset
+  rw [← Finset.insert_erase hi]; rw [Finset.sum_insert (s.notMem_erase i)]; rw [add_eq_zero_iff_eq_neg] at h
+  rw [h]; rw [f.map_update_neg]; rw [f.map_update_sum]; rw [neg_eq_zero]
+  apply Finset.sum_eq_zero
+  intro j hj
+  obtain ⟨hij, _⟩ := Finset.mem_erase.mp hj
+  rw [f.map_update_smul]; rw [f.map_update_self _ hij.symm]; rw [smul_zero]
 
 Depends on / 依赖: Classical, Classical.decEq, Finset, Finset.insert_erase, Finset.mem_erase.mp, Finset.sum_eq_zero, Finset.sum_insert, Function, Function.update_eq_self, Or.resolve_left, add_eq_zero_iff_eq_neg, f.map_update_neg, f.map_update_smul, f.map_update_sum, insert_erase, map_update_neg, map_update_smul, map_update_sum, mem_erase, neg_eq_zero
 -/
@@ -2891,7 +2901,8 @@ definition alternatization
       toFun := ⇑(∑ σ : Perm ι, Equiv.Perm.sign σ • m.domDomCongr σ)
       map_eq_zero_of_eq' := private fun v i j hvij hij =>
         alternization_map_eq_zero_of_eq_aux m v i j hij hvij }
-  map_add' a b := by ext; simp [Finset.sum_add_distrib
+  map_add' a b := by ext; simp [Finset.sum_add_distrib]
+  map_zero' := by ext; simp
 
 中文:
 定义 alternatization
@@ -2900,7 +2911,8 @@ definition alternatization
       toFun := ⇑(∑ σ : Perm ι, Equiv.Perm.sign σ • m.domDomCongr σ)
       map_eq_zero_of_eq' := private fun v i j hvij hij =>
         alternization_map_eq_zero_of_eq_aux m v i j hij hvij }
-  map_add' a b := by ext; simp [Finset.sum_add_distrib
+  map_add' a b := by ext; simp [Finset.sum_add_distrib]
+  map_zero' := by ext; simp
 
 Depends on / 依赖: Equiv.Perm.sign, Finset, Finset.sum_add_distrib, alternization_map_eq_zero_of_eq_aux, domDomCongr, m.domDomCongr, map_add, map_eq_zero_of_eq, map_zero, private, sum_add_distrib
 -/
@@ -3058,7 +3070,7 @@ theorem Module.Basis.ext_alternating
   by_cases hi : Function.Injective v
   · exact h v hi
   · have : ¬Function.Injective fun i => e (v i) := hi.imp Function.Injective.of_comp
-    rw [coe_multilinearMap]; rw [coe_multilinearMap]; rw
+    rw [coe_multilinearMap]; rw [coe_multilinearMap]; rw [f.map_eq_zero_of_not_injective _ this]; rw [g.map_eq_zero_of_not_injective _ this]
 
 中文:
 定理 模.基.ext_alternating
@@ -3068,7 +3080,7 @@ theorem Module.Basis.ext_alternating
   by_cases hi : Function.Injective v
   · exact h v hi
   · have : ¬Function.Injective fun i => e (v i) := hi.imp Function.Injective.of_comp
-    rw [coe_multilinearMap]; rw [coe_multilinearMap]; rw
+    rw [coe_multilinearMap]; rw [coe_multilinearMap]; rw [f.map_eq_zero_of_not_injective _ this]; rw [g.map_eq_zero_of_not_injective _ this]
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.coe_multilinearMap_injective, Basis.ext_multilinear, Function, Function.Injective, Function.Injective.of_comp, Injective, coe_multilinearMap, coe_multilinearMap_injective, ext_multilinear, f.map_eq_zero_of_not_injective, g.map_eq_zero_of_not_injective, hi.imp, map_eq_zero_of_not_injective, of_comp
 -/

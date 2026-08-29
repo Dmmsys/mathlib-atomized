@@ -91,7 +91,13 @@ definition evaluationJointlyReflectsLimits
         (t Y).hom_ext fun j => by
           rw [assoc]; rw [(t Y).fac _ j]
           simpa using
-            ((t X).fac_assoc ⟨s.pt.obj X, whiskerRight s.π ((evaluation K C).obj X)⟩ 
+            ((t X).fac_assoc ⟨s.pt.obj X, whiskerRight s.π ((evaluation K C).obj X)⟩ j _).symm }
+  fac s j := by ext k; exact (t k).fac _ j
+  uniq s m w := by
+    ext x
+    exact (t x).hom_ext fun j =>
+      (congr_app (w j) x).trans
+        ((t x).fac ⟨s.pt.obj _, whiskerRight s.π ((evaluation K C).obj _)⟩ j).symm
 
 中文:
 定义 evaluationJointlyReflectsLimits
@@ -101,7 +107,13 @@ definition evaluationJointlyReflectsLimits
         (t Y).hom_ext fun j => by
           rw [assoc]; rw [(t Y).fac _ j]
           simpa using
-            ((t X).fac_assoc ⟨s.pt.obj X, whiskerRight s.π ((evaluation K C).obj X)⟩ 
+            ((t X).fac_assoc ⟨s.pt.obj X, whiskerRight s.π ((evaluation K C).obj X)⟩ j _).symm }
+  fac s j := by ext k; exact (t k).fac _ j
+  uniq s m w := by
+    ext x
+    exact (t x).hom_ext fun j =>
+      (congr_app (w j) x).trans
+        ((t x).fac ⟨s.pt.obj _, whiskerRight s.π ((evaluation K C).obj _)⟩ j).symm
 
 Depends on / 依赖: congr_app, evaluation, fac_assoc, hom_ext, naturality, s.pt.obj, whiskerRight
 -/
@@ -141,7 +153,8 @@ definition combineCones
         (c k).isLimit.hom_ext fun j => by simp
       map_comp := fun {k₁} {k₂} {k₃} f₁ f₂ => (c k₃).isLimit.hom_ext fun j => by simp }
   π :=
-    { app := fu
+    { app := fun j => { app := fun k => (c k).cone.π.app j }
+      naturality := fun j₁ j₂ g => by ext k; exact (c k).cone.π.naturality g }
 
 中文:
 定义 combineCones
@@ -152,7 +165,8 @@ definition combineCones
         (c k).isLimit.hom_ext fun j => by simp
       map_comp := fun {k₁} {k₂} {k₃} f₁ f₂ => (c k₃).isLimit.hom_ext fun j => by simp }
   π :=
-    { app := fu
+    { app := fun j => { app := fun k => (c k).cone.π.app j }
+      naturality := fun j₁ j₂ g => by ext k; exact (c k).cone.π.naturality g }
 
 Depends on / 依赖: F.flip.map, cone.pt, hom_ext, isLimit, isLimit.hom_ext, isLimit.lift, map_comp, map_id, naturality
 -/
@@ -225,7 +239,13 @@ definition evaluationJointlyReflectsColimits
           rw [(t X).fac_assoc _ j]
           erw [← (c.ι.app j).naturality_assoc f]
           erw [(t Y).fac ⟨s.pt.obj _, whiskerRight s.ι _⟩ j]
-   
+          simp }
+  fac s j := by ext k; exact (t k).fac _ j
+  uniq s m w := by
+    ext x
+    exact (t x).hom_ext fun j =>
+      (congr_app (w j) x).trans
+        ((t x).fac ⟨s.pt.obj _, whiskerRight s.ι ((evaluation K C).obj _)⟩ j).symm
 
 中文:
 定义 evaluationJointlyReflectsColimits
@@ -236,7 +256,13 @@ definition evaluationJointlyReflectsColimits
           rw [(t X).fac_assoc _ j]
           erw [← (c.ι.app j).naturality_assoc f]
           erw [(t Y).fac ⟨s.pt.obj _, whiskerRight s.ι _⟩ j]
-   
+          simp }
+  fac s j := by ext k; exact (t k).fac _ j
+  uniq s m w := by
+    ext x
+    exact (t x).hom_ext fun j =>
+      (congr_app (w j) x).trans
+        ((t x).fac ⟨s.pt.obj _, whiskerRight s.ι ((evaluation K C).obj _)⟩ j).symm
 
 Depends on / 依赖: congr_app, evaluation, fac_assoc, hom_ext, naturality, naturality_assoc, s.pt.obj, whiskerRight
 -/
@@ -278,7 +304,8 @@ definition combineCocones
         (c k).isColimit.hom_ext fun j => by simp
       map_comp := fun {k₁} {k₂} {k₃} f₁ f₂ => (c k₁).isColimit.hom_ext fun j => by simp }
   ι :=
-    {
+    { app := fun j => { app := fun k => (c k).cocone.ι.app j }
+      naturality := fun j₁ j₂ g => by ext k; exact (c k).cocone.ι.naturality g }
 
 中文:
 定义 combineCocones
@@ -289,7 +316,8 @@ definition combineCocones
         (c k).isColimit.hom_ext fun j => by simp
       map_comp := fun {k₁} {k₂} {k₃} f₁ f₂ => (c k₁).isColimit.hom_ext fun j => by simp }
   ι :=
-    {
+    { app := fun j => { app := fun k => (c k).cocone.ι.app j }
+      naturality := fun j₁ j₂ g => by ext k; exact (c k).cocone.ι.naturality g }
 
 Depends on / 依赖: F.flip.map, cocone, cocone.pt, hom_ext, isColimit, isColimit.desc, isColimit.hom_ext, map_comp, map_id, naturality
 -/
@@ -368,7 +396,8 @@ definition pointwiseCocone
       ext x
       simp only [Functor.const_obj_obj, Functor.comp_obj, colim_obj, NatTrans.comp_app,
         Functor.const_obj_map, Category.comp_id]
-      change (F.flip.obj x).map
+      change (F.flip.obj x).map f ≫ _ = _
+      rw [colimit.w] }
 
 中文:
 定义 pointwiseCocone
@@ -380,7 +409,8 @@ definition pointwiseCocone
       ext x
       simp only [Functor.const_obj_obj, Functor.comp_obj, colim_obj, NatTrans.comp_app,
         Functor.const_obj_map, Category.comp_id]
-      change (F.flip.obj x).map
+      change (F.flip.obj x).map f ≫ _ = _
+      rw [colimit.w] }
 
 Depends on / 依赖: F.flip
 -/
@@ -866,7 +896,7 @@ instance evaluation_preservesColimit
   body: -- Porting note: added a let because X was not inferred
   let X : (k : K) -> ColimitCocone (F.flip.obj k) := fun k => getColimitCocone (F.flip.obj k)
 preservesColimit_of_preserves_colimit_cocone (combinedIsColimit _ X)
-    IsColimit.ofIsoColimit (colimit.isColimit _) (evaluateCombinedCocones F X k).
+    IsColimit.ofIsoColimit (colimit.isColimit _) (evaluateCombinedCocones F X k).symm
 
 中文:
 实例 evaluation_preservesColimit
@@ -874,7 +904,7 @@ preservesColimit_of_preserves_colimit_cocone (combinedIsColimit _ X)
   定义体: -- Porting note: added a let because X was not inferred
   let X : (k : K) -> ColimitCocone (F.flip.obj k) := fun k => getColimitCocone (F.flip.obj k)
 preservesColimit_of_preserves_colimit_cocone (combinedIsColimit _ X)
-    IsColimit.ofIsoColimit (colimit.isColimit _) (evaluateCombinedCocones F X k).
+    IsColimit.ofIsoColimit (colimit.isColimit _) (evaluateCombinedCocones F X k).symm
 -/
 instance evaluation_preservesColimit (F : J ⥤ K ⥤ C) [forall k, HasColimit (F.flip.obj k)] (k : K) :
     PreservesColimit F ((evaluation K C).obj k) :=

@@ -153,7 +153,9 @@ theorem matPolyEquiv_coeff_apply_aux_1
   simp only [AlgEquiv.apply_symm_apply, Algebra.TensorProduct.comm_tmul,
     polyEquivTensor_apply, eval₂_monomial]
   simp only [one_pow,
-    Algebra.TensorProduct
+    Algebra.TensorProduct.tmul_pow]
+  rw [← smul_X_eq_monomial]; rw [← TensorProduct.smul_tmul]
+  congr with i' <;> simp [single]
 
 中文:
 定理 matPolyEquiv_coeff_apply_aux_1
@@ -164,7 +166,9 @@ theorem matPolyEquiv_coeff_apply_aux_1
   simp only [AlgEquiv.apply_symm_apply, Algebra.TensorProduct.comm_tmul,
     polyEquivTensor_apply, eval₂_monomial]
   simp only [one_pow,
-    Algebra.TensorProduct
+    Algebra.TensorProduct.tmul_pow]
+  rw [← smul_X_eq_monomial]; rw [← TensorProduct.smul_tmul]
+  congr with i' <;> simp [single]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.apply_symm_apply, AlgEquiv.trans_apply, Algebra, Algebra.TensorProduct.comm_tmul, Algebra.TensorProduct.tmul_pow, Matrix, TensorProduct, TensorProduct.smul_tmul, apply_symm_apply, comm_tmul, injective, matPolyEquiv, matrixEquivTensor_apply_single, one_pow, polyEquivTensor, polyEquivTensor_apply, single, smul_X_eq_monomial, smul_tmul
 -/
@@ -382,7 +386,7 @@ theorem matPolyEquiv_symm_map_eval
   ext : 1
   · ext M : 1
     simp [Function.comp_def]
-  · s
+  · simp
 
 中文:
 定理 matPolyEquiv_symm_map_eval
@@ -395,7 +399,7 @@ theorem matPolyEquiv_symm_map_eval
   ext : 1
   · ext M : 1
     simp [Function.comp_def]
-  · s
+  · simp
 
 Depends on / 依赖: AlgHom, AlgHom.id, Commute, Commute.all, DFunLike, DFunLike.congr_fun, Function, Function.comp_def, Matrix, comp_def, congr_fun, mapMatrix, mapMatrix.comp, matPolyEquiv, matPolyEquiv.symm.toAlgHom, scalar, scalar_commute, toAlgHom
 -/

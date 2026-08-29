@@ -110,7 +110,19 @@ definition isColimitOf
   have hf : forall (x : t.pt), x = t.ι.app _ (f x) := fun x => (hsurj x).choose_spec.choose_spec
   exact
     { desc s := ↾fun x => s.ι.app _ (f x)
-      fac := fun s 
+      fac := fun s j => by
+        ext y
+        obtain ⟨k, l, g, eq⟩ := hinj _ _ _ _ (hf (t.ι.app j y))
+        have h := congr_hom (s.ι.naturality g) (f (t.ι.app j y))
+        have h' := congr_hom (s.ι.naturality l) y
+        simp only [Functor.const_obj_obj, comp_apply, Functor.const_obj_map, Category.comp_id,
+          TypeCat.Fun.toFun_apply, hom_ofHom, TypeCat.Fun.coe_mk] at h h' ⊢
+        rw [← h]; rw [← eq]; rw [h']
+      uniq := fun s m hm => by
+        ext x
+        dsimp
+        nth_rw 1 [hf x]
+        simp [← hm, comp_apply] }
 
 中文:
 定义 isColimitOf
@@ -121,7 +133,19 @@ definition isColimitOf
   have hf : forall (x : t.pt), x = t.ι.app _ (f x) := fun x => (hsurj x).choose_spec.choose_spec
   exact
     { desc s := ↾fun x => s.ι.app _ (f x)
-      fac := fun s 
+      fac := fun s j => by
+        ext y
+        obtain ⟨k, l, g, eq⟩ := hinj _ _ _ _ (hf (t.ι.app j y))
+        have h := congr_hom (s.ι.naturality g) (f (t.ι.app j y))
+        have h' := congr_hom (s.ι.naturality l) y
+        simp only [Functor.const_obj_obj, comp_apply, Functor.const_obj_map, Category.comp_id,
+          TypeCat.Fun.toFun_apply, hom_ofHom, TypeCat.Fun.coe_mk] at h h' ⊢
+        rw [← h]; rw [← eq]; rw [h']
+      uniq := fun s m hm => by
+        ext x
+        dsimp
+        nth_rw 1 [hf x]
+        simp [← hm, comp_apply] }
 
 Depends on / 依赖: F.obj, Functor, Functor.const_obj_obj, choose_spec, choose_spec.choose, choose_spec.choose_spec, comp_apply, congr_hom, const_obj_obj, naturality, t.pt
 -/
@@ -171,7 +195,7 @@ definition isColimitOf'
     obtain ⟨k, g, hg⟩ := hinj (IsFiltered.max i j) (F.map (IsFiltered.leftToMax i j) xi)
       (F.map (IsFiltered.rightToMax i j) xj)
       (by set_option backward.isDefEq.respectTransparency true in simp_all)
-    exact ⟨k, IsFiltered.leftToMax i j ≫ g, I
+    exact ⟨k, IsFiltered.leftToMax i j ≫ g, IsFiltered.rightToMax i j ≫ g, by simpa using hg⟩)
 
 中文:
 定义 isColimitOf'
@@ -180,7 +204,7 @@ definition isColimitOf'
     obtain ⟨k, g, hg⟩ := hinj (IsFiltered.max i j) (F.map (IsFiltered.leftToMax i j) xi)
       (F.map (IsFiltered.rightToMax i j) xj)
       (by set_option backward.isDefEq.respectTransparency true in simp_all)
-    exact ⟨k, IsFiltered.leftToMax i j ≫ g, I
+    exact ⟨k, IsFiltered.leftToMax i j ≫ g, IsFiltered.rightToMax i j ≫ g, by simpa using hg⟩)
 
 Depends on / 依赖: F.map, IsFiltered, IsFiltered.leftToMax, IsFiltered.max, IsFiltered.rightToMax, backward, backward.isDefEq.respectTransparency, isColimitOf, isDefEq, leftToMax, respectTransparency, rightToMax, set_option
 -/
@@ -205,7 +229,14 @@ theorem rel_equiv
     let ⟨l, fl, gl, _⟩ := IsFilteredOrEmpty.cocone_objs k k'
     let ⟨m, n, hn⟩ := IsFilteredOrEmpty.cocone_maps (g ≫ fl) (f' ≫ gl)
     ⟨m, f ≫ fl ≫ n, g' ≫ gl ≫ n,
-      
+      calc
+        F.map (f ≫ fl ≫ n) x.2 = F.map (fl ≫ n) (F.map f x.2) := by simp
+        _ = F.map (fl ≫ n) (F.map g y.2) := by rw [h]
+        _ = F.map ((g ≫ fl) ≫ n) y.2 := by simp
+        _ = F.map ((f' ≫ gl) ≫ n) y.2 := by rw [hn]
+        _ = F.map (gl ≫ n) (F.map f' y.2) := by simp
+        _ = F.map (gl ≫ n) (F.map g' z.2) := by rw [h']
+        _ = F.map (g' ≫ gl ≫ n) z.2 := by simp⟩
 
 中文:
 定理 rel_equiv
@@ -216,7 +247,14 @@ theorem rel_equiv
     let ⟨l, fl, gl, _⟩ := IsFilteredOrEmpty.cocone_objs k k'
     let ⟨m, n, hn⟩ := IsFilteredOrEmpty.cocone_maps (g ≫ fl) (f' ≫ gl)
     ⟨m, f ≫ fl ≫ n, g' ≫ gl ≫ n,
-      
+      calc
+        F.map (f ≫ fl ≫ n) x.2 = F.map (fl ≫ n) (F.map f x.2) := by simp
+        _ = F.map (fl ≫ n) (F.map g y.2) := by rw [h]
+        _ = F.map ((g ≫ fl) ≫ n) y.2 := by simp
+        _ = F.map ((f' ≫ gl) ≫ n) y.2 := by rw [hn]
+        _ = F.map (gl ≫ n) (F.map f' y.2) := by simp
+        _ = F.map (gl ≫ n) (F.map g' z.2) := by rw [h']
+        _ = F.map (g' ≫ gl ≫ n) z.2 := by simp⟩
 -/
 protected theorem rel_equiv : _root_.Equivalence (FilteredColimit.Rel.{v, u} F) where
   refl x := ⟨x.1, 𝟙 x.1, 𝟙 x.1, rfl⟩
@@ -303,7 +341,9 @@ theorem isColimit_eq_iff
   rw [← (IsColimit.coconePointUniqueUpToIso ht (colimitCoconeIsColimit F)).toEquiv.injective.eq_iff]
   convert! Iff.rfl
   · exact (congr_hom
-      (IsColimit.comp_coconePointUniqueUpToIso_hom ht (colimitCoconeIsColimit 
+      (IsColimit.comp_coconePointUniqueUpToIso_hom ht (colimitCoconeIsColimit F) _) xi).symm
+  · exact (congr_hom
+      (IsColimit.comp_coconePointUniqueUpToIso_hom ht (colimitCoconeIsColimit F) _) xj).symm
 
 中文:
 定理 isColimit_eq_iff
@@ -314,7 +354,9 @@ theorem isColimit_eq_iff
   rw [← (IsColimit.coconePointUniqueUpToIso ht (colimitCoconeIsColimit F)).toEquiv.injective.eq_iff]
   convert! Iff.rfl
   · exact (congr_hom
-      (IsColimit.comp_coconePointUniqueUpToIso_hom ht (colimitCoconeIsColimit 
+      (IsColimit.comp_coconePointUniqueUpToIso_hom ht (colimitCoconeIsColimit F) _) xi).symm
+  · exact (congr_hom
+      (IsColimit.comp_coconePointUniqueUpToIso_hom ht (colimitCoconeIsColimit F) _) xj).symm
 
 Depends on / 依赖: HasColimit, Iff.rfl, Iff.trans, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.comp_coconePointUniqueUpToIso_hom, coconePointUniqueUpToIso, colimitCoconeIsColimit, colimit_eq_iff_aux, comp_coconePointUniqueUpToIso_hom, congr_hom, convert, eq_iff, injective, toEquiv, toEquiv.injective.eq_iff
 -/

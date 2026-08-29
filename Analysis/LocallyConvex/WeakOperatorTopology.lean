@@ -2026,7 +2026,14 @@ lemma continuous_postcomp
   have σ_bij : Function.Bijective σ₂₃ := ⟨σ₂₃.injective, RingHomSurjective.is_surjective⟩
   let σ_equiv : 𝕜₂ ≃+* 𝕜₃ := RingEquiv.ofBijective σ₂₃ σ_bij
   let invPair : RingHomInvPair σ₂₃ σ_equiv.symm := RingHomInvPair.of_ringEquiv σ_equiv
-
+  let invPair_symm := invPair.symm
+  let σ_li : 𝕜₂ ≃ₛₗᵢ[σ₂₃] 𝕜₃ :=
+    { toLinearEquiv := .ofBijective σ₂₃.toSemilinearMap σ_bij
+      norm_map' _ := RingHomIsometric.norm_map }
+  conv => enter [1, a]; rw [← σ_li.apply_symm_apply (z _), comp_apply, ← toCLM_apply]
+  apply σ_li.continuous.comp
+exact continuous_dual_apply x σ_li.symm.toLinearIsometry.toContinuousLinearMap.comp
+    z.comp g.toCLM
 
 中文:
 引理 continuous_postcomp
@@ -2036,7 +2043,14 @@ lemma continuous_postcomp
   have σ_bij : Function.Bijective σ₂₃ := ⟨σ₂₃.injective, RingHomSurjective.is_surjective⟩
   let σ_equiv : 𝕜₂ ≃+* 𝕜₃ := RingEquiv.ofBijective σ₂₃ σ_bij
   let invPair : RingHomInvPair σ₂₃ σ_equiv.symm := RingHomInvPair.of_ringEquiv σ_equiv
-
+  let invPair_symm := invPair.symm
+  let σ_li : 𝕜₂ ≃ₛₗᵢ[σ₂₃] 𝕜₃ :=
+    { toLinearEquiv := .ofBijective σ₂₃.toSemilinearMap σ_bij
+      norm_map' _ := RingHomIsometric.norm_map }
+  conv => enter [1, a]; rw [← σ_li.apply_symm_apply (z _), comp_apply, ← toCLM_apply]
+  apply σ_li.continuous.comp
+exact continuous_dual_apply x σ_li.symm.toLinearIsometry.toContinuousLinearMap.comp
+    z.comp g.toCLM
 
 Depends on / 依赖: Bijective, Function, Function.Bijective, RingEquiv, RingEquiv.ofBijective, RingHomInvPair, RingHomInvPair.of_ringEquiv, RingHomIsometric, RingHomIsometric.norm_map, RingHomSurjective, RingHomSurjective.is_surjective, _equiv.symm, _li.apply_symm_, apply_symm_, continuous_of_dual_apply_continuous, injective, invPair, invPair.symm, invPair_symm, is_surjective
 -/

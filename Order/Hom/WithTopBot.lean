@@ -258,7 +258,9 @@ definition subtypeOrderIso
   map_rel_iff' {a b} := match a, b with
   | .some a, .some b => by simp
   | ⊤, .some ⟨b, h⟩ => by simp [h]
-  | a
+  | a, ⊤ => by simp
+
+@[to_dual (attr := simp)]
 
 中文:
 定义 subtypeOrderIso
@@ -272,7 +274,9 @@ definition subtypeOrderIso
   map_rel_iff' {a b} := match a, b with
   | .some a, .some b => by simp
   | ⊤, .some ⟨b, h⟩ => by simp [h]
-  | a
+  | a, ⊤ => by simp
+
+@[to_dual (attr := simp)]
 
 Depends on / 依赖: a.map, untopD
 -/

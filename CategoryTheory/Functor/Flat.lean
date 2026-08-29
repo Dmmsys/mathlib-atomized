@@ -184,7 +184,12 @@ instance RepresentablyFlat.comp
   let H₂ : J ⥤ StructuredArrow c₁.pt.right F :=
     { obj := fun j => StructuredArrow.mk (c₁.π.app j).right
       map := fun {j j'} f =>
-      
+        StructuredArrow.homMk (H.map f).right (congrArg CommaMorphism.right (c₁.w f)) }
+  obtain ⟨c₂⟩ := IsCofiltered.cone_nonempty H₂
+  simp only [H₂] at c₂
+  exact ⟨⟨StructuredArrow.mk (c₁.pt.hom ≫ G.map c₂.pt.hom),
+    ⟨fun j => StructuredArrow.homMk (c₂.π.app j).right (by simp [← G.map_comp]),
+     fun j j' f => by simpa using (c₂.w f).symm⟩⟩⟩
 
 中文:
 实例 RepresentablyFlat.comp
@@ -195,7 +200,12 @@ instance RepresentablyFlat.comp
   let H₂ : J ⥤ StructuredArrow c₁.pt.right F :=
     { obj := fun j => StructuredArrow.mk (c₁.π.app j).right
       map := fun {j j'} f =>
-      
+        StructuredArrow.homMk (H.map f).right (congrArg CommaMorphism.right (c₁.w f)) }
+  obtain ⟨c₂⟩ := IsCofiltered.cone_nonempty H₂
+  simp only [H₂] at c₂
+  exact ⟨⟨StructuredArrow.mk (c₁.pt.hom ≫ G.map c₂.pt.hom),
+    ⟨fun j => StructuredArrow.homMk (c₂.π.app j).right (by simp [← G.map_comp]),
+     fun j j' f => by simpa using (c₂.w f).symm⟩⟩⟩
 
 Depends on / 依赖: CommaMorphism, CommaMorphism.right, G.map, H.map, IsCofiltered, IsCofiltered.cone_nonempty, IsCofiltered.of_cone_nonempty, Structur, StructuredArrow, StructuredArrow.homMk, StructuredArrow.mk, StructuredArrow.pre, cone_nonempty, of_cone_nonempty, pt.hom, pt.right
 -/
@@ -267,7 +277,10 @@ theorem representablyCoflat_op_iff
   refine ⟨fun _ => ⟨fun X => ?_⟩, fun _ => ⟨fun ⟨X⟩ => ?_⟩⟩
   · suffices IsFiltered (StructuredArrow X F)ᵒᵖ from isCofiltered_of_isFiltered_op _
     apply IsFiltered.of_equivalence (structuredArrowOpEquivalence _ _).symm
-  · suffices IsCofiltered (CostructuredArrow F.op (op X))ᵒᵖ from isFiltered_
+  · suffices IsCofiltered (CostructuredArrow F.op (op X))ᵒᵖ from isFiltered_of_isCofiltered_op _
+    suffices IsCofiltered (StructuredArrow X F)ᵒᵖᵒᵖ from
+      IsCofiltered.of_equivalence (structuredArrowOpEquivalence _ _).op
+    apply IsCofiltered.of_equivalence (opOpEquivalence _)
 
 中文:
 定理 representablyCoflat_op_iff
@@ -276,7 +289,10 @@ theorem representablyCoflat_op_iff
   refine ⟨fun _ => ⟨fun X => ?_⟩, fun _ => ⟨fun ⟨X⟩ => ?_⟩⟩
   · suffices IsFiltered (StructuredArrow X F)ᵒᵖ from isCofiltered_of_isFiltered_op _
     apply IsFiltered.of_equivalence (structuredArrowOpEquivalence _ _).symm
-  · suffices IsCofiltered (CostructuredArrow F.op (op X))ᵒᵖ from isFiltered_
+  · suffices IsCofiltered (CostructuredArrow F.op (op X))ᵒᵖ from isFiltered_of_isCofiltered_op _
+    suffices IsCofiltered (StructuredArrow X F)ᵒᵖᵒᵖ from
+      IsCofiltered.of_equivalence (structuredArrowOpEquivalence _ _).op
+    apply IsCofiltered.of_equivalence (opOpEquivalence _)
 
 Depends on / 依赖: CostructuredArrow, F.op, IsCofiltered, IsCofiltered.of_equivalence, IsFiltered, IsFiltered.of_equivalence, StructuredArrow, isCofiltered_of_isFiltered_op, isFiltered_of_isCofiltered_op, of_equivalence, opOpEquivalence, structuredArrowOpEquivalence
 -/
@@ -299,7 +315,10 @@ theorem representablyFlat_op_iff
   refine ⟨fun _ => ⟨fun X => ?_⟩, fun _ => ⟨fun ⟨X⟩ => ?_⟩⟩
   · suffices IsCofiltered (CostructuredArrow F X)ᵒᵖ from isFiltered_of_isCofiltered_op _
     apply IsCofiltered.of_equivalence (costructuredArrowOpEquivalence _ _).symm
-  · suffices IsFiltered (StructuredArrow (op X) F.op)ᵒᵖ from isCofil
+  · suffices IsFiltered (StructuredArrow (op X) F.op)ᵒᵖ from isCofiltered_of_isFiltered_op _
+    suffices IsFiltered (CostructuredArrow F X)ᵒᵖᵒᵖ from
+      IsFiltered.of_equivalence (costructuredArrowOpEquivalence _ _).op
+    apply IsFiltered.of_equivalence (opOpEquivalence _)
 
 中文:
 定理 representablyFlat_op_iff
@@ -308,7 +327,10 @@ theorem representablyFlat_op_iff
   refine ⟨fun _ => ⟨fun X => ?_⟩, fun _ => ⟨fun ⟨X⟩ => ?_⟩⟩
   · suffices IsCofiltered (CostructuredArrow F X)ᵒᵖ from isFiltered_of_isCofiltered_op _
     apply IsCofiltered.of_equivalence (costructuredArrowOpEquivalence _ _).symm
-  · suffices IsFiltered (StructuredArrow (op X) F.op)ᵒᵖ from isCofil
+  · suffices IsFiltered (StructuredArrow (op X) F.op)ᵒᵖ from isCofiltered_of_isFiltered_op _
+    suffices IsFiltered (CostructuredArrow F X)ᵒᵖᵒᵖ from
+      IsFiltered.of_equivalence (costructuredArrowOpEquivalence _ _).op
+    apply IsFiltered.of_equivalence (opOpEquivalence _)
 
 Depends on / 依赖: CostructuredArrow, F.op, IsCofiltered, IsCofiltered.of_equivalence, IsFiltered, IsFiltered.of_equivalence, StructuredArrow, costructuredArrowOpEquivalence, isCofiltered_of_isFiltered_op, isFiltered_of_isCofiltered_op, of_equivalence, opOpEquivalence
 -/
@@ -497,7 +519,7 @@ hc.lift
         (Cone.postcompose
               ({ app := fun _ => 𝟙 _ } :
                 (s.toStructuredArrow ⋙ pre s.pt K F) ⋙ proj s.pt F ⟶ K)).obj <|
-          (StructuredArrow.proj s.pt F)
+          (StructuredArrow.proj s.pt F).mapCone s')
 
 中文:
 定义 lift
@@ -509,7 +531,7 @@ hc.lift
         (Cone.postcompose
               ({ app := fun _ => 𝟙 _ } :
                 (s.toStructuredArrow ⋙ pre s.pt K F) ⋙ proj s.pt F ⟶ K)).obj <|
-          (StructuredArrow.proj s.pt F)
+          (StructuredArrow.proj s.pt F).mapCone s')
 
 Depends on / 依赖: Cone.postcompose, F.map, IsCofiltered, IsCofiltered.cone, StructuredArrow, StructuredArrow.pre, StructuredArrow.proj, hc.lift, mapCone, postcompose, pt.hom, s.pt, s.toStructuredArrow, toStructuredArrow
 -/
@@ -560,7 +582,45 @@ theorem uniq
   let α₁ : (F.mapCone c).toStructuredArrow ⋙ map f₁ ⟶ s.toStructuredArrow :=
     { app := fun X => eqToHom (by simp [← h₁]) }
   let α₂ : (F.mapCone c).toStructuredArrow ⋙ map f₂ ⟶ s.toStructuredArrow :=
-    { app := fun X => eq
+    { app := fun X => eqToHom (by simp [← h₂]) }
+  let c₁ : Cone (s.toStructuredArrow ⋙ pre s.pt K F) :=
+    (Cone.postcompose (Functor.whiskerRight α₁ (pre s.pt K F) :)).obj
+      (c.toStructuredArrowCone F f₁)
+  let c₂ : Cone (s.toStructuredArrow ⋙ pre s.pt K F) :=
+    (Cone.postcompose (Functor.whiskerRight α₂ (pre s.pt K F) :)).obj
+      (c.toStructuredArrowCone F f₂)
+  -- The two cones can then be combined and we may obtain a cone over the two cones since
+  -- `StructuredArrow s.pt F` is cofiltered.
+  let c₀ := IsCofiltered.cone (biconeMk _ c₁ c₂)
+  let g₁ : c₀.pt ⟶ c₁.pt := c₀.π.app Bicone.left
+  let g₂ : c₀.pt ⟶ c₂.pt := c₀.π.app Bicone.right
+  -- Then `g₁.right` and `g₂.right` are two maps from the same cone into the `c`.
+  have : forall j : J, g₁.right ≫ c.π.app j = g₂.right ≫ c.π.app j := by
+    intro j
+    injection c₀.π.naturality (BiconeHom.left j) with _ e₁
+    injection c₀.π.naturality (BiconeHom.right j) with _ e₂
+    convert! e₁.symm.trans e₂ <;> simp [c₁, c₂]
+  have : c.extend g₁.right = c.extend g₂.right := by
+    unfold Cone.extend
+    congr 1
+    ext x
+    apply this
+  -- And thus they are equal as `c` is the limit.
+  have : g₁.right = g₂.right := calc
+    g₁.right = hc.lift (c.extend g₁.right) := by
+      apply hc.uniq (c.extend _)
+      simp
+    _ = hc.lift (c.extend g₂.right) := by
+      congr
+    _ = g₂.right := by
+      symm
+      apply hc.uniq (c.extend _)
+      simp
+  -- Finally, since `fᵢ` factors through `F(gᵢ)`, the result follows.
+  calc
+    f₁ = c₀.pt.hom ≫ F.map g₁.right := g₁.w.symm
+    _ = c₀.pt.hom ≫ F.map g₂.right := by rw [this]
+    _ = f₂ := g₂.w
 
 中文:
 定理 uniq
@@ -570,7 +630,45 @@ theorem uniq
   let α₁ : (F.mapCone c).toStructuredArrow ⋙ map f₁ ⟶ s.toStructuredArrow :=
     { app := fun X => eqToHom (by simp [← h₁]) }
   let α₂ : (F.mapCone c).toStructuredArrow ⋙ map f₂ ⟶ s.toStructuredArrow :=
-    { app := fun X => eq
+    { app := fun X => eqToHom (by simp [← h₂]) }
+  let c₁ : Cone (s.toStructuredArrow ⋙ pre s.pt K F) :=
+    (Cone.postcompose (Functor.whiskerRight α₁ (pre s.pt K F) :)).obj
+      (c.toStructuredArrowCone F f₁)
+  let c₂ : Cone (s.toStructuredArrow ⋙ pre s.pt K F) :=
+    (Cone.postcompose (Functor.whiskerRight α₂ (pre s.pt K F) :)).obj
+      (c.toStructuredArrowCone F f₂)
+  -- The two cones can then be combined and we may obtain a cone over the two cones since
+  -- `StructuredArrow s.pt F` is cofiltered.
+  let c₀ := IsCofiltered.cone (biconeMk _ c₁ c₂)
+  let g₁ : c₀.pt ⟶ c₁.pt := c₀.π.app Bicone.left
+  let g₂ : c₀.pt ⟶ c₂.pt := c₀.π.app Bicone.right
+  -- Then `g₁.right` and `g₂.right` are two maps from the same cone into the `c`.
+  have : forall j : J, g₁.right ≫ c.π.app j = g₂.right ≫ c.π.app j := by
+    intro j
+    injection c₀.π.naturality (BiconeHom.left j) with _ e₁
+    injection c₀.π.naturality (BiconeHom.right j) with _ e₂
+    convert! e₁.symm.trans e₂ <;> simp [c₁, c₂]
+  have : c.extend g₁.right = c.extend g₂.right := by
+    unfold Cone.extend
+    congr 1
+    ext x
+    apply this
+  -- And thus they are equal as `c` is the limit.
+  have : g₁.right = g₂.right := calc
+    g₁.right = hc.lift (c.extend g₁.right) := by
+      apply hc.uniq (c.extend _)
+      simp
+    _ = hc.lift (c.extend g₂.right) := by
+      congr
+    _ = g₂.right := by
+      symm
+      apply hc.uniq (c.extend _)
+      simp
+  -- Finally, since `fᵢ` factors through `F(gᵢ)`, the result follows.
+  calc
+    f₁ = c₀.pt.hom ≫ F.map g₁.right := g₁.w.symm
+    _ = c₀.pt.hom ≫ F.map g₂.right := by rw [this]
+    _ = f₂ := g₂.w
 -/
 theorem uniq {K : J ⥤ C} {c : Cone K} (hc : IsLimit c) (s : Cone (K ⋙ F))
     (f₁ f₂ : s.pt ⟶ F.obj c.pt) (h₁ : forall j : J, f₁ ≫ (F.mapCone c).π.app j = s.π.app j)
@@ -637,7 +735,9 @@ lemma preservesFiniteLimits_of_flat
     { lift := PreservesFiniteLimitsOfFlat.lift F hc
       fac := PreservesFiniteLimitsOfFlat.fac F hc
       uniq := fun s m h => by
-        apply Prese
+        apply PreservesFiniteLimitsOfFlat.uniq F hc
+        · exact h
+        · exact PreservesFiniteLimitsOfFlat.fac F hc s }
 
 中文:
 引理 preservesFiniteLimits_of_flat
@@ -652,7 +752,9 @@ lemma preservesFiniteLimits_of_flat
     { lift := PreservesFiniteLimitsOfFlat.lift F hc
       fac := PreservesFiniteLimitsOfFlat.fac F hc
       uniq := fun s m h => by
-        apply Prese
+        apply PreservesFiniteLimitsOfFlat.uniq F hc
+        · exact h
+        · exact PreservesFiniteLimitsOfFlat.fac F hc s }
 
 Depends on / 依赖: PreservesFiniteLimitsOfFlat, PreservesFiniteLimitsOfFlat.fac, PreservesFiniteLimitsOfFlat.lift, PreservesFiniteLimitsOfFlat.uniq, preservesFiniteLimits_of_preservesFiniteLimitsOfSize
 -/
@@ -752,7 +854,14 @@ definition lanEvaluationIsoColim
     (colimit.isColimit _)) (fun {G₁ G₂} φ => by
       apply (Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit F G₁ X).hom_ext
       intro T
-      have h₁ :=
+      have h₁ := fun (G : C ⥤ E) => IsColimit.comp_coconePointUniqueUpToIso_hom
+        (Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit F G X) (colimit.isColimit _) T
+      have h₂ := congr_app (F.lanUnit.naturality φ) T.left
+      dsimp at h₁ h₂ ⊢
+      simp only [Category.assoc] at h₁ ⊢
+      simp only [Functor.lan, Functor.lanUnit] at h₂ ⊢
+      rw [reassoc_of% h₁]; rw [NatTrans.naturality_assoc]; rw [← reassoc_of% h₂]; rw [h₁]; rw [ι_colimMap]; rw [Functor.whiskerLeft_app]
+      rfl)
 
 中文:
 定义 lanEvaluationIsoColim
@@ -763,7 +872,14 @@ definition lanEvaluationIsoColim
     (colimit.isColimit _)) (fun {G₁ G₂} φ => by
       apply (Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit F G₁ X).hom_ext
       intro T
-      have h₁ :=
+      have h₁ := fun (G : C ⥤ E) => IsColimit.comp_coconePointUniqueUpToIso_hom
+        (Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit F G X) (colimit.isColimit _) T
+      have h₂ := congr_app (F.lanUnit.naturality φ) T.left
+      dsimp at h₁ h₂ ⊢
+      simp only [Category.assoc] at h₁ ⊢
+      simp only [Functor.lan, Functor.lanUnit] at h₂ ⊢
+      rw [reassoc_of% h₁]; rw [NatTrans.naturality_assoc]; rw [← reassoc_of% h₂]; rw [h₁]; rw [ι_colimMap]; rw [Functor.whiskerLeft_app]
+      rfl)
 
 Depends on / 依赖: F.lanUnit.naturality, Functor, Functor.isPointwiseLeftKanExtensionLeftKanExtensionUnit, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.comp_coconePointUniqueUpToIso_hom, NatIso, NatIso.ofComponents, T.left, coconePointUniqueUpToIso, colimit, colimit.isColimit, comp_coconePointUniqueUpToIso_hom, congr_app, hom_ext, isColimit, isPointwiseLeftKanExtensionLeftKanExtensionUnit, lanUnit, naturality, ofComponents
 -/
@@ -804,7 +920,7 @@ instance lan_preservesFiniteLimits_of_flat
   intro K
   have : IsFiltered (CostructuredArrow F.op K) :=
     IsFiltered.of_equivalence (structuredArrowOpEquivalence F (unop K))
-  exa
+  exact preservesLimitsOfShape_of_natIso (lanEvaluationIsoColim _ _ _).symm
 
 中文:
 实例 lan_preservesFiniteLimits_of_flat
@@ -816,7 +932,7 @@ instance lan_preservesFiniteLimits_of_flat
   intro K
   have : IsFiltered (CostructuredArrow F.op K) :=
     IsFiltered.of_equivalence (structuredArrowOpEquivalence F (unop K))
-  exa
+  exact preservesLimitsOfShape_of_natIso (lanEvaluationIsoColim _ _ _).symm
 
 Depends on / 依赖: CostructuredArrow, F.op, F.op.lan, IsFiltered, IsFiltered.of_equivalence, lanEvaluationIsoColim, of_equivalence, preservesFiniteLimits_of_preservesFiniteLimitsOfSize, preservesLimitsOfShape_of_evaluation, preservesLimitsOfShape_of_natIso, structuredArrowOpEquivalence
 -/
@@ -886,7 +1002,7 @@ theorem flat_iff_lan_flat
     have : PreservesFiniteLimits F := by
       apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize.{u₁}
       intros; apply preservesLimit_of_lan_preservesLimit
-    apply flat_of_pres
+    apply flat_of_preservesFiniteLimits⟩
 
 中文:
 定理 flat_iff_lan_flat
@@ -896,7 +1012,7 @@ theorem flat_iff_lan_flat
     have : PreservesFiniteLimits F := by
       apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize.{u₁}
       intros; apply preservesLimit_of_lan_preservesLimit
-    apply flat_of_pres
+    apply flat_of_preservesFiniteLimits⟩
 
 Depends on / 依赖: F.op.lan, PreservesFiniteLimits, flat_of_preservesFiniteLimits, intros, preservesFiniteLimits_of_flat, preservesFiniteLimits_of_preservesFiniteLimitsOfSize, preservesLimit_of_lan_preservesLimit
 -/

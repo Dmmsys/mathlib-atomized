@@ -153,7 +153,20 @@ lemma goursat_surjective
   -- check R-linearity of the map
   have (r : R) (x : M ⧸ L.goursatFst) : e (r • x) = r • e x := by
     change (r • x, r • e x) in e.toAddMonoidHom.graph
-    rw 
+    rw [← he]; rw [← Prod.smul_mk]
+    have : (x, e x) in e.toAddMonoidHom.graph := rfl
+    rw [← he]; rw [AddMonoidHom.mem_range] at this
+    rcases this with ⟨⟨l, hl⟩, hl'⟩
+    use ⟨r • l, L.smul_mem r hl⟩
+    rw [← hl']
+    rfl
+  -- define the map as an R-linear equiv
+  use { e with map_smul' := this }
+  rw [← toAddSubgroup_injective.eq_iff]
+  convert! he using 1
+  ext v
+  rw [mem_toAddSubgroup]; rw [mem_graph_iff]; rw [Eq.comm]
+  rfl
 
 中文:
 引理 goursat_surjective
@@ -165,7 +178,20 @@ lemma goursat_surjective
   -- check R-linearity of the map
   have (r : R) (x : M ⧸ L.goursatFst) : e (r • x) = r • e x := by
     change (r • x, r • e x) in e.toAddMonoidHom.graph
-    rw 
+    rw [← he]; rw [← Prod.smul_mk]
+    have : (x, e x) in e.toAddMonoidHom.graph := rfl
+    rw [← he]; rw [AddMonoidHom.mem_range] at this
+    rcases this with ⟨⟨l, hl⟩, hl'⟩
+    use ⟨r • l, L.smul_mem r hl⟩
+    rw [← hl']
+    rfl
+  -- define the map as an R-linear equiv
+  use { e with map_smul' := this }
+  rw [← toAddSubgroup_injective.eq_iff]
+  convert! he using 1
+  ext v
+  rw [mem_toAddSubgroup]; rw [mem_graph_iff]; rw [Eq.comm]
+  rfl
 -/
 lemma goursat_surjective : exists e : (M ⧸ L.goursatFst) ≃ₗ[R] N ⧸ L.goursatSnd,
     LinearMap.range ((L.goursatFst.mkQ.prodMap L.goursatSnd.mkQ).comp L.subtype) = e.graph := by
@@ -202,7 +228,32 @@ lemma goursat
   let P : L ->ₗ[R] M' := (LinearMap.fst ..).submoduleMap L
   let Q : L ->ₗ[R] N' := (LinearMap.snd ..).submoduleMap L
   let L' : Submodule R (M' × N') := LinearMap.range (P.prod Q)
-  have hL₁' : Surjective (Prod.fst ∘ L'.su
+  have hL₁' : Surjective (Prod.fst ∘ L'.subtype) := by
+    simp only [← coe_fst (R := R), ← coe_comp, ← range_eq_top, LinearMap.range_comp, range_subtype]
+    simpa only [L', ← LinearMap.range_comp, fst_prod, range_eq_top] using
+      (LinearMap.fst ..).submoduleMap_surjective L
+  have hL₂' : Surjective (Prod.snd ∘ L'.subtype) := by
+    simp only [← coe_snd (R := R), ← coe_comp, ← range_eq_top, LinearMap.range_comp, range_subtype]
+    simpa only [L', ← LinearMap.range_comp, snd_prod, range_eq_top] using
+      (LinearMap.snd ..).submoduleMap_surjective L
+  obtain ⟨e, he⟩ := goursat_surjective hL₁' hL₂'
+  use M', N', L'.goursatFst, L'.goursatSnd, e
+  rw [← he]
+  simp only [LinearMap.range_comp, Submodule.range_subtype, L', M', N', P, Q]
+  rw [comap_map_eq_self]
+  · ext ⟨m, n⟩
+    constructor
+    · simp only [mem_map, LinearMap.mem_range, LinearMap.prod_apply, Function.prod_apply,
+      Subtype.exists, Prod.exists, LinearMap.prodMap_apply, subtype_apply, Prod.mk.injEq,
+      Subtype.ext_iff, submoduleMap_coe_apply, fst_apply, snd_apply]
+      grind
+    · simp only [mem_map, LinearMap.mem_range, LinearMap.prod_apply, Function.prod_apply,
+      Subtype.exists, Prod.exists, LinearMap.prodMap_apply, subtype_apply, Prod.mk.injEq,
+      snd_apply, fst_apply, Subtype.ext_iff, submoduleMap_coe_apply]
+      grind
+  · convert! goursatFst_prod_goursatSnd_le (range <| P.prod Q)
+    simp only [ker_prodMap, ker_mkQ, Submodule.ext_iff]
+    grind
 
 中文:
 引理 goursat
@@ -213,7 +264,32 @@ lemma goursat
   let P : L ->ₗ[R] M' := (LinearMap.fst ..).submoduleMap L
   let Q : L ->ₗ[R] N' := (LinearMap.snd ..).submoduleMap L
   let L' : Submodule R (M' × N') := LinearMap.range (P.prod Q)
-  have hL₁' : Surjective (Prod.fst ∘ L'.su
+  have hL₁' : Surjective (Prod.fst ∘ L'.subtype) := by
+    simp only [← coe_fst (R := R), ← coe_comp, ← range_eq_top, LinearMap.range_comp, range_subtype]
+    simpa only [L', ← LinearMap.range_comp, fst_prod, range_eq_top] using
+      (LinearMap.fst ..).submoduleMap_surjective L
+  have hL₂' : Surjective (Prod.snd ∘ L'.subtype) := by
+    simp only [← coe_snd (R := R), ← coe_comp, ← range_eq_top, LinearMap.range_comp, range_subtype]
+    simpa only [L', ← LinearMap.range_comp, snd_prod, range_eq_top] using
+      (LinearMap.snd ..).submoduleMap_surjective L
+  obtain ⟨e, he⟩ := goursat_surjective hL₁' hL₂'
+  use M', N', L'.goursatFst, L'.goursatSnd, e
+  rw [← he]
+  simp only [LinearMap.range_comp, Submodule.range_subtype, L', M', N', P, Q]
+  rw [comap_map_eq_self]
+  · ext ⟨m, n⟩
+    constructor
+    · simp only [mem_map, LinearMap.mem_range, LinearMap.prod_apply, Function.prod_apply,
+      Subtype.exists, Prod.exists, LinearMap.prodMap_apply, subtype_apply, Prod.mk.injEq,
+      Subtype.ext_iff, submoduleMap_coe_apply, fst_apply, snd_apply]
+      grind
+    · simp only [mem_map, LinearMap.mem_range, LinearMap.prod_apply, Function.prod_apply,
+      Subtype.exists, Prod.exists, LinearMap.prodMap_apply, subtype_apply, Prod.mk.injEq,
+      snd_apply, fst_apply, Subtype.ext_iff, submoduleMap_coe_apply]
+      grind
+  · convert! goursatFst_prod_goursatSnd_le (range <| P.prod Q)
+    simp only [ker_prodMap, ker_mkQ, Submodule.ext_iff]
+    grind
 
 Depends on / 依赖: L.map, LinearMap, LinearMap.fst, LinearMap.range, LinearMap.range_comp, LinearMap.snd, P.prod, Prod.fst, Submodule, Surjective, coe_comp, coe_fst, fst_prod, range_comp, range_eq_top, range_subtype, submoduleMap, submoduleMap_s, subtype
 -/

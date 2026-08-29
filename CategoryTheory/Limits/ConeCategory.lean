@@ -498,7 +498,9 @@ theorem hasLimitsOfShape_iff_isLeftAdjoint_const
       ⟨fun h => h.has_limit, fun h => HasLimitsOfShape.mk⟩
     _ ↔ forall F : J ⥤ C, HasTerminal (Cone F) := forall_congr' hasLimit_iff_hasTerminal_cone
     _ ↔ forall F : J ⥤ C, HasTerminal (CostructuredArrow (const J) F) :=
-      (for
+      (forall_congr' fun F => (Cone.equivCostructuredArrow F).hasTerminal_iff)
+    _ ↔ (IsLeftAdjoint (const J : C ⥤ _)) :=
+      isLeftAdjoint_iff_hasTerminal_costructuredArrow.symm
 
 中文:
 定理 hasLimitsOfShape_iff_isLeftAdjoint_const
@@ -507,7 +509,9 @@ theorem hasLimitsOfShape_iff_isLeftAdjoint_const
       ⟨fun h => h.has_limit, fun h => HasLimitsOfShape.mk⟩
     _ ↔ forall F : J ⥤ C, HasTerminal (Cone F) := forall_congr' hasLimit_iff_hasTerminal_cone
     _ ↔ forall F : J ⥤ C, HasTerminal (CostructuredArrow (const J) F) :=
-      (for
+      (forall_congr' fun F => (Cone.equivCostructuredArrow F).hasTerminal_iff)
+    _ ↔ (IsLeftAdjoint (const J : C ⥤ _)) :=
+      isLeftAdjoint_iff_hasTerminal_costructuredArrow.symm
 
 Depends on / 依赖: Cone.equivCostructuredArrow, CostructuredArrow, HasLimit, HasLimitsOfShape, HasLimitsOfShape.mk, HasTerminal, IsLeftAdjoint, equivCostructuredArrow, forall_congr, h.has_limit, hasLimit_iff_hasTerminal_cone, hasTerminal_iff, has_limit, isLeftAdjoint_iff_hasTerminal_costructuredArrow, isLeftAdjoint_iff_hasTerminal_costructuredArrow.symm
 -/
@@ -1055,7 +1059,9 @@ theorem hasColimitsOfShape_iff_isRightAdjoint_const
       ⟨fun h => h.has_colimit, fun h => HasColimitsOfShape.mk⟩
     _ ↔ forall F : J ⥤ C, HasInitial (Cocone F) := forall_congr' hasColimit_iff_hasInitial_cocone
     _ ↔ forall F : J ⥤ C, HasInitial (StructuredArrow F (const J)) :=
- 
+      (forall_congr' fun F => (Cocone.equivStructuredArrow F).hasInitial_iff)
+    _ ↔ (IsRightAdjoint (const J : C ⥤ _)) :=
+      isRightAdjoint_iff_hasInitial_structuredArrow.symm
 
 中文:
 定理 hasColimitsOfShape_iff_isRightAdjoint_const
@@ -1064,7 +1070,9 @@ theorem hasColimitsOfShape_iff_isRightAdjoint_const
       ⟨fun h => h.has_colimit, fun h => HasColimitsOfShape.mk⟩
     _ ↔ forall F : J ⥤ C, HasInitial (Cocone F) := forall_congr' hasColimit_iff_hasInitial_cocone
     _ ↔ forall F : J ⥤ C, HasInitial (StructuredArrow F (const J)) :=
- 
+      (forall_congr' fun F => (Cocone.equivStructuredArrow F).hasInitial_iff)
+    _ ↔ (IsRightAdjoint (const J : C ⥤ _)) :=
+      isRightAdjoint_iff_hasInitial_structuredArrow.symm
 
 Depends on / 依赖: Cocone, Cocone.equivStructuredArrow, HasColimit, HasColimitsOfShape, HasColimitsOfShape.mk, HasInitial, IsRightAdjoint, StructuredArrow, equivStructuredArrow, forall_congr, h.has_colimit, hasColimit_iff_hasInitial_cocone, hasInitial_iff, has_colimit, isRightAdjoint_iff_hasInitial_structuredArrow, isRightAdjoint_iff_hasInitial_structuredArrow.symm
 -/

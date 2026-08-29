@@ -962,7 +962,8 @@ theorem cancel_right_div_gcd
   refine Int.dvd_of_dvd_mul_right_of_gcd_one (?_ : m / d ∣ c / d * (b - a)) ?_
   · rw [mul_comm, ← Int.mul_ediv_assoc (b - a) (gcd_dvd_right ..), Int.sub_mul]
     exact Int.ediv_dvd_ediv (gcd_dvd_left ..) h
-  · rw [gcd_div (gcd_dvd_left ..) (gcd_dvd_
+  · rw [gcd_div (gcd_dvd_left ..) (gcd_dvd_right ..), natAbs_natCast,
+      Nat.div_self (gcd_pos_of_ne_zero_left c hm.ne')]
 
 中文:
 定理 cancel_right_div_gcd
@@ -973,7 +974,8 @@ theorem cancel_right_div_gcd
   refine Int.dvd_of_dvd_mul_right_of_gcd_one (?_ : m / d ∣ c / d * (b - a)) ?_
   · rw [mul_comm, ← Int.mul_ediv_assoc (b - a) (gcd_dvd_right ..), Int.sub_mul]
     exact Int.ediv_dvd_ediv (gcd_dvd_left ..) h
-  · rw [gcd_div (gcd_dvd_left ..) (gcd_dvd_
+  · rw [gcd_div (gcd_dvd_left ..) (gcd_dvd_right ..), natAbs_natCast,
+      Nat.div_self (gcd_pos_of_ne_zero_left c hm.ne')]
 
 Depends on / 依赖: Int.dvd_of_dvd_mul_right_of_gcd_one, Int.ediv_dvd_ediv, Int.mul_ediv_assoc, Int.sub_mul, Nat.div_self, div_self, dvd_of_dvd_mul_right_of_gcd_one, ediv_dvd_ediv, gcd_div, gcd_dvd_left, gcd_dvd_right, gcd_pos_of_ne_zero_left, hm.ne, modEq_iff_dvd, mul_comm, mul_ediv_assoc, natAbs_natCast, sub_mul
 -/

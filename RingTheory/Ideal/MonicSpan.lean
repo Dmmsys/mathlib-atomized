@@ -69,7 +69,16 @@ lemma exists_monic_span_sup_map_eq
   have ne' : Ideal.map (mapRingHom (Ideal.Quotient.mk q)) p != ⊥ := by
     simp only [ne_eq, map_eq_bot_iff_le_ker, Polynomial.ker_mapRingHom, q, mk_ker]
     exact not_le_of_gt (lt_of_le_of_ne Ideal.map_comap_le ne.symm)
-  rcase
+  rcases Polynomial.exists_monic_span _ ne' with ⟨y, mony, hy⟩
+  have : y in lifts (Ideal.Quotient.mk q) := map_surjective _ Ideal.Quotient.mk_surjective _
+  rcases Polynomial.lifts_and_natDegree_eq_and_monic this mony with ⟨f, hf, deg, monf⟩
+  use f, monf
+  trans comap (mapRingHom (Ideal.Quotient.mk q)) ((span {f}).map (mapRingHom (Ideal.Quotient.mk q)))
+  · rw [Ideal.map_span, coe_mapRingHom, Set.image_singleton, hf, ← hy,
+      Ideal.comap_map_of_surjective' _ (map_surjective _ Ideal.Quotient.mk_surjective)]
+    simpa [Polynomial.ker_mapRingHom, q] using Ideal.map_comap_le
+  · rw [Ideal.comap_map_of_surjective' _ (map_surjective _ Ideal.Quotient.mk_surjective),
+      sup_comm, Polynomial.ker_mapRingHom, mk_ker]
 
 中文:
 引理 存在_monic_span_sup_map_eq
@@ -80,7 +89,16 @@ lemma exists_monic_span_sup_map_eq
   have ne' : Ideal.map (mapRingHom (Ideal.Quotient.mk q)) p != ⊥ := by
     simp only [ne_eq, map_eq_bot_iff_le_ker, Polynomial.ker_mapRingHom, q, mk_ker]
     exact not_le_of_gt (lt_of_le_of_ne Ideal.map_comap_le ne.symm)
-  rcase
+  rcases Polynomial.exists_monic_span _ ne' with ⟨y, mony, hy⟩
+  have : y in lifts (Ideal.Quotient.mk q) := map_surjective _ Ideal.Quotient.mk_surjective _
+  rcases Polynomial.lifts_and_natDegree_eq_and_monic this mony with ⟨f, hf, deg, monf⟩
+  use f, monf
+  trans comap (mapRingHom (Ideal.Quotient.mk q)) ((span {f}).map (mapRingHom (Ideal.Quotient.mk q)))
+  · rw [Ideal.map_span, coe_mapRingHom, Set.image_singleton, hf, ← hy,
+      Ideal.comap_map_of_surjective' _ (map_surjective _ Ideal.Quotient.mk_surjective)]
+    simpa [Polynomial.ker_mapRingHom, q] using Ideal.map_comap_le
+  · rw [Ideal.comap_map_of_surjective' _ (map_surjective _ Ideal.Quotient.mk_surjective),
+      sup_comm, Polynomial.ker_mapRingHom, mk_ker]
 
 Depends on / 依赖: Ideal.Quotient.field, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.map, Ideal.map_comap_le, Polynomial, Polynomial.exists_monic_span, Polynomial.ker_mapRingHom, Polynomial.lifts_and_natDegree_eq_and_monic, Quotient, exists_monic_span, ker_mapRingHom, lifts_and_natDegree_eq_and_monic, lt_of_le_of_ne, mapRingHom, map_comap_le, map_eq_bot_iff_le_ker, map_surjective, mk_ker, mk_surjective
 -/

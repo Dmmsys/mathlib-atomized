@@ -619,7 +619,10 @@ theorem hasWeakLimit_cospan_of_hasLimit_pair_of_hasWeakLimit_parallelPair
           rw [Category.assoc]; rw [weakEqualizer.condition]
           simp
       isWeakLimit :=
-        PullbackCone.IsWeakLimit.mk _ (fun s => weakEqu
+        PullbackCone.IsWeakLimit.mk _ (fun s => weakEqualizer.lift
+(prod.lift (s.π.app .left) (s.π.app .right)) by
+            simp [limit.lift_π_assoc, PullbackCone.condition])
+          (by simp) (by simp) }
 
 中文:
 定理 hasWeakLimit_cospan_of_hasLimit_pair_of_hasWeakLimit_parallelPair
@@ -631,7 +634,10 @@ theorem hasWeakLimit_cospan_of_hasLimit_pair_of_hasWeakLimit_parallelPair
           rw [Category.assoc]; rw [weakEqualizer.condition]
           simp
       isWeakLimit :=
-        PullbackCone.IsWeakLimit.mk _ (fun s => weakEqu
+        PullbackCone.IsWeakLimit.mk _ (fun s => weakEqualizer.lift
+(prod.lift (s.π.app .left) (s.π.app .right)) by
+            simp [limit.lift_π_assoc, PullbackCone.condition])
+          (by simp) (by simp) }
 
 Depends on / 依赖: Category, Category.assoc, HasWeakLimit, HasWeakLimit.mk, IsWeakLimit, PullbackCone, PullbackCone.IsWeakLimit.mk, PullbackCone.condition, PullbackCone.mk, condition, isWeakLimit, limit.lift_, prod.fst, prod.lift, prod.snd, weakEqualizer, weakEqualizer.condition, weakEqualizer.lift
 -/

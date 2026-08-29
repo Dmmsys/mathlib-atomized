@@ -91,7 +91,15 @@ theorem pow_add_pow_le
     let n := k.succ
     have h1 := add_nonneg (mul_nonneg hx (pow_nonneg hy n)) (mul_nonneg hy (pow_nonneg hx n))
     have h2 := add_nonneg hx hy
-    c
+    calc
+      x ^ (n + 1) + y ^ (n + 1) <= x * x ^ n + y * y ^ n + (x * y ^ n + y * x ^ n) := by
+        rw [pow_succ' _ n]; rw [pow_succ' _ n]
+        exact le_add_of_nonneg_right h1
+      _ = (x + y) * (x ^ n + y ^ n) := by
+        rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [add_comm (y * x ^ n)]; rw [← add_assoc]; rw [← add_assoc]; rw [add_assoc (x * x ^ n) (x * y ^ n)]; rw [add_comm (x * y ^ n) (y * y ^ n)]; rw [← add_assoc]
+      _ <= (x + y) ^ (n + 1) := by
+        rw [pow_succ' _ n]
+        gcongr; exact ih (Nat.succ_ne_zero k)
 
 中文:
 定理 pow_add_pow_le
@@ -105,7 +113,15 @@ theorem pow_add_pow_le
     let n := k.succ
     have h1 := add_nonneg (mul_nonneg hx (pow_nonneg hy n)) (mul_nonneg hy (pow_nonneg hx n))
     have h2 := add_nonneg hx hy
-    c
+    calc
+      x ^ (n + 1) + y ^ (n + 1) <= x * x ^ n + y * y ^ n + (x * y ^ n + y * x ^ n) := by
+        rw [pow_succ' _ n]; rw [pow_succ' _ n]
+        exact le_add_of_nonneg_right h1
+      _ = (x + y) * (x ^ n + y ^ n) := by
+        rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [add_comm (y * x ^ n)]; rw [← add_assoc]; rw [← add_assoc]; rw [add_assoc (x * x ^ n) (x * y ^ n)]; rw [add_comm (x * y ^ n) (y * y ^ n)]; rw [← add_assoc]
+      _ <= (x + y) ^ (n + 1) := by
+        rw [pow_succ' _ n]
+        gcongr; exact ih (Nat.succ_ne_zero k)
 
 Depends on / 依赖: Nat.exists_eq_add_one_of_ne_zero, add_mul, add_nonneg, exists_eq_add_one_of_ne_zero, k.succ, le_add_of_nonneg_right, le_refl, mul_add, mul_nonneg, pow_nonneg, pow_one, pow_succ, zero_add
 -/
@@ -271,7 +287,9 @@ lemma add_sq_le
         simp_rw [pow_succ', pow_zero, mul_one, add_mul, mul_add, add_comm (b * a), add_add_add_comm]
     _ <= a ^ 2 + b ^ 2 + (a * a + b * b) := add_le_add_right ?_ _
     _ = _ := by simp_rw [pow_succ', pow_zero, mul_one, two_mul]
-  c
+  cases le_total a b
+  · exact mul_add_mul_le_mul_add_mul ‹_› ‹_›
+  · exact mul_add_mul_le_mul_add_mul' ‹_› ‹_›
 
 中文:
 引理 add_sq_le
@@ -282,7 +300,9 @@ lemma add_sq_le
         simp_rw [pow_succ', pow_zero, mul_one, add_mul, mul_add, add_comm (b * a), add_add_add_comm]
     _ <= a ^ 2 + b ^ 2 + (a * a + b * b) := add_le_add_right ?_ _
     _ = _ := by simp_rw [pow_succ', pow_zero, mul_one, two_mul]
-  c
+  cases le_total a b
+  · exact mul_add_mul_le_mul_add_mul ‹_› ‹_›
+  · exact mul_add_mul_le_mul_add_mul' ‹_› ‹_›
 
 Depends on / 依赖: add_add_add_comm, add_comm, add_le_add_right, add_mul, le_total, mul_add, mul_add_mul_le_mul_add_mul, mul_one, pow_succ, pow_zero, simp_rw, two_mul
 -/
@@ -306,7 +326,14 @@ lemma add_pow_le
   statement: forall n, (a + b) ^ n <= 2 ^ (n - 1) * (a ^ n + b ^ n)
   proof: mul_le_mul_of_nonneg_right (add_pow_le ha hb (n + 1)) add_nonneg ha hb
       _ = 2 ^ n * (a ^ (n + 2) + b ^ (n + 2) + (a ^ (n + 1) * b + b ^ (n + 1) * a)) := by
-          rw [mul_assoc]; rw [mul_add]; rw [add_mul]; rw [add_mul]; rw [← pow_succ]; rw [← pow_succ]; rw [add_comm _ (b ^ _)]; rw [add_add_
+          rw [mul_assoc]; rw [mul_add]; rw [add_mul]; rw [add_mul]; rw [← pow_succ]; rw [← pow_succ]; rw [add_comm _ (b ^ _)]; rw [add_add_add_comm]; rw [add_comm (_ * a)]
+      _ <= 2 ^ n * (a ^ (n + 2) + b ^ (n + 2) + (a ^ (n + 1) * a + b ^ (n + 1) * b)) := by
+        gcongr _ * (_ + _ + ?_)
+        · exact pow_nonneg zero_le_two _
+        obtain hab | hba := le_total a b
+        · exact mul_add_mul_le_mul_add_mul (by gcongr) hab
+        · exact mul_add_mul_le_mul_add_mul' (by gcongr) hba
+      _ = _ := by simp only [← pow_succ, ← two_mul, ← mul_assoc]; rfl
 
 中文:
 引理 add_pow_le
@@ -314,7 +341,14 @@ lemma add_pow_le
   结论: 对任意 n, (a + b) ^ n <= 2 ^ (n - 1) * (a ^ n + b ^ n)
   证明: mul_le_mul_of_nonneg_right (add_pow_le ha hb (n + 1)) add_nonneg ha hb
       _ = 2 ^ n * (a ^ (n + 2) + b ^ (n + 2) + (a ^ (n + 1) * b + b ^ (n + 1) * a)) := by
-          rw [mul_assoc]; rw [mul_add]; rw [add_mul]; rw [add_mul]; rw [← pow_succ]; rw [← pow_succ]; rw [add_comm _ (b ^ _)]; rw [add_add_
+          rw [mul_assoc]; rw [mul_add]; rw [add_mul]; rw [add_mul]; rw [← pow_succ]; rw [← pow_succ]; rw [add_comm _ (b ^ _)]; rw [add_add_add_comm]; rw [add_comm (_ * a)]
+      _ <= 2 ^ n * (a ^ (n + 2) + b ^ (n + 2) + (a ^ (n + 1) * a + b ^ (n + 1) * b)) := by
+        gcongr _ * (_ + _ + ?_)
+        · exact pow_nonneg zero_le_two _
+        obtain hab | hba := le_total a b
+        · exact mul_add_mul_le_mul_add_mul (by gcongr) hab
+        · exact mul_add_mul_le_mul_add_mul' (by gcongr) hba
+      _ = _ := by simp only [← pow_succ, ← two_mul, ← mul_assoc]; rfl
 
 Depends on / 依赖: add_add_add_comm, add_comm, add_mul, add_nonneg, add_pow_le, le_total, mul_add, mul_assoc, mul_le_mul_of_nonneg_right, pow_nonneg, pow_succ, zero_le_two
 -/
@@ -349,6 +383,13 @@ lemma Even.add_pow_le
     _ <= (2 * (a ^ 2 + b ^ 2)) ^ n := pow_le_pow_left₀ (sq_nonneg _) add_sq_le _
     _ = 2 ^ n * (a ^ 2 + b ^ 2) ^ n := by -- TODO: Should be `Nat.cast_commute`
         rw [Commute.mul_pow]; simp [Commute, SemiconjBy, two_mul, mul_two]
+    _ <= 2 ^ n * (2 ^ (n - 1) * ((a ^ 2) ^ n + (b ^ 2) ^ n)) := mul_le_mul_of_nonneg_left
+(add_pow_le (sq_nonneg _) (sq_nonneg _) _) pow_nonneg (zero_le_two (α := R)) _
+    _ = _ := by
+      simp only [← mul_assoc, ← pow_add, ← pow_mul]
+      cases n
+      · rfl
+      · simp [Nat.two_mul]
 
 中文:
 引理 Even.add_pow_le
@@ -360,6 +401,13 @@ lemma Even.add_pow_le
     _ <= (2 * (a ^ 2 + b ^ 2)) ^ n := pow_le_pow_left₀ (sq_nonneg _) add_sq_le _
     _ = 2 ^ n * (a ^ 2 + b ^ 2) ^ n := by -- TODO: Should be `Nat.cast_commute`
         rw [Commute.mul_pow]; simp [Commute, SemiconjBy, two_mul, mul_two]
+    _ <= 2 ^ n * (2 ^ (n - 1) * ((a ^ 2) ^ n + (b ^ 2) ^ n)) := mul_le_mul_of_nonneg_left
+(add_pow_le (sq_nonneg _) (sq_nonneg _) _) pow_nonneg (zero_le_two (α := R)) _
+    _ = _ := by
+      simp only [← mul_assoc, ← pow_add, ← pow_mul]
+      cases n
+      · rfl
+      · simp [Nat.two_mul]
 -/
 protected lemma Even.add_pow_le (hn : Even n) :
     (a + b) ^ n <= 2 ^ (n - 1) * (a ^ n + b ^ n) := by
@@ -538,7 +586,17 @@ lemma Odd.strictMono_pow
   obtain hb | hb := lt_or_ge 0 b
   · exact (hn.pow_nonpos ha).trans_lt (pow_pos hb _)
   obtain ⟨c, hac⟩ := exists_add_of_le ha
-  obtain ⟨d, hbd⟩ := exists_
+  obtain ⟨d, hbd⟩ := exists_add_of_le hb
+  have hd := nonneg_of_le_add_right (hb.trans_eq hbd)
+  refine lt_of_add_lt_add_right (a := c ^ n + d ^ n) ?_
+  dsimp
+  calc
+    a ^ n + (c ^ n + d ^ n) = d ^ n := by
+      rw [← add_assoc]; rw [hn.pow_add_pow_eq_zero hac.symm]; rw [zero_add]
+    _ < c ^ n := pow_lt_pow_left₀ ?_ hd hn₀
+    _ = b ^ n + (c ^ n + d ^ n) := by rw [add_left_comm, hn.pow_add_pow_eq_zero hbd.symm, add_zero]
+  refine lt_of_add_lt_add_right (a := a + b) ?_
+  rwa [add_rotate', ← hbd, add_zero, add_left_comm, ← add_assoc, ← hac, zero_add]
 
 中文:
 引理 Odd.strictMono_pow
@@ -552,7 +610,17 @@ lemma Odd.strictMono_pow
   obtain hb | hb := lt_or_ge 0 b
   · exact (hn.pow_nonpos ha).trans_lt (pow_pos hb _)
   obtain ⟨c, hac⟩ := exists_add_of_le ha
-  obtain ⟨d, hbd⟩ := exists_
+  obtain ⟨d, hbd⟩ := exists_add_of_le hb
+  have hd := nonneg_of_le_add_right (hb.trans_eq hbd)
+  refine lt_of_add_lt_add_right (a := c ^ n + d ^ n) ?_
+  dsimp
+  calc
+    a ^ n + (c ^ n + d ^ n) = d ^ n := by
+      rw [← add_assoc]; rw [hn.pow_add_pow_eq_zero hac.symm]; rw [zero_add]
+    _ < c ^ n := pow_lt_pow_left₀ ?_ hd hn₀
+    _ = b ^ n + (c ^ n + d ^ n) := by rw [add_left_comm, hn.pow_add_pow_eq_zero hbd.symm, add_zero]
+  refine lt_of_add_lt_add_right (a := a + b) ?_
+  rwa [add_rotate', ← hbd, add_zero, add_left_comm, ← add_assoc, ← hac, zero_add]
 
 Depends on / 依赖: add_assoc, exists_add_of_le, hb.trans_eq, hn.pow_add_pow_eq_zero, hn.pow_nonpos, le_total, lt_of_add_lt_add_right, lt_or_ge, nonneg_of_le_add_right, pow_add_pow_eq_zero, pow_nonpos, pow_pos, trans_eq, trans_lt
 -/

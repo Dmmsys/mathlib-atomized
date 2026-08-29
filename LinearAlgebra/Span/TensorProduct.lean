@@ -125,7 +125,11 @@ lemma injective_tensorToSpan
   let f : A otimes[R] (span A (p : Set M)) ->ₗ[A] span A (p : Set M) :=
 AlgebraTensorModule.lift (restrictScalarsₗ R A _ _ A) ∘ₗ lsmul A (span A (p : Set M))
   let g : A otimes[R] p ->ₗ[R] A otimes[R] span A (p : Set M) := (p.inclusionSpan A).lTensor A
-  have hf : Injective f := Algebra.injective
+  have hf : Injective f := Algebra.injective_lift_lsmul R A _
+  have hg : Injective g := lTensor_preserves_injective_linearMap _ (p.injective_inclusionSpan A)
+  have : p.tensorToSpan A = f.restrictScalars R ∘ₗ g := by ext; simp [tensorToSpan, f, g]
+  rw [← LinearMap.coe_restrictScalars R]; rw [this]; rw [coe_comp]
+  exact hf.comp hg
 
 中文:
 引理 injective_tensorToSpan
@@ -134,7 +138,11 @@ AlgebraTensorModule.lift (restrictScalarsₗ R A _ _ A) ∘ₗ lsmul A (span A (
   let f : A otimes[R] (span A (p : Set M)) ->ₗ[A] span A (p : Set M) :=
 AlgebraTensorModule.lift (restrictScalarsₗ R A _ _ A) ∘ₗ lsmul A (span A (p : Set M))
   let g : A otimes[R] p ->ₗ[R] A otimes[R] span A (p : Set M) := (p.inclusionSpan A).lTensor A
-  have hf : Injective f := Algebra.injective
+  have hf : Injective f := Algebra.injective_lift_lsmul R A _
+  have hg : Injective g := lTensor_preserves_injective_linearMap _ (p.injective_inclusionSpan A)
+  have : p.tensorToSpan A = f.restrictScalars R ∘ₗ g := by ext; simp [tensorToSpan, f, g]
+  rw [← LinearMap.coe_restrictScalars R]; rw [this]; rw [coe_comp]
+  exact hf.comp hg
 
 Depends on / 依赖: Algebra, Algebra.injective_lift_lsmul, AlgebraTensorModule, AlgebraTensorModule.lift, Injective, f.restrictScalars, inclusionSpan, injective_inclusionSpan, injective_lift_lsmul, lTensor, lTensor_preserves_injective_linearMap, otimes, p.inclusionSpan, p.injective_inclusionSpan, p.tensorToSpan, restrictScalars, tensorToSpan
 -/
@@ -240,7 +248,7 @@ lemma finrank_span_eq_finrank
   let ι := Free.ChooseBasisIndex R p
   let b₁ : Basis ι R p := Free.chooseBasis R p
 let b₂ : Basis ι A (span A (p : Set M)) := (b₁.baseChange A).map p.tensorEquivSpan A
-  rw [finrank_eq_card_basis b₁]; rw [finrank_eq_card_ba
+  rw [finrank_eq_card_basis b₁]; rw [finrank_eq_card_basis b₂]
 
 中文:
 引理 finrank_span_eq_finrank
@@ -249,7 +257,7 @@ let b₂ : Basis ι A (span A (p : Set M)) := (b₁.baseChange A).map p.tensorEq
   let ι := Free.ChooseBasisIndex R p
   let b₁ : Basis ι R p := Free.chooseBasis R p
 let b₂ : Basis ι A (span A (p : Set M)) := (b₁.baseChange A).map p.tensorEquivSpan A
-  rw [finrank_eq_card_basis b₁]; rw [finrank_eq_card_ba
+  rw [finrank_eq_card_basis b₁]; rw [finrank_eq_card_basis b₂]
 -/
 @[simp] lemma finrank_span_eq_finrank :
     finrank A (span A (p : Set M)) = finrank R p := by

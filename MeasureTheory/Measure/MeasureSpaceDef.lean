@@ -231,7 +231,9 @@ definition ofMeasurable
     m_iUnion := fun f hf hd =>
       show inducedOuterMeasure m _ m0 (iUnion f) = ∑' i, inducedOuterMeasure m _ m0 (f i) by
         rw [inducedOuterMeasure_eq m0 mU (MeasurableSet.iUnion hf)]; rw [mU hf hd]
-        congr; funext n; rw [inducedOuterMeasu
+        congr; funext n; rw [inducedOuterMeasure_eq m0 mU]
+    trim_le := le_inducedOuterMeasure.2 fun s hs => by
+      rw [OuterMeasure.trim_eq _ hs]; rw [inducedOuterMeasure_eq m0 mU hs] }
 
 中文:
 定义 ofMeasurable
@@ -240,7 +242,9 @@ definition ofMeasurable
     m_iUnion := fun f hf hd =>
       show inducedOuterMeasure m _ m0 (iUnion f) = ∑' i, inducedOuterMeasure m _ m0 (f i) by
         rw [inducedOuterMeasure_eq m0 mU (MeasurableSet.iUnion hf)]; rw [mU hf hd]
-        congr; funext n; rw [inducedOuterMeasu
+        congr; funext n; rw [inducedOuterMeasure_eq m0 mU]
+    trim_le := le_inducedOuterMeasure.2 fun s hs => by
+      rw [OuterMeasure.trim_eq _ hs]; rw [inducedOuterMeasure_eq m0 mU hs] }
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iUnion, OuterMeasure, OuterMeasure.trim_eq, iUnion, inducedOuterMeasure, inducedOuterMeasure_eq, le_inducedOuterMeasure, m_iUnion, toOuterMeasure, trim_eq, trim_le
 -/

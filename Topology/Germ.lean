@@ -231,7 +231,8 @@ definition RestrictGermPredicate
       intro f f' hff' hf
       apply (hf.and <| Eventually.eventually_nhds hff').mono
       rintro y ⟨hy, hy'⟩
-      r
+      rwa [Germ.coe_eq.mpr (EventuallyEq.symm hy')]
+fun f f' hff' => propext forall_congr' fun _ => ⟨this f f' hff', this f' f hff'.symm⟩
 
 中文:
 定义 RestrictGermPredicate
@@ -242,7 +243,8 @@ definition RestrictGermPredicate
       intro f f' hff' hf
       apply (hf.and <| Eventually.eventually_nhds hff').mono
       rintro y ⟨hy, hy'⟩
-      r
+      rwa [Germ.coe_eq.mpr (EventuallyEq.symm hy')]
+fun f f' hff' => propext forall_congr' fun _ => ⟨this f f' hff', this f' f hff'.symm⟩
 -/
 def RestrictGermPredicate (P : forall x : X, Germ (𝓝 x) Y -> Prop)
     (A : Set X) : forall x : X, Germ (𝓝 x) Y -> Prop := fun x φ =>

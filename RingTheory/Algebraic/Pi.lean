@@ -121,7 +121,12 @@ definition Polynomial.algebraPi
   { toFun p z := algebraMap S T (aeval z p)
     map_one' := funext fun z => by simp only [Pi.one_apply, map_one]
     map_mul' _ _ := funext fun z => by simp only [Pi.mul_apply, map_mul]
-    map_zero' := funext fun z => by simp only [Pi.zero_apply, map_zero
+    map_zero' := funext fun z => by simp only [Pi.zero_apply, map_zero]
+    map_add' _ _ := funext fun z => by simp only [Pi.add_apply, map_add] }
+  commutes' _ _ := funext fun z => by exact mul_comm _ _
+  smul_def' _ _ := funext fun z => by
+    simp only [polynomial_smul_apply', Algebra.algebraMap_eq_smul_one, RingHom.coe_mk,
+      MonoidHom.coe_mk, OneHom.coe_mk, Pi.mul_apply, Algebra.smul_mul_assoc, one_mul]
 
 中文:
 定义 多项式.algebraPi
@@ -131,7 +136,12 @@ definition Polynomial.algebraPi
   { toFun p z := algebraMap S T (aeval z p)
     map_one' := funext fun z => by simp only [Pi.one_apply, map_one]
     map_mul' _ _ := funext fun z => by simp only [Pi.mul_apply, map_mul]
-    map_zero' := funext fun z => by simp only [Pi.zero_apply, map_zero
+    map_zero' := funext fun z => by simp only [Pi.zero_apply, map_zero]
+    map_add' _ _ := funext fun z => by simp only [Pi.add_apply, map_add] }
+  commutes' _ _ := funext fun z => by exact mul_comm _ _
+  smul_def' _ _ := funext fun z => by
+    simp only [polynomial_smul_apply', Algebra.algebraMap_eq_smul_one, RingHom.coe_mk,
+      MonoidHom.coe_mk, OneHom.coe_mk, Pi.mul_apply, Algebra.smul_mul_assoc, one_mul]
 
 Depends on / 依赖: Polynomial, Polynomial.hasSMulPi, hasSMulPi
 -/

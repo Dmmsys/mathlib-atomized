@@ -76,7 +76,11 @@ instance instAddCommGroup
   nsmul_succ n x :=
     show (n + 1 : Int) * x = n * x + x by rw [Int.add_mul, Int.one_mul]
   zsmul := (· * ·)
-  zsmul_
+  zsmul_zero' := Int.zero_mul
+  zsmul_succ' m n := by
+    simp only [HSMul.hSMul, SMul.smul, natCast_succ, Int.add_mul, Int.add_comm, Int.one_mul]
+  zsmul_neg' m n := by simp only [HSMul.hSMul, SMul.smul, negSucc_eq, natCast_succ, Int.neg_mul]
+  sub_eq_add_neg _ _ := Int.sub_eq_add_neg
 
 中文:
 实例 instAddCommGroup
@@ -91,7 +95,11 @@ instance instAddCommGroup
   nsmul_succ n x :=
     show (n + 1 : Int) * x = n * x + x by rw [Int.add_mul, Int.one_mul]
   zsmul := (· * ·)
-  zsmul_
+  zsmul_zero' := Int.zero_mul
+  zsmul_succ' m n := by
+    simp only [HSMul.hSMul, SMul.smul, natCast_succ, Int.add_mul, Int.add_comm, Int.one_mul]
+  zsmul_neg' m n := by simp only [HSMul.hSMul, SMul.smul, negSucc_eq, natCast_succ, Int.neg_mul]
+  sub_eq_add_neg _ _ := Int.sub_eq_add_neg
 
 Depends on / 依赖: Int.add_comm, add_comm
 -/

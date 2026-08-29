@@ -612,7 +612,7 @@ theorem mul_eq_mul_iff_eq_and_eq_of_pos
   simp only [eq_iff_le_not_lt, hab, hcd, true_and]
   refine ⟨fun hab => h.not_lt ?_, fun hcd => h.not_lt ?_⟩
   · exact (mul_le_mul_of_nonneg_left hcd a0.le).trans_lt (mul_lt_mul_of_pos_right hab d0)
-  · exact (mul_lt_mul_of_pos_left hcd a0).trans_
+  · exact (mul_lt_mul_of_pos_left hcd a0).trans_le (mul_le_mul_of_nonneg_right hab d0.le)
 
 中文:
 定理 mul_eq_mul_iff_eq_and_eq_of_pos
@@ -622,7 +622,7 @@ theorem mul_eq_mul_iff_eq_and_eq_of_pos
   simp only [eq_iff_le_not_lt, hab, hcd, true_and]
   refine ⟨fun hab => h.not_lt ?_, fun hcd => h.not_lt ?_⟩
   · exact (mul_le_mul_of_nonneg_left hcd a0.le).trans_lt (mul_lt_mul_of_pos_right hab d0)
-  · exact (mul_lt_mul_of_pos_left hcd a0).trans_
+  · exact (mul_lt_mul_of_pos_left hcd a0).trans_le (mul_le_mul_of_nonneg_right hab d0.le)
 
 Depends on / 依赖: a0.le, d0.le, eq_iff_le_not_lt, h.not_lt, mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_right, mul_lt_mul_of_pos_left, mul_lt_mul_of_pos_right, not_lt, trans_le, trans_lt, true_and
 -/
@@ -646,7 +646,7 @@ theorem mul_eq_mul_iff_eq_and_eq_of_pos'
   simp only [eq_iff_le_not_lt, hab, hcd, true_and]
   refine ⟨fun hab => h.not_lt ?_, fun hcd => h.not_lt ?_⟩
   · exact (mul_lt_mul_of_pos_right hab c0).trans_le (mul_le_mul_of_nonneg_left hcd b0.le)
-  · exact (mul_le_mul_of_nonneg_right hab c0.le)
+  · exact (mul_le_mul_of_nonneg_right hab c0.le).trans_lt (mul_lt_mul_of_pos_left hcd b0)
 
 中文:
 定理 mul_eq_mul_iff_eq_and_eq_of_pos'
@@ -656,7 +656,7 @@ theorem mul_eq_mul_iff_eq_and_eq_of_pos'
   simp only [eq_iff_le_not_lt, hab, hcd, true_and]
   refine ⟨fun hab => h.not_lt ?_, fun hcd => h.not_lt ?_⟩
   · exact (mul_lt_mul_of_pos_right hab c0).trans_le (mul_le_mul_of_nonneg_left hcd b0.le)
-  · exact (mul_le_mul_of_nonneg_right hab c0.le)
+  · exact (mul_le_mul_of_nonneg_right hab c0.le).trans_lt (mul_lt_mul_of_pos_left hcd b0)
 
 Depends on / 依赖: b0.le, c0.le, eq_iff_le_not_lt, h.not_lt, mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_right, mul_lt_mul_of_pos_left, mul_lt_mul_of_pos_right, not_lt, trans_le, trans_lt, true_and
 -/
@@ -728,7 +728,7 @@ theorem pos_and_pos_or_neg_and_neg_of_mul_pos
   · rw [zero_mul] at hab
     exact hab.false.elim
   · refine Or.inl ⟨ha, lt_imp_lt_of_le_imp_le (fun hb => ?_) hab⟩
-    exact mul_non
+    exact mul_nonpos_of_nonneg_of_nonpos ha.le hb
 
 中文:
 定理 pos_and_pos_or_neg_and_neg_of_mul_pos
@@ -740,7 +740,7 @@ theorem pos_and_pos_or_neg_and_neg_of_mul_pos
   · rw [zero_mul] at hab
     exact hab.false.elim
   · refine Or.inl ⟨ha, lt_imp_lt_of_le_imp_le (fun hb => ?_) hab⟩
-    exact mul_non
+    exact mul_nonpos_of_nonneg_of_nonpos ha.le hb
 
 Depends on / 依赖: Or.inl, Or.inr, ha.le, hab.false.elim, lt_imp_lt_of_le_imp_le, lt_trichotomy, mul_nonpos_of_nonneg_of_nonpos, mul_nonpos_of_nonpos_of_nonneg, zero_mul
 -/

@@ -112,7 +112,8 @@ theorem IsCountablySpanning.pi
   refine ⟨fun n => Set.pi univ fun i => s i (e n i), fun n =>
     mem_image_of_mem _ fun i _ => h1s i _, ?_⟩
   simp_rw [e,
-    (surjective_decode_getD (ι -
+    (surjective_decode_getD (ι -> Nat) default).iUnion_comp fun x => Set.pi univ fun i => s i (x i),
+    iUnion_univ_pi s, h2s, pi_univ]
 
 中文:
 定理 IsCountablySpanning.pi
@@ -124,7 +125,8 @@ theorem IsCountablySpanning.pi
   refine ⟨fun n => Set.pi univ fun i => s i (e n i), fun n =>
     mem_image_of_mem _ fun i _ => h1s i _, ?_⟩
   simp_rw [e,
-    (surjective_decode_getD (ι -
+    (surjective_decode_getD (ι -> Nat) default).iUnion_comp fun x => Set.pi univ fun i => s i (x i),
+    iUnion_univ_pi s, h2s, pi_univ]
 
 Depends on / 依赖: Set.pi, decode, iUnion_comp, iUnion_univ_pi, mem_image_of_mem, nonempty_encodable, pi_univ, simp_rw, surjective_decode_getD
 -/
@@ -156,7 +158,23 @@ theorem generateFrom_pi_eq
     choose t h1t h2t using hC
     simp_rw [eval_preimage, ← h2t]
     rw [← @iUnion_const _ Nat _ s]
-    have : Set.pi univ (update 
+    have : Set.pi univ (update (fun i' : ι => iUnion (t i')) i (⋃ _ : Nat, s)) =
+        Set.pi univ fun k => ⋃ j : Nat,
+        @update ι (fun i' => Set (α i')) _ (fun i' => t i' j) i s k := by
+      ext; simp_rw [mem_univ_pi]; apply forall_congr'; intro i'
+      by_cases h : i' = i
+      · subst h; simp
+      · simp [h]
+    rw [this]; rw [← iUnion_univ_pi]
+    apply MeasurableSet.iUnion
+    intro n; apply measurableSet_generateFrom
+    -- `grind` can close the goal alone, but is slow
+    apply mem_image_of_mem
+    grind
+  · apply generateFrom_le; rintro _ ⟨s, hs, rfl⟩
+    rw [univ_pi_eq_iInter]; apply MeasurableSet.iInter; intro i
+    apply @measurable_pi_apply _ _ (fun i => generateFrom (C i))
+    exact measurableSet_generateFrom (hs i (mem_univ i))
 
 中文:
 定理 generateFrom_pi_eq
@@ -170,7 +188,23 @@ theorem generateFrom_pi_eq
     choose t h1t h2t using hC
     simp_rw [eval_preimage, ← h2t]
     rw [← @iUnion_const _ Nat _ s]
-    have : Set.pi univ (update 
+    have : Set.pi univ (update (fun i' : ι => iUnion (t i')) i (⋃ _ : Nat, s)) =
+        Set.pi univ fun k => ⋃ j : Nat,
+        @update ι (fun i' => Set (α i')) _ (fun i' => t i' j) i s k := by
+      ext; simp_rw [mem_univ_pi]; apply forall_congr'; intro i'
+      by_cases h : i' = i
+      · subst h; simp
+      · simp [h]
+    rw [this]; rw [← iUnion_univ_pi]
+    apply MeasurableSet.iUnion
+    intro n; apply measurableSet_generateFrom
+    -- `grind` can close the goal alone, but is slow
+    apply mem_image_of_mem
+    grind
+  · apply generateFrom_le; rintro _ ⟨s, hs, rfl⟩
+    rw [univ_pi_eq_iInter]; apply MeasurableSet.iInter; intro i
+    apply @measurable_pi_apply _ _ (fun i => generateFrom (C i))
+    exact measurableSet_generateFrom (hs i (mem_univ i))
 
 Depends on / 依赖: Set.pi, classical, comap_generateFrom, eval_preimage, forall_congr, generateFrom_le, iSup_le, iUnion, iUnion_const, le_antisymm, mem_univ_pi, nonempty_encodable, simp_rw, update
 -/

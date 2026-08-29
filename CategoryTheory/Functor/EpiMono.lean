@@ -386,7 +386,24 @@ theorem ReflectsMonomorphisms.iso_iff
 alias preservesMonomorphisms.of_natTrans := PreservesMonomorphisms.of_natTrans
 @[deprecated (since := "2026-06-25")]
 alias preservesMonomorphisms.of_iso := PreservesMonomorphisms.of_iso
-@[deprecated (since := "2026-06
+@[deprecated (since := "2026-06-25")]
+alias preservesMonomorphisms.iso_iff := PreservesMonomorphisms.iso_iff
+@[deprecated (since := "2026-06-25")]
+alias reflectsMonomorphisms.of_iso := ReflectsMonomorphisms.of_iso
+@[deprecated (since := "2026-06-25")]
+alias reflectsMonomorphisms.iso_iff := ReflectsMonomorphisms.iso_iff
+@[deprecated (since := "2026-06-25")]
+alias preservesEpimorphisms.of_natTrans := PreservesEpimorphisms.of_natTrans
+@[deprecated (since := "2026-06-25")]
+alias preservesEpimorphisms.of_iso := PreservesEpimorphisms.of_iso
+@[deprecated (since := "2026-06-25")]
+alias preservesEpimorphisms.iso_iff := PreservesEpimorphisms.iso_iff
+@[deprecated (since := "2026-06-25")]
+alias reflectsEpimorphisms.of_iso := ReflectsEpimorphisms.of_iso
+@[deprecated (since := "2026-06-25")]
+alias reflectsEpimorphisms.iso_iff := ReflectsEpimorphisms.iso_iff
+
+@[to_dual]
 
 中文:
 定理 反映单态射.iso_iff
@@ -397,7 +414,24 @@ alias preservesMonomorphisms.of_iso := PreservesMonomorphisms.of_iso
 alias preservesMonomorphisms.of_natTrans := PreservesMonomorphisms.of_natTrans
 @[deprecated (since := "2026-06-25")]
 alias preservesMonomorphisms.of_iso := PreservesMonomorphisms.of_iso
-@[deprecated (since := "2026-06
+@[deprecated (since := "2026-06-25")]
+alias preservesMonomorphisms.iso_iff := PreservesMonomorphisms.iso_iff
+@[deprecated (since := "2026-06-25")]
+alias reflectsMonomorphisms.of_iso := ReflectsMonomorphisms.of_iso
+@[deprecated (since := "2026-06-25")]
+alias reflectsMonomorphisms.iso_iff := ReflectsMonomorphisms.iso_iff
+@[deprecated (since := "2026-06-25")]
+alias preservesEpimorphisms.of_natTrans := PreservesEpimorphisms.of_natTrans
+@[deprecated (since := "2026-06-25")]
+alias preservesEpimorphisms.of_iso := PreservesEpimorphisms.of_iso
+@[deprecated (since := "2026-06-25")]
+alias preservesEpimorphisms.iso_iff := PreservesEpimorphisms.iso_iff
+@[deprecated (since := "2026-06-25")]
+alias reflectsEpimorphisms.of_iso := ReflectsEpimorphisms.of_iso
+@[deprecated (since := "2026-06-25")]
+alias reflectsEpimorphisms.iso_iff := ReflectsEpimorphisms.iso_iff
+
+@[to_dual]
 
 Depends on / 依赖: of_iso
 -/

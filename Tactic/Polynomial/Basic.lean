@@ -218,7 +218,7 @@ definition cleanup
       (simpTheorems := #[thms])
       (congrTheorems := ← getSimpCongrTheorems)
 pure ←
-    
+      r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 
 中文:
 定义 cleanup
@@ -233,7 +233,7 @@ pure ←
       (simpTheorems := #[thms])
       (congrTheorems := ← getSimpCongrTheorems)
 pure ←
-    
+      r.mkEqTrans (← Simp.main r.expr ctx (methods := Lean.Meta.Simp.mkDefaultMethodsCore {})).1
 -/
 def cleanup (cfg : RingNF.Config) (r : Simp.Result) : MetaM Simp.Result := do
   match cfg.mode with
@@ -264,7 +264,7 @@ definition evalExprPoly
   let r₃ ← evalExpr R' r₂.expr
   (← r₁.mkEqTrans r₂).mkEqTrans r₃
 
-@[
+@[tactic_alt polynomial]
 
 中文:
 定义 evalExprPoly
@@ -280,7 +280,7 @@ definition evalExprPoly
   let r₃ ← evalExpr R' r₂.expr
   (← r₁.mkEqTrans r₂).mkEqTrans r₃
 
-@[
+@[tactic_alt polynomial]
 -/
 def evalExprPoly (e : Expr) : AtomM Simp.Result := do
   let ⟨_, α, e⟩ ← inferTypeQ e

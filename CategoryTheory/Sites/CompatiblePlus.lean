@@ -133,7 +133,33 @@ definition plusCompIso
           (colimit.isColimit _))
     (by
       intro X Y f
-    
+      apply (isColimitOfPreserves F (colimit.isColimit (J.diagram P X.unop))).hom_ext
+      intro W
+      dsimp [plusObj, plusMap]
+      simp only [Functor.map_comp, Category.assoc]
+      slice_rhs 1 2 =>
+        erw [(isColimitOfPreserves F (colimit.isColimit (J.diagram P X.unop))).fac]
+      slice_lhs 1 3 =>
+        simp only [← F.map_comp]
+        dsimp [colimMap, IsColimit.map, colimit.pre]
+        simp only [colimit.ι_desc_assoc, colimit.ι_desc]
+        dsimp [Cocone.precompose]
+        simp only [Category.assoc, colimit.ι_desc]
+        dsimp [Cocone.whisker]
+        rw [F.map_comp]
+      simp only [Category.assoc]
+      slice_lhs 2 3 =>
+        erw [(isColimitOfPreserves F (colimit.isColimit (J.diagram P Y.unop))).fac]
+      dsimp
+      simp only [HasColimit.isoOfNatIso_ι_hom_assoc, GrothendieckTopology.diagramPullback_app,
+        colimit.ι_pre, HasColimit.isoOfNatIso_ι_hom, ι_colimMap_assoc]
+      simp only [← Category.assoc]
+      dsimp
+      congr 1
+      ext
+      dsimp
+      simp only [Category.assoc]
+      rw [Multiequalizer.lift_ι]; rw [diagramCompIso_hom_ι]; rw [diagramCompIso_hom_ι]; rw [← F.map_comp]; rw [Multiequalizer.lift_ι])
 
 中文:
 定义 plusCompIso
@@ -147,7 +173,33 @@ definition plusCompIso
           (colimit.isColimit _))
     (by
       intro X Y f
-    
+      apply (isColimitOfPreserves F (colimit.isColimit (J.diagram P X.unop))).hom_ext
+      intro W
+      dsimp [plusObj, plusMap]
+      simp only [Functor.map_comp, Category.assoc]
+      slice_rhs 1 2 =>
+        erw [(isColimitOfPreserves F (colimit.isColimit (J.diagram P X.unop))).fac]
+      slice_lhs 1 3 =>
+        simp only [← F.map_comp]
+        dsimp [colimMap, IsColimit.map, colimit.pre]
+        simp only [colimit.ι_desc_assoc, colimit.ι_desc]
+        dsimp [Cocone.precompose]
+        simp only [Category.assoc, colimit.ι_desc]
+        dsimp [Cocone.whisker]
+        rw [F.map_comp]
+      simp only [Category.assoc]
+      slice_lhs 2 3 =>
+        erw [(isColimitOfPreserves F (colimit.isColimit (J.diagram P Y.unop))).fac]
+      dsimp
+      simp only [HasColimit.isoOfNatIso_ι_hom_assoc, GrothendieckTopology.diagramPullback_app,
+        colimit.ι_pre, HasColimit.isoOfNatIso_ι_hom, ι_colimMap_assoc]
+      simp only [← Category.assoc]
+      dsimp
+      congr 1
+      ext
+      dsimp
+      simp only [Category.assoc]
+      rw [Multiequalizer.lift_ι]; rw [diagramCompIso_hom_ι]; rw [diagramCompIso_hom_ι]; rw [← F.map_comp]; rw [Multiequalizer.lift_ι])
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp, HasColimit, HasColimit.isoOfNatIso, J.diagram, J.diagramCompIso, NatIso, NatIso.ofComponents, X.unop, coconePointUniqueUpToIso, colimit, colimit.isColimit, diagram, diagramCompIso, hom_ext, isColimit, isColimitOfPreserves, isoOfNatIso
 -/
@@ -241,7 +293,9 @@ theorem plusCompIso_whiskerLeft
   dsimp [plusObj, plusMap]
   simp only [ι_plusCompIso_hom, ι_colimMap, whiskerLeft_app, ι_plusCompIso_hom_assoc,
     NatTrans.naturality_assoc, GrothendieckTopology.diagramNatTrans_app]
-  simp only
+  simp only [← Category.assoc]
+  congr 1
+  cat_disch
 
 中文:
 定理 plusCompIso_whiskerLeft
@@ -253,7 +307,9 @@ theorem plusCompIso_whiskerLeft
   dsimp [plusObj, plusMap]
   simp only [ι_plusCompIso_hom, ι_colimMap, whiskerLeft_app, ι_plusCompIso_hom_assoc,
     NatTrans.naturality_assoc, GrothendieckTopology.diagramNatTrans_app]
-  simp only
+  simp only [← Category.assoc]
+  congr 1
+  cat_disch
 
 Depends on / 依赖: Category, Category.assoc, GrothendieckTopology, GrothendieckTopology.diagramNatTrans_app, J.diagram, NatTrans, NatTrans.naturality_assoc, X.unop, cat_disch, colimit, colimit.isColimit, diagram, diagramNatTrans_app, hom_ext, isColimit, isColimitOfPreserves, naturality_assoc, plusMap, plusObj, whiskerLeft_app
 -/
@@ -315,7 +371,18 @@ theorem plusCompIso_whiskerRight
   simp only [ι_colimMap, whiskerRight_app, ι_plusCompIso_hom_assoc,
     GrothendieckTopology.diagramNatTrans_app]
   simp only [← Category.assoc, ← F.map_comp]
-  dsimp [co
+  dsimp [colimMap, IsColimit.map]
+  simp only [colimit.ι_desc]
+  dsimp [Cocone.precompose]
+  simp only [Functor.map_comp, Category.assoc, ι_plusCompIso_hom]
+  simp only [← Category.assoc]
+  congr 1
+  dsimp only [diagram] -- Need to unfold `diagram` before `ext` applies.
+  ext a
+  dsimp
+  simp only [diagramCompIso_hom_ι_assoc, Multiequalizer.lift_ι, diagramCompIso_hom_ι,
+    Category.assoc]
+  simp only [← F.map_comp, Multiequalizer.lift_ι]
 
 中文:
 定理 plusCompIso_whiskerRight
@@ -328,7 +395,18 @@ theorem plusCompIso_whiskerRight
   simp only [ι_colimMap, whiskerRight_app, ι_plusCompIso_hom_assoc,
     GrothendieckTopology.diagramNatTrans_app]
   simp only [← Category.assoc, ← F.map_comp]
-  dsimp [co
+  dsimp [colimMap, IsColimit.map]
+  simp only [colimit.ι_desc]
+  dsimp [Cocone.precompose]
+  simp only [Functor.map_comp, Category.assoc, ι_plusCompIso_hom]
+  simp only [← Category.assoc]
+  congr 1
+  dsimp only [diagram] -- Need to unfold `diagram` before `ext` applies.
+  ext a
+  dsimp
+  simp only [diagramCompIso_hom_ι_assoc, Multiequalizer.lift_ι, diagramCompIso_hom_ι,
+    Category.assoc]
+  simp only [← F.map_comp, Multiequalizer.lift_ι]
 
 Depends on / 依赖: Category, Category.assoc, Cocone, Cocone.precompose, F.map_comp, Functor, Functor.map_comp, GrothendieckTopology, GrothendieckTopology.diagramNatTrans_app, IsColimit, IsColimit.map, J.diagram, X.unop, colimMap, colimit, colimit.isColimit, diagram, diagramNatTrans_app, hom_ext, isColimit
 -/
@@ -394,7 +472,9 @@ theorem whiskerRight_toPlus_comp_plusCompIso_hom
   dsimp only [diagram] -- Need to unfold `diagram` before `ext` applies.
   ext a
   rw [Category.assoc]; rw [diagramCompIso_hom_ι]; rw [← F.map_comp]
-  simp only [unop_
+  simp only [unop_op, limit.lift_π, Multifork.ofι_π_app, Functor.comp_obj, Functor.comp_map]
+
+@[simp]
 
 中文:
 定理 whiskerRight_toPlus_comp_plusCompIso_hom
@@ -407,7 +487,9 @@ theorem whiskerRight_toPlus_comp_plusCompIso_hom
   dsimp only [diagram] -- Need to unfold `diagram` before `ext` applies.
   ext a
   rw [Category.assoc]; rw [diagramCompIso_hom_ι]; rw [← F.map_comp]
-  simp only [unop_
+  simp only [unop_op, limit.lift_π, Multifork.ofι_π_app, Functor.comp_obj, Functor.comp_map]
+
+@[simp]
 
 Depends on / 依赖: Category, Category.assoc, F.map_comp, Functor, Functor.comp_map, Functor.comp_obj, Functor.map_comp, Multifork, Multifork.of, applies, before, comp_map, comp_obj, diagram, limit.lift_, map_comp, toPlus, unop_op
 -/

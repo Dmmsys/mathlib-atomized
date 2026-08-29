@@ -59,7 +59,14 @@ theorem IsGδ.setOfPred_continuousAt
   have := pseudoMetrizableSpaceUniformity_countably_generated Y
   obtain ⟨U, _, hU⟩ := (@uniformity_hasBasis_open_symmetric Y _).exists_antitone_subbasis
   simp only [Uniform.continuousAt_iff_prod, nhds_prod_eq]
-  simp only [(nhds_basis_opens _).prod_sel
+  simp only [(nhds_basis_opens _).prod_self.tendsto_iff hU.toHasBasis,
+    forall_prop_of_true, ofPred_forall]
+refine .iInter fun k => IsOpen.isGδ isOpen_iff_mem_nhds.2 fun x => ?_
+  rintro ⟨s, ⟨hsx, hso⟩, hsU⟩
+  filter_upwards [IsOpen.mem_nhds hso hsx] with _ hy using ⟨s, ⟨hy, hso⟩, hsU⟩
+
+@[deprecated (since := "2026-07-09")]
+alias IsGδ.setOf_continuousAt := IsGδ.setOfPred_continuousAt
 
 中文:
 定理 IsGδ.setOfPred_continuousAt
@@ -69,7 +76,14 @@ theorem IsGδ.setOfPred_continuousAt
   have := pseudoMetrizableSpaceUniformity_countably_generated Y
   obtain ⟨U, _, hU⟩ := (@uniformity_hasBasis_open_symmetric Y _).exists_antitone_subbasis
   simp only [Uniform.continuousAt_iff_prod, nhds_prod_eq]
-  simp only [(nhds_basis_opens _).prod_sel
+  simp only [(nhds_basis_opens _).prod_self.tendsto_iff hU.toHasBasis,
+    forall_prop_of_true, ofPred_forall]
+refine .iInter fun k => IsOpen.isGδ isOpen_iff_mem_nhds.2 fun x => ?_
+  rintro ⟨s, ⟨hsx, hso⟩, hsU⟩
+  filter_upwards [IsOpen.mem_nhds hso hsx] with _ hy using ⟨s, ⟨hy, hso⟩, hsU⟩
+
+@[deprecated (since := "2026-07-09")]
+alias IsGδ.setOf_continuousAt := IsGδ.setOfPred_continuousAt
 
 Depends on / 依赖: IsOpen, IsOpen.isG, IsOpen.mem_nhds, Uniform, Uniform.continuousAt_iff_prod, continuousAt_iff_prod, exists_antitone_subbasis, filter_upwards, forall_prop_of_true, hU.toHasBasis, iInter, isOpen_iff_mem_nhds, mem_nhds, nhds_basis_opens, nhds_prod_eq, ofPred_forall, prod_self, prod_self.tendsto_iff, pseudoMetrizableSpaceUniformity, pseudoMetrizableSpaceUniformity_countably_generated
 -/

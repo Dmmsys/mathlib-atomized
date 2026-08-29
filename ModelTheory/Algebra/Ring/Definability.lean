@@ -41,7 +41,10 @@ theorem mvPolynomial_zeroLocus_definable
   refine ⟨BoundedFormula.iInf
       (fun i : S => Term.equal
         ((termOfFreeCommRing (p' i)).relabel
-    
+          (Sum.map (fun p => ⟨p.1.1.coeff p.2.1, by
+            simp only [Set.mem_iUnion]
+            exact ⟨p.1.1, p.1.2, Set.mem_image_of_mem _ p.2.2⟩⟩) id)) 0), ?_⟩
+  simp [Formula.Realize, Term.equal, Function.comp_def, p', MvPolynomial.aeval_eq_eval₂Hom]
 
 中文:
 定理 mvPolynomial_zeroLocus_definable
@@ -55,7 +58,10 @@ theorem mvPolynomial_zeroLocus_definable
   refine ⟨BoundedFormula.iInf
       (fun i : S => Term.equal
         ((termOfFreeCommRing (p' i)).relabel
-    
+          (Sum.map (fun p => ⟨p.1.1.coeff p.2.1, by
+            simp only [Set.mem_iUnion]
+            exact ⟨p.1.1, p.1.2, Set.mem_image_of_mem _ p.2.2⟩⟩) id)) 0), ?_⟩
+  simp [Formula.Realize, Term.equal, Function.comp_def, p', MvPolynomial.aeval_eq_eval₂Hom]
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.iInf, Classical, Classical.decEq, Formula, Formula.Realize, Function, Function.comp_def, MvPolynomial, MvPolynomial.aeval_eq_eval, MvPolynomial.zeroLocus_span, Realize, Set.definable_iff_exists_formula_sum, Set.mem_iUnion, Set.mem_image_of_mem, Sum.map, Term.equal, comp_def, definable_iff_exists_formula_sum, genericPolyMap
 -/

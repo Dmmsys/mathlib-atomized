@@ -46,7 +46,12 @@ definition pointGrothendieckTopology
         rintro ⟨U, ⟨⟨hU⟩⟩⟩ ⟨V, ⟨⟨hV⟩⟩⟩
         exact ⟨⟨U ⊓ V, ⟨⟨⟨hU, hV⟩⟩⟩⟩, ⟨homOfLE (by simp), rfl⟩,
           ⟨homOfLE (by simp), rfl⟩, ⟨⟩⟩
-  
+      cone_maps _ _ _ _ := ⟨_, 𝟙 _, rfl⟩ }
+  initiallySmall := initiallySmall_of_essentiallySmall _
+  jointly_surjective := by
+    rintro U R hR ⟨⟨hU⟩⟩
+    obtain ⟨V, f, hf, hV⟩ := hR x hU
+    exact ⟨_, _, hf, ⟨⟨hV⟩⟩, rfl⟩
 
 中文:
 定义 pointGrothendieckTopology
@@ -59,7 +64,12 @@ definition pointGrothendieckTopology
         rintro ⟨U, ⟨⟨hU⟩⟩⟩ ⟨V, ⟨⟨hV⟩⟩⟩
         exact ⟨⟨U ⊓ V, ⟨⟨⟨hU, hV⟩⟩⟩⟩, ⟨homOfLE (by simp), rfl⟩,
           ⟨homOfLE (by simp), rfl⟩, ⟨⟩⟩
-  
+      cone_maps _ _ _ _ := ⟨_, 𝟙 _, rfl⟩ }
+  initiallySmall := initiallySmall_of_essentiallySmall _
+  jointly_surjective := by
+    rintro U R hR ⟨⟨hU⟩⟩
+    obtain ⟨V, f, hf, hV⟩ := hR x hU
+    exact ⟨_, _, hf, ⟨⟨hV⟩⟩, rfl⟩
 -/
 def pointGrothendieckTopology : Point.{u} (grothendieckTopology X) where
   fiber.obj U := ULift.{u} (PLift (x in U))

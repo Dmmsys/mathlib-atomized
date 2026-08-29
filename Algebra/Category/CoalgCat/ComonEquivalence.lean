@@ -142,7 +142,7 @@ definition ofComonObj
       { ofComonObjCoalgebraStruct X with
         coassoc := ModuleCat.hom_ext_iff.mp (comul_assoc X).symm
         rTensor_counit_comp_comul := ModuleCat.hom_ext_iff.mp (counit_comul X)
-        lTensor_counit_comp_comul := ModuleCat.hom_ext_iff.mp (comul_c
+        lTensor_counit_comp_comul := ModuleCat.hom_ext_iff.mp (comul_counit X) } }
 
 中文:
 定义 ofComonObj
@@ -152,7 +152,7 @@ definition ofComonObj
       { ofComonObjCoalgebraStruct X with
         coassoc := ModuleCat.hom_ext_iff.mp (comul_assoc X).symm
         rTensor_counit_comp_comul := ModuleCat.hom_ext_iff.mp (counit_comul X)
-        lTensor_counit_comp_comul := ModuleCat.hom_ext_iff.mp (comul_c
+        lTensor_counit_comp_comul := ModuleCat.hom_ext_iff.mp (comul_counit X) } }
 
 Depends on / 依赖: ModuleCat, ModuleCat.hom_ext_iff.mp, ModuleCat.of, coassoc, comul_assoc, comul_counit, counit_comul, hom_ext_iff, instCoalgebra, lTensor_counit_comp_comul, ofComonObjCoalgebraStruct, rTensor_counit_comp_comul
 -/

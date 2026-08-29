@@ -676,7 +676,7 @@ definition preordToPartOrd
   map_comp f g := by
     ext x
     induction x using Quotient.inductionOn'
-    exact OrderHom.
+    exact OrderHom.antisymmetrization_apply_mk ..
 
 中文:
 定义 preordToPartOrd
@@ -690,7 +690,7 @@ definition preordToPartOrd
   map_comp f g := by
     ext x
     induction x using Quotient.inductionOn'
-    exact OrderHom.
+    exact OrderHom.antisymmetrization_apply_mk ..
 
 Depends on / 依赖: Antisymmetrization
 -/
@@ -717,7 +717,11 @@ definition preordToPartOrdForgetAdjunction
         { toFun f := Preord.ofHom
             ⟨f ∘ toAntisymmetrization (· <= ·), f.hom.mono.comp toAntisymmetrization_mono⟩
           invFun f := PartOrd.ofHom
-            ⟨fun a => Quotient.liftOn' a f (fun _ _ h => (AntisymmRel.image h f.hom.mono).eq)
+            ⟨fun a => Quotient.liftOn' a f (fun _ _ h => (AntisymmRel.image h f.hom.mono).eq),
+              fun a b => Quotient.inductionOn₂' a b fun _ _ h => f.hom.mono h⟩
+          left_inv _ := PartOrd.ext fun x => Quotient.inductionOn' x fun _ => rfl }
+      homEquiv_naturality_left_symm _ _ :=
+        PartOrd.ext fun x => Quotient.inductionOn' x fun _ => rfl }
 
 中文:
 定义 preordToPartOrdForgetAdjunction
@@ -727,7 +731,11 @@ definition preordToPartOrdForgetAdjunction
         { toFun f := Preord.ofHom
             ⟨f ∘ toAntisymmetrization (· <= ·), f.hom.mono.comp toAntisymmetrization_mono⟩
           invFun f := PartOrd.ofHom
-            ⟨fun a => Quotient.liftOn' a f (fun _ _ h => (AntisymmRel.image h f.hom.mono).eq)
+            ⟨fun a => Quotient.liftOn' a f (fun _ _ h => (AntisymmRel.image h f.hom.mono).eq),
+              fun a b => Quotient.inductionOn₂' a b fun _ _ h => f.hom.mono h⟩
+          left_inv _ := PartOrd.ext fun x => Quotient.inductionOn' x fun _ => rfl }
+      homEquiv_naturality_left_symm _ _ :=
+        PartOrd.ext fun x => Quotient.inductionOn' x fun _ => rfl }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, AntisymmRel, AntisymmRel.image, PartOrd, PartOrd.ext, PartOrd.ofHom, Preord, Preord.ofHom, Quotient, Quotient.inductionOn, Quotient.liftOn, f.hom.mono, f.hom.mono.comp, homEquiv, homEquiv_naturality_left_symm, inductionOn, invFun, left_inv, liftOn
 -/

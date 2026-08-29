@@ -332,7 +332,8 @@ definition shrinkYonedaEquiv
   left_inv τ := by
     ext Y f
     obtain ⟨f, rfl⟩ := (equivShrink _).surjective f
-    simpa [shrinkYoneda] using ((τ.naturality_ap
+    simpa [shrinkYoneda] using ((τ.naturality_apply f.op) (equivShrink _ (𝟙 X))).symm
+  right_inv x := by simp
 
 中文:
 定义 shrinkYonedaEquiv
@@ -344,7 +345,8 @@ definition shrinkYonedaEquiv
   left_inv τ := by
     ext Y f
     obtain ⟨f, rfl⟩ := (equivShrink _).surjective f
-    simpa [shrinkYoneda] using ((τ.naturality_ap
+    simpa [shrinkYoneda] using ((τ.naturality_apply f.op) (equivShrink _ (𝟙 X))).symm
+  right_inv x := by simp
 
 Depends on / 依赖: equivShrink
 -/
@@ -656,7 +658,7 @@ definition uliftYonedaIsoShrinkYoneda
       ext
       exact (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm _ _).symm)) (fun g => by
       ext
-      exact (shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_s
+      exact (shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm _ _).symm)
 
 中文:
 定义 uliftYonedaIsoShrinkYoneda
@@ -666,7 +668,7 @@ definition uliftYonedaIsoShrinkYoneda
       ext
       exact (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm _ _).symm)) (fun g => by
       ext
-      exact (shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_s
+      exact (shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm _ _).symm)
 
 Depends on / 依赖: shrinkYoneda
 -/
@@ -957,7 +959,8 @@ definition shrinkCoyonedaEquiv
   left_inv τ := by
     ext Y f
     obtain ⟨f, rfl⟩ := (equivShrink _).surjective f
-    simpa [shrinkYoneda] using ((τ.naturality_
+    simpa [shrinkYoneda] using ((τ.naturality_apply f) (equivShrink _ (𝟙 X.unop))).symm
+  right_inv x := by simp
 
 中文:
 定义 shrinkCoyonedaEquiv
@@ -969,7 +972,8 @@ definition shrinkCoyonedaEquiv
   left_inv τ := by
     ext Y f
     obtain ⟨f, rfl⟩ := (equivShrink _).surjective f
-    simpa [shrinkYoneda] using ((τ.naturality_
+    simpa [shrinkYoneda] using ((τ.naturality_apply f) (equivShrink _ (𝟙 X.unop))).symm
+  right_inv x := by simp
 
 Depends on / 依赖: X.unop, equivShrink
 -/
@@ -1284,7 +1288,7 @@ definition uliftYonedaIsoShrinkCoyoneda
       ext
       exact (shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm _ _).symm)) (fun g => by
       ext
-      exact (shrinkCoyoneda_map_app_shrinkCoyonedaObj
+      exact (shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm _ _).symm)
 
 中文:
 定义 uliftYonedaIsoShrinkCoyoneda
@@ -1294,7 +1298,7 @@ definition uliftYonedaIsoShrinkCoyoneda
       ext
       exact (shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm _ _).symm)) (fun g => by
       ext
-      exact (shrinkCoyoneda_map_app_shrinkCoyonedaObj
+      exact (shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm _ _).symm)
 
 Depends on / 依赖: shrinkCoyoneda
 -/

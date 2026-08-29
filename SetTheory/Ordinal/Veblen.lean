@@ -305,7 +305,13 @@ theorem veblenWith_add_one
     rw [mem_iInter]
     use fun ha => ha ⟨o, lt_succ o⟩
     rintro (ha : _ = _) ⟨b, hb : b < _⟩
-    obtain rfl | hb := l
+    obtain rfl | hb := lt_succ_iff_eq_or_lt.1 hb
+    · rw [Function.mem_fixedPoints_iff, ha]
+    · rw [← ha]
+      exact veblenWith_veblenWith_of_lt hf hb _
+  · exact fun o => isNormal_veblenWith hf o.1
+
+@[simp]
 
 中文:
 定理 veblenWith_add_one
@@ -318,7 +324,13 @@ theorem veblenWith_add_one
     rw [mem_iInter]
     use fun ha => ha ⟨o, lt_succ o⟩
     rintro (ha : _ = _) ⟨b, hb : b < _⟩
-    obtain rfl | hb := l
+    obtain rfl | hb := lt_succ_iff_eq_or_lt.1 hb
+    · rw [Function.mem_fixedPoints_iff, ha]
+    · rw [← ha]
+      exact veblenWith_veblenWith_of_lt hf hb _
+  · exact fun o => isNormal_veblenWith hf o.1
+
+@[simp]
 
 Depends on / 依赖: Function, Function.mem_fixedPoints_iff, add_pos_of_right, congr_arg, derivFamily_eq_enumOrd, deriv_eq_enumOrd, isNormal_veblenWith, lt_succ, lt_succ_iff_eq_or_lt, mem_fixedPoints_iff, mem_iInter, veblenWith_of_ne_zero, veblenWith_veblenWith_of_lt, zero_lt_one
 -/
@@ -707,7 +719,17 @@ theorem isNormal_veblenWith_zero
   apply nfpFamily_le fun l => ?_
   suffices exists b < o, List.foldr _ 0 l <= veblenWith f b 0 by
     obtain ⟨b, hb, hb'⟩ := this
-    exact hb'.tran
+    exact hb'.trans (IH b hb)
+  induction l with
+  | nil => use 0; simpa using ho.bot_lt
+  | cons a l IH =>
+    obtain ⟨b, hb, hb'⟩ := IH
+    refine ⟨_, ho.succ_lt (max_lt a.2 hb), ((veblenWith_right_strictMono hf _).monotone <|
+hb'.trans veblenWith_left_monotone hf _
+        (le_max_right a.1 b).trans (le_succ _)).trans ?_⟩
+    rw [veblenWith_veblenWith_of_lt hf]
+    rw [lt_succ_iff]
+    exact le_max_left _ b
 
 中文:
 定理 isNormal_veblenWith_zero
@@ -720,7 +742,17 @@ theorem isNormal_veblenWith_zero
   apply nfpFamily_le fun l => ?_
   suffices exists b < o, List.foldr _ 0 l <= veblenWith f b 0 by
     obtain ⟨b, hb, hb'⟩ := this
-    exact hb'.tran
+    exact hb'.trans (IH b hb)
+  induction l with
+  | nil => use 0; simpa using ho.bot_lt
+  | cons a l IH =>
+    obtain ⟨b, hb, hb'⟩ := IH
+    refine ⟨_, ho.succ_lt (max_lt a.2 hb), ((veblenWith_right_strictMono hf _).monotone <|
+hb'.trans veblenWith_left_monotone hf _
+        (le_max_right a.1 b).trans (le_succ _)).trans ?_⟩
+    rw [veblenWith_veblenWith_of_lt hf]
+    rw [lt_succ_iff]
+    exact le_max_left _ b
 
 Depends on / 依赖: List.foldr, bot_lt, derivFamily_zero, ho.bot_lt, ho.ne_bot, ho.succ_lt, isNormal_iff, max_lt, monotone, ne_bot, nfpFamily_le, succ_lt, veblenWith, veblenWith_, veblenWith_of_ne_zero, veblenWith_right_strictMono, veblenWith_zero_strictMono
 -/
@@ -1778,7 +1810,12 @@ theorem mem_range_veblen_iff_le_invVeblen₁
     by_cases h : invVeblen₁ x = 0
     · simp [h]
     · simp_rw [mem_range_veblen h, veblen_opow_eq_opow_iff]
-      exact fun o
+      exact fun o => veblen_eq_of_lt_invVeblen₁
+  · apply iff_of_false _ h.not_ge
+    rintro ⟨z, hz⟩
+    have hz' := hz
+    rw [← veblen_veblen_of_lt h]; rw [hz']; rw [veblen_opow_eq_opow_iff] at hz
+    exact (lt_veblen_invVeblen₁ x).ne' hz
 
 中文:
 定理 mem_range_veblen_iff_le_invVeblen₁
@@ -1790,7 +1827,12 @@ theorem mem_range_veblen_iff_le_invVeblen₁
     by_cases h : invVeblen₁ x = 0
     · simp [h]
     · simp_rw [mem_range_veblen h, veblen_opow_eq_opow_iff]
-      exact fun o
+      exact fun o => veblen_eq_of_lt_invVeblen₁
+  · apply iff_of_false _ h.not_ge
+    rintro ⟨z, hz⟩
+    have hz' := hz
+    rw [← veblen_veblen_of_lt h]; rw [hz']; rw [veblen_opow_eq_opow_iff] at hz
+    exact (lt_veblen_invVeblen₁ x).ne' hz
 
 Depends on / 依赖: h.le, h.not_ge, iff_of_false, iff_of_true, le_rfl, lt_trichotomy, mem_range_veblen, not_ge, simp_rw, veblen_opow_eq_opow_iff, veblen_veblen_of_lt
 -/
@@ -2183,7 +2225,8 @@ theorem veblen_eq_opow_iff
       aesop
     · rw [← veblen_veblen_of_lt ho, veblen_zero_apply, opow_right_inj one_lt_omega0]
       rintro rfl
-     
+      simp [invVeblen₁_veblen h, invVeblen₂_veblen ho.ne' h]
+  · convert! ← veblen_invVeblen₁_invVeblen₂ x
 
 中文:
 定理 veblen_eq_opow_iff
@@ -2197,7 +2240,8 @@ theorem veblen_eq_opow_iff
       aesop
     · rw [← veblen_veblen_of_lt ho, veblen_zero_apply, opow_right_inj one_lt_omega0]
       rintro rfl
-     
+      simp [invVeblen₁_veblen h, invVeblen₂_veblen ho.ne' h]
+  · convert! ← veblen_invVeblen₁_invVeblen₂ x
 
 Depends on / 依赖: convert, eq_zero_or_pos, ho.ne, one_lt_omega0, opow_right_inj, veblen_veblen_of_lt, veblen_zero, veblen_zero_apply
 -/

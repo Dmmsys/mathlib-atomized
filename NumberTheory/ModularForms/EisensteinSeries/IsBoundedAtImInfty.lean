@@ -113,7 +113,19 @@ theorem isBoundedAtImInfty_eisensteinSeriesSIF
   refine ⟨∑'(x : Fin 2 -> Int), r ⟨⟨N, 2⟩, Nat.ofNat_pos⟩ ^ (-k) * ‖x‖ ^ (-k), 2, ?_⟩
   intro z hz
   obtain ⟨n, hn⟩ := (ModularGroup_T_zpow_mem_verticalStrip z (NeZero.pos N))
-  rw [SlashInvariantForm.coe_mk]; rw [eisenst
+  rw [SlashInvariantForm.coe_mk]; rw [eisensteinSeries_slash_apply]; rw [← eisensteinSeriesSIF_apply]; rw [← T_zpow_width_invariant N k n (eisensteinSeriesSIF (a ᵥ* A) k) z]
+  apply le_trans (norm_le_tsum_norm N (a ᵥ* A) k hk _)
+  have hk' : (2 : Real) < k := by norm_cast
+  apply (summable_norm_eisSummand hk _).tsum_le_tsum _
+· exact_mod_cast (summable_one_div_norm_rpow hk').mul_left r ⟨⟨N, 2⟩, Nat.ofNat_pos⟩ ^ (-k)
+  · intro x
+    simp_rw [eisSummand, norm_zpow]
+    exact_mod_cast
+      summand_bound_of_mem_verticalStrip (lt_trans two_pos hk').le x two_pos
+      (verticalStrip_anti_right N hz hn)
+
+@[deprecated (since := "2026-02-10")]
+alias isBoundedAtImInfty_eisensteinSeries_SIF := isBoundedAtImInfty_eisensteinSeriesSIF
 
 中文:
 定理 isBoundedAtImInfty_eisensteinSeriesSIF
@@ -123,7 +135,19 @@ theorem isBoundedAtImInfty_eisensteinSeriesSIF
   refine ⟨∑'(x : Fin 2 -> Int), r ⟨⟨N, 2⟩, Nat.ofNat_pos⟩ ^ (-k) * ‖x‖ ^ (-k), 2, ?_⟩
   intro z hz
   obtain ⟨n, hn⟩ := (ModularGroup_T_zpow_mem_verticalStrip z (NeZero.pos N))
-  rw [SlashInvariantForm.coe_mk]; rw [eisenst
+  rw [SlashInvariantForm.coe_mk]; rw [eisensteinSeries_slash_apply]; rw [← eisensteinSeriesSIF_apply]; rw [← T_zpow_width_invariant N k n (eisensteinSeriesSIF (a ᵥ* A) k) z]
+  apply le_trans (norm_le_tsum_norm N (a ᵥ* A) k hk _)
+  have hk' : (2 : Real) < k := by norm_cast
+  apply (summable_norm_eisSummand hk _).tsum_le_tsum _
+· exact_mod_cast (summable_one_div_norm_rpow hk').mul_left r ⟨⟨N, 2⟩, Nat.ofNat_pos⟩ ^ (-k)
+  · intro x
+    simp_rw [eisSummand, norm_zpow]
+    exact_mod_cast
+      summand_bound_of_mem_verticalStrip (lt_trans two_pos hk').le x two_pos
+      (verticalStrip_anti_right N hz hn)
+
+@[deprecated (since := "2026-02-10")]
+alias isBoundedAtImInfty_eisensteinSeries_SIF := isBoundedAtImInfty_eisensteinSeriesSIF
 
 Depends on / 依赖: ModularGroup_T_zpow_mem_verticalStrip, Nat.ofNat_pos, NeZero, NeZero.pos, SlashInvariantForm, SlashInvariantForm.coe_mk, T_zpow_width_invariant, UpperHalfPlane, UpperHalfPlane.isBoundedAtImInfty_iff, coe_mk, eisensteinSeriesSIF, eisensteinSeriesSIF_apply, eisensteinSeries_slash_apply, isBoundedAtImInfty_iff, le_trans, norm_le_tsum_norm, ofNat_pos, simp_rw
 -/

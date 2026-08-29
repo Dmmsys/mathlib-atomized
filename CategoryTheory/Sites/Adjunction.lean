@@ -89,7 +89,12 @@ lemma adjunction_unit_app_hom
   change (sheafToPresheaf _ _).map ((adjunction J adj).unit.app X) = _
   simp only [Functor.id_obj, Functor.comp_obj, whiskeringRight_obj_obj, adjunction,
     Adjunction.map_restrictFullyFaithful_unit_app, Adjunction.comp_unit_app,
-    sheafificationAdjunction_unit_app, whiskeringRight_obj_map, I
+    sheafificationAdjunction_unit_app, whiskeringRight_obj_map, Iso.refl_hom, NatTrans.id_app,
+    Functor.comp_map, Functor.map_id, whiskerRight_id', Category.comp_id]
+  rfl
+
+@[deprecated (since := "2026-03-05")]
+alias adjunction_unit_app_val := adjunction_unit_app_hom
 
 中文:
 引理 adjunction_unit_app_hom
@@ -98,7 +103,12 @@ lemma adjunction_unit_app_hom
   change (sheafToPresheaf _ _).map ((adjunction J adj).unit.app X) = _
   simp only [Functor.id_obj, Functor.comp_obj, whiskeringRight_obj_obj, adjunction,
     Adjunction.map_restrictFullyFaithful_unit_app, Adjunction.comp_unit_app,
-    sheafificationAdjunction_unit_app, whiskeringRight_obj_map, I
+    sheafificationAdjunction_unit_app, whiskeringRight_obj_map, Iso.refl_hom, NatTrans.id_app,
+    Functor.comp_map, Functor.map_id, whiskerRight_id', Category.comp_id]
+  rfl
+
+@[deprecated (since := "2026-03-05")]
+alias adjunction_unit_app_val := adjunction_unit_app_hom
 
 Depends on / 依赖: Adjunction, Adjunction.comp_unit_app, Adjunction.map_restrictFullyFaithful_unit_app, Category, Category.comp_id, Functor, Functor.comp_map, Functor.comp_obj, Functor.id_obj, Functor.map_id, Iso.refl_hom, NatTrans, NatTrans.id_app, adjunction, comp_id, comp_map, comp_obj, comp_unit_app, id_app, id_obj
 -/
@@ -128,7 +138,7 @@ lemma adjunction_counit_app_hom
       (L := composeAndSheafify J G) (R := sheafCompose J F) _ _ Y)).trans (by cat_disch)
 
 @[deprecated (since := "2026-03-05")]
-alias adjunction_counit_app_val := adjunction_counit_
+alias adjunction_counit_app_val := adjunction_counit_app_hom
 
 中文:
 引理 adjunction_counit_app_hom
@@ -138,7 +148,7 @@ alias adjunction_counit_app_val := adjunction_counit_
       (L := composeAndSheafify J G) (R := sheafCompose J F) _ _ Y)).trans (by cat_disch)
 
 @[deprecated (since := "2026-03-05")]
-alias adjunction_counit_app_val := adjunction_counit_
+alias adjunction_counit_app_val := adjunction_counit_app_hom
 
 Depends on / 依赖: Adjunction, Adjunction.map_restrictFullyFaithful_counit_app, FullyFaithful, Functor, Functor.FullyFaithful.id, cat_disch, composeAndSheafify, congr_map, map_restrictFullyFaithful_counit_app, sheafCompose, sheafToPresheaf
 -/
@@ -204,7 +214,14 @@ lemma preservesSheafification_of_adjunction
     rw [← ((adj.whiskerRight Cᵒᵖ).homEquiv P R).comp_bijective]
     convert!
       (((adj.whiskerRight Cᵒᵖ).homEquiv Q R).trans
-          (hf.homEquiv (R ⋙ F) ((sheafCompose J F).obj ⟨R, hR⟩).proper
+          (hf.homEquiv (R ⋙ F) ((sheafCompose J F).obj ⟨R, hR⟩).property)).bijective
+    ext g X
+    -- The rest of this proof was
+    -- `dsimp [Adjunction.whiskerRight, Adjunction.mkOfUnitCounit]; simp` before https://github.com/leanprover-community/mathlib4/pull/16317.
+    dsimp
+    rw [← NatTrans.comp_app]
+    congr
+    exact Adjunction.homEquiv_naturality_left _ _ _
 
 中文:
 引理 preservesSheafification_of_adjunction
@@ -217,7 +234,14 @@ lemma preservesSheafification_of_adjunction
     rw [← ((adj.whiskerRight Cᵒᵖ).homEquiv P R).comp_bijective]
     convert!
       (((adj.whiskerRight Cᵒᵖ).homEquiv Q R).trans
-          (hf.homEquiv (R ⋙ F) ((sheafCompose J F).obj ⟨R, hR⟩).proper
+          (hf.homEquiv (R ⋙ F) ((sheafCompose J F).obj ⟨R, hR⟩).property)).bijective
+    ext g X
+    -- The rest of this proof was
+    -- `dsimp [Adjunction.whiskerRight, Adjunction.mkOfUnitCounit]; simp` before https://github.com/leanprover-community/mathlib4/pull/16317.
+    dsimp
+    rw [← NatTrans.comp_app]
+    congr
+    exact Adjunction.homEquiv_naturality_left _ _ _
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.inverseImage_iff, adj.isRightAdjoint, adj.whiskerRight, bijective, comp_bijective, convert, hf.homEquiv, homEquiv, inverseImage_iff, isRightAdjoint, property, sheafCompose, whiskerRight
 -/

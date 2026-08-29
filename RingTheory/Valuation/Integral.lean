@@ -46,7 +46,19 @@ lemma isIntegral_iff_v_le_one
     · rw [Polynomial.natDegree_eq_zero] at hn
       obtain ⟨c, rfl⟩ := hn
       simp [map_eq_zero_iff _ hv.hom_inj, hm.ne_zero_of_C] at hf
-    simp
+    simp only [Polynomial.eval₂_eq_sum_range, Finset.sum_range_succ, hm.coeff_natDegree, map_one,
+      one_mul, add_eq_zero_iff_eq_neg] at hf
+    apply_fun v at hf
+    simp only [map_neg, map_pow] at hf
+    contrapose! hf
+    refine ne_of_lt (v.map_sum_lt ?_ ?_)
+    · simp [hn, (hf.trans' (zero_lt_one)).ne']
+    · simp only [Finset.mem_range, map_mul, map_pow]
+      intro _ hi
+exact mul_lt_of_le_one_of_lt (hv.map_le_one _) pow_lt_pow_right₀ hf hi
+  · intro h
+    obtain ⟨y, rfl⟩ := hv.exists_of_le_one h
+    exact ⟨Polynomial.X - .C y, by monicity, by simp⟩
 
 中文:
 引理 is整数egral_iff_v_le_one
@@ -60,7 +72,19 @@ lemma isIntegral_iff_v_le_one
     · rw [Polynomial.natDegree_eq_zero] at hn
       obtain ⟨c, rfl⟩ := hn
       simp [map_eq_zero_iff _ hv.hom_inj, hm.ne_zero_of_C] at hf
-    simp
+    simp only [Polynomial.eval₂_eq_sum_range, Finset.sum_range_succ, hm.coeff_natDegree, map_one,
+      one_mul, add_eq_zero_iff_eq_neg] at hf
+    apply_fun v at hf
+    simp only [map_neg, map_pow] at hf
+    contrapose! hf
+    refine ne_of_lt (v.map_sum_lt ?_ ?_)
+    · simp [hn, (hf.trans' (zero_lt_one)).ne']
+    · simp only [Finset.mem_range, map_mul, map_pow]
+      intro _ hi
+exact mul_lt_of_le_one_of_lt (hv.map_le_one _) pow_lt_pow_right₀ hf hi
+  · intro h
+    obtain ⟨y, rfl⟩ := hv.exists_of_le_one h
+    exact ⟨Polynomial.X - .C y, by monicity, by simp⟩
 
 Depends on / 依赖: Finset, Finset.sum_range_succ, Nontrivial, Polynomial, Polynomial.eval, Polynomial.natDegree_eq_zero, add_eq_zero_iff_eq_neg, apply_fun, coeff_natDegree, contrapose, f.natDegree, hm.coeff_natDegree, hm.ne_zero_of_C, hom_inj, hv.hom_inj, hv.nontrivial_iff.mpr, map_eq_zero_iff, map_neg, map_one, map_pow
 -/

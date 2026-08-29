@@ -302,7 +302,12 @@ lemma locallyLipschitzOn_iff_restrict
   constructor
   · rintro ⟨t, ht, hft⟩
 exact ⟨_, ⟨t, ht, Subset.rfl⟩, hft.mono inter_subset_right.trans image_preimage_subset ..⟩
-  · 
+  · rintro ⟨t, ⟨u, hu, hut⟩, hft⟩
+    exact ⟨s inter u, Filter.inter_mem self_mem_nhdsWithin hu,
+      hft.mono fun x hx => ⟨hx.1, ⟨x, hx.1⟩, hut hx.2, rfl⟩⟩
+
+alias ⟨LipschitzOnWith.to_restrict, _⟩ := lipschitzOnWith_iff_restrict
+alias ⟨LocallyLipschitzOn.restrict, _⟩ := locallyLipschitzOn_iff_restrict
 
 中文:
 引理 locallyLipschitzOn_iff_restrict
@@ -314,7 +319,12 @@ exact ⟨_, ⟨t, ht, Subset.rfl⟩, hft.mono inter_subset_right.trans image_pre
   constructor
   · rintro ⟨t, ht, hft⟩
 exact ⟨_, ⟨t, ht, Subset.rfl⟩, hft.mono inter_subset_right.trans image_preimage_subset ..⟩
-  · 
+  · rintro ⟨t, ⟨u, hu, hut⟩, hft⟩
+    exact ⟨s inter u, Filter.inter_mem self_mem_nhdsWithin hu,
+      hft.mono fun x hx => ⟨hx.1, ⟨x, hx.1⟩, hut hx.2, rfl⟩⟩
+
+alias ⟨LipschitzOnWith.to_restrict, _⟩ := lipschitzOnWith_iff_restrict
+alias ⟨LocallyLipschitzOn.restrict, _⟩ := locallyLipschitzOn_iff_restrict
 
 Depends on / 依赖: Filter, Filter.inter_mem, LocallyLipschitz, LocallyLipschitzOn, SetCoe, SetCoe.forall, Subset, Subset.rfl, hft.mono, image_preimage_subset, inter_mem, inter_subset_right, inter_subset_right.trans, lipschitzOnWith_restrict, mem_comap, nhds_subtype_eq_comap_nhdsWithin, self_mem_nhdsWithin
 -/
@@ -1262,7 +1272,7 @@ theorem ediam_image2_le
   exact
     add_le_add
       ((hf₁ b₁ hb₁ ha₁ ha₂).trans <| mul_right_mono <| Metric.edist_le_ediam_of_mem ha₁ ha₂)
-      ((hf₂ a₂ ha₂ hb₁ hb₂).trans <| mul_ri
+      ((hf₂ a₂ ha₂ hb₁ hb₂).trans <| mul_right_mono <| Metric.edist_le_ediam_of_mem hb₁ hb₂)
 
 中文:
 定理 ediam_image2_le
@@ -1274,7 +1284,7 @@ theorem ediam_image2_le
   exact
     add_le_add
       ((hf₁ b₁ hb₁ ha₁ ha₂).trans <| mul_right_mono <| Metric.edist_le_ediam_of_mem ha₁ ha₂)
-      ((hf₂ a₂ ha₂ hb₁ hb₂).trans <| mul_ri
+      ((hf₂ a₂ ha₂ hb₁ hb₂).trans <| mul_right_mono <| Metric.edist_le_ediam_of_mem hb₁ hb₂)
 
 Depends on / 依赖: Metric, Metric.ediam_le_iff, Metric.edist_le_ediam_of_mem, add_le_add, ediam_le_iff, edist_le_ediam_of_mem, edist_triangle, forall_mem_image2, mul_right_mono
 -/
@@ -1386,7 +1396,7 @@ lemma comp
   rcases hf (g x) with ⟨Kf, u, hu, hfL⟩
   refine ⟨Kf * Kg, t inter g⁻¹' u, inter_mem ht (hg.continuous.continuousAt hu), ?_⟩
   exact hfL.comp (hgL.mono inter_subset_left)
-    ((mapsTo_preimage g
+    ((mapsTo_preimage g u).mono_left inter_subset_right)
 
 中文:
 引理 comp
@@ -1398,7 +1408,7 @@ lemma comp
   rcases hf (g x) with ⟨Kf, u, hu, hfL⟩
   refine ⟨Kf * Kg, t inter g⁻¹' u, inter_mem ht (hg.continuous.continuousAt hu), ?_⟩
   exact hfL.comp (hgL.mono inter_subset_left)
-    ((mapsTo_preimage g
+    ((mapsTo_preimage g u).mono_left inter_subset_right)
 -/
 protected lemma comp {f : β -> γ} {g : α -> β}
     (hf : LocallyLipschitz f) (hg : LocallyLipschitz g) : LocallyLipschitz (f ∘ g) := by
@@ -1564,7 +1574,26 @@ theorem continuousOn_prod_of_subset_closure_continuousOn_lipschitzOnWith
   refine Metric.nhds_basis_closedEBall.tendsto_right_iff.2 fun ε (ε0 : 0 < ε) => ?_
   replace ε0 : 0 < ε / 2 := ENNReal.half_pos ε0.ne'
   obtain ⟨δ, δpos, hδ⟩ : exists δ : Real>=0, 0 < δ ∧ (δ : Real>=0∞) * ↑(3 * K) < ε / 2 :=
-    ENNReal.exists_nnreal_po
+    ENNReal.exists_nnreal_pos_mul_lt ENNReal.coe_ne_top ε0.ne'
+  rw [← ENNReal.coe_pos] at δpos
+  rcases EMetric.mem_closure_iff.1 (hss' hx) δ δpos with ⟨x', hx', hxx'⟩
+  have A : s inter Metric.eball x δ in 𝓝[s] x :=
+    inter_mem_nhdsWithin _ (Metric.eball_mem_nhds _ δpos)
+  have B : t inter { b | edist (f (x', b)) (f (x', y)) <= ε / 2 } in 𝓝[t] y :=
+    inter_mem self_mem_nhdsWithin (ha x' hx' y hy (Metric.closedEBall_mem_nhds (f (x', y)) ε0))
+  filter_upwards [nhdsWithin_prod A B] with ⟨a, b⟩ ⟨⟨has, hax⟩, ⟨hbt, hby⟩⟩
+  calc
+    edist (f (a, b)) (f (x, y)) <= edist (f (a, b)) (f (x', b)) + edist (f (x', b)) (f (x', y)) +
+        edist (f (x', y)) (f (x, y)) := edist_triangle4 _ _ _ _
+    _ <= K * (δ + δ) + ε / 2 + K * δ := by
+      gcongr
+      · refine (hb b hbt).edist_le_mul_of_le has (hs' hx') ?_
+        exact (edist_triangle _ _ _).trans (add_le_add (le_of_lt hax) hxx'.le)
+      · exact hby
+      · exact (hb y hy).edist_le_mul_of_le (hs' hx') hx ((edist_comm _ _).trans_le hxx'.le)
+    _ = δ * ↑(3 * K) + ε / 2 := by push_cast; ring
+    _ <= ε / 2 + ε / 2 := by gcongr
+    _ = ε := ENNReal.add_halves _
 
 中文:
 定理 continuousOn_prod_of_subset_closure_continuousOn_lipschitzOnWith
@@ -1574,7 +1603,26 @@ theorem continuousOn_prod_of_subset_closure_continuousOn_lipschitzOnWith
   refine Metric.nhds_basis_closedEBall.tendsto_right_iff.2 fun ε (ε0 : 0 < ε) => ?_
   replace ε0 : 0 < ε / 2 := ENNReal.half_pos ε0.ne'
   obtain ⟨δ, δpos, hδ⟩ : exists δ : Real>=0, 0 < δ ∧ (δ : Real>=0∞) * ↑(3 * K) < ε / 2 :=
-    ENNReal.exists_nnreal_po
+    ENNReal.exists_nnreal_pos_mul_lt ENNReal.coe_ne_top ε0.ne'
+  rw [← ENNReal.coe_pos] at δpos
+  rcases EMetric.mem_closure_iff.1 (hss' hx) δ δpos with ⟨x', hx', hxx'⟩
+  have A : s inter Metric.eball x δ in 𝓝[s] x :=
+    inter_mem_nhdsWithin _ (Metric.eball_mem_nhds _ δpos)
+  have B : t inter { b | edist (f (x', b)) (f (x', y)) <= ε / 2 } in 𝓝[t] y :=
+    inter_mem self_mem_nhdsWithin (ha x' hx' y hy (Metric.closedEBall_mem_nhds (f (x', y)) ε0))
+  filter_upwards [nhdsWithin_prod A B] with ⟨a, b⟩ ⟨⟨has, hax⟩, ⟨hbt, hby⟩⟩
+  calc
+    edist (f (a, b)) (f (x, y)) <= edist (f (a, b)) (f (x', b)) + edist (f (x', b)) (f (x', y)) +
+        edist (f (x', y)) (f (x, y)) := edist_triangle4 _ _ _ _
+    _ <= K * (δ + δ) + ε / 2 + K * δ := by
+      gcongr
+      · refine (hb b hbt).edist_le_mul_of_le has (hs' hx') ?_
+        exact (edist_triangle _ _ _).trans (add_le_add (le_of_lt hax) hxx'.le)
+      · exact hby
+      · exact (hb y hy).edist_le_mul_of_le (hs' hx') hx ((edist_comm _ _).trans_le hxx'.le)
+    _ = δ * ↑(3 * K) + ε / 2 := by push_cast; ring
+    _ <= ε / 2 + ε / 2 := by gcongr
+    _ = ε := ENNReal.add_halves _
 
 Depends on / 依赖: EMetric, EMetric.mem_closure_iff, ENNReal, ENNReal.coe_ne_top, ENNReal.coe_pos, ENNReal.exists_nnreal_pos_mul_lt, ENNReal.half_pos, Metric, Metric.eball, Metric.nhds_basis_closedEBall.tendsto_right_iff, coe_ne_top, coe_pos, exists_nnreal_pos_mul_lt, half_pos, inter_mem_nhdsWithin, mem_closure_iff, nhds_basis_closedEBall, replace, tendsto_right_iff
 -/

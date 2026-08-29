@@ -206,7 +206,8 @@ definition tensorUnitIso
     else
       { hom := 0
         inv := 0
-        hom_inv_id := (GradedObject.isInitialSingleObjApply 0 (𝟙_ C) i hi).hom_ext 
+        hom_inv_id := (GradedObject.isInitialSingleObjApply 0 (𝟙_ C) i hi).hom_ext _ _
+        inv_hom_id := (isZero_single_obj_X c 0 (𝟙_ C) i hi).eq_of_src _ _ })
 
 中文:
 定义 tensorUnitIso
@@ -218,7 +219,8 @@ definition tensorUnitIso
     else
       { hom := 0
         inv := 0
-        hom_inv_id := (GradedObject.isInitialSingleObjApply 0 (𝟙_ C) i hi).hom_ext 
+        hom_inv_id := (GradedObject.isInitialSingleObjApply 0 (𝟙_ C) i hi).hom_ext _ _
+        inv_hom_id := (isZero_single_obj_X c 0 (𝟙_ C) i hi).eq_of_src _ _ })
 
 Depends on / 依赖: GradedObject, GradedObject.isInitialSingleObjApply, GradedObject.isoMk, GradedObject.singleObjApplyIsoOfEq, eq_of_src, hom_ext, hom_inv_id, inv_hom_id, isInitialSingleObjApply, isZero_single_obj_X, singleObjApplyIsoOfEq, singleObjXIsoOfEq
 -/
@@ -312,7 +314,7 @@ lemma unit_tensor_d₁
     · rw [mapBifunctor.d₁_eq _ _ _ _ h₁ _ _ h₂, single_obj_d, Functor.map_zero,
         zero_app, zero_comp, smul_zero]
     · rw [mapBifunctor.d₁_eq_zero' _ _ _ _ h₁ _ _ h₂]
-  · rw [mapBifunctor.d₁_eq_
+  · rw [mapBifunctor.d₁_eq_zero _ _ _ _ _ _ _ h₁]
 
 中文:
 引理 unit_tensor_d₁
@@ -323,7 +325,7 @@ lemma unit_tensor_d₁
     · rw [mapBifunctor.d₁_eq _ _ _ _ h₁ _ _ h₂, single_obj_d, Functor.map_zero,
         zero_app, zero_comp, smul_zero]
     · rw [mapBifunctor.d₁_eq_zero' _ _ _ _ h₁ _ _ h₂]
-  · rw [mapBifunctor.d₁_eq_
+  · rw [mapBifunctor.d₁_eq_zero _ _ _ _ _ _ _ h₁]
 
 Depends on / 依赖: ComplexShape, Functor, Functor.map_zero, c.Rel, c.next, mapBifunctor, mapBifunctor.d, map_zero, single_obj_d, smul_zero, zero_app, zero_comp
 -/
@@ -396,7 +398,7 @@ lemma tensor_unit_d₂
     · rw [mapBifunctor.d₂_eq _ _ _ _ _ h₁ _ h₂, single_obj_d, Functor.map_zero,
         zero_comp, smul_zero]
     · rw [mapBifunctor.d₂_eq_zero' _ _ _ _ _ h₁ _ h₂]
-  · rw [mapBifunctor.d₂_eq_zero _ _ _
+  · rw [mapBifunctor.d₂_eq_zero _ _ _ _ _ _ _ h₁]
 
 中文:
 引理 tensor_unit_d₂
@@ -407,7 +409,7 @@ lemma tensor_unit_d₂
     · rw [mapBifunctor.d₂_eq _ _ _ _ _ h₁ _ h₂, single_obj_d, Functor.map_zero,
         zero_comp, smul_zero]
     · rw [mapBifunctor.d₂_eq_zero' _ _ _ _ _ h₁ _ h₂]
-  · rw [mapBifunctor.d₂_eq_zero _ _ _
+  · rw [mapBifunctor.d₂_eq_zero _ _ _ _ _ _ _ h₁]
 
 Depends on / 依赖: ComplexShape, Functor, Functor.map_zero, c.Rel, c.next, mapBifunctor, mapBifunctor.d, map_zero, single_obj_d, smul_zero, zero_comp
 -/
@@ -469,7 +471,10 @@ lemma leftUnitor'_inv
   dsimp
   rw [tensorHom_id]; rw [← comp_whiskerRight_assoc]
   congr 2
-  rw [← cancel_epi (GradedObject.Monoidal.tensorUnit₀ (I := I
+  rw [← cancel_epi (GradedObject.Monoidal.tensorUnit₀ (I := I)).hom]; rw [Iso.hom_inv_id_assoc]
+  dsimp [tensorUnitIso]
+  rw [dif_pos rfl]
+  rfl
 
 中文:
 引理 leftUnitor'_inv
@@ -480,7 +485,10 @@ lemma leftUnitor'_inv
   dsimp
   rw [tensorHom_id]; rw [← comp_whiskerRight_assoc]
   congr 2
-  rw [← cancel_epi (GradedObject.Monoidal.tensorUnit₀ (I := I
+  rw [← cancel_epi (GradedObject.Monoidal.tensorUnit₀ (I := I)).hom]; rw [Iso.hom_inv_id_assoc]
+  dsimp [tensorUnitIso]
+  rw [dif_pos rfl]
+  rfl
 -/
 lemma leftUnitor'_inv (i : I) :
     (leftUnitor' K).inv i = (fun_ (K.X i)).inv ≫ ((singleObjXSelf c 0 (𝟙_ C)).inv ▷ (K.X i)) ≫
@@ -511,7 +519,9 @@ lemma leftUnitor'_inv_comm
       unit_tensor_d₁, comp_zero, zero_add]
     rw [mapBifunctor.d₂_eq _ _ _ _ _ hij _ (by simp)]
     dsimp
-    simp only [ComplexShape.ε_zero, one
+    simp only [ComplexShape.ε_zero, one_smul, ← whisker_exchange_assoc,
+      id_whiskerLeft, assoc, Iso.inv_hom_id_assoc]
+  · simp only [shape _ _ _ hij, comp_zero, zero_comp]
 
 中文:
 引理 leftUnitor'_inv_comm
@@ -523,7 +533,9 @@ lemma leftUnitor'_inv_comm
       unit_tensor_d₁, comp_zero, zero_add]
     rw [mapBifunctor.d₂_eq _ _ _ _ _ hij _ (by simp)]
     dsimp
-    simp only [ComplexShape.ε_zero, one
+    simp only [ComplexShape.ε_zero, one_smul, ← whisker_exchange_assoc,
+      id_whiskerLeft, assoc, Iso.inv_hom_id_assoc]
+  · simp only [shape _ _ _ hij, comp_zero, zero_comp]
 -/
 lemma leftUnitor'_inv_comm (i j : I) :
     (leftUnitor' K).inv i ≫ (tensorObj (tensorUnit C c) K).d i j =
@@ -603,7 +615,10 @@ lemma rightUnitor'_inv
   dsimp
   rw [id_tensorHom]; rw [← whiskerLeft_comp_assoc]
   congr 2
-  rw [← cancel_epi (GradedObject.Monoidal.tensorUnit₀ (I := 
+  rw [← cancel_epi (GradedObject.Monoidal.tensorUnit₀ (I := I)).hom]; rw [Iso.hom_inv_id_assoc]
+  dsimp [tensorUnitIso]
+  rw [dif_pos rfl]
+  rfl
 
 中文:
 引理 rightUnitor'_inv
@@ -614,7 +629,10 @@ lemma rightUnitor'_inv
   dsimp
   rw [id_tensorHom]; rw [← whiskerLeft_comp_assoc]
   congr 2
-  rw [← cancel_epi (GradedObject.Monoidal.tensorUnit₀ (I := 
+  rw [← cancel_epi (GradedObject.Monoidal.tensorUnit₀ (I := I)).hom]; rw [Iso.hom_inv_id_assoc]
+  dsimp [tensorUnitIso]
+  rw [dif_pos rfl]
+  rfl
 -/
 lemma rightUnitor'_inv (i : I) :
     (rightUnitor' K).inv i = (ρ_ (K.X i)).inv ≫ ((K.X i) ◁ (singleObjXSelf c 0 (𝟙_ C)).inv) ≫
@@ -644,7 +662,8 @@ lemma rightUnitor'_inv_comm
       tensor_unit_d₂, comp_zero, add_zero]
     rw [mapBifunctor.d₁_eq _ _ _ _ hij _ _ (by simp)]
     dsimp
-    simp only [one_smul, whisker_excha
+    simp only [one_smul, whisker_exchange_assoc, whiskerRight_id, assoc, Iso.inv_hom_id_assoc]
+  · simp only [shape _ _ _ hij, comp_zero, zero_comp]
 
 中文:
 引理 rightUnitor'_inv_comm
@@ -656,7 +675,8 @@ lemma rightUnitor'_inv_comm
       tensor_unit_d₂, comp_zero, add_zero]
     rw [mapBifunctor.d₁_eq _ _ _ _ hij _ _ (by simp)]
     dsimp
-    simp only [one_smul, whisker_excha
+    simp only [one_smul, whisker_exchange_assoc, whiskerRight_id, assoc, Iso.inv_hom_id_assoc]
+  · simp only [shape _ _ _ hij, comp_zero, zero_comp]
 -/
 lemma rightUnitor'_inv_comm (i j : I) :
     (rightUnitor' K).inv i ≫ (tensorObj K (tensorUnit C c)).d i j =
@@ -767,7 +787,26 @@ definition Monoidal.inducingFunctorData
     rfl
   tensorHom_eq {K₁ L₁ K₂ L₂} f g := by
     dsimp [forget]
-    rw [
+    rw [comp_id]
+    erw [id_comp]
+    rfl
+  associator_eq K₁ K₂ K₃ := by
+    dsimp [forget]
+    simp only [tensorHom_id, whiskerRight_tensor, id_whiskerRight,
+      id_comp, Iso.inv_hom_id, comp_id, assoc]
+    erw [id_whiskerRight]
+    rw [id_comp]
+    erw [id_comp]
+    rfl
+  leftUnitor_eq K := by
+    dsimp
+    erw [id_comp]
+    rfl
+  rightUnitor_eq K := by
+    dsimp
+    rw [assoc]
+    erw [id_comp]
+    rfl
 
 中文:
 定义 幺半群.inducingFunctorData
@@ -786,7 +825,26 @@ definition Monoidal.inducingFunctorData
     rfl
   tensorHom_eq {K₁ L₁ K₂ L₂} f g := by
     dsimp [forget]
-    rw [
+    rw [comp_id]
+    erw [id_comp]
+    rfl
+  associator_eq K₁ K₂ K₃ := by
+    dsimp [forget]
+    simp only [tensorHom_id, whiskerRight_tensor, id_whiskerRight,
+      id_comp, Iso.inv_hom_id, comp_id, assoc]
+    erw [id_whiskerRight]
+    rw [id_comp]
+    erw [id_comp]
+    rfl
+  leftUnitor_eq K := by
+    dsimp
+    erw [id_comp]
+    rfl
+  rightUnitor_eq K := by
+    dsimp
+    rw [assoc]
+    erw [id_comp]
+    rfl
 
 Depends on / 依赖: Iso.refl
 -/

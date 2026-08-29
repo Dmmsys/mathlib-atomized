@@ -126,7 +126,17 @@ theorem _root_.Submodule.eq_top_of_finrank_eq
     simpa [bS] using bS.linearIndependent.linearIndepOn_id.image
       (f := Submodule.subtype S) (by simp)
   set b := Basis.extend this with b_eq
-  let i2 : Fintype (((↑
+  let i2 : Fintype (((↑) : S -> V) '' Basis.ofVectorSpaceIndex K S) :=
+    (LinearIndependent.set_finite_of_isNoetherian this).fintype
+  have : (↑) '' Basis.ofVectorSpaceIndex K S = this.extend (Set.subset_univ _) :=
+    Set.eq_of_subset_of_card_le (this.subset_extend _)
+      (by
+        rw [Set.card_image_of_injective _ Subtype.coe_injective]; rw [← finrank_eq_card_basis bS]; rw [←
+            finrank_eq_card_basis b]; rw [h])
+  rw [← b.span_eq]; rw [b_eq]; rw [Basis.coe_extend]; rw [Subtype.range_coe]; rw [← this]; rw [← Submodule.coe_subtype]; rw [span_image]
+  have := bS.span_eq
+  rw [bS_eq]; rw [Basis.coe_ofVectorSpace]; rw [Subtype.range_coe] at this
+  rw [this]; rw [Submodule.map_top (Submodule.subtype S)]; rw [range_subtype]
 
 中文:
 定理 _root_.子模.eq_top_of_finrank_eq
@@ -137,7 +147,17 @@ theorem _root_.Submodule.eq_top_of_finrank_eq
     simpa [bS] using bS.linearIndependent.linearIndepOn_id.image
       (f := Submodule.subtype S) (by simp)
   set b := Basis.extend this with b_eq
-  let i2 : Fintype (((↑
+  let i2 : Fintype (((↑) : S -> V) '' Basis.ofVectorSpaceIndex K S) :=
+    (LinearIndependent.set_finite_of_isNoetherian this).fintype
+  have : (↑) '' Basis.ofVectorSpaceIndex K S = this.extend (Set.subset_univ _) :=
+    Set.eq_of_subset_of_card_le (this.subset_extend _)
+      (by
+        rw [Set.card_image_of_injective _ Subtype.coe_injective]; rw [← finrank_eq_card_basis bS]; rw [←
+            finrank_eq_card_basis b]; rw [h])
+  rw [← b.span_eq]; rw [b_eq]; rw [Basis.coe_extend]; rw [Subtype.range_coe]; rw [← this]; rw [← Submodule.coe_subtype]; rw [span_image]
+  have := bS.span_eq
+  rw [bS_eq]; rw [Basis.coe_ofVectorSpace]; rw [Subtype.range_coe] at this
+  rw [this]; rw [Submodule.map_top (Submodule.subtype S)]; rw [range_subtype]
 
 Depends on / 依赖: Basis.extend, Basis.ofVectorSpace, Basis.ofVectorSpaceIndex, Fintype, LinearIndepOn, LinearIndependent, LinearIndependent.set_finite_of_isNoetherian, Set.eq_of_subset_of_card_le, Set.subset_univ, Submodule, Submodule.subtype, Subtype, Subtype.val, bS.linearIndependent.linearIndepOn_id.image, bS_eq, b_eq, eq_of_subset_of_card_le, extend, fintype, linearIndepOn_id
 -/
@@ -172,7 +192,9 @@ theorem _root_.Submodule.exists_linearEquiv_restrict_eq
   let eQ' := W'.prodEquivOfIsCompl Q' hQ'
   suffices Nonempty (Q ≃ₗ[K] Q') from
     ⟨eQ.symm ≪≫ₗ (LinearEquiv.prodCongr f this.some) ≪≫ₗ eQ', by aesop⟩
-  refine M
+  refine Module.nonempty_linearEquiv_iff_rank_eq.mpr ?_
+  rw [← Cardinal.add_right_inj_of_lt_aleph0 (γ := Module.rank K W)]; rw [add_comm]; rw [← rank_prod']; rw [Module.nonempty_linearEquiv_iff_rank_eq.mp ⟨eQ⟩]; rw [add_comm]; rw [Module.nonempty_linearEquiv_iff_rank_eq.mp ⟨f⟩]; rw [← rank_prod']; rw [Module.nonempty_linearEquiv_iff_rank_eq.mp ⟨eQ'⟩]
+  exact Module.rank_lt_aleph0 K ↥W
 
 中文:
 定理 _root_.子模.存在_linearEquiv_restrict_eq
@@ -183,7 +205,9 @@ theorem _root_.Submodule.exists_linearEquiv_restrict_eq
   let eQ' := W'.prodEquivOfIsCompl Q' hQ'
   suffices Nonempty (Q ≃ₗ[K] Q') from
     ⟨eQ.symm ≪≫ₗ (LinearEquiv.prodCongr f this.some) ≪≫ₗ eQ', by aesop⟩
-  refine M
+  refine Module.nonempty_linearEquiv_iff_rank_eq.mpr ?_
+  rw [← Cardinal.add_right_inj_of_lt_aleph0 (γ := Module.rank K W)]; rw [add_comm]; rw [← rank_prod']; rw [Module.nonempty_linearEquiv_iff_rank_eq.mp ⟨eQ⟩]; rw [add_comm]; rw [Module.nonempty_linearEquiv_iff_rank_eq.mp ⟨f⟩]; rw [← rank_prod']; rw [Module.nonempty_linearEquiv_iff_rank_eq.mp ⟨eQ'⟩]
+  exact Module.rank_lt_aleph0 K ↥W
 
 Depends on / 依赖: Cardinal, Cardinal.add_right_inj_of_lt_aleph0, LinearEquiv, LinearEquiv.prodCongr, Module, Module.nonempty_linearEquiv_iff_rank_eq.mp, Module.nonempty_linearEquiv_iff_rank_eq.mpr, Module.rank, Nonempty, Submodule, Submodule.exists_isCompl, W.prodEquivOfIsCompl, add_comm, add_right_inj_of_lt_aleph0, eQ.symm, exists_isCompl, nonempty_linearEquiv_iff_rank_eq, prodCongr, prodEquivOfIsCompl, rank_prod
 -/
@@ -253,7 +277,18 @@ definition basisSingleton
     { toFun := fun w => Finsupp.single default (b.repr w default / b.repr v default)
       invFun := fun f => f default • v
       map_add' := by simp [add_div]
-      map_sm
+      map_smul' := by simp [mul_div]
+      left_inv := fun w => by
+        apply_fun b.repr using b.repr.toEquiv.injective
+        apply_fun Finsupp.uniqueEquiv default
+        simp only [map_smulₛₗ, Finsupp.coe_smul, Finsupp.single_eq_same,
+          smul_eq_mul, Pi.smul_apply, Finsupp.uniqueEquiv_apply]
+        exact div_mul_cancel₀ _ h
+      right_inv := fun f => by
+        ext
+        simp only [map_smulₛₗ, Finsupp.coe_smul, Finsupp.single_eq_same,
+          RingHom.id_apply, smul_eq_mul, Pi.smul_apply]
+        exact mul_div_cancel_right₀ _ h }
 
 中文:
 定义 basisSingleton
@@ -264,7 +299,18 @@ definition basisSingleton
     { toFun := fun w => Finsupp.single default (b.repr w default / b.repr v default)
       invFun := fun f => f default • v
       map_add' := by simp [add_div]
-      map_sm
+      map_smul' := by simp [mul_div]
+      left_inv := fun w => by
+        apply_fun b.repr using b.repr.toEquiv.injective
+        apply_fun Finsupp.uniqueEquiv default
+        simp only [map_smulₛₗ, Finsupp.coe_smul, Finsupp.single_eq_same,
+          smul_eq_mul, Pi.smul_apply, Finsupp.uniqueEquiv_apply]
+        exact div_mul_cancel₀ _ h
+      right_inv := fun f => by
+        ext
+        simp only [map_smulₛₗ, Finsupp.coe_smul, Finsupp.single_eq_same,
+          RingHom.id_apply, smul_eq_mul, Pi.smul_apply]
+        exact mul_div_cancel_right₀ _ h }
 
 Depends on / 依赖: Basis.ofRepr, Finsupp, Finsupp.coe_smul, Finsupp.single, Finsupp.single_eq_same, Finsupp.uniqueEquiv, Module, Module.basisUnique, Module.basisUnique_repr_eq_zero_iff.mp, Pi.smul_apply, add_div, apply_fun, b.repr, b.repr.toEquiv.injective, basisUnique, basisUnique_repr_eq_zero_iff, coe_smul, injective, invFun, left_inv
 -/
@@ -955,7 +1001,7 @@ theorem comap_eq_sup_ker_of_disjoint
   obtain ⟨⟨y, hy⟩, hxy⟩ :=
     surjective_of_injective ((injective_restrict_iff h).mpr h') ⟨f x, hx⟩
   replace hxy : f y = f x := by simpa [Subtype.ext_iff] using hxy
-  exact Submodule.mem_sup.mpr ⟨y, hy, x - y, by simp [h
+  exact Submodule.mem_sup.mpr ⟨y, hy, x - y, by simp [hxy], add_sub_cancel y x⟩
 
 中文:
 定理 comap_eq_sup_ker_of_disjoint
@@ -965,7 +1011,7 @@ theorem comap_eq_sup_ker_of_disjoint
   obtain ⟨⟨y, hy⟩, hxy⟩ :=
     surjective_of_injective ((injective_restrict_iff h).mpr h') ⟨f x, hx⟩
   replace hxy : f y = f x := by simpa [Subtype.ext_iff] using hxy
-  exact Submodule.mem_sup.mpr ⟨y, hy, x - y, by simp [h
+  exact Submodule.mem_sup.mpr ⟨y, hy, x - y, by simp [hxy], add_sub_cancel y x⟩
 
 Depends on / 依赖: Submodule, Submodule.mem_sup.mpr, Subtype, Subtype.ext_iff, add_sub_cancel, ext_iff, injective_restrict_iff, ker_le_comap, le_antisymm, mem_sup, replace, sup_le_iff, sup_le_iff.mpr, surjective_of_injective
 -/
@@ -1019,7 +1065,12 @@ theorem ker_noncommProd_eq_of_supIndep_ker
   | insert i s hi ih =>
     replace ih : ker (Finset.noncommProd s f <| Set.Pairwise.mono (s.subset_insert i) comm) =
         ⨆ x in s, ker (f x) := ih _ (h.subset (s.subset_insert i))
-    rw [Finset
+    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hi]; rw [Module.End.mul_eq_comp]; rw [ker_comp_eq_of_commute_of_disjoint_ker]
+    · simp_rw [Finset.mem_insert_coe, iSup_insert, Finset.mem_coe, ih]
+    · exact s.noncommProd_commute _ _ _ fun j hj =>
+        comm (s.mem_insert_self i) (Finset.mem_insert_of_mem hj) (by lia)
+    · replace h := Finset.supIndep_iff_disjoint_erase.mp h i (s.mem_insert_self i)
+      simpa [ih, hi, Finset.sup_eq_iSup] using h
 
 中文:
 定理 ker_noncommProd_eq_of_supIndep_ker
@@ -1031,7 +1082,12 @@ theorem ker_noncommProd_eq_of_supIndep_ker
   | insert i s hi ih =>
     replace ih : ker (Finset.noncommProd s f <| Set.Pairwise.mono (s.subset_insert i) comm) =
         ⨆ x in s, ker (f x) := ih _ (h.subset (s.subset_insert i))
-    rw [Finset
+    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hi]; rw [Module.End.mul_eq_comp]; rw [ker_comp_eq_of_commute_of_disjoint_ker]
+    · simp_rw [Finset.mem_insert_coe, iSup_insert, Finset.mem_coe, ih]
+    · exact s.noncommProd_commute _ _ _ fun j hj =>
+        comm (s.mem_insert_self i) (Finset.mem_insert_of_mem hj) (by lia)
+    · replace h := Finset.supIndep_iff_disjoint_erase.mp h i (s.mem_insert_self i)
+      simpa [ih, hi, Finset.sup_eq_iSup] using h
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_coe, Finset.mem_insert_coe, Finset.noncommProd, Finset.noncommProd_insert_of_notMem, Module, Module.End.mul_eq_comp, Module.End.one_eq_id, Pairwise, Set.Pairwise.mono, classical, h.subset, iSup_insert, induction_on, insert, ker_comp_eq_of_commute_of_disjoint_ker, mem_coe, mem_insert_coe, mul_eq_comp
 -/
@@ -1219,7 +1275,8 @@ theorem isUnit_iff_ker_eq_bot
   · intro h_inj
     rw [ker_eq_bot] at h_inj
     exact ⟨⟨f, (LinearEquiv.ofInjectiveEndo f h_inj).symm.toLinearMap,
-      LinearEquiv.ofInjectiveEndo_right_inv f h_inj, LinearEquiv.ofInjectiveEndo_left_inv f h_i
+      LinearEquiv.ofInjectiveEndo_right_inv f h_inj, LinearEquiv.ofInjectiveEndo_left_inv f h_inj⟩,
+      rfl⟩
 
 中文:
 定理 isUnit_iff_ker_eq_bot
@@ -1231,7 +1288,8 @@ theorem isUnit_iff_ker_eq_bot
   · intro h_inj
     rw [ker_eq_bot] at h_inj
     exact ⟨⟨f, (LinearEquiv.ofInjectiveEndo f h_inj).symm.toLinearMap,
-      LinearEquiv.ofInjectiveEndo_right_inv f h_inj, LinearEquiv.ofInjectiveEndo_left_inv f h_i
+      LinearEquiv.ofInjectiveEndo_right_inv f h_inj, LinearEquiv.ofInjectiveEndo_left_inv f h_inj⟩,
+      rfl⟩
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjectiveEndo, LinearEquiv.ofInjectiveEndo_left_inv, LinearEquiv.ofInjectiveEndo_right_inv, LinearMap, LinearMap.ker_eq_bot_of_inverse, h_inj, inv_mul, ker_eq_bot, ker_eq_bot_of_inverse, ofInjectiveEndo, ofInjectiveEndo_left_inv, ofInjectiveEndo_right_inv, symm.toLinearMap, toLinearMap, u.inv_mul
 -/
@@ -1363,7 +1421,11 @@ if H : x = 0 then 0 else Classical.choose FiniteDimensional.exists_mul_eq_one F 
   mul_inv_cancel x hx := show x * dite _ (h := _) _ _ = _ by
     rw [dif_neg hx]
     exact (Classical.choose_spec (FiniteDimensional.exists_mul_eq_one F hx) :)
-  in
+  inv_zero := dif_pos rfl
+  nnqsmul := _
+  nnqsmul_def := fun _ _ => rfl
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
 
 中文:
 定义 divisionRingOfFiniteDimensional
@@ -1375,7 +1437,11 @@ if H : x = 0 then 0 else Classical.choose FiniteDimensional.exists_mul_eq_one F 
   mul_inv_cancel x hx := show x * dite _ (h := _) _ _ = _ by
     rw [dif_neg hx]
     exact (Classical.choose_spec (FiniteDimensional.exists_mul_eq_one F hx) :)
-  in
+  inv_zero := dif_pos rfl
+  nnqsmul := _
+  nnqsmul_def := fun _ _ => rfl
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
 
 Depends on / 依赖: IsDomain
 -/
@@ -1495,7 +1561,13 @@ theorem Submodule.isAtom_iff_finrank_eq_one
     suffices K ∙ v = S by rw [← this, finrank_span_singleton hv_ne]
     have : K ∙ v != ⊥ := by
       rw [Submodule.ne_bot_iff]
-      exact ⟨v, mem_span_singl
+      exact ⟨v, mem_span_singleton_self v, hv_ne⟩
+    rwa [← hS.le_iff_eq this, span_le, Set.singleton_subset_iff]
+  · have : FiniteDimensional K S := .of_finrank_eq_succ hS
+    have : FiniteDimensional K T := .of_injective (inclusion hT.le) (inclusion_injective hT.le)
+    rw [← finrank_eq_zero (R := K)]
+    by_contra h
+exact hT.ne eq_of_le_of_finrank_le hT.le by lia
 
 中文:
 定理 子模.isAtom_iff_finrank_eq_one
@@ -1506,7 +1578,13 @@ theorem Submodule.isAtom_iff_finrank_eq_one
     suffices K ∙ v = S by rw [← this, finrank_span_singleton hv_ne]
     have : K ∙ v != ⊥ := by
       rw [Submodule.ne_bot_iff]
-      exact ⟨v, mem_span_singl
+      exact ⟨v, mem_span_singleton_self v, hv_ne⟩
+    rwa [← hS.le_iff_eq this, span_le, Set.singleton_subset_iff]
+  · have : FiniteDimensional K S := .of_finrank_eq_succ hS
+    have : FiniteDimensional K T := .of_injective (inclusion hT.le) (inclusion_injective hT.le)
+    rw [← finrank_eq_zero (R := K)]
+    by_contra h
+exact hT.ne eq_of_le_of_finrank_le hT.le by lia
 
 Depends on / 依赖: FiniteDimensional, S.ne_bot_iff.mp, Set.singleton_subset_iff, Submodule, Submodule.ne_bot_iff, finrank_span_singleton, hS.le_iff_eq, hS.ne_bot, hT.le, hv_ne, inclusion, inclusion_injective, le_iff_eq, mem_span_singleton_self, ne_bot, ne_bot_iff, of_finrank_eq_succ, of_injective, singleton_subset_iff, span_le
 -/

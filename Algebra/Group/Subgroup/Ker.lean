@@ -248,7 +248,7 @@ theorem domRestrict_range
 
 @[deprecated (since := "2026-07-19")] alias restrict_range := domRestrict_range
 @[deprecated (since := "2026-07-19")]
-alias _root_.AddMonoidHom.restrict_range := _root_.AddMonoidHom.
+alias _root_.AddMonoidHom.restrict_range := _root_.AddMonoidHom.domRestrict_range
 
 中文:
 定理 domRestrict_range
@@ -260,7 +260,7 @@ alias _root_.AddMonoidHom.restrict_range := _root_.AddMonoidHom.
 
 @[deprecated (since := "2026-07-19")] alias restrict_range := domRestrict_range
 @[deprecated (since := "2026-07-19")]
-alias _root_.AddMonoidHom.restrict_range := _root_.AddMonoidHom.
+alias _root_.AddMonoidHom.restrict_range := _root_.AddMonoidHom.domRestrict_range
 
 Depends on / 依赖: SetLike, SetLike.exists, SetLike.ext_iff, domRestrict_apply, exists_prop, ext_iff, forall_const, mem_map, mem_range, simp_rw
 -/

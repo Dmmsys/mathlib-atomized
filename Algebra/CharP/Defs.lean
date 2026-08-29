@@ -168,7 +168,8 @@ lemma cast_eq_iff_mod_eq
   constructor
   · simp +contextual [Nat.add_mod, Nat.dvd_iff_mod_eq_zero]
   intro h
-  have := Nat.sub_mod_e
+  have := Nat.sub_mod_eq_zero_of_mod_eq h.symm
+  simpa [Nat.dvd_iff_mod_eq_zero] using this
 
 中文:
 引理 cast_eq_iff_mod_eq
@@ -182,7 +183,8 @@ lemma cast_eq_iff_mod_eq
   constructor
   · simp +contextual [Nat.add_mod, Nat.dvd_iff_mod_eq_zero]
   intro h
-  have := Nat.sub_mod_e
+  have := Nat.sub_mod_eq_zero_of_mod_eq h.symm
+  simpa [Nat.dvd_iff_mod_eq_zero] using this
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, Nat.add_mod, Nat.cast_add, Nat.dvd_iff_mod_eq_zero, Nat.exists_eq_add_of_le, Nat.sub_mod_eq_zero_of_mod_eq, add_mod, cast_add, cast_eq_zero_iff, contextual, dvd_iff_mod_eq_zero, eq_comm, exists_eq_add_of_le, h.symm, hle.le, left_eq_add, sub_mod_eq_zero_of_mod_eq
 -/
@@ -280,7 +282,8 @@ lemma intCast_eq_zero_iff
     lift -a to Nat using Int.neg_nonneg.mpr (le_of_lt h) with b
     rw [Int.cast_natCast]; rw [CharP.cast_eq_zero_iff R p]; rw [Int.natCast_dvd_natCast]
   · simp
-  · lift a to Nat using le_of_lt h 
+  · lift a to Nat using le_of_lt h with b
+    rw [Int.cast_natCast]; rw [CharP.cast_eq_zero_iff R p]; rw [Int.natCast_dvd_natCast]
 
 中文:
 引理 intCast_eq_zero_iff
@@ -292,7 +295,8 @@ lemma intCast_eq_zero_iff
     lift -a to Nat using Int.neg_nonneg.mpr (le_of_lt h) with b
     rw [Int.cast_natCast]; rw [CharP.cast_eq_zero_iff R p]; rw [Int.natCast_dvd_natCast]
   · simp
-  · lift a to Nat using le_of_lt h 
+  · lift a to Nat using le_of_lt h with b
+    rw [Int.cast_natCast]; rw [CharP.cast_eq_zero_iff R p]; rw [Int.natCast_dvd_natCast]
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, CommSemiring, Int.cast_natCast, Int.cast_neg, Int.dvd_neg, Int.natCast_dvd_natCast, Int.neg_nonneg.mpr, R.carrier, carrier, cast_eq_zero_iff, cast_natCast, cast_neg, dvd_neg, le_of_lt, lt_trichotomy, natCast_dvd_natCast, neg_eq_zero, neg_nonneg
 -/
@@ -363,7 +367,19 @@ lemma «exists»
       ⟨fun x =>
         ⟨fun H1 =>
           Nat.dvd_of_mod_eq_zero
-            (by_con
+            (by_contradiction fun H2 =>
+              Nat.find_min (not_forall.1 H)
+                (Nat.mod_lt x <|
+Nat.pos_of_ne_zero not_of_not_imp Nat.find_spec (not_forall.1 H))
+                (not_imp_of_and_not
+                  ⟨by
+                    rwa [← Nat.mod_add_div x (Nat.find (not_forall.1 H)), Nat.cast_add,
+                      Nat.cast_mul,
+                      of_not_not (not_not_of_not_imp <| Nat.find_spec (not_forall.1 H)),
+                      zero_mul, add_zero] at H1,
+                    H2⟩)),
+          fun H1 => by
+          rw [← Nat.mul_div_cancel' H1]; rw [Nat.cast_mul]; rw [of_not_not (not_not_of_not_imp <| Nat.find_spec (not_forall.1 H))]; rw [zero_mul]⟩⟩⟩
 
 中文:
 引理 «存在»
@@ -377,7 +393,19 @@ lemma «exists»
       ⟨fun x =>
         ⟨fun H1 =>
           Nat.dvd_of_mod_eq_zero
-            (by_con
+            (by_contradiction fun H2 =>
+              Nat.find_min (not_forall.1 H)
+                (Nat.mod_lt x <|
+Nat.pos_of_ne_zero not_of_not_imp Nat.find_spec (not_forall.1 H))
+                (not_imp_of_and_not
+                  ⟨by
+                    rwa [← Nat.mod_add_div x (Nat.find (not_forall.1 H)), Nat.cast_add,
+                      Nat.cast_mul,
+                      of_not_not (not_not_of_not_imp <| Nat.find_spec (not_forall.1 H)),
+                      zero_mul, add_zero] at H1,
+                    H2⟩)),
+          fun H1 => by
+          rw [← Nat.mul_div_cancel' H1]; rw [Nat.cast_mul]; rw [of_not_not (not_not_of_not_imp <| Nat.find_spec (not_forall.1 H))]; rw [zero_mul]⟩⟩⟩
 -/
 lemma «exists» : exists p, CharP R p :=
   letI := Classical.decEq R
@@ -739,7 +767,17 @@ lemma char_is_prime_of_two_le
   let ⟨e, hmul⟩ := hdvd
   have : (p : R) = 0 := (cast_eq_zero_iff R p p).mpr (dvd_refl p)
   have : (d : R) * e = 0 := @Nat.cast_mul R _ d e ▸ hmul ▸ this
-  Or.elim (eq_zer
+  Or.elim (eq_zero_or_eq_zero_of_mul_eq_zero this)
+    (fun hd : (d : R) = 0 =>
+      have : p ∣ d := (cast_eq_zero_iff R p d).mp hd
+      show d = 1 ∨ d = p from Or.inr (this.antisymm' ⟨e, hmul⟩))
+    fun he : (e : R) = 0 =>
+    have : p ∣ e := (cast_eq_zero_iff R p e).mp he
+    have : e ∣ p := dvd_of_mul_left_eq d (Eq.symm hmul)
+    have : e = p := ‹e ∣ p›.antisymm ‹p ∣ e›
+    have h₀ : 0 < p := by grind
+    have : d * p = 1 * p := by grind
+    show d = 1 ∨ d = p from Or.inl (mul_right_cancel₀ h₀.ne' this)
 
 中文:
 引理 char_is_prime_of_two_le
@@ -750,7 +788,17 @@ lemma char_is_prime_of_two_le
   let ⟨e, hmul⟩ := hdvd
   have : (p : R) = 0 := (cast_eq_zero_iff R p p).mpr (dvd_refl p)
   have : (d : R) * e = 0 := @Nat.cast_mul R _ d e ▸ hmul ▸ this
-  Or.elim (eq_zer
+  Or.elim (eq_zero_or_eq_zero_of_mul_eq_zero this)
+    (fun hd : (d : R) = 0 =>
+      have : p ∣ d := (cast_eq_zero_iff R p d).mp hd
+      show d = 1 ∨ d = p from Or.inr (this.antisymm' ⟨e, hmul⟩))
+    fun he : (e : R) = 0 =>
+    have : p ∣ e := (cast_eq_zero_iff R p e).mp he
+    have : e ∣ p := dvd_of_mul_left_eq d (Eq.symm hmul)
+    have : e = p := ‹e ∣ p›.antisymm ‹p ∣ e›
+    have h₀ : 0 < p := by grind
+    have : d * p = 1 * p := by grind
+    show d = 1 ∨ d = p from Or.inl (mul_right_cancel₀ h₀.ne' this)
 
 Depends on / 依赖: Nat.cast_mul, Nat.prime_def.mpr, Or.elim, Or.inr, antisymm, cast_eq_zero_iff, cast_mul, dvd_refl, eq_zero_or_eq_zero_of_mul_eq_zero, prime_def, this.antisymm
 -/

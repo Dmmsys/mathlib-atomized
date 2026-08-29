@@ -1106,7 +1106,8 @@ instance instInfSet
 compl_mem' := fun ha => mem_iInter₂.2 fun L hL => compl_mem mem_iInter₂.1 ha L hL
 supClosed' := supClosed_sInter forall_mem_range.2 fun L => supClosed_sInter
                 forall_mem_range.2 fun _ => L.supClosed
-in
+infClosed' := infClosed_sInter forall_mem_range.2 fun L => infClosed_sInter
+                forall_mem_range.2 fun _ => L.infClosed }
 
 中文:
 实例 instInfSet
@@ -1116,7 +1117,8 @@ in
 compl_mem' := fun ha => mem_iInter₂.2 fun L hL => compl_mem mem_iInter₂.1 ha L hL
 supClosed' := supClosed_sInter forall_mem_range.2 fun L => supClosed_sInter
                 forall_mem_range.2 fun _ => L.supClosed
-in
+infClosed' := infClosed_sInter forall_mem_range.2 fun L => infClosed_sInter
+                forall_mem_range.2 fun _ => L.infClosed }
 
 Depends on / 依赖: carrier
 -/
@@ -1365,7 +1367,7 @@ instance instCompleteLattice
   inf_le_left _L _M _a := And.left
   inf_le_right _L _M _a := And.right
   __ := completeLatticeOfInf (BooleanSubalgebra α)
-      fun _s => IsGLB.of_image SetLike.coe_
+      fun _s => IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf
 
 中文:
 实例 instCompleteLattice
@@ -1379,7 +1381,7 @@ instance instCompleteLattice
   inf_le_left _L _M _a := And.left
   inf_le_right _L _M _a := And.right
   __ := completeLatticeOfInf (BooleanSubalgebra α)
-      fun _s => IsGLB.of_image SetLike.coe_
+      fun _s => IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf
 -/
 instance instCompleteLattice : CompleteLattice (BooleanSubalgebra α) where
   bot := ⊥
@@ -2203,7 +2205,11 @@ lemma closure_bot_sup_induction
 simpa using compl _ _ sup _ _ _ _ (compl _ _ hx') (compl _ _ hy')
   let L : BooleanSubalgebra α :=
     { carrier := { x | exists hx, p x hx }
-      supClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, sup _ _ _ _ ha h
+      supClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, sup _ _ _ _ ha hb⟩
+      infClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, inf ha hb⟩
+      bot_mem' := ⟨_, bot⟩
+      compl_mem' := fun ⟨_, hb⟩ => ⟨_, compl _ _ hb⟩ }
+.elim fun _ => id closure_le (L := L).mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx
 
 中文:
 引理 closure_bot_sup_induction
@@ -2212,7 +2218,11 @@ simpa using compl _ _ sup _ _ _ _ (compl _ _ hx') (compl _ _ hy')
 simpa using compl _ _ sup _ _ _ _ (compl _ _ hx') (compl _ _ hy')
   let L : BooleanSubalgebra α :=
     { carrier := { x | exists hx, p x hx }
-      supClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, sup _ _ _ _ ha h
+      supClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, sup _ _ _ _ ha hb⟩
+      infClosed' := fun _a ⟨_, ha⟩ _b ⟨_, hb⟩ => ⟨_, inf ha hb⟩
+      bot_mem' := ⟨_, bot⟩
+      compl_mem' := fun ⟨_, hb⟩ => ⟨_, compl _ _ hb⟩ }
+.elim fun _ => id closure_le (L := L).mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx
 
 Depends on / 依赖: BooleanSubalgebra, bot_mem, carrier, closure_le, compl_mem, infClosed, subset_closure, supClosed
 -/
@@ -2248,7 +2258,16 @@ theorem mem_closure_iff_sup_sdiff
   · rintro ⟨t, rfl⟩
     exact t.sup_mem _ (subset_closure bot_mem) (fun _ h _ => sup_mem h) _
       fun x hx => sdiff_mem (subset_closure x.1.2) (subset_closure x.2.2)
-  · 
+  · rintro _ - _ - ⟨t₁, rfl⟩ ⟨t₂, rfl⟩
+    exact ⟨t₁ union t₂, by rw [Finset.sup_union]⟩
+  rintro x - ⟨t, rfl⟩
+  refine t.induction ⟨{(⟨⊤, top_mem⟩, ⟨⊥, bot_mem⟩)}, by simp⟩ fun ⟨x, y⟩ t _ ⟨tc, eq⟩ => ?_
+  simp_rw [Finset.sup_insert, compl_sup, eq]
+  refine tc.induction ⟨∅, by simp⟩ fun ⟨z, w⟩ tc _ ⟨t, eq⟩ => ?_
+  simp_rw [Finset.sup_insert, inf_sup_left, eq]
+  use {(z, ⟨_, isSublattice.supClosed x.2 w.2⟩), (⟨_, isSublattice.infClosed y.2 z.2⟩, w)} union t
+  simp_rw [Finset.sup_union, Finset.sup_insert, Finset.sup_singleton, _root_.sdiff_eq,
+    compl_sup, inf_left_comm z.1, compl_inf, compl_compl, inf_sup_right, inf_assoc]
 
 中文:
 定理 mem_closure_iff_sup_sdiff
@@ -2260,7 +2279,16 @@ theorem mem_closure_iff_sup_sdiff
   · rintro ⟨t, rfl⟩
     exact t.sup_mem _ (subset_closure bot_mem) (fun _ h _ => sup_mem h) _
       fun x hx => sdiff_mem (subset_closure x.1.2) (subset_closure x.2.2)
-  · 
+  · rintro _ - _ - ⟨t₁, rfl⟩ ⟨t₂, rfl⟩
+    exact ⟨t₁ union t₂, by rw [Finset.sup_union]⟩
+  rintro x - ⟨t, rfl⟩
+  refine t.induction ⟨{(⟨⊤, top_mem⟩, ⟨⊥, bot_mem⟩)}, by simp⟩ fun ⟨x, y⟩ t _ ⟨tc, eq⟩ => ?_
+  simp_rw [Finset.sup_insert, compl_sup, eq]
+  refine tc.induction ⟨∅, by simp⟩ fun ⟨z, w⟩ tc _ ⟨t, eq⟩ => ?_
+  simp_rw [Finset.sup_insert, inf_sup_left, eq]
+  use {(z, ⟨_, isSublattice.supClosed x.2 w.2⟩), (⟨_, isSublattice.infClosed y.2 z.2⟩, w)} union t
+  simp_rw [Finset.sup_union, Finset.sup_insert, Finset.sup_singleton, _root_.sdiff_eq,
+    compl_sup, inf_left_comm z.1, compl_inf, compl_compl, inf_sup_right, inf_assoc]
 
 Depends on / 依赖: Finset, Finset.sup_insert, Finset.sup_union, bot_mem, classical, closure_bot_sup_induction, sdiff_mem, simp_rw, subset_closure, sup_insert, sup_mem, sup_union, t.induction, t.sup_mem, top_mem
 -/
@@ -2295,7 +2323,8 @@ theorem closure_sdiff_sup_induction
   classical
   refine t.induction (by simpa using sdiff _ bot_mem _ bot_mem) fun x t _ ih hxt => ?_
   simp only [Finset.sup_insert] at hxt ⊢
-  exact sup _ _ _ ((mem_closure_iff_sup_sdiff isSublattice bo
+  exact sup _ _ _ ((mem_closure_iff_sup_sdiff isSublattice bot_mem top_mem).mpr ⟨_, rfl⟩)
+    (sdiff _ x.1.2 _ x.2.2) (ih _)
 
 中文:
 定理 closure_sdiff_sup_induction
@@ -2306,7 +2335,8 @@ theorem closure_sdiff_sup_induction
   classical
   refine t.induction (by simpa using sdiff _ bot_mem _ bot_mem) fun x t _ ih hxt => ?_
   simp only [Finset.sup_insert] at hxt ⊢
-  exact sup _ _ _ ((mem_closure_iff_sup_sdiff isSublattice bo
+  exact sup _ _ _ ((mem_closure_iff_sup_sdiff isSublattice bot_mem top_mem).mpr ⟨_, rfl⟩)
+    (sdiff _ x.1.2 _ x.2.2) (ih _)
 -/
 @[elab_as_elim] theorem closure_sdiff_sup_induction {p : forall g in closure s, Prop}
     (sdiff : forall x hx y hy, p (x \ y) (sdiff_mem (subset_closure hx) (subset_closure hy)))

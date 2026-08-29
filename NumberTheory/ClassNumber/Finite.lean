@@ -55,7 +55,7 @@ definition normBound
       (Finset.univ.image fun ijk : ι × ι × ι =>
         abv (Algebra.leftMulMatrix bS (bS ijk.1) ijk.2.1 ijk.2.2))
       ⟨_, Finset.mem_image.mpr ⟨⟨i, i, i⟩, Finset.mem_univ _, rfl⟩⟩
-  Nat.factori
+  Nat.factorial n • (n • m) ^ n
 
 中文:
 定义 normBound
@@ -67,7 +67,7 @@ definition normBound
       (Finset.univ.image fun ijk : ι × ι × ι =>
         abv (Algebra.leftMulMatrix bS (bS ijk.1) ijk.2.1 ijk.2.2))
       ⟨_, Finset.mem_image.mpr ⟨⟨i, i, i⟩, Finset.mem_univ _, rfl⟩⟩
-  Nat.factori
+  Nat.factorial n • (n • m) ^ n
 
 Depends on / 依赖: Algebra, Algebra.leftMulMatrix, Finset, Finset.max, Finset.mem_image.mpr, Finset.mem_univ, Finset.univ.image, Fintype, Fintype.card, Nat.factorial, Nonempty, Nonempty.some, bS.index_nonempty, factorial, index_nonempty, leftMulMatrix, mem_image, mem_univ
 -/
@@ -95,7 +95,12 @@ theorem normBound_pos
     apply
       (injective_iff_map_eq_zero (Algebra.leftMulMatrix bS)).mp (Algebra.leftMulMatrix_injective bS)
     ext j k
-    simp [
+    simp [h]
+  simp only [normBound, Algebra.smul_def, eq_natCast]
+  apply mul_pos (Int.natCast_pos.mpr (Nat.factorial_pos _))
+  refine pow_pos (mul_pos (Int.natCast_pos.mpr (Fintype.card_pos_iff.mpr ⟨i⟩)) ?_) _
+  refine lt_of_lt_of_le (abv.pos hijk) (Finset.le_max' _ _ ?_)
+  exact Finset.mem_image.mpr ⟨⟨i, j, k⟩, Finset.mem_univ _, rfl⟩
 
 中文:
 定理 normBound_pos
@@ -108,7 +113,12 @@ theorem normBound_pos
     apply
       (injective_iff_map_eq_zero (Algebra.leftMulMatrix bS)).mp (Algebra.leftMulMatrix_injective bS)
     ext j k
-    simp [
+    simp [h]
+  simp only [normBound, Algebra.smul_def, eq_natCast]
+  apply mul_pos (Int.natCast_pos.mpr (Nat.factorial_pos _))
+  refine pow_pos (mul_pos (Int.natCast_pos.mpr (Fintype.card_pos_iff.mpr ⟨i⟩)) ?_) _
+  refine lt_of_lt_of_le (abv.pos hijk) (Finset.le_max' _ _ ?_)
+  exact Finset.mem_image.mpr ⟨⟨i, j, k⟩, Finset.mem_univ _, rfl⟩
 
 Depends on / 依赖: Algebra, Algebra.leftMulMatrix, Algebra.leftMulMatrix_injective, Algebra.smul_def, Fintype, Fintype.card_pos_iff.mpr, Int.natCast_pos.mpr, Nat.factorial_pos, abv.pos, bS.index_nonempty, bS.ne_zero, card_pos_iff, eq_natCast, factorial_pos, index_nonempty, injective_iff_map_eq_zero, leftMulMatrix, leftMulMatrix_injective, lt_of_lt_of_le, mul_pos
 -/
@@ -139,7 +149,10 @@ theorem norm_le
   simp only [map_sum, map_smul, map_sum, map_smul,
     normBound, smul_mul_assoc, ← mul_pow]
   convert! Matrix.det_sum_smul_le Finset.univ _ hy using 3
-  · rw [Finset.card_univ, smul_mul_assoc, mul_comm
+  · rw [Finset.card_univ, smul_mul_assoc, mul_comm]
+  · intro i j k
+    apply Finset.le_max'
+    exact Finset.mem_image.mpr ⟨⟨i, j, k⟩, Finset.mem_univ _, rfl⟩
 
 中文:
 定理 norm_le
@@ -150,7 +163,10 @@ theorem norm_le
   simp only [map_sum, map_smul, map_sum, map_smul,
     normBound, smul_mul_assoc, ← mul_pow]
   convert! Matrix.det_sum_smul_le Finset.univ _ hy using 3
-  · rw [Finset.card_univ, smul_mul_assoc, mul_comm
+  · rw [Finset.card_univ, smul_mul_assoc, mul_comm]
+  · intro i j k
+    apply Finset.le_max'
+    exact Finset.mem_image.mpr ⟨⟨i, j, k⟩, Finset.mem_univ _, rfl⟩
 
 Depends on / 依赖: Algebra, Algebra.norm_apply, Finset, Finset.card_univ, Finset.le_max, Finset.mem_image.mpr, Finset.mem_univ, Finset.univ, LinearMap, LinearMap.det_toMatrix, Matrix, Matrix.det_sum_smul_le, bS.sum_repr, card_univ, conv_lhs, convert, det_sum_smul_le, det_toMatrix, le_max, map_smul
 -/
@@ -179,7 +195,21 @@ theorem norm_lt
   set y' : Int := Finset.max' _ him with y'_def
   have hy' : forall k, abv (bS.repr a k) <= y' := by
     intro k
-    exact @Finset.le
+    exact @Finset.le_max' Int _ _ _ (Finset.mem_image.mpr ⟨k, Finset.mem_univ _, rfl⟩)
+  have : (y' : T) < y := by
+    rw [y'_def]; rw [← Finset.max'_image (show Monotone (_ : Int -> T) from fun x y h => Int.cast_le.mpr h)
+          _ (him.image _)]
+    apply (Finset.max'_lt_iff _ (him.image _)).mpr
+    simp only [Finset.mem_image]
+    rintro _ ⟨x, ⟨k, -, rfl⟩, rfl⟩
+    exact hy k
+  have y'_nonneg : 0 <= y' := le_trans (abv.nonneg _) (hy' i)
+  apply (Int.cast_le.mpr (norm_le abv bS a hy')).trans_lt
+  simp only [Int.cast_mul, Int.cast_pow]
+  apply mul_lt_mul' le_rfl
+  · exact pow_lt_pow_left₀ this (by positivity) (@Fintype.card_ne_zero _ _ ⟨i⟩)
+  · positivity
+  · exact Int.cast_pos.mpr (normBound_pos abv bS)
 
 中文:
 定理 norm_lt
@@ -191,7 +221,21 @@ theorem norm_lt
   set y' : Int := Finset.max' _ him with y'_def
   have hy' : forall k, abv (bS.repr a k) <= y' := by
     intro k
-    exact @Finset.le
+    exact @Finset.le_max' Int _ _ _ (Finset.mem_image.mpr ⟨k, Finset.mem_univ _, rfl⟩)
+  have : (y' : T) < y := by
+    rw [y'_def]; rw [← Finset.max'_image (show Monotone (_ : Int -> T) from fun x y h => Int.cast_le.mpr h)
+          _ (him.image _)]
+    apply (Finset.max'_lt_iff _ (him.image _)).mpr
+    simp only [Finset.mem_image]
+    rintro _ ⟨x, ⟨k, -, rfl⟩, rfl⟩
+    exact hy k
+  have y'_nonneg : 0 <= y' := le_trans (abv.nonneg _) (hy' i)
+  apply (Int.cast_le.mpr (norm_le abv bS a hy')).trans_lt
+  simp only [Int.cast_mul, Int.cast_pow]
+  apply mul_lt_mul' le_rfl
+  · exact pow_lt_pow_left₀ this (by positivity) (@Fintype.card_ne_zero _ _ ⟨i⟩)
+  · positivity
+  · exact Int.cast_pos.mpr (normBound_pos abv bS)
 
 Depends on / 依赖: Finset, Finset.le_max, Finset.max, Finset.mem_image.mpr, Finset.mem_univ, Finset.univ.image, Int.cast_le.mpr, Monotone, Nonempty, _def, _image, bS.index_nonempty, bS.repr, cast_le, him.image, index_nonempty, le_max, mem_image, mem_univ
 -/
@@ -235,7 +279,12 @@ theorem exists_min
       rintro _ ⟨b, _, _, rfl⟩
       apply abv.nonneg)
     (by
-      obtain ⟨b, b_mem, b_ne_zero⟩ := (I : Ideal S).ne_
+      obtain ⟨b, b_mem, b_ne_zero⟩ := (I : Ideal S).ne_bot_iff.mp (nonZeroDivisors.coe_ne_zero I)
+      exact ⟨_, ⟨b, b_mem, b_ne_zero, rfl⟩⟩)
+  refine ⟨b, b_mem, b_ne_zero, ?_⟩
+  intro c hc lt
+  contrapose! lt with c_ne_zero
+  exact min _ ⟨c, hc, c_ne_zero, rfl⟩
 
 中文:
 定理 存在_min
@@ -248,7 +297,12 @@ theorem exists_min
       rintro _ ⟨b, _, _, rfl⟩
       apply abv.nonneg)
     (by
-      obtain ⟨b, b_mem, b_ne_zero⟩ := (I : Ideal S).ne_
+      obtain ⟨b, b_mem, b_ne_zero⟩ := (I : Ideal S).ne_bot_iff.mp (nonZeroDivisors.coe_ne_zero I)
+      exact ⟨_, ⟨b, b_mem, b_ne_zero, rfl⟩⟩)
+  refine ⟨b, b_mem, b_ne_zero, ?_⟩
+  intro c hc lt
+  contrapose! lt with c_ne_zero
+  exact min _ ⟨c, hc, c_ne_zero, rfl⟩
 
 Depends on / 依赖: Algebra, Algebra.norm, Int.exists_least_of_bdd, abv.nonneg, b_mem, b_ne_zero, c_ne_zero, coe_ne_zero, contrapose, exists_least_of_bdd, ne_bot_iff, ne_bot_iff.mp, nonZeroDivisors, nonZeroDivisors.coe_ne_zero, nonneg
 -/
@@ -375,7 +429,7 @@ theorem mem_finsetApprox
   · rintro ⟨i, j, hij, rfl⟩
     refine ⟨?_, ⟨i, j⟩, Finset.mem_univ _, rfl⟩
     rw [Ne]; rw [sub_eq_zero]
-    exact fun h => hij ((
+    exact fun h => hij ((distinctElems bS adm).injective h)
 
 中文:
 定理 mem_finsetApprox
@@ -390,7 +444,7 @@ theorem mem_finsetApprox
   · rintro ⟨i, j, hij, rfl⟩
     refine ⟨?_, ⟨i, j⟩, Finset.mem_univ _, rfl⟩
     rw [Ne]; rw [sub_eq_zero]
-    exact fun h => hij ((
+    exact fun h => hij ((distinctElems bS adm).injective h)
 
 Depends on / 依赖: Finset, Finset.mem_erase, Finset.mem_image, Finset.mem_univ, distinctElems, finsetApprox, injective, mem_erase, mem_image, mem_univ, sub_eq_zero
 -/
@@ -425,7 +479,48 @@ theorem exists_mem_finsetApprox
   have dim_pos := Fintype.card_pos_iff.mpr bS.index_nonempty
   set ε : Real := normBound abv bS ^ (-1 / Fintype.card ι : Real) with ε_eq
   have hε : 0 < ε := Real.rpow_pos_of_pos (Int.cast_pos.mpr (normBound_pos abv bS)) _
-  have ε_le : (normBound abv bS : Real) * (abv b • ε) ^ (Fintype.card ι : 
+  have ε_le : (normBound abv bS : Real) * (abv b • ε) ^ (Fintype.card ι : Real)
+                <= abv b ^ (Fintype.card ι : Real) := by
+    have := normBound_pos abv bS
+    have := abv.nonneg b
+    rw [ε_eq]; rw [Algebra.smul_def]; rw [eq_intCast]; rw [mul_rpow]; rw [← rpow_mul]; rw [div_mul_cancel₀]; rw [rpow_neg_one]; rw [mul_left_comm]; rw [mul_inv_cancel₀]; rw [mul_one]; rw [rpow_natCast] <;>
+      try norm_cast; lia
+    · exact Int.cast_nonneg this
+    · linarith
+  set μ : Fin (cardM bS adm).succ ↪ R := distinctElems bS adm
+  let s : ι ->₀ R := bS.repr a
+  have s_eq : forall i, s i = bS.repr a i := fun i => rfl
+  let qs : Fin (cardM bS adm).succ -> ι -> R := fun j i => μ j * s i / b
+  let rs : Fin (cardM bS adm).succ -> ι -> R := fun j i => μ j * s i % b
+  have r_eq : forall j i, rs j i = μ j * s i % b := fun i j => rfl
+  have μ_eq : forall i j, μ j * s i = b * qs j i + rs j i := by
+    intro i j
+    rw [r_eq]; rw [EuclideanDomain.div_add_mod]
+  have μ_mul_a_eq : forall j, μ j • a = b • ∑ i, qs j i • bS i + ∑ i, rs j i • bS i := by
+    intro j
+    rw [← bS.sum_repr a]
+    simp only [μ, qs, rs, Finset.smul_sum, ← Finset.sum_add_distrib]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [← s_eq]; rw [← mul_smul]; rw [μ_eq]; rw [add_smul]; rw [mul_smul]; rw [← μ_eq]
+  obtain ⟨j, k, j_ne_k, hjk⟩ := adm.exists_approx hε hb fun j i => μ j * s i
+  have hjk' : forall i, (abv (rs k i - rs j i) : Real) < abv b • ε := by simpa only [r_eq] using hjk
+  let q := ∑ i, (qs k i - qs j i) • bS i
+  set r := μ k - μ j with r_eq
+  refine ⟨q, r, (mem_finsetApprox bS adm).mpr ?_, ?_⟩
+  · exact ⟨k, j, j_ne_k.symm, rfl⟩
+  have : r • a - b • q = ∑ x : ι, (rs k x • bS x - rs j x • bS x) := by
+    simp only [q, r_eq, sub_smul, μ_mul_a_eq, Finset.smul_sum, ← Finset.sum_add_distrib,
+      ← Finset.sum_sub_distrib, smul_sub]
+    refine Finset.sum_congr rfl fun x _ => ?_
+    ring
+  rw [this]; rw [Algebra.norm_algebraMap_of_basis bS]; rw [abv.map_pow]
+  refine Int.cast_lt.mp ((norm_lt abv bS _ fun i => lt_of_le_of_lt ?_ (hjk' i)).trans_le ?_)
+  · apply le_of_eq
+    congr
+    simp_rw [map_sum, map_sub, map_smul, Finset.sum_apply',
+      Finsupp.sub_apply, Finsupp.smul_apply, Finset.sum_sub_distrib, Basis.repr_self_apply,
+      smul_eq_mul, mul_boole, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+  · exact mod_cast ε_le
 
 中文:
 定理 存在_mem_finsetApprox
@@ -434,7 +529,48 @@ theorem exists_mem_finsetApprox
   have dim_pos := Fintype.card_pos_iff.mpr bS.index_nonempty
   set ε : Real := normBound abv bS ^ (-1 / Fintype.card ι : Real) with ε_eq
   have hε : 0 < ε := Real.rpow_pos_of_pos (Int.cast_pos.mpr (normBound_pos abv bS)) _
-  have ε_le : (normBound abv bS : Real) * (abv b • ε) ^ (Fintype.card ι : 
+  have ε_le : (normBound abv bS : Real) * (abv b • ε) ^ (Fintype.card ι : Real)
+                <= abv b ^ (Fintype.card ι : Real) := by
+    have := normBound_pos abv bS
+    have := abv.nonneg b
+    rw [ε_eq]; rw [Algebra.smul_def]; rw [eq_intCast]; rw [mul_rpow]; rw [← rpow_mul]; rw [div_mul_cancel₀]; rw [rpow_neg_one]; rw [mul_left_comm]; rw [mul_inv_cancel₀]; rw [mul_one]; rw [rpow_natCast] <;>
+      try norm_cast; lia
+    · exact Int.cast_nonneg this
+    · linarith
+  set μ : Fin (cardM bS adm).succ ↪ R := distinctElems bS adm
+  let s : ι ->₀ R := bS.repr a
+  have s_eq : forall i, s i = bS.repr a i := fun i => rfl
+  let qs : Fin (cardM bS adm).succ -> ι -> R := fun j i => μ j * s i / b
+  let rs : Fin (cardM bS adm).succ -> ι -> R := fun j i => μ j * s i % b
+  have r_eq : forall j i, rs j i = μ j * s i % b := fun i j => rfl
+  have μ_eq : forall i j, μ j * s i = b * qs j i + rs j i := by
+    intro i j
+    rw [r_eq]; rw [EuclideanDomain.div_add_mod]
+  have μ_mul_a_eq : forall j, μ j • a = b • ∑ i, qs j i • bS i + ∑ i, rs j i • bS i := by
+    intro j
+    rw [← bS.sum_repr a]
+    simp only [μ, qs, rs, Finset.smul_sum, ← Finset.sum_add_distrib]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    rw [← s_eq]; rw [← mul_smul]; rw [μ_eq]; rw [add_smul]; rw [mul_smul]; rw [← μ_eq]
+  obtain ⟨j, k, j_ne_k, hjk⟩ := adm.exists_approx hε hb fun j i => μ j * s i
+  have hjk' : forall i, (abv (rs k i - rs j i) : Real) < abv b • ε := by simpa only [r_eq] using hjk
+  let q := ∑ i, (qs k i - qs j i) • bS i
+  set r := μ k - μ j with r_eq
+  refine ⟨q, r, (mem_finsetApprox bS adm).mpr ?_, ?_⟩
+  · exact ⟨k, j, j_ne_k.symm, rfl⟩
+  have : r • a - b • q = ∑ x : ι, (rs k x • bS x - rs j x • bS x) := by
+    simp only [q, r_eq, sub_smul, μ_mul_a_eq, Finset.smul_sum, ← Finset.sum_add_distrib,
+      ← Finset.sum_sub_distrib, smul_sub]
+    refine Finset.sum_congr rfl fun x _ => ?_
+    ring
+  rw [this]; rw [Algebra.norm_algebraMap_of_basis bS]; rw [abv.map_pow]
+  refine Int.cast_lt.mp ((norm_lt abv bS _ fun i => lt_of_le_of_lt ?_ (hjk' i)).trans_le ?_)
+  · apply le_of_eq
+    congr
+    simp_rw [map_sum, map_sub, map_smul, Finset.sum_apply',
+      Finsupp.sub_apply, Finsupp.smul_apply, Finset.sum_sub_distrib, Basis.repr_self_apply,
+      smul_eq_mul, mul_boole, Finset.sum_ite_eq', Finset.mem_univ, if_true]
+  · exact mod_cast ε_le
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Fintype, Fintype.card, Fintype.card_pos_iff.mpr, Int.cast_pos.mpr, Real.rpow_pos_of_pos, abv.nonneg, bS.index_nonempty, card_pos_iff, cast_pos, dim_pos, eq_intCast, index_nonempty, mul_rpow, nonneg, normBound, normBound_pos, rpow_mul, rpow_pos_of_pos
 -/
@@ -501,7 +637,10 @@ theorem exists_mem_finset_approx'
   refine
     lt_of_mul_lt_mul_left ?_ (show 0 <= abv (Algebra.norm R (algebraMap R S b')) from abv.nonneg _)
   refine
-    lt_of_le_o
+    lt_of_le_of_lt (le_of_eq ?_)
+      (mul_lt_mul hqr le_rfl (abv.pos ((Algebra.norm_ne_zero_iff_of_basis bS).mpr hb))
+        (abv.nonneg _))
+  rw [← abv.map_mul]; rw [← map_mul]; rw [← abv.map_mul]; rw [← map_mul]; rw [← Algebra.smul_def]; rw [smul_sub b']; rw [sub_mul]; rw [smul_comm]; rw [h]; rw [mul_comm b a']; rw [Algebra.smul_mul_assoc r a' b]; rw [Algebra.smul_mul_assoc b' q b]
 
 中文:
 定理 存在_mem_finset_approx'
@@ -513,7 +652,10 @@ theorem exists_mem_finset_approx'
   refine
     lt_of_mul_lt_mul_left ?_ (show 0 <= abv (Algebra.norm R (algebraMap R S b')) from abv.nonneg _)
   refine
-    lt_of_le_o
+    lt_of_le_of_lt (le_of_eq ?_)
+      (mul_lt_mul hqr le_rfl (abv.pos ((Algebra.norm_ne_zero_iff_of_basis bS).mpr hb))
+        (abv.nonneg _))
+  rw [← abv.map_mul]; rw [← map_mul]; rw [← abv.map_mul]; rw [← map_mul]; rw [← Algebra.smul_def]; rw [smul_sub b']; rw [sub_mul]; rw [smul_comm]; rw [h]; rw [mul_comm b a']; rw [Algebra.smul_mul_assoc r a' b]; rw [Algebra.smul_mul_assoc b' q b]
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.exists_smul_eq_mul, Algebra.norm, Algebra.norm_ne_zero_iff_of_basis, Algebra.smul_def, IsAlgebraic, abv.map_mul, abv.nonneg, abv.pos, algebraMap, exists_mem_finsetApprox, exists_smul_eq_mul, le_of_eq, le_rfl, lt_of_le_of_lt, lt_of_mul_lt_mul_left, map_mul, mul_lt_mul, nonneg, norm_ne_zero_iff_of_basis
 -/
@@ -596,7 +738,29 @@ theorem exists_mk0_eq_mk0
   suffices Ideal.span {b} ∣ Ideal.span {algebraMap _ _ M} * I.1 by
     obtain ⟨J, hJ⟩ := this
     refine ⟨⟨J, ?_⟩, ?_, ?_⟩
-    ·
+    · rw [mem_nonZeroDivisors_iff_ne_zero]
+      rintro rfl
+      rw [Ideal.zero_eq_bot]; rw [Ideal.mul_bot] at hJ
+      exact hM (Ideal.span_singleton_eq_bot.mp (I.2.2 _ hJ))
+    · rw [ClassGroup.mk0_eq_mk0_iff]
+      exact ⟨algebraMap _ _ M, b, hM, b_ne_zero, hJ⟩
+    rw [← SetLike.mem_coe]; rw [← Set.singleton_subset_iff]; rw [← Ideal.span_le]; rw [← Ideal.dvd_iff_le]
+    apply (mul_dvd_mul_iff_left _).mp _
+    swap; · exact mt Ideal.span_singleton_eq_bot.mp b_ne_zero
+    rw [Subtype.coe_mk]; rw [Ideal.dvd_iff_le]; rw [← hJ]; rw [mul_comm]
+    apply Ideal.mul_mono le_rfl
+    rw [Ideal.span_le]; rw [Set.singleton_subset_iff]
+    exact b_mem
+  rw [Ideal.dvd_iff_le]; rw [Ideal.mul_le]
+  intro r' hr' a ha
+  rw [Ideal.mem_span_singleton] at hr' ⊢
+  obtain ⟨q, r, r_mem, lt⟩ := exists_mem_finset_approx' bS adm a b_ne_zero
+  apply @dvd_of_mul_left_dvd _ _ q
+  simp only [Algebra.smul_def] at lt
+  rw [←
+    sub_eq_zero.mp (b_min _ (I.1.sub_mem (I.1.mul_mem_left _ ha) (I.1.mul_mem_left _ b_mem)) lt)]
+  refine mul_dvd_mul_right (dvd_trans (map_dvd _ ?_) hr') _
+  exact Multiset.dvd_prod (Multiset.mem_map.mpr ⟨_, r_mem, rfl⟩)
 
 中文:
 定理 存在_mk0_eq_mk0
@@ -608,7 +772,29 @@ theorem exists_mk0_eq_mk0
   suffices Ideal.span {b} ∣ Ideal.span {algebraMap _ _ M} * I.1 by
     obtain ⟨J, hJ⟩ := this
     refine ⟨⟨J, ?_⟩, ?_, ?_⟩
-    ·
+    · rw [mem_nonZeroDivisors_iff_ne_zero]
+      rintro rfl
+      rw [Ideal.zero_eq_bot]; rw [Ideal.mul_bot] at hJ
+      exact hM (Ideal.span_singleton_eq_bot.mp (I.2.2 _ hJ))
+    · rw [ClassGroup.mk0_eq_mk0_iff]
+      exact ⟨algebraMap _ _ M, b, hM, b_ne_zero, hJ⟩
+    rw [← SetLike.mem_coe]; rw [← Set.singleton_subset_iff]; rw [← Ideal.span_le]; rw [← Ideal.dvd_iff_le]
+    apply (mul_dvd_mul_iff_left _).mp _
+    swap; · exact mt Ideal.span_singleton_eq_bot.mp b_ne_zero
+    rw [Subtype.coe_mk]; rw [Ideal.dvd_iff_le]; rw [← hJ]; rw [mul_comm]
+    apply Ideal.mul_mono le_rfl
+    rw [Ideal.span_le]; rw [Set.singleton_subset_iff]
+    exact b_mem
+  rw [Ideal.dvd_iff_le]; rw [Ideal.mul_le]
+  intro r' hr' a ha
+  rw [Ideal.mem_span_singleton] at hr' ⊢
+  obtain ⟨q, r, r_mem, lt⟩ := exists_mem_finset_approx' bS adm a b_ne_zero
+  apply @dvd_of_mul_left_dvd _ _ q
+  simp only [Algebra.smul_def] at lt
+  rw [←
+    sub_eq_zero.mp (b_min _ (I.1.sub_mem (I.1.mul_mem_left _ ha) (I.1.mul_mem_left _ b_mem)) lt)]
+  refine mul_dvd_mul_right (dvd_trans (map_dvd _ ?_) hr') _
+  exact Multiset.dvd_prod (Multiset.mem_map.mpr ⟨_, r_mem, rfl⟩)
 
 Depends on / 依赖: ClassGroup, ClassGroup.mk0_eq_mk0_iff, Ideal.mul_bot, Ideal.span, Ideal.span_singleton_eq_bot.mp, Ideal.zero_eq_bot, algebraMap, b_mem, b_min, b_ne_zero, exists_min, finsetApprox, mem_nonZeroDivisors_iff_ne_zero, mk0_eq_mk0_iff, mul_bot, prod_finsetApprox_ne_zero, span_singleton_eq_bot, zero_eq_bot
 -/
@@ -718,7 +904,11 @@ definition fintypeOfAdmissibleOfAlgebraic
       (UniqueFactorizationMonoid.fintypeSubtypeDvd _
         (by
           rw [Ne]; rw [Ideal.zero_eq_bot]; rw [Ideal.span_singleton_eq_bot]
-          exact pr
+          exact prod_finsetApprox_ne_zero bS adm))
+      ((Equiv.refl _).subtypeEquiv fun I =>
+        Ideal.dvd_iff_le.trans (by
+          rw [Equiv.refl_apply]; rw [Ideal.span_le]; rw [Set.singleton_subset_iff]; rfl)))
+    (ClassGroup.mkMMem bS adm) (ClassGroup.mkMMem_surjective bS adm)
 
 中文:
 定义 fintypeOfAdmissibleOfAlgebraic
@@ -729,7 +919,11 @@ definition fintypeOfAdmissibleOfAlgebraic
       (UniqueFactorizationMonoid.fintypeSubtypeDvd _
         (by
           rw [Ne]; rw [Ideal.zero_eq_bot]; rw [Ideal.span_singleton_eq_bot]
-          exact pr
+          exact prod_finsetApprox_ne_zero bS adm))
+      ((Equiv.refl _).subtypeEquiv fun I =>
+        Ideal.dvd_iff_le.trans (by
+          rw [Equiv.refl_apply]; rw [Ideal.span_le]; rw [Set.singleton_subset_iff]; rfl)))
+    (ClassGroup.mkMMem bS adm) (ClassGroup.mkMMem_surjective bS adm)
 
 Depends on / 依赖: ClassGroup, ClassGroup.mkMMem, ClassGroup.mkMMem_surjective, Equiv.refl, Equiv.refl_apply, Fintype, Fintype.ofEquiv, Fintype.ofSurjective, Ideal.dvd_iff_le.trans, Ideal.span, Ideal.span_le, Ideal.span_singleton_eq_bot, Ideal.zero_eq_bot, Set.singleton_subset_iff, UniqueFactorizationMonoid, UniqueFactorizationMonoid.fintypeSubtypeDvd, algebraMap, dvd_iff_le, finsetApprox, fintypeSubtypeDvd
 -/
@@ -767,7 +961,19 @@ definition fintypeOfAdmissibleOfFinite
   letI := IsIntegralClosure.isDedekindDomain R K L S
   choose s b hb_int using FiniteDimensional.exists_is_basis_integral R K L
   have : LinearIndependent R ((Algebra.traceForm K L).dualBasis
-      
+      (traceForm_nondegenerate K L) b) := by
+    apply (Basis.linearIndependent _).restrict_scalars
+    simp only [Algebra.smul_def, mul_one]
+    apply IsFractionRing.injective
+  obtain ⟨n, b⟩ :=
+    Submodule.basisOfPidOfLESpan this (IsIntegralClosure.range_le_span_dualBasis S b hb_int)
+  let f : (S ⧸ LinearMap.ker (LinearMap.restrictScalars R (Algebra.linearMap S L))) ≃ₗ[R] S := by
+    rw [LinearMap.ker_eq_bot.mpr]
+    · exact Submodule.quotEquivOfEqBot _ rfl
+    · exact IsIntegralClosure.algebraMap_injective _ R _
+  let bS := b.map ((LinearMap.quotKerEquivRange _).symm ≪≫ₗ f)
+  have : Algebra.IsIntegral R S := IsIntegralClosure.isIntegral_algebra R L
+  exact fintypeOfAdmissibleOfAlgebraic bS adm
 
 中文:
 定义 fintypeOfAdmissibleOfFinite
@@ -778,7 +984,19 @@ definition fintypeOfAdmissibleOfFinite
   letI := IsIntegralClosure.isDedekindDomain R K L S
   choose s b hb_int using FiniteDimensional.exists_is_basis_integral R K L
   have : LinearIndependent R ((Algebra.traceForm K L).dualBasis
-      
+      (traceForm_nondegenerate K L) b) := by
+    apply (Basis.linearIndependent _).restrict_scalars
+    simp only [Algebra.smul_def, mul_one]
+    apply IsFractionRing.injective
+  obtain ⟨n, b⟩ :=
+    Submodule.basisOfPidOfLESpan this (IsIntegralClosure.range_le_span_dualBasis S b hb_int)
+  let f : (S ⧸ LinearMap.ker (LinearMap.restrictScalars R (Algebra.linearMap S L))) ≃ₗ[R] S := by
+    rw [LinearMap.ker_eq_bot.mpr]
+    · exact Submodule.quotEquivOfEqBot _ rfl
+    · exact IsIntegralClosure.algebraMap_injective _ R _
+  let bS := b.map ((LinearMap.quotKerEquivRange _).symm ≪≫ₗ f)
+  have : Algebra.IsIntegral R S := IsIntegralClosure.isIntegral_algebra R L
+  exact fintypeOfAdmissibleOfAlgebraic bS adm
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Algebra.traceForm, Basis.linearIndependent, Classical, Classical.decEq, FiniteDimensional, FiniteDimensional.exists_is_basis_integral, IsFractionRing, IsFractionRing.injective, IsIntegralClosure, IsIntegralClosure.isDedekindDomain, IsIntegralClosure.isFractionRing_of_finite_extension, LinearIndependent, Submodule, Submodule.basisOfPidOfLESpan, basisOfPidOfLESpan, dualBasis, exists_is_basis_integral, hb_int
 -/

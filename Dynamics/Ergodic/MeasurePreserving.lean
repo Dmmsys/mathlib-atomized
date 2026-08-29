@@ -704,7 +704,7 @@ lemma measure_symmDiff_preimage_iterate_le
     grw [← ih, measure_symmDiff_le s (f^[n] ⁻¹' s) (f^[n + 1] ⁻¹' s)]
     replace hs : NullMeasurableSet (s ∆ (f ⁻¹' s)) μ :=
 hs.symmDiff hs.preimage hf.quasiMeasurePreserving
-    rw [iterate_succ']; rw [preim
+    rw [iterate_succ']; rw [preimage_comp]; rw [← preimage_symmDiff]; rw [(hf.iterate n).measure_preimage hs]
 
 中文:
 引理 measure_symmDiff_preimage_iterate_le
@@ -716,7 +716,7 @@ hs.symmDiff hs.preimage hf.quasiMeasurePreserving
     grw [← ih, measure_symmDiff_le s (f^[n] ⁻¹' s) (f^[n + 1] ⁻¹' s)]
     replace hs : NullMeasurableSet (s ∆ (f ⁻¹' s)) μ :=
 hs.symmDiff hs.preimage hf.quasiMeasurePreserving
-    rw [iterate_succ']; rw [preim
+    rw [iterate_succ']; rw [preimage_comp]; rw [← preimage_symmDiff]; rw [(hf.iterate n).measure_preimage hs]
 
 Depends on / 依赖: NullMeasurableSet, add_smul, hf.iterate, hf.quasiMeasurePreserving, hs.preimage, hs.symmDiff, iterate, iterate_succ, measure_preimage, measure_symmDiff_le, one_smul, preimage, preimage_comp, preimage_symmDiff, quasiMeasurePreserving, replace, symmDiff
 -/
@@ -743,7 +743,13 @@ theorem exists_mem_iterate_mem_of_measure_univ_lt_mul_measure
     hs.preimage (hf.iterate m).quasiMeasurePreserving
   have B : forall m, μ (f^[m] ⁻¹' s) = μ s := fun m => (hf.iterate m).measure_preimage hs
   have : μ (univ : Set α) < ∑ m in Finset.range n, μ (f^[m] ⁻¹' s) := by simpa [B]
-  o
+  obtain ⟨i, hi, j, hj, hij, x, hxi : f^[i] x in s, hxj : f^[j] x in s⟩ :
+      exists i < n, exists j < n, i != j ∧ (f^[i] ⁻¹' s inter f^[j] ⁻¹' s).Nonempty := by
+    simpa using exists_nonempty_inter_of_measure_univ_lt_sum_measure μ (fun m _ => A m) this
+  wlog hlt : i < j generalizing i j
+  · exact this j hj i hi hij.symm hxj hxi (hij.lt_or_gt.resolve_left hlt)
+  refine ⟨f^[i] x, hxi, j - i, ⟨tsub_pos_of_lt hlt, lt_of_le_of_lt (j.sub_le i) hj⟩, ?_⟩
+  rwa [← iterate_add_apply, tsub_add_cancel_of_le hlt.le]
 
 中文:
 定理 存在_mem_iterate_mem_of_measure_univ_lt_mul_measure
@@ -753,7 +759,13 @@ theorem exists_mem_iterate_mem_of_measure_univ_lt_mul_measure
     hs.preimage (hf.iterate m).quasiMeasurePreserving
   have B : forall m, μ (f^[m] ⁻¹' s) = μ s := fun m => (hf.iterate m).measure_preimage hs
   have : μ (univ : Set α) < ∑ m in Finset.range n, μ (f^[m] ⁻¹' s) := by simpa [B]
-  o
+  obtain ⟨i, hi, j, hj, hij, x, hxi : f^[i] x in s, hxj : f^[j] x in s⟩ :
+      exists i < n, exists j < n, i != j ∧ (f^[i] ⁻¹' s inter f^[j] ⁻¹' s).Nonempty := by
+    simpa using exists_nonempty_inter_of_measure_univ_lt_sum_measure μ (fun m _ => A m) this
+  wlog hlt : i < j generalizing i j
+  · exact this j hj i hi hij.symm hxj hxi (hij.lt_or_gt.resolve_left hlt)
+  refine ⟨f^[i] x, hxi, j - i, ⟨tsub_pos_of_lt hlt, lt_of_le_of_lt (j.sub_le i) hj⟩, ?_⟩
+  rwa [← iterate_add_apply, tsub_add_cancel_of_le hlt.le]
 
 Depends on / 依赖: Finset, Finset.range, Nonempty, NullMeasurableSet, exists_nonempty_inter_of_measure_univ_lt_sum_, hf.iterate, hs.preimage, iterate, measure_preimage, preimage, quasiMeasurePreserving
 -/

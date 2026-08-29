@@ -66,7 +66,13 @@ definition extended
     refine ⟨f a, hf ha, fun b hb => ?_⟩
     refine span_induction (fun x hx => ?_) ⟨0, by simp⟩
       (fun x y _ _ hx hy => smul_add (f a) x y ▸ isInteger_add hx hy) (fun b c _ hc => ?_) hb
-   
+    · rcases hx with ⟨k, kI, rfl⟩
+      obtain ⟨c, hc⟩ := frac k kI
+      exact ⟨f c, by simp [← IsLocalization.map_smul, ← hc]⟩
+    · rw [← smul_assoc, smul_eq_mul, mul_comm (f a), ← smul_eq_mul, smul_assoc]
+      exact isInteger_smul hc
+
+local notation "map_f" => (IsLocalization.map (S := K) L f hf)
 
 中文:
 定义 extended
@@ -77,7 +83,13 @@ definition extended
     refine ⟨f a, hf ha, fun b hb => ?_⟩
     refine span_induction (fun x hx => ?_) ⟨0, by simp⟩
       (fun x y _ _ hx hy => smul_add (f a) x y ▸ isInteger_add hx hy) (fun b c _ hc => ?_) hb
-   
+    · rcases hx with ⟨k, kI, rfl⟩
+      obtain ⟨c, hc⟩ := frac k kI
+      exact ⟨f c, by simp [← IsLocalization.map_smul, ← hc]⟩
+    · rw [← smul_assoc, smul_eq_mul, mul_comm (f a), ← smul_eq_mul, smul_assoc]
+      exact isInteger_smul hc
+
+local notation "map_f" => (IsLocalization.map (S := K) L f hf)
 
 Depends on / 依赖: IsLocalization, IsLocalization.map
 -/
@@ -180,7 +192,10 @@ theorem extended_ne_zero
     Set.mem_image, SetLike.mem_coe, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,
     not_forall]
   obtain ⟨x, hx₁, hx₂⟩ : exists x in I, x != 0 := by simpa [ne_eq, eq_zero_iff] using hI
-  r
+  refine ⟨x, hx₁, ?_⟩
+  exact (map_ne_zero_iff _ (IsLocalization.map_injective_of_injective' _ _ _ _ hN hf')).mpr hx₂
+
+@[simp]
 
 中文:
 定理 extended_ne_zero
@@ -190,7 +205,10 @@ theorem extended_ne_zero
     Set.mem_image, SetLike.mem_coe, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,
     not_forall]
   obtain ⟨x, hx₁, hx₂⟩ : exists x in I, x != 0 := by simpa [ne_eq, eq_zero_iff] using hI
-  r
+  refine ⟨x, hx₁, ?_⟩
+  exact (map_ne_zero_iff _ (IsLocalization.map_injective_of_injective' _ _ _ _ hN hf')).mpr hx₂
+
+@[simp]
 
 Depends on / 依赖: IsLocalization, IsLocalization.map_injective_of_injective, Set.mem_image, SetLike, SetLike.mem_coe, Submodule, Submodule.span_eq_bot, and_imp, coeToSubmodule_inj, coe_extended_eq_span, coe_zero, eq_zero_iff, forall_exists_index, map_injective_of_injective, map_ne_zero_iff, mem_coe, mem_image, ne_eq, not_forall, span_eq_bot
 -/
@@ -245,7 +263,9 @@ refine coeToSubmodule_injective Submodule.ext fun x => ⟨fun hx => span_inducti
     ?_ (zero_mem _) (fun y z _ _ hy hz => add_mem hy hz) (fun b y _ hy => smul_mem _ b hy) hx, ?_⟩
   · rintro ⟨b, _, rfl⟩
     rw [Algebra.linearMap_apply]; rw [Algebra.algebraMap_eq_smul_one]
-exact smul_mem _ _ subse
+exact smul_mem _ _ subset_span ⟨1, by simpa using one_mem_one⟩
+  · rintro _ ⟨_, ⟨a, ha, rfl⟩, rfl⟩
+    exact ⟨f a, ha, by rw [Algebra.linearMap_apply, Algebra.linearMap_apply, map_eq]⟩
 
 中文:
 定理 extended_one
@@ -255,7 +275,9 @@ refine coeToSubmodule_injective Submodule.ext fun x => ⟨fun hx => span_inducti
     ?_ (zero_mem _) (fun y z _ _ hy hz => add_mem hy hz) (fun b y _ hy => smul_mem _ b hy) hx, ?_⟩
   · rintro ⟨b, _, rfl⟩
     rw [Algebra.linearMap_apply]; rw [Algebra.algebraMap_eq_smul_one]
-exact smul_mem _ _ subse
+exact smul_mem _ _ subset_span ⟨1, by simpa using one_mem_one⟩
+  · rintro _ ⟨_, ⟨a, ha, rfl⟩, rfl⟩
+    exact ⟨f a, ha, by rw [Algebra.linearMap_apply, Algebra.linearMap_apply, map_eq]⟩
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Algebra.linearMap_apply, Submodule, Submodule.ext, add_mem, algebraMap_eq_smul_one, coeToSubmodule_injective, linearMap_apply, map_eq, one_mem_one, smul_mem, span_induction, subset_span, zero_mem
 -/
@@ -346,7 +368,12 @@ theorem extended_add
   · rintro _ ⟨y, hy, rfl⟩
 obtain ⟨i, hi, j, hj, rfl⟩ := (mem_add I J y).mp SetLike.mem_coe.mp hy
     rw [map_add]
-    exact add_mem (S
+    exact add_mem (Submodule.subset_span ⟨i, Set.mem_union_left _ hi, by simp⟩)
+      (Submodule.subset_span ⟨j, Set.mem_union_right _ hj, by simp⟩)
+  · rintro _ ⟨y, hy, rfl⟩
+suffices y in I + J from SetLike.mem_coe.mpr Submodule.subset_span ⟨y, by simp [this]⟩
+    exact hy.elim (fun h => (mem_add I J y).mpr ⟨y, h, 0, zero_mem J, add_zero y⟩)
+      (fun h => (mem_add I J y).mpr ⟨0, zero_mem I, y, h, zero_add y⟩)
 
 中文:
 定理 extended_add
@@ -358,7 +385,12 @@ obtain ⟨i, hi, j, hj, rfl⟩ := (mem_add I J y).mp SetLike.mem_coe.mp hy
   · rintro _ ⟨y, hy, rfl⟩
 obtain ⟨i, hi, j, hj, rfl⟩ := (mem_add I J y).mp SetLike.mem_coe.mp hy
     rw [map_add]
-    exact add_mem (S
+    exact add_mem (Submodule.subset_span ⟨i, Set.mem_union_left _ hi, by simp⟩)
+      (Submodule.subset_span ⟨j, Set.mem_union_right _ hj, by simp⟩)
+  · rintro _ ⟨y, hy, rfl⟩
+suffices y in I + J from SetLike.mem_coe.mpr Submodule.subset_span ⟨y, by simp [this]⟩
+    exact hy.elim (fun h => (mem_add I J y).mpr ⟨y, h, 0, zero_mem J, add_zero y⟩)
+      (fun h => (mem_add I J y).mpr ⟨0, zero_mem I, y, h, zero_add y⟩)
 
 Depends on / 依赖: Set.image_union, Set.mem_union_left, Set.mem_union_right, SetLike, SetLike.mem_coe.mp, SetLike.mem_coe.mpr, Submodule, Submodule.add_eq_sup, Submodule.span_eq_span, Submodule.subset_span, add_eq_sup, add_mem, coeToSubmodule_injective, coe_add, coe_extended_eq_span, image_union, map_add, mem_add, mem_coe, mem_union_left
 -/
@@ -388,7 +420,17 @@ theorem extended_mul
   refine Submodule.span_eq_span (fun _ h => ?_) (fun _ h => ?_)
   · rcases h with ⟨x, hx, rfl⟩
     replace hx : x in (I : Submodule A K) * (J : Submodule A K) := coe_mul I J ▸ hx
-    rw [Submodule.mul_eq_s
+    rw [Submodule.mul_eq_span_mul_set] at hx
+    refine span_induction (fun y hy => ?_) (by simp) (fun y z _ _ hy hz => ?_)
+      (fun a y _ hy => ?_) hx
+    · rcases Set.mem_mul.mp hy with ⟨i, hi, j, hj, rfl⟩
+exact subset_span Set.mem_mul.mpr
+        ⟨map_f i, ⟨i, hi, by simp⟩, map_f j, ⟨j, hj, by simp⟩, by simp⟩
+    · exact map_add map_f y z ▸ Submodule.add_mem _ hy hz
+    · rw [Algebra.smul_def, map_mul, map_eq, ← Algebra.smul_def]
+      exact smul_mem _ (f a) hy
+  · rcases Set.mem_mul.mp h with ⟨y, ⟨i, hi, rfl⟩, z, ⟨j, hj, rfl⟩, rfl⟩
+    exact Submodule.subset_span ⟨i * j, mul_mem_mul hi hj, by simp⟩
 
 中文:
 定理 extended_mul
@@ -399,7 +441,17 @@ theorem extended_mul
   refine Submodule.span_eq_span (fun _ h => ?_) (fun _ h => ?_)
   · rcases h with ⟨x, hx, rfl⟩
     replace hx : x in (I : Submodule A K) * (J : Submodule A K) := coe_mul I J ▸ hx
-    rw [Submodule.mul_eq_s
+    rw [Submodule.mul_eq_span_mul_set] at hx
+    refine span_induction (fun y hy => ?_) (by simp) (fun y z _ _ hy hz => ?_)
+      (fun a y _ hy => ?_) hx
+    · rcases Set.mem_mul.mp hy with ⟨i, hi, j, hj, rfl⟩
+exact subset_span Set.mem_mul.mpr
+        ⟨map_f i, ⟨i, hi, by simp⟩, map_f j, ⟨j, hj, by simp⟩, by simp⟩
+    · exact map_add map_f y z ▸ Submodule.add_mem _ hy hz
+    · rw [Algebra.smul_def, map_mul, map_eq, ← Algebra.smul_def]
+      exact smul_mem _ (f a) hy
+  · rcases Set.mem_mul.mp h with ⟨y, ⟨i, hi, rfl⟩, z, ⟨j, hj, rfl⟩, rfl⟩
+    exact Submodule.subset_span ⟨i * j, mul_mem_mul hi hj, by simp⟩
 
 Depends on / 依赖: Set.mem_mul.mp, Set.mem_mul.mpr, Submodule, Submodule.mul_eq_span_mul_set, Submodule.span_eq_span, coeToSubmodule_injective, coe_extended_eq_span, coe_mul, map_f, mem_mul, mul_eq_span_mul_set, replace, span_eq_span, span_induction, span_mul_span, subset_span
 -/
@@ -433,7 +485,19 @@ theorem extended_extended
   · rintro _ ⟨x, hx, rfl⟩
     have hx' : x in span B (IsLocalization.map L f hf '' (I : Set K)) :=
       (mem_extended_iff L hf I x).1 hx
-    refine span_induction (fun y hy => 
+    refine span_induction (fun y hy => ?_) (by simp) (fun y z _ _ hy hz => ?_) (fun b y _ hy => ?_) hx'
+    · rcases hy with ⟨z, hz, rfl⟩
+      exact Submodule.subset_span ⟨z, hz, by rw [IsLocalization.map_map]⟩
+    · rw [map_add]
+      exact add_mem hy hz
+    · rw [IsLocalization.map_smul]
+      exact smul_mem _ (g b) hy
+  · rintro _ ⟨x, hx, rfl⟩
+    refine Submodule.subset_span ⟨IsLocalization.map L f hf x, ?_, ?_⟩
+· exact (mem_extended_iff L hf I _).2 Submodule.subset_span ⟨x, hx, rfl⟩
+    · rw [IsLocalization.map_map]
+
+@[simp]
 
 中文:
 定理 extended_extended
@@ -444,7 +508,19 @@ theorem extended_extended
   · rintro _ ⟨x, hx, rfl⟩
     have hx' : x in span B (IsLocalization.map L f hf '' (I : Set K)) :=
       (mem_extended_iff L hf I x).1 hx
-    refine span_induction (fun y hy => 
+    refine span_induction (fun y hy => ?_) (by simp) (fun y z _ _ hy hz => ?_) (fun b y _ hy => ?_) hx'
+    · rcases hy with ⟨z, hz, rfl⟩
+      exact Submodule.subset_span ⟨z, hz, by rw [IsLocalization.map_map]⟩
+    · rw [map_add]
+      exact add_mem hy hz
+    · rw [IsLocalization.map_smul]
+      exact smul_mem _ (g b) hy
+  · rintro _ ⟨x, hx, rfl⟩
+    refine Submodule.subset_span ⟨IsLocalization.map L f hf x, ?_, ?_⟩
+· exact (mem_extended_iff L hf I _).2 Submodule.subset_span ⟨x, hx, rfl⟩
+    · rw [IsLocalization.map_map]
+
+@[simp]
 
 Depends on / 依赖: IsLocalization, IsLocalization.map, IsLocalization.map_map, Submodule, Submodule.span_eq_span, Submodule.subset_span, Submonoid, Submonoid.monotone_comap, coeToSubmodule_inj, coe_extended_eq_span, g.comp, hf.trans, map_map, mem_extended_iff, monotone_comap, span_eq_span, span_induction, subset_span
 -/
@@ -481,7 +557,10 @@ theorem extended_coeIdeal_eq_map
   refine Submodule.span_eq_span ?_ ?_
   · rintro _ ⟨_, ⟨a, ha, rfl⟩, rfl⟩
     exact Submodule.subset_span
-      ⟨f a, Set
+      ⟨f a, Set.mem_image_of_mem f ha, by rw [Algebra.linearMap_apply, IsLocalization.map_eq hf a]⟩
+  · rintro _ ⟨_, ⟨a, ha, rfl⟩, rfl⟩
+    exact Submodule.subset_span
+      ⟨algebraMap A K a, mem_coeIdeal_of_mem M ha, IsLocalization.map_eq hf a⟩
 
 中文:
 定理 extended_coeIdeal_eq_map
@@ -491,7 +570,10 @@ theorem extended_coeIdeal_eq_map
   refine Submodule.span_eq_span ?_ ?_
   · rintro _ ⟨_, ⟨a, ha, rfl⟩, rfl⟩
     exact Submodule.subset_span
-      ⟨f a, Set
+      ⟨f a, Set.mem_image_of_mem f ha, by rw [Algebra.linearMap_apply, IsLocalization.map_eq hf a]⟩
+  · rintro _ ⟨_, ⟨a, ha, rfl⟩, rfl⟩
+    exact Submodule.subset_span
+      ⟨algebraMap A K a, mem_coeIdeal_of_mem M ha, IsLocalization.map_eq hf a⟩
 
 Depends on / 依赖: Algebra, Algebra.linearMap_apply, Ideal.map, Ideal.span, Ideal.submodule_span_eq, IsLocalization, IsLocalization.coeSubmodule_span, IsLocalization.map_eq, Set.mem_image_of_mem, Submodule, Submodule.span_eq_span, Submodule.subset_span, algebraMap, coeSubmodule_span, coeToSubmodule_inj, coe_coeIdeal, coe_extended_eq_span, linearMap_apply, map_eq, mem_coeIdeal_of_mem
 -/
@@ -518,7 +600,9 @@ theorem extended_spanSingleton
   refine ⟨fun hy => span_le.2 ?_ hy, fun hy => span_le.2 (fun _ h => ?_) hy⟩
   · rintro _ ⟨w, hw, rfl⟩
     obtain ⟨a, rfl⟩ := (mem_spanSingleton _).1 hw
-    rw [SetLike.mem_coe]; rw [Algebra.smul_def]; rw [map_mul]; 
+    rw [SetLike.mem_coe]; rw [Algebra.smul_def]; rw [map_mul]; rw [IsLocalization.map_eq]; rw [← Algebra.smul_def]
+    exact smul_mem _ _ (mem_span_singleton_self _)
+  · exact subset_span ⟨x, SetLike.mem_coe.mpr (mem_spanSingleton_self _ x), h.symm⟩
 
 中文:
 定理 extended_spanSingleton
@@ -529,7 +613,9 @@ theorem extended_spanSingleton
   refine ⟨fun hy => span_le.2 ?_ hy, fun hy => span_le.2 (fun _ h => ?_) hy⟩
   · rintro _ ⟨w, hw, rfl⟩
     obtain ⟨a, rfl⟩ := (mem_spanSingleton _).1 hw
-    rw [SetLike.mem_coe]; rw [Algebra.smul_def]; rw [map_mul]; 
+    rw [SetLike.mem_coe]; rw [Algebra.smul_def]; rw [map_mul]; rw [IsLocalization.map_eq]; rw [← Algebra.smul_def]
+    exact smul_mem _ _ (mem_span_singleton_self _)
+  · exact subset_span ⟨x, SetLike.mem_coe.mpr (mem_spanSingleton_self _ x), h.symm⟩
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsLocalization, IsLocalization.map_eq, SetLike, SetLike.mem_coe, SetLike.mem_coe.mpr, h.symm, map_eq, map_mul, mem_coe, mem_extended_iff, mem_spanSingleton, mem_spanSingleton_self, mem_span_singleton, mem_span_singleton_self, smul_def, smul_mem, span_le, subset_span
 -/
@@ -769,7 +855,11 @@ theorem le_one_of_extendedHom_le_one
   · simpa [← FractionalIdeal.mem_coe, IsLocalization.algebraMap_eq_map_map_submonoid A⁰ B K L]
 using! subset_span Set.mem_image_of_mem _ hx₁
   · contrapose hx₂
-    rw [mem_one
+    rw [mem_one_iff]; rw [← IsIntegrallyClosed.isIntegral_iff] at hx₂ ⊢
+exact IsIntegral.tower_bot_of_field isIntegral_trans _ hx₂
+
+@[deprecated (since := "2026-04-16")]
+alias le_one_of_extendedHomₐ_le_one := le_one_of_extendedHom_le_one
 
 中文:
 定理 le_one_of_extendedHom_le_one
@@ -782,7 +872,11 @@ using! subset_span Set.mem_image_of_mem _ hx₁
   · simpa [← FractionalIdeal.mem_coe, IsLocalization.algebraMap_eq_map_map_submonoid A⁰ B K L]
 using! subset_span Set.mem_image_of_mem _ hx₁
   · contrapose hx₂
-    rw [mem_one
+    rw [mem_one_iff]; rw [← IsIntegrallyClosed.isIntegral_iff] at hx₂ ⊢
+exact IsIntegral.tower_bot_of_field isIntegral_trans _ hx₂
+
+@[deprecated (since := "2026-04-16")]
+alias le_one_of_extendedHomₐ_le_one := le_one_of_extendedHom_le_one
 
 Depends on / 依赖: FractionalIdeal, FractionalIdeal.mem_coe, IsIntegral, IsIntegral.tower_bot_of_field, IsIntegrallyClosed, IsIntegrallyClosed.isIntegral_iff, IsLocalization, IsLocalization.algebraMap_eq_map_map_submonoid, Set.mem_image_of_mem, SetLike, SetLike.not_le_iff_exists, algebraMap, algebraMap_eq_map_map_submonoid, contrapose, isIntegral_iff, isIntegral_trans, mem_coe, mem_image_of_mem, mem_one_iff, not_le_iff_exists
 -/
@@ -901,7 +995,10 @@ theorem extendedHom_injective
   · rwa [hI, map_zero, eq_comm, extendedHom_eq_zero_iff L B, eq_comm, ← hI] at h
   by_cases hJ : J = 0
   · rwa [hJ, map_zero, extendedHom_eq_zero_iff L B, ← hJ] at h
-  rwa [← mul_inv_eq_one₀ ((extendedHom_eq_zero_iff _ _).not.mpr hJ), ← map_in
+  rwa [← mul_inv_eq_one₀ ((extendedHom_eq_zero_iff _ _).not.mpr hJ), ← map_inv₀, ← map_mul,
+    extendedHom_eq_one_iff _ _ (mul_ne_zero hI (inv_ne_zero hJ)), mul_inv_eq_one₀ hJ] at h
+
+@[deprecated (since := "2026-04-16")] alias extendedHomₐ_injective := extendedHom_injective
 
 中文:
 定理 extendedHom_injective
@@ -912,7 +1009,10 @@ theorem extendedHom_injective
   · rwa [hI, map_zero, eq_comm, extendedHom_eq_zero_iff L B, eq_comm, ← hI] at h
   by_cases hJ : J = 0
   · rwa [hJ, map_zero, extendedHom_eq_zero_iff L B, ← hJ] at h
-  rwa [← mul_inv_eq_one₀ ((extendedHom_eq_zero_iff _ _).not.mpr hJ), ← map_in
+  rwa [← mul_inv_eq_one₀ ((extendedHom_eq_zero_iff _ _).not.mpr hJ), ← map_inv₀, ← map_mul,
+    extendedHom_eq_one_iff _ _ (mul_ne_zero hI (inv_ne_zero hJ)), mul_inv_eq_one₀ hJ] at h
+
+@[deprecated (since := "2026-04-16")] alias extendedHomₐ_injective := extendedHom_injective
 
 Depends on / 依赖: eq_comm, extendedHom_eq_one_iff, extendedHom_eq_zero_iff, inv_ne_zero, map_mul, map_zero, mul_ne_zero, not.mpr
 -/

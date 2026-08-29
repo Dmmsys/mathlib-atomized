@@ -27,7 +27,7 @@ theorem Set.star_mem_center
   left_assoc b c := by
     simpa only [star_mul, star_star] using congr_arg star (ha.right_assoc (star c) (star b))
   right_assoc b c := by
-    simpa only [star_mul, star_star] using co
+    simpa only [star_mul, star_star] using congr_arg star (ha.left_assoc (star c) (star b))
 
 中文:
 定理 集合.star_mem_center
@@ -38,7 +38,7 @@ theorem Set.star_mem_center
   left_assoc b c := by
     simpa only [star_mul, star_star] using congr_arg star (ha.right_assoc (star c) (star b))
   right_assoc b c := by
-    simpa only [star_mul, star_star] using co
+    simpa only [star_mul, star_star] using congr_arg star (ha.left_assoc (star c) (star b))
 
 Depends on / 依赖: congr_arg, ha.left_assoc, ha.right_assoc, left_assoc, mem_center_iff, right_assoc, star_mul, star_star
 -/

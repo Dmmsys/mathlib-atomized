@@ -201,7 +201,11 @@ theorem adjointAux_norm
     rw [adjointAux_apply]; rw [LinearIsometryEquiv.norm_map]
     exact toSesqForm_apply_norm_le
   · nth_rw 1 [← adjointAux_adjointAux A]
-    refine ContinuousLinearMap.opNorm_le_bound _ (norm_n
+    refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
+    rw [adjointAux_apply]; rw [LinearIsometryEquiv.norm_map]
+    exact toSesqForm_apply_norm_le
+
+public section
 
 中文:
 定理 adjointAux_norm
@@ -213,7 +217,11 @@ theorem adjointAux_norm
     rw [adjointAux_apply]; rw [LinearIsometryEquiv.norm_map]
     exact toSesqForm_apply_norm_le
   · nth_rw 1 [← adjointAux_adjointAux A]
-    refine ContinuousLinearMap.opNorm_le_bound _ (norm_n
+    refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
+    rw [adjointAux_apply]; rw [LinearIsometryEquiv.norm_map]
+    exact toSesqForm_apply_norm_le
+
+public section
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.opNorm_le_bound, LinearIsometryEquiv, LinearIsometryEquiv.norm_map, adjointAux_adjointAux, adjointAux_apply, le_antisymm, norm_map, norm_nonneg, nth_rw, opNorm_le_bound, toSesqForm_apply_norm_le
 -/
@@ -978,7 +986,16 @@ theorem norm_adjoint_comp_self
       _ = ‖A‖ * ‖A‖ := by rw [LinearIsometryEquiv.norm_map]
   · rw [← sq, ← Real.sqrt_le_sqrt_iff (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)]
     refine opNorm_le_bound _ (Real.sqrt_nonneg _) fun x => ?_
-  
+    have :=
+      calc
+        re ⟪(A† ∘L A) x, x⟫ <= ‖(A† ∘L A) x‖ * ‖x‖ := re_inner_le_norm _ _
+        _ <= ‖A† ∘L A‖ * ‖x‖ * ‖x‖ := by gcongr; exact le_opNorm _ _
+    calc
+      ‖A x‖ = √(re ⟪(A† ∘L A) x, x⟫) := by rw [apply_norm_eq_sqrt_inner_adjoint_left]
+      _ <= √(‖A† ∘L A‖ * ‖x‖ * ‖x‖) := Real.sqrt_le_sqrt this
+      _ = √‖A† ∘L A‖ * ‖x‖ := by
+        simp_rw [mul_assoc, Real.sqrt_mul (norm_nonneg _) (‖x‖ * ‖x‖),
+          Real.sqrt_mul_self (norm_nonneg x)]
 
 中文:
 定理 norm_adjoint_comp_self
@@ -990,7 +1007,16 @@ theorem norm_adjoint_comp_self
       _ = ‖A‖ * ‖A‖ := by rw [LinearIsometryEquiv.norm_map]
   · rw [← sq, ← Real.sqrt_le_sqrt_iff (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)]
     refine opNorm_le_bound _ (Real.sqrt_nonneg _) fun x => ?_
-  
+    have :=
+      calc
+        re ⟪(A† ∘L A) x, x⟫ <= ‖(A† ∘L A) x‖ * ‖x‖ := re_inner_le_norm _ _
+        _ <= ‖A† ∘L A‖ * ‖x‖ * ‖x‖ := by gcongr; exact le_opNorm _ _
+    calc
+      ‖A x‖ = √(re ⟪(A† ∘L A) x, x⟫) := by rw [apply_norm_eq_sqrt_inner_adjoint_left]
+      _ <= √(‖A† ∘L A‖ * ‖x‖ * ‖x‖) := Real.sqrt_le_sqrt this
+      _ = √‖A† ∘L A‖ * ‖x‖ := by
+        simp_rw [mul_assoc, Real.sqrt_mul (norm_nonneg _) (‖x‖ * ‖x‖),
+          Real.sqrt_mul_self (norm_nonneg x)]
 
 Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.norm_map, Real.sqrt_le_sqrt_iff, Real.sqrt_nonneg, Real.sqrt_sq, apply_norm_eq_sqrt_inner_adjoint_left, le_antisymm, le_opNorm, norm_map, norm_nonneg, opNorm_comp_le, opNorm_le_bound, re_inner_le_norm, sqrt_le_sqrt_iff, sqrt_nonneg, sqrt_sq
 -/
@@ -1413,7 +1439,12 @@ theorem isStarNormal_iff_norm_eq_adjoint
   simp_rw [ContinuousLinearMap.ext_iff, ← coe_coe, toLinearMap_sub, ← LinearMap.ext_iff,
     toLinearMap_zero]
   have := star_eq_adjoint T ▸ toLinearMap_sub (star _ * T) _ ▸
-    ((IsSelfAdjoint.star_mul_self T).sub (IsSelf
+    ((IsSelfAdjoint.star_mul_self T).sub (IsSelfAdjoint.mul_star_self T)).isSymmetric
+  simp_rw [star_eq_adjoint, ← LinearMap.IsSymmetric.inner_map_self_eq_zero this,
+    LinearMap.sub_apply, inner_sub_left, coe_coe, mul_apply_eq_comp, adjoint_inner_left,
+    inner_self_eq_norm_sq_to_K, ← adjoint_inner_right T, inner_self_eq_norm_sq_to_K,
+    sub_eq_zero, ← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]
+  norm_cast
 
 中文:
 定理 isStarNormal_iff_norm_eq_adjoint
@@ -1422,7 +1453,12 @@ theorem isStarNormal_iff_norm_eq_adjoint
   simp_rw [ContinuousLinearMap.ext_iff, ← coe_coe, toLinearMap_sub, ← LinearMap.ext_iff,
     toLinearMap_zero]
   have := star_eq_adjoint T ▸ toLinearMap_sub (star _ * T) _ ▸
-    ((IsSelfAdjoint.star_mul_self T).sub (IsSelf
+    ((IsSelfAdjoint.star_mul_self T).sub (IsSelfAdjoint.mul_star_self T)).isSymmetric
+  simp_rw [star_eq_adjoint, ← LinearMap.IsSymmetric.inner_map_self_eq_zero this,
+    LinearMap.sub_apply, inner_sub_left, coe_coe, mul_apply_eq_comp, adjoint_inner_left,
+    inner_self_eq_norm_sq_to_K, ← adjoint_inner_right T, inner_self_eq_norm_sq_to_K,
+    sub_eq_zero, ← sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)]
+  norm_cast
 
 Depends on / 依赖: Commute, ContinuousLinearMap, ContinuousLinearMap.ext_iff, IsSelfAdjoint, IsSelfAdjoint.mul_star_self, IsSelfAdjoint.star_mul_self, IsSymmetric, LinearMap, LinearMap.IsSymmetric.inner_map_self_eq_zero, LinearMap.ext_iff, LinearMap.sub_apply, SemiconjBy, adjoint_inner_left, coe_coe, ext_iff, inner_map_self_eq_zero, inner_self_e, inner_sub_left, isStarNormal_iff, isSymmetric
 -/
@@ -1517,7 +1553,14 @@ theorem IsIdempotentElem.isSelfAdjoint_iff_isStarNormal
   rw [← sub_eq_zero]; rw [ContinuousLinearMap.ext_iff]
   simp_rw [zero_apply, ← norm_eq_zero (E := E)]
   have :=
-    calc (forall x : E, ‖(T - star T * T) x‖ = 0) ↔ for
+    calc (forall x : E, ‖(T - star T * T) x‖ = 0) ↔ forall x, ‖(adjoint (1 - T)) (T x)‖ = 0 := by
+          simp [star_eq_adjoint, one_def]
+      _ ↔ forall x, ‖(1 - T) (T x)‖ = 0 := by
+          simp only [isStarNormal_iff_norm_eq_adjoint.mp h.one_sub]
+      _ ↔ forall x, ‖(T - T * T) x‖ = 0 := by simp
+      _ ↔ T - T * T = 0 := by simp only [norm_eq_zero, ContinuousLinearMap.ext_iff, zero_apply]
+      _ ↔ IsIdempotentElem T := by simp only [sub_eq_zero, IsIdempotentElem, eq_comm]
+  exact this.mpr hT
 
 中文:
 定理 IsIdempotentElem.isSelfAdjoint_iff_isStarNormal
@@ -1528,7 +1571,14 @@ theorem IsIdempotentElem.isSelfAdjoint_iff_isStarNormal
   rw [← sub_eq_zero]; rw [ContinuousLinearMap.ext_iff]
   simp_rw [zero_apply, ← norm_eq_zero (E := E)]
   have :=
-    calc (forall x : E, ‖(T - star T * T) x‖ = 0) ↔ for
+    calc (forall x : E, ‖(T - star T * T) x‖ = 0) ↔ forall x, ‖(adjoint (1 - T)) (T x)‖ = 0 := by
+          simp [star_eq_adjoint, one_def]
+      _ ↔ forall x, ‖(1 - T) (T x)‖ = 0 := by
+          simp only [isStarNormal_iff_norm_eq_adjoint.mp h.one_sub]
+      _ ↔ forall x, ‖(T - T * T) x‖ = 0 := by simp
+      _ ↔ T - T * T = 0 := by simp only [norm_eq_zero, ContinuousLinearMap.ext_iff, zero_apply]
+      _ ↔ IsIdempotentElem T := by simp only [sub_eq_zero, IsIdempotentElem, eq_comm]
+  exact this.mpr hT
 -/
 theorem IsIdempotentElem.isSelfAdjoint_iff_isStarNormal (hT : IsIdempotentElem T) :
     IsSelfAdjoint T ↔ IsStarNormal T := by
@@ -1578,7 +1628,7 @@ theorem isStarProjection_iff_isSymmetricProjection
     isSelfAdjoint_iff_isSymmetric, IsIdempotentElem, End.mul_eq_comp, ← toLinearMap_comp, mul_def]
 
 alias ⟨IsStarProjection.isSymmetricProjection, LinearMap.IsSymmetricProjection.isStarProjection⟩ :=
-  isStarProjection_iff_isSymme
+  isStarProjection_iff_isSymmetricProjection
 
 中文:
 定理 isStarProjection_iff_isSymmetricProjection
@@ -1587,7 +1637,7 @@ alias ⟨IsStarProjection.isSymmetricProjection, LinearMap.IsSymmetricProjection
     isSelfAdjoint_iff_isSymmetric, IsIdempotentElem, End.mul_eq_comp, ← toLinearMap_comp, mul_def]
 
 alias ⟨IsStarProjection.isSymmetricProjection, LinearMap.IsSymmetricProjection.isStarProjection⟩ :=
-  isStarProjection_iff_isSymme
+  isStarProjection_iff_isSymmetricProjection
 
 Depends on / 依赖: End.mul_eq_comp, IsIdempotentElem, LinearMap, LinearMap.isSymmetricProjection_iff, isSelfAdjoint_iff_isSymmetric, isStarProjection_iff, isSymmetricProjection_iff, mul_def, mul_eq_comp, toLinearMap_comp
 -/
@@ -1844,7 +1894,13 @@ definition adjoint
       haveI := FiniteDimensional.complete 𝕜
       haveI := FiniteDimensional.complete 𝕜
     ```
-    But removing one of the `have`s makes it f
+    But removing one of the `have`s makes it fail. The reason is that `E` and `F` don't live
+    in the same universe, so the first `have` can no longer be used for `F` after its universe
+    metavariable has been assigned to that of `E`!
+  -/
+  ((LinearMap.toContinuousLinearMap : (E ->ₗ[𝕜] F) ≃ₗ[𝕜] E ->L[𝕜] F).trans
+      ContinuousLinearMap.adjoint.toLinearEquiv).trans
+    LinearMap.toContinuousLinearMap.symm
 
 中文:
 定义 adjoint
@@ -1856,7 +1912,13 @@ definition adjoint
       haveI := FiniteDimensional.complete 𝕜
       haveI := FiniteDimensional.complete 𝕜
     ```
-    But removing one of the `have`s makes it f
+    But removing one of the `have`s makes it fail. The reason is that `E` and `F` don't live
+    in the same universe, so the first `have` can no longer be used for `F` after its universe
+    metavariable has been assigned to that of `E`!
+  -/
+  ((LinearMap.toContinuousLinearMap : (E ->ₗ[𝕜] F) ≃ₗ[𝕜] E ->L[𝕜] F).trans
+      ContinuousLinearMap.adjoint.toLinearEquiv).trans
+    LinearMap.toContinuousLinearMap.symm
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.complete, complete
 -/
@@ -3390,7 +3452,25 @@ theorem conjStarAlgEquiv_ext_iff
   simp_rw [StarAlgEquiv.ext_iff, LinearIsometryEquiv.ext_iff, conjStarAlgEquiv_apply,
     ← eq_toContinuousLinearMap_symm_comp, ← comp_assoc, toContinuousLinearEquiv_symm,
     eq_comp_toContinuousLinearMap_symm,
-    comp_assoc, ← comp_assoc _ (f : H ->L[𝕜] K), comp_coe,
+    comp_assoc, ← comp_assoc _ (f : H ->L[𝕜] K), comp_coe, ← ContinuousLinearMap.mul_def,
+    ← Subalgebra.mem_center_iff (R := 𝕜), Algebra.IsCentral.center_eq_bot, ← comp_coe,
+    Algebra.mem_bot, Set.mem_range, Algebra.algebraMap_eq_smul_one]
+  refine ⟨fun ⟨y, h⟩ => ?_, fun ⟨y, h⟩ => ⟨(y : 𝕜), by ext; simp [h]⟩⟩
+  by_cases! hy : y = 0
+  · exact ⟨1, fun x => by simp [by simpa [hy] using congr($h x).symm]⟩
+  have hfg : (f : H ->L[𝕜] K) = y • g := by ext; simpa using congr(g ($h _)).symm
+  have hgf : (g : H ->L[𝕜] K) = star y • f := by
+    ext x
+    have := by simpa [map_smulₛₗ, ← ContinuousLinearEquiv.comp_coe, ← toContinuousLinearEquiv_symm,
+      ← adjoint_eq_symm, ContinuousLinearMap.one_def] using congr(f (adjoint $h x)).symm
+    simpa
+  have : (g : H ->L[𝕜] K) = (starRingEnd 𝕜 y * y) • g := by
+    simp [← smul_smul, ← hfg, ← star_def, ← hgf]
+  nth_rw 1 [← one_smul 𝕜 (g : H ->L[𝕜] K)] at this
+  rw [← sub_eq_zero]; rw [← sub_smul]; rw [smul_eq_zero]; rw [sub_eq_zero]; rw [eq_comm] at this
+  obtain (this | this) := this
+  · exact ⟨⟨y, by simp [Unitary.mem_iff, this, mul_comm y]⟩, fun x => congr($hfg x)⟩
+  · exact ⟨1, fun x => by simp [by simpa using congr($this x)]⟩
 
 中文:
 定理 conjStarAlgEquiv_ext_iff
@@ -3400,7 +3480,25 @@ theorem conjStarAlgEquiv_ext_iff
   simp_rw [StarAlgEquiv.ext_iff, LinearIsometryEquiv.ext_iff, conjStarAlgEquiv_apply,
     ← eq_toContinuousLinearMap_symm_comp, ← comp_assoc, toContinuousLinearEquiv_symm,
     eq_comp_toContinuousLinearMap_symm,
-    comp_assoc, ← comp_assoc _ (f : H ->L[𝕜] K), comp_coe,
+    comp_assoc, ← comp_assoc _ (f : H ->L[𝕜] K), comp_coe, ← ContinuousLinearMap.mul_def,
+    ← Subalgebra.mem_center_iff (R := 𝕜), Algebra.IsCentral.center_eq_bot, ← comp_coe,
+    Algebra.mem_bot, Set.mem_range, Algebra.algebraMap_eq_smul_one]
+  refine ⟨fun ⟨y, h⟩ => ?_, fun ⟨y, h⟩ => ⟨(y : 𝕜), by ext; simp [h]⟩⟩
+  by_cases! hy : y = 0
+  · exact ⟨1, fun x => by simp [by simpa [hy] using congr($h x).symm]⟩
+  have hfg : (f : H ->L[𝕜] K) = y • g := by ext; simpa using congr(g ($h _)).symm
+  have hgf : (g : H ->L[𝕜] K) = star y • f := by
+    ext x
+    have := by simpa [map_smulₛₗ, ← ContinuousLinearEquiv.comp_coe, ← toContinuousLinearEquiv_symm,
+      ← adjoint_eq_symm, ContinuousLinearMap.one_def] using congr(f (adjoint $h x)).symm
+    simpa
+  have : (g : H ->L[𝕜] K) = (starRingEnd 𝕜 y * y) • g := by
+    simp [← smul_smul, ← hfg, ← star_def, ← hgf]
+  nth_rw 1 [← one_smul 𝕜 (g : H ->L[𝕜] K)] at this
+  rw [← sub_eq_zero]; rw [← sub_smul]; rw [smul_eq_zero]; rw [sub_eq_zero]; rw [eq_comm] at this
+  obtain (this | this) := this
+  · exact ⟨⟨y, by simp [Unitary.mem_iff, this, mul_comm y]⟩, fun x => congr($hfg x)⟩
+  · exact ⟨1, fun x => by simp [by simpa using congr($this x)]⟩
 
 Depends on / 依赖: Algebra, Algebra.IsCentral.center_eq_bot, Algebra.algebraMap_eq_smul_one, Algebra.mem_bot, ContinuousLinearMap, ContinuousLinearMap.mul_def, IsCentral, LinearIsometryEquiv, LinearIsometryEquiv.ext_iff, Set.mem_range, StarAlgEquiv, StarAlgEquiv.ext_iff, Subalgebra, Subalgebra.mem_center_iff, algebraMap_eq_smul_one, center_eq_bot, comp_assoc, comp_coe, conjStarAlgEquiv_apply, conv_lhs
 -/
@@ -3489,7 +3587,15 @@ definition linearIsometryEquiv
     { val := e
       property := by
         let e' : (H ->L[𝕜] H)ˣ :=
-          { val
+          { val := (e : H ->L[𝕜] H)
+            inv := (e.symm : H ->L[𝕜] H)
+            val_inv := by ext; simp
+            inv_val := by ext; simp }
+exact IsUnit.mem_unitary_of_star_mul_self ⟨e', rfl⟩
+          (e : H ->L[𝕜] H).norm_map_iff_adjoint_comp_self.mp e.norm_map }
+  map_mul' u v := by ext; rfl
+
+@[simp]
 
 中文:
 定义 linearIsometryEquiv
@@ -3503,7 +3609,15 @@ definition linearIsometryEquiv
     { val := e
       property := by
         let e' : (H ->L[𝕜] H)ˣ :=
-          { val
+          { val := (e : H ->L[𝕜] H)
+            inv := (e.symm : H ->L[𝕜] H)
+            val_inv := by ext; simp
+            inv_val := by ext; simp }
+exact IsUnit.mem_unitary_of_star_mul_self ⟨e', rfl⟩
+          (e : H ->L[𝕜] H).norm_map_iff_adjoint_comp_self.mp e.norm_map }
+  map_mul' u v := by ext; rfl
+
+@[simp]
 
 Depends on / 依赖: IsUnit, IsUnit.mem_unitary_of_star_mul_self, e.norm_map, e.symm, invFun, inv_val, left_inv, map_mul, mem_unitary_of_star_mul_self, mul_star_self, norm_map, norm_map_iff_adjoint_comp_self, norm_map_iff_adjoint_comp_self.mp, property, right_inv, star_mul_self, val_inv
 -/

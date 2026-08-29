@@ -231,7 +231,7 @@ definition rcomap
   univ_sets := ⟨Set.univ, univ_mem, Set.subset_univ _⟩
   sets_of_superset := fun ⟨a', ha', ma'a⟩ ab => ⟨a', ha', ma'a.trans ab⟩
   inter_sets := fun ⟨a', ha₁, ha₂⟩ ⟨b', hb₁, hb₂⟩ =>
-    ⟨a' inter b', inter_mem ha₁ hb₁, (r.core_inter a' b').su
+    ⟨a' inter b', inter_mem ha₁ hb₁, (r.core_inter a' b').subset.trans (Set.inter_subset_inter ha₂ hb₂)⟩
 
 中文:
 定义 rcomap
@@ -240,7 +240,7 @@ definition rcomap
   univ_sets := ⟨Set.univ, univ_mem, Set.subset_univ _⟩
   sets_of_superset := fun ⟨a', ha', ma'a⟩ ab => ⟨a', ha', ma'a.trans ab⟩
   inter_sets := fun ⟨a', ha₁, ha₂⟩ ⟨b', hb₁, hb₂⟩ =>
-    ⟨a' inter b', inter_mem ha₁ hb₁, (r.core_inter a' b').su
+    ⟨a' inter b', inter_mem ha₁ hb₁, (r.core_inter a' b').subset.trans (Set.inter_subset_inter ha₂ hb₂)⟩
 
 Depends on / 依赖: SetRel, SetRel.image, f.sets, r.core, subseteq
 -/
@@ -281,7 +281,9 @@ theorem rcomap_rcomap
     · rintro ⟨u, ⟨v, vsets, hv⟩, h⟩
       exact ⟨v, vsets, Set.Subset.trans (SetRel.core_mono hv) h⟩
     rintro ⟨t, tsets, ht⟩
-    exact ⟨SetRel.core s t, ⟨t, tsets,
+    exact ⟨SetRel.core s t, ⟨t, tsets, Set.Subset.rfl⟩, ht⟩
+
+@[simp]
 
 中文:
 定理 rcomap_rcomap
@@ -293,7 +295,9 @@ theorem rcomap_rcomap
     · rintro ⟨u, ⟨v, vsets, hv⟩, h⟩
       exact ⟨v, vsets, Set.Subset.trans (SetRel.core_mono hv) h⟩
     rintro ⟨t, tsets, ht⟩
-    exact ⟨SetRel.core s t, ⟨t, tsets,
+    exact ⟨SetRel.core s t, ⟨t, tsets, Set.Subset.rfl⟩, ht⟩
+
+@[simp]
 
 Depends on / 依赖: Filter, Filter.mem_sets, Set.Subset.rfl, Set.Subset.trans, Set.mem_ofPred_eq, SetRel, SetRel.core, SetRel.core_comp, SetRel.core_mono, SetRel.image, Subset, core_comp, core_mono, filter_eq, mem_ofPred_eq, mem_sets, rcomap_sets
 -/
@@ -381,7 +385,9 @@ definition rcomap'
   univ_sets := ⟨Set.univ, univ_mem, Set.subset_univ _⟩
   sets_of_superset := fun ⟨a', ha', ma'a⟩ ab => ⟨a', ha', ma'a.trans ab⟩
   inter_sets := fun ⟨a', ha₁, ha₂⟩ ⟨b', hb₁, hb₂⟩ =>
-    ⟨a' inter b', inter_mem ha₁ hb₁, r.preimage_inter_su
+    ⟨a' inter b', inter_mem ha₁ hb₁, r.preimage_inter_subset.trans (Set.inter_subset_inter ha₂ hb₂)⟩
+
+@[simp]
 
 中文:
 定义 rcomap'
@@ -390,7 +396,9 @@ definition rcomap'
   univ_sets := ⟨Set.univ, univ_mem, Set.subset_univ _⟩
   sets_of_superset := fun ⟨a', ha', ma'a⟩ ab => ⟨a', ha', ma'a.trans ab⟩
   inter_sets := fun ⟨a', ha₁, ha₂⟩ ⟨b', hb₁, hb₂⟩ =>
-    ⟨a' inter b', inter_mem ha₁ hb₁, r.preimage_inter_su
+    ⟨a' inter b', inter_mem ha₁ hb₁, r.preimage_inter_subset.trans (Set.inter_subset_inter ha₂ hb₂)⟩
+
+@[simp]
 
 Depends on / 依赖: SetRel, SetRel.image, f.sets, preimage, r.preimage, subseteq
 -/

@@ -43,7 +43,36 @@ instance cartesianMonoidalCategory
     evaluationJointlyReflectsLimits _ (fun j =>
       (IsLimit.postcomposeHomEquiv
         (mapPairIso (by exact Iso.refl _) (by exact Iso.refl _)) _).1
-  
+        (IsLimit.ofIsoLimit
+          (tensorProductIsBinaryProduct (X := X.obj j) (Y := Y.obj j))
+          (Cone.ext (Iso.refl _) (by rintro ⟨_ | _⟩; all_goals cat_disch))))
+  isTerminalTensorUnit :=
+    evaluationJointlyReflectsLimits _
+      fun _ => isLimitChangeEmptyCone _ isTerminalTensorUnit _ (.refl _)
+  fst_def X Y := by
+    ext
+    simp only [Monoidal.tensorObj_obj, fst_def, asEmptyCone_pt, NatTrans.comp_app,
+      Monoidal.tensorUnit_obj, Monoidal.whiskerLeft_app, Monoidal.rightUnitor_hom_app,
+      Iso.cancel_iso_hom_right]
+    congr
+    subsingleton
+  snd_def X Y := by
+    ext
+    simp only [Monoidal.tensorObj_obj, snd_def, asEmptyCone_pt, NatTrans.comp_app,
+      Monoidal.tensorUnit_obj, Monoidal.whiskerRight_app, Monoidal.leftUnitor_hom_app,
+      Iso.cancel_iso_hom_right]
+    congr
+    subsingleton
+
+@[deprecated (since := "2026-03-07")] alias chosenTerminal := MonoidalCategory.tensorUnit
+@[deprecated (since := "2026-03-07")] alias chosenTerminalIsTerminal :=
+  CartesianMonoidalCategory.isTerminalTensorUnit
+
+@[deprecated (since := "2026-03-07")] alias chosenProd := MonoidalCategory.tensorObj
+@[deprecated (since := "2026-03-07")] alias chosenProd.fst := CartesianMonoidalCategory.fst
+@[deprecated (since := "2026-03-07")] alias chosenProd.snd := CartesianMonoidalCategory.snd
+@[deprecated (since := "2026-03-07")] alias chosenProd.isLimit :=
+  CartesianMonoidalCategory.tensorProductIsBinaryProduct
 
 中文:
 实例 cartesianMonoidalCategory
@@ -54,7 +83,36 @@ instance cartesianMonoidalCategory
     evaluationJointlyReflectsLimits _ (fun j =>
       (IsLimit.postcomposeHomEquiv
         (mapPairIso (by exact Iso.refl _) (by exact Iso.refl _)) _).1
-  
+        (IsLimit.ofIsoLimit
+          (tensorProductIsBinaryProduct (X := X.obj j) (Y := Y.obj j))
+          (Cone.ext (Iso.refl _) (by rintro ⟨_ | _⟩; all_goals cat_disch))))
+  isTerminalTensorUnit :=
+    evaluationJointlyReflectsLimits _
+      fun _ => isLimitChangeEmptyCone _ isTerminalTensorUnit _ (.refl _)
+  fst_def X Y := by
+    ext
+    simp only [Monoidal.tensorObj_obj, fst_def, asEmptyCone_pt, NatTrans.comp_app,
+      Monoidal.tensorUnit_obj, Monoidal.whiskerLeft_app, Monoidal.rightUnitor_hom_app,
+      Iso.cancel_iso_hom_right]
+    congr
+    subsingleton
+  snd_def X Y := by
+    ext
+    simp only [Monoidal.tensorObj_obj, snd_def, asEmptyCone_pt, NatTrans.comp_app,
+      Monoidal.tensorUnit_obj, Monoidal.whiskerRight_app, Monoidal.leftUnitor_hom_app,
+      Iso.cancel_iso_hom_right]
+    congr
+    subsingleton
+
+@[deprecated (since := "2026-03-07")] alias chosenTerminal := MonoidalCategory.tensorUnit
+@[deprecated (since := "2026-03-07")] alias chosenTerminalIsTerminal :=
+  CartesianMonoidalCategory.isTerminalTensorUnit
+
+@[deprecated (since := "2026-03-07")] alias chosenProd := MonoidalCategory.tensorObj
+@[deprecated (since := "2026-03-07")] alias chosenProd.fst := CartesianMonoidalCategory.fst
+@[deprecated (since := "2026-03-07")] alias chosenProd.snd := CartesianMonoidalCategory.snd
+@[deprecated (since := "2026-03-07")] alias chosenProd.isLimit :=
+  CartesianMonoidalCategory.tensorProductIsBinaryProduct
 
 Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.fst
 -/
@@ -480,7 +538,8 @@ definition RepresentableBy.tensorObj
     refine Prod.ext ?_ ?_
     · change h₁.homEquiv ((f ≫ g) ≫ fst X Y) = F.map f.op (h₁.homEquiv (g ≫ fst X Y))
       simp [h₁.homEquiv_comp]
-    · change h₂.homEquiv ((f ≫ g) ≫ snd X Y) = G.map f.op (h₂.homEqui
+    · change h₂.homEquiv ((f ≫ g) ≫ snd X Y) = G.map f.op (h₂.homEquiv (g ≫ snd X Y))
+      simp [h₂.homEquiv_comp]
 
 中文:
 定义 可表示.tensorObj
@@ -490,7 +549,8 @@ definition RepresentableBy.tensorObj
     refine Prod.ext ?_ ?_
     · change h₁.homEquiv ((f ≫ g) ≫ fst X Y) = F.map f.op (h₁.homEquiv (g ≫ fst X Y))
       simp [h₁.homEquiv_comp]
-    · change h₂.homEquiv ((f ≫ g) ≫ snd X Y) = G.map f.op (h₂.homEqui
+    · change h₂.homEquiv ((f ≫ g) ≫ snd X Y) = G.map f.op (h₂.homEquiv (g ≫ snd X Y))
+      simp [h₂.homEquiv_comp]
 -/
 protected def RepresentableBy.tensorObj {F : Cᵒᵖ ⥤ Type v} {G : Cᵒᵖ ⥤ Type v} {X Y : C}
     (h₁ : F.RepresentableBy X) (h₂ : G.RepresentableBy Y) : (F otimes G).RepresentableBy (X otimes Y) where

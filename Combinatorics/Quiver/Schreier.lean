@@ -325,7 +325,16 @@ lemma map_smul_of_comp_labelling_eq
   -- φ.map e is an edge from φ.obj v, and its label is preserved
   have h := (φ.map e).property
   -- This says: `ι (φ.map e).val • φ.obj v = φ.obj (ι s • v)`
-  -- We need to show `(φ
+  -- We need to show `(φ.map e).val = s`
+  have label_eq : (φ.map e).val = s := by
+    -- `φm` says `φ ⋙q labelling = labelling`
+    -- So `(φ ⋙q labelling).map e = labelling.map e`
+    have : (φ ⋙q labelling W ι).map e = (labelling V ι).map e := by
+      rw [φm]
+    simp only [Prefunctor.comp_map, labelling_map] at this
+    exact this
+  rw [label_eq] at h
+  exact h.symm
 
 中文:
 引理 map_smul_of_comp_labelling_eq
@@ -336,7 +345,16 @@ lemma map_smul_of_comp_labelling_eq
   -- φ.map e is an edge from φ.obj v, and its label is preserved
   have h := (φ.map e).property
   -- This says: `ι (φ.map e).val • φ.obj v = φ.obj (ι s • v)`
-  -- We need to show `(φ
+  -- We need to show `(φ.map e).val = s`
+  have label_eq : (φ.map e).val = s := by
+    -- `φm` says `φ ⋙q labelling = labelling`
+    -- So `(φ ⋙q labelling).map e = labelling.map e`
+    have : (φ ⋙q labelling W ι).map e = (labelling V ι).map e := by
+      rw [φm]
+    simp only [Prefunctor.comp_map, labelling_map] at this
+    exact this
+  rw [label_eq] at h
+  exact h.symm
 -/
 lemma map_smul_of_comp_labelling_eq {W : Type*} [MulAction M W]
     (φ : SchreierGraph V ι ⥤q SchreierGraph W ι) (φm : φ ⋙q labelling W ι = labelling V ι)

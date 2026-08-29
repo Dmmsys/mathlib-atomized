@@ -296,7 +296,18 @@ lemma hf_zero
   obtain ⟨C, hC⟩ := this
   use ‖P.ε‖ * C
   filter_upwards [hC] with x hC' (hx : 0 < x)
-  have h_nv2 : ↑(x ^ P.k) != (0 : Complex) := ofReal_ne_zero.mpr (rpow_
+  have h_nv2 : ↑(x ^ P.k) != (0 : Complex) := ofReal_ne_zero.mpr (rpow_pos_of_pos hx _).ne'
+  have h_nv : P.ε⁻¹ * ↑(x ^ P.k) != 0 := mul_ne_zero P.symm.hε h_nv2
+  specialize hC' hx
+  simp_rw [Function.comp_apply, ← one_div, P.h_feq' _ hx] at hC'
+  rw [← ((mul_inv_cancel₀ h_nv).symm ▸ one_smul Complex P.g₀ :)]; rw [mul_smul _ _ P.g₀]; rw [← smul_sub]; rw [norm_smul]; rw [← le_div_iff₀' (lt_of_le_of_ne (norm_nonneg _) (norm_ne_zero_iff.mpr h_nv).symm)] at hC'
+  convert! hC' using 1
+  · congr 3
+    rw [rpow_neg hx.le]
+    simp [field]
+  · simp_rw [norm_mul, norm_real, one_div, inv_rpow hx.le, rpow_neg hx.le, inv_inv, norm_inv,
+      norm_of_nonneg (rpow_pos_of_pos hx _).le, rpow_add hx]
+    field
 
 中文:
 引理 hf_zero
@@ -307,7 +318,18 @@ lemma hf_zero
   obtain ⟨C, hC⟩ := this
   use ‖P.ε‖ * C
   filter_upwards [hC] with x hC' (hx : 0 < x)
-  have h_nv2 : ↑(x ^ P.k) != (0 : Complex) := ofReal_ne_zero.mpr (rpow_
+  have h_nv2 : ↑(x ^ P.k) != (0 : Complex) := ofReal_ne_zero.mpr (rpow_pos_of_pos hx _).ne'
+  have h_nv : P.ε⁻¹ * ↑(x ^ P.k) != 0 := mul_ne_zero P.symm.hε h_nv2
+  specialize hC' hx
+  simp_rw [Function.comp_apply, ← one_div, P.h_feq' _ hx] at hC'
+  rw [← ((mul_inv_cancel₀ h_nv).symm ▸ one_smul Complex P.g₀ :)]; rw [mul_smul _ _ P.g₀]; rw [← smul_sub]; rw [norm_smul]; rw [← le_div_iff₀' (lt_of_le_of_ne (norm_nonneg _) (norm_ne_zero_iff.mpr h_nv).symm)] at hC'
+  convert! hC' using 1
+  · congr 3
+    rw [rpow_neg hx.le]
+    simp [field]
+  · simp_rw [norm_mul, norm_real, one_div, inv_rpow hx.le, rpow_neg hx.le, inv_inv, norm_inv,
+      norm_of_nonneg (rpow_pos_of_pos hx _).le, rpow_add hx]
+    field
 
 Depends on / 依赖: Function, Function.comp_apply, IsBigO, IsBigOWith, P.h_feq, P.hg_top, P.symm.h, comp_apply, comp_tendsto, eventually_nhdsWithin_iff, filter_upwards, h_feq, h_nv, h_nv2, hg_top, mul_ne_zero, ofReal_ne_zero, ofReal_ne_zero.mpr, one_div, one_sm
 -/
@@ -343,7 +365,11 @@ lemma hf_zero'
   · rw [← isBigO_norm_norm]
     simp_rw [mul_smul, norm_smul, mul_comm _ ‖P.g₀‖, ← mul_assoc, norm_real]
     apply (isBigO_refl _ _).const_mul_left
-  · refine IsBigO
+  · refine IsBigO.of_bound ‖P.f₀‖ (eventually_nhdsWithin_iff.mpr ?_)
+    filter_upwards [eventually_le_nhds zero_lt_one] with x hx' (hx : 0 < x)
+    apply le_mul_of_one_le_right (norm_nonneg _)
+    rw [norm_of_nonneg (rpow_pos_of_pos hx _).le]; rw [rpow_neg hx.le]
+    exact (one_le_inv₀ (rpow_pos_of_pos hx _)).2 (rpow_le_one hx.le hx' P.hk.le)
 
 中文:
 引理 hf_zero'
@@ -354,7 +380,11 @@ lemma hf_zero'
   · rw [← isBigO_norm_norm]
     simp_rw [mul_smul, norm_smul, mul_comm _ ‖P.g₀‖, ← mul_assoc, norm_real]
     apply (isBigO_refl _ _).const_mul_left
-  · refine IsBigO
+  · refine IsBigO.of_bound ‖P.f₀‖ (eventually_nhdsWithin_iff.mpr ?_)
+    filter_upwards [eventually_le_nhds zero_lt_one] with x hx' (hx : 0 < x)
+    apply le_mul_of_one_le_right (norm_nonneg _)
+    rw [norm_of_nonneg (rpow_pos_of_pos hx _).le]; rw [rpow_neg hx.le]
+    exact (one_le_inv₀ (rpow_pos_of_pos hx _)).2 (rpow_le_one hx.le hx' P.hk.le)
 
 Depends on / 依赖: IsBigO, IsBigO.of_bound, IsBigO.sub, P.hf_zero, const_mul_left, eventually_le_nhds, eventually_nhdsWithin_iff, eventually_nhdsWithin_iff.mpr, filter_upwards, hf_zero, isBigO_norm_norm, isBigO_refl, le_mul_of_one_le_right, mul_assoc, mul_comm, mul_smul, norm_nonneg, norm_of_nonneg, norm_real, norm_smul
 -/
@@ -382,7 +412,19 @@ theorem functional_equation_aux
   simp_rw [abs_neg, abs_one, inv_one, one_smul, ofReal_neg, ofReal_one, div_neg, div_one, neg_neg,
     rpow_neg_one, ← one_div] at step1
   -- introduce a power of `t` to match the hypothesis `P.h_feq`
-  hav
+  have step2 := mellin_cpow_smul (fun t => P.g (1 / t)) (P.k - s) (-P.k)
+  rw [← sub_eq_add_neg]; rw [sub_right_comm]; rw [sub_self]; rw [zero_sub]; rw [step1] at step2
+  -- put in the constant `P.ε`
+  have step3 := mellin_const_smul (fun t => (t : Complex) ^ (-P.k : Complex) • P.g (1 / t)) (P.k - s) P.ε
+  rw [step2] at step3
+  rw [← step3]
+  -- now the integrand matches `P.h_feq'` on `Ioi 0`, so we can apply `setIntegral_congr_fun`
+  refine setIntegral_congr_fun measurableSet_Ioi (fun t ht => ?_)
+  simp_rw [P.h_feq' t ht, ← mul_smul]
+  -- some simple `cpow` arithmetic to finish
+  rw [cpow_neg]; rw [ofReal_cpow (le_of_lt ht)]
+  have : (t : Complex) ^ (P.k : Complex) != 0 := by simpa [← ofReal_cpow ht.le] using (rpow_pos_of_pos ht _).ne'
+  field_simp [P.hε]
 
 中文:
 定理 functional_equation_aux
@@ -393,7 +435,19 @@ theorem functional_equation_aux
   simp_rw [abs_neg, abs_one, inv_one, one_smul, ofReal_neg, ofReal_one, div_neg, div_one, neg_neg,
     rpow_neg_one, ← one_div] at step1
   -- introduce a power of `t` to match the hypothesis `P.h_feq`
-  hav
+  have step2 := mellin_cpow_smul (fun t => P.g (1 / t)) (P.k - s) (-P.k)
+  rw [← sub_eq_add_neg]; rw [sub_right_comm]; rw [sub_self]; rw [zero_sub]; rw [step1] at step2
+  -- put in the constant `P.ε`
+  have step3 := mellin_const_smul (fun t => (t : Complex) ^ (-P.k : Complex) • P.g (1 / t)) (P.k - s) P.ε
+  rw [step2] at step3
+  rw [← step3]
+  -- now the integrand matches `P.h_feq'` on `Ioi 0`, so we can apply `setIntegral_congr_fun`
+  refine setIntegral_congr_fun measurableSet_Ioi (fun t ht => ?_)
+  simp_rw [P.h_feq' t ht, ← mul_smul]
+  -- some simple `cpow` arithmetic to finish
+  rw [cpow_neg]; rw [ofReal_cpow (le_of_lt ht)]
+  have : (t : Complex) ^ (P.k : Complex) != 0 := by simpa [← ofReal_cpow ht.le] using (rpow_pos_of_pos ht _).ne'
+  field_simp [P.hε]
 -/
 private theorem functional_equation_aux (s : Complex) :
     mellin P.f (P.k - s) = P.ε • mellin P.g s := by
@@ -578,7 +632,11 @@ lemma hf_modif_int
     refine continuousOn_of_forall_continuousAt (fun x (hx : 0 < x) => ?_)
     have : x != 0 ∨ 0 <= -P.k := Or.inl hx.ne'
     fun_prop
-  refine
+  refine LocallyIntegrableOn.add (fun x hx => ?_) (fun x hx => ?_)
+  · obtain ⟨s, hs, hs'⟩ := P.hf_int.sub (locallyIntegrableOn_const _) x hx
+    exact ⟨s, hs, hs'.indicator measurableSet_Ioi⟩
+  · obtain ⟨s, hs, hs'⟩ := P.hf_int.sub this x hx
+    exact ⟨s, hs, hs'.indicator measurableSet_Ioo⟩
 
 中文:
 引理 hf_modif_int
@@ -588,7 +646,11 @@ lemma hf_modif_int
     refine continuousOn_of_forall_continuousAt (fun x (hx : 0 < x) => ?_)
     have : x != 0 ∨ 0 <= -P.k := Or.inl hx.ne'
     fun_prop
-  refine
+  refine LocallyIntegrableOn.add (fun x hx => ?_) (fun x hx => ?_)
+  · obtain ⟨s, hs, hs'⟩ := P.hf_int.sub (locallyIntegrableOn_const _) x hx
+    exact ⟨s, hs, hs'.indicator measurableSet_Ioi⟩
+  · obtain ⟨s, hs, hs'⟩ := P.hf_int.sub this x hx
+    exact ⟨s, hs, hs'.indicator measurableSet_Ioo⟩
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.locallyIntegrableOn, LocallyIntegrableOn, LocallyIntegrableOn.add, Or.inl, P.hf_int.sub, continuousOn_of_forall_continuousAt, fun_prop, hf_int, hx.ne, indicator, locallyIntegrableOn, locallyIntegrableOn_const, measurableSet_Ioi
 -/
@@ -614,7 +676,14 @@ lemma hf_modif_FE
   proof: by
   rcases lt_trichotomy 1 x with hx' | rfl | hx'
   · have : 1 / x < 1 := by rwa [one_div_lt hx one_pos, div_one]
-    rw [f_modif]; rw [Pi.add_apply]; rw [indicator_of_notMem (notMem_Ioi.mpr this.le)]; rw [zero_add]; rw [indicator_of_mem (mem_Ioo.mpr ⟨div_pos one_pos hx]; rw [this⟩)]; rw [g_modif];
+    rw [f_modif]; rw [Pi.add_apply]; rw [indicator_of_notMem (notMem_Ioi.mpr this.le)]; rw [zero_add]; rw [indicator_of_mem (mem_Ioo.mpr ⟨div_pos one_pos hx]; rw [this⟩)]; rw [g_modif]; rw [Pi.add_apply]; rw [indicator_of_mem (mem_Ioi.mpr hx')]; rw [indicator_of_notMem
+      (notMem_Ioo_of_ge hx'.le)]; rw [add_zero]; rw [P.h_feq _ hx]; rw [smul_sub]
+    simp_rw [rpow_neg (one_div_pos.mpr hx).le, one_div, inv_rpow hx.le, inv_inv]
+  · simp [f_modif, g_modif]
+  · have : 1 < 1 / x := by rwa [lt_one_div one_pos hx, div_one]
+    rw [f_modif]; rw [Pi.add_apply]; rw [indicator_of_mem (mem_Ioi.mpr this)]; rw [indicator_of_notMem (notMem_Ioo_of_ge this.le)]; rw [g_modif]; rw [Pi.add_apply]; rw [indicator_of_notMem (notMem_Ioi.mpr hx'.le)]; rw [indicator_of_mem (mem_Ioo.mpr ⟨hx]; rw [hx'⟩)]; rw [P.h_feq _ hx]
+    simp_rw [rpow_neg hx.le]
+    match_scalars <;> field [(rpow_pos_of_pos hx P.k).ne', P.hε]
 
 中文:
 引理 hf_modif_FE
@@ -622,7 +691,14 @@ lemma hf_modif_FE
   证明: by
   rcases lt_trichotomy 1 x with hx' | rfl | hx'
   · have : 1 / x < 1 := by rwa [one_div_lt hx one_pos, div_one]
-    rw [f_modif]; rw [Pi.add_apply]; rw [indicator_of_notMem (notMem_Ioi.mpr this.le)]; rw [zero_add]; rw [indicator_of_mem (mem_Ioo.mpr ⟨div_pos one_pos hx]; rw [this⟩)]; rw [g_modif];
+    rw [f_modif]; rw [Pi.add_apply]; rw [indicator_of_notMem (notMem_Ioi.mpr this.le)]; rw [zero_add]; rw [indicator_of_mem (mem_Ioo.mpr ⟨div_pos one_pos hx]; rw [this⟩)]; rw [g_modif]; rw [Pi.add_apply]; rw [indicator_of_mem (mem_Ioi.mpr hx')]; rw [indicator_of_notMem
+      (notMem_Ioo_of_ge hx'.le)]; rw [add_zero]; rw [P.h_feq _ hx]; rw [smul_sub]
+    simp_rw [rpow_neg (one_div_pos.mpr hx).le, one_div, inv_rpow hx.le, inv_inv]
+  · simp [f_modif, g_modif]
+  · have : 1 < 1 / x := by rwa [lt_one_div one_pos hx, div_one]
+    rw [f_modif]; rw [Pi.add_apply]; rw [indicator_of_mem (mem_Ioi.mpr this)]; rw [indicator_of_notMem (notMem_Ioo_of_ge this.le)]; rw [g_modif]; rw [Pi.add_apply]; rw [indicator_of_notMem (notMem_Ioi.mpr hx'.le)]; rw [indicator_of_mem (mem_Ioo.mpr ⟨hx]; rw [hx'⟩)]; rw [P.h_feq _ hx]
+    simp_rw [rpow_neg hx.le]
+    match_scalars <;> field [(rpow_pos_of_pos hx P.k).ne', P.hε]
 
 Depends on / 依赖: P.h_feq, Pi.add_apply, add_apply, add_zero, div_one, div_pos, f_modif, g_modif, h_feq, indicator_of_mem, indicator_of_notMem, lt_trichotomy, mem_Ioi, mem_Ioi.mpr, mem_Ioo, mem_Ioo.mpr, notMem_Ioi, notMem_Ioi.mpr, notMem_Ioo_of_ge, one_
 -/
@@ -752,7 +828,10 @@ lemma f_modif_aux1
   · simp_rw [indicator_of_notMem (notMem_Ioi.mpr hx'.le), indicator_of_mem (mem_Ioo.mpr ⟨hx, hx'⟩),
       indicator_of_notMem (mem_singleton_iff.not.mpr hx'.ne)]
     abel
-  · simp [add_comm, s
+  · simp [add_comm, sub_eq_add_neg]
+  · simp_rw [indicator_of_mem (mem_Ioi.mpr hx'), indicator_of_notMem (notMem_Ioo_of_ge hx'.le),
+      indicator_of_notMem (mem_singleton_iff.not.mpr hx'.ne')]
+    abel
 
 中文:
 引理 f_modif_aux1
@@ -764,7 +843,10 @@ lemma f_modif_aux1
   · simp_rw [indicator_of_notMem (notMem_Ioi.mpr hx'.le), indicator_of_mem (mem_Ioo.mpr ⟨hx, hx'⟩),
       indicator_of_notMem (mem_singleton_iff.not.mpr hx'.ne)]
     abel
-  · simp [add_comm, s
+  · simp [add_comm, sub_eq_add_neg]
+  · simp_rw [indicator_of_mem (mem_Ioi.mpr hx'), indicator_of_notMem (notMem_Ioo_of_ge hx'.le),
+      indicator_of_notMem (mem_singleton_iff.not.mpr hx'.ne')]
+    abel
 
 Depends on / 依赖: Pi.add_apply, add_apply, add_comm, f_modif, indicator_of_mem, indicator_of_notMem, lt_trichotomy, mem_Ioi, mem_Ioi.mpr, mem_Ioo, mem_Ioo.mpr, mem_singleton_iff, mem_singleton_iff.not.mpr, notMem_Ioi, notMem_Ioi.mpr, notMem_Ioo_of_ge, simp_rw, sub_eq_add_neg
 -/
@@ -794,7 +876,34 @@ lemma f_modif_aux2
   calc
   _ = ∫ (x : Real) in Ioi 0, (x : Complex) ^ (s - 1) •
       ((Ioo 0 1).indicator (fun t : Real => P.f₀ - (P.ε * ↑(t ^ (-P.k))) • P.g₀) x
-      + ({1} : Set Real).indica
+      + ({1} : Set Real).indicator (fun _ => P.f₀ - P.f 1) x) :=
+    setIntegral_congr_fun measurableSet_Ioi (fun x hx => by simp [f_modif_aux1 P hx])
+  _ = ∫ (x : Real) in Ioi 0, (x : Complex) ^ (s - 1) • ((Ioo 0 1).indicator
+      (fun t : Real => P.f₀ - (P.ε * ↑(t ^ (-P.k))) • P.g₀) x) := by
+    refine setIntegral_congr_ae measurableSet_Ioi (eventually_of_mem (U := {1}ᶜ)
+        (compl_mem_ae_iff.mpr (subsingleton_singleton.measure_zero _)) (fun x hx _ => ?_))
+    rw [indicator_of_notMem hx]; rw [add_zero]
+  _ = ∫ (x : Real) in Ioc 0 1, (x : Complex) ^ (s - 1) • (P.f₀ - (P.ε * ↑(x ^ (-P.k))) • P.g₀) := by
+    simp_rw [← indicator_smul, setIntegral_indicator measurableSet_Ioo,
+      inter_eq_right.mpr Ioo_subset_Ioi_self, integral_Ioc_eq_integral_Ioo]
+  _ = ∫ x : Real in Ioc 0 1, ((x : Complex) ^ (s - 1) • P.f₀ - P.ε • (x : Complex) ^ (s - P.k - 1) • P.g₀) := by
+    refine setIntegral_congr_fun measurableSet_Ioc (fun x ⟨hx, _⟩ => ?_)
+    rw [ofReal_cpow hx.le]; rw [ofReal_neg]; rw [smul_sub]; rw [← mul_smul]; rw [mul_comm]; rw [mul_assoc]; rw [mul_smul]; rw [mul_comm]; rw [← cpow_add _ _ (ofReal_ne_zero.mpr hx.ne')]; rw [← sub_eq_add_neg]; rw [sub_right_comm]
+  _ = (∫ (x : Real) in Ioc 0 1, (x : Complex) ^ (s - 1)) • P.f₀
+        - P.ε • (∫ (x : Real) in Ioc 0 1, (x : Complex) ^ (s - P.k - 1)) • P.g₀ := by
+    rw [integral_sub]; rw [integral_smul]; rw [integral_smul_const]; rw [integral_smul_const]
+    · apply Integrable.smul_const
+      rw [← IntegrableOn]; rw [← intervalIntegrable_iff_integrableOn_Ioc_of_le zero_le_one]
+      exact intervalIntegral.intervalIntegrable_cpow' h_re1
+    · refine (Integrable.smul_const ?_ _).smul _
+      rw [← IntegrableOn]; rw [← intervalIntegrable_iff_integrableOn_Ioc_of_le zero_le_one]
+      exact intervalIntegral.intervalIntegrable_cpow' h_re2
+  _ = _ := by
+      simp_rw [← intervalIntegral.integral_of_le zero_le_one]
+      match_scalars
+      · simp [integral_cpow (.inl h_re1), zero_cpow (show s != 0 by grind [P.hk, zero_re])]
+      · simp [integral_cpow (.inl h_re2), zero_cpow (show s - P.k != 0 by grind [P.hk, ofReal_re])]
+        grind
 
 中文:
 引理 f_modif_aux2
@@ -805,7 +914,34 @@ lemma f_modif_aux2
   calc
   _ = ∫ (x : Real) in Ioi 0, (x : Complex) ^ (s - 1) •
       ((Ioo 0 1).indicator (fun t : Real => P.f₀ - (P.ε * ↑(t ^ (-P.k))) • P.g₀) x
-      + ({1} : Set Real).indica
+      + ({1} : Set Real).indicator (fun _ => P.f₀ - P.f 1) x) :=
+    setIntegral_congr_fun measurableSet_Ioi (fun x hx => by simp [f_modif_aux1 P hx])
+  _ = ∫ (x : Real) in Ioi 0, (x : Complex) ^ (s - 1) • ((Ioo 0 1).indicator
+      (fun t : Real => P.f₀ - (P.ε * ↑(t ^ (-P.k))) • P.g₀) x) := by
+    refine setIntegral_congr_ae measurableSet_Ioi (eventually_of_mem (U := {1}ᶜ)
+        (compl_mem_ae_iff.mpr (subsingleton_singleton.measure_zero _)) (fun x hx _ => ?_))
+    rw [indicator_of_notMem hx]; rw [add_zero]
+  _ = ∫ (x : Real) in Ioc 0 1, (x : Complex) ^ (s - 1) • (P.f₀ - (P.ε * ↑(x ^ (-P.k))) • P.g₀) := by
+    simp_rw [← indicator_smul, setIntegral_indicator measurableSet_Ioo,
+      inter_eq_right.mpr Ioo_subset_Ioi_self, integral_Ioc_eq_integral_Ioo]
+  _ = ∫ x : Real in Ioc 0 1, ((x : Complex) ^ (s - 1) • P.f₀ - P.ε • (x : Complex) ^ (s - P.k - 1) • P.g₀) := by
+    refine setIntegral_congr_fun measurableSet_Ioc (fun x ⟨hx, _⟩ => ?_)
+    rw [ofReal_cpow hx.le]; rw [ofReal_neg]; rw [smul_sub]; rw [← mul_smul]; rw [mul_comm]; rw [mul_assoc]; rw [mul_smul]; rw [mul_comm]; rw [← cpow_add _ _ (ofReal_ne_zero.mpr hx.ne')]; rw [← sub_eq_add_neg]; rw [sub_right_comm]
+  _ = (∫ (x : Real) in Ioc 0 1, (x : Complex) ^ (s - 1)) • P.f₀
+        - P.ε • (∫ (x : Real) in Ioc 0 1, (x : Complex) ^ (s - P.k - 1)) • P.g₀ := by
+    rw [integral_sub]; rw [integral_smul]; rw [integral_smul_const]; rw [integral_smul_const]
+    · apply Integrable.smul_const
+      rw [← IntegrableOn]; rw [← intervalIntegrable_iff_integrableOn_Ioc_of_le zero_le_one]
+      exact intervalIntegral.intervalIntegrable_cpow' h_re1
+    · refine (Integrable.smul_const ?_ _).smul _
+      rw [← IntegrableOn]; rw [← intervalIntegrable_iff_integrableOn_Ioc_of_le zero_le_one]
+      exact intervalIntegral.intervalIntegrable_cpow' h_re2
+  _ = _ := by
+      simp_rw [← intervalIntegral.integral_of_le zero_le_one]
+      match_scalars
+      · simp [integral_cpow (.inl h_re1), zero_cpow (show s != 0 by grind [P.hk, zero_re])]
+      · simp [integral_cpow (.inl h_re2), zero_cpow (show s - P.k != 0 by grind [P.hk, ofReal_re])]
+        grind
 
 Depends on / 依赖: P.hk.trans, f_modif_aux1, h_re1, h_re2, indicator, measurableSet_Ioi, setIntegral_congr_fun
 -/
@@ -994,7 +1130,12 @@ theorem hasMellin
       P.hf_zero' hs
   refine ⟨hc1, ?_⟩
   have hc2 : MellinConvergent P.f_modif s :=
-    P.isStrongFEPair_toStrongFEP
+    P.isStrongFEPair_toStrongFEPair.mellinConvergent s
+  have hc3 : mellin (fun x => f_modif P x - f P x + P.f₀) s =
+    (1 / s) • P.f₀ + (P.ε / (↑P.k - s)) • P.g₀ := P.f_modif_aux2 hs
+  have := (hasMellin_sub hc2 hc1).2
+  simp only [Λ, Λ₀] at *
+  grind
 
 中文:
 定理 hasMellin
@@ -1006,7 +1147,12 @@ theorem hasMellin
       P.hf_zero' hs
   refine ⟨hc1, ?_⟩
   have hc2 : MellinConvergent P.f_modif s :=
-    P.isStrongFEPair_toStrongFEP
+    P.isStrongFEPair_toStrongFEPair.mellinConvergent s
+  have hc3 : mellin (fun x => f_modif P x - f P x + P.f₀) s =
+    (1 / s) • P.f₀ + (P.ε / (↑P.k - s)) • P.g₀ := P.f_modif_aux2 hs
+  have := (hasMellin_sub hc2 hc1).2
+  simp only [Λ, Λ₀] at *
+  grind
 
 Depends on / 依赖: MellinConvergent, P.f_modif, P.f_modif_aux2, P.hf_int.sub, P.hf_top, P.hf_zero, P.isStrongFEPair_toStrongFEPair.mellinConvergent, exists_gt, f_modif, f_modif_aux2, hasMellin_sub, hf_int, hf_top, hf_zero, isStrongFEPair_toStrongFEPair, locallyIntegrableOn_const, mellin, mellinConvergent, mellinConvergent_of_isBigO_rpow, s.re
 -/
@@ -1079,7 +1225,14 @@ theorem Λ_residue_k
   refine ((Tendsto.sub ?_ ?_).mono_left nhdsWithin_le_nhds).sub ?_
   · rw [(by simp : 𝓝 0 = 𝓝 ((P.k - P.k : Complex) • P.Λ₀ P.k))]
     apply ((continuous_sub_right _).smul P.differentiable_Λ₀.continuous).tendsto
-  · rw 
+  · rw [(by simp : 𝓝 0 = 𝓝 ((P.k - P.k : Complex) • (1 / P.k : Complex) • P.f₀))]
+    refine (continuous_sub_right _).continuousAt.smul (ContinuousAt.smul ?_ continuousAt_const)
+    have := ofReal_ne_zero.mpr P.hk.ne'
+    fun_prop
+  · refine (tendsto_const_nhds.mono_left nhdsWithin_le_nhds).congr' ?_
+    filter_upwards [self_mem_nhdsWithin] with s (hs : s != P.k)
+    match_scalars
+    grind
 
 中文:
 定理 Λ_residue_k
@@ -1088,7 +1241,14 @@ theorem Λ_residue_k
   refine ((Tendsto.sub ?_ ?_).mono_left nhdsWithin_le_nhds).sub ?_
   · rw [(by simp : 𝓝 0 = 𝓝 ((P.k - P.k : Complex) • P.Λ₀ P.k))]
     apply ((continuous_sub_right _).smul P.differentiable_Λ₀.continuous).tendsto
-  · rw 
+  · rw [(by simp : 𝓝 0 = 𝓝 ((P.k - P.k : Complex) • (1 / P.k : Complex) • P.f₀))]
+    refine (continuous_sub_right _).continuousAt.smul (ContinuousAt.smul ?_ continuousAt_const)
+    have := ofReal_ne_zero.mpr P.hk.ne'
+    fun_prop
+  · refine (tendsto_const_nhds.mono_left nhdsWithin_le_nhds).congr' ?_
+    filter_upwards [self_mem_nhdsWithin] with s (hs : s != P.k)
+    match_scalars
+    grind
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.smul, P.differentiable_, P.hk.ne, Tendsto, Tendsto.sub, continuous, continuousAt, continuousAt.smul, continuousAt_const, continuous_sub_right, fun_prop, mono_left, nhdsWithin_le_nhds, ofReal_ne_zero, ofReal_ne_zero.mpr, simp_rw, smul_sub, tendsto
 -/
@@ -1117,7 +1277,13 @@ theorem Λ_residue_zero
   simp_rw [Λ, smul_sub, (by simp : 𝓝 (-P.f₀) = 𝓝 (((0 : Complex) • P.Λ₀ 0) - P.f₀ - 0))]
   refine ((Tendsto.mono_left ?_ nhdsWithin_le_nhds).sub ?_).sub ?_
   · exact (continuous_id.smul P.differentiable_Λ₀.continuous).tendsto _
-  · refine (tendsto_const_nhds.mono_left nhdsWithin_le_nhds).congr' ?
+  · refine (tendsto_const_nhds.mono_left nhdsWithin_le_nhds).congr' ?_
+    filter_upwards [self_mem_nhdsWithin] with s (hs : s != 0)
+    match_scalars
+    grind
+  · rw [show 𝓝 0 = 𝓝 ((0 : Complex) • (P.ε / (P.k - 0 : Complex)) • P.g₀) by rw [zero_smul]]
+    exact (continuousAt_id.smul ((continuousAt_const.div ((continuous_sub_left _).continuousAt)
+      (by simpa using P.hk.ne')).smul continuousAt_const)).mono_left nhdsWithin_le_nhds
 
 中文:
 定理 Λ_residue_zero
@@ -1126,7 +1292,13 @@ theorem Λ_residue_zero
   simp_rw [Λ, smul_sub, (by simp : 𝓝 (-P.f₀) = 𝓝 (((0 : Complex) • P.Λ₀ 0) - P.f₀ - 0))]
   refine ((Tendsto.mono_left ?_ nhdsWithin_le_nhds).sub ?_).sub ?_
   · exact (continuous_id.smul P.differentiable_Λ₀.continuous).tendsto _
-  · refine (tendsto_const_nhds.mono_left nhdsWithin_le_nhds).congr' ?
+  · refine (tendsto_const_nhds.mono_left nhdsWithin_le_nhds).congr' ?_
+    filter_upwards [self_mem_nhdsWithin] with s (hs : s != 0)
+    match_scalars
+    grind
+  · rw [show 𝓝 0 = 𝓝 ((0 : Complex) • (P.ε / (P.k - 0 : Complex)) • P.g₀) by rw [zero_smul]]
+    exact (continuousAt_id.smul ((continuousAt_const.div ((continuous_sub_left _).continuousAt)
+      (by simpa using P.hk.ne')).smul continuousAt_const)).mono_left nhdsWithin_le_nhds
 
 Depends on / 依赖: P.differentiable_, Tendsto, Tendsto.mono_left, continu, continuous, continuousAt_id, continuousAt_id.smul, continuous_id, continuous_id.smul, filter_upwards, match_scalars, mono_left, nhdsWithin_le_nhds, self_mem_nhdsWithin, simp_rw, smul_sub, tendsto, tendsto_const_nhds, tendsto_const_nhds.mono_left, zero_smul
 -/
@@ -1166,7 +1338,8 @@ lemma Λ_eq
 refine integral_congr_ae (ae_restrict_iff' measurableSet_Ioi).mpr ?_
   filter_upwards [compl_mem_ae_iff.mpr (Subsingleton.measure_zero (s := {1}) (by simp) _)]
     with t (ht₁ : t != 1) (ht₀ : 0 < t)
-  by_cases ht :
+  by_cases ht : t < 1 <;> [rw [add_comm] ; skip] <;>
+  rw [Pi.add_apply]; rw [indicator_of_mem (by grind)]; rw [indicator_of_notMem (by grind)]; rw [add_zero]
 
 中文:
 引理 Λ_eq
@@ -1177,7 +1350,8 @@ refine integral_congr_ae (ae_restrict_iff' measurableSet_Ioi).mpr ?_
 refine integral_congr_ae (ae_restrict_iff' measurableSet_Ioi).mpr ?_
   filter_upwards [compl_mem_ae_iff.mpr (Subsingleton.measure_zero (s := {1}) (by simp) _)]
     with t (ht₁ : t != 1) (ht₀ : 0 < t)
-  by_cases ht :
+  by_cases ht : t < 1 <;> [rw [add_comm] ; skip] <;>
+  rw [Pi.add_apply]; rw [indicator_of_mem (by grind)]; rw [indicator_of_notMem (by grind)]; rw [add_zero]
 
 Depends on / 依赖: Pi.add_apply, Subsingleton, Subsingleton.measure_zero, add_apply, add_comm, add_zero, ae_restrict_iff, compl_mem_ae_iff, compl_mem_ae_iff.mpr, f_modif, filter_upwards, hP.hf, hP.hg, indicator_of_mem, indicator_of_notMem, integral_congr_ae, measurableSet_Ioi, measure_zero, mellin, smul_zero
 -/

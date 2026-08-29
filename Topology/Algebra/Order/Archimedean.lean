@@ -74,7 +74,10 @@ theorem dense_of_not_isolated_one
     exact one_mem S
   refine dense_of_exists_between fun a b hlt => ?_
   rcases hS (b / a) (one_lt_div'.2 hlt) with ⟨g, hgS, hg0, hg⟩
-  rcases (existsUnique_add_zpow_mem_Ioc hg0 1 a).e
+  rcases (existsUnique_add_zpow_mem_Ioc hg0 1 a).exists with ⟨m, hm⟩
+  rw [one_mul] at hm
+  refine ⟨g ^ m, zpow_mem hgS _, hm.1, hm.2.trans_lt ?_⟩
+  rwa [lt_div_iff_mul_lt'] at hg
 
 中文:
 定理 dense_of_not_isolated_one
@@ -86,7 +89,10 @@ theorem dense_of_not_isolated_one
     exact one_mem S
   refine dense_of_exists_between fun a b hlt => ?_
   rcases hS (b / a) (one_lt_div'.2 hlt) with ⟨g, hgS, hg0, hg⟩
-  rcases (existsUnique_add_zpow_mem_Ioc hg0 1 a).e
+  rcases (existsUnique_add_zpow_mem_Ioc hg0 1 a).exists with ⟨m, hm⟩
+  rw [one_mul] at hm
+  refine ⟨g ^ m, zpow_mem hgS _, hm.1, hm.2.trans_lt ?_⟩
+  rwa [lt_div_iff_mul_lt'] at hg
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, _root_, _root_.subset_closure, dense_of_exists_between, existsUnique_add_zpow_mem_Ioc, lt_div_iff_mul_lt, one_lt_div, one_mem, one_mul, subset_closure, subsingleton_or_nontrivial, trans_lt, zpow_mem
 -/
@@ -200,6 +206,9 @@ theorem dense_xor_cyclic
     exact s.dense_or_cyclic.resolve_left hd
 
 @[to_additive (attr := deprecated dense_xor_cyclic (since := "2026-04-27"))]
+alias dense_xor'_cyclic := dense_xor_cyclic
+
+@[to_additive]
 
 中文:
 定理 dense_xor_cyclic
@@ -214,6 +223,9 @@ theorem dense_xor_cyclic
     exact s.dense_or_cyclic.resolve_left hd
 
 @[to_additive (attr := deprecated dense_xor_cyclic (since := "2026-04-27"))]
+alias dense_xor'_cyclic := dense_xor_cyclic
+
+@[to_additive]
 
 Depends on / 依赖: dense_or_cyclic, not_denseRange_zpow, resolve_left, s.dense_or_cyclic.resolve_left, xor_false, xor_true, zpowers_eq_closure
 -/

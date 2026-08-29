@@ -47,7 +47,8 @@ instance instMonoidalCategoryStruct
   tensorHom f g := ofHom (Coalgebra.TensorProduct.map f.1 g.1)
   tensorUnit := CoalgCat.of R R
   associator X Y Z := (Coalgebra.TensorProduct.assoc R R X Y Z).toCoalgIso
-  leftUnitor X := 
+  leftUnitor X := (Coalgebra.TensorProduct.lid R X).toCoalgIso
+  rightUnitor X := (Coalgebra.TensorProduct.rid R R X).toCoalgIso
 
 中文:
 实例 instMonoidalCategoryStruct
@@ -58,7 +59,8 @@ instance instMonoidalCategoryStruct
   tensorHom f g := ofHom (Coalgebra.TensorProduct.map f.1 g.1)
   tensorUnit := CoalgCat.of R R
   associator X Y Z := (Coalgebra.TensorProduct.assoc R R X Y Z).toCoalgIso
-  leftUnitor X := 
+  leftUnitor X := (Coalgebra.TensorProduct.lid R X).toCoalgIso
+  rightUnitor X := (Coalgebra.TensorProduct.rid R R X).toCoalgIso
 
 Depends on / 依赖: otimes
 -/
@@ -89,7 +91,7 @@ definition MonoidalCategory.inducingFunctorData
   εIso := Iso.refl _
 associator_eq X Y Z := ModuleCat.hom_ext TensorProduct.ext TensorProduct.ext by ext; rfl
 leftUnitor_eq X := ModuleCat.hom_ext TensorProduct.ext by ext; rfl
-r
+rightUnitor_eq X := ModuleCat.hom_ext TensorProduct.ext by ext; rfl
 
 中文:
 定义 幺半群范畴.inducingFunctorData
@@ -101,7 +103,7 @@ r
   εIso := Iso.refl _
 associator_eq X Y Z := ModuleCat.hom_ext TensorProduct.ext TensorProduct.ext by ext; rfl
 leftUnitor_eq X := ModuleCat.hom_ext TensorProduct.ext by ext; rfl
-r
+rightUnitor_eq X := ModuleCat.hom_ext TensorProduct.ext by ext; rfl
 -/
 noncomputable def MonoidalCategory.inducingFunctorData :
     Monoidal.InducingFunctorData (forget₂ (CoalgCat R) (ModuleCat R)) where

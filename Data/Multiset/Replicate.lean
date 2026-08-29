@@ -561,7 +561,7 @@ theorem rel_replicate_left
       rwa [eq_of_mem_replicate hb1] at hb2⟩,
     fun h =>
     rel_of_forall (fun _ _ hx hy => (eq_of_mem_replicate hx).symm ▸ h.2 _ hy)
-    
+      (Eq.trans (card_replicate _ _) h.1.symm)⟩
 
 中文:
 定理 rel_replicate_left
@@ -572,7 +572,7 @@ theorem rel_replicate_left
       rwa [eq_of_mem_replicate hb1] at hb2⟩,
     fun h =>
     rel_of_forall (fun _ _ hx hy => (eq_of_mem_replicate hx).symm ▸ h.2 _ hy)
-    
+      (Eq.trans (card_replicate _ _) h.1.symm)⟩
 
 Depends on / 依赖: Eq.trans, card_eq_card_of_rel, card_replicate, eq_of_mem_replicate, exists_mem_of_rel_of_mem, rel_flip, rel_of_forall, symm.trans
 -/

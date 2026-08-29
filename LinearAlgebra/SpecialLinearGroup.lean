@@ -167,7 +167,13 @@ theorem subsingleton_of_finrank_eq_one
       simp [this u, this v]
     intro u
     ext x
-  
+    set c := (LinearEquiv.smul_id_of_finrank_eq_one d1).symm u with hc
+    rw [LinearEquiv.eq_symm_apply] at hc
+    suffices c = 1 by
+      simp [← hc, LinearEquiv.smul_id_of_finrank_eq_one, this]
+    have hu := u.prop
+    simpa [← Units.val_inj, LinearEquiv.coe_det, ← hc,
+      LinearEquiv.smul_id_of_finrank_eq_one, d1] using hu
 
 中文:
 定理 subsingleton_of_finrank_eq_one
@@ -182,7 +188,13 @@ theorem subsingleton_of_finrank_eq_one
       simp [this u, this v]
     intro u
     ext x
-  
+    set c := (LinearEquiv.smul_id_of_finrank_eq_one d1).symm u with hc
+    rw [LinearEquiv.eq_symm_apply] at hc
+    suffices c = 1 by
+      simp [← hc, LinearEquiv.smul_id_of_finrank_eq_one, this]
+    have hu := u.prop
+    simpa [← Units.val_inj, LinearEquiv.coe_det, ← hc,
+      LinearEquiv.smul_id_of_finrank_eq_one, d1] using hu
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.coe_det, LinearEquiv.eq_symm_apply, LinearEquiv.smul_id_of_finrank_eq_one, LinearMap, LinearMap.ext_iff, LinearMap.id, LinearMap.id_coe, SpecialLinearGroup, Units.val_inj, coe_coe, coe_det, eq_symm_apply, ext_iff, id_coe, id_eq, nontriviality, smul_id_of_finrank_eq_one, u.prop
 -/
@@ -936,7 +948,9 @@ definition congr_linearEquiv
     rw [LinearEquiv.det_conj g e.symm]; rw [g.prop]⟩
 left_inv f := Subtype.coe_injective by aesop
 right_inv g := Subtype.coe_injective by aesop
-map_mul' f g := Subtype.coe_injec
+map_mul' f g := Subtype.coe_injective by aesop
+
+@[simp]
 
 中文:
 定义 congr_linearEquiv
@@ -947,7 +961,9 @@ map_mul' f g := Subtype.coe_injec
     rw [LinearEquiv.det_conj g e.symm]; rw [g.prop]⟩
 left_inv f := Subtype.coe_injective by aesop
 right_inv g := Subtype.coe_injective by aesop
-map_mul' f g := Subtype.coe_injec
+map_mul' f g := Subtype.coe_injective by aesop
+
+@[simp]
 
 Depends on / 依赖: e.symm, f.prop
 -/
@@ -1073,7 +1089,10 @@ definition toLin'_equiv
   invFun u := ⟨LinearMap.toMatrix' u,
       by simp [← LinearEquiv.coe_det, u.prop]⟩
 left_inv A := Subtype.coe_injective by
-    rw [← L
+    rw [← LinearEquiv.eq_symm_apply]; rw [LinearMap.toMatrix'_symm]; rw [Matrix.SpecialLinearGroup.toLin'_to_linearMap]
+right_inv u := Subtype.coe_injective by
+    simp [← LinearEquiv.toLinearMap_inj, Matrix.SpecialLinearGroup.toLin']
+  map_mul' A B := Subtype.coe_injective (by simp)
 
 中文:
 定义 toLin'_equiv
@@ -1085,7 +1104,10 @@ left_inv A := Subtype.coe_injective by
   invFun u := ⟨LinearMap.toMatrix' u,
       by simp [← LinearEquiv.coe_det, u.prop]⟩
 left_inv A := Subtype.coe_injective by
-    rw [← L
+    rw [← LinearEquiv.eq_symm_apply]; rw [LinearMap.toMatrix'_symm]; rw [Matrix.SpecialLinearGroup.toLin'_to_linearMap]
+right_inv u := Subtype.coe_injective by
+    simp [← LinearEquiv.toLinearMap_inj, Matrix.SpecialLinearGroup.toLin']
+  map_mul' A B := Subtype.coe_injective (by simp)
 
 Depends on / 依赖: Matrix, Matrix.SpecialLinearGroup.toLin, SpecialLinearGroup
 -/
@@ -1177,7 +1199,11 @@ theorem center_eq_bot_of_finrank_le_one
     rwa [← Finite.card_le_one_iff_subsingleton,
       Nat.card_eq_fintype_card, ← Module.finrank_eq_card_basis b]
   have : Subsingleton (Subgroup.center
-    (Matrix.SpecialLinea
+    (Matrix.SpecialLinearGroup (Module.Free.ChooseBasisIndex R V) R)) := by
+    infer_instance
+  rw [Equiv.subsingleton_congr
+    (Subgroup.centerCongr (Matrix.SpecialLinearGroup.toLin_equiv b)).toEquiv] at this
+  exact Subgroup.eq_bot_of_subsingleton _
 
 中文:
 定理 center_eq_bot_of_finrank_le_one
@@ -1189,7 +1215,11 @@ theorem center_eq_bot_of_finrank_le_one
     rwa [← Finite.card_le_one_iff_subsingleton,
       Nat.card_eq_fintype_card, ← Module.finrank_eq_card_basis b]
   have : Subsingleton (Subgroup.center
-    (Matrix.SpecialLinea
+    (Matrix.SpecialLinearGroup (Module.Free.ChooseBasisIndex R V) R)) := by
+    infer_instance
+  rw [Equiv.subsingleton_congr
+    (Subgroup.centerCongr (Matrix.SpecialLinearGroup.toLin_equiv b)).toEquiv] at this
+  exact Subgroup.eq_bot_of_subsingleton _
 
 Depends on / 依赖: ChooseBasisIndex, Equiv.subsingleton_congr, Finite, Finite.card_le_one_iff_subsingleton, Matrix, Matrix.SpecialLinearGroup, Matrix.SpecialLinearGroup.toLin_equiv, Module, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, Module.finrank_eq_card_basis, Nat.card_eq_fintype_card, SpecialLinearGroup, Subgroup, Subgroup.center, Subgroup.centerCongr, Subgroup.eq_bot_of_subsingleton, Subsingleton, card_eq_fintype_card, card_le_one_iff_subsingleton
 -/
@@ -1220,7 +1250,24 @@ theorem mem_center_iff
   let b := Module.Free.chooseBasis R V
   let := Module.Free.ChooseBasisIndex.fintype R V
   rw [Module.finrank_eq_card_basis b]
-  let e := (Matrix.S
+  let e := (Matrix.SpecialLinearGroup.toLin_equiv b).symm
+  rw [← show e g in Subgroup.center _ ↔ g in Subgroup.center _ from
+    MulEquivClass.apply_mem_center_iff e]
+  rw [Matrix.SpecialLinearGroup.mem_center_iff]
+  apply exists_congr
+  simp only [Matrix.scalar_apply, and_congr_right_iff, e]
+  intro r hr
+  suffices ((Matrix.SpecialLinearGroup.toLin_equiv b).symm g) =
+    Matrix.of fun i j => (b.repr (g (b j))) i by
+    simp only [this]
+    rw [← (LinearMap.toMatrix b b).injective.eq_iff]
+    simp only [← Matrix.ext_iff, Matrix.of_apply]
+    apply forall₂_congr
+    intro i j
+    simp [Matrix.diagonal, LinearMap.toMatrix_apply,
+      Finsupp.single, Pi.single_apply, Iff.symm eq_comm]
+  ext
+  simp [Matrix.SpecialLinearGroup.toLin_equiv.symm_toLinearMap_eq, LinearMap.toMatrix_apply]
 
 中文:
 定理 mem_center_iff
@@ -1232,7 +1279,24 @@ theorem mem_center_iff
   let b := Module.Free.chooseBasis R V
   let := Module.Free.ChooseBasisIndex.fintype R V
   rw [Module.finrank_eq_card_basis b]
-  let e := (Matrix.S
+  let e := (Matrix.SpecialLinearGroup.toLin_equiv b).symm
+  rw [← show e g in Subgroup.center _ ↔ g in Subgroup.center _ from
+    MulEquivClass.apply_mem_center_iff e]
+  rw [Matrix.SpecialLinearGroup.mem_center_iff]
+  apply exists_congr
+  simp only [Matrix.scalar_apply, and_congr_right_iff, e]
+  intro r hr
+  suffices ((Matrix.SpecialLinearGroup.toLin_equiv b).symm g) =
+    Matrix.of fun i j => (b.repr (g (b j))) i by
+    simp only [this]
+    rw [← (LinearMap.toMatrix b b).injective.eq_iff]
+    simp only [← Matrix.ext_iff, Matrix.of_apply]
+    apply forall₂_congr
+    intro i j
+    simp [Matrix.diagonal, LinearMap.toMatrix_apply,
+      Finsupp.single, Pi.single_apply, Iff.symm eq_comm]
+  ext
+  simp [Matrix.SpecialLinearGroup.toLin_equiv.symm_toLinearMap_eq, LinearMap.toMatrix_apply]
 
 Depends on / 依赖: ChooseBasisIndex, Matrix, Matrix.SpecialLinearGroup.mem_center_iff, Matrix.SpecialLinearGroup.toLin_equiv, Module, Module.Free.ChooseBasisIndex.fintype, Module.Free.chooseBasis, Module.finrank_eq_card_basis, MulEquivClass, MulEquivClass.apply_mem_center_iff, SpecialLinearGroup, Subgroup, Subgroup.center, Subsingleton, Subsingleton.eq_one, apply_mem_center_iff, center, chooseBasis, eq_one, exists_congr
 -/
@@ -1306,7 +1370,21 @@ definition centerEquivRootsOfUnity_invFun
     simp [LinearMap.det_smul, IsUnit.pow]), by
     simp only [← Units.val_inj, LinearEquiv.coe_det, LinearMap.coe_equivOfIsUnitDet,
       LinearMap.det_smul, LinearMap.det_id, mul_one, Units.val_one]
-    have := 
+    have := (mem_rootsOfUnity' _ _).mp r.prop
+    rcases max_cases (Module.finrank R V) 1 with ⟨h, h'⟩ | ⟨h, h'⟩
+    · simp_rw [h] at this
+      exact this
+    · simp_rw [h, pow_one] at this
+      simp [this]⟩, by
+    simp only [mem_center_iff, LinearMap.coe_equivOfIsUnitDet]
+    use r.val
+    simp only [and_true]
+    let ⟨r, hr⟩ := r
+    by_cases hV : Module.finrank R V = 0
+    · simp [hV]
+    · rw [← ne_eq, ← Nat.one_le_iff_ne_zero] at hV
+      rw [mem_rootsOfUnity']; rw [max_eq_left hV] at hr
+      simpa [← Subtype.val_inj, ← Units.val_inj]⟩
 
 中文:
 定义 centerEquivRootsOfUnity_invFun
@@ -1314,7 +1392,21 @@ definition centerEquivRootsOfUnity_invFun
     simp [LinearMap.det_smul, IsUnit.pow]), by
     simp only [← Units.val_inj, LinearEquiv.coe_det, LinearMap.coe_equivOfIsUnitDet,
       LinearMap.det_smul, LinearMap.det_id, mul_one, Units.val_one]
-    have := 
+    have := (mem_rootsOfUnity' _ _).mp r.prop
+    rcases max_cases (Module.finrank R V) 1 with ⟨h, h'⟩ | ⟨h, h'⟩
+    · simp_rw [h] at this
+      exact this
+    · simp_rw [h, pow_one] at this
+      simp [this]⟩, by
+    simp only [mem_center_iff, LinearMap.coe_equivOfIsUnitDet]
+    use r.val
+    simp only [and_true]
+    let ⟨r, hr⟩ := r
+    by_cases hV : Module.finrank R V = 0
+    · simp [hV]
+    · rw [← ne_eq, ← Nat.one_le_iff_ne_zero] at hV
+      rw [mem_rootsOfUnity']; rw [max_eq_left hV] at hr
+      simpa [← Subtype.val_inj, ← Units.val_inj]⟩
 
 Depends on / 依赖: IsUnit, IsUnit.pow, LinearEquiv, LinearEquiv.coe_det, LinearMap, LinearMap.coe, LinearMap.coe_equivOfIsUnitDet, LinearMap.det_id, LinearMap.det_smul, LinearMap.equivOfIsUnitDet, LinearMap.id, Module, Module.finrank, Units.val_inj, Units.val_one, coe_det, coe_equivOfIsUnitDet, det_id, det_smul, equivOfIsUnitDet
 -/
@@ -1356,7 +1448,66 @@ definition centerEquivRootsOfUnity
       (fun hV => by
         rw [← Module.finrank_pos_iff_of_free (R := R)] at hV
         replace hV : 1 <= Module.finrank R V := hV
-        have hr := (mem_center_iff.mp
+        have hr := (mem_center_iff.mp g.prop).choose_spec.1
+        set r := (mem_center_iff.mp g.prop).choose
+        rw [← Nat.max_eq_left hV] at hr
+        have : IsUnit r := by
+          rw [← isUnit_pow_iff _]; rw [hr]
+          · exact isUnit_one
+          rw [Nat.max_eq_left hV]
+          exact Nat.ne_zero_of_lt hV
+        exact ⟨this.unit, by simp [mem_rootsOfUnity, ← Units.val_inj, hr]⟩))
+  invFun := centerEquivRootsOfUnity_invFun
+  left_inv g := by
+    simp only [centerEquivRootsOfUnity_invFun, ← Subtype.val_inj,
+      ← LinearEquiv.toLinearMap_inj, LinearMap.coe_equivOfIsUnitDet]
+    simp only [Or.by_cases]
+    split_ifs with hR hV
+    · simp [Subsingleton.eq_one g]
+    · simp [Subsingleton.eq_one g]
+    · simp only [IsUnit.unit_spec, ← (mem_center_iff.mp g.prop).choose_spec.2]
+  right_inv r := by
+    rw [← Subtype.val_inj]; rw [SetLike.coe_eq_coe]
+    simp only [Or.by_cases]
+    split_ifs with hR hV
+    · simp [Subsingleton.eq_one r]
+    · replace hR := not_subsingleton_iff_nontrivial.mp hR
+      symm
+      rw [← Module.finrank_eq_zero_iff_of_free (R := R)] at hV
+      simpa [hV] using (mem_rootsOfUnity _ _).mp r.prop
+    · rw [not_subsingleton_iff_nontrivial] at hV
+      have := Module.Free.instFaithfulSMulOfNontrivial R V
+      simp only [← Subtype.val_inj, ← Units.val_inj, IsUnit.unit_spec]
+      have H := mem_center_iff.mp (Subtype.prop (centerEquivRootsOfUnity_invFun r))
+      suffices (H.choose • LinearMap.id : V ->ₗ[R] V) = (r.val : R) • LinearMap.id by
+        apply FaithfulSMul.eq_of_smul_eq_smul (α := V)
+        intro x
+        rw [LinearMap.ext_iff] at this
+        simp only [LinearMap.smul_apply, LinearMap.id_coe, id_eq] at this
+        rw [this x]
+      rw [← H.choose_spec.2]
+      simp [centerEquivRootsOfUnity_invFun]
+  map_mul' g h := by
+    simp only [Or.by_cases, Subgroup.coe_mul, coe_mul, LinearEquiv.coe_toLinearMap_mul,
+      mul_dite, mul_one, dite_mul, one_mul, MulMemClass.mk_mul_mk]
+    split_ifs with hR hV
+    · rfl
+    · rfl
+    rw [not_subsingleton_iff_nontrivial] at hV
+    have := Module.Free.instFaithfulSMulOfNontrivial R V
+    set Hg := (mem_center_iff.mp g.prop)
+    set Hh := (mem_center_iff.mp h.prop)
+    set Hgh := (mem_center_iff.mp (g * h).prop)
+    simp only [← Subtype.val_inj, ← Units.val_inj, IsUnit.unit_spec, Units.val_mul]
+    change Hgh.choose = Hg.choose * Hh.choose
+    suffices (Hgh.choose • LinearMap.id : V ->ₗ[R] V)
+      = (Hg.choose • LinearMap.id) * (Hh.choose • LinearMap.id) by
+      apply FaithfulSMul.eq_of_smul_eq_smul (α := V)
+      intro x
+      simp [mul_smul,
+        ← mem_center_iff_spec (g * h).prop, ← mem_center_iff_spec h.prop,
+        ← mem_center_iff_spec g.prop]
+    simp [← Hgh.choose_spec.2, ← Hh.choose_spec.2, ← Hg.choose_spec.2]
 
 中文:
 定义 centerEquivRootsOfUnity
@@ -1368,7 +1519,66 @@ definition centerEquivRootsOfUnity
       (fun hV => by
         rw [← Module.finrank_pos_iff_of_free (R := R)] at hV
         replace hV : 1 <= Module.finrank R V := hV
-        have hr := (mem_center_iff.mp
+        have hr := (mem_center_iff.mp g.prop).choose_spec.1
+        set r := (mem_center_iff.mp g.prop).choose
+        rw [← Nat.max_eq_left hV] at hr
+        have : IsUnit r := by
+          rw [← isUnit_pow_iff _]; rw [hr]
+          · exact isUnit_one
+          rw [Nat.max_eq_left hV]
+          exact Nat.ne_zero_of_lt hV
+        exact ⟨this.unit, by simp [mem_rootsOfUnity, ← Units.val_inj, hr]⟩))
+  invFun := centerEquivRootsOfUnity_invFun
+  left_inv g := by
+    simp only [centerEquivRootsOfUnity_invFun, ← Subtype.val_inj,
+      ← LinearEquiv.toLinearMap_inj, LinearMap.coe_equivOfIsUnitDet]
+    simp only [Or.by_cases]
+    split_ifs with hR hV
+    · simp [Subsingleton.eq_one g]
+    · simp [Subsingleton.eq_one g]
+    · simp only [IsUnit.unit_spec, ← (mem_center_iff.mp g.prop).choose_spec.2]
+  right_inv r := by
+    rw [← Subtype.val_inj]; rw [SetLike.coe_eq_coe]
+    simp only [Or.by_cases]
+    split_ifs with hR hV
+    · simp [Subsingleton.eq_one r]
+    · replace hR := not_subsingleton_iff_nontrivial.mp hR
+      symm
+      rw [← Module.finrank_eq_zero_iff_of_free (R := R)] at hV
+      simpa [hV] using (mem_rootsOfUnity _ _).mp r.prop
+    · rw [not_subsingleton_iff_nontrivial] at hV
+      have := Module.Free.instFaithfulSMulOfNontrivial R V
+      simp only [← Subtype.val_inj, ← Units.val_inj, IsUnit.unit_spec]
+      have H := mem_center_iff.mp (Subtype.prop (centerEquivRootsOfUnity_invFun r))
+      suffices (H.choose • LinearMap.id : V ->ₗ[R] V) = (r.val : R) • LinearMap.id by
+        apply FaithfulSMul.eq_of_smul_eq_smul (α := V)
+        intro x
+        rw [LinearMap.ext_iff] at this
+        simp only [LinearMap.smul_apply, LinearMap.id_coe, id_eq] at this
+        rw [this x]
+      rw [← H.choose_spec.2]
+      simp [centerEquivRootsOfUnity_invFun]
+  map_mul' g h := by
+    simp only [Or.by_cases, Subgroup.coe_mul, coe_mul, LinearEquiv.coe_toLinearMap_mul,
+      mul_dite, mul_one, dite_mul, one_mul, MulMemClass.mk_mul_mk]
+    split_ifs with hR hV
+    · rfl
+    · rfl
+    rw [not_subsingleton_iff_nontrivial] at hV
+    have := Module.Free.instFaithfulSMulOfNontrivial R V
+    set Hg := (mem_center_iff.mp g.prop)
+    set Hh := (mem_center_iff.mp h.prop)
+    set Hgh := (mem_center_iff.mp (g * h).prop)
+    simp only [← Subtype.val_inj, ← Units.val_inj, IsUnit.unit_spec, Units.val_mul]
+    change Hgh.choose = Hg.choose * Hh.choose
+    suffices (Hgh.choose • LinearMap.id : V ->ₗ[R] V)
+      = (Hg.choose • LinearMap.id) * (Hh.choose • LinearMap.id) by
+      apply FaithfulSMul.eq_of_smul_eq_smul (α := V)
+      intro x
+      simp [mul_smul,
+        ← mem_center_iff_spec (g * h).prop, ← mem_center_iff_spec h.prop,
+        ← mem_center_iff_spec g.prop]
+    simp [← Hgh.choose_spec.2, ← Hh.choose_spec.2, ← Hg.choose_spec.2]
 
 Depends on / 依赖: subsingleton_or_nontrivial
 -/
@@ -1455,7 +1665,8 @@ theorem centerEquivRootsOfUnity_apply
   · have : Subsingleton V := Module.subsingleton R V
     apply Subsingleton.eq_one
   · apply Subsingleton.eq_one
- 
+  · rw [not_subsingleton_iff_nontrivial] at hV
+    rw [← (mem_center_iff.mp g.prop).choose_spec.2]
 
 中文:
 定理 centerEquivRootsOfUnity_apply
@@ -1466,7 +1677,8 @@ theorem centerEquivRootsOfUnity_apply
   · have : Subsingleton V := Module.subsingleton R V
     apply Subsingleton.eq_one
   · apply Subsingleton.eq_one
- 
+  · rw [not_subsingleton_iff_nontrivial] at hV
+    rw [← (mem_center_iff.mp g.prop).choose_spec.2]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Module, Module.subsingleton, MulEquiv, MulEquiv.coe_mk, Or.by_cases, Subgroup, Subgroup.mk_smul, Subsingleton, Subsingleton.eq_one, Units.smul_isUnit, centerEquivRootsOfUnity, choose_spec, coe_fn_mk, coe_mk, dite_eq_ite, dite_smul, eq_one, g.prop, mem_center_iff
 -/
@@ -1609,7 +1821,29 @@ theorem centerCongr_toLin_equiv_trans_centerEquivRootsOfUnity_eq
     · apply rootsOfUnity.eq_one
       rw [← Module.finrank_eq_zero_iff_of_free (R := R)] at hV
       simp only [hV, sup_eq_right, zero_le_one, ← Module.finrank_eq_card_basis b]
-  · have hι : ¬ IsEmpty ι := fun hι =
+  · have hι : ¬ IsEmpty ι := fun hι => hV (by
+      rw [← Module.finrank_eq_zero_iff_of_free (R := R)]; rw [Module.finrank_eq_card_basis b]; rw [Fintype.card_of_isEmpty])
+    rw [not_subsingleton_iff_nontrivial] at hV
+    have := Module.Free.instFaithfulSMulOfNontrivial R V
+    suffices (((((Subgroup.centerCongr (Matrix.SpecialLinearGroup.toLin_equiv b)).trans
+      centerEquivRootsOfUnity g).val : R) • LinearMap.id) : V ->ₗ[R] V) =
+        ((Matrix.SpecialLinearGroup.center_equiv_rootsOfUnity g).val : R) • LinearMap.id by
+      rw [← Units.val_inj]
+      apply FaithfulSMul.eq_of_smul_eq_smul (α := V)
+      intro x
+      simp only [MulEquiv.trans_apply, LinearMap.ext_iff, LinearMap.smul_apply, LinearMap.id_coe,
+        id_eq] at this
+      rw [MulEquiv.trans_apply]; rw [this]
+    simp only [MulEquiv.trans_apply]
+    have hgg' := Subgroup.centerCongr_apply_coe (Matrix.SpecialLinearGroup.toLin_equiv b) g
+    rw [← Subtype.coe_inj]; rw [← LinearEquiv.toLinearMap_inj]; rw [LinearMap.ext_iff] at hgg'
+    set g' := ((Subgroup.centerCongr (Matrix.SpecialLinearGroup.toLin_equiv b)) g)
+    ext x
+    have := centerEquivRootsOfUnity_apply_apply g' x
+    simp only [Subgroup.smul_def, Units.smul_def] at this
+    simp only [LinearMap.smul_apply, LinearMap.id_coe, id_eq]
+    rw [this]; rw [← LinearEquiv.coe_toLinearMap]; rw [hgg']; rw [Matrix.SpecialLinearGroup.toLin_equiv.toLinearMap_eq]; rw [Matrix.SpecialLinearGroup.eq_scalar_center_equiv_rootsOfUnity g]; rw [Matrix.toLin_scalar]
+    simp
 
 中文:
 定理 centerCongr_toLin_equiv_trans_centerEquivRootsOfUnity_eq
@@ -1621,7 +1855,29 @@ theorem centerCongr_toLin_equiv_trans_centerEquivRootsOfUnity_eq
     · apply rootsOfUnity.eq_one
       rw [← Module.finrank_eq_zero_iff_of_free (R := R)] at hV
       simp only [hV, sup_eq_right, zero_le_one, ← Module.finrank_eq_card_basis b]
-  · have hι : ¬ IsEmpty ι := fun hι =
+  · have hι : ¬ IsEmpty ι := fun hι => hV (by
+      rw [← Module.finrank_eq_zero_iff_of_free (R := R)]; rw [Module.finrank_eq_card_basis b]; rw [Fintype.card_of_isEmpty])
+    rw [not_subsingleton_iff_nontrivial] at hV
+    have := Module.Free.instFaithfulSMulOfNontrivial R V
+    suffices (((((Subgroup.centerCongr (Matrix.SpecialLinearGroup.toLin_equiv b)).trans
+      centerEquivRootsOfUnity g).val : R) • LinearMap.id) : V ->ₗ[R] V) =
+        ((Matrix.SpecialLinearGroup.center_equiv_rootsOfUnity g).val : R) • LinearMap.id by
+      rw [← Units.val_inj]
+      apply FaithfulSMul.eq_of_smul_eq_smul (α := V)
+      intro x
+      simp only [MulEquiv.trans_apply, LinearMap.ext_iff, LinearMap.smul_apply, LinearMap.id_coe,
+        id_eq] at this
+      rw [MulEquiv.trans_apply]; rw [this]
+    simp only [MulEquiv.trans_apply]
+    have hgg' := Subgroup.centerCongr_apply_coe (Matrix.SpecialLinearGroup.toLin_equiv b) g
+    rw [← Subtype.coe_inj]; rw [← LinearEquiv.toLinearMap_inj]; rw [LinearMap.ext_iff] at hgg'
+    set g' := ((Subgroup.centerCongr (Matrix.SpecialLinearGroup.toLin_equiv b)) g)
+    ext x
+    have := centerEquivRootsOfUnity_apply_apply g' x
+    simp only [Subgroup.smul_def, Units.smul_def] at this
+    simp only [LinearMap.smul_apply, LinearMap.id_coe, id_eq]
+    rw [this]; rw [← LinearEquiv.coe_toLinearMap]; rw [hgg']; rw [Matrix.SpecialLinearGroup.toLin_equiv.toLinearMap_eq]; rw [Matrix.SpecialLinearGroup.eq_scalar_center_equiv_rootsOfUnity g]; rw [Matrix.toLin_scalar]
+    simp
 
 Depends on / 依赖: Eq.refl, Fintype, Fintype.card_of_isEmpty, IsEmpty, Module, Module.Free.instFaithfulSMulOfNontrivial, Module.finrank_eq_card_basis, Module.finrank_eq_zero_iff_of_free, Subsingleton, card_of_isEmpty, convert, eq_one, finrank_eq_card_basis, finrank_eq_zero_iff_of_free, instFaithfulSMulOfNontrivial, nontriviality, not_subsingleton_iff_nontrivial, rootsOfUnity, rootsOfUnity.eq_one, sup_eq_right
 -/

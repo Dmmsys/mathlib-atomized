@@ -39,7 +39,9 @@ instance instBialgebra
       simp [Algebra.TensorProduct.one_def, TensorProduct.add_tmul, TensorProduct.tmul_add]
       abel)
     (by ext x; simp [algebraMapInv_ι])
-    (by ext x; simp
+    (by ext x; simp [algebraMapInv_ι])
+
+@[simp]
 
 中文:
 实例 instBialgebra
@@ -52,7 +54,9 @@ instance instBialgebra
       simp [Algebra.TensorProduct.one_def, TensorProduct.add_tmul, TensorProduct.tmul_add]
       abel)
     (by ext x; simp [algebraMapInv_ι])
-    (by ext x; simp
+    (by ext x; simp [algebraMapInv_ι])
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.one_def, TensorProduct, TensorProduct.add_tmul, TensorProduct.mk, TensorProduct.tmul_add, add_tmul, algebraMapInv, ofAlgHom, one_def, tmul_add
 -/

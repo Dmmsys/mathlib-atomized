@@ -280,7 +280,8 @@ definition lift₀
       dsimp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe]
       rw [LocalizationMap.lift_spec f hg 0 0]; rw [mul_zero]; rw [← map_zero g]; rw [← g.toMonoidHom_coe]
       refine f.eq_of_eq hg ?_
-      rw [Localizat
+      rw [LocalizationMap.sec_zero_fst]
+      exact (map_zero f).symm }
 
 中文:
 定义 lift₀
@@ -290,7 +291,8 @@ definition lift₀
       dsimp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe]
       rw [LocalizationMap.lift_spec f hg 0 0]; rw [mul_zero]; rw [← map_zero g]; rw [← g.toMonoidHom_coe]
       refine f.eq_of_eq hg ?_
-      rw [Localizat
+      rw [LocalizationMap.sec_zero_fst]
+      exact (map_zero f).symm }
 
 Depends on / 依赖: LocalizationMap, LocalizationMap.lift, LocalizationMap.lift_spec, LocalizationMap.sec_zero_fst, MonoidHom, MonoidHom.toOneHom_coe, OneHom, OneHom.toFun_eq_coe, eq_of_eq, f.eq_of_eq, g.toMonoidHom, g.toMonoidHom_coe, lift_spec, map_zero, mul_zero, sec_zero_fst, toFun_eq_coe, toMonoidHom, toMonoidHom_coe, toOneHom_coe
 -/
@@ -350,7 +352,7 @@ theorem isCancelMulZero
   have ⟨ms, eq⟩ := f.surj n
   refine (eq ▸ f.map_isRegular (isCancelMulZero_iff_forall_isRegular.mp ‹_› ?_)).2.of_mul
   refine fun h => hn ?_
-  rw
+  rwa [h, map_zero, (f.map_units _).mul_left_eq_zero] at eq
 
 中文:
 定理 isCancelMulZero
@@ -363,7 +365,7 @@ theorem isCancelMulZero
   have ⟨ms, eq⟩ := f.surj n
   refine (eq ▸ f.map_isRegular (isCancelMulZero_iff_forall_isRegular.mp ‹_› ?_)).2.of_mul
   refine fun h => hn ?_
-  rw
+  rwa [h, map_zero, (f.map_units _).mul_left_eq_zero] at eq
 
 Depends on / 依赖: Commute, Commute.all, Commute.isRegular_iff, Commute.isRightRegular_iff, f.map_isRegular, f.map_units, f.surj, isCancelMulZero_iff_forall_isRegular, isCancelMulZero_iff_forall_isRegular.mp, isRegular_iff, isRightRegular_iff, map_isRegular, map_units, map_zero, mul_left_eq_zero, of_mul, simp_rw
 -/
@@ -447,7 +449,8 @@ theorem nonZeroDivisors_le_comap
   refine fun m hm => nonZeroDivisorsRight_eq_nonZeroDivisors (M₀ := N) ▸ fun n h0 => ?_
   have ⟨ms, eq⟩ := f.surj n
   rw [← (f.map_units ms.2).mul_left_eq_zero]; rw [mul_right_comm]; rw [eq]; rw [← map_mul]; rw [map_eq_zero_iff] at h0
-  simp_rw [← mul_assoc, mul_right_mem_nonZeroDivisorsRight_eq_
+  simp_rw [← mul_assoc, mul_right_mem_nonZeroDivisorsRight_eq_zero_iff hm.2] at h0
+  rwa [← (f.map_units ms.2).mul_left_eq_zero, eq, map_eq_zero_iff]
 
 中文:
 定理 nonZeroDivisors_le_comap
@@ -456,7 +459,8 @@ theorem nonZeroDivisors_le_comap
   refine fun m hm => nonZeroDivisorsRight_eq_nonZeroDivisors (M₀ := N) ▸ fun n h0 => ?_
   have ⟨ms, eq⟩ := f.surj n
   rw [← (f.map_units ms.2).mul_left_eq_zero]; rw [mul_right_comm]; rw [eq]; rw [← map_mul]; rw [map_eq_zero_iff] at h0
-  simp_rw [← mul_assoc, mul_right_mem_nonZeroDivisorsRight_eq_
+  simp_rw [← mul_assoc, mul_right_mem_nonZeroDivisorsRight_eq_zero_iff hm.2] at h0
+  rwa [← (f.map_units ms.2).mul_left_eq_zero, eq, map_eq_zero_iff]
 
 Depends on / 依赖: f.map_units, f.surj, map_eq_zero_iff, map_mul, map_units, mul_assoc, mul_left_eq_zero, mul_right_comm, mul_right_mem_nonZeroDivisorsRight_eq_zero_iff, nonZeroDivisorsRight_eq_nonZeroDivisors, simp_rw
 -/
@@ -499,7 +503,7 @@ theorem noZeroDivisors
   have ⟨ms, eq⟩ := f.surj n
   have hs : ms.1 != 0 := fun h => hn (by rwa [h, f.map_zero, (f.map_units _).mul_left_eq_zero] at eq)
 exact And.left mul_mem_nonZeroDivisors.mp
-    (eq ▸ f.map_nonZeroDivisors_le ⟨_, mem_nonZeroD
+    (eq ▸ f.map_nonZeroDivisors_le ⟨_, mem_nonZeroDivisors_of_ne_zero hs, rfl⟩)
 
 中文:
 定理 noZeroDivisors
@@ -510,7 +514,7 @@ exact And.left mul_mem_nonZeroDivisors.mp
   have ⟨ms, eq⟩ := f.surj n
   have hs : ms.1 != 0 := fun h => hn (by rwa [h, f.map_zero, (f.map_units _).mul_left_eq_zero] at eq)
 exact And.left mul_mem_nonZeroDivisors.mp
-    (eq ▸ f.map_nonZeroDivisors_le ⟨_, mem_nonZeroD
+    (eq ▸ f.map_nonZeroDivisors_le ⟨_, mem_nonZeroDivisors_of_ne_zero hs, rfl⟩)
 
 Depends on / 依赖: And.left, f.map_nonZeroDivisors_le, f.map_units, f.map_zero, f.surj, map_nonZeroDivisors_le, map_units, map_zero, mem_nonZeroDivisors_of_ne_zero, mul_left_eq_zero, mul_mem_nonZeroDivisors, mul_mem_nonZeroDivisors.mp, noZeroDivisors_iff_forall_mem_nonZeroDivisors, noZeroDivisors_iff_forall_mem_nonZeroDivisors.mpr
 -/

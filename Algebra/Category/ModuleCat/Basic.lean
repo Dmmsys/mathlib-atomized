@@ -615,7 +615,7 @@ definition equivalenceSemimoduleCat
   { obj M := of R M
     map {M N} f := ofHom f.hom }
   unitIso := NatIso.ofComponents fun _ => { hom := ⟨.id⟩, inv := ⟨.id⟩ }
-  counitIso := NatIso.ofComponents fun _ => { hom := ⟨.id
+  counitIso := NatIso.ofComponents fun _ => { hom := ⟨.id⟩, inv := ⟨.id⟩ }
 
 中文:
 定义 equivalenceSemimoduleCat
@@ -626,7 +626,7 @@ definition equivalenceSemimoduleCat
   { obj M := of R M
     map {M N} f := ofHom f.hom }
   unitIso := NatIso.ofComponents fun _ => { hom := ⟨.id⟩, inv := ⟨.id⟩ }
-  counitIso := NatIso.ofComponents fun _ => { hom := ⟨.id
+  counitIso := NatIso.ofComponents fun _ => { hom := ⟨.id⟩, inv := ⟨.id⟩ }
 
 Depends on / 依赖: Module, Module.addCommMonoidToAddCommGroup, NatIso, NatIso.ofComponents, SemimoduleCat, SemimoduleCat.ofHom, addCommMonoidToAddCommGroup, counitIso, f.hom, inverse, ofComponents, unitIso
 -/
@@ -1681,7 +1681,8 @@ definition smul
       map_add' := fun x y => by rw [smul_add] }
   map_one' := AddCommGrpCat.ext (fun x => by simp)
   map_zero' := AddCommGrpCat.ext (fun x => by simp)
-  map_mul' r s := AddCommGrpCat.ext (fun (x : M) => (smu
+  map_mul' r s := AddCommGrpCat.ext (fun (x : M) => (smul_smul r s x).symm)
+  map_add' r s := AddCommGrpCat.ext (fun (x : M) => add_smul r s x)
 
 中文:
 定义 smul
@@ -1692,7 +1693,8 @@ definition smul
       map_add' := fun x y => by rw [smul_add] }
   map_one' := AddCommGrpCat.ext (fun x => by simp)
   map_zero' := AddCommGrpCat.ext (fun x => by simp)
-  map_mul' r s := AddCommGrpCat.ext (fun (x : M) => (smu
+  map_mul' r s := AddCommGrpCat.ext (fun (x : M) => (smul_smul r s x).symm)
+  map_add' r s := AddCommGrpCat.ext (fun (x : M) => add_smul r s x)
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ofHom
 -/

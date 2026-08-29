@@ -557,7 +557,8 @@ instance :
       ⟨?_, ?_⟩⟩
     · rw [Scheme.presieve₀_mem_qcPrecoverage_iff]
       exact .of_hom (𝒱 := QuasiCompactCover.ulift 𝒰.1) ⟨Sum.inr, fun i => 𝟙 _, by cat_disch⟩
-    · rw [Scheme.presieve₀_mem_precoverage_i
+    · rw [Scheme.presieve₀_mem_precoverage_iff]
+      exact ⟨fun x => ⟨Sum.inl x, 𝒰.forgetQc.covers _⟩, fun i => 𝒰.forgetQc.map_prop _⟩
 
 中文:
 实例 :
@@ -567,7 +568,8 @@ instance :
       ⟨?_, ?_⟩⟩
     · rw [Scheme.presieve₀_mem_qcPrecoverage_iff]
       exact .of_hom (𝒱 := QuasiCompactCover.ulift 𝒰.1) ⟨Sum.inr, fun i => 𝟙 _, by cat_disch⟩
-    · rw [Scheme.presieve₀_mem_precoverage_i
+    · rw [Scheme.presieve₀_mem_precoverage_iff]
+      exact ⟨fun x => ⟨Sum.inl x, 𝒰.forgetQc.covers _⟩, fun i => 𝒰.forgetQc.map_prop _⟩
 
 Depends on / 依赖: QuasiCompactCover, QuasiCompactCover.ulift, QuasiCompactCover.uliftHom, Scheme, Scheme.presieve, Sum.elim, Sum.inl, Sum.inr, cat_disch, covers, forgetQc, forgetQc.covers, forgetQc.idx, forgetQc.map_prop, forgetQc.qculift.I, map_prop, of_hom, qculift, uliftHom
 -/

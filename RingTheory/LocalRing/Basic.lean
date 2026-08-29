@@ -179,7 +179,10 @@ fun H : 0 = 1 => Imax.1.1 I.eq_top_iff_one.2 H ▸ I.zero_mem)
     fun x y hx hy H =>
     let ⟨I, Imax, Iuniq⟩ := h
     let ⟨Ix, Ixmax, Hx⟩ := exists_max_ideal_of_mem_nonunits hx
-    let ⟨Iy, Iymax, Hy⟩ := exists_max_i
+    let ⟨Iy, Iymax, Hy⟩ := exists_max_ideal_of_mem_nonunits hy
+    have xmemI : x in I := Iuniq Ix Ixmax ▸ Hx
+    have ymemI : y in I := Iuniq Iy Iymax ▸ Hy
+Imax.1.1 I.eq_top_of_isUnit_mem (I.add_mem xmemI ymemI) H
 
 中文:
 定理 of_unique_max_ideal
@@ -192,7 +195,10 @@ fun H : 0 = 1 => Imax.1.1 I.eq_top_iff_one.2 H ▸ I.zero_mem)
     fun x y hx hy H =>
     let ⟨I, Imax, Iuniq⟩ := h
     let ⟨Ix, Ixmax, Hx⟩ := exists_max_ideal_of_mem_nonunits hx
-    let ⟨Iy, Iymax, Hy⟩ := exists_max_i
+    let ⟨Iy, Iymax, Hy⟩ := exists_max_ideal_of_mem_nonunits hy
+    have xmemI : x in I := Iuniq Ix Ixmax ▸ Hx
+    have ymemI : y in I := Iuniq Iy Iymax ▸ Hy
+Imax.1.1 I.eq_top_of_isUnit_mem (I.add_mem xmemI ymemI) H
 
 Depends on / 依赖: I.add_mem, I.eq_top_iff_one, I.eq_top_of_isUnit_mem, I.zero_mem, add_mem, eq_top_iff_one, eq_top_of_isUnit_mem, exists_max_ideal_of_mem_nonunits, nontrivial_of_ne, of_nonunits_add, zero_mem
 -/
@@ -221,7 +227,9 @@ theorem of_unique_nonzero_prime
       rcases h with ⟨P, ⟨hPnonzero, hPnot_top, _⟩, hPunique⟩
       refine ⟨P, ⟨⟨hPnot_top, ?_⟩⟩, fun M hM => hPunique _ ⟨?_, Ideal.IsMaximal.isPrime hM⟩⟩
       · refine Ideal.maximal_of_no_maximal fun M hPM hM => ne_of_lt hPM ?_
-        exact (hPunique _ ⟨ne_bot_of_gt hPM
+        exact (hPunique _ ⟨ne_bot_of_gt hPM, Ideal.IsMaximal.isPrime hM⟩).symm
+      · rintro rfl
+        exact hPnot_top (hM.1.2 P (bot_lt_iff_ne_bot.2 hPnonzero)))
 
 中文:
 定理 of_unique_nonzero_prime
@@ -232,7 +240,9 @@ theorem of_unique_nonzero_prime
       rcases h with ⟨P, ⟨hPnonzero, hPnot_top, _⟩, hPunique⟩
       refine ⟨P, ⟨⟨hPnot_top, ?_⟩⟩, fun M hM => hPunique _ ⟨?_, Ideal.IsMaximal.isPrime hM⟩⟩
       · refine Ideal.maximal_of_no_maximal fun M hPM hM => ne_of_lt hPM ?_
-        exact (hPunique _ ⟨ne_bot_of_gt hPM
+        exact (hPunique _ ⟨ne_bot_of_gt hPM, Ideal.IsMaximal.isPrime hM⟩).symm
+      · rintro rfl
+        exact hPnot_top (hM.1.2 P (bot_lt_iff_ne_bot.2 hPnonzero)))
 
 Depends on / 依赖: Ideal.IsMaximal.isPrime, Ideal.maximal_of_no_maximal, IsMaximal, bot_lt_iff_ne_bot, hPnonzero, hPnot_top, hPunique, isPrime, maximal_of_no_maximal, ne_bot_of_gt, ne_of_lt, of_unique_max_ideal
 -/

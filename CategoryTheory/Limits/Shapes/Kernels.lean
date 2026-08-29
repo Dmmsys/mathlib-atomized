@@ -2068,7 +2068,10 @@ definition isCokernelEpiComp
           rw [← Category.assoc]; rw [← hh]; rw [s.condition]
           simp)
     let l := CokernelCofork.IsColimit.desc' i s'.π s'.condition
-    ⟨l.1, l.2, fun hm =>
+    ⟨l.1, l.2, fun hm => by
+      apply Cofork.IsColimit.hom_ext i; rw [Cofork.π_ofπ] at hm; rw [hm]; exact l.2.symm⟩
+
+@[simp]
 
 中文:
 定义 isCokernelEpiComp
@@ -2081,7 +2084,10 @@ definition isCokernelEpiComp
           rw [← Category.assoc]; rw [← hh]; rw [s.condition]
           simp)
     let l := CokernelCofork.IsColimit.desc' i s'.π s'.condition
-    ⟨l.1, l.2, fun hm =>
+    ⟨l.1, l.2, fun hm => by
+      apply Cofork.IsColimit.hom_ext i; rw [Cofork.π_ofπ] at hm; rw [hm]; exact l.2.symm⟩
+
+@[simp]
 
 Depends on / 依赖: Category, Category.assoc, Cofork, Cofork.IsColimit.hom_ext, Cofork.IsColimit.mk, Cofork.of, CokernelCofork, CokernelCofork.IsColimit.desc, IsColimit, condition, hg.left_cancellation, hom_ext, left_cancellation, s.condition
 -/
@@ -3090,7 +3096,9 @@ instance hasCokernel_comp_iso
             (fun s =>
               cokernel.desc _ (g ≫ s.π) (by rw [← Category.assoc, CokernelCofork.condition]))
             (by simp) fun s (m : cokernel _ ⟶ _) w => by
-            simp
+            simp_rw [← w]
+            apply coequalizer.hom_ext
+            simp }⟩
 
 中文:
 实例 hasCokernel_comp_iso
@@ -3101,7 +3109,9 @@ instance hasCokernel_comp_iso
             (fun s =>
               cokernel.desc _ (g ≫ s.π) (by rw [← Category.assoc, CokernelCofork.condition]))
             (by simp) fun s (m : cokernel _ ⟶ _) w => by
-            simp
+            simp_rw [← w]
+            apply coequalizer.hom_ext
+            simp }⟩
 
 Depends on / 依赖: Category, Category.assoc, CokernelCofork, CokernelCofork.condition, CokernelCofork.of, cocone, coequalizer, coequalizer.hom_ext, cokernel, cokernel.desc, condition, hom_ext, isColimit, isColimitAux, simp_rw
 -/
@@ -3400,7 +3410,13 @@ definition cokernelImageι
         rw [← HasZeroMorphisms.comp_zero (Limits.factorThruImage f)]; rw [Category.assoc]; rw [cancel_epi] at w
         exact w)
   inv :=
-  
+    cokernel.desc _ (cokernel.π _)
+      (by
+        conv =>
+          lhs
+          congr
+          rw [← image.fac f]
+        rw [Category.assoc]; rw [cokernel.condition]; rw [HasZeroMorphisms.comp_zero])
 
 中文:
 定义 cokernelImageι
@@ -3415,7 +3431,13 @@ definition cokernelImageι
         rw [← HasZeroMorphisms.comp_zero (Limits.factorThruImage f)]; rw [Category.assoc]; rw [cancel_epi] at w
         exact w)
   inv :=
-  
+    cokernel.desc _ (cokernel.π _)
+      (by
+        conv =>
+          lhs
+          congr
+          rw [← image.fac f]
+        rw [Category.assoc]; rw [cokernel.condition]; rw [HasZeroMorphisms.comp_zero])
 
 Depends on / 依赖: Category, Category.assoc, HasZeroMorphisms, HasZeroMorphisms.comp_zero, Limits, Limits.factorThruImage, cancel_epi, cokernel, cokernel.condition, cokernel.desc, comp_zero, condition, factorThruImage, image.fac
 -/

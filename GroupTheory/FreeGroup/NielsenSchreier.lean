@@ -148,7 +148,34 @@ instance actionGroupoidIsFree
   unique_lift := by
     intro X _ f
     let f' : IsFreeGroup.Generators G -> (A -> X) ⋊[mulAutArrow] G := fun e =>
-      ⟨fun b => @f ⟨(), _⟩ ⟨(), b⟩ ⟨e, 
+      ⟨fun b => @f ⟨(), _⟩ ⟨(), b⟩ ⟨e, smul_inv_smul _ b⟩, IsFreeGroup.of e⟩
+    rcases IsFreeGroup.unique_lift f' with ⟨F', hF', uF'⟩
+    refine ⟨uncurry F' ?_, ?_, ?_⟩
+    · suffices SemidirectProduct.rightHom.comp F' = MonoidHom.id _ by
+        exact DFunLike.ext_iff.mp this
+      apply IsFreeGroup.ext_hom (fun x => ?_)
+      rw [MonoidHom.comp_apply]; rw [hF']
+      rfl
+    · rintro ⟨⟨⟩, a : A⟩ ⟨⟨⟩, b⟩ ⟨e, h : IsFreeGroup.of e • a = b⟩
+      change (F' (IsFreeGroup.of _)).left _ = _
+      rw [hF']
+      cases inv_smul_eq_iff.mpr h.symm
+      rfl
+    · intro E hE
+      have : curry E = F' := by
+        apply uF'
+        intro e
+        ext
+        · convert! hE _ _ _
+          rfl
+        · rfl
+      apply Functor.hext
+      · intro
+        apply Unit.ext
+      · refine ActionCategory.cases ?_
+        intros
+        simp only [← this, uncurry_map, curry_apply_left, coe_back, homOfPair.val]
+        rfl
 
 中文:
 实例 actionGroupoidIsFree
@@ -158,7 +185,34 @@ instance actionGroupoidIsFree
   unique_lift := by
     intro X _ f
     let f' : IsFreeGroup.Generators G -> (A -> X) ⋊[mulAutArrow] G := fun e =>
-      ⟨fun b => @f ⟨(), _⟩ ⟨(), b⟩ ⟨e, 
+      ⟨fun b => @f ⟨(), _⟩ ⟨(), b⟩ ⟨e, smul_inv_smul _ b⟩, IsFreeGroup.of e⟩
+    rcases IsFreeGroup.unique_lift f' with ⟨F', hF', uF'⟩
+    refine ⟨uncurry F' ?_, ?_, ?_⟩
+    · suffices SemidirectProduct.rightHom.comp F' = MonoidHom.id _ by
+        exact DFunLike.ext_iff.mp this
+      apply IsFreeGroup.ext_hom (fun x => ?_)
+      rw [MonoidHom.comp_apply]; rw [hF']
+      rfl
+    · rintro ⟨⟨⟩, a : A⟩ ⟨⟨⟩, b⟩ ⟨e, h : IsFreeGroup.of e • a = b⟩
+      change (F' (IsFreeGroup.of _)).left _ = _
+      rw [hF']
+      cases inv_smul_eq_iff.mpr h.symm
+      rfl
+    · intro E hE
+      have : curry E = F' := by
+        apply uF'
+        intro e
+        ext
+        · convert! hE _ _ _
+          rfl
+        · rfl
+      apply Functor.hext
+      · intro
+        apply Unit.ext
+      · refine ActionCategory.cases ?_
+        intros
+        simp only [← this, uncurry_map, curry_apply_left, coe_back, homOfPair.val]
+        rfl
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff.mp, Generators, IsFreeGroup, IsFreeGroup.Generators, IsFreeGroup.of, IsFreeGroup.unique_lift, MonoidHom, MonoidHom.id, SemidirectProduct, SemidirectProduct.rightHom.comp, Subtype, a.back, b.back, e.property, ext_iff, mulAutArrow, property, rightHom, smul_inv_smul
 -/
@@ -349,7 +403,7 @@ theorem loopOfHom_eq_id
   · rw [treeHom_eq T (Path.cons default ⟨Sum.inl e, H⟩), homOfPath]
     rfl
   · rw [treeHom_eq T (Path.cons default ⟨Sum.inr e, H⟩), homOfPath]
-    simp only [IsIso.inv_hom_id, Category.co
+    simp only [IsIso.inv_hom_id, Category.comp_id, Category.assoc, treeHom]
 
 中文:
 定理 loopOfHom_eq_id
@@ -360,7 +414,7 @@ theorem loopOfHom_eq_id
   · rw [treeHom_eq T (Path.cons default ⟨Sum.inl e, H⟩), homOfPath]
     rfl
   · rw [treeHom_eq T (Path.cons default ⟨Sum.inr e, H⟩), homOfPath]
-    simp only [IsIso.inv_hom_id, Category.co
+    simp only [IsIso.inv_hom_id, Category.comp_id, Category.assoc, treeHom]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, IsIso.comp_inv_eq, IsIso.inv_hom_id, Path.cons, Sum.inl, Sum.inr, comp_id, comp_inv_eq, homOfPath, id_comp, inv_hom_id, loopOfHom, treeHom, treeHom_eq
 -/
@@ -394,7 +448,7 @@ definition functorOfMonoidHom
   map_comp := by
     intros
     rw [comp_as_mul]; rw [← f.map_mul]
-    simp only [IsIso.inv_hom_id_assoc, loopOfH
+    simp only [IsIso.inv_hom_id_assoc, loopOfHom, End.mul_def, Category.assoc]
 
 中文:
 定义 functorOfMonoidHom
@@ -408,7 +462,7 @@ definition functorOfMonoidHom
   map_comp := by
     intros
     rw [comp_as_mul]; rw [← f.map_mul]
-    simp only [IsIso.inv_hom_id_assoc, loopOfH
+    simp only [IsIso.inv_hom_id_assoc, loopOfHom, End.mul_def, Category.assoc]
 -/
 def functorOfMonoidHom {X} [Monoid X] (f : End (root' T) ->* X) :
     G ⥤ CategoryTheory.SingleObj X where
@@ -439,7 +493,38 @@ lemma endIsFree
       intro X _ f
       let f' : Labelling (Generators G) X := fun a b e =>
         if h : e in wideSubquiverSymmetrify T a b then 1 else f ⟨⟨a, b, e⟩, h⟩
- 
+      rcases unique_lift f' with ⟨F', hF', uF'⟩
+      refine ⟨F'.mapEnd _, ?_, ?_⟩
+      · suffices forall {x y} (q : x ⟶ y), F'.map (loopOfHom T q) = (F'.map q : X) by
+          rintro ⟨⟨a, b, e⟩, h⟩
+          simp only [Functor.mapEnd, DFunLike.coe, this, hF']
+          exact dif_neg h
+        intro x y q
+        suffices forall {a} (p : Path (root T) a), F'.map (homOfPath T p) = 1 by
+          simp only [this, treeHom, comp_as_mul, inv_as_inv, loopOfHom, inv_one, mul_one,
+            one_mul, Functor.map_inv, Functor.map_comp]
+        intro a p
+        induction p with
+        | nil => rw [homOfPath, F'.map_id, id_as_one]
+        | cons p e ih =>
+          rw [homOfPath]; rw [F'.map_comp]; rw [comp_as_mul]; rw [ih]; rw [mul_one]
+          rcases e with ⟨e | e, eT⟩
+          · rw [hF']
+            exact dif_pos (Or.inl eT)
+          · rw [F'.map_inv, inv_as_inv, inv_eq_one, hF']
+            exact dif_pos (Or.inr eT)
+      · intro E hE
+        ext x
+        suffices (functorOfMonoidHom T E).map x = F'.map x by
+          simpa only [loopOfHom, functorOfMonoidHom, IsIso.inv_id, treeHom_root,
+            Category.id_comp, Category.comp_id] using! this
+        congr
+        apply uF'
+        intro a b e
+        change E (loopOfHom T _) = dite _ _ _
+        split_ifs with h
+        · rw [loopOfHom_eq_id T e h, ← End.one_def, E.map_one]
+        · exact hE ⟨⟨a, b, e⟩, h⟩)
 
 中文:
 引理 endIsFree
@@ -450,7 +535,38 @@ lemma endIsFree
       intro X _ f
       let f' : Labelling (Generators G) X := fun a b e =>
         if h : e in wideSubquiverSymmetrify T a b then 1 else f ⟨⟨a, b, e⟩, h⟩
- 
+      rcases unique_lift f' with ⟨F', hF', uF'⟩
+      refine ⟨F'.mapEnd _, ?_, ?_⟩
+      · suffices forall {x y} (q : x ⟶ y), F'.map (loopOfHom T q) = (F'.map q : X) by
+          rintro ⟨⟨a, b, e⟩, h⟩
+          simp only [Functor.mapEnd, DFunLike.coe, this, hF']
+          exact dif_neg h
+        intro x y q
+        suffices forall {a} (p : Path (root T) a), F'.map (homOfPath T p) = 1 by
+          simp only [this, treeHom, comp_as_mul, inv_as_inv, loopOfHom, inv_one, mul_one,
+            one_mul, Functor.map_inv, Functor.map_comp]
+        intro a p
+        induction p with
+        | nil => rw [homOfPath, F'.map_id, id_as_one]
+        | cons p e ih =>
+          rw [homOfPath]; rw [F'.map_comp]; rw [comp_as_mul]; rw [ih]; rw [mul_one]
+          rcases e with ⟨e | e, eT⟩
+          · rw [hF']
+            exact dif_pos (Or.inl eT)
+          · rw [F'.map_inv, inv_as_inv, inv_eq_one, hF']
+            exact dif_pos (Or.inr eT)
+      · intro E hE
+        ext x
+        suffices (functorOfMonoidHom T E).map x = F'.map x by
+          simpa only [loopOfHom, functorOfMonoidHom, IsIso.inv_id, treeHom_root,
+            Category.id_comp, Category.comp_id] using! this
+        congr
+        apply uF'
+        intro a b e
+        change E (loopOfHom T _) = dite _ _ _
+        split_ifs with h
+        · rw [loopOfHom_eq_id T e h, ← End.one_def, E.map_one]
+        · exact hE ⟨⟨a, b, e⟩, h⟩)
 
 Depends on / 依赖: DFunLike, DFunLike.coe, Functor, Functor.mapEnd, Generators, IsFreeGroup, IsFreeGroup.ofUniqueLift, Labelling, e.val.hom, loopOfHom, mapEnd, ofUniqueLift, unique_lift, wideSubquiverEquivSetTotal, wideSubquiverSymmetrify
 -/
@@ -527,7 +643,13 @@ theorem path_nonempty_of_hom
     mul_inv_eq_one]
   let X := FreeGroup (WeaklyConnectedComponent <| Generators G)
   let f : G -> X := fun g => FreeGroup.of (WeaklyConnectedComponent.mk g)
-  let F : G ⥤ 
+  let F : G ⥤ CategoryTheory.SingleObj.{u} (X : Type u) := SingleObj.differenceFunctor f
+  change (F.map p) = ((@CategoryTheory.Functor.const G _ _ (SingleObj.category X)).obj ()).map p
+  congr; ext
+  rw [Functor.const_obj_map]; rw [id_as_one]; rw [differenceFunctor_map]; rw [@mul_inv_eq_one _ _ (f _)]
+  apply congr_arg FreeGroup.of
+  apply (WeaklyConnectedComponent.eq _ _).mpr
+  exact ⟨Hom.toPath (Sum.inr (by assumption))⟩
 
 中文:
 定理 path_nonempty_of_hom
@@ -538,7 +660,13 @@ theorem path_nonempty_of_hom
     mul_inv_eq_one]
   let X := FreeGroup (WeaklyConnectedComponent <| Generators G)
   let f : G -> X := fun g => FreeGroup.of (WeaklyConnectedComponent.mk g)
-  let F : G ⥤ 
+  let F : G ⥤ CategoryTheory.SingleObj.{u} (X : Type u) := SingleObj.differenceFunctor f
+  change (F.map p) = ((@CategoryTheory.Functor.const G _ _ (SingleObj.category X)).obj ()).map p
+  congr; ext
+  rw [Functor.const_obj_map]; rw [id_as_one]; rw [differenceFunctor_map]; rw [@mul_inv_eq_one _ _ (f _)]
+  apply congr_arg FreeGroup.of
+  apply (WeaklyConnectedComponent.eq _ _).mpr
+  exact ⟨Hom.toPath (Sum.inr (by assumption))⟩
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.const, CategoryTheory.SingleObj, F.map, FreeGroup, FreeGroup.of, FreeGroup.of_injective.eq_iff, Functor, Functor.const_obj_map, Generators, SingleObj, SingleObj.category, SingleObj.differenceFunctor, WeaklyConnectedComponent, WeaklyConnectedComponent.eq, WeaklyConnectedComponent.mk, category, const_obj_map, differenceFunctor, eq_comm
 -/

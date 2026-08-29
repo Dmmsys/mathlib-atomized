@@ -83,7 +83,12 @@ definition hypPriority
     -- Guessing (disjunction) gets a big penalty
 | ~q($a ∨ $b) => pure 100 + (← hypPriority a) + (← hypPriority b)
     -- Inequalities get score 1 if they contain zero, 10 otherwise
-    | ~
+    | ~q(@LE.le _ $i $a $b) => ineqPriority a b
+    | ~q(@LT.lt _ $i $a $b) => ineqPriority a b
+    | ~q(@GE.ge _ $i $b $a) => ineqPriority a b
+    | ~q(@GT.gt _ $i $b $a) => ineqPriority a b
+    -- Assume anything else is non-relevant
+    | _ => pure 0
 
 中文:
 定义 hypPriority
@@ -95,7 +100,12 @@ definition hypPriority
     -- Guessing (disjunction) gets a big penalty
 | ~q($a ∨ $b) => pure 100 + (← hypPriority a) + (← hypPriority b)
     -- Inequalities get score 1 if they contain zero, 10 otherwise
-    | ~
+    | ~q(@LE.le _ $i $a $b) => ineqPriority a b
+    | ~q(@LT.lt _ $i $a $b) => ineqPriority a b
+    | ~q(@GE.ge _ $i $b $a) => ineqPriority a b
+    | ~q(@GT.gt _ $i $b $a) => ineqPriority a b
+    -- Assume anything else is non-relevant
+    | _ => pure 0
 -/
 partial def hypPriority (hyp : Q(Prop)) : MetaM Nat := do
   match hyp with
@@ -186,7 +196,9 @@ definition scoreToConfig
   { term? := some (Lean.mkIdent decl)
     phase? := phase
     priority? := some (Aesop.Frontend.Priority.int priority)
-    build
+    builder? := some (.regular .apply)
+    builderOptions := {}
+    ruleSets := ⟨#[`Bound]⟩ }
 
 中文:
 定义 scoreToConfig
@@ -197,7 +209,9 @@ definition scoreToConfig
   { term? := some (Lean.mkIdent decl)
     phase? := phase
     priority? := some (Aesop.Frontend.Priority.int priority)
-    build
+    builder? := some (.regular .apply)
+    builderOptions := {}
+    ruleSets := ⟨#[`Bound]⟩ }
 
 Depends on / 依赖: Aesop.Frontend.Priority.int, Aesop.PhaseName.norm, Aesop.PhaseName.safe, Frontend, Lean.mkIdent, PhaseName, Priority, builder, builderOptions, closes, hypotheses, immediately, mkIdent, priority, regular, ruleSets
 -/

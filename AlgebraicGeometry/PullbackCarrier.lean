@@ -360,7 +360,7 @@ lemma SpecMap_tensorInl_fromSpecResidueField
   simp only [residueFieldCongr_inv, Category.assoc, tensorInl, tensorInr,
     ← Hom.SpecMap_residueFieldMap_fromSpecResidueField]
   rw [← residueFieldCongr_fromSpecResidueField T.hx.symm]; rw [← residueFieldCongr_fromSpecResidueField T.hy.symm]
-  simp only [← Category.assoc, ← Spec.map_comp, push
+  simp only [← Category.assoc, ← Spec.map_comp, pushout.condition]
 
 中文:
 引理 SpecMap_tensorInl_fromSpecResidueField
@@ -368,7 +368,7 @@ lemma SpecMap_tensorInl_fromSpecResidueField
   simp only [residueFieldCongr_inv, Category.assoc, tensorInl, tensorInr,
     ← Hom.SpecMap_residueFieldMap_fromSpecResidueField]
   rw [← residueFieldCongr_fromSpecResidueField T.hx.symm]; rw [← residueFieldCongr_fromSpecResidueField T.hy.symm]
-  simp only [← Category.assoc, ← Spec.map_comp, push
+  simp only [← Category.assoc, ← Spec.map_comp, pushout.condition]
 
 Depends on / 依赖: Category, Category.assoc, Hom.SpecMap_residueFieldMap_fromSpecResidueField, Spec.map_comp, SpecMap_residueFieldMap_fromSpecResidueField, T.hx.symm, T.hy.symm, condition, map_comp, pushout, pushout.condition, residueFieldCongr_fromSpecResidueField, residueFieldCongr_inv, tensorInl, tensorInr
 -/
@@ -623,7 +623,10 @@ lemma ofPointTensor_SpecTensorTo
     simp only [Category.assoc, Triplet.specTensorTo_fst]
     rw [← pushout.inl_desc _ _ (residueFieldCongr_inv_residueFieldMap_ofPoint t)]; rw [Spec.map_comp]
     rfl
-  · rw [← Scheme.Hom.SpecMap_residueFi
+  · rw [← Scheme.Hom.SpecMap_residueFieldMap_fromSpecResidueField]
+    simp only [Category.assoc, Triplet.specTensorTo_snd]
+    rw [← pushout.inr_desc _ _ (residueFieldCongr_inv_residueFieldMap_ofPoint t)]; rw [Spec.map_comp]
+    rfl
 
 中文:
 引理 ofPointTensor_SpecTensorTo
@@ -634,7 +637,10 @@ lemma ofPointTensor_SpecTensorTo
     simp only [Category.assoc, Triplet.specTensorTo_fst]
     rw [← pushout.inl_desc _ _ (residueFieldCongr_inv_residueFieldMap_ofPoint t)]; rw [Spec.map_comp]
     rfl
-  · rw [← Scheme.Hom.SpecMap_residueFi
+  · rw [← Scheme.Hom.SpecMap_residueFieldMap_fromSpecResidueField]
+    simp only [Category.assoc, Triplet.specTensorTo_snd]
+    rw [← pushout.inr_desc _ _ (residueFieldCongr_inv_residueFieldMap_ofPoint t)]; rw [Spec.map_comp]
+    rfl
 
 Depends on / 依赖: Category, Category.assoc, Scheme, Scheme.Hom.SpecMap_residueFieldMap_fromSpecResidueField, Spec.map_comp, SpecMap_residueFieldMap_fromSpecResidueField, Triplet, Triplet.specTensorTo_fst, Triplet.specTensorTo_snd, hom_ext, inl_desc, inr_desc, map_comp, pullback, pullback.hom_ext, pushout, pushout.inl_desc, pushout.inr_desc, residueFieldCongr_inv_residueFieldMap_ofPoint, specTensorTo_fst
 -/
@@ -732,7 +738,9 @@ lemma Triplet.Spec_ofPointTensor_SpecTensorTo
   · rw [← cancel_mono <| X.fromSpecResidueField T.x]
     simp_rw [Category.assoc, ← T.specTensorTo_fst, tensorCongr_SpecTensorTo_assoc]
     rw [← Hom.SpecMap_residueFieldMap_fromSpecResidueField_assoc]; rw [ofPointTensor_SpecTensorTo_assoc]
-  · rw [← ca
+  · rw [← cancel_mono <| Y.fromSpecResidueField T.y]
+    simp_rw [Category.assoc, ← T.specTensorTo_snd, tensorCongr_SpecTensorTo_assoc]
+    rw [← Hom.SpecMap_residueFieldMap_fromSpecResidueField_assoc]; rw [ofPointTensor_SpecTensorTo_assoc]
 
 中文:
 引理 Triplet.Spec_ofPointTensor_SpecTensorTo
@@ -742,7 +750,9 @@ lemma Triplet.Spec_ofPointTensor_SpecTensorTo
   · rw [← cancel_mono <| X.fromSpecResidueField T.x]
     simp_rw [Category.assoc, ← T.specTensorTo_fst, tensorCongr_SpecTensorTo_assoc]
     rw [← Hom.SpecMap_residueFieldMap_fromSpecResidueField_assoc]; rw [ofPointTensor_SpecTensorTo_assoc]
-  · rw [← ca
+  · rw [← cancel_mono <| Y.fromSpecResidueField T.y]
+    simp_rw [Category.assoc, ← T.specTensorTo_snd, tensorCongr_SpecTensorTo_assoc]
+    rw [← Hom.SpecMap_residueFieldMap_fromSpecResidueField_assoc]; rw [ofPointTensor_SpecTensorTo_assoc]
 
 Depends on / 依赖: Category, Category.assoc, Hom.SpecMap_residueFieldMap_fromSpecResidueField_assoc, SpecMap_residueFieldMap_fromSpecResidueField_assoc, T.isPullback_SpecMap_tensor.hom_ext, T.specTensorTo_fst, T.specTensorTo_snd, X.fromSpecResidueField, Y.fromSpecResidueField, cancel_mono, fromSpecResidueField, hom_ext, isPullback_SpecMap_tensor, isRegular, ofPointTensor_SpecTensorTo_, ofPointTensor_SpecTensorTo_assoc, simp_rw, specTensorTo_fst, specTensorTo_snd, tensorCongr_SpecTensorTo_assoc
 -/
@@ -813,7 +823,11 @@ definition carrierEquiv
     apply carrierEquiv_eq_iff.mpr
     use T.ofPoint_SpecTensorTo p
     have : Spec.map (Hom.residueFieldMap T.SpecTensorTo p) (⊥ : PrimeSpectrum _) =
-        (⊥ : 
+        (⊥ : PrimeSpectrum _) :=
+      (PrimeSpectrum.instUnique).uniq _
+    simp only [SpecOfPoint, Triplet.tensorCongr_inv, ← this, ← Scheme.Hom.comp_apply,
+      ← Scheme.Hom.comp_apply]
+    simp [Triplet.Spec_ofPointTensor_SpecTensorTo]
 
 中文:
 定义 carrierEquiv
@@ -826,7 +840,11 @@ definition carrierEquiv
     apply carrierEquiv_eq_iff.mpr
     use T.ofPoint_SpecTensorTo p
     have : Spec.map (Hom.residueFieldMap T.SpecTensorTo p) (⊥ : PrimeSpectrum _) =
-        (⊥ : 
+        (⊥ : PrimeSpectrum _) :=
+      (PrimeSpectrum.instUnique).uniq _
+    simp only [SpecOfPoint, Triplet.tensorCongr_inv, ← this, ← Scheme.Hom.comp_apply,
+      ← Scheme.Hom.comp_apply]
+    simp [Triplet.Spec_ofPointTensor_SpecTensorTo]
 
 Depends on / 依赖: SpecOfPoint, ofPoint
 -/
@@ -1107,7 +1125,16 @@ lemma range_map
       rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]
       simp
   · intro ⟨⟨x, hx⟩, ⟨y, hy⟩⟩
-
+    let T₁ : Triplet (pullback.fst f' g') i₁ := Triplet.mk' z x hx.symm
+    obtain ⟨w₁, hw₁⟩ := T₁.exists_preimage
+    let T₂ : Triplet (pullback.snd f' g') i₂ := Triplet.mk' z y hy.symm
+    obtain ⟨w₂, hw₂⟩ := T₂.exists_preimage
+    let T : Triplet (pullback.fst (pullback.fst f' g') i₁) (pullback.fst (pullback.snd f' g') i₂) :=
+Triplet.mk' w₁ w₂ by simp [hw₁.left, hw₂.left, T₁, T₂]
+    obtain ⟨t, _, ht₂⟩ := T.exists_preimage
+    use (pullbackFstFstIso f g f' g' i₁ i₂ i₃ e₁ e₂).hom t
+    rw [pullback_map_eq_pullbackFstFstIso_inv]; rw [← Scheme.Hom.comp_apply]; rw [Iso.hom_inv_id_assoc]
+    simp [ht₂, T, hw₂.left, T₂]
 
 中文:
 引理 range_map
@@ -1124,7 +1151,16 @@ lemma range_map
       rw [← Scheme.Hom.comp_apply]; rw [← Scheme.Hom.comp_apply]
       simp
   · intro ⟨⟨x, hx⟩, ⟨y, hy⟩⟩
-
+    let T₁ : Triplet (pullback.fst f' g') i₁ := Triplet.mk' z x hx.symm
+    obtain ⟨w₁, hw₁⟩ := T₁.exists_preimage
+    let T₂ : Triplet (pullback.snd f' g') i₂ := Triplet.mk' z y hy.symm
+    obtain ⟨w₂, hw₂⟩ := T₂.exists_preimage
+    let T : Triplet (pullback.fst (pullback.fst f' g') i₁) (pullback.fst (pullback.snd f' g') i₂) :=
+Triplet.mk' w₁ w₂ by simp [hw₁.left, hw₂.left, T₁, T₂]
+    obtain ⟨t, _, ht₂⟩ := T.exists_preimage
+    use (pullbackFstFstIso f g f' g' i₁ i₂ i₃ e₁ e₂).hom t
+    rw [pullback_map_eq_pullbackFstFstIso_inv]; rw [← Scheme.Hom.comp_apply]; rw [Iso.hom_inv_id_assoc]
+    simp [ht₂, T, hw₂.left, T₂]
 
 Depends on / 依赖: Scheme, Scheme.Hom.comp_apply, Triplet, Triplet.mk, comp_apply, exists_preimage, hx.symm, hy.symm, pullback, pullback.fst, pullback.snd
 -/
@@ -1195,7 +1231,9 @@ refine .of_comp_left (fun x => ?_)
   use z
   ext
   · simp only [Function.comp_apply, Types.pullbackIsoPullback_hom_fst]
- 
+    rwa [← types_comp_apply (g := pullback.fst _ _), pullbackComparison_comp_fst]
+  · simp only [Function.comp_apply, Types.pullbackIsoPullback_hom_snd]
+    rwa [← types_comp_apply (g := pullback.snd _ _), pullbackComparison_comp_snd]
 
 中文:
 引理 pullbackComparison_forget_surjective
@@ -1207,7 +1245,9 @@ refine .of_comp_left (fun x => ?_)
   use z
   ext
   · simp only [Function.comp_apply, Types.pullbackIsoPullback_hom_fst]
- 
+    rwa [← types_comp_apply (g := pullback.fst _ _), pullbackComparison_comp_fst]
+  · simp only [Function.comp_apply, Types.pullbackIsoPullback_hom_snd]
+    rwa [← types_comp_apply (g := pullback.snd _ _), pullbackComparison_comp_snd]
 
 Depends on / 依赖: Function, Function.comp_apply, Pullback, Pullback.exists_preimage_pullback, Types.pullbackIsoPullback, Types.pullbackIsoPullback_hom_fst, Types.pullbackIsoPullback_hom_snd, comp_apply, exists_preimage_pullback, forget, forget.map, injective_of_mono, of_comp_left, pullback, pullback.fst, pullback.snd, pullbackCompariso, pullbackComparison_comp_fst, pullbackIsoPullback, pullbackIsoPullback_hom_fst
 -/
@@ -1273,7 +1313,10 @@ lemma image_preimage_eq_of_isPullback
   · rw [Set.image_subset_iff, ← Set.preimage_comp, ← TopCat.coe_comp, ← Hom.comp_base, ← h.1.1]
     rw [Hom.comp_base]; rw [TopCat.coe_comp]; rw [← Set.image_subset_iff]; rw [Set.image_comp]
     exact Set.image_mono (Set.image_preimage_subset _ _)
-  · 
+  · obtain ⟨y, hy, heq⟩ := hx
+    obtain ⟨o, hl, hr⟩ := exists_preimage_of_isPullback h y x heq
+    use o
+    simpa [hl, hr]
 
 中文:
 引理 image_preimage_eq_of_isPullback
@@ -1283,7 +1326,10 @@ lemma image_preimage_eq_of_isPullback
   · rw [Set.image_subset_iff, ← Set.preimage_comp, ← TopCat.coe_comp, ← Hom.comp_base, ← h.1.1]
     rw [Hom.comp_base]; rw [TopCat.coe_comp]; rw [← Set.image_subset_iff]; rw [Set.image_comp]
     exact Set.image_mono (Set.image_preimage_subset _ _)
-  · 
+  · obtain ⟨y, hy, heq⟩ := hx
+    obtain ⟨o, hl, hr⟩ := exists_preimage_of_isPullback h y x heq
+    use o
+    simpa [hl, hr]
 
 Depends on / 依赖: Hom.comp_base, Set.image_comp, Set.image_mono, Set.image_preimage_subset, Set.image_subset_iff, Set.preimage_comp, TopCat, TopCat.coe_comp, coe_comp, comp_base, exists_preimage_of_isPullback, image_comp, image_mono, image_preimage_subset, image_subset_iff, preimage_comp, subset_antisymm
 -/

@@ -83,7 +83,10 @@ definition getNNRealCoes
   | none => match e.getAppFnArgs with
     | (``HAdd.hAdd, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
     | (``HMul.hMul, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
-    | (``HSub.hSub, #[_, _, _, _, a, b]) => getNNReal
+    | (``HSub.hSub, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
+    | (``HDiv.hDiv, #[_, _, _, _, a, _]) => getNNRealCoes a
+    | (``Neg.neg, #[_, _, a]) => getNNRealCoes a
+    | _ => []
 
 中文:
 定义 getNN实数Coes
@@ -93,7 +96,10 @@ definition getNNRealCoes
   | none => match e.getAppFnArgs with
     | (``HAdd.hAdd, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
     | (``HMul.hMul, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
-    | (``HSub.hSub, #[_, _, _, _, a, b]) => getNNReal
+    | (``HSub.hSub, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
+    | (``HDiv.hDiv, #[_, _, _, _, a, _]) => getNNRealCoes a
+    | (``Neg.neg, #[_, _, a]) => getNNRealCoes a
+    | _ => []
 -/
 partial def getNNRealCoes (e : Expr) : List Expr :=
   match getNNRealToRealArg? e with

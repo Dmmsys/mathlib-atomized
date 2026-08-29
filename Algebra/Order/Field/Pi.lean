@@ -35,7 +35,10 @@ theorem Pi.exists_forall_pos_add_lt
     obtain ha | ha := ha.lt_or_gt <;> obtain ⟨b, hb, -⟩ := exists_pos_add_of_lt' ha <;>
       exact ⟨b, hb, isEmptyElim⟩
   choose ε hε hxε using fun i => exists_pos_add_of_lt' (h i)
-  obtain rfl : x +
+  obtain rfl : x + ε = y := funext hxε
+  have hε : 0 < Finset.univ.inf' Finset.univ_nonempty ε := (Finset.lt_inf'_iff _).2 fun i _ => hε _
+  obtain ⟨δ, hδ, hδε⟩ := exists_between hε
+  exact ⟨δ, hδ, fun i => add_lt_add_right (hδε.trans_le <| Finset.inf'_le _ <| Finset.mem_univ _) _⟩
 
 中文:
 定理 依赖函数类型.存在_对任意_pos_add_lt
@@ -47,7 +50,10 @@ theorem Pi.exists_forall_pos_add_lt
     obtain ha | ha := ha.lt_or_gt <;> obtain ⟨b, hb, -⟩ := exists_pos_add_of_lt' ha <;>
       exact ⟨b, hb, isEmptyElim⟩
   choose ε hε hxε using fun i => exists_pos_add_of_lt' (h i)
-  obtain rfl : x +
+  obtain rfl : x + ε = y := funext hxε
+  have hε : 0 < Finset.univ.inf' Finset.univ_nonempty ε := (Finset.lt_inf'_iff _).2 fun i _ => hε _
+  obtain ⟨δ, hδ, hδε⟩ := exists_between hε
+  exact ⟨δ, hδ, fun i => add_lt_add_right (hδε.trans_le <| Finset.inf'_le _ <| Finset.mem_univ _) _⟩
 
 Depends on / 依赖: Finset, Finset.lt_inf, Finset.univ.inf, Finset.univ_nonempty, _iff, add_lt_add_right, exists_between, exists_ne, exists_pos_add_of_lt, ha.lt_or_gt, isEmptyElim, isEmpty_or_nonempty, lt_inf, lt_or_gt, nonempty_fintype, trans_le, univ_nonempty
 -/

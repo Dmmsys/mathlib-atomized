@@ -83,7 +83,12 @@ theorem card_support_le_one_iff_monomial
     · simp [hi]
     · have : f.coeff i = 0 := by
         rw [← notMem_support_iff]
-        exact fun hi' => hi (Finset.mem_sing
+        exact fun hi' => hi (Finset.mem_singleton.1 (hn hi'))
+      simp [this, Ne.symm hi, coeff_monomial]
+  · rintro ⟨n, a, rfl⟩
+    rw [← Finset.card_singleton n]
+    apply Finset.card_le_card
+    exact support_monomial_subset _ _
 
 中文:
 定理 card_support_le_one_iff_monomial
@@ -99,7 +104,12 @@ theorem card_support_le_one_iff_monomial
     · simp [hi]
     · have : f.coeff i = 0 := by
         rw [← notMem_support_iff]
-        exact fun hi' => hi (Finset.mem_sing
+        exact fun hi' => hi (Finset.mem_singleton.1 (hn hi'))
+      simp [this, Ne.symm hi, coeff_monomial]
+  · rintro ⟨n, a, rfl⟩
+    rw [← Finset.card_singleton n]
+    apply Finset.card_le_card
+    exact support_monomial_subset _ _
 
 Depends on / 依赖: Finset, Finset.card_le_card, Finset.card_le_one_iff_subset_singleton, Finset.card_singleton, Finset.mem_singleton, Ne.symm, card_le_card, card_le_one_iff_subset_singleton, card_singleton, coeff_monomial, f.coeff, mem_singleton, notMem_support_iff, support_monomial_subset
 -/
@@ -136,7 +146,18 @@ theorem ringHom_ext
     · simp [f', g', h₁, RingEquiv.toRingHom_eq_coe]
     simpa using! h₂
   have B : f = f'.comp (toFinsuppIso R) := by
-    rw [hf']; rw [RingHom.
+    rw [hf']; rw [RingHom.comp_assoc]
+    ext x
+    simp only [RingEquiv.toRingHom_eq_coe, RingEquiv.symm_apply_apply, Function.comp_apply,
+      RingHom.coe_comp, RingEquiv.coe_toRingHom]
+  have C' : g = g'.comp (toFinsuppIso R) := by
+    rw [hg']; rw [RingHom.comp_assoc]
+    ext x
+    simp only [RingEquiv.toRingHom_eq_coe, RingEquiv.symm_apply_apply, Function.comp_apply,
+      RingHom.coe_comp, RingEquiv.coe_toRingHom]
+  rw [B]; rw [C']; rw [A]
+
+@[ext high]
 
 中文:
 定理 ringHom_ext
@@ -149,7 +170,18 @@ theorem ringHom_ext
     · simp [f', g', h₁, RingEquiv.toRingHom_eq_coe]
     simpa using! h₂
   have B : f = f'.comp (toFinsuppIso R) := by
-    rw [hf']; rw [RingHom.
+    rw [hf']; rw [RingHom.comp_assoc]
+    ext x
+    simp only [RingEquiv.toRingHom_eq_coe, RingEquiv.symm_apply_apply, Function.comp_apply,
+      RingHom.coe_comp, RingEquiv.coe_toRingHom]
+  have C' : g = g'.comp (toFinsuppIso R) := by
+    rw [hg']; rw [RingHom.comp_assoc]
+    ext x
+    simp only [RingEquiv.toRingHom_eq_coe, RingEquiv.symm_apply_apply, Function.comp_apply,
+      RingHom.coe_comp, RingEquiv.coe_toRingHom]
+  rw [B]; rw [C']; rw [A]
+
+@[ext high]
 
 Depends on / 依赖: Function, Function.comp_apply, RingEquiv, RingEquiv.coe_toRingHom, RingEquiv.symm_apply_apply, RingEquiv.toRingHom_eq_coe, RingHom, RingHom.coe_comp, RingHom.comp_ass, RingHom.comp_assoc, coe_comp, coe_toRingHom, comp_apply, comp_ass, comp_assoc, f.comp, g.comp, symm.toRingHom, symm_apply_apply, toFinsuppIso
 -/

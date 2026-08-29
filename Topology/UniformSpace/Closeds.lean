@@ -214,7 +214,14 @@ theorem hausdorffEntourage_comp
     refine ⟨U.image s inter V.preimage t, ⟨?_, Set.inter_subset_left⟩, ⟨Set.inter_subset_right, ?_⟩⟩
     · intro x hx
       obtain ⟨z, hz, y, hxy, hyz⟩ := hst hx
-      exact ⟨y, ⟨⟨x, hx, hxy⟩
+      exact ⟨y, ⟨⟨x, hx, hxy⟩, ⟨z, hz, hyz⟩⟩, hxy⟩
+    · intro z hz
+      obtain ⟨x, hx, y, hxy, hyz⟩ := hts hz
+      exact ⟨y, ⟨⟨x, hx, hxy⟩, ⟨z, hz, hyz⟩⟩, hyz⟩
+  · intro ⟨s₁, s₃⟩ ⟨s₂, ⟨h₁₂, h₂₁⟩, ⟨h₂₃, h₃₂⟩⟩
+    simp only at *
+    grw [mem_hausdorffEntourage, preimage_comp, ← h₂₃, ← h₁₂, image_comp, ← h₂₁, ← h₃₂]
+    exact ⟨subset_rfl, subset_rfl⟩
 
 中文:
 定理 hausdorffEntourage_comp
@@ -226,7 +233,14 @@ theorem hausdorffEntourage_comp
     refine ⟨U.image s inter V.preimage t, ⟨?_, Set.inter_subset_left⟩, ⟨Set.inter_subset_right, ?_⟩⟩
     · intro x hx
       obtain ⟨z, hz, y, hxy, hyz⟩ := hst hx
-      exact ⟨y, ⟨⟨x, hx, hxy⟩
+      exact ⟨y, ⟨⟨x, hx, hxy⟩, ⟨z, hz, hyz⟩⟩, hxy⟩
+    · intro z hz
+      obtain ⟨x, hx, y, hxy, hyz⟩ := hts hz
+      exact ⟨y, ⟨⟨x, hx, hxy⟩, ⟨z, hz, hyz⟩⟩, hyz⟩
+  · intro ⟨s₁, s₃⟩ ⟨s₂, ⟨h₁₂, h₂₁⟩, ⟨h₂₃, h₃₂⟩⟩
+    simp only at *
+    grw [mem_hausdorffEntourage, preimage_comp, ← h₂₃, ← h₁₂, image_comp, ← h₂₁, ← h₃₂]
+    exact ⟨subset_rfl, subset_rfl⟩
 
 Depends on / 依赖: Set.inter_subset_left, Set.inter_subset_right, U.image, V.preimage, inter_subset_left, inter_subset_right, mem_comp, mem_hausdorffEntourage, preimage, preimage_comp, subset_antisymm
 -/
@@ -330,7 +344,7 @@ theorem TotallyBounded.exists_prodMk_finset_mem_hausdorffEntourage
   rw [Finset.coe_filter]
   refine ⟨fun _ h => h.2, fun x hx => ?_⟩
   obtain ⟨y, hy, hxy⟩ := Set.mem_iUnion₂.mp (ht₂ hx)
-  exact ⟨y, ⟨hy, x, hx, hx
+  exact ⟨y, ⟨hy, x, hx, hxy⟩, hxy⟩
 
 中文:
 定理 全有界.存在_prodMk_finset_mem_hausdorffEntourage
@@ -343,7 +357,7 @@ theorem TotallyBounded.exists_prodMk_finset_mem_hausdorffEntourage
   rw [Finset.coe_filter]
   refine ⟨fun _ h => h.2, fun x hx => ?_⟩
   obtain ⟨y, hy, hxy⟩ := Set.mem_iUnion₂.mp (ht₂ hx)
-  exact ⟨y, ⟨hy, x, hx, hx
+  exact ⟨y, ⟨hy, x, hx, hxy⟩, hxy⟩
 
 Depends on / 依赖: Finset, Finset.coe_filter, Set.mem_iUnion, classical, coe_filter, symm_le_uniformity
 -/
@@ -402,7 +416,14 @@ abbreviation UniformSpace.hausdorff
       have := isRefl_of_mem_uniformity hU
       exact isRefl_hausdorffEntourage U
     symm :=
-      Filter.tendsto_lift'.mpr fun U h
+      Filter.tendsto_lift'.mpr fun U hU => Filter.mem_of_superset
+        (Filter.mem_lift' (symm_le_uniformity hU)) (inv_hausdorffEntourage U).symm.subset
+    comp := by
+      rw [Filter.le_lift']
+      intro U hU
+      obtain ⟨V, hV, hVU⟩ := comp_mem_uniformity_sets hU
+      refine Filter.mem_of_superset (Filter.mem_lift' (Filter.mem_lift' hV)) ?_
+      grw [← hausdorffEntourage_comp, hVU] }
 
 中文:
 缩写 一致空间.hausdorff
@@ -415,7 +436,14 @@ abbreviation UniformSpace.hausdorff
       have := isRefl_of_mem_uniformity hU
       exact isRefl_hausdorffEntourage U
     symm :=
-      Filter.tendsto_lift'.mpr fun U h
+      Filter.tendsto_lift'.mpr fun U hU => Filter.mem_of_superset
+        (Filter.mem_lift' (symm_le_uniformity hU)) (inv_hausdorffEntourage U).symm.subset
+    comp := by
+      rw [Filter.le_lift']
+      intro U hU
+      obtain ⟨V, hV, hVU⟩ := comp_mem_uniformity_sets hU
+      refine Filter.mem_of_superset (Filter.mem_lift' (Filter.mem_lift' hV)) ?_
+      grw [← hausdorffEntourage_comp, hVU] }
 -/
 protected abbrev UniformSpace.hausdorff : UniformSpace (Set α) := .ofCore
   { uniformity := (𝓤 α).lift' hausdorffEntourage
@@ -660,7 +688,7 @@ theorem uniformContinuous_prod
 .lift' monotone_hausdorffEntourage refine (𝓤 α).basis_sets.uniformity_prod (𝓤 β).basis_sets
 .tendsto_right_iff.mpr fun ⟨U, V⟩ ⟨hU, hV⟩ => ?_
   filter_upwards [entourageProd_mem_uniformity (Filter.mem_lift' hU) (Filter.mem_lift' hV)]
-    with ⟨⟨s₁, s₂⟩, ⟨t₁, t₂⟩⟩ ⟨h₁, h₂⟩ using prod_mem_hausdorffE
+    with ⟨⟨s₁, s₂⟩, ⟨t₁, t₂⟩⟩ ⟨h₁, h₂⟩ using prod_mem_hausdorffEntourage_entourageProd U V h₁ h₂
 
 中文:
 定理 uniformContinuous_prod
@@ -669,7 +697,7 @@ theorem uniformContinuous_prod
 .lift' monotone_hausdorffEntourage refine (𝓤 α).basis_sets.uniformity_prod (𝓤 β).basis_sets
 .tendsto_right_iff.mpr fun ⟨U, V⟩ ⟨hU, hV⟩ => ?_
   filter_upwards [entourageProd_mem_uniformity (Filter.mem_lift' hU) (Filter.mem_lift' hV)]
-    with ⟨⟨s₁, s₂⟩, ⟨t₁, t₂⟩⟩ ⟨h₁, h₂⟩ using prod_mem_hausdorffE
+    with ⟨⟨s₁, s₂⟩, ⟨t₁, t₂⟩⟩ ⟨h₁, h₂⟩ using prod_mem_hausdorffEntourage_entourageProd U V h₁ h₂
 
 Depends on / 依赖: Filter, Filter.mem_lift, basis_sets, basis_sets.uniformity_prod, entourageProd_mem_uniformity, filter_upwards, mem_lift, monotone_hausdorffEntourage, prod_mem_hausdorffEntourage_entourageProd, tendsto_right_iff, tendsto_right_iff.mpr, uniformity_prod
 -/
@@ -691,7 +719,12 @@ theorem uniformContinuous_closure
   intro U hU
   obtain ⟨V : SetRel α α, hV, hVU⟩ := comp_mem_uniformity_sets hU
   refine ⟨V, hV, fun ⟨s, t⟩ ⟨hst, hts⟩ => ?_⟩
-  simp 
+  simp only at *
+  constructor
+  · grw [closure_subset_preimage hV s, hst, ← subset_closure, ← hVU, SetRel.preimage_comp]
+  · grw [closure_subset_image hV t, hts, ← subset_closure, ← hVU, SetRel.image_comp]
+
+@[fun_prop]
 
 中文:
 定理 uniformContinuous_closure
@@ -702,7 +735,12 @@ theorem uniformContinuous_closure
   intro U hU
   obtain ⟨V : SetRel α α, hV, hVU⟩ := comp_mem_uniformity_sets hU
   refine ⟨V, hV, fun ⟨s, t⟩ ⟨hst, hts⟩ => ?_⟩
-  simp 
+  simp only at *
+  constructor
+  · grw [closure_subset_preimage hV s, hst, ← subset_closure, ← hVU, SetRel.preimage_comp]
+  · grw [closure_subset_image hV t, hts, ← subset_closure, ← hVU, SetRel.image_comp]
+
+@[fun_prop]
 
 Depends on / 依赖: Function, Function.comp_id, SetRel, SetRel.image_comp, SetRel.preimage_comp, UniformContinuous, basis_sets, basis_sets.uniformity_hausdorff, basis_sets.uniformity_hausdorff.tendsto_iff, closure_subset_image, closure_subset_preimage, comp_id, comp_mem_uniformity_sets, image_comp, mem_hausdorffEntourage, preimage_comp, simp_rw, subset_closure, tendsto_iff, uniformity_hausdorff
 -/
@@ -746,7 +784,11 @@ refine ⟨le_antisymm ?_ Filter.map_le_iff_le_comap.mp uniformContinuous_closure
     (𝓤 α).basis_sets.uniformity_hausdorff]; rw [Function.comp_id]
   intro U hU
   obtain ⟨V : SetRel α α, hV, hVU⟩ := comp_mem_uniformity_sets hU
-  re
+  refine ⟨V, hV, fun ⟨s, t⟩ ⟨hst, hts⟩ => ?_⟩
+  simp only [mem_hausdorffEntourage] at *
+  constructor
+  · grw [subset_closure (s := s), hst, closure_subset_preimage hV t, ← hVU, SetRel.preimage_comp]
+  · grw [subset_closure (s := t), hts, closure_subset_image hV s, ← hVU, SetRel.image_comp]
 
 中文:
 定理 isUniformInducing_closure
@@ -757,7 +799,11 @@ refine ⟨le_antisymm ?_ Filter.map_le_iff_le_comap.mp uniformContinuous_closure
     (𝓤 α).basis_sets.uniformity_hausdorff]; rw [Function.comp_id]
   intro U hU
   obtain ⟨V : SetRel α α, hV, hVU⟩ := comp_mem_uniformity_sets hU
-  re
+  refine ⟨V, hV, fun ⟨s, t⟩ ⟨hst, hts⟩ => ?_⟩
+  simp only [mem_hausdorffEntourage] at *
+  constructor
+  · grw [subset_closure (s := s), hst, closure_subset_preimage hV t, ← hVU, SetRel.preimage_comp]
+  · grw [subset_closure (s := t), hts, closure_subset_image hV s, ← hVU, SetRel.image_comp]
 
 Depends on / 依赖: Filter, Filter.map_le_iff_le_comap.mp, Function, Function.comp_id, SetRel, SetRel.preimage_comp, basis_sets, basis_sets.uniformity_hausdorff, basis_sets.uniformity_hausdorff.comap, closure_subset_preimage, comp_id, comp_mem_uniformity_sets, le_antisymm, le_basis_iff, map_le_iff_le_comap, mem_hausdorffEntourage, preimage_comp, subset_c, subset_closure, uniformContinuous_closure
 -/
@@ -807,7 +853,14 @@ theorem isClosed_setOfPred_totallyBounded
   obtain ⟨V : SetRel α α, hV, hVU⟩ := comp_mem_uniformity_sets hU
   rw [(𝓤 α).basis_sets.uniformity_hausdorff.comap _ |>.frequently_iff] at hs
   obtain ⟨t, ⟨hst : s subseteq V.preimage t, -⟩, ht⟩ := hs V hV
-  obtain ⟨
+  obtain ⟨u, hu, htu⟩ := ht V hV
+  refine ⟨u, hu, ?_⟩
+  grw [hst, htu, ← hVU]
+  simp [Set.subset_def]
+  grind
+
+@[deprecated (since := "2026-07-09")]
+alias isClosed_setOf_totallyBounded := isClosed_setOfPred_totallyBounded
 
 中文:
 定理 isClosed_setOfPred_totallyBounded
@@ -818,7 +871,14 @@ theorem isClosed_setOfPred_totallyBounded
   obtain ⟨V : SetRel α α, hV, hVU⟩ := comp_mem_uniformity_sets hU
   rw [(𝓤 α).basis_sets.uniformity_hausdorff.comap _ |>.frequently_iff] at hs
   obtain ⟨t, ⟨hst : s subseteq V.preimage t, -⟩, ht⟩ := hs V hV
-  obtain ⟨
+  obtain ⟨u, hu, htu⟩ := ht V hV
+  refine ⟨u, hu, ?_⟩
+  grw [hst, htu, ← hVU]
+  simp [Set.subset_def]
+  grind
+
+@[deprecated (since := "2026-07-09")]
+alias isClosed_setOf_totallyBounded := isClosed_setOfPred_totallyBounded
 
 Depends on / 依赖: Set.subset_def, SetRel, V.preimage, basis_sets, basis_sets.uniformity_hausdorff.comap, comp_mem_uniformity_sets, frequently_iff, isClosed_iff_frequently, nhds_eq_comap_uniformity, preimage, simp_rw, subset_def, subseteq, uniformity_hausdorff
 -/
@@ -876,7 +936,7 @@ theorem UniformContinuous.image_hausdorff
   filter_upwards [Filter.mem_lift' (hf hU)] with ⟨s, t⟩ ⟨h₁, h₂⟩
   simp_rw [mem_hausdorffEntourage, Set.image_subset_iff]
   exact ⟨h₁.trans fun x ⟨y, hy, hxy⟩ => ⟨f y, Set.mem_image_of_mem f hy, hxy⟩,
-    h₂.trans fun x ⟨y, hy, hxy⟩ => ⟨f y, Set.me
+    h₂.trans fun x ⟨y, hy, hxy⟩ => ⟨f y, Set.mem_image_of_mem f hy, hxy⟩⟩
 
 中文:
 定理 一致连续.image_hausdorff
@@ -886,7 +946,7 @@ theorem UniformContinuous.image_hausdorff
   filter_upwards [Filter.mem_lift' (hf hU)] with ⟨s, t⟩ ⟨h₁, h₂⟩
   simp_rw [mem_hausdorffEntourage, Set.image_subset_iff]
   exact ⟨h₁.trans fun x ⟨y, hy, hxy⟩ => ⟨f y, Set.mem_image_of_mem f hy, hxy⟩,
-    h₂.trans fun x ⟨y, hy, hxy⟩ => ⟨f y, Set.me
+    h₂.trans fun x ⟨y, hy, hxy⟩ => ⟨f y, Set.mem_image_of_mem f hy, hxy⟩⟩
 
 Depends on / 依赖: Filter, Filter.mem_lift, Filter.tendsto_lift, Set.image_subset_iff, Set.mem_image_of_mem, filter_upwards, image_subset_iff, mem_hausdorffEntourage, mem_image_of_mem, mem_lift, simp_rw, tendsto_lift
 -/
@@ -909,7 +969,8 @@ theorem IsUniformInducing.image_hausdorff
   change Filter.comap _ (Filter.lift' _ _) = Filter.lift' _ _
   rw [Filter.comap_lift'_eq]; rw [← hf.comap_uniformity]; rw [Filter.comap_lift'_eq2 monotone_hausdorffEntourage]
   congr with U ⟨s, t⟩
-  simp only [Function.comp, hausdorffEntourage, SetRel.preimage, SetRel.image, Set.pr
+  simp only [Function.comp, hausdorffEntourage, SetRel.preimage, SetRel.image, Set.preimage,
+    Set.mem_ofPred, Set.image_subset_iff, Set.exists_mem_image]
 
 中文:
 定理 是UniformInducing.image_hausdorff
@@ -919,7 +980,8 @@ theorem IsUniformInducing.image_hausdorff
   change Filter.comap _ (Filter.lift' _ _) = Filter.lift' _ _
   rw [Filter.comap_lift'_eq]; rw [← hf.comap_uniformity]; rw [Filter.comap_lift'_eq2 monotone_hausdorffEntourage]
   congr with U ⟨s, t⟩
-  simp only [Function.comp, hausdorffEntourage, SetRel.preimage, SetRel.image, Set.pr
+  simp only [Function.comp, hausdorffEntourage, SetRel.preimage, SetRel.image, Set.preimage,
+    Set.mem_ofPred, Set.image_subset_iff, Set.exists_mem_image]
 
 Depends on / 依赖: Filter, Filter.comap, Filter.comap_lift, Filter.lift, Function, Function.comp, Set.exists_mem_image, Set.image_subset_iff, Set.mem_ofPred, Set.preimage, SetRel, SetRel.image, SetRel.preimage, _eq2, comap_lift, comap_uniformity, exists_mem_image, hausdorffEntourage, hf.comap_uniformity, image_subset_iff
 -/
@@ -966,7 +1028,9 @@ theorem TotallyBounded.powerset_hausdorff
   intro (U : SetRel α α) hU
   obtain ⟨u, hu, ht⟩ := ht U hU
   refine ⟨u.powerset, hu.powerset, fun s hs => ⟨u inter U.image s, by grind, fun x hx => ?_,
-    
+    fun x ⟨_, hx⟩ => hx⟩⟩
+  obtain ⟨y, hy, hxy⟩ := Set.mem_iUnion₂.mp (ht (hs hx))
+  exact ⟨y, ⟨hy, ⟨x, hx, hxy⟩⟩, hxy⟩
 
 中文:
 定理 全有界.powerset_hausdorff
@@ -977,7 +1041,9 @@ theorem TotallyBounded.powerset_hausdorff
   intro (U : SetRel α α) hU
   obtain ⟨u, hu, ht⟩ := ht U hU
   refine ⟨u.powerset, hu.powerset, fun s hs => ⟨u inter U.image s, by grind, fun x hx => ?_,
-    
+    fun x ⟨_, hx⟩ => hx⟩⟩
+  obtain ⟨y, hy, hxy⟩ := Set.mem_iUnion₂.mp (ht (hs hx))
+  exact ⟨y, ⟨hy, ⟨x, hx, hxy⟩⟩, hxy⟩
 
 Depends on / 依赖: Function, Function.comp_id, Set.mem_iUnion, Set.ofPred_subset, Set.powerset, SetRel, U.image, basis_sets, basis_sets.uniformity_hausdorff.totallyBounded_iff, comp_id, hu.powerset, mem_iUnion, ofPred_subset, powerset, simp_rw, totallyBounded_iff, u.powerset, uniformity_hausdorff
 -/
@@ -1004,7 +1070,17 @@ theorem TotallyBounded.nhds_vietoris_le_nhds_hausdorff
 .ge_iff, Function.comp_id, .comap _ uniformity_hasBasis_open.uniformity_hausdorff
     hausdorffEntourage, Set.preimage_ofPred_eq, Set.ofPred_and]
   intro U ⟨hU₁, hU₂⟩
-  have : U.IsRefl := ⟨fun _ => refl_mem_unif
+  have : U.IsRefl := ⟨fun _ => refl_mem_uniformity hU₁⟩
+  let := TopologicalSpace.vietoris α
+refine Filter.inter_mem ?_ hU₂.relImage.powerset_vietoris.mem_nhds
+    SetRel.self_subset_image _
+  obtain ⟨V : SetRel α α, hV₁, hV₂, _, hVU⟩ := comp_open_symm_mem_uniformity_sets hU₁
+  obtain ⟨t, ht₁, ht₂⟩ := hs.exists_prodMk_finset_mem_hausdorffEntourage hV₁
+  dsimp only at ht₁ ht₂
+  filter_upwards [(Filter.eventually_all_finset t).mpr fun x hx =>
+.eventually_mem (ht₁ hx)] isOpen_inter_nonempty_of_isOpen (isOpen_ball x hV₂)
+    with u (hu : ↑t subseteq V.preimage ↑u)
+  grw [ht₂, ← SetRel.preimage_eq_image, hu, ← hVU, SetRel.preimage_comp]
 
 中文:
 定理 全有界.nhds_vietoris_le_nhds_hausdorff
@@ -1015,7 +1091,17 @@ theorem TotallyBounded.nhds_vietoris_le_nhds_hausdorff
 .ge_iff, Function.comp_id, .comap _ uniformity_hasBasis_open.uniformity_hausdorff
     hausdorffEntourage, Set.preimage_ofPred_eq, Set.ofPred_and]
   intro U ⟨hU₁, hU₂⟩
-  have : U.IsRefl := ⟨fun _ => refl_mem_unif
+  have : U.IsRefl := ⟨fun _ => refl_mem_uniformity hU₁⟩
+  let := TopologicalSpace.vietoris α
+refine Filter.inter_mem ?_ hU₂.relImage.powerset_vietoris.mem_nhds
+    SetRel.self_subset_image _
+  obtain ⟨V : SetRel α α, hV₁, hV₂, _, hVU⟩ := comp_open_symm_mem_uniformity_sets hU₁
+  obtain ⟨t, ht₁, ht₂⟩ := hs.exists_prodMk_finset_mem_hausdorffEntourage hV₁
+  dsimp only at ht₁ ht₂
+  filter_upwards [(Filter.eventually_all_finset t).mpr fun x hx =>
+.eventually_mem (ht₁ hx)] isOpen_inter_nonempty_of_isOpen (isOpen_ball x hV₂)
+    with u (hu : ↑t subseteq V.preimage ↑u)
+  grw [ht₂, ← SetRel.preimage_eq_image, hu, ← hVU, SetRel.preimage_comp]
 
 Depends on / 依赖: Filter, Filter.inter_mem, Function, Function.comp_id, IsRefl, Set.ofPred_and, Set.preimage_ofPred_eq, SetRel, SetRel.self_subset_image, TopologicalSpace, TopologicalSpace.vietoris, U.IsRefl, UniformSpace, comp_id, comp_open_symm_mem_uniform, ge_iff, hausdorffEntourage, inter_mem, mem_nhds, nhds_eq_comap_uniformity
 -/
@@ -1049,7 +1135,11 @@ theorem IsCompact.nhds_hausdorff_eq_nhds_vietoris
   simp_rw [TopologicalSpace.nhds_generateFrom, le_iInf₂_iff, Filter.le_principal_iff]
   rintro _ ⟨hs', (⟨U, hU, rfl⟩ | ⟨U, hU, rfl⟩)⟩
   · obtain ⟨V : SetRel α α, hV₁, hV₂⟩ :=
-.mem_iff.mp (hU.mem_nhdsSet.mpr hs') hs.nhdsSet_
+.mem_iff.mp (hU.mem_nhdsSet.mpr hs') hs.nhdsSet_basis_uniformity (𝓤 α).basis_sets
+    filter_upwards [UniformSpace.ball_mem_nhds _ (Filter.mem_lift' hV₁)]
+      with t ⟨_, ht⟩
+exact ht.trans fun x ⟨y, hy, hxy⟩ => hV₂ Set.mem_biUnion hy hxy
+  · exact (UniformSpace.hausdorff.isOpen_inter_nonempty_of_isOpen hU).mem_nhds hs'
 
 中文:
 定理 是紧集.nhds_hausdorff_eq_nhds_vietoris
@@ -1059,7 +1149,11 @@ theorem IsCompact.nhds_hausdorff_eq_nhds_vietoris
   simp_rw [TopologicalSpace.nhds_generateFrom, le_iInf₂_iff, Filter.le_principal_iff]
   rintro _ ⟨hs', (⟨U, hU, rfl⟩ | ⟨U, hU, rfl⟩)⟩
   · obtain ⟨V : SetRel α α, hV₁, hV₂⟩ :=
-.mem_iff.mp (hU.mem_nhdsSet.mpr hs') hs.nhdsSet_
+.mem_iff.mp (hU.mem_nhdsSet.mpr hs') hs.nhdsSet_basis_uniformity (𝓤 α).basis_sets
+    filter_upwards [UniformSpace.ball_mem_nhds _ (Filter.mem_lift' hV₁)]
+      with t ⟨_, ht⟩
+exact ht.trans fun x ⟨y, hy, hxy⟩ => hV₂ Set.mem_biUnion hy hxy
+  · exact (UniformSpace.hausdorff.isOpen_inter_nonempty_of_isOpen hU).mem_nhds hs'
 
 Depends on / 依赖: Filter, Filter.le_principal_iff, Filter.mem_lift, Set.mem_biUnion, SetRel, TopologicalSpace, TopologicalSpace.nhds_generateFrom, UniformSpace, UniformSpace.ball_mem_nhds, UniformSpace.haus, ball_mem_nhds, basis_sets, filter_upwards, hU.mem_nhdsSet.mpr, hs.nhdsSet_basis_uniformity, hs.totallyBounded.nhds_vietoris_le_nhds_hausdorff, ht.trans, le_antisymm, le_principal_iff, mem_biUnion
 -/
@@ -1090,7 +1184,7 @@ instance [CompactSpace
     -- `f.lim` is the limit of `f` in the Vietoris topology
     refine ⟨closure f.lim, Set.mem_univ _, ?_⟩
     grw [isClosed_closure.isCompact.nhds_hausdorff_eq_nhds_vietoris,
-      ← TopologicalSpace
+      ← TopologicalSpace.vietoris.specializes_closure.nhds_le_nhds, f.le_nhds_lim]
 
 中文:
 实例 [紧空间
@@ -1102,7 +1196,7 @@ instance [CompactSpace
     -- `f.lim` is the limit of `f` in the Vietoris topology
     refine ⟨closure f.lim, Set.mem_univ _, ?_⟩
     grw [isClosed_closure.isCompact.nhds_hausdorff_eq_nhds_vietoris,
-      ← TopologicalSpace
+      ← TopologicalSpace.vietoris.specializes_closure.nhds_le_nhds, f.le_nhds_lim]
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.vietoris, isCompact_iff_ultrafilter_le_nhds, vietoris
 -/
@@ -1618,7 +1712,12 @@ instance :
   suffices forall F₁ F₂ : Closeds α, Inseparable F₁ F₂ -> F₁ <= F₂ from
     ⟨fun F₁ F₂ h => le_antisymm (this F₁ F₂ h) (this F₂ F₁ h.symm)⟩
   refine fun F₁ F₂ h x hx₁ => isClosed_iff_frequently.mp F₂.isClosed _ ?_
-  rw [nhds_eq_comap_uniformity]; rw [Filter.frequently_comap]; rw [Filter.frequentl
+  rw [nhds_eq_comap_uniformity]; rw [Filter.frequently_comap]; rw [Filter.frequently_iff]
+  intro (U : SetRel α α) hU
+  obtain ⟨h : (F₁ : Set α) subseteq U.preimage F₂, -⟩ :=
+mem_of_mem_nhds h.nhds_le_uniformity Filter.preimage_mem_comap Filter.mem_lift' hU
+  obtain ⟨y, hy, hxy⟩ := h hx₁
+  exact ⟨(x, y), hxy, y, rfl, hy⟩
 
 中文:
 实例 :
@@ -1627,7 +1726,12 @@ instance :
   suffices forall F₁ F₂ : Closeds α, Inseparable F₁ F₂ -> F₁ <= F₂ from
     ⟨fun F₁ F₂ h => le_antisymm (this F₁ F₂ h) (this F₂ F₁ h.symm)⟩
   refine fun F₁ F₂ h x hx₁ => isClosed_iff_frequently.mp F₂.isClosed _ ?_
-  rw [nhds_eq_comap_uniformity]; rw [Filter.frequently_comap]; rw [Filter.frequentl
+  rw [nhds_eq_comap_uniformity]; rw [Filter.frequently_comap]; rw [Filter.frequently_iff]
+  intro (U : SetRel α α) hU
+  obtain ⟨h : (F₁ : Set α) subseteq U.preimage F₂, -⟩ :=
+mem_of_mem_nhds h.nhds_le_uniformity Filter.preimage_mem_comap Filter.mem_lift' hU
+  obtain ⟨y, hy, hxy⟩ := h hx₁
+  exact ⟨(x, y), hxy, y, rfl, hy⟩
 
 Depends on / 依赖: Closeds, Filter, Filter.frequently_comap, Filter.frequently_iff, Filter.mem_lift, Filter.preimage_mem_comap, Inseparable, SetRel, U.preimage, frequently_comap, frequently_iff, h.nhds_le_uniformity, h.symm, isClosed, isClosed_iff_frequently, isClosed_iff_frequently.mp, le_antisymm, mem_lift, mem_of_mem_nhds, nhds_eq_comap_uniformity
 -/
@@ -1735,7 +1839,15 @@ theorem compactSpace_iff
     fun _ => inferInstance⟩
   have := isClopen_singleton_bot.compl.isClosed.isCompact.elim_finite_subfamily_closed
     (fun i => {C : Closeds α | ↑C subseteq F i})
-    (fun i => isClosed_subsets_of_isClosed (hF₁ i
+    (fun i => isClosed_subsets_of_isClosed (hF₁ i))
+  simp_rw [← Set.disjoint_iff_inter_eq_empty, Set.disjoint_compl_left_iff_subset,
+    ← Set.ofPred_forall, ← Set.subset_iInter_iff, hF₂, Set.subset_empty_iff, coe_eq_empty,
+    Set.ofPred_eq_eq_singleton] at this
+  obtain ⟨s, hs⟩ := this .rfl
+  specialize @hs ⟨⋂ i in s, F i, isClosed_biInter fun i _ => hF₁ i⟩ .rfl
+  exact ⟨s, congr($hs)⟩
+
+@[simp]
 
 中文:
 定理 compactSpace_iff
@@ -1745,7 +1857,15 @@ theorem compactSpace_iff
     fun _ => inferInstance⟩
   have := isClopen_singleton_bot.compl.isClosed.isCompact.elim_finite_subfamily_closed
     (fun i => {C : Closeds α | ↑C subseteq F i})
-    (fun i => isClosed_subsets_of_isClosed (hF₁ i
+    (fun i => isClosed_subsets_of_isClosed (hF₁ i))
+  simp_rw [← Set.disjoint_iff_inter_eq_empty, Set.disjoint_compl_left_iff_subset,
+    ← Set.ofPred_forall, ← Set.subset_iInter_iff, hF₂, Set.subset_empty_iff, coe_eq_empty,
+    Set.ofPred_eq_eq_singleton] at this
+  obtain ⟨s, hs⟩ := this .rfl
+  specialize @hs ⟨⋂ i in s, F i, isClosed_biInter fun i _ => hF₁ i⟩ .rfl
+  exact ⟨s, congr($hs)⟩
+
+@[simp]
 
 Depends on / 依赖: Closeds, Set.disjoint_compl_left_iff_subset, Set.disjoint_iff_inter_eq_empty, Set.ofPred_eq_eq_singleton, Set.ofPred_forall, Set.subset_empty_iff, Set.subset_iInter_iff, coe_eq_empty, compactSpace_of_finite_subfamily_closed, disjoint_compl_left_iff_subset, disjoint_iff_inter_eq_empty, elim_finite_subfamily_closed, isClopen_singleton_bot, isClopen_singleton_bot.compl.isClosed.isCompact.elim_finite_subfamily_closed, isClosed, isClosed_subsets_of_isClosed, isCompact, ofPred_eq_eq_singleton, ofPred_forall, simp_rw
 -/
@@ -2274,7 +2394,46 @@ instance [CompleteSpace
   grw [← Filter.curry_le_prod, (𝓤 α).basis_sets.uniformity_compacts.ge_iff] at hf
   change forall {U} (hU : U in 𝓤 α), forallᶠ K in f, forallᶠ K' in f, (↑K, ↑K') in hausdorffEntourage U at hf
   let l : Filter α := f.lift' fun s => ⋃ K in s, K
-  have hl : l.Totally
+  have hl : l.TotallyBounded := by
+    intro U hU
+    obtain ⟨V : SetRel α α, hV, hVU⟩ := comp_mem_uniformity_sets hU
+.exists obtain ⟨K, hK⟩ := hf (symm_le_uniformity hV)
+    obtain ⟨t, ht₁, ht₂⟩ := K.isCompact.totallyBounded V hV
+    rw [← SetRel.preimage_eq_biUnion] at ht₂
+    refine ⟨t, ht₁, Filter.mem_of_superset (Filter.mem_lift' hK) ?_⟩
+    rw [Set.iUnion₂_subset_iff]
+    intro K' ⟨_, (hK' : ↑K' subseteq V.preimage K)⟩
+    grw [← hVU, SetRel.preimage_comp, ← ht₂, hK']
+  let L : Compacts α := ⟨{x | ClusterPt x l}, hl.isCompact_setOfPred_clusterPt⟩
+  exists L
+  simp_rw [nhds_eq_comap_uniformity']
+  rw [uniformity_hasBasis_closed.uniformity_compacts.comap _ |>.ge_iff]
+  intro U ⟨hU₁, hU₂⟩
+  filter_upwards [hf hU₁] with K hK
+  simp_rw [Set.mem_preimage, Prod.map, id, mem_hausdorffEntourage]
+  constructor
+  · intro x hx
+    set lx := l ⊓ 𝓟 (UniformSpace.ball x U) with le_def
+    have hlx : lx.TotallyBounded := hl.mono inf_le_left
+    have : lx.NeBot := by
+      rw [le_def]; rw [Filter.lift'_inf_principal_eq]; rw [Filter.lift'_neBot_iff fun _ _ h =>
+Set.inter_subset_inter_left _ Set.biUnion_subset_biUnion_left h]
+      intro s hs
+obtain ⟨K', ⟨h₁, -⟩, h₂⟩ := Filter.nonempty_of_mem Filter.inter_mem hK hs
+      obtain ⟨y, hy, hxy⟩ := h₁ hx
+      exact ⟨y, Set.mem_iUnion₂_of_mem h₂ hy, hxy⟩
+    obtain ⟨y, hy⟩ := hlx.exists_clusterPt
+    have hy₁ : ClusterPt y l := .of_inf_left hy
+    have hy₂ : ClusterPt y (𝓟 (UniformSpace.ball x U)) := .of_inf_right hy
+    rw [← mem_closure_iff_clusterPt]; rw [(UniformSpace.isClosed_ball x hU₂).closure_eq] at hy₂
+    exact ⟨y, hy₁, hy₂⟩
+  · intro x (hx : ClusterPt x l)
+    rw [← (hU₂.relImage_of_isCompact K.isCompact).closure_eq]; rw [mem_closure_iff_clusterPt]
+    refine hx.mono ?_
+    rw [Filter.le_principal_iff]
+    refine Filter.mem_of_superset (Filter.mem_lift' hK) ?_
+    rw [Set.iUnion₂_subset_iff]
+    exact fun _ ⟨_, h⟩ => h
 
 中文:
 实例 [完备空间
@@ -2284,7 +2443,46 @@ instance [CompleteSpace
   grw [← Filter.curry_le_prod, (𝓤 α).basis_sets.uniformity_compacts.ge_iff] at hf
   change forall {U} (hU : U in 𝓤 α), forallᶠ K in f, forallᶠ K' in f, (↑K, ↑K') in hausdorffEntourage U at hf
   let l : Filter α := f.lift' fun s => ⋃ K in s, K
-  have hl : l.Totally
+  have hl : l.TotallyBounded := by
+    intro U hU
+    obtain ⟨V : SetRel α α, hV, hVU⟩ := comp_mem_uniformity_sets hU
+.exists obtain ⟨K, hK⟩ := hf (symm_le_uniformity hV)
+    obtain ⟨t, ht₁, ht₂⟩ := K.isCompact.totallyBounded V hV
+    rw [← SetRel.preimage_eq_biUnion] at ht₂
+    refine ⟨t, ht₁, Filter.mem_of_superset (Filter.mem_lift' hK) ?_⟩
+    rw [Set.iUnion₂_subset_iff]
+    intro K' ⟨_, (hK' : ↑K' subseteq V.preimage K)⟩
+    grw [← hVU, SetRel.preimage_comp, ← ht₂, hK']
+  let L : Compacts α := ⟨{x | ClusterPt x l}, hl.isCompact_setOfPred_clusterPt⟩
+  exists L
+  simp_rw [nhds_eq_comap_uniformity']
+  rw [uniformity_hasBasis_closed.uniformity_compacts.comap _ |>.ge_iff]
+  intro U ⟨hU₁, hU₂⟩
+  filter_upwards [hf hU₁] with K hK
+  simp_rw [Set.mem_preimage, Prod.map, id, mem_hausdorffEntourage]
+  constructor
+  · intro x hx
+    set lx := l ⊓ 𝓟 (UniformSpace.ball x U) with le_def
+    have hlx : lx.TotallyBounded := hl.mono inf_le_left
+    have : lx.NeBot := by
+      rw [le_def]; rw [Filter.lift'_inf_principal_eq]; rw [Filter.lift'_neBot_iff fun _ _ h =>
+Set.inter_subset_inter_left _ Set.biUnion_subset_biUnion_left h]
+      intro s hs
+obtain ⟨K', ⟨h₁, -⟩, h₂⟩ := Filter.nonempty_of_mem Filter.inter_mem hK hs
+      obtain ⟨y, hy, hxy⟩ := h₁ hx
+      exact ⟨y, Set.mem_iUnion₂_of_mem h₂ hy, hxy⟩
+    obtain ⟨y, hy⟩ := hlx.exists_clusterPt
+    have hy₁ : ClusterPt y l := .of_inf_left hy
+    have hy₂ : ClusterPt y (𝓟 (UniformSpace.ball x U)) := .of_inf_right hy
+    rw [← mem_closure_iff_clusterPt]; rw [(UniformSpace.isClosed_ball x hU₂).closure_eq] at hy₂
+    exact ⟨y, hy₁, hy₂⟩
+  · intro x (hx : ClusterPt x l)
+    rw [← (hU₂.relImage_of_isCompact K.isCompact).closure_eq]; rw [mem_closure_iff_clusterPt]
+    refine hx.mono ?_
+    rw [Filter.le_principal_iff]
+    refine Filter.mem_of_superset (Filter.mem_lift' hK) ?_
+    rw [Set.iUnion₂_subset_iff]
+    exact fun _ ⟨_, h⟩ => h
 
 Depends on / 依赖: Filter, Filter.curry_le_prod, K.isCompact.totallyBounded, SetRel, TotallyBounded, basis_sets, basis_sets.uniformity_compacts.ge_iff, comp_mem_uniformity_sets, curry_le_prod, f.lift, ge_iff, hausdorffEntourage, isCompact, l.TotallyBounded, symm_le_uniformity, totallyBounded, uniformity_compacts
 -/
@@ -2851,7 +3049,10 @@ obtain ⟨K, hK⟩ := CompleteSpace.complete hf.map uniformContinuous_singleton
   exists x
   rw [(nhds_basis_opens x).ge_iff]
   intro U ⟨hxU, hU⟩
-  filter_upwards [hK <| (isOpen_inter_nonempty_of_isOpen hU).
+  filter_upwards [hK <| (isOpen_inter_nonempty_of_isOpen hU).mem_nhds ⟨x, hx, hxU⟩]
+  simp
+
+@[simp]
 
 中文:
 定理 completeSpace_iff
@@ -2863,7 +3064,10 @@ obtain ⟨K, hK⟩ := CompleteSpace.complete hf.map uniformContinuous_singleton
   exists x
   rw [(nhds_basis_opens x).ge_iff]
   intro U ⟨hxU, hU⟩
-  filter_upwards [hK <| (isOpen_inter_nonempty_of_isOpen hU).
+  filter_upwards [hK <| (isOpen_inter_nonempty_of_isOpen hU).mem_nhds ⟨x, hx, hxU⟩]
+  simp
+
+@[simp]
 
 Depends on / 依赖: CompleteSpace, CompleteSpace.complete, K.nonempty, complete, filter_upwards, ge_iff, hf.map, isOpen_inter_nonempty_of_isOpen, mem_nhds, nhds_basis_opens, nonempty, uniformContinuous_singleton
 -/

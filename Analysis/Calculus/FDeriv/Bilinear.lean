@@ -56,7 +56,23 @@ theorem IsBoundedBilinearMap.hasStrictFDerivAt
     _ = fun x => h.deriv (x.1 - x.2) (x.2.1, x.1.2) := by
       ext ⟨⟨x₁, y₁⟩, ⟨x₂, y₂⟩⟩
       rcases p with ⟨x, y⟩
-      simp only [map_sub, deriv_apply, F
+      simp only [map_sub, deriv_apply, Function.comp_apply, Prod.mk_add_mk, h.add_right, h.add_left,
+        Prod.mk_sub_mk, h.map_sub_left, h.map_sub_right, sub_add_sub_cancel]
+      abel
+    -- _ =O[𝓝 (0 : T)] fun x ↦ ‖x.1 - x.2‖ * ‖(x.2.1, x.1.2)‖ :=
+    -- h.toContinuousLinearMap.deriv₂.isBoundedBilinearMap.isBigO_comp
+    -- _ = o[𝓝 0] fun x ↦ ‖x.1 - x.2‖ * 1 := _
+    _ =o[𝓝 (0 : T)] fun x => x.1 - x.2 := by
+      -- TODO : add 2 `calc` steps instead of the next 3 lines
+      refine h.toContinuousLinearMap.deriv₂.isBoundedBilinearMap.isBigO_comp.trans_isLittleO ?_
+      suffices (fun x : T => ‖x.1 - x.2‖ * ‖(x.2.1, x.1.2)‖) =o[𝓝 0] fun x => ‖x.1 - x.2‖ * 1 by
+        simpa only [mul_one, isLittleO_norm_right] using this
+      refine (isBigO_refl _ _).mul_isLittleO ((isLittleO_one_iff _).2 ?_)
+      -- TODO: `continuity` fails
+      exact (continuous_snd.fst.prodMk continuous_fst.snd).norm.tendsto' _ _ (by simp)
+    _ = _ := by simp [T, Function.comp_def]
+
+@[fun_prop]
 
 中文:
 定理 是BoundedBilinear映射.hasStrictFDerivAt
@@ -69,7 +85,23 @@ theorem IsBoundedBilinearMap.hasStrictFDerivAt
     _ = fun x => h.deriv (x.1 - x.2) (x.2.1, x.1.2) := by
       ext ⟨⟨x₁, y₁⟩, ⟨x₂, y₂⟩⟩
       rcases p with ⟨x, y⟩
-      simp only [map_sub, deriv_apply, F
+      simp only [map_sub, deriv_apply, Function.comp_apply, Prod.mk_add_mk, h.add_right, h.add_left,
+        Prod.mk_sub_mk, h.map_sub_left, h.map_sub_right, sub_add_sub_cancel]
+      abel
+    -- _ =O[𝓝 (0 : T)] fun x ↦ ‖x.1 - x.2‖ * ‖(x.2.1, x.1.2)‖ :=
+    -- h.toContinuousLinearMap.deriv₂.isBoundedBilinearMap.isBigO_comp
+    -- _ = o[𝓝 0] fun x ↦ ‖x.1 - x.2‖ * 1 := _
+    _ =o[𝓝 (0 : T)] fun x => x.1 - x.2 := by
+      -- TODO : add 2 `calc` steps instead of the next 3 lines
+      refine h.toContinuousLinearMap.deriv₂.isBoundedBilinearMap.isBigO_comp.trans_isLittleO ?_
+      suffices (fun x : T => ‖x.1 - x.2‖ * ‖(x.2.1, x.1.2)‖) =o[𝓝 0] fun x => ‖x.1 - x.2‖ * 1 by
+        simpa only [mul_one, isLittleO_norm_right] using this
+      refine (isBigO_refl _ _).mul_isLittleO ((isLittleO_one_iff _).2 ?_)
+      -- TODO: `continuity` fails
+      exact (continuous_snd.fst.prodMk continuous_fst.snd).norm.tendsto' _ _ (by simp)
+    _ = _ := by simp [T, Function.comp_def]
+
+@[fun_prop]
 
 Depends on / 依赖: Function, Function.comp_apply, Prod.mk_add_mk, Prod.mk_sub_mk, add_left, add_right, comp_apply, deriv_apply, h.add_left, h.add_right, h.deriv, h.map_sub_left, h.map_sub_right, hasStrictFDerivAt_iff_isLittleO, isLittleO_map, map_add_left_nhds_zero, map_sub, map_sub_left, map_sub_right, mk_add_mk
 -/

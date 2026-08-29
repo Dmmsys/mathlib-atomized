@@ -43,7 +43,18 @@ theorem singularPart
   rcases (μ.mutuallySingular_singularPart ν).symm with ⟨s, hsm, hνs, hμs⟩
   convert! hfμ.restrict_preimage hsm using 1
   · refine singularPart_eq_restrict ?_ (hfν.preimage_null hνs)
-    rw [← mem_ae_iff]; rw [← Filter.eventuallyEq_univ]; rw [ae_eq_univ_iff_measure_eq (hfμ.measurable hsm).nullMeas
+    rw [← mem_ae_iff]; rw [← Filter.eventuallyEq_univ]; rw [ae_eq_univ_iff_measure_eq (hfμ.measurable hsm).nullMeasurableSet]
+    calc
+      μ.singularPart ν (f ⁻¹' s) = (ν.withDensity (μ.rnDeriv ν) + μ.singularPart ν) (f ⁻¹' s) := by
+        rw [← hfν.measure_preimage hsm.nullMeasurableSet] at hνs
+        rw [add_apply]; rw [withDensity_absolutelyContinuous _ _ hνs]; rw [zero_add]
+      _ = (ν.withDensity (μ.rnDeriv ν) + μ.singularPart ν) s := by
+        rw [rnDeriv_add_singularPart]; rw [hfμ.measure_preimage hsm.nullMeasurableSet]
+      _ = μ.singularPart ν s := by
+        rw [add_apply]; rw [withDensity_absolutelyContinuous _ _ hνs]; rw [zero_add]
+      _ = μ.singularPart ν univ := by
+        rw [← measure_add_measure_compl hsm]; rw [hμs]; rw [add_zero]
+  · exact singularPart_eq_restrict hμs hνs
 
 中文:
 定理 singularPart
@@ -52,7 +63,18 @@ theorem singularPart
   rcases (μ.mutuallySingular_singularPart ν).symm with ⟨s, hsm, hνs, hμs⟩
   convert! hfμ.restrict_preimage hsm using 1
   · refine singularPart_eq_restrict ?_ (hfν.preimage_null hνs)
-    rw [← mem_ae_iff]; rw [← Filter.eventuallyEq_univ]; rw [ae_eq_univ_iff_measure_eq (hfμ.measurable hsm).nullMeas
+    rw [← mem_ae_iff]; rw [← Filter.eventuallyEq_univ]; rw [ae_eq_univ_iff_measure_eq (hfμ.measurable hsm).nullMeasurableSet]
+    calc
+      μ.singularPart ν (f ⁻¹' s) = (ν.withDensity (μ.rnDeriv ν) + μ.singularPart ν) (f ⁻¹' s) := by
+        rw [← hfν.measure_preimage hsm.nullMeasurableSet] at hνs
+        rw [add_apply]; rw [withDensity_absolutelyContinuous _ _ hνs]; rw [zero_add]
+      _ = (ν.withDensity (μ.rnDeriv ν) + μ.singularPart ν) s := by
+        rw [rnDeriv_add_singularPart]; rw [hfμ.measure_preimage hsm.nullMeasurableSet]
+      _ = μ.singularPart ν s := by
+        rw [add_apply]; rw [withDensity_absolutelyContinuous _ _ hνs]; rw [zero_add]
+      _ = μ.singularPart ν univ := by
+        rw [← measure_add_measure_compl hsm]; rw [hμs]; rw [add_zero]
+  · exact singularPart_eq_restrict hμs hνs
 -/
 protected theorem singularPart [SigmaFinite ν] {f : X -> X}
     (hfμ : MeasurePreserving f μ μ) (hfν : MeasurePreserving f ν ν) :
@@ -82,7 +104,7 @@ theorem withDensity_rnDeriv
   proof: by
   use hfμ.measurable
   ext s hs
-  rw [← ENNReal.add_left_inj (measure_ne_top (μ.singularPart ν) s)]; rw [map_apply hfμ.measurable hs]; rw [← add_apply]; rw [rnDeriv_add_singularPart]; rw [← (hfμ.singularPart hfν).measure_preimage hs.nullMeasurableSet]; rw [← add_apply]; rw [rnDeriv_add_singularPa
+  rw [← ENNReal.add_left_inj (measure_ne_top (μ.singularPart ν) s)]; rw [map_apply hfμ.measurable hs]; rw [← add_apply]; rw [rnDeriv_add_singularPart]; rw [← (hfμ.singularPart hfν).measure_preimage hs.nullMeasurableSet]; rw [← add_apply]; rw [rnDeriv_add_singularPart]; rw [hfμ.measure_preimage hs.nullMeasurableSet]
 
 中文:
 定理 withDensity_rnDeriv
@@ -90,7 +112,7 @@ theorem withDensity_rnDeriv
   证明: by
   use hfμ.measurable
   ext s hs
-  rw [← ENNReal.add_left_inj (measure_ne_top (μ.singularPart ν) s)]; rw [map_apply hfμ.measurable hs]; rw [← add_apply]; rw [rnDeriv_add_singularPart]; rw [← (hfμ.singularPart hfν).measure_preimage hs.nullMeasurableSet]; rw [← add_apply]; rw [rnDeriv_add_singularPa
+  rw [← ENNReal.add_left_inj (measure_ne_top (μ.singularPart ν) s)]; rw [map_apply hfμ.measurable hs]; rw [← add_apply]; rw [rnDeriv_add_singularPart]; rw [← (hfμ.singularPart hfν).measure_preimage hs.nullMeasurableSet]; rw [← add_apply]; rw [rnDeriv_add_singularPart]; rw [hfμ.measure_preimage hs.nullMeasurableSet]
 -/
 protected theorem withDensity_rnDeriv [SigmaFinite ν] {f : X -> X}
     (hfμ : MeasurePreserving f μ μ) (hfν : MeasurePreserving f ν ν) :
@@ -110,7 +132,32 @@ theorem rnDeriv_comp_aeEq
   · specialize this (hfμ.withDensity_rnDeriv hfν) (withDensity_absolutelyContinuous _ _)
     refine .trans (.trans ?_ this) (rnDeriv_withDensity ν (measurable_rnDeriv μ ν))
     apply hfν.quasiMeasurePreserving.ae_eq_comp
-    exact (rnDeriv_withDensity ν (measurab
+    exact (rnDeriv_withDensity ν (measurable_rnDeriv μ ν)).symm
+  refine .of_forall_eventually_lt_iff fun c => ?_
+  set s := {a | μ.rnDeriv ν a < c}
+  have hsm : MeasurableSet s := measurable_rnDeriv _ _ measurableSet_Iio
+  have hμ_sdiff : μ (f ⁻¹' s \ s) = μ (s \ f ⁻¹' s) :=
+    measure_sdiff_symm (hfμ.measurable hsm).nullMeasurableSet hsm.nullMeasurableSet
+      (hfμ.measure_preimage hsm.nullMeasurableSet) (by finiteness)
+  have hν_sdiff : ν (f ⁻¹' s \ s) = ν (s \ f ⁻¹' s) :=
+    measure_sdiff_symm (hfν.measurable hsm).nullMeasurableSet hsm.nullMeasurableSet
+      (hfν.measure_preimage hsm.nullMeasurableSet) (by finiteness)
+  suffices f ⁻¹' s =ᵐ[ν] s from this.mem_iff
+  suffices ν (f ⁻¹' s \ s) = 0 from (ae_le_set.mpr this).antisymm (ae_le_set.mpr <| hν_sdiff ▸ this)
+  contrapose! hμ_sdiff with h₀
+  apply ne_of_gt
+  calc
+    μ (s \ f ⁻¹' s) = ∫⁻ a in s \ f ⁻¹' s, μ.rnDeriv ν a ∂ν := (setLIntegral_rnDeriv hμν _).symm
+    _ < ∫⁻ _ in s \ f ⁻¹' s, c ∂ν := by
+      apply setLIntegral_strict_mono (hsm.diff (hfμ.measurable hsm)) (hν_sdiff ▸ h₀)
+        measurable_const
+      · rw [setLIntegral_rnDeriv hμν]
+        finiteness
+      · exact .of_forall fun x hx => hx.1
+    _ = ∫⁻ _ in f ⁻¹' s \ s, c ∂ν := by simp [hν_sdiff]
+    _ <= ∫⁻ a in f ⁻¹' s \ s, μ.rnDeriv ν a ∂ν :=
+      setLIntegral_mono (by fun_prop) (fun x hx => not_lt.mp hx.2)
+    _ = μ (f ⁻¹' s \ s) := setLIntegral_rnDeriv hμν _
 
 中文:
 定理 rnDeriv_comp_aeEq
@@ -120,7 +167,32 @@ theorem rnDeriv_comp_aeEq
   · specialize this (hfμ.withDensity_rnDeriv hfν) (withDensity_absolutelyContinuous _ _)
     refine .trans (.trans ?_ this) (rnDeriv_withDensity ν (measurable_rnDeriv μ ν))
     apply hfν.quasiMeasurePreserving.ae_eq_comp
-    exact (rnDeriv_withDensity ν (measurab
+    exact (rnDeriv_withDensity ν (measurable_rnDeriv μ ν)).symm
+  refine .of_forall_eventually_lt_iff fun c => ?_
+  set s := {a | μ.rnDeriv ν a < c}
+  have hsm : MeasurableSet s := measurable_rnDeriv _ _ measurableSet_Iio
+  have hμ_sdiff : μ (f ⁻¹' s \ s) = μ (s \ f ⁻¹' s) :=
+    measure_sdiff_symm (hfμ.measurable hsm).nullMeasurableSet hsm.nullMeasurableSet
+      (hfμ.measure_preimage hsm.nullMeasurableSet) (by finiteness)
+  have hν_sdiff : ν (f ⁻¹' s \ s) = ν (s \ f ⁻¹' s) :=
+    measure_sdiff_symm (hfν.measurable hsm).nullMeasurableSet hsm.nullMeasurableSet
+      (hfν.measure_preimage hsm.nullMeasurableSet) (by finiteness)
+  suffices f ⁻¹' s =ᵐ[ν] s from this.mem_iff
+  suffices ν (f ⁻¹' s \ s) = 0 from (ae_le_set.mpr this).antisymm (ae_le_set.mpr <| hν_sdiff ▸ this)
+  contrapose! hμ_sdiff with h₀
+  apply ne_of_gt
+  calc
+    μ (s \ f ⁻¹' s) = ∫⁻ a in s \ f ⁻¹' s, μ.rnDeriv ν a ∂ν := (setLIntegral_rnDeriv hμν _).symm
+    _ < ∫⁻ _ in s \ f ⁻¹' s, c ∂ν := by
+      apply setLIntegral_strict_mono (hsm.diff (hfμ.measurable hsm)) (hν_sdiff ▸ h₀)
+        measurable_const
+      · rw [setLIntegral_rnDeriv hμν]
+        finiteness
+      · exact .of_forall fun x hx => hx.1
+    _ = ∫⁻ _ in f ⁻¹' s \ s, c ∂ν := by simp [hν_sdiff]
+    _ <= ∫⁻ a in f ⁻¹' s \ s, μ.rnDeriv ν a ∂ν :=
+      setLIntegral_mono (by fun_prop) (fun x hx => not_lt.mp hx.2)
+    _ = μ (f ⁻¹' s \ s) := setLIntegral_rnDeriv hμν _
 
 Depends on / 依赖: MeasurableSet, ae_eq_comp, generalizing, measurableSet_Iio, measurable_rnDeriv, of_forall_eventually_lt_iff, quasiMeasurePreserving, quasiMeasurePreserving.ae_eq_comp, rnDeriv, rnDeriv_withDensity, specialize, withDensity_absolutelyContinuous, withDensity_rnDeriv
 -/

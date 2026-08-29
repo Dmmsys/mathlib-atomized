@@ -782,7 +782,22 @@ theorem induction_on
     · simpa only [T_zero, mul_one] using h_C a
     · exact fun m => h_C_mul_T m a
     · exact fun m => h_C_mul_T_Z m a
-  have B : forall s : Finset Int, M (s.sum fun n : Int => C (p.coeff
+  have B : forall s : Finset Int, M (s.sum fun n : Int => C (p.coeff n) * T n) := by
+    apply Finset.induction
+    · convert! h_C 0
+      simp only [Finset.sum_empty, map_zero]
+    · intro n s ns ih
+      rw [Finset.sum_insert ns]
+      exact h_add A ih
+  convert! B p.coeff.support
+  ext a
+  simp_rw [← single_eq_C_mul_T]
+  simp only [AddMonoidAlgebra.coeff_sum, coeff_single]
+  rw [Finset.sum_apply']; rw [Finset.sum_eq_single a]; rw [single_eq_same]
+  · intro b _ hb
+    rw [single_eq_of_ne' hb]
+  · intro ha
+    rw [single_eq_same]; rw [notMem_support_iff.mp ha]
 
 中文:
 定理 induction_on
@@ -794,7 +809,22 @@ theorem induction_on
     · simpa only [T_zero, mul_one] using h_C a
     · exact fun m => h_C_mul_T m a
     · exact fun m => h_C_mul_T_Z m a
-  have B : forall s : Finset Int, M (s.sum fun n : Int => C (p.coeff
+  have B : forall s : Finset Int, M (s.sum fun n : Int => C (p.coeff n) * T n) := by
+    apply Finset.induction
+    · convert! h_C 0
+      simp only [Finset.sum_empty, map_zero]
+    · intro n s ns ih
+      rw [Finset.sum_insert ns]
+      exact h_add A ih
+  convert! B p.coeff.support
+  ext a
+  simp_rw [← single_eq_C_mul_T]
+  simp only [AddMonoidAlgebra.coeff_sum, coeff_single]
+  rw [Finset.sum_apply']; rw [Finset.sum_eq_single a]; rw [single_eq_same]
+  · intro b _ hb
+    rw [single_eq_of_ne' hb]
+  · intro ha
+    rw [single_eq_same]; rw [notMem_support_iff.mp ha]
 -/
 protected theorem induction_on {M : R[T;T⁻¹] -> Prop} (p : R[T;T⁻¹]) (h_C : forall a, M (C a))
     (h_add : forall {p q}, M p -> M q -> M (p + q))
@@ -924,7 +954,7 @@ theorem smul_eq_C_mul
     rw [smul_add]; rw [mul_add]; rw [hp]; rw [hq]
   | C_mul_T n s =>
     rw [← mul_assoc]; rw [← smul_mul_assoc]; rw [mul_left_inj_of_invertible]; rw [← map_mul]; rw [← single_eq_C]; rw [AddMonoidAlgebra.smul_single']
- 
+    rfl
 
 中文:
 定理 smul_eq_C_mul
@@ -936,7 +966,7 @@ theorem smul_eq_C_mul
     rw [smul_add]; rw [mul_add]; rw [hp]; rw [hq]
   | C_mul_T n s =>
     rw [← mul_assoc]; rw [← smul_mul_assoc]; rw [mul_left_inj_of_invertible]; rw [← map_mul]; rw [← single_eq_C]; rw [AddMonoidAlgebra.smul_single']
- 
+    rfl
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.smul_single, C_mul_T, LaurentPolynomial, LaurentPolynomial.induction_on, induction_on, map_mul, mul_add, mul_assoc, mul_left_inj_of_invertible, single_eq_C, smul_add, smul_mul_assoc, smul_single
 -/
@@ -981,7 +1011,13 @@ theorem trunc_C_mul_T
     RingHom.toAddMonoidHom_eq_coe, RingEquiv.toRingHom_eq_coe,
     AddMonoidHom.coe_coe, RingHom.coe_coe, RingEquiv.apply_symm_apply, toFinsuppIso_apply]
   split_ifs with hn
-  ·
+  · lift n to Nat using hn
+    simp [toFinsupp_monomial, -single_eq_C_mul_T]
+  · ext a
+    have : a != n := by lia
+    simp [-single_eq_C_mul_T, single_eq_of_ne this]
+
+@[simp]
 
 中文:
 定理 trunc_C_mul_T
@@ -993,7 +1029,13 @@ theorem trunc_C_mul_T
     RingHom.toAddMonoidHom_eq_coe, RingEquiv.toRingHom_eq_coe,
     AddMonoidHom.coe_coe, RingHom.coe_coe, RingEquiv.apply_symm_apply, toFinsuppIso_apply]
   split_ifs with hn
-  ·
+  · lift n to Nat using hn
+    simp [toFinsupp_monomial, -single_eq_C_mul_T]
+  · ext a
+    have : a != n := by lia
+    simp [-single_eq_C_mul_T, single_eq_of_ne this]
+
+@[simp]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_coe, AddMonoidHom.coe_comp, Function, Function.comp_apply, RingEquiv, RingEquiv.apply_symm_apply, RingEquiv.toRingHom_eq_coe, RingHom, RingHom.coe_coe, RingHom.toAddMonoidHom_eq_coe, apply_symm_apply, coe_coe, coe_comp, comp_apply, injective, single_eq_C_mul_T, single_eq_of_ne, split_ifs, toAddMonoidHom_eq_coe
 -/
@@ -1169,7 +1211,11 @@ theorem exists_T_pow
     refine ⟨m + n, fn * X ^ n + gn * X ^ m, ?_⟩
     simp only [hf, hg, add_mul, add_comm (n : Int), map_add, map_mul, Polynomial.toLaurent_X_pow,
       mul_T_assoc, Int.natCast_add]
-  · rcases n with n | 
+  · rcases n with n | n
+    · exact ⟨0, Polynomial.C a * X ^ n, by simp⟩
+    · refine ⟨n + 1, Polynomial.C a, ?_⟩
+      simp only [Int.negSucc_eq, Polynomial.toLaurent_C, Int.natCast_succ, mul_T_assoc,
+        neg_add_cancel, T_zero, mul_one]
 
 中文:
 定理 存在_T_pow
@@ -1181,7 +1227,11 @@ theorem exists_T_pow
     refine ⟨m + n, fn * X ^ n + gn * X ^ m, ?_⟩
     simp only [hf, hg, add_mul, add_comm (n : Int), map_add, map_mul, Polynomial.toLaurent_X_pow,
       mul_T_assoc, Int.natCast_add]
-  · rcases n with n | 
+  · rcases n with n | n
+    · exact ⟨0, Polynomial.C a * X ^ n, by simp⟩
+    · refine ⟨n + 1, Polynomial.C a, ?_⟩
+      simp only [Int.negSucc_eq, Polynomial.toLaurent_C, Int.natCast_succ, mul_T_assoc,
+        neg_add_cancel, T_zero, mul_one]
 
 Depends on / 依赖: Int.natCast_add, Int.natCast_succ, Int.negSucc_eq, Polynomial, Polynomial.C, Polynomial.toLaurent_C, Polynomial.toLaurent_X_pow, T_zero, add_comm, add_mul, f.induction_on, induction_on, map_add, map_mul, mul_T_assoc, mul_one, natCast_add, natCast_succ, negSucc_eq, neg_add_cancel
 -/
@@ -1756,7 +1806,13 @@ instance isLocalization
     surj f := by
       induction f using LaurentPolynomial.induction_on_mul_T with | _ f n
       have : X ^ n in Submonoid.powers (X : R[X]) := ⟨n, rfl⟩
-     
+      refine ⟨(f, ⟨_, this⟩), ?_⟩
+      simp only [algebraMap_eq_toLaurent, toLaurent_X_pow, mul_T_assoc, neg_add_cancel, T_zero,
+        mul_one]
+    exists_of_eq := fun {f g} => by
+      rw [algebraMap_eq_toLaurent]; rw [algebraMap_eq_toLaurent]; rw [Polynomial.toLaurent_inj]
+      rintro rfl
+      exact ⟨1, rfl⟩ }
 
 中文:
 实例 isLocalization
@@ -1768,7 +1824,13 @@ instance isLocalization
     surj f := by
       induction f using LaurentPolynomial.induction_on_mul_T with | _ f n
       have : X ^ n in Submonoid.powers (X : R[X]) := ⟨n, rfl⟩
-     
+      refine ⟨(f, ⟨_, this⟩), ?_⟩
+      simp only [algebraMap_eq_toLaurent, toLaurent_X_pow, mul_T_assoc, neg_add_cancel, T_zero,
+        mul_one]
+    exists_of_eq := fun {f g} => by
+      rw [algebraMap_eq_toLaurent]; rw [algebraMap_eq_toLaurent]; rw [Polynomial.toLaurent_inj]
+      rintro rfl
+      exact ⟨1, rfl⟩ }
 
 Depends on / 依赖: LaurentPolynomial, LaurentPolynomial.induction_on_mul_T, Polynomial, Polynomial.toLau, Submonoid, Submonoid.powers, T_zero, algebraMap_eq_toLaurent, exists_of_eq, induction_on_mul_T, isUnit_T, map_units, mul_T_assoc, mul_one, neg_add_cancel, powers, toLaurent_X_pow
 -/

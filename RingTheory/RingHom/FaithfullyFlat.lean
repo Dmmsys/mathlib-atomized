@@ -192,7 +192,7 @@ lemma of_bijective
   have : ((RingEquiv.ofBijective f hf).symm : _ ->+* _).comp f = id R := by
     ext
     exact (RingEquiv.ofBijective f hf).injective (by simp)
-  rw [← PrimeSp
+  rw [← PrimeSpectrum.comap_comp_apply]; rw [this]; rw [PrimeSpectrum.comap_id]
 
 中文:
 引理 of_bijective
@@ -205,7 +205,7 @@ lemma of_bijective
   have : ((RingEquiv.ofBijective f hf).symm : _ ->+* _).comp f = id R := by
     ext
     exact (RingEquiv.ofBijective f hf).injective (by simp)
-  rw [← PrimeSp
+  rw [← PrimeSpectrum.comap_comp_apply]; rw [this]; rw [PrimeSpectrum.comap_id]
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.comap_comp_apply, PrimeSpectrum.comap_id, RingEquiv, RingEquiv.ofBijective, comap_comp_apply, comap_id, iff_flat_and_comap_surjective, injective, ofBijective, of_bijective, p.comap
 -/

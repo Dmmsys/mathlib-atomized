@@ -636,7 +636,7 @@ theorem comap_cobounded_le_iff
 ⟨(f '' tᶜ)ᶜ, h IsCobounded.compl ht, compl_subset_comm.1 subset_preimage_image _ _⟩⟩
   obtain ⟨t, ht, hts⟩ := h hs.compl
   rw [subset_compl_comm]; rw [← preimage_compl] at hts
-  exact (IsCobounded.compl ht).subset ((image_mono hts).trans <| image_prei
+  exact (IsCobounded.compl ht).subset ((image_mono hts).trans <| image_preimage_subset _ _)
 
 中文:
 定理 comap_cobounded_le_iff
@@ -647,7 +647,7 @@ theorem comap_cobounded_le_iff
 ⟨(f '' tᶜ)ᶜ, h IsCobounded.compl ht, compl_subset_comm.1 subset_preimage_image _ _⟩⟩
   obtain ⟨t, ht, hts⟩ := h hs.compl
   rw [subset_compl_comm]; rw [← preimage_compl] at hts
-  exact (IsCobounded.compl ht).subset ((image_mono hts).trans <| image_prei
+  exact (IsCobounded.compl ht).subset ((image_mono hts).trans <| image_preimage_subset _ _)
 
 Depends on / 依赖: IsCobounded, IsCobounded.compl, compl_subset_comm, hs.compl, image_mono, image_preimage_subset, preimage_compl, subset, subset_compl_comm, subset_preimage_image
 -/

@@ -158,7 +158,11 @@ lemma geom_sum_inv
   have h₃ : x - 1 != 0 := mt sub_eq_zero.1 hx1
   have h₄ : x * (x ^ n)⁻¹ = (x ^ n)⁻¹ * x :=
     Nat.recOn n (by simp) fun n h => by
-      rw [pow_succ']; rw [mul_inv
+      rw [pow_succ']; rw [mul_inv_rev]; rw [← mul_assoc]; rw [h]; rw [mul_assoc]; rw [mul_inv_cancel₀ hx0]; rw [mul_assoc]; rw [inv_mul_cancel₀ hx0]
+  rw [geom_sum_eq h₁]; rw [div_eq_iff_mul_eq h₂]; rw [← mul_right_inj' h₃]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_inv_cancel₀ h₃]
+  simp only [inv_pow, sub_eq_add_neg, mul_add, one_mul, mul_neg, add_mul, mul_inv_cancel₀ hx0,
+    neg_mul, mul_assoc, mul_one, add_comm, neg_add_rev, neg_neg, h₄, add_left_comm]
+  rw [add_comm _ (-x)]; rw [add_assoc]; rw [add_assoc _ _ 1]
 
 中文:
 引理 geom_sum_inv
@@ -169,7 +173,11 @@ lemma geom_sum_inv
   have h₃ : x - 1 != 0 := mt sub_eq_zero.1 hx1
   have h₄ : x * (x ^ n)⁻¹ = (x ^ n)⁻¹ * x :=
     Nat.recOn n (by simp) fun n h => by
-      rw [pow_succ']; rw [mul_inv
+      rw [pow_succ']; rw [mul_inv_rev]; rw [← mul_assoc]; rw [h]; rw [mul_assoc]; rw [mul_inv_cancel₀ hx0]; rw [mul_assoc]; rw [inv_mul_cancel₀ hx0]
+  rw [geom_sum_eq h₁]; rw [div_eq_iff_mul_eq h₂]; rw [← mul_right_inj' h₃]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_inv_cancel₀ h₃]
+  simp only [inv_pow, sub_eq_add_neg, mul_add, one_mul, mul_neg, add_mul, mul_inv_cancel₀ hx0,
+    neg_mul, mul_assoc, mul_one, add_comm, neg_add_rev, neg_neg, h₄, add_left_comm]
+  rw [add_comm _ (-x)]; rw [add_assoc]; rw [add_assoc _ _ 1]
 
 Depends on / 依赖: Nat.recOn, div_eq_iff_mul_eq, geom_sum_eq, inv_eq_one_div, mul_, mul_assoc, mul_inv_rev, mul_right_inj, one_mul, pow_succ, sub_eq_zero
 -/

@@ -131,7 +131,12 @@ instance toAddTorsor
   vsub a b := ⟨(a : P) -ᵥ (b : P), (vsub_left_mem_direction_iff_mem a.2 _).mpr b.2⟩
   vsub_vadd' a b := by
     ext
-    apply AddTorsor.
+    apply AddTorsor.vsub_vadd'
+  vadd_vsub' a b := by
+    ext
+    apply AddTorsor.vadd_vsub'
+
+@[simp, norm_cast]
 
 中文:
 实例 toAddTorsor
@@ -146,7 +151,12 @@ instance toAddTorsor
   vsub a b := ⟨(a : P) -ᵥ (b : P), (vsub_left_mem_direction_iff_mem a.2 _).mpr b.2⟩
   vsub_vadd' a b := by
     ext
-    apply AddTorsor.
+    apply AddTorsor.vsub_vadd'
+  vadd_vsub' a b := by
+    ext
+    apply AddTorsor.vadd_vsub'
+
+@[simp, norm_cast]
 
 Depends on / 依赖: vadd_mem_of_mem_direction
 -/
@@ -513,7 +523,8 @@ theorem subsingleton_of_subsingleton_span_eq_top
   proof: by
   obtain ⟨p, hp⟩ := AffineSubspace.nonempty_of_affineSpan_eq_top k V P h₂
   have : s = {p} := Subset.antisymm (fun q hq => h₁ hq hp) (by simp [hp])
-  rw [this]; rw [AffineSubspace.ext_iff]; rw [AffineSubspace.coe_affineSpan_singleton]; rw [AffineSubspace.top_coe]; rw [eq_comm]; rw [← subsingleton
+  rw [this]; rw [AffineSubspace.ext_iff]; rw [AffineSubspace.coe_affineSpan_singleton]; rw [AffineSubspace.top_coe]; rw [eq_comm]; rw [← subsingleton_iff_singleton (mem_univ _)] at h₂
+  exact subsingleton_of_univ_subsingleton h₂
 
 中文:
 定理 subsingleton_of_subsingleton_span_eq_top
@@ -521,7 +532,8 @@ theorem subsingleton_of_subsingleton_span_eq_top
   证明: by
   obtain ⟨p, hp⟩ := AffineSubspace.nonempty_of_affineSpan_eq_top k V P h₂
   have : s = {p} := Subset.antisymm (fun q hq => h₁ hq hp) (by simp [hp])
-  rw [this]; rw [AffineSubspace.ext_iff]; rw [AffineSubspace.coe_affineSpan_singleton]; rw [AffineSubspace.top_coe]; rw [eq_comm]; rw [← subsingleton
+  rw [this]; rw [AffineSubspace.ext_iff]; rw [AffineSubspace.coe_affineSpan_singleton]; rw [AffineSubspace.top_coe]; rw [eq_comm]; rw [← subsingleton_iff_singleton (mem_univ _)] at h₂
+  exact subsingleton_of_univ_subsingleton h₂
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.coe_affineSpan_singleton, AffineSubspace.ext_iff, AffineSubspace.nonempty_of_affineSpan_eq_top, AffineSubspace.top_coe, Subset, Subset.antisymm, antisymm, coe_affineSpan_singleton, eq_comm, ext_iff, mem_univ, nonempty_of_affineSpan_eq_top, subsingleton_iff_singleton, subsingleton_of_univ_subsingleton, top_coe
 -/
@@ -542,7 +554,7 @@ theorem eq_univ_of_subsingleton_span_eq_top
   obtain ⟨p, hp⟩ := AffineSubspace.nonempty_of_affineSpan_eq_top k V P h₂
   have : s = {p} := Subset.antisymm (fun q hq => h₁ hq hp) (by simp [hp])
   rw [this]; rw [eq_comm]; rw [← subsingleton_iff_singleton (mem_univ p)]; rw [subsingleton_univ_iff]
-  exact subsingleton_of_subsingleton_span_eq_to
+  exact subsingleton_of_subsingleton_span_eq_top h₁ h₂
 
 中文:
 定理 eq_univ_of_subsingleton_span_eq_top
@@ -551,7 +563,7 @@ theorem eq_univ_of_subsingleton_span_eq_top
   obtain ⟨p, hp⟩ := AffineSubspace.nonempty_of_affineSpan_eq_top k V P h₂
   have : s = {p} := Subset.antisymm (fun q hq => h₁ hq hp) (by simp [hp])
   rw [this]; rw [eq_comm]; rw [← subsingleton_iff_singleton (mem_univ p)]; rw [subsingleton_univ_iff]
-  exact subsingleton_of_subsingleton_span_eq_to
+  exact subsingleton_of_subsingleton_span_eq_top h₁ h₂
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.nonempty_of_affineSpan_eq_top, Subset, Subset.antisymm, antisymm, eq_comm, mem_univ, nonempty_of_affineSpan_eq_top, subsingleton_iff_singleton, subsingleton_of_subsingleton_span_eq_top, subsingleton_univ_iff
 -/
@@ -628,7 +640,9 @@ theorem vectorSpan_eq_span_vsub_set_left
     rintro v ⟨p₁, hp₁, p₂, hp₂, hv⟩
     simp_rw [← vsub_sub_vsub_cancel_left p₁ p₂ p] at hv
     rw [← hv]; rw [SetLike.mem_coe]; rw [Submodule.mem_span]
-    exact fun m hm => Submodule.sub_mem _ (hm 
+    exact fun m hm => Submodule.sub_mem _ (hm ⟨p₂, hp₂, rfl⟩) (hm ⟨p₁, hp₁, rfl⟩)
+  · rintro v ⟨p₂, hp₂, hv⟩
+    exact ⟨p, hp, p₂, hp₂, hv⟩
 
 中文:
 定理 vectorSpan_eq_span_vsub_set_left
@@ -640,7 +654,9 @@ theorem vectorSpan_eq_span_vsub_set_left
     rintro v ⟨p₁, hp₁, p₂, hp₂, hv⟩
     simp_rw [← vsub_sub_vsub_cancel_left p₁ p₂ p] at hv
     rw [← hv]; rw [SetLike.mem_coe]; rw [Submodule.mem_span]
-    exact fun m hm => Submodule.sub_mem _ (hm 
+    exact fun m hm => Submodule.sub_mem _ (hm ⟨p₂, hp₂, rfl⟩) (hm ⟨p₁, hp₁, rfl⟩)
+  · rintro v ⟨p₂, hp₂, hv⟩
+    exact ⟨p, hp, p₂, hp₂, hv⟩
 
 Depends on / 依赖: SetLike, SetLike.mem_coe, Submodule, Submodule.mem_span, Submodule.span_le, Submodule.span_mono, Submodule.sub_mem, le_antisymm, mem_coe, mem_span, simp_rw, span_le, span_mono, sub_mem, vectorSpan_def, vsub_sub_vsub_cancel_left
 -/
@@ -669,7 +685,9 @@ theorem vectorSpan_eq_span_vsub_set_right
     rintro v ⟨p₁, hp₁, p₂, hp₂, hv⟩
     simp_rw [← vsub_sub_vsub_cancel_right p₁ p₂ p] at hv
     rw [← hv]; rw [SetLike.mem_coe]; rw [Submodule.mem_span]
-    exact fun m hm => Submodule.sub_mem _ (hm
+    exact fun m hm => Submodule.sub_mem _ (hm ⟨p₁, hp₁, rfl⟩) (hm ⟨p₂, hp₂, rfl⟩)
+  · rintro v ⟨p₂, hp₂, hv⟩
+    exact ⟨p₂, hp₂, p, hp, hv⟩
 
 中文:
 定理 vectorSpan_eq_span_vsub_set_right
@@ -681,7 +699,9 @@ theorem vectorSpan_eq_span_vsub_set_right
     rintro v ⟨p₁, hp₁, p₂, hp₂, hv⟩
     simp_rw [← vsub_sub_vsub_cancel_right p₁ p₂ p] at hv
     rw [← hv]; rw [SetLike.mem_coe]; rw [Submodule.mem_span]
-    exact fun m hm => Submodule.sub_mem _ (hm
+    exact fun m hm => Submodule.sub_mem _ (hm ⟨p₁, hp₁, rfl⟩) (hm ⟨p₂, hp₂, rfl⟩)
+  · rintro v ⟨p₂, hp₂, hv⟩
+    exact ⟨p₂, hp₂, p, hp, hv⟩
 
 Depends on / 依赖: SetLike, SetLike.mem_coe, Submodule, Submodule.mem_span, Submodule.span_le, Submodule.span_mono, Submodule.sub_mem, le_antisymm, mem_coe, mem_span, simp_rw, span_le, span_mono, sub_mem, vectorSpan_def, vsub_sub_vsub_cancel_right
 -/
@@ -897,7 +917,7 @@ theorem vectorSpan_range_eq_span_range_vsub_left_ne
   constructor
   · rintro ⟨x, ⟨i₁, ⟨⟨_, hi₁⟩, rfl⟩⟩, hv⟩
     exact ⟨i₁, hi₁, hv⟩
-  · exact f
+  · exact fun ⟨i₁, hi₁, hv⟩ => ⟨p i₁, ⟨i₁, ⟨Set.mem_univ _, hi₁⟩, rfl⟩, hv⟩
 
 中文:
 定理 vectorSpan_range_eq_span_range_vsub_left_ne
@@ -909,7 +929,7 @@ theorem vectorSpan_range_eq_span_range_vsub_left_ne
   constructor
   · rintro ⟨x, ⟨i₁, ⟨⟨_, hi₁⟩, rfl⟩⟩, hv⟩
     exact ⟨i₁, hi₁, hv⟩
-  · exact f
+  · exact fun ⟨i₁, hi₁, hv⟩ => ⟨p i₁, ⟨i₁, ⟨Set.mem_univ _, hi₁⟩, rfl⟩, hv⟩
 
 Depends on / 依赖: Set.image_univ, Set.mem_image, Set.mem_range, Set.mem_sdiff, Set.mem_singleton_iff, Set.mem_univ, Subtype, Subtype.exists, image_univ, mem_image, mem_range, mem_sdiff, mem_singleton_iff, mem_univ, vectorSpan_image_eq_span_vsub_set_left_ne
 -/
@@ -937,7 +957,7 @@ theorem vectorSpan_range_eq_span_range_vsub_right_ne
   constructor
   · rintro ⟨x, ⟨i₁, ⟨⟨_, hi₁⟩, rfl⟩⟩, hv⟩
     exact ⟨i₁, hi₁, hv⟩
-  · exact 
+  · exact fun ⟨i₁, hi₁, hv⟩ => ⟨p i₁, ⟨i₁, ⟨Set.mem_univ _, hi₁⟩, rfl⟩, hv⟩
 
 中文:
 定理 vectorSpan_range_eq_span_range_vsub_right_ne
@@ -949,7 +969,7 @@ theorem vectorSpan_range_eq_span_range_vsub_right_ne
   constructor
   · rintro ⟨x, ⟨i₁, ⟨⟨_, hi₁⟩, rfl⟩⟩, hv⟩
     exact ⟨i₁, hi₁, hv⟩
-  · exact 
+  · exact fun ⟨i₁, hi₁, hv⟩ => ⟨p i₁, ⟨i₁, ⟨Set.mem_univ _, hi₁⟩, rfl⟩, hv⟩
 
 Depends on / 依赖: Set.image_univ, Set.mem_image, Set.mem_range, Set.mem_sdiff, Set.mem_singleton_iff, Set.mem_univ, Subtype, Subtype.exists, image_univ, mem_image, mem_range, mem_sdiff, mem_singleton_iff, mem_univ, vectorSpan_image_eq_span_vsub_set_right_ne
 -/
@@ -1012,7 +1032,10 @@ theorem affineSpan_singleton_union_vadd_eq_top_of_span_eq_top
     ext_of_direction_eq _
       ⟨p, mem_affineSpan k (Set.mem_union_left _ (Set.mem_singleton _)), mem_top k V p⟩
   rw [direction_affineSpan]; rw [direction_top]; rw [vectorSpan_eq_span_vsub_set_right k (Set.mem_union_left _ (Set.mem_singleton _) : p in _)]; rw [eq_top_iff]; rw [← h]
- 
+  apply Submodule.span_mono
+  rintro v ⟨v', rfl⟩
+  use (v' : V) +ᵥ p
+  simp
 
 中文:
 定理 affineSpan_singleton_union_vadd_eq_top_of_span_eq_top
@@ -1022,7 +1045,10 @@ theorem affineSpan_singleton_union_vadd_eq_top_of_span_eq_top
     ext_of_direction_eq _
       ⟨p, mem_affineSpan k (Set.mem_union_left _ (Set.mem_singleton _)), mem_top k V p⟩
   rw [direction_affineSpan]; rw [direction_top]; rw [vectorSpan_eq_span_vsub_set_right k (Set.mem_union_left _ (Set.mem_singleton _) : p in _)]; rw [eq_top_iff]; rw [← h]
- 
+  apply Submodule.span_mono
+  rintro v ⟨v', rfl⟩
+  use (v' : V) +ᵥ p
+  simp
 
 Depends on / 依赖: Set.mem_singleton, Set.mem_union_left, Submodule, Submodule.span_mono, convert, direction_affineSpan, direction_top, eq_top_iff, ext_of_direction_eq, mem_affineSpan, mem_singleton, mem_top, mem_union_left, span_mono, vectorSpan_eq_span_vsub_set_right
 -/
@@ -1336,7 +1362,25 @@ theorem direction_sup
     rw [← mem_coe] at hp₁
     rw [direction_affineSpan]; rw [vectorSpan_eq_span_vsub_set_right k (Set.mem_union_left _ hp₁)]; rw [Submodule.span_le]
     rintro v ⟨p₃, hp₃, rfl⟩
-    rcases hp₃ with hp₃ | hp
+    rcases hp₃ with hp₃ | hp₃
+    · rw [sup_assoc, sup_comm, SetLike.mem_coe, Submodule.mem_sup]
+      use 0, Submodule.zero_mem _, p₃ -ᵥ p₁, vsub_mem_direction hp₃ hp₁
+      rw [zero_add]
+    · rw [sup_assoc, SetLike.mem_coe, Submodule.mem_sup]
+      use 0, Submodule.zero_mem _, p₃ -ᵥ p₁
+      rw [and_comm]; rw [zero_add]
+      use rfl
+      rw [← vsub_add_vsub_cancel p₃ p₂ p₁]; rw [Submodule.mem_sup]
+      use p₃ -ᵥ p₂, vsub_mem_direction hp₃ hp₂, p₂ -ᵥ p₁, Submodule.mem_span_singleton_self _
+  · refine sup_le (sup_direction_le _ _) ?_
+    rw [direction_eq_vectorSpan]; rw [vectorSpan_def]
+    exact
+      sInf_le_sInf fun p hp =>
+        Set.Subset.trans
+          (Set.singleton_subset_iff.2
+            (vsub_mem_vsub (mem_affineSpan k (Set.mem_union_right _ hp₂))
+              (mem_affineSpan k (Set.mem_union_left _ hp₁))))
+          hp
 
 中文:
 定理 direction_sup
@@ -1347,7 +1391,25 @@ theorem direction_sup
     rw [← mem_coe] at hp₁
     rw [direction_affineSpan]; rw [vectorSpan_eq_span_vsub_set_right k (Set.mem_union_left _ hp₁)]; rw [Submodule.span_le]
     rintro v ⟨p₃, hp₃, rfl⟩
-    rcases hp₃ with hp₃ | hp
+    rcases hp₃ with hp₃ | hp₃
+    · rw [sup_assoc, sup_comm, SetLike.mem_coe, Submodule.mem_sup]
+      use 0, Submodule.zero_mem _, p₃ -ᵥ p₁, vsub_mem_direction hp₃ hp₁
+      rw [zero_add]
+    · rw [sup_assoc, SetLike.mem_coe, Submodule.mem_sup]
+      use 0, Submodule.zero_mem _, p₃ -ᵥ p₁
+      rw [and_comm]; rw [zero_add]
+      use rfl
+      rw [← vsub_add_vsub_cancel p₃ p₂ p₁]; rw [Submodule.mem_sup]
+      use p₃ -ᵥ p₂, vsub_mem_direction hp₃ hp₂, p₂ -ᵥ p₁, Submodule.mem_span_singleton_self _
+  · refine sup_le (sup_direction_le _ _) ?_
+    rw [direction_eq_vectorSpan]; rw [vectorSpan_def]
+    exact
+      sInf_le_sInf fun p hp =>
+        Set.Subset.trans
+          (Set.singleton_subset_iff.2
+            (vsub_mem_vsub (mem_affineSpan k (Set.mem_union_right _ hp₂))
+              (mem_affineSpan k (Set.mem_union_left _ hp₁))))
+          hp
 
 Depends on / 依赖: Set.mem_union_left, SetLike, SetLike.mem_coe, Submodule, Submodule.mem_sup, Submodule.span_le, Submodule.zero_, Submodule.zero_mem, affineSpan, direction, direction_affineSpan, le_antisymm, mem_coe, mem_sup, mem_union_left, span_le, sup_assoc, sup_comm, vectorSpan_eq_span_vsub_set_right, vsub_mem_direction
 -/
@@ -1445,7 +1507,15 @@ theorem mem_affineSpan_insert_iff
   constructor
   · rintro ⟨v₁, hv₁, v₂, hv₂, hp⟩
     rw [Submodule.mem_span_singleton] at hv₁
-    rcases hv₁ with ⟨r, rfl
+    rcases hv₁ with ⟨r, rfl⟩
+    use r, v₂ +ᵥ p₁, vadd_mem_of_mem_direction hv₂ hp₁
+    symm at hp
+    rw [← sub_eq_zero]; rw [← vsub_vadd_eq_vsub_sub]; rw [vsub_eq_zero_iff_eq] at hp
+    rw [hp]; rw [vadd_vadd]
+  · rintro ⟨r, p₃, hp₃, rfl⟩
+    use r • (p₂ -ᵥ p₁), Submodule.mem_span_singleton.2 ⟨r, rfl⟩, p₃ -ᵥ p₁,
+      vsub_mem_direction hp₃ hp₁
+    rw [vadd_vsub_assoc]
 
 中文:
 定理 mem_affineSpan_insert_iff
@@ -1456,7 +1526,15 @@ theorem mem_affineSpan_insert_iff
   constructor
   · rintro ⟨v₁, hv₁, v₂, hv₂, hp⟩
     rw [Submodule.mem_span_singleton] at hv₁
-    rcases hv₁ with ⟨r, rfl
+    rcases hv₁ with ⟨r, rfl⟩
+    use r, v₂ +ᵥ p₁, vadd_mem_of_mem_direction hv₂ hp₁
+    symm at hp
+    rw [← sub_eq_zero]; rw [← vsub_vadd_eq_vsub_sub]; rw [vsub_eq_zero_iff_eq] at hp
+    rw [hp]; rw [vadd_vadd]
+  · rintro ⟨r, p₃, hp₃, rfl⟩
+    use r • (p₂ -ᵥ p₁), Submodule.mem_span_singleton.2 ⟨r, rfl⟩, p₃ -ᵥ p₁,
+      vsub_mem_direction hp₃ hp₁
+    rw [vadd_vsub_assoc]
 
 Depends on / 依赖: Set.mem_insert_of_mem, Submodule, Submodule.mem_span_singleton, Submodule.mem_sup, direction_affineSpan_insert, mem_affineSpan, mem_coe, mem_insert_of_mem, mem_span_singleton, mem_sup, sub_eq_zero, vadd_mem_of_mem_direction, vadd_vadd, vsub_eq_zero_iff_eq, vsub_right_mem_direction_iff_mem, vsub_vadd_eq_vsub_sub
 -/
@@ -1558,7 +1636,9 @@ definition map
     suffices t • (p₁ -ᵥ p₂) +ᵥ p₃ in s by
     { simp only [SetLike.mem_coe, true_and, this]
       rw [AffineMap.map_vadd]; rw [map_smul]; rw [AffineMap.linearMap_vsub] }
-    e
+    exact s.smul_vsub_vadd_mem t h₁ h₂ h₃
+
+@[simp]
 
 中文:
 定义 map
@@ -1570,7 +1650,9 @@ definition map
     suffices t • (p₁ -ᵥ p₂) +ᵥ p₃ in s by
     { simp only [SetLike.mem_coe, true_and, this]
       rw [AffineMap.map_vadd]; rw [map_smul]; rw [AffineMap.linearMap_vsub] }
-    e
+    exact s.smul_vsub_vadd_mem t h₁ h₂ h₃
+
+@[simp]
 -/
 def map (s : AffineSubspace k P₁) : AffineSubspace k P₂ where
   carrier := f '' s
@@ -3082,7 +3164,9 @@ theorem _root_.affineSpan_prod_eq
   · simp [direction_prod_eq, Set.nonempty_iff_ne_empty.mp, hs, ht, direction_affineSpan,
       vectorSpan_prod_eq]
   · obtain ⟨x, hx⟩ := hs
-    
+    obtain ⟨y, hy⟩ := ht
+    use ⟨x, y⟩
+    simp [mem_affineSpan, hx, hy]
 
 中文:
 定理 _root_.affineSpan_prod_eq
@@ -3096,7 +3180,9 @@ theorem _root_.affineSpan_prod_eq
   · simp [direction_prod_eq, Set.nonempty_iff_ne_empty.mp, hs, ht, direction_affineSpan,
       vectorSpan_prod_eq]
   · obtain ⟨x, hx⟩ := hs
-    
+    obtain ⟨y, hy⟩ := ht
+    use ⟨x, y⟩
+    simp [mem_affineSpan, hx, hy]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.ext_of_direction_eq, Set.nonempty_iff_ne_empty.mp, direction_affineSpan, direction_prod_eq, eq_empty_or_nonempty, ext_of_direction_eq, mem_affineSpan, nonempty_iff_ne_empty, s.eq_empty_or_nonempty, t.eq_empty_or_nonempty, vectorSpan_prod_eq
 -/
@@ -3423,7 +3509,14 @@ theorem parallel_iff_direction_eq_and_eq_bot_iff_eq_bot
     by_cases hs₁ : s₁ = ⊥
     · rw [hs₁, bot_parallel_iff_eq_bot]
       exact hb.1 hs₁
-    · have hs₂ : s₂
+    · have hs₂ : s₂ != ⊥ := hb.not.1 hs₁
+      rcases (nonempty_iff_ne_bot s₁).2 hs₁ with ⟨p₁, hp₁⟩
+      rcases (nonempty_iff_ne_bot s₂).2 hs₂ with ⟨p₂, hp₂⟩
+      refine ⟨p₂ -ᵥ p₁, (eq_iff_direction_eq_of_mem hp₂ ?_).2 ?_⟩
+      · rw [mem_map]
+        refine ⟨p₁, hp₁, ?_⟩
+        simp
+      · simpa using hd.symm
 
 中文:
 定理 parallel_iff_direction_eq_and_eq_bot_iff_eq_bot
@@ -3438,7 +3531,14 @@ theorem parallel_iff_direction_eq_and_eq_bot_iff_eq_bot
     by_cases hs₁ : s₁ = ⊥
     · rw [hs₁, bot_parallel_iff_eq_bot]
       exact hb.1 hs₁
-    · have hs₂ : s₂
+    · have hs₂ : s₂ != ⊥ := hb.not.1 hs₁
+      rcases (nonempty_iff_ne_bot s₁).2 hs₁ with ⟨p₁, hp₁⟩
+      rcases (nonempty_iff_ne_bot s₂).2 hs₂ with ⟨p₂, hp₂⟩
+      refine ⟨p₂ -ᵥ p₁, (eq_iff_direction_eq_of_mem hp₂ ?_).2 ?_⟩
+      · rw [mem_map]
+        refine ⟨p₁, hp₁, ?_⟩
+        simp
+      · simpa using hd.symm
 
 Depends on / 依赖: bot_parallel_iff_eq_bot, direction_eq, eq_iff_direction_eq_of_mem, h.direction_eq, hb.not, mem_map, nonempty_iff_ne_bot, parallel_bot_iff_eq_bot
 -/
@@ -3645,7 +3745,17 @@ lemma affineSpan_pair_eq_of_mem_of_mem_of_ne
   rw [← vsub_vadd p₂ p₃]; rw [vadd_left_mem_affineSpan_pair] at hp₂
   rcases hp₂ with ⟨r₂, hp₂⟩
   have hr₀ : r₂ - r₁ != 0 := by
-    rw
+    rw [sub_ne_zero]
+    rintro rfl
+    simp_all
+  have hr : (r₂ - r₁) • (p₄ -ᵥ p₃) = p₂ -ᵥ p₁ := by
+    simp [sub_smul, hp₁, hp₂]
+  rw [← eq_inv_smul_iff₀ hr₀] at hr
+  refine affineSpan_pair_le_of_mem_of_mem ?_ ?_
+  · convert! smul_vsub_vadd_mem_affineSpan_pair (-r₁ * (r₂ - r₁)⁻¹) p₁ p₂
+    simp [mul_smul, ← hr, hp₁]
+  · convert! smul_vsub_vadd_mem_affineSpan_pair ((1 - r₁) * (r₂ - r₁)⁻¹) p₁ p₂
+    simp [mul_smul, ← hr, sub_smul, hp₁]
 
 中文:
 引理 affineSpan_pair_eq_of_mem_of_mem_of_ne
@@ -3657,7 +3767,17 @@ lemma affineSpan_pair_eq_of_mem_of_mem_of_ne
   rw [← vsub_vadd p₂ p₃]; rw [vadd_left_mem_affineSpan_pair] at hp₂
   rcases hp₂ with ⟨r₂, hp₂⟩
   have hr₀ : r₂ - r₁ != 0 := by
-    rw
+    rw [sub_ne_zero]
+    rintro rfl
+    simp_all
+  have hr : (r₂ - r₁) • (p₄ -ᵥ p₃) = p₂ -ᵥ p₁ := by
+    simp [sub_smul, hp₁, hp₂]
+  rw [← eq_inv_smul_iff₀ hr₀] at hr
+  refine affineSpan_pair_le_of_mem_of_mem ?_ ?_
+  · convert! smul_vsub_vadd_mem_affineSpan_pair (-r₁ * (r₂ - r₁)⁻¹) p₁ p₂
+    simp [mul_smul, ← hr, hp₁]
+  · convert! smul_vsub_vadd_mem_affineSpan_pair ((1 - r₁) * (r₂ - r₁)⁻¹) p₁ p₂
+    simp [mul_smul, ← hr, sub_smul, hp₁]
 
 Depends on / 依赖: affineSpan_pair_le_of_mem_of_mem, convert, le_antisymm, smul_vsub_vadd, sub_ne_zero, sub_smul, vadd_left_mem_affineSpan_pair, vsub_vadd
 -/
@@ -3734,7 +3854,20 @@ theorem exists_eq_smul_of_parallel
   obtain ⟨r₃, hr₃⟩ := h₃₁₆₄
   rw [Units.smul_def] at hr₁
   by_cases h : (r₁ : k) = r₂
-  · refine ⟨r₁, r₁.ne_zer
+  · refine ⟨r₁, r₁.ne_zero, hr₁.symm, h ▸ hr₂.symm, ?_⟩
+    rw [← neg_inj]; rw [neg_vsub_eq_vsub_rev]; rw [← smul_neg]; rw [neg_vsub_eq_vsub_rev]; rw [← vsub_add_vsub_cancel p₆ p₅ p₄]; rw [← vsub_add_vsub_cancel p₃ p₂ p₁]; rw [smul_add]; rw [hr₁]; rw [h]; rw [hr₂]
+  · exfalso
+    have h₁₂ : (r₁ : k) • (p₂ -ᵥ p₁) + r₂ • (p₃ -ᵥ p₂) in vectorSpan k {p₁, p₃} := by
+      rw [hr₁]; rw [hr₂]; rw [add_comm]; rw [vsub_add_vsub_cancel]; rw [← neg_vsub_eq_vsub_rev]; rw [neg_mem_iff]; rw [← hr₃]
+      exact smul_vsub_mem_vectorSpan_pair _ _ _
+    have h₁₁ : (r₁ : k) • (p₂ -ᵥ p₁) + (r₁ : k) • (p₃ -ᵥ p₂) in vectorSpan k {p₁, p₃} := by
+      rw [add_comm]; rw [← smul_add]; rw [vsub_add_vsub_cancel]
+      exact smul_vsub_rev_mem_vectorSpan_pair _ _ _
+    have h₂₁ : (r₂ - r₁) • (p₃ -ᵥ p₂) in vectorSpan k {p₁, p₃} := by
+      simpa [sub_smul] using sub_mem h₁₂ h₁₁
+    rw [Submodule.smul_mem_iff _ (by rwa [sub_ne_zero]; rw [ne_comm]), ← direction_affineSpan,
+      vsub_left_mem_direction_iff_mem (right_mem_affineSpan_pair _ _ _)] at h₂₁
+    exact h₂ h₂₁
 
 中文:
 定理 存在_eq_smul_of_parallel
@@ -3747,7 +3880,20 @@ theorem exists_eq_smul_of_parallel
   obtain ⟨r₃, hr₃⟩ := h₃₁₆₄
   rw [Units.smul_def] at hr₁
   by_cases h : (r₁ : k) = r₂
-  · refine ⟨r₁, r₁.ne_zer
+  · refine ⟨r₁, r₁.ne_zero, hr₁.symm, h ▸ hr₂.symm, ?_⟩
+    rw [← neg_inj]; rw [neg_vsub_eq_vsub_rev]; rw [← smul_neg]; rw [neg_vsub_eq_vsub_rev]; rw [← vsub_add_vsub_cancel p₆ p₅ p₄]; rw [← vsub_add_vsub_cancel p₃ p₂ p₁]; rw [smul_add]; rw [hr₁]; rw [h]; rw [hr₂]
+  · exfalso
+    have h₁₂ : (r₁ : k) • (p₂ -ᵥ p₁) + r₂ • (p₃ -ᵥ p₂) in vectorSpan k {p₁, p₃} := by
+      rw [hr₁]; rw [hr₂]; rw [add_comm]; rw [vsub_add_vsub_cancel]; rw [← neg_vsub_eq_vsub_rev]; rw [neg_mem_iff]; rw [← hr₃]
+      exact smul_vsub_mem_vectorSpan_pair _ _ _
+    have h₁₁ : (r₁ : k) • (p₂ -ᵥ p₁) + (r₁ : k) • (p₃ -ᵥ p₂) in vectorSpan k {p₁, p₃} := by
+      rw [add_comm]; rw [← smul_add]; rw [vsub_add_vsub_cancel]
+      exact smul_vsub_rev_mem_vectorSpan_pair _ _ _
+    have h₂₁ : (r₂ - r₁) • (p₃ -ᵥ p₂) in vectorSpan k {p₁, p₃} := by
+      simpa [sub_smul] using sub_mem h₁₂ h₁₁
+    rw [Submodule.smul_mem_iff _ (by rwa [sub_ne_zero]; rw [ne_comm]), ← direction_affineSpan,
+      vsub_left_mem_direction_iff_mem (right_mem_affineSpan_pair _ _ _)] at h₂₁
+    exact h₂ h₂₁
 
 Depends on / 依赖: Units.smul_def, affineSpan_pair_parallel_iff_exists_unit_smul, direction_affineSpan_pair_le_iff_exists_smul, ne_zero, neg_inj, neg_vsub_eq_vsub_rev, smul_add, smul_def, smul_neg, vsub_add_vsub_cancel
 -/

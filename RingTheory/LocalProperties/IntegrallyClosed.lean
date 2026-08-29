@@ -39,7 +39,9 @@ theorem IsIntegrallyClosed.iInf
   intro i
   have le : (⨅ i : ι, S i : Subalgebra R K) <= S i := iInf_le S i
   algebraize [(Subalgebra.inclusion le).toRingHom]
-  have : IsScalarTower ↥(⨅ i, S i) (S i) K := Subalgebra.inclusion.isScala
+  have : IsScalarTower ↥(⨅ i, S i) (S i) K := Subalgebra.inclusion.isScalarTower_right le K
+  rcases (isIntegrallyClosed_iff K).mp (h i) hx.tower_top with ⟨⟨_, hin⟩, hy⟩
+  rwa [← hy]
 
 中文:
 定理 是整闭.iInf
@@ -49,7 +51,9 @@ theorem IsIntegrallyClosed.iInf
   intro i
   have le : (⨅ i : ι, S i : Subalgebra R K) <= S i := iInf_le S i
   algebraize [(Subalgebra.inclusion le).toRingHom]
-  have : IsScalarTower ↥(⨅ i, S i) (S i) K := Subalgebra.inclusion.isScala
+  have : IsScalarTower ↥(⨅ i, S i) (S i) K := Subalgebra.inclusion.isScalarTower_right le K
+  rcases (isIntegrallyClosed_iff K).mp (h i) hx.tower_top with ⟨⟨_, hin⟩, hy⟩
+  rwa [← hy]
 
 Depends on / 依赖: Algebra, Algebra.mem_iInf.mpr, CanLift, CanLift.prf, IsScalarTower, Subalgebra, Subalgebra.inclusion, Subalgebra.inclusion.isScalarTower_right, algebraize, hx.tower_top, iInf_le, inclusion, isIntegrallyClosed_iff, isScalarTower_right, mem_iInf, toRingHom, tower_top
 -/
@@ -158,7 +162,8 @@ theorem IsIntegrallyClosed.of_localization_maximal
   · rintro ⟨p, rfl⟩
     exact h p.asIdeal (Ring.ne_bot_of_isMaximal_of_not_isField p.isMaximal hf)
   · rw [iInf_range]
-    convert! MaximalSpect
+    convert! MaximalSpectrum.iInf_localization_eq_bot R (FractionRing R)
+    rw [subalgebra.ofField_eq]; rw [MaximalSpectrum.toPrimeSpectrum]
 
 中文:
 定理 是整闭.of_localization_maximal
@@ -170,7 +175,8 @@ theorem IsIntegrallyClosed.of_localization_maximal
   · rintro ⟨p, rfl⟩
     exact h p.asIdeal (Ring.ne_bot_of_isMaximal_of_not_isField p.isMaximal hf)
   · rw [iInf_range]
-    convert! MaximalSpect
+    convert! MaximalSpectrum.iInf_localization_eq_bot R (FractionRing R)
+    rw [subalgebra.ofField_eq]; rw [MaximalSpectrum.toPrimeSpectrum]
 
 Depends on / 依赖: FractionRing, IsField, MaximalSpectrum, MaximalSpectrum.iInf_localization_eq_bot, MaximalSpectrum.toPrimeSpectrum, Ring.ne_bot_of_isMaximal_of_not_isField, asIdeal, convert, hf.toField.instIsIntegrallyClosed, iInf_localization_eq_bot, iInf_range, instIsIntegrallyClosed, isMaximal, ne_bot_of_isMaximal_of_not_isField, ofField_eq, of_localization, p.asIdeal, p.isMaximal, subalgebra, subalgebra.ofField_eq
 -/

@@ -38,7 +38,10 @@ theorem natCast_mem_center
     | succ n ihn => rw [Nat.cast_succ, add_mul, one_mul, ihn, add_mul, add_mul, one_mul]
   right_assoc _ _ := by
     induction n with
-    | zero => rw [
+    | zero => rw [Nat.cast_zero, mul_zero, mul_zero, mul_zero]
+    | succ n ihn => rw [Nat.cast_succ, mul_add, ihn, mul_add, mul_add, mul_one, mul_one]
+
+@[simp]
 
 中文:
 定理 natCast_mem_center
@@ -51,7 +54,10 @@ theorem natCast_mem_center
     | succ n ihn => rw [Nat.cast_succ, add_mul, one_mul, ihn, add_mul, add_mul, one_mul]
   right_assoc _ _ := by
     induction n with
-    | zero => rw [
+    | zero => rw [Nat.cast_zero, mul_zero, mul_zero, mul_zero]
+    | succ n ihn => rw [Nat.cast_succ, mul_add, ihn, mul_add, mul_add, mul_one, mul_one]
+
+@[simp]
 
 Depends on / 依赖: Nat.cast_succ, Nat.cast_zero, Nat.commute_cast, add_mul, cast_succ, cast_zero, commute_cast, commute_iff_eq, left_assoc, mul_add, mul_one, mul_zero, one_mul, right_assoc, zero_mul
 -/
@@ -102,7 +108,12 @@ theorem intCast_mem_center
   left_assoc _ _ := match n with
     | (n : Nat) => by rw [Int.cast_natCast, (natCast_mem_center _ n).left_assoc _ _]
     | Int.negSucc n => by
-      rw [Int.cast_negSucc]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [neg_add_rev]; rw [add_mul]; rw [add_mul]; rw
+      rw [Int.cast_negSucc]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [neg_add_rev]; rw [add_mul]; rw [add_mul]; rw [add_mul]; rw [neg_mul]; rw [one_mul]; rw [neg_mul 1]; rw [one_mul]; rw [← neg_mul]; rw [add_right_inj]; rw [neg_mul]; rw [(natCast_mem_center _ n).left_assoc _ _]; rw [neg_mul]; rw [neg_mul]
+  right_assoc _ _ := match n with
+    | (n : Nat) => by rw [Int.cast_natCast, (natCast_mem_center _ n).right_assoc _ _]
+    | Int.negSucc n => by
+        simp only [Int.cast_negSucc, Nat.cast_add, Nat.cast_one, neg_add_rev]
+        rw [mul_add]; rw [mul_add]; rw [mul_add]; rw [mul_neg]; rw [mul_one]; rw [mul_neg]; rw [mul_neg]; rw [mul_one]; rw [mul_neg]; rw [add_right_inj]; rw [(natCast_mem_center _ n).right_assoc _ _]; rw [mul_neg]; rw [mul_neg]
 
 中文:
 定理 intCast_mem_center
@@ -112,7 +123,12 @@ theorem intCast_mem_center
   left_assoc _ _ := match n with
     | (n : Nat) => by rw [Int.cast_natCast, (natCast_mem_center _ n).left_assoc _ _]
     | Int.negSucc n => by
-      rw [Int.cast_negSucc]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [neg_add_rev]; rw [add_mul]; rw [add_mul]; rw
+      rw [Int.cast_negSucc]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [neg_add_rev]; rw [add_mul]; rw [add_mul]; rw [add_mul]; rw [neg_mul]; rw [one_mul]; rw [neg_mul 1]; rw [one_mul]; rw [← neg_mul]; rw [add_right_inj]; rw [neg_mul]; rw [(natCast_mem_center _ n).left_assoc _ _]; rw [neg_mul]; rw [neg_mul]
+  right_assoc _ _ := match n with
+    | (n : Nat) => by rw [Int.cast_natCast, (natCast_mem_center _ n).right_assoc _ _]
+    | Int.negSucc n => by
+        simp only [Int.cast_negSucc, Nat.cast_add, Nat.cast_one, neg_add_rev]
+        rw [mul_add]; rw [mul_add]; rw [mul_add]; rw [mul_neg]; rw [mul_one]; rw [mul_neg]; rw [mul_neg]; rw [mul_one]; rw [mul_neg]; rw [add_right_inj]; rw [(natCast_mem_center _ n).right_assoc _ _]; rw [mul_neg]; rw [mul_neg]
 
 Depends on / 依赖: Int.cast_natCast, Int.cast_negSucc, Int.commute_cast, Int.negSucc, Nat.cast_add, Nat.cast_one, add_mul, add_right_inj, cast_add, cast_natCast, cast_negSucc, cast_one, commute_cast, commute_iff_eq, left_assoc, natCast_mem_center, negSucc, neg_add_rev, neg_mul, one_mul
 -/

@@ -1934,7 +1934,7 @@ definition constLimAdj
       left_inv := by cat_disch
       right_inv := by cat_disch }
   unit := { app := fun _ => limit.lift _ ⟨_, 𝟙 _⟩ }
-  counit := { app := fun g =
+  counit := { app := fun g => { app := limit.π _ } } }
 
 中文:
 定义 constLimAdj
@@ -1947,7 +1947,7 @@ definition constLimAdj
       left_inv := by cat_disch
       right_inv := by cat_disch }
   unit := { app := fun _ => limit.lift _ ⟨_, 𝟙 _⟩ }
-  counit := { app := fun g =
+  counit := { app := fun g => { app := limit.π _ } } }
 
 Depends on / 依赖: Adjunction, Adjunction.mk
 -/
@@ -2070,7 +2070,7 @@ definition isLimitConeOfAdj
     have eq' := NatTrans.congr_app (adj.left_triangle_components s.pt) j
     dsimp at eq eq' ⊢
     rw [adj.homEquiv_unit]; rw [assoc]; rw [eq]; rw [reassoc_of% eq']
-  uniq s m hm := (adj.homEquiv _ _
+  uniq s m hm := (adj.homEquiv _ _).symm.injective (by ext j; simpa using! hm j)
 
 中文:
 定义 isLimitConeOfAdj
@@ -2081,7 +2081,7 @@ definition isLimitConeOfAdj
     have eq' := NatTrans.congr_app (adj.left_triangle_components s.pt) j
     dsimp at eq eq' ⊢
     rw [adj.homEquiv_unit]; rw [assoc]; rw [eq]; rw [reassoc_of% eq']
-  uniq s m hm := (adj.homEquiv _ _
+  uniq s m hm := (adj.homEquiv _ _).symm.injective (by ext j; simpa using! hm j)
 
 Depends on / 依赖: adj.homEquiv, homEquiv
 -/
@@ -2496,7 +2496,7 @@ theorem HasColimit.ι_isoOfEquivalence_inv
 alias HasColimit.isoOfEquivalence_hom_π := HasColimit.ι_isoOfEquivalence_hom
 
 @[deprecated (since := "2026-05-25")]
-alias HasColimit.isoOfEquivalence_inv_π := HasColimit.ι_isoOf
+alias HasColimit.isoOfEquivalence_inv_π := HasColimit.ι_isoOfEquivalence_inv
 
 中文:
 定理 有余极限.ι_isoOfEquivalence_inv
@@ -2508,7 +2508,7 @@ alias HasColimit.isoOfEquivalence_inv_π := HasColimit.ι_isoOf
 alias HasColimit.isoOfEquivalence_hom_π := HasColimit.ι_isoOfEquivalence_hom
 
 @[deprecated (since := "2026-05-25")]
-alias HasColimit.isoOfEquivalence_inv_π := HasColimit.ι_isoOf
+alias HasColimit.isoOfEquivalence_inv_π := HasColimit.ι_isoOfEquivalence_inv
 
 Depends on / 依赖: HasColimit, HasColimit.isoOfEquivalence, IsColimit, IsColimit.coconePointsIsoOfEquivalence_inv, coconePointsIsoOfEquivalence_inv, isoOfEquivalence
 -/
@@ -3164,7 +3164,7 @@ definition colimConstAdj
       left_inv := by cat_disch
       right_inv := by cat_disch }
   unit := { app := fun g => { app := colimit.ι _ } }
-  counit := { app := fu
+  counit := { app := fun _ => colimit.desc _ ⟨_, 𝟙 _⟩ } }
 
 中文:
 定义 colimConstAdj
@@ -3177,7 +3177,7 @@ definition colimConstAdj
       left_inv := by cat_disch
       right_inv := by cat_disch }
   unit := { app := fun g => { app := colimit.ι _ } }
-  counit := { app := fu
+  counit := { app := fun _ => colimit.desc _ ⟨_, 𝟙 _⟩ } }
 
 Depends on / 依赖: Adjunction, Adjunction.mk
 -/

@@ -75,7 +75,9 @@ definition f₂
       (Y.spine 1 (by simp) (f₁ (X.map (δ₂ 0).op x))) (by
         simp only [spine_vertex]
         rw [← δ₂_one_eq_const]; rw [← δ₂_zero_eq_const]; rw [← hδ₁]; rw [← hδ₀]
-        simp only [← Functor.map_comp_apply, ← op_
+        simp only [← Functor.map_comp_apply, ← op_comp, δ₂_zero_comp_δ₂_two]))
+
+@[simp]
 
 中文:
 定义 f₂
@@ -85,7 +87,9 @@ definition f₂
       (Y.spine 1 (by simp) (f₁ (X.map (δ₂ 0).op x))) (by
         simp only [spine_vertex]
         rw [← δ₂_one_eq_const]; rw [← δ₂_zero_eq_const]; rw [← hδ₁]; rw [← hδ₀]
-        simp only [← Functor.map_comp_apply, ← op_
+        simp only [← Functor.map_comp_apply, ← op_comp, δ₂_zero_comp_δ₂_two]))
+
+@[simp]
 
 Depends on / 依赖: Functor, Functor.map_comp_apply, X.map, Y.spine, hY.spineEquiv, map_comp_apply, op_comp, spineEquiv, spine_vertex
 -/
@@ -226,7 +230,11 @@ lemma hσ'₀
   · dsimp
     rw [spineEquiv_f₂_arrow_zero]
     dsimp [StrictSegal.spineEquiv]
-    rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_two_comp_σ₂_zero]; rw [op_comp]; rw [Functor.map_comp_apply]; rw [hσ]; rw [SimplexCategory.mkOfSucc_ze
+    rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_two_comp_σ₂_zero]; rw [op_comp]; rw [Functor.map_comp_apply]; rw [hσ]; rw [SimplexCategory.mkOfSucc_zero_eq_δ]; rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_two_comp_σ₂_zero]; rw [op_comp]; rw [Functor.map_comp_apply]; rw [hδ₁]
+  · dsimp
+    rw [spineEquiv_f₂_arrow_one]
+    simp [StrictSegal.spineEquiv, SimplexCategory.mkOfSucc_one_eq_δ,
+      ← Functor.map_comp_apply, ← op_comp]
 
 中文:
 引理 hσ'₀
@@ -238,7 +246,11 @@ lemma hσ'₀
   · dsimp
     rw [spineEquiv_f₂_arrow_zero]
     dsimp [StrictSegal.spineEquiv]
-    rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_two_comp_σ₂_zero]; rw [op_comp]; rw [Functor.map_comp_apply]; rw [hσ]; rw [SimplexCategory.mkOfSucc_ze
+    rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_two_comp_σ₂_zero]; rw [op_comp]; rw [Functor.map_comp_apply]; rw [hσ]; rw [SimplexCategory.mkOfSucc_zero_eq_δ]; rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_two_comp_σ₂_zero]; rw [op_comp]; rw [Functor.map_comp_apply]; rw [hδ₁]
+  · dsimp
+    rw [spineEquiv_f₂_arrow_one]
+    simp [StrictSegal.spineEquiv, SimplexCategory.mkOfSucc_one_eq_δ,
+      ← Functor.map_comp_apply, ← op_comp]
 
 Depends on / 依赖: Functor, Functor.map_comp_apply, SimplexCategory, SimplexCategory.mk, SimplexCategory.mkOfSucc_zero_eq_, StrictSegal, StrictSegal.spineEquiv, fin_cases, hY.spineEquiv, injective, map_comp_apply, op_comp, spineEquiv
 -/
@@ -275,7 +287,7 @@ lemma hσ'₁
   · dsimp
     rw [spineEquiv_f₂_arrow_one]
     dsimp [StrictSegal.spineEquiv]
-    
+    rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_zero_comp_σ₂_one]; rw [op_comp]; rw [Functor.map_comp_apply]; rw [hσ]; rw [SimplexCategory.mkOfSucc_one_eq_δ]; rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_zero_comp_σ₂_one]; rw [op_comp]; rw [Functor.map_comp_apply]; rw [hδ₀]
 
 中文:
 引理 hσ'₁
@@ -291,7 +303,7 @@ lemma hσ'₁
   · dsimp
     rw [spineEquiv_f₂_arrow_one]
     dsimp [StrictSegal.spineEquiv]
-    
+    rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_zero_comp_σ₂_one]; rw [op_comp]; rw [Functor.map_comp_apply]; rw [hσ]; rw [SimplexCategory.mkOfSucc_one_eq_δ]; rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_zero_comp_σ₂_one]; rw [op_comp]; rw [Functor.map_comp_apply]; rw [hδ₀]
 -/
 lemma hσ'₁ (x : X _⦋1⦌₂) :
     f₂ f₀ f₁ hδ₁ hδ₀ hY (X.map (σ₂ 1).op x) = Y.map (σ₂ 1).op (f₁ x) := by
@@ -375,7 +387,15 @@ lemma naturalityProperty_eq_top
     · fin_cases i
       · ext; apply hδ'₀ f₀ f₁ hδ₁ hδ₀ hY
       · ext; apply hδ'₁ f₀ f₁ hδ₁ hδ₀ H hY
-  
+      · ext; apply hδ'₂ f₀ f₁ hδ₁ hδ₀ hY
+    · lia
+  · obtain _ | _ | n := n
+    · fin_cases i
+      ext; apply hσ
+    · fin_cases i
+      · ext; apply hσ'₀ f₀ f₁ hδ₁ hδ₀ hσ hY
+      · ext; apply hσ'₁ f₀ f₁ hδ₁ hδ₀ hσ hY
+    · lia
 
 中文:
 引理 naturalityProperty_eq_top
@@ -389,7 +409,15 @@ lemma naturalityProperty_eq_top
     · fin_cases i
       · ext; apply hδ'₀ f₀ f₁ hδ₁ hδ₀ hY
       · ext; apply hδ'₁ f₀ f₁ hδ₁ hδ₀ H hY
-  
+      · ext; apply hδ'₂ f₀ f₁ hδ₁ hδ₀ hY
+    · lia
+  · obtain _ | _ | n := n
+    · fin_cases i
+      ext; apply hσ
+    · fin_cases i
+      · ext; apply hσ'₀ f₀ f₁ hδ₁ hδ₀ hσ hY
+      · ext; apply hσ'₁ f₀ f₁ hδ₁ hδ₀ hσ hY
+    · lia
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.Truncated.morphismProperty_eq_top, Truncated, fin_cases, morphismProperty_eq_top
 -/
@@ -595,7 +623,33 @@ definition homToNerveMk
     (fun f => ComposableArrows.ext₀ rfl)
     (fun x y h₂ h₀ => by
       have h' {a b : X _⦋0⦌₂} (e : Edge a b) :
-          C
+          ComposableArrows.mk₁ (F.map (homMk (Edge.mk' e.edge))) =
+            ComposableArrows.mk₁ (F.map (homMk e)) :=
+        ComposableArrows.arrowEquiv.injective
+          (congr_arg F.mapArrow.obj (congr_arrowMk_homMk (Edge.mk' e.edge) e rfl))
+      obtain ⟨x₀, x₁, x₂, e₀₁, e₁₂, e₀₂, h, rfl⟩ := Edge.CompStruct.exists_of_simplex x
+      dsimp at h₀ h₂ ⊢
+      have : ComposableArrows.mk₂ (F.map (homMk e₀₁)) (F.map (homMk e₁₂)) = y := by
+        rw [h.d₂]; rw [h'] at h₂
+        rw [h.d₀]; rw [h'] at h₀
+        refine (spine_bijective (X := (truncation 2).obj (nerve C)) _ _).injective ?_
+        ext i
+        fin_cases i
+        · dsimp
+          simp only [SimplexCategory.mkOfSucc_zero_eq_δ, ← h₂]
+          apply nerve.δ₂_mk₂_eq
+        · dsimp
+          simp only [SimplexCategory.mkOfSucc_one_eq_δ, ← h₀]
+          apply nerve.δ₀_mk₂_eq
+      rw [h.d₁]; rw [← this]
+      have := (nerve.δ₁_mk₂_eq (F.map (homMk e₀₁)) (F.map (homMk e₁₂))).symm
+      rwa [← Functor.map_comp, homMk_comp_homMk h, ← h'] at this)
+    (fun x => ComposableArrows.arrowEquiv.injective
+      ((congr_arg F.mapArrow.obj
+        (congr_arrowMk_homMk (Edge.mk' (X.map (σ₂ 0).op x)) (Edge.id x) rfl)).trans (by aesop)))
+    ((Nerve.strictSegal C).truncation 1)
+
+@[simp]
 
 中文:
 定义 homToNerveMk
@@ -606,7 +660,33 @@ definition homToNerveMk
     (fun f => ComposableArrows.ext₀ rfl)
     (fun x y h₂ h₀ => by
       have h' {a b : X _⦋0⦌₂} (e : Edge a b) :
-          C
+          ComposableArrows.mk₁ (F.map (homMk (Edge.mk' e.edge))) =
+            ComposableArrows.mk₁ (F.map (homMk e)) :=
+        ComposableArrows.arrowEquiv.injective
+          (congr_arg F.mapArrow.obj (congr_arrowMk_homMk (Edge.mk' e.edge) e rfl))
+      obtain ⟨x₀, x₁, x₂, e₀₁, e₁₂, e₀₂, h, rfl⟩ := Edge.CompStruct.exists_of_simplex x
+      dsimp at h₀ h₂ ⊢
+      have : ComposableArrows.mk₂ (F.map (homMk e₀₁)) (F.map (homMk e₁₂)) = y := by
+        rw [h.d₂]; rw [h'] at h₂
+        rw [h.d₀]; rw [h'] at h₀
+        refine (spine_bijective (X := (truncation 2).obj (nerve C)) _ _).injective ?_
+        ext i
+        fin_cases i
+        · dsimp
+          simp only [SimplexCategory.mkOfSucc_zero_eq_δ, ← h₂]
+          apply nerve.δ₂_mk₂_eq
+        · dsimp
+          simp only [SimplexCategory.mkOfSucc_one_eq_δ, ← h₀]
+          apply nerve.δ₀_mk₂_eq
+      rw [h.d₁]; rw [← this]
+      have := (nerve.δ₁_mk₂_eq (F.map (homMk e₀₁)) (F.map (homMk e₁₂))).symm
+      rwa [← Functor.map_comp, homMk_comp_homMk h, ← h'] at this)
+    (fun x => ComposableArrows.arrowEquiv.injective
+      ((congr_arg F.mapArrow.obj
+        (congr_arrowMk_homMk (Edge.mk' (X.map (σ₂ 0).op x)) (Edge.id x) rfl)).trans (by aesop)))
+    ((Nerve.strictSegal C).truncation 1)
+
+@[simp]
 
 Depends on / 依赖: ComposableArrows, ComposableArrows.arrowEquiv.injective, ComposableArrows.ext, ComposableArrows.mk, Edge.mk, F.map, F.mapArrow.obj, F.obj, Truncated, Truncated.Edge.mk, arrowEquiv, congr_arg, congr_arrowMk_homMk, e.edge, injective, liftOfStrictSegal, mapArrow, nerveEquiv, nerveEquiv.symm
 -/
@@ -726,7 +806,20 @@ definition functorEquiv
       dsimp
       simp only [Category.comp_id, Category.id_comp, descOfTruncation_map_homMk,
         homToNerveMk_app_zero]
-      exact nerve.homEquiv.symm.injective (Edge.ext (by cat_disch)
+      exact nerve.homEquiv.symm.injective (Edge.ext (by cat_disch)))
+  right_inv φ :=
+    IsStrictSegal.hom_ext (fun s => by
+      obtain ⟨x₀, x₁, f, rfl⟩ := Edge.exists_of_simplex s
+      dsimp [nerve.homEquiv]
+      simp only [homToNerveMk_app_edge, descOfTruncation_obj_mk,
+        descOfTruncation_map_homMk]
+      refine ComposableArrows.ext₁ ?_ ?_ rfl
+      · dsimp [nerveEquiv, ComposableArrows.right]
+        simp only [← f.src_eq, NatTrans.naturality_apply]
+        rfl
+      · dsimp [nerveEquiv, ComposableArrows.right]
+        simp only [← f.tgt_eq, NatTrans.naturality_apply]
+        rfl)
 
 中文:
 定义 functorEquiv
@@ -738,7 +831,20 @@ definition functorEquiv
       dsimp
       simp only [Category.comp_id, Category.id_comp, descOfTruncation_map_homMk,
         homToNerveMk_app_zero]
-      exact nerve.homEquiv.symm.injective (Edge.ext (by cat_disch)
+      exact nerve.homEquiv.symm.injective (Edge.ext (by cat_disch)))
+  right_inv φ :=
+    IsStrictSegal.hom_ext (fun s => by
+      obtain ⟨x₀, x₁, f, rfl⟩ := Edge.exists_of_simplex s
+      dsimp [nerve.homEquiv]
+      simp only [homToNerveMk_app_edge, descOfTruncation_obj_mk,
+        descOfTruncation_map_homMk]
+      refine ComposableArrows.ext₁ ?_ ?_ rfl
+      · dsimp [nerveEquiv, ComposableArrows.right]
+        simp only [← f.src_eq, NatTrans.naturality_apply]
+        rfl
+      · dsimp [nerveEquiv, ComposableArrows.right]
+        simp only [← f.tgt_eq, NatTrans.naturality_apply]
+        rfl)
 
 Depends on / 依赖: homToNerveMk
 -/
@@ -855,7 +961,8 @@ definition functorOfNerveMap
     rw [edgeMk_id]; rw [SSet.Edge.toTruncated_id]; rw [SSet.Truncated.Edge.map_id]
     exact nerve.homEquiv_id _
   map_comp f g := by
-    obtain ⟨h⟩ := (nerve.no
+    obtain ⟨h⟩ := (nerve.nonempty_compStruct_iff f g (f ≫ g)).2 rfl
+    exact (nerve.homEquiv_comp (h.toTruncated.map φ)).symm
 
 中文:
 定义 functorOfNerveMap
@@ -866,7 +973,8 @@ definition functorOfNerveMap
     rw [edgeMk_id]; rw [SSet.Edge.toTruncated_id]; rw [SSet.Truncated.Edge.map_id]
     exact nerve.homEquiv_id _
   map_comp f g := by
-    obtain ⟨h⟩ := (nerve.no
+    obtain ⟨h⟩ := (nerve.nonempty_compStruct_iff f g (f ≫ g)).2 rfl
+    exact (nerve.homEquiv_comp (h.toTruncated.map φ)).symm
 
 Depends on / 依赖: nerveEquiv, nerveEquiv.symm
 -/
@@ -1213,7 +1321,8 @@ lemma isIso_prodComparison_of_stdSimplex
       (prodComparisonNatTrans hoFunctor.{u} D)) := by
     rw [NatTrans.isIso_iff_isIso_app]
     exact fun x => H (x.left).len
-  exact isIso_app_coconePt_of_preservesColimit _ (prodComparisonNatTrans hoFunctor
+  exact isIso_app_coconePt_of_preservesColimit _ (prodComparisonNatTrans hoFunctor _) _
+    (Presheaf.isColimitTautologicalCocone' X)
 
 中文:
 引理 isIso_prodComparison_of_stdSimplex
@@ -1223,7 +1332,8 @@ lemma isIso_prodComparison_of_stdSimplex
       (prodComparisonNatTrans hoFunctor.{u} D)) := by
     rw [NatTrans.isIso_iff_isIso_app]
     exact fun x => H (x.left).len
-  exact isIso_app_coconePt_of_preservesColimit _ (prodComparisonNatTrans hoFunctor
+  exact isIso_app_coconePt_of_preservesColimit _ (prodComparisonNatTrans hoFunctor _) _
+    (Presheaf.isColimitTautologicalCocone' X)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.proj, Functor, Functor.whiskerLeft, NatTrans, NatTrans.isIso_iff_isIso_app, Presheaf, Presheaf.isColimitTautologicalCocone, hoFunctor, isColimitTautologicalCocone, isIso_app_coconePt_of_preservesColimit, isIso_iff_isIso_app, prodComparisonNatTrans, uliftYoneda, whiskerLeft, x.left
 -/
@@ -1249,7 +1359,7 @@ instance isIso_prodComparison
     prodComparison hoFunctor Δ[m] X ≫ (prod.braiding _ _).hom)
   · ext <;> simp [← Functor.map_comp]
   suffices IsIso (prodComparison hoFunctor Δ[m] X) by infer_instance
-  exact isIso_prodCom
+  exact isIso_prodComparison_of_stdSimplex _ (isIso_prodComparison_stdSimplex _)
 
 中文:
 实例 isIso_prodComparison
@@ -1259,7 +1369,7 @@ instance isIso_prodComparison
     prodComparison hoFunctor Δ[m] X ≫ (prod.braiding _ _).hom)
   · ext <;> simp [← Functor.map_comp]
   suffices IsIso (prodComparison hoFunctor Δ[m] X) by infer_instance
-  exact isIso_prodCom
+  exact isIso_prodComparison_of_stdSimplex _ (isIso_prodComparison_stdSimplex _)
 
 Depends on / 依赖: Functor, Functor.map_comp, braiding, convert_to, hoFunctor, hoFunctor.map, infer_instance, isIso_prodComparison_of_stdSimplex, isIso_prodComparison_stdSimplex, map_comp, prod.braiding, prodComparison
 -/

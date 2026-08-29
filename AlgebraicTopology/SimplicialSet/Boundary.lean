@@ -195,7 +195,13 @@ lemma boundary_obj_eq_univ
   · simp at h
   · obtain ⟨i, q, rfl⟩ := SimplexCategory.eq_comp_δ_of_not_surjective f (fun hf => by
       rw [← SimplexCategory.epi_iff_surjective] at hf
-      have : n + 1 
+      have : n + 1 <= m := SimplexCategory.len_le_of_epi f
+      lia)
+    apply face_singleton_compl_le_boundary i
+    rw [stdSimplex.face_singleton_compl]; rw [stdSimplex.objEquiv_symm_comp]; rw [← Subcomplex.ofSimplex_le_iff]
+    apply Subcomplex.ofSimplex_map_le
+
+@[simp]
 
 中文:
 引理 boundary_obj_eq_univ
@@ -208,7 +214,13 @@ lemma boundary_obj_eq_univ
   · simp at h
   · obtain ⟨i, q, rfl⟩ := SimplexCategory.eq_comp_δ_of_not_surjective f (fun hf => by
       rw [← SimplexCategory.epi_iff_surjective] at hf
-      have : n + 1 
+      have : n + 1 <= m := SimplexCategory.len_le_of_epi f
+      lia)
+    apply face_singleton_compl_le_boundary i
+    rw [stdSimplex.face_singleton_compl]; rw [stdSimplex.objEquiv_symm_comp]; rw [← Subcomplex.ofSimplex_le_iff]
+    apply Subcomplex.ofSimplex_map_le
+
+@[simp]
 
 Depends on / 依赖: Set.mem_univ, SimplexCategory, SimplexCategory.epi_iff_surjective, SimplexCategory.eq_comp_, SimplexCategory.len_le_of_epi, Subcomp, boundary, epi_iff_surjective, face_singleton_compl, face_singleton_compl_le_boundary, iff_true, len_le_of_epi, mem_univ, objEquiv, objEquiv_symm_comp, stdSimplex, stdSimplex.face_singleton_compl, stdSimplex.objEquiv.symm.surjective, stdSimplex.objEquiv_symm_comp, surjective
 -/
@@ -274,7 +286,7 @@ lemma op_boundary
   constructor
   all_goals
   · rintro ⟨k, hk⟩
-    exac
+    exact ⟨k.rev, fun l _ => hk l.rev (by aesop)⟩
 
 中文:
 引理 op_boundary
@@ -287,7 +299,7 @@ lemma op_boundary
   constructor
   all_goals
   · rintro ⟨k, hk⟩
-    exac
+    exact ⟨k.rev, fun l _ => hk l.rev (by aesop)⟩
 
 Depends on / 依赖: Set.mem_preimage, Set.mem_range, Subcomplex, Subcomplex.mem_op_obj_iff, Subcomplex.preimage_obj, all_goals, k.rev, l.rev, mem_boundary_iff_notMem_range, mem_op_obj_iff, mem_preimage, mem_range, not_exists, opIso_inv_app_hom_apply, opObjEquiv_opObjEquiv_symm_apply, preimage_obj, stdSimplex, stdSimplex.opIso_inv_app_hom_apply, stdSimplex.opObjEquiv_opObjEquiv_symm_apply
 -/
@@ -321,7 +333,7 @@ lemma subcomplex_hasDimensionLT_of_neq_top
     · simp [Δ[n].degenerate_eq_univ_of_hasDimensionLT (n + 1) i]
     · rw [mem_degenerate_iff_notMem_nonDegenerate, nonDegenerate_top_dim]
       rintro rfl
-    
+      exact h (le_antisymm (by simp) (by simpa [← ofSimplex_objEquiv_symm_id]))
 
 中文:
 引理 subcomplex_hasDimensionLT_of_neq_top
@@ -334,7 +346,7 @@ lemma subcomplex_hasDimensionLT_of_neq_top
     · simp [Δ[n].degenerate_eq_univ_of_hasDimensionLT (n + 1) i]
     · rw [mem_degenerate_iff_notMem_nonDegenerate, nonDegenerate_top_dim]
       rintro rfl
-    
+      exact h (le_antisymm (by simp) (by simpa [← ofSimplex_objEquiv_symm_id]))
 
 Depends on / 依赖: A.mem_degenerate_iff, Set.mem_univ, Set.top_eq_univ, degenerate_eq_univ_of_hasDimensionLT, hi.lt_or_eq, iff_true, le_antisymm, lt_or_eq, mem_degenerate_iff, mem_degenerate_iff_notMem_nonDegenerate, mem_univ, nonDegenerate_top_dim, ofSimplex_objEquiv_symm_id, top_eq_univ
 -/
@@ -365,7 +377,9 @@ lemma le_boundary_iff
     rintro m ⟨x, h₁⟩ h₂
     dsimp at h₂ ⊢
     by_cases! h₃ : m < n
-    · simp [b
+    · simp [boundary_obj_eq_univ m n h₃]
+    · simp [← A.mem_nonDegenerate_iff ⟨x, h₂⟩,
+        nonDegenerate_eq_empty_of_hasDimensionLT _ _ _ h₃] at h₁
 
 中文:
 引理 le_boundary_iff
@@ -378,7 +392,9 @@ lemma le_boundary_iff
     rintro m ⟨x, h₁⟩ h₂
     dsimp at h₂ ⊢
     by_cases! h₃ : m < n
-    · simp [b
+    · simp [boundary_obj_eq_univ m n h₃]
+    · simp [← A.mem_nonDegenerate_iff ⟨x, h₂⟩,
+        nonDegenerate_eq_empty_of_hasDimensionLT _ _ _ h₃] at h₁
 
 Depends on / 依赖: A.mem_nonDegenerate_iff, Subcomplex, Subcomplex.le_iff_contains_nonDegenerate, boundary_lt_top, boundary_obj_eq_univ, le_iff_contains_nonDegenerate, lt_irrefl, lt_of_le_of_lt, mem_nonDegenerate_iff, nonDegenerate_eq_empty_of_hasDimensionLT, subcomplex_hasDimensionLT_of_neq_top
 -/

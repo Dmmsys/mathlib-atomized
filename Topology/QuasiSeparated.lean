@@ -131,7 +131,21 @@ theorem IsQuasiSeparated.image_of_isEmbedding
       h.continuous
   · symm
     rw [← Set.preimage_inter]; rw [Set.image_preimage_eq_inter_range]; rw [Set.inter_eq_left]
-    exact Set.inter_subset_left.tran
+    exact Set.inter_subset_left.trans (hU.trans (Set.image_subset_range _ _))
+  · intro x hx
+    rw [← h.injective.injOn.mem_image_iff (Set.subset_univ _) trivial]
+    exact hU hx
+  · rw [h.isCompact_iff]
+    convert! hU''
+    rw [Set.image_preimage_eq_inter_range]; rw [Set.inter_eq_left]
+    exact hU.trans (Set.image_subset_range _ _)
+  · intro x hx
+    rw [← h.injective.injOn.mem_image_iff (Set.subset_univ _) trivial]
+    exact hV hx
+  · rw [h.isCompact_iff]
+    convert! hV''
+    rw [Set.image_preimage_eq_inter_range]; rw [Set.inter_eq_left]
+    exact hV.trans (Set.image_subset_range _ _)
 
 中文:
 定理 IsQuasiSeparated.image_of_isEmbedding
@@ -143,7 +157,21 @@ theorem IsQuasiSeparated.image_of_isEmbedding
       h.continuous
   · symm
     rw [← Set.preimage_inter]; rw [Set.image_preimage_eq_inter_range]; rw [Set.inter_eq_left]
-    exact Set.inter_subset_left.tran
+    exact Set.inter_subset_left.trans (hU.trans (Set.image_subset_range _ _))
+  · intro x hx
+    rw [← h.injective.injOn.mem_image_iff (Set.subset_univ _) trivial]
+    exact hU hx
+  · rw [h.isCompact_iff]
+    convert! hU''
+    rw [Set.image_preimage_eq_inter_range]; rw [Set.inter_eq_left]
+    exact hU.trans (Set.image_subset_range _ _)
+  · intro x hx
+    rw [← h.injective.injOn.mem_image_iff (Set.subset_univ _) trivial]
+    exact hV hx
+  · rw [h.isCompact_iff]
+    convert! hV''
+    rw [Set.image_preimage_eq_inter_range]; rw [Set.inter_eq_left]
+    exact hV.trans (Set.image_subset_range _ _)
 
 Depends on / 依赖: Set.image_preimage_eq_inter_range, Set.image_subset_range, Set.inter, Set.inter_eq_left, Set.inter_subset_left.trans, Set.preimage_inter, Set.subset_univ, continuous, convert, h.continuous, h.injective.injOn.mem_image_iff, h.isCompact_iff, hU.trans, image_preimage_eq_inter_range, image_subset_range, injective, inter_eq_left, inter_subset_left, isCompact_iff, mem_image_iff
 -/
@@ -207,7 +235,7 @@ theorem Topology.IsOpenEmbedding.isQuasiSeparated_iff
   rw [h.isEmbedding.isCompact_iff]; rw [Set.image_inter h.injective]
   exact
     H (f '' U) (f '' V) (image_mono hU) (h.isOpenMap _ hU') (hU''.image h.continuous)
-      (image_mono hV) (h.isOpenMa
+      (image_mono hV) (h.isOpenMap _ hV') (hV''.image h.continuous)
 
 中文:
 定理 拓扑.是开嵌入.isQuasiSeparated_iff
@@ -218,7 +246,7 @@ theorem Topology.IsOpenEmbedding.isQuasiSeparated_iff
   rw [h.isEmbedding.isCompact_iff]; rw [Set.image_inter h.injective]
   exact
     H (f '' U) (f '' V) (image_mono hU) (h.isOpenMap _ hU') (hU''.image h.continuous)
-      (image_mono hV) (h.isOpenMa
+      (image_mono hV) (h.isOpenMap _ hV') (hV''.image h.continuous)
 
 Depends on / 依赖: Set.image_inter, continuous, h.continuous, h.injective, h.isEmbedding, h.isEmbedding.isCompact_iff, h.isOpenMap, hs.image_of_isEmbedding, image_inter, image_mono, image_of_isEmbedding, injective, isCompact_iff, isEmbedding, isOpenMap
 -/
@@ -301,7 +329,7 @@ lemma QuasiSeparatedSpace.of_isTopologicalBasis
     obtain ⟨s, hs, rfl⟩ := (aux _).1 ⟨hUcomp, hUopen⟩
     obtain ⟨t, ht, rfl⟩ := (aux _).1 ⟨hVcomp, hVopen⟩
     rw [iUnion₂_inter_iUnion₂]
-    exact hs.isCompact_biU
+    exact hs.isCompact_biUnion fun i hi => ht.isCompact_biUnion fun j hj => isCompact_inter ..
 
 中文:
 引理 拟分离空间.of_isTopologicalBasis
@@ -312,7 +340,7 @@ lemma QuasiSeparatedSpace.of_isTopologicalBasis
     obtain ⟨s, hs, rfl⟩ := (aux _).1 ⟨hUcomp, hUopen⟩
     obtain ⟨t, ht, rfl⟩ := (aux _).1 ⟨hVcomp, hVopen⟩
     rw [iUnion₂_inter_iUnion₂]
-    exact hs.isCompact_biU
+    exact hs.isCompact_biUnion fun i hi => ht.isCompact_biUnion fun j hj => isCompact_inter ..
 
 Depends on / 依赖: hUcomp, hUopen, hVcomp, hVopen, hs.isCompact_biUnion, ht.isCompact_biUnion, isCompact_biUnion, isCompact_inter, isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis
 -/
@@ -402,7 +430,20 @@ lemma QuasiSeparatedSpace.isCompact_sInter_of_nonempty
     rw [heq]; rw [Set.sInter_union]
     simp only [not_forall] at h
     obtain ⟨t, ht, hno⟩ := h
-    obtain (ha | ha) :=
+    obtain (ha | ha) := a.eq_empty_or_nonempty
+    · simp only [ha, Set.sInter_empty, Set.univ_inter]
+      exact IsCompact.of_isClosed_subset (hc _ ht) (isClosed_sInter (by grind)) (by grind)
+    · apply IsCompact.inter_right
+      · apply this (hf.subset (by grind)) ha <;> grind
+      · exact isClosed_sInter (by grind)
+  revert hne
+  induction s, hf using Set.Finite.induction_on with
+  | empty => simp
+  | insert ha hs ih =>
+    rename_i s
+    obtain (rfl | hne) := s.eq_empty_or_nonempty
+    · grind
+    · grind [IsCompact.inter_of_isOpen, hs.isOpen_sInter, Set.sInter_insert]
 
 中文:
 引理 拟分离空间.isCompact_s整数er_of_nonempty
@@ -415,7 +456,20 @@ lemma QuasiSeparatedSpace.isCompact_sInter_of_nonempty
     rw [heq]; rw [Set.sInter_union]
     simp only [not_forall] at h
     obtain ⟨t, ht, hno⟩ := h
-    obtain (ha | ha) :=
+    obtain (ha | ha) := a.eq_empty_or_nonempty
+    · simp only [ha, Set.sInter_empty, Set.univ_inter]
+      exact IsCompact.of_isClosed_subset (hc _ ht) (isClosed_sInter (by grind)) (by grind)
+    · apply IsCompact.inter_right
+      · apply this (hf.subset (by grind)) ha <;> grind
+      · exact isClosed_sInter (by grind)
+  revert hne
+  induction s, hf using Set.Finite.induction_on with
+  | empty => simp
+  | insert ha hs ih =>
+    rename_i s
+    obtain (rfl | hne) := s.eq_empty_or_nonempty
+    · grind
+    · grind [IsCompact.inter_of_isOpen, hs.isOpen_sInter, Set.sInter_insert]
 
 Depends on / 依赖: IsClosed, IsCompact, IsCompact.inter_right, IsCompact.of_isClosed_subset, IsOpen, Set.sInter_empty, Set.sInter_union, Set.univ_inter, a.eq_empty_or_nonempty, eq_empty_or_nonempty, hf.subset, inter_right, isClosed_sInter, not_forall, of_isClosed_subset, sInter_empty, sInter_union, subset, subset_antisymm, univ_inter
 -/

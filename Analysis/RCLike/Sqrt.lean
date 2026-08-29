@@ -150,7 +150,9 @@ theorem RCLike.sqrt_eq_ite
   have : (I : 𝕜) = 0 := by grind [I_eq_zero_or_im_I_eq_one]
   simp_all only [Complex.sqrt, im_eq_zero this, map_apply, add_zero, re_to_complex, im_to_complex,
     mul_zero, algebraMap.coe_inj, Complex.cpow_inv_two_re]
-  by_cases! ha' : 0 <= re
+  by_cases! ha' : 0 <= re a
+  · simp [abs_of_nonneg ha', ← two_mul]
+  simp [abs_of_nonpos ha'.le, Real.sqrt_eq_zero', ha'.le]
 
 中文:
 定理 RCLike.sqrt_eq_ite
@@ -162,7 +164,9 @@ theorem RCLike.sqrt_eq_ite
   have : (I : 𝕜) = 0 := by grind [I_eq_zero_or_im_I_eq_one]
   simp_all only [Complex.sqrt, im_eq_zero this, map_apply, add_zero, re_to_complex, im_to_complex,
     mul_zero, algebraMap.coe_inj, Complex.cpow_inv_two_re]
-  by_cases! ha' : 0 <= re
+  by_cases! ha' : 0 <= re a
+  · simp [abs_of_nonneg ha', ← two_mul]
+  simp [abs_of_nonpos ha'.le, Real.sqrt_eq_zero', ha'.le]
 
 Depends on / 依赖: Complex.cpow_inv_two_re, Complex.sqrt, I_eq_zero_or_im_I_eq_one, Real.sqrt_eq_zero, abs_of_nonneg, abs_of_nonpos, add_zero, algebraMap, algebraMap.coe_inj, coe_inj, cpow_inv_two_re, eq_comm, im_eq_zero, im_to_complex, map_apply, mul_zero, re_to_complex, split_ifs, sqrt_eq_zero, two_mul
 -/

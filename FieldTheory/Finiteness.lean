@@ -38,7 +38,10 @@ theorem iff_rank_lt_aleph0
     exact (Basis.ofVectorSpaceIndex.linearIndependent K V).set_finite_of_isNoetherian
   · intro hbfinite
     refine
-      @isNoetherian_of_linearEquiv K K (⊤ : Submodule K V) V _ _ _ 
+      @isNoetherian_of_linearEquiv K K (⊤ : Submodule K V) V _ _ _ _ _ _ (RingHom.id K) _ _ _
+        (LinearEquiv.ofTop _ rfl) (id ?_)
+    refine isNoetherian_of_fg_of_noetherian _ ⟨Set.Finite.toFinset hbfinite, ?_⟩
+    rw [Set.Finite.coe_toFinset]; rw [← b.span_eq]; rw [Basis.coe_ofVectorSpace]; rw [Subtype.range_coe]
 
 中文:
 定理 iff_rank_lt_aleph0
@@ -51,7 +54,10 @@ theorem iff_rank_lt_aleph0
     exact (Basis.ofVectorSpaceIndex.linearIndependent K V).set_finite_of_isNoetherian
   · intro hbfinite
     refine
-      @isNoetherian_of_linearEquiv K K (⊤ : Submodule K V) V _ _ _ 
+      @isNoetherian_of_linearEquiv K K (⊤ : Submodule K V) V _ _ _ _ _ _ (RingHom.id K) _ _ _
+        (LinearEquiv.ofTop _ rfl) (id ?_)
+    refine isNoetherian_of_fg_of_noetherian _ ⟨Set.Finite.toFinset hbfinite, ?_⟩
+    rw [Set.Finite.coe_toFinset]; rw [← b.span_eq]; rw [Basis.coe_ofVectorSpace]; rw [Subtype.range_coe]
 
 Depends on / 依赖: Basis.coe_ofVectorSpace, Basis.ofVectorSpace, Basis.ofVectorSpaceIndex.linearIndependent, Finite, LinearEquiv, LinearEquiv.ofTop, RingHom, RingHom.id, Set.Finite.coe_toFinset, Set.Finite.toFinset, Submodule, b.mk_eq_rank, b.span_eq, coe_ofVectorSpace, coe_toFinset, hbfinite, isNoetherian_of_fg_of_noetherian, isNoetherian_of_linearEquiv, linearIndependent, lt_aleph0_iff_set_finite
 -/

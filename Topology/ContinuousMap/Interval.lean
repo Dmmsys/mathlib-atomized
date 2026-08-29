@@ -138,7 +138,8 @@ definition concat
     suffices Continuous h from ⟨fun t => h t, by fun_prop⟩
     apply Continuous.if_le (by fun_prop) (by fun_prop) continuous_id continuous_const
     rintro x rfl
-    simpa [IccExtendCM, projIccC
+    simpa [IccExtendCM, projIccCM]
+  · exact .const _ (f ⊥) -- junk value
 
 中文:
 定义 concat
@@ -149,7 +150,8 @@ definition concat
     suffices Continuous h from ⟨fun t => h t, by fun_prop⟩
     apply Continuous.if_le (by fun_prop) (by fun_prop) continuous_id continuous_const
     rintro x rfl
-    simpa [IccExtendCM, projIccC
+    simpa [IccExtendCM, projIccCM]
+  · exact .const _ (f ⊥) -- junk value
 
 Depends on / 依赖: Continuous, Continuous.if_le, IccExtendCM, continuous_const, continuous_id, fun_prop, if_le, projIccCM
 -/
@@ -202,7 +204,7 @@ theorem concat_comp_IccInclusionRight
 .not_ge · have h : ¬ x <= b := lt_of_le_of_ne hx.1 (Ne.symm hxb)
     simp [concat, hb, IccInclusionRight, h, IccExtendCM, projIccCM, projIcc, inclusion, hx.2, hx.1]
 
-@[sim
+@[simp]
 
 中文:
 定理 concat_comp_IccInclusionRight
@@ -214,7 +216,7 @@ theorem concat_comp_IccInclusionRight
 .not_ge · have h : ¬ x <= b := lt_of_le_of_ne hx.1 (Ne.symm hxb)
     simp [concat, hb, IccInclusionRight, h, IccExtendCM, projIccCM, projIcc, inclusion, hx.2, hx.1]
 
-@[sim
+@[simp]
 
 Depends on / 依赖: IccExtendCM, IccInclusionRight, Ne.symm, concat, eq_or_ne, inclusion, lt_of_le_of_ne, not_ge, projIcc, projIccCM
 -/
@@ -293,6 +295,28 @@ theorem tendsto_concat
   let K₁ : Set (Icc a b) := projIccCM '' Subtype.val '' (K inter Iic ⟨b, h⟩)
   let K₂ : Set (Icc b c) := projIccCM '' Subtype.val '' (K inter Ici ⟨b, h⟩)
   have hK₁ : IsCompact K₁ :=
+.image projIccCM.continuous .image continuous_subtype_val hK.inter_right isClosed_Iic
+  have hK₂ : IsCompact K₂ :=
+.image projIccCM.continuous .image continuous_subtype_val hK.inter_right isClosed_Ici
+  have hfU : MapsTo f K₁ U := by
+    rw [← concat_comp_IccInclusionLeft hfg']
+    apply hfgU.comp
+    rintro x ⟨y, ⟨⟨z, hz⟩, ⟨h1, (h2 : z <= b)⟩, rfl⟩, rfl⟩
+    simpa [projIccCM, projIcc, h2, hz.1] using! h1
+  have hgU : MapsTo g K₂ U := by
+    rw [← concat_comp_IccInclusionRight hfg']
+    apply hfgU.comp
+    rintro x ⟨y, ⟨⟨z, hz⟩, ⟨h1, (h2 : b <= z)⟩, rfl⟩, rfl⟩
+    simpa [projIccCM, projIcc, h2, hz.2] using! h1
+  filter_upwards [hf K₁ hK₁ U hU hfU, hg K₂ hK₂ U hU hgU, hfg] with i hf hg hfg x hx
+  by_cases! hxb : x <= b
+  · rw [concat_left hfg hxb]
+    refine hf ⟨x, ⟨x, ⟨hx, hxb⟩, rfl⟩, ?_⟩
+    simp [projIccCM, projIcc, hxb, x.2.1]
+  · replace hxb : b <= x := hxb.le
+    rw [concat_right hfg hxb]
+    refine hg ⟨x, ⟨x, ⟨hx, hxb⟩, rfl⟩, ?_⟩
+    simp [projIccCM, projIcc, hxb, x.2.2]
 
 中文:
 定理 tendsto_concat
@@ -304,6 +328,28 @@ theorem tendsto_concat
   let K₁ : Set (Icc a b) := projIccCM '' Subtype.val '' (K inter Iic ⟨b, h⟩)
   let K₂ : Set (Icc b c) := projIccCM '' Subtype.val '' (K inter Ici ⟨b, h⟩)
   have hK₁ : IsCompact K₁ :=
+.image projIccCM.continuous .image continuous_subtype_val hK.inter_right isClosed_Iic
+  have hK₂ : IsCompact K₂ :=
+.image projIccCM.continuous .image continuous_subtype_val hK.inter_right isClosed_Ici
+  have hfU : MapsTo f K₁ U := by
+    rw [← concat_comp_IccInclusionLeft hfg']
+    apply hfgU.comp
+    rintro x ⟨y, ⟨⟨z, hz⟩, ⟨h1, (h2 : z <= b)⟩, rfl⟩, rfl⟩
+    simpa [projIccCM, projIcc, h2, hz.1] using! h1
+  have hgU : MapsTo g K₂ U := by
+    rw [← concat_comp_IccInclusionRight hfg']
+    apply hfgU.comp
+    rintro x ⟨y, ⟨⟨z, hz⟩, ⟨h1, (h2 : b <= z)⟩, rfl⟩, rfl⟩
+    simpa [projIccCM, projIcc, h2, hz.2] using! h1
+  filter_upwards [hf K₁ hK₁ U hU hfU, hg K₂ hK₂ U hU hgU, hfg] with i hf hg hfg x hx
+  by_cases! hxb : x <= b
+  · rw [concat_left hfg hxb]
+    refine hf ⟨x, ⟨x, ⟨hx, hxb⟩, rfl⟩, ?_⟩
+    simp [projIccCM, projIcc, hxb, x.2.1]
+  · replace hxb : b <= x := hxb.le
+    rw [concat_right hfg hxb]
+    refine hg ⟨x, ⟨x, ⟨hx, hxb⟩, rfl⟩, ?_⟩
+    simp [projIccCM, projIcc, hxb, x.2.2]
 
 Depends on / 依赖: Fact.out, IsCompact, Subtype, Subtype.val, continuous, continuous_subtype_val, hK.inter_right, inter_right, isClosed_Ici, isClosed_Iic, projIccCM, projIccCM.continuous, tendsto_nhds_compactOpen
 -/
@@ -352,7 +398,11 @@ definition concatCM
     change Continuous (S.domRestrict concat.uncurry)
     refine continuousOn_iff_continuous_domRestrict.mp (fun fg hfg => ?_)
     refine tendsto_concat ?_ hfg ?_ ?_
-    · exact
+    · exact eventually_nhdsWithin_of_forall (fun _ => id)
+    · exact tendsto_nhdsWithin_of_tendsto_nhds continuousAt_fst
+    · exact tendsto_nhdsWithin_of_tendsto_nhds continuousAt_snd
+
+@[simp]
 
 中文:
 定义 concatCM
@@ -363,7 +413,11 @@ definition concatCM
     change Continuous (S.domRestrict concat.uncurry)
     refine continuousOn_iff_continuous_domRestrict.mp (fun fg hfg => ?_)
     refine tendsto_concat ?_ hfg ?_ ?_
-    · exact
+    · exact eventually_nhdsWithin_of_forall (fun _ => id)
+    · exact tendsto_nhdsWithin_of_tendsto_nhds continuousAt_fst
+    · exact tendsto_nhdsWithin_of_tendsto_nhds continuousAt_snd
+
+@[simp]
 
 Depends on / 依赖: concat, fg.val
 -/

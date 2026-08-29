@@ -39,7 +39,7 @@ theorem Rel.star
   | mul_left _ h => rw [star_mul, star_mul]
                      exact Rel.mul_right h
   | mul_right _ h => rw [star_mul, star_mul]
-                     exa
+                     exact Rel.mul_left h
 
 中文:
 定理 关系.star
@@ -52,7 +52,7 @@ theorem Rel.star
   | mul_left _ h => rw [star_mul, star_mul]
                      exact Rel.mul_right h
   | mul_right _ h => rw [star_mul, star_mul]
-                     exa
+                     exact Rel.mul_left h
 
 Depends on / 依赖: Rel.add_left, Rel.mul_left, Rel.mul_right, Rel.of, add_left, mul_left, mul_right, star_add, star_mul
 -/

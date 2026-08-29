@@ -294,7 +294,8 @@ theorem UniformSpace.Core.nhds_toTopologicalSpace
   · intro a U hU
     rcases u.comp_mem_uniformity_sets hU with ⟨V, hV, hVU⟩
     filter_upwards [preimage_mem_comap hV] with b hb
-    filter_upwards [preimage_mem_comap hV] wi
+    filter_upwards [preimage_mem_comap hV] with c hc
+    exact hVU ⟨b, hb, hc⟩
 
 中文:
 定理 一致空间.核.nhds_toTopologicalSpace
@@ -305,7 +306,8 @@ theorem UniformSpace.Core.nhds_toTopologicalSpace
   · intro a U hU
     rcases u.comp_mem_uniformity_sets hU with ⟨V, hV, hVU⟩
     filter_upwards [preimage_mem_comap hV] with b hb
-    filter_upwards [preimage_mem_comap hV] wi
+    filter_upwards [preimage_mem_comap hV] with c hc
+    exact hVU ⟨b, hb, hc⟩
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.nhds_mkOfNhds_of_hasBasis, basis_sets, comp_mem_uniformity_sets, filter_upwards, nhds_mkOfNhds_of_hasBasis, preimage_mem_comap, u.comp_mem_uniformity_sets, u.refl
 -/
@@ -1216,7 +1218,8 @@ theorem comp_symm_mem_uniformity_sets
   use SetRel.symmetrize w, symmetrize_mem_uniformity w_in, inferInstance
   have : SetRel.symmetrize w subseteq w := SetRel.symmetrize_subset_self
   calc SetRel.symmetrize w ○ SetRel.symmetrize w
-    _ sub
+    _ subseteq w ○ w := by gcongr
+    _ subseteq s := w_sub
 
 中文:
 定理 comp_symm_mem_uniformity_sets
@@ -1226,7 +1229,8 @@ theorem comp_symm_mem_uniformity_sets
   use SetRel.symmetrize w, symmetrize_mem_uniformity w_in, inferInstance
   have : SetRel.symmetrize w subseteq w := SetRel.symmetrize_subset_self
   calc SetRel.symmetrize w ○ SetRel.symmetrize w
-    _ sub
+    _ subseteq w ○ w := by gcongr
+    _ subseteq s := w_sub
 
 Depends on / 依赖: SetRel, SetRel.symmetrize, SetRel.symmetrize_subset_self, comp_mem_uniformity_sets, subseteq, symmetrize, symmetrize_mem_uniformity, symmetrize_subset_self, w_in, w_sub
 -/
@@ -1272,7 +1276,8 @@ theorem comp_comp_symm_mem_uniformity_sets
   have : t subseteq t ○ t := subset_comp_self_of_mem_uniformity t_in
   calc
     t ○ t ○ t subseteq w ○ (t ○ t) := by gcongr
-    _ subs
+    _ subseteq w ○ w := by gcongr
+    _ subseteq s := w_sub
 
 中文:
 定理 comp_comp_symm_mem_uniformity_sets
@@ -1284,7 +1289,8 @@ theorem comp_comp_symm_mem_uniformity_sets
   have : t subseteq t ○ t := subset_comp_self_of_mem_uniformity t_in
   calc
     t ○ t ○ t subseteq w ○ (t ○ t) := by gcongr
-    _ subs
+    _ subseteq w ○ w := by gcongr
+    _ subseteq s := w_sub
 
 Depends on / 依赖: comp_symm_mem_uniformity_sets, subset_comp_self_of_mem_uniformity, subseteq, t_in, t_sub, t_symm, w_in, w_sub
 -/

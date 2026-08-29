@@ -172,7 +172,7 @@ definition SemilatticeSup.mk'
   le_antisymm a b hab hba := by rwa [← hba, sup_comm]
   le_sup_left a b := by rw [← sup_assoc, sup_idem]
   le_sup_right a b := by rw [sup_comm, sup_assoc, sup_idem]
-  sup_le a b c hac hbc 
+  sup_le a b c hac hbc := by rwa [sup_assoc, hbc]
 
 中文:
 定义 SemilatticeSup.mk'
@@ -184,7 +184,7 @@ definition SemilatticeSup.mk'
   le_antisymm a b hab hba := by rwa [← hba, sup_comm]
   le_sup_left a b := by rw [← sup_assoc, sup_idem]
   le_sup_right a b := by rw [sup_comm, sup_assoc, sup_idem]
-  sup_le a b c hac hbc 
+  sup_le a b c hac hbc := by rwa [sup_assoc, hbc]
 -/
 def SemilatticeSup.mk' {α : Type*} [Max α] (sup_comm : forall a b : α, a ⊔ b = b ⊔ a)
     (sup_assoc : forall a b c : α, a ⊔ b ⊔ c = a ⊔ (b ⊔ c)) (sup_idem : forall a : α, a ⊔ a = a) :
@@ -218,7 +218,7 @@ definition SemilatticeInf.mk'
   le_antisymm a b hba hab := by rwa [← hba, inf_comm]
   inf_le_left a b := by rw [← inf_assoc, inf_idem]
   inf_le_right a b := by rw [inf_comm, inf_assoc, inf_idem]
-  le_inf a b c hac hbc 
+  le_inf a b c hac hbc := by rwa [inf_assoc, hbc]
 
 中文:
 定义 SemilatticeInf.mk'
@@ -230,7 +230,7 @@ definition SemilatticeInf.mk'
   le_antisymm a b hba hab := by rwa [← hba, inf_comm]
   inf_le_left a b := by rw [← inf_assoc, inf_idem]
   inf_le_right a b := by rw [inf_comm, inf_assoc, inf_idem]
-  le_inf a b c hac hbc 
+  le_inf a b c hac hbc := by rwa [inf_assoc, hbc]
 -/
 def SemilatticeInf.mk' {α : Type*} [Min α] (inf_comm : forall a b : α, a ⊓ b = b ⊓ a)
     (inf_assoc : forall a b c : α, a ⊓ b ⊓ c = a ⊓ (b ⊓ c)) (inf_idem : forall a : α, a ⊓ a = a) :
@@ -1469,7 +1469,23 @@ definition Lattice.mk'
   have inf_idem : forall b : α, b ⊓ b = b := fun b =>
     calc
       b ⊓ b = b ⊓ (b ⊔ b ⊓ b) := by rw [sup_inf_self]
-      _ = b := by rw [inf_sup_se
+      _ = b := by rw [inf_sup_self]
+  let semilatt_inf_inst := SemilatticeInf.mk' inf_comm inf_assoc inf_idem
+  let semilatt_sup_inst := SemilatticeSup.mk' sup_comm sup_assoc sup_idem
+  have partial_order_eq : @SemilatticeSup.toPartialOrder _ semilatt_sup_inst =
+                          @SemilatticeInf.toPartialOrder _ semilatt_inf_inst :=
+    semilatticeSup_mk'_partialOrder_eq_semilatticeInf_mk'_partialOrder _ _ _ _ _ _
+      sup_inf_self inf_sup_self
+  { semilatt_sup_inst, semilatt_inf_inst with
+    inf_le_left := fun a b => by
+      rw [partial_order_eq]
+      apply inf_le_left,
+    inf_le_right := fun a b => by
+      rw [partial_order_eq]
+      apply inf_le_right,
+    le_inf := fun a b c => by
+      rw [partial_order_eq]
+      apply le_inf }
 
 中文:
 定义 格.mk'
@@ -1481,7 +1497,23 @@ definition Lattice.mk'
   have inf_idem : forall b : α, b ⊓ b = b := fun b =>
     calc
       b ⊓ b = b ⊓ (b ⊔ b ⊓ b) := by rw [sup_inf_self]
-      _ = b := by rw [inf_sup_se
+      _ = b := by rw [inf_sup_self]
+  let semilatt_inf_inst := SemilatticeInf.mk' inf_comm inf_assoc inf_idem
+  let semilatt_sup_inst := SemilatticeSup.mk' sup_comm sup_assoc sup_idem
+  have partial_order_eq : @SemilatticeSup.toPartialOrder _ semilatt_sup_inst =
+                          @SemilatticeInf.toPartialOrder _ semilatt_inf_inst :=
+    semilatticeSup_mk'_partialOrder_eq_semilatticeInf_mk'_partialOrder _ _ _ _ _ _
+      sup_inf_self inf_sup_self
+  { semilatt_sup_inst, semilatt_inf_inst with
+    inf_le_left := fun a b => by
+      rw [partial_order_eq]
+      apply inf_le_left,
+    inf_le_right := fun a b => by
+      rw [partial_order_eq]
+      apply inf_le_right,
+    le_inf := fun a b c => by
+      rw [partial_order_eq]
+      apply le_inf }
 
 Depends on / 依赖: Semilatt, SemilatticeInf, SemilatticeInf.mk, SemilatticeSup, SemilatticeSup.mk, SemilatticeSup.toPartialOrder, inf_assoc, inf_comm, inf_idem, inf_sup_self, partial_order_eq, semilatt_inf_inst, semilatt_sup_inst, sup_assoc, sup_comm, sup_idem, sup_inf_self, toPartialOrder
 -/
@@ -1909,7 +1941,7 @@ theorem inf_sup_left
     _ = (a ⊓ b ⊔ a) ⊓ (a ⊓ b ⊔ c) := by rw [sup_comm]
     _ = a ⊓ b ⊔ a ⊓ c := by rw [sup_inf_left]
 
-@[to_
+@[to_dual existing le_sup_inf]
 
 中文:
 定理 inf_sup_left
@@ -1922,7 +1954,7 @@ theorem inf_sup_left
     _ = (a ⊓ b ⊔ a) ⊓ (a ⊓ b ⊔ c) := by rw [sup_comm]
     _ = a ⊓ b ⊔ a ⊓ c := by rw [sup_inf_left]
 
-@[to_
+@[to_dual existing le_sup_inf]
 
 Depends on / 依赖: inf_assoc, inf_sup_self, sup_comm, sup_inf_left, sup_inf_right, sup_inf_self
 -/
@@ -2022,7 +2054,7 @@ theorem le_of_inf_le_sup_le
     _ <= y ⊔ y ⊓ z := sup_le_sup_left h₁ _
     _ <= _ := sup_le (le_refl y) inf_le_left
 
-@[to_dual sel
+@[to_dual self (reorder := h₁ h₂)]
 
 中文:
 定理 le_of_inf_le_sup_le
@@ -2036,7 +2068,7 @@ theorem le_of_inf_le_sup_le
     _ <= y ⊔ y ⊓ z := sup_le_sup_left h₁ _
     _ <= _ := sup_le (le_refl y) inf_le_left
 
-@[to_dual sel
+@[to_dual self (reorder := h₁ h₂)]
 
 Depends on / 依赖: inf_le_inf_left, inf_le_left, le_refl, le_sup_right, sup_comm, sup_inf_left, sup_inf_right, sup_le, sup_le_sup_left
 -/

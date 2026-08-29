@@ -39,7 +39,22 @@ lemma AddDissociated.randomisation
     _ = ∑ t, (𝔼 a, ∏ ψ in t, ((d ψ * ψ a) + conj (d ψ * ψ a)) / 2) * ∏ ψ in tᶜ, (c ψ : Complex) := by
         simp_rw [expect_mul, ← expect_sum_comm, ← Fintype.prod_add, add_comm,
           Complex.re_eq_add_conj]
-    _ = (𝔼 a, ∏ ψ in ∅, ((d
+    _ = (𝔼 a, ∏ ψ in ∅, ((d ψ * ψ a) + conj (d ψ * ψ a)) / 2) * ∏ ψ in ∅ᶜ, (c ψ : Complex) :=
+        Fintype.sum_eq_single ∅ fun t ht => mul_eq_zero_of_left ?_ _
+    _ = ∏ ψ, (c ψ : Complex) := by simp
+  simp only [map_mul, prod_div_distrib, prod_add, prod_const, ← expect_div, expect_sum_comm,
+    div_eq_zero_iff, pow_eq_zero_iff', OfNat.ofNat_ne_zero, ne_eq, card_eq_zero,
+    false_and, or_false]
+  refine sum_eq_zero fun u _ => ?_
+  calc
+    𝔼 a, (∏ ψ in u, d ψ * ψ a) * ∏ ψ in t \ u, conj (d ψ) * conj (ψ a)
+      = ((∏ ψ in u, d ψ) * ∏ ψ in t \ u, conj (d ψ)) * 𝔼 a, (∑ ψ in u, ψ - ∑ ψ in t \ u, ψ) a := by
+        simp_rw [mul_expect, AddChar.sub_apply, AddChar.sum_apply, mul_mul_mul_comm,
+          ← prod_mul_distrib, AddChar.map_neg_eq_conj]
+    _ = 0 := ?_
+  rw [mul_eq_zero]; rw [AddChar.expect_eq_zero_iff_ne_zero]; rw [sub_ne_zero]; rw [or_iff_not_imp_left]; rw [← Ne]; rw [mul_ne_zero_iff]; rw [prod_ne_zero_iff]; rw [prod_ne_zero_iff]
+  exact fun h => hcd.ne h.1 (by simpa only [map_ne_zero] using! h.2)
+    (sdiff_ne_right.2 <| .inl ht).symm
 
 中文:
 引理 AddDissociated.randomisation
@@ -51,7 +66,22 @@ lemma AddDissociated.randomisation
     _ = ∑ t, (𝔼 a, ∏ ψ in t, ((d ψ * ψ a) + conj (d ψ * ψ a)) / 2) * ∏ ψ in tᶜ, (c ψ : Complex) := by
         simp_rw [expect_mul, ← expect_sum_comm, ← Fintype.prod_add, add_comm,
           Complex.re_eq_add_conj]
-    _ = (𝔼 a, ∏ ψ in ∅, ((d
+    _ = (𝔼 a, ∏ ψ in ∅, ((d ψ * ψ a) + conj (d ψ * ψ a)) / 2) * ∏ ψ in ∅ᶜ, (c ψ : Complex) :=
+        Fintype.sum_eq_single ∅ fun t ht => mul_eq_zero_of_left ?_ _
+    _ = ∏ ψ, (c ψ : Complex) := by simp
+  simp only [map_mul, prod_div_distrib, prod_add, prod_const, ← expect_div, expect_sum_comm,
+    div_eq_zero_iff, pow_eq_zero_iff', OfNat.ofNat_ne_zero, ne_eq, card_eq_zero,
+    false_and, or_false]
+  refine sum_eq_zero fun u _ => ?_
+  calc
+    𝔼 a, (∏ ψ in u, d ψ * ψ a) * ∏ ψ in t \ u, conj (d ψ) * conj (ψ a)
+      = ((∏ ψ in u, d ψ) * ∏ ψ in t \ u, conj (d ψ)) * 𝔼 a, (∑ ψ in u, ψ - ∑ ψ in t \ u, ψ) a := by
+        simp_rw [mul_expect, AddChar.sub_apply, AddChar.sum_apply, mul_mul_mul_comm,
+          ← prod_mul_distrib, AddChar.map_neg_eq_conj]
+    _ = 0 := ?_
+  rw [mul_eq_zero]; rw [AddChar.expect_eq_zero_iff_ne_zero]; rw [sub_ne_zero]; rw [or_iff_not_imp_left]; rw [← Ne]; rw [mul_ne_zero_iff]; rw [prod_ne_zero_iff]; rw [prod_ne_zero_iff]
+  exact fun h => hcd.ne h.1 (by simpa only [map_ne_zero] using! h.2)
+    (sdiff_ne_right.2 <| .inl ht).symm
 
 Depends on / 依赖: Complex.ofReal_injective, Complex.re_eq_add_conj, Fintype, Fintype.prod_add, Fintype.sum_eq_single, add_comm, expect, expect_mul, expect_sum_comm, map_mul, mul_eq_zero_of_left, ofReal_injective, prod_add, prod_const, prod_div_distrib, re_eq_add_conj, simp_rw, sum_eq_single
 -/

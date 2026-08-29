@@ -239,7 +239,7 @@ lemma SpecMap_iff
   have := RingHom.toMorphismProperty_respectsIso_iff.mp RingHom.isIntegral_respectsIso
   rw [HasAffineProperty.iff_of_isAffine (P := @IsIntegralHom)]; rw [and_iff_right]
   exacts [MorphismProperty.arrow_mk_iso_iff (RingHom.toMorphismProperty RingHom.IsIntegral)
-    (arrowIsoΓSpecOfIsAffine φ).sym
+    (arrowIsoΓSpecOfIsAffine φ).symm, inferInstance]
 
 中文:
 引理 SpecMap_iff
@@ -248,7 +248,7 @@ lemma SpecMap_iff
   have := RingHom.toMorphismProperty_respectsIso_iff.mp RingHom.isIntegral_respectsIso
   rw [HasAffineProperty.iff_of_isAffine (P := @IsIntegralHom)]; rw [and_iff_right]
   exacts [MorphismProperty.arrow_mk_iso_iff (RingHom.toMorphismProperty RingHom.IsIntegral)
-    (arrowIsoΓSpecOfIsAffine φ).sym
+    (arrowIsoΓSpecOfIsAffine φ).symm, inferInstance]
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine, IsIntegral, IsIntegralHom, MorphismProperty, MorphismProperty.arrow_mk_iso_iff, RingHom, RingHom.IsIntegral, RingHom.isIntegral_respectsIso, RingHom.toMorphismProperty, RingHom.toMorphismProperty_respectsIso_iff.mp, and_iff_right, arrow_mk_iso_iff, exacts, iff_of_isAffine, isIntegral_respectsIso, toMorphismProperty, toMorphismProperty_respectsIso_iff
 -/
@@ -316,7 +316,22 @@ lemma iff_universallyClosed_and_isAffineHom
   wlog hY : exists R, Y = Spec R
   · rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @IsIntegralHom) Y.affineCover]
     rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @UniversallyClosed) Y.affineCover] at H₁
- 
+    rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @IsAffineHom) Y.affineCover] at H₂
+    exact fun _ => this inferInstance inferInstance ⟨_, rfl⟩
+  obtain ⟨R, rfl⟩ := hY
+  wlog hX : exists S, X = Spec S
+  · have inst : IsAffine X := isAffine_of_isAffineHom f
+    rw [← cancel_left_of_respectsIso (P := @IsIntegralHom) X.isoSpec.inv]
+    exact this _ inferInstance inferInstance ⟨_, rfl⟩
+  obtain ⟨S, rfl⟩ := hX
+  obtain ⟨φ, rfl⟩ : exists φ, Spec.map φ = f := ⟨_, Spec.map_preimage _⟩
+  rw [SpecMap_iff]
+  apply PrimeSpectrum.isIntegral_of_isClosedMap_comap_mapRingHom
+  algebraize [φ.1, Polynomial.mapRingHom φ.1]
+  exact H₁.universally_isClosedMap (Spec.map (CommRingCat.ofHom Polynomial.C))
+    (Spec.map (CommRingCat.ofHom Polynomial.C)) (Spec.map _)
+    (isPullback_SpecMap_of_isPushout _ _ _ _
+    (CommRingCat.isPushout_of_isPushout R S (Polynomial R) (Polynomial S))).flip
 
 中文:
 引理 iff_universallyClosed_and_isAffineHom
@@ -327,7 +342,22 @@ lemma iff_universallyClosed_and_isAffineHom
   wlog hY : exists R, Y = Spec R
   · rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @IsIntegralHom) Y.affineCover]
     rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @UniversallyClosed) Y.affineCover] at H₁
- 
+    rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @IsAffineHom) Y.affineCover] at H₂
+    exact fun _ => this inferInstance inferInstance ⟨_, rfl⟩
+  obtain ⟨R, rfl⟩ := hY
+  wlog hX : exists S, X = Spec S
+  · have inst : IsAffine X := isAffine_of_isAffineHom f
+    rw [← cancel_left_of_respectsIso (P := @IsIntegralHom) X.isoSpec.inv]
+    exact this _ inferInstance inferInstance ⟨_, rfl⟩
+  obtain ⟨S, rfl⟩ := hX
+  obtain ⟨φ, rfl⟩ : exists φ, Spec.map φ = f := ⟨_, Spec.map_preimage _⟩
+  rw [SpecMap_iff]
+  apply PrimeSpectrum.isIntegral_of_isClosedMap_comap_mapRingHom
+  algebraize [φ.1, Polynomial.mapRingHom φ.1]
+  exact H₁.universally_isClosedMap (Spec.map (CommRingCat.ofHom Polynomial.C))
+    (Spec.map (CommRingCat.ofHom Polynomial.C)) (Spec.map _)
+    (isPullback_SpecMap_of_isPushout _ _ _ _
+    (CommRingCat.isPushout_of_isPushout R S (Polynomial R) (Polynomial S))).flip
 
 Depends on / 依赖: IsAffineHom, IsIntegralHom, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_openCover, UniversallyClosed, Y.affineCover, affineCover, iff_of_openCover
 -/

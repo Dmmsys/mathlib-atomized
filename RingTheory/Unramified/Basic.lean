@@ -98,7 +98,7 @@ theorem comp_injective
   have :=
     ((KaehlerDifferential.linearMapEquivDerivation R A).toEquiv.trans
           (derivationToSquareZeroEquivLift I hI)).surjective.subsingleton
-  exact Subtype.ext_iff.mp (@
+  exact Subtype.ext_iff.mp (@Subsingleton.elim _ this ⟨f₁, rfl⟩ ⟨f₂, e.symm⟩)
 
 中文:
 定理 comp_injective
@@ -110,7 +110,7 @@ theorem comp_injective
   have :=
     ((KaehlerDifferential.linearMapEquivDerivation R A).toEquiv.trans
           (derivationToSquareZeroEquivLift I hI)).surjective.subsingleton
-  exact Subtype.ext_iff.mp (@
+  exact Subtype.ext_iff.mp (@Subsingleton.elim _ this ⟨f₁, rfl⟩ ⟨f₂, e.symm⟩)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, KaehlerDifferential, KaehlerDifferential.linearMapEquivDerivation, Subsingleton, Subsingleton.elim, Subtype, Subtype.ext_iff.mp, comp_algebraMap, comp_algebraMap.symm, derivationToSquareZeroEquivLift, e.symm, ext_iff, linearMapEquivDerivation, of_algebraMap_eq, subsingleton, surjective, surjective.subsingleton, toAlgebra, toEquiv
 -/
@@ -138,7 +138,25 @@ theorem iff_comp_injective_of_small
     replace H : forall ⦃B : Type u⦄ [CommRing B] [Small.{w} B],
         forall [Algebra R B] (I : Ideal B) (_ : I ^ 2 = ⊥),
           Function.Injective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) := by
-      in
+      intro B _ _ _ I hI f g e
+      simpa [DFunLike.ext_iff] using H (B := Shrink B) (I.comap (Shrink.ringEquiv _))
+        (by rw [← Ideal.map_symm, ← Ideal.map_pow, hI]; simp)
+        (a₁ := (Shrink.algEquiv _ _).symm.toAlgHom.comp f)
+        (a₂ := (Shrink.algEquiv _ _).symm.toAlgHom.comp g)
+        (by simpa [DFunLike.ext_iff, Ideal.Quotient.mk_eq_mk_iff_sub_mem, Shrink.ringEquiv] using e)
+    constructor
+    by_contra! h
+    obtain ⟨f₁, f₂, e⟩ := (KaehlerDifferential.endEquiv R A).injective.nontrivial
+    apply e
+    ext1
+    let f := RingHom.ker (TensorProduct.lmul' R (S := A)).kerSquareLift.toRingHom
+    refine H
+      (RingHom.ker (TensorProduct.lmul' R (S := A)).kerSquareLift.toRingHom) ?_ ?_
+    · rw [AlgHom.ker_kerSquareLift]
+      exact Ideal.cotangentIdeal_square _
+    · ext x
+      apply RingHom.kerLift_injective (TensorProduct.lmul' R (S := A)).kerSquareLift.toRingHom
+      simpa using DFunLike.congr_fun (f₁.2.trans f₂.2.symm) x
 
 中文:
 定理 iff_comp_injective_of_small
@@ -150,7 +168,25 @@ theorem iff_comp_injective_of_small
     replace H : forall ⦃B : Type u⦄ [CommRing B] [Small.{w} B],
         forall [Algebra R B] (I : Ideal B) (_ : I ^ 2 = ⊥),
           Function.Injective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) := by
-      in
+      intro B _ _ _ I hI f g e
+      simpa [DFunLike.ext_iff] using H (B := Shrink B) (I.comap (Shrink.ringEquiv _))
+        (by rw [← Ideal.map_symm, ← Ideal.map_pow, hI]; simp)
+        (a₁ := (Shrink.algEquiv _ _).symm.toAlgHom.comp f)
+        (a₂ := (Shrink.algEquiv _ _).symm.toAlgHom.comp g)
+        (by simpa [DFunLike.ext_iff, Ideal.Quotient.mk_eq_mk_iff_sub_mem, Shrink.ringEquiv] using e)
+    constructor
+    by_contra! h
+    obtain ⟨f₁, f₂, e⟩ := (KaehlerDifferential.endEquiv R A).injective.nontrivial
+    apply e
+    ext1
+    let f := RingHom.ker (TensorProduct.lmul' R (S := A)).kerSquareLift.toRingHom
+    refine H
+      (RingHom.ker (TensorProduct.lmul' R (S := A)).kerSquareLift.toRingHom) ?_ ?_
+    · rw [AlgHom.ker_kerSquareLift]
+      exact Ideal.cotangentIdeal_square _
+    · ext x
+      apply RingHom.kerLift_injective (TensorProduct.lmul' R (S := A)).kerSquareLift.toRingHom
+      simpa using DFunLike.congr_fun (f₁.2.trans f₂.2.symm) x
 
 Depends on / 依赖: Algebra, CommRing, DFunLike, DFunLike.ext_iff, Function, Function.Injective, I.comap, Ideal.Quotient.mk, Ideal.map_pow, Ideal.map_symm, Injective, Quotient, Shrink, Shrink.algEquiv, Shrink.ringEquiv, algEquiv, comp_injective, ext_iff, intros, map_pow
 -/
@@ -220,7 +256,9 @@ theorem lift_unique
     apply h₁
     apply h₂
     ext x
-    rep
+    replace e := AlgHom.congr_fun e x
+    dsimp only [AlgHom.comp_apply, Ideal.Quotient.mkₐ_eq_mk] at e ⊢
+    rwa [Ideal.Quotient.eq, ← map_sub, Ideal.mem_quotient_iff_mem hIJ, ← Ideal.Quotient.eq]
 
 中文:
 定理 lift_unique
@@ -234,7 +272,9 @@ theorem lift_unique
     apply h₁
     apply h₂
     ext x
-    rep
+    replace e := AlgHom.congr_fun e x
+    dsimp only [AlgHom.comp_apply, Ideal.Quotient.mkₐ_eq_mk] at e ⊢
+    rwa [Ideal.Quotient.eq, ← map_sub, Ideal.mem_quotient_iff_mem hIJ, ← Ideal.Quotient.eq]
 
 Depends on / 依赖: AlgHom, AlgHom.comp_apply, AlgHom.congr_fun, Algebra, FormallyUnramified, FormallyUnramified.comp_injective, Function, Function.Injective, Ideal.IsNilpotent.induction_on, Ideal.Quotient.eq, Ideal.Quotient.mk, Ideal.mem_quotient_iff_mem, Injective, IsNilpotent, Quotient, comp_apply, comp_injective, congr_fun, induction_on, map_sub
 -/
@@ -362,7 +402,19 @@ theorem ext_of_iInf
       have : Subsingleton (B ⧸ I ^ i) := by
         rw [hi]; rw [pow_zero]; rw [Ideal.one_eq_top]
         infer_instance
-      exact Subsingleton.elim
+      exact Subsingleton.elim _ _
+    apply ext (I.map (algebraMap _ _)) ⟨i, by simp [← Ideal.map_pow]⟩
+    intro x
+    dsimp
+    rw [Ideal.Quotient.eq]; rw [← map_sub]; rw [← Ideal.mem_comap]; rw [Ideal.comap_map_of_surjective']; rw [sup_eq_left.mpr]; rw [← Ideal.Quotient.eq]
+    · exact H _
+    · simpa using Ideal.pow_le_self hi
+    · exact Ideal.Quotient.mk_surjective
+  ext x
+  rw [← sub_eq_zero]; rw [← Ideal.mem_bot]; rw [← hI]; rw [Ideal.mem_iInf]
+  intro i
+  rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [map_sub]; rw [sub_eq_zero]
+  exact DFunLike.congr_fun (this i) x
 
 中文:
 定理 ext_of_iInf
@@ -375,7 +427,19 @@ theorem ext_of_iInf
       have : Subsingleton (B ⧸ I ^ i) := by
         rw [hi]; rw [pow_zero]; rw [Ideal.one_eq_top]
         infer_instance
-      exact Subsingleton.elim
+      exact Subsingleton.elim _ _
+    apply ext (I.map (algebraMap _ _)) ⟨i, by simp [← Ideal.map_pow]⟩
+    intro x
+    dsimp
+    rw [Ideal.Quotient.eq]; rw [← map_sub]; rw [← Ideal.mem_comap]; rw [Ideal.comap_map_of_surjective']; rw [sup_eq_left.mpr]; rw [← Ideal.Quotient.eq]
+    · exact H _
+    · simpa using Ideal.pow_le_self hi
+    · exact Ideal.Quotient.mk_surjective
+  ext x
+  rw [← sub_eq_zero]; rw [← Ideal.mem_bot]; rw [← hI]; rw [Ideal.mem_iInf]
+  intro i
+  rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [map_sub]; rw [sub_eq_zero]
+  exact DFunLike.congr_fun (this i) x
 
 Depends on / 依赖: I.map, Ideal.Quotient.eq, Ideal.Quotient.mk, Ideal.comap_map_of_surjective, Ideal.map_pow, Ideal.mem_comap, Ideal.one_eq_top, Quotient, Subsingleton, Subsingleton.elim, algebraMap, comap_map_of_surjective, infer_instance, map_pow, map_sub, mem_comap, one_eq_top, pow_zero, sup_eq_left, sup_eq_left.mpr
 -/
@@ -471,7 +535,12 @@ theorem comp
     FormallyUnramified.lift_unique I ⟨2, hI⟩ (f₁.comp <| IsScalarTower.toAlgHom R A B)
       (f₂.comp <| IsScalarTower.toAlgHom R A B) (by rw [← AlgHom.comp_assoc, e, AlgHom.comp_assoc])
   let := (f₁.domRestrict A).toAlgebra
-  let 
+  let F₁ : B ->ₐ[A] C := { f₁ with commutes' := fun r => rfl }
+  let F₂ : B ->ₐ[A] C := { f₂ with commutes' := AlgHom.congr_fun e'.symm }
+  ext1 x
+  change F₁ x = F₂ x
+  congr
+  exact FormallyUnramified.ext I ⟨2, hI⟩ (AlgHom.congr_fun e)
 
 中文:
 定理 comp
@@ -483,7 +552,12 @@ theorem comp
     FormallyUnramified.lift_unique I ⟨2, hI⟩ (f₁.comp <| IsScalarTower.toAlgHom R A B)
       (f₂.comp <| IsScalarTower.toAlgHom R A B) (by rw [← AlgHom.comp_assoc, e, AlgHom.comp_assoc])
   let := (f₁.domRestrict A).toAlgebra
-  let 
+  let F₁ : B ->ₐ[A] C := { f₁ with commutes' := fun r => rfl }
+  let F₂ : B ->ₐ[A] C := { f₂ with commutes' := AlgHom.congr_fun e'.symm }
+  ext1 x
+  change F₁ x = F₂ x
+  congr
+  exact FormallyUnramified.ext I ⟨2, hI⟩ (AlgHom.congr_fun e)
 
 Depends on / 依赖: AlgHom, AlgHom.comp_assoc, AlgHom.congr_fun, FormallyUnramified, FormallyUnramified.ext, FormallyUnramified.lift_unique, IsScalarTower, IsScalarTower.toAlgHom, commutes, comp_assoc, congr_fun, domRestrict, iff_comp_injective, lift_unique, toAlgHom, toAlgebra
 -/
@@ -517,7 +591,7 @@ theorem of_restrictScalars
   refine AlgHom.restrictScalars_injective R ?_
   refine FormallyUnramified.ext I ⟨2, e⟩ ?_
   intro x
-  exact AlgHom.c
+  exact AlgHom.congr_fun e' x
 
 中文:
 定理 of_restrictScalars
@@ -531,7 +605,7 @@ theorem of_restrictScalars
   refine AlgHom.restrictScalars_injective R ?_
   refine FormallyUnramified.ext I ⟨2, e⟩ ?_
   intro x
-  exact AlgHom.c
+  exact AlgHom.congr_fun e' x
 
 Depends on / 依赖: AlgHom, AlgHom.congr_fun, AlgHom.restrictScalars_injective, FormallyUnramified, FormallyUnramified.ext, IsScalarTower, IsScalarTower.of_algebraMap_eq, algebraMap, congr_fun, iff_comp_injective, of_algebraMap_eq, restrictScalars_injective, toAlgebra
 -/
@@ -835,7 +909,13 @@ lemma exists_algEquiv_prod
   obtain ⟨e, he, hsp⟩ : exists e, IsIdempotentElem e ∧ KaehlerDifferential.ideal R S = S otimes[R] S ∙ e :=
 (Ideal.isIdempotentElem_iff_of_fg _ (KaehlerDifferential.ideal_fg R S)).mp
 (Ideal.cotangent_subsingleton_iff _).mp inferInstanceAs Subsingleton Ω[S⁄R]
-  let e₁ := AlgEquiv.prodQuotientOfIsI
+  let e₁ := AlgEquiv.prodQuotientOfIsIdempotentElem (R := S) he he.one_sub (by simp) (by simp [he])
+  let e₂ : (S otimes[R] S ⧸ Ideal.span {e}) ≃ₐ[S] S :=
+((Ideal.span {e}).quotientEquivAlgOfEq S hsp.symm).trans
+Ideal.quotientKerAlgEquivOfSurjective
+        (⟨· otimesₜ 1, by simp [Algebra.TensorProduct.lmul'']⟩)
+  exact ⟨(S otimes[R] S) ⧸ Ideal.span {1 - e}, inferInstance, inferInstance,
+    ⟨e₁.trans (.prodCongr e₂ .refl)⟩⟩
 
 中文:
 引理 存在_algEquiv_prod
@@ -844,7 +924,13 @@ lemma exists_algEquiv_prod
   obtain ⟨e, he, hsp⟩ : exists e, IsIdempotentElem e ∧ KaehlerDifferential.ideal R S = S otimes[R] S ∙ e :=
 (Ideal.isIdempotentElem_iff_of_fg _ (KaehlerDifferential.ideal_fg R S)).mp
 (Ideal.cotangent_subsingleton_iff _).mp inferInstanceAs Subsingleton Ω[S⁄R]
-  let e₁ := AlgEquiv.prodQuotientOfIsI
+  let e₁ := AlgEquiv.prodQuotientOfIsIdempotentElem (R := S) he he.one_sub (by simp) (by simp [he])
+  let e₂ : (S otimes[R] S ⧸ Ideal.span {e}) ≃ₐ[S] S :=
+((Ideal.span {e}).quotientEquivAlgOfEq S hsp.symm).trans
+Ideal.quotientKerAlgEquivOfSurjective
+        (⟨· otimesₜ 1, by simp [Algebra.TensorProduct.lmul'']⟩)
+  exact ⟨(S otimes[R] S) ⧸ Ideal.span {1 - e}, inferInstance, inferInstance,
+    ⟨e₁.trans (.prodCongr e₂ .refl)⟩⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.prodQuotientOfIsIdempotentElem, Ideal.cotangent_subsingleton_iff, Ideal.isIdempotentElem_iff_of_fg, Ideal.quotientKerAlgEquivOfSurje, Ideal.span, IsIdempotentElem, KaehlerDifferential, KaehlerDifferential.ideal, KaehlerDifferential.ideal_fg, Subsingleton, cotangent_subsingleton_iff, he.one_sub, hsp.symm, ideal_fg, isIdempotentElem_iff_of_fg, one_sub, otimes, prodQuotientOfIsIdempotentElem, quotientEquivAlgOfEq
 -/

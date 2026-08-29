@@ -396,7 +396,27 @@ definition unitsFstOne_mulEquiv_quasiregular
 val_inv := PreQuasiregular.equiv.symm.injective by
         simpa [-Units.mul_inv] using congr($(x.val.mul_inv).snd)
 inv_val := PreQuasiregular.equiv.symm.injective by
-        simpa [-Units.inv_mul] using 
+        simpa [-Units.inv_mul] using congr($(x.val.inv_mul).snd) }
+  invFun x :=
+    { val :=
+      { val := 1 + PreQuasiregular.equiv.symm x.val
+        inv := 1 + PreQuasiregular.equiv.symm x⁻¹.val
+        val_inv := by
+          convert congr((1 + $(inv_add_add_mul_eq_zero x) : Unitization R A))
+          · simp only [mul_one, PreQuasiregular.equiv_symm_apply, one_mul, mul_add,
+              add_mul, inr_add, inr_mul]
+            abel
+          · simp only [inr_zero, add_zero]
+        inv_val := by
+          convert congr((1 + $(add_inv_add_mul_eq_zero x) : Unitization R A))
+          · simp only [mul_one, PreQuasiregular.equiv_symm_apply, one_mul, mul_add,
+              add_mul, inr_add, inr_mul]
+            abel
+          · simp only [inr_zero, add_zero] }
+      property := by simp }
+left_inv x := Subtype.ext Units.ext by simpa using x.val.val.inl_fst_add_inr_snd_eq
+right_inv x := Units.ext by simp [-PreQuasiregular.equiv_symm_apply]
+map_mul' x y := Units.ext PreQuasiregular.equiv.symm.injective by simp
 
 中文:
 定义 unitsFstOne_mulEquiv_quasiregular
@@ -406,7 +426,27 @@ inv_val := PreQuasiregular.equiv.symm.injective by
 val_inv := PreQuasiregular.equiv.symm.injective by
         simpa [-Units.mul_inv] using congr($(x.val.mul_inv).snd)
 inv_val := PreQuasiregular.equiv.symm.injective by
-        simpa [-Units.inv_mul] using 
+        simpa [-Units.inv_mul] using congr($(x.val.inv_mul).snd) }
+  invFun x :=
+    { val :=
+      { val := 1 + PreQuasiregular.equiv.symm x.val
+        inv := 1 + PreQuasiregular.equiv.symm x⁻¹.val
+        val_inv := by
+          convert congr((1 + $(inv_add_add_mul_eq_zero x) : Unitization R A))
+          · simp only [mul_one, PreQuasiregular.equiv_symm_apply, one_mul, mul_add,
+              add_mul, inr_add, inr_mul]
+            abel
+          · simp only [inr_zero, add_zero]
+        inv_val := by
+          convert congr((1 + $(add_inv_add_mul_eq_zero x) : Unitization R A))
+          · simp only [mul_one, PreQuasiregular.equiv_symm_apply, one_mul, mul_add,
+              add_mul, inr_add, inr_mul]
+            abel
+          · simp only [inr_zero, add_zero] }
+      property := by simp }
+left_inv x := Subtype.ext Units.ext by simpa using x.val.val.inl_fst_add_inr_snd_eq
+right_inv x := Units.ext by simp [-PreQuasiregular.equiv_symm_apply]
+map_mul' x y := Units.ext PreQuasiregular.equiv.symm.injective by simp
 
 Depends on / 依赖: PreQuasiregular, PreQuasiregular.equiv, PreQuasiregular.equiv.symm, PreQuasiregular.equiv.symm.injective, Unitization, Units.inv_mul, Units.mul_inv, convert, injective, invFun, inv_add_add_mul_eq_zero, inv_mul, inv_val, mul_inv, val.val.snd, val_inv, x.val, x.val.inv_mul, x.val.mul_inv, x.val.val.snd
 -/
@@ -626,7 +666,9 @@ lemma isQuasiregular_iff_isUnit
   case' h.left => have := congr($(hx.mul_val_inv) - 1)
   case' h.right => have := congr($(hx.val_inv_mul) - 1)
   all_goals
-    rw [← sub_add_cancel (↑hx.unit⁻¹ : R) 1]; rw [sub_self]
+    rw [← sub_add_cancel (↑hx.unit⁻¹ : R) 1]; rw [sub_self] at this
+    convert this
+    noncomm_ring
 
 中文:
 引理 isQuasiregular_iff_isUnit
@@ -639,7 +681,9 @@ lemma isQuasiregular_iff_isUnit
   case' h.left => have := congr($(hx.mul_val_inv) - 1)
   case' h.right => have := congr($(hx.val_inv_mul) - 1)
   all_goals
-    rw [← sub_add_cancel (↑hx.unit⁻¹ : R) 1]; rw [sub_self]
+    rw [← sub_add_cancel (↑hx.unit⁻¹ : R) 1]; rw [sub_self] at this
+    convert this
+    noncomm_ring
 
 Depends on / 依赖: IsQuasiregular, IsQuasiregular.isUnit_one_add, all_goals, convert, h.left, h.right, hx.mul_val_inv, hx.unit, hx.val_inv_mul, isQuasiregular_iff, isUnit_one_add, mul_val_inv, noncomm_ring, sub_add_cancel, sub_self, val_inv_mul
 -/
@@ -905,7 +949,7 @@ lemma quasispectrum_eq_spectrum_union
   simp only [Set.mem_ofPred_eq, Set.mem_union, ← imp_iff_or_not, spectrum.mem_iff]
   congr! 1 with hr
   rw [not_iff_not]; rw [isQuasiregular_iff_isUnit]; rw [← sub_eq_add_neg]; rw [Algebra.algebraMap_eq_smul_one]
-  exact (IsUnit.smul_sub_iff_sub_inv_smul hr.unit a).sy
+  exact (IsUnit.smul_sub_iff_sub_inv_smul hr.unit a).symm
 
 中文:
 引理 quasispectrum_eq_spectrum_union
@@ -916,7 +960,7 @@ lemma quasispectrum_eq_spectrum_union
   simp only [Set.mem_ofPred_eq, Set.mem_union, ← imp_iff_or_not, spectrum.mem_iff]
   congr! 1 with hr
   rw [not_iff_not]; rw [isQuasiregular_iff_isUnit]; rw [← sub_eq_add_neg]; rw [Algebra.algebraMap_eq_smul_one]
-  exact (IsUnit.smul_sub_iff_sub_inv_smul hr.unit a).sy
+  exact (IsUnit.smul_sub_iff_sub_inv_smul hr.unit a).symm
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, IsUnit, IsUnit.smul_sub_iff_sub_inv_smul, Set.mem_ofPred_eq, Set.mem_union, algebraMap_eq_smul_one, hr.unit, imp_iff_or_not, isQuasiregular_iff_isUnit, mem_iff, mem_ofPred_eq, mem_union, not_iff_not, quasispectrum, smul_sub_iff_sub_inv_smul, spectrum, spectrum.mem_iff, sub_eq_add_neg
 -/
@@ -1090,7 +1134,7 @@ lemma quasispectrum_eq_spectrum_inr
   have : { r | ¬ IsUnit r} subseteq spectrum R _ := mem_spectrum_inr_of_not_isUnit a
   rw [← Set.union_eq_left.mpr this]; rw [← quasispectrum_eq_spectrum_union]
   apply forall_congr' fun hr => ?_
-  rw [not_iff_not]; rw [Units.smul_def]; rw [Units.smul_def]; rw [← inr_smul]; rw [← inr_neg]
+  rw [not_iff_not]; rw [Units.smul_def]; rw [Units.smul_def]; rw [← inr_smul]; rw [← inr_neg]; rw [isQuasiregular_inr_iff]
 
 中文:
 引理 quasispectrum_eq_spectrum_inr
@@ -1100,7 +1144,7 @@ lemma quasispectrum_eq_spectrum_inr
   have : { r | ¬ IsUnit r} subseteq spectrum R _ := mem_spectrum_inr_of_not_isUnit a
   rw [← Set.union_eq_left.mpr this]; rw [← quasispectrum_eq_spectrum_union]
   apply forall_congr' fun hr => ?_
-  rw [not_iff_not]; rw [Units.smul_def]; rw [Units.smul_def]; rw [← inr_smul]; rw [← inr_neg]
+  rw [not_iff_not]; rw [Units.smul_def]; rw [Units.smul_def]; rw [← inr_smul]; rw [← inr_neg]; rw [isQuasiregular_inr_iff]
 
 Depends on / 依赖: IsUnit, Set.union_eq_left.mpr, Units.smul_def, forall_congr, inr_neg, inr_smul, isQuasiregular_inr_iff, mem_spectrum_inr_of_not_isUnit, not_iff_not, quasispectrum_eq_spectrum_union, smul_def, spectrum, subseteq, union_eq_left
 -/
@@ -1124,7 +1168,7 @@ lemma quasispectrum_eq_spectrum_inr'
   have := Set.singleton_subset_iff.mpr (zero_mem_spectrum_inr R S a)
   rw [← Set.union_eq_self_of_subset_right this]; rw [← quasispectrum_eq_spectrum_union_zero]
   apply forall_congr' fun x => ?_
-  rw [not_iff_not]; rw [Units.smul_def]; rw [Units.smul_def]; rw [← inr_smul]; rw [← inr_neg]
+  rw [not_iff_not]; rw [Units.smul_def]; rw [Units.smul_def]; rw [← inr_smul]; rw [← inr_neg]; rw [isQuasiregular_inr_iff]
 
 中文:
 引理 quasispectrum_eq_spectrum_inr'
@@ -1134,7 +1178,7 @@ lemma quasispectrum_eq_spectrum_inr'
   have := Set.singleton_subset_iff.mpr (zero_mem_spectrum_inr R S a)
   rw [← Set.union_eq_self_of_subset_right this]; rw [← quasispectrum_eq_spectrum_union_zero]
   apply forall_congr' fun x => ?_
-  rw [not_iff_not]; rw [Units.smul_def]; rw [Units.smul_def]; rw [← inr_smul]; rw [← inr_neg]
+  rw [not_iff_not]; rw [Units.smul_def]; rw [Units.smul_def]; rw [← inr_smul]; rw [← inr_neg]; rw [isQuasiregular_inr_iff]
 
 Depends on / 依赖: Set.singleton_subset_iff.mpr, Set.union_eq_self_of_subset_right, Units.smul_def, forall_congr, inr_neg, inr_smul, isQuasiregular_inr_iff, not_iff_not, quasispectrum_eq_spectrum_union_zero, singleton_subset_iff, smul_def, union_eq_self_of_subset_right, zero_mem_spectrum_inr
 -/
@@ -1186,7 +1230,9 @@ lemma quasispectrum.mul_comm
   rw [← Set.inter_union_compl (quasispectrum R (a * b)) {r | IsUnit r}]; rw [← Set.inter_union_compl (quasispectrum R (b * a)) {r | IsUnit r}]
   congr! 1
   · simpa [Set.inter_comm _ {r | IsUnit r}, Unitization.quasispectrum_eq_spectrum_inr,
-      Unitization.inr_mul] using spectrum.setOfPred_isUn
+      Unitization.inr_mul] using spectrum.setOfPred_isUnit_inter_mul_comm _ _
+  · rw [Set.inter_eq_right.mpr, Set.inter_eq_right.mpr]
+    all_goals exact fun _ => quasispectrum.not_isUnit_mem _
 
 中文:
 引理 quasispectrum.mul_comm
@@ -1195,7 +1241,9 @@ lemma quasispectrum.mul_comm
   rw [← Set.inter_union_compl (quasispectrum R (a * b)) {r | IsUnit r}]; rw [← Set.inter_union_compl (quasispectrum R (b * a)) {r | IsUnit r}]
   congr! 1
   · simpa [Set.inter_comm _ {r | IsUnit r}, Unitization.quasispectrum_eq_spectrum_inr,
-      Unitization.inr_mul] using spectrum.setOfPred_isUn
+      Unitization.inr_mul] using spectrum.setOfPred_isUnit_inter_mul_comm _ _
+  · rw [Set.inter_eq_right.mpr, Set.inter_eq_right.mpr]
+    all_goals exact fun _ => quasispectrum.not_isUnit_mem _
 
 Depends on / 依赖: IsUnit, Set.inter_comm, Set.inter_eq_right.mpr, Set.inter_union_compl, Unitization, Unitization.inr_mul, Unitization.quasispectrum_eq_spectrum_inr, all_goals, inr_mul, inter_comm, inter_eq_right, inter_union_compl, not_isUnit_mem, quasispectrum, quasispectrum.not_isUnit_mem, quasispectrum_eq_spectrum_inr, setOfPred_isUnit_inter_mul_comm, spectrum, spectrum.setOfPred_isUnit_inter_mul_comm
 -/

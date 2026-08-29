@@ -37,7 +37,13 @@ theorem map_prime
   have ⟨⟨m₂, s₂⟩, eq₂⟩ := f.surj n₂
   have := (f.map_units (s₁ * s₂)).dvd_mul_right.mpr dvd
   rw [Submonoid.mul_def]; rw [map_mul]; rw [mul_mul_mul_comm]; rw [eq₁]; rw [eq₂]; rw [← map_mul]; rw [f.map_dvd_map] at this
-  ha
+  have ⟨s, hs, dvd⟩ := this
+  rw [← mul_assoc] at dvd
+  obtain dvd | dvd := prime.dvd_or_dvd dvd
+  all_goals have := map_dvd f dvd
+  · rw [map_mul, (f.map_units ⟨s, hs⟩).dvd_mul_left, ← eq₁, (f.map_units s₁).dvd_mul_right] at this
+    exact .inl this
+  · rw [← eq₂, (f.map_units s₂).dvd_mul_right] at this; exact .inr this
 
 中文:
 定理 map_prime
@@ -48,7 +54,13 @@ theorem map_prime
   have ⟨⟨m₂, s₂⟩, eq₂⟩ := f.surj n₂
   have := (f.map_units (s₁ * s₂)).dvd_mul_right.mpr dvd
   rw [Submonoid.mul_def]; rw [map_mul]; rw [mul_mul_mul_comm]; rw [eq₁]; rw [eq₂]; rw [← map_mul]; rw [f.map_dvd_map] at this
-  ha
+  have ⟨s, hs, dvd⟩ := this
+  rw [← mul_assoc] at dvd
+  obtain dvd | dvd := prime.dvd_or_dvd dvd
+  all_goals have := map_dvd f dvd
+  · rw [map_mul, (f.map_units ⟨s, hs⟩).dvd_mul_left, ← eq₁, (f.map_units s₁).dvd_mul_right] at this
+    exact .inl this
+  · rw [← eq₂, (f.map_units s₂).dvd_mul_right] at this; exact .inr this
 
 Depends on / 依赖: Submonoid, Submonoid.mul_def, all_goals, dvd_mul_left, dvd_mul_right, dvd_mul_right.mpr, dvd_or_dvd, f.map_dvd_map, f.map_units, f.surj, map_dvd, map_dvd_map, map_mul, map_units, mul_assoc, mul_def, mul_mul_mul_comm, prime.dvd_or_dvd
 -/
@@ -80,7 +92,9 @@ theorem eq_isUnit_map_mul_irreducible_of_irreducible_map
   | mul a i ha0 hi ha =>
     rw [map_mul]; rw [irreducible_mul_iff] at hm
     obtain hia | hai := hm
-    · exact ⟨a, i, hia.2, hi, mu
+    · exact ⟨a, i, hia.2, hi, mul_comm ..⟩
+    · obtain ⟨u, m', hu, hm', rfl⟩ := ha hai.1
+      exact ⟨u * i, m', by simpa using hu.mul hai.2, hm', by ac_rfl⟩
 
 中文:
 定理 eq_isUnit_map_mul_irreducible_of_irreducible_map
@@ -92,7 +106,9 @@ theorem eq_isUnit_map_mul_irreducible_of_irreducible_map
   | mul a i ha0 hi ha =>
     rw [map_mul]; rw [irreducible_mul_iff] at hm
     obtain hia | hai := hm
-    · exact ⟨a, i, hia.2, hi, mu
+    · exact ⟨a, i, hia.2, hi, mul_comm ..⟩
+    · obtain ⟨u, m', hu, hm', rfl⟩ := ha hai.1
+      exact ⟨u * i, m', by simpa using hu.mul hai.2, hm', by ac_rfl⟩
 
 Depends on / 依赖: WfDvdMonoid, WfDvdMonoid.induction_on_irreducible, f.map_zero, hm.ne_zero, hm.not_isUnit, hu.map, hu.mul, induction_on_irreducible, irreducible_mul_iff, map_mul, map_zero, mul_comm, ne_zero, not_isUnit
 -/
@@ -121,7 +137,15 @@ theorem uniqueFactorizationMonoid
     have ⟨⟨m, s⟩, eq⟩ := f.surj n
     use ((factors m).map f).filter (¬ IsUnit ·)
     rw [Ne]; rw [← (f.map_units s).mul_left_eq_zero]; rw [eq] at hn
-    refine ⟨fun x hx => ?_, .trans (eq ▸ ?_) ((associated_mul_unit_l
+    refine ⟨fun x hx => ?_, .trans (eq ▸ ?_) ((associated_mul_unit_left _ _ (f.map_units s)))⟩
+    · rw [Multiset.mem_filter, Multiset.mem_map] at hx
+      obtain ⟨p, hp, rfl⟩ := hx.1
+      exact f.map_prime (prime_of_factor _ hp)
+        (mt (fun h => eq_zero_of_zero_dvd <| h ▸ map_dvd f (dvd_of_mem_factors hp)) hn) hx.2
+    · exact .trans (.trans (associated_unit_mul_right _ _ <|
+        IsUnit.multisetProd_iff.mpr fun x hx => (Multiset.mem_filter.mp hx).2) <| .of_eq <|
+        (Multiset.prod_filter_mul_prod_filter_not _).trans (f.toMonoidHom.map_multiset_prod _).symm)
+        ((factors_prod (mt (by simp [·]) hn)).map f)
 
 中文:
 定理 uniqueFactorizationMonoid
@@ -132,7 +156,15 @@ theorem uniqueFactorizationMonoid
     have ⟨⟨m, s⟩, eq⟩ := f.surj n
     use ((factors m).map f).filter (¬ IsUnit ·)
     rw [Ne]; rw [← (f.map_units s).mul_left_eq_zero]; rw [eq] at hn
-    refine ⟨fun x hx => ?_, .trans (eq ▸ ?_) ((associated_mul_unit_l
+    refine ⟨fun x hx => ?_, .trans (eq ▸ ?_) ((associated_mul_unit_left _ _ (f.map_units s)))⟩
+    · rw [Multiset.mem_filter, Multiset.mem_map] at hx
+      obtain ⟨p, hp, rfl⟩ := hx.1
+      exact f.map_prime (prime_of_factor _ hp)
+        (mt (fun h => eq_zero_of_zero_dvd <| h ▸ map_dvd f (dvd_of_mem_factors hp)) hn) hx.2
+    · exact .trans (.trans (associated_unit_mul_right _ _ <|
+        IsUnit.multisetProd_iff.mpr fun x hx => (Multiset.mem_filter.mp hx).2) <| .of_eq <|
+        (Multiset.prod_filter_mul_prod_filter_not _).trans (f.toMonoidHom.map_multiset_prod _).symm)
+        ((factors_prod (mt (by simp [·]) hn)).map f)
 
 Depends on / 依赖: IsUnit, Multiset, Multiset.mem_filter, Multiset.mem_map, associated_mul_unit_left, classical, dvd_of_mem_factors, eq_zero_of_zero_dvd, f.isCancelMulZero, f.map_prime, f.map_units, f.surj, factors, filter, isCancelMulZero, map_dvd, map_prime, map_units, mem_filter, mem_map
 -/

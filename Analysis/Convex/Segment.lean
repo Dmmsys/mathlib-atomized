@@ -341,7 +341,10 @@ theorem insert_endpoints_openSegment
   rintro z ⟨a, b, ha, hb, hab, rfl⟩
   refine hb.eq_or_lt.imp ?_ fun hb' => ha.eq_or_lt.imp ?_ fun ha' => ?_
   · rintro rfl
-    rw [← add_zero a]; rw [hab]; rw [one_s
+    rw [← add_zero a]; rw [hab]; rw [one_smul]; rw [zero_smul]; rw [add_zero]
+  · rintro rfl
+    rw [← zero_add b]; rw [hab]; rw [one_smul]; rw [zero_smul]; rw [zero_add]
+  · exact ⟨a, b, ha', hb', hab, rfl⟩
 
 中文:
 定理 insert_endpoints_openSegment
@@ -352,7 +355,10 @@ theorem insert_endpoints_openSegment
   rintro z ⟨a, b, ha, hb, hab, rfl⟩
   refine hb.eq_or_lt.imp ?_ fun hb' => ha.eq_or_lt.imp ?_ fun ha' => ?_
   · rintro rfl
-    rw [← add_zero a]; rw [hab]; rw [one_s
+    rw [← add_zero a]; rw [hab]; rw [one_smul]; rw [zero_smul]; rw [add_zero]
+  · rintro rfl
+    rw [← zero_add b]; rw [hab]; rw [one_smul]; rw [zero_smul]; rw [zero_add]
+  · exact ⟨a, b, ha', hb', hab, rfl⟩
 
 Depends on / 依赖: add_zero, eq_or_lt, ha.eq_or_lt.imp, hb.eq_or_lt.imp, insert_subset_iff, left_mem_segment, one_smul, openSegment_subset_segment, right_mem_segment, subset_antisymm_iff, true_and, zero_add, zero_smul
 -/
@@ -505,7 +511,8 @@ theorem openSegment_same
       simpa only [← add_smul, mem_singleton_iff, hab, one_smul, eq_comm] using hz,
     fun h : z = x => by
       obtain ⟨a, ha₀, ha₁⟩ := DenselyOrdered.dense (0 : 𝕜) 1 zero_lt_one
-      refine ⟨a, 1 - a, ha₀, sub_pos_of_lt ha₁, add_sub_cancel _ _
+      refine ⟨a, 1 - a, ha₀, sub_pos_of_lt ha₁, add_sub_cancel _ _, ?_⟩
+      rw [← add_smul]; rw [add_sub_cancel]; rw [one_smul]; rw [h]⟩
 
 中文:
 定理 openSegment_same
@@ -516,7 +523,8 @@ theorem openSegment_same
       simpa only [← add_smul, mem_singleton_iff, hab, one_smul, eq_comm] using hz,
     fun h : z = x => by
       obtain ⟨a, ha₀, ha₁⟩ := DenselyOrdered.dense (0 : 𝕜) 1 zero_lt_one
-      refine ⟨a, 1 - a, ha₀, sub_pos_of_lt ha₁, add_sub_cancel _ _
+      refine ⟨a, 1 - a, ha₀, sub_pos_of_lt ha₁, add_sub_cancel _ _, ?_⟩
+      rw [← add_smul]; rw [add_sub_cancel]; rw [one_smul]; rw [h]⟩
 
 Depends on / 依赖: DenselyOrdered, DenselyOrdered.dense, Set.ext, add_smul, add_sub_cancel, eq_comm, mem_singleton_iff, one_smul, sub_pos_of_lt, zero_lt_one
 -/
@@ -1000,7 +1008,10 @@ lemma segment_inter_subset_endpoint_of_linearIndependent_sub
   have Hx : x = (x - c) + c := by abel
   have Hy : y = (y - c) + c := by abel
   rw [Hx]; rw [Hy]; rw [smul_add]; rw [smul_add] at H
-  have : c + q • (y -
+  have : c + q • (y - c) = c + p • (x - c) := by
+    convert! H using 1 <;> simp [sub_smul]
+  obtain ⟨rfl, rfl⟩ : p = 0 ∧ q = 0 := h.eq_zero_of_pair' ((add_right_inj c).1 this).symm
+  simp
 
 中文:
 引理 segment_inter_subset_endpoint_of_linearIndependent_sub
@@ -1012,7 +1023,10 @@ lemma segment_inter_subset_endpoint_of_linearIndependent_sub
   have Hx : x = (x - c) + c := by abel
   have Hy : y = (y - c) + c := by abel
   rw [Hx]; rw [Hy]; rw [smul_add]; rw [smul_add] at H
-  have : c + q • (y -
+  have : c + q • (y - c) = c + p • (x - c) := by
+    convert! H using 1 <;> simp [sub_smul]
+  obtain ⟨rfl, rfl⟩ : p = 0 ∧ q = 0 := h.eq_zero_of_pair' ((add_right_inj c).1 this).symm
+  simp
 
 Depends on / 依赖: add_right_inj, convert, eq_zero_of_pair, h.eq_zero_of_pair, mem_image, segment_eq_image, smul_add, sub_smul
 -/
@@ -1100,7 +1114,8 @@ lemma segment_inter_eq_endpoint_of_linearIndependent_of_ne
   suffices H : LinearIndependent 𝕜 ![(-1 : 𝕜) • x + t • y, (-1 : 𝕜) • x + s • y] by
     convert! H using 1; simp only [neg_smul, one_smul]; abel_nf
   nontriviality 𝕜
-  rw [LinearIndependent.pair_add_s
+  rw [LinearIndependent.pair_add_smul_add_smul_iff]
+  aesop
 
 中文:
 引理 segment_inter_eq_endpoint_of_linearIndependent_of_ne
@@ -1110,7 +1125,8 @@ lemma segment_inter_eq_endpoint_of_linearIndependent_of_ne
   suffices H : LinearIndependent 𝕜 ![(-1 : 𝕜) • x + t • y, (-1 : 𝕜) • x + s • y] by
     convert! H using 1; simp only [neg_smul, one_smul]; abel_nf
   nontriviality 𝕜
-  rw [LinearIndependent.pair_add_s
+  rw [LinearIndependent.pair_add_smul_add_smul_iff]
+  aesop
 
 Depends on / 依赖: LinearIndependent, LinearIndependent.pair_add_smul_add_smul_iff, abel_nf, add_sub_add_left_eq_sub, convert, neg_smul, nontriviality, one_smul, pair_add_smul_add_smul_iff, segment_inter_eq_endpoint_of_linearIndependent_sub
 -/
@@ -1388,7 +1404,7 @@ theorem mem_openSegment_iff_div
   · rintro ⟨a, b, ha, hb, rfl⟩
     have hab : 0 < a + b := add_pos' ha hb
     refine ⟨a / (a + b), b / (a + b), by positivity, by positivity, ?_, rfl⟩
-    rw [← add_div]; rw [div_self h
+    rw [← add_div]; rw [div_self hab.ne']
 
 中文:
 定理 mem_openSegment_iff_div
@@ -1401,7 +1417,7 @@ theorem mem_openSegment_iff_div
   · rintro ⟨a, b, ha, hb, rfl⟩
     have hab : 0 < a + b := add_pos' ha hb
     refine ⟨a / (a + b), b / (a + b), by positivity, by positivity, ?_, rfl⟩
-    rw [← add_div]; rw [div_self h
+    rw [← add_div]; rw [div_self hab.ne']
 
 Depends on / 依赖: add_div, add_pos, div_one, div_self, hab.ne
 -/
@@ -1434,7 +1450,7 @@ theorem mem_segment_iff_sameRay
   rw [add_comm]; rw [sub_add_sub_cancel] at hxy hzx
   rw [← mem_segment_translate _ (-x)]; rw [neg_add_cancel]
   refine ⟨b, a, hb, ha, add_comm a b ▸ hab, ?_⟩
-  rw [← sub_eq_neg_add]; r
+  rw [← sub_eq_neg_add]; rw [← neg_sub]; rw [hxy]; rw [← sub_eq_neg_add]; rw [hzx]; rw [smul_neg]; rw [smul_comm]; rw [neg_add_cancel]
 
 中文:
 定理 mem_segment_iff_sameRay
@@ -1445,7 +1461,7 @@ theorem mem_segment_iff_sameRay
   rw [add_comm]; rw [sub_add_sub_cancel] at hxy hzx
   rw [← mem_segment_translate _ (-x)]; rw [neg_add_cancel]
   refine ⟨b, a, hb, ha, add_comm a b ▸ hab, ?_⟩
-  rw [← sub_eq_neg_add]; r
+  rw [← sub_eq_neg_add]; rw [← neg_sub]; rw [hxy]; rw [← sub_eq_neg_add]; rw [hzx]; rw [smul_neg]; rw [smul_comm]; rw [neg_add_cancel]
 
 Depends on / 依赖: add_comm, exists_eq_smul_add, h.exists_eq_smul_add, mem_segment_translate, neg_add_cancel, neg_sub, sameRay_of_mem_segment, smul_comm, smul_neg, sub_add_sub_cancel, sub_eq_neg_add
 -/
@@ -1475,7 +1491,18 @@ theorem openSegment_subset_union
     left
     have hc : 0 < c := h₀.trans hac
     refine ⟨a / c, ⟨div_pos h₀ hc, (div_lt_one hc).2 hac⟩, ?_⟩
-    simp only
+    simp only [← homothety_eq_lineMap, ← homothety_mul_apply, div_mul_cancel₀ _ hc.ne']
+  · left
+    rfl
+  · right
+    right
+    have hc : 0 < 1 - c := sub_pos.2 (hca.trans h₁)
+    simp only [← lineMap_apply_one_sub y]
+    refine
+⟨(a - c) / (1 - c), ⟨div_pos (sub_pos.2 hca) hc, (div_lt_one hc).2 sub_lt_sub_right h₁ _⟩,
+        ?_⟩
+    simp only [← homothety_eq_lineMap, ← homothety_mul_apply, sub_mul, one_mul,
+      div_mul_cancel₀ _ hc.ne', sub_sub_sub_cancel_right]
 
 中文:
 定理 openSegment_subset_union
@@ -1489,7 +1516,18 @@ theorem openSegment_subset_union
     left
     have hc : 0 < c := h₀.trans hac
     refine ⟨a / c, ⟨div_pos h₀ hc, (div_lt_one hc).2 hac⟩, ?_⟩
-    simp only
+    simp only [← homothety_eq_lineMap, ← homothety_mul_apply, div_mul_cancel₀ _ hc.ne']
+  · left
+    rfl
+  · right
+    right
+    have hc : 0 < 1 - c := sub_pos.2 (hca.trans h₁)
+    simp only [← lineMap_apply_one_sub y]
+    refine
+⟨(a - c) / (1 - c), ⟨div_pos (sub_pos.2 hca) hc, (div_lt_one hc).2 sub_lt_sub_right h₁ _⟩,
+        ?_⟩
+    simp only [← homothety_eq_lineMap, ← homothety_mul_apply, sub_mul, one_mul,
+      div_mul_cancel₀ _ hc.ne', sub_sub_sub_cancel_right]
 
 Depends on / 依赖: div_lt_one, div_pos, hc.ne, hca.trans, homothety_eq_lineMap, homothety_mul_apply, lineMap_apply_one_sub, lt_trichotomy, mapsTo_iff_image_subset, openSegment_eq_image_lineMap, sub_pos
 -/
@@ -1728,7 +1766,11 @@ theorem Icc_subset_segment
   rw [← sub_nonneg] at hxz hyz
   rw [← sub_pos] at h
   refine ⟨(y - z) / (y - x), (z - x) / (y - x), div_nonneg hyz h.le, div_nonneg hxz h.le, ?_, ?_⟩
-  · rw [← add_div, sub_add_sub
+  · rw [← add_div, sub_add_sub_cancel, div_self h.ne']
+  · rw [smul_eq_mul, smul_eq_mul, ← mul_div_right_comm, ← mul_div_right_comm, ← add_div,
+      div_eq_iff h.ne', add_comm, sub_mul, sub_mul, mul_comm x, sub_add_sub_cancel, mul_sub]
+
+@[simp]
 
 中文:
 定理 Icc_subset_segment
@@ -1741,7 +1783,11 @@ theorem Icc_subset_segment
   rw [← sub_nonneg] at hxz hyz
   rw [← sub_pos] at h
   refine ⟨(y - z) / (y - x), (z - x) / (y - x), div_nonneg hyz h.le, div_nonneg hxz h.le, ?_, ?_⟩
-  · rw [← add_div, sub_add_sub
+  · rw [← add_div, sub_add_sub_cancel, div_self h.ne']
+  · rw [smul_eq_mul, smul_eq_mul, ← mul_div_right_comm, ← mul_div_right_comm, ← add_div,
+      div_eq_iff h.ne', add_comm, sub_mul, sub_mul, mul_comm x, sub_add_sub_cancel, mul_sub]
+
+@[simp]
 
 Depends on / 依赖: add_comm, add_div, antisymm, div_eq_iff, div_nonneg, div_self, eq_or_lt, h.le, h.ne, hxz.trans, hyz.antisymm, mul_comm, mul_div_right_comm, mul_sub, segment_same, smul_eq_mul, sub_add_sub_cancel, sub_mul, sub_nonneg, sub_pos
 -/
@@ -1952,7 +1998,12 @@ theorem Convex.mem_Ioc
     · rw [add_zero] at hab
       rw [hab]; rw [one_mul]; rw [zero_mul]; rw [add_zero] at hz
       exact (hz.1.ne rfl).elim
-    · exact ⟨a, b, ha,
+    · exact ⟨a, b, ha, hb', hab, rfl⟩
+  · rintro ⟨a, b, ha, hb, hab, rfl⟩
+    obtain rfl | ha' := ha.eq_or_lt
+    · rw [zero_add] at hab
+      rwa [hab, one_mul, zero_mul, zero_add, right_mem_Ioc]
+    · exact Ioo_subset_Ioc_self ((Convex.mem_Ioo h).2 ⟨a, b, ha', hb, hab, rfl⟩)
 
 中文:
 定理 凸.mem_Ioc
@@ -1964,7 +2015,12 @@ theorem Convex.mem_Ioc
     · rw [add_zero] at hab
       rw [hab]; rw [one_mul]; rw [zero_mul]; rw [add_zero] at hz
       exact (hz.1.ne rfl).elim
-    · exact ⟨a, b, ha,
+    · exact ⟨a, b, ha, hb', hab, rfl⟩
+  · rintro ⟨a, b, ha, hb, hab, rfl⟩
+    obtain rfl | ha' := ha.eq_or_lt
+    · rw [zero_add] at hab
+      rwa [hab, one_mul, zero_mul, zero_add, right_mem_Ioc]
+    · exact Ioo_subset_Ioc_self ((Convex.mem_Ioo h).2 ⟨a, b, ha', hb, hab, rfl⟩)
 
 Depends on / 依赖: Convex, Convex.mem_Icc, Convex.mem_Ioo, Ioc_subset_Icc_self, Ioo_subset_Ioc_self, add_zero, eq_or_lt, h.le, ha.eq_or_lt, hb.eq_or_lt, mem_Icc, mem_Ioo, one_mul, right_mem_Ioc, zero_add, zero_mul
 -/
@@ -1996,7 +2052,12 @@ theorem Convex.mem_Ico
     · rw [zero_add] at hab
       rw [hab]; rw [one_mul]; rw [zero_mul]; rw [zero_add] at hz
       exact (hz.2.ne rfl).elim
-    · exact ⟨a, b, ha'
+    · exact ⟨a, b, ha', hb, hab, rfl⟩
+  · rintro ⟨a, b, ha, hb, hab, rfl⟩
+    obtain rfl | hb' := hb.eq_or_lt
+    · rw [add_zero] at hab
+      rwa [hab, one_mul, zero_mul, add_zero, left_mem_Ico]
+    · exact Ioo_subset_Ico_self ((Convex.mem_Ioo h).2 ⟨a, b, ha, hb', hab, rfl⟩)
 
 中文:
 定理 凸.mem_Ico
@@ -2008,7 +2069,12 @@ theorem Convex.mem_Ico
     · rw [zero_add] at hab
       rw [hab]; rw [one_mul]; rw [zero_mul]; rw [zero_add] at hz
       exact (hz.2.ne rfl).elim
-    · exact ⟨a, b, ha'
+    · exact ⟨a, b, ha', hb, hab, rfl⟩
+  · rintro ⟨a, b, ha, hb, hab, rfl⟩
+    obtain rfl | hb' := hb.eq_or_lt
+    · rw [add_zero] at hab
+      rwa [hab, one_mul, zero_mul, add_zero, left_mem_Ico]
+    · exact Ioo_subset_Ico_self ((Convex.mem_Ioo h).2 ⟨a, b, ha, hb', hab, rfl⟩)
 
 Depends on / 依赖: Convex, Convex.mem_Icc, Convex.mem_Ioo, Ico_subset_Icc_self, Ioo_subset_Ico_self, add_zero, eq_or_lt, h.le, ha.eq_or_lt, hb.eq_or_lt, left_mem_Ico, mem_Icc, mem_Ioo, one_mul, zero_add, zero_mul
 -/

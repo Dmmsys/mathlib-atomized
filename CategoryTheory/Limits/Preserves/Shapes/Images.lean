@@ -51,7 +51,10 @@ m := L.map Limits.image.ι _
       m_mono := preserves_mono_of_preservesLimit _ _
 e := L.map factorThruImage _
       e_strong_epi := @strongEpi_of_epi B _ _ _ _ _ (preserves_epi_of_preservesColimit L _)
-      fac := 
+      fac := by rw [← L.map_comp, Limits.image.fac] }
+  IsImage.isoExt (Image.isImage (L.map f)) aux1.toMonoIsImage
+
+@[reassoc]
 
 中文:
 定义 iso
@@ -62,7 +65,10 @@ m := L.map Limits.image.ι _
       m_mono := preserves_mono_of_preservesLimit _ _
 e := L.map factorThruImage _
       e_strong_epi := @strongEpi_of_epi B _ _ _ _ _ (preserves_epi_of_preservesColimit L _)
-      fac := 
+      fac := by rw [← L.map_comp, Limits.image.fac] }
+  IsImage.isoExt (Image.isImage (L.map f)) aux1.toMonoIsImage
+
+@[reassoc]
 
 Depends on / 依赖: Image.isImage, IsImage, IsImage.isoExt, L.map, L.map_comp, L.obj, Limits, Limits.image, Limits.image.fac, StrongEpiMonoFactorisation, aux1.toMonoIsImage, e_strong_epi, factorThruImage, isImage, isoExt, m_mono, map_comp, preserves_epi_of_preservesColimit, preserves_mono_of_preservesLimit, strongEpi_of_epi
 -/

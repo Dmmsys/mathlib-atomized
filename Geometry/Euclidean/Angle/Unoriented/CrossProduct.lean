@@ -35,7 +35,9 @@ lemma norm_ofLp_crossProduct
 .mp ?_ refine sq_eq_sq₀ (by positivity) (by positivity)
   trans ‖a‖ ^ 2 * ‖b‖ ^ 2 - ⟪a, b⟫ ^ 2
   · simp_rw [norm_sq_eq_re_inner (𝕜 := Real), EuclideanSpace.inner_eq_star_dotProduct, star_trivial,
-      RCLike.re_to_real, cross_dot_cross, dotProduct_comm (ofLp b) (of
+      RCLike.re_to_real, cross_dot_cross, dotProduct_comm (ofLp b) (ofLp a), sq]
+  · linear_combination (‖a‖ * ‖b‖) ^ 2 * (sin_sq_add_cos_sq (angle a b)).symm +
+      congrArg (· ^ 2) (cos_angle_mul_norm_mul_norm a b)
 
 中文:
 引理 norm_ofLp_crossProduct
@@ -45,7 +47,9 @@ lemma norm_ofLp_crossProduct
 .mp ?_ refine sq_eq_sq₀ (by positivity) (by positivity)
   trans ‖a‖ ^ 2 * ‖b‖ ^ 2 - ⟪a, b⟫ ^ 2
   · simp_rw [norm_sq_eq_re_inner (𝕜 := Real), EuclideanSpace.inner_eq_star_dotProduct, star_trivial,
-      RCLike.re_to_real, cross_dot_cross, dotProduct_comm (ofLp b) (of
+      RCLike.re_to_real, cross_dot_cross, dotProduct_comm (ofLp b) (ofLp a), sq]
+  · linear_combination (‖a‖ * ‖b‖) ^ 2 * (sin_sq_add_cos_sq (angle a b)).symm +
+      congrArg (· ^ 2) (cos_angle_mul_norm_mul_norm a b)
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.inner_eq_star_dotProduct, RCLike, RCLike.re_to_real, cos_angle_mul_norm_mul_norm, cross_dot_cross, dotProduct_comm, inner_eq_star_dotProduct, linear_combination, norm_sq_eq_re_inner, re_to_real, simp_rw, sin_angle_nonneg, sin_sq_add_cos_sq, star_trivial
 -/

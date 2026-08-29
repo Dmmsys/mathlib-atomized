@@ -128,7 +128,9 @@ theorem of_isIntegral
 
 @[deprecated (since := "2026-05-08")] alias isIntegralClosure := of_isIntegral
 
-nonrec instance integralClosure [Nontrivial R] [IsDomain A] [Algebra R A
+nonrec instance integralClosure [Nontrivial R] [IsDomain A] [Algebra R A] [DimensionLEOne R] :
+    DimensionLEOne (integralClosure R A) :=
+  DimensionLEOne.of_isIntegral R (integralClosure R A)
 
 中文:
 定理 of_is整数egral
@@ -139,7 +141,9 @@ nonrec instance integralClosure [Nontrivial R] [IsDomain A] [Algebra R A
 
 @[deprecated (since := "2026-05-08")] alias isIntegralClosure := of_isIntegral
 
-nonrec instance integralClosure [Nontrivial R] [IsDomain A] [Algebra R A
+nonrec instance integralClosure [Nontrivial R] [IsDomain A] [Algebra R A] [DimensionLEOne R] :
+    DimensionLEOne (integralClosure R A) :=
+  DimensionLEOne.of_isIntegral R (integralClosure R A)
 
 Depends on / 依赖: ne_bot
 -/
@@ -352,7 +356,7 @@ theorem IsLocalRing.primesOver_eq
   refine Set.eq_singleton_iff_nonempty_unique_mem.mpr ⟨?_, fun P hP => ?_⟩
   · obtain ⟨w', hmax, hover⟩ := exists_maximal_ideal_liesOver_of_isIntegral (S := A) p
     exact ⟨w', hmax.isPrime, hover⟩
-· exact IsLocalRing.eq_maximalIdeal hP.1.isMaximal (Ide
+· exact IsLocalRing.eq_maximalIdeal hP.1.isMaximal (Ideal.ne_bot_of_mem_primesOver hp0 hP)
 
 中文:
 定理 是局部环.primesOver_eq
@@ -362,7 +366,7 @@ theorem IsLocalRing.primesOver_eq
   refine Set.eq_singleton_iff_nonempty_unique_mem.mpr ⟨?_, fun P hP => ?_⟩
   · obtain ⟨w', hmax, hover⟩ := exists_maximal_ideal_liesOver_of_isIntegral (S := A) p
     exact ⟨w', hmax.isPrime, hover⟩
-· exact IsLocalRing.eq_maximalIdeal hP.1.isMaximal (Ide
+· exact IsLocalRing.eq_maximalIdeal hP.1.isMaximal (Ideal.ne_bot_of_mem_primesOver hp0 hP)
 
 Depends on / 依赖: Ideal.ne_bot_of_mem_primesOver, IsDomain, IsLocalRing, IsLocalRing.eq_maximalIdeal, Set.eq_singleton_iff_nonempty_unique_mem.mpr, eq_maximalIdeal, eq_singleton_iff_nonempty_unique_mem, exists_maximal_ideal_liesOver_of_isIntegral, hmax.isPrime, isMaximal, isPrime, ne_bot_of_mem_primesOver, of_faithfulSMul
 -/

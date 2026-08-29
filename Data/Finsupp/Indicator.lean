@@ -310,7 +310,9 @@ theorem eq_indicator_iff
     simp only [this, funext_iff, indicator_apply]
     grind
   rw [Set.subset_def]; rw [and_comm]
-  have : (forall (i : ι), if hi : i in s then 
+  have : (forall (i : ι), if hi : i in s then f i hi = g i else g i = 0) ↔
+      ((forall (i : ι) (hi : i in s), f i hi = g i) ∧ forall i (hi : i ∉ s), g i = 0) := by grind
+  simp [this, not_imp_comm]
 
 中文:
 定理 eq_indicator_iff
@@ -322,7 +324,9 @@ theorem eq_indicator_iff
     simp only [this, funext_iff, indicator_apply]
     grind
   rw [Set.subset_def]; rw [and_comm]
-  have : (forall (i : ι), if hi : i in s then 
+  have : (forall (i : ι), if hi : i in s then f i hi = g i else g i = 0) ↔
+      ((forall (i : ι) (hi : i in s), f i hi = g i) ∧ forall i (hi : i ∉ s), g i = 0) := by grind
+  simp [this, not_imp_comm]
 
 Depends on / 依赖: Set.subset_def, XgcdType, XgcdType.z, add_assoc, and_comm, classical, funext_iff, g.support, indicator_apply, not_imp_comm, subset_def, subseteq, support
 -/

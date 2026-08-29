@@ -751,7 +751,10 @@ theorem bitwise_or
   · rw [Nat.bitwise_swap, Function.swap]
     congr
     funext x y
-    cases x <;> cases y <;
+    cases x <;> cases y <;> rfl
+  · simp
+  · congr
+    simp
 
 中文:
 定理 bitwise_or
@@ -764,7 +767,10 @@ theorem bitwise_or
   · rw [Nat.bitwise_swap, Function.swap]
     congr
     funext x y
-    cases x <;> cases y <;
+    cases x <;> cases y <;> rfl
+  · simp
+  · congr
+    simp
 
 Depends on / 依赖: Bool.not_false, Bool.or_true, Bool.true_or, Function, Function.swap, Nat.bitwise_swap, Nat.ldiff, bitwise, bitwise_swap, cond_true, natBitwise, negSucc, negSucc.injEq, not_false, or_true, true_or
 -/
@@ -798,7 +804,8 @@ theorem bitwise_and
     congr
     funext x y
     cases x <;> cases y <;> rfl
-  · 
+  · congr
+    simp
 
 中文:
 定理 bitwise_and
@@ -813,7 +820,8 @@ theorem bitwise_and
     congr
     funext x y
     cases x <;> cases y <;> rfl
-  · 
+  · congr
+    simp
 
 Depends on / 依赖: Bool.and_false, Bool.and_true, Bool.not_false, Function, Function.swap, Nat.bitwise_swap, and_false, and_true, bitwise, bitwise_swap, cond_false, cond_true, natBitwise, not_false
 -/
@@ -847,7 +855,10 @@ theorem bitwise_diff
     simp
   · congr
     simp
-  · rw [Nat.bitw
+  · rw [Nat.bitwise_swap, Function.swap]
+    congr
+    funext x y
+    cases x <;> cases y <;> rfl
 
 中文:
 定理 bitwise_diff
@@ -862,7 +873,10 @@ theorem bitwise_diff
     simp
   · congr
     simp
-  · rw [Nat.bitw
+  · rw [Nat.bitwise_swap, Function.swap]
+    congr
+    funext x y
+    cases x <;> cases y <;> rfl
 
 Depends on / 依赖: Bool.and_false, Bool.and_true, Bool.not_false, Bool.not_true, Function, Function.swap, Nat.bitwise_swap, Nat.ldiff, and_false, and_true, bitwise, bitwise_swap, cond_false, cond_true, natBitwise, negSucc, negSucc.injEq, not_false, not_true
 -/
@@ -896,6 +910,7 @@ theorem bitwise_xor
       Bool.true_xor, Bool.not_true,
       Int.xor, HXor.hXor, XorOp.xor, Nat.xor] <;> simp
 
+@[simp]
 
 中文:
 定理 bitwise_xor
@@ -908,6 +923,7 @@ theorem bitwise_xor
       Bool.true_xor, Bool.not_true,
       Int.xor, HXor.hXor, XorOp.xor, Nat.xor] <;> simp
 
+@[simp]
 
 Depends on / 依赖: Bool.bne_eq_xor, Bool.false_xor, Bool.not_false, Bool.not_true, Bool.true_xor, HXor.hXor, Int.xor, Nat.xor, XorOp.xor, bitwise, bne_eq_xor, cond_false, cond_true, false_xor, natBitwise, negSucc, negSucc.injEq, not_false, not_true, true_xor
 -/
@@ -933,7 +949,9 @@ theorem bitwise_bit
   · by_cases h : f false false <;> simp +decide [h]
   · by_cases h : f false true <;> simp +decide [h]
   · by_cases h : f true false <;> simp +decide [h]
+  · by_cases h : f true true <;> simp +decide [h]
 
+@[simp]
 
 中文:
 定理 bitwise_bit
@@ -945,7 +963,9 @@ theorem bitwise_bit
   · by_cases h : f false false <;> simp +decide [h]
   · by_cases h : f false true <;> simp +decide [h]
   · by_cases h : f true false <;> simp +decide [h]
+  · by_cases h : f true true <;> simp +decide [h]
 
+@[simp]
 
 Depends on / 依赖: Bool.not_false, bit_coe_nat, bit_negSucc, bitwise, natBitwise, not_false, ofNat_eq_natCast
 -/
@@ -1415,7 +1435,7 @@ lemma shiftLeft_natCast_right
     Nat.pow_eq, Int.natCast_pow, Nat.cast_ofNat, mul_def]
   · grind [Int.shiftLeft_eq']
   · simp only [negSucc_eq, ← natCast_add_one, Nat.shiftLeft'_true_eq_mul_pow]
-    grin
+    grind
 
 中文:
 引理 shiftLeft_natCast_right
@@ -1426,7 +1446,7 @@ lemma shiftLeft_natCast_right
     Nat.pow_eq, Int.natCast_pow, Nat.cast_ofNat, mul_def]
   · grind [Int.shiftLeft_eq']
   · simp only [negSucc_eq, ← natCast_add_one, Nat.shiftLeft'_true_eq_mul_pow]
-    grin
+    grind
 
 Depends on / 依赖: Int.natCast_pow, Int.shiftLeft_eq, Nat.cast_ofNat, Nat.pow_eq, Nat.shiftLeft, _false, _true_eq_mul_pow, cast_ofNat, mul_def, natCast_add_one, natCast_pow, natCast_shiftLeft, negSucc_eq, ofNat_eq_natCast, pow_eq, shiftLeft, shiftLeft_eq, unfold_projs
 -/

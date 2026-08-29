@@ -314,7 +314,16 @@ lemma isIso_leftSMul_iff
     ext <;> simp [Hom.smul_def]
   have h (Z : C) (f g : Z ⟶ X) (m : Z ⟶ M) (x : Z ⟶ X) :
       lift m x ≫ leftSMul M X = lift f g ↔ x = g ∧ m • x = f := by
-    simp [← lift_leftSMul_eq_lift_iff, Cartes
+    simp [← lift_leftSMul_eq_lift_iff, CartesianMonoidalCategory.hom_ext_iff]
+    grind
+  rw [isIso_iff_yoneda_map_bijective]
+  congr! with Z
+  rw [← Function.Bijective.of_comp_iff _ liftEquiv.bijective]; rw [Function.bijective_iff_existsUnique]
+  simp only [liftEquiv.surjective.forall, liftEquiv_apply, Prod.forall, Function.comp_apply, h]
+  rw [forall_comm]
+  congr! 2 with f g
+  exact Equiv.existsUnique_subtype_congr ⟨fun a => ⟨a.val.fst, by grind⟩,
+    fun a => ⟨⟨a.val, f⟩, by grind⟩, by cat_disch, by cat_disch⟩
 
 中文:
 引理 isIso_leftSMul_iff
@@ -324,7 +333,16 @@ lemma isIso_leftSMul_iff
     ext <;> simp [Hom.smul_def]
   have h (Z : C) (f g : Z ⟶ X) (m : Z ⟶ M) (x : Z ⟶ X) :
       lift m x ≫ leftSMul M X = lift f g ↔ x = g ∧ m • x = f := by
-    simp [← lift_leftSMul_eq_lift_iff, Cartes
+    simp [← lift_leftSMul_eq_lift_iff, CartesianMonoidalCategory.hom_ext_iff]
+    grind
+  rw [isIso_iff_yoneda_map_bijective]
+  congr! with Z
+  rw [← Function.Bijective.of_comp_iff _ liftEquiv.bijective]; rw [Function.bijective_iff_existsUnique]
+  simp only [liftEquiv.surjective.forall, liftEquiv_apply, Prod.forall, Function.comp_apply, h]
+  rw [forall_comm]
+  congr! 2 with f g
+  exact Equiv.existsUnique_subtype_congr ⟨fun a => ⟨a.val.fst, by grind⟩,
+    fun a => ⟨⟨a.val, f⟩, by grind⟩, by cat_disch, by cat_disch⟩
 
 Depends on / 依赖: Bijective, CartesianMonoidalCategory, CartesianMonoidalCategory.hom_ext_iff, Function, Function.Bijective.of_comp_iff, Function.bijective_iff_existsUnique, Hom.smul_def, bijective, bijective_iff_existsUnique, hom_ext_iff, isIso_iff_yoneda_map_bijective, leftSMul, liftEquiv, liftEquiv.bijective, liftEquiv.surjective.f, lift_leftSMul_eq_lift_iff, of_comp_iff, smul_def, surjective
 -/

@@ -235,7 +235,22 @@ lemma card_add_card_subsetSum_lt_card_subsetSum_insert_max
   -- `(insert a A).subsetSum`, and their combined cardinality gives the result.
   -- The sets are disjoint.
   have disjoint : Disjoint (insert 0 A) (a +ᵥ A.subsetSum) := by
-    have := nonneg_of_mem_subsetSum (fun y hy 
+    have := nonneg_of_mem_subsetSum (fun y hy => (hA y hy).le)
+    simpa [disjoint_left, mem_insert, mem_vadd_finset] using
+      ⟨fun x hx => (add_pos_of_pos_of_nonneg ha <| this _ hx).ne',
+        fun x hx y hy => (lt_add_of_lt_of_nonneg (hAa x hx) <| this _ hy).ne'⟩
+  -- Both sets are subsets of `(insert a A).subsetSum`.
+  have insert_subset : insert 0 A subseteq (insert a A).subsetSum := by
+    grw [insert_subset_iff, ← subset_insert]; exact ⟨zero_mem_subsetSum, subset_subsetSum⟩
+  have vadd_subset : a +ᵥ A.subsetSum subseteq (insert a A).subsetSum :=
+    vadd_finset_subsetSum_subset_subsetSum_insert fun ha => (hAa a ha).false
+  -- Count the sizes.
+  calc #A + #A.subsetSum
+    _ < #A + 1 + #A.subsetSum := by gcongr; exact Nat.lt_add_one _
+    _ = #(insert 0 A) + #A.subsetSum := by rw [card_insert_of_notMem fun h => (hA 0 h).false]
+    _ = #(insert 0 A) + #(a +ᵥ A.subsetSum) := by simp [vadd_finset_def, card_image_of_injOn]
+    _ = #((insert 0 A) union (a +ᵥ A.subsetSum)) := by rw [card_union_of_disjoint disjoint]
+    _ <= #(insert a A).subsetSum := by grw [union_subset insert_subset vadd_subset]
 
 中文:
 引理 card_add_card_subsetSum_lt_card_subsetSum_insert_max
@@ -245,7 +260,22 @@ lemma card_add_card_subsetSum_lt_card_subsetSum_insert_max
   -- `(insert a A).subsetSum`, and their combined cardinality gives the result.
   -- The sets are disjoint.
   have disjoint : Disjoint (insert 0 A) (a +ᵥ A.subsetSum) := by
-    have := nonneg_of_mem_subsetSum (fun y hy 
+    have := nonneg_of_mem_subsetSum (fun y hy => (hA y hy).le)
+    simpa [disjoint_left, mem_insert, mem_vadd_finset] using
+      ⟨fun x hx => (add_pos_of_pos_of_nonneg ha <| this _ hx).ne',
+        fun x hx y hy => (lt_add_of_lt_of_nonneg (hAa x hx) <| this _ hy).ne'⟩
+  -- Both sets are subsets of `(insert a A).subsetSum`.
+  have insert_subset : insert 0 A subseteq (insert a A).subsetSum := by
+    grw [insert_subset_iff, ← subset_insert]; exact ⟨zero_mem_subsetSum, subset_subsetSum⟩
+  have vadd_subset : a +ᵥ A.subsetSum subseteq (insert a A).subsetSum :=
+    vadd_finset_subsetSum_subset_subsetSum_insert fun ha => (hAa a ha).false
+  -- Count the sizes.
+  calc #A + #A.subsetSum
+    _ < #A + 1 + #A.subsetSum := by gcongr; exact Nat.lt_add_one _
+    _ = #(insert 0 A) + #A.subsetSum := by rw [card_insert_of_notMem fun h => (hA 0 h).false]
+    _ = #(insert 0 A) + #(a +ᵥ A.subsetSum) := by simp [vadd_finset_def, card_image_of_injOn]
+    _ = #((insert 0 A) union (a +ᵥ A.subsetSum)) := by rw [card_union_of_disjoint disjoint]
+    _ <= #(insert a A).subsetSum := by grw [union_subset insert_subset vadd_subset]
 -/
 lemma card_add_card_subsetSum_lt_card_subsetSum_insert_max (hA : forall x in A, 0 < x)
     (hAa : forall x in A, x < a) (ha : 0 < a) :
@@ -284,7 +314,9 @@ theorem card_succ_choose_two_lt_card_subsetSum_of_pos
   | insert a A A_lt_a ih =>
     have A_pos' : forall x in A, 0 < x := fun x hx => A_pos x (mem_insert_of_mem hx)
     grw [card_insert_of_notMem fun ha => (A_lt_a a ha).false, Nat.choose_succ_left _ _ (by lia),
-      Nat.choose_one_right,
+      Nat.choose_one_right, add_right_comm, add_assoc, Nat.add_one_le_iff.2 (ih A_pos')]
+exact card_add_card_subsetSum_lt_card_subsetSum_insert_max A_pos' A_lt_a A_pos a
+      mem_insert_self a A
 
 中文:
 定理 card_succ_choose_two_lt_card_subsetSum_of_pos
@@ -295,7 +327,9 @@ theorem card_succ_choose_two_lt_card_subsetSum_of_pos
   | insert a A A_lt_a ih =>
     have A_pos' : forall x in A, 0 < x := fun x hx => A_pos x (mem_insert_of_mem hx)
     grw [card_insert_of_notMem fun ha => (A_lt_a a ha).false, Nat.choose_succ_left _ _ (by lia),
-      Nat.choose_one_right,
+      Nat.choose_one_right, add_right_comm, add_assoc, Nat.add_one_le_iff.2 (ih A_pos')]
+exact card_add_card_subsetSum_lt_card_subsetSum_insert_max A_pos' A_lt_a A_pos a
+      mem_insert_self a A
 
 Depends on / 依赖: A_lt_a, A_pos, Nat.add_one_le_iff, Nat.choose_one_right, Nat.choose_succ_left, add_assoc, add_one_le_iff, add_right_comm, card_add_card_subsetSum_lt_card_subsetSum_insert_max, card_insert_of_notMem, choose_one_right, choose_succ_left, induction_on_max, insert, mem_insert_of_mem, mem_insert_self
 -/
@@ -322,7 +356,7 @@ theorem card_choose_two_lt_card_subsetSum_of_nonneg
     _ < #(A.erase 0).subsetSum :=
         card_succ_choose_two_lt_card_subsetSum_of_pos fun x hx =>
           (A_pos x (mem_of_mem_erase hx)).lt_of_ne (ne_of_mem_erase hx).symm
-   
+    _ = #A.subsetSum := by rw [subsetSum_erase_zero]
 
 中文:
 定理 card_choose_two_lt_card_subsetSum_of_nonneg
@@ -333,7 +367,7 @@ theorem card_choose_two_lt_card_subsetSum_of_nonneg
     _ < #(A.erase 0).subsetSum :=
         card_succ_choose_two_lt_card_subsetSum_of_pos fun x hx =>
           (A_pos x (mem_of_mem_erase hx)).lt_of_ne (ne_of_mem_erase hx).symm
-   
+    _ = #A.subsetSum := by rw [subsetSum_erase_zero]
 
 Depends on / 依赖: A.erase, A.subsetSum, A_pos, card_succ_choose_two_lt_card_subsetSum_of_pos, lt_of_ne, mem_of_mem_erase, ne_of_mem_erase, pred_card_le_card_erase, subsetSum, subsetSum_erase_zero, tsub_le_iff_right
 -/

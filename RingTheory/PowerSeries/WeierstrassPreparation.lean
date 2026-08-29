@@ -490,7 +490,22 @@ theorem coeff_seq_mem
     set n := (g.map (Ideal.Quotient.mk I)).order.toNat
     have hs := s.eq_X_pow_mul_shift_add_trunc n
     set s₀ := s.trunc n
-    set s₁ := PowerSeries.mk fun i => co
+    set s₁ := PowerSeries.mk fun i => coeff (i + n) s
+    set q' := q + s₁ * H.isUnit_shift.unit⁻¹
+    have key : f - g * q' = (s₀ : A⟦X⟧) - (g.trunc n : A⟦X⟧) * s₁ * H.isUnit_shift.unit⁻¹ := by
+      trans s + g * (q - q')
+      · simp_rw [s]; ring
+      simp_rw [q']
+      rw [sub_add_cancel_left]; rw [mul_neg]; rw [← mul_assoc]; rw [mul_right_comm]
+      nth_rw 1 [g.eq_X_pow_mul_shift_add_trunc n]
+      rw [add_mul]; rw [mul_assoc]; rw [IsUnit.mul_val_inv]; rw [hs]
+      ring
+    rw [key]; rw [map_sub]; rw [Polynomial.coeff_coe]; rw [coeff_trunc]; rw [if_neg hi.not_gt]; rw [zero_sub]; rw [neg_mem_iff]; rw [pow_succ']
+    refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal' (fun i => ?_) i
+    refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal'
+      (by simp [n, g.coeff_trunc_order_mem]) (fun i => ?_) i
+    rw [coeff_mk]
+    exact hq (by simp)
 
 中文:
 定理 coeff_seq_mem
@@ -505,7 +520,22 @@ theorem coeff_seq_mem
     set n := (g.map (Ideal.Quotient.mk I)).order.toNat
     have hs := s.eq_X_pow_mul_shift_add_trunc n
     set s₀ := s.trunc n
-    set s₁ := PowerSeries.mk fun i => co
+    set s₁ := PowerSeries.mk fun i => coeff (i + n) s
+    set q' := q + s₁ * H.isUnit_shift.unit⁻¹
+    have key : f - g * q' = (s₀ : A⟦X⟧) - (g.trunc n : A⟦X⟧) * s₁ * H.isUnit_shift.unit⁻¹ := by
+      trans s + g * (q - q')
+      · simp_rw [s]; ring
+      simp_rw [q']
+      rw [sub_add_cancel_left]; rw [mul_neg]; rw [← mul_assoc]; rw [mul_right_comm]
+      nth_rw 1 [g.eq_X_pow_mul_shift_add_trunc n]
+      rw [add_mul]; rw [mul_assoc]; rw [IsUnit.mul_val_inv]; rw [hs]
+      ring
+    rw [key]; rw [map_sub]; rw [Polynomial.coeff_coe]; rw [coeff_trunc]; rw [if_neg hi.not_gt]; rw [zero_sub]; rw [neg_mem_iff]; rw [pow_succ']
+    refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal' (fun i => ?_) i
+    refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal'
+      (by simp [n, g.coeff_trunc_order_mem]) (fun i => ?_) i
+    rw [coeff_mk]
+    exact hq (by simp)
 
 Depends on / 依赖: H.isUnit_shift.unit, H.seq, Ideal.Quotient.mk, PowerSeries, PowerSeries.mk, Quotient, eq_X_pow_mul_shift_add_trunc, g.map, g.trunc, generalizing, isUnit_shift, order.toNat, s.eq_X_pow_mul_shift_add_trunc, s.trunc, simp_rw, sub_add_cancel_left
 -/
@@ -620,7 +650,8 @@ definition divCoeff
       | base => rw [SModEq.def]
       | succ n hn ih =>
         refine ih.trans (SModEq.symm ?_)
-        rw [SModEq.sub_mem]; rw [s
+        rw [SModEq.sub_mem]; rw [smul_eq_mul]; rw [Ideal.mul_top]; rw [← map_sub]
+        exact Ideal.pow_le_pow_right hn (H.coeff_seq_succ_sub_seq_mem f n i)
 
 中文:
 定义 divCoeff
@@ -631,7 +662,8 @@ definition divCoeff
       | base => rw [SModEq.def]
       | succ n hn ih =>
         refine ih.trans (SModEq.symm ?_)
-        rw [SModEq.sub_mem]; rw [s
+        rw [SModEq.sub_mem]; rw [smul_eq_mul]; rw [Ideal.mul_top]; rw [← map_sub]
+        exact Ideal.pow_le_pow_right hn (H.coeff_seq_succ_sub_seq_mem f n i)
 
 Depends on / 依赖: Classical, Classical.indefiniteDescription, H.coeff_seq_succ_sub_seq_mem, H.seq, Ideal.mul_top, Ideal.pow_le_pow_right, IsPrecomplete, IsPrecomplete.prec, Nat.le_induction, SModEq, SModEq.def, SModEq.sub_mem, SModEq.symm, coeff_seq_succ_sub_seq_mem, ih.trans, indefiniteDescription, le_induction, map_sub, mul_top, pow_le_pow_right
 -/
@@ -734,7 +766,16 @@ theorem isWeierstrassDivisionAt_div_mod
     exact g.isWeierstrassDivisionAt_zero _
   constructor
   · exact degree_trunc_lt _ _
-  · rw [mod
+  · rw [mod, add_comm, ← sub_eq_iff_eq_add]
+    ext i
+    rw [Polynomial.coeff_coe]; rw [coeff_trunc]
+    split_ifs with hi
+    · rfl
+    refine IsHausdorff.haus' (I := I) _ fun k => ?_
+    rw [SModEq.zero]; rw [smul_eq_mul]; rw [Ideal.mul_top]; rw [show f - g * H.div f =
+      f - g * (H.seq f k) - g * (H.div f - (H.seq f k)) by ring]; rw [map_sub]
+exact Ideal.sub_mem _ (H.coeff_seq_mem f k (not_lt.1 hi))
+      coeff_mul_mem_ideal_of_coeff_right_mem_ideal' (H.coeff_div_sub_seq_mem f k) i
 
 中文:
 定理 isWeierstrassDivisionAt_div_mod
@@ -746,7 +787,16 @@ theorem isWeierstrassDivisionAt_div_mod
     exact g.isWeierstrassDivisionAt_zero _
   constructor
   · exact degree_trunc_lt _ _
-  · rw [mod
+  · rw [mod, add_comm, ← sub_eq_iff_eq_add]
+    ext i
+    rw [Polynomial.coeff_coe]; rw [coeff_trunc]
+    split_ifs with hi
+    · rfl
+    refine IsHausdorff.haus' (I := I) _ fun k => ?_
+    rw [SModEq.zero]; rw [smul_eq_mul]; rw [Ideal.mul_top]; rw [show f - g * H.div f =
+      f - g * (H.seq f k) - g * (H.div f - (H.seq f k)) by ring]; rw [map_sub]
+exact Ideal.sub_mem _ (H.coeff_seq_mem f k (not_lt.1 hi))
+      coeff_mul_mem_ideal_of_coeff_right_mem_ideal' (H.coeff_div_sub_seq_mem f k) i
 
 Depends on / 依赖: H.div, H.mod, Ideal.mul_top, IsAdicComplete, IsHausdorff, IsHausdorff.haus, Polynomial, Polynomial.coeff_coe, SModEq, SModEq.zero, Subsingleton, Subsingleton.elim, add_comm, coeff_coe, coeff_trunc, degree_trunc_lt, eq_or_ne, g.isWeierstrassDivisionAt_zero, isWeierstrassDivisionAt_zero, mul_top
 -/
@@ -782,7 +832,34 @@ theorem eq_zero_of_mul_eq
       refine IsHausdorff.haus' (I := I) _ fun k => ?_
       rw [SModEq.zero]; rw [smul_eq_mul]; rw [Ideal.mul_top]
       exact this _ _
-    rw [hq]; rw [mul_zero]; rw [Eq.comm]; rw [Polynomial.coe_eq_zero_iff] at h
+    rw [hq]; rw [mul_zero]; rw [Eq.comm]; rw [Polynomial.coe_eq_zero_iff] at heq
+    exact ⟨hq, heq⟩
+  intro k
+  induction k with
+  | zero => simp
+  | succ k ih =>
+    rw [g.eq_X_pow_mul_shift_add_trunc (g.map (Ideal.Quotient.mk I)).order.toNat] at heq
+    have h1 : forall i, coeff i r in I ^ (k + 1) := fun i => by
+      rcases lt_or_ge i (g.map (Ideal.Quotient.mk I)).order.toNat with hi | hi
+      · rw [← heq, pow_succ']
+        refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal i (fun j hj => ?_)
+          (fun j _ => ih j) i le_rfl
+        rw [map_add]; rw [Polynomial.coeff_coe]
+        refine Ideal.add_mem _ ?_ (g.coeff_trunc_order_mem I j)
+        simp_rw [coeff_X_pow_mul', if_neg (lt_of_le_of_lt hj hi).not_ge, zero_mem]
+      simp_rw [Polynomial.coeff_coe,
+        Polynomial.coeff_eq_zero_of_degree_lt (lt_of_lt_of_le hdeg (by simpa)), zero_mem]
+    rw [add_mul]; rw [mul_comm (X ^ _)]; rw [← eq_sub_iff_add_eq] at heq
+    replace heq := congr(H.isUnit_shift.unit⁻¹ * $heq)
+    rw [← mul_assoc]; rw [← mul_assoc]; rw [IsUnit.val_inv_mul]; rw [one_mul] at heq
+    intro i
+    rw [← coeff_X_pow_mul _ (g.map (Ideal.Quotient.mk I)).order.toNat i]; rw [heq]
+    refine coeff_mul_mem_ideal_of_coeff_right_mem_ideal' (fun i => ?_) _
+    rw [map_sub]
+    refine Ideal.sub_mem _ (h1 _) ?_
+    rw [pow_succ']
+    refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal' (fun i => ?_) ih _
+    simp_rw [Polynomial.coeff_coe, g.coeff_trunc_order_mem]
 
 中文:
 定理 eq_zero_of_mul_eq
@@ -794,7 +871,34 @@ theorem eq_zero_of_mul_eq
       refine IsHausdorff.haus' (I := I) _ fun k => ?_
       rw [SModEq.zero]; rw [smul_eq_mul]; rw [Ideal.mul_top]
       exact this _ _
-    rw [hq]; rw [mul_zero]; rw [Eq.comm]; rw [Polynomial.coe_eq_zero_iff] at h
+    rw [hq]; rw [mul_zero]; rw [Eq.comm]; rw [Polynomial.coe_eq_zero_iff] at heq
+    exact ⟨hq, heq⟩
+  intro k
+  induction k with
+  | zero => simp
+  | succ k ih =>
+    rw [g.eq_X_pow_mul_shift_add_trunc (g.map (Ideal.Quotient.mk I)).order.toNat] at heq
+    have h1 : forall i, coeff i r in I ^ (k + 1) := fun i => by
+      rcases lt_or_ge i (g.map (Ideal.Quotient.mk I)).order.toNat with hi | hi
+      · rw [← heq, pow_succ']
+        refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal i (fun j hj => ?_)
+          (fun j _ => ih j) i le_rfl
+        rw [map_add]; rw [Polynomial.coeff_coe]
+        refine Ideal.add_mem _ ?_ (g.coeff_trunc_order_mem I j)
+        simp_rw [coeff_X_pow_mul', if_neg (lt_of_le_of_lt hj hi).not_ge, zero_mem]
+      simp_rw [Polynomial.coeff_coe,
+        Polynomial.coeff_eq_zero_of_degree_lt (lt_of_lt_of_le hdeg (by simpa)), zero_mem]
+    rw [add_mul]; rw [mul_comm (X ^ _)]; rw [← eq_sub_iff_add_eq] at heq
+    replace heq := congr(H.isUnit_shift.unit⁻¹ * $heq)
+    rw [← mul_assoc]; rw [← mul_assoc]; rw [IsUnit.val_inv_mul]; rw [one_mul] at heq
+    intro i
+    rw [← coeff_X_pow_mul _ (g.map (Ideal.Quotient.mk I)).order.toNat i]; rw [heq]
+    refine coeff_mul_mem_ideal_of_coeff_right_mem_ideal' (fun i => ?_) _
+    rw [map_sub]
+    refine Ideal.sub_mem _ (h1 _) ?_
+    rw [pow_succ']
+    refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal' (fun i => ?_) ih _
+    simp_rw [Polynomial.coeff_coe, g.coeff_trunc_order_mem]
 
 Depends on / 依赖: Eq.comm, Ideal.Quotient.mk, Ideal.mul_top, IsHausdorff, IsHausdorff.haus, Polynomial, Polynomial.coe_eq_zero_iff, Quotient, SModEq, SModEq.zero, coe_eq_zero_iff, eq_X_pow_mul_shift_add_trunc, g.eq_X_pow_mul_shift_add_trunc, g.map, lt_or_ge, mul_top, mul_zero, order.toNat, smul_eq_mul
 -/
@@ -1086,7 +1190,18 @@ definition mod'
     rw [Ideal.mem_span_singleton'] at hf
     obtain ⟨a, ha⟩ := hf
     obtain ⟨hf1, hf2⟩ := H.isWeierstrassDivisionAt_div_mod f
-    obtain ⟨hf'1, hf'2⟩ := H.isWeierstrassDivisionA
+    obtain ⟨hf'1, hf'2⟩ := H.isWeierstrassDivisionAt_div_mod f'
+    rw [eq_sub_iff_add_eq]; rw [hf2]; rw [hf'2]; rw [← add_assoc]; rw [mul_comm]; rw [← mul_add] at ha
+    exact (H.eq_of_mul_add_eq_mul_add hf'1 hf1 ha).2.symm
+  map_add' f f' := by
+    obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
+    obtain ⟨f', rfl⟩ := Ideal.Quotient.mk_surjective f'
+    exact H.mod_add f f'
+  map_smul' a f := by
+    obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
+    exact H.mod_smul a f
+
+@[simp]
 
 中文:
 定义 mod'
@@ -1096,7 +1211,18 @@ definition mod'
     rw [Ideal.mem_span_singleton'] at hf
     obtain ⟨a, ha⟩ := hf
     obtain ⟨hf1, hf2⟩ := H.isWeierstrassDivisionAt_div_mod f
-    obtain ⟨hf'1, hf'2⟩ := H.isWeierstrassDivisionA
+    obtain ⟨hf'1, hf'2⟩ := H.isWeierstrassDivisionAt_div_mod f'
+    rw [eq_sub_iff_add_eq]; rw [hf2]; rw [hf'2]; rw [← add_assoc]; rw [mul_comm]; rw [← mul_add] at ha
+    exact (H.eq_of_mul_add_eq_mul_add hf'1 hf1 ha).2.symm
+  map_add' f f' := by
+    obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
+    obtain ⟨f', rfl⟩ := Ideal.Quotient.mk_surjective f'
+    exact H.mod_add f f'
+  map_smul' a f := by
+    obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
+    exact H.mod_smul a f
+
+@[simp]
 
 Depends on / 依赖: H.eq_of_mul_add_eq_mul_add, H.isWeierstrassDivisionAt_div_mod, H.mod, Ideal.Quotient, Ideal.mem_span_singleton, Ideal.span, Quotient, Quotient.lift, Submodule, Submodule.quotientRel_def, add_assoc, eq_of_mul_add_eq_mul_add, eq_sub_iff_add_eq, isWeierstrassDivisionAt_div_mod, map_add, mem_span_singleton, mul_add, mul_comm, quotientRel_def
 -/
@@ -1236,7 +1362,31 @@ definition _root_.Polynomial.IsDistinguishedAt.algEquivQuotient
     obtain ⟨b, hb⟩ := Ideal.mem_span_singleton'.1 ha
     simp only [Ideal.mem_comap, Polynomial.coeToPowerSeries.algHom_apply, Algebra.algebraMap_self,
       map_id, id_eq, Ideal.mem_span_singleton']
-    exact ⟨b, by simp [← 
+    exact ⟨b, by simp [← hb]⟩
+  invFun := Ideal.Quotient.mk _ ∘ H.isWeierstrassDivisorAt'.mod'
+  left_inv f := by
+    rcases subsingleton_or_nontrivial A with _ | _
+    · have : Subsingleton A[X] := inferInstance
+      have : Subsingleton (A[X] ⧸ Ideal.span {g}) := Quot.Subsingleton
+      exact Subsingleton.elim _ _
+    have hI : I != ⊤ := by
+      rintro rfl
+      exact not_subsingleton _ ‹IsAdicComplete ⊤ A›.toIsHausdorff.subsingleton
+    have := Ideal.Quotient.nontrivial_iff.mpr hI
+    obtain ⟨f, hfdeg, rfl⟩ : exists r : A[X], r.degree < g.degree ∧ Ideal.Quotient.mk _ r = f := by
+      obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
+      refine ⟨f %ₘ g, Polynomial.degree_modByMonic_lt f H.monic, ?_⟩
+      rw [Eq.comm]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
+      exact ⟨f /ₘ g, by rw [Polynomial.modByMonic_eq_sub_mul_div]; ring⟩
+    have h1 : g.degree = ((g : A⟦X⟧).map (Ideal.Quotient.mk I)).order.toNat := by
+      convert!
+        H.degree_eq_coe_lift_order_map g 1 (by rwa [constantCoeff_one, ← Ideal.ne_top_iff_one])
+          (by simp)
+      exact (ENat.lift_eq_toNat_of_lt_top _).symm
+    dsimp
+    rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
+    exact ⟨0, by simp [H.isWeierstrassDivisorAt'.mod_coe_eq_self (hfdeg.trans_eq h1)]⟩
+  right_inv f := by exact H.isWeierstrassDivisorAt'.mk_mod'_eq_self
 
 中文:
 定义 _root_.多项式.是DistinguishedAt.algEquivQuotient
@@ -1245,7 +1395,31 @@ definition _root_.Polynomial.IsDistinguishedAt.algEquivQuotient
     obtain ⟨b, hb⟩ := Ideal.mem_span_singleton'.1 ha
     simp only [Ideal.mem_comap, Polynomial.coeToPowerSeries.algHom_apply, Algebra.algebraMap_self,
       map_id, id_eq, Ideal.mem_span_singleton']
-    exact ⟨b, by simp [← 
+    exact ⟨b, by simp [← hb]⟩
+  invFun := Ideal.Quotient.mk _ ∘ H.isWeierstrassDivisorAt'.mod'
+  left_inv f := by
+    rcases subsingleton_or_nontrivial A with _ | _
+    · have : Subsingleton A[X] := inferInstance
+      have : Subsingleton (A[X] ⧸ Ideal.span {g}) := Quot.Subsingleton
+      exact Subsingleton.elim _ _
+    have hI : I != ⊤ := by
+      rintro rfl
+      exact not_subsingleton _ ‹IsAdicComplete ⊤ A›.toIsHausdorff.subsingleton
+    have := Ideal.Quotient.nontrivial_iff.mpr hI
+    obtain ⟨f, hfdeg, rfl⟩ : exists r : A[X], r.degree < g.degree ∧ Ideal.Quotient.mk _ r = f := by
+      obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
+      refine ⟨f %ₘ g, Polynomial.degree_modByMonic_lt f H.monic, ?_⟩
+      rw [Eq.comm]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
+      exact ⟨f /ₘ g, by rw [Polynomial.modByMonic_eq_sub_mul_div]; ring⟩
+    have h1 : g.degree = ((g : A⟦X⟧).map (Ideal.Quotient.mk I)).order.toNat := by
+      convert!
+        H.degree_eq_coe_lift_order_map g 1 (by rwa [constantCoeff_one, ← Ideal.ne_top_iff_one])
+          (by simp)
+      exact (ENat.lift_eq_toNat_of_lt_top _).symm
+    dsimp
+    rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
+    exact ⟨0, by simp [H.isWeierstrassDivisorAt'.mod_coe_eq_self (hfdeg.trans_eq h1)]⟩
+  right_inv f := by exact H.isWeierstrassDivisorAt'.mk_mod'_eq_self
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_self, H.isWeierstrassDivisorAt, Ideal.Quotient.mk, Ideal.mem_comap, Ideal.mem_span_singleton, Ideal.quotientMap, Ideal.span, Polynomial, Polynomial.coeToPowerSeries.algHom, Polynomial.coeToPowerSeries.algHom_apply, Quotient, Subsingleton, algHom, algHom_apply, algebraMap_self, coeToPowerSeries, id_eq, invFun, isWeierstrassDivisorAt
 -/
@@ -2110,7 +2284,16 @@ theorem IsWeierstrassDivision.isUnit_of_map_ne_zero
   set n := (g.map (IsLocalRing.residue A)).order.toNat
   replace H2 := congr(coeff n (($H2).map (IsLocalRing.residue A)))
   simp_rw [map_pow, map_X, coeff_X_pow_self, map_add, map_mul, coeff_map,
-    Polynomial.coeff_
+    Polynomial.coeff_coe, Polynomial.coeff_eq_zero_of_degree_lt H1, map_zero, add_zero] at H2
+  rw [isUnit_iff_constantCoeff]; rw [← isUnit_map_iff (IsLocalRing.residue A)]
+  rw [coeff_mul]; rw [← Finset.sum_subset (s₁ := {(n]; rw [0)}) (by simp) (fun p hp hnotMem => ?_)]; rw [Finset.sum_singleton]; rw [coeff_map]; rw [coeff_map]; rw [coeff_zero_eq_constantCoeff]; rw [mul_comm] at H2
+  · exact .of_mul_eq_one _ H2.symm
+  · rw [coeff_of_lt_order p.1 ?_]
+    · rw [zero_mul]
+    · rw [← ENat.lt_lift_iff (h := order_finite_iff_ne_zero.2 hg), ENat.lift_eq_toNat_of_lt_top]
+      refine (Finset.HasAntidiagonal.antidiagonal.fst_le hp).lt_of_ne ?_
+      contrapose hnotMem
+      rwa [Finset.mem_singleton, Finset.HasAntidiagonal.antidiagonal_congr hp (by simp)]
 
 中文:
 定理 IsWeierstrassDivision.isUnit_of_map_ne_zero
@@ -2119,7 +2302,16 @@ theorem IsWeierstrassDivision.isUnit_of_map_ne_zero
   set n := (g.map (IsLocalRing.residue A)).order.toNat
   replace H2 := congr(coeff n (($H2).map (IsLocalRing.residue A)))
   simp_rw [map_pow, map_X, coeff_X_pow_self, map_add, map_mul, coeff_map,
-    Polynomial.coeff_
+    Polynomial.coeff_coe, Polynomial.coeff_eq_zero_of_degree_lt H1, map_zero, add_zero] at H2
+  rw [isUnit_iff_constantCoeff]; rw [← isUnit_map_iff (IsLocalRing.residue A)]
+  rw [coeff_mul]; rw [← Finset.sum_subset (s₁ := {(n]; rw [0)}) (by simp) (fun p hp hnotMem => ?_)]; rw [Finset.sum_singleton]; rw [coeff_map]; rw [coeff_map]; rw [coeff_zero_eq_constantCoeff]; rw [mul_comm] at H2
+  · exact .of_mul_eq_one _ H2.symm
+  · rw [coeff_of_lt_order p.1 ?_]
+    · rw [zero_mul]
+    · rw [← ENat.lt_lift_iff (h := order_finite_iff_ne_zero.2 hg), ENat.lift_eq_toNat_of_lt_top]
+      refine (Finset.HasAntidiagonal.antidiagonal.fst_le hp).lt_of_ne ?_
+      contrapose hnotMem
+      rwa [Finset.mem_singleton, Finset.HasAntidiagonal.antidiagonal_congr hp (by simp)]
 
 Depends on / 依赖: Finset, Finset.sum_subset, IsLocalRing, IsLocalRing.residue, Polynomial, Polynomial.coeff_coe, Polynomial.coeff_eq_zero_of_degree_lt, add_zero, coeff_X_pow_self, coeff_coe, coeff_eq_zero_of_degree_lt, coeff_map, coeff_mul, degree, g.map, isUnit_iff_constantCoeff, isUnit_map_iff, map_X, map_add, map_mul
 -/
@@ -2153,7 +2345,16 @@ theorem IsWeierstrassDivision.isWeierstrassFactorization
   set f := Polynomial.X ^ n - r
   replace H1 : r.degree < (Polynomial.X (R := A) ^ n).degree := by rwa [Polynomial.degree_X_pow]
   have hfdeg : f.natDegree = n := by
-  
+    suffices f.degree = n by rw [Polynomial.natDegree, this]; rfl
+    rw [Polynomial.degree_sub_eq_left_of_degree_lt H1]; rw [Polynomial.degree_X_pow]
+  refine ⟨⟨⟨fun {i} hi => ?_⟩, .sub_of_left (Polynomial.monic_X_pow _) H1⟩, Units.isUnit _, ?_⟩
+  · rw [hfdeg] at hi
+    simp_rw [f, Polynomial.coeff_sub, Polynomial.coeff_X_pow, if_neg hi.ne, zero_sub, neg_mem_iff]
+    have := H.coeff_f_sub_r_mem hi
+    rwa [map_sub, coeff_X_pow, if_neg hi.ne, zero_sub, neg_mem_iff, Polynomial.coeff_coe] at this
+  · have := congr($(H.2) * ↑(H.isUnit_of_map_ne_zero hg).unit⁻¹)
+    rw [add_mul]; rw [mul_assoc]; rw [IsUnit.mul_val_inv]; rw [mul_one]; rw [← sub_eq_iff_eq_add] at this
+    simp_rw [← this, f, Polynomial.coe_sub, Polynomial.coe_pow, Polynomial.coe_X, sub_mul]
 
 中文:
 定理 IsWeierstrassDivision.isWeierstrassFactorization
@@ -2163,7 +2364,16 @@ theorem IsWeierstrassDivision.isWeierstrassFactorization
   set f := Polynomial.X ^ n - r
   replace H1 : r.degree < (Polynomial.X (R := A) ^ n).degree := by rwa [Polynomial.degree_X_pow]
   have hfdeg : f.natDegree = n := by
-  
+    suffices f.degree = n by rw [Polynomial.natDegree, this]; rfl
+    rw [Polynomial.degree_sub_eq_left_of_degree_lt H1]; rw [Polynomial.degree_X_pow]
+  refine ⟨⟨⟨fun {i} hi => ?_⟩, .sub_of_left (Polynomial.monic_X_pow _) H1⟩, Units.isUnit _, ?_⟩
+  · rw [hfdeg] at hi
+    simp_rw [f, Polynomial.coeff_sub, Polynomial.coeff_X_pow, if_neg hi.ne, zero_sub, neg_mem_iff]
+    have := H.coeff_f_sub_r_mem hi
+    rwa [map_sub, coeff_X_pow, if_neg hi.ne, zero_sub, neg_mem_iff, Polynomial.coeff_coe] at this
+  · have := congr($(H.2) * ↑(H.isUnit_of_map_ne_zero hg).unit⁻¹)
+    rw [add_mul]; rw [mul_assoc]; rw [IsUnit.mul_val_inv]; rw [mul_one]; rw [← sub_eq_iff_eq_add] at this
+    simp_rw [← this, f, Polynomial.coe_sub, Polynomial.coe_pow, Polynomial.coe_X, sub_mul]
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.residue, Polynomial, Polynomial.X, Polynomial.degree_X_pow, Polynomial.degree_sub_eq_left_of_degree_lt, Polynomial.monic_X_pow, Polynomial.natDegree, degree, degree_X_pow, degree_sub_eq_left_of_degree_lt, f.degree, f.natDegree, g.map, monic_X_pow, natDegree, order.toNat, r.degree, replace, residue
 -/
@@ -2200,7 +2410,10 @@ theorem IsWeierstrassFactorization.isWeierstrassDivision
   · refine (Polynomial.degree_sub_lt_left ?_ (Polynomial.monic_X_pow n).ne_zero ?_).trans_eq
       (by simpa)
     · simp_rw [H.degree_eq_coe_lift_order_map, Polynomial.degree_X_pow, n,
-        ENat.lift_eq_toNat_of_lt_to
+        ENat.lift_eq_toNat_of_lt_top]
+    · rw [(Polynomial.monic_X_pow n).leadingCoeff, H.isDistinguishedAt.monic.leadingCoeff]
+  · simp_rw [H.eq_mul, mul_assoc, IsUnit.mul_val_inv, mul_one, Polynomial.coe_sub,
+      Polynomial.coe_pow, Polynomial.coe_X, add_sub_cancel]
 
 中文:
 定理 IsWeierstrassFactorization.isWeierstrassDivision
@@ -2210,7 +2423,10 @@ theorem IsWeierstrassFactorization.isWeierstrassDivision
   · refine (Polynomial.degree_sub_lt_left ?_ (Polynomial.monic_X_pow n).ne_zero ?_).trans_eq
       (by simpa)
     · simp_rw [H.degree_eq_coe_lift_order_map, Polynomial.degree_X_pow, n,
-        ENat.lift_eq_toNat_of_lt_to
+        ENat.lift_eq_toNat_of_lt_top]
+    · rw [(Polynomial.monic_X_pow n).leadingCoeff, H.isDistinguishedAt.monic.leadingCoeff]
+  · simp_rw [H.eq_mul, mul_assoc, IsUnit.mul_val_inv, mul_one, Polynomial.coe_sub,
+      Polynomial.coe_pow, Polynomial.coe_X, add_sub_cancel]
 
 Depends on / 依赖: ENat.lift_eq_toNat_of_lt_top, H.degree_eq_coe_lift_order_map, H.eq_mul, H.isDistinguishedAt.monic.leadingCoeff, IsLocalRing, IsLocalRing.residue, IsUnit, IsUnit.mul_val_inv, Polynomial, Polynomial.coe_X, Polynomial.coe_pow, Polynomial.coe_sub, Polynomial.degree_X_pow, Polynomial.degree_sub_lt_left, Polynomial.monic_X_pow, add_sub_cancel, coe_X, coe_pow, coe_sub, degree_X_pow
 -/
@@ -2451,7 +2667,10 @@ theorem weierstrassDistinguished_mul
     (fun h => hg (by simp [h]))
   have H' := g'.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [h]))
-  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistin
+  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
+  exact (H''.elim (H.mul H')).1
+
+@[simp]
 
 中文:
 定理 weierstrassDistinguished_mul
@@ -2461,7 +2680,10 @@ theorem weierstrassDistinguished_mul
     (fun h => hg (by simp [h]))
   have H' := g'.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [h]))
-  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistin
+  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
+  exact (H''.elim (H.mul H')).1
+
+@[simp]
 
 Depends on / 依赖: H.mul, g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
 -/
@@ -2488,7 +2710,10 @@ theorem weierstrassUnit_mul
     (fun h => hg (by simp [h]))
   have H' := g'.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [h]))
-  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistin
+  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
+  exact (H''.elim (H.mul H')).2
+
+@[simp]
 
 中文:
 定理 weierstrassUnit_mul
@@ -2498,7 +2723,10 @@ theorem weierstrassUnit_mul
     (fun h => hg (by simp [h]))
   have H' := g'.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [h]))
-  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistin
+  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
+  exact (H''.elim (H.mul H')).2
+
+@[simp]
 
 Depends on / 依赖: H.mul, g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
 -/
@@ -2524,7 +2752,10 @@ theorem weierstrassDistinguished_smul
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [Algebra.smul_def, h]))
   have H' := (a • g).isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra
+  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra.smul_def, h])
+  exact (H'.elim (H.smul (by simpa using ha))).1
+
+@[simp]
 
 中文:
 定理 weierstrassDistinguished_smul
@@ -2533,7 +2764,10 @@ theorem weierstrassDistinguished_smul
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [Algebra.smul_def, h]))
   have H' := (a • g).isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra
+  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra.smul_def, h])
+  exact (H'.elim (H.smul (by simpa using ha))).1
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, H.smul, IsLocalRing, IsLocalRing.residue, g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, residue, smul_def
 -/
@@ -2557,7 +2791,8 @@ theorem weierstrassUnit_smul
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [Algebra.smul_def, h]))
   have H' := (a • g).isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra
+  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra.smul_def, h])
+  exact (H'.elim (H.smul (by simpa using ha))).2
 
 中文:
 定理 weierstrassUnit_smul
@@ -2566,7 +2801,8 @@ theorem weierstrassUnit_smul
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [Algebra.smul_def, h]))
   have H' := (a • g).isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra
+  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra.smul_def, h])
+  exact (H'.elim (H.smul (by simpa using ha))).2
 
 Depends on / 依赖: Algebra, Algebra.smul_def, H.smul, IsLocalRing, IsLocalRing.residue, g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, residue, smul_def
 -/

@@ -104,7 +104,18 @@ theorem charpoly_sub_diagonal_degree_lt
   rw [charpoly]; rw [det_apply']; rw [← insert_erase (mem_univ (Equiv.refl n))]; rw [sum_insert (notMem_erase (Equiv.refl n) univ)]; rw [add_comm]
   simp only [charmatrix_apply_eq, one_mul, Equiv.Perm.sign_refl, id, Int.cast_one,
     Units.val_one, add_sub_cancel_right, Equiv.coe_refl]
-  rw [← me
+  rw [← mem_degreeLT]
+  apply Submodule.sum_mem (degreeLT R (Fintype.card n - 1))
+  intro c hc; rw [← C_eq_intCast, C_mul']
+  apply Submodule.smul_mem (degreeLT R (Fintype.card n - 1)) ↑↑(Equiv.Perm.sign c)
+  rw [mem_degreeLT]
+  apply lt_of_le_of_lt degree_le_natDegree _
+  rw [Nat.cast_lt]
+  apply lt_of_le_of_lt _ (Equiv.Perm.fixed_point_card_lt_of_ne_one (ne_of_mem_erase hc))
+  apply le_trans (Polynomial.natDegree_prod_le univ fun i : n => charmatrix M (c i) i) _
+  rw [card_eq_sum_ones]; rw [sum_filter]; apply sum_le_sum
+  intros
+  apply charmatrix_apply_natDegree_le
 
 中文:
 定理 charpoly_sub_diagonal_degree_lt
@@ -112,7 +123,18 @@ theorem charpoly_sub_diagonal_degree_lt
   rw [charpoly]; rw [det_apply']; rw [← insert_erase (mem_univ (Equiv.refl n))]; rw [sum_insert (notMem_erase (Equiv.refl n) univ)]; rw [add_comm]
   simp only [charmatrix_apply_eq, one_mul, Equiv.Perm.sign_refl, id, Int.cast_one,
     Units.val_one, add_sub_cancel_right, Equiv.coe_refl]
-  rw [← me
+  rw [← mem_degreeLT]
+  apply Submodule.sum_mem (degreeLT R (Fintype.card n - 1))
+  intro c hc; rw [← C_eq_intCast, C_mul']
+  apply Submodule.smul_mem (degreeLT R (Fintype.card n - 1)) ↑↑(Equiv.Perm.sign c)
+  rw [mem_degreeLT]
+  apply lt_of_le_of_lt degree_le_natDegree _
+  rw [Nat.cast_lt]
+  apply lt_of_le_of_lt _ (Equiv.Perm.fixed_point_card_lt_of_ne_one (ne_of_mem_erase hc))
+  apply le_trans (Polynomial.natDegree_prod_le univ fun i : n => charmatrix M (c i) i) _
+  rw [card_eq_sum_ones]; rw [sum_filter]; apply sum_le_sum
+  intros
+  apply charmatrix_apply_natDegree_le
 
 Depends on / 依赖: C_eq_intCast, C_mul, Equiv.Perm.sign, Equiv.Perm.sign_refl, Equiv.coe_refl, Equiv.refl, Fintype, Fintype.card, Int.cast_one, Submodule, Submodule.smul_mem, Submodule.sum_mem, Units.val_one, add_comm, add_sub_cancel_right, cast_one, charmatrix_apply_eq, charpoly, coe_refl, degreeLT
 -/
@@ -184,7 +206,18 @@ theorem charpoly_degree_eq_dim
     · assumption
   rw [← sub_add_cancel M.charpoly (∏ i : n]; rw [(X - C (M i i)))]
   -- Porting note: added `↑` in front of `Fintype.card n`
-  have h1 : (∏ i : n, (X - C (M i i))).degr
+  have h1 : (∏ i : n, (X - C (M i i))).degree = ↑(Fintype.card n) := by
+    rw [degree_eq_iff_natDegree_eq_of_pos (Nat.pos_of_ne_zero h)]; rw [natDegree_prod']
+    · simp_rw [natDegree_X_sub_C]
+      rw [← Finset.card_univ]; rw [sum_const]; rw [smul_eq_mul]; rw [mul_one]
+    simp_rw [(monic_X_sub_C _).leadingCoeff]
+    simp
+  rw [degree_add_eq_right_of_degree_lt]
+  · exact h1
+  rw [h1]
+  apply lt_trans (charpoly_sub_diagonal_degree_lt M)
+  rw [Nat.cast_lt]
+  lia
 
 中文:
 定理 charpoly_degree_eq_dim
@@ -198,7 +231,18 @@ theorem charpoly_degree_eq_dim
     · assumption
   rw [← sub_add_cancel M.charpoly (∏ i : n]; rw [(X - C (M i i)))]
   -- Porting note: added `↑` in front of `Fintype.card n`
-  have h1 : (∏ i : n, (X - C (M i i))).degr
+  have h1 : (∏ i : n, (X - C (M i i))).degree = ↑(Fintype.card n) := by
+    rw [degree_eq_iff_natDegree_eq_of_pos (Nat.pos_of_ne_zero h)]; rw [natDegree_prod']
+    · simp_rw [natDegree_X_sub_C]
+      rw [← Finset.card_univ]; rw [sum_const]; rw [smul_eq_mul]; rw [mul_one]
+    simp_rw [(monic_X_sub_C _).leadingCoeff]
+    simp
+  rw [degree_add_eq_right_of_degree_lt]
+  · exact h1
+  rw [h1]
+  apply lt_trans (charpoly_sub_diagonal_degree_lt M)
+  rw [Nat.cast_lt]
+  lia
 
 Depends on / 依赖: Fintype, Fintype.card, M.charpoly, charpoly, det_eq_one_of_card_eq_zero, sub_add_cancel
 -/
@@ -257,7 +301,15 @@ theorem charpoly_monic
   have mon : (∏ i : n, (X - C (M i i))).Monic := by
     apply monic_prod_of_monic univ fun i : n => X - C (M i i)
     simp [monic_X_sub_C]
-  rw [← sub_add_cancel (∏ i : n]; rw [
+  rw [← sub_add_cancel (∏ i : n]; rw [(X - C (M i i))) M.charpoly] at mon
+  rw [Monic] at *
+  rwa [leadingCoeff_add_of_degree_lt] at mon
+  rw [charpoly_degree_eq_dim]
+  rw [← neg_sub]
+  rw [degree_neg]
+  apply lt_trans (charpoly_sub_diagonal_degree_lt M)
+  rw [Nat.cast_lt]
+  lia
 
 中文:
 定理 charpoly_monic
@@ -271,7 +323,15 @@ theorem charpoly_monic
   have mon : (∏ i : n, (X - C (M i i))).Monic := by
     apply monic_prod_of_monic univ fun i : n => X - C (M i i)
     simp [monic_X_sub_C]
-  rw [← sub_add_cancel (∏ i : n]; rw [
+  rw [← sub_add_cancel (∏ i : n]; rw [(X - C (M i i))) M.charpoly] at mon
+  rw [Monic] at *
+  rwa [leadingCoeff_add_of_degree_lt] at mon
+  rw [charpoly_degree_eq_dim]
+  rw [← neg_sub]
+  rw [degree_neg]
+  apply lt_trans (charpoly_sub_diagonal_degree_lt M)
+  rw [Nat.cast_lt]
+  lia
 
 Depends on / 依赖: Fintype, Fintype.card, M.charpoly, Nat.cast_lt, cast_lt, charpoly, charpoly_degree_eq_dim, charpoly_sub_diagonal_degree_lt, degree_neg, det_eq_one_of_card_eq_zero, leadingCoeff_add_of_degree_lt, lt_trans, monic_X_sub_C, monic_one, monic_prod_of_monic, neg_sub, nontriviality, sub_add_cancel
 -/
@@ -385,7 +445,23 @@ lemma derivative_det_one_add_X_smul_aux
     rw [det_succ_row_zero]; rw [map_sum]; rw [eval_finsetSum]
     simp only [add_apply, smul_apply, map_apply, smul_eq_mul, X_mul_C, submatrix_add,
       submatrix_smul, Pi.add_apply, Pi.smul_apply, submatrix_map, derivative_mul, map_add,
-     
+      derivative_C, zero_mul, derivative_X, mul_one, zero_add, eval_add, eval_mul, eval_C, eval_X,
+      mul_zero, add_zero, eval_det_add_X_smul, eval_pow, eval_neg, eval_one]
+    rw [Finset.sum_eq_single 0]
+    · simp only [Fin.val_zero, pow_zero, derivative_one, eval_zero, one_apply_eq, eval_one,
+        mul_one, zero_add, one_mul, Fin.succAbove_zero, submatrix_one _ (Fin.succ_injective _),
+        det_one, IH, trace_submatrix_succ]
+    · intro i _ hi
+      cases n with
+      | zero => exact (hi (Subsingleton.elim i 0)).elim
+      | succ n =>
+        simp only [one_apply_ne' hi, eval_zero, mul_zero, zero_add, zero_mul, add_zero]
+        rw [det_eq_zero_of_column_eq_zero 0]; rw [eval_zero]; rw [mul_zero]
+        intro j
+        rw [submatrix_apply]; rw [Fin.succAbove_of_castSucc_lt]; rw [one_apply_ne]
+        · exact (bne_iff_ne (a := Fin.succ j) (b := Fin.castSucc 0)).mp rfl
+        · rw [Fin.castSucc_zero]; exact lt_of_le_of_ne (Fin.zero_le _) hi.symm
+    · exact fun H => (H <| Finset.mem_univ _).elim
 
 中文:
 引理 derivative_det_one_add_X_smul_aux
@@ -397,7 +473,23 @@ lemma derivative_det_one_add_X_smul_aux
     rw [det_succ_row_zero]; rw [map_sum]; rw [eval_finsetSum]
     simp only [add_apply, smul_apply, map_apply, smul_eq_mul, X_mul_C, submatrix_add,
       submatrix_smul, Pi.add_apply, Pi.smul_apply, submatrix_map, derivative_mul, map_add,
-     
+      derivative_C, zero_mul, derivative_X, mul_one, zero_add, eval_add, eval_mul, eval_C, eval_X,
+      mul_zero, add_zero, eval_det_add_X_smul, eval_pow, eval_neg, eval_one]
+    rw [Finset.sum_eq_single 0]
+    · simp only [Fin.val_zero, pow_zero, derivative_one, eval_zero, one_apply_eq, eval_one,
+        mul_one, zero_add, one_mul, Fin.succAbove_zero, submatrix_one _ (Fin.succ_injective _),
+        det_one, IH, trace_submatrix_succ]
+    · intro i _ hi
+      cases n with
+      | zero => exact (hi (Subsingleton.elim i 0)).elim
+      | succ n =>
+        simp only [one_apply_ne' hi, eval_zero, mul_zero, zero_add, zero_mul, add_zero]
+        rw [det_eq_zero_of_column_eq_zero 0]; rw [eval_zero]; rw [mul_zero]
+        intro j
+        rw [submatrix_apply]; rw [Fin.succAbove_of_castSucc_lt]; rw [one_apply_ne]
+        · exact (bne_iff_ne (a := Fin.succ j) (b := Fin.castSucc 0)).mp rfl
+        · rw [Fin.castSucc_zero]; exact lt_of_le_of_ne (Fin.zero_le _) hi.symm
+    · exact fun H => (H <| Finset.mem_univ _).elim
 
 Depends on / 依赖: Fin.val_zero, Finset, Finset.sum_eq_single, Pi.add_apply, Pi.smul_apply, X_mul_C, add_apply, add_zero, derivative_C, derivative_X, derivative_mul, det_succ_row_zero, eval_C, eval_X, eval_add, eval_det_add_X_smul, eval_finsetSum, eval_mul, eval_neg, eval_one
 -/
@@ -440,7 +532,7 @@ lemma derivative_det_one_add_X_smul
   · ext; simp [map_add, e]
   · delta trace
     rw [← (Fintype.equivFin n).symm.sum_comp]
-    
+    simp_rw [e, coe_reindexLinearEquiv, reindex_apply, diag_apply, submatrix_apply]
 
 中文:
 引理 derivative_det_one_add_X_smul
@@ -452,7 +544,7 @@ lemma derivative_det_one_add_X_smul
   · ext; simp [map_add, e]
   · delta trace
     rw [← (Fintype.equivFin n).symm.sum_comp]
-    
+    simp_rw [e, coe_reindexLinearEquiv, reindex_apply, diag_apply, submatrix_apply]
 
 Depends on / 依赖: Fintype, Fintype.equivFin, Matrix, Matrix.det_reindexLinearEquiv_self, Matrix.reindexLinearEquiv, coe_reindexLinearEquiv, convert, derivative_det_one_add_X_smul_aux, det_reindexLinearEquiv_self, diag_apply, equivFin, map_add, reindexLinearEquiv, reindex_apply, simp_rw, submatrix_apply, sum_comp, symm.sum_comp
 -/
@@ -499,7 +591,7 @@ lemma det_one_add_X_smul
   proof: by
   rw [Algebra.smul_def (trace M)]; rw [← C_eq_algebraMap]; rw [pow_two]; rw [← mul_assoc]; rw [add_assoc]; rw [← add_mul]; rw [← coeff_det_one_add_X_smul_one]; rw [← coeff_divX]; rw [add_comm (C _)]; rw [divX_mul_X_add]; rw [add_comm (1 : R[X]), ← C.map_one]
   convert! (divX_mul_X_add _).symm
-  r
+  rw [coeff_zero_eq_eval_zero]; rw [eval_det_add_X_smul]; rw [det_one]; rw [eval_one]
 
 中文:
 引理 det_one_add_X_smul
@@ -507,7 +599,7 @@ lemma det_one_add_X_smul
   证明: by
   rw [Algebra.smul_def (trace M)]; rw [← C_eq_algebraMap]; rw [pow_two]; rw [← mul_assoc]; rw [add_assoc]; rw [← add_mul]; rw [← coeff_det_one_add_X_smul_one]; rw [← coeff_divX]; rw [add_comm (C _)]; rw [divX_mul_X_add]; rw [add_comm (1 : R[X]), ← C.map_one]
   convert! (divX_mul_X_add _).symm
-  r
+  rw [coeff_zero_eq_eval_zero]; rw [eval_det_add_X_smul]; rw [det_one]; rw [eval_one]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, C.map_one, C_eq_algebraMap, add_assoc, add_comm, add_mul, coeff_det_one_add_X_smul_one, coeff_divX, coeff_zero_eq_eval_zero, convert, det_one, divX_mul_X_add, eval_det_add_X_smul, eval_one, map_one, mul_assoc, pow_two, smul_def
 -/
@@ -554,7 +646,12 @@ lemma charpoly_of_card_eq_two
     · simp [det_eq_sign_charpoly_coeff, hn]
     · simp [trace_eq_neg_charpoly_coeff, hn]
     · simpa [leadingCoeff, charpoly_natDegree_eq_dim, hn, coeff_X] using
-        M.charp
+        M.charpoly_monic.leadingCoeff
+  · rw [Finset.mem_range, not_lt, Nat.succ_le_iff] at hi
+    suffices M.charpoly.coeff i = 0 by
+      simpa [show i != 2 by lia, show 1 != i by lia, show i != 0 by lia, coeff_X, coeff_C]
+    apply coeff_eq_zero_of_natDegree_lt
+    simpa [charpoly_natDegree_eq_dim, hn] using hi
 
 中文:
 引理 charpoly_of_card_eq_two
@@ -567,7 +664,12 @@ lemma charpoly_of_card_eq_two
     · simp [det_eq_sign_charpoly_coeff, hn]
     · simp [trace_eq_neg_charpoly_coeff, hn]
     · simpa [leadingCoeff, charpoly_natDegree_eq_dim, hn, coeff_X] using
-        M.charp
+        M.charpoly_monic.leadingCoeff
+  · rw [Finset.mem_range, not_lt, Nat.succ_le_iff] at hi
+    suffices M.charpoly.coeff i = 0 by
+      simpa [show i != 2 by lia, show 1 != i by lia, show i != 0 by lia, coeff_X, coeff_C]
+    apply coeff_eq_zero_of_natDegree_lt
+    simpa [charpoly_natDegree_eq_dim, hn] using hi
 
 Depends on / 依赖: Finset, Finset.mem_range, Finset.range, Fintype, Fintype.card_pos_iff, M.charpoly.coeff, M.charpoly_monic.leadingCoeff, Nat.succ_le_iff, Nonempty, card_pos_iff, charpoly, charpoly_monic, charpoly_natDegree_eq_dim, coeff_C, coeff_X, coeff_eq_zero_of_natDegr, det_eq_sign_charpoly_coeff, fin_cases, leadingCoeff, mem_range
 -/
@@ -619,7 +721,9 @@ theorem matPolyEquiv_eq_X_pow_sub_C
   rw [coeff_sub]; rw [coeff_C]; rw [matPolyEquiv_coeff_apply]; rw [RingHom.mapMatrix_apply]; rw [Matrix.map_apply]; rw [AlgHom.coe_toRingHom]; rw [coeff_X_pow]
   by_cases hij : i = j
   · rw [hij, charmatrix_apply_eq, map_sub, expand_C, expand_X, coeff_sub, coeff_X_pow, coeff_C]
-    sp
+    split_ifs with mp m0 <;> simp
+  · rw [charmatrix_apply_ne _ _ _ hij, map_neg, expand_C, coeff_neg, coeff_C]
+    split_ifs with m0 mp <;> simp_all
 
 中文:
 定理 matPolyEquiv_eq_X_pow_sub_C
@@ -629,7 +733,9 @@ theorem matPolyEquiv_eq_X_pow_sub_C
   rw [coeff_sub]; rw [coeff_C]; rw [matPolyEquiv_coeff_apply]; rw [RingHom.mapMatrix_apply]; rw [Matrix.map_apply]; rw [AlgHom.coe_toRingHom]; rw [coeff_X_pow]
   by_cases hij : i = j
   · rw [hij, charmatrix_apply_eq, map_sub, expand_C, expand_X, coeff_sub, coeff_X_pow, coeff_C]
-    sp
+    split_ifs with mp m0 <;> simp
+  · rw [charmatrix_apply_ne _ _ _ hij, map_neg, expand_C, coeff_neg, coeff_C]
+    split_ifs with m0 mp <;> simp_all
 
 Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, Matrix, Matrix.map_apply, RingHom, RingHom.mapMatrix_apply, charmatrix_apply_eq, charmatrix_apply_ne, coe_toRingHom, coeff_C, coeff_X_pow, coeff_neg, coeff_sub, expand_C, expand_X, mapMatrix_apply, map_apply, map_neg, map_sub, matPolyEquiv_coeff_apply
 -/
@@ -701,7 +807,12 @@ theorem coeff_charpoly_mem_ideal_pow
   have : ∑ x : n, 1 = Fintype.card n := by rw [Finset.sum_const, card_univ, smul_eq_mul, mul_one]
   rw [← this]
   apply coeff_prod_mem_ideal_pow_tsub
-  rintr
+  rintro i - (_ | k)
+  · rw [tsub_zero, pow_one, charmatrix_apply, coeff_sub, ← smul_one_eq_diagonal, smul_apply,
+      smul_eq_mul, coeff_X_mul_zero, coeff_C_zero, zero_sub, neg_mem_iff]
+    exact h (c i) i
+  · rw [add_comm, tsub_self_add, pow_zero, Ideal.one_eq_top]
+    exact Submodule.mem_top
 
 中文:
 定理 coeff_charpoly_mem_ideal_pow
@@ -715,7 +826,12 @@ theorem coeff_charpoly_mem_ideal_pow
   have : ∑ x : n, 1 = Fintype.card n := by rw [Finset.sum_const, card_univ, smul_eq_mul, mul_one]
   rw [← this]
   apply coeff_prod_mem_ideal_pow_tsub
-  rintr
+  rintro i - (_ | k)
+  · rw [tsub_zero, pow_one, charmatrix_apply, coeff_sub, ← smul_one_eq_diagonal, smul_apply,
+      smul_eq_mul, coeff_X_mul_zero, coeff_C_zero, zero_sub, neg_mem_iff]
+    exact h (c i) i
+  · rw [add_comm, tsub_self_add, pow_zero, Ideal.one_eq_top]
+    exact Submodule.mem_top
 
 Depends on / 依赖: Finset, Finset.sum_const, Fintype, Fintype.card, Matrix, Matrix.det_apply, Submodule, Submodule.smul_mem_iff, add_comm, card_univ, charmatrix_apply, charpoly, coeff_C_zero, coeff_X_mul_zero, coeff_prod_mem_ideal_pow_tsub, coeff_smul, coeff_sub, det_apply, finsetSum_coeff, mul_one
 -/
@@ -772,7 +888,17 @@ lemma reverse_charpoly
   let p : R[T;T⁻¹] := det (scalar n t - M.map LaurentPolynomial.C)
   let q : R[T;T⁻¹] := det (1 - scalar n t * M.map LaurentPolynomial.C)
   have ht : t_inv * t = 1 := by rw [← T_add, neg_add_cancel, T_zero]
-  have hp : t
+  have hp : toLaurentAlg M.charpoly = p := by
+    simp [p, t, charpoly, charmatrix, AlgHom.map_det, map_sub]
+  have hq : toLaurentAlg M.charpolyRev = q := by
+    simp [q, t, charpolyRev, AlgHom.map_det, map_sub, smul_eq_diagonal_mul]
+  suffices t_inv ^ Fintype.card n * p = invert q by
+    apply toLaurent_injective
+    rwa [toLaurent_reverse, ← coe_toLaurentAlg, hp, hq, ← involutive_invert.injective.eq_iff,
+      map_mul, involutive_invert p, charpoly_natDegree_eq_dim,
+      ← mul_one (Fintype.card n : Int), ← T_pow, map_pow, invert_T, mul_comm]
+  rw [← det_smul]; rw [smul_sub]; rw [scalar_apply]; rw [← diagonal_smul]; rw [Pi.smul_def]; rw [smul_eq_mul]; rw [ht]; rw [diagonal_one]; rw [invert.map_det]
+  simp [t_inv, map_sub, map_one, map_mul, t, smul_eq_diagonal_mul]
 
 中文:
 引理 reverse_charpoly
@@ -784,7 +910,17 @@ lemma reverse_charpoly
   let p : R[T;T⁻¹] := det (scalar n t - M.map LaurentPolynomial.C)
   let q : R[T;T⁻¹] := det (1 - scalar n t * M.map LaurentPolynomial.C)
   have ht : t_inv * t = 1 := by rw [← T_add, neg_add_cancel, T_zero]
-  have hp : t
+  have hp : toLaurentAlg M.charpoly = p := by
+    simp [p, t, charpoly, charmatrix, AlgHom.map_det, map_sub]
+  have hq : toLaurentAlg M.charpolyRev = q := by
+    simp [q, t, charpolyRev, AlgHom.map_det, map_sub, smul_eq_diagonal_mul]
+  suffices t_inv ^ Fintype.card n * p = invert q by
+    apply toLaurent_injective
+    rwa [toLaurent_reverse, ← coe_toLaurentAlg, hp, hq, ← involutive_invert.injective.eq_iff,
+      map_mul, involutive_invert p, charpoly_natDegree_eq_dim,
+      ← mul_one (Fintype.card n : Int), ← T_pow, map_pow, invert_T, mul_comm]
+  rw [← det_smul]; rw [smul_sub]; rw [scalar_apply]; rw [← diagonal_smul]; rw [Pi.smul_def]; rw [smul_eq_mul]; rw [ht]; rw [diagonal_one]; rw [invert.map_det]
+  simp [t_inv, map_sub, map_one, map_mul, t, smul_eq_diagonal_mul]
 
 Depends on / 依赖: AlgHom, AlgHom.map_det, LaurentPolynomial, LaurentPolynomial.C, M.charpoly, M.charpolyRev, M.map, T_add, T_zero, charmatrix, charpoly, charpolyRev, map_det, map_sub, neg_add_cancel, nontriviality, scalar, smul_eq_diagonal_mul, t_inv, toLaurentAlg
 -/
@@ -820,7 +956,12 @@ theorem charpoly_inv
   _ = (scalar n X - C.mapMatrix A⁻¹).det := rfl
   _ = C (A⁻¹ * A).det * (scalar n X - C.mapMatrix A⁻¹).det := by simp
   _ = C A⁻¹.det * C A.det * (scalar n X - C.mapMatrix A⁻¹).det := by rw [det_mul]; simp
-  _ = C A⁻¹.det * (C A.det * (scalar n X - C.m
+  _ = C A⁻¹.det * (C A.det * (scalar n X - C.mapMatrix A⁻¹).det) := by ac_rfl
+  _ = C A⁻¹.det * (C.mapMatrix A * (scalar n X - C.mapMatrix A⁻¹)).det := by simp [RingHom.map_det]
+  _ = C A⁻¹.det * (C.mapMatrix A * scalar n X - 1).det := by rw [mul_sub, ← map_mul]; simp
+  _ = C A⁻¹.det * ((-1) ^ Fintype.card n * (1 - scalar n X * C.mapMatrix A).det) := by
+    rw [← neg_sub]; rw [det_neg]; rw [det_one_sub_mul_comm]
+  _ = _ := by simp [charpolyRev, smul_eq_diagonal_mul]; ac_rfl
 
 中文:
 定理 charpoly_inv
@@ -831,7 +972,12 @@ theorem charpoly_inv
   _ = (scalar n X - C.mapMatrix A⁻¹).det := rfl
   _ = C (A⁻¹ * A).det * (scalar n X - C.mapMatrix A⁻¹).det := by simp
   _ = C A⁻¹.det * C A.det * (scalar n X - C.mapMatrix A⁻¹).det := by rw [det_mul]; simp
-  _ = C A⁻¹.det * (C A.det * (scalar n X - C.m
+  _ = C A⁻¹.det * (C A.det * (scalar n X - C.mapMatrix A⁻¹).det) := by ac_rfl
+  _ = C A⁻¹.det * (C.mapMatrix A * (scalar n X - C.mapMatrix A⁻¹)).det := by simp [RingHom.map_det]
+  _ = C A⁻¹.det * (C.mapMatrix A * scalar n X - 1).det := by rw [mul_sub, ← map_mul]; simp
+  _ = C A⁻¹.det * ((-1) ^ Fintype.card n * (1 - scalar n X * C.mapMatrix A).det) := by
+    rw [← neg_sub]; rw [det_neg]; rw [det_one_sub_mul_comm]
+  _ = _ := by simp [charpolyRev, smul_eq_diagonal_mul]; ac_rfl
 
 Depends on / 依赖: A.det, C.mapMatrix, Invertible, RingHom, RingHom.map_det, det_mul, h.invertible, invertible, mapMatrix, map_det, map_mul, mul_sub, scalar
 -/
@@ -915,7 +1061,8 @@ lemma isUnit_charpolyRev_of_isNilpotent
     convert! one_sub_dvd_one_sub_pow ((X : R[X]) • M.map C) k
     rw [← C.mapMatrix_apply]; rw [smul_pow]; rw [← map_pow]; rw [hk]; rw [map_zero]; rw [smul_zero]; rw [sub_zero]
   apply isUnit_of_dvd_one
-  rw [← det_one (R :=
+  rw [← det_one (R := R[X]) (n := n)]
+  exact map_dvd detMonoidHom hk
 
 中文:
 引理 isUnit_charpolyRev_of_isNilpotent
@@ -926,7 +1073,8 @@ lemma isUnit_charpolyRev_of_isNilpotent
     convert! one_sub_dvd_one_sub_pow ((X : R[X]) • M.map C) k
     rw [← C.mapMatrix_apply]; rw [smul_pow]; rw [← map_pow]; rw [hk]; rw [map_zero]; rw [smul_zero]; rw [sub_zero]
   apply isUnit_of_dvd_one
-  rw [← det_one (R :=
+  rw [← det_one (R := R[X]) (n := n)]
+  exact map_dvd detMonoidHom hk
 
 Depends on / 依赖: C.mapMatrix_apply, M.map, convert, detMonoidHom, det_one, isUnit_of_dvd_one, mapMatrix_apply, map_dvd, map_pow, map_zero, one_sub_dvd_one_sub_pow, replace, smul_pow, smul_zero, sub_zero
 -/
@@ -987,7 +1135,10 @@ lemma isNilpotent_charpoly_sub_pow_of_isNilpotent
     simp [p, modByMonic_X]
   have : IsNilpotent (p /ₘ X) :=
     (Polynomial.isUnit_iff'.mp (isUnit_charpolyRev_of_isNilpotent hM)).2
-  have aux : (M.charpoly - X 
+  have aux : (M.charpoly - X ^ (Fintype.card n)).natDegree <= M.charpoly.natDegree :=
+    le_trans (natDegree_sub_le _ _) (by simp)
+  rw [← isNilpotent_reflect_iff aux]; rw [reflect_sub]; rw [← reverse]; rw [M.reverse_charpoly]
+  simpa [p, hp]
 
 中文:
 引理 isNilpotent_charpoly_sub_pow_of_isNilpotent
@@ -1000,7 +1151,10 @@ lemma isNilpotent_charpoly_sub_pow_of_isNilpotent
     simp [p, modByMonic_X]
   have : IsNilpotent (p /ₘ X) :=
     (Polynomial.isUnit_iff'.mp (isUnit_charpolyRev_of_isNilpotent hM)).2
-  have aux : (M.charpoly - X 
+  have aux : (M.charpoly - X ^ (Fintype.card n)).natDegree <= M.charpoly.natDegree :=
+    le_trans (natDegree_sub_le _ _) (by simp)
+  rw [← isNilpotent_reflect_iff aux]; rw [reflect_sub]; rw [← reverse]; rw [M.reverse_charpoly]
+  simpa [p, hp]
 
 Depends on / 依赖: Fintype, Fintype.card, IsNilpotent, M.charpoly, M.charpoly.natDegree, M.charpolyRev, M.reverse_charpoly, Polynomial, Polynomial.isUnit_iff, charpoly, charpolyRev, conv_lhs, isNilpotent_reflect_iff, isUnit_charpolyRev_of_isNilpotent, isUnit_iff, le_trans, modByMonic_X, modByMonic_add_div, natDegree, natDegree_sub_le
 -/
@@ -1030,7 +1184,14 @@ lemma det_piecewise_one_eq_submatrix_det
   have h_blocks : A.submatrix e e =
       Matrix.fromBlocks
         (M.submatrix Subtype.val Subtype.val)
-        (M.submatri
+        (M.submatrix Subtype.val Subtype.val) 0 1 := by
+    ext (i | i) (j | j) <;> dsimp [A, e]
+    · simp only [Finset.piecewise, if_pos i.prop]
+    · simp only [Finset.piecewise, if_pos i.prop]
+    · simp only [Finset.piecewise, if_neg i.prop]
+      exact Matrix.one_apply_ne (fun h => i.prop (h ▸ j.prop))
+    · simp only [Finset.piecewise, if_neg i.prop, Matrix.one_apply, Subtype.ext_iff]
+  rw [h_blocks]; rw [Matrix.det_fromBlocks_zero₂₁]; rw [Matrix.det_one]; rw [mul_one]
 
 中文:
 引理 det_piecewise_one_eq_submatrix_det
@@ -1041,7 +1202,14 @@ lemma det_piecewise_one_eq_submatrix_det
   have h_blocks : A.submatrix e e =
       Matrix.fromBlocks
         (M.submatrix Subtype.val Subtype.val)
-        (M.submatri
+        (M.submatrix Subtype.val Subtype.val) 0 1 := by
+    ext (i | i) (j | j) <;> dsimp [A, e]
+    · simp only [Finset.piecewise, if_pos i.prop]
+    · simp only [Finset.piecewise, if_pos i.prop]
+    · simp only [Finset.piecewise, if_neg i.prop]
+      exact Matrix.one_apply_ne (fun h => i.prop (h ▸ j.prop))
+    · simp only [Finset.piecewise, if_neg i.prop, Matrix.one_apply, Subtype.ext_iff]
+  rw [h_blocks]; rw [Matrix.det_fromBlocks_zero₂₁]; rw [Matrix.det_one]; rw [mul_one]
 
 Depends on / 依赖: A.submatrix, Equiv.sumCompl, Finset, Finset.piecewise, M.submatrix, Matrix, Matrix.det_submatrix_equiv_self, Matrix.fromBlocks, Matrix.of, Matrix.one_a, Subtype, Subtype.val, det_submatrix_equiv_self, fromBlocks, generalize, h_blocks, i.prop, if_neg, if_pos, one_a
 -/
@@ -1076,7 +1244,50 @@ theorem coeff_det_one_add_X_smul_eq_sum_minors
   rw [add_comm]
   change (D (fun i => ((X : R[X]) • M.map C) i + (1 : Matrix n n R[X]) i)).coeff k = _
   conv_lhs => rw [show (fun i => ((X : R[X]) • M.map C) i + (1 : Matrix n n R[X]) i) =
-      (fun i => ((X : R[
+      (fun i => ((X : R[X]) • M.map C) i) + (fun i => (1 : Matrix n n R[X]) i) from rfl]
+  conv_lhs => rw [D.map_add_univ]
+  have h_map : forall s : Finset n,
+        (s.piecewise (fun i => (M.map C) i)
+          (fun i => (1 : Matrix n n R[X]) i) : Matrix n n R[X]) =
+        Matrix.map (s.piecewise M (1 : Matrix n n R)) C := by
+      intro s; ext i j
+      simp only [Finset.piecewise, Matrix.map_apply]
+      split_ifs with h <;> simp [Matrix.one_apply]
+  have h_det : forall s : Finset n,
+      D (s.piecewise (fun i => (M.map C) i)
+        (fun i => (1 : Matrix n n R[X]) i)) =
+      C (det (s.piecewise M (1 : Matrix n n R))) := by
+    intro s; change det _ = _
+    rw [h_map]; exact (RingHom.map_det C _).symm
+  calc (∑ s : Finset n, D (Finset.piecewise s (fun i => ((X : R[X]) • M.map C) i)
+            (fun i => (1 : Matrix n n R[X]) i))).coeff k
+      _ = (∑ s : Finset n, (X : R[X]) ^ s.card •
+            D (s.piecewise (fun i => (M.map C) i)
+              (fun i => (1 : Matrix n n R[X]) i))).coeff k := by
+        congr 2 with s
+        have h_smul : s.piecewise (fun i => ((X : R[X]) • M.map C) i)
+            (fun i => (1 : Matrix n n R[X]) i) =
+            fun i => (if i in s then (X : R[X]) else 1) •
+              s.piecewise (fun i => (M.map C) i) (fun i => (1 : Matrix n n R[X]) i) i := by
+          funext i j
+          simp only [piecewise, Pi.smul_apply, smul_eq_mul, ite_mul, one_mul]
+          split_ifs <;> rfl
+        rw [h_smul]; rw [D.map_smul_univ]
+        congr 1
+        simp only [Finset.prod_ite_mem, Finset.univ_inter, Finset.prod_const]
+      _ = ∑ s : Finset n, ((X : R[X]) ^ s.card •
+            D (Finset.piecewise s (fun i => (M.map C) i)
+              (fun i => (1 : Matrix n n R[X]) i))).coeff k := by
+        simp only [Polynomial.finsetSum_coeff]
+      _ = _ := by
+        simp_rw [h_det, smul_eq_mul, mul_comm (X ^ _) (C _)]
+        simp_rw [C_mul_X_pow_eq_monomial, coeff_monomial]
+        rw [← Finset.sum_filter]
+        have h_set : Finset.univ.filter (fun s : Finset n => s.card = k) =
+            Finset.univ.powersetCard k := by
+          ext s; simp [Finset.mem_powersetCard]
+        rw [h_set]
+        exact Finset.sum_congr rfl fun s _ => det_piecewise_one_eq_submatrix_det M s
 
 中文:
 定理 coeff_det_one_add_X_smul_eq_sum_minors
@@ -1086,7 +1297,50 @@ theorem coeff_det_one_add_X_smul_eq_sum_minors
   rw [add_comm]
   change (D (fun i => ((X : R[X]) • M.map C) i + (1 : Matrix n n R[X]) i)).coeff k = _
   conv_lhs => rw [show (fun i => ((X : R[X]) • M.map C) i + (1 : Matrix n n R[X]) i) =
-      (fun i => ((X : R[
+      (fun i => ((X : R[X]) • M.map C) i) + (fun i => (1 : Matrix n n R[X]) i) from rfl]
+  conv_lhs => rw [D.map_add_univ]
+  have h_map : forall s : Finset n,
+        (s.piecewise (fun i => (M.map C) i)
+          (fun i => (1 : Matrix n n R[X]) i) : Matrix n n R[X]) =
+        Matrix.map (s.piecewise M (1 : Matrix n n R)) C := by
+      intro s; ext i j
+      simp only [Finset.piecewise, Matrix.map_apply]
+      split_ifs with h <;> simp [Matrix.one_apply]
+  have h_det : forall s : Finset n,
+      D (s.piecewise (fun i => (M.map C) i)
+        (fun i => (1 : Matrix n n R[X]) i)) =
+      C (det (s.piecewise M (1 : Matrix n n R))) := by
+    intro s; change det _ = _
+    rw [h_map]; exact (RingHom.map_det C _).symm
+  calc (∑ s : Finset n, D (Finset.piecewise s (fun i => ((X : R[X]) • M.map C) i)
+            (fun i => (1 : Matrix n n R[X]) i))).coeff k
+      _ = (∑ s : Finset n, (X : R[X]) ^ s.card •
+            D (s.piecewise (fun i => (M.map C) i)
+              (fun i => (1 : Matrix n n R[X]) i))).coeff k := by
+        congr 2 with s
+        have h_smul : s.piecewise (fun i => ((X : R[X]) • M.map C) i)
+            (fun i => (1 : Matrix n n R[X]) i) =
+            fun i => (if i in s then (X : R[X]) else 1) •
+              s.piecewise (fun i => (M.map C) i) (fun i => (1 : Matrix n n R[X]) i) i := by
+          funext i j
+          simp only [piecewise, Pi.smul_apply, smul_eq_mul, ite_mul, one_mul]
+          split_ifs <;> rfl
+        rw [h_smul]; rw [D.map_smul_univ]
+        congr 1
+        simp only [Finset.prod_ite_mem, Finset.univ_inter, Finset.prod_const]
+      _ = ∑ s : Finset n, ((X : R[X]) ^ s.card •
+            D (Finset.piecewise s (fun i => (M.map C) i)
+              (fun i => (1 : Matrix n n R[X]) i))).coeff k := by
+        simp only [Polynomial.finsetSum_coeff]
+      _ = _ := by
+        simp_rw [h_det, smul_eq_mul, mul_comm (X ^ _) (C _)]
+        simp_rw [C_mul_X_pow_eq_monomial, coeff_monomial]
+        rw [← Finset.sum_filter]
+        have h_set : Finset.univ.filter (fun s : Finset n => s.card = k) =
+            Finset.univ.powersetCard k := by
+          ext s; simp [Finset.mem_powersetCard]
+        rw [h_set]
+        exact Finset.sum_congr rfl fun s _ => det_piecewise_one_eq_submatrix_det M s
 
 Depends on / 依赖: D.map_add_univ, Finset, M.map, Matrix, add_comm, conv_lhs, detRowAlternating, h_map, map_add_univ, piecewise, s.piecewise
 -/
@@ -1156,7 +1410,13 @@ theorem charpoly_coeff_eq_sum_minors
   have hrev : M.charpoly.coeff (Fintype.card n - k) = M.charpoly.reverse.coeff k := by
     simp [Polynomial.coeff_reverse, hnd, hk]
   rw [hrev]; rw [M.reverse_charpoly]
-  have hcharpolyRev : M.charpolyRev = det (1 + (X : R[X]) • (-M).map
+  have hcharpolyRev : M.charpolyRev = det (1 + (X : R[X]) • (-M).map C) := by
+    simp only [charpolyRev, sub_eq_add_neg]
+    congr 2
+    rw [Matrix.map_neg C (map_neg C) M]; rw [smul_neg]
+  rw [hcharpolyRev]; rw [coeff_det_one_add_X_smul_eq_sum_minors]
+  simp only [submatrix_neg, Pi.neg_apply, det_neg, Fintype.card_coe, mul_sum]
+  exact Finset.sum_congr rfl fun s hs => by rw [(Finset.mem_powersetCard.mp hs).2]
 
 中文:
 定理 charpoly_coeff_eq_sum_minors
@@ -1166,7 +1426,13 @@ theorem charpoly_coeff_eq_sum_minors
   have hrev : M.charpoly.coeff (Fintype.card n - k) = M.charpoly.reverse.coeff k := by
     simp [Polynomial.coeff_reverse, hnd, hk]
   rw [hrev]; rw [M.reverse_charpoly]
-  have hcharpolyRev : M.charpolyRev = det (1 + (X : R[X]) • (-M).map
+  have hcharpolyRev : M.charpolyRev = det (1 + (X : R[X]) • (-M).map C) := by
+    simp only [charpolyRev, sub_eq_add_neg]
+    congr 2
+    rw [Matrix.map_neg C (map_neg C) M]; rw [smul_neg]
+  rw [hcharpolyRev]; rw [coeff_det_one_add_X_smul_eq_sum_minors]
+  simp only [submatrix_neg, Pi.neg_apply, det_neg, Fintype.card_coe, mul_sum]
+  exact Finset.sum_congr rfl fun s hs => by rw [(Finset.mem_powersetCard.mp hs).2]
 
 Depends on / 依赖: Fintype, Fintype.card, M.charpoly.coeff, M.charpoly.reverse.coeff, M.charpolyRev, M.charpoly_natDegree_eq_dim, M.reverse_charpoly, Matrix, Matrix.map_neg, Pi.neg_apply, Polynomial, Polynomial.coeff_reverse, charpoly, charpolyRev, charpoly_natDegree_eq_dim, coeff_det_one_add_X_smul_eq_sum_minors, coeff_reverse, hcharpolyRev, map_neg, neg_apply
 -/

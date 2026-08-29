@@ -58,7 +58,12 @@ definition limit
     { pt := _
       π.app X := (c.π.app X otimesₘ c.π.app X) ≫ μ[(F.obj X).X]
       π.naturality i j f := by have := c.π.naturality f; simp_all }
-mon.one_mul := hc.hom_ext by simp [whiskerRight_comp_tensor
+mon.one_mul := hc.hom_ext by simp [whiskerRight_comp_tensorHom_assoc]
+mon.mul_one := hc.hom_ext by simp [whiskerLeft_comp_tensorHom_assoc]
+  mon.mul_assoc := by
+    apply hc.hom_ext
+    simp only [Functor.comp_obj, forget_obj, Functor.const_obj_obj, IsLimit.fac,
+      mon_tauto, implies_true]
 
 中文:
 定义 limit
@@ -71,7 +76,12 @@ mon.one_mul := hc.hom_ext by simp [whiskerRight_comp_tensor
     { pt := _
       π.app X := (c.π.app X otimesₘ c.π.app X) ≫ μ[(F.obj X).X]
       π.naturality i j f := by have := c.π.naturality f; simp_all }
-mon.one_mul := hc.hom_ext by simp [whiskerRight_comp_tensor
+mon.one_mul := hc.hom_ext by simp [whiskerRight_comp_tensorHom_assoc]
+mon.mul_one := hc.hom_ext by simp [whiskerLeft_comp_tensorHom_assoc]
+  mon.mul_assoc := by
+    apply hc.hom_ext
+    simp only [Functor.comp_obj, forget_obj, Functor.const_obj_obj, IsLimit.fac,
+      mon_tauto, implies_true]
 
 Depends on / 依赖: c.pt
 -/

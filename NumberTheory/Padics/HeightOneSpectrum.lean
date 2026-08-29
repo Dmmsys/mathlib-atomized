@@ -260,7 +260,14 @@ definition primesEquiv
       Ideal.map_prime_of_equiv _ (by simp [← Nat.prime_iff_prime_int, p.2]) (by simp [p.2.ne_zero])
     .ofPrime h
   left_inv v := by
-    simp only [Ideal.m
+    simp only [Ideal.map_symm]
+    congr
+    rw [← v.asIdeal.comap_map_of_bijective _ (IsIntegralClosure.intEquiv R).bijective]; rw [← span_natGenerator]
+  right_inv p := by
+    simp only [Ideal.map_symm, natGenerator, HeightOneSpectrum.ofPrime_asIdeal]
+    congr
+    simp [Ideal.map_comap_of_surjective _ (IsIntegralClosure.intEquiv R).surjective,
+      Int.associated_iff_natAbs.1 (Submodule.IsPrincipal.associated_generator_span_self _)]
 
 中文:
 定义 primesEquiv
@@ -271,7 +278,14 @@ definition primesEquiv
       Ideal.map_prime_of_equiv _ (by simp [← Nat.prime_iff_prime_int, p.2]) (by simp [p.2.ne_zero])
     .ofPrime h
   left_inv v := by
-    simp only [Ideal.m
+    simp only [Ideal.map_symm]
+    congr
+    rw [← v.asIdeal.comap_map_of_bijective _ (IsIntegralClosure.intEquiv R).bijective]; rw [← span_natGenerator]
+  right_inv p := by
+    simp only [Ideal.map_symm, natGenerator, HeightOneSpectrum.ofPrime_asIdeal]
+    congr
+    simp [Ideal.map_comap_of_surjective _ (IsIntegralClosure.intEquiv R).surjective,
+      Int.associated_iff_natAbs.1 (Submodule.IsPrincipal.associated_generator_span_self _)]
 
 Depends on / 依赖: natGenerator, prime_natGenerator
 -/
@@ -350,7 +364,8 @@ definition adicCompletion.padicEquiv
     (mapRingEquiv _ (withValEquiv v).continuous
       (withValEquiv v).symm.continuous).trans Padic.withValRingEquiv
   __ := ((IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv Rat v).trans <|
-    (mapEquiv (withValEq
+    (mapEquiv (withValEquiv v)).trans Padic.withValUniformEquiv).toHomeomorph
+  commutes' := by simp
 
 中文:
 定义 adicCompletion.padicEquiv
@@ -359,7 +374,8 @@ definition adicCompletion.padicEquiv
     (mapRingEquiv _ (withValEquiv v).continuous
       (withValEquiv v).symm.continuous).trans Padic.withValRingEquiv
   __ := ((IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv Rat v).trans <|
-    (mapEquiv (withValEq
+    (mapEquiv (withValEquiv v)).trans Padic.withValUniformEquiv).toHomeomorph
+  commutes' := by simp
 
 Depends on / 依赖: HeightOneSpectrum, IsDedekindDomain, IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv, adicCompletion
 -/
@@ -382,7 +398,16 @@ definition adicCompletionIntegers.padicIntEquiv
           (v.adicCompletionIntegers Rat)
           (Valued.v (R := (v.valuation Rat).Completion)).valuationSubring
           fun _ => by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
-        let e := (mapRing
+        let e := (mapRingEquiv _ (withValEquiv v).continuous
+          (withValEquiv v).symm.continuous).restrict _ _ fun _ => by
+            simpa using! (valuation_equiv_padicValuation v).valuedCompletion_le_one_iff
+        (e0.trans e).trans withValIntegersRingEquiv
+  __ := let e0 := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv Rat v).subtype
+          fun _ => by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
+        let e := (mapEquiv (withValEquiv v)).subtype fun _ => by
+          simpa using! (valuation_equiv_padicValuation v).valuedCompletion_le_one_iff
+        ((e0.trans e).trans withValIntegersUniformEquiv).toHomeomorph
+  commutes' := by simp
 
 中文:
 定义 adicCompletion整数egers.padic整数Equiv
@@ -391,7 +416,16 @@ definition adicCompletionIntegers.padicIntEquiv
           (v.adicCompletionIntegers Rat)
           (Valued.v (R := (v.valuation Rat).Completion)).valuationSubring
           fun _ => by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
-        let e := (mapRing
+        let e := (mapRingEquiv _ (withValEquiv v).continuous
+          (withValEquiv v).symm.continuous).restrict _ _ fun _ => by
+            simpa using! (valuation_equiv_padicValuation v).valuedCompletion_le_one_iff
+        (e0.trans e).trans withValIntegersRingEquiv
+  __ := let e0 := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.uniformEquiv Rat v).subtype
+          fun _ => by rw [HeightOneSpectrum.mem_adicCompletionIntegers]; rfl
+        let e := (mapEquiv (withValEquiv v)).subtype fun _ => by
+          simpa using! (valuation_equiv_padicValuation v).valuedCompletion_le_one_iff
+        ((e0.trans e).trans withValIntegersUniformEquiv).toHomeomorph
+  commutes' := by simp
 
 Depends on / 依赖: HeightOneSpectrum, IsDedekindDomain, IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv, adicCompletion, restrict
 -/
@@ -456,7 +490,7 @@ theorem adicCompletion.padicEquiv_bijOn
   · rw [← adicCompletionIntegers.coe_padicIntEquiv_apply v ⟨x, hx⟩]
     exact norm_le_one ((adicCompletionIntegers.padicIntEquiv v) ⟨x, hx⟩)
   · obtain ⟨x, hx⟩ := (adicCompletionIntegers.padicIntEquiv v).surjective ⟨y, hy⟩
-
+    refine ⟨x, x.2, by rw [← adicCompletionIntegers.coe_padicIntEquiv_apply, hx]⟩
 
 中文:
 定理 adicCompletion.padicEquiv_bijOn
@@ -466,7 +500,7 @@ theorem adicCompletion.padicEquiv_bijOn
   · rw [← adicCompletionIntegers.coe_padicIntEquiv_apply v ⟨x, hx⟩]
     exact norm_le_one ((adicCompletionIntegers.padicIntEquiv v) ⟨x, hx⟩)
   · obtain ⟨x, hx⟩ := (adicCompletionIntegers.padicIntEquiv v).surjective ⟨y, hy⟩
-
+    refine ⟨x, x.2, by rw [← adicCompletionIntegers.coe_padicIntEquiv_apply, hx]⟩
 
 Depends on / 依赖: adicCompletionIntegers, adicCompletionIntegers.coe_padicIntEquiv_apply, adicCompletionIntegers.padicIntEquiv, coe_padicIntEquiv_apply, injective, injective.injOn, norm_le_one, padicEquiv, padicIntEquiv, surjective
 -/
@@ -556,7 +590,9 @@ theorem coe_adicCompletionIntegersEquiv_apply
     adicCompletionIntegers.coe_padicIntEquiv_symm_apply,
     adicCompletionEquiv, ContinuousAlgEquiv.trans_apply, ContinuousAlgEquiv.cast_apply,
     EmbeddingLike.apply_eq_iff_eq, Equiv.cast_apply, eq_cast_iff_heq]
-  rw [← 
+  rw [← Subtype.heq_iff_coe_heq (by rw [primesEquiv.apply_symm_apply])
+    (by rw [primesEquiv.apply_symm_apply])]
+  exact cast_heq _ _
 
 中文:
 定理 coe_adicCompletion整数egersEquiv_apply
@@ -566,7 +602,9 @@ theorem coe_adicCompletionIntegersEquiv_apply
     adicCompletionIntegers.coe_padicIntEquiv_symm_apply,
     adicCompletionEquiv, ContinuousAlgEquiv.trans_apply, ContinuousAlgEquiv.cast_apply,
     EmbeddingLike.apply_eq_iff_eq, Equiv.cast_apply, eq_cast_iff_heq]
-  rw [← 
+  rw [← Subtype.heq_iff_coe_heq (by rw [primesEquiv.apply_symm_apply])
+    (by rw [primesEquiv.apply_symm_apply])]
+  exact cast_heq _ _
 
 Depends on / 依赖: ContinuousAlgEquiv, ContinuousAlgEquiv.cast_apply, ContinuousAlgEquiv.trans_apply, EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, Equiv.cast_apply, Subtype, Subtype.heq_iff_coe_heq, adicCompletionEquiv, adicCompletionIntegers, adicCompletionIntegers.coe_padicIntEquiv_symm_apply, adicCompletionIntegersEquiv, apply_eq_iff_eq, apply_symm_apply, cast_apply, cast_heq, coe_padicIntEquiv_symm_apply, eq_cast_iff_heq, heq_iff_coe_heq, primesEquiv
 -/
@@ -591,7 +629,9 @@ theorem coe_adicCompletionIntegersEquiv_symm_apply
   simp -implicitDefEqProofs only [adicCompletionIntegersEquiv, ContinuousAlgEquiv.symm_trans_apply,
     ContinuousAlgEquiv.symm_symm, adicCompletionEquiv, Equiv.cast_apply, eq_cast_iff_heq,
     ← adicCompletionIntegers.coe_padicIntEquiv_apply, ContinuousAlgEquiv.cast_symm_apply]
-  rw [← Subtype.h
+  rw [← Subtype.heq_iff_coe_heq (by rw [primesEquiv.apply_symm_apply])
+    (by rw [primesEquiv.apply_symm_apply])]
+  exact cast_heq _ _
 
 中文:
 定理 coe_adicCompletion整数egersEquiv_symm_apply
@@ -600,7 +640,9 @@ theorem coe_adicCompletionIntegersEquiv_symm_apply
   simp -implicitDefEqProofs only [adicCompletionIntegersEquiv, ContinuousAlgEquiv.symm_trans_apply,
     ContinuousAlgEquiv.symm_symm, adicCompletionEquiv, Equiv.cast_apply, eq_cast_iff_heq,
     ← adicCompletionIntegers.coe_padicIntEquiv_apply, ContinuousAlgEquiv.cast_symm_apply]
-  rw [← Subtype.h
+  rw [← Subtype.heq_iff_coe_heq (by rw [primesEquiv.apply_symm_apply])
+    (by rw [primesEquiv.apply_symm_apply])]
+  exact cast_heq _ _
 
 Depends on / 依赖: ContinuousAlgEquiv, ContinuousAlgEquiv.cast_symm_apply, ContinuousAlgEquiv.symm_symm, ContinuousAlgEquiv.symm_trans_apply, Equiv.cast_apply, Subtype, Subtype.heq_iff_coe_heq, adicCompletionEquiv, adicCompletionIntegers, adicCompletionIntegers.coe_padicIntEquiv_apply, adicCompletionIntegersEquiv, apply_symm_apply, cast_apply, cast_heq, cast_symm_apply, coe_padicIntEquiv_apply, eq_cast_iff_heq, heq_iff_coe_heq, implicitDefEqProofs, primesEquiv
 -/

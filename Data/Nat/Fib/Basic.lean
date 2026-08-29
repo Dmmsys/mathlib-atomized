@@ -706,7 +706,7 @@ theorem fastFibAux_eq
         congr_arg Prod.snd ih, Prod.mk_inj] <;>
       simp [bit, fib_two_mul, fib_two_mul_add_one, fib_two_mul_add_two]
 
-@[deprecate
+@[deprecated (since := "2026-02-04")] alias fast_fib_aux_eq := fastFibAux_eq
 
 中文:
 定理 fastFibAux_eq
@@ -720,7 +720,7 @@ theorem fastFibAux_eq
         congr_arg Prod.snd ih, Prod.mk_inj] <;>
       simp [bit, fib_two_mul, fib_two_mul_add_one, fib_two_mul_add_two]
 
-@[deprecate
+@[deprecated (since := "2026-02-04")] alias fast_fib_aux_eq := fastFibAux_eq
 
 Depends on / 依赖: Nat.binaryRec, Prod.fst, Prod.mk_inj, Prod.snd, binaryRec, congr_arg, fastFibAux, fastFibAux_bit_false, fastFibAux_bit_true, fib_two_mul, fib_two_mul_add_one, fib_two_mul_add_two, mk_inj
 -/
@@ -797,7 +797,10 @@ theorem gcd_fib_add_self
         gcd (fib m) (fib n.pred * fib m + fib (n.pred + 1) * fib (m + 1)) := by
         rw [← fib_add n.pred _]
         ring_nf
- 
+    _ = gcd (fib m) (fib (n.pred + 1) * fib (m + 1)) := by
+        rw [add_comm]; rw [gcd_add_mul_right_right (fib m) _ (fib n.pred)]
+    _ = gcd (fib m) (fib (n.pred + 1)) :=
+      Coprime.gcd_mul_right_cancel_right (fib (n.pred + 1)) (Coprime.symm (fib_coprime_fib_succ m))
 
 中文:
 定理 gcd_fib_add_self
@@ -812,7 +815,10 @@ theorem gcd_fib_add_self
         gcd (fib m) (fib n.pred * fib m + fib (n.pred + 1) * fib (m + 1)) := by
         rw [← fib_add n.pred _]
         ring_nf
- 
+    _ = gcd (fib m) (fib (n.pred + 1) * fib (m + 1)) := by
+        rw [add_comm]; rw [gcd_add_mul_right_right (fib m) _ (fib n.pred)]
+    _ = gcd (fib m) (fib (n.pred + 1)) :=
+      Coprime.gcd_mul_right_cancel_right (fib (n.pred + 1)) (Coprime.symm (fib_coprime_fib_succ m))
 
 Depends on / 依赖: Coprime, Coprime.gcd_mul_right_cancel_right, Coprime.symm, Nat.eq_zero_or_pos, Nat.succ_pred_eq_of_pos, add_comm, eq_zero_or_pos, fib_add, fib_copr, gcd_add_mul_right_right, gcd_mul_right_cancel_right, n.pred, replace, ring_nf, succ_eq_add_one, succ_pred_eq_of_pos
 -/

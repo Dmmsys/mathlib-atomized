@@ -81,7 +81,19 @@ definition evalInhabit
     let nonempty_e := mkApp (mkConst ``Nonempty [e_lvl]) e
     let nonempty_e_pf ← synthInstance nonempty_e
     let h_name : Name :=
-      match
+      match h_name with
+      | some h_name => h_name.getId
+      | none => `inhabited_h
+    let pf ←
+      if ← isProp e then Meta.mkAppM ``nonempty_prop_to_inhabited #[e, nonempty_e_pf]
+      else Meta.mkAppM ``nonempty_to_inhabited #[e, nonempty_e_pf]
+    let (_, r) ← (← goal.assert h_name inhabited_e pf).intro1P
+    return r
+
+elab_rules : tactic
+  | `(tactic| inhabit $[$h_name:ident :]? $term) => do
+    let goal ← evalInhabit (← getMainGoal) h_name term
+    replaceMainGoal [goal]
 
 中文:
 定义 evalInhabit
@@ -94,7 +106,19 @@ definition evalInhabit
     let nonempty_e := mkApp (mkConst ``Nonempty [e_lvl]) e
     let nonempty_e_pf ← synthInstance nonempty_e
     let h_name : Name :=
-      match
+      match h_name with
+      | some h_name => h_name.getId
+      | none => `inhabited_h
+    let pf ←
+      if ← isProp e then Meta.mkAppM ``nonempty_prop_to_inhabited #[e, nonempty_e_pf]
+      else Meta.mkAppM ``nonempty_to_inhabited #[e, nonempty_e_pf]
+    let (_, r) ← (← goal.assert h_name inhabited_e pf).intro1P
+    return r
+
+elab_rules : tactic
+  | `(tactic| inhabit $[$h_name:ident :]? $term) => do
+    let goal ← evalInhabit (← getMainGoal) h_name term
+    replaceMainGoal [goal]
 -/
 def evalInhabit (goal : MVarId) (h_name : Option Ident) (term : Syntax) : TacticM MVarId := do
   goal.withContext do

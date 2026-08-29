@@ -559,7 +559,9 @@ lemma noZeroDivisors_tfae
     isLeftRegular_iff_right_eq_zero_of_mul, isRightRegular_iff_left_eq_zero_of_mul,
     isRegular_iff_eq_zero_of_mul]
   tfae_have 1 ↔ 2 := noZeroDivisors_iff_right_eq_zero_of_mul
-  tfae_have 1 ↔ 3 
+  tfae_have 1 ↔ 3 := noZeroDivisors_iff_left_eq_zero_of_mul
+  tfae_have 1 ↔ 4 := noZeroDivisors_iff_eq_zero_of_mul
+  tfae_finish
 
 中文:
 引理 noZeroDivisors_tfae
@@ -569,7 +571,9 @@ lemma noZeroDivisors_tfae
     isLeftRegular_iff_right_eq_zero_of_mul, isRightRegular_iff_left_eq_zero_of_mul,
     isRegular_iff_eq_zero_of_mul]
   tfae_have 1 ↔ 2 := noZeroDivisors_iff_right_eq_zero_of_mul
-  tfae_have 1 ↔ 3 
+  tfae_have 1 ↔ 3 := noZeroDivisors_iff_left_eq_zero_of_mul
+  tfae_have 1 ↔ 4 := noZeroDivisors_iff_eq_zero_of_mul
+  tfae_finish
 
 Depends on / 依赖: isCancelMulZero_iff_forall_isRegular, isLeftCancelMulZero_iff, isLeftRegular_iff_right_eq_zero_of_mul, isRegular_iff_eq_zero_of_mul, isRightCancelMulZero_iff, isRightRegular_iff_left_eq_zero_of_mul, noZeroDivisors_iff_eq_zero_of_mul, noZeroDivisors_iff_left_eq_zero_of_mul, noZeroDivisors_iff_right_eq_zero_of_mul, simp_rw, tfae_finish, tfae_have
 -/

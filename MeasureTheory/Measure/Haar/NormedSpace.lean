@@ -80,7 +80,17 @@ lemma _root_.MonoidHom.exists_nhds_isBounded
   obtain ⟨n, hn⟩ : exists n : Nat, 0 < haar (interior K inter f ⁻¹' ball 1 n) := by
     by_contra!
     simp_rw [nonpos_iff_eq_zero, ← measure_iUnion_null_iff, ← inter_iUnion, ← preimage_iUnion,
-      iUnion_ball_nat, preimage_univ, inter_univ]
+      iUnion_ball_nat, preimage_univ, inter_univ] at this
+exact this.not_gt isOpen_interior.measure_pos _ K.interior_nonempty
+  rw [← mul_one x]; rw [← smul_eq_mul]
+refine ⟨_, smul_mem_nhds_smul _ div_mem_nhds_one_of_haar_pos_ne_top haar _
+(isOpen_interior.measurableSet.inter <| hf measurableSet_ball) hn
+      mt (measure_mono_top <| inter_subset_left.trans interior_subset) K.isCompact.measure_ne_top,
+    ?_⟩
+  have : Bornology.IsBounded (f '' (interior K inter f ⁻¹' ball 1 n)) :=
+isBounded_ball.subset (image_mono inter_subset_right).trans image_preimage_subset _ _
+  rw [image_smul_distrib]; rw [image_div]
+  exact (this.div this).smul _
 
 中文:
 引理 _root_.幺半群态射.存在_nhds_isBounded
@@ -90,7 +100,17 @@ lemma _root_.MonoidHom.exists_nhds_isBounded
   obtain ⟨n, hn⟩ : exists n : Nat, 0 < haar (interior K inter f ⁻¹' ball 1 n) := by
     by_contra!
     simp_rw [nonpos_iff_eq_zero, ← measure_iUnion_null_iff, ← inter_iUnion, ← preimage_iUnion,
-      iUnion_ball_nat, preimage_univ, inter_univ]
+      iUnion_ball_nat, preimage_univ, inter_univ] at this
+exact this.not_gt isOpen_interior.measure_pos _ K.interior_nonempty
+  rw [← mul_one x]; rw [← smul_eq_mul]
+refine ⟨_, smul_mem_nhds_smul _ div_mem_nhds_one_of_haar_pos_ne_top haar _
+(isOpen_interior.measurableSet.inter <| hf measurableSet_ball) hn
+      mt (measure_mono_top <| inter_subset_left.trans interior_subset) K.isCompact.measure_ne_top,
+    ?_⟩
+  have : Bornology.IsBounded (f '' (interior K inter f ⁻¹' ball 1 n)) :=
+isBounded_ball.subset (image_mono inter_subset_right).trans image_preimage_subset _ _
+  rw [image_smul_distrib]; rw [image_div]
+  exact (this.div this).smul _
 
 Depends on / 依赖: Classical, Classical.arbitrary, K.interior_nonempty, PositiveCompacts, arbitrary, div_mem_nhds_one_of_haar_pos_ne_top, iUnion_ball_nat, inter_iUnion, inter_univ, interior, interior_nonempty, isOpen_interior, isOpen_interior.measurableSe, isOpen_interior.measure_pos, measurableSe, measure_iUnion_null_iff, measure_pos, mul_one, nonpos_iff_eq_zero, not_gt
 -/
@@ -152,7 +172,17 @@ theorem integral_comp_smul
   · simp only [zero_smul, integral_const]
     rcases Nat.eq_zero_or_pos (finrank Real E) with (hE | hE)
     · have : Subsingleton E := finrank_zero_iff.1 hE
-      have : f = fun _ => f 0 := by ext 
+      have : f = fun _ => f 0 := by ext x; rw [Subsingleton.elim x 0]
+      conv_rhs => rw [this]
+      simp only [hE, pow_zero, inv_one, abs_one, one_smul, integral_const]
+    · have : Nontrivial E := finrank_pos_iff.1 hE
+      simp [zero_pow hE.ne', measure_univ_of_isAddLeftInvariant, measureReal_def]
+  · calc
+      (∫ x, f (R • x) ∂μ) = ∫ y, f y ∂Measure.map (fun x => R • x) μ :=
+        (integral_map_equiv (Homeomorph.smul (isUnit_iff_ne_zero.2 hR).unit).toMeasurableEquiv
+            f).symm
+      _ = |(R ^ finrank Real E)⁻¹| • ∫ x, f x ∂μ := by
+        simp only [map_addHaar_smul μ hR, integral_smul_measure, ENNReal.toReal_ofReal, abs_nonneg]
 
 中文:
 定理 integral_comp_smul
@@ -164,7 +194,17 @@ theorem integral_comp_smul
   · simp only [zero_smul, integral_const]
     rcases Nat.eq_zero_or_pos (finrank Real E) with (hE | hE)
     · have : Subsingleton E := finrank_zero_iff.1 hE
-      have : f = fun _ => f 0 := by ext 
+      have : f = fun _ => f 0 := by ext x; rw [Subsingleton.elim x 0]
+      conv_rhs => rw [this]
+      simp only [hE, pow_zero, inv_one, abs_one, one_smul, integral_const]
+    · have : Nontrivial E := finrank_pos_iff.1 hE
+      simp [zero_pow hE.ne', measure_univ_of_isAddLeftInvariant, measureReal_def]
+  · calc
+      (∫ x, f (R • x) ∂μ) = ∫ y, f y ∂Measure.map (fun x => R • x) μ :=
+        (integral_map_equiv (Homeomorph.smul (isUnit_iff_ne_zero.2 hR).unit).toMeasurableEquiv
+            f).symm
+      _ = |(R ^ finrank Real E)⁻¹| • ∫ x, f x ∂μ := by
+        simp only [map_addHaar_smul μ hR, integral_smul_measure, ENNReal.toReal_ofReal, abs_nonneg]
 
 Depends on / 依赖: CompleteSpace, Nat.eq_zero_or_pos, Nontrivial, Subsingleton, Subsingleton.elim, abs_one, conv_rhs, eq_or_ne, eq_zero_or_pos, finrank, finrank_pos_iff, finrank_zero_iff, hE.ne, integral, integral_const, inv_one, measure_univ_of_isAddLeftInvaria, one_smul, pow_zero, zero_pow
 -/
@@ -263,7 +303,13 @@ theorem setIntegral_comp_smul
   ∫ x in s, f (R • x) ∂μ
     = ∫ x in e ⁻¹' e.symm ⁻¹' s, f (e x) ∂μ := by simp [← preimage_comp]; rfl
   _ = ∫ y in e.symm ⁻¹' s, f y ∂map (fun x => R • x) μ := (setIntegral_map_equiv _ _ _).symm
-  _ = |(R ^ finrank R
+  _ = |(R ^ finrank Real E)⁻¹| • ∫ y in e.symm ⁻¹' s, f y ∂μ := by
+    simp [map_addHaar_smul μ hR, integral_smul_measure, ENNReal.toReal_ofReal, abs_nonneg]
+  _ = |(R ^ finrank Real E)⁻¹| • ∫ x in R • s, f x ∂μ := by
+    congr 3
+    ext y
+    rw [mem_smul_set_iff_inv_smul_mem₀ hR]
+    rfl
 
 中文:
 定理 set整数egral_comp_smul
@@ -274,7 +320,13 @@ theorem setIntegral_comp_smul
   ∫ x in s, f (R • x) ∂μ
     = ∫ x in e ⁻¹' e.symm ⁻¹' s, f (e x) ∂μ := by simp [← preimage_comp]; rfl
   _ = ∫ y in e.symm ⁻¹' s, f y ∂map (fun x => R • x) μ := (setIntegral_map_equiv _ _ _).symm
-  _ = |(R ^ finrank R
+  _ = |(R ^ finrank Real E)⁻¹| • ∫ y in e.symm ⁻¹' s, f y ∂μ := by
+    simp [map_addHaar_smul μ hR, integral_smul_measure, ENNReal.toReal_ofReal, abs_nonneg]
+  _ = |(R ^ finrank Real E)⁻¹| • ∫ x in R • s, f x ∂μ := by
+    congr 3
+    ext y
+    rw [mem_smul_set_iff_inv_smul_mem₀ hR]
+    rfl
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_ofReal, Homeomorph, Homeomorph.smul, Units.mk0, abs_nonneg, e.symm, finrank, integral_smul_measure, map_addHaar_smul, mem_s, preimage_comp, setIntegral_map_equiv, toMeasurableEquiv, toReal_ofReal
 -/
@@ -434,7 +486,13 @@ theorem integrable_comp_smul_iff
     forall {g : E -> F} (_ : Integrable g μ) {S : Real} (_ : S != 0), Integrable (fun x => g (S • x)) μ by
     refine ⟨fun hf => ?_, fun hf => this hf hR⟩
     convert! this hf (inv_ne_zero hR)
-    rw [← mul_smul]; rw [mul_inv_cancel₀ hR]; rw [one_smul
+    rw [← mul_smul]; rw [mul_inv_cancel₀ hR]; rw [one_smul]
+  -- now prove
+  intro g hg S hS
+  let t := ((Homeomorph.smul (isUnit_iff_ne_zero.2 hS).unit).toMeasurableEquiv : E ≃ᵐ E)
+  refine (integrable_map_equiv t g).mp (?_ : Integrable g (map (S • ·) μ))
+  rwa [map_addHaar_smul μ hS, integrable_smul_measure _ ENNReal.ofReal_ne_top]
+  simpa only [Ne, ENNReal.ofReal_eq_zero, not_le, abs_pos] using inv_ne_zero (pow_ne_zero _ hS)
 
 中文:
 定理 integrable_comp_smul_iff
@@ -445,7 +503,13 @@ theorem integrable_comp_smul_iff
     forall {g : E -> F} (_ : Integrable g μ) {S : Real} (_ : S != 0), Integrable (fun x => g (S • x)) μ by
     refine ⟨fun hf => ?_, fun hf => this hf hR⟩
     convert! this hf (inv_ne_zero hR)
-    rw [← mul_smul]; rw [mul_inv_cancel₀ hR]; rw [one_smul
+    rw [← mul_smul]; rw [mul_inv_cancel₀ hR]; rw [one_smul]
+  -- now prove
+  intro g hg S hS
+  let t := ((Homeomorph.smul (isUnit_iff_ne_zero.2 hS).unit).toMeasurableEquiv : E ≃ᵐ E)
+  refine (integrable_map_equiv t g).mp (?_ : Integrable g (map (S • ·) μ))
+  rwa [map_addHaar_smul μ hS, integrable_smul_measure _ ENNReal.ofReal_ne_top]
+  simpa only [Ne, ENNReal.ofReal_eq_zero, not_le, abs_pos] using inv_ne_zero (pow_ne_zero _ hS)
 -/
 theorem integrable_comp_smul_iff {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E]
     [MeasurableSpace E] [BorelSpace E] [FiniteDimensional Real E] (μ : Measure E) [IsAddHaarMeasure μ]

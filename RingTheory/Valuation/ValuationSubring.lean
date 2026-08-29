@@ -555,7 +555,11 @@ instance :
       right
       ext
       simp [field]
-    · rw [show (a / b : K)⁻¹ = b / 
+    · rw [show (a / b : K)⁻¹ = b / a by simp] at hh
+      use ⟨b / a, hh⟩
+      left
+      ext
+      simp [field]
 
 中文:
 实例 :
@@ -575,7 +579,11 @@ instance :
       right
       ext
       simp [field]
-    · rw [show (a / b : K)⁻¹ = b / 
+    · rw [show (a / b : K)⁻¹ = b / a by simp] at hh
+      use ⟨b / a, hh⟩
+      left
+      ext
+      simp [field]
 
 Depends on / 依赖: A.mem_or_inv_mem, mem_or_inv_mem
 -/
@@ -666,7 +674,8 @@ instance :
     rcases A.mem_or_inv_mem z with hh | hh
     · use (⟨z, hh⟩, 1); simp
     · refine ⟨⟨1, ⟨⟨_, hh⟩, ?_⟩⟩, mul_inv_cancel₀ h⟩
-      exact me
+      exact mem_nonZeroDivisors_iff_ne_zero.2 fun c => h (inv_eq_zero.mp (congr_arg Subtype.val c))
+  exists_of_eq {a b} h := ⟨1, by ext; simpa using h⟩
 
 中文:
 实例 :
@@ -678,7 +687,8 @@ instance :
     rcases A.mem_or_inv_mem z with hh | hh
     · use (⟨z, hh⟩, 1); simp
     · refine ⟨⟨1, ⟨⟨_, hh⟩, ?_⟩⟩, mul_inv_cancel₀ h⟩
-      exact me
+      exact mem_nonZeroDivisors_iff_ne_zero.2 fun c => h (inv_eq_zero.mp (congr_arg Subtype.val c))
+  exists_of_eq {a b} h := ⟨1, by ext; simpa using h⟩
 -/
 instance : IsFractionRing A K where
   map_units := fun ⟨y, hy⟩ =>
@@ -913,7 +923,7 @@ theorem valuation_eq_one_iff
     have ha' : (a : K)⁻¹ in A := by rw [← valuation_le_one_iff, map_inv₀, h, inv_one]
     refine .of_mul_eq_one ⟨a⁻¹, ha'⟩ ?_
     ext
-    simp [
+    simp [field]
 
 中文:
 定理 valuation_eq_one_iff
@@ -928,7 +938,7 @@ theorem valuation_eq_one_iff
     have ha' : (a : K)⁻¹ in A := by rw [← valuation_le_one_iff, map_inv₀, h, inv_one]
     refine .of_mul_eq_one ⟨a⁻¹, ha'⟩ ?_
     ext
-    simp [
+    simp [field]
 
 Depends on / 依赖: A.valuation_unit, h.unit, valuation_unit
 -/
@@ -1083,7 +1093,8 @@ instance :
   body: { (inferInstance : PartialOrder (ValuationSubring K)) with
 sup := fun R S => ofLE R (R.toSubring ⊔ S.toSubring) le_sup_left
     le_sup_left := fun R S _ hx => (le_sup_left : R.toSubring <= R.toSubring ⊔ S.toSubring) hx
-    le_sup_right := fun R S _ hx => (le_sup_right : S.toSubring <= R.toSubring ⊔ 
+    le_sup_right := fun R S _ hx => (le_sup_right : S.toSubring <= R.toSubring ⊔ S.toSubring) hx
+    sup_le := fun R S T hR hT _ hx => (sup_le hR hT : R.toSubring ⊔ S.toSubring <= T.toSubring) hx }
 
 中文:
 实例 :
@@ -1091,7 +1102,8 @@ sup := fun R S => ofLE R (R.toSubring ⊔ S.toSubring) le_sup_left
   定义体: { (inferInstance : PartialOrder (ValuationSubring K)) with
 sup := fun R S => ofLE R (R.toSubring ⊔ S.toSubring) le_sup_left
     le_sup_left := fun R S _ hx => (le_sup_left : R.toSubring <= R.toSubring ⊔ S.toSubring) hx
-    le_sup_right := fun R S _ hx => (le_sup_right : S.toSubring <= R.toSubring ⊔ 
+    le_sup_right := fun R S _ hx => (le_sup_right : S.toSubring <= R.toSubring ⊔ S.toSubring) hx
+    sup_le := fun R S T hR hT _ hx => (sup_le hR hT : R.toSubring ⊔ S.toSubring <= T.toSubring) hx }
 
 Depends on / 依赖: PartialOrder, R.toSubring, S.toSubring, T.toSubring, ValuationSubring, le_sup_left, le_sup_right, sup_le, toSubring
 -/
@@ -1560,7 +1572,22 @@ theorem ofPrime_idealOfLE
   · rintro ⟨a, r, hr, rfl⟩; apply mul_mem; · exact h a.2
     · rw [← valuation_le_one_iff, map_inv₀, ← inv_one, inv_le_inv₀]
       · exact not_lt.1 ((not_iff_not.2 <| valuation_lt_one_iff S _).1 hr)
-· simpa [Valuation.pos_iff] using fun hr₀ => hr₀ ▸ hr Ideal.zero_mem (R.ideal
+· simpa [Valuation.pos_iff] using fun hr₀ => hr₀ ▸ hr Ideal.zero_mem (R.idealOfLE S h)
+      · exact zero_lt_one
+  · intro hx; by_cases hr : x in R; · exact R.le_ofPrime _ hr
+    have : x != 0 := fun h => hr (by rw [h]; exact R.zero_mem)
+    replace hr := (R.mem_or_inv_mem x).resolve_left hr
+    refine ⟨1, ⟨x⁻¹, hr⟩, ?_, ?_⟩
+    · simp only [Ideal.primeCompl, Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_compl_iff,
+        SetLike.mem_coe, idealOfLE, Ideal.mem_comap, IsLocalRing.mem_maximalIdeal, mem_nonunits_iff,
+        not_not]
+      change IsUnit (⟨x⁻¹, h hr⟩ : S)
+      refine .of_mul_eq_one (⟨x, hx⟩ : S) ?_
+      ext
+      simp [field]
+    · simp
+
+@[simp]
 
 中文:
 定理 ofPrime_idealOfLE
@@ -1570,7 +1597,22 @@ theorem ofPrime_idealOfLE
   · rintro ⟨a, r, hr, rfl⟩; apply mul_mem; · exact h a.2
     · rw [← valuation_le_one_iff, map_inv₀, ← inv_one, inv_le_inv₀]
       · exact not_lt.1 ((not_iff_not.2 <| valuation_lt_one_iff S _).1 hr)
-· simpa [Valuation.pos_iff] using fun hr₀ => hr₀ ▸ hr Ideal.zero_mem (R.ideal
+· simpa [Valuation.pos_iff] using fun hr₀ => hr₀ ▸ hr Ideal.zero_mem (R.idealOfLE S h)
+      · exact zero_lt_one
+  · intro hx; by_cases hr : x in R; · exact R.le_ofPrime _ hr
+    have : x != 0 := fun h => hr (by rw [h]; exact R.zero_mem)
+    replace hr := (R.mem_or_inv_mem x).resolve_left hr
+    refine ⟨1, ⟨x⁻¹, hr⟩, ?_, ?_⟩
+    · simp only [Ideal.primeCompl, Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_compl_iff,
+        SetLike.mem_coe, idealOfLE, Ideal.mem_comap, IsLocalRing.mem_maximalIdeal, mem_nonunits_iff,
+        not_not]
+      change IsUnit (⟨x⁻¹, h hr⟩ : S)
+      refine .of_mul_eq_one (⟨x, hx⟩ : S) ?_
+      ext
+      simp [field]
+    · simp
+
+@[simp]
 
 Depends on / 依赖: Ideal.zero_mem, R.idealOfLE, R.le_ofPrime, R.mem_or_inv_mem, R.zero_mem, Valuation, Valuation.pos_iff, idealOfLE, inv_one, le_ofPrime, mem_or_inv_mem, mul_mem, not_iff_not, not_lt, pos_iff, replace, resolve_left, valuation_le_one_iff, valuation_lt_one_iff, zero_lt_one
 -/
@@ -1727,7 +1769,8 @@ definition primeSpectrumOrderEquiv
         dsimp at h
         have := idealOfLE_le_of_le A _ _ ?_ ?_ h
         · rwa [idealOfLE_ofPrime, idealOfLE_ofPrime] at this
-        a
+        all_goals exact le_ofPrime A (PrimeSpectrum.asIdeal _),
+      fun h => by apply ofPrime_le_of_le; exact h⟩ }
 
 中文:
 定义 primeSpectrumOrderEquiv
@@ -1739,7 +1782,8 @@ definition primeSpectrumOrderEquiv
         dsimp at h
         have := idealOfLE_le_of_le A _ _ ?_ ?_ h
         · rwa [idealOfLE_ofPrime, idealOfLE_ofPrime] at this
-        a
+        all_goals exact le_ofPrime A (PrimeSpectrum.asIdeal _),
+      fun h => by apply ofPrime_le_of_le; exact h⟩ }
 
 Depends on / 依赖: OrderDual, OrderDual.ofDual.trans, OrderDual.toDual_le_toDual, PrimeSpectrum, PrimeSpectrum.asIdeal, a.rec, all_goals, asIdeal, b.rec, idealOfLE_le_of_le, idealOfLE_ofPrime, le_ofPrime, map_rel_iff, ofDual, ofPrime_le_of_le, primeSpectrumEquiv, toDual_le_toDual
 -/
@@ -2200,7 +2244,9 @@ definition unitGroupMulEquiv
       val_inv := Subtype.ext (by simp)
       inv_val := Subtype.ext (by simp) }
   invFun x := ⟨Units.map A.subtype.toMonoidHom x, A.valuation_unit x⟩
-  map_mu
+  map_mul' a b := by ext; rfl
+
+@[simp]
 
 中文:
 定义 unitGroupMulEquiv
@@ -2210,7 +2256,9 @@ definition unitGroupMulEquiv
       val_inv := Subtype.ext (by simp)
       inv_val := Subtype.ext (by simp) }
   invFun x := ⟨Units.map A.subtype.toMonoidHom x, A.valuation_unit x⟩
-  map_mu
+  map_mul' a b := by ext; rfl
+
+@[simp]
 
 Depends on / 依赖: A.subtype.toMonoidHom, A.unitGroup, A.valuation_unit, Subtype, Subtype.ext, Units.map, invFun, inv_val, map_mul, mem_of_valuation_le_one, prop.le, subtype, toMonoidHom, unitGroup, val_inv, valuation_unit, x.prop.le
 -/
@@ -2278,7 +2326,15 @@ theorem unitGroup_le_unitGroup
     by_cases h_2 : 1 + x = 0
     · simp only [← add_eq_zero_iff_neg_eq.1 h_2, neg_mem _ _ (one_mem _)]
     rcases hx with hx | hx
-    · have := h (s
+    · have := h (show Units.mk0 _ h_2 in A.unitGroup from A.valuation.map_one_add_of_lt hx)
+      simpa using
+        B.add_mem _ _ (show 1 + x in B from SetLike.coe_mem (B.unitGroupMulEquiv ⟨_, this⟩ : B))
+          (B.neg_mem _ B.one_mem)
+    · have := h (show Units.mk0 x h_1 in A.unitGroup from hx)
+      exact SetLike.coe_mem (B.unitGroupMulEquiv ⟨_, this⟩ : B)
+  · rintro h x (hx : A.valuation x = 1)
+    apply_fun A.mapOfLE B h at hx
+    simpa using hx
 
 中文:
 定理 unitGroup_le_unitGroup
@@ -2292,7 +2348,15 @@ theorem unitGroup_le_unitGroup
     by_cases h_2 : 1 + x = 0
     · simp only [← add_eq_zero_iff_neg_eq.1 h_2, neg_mem _ _ (one_mem _)]
     rcases hx with hx | hx
-    · have := h (s
+    · have := h (show Units.mk0 _ h_2 in A.unitGroup from A.valuation.map_one_add_of_lt hx)
+      simpa using
+        B.add_mem _ _ (show 1 + x in B from SetLike.coe_mem (B.unitGroupMulEquiv ⟨_, this⟩ : B))
+          (B.neg_mem _ B.one_mem)
+    · have := h (show Units.mk0 x h_1 in A.unitGroup from hx)
+      exact SetLike.coe_mem (B.unitGroupMulEquiv ⟨_, this⟩ : B)
+  · rintro h x (hx : A.valuation x = 1)
+    apply_fun A.mapOfLE B h at hx
+    simpa using hx
 
 Depends on / 依赖: A.unitGroup, A.valuation.map_one_add_of_lt, A.valuation_le_one_iff, B.add_mem, B.neg_mem, B.one_mem, B.unitGroupMulEquiv, SetLike, SetLike.coe_mem, Units.mk0, add_eq_zero_iff_neg_eq, add_mem, coe_mem, le_iff_lt_or_eq, map_one_add_of_lt, neg_mem, one_mem, unitGroup, unitGroupMulEquiv, valuation
 -/
@@ -2515,7 +2579,7 @@ theorem nonunits_le_nonunits
     rw [← valuation_le_one_iff]; rw [← not_lt]; rw [Valuation.one_lt_val_iff _ h_1] at hx ⊢
     by_contra h_2; exact hx (h h_2)
   · intro h x hx
-    by_contra h_1; exact not_lt.2 (monotone_mapOfLE _ _ h (not_lt.1
+    by_contra h_1; exact not_lt.2 (monotone_mapOfLE _ _ h (not_lt.1 h_1)) hx
 
 中文:
 定理 nonunits_le_nonunits
@@ -2528,7 +2592,7 @@ theorem nonunits_le_nonunits
     rw [← valuation_le_one_iff]; rw [← not_lt]; rw [Valuation.one_lt_val_iff _ h_1] at hx ⊢
     by_contra h_2; exact hx (h h_2)
   · intro h x hx
-    by_contra h_1; exact not_lt.2 (monotone_mapOfLE _ _ h (not_lt.1
+    by_contra h_1; exact not_lt.2 (monotone_mapOfLE _ _ h (not_lt.1 h_1)) hx
 
 Depends on / 依赖: Valuation, Valuation.one_lt_val_iff, monotone_mapOfLE, not_lt, one_lt_val_iff, valuation_le_one_iff, zero_mem
 -/
@@ -2726,7 +2790,17 @@ definition principalUnitGroup
     intro a b ha hb
     rw [Set.mem_ofPred] at ha hb ⊢
     refine lt_of_le_of_lt ?_ (max_lt hb ha)
-    rw [← one_mul (A.valuation (b - 1))]; rw [← A.valuation.map_one_add_of_lt ha]; rw [add_sub_cancel]; rw [← Valuation.map_mul]; rw [mul_sub_one]; rw [← 
+    rw [← one_mul (A.valuation (b - 1))]; rw [← A.valuation.map_one_add_of_lt ha]; rw [add_sub_cancel]; rw [← Valuation.map_mul]; rw [mul_sub_one]; rw [← sub_add_sub_cancel]
+    exact A.valuation.map_add _ _
+  one_mem' := by simp
+  inv_mem' := by
+    dsimp
+    intro a ha
+    conv =>
+      lhs
+      rw [← mul_one (A.valuation _)]; rw [← A.valuation.map_one_add_of_lt ha]
+    rwa [add_sub_cancel, ← Valuation.map_mul, sub_mul, Units.inv_mul, ← neg_sub, one_mul,
+      Valuation.map_neg]
 
 中文:
 定义 principalUnitGroup
@@ -2736,7 +2810,17 @@ definition principalUnitGroup
     intro a b ha hb
     rw [Set.mem_ofPred] at ha hb ⊢
     refine lt_of_le_of_lt ?_ (max_lt hb ha)
-    rw [← one_mul (A.valuation (b - 1))]; rw [← A.valuation.map_one_add_of_lt ha]; rw [add_sub_cancel]; rw [← Valuation.map_mul]; rw [mul_sub_one]; rw [← 
+    rw [← one_mul (A.valuation (b - 1))]; rw [← A.valuation.map_one_add_of_lt ha]; rw [add_sub_cancel]; rw [← Valuation.map_mul]; rw [mul_sub_one]; rw [← sub_add_sub_cancel]
+    exact A.valuation.map_add _ _
+  one_mem' := by simp
+  inv_mem' := by
+    dsimp
+    intro a ha
+    conv =>
+      lhs
+      rw [← mul_one (A.valuation _)]; rw [← A.valuation.map_one_add_of_lt ha]
+    rwa [add_sub_cancel, ← Valuation.map_mul, sub_mul, Units.inv_mul, ← neg_sub, one_mul,
+      Valuation.map_neg]
 
 Depends on / 依赖: A.valuation, valuation
 -/
@@ -2810,7 +2894,11 @@ theorem principalUnitGroup_le_principalUnitGroup
     by_cases h_2 : x⁻¹ + 1 = 0
     · rw [add_eq_zero_iff_eq_neg, inv_eq_iff_eq_inv, inv_neg, inv_one] at h_2
       simpa only [h_2] using B.neg_mem _ B.one_mem
-    · rw [← valuation_le_one_iff, ← not_lt, Valuatio
+    · rw [← valuation_le_one_iff, ← not_lt, Valuation.one_lt_val_iff _ h_1,
+        ← add_sub_cancel_right x⁻¹, ← Units.val_mk0 h_2, ← mem_principalUnitGroup_iff] at hx ⊢
+      simpa only [hx] using @h (Units.mk0 (x⁻¹ + 1) h_2)
+  · intro h x hx
+    by_contra h_1; exact not_lt.2 (monotone_mapOfLE _ _ h (not_lt.1 h_1)) hx
 
 中文:
 定理 principalUnitGroup_le_principalUnitGroup
@@ -2822,7 +2910,11 @@ theorem principalUnitGroup_le_principalUnitGroup
     by_cases h_2 : x⁻¹ + 1 = 0
     · rw [add_eq_zero_iff_eq_neg, inv_eq_iff_eq_inv, inv_neg, inv_one] at h_2
       simpa only [h_2] using B.neg_mem _ B.one_mem
-    · rw [← valuation_le_one_iff, ← not_lt, Valuatio
+    · rw [← valuation_le_one_iff, ← not_lt, Valuation.one_lt_val_iff _ h_1,
+        ← add_sub_cancel_right x⁻¹, ← Units.val_mk0 h_2, ← mem_principalUnitGroup_iff] at hx ⊢
+      simpa only [hx] using @h (Units.mk0 (x⁻¹ + 1) h_2)
+  · intro h x hx
+    by_contra h_1; exact not_lt.2 (monotone_mapOfLE _ _ h (not_lt.1 h_1)) hx
 
 Depends on / 依赖: B.neg_mem, B.one_mem, Units.mk0, Units.val_mk0, Valuation, Valuation.one_lt_val_iff, add_eq_zero_iff_eq_neg, add_sub_cancel_right, inv_eq_iff_eq_inv, inv_neg, inv_one, mem_principalUnitGroup_iff, monotone_mapOfLE, neg_mem, not_lt, one_lt_val_iff, one_mem, val_mk0, valuation_le_one_iff, zero_mem
 -/
@@ -3194,7 +3286,9 @@ definition pointwiseHasSMul
     { g • S.toSubring with
       mem_or_inv_mem' := fun x =>
         (mem_or_inv_mem S (g⁻¹ • x)).imp Subring.mem_pointwise_smul_iff_inv_smul_mem.mpr fun h =>
-Subring.mem_pointwise_smul_iff_inv_smul_mem.mpr by rwa [smul
+Subring.mem_pointwise_smul_iff_inv_smul_mem.mpr by rwa [smul_inv''] }
+
+scoped[Pointwise] attribute [instance] ValuationSubring.pointwiseHasSMul
 
 中文:
 定义 pointwiseHasSMul
@@ -3203,7 +3297,9 @@ Subring.mem_pointwise_smul_iff_inv_smul_mem.mpr by rwa [smul
     { g • S.toSubring with
       mem_or_inv_mem' := fun x =>
         (mem_or_inv_mem S (g⁻¹ • x)).imp Subring.mem_pointwise_smul_iff_inv_smul_mem.mpr fun h =>
-Subring.mem_pointwise_smul_iff_inv_smul_mem.mpr by rwa [smul
+Subring.mem_pointwise_smul_iff_inv_smul_mem.mpr by rwa [smul_inv''] }
+
+scoped[Pointwise] attribute [instance] ValuationSubring.pointwiseHasSMul
 
 Depends on / 依赖: ValuationSubring, ValuationSubring.map, should
 -/

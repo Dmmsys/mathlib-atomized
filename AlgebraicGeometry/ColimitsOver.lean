@@ -275,7 +275,24 @@ lemma isPullback
 (isColimitOfPreserves (Over.pullback P ⊤ (𝒰.trans hij)) (d.isColimit j))
       D.isoWhiskerLeft (Over.pullbackComp _ _ _) ≪≫ (Functor.associator _ _ _).symm
   have heq : (Over.map _ (d.prop_trans hij)).map iso1.hom ≫
-
+        (Over.mapPullbackAdj _ _ _ (d.prop_trans hij) trivial).counit.app _ =
+      d.transitionMap hij := by
+    apply (isColimitOfPreserves (Over.map _ (d.prop_trans hij)) (d.isColimit i)).hom_ext
+    intro a
+    dsimp only [Functor.comp_obj, Functor.id_obj, Functor.mapCocone_pt, Functor.const_obj_obj,
+      Functor.mapCocone_ι_app, Iso.trans_hom, Functor.isoWhiskerLeft_hom, Iso.symm_hom]
+    rw [IsColimit.coconePointsIsoOfNatIso_hom]; rw [← Functor.map_comp_assoc]; rw [IsColimit.ι_map]; rw [Functor.mapCocone_ι_app]; rw [Functor.map_comp]; rw [Category.assoc]; rw [Adjunction.counit_naturality]; rw [cocone_ι_transitionMap]
+    ext
+    dsimp
+    rw [Category.comp_id]; rw [← Category.assoc]
+    congr 1
+    apply pullback.hom_ext <;> simp
+  let iso2 : (d.cocone i).pt.left ≅ pullback (d.cocone j).pt.hom (𝒰.trans hij) :=
+    (MorphismProperty.Over.forget _ _ _ ⋙ Over.forget _).mapIso iso1
+  refine .of_iso (IsPullback.of_hasPullback _ _) iso2.symm (.refl _) (.refl _) (.refl _) ?_ ?_
+      (by simp) (by simp)
+  · simpa [← cancel_epi iso2.hom] using! congr($(heq).left)
+  · exact (Over.w iso1.inv).symm
 
 中文:
 引理 isPullback
@@ -286,7 +303,24 @@ lemma isPullback
 (isColimitOfPreserves (Over.pullback P ⊤ (𝒰.trans hij)) (d.isColimit j))
       D.isoWhiskerLeft (Over.pullbackComp _ _ _) ≪≫ (Functor.associator _ _ _).symm
   have heq : (Over.map _ (d.prop_trans hij)).map iso1.hom ≫
-
+        (Over.mapPullbackAdj _ _ _ (d.prop_trans hij) trivial).counit.app _ =
+      d.transitionMap hij := by
+    apply (isColimitOfPreserves (Over.map _ (d.prop_trans hij)) (d.isColimit i)).hom_ext
+    intro a
+    dsimp only [Functor.comp_obj, Functor.id_obj, Functor.mapCocone_pt, Functor.const_obj_obj,
+      Functor.mapCocone_ι_app, Iso.trans_hom, Functor.isoWhiskerLeft_hom, Iso.symm_hom]
+    rw [IsColimit.coconePointsIsoOfNatIso_hom]; rw [← Functor.map_comp_assoc]; rw [IsColimit.ι_map]; rw [Functor.mapCocone_ι_app]; rw [Functor.map_comp]; rw [Category.assoc]; rw [Adjunction.counit_naturality]; rw [cocone_ι_transitionMap]
+    ext
+    dsimp
+    rw [Category.comp_id]; rw [← Category.assoc]
+    congr 1
+    apply pullback.hom_ext <;> simp
+  let iso2 : (d.cocone i).pt.left ≅ pullback (d.cocone j).pt.hom (𝒰.trans hij) :=
+    (MorphismProperty.Over.forget _ _ _ ⋙ Over.forget _).mapIso iso1
+  refine .of_iso (IsPullback.of_hasPullback _ _) iso2.symm (.refl _) (.refl _) (.refl _) ?_ ?_
+      (by simp) (by simp)
+  · simpa [← cancel_epi iso2.hom] using! congr($(heq).left)
+  · exact (Over.w iso1.inv).symm
 
 Depends on / 依赖: D.isoWhiskerLeft, Functor, Functor.associator, Functor.comp_, Over.map, Over.mapPullbackAdj, Over.pullback, Over.pullbackComp, associator, cocone, coconePointsIsoOfNatIso, comp_, counit, counit.app, d.cocone, d.isColimit, d.prop_trans, d.transitionMap, hom_ext, isColimit
 -/
@@ -465,7 +499,22 @@ definition gluedCocone
   refine { pt := d.glued, ι.app a := ?_, ι.naturality {a b} f := ?_ }
   · refine ⟨(𝒱 a).glueMorphismsOverOfLocallyDirected ?_ ?_ ?_, trivial, trivial⟩
     · intro i
-      exact ((d.cocone i).ι.app a).left ≫ colimit.ι d.relat
+      exact ((d.cocone i).ι.app a).left ≫ colimit.ι d.relativeGluingData.functor i
+    · intro i j hij
+      conv_rhs => rw [← colimit.w d.relativeGluingData.functor hij]
+      simp only [← Category.assoc]
+      congr 1
+      exact congr($(d.cocone_ι_transitionMap hij a).left).symm
+    · intro
+      simp [𝒱, pullback.condition, glued]
+  · ext
+    apply (𝒱 a).hom_ext
+    intro i
+    have : (𝒱 a).f i ≫ (D.map f).left =
+        ((D ⋙ Over.pullback _ _ (𝒰.f i)).map f).left ≫ (𝒱 b).f i := by
+      simp [𝒱]
+    dsimp
+    rw [Category.comp_id]; rw [Scheme.OpenCover.map_glueMorphismsOverOfLocallyDirected_left]; rw [reassoc_of% this]; rw [Scheme.OpenCover.map_glueMorphismsOverOfLocallyDirected_left]; rw [← Over.comp_left_assoc]; rw [← Comma.comp_hom]; rw [← Functor.comp_map]; rw [Cocone.w]
 
 中文:
 定义 gluedCocone
@@ -475,7 +524,22 @@ definition gluedCocone
   refine { pt := d.glued, ι.app a := ?_, ι.naturality {a b} f := ?_ }
   · refine ⟨(𝒱 a).glueMorphismsOverOfLocallyDirected ?_ ?_ ?_, trivial, trivial⟩
     · intro i
-      exact ((d.cocone i).ι.app a).left ≫ colimit.ι d.relat
+      exact ((d.cocone i).ι.app a).left ≫ colimit.ι d.relativeGluingData.functor i
+    · intro i j hij
+      conv_rhs => rw [← colimit.w d.relativeGluingData.functor hij]
+      simp only [← Category.assoc]
+      congr 1
+      exact congr($(d.cocone_ι_transitionMap hij a).left).symm
+    · intro
+      simp [𝒱, pullback.condition, glued]
+  · ext
+    apply (𝒱 a).hom_ext
+    intro i
+    have : (𝒱 a).f i ≫ (D.map f).left =
+        ((D ⋙ Over.pullback _ _ (𝒰.f i)).map f).left ≫ (𝒱 b).f i := by
+      simp [𝒱]
+    dsimp
+    rw [Category.comp_id]; rw [Scheme.OpenCover.map_glueMorphismsOverOfLocallyDirected_left]; rw [reassoc_of% this]; rw [Scheme.OpenCover.map_glueMorphismsOverOfLocallyDirected_left]; rw [← Over.comp_left_assoc]; rw [← Comma.comp_hom]; rw [← Functor.comp_map]; rw [Cocone.w]
 
 Depends on / 依赖: Category, Category.assoc, D.obj, OpenCover, cocone, colimit, colimit.w, conv_rhs, d.cocone, d.cocone_, d.glued, d.relativeGluingData.functor, functor, glueMorphismsOverOfLocallyDirected, left.OpenCover, naturality, relativeGluingData
 -/
@@ -551,7 +615,52 @@ definition isColimitGluedCocone
   · refine ⟨𝒱.glueMorphismsOverOfLocallyDirected ?_ ?_ ?_, trivial, trivial⟩
     · intro i
       exact ((d.isColimit i).desc (Functor.mapCocone _ s)).left ≫ pullback.fst _ _
-    · intr
+    · intro i j hij
+      simp only [Functor.mapCocone_pt, MorphismProperty.Over.pullback_obj_left,
+        Functor.id_obj, Functor.const_obj_obj]
+      change (d.transitionMap hij).left ≫ _ ≫ _ = _
+      have : d.transitionMap hij ≫ (d.isColimit j).desc ((Over.pullback P ⊤ (𝒰.f j)).mapCocone s) =
+          (Over.map ⊤ (d.prop_trans hij)).map
+            ((d.isColimit i).desc ((MorphismProperty.Over.pullback P ⊤ (𝒰.f i)).mapCocone s)) ≫
+          (Over.pullbackMapHomPullback _ (d.prop_trans hij) trivial _ _).app _ := by
+        apply (isColimitOfPreserves (Over.map ⊤ <| d.prop_trans _) (d.isColimit i)).hom_ext
+        intro
+        ext
+        apply pullback.hom_ext <;> simp [cocone_ι_transitionMap_assoc, ← Functor.map_comp_assoc]
+      rw [← Over.comp_left_assoc]; rw [← Comma.comp_hom]; rw [this]
+      simp
+    · intro i
+      have : _ ≫ pullback.snd _ _ = _ := Over.w ((d.isColimit i).desc (Functor.mapCocone _ s))
+      simp only [glued, Category.assoc, 𝒱, pullback.condition]
+      rw [reassoc_of% this]
+      simp
+  · intro s a
+    let 𝒲 (a : J) : (D.obj a).left.OpenCover := 𝒰.pullback₁ (D.obj a).hom
+    ext
+    refine (𝒲 a).hom_ext _ _ fun i => ?_
+    dsimp
+    simp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
+      PreZeroHypercover.pullback₁_f, 𝒲, fst_gluedCocone_ι_assoc]
+    change _ ≫ 𝒱.f _ ≫ _ = _
+    rw [Scheme.OpenCover.map_glueMorphismsOverOfLocallyDirected_left]; rw [← Over.comp_left_assoc]; rw [← Comma.comp_hom]
+    simp
+  · intro s m hm
+    ext
+    refine 𝒱.hom_ext _ _ fun i => ?_
+    have : (d.pullbackGluedIso i).inv ≫ (Over.pullback P ⊤ (𝒰.f i)).map m =
+        (d.isColimit i).desc ((Over.pullback P ⊤ (𝒰.f i)).mapCocone s) := by
+      refine (d.isColimit i).hom_ext fun a => ?_
+      rw [IsColimit.fac]
+      ext
+      apply pullback.hom_ext
+      · dsimp
+        simp only [Category.assoc, limit.lift_π, PullbackCone.mk_π_app,
+          pullbackGluedIso_inv_fst_assoc]
+        rw [← congr($(hm a).left)]
+        simp [fst_gluedCocone_ι_assoc]
+      · simp
+    rw [Scheme.OpenCover.map_glueMorphismsOverOfLocallyDirected_left]
+    simp [𝒱, ← this]
 
 中文:
 定义 isColimitGluedCocone
@@ -562,7 +671,52 @@ definition isColimitGluedCocone
   · refine ⟨𝒱.glueMorphismsOverOfLocallyDirected ?_ ?_ ?_, trivial, trivial⟩
     · intro i
       exact ((d.isColimit i).desc (Functor.mapCocone _ s)).left ≫ pullback.fst _ _
-    · intr
+    · intro i j hij
+      simp only [Functor.mapCocone_pt, MorphismProperty.Over.pullback_obj_left,
+        Functor.id_obj, Functor.const_obj_obj]
+      change (d.transitionMap hij).left ≫ _ ≫ _ = _
+      have : d.transitionMap hij ≫ (d.isColimit j).desc ((Over.pullback P ⊤ (𝒰.f j)).mapCocone s) =
+          (Over.map ⊤ (d.prop_trans hij)).map
+            ((d.isColimit i).desc ((MorphismProperty.Over.pullback P ⊤ (𝒰.f i)).mapCocone s)) ≫
+          (Over.pullbackMapHomPullback _ (d.prop_trans hij) trivial _ _).app _ := by
+        apply (isColimitOfPreserves (Over.map ⊤ <| d.prop_trans _) (d.isColimit i)).hom_ext
+        intro
+        ext
+        apply pullback.hom_ext <;> simp [cocone_ι_transitionMap_assoc, ← Functor.map_comp_assoc]
+      rw [← Over.comp_left_assoc]; rw [← Comma.comp_hom]; rw [this]
+      simp
+    · intro i
+      have : _ ≫ pullback.snd _ _ = _ := Over.w ((d.isColimit i).desc (Functor.mapCocone _ s))
+      simp only [glued, Category.assoc, 𝒱, pullback.condition]
+      rw [reassoc_of% this]
+      simp
+  · intro s a
+    let 𝒲 (a : J) : (D.obj a).left.OpenCover := 𝒰.pullback₁ (D.obj a).hom
+    ext
+    refine (𝒲 a).hom_ext _ _ fun i => ?_
+    dsimp
+    simp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
+      PreZeroHypercover.pullback₁_f, 𝒲, fst_gluedCocone_ι_assoc]
+    change _ ≫ 𝒱.f _ ≫ _ = _
+    rw [Scheme.OpenCover.map_glueMorphismsOverOfLocallyDirected_left]; rw [← Over.comp_left_assoc]; rw [← Comma.comp_hom]
+    simp
+  · intro s m hm
+    ext
+    refine 𝒱.hom_ext _ _ fun i => ?_
+    have : (d.pullbackGluedIso i).inv ≫ (Over.pullback P ⊤ (𝒰.f i)).map m =
+        (d.isColimit i).desc ((Over.pullback P ⊤ (𝒰.f i)).mapCocone s) := by
+      refine (d.isColimit i).hom_ext fun a => ?_
+      rw [IsColimit.fac]
+      ext
+      apply pullback.hom_ext
+      · dsimp
+        simp only [Category.assoc, limit.lift_π, PullbackCone.mk_π_app,
+          pullbackGluedIso_inv_fst_assoc]
+        rw [← congr($(hm a).left)]
+        simp [fst_gluedCocone_ι_assoc]
+      · simp
+    rw [Scheme.OpenCover.map_glueMorphismsOverOfLocallyDirected_left]
+    simp [𝒱, ← this]
 
 Depends on / 依赖: Functor, Functor.const_obj_obj, Functor.id_obj, Functor.mapCocone, Functor.mapCocone_pt, MorphismProperty, MorphismProperty.Over.pullback_obj_left, OpenCover, const_obj_obj, d.glued.left.OpenCover, d.isColimit, d.relativeGluingData.cover, d.transitionMap, glueMorphismsOverOfLocallyDirected, id_obj, isColimit, mapCocone, mapCocone_pt, pullback, pullback.fst
 -/

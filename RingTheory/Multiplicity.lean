@@ -1498,7 +1498,12 @@ theorem emultiplicity_le_emultiplicity_iff
       obtain ⟨w, h_1⟩ := h_1
       split
       next h_2 =>
-        simp_all only [cast_le, 
+        simp_all only [cast_le, le_find_iff, lt_find_iff, Decidable.not_not, le_refl,
+          not_true_eq_false, not_false_eq_true, implies_true]
+      next h_2 => simp_all only [not_exists, Decidable.not_not, le_top]
+    next h_1 =>
+      simp_all only [not_exists, Decidable.not_not, not_true_eq_false, top_le_iff,
+        dite_eq_right_iff, ENat.natCast_ne_top, imp_false, not_false_eq_true, implies_true]
 
 中文:
 定理 emultiplicity_le_emultiplicity_iff
@@ -1514,7 +1519,12 @@ theorem emultiplicity_le_emultiplicity_iff
       obtain ⟨w, h_1⟩ := h_1
       split
       next h_2 =>
-        simp_all only [cast_le, 
+        simp_all only [cast_le, le_find_iff, lt_find_iff, Decidable.not_not, le_refl,
+          not_true_eq_false, not_false_eq_true, implies_true]
+      next h_2 => simp_all only [not_exists, Decidable.not_not, le_top]
+    next h_1 =>
+      simp_all only [not_exists, Decidable.not_not, not_true_eq_false, top_le_iff,
+        dite_eq_right_iff, ENat.natCast_ne_top, imp_false, not_false_eq_true, implies_true]
 
 Depends on / 依赖: classical, emultiplicity, le_emultiplicity_of_pow_dvd, le_trans, pow_dvd_of_le_emultiplicity
 -/
@@ -1800,7 +1810,17 @@ theorem Nat.finiteMultiplicity_iff
     ⟨fun h =>
       or_iff_not_imp_right.2 fun hb =>
 have ha : a != 0 := fun ha => hb zero_dvd_iff.mp by rw [ha] at h; exact h 1
-        Classical.by_contradiction
+        Classical.by_contradiction fun ha1 : a != 1 =>
+          have ha_gt_one : 1 < a :=
+            lt_of_not_ge fun _ =>
+              match a with
+              | 0 => ha rfl
+              | 1 => ha1 rfl
+              | b+2 => by lia
+          not_lt_of_ge (le_of_dvd (Nat.pos_of_ne_zero hb) (h b)) (b.lt_pow_self ha_gt_one),
+      fun h => by cases h <;> simp [*]⟩
+
+alias ⟨_, Dvd.multiplicity_pos⟩ := dvd_iff_multiplicity_pos
 
 中文:
 定理 自然数.finiteMultiplicity_iff
@@ -1812,7 +1832,17 @@ have ha : a != 0 := fun ha => hb zero_dvd_iff.mp by rw [ha] at h; exact h 1
     ⟨fun h =>
       or_iff_not_imp_right.2 fun hb =>
 have ha : a != 0 := fun ha => hb zero_dvd_iff.mp by rw [ha] at h; exact h 1
-        Classical.by_contradiction
+        Classical.by_contradiction fun ha1 : a != 1 =>
+          have ha_gt_one : 1 < a :=
+            lt_of_not_ge fun _ =>
+              match a with
+              | 0 => ha rfl
+              | 1 => ha1 rfl
+              | b+2 => by lia
+          not_lt_of_ge (le_of_dvd (Nat.pos_of_ne_zero hb) (h b)) (b.lt_pow_self ha_gt_one),
+      fun h => by cases h <;> simp [*]⟩
+
+alias ⟨_, Dvd.multiplicity_pos⟩ := dvd_iff_multiplicity_pos
 
 Depends on / 依赖: Classical, Classical.by_contradiction, FiniteMultiplicity, FiniteMultiplicity.not_iff_forall, Nat.le_zero, Nat.pos_of_ne_zero, b.lt_pow_self, by_contradiction, ha_gt_one, le_of_dvd, le_zero, lt_of_not_ge, lt_pow_self, not_and_or, not_iff_forall, not_iff_not, not_lt, not_lt_of_ge, not_ne_iff, or_iff_not_imp_right
 -/
@@ -2225,7 +2255,7 @@ theorem min_le_emultiplicity_add
     simp only [not_and_or, not_not] at hm ⊢
     exact hm.or_of_add
   · apply le_emultiplicity_of_pow_dvd
-    simp [dvd_add, pow_dvd_of_le_emultiplicity, 
+    simp [dvd_add, pow_dvd_of_le_emultiplicity, ← hm]
 
 中文:
 定理 min_le_emultiplicity_add
@@ -2237,7 +2267,7 @@ theorem min_le_emultiplicity_add
     simp only [not_and_or, not_not] at hm ⊢
     exact hm.or_of_add
   · apply le_emultiplicity_of_pow_dvd
-    simp [dvd_add, pow_dvd_of_le_emultiplicity, 
+    simp [dvd_add, pow_dvd_of_le_emultiplicity, ← hm]
 
 Depends on / 依赖: contrapose, dvd_add, emultiplicity, emultiplicity_eq_top, hm.or_of_add, le_emultiplicity_of_pow_dvd, min_eq_top, not_and_or, not_not, or_of_add, pow_dvd_of_le_emultiplicity, top_le_iff
 -/
@@ -2406,7 +2436,11 @@ theorem emultiplicity_add_of_gt
     · apply pow_dvd_of_le_emultiplicity
       exact h.le
     · simp
-  · rw [dvd_add_right
+  · rw [dvd_add_right]
+    · apply this.not_pow_dvd_of_multiplicity_lt
+      simp
+    apply pow_dvd_of_le_emultiplicity
+    exact Order.add_one_le_of_lt h
 
 中文:
 定理 emultiplicity_add_of_gt
@@ -2419,7 +2453,11 @@ theorem emultiplicity_add_of_gt
     · apply pow_dvd_of_le_emultiplicity
       exact h.le
     · simp
-  · rw [dvd_add_right
+  · rw [dvd_add_right]
+    · apply this.not_pow_dvd_of_multiplicity_lt
+      simp
+    apply pow_dvd_of_le_emultiplicity
+    exact Order.add_one_le_of_lt h
 
 Depends on / 依赖: FiniteMultiplicity, Order.add_one_le_of_lt, add_one_le_of_lt, dvd_add, dvd_add_right, emultiplicity_eq_multiplicity, emultiplicity_eq_of_dvd_of_not_dvd, finiteMultiplicity_iff_emultiplicity_ne_top, h.le, not_pow_dvd_of_multiplicity_lt, pow_dvd_of_le_emultiplicity, this.emultiplicity_eq_multiplicity, this.not_pow_dvd_of_multiplicity_lt
 -/
@@ -2595,7 +2633,28 @@ theorem finiteMultiplicity_mul_aux
         have hn0 : 0 < n :=
           Nat.pos_of_ne_zero fun hn0 => by simp [hx, hn0] at ha
         have hpx : ¬p ^ (n - 1 + 1) ∣ x := fun ⟨y, hy⟩ =>
-          ha (hx.symm ▸ ⟨y, mul_rig
+          ha (hx.symm ▸ ⟨y, mul_right_cancel₀ hp.1 <| by
+            rw [tsub_add_cancel_of_le (succ_le_of_lt hn0)] at hy
+            simp [hy, pow_add, mul_comm, mul_left_comm]⟩)
+        have : 1 <= n + m := le_trans hn0 (Nat.le_add_right n m)
+        finiteMultiplicity_mul_aux hp hpx hb
+          ⟨s, mul_right_cancel₀ hp.1 (by
+                rw [tsub_add_eq_add_tsub (succ_le_of_lt hn0)]; rw [tsub_add_cancel_of_le this]
+                simp_all [mul_comm, mul_left_comm, pow_add])⟩)
+      fun ⟨x, hx⟩ =>
+        have hm0 : 0 < m :=
+          Nat.pos_of_ne_zero fun hm0 => by simp [hx, hm0] at hb
+        have hpx : ¬p ^ (m - 1 + 1) ∣ x := fun ⟨y, hy⟩ =>
+          hb
+            (hx.symm ▸
+              ⟨y,
+mul_right_cancel₀ hp.1 by
+                  rw [tsub_add_cancel_of_le (succ_le_of_lt hm0)] at hy
+                  simp [hy, pow_add, mul_comm, mul_left_comm]⟩)
+        finiteMultiplicity_mul_aux hp ha hpx
+        ⟨s, mul_right_cancel₀ hp.1 (by
+              rw [add_assoc]; rw [tsub_add_cancel_of_le (succ_le_of_lt hm0)]
+              simp_all [mul_comm, mul_left_comm, pow_add])⟩
 
 中文:
 定理 finiteMultiplicity_mul_aux
@@ -2606,7 +2665,28 @@ theorem finiteMultiplicity_mul_aux
         have hn0 : 0 < n :=
           Nat.pos_of_ne_zero fun hn0 => by simp [hx, hn0] at ha
         have hpx : ¬p ^ (n - 1 + 1) ∣ x := fun ⟨y, hy⟩ =>
-          ha (hx.symm ▸ ⟨y, mul_rig
+          ha (hx.symm ▸ ⟨y, mul_right_cancel₀ hp.1 <| by
+            rw [tsub_add_cancel_of_le (succ_le_of_lt hn0)] at hy
+            simp [hy, pow_add, mul_comm, mul_left_comm]⟩)
+        have : 1 <= n + m := le_trans hn0 (Nat.le_add_right n m)
+        finiteMultiplicity_mul_aux hp hpx hb
+          ⟨s, mul_right_cancel₀ hp.1 (by
+                rw [tsub_add_eq_add_tsub (succ_le_of_lt hn0)]; rw [tsub_add_cancel_of_le this]
+                simp_all [mul_comm, mul_left_comm, pow_add])⟩)
+      fun ⟨x, hx⟩ =>
+        have hm0 : 0 < m :=
+          Nat.pos_of_ne_zero fun hm0 => by simp [hx, hm0] at hb
+        have hpx : ¬p ^ (m - 1 + 1) ∣ x := fun ⟨y, hy⟩ =>
+          hb
+            (hx.symm ▸
+              ⟨y,
+mul_right_cancel₀ hp.1 by
+                  rw [tsub_add_cancel_of_le (succ_le_of_lt hm0)] at hy
+                  simp [hy, pow_add, mul_comm, mul_left_comm]⟩)
+        finiteMultiplicity_mul_aux hp ha hpx
+        ⟨s, mul_right_cancel₀ hp.1 (by
+              rw [add_assoc]; rw [tsub_add_cancel_of_le (succ_le_of_lt hm0)]
+              simp_all [mul_comm, mul_left_comm, pow_add])⟩
 
 Depends on / 依赖: mul_comm, mul_left_comm, pow_add
 -/
@@ -2728,7 +2808,12 @@ theorem multiplicity_self
     nth_rw 1 [← mul_one a] at hv
     simp only [sq, mul_assoc, mul_eq_mul_left_iff] at hv
     obtain hv | rfl := hv
-    · have : IsUnit a := .of_mul_eq_
+    · have : IsUnit a := .of_mul_eq_one v hv.symm
+      simpa [this] using ha.not_isUnit
+    · simpa using ha.ne_zero
+  · simp [ha]
+
+@[simp]
 
 中文:
 定理 multiplicity_self
@@ -2742,7 +2827,12 @@ theorem multiplicity_self
     nth_rw 1 [← mul_one a] at hv
     simp only [sq, mul_assoc, mul_eq_mul_left_iff] at hv
     obtain hv | rfl := hv
-    · have : IsUnit a := .of_mul_eq_
+    · have : IsUnit a := .of_mul_eq_one v hv.symm
+      simpa [this] using ha.not_isUnit
+    · simpa using ha.ne_zero
+  · simp [ha]
+
+@[simp]
 
 Depends on / 依赖: FiniteMultiplicity, IsUnit, dvd_refl, ha.multiplicity_eq_iff, ha.ne_zero, ha.not_isUnit, hv.symm, mul_assoc, mul_eq_mul_left_iff, mul_one, multiplicity_eq_iff, ne_zero, not_isUnit, nth_rw, of_mul_eq_one, pow_one, reduceAdd, true_and
 -/
@@ -2792,7 +2882,13 @@ theorem multiplicity_mul
   have hdivb : p ^ multiplicity p b ∣ b := pow_multiplicity_dvd ..
   have hdiv : p ^ (multiplicity p a + multiplicity p b) ∣ a * b := by
     rw [pow_add]; gcongr
-  have hsucc : ¬p ^ (multiplicity p a + multiplicity p b + 1) ∣ a * 
+  have hsucc : ¬p ^ (multiplicity p a + multiplicity p b + 1) ∣ a * b :=
+    fun h =>
+    not_or_intro (hfin.mul_left.not_pow_dvd_of_multiplicity_lt (lt_succ_self _))
+      (hfin.mul_right.not_pow_dvd_of_multiplicity_lt (lt_succ_self _))
+      (_root_.succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul hp hdiva hdivb h)
+  rw [hfin.multiplicity_eq_iff]
+  exact ⟨hdiv, hsucc⟩
 
 中文:
 定理 multiplicity_mul
@@ -2802,7 +2898,13 @@ theorem multiplicity_mul
   have hdivb : p ^ multiplicity p b ∣ b := pow_multiplicity_dvd ..
   have hdiv : p ^ (multiplicity p a + multiplicity p b) ∣ a * b := by
     rw [pow_add]; gcongr
-  have hsucc : ¬p ^ (multiplicity p a + multiplicity p b + 1) ∣ a * 
+  have hsucc : ¬p ^ (multiplicity p a + multiplicity p b + 1) ∣ a * b :=
+    fun h =>
+    not_or_intro (hfin.mul_left.not_pow_dvd_of_multiplicity_lt (lt_succ_self _))
+      (hfin.mul_right.not_pow_dvd_of_multiplicity_lt (lt_succ_self _))
+      (_root_.succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul hp hdiva hdivb h)
+  rw [hfin.multiplicity_eq_iff]
+  exact ⟨hdiv, hsucc⟩
 
 Depends on / 依赖: _root_, _root_.succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul, hfin.mul_left.not_pow_dvd_of_multiplicity_lt, hfin.mul_right.not_pow_dvd_of_multiplicity_lt, lt_succ_self, mul_left, mul_right, multiplicity, not_or_intro, not_pow_dvd_of_multiplicity_lt, pow_add, pow_multiplicity_dvd, succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
 -/
@@ -2832,7 +2934,9 @@ theorem emultiplicity_mul
       hfin.mul_right.emultiplicity_eq_multiplicity]
     norm_cast
     exact multiplicity_mul hp hfin
-  · rw [emultiplicity_eq_top.mpr hfin, eq_comm, ENat.add_eq_
+  · rw [emultiplicity_eq_top.mpr hfin, eq_comm, ENat.add_eq_top, emultiplicity_eq_top,
+      emultiplicity_eq_top]
+    simpa only [FiniteMultiplicity.mul_iff hp, not_and_or] using hfin
 
 中文:
 定理 emultiplicity_mul
@@ -2843,7 +2947,9 @@ theorem emultiplicity_mul
       hfin.mul_right.emultiplicity_eq_multiplicity]
     norm_cast
     exact multiplicity_mul hp hfin
-  · rw [emultiplicity_eq_top.mpr hfin, eq_comm, ENat.add_eq_
+  · rw [emultiplicity_eq_top.mpr hfin, eq_comm, ENat.add_eq_top, emultiplicity_eq_top,
+      emultiplicity_eq_top]
+    simpa only [FiniteMultiplicity.mul_iff hp, not_and_or] using hfin
 
 Depends on / 依赖: ENat.add_eq_top, FiniteMultiplicity, FiniteMultiplicity.mul_iff, add_eq_top, emultiplicity_eq_multiplicity, emultiplicity_eq_top, emultiplicity_eq_top.mpr, eq_comm, hfin.emultiplicity_eq_multiplicity, hfin.mul_left.emultiplicity_eq_multiplicity, hfin.mul_right.emultiplicity_eq_multiplicity, mul_iff, mul_left, mul_right, multiplicity_mul, not_and_or
 -/

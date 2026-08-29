@@ -53,7 +53,8 @@ theorem Real.sInf_smul_of_nonneg
     exact csInf_singleton 0
   by_cases h : BddBelow s
   · exact ((OrderIso.smulRight ha').map_csInf' hs h).symm
-  · rw [Real.sInf_
+  · rw [Real.sInf_of_not_bddBelow (mt (bddBelow_smul_iff_of_pos ha').1 h),
+        Real.sInf_of_not_bddBelow h, smul_zero]
 
 中文:
 定理 实数.sInf_smul_of_nonneg
@@ -67,7 +68,8 @@ theorem Real.sInf_smul_of_nonneg
     exact csInf_singleton 0
   by_cases h : BddBelow s
   · exact ((OrderIso.smulRight ha').map_csInf' hs h).symm
-  · rw [Real.sInf_
+  · rw [Real.sInf_of_not_bddBelow (mt (bddBelow_smul_iff_of_pos ha').1 h),
+        Real.sInf_of_not_bddBelow h, smul_zero]
 
 Depends on / 依赖: BddBelow, OrderIso, OrderIso.smulRight, Real.sInf_empty, Real.sInf_of_not_bddBelow, bddBelow_smul_iff_of_pos, csInf_singleton, eq_empty_or_nonempty, eq_or_lt, ha.eq_or_lt, map_csInf, s.eq_empty_or_nonempty, sInf_empty, sInf_of_not_bddBelow, smulRight, smul_set_empty, smul_zero, zero_smul, zero_smul_set
 -/
@@ -117,7 +119,8 @@ theorem Real.sSup_smul_of_nonneg
     exact csSup_singleton 0
   by_cases h : BddAbove s
   · exact ((OrderIso.smulRight ha').map_csSup' hs h).symm
-  · rw [Real.sSup_
+  · rw [Real.sSup_of_not_bddAbove (mt (bddAbove_smul_iff_of_pos ha').1 h),
+        Real.sSup_of_not_bddAbove h, smul_zero]
 
 中文:
 定理 实数.sSup_smul_of_nonneg
@@ -131,7 +134,8 @@ theorem Real.sSup_smul_of_nonneg
     exact csSup_singleton 0
   by_cases h : BddAbove s
   · exact ((OrderIso.smulRight ha').map_csSup' hs h).symm
-  · rw [Real.sSup_
+  · rw [Real.sSup_of_not_bddAbove (mt (bddAbove_smul_iff_of_pos ha').1 h),
+        Real.sSup_of_not_bddAbove h, smul_zero]
 
 Depends on / 依赖: BddAbove, OrderIso, OrderIso.smulRight, Real.sSup_empty, Real.sSup_of_not_bddAbove, bddAbove_smul_iff_of_pos, csSup_singleton, eq_empty_or_nonempty, eq_or_lt, ha.eq_or_lt, map_csSup, s.eq_empty_or_nonempty, sSup_empty, sSup_of_not_bddAbove, smulRight, smul_set_empty, smul_zero, zero_smul, zero_smul_set
 -/
@@ -186,7 +190,9 @@ theorem Real.sInf_smul_of_nonpos
   · rw [zero_smul_set hs, zero_smul]
     exact csInf_singleton 0
   by_cases h : BddAbove s
-  · exact ((OrderIso.smulRightDual Real ha').map_csSup' hs 
+  · exact ((OrderIso.smulRightDual Real ha').map_csSup' hs h).symm
+  · rw [Real.sInf_of_not_bddBelow (mt (bddBelow_smul_iff_of_neg ha').1 h),
+        Real.sSup_of_not_bddAbove h, smul_zero]
 
 中文:
 定理 实数.sInf_smul_of_nonpos
@@ -199,7 +205,9 @@ theorem Real.sInf_smul_of_nonpos
   · rw [zero_smul_set hs, zero_smul]
     exact csInf_singleton 0
   by_cases h : BddAbove s
-  · exact ((OrderIso.smulRightDual Real ha').map_csSup' hs 
+  · exact ((OrderIso.smulRightDual Real ha').map_csSup' hs h).symm
+  · rw [Real.sInf_of_not_bddBelow (mt (bddBelow_smul_iff_of_neg ha').1 h),
+        Real.sSup_of_not_bddAbove h, smul_zero]
 
 Depends on / 依赖: BddAbove, OrderIso, OrderIso.smulRightDual, Real.sInf_empty, Real.sInf_of_not_bddBelow, Real.sSup_empty, Real.sSup_of_not_bddAbove, bddBelow_smul_iff_of_neg, csInf_singleton, eq_empty_or_nonempty, eq_or_lt, ha.eq_or_lt, map_csSup, s.eq_empty_or_nonempty, sInf_empty, sInf_of_not_bddBelow, sSup_empty, sSup_of_not_bddAbove, smulRightDual, smul_set_empty
 -/
@@ -248,7 +256,9 @@ theorem Real.sSup_smul_of_nonpos
   · rw [zero_smul_set hs, zero_smul]
     exact csSup_singleton 0
   by_cases h : BddBelow s
-  · exact ((OrderIso.smulRightDual Real ha').map_csInf' hs 
+  · exact ((OrderIso.smulRightDual Real ha').map_csInf' hs h).symm
+  · rw [Real.sSup_of_not_bddAbove (mt (bddAbove_smul_iff_of_neg ha').1 h),
+        Real.sInf_of_not_bddBelow h, smul_zero]
 
 中文:
 定理 实数.sSup_smul_of_nonpos
@@ -261,7 +271,9 @@ theorem Real.sSup_smul_of_nonpos
   · rw [zero_smul_set hs, zero_smul]
     exact csSup_singleton 0
   by_cases h : BddBelow s
-  · exact ((OrderIso.smulRightDual Real ha').map_csInf' hs 
+  · exact ((OrderIso.smulRightDual Real ha').map_csInf' hs h).symm
+  · rw [Real.sSup_of_not_bddAbove (mt (bddAbove_smul_iff_of_neg ha').1 h),
+        Real.sInf_of_not_bddBelow h, smul_zero]
 
 Depends on / 依赖: BddBelow, OrderIso, OrderIso.smulRightDual, Real.sInf_empty, Real.sInf_of_not_bddBelow, Real.sSup_empty, Real.sSup_of_not_bddAbove, bddAbove_smul_iff_of_neg, csSup_singleton, eq_empty_or_nonempty, eq_or_lt, ha.eq_or_lt, map_csInf, s.eq_empty_or_nonempty, sInf_empty, sInf_of_not_bddBelow, sSup_empty, sSup_of_not_bddAbove, smulRightDual, smul_set_empty
 -/

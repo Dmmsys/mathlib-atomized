@@ -238,7 +238,18 @@ instance instLinearWeightsOfIsLieAbelian
     have h : forall x y, Commute (toEnd R L M x) (toEnd R L M y) := fun x y => by
       rw [commute_iff_lie_eq]; rw [← LieHom.map_lie]; rw [trivial_lie_zero]; rw [map_zero]
     intro χ hχ x y
-   
+    simp_rw [Ne, ← LieSubmodule.toSubmodule_inj, genWeightSpace, genWeightSpaceOf,
+      LieSubmodule.iInf_toSubmodule, LieSubmodule.bot_toSubmodule] at hχ
+    exact Module.End.map_add_of_iInf_genEigenspace_ne_bot_of_commute
+      (toEnd R L M).toLinearMap χ _ hχ h x y
+  { map_add := aux
+    map_smul := fun χ hχ t x => by
+      simp_rw [Ne, ← LieSubmodule.toSubmodule_inj, genWeightSpace, genWeightSpaceOf,
+        LieSubmodule.iInf_toSubmodule, LieSubmodule.bot_toSubmodule] at hχ
+      exact Module.End.map_smul_of_iInf_genEigenspace_ne_bot
+        (toEnd R L M).toLinearMap χ _ hχ t x
+    map_lie := fun χ hχ t x => by
+      rw [trivial_lie_zero]; rw [← add_left_inj (χ 0)]; rw [← aux χ hχ]; rw [zero_add]; rw [zero_add] }
 
 中文:
 实例 instLinearWeightsOfIsLieAbelian
@@ -247,7 +258,18 @@ instance instLinearWeightsOfIsLieAbelian
     have h : forall x y, Commute (toEnd R L M x) (toEnd R L M y) := fun x y => by
       rw [commute_iff_lie_eq]; rw [← LieHom.map_lie]; rw [trivial_lie_zero]; rw [map_zero]
     intro χ hχ x y
-   
+    simp_rw [Ne, ← LieSubmodule.toSubmodule_inj, genWeightSpace, genWeightSpaceOf,
+      LieSubmodule.iInf_toSubmodule, LieSubmodule.bot_toSubmodule] at hχ
+    exact Module.End.map_add_of_iInf_genEigenspace_ne_bot_of_commute
+      (toEnd R L M).toLinearMap χ _ hχ h x y
+  { map_add := aux
+    map_smul := fun χ hχ t x => by
+      simp_rw [Ne, ← LieSubmodule.toSubmodule_inj, genWeightSpace, genWeightSpaceOf,
+        LieSubmodule.iInf_toSubmodule, LieSubmodule.bot_toSubmodule] at hχ
+      exact Module.End.map_smul_of_iInf_genEigenspace_ne_bot
+        (toEnd R L M).toLinearMap χ _ hχ t x
+    map_lie := fun χ hχ t x => by
+      rw [trivial_lie_zero]; rw [← add_left_inj (χ 0)]; rw [← aux χ hχ]; rw [zero_add]; rw [zero_add] }
 
 Depends on / 依赖: Commute, LieHom, LieHom.map_lie, LieSubmodule, LieSubmodule.bot_toSubmodule, LieSubmodule.iInf_toSubmodule, LieSubmodule.toSubmodule_inj, Module, Module.End.map_add_of_iInf_genEigenspace_ne_bot_of_commute, bot_toSubmodule, commute_iff_lie_eq, genWeightSpace, genWeightSpaceOf, iInf_toSubmodule, map_add_of_iInf_genEigenspace_ne_bot_of_commute, map_lie, map_zero, simp_rw, toSubmodule_inj, trivial_lie_zero
 -/
@@ -334,7 +356,9 @@ instance instLinearWeightsOfCharZero
   body: by
     rw [← smul_right_inj (zero_lt_finrank_genWeightSpace hχ).ne']; rw [smul_add]; rw [← Pi.smul_apply]; rw [← Pi.smul_apply]; rw [← Pi.smul_apply]; rw [← trace_comp_toEnd_genWeightSpace_eq]; rw [map_add]
   map_smul χ hχ t x := by
-    rw [← smul_right_inj (zero_lt_finrank_genWeightSpace hχ).ne']; 
+    rw [← smul_right_inj (zero_lt_finrank_genWeightSpace hχ).ne']; rw [smul_comm]; rw [← Pi.smul_apply]; rw [← Pi.smul_apply (finrank R _)]; rw [← trace_comp_toEnd_genWeightSpace_eq]; rw [map_smul]
+  map_lie χ hχ x y := by
+    rw [← smul_right_inj (zero_lt_finrank_genWeightSpace hχ).ne']; rw [nsmul_zero]; rw [← Pi.smul_apply]; rw [← trace_comp_toEnd_genWeightSpace_eq]; rw [LinearMap.comp_apply]; rw [LieHom.coe_toLinearMap]; rw [LieHom.map_lie]; rw [Ring.lie_def]; rw [map_sub]; rw [LinearMap.trace_mul_comm]; rw [sub_self]
 
 中文:
 实例 instLinearWeightsOfCharZero
@@ -342,7 +366,9 @@ instance instLinearWeightsOfCharZero
   定义体: by
     rw [← smul_right_inj (zero_lt_finrank_genWeightSpace hχ).ne']; rw [smul_add]; rw [← Pi.smul_apply]; rw [← Pi.smul_apply]; rw [← Pi.smul_apply]; rw [← trace_comp_toEnd_genWeightSpace_eq]; rw [map_add]
   map_smul χ hχ t x := by
-    rw [← smul_right_inj (zero_lt_finrank_genWeightSpace hχ).ne']; 
+    rw [← smul_right_inj (zero_lt_finrank_genWeightSpace hχ).ne']; rw [smul_comm]; rw [← Pi.smul_apply]; rw [← Pi.smul_apply (finrank R _)]; rw [← trace_comp_toEnd_genWeightSpace_eq]; rw [map_smul]
+  map_lie χ hχ x y := by
+    rw [← smul_right_inj (zero_lt_finrank_genWeightSpace hχ).ne']; rw [nsmul_zero]; rw [← Pi.smul_apply]; rw [← trace_comp_toEnd_genWeightSpace_eq]; rw [LinearMap.comp_apply]; rw [LieHom.coe_toLinearMap]; rw [LieHom.map_lie]; rw [Ring.lie_def]; rw [map_sub]; rw [LinearMap.trace_mul_comm]; rw [sub_self]
 
 Depends on / 依赖: Pi.smul_apply, finrank, map_add, map_lie, map_smul, smul_add, smul_apply, smul_comm, smul_right_inj, trace_comp_toEnd_genWeightSpace_eq, zero_lt_finrank_genWeightSpace
 -/
@@ -411,7 +437,11 @@ instance :
     nontriviality shiftedGenWeightSpace R L M χ
     simp only [lie_add, smul_add]
     abel
-  leibniz_lie x y 
+  leibniz_lie x y m := by
+    nontriviality shiftedGenWeightSpace R L M χ
+    simp only [lie_sub, lie_smul, lie_lie, LinearWeights.map_lie χ (aux R L M χ), zero_smul,
+      sub_zero, smul_sub, smul_comm (χ x)]
+    abel
 
 中文:
 实例 :
@@ -425,7 +455,11 @@ instance :
     nontriviality shiftedGenWeightSpace R L M χ
     simp only [lie_add, smul_add]
     abel
-  leibniz_lie x y 
+  leibniz_lie x y m := by
+    nontriviality shiftedGenWeightSpace R L M χ
+    simp only [lie_sub, lie_smul, lie_lie, LinearWeights.map_lie χ (aux R L M χ), zero_smul,
+      sub_zero, smul_sub, smul_comm (χ x)]
+    abel
 -/
 instance : LieRingModule L (shiftedGenWeightSpace R L M χ) where
   bracket x m := ⁅x, m⁆ - χ x • m
@@ -479,7 +513,12 @@ instance :
     rw [← smul_sub]
     congr
   lie_smul t x m := by
-    nontriviality shiftedGenWeig
+    nontriviality shiftedGenWeightSpace R L M χ
+    apply Subtype.ext
+    rw [coe_lie_shiftedGenWeightSpace_apply]
+    simp only [SetLike.val_smul, lie_smul]
+    rw [smul_comm (χ x)]; rw [← smul_sub]
+    congr
 
 中文:
 实例 :
@@ -492,7 +531,12 @@ instance :
     rw [← smul_sub]
     congr
   lie_smul t x m := by
-    nontriviality shiftedGenWeig
+    nontriviality shiftedGenWeightSpace R L M χ
+    apply Subtype.ext
+    rw [coe_lie_shiftedGenWeightSpace_apply]
+    simp only [SetLike.val_smul, lie_smul]
+    rw [smul_comm (χ x)]; rw [← smul_sub]
+    congr
 
 Depends on / 依赖: LinearWeights, LinearWeights.map_smul, SetLike, SetLike.val_smul, Subtype, Subtype.ext, coe_lie_shiftedGenWeightSpace_apply, lie_smul, map_smul, nontriviality, shiftedGenWeightSpace, smul_assoc, smul_comm, smul_lie, smul_sub, val_smul
 -/
@@ -580,7 +624,12 @@ lemma exists_forall_lie_eq_smul
     (LieSubmodule.nontrivial_iff_ne_bot R L M).mpr χ.genWeightSpace_ne_bot
   obtain ⟨⟨⟨m, _⟩, hm₁⟩, hm₂⟩ :=
     @exists_ne _ (nontrivial_max_triv_of_isNilpotent R L (shiftedGenWeightSpace R L M χ)) 0
-  simp_rw [mem_maxTrivSubmodule, Sub
+  simp_rw [mem_maxTrivSubmodule, Subtype.ext_iff,
+    ZeroMemClass.coe_zero] at hm₁
+  refine ⟨m, by simpa [LieSubmodule.mk_eq_zero] using hm₂, ?_⟩
+  intro x
+  have := hm₁ x
+  rwa [coe_lie_shiftedGenWeightSpace_apply, sub_eq_zero] at this
 
 中文:
 引理 存在_对任意_lie_eq_smul
@@ -590,7 +639,12 @@ lemma exists_forall_lie_eq_smul
     (LieSubmodule.nontrivial_iff_ne_bot R L M).mpr χ.genWeightSpace_ne_bot
   obtain ⟨⟨⟨m, _⟩, hm₁⟩, hm₂⟩ :=
     @exists_ne _ (nontrivial_max_triv_of_isNilpotent R L (shiftedGenWeightSpace R L M χ)) 0
-  simp_rw [mem_maxTrivSubmodule, Sub
+  simp_rw [mem_maxTrivSubmodule, Subtype.ext_iff,
+    ZeroMemClass.coe_zero] at hm₁
+  refine ⟨m, by simpa [LieSubmodule.mk_eq_zero] using hm₂, ?_⟩
+  intro x
+  have := hm₁ x
+  rwa [coe_lie_shiftedGenWeightSpace_apply, sub_eq_zero] at this
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.mk_eq_zero, LieSubmodule.nontrivial_iff_ne_bot, Nontrivial, Subtype, Subtype.ext_iff, ZeroMemClass, ZeroMemClass.coe_zero, coe_lie_shiftedGenWeightSpace_apply, coe_zero, exists_ne, ext_iff, genWeightSpace_ne_bot, mem_maxTrivSubmodule, mk_eq_zero, nontrivial_iff_ne_bot, nontrivial_max_triv_of_isNilpotent, replace, shiftedGenWeightSpace, simp_rw
 -/
@@ -618,7 +672,8 @@ lemma exists_nontrivial_weightSpace_of_isNilpotent
     by_contra! contra
     simpa only [iSup_of_empty, bot_ne_top] using LieModule.iSup_genWeightSpace_eq_top' k L M
   obtain ⟨m, hm₀, hm⟩ := exists_forall_lie_eq_smul k L M χ
-  simp only [LieSubmodule.nontrivial_iff_ne_bot, LieSubmodule.eq_bot_iff, ne_e
+  simp only [LieSubmodule.nontrivial_iff_ne_bot, LieSubmodule.eq_bot_iff, ne_eq, not_forall]
+  exact ⟨χ.toLinear, m, by simpa [mem_weightSpace], hm₀⟩
 
 中文:
 引理 存在_nontrivial_weightSpace_of_isNilpotent
@@ -628,7 +683,8 @@ lemma exists_nontrivial_weightSpace_of_isNilpotent
     by_contra! contra
     simpa only [iSup_of_empty, bot_ne_top] using LieModule.iSup_genWeightSpace_eq_top' k L M
   obtain ⟨m, hm₀, hm⟩ := exists_forall_lie_eq_smul k L M χ
-  simp only [LieSubmodule.nontrivial_iff_ne_bot, LieSubmodule.eq_bot_iff, ne_e
+  simp only [LieSubmodule.nontrivial_iff_ne_bot, LieSubmodule.eq_bot_iff, ne_eq, not_forall]
+  exact ⟨χ.toLinear, m, by simpa [mem_weightSpace], hm₀⟩
 
 Depends on / 依赖: LieModule, LieModule.iSup_genWeightSpace_eq_top, LieSubmodule, LieSubmodule.eq_bot_iff, LieSubmodule.nontrivial_iff_ne_bot, Nonempty, Weight, bot_ne_top, contra, eq_bot_iff, exists_forall_lie_eq_smul, iSup_genWeightSpace_eq_top, iSup_of_empty, mem_weightSpace, ne_eq, nontrivial_iff_ne_bot, not_forall, toLinear
 -/

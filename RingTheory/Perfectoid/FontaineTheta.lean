@@ -72,7 +72,9 @@ theorem ker_map_le_ker_mk_comp_ghostComponent
   simp only [ghostComponent]
   apply_fun Ideal.quotEquivOfEq (Ideal.span_singleton_pow _ (n + 1))
   simp only [RingHom.coe_comp, Function.comp_apply, Pi.evalRingHom_apply, ghostMap_apply,
-    quotEquivOfEq_mk, 
+    quotEquivOfEq_mk, map_zero]
+  simp only [eq_zero_iff_dvd] at h ⊢
+  exact pow_dvd_ghostComponent_of_dvd_coeff (fun _ _ => h _)
 
 中文:
 定理 ker_map_le_ker_mk_comp_ghostComponent
@@ -84,7 +86,9 @@ theorem ker_map_le_ker_mk_comp_ghostComponent
   simp only [ghostComponent]
   apply_fun Ideal.quotEquivOfEq (Ideal.span_singleton_pow _ (n + 1))
   simp only [RingHom.coe_comp, Function.comp_apply, Pi.evalRingHom_apply, ghostMap_apply,
-    quotEquivOfEq_mk, 
+    quotEquivOfEq_mk, map_zero]
+  simp only [eq_zero_iff_dvd] at h ⊢
+  exact pow_dvd_ghostComponent_of_dvd_coeff (fun _ _ => h _)
 
 Depends on / 依赖: Function, Function.comp_apply, Ideal.quotEquivOfEq, Ideal.span_singleton_pow, Pi.evalRingHom_apply, RingHom, RingHom.coe_comp, RingHom.comp_apply, RingHom.mem_ker, apply_fun, coe_comp, comp_apply, eq_zero_iff_dvd, evalRingHom_apply, ghostComponent, ghostMap_apply, map_eq_zero_iff, map_zero, mem_ker, pow_dvd_ghostComponent_of_dvd_coeff
 -/
@@ -270,7 +274,8 @@ theorem factorPowSucc_comp_fontaineThetaModPPow
     have : p = Ideal.Quotient.mk (𝔭 ^ (n + 1)) p := by
       simp [map_natCast]
     rw [this]; rw [← map_pow]; rw [Ideal.Quotient.eq_zero_iff_mem]
-    ex
+    exact Ideal.pow_mem_pow (mem_span_singleton_self _) _
+  simp [fontaineThetaModPPow]
 
 中文:
 定理 factorPowSucc_comp_fontaineThetaModPPow
@@ -282,7 +287,8 @@ theorem factorPowSucc_comp_fontaineThetaModPPow
     have : p = Ideal.Quotient.mk (𝔭 ^ (n + 1)) p := by
       simp [map_natCast]
     rw [this]; rw [← map_pow]; rw [Ideal.Quotient.eq_zero_iff_mem]
-    ex
+    exact Ideal.pow_mem_pow (mem_span_singleton_self _) _
+  simp [fontaineThetaModPPow]
 
 Depends on / 依赖: Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk, Ideal.pow_mem_pow, Quotient, eq_of_apply_teichmuller_eq, eq_zero_iff_mem, factorPowSucc, fontaineThetaModPPow, map_natCast, map_pow, mem_span_singleton_self, pow_mem_pow
 -/
@@ -453,7 +459,17 @@ theorem surjective_fontaineTheta
     rw [this]
     infer_instance
   apply surjective_of_mk_map_comp_surjective (fontaineTheta R p) (I := span {(p : 𝕎 R♭)})
-  simp o
+  simp only [RingHom.coe_comp]
+  suffices h : Function.Surjective (Ideal.Quotient.mk 𝔭 ∘ fontaineTheta R p) by
+    rwa [Ideal.map_span, Set.image_singleton, map_natCast]
+  have : Ideal.Quotient.mk 𝔭 ∘ fontaineTheta R p = (fun x =>
+      PreTilt.coeff 0 x) ∘ fun (x : 𝕎 R♭) => (x.coeff 0) := by
+    ext
+    simp [mk_fontaineTheta]
+  rw [this]
+  apply Function.Surjective.comp
+  · exact Perfection.coeff_surjective hF 0
+  · exact WittVector.coeff_surjective 0
 
 中文:
 定理 surjective_fontaineTheta
@@ -465,7 +481,17 @@ theorem surjective_fontaineTheta
     rw [this]
     infer_instance
   apply surjective_of_mk_map_comp_surjective (fontaineTheta R p) (I := span {(p : 𝕎 R♭)})
-  simp o
+  simp only [RingHom.coe_comp]
+  suffices h : Function.Surjective (Ideal.Quotient.mk 𝔭 ∘ fontaineTheta R p) by
+    rwa [Ideal.map_span, Set.image_singleton, map_natCast]
+  have : Ideal.Quotient.mk 𝔭 ∘ fontaineTheta R p = (fun x =>
+      PreTilt.coeff 0 x) ∘ fun (x : 𝕎 R♭) => (x.coeff 0) := by
+    ext
+    simp [mk_fontaineTheta]
+  rw [this]
+  apply Function.Surjective.comp
+  · exact Perfection.coeff_surjective hF 0
+  · exact WittVector.coeff_surjective 0
 
 Depends on / 依赖: Function, Function.Surjective, Ideal.Quotient.mk, Ideal.map, Ideal.map_span, IsHausdorff, Quotient, RingHom, RingHom.coe_comp, Set.image_singleton, Surjective, coe_comp, fontaineTheta, image_singleton, infer_instance, map_natCast, map_span, surjective_of_mk_map_comp_surjective
 -/

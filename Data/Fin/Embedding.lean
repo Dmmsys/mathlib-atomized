@@ -188,7 +188,9 @@ lemma nonempty_embedding_iff
     rcases exists_eq_succ_of_ne_zero (pos_iff_nonempty.2 (Nonempty.map e inferInstance)).ne'
       with ⟨m, rfl⟩
 refine Nat.succ_le_succ ihn ⟨?_⟩
-    
+    refine ⟨fun i => (e.setValue 0 0 i.succ).pred (mt e.setValue_eq_iff.1 i.succ_ne_zero),
+      fun i j h => ?_⟩
+    simpa only [pred_inj, EmbeddingLike.apply_eq_iff_eq, succ_inj] using h
 
 中文:
 引理 nonempty_embedding_iff
@@ -202,7 +204,9 @@ refine Nat.succ_le_succ ihn ⟨?_⟩
     rcases exists_eq_succ_of_ne_zero (pos_iff_nonempty.2 (Nonempty.map e inferInstance)).ne'
       with ⟨m, rfl⟩
 refine Nat.succ_le_succ ihn ⟨?_⟩
-    
+    refine ⟨fun i => (e.setValue 0 0 i.succ).pred (mt e.setValue_eq_iff.1 i.succ_ne_zero),
+      fun i j h => ?_⟩
+    simpa only [pred_inj, EmbeddingLike.apply_eq_iff_eq, succ_inj] using h
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, Nat.succ_le_succ, Nonempty, Nonempty.map, apply_eq_iff_eq, castLEEmb, e.setValue, e.setValue_eq_iff, exists_eq_succ_of_ne_zero, generalizing, i.succ, i.succ_ne_zero, m.zero_le, pos_iff_nonempty, pred_inj, setValue, setValue_eq_iff, succ_inj, succ_le_succ
 -/

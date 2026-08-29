@@ -59,7 +59,9 @@ nonrec theorem ZeroAtFilter.add [TopologicalSpace β] [AddZeroClass β] [Continu
     ZeroAtFilter l (f + g) := by
   simpa using! hf.add hg
 
-nonrec theorem ZeroAtFilter.neg [TopologicalSpace
+nonrec theorem ZeroAtFilter.neg [TopologicalSpace β] [SubtractionMonoid β] [ContinuousNeg β]
+    {l : Filter α} {f : α -> β} (hf : ZeroAtFilter l f) : ZeroAtFilter l (-f) := by
+  simpa using! hf.neg
 
 中文:
 定理 zero_zeroAtFilter
@@ -71,7 +73,9 @@ nonrec theorem ZeroAtFilter.add [TopologicalSpace β] [AddZeroClass β] [Continu
     ZeroAtFilter l (f + g) := by
   simpa using! hf.add hg
 
-nonrec theorem ZeroAtFilter.neg [TopologicalSpace
+nonrec theorem ZeroAtFilter.neg [TopologicalSpace β] [SubtractionMonoid β] [ContinuousNeg β]
+    {l : Filter α} {f : α -> β} (hf : ZeroAtFilter l f) : ZeroAtFilter l (-f) := by
+  simpa using! hf.neg
 
 Depends on / 依赖: tendsto_const_nhds
 -/

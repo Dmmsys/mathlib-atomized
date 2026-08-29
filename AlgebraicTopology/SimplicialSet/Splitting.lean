@@ -44,7 +44,12 @@ definition splitting
     rw [← Limits.Cofan.isColimit_cofanTypes_iff]
     refine CofanTypes.isColimit_mk _ (fun x => ?_) (fun ⟨⟨⟨m⟩⟩, f, _⟩ x y h => ?_)
       (fun ⟨⟨⟨m⟩⟩, f, _⟩ ⟨⟨⟨p⟩⟩, g, _⟩ x y h => ?_)
-    · obtain ⟨m, f, _, y, rfl
+    · obtain ⟨m, f, _, y, rfl⟩ := X.exists_nonDegenerate x
+      exact ⟨.mk f, y, rfl⟩
+    · exact unique_nonDegenerate_simplex _ _ _ _ rfl _ _ h
+    · obtain rfl : m = p := unique_nonDegenerate_dim _ _ _ _ rfl _ _ h
+      obtain rfl : f = g := unique_nonDegenerate_map _ _ _ _ rfl _ _ h
+      dsimp)
 
 中文:
 定义 splitting
@@ -55,7 +60,12 @@ definition splitting
     rw [← Limits.Cofan.isColimit_cofanTypes_iff]
     refine CofanTypes.isColimit_mk _ (fun x => ?_) (fun ⟨⟨⟨m⟩⟩, f, _⟩ x y h => ?_)
       (fun ⟨⟨⟨m⟩⟩, f, _⟩ ⟨⟨⟨p⟩⟩, g, _⟩ x y h => ?_)
-    · obtain ⟨m, f, _, y, rfl
+    · obtain ⟨m, f, _, y, rfl⟩ := X.exists_nonDegenerate x
+      exact ⟨.mk f, y, rfl⟩
+    · exact unique_nonDegenerate_simplex _ _ _ _ rfl _ _ h
+    · obtain rfl : m = p := unique_nonDegenerate_dim _ _ _ _ rfl _ _ h
+      obtain rfl : f = g := unique_nonDegenerate_map _ _ _ _ rfl _ _ h
+      dsimp)
 
 Depends on / 依赖: X.nonDegenerate, nonDegenerate
 -/

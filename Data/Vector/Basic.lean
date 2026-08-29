@@ -1413,7 +1413,10 @@ theorem scanl_get
     simp [scanl_singleton, i0, get_zero]; simp [get_eq_get_toList]
   | succ n hn =>
     rw [← cons_head_tail v]; rw [scanl_cons]; rw [get_cons_succ]
-    refine Fin.cases ?_ ?
+    refine Fin.cases ?_ ?_ i
+    · simp
+    · intro i'
+      simp only [hn, Fin.castSucc_succ, get_cons_succ]
 
 中文:
 定理 scanl_get
@@ -1427,7 +1430,10 @@ theorem scanl_get
     simp [scanl_singleton, i0, get_zero]; simp [get_eq_get_toList]
   | succ n hn =>
     rw [← cons_head_tail v]; rw [scanl_cons]; rw [get_cons_succ]
-    refine Fin.cases ?_ ?
+    refine Fin.cases ?_ ?_ i
+    · simp
+    · intro i'
+      simp only [hn, Fin.castSucc_succ, get_cons_succ]
 
 Depends on / 依赖: Fin.cases, Fin.castSucc_succ, Fin.eq_zero, castSucc_succ, cons_head_tail, eq_zero, generalizing, get_cons_succ, get_eq_get_toList, get_zero, i.elim0, scanl_cons, scanl_singleton
 -/
@@ -1663,7 +1669,8 @@ definition inductionOn₂
     cases v_property
     rcases w with ⟨_ | ⟨b, w⟩, w_property⟩
     cases w_property
-    apply @cons n _ _ ⟨v, (add_
+    apply @cons n _ _ ⟨v, (add_left_inj 1).mp v_property⟩ ⟨w, (add_left_inj 1).mp w_property⟩
+    apply ih
 
 中文:
 定义 inductionOn₂
@@ -1679,7 +1686,8 @@ definition inductionOn₂
     cases v_property
     rcases w with ⟨_ | ⟨b, w⟩, w_property⟩
     cases w_property
-    apply @cons n _ _ ⟨v, (add_
+    apply @cons n _ _ ⟨v, (add_left_inj 1).mp v_property⟩ ⟨w, (add_left_inj 1).mp w_property⟩
+    apply ih
 
 Depends on / 依赖: add_left_inj, v_property, w_property
 -/
@@ -1720,7 +1728,13 @@ definition inductionOn₃
     rcases u with ⟨_ | ⟨a, u⟩, u_property⟩
     cases u_property
     rcases v with ⟨_ | ⟨b, v⟩, v_property⟩
-    cases v_pr
+    cases v_property
+    rcases w with ⟨_ | ⟨c, w⟩, w_property⟩
+    cases w_property
+    apply
+      @cons n _ _ _ ⟨u, (add_left_inj 1).mp u_property⟩ ⟨v, (add_left_inj 1).mp v_property⟩
+        ⟨w, (add_left_inj 1).mp w_property⟩
+    apply ih
 
 中文:
 定义 inductionOn₃
@@ -1736,7 +1750,13 @@ definition inductionOn₃
     rcases u with ⟨_ | ⟨a, u⟩, u_property⟩
     cases u_property
     rcases v with ⟨_ | ⟨b, v⟩, v_property⟩
-    cases v_pr
+    cases v_property
+    rcases w with ⟨_ | ⟨c, w⟩, w_property⟩
+    cases w_property
+    apply
+      @cons n _ _ _ ⟨u, (add_left_inj 1).mp u_property⟩ ⟨v, (add_left_inj 1).mp v_property⟩
+        ⟨w, (add_left_inj 1).mp w_property⟩
+    apply ih
 
 Depends on / 依赖: add_left_inj, u_property, v_property, w_property
 -/

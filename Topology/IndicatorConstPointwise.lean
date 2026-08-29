@@ -53,7 +53,24 @@ lemma tendsto_ite
       filter_upwards [mem_map.mp (h hbF)] with i hi
       simp only [Set.preimage_compl, Set.mem_compl_iff, Set.mem_preimage, Set.mem_singleton_iff,
         ite_eq_right_iff, not_forall, exists_prop] at hi
-      tau
+      tauto
+    · simp only [hq, ite_false] at h
+      filter_upwards [mem_map.mp (h haG)] with i hi
+      simp only [Set.preimage_compl, Set.mem_compl_iff, Set.mem_preimage, Set.mem_singleton_iff,
+        ite_eq_left_iff, not_forall, exists_prop] at hi
+      tauto
+  · have obs : (fun _ => if q then a else b) =ᶠ[L] (fun i => if p i then a else b) := by
+      filter_upwards [h] with i hi
+      simp only [hi]
+    apply Tendsto.congr' obs
+    by_cases hq : q
+    · simp only [hq, ite_true]
+      apply le_trans _ haF
+      simp
+    · simp only [hq, ite_false]
+      apply le_trans _ hbG
+      simp only [principal_singleton, le_pure_iff, mem_map, Set.mem_singleton_iff,
+        Set.preimage_const_of_mem, univ_mem]
 
 中文:
 引理 tendsto_ite
@@ -65,7 +82,24 @@ lemma tendsto_ite
       filter_upwards [mem_map.mp (h hbF)] with i hi
       simp only [Set.preimage_compl, Set.mem_compl_iff, Set.mem_preimage, Set.mem_singleton_iff,
         ite_eq_right_iff, not_forall, exists_prop] at hi
-      tau
+      tauto
+    · simp only [hq, ite_false] at h
+      filter_upwards [mem_map.mp (h haG)] with i hi
+      simp only [Set.preimage_compl, Set.mem_compl_iff, Set.mem_preimage, Set.mem_singleton_iff,
+        ite_eq_left_iff, not_forall, exists_prop] at hi
+      tauto
+  · have obs : (fun _ => if q then a else b) =ᶠ[L] (fun i => if p i then a else b) := by
+      filter_upwards [h] with i hi
+      simp only [hi]
+    apply Tendsto.congr' obs
+    by_cases hq : q
+    · simp only [hq, ite_true]
+      apply le_trans _ haF
+      simp
+    · simp only [hq, ite_false]
+      apply le_trans _ hbG
+      simp only [principal_singleton, le_pure_iff, mem_map, Set.mem_singleton_iff,
+        Set.preimage_const_of_mem, univ_mem]
 
 Depends on / 依赖: Set.mem_compl_iff, Set.mem_preimage, Set.mem_singleton_iff, Set.preimage_compl, exists_prop, filter_upwards, ite_eq_left_iff, ite_eq_right_iff, ite_false, ite_true, mem_compl_iff, mem_map, mem_map.mp, mem_preimage, mem_singleton_iff, not_forall, preimage_compl
 -/
@@ -111,7 +145,9 @@ lemma tendsto_indicator_const_apply_iff_eventually'
   · convert! heart
     by_cases hxA : x in A <;> simp [hxA]
   · simp only [principal_singleton, le_def, mem_pure]
-    exact fun s s_nhds => mem_of_mem_nhds s_
+    exact fun s s_nhds => mem_of_mem_nhds s_nhds
+  · simp only [principal_singleton, le_def, mem_pure]
+    exact fun s s_nhds => mem_of_mem_nhds s_nhds
 
 中文:
 引理 tendsto_indicator_const_apply_iff_eventually'
@@ -123,7 +159,9 @@ lemma tendsto_indicator_const_apply_iff_eventually'
   · convert! heart
     by_cases hxA : x in A <;> simp [hxA]
   · simp only [principal_singleton, le_def, mem_pure]
-    exact fun s s_nhds => mem_of_mem_nhds s_
+    exact fun s s_nhds => mem_of_mem_nhds s_nhds
+  · simp only [principal_singleton, le_def, mem_pure]
+    exact fun s s_nhds => mem_of_mem_nhds s_nhds
 
 Depends on / 依赖: classical, convert, le_def, mem_of_mem_nhds, mem_pure, nhds_b, nhds_o, principal_singleton, s_nhds, tendsto_ite
 -/

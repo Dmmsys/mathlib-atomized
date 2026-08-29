@@ -213,7 +213,7 @@ theorem hasStrictFDerivAt_toLp
 nonrec theorem hasStrictFDerivAt_apply (f : PiLp p E) (i : ι) :
     HasStrictFDerivAt (𝕜 := 𝕜) (fun f : PiLp p E => f i) (proj p E i) f :=
   have := Fintype.ofFinite ι
-  (hasStrictFDerivA
+  (hasStrictFDerivAt_apply i f).comp f (hasStrictFDerivAt_ofLp (𝕜 := 𝕜) p f)
 
 中文:
 定理 hasStrictFDerivAt_toLp
@@ -224,7 +224,7 @@ nonrec theorem hasStrictFDerivAt_apply (f : PiLp p E) (i : ι) :
 nonrec theorem hasStrictFDerivAt_apply (f : PiLp p E) (i : ι) :
     HasStrictFDerivAt (𝕜 := 𝕜) (fun f : PiLp p E => f i) (proj p E i) f :=
   have := Fintype.ofFinite ι
-  (hasStrictFDerivA
+  (hasStrictFDerivAt_apply i f).comp f (hasStrictFDerivAt_ofLp (𝕜 := 𝕜) p f)
 
 Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_zero, Fintype, Fintype.ofFinite, congr_left, isLittleO_zero, ofFinite, of_isLittleO, sub_self
 -/

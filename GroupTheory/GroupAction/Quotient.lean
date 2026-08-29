@@ -768,7 +768,18 @@ definition sigmaFixedByEquivOrbitsProdGroup
       (Equiv.subtypeProdEquivSigmaSubtype _).symm
     _ ≃ { ba : X × G // ba.2 • ba.1 = ba.1 } := (Equiv.prodComm G X).subtypeEquiv fun _ => Iff.rfl
     _ ≃ Σ b : X, stabilizer G b :=
-      Equiv.subtypeProdEquivSigmaSubtype f
+      Equiv.subtypeProdEquivSigmaSubtype fun (b : X) a => a in stabilizer G b
+    _ ≃ Σ ωb : Σ ω : Ω, orbit G ω.out, stabilizer G (ωb.2 : X) :=
+      (selfEquivSigmaOrbits G X).sigmaCongrLeft'
+    _ ≃ Σ ω : Ω, Σ b : orbit G ω.out, stabilizer G (b : X) :=
+      Equiv.sigmaAssoc fun (ω : Ω) (b : orbit G ω.out) => stabilizer G (b : X)
+    _ ≃ Σ ω : Ω, Σ _ : orbit G ω.out, stabilizer G ω.out :=
+      Equiv.sigmaCongrRight fun _ =>
+        Equiv.sigmaCongrRight fun ⟨_, hb⟩ => (stabilizerEquivStabilizerOfOrbitRel hb).toEquiv
+    _ ≃ Σ ω : Ω, orbit G ω.out × stabilizer G ω.out :=
+      Equiv.sigmaCongrRight fun _ => Equiv.sigmaEquivProd _ _
+    _ ≃ Σ _ : Ω, G := Equiv.sigmaCongrRight fun ω => orbitProdStabilizerEquivGroup G ω.out
+    _ ≃ Ω × G := Equiv.sigmaEquivProd Ω G
 
 中文:
 定义 sigmaFixedByEquivOrbitsProdGroup
@@ -778,7 +789,18 @@ definition sigmaFixedByEquivOrbitsProdGroup
       (Equiv.subtypeProdEquivSigmaSubtype _).symm
     _ ≃ { ba : X × G // ba.2 • ba.1 = ba.1 } := (Equiv.prodComm G X).subtypeEquiv fun _ => Iff.rfl
     _ ≃ Σ b : X, stabilizer G b :=
-      Equiv.subtypeProdEquivSigmaSubtype f
+      Equiv.subtypeProdEquivSigmaSubtype fun (b : X) a => a in stabilizer G b
+    _ ≃ Σ ωb : Σ ω : Ω, orbit G ω.out, stabilizer G (ωb.2 : X) :=
+      (selfEquivSigmaOrbits G X).sigmaCongrLeft'
+    _ ≃ Σ ω : Ω, Σ b : orbit G ω.out, stabilizer G (b : X) :=
+      Equiv.sigmaAssoc fun (ω : Ω) (b : orbit G ω.out) => stabilizer G (b : X)
+    _ ≃ Σ ω : Ω, Σ _ : orbit G ω.out, stabilizer G ω.out :=
+      Equiv.sigmaCongrRight fun _ =>
+        Equiv.sigmaCongrRight fun ⟨_, hb⟩ => (stabilizerEquivStabilizerOfOrbitRel hb).toEquiv
+    _ ≃ Σ ω : Ω, orbit G ω.out × stabilizer G ω.out :=
+      Equiv.sigmaCongrRight fun _ => Equiv.sigmaEquivProd _ _
+    _ ≃ Σ _ : Ω, G := Equiv.sigmaCongrRight fun ω => orbitProdStabilizerEquivGroup G ω.out
+    _ ≃ Ω × G := Equiv.sigmaEquivProd Ω G
 
 Depends on / 依赖: Equiv.prodComm, Equiv.sigmaAssoc, Equiv.subtypeProdEquivSigmaSubtype, Iff.rfl, fixedBy, prodComm, selfEquivSigmaOrbits, sigmaAssoc, sigmaCongrLeft, stabilizer, subtypeEquiv, subtypeProdEquivSigmaSubtype
 -/
@@ -876,7 +898,13 @@ instance finite_quotient_of_pretransitive_of_finite_quotient
   · have h' : Finite (Quotient (rightRel H)) :=
       Finite.of_equiv _ (quotientRightRelEquivQuotientLeftRel _).symm
     let f : Quotient (rightRel H) -> orbitRel.Quotient H X :=
-      fun a => Quotient.liftOn' a (fun g =
+      fun a => Quotient.liftOn' a (fun g => ⟦g • b⟧) fun g₁ g₂ r => by
+        replace r := Setoid.symm' _ r
+        rw [rightRel_eq] at r
+        simp only [Quotient.eq, orbitRel_apply, mem_orbit_iff]
+        exact ⟨⟨g₁ * g₂⁻¹, r⟩, by simp [mul_smul]⟩
+    exact Finite.of_surjective f ((Quotient.surjective_liftOn' _).2
+      (Quotient.mk''_surjective.comp (MulAction.surjective_smul _ _)))
 
 中文:
 实例 finite_quotient_of_pretransitive_of_finite_quotient
@@ -887,7 +915,13 @@ instance finite_quotient_of_pretransitive_of_finite_quotient
   · have h' : Finite (Quotient (rightRel H)) :=
       Finite.of_equiv _ (quotientRightRelEquivQuotientLeftRel _).symm
     let f : Quotient (rightRel H) -> orbitRel.Quotient H X :=
-      fun a => Quotient.liftOn' a (fun g =
+      fun a => Quotient.liftOn' a (fun g => ⟦g • b⟧) fun g₁ g₂ r => by
+        replace r := Setoid.symm' _ r
+        rw [rightRel_eq] at r
+        simp only [Quotient.eq, orbitRel_apply, mem_orbit_iff]
+        exact ⟨⟨g₁ * g₂⁻¹, r⟩, by simp [mul_smul]⟩
+    exact Finite.of_surjective f ((Quotient.surjective_liftOn' _).2
+      (Quotient.mk''_surjective.comp (MulAction.surjective_smul _ _)))
 
 Depends on / 依赖: Finite, Finite.of_equiv, Finite.of_surjective, Quotient, Quotient.eq, Quotient.finite, Quotient.liftOn, Quotient.sur, Setoid, Setoid.symm, finite, isEmpty_or_nonempty, liftOn, mem_orbit_iff, mul_smul, of_equiv, of_surjective, orbitRel, orbitRel.Quotient, orbitRel_apply
 -/
@@ -923,6 +957,24 @@ definition equivSubgroupOrbitsSetoidComap
     rwa [orbitRel.Quotient.mem_orbit] at hx⟩⟧) fun a b h => by
       simp only [← Quotient.eq, orbitRel.Quotient.subgroup_quotient_eq_iff] at h
       simp only [Quotient.eq] at h ⊢
+      exact h
+  invFun := fun q => q.liftOn' (fun x => ⟦⟨↑x, by
+    have hx := x.property
+    simp only [Set.mem_preimage, Set.mem_singleton_iff] at hx
+    rwa [orbitRel.Quotient.mem_orbit, @Quotient.mk''_eq_mk]⟩⟧) fun a b h => by
+      rw [Setoid.comap_rel]; rw [← Quotient.eq'']; rw [@Quotient.mk''_eq_mk] at h
+      simp only [orbitRel.Quotient.subgroup_quotient_eq_iff]
+      exact h
+  left_inv := by
+    simp only [LeftInverse]
+    intro q
+    induction q using Quotient.inductionOn'
+    rfl
+  right_inv := by
+    simp only [Function.RightInverse, LeftInverse]
+    intro q
+    induction q using Quotient.inductionOn'
+    rfl
 
 中文:
 定义 equivSubgroupOrbitsSetoidComap
@@ -933,6 +985,24 @@ definition equivSubgroupOrbitsSetoidComap
     rwa [orbitRel.Quotient.mem_orbit] at hx⟩⟧) fun a b h => by
       simp only [← Quotient.eq, orbitRel.Quotient.subgroup_quotient_eq_iff] at h
       simp only [Quotient.eq] at h ⊢
+      exact h
+  invFun := fun q => q.liftOn' (fun x => ⟦⟨↑x, by
+    have hx := x.property
+    simp only [Set.mem_preimage, Set.mem_singleton_iff] at hx
+    rwa [orbitRel.Quotient.mem_orbit, @Quotient.mk''_eq_mk]⟩⟧) fun a b h => by
+      rw [Setoid.comap_rel]; rw [← Quotient.eq'']; rw [@Quotient.mk''_eq_mk] at h
+      simp only [orbitRel.Quotient.subgroup_quotient_eq_iff]
+      exact h
+  left_inv := by
+    simp only [LeftInverse]
+    intro q
+    induction q using Quotient.inductionOn'
+    rfl
+  right_inv := by
+    simp only [Function.RightInverse, LeftInverse]
+    intro q
+    induction q using Quotient.inductionOn'
+    rfl
 
 Depends on / 依赖: Quotient, Quotient.eq, Quotient.mk, Set.mem_preimage, Set.mem_singleton_iff, Setoid, Setoid.c, _eq_mk, invFun, liftOn, mem_orbit, mem_preimage, mem_singleton_iff, orbitRel, orbitRel.Quotient.mem_orbit, orbitRel.Quotient.subgroup_quotient_eq_iff, property, q.liftOn, subgroup_quotient_eq_iff, x.property
 -/
@@ -1036,7 +1106,27 @@ definition equivSubgroupOrbitsQuotientGroup
     rcases h with ⟨g, rfl⟩
     dsimp only
     suffices (exists_smul_eq G (g • y₂) x).choose = (exists_smul_eq G y₂ x).choose * g⁻¹ by
-
+      simp [this]
+    refine IsCancelSMul.right_cancel _ _ (g • y₂) ?_
+    rw [(exists_smul_eq G (g • y₂) x).choose_spec]; rw [Subgroup.smul_def]; rw [Subgroup.coe_inv]; rw [smul_smul]; rw [inv_mul_cancel_right]; rw [(exists_smul_eq G y₂ x).choose_spec])
+  invFun := fun q => q.liftOn' (fun g => ⟦g⁻¹ • x⟧) (by
+    intro g₁ g₂ h
+    rw [leftRel_eq] at h
+    rw [← @Quotient.mk''_eq_mk]; rw [Quotient.eq'']; rw [orbitRel_apply]
+    exact ⟨⟨_, h⟩, by simp [mul_smul]⟩)
+  left_inv := fun y => by
+    cases y using Quotient.inductionOn'
+    simp only [Quotient.liftOn'_mk'']
+    rw [← @Quotient.mk''_eq_mk]; rw [Quotient.eq'']; rw [orbitRel_apply]
+    convert! mem_orbit_self _
+    rw [inv_smul_eq_iff]; rw [(exists_smul_eq G _ x).choose_spec]
+  right_inv := fun g => by
+    cases g using Quotient.inductionOn' with | _ g
+    simp only [Quotient.liftOn'_mk'', QuotientGroup.mk]
+    rw [Quotient.eq'']; rw [leftRel_eq]
+    simp only
+    convert! one_mem H
+    rw [inv_mul_eq_one]; rw [eq_comm]; rw [← inv_mul_eq_one]; rw [← Subgroup.mem_bot]; rw [← IsCancelSMul.stabilizer_eq_bot (g⁻¹ • x)]; rw [mem_stabilizer_iff]; rw [mul_smul]; rw [(exists_smul_eq G (g⁻¹ • x) x).choose_spec]
 
 中文:
 定义 equivSubgroupOrbitsQuotientGroup
@@ -1049,7 +1139,27 @@ definition equivSubgroupOrbitsQuotientGroup
     rcases h with ⟨g, rfl⟩
     dsimp only
     suffices (exists_smul_eq G (g • y₂) x).choose = (exists_smul_eq G y₂ x).choose * g⁻¹ by
-
+      simp [this]
+    refine IsCancelSMul.right_cancel _ _ (g • y₂) ?_
+    rw [(exists_smul_eq G (g • y₂) x).choose_spec]; rw [Subgroup.smul_def]; rw [Subgroup.coe_inv]; rw [smul_smul]; rw [inv_mul_cancel_right]; rw [(exists_smul_eq G y₂ x).choose_spec])
+  invFun := fun q => q.liftOn' (fun g => ⟦g⁻¹ • x⟧) (by
+    intro g₁ g₂ h
+    rw [leftRel_eq] at h
+    rw [← @Quotient.mk''_eq_mk]; rw [Quotient.eq'']; rw [orbitRel_apply]
+    exact ⟨⟨_, h⟩, by simp [mul_smul]⟩)
+  left_inv := fun y => by
+    cases y using Quotient.inductionOn'
+    simp only [Quotient.liftOn'_mk'']
+    rw [← @Quotient.mk''_eq_mk]; rw [Quotient.eq'']; rw [orbitRel_apply]
+    convert! mem_orbit_self _
+    rw [inv_smul_eq_iff]; rw [(exists_smul_eq G _ x).choose_spec]
+  right_inv := fun g => by
+    cases g using Quotient.inductionOn' with | _ g
+    simp only [Quotient.liftOn'_mk'', QuotientGroup.mk]
+    rw [Quotient.eq'']; rw [leftRel_eq]
+    simp only
+    convert! one_mem H
+    rw [inv_mul_eq_one]; rw [eq_comm]; rw [← inv_mul_eq_one]; rw [← Subgroup.mem_bot]; rw [← IsCancelSMul.stabilizer_eq_bot (g⁻¹ • x)]; rw [mem_stabilizer_iff]; rw [mul_smul]; rw [(exists_smul_eq G (g⁻¹ • x) x).choose_spec]
 
 Depends on / 依赖: IsCancelSMul, IsCancelSMul.right_cancel, Quotient, Quotient.eq, Subgroup, Subgroup.coe_inv, Subgroup.smul_def, choose_spec, coe_inv, exists_smul_eq, inv_mul_cancel_right, leftRel_eq, liftOn, orbitRel_apply, q.liftOn, right_cancel, smul_def, smul_smul
 -/
@@ -1198,7 +1308,10 @@ theorem normalCore_eq_ker
     refine fun q => QuotientGroup.induction_on q ?_
     refine fun g' => (MulAction.Quotient.smul_mk H g g').trans (QuotientGroup.eq.mpr ?_)
     rw [smul_eq_mul]; rw [mul_inv_rev]; rw [← inv_inv g']; rw [inv_inv]
-    exact H.normalCore.i
+    exact H.normalCore.inv_mem hg g'⁻¹
+  · refine (Subgroup.normal_le_normalCore.mpr fun g hg => ?_)
+    rw [← H.inv_mem_iff]; rw [← mul_one g⁻¹]; rw [← QuotientGroup.eq]; rw [← mul_one g]
+    exact (MulAction.Quotient.smul_mk H g 1).symm.trans (Equiv.Perm.ext_iff.mp hg (1 : G))
 
 中文:
 定理 normalCore_eq_ker
@@ -1210,7 +1323,10 @@ theorem normalCore_eq_ker
     refine fun q => QuotientGroup.induction_on q ?_
     refine fun g' => (MulAction.Quotient.smul_mk H g g').trans (QuotientGroup.eq.mpr ?_)
     rw [smul_eq_mul]; rw [mul_inv_rev]; rw [← inv_inv g']; rw [inv_inv]
-    exact H.normalCore.i
+    exact H.normalCore.inv_mem hg g'⁻¹
+  · refine (Subgroup.normal_le_normalCore.mpr fun g hg => ?_)
+    rw [← H.inv_mem_iff]; rw [← mul_one g⁻¹]; rw [← QuotientGroup.eq]; rw [← mul_one g]
+    exact (MulAction.Quotient.smul_mk H g 1).symm.trans (Equiv.Perm.ext_iff.mp hg (1 : G))
 
 Depends on / 依赖: Equiv.Perm.e, Equiv.Perm.ext, H.inv_mem_iff, H.normalCore.inv_mem, MulAction, MulAction.Quotient.smul_mk, Quotient, QuotientGroup, QuotientGroup.eq, QuotientGroup.eq.mpr, QuotientGroup.induction_on, Subgroup, Subgroup.normal_le_normalCore.mpr, induction_on, inv_inv, inv_mem, inv_mem_iff, le_antisymm, mul_inv_rev, mul_one
 -/
@@ -1240,7 +1356,7 @@ definition quotientCentralizerEmbedding
       ⟨x * g⁻¹,
         let ⟨_, x, rfl⟩ := x
         ⟨x, g, rfl⟩⟩,
-      fun _ _ => Subtype.ext ∘ mul_right_cancel ∘ Subtype.ext_i
+      fun _ _ => Subtype.ext ∘ mul_right_cancel ∘ Subtype.ext_iff.mp⟩
 
 中文:
 定义 quotientCentralizerEmbedding
@@ -1251,7 +1367,7 @@ definition quotientCentralizerEmbedding
       ⟨x * g⁻¹,
         let ⟨_, x, rfl⟩ := x
         ⟨x, g, rfl⟩⟩,
-      fun _ _ => Subtype.ext ∘ mul_right_cancel ∘ Subtype.ext_i
+      fun _ _ => Subtype.ext ∘ mul_right_cancel ∘ Subtype.ext_iff.mp⟩
 
 Depends on / 依赖: ConjAct, ConjAct.stabilizer_eq_centralizer, MulAction, MulAction.orbitEquivQuotientStabilizer, Subtype, Subtype.ext, Subtype.ext_iff.mp, ext_iff, mul_right_cancel, orbitEquivQuotientStabilizer, quotientEquivOfEq, stabilizer_eq_centralizer, symm.toEmbedding.trans, toEmbedding
 -/

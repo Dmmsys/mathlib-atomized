@@ -290,7 +290,38 @@ abbreviation WeakPseudoEMetricSpace.OfIsOpenEmbedding
   edist_triangle := h_edist ▸ edist_triangle' m
   topology_le s so := by
     apply (@EMetric.isOpen_iff (Option α) (PseudoEMetricSpace.ofEDist edist
-      (h_edist ▸ edist_self' m) (h_edist ▸ edist_comm' m) (h_edis
+      (h_edist ▸ edist_self' m) (h_edist ▸ edist_comm' m) (h_edist ▸ edist_triangle' m))).mpr
+    intro x xs
+    suffices exists ε > 0, @Metric.eball (Option α) Option.toEDist x ε subseteq s by rwa [← h_edist] at this
+    match x with
+    | none =>
+      exact ⟨1, by norm_num, by simpa [ball_infty_of_pos]⟩
+    | (x : α) =>
+      obtain ⟨ε, εp, εt⟩ := (@EMetric.isOpen_iff α (PseudoEMetricSpace.ofEDist edist
+        m.edist_self m.edist_comm m.edist_triangle)).mp
+          (m.topology_le _ <| h.continuous.isOpen_preimage s so) x (mem_preimage.mpr xs)
+      exact ⟨ε, εp, some_eball x ε ▸ image_subset_iff.mpr εt⟩
+  topology_eq_on_restrict := by
+    intro x r
+    rw [h_edist]
+    match x with
+    | (x : α) =>
+      obtain ⟨s', s'o, s's⟩ := m.topology_eq_on_restrict x r
+      refine ⟨some '' s', ?_, ?_⟩
+      · exact (IsOpenEmbedding.isOpen_iff_image_isOpen h).mp s'o
+      ext ⟨y, yh⟩
+      match y with
+      | none => contradiction
+      | (z : α) =>
+        apply Set.ext_iff.mp at s's
+        simp only [mem_preimage, Subtype.forall, Metric.mem_eball, mem_image] at s's ⊢ yh
+        specialize s's z yh
+        refine ⟨fun ⟨r, rh, rh'⟩ => ?_, fun _ => ⟨z, by tauto⟩⟩
+exact s's.1 h.injective rh' ▸ rh
+    | none =>
+      apply discreteTopology_iff_forall_isOpen.mp
+      rw [ball_infty_of_pos ENNReal.zero_lt_top]
+      exact Subsingleton.discreteTopology
 
 中文:
 缩写 WeakPseudoEMetric空间.OfIsOpenEmbedding
@@ -301,7 +332,38 @@ abbreviation WeakPseudoEMetricSpace.OfIsOpenEmbedding
   edist_triangle := h_edist ▸ edist_triangle' m
   topology_le s so := by
     apply (@EMetric.isOpen_iff (Option α) (PseudoEMetricSpace.ofEDist edist
-      (h_edist ▸ edist_self' m) (h_edist ▸ edist_comm' m) (h_edis
+      (h_edist ▸ edist_self' m) (h_edist ▸ edist_comm' m) (h_edist ▸ edist_triangle' m))).mpr
+    intro x xs
+    suffices exists ε > 0, @Metric.eball (Option α) Option.toEDist x ε subseteq s by rwa [← h_edist] at this
+    match x with
+    | none =>
+      exact ⟨1, by norm_num, by simpa [ball_infty_of_pos]⟩
+    | (x : α) =>
+      obtain ⟨ε, εp, εt⟩ := (@EMetric.isOpen_iff α (PseudoEMetricSpace.ofEDist edist
+        m.edist_self m.edist_comm m.edist_triangle)).mp
+          (m.topology_le _ <| h.continuous.isOpen_preimage s so) x (mem_preimage.mpr xs)
+      exact ⟨ε, εp, some_eball x ε ▸ image_subset_iff.mpr εt⟩
+  topology_eq_on_restrict := by
+    intro x r
+    rw [h_edist]
+    match x with
+    | (x : α) =>
+      obtain ⟨s', s'o, s's⟩ := m.topology_eq_on_restrict x r
+      refine ⟨some '' s', ?_, ?_⟩
+      · exact (IsOpenEmbedding.isOpen_iff_image_isOpen h).mp s'o
+      ext ⟨y, yh⟩
+      match y with
+      | none => contradiction
+      | (z : α) =>
+        apply Set.ext_iff.mp at s's
+        simp only [mem_preimage, Subtype.forall, Metric.mem_eball, mem_image] at s's ⊢ yh
+        specialize s's z yh
+        refine ⟨fun ⟨r, rh, rh'⟩ => ?_, fun _ => ⟨z, by tauto⟩⟩
+exact s's.1 h.injective rh' ▸ rh
+    | none =>
+      apply discreteTopology_iff_forall_isOpen.mp
+      rw [ball_infty_of_pos ENNReal.zero_lt_top]
+      exact Subsingleton.discreteTopology
 -/
 abbrev WeakPseudoEMetricSpace.OfIsOpenEmbedding {α : Type u} [t : TopologicalSpace α]
     [TopologicalSpace (Option α)] [m : WeakPseudoEMetricSpace α] [inst : EDist (Option α)]

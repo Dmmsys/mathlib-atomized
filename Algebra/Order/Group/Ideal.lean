@@ -44,7 +44,15 @@ theorem fg_of_wellQuasiOrderedLE
     (hpwo.mono (setOfPred_minimal_subset _)), ?_⟩
   ext x
   simp only [mem_closure'', SetLike.setOfPred_mem_eq, SetLike.mem_coe, Set.mem_ofPred_eq]
-  constru
+  constructor
+  · intro hx
+    rcases hpwo.exists_le_minimal hx with ⟨z, hz, hz'⟩
+    rw [le_iff_exists_mul'] at hz
+    rcases hz with ⟨y, rfl⟩
+    exact ⟨y, z, hz', rfl⟩
+  · rintro ⟨y, z, hz, rfl⟩
+    apply SubMulAction.smul_mem
+    exact hz.1
 
 中文:
 定理 fg_of_wellQuasiOrderedLE
@@ -56,7 +64,15 @@ theorem fg_of_wellQuasiOrderedLE
     (hpwo.mono (setOfPred_minimal_subset _)), ?_⟩
   ext x
   simp only [mem_closure'', SetLike.setOfPred_mem_eq, SetLike.mem_coe, Set.mem_ofPred_eq]
-  constru
+  constructor
+  · intro hx
+    rcases hpwo.exists_le_minimal hx with ⟨z, hz, hz'⟩
+    rw [le_iff_exists_mul'] at hz
+    rcases hz with ⟨y, rfl⟩
+    exact ⟨y, z, hz', rfl⟩
+  · rintro ⟨y, z, hz, rfl⟩
+    apply SubMulAction.smul_mem
+    exact hz.1
 
 Depends on / 依赖: Set.isPWO_of_wellQuasiOrderedLE, Set.mem_ofPred_eq, SetLike, SetLike.mem_coe, SetLike.setOfPred_mem_eq, SubMulAction, SubMulAction.smul_mem, exists_le_minimal, finite_of_partiallyWellOrderedOn, hpwo.exists_le_minimal, hpwo.mono, isPWO_of_wellQuasiOrderedLE, le_iff_exists_mul, mem_closure, mem_coe, mem_ofPred_eq, setOfPred_mem_eq, setOfPred_minimal_antichain, setOfPred_minimal_subset, smul_mem
 -/
@@ -95,7 +111,14 @@ instance :
     apply subset_closure (s := (s : Set M)) at hx
     simpa [← hI] using hx
   choose! g hg using hs
- 
+  exists s.sup g
+  intro n hn
+  apply (f.mono hn).antisymm
+  apply (le_iSup f n).trans
+  intro x hx
+  rw [hI]; rw [mem_closure''] at hx
+  rcases hx with ⟨y, z, hz, rfl⟩
+  exact SemigroupIdeal.mul_mem _ _ (f.mono (Finset.le_sup hz) (hg _ hz))
 
 中文:
 实例 :
@@ -109,7 +132,14 @@ instance :
     apply subset_closure (s := (s : Set M)) at hx
     simpa [← hI] using hx
   choose! g hg using hs
- 
+  exists s.sup g
+  intro n hn
+  apply (f.mono hn).antisymm
+  apply (le_iSup f n).trans
+  intro x hx
+  rw [hI]; rw [mem_closure''] at hx
+  rcases hx with ⟨y, z, hz, rfl⟩
+  exact SemigroupIdeal.mul_mem _ _ (f.mono (Finset.le_sup hz) (hg _ hz))
 
 Depends on / 依赖: Finset, Finset.le_sup, SemigroupIdeal, SemigroupIdeal.mul_mem, antisymm, f.mono, fg_iff, fg_of_wellQuasiOrderedLE, le_iSup, le_sup, mem_closure, mul_mem, s.sup, subset_closure, wellFoundedGT_iff_monotone_chain_condition
 -/

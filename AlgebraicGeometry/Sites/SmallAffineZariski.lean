@@ -347,7 +347,7 @@ lemma mem_grothendieckTopology
   · rintro ⟨V, f, ⟨W, g, h, hg, rfl⟩, hxV⟩
     exact ⟨W, g, hg, h.le hxV⟩
   · rintro ⟨W, g, hg, hxW⟩
-    exact ⟨W.toOpens, homOfLE (toOpens_mono g.le), ⟨W, g, 𝟙 _, hg, rfl
+    exact ⟨W.toOpens, homOfLE (toOpens_mono g.le), ⟨W, g, 𝟙 _, hg, rfl⟩, hxW⟩
 
 中文:
 引理 mem_grothendieckTopology
@@ -358,7 +358,7 @@ lemma mem_grothendieckTopology
   · rintro ⟨V, f, ⟨W, g, h, hg, rfl⟩, hxV⟩
     exact ⟨W, g, hg, h.le hxV⟩
   · rintro ⟨W, g, hg, hxW⟩
-    exact ⟨W.toOpens, homOfLE (toOpens_mono g.le), ⟨W, g, 𝟙 _, hg, rfl
+    exact ⟨W.toOpens, homOfLE (toOpens_mono g.le), ⟨W, g, 𝟙 _, hg, rfl⟩, hxW⟩
 
 Depends on / 依赖: Functor, Functor.mem_inducedTopology_iff_of_isCoverDense, W.toOpens, g.le, grothendieckTopology, h.le, homOfLE, mem_inducedTopology_iff_of_isCoverDense, toOpens, toOpens_mono
 -/
@@ -529,7 +529,9 @@ lemma generate_presieveOfSections
     refine ⟨f₂, hf₂s, f₃, ?_⟩
     rw [X.basicOpen_mul]; rw [hf₃]; rw [inf_eq_right]
     exact X.basicOpen_le _
-  · rintro ⟨
+  · rintro ⟨f₁, hf₁s, f₂, rfl⟩
+    refine ⟨U.basicOpen f₁, ⟨f₂ |_ _, ?_⟩, ⟨f₁, rfl⟩, ⟨f₁, hf₁s, rfl⟩, rfl⟩
+    exact (X.basicOpen_res _ _).trans (X.basicOpen_mul _ _).symm
 
 中文:
 引理 generate_presieveOfSections
@@ -542,7 +544,9 @@ lemma generate_presieveOfSections
     refine ⟨f₂, hf₂s, f₃, ?_⟩
     rw [X.basicOpen_mul]; rw [hf₃]; rw [inf_eq_right]
     exact X.basicOpen_le _
-  · rintro ⟨
+  · rintro ⟨f₁, hf₁s, f₂, rfl⟩
+    refine ⟨U.basicOpen f₁, ⟨f₂ |_ _, ?_⟩, ⟨f₁, rfl⟩, ⟨f₁, hf₁s, rfl⟩, rfl⟩
+    exact (X.basicOpen_res _ _).trans (X.basicOpen_mul _ _).symm
 
 Depends on / 依赖: U.basicOpen, X.basicOpen_le, X.basicOpen_mul, X.basicOpen_res, basicOpen, basicOpen_basicOpen_is_basicOpen, basicOpen_le, basicOpen_mul, basicOpen_res, inf_eq_right
 -/
@@ -571,7 +575,13 @@ lemma generate_presieveOfSections_mem_grothendieckTopology
   refine forall₂_congr fun x hx => ?_
   simp only [exists_and_left, TopologicalSpace.Opens.iSup_mk,
     TopologicalSpace.Opens.carrier_eq_coe, Set.iUnion_coe_set, TopologicalSpace.Opens.mem_mk,
-    Set.mem
+    Set.mem_iUnion, SetLike.mem_coe, exists_prop, generate_presieveOfSections]
+  constructor
+  · simp only [basicOpen_mul]
+    rintro ⟨⟨V, hV⟩, ⟨f, hfs, g, rfl⟩, -, hxV⟩
+    exact ⟨f, hfs, hxV.1⟩
+  · rintro ⟨f, hfs, hxf⟩
+    refine ⟨U.basicOpen _, ⟨f, hfs, 1, rfl⟩, ⟨_, rfl⟩, by simpa using hxf⟩
 
 中文:
 引理 generate_presieveOfSections_mem_grothendieckTopology
@@ -580,7 +590,13 @@ lemma generate_presieveOfSections_mem_grothendieckTopology
   refine forall₂_congr fun x hx => ?_
   simp only [exists_and_left, TopologicalSpace.Opens.iSup_mk,
     TopologicalSpace.Opens.carrier_eq_coe, Set.iUnion_coe_set, TopologicalSpace.Opens.mem_mk,
-    Set.mem
+    Set.mem_iUnion, SetLike.mem_coe, exists_prop, generate_presieveOfSections]
+  constructor
+  · simp only [basicOpen_mul]
+    rintro ⟨⟨V, hV⟩, ⟨f, hfs, g, rfl⟩, -, hxV⟩
+    exact ⟨f, hfs, hxV.1⟩
+  · rintro ⟨f, hfs, hxf⟩
+    refine ⟨U.basicOpen _, ⟨f, hfs, 1, rfl⟩, ⟨_, rfl⟩, by simpa using hxf⟩
 
 Depends on / 依赖: Set.iUnion_coe_set, Set.mem_iUnion, SetLike, SetLike.le_def, SetLike.mem_coe, TopologicalSpace, TopologicalSpace.Opens.carrier_eq_coe, TopologicalSpace.Opens.iSup_mk, TopologicalSpace.Opens.mem_mk, U.basicOpe, basicOpe, basicOpen_mul, carrier_eq_coe, exists_and_left, exists_prop, generate_presieveOfSections, iSup_mk, iUnion_coe_set, le_def, mem_coe
 -/
@@ -695,7 +711,14 @@ instance :
     let a := (pullback.fst _ _ ≫ U.1.ι) x
     have haU : a in U.1 := (pullback.fst U.1.ι V.1.ι x).2
     have haV : a in V.1 := by unfold a; rw [pullback.condition]; exact (pullback.snd U.1.ι V.1.ι x).2
-    ob
+    obtain ⟨f, g, e, hxf⟩ := exists_basicOpen_le_affine_inter U.2 V.2 _ ⟨haU, haV⟩
+    refine ⟨U.basicOpen f, homOfLE (U.basicOpen_le f), eqToHom (Subtype.ext (by exact e)) ≫
+      homOfLE (V.basicOpen_le g), ⟨a, hxf⟩, ?_⟩
+    apply (pullback.fst _ _ ≫ U.1.ι).isOpenEmbedding.injective
+    dsimp
+    change (pullback.lift _ _ _ ≫ pullback.fst _ _ ≫ U.1.ι) _ = _
+    simp only [pullback.lift_fst_assoc, homOfLE_ι, Opens.ι_apply]
+    rfl
 
 中文:
 实例 :
@@ -705,7 +728,14 @@ instance :
     let a := (pullback.fst _ _ ≫ U.1.ι) x
     have haU : a in U.1 := (pullback.fst U.1.ι V.1.ι x).2
     have haV : a in V.1 := by unfold a; rw [pullback.condition]; exact (pullback.snd U.1.ι V.1.ι x).2
-    ob
+    obtain ⟨f, g, e, hxf⟩ := exists_basicOpen_le_affine_inter U.2 V.2 _ ⟨haU, haV⟩
+    refine ⟨U.basicOpen f, homOfLE (U.basicOpen_le f), eqToHom (Subtype.ext (by exact e)) ≫
+      homOfLE (V.basicOpen_le g), ⟨a, hxf⟩, ?_⟩
+    apply (pullback.fst _ _ ≫ U.1.ι).isOpenEmbedding.injective
+    dsimp
+    change (pullback.lift _ _ _ ≫ pullback.fst _ _ ≫ U.1.ι) _ = _
+    simp only [pullback.lift_fst_assoc, homOfLE_ι, Opens.ι_apply]
+    rfl
 
 Depends on / 依赖: AffineZariskiSite, Scheme, Scheme.AffineZariskiSite.toOpensFunctor, X.homOfLE, homOfLE, toOpensFunctor
 -/
@@ -780,7 +810,24 @@ lemma coequifibered_iff_forall_isLocalizationAway
       IsLocalization.Away (α.app (.op U) f) (F.obj (.op (U.basicOpen f))) := by
   trans forall (U : X.AffineZariskiSite) (f : Γ(X, U.1)),
     IsPushout (X.presheaf.map (homOfLE (X.basicOpen_le f)).op)
-      (α.app _) (α.app (.op (U.basicOpen f)))
+      (α.app _) (α.app (.op (U.basicOpen f))) (F.map (homOfLE (U.basicOpen_le f)).op)
+  · refine ⟨fun H U f => H (homOfLE (U.basicOpen_le f)).op, fun H ⟨V⟩ ⟨U⟩ ⟨f, hf⟩ => ?_⟩
+    obtain rfl : V.basicOpen f = U := Subtype.ext hf
+    exact H V f
+  refine forall₂_congr fun U f => ?_
+  set αU : Γ(X, U.toOpens) ⟶ F.obj (.op U) := α.app (.op U)
+  set αUf : Γ(X, X.basicOpen f) ⟶ F.obj (.op (U.basicOpen f)) := α.app (.op (U.basicOpen f))
+  algebraize [(X.presheaf.map (homOfLE (X.basicOpen_le f)).op).hom, αU.hom, αUf.hom,
+    (F.map (U.basicOpen_le f).hom.op).hom, (F.map (U.basicOpen_le f).hom.op).hom.comp αU.hom]
+  have : IsScalarTower Γ(X, U.toOpens) Γ(X, X.basicOpen f) (F.obj (.op (U.basicOpen f))) :=
+    .of_algebraMap_eq' congr($(α.naturality (U.basicOpen_le f).hom.op).hom).symm
+  have : IsLocalization.Away f Γ(X, X.basicOpen f) := U.2.isLocalization_basicOpen _
+  refine (CommRingCat.isPushout_iff_isPushout ..).trans ?_
+  rw [Algebra.IsPushout.comm]
+  refine (Algebra.isLocalization_iff_isPushout (.powers f) Γ(X, X.basicOpen f)).symm.trans ?_
+  simp [RingHom.algebraMap_toAlgebra]
+
+@[deprecated (since := "2026-02-01")] alias PreservesLocalization := NatTrans.Coequifibered
 
 中文:
 引理 coequifibered_iff_对任意_isLocalizationAway
@@ -789,7 +836,24 @@ lemma coequifibered_iff_forall_isLocalizationAway
       IsLocalization.Away (α.app (.op U) f) (F.obj (.op (U.basicOpen f))) := by
   trans forall (U : X.AffineZariskiSite) (f : Γ(X, U.1)),
     IsPushout (X.presheaf.map (homOfLE (X.basicOpen_le f)).op)
-      (α.app _) (α.app (.op (U.basicOpen f)))
+      (α.app _) (α.app (.op (U.basicOpen f))) (F.map (homOfLE (U.basicOpen_le f)).op)
+  · refine ⟨fun H U f => H (homOfLE (U.basicOpen_le f)).op, fun H ⟨V⟩ ⟨U⟩ ⟨f, hf⟩ => ?_⟩
+    obtain rfl : V.basicOpen f = U := Subtype.ext hf
+    exact H V f
+  refine forall₂_congr fun U f => ?_
+  set αU : Γ(X, U.toOpens) ⟶ F.obj (.op U) := α.app (.op U)
+  set αUf : Γ(X, X.basicOpen f) ⟶ F.obj (.op (U.basicOpen f)) := α.app (.op (U.basicOpen f))
+  algebraize [(X.presheaf.map (homOfLE (X.basicOpen_le f)).op).hom, αU.hom, αUf.hom,
+    (F.map (U.basicOpen_le f).hom.op).hom, (F.map (U.basicOpen_le f).hom.op).hom.comp αU.hom]
+  have : IsScalarTower Γ(X, U.toOpens) Γ(X, X.basicOpen f) (F.obj (.op (U.basicOpen f))) :=
+    .of_algebraMap_eq' congr($(α.naturality (U.basicOpen_le f).hom.op).hom).symm
+  have : IsLocalization.Away f Γ(X, X.basicOpen f) := U.2.isLocalization_basicOpen _
+  refine (CommRingCat.isPushout_iff_isPushout ..).trans ?_
+  rw [Algebra.IsPushout.comm]
+  refine (Algebra.isLocalization_iff_isPushout (.powers f) Γ(X, X.basicOpen f)).symm.trans ?_
+  simp [RingHom.algebraMap_toAlgebra]
+
+@[deprecated (since := "2026-02-01")] alias PreservesLocalization := NatTrans.Coequifibered
 
 Depends on / 依赖: F.map, U.basicOpen_le, basicOpen_le, hom.toAlgebra, homOfLE, toAlgebra
 -/
@@ -914,7 +978,8 @@ lemma opensRange_relativeGluingData_map
   refine PrimeSpectrum.localization_away_comap_range (F.obj (.op <| U.basicOpen r))
     (α.app (.op U) r)
 
-@[deprecated (since
+@[deprecated (since := "2026-02-01")]
+alias PreservesLocalization.opensRange_map := opensRange_relativeGluingData_map
 
 中文:
 引理 opensRange_relativeGluingData_map
@@ -926,7 +991,8 @@ lemma opensRange_relativeGluingData_map
   refine PrimeSpectrum.localization_away_comap_range (F.obj (.op <| U.basicOpen r))
     (α.app (.op U) r)
 
-@[deprecated (since
+@[deprecated (since := "2026-02-01")]
+alias PreservesLocalization.opensRange_map := opensRange_relativeGluingData_map
 
 Depends on / 依赖: F.map, F.obj, PrimeSpectrum, PrimeSpectrum.localization_away_comap_range, TopologicalSpace, TopologicalSpace.Opens.coe_inj.mp, U.basicOpen, U.basicOpen_le, basicOpen, basicOpen_le, coe_inj, coequifibered_iff_forall_isLocalizationAway, coequifibered_iff_forall_isLocalizationAway.mp, hom.toAlgebra, homOfLE, localization_away_comap_range, toAlgebra
 -/
@@ -994,7 +1060,23 @@ definition isColimitCocone
   -- Why doesn't typeclass synthesis work here?
   -- It does fire if one adds `(C := no_index(_))` to the composition in the instance.
   haveI : (D.functor ⋙ forget).IsLocallyDirected :=
-    Cover.RelativeGluingData.instIs
+    Cover.RelativeGluingData.instIsLocallyDirectedI₀CompFunctorForgetOfIsThin ..
+  haveI : IsIso ((colimit.isColimit F).desc (cocone X:)) := by
+    refine (IsZariskiLocalAtTarget.iff_of_openCover (P := .isomorphisms _)
+      (X.openCoverOfIsOpenCover _ (iSup_affineOpens_eq_top X))).mpr fun U => ?_
+    change IsIso (pullback.snd (colimit.desc F (cocone X)) U.1.ι)
+    let e := IsOpenImmersion.isoOfRangeEq (pullback.fst (colimit.desc F (cocone X)) U.1.ι)
+(U.2.isoSpec.hom ≫ colimit.ι F U) by
+      rw [Pullback.range_fst]; rw [Opens.range_ι]; rw [← Hom.coe_opensRange]; rw [Hom.opensRange_comp_of_isIso]; rw [← Scheme.Hom.coe_preimage]
+      convert! congr($(D.toBase_preimage_eq_opensRange_ι U).1)
+      · delta cocone
+        congr with U
+        simp [D, relativeGluingData, restrictIsoSpec]
+      · simp
+    convert! (inferInstance : IsIso e.hom)
+    rw [← cancel_mono U.1.ι]; rw [← Iso.inv_comp_eq]
+    simp [e, ← pullback.condition, IsAffineOpen.isoSpec_hom]
+  .ofPointIso (colimit.isColimit F)
 
 中文:
 定义 isColimitCocone
@@ -1004,7 +1086,23 @@ definition isColimitCocone
   -- Why doesn't typeclass synthesis work here?
   -- It does fire if one adds `(C := no_index(_))` to the composition in the instance.
   haveI : (D.functor ⋙ forget).IsLocallyDirected :=
-    Cover.RelativeGluingData.instIs
+    Cover.RelativeGluingData.instIsLocallyDirectedI₀CompFunctorForgetOfIsThin ..
+  haveI : IsIso ((colimit.isColimit F).desc (cocone X:)) := by
+    refine (IsZariskiLocalAtTarget.iff_of_openCover (P := .isomorphisms _)
+      (X.openCoverOfIsOpenCover _ (iSup_affineOpens_eq_top X))).mpr fun U => ?_
+    change IsIso (pullback.snd (colimit.desc F (cocone X)) U.1.ι)
+    let e := IsOpenImmersion.isoOfRangeEq (pullback.fst (colimit.desc F (cocone X)) U.1.ι)
+(U.2.isoSpec.hom ≫ colimit.ι F U) by
+      rw [Pullback.range_fst]; rw [Opens.range_ι]; rw [← Hom.coe_opensRange]; rw [Hom.opensRange_comp_of_isIso]; rw [← Scheme.Hom.coe_preimage]
+      convert! congr($(D.toBase_preimage_eq_opensRange_ι U).1)
+      · delta cocone
+        congr with U
+        simp [D, relativeGluingData, restrictIsoSpec]
+      · simp
+    convert! (inferInstance : IsIso e.hom)
+    rw [← cancel_mono U.1.ι]; rw [← Iso.inv_comp_eq]
+    simp [e, ← pullback.condition, IsAffineOpen.isoSpec_hom]
+  .ofPointIso (colimit.isColimit F)
 
 Depends on / 依赖: D.functor, functor, of_isIso, relativeGluingData
 -/

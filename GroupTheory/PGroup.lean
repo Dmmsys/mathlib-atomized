@@ -159,7 +159,11 @@ theorem _root_.isPGroup_iff_card_dvd_pow
   · exact ⟨1, by simp⟩
 .mpr fun q hq => ?_⟩ refine ⟨Nat.card G, Nat.dvd_pow_self_iff NeZero.out hp
   have ⟨hqp, hqdvd, _⟩ := Nat.mem_primeFactors.mp hq
-  have ⟨g, hg⟩ := exists_prime_orderOf_dvd_card' q 
+  have ⟨g, hg⟩ := exists_prime_orderOf_dvd_card' q (hp := ⟨hqp⟩) hqdvd
+  have ⟨k, hk⟩ := h.exists_orderOf_dvd_pow g
+exact Nat.mem_primeFactors.mpr ⟨hqp, hqp.dvd_of_dvd_pow hg ▸ hk, hp⟩
+
+alias ⟨exists_card_dvd_pow, _⟩ := isPGroup_iff_card_dvd_pow
 
 中文:
 定理 _root_.isPGroup_iff_card_dvd_pow
@@ -171,7 +175,11 @@ theorem _root_.isPGroup_iff_card_dvd_pow
   · exact ⟨1, by simp⟩
 .mpr fun q hq => ?_⟩ refine ⟨Nat.card G, Nat.dvd_pow_self_iff NeZero.out hp
   have ⟨hqp, hqdvd, _⟩ := Nat.mem_primeFactors.mp hq
-  have ⟨g, hg⟩ := exists_prime_orderOf_dvd_card' q 
+  have ⟨g, hg⟩ := exists_prime_orderOf_dvd_card' q (hp := ⟨hqp⟩) hqdvd
+  have ⟨k, hk⟩ := h.exists_orderOf_dvd_pow g
+exact Nat.mem_primeFactors.mpr ⟨hqp, hqp.dvd_of_dvd_pow hg ▸ hk, hp⟩
+
+alias ⟨exists_card_dvd_pow, _⟩ := isPGroup_iff_card_dvd_pow
 
 Depends on / 依赖: Nat.card, Nat.dvd_pow_self_iff, Nat.mem_primeFactors.mp, Nat.mem_primeFactors.mpr, NeZero, NeZero.out, dvd_of_dvd_pow, dvd_pow_self_iff, eq_or_ne, exists_orderOf_dvd_pow, exists_prime_orderOf_dvd_card, h.exists_orderOf_dvd_pow, hqp.dvd_of_dvd_pow, mem_primeFactors, of_card_dvd_pow
 -/
@@ -430,7 +438,8 @@ theorem _root_.isPGroup_iff_exists_orderOf_dvd_pow
   have := Fintype.ofFinite G
   have ⟨g, _, hg⟩ := Finset.exists_max_image .univ k Finset.univ_nonempty
   refine ⟨k g, fun g' => ?_⟩
-  grw [← Nat.pow_dvd_pow p <| hg g' <| Finset.mem_
+  grw [← Nat.pow_dvd_pow p <| hg g' <| Finset.mem_univ g']
+  exact hk g'
 
 中文:
 定理 _root_.isPGroup_iff_存在_orderOf_dvd_pow
@@ -441,7 +450,8 @@ theorem _root_.isPGroup_iff_exists_orderOf_dvd_pow
   have := Fintype.ofFinite G
   have ⟨g, _, hg⟩ := Finset.exists_max_image .univ k Finset.univ_nonempty
   refine ⟨k g, fun g' => ?_⟩
-  grw [← Nat.pow_dvd_pow p <| hg g' <| Finset.mem_
+  grw [← Nat.pow_dvd_pow p <| hg g' <| Finset.mem_univ g']
+  exact hk g'
 
 Depends on / 依赖: Finset, Finset.exists_max_image, Finset.mem_univ, Finset.univ_nonempty, Fintype, Fintype.ofFinite, Nat.pow_dvd_pow, exists_max_image, isPGroup_iff_orderOf_dvd_pow, isPGroup_iff_orderOf_dvd_pow.trans, mem_univ, ofFinite, pow_dvd_pow, univ_nonempty
 -/
@@ -584,7 +594,7 @@ theorem _root_.isPGroup_iff_primeFactors_card_subset
     · simp_all
     grw [← Nat.primeFactors_pow p hn0, Nat.primeFactors_mono hn <| pow_ne_zero n h]
 .trans ?_⟩ · refine ⟨Nat.card G, Nat.dvd_prod_primeFactors_pow_self NeZero.out
-   
+    grw [Finset.prod_dvd_prod_of_subset _ _ (·) hG, p.prod_primeFactors_dvd]
 
 中文:
 定理 _root_.isPGroup_iff_primeFactors_card_subset
@@ -595,7 +605,7 @@ theorem _root_.isPGroup_iff_primeFactors_card_subset
     · simp_all
     grw [← Nat.primeFactors_pow p hn0, Nat.primeFactors_mono hn <| pow_ne_zero n h]
 .trans ?_⟩ · refine ⟨Nat.card G, Nat.dvd_prod_primeFactors_pow_self NeZero.out
-   
+    grw [Finset.prod_dvd_prod_of_subset _ _ (·) hG, p.prod_primeFactors_dvd]
 
 Depends on / 依赖: Finset, Finset.prod_dvd_prod_of_subset, Nat.card, Nat.dvd_prod_primeFactors_pow_self, Nat.primeFactors_mono, Nat.primeFactors_pow, NeZero, NeZero.out, dvd_prod_primeFactors_pow_self, eq_or_ne, isPGroup_iff_card_dvd_pow, isPGroup_iff_card_dvd_pow.trans, p.prod_primeFactors_dvd, pow_ne_zero, primeFactors_mono, primeFactors_pow, prod_dvd_prod_of_subset, prod_primeFactors_dvd
 -/
@@ -776,7 +786,12 @@ definition powEquiv
     invFun := fun g => (powCoprime (h g)).symm ⟨g, Subgroup.mem_zpowers g⟩
     left_inv := fun g =>
 Subtype.ext_iff.1
-        (powCoprime (h (g ^ n
+        (powCoprime (h (g ^ n))).left_inv
+⟨g, _, Subtype.ext_iff.1 (powCoprime (h g)).left_inv ⟨g, Subgroup.mem_zpowers g⟩⟩
+    right_inv := fun g =>
+Subtype.ext_iff.1 (powCoprime (h g)).right_inv ⟨g, Subgroup.mem_zpowers g⟩ }
+
+@[simp]
 
 中文:
 定义 powEquiv
@@ -787,7 +802,12 @@ Subtype.ext_iff.1
     invFun := fun g => (powCoprime (h g)).symm ⟨g, Subgroup.mem_zpowers g⟩
     left_inv := fun g =>
 Subtype.ext_iff.1
-        (powCoprime (h (g ^ n
+        (powCoprime (h (g ^ n))).left_inv
+⟨g, _, Subtype.ext_iff.1 (powCoprime (h g)).left_inv ⟨g, Subgroup.mem_zpowers g⟩⟩
+    right_inv := fun g =>
+Subtype.ext_iff.1 (powCoprime (h g)).right_inv ⟨g, Subgroup.mem_zpowers g⟩ }
+
+@[simp]
 
 Depends on / 依赖: Coprime, Nat.card, Nat.card_zpowers, Subgroup, Subgroup.mem_zpowers, Subgroup.zpowers, Subtype, Subtype.ext_iff, card_zpowers, ext_iff, hG.orderOf_coprime, invFun, left_inv, mem_zpowers, orderOf_coprime, powCoprime, right_inv, zpowers
 -/
@@ -958,7 +978,7 @@ theorem nontrivial_iff_card
       hk⟩,
     fun ⟨_, hk0, hk⟩ =>
 Finite.one_lt_card_iff_nontrivial.1
-      hk.symm ▸ one_lt_pow₀ (Fact.out (p := p.Prime)).one_lt (ne
+      hk.symm ▸ one_lt_pow₀ (Fact.out (p := p.Prime)).one_lt (ne_of_gt hk0)⟩
 
 中文:
 定理 nontrivial_iff_card
@@ -972,7 +992,7 @@ Finite.one_lt_card_iff_nontrivial.1
       hk⟩,
     fun ⟨_, hk0, hk⟩ =>
 Finite.one_lt_card_iff_nontrivial.1
-      hk.symm ▸ one_lt_pow₀ (Fact.out (p := p.Prime)).one_lt (ne
+      hk.symm ▸ one_lt_pow₀ (Fact.out (p := p.Prime)).one_lt (ne_of_gt hk0)⟩
 
 Depends on / 依赖: Fact.out, Finite, Finite.one_lt_card.ne, Finite.one_lt_card_iff_nontrivial, Nat.pos_of_ne_zero, hk.symm, iff_card, ne_of_gt, one_lt, one_lt_card, one_lt_card_iff_nontrivial, p.Prime, pos_of_ne_zero, pow_zero
 -/
@@ -1038,7 +1058,31 @@ theorem card_modEq_card_fixedPoints
   classical
     calc
       card α = card (Σ y : Quotient (orbitRel G α), { x // Quotient.mk'' x = y }) :=
-        card_congr (Equiv.sigmaFiberEquiv (@Quotient.m
+        card_congr (Equiv.sigmaFiberEquiv (@Quotient.mk'' _ (orbitRel G α))).symm
+      _ = ∑ a : Quotient (orbitRel G α), card { x // Quotient.mk'' x = a } := card_sigma
+      _ ≡ ∑ _a : fixedPoints G α, 1 [MOD p] := ?_
+      _ = _ := by simp
+    rw [← ZMod.natCast_eq_natCast_iff _ _ p]; rw [Nat.cast_sum]; rw [Nat.cast_sum]
+    have key :
+      forall x,
+        card { y // (Quotient.mk'' y : Quotient (orbitRel G α)) = Quotient.mk'' x } =
+          card (orbit G x) :=
+      fun x => by simp only [Quotient.eq'']; congr
+    refine
+      Eq.symm
+        (Finset.sum_bij_ne_zero (fun a _ _ => Quotient.mk'' a.1) (fun _ _ _ => Finset.mem_univ _)
+          (fun a₁ _ _ a₂ _ _ h =>
+            Subtype.ext (mem_fixedPoints'.mp a₂.2 a₁.1 (Quotient.exact' h)))
+          (fun b => Quotient.inductionOn' b fun b _ hb => ?_) fun a ha _ => by
+          rw [key]; rw [mem_fixedPoints_iff_card_orbit_eq_one.mp a.2])
+    obtain ⟨k, hk⟩ := hG.card_orbit b
+    rw [Nat.card_eq_fintype_card] at hk
+    have : k = 0 := by
+      contrapose! hb
+      simp [key, hk, hb]
+    exact
+⟨⟨b, mem_fixedPoints_iff_card_orbit_eq_one.2 by rw [hk, this, pow_zero]⟩,
+        Finset.mem_univ _, ne_of_eq_of_ne Nat.cast_one one_ne_zero, rfl⟩
 
 中文:
 定理 card_modEq_card_fixedPoints
@@ -1050,7 +1094,31 @@ theorem card_modEq_card_fixedPoints
   classical
     calc
       card α = card (Σ y : Quotient (orbitRel G α), { x // Quotient.mk'' x = y }) :=
-        card_congr (Equiv.sigmaFiberEquiv (@Quotient.m
+        card_congr (Equiv.sigmaFiberEquiv (@Quotient.mk'' _ (orbitRel G α))).symm
+      _ = ∑ a : Quotient (orbitRel G α), card { x // Quotient.mk'' x = a } := card_sigma
+      _ ≡ ∑ _a : fixedPoints G α, 1 [MOD p] := ?_
+      _ = _ := by simp
+    rw [← ZMod.natCast_eq_natCast_iff _ _ p]; rw [Nat.cast_sum]; rw [Nat.cast_sum]
+    have key :
+      forall x,
+        card { y // (Quotient.mk'' y : Quotient (orbitRel G α)) = Quotient.mk'' x } =
+          card (orbit G x) :=
+      fun x => by simp only [Quotient.eq'']; congr
+    refine
+      Eq.symm
+        (Finset.sum_bij_ne_zero (fun a _ _ => Quotient.mk'' a.1) (fun _ _ _ => Finset.mem_univ _)
+          (fun a₁ _ _ a₂ _ _ h =>
+            Subtype.ext (mem_fixedPoints'.mp a₂.2 a₁.1 (Quotient.exact' h)))
+          (fun b => Quotient.inductionOn' b fun b _ hb => ?_) fun a ha _ => by
+          rw [key]; rw [mem_fixedPoints_iff_card_orbit_eq_one.mp a.2])
+    obtain ⟨k, hk⟩ := hG.card_orbit b
+    rw [Nat.card_eq_fintype_card] at hk
+    have : k = 0 := by
+      contrapose! hb
+      simp [key, hk, hb]
+    exact
+⟨⟨b, mem_fixedPoints_iff_card_orbit_eq_one.2 by rw [hk, this, pow_zero]⟩,
+        Finset.mem_univ _, ne_of_eq_of_ne Nat.cast_one one_ne_zero, rfl⟩
 
 Depends on / 依赖: Equiv.sigmaFiberEquiv, Fintype, Fintype.ofFinite, Nat.card_eq_fintype_card, Nat.cast, Quotient, Quotient.mk, ZMod.natCast_eq_natCast_iff, card_congr, card_eq_fintype_card, card_sigma, classical, fixedPoints, natCast_eq_natCast_iff, ofFinite, orbitRel, sigmaFiberEquiv
 -/
@@ -1135,7 +1203,10 @@ theorem exists_fixed_point_of_prime_dvd_card_of_fixed_point
     Nat.modEq_zero_iff_dvd.mp ((hG.card_modEq_card_fixedPoints α).symm.trans hpα.modEq_zero_nat)
   have hα : 1 < Nat.card (fixedPoints G α) :=
     (Fact.out (p := p.Prime)).one_lt.trans_le (Nat.le_of_dvd (Finite.card_pos_iff.2 ⟨⟨a, ha⟩⟩) hpf)
-  rw [F
+  rw [Finite.one_lt_card_iff_nontrivial] at hα
+  exact
+    let ⟨⟨b, hb⟩, hba⟩ := exists_ne (⟨a, ha⟩ : fixedPoints G α)
+    ⟨b, hb, fun hab => hba (by simp_rw [hab])⟩
 
 中文:
 定理 存在_fixed_point_of_prime_dvd_card_of_fixed_point
@@ -1145,7 +1216,10 @@ theorem exists_fixed_point_of_prime_dvd_card_of_fixed_point
     Nat.modEq_zero_iff_dvd.mp ((hG.card_modEq_card_fixedPoints α).symm.trans hpα.modEq_zero_nat)
   have hα : 1 < Nat.card (fixedPoints G α) :=
     (Fact.out (p := p.Prime)).one_lt.trans_le (Nat.le_of_dvd (Finite.card_pos_iff.2 ⟨⟨a, ha⟩⟩) hpf)
-  rw [F
+  rw [Finite.one_lt_card_iff_nontrivial] at hα
+  exact
+    let ⟨⟨b, hb⟩, hba⟩ := exists_ne (⟨a, ha⟩ : fixedPoints G α)
+    ⟨b, hb, fun hab => hba (by simp_rw [hab])⟩
 
 Depends on / 依赖: Fact.out, Finite, Finite.card_pos_iff, Finite.one_lt_card_iff_nontrivial, Nat.card, Nat.le_of_dvd, Nat.modEq_zero_iff_dvd.mp, card_modEq_card_fixedPoints, card_pos_iff, exists_ne, fixedPoints, hG.card_modEq_card_fixedPoints, le_of_dvd, modEq_zero_iff_dvd, modEq_zero_nat, one_lt, one_lt.trans_le, one_lt_card_iff_nontrivial, p.Prime, simp_rw
 -/
@@ -1173,7 +1247,8 @@ theorem center_nontrivial
   have dvd : p ∣ Nat.card G := by
     obtain ⟨n, hn0, hn⟩ := hG.nontrivial_iff_card.mp inferInstance
     exact hn.symm ▸ dvd_pow_self _ (ne_of_gt hn0)
-  obt
+  obtain ⟨g, hg⟩ := this dvd (Subgroup.center G).one_mem
+  exact ⟨⟨1, ⟨g, hg.1⟩, mt Subtype.ext_iff.mp hg.2⟩⟩
 
 中文:
 定理 center_nontrivial
@@ -1185,7 +1260,8 @@ theorem center_nontrivial
   have dvd : p ∣ Nat.card G := by
     obtain ⟨n, hn0, hn⟩ := hG.nontrivial_iff_card.mp inferInstance
     exact hn.symm ▸ dvd_pow_self _ (ne_of_gt hn0)
-  obt
+  obtain ⟨g, hg⟩ := this dvd (Subgroup.center G).one_mem
+  exact ⟨⟨1, ⟨g, hg.1⟩, mt Subtype.ext_iff.mp hg.2⟩⟩
 
 Depends on / 依赖: ConjAct, ConjAct.fixedPoints_eq_center, ConjAct.toConjAct, Nat.card, Subgroup, Subgroup.center, Subtype, Subtype.ext_iff.mp, center, dvd_pow_self, exists_fixed_point_of_prime_dvd_card_of_fixed_point, ext_iff, fixedPoints_eq_center, hG.nontrivial_iff_card.mp, hG.of_equiv, hn.symm, ne_of_gt, nontrivial_iff_card, of_equiv, one_mem
 -/
@@ -1334,7 +1410,7 @@ theorem comap_of_ker_isPGroup
   rw [Subtype.ext_iff]; rw [H.coe_pow]; rw [Subtype.coe_mk]; rw [← ϕ.map_pow] at hj
   obtain ⟨k, hk⟩ := hϕ ⟨g.1 ^ p ^ j, hj⟩
   rw [Subtype.ext_iff]; rw [ϕ.ker.coe_pow]; rw [Subtype.coe_mk]; rw [← pow_mul]; rw [← pow_add] at hk
-  exact ⟨j + k, by rwa [
+  exact ⟨j + k, by rwa [Subtype.ext_iff, (H.comap ϕ).coe_pow]⟩
 
 中文:
 定理 comap_of_ker_isPGroup
@@ -1345,7 +1421,7 @@ theorem comap_of_ker_isPGroup
   rw [Subtype.ext_iff]; rw [H.coe_pow]; rw [Subtype.coe_mk]; rw [← ϕ.map_pow] at hj
   obtain ⟨k, hk⟩ := hϕ ⟨g.1 ^ p ^ j, hj⟩
   rw [Subtype.ext_iff]; rw [ϕ.ker.coe_pow]; rw [Subtype.coe_mk]; rw [← pow_mul]; rw [← pow_add] at hk
-  exact ⟨j + k, by rwa [
+  exact ⟨j + k, by rwa [Subtype.ext_iff, (H.comap ϕ).coe_pow]⟩
 
 Depends on / 依赖: H.coe_pow, H.comap, Subtype, Subtype.coe_mk, Subtype.ext_iff, coe_mk, coe_pow, ext_iff, ker.coe_pow, map_pow, pow_add, pow_mul
 -/
@@ -1470,7 +1546,9 @@ theorem to_sup_of_normal_right'
     to_sup_of_normal_right (hH.of_equiv (Subgroup.subgroupOfEquivOfLe hHK).symm)
       (hK.of_equiv (Subgroup.subgroupOfEquivOfLe Subgroup.le_normalizer).symm)
   ((congr_arg (fun H : Subgroup (Subgroup.normalizer K) => IsPGroup p H)
-            ((Subgroup.subgroupOf_sup hHK Subgroup.le_n
+            ((Subgroup.subgroupOf_sup hHK Subgroup.le_normalizer).symm)).mp
+        hHK').of_equiv
+    (Subgroup.subgroupOfEquivOfLe (sup_le hHK Subgroup.le_normalizer))
 
 中文:
 定理 to_sup_of_normal_right'
@@ -1479,7 +1557,9 @@ theorem to_sup_of_normal_right'
     to_sup_of_normal_right (hH.of_equiv (Subgroup.subgroupOfEquivOfLe hHK).symm)
       (hK.of_equiv (Subgroup.subgroupOfEquivOfLe Subgroup.le_normalizer).symm)
   ((congr_arg (fun H : Subgroup (Subgroup.normalizer K) => IsPGroup p H)
-            ((Subgroup.subgroupOf_sup hHK Subgroup.le_n
+            ((Subgroup.subgroupOf_sup hHK Subgroup.le_normalizer).symm)).mp
+        hHK').of_equiv
+    (Subgroup.subgroupOfEquivOfLe (sup_le hHK Subgroup.le_normalizer))
 
 Depends on / 依赖: IsPGroup, Subgroup, Subgroup.le_normalizer, Subgroup.normalizer, Subgroup.subgroupOfEquivOfLe, Subgroup.subgroupOf_sup, congr_arg, hH.of_equiv, hK.of_equiv, le_normalizer, normalizer, of_equiv, subgroupOfEquivOfLe, subgroupOf_sup, sup_le, to_sup_of_normal_right
 -/
@@ -1553,7 +1633,7 @@ theorem disjoint_of_coprime
   have hg₁ := Subgroup.orderOf_mk g _ ▸ orderOf_dvd_of_pow_eq_one hk₁
   have ⟨k₂, hk₂⟩ := hH₂ ⟨g, hg₂⟩
   have hg₂ := Subgroup.orderOf_mk g _ ▸ orderOf_dvd_of_pow_eq_one hk₂
-exact orderOf_eq_one_iff.mp Nat.eq
+exact orderOf_eq_one_iff.mp Nat.eq_one_of_dvd_coprimes (h.pow k₁ k₂) hg₁ hg₂
 
 中文:
 定理 disjoint_of_coprime
@@ -1564,7 +1644,7 @@ exact orderOf_eq_one_iff.mp Nat.eq
   have hg₁ := Subgroup.orderOf_mk g _ ▸ orderOf_dvd_of_pow_eq_one hk₁
   have ⟨k₂, hk₂⟩ := hH₂ ⟨g, hg₂⟩
   have hg₂ := Subgroup.orderOf_mk g _ ▸ orderOf_dvd_of_pow_eq_one hk₂
-exact orderOf_eq_one_iff.mp Nat.eq
+exact orderOf_eq_one_iff.mp Nat.eq_one_of_dvd_coprimes (h.pow k₁ k₂) hg₁ hg₂
 
 Depends on / 依赖: Nat.eq_one_of_dvd_coprimes, Subgroup, Subgroup.disjoint_def.mpr, Subgroup.orderOf_mk, disjoint_def, eq_one_of_dvd_coprimes, h.pow, orderOf_dvd_of_pow_eq_one, orderOf_eq_one_iff, orderOf_eq_one_iff.mp, orderOf_mk
 -/
@@ -1611,7 +1691,20 @@ theorem le_or_disjoint_of_coprime
   · rw [h2, Nat.coprime_zero_right, Subgroup.card_eq_one] at h_cop
     rw [h_cop]
     exact Or.inr disjoint_bot_left
-  have : Finite
+  have : Finite G := by
+    apply Nat.finite_of_card_ne_zero
+    rw [← H.card_mul_index]
+    exact mul_ne_zero h1 h2
+  have h3 : (Nat.card H).Coprime (Nat.card P) ∨ H.index.Coprime (Nat.card P) := by
+    obtain ⟨k, hk⟩ := hP.exists_card_eq
+    refine hk ▸ Or.imp hp.out.coprime_pow_of_not_dvd hp.out.coprime_pow_of_not_dvd ?_
+    contrapose! h_cop
+    exact Nat.Prime.not_coprime_iff_dvd.mpr ⟨p, hp.out, h_cop⟩
+  refine h3.symm.imp (fun h4 => ?_) (fun h4 => ?_)
+  · rw [← Subgroup.relIndex_eq_one]
+    exact Nat.eq_one_of_dvd_coprimes h4 (H.relIndex_dvd_index_of_normal P)
+      (Subgroup.relIndex_dvd_card H P)
+  · exact Subgroup.disjoint_of_coprime_natCard h4
 
 中文:
 定理 le_or_disjoint_of_coprime
@@ -1625,7 +1718,20 @@ theorem le_or_disjoint_of_coprime
   · rw [h2, Nat.coprime_zero_right, Subgroup.card_eq_one] at h_cop
     rw [h_cop]
     exact Or.inr disjoint_bot_left
-  have : Finite
+  have : Finite G := by
+    apply Nat.finite_of_card_ne_zero
+    rw [← H.card_mul_index]
+    exact mul_ne_zero h1 h2
+  have h3 : (Nat.card H).Coprime (Nat.card P) ∨ H.index.Coprime (Nat.card P) := by
+    obtain ⟨k, hk⟩ := hP.exists_card_eq
+    refine hk ▸ Or.imp hp.out.coprime_pow_of_not_dvd hp.out.coprime_pow_of_not_dvd ?_
+    contrapose! h_cop
+    exact Nat.Prime.not_coprime_iff_dvd.mpr ⟨p, hp.out, h_cop⟩
+  refine h3.symm.imp (fun h4 => ?_) (fun h4 => ?_)
+  · rw [← Subgroup.relIndex_eq_one]
+    exact Nat.eq_one_of_dvd_coprimes h4 (H.relIndex_dvd_index_of_normal P)
+      (Subgroup.relIndex_dvd_card H P)
+  · exact Subgroup.disjoint_of_coprime_natCard h4
 
 Depends on / 依赖: Coprime, Finite, H.card_mul_index, H.index, H.index.Coprime, Nat.card, Nat.coprime_zero_left, Nat.coprime_zero_right, Nat.finite_of_card_ne_zero, Or.imp, Or.inl, Or.inr, Subgroup, Subgroup.card_eq_one, Subgroup.index_eq_one, card_eq_one, card_mul_index, coprime_zero_left, coprime_zero_right, disjoint_bot_left
 -/
@@ -1672,7 +1778,7 @@ theorem card_center_eq_prime_pow
   have hcG := to_subgroup (of_card hGpn) (center G)
   rcases iff_card.1 hcG with _
   have : Nontrivial G := (nontrivial_iff_card <| of_card hGpn).2 ⟨n, hn, hGpn⟩
-  exact (nontrivial_iff_card hcG).mp (center_nontr
+  exact (nontrivial_iff_card hcG).mp (center_nontrivial (of_card hGpn))
 
 中文:
 定理 card_center_eq_prime_pow
@@ -1682,7 +1788,7 @@ theorem card_center_eq_prime_pow
   have hcG := to_subgroup (of_card hGpn) (center G)
   rcases iff_card.1 hcG with _
   have : Nontrivial G := (nontrivial_iff_card <| of_card hGpn).2 ⟨n, hn, hGpn⟩
-  exact (nontrivial_iff_card hcG).mp (center_nontr
+  exact (nontrivial_iff_card hcG).mp (center_nontrivial (of_card hGpn))
 
 Depends on / 依赖: Finite, Nat.finite_of_card_ne_zero, NeZero, NeZero.ne, Nontrivial, center, center_nontrivial, finite_of_card_ne_zero, iff_card, nontrivial_iff_card, of_card, pow_ne_zero, to_subgroup
 -/

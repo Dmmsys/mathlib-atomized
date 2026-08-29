@@ -1066,7 +1066,9 @@ theorem sizeUpTo_index_le
     simp [nonpos_iff_eq_zero.1 i_pos, c.sizeUpTo_zero]
   let i₁ := (i : Nat).pred
   have i₁_lt_i : i₁ < i := Nat.pred_lt (ne_of_gt i_pos)
-  have i₁_succ : i₁ + 1 = i := Nat.succ_pred_eq_of_pos
+  have i₁_succ : i₁ + 1 = i := Nat.succ_pred_eq_of_pos i_pos
+  have := Nat.find_min (c.index_exists j.2) i₁_lt_i
+  simp_all [lt_trans i₁_lt_i (c.index j).2]
 
 中文:
 定理 sizeUpTo_index_le
@@ -1081,7 +1083,9 @@ theorem sizeUpTo_index_le
     simp [nonpos_iff_eq_zero.1 i_pos, c.sizeUpTo_zero]
   let i₁ := (i : Nat).pred
   have i₁_lt_i : i₁ < i := Nat.pred_lt (ne_of_gt i_pos)
-  have i₁_succ : i₁ + 1 = i := Nat.succ_pred_eq_of_pos
+  have i₁_succ : i₁ + 1 = i := Nat.succ_pred_eq_of_pos i_pos
+  have := Nat.find_min (c.index_exists j.2) i₁_lt_i
+  simp_all [lt_trans i₁_lt_i (c.index j).2]
 
 Depends on / 依赖: HasFiniteLimits, Nat.find_min, Nat.pred_lt, Nat.succ_pred_eq_of_pos, c.index, c.index_exists, c.sizeUpTo_zero, find_min, i_pos, index_exists, lt_trans, ne_of_gt, nonpos_iff_eq_zero, pred_lt, revert, sizeUpTo_zero, succ_pred_eq_of_pos
 -/
@@ -1196,7 +1200,10 @@ theorem mem_range_embedding_iff
     apply Set.mem_range.2
     refine ⟨⟨j - c.sizeUpTo i, ?_⟩, ?_⟩
     · rw [tsub_lt_iff_left, ← sizeUpTo_succ']
-      · exact
+      · exact h.2
+      · exact h.1
+    · rw [Fin.ext_iff]
+      exact add_tsub_cancel_of_le h.1
 
 中文:
 定理 mem_range_embedding_iff
@@ -1213,7 +1220,10 @@ theorem mem_range_embedding_iff
     apply Set.mem_range.2
     refine ⟨⟨j - c.sizeUpTo i, ?_⟩, ?_⟩
     · rw [tsub_lt_iff_left, ← sizeUpTo_succ']
-      · exact
+      · exact h.2
+      · exact h.1
+    · rw [Fin.ext_iff]
+      exact add_tsub_cancel_of_le h.1
 
 Depends on / 依赖: Fin.ext_iff, Set.mem_range, add_tsub_cancel_of_le, c.sizeUpTo, ext_iff, is_lt, k.is_lt, mem_range, sizeUpTo, sizeUpTo_succ, tsub_lt_iff_left
 -/
@@ -1249,7 +1259,11 @@ theorem disjoint_range
     exists x : Fin n, x in Set.range (c.embedding i₁) ∧ x in Set.range (c.embedding i₂) :=
     Set.not_disjoint_iff.1 d
   have A : (i₁ : Nat).succ <= i₂ := Nat.succ_le_of_lt h'
- 
+  apply lt_irrefl (x : Nat)
+  calc
+    (x : Nat) < c.sizeUpTo (i₁ : Nat).succ := (c.mem_range_embedding_iff.1 hx₁).2
+    _ <= c.sizeUpTo (i₂ : Nat) := monotone_sum_take _ A
+    _ <= x := (c.mem_range_embedding_iff.1 hx₂).1
 
 中文:
 定理 disjoint_range
@@ -1262,7 +1276,11 @@ theorem disjoint_range
     exists x : Fin n, x in Set.range (c.embedding i₁) ∧ x in Set.range (c.embedding i₂) :=
     Set.not_disjoint_iff.1 d
   have A : (i₁ : Nat).succ <= i₂ := Nat.succ_le_of_lt h'
- 
+  apply lt_irrefl (x : Nat)
+  calc
+    (x : Nat) < c.sizeUpTo (i₁ : Nat).succ := (c.mem_range_embedding_iff.1 hx₁).2
+    _ <= c.sizeUpTo (i₂ : Nat) := monotone_sum_take _ A
+    _ <= x := (c.mem_range_embedding_iff.1 hx₂).1
 
 Depends on / 依赖: Nat.succ_le_of_lt, Set.not_disjoint_iff, Set.range, c.embedding, c.mem_range_embedding_iff, c.sizeUpTo, embedding, h.lt_or_gt.resolve_left, h.symm, lt_irrefl, lt_or_gt, mem_range_embedding_iff, monotone_sum_take, not_disjoint_iff, resolve_left, sizeUpTo, succ_le_of_lt
 -/
@@ -1789,7 +1807,13 @@ theorem eq_ones_iff_length
       n = ∑ i : Fin c.length, 1 := by simp [length_n]
       _ < ∑ i : Fin c.length, c.blocksFun i := by
         {
-        obtain ⟨i, hi, i_blocks⟩ : exists i in c.blocks, 1 < i 
+        obtain ⟨i, hi, i_blocks⟩ : exists i in c.blocks, 1 < i := ne_ones_iff.1 H
+        rw [← ofFn_blocksFun]; rw [mem_ofFn' c.blocksFun]; rw [Set.mem_range] at hi
+        obtain ⟨j : Fin c.length, hj : c.blocksFun j = i⟩ := hi
+        rw [← hj] at i_blocks
+        exact Finset.sum_lt_sum (fun i _ => one_le_blocksFun c i) ⟨j, Finset.mem_univ _, i_blocks⟩
+        }
+      _ = n := c.sum_blocksFun
 
 中文:
 定理 eq_ones_iff_length
@@ -1806,7 +1830,13 @@ theorem eq_ones_iff_length
       n = ∑ i : Fin c.length, 1 := by simp [length_n]
       _ < ∑ i : Fin c.length, c.blocksFun i := by
         {
-        obtain ⟨i, hi, i_blocks⟩ : exists i in c.blocks, 1 < i 
+        obtain ⟨i, hi, i_blocks⟩ : exists i in c.blocks, 1 < i := ne_ones_iff.1 H
+        rw [← ofFn_blocksFun]; rw [mem_ofFn' c.blocksFun]; rw [Set.mem_range] at hi
+        obtain ⟨j : Fin c.length, hj : c.blocksFun j = i⟩ := hi
+        rw [← hj] at i_blocks
+        exact Finset.sum_lt_sum (fun i _ => one_le_blocksFun c i) ⟨j, Finset.mem_univ _, i_blocks⟩
+        }
+      _ = n := c.sum_blocksFun
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum_lt_sum, Set.mem_range, blocks, blocksFun, c.blocks, c.blocksFun, c.length, contrapose, i_blocks, length, length_n, lt_irrefl, mem_ofFn, mem_range, mem_univ, ne_ones_iff, ofFn_blocksFun, one_le_blocksFun
 -/
@@ -2028,7 +2058,11 @@ theorem ne_single_iff
       by_contra ji
       apply lt_irrefl (∑ k, c.blocksFun k)
       calc
-        ∑ k, c.blocksFun k <= c.bloc
+        ∑ k, c.blocksFun k <= c.blocksFun i := by simp only [c.sum_blocksFun, hi]
+        _ < ∑ k, c.blocksFun k :=
+          Finset.single_lt_sum ji (Finset.mem_univ _) (Finset.mem_univ _) (c.one_le_blocksFun j)
+            fun _ _ _ => zero_le
+    simpa using Fintype.card_eq_one_of_forall_eq this
 
 中文:
 定理 ne_single_iff
@@ -2045,7 +2079,11 @@ theorem ne_single_iff
       by_contra ji
       apply lt_irrefl (∑ k, c.blocksFun k)
       calc
-        ∑ k, c.blocksFun k <= c.bloc
+        ∑ k, c.blocksFun k <= c.blocksFun i := by simp only [c.sum_blocksFun, hi]
+        _ < ∑ k, c.blocksFun k :=
+          Finset.single_lt_sum ji (Finset.mem_univ _) (Finset.mem_univ _) (c.one_le_blocksFun j)
+            fun _ _ _ => zero_le
+    simpa using Fintype.card_eq_one_of_forall_eq this
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.single_lt_sum, Fintype, Fintype.card_eq_one_of_forall_eq, blocksFun, c.blocksFun, c.length, c.one_le_blocksFun, c.sum_blocksFun, card_eq_one_of_forall_eq, continuous_coinduced_dom, continuous_coinducingCoprod, continuous_sigma_iff, contrapose, eq_single_iff_length, length, lt_irrefl, mem_univ, one_le_blocksFun
 -/
@@ -2954,7 +2992,31 @@ definition compositionAsSetEquiv
         { i : Fin n.succ |
             i = 0 ∨ i = Fin.last n ∨ exists (j : Fin (n - 1)) (_hj : j in s), (i : Nat) = j + 1 }.toFinset
       zero_mem := by simp
-      getLas
+      getLast_mem := by simp }
+  left_inv := by
+    intro c
+    ext i
+    simp only [add_comm, Set.toFinset_ofPred, Finset.mem_univ,
+     Finset.mem_filter, true_and, exists_prop]
+    constructor
+    · rintro (rfl | rfl | ⟨j, hj1, hj2⟩)
+      · exact c.zero_mem
+      · exact c.getLast_mem
+      · convert! hj1
+    · simp only [or_iff_not_imp_left, ← ne_eq, ← Fin.exists_succ_eq]
+      rintro i_mem ⟨j, rfl⟩ i_ne_last
+      rcases Nat.exists_add_one_eq.mpr j.pos with ⟨n, rfl⟩
+      obtain ⟨k, rfl⟩ : exists k : Fin n, k.castSucc = j := by
+        simpa [Fin.exists_castSucc_eq] using! i_ne_last
+      use k
+      simpa using! i_mem
+  right_inv := by
+    intro s
+    ext i
+    have : (i : Nat) + 1 != n := by lia
+    simp_rw [add_comm, Fin.ext_iff, Fin.val_zero, Fin.val_last, exists_prop, Set.toFinset_ofPred,
+      Finset.mem_filter_univ, reduceCtorEq, this, false_or, add_left_inj, ← Fin.ext_iff,
+      exists_eq_right']
 
 中文:
 定义 compositionAsSetEquiv
@@ -2966,7 +3028,31 @@ definition compositionAsSetEquiv
         { i : Fin n.succ |
             i = 0 ∨ i = Fin.last n ∨ exists (j : Fin (n - 1)) (_hj : j in s), (i : Nat) = j + 1 }.toFinset
       zero_mem := by simp
-      getLas
+      getLast_mem := by simp }
+  left_inv := by
+    intro c
+    ext i
+    simp only [add_comm, Set.toFinset_ofPred, Finset.mem_univ,
+     Finset.mem_filter, true_and, exists_prop]
+    constructor
+    · rintro (rfl | rfl | ⟨j, hj1, hj2⟩)
+      · exact c.zero_mem
+      · exact c.getLast_mem
+      · convert! hj1
+    · simp only [or_iff_not_imp_left, ← ne_eq, ← Fin.exists_succ_eq]
+      rintro i_mem ⟨j, rfl⟩ i_ne_last
+      rcases Nat.exists_add_one_eq.mpr j.pos with ⟨n, rfl⟩
+      obtain ⟨k, rfl⟩ : exists k : Fin n, k.castSucc = j := by
+        simpa [Fin.exists_castSucc_eq] using! i_ne_last
+      use k
+      simpa using! i_mem
+  right_inv := by
+    intro s
+    ext i
+    have : (i : Nat) + 1 != n := by lia
+    simp_rw [add_comm, Fin.ext_iff, Fin.val_zero, Fin.val_last, exists_prop, Set.toFinset_ofPred,
+      Finset.mem_filter_univ, reduceCtorEq, this, false_or, add_left_inj, ← Fin.ext_iff,
+      exists_eq_right']
 
 Depends on / 依赖: Fin.last, Finset, Finset.mem_filter, Finset.mem_univ, Set.toFinset_ofPred, add_comm, boundaries, c.boundaries, c.getLast_mem, c.zero_mem, exists_prop, getLast_mem, invFun, left_inv, mem_filter, mem_univ, n.succ, toFinset, toFinset_ofPred, true_and
 -/
@@ -3364,7 +3450,8 @@ theorem blocks_partial_sum
       rw [c.card_boundaries_eq_succ_length] at h
       simp [blocks, Nat.lt_of_succ_lt_succ h]
     have B : i < c.boundaries.card := lt_of_lt_of_le A (by simp [blocks, length])
-    rw [sum_take_succ _ _ A]
+    rw [sum_take_succ _ _ A]; rw [IH B]
+    simp [blocks, blocksFun]
 
 中文:
 定理 blocks_partial_sum
@@ -3377,7 +3464,8 @@ theorem blocks_partial_sum
       rw [c.card_boundaries_eq_succ_length] at h
       simp [blocks, Nat.lt_of_succ_lt_succ h]
     have B : i < c.boundaries.card := lt_of_lt_of_le A (by simp [blocks, length])
-    rw [sum_take_succ _ _ A]
+    rw [sum_take_succ _ _ A]; rw [IH B]
+    simp [blocks, blocksFun]
 
 Depends on / 依赖: Nat.lt_of_succ_lt_succ, blocks, blocksFun, boundaries, c.blocks.length, c.boundaries.card, c.card_boundaries_eq_succ_length, card_boundaries_eq_succ_length, length, lt_of_lt_of_le, lt_of_succ_lt_succ, sum_take_succ
 -/
@@ -3409,7 +3497,9 @@ theorem mem_boundaries_iff_exists_blocks_sum_take_eq
     rw [← hi]; rw [c.blocks_partial_sum i.2]
     rfl
   · rintro ⟨i, hi, H⟩
-    convert! (c.boundarie
+    convert! (c.boundaries.orderIsoOfFin rfl ⟨i, hi⟩).2
+    have : c.boundary ⟨i, hi⟩ = j := by rwa [Fin.ext_iff, ← c.blocks_partial_sum hi]
+    exact this.symm
 
 中文:
 定理 mem_boundaries_iff_存在_blocks_sum_take_eq
@@ -3424,7 +3514,9 @@ theorem mem_boundaries_iff_exists_blocks_sum_take_eq
     rw [← hi]; rw [c.blocks_partial_sum i.2]
     rfl
   · rintro ⟨i, hi, H⟩
-    convert! (c.boundarie
+    convert! (c.boundaries.orderIsoOfFin rfl ⟨i, hi⟩).2
+    have : c.boundary ⟨i, hi⟩ = j := by rwa [Fin.ext_iff, ← c.blocks_partial_sum hi]
+    exact this.symm
 
 Depends on / 依赖: Fin.ext_iff, Subtype, Subtype.coe_mk, Subtype.ext_iff, blocks_partial_sum, boundaries, boundary, c.blocks_partial_sum, c.boundaries.orderIsoOfFin, c.boundary, coe_mk, convert, ext_iff, orderIsoOfFin, surjective, this.symm
 -/
@@ -3570,7 +3662,19 @@ theorem Composition.toCompositionAsSet_blocks
   suffices H : forall i <= d.blocks.length, (d.blocks.take i).sum = (c.blocks.take i).sum from
     eq_of_sum_take_eq length_eq H
   intro i hi
-  have i_lt
+  have i_lt : i < d.boundaries.card := by
+    simpa [CompositionAsSet.blocks, length_ofFn,
+      d.card_boundaries_eq_succ_length] using Nat.lt_succ_iff.2 hi
+  have i_lt' : i < c.boundaries.card := i_lt
+  have i_lt'' : i < c.length + 1 := by rwa [c.card_boundaries_eq_succ_length] at i_lt'
+  have A :
+    d.boundaries.orderEmbOfFin rfl ⟨i, i_lt⟩ =
+      c.boundaries.orderEmbOfFin c.card_boundaries_eq_succ_length ⟨i, i_lt''⟩ :=
+    rfl
+  have B : c.sizeUpTo i = c.boundary ⟨i, i_lt''⟩ := rfl
+  rw [d.blocks_partial_sum i_lt]; rw [CompositionAsSet.boundary]; rw [← Composition.sizeUpTo]; rw [B]; rw [A]; rw [c.orderEmbOfFin_boundaries]
+
+@[simp]
 
 中文:
 定理 余mposition.toCompositionAsSet_blocks
@@ -3582,7 +3686,19 @@ theorem Composition.toCompositionAsSet_blocks
   suffices H : forall i <= d.blocks.length, (d.blocks.take i).sum = (c.blocks.take i).sum from
     eq_of_sum_take_eq length_eq H
   intro i hi
-  have i_lt
+  have i_lt : i < d.boundaries.card := by
+    simpa [CompositionAsSet.blocks, length_ofFn,
+      d.card_boundaries_eq_succ_length] using Nat.lt_succ_iff.2 hi
+  have i_lt' : i < c.boundaries.card := i_lt
+  have i_lt'' : i < c.length + 1 := by rwa [c.card_boundaries_eq_succ_length] at i_lt'
+  have A :
+    d.boundaries.orderEmbOfFin rfl ⟨i, i_lt⟩ =
+      c.boundaries.orderEmbOfFin c.card_boundaries_eq_succ_length ⟨i, i_lt''⟩ :=
+    rfl
+  have B : c.sizeUpTo i = c.boundary ⟨i, i_lt''⟩ := rfl
+  rw [d.blocks_partial_sum i_lt]; rw [CompositionAsSet.boundary]; rw [← Composition.sizeUpTo]; rw [B]; rw [A]; rw [c.orderEmbOfFin_boundaries]
+
+@[simp]
 
 Depends on / 依赖: CompositionAsSet, CompositionAsSet.blocks, Countable, Countable.toSmall, Discrete, Discrete.equivalence, Finite, Nat.lt_succ_iff, blocks, blocks_length, boundaries, c.blocks, c.blocks.length, c.blocks.take, c.boundaries.card, c.length, c.toCompositionAsSet, card_boundaries_eq_succ_length, choose_spec, d.blocks
 -/

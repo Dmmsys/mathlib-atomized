@@ -91,7 +91,15 @@ lemma associator_naturality
   refine Arrow.hom_ext _ _ (pushout.hom_ext (by simp [whisker_exchange_assoc]) ?_) (by simp)
   apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
   · suffices _ ◁ _ ◁ f₃.right ≫ (α_ _ _ _).inv ≫ f₁.right ▷ _ ▷ _ ≫ (α_ _ _ _).hom ≫
-      _ ◁ f₂.left ▷ _ ≫ _ ◁ pushout.inr _
+      _ ◁ f₂.left ▷ _ ≫ _ ◁ pushout.inr _ _ = _ ◁ f₂.left ▷ _ ≫ _ ◁ _ ◁ f₃.right ≫
+      _ ◁ pushout.inr _ _ ≫ f₁.right ▷ pushout (Y₂.hom ▷ Y₃.left) (Y₂.left ◁ Y₃.hom) by
+      simp [← whisker_exchange_assoc, reassoc_of% this]
+    rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [whisker_exchange]; rw [whisker_exchange_assoc]; rw [← whisker_exchange]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [associator_naturality_right_assoc]; rw [Iso.inv_hom_id_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]
+  · suffices ((α_ _ _ _).hom ≫ _ ◁ _ ◁ f₃.right ≫ (α_ _ _ _).inv ≫ f₁.left ▷ _ ▷ _ ≫
+      (α_ _ _ _).hom ≫ _ ◁ f₂.right ▷ _ = f₁.left ▷ _ ▷ _ ≫ (α_ _ _ _).hom ≫
+      _ ◁ f₂.right ▷ _ ≫ _ ◁ _ ◁ f₃.right) by
+      simp [← whisker_exchange_assoc, reassoc_of% this]
+    cat_disch
 
 中文:
 引理 associator_naturality
@@ -100,7 +108,15 @@ lemma associator_naturality
   refine Arrow.hom_ext _ _ (pushout.hom_ext (by simp [whisker_exchange_assoc]) ?_) (by simp)
   apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
   · suffices _ ◁ _ ◁ f₃.right ≫ (α_ _ _ _).inv ≫ f₁.right ▷ _ ▷ _ ≫ (α_ _ _ _).hom ≫
-      _ ◁ f₂.left ▷ _ ≫ _ ◁ pushout.inr _
+      _ ◁ f₂.left ▷ _ ≫ _ ◁ pushout.inr _ _ = _ ◁ f₂.left ▷ _ ≫ _ ◁ _ ◁ f₃.right ≫
+      _ ◁ pushout.inr _ _ ≫ f₁.right ▷ pushout (Y₂.hom ▷ Y₃.left) (Y₂.left ◁ Y₃.hom) by
+      simp [← whisker_exchange_assoc, reassoc_of% this]
+    rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [whisker_exchange]; rw [whisker_exchange_assoc]; rw [← whisker_exchange]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [associator_naturality_right_assoc]; rw [Iso.inv_hom_id_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]
+  · suffices ((α_ _ _ _).hom ≫ _ ◁ _ ◁ f₃.right ≫ (α_ _ _ _).inv ≫ f₁.left ▷ _ ▷ _ ≫
+      (α_ _ _ _).hom ≫ _ ◁ f₂.right ▷ _ = f₁.left ▷ _ ▷ _ ≫ (α_ _ _ _).hom ≫
+      _ ◁ f₂.right ▷ _ ≫ _ ◁ _ ◁ f₃.right) by
+      simp [← whisker_exchange_assoc, reassoc_of% this]
+    cat_disch
 
 Depends on / 依赖: Arrow.hom_ext, IsPushout, IsPushout.of_hasPushout, MonoidalCategory, MonoidalCategory.whiskerLeft_com, hom_ext, map_isPushout, of_hasPushout, pushout, pushout.hom_ext, pushout.inr, reassoc_of, tensorRight, whiskerLeft_com, whisker_exchange_assoc
 -/
@@ -217,7 +233,8 @@ lemma triangle
   refine Arrow.hom_ext _ _ (pushout.hom_ext (by simp) ?_) (by simp)
   apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
   · apply (initialIsInitial.ofIso ((initialIsoIsInitial ?_) ≪≫ (mulZero ?_).symm)).hom_ext <;>
-    exact initialIsInitial.ofIso (zeroMul initialIsIniti
+    exact initialIsInitial.ofIso (zeroMul initialIsInitial).symm
+  · simp [← comp_whiskerRight_assoc]
 
 中文:
 引理 triangle
@@ -226,7 +243,8 @@ lemma triangle
   refine Arrow.hom_ext _ _ (pushout.hom_ext (by simp) ?_) (by simp)
   apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
   · apply (initialIsInitial.ofIso ((initialIsoIsInitial ?_) ≪≫ (mulZero ?_).symm)).hom_ext <;>
-    exact initialIsInitial.ofIso (zeroMul initialIsIniti
+    exact initialIsInitial.ofIso (zeroMul initialIsInitial).symm
+  · simp [← comp_whiskerRight_assoc]
 
 Depends on / 依赖: Arrow.hom_ext, IsPushout, IsPushout.of_hasPushout, comp_whiskerRight_assoc, hom_ext, initialIsInitial, initialIsInitial.ofIso, initialIsoIsInitial, map_isPushout, mulZero, of_hasPushout, pushout, pushout.hom_ext, tensorRight, zeroMul
 -/

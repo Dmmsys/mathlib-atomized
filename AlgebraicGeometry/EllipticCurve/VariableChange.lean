@@ -227,7 +227,13 @@ instance :
   inv_mul_cancel C := by
     rw [mul_def]; rw [one_def]; rw [inv_def]
     ext <;> dsimp only
-    · exact C.u.inv
+    · exact C.u.inv_mul
+    · linear_combination -C.r * pow_mul_pow_eq_one 2 C.u.inv_mul
+    · linear_combination -C.s * C.u.inv_mul
+    · linear_combination (C.r * C.s - C.t) * pow_mul_pow_eq_one 3 C.u.inv_mul
+        + -C.r * C.s * pow_mul_pow_eq_one 2 C.u.inv_mul
+  mul_assoc _ _ _ := by
+    ext <;> simp only [mul_def, Units.val_mul] <;> ring1
 
 中文:
 实例 :
@@ -239,7 +245,13 @@ instance :
   inv_mul_cancel C := by
     rw [mul_def]; rw [one_def]; rw [inv_def]
     ext <;> dsimp only
-    · exact C.u.inv
+    · exact C.u.inv_mul
+    · linear_combination -C.r * pow_mul_pow_eq_one 2 C.u.inv_mul
+    · linear_combination -C.s * C.u.inv_mul
+    · linear_combination (C.r * C.s - C.t) * pow_mul_pow_eq_one 3 C.u.inv_mul
+        + -C.r * C.s * pow_mul_pow_eq_one 2 C.u.inv_mul
+  mul_assoc _ _ _ := by
+    ext <;> simp only [mul_def, Units.val_mul] <;> ring1
 
 Depends on / 依赖: C.u.inv_, C.u.inv_mul, Units.val_one, add_zero, inv_, inv_def, inv_mul, inv_mul_cancel, linear_combination, mul_def, mul_one, mul_zero, one_def, one_mul, one_pow, pow_mul_pow_eq_one, val_one, zero_add, zero_mul
 -/
@@ -275,7 +287,8 @@ instance :
     a₃ := C.u⁻¹ ^ 3 * (W.a₃ + C.r * W.a₁ + 2 * C.t)
     a₄ := C.u⁻¹ ^ 4 * (W.a₄ - C.s * W.a₃ + 2 * C.r * W.a₂ - (C.t + C.r * C.s) * W.a₁ + 3 * C.r ^ 2
       - 2 * C.s * C.t)
-    a₆ := C.u⁻¹ ^ 6 * (W.a₆
+    a₆ := C.u⁻¹ ^ 6 * (W.a₆ + C.r * W.a₄ + C.r ^ 2 * W.a₂ + C.r ^ 3 - C.t * W.a₃ - C.t ^ 2
+      - C.r * C.t * W.a₁) }
 
 中文:
 实例 :
@@ -286,7 +299,8 @@ instance :
     a₃ := C.u⁻¹ ^ 3 * (W.a₃ + C.r * W.a₁ + 2 * C.t)
     a₄ := C.u⁻¹ ^ 4 * (W.a₄ - C.s * W.a₃ + 2 * C.r * W.a₂ - (C.t + C.r * C.s) * W.a₁ + 3 * C.r ^ 2
       - 2 * C.s * C.t)
-    a₆ := C.u⁻¹ ^ 6 * (W.a₆
+    a₆ := C.u⁻¹ ^ 6 * (W.a₆ + C.r * W.a₄ + C.r ^ 2 * W.a₂ + C.r ^ 3 - C.t * W.a₃ - C.t ^ 2
+      - C.r * C.t * W.a₁) }
 -/
 instance : SMul (VariableChange R) (WeierstrassCurve R) where
   smul C W := {
@@ -332,7 +346,29 @@ instance :
   mul_smul C C' W := by
     simp only [VariableChange.mul_def, variableChange_def]
     ext <;> simp only [mul_inv, Units.val_mul]
-    · linear_combination ↑C.u⁻¹ * C.s * 2 *
+    · linear_combination ↑C.u⁻¹ * C.s * 2 * C'.u.inv_mul
+    · linear_combination
+        C.s * (-C'.s * 2 - W.a₁) * C.u⁻¹ ^ 2 * ↑C'.u⁻¹ * C'.u.inv_mul
+          + (C.r * 3 - C.s ^ 2) * C.u⁻¹ ^ 2 * pow_mul_pow_eq_one 2 C'.u.inv_mul
+    · linear_combination
+        C.r * (C'.s * 2 + W.a₁) * C.u⁻¹ ^ 3 * ↑C'.u⁻¹ * pow_mul_pow_eq_one 2 C'.u.inv_mul
+          + C.t * 2 * C.u⁻¹ ^ 3 * pow_mul_pow_eq_one 3 C'.u.inv_mul
+    · linear_combination
+        C.s * (-W.a₃ - C'.r * W.a₁ - C'.t * 2) * C.u⁻¹ ^ 4 * C'.u⁻¹ ^ 3 * C'.u.inv_mul
+          + C.u⁻¹ ^ 4 * C'.u⁻¹ ^ 2 * (C.r * C'.r * 6 + C.r * W.a₂ * 2 - C'.s * C.r * W.a₁ * 2
+            - C'.s ^ 2 * C.r * 2) * pow_mul_pow_eq_one 2 C'.u.inv_mul
+          - C.u⁻¹ ^ 4 * ↑C'.u⁻¹ * (C.s * C'.s * C.r * 2 + C.s * C.r * W.a₁ + C'.s * C.t * 2
+            + C.t * W.a₁) * pow_mul_pow_eq_one 3 C'.u.inv_mul
+          + C.u⁻¹ ^ 4 * (C.r ^ 2 * 3 - C.s * C.t * 2) * pow_mul_pow_eq_one 4 C'.u.inv_mul
+    · linear_combination
+        C.r * C.u⁻¹ ^ 6 * C'.u⁻¹ ^ 4 * (C'.r * W.a₂ * 2 - C'.r * C'.s * W.a₁ + C'.r ^ 2 * 3 + W.a₄
+            - C'.s * C'.t * 2 - C'.s * W.a₃ - C'.t * W.a₁) * pow_mul_pow_eq_one 2 C'.u.inv_mul
+          - C.u⁻¹ ^ 6 * C'.u⁻¹ ^ 3 * C.t * (C'.r * W.a₁ + C'.t * 2 + W.a₃)
+            * pow_mul_pow_eq_one 3 C'.u.inv_mul
+          + C.r ^ 2 * C.u⁻¹ ^ 6 * C'.u⁻¹ ^ 2 * (C'.r * 3 + W.a₂ - C'.s * W.a₁ - C'.s ^ 2)
+            * pow_mul_pow_eq_one 4 C'.u.inv_mul
+          - C.r * C.t * C.u⁻¹ ^ 6 * ↑C'.u⁻¹ * (C'.s * 2 + W.a₁) * pow_mul_pow_eq_one 5 C'.u.inv_mul
+          + C.u⁻¹ ^ 6 * (C.r ^ 3 - C.t ^ 2) * pow_mul_pow_eq_one 6 C'.u.inv_mul
 
 中文:
 实例 :
@@ -343,7 +379,29 @@ instance :
   mul_smul C C' W := by
     simp only [VariableChange.mul_def, variableChange_def]
     ext <;> simp only [mul_inv, Units.val_mul]
-    · linear_combination ↑C.u⁻¹ * C.s * 2 *
+    · linear_combination ↑C.u⁻¹ * C.s * 2 * C'.u.inv_mul
+    · linear_combination
+        C.s * (-C'.s * 2 - W.a₁) * C.u⁻¹ ^ 2 * ↑C'.u⁻¹ * C'.u.inv_mul
+          + (C.r * 3 - C.s ^ 2) * C.u⁻¹ ^ 2 * pow_mul_pow_eq_one 2 C'.u.inv_mul
+    · linear_combination
+        C.r * (C'.s * 2 + W.a₁) * C.u⁻¹ ^ 3 * ↑C'.u⁻¹ * pow_mul_pow_eq_one 2 C'.u.inv_mul
+          + C.t * 2 * C.u⁻¹ ^ 3 * pow_mul_pow_eq_one 3 C'.u.inv_mul
+    · linear_combination
+        C.s * (-W.a₃ - C'.r * W.a₁ - C'.t * 2) * C.u⁻¹ ^ 4 * C'.u⁻¹ ^ 3 * C'.u.inv_mul
+          + C.u⁻¹ ^ 4 * C'.u⁻¹ ^ 2 * (C.r * C'.r * 6 + C.r * W.a₂ * 2 - C'.s * C.r * W.a₁ * 2
+            - C'.s ^ 2 * C.r * 2) * pow_mul_pow_eq_one 2 C'.u.inv_mul
+          - C.u⁻¹ ^ 4 * ↑C'.u⁻¹ * (C.s * C'.s * C.r * 2 + C.s * C.r * W.a₁ + C'.s * C.t * 2
+            + C.t * W.a₁) * pow_mul_pow_eq_one 3 C'.u.inv_mul
+          + C.u⁻¹ ^ 4 * (C.r ^ 2 * 3 - C.s * C.t * 2) * pow_mul_pow_eq_one 4 C'.u.inv_mul
+    · linear_combination
+        C.r * C.u⁻¹ ^ 6 * C'.u⁻¹ ^ 4 * (C'.r * W.a₂ * 2 - C'.r * C'.s * W.a₁ + C'.r ^ 2 * 3 + W.a₄
+            - C'.s * C'.t * 2 - C'.s * W.a₃ - C'.t * W.a₁) * pow_mul_pow_eq_one 2 C'.u.inv_mul
+          - C.u⁻¹ ^ 6 * C'.u⁻¹ ^ 3 * C.t * (C'.r * W.a₁ + C'.t * 2 + W.a₃)
+            * pow_mul_pow_eq_one 3 C'.u.inv_mul
+          + C.r ^ 2 * C.u⁻¹ ^ 6 * C'.u⁻¹ ^ 2 * (C'.r * 3 + W.a₂ - C'.s * W.a₁ - C'.s ^ 2)
+            * pow_mul_pow_eq_one 4 C'.u.inv_mul
+          - C.r * C.t * C.u⁻¹ ^ 6 * ↑C'.u⁻¹ * (C'.s * 2 + W.a₁) * pow_mul_pow_eq_one 5 C'.u.inv_mul
+          + C.u⁻¹ ^ 6 * (C.r ^ 3 - C.t ^ 2) * pow_mul_pow_eq_one 6 C'.u.inv_mul
 
 Depends on / 依赖: Units.val_mul, Units.val_one, VariableChange, VariableChange.mul_def, VariableChange.one_def, inv_mul, inv_one, linear_combination, mul_def, mul_inv, mul_smul, one_def, pow_mul_pow_eq_one, u.inv_mul, val_mul, val_one, variableChange_def
 -/

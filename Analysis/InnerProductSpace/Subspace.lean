@@ -211,7 +211,11 @@ theorem OrthogonalFamily.inner_right_dfinsupp
     _ = l.sum fun j w => ite (i = j) ⟪V i v, V j w⟫ 0 :=
       (congr_arg l.sum <| funext fun _ => funext <| hV.eq_ite v)
     _ = ⟪v, l i⟫ := by
-      simp only [DFinsupp.sum, 
+      simp only [DFinsupp.sum, Finset.sum_ite_eq,
+        DFinsupp.mem_support_toFun]
+      split_ifs with h
+      · simp only [LinearIsometry.inner_map_map]
+      · simp only [of_not_not h, inner_zero_right]
 
 中文:
 定理 OrthogonalFamily.inner_right_dfinsupp
@@ -221,7 +225,11 @@ theorem OrthogonalFamily.inner_right_dfinsupp
     _ = l.sum fun j w => ite (i = j) ⟪V i v, V j w⟫ 0 :=
       (congr_arg l.sum <| funext fun _ => funext <| hV.eq_ite v)
     _ = ⟪v, l i⟫ := by
-      simp only [DFinsupp.sum, 
+      simp only [DFinsupp.sum, Finset.sum_ite_eq,
+        DFinsupp.mem_support_toFun]
+      split_ifs with h
+      · simp only [LinearIsometry.inner_map_map]
+      · simp only [of_not_not h, inner_zero_right]
 
 Depends on / 依赖: DFinsupp, DFinsupp.inner_sum, DFinsupp.mem_support_toFun, DFinsupp.sum, Finset, Finset.sum_ite_eq, LinearIsometry, LinearIsometry.inner_map_map, congr_arg, eq_ite, hV.eq_ite, inner_map_map, inner_sum, inner_zero_right, l.sum, mem_support_toFun, of_not_not, split_ifs, sum_ite_eq
 -/
@@ -253,7 +261,21 @@ theorem OrthogonalFamily.inner_right_fintype
     _ = ∑ j, ite (i = j) ⟪V i v, V j (l j)⟫ 0 :=
       (congr_arg (Finset.sum Finset.univ) <| funext fun j => hV.eq_ite v (l j))
     _ = ⟪v, l i⟫ := by
-      simp only [Finset.sum_ite_eq, Finset.
+      simp only [Finset.sum_ite_eq, Finset.mem_univ, (V i).inner_map_map, if_true]
+
+nonrec theorem OrthogonalFamily.inner_sum (l₁ l₂ : forall i, G i) (s : Finset ι) :
+    ⟪∑ i in s, V i (l₁ i), ∑ j in s, V j (l₂ j)⟫ = ∑ i in s, ⟪l₁ i, l₂ i⟫ := by
+  classical
+  calc
+    ⟪∑ i in s, V i (l₁ i), ∑ j in s, V j (l₂ j)⟫ = ∑ j in s, ∑ i in s, ⟪V i (l₁ i), V j (l₂ j)⟫ := by
+      simp only [sum_inner, inner_sum]
+    _ = ∑ j in s, ∑ i in s, ite (i = j) ⟪V i (l₁ i), V j (l₂ j)⟫ 0 := by
+      congr with i
+      congr with j
+      apply hV.eq_ite
+    _ = ∑ i in s, ⟪l₁ i, l₂ i⟫ := by
+      simp only [Finset.sum_ite_of_true, Finset.sum_ite_eq', LinearIsometry.inner_map_map,
+        imp_self, imp_true_iff]
 
 中文:
 定理 OrthogonalFamily.inner_right_fintype
@@ -265,7 +287,21 @@ theorem OrthogonalFamily.inner_right_fintype
     _ = ∑ j, ite (i = j) ⟪V i v, V j (l j)⟫ 0 :=
       (congr_arg (Finset.sum Finset.univ) <| funext fun j => hV.eq_ite v (l j))
     _ = ⟪v, l i⟫ := by
-      simp only [Finset.sum_ite_eq, Finset.
+      simp only [Finset.sum_ite_eq, Finset.mem_univ, (V i).inner_map_map, if_true]
+
+nonrec theorem OrthogonalFamily.inner_sum (l₁ l₂ : forall i, G i) (s : Finset ι) :
+    ⟪∑ i in s, V i (l₁ i), ∑ j in s, V j (l₂ j)⟫ = ∑ i in s, ⟪l₁ i, l₂ i⟫ := by
+  classical
+  calc
+    ⟪∑ i in s, V i (l₁ i), ∑ j in s, V j (l₂ j)⟫ = ∑ j in s, ∑ i in s, ⟪V i (l₁ i), V j (l₂ j)⟫ := by
+      simp only [sum_inner, inner_sum]
+    _ = ∑ j in s, ∑ i in s, ite (i = j) ⟪V i (l₁ i), V j (l₂ j)⟫ 0 := by
+      congr with i
+      congr with j
+      apply hV.eq_ite
+    _ = ∑ i in s, ⟪l₁ i, l₂ i⟫ := by
+      simp only [Finset.sum_ite_of_true, Finset.sum_ite_eq', LinearIsometry.inner_map_map,
+        imp_self, imp_true_iff]
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum, Finset.sum_ite_eq, Finset.univ, classical, congr_arg, eq_ite, hV.eq_ite, if_true, inner_map_map, inner_sum, mem_univ, sum_ite_eq
 -/
@@ -355,7 +391,8 @@ theorem OrthogonalFamily.orthonormal_sigma_orthonormal
     have : v != w := fun h => by
       subst h
       exact hvw rfl
-    simpa only [LinearIsometry.inner_map_map] using (hv_family i).
+    simpa only [LinearIsometry.inner_map_map] using (hv_family i).2 this
+  · exact hV hij (v_family i v) (v_family j w)
 
 中文:
 定理 OrthogonalFamily.orthonormal_sigma_orthonormal
@@ -370,7 +407,8 @@ theorem OrthogonalFamily.orthonormal_sigma_orthonormal
     have : v != w := fun h => by
       subst h
       exact hvw rfl
-    simpa only [LinearIsometry.inner_map_map] using (hv_family i).
+    simpa only [LinearIsometry.inner_map_map] using (hv_family i).2 this
+  · exact hV hij (v_family i v) (v_family j w)
 
 Depends on / 依赖: LinearIsometry, LinearIsometry.inner_map_map, LinearIsometry.norm_map, hv_family, inner_map_map, norm_map, v_family
 -/
@@ -399,7 +437,26 @@ theorem OrthogonalFamily.norm_sq_sdiff_sum
   rw [← Finset.sum_sdiff_sub_sum_sdiff]; rw [sub_eq_add_neg]; rw [← Finset.sum_neg_distrib]
   let F : forall i, G i := fun i => if i in s₁ then f i else -f i
   have hF₁ : forall i in s₁ \ s₂, F i = f i := fun i hi => if_pos (Finset.sdiff_subset hi)
-  have hF₂ : forall i in s₂ \ s₁, F i = -f i := 
+  have hF₂ : forall i in s₂ \ s₁, F i = -f i := fun i hi => if_neg (Finset.mem_sdiff.mp hi).2
+  have hF : forall i, ‖F i‖ = ‖f i‖ := by
+    intro i
+    dsimp only [F]
+    split_ifs <;> simp only [norm_neg]
+  have :
+    ‖(∑ i in s₁ \ s₂, V i (F i)) + ∑ i in s₂ \ s₁, V i (F i)‖ ^ 2 =
+      (∑ i in s₁ \ s₂, ‖F i‖ ^ 2) + ∑ i in s₂ \ s₁, ‖F i‖ ^ 2 := by
+    have hs : Disjoint (s₁ \ s₂) (s₂ \ s₁) := disjoint_sdiff_sdiff
+    simpa only [Finset.sum_union hs] using hV.norm_sum F (s₁ \ s₂ union s₂ \ s₁)
+  convert! this using 4
+  · refine Finset.sum_congr rfl fun i hi => ?_
+    simp only [hF₁ i hi]
+  · refine Finset.sum_congr rfl fun i hi => ?_
+    simp only [hF₂ i hi, LinearIsometry.map_neg]
+  · simp only [hF]
+  · simp only [hF]
+
+@[deprecated (since := "2026-06-03")]
+alias OrthogonalFamily.norm_sq_diff_sum := OrthogonalFamily.norm_sq_sdiff_sum
 
 中文:
 定理 OrthogonalFamily.norm_sq_sdiff_sum
@@ -408,7 +465,26 @@ theorem OrthogonalFamily.norm_sq_sdiff_sum
   rw [← Finset.sum_sdiff_sub_sum_sdiff]; rw [sub_eq_add_neg]; rw [← Finset.sum_neg_distrib]
   let F : forall i, G i := fun i => if i in s₁ then f i else -f i
   have hF₁ : forall i in s₁ \ s₂, F i = f i := fun i hi => if_pos (Finset.sdiff_subset hi)
-  have hF₂ : forall i in s₂ \ s₁, F i = -f i := 
+  have hF₂ : forall i in s₂ \ s₁, F i = -f i := fun i hi => if_neg (Finset.mem_sdiff.mp hi).2
+  have hF : forall i, ‖F i‖ = ‖f i‖ := by
+    intro i
+    dsimp only [F]
+    split_ifs <;> simp only [norm_neg]
+  have :
+    ‖(∑ i in s₁ \ s₂, V i (F i)) + ∑ i in s₂ \ s₁, V i (F i)‖ ^ 2 =
+      (∑ i in s₁ \ s₂, ‖F i‖ ^ 2) + ∑ i in s₂ \ s₁, ‖F i‖ ^ 2 := by
+    have hs : Disjoint (s₁ \ s₂) (s₂ \ s₁) := disjoint_sdiff_sdiff
+    simpa only [Finset.sum_union hs] using hV.norm_sum F (s₁ \ s₂ union s₂ \ s₁)
+  convert! this using 4
+  · refine Finset.sum_congr rfl fun i hi => ?_
+    simp only [hF₁ i hi]
+  · refine Finset.sum_congr rfl fun i hi => ?_
+    simp only [hF₂ i hi, LinearIsometry.map_neg]
+  · simp only [hF]
+  · simp only [hF]
+
+@[deprecated (since := "2026-06-03")]
+alias OrthogonalFamily.norm_sq_diff_sum := OrthogonalFamily.norm_sq_sdiff_sum
 
 Depends on / 依赖: Finset, Finset.mem_sdiff.mp, Finset.sdiff_subset, Finset.sum_neg_distrib, Finset.sum_sdiff_sub_sum_sdiff, if_neg, if_pos, mem_sdiff, norm_neg, sdiff_subset, split_ifs, sub_eq_add_neg, sum_neg_distrib, sum_sdiff_sub_sum_sdiff
 -/
@@ -455,7 +531,35 @@ theorem OrthogonalFamily.summable_iff_norm_sq_summable
       use a
       intro s₁ hs₁ s₂ hs₂
       rw [← Finset.sum_sdiff_sub_sum_sdiff]
-   
+      refine (abs_sub _ _).trans_lt ?_
+      have : forall i, 0 <= ‖f i‖ ^ 2 := fun i : ι => sq_nonneg _
+      simp only [Finset.abs_sum_of_nonneg' this]
+      have : ((∑ i in s₁ \ s₂, ‖f i‖ ^ 2) + ∑ i in s₂ \ s₁, ‖f i‖ ^ 2) < √ε ^ 2 := by
+        rw [← hV.norm_sq_sdiff_sum]; rw [sq_lt_sq]; rw [abs_of_nonneg (sqrt_nonneg _)]; rw [abs_of_nonneg (norm_nonneg _)]
+        exact H s₁ hs₁ s₂ hs₂
+      have hη := sq_sqrt (le_of_lt hε)
+      linarith
+    · intro hf ε hε
+      have hε' : 0 < ε ^ 2 / 2 := half_pos (sq_pos_of_pos hε)
+      obtain ⟨a, H⟩ := hf _ hε'
+      use a
+      intro s₁ hs₁ s₂ hs₂
+      refine (abs_lt_of_sq_lt_sq' ?_ (le_of_lt hε)).2
+      have has : a <= s₁ ⊓ s₂ := le_inf hs₁ hs₂
+      rw [hV.norm_sq_sdiff_sum]
+      have Hs₁ : ∑ x in s₁ \ s₂, ‖f x‖ ^ 2 < ε ^ 2 / 2 := by
+        convert! H _ hs₁ _ has
+        have : s₁ ⊓ s₂ subseteq s₁ := Finset.inter_subset_left
+        rw [← Finset.sum_sdiff this]; rw [add_tsub_cancel_right]; rw [Finset.abs_sum_of_nonneg']
+        · simp
+        · exact fun i => sq_nonneg _
+      have Hs₂ : ∑ x in s₂ \ s₁, ‖f x‖ ^ 2 < ε ^ 2 / 2 := by
+        convert! H _ hs₂ _ has
+        have : s₁ ⊓ s₂ subseteq s₂ := Finset.inter_subset_right
+        rw [← Finset.sum_sdiff this]; rw [add_tsub_cancel_right]; rw [Finset.abs_sum_of_nonneg']
+        · simp
+        · exact fun i => sq_nonneg _
+      linarith
 
 中文:
 定理 OrthogonalFamily.summable_iff_norm_sq_summable
@@ -470,7 +574,35 @@ theorem OrthogonalFamily.summable_iff_norm_sq_summable
       use a
       intro s₁ hs₁ s₂ hs₂
       rw [← Finset.sum_sdiff_sub_sum_sdiff]
-   
+      refine (abs_sub _ _).trans_lt ?_
+      have : forall i, 0 <= ‖f i‖ ^ 2 := fun i : ι => sq_nonneg _
+      simp only [Finset.abs_sum_of_nonneg' this]
+      have : ((∑ i in s₁ \ s₂, ‖f i‖ ^ 2) + ∑ i in s₂ \ s₁, ‖f i‖ ^ 2) < √ε ^ 2 := by
+        rw [← hV.norm_sq_sdiff_sum]; rw [sq_lt_sq]; rw [abs_of_nonneg (sqrt_nonneg _)]; rw [abs_of_nonneg (norm_nonneg _)]
+        exact H s₁ hs₁ s₂ hs₂
+      have hη := sq_sqrt (le_of_lt hε)
+      linarith
+    · intro hf ε hε
+      have hε' : 0 < ε ^ 2 / 2 := half_pos (sq_pos_of_pos hε)
+      obtain ⟨a, H⟩ := hf _ hε'
+      use a
+      intro s₁ hs₁ s₂ hs₂
+      refine (abs_lt_of_sq_lt_sq' ?_ (le_of_lt hε)).2
+      have has : a <= s₁ ⊓ s₂ := le_inf hs₁ hs₂
+      rw [hV.norm_sq_sdiff_sum]
+      have Hs₁ : ∑ x in s₁ \ s₂, ‖f x‖ ^ 2 < ε ^ 2 / 2 := by
+        convert! H _ hs₁ _ has
+        have : s₁ ⊓ s₂ subseteq s₁ := Finset.inter_subset_left
+        rw [← Finset.sum_sdiff this]; rw [add_tsub_cancel_right]; rw [Finset.abs_sum_of_nonneg']
+        · simp
+        · exact fun i => sq_nonneg _
+      have Hs₂ : ∑ x in s₂ \ s₁, ‖f x‖ ^ 2 < ε ^ 2 / 2 := by
+        convert! H _ hs₂ _ has
+        have : s₁ ⊓ s₂ subseteq s₂ := Finset.inter_subset_right
+        rw [← Finset.sum_sdiff this]; rw [add_tsub_cancel_right]; rw [Finset.abs_sum_of_nonneg']
+        · simp
+        · exact fun i => sq_nonneg _
+      linarith
 
 Depends on / 依赖: Finset, Finset.abs_sum_of_nonneg, Finset.sum_sdiff_sub_sum_sdiff, NormedAddCommGroup, NormedAddCommGroup.cauchySeq_iff, Real.norm_eq_abs, abs_sub, abs_sum_of_nonneg, cauchySeq_iff, classical, hV.norm_sq_sdiff_sum, norm_eq_abs, norm_neg_add, norm_sq_sdiff_sum, sq_nonneg, sqrt_pos, sqrt_pos.mpr, sum_sdiff_sub_sum_sdiff, summable_iff_cauchySeq_finset, trans_lt
 -/
@@ -543,7 +675,10 @@ theorem OrthogonalFamily.independent
   ext i
   suffices ⟪(v i : E), v i⟫ = 0 by simpa only [inner_self_eq_zero] using! this
   calc
-    ⟪(v i : E), v i⟫ = ⟪(v i : E), DFi
+    ⟪(v i : E), v i⟫ = ⟪(v i : E), DFinsupp.lsum Nat (fun i => (V i).subtype) v⟫ := by
+      simpa only [DFinsupp.sumAddHom_apply, DFinsupp.lsum_apply_apply] using!
+        (hV.inner_right_dfinsupp v i (v i)).symm
+    _ = 0 := by simp only [hv, inner_zero_right]
 
 中文:
 定理 OrthogonalFamily.independent
@@ -558,7 +693,10 @@ theorem OrthogonalFamily.independent
   ext i
   suffices ⟪(v i : E), v i⟫ = 0 by simpa only [inner_self_eq_zero] using! this
   calc
-    ⟪(v i : E), v i⟫ = ⟪(v i : E), DFi
+    ⟪(v i : E), v i⟫ = ⟪(v i : E), DFinsupp.lsum Nat (fun i => (V i).subtype) v⟫ := by
+      simpa only [DFinsupp.sumAddHom_apply, DFinsupp.lsum_apply_apply] using!
+        (hV.inner_right_dfinsupp v i (v i)).symm
+    _ = 0 := by simp only [hv, inner_zero_right]
 
 Depends on / 依赖: DFinsupp, DFinsupp.lsum, DFinsupp.lsum_apply_apply, DFinsupp.sumAddHom_apply, LinearMap, LinearMap.ker_eq_bot.mp, LinearMap.mem_ker, Submodule, Submodule.eq_bot_iff, classical, eq_bot_iff, hV.inner_right_dfinsupp, iSupIndep_of_dfinsupp_lsum_injective, inner_right_dfinsupp, inner_self_eq_zero, inner_zero_right, ker_eq_bot, lsum_apply_apply, mem_ker, subtype
 -/

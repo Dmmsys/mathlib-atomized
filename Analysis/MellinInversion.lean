@@ -88,7 +88,8 @@ theorem rexp_cexp_aux
   rw [← smul_assoc]; rw [smul_eq_mul]
   push_cast
   conv in cexp _ * _ => lhs; rw [← cpow_one (cexp _)]
-  rw [← cpow_add _ _ (Complex.exp_ne_zero _)]; rw [cpow_def_of_ne_zero (Complex.exp_ne_zero _)]; rw [Complex.log_exp (by simp [pi_pos]) (by simpa usin
+  rw [← cpow_add _ _ (Complex.exp_ne_zero _)]; rw [cpow_def_of_ne_zero (Complex.exp_ne_zero _)]; rw [Complex.log_exp (by simp [pi_pos]) (by simpa using pi_nonneg)]
+  ring_nf
 
 中文:
 定理 rexp_cexp_aux
@@ -98,7 +99,8 @@ theorem rexp_cexp_aux
   rw [← smul_assoc]; rw [smul_eq_mul]
   push_cast
   conv in cexp _ * _ => lhs; rw [← cpow_one (cexp _)]
-  rw [← cpow_add _ _ (Complex.exp_ne_zero _)]; rw [cpow_def_of_ne_zero (Complex.exp_ne_zero _)]; rw [Complex.log_exp (by simp [pi_pos]) (by simpa usin
+  rw [← cpow_add _ _ (Complex.exp_ne_zero _)]; rw [cpow_def_of_ne_zero (Complex.exp_ne_zero _)]; rw [Complex.log_exp (by simp [pi_pos]) (by simpa using pi_nonneg)]
+  ring_nf
 -/
 private theorem rexp_cexp_aux (x : Real) (s : Complex) (f : E) :
     rexp (-x) • cexp (-↑x) ^ (s - 1) • f = cexp (-s * ↑x) • f := by
@@ -121,7 +123,20 @@ theorem mellin_eq_fourier
       rw [mellin]; rw [← rexp_neg_image_aux]; rw [integral_image_eq_integral_abs_deriv_smul
         MeasurableSet.univ rexp_neg_deriv_aux rexp_neg_injOn_aux]
       simp [rexp_cexp_aux]
-    _ = ∫ (u : Real), Comp
+    _ = ∫ (u : Real), Complex.exp (↑(-2 * π * (u * (s.im / (2 * π)))) * I) •
+        (Real.exp (-s.re * u) • f (Real.exp (-u))) := by
+      congr
+      ext u
+      trans Complex.exp (-s.im * u * I) • (Real.exp (-s.re * u) • f (Real.exp (-u)))
+      · conv => lhs; rw [← re_add_im s]
+        rw [neg_add]; rw [add_mul]; rw [Complex.exp_add]; rw [mul_comm]; rw [← smul_eq_mul]; rw [smul_assoc]
+        norm_cast
+        push_cast
+        ring_nf
+      congr
+      simp [field]
+    _ = 𝓕 (fun (u : Real) => (Real.exp (-s.re * u) • f (Real.exp (-u)))) (s.im / (2 * π)) := by
+      simp [fourier_eq', mul_comm (_ / _)]
 
 中文:
 定理 mellin_eq_fourier
@@ -132,7 +147,20 @@ theorem mellin_eq_fourier
       rw [mellin]; rw [← rexp_neg_image_aux]; rw [integral_image_eq_integral_abs_deriv_smul
         MeasurableSet.univ rexp_neg_deriv_aux rexp_neg_injOn_aux]
       simp [rexp_cexp_aux]
-    _ = ∫ (u : Real), Comp
+    _ = ∫ (u : Real), Complex.exp (↑(-2 * π * (u * (s.im / (2 * π)))) * I) •
+        (Real.exp (-s.re * u) • f (Real.exp (-u))) := by
+      congr
+      ext u
+      trans Complex.exp (-s.im * u * I) • (Real.exp (-s.re * u) • f (Real.exp (-u)))
+      · conv => lhs; rw [← re_add_im s]
+        rw [neg_add]; rw [add_mul]; rw [Complex.exp_add]; rw [mul_comm]; rw [← smul_eq_mul]; rw [smul_assoc]
+        norm_cast
+        push_cast
+        ring_nf
+      congr
+      simp [field]
+    _ = 𝓕 (fun (u : Real) => (Real.exp (-s.re * u) • f (Real.exp (-u)))) (s.im / (2 * π)) := by
+      simp [fourier_eq', mul_comm (_ / _)]
 
 Depends on / 依赖: Complex.exp, MeasurableSet, MeasurableSet.univ, Real.exp, integral_image_eq_integral_abs_deriv_smul, mellin, neg_a, re_add_im, rexp_cexp_aux, rexp_neg_deriv_aux, rexp_neg_image_aux, rexp_neg_injOn_aux, s.im, s.re
 -/
@@ -170,7 +198,15 @@ theorem mellinInv_eq_fourierInv
     = (x : Complex) ^ (-σ : Complex) •
       (∫ (y : Real), Complex.exp (2 * π * (y * (-Real.log x)) * I) • f (σ + 2 * π * y * I)) := by
     rw [mellinInv]; rw [one_div]; rw [← abs_of_pos (show 0 < (2 * π)⁻¹ by simp [pi_pos])]
-    have hx0 : (x : Complex) != 0 := ofReal_ne_zer
+    have hx0 : (x : Complex) != 0 := ofReal_ne_zero.mpr (ne_of_gt hx)
+    simp_rw [neg_add, cpow_add _ _ hx0, mul_smul, integral_smul]
+    rw [smul_comm]; rw [← Measure.integral_comp_mul_left]
+    congr! 3
+    rw [cpow_def_of_ne_zero hx0]; rw [← Complex.ofReal_log hx.le]
+    push_cast
+    ring_nf
+  _ = (x : Complex) ^ (-σ : Complex) • 𝓕⁻ (fun (y : Real) => f (σ + 2 * π * y * I)) (-Real.log x) := by
+    simp [fourierInv_eq', mul_comm (Real.log _)]
 
 中文:
 定理 mellinInv_eq_fourierInv
@@ -180,7 +216,15 @@ theorem mellinInv_eq_fourierInv
     = (x : Complex) ^ (-σ : Complex) •
       (∫ (y : Real), Complex.exp (2 * π * (y * (-Real.log x)) * I) • f (σ + 2 * π * y * I)) := by
     rw [mellinInv]; rw [one_div]; rw [← abs_of_pos (show 0 < (2 * π)⁻¹ by simp [pi_pos])]
-    have hx0 : (x : Complex) != 0 := ofReal_ne_zer
+    have hx0 : (x : Complex) != 0 := ofReal_ne_zero.mpr (ne_of_gt hx)
+    simp_rw [neg_add, cpow_add _ _ hx0, mul_smul, integral_smul]
+    rw [smul_comm]; rw [← Measure.integral_comp_mul_left]
+    congr! 3
+    rw [cpow_def_of_ne_zero hx0]; rw [← Complex.ofReal_log hx.le]
+    push_cast
+    ring_nf
+  _ = (x : Complex) ^ (-σ : Complex) • 𝓕⁻ (fun (y : Real) => f (σ + 2 * π * y * I)) (-Real.log x) := by
+    simp [fourierInv_eq', mul_comm (Real.log _)]
 -/
 theorem mellinInv_eq_fourierInv (σ : Real) (f : Complex -> E) {x : Real} (hx : 0 < x) :
     mellinInv σ f x =
@@ -212,7 +256,31 @@ theorem mellinInv_mellin_eq
   replace hf : Integrable g := by
     rw [MellinConvergent]; rw [← rexp_neg_image_aux]; rw [integrableOn_image_iff_integrableOn_abs_deriv_smul
       MeasurableSet.univ rexp_neg_deriv_aux rexp_neg_injOn_aux] at hf
-    replace hf : 
+    replace hf : Integrable fun (x : Real) => cexp (-↑σ * ↑x) • f (rexp (-x)) := by
+      simpa [rexp_cexp_aux] using hf
+    norm_cast at hf
+  replace hFf : Integrable (𝓕 g) := by
+    have h2π : 2 * π != 0 := by simp
+    have : Integrable (𝓕 (fun u => rexp (-(σ * u)) • f (rexp (-u)))) := by
+      simpa [mellin_eq_fourier, mul_div_cancel_right₀ _ h2π] using hFf.comp_mul_right' h2π
+    simp_rw [neg_mul_eq_neg_mul] at this
+    exact this
+  replace hfx : ContinuousAt g (-Real.log x) := by
+    refine ContinuousAt.fun_smul (by fun_prop) (ContinuousAt.comp ?_ (by fun_prop))
+    simpa [Real.exp_log hx] using hfx
+  calc
+    mellinInv σ (mellin f) x
+      = mellinInv σ (fun s => 𝓕 g (s.im / (2 * π))) x := by
+      simp [g, mellinInv, mellin_eq_fourier]
+    _ = (x : Complex) ^ (-σ : Complex) • g (-Real.log x) := by
+      rw [mellinInv_eq_fourierInv _ _ hx]; rw [← hf.fourierInv_fourier_eq hFf hfx]
+      simp [mul_div_cancel_left₀ _ (show 2 * π != 0 by simp)]
+    _ = (x : Complex) ^ (-σ : Complex) • rexp (σ * Real.log x) • f (rexp (Real.log x)) := by simp [g]
+    _ = f x := by
+      norm_cast
+      rw [mul_comm σ]; rw [← rpow_def_of_pos hx]; rw [Real.exp_log hx]; rw [← Complex.ofReal_cpow hx.le]
+      norm_cast
+      rw [← smul_assoc]; rw [smul_eq_mul]; rw [Real.rpow_neg hx.le]; rw [inv_mul_cancel₀ (ne_of_gt (rpow_pos_of_pos hx σ))]; rw [one_smul]
 
 中文:
 定理 mellinInv_mellin_eq
@@ -222,7 +290,31 @@ theorem mellinInv_mellin_eq
   replace hf : Integrable g := by
     rw [MellinConvergent]; rw [← rexp_neg_image_aux]; rw [integrableOn_image_iff_integrableOn_abs_deriv_smul
       MeasurableSet.univ rexp_neg_deriv_aux rexp_neg_injOn_aux] at hf
-    replace hf : 
+    replace hf : Integrable fun (x : Real) => cexp (-↑σ * ↑x) • f (rexp (-x)) := by
+      simpa [rexp_cexp_aux] using hf
+    norm_cast at hf
+  replace hFf : Integrable (𝓕 g) := by
+    have h2π : 2 * π != 0 := by simp
+    have : Integrable (𝓕 (fun u => rexp (-(σ * u)) • f (rexp (-u)))) := by
+      simpa [mellin_eq_fourier, mul_div_cancel_right₀ _ h2π] using hFf.comp_mul_right' h2π
+    simp_rw [neg_mul_eq_neg_mul] at this
+    exact this
+  replace hfx : ContinuousAt g (-Real.log x) := by
+    refine ContinuousAt.fun_smul (by fun_prop) (ContinuousAt.comp ?_ (by fun_prop))
+    simpa [Real.exp_log hx] using hfx
+  calc
+    mellinInv σ (mellin f) x
+      = mellinInv σ (fun s => 𝓕 g (s.im / (2 * π))) x := by
+      simp [g, mellinInv, mellin_eq_fourier]
+    _ = (x : Complex) ^ (-σ : Complex) • g (-Real.log x) := by
+      rw [mellinInv_eq_fourierInv _ _ hx]; rw [← hf.fourierInv_fourier_eq hFf hfx]
+      simp [mul_div_cancel_left₀ _ (show 2 * π != 0 by simp)]
+    _ = (x : Complex) ^ (-σ : Complex) • rexp (σ * Real.log x) • f (rexp (Real.log x)) := by simp [g]
+    _ = f x := by
+      norm_cast
+      rw [mul_comm σ]; rw [← rpow_def_of_pos hx]; rw [Real.exp_log hx]; rw [← Complex.ofReal_cpow hx.le]
+      norm_cast
+      rw [← smul_assoc]; rw [smul_eq_mul]; rw [Real.rpow_neg hx.le]; rw [inv_mul_cancel₀ (ne_of_gt (rpow_pos_of_pos hx σ))]; rw [one_smul]
 
 Depends on / 依赖: Integrable, MeasurableSet, MeasurableSet.univ, MellinConvergent, Real.exp, integrableOn_image_iff_integrableOn_abs_deriv_smul, replace, rexp_cexp_aux, rexp_neg_deriv_aux, rexp_neg_image_aux, rexp_neg_injOn_aux
 -/

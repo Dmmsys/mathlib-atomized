@@ -276,7 +276,11 @@ lemma irreducible_polynomial
     with ⟨f, g, h0, h1⟩
   simp only [polynomial_eq, Cubic.coeff_eq_c, Cubic.coeff_eq_d] at h0 h1
   apply_fun degree at h0 h1
-  rw [Cubic.degree_of_a_ne_zero' <| neg_ne_zero.mpr <| one_n
+  rw [Cubic.degree_of_a_ne_zero' <| neg_ne_zero.mpr <| one_ne_zero' R]; rw [degree_mul] at h0
+  apply (h1.symm.le.trans Cubic.degree_of_b_eq_zero').not_gt
+  rcases Nat.WithBot.add_eq_three_iff.mp h0.symm with h | h | h | h
+  iterate 2 rw [degree_add_eq_right_of_degree_lt] <;> simp only [h] <;> decide
+  iterate 2 rw [degree_add_eq_left_of_degree_lt] <;> simp only [h] <;> decide
 
 中文:
 引理 irreducible_polynomial
@@ -288,7 +292,11 @@ lemma irreducible_polynomial
     with ⟨f, g, h0, h1⟩
   simp only [polynomial_eq, Cubic.coeff_eq_c, Cubic.coeff_eq_d] at h0 h1
   apply_fun degree at h0 h1
-  rw [Cubic.degree_of_a_ne_zero' <| neg_ne_zero.mpr <| one_n
+  rw [Cubic.degree_of_a_ne_zero' <| neg_ne_zero.mpr <| one_ne_zero' R]; rw [degree_mul] at h0
+  apply (h1.symm.le.trans Cubic.degree_of_b_eq_zero').not_gt
+  rcases Nat.WithBot.add_eq_three_iff.mp h0.symm with h | h | h | h
+  iterate 2 rw [degree_add_eq_right_of_degree_lt] <;> simp only [h] <;> decide
+  iterate 2 rw [degree_add_eq_left_of_degree_lt] <;> simp only [h] <;> decide
 
 Depends on / 依赖: Cubic.coeff_eq_c, Cubic.coeff_eq_d, Cubic.degree_of_a_ne_zero, Cubic.degree_of_b_eq_zero, Nat.WithBot.add_eq_three_iff.mp, WithBot, add_eq_three_iff, apply_fun, coeff_eq_c, coeff_eq_d, degree, degree_add_eq_right_of_degree_lt, degree_mul, degree_of_a_ne_zero, degree_of_b_eq_zero, h0.symm, h1.symm.le.trans, iterate, monic_polynomial, monic_polynomial.not_irreducible_iff_exists_add_mul_eq_coeff
 -/

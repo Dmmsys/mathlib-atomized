@@ -109,7 +109,13 @@ theorem summable_mul_of_summable_norm'
   let s : Finset ι × Finset ι' -> Finset (ι × ι') := fun p => p.1 ×ˢ p.2
   apply hasSum_of_subseq_of_summable (hf.mul_norm hg) tendsto_finsetProd_atTop
   rw [← prod_atTop_atTop_eq]
-  hav
+  have := Tendsto.prodMap h'f.hasSum h'g.hasSum
+  rw [← nhds_prod_eq] at this
+  convert!
+    ((continuous_mul (M := R)).continuousAt (x := (∑' (i : ι), f i, ∑' (j : ι'), g j))).tendsto.comp
+      this with
+    p
+  simp [sum_product, ← mul_sum, ← sum_mul]
 
 中文:
 定理 summable_mul_of_summable_norm'
@@ -120,7 +126,13 @@ theorem summable_mul_of_summable_norm'
   let s : Finset ι × Finset ι' -> Finset (ι × ι') := fun p => p.1 ×ˢ p.2
   apply hasSum_of_subseq_of_summable (hf.mul_norm hg) tendsto_finsetProd_atTop
   rw [← prod_atTop_atTop_eq]
-  hav
+  have := Tendsto.prodMap h'f.hasSum h'g.hasSum
+  rw [← nhds_prod_eq] at this
+  convert!
+    ((continuous_mul (M := R)).continuousAt (x := (∑' (i : ι), f i, ∑' (j : ι'), g j))).tendsto.comp
+      this with
+    p
+  simp [sum_product, ← mul_sum, ← sum_mul]
 
 Depends on / 依赖: Finset, HasSum, Tendsto, Tendsto.prodMap, classical, continuousAt, continuous_mul, convert, f.hasSum, g.hasSum, hasSum, hasSum_of_subseq_of_summable, hf.mul_norm, mul_norm, nhds_prod_eq, prodMap, prod_atTop_atTop_eq, sum_product, summable, tendsto
 -/
@@ -208,7 +220,9 @@ theorem summable_norm_sum_mul_antidiagonal_of_summable_norm
       (Summable.mul_of_nonneg hf hg (fun _ => norm_nonneg _) fun _ => norm_nonneg _)
   refine this.of_nonneg_of_le (fun _ => norm_nonneg _) (fun n => ?_)
   calc
-    ‖∑ kl in antidiagonal n, f kl.1 * g kl.2‖ <= ∑ kl in antidiagonal n, ‖f 
+    ‖∑ kl in antidiagonal n, f kl.1 * g kl.2‖ <= ∑ kl in antidiagonal n, ‖f kl.1 * g kl.2‖ :=
+      norm_sum_le _ _
+    _ <= ∑ kl in antidiagonal n, ‖f kl.1‖ * ‖g kl.2‖ := by gcongr; apply norm_mul_le
 
 中文:
 定理 summable_norm_sum_mul_antidiagonal_of_summable_norm
@@ -219,7 +233,9 @@ theorem summable_norm_sum_mul_antidiagonal_of_summable_norm
       (Summable.mul_of_nonneg hf hg (fun _ => norm_nonneg _) fun _ => norm_nonneg _)
   refine this.of_nonneg_of_le (fun _ => norm_nonneg _) (fun n => ?_)
   calc
-    ‖∑ kl in antidiagonal n, f kl.1 * g kl.2‖ <= ∑ kl in antidiagonal n, ‖f 
+    ‖∑ kl in antidiagonal n, f kl.1 * g kl.2‖ <= ∑ kl in antidiagonal n, ‖f kl.1 * g kl.2‖ :=
+      norm_sum_le _ _
+    _ <= ∑ kl in antidiagonal n, ‖f kl.1‖ * ‖g kl.2‖ := by gcongr; apply norm_mul_le
 
 Depends on / 依赖: Summable, Summable.mul_of_nonneg, antidiagonal, mul_of_nonneg, norm_mul_le, norm_nonneg, norm_sum_le, of_nonneg_of_le, summable_sum_mul_antidiagonal_of_summable_mul, this.of_nonneg_of_le
 -/

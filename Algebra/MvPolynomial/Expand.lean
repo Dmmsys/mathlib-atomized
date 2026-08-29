@@ -768,7 +768,10 @@ theorem totalDegree_expand
   by_cases hf : f = 0
   · rw [hf, map_zero, totalDegree_zero, zero_mul]
   simp_rw [totalDegree_eq, support_expand _ (p.ne_zero_iff_zero_lt.mpr hp)]
-  simp only [Finsupp.card_toMultiset, Finset.sup_image, Finset.sup_mul₀, Function.co
+  simp only [Finsupp.card_toMultiset, Finset.sup_image, Finset.sup_mul₀, Function.comp_def]
+  congr! 2 with d
+  rw [Finsupp.sum_of_support_subset _ Finsupp.support_smul _ (by simp)]
+  simp [Finsupp.sum, Finset.sum_mul, mul_comm p]
 
 中文:
 定理 totalDegree_expand
@@ -780,7 +783,10 @@ theorem totalDegree_expand
   by_cases hf : f = 0
   · rw [hf, map_zero, totalDegree_zero, zero_mul]
   simp_rw [totalDegree_eq, support_expand _ (p.ne_zero_iff_zero_lt.mpr hp)]
-  simp only [Finsupp.card_toMultiset, Finset.sup_image, Finset.sup_mul₀, Function.co
+  simp only [Finsupp.card_toMultiset, Finset.sup_image, Finset.sup_mul₀, Function.comp_def]
+  congr! 2 with d
+  rw [Finsupp.sum_of_support_subset _ Finsupp.support_smul _ (by simp)]
+  simp [Finsupp.sum, Finset.sum_mul, mul_comm p]
 
 Depends on / 依赖: Finset, Finset.sum_mul, Finset.sup_image, Finset.sup_mul, Finsupp, Finsupp.card_toMultiset, Finsupp.sum, Finsupp.sum_of_support_subset, Finsupp.support_smul, Function, Function.comp_def, card_toMultiset, classical, comp_def, eq_zero_or_pos, map_zero, mul_comm, ne_zero_iff_zero_lt, p.eq_zero_or_pos, p.ne_zero_iff_zero_lt.mpr
 -/

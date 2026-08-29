@@ -33,7 +33,14 @@ lemma not_weaklyQuasiFiniteAt
     obtain ⟨Q, hQ⟩ := (PrimeSpectrum.preimageEquivFiber R R[X]
         ⟨p, inferInstance⟩).symm.surjective ⟨⟨P, ‹_›⟩, rfl⟩
     have inst : Algebra.WeaklyQuasiFiniteAt p.ResidueField Q.asIdeal :=
-      .baseChange P Q.asIdeal congr($(hQ.symm).
+      .baseChange P Q.asIdeal congr($(hQ.symm).1.1)
+    exact this (Q.asIdeal.comap (polyEquivTensor' R p.ResidueField).toRingHom)
+      inferInstance (Field.toIsField _)
+  let := hR.toField
+  have := Module.Finite.of_injective
+    (IsScalarTower.toAlgHom R R[X] (Localization.AtPrime P)).toLinearMap
+    (IsLocalization.injective _ P.primeCompl_le_nonZeroDivisors)
+  exact transcendental_X R (Algebra.IsIntegral.isIntegral X).isAlgebraic
 
 中文:
 引理 not_weaklyQuasiFiniteAt
@@ -46,7 +53,14 @@ lemma not_weaklyQuasiFiniteAt
     obtain ⟨Q, hQ⟩ := (PrimeSpectrum.preimageEquivFiber R R[X]
         ⟨p, inferInstance⟩).symm.surjective ⟨⟨P, ‹_›⟩, rfl⟩
     have inst : Algebra.WeaklyQuasiFiniteAt p.ResidueField Q.asIdeal :=
-      .baseChange P Q.asIdeal congr($(hQ.symm).
+      .baseChange P Q.asIdeal congr($(hQ.symm).1.1)
+    exact this (Q.asIdeal.comap (polyEquivTensor' R p.ResidueField).toRingHom)
+      inferInstance (Field.toIsField _)
+  let := hR.toField
+  have := Module.Finite.of_injective
+    (IsScalarTower.toAlgHom R R[X] (Localization.AtPrime P)).toLinearMap
+    (IsLocalization.injective _ P.primeCompl_le_nonZeroDivisors)
+  exact transcendental_X R (Algebra.IsIntegral.isIntegral X).isAlgebraic
 
 Depends on / 依赖: Algebra, Algebra.WeaklyQuasiFiniteAt, AtPrime, Field.toIsField, Finite, IsField, IsScalarTower, IsScalarTower.toAlgHom, Localization, Localization.AtPrime, Module, Module.Finite.of_injective, P.under, PrimeSpectrum, PrimeSpectrum.preimageEquivFiber, Q.asIdeal, Q.asIdeal.comap, ResidueField, WeaklyQuasiFiniteAt, asIdeal
 -/
@@ -96,7 +110,18 @@ lemma map_under_lt_comap_of_weaklyQuasiFiniteAt
   refine lt_of_le_of_ne (Ideal.map_le_iff_le_comap.mpr ?_) fun e => ?_
   · rw [Ideal.comap_comap, ← algebraMap_eq, f.comp_algebraMap]
   let := Localization.AtPrime.algebraOfLiesOver (P.under R) (P.under R[X])
-  let := Localization.AtPrime.algebraOfLiesOver (P.under R[X]
+  let := Localization.AtPrime.algebraOfLiesOver (P.under R[X]) P
+  let := Localization.AtPrime.algebraOfLiesOver (P.under R) P
+  have : Module.Finite (Ideal.under R P).ResidueField P.ResidueField :=
+    Algebra.WeaklyQuasiFiniteAt.finite_residueField ..
+  have : Module.Finite (P.under R).ResidueField (P.under R[X]).ResidueField :=
+    .of_injective (IsScalarTower.toAlgHom _ _ P.ResidueField).toLinearMap
+      (algebraMap (P.under R[X]).ResidueField P.ResidueField).injective
+  have : Module.Finite (P.under R).ResidueField (RatFunc (P.under R).ResidueField) :=
+    .of_surjective (residueFieldMapCAlgEquiv _ (P.under _) e.symm).toLinearMap
+      (residueFieldMapCAlgEquiv _ (P.under _) e.symm).surjective
+  exact RatFunc.transcendental_X (K := (P.under R).ResidueField)
+    (Algebra.IsIntegral.isIntegral _).isAlgebraic
 
 中文:
 引理 map_under_lt_comap_of_weaklyQuasiFiniteAt
@@ -105,7 +130,18 @@ lemma map_under_lt_comap_of_weaklyQuasiFiniteAt
   refine lt_of_le_of_ne (Ideal.map_le_iff_le_comap.mpr ?_) fun e => ?_
   · rw [Ideal.comap_comap, ← algebraMap_eq, f.comp_algebraMap]
   let := Localization.AtPrime.algebraOfLiesOver (P.under R) (P.under R[X])
-  let := Localization.AtPrime.algebraOfLiesOver (P.under R[X]
+  let := Localization.AtPrime.algebraOfLiesOver (P.under R[X]) P
+  let := Localization.AtPrime.algebraOfLiesOver (P.under R) P
+  have : Module.Finite (Ideal.under R P).ResidueField P.ResidueField :=
+    Algebra.WeaklyQuasiFiniteAt.finite_residueField ..
+  have : Module.Finite (P.under R).ResidueField (P.under R[X]).ResidueField :=
+    .of_injective (IsScalarTower.toAlgHom _ _ P.ResidueField).toLinearMap
+      (algebraMap (P.under R[X]).ResidueField P.ResidueField).injective
+  have : Module.Finite (P.under R).ResidueField (RatFunc (P.under R).ResidueField) :=
+    .of_surjective (residueFieldMapCAlgEquiv _ (P.under _) e.symm).toLinearMap
+      (residueFieldMapCAlgEquiv _ (P.under _) e.symm).surjective
+  exact RatFunc.transcendental_X (K := (P.under R).ResidueField)
+    (Algebra.IsIntegral.isIntegral _).isAlgebraic
 
 Depends on / 依赖: Algebra, Algebra.WeaklyQuasiFiniteAt.finite_residueField, AtPrime, Finite, Ideal.comap_comap, Ideal.map_le_iff_le_comap.mpr, Ideal.under, Localization, Localization.AtPrime.algebraOfLiesOver, Module, Module.Finite, P.ResidueField, P.under, ResidueField, WeaklyQuasiFiniteAt, algebraMap_eq, algebraOfLiesOver, algebraize, comap_comap, comp_algebraMap
 -/
@@ -160,7 +196,14 @@ lemma not_ker_le_map_C_of_surjective_of_weaklyQuasiFiniteAt
     rw [← le_bot_iff]; rw [Ideal.map_le_iff_le_comap]
     intro x hx
     simpa [Polynomial.ext_iff, Ideal.mem_map_C_iff] using! H hx
-  let g' : p.ResidueF
+  let g' : p.ResidueField[X] ≃ₐ[p.ResidueField] p.Fiber S :=
+    .trans ((AlgEquiv.quotientBot _ _).symm.trans (Ideal.quotientEquivAlgOfEq _ H'.symm))
+      (Polynomial.fiberEquivQuotient f hf _).symm
+  obtain ⟨Q, hQ⟩ := (PrimeSpectrum.preimageEquivFiber _ _
+      ⟨p, inferInstance⟩).symm.surjective ⟨⟨P, ‹_›⟩, PrimeSpectrum.ext (P.over_def p).symm⟩
+  have inst : Algebra.WeaklyQuasiFiniteAt p.ResidueField Q.asIdeal :=
+    .baseChange P Q.asIdeal congr($(hQ.symm).1.1)
+  exact Polynomial.not_weaklyQuasiFiniteAt (Q.asIdeal.comap g'.toRingHom) inferInstance
 
 中文:
 引理 not_ker_le_map_C_of_surjective_of_weaklyQuasiFiniteAt
@@ -172,7 +215,14 @@ lemma not_ker_le_map_C_of_surjective_of_weaklyQuasiFiniteAt
     rw [← le_bot_iff]; rw [Ideal.map_le_iff_le_comap]
     intro x hx
     simpa [Polynomial.ext_iff, Ideal.mem_map_C_iff] using! H hx
-  let g' : p.ResidueF
+  let g' : p.ResidueField[X] ≃ₐ[p.ResidueField] p.Fiber S :=
+    .trans ((AlgEquiv.quotientBot _ _).symm.trans (Ideal.quotientEquivAlgOfEq _ H'.symm))
+      (Polynomial.fiberEquivQuotient f hf _).symm
+  obtain ⟨Q, hQ⟩ := (PrimeSpectrum.preimageEquivFiber _ _
+      ⟨p, inferInstance⟩).symm.surjective ⟨⟨P, ‹_›⟩, PrimeSpectrum.ext (P.over_def p).symm⟩
+  have inst : Algebra.WeaklyQuasiFiniteAt p.ResidueField Q.asIdeal :=
+    .baseChange P Q.asIdeal congr($(hQ.symm).1.1)
+  exact Polynomial.not_weaklyQuasiFiniteAt (Q.asIdeal.comap g'.toRingHom) inferInstance
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.quotientBot, Ideal.map_le_iff_le_comap, Ideal.mem_map_C_iff, Ideal.quotientEquivAlgOfEq, P.under, Polynomial, Polynomial.ext_iff, Polynomial.fiberEquivQuotient, PrimeSpectrum, PrimeSpectrum.preimageEquivFiber, ResidueField, RingHom, RingHom.ker, algebraMap, algebraize, ext_iff, f.toRingHom, fiberEquivQuotient, le_bot_iff
 -/

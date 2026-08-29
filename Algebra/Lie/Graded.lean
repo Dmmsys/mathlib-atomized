@@ -256,7 +256,31 @@ definition ofGradingSum
       fun i => (lof R ι (ℒ ·) i).comp (Module.End.smulLeft (φ i) (by simp))
     leibniz' x y := by
       have hM (k : ι) (b : ⨁ i, ℒ i) (hb : (decompose ℒ).symm b in ℒ k) :
-          (toModule R ι (⨁ (i : ι), ℒ i) fun i => lof R ι (ℒ ·) i ∘ₗ (φ i • .id)) b =
+          (toModule R ι (⨁ (i : ι), ℒ i) fun i => lof R ι (ℒ ·) i ∘ₗ (φ i • .id)) b = (φ k) • b := by
+        obtain ⟨_, rfl⟩ : b in LinearMap.range (lof R ι (ℒ ·) k) := by
+          use ⟨(decompose ℒ).symm b, hb⟩
+          simp [lof_eq_of, ← decompose_of_mem]
+        simp
+      ext j
+      induction x using DirectSum.induction_on' with
+      | h0 => simp
+      | hadd i a f _ _ ih =>
+        simp only [Module.End.smulLeft_eq, DirectSum.sub_apply, AddSubgroupClass.coe_sub] at ih
+        simp only [Module.End.smulLeft_eq, add_lie, map_add, DirectSum.add_apply, Submodule.coe_add,
+          ih, lie_add, DirectSum.sub_apply, AddSubgroupClass.coe_sub]
+        rw [add_sub_add_comm]; rw [add_right_cancel_iff]; rw [hM i (of (ℒ ·) i a) (by simp)]
+        clear ih
+        induction y using DirectSum.induction_on' with
+        | h0 => simp
+        | hadd k b f _ _ ih =>
+          simp only [lie_add, map_add, DirectSum.add_apply, Submodule.coe_add, ih, lie_smul,
+            add_lie, smul_add, add_sub, ← sub_sub]
+          congr 1
+          have : (decompose ℒ).symm ⁅of (fun i => ℒ i) i a, of (fun i => ℒ i) k b⁆ in ℒ (i + k) := by
+            simp [SetLike.GradedBracket.bracket_mem (Submodule.coe_mem a) (Submodule.coe_mem b)]
+          rw [hM _ _ this]; rw [hM k (of (ℒ ·) k b) (by simp)]; rw [← lie_skew (of (ℒ ·) k b)]; rw [add_sub_right_comm]; rw [add_right_cancel_iff]; rw [add_comm i k]; rw [map_add]; rw [add_smul]; rw [DirectSum.add_apply]; rw [Submodule.coe_add]; rw [sub_eq_add_neg]; rw [lie_smul]; rw [add_left_cancel_iff]; rw [smul_neg]; rw [← sub_eq_zero]; rw [sub_neg_eq_add]; rw [← Submodule.coe_add]; rw [Submodule.coe_eq_zero]; rw [← DirectSum.add_apply]; rw [add_neg_cancel]; rw [DirectSum.zero_apply] }
+
+@[simp]
 
 中文:
 定义 ofGradingSum
@@ -265,7 +289,31 @@ definition ofGradingSum
       fun i => (lof R ι (ℒ ·) i).comp (Module.End.smulLeft (φ i) (by simp))
     leibniz' x y := by
       have hM (k : ι) (b : ⨁ i, ℒ i) (hb : (decompose ℒ).symm b in ℒ k) :
-          (toModule R ι (⨁ (i : ι), ℒ i) fun i => lof R ι (ℒ ·) i ∘ₗ (φ i • .id)) b =
+          (toModule R ι (⨁ (i : ι), ℒ i) fun i => lof R ι (ℒ ·) i ∘ₗ (φ i • .id)) b = (φ k) • b := by
+        obtain ⟨_, rfl⟩ : b in LinearMap.range (lof R ι (ℒ ·) k) := by
+          use ⟨(decompose ℒ).symm b, hb⟩
+          simp [lof_eq_of, ← decompose_of_mem]
+        simp
+      ext j
+      induction x using DirectSum.induction_on' with
+      | h0 => simp
+      | hadd i a f _ _ ih =>
+        simp only [Module.End.smulLeft_eq, DirectSum.sub_apply, AddSubgroupClass.coe_sub] at ih
+        simp only [Module.End.smulLeft_eq, add_lie, map_add, DirectSum.add_apply, Submodule.coe_add,
+          ih, lie_add, DirectSum.sub_apply, AddSubgroupClass.coe_sub]
+        rw [add_sub_add_comm]; rw [add_right_cancel_iff]; rw [hM i (of (ℒ ·) i a) (by simp)]
+        clear ih
+        induction y using DirectSum.induction_on' with
+        | h0 => simp
+        | hadd k b f _ _ ih =>
+          simp only [lie_add, map_add, DirectSum.add_apply, Submodule.coe_add, ih, lie_smul,
+            add_lie, smul_add, add_sub, ← sub_sub]
+          congr 1
+          have : (decompose ℒ).symm ⁅of (fun i => ℒ i) i a, of (fun i => ℒ i) k b⁆ in ℒ (i + k) := by
+            simp [SetLike.GradedBracket.bracket_mem (Submodule.coe_mem a) (Submodule.coe_mem b)]
+          rw [hM _ _ this]; rw [hM k (of (ℒ ·) k b) (by simp)]; rw [← lie_skew (of (ℒ ·) k b)]; rw [add_sub_right_comm]; rw [add_right_cancel_iff]; rw [add_comm i k]; rw [map_add]; rw [add_smul]; rw [DirectSum.add_apply]; rw [Submodule.coe_add]; rw [sub_eq_add_neg]; rw [lie_smul]; rw [add_left_cancel_iff]; rw [smul_neg]; rw [← sub_eq_zero]; rw [sub_neg_eq_add]; rw [← Submodule.coe_add]; rw [Submodule.coe_eq_zero]; rw [← DirectSum.add_apply]; rw [add_neg_cancel]; rw [DirectSum.zero_apply] }
+
+@[simp]
 
 Depends on / 依赖: DirectSum, DirectSum.induction_on, DirectSum.toModule, LinearMap, LinearMap.range, Module, Module.End.smulLeft, decompose, decompose_of_mem, induction_on, leibniz, lof_eq_of, smulLeft, toModule
 -/

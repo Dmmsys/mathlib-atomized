@@ -55,7 +55,34 @@ definition fourierTransformCLM
     simp [fourier_eq, integral_add ((fourierIntegral_convergent_iff _).mpr f.integrable)
       ((fourierIntegral_convergent_iff _).mpr g.integrable)]
   · simp [fourier_eq, smul_comm, integral_smul]
-  · exact fun f => contDiff
+  · exact fun f => contDiff_fourier (fun n _ => integrable_pow_mul volume f n)
+  · rintro ⟨k, n⟩
+    refine ⟨Finset.range (n + integrablePower (volume : Measure V) + 1) ×ˢ Finset.range (k + 1),
+      (2 * π) ^ n * (2 * n + 2) ^ k * (Finset.range (n + 1) ×ˢ Finset.range (k + 1)).card *
+        2 ^ integrablePower (volume : Measure V) *
+        (∫ x : V, (1 + ‖x‖) ^ (- integrablePower (volume : Measure V) : Real)) * 2, by positivity,
+      fun f x => ?_⟩
+    apply (pow_mul_norm_iteratedFDeriv_fourier_le (f.smooth ⊤)
+      (fun k n _hk _hn => integrable_pow_mul_iteratedFDeriv _ f k n) le_top le_top x).trans
+    simp only [mul_assoc]
+    gcongr
+    calc
+    _ <= ∑ _ in Finset.range (n + 1) ×ˢ Finset.range (k + 1),
+        2 ^ integrablePower (volume : Measure V) *
+          (∫ x : V, (1 + ‖x‖) ^ (- integrablePower (volume : Measure V) : Real)) * 2 *
+          (Finset.range (n + integrablePower (volume : Measure V) + 1) ×ˢ Finset.range (k + 1)).sup
+          (schwartzSeminormFamily 𝕜 V E) f := by
+      gcongr with p
+      apply (f.integral_pow_mul_iteratedFDeriv_le 𝕜 ..).trans
+      simp only [mul_assoc, two_mul]
+      gcongr
+      · have : (0, p.2) in Finset.range (n + integrablePower (volume : Measure V) + 1) ×ˢ
+            Finset.range (k + 1) := by simp_all
+        apply Seminorm.le_def.mp (Finset.le_sup (f := fun p => SchwartzMap.seminorm 𝕜 p.1 p.2) this)
+      · have : (p.1 + integrablePower (volume : Measure V), p.2) in Finset.range
+            (n + integrablePower (volume : Measure V) + 1) ×ˢ Finset.range (k + 1) := by simp_all
+        apply Seminorm.le_def.mp (Finset.le_sup (f := fun p => SchwartzMap.seminorm 𝕜 p.1 p.2) this)
+    _ = _ := by simp [mul_assoc]
 
 中文:
 定义 fourierTransformCLM
@@ -66,7 +93,34 @@ definition fourierTransformCLM
     simp [fourier_eq, integral_add ((fourierIntegral_convergent_iff _).mpr f.integrable)
       ((fourierIntegral_convergent_iff _).mpr g.integrable)]
   · simp [fourier_eq, smul_comm, integral_smul]
-  · exact fun f => contDiff
+  · exact fun f => contDiff_fourier (fun n _ => integrable_pow_mul volume f n)
+  · rintro ⟨k, n⟩
+    refine ⟨Finset.range (n + integrablePower (volume : Measure V) + 1) ×ˢ Finset.range (k + 1),
+      (2 * π) ^ n * (2 * n + 2) ^ k * (Finset.range (n + 1) ×ˢ Finset.range (k + 1)).card *
+        2 ^ integrablePower (volume : Measure V) *
+        (∫ x : V, (1 + ‖x‖) ^ (- integrablePower (volume : Measure V) : Real)) * 2, by positivity,
+      fun f x => ?_⟩
+    apply (pow_mul_norm_iteratedFDeriv_fourier_le (f.smooth ⊤)
+      (fun k n _hk _hn => integrable_pow_mul_iteratedFDeriv _ f k n) le_top le_top x).trans
+    simp only [mul_assoc]
+    gcongr
+    calc
+    _ <= ∑ _ in Finset.range (n + 1) ×ˢ Finset.range (k + 1),
+        2 ^ integrablePower (volume : Measure V) *
+          (∫ x : V, (1 + ‖x‖) ^ (- integrablePower (volume : Measure V) : Real)) * 2 *
+          (Finset.range (n + integrablePower (volume : Measure V) + 1) ×ˢ Finset.range (k + 1)).sup
+          (schwartzSeminormFamily 𝕜 V E) f := by
+      gcongr with p
+      apply (f.integral_pow_mul_iteratedFDeriv_le 𝕜 ..).trans
+      simp only [mul_assoc, two_mul]
+      gcongr
+      · have : (0, p.2) in Finset.range (n + integrablePower (volume : Measure V) + 1) ×ˢ
+            Finset.range (k + 1) := by simp_all
+        apply Seminorm.le_def.mp (Finset.le_sup (f := fun p => SchwartzMap.seminorm 𝕜 p.1 p.2) this)
+      · have : (p.1 + integrablePower (volume : Measure V), p.2) in Finset.range
+            (n + integrablePower (volume : Measure V) + 1) ×ˢ Finset.range (k + 1) := by simp_all
+        apply Seminorm.le_def.mp (Finset.le_sup (f := fun p => SchwartzMap.seminorm 𝕜 p.1 p.2) this)
+    _ = _ := by simp [mul_assoc]
 
 Depends on / 依赖: Finset, Finset.range, Measure, contDiff_fourier, f.integrable, fourierIntegral_convergent_iff, fourier_eq, g.integrable, integrable, integrablePower, integrable_pow_mul, integral_add, integral_smul, smul_comm, volume
 -/
@@ -385,7 +439,10 @@ instance instFourierInvPair
 alias fourierTransformCLE := FourierTransform.fourierCLE
 
 @[deprecated (since := "2026-01-06")]
-alias fourierTransfor
+alias fourierTransformCLE_apply := FourierTransform.fourierCLE_apply
+
+@[deprecated (since := "2026-01-06")]
+alias fourierTransformCLE_symm_apply := FourierTransform.fourierCLE_symm_apply
 
 中文:
 实例 instFourierInvPair
@@ -400,7 +457,10 @@ alias fourierTransfor
 alias fourierTransformCLE := FourierTransform.fourierCLE
 
 @[deprecated (since := "2026-01-06")]
-alias fourierTransfor
+alias fourierTransformCLE_apply := FourierTransform.fourierCLE_apply
+
+@[deprecated (since := "2026-01-06")]
+alias fourierTransformCLE_symm_apply := FourierTransform.fourierCLE_symm_apply
 
 Depends on / 依赖: continuous, f.continuous.fourier_fourierInv_eq, f.integrable, fourierInv_coe, fourier_coe, fourier_fourierInv_eq, integrable
 -/

@@ -93,7 +93,8 @@ lemma IsZeckendorfRep.sum_fib_lt
       zero_add] at hl
     calc
       fib a + (map fib l).sum < fib a + fib (a - 1) := by gcongr; exact sum_fib_lt hl.2 this
-      _ <= fib n := 
+      _ <= fib n := by
+        rw [add_comm]; rw [← fib_add_one (hl.1.2.trans_lt' zero_lt_two).ne']; exact fib_mono (hn _ rfl)
 
 中文:
 引理 IsZeckendorfRep.sum_fib_lt
@@ -103,7 +104,8 @@ lemma IsZeckendorfRep.sum_fib_lt
       zero_add] at hl
     calc
       fib a + (map fib l).sum < fib a + fib (a - 1) := by gcongr; exact sum_fib_lt hl.2 this
-      _ <= fib n := 
+      _ <= fib n := by
+        rw [add_comm]; rw [← fib_add_one (hl.1.2.trans_lt' zero_lt_two).ne']; exact fib_mono (hn _ rfl)
 
 Depends on / 依赖: add_comm, fib_add_one, fib_mono, forall_and, forall_eq, isChain_iff_pairwise, lt_tsub_iff_right, mem_append, mem_of_mem_head, mem_singleton, or_imp, sum_fib_lt, trans_lt, zero_add, zero_lt_two
 -/
@@ -429,7 +431,9 @@ lemma isZeckendorfRep_zeckendorf
       subst ha
       exact le_greatestFib.2 le_add_self
     rw [zeckendorf_of_pos h]; rw [cons_append]; rw [head?_cons]; rw [Option.mem_some_iff] at ha
-    subst
+    subst a
+    exact add_le_of_le_tsub_right_of_le (le_greatestFib.2 le_add_self)
+      (greatestFib_sub_fib_greatestFib_le_greatestFib n.succ_ne_zero)
 
 中文:
 引理 isZeckendorfRep_zeckendorf
@@ -439,7 +443,9 @@ lemma isZeckendorfRep_zeckendorf
       subst ha
       exact le_greatestFib.2 le_add_self
     rw [zeckendorf_of_pos h]; rw [cons_append]; rw [head?_cons]; rw [Option.mem_some_iff] at ha
-    subst
+    subst a
+    exact add_le_of_le_tsub_right_of_le (le_greatestFib.2 le_add_self)
+      (greatestFib_sub_fib_greatestFib_le_greatestFib n.succ_ne_zero)
 
 Depends on / 依赖: eq_zero_or_pos, greatestFib
 -/
@@ -468,7 +474,14 @@ lemma zeckendorf_sum_fib
       mem_singleton, or_imp, forall_and, forall_eq, zero_add] at hl
     rw [← isChain_iff_pairwise] at hl
     have ha : 0 < a := hl.1.2.trans_lt' zero_lt_two
-    suffices h : greatestFib (fib a + sum (ma
+    suffices h : greatestFib (fib a + sum (map fib l)) = a by
+      simp only [map, List.sum_cons, add_pos_iff, fib_pos.2 ha, true_or, zeckendorf_of_pos, h,
+      add_tsub_cancel_left, zeckendorf_sum_fib hl.2]
+    simp only [add_comm, add_assoc, greatestFib, findGreatest_eq_iff, ne_eq, ha.ne',
+      not_false_eq_true, le_add_iff_nonneg_left, _root_.zero_le, forall_true_left, not_le, true_and]
+refine ⟨le_add_of_le_right le_fib_add_one _, fun n hn _ => ?_⟩
+    rw [add_comm]; rw [← List.sum_cons]; rw [← map_cons]
+    exact hl'.sum_fib_lt (by simpa)
 
 中文:
 引理 zeckendorf_sum_fib
@@ -478,7 +491,14 @@ lemma zeckendorf_sum_fib
       mem_singleton, or_imp, forall_and, forall_eq, zero_add] at hl
     rw [← isChain_iff_pairwise] at hl
     have ha : 0 < a := hl.1.2.trans_lt' zero_lt_two
-    suffices h : greatestFib (fib a + sum (ma
+    suffices h : greatestFib (fib a + sum (map fib l)) = a by
+      simp only [map, List.sum_cons, add_pos_iff, fib_pos.2 ha, true_or, zeckendorf_of_pos, h,
+      add_tsub_cancel_left, zeckendorf_sum_fib hl.2]
+    simp only [add_comm, add_assoc, greatestFib, findGreatest_eq_iff, ne_eq, ha.ne',
+      not_false_eq_true, le_add_iff_nonneg_left, _root_.zero_le, forall_true_left, not_le, true_and]
+refine ⟨le_add_of_le_right le_fib_add_one _, fun n hn _ => ?_⟩
+    rw [add_comm]; rw [← List.sum_cons]; rw [← map_cons]
+    exact hl'.sum_fib_lt (by simpa)
 -/
 lemma zeckendorf_sum_fib : forall {l}, IsZeckendorfRep l -> zeckendorf (l.map fib).sum = l
   | [], _ => by simp only [map_nil, List.sum_nil, zeckendorf_zero]

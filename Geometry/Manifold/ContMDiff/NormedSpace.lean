@@ -369,7 +369,9 @@ theorem ContMDiffWithinAt.clm_precomp
 
 nonrec theorem ContMDiffAt.clm_precomp {f : M -> F₁ ->L[𝕜] F₂} {x : M}
     (hf : ContMDiffAt I 𝓘(𝕜, F₁ ->L[𝕜] F₂) n f x) :
-    ContMDiffAt I 𝓘(𝕜, (F₂ ->L[𝕜] F₃) ->L[𝕜] (F₁ ->L[
+    ContMDiffAt I 𝓘(𝕜, (F₂ ->L[𝕜] F₃) ->L[𝕜] (F₁ ->L[𝕜] F₃)) n
+      (fun y => (f y).precomp F₃ : M -> (F₂ ->L[𝕜] F₃) ->L[𝕜] (F₁ ->L[𝕜] F₃)) x :=
+  hf.clm_precomp
 
 中文:
 定理 ContMDiffWithinAt.clm_precomp
@@ -379,7 +381,9 @@ nonrec theorem ContMDiffAt.clm_precomp {f : M -> F₁ ->L[𝕜] F₂} {x : M}
 
 nonrec theorem ContMDiffAt.clm_precomp {f : M -> F₁ ->L[𝕜] F₂} {x : M}
     (hf : ContMDiffAt I 𝓘(𝕜, F₁ ->L[𝕜] F₂) n f x) :
-    ContMDiffAt I 𝓘(𝕜, (F₂ ->L[𝕜] F₃) ->L[𝕜] (F₁ ->L[
+    ContMDiffAt I 𝓘(𝕜, (F₂ ->L[𝕜] F₃) ->L[𝕜] (F₁ ->L[𝕜] F₃)) n
+      (fun y => (f y).precomp F₃ : M -> (F₂ ->L[𝕜] F₃) ->L[𝕜] (F₁ ->L[𝕜] F₃)) x :=
+  hf.clm_precomp
 
 Depends on / 依赖: ContDiff, ContDiff.comp_contMDiffWithinAt, ContinuousLinearMap, ContinuousLinearMap.compL, ContinuousLinearMap.contDiff, comp_contMDiffWithinAt, contDiff
 -/
@@ -448,7 +452,15 @@ theorem ContMDiffWithinAt.clm_postcomp
 
 nonrec theorem ContMDiffAt.clm_postcomp {f : M -> F₂ ->L[𝕜] F₃} {x : M}
     (hf : ContMDiffAt I 𝓘(𝕜, F₂ ->L[𝕜] F₃) n f x) :
-    ContMDiffA
+    ContMDiffAt I 𝓘(𝕜, (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->L[𝕜] F₃)) n
+      (fun y => (f y).postcomp F₁ : M -> (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->L[𝕜] F₃)) x :=
+  hf.clm_postcomp
+
+nonrec theorem ContMDiffOn.clm_postcomp {f : M -> F₂ ->L[𝕜] F₃} {s : Set M}
+    (hf : ContMDiffOn I 𝓘(𝕜, F₂ ->L[𝕜] F₃) n f s) :
+    ContMDiffOn I 𝓘(𝕜, (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->L[𝕜] F₃)) n
+      (fun y => (f y).postcomp F₁ : M -> (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->L[𝕜] F₃)) s := fun x hx =>
+  (hf x hx).clm_postcomp
 
 中文:
 定理 ContMDiffWithinAt.clm_postcomp
@@ -458,7 +470,15 @@ nonrec theorem ContMDiffAt.clm_postcomp {f : M -> F₂ ->L[𝕜] F₃} {x : M}
 
 nonrec theorem ContMDiffAt.clm_postcomp {f : M -> F₂ ->L[𝕜] F₃} {x : M}
     (hf : ContMDiffAt I 𝓘(𝕜, F₂ ->L[𝕜] F₃) n f x) :
-    ContMDiffA
+    ContMDiffAt I 𝓘(𝕜, (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->L[𝕜] F₃)) n
+      (fun y => (f y).postcomp F₁ : M -> (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->L[𝕜] F₃)) x :=
+  hf.clm_postcomp
+
+nonrec theorem ContMDiffOn.clm_postcomp {f : M -> F₂ ->L[𝕜] F₃} {s : Set M}
+    (hf : ContMDiffOn I 𝓘(𝕜, F₂ ->L[𝕜] F₃) n f s) :
+    ContMDiffOn I 𝓘(𝕜, (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->L[𝕜] F₃)) n
+      (fun y => (f y).postcomp F₁ : M -> (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->L[𝕜] F₃)) s := fun x hx =>
+  (hf x hx).clm_postcomp
 
 Depends on / 依赖: ContDiff, ContDiff.comp_contMDiffWithinAt, ContinuousLinearMap, ContinuousLinearMap.compL, ContinuousLinearMap.contDiff, comp_contMDiffWithinAt, contDiff
 -/
@@ -670,7 +690,12 @@ theorem ContMDiffWithinAt.cle_arrowCongr
     (fun y => (((f y).symm : F₂ ->L[𝕜] F₁).precomp F₄).comp ((g y : F₃ ->L[𝕜] F₄).postcomp F₁)) s x
 .clm_comp hg.clm_postcomp (F₁ := F₁) from hf.clm_precomp (F₃ := F₄)
 
-nonrec theorem ContMDiffAt.cle_arrowCongr {f : M -> F₁ ≃L[𝕜] 
+nonrec theorem ContMDiffAt.cle_arrowCongr {f : M -> F₁ ≃L[𝕜] F₂} {g : M -> F₃ ≃L[𝕜] F₄} {x : M}
+    (hf : ContMDiffAt I 𝓘(𝕜, F₂ ->L[𝕜] F₁) n (fun x => ((f x).symm : F₂ ->L[𝕜] F₁)) x)
+    (hg : ContMDiffAt I 𝓘(𝕜, F₃ ->L[𝕜] F₄) n (fun x => (g x : F₃ ->L[𝕜] F₄)) x) :
+    ContMDiffAt I 𝓘(𝕜, (F₁ ->L[𝕜] F₃) ->L[𝕜] (F₂ ->L[𝕜] F₄)) n
+      (fun y => (f y).arrowCongr (g y) : M -> (F₁ ->L[𝕜] F₃) ->L[𝕜] (F₂ ->L[𝕜] F₄)) x :=
+  hf.cle_arrowCongr hg
 
 中文:
 定理 ContMDiffWithinAt.cle_arrowCongr
@@ -679,7 +704,12 @@ nonrec theorem ContMDiffAt.cle_arrowCongr {f : M -> F₁ ≃L[𝕜]
     (fun y => (((f y).symm : F₂ ->L[𝕜] F₁).precomp F₄).comp ((g y : F₃ ->L[𝕜] F₄).postcomp F₁)) s x
 .clm_comp hg.clm_postcomp (F₁ := F₁) from hf.clm_precomp (F₃ := F₄)
 
-nonrec theorem ContMDiffAt.cle_arrowCongr {f : M -> F₁ ≃L[𝕜] 
+nonrec theorem ContMDiffAt.cle_arrowCongr {f : M -> F₁ ≃L[𝕜] F₂} {g : M -> F₃ ≃L[𝕜] F₄} {x : M}
+    (hf : ContMDiffAt I 𝓘(𝕜, F₂ ->L[𝕜] F₁) n (fun x => ((f x).symm : F₂ ->L[𝕜] F₁)) x)
+    (hg : ContMDiffAt I 𝓘(𝕜, F₃ ->L[𝕜] F₄) n (fun x => (g x : F₃ ->L[𝕜] F₄)) x) :
+    ContMDiffAt I 𝓘(𝕜, (F₁ ->L[𝕜] F₃) ->L[𝕜] (F₂ ->L[𝕜] F₄)) n
+      (fun y => (f y).arrowCongr (g y) : M -> (F₁ ->L[𝕜] F₃) ->L[𝕜] (F₂ ->L[𝕜] F₄)) x :=
+  hf.cle_arrowCongr hg
 
 Depends on / 依赖: ContMDiffWithinAt, clm_comp, clm_postcomp, clm_precomp, hf.clm_precomp, hg.clm_postcomp, postcomp, precomp
 -/
@@ -754,7 +784,10 @@ theorem ContMDiffWithinAt.clm_prodMap
     (f := fun x => (g x, f x)) (ContinuousLinearMap.prodMapL 𝕜 F₁ F₃ F₂ F₄).contDiff
     (hg.prodMk_space hf)
 
-nonrec theorem ContMDiffAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {x :
+nonrec theorem ContMDiffAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {x : M}
+    (hg : ContMDiffAt I 𝓘(𝕜, F₁ ->L[𝕜] F₃) n g x) (hf : ContMDiffAt I 𝓘(𝕜, F₂ ->L[𝕜] F₄) n f x) :
+    ContMDiffAt I 𝓘(𝕜, F₁ × F₂ ->L[𝕜] F₃ × F₄) n (fun x => (g x).prodMap (f x)) x :=
+  hg.clm_prodMap hf
 
 中文:
 定理 ContMDiffWithinAt.clm_prodMap
@@ -763,7 +796,10 @@ nonrec theorem ContMDiffAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃} {f : M -> 
     (f := fun x => (g x, f x)) (ContinuousLinearMap.prodMapL 𝕜 F₁ F₃ F₂ F₄).contDiff
     (hg.prodMk_space hf)
 
-nonrec theorem ContMDiffAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {x :
+nonrec theorem ContMDiffAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {x : M}
+    (hg : ContMDiffAt I 𝓘(𝕜, F₁ ->L[𝕜] F₃) n g x) (hf : ContMDiffAt I 𝓘(𝕜, F₂ ->L[𝕜] F₄) n f x) :
+    ContMDiffAt I 𝓘(𝕜, F₁ × F₂ ->L[𝕜] F₃ × F₄) n (fun x => (g x).prodMap (f x)) x :=
+  hg.clm_prodMap hf
 
 Depends on / 依赖: ContDiff, ContDiff.comp_contMDiffWithinAt, ContinuousLinearMap, ContinuousLinearMap.prodMapL, comp_contMDiffWithinAt, contDiff, hg.prodMk_space, prodMap, prodMapL, prodMk_space
 -/

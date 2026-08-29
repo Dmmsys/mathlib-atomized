@@ -3313,7 +3313,11 @@ theorem mul_eq_one_iff
     obtain ⟨b, hb⟩ := hst.of_image2_right
     have H : forall {a b}, a in s -> b in t -> a * b = (1 : α) := fun {a b} ha hb =>
 h.subset mem_image2_of_mem ha hb
-    refi
+    refine ⟨a, b, ?_, ?_, H ha hb⟩ <;> refine eq_singleton_iff_unique_mem.2 ⟨‹_›, fun x hx => ?_⟩
+    · exact (eq_inv_of_mul_eq_one_left <| H hx hb).trans (inv_eq_of_mul_eq_one_left <| H ha hb)
+    · exact (eq_inv_of_mul_eq_one_right <| H ha hx).trans (inv_eq_of_mul_eq_one_right <| H ha hb)
+  · rintro ⟨b, c, rfl, rfl, h⟩
+    rw [singleton_mul_singleton]; rw [h]; rw [singleton_one]
 
 中文:
 定理 mul_eq_one_iff
@@ -3325,7 +3329,11 @@ h.subset mem_image2_of_mem ha hb
     obtain ⟨b, hb⟩ := hst.of_image2_right
     have H : forall {a b}, a in s -> b in t -> a * b = (1 : α) := fun {a b} ha hb =>
 h.subset mem_image2_of_mem ha hb
-    refi
+    refine ⟨a, b, ?_, ?_, H ha hb⟩ <;> refine eq_singleton_iff_unique_mem.2 ⟨‹_›, fun x hx => ?_⟩
+    · exact (eq_inv_of_mul_eq_one_left <| H hx hb).trans (inv_eq_of_mul_eq_one_left <| H ha hb)
+    · exact (eq_inv_of_mul_eq_one_right <| H ha hx).trans (inv_eq_of_mul_eq_one_right <| H ha hb)
+  · rintro ⟨b, c, rfl, rfl, h⟩
+    rw [singleton_mul_singleton]; rw [h]; rw [singleton_one]
 -/
 protected theorem mul_eq_one_iff : s * t = 1 ↔ exists a b, s = {a} ∧ t = {b} ∧ a * b = 1 := by
   refine ⟨fun h => ?_, ?_⟩
@@ -3393,7 +3401,14 @@ definition divisionMonoid
       exact image_image2_antidistrib mul_inv_rev
     inv_eq_of_mul := fun s t h => by
       obtain ⟨a, b, rfl, rfl, hab⟩ := Set.mul_eq_one_iff.1 h
-      rw [inv_single
+      rw [inv_singleton]; rw [inv_eq_of_mul_eq_one_right hab]
+    div_eq_mul_inv := fun s t => by
+      rw [← image_id (s / t)]; rw [← image_inv_eq_inv]
+      exact image_image2_distrib_right div_eq_mul_inv }
+
+scoped[Pointwise] attribute [instance] Set.divisionMonoid Set.subtractionMonoid
+
+@[to_additive (attr := simp 500)]
 
 中文:
 定义 divisionMonoid
@@ -3404,7 +3419,14 @@ definition divisionMonoid
       exact image_image2_antidistrib mul_inv_rev
     inv_eq_of_mul := fun s t h => by
       obtain ⟨a, b, rfl, rfl, hab⟩ := Set.mul_eq_one_iff.1 h
-      rw [inv_single
+      rw [inv_singleton]; rw [inv_eq_of_mul_eq_one_right hab]
+    div_eq_mul_inv := fun s t => by
+      rw [← image_id (s / t)]; rw [← image_inv_eq_inv]
+      exact image_image2_distrib_right div_eq_mul_inv }
+
+scoped[Pointwise] attribute [instance] Set.divisionMonoid Set.subtractionMonoid
+
+@[to_additive (attr := simp 500)]
 -/
 protected def divisionMonoid : DivisionMonoid (Set α) :=
   { Set.monoid, Set.involutiveInv, Set.div, @Set.ZPow α _ _ _ with
@@ -3437,7 +3459,7 @@ theorem isUnit_iff
   · rintro ⟨a, rfl, ha⟩
     exact ha.set
 
-@[to_additive (attr :=
+@[to_additive (attr := simp)]
 
 中文:
 定理 isUnit_iff
@@ -3452,7 +3474,7 @@ theorem isUnit_iff
   · rintro ⟨a, rfl, ha⟩
     exact ha.set
 
-@[to_additive (attr :=
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Set.mul_eq_one_iff, ha.set, inv_mul, mul_eq_one_iff, mul_inv, singleton_injective, singleton_mul_singleton, u.inv_mul, u.mul_inv
 -/

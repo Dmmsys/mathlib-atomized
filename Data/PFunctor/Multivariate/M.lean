@@ -277,7 +277,11 @@ definition M.corecContents
       rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
       cases h'
       rfl
-    have h₁ : 
+    have h₁ : f j = M.corecShape P g₀ g₂ (g₂ b (castLastB P h₀ j)) := by
+      rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
+      cases h'
+      rfl
+    M.corecContents g₀ g₁ g₂ (f j) (g₂ b (P.castLastB h₀ j)) h₁ i c
 
 中文:
 定义 M.corecContents
@@ -292,7 +296,11 @@ definition M.corecContents
       rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
       cases h'
       rfl
-    have h₁ : 
+    have h₁ : f j = M.corecShape P g₀ g₂ (g₂ b (castLastB P h₀ j)) := by
+      rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
+      cases h'
+      rfl
+    M.corecContents g₀ g₁ g₂ (f j) (g₂ b (P.castLastB h₀ j)) h₁ i c
 
 Depends on / 依赖: M.Path.child, M.corecContents, M.corecShape, P.castDropB, P.castLastB, PFunctor, PFunctor.M.dest_corec, castDropB, castLastB, corecContents, corecShape, dest_corec
 -/
@@ -596,7 +604,23 @@ theorem M.bisim
       PFunctor.M.bisim (fun a₁ a₂ => exists x y, R x y ∧ x.1 = a₁ ∧ y.1 = a₂) ?_ _ _
         ⟨⟨a₁, f₁⟩, ⟨a₂, f₂⟩, r, rfl, rfl⟩
     rintro _ _ ⟨⟨a₁, f₁⟩, ⟨a₂, f₂⟩, r, rfl, rfl⟩
-    rcases h _ _ r with
+    rcases h _ _ r with ⟨a', f', f₁', f₂', e₁, e₂, h'⟩
+    rcases M.bisim_lemma P e₁ with ⟨g₁', e₁', rfl, rfl⟩
+    rcases M.bisim_lemma P e₂ with ⟨g₂', e₂', _, rfl⟩
+    rw [e₁']; rw [e₂']
+    exact ⟨_, _, _, rfl, rfl, fun b => ⟨_, _, h' b, rfl, rfl⟩⟩
+  subst this
+  congr with (i p)
+  induction p with (
+    obtain ⟨a', f', f₁', f₂', e₁, e₂, h''⟩ := h _ _ r
+    obtain ⟨g₁', e₁', rfl, rfl⟩ := M.bisim_lemma P e₁
+    obtain ⟨g₂', e₂', e₃, rfl⟩ := M.bisim_lemma P e₂
+    cases h'.symm.trans e₁'
+    cases h'.symm.trans e₂')
+  | root x a f h' i c =>
+    exact congr_fun (congr_fun e₃ i) c
+  | child x a f h' i c p IH =>
+    exact IH _ _ (h'' _)
 
 中文:
 定理 M.bisim
@@ -610,7 +634,23 @@ theorem M.bisim
       PFunctor.M.bisim (fun a₁ a₂ => exists x y, R x y ∧ x.1 = a₁ ∧ y.1 = a₂) ?_ _ _
         ⟨⟨a₁, f₁⟩, ⟨a₂, f₂⟩, r, rfl, rfl⟩
     rintro _ _ ⟨⟨a₁, f₁⟩, ⟨a₂, f₂⟩, r, rfl, rfl⟩
-    rcases h _ _ r with
+    rcases h _ _ r with ⟨a', f', f₁', f₂', e₁, e₂, h'⟩
+    rcases M.bisim_lemma P e₁ with ⟨g₁', e₁', rfl, rfl⟩
+    rcases M.bisim_lemma P e₂ with ⟨g₂', e₂', _, rfl⟩
+    rw [e₁']; rw [e₂']
+    exact ⟨_, _, _, rfl, rfl, fun b => ⟨_, _, h' b, rfl, rfl⟩⟩
+  subst this
+  congr with (i p)
+  induction p with (
+    obtain ⟨a', f', f₁', f₂', e₁, e₂, h''⟩ := h _ _ r
+    obtain ⟨g₁', e₁', rfl, rfl⟩ := M.bisim_lemma P e₁
+    obtain ⟨g₂', e₂', e₃, rfl⟩ := M.bisim_lemma P e₂
+    cases h'.symm.trans e₁'
+    cases h'.symm.trans e₂')
+  | root x a f h' i c =>
+    exact congr_fun (congr_fun e₃ i) c
+  | child x a f h' i c p IH =>
+    exact IH _ _ (h'' _)
 
 Depends on / 依赖: M.bisim_lemma, PFunctor, PFunctor.M.bisim, bisim_lemma
 -/
@@ -669,7 +709,18 @@ theorem M.bisim₀
   injection h with h₀ h₁
   subst ay
   simp only [heq_eq_eq] at h₁
-  have Hdrop : dropFun 
+  have Hdrop : dropFun fx = dropFun fy := by
+    replace h₁ := congr_arg dropFun h₁
+    simpa using! h₁
+  exists ax, dropFun fx, lastFun fx, lastFun fy
+  rw [split_dropFun_lastFun]; rw [Hdrop]; rw [split_dropFun_lastFun]
+  simp only [true_and]
+  intro i
+  replace h₁ := congr_fun (congr_fun h₁ Fin2.fz) i
+  simp only [TypeVec.comp, appendFun, splitFun] at h₁
+  replace h₁ := Quot.eqvGen_exact h₁
+  rw [h₀.eqvGen_iff] at h₁
+  exact h₁
 
 中文:
 定理 M.bisim₀
@@ -688,7 +739,18 @@ theorem M.bisim₀
   injection h with h₀ h₁
   subst ay
   simp only [heq_eq_eq] at h₁
-  have Hdrop : dropFun 
+  have Hdrop : dropFun fx = dropFun fy := by
+    replace h₁ := congr_arg dropFun h₁
+    simpa using! h₁
+  exists ax, dropFun fx, lastFun fx, lastFun fy
+  rw [split_dropFun_lastFun]; rw [Hdrop]; rw [split_dropFun_lastFun]
+  simp only [true_and]
+  intro i
+  replace h₁ := congr_fun (congr_fun h₁ Fin2.fz) i
+  simp only [TypeVec.comp, appendFun, splitFun] at h₁
+  replace h₁ := Quot.eqvGen_exact h₁
+  rw [h₀.eqvGen_iff] at h₁
+  exact h₁
 
 Depends on / 依赖: M.bisim, M.dest, congr_arg, dropFun, heq_eq_eq, injection, introv, lastFun, map_eq, replace, revert, specialize, split_dropFun_lastFun, true_and
 -/
@@ -735,7 +797,9 @@ theorem M.bisim'
     introv Hr
     have : forall x y, R x y -> Relation.EqvGen R x y := @Relation.EqvGen.rel _ R
     induction Hr
-    · rw [← Quot.factor_mk_eq R (Relatio
+    · rw [← Quot.factor_mk_eq R (Relation.EqvGen R) this]
+      rwa [appendFun_comp_id, ← MvFunctor.map_map, ← MvFunctor.map_map, h]
+    all_goals simp_all
 
 中文:
 定理 M.bisim'
@@ -748,7 +812,9 @@ theorem M.bisim'
     introv Hr
     have : forall x y, R x y -> Relation.EqvGen R x y := @Relation.EqvGen.rel _ R
     induction Hr
-    · rw [← Quot.factor_mk_eq R (Relatio
+    · rw [← Quot.factor_mk_eq R (Relation.EqvGen R) this]
+      rwa [appendFun_comp_id, ← MvFunctor.map_map, ← MvFunctor.map_map, h]
+    all_goals simp_all
 
 Depends on / 依赖: EqvGen, M.bisim, MvFunctor, MvFunctor.map_map, Quot.factor_mk_eq, Relation, Relation.EqvGen, Relation.EqvGen.is_equivalence, Relation.EqvGen.rel, all_goals, appendFun_comp_id, factor_mk_eq, introv, is_equivalence, map_map, solve_by_elim
 -/

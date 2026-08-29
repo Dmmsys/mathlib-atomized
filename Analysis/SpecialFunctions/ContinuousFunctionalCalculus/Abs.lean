@@ -639,7 +639,7 @@ lemma abs_smul
       RCLike.real_smul_eq_coe_smul (K := 𝕜)]
     simp [-algebraMap_smul, ← smul_mul_assoc, ← mul_comm (starRingEnd _ _), RCLike.conj_mul, sq]
   · lift ‖r‖ to Real>=0 using norm_nonneg _ with r
-    si
+    simp [← NNReal.smul_def]
 
 中文:
 引理 abs_smul
@@ -651,7 +651,7 @@ lemma abs_smul
       RCLike.real_smul_eq_coe_smul (K := 𝕜)]
     simp [-algebraMap_smul, ← smul_mul_assoc, ← mul_comm (starRingEnd _ _), RCLike.conj_mul, sq]
   · lift ‖r‖ to Real>=0 using norm_nonneg _ with r
-    si
+    simp [← NNReal.smul_def]
 
 Depends on / 依赖: NNReal, NNReal.smul_def, RCLike, RCLike.conj_mul, RCLike.real_smul_eq_coe_smul, algebraMap_smul, conj_mul, mul_comm, mul_smul_comm, norm_nonneg, real_smul_eq_coe_smul, smul_assoc, smul_def, smul_mul_assoc, starRingEnd, star_smul
 -/

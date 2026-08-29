@@ -47,7 +47,7 @@ lemma inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms
   simp only [inverseImage_iff, isomorphisms.iff,
     ← isIso_iff_of_reflects_iso _ (SheafOfModules.toSheaf.{v} R)]
   exact (isomorphisms _).arrow_mk_iso_iff
-    (((Functor.mapArrowFunctor _ _).mapIso (sheafificationCompToSheaf.{v} α)).app (Arrow
+    (((Functor.mapArrowFunctor _ _).mapIso (sheafificationCompToSheaf.{v} α)).app (Arrow.mk f))
 
 中文:
 引理 inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms
@@ -57,7 +57,7 @@ lemma inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms
   simp only [inverseImage_iff, isomorphisms.iff,
     ← isIso_iff_of_reflects_iso _ (SheafOfModules.toSheaf.{v} R)]
   exact (isomorphisms _).arrow_mk_iso_iff
-    (((Functor.mapArrowFunctor _ _).mapIso (sheafificationCompToSheaf.{v} α)).app (Arrow
+    (((Functor.mapArrowFunctor _ _).mapIso (sheafificationCompToSheaf.{v} α)).app (Arrow.mk f))
 
 Depends on / 依赖: Arrow.mk, Functor, Functor.mapArrowFunctor, J.W_eq_inverseImage_isomorphisms, SheafOfModules, SheafOfModules.toSheaf, W_eq_inverseImage_isomorphisms, arrow_mk_iso_iff, inverseImage_iff, isIso_iff_of_reflects_iso, isomorphisms, isomorphisms.iff, mapArrowFunctor, mapIso, sheafificationCompToSheaf, toSheaf
 -/

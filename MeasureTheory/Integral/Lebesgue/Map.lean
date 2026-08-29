@@ -72,7 +72,9 @@ theorem lintegral_map'
     _ = ∫⁻ a, hf.mk f a ∂Measure.map (hg.mk g) μ := by
       congr 1
       exact Measure.map_congr hg.ae_eq_mk
-    _ = ∫⁻ a, hf.mk f (hg.mk g a) ∂μ := lintegral_map hf.measurable_mk hg.meas
+    _ = ∫⁻ a, hf.mk f (hg.mk g a) ∂μ := lintegral_map hf.measurable_mk hg.measurable_mk
+_ = ∫⁻ a, hf.mk f (g a) ∂μ := lintegral_congr_ae hg.ae_eq_mk.symm.fun_comp _
+    _ = ∫⁻ a, f (g a) ∂μ := lintegral_congr_ae (ae_eq_comp hg hf.ae_eq_mk.symm)
 
 中文:
 定理 lintegral_map'
@@ -83,7 +85,9 @@ theorem lintegral_map'
     _ = ∫⁻ a, hf.mk f a ∂Measure.map (hg.mk g) μ := by
       congr 1
       exact Measure.map_congr hg.ae_eq_mk
-    _ = ∫⁻ a, hf.mk f (hg.mk g a) ∂μ := lintegral_map hf.measurable_mk hg.meas
+    _ = ∫⁻ a, hf.mk f (hg.mk g a) ∂μ := lintegral_map hf.measurable_mk hg.measurable_mk
+_ = ∫⁻ a, hf.mk f (g a) ∂μ := lintegral_congr_ae hg.ae_eq_mk.symm.fun_comp _
+    _ = ∫⁻ a, f (g a) ∂μ := lintegral_congr_ae (ae_eq_comp hg hf.ae_eq_mk.symm)
 
 Depends on / 依赖: Measure, Measure.map, Measure.map_congr, ae_eq_comp, ae_eq_mk, fun_comp, hf.ae_eq_mk, hf.ae_eq_mk.symm, hf.measurable_mk, hf.mk, hg.ae_eq_mk, hg.ae_eq_mk.symm.fun_comp, hg.measurable_mk, hg.mk, lintegral_congr_ae, lintegral_map, map_congr, measurable_mk
 -/
@@ -229,7 +233,11 @@ theorem _root_.MeasurableEmbedding.lintegral_map
   refine le_antisymm (iSup₂_le fun f₀ hf₀ => ?_) (iSup₂_le fun f₀ hf₀ => ?_)
   · rw [SimpleFunc.lintegral_map _ hg.measurable]
     have : (f₀.comp g hg.measurable : α -> Real>=0∞) <= f ∘ g := fun x => hf₀ (g x)
-    exact le_iSup_of_le (comp f₀ g hg.measurable) (by
+    exact le_iSup_of_le (comp f₀ g hg.measurable) (by exact le_iSup (α := Real>=0∞) _ this)
+  · rw [← f₀.extend_comp_eq hg (const _ 0), ← SimpleFunc.lintegral_map, ←
+      SimpleFunc.lintegral_eq_lintegral, ← lintegral]
+    refine lintegral_mono_ae (hg.ae_map_iff.2 <| Eventually.of_forall fun x => ?_)
+    exact (extend_apply _ _ _ _).trans_le (hf₀ _)
 
 中文:
 定理 _root_.可测嵌入.lintegral_map
@@ -239,7 +247,11 @@ theorem _root_.MeasurableEmbedding.lintegral_map
   refine le_antisymm (iSup₂_le fun f₀ hf₀ => ?_) (iSup₂_le fun f₀ hf₀ => ?_)
   · rw [SimpleFunc.lintegral_map _ hg.measurable]
     have : (f₀.comp g hg.measurable : α -> Real>=0∞) <= f ∘ g := fun x => hf₀ (g x)
-    exact le_iSup_of_le (comp f₀ g hg.measurable) (by
+    exact le_iSup_of_le (comp f₀ g hg.measurable) (by exact le_iSup (α := Real>=0∞) _ this)
+  · rw [← f₀.extend_comp_eq hg (const _ 0), ← SimpleFunc.lintegral_map, ←
+      SimpleFunc.lintegral_eq_lintegral, ← lintegral]
+    refine lintegral_mono_ae (hg.ae_map_iff.2 <| Eventually.of_forall fun x => ?_)
+    exact (extend_apply _ _ _ _).trans_le (hf₀ _)
 
 Depends on / 依赖: Eventually, SimpleFunc, SimpleFunc.lintegral_eq_lintegral, SimpleFunc.lintegral_map, ae_map_iff, extend_comp_eq, hg.ae_map_iff, hg.measurable, le_antisymm, le_iSup, le_iSup_of_le, lintegral, lintegral_eq_lintegral, lintegral_map, lintegral_mono_ae, measurable
 -/

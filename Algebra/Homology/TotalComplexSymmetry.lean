@@ -109,7 +109,8 @@ definition totalFlipIsoX
     rw [← ComplexShape.π_symm c₁ c₂ c i₁ i₂]; rw [h]))
   inv := K.totalDesc (fun i₁ i₂ h => ComplexShape.σ c₁ c₂ c i₁ i₂ • K.flip.ιTotal c i₂ i₁ j (by
     rw [ComplexShape.π_symm c₁ c₂ c i₁ i₂]; rw [h]))
-  hom_inv
+  hom_inv_id := by ext; simp
+  inv_hom_id := by ext; simp
 
 中文:
 定义 totalFlipIsoX
@@ -118,7 +119,8 @@ definition totalFlipIsoX
     rw [← ComplexShape.π_symm c₁ c₂ c i₁ i₂]; rw [h]))
   inv := K.totalDesc (fun i₁ i₂ h => ComplexShape.σ c₁ c₂ c i₁ i₂ • K.flip.ιTotal c i₂ i₁ j (by
     rw [ComplexShape.π_symm c₁ c₂ c i₁ i₂]; rw [h]))
-  hom_inv
+  hom_inv_id := by ext; simp
+  inv_hom_id := by ext; simp
 
 Depends on / 依赖: ComplexShape, K.flip, K.flip.totalDesc, K.totalDesc, hom_inv_id, inv_hom_id, totalDesc
 -/
@@ -147,7 +149,13 @@ lemma totalFlipIsoX_hom_D₁
     dsimp
     by_cases h₂ : c₁.Rel i₁ (c₁.next i₁)
     · have h₃ : ComplexShape.π c₂ c₁ c ⟨i₂, c₁.next i₁⟩ = j' := by
-        rw [← ComplexShap
+        rw [← ComplexShape.next_π₂ c₂ c i₂ h₂]; rw [h₁]; rw [c.next_eq' h₀]
+      have h₄ : ComplexShape.π c₁ c₂ c ⟨c₁.next i₁, i₂⟩ = j' := by
+        rw [← h₃]; rw [ComplexShape.π_symm c₁ c₂ c]
+      rw [K.d₁_eq _ h₂ _ _ h₄]; rw [K.flip.d₂_eq _ _ h₂ _ h₃]; rw [Linear.units_smul_comp]; rw [assoc]; rw [ι_totalDesc]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [smul_smul]; rw [ComplexShape.σ_ε₁ c₂ c h₂ i₂]
+      dsimp only [flip_X_X, flip_X_d]
+    · rw [K.d₁_eq_zero _ _ _ _ h₂, K.flip.d₂_eq_zero _ _ _ _ h₂, smul_zero, zero_comp]
+  · rw [K.D₁_shape _ _ _ h₀, K.flip.D₂_shape c _ _ h₀, zero_comp, comp_zero]
 
 中文:
 引理 totalFlipIsoX_hom_D₁
@@ -160,7 +168,13 @@ lemma totalFlipIsoX_hom_D₁
     dsimp
     by_cases h₂ : c₁.Rel i₁ (c₁.next i₁)
     · have h₃ : ComplexShape.π c₂ c₁ c ⟨i₂, c₁.next i₁⟩ = j' := by
-        rw [← ComplexShap
+        rw [← ComplexShape.next_π₂ c₂ c i₂ h₂]; rw [h₁]; rw [c.next_eq' h₀]
+      have h₄ : ComplexShape.π c₁ c₂ c ⟨c₁.next i₁, i₂⟩ = j' := by
+        rw [← h₃]; rw [ComplexShape.π_symm c₁ c₂ c]
+      rw [K.d₁_eq _ h₂ _ _ h₄]; rw [K.flip.d₂_eq _ _ h₂ _ h₃]; rw [Linear.units_smul_comp]; rw [assoc]; rw [ι_totalDesc]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [smul_smul]; rw [ComplexShape.σ_ε₁ c₂ c h₂ i₂]
+      dsimp only [flip_X_X, flip_X_d]
+    · rw [K.d₁_eq_zero _ _ _ _ h₂, K.flip.d₂_eq_zero _ _ _ _ h₂, smul_zero, zero_comp]
+  · rw [K.D₁_shape _ _ _ h₀, K.flip.D₂_shape c _ _ h₀, zero_comp, comp_zero]
 
 Depends on / 依赖: ComplexShape, ComplexShape.next_, K.flip.d, Linear, Linear.units_sm, Linear.units_smul_comp, c.Rel, c.next_eq, next_eq, totalFlipIsoX, units_sm, units_smul_comp
 -/
@@ -199,7 +213,13 @@ lemma totalFlipIsoX_hom_D₂
     dsimp
     by_cases h₂ : c₂.Rel i₂ (c₂.next i₂)
     · have h₃ : ComplexShape.π c₂ c₁ c (ComplexShape.next c₂ i₂, i₁) = j' := by
-        rw [
+        rw [← ComplexShape.next_π₁ c₁ c h₂ i₁]; rw [h₁]; rw [c.next_eq' h₀]
+      have h₄ : ComplexShape.π c₁ c₂ c (i₁, ComplexShape.next c₂ i₂) = j' := by
+        rw [← h₃]; rw [ComplexShape.π_symm c₁ c₂ c]
+      rw [K.d₂_eq _ _ h₂ _ h₄]; rw [K.flip.d₁_eq _ h₂ _ _ h₃]; rw [Linear.units_smul_comp]; rw [assoc]; rw [ι_totalDesc]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [smul_smul]; rw [ComplexShape.σ_ε₂ c₁ c i₁ h₂]
+      rfl
+    · rw [K.d₂_eq_zero _ _ _ _ h₂, K.flip.d₁_eq_zero _ _ _ _ h₂, smul_zero, zero_comp]
+  · rw [K.D₂_shape _ _ _ h₀, K.flip.D₁_shape c _ _ h₀, zero_comp, comp_zero]
 
 中文:
 引理 totalFlipIsoX_hom_D₂
@@ -212,7 +232,13 @@ lemma totalFlipIsoX_hom_D₂
     dsimp
     by_cases h₂ : c₂.Rel i₂ (c₂.next i₂)
     · have h₃ : ComplexShape.π c₂ c₁ c (ComplexShape.next c₂ i₂, i₁) = j' := by
-        rw [
+        rw [← ComplexShape.next_π₁ c₁ c h₂ i₁]; rw [h₁]; rw [c.next_eq' h₀]
+      have h₄ : ComplexShape.π c₁ c₂ c (i₁, ComplexShape.next c₂ i₂) = j' := by
+        rw [← h₃]; rw [ComplexShape.π_symm c₁ c₂ c]
+      rw [K.d₂_eq _ _ h₂ _ h₄]; rw [K.flip.d₁_eq _ h₂ _ _ h₃]; rw [Linear.units_smul_comp]; rw [assoc]; rw [ι_totalDesc]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [smul_smul]; rw [ComplexShape.σ_ε₂ c₁ c i₁ h₂]
+      rfl
+    · rw [K.d₂_eq_zero _ _ _ _ h₂, K.flip.d₁_eq_zero _ _ _ _ h₂, smul_zero, zero_comp]
+  · rw [K.D₂_shape _ _ _ h₀, K.flip.D₁_shape c _ _ h₀, zero_comp, comp_zero]
 
 Depends on / 依赖: ComplexShape, ComplexShape.next, ComplexShape.next_, K.flip.d, Linear, Linear.units_smul_comp, c.Rel, c.next_eq, next_eq, totalFlipIsoX, units_smul_comp
 -/

@@ -394,7 +394,10 @@ lemma mul_assoc
   suffices LinearMap.llcomp R _ _ _ mul ∘ₗ mul =
       (LinearMap.llcomp R _ _ _ LinearMap.lflip.toLinearMap <|
         LinearMap.llcomp R _ _ _ mul.flip ∘ₗ mul).flip by
-    exact DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.co
+    exact DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.congr_fun this x) y) z
+  ext x y z
+  dsimp [← mul_def]
+  simpa only [tprod_mul_tprod] using congr_arg (tprod R) (mul_assoc x y z)
 
 中文:
 引理 mul_assoc
@@ -405,7 +408,10 @@ lemma mul_assoc
   suffices LinearMap.llcomp R _ _ _ mul ∘ₗ mul =
       (LinearMap.llcomp R _ _ _ LinearMap.lflip.toLinearMap <|
         LinearMap.llcomp R _ _ _ mul.flip ∘ₗ mul).flip by
-    exact DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.co
+    exact DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.congr_fun this x) y) z
+  ext x y z
+  dsimp [← mul_def]
+  simpa only [tprod_mul_tprod] using congr_arg (tprod R) (mul_assoc x y z)
 -/
 protected lemma mul_assoc (x y z : ⨂[R] i, A i) : mul (mul x y) z = mul x (mul y z) := by
   -- restate as an equality of morphisms so that we can use `ext`
@@ -480,7 +486,22 @@ instance instAlgebra
     map_mul' r s := show (r * s) • 1 = mul (r • 1) (s • 1) by
       rw [LinearMap.map_smul_of_tower]; rw [LinearMap.map_smul_of_tower]; rw [LinearMap.smul_apply]; rw [mul_comm]; rw [mul_smul]
       congr
-      change (1 : ⨂[R] i, 
+      change (1 : ⨂[R] i, A i) = 1 * 1
+      rw [mul_one]
+    map_zero' := by simp
+    map_add' := by simp [add_smul] }
+  commutes' r x := by
+    simp only [RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk]
+    change mul _ _ = mul _ _
+    rw [LinearMap.map_smul_of_tower]; rw [LinearMap.map_smul_of_tower]; rw [LinearMap.smul_apply]
+    change r • (1 * x) = r • (x * 1)
+    rw [mul_one]; rw [one_mul]
+  smul_def' r x := by
+    simp only [RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk]
+    change _ = mul _ _
+    rw [LinearMap.map_smul_of_tower]; rw [LinearMap.smul_apply]
+    change _ = r • (1 * x)
+    rw [one_mul]
 
 中文:
 实例 instAlgebra
@@ -492,7 +513,22 @@ instance instAlgebra
     map_mul' r s := show (r * s) • 1 = mul (r • 1) (s • 1) by
       rw [LinearMap.map_smul_of_tower]; rw [LinearMap.map_smul_of_tower]; rw [LinearMap.smul_apply]; rw [mul_comm]; rw [mul_smul]
       congr
-      change (1 : ⨂[R] i, 
+      change (1 : ⨂[R] i, A i) = 1 * 1
+      rw [mul_one]
+    map_zero' := by simp
+    map_add' := by simp [add_smul] }
+  commutes' r x := by
+    simp only [RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk]
+    change mul _ _ = mul _ _
+    rw [LinearMap.map_smul_of_tower]; rw [LinearMap.map_smul_of_tower]; rw [LinearMap.smul_apply]
+    change r • (1 * x) = r • (x * 1)
+    rw [mul_one]; rw [one_mul]
+  smul_def' r x := by
+    simp only [RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk]
+    change _ = mul _ _
+    rw [LinearMap.map_smul_of_tower]; rw [LinearMap.smul_apply]
+    change _ = r • (1 * x)
+    rw [one_mul]
 
 Depends on / 依赖: hasSMul
 -/
@@ -531,7 +567,7 @@ lemma algebraMap_apply
   change r • tprod R 1 = _
   have : Pi.mulSingle i (algebraMap R' (A i) r) = update (fun i => 1) i (r • 1) := by
     rw [Algebra.algebraMap_eq_smul_one]; rfl
-  rw [this]; rw [← smul_one_smul R r (1 : A i)]; rw [MultilinearMap.map_update_smul]; rw [update_eq_self]; rw [smul_one_smul]; rw [Pi.one_d
+  rw [this]; rw [← smul_one_smul R r (1 : A i)]; rw [MultilinearMap.map_update_smul]; rw [update_eq_self]; rw [smul_one_smul]; rw [Pi.one_def]
 
 中文:
 引理 algebraMap_apply
@@ -540,7 +576,7 @@ lemma algebraMap_apply
   change r • tprod R 1 = _
   have : Pi.mulSingle i (algebraMap R' (A i) r) = update (fun i => 1) i (r • 1) := by
     rw [Algebra.algebraMap_eq_smul_one]; rfl
-  rw [this]; rw [← smul_one_smul R r (1 : A i)]; rw [MultilinearMap.map_update_smul]; rw [update_eq_self]; rw [smul_one_smul]; rw [Pi.one_d
+  rw [this]; rw [← smul_one_smul R r (1 : A i)]; rw [MultilinearMap.map_update_smul]; rw [update_eq_self]; rw [smul_one_smul]; rw [Pi.one_def]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, MultilinearMap, MultilinearMap.map_update_smul, Pi.mulSingle, Pi.one_def, algebraMap, algebraMap_eq_smul_one, map_update_smul, mulSingle, one_def, smul_one_smul, update, update_eq_self
 -/
@@ -567,7 +603,8 @@ definition singleAlgHom
   map_zero' := MultilinearMap.map_update_zero _ _ _
   map_add' _ _ := MultilinearMap.map_update_add _ _ _ _ _
   commutes' r := show tprodCoeff R _ _ = r • tprodCoeff R _ _ by
-    rw [Al
+    rw [Algebra.algebraMap_eq_smul_one]; rw [← Pi.one_apply]; rw [MonoidHom.mulSingle_apply]; rw [Pi.mulSingle]; rw [smul_tprodCoeff]
+    rfl
 
 中文:
 定义 singleAlgHom
@@ -578,7 +615,8 @@ definition singleAlgHom
   map_zero' := MultilinearMap.map_update_zero _ _ _
   map_add' _ _ := MultilinearMap.map_update_add _ _ _ _ _
   commutes' r := show tprodCoeff R _ _ = r • tprodCoeff R _ _ by
-    rw [Al
+    rw [Algebra.algebraMap_eq_smul_one]; rw [← Pi.one_apply]; rw [MonoidHom.mulSingle_apply]; rw [Pi.mulSingle]; rw [smul_tprodCoeff]
+    rfl
 
 Depends on / 依赖: MonoidHom, MonoidHom.mulSingle, mulSingle
 -/
@@ -794,7 +832,18 @@ definition constantBaseRingEquiv
       ((lift.tprod _).trans Finset.prod_const_one)
       (by
         -- one of these is required, the other is a performance optimization
-        let : IsScalarTower R (⨂[R] x : ι, R) (⨂[R] 
+        let : IsScalarTower R (⨂[R] x : ι, R) (⨂[R] x : ι, R) :=
+          IsScalarTower.right (R := R) (A := ⨂[R] (x : ι), R)
+        let : SMulCommClass R (⨂[R] x : ι, R) (⨂[R] x : ι, R) :=
+          Algebra.to_smulCommClass (R := R) (A := ⨂[R] x : ι, R)
+        rw [LinearMap.map_mul_iff]
+        ext
+        change toFun (tprod R _ * tprod R _) = toFun (tprod R _) * toFun (tprod R _)
+        simp_rw [tprod_mul_tprod, toFun, lift.tprod, MultilinearMap.mkPiAlgebra_apply,
+          Pi.mul_apply, Finset.prod_mul_distrib]))
+    (Algebra.ofId _ _)
+    (by ext)
+    (by classical ext)
 
 中文:
 定义 constantBaseRingEquiv
@@ -806,7 +855,18 @@ definition constantBaseRingEquiv
       ((lift.tprod _).trans Finset.prod_const_one)
       (by
         -- one of these is required, the other is a performance optimization
-        let : IsScalarTower R (⨂[R] x : ι, R) (⨂[R] 
+        let : IsScalarTower R (⨂[R] x : ι, R) (⨂[R] x : ι, R) :=
+          IsScalarTower.right (R := R) (A := ⨂[R] (x : ι), R)
+        let : SMulCommClass R (⨂[R] x : ι, R) (⨂[R] x : ι, R) :=
+          Algebra.to_smulCommClass (R := R) (A := ⨂[R] x : ι, R)
+        rw [LinearMap.map_mul_iff]
+        ext
+        change toFun (tprod R _ * tprod R _) = toFun (tprod R _) * toFun (tprod R _)
+        simp_rw [tprod_mul_tprod, toFun, lift.tprod, MultilinearMap.mkPiAlgebra_apply,
+          Pi.mul_apply, Finset.prod_mul_distrib]))
+    (Algebra.ofId _ _)
+    (by ext)
+    (by classical ext)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, AlgHom, AlgHom.ofLinearMap, Finset, Finset.prod_const_one, MultilinearMap, MultilinearMap.mkPiAlgebra, lift.tprod, mkPiAlgebra, ofAlgHom, ofLinearMap, prod_const_one
 -/

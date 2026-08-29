@@ -202,7 +202,7 @@ theorem isDiscrete_iff_forall_mem_exists_isClosed
   · obtain ⟨U, Uo, Us⟩ := h (sᶜ inter S) inter_subset_right
     exact ⟨Uᶜ, isClosed_compl_iff.mpr Uo, by rw [left_eq_inter.mpr sS]; simp_all [Set.ext_iff]⟩
   · obtain ⟨U, Uo, Us⟩ := h (sᶜ inter S) inter_subset_right
-
+    exact ⟨Uᶜ, isOpen_compl_iff.mpr Uo, by rw [left_eq_inter.mpr sS]; simp_all [Set.ext_iff]⟩
 
 中文:
 定理 isDiscrete_iff_对任意_mem_存在_isClosed
@@ -213,7 +213,7 @@ theorem isDiscrete_iff_forall_mem_exists_isClosed
   · obtain ⟨U, Uo, Us⟩ := h (sᶜ inter S) inter_subset_right
     exact ⟨Uᶜ, isClosed_compl_iff.mpr Uo, by rw [left_eq_inter.mpr sS]; simp_all [Set.ext_iff]⟩
   · obtain ⟨U, Uo, Us⟩ := h (sᶜ inter S) inter_subset_right
-
+    exact ⟨Uᶜ, isOpen_compl_iff.mpr Uo, by rw [left_eq_inter.mpr sS]; simp_all [Set.ext_iff]⟩
 
 Depends on / 依赖: Set.ext_iff, ext_iff, inter_subset_right, isClosed_compl_iff, isClosed_compl_iff.mpr, isDiscrete_iff_forall_subset_exists_isOpen, isOpen_compl_iff, isOpen_compl_iff.mpr, left_eq_inter, left_eq_inter.mpr
 -/
@@ -288,7 +288,7 @@ lemma isDiscrete_iff_nhdsWithin
     ← (Filter.map_injective Subtype.val_injective).eq_iff,
     Filter.map_comap, nhdsWithin]
 
-protected alias ⟨IsDiscrete.nhdsWithin, _⟩ := isDiscrete_iff_nhdsWithi
+protected alias ⟨IsDiscrete.nhdsWithin, _⟩ := isDiscrete_iff_nhdsWithin
 
 中文:
 引理 isDiscrete_iff_nhdsWithin
@@ -299,7 +299,7 @@ protected alias ⟨IsDiscrete.nhdsWithin, _⟩ := isDiscrete_iff_nhdsWithi
     ← (Filter.map_injective Subtype.val_injective).eq_iff,
     Filter.map_comap, nhdsWithin]
 
-protected alias ⟨IsDiscrete.nhdsWithin, _⟩ := isDiscrete_iff_nhdsWithi
+protected alias ⟨IsDiscrete.nhdsWithin, _⟩ := isDiscrete_iff_nhdsWithin
 
 Depends on / 依赖: Filter, Filter.map_comap, Filter.map_injective, Subtype, Subtype.val_injective, discreteTopology_iff_isOpen_singleton, eq_iff, isDiscrete_iff_discreteTopology, isOpen_singleton_iff_nhds_eq_pure, map_comap, map_injective, nhdsWithin, nhds_induced, val_injective
 -/
@@ -637,7 +637,8 @@ lemma Continuous.discrete_of_tendsto_cofinite_cocompact
   obtain ⟨K : Set Y, hK : IsCompact K, hK' : K in 𝓝 (f x)⟩ := exists_compact_mem_nhds (f x)
   obtain ⟨U : Set Y, hU₁ : U subseteq K, hU₂ : IsOpen U, hU₃ : f x in U⟩ := mem_nhds_iff.mp hK'
   have hU₄ : Set.Finite (f ⁻¹' U) :=
-    Fin
+    Finite.subset (tendsto_cofinite_cocompact_iff.mp hf K hK) (preimage_mono hU₁)
+  exact isOpen_singleton_of_finite_mem_nhds _ ((hU₂.preimage hf').mem_nhds hU₃) hU₄
 
 中文:
 引理 连续.discrete_of_tendsto_cofinite_cocompact
@@ -647,7 +648,8 @@ lemma Continuous.discrete_of_tendsto_cofinite_cocompact
   obtain ⟨K : Set Y, hK : IsCompact K, hK' : K in 𝓝 (f x)⟩ := exists_compact_mem_nhds (f x)
   obtain ⟨U : Set Y, hU₁ : U subseteq K, hU₂ : IsOpen U, hU₃ : f x in U⟩ := mem_nhds_iff.mp hK'
   have hU₄ : Set.Finite (f ⁻¹' U) :=
-    Fin
+    Finite.subset (tendsto_cofinite_cocompact_iff.mp hf K hK) (preimage_mono hU₁)
+  exact isOpen_singleton_of_finite_mem_nhds _ ((hU₂.preimage hf').mem_nhds hU₃) hU₄
 
 Depends on / 依赖: Finite, Finite.subset, IsCompact, IsOpen, Set.Finite, discreteTopology_iff_isOpen_singleton, discreteTopology_iff_isOpen_singleton.mpr, exists_compact_mem_nhds, isOpen_singleton_of_finite_mem_nhds, mem_nhds, mem_nhds_iff, mem_nhds_iff.mp, preimage, preimage_mono, subset, subseteq, tendsto_cofinite_cocompact_iff, tendsto_cofinite_cocompact_iff.mp
 -/
@@ -746,7 +748,9 @@ theorem isClosed_and_discrete_iff
   rw [← not_imp_not]; rw [clusterPt_iff_not_disjoint]; rw [not_not]; rw [← disjoint_iff]
   constructor <;> intro H
   · by_cases hx : x in S
-    exacts [H.2 hx, (H.1 hx).mono_left nhdsWithin_le_nhd
+    exacts [H.2 hx, (H.1 hx).mono_left nhdsWithin_le_nhds]
+  · refine ⟨fun hx => ?_, fun _ => H⟩
+    simpa [disjoint_iff, nhdsWithin, inf_assoc, hx] using H
 
 中文:
 定理 isClosed_and_discrete_iff
@@ -757,7 +761,9 @@ theorem isClosed_and_discrete_iff
   rw [← not_imp_not]; rw [clusterPt_iff_not_disjoint]; rw [not_not]; rw [← disjoint_iff]
   constructor <;> intro H
   · by_cases hx : x in S
-    exacts [H.2 hx, (H.1 hx).mono_left nhdsWithin_le_nhd
+    exacts [H.2 hx, (H.1 hx).mono_left nhdsWithin_le_nhds]
+  · refine ⟨fun hx => ?_, fun _ => H⟩
+    simpa [disjoint_iff, nhdsWithin, inf_assoc, hx] using H
 
 Depends on / 依赖: clusterPt_iff_not_disjoint, congrm, disjoint_iff, exacts, forall_and, inf_assoc, isClosed_iff_clusterPt, isDiscrete_iff_nhdsNE, mono_left, nhdsWithin, nhdsWithin_le_nhds, not_imp_not, not_not
 -/
@@ -990,7 +996,11 @@ theorem isClosed_sdiff_of_codiscreteWithin
     by_cases h₂a : a = x
     · tauto_set
     · specialize ha h₂a
- 
+      tauto_set
+  · rw [eventually_iff_exists_mem]
+    use Uᶜ, hU.compl_mem_nhds h₁x
+    intro y hy
+    tauto_set
 
 中文:
 定理 isClosed_sdiff_of_codiscreteWithin
@@ -1005,7 +1015,11 @@ theorem isClosed_sdiff_of_codiscreteWithin
     by_cases h₂a : a = x
     · tauto_set
     · specialize ha h₂a
- 
+      tauto_set
+  · rw [eventually_iff_exists_mem]
+    use Uᶜ, hU.compl_mem_nhds h₁x
+    intro y hy
+    tauto_set
 
 Depends on / 依赖: compl_mem_nhds, disjoint_principal_right, eventually_iff_exists_mem, eventually_nhdsWithin_iff, filter_upwards, hU.compl_mem_nhds, isOpen_compl_iff, isOpen_iff_eventually, mem_codiscreteWithin, specialize, tauto_set
 -/
@@ -1082,7 +1096,12 @@ theorem codiscreteWithin_iff_locallyFiniteComplementWithin
     by_cases hz : z in U \ s
     · rw [inter_comm, inter_insert_of_mem hz, inter_comm, h₂t]
       simp
-    · rw [inter_comm,
+    · rw [inter_comm, inter_insert_of_notMem hz, inter_comm, h₂t]
+      simp
+  · intro h z h₁z
+    obtain ⟨t, h₁t, h₂t⟩ := h z h₁z
+    use t \ (t inter (U \ s)), nhdsNE_of_nhdsNE_sdiff_finite (mem_nhdsWithin_of_mem_nhds h₁t) h₂t
+    simp
 
 中文:
 定理 codiscreteWithin_iff_locallyFiniteComplementWithin
@@ -1096,7 +1115,12 @@ theorem codiscreteWithin_iff_locallyFiniteComplementWithin
     by_cases hz : z in U \ s
     · rw [inter_comm, inter_insert_of_mem hz, inter_comm, h₂t]
       simp
-    · rw [inter_comm,
+    · rw [inter_comm, inter_insert_of_notMem hz, inter_comm, h₂t]
+      simp
+  · intro h z h₁z
+    obtain ⟨t, h₁t, h₂t⟩ := h z h₁z
+    use t \ (t inter (U \ s)), nhdsNE_of_nhdsNE_sdiff_finite (mem_nhdsWithin_of_mem_nhds h₁t) h₂t
+    simp
 
 Depends on / 依赖: codiscreteWithin_iff_locallyEmptyComplementWithin, insert, insert_mem_nhds_iff, insert_mem_nhds_iff.mpr, inter_comm, inter_insert_of_mem, inter_insert_of_notMem, mem_nhdsWithin_of_mem_nhds, nhdsNE_of_nhdsNE_sdiff_finite
 -/
@@ -1261,7 +1285,11 @@ lemma Disjoint.eventually_nhdsWithin_specializes
   have hS_nhds (y) (hy : y in S) : (closure ({y} : Set X))ᶜ in 𝓝 p :=
 isClosed_closure.isOpen_compl.mem_nhds by
       simpa [specializes_iff_mem_closure] using hy.2
-  filter_upwards [h₁t, nhdsWithin_le_
+  filter_upwards [h₁t, nhdsWithin_le_nhds ((biInter_mem <| h₂t.subset (by grind)).mpr hS_nhds),
+    self_mem_nhdsWithin] with x hxt hxS
+  contrapose
+  refine fun hxp hxf => mem_iInter₂.mp hxS x ⟨⟨hxt, hxf⟩, hxp⟩ ?_
+  grind [subset_closure]
 
 中文:
 引理 Disjoint.eventually_nhdsWithin_specializes
@@ -1271,7 +1299,11 @@ isClosed_closure.isOpen_compl.mem_nhds by
   have hS_nhds (y) (hy : y in S) : (closure ({y} : Set X))ᶜ in 𝓝 p :=
 isClosed_closure.isOpen_compl.mem_nhds by
       simpa [specializes_iff_mem_closure] using hy.2
-  filter_upwards [h₁t, nhdsWithin_le_
+  filter_upwards [h₁t, nhdsWithin_le_nhds ((biInter_mem <| h₂t.subset (by grind)).mpr hS_nhds),
+    self_mem_nhdsWithin] with x hxt hxS
+  contrapose
+  refine fun hxp hxf => mem_iInter₂.mp hxS x ⟨⟨hxt, hxf⟩, hxp⟩ ?_
+  grind [subset_closure]
 
 Depends on / 依赖: biInter_mem, closure, contrapose, disjoint_cofinite_right, disjoint_cofinite_right.mp, filter_upwards, hS_nhds, isClosed_closure, isClosed_closure.isOpen_compl.mem_nhds, isOpen_compl, mem_nhds, nhdsWithin_le_nhds, self_mem_nhdsWithin, specializes_iff_mem_closure, subset, subset_closure, t.subset
 -/

@@ -180,7 +180,8 @@ theorem isClosedEmbedding_toContinuousMap
     simp only [range_toContinuousMap, Set.ofPred_and, Set.ofPred_forall]
 refine .inter (isClosed_singleton.preimage (continuous_eval_const 1))
       isClosed_iInter fun x => isClosed_iInter fun y => ?_
-exact isClosed_eq (continuous_eval_const (x
+exact isClosed_eq (continuous_eval_const (x * y))
+      .mul (continuous_eval_const x) (continuous_eval_const y)
 
 中文:
 定理 isClosedEmbedding_toContinuousMap
@@ -190,7 +191,8 @@ exact isClosed_eq (continuous_eval_const (x
     simp only [range_toContinuousMap, Set.ofPred_and, Set.ofPred_forall]
 refine .inter (isClosed_singleton.preimage (continuous_eval_const 1))
       isClosed_iInter fun x => isClosed_iInter fun y => ?_
-exact isClosed_eq (continuous_eval_const (x
+exact isClosed_eq (continuous_eval_const (x * y))
+      .mul (continuous_eval_const x) (continuous_eval_const y)
 
 Depends on / 依赖: isEmbedding_toContinuousMap
 -/
@@ -497,7 +499,33 @@ theorem locallyCompactSpace_of_equicontinuousAt
   let S1 : Set (X ->* Y) := {f | Set.MapsTo f U W}
   let S2 : Set (ContinuousMonoidHom X Y) := {f | Set.MapsTo f U W}
   let S3 : Set C(X, Y) := (↑) '' S2
-  let S4 : Set (X -> Y) := (↑) '
+  let S4 : Set (X -> Y) := (↑) '' S3
+  replace h : Equicontinuous ((↑) : S1 -> X -> Y) :=
+    h.comp (Subtype.map _root_.id fun f hf => hf.mono_right hWV)
+  have hS4 : S4 = (↑) '' S1 := by
+    ext
+    constructor
+    · rintro ⟨-, ⟨f, hf, rfl⟩, rfl⟩
+      exact ⟨f, hf, rfl⟩
+    · rintro ⟨f, hf, rfl⟩
+      exact ⟨⟨f, h.continuous ⟨f, hf⟩⟩, ⟨⟨f, h.continuous ⟨f, hf⟩⟩, hf, rfl⟩, rfl⟩
+  replace h : Equicontinuous ((↑) : S3 -> X -> Y) := by
+    rw [equicontinuous_iff_range]; rw [← Set.image_eq_range] at h ⊢
+    rwa [← hS4] at h
+  replace hS4 : S4 = Set.pi U (fun _ => W) inter Set.range ((↑) : (X ->* Y) -> (X -> Y)) := by
+    simp_rw [hS4, Set.ext_iff, Set.mem_image, S1, Set.mem_ofPred_eq]
+    exact fun f => ⟨fun ⟨g, hg, hf⟩ => hf ▸ ⟨hg, g, rfl⟩, fun ⟨hg, g, hf⟩ => ⟨g, hf ▸ hg, hf⟩⟩
+  replace hS4 : IsClosed S4 :=
+    hS4.symm ▸ (isClosed_set_pi (fun _ _ => hWc.isClosed)).inter (MonoidHom.isClosed_range_coe X Y)
+  have hS2 : (interior S2).Nonempty := by
+    let T : Set (ContinuousMonoidHom X Y) := {f | Set.MapsTo f U (interior W)}
+    have h1 : T.Nonempty := ⟨1, fun _ _ => mem_interior_iff_mem_nhds.mpr hWo⟩
+    have h2 : T subseteq S2 := fun f hf => hf.mono_right interior_subset
+    have h3 : IsOpen T := isOpen_induced (ContinuousMap.isOpen_setOfPred_mapsTo hU isOpen_interior)
+    exact h1.mono (interior_maximal h2 h3)
+  exact TopologicalSpace.PositiveCompacts.locallyCompactSpace_of_group
+    ⟨⟨S2, (isInducing_toContinuousMap X Y).isCompact_iff.mpr
+      (ArzelaAscoli.isCompact_of_equicontinuous S3 hS4.isCompact h)⟩, hS2⟩
 
 中文:
 定理 locallyCompactSpace_of_equicontinuousAt
@@ -508,7 +536,33 @@ theorem locallyCompactSpace_of_equicontinuousAt
   let S1 : Set (X ->* Y) := {f | Set.MapsTo f U W}
   let S2 : Set (ContinuousMonoidHom X Y) := {f | Set.MapsTo f U W}
   let S3 : Set C(X, Y) := (↑) '' S2
-  let S4 : Set (X -> Y) := (↑) '
+  let S4 : Set (X -> Y) := (↑) '' S3
+  replace h : Equicontinuous ((↑) : S1 -> X -> Y) :=
+    h.comp (Subtype.map _root_.id fun f hf => hf.mono_right hWV)
+  have hS4 : S4 = (↑) '' S1 := by
+    ext
+    constructor
+    · rintro ⟨-, ⟨f, hf, rfl⟩, rfl⟩
+      exact ⟨f, hf, rfl⟩
+    · rintro ⟨f, hf, rfl⟩
+      exact ⟨⟨f, h.continuous ⟨f, hf⟩⟩, ⟨⟨f, h.continuous ⟨f, hf⟩⟩, hf, rfl⟩, rfl⟩
+  replace h : Equicontinuous ((↑) : S3 -> X -> Y) := by
+    rw [equicontinuous_iff_range]; rw [← Set.image_eq_range] at h ⊢
+    rwa [← hS4] at h
+  replace hS4 : S4 = Set.pi U (fun _ => W) inter Set.range ((↑) : (X ->* Y) -> (X -> Y)) := by
+    simp_rw [hS4, Set.ext_iff, Set.mem_image, S1, Set.mem_ofPred_eq]
+    exact fun f => ⟨fun ⟨g, hg, hf⟩ => hf ▸ ⟨hg, g, rfl⟩, fun ⟨hg, g, hf⟩ => ⟨g, hf ▸ hg, hf⟩⟩
+  replace hS4 : IsClosed S4 :=
+    hS4.symm ▸ (isClosed_set_pi (fun _ _ => hWc.isClosed)).inter (MonoidHom.isClosed_range_coe X Y)
+  have hS2 : (interior S2).Nonempty := by
+    let T : Set (ContinuousMonoidHom X Y) := {f | Set.MapsTo f U (interior W)}
+    have h1 : T.Nonempty := ⟨1, fun _ _ => mem_interior_iff_mem_nhds.mpr hWo⟩
+    have h2 : T subseteq S2 := fun f hf => hf.mono_right interior_subset
+    have h3 : IsOpen T := isOpen_induced (ContinuousMap.isOpen_setOfPred_mapsTo hU isOpen_interior)
+    exact h1.mono (interior_maximal h2 h3)
+  exact TopologicalSpace.PositiveCompacts.locallyCompactSpace_of_group
+    ⟨⟨S2, (isInducing_toContinuousMap X Y).isCompact_iff.mpr
+      (ArzelaAscoli.isCompact_of_equicontinuous S3 hS4.isCompact h)⟩, hS2⟩
 
 Depends on / 依赖: ContinuousMonoidHom, Equicontinuous, MapsTo, Set.MapsTo, Subtype, Subtype.map, _root_, _root_.id, equicontinuous_of_equicontinuousAt_one, h.comp, hf.mono_right, local_compact_nhds, mono_right, replace
 -/
@@ -564,6 +618,22 @@ theorem locallyCompactSpace_of_hasBasis
 Nat.rec ⟨U0, hU0o⟩ fun _ S => let h := exists_closed_nhds_one_inv_eq_mul_subset S.2
       ⟨Classical.choose h, (Classical.choose_spec h).1⟩
   let U : Nat -> Set X := fun n => (U_aux n).1
+  have hU1 : forall n, U n in nhds 1 := fun n => (U_aux n).2
+  have hU2 : forall n, U (n + 1) * U (n + 1) subseteq U n :=
+    fun n => (Classical.choose_spec (exists_closed_nhds_one_inv_eq_mul_subset (U_aux n).2)).2.2.2
+  have hU3 : forall n, U (n + 1) subseteq U n :=
+    fun n x hx => hU2 n (mul_one x ▸ Set.mul_mem_mul hx (mem_of_mem_nhds (hU1 (n + 1))))
+  have hU4 : forall f : X ->* Y, Set.MapsTo f (U 0) (V 0) -> forall n, Set.MapsTo f (U n) (V n) := by
+    intro f hf n
+    induction n with
+    | zero => exact hf
+    | succ n ih =>
+      exact fun x hx => hV (ih (hU3 n hx)) (map_mul f x x ▸ ih (hU2 n (Set.mul_mem_mul hx hx)))
+  apply locallyCompactSpace_of_equicontinuousAt (U 0) (V 0) hU0c (hVo.mem_of_mem trivial)
+  rw [hVo.uniformity_of_nhds_one.equicontinuousAt_iff_right]
+  refine fun n _ => Filter.eventually_iff_exists_mem.mpr ⟨U n, hU1 n, fun x hx ⟨f, hf⟩ => ?_⟩
+  rw [Set.mem_ofPred_eq]; rw [map_one]; rw [div_one]
+  exact hU4 f hf n hx
 
 中文:
 定理 locallyCompactSpace_of_hasBasis
@@ -574,6 +644,22 @@ Nat.rec ⟨U0, hU0o⟩ fun _ S => let h := exists_closed_nhds_one_inv_eq_mul_sub
 Nat.rec ⟨U0, hU0o⟩ fun _ S => let h := exists_closed_nhds_one_inv_eq_mul_subset S.2
       ⟨Classical.choose h, (Classical.choose_spec h).1⟩
   let U : Nat -> Set X := fun n => (U_aux n).1
+  have hU1 : forall n, U n in nhds 1 := fun n => (U_aux n).2
+  have hU2 : forall n, U (n + 1) * U (n + 1) subseteq U n :=
+    fun n => (Classical.choose_spec (exists_closed_nhds_one_inv_eq_mul_subset (U_aux n).2)).2.2.2
+  have hU3 : forall n, U (n + 1) subseteq U n :=
+    fun n x hx => hU2 n (mul_one x ▸ Set.mul_mem_mul hx (mem_of_mem_nhds (hU1 (n + 1))))
+  have hU4 : forall f : X ->* Y, Set.MapsTo f (U 0) (V 0) -> forall n, Set.MapsTo f (U n) (V n) := by
+    intro f hf n
+    induction n with
+    | zero => exact hf
+    | succ n ih =>
+      exact fun x hx => hV (ih (hU3 n hx)) (map_mul f x x ▸ ih (hU2 n (Set.mul_mem_mul hx hx)))
+  apply locallyCompactSpace_of_equicontinuousAt (U 0) (V 0) hU0c (hVo.mem_of_mem trivial)
+  rw [hVo.uniformity_of_nhds_one.equicontinuousAt_iff_right]
+  refine fun n _ => Filter.eventually_iff_exists_mem.mpr ⟨U n, hU1 n, fun x hx ⟨f, hf⟩ => ?_⟩
+  rw [Set.mem_ofPred_eq]; rw [map_one]; rw [div_one]
+  exact hU4 f hf n hx
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Nat.rec, U_aux, choose_spec, exists_closed_nhds_one_inv_eq_mul_subset, exists_compact_mem_nhds, subseteq
 -/

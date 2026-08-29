@@ -1129,7 +1129,8 @@ definition comapRight
       ext1 a
       rw [Measure.comap_apply _ hf.injective _ _ ht]
       exact fun s' hs' => hf.measurableSet_image.mpr hs'
-    rw [th
+    rw [this]
+    exact Kernel.measurable_coe _ (hf.measurableSet_image.mpr ht)
 
 中文:
 定义 comapRight
@@ -1141,7 +1142,8 @@ definition comapRight
       ext1 a
       rw [Measure.comap_apply _ hf.injective _ _ ht]
       exact fun s' hs' => hf.measurableSet_image.mpr hs'
-    rw [th
+    rw [this]
+    exact Kernel.measurable_coe _ (hf.measurableSet_image.mpr ht)
 -/
 noncomputable def comapRight (κ : Kernel α β) (hf : MeasurableEmbedding f) : Kernel α γ where
   toFun a := (κ a).comap f
@@ -1291,7 +1293,10 @@ instance IsSFiniteKernel.comapRight
     (Measure.sum fun n => Measure.comap f (seq κ n a)) =
       Measure.comap f (Measure.sum fun n => seq κ n a) := by
     ext1 t ht
-    rw [Measure.comap_apply _ h
+    rw [Measure.comap_apply _ hf.injective (fun s' => hf.measurableSet_image.mpr) _ ht]; rw [Measure.sum_apply _ ht]; rw [Measure.sum_apply _ (hf.measurableSet_image.mpr ht)]
+    congr with n : 1
+    rw [Measure.comap_apply _ hf.injective (fun s' => hf.measurableSet_image.mpr) _ ht]
+  rw [this]; rw [measure_sum_seq]
 
 中文:
 实例 是SFiniteKernel.comapRight
@@ -1305,7 +1310,10 @@ instance IsSFiniteKernel.comapRight
     (Measure.sum fun n => Measure.comap f (seq κ n a)) =
       Measure.comap f (Measure.sum fun n => seq κ n a) := by
     ext1 t ht
-    rw [Measure.comap_apply _ h
+    rw [Measure.comap_apply _ hf.injective (fun s' => hf.measurableSet_image.mpr) _ ht]; rw [Measure.sum_apply _ ht]; rw [Measure.sum_apply _ (hf.measurableSet_image.mpr ht)]
+    congr with n : 1
+    rw [Measure.comap_apply _ hf.injective (fun s' => hf.measurableSet_image.mpr) _ ht]
+  rw [this]; rw [measure_sum_seq]
 -/
 protected instance IsSFiniteKernel.comapRight (κ : Kernel α β) [IsSFiniteKernel κ]
     (hf : MeasurableEmbedding f) : IsSFiniteKernel (comapRight κ hf) := by
@@ -1523,7 +1531,17 @@ lemma exists_ae_eq_isMarkovKernel
     refine ⟨toMeasurable μ {a | ¬ IsProbabilityMeasure (κ a)}, measurableSet_toMeasurable _ _,
       by simpa [measure_toMeasurable] using! h, ?_⟩
     intro a ha
- 
+    contrapose ha
+    exact subset_toMeasurable _ _ ha
+  obtain ⟨a, ha⟩ : sᶜ.Nonempty := by
+    contrapose! h'; simpa [μs, h'] using! measure_univ_le_add_compl s (μ := μ)
+  refine ⟨Kernel.piecewise s_meas (Kernel.const _ (κ a)) κ, ?_, ?_⟩
+  · filter_upwards [measure_eq_zero_iff_ae_notMem.1 μs] with b hb
+    simp [hb, piecewise]
+  · refine ⟨fun b => ?_⟩
+    by_cases hb : b in s
+    · simpa [hb, piecewise] using! hs _ ha
+    · simpa [hb, piecewise] using! hs _ hb
 
 中文:
 引理 存在_ae_eq_isMarkovKernel
@@ -1535,7 +1553,17 @@ lemma exists_ae_eq_isMarkovKernel
     refine ⟨toMeasurable μ {a | ¬ IsProbabilityMeasure (κ a)}, measurableSet_toMeasurable _ _,
       by simpa [measure_toMeasurable] using! h, ?_⟩
     intro a ha
- 
+    contrapose ha
+    exact subset_toMeasurable _ _ ha
+  obtain ⟨a, ha⟩ : sᶜ.Nonempty := by
+    contrapose! h'; simpa [μs, h'] using! measure_univ_le_add_compl s (μ := μ)
+  refine ⟨Kernel.piecewise s_meas (Kernel.const _ (κ a)) κ, ?_, ?_⟩
+  · filter_upwards [measure_eq_zero_iff_ae_notMem.1 μs] with b hb
+    simp [hb, piecewise]
+  · refine ⟨fun b => ?_⟩
+    by_cases hb : b in s
+    · simpa [hb, piecewise] using! hs _ ha
+    · simpa [hb, piecewise] using! hs _ hb
 
 Depends on / 依赖: IsProbabilityMeasure, Kernel, Kernel.const, Kernel.piecewise, MeasurableSet, Nonempty, classical, contrapose, measurableSet_toMeasurable, measure_toMeasurable, measure_univ_le_add_compl, piecewise, s_meas, subset_toMeasurable, toMeasurable
 -/

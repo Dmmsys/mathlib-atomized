@@ -45,7 +45,9 @@ lemma index_range_nsmul
         using (index_map_equiv (nsmulAddMonoidHom (α := M) n).range
                 (Module.finBasis Int M).equivFun.toAddEquiv).symm
     _ = _ := by
-      simp
+      simp [index_eq_card, Nat.card_congr (addEquivPiModRangeNSMulAddMonoidHom _ n).toEquiv,
+        Nat.card_fun, Int.range_nsmulAddMonoidHom,
+        Nat.card_congr (Int.quotientZMultiplesNatEquivZMod n).toEquiv]
 
 中文:
 引理 index_range_nsmul
@@ -56,7 +58,9 @@ lemma index_range_nsmul
         using (index_map_equiv (nsmulAddMonoidHom (α := M) n).range
                 (Module.finBasis Int M).equivFun.toAddEquiv).symm
     _ = _ := by
-      simp
+      simp [index_eq_card, Nat.card_congr (addEquivPiModRangeNSMulAddMonoidHom _ n).toEquiv,
+        Nat.card_fun, Int.range_nsmulAddMonoidHom,
+        Nat.card_congr (Int.quotientZMultiplesNatEquivZMod n).toEquiv]
 
 Depends on / 依赖: finrank, range.index
 -/
@@ -145,7 +149,9 @@ lemma finrank_eq_of_finiteIndex
 (DistribSMul.toLinearMap ..).finrank_range_of_inj
       distribSMulToLinearMap_injective_of_isTorsionFree FiniteIndex.index_ne_zero
   rw [← this]
-refine Submod
+refine Submodule.finrank_mono (OrderIso.symm_apply_le toIntSubmodule).mp fun m hm => ?_
+  obtain ⟨x, rfl⟩ : exists x, A.index • x = m := by simpa using hm
+  exact A.nsmul_index_mem x
 
 中文:
 引理 finrank_eq_of_finiteIndex
@@ -156,7 +162,9 @@ refine Submod
 (DistribSMul.toLinearMap ..).finrank_range_of_inj
       distribSMulToLinearMap_injective_of_isTorsionFree FiniteIndex.index_ne_zero
   rw [← this]
-refine Submod
+refine Submodule.finrank_mono (OrderIso.symm_apply_le toIntSubmodule).mp fun m hm => ?_
+  obtain ⟨x, rfl⟩ : exists x, A.index • x = m := by simpa using hm
+  exact A.nsmul_index_mem x
 
 Depends on / 依赖: A.index, A.nsmul_index_mem, A.toIntSubmodule.finrank_le, DistribSMul, DistribSMul.toLinearMap, FiniteIndex, FiniteIndex.index_ne_zero, OrderIso, OrderIso.symm_apply_le, Submodule, Submodule.finrank_mono, distribSMulToLinearMap_injective_of_isTorsionFree, finrank, finrank_le, finrank_mono, finrank_range_of_inj, index_ne_zero, le_antisymm, nsmul_index_mem, symm_apply_le
 -/

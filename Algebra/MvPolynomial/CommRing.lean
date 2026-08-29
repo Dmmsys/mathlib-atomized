@@ -223,6 +223,15 @@ theorem support_sub_monomial_sub_monomial_subset
   · by_cases hxd : x = d
     · exact absurd (hxd ▸ hx) hd_not
     exact Finset.mem_union_left _ (Finset.mem_erase.mpr ⟨hxd, hp⟩)
+  rcases Finset.mem_union.mp (support_sub σ _ _ hdelta) with h1 | h2
+  · rw [support_monomial] at h1
+    split_ifs at h1
+    · exact absurd h1 (Finset.notMem_empty _)
+    exact absurd ((Finset.mem_singleton.mp h1) ▸ hx) hd_not
+  rw [support_monomial] at h2
+  split_ifs at h2
+  · exact absurd h2 (Finset.notMem_empty _)
+  exact Finset.mem_union_right _ (by rwa [Finset.mem_singleton] at h2 ⊢)
 
 中文:
 定理 support_sub_monomial_sub_monomial_subset
@@ -235,6 +244,15 @@ theorem support_sub_monomial_sub_monomial_subset
   · by_cases hxd : x = d
     · exact absurd (hxd ▸ hx) hd_not
     exact Finset.mem_union_left _ (Finset.mem_erase.mpr ⟨hxd, hp⟩)
+  rcases Finset.mem_union.mp (support_sub σ _ _ hdelta) with h1 | h2
+  · rw [support_monomial] at h1
+    split_ifs at h1
+    · exact absurd h1 (Finset.notMem_empty _)
+    exact absurd ((Finset.mem_singleton.mp h1) ▸ hx) hd_not
+  rw [support_monomial] at h2
+  split_ifs at h2
+  · exact absurd h2 (Finset.notMem_empty _)
+  exact Finset.mem_union_right _ (by rwa [Finset.mem_singleton] at h2 ⊢)
 
 Depends on / 依赖: Finset, Finset.mem_erase.mpr, Finset.mem_singleton.mp, Finset.mem_union.mp, Finset.mem_union_left, Finset.notMem_empty, absurd, classical, hd_not, hdelta, mem_erase, mem_singleton, mem_union, mem_union_left, notMem_empty, notMem_support_sub_monomial_sub_monomial, split_ifs, support_monomial, support_sub
 -/
@@ -550,7 +568,7 @@ theorem eval₂Hom_X
       exact (f.map_add _ _).symm)
     (fun p n hp => by
       rw [eval₂_mul]; rw [eval₂_X]; rw [hp]
-      exact (f.map_
+      exact (f.map_mul _ _).symm)
 
 中文:
 定理 eval₂Hom_X
@@ -565,7 +583,7 @@ theorem eval₂Hom_X
       exact (f.map_add _ _).symm)
     (fun p n hp => by
       rw [eval₂_mul]; rw [eval₂_X]; rw [hp]
-      exact (f.map_
+      exact (f.map_mul _ _).symm)
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.induction_on, eq_intCast, f.map_add, f.map_mul, hom_C, induction_on, map_add, map_mul
 -/

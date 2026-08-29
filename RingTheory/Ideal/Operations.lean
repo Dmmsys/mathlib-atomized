@@ -41,7 +41,15 @@ lemma coe_span_smul
         induction hr using Submodule.span_induction with
         | mem _ h => exact mem_set_smul_of_mem_mem h hn
         | zero => rw [zero_smul]; exact Submodule.zero_mem _
-        | add _ _ _ _ ihr ihs => rw [add_smul]; exact Submodule.add_mem _ ihr
+        | add _ _ _ _ ihr ihs => rw [add_smul]; exact Submodule.add_mem _ ihr ihs
+        | smul _ _ hr =>
+          rw [mem_span_set] at hr
+          obtain ⟨c, hc, rfl⟩ := hr
+          rw [Finsupp.sum]; rw [Finset.smul_sum]; rw [Finset.sum_smul]
+          refine Submodule.sum_mem _ fun i hi => ?_
+          rw [← mul_smul]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_smul]
+exact mem_set_smul_of_mem_mem (hc hi) Submodule.smul_mem _ _ hn) <|
+    set_smul_mono_left _ Submodule.subset_span
 
 中文:
 引理 coe_span_smul
@@ -51,7 +59,15 @@ lemma coe_span_smul
         induction hr using Submodule.span_induction with
         | mem _ h => exact mem_set_smul_of_mem_mem h hn
         | zero => rw [zero_smul]; exact Submodule.zero_mem _
-        | add _ _ _ _ ihr ihs => rw [add_smul]; exact Submodule.add_mem _ ihr
+        | add _ _ _ _ ihr ihs => rw [add_smul]; exact Submodule.add_mem _ ihr ihs
+        | smul _ _ hr =>
+          rw [mem_span_set] at hr
+          obtain ⟨c, hc, rfl⟩ := hr
+          rw [Finsupp.sum]; rw [Finset.smul_sum]; rw [Finset.sum_smul]
+          refine Submodule.sum_mem _ fun i hi => ?_
+          rw [← mul_smul]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_smul]
+exact mem_set_smul_of_mem_mem (hc hi) Submodule.smul_mem _ _ hn) <|
+    set_smul_mono_left _ Submodule.subset_span
 
 Depends on / 依赖: Finset, Finset.smul_sum, Finset.sum_smul, Finsupp, Finsupp.sum, Submodule, Submodule.add_mem, Submodule.span_induction, Submodule.sum_mem, Submodule.zero_mem, add_mem, add_smul, mem_set_smul_of_mem_mem, mem_span_set, mul_comm, mul_smu, mul_smul, set_smul_eq_of_le, smul_eq_mul, smul_sum
 -/
@@ -272,7 +288,7 @@ theorem map_smul''
           (f.map_smul r n).symm ▸ smul_mem_smul hr (mem_map_of_mem hn)) <|
     smul_le.2 fun r hr _ hn =>
       let ⟨p, hp, hfp⟩ := mem_map.1 hn
-      hfp ▸ f.map_smul r p ▸ mem_map_
+      hfp ▸ f.map_smul r p ▸ mem_map_of_mem (smul_mem_smul hr hp)
 
 中文:
 定理 map_smul''
@@ -285,7 +301,7 @@ theorem map_smul''
           (f.map_smul r n).symm ▸ smul_mem_smul hr (mem_map_of_mem hn)) <|
     smul_le.2 fun r hr _ hn =>
       let ⟨p, hp, hfp⟩ := mem_map.1 hn
-      hfp ▸ f.map_smul r p ▸ mem_map_
+      hfp ▸ f.map_smul r p ▸ mem_map_of_mem (smul_mem_smul hr hp)
 
 Depends on / 依赖: N.map, f.map_smul, le_antisymm, map_le_iff_le_comap, map_smul, mem_map, mem_map_of_mem, smul_le, smul_mem_smul
 -/
@@ -404,7 +420,7 @@ theorem mem_smul_span_singleton
         ⟨r * s, I.mul_mem_right _ hri, hs ▸ mul_smul r s m⟩)
       fun m1 m2 ⟨y1, hyi1, hy1⟩ ⟨y2, hyi2, hy2⟩ =>
       ⟨y1 + y2, I.add_mem hyi1 hyi2, by rw [add_smul, hy1, hy2]⟩,
-    fun ⟨_, 
+    fun ⟨_, hyi, hy⟩ => hy ▸ smul_mem_smul hyi (subset_span <| Set.mem_singleton m)⟩
 
 中文:
 定理 mem_smul_span_singleton
@@ -416,7 +432,7 @@ theorem mem_smul_span_singleton
         ⟨r * s, I.mul_mem_right _ hri, hs ▸ mul_smul r s m⟩)
       fun m1 m2 ⟨y1, hyi1, hy1⟩ ⟨y2, hyi2, hy2⟩ =>
       ⟨y1 + y2, I.add_mem hyi1 hyi2, by rw [add_smul, hy1, hy2]⟩,
-    fun ⟨_, 
+    fun ⟨_, hyi, hy⟩ => hy ▸ smul_mem_smul hyi (subset_span <| Set.mem_singleton m)⟩
 
 Depends on / 依赖: I.add_mem, I.mul_mem_right, Set.mem_singleton, add_mem, add_smul, continuousAt_const, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, mem_singleton, mem_span_singleton, mul_mem_right, mul_smul, smul_induction_on, smul_mem_smul, subset_span
 -/
@@ -445,7 +461,13 @@ theorem span_smul_span
       (fun r hr => subset_span ⟨r, hr, m, hm, rfl⟩)
       (by rw [zero_smul]; exact zero_mem _)
       (fun _ _ _ _ h₁ h₂ => by rw [add_smul]; exact add_mem h₁ h₂)
-      (fun _ _ _ h =
+      (fun _ _ _ h => by rw [smul_assoc]; exact smul_mem _ _ h) hr)
+      (fun _ _ => by rw [smul_zero]; exact zero_mem _)
+      (fun _ _ _ _ h₁ h₂ r hr => by rw [smul_add]; exact add_mem (h₁ r hr) (h₂ r hr))
+      (fun r' m hm mem r hr => by rw [← mul_smul]; exact mem _ (Ideal.mul_mem_right _ _ hr)) hm) <|
+  span_le.mpr fun m => by
+    rintro ⟨s, hs, t, ht, rfl⟩
+    exact smul_mem_smul (subset_span hs) (subset_span ht)
 
 中文:
 定理 span_smul_span
@@ -456,7 +478,13 @@ theorem span_smul_span
       (fun r hr => subset_span ⟨r, hr, m, hm, rfl⟩)
       (by rw [zero_smul]; exact zero_mem _)
       (fun _ _ _ _ h₁ h₂ => by rw [add_smul]; exact add_mem h₁ h₂)
-      (fun _ _ _ h =
+      (fun _ _ _ h => by rw [smul_assoc]; exact smul_mem _ _ h) hr)
+      (fun _ _ => by rw [smul_zero]; exact zero_mem _)
+      (fun _ _ _ _ h₁ h₂ r hr => by rw [smul_add]; exact add_mem (h₁ r hr) (h₂ r hr))
+      (fun r' m hm mem r hr => by rw [← mul_smul]; exact mem _ (Ideal.mul_mem_right _ _ hr)) hm) <|
+  span_le.mpr fun m => by
+    rintro ⟨s, hs, t, ht, rfl⟩
+    exact smul_mem_smul (subset_span hs) (subset_span ht)
 
 Depends on / 依赖: add_mem, add_smul, le_antisymm, mul_smul, revert, smul_add, smul_assoc, smul_le, smul_le.mpr, smul_mem, smul_zero, span_induction, subset_span, zero_mem, zero_smul
 -/
@@ -517,7 +545,20 @@ exact Submodule.sum_mem _ fun c _ => smul_mem_smul (ha c) subset_span Set.mem_ra
   refine fun hx => span_induction ?_ ?_ ?_ ?_ (mem_smul_span.mp hx)
   · rintro x ⟨y, hy, x, ⟨i, rfl⟩, rfl⟩
     refine ⟨Finsupp.single i y, fun j => ?_, ?_⟩
-    · 
+    · let := Classical.decEq ι
+      rw [Finsupp.single_apply]
+      split_ifs
+      · assumption
+      · exact I.zero_mem
+    refine @Finsupp.sum_single_index ι R M _ _ i _ (fun i y => y • f i) ?_
+    simp
+  · exact ⟨0, fun _ => I.zero_mem, Finsupp.sum_zero_index⟩
+  · rintro x y - - ⟨ax, hax, rfl⟩ ⟨ay, hay, rfl⟩
+    refine ⟨ax + ay, fun i => I.add_mem (hax i) (hay i), Finsupp.sum_add_index' ?_ ?_⟩ <;>
+      intros <;> simp only [zero_smul, add_smul]
+  · rintro c x - ⟨a, ha, rfl⟩
+    refine ⟨c • a, fun i => I.mul_mem_left c (ha i), ?_⟩
+    rw [Finsupp.sum_smul_index]; rw [Finsupp.smul_sum] <;> intros <;> simp only [zero_smul, mul_smul]
 
 中文:
 定理 mem_ideal_smul_span_iff_存在_sum
@@ -529,7 +570,20 @@ exact Submodule.sum_mem _ fun c _ => smul_mem_smul (ha c) subset_span Set.mem_ra
   refine fun hx => span_induction ?_ ?_ ?_ ?_ (mem_smul_span.mp hx)
   · rintro x ⟨y, hy, x, ⟨i, rfl⟩, rfl⟩
     refine ⟨Finsupp.single i y, fun j => ?_, ?_⟩
-    · 
+    · let := Classical.decEq ι
+      rw [Finsupp.single_apply]
+      split_ifs
+      · assumption
+      · exact I.zero_mem
+    refine @Finsupp.sum_single_index ι R M _ _ i _ (fun i y => y • f i) ?_
+    simp
+  · exact ⟨0, fun _ => I.zero_mem, Finsupp.sum_zero_index⟩
+  · rintro x y - - ⟨ax, hax, rfl⟩ ⟨ay, hay, rfl⟩
+    refine ⟨ax + ay, fun i => I.add_mem (hax i) (hay i), Finsupp.sum_add_index' ?_ ?_⟩ <;>
+      intros <;> simp only [zero_smul, add_smul]
+  · rintro c x - ⟨a, ha, rfl⟩
+    refine ⟨c • a, fun i => I.mul_mem_left c (ha i), ?_⟩
+    rw [Finsupp.sum_smul_index]; rw [Finsupp.smul_sum] <;> intros <;> simp only [zero_smul, mul_smul]
 
 Depends on / 依赖: Classical, Classical.decEq, Finsupp, Finsupp.single, Finsupp.single_apply, Finsupp.sum_single_index, Finsupp.sum_ze, I.zero_mem, Set.mem_range_self, Submodule, Submodule.sum_mem, mem_range_self, mem_smul_span, mem_smul_span.mp, single, single_apply, smul_mem_smul, span_induction, split_ifs, subset_span
 -/
@@ -1654,7 +1708,7 @@ theorem sup_mul_eq_of_coprime_left
     rw [eq_top_iff_one] at h; rw [Submodule.mem_sup] at h hi ⊢
     obtain ⟨i1, hi1, j, hj, h⟩ := h; obtain ⟨i', hi', k, hk, rfl⟩ := hi
     refine ⟨_, add_mem hi' (mul_mem_right k _ hi1), _, mul_mem_mul hj hk, ?_⟩
-    rw [add_assoc]; rw [← a
+    rw [add_assoc]; rw [← add_mul]; rw [h]; rw [one_mul]
 
 中文:
 定理 sup_mul_eq_of_coprime_left
@@ -1664,7 +1718,7 @@ theorem sup_mul_eq_of_coprime_left
     rw [eq_top_iff_one] at h; rw [Submodule.mem_sup] at h hi ⊢
     obtain ⟨i1, hi1, j, hj, h⟩ := h; obtain ⟨i', hi', k, hk, rfl⟩ := hi
     refine ⟨_, add_mem hi' (mul_mem_right k _ hi1), _, mul_mem_mul hj hk, ?_⟩
-    rw [add_assoc]; rw [← a
+    rw [add_assoc]; rw [← add_mul]; rw [h]; rw [one_mul]
 
 Depends on / 依赖: Submodule, Submodule.mem_sup, add_assoc, add_mem, add_mul, eq_top_iff_one, le_antisymm, mem_sup, mul_le_right, mul_mem_mul, mul_mem_right, one_mul, sup_le_sup_left
 -/
@@ -1686,7 +1740,7 @@ theorem sup_mul_eq_of_coprime_right
     rw [eq_top_iff_one] at h; rw [Submodule.mem_sup] at h hi ⊢
     obtain ⟨i1, hi1, k, hk, h⟩ := h; obtain ⟨i', hi', j, hj, rfl⟩ := hi
     refine ⟨_, add_mem hi' (mul_mem_left _ j hi1), _, mul_mem_mul hj hk, ?_⟩
-    rw [add_assoc]; rw [← mul
+    rw [add_assoc]; rw [← mul_add]; rw [h]; rw [mul_one]
 
 中文:
 定理 sup_mul_eq_of_coprime_right
@@ -1696,7 +1750,7 @@ theorem sup_mul_eq_of_coprime_right
     rw [eq_top_iff_one] at h; rw [Submodule.mem_sup] at h hi ⊢
     obtain ⟨i1, hi1, k, hk, h⟩ := h; obtain ⟨i', hi', j, hj, rfl⟩ := hi
     refine ⟨_, add_mem hi' (mul_mem_left _ j hi1), _, mul_mem_mul hj hk, ?_⟩
-    rw [add_assoc]; rw [← mul
+    rw [add_assoc]; rw [← mul_add]; rw [h]; rw [mul_one]
 
 Depends on / 依赖: Submodule, Submodule.mem_sup, add_assoc, add_mem, eq_top_iff_one, le_antisymm, mem_sup, mul_add, mul_le_left, mul_mem_left, mul_mem_mul, mul_one, sup_le_sup_left
 -/
@@ -2210,7 +2264,9 @@ lemma sup_pow_add_le_pow_sup_pow
   by_cases hn : n <= i
   · exact (Ideal.mul_le_left.trans (Ideal.mul_le_left.trans
       ((Ideal.pow_le_pow_right hn).trans le_sup_left)))
-  · refine (Ideal.mul_le_left.trans
+  · refine (Ideal.mul_le_left.trans (Ideal.mul_le_right.trans
+      ((Ideal.pow_le_pow_right ?_).trans le_sup_right)))
+    lia
 
 中文:
 引理 sup_pow_add_le_pow_sup_pow
@@ -2223,7 +2279,9 @@ lemma sup_pow_add_le_pow_sup_pow
   by_cases hn : n <= i
   · exact (Ideal.mul_le_left.trans (Ideal.mul_le_left.trans
       ((Ideal.pow_le_pow_right hn).trans le_sup_left)))
-  · refine (Ideal.mul_le_left.trans
+  · refine (Ideal.mul_le_left.trans (Ideal.mul_le_right.trans
+      ((Ideal.pow_le_pow_right ?_).trans le_sup_right)))
+    lia
 
 Depends on / 依赖: Finset, Finset.sup_le, Ideal.add_eq_sup, Ideal.mul_le_left.trans, Ideal.mul_le_right.trans, Ideal.pow_le_pow_right, Ideal.sum_eq_sup, add_eq_sup, add_pow, le_sup_left, le_sup_right, mul_le_left, mul_le_right, pow_le_pow_right, sum_eq_sup, sup_le
 -/
@@ -2674,7 +2732,7 @@ theorem sup_eq_top_iff_isCoprime
     rw [← hu.choose_spec]; rw [← hv.choose_spec] at h1
     exact ⟨_, _, h1⟩
   · exact fun ⟨u, v, h1⟩ =>
-      ⟨_, mem_span_singleton'.mpr ⟨_, rfl⟩, _, mem_span_singleton
+      ⟨_, mem_span_singleton'.mpr ⟨_, rfl⟩, _, mem_span_singleton'.mpr ⟨_, rfl⟩, h1⟩
 
 中文:
 定理 sup_eq_top_iff_isCoprime
@@ -2687,7 +2745,7 @@ theorem sup_eq_top_iff_isCoprime
     rw [← hu.choose_spec]; rw [← hv.choose_spec] at h1
     exact ⟨_, _, h1⟩
   · exact fun ⟨u, v, h1⟩ =>
-      ⟨_, mem_span_singleton'.mpr ⟨_, rfl⟩, _, mem_span_singleton
+      ⟨_, mem_span_singleton'.mpr ⟨_, rfl⟩, _, mem_span_singleton'.mpr ⟨_, rfl⟩, h1⟩
 
 Depends on / 依赖: Submodule, Submodule.mem_sup, choose_spec, eq_top_iff_one, hu.choose_spec, hv.choose_spec, mem_span_singleton, mem_sup
 -/
@@ -2893,7 +2951,8 @@ theorem isCoprime_iff_codisjoint
     rw [hxy]
     simp only [one_eq_top, Submodule.mem_top]
   · intro h
-  
+    refine ⟨1, 1, ?_⟩
+    simpa only [one_eq_top, top_mul, Submodule.add_eq_sup]
 
 中文:
 定理 isCoprime_iff_codisjoint
@@ -2908,7 +2967,8 @@ theorem isCoprime_iff_codisjoint
     rw [hxy]
     simp only [one_eq_top, Submodule.mem_top]
   · intro h
-  
+    refine ⟨1, 1, ?_⟩
+    simpa only [one_eq_top, top_mul, Submodule.add_eq_sup]
 
 Depends on / 依赖: IsCoprime, Submodule, Submodule.add_eq_sup, Submodule.mem_top, add_eq_sup, codisjoint_iff, eq_top_iff_one, le_sup_left, le_sup_right, mem_top, mul_le_right, mul_le_right.trans, one_eq_top, sup_le, top_mul
 -/
@@ -3262,7 +3322,7 @@ theorem prod_eq_iInf_of_pairwise_isCoprime
     simp_all only [Finset.iInf_insert, Finset.coe_insert, Set.pairwise_insert, SetLike.mem_coe,
       ne_eq, not_false_eq_true, Finset.prod_insert, forall_const]
     obtain ⟨hp1, hp2⟩ := hp
-    rw [Ide
+    rw [Ideal.mul_eq_inf_of_isCoprime (isCoprime_biInf (by grind))]
 
 中文:
 定理 prod_eq_iInf_of_pairwise_isCoprime
@@ -3275,7 +3335,7 @@ theorem prod_eq_iInf_of_pairwise_isCoprime
     simp_all only [Finset.iInf_insert, Finset.coe_insert, Set.pairwise_insert, SetLike.mem_coe,
       ne_eq, not_false_eq_true, Finset.prod_insert, forall_const]
     obtain ⟨hp1, hp2⟩ := hp
-    rw [Ide
+    rw [Ideal.mul_eq_inf_of_isCoprime (isCoprime_biInf (by grind))]
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.iInf_insert, Finset.induction, Finset.prod_insert, Ideal.mul_eq_inf_of_isCoprime, Set.pairwise_insert, SetLike, SetLike.mem_coe, classical, coe_insert, forall_const, iInf_insert, insert, isCoprime_biInf, mem_coe, mul_eq_inf_of_isCoprime, ne_eq, not_false_eq_true, pairwise_insert
 -/
@@ -3978,7 +4038,35 @@ theorem radical_eq_sInf
         zorn_le_nonempty₀ { K : Ideal R | r ∉ radical K }
           (fun c hc hcc y hyc =>
             ⟨sSup c, fun ⟨n, hrnc⟩ =>
-              let ⟨_, hyc, hrny⟩ := (Sub
+              let ⟨_, hyc, hrny⟩ := (Submodule.mem_sSup_of_directed ⟨y, hyc⟩ hcc.directedOn).1 hrnc
+              hc hyc ⟨n, hrny⟩,
+              fun _ => le_sSup⟩)
+          I hri
+      have hrm : r ∉ radical m := hm.prop
+      have : forall x ∉ m, r in radical (m ⊔ span {x}) := fun x hxm =>
+by_contradiction fun hrmx => hxm by
+          rw [hm.eq_of_le hrmx le_sup_left]
+exact Submodule.mem_sup_right mem_span_singleton_self x
+      have : IsPrime m :=
+        ⟨by rintro rfl; rw [radical_top] at hrm; exact hrm trivial, fun {x y} hxym =>
+          or_iff_not_imp_left.2 fun hxm =>
+            by_contradiction fun hym =>
+              let ⟨n, hrn⟩ := this _ hxm
+              let ⟨p, hpm, q, hq, hpqrn⟩ := Submodule.mem_sup.1 hrn
+              let ⟨c, hcxq⟩ := mem_span_singleton'.1 hq
+              let ⟨k, hrk⟩ := this _ hym
+              let ⟨f, hfm, g, hg, hfgrk⟩ := Submodule.mem_sup.1 hrk
+              let ⟨d, hdyg⟩ := mem_span_singleton'.1 hg
+              hrm
+                ⟨n + k, by
+                  rw [pow_add]; rw [← hpqrn]; rw [← hcxq]; rw [← hfgrk]; rw [← hdyg]; rw [add_mul]; rw [mul_add (c * x)]; rw [mul_assoc c x (d * y)]; rw [mul_left_comm x]; rw [← mul_assoc]
+                  refine
+                    m.add_mem (m.mul_mem_right _ hpm)
+                    (m.add_mem (m.mul_mem_left _ hfm) (m.mul_mem_left _ hxym))⟩⟩
+hrm
+      this.radical.symm ▸ (sInf_le ⟨hIm, this⟩ : sInf { J : Ideal R | I <= J ∧ IsPrime J } <= m) hr
+
+@[deprecated isRadical_bot (since := "2026-08-03")]
 
 中文:
 定理 radical_eq_sInf
@@ -3990,7 +4078,35 @@ theorem radical_eq_sInf
         zorn_le_nonempty₀ { K : Ideal R | r ∉ radical K }
           (fun c hc hcc y hyc =>
             ⟨sSup c, fun ⟨n, hrnc⟩ =>
-              let ⟨_, hyc, hrny⟩ := (Sub
+              let ⟨_, hyc, hrny⟩ := (Submodule.mem_sSup_of_directed ⟨y, hyc⟩ hcc.directedOn).1 hrnc
+              hc hyc ⟨n, hrny⟩,
+              fun _ => le_sSup⟩)
+          I hri
+      have hrm : r ∉ radical m := hm.prop
+      have : forall x ∉ m, r in radical (m ⊔ span {x}) := fun x hxm =>
+by_contradiction fun hrmx => hxm by
+          rw [hm.eq_of_le hrmx le_sup_left]
+exact Submodule.mem_sup_right mem_span_singleton_self x
+      have : IsPrime m :=
+        ⟨by rintro rfl; rw [radical_top] at hrm; exact hrm trivial, fun {x y} hxym =>
+          or_iff_not_imp_left.2 fun hxm =>
+            by_contradiction fun hym =>
+              let ⟨n, hrn⟩ := this _ hxm
+              let ⟨p, hpm, q, hq, hpqrn⟩ := Submodule.mem_sup.1 hrn
+              let ⟨c, hcxq⟩ := mem_span_singleton'.1 hq
+              let ⟨k, hrk⟩ := this _ hym
+              let ⟨f, hfm, g, hg, hfgrk⟩ := Submodule.mem_sup.1 hrk
+              let ⟨d, hdyg⟩ := mem_span_singleton'.1 hg
+              hrm
+                ⟨n + k, by
+                  rw [pow_add]; rw [← hpqrn]; rw [← hcxq]; rw [← hfgrk]; rw [← hdyg]; rw [add_mul]; rw [mul_add (c * x)]; rw [mul_assoc c x (d * y)]; rw [mul_left_comm x]; rw [← mul_assoc]
+                  refine
+                    m.add_mem (m.mul_mem_right _ hpm)
+                    (m.add_mem (m.mul_mem_left _ hfm) (m.mul_mem_left _ hxym))⟩⟩
+hrm
+      this.radical.symm ▸ (sInf_le ⟨hIm, this⟩ : sInf { J : Ideal R | I <= J ∧ IsPrime J } <= m) hr
+
+@[deprecated isRadical_bot (since := "2026-08-03")]
 
 Depends on / 依赖: Submodule, Submodule.mem_sSup_of_directed, by_contradiction, directedOn, eq_of_l, hcc.directedOn, hm.eq_of_l, hm.prop, le_antisymm, le_sInf, le_sSup, mem_sSup_of_directed, radical, radical_le_iff
 -/
@@ -4440,7 +4556,94 @@ theorem subset_union_prime'
         (fun h =>
 Set.Subset.trans h
             Set.Subset.trans Set.subset_union_left Set.subset_union_left)
-        fu
+        fun h =>
+        Or.casesOn h
+          (fun h =>
+Set.Subset.trans h
+              Set.Subset.trans Set.subset_union_right Set.subset_union_left)
+          fun ⟨i, his, hi⟩ => by
+refine Set.Subset.trans hi Set.Subset.trans ?_ Set.subset_union_right
+          exact Set.subset_biUnion_of_mem (u := fun x => (f x : Set R)) (Finset.mem_coe.2 his)⟩
+  generalize hn : s.card = n; intro h
+  induction n generalizing a b s with
+  | zero =>
+    clear hp
+    rw [Finset.card_eq_zero] at hn
+    subst hn
+    rw [Finset.coe_empty]; rw [Set.biUnion_empty]; rw [Set.union_empty]; rw [subset_union] at h
+    simpa only [exists_prop, Finset.notMem_empty, false_and, exists_false, or_false]
+  | succ n ih =>
+    classical
+    replace hn : exists (i : ι) (t : Finset ι), i ∉ t ∧ insert i t = s ∧ t.card = n :=
+      Finset.card_eq_succ.1 hn
+    rcases hn with ⟨i, t, hit, rfl, hn⟩
+    replace hp : IsPrime (f i) ∧ forall x in t, IsPrime (f x) := (t.forall_mem_insert _ _).1 hp
+    by_cases Ht : exists j in t, f j <= f i
+    · obtain ⟨j, hjt, hfji⟩ : exists j in t, f j <= f i := Ht
+      obtain ⟨u, hju, rfl⟩ : exists u, j ∉ u ∧ insert j u = t :=
+        ⟨t.erase j, t.notMem_erase j, Finset.insert_erase hjt⟩
+      have hp' : forall k in insert i u, IsPrime (f k) := by
+        rw [Finset.forall_mem_insert] at hp ⊢
+        exact ⟨hp.1, hp.2.2⟩
+      have hiu : i ∉ u := mt Finset.mem_insert_of_mem hit
+      have hn' : (insert i u).card = n := by
+        rwa [Finset.card_insert_of_notMem] at hn ⊢
+        exacts [hiu, hju]
+      have h' : (I : Set R) subseteq f a union f b union ⋃ k in (↑(insert i u) : Set ι), f k := by
+        rw [Finset.coe_insert] at h ⊢
+        rw [Finset.coe_insert] at h
+        simp only [Set.biUnion_insert] at h ⊢
+        rw [← Set.union_assoc (f i : Set R)]; rw [Set.union_eq_self_of_subset_right hfji] at h
+        exact h
+      specialize ih hp' hn' h'
+      refine ih.imp id (Or.imp id (Exists.imp fun k => ?_))
+      exact And.imp (fun hk => Finset.insert_subset_insert i (Finset.subset_insert j u) hk) id
+    by_cases Ha : f a <= f i
+    · have h' : (I : Set R) subseteq f i union f b union ⋃ j in (↑t : Set ι), f j := by
+        rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [← Set.union_assoc]; rw [Set.union_right_comm (f a : Set R)]; rw [Set.union_eq_self_of_subset_left Ha] at h
+        exact h
+      specialize ih hp.2 hn h'
+      right
+      rcases ih with (ih | ih | ⟨k, hkt, ih⟩)
+      · exact Or.inr ⟨i, Finset.mem_insert_self i t, ih⟩
+      · exact Or.inl ih
+      · exact Or.inr ⟨k, Finset.mem_insert_of_mem hkt, ih⟩
+    by_cases Hb : f b <= f i
+    · have h' : (I : Set R) subseteq f a union f i union ⋃ j in (↑t : Set ι), f j := by
+        rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [← Set.union_assoc]; rw [Set.union_assoc (f a : Set R)]; rw [Set.union_eq_self_of_subset_left Hb] at h
+        exact h
+      specialize ih hp.2 hn h'
+      rcases ih with (ih | ih | ⟨k, hkt, ih⟩)
+      · exact Or.inl ih
+      · exact Or.inr (Or.inr ⟨i, Finset.mem_insert_self i t, ih⟩)
+      · exact Or.inr (Or.inr ⟨k, Finset.mem_insert_of_mem hkt, ih⟩)
+    by_cases Hi : I <= f i
+    · exact Or.inr (Or.inr ⟨i, Finset.mem_insert_self i t, Hi⟩)
+    have : ¬I ⊓ f a ⊓ f b ⊓ t.inf f <= f i := by
+      simp only [hp.1.inf_le, hp.1.inf_le', not_or]
+      exact ⟨⟨⟨Hi, Ha⟩, Hb⟩, Ht⟩
+    rcases Set.not_subset.1 this with ⟨r, ⟨⟨⟨hrI, hra⟩, hrb⟩, hr⟩, hri⟩
+    by_cases HI : (I : Set R) subseteq f a union f b union ⋃ j in (↑t : Set ι), f j
+    · specialize ih hp.2 hn HI
+      rcases ih with (ih | ih | ⟨k, hkt, ih⟩)
+      · order
+      · order
+      · right
+        right
+        exact ⟨k, Finset.mem_insert_of_mem hkt, ih⟩
+    exfalso
+    rcases Set.not_subset.1 HI with ⟨s, hsI, hs⟩
+    rw [Finset.coe_insert]; rw [Set.biUnion_insert] at h
+    have hsi : s in f i := ((h hsI).resolve_left (mt Or.inl hs)).resolve_right (mt Or.inr hs)
+    rcases h (I.add_mem hrI hsI) with (⟨ha | hb⟩ | hi | ht)
+    · exact hs (Or.inl <| Or.inl <| add_sub_cancel_left r s ▸ (f a).sub_mem ha hra)
+    · exact hs (Or.inl <| Or.inr <| add_sub_cancel_left r s ▸ (f b).sub_mem hb hrb)
+    · exact hri (add_sub_cancel_right r s ▸ (f i).sub_mem hi hsi)
+    · rw [Set.mem_iUnion₂] at ht
+      rcases ht with ⟨j, hjt, hj⟩
+      simp only [Finset.inf_eq_iInf, SetLike.mem_coe, Submodule.mem_iInf] at hr
+exact hs Or.inr Set.mem_biUnion hjt
+add_sub_cancel_left r s ▸ (f j).sub_mem hj hr j hjt
 
 中文:
 定理 subset_union_prime'
@@ -4453,7 +4656,94 @@ Set.Subset.trans h
         (fun h =>
 Set.Subset.trans h
             Set.Subset.trans Set.subset_union_left Set.subset_union_left)
-        fu
+        fun h =>
+        Or.casesOn h
+          (fun h =>
+Set.Subset.trans h
+              Set.Subset.trans Set.subset_union_right Set.subset_union_left)
+          fun ⟨i, his, hi⟩ => by
+refine Set.Subset.trans hi Set.Subset.trans ?_ Set.subset_union_right
+          exact Set.subset_biUnion_of_mem (u := fun x => (f x : Set R)) (Finset.mem_coe.2 his)⟩
+  generalize hn : s.card = n; intro h
+  induction n generalizing a b s with
+  | zero =>
+    clear hp
+    rw [Finset.card_eq_zero] at hn
+    subst hn
+    rw [Finset.coe_empty]; rw [Set.biUnion_empty]; rw [Set.union_empty]; rw [subset_union] at h
+    simpa only [exists_prop, Finset.notMem_empty, false_and, exists_false, or_false]
+  | succ n ih =>
+    classical
+    replace hn : exists (i : ι) (t : Finset ι), i ∉ t ∧ insert i t = s ∧ t.card = n :=
+      Finset.card_eq_succ.1 hn
+    rcases hn with ⟨i, t, hit, rfl, hn⟩
+    replace hp : IsPrime (f i) ∧ forall x in t, IsPrime (f x) := (t.forall_mem_insert _ _).1 hp
+    by_cases Ht : exists j in t, f j <= f i
+    · obtain ⟨j, hjt, hfji⟩ : exists j in t, f j <= f i := Ht
+      obtain ⟨u, hju, rfl⟩ : exists u, j ∉ u ∧ insert j u = t :=
+        ⟨t.erase j, t.notMem_erase j, Finset.insert_erase hjt⟩
+      have hp' : forall k in insert i u, IsPrime (f k) := by
+        rw [Finset.forall_mem_insert] at hp ⊢
+        exact ⟨hp.1, hp.2.2⟩
+      have hiu : i ∉ u := mt Finset.mem_insert_of_mem hit
+      have hn' : (insert i u).card = n := by
+        rwa [Finset.card_insert_of_notMem] at hn ⊢
+        exacts [hiu, hju]
+      have h' : (I : Set R) subseteq f a union f b union ⋃ k in (↑(insert i u) : Set ι), f k := by
+        rw [Finset.coe_insert] at h ⊢
+        rw [Finset.coe_insert] at h
+        simp only [Set.biUnion_insert] at h ⊢
+        rw [← Set.union_assoc (f i : Set R)]; rw [Set.union_eq_self_of_subset_right hfji] at h
+        exact h
+      specialize ih hp' hn' h'
+      refine ih.imp id (Or.imp id (Exists.imp fun k => ?_))
+      exact And.imp (fun hk => Finset.insert_subset_insert i (Finset.subset_insert j u) hk) id
+    by_cases Ha : f a <= f i
+    · have h' : (I : Set R) subseteq f i union f b union ⋃ j in (↑t : Set ι), f j := by
+        rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [← Set.union_assoc]; rw [Set.union_right_comm (f a : Set R)]; rw [Set.union_eq_self_of_subset_left Ha] at h
+        exact h
+      specialize ih hp.2 hn h'
+      right
+      rcases ih with (ih | ih | ⟨k, hkt, ih⟩)
+      · exact Or.inr ⟨i, Finset.mem_insert_self i t, ih⟩
+      · exact Or.inl ih
+      · exact Or.inr ⟨k, Finset.mem_insert_of_mem hkt, ih⟩
+    by_cases Hb : f b <= f i
+    · have h' : (I : Set R) subseteq f a union f i union ⋃ j in (↑t : Set ι), f j := by
+        rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [← Set.union_assoc]; rw [Set.union_assoc (f a : Set R)]; rw [Set.union_eq_self_of_subset_left Hb] at h
+        exact h
+      specialize ih hp.2 hn h'
+      rcases ih with (ih | ih | ⟨k, hkt, ih⟩)
+      · exact Or.inl ih
+      · exact Or.inr (Or.inr ⟨i, Finset.mem_insert_self i t, ih⟩)
+      · exact Or.inr (Or.inr ⟨k, Finset.mem_insert_of_mem hkt, ih⟩)
+    by_cases Hi : I <= f i
+    · exact Or.inr (Or.inr ⟨i, Finset.mem_insert_self i t, Hi⟩)
+    have : ¬I ⊓ f a ⊓ f b ⊓ t.inf f <= f i := by
+      simp only [hp.1.inf_le, hp.1.inf_le', not_or]
+      exact ⟨⟨⟨Hi, Ha⟩, Hb⟩, Ht⟩
+    rcases Set.not_subset.1 this with ⟨r, ⟨⟨⟨hrI, hra⟩, hrb⟩, hr⟩, hri⟩
+    by_cases HI : (I : Set R) subseteq f a union f b union ⋃ j in (↑t : Set ι), f j
+    · specialize ih hp.2 hn HI
+      rcases ih with (ih | ih | ⟨k, hkt, ih⟩)
+      · order
+      · order
+      · right
+        right
+        exact ⟨k, Finset.mem_insert_of_mem hkt, ih⟩
+    exfalso
+    rcases Set.not_subset.1 HI with ⟨s, hsI, hs⟩
+    rw [Finset.coe_insert]; rw [Set.biUnion_insert] at h
+    have hsi : s in f i := ((h hsI).resolve_left (mt Or.inl hs)).resolve_right (mt Or.inr hs)
+    rcases h (I.add_mem hrI hsI) with (⟨ha | hb⟩ | hi | ht)
+    · exact hs (Or.inl <| Or.inl <| add_sub_cancel_left r s ▸ (f a).sub_mem ha hra)
+    · exact hs (Or.inl <| Or.inr <| add_sub_cancel_left r s ▸ (f b).sub_mem hb hrb)
+    · exact hri (add_sub_cancel_right r s ▸ (f i).sub_mem hi hsi)
+    · rw [Set.mem_iUnion₂] at ht
+      rcases ht with ⟨j, hjt, hj⟩
+      simp only [Finset.inf_eq_iInf, SetLike.mem_coe, Submodule.mem_iInf] at hr
+exact hs Or.inr Set.mem_biUnion hjt
+add_sub_cancel_left r s ▸ (f j).sub_mem hj hr j hjt
 
 Depends on / 依赖: Or.casesOn, Set.Subset.trans, Set.subset_biUnion_of_mem, Set.subset_union_left, Set.subset_union_right, Subset, casesOn, subset_biUnion_of_mem, subset_union_left, subset_union_right, subseteq
 -/
@@ -4568,7 +4858,50 @@ theorem subset_union_prime
     have aux := fun h => (bex_def.2 <| this h)
     simp_rw [exists_prop] at aux
     refine ⟨aux, fun ⟨i, his, hi⟩ => Set.Subset.trans hi ?_⟩
-    apply Set.subset_biUnion_of_mem (show i in (↑s : Set ι) from his
+    apply Set.subset_biUnion_of_mem (show i in (↑s : Set ι) from his)
+  fun h : (I : Set R) subseteq ⋃ i in (↑s : Set ι), f i => by
+  classical
+    by_cases has : a in s
+    · obtain ⟨t, hat, rfl⟩ : exists t, a ∉ t ∧ insert a t = s :=
+        ⟨s.erase a, Finset.notMem_erase a s, Finset.insert_erase has⟩
+      by_cases hbt : b in t
+      · obtain ⟨u, hbu, rfl⟩ : exists u, b ∉ u ∧ insert b u = t :=
+          ⟨t.erase b, Finset.notMem_erase b t, Finset.insert_erase hbt⟩
+        have hp' : forall i in u, IsPrime (f i) := by
+          intro i hiu
+          refine hp i (Finset.mem_insert_of_mem (Finset.mem_insert_of_mem hiu)) ?_ ?_ <;>
+              rintro rfl <;>
+            solve_by_elim only [Finset.mem_insert_of_mem, *]
+        rw [Finset.coe_insert]; rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [Set.biUnion_insert]; rw [←
+          Set.union_assoc]; rw [subset_union_prime' hp'] at h
+        rwa [Finset.exists_mem_insert, Finset.exists_mem_insert]
+      · have hp' : forall j in t, IsPrime (f j) := by
+          intro j hj
+          refine hp j (Finset.mem_insert_of_mem hj) ?_ ?_ <;> rintro rfl <;>
+            solve_by_elim only [Finset.mem_insert_of_mem, *]
+        rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [← Set.union_self (f a : Set R)]; rw [subset_union_prime' hp']; rw [← or_assoc]; rw [or_self_iff] at h
+        rwa [Finset.exists_mem_insert]
+    · by_cases hbs : b in s
+      · obtain ⟨t, hbt, rfl⟩ : exists t, b ∉ t ∧ insert b t = s :=
+          ⟨s.erase b, Finset.notMem_erase b s, Finset.insert_erase hbs⟩
+        have hp' : forall j in t, IsPrime (f j) := by
+          intro j hj
+          refine hp j (Finset.mem_insert_of_mem hj) ?_ ?_ <;> rintro rfl <;>
+            solve_by_elim only [Finset.mem_insert_of_mem, *]
+        rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [← Set.union_self (f b : Set R)]; rw [subset_union_prime' hp']; rw [← or_assoc]; rw [or_self_iff] at h
+        rwa [Finset.exists_mem_insert]
+      rcases s.eq_empty_or_nonempty with rfl | hsne
+      · rw [Finset.coe_empty, Set.biUnion_empty] at h
+        exact (h I.zero_mem).elim
+      · obtain ⟨i, his⟩ := hsne
+        obtain ⟨t, _, rfl⟩ : exists t, i ∉ t ∧ insert i t = s :=
+          ⟨s.erase i, Finset.notMem_erase i s, Finset.insert_erase his⟩
+        have hp' : forall j in t, IsPrime (f j) := by
+          intro j hj
+          refine hp j (Finset.mem_insert_of_mem hj) ?_ ?_ <;> rintro rfl <;>
+            solve_by_elim only [Finset.mem_insert_of_mem, *]
+        rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [← Set.union_self (f i : Set R)]; rw [subset_union_prime' hp']; rw [← or_assoc]; rw [or_self_iff] at h
+        rwa [Finset.exists_mem_insert]
 
 中文:
 定理 subset_union_prime
@@ -4577,7 +4910,50 @@ theorem subset_union_prime
     have aux := fun h => (bex_def.2 <| this h)
     simp_rw [exists_prop] at aux
     refine ⟨aux, fun ⟨i, his, hi⟩ => Set.Subset.trans hi ?_⟩
-    apply Set.subset_biUnion_of_mem (show i in (↑s : Set ι) from his
+    apply Set.subset_biUnion_of_mem (show i in (↑s : Set ι) from his)
+  fun h : (I : Set R) subseteq ⋃ i in (↑s : Set ι), f i => by
+  classical
+    by_cases has : a in s
+    · obtain ⟨t, hat, rfl⟩ : exists t, a ∉ t ∧ insert a t = s :=
+        ⟨s.erase a, Finset.notMem_erase a s, Finset.insert_erase has⟩
+      by_cases hbt : b in t
+      · obtain ⟨u, hbu, rfl⟩ : exists u, b ∉ u ∧ insert b u = t :=
+          ⟨t.erase b, Finset.notMem_erase b t, Finset.insert_erase hbt⟩
+        have hp' : forall i in u, IsPrime (f i) := by
+          intro i hiu
+          refine hp i (Finset.mem_insert_of_mem (Finset.mem_insert_of_mem hiu)) ?_ ?_ <;>
+              rintro rfl <;>
+            solve_by_elim only [Finset.mem_insert_of_mem, *]
+        rw [Finset.coe_insert]; rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [Set.biUnion_insert]; rw [←
+          Set.union_assoc]; rw [subset_union_prime' hp'] at h
+        rwa [Finset.exists_mem_insert, Finset.exists_mem_insert]
+      · have hp' : forall j in t, IsPrime (f j) := by
+          intro j hj
+          refine hp j (Finset.mem_insert_of_mem hj) ?_ ?_ <;> rintro rfl <;>
+            solve_by_elim only [Finset.mem_insert_of_mem, *]
+        rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [← Set.union_self (f a : Set R)]; rw [subset_union_prime' hp']; rw [← or_assoc]; rw [or_self_iff] at h
+        rwa [Finset.exists_mem_insert]
+    · by_cases hbs : b in s
+      · obtain ⟨t, hbt, rfl⟩ : exists t, b ∉ t ∧ insert b t = s :=
+          ⟨s.erase b, Finset.notMem_erase b s, Finset.insert_erase hbs⟩
+        have hp' : forall j in t, IsPrime (f j) := by
+          intro j hj
+          refine hp j (Finset.mem_insert_of_mem hj) ?_ ?_ <;> rintro rfl <;>
+            solve_by_elim only [Finset.mem_insert_of_mem, *]
+        rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [← Set.union_self (f b : Set R)]; rw [subset_union_prime' hp']; rw [← or_assoc]; rw [or_self_iff] at h
+        rwa [Finset.exists_mem_insert]
+      rcases s.eq_empty_or_nonempty with rfl | hsne
+      · rw [Finset.coe_empty, Set.biUnion_empty] at h
+        exact (h I.zero_mem).elim
+      · obtain ⟨i, his⟩ := hsne
+        obtain ⟨t, _, rfl⟩ : exists t, i ∉ t ∧ insert i t = s :=
+          ⟨s.erase i, Finset.notMem_erase i s, Finset.insert_erase his⟩
+        have hp' : forall j in t, IsPrime (f j) := by
+          intro j hj
+          refine hp j (Finset.mem_insert_of_mem hj) ?_ ?_ <;> rintro rfl <;>
+            solve_by_elim only [Finset.mem_insert_of_mem, *]
+        rw [Finset.coe_insert]; rw [Set.biUnion_insert]; rw [← Set.union_self (f i : Set R)]; rw [subset_union_prime' hp']; rw [← or_assoc]; rw [or_self_iff] at h
+        rwa [Finset.exists_mem_insert]
 
 Depends on / 依赖: Finset, Finset.insert_erase, Finset.notMem_erase, Set.Subset.trans, Set.subset_biUnion_of_mem, Subset, bex_def, classical, exists_prop, insert, insert_erase, notMem_erase, s.erase, simp_rw, subset_biUnion_of_mem, subseteq
 -/
@@ -4644,7 +5020,10 @@ lemma subset_union_prime_finite
   have heq : ⋃ i in s, f i = ⋃ i in t, (f i : Set R) := by
     ext
     simpa using exists_congr (fun i => (and_congr_left fun a => ht i).symm)
-  have hmem_union : ((I : Set R) subseteq ⋃ i in s, f i) ↔ ((I : Set R) subseteq ⋃ i in (t : Set ι), f i
+  have hmem_union : ((I : Set R) subseteq ⋃ i in s, f i) ↔ ((I : Set R) subseteq ⋃ i in (t : Set ι), f i) :=
+    (congrArg _ heq).to_iff
+  rw [hmem_union]; rw [Ideal.subset_union_prime a b (fun i hin => hp i ((ht i).mp hin))]
+  exact exists_congr (fun i => and_congr_left fun _ => ht i)
 
 中文:
 引理 subset_union_prime_finite
@@ -4654,7 +5033,10 @@ lemma subset_union_prime_finite
   have heq : ⋃ i in s, f i = ⋃ i in t, (f i : Set R) := by
     ext
     simpa using exists_congr (fun i => (and_congr_left fun a => ht i).symm)
-  have hmem_union : ((I : Set R) subseteq ⋃ i in s, f i) ↔ ((I : Set R) subseteq ⋃ i in (t : Set ι), f i
+  have hmem_union : ((I : Set R) subseteq ⋃ i in s, f i) ↔ ((I : Set R) subseteq ⋃ i in (t : Set ι), f i) :=
+    (congrArg _ heq).to_iff
+  rw [hmem_union]; rw [Ideal.subset_union_prime a b (fun i hin => hp i ((ht i).mp hin))]
+  exact exists_congr (fun i => and_congr_left fun _ => ht i)
 
 Depends on / 依赖: Finite, Ideal.subset_union_prime, Set.Finite.exists_finset, and_congr_left, exists_congr, exists_finset, hmem_union, subset_union_prime, subseteq, to_iff
 -/
@@ -4719,7 +5101,10 @@ theorem IsMaximal.exists_inv_pow
       obtain ⟨z, hz⟩ := ih
       refine ⟨z * i + y, ?_⟩
       trans z * i * x + i * i ^ n + y * x
-      
+      · ring
+      · rw [mul_comm z i, mul_assoc, ← mul_add, hz, add_comm]
+        simpa
+  exact ⟨y, i ^ n, Ideal.pow_mem_pow hmem n, hy⟩
 
 中文:
 定理 是极大.存在_inv_pow
@@ -4733,7 +5118,10 @@ theorem IsMaximal.exists_inv_pow
       obtain ⟨z, hz⟩ := ih
       refine ⟨z * i + y, ?_⟩
       trans z * i * x + i * i ^ n + y * x
-      
+      · ring
+      · rw [mul_comm z i, mul_assoc, ← mul_add, hz, add_comm]
+        simpa
+  exact ⟨y, i ^ n, Ideal.pow_mem_pow hmem n, hy⟩
 
 Depends on / 依赖: Ideal.IsMaximal.exists_inv, Ideal.pow_mem_pow, IsMaximal, add_comm, exists_inv, mul_add, mul_assoc, mul_comm, pow_mem_pow
 -/
@@ -5001,7 +5389,12 @@ theorem range_finsuppTotal
   rintro ⟨a, ha, rfl⟩
   classical
     refine ⟨a.mapRange (fun r => if h : r in I then ⟨r, h⟩ else 0)
-      (by simp only [Submodule.zero_mem, ↓reduc
+      (by simp only [Submodule.zero_mem, ↓reduceDIte]; rfl), ?_⟩
+    rw [finsuppTotal_apply]; rw [Finsupp.sum_mapRange_index]
+    · apply Finsupp.sum_congr
+      intro i _
+      rw [dif_pos (ha i)]
+    · exact fun _ => zero_smul _ _
 
 中文:
 定理 range_finsuppTotal
@@ -5012,7 +5405,12 @@ theorem range_finsuppTotal
   rintro ⟨a, ha, rfl⟩
   classical
     refine ⟨a.mapRange (fun r => if h : r in I then ⟨r, h⟩ else 0)
-      (by simp only [Submodule.zero_mem, ↓reduc
+      (by simp only [Submodule.zero_mem, ↓reduceDIte]; rfl), ?_⟩
+    rw [finsuppTotal_apply]; rw [Finsupp.sum_mapRange_index]
+    · apply Finsupp.sum_congr
+      intro i _
+      rw [dif_pos (ha i)]
+    · exact fun _ => zero_smul _ _
 
 Depends on / 依赖: Finsupp, Finsupp.mapRange.linearMap, Finsupp.sum_congr, Finsupp.sum_mapRange_index, I.subtype, Submodule, Submodule.mem_ideal_smul_span_iff_exists_sum, Submodule.zero_mem, a.mapRange, classical, dif_pos, finsuppTotal_apply, linearMap, mapRange, mem_ideal_smul_span_iff_exists_sum, reduceDIte, subtype, sum_congr, sum_mapRange_index, zero_mem
 -/
@@ -5128,7 +5526,7 @@ theorem Ideal.span_singleton_nonZeroDivisors
   · simp_rw [← nonZeroDivisorsRight_eq_nonZeroDivisors]
     exact ⟨fun _ _ _ => Subsingleton.eq_zero _, fun _ _ _ => Subsingleton.eq_zero _⟩
   · rw [mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero, ne_eq, zero_eq_bot,
-      span_singleton_eq_b
+      span_singleton_eq_bot]
 
 中文:
 定理 理想.span_singleton_nonZeroDivisors
@@ -5138,7 +5536,7 @@ theorem Ideal.span_singleton_nonZeroDivisors
   · simp_rw [← nonZeroDivisorsRight_eq_nonZeroDivisors]
     exact ⟨fun _ _ _ => Subsingleton.eq_zero _, fun _ _ _ => Subsingleton.eq_zero _⟩
   · rw [mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero, ne_eq, zero_eq_bot,
-      span_singleton_eq_b
+      span_singleton_eq_bot]
 
 Depends on / 依赖: Subsingleton, Subsingleton.eq_zero, eq_zero, mem_nonZeroDivisors_iff_ne_zero, ne_eq, nonZeroDivisorsRight_eq_nonZeroDivisors, simp_rw, span_singleton_eq_bot, subsingleton_or_nontrivial, zero_eq_bot
 -/
@@ -5292,7 +5690,13 @@ instance algebraIdeal
     map_one' := by
       rw [one_eq_span]; rw [map_span]; rw [Set.image_singleton]; rw [Algebra.linearMap_apply]; rw [map_one]; rw [one_eq_span]
     map_mul' := (Submodule.map_mul · · <| Algebra.ofId R A)
-    map_zero' := map_b
+    map_zero' := map_bot _
+    map_add' := (map_sup · · _) }
+commutes' I M := mul_comm_of_commute by rintro _ ⟨r, _, rfl⟩ a _; apply Algebra.commutes
+  smul_def' I M := le_antisymm (smul_le.mpr fun r hr a ha => by
+rw [Algebra.smul_def]; exact Submodule.mul_mem_mul ⟨r, hr, rfl⟩ ha) (Submodule.mul_le.mpr by
+    rintro _ ⟨r, hr, rfl⟩ a ha; rw [Algebra.linearMap_apply, ← Algebra.smul_def]
+    exact Submodule.smul_mem_smul hr ha)
 
 中文:
 实例 algebraIdeal
@@ -5303,7 +5707,13 @@ instance algebraIdeal
     map_one' := by
       rw [one_eq_span]; rw [map_span]; rw [Set.image_singleton]; rw [Algebra.linearMap_apply]; rw [map_one]; rw [one_eq_span]
     map_mul' := (Submodule.map_mul · · <| Algebra.ofId R A)
-    map_zero' := map_b
+    map_zero' := map_bot _
+    map_add' := (map_sup · · _) }
+commutes' I M := mul_comm_of_commute by rintro _ ⟨r, _, rfl⟩ a _; apply Algebra.commutes
+  smul_def' I M := le_antisymm (smul_le.mpr fun r hr a ha => by
+rw [Algebra.smul_def]; exact Submodule.mul_mem_mul ⟨r, hr, rfl⟩ ha) (Submodule.mul_le.mpr by
+    rintro _ ⟨r, hr, rfl⟩ a ha; rw [Algebra.linearMap_apply, ← Algebra.smul_def]
+    exact Submodule.smul_mem_smul hr ha)
 
 Depends on / 依赖: moduleSubmodule
 -/
@@ -5440,7 +5850,8 @@ lemma Ideal.exists_subset_radical_span_sup_of_subset_radical_sup
     obtain ⟨m, y, hyq, b, hb, hy⟩ := hs hzs
     exact ⟨m, y, b, hyq, hb, hy⟩
   choose m a b ha hb heq using hs
-  refi
+  refine ⟨a, by rwa [Set.range_subset_iff], fun z hz => ⟨m ⟨z, hz⟩, heq ⟨z, hz⟩ ▸ ?_⟩⟩
+  exact Ideal.add_mem _ (mem_sup_left (subset_span ⟨⟨z, hz⟩, rfl⟩)) (mem_sup_right <| hb _)
 
 中文:
 引理 理想.存在_subset_radical_span_sup_of_subset_radical_sup
@@ -5452,7 +5863,8 @@ lemma Ideal.exists_subset_radical_span_sup_of_subset_radical_sup
     obtain ⟨m, y, hyq, b, hb, hy⟩ := hs hzs
     exact ⟨m, y, b, hyq, hb, hy⟩
   choose m a b ha hb heq using hs
-  refi
+  refine ⟨a, by rwa [Set.range_subset_iff], fun z hz => ⟨m ⟨z, hz⟩, heq ⟨z, hz⟩ ▸ ?_⟩⟩
+  exact Ideal.add_mem _ (mem_sup_left (subset_span ⟨⟨z, hz⟩, rfl⟩)) (mem_sup_right <| hb _)
 
 Depends on / 依赖: Ideal.add_mem, Ideal.radical, Set.range_subset_iff, Submodule, Submodule.mem_sup, add_mem, mem_sup, mem_sup_left, mem_sup_right, radical, range_subset_iff, replace, subset_span
 -/

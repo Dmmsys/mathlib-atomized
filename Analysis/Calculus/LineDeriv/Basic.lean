@@ -793,7 +793,7 @@ lemma HasFDerivWithinAt.hasLineDerivWithinAt
   have A : HasDerivWithinAt F (0 + (1 : 𝕜) • v) (F ⁻¹' s) 0 :=
     ((hasDerivAt_const (0 : 𝕜) x).add ((hasDerivAt_id' (0 : 𝕜)).smul_const v)).hasDerivWithinAt
   simp only [one_smul, zero_add] at A
-  exact hf.comp_hasD
+  exact hf.comp_hasDerivWithinAt (x := (0 : 𝕜)) A (mapsTo_preimage F s)
 
 中文:
 引理 HasFDerivWithinAt.hasLineDerivWithinAt
@@ -804,7 +804,7 @@ lemma HasFDerivWithinAt.hasLineDerivWithinAt
   have A : HasDerivWithinAt F (0 + (1 : 𝕜) • v) (F ⁻¹' s) 0 :=
     ((hasDerivAt_const (0 : 𝕜) x).add ((hasDerivAt_id' (0 : 𝕜)).smul_const v)).hasDerivWithinAt
   simp only [one_smul, zero_add] at A
-  exact hf.comp_hasD
+  exact hf.comp_hasDerivWithinAt (x := (0 : 𝕜)) A (mapsTo_preimage F s)
 
 Depends on / 依赖: HasDerivWithinAt, comp_hasDerivWithinAt, hasDerivAt_const, hasDerivAt_id, hasDerivWithinAt, hf.comp_hasDerivWithinAt, mapsTo_preimage, one_smul, smul_const, zero_add
 -/
@@ -1352,7 +1352,9 @@ theorem HasLineDerivAt.le_of_lip'
   have A : Continuous (fun (t : 𝕜) => x₀ + t • v) := by fun_prop
   have : forallᶠ x in 𝓝 (x₀ + (0 : 𝕜) • v), ‖f x - f x₀‖ <= C * ‖x - x₀‖ := by simpa using hlip
   filter_upwards [(A.continuousAt (x := 0)).preimage_mem_nhds this] with t ht
-  simp on
+  simp only [preimage_ofPred_eq, add_sub_cancel_left, norm_smul, mem_ofPred_eq,
+    mul_comm (‖t‖)] at ht
+  simpa [mul_assoc] using ht
 
 中文:
 定理 HasLineDerivAt.le_of_lip'
@@ -1362,7 +1364,9 @@ theorem HasLineDerivAt.le_of_lip'
   have A : Continuous (fun (t : 𝕜) => x₀ + t • v) := by fun_prop
   have : forallᶠ x in 𝓝 (x₀ + (0 : 𝕜) • v), ‖f x - f x₀‖ <= C * ‖x - x₀‖ := by simpa using hlip
   filter_upwards [(A.continuousAt (x := 0)).preimage_mem_nhds this] with t ht
-  simp on
+  simp only [preimage_ofPred_eq, add_sub_cancel_left, norm_smul, mem_ofPred_eq,
+    mul_comm (‖t‖)] at ht
+  simpa [mul_assoc] using ht
 
 Depends on / 依赖: A.continuousAt, Continuous, HasDerivAt, HasDerivAt.le_of_lip, add_sub_cancel_left, continuousAt, filter_upwards, fun_prop, le_of_lip, mem_ofPred_eq, mul_assoc, mul_comm, norm_smul, preimage_mem_nhds, preimage_ofPred_eq
 -/
@@ -1432,7 +1436,9 @@ theorem norm_lineDeriv_le_of_lip'
   have A : Continuous (fun (t : 𝕜) => x₀ + t • v) := by fun_prop
   have : forallᶠ x in 𝓝 (x₀ + (0 : 𝕜) • v), ‖f x - f x₀‖ <= C * ‖x - x₀‖ := by simpa using hlip
   filter_upwards [(A.continuousAt (x := 0)).preimage_mem_nhds this] with t ht
-  simp only 
+  simp only [preimage_ofPred_eq, add_sub_cancel_left, norm_smul, mem_ofPred_eq,
+    mul_comm (‖t‖)] at ht
+  simpa [mul_assoc] using ht
 
 中文:
 定理 norm_lineDeriv_le_of_lip'
@@ -1442,7 +1448,9 @@ theorem norm_lineDeriv_le_of_lip'
   have A : Continuous (fun (t : 𝕜) => x₀ + t • v) := by fun_prop
   have : forallᶠ x in 𝓝 (x₀ + (0 : 𝕜) • v), ‖f x - f x₀‖ <= C * ‖x - x₀‖ := by simpa using hlip
   filter_upwards [(A.continuousAt (x := 0)).preimage_mem_nhds this] with t ht
-  simp only 
+  simp only [preimage_ofPred_eq, add_sub_cancel_left, norm_smul, mem_ofPred_eq,
+    mul_comm (‖t‖)] at ht
+  simpa [mul_assoc] using ht
 
 Depends on / 依赖: A.continuousAt, Continuous, add_sub_cancel_left, continuousAt, filter_upwards, fun_prop, mem_ofPred_eq, mul_assoc, mul_comm, norm_deriv_le_of_lip, norm_smul, preimage_mem_nhds, preimage_ofPred_eq
 -/
@@ -1666,7 +1674,11 @@ theorem HasLineDerivWithinAt.smul
   let s' := (fun (t : 𝕜) => x + t • v) ⁻¹' s
   have A : HasDerivAt g c 0 := by simpa using! (hasDerivAt_id (0 : 𝕜)).const_smul c
   have B : HasDerivWithinAt (fun t => f (x + t • v)) f' s' (g 0) := by simpa [g] using! h
-  ha
+  have Z := B.scomp (0 : 𝕜) A.hasDerivWithinAt (mapsTo_preimage g s')
+  simp only [g, s', Function.comp_def, smul_eq_mul, mul_comm c, ← smul_smul] at Z
+  convert! Z
+  ext t
+  simp [← smul_smul]
 
 中文:
 定理 HasLineDerivWithinAt.smul
@@ -1677,7 +1689,11 @@ theorem HasLineDerivWithinAt.smul
   let s' := (fun (t : 𝕜) => x + t • v) ⁻¹' s
   have A : HasDerivAt g c 0 := by simpa using! (hasDerivAt_id (0 : 𝕜)).const_smul c
   have B : HasDerivWithinAt (fun t => f (x + t • v)) f' s' (g 0) := by simpa [g] using! h
-  ha
+  have Z := B.scomp (0 : 𝕜) A.hasDerivWithinAt (mapsTo_preimage g s')
+  simp only [g, s', Function.comp_def, smul_eq_mul, mul_comm c, ← smul_smul] at Z
+  convert! Z
+  ext t
+  simp [← smul_smul]
 
 Depends on / 依赖: A.hasDerivWithinAt, B.scomp, Function, Function.comp_def, HasDerivAt, HasDerivWithinAt, HasLineDerivWithinAt, comp_def, const_smul, convert, hasDerivAt_id, hasDerivWithinAt, mapsTo_preimage, mul_comm, smul_eq_mul, smul_smul
 -/
@@ -1846,7 +1862,7 @@ theorem lineDeriv_smul
   · exact (H.hasLineDerivAt.smul c).lineDeriv
   · have H' : ¬ (LineDifferentiableAt 𝕜 f x (c • v)) := by
       simpa [lineDifferentiableAt_smul_iff hc] using H
-    simp [lineDeriv_zero_of_not
+    simp [lineDeriv_zero_of_not_lineDifferentiableAt, H, H']
 
 中文:
 定理 lineDeriv_smul
@@ -1859,7 +1875,7 @@ theorem lineDeriv_smul
   · exact (H.hasLineDerivAt.smul c).lineDeriv
   · have H' : ¬ (LineDifferentiableAt 𝕜 f x (c • v)) := by
       simpa [lineDifferentiableAt_smul_iff hc] using H
-    simp [lineDeriv_zero_of_not
+    simp [lineDeriv_zero_of_not_lineDifferentiableAt, H, H']
 
 Depends on / 依赖: H.hasLineDerivAt.smul, LineDifferentiableAt, eq_or_ne, hasLineDerivAt, lineDeriv, lineDeriv_zero, lineDeriv_zero_of_not_lineDifferentiableAt, lineDifferentiableAt_smul_iff
 -/

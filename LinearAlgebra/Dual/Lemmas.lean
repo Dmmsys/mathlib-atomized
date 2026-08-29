@@ -564,7 +564,8 @@ theorem finite_dual_iff
   nontriviality K
   have ⟨n, hn⟩ := Module.Finite.exists_nat_not_surjective K (Dual K V)
   let g := Finsupp.llift K K K ι ≪≫ₗ b.repr.dualMap
-  e
+  exact hn (LinearMap.funLeft K K (Fin.valEmbedding.trans (Infinite.natEmbedding ι)) ∘ₗ _)
+.elim ((Function.Embedding.injective _).surjective_comp_right.comp g.symm.surjective)
 
 中文:
 定理 finite_dual_iff
@@ -578,7 +579,8 @@ theorem finite_dual_iff
   nontriviality K
   have ⟨n, hn⟩ := Module.Finite.exists_nat_not_surjective K (Dual K V)
   let g := Finsupp.llift K K K ι ≪≫ₗ b.repr.dualMap
-  e
+  exact hn (LinearMap.funLeft K K (Fin.valEmbedding.trans (Infinite.natEmbedding ι)) ∘ₗ _)
+.elim ((Function.Embedding.injective _).surjective_comp_right.comp g.symm.surjective)
 
 Depends on / 依赖: Embedding, Fin.valEmbedding.trans, Finite, Finsupp, Finsupp.llift, Free.exists_basis, Function, Function.Embedding.injective, Infinite, Infinite.natEmbedding, LinearMap, LinearMap.funLeft, Module, Module.Finite.exists_nat_not_surjective, b.repr.dualMap, dualMap, exists_basis, exists_nat_not_surjective, finite_or_infinite, funLeft
 -/
@@ -647,7 +649,10 @@ instance _root_.Prod.instModuleIsReflexive
       (dualProdDualEquivDual R M N).dualMap.trans
         (dualProdDualEquivDual R (Dual R M) (Dual R N)).symm
     have : Dual.eval R (M × N) = e.symm.comp ((Dual.eval R M).prodMap (Dual.eval R N)) := by
-      ext 
+      ext m f <;> simp [e]
+    simp only [this,
+      coe_comp, LinearEquiv.coe_coe, EquivLike.comp_bijective]
+    exact (bijective_dual_eval R M).prodMap (bijective_dual_eval R N)
 
 中文:
 实例 _root_.积类型.instModuleIsReflexive
@@ -657,7 +662,10 @@ instance _root_.Prod.instModuleIsReflexive
       (dualProdDualEquivDual R M N).dualMap.trans
         (dualProdDualEquivDual R (Dual R M) (Dual R N)).symm
     have : Dual.eval R (M × N) = e.symm.comp ((Dual.eval R M).prodMap (Dual.eval R N)) := by
-      ext 
+      ext m f <;> simp [e]
+    simp only [this,
+      coe_comp, LinearEquiv.coe_coe, EquivLike.comp_bijective]
+    exact (bijective_dual_eval R M).prodMap (bijective_dual_eval R N)
 
 Depends on / 依赖: Dual.eval, EquivLike, EquivLike.comp_bijective, LinearEquiv, LinearEquiv.coe_coe, bijective_dual_eval, coe_coe, coe_comp, comp_bijective, dualMap, dualMap.trans, dualProdDualEquivDual, e.symm.comp, prodMap
 -/
@@ -811,7 +819,8 @@ theorem span_eq_top_of_ne_zero
   have this f (hf : f in s) : f φs = 0 := by
     rw [← mem_bot R]; rw [← hφ]; rw [mem_map]
     exact ⟨f, subset_span hf, (apply_evalEquiv_symm_apply R M f φ).symm⟩
-
+  obtain ⟨x, xs, hx⟩ := h φs (by simp [φne, φs])
+exact hx this x xs
 
 中文:
 定理 span_eq_top_of_ne_zero
@@ -823,7 +832,8 @@ theorem span_eq_top_of_ne_zero
   have this f (hf : f in s) : f φs = 0 := by
     rw [← mem_bot R]; rw [← hφ]; rw [mem_map]
     exact ⟨f, subset_span hf, (apply_evalEquiv_symm_apply R M f φ).symm⟩
-
+  obtain ⟨x, xs, hx⟩ := h φs (by simp [φne, φs])
+exact hx this x xs
 
 Depends on / 依赖: apply_evalEquiv_symm_apply, evalEquiv, exists_dual_map_eq_bot_of_lt_top, hn.lt_top, lt_top, mem_bot, mem_map, subset_span
 -/
@@ -856,7 +866,8 @@ theorem _root_.FiniteDimensional.mem_span_of_iInf_ker_le_ker
   have : K φs = 0 := by
 refine h (Submodule.mem_iInf _).2 fun i => (mem_bot 𝕜).1 ?_
     rw [← hφ]; rw [Submodule.mem_map]
-    exact ⟨L i, Submodule.subset_span ⟨i,
+    exact ⟨L i, Submodule.subset_span ⟨i, rfl⟩, (apply_evalEquiv_symm_apply 𝕜 E _ φ).symm⟩
+  simp only [apply_evalEquiv_symm_apply, φs, φne] at this
 
 中文:
 定理 _root_.有限维.mem_span_of_iInf_ker_le_ker
@@ -868,7 +879,8 @@ refine h (Submodule.mem_iInf _).2 fun i => (mem_bot 𝕜).1 ?_
   have : K φs = 0 := by
 refine h (Submodule.mem_iInf _).2 fun i => (mem_bot 𝕜).1 ?_
     rw [← hφ]; rw [Submodule.mem_map]
-    exact ⟨L i, Submodule.subset_span ⟨i,
+    exact ⟨L i, Submodule.subset_span ⟨i, rfl⟩, (apply_evalEquiv_symm_apply 𝕜 E _ φ).symm⟩
+  simp only [apply_evalEquiv_symm_apply, φs, φne] at this
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Module, Module.evalEquiv, Submodule, Submodule.mem_iInf, Submodule.mem_map, Submodule.subset_span, _le_nnreal_smul_eLpNorm, _of_ae_le_mul, apply_evalEquiv_symm_apply, eLpNorm, evalEquiv, exists_dual_map_eq_bot_of_notMem, mem_bot, mem_iInf, mem_map, nnnorm_smul_le, of_forall, subset_span
 -/
@@ -897,6 +909,20 @@ theorem _root_.mem_span_of_iInf_ker_le_ker
   have p_eq : p = ker φ := (ker_pi L).symm
   let ψ : (E ⧸ p) ->ₗ[𝕜] ι -> 𝕜 := p.liftQ φ p_eq.le
   have _ : FiniteDimensional 𝕜 (E ⧸ p) := of_injective ψ (ker_eq_bot.1 (ker_liftQ_eq_bot' p φ p_eq))
+  let L' i : (E ⧸ p) ->ₗ[𝕜] 𝕜 := p.liftQ (L i) (iInf_le _ i)
+  let K' : (E ⧸ p) ->ₗ[𝕜] 𝕜 := p.liftQ K h
+  have : ⨅ i, ker (L' i) <= ker K' := by
+    simp_rw +zetaDelta [← ker_pi, pi_liftQ_eq_liftQ_pi, ker_liftQ_eq_bot' p φ p_eq]
+    exact bot_le
+  obtain ⟨c, hK'⟩ :=
+    (mem_span_range_iff_exists_fun 𝕜).1 (FiniteDimensional.mem_span_of_iInf_ker_le_ker this)
+  refine (mem_span_range_iff_exists_fun 𝕜).2 ⟨c, ?_⟩
+  conv_lhs => enter [2]; intro i; rw [← p.liftQ_mkQ (L i) (iInf_le _ i)]
+  rw [← p.liftQ_mkQ K h]
+  ext x
+  convert! LinearMap.congr_fun hK' (p.mkQ x)
+  simp only [L', LinearMap.coe_sum, Finset.sum_apply, smul_apply, coe_comp, Function.comp_apply,
+    smul_eq_mul]
 
 中文:
 定理 _root_.mem_span_of_iInf_ker_le_ker
@@ -908,6 +934,20 @@ theorem _root_.mem_span_of_iInf_ker_le_ker
   have p_eq : p = ker φ := (ker_pi L).symm
   let ψ : (E ⧸ p) ->ₗ[𝕜] ι -> 𝕜 := p.liftQ φ p_eq.le
   have _ : FiniteDimensional 𝕜 (E ⧸ p) := of_injective ψ (ker_eq_bot.1 (ker_liftQ_eq_bot' p φ p_eq))
+  let L' i : (E ⧸ p) ->ₗ[𝕜] 𝕜 := p.liftQ (L i) (iInf_le _ i)
+  let K' : (E ⧸ p) ->ₗ[𝕜] 𝕜 := p.liftQ K h
+  have : ⨅ i, ker (L' i) <= ker K' := by
+    simp_rw +zetaDelta [← ker_pi, pi_liftQ_eq_liftQ_pi, ker_liftQ_eq_bot' p φ p_eq]
+    exact bot_le
+  obtain ⟨c, hK'⟩ :=
+    (mem_span_range_iff_exists_fun 𝕜).1 (FiniteDimensional.mem_span_of_iInf_ker_le_ker this)
+  refine (mem_span_range_iff_exists_fun 𝕜).2 ⟨c, ?_⟩
+  conv_lhs => enter [2]; intro i; rw [← p.liftQ_mkQ (L i) (iInf_le _ i)]
+  rw [← p.liftQ_mkQ K h]
+  ext x
+  convert! LinearMap.congr_fun hK' (p.mkQ x)
+  simp only [L', LinearMap.coe_sum, Finset.sum_apply, smul_apply, coe_comp, Function.comp_apply,
+    smul_eq_mul]
 
 Depends on / 依赖: FiniteDimensional, Fintype, Fintype.ofFinite, LinearMap, LinearMap.pi, iInf_le, ker_eq_bot, ker_liftQ_eq_bot, ker_pi, ofFinite, of_injective, p.liftQ, p_eq, p_eq.le, pi_liftQ_eq_liftQ_pi, simp_rw, zetaDelta
 -/
@@ -956,7 +996,7 @@ theorem dualAnnihilator_dualCoannihilator_eq
   rw [← Quotient.mk_eq_zero W]; rw [← Module.forall_dual_apply_eq_zero_iff K]
   push Not
   refine fun ⟨φ, hφ⟩ => ⟨φ.comp W.mkQ, fun w hw => ?_, hφ⟩
-  r
+  rw [comp_apply]; rw [mkQ_apply]; rw [(Quotient.mk_eq_zero W).mpr hw]; rw [φ.map_zero]
 
 中文:
 定理 dualAnnihilator_dualCoannihilator_eq
@@ -967,7 +1007,7 @@ theorem dualAnnihilator_dualCoannihilator_eq
   rw [← Quotient.mk_eq_zero W]; rw [← Module.forall_dual_apply_eq_zero_iff K]
   push Not
   refine fun ⟨φ, hφ⟩ => ⟨φ.comp W.mkQ, fun w hw => ?_, hφ⟩
-  r
+  rw [comp_apply]; rw [mkQ_apply]; rw [(Quotient.mk_eq_zero W).mpr hw]; rw [φ.map_zero]
 
 Depends on / 依赖: Function, Function.mtr, Module, Module.forall_dual_apply_eq_zero_iff, Quotient, Quotient.mk_eq_zero, W.mkQ, comp_apply, forall_dual_apply_eq_zero_iff, le_antisymm, le_dualAnnihilator_dualCoannihilator, map_zero, mem_dualAnnihilator, mem_dualCoannihilator, mkQ_apply, mk_eq_zero
 -/
@@ -1423,7 +1463,7 @@ theorem dual_finrank_eq
   · classical exact LinearEquiv.finrank_eq (Basis.ofVectorSpace K V).toDualEquiv.symm
   rw [finrank_eq_zero_of_basis_imp_false]; rw [finrank_eq_zero_of_basis_imp_false]
   · exact fun _ b => h (Module.Finite.of_basis b)
-  · exact fun _ b => h ((Module.finite_du
+  · exact fun _ b => h ((Module.finite_dual_iff K).mp <| Module.Finite.of_basis b)
 
 中文:
 定理 dual_finrank_eq
@@ -1433,7 +1473,7 @@ theorem dual_finrank_eq
   · classical exact LinearEquiv.finrank_eq (Basis.ofVectorSpace K V).toDualEquiv.symm
   rw [finrank_eq_zero_of_basis_imp_false]; rw [finrank_eq_zero_of_basis_imp_false]
   · exact fun _ b => h (Module.Finite.of_basis b)
-  · exact fun _ b => h ((Module.finite_du
+  · exact fun _ b => h ((Module.finite_dual_iff K).mp <| Module.Finite.of_basis b)
 
 Depends on / 依赖: Basis.ofVectorSpace, Finite, FiniteDimensional, LinearEquiv, LinearEquiv.finrank_eq, Module, Module.Finite.of_basis, Module.finite_dual_iff, classical, finite_dual_iff, finrank_eq, finrank_eq_zero_of_basis_imp_false, ofVectorSpace, of_basis, toDualEquiv, toDualEquiv.symm
 -/
@@ -2062,7 +2102,12 @@ theorem range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective
   have := range_dualMap_eq_dualAnnihilator_ker_of_surjective f.rangeRestrict rr_surj
   convert! this using 1
   · calc
-      _ = range ((range f).subtype.comp f.rangeRestrict).dualMap := by
+      _ = range ((range f).subtype.comp f.rangeRestrict).dualMap := by simp
+      _ = _ := ?_
+    rw [← dualMap_comp_dualMap]; rw [range_comp_of_range_eq_top]
+    rwa [range_eq_top]
+  · apply congr_arg
+    exact (ker_rangeRestrict f).symm
 
 中文:
 定理 range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective
@@ -2073,7 +2118,12 @@ theorem range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective
   have := range_dualMap_eq_dualAnnihilator_ker_of_surjective f.rangeRestrict rr_surj
   convert! this using 1
   · calc
-      _ = range ((range f).subtype.comp f.rangeRestrict).dualMap := by
+      _ = range ((range f).subtype.comp f.rangeRestrict).dualMap := by simp
+      _ = _ := ?_
+    rw [← dualMap_comp_dualMap]; rw [range_comp_of_range_eq_top]
+    rwa [range_eq_top]
+  · apply congr_arg
+    exact (ker_rangeRestrict f).symm
 
 Depends on / 依赖: Function, Function.Surjective, Surjective, congr_arg, convert, dualMap, dualMap_comp_dualMap, f.rangeRestrict, ker_rangeRestrict, rangeRestrict, range_comp_of_range_eq_top, range_dualMap_eq_dualAnnihilator_ker_of_surjective, range_eq_top, range_rangeRestrict, rr_surj, subtype, subtype.comp
 -/
@@ -2167,7 +2217,8 @@ lemma isCompl_ker_of_disjoint_of_ne_bot
 refine ⟨hpf, codisjoint_iff.mpr eq_of_le_of_finrank_le le_top ?_⟩
   have : finrank K ↑(LinearMap.ker f ⊔ p) = finrank K (LinearMap.ker f) + finrank K p := by
     simp [← Submodule.finrank_sup_add_finrank_inf_eq (LinearMap.ker f) p, hpf.eq_bot]
-  rwa [finrank_top, this, ← finrank_ker_add_one_of_ne
+  rwa [finrank_top, this, ← finrank_ker_add_one_of_ne_zero hf, add_le_add_iff_left,
+    Submodule.one_le_finrank_iff]
 
 中文:
 引理 isCompl_ker_of_disjoint_of_ne_bot
@@ -2176,7 +2227,8 @@ refine ⟨hpf, codisjoint_iff.mpr eq_of_le_of_finrank_le le_top ?_⟩
 refine ⟨hpf, codisjoint_iff.mpr eq_of_le_of_finrank_le le_top ?_⟩
   have : finrank K ↑(LinearMap.ker f ⊔ p) = finrank K (LinearMap.ker f) + finrank K p := by
     simp [← Submodule.finrank_sup_add_finrank_inf_eq (LinearMap.ker f) p, hpf.eq_bot]
-  rwa [finrank_top, this, ← finrank_ker_add_one_of_ne
+  rwa [finrank_top, this, ← finrank_ker_add_one_of_ne_zero hf, add_le_add_iff_left,
+    Submodule.one_le_finrank_iff]
 
 Depends on / 依赖: LinearMap, LinearMap.ker, Submodule, Submodule.finrank_sup_add_finrank_inf_eq, Submodule.one_le_finrank_iff, add_le_add_iff_left, codisjoint_iff, codisjoint_iff.mpr, eq_bot, eq_of_le_of_finrank_le, finrank, finrank_ker_add_one_of_ne_zero, finrank_sup_add_finrank_inf_eq, finrank_top, hpf.eq_bot, le_top, one_le_finrank_iff
 -/
@@ -2205,7 +2257,16 @@ lemma eq_of_ker_eq_of_apply_eq
     rintro y ⟨hfy : f y = 0, hpy : y in p⟩
     obtain ⟨t, rfl⟩ := Submodule.mem_span_singleton.mp hpy
     have ht : t = 0 := by simpa [hx] using hfy
-   
+    simp [ht]
+  have hf : f != 0 := by aesop
+  ext v
+  obtain ⟨y, hy, z, hz, rfl⟩ : existsᵉ (y in LinearMap.ker f) (z in p), y + z = v := by
+    have : v in (⊤ : Submodule K V₁) := Submodule.mem_top
+    rwa [← (isCompl_ker_of_disjoint_of_ne_bot hf hpf hp).sup_eq_top, Submodule.mem_sup] at this
+  have hy' : g y = 0 := by rwa [← LinearMap.mem_ker, ← h]
+  replace hy : f y = 0 := by rwa [LinearMap.mem_ker] at hy
+  obtain ⟨t, rfl⟩ := Submodule.mem_span_singleton.mp hz
+  simp [h', hy, hy']
 
 中文:
 引理 eq_of_ker_eq_of_apply_eq
@@ -2218,7 +2279,16 @@ lemma eq_of_ker_eq_of_apply_eq
     rintro y ⟨hfy : f y = 0, hpy : y in p⟩
     obtain ⟨t, rfl⟩ := Submodule.mem_span_singleton.mp hpy
     have ht : t = 0 := by simpa [hx] using hfy
-   
+    simp [ht]
+  have hf : f != 0 := by aesop
+  ext v
+  obtain ⟨y, hy, z, hz, rfl⟩ : existsᵉ (y in LinearMap.ker f) (z in p), y + z = v := by
+    have : v in (⊤ : Submodule K V₁) := Submodule.mem_top
+    rwa [← (isCompl_ker_of_disjoint_of_ne_bot hf hpf hp).sup_eq_top, Submodule.mem_sup] at this
+  have hy' : g y = 0 := by rwa [← LinearMap.mem_ker, ← h]
+  replace hy : f y = 0 := by rwa [LinearMap.mem_ker] at hy
+  obtain ⟨t, rfl⟩ := Submodule.mem_span_singleton.mp hz
+  simp [h', hy, hy']
 
 Depends on / 依赖: Disjoint, LinearMap, LinearMap.ker, Submodule, Submodule.eq_bot_iff, Submodule.mem_span_singleton.mp, Submodule.mem_top, disjoint_iff, eq_bot_iff, isCompl_ker_of_disjoint_of_ne_bo, mem_span_singleton, mem_top
 -/
@@ -2558,7 +2628,15 @@ theorem dualAnnihilator_inf_eq
   let F : V₁ ->ₗ[K] (V₁ ⧸ W) × V₁ ⧸ W' := (Submodule.mkQ W).prod (Submodule.mkQ W')
   have : LinearMap.ker F = W ⊓ W' := by simp only [F, LinearMap.ker_prod, ker_mkQ]
   rw [← this]; rw [← LinearMap.range_dualMap_eq_dualAnnihilator_ker]
-  i
+  intro φ
+  rw [LinearMap.mem_range]
+  rintro ⟨x, rfl⟩
+  rw [Submodule.mem_sup]
+  obtain ⟨⟨a, b⟩, rfl⟩ := (dualProdDualEquivDual K (V₁ ⧸ W) (V₁ ⧸ W')).surjective x
+  obtain ⟨a', rfl⟩ := (dualQuotEquivDualAnnihilator W).symm.surjective a
+  obtain ⟨b', rfl⟩ := (dualQuotEquivDualAnnihilator W').symm.surjective b
+  use a', a'.property, b', b'.property
+  rfl
 
 中文:
 定理 dualAnnihilator_inf_eq
@@ -2568,7 +2646,15 @@ theorem dualAnnihilator_inf_eq
   let F : V₁ ->ₗ[K] (V₁ ⧸ W) × V₁ ⧸ W' := (Submodule.mkQ W).prod (Submodule.mkQ W')
   have : LinearMap.ker F = W ⊓ W' := by simp only [F, LinearMap.ker_prod, ker_mkQ]
   rw [← this]; rw [← LinearMap.range_dualMap_eq_dualAnnihilator_ker]
-  i
+  intro φ
+  rw [LinearMap.mem_range]
+  rintro ⟨x, rfl⟩
+  rw [Submodule.mem_sup]
+  obtain ⟨⟨a, b⟩, rfl⟩ := (dualProdDualEquivDual K (V₁ ⧸ W) (V₁ ⧸ W')).surjective x
+  obtain ⟨a', rfl⟩ := (dualQuotEquivDualAnnihilator W).symm.surjective a
+  obtain ⟨b', rfl⟩ := (dualQuotEquivDualAnnihilator W').symm.surjective b
+  use a', a'.property, b', b'.property
+  rfl
 
 Depends on / 依赖: LinearMap, LinearMap.ker, LinearMap.ker_prod, LinearMap.mem_range, LinearMap.range_dualMap_eq_dualAnnihilator_ker, Submodule, Submodule.mem_sup, Submodule.mkQ, dualProdDualEquivDual, dualQuotEquivDualAnnihilator, ker_mkQ, ker_prod, le_antisymm, mem_range, mem_sup, range_dualMap_eq_dualAnnihilator_ker, sup_dualAnnihilator_le_inf, surjective
 -/
@@ -2609,7 +2695,7 @@ theorem dualAnnihilator_iInf_eq
   · intro W
     rw [iSup_of_empty']; rw [iInf_of_isEmpty]; rw [sInf_empty]; rw [sSup_empty]; rw [dualAnnihilator_top]
   · intro α _ h W
-    rw [iInf_option]; rw [iSup_opti
+    rw [iInf_option]; rw [iSup_option]; rw [dualAnnihilator_inf_eq]; rw [h]
 
 中文:
 定理 dualAnnihilator_iInf_eq
@@ -2622,7 +2708,7 @@ theorem dualAnnihilator_iInf_eq
   · intro W
     rw [iSup_of_empty']; rw [iInf_of_isEmpty]; rw [sInf_empty]; rw [sSup_empty]; rw [dualAnnihilator_top]
   · intro α _ h W
-    rw [iInf_option]; rw [iSup_opti
+    rw [iInf_option]; rw [iSup_option]; rw [dualAnnihilator_inf_eq]; rw [h]
 
 Depends on / 依赖: Finite, Finite.induction_empty_option, dualAnnihilator_inf_eq, dualAnnihilator_top, h.iInf_comp, h.iSup_comp, iInf_comp, iInf_of_isEmpty, iInf_option, iSup_comp, iSup_of_empty, iSup_option, induction_empty_option, revert, sInf_empty, sSup_empty
 -/
@@ -2700,14 +2786,14 @@ theorem finrank_range_dualMap_eq_finrank_range
   given: (f : V₁ ->ₗ[K] V₂)
   proof: by
   rw [congr_arg dualMap (show f = (range f).subtype.comp f.rangeRestrict by rfl)]; rw [← dualMap_comp_dualMap]; rw [range_comp]; rw [range_eq_top.mpr (dualMap_surjective_of_injective (range f).injective_subtype)]; rw [Submodule.map_top]; rw [finrank_range_of_inj]; rw [Subspace.dual_finrank_eq]
-  
+  exact dualMap_injective_of_surjective (range_eq_top.mp f.range_rangeRestrict)
 
 中文:
 定理 finrank_range_dualMap_eq_finrank_range
   条件: (f : V₁ ->ₗ[K] V₂)
   证明: by
   rw [congr_arg dualMap (show f = (range f).subtype.comp f.rangeRestrict by rfl)]; rw [← dualMap_comp_dualMap]; rw [range_comp]; rw [range_eq_top.mpr (dualMap_surjective_of_injective (range f).injective_subtype)]; rw [Submodule.map_top]; rw [finrank_range_of_inj]; rw [Subspace.dual_finrank_eq]
-  
+  exact dualMap_injective_of_surjective (range_eq_top.mp f.range_rangeRestrict)
 
 Depends on / 依赖: Submodule, Submodule.map_top, Subspace, Subspace.dual_finrank_eq, congr_arg, dualMap, dualMap_comp_dualMap, dualMap_injective_of_surjective, dualMap_surjective_of_injective, dual_finrank_eq, f.rangeRestrict, f.range_rangeRestrict, finrank_range_of_inj, injective_subtype, map_top, rangeRestrict, range_comp, range_eq_top, range_eq_top.mp, range_eq_top.mpr
 -/
@@ -2980,7 +3066,7 @@ theorem dualCoannihilator_dualAnnihilator_eq
     (Submodule.dualQuotEquivDualAnnihilator _)
   letI : AddCommGroup W := inferInstance
   haveI : FiniteDimensional K W.dualCoannihilator.dualAnnihilator := LinearEquiv.finiteDimensional e
-  (eq_of_le_of_finrank_
+  (eq_of_le_of_finrank_eq W.le_dualCoannihilator_dualAnnihilator e.finrank_eq).symm
 
 中文:
 定理 dualCoannihilator_dualAnnihilator_eq
@@ -2989,7 +3075,7 @@ theorem dualCoannihilator_dualAnnihilator_eq
     (Submodule.dualQuotEquivDualAnnihilator _)
   letI : AddCommGroup W := inferInstance
   haveI : FiniteDimensional K W.dualCoannihilator.dualAnnihilator := LinearEquiv.finiteDimensional e
-  (eq_of_le_of_finrank_
+  (eq_of_le_of_finrank_eq W.le_dualCoannihilator_dualAnnihilator e.finrank_eq).symm
 
 Depends on / 依赖: AddCommGroup, FiniteDimensional, LinearEquiv, LinearEquiv.finiteDimensional, LinearEquiv.ofBijective, Submodule, Submodule.dualQuotEquivDualAnnihilator, W.dualCoannihilator.dualAnnihilator, W.flip_quotDualCoannihilatorToDual_bijective, W.le_dualCoannihilator_dualAnnihilator, dualAnnihilator, dualCoannihilator, dualQuotEquivDualAnnihilator, e.finrank_eq, eq_of_le_of_finrank_eq, finiteDimensional, finrank_eq, flip_quotDualCoannihilatorToDual_bijective, le_dualCoannihilator_dualAnnihilator, ofBijective
 -/
@@ -3034,7 +3120,8 @@ definition orderIsoFiniteCodimDim
   invFun W := ⟨(ofDual W).1.dualCoannihilator,
     finiteDimensional_quot_dualCoannihilator_iff.mpr (ofDual W).2⟩
   left_inv _ := Subtype.ext dualAnnihilator_dualCoannihilator_eq
-  right_inv W := have := (ofDual W).2; Subtype
+  right_inv W := have := (ofDual W).2; Subtype.ext dualCoannihilator_dualAnnihilator_eq
+  map_rel_iff' := dualAnnihilator_le_dualAnnihilator_iff
 
 中文:
 定义 orderIsoFiniteCodimDim
@@ -3043,7 +3130,8 @@ definition orderIsoFiniteCodimDim
   invFun W := ⟨(ofDual W).1.dualCoannihilator,
     finiteDimensional_quot_dualCoannihilator_iff.mpr (ofDual W).2⟩
   left_inv _ := Subtype.ext dualAnnihilator_dualCoannihilator_eq
-  right_inv W := have := (ofDual W).2; Subtype
+  right_inv W := have := (ofDual W).2; Subtype.ext dualCoannihilator_dualAnnihilator_eq
+  map_rel_iff' := dualAnnihilator_le_dualAnnihilator_iff
 
 Depends on / 依赖: Submodule, Submodule.finite_dualAnnihilator_iff.mpr, dualAnnihilator, finite_dualAnnihilator_iff, toDual
 -/
@@ -3101,7 +3189,9 @@ theorem dualAnnihilator_dualAnnihilator_eq_map
   have := e1.finiteDimensional
   let e2 := (Free.chooseBasis K _).toDualEquiv ≪≫ₗ W.dualAnnihilator.dualQuotEquivDualAnnihilator
   have := LinearEquiv.finiteDimensional (V₂ := W.dualAnnihilator.dualAnnihilator) e2
-  rw
+  rw [eq_of_le_of_finrank_eq (map_le_dualAnnihilator_dualAnnihilator W)]
+  rw [← (equivMapOfInjective _ (eval_apply_injective K (V := V)) W).finrank_eq]; rw [e1.finrank_eq]
+  exact e2.finrank_eq
 
 中文:
 定理 dualAnnihilator_dualAnnihilator_eq_map
@@ -3111,7 +3201,9 @@ theorem dualAnnihilator_dualAnnihilator_eq_map
   have := e1.finiteDimensional
   let e2 := (Free.chooseBasis K _).toDualEquiv ≪≫ₗ W.dualAnnihilator.dualQuotEquivDualAnnihilator
   have := LinearEquiv.finiteDimensional (V₂ := W.dualAnnihilator.dualAnnihilator) e2
-  rw
+  rw [eq_of_le_of_finrank_eq (map_le_dualAnnihilator_dualAnnihilator W)]
+  rw [← (equivMapOfInjective _ (eval_apply_injective K (V := V)) W).finrank_eq]; rw [e1.finrank_eq]
+  exact e2.finrank_eq
 
 Depends on / 依赖: Free.chooseBasis, LinearEquiv, LinearEquiv.finiteDimensional, W.dualAnnihilator.dualAnnihilator, W.dualAnnihilator.dualQuotEquivDualAnnihilator, W.quotAnnihilatorEquiv.symm, chooseBasis, dualAnnihilator, dualQuotEquivDualAnnihilator, e1.finiteDimensional, e1.finrank_eq, e2.finrank_eq, eq_of_le_of_finrank_eq, equivMapOfInjective, eval_apply_injective, finiteDimensional, finrank_eq, map_le_dualAnnihilator_dualAnnihilator, quotAnnihilatorEquiv, toDualEquiv
 -/
@@ -3161,7 +3253,9 @@ theorem span_flip_eq_top_iff_linearIndependent
   proof: by
   rw [linearIndependent_iff_ker]; rw [← Submodule.map_eq_top_iff (e := Finsupp.llift F F F ι)]; rw [← Subspace.dualCoannihilator_dualAnnihilator_eq (W := map ..)]; rw [dualAnnihilator_eq_top_iff]
   congr!
-  rw [SetLike.ext'_iff]; rw [map_span]; rw [Submodule.coe_dualCoannihilator_span]; rw [← Set
+  rw [SetLike.ext'_iff]; rw [map_span]; rw [Submodule.coe_dualCoannihilator_span]; rw [← Set.range_comp]
+  ext
+  simp [funext_iff, Finsupp.linearCombination, Finsupp.sum, Finset.sum_apply, flip]
 
 中文:
 定理 span_flip_eq_top_iff_linearIndependent
@@ -3169,7 +3263,9 @@ theorem span_flip_eq_top_iff_linearIndependent
   证明: by
   rw [linearIndependent_iff_ker]; rw [← Submodule.map_eq_top_iff (e := Finsupp.llift F F F ι)]; rw [← Subspace.dualCoannihilator_dualAnnihilator_eq (W := map ..)]; rw [dualAnnihilator_eq_top_iff]
   congr!
-  rw [SetLike.ext'_iff]; rw [map_span]; rw [Submodule.coe_dualCoannihilator_span]; rw [← Set
+  rw [SetLike.ext'_iff]; rw [map_span]; rw [Submodule.coe_dualCoannihilator_span]; rw [← Set.range_comp]
+  ext
+  simp [funext_iff, Finsupp.linearCombination, Finsupp.sum, Finset.sum_apply, flip]
 
 Depends on / 依赖: Finset, Finset.sum_apply, Finsupp, Finsupp.linearCombination, Finsupp.llift, Finsupp.sum, Set.range_comp, SetLike, SetLike.ext, Submodule, Submodule.coe_dualCoannihilator_span, Submodule.map_eq_top_iff, Subspace, Subspace.dualCoannihilator_dualAnnihilator_eq, _iff, coe_dualCoannihilator_span, dualAnnihilator_eq_top_iff, dualCoannihilator_dualAnnihilator_eq, funext_iff, linearCombination
 -/
@@ -3192,7 +3288,11 @@ lemma Module.exists_dual_forall_apply_eq_one
 let b : Basis _ K V := .mk (hli.linearIndepOn_extend (Set.subset_univ _)) by
 simpa using hli.span_extend_eq_span Set.subset_univ _
   refine ⟨b.constr K 1, fun i hi => ?_⟩
-  replace hi : v i in hli.extend (Set.subset_univ _)
+  replace hi : v i in hli.extend (Set.subset_univ _) :=
+hli.subset_extend _ Set.mem_image_of_mem v hi
+  let ri : hli.extend (Set.subset_univ _) := ⟨v i, hi⟩
+  have : b ri = v i := by simp [b, ri]
+  simp [← this]
 
 中文:
 引理 模.存在_dual_对任意_apply_eq_one
@@ -3202,7 +3302,11 @@ simpa using hli.span_extend_eq_span Set.subset_univ _
 let b : Basis _ K V := .mk (hli.linearIndepOn_extend (Set.subset_univ _)) by
 simpa using hli.span_extend_eq_span Set.subset_univ _
   refine ⟨b.constr K 1, fun i hi => ?_⟩
-  replace hi : v i in hli.extend (Set.subset_univ _)
+  replace hi : v i in hli.extend (Set.subset_univ _) :=
+hli.subset_extend _ Set.mem_image_of_mem v hi
+  let ri : hli.extend (Set.subset_univ _) := ⟨v i, hi⟩
+  have : b ri = v i := by simp [b, ri]
+  simp [← this]
 
 Depends on / 依赖: LinearIndepOn, LinearIndepOn.id_image, Set.mem_image_of_mem, Set.subset_univ, b.constr, constr, extend, hli.extend, hli.linearIndepOn_extend, hli.span_extend_eq_span, hli.subset_extend, id_image, linearIndepOn_extend, mem_image_of_mem, replace, span_extend_eq_span, subset_extend, subset_univ
 -/

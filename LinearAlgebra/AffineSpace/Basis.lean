@@ -421,7 +421,13 @@ definition basisOf
       suffices
         Submodule.span k (range fun j : { x // x != i } => b ↑j -ᵥ b i) = vectorSpan k (range b) by
         rw [this]; rw [← direction_affineSpan]; rw [b.tot]; rw [AffineSubspace.direction_top]
-      conv
+      conv_rhs => rw [← image_univ]
+      rw [vectorSpan_image_eq_span_vsub_set_right_ne k b (mem_univ i)]
+      congr
+      ext v
+      simp)
+
+@[simp]
 
 中文:
 定义 basisOf
@@ -431,7 +437,13 @@ definition basisOf
       suffices
         Submodule.span k (range fun j : { x // x != i } => b ↑j -ᵥ b i) = vectorSpan k (range b) by
         rw [this]; rw [← direction_affineSpan]; rw [b.tot]; rw [AffineSubspace.direction_top]
-      conv
+      conv_rhs => rw [← image_univ]
+      rw [vectorSpan_image_eq_span_vsub_set_right_ne k b (mem_univ i)]
+      congr
+      ext v
+      simp)
+
+@[simp]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.direction_top, Basis.mk, Submodule, Submodule.span, affineIndependent_iff_linearIndependent_vsub, b.ind, b.tot, conv_rhs, direction_affineSpan, direction_top, image_univ, mem_univ, vectorSpan, vectorSpan_image_eq_span_vsub_set_right_ne
 -/
@@ -883,7 +895,10 @@ theorem coe_coord_of_subsingleton_eq_one
   have := AffineSubspace.subsingleton_of_subsingleton_span_eq_top hp b.tot
   let s : Finset ι := {i}
   have hi : i in s := by simp [s]
-  have hw : s.sum (Func
+  have hw : s.sum (Function.const ι (1 : k)) = 1 := by simp [s]
+  have hq : q = s.affineCombination k b (Function.const ι (1 : k)) := by
+    simp [eq_iff_true_of_subsingleton]
+  rw [Pi.one_apply]; rw [hq]; rw [b.coord_apply_combination_of_mem hi hw]; rw [Function.const_apply]
 
 中文:
 定理 coe_coord_of_subsingleton_eq_one
@@ -898,7 +913,10 @@ theorem coe_coord_of_subsingleton_eq_one
   have := AffineSubspace.subsingleton_of_subsingleton_span_eq_top hp b.tot
   let s : Finset ι := {i}
   have hi : i in s := by simp [s]
-  have hw : s.sum (Func
+  have hw : s.sum (Function.const ι (1 : k)) = 1 := by simp [s]
+  have hq : q = s.affineCombination k b (Function.const ι (1 : k)) := by
+    simp [eq_iff_true_of_subsingleton]
+  rw [Pi.one_apply]; rw [hq]; rw [b.coord_apply_combination_of_mem hi hw]; rw [Function.const_apply]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.subsingleton_of_subsingleton_span_eq_top, Finset, Function, Function.const, Pi.one_apply, Subsingleton, Subsingleton.image, affineCombination, b.coord_apply_combination_of_mem, b.tot, coord_apply_combination_of_mem, eq_iff_true_of_subsingleton, image_univ, one_apply, s.affineCombination, s.sum, subsingleton_of_subsingleton, subsingleton_of_subsingleton_span_eq_top
 -/
@@ -931,7 +949,9 @@ theorem surjective_coord
     have hi : i in s := by simp [s]
     let w : ι -> k := fun j' => if j' = i then x else 1 - x
     have hw : s.sum w = 1 := by simp [s, w, Finset.sum_ite, Finset.filter_insert, hij,
-      Finset.filter_true
+      Finset.filter_true_of_mem, Finset.filter_false_of_mem]
+    use s.affineCombination k b w
+    simp [w, b.coord_apply_combination_of_mem hi hw]
 
 中文:
 定理 surjective_coord
@@ -945,7 +965,9 @@ theorem surjective_coord
     have hi : i in s := by simp [s]
     let w : ι -> k := fun j' => if j' = i then x else 1 - x
     have hw : s.sum w = 1 := by simp [s, w, Finset.sum_ite, Finset.filter_insert, hij,
-      Finset.filter_true
+      Finset.filter_true_of_mem, Finset.filter_false_of_mem]
+    use s.affineCombination k b w
+    simp [w, b.coord_apply_combination_of_mem hi hw]
 
 Depends on / 依赖: Finset, Finset.filter_false_of_mem, Finset.filter_insert, Finset.filter_true_of_mem, Finset.sum_ite, affineCombination, b.coord_apply_combination_of_mem, classical, coord_apply_combination_of_mem, exists_ne, filter_false_of_mem, filter_insert, filter_true_of_mem, s.affineCombination, s.sum, sum_ite
 -/
@@ -1115,7 +1137,7 @@ lemma coord_vadd
     AffineMap.coe_mk, AffineEquiv.constVAdd_symm, AffineMap.coe_comp, AffineEquiv.coe_toAffineMap,
     Function.comp_apply, AffineEquiv.constVAdd_apply, sub_right_inj]
   congr! 1
-  rw [vadd_vsub_assoc];
+  rw [vadd_vsub_assoc]; rw [neg_add_eq_sub]; rw [vsub_vadd_eq_vsub_sub]
 
 中文:
 引理 coord_vadd
@@ -1126,7 +1148,7 @@ lemma coord_vadd
     AffineMap.coe_mk, AffineEquiv.constVAdd_symm, AffineMap.coe_comp, AffineEquiv.coe_toAffineMap,
     Function.comp_apply, AffineEquiv.constVAdd_apply, sub_right_inj]
   congr! 1
-  rw [vadd_vsub_assoc];
+  rw [vadd_vsub_assoc]; rw [neg_add_eq_sub]; rw [vsub_vadd_eq_vsub_sub]
 -/
 @[simp] lemma coord_vadd (v : V) (b : AffineBasis ι k P) :
     (v +ᵥ b).coord i = (b.coord i).comp (AffineEquiv.constVAdd k P v).symm := by

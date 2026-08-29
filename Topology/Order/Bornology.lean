@@ -468,7 +468,11 @@ lemma IsOrderBornology.cobounded_le_atBot_sup_atTop
   intro s
   rw [Filter.mem_sup]; rw [Filter.atTop_basis.mem_iff]; rw [Filter.atBot_basis.mem_iff]; rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove]; rw [compl_compl s]
   intro ⟨⟨b, _, hb⟩, ⟨a, _, ha⟩⟩
-  refine ⟨⟨b, fun x hx 
+  refine ⟨⟨b, fun x hx => ?_⟩, ⟨a, fun x hx => ?_⟩⟩ <;> by_contra! hx'
+  · exact hx (hb hx'.le)
+  · exact hx (ha hx'.le)
+
+@[simp]
 
 中文:
 引理 是OrderBornology.cobounded_le_atBot_sup_atTop
@@ -478,7 +482,11 @@ lemma IsOrderBornology.cobounded_le_atBot_sup_atTop
   intro s
   rw [Filter.mem_sup]; rw [Filter.atTop_basis.mem_iff]; rw [Filter.atBot_basis.mem_iff]; rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove]; rw [compl_compl s]
   intro ⟨⟨b, _, hb⟩, ⟨a, _, ha⟩⟩
-  refine ⟨⟨b, fun x hx 
+  refine ⟨⟨b, fun x hx => ?_⟩, ⟨a, fun x hx => ?_⟩⟩ <;> by_contra! hx'
+  · exact hx (hb hx'.le)
+  · exact hx (ha hx'.le)
+
+@[simp]
 
 Depends on / 依赖: Filter, Filter.atBot_basis.mem_iff, Filter.atTop_basis.mem_iff, Filter.mem_sup, Nonempty, Nonempty.of_isOrderBornology, atBot_basis, atTop_basis, compl_compl, isBounded_def, isBounded_iff_bddBelow_bddAbove, mem_iff, mem_sup, of_isOrderBornology
 -/
@@ -525,7 +533,7 @@ lemma IsOrderBornology.cobounded_eq_atTop
   rw [Filter.atTop_basis.mem_iff]; rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove]; rw [compl_compl s]
   refine fun ⟨b, _, hb⟩ => ⟨⟨⊥, fun x hx => by simp⟩, ⟨b, fun x hx => ?_⟩⟩
   by_contra! hx'
-  exact hx (hb hx'.
+  exact hx (hb hx'.le)
 
 中文:
 引理 是OrderBornology.cobounded_eq_atTop
@@ -535,7 +543,7 @@ lemma IsOrderBornology.cobounded_eq_atTop
   rw [Filter.atTop_basis.mem_iff]; rw [← compl_compl s]; rw [← isBounded_def]; rw [isBounded_iff_bddBelow_bddAbove]; rw [compl_compl s]
   refine fun ⟨b, _, hb⟩ => ⟨⟨⊥, fun x hx => by simp⟩, ⟨b, fun x hx => ?_⟩⟩
   by_contra! hx'
-  exact hx (hb hx'.
+  exact hx (hb hx'.le)
 
 Depends on / 依赖: Filter, Filter.atTop_basis.mem_iff, antisymm, atTop_basis, atTop_le_cobounded, atTop_le_cobounded.antisymm, compl_compl, isBounded_def, isBounded_iff_bddBelow_bddAbove, mem_iff
 -/

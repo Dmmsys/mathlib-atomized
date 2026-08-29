@@ -70,7 +70,29 @@ lemma IsAdic.isPrecomplete_iff
   simp only [isPrecomplete_iff, smul_eq_mul, Ideal.mul_top, SModEq.sub_mem]
   constructor
   · intro H
-    refine UniformSpace.complete_of_cauchySeq_tendsto 
+    refine UniformSpace.complete_of_cauchySeq_tendsto fun u hu => ?_
+    have : forall i, exists N, forall m, N <= m -> forall n, N <= n -> u n - u m in I ^ i := by
+      simpa using hI.hasBasis_nhds_zero.uniformity_of_nhds_zero.cauchySeq_iff.mp hu
+    choose N hN using this
+    obtain ⟨L, hL⟩ := H (fun i => u ((Finset.Iic i).sup N))
+      fun _ => hN _ _ (Finset.le_sup (by simpa)) _ (Finset.le_sup (by simp))
+    use L
+    suffices forall i, exists N, forall n, N <= n -> u n - L in I ^ i by
+      simpa [(hI.hasBasis_nhds L).tendsto_right_iff, sub_eq_neg_add]
+    refine fun i => ⟨(Finset.Iic i).sup N, fun n hn => ?_⟩
+    have := Ideal.add_mem _ (hN i ((Finset.Iic i).sup N) (Finset.le_sup (by simp))
+      n (.trans (Finset.le_sup (by simp)) hn)) (hL i)
+    rwa [sub_add_sub_cancel] at this
+  · intro H f hf
+    obtain ⟨L, hL⟩ := CompleteSpace.complete (f := Filter.atTop.map f)
+      (hI.hasBasis_nhds_zero.uniformity_of_nhds_zero.cauchySeq_iff.mpr fun i _ =>
+        ⟨i, fun m hm n hn => by simpa using Ideal.sub_mem _ (hf hm) (hf hn)⟩)
+    refine ⟨L, fun i => ?_⟩
+    obtain ⟨N, hN⟩ : exists N, forall n, N <= n -> f n - L in I ^ i := by
+      simpa [sub_eq_neg_add] using (hI.hasBasis_nhds L).tendsto_right_iff.mp hL i
+    simpa using Ideal.add_mem _ (hN (max i N) le_sup_right) (hf (le_max_left i N))
+
+include hI in
 
 中文:
 引理 IsAdic.isPrecomplete_iff
@@ -81,7 +103,29 @@ lemma IsAdic.isPrecomplete_iff
   simp only [isPrecomplete_iff, smul_eq_mul, Ideal.mul_top, SModEq.sub_mem]
   constructor
   · intro H
-    refine UniformSpace.complete_of_cauchySeq_tendsto 
+    refine UniformSpace.complete_of_cauchySeq_tendsto fun u hu => ?_
+    have : forall i, exists N, forall m, N <= m -> forall n, N <= n -> u n - u m in I ^ i := by
+      simpa using hI.hasBasis_nhds_zero.uniformity_of_nhds_zero.cauchySeq_iff.mp hu
+    choose N hN using this
+    obtain ⟨L, hL⟩ := H (fun i => u ((Finset.Iic i).sup N))
+      fun _ => hN _ _ (Finset.le_sup (by simpa)) _ (Finset.le_sup (by simp))
+    use L
+    suffices forall i, exists N, forall n, N <= n -> u n - L in I ^ i by
+      simpa [(hI.hasBasis_nhds L).tendsto_right_iff, sub_eq_neg_add]
+    refine fun i => ⟨(Finset.Iic i).sup N, fun n hn => ?_⟩
+    have := Ideal.add_mem _ (hN i ((Finset.Iic i).sup N) (Finset.le_sup (by simp))
+      n (.trans (Finset.le_sup (by simp)) hn)) (hL i)
+    rwa [sub_add_sub_cancel] at this
+  · intro H f hf
+    obtain ⟨L, hL⟩ := CompleteSpace.complete (f := Filter.atTop.map f)
+      (hI.hasBasis_nhds_zero.uniformity_of_nhds_zero.cauchySeq_iff.mpr fun i _ =>
+        ⟨i, fun m hm n hn => by simpa using Ideal.sub_mem _ (hf hm) (hf hn)⟩)
+    refine ⟨L, fun i => ?_⟩
+    obtain ⟨N, hN⟩ : exists N, forall n, N <= n -> f n - L in I ^ i := by
+      simpa [sub_eq_neg_add] using (hI.hasBasis_nhds L).tendsto_right_iff.mp hL i
+    simpa using Ideal.add_mem _ (hN (max i N) le_sup_right) (hf (le_max_left i N))
+
+include hI in
 -/
 protected lemma IsAdic.isPrecomplete_iff : IsPrecomplete I R ↔ CompleteSpace R := by
   have := hI.hasBasis_nhds_zero.isCountablyGenerated

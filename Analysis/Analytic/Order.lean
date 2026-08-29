@@ -201,7 +201,8 @@ lemma AnalyticAt.analyticOrderAt_eq_natCast
     rw [← hf.exists_eventuallyEq_pow_smul_nonzero_iff]
     exact ⟨n, h⟩
   · rw [← hf.exists_eventuallyEq_pow_smul_nonzero_iff] at h
-    refine ⟨fun hn => (WithTop.coe_inj.mp hn : h.choose =
+    refine ⟨fun hn => (WithTop.coe_inj.mp hn : h.choose = n) ▸ h.choose_spec, fun h' => ?_⟩
+    rw [AnalyticAt.unique_eventuallyEq_pow_smul_nonzero h.choose_spec h']
 
 中文:
 引理 AnalyticAt.analyticOrderAt_eq_natCast
@@ -214,7 +215,8 @@ lemma AnalyticAt.analyticOrderAt_eq_natCast
     rw [← hf.exists_eventuallyEq_pow_smul_nonzero_iff]
     exact ⟨n, h⟩
   · rw [← hf.exists_eventuallyEq_pow_smul_nonzero_iff] at h
-    refine ⟨fun hn => (WithTop.coe_inj.mp hn : h.choose =
+    refine ⟨fun hn => (WithTop.coe_inj.mp hn : h.choose = n) ▸ h.choose_spec, fun h' => ?_⟩
+    rw [AnalyticAt.unique_eventuallyEq_pow_smul_nonzero h.choose_spec h']
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.unique_eventuallyEq_pow_smul_nonzero, ENat.top_ne_natCast, WithTop, WithTop.coe_inj.mp, analyticOrderAt, choose_spec, coe_inj, contrapose, exists_eventuallyEq_pow_smul_nonzero_iff, false_iff, h.choose, h.choose_spec, hf.exists_eventuallyEq_pow_smul_nonzero_iff, split_ifs, top_ne_natCast, unique_eventuallyEq_pow_smul_nonzero
 -/
@@ -425,7 +427,17 @@ lemma natCast_le_analyticOrderAt
   · let m := (hf.exists_eventuallyEq_pow_smul_nonzero_iff.mpr h).choose
     obtain ⟨g, hg, hg_ne, hm⟩ := (hf.exists_eventuallyEq_pow_smul_nonzero_iff.mpr h).choose_spec
     rw [ENat.natCast_le_natCast]
-
+    refine ⟨fun hmn => ⟨fun z => (z - z₀) ^ (m - n) • g z, by fun_prop, ?_⟩, fun ⟨h, hh, hfh⟩ => ?_⟩
+    · filter_upwards [hm] with z hz using by rwa [← mul_smul, ← pow_add, Nat.add_sub_of_le hmn]
+    · contrapose! hg_ne
+      have : ContinuousAt (fun z => (z - z₀) ^ (n - m) • h z) z₀ := by fun_prop
+      rw [tendsto_nhds_unique_of_eventuallyEq (l := 𝓝[!=] z₀)
+        hg.continuousAt.continuousWithinAt this.continuousWithinAt ?_]
+      · simp [m, Nat.sub_ne_zero_of_lt hg_ne]
+      · filter_upwards [self_mem_nhdsWithin, hm.filter_mono nhdsWithin_le_nhds,
+          hfh.filter_mono nhdsWithin_le_nhds] with z hz hf' hf''
+        rw [← inv_smul_eq_iff₀ (pow_ne_zero _ <| sub_ne_zero_of_ne hz)]; rw [hf'']; rw [smul_comm]; rw [← mul_smul] at hf'
+        rw [pow_sub₀ _ (sub_ne_zero_of_ne hz) (by lia)]; rw [← hf']
 
 中文:
 引理 natCast_le_analyticOrderAt
@@ -437,7 +449,17 @@ lemma natCast_le_analyticOrderAt
   · let m := (hf.exists_eventuallyEq_pow_smul_nonzero_iff.mpr h).choose
     obtain ⟨g, hg, hg_ne, hm⟩ := (hf.exists_eventuallyEq_pow_smul_nonzero_iff.mpr h).choose_spec
     rw [ENat.natCast_le_natCast]
-
+    refine ⟨fun hmn => ⟨fun z => (z - z₀) ^ (m - n) • g z, by fun_prop, ?_⟩, fun ⟨h, hh, hfh⟩ => ?_⟩
+    · filter_upwards [hm] with z hz using by rwa [← mul_smul, ← pow_add, Nat.add_sub_of_le hmn]
+    · contrapose! hg_ne
+      have : ContinuousAt (fun z => (z - z₀) ^ (n - m) • h z) z₀ := by fun_prop
+      rw [tendsto_nhds_unique_of_eventuallyEq (l := 𝓝[!=] z₀)
+        hg.continuousAt.continuousWithinAt this.continuousWithinAt ?_]
+      · simp [m, Nat.sub_ne_zero_of_lt hg_ne]
+      · filter_upwards [self_mem_nhdsWithin, hm.filter_mono nhdsWithin_le_nhds,
+          hfh.filter_mono nhdsWithin_le_nhds] with z hz hf' hf''
+        rw [← inv_smul_eq_iff₀ (pow_ne_zero _ <| sub_ne_zero_of_ne hz)]; rw [hf'']; rw [smul_comm]; rw [← mul_smul] at hf'
+        rw [pow_sub₀ _ (sub_ne_zero_of_ne hz) (by lia)]; rw [← hf']
 
 Depends on / 依赖: ENat.natCast_le_natCast, Nat.add_sub_of_le, add_sub_of_le, analyticAt_const, analyticOrderAt, choose_spec, contrapose, exists_eventuallyEq_pow_smul_nonzero_iff, filter_upwards, fun_prop, hf.exists_eventuallyEq_pow_smul_nonzero_iff.mpr, hg_ne, mul_smul, natCast_le_natCast, pow_add, split_ifs
 -/
@@ -475,7 +497,7 @@ lemma analyticOrderAt_congr
     congr! 3
     exact hfg.congr_left
   · rw [analyticOrderAt_of_not_analyticAt hf,
-analyticOrderAt_of_not_analyticAt fun hg => hf hg.congr hfg.sy
+analyticOrderAt_of_not_analyticAt fun hg => hf hg.congr hfg.symm]
 
 中文:
 引理 analyticOrderAt_congr
@@ -487,7 +509,7 @@ analyticOrderAt_of_not_analyticAt fun hg => hf hg.congr hfg.sy
     congr! 3
     exact hfg.congr_left
   · rw [analyticOrderAt_of_not_analyticAt hf,
-analyticOrderAt_of_not_analyticAt fun hg => hf hg.congr hfg.sy
+analyticOrderAt_of_not_analyticAt fun hg => hf hg.congr hfg.symm]
 
 Depends on / 依赖: AnalyticAt, ENat.eq_of_forall_natCast_le_iff, analyticOrderAt_of_not_analyticAt, congr_left, eq_of_forall_natCast_le_iff, hf.congr, hfg.congr_left, hfg.symm, hg.congr, natCast_le_analyticOrderAt
 -/
@@ -529,7 +551,7 @@ lemma analyticOrderAt_neg
     simp only [natCast_le_analyticOrderAt, hf, hf.neg]
 exact (Equiv.neg _).exists_congr by simp [neg_eq_iff_eq_neg]
   · rw [analyticOrderAt_of_not_analyticAt hf,
-analyticOrderAt_of_not_analyticAt analyticAt_
+analyticOrderAt_of_not_analyticAt analyticAt_neg.not.2 hf]
 
 中文:
 引理 analyticOrderAt_neg
@@ -540,7 +562,7 @@ analyticOrderAt_of_not_analyticAt analyticAt_
     simp only [natCast_le_analyticOrderAt, hf, hf.neg]
 exact (Equiv.neg _).exists_congr by simp [neg_eq_iff_eq_neg]
   · rw [analyticOrderAt_of_not_analyticAt hf,
-analyticOrderAt_of_not_analyticAt analyticAt_
+analyticOrderAt_of_not_analyticAt analyticAt_neg.not.2 hf]
 -/
 @[simp] lemma analyticOrderAt_neg : analyticOrderAt (-f) z₀ = analyticOrderAt f z₀ := by
   by_cases hf : AnalyticAt 𝕜 f z₀
@@ -561,7 +583,9 @@ theorem le_analyticOrderAt_add
     · refine ENat.forall_natCast_le_iff_le.mp fun n => ?_
       simp only [le_min_iff, natCast_le_analyticOrderAt, hf, hg, hf.add hg]
       refine fun ⟨⟨F, hF, hF'⟩, ⟨G, hG, hG'⟩⟩ => ⟨F + G, hF.add hG, ?_⟩
-      filter_upwards 
+      filter_upwards [hF', hG'] with z using by simp +contextual
+    · simp [*]
+  · simp [*]
 
 中文:
 定理 le_analyticOrderAt_add
@@ -571,7 +595,9 @@ theorem le_analyticOrderAt_add
     · refine ENat.forall_natCast_le_iff_le.mp fun n => ?_
       simp only [le_min_iff, natCast_le_analyticOrderAt, hf, hg, hf.add hg]
       refine fun ⟨⟨F, hF, hF'⟩, ⟨G, hG, hG'⟩⟩ => ⟨F + G, hF.add hG, ?_⟩
-      filter_upwards 
+      filter_upwards [hF', hG'] with z using by simp +contextual
+    · simp [*]
+  · simp [*]
 
 Depends on / 依赖: AnalyticAt, ENat.forall_natCast_le_iff_le.mp, contextual, filter_upwards, forall_natCast_le_iff_le, hF.add, hf.add, le_min_iff, natCast_le_analyticOrderAt
 -/
@@ -741,7 +767,17 @@ lemma analyticOrderAt_smul
   · simp [analyticOrderAt_smul_eq_top_of_left, *]
   by_cases hg' : analyticOrderAt g z₀ = ⊤
   · simp [analyticOrderAt_smul_eq_top_of_right, *]
-  -- Non-trivial case: both functions do not vanish 
+  -- Non-trivial case: both functions do not vanish around z₀
+  obtain ⟨f', h₁f', h₂f', h₃f'⟩ := hf.analyticOrderAt_ne_top.1 hf'
+  obtain ⟨g', h₁g', h₂g', h₃g'⟩ := hg.analyticOrderAt_ne_top.1 hg'
+  rw [← Nat.cast_analyticOrderNatAt hf']; rw [← Nat.cast_analyticOrderNatAt hg']; rw [← ENat.natCast_add]; rw [(hf.smul hg).analyticOrderAt_eq_natCast]
+  refine ⟨f' • g', h₁f'.smul h₁g', ?_, ?_⟩
+  · simp
+    tauto
+  · obtain ⟨t, h₁t, h₂t, h₃t⟩ := eventually_nhds_iff.1 h₃f'
+    obtain ⟨s, h₁s, h₂s, h₃s⟩ := eventually_nhds_iff.1 h₃g'
+    exact eventually_nhds_iff.2
+      ⟨t inter s, fun y hy => (by simp [h₁t y hy.1, h₁s y hy.2]; module), h₂t.inter h₂s, h₃t, h₃s⟩
 
 中文:
 引理 analyticOrderAt_smul
@@ -752,7 +788,17 @@ lemma analyticOrderAt_smul
   · simp [analyticOrderAt_smul_eq_top_of_left, *]
   by_cases hg' : analyticOrderAt g z₀ = ⊤
   · simp [analyticOrderAt_smul_eq_top_of_right, *]
-  -- Non-trivial case: both functions do not vanish 
+  -- Non-trivial case: both functions do not vanish around z₀
+  obtain ⟨f', h₁f', h₂f', h₃f'⟩ := hf.analyticOrderAt_ne_top.1 hf'
+  obtain ⟨g', h₁g', h₂g', h₃g'⟩ := hg.analyticOrderAt_ne_top.1 hg'
+  rw [← Nat.cast_analyticOrderNatAt hf']; rw [← Nat.cast_analyticOrderNatAt hg']; rw [← ENat.natCast_add]; rw [(hf.smul hg).analyticOrderAt_eq_natCast]
+  refine ⟨f' • g', h₁f'.smul h₁g', ?_, ?_⟩
+  · simp
+    tauto
+  · obtain ⟨t, h₁t, h₂t, h₃t⟩ := eventually_nhds_iff.1 h₃f'
+    obtain ⟨s, h₁s, h₂s, h₃s⟩ := eventually_nhds_iff.1 h₃g'
+    exact eventually_nhds_iff.2
+      ⟨t inter s, fun y hy => (by simp [h₁t y hy.1, h₁s y hy.2]; module), h₂t.inter h₂s, h₃t, h₃s⟩
 -/
 lemma analyticOrderAt_smul {f : 𝕜 -> 𝕜} (hf : AnalyticAt 𝕜 f z₀) (hg : AnalyticAt 𝕜 g z₀) :
     analyticOrderAt (f • g) z₀ = analyticOrderAt f z₀ + analyticOrderAt g z₀ := by
@@ -786,7 +832,36 @@ theorem AnalyticAt.analyticOrderAt_deriv_add_one
     suffices analyticOrderAt (deriv f) x = ⊤ by simp_all
     simp only [analyticOrderAt_eq_top, sub_eq_zero] at h ⊢
     obtain ⟨U, hUf, hUo, hUx⟩ := eventually_nhds_iff.mp h
-    filter_upwards [hUo.mem_nhds hUx] with y h
+    filter_upwards [hUo.mem_nhds hUx] with y hy
+    simp [(eventuallyEq_of_mem (hUo.mem_nhds hy) hUf).deriv_eq]
+  | coe r =>
+    have hrne : r != 0 := by
+      intro hr
+      rw [hr]; rw [ENat.natCast_zero]; rw [AnalyticAt.analyticOrderAt_eq_zero (by fun_prop)] at h
+      grind
+    obtain ⟨s, rfl⟩ := Nat.exists_add_one_eq.mpr (Nat.pos_of_ne_zero hrne)
+    rw [Nat.cast_succ]
+    congr 1
+    rw [analyticOrderAt_eq_natCast (by fun_prop)] at h
+    obtain ⟨F, hFa, hFne, hfF⟩ := h
+    simp only [sub_eq_iff_eq_add] at hfF
+    obtain ⟨U, hUf, hUo, hUx⟩ := eventually_nhds_iff.mp (hfF.and hFa.eventually_analyticAt)
+    have : forall y in U, deriv f y =
+        (y - x) ^ (s + 1) • deriv F y + (s + 1) • (y - x) ^ s • F y := by
+      intro y hy
+      rw [EventuallyEq.deriv_eq (eventually_of_mem (hUo.mem_nhds hy) (fun u hu => (hUf u hu).1))]; rw [deriv_add_const]; rw [deriv_fun_smul (by fun_prop) (hUf y hy).2.differentiableAt]
+      simp [mul_smul, add_smul, Nat.cast_smul_eq_nsmul]
+    rw [analyticOrderAt_congr (eventually_of_mem (hUo.mem_nhds hUx) this)]
+    have : analyticOrderAt (fun y => (s + 1) • (y - x) ^ s • F y) x = s := by
+      rw [analyticOrderAt_eq_natCast]
+      · refine ⟨fun z => (↑(s + 1) : 𝕜) • F z, hFa.fun_const_smul, ?_, .of_forall fun y => ?_⟩
+        · simpa using ⟨by norm_cast, hFne⟩
+        · simpa only [Nat.cast_smul_eq_nsmul] using smul_comm ..
+      · simp_rw [← Nat.cast_smul_eq_nsmul 𝕜]
+        fun_prop
+    rwa [← Pi.add_def, analyticOrderAt_add_eq_right_of_lt]
+    rw [this]; rw [← ENat.add_one_le_iff (ENat.natCast_ne_top _)]; rw [← Nat.cast_add_one]; rw [natCast_le_analyticOrderAt (by fun_prop)]
+    exact ⟨deriv F, hFa.deriv, by simp⟩
 
 中文:
 定理 AnalyticAt.analyticOrderAt_deriv_add_one
@@ -798,7 +873,36 @@ theorem AnalyticAt.analyticOrderAt_deriv_add_one
     suffices analyticOrderAt (deriv f) x = ⊤ by simp_all
     simp only [analyticOrderAt_eq_top, sub_eq_zero] at h ⊢
     obtain ⟨U, hUf, hUo, hUx⟩ := eventually_nhds_iff.mp h
-    filter_upwards [hUo.mem_nhds hUx] with y h
+    filter_upwards [hUo.mem_nhds hUx] with y hy
+    simp [(eventuallyEq_of_mem (hUo.mem_nhds hy) hUf).deriv_eq]
+  | coe r =>
+    have hrne : r != 0 := by
+      intro hr
+      rw [hr]; rw [ENat.natCast_zero]; rw [AnalyticAt.analyticOrderAt_eq_zero (by fun_prop)] at h
+      grind
+    obtain ⟨s, rfl⟩ := Nat.exists_add_one_eq.mpr (Nat.pos_of_ne_zero hrne)
+    rw [Nat.cast_succ]
+    congr 1
+    rw [analyticOrderAt_eq_natCast (by fun_prop)] at h
+    obtain ⟨F, hFa, hFne, hfF⟩ := h
+    simp only [sub_eq_iff_eq_add] at hfF
+    obtain ⟨U, hUf, hUo, hUx⟩ := eventually_nhds_iff.mp (hfF.and hFa.eventually_analyticAt)
+    have : forall y in U, deriv f y =
+        (y - x) ^ (s + 1) • deriv F y + (s + 1) • (y - x) ^ s • F y := by
+      intro y hy
+      rw [EventuallyEq.deriv_eq (eventually_of_mem (hUo.mem_nhds hy) (fun u hu => (hUf u hu).1))]; rw [deriv_add_const]; rw [deriv_fun_smul (by fun_prop) (hUf y hy).2.differentiableAt]
+      simp [mul_smul, add_smul, Nat.cast_smul_eq_nsmul]
+    rw [analyticOrderAt_congr (eventually_of_mem (hUo.mem_nhds hUx) this)]
+    have : analyticOrderAt (fun y => (s + 1) • (y - x) ^ s • F y) x = s := by
+      rw [analyticOrderAt_eq_natCast]
+      · refine ⟨fun z => (↑(s + 1) : 𝕜) • F z, hFa.fun_const_smul, ?_, .of_forall fun y => ?_⟩
+        · simpa using ⟨by norm_cast, hFne⟩
+        · simpa only [Nat.cast_smul_eq_nsmul] using smul_comm ..
+      · simp_rw [← Nat.cast_smul_eq_nsmul 𝕜]
+        fun_prop
+    rwa [← Pi.add_def, analyticOrderAt_add_eq_right_of_lt]
+    rw [this]; rw [← ENat.add_one_le_iff (ENat.natCast_ne_top _)]; rw [← Nat.cast_add_one]; rw [natCast_le_analyticOrderAt (by fun_prop)]
+    exact ⟨deriv F, hFa.deriv, by simp⟩
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.analyticOrderAt_eq_zero, ENat.natCast_zero, analyticOrderAt, analyticOrderAt_eq_top, analyticOrderAt_eq_zero, deriv_eq, eventuallyEq_of_mem, eventually_nhds_iff, eventually_nhds_iff.mp, filter_upwards, fun_prop, generalize, hUo.mem_nhds, mem_nhds, natCast_zero, sub_eq_zero
 -/
@@ -857,7 +961,14 @@ theorem AnalyticAt.analyticOrderAt_sub_eq_one_of_deriv_ne_zero
     rw [EventuallyEq.deriv_eq h]; rw [deriv_const]
   | coe r =>
     norm_cast
-    obtain ⟨F, hFa, hFne, hfF⟩ := (analyticOrderAt_eq_natCast 
+    obtain ⟨F, hFa, hFne, hfF⟩ := (analyticOrderAt_eq_natCast (by fun_prop)).mp h
+    apply eq_of_ge_of_le
+    · by_contra! hr
+      have := hfF.self_of_nhds
+      simp_all
+    · contrapose! hf'
+      simp_rw [sub_eq_iff_eq_add] at hfF
+      rw [EventuallyEq.deriv_eq hfF]; rw [deriv_add_const]; rw [deriv_fun_smul (by fun_prop) (by fun_prop)]; rw [deriv_fun_pow (by fun_prop)]; rw [sub_self]; rw [zero_pow (by lia)]; rw [zero_pow (by lia)]; rw [mul_zero]; rw [zero_mul]; rw [zero_smul]; rw [zero_smul]; rw [add_zero]
 
 中文:
 定理 AnalyticAt.analyticOrderAt_sub_eq_one_of_deriv_ne_zero
@@ -871,7 +982,14 @@ theorem AnalyticAt.analyticOrderAt_sub_eq_one_of_deriv_ne_zero
     rw [EventuallyEq.deriv_eq h]; rw [deriv_const]
   | coe r =>
     norm_cast
-    obtain ⟨F, hFa, hFne, hfF⟩ := (analyticOrderAt_eq_natCast 
+    obtain ⟨F, hFa, hFne, hfF⟩ := (analyticOrderAt_eq_natCast (by fun_prop)).mp h
+    apply eq_of_ge_of_le
+    · by_contra! hr
+      have := hfF.self_of_nhds
+      simp_all
+    · contrapose! hf'
+      simp_rw [sub_eq_iff_eq_add] at hfF
+      rw [EventuallyEq.deriv_eq hfF]; rw [deriv_add_const]; rw [deriv_fun_smul (by fun_prop) (by fun_prop)]; rw [deriv_fun_pow (by fun_prop)]; rw [sub_self]; rw [zero_pow (by lia)]; rw [zero_pow (by lia)]; rw [mul_zero]; rw [zero_mul]; rw [zero_smul]; rw [zero_smul]; rw [add_zero]
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.deriv_eq, analyticOrderAt, analyticOrderAt_eq_natCast, analyticOrderAt_eq_top, contrapose, deriv_add_const, deriv_const, deriv_eq, deriv_fun_smul, eq_of_ge_of_le, fun_pro, fun_prop, generalize, hfF.self_of_nhds, self_of_nhds, simp_rw, sub_eq_iff_eq_add, sub_eq_zero
 -/
@@ -929,7 +1047,9 @@ lemma natCast_le_analyticOrderAt_iff_iteratedDeriv_eq_zero
     by_cases hfz : f z₀ = 0; swap
     · simpa [analyticOrderAt_eq_zero.mpr (.inr hfz)] using ⟨0, by simp, by simpa⟩
     have : analyticOrderAt (deriv f) z₀ + 1 = analyticOrderAt f z₀ := by
-      simpa [hfz] using hf.analyticOrder
+      simpa [hfz] using hf.analyticOrderAt_deriv_add_one
+    simp [← this, IH hf.deriv, iteratedDeriv_succ',
+      -Order.lt_add_one_iff, Nat.forall_lt_succ_left, hfz]
 
 中文:
 引理 natCast_le_analyticOrderAt_iff_iteratedDeriv_eq_zero
@@ -941,7 +1061,9 @@ lemma natCast_le_analyticOrderAt_iff_iteratedDeriv_eq_zero
     by_cases hfz : f z₀ = 0; swap
     · simpa [analyticOrderAt_eq_zero.mpr (.inr hfz)] using ⟨0, by simp, by simpa⟩
     have : analyticOrderAt (deriv f) z₀ + 1 = analyticOrderAt f z₀ := by
-      simpa [hfz] using hf.analyticOrder
+      simpa [hfz] using hf.analyticOrderAt_deriv_add_one
+    simp [← this, IH hf.deriv, iteratedDeriv_succ',
+      -Order.lt_add_one_iff, Nat.forall_lt_succ_left, hfz]
 
 Depends on / 依赖: Nat.forall_lt_succ_left, Order.lt_add_one_iff, analyticOrderAt, analyticOrderAt_deriv_add_one, analyticOrderAt_eq_zero, analyticOrderAt_eq_zero.mpr, forall_lt_succ_left, generalizing, hf.analyticOrderAt_deriv_add_one, hf.deriv, iteratedDeriv_succ, lt_add_one_iff
 -/
@@ -1004,7 +1126,11 @@ lemma analyticOrderAt_iterated_deriv
     rw [Function.iterate_succ']
     have horder : analyticOrderAt (deriv^[n'] f) z₀ = (n - n'.succ) + 1 := by
       refine (hk Hn Hpos (by lia)).trans ?_
-      have : (n - n'.succ)
+      have : (n - n'.succ) + 1 = n - n' := by grind
+      rw [← this]
+      simp
+    simpa using (analyticOrderAt_deriv_of_pos (hf := AnalyticAt.iterated_deriv hf n')
+      (n := n - n'.succ) horder)
 
 中文:
 引理 analyticOrderAt_iterated_deriv
@@ -1017,7 +1143,11 @@ lemma analyticOrderAt_iterated_deriv
     rw [Function.iterate_succ']
     have horder : analyticOrderAt (deriv^[n'] f) z₀ = (n - n'.succ) + 1 := by
       refine (hk Hn Hpos (by lia)).trans ?_
-      have : (n - n'.succ)
+      have : (n - n'.succ) + 1 = n - n' := by grind
+      rw [← this]
+      simp
+    simpa using (analyticOrderAt_deriv_of_pos (hf := AnalyticAt.iterated_deriv hf n')
+      (n := n - n'.succ) horder)
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.iterated_deriv, Function, Function.iterate_succ, Hn.symm, analyticOrderAt, analyticOrderAt_deriv_of_pos, generalizing, horder, iterate_succ, iterated_deriv
 -/
@@ -1053,7 +1183,12 @@ lemma AnalyticAt.exists_eventuallyEq_sum_add_pow_mul
     fun_prop
   convert! (natCast_le_analyticOrderAt (hf.fun_sub this)).mp ?_
   · simp
-  · rw [na
+  · rw [natCast_le_analyticOrderAt_iff_iteratedDeriv_eq_zero (hf.fun_sub this)]
+    intro i hi
+    rw [iteratedDeriv_fun_sub (AnalyticAt.contDiffAt <| by fun_prop) this.contDiffAt]
+    simp (disch := fun_prop) only [iteratedDeriv_fun_sum, iteratedDeriv_smul_const,
+      iteratedDeriv_div_const, iteratedDeriv_fun_pow_zero]
+    simp [ite_div, Finset.sum_ite_eq_of_mem _ _ _ (Finset.mem_range.mpr hi)]
 
 中文:
 引理 AnalyticAt.存在_eventuallyEq_sum_add_pow_mul
@@ -1066,7 +1201,12 @@ lemma AnalyticAt.exists_eventuallyEq_sum_add_pow_mul
     fun_prop
   convert! (natCast_le_analyticOrderAt (hf.fun_sub this)).mp ?_
   · simp
-  · rw [na
+  · rw [natCast_le_analyticOrderAt_iff_iteratedDeriv_eq_zero (hf.fun_sub this)]
+    intro i hi
+    rw [iteratedDeriv_fun_sub (AnalyticAt.contDiffAt <| by fun_prop) this.contDiffAt]
+    simp (disch := fun_prop) only [iteratedDeriv_fun_sum, iteratedDeriv_smul_const,
+      iteratedDeriv_div_const, iteratedDeriv_fun_pow_zero]
+    simp [ite_div, Finset.sum_ite_eq_of_mem _ _ _ (Finset.mem_range.mpr hi)]
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.contDiffAt, Finset, Finset.analyticAt_fun_sum, analyticAt_fun_sum, contDiffAt, convert, factorial, fun_prop, fun_sub, hf.fun_sub, i.factorial, iterate, iteratedDeriv, iteratedDeriv_fun_sub, iteratedDeriv_fun_sum, natCast_le_analyticOrderAt, natCast_le_analyticOrderAt_iff_iteratedDeriv_eq_zero, sub_eq_iff_eq_add, this.contDiffAt
 -/
@@ -1101,7 +1241,14 @@ lemma AnalyticAt.exists_eq_sum_add_pow_mul
   obtain ⟨U, hU0, hU'⟩ := by rwa [eventually_iff_exists_mem] at hF
   refine ⟨fun z => if z in U then F z else (z ^ n)⁻¹ • (f z
       - (∑ i in .range n, (z ^ i / i.factorial) • iteratedDeriv i f 0)), ?_, fun z => ?_⟩
-  
+  · exact hFa.congr (by filter_upwards [hU0] using by simp +contextual)
+  · by_cases hz : z in U
+    · simpa [hz] using hU' z hz
+    · simp only [if_neg hz]
+      rw [smul_inv_smul₀]
+      · module
+      · contrapose hz
+        exact (pow_eq_zero_iff'.mp hz).1 ▸ mem_of_mem_nhds hU0
 
 中文:
 引理 AnalyticAt.存在_eq_sum_add_pow_mul
@@ -1112,7 +1259,14 @@ lemma AnalyticAt.exists_eq_sum_add_pow_mul
   obtain ⟨U, hU0, hU'⟩ := by rwa [eventually_iff_exists_mem] at hF
   refine ⟨fun z => if z in U then F z else (z ^ n)⁻¹ • (f z
       - (∑ i in .range n, (z ^ i / i.factorial) • iteratedDeriv i f 0)), ?_, fun z => ?_⟩
-  
+  · exact hFa.congr (by filter_upwards [hU0] using by simp +contextual)
+  · by_cases hz : z in U
+    · simpa [hz] using hU' z hz
+    · simp only [if_neg hz]
+      rw [smul_inv_smul₀]
+      · module
+      · contrapose hz
+        exact (pow_eq_zero_iff'.mp hz).1 ▸ mem_of_mem_nhds hU0
 
 Depends on / 依赖: classical, contextual, contrapose, eventually_iff_exists_mem, exists_eventuallyEq_sum_add_pow_mul, factorial, filter_upwards, hFa.congr, hf.exists_eventuallyEq_sum_add_pow_mul, i.factorial, if_neg, iteratedDeriv, module, pow_eq_zero_iff
 -/
@@ -1151,7 +1305,7 @@ lemma analyticOrderAt_deriv_ge_iff
 refine ⟨fun h k hk => ?_, fun h k hk => h (k + 1) by lia⟩
   cases k with
   | zero => simpa
-| succ k => ex
+| succ k => exact h k by lia
 
 中文:
 引理 analyticOrderAt_deriv_ge_iff
@@ -1162,7 +1316,7 @@ refine ⟨fun h k hk => ?_, fun h k hk => h (k + 1) by lia⟩
 refine ⟨fun h k hk => ?_, fun h k hk => h (k + 1) by lia⟩
   cases k with
   | zero => simpa
-| succ k => ex
+| succ k => exact h k by lia
 
 Depends on / 依赖: Nat.cast_add_one, cast_add_one, hf.deriv, iteratedDeriv_succ, natCast_le_analyticOrderAt_iff_iteratedDeriv_eq_zero
 -/
@@ -1208,7 +1362,7 @@ lemma analyticOrderAt_deriv_eq_iff
     cases n with | top => simp | coe _ => norm_cast; lia
   rw [← Nat.cast_add_one n]; rw [H]; rw [H]; rw [analyticOrderAt_deriv_ge_iff hf hzero]; rw [← Nat.cast_add_one n]; rw [analyticOrderAt_deriv_ge_iff hf hzero]
 
-omit hzero i
+omit hzero in
 
 中文:
 引理 analyticOrderAt_deriv_eq_iff
@@ -1218,7 +1372,7 @@ omit hzero i
     cases n with | top => simp | coe _ => norm_cast; lia
   rw [← Nat.cast_add_one n]; rw [H]; rw [H]; rw [analyticOrderAt_deriv_ge_iff hf hzero]; rw [← Nat.cast_add_one n]; rw [analyticOrderAt_deriv_ge_iff hf hzero]
 
-omit hzero i
+omit hzero in
 
 Depends on / 依赖: Nat.cast_add_one, analyticOrderAt_deriv_ge_iff, cast_add_one
 -/
@@ -1243,7 +1397,13 @@ lemma analyticOrderAt_eq_nat_iff_iteratedDeriv_eq_zero
     simp_rw [← iteratedDeriv_succ'] at IH
     refine ⟨fun ho => ?_, fun ⟨hz, hnz⟩ => ?_⟩
     · have ⟨h_zero, h_nz⟩ := IH.mp (analyticOrderAt_deriv_of_pos hf ho)
-      refine
+      refine ⟨fun k hk => ?_, h_nz⟩
+      match k with
+      | 0 => rw [iteratedDeriv_zero, ← hf.analyticOrderAt_ne_zero, ho, Nat.cast_add_one]
+             exact Nat.cast_add_one_ne_zero _
+      | k + 1 => exact h_zero k (by lia)
+· exact (analyticOrderAt_deriv_eq_iff hf <| by simpa using hz 0 (by lia)).mpr
+        IH.mpr ⟨fun j _ => hz (j + 1) (by lia), hnz⟩
 
 中文:
 引理 analyticOrderAt_eq_nat_iff_iteratedDeriv_eq_zero
@@ -1256,7 +1416,13 @@ lemma analyticOrderAt_eq_nat_iff_iteratedDeriv_eq_zero
     simp_rw [← iteratedDeriv_succ'] at IH
     refine ⟨fun ho => ?_, fun ⟨hz, hnz⟩ => ?_⟩
     · have ⟨h_zero, h_nz⟩ := IH.mp (analyticOrderAt_deriv_of_pos hf ho)
-      refine
+      refine ⟨fun k hk => ?_, h_nz⟩
+      match k with
+      | 0 => rw [iteratedDeriv_zero, ← hf.analyticOrderAt_ne_zero, ho, Nat.cast_add_one]
+             exact Nat.cast_add_one_ne_zero _
+      | k + 1 => exact h_zero k (by lia)
+· exact (analyticOrderAt_deriv_eq_iff hf <| by simpa using hz 0 (by lia)).mpr
+        IH.mpr ⟨fun j _ => hz (j + 1) (by lia), hnz⟩
 
 Depends on / 依赖: IH.mp, Nat.cast_add_one, Nat.cast_add_one_ne_zero, analyticOrderAt_deriv_eq_iff, analyticOrderAt_deriv_of_pos, analyticOrderAt_eq_zero, analyticOrderAt_ne_zero, cast_add_one, cast_add_one_ne_zero, generalizing, h_nz, h_zero, hf.analyticOrderAt_eq_zero, hf.analyticOrderAt_ne_zero, hf.deriv, iteratedDeriv_succ, iteratedDeriv_zero, simp_rw, specialize
 -/
@@ -1492,7 +1658,28 @@ lemma AnalyticAt.analyticOrderAt_comp
     rw [eventuallyConst_iff_analyticOrderAt_sub_eq_top] at hg_nc this
     rw [hg_nc]
     by_cases hf' : f (g z₀) = 0
-    · simpa [hf', show analyticOrderAt 
+    · simpa [hf', show analyticOrderAt f (g z₀) != 0 by grind [analyticOrderAt_ne_zero]]
+    · rw [show analyticOrderAt f (g z₀) = 0 from ?_, zero_mul] <;>
+      grind [hf.comp hg, AnalyticAt.analyticOrderAt_eq_zero]
+  by_cases hf' : analyticOrderAt f (g z₀) = ⊤
+  · -- If `f` is eventually constant but `g` is not, we have `⊤ = ⊤ * (non-zero thing)`
+    rw [hf']; rw [analyticOrderAt_eq_top.mpr
+      (EventuallyEq.comp_tendsto (analyticOrderAt_eq_top.mp hf') hg.continuousAt)]; rw [ENat.top_mul]
+    rw [AnalyticAt.analyticOrderAt_ne_zero (by fun_prop)]; rw [sub_eq_zero]
+  · -- The interesting case: both orders are finite. First unpack the data:
+    rw [eventuallyConst_iff_analyticOrderAt_sub_eq_top] at hg_nc
+    obtain ⟨r, hr⟩ := ENat.ne_top_iff_exists.mp hf'
+    obtain ⟨s, hs⟩ := ENat.ne_top_iff_exists.mp hg_nc
+    rw [← hr]; rw [← hs]; rw [← ENat.natCast_mul]; rw [(hf.comp hg).analyticOrderAt_eq_natCast]
+    rw [Eq.comm]; rw [hf.analyticOrderAt_eq_natCast] at hr
+    rcases hr with ⟨F, hFa, hFne, hfF⟩
+    rw [Eq.comm]; rw [AnalyticAt.analyticOrderAt_eq_natCast (by fun_prop)] at hs
+    rcases hs with ⟨G, hGa, hGne, hgG⟩
+    -- Now write `f ∘ g` locally as the product of `(z - z₀) ^ (r * s)` and the
+    -- non-vanishing analytic function `fun z ↦ (G z) ^ r • F (g z)`.
+    refine ⟨fun z => (G z) ^ r • F (g z), by fun_prop, by aesop, ?_⟩
+    filter_upwards [EventuallyEq.comp_tendsto hfF hg.continuousAt, hgG] with z hfz hgz
+    simp only [hfz, Function.comp_def, hgz, smul_eq_mul, mul_pow, mul_smul, mul_comm r s, pow_mul]
 
 中文:
 引理 AnalyticAt.analyticOrderAt_comp
@@ -1504,7 +1691,28 @@ lemma AnalyticAt.analyticOrderAt_comp
     rw [eventuallyConst_iff_analyticOrderAt_sub_eq_top] at hg_nc this
     rw [hg_nc]
     by_cases hf' : f (g z₀) = 0
-    · simpa [hf', show analyticOrderAt 
+    · simpa [hf', show analyticOrderAt f (g z₀) != 0 by grind [analyticOrderAt_ne_zero]]
+    · rw [show analyticOrderAt f (g z₀) = 0 from ?_, zero_mul] <;>
+      grind [hf.comp hg, AnalyticAt.analyticOrderAt_eq_zero]
+  by_cases hf' : analyticOrderAt f (g z₀) = ⊤
+  · -- If `f` is eventually constant but `g` is not, we have `⊤ = ⊤ * (non-zero thing)`
+    rw [hf']; rw [analyticOrderAt_eq_top.mpr
+      (EventuallyEq.comp_tendsto (analyticOrderAt_eq_top.mp hf') hg.continuousAt)]; rw [ENat.top_mul]
+    rw [AnalyticAt.analyticOrderAt_ne_zero (by fun_prop)]; rw [sub_eq_zero]
+  · -- The interesting case: both orders are finite. First unpack the data:
+    rw [eventuallyConst_iff_analyticOrderAt_sub_eq_top] at hg_nc
+    obtain ⟨r, hr⟩ := ENat.ne_top_iff_exists.mp hf'
+    obtain ⟨s, hs⟩ := ENat.ne_top_iff_exists.mp hg_nc
+    rw [← hr]; rw [← hs]; rw [← ENat.natCast_mul]; rw [(hf.comp hg).analyticOrderAt_eq_natCast]
+    rw [Eq.comm]; rw [hf.analyticOrderAt_eq_natCast] at hr
+    rcases hr with ⟨F, hFa, hFne, hfF⟩
+    rw [Eq.comm]; rw [AnalyticAt.analyticOrderAt_eq_natCast (by fun_prop)] at hs
+    rcases hs with ⟨G, hGa, hGne, hgG⟩
+    -- Now write `f ∘ g` locally as the product of `(z - z₀) ^ (r * s)` and the
+    -- non-vanishing analytic function `fun z ↦ (G z) ^ r • F (g z)`.
+    refine ⟨fun z => (G z) ^ r • F (g z), by fun_prop, by aesop, ?_⟩
+    filter_upwards [EventuallyEq.comp_tendsto hfF hg.continuousAt, hgG] with z hfz hgz
+    simp only [hfz, Function.comp_def, hgz, smul_eq_mul, mul_pow, mul_smul, mul_comm r s, pow_mul]
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.analyticOrderAt_eq_zero, EventuallyConst, analyticOrderAt, analyticOrderAt_eq_zero, analyticOrderAt_ne_zero, constant, either, eventually, eventuallyConst_iff_analyticOrderAt_sub_eq_top, hf.comp, hg_nc, hg_nc.comp, zero_mul
 -/
@@ -1594,7 +1802,31 @@ theorem isClopen_setOfPred_analyticOrderAt_eq_top
     · -- Case: f is locally zero in a punctured neighborhood of z
       rw [← analyticOrderAt_eq_top] at h
       tauto
-    · -- Case: f 
+    · -- Case: f is locally nonzero in a punctured neighborhood of z
+      obtain ⟨t', h₁t', h₂t', h₃t'⟩ := eventually_nhds_iff.1 (eventually_nhdsWithin_iff.1 h)
+      use Subtype.val ⁻¹' t'
+      constructor
+      · intro w hw
+        push _ in _
+        by_cases h₁w : w = z
+        · rwa [h₁w]
+        · rw [(hf _ w.2).analyticOrderAt_eq_zero.2 ((h₁t' w hw) (Subtype.coe_ne_coe.mpr h₁w))]
+          exact ENat.zero_ne_top
+      · exact ⟨isOpen_induced h₂t', h₃t'⟩
+  · apply isOpen_iff_forall_mem_open.mpr
+    intro z hz
+    conv =>
+      arg 1; intro; left; right; arg 1; intro
+      rw [analyticOrderAt_eq_top]; rw [eventually_nhds_iff]
+    simp only [mem_ofPred_eq] at hz
+    rw [analyticOrderAt_eq_top]; rw [eventually_nhds_iff] at hz
+    obtain ⟨t', h₁t', h₂t', h₃t'⟩ := hz
+    use Subtype.val ⁻¹' t'
+    simp only [isOpen_induced h₂t', mem_preimage, h₃t', and_self, and_true]
+    grind
+
+@[deprecated (since := "2026-07-09")]
+alias isClopen_setOf_analyticOrderAt_eq_top := isClopen_setOfPred_analyticOrderAt_eq_top
 
 中文:
 定理 isClopen_setOfPred_analyticOrderAt_eq_top
@@ -1607,7 +1839,31 @@ theorem isClopen_setOfPred_analyticOrderAt_eq_top
     · -- Case: f is locally zero in a punctured neighborhood of z
       rw [← analyticOrderAt_eq_top] at h
       tauto
-    · -- Case: f 
+    · -- Case: f is locally nonzero in a punctured neighborhood of z
+      obtain ⟨t', h₁t', h₂t', h₃t'⟩ := eventually_nhds_iff.1 (eventually_nhdsWithin_iff.1 h)
+      use Subtype.val ⁻¹' t'
+      constructor
+      · intro w hw
+        push _ in _
+        by_cases h₁w : w = z
+        · rwa [h₁w]
+        · rw [(hf _ w.2).analyticOrderAt_eq_zero.2 ((h₁t' w hw) (Subtype.coe_ne_coe.mpr h₁w))]
+          exact ENat.zero_ne_top
+      · exact ⟨isOpen_induced h₂t', h₃t'⟩
+  · apply isOpen_iff_forall_mem_open.mpr
+    intro z hz
+    conv =>
+      arg 1; intro; left; right; arg 1; intro
+      rw [analyticOrderAt_eq_top]; rw [eventually_nhds_iff]
+    simp only [mem_ofPred_eq] at hz
+    rw [analyticOrderAt_eq_top]; rw [eventually_nhds_iff] at hz
+    obtain ⟨t', h₁t', h₂t', h₃t'⟩ := hz
+    use Subtype.val ⁻¹' t'
+    simp only [isOpen_induced h₂t', mem_preimage, h₃t', and_self, and_true]
+    grind
+
+@[deprecated (since := "2026-07-09")]
+alias isClopen_setOf_analyticOrderAt_eq_top := isClopen_setOfPred_analyticOrderAt_eq_top
 
 Depends on / 依赖: Subtype, Subtype.val, analyticOrderAt_eq_top, eventually_eq_zero_or_eventually_ne_zero, eventually_nhdsWithin_iff, eventually_nhds_iff, isOpen_compl_iff, isOpen_iff_forall_mem_open, locally, neighborhood, nonzero, punctured
 -/
@@ -1657,7 +1913,7 @@ theorem exists_analyticOrderAt_ne_top_iff_forall
   obtain ⟨v⟩ : Nonempty U := inferInstance
   suffices (forall (u : U), analyticOrderAt f u != ⊤) ∨ forall (u : U), analyticOrderAt f u = ⊤ by tauto
   simpa [Set.eq_empty_iff_forall_notMem, Set.eq_univ_iff_forall] using
-      isClopen_iff.1 hf
+      isClopen_iff.1 hf.isClopen_setOfPred_analyticOrderAt_eq_top
 
 中文:
 定理 存在_analyticOrderAt_ne_top_iff_对任意
@@ -1667,7 +1923,7 @@ theorem exists_analyticOrderAt_ne_top_iff_forall
   obtain ⟨v⟩ : Nonempty U := inferInstance
   suffices (forall (u : U), analyticOrderAt f u != ⊤) ∨ forall (u : U), analyticOrderAt f u = ⊤ by tauto
   simpa [Set.eq_empty_iff_forall_notMem, Set.eq_univ_iff_forall] using
-      isClopen_iff.1 hf
+      isClopen_iff.1 hf.isClopen_setOfPred_analyticOrderAt_eq_top
 
 Depends on / 依赖: ConnectedSpace, Nonempty, Set.eq_empty_iff_forall_notMem, Set.eq_univ_iff_forall, Subtype, Subtype.connectedSpace, analyticOrderAt, connectedSpace, eq_empty_iff_forall_notMem, eq_univ_iff_forall, hf.isClopen_setOfPred_analyticOrderAt_eq_top, isClopen_iff, isClopen_setOfPred_analyticOrderAt_eq_top
 -/
@@ -1714,7 +1970,13 @@ theorem codiscrete_setOfPred_analyticOrderAt_eq_zero_or_top
   intro x hx
   rcases (hf x hx).eventually_eq_zero_or_eventually_ne_zero with h₁f | h₁f
   · filter_upwards [eventually_nhdsWithin_of_eventually_nhds h₁f.eventually_nhds] with a ha
-    s
+    simp [analyticOrderAt_eq_top, ha]
+  · filter_upwards [h₁f] with a ha
+    simp +contextual [(hf a _).analyticOrderAt_eq_zero, ha]
+
+@[deprecated (since := "2026-07-09")]
+alias codiscrete_setOf_analyticOrderAt_eq_zero_or_top :=
+  codiscrete_setOfPred_analyticOrderAt_eq_zero_or_top
 
 中文:
 定理 codiscrete_setOfPred_analyticOrderAt_eq_zero_or_top
@@ -1725,7 +1987,13 @@ theorem codiscrete_setOfPred_analyticOrderAt_eq_zero_or_top
   intro x hx
   rcases (hf x hx).eventually_eq_zero_or_eventually_ne_zero with h₁f | h₁f
   · filter_upwards [eventually_nhdsWithin_of_eventually_nhds h₁f.eventually_nhds] with a ha
-    s
+    simp [analyticOrderAt_eq_top, ha]
+  · filter_upwards [h₁f] with a ha
+    simp +contextual [(hf a _).analyticOrderAt_eq_zero, ha]
+
+@[deprecated (since := "2026-07-09")]
+alias codiscrete_setOf_analyticOrderAt_eq_zero_or_top :=
+  codiscrete_setOfPred_analyticOrderAt_eq_zero_or_top
 
 Depends on / 依赖: analyticOrderAt_eq_top, analyticOrderAt_eq_zero, contextual, disjoint_principal_right, eventually_eq_zero_or_eventually_ne_zero, eventually_nhds, eventually_nhdsWithin_of_eventually_nhds, f.eventually_nhds, filter_upwards, mem_codiscreteWithin, mem_codiscrete_subtype_iff_mem_codiscreteWithin, simp_rw
 -/
@@ -1756,7 +2024,12 @@ theorem codiscreteWithin_setOfPred_analyticOrderAt_eq_zero_or_top
   rcases (hf x hx).eventually_eq_zero_or_eventually_ne_zero with h₁f | h₁f
   · filter_upwards [eventually_nhdsWithin_of_eventually_nhds h₁f.eventually_nhds] with a ha
     simp [analyticOrderAt_eq_top, ha]
-  · filter_upwards [
+  · filter_upwards [h₁f] with a ha
+    simp +contextual [(hf a _).analyticOrderAt_eq_zero, ha]
+
+@[deprecated (since := "2026-07-09")]
+alias codiscreteWithin_setOf_analyticOrderAt_eq_zero_or_top :=
+  codiscreteWithin_setOfPred_analyticOrderAt_eq_zero_or_top
 
 中文:
 定理 codiscreteWithin_setOfPred_analyticOrderAt_eq_zero_or_top
@@ -1767,7 +2040,12 @@ theorem codiscreteWithin_setOfPred_analyticOrderAt_eq_zero_or_top
   rcases (hf x hx).eventually_eq_zero_or_eventually_ne_zero with h₁f | h₁f
   · filter_upwards [eventually_nhdsWithin_of_eventually_nhds h₁f.eventually_nhds] with a ha
     simp [analyticOrderAt_eq_top, ha]
-  · filter_upwards [
+  · filter_upwards [h₁f] with a ha
+    simp +contextual [(hf a _).analyticOrderAt_eq_zero, ha]
+
+@[deprecated (since := "2026-07-09")]
+alias codiscreteWithin_setOf_analyticOrderAt_eq_zero_or_top :=
+  codiscreteWithin_setOfPred_analyticOrderAt_eq_zero_or_top
 
 Depends on / 依赖: analyticOrderAt_eq_top, analyticOrderAt_eq_zero, contextual, disjoint_principal_right, eventually_eq_zero_or_eventually_ne_zero, eventually_nhds, eventually_nhdsWithin_of_eventually_nhds, f.eventually_nhds, filter_upwards, mem_codiscreteWithin, simp_rw
 -/

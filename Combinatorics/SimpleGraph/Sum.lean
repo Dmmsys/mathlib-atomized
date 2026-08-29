@@ -444,7 +444,12 @@ definition edgeSetSumEquiv
       | Sum.inr u, Sum.inl v, h => by contradiction
     ) (by grind)
   invFun
-    | Sum.
+    | Sum.inl ⟨e, he⟩ =>
+e.fromRelNdrec (sym := G.symm) he (fun u v h => ⟨s(.inl u, .inl v), h⟩) by simp
+    | Sum.inr ⟨e, he⟩ =>
+e.fromRelNdrec (sym := H.symm) he (fun u v h => ⟨s(.inr u, .inr v), h⟩) by simp
+  left_inv := by rintro ⟨⟨u | u, v | v⟩, h⟩ <;> first | contradiction | rfl
+  right_inv := by rintro (⟨⟨u, v⟩, h⟩ | ⟨⟨u, v⟩, h⟩) <;> rfl
 
 中文:
 定义 edgeSetSumEquiv
@@ -456,7 +461,12 @@ definition edgeSetSumEquiv
       | Sum.inr u, Sum.inl v, h => by contradiction
     ) (by grind)
   invFun
-    | Sum.
+    | Sum.inl ⟨e, he⟩ =>
+e.fromRelNdrec (sym := G.symm) he (fun u v h => ⟨s(.inl u, .inl v), h⟩) by simp
+    | Sum.inr ⟨e, he⟩ =>
+e.fromRelNdrec (sym := H.symm) he (fun u v h => ⟨s(.inr u, .inr v), h⟩) by simp
+  left_inv := by rintro ⟨⟨u | u, v | v⟩, h⟩ <;> first | contradiction | rfl
+  right_inv := by rintro (⟨⟨u, v⟩, h⟩ | ⟨⟨u, v⟩, h⟩) <;> rfl
 
 Depends on / 依赖: G.symm, H.symm, Sum.inl, Sum.inr, e.fromRelNdrec, fromRelNdrec, invFun, left_inv
 -/
@@ -507,7 +517,8 @@ lemma not_reachable_sum_inl_inr
   simp only [hs] at hadj hd1 hd2
   obtain ⟨v', hv'⟩ := hd1
   obtain ⟨w', hw'⟩ := hd2
-  rw [← hv']; rw
+  rw [← hv']; rw [← hw'] at hadj
+  exact not_adj_sum_inl_inr _ _ hadj
 
 中文:
 引理 not_reachable_sum_inl_inr
@@ -520,7 +531,8 @@ lemma not_reachable_sum_inl_inr
   simp only [hs] at hadj hd1 hd2
   obtain ⟨v', hv'⟩ := hd1
   obtain ⟨w', hw'⟩ := hd2
-  rw [← hv']; rw
+  rw [← hv']; rw [← hw'] at hadj
+  exact not_adj_sum_inl_inr _ _ hadj
 
 Depends on / 依赖: Set.range, exists_boundary_dart, not_adj_sum_inl_inr, p.exists_boundary_dart
 -/
@@ -962,7 +974,8 @@ theorem chromaticNumber_sum
   | top => simp
   | coe n =>
     let cG : G.Coloring (Fin n) := (chromaticNumber_le_iff_colorable.mp hG).some
-    let cH : H.Coloring (Fin n) := (chromaticNumber_le_iff_colorable.mp hH).som
+    let cH : H.Coloring (Fin n) := (chromaticNumber_le_iff_colorable.mp hH).some
+    exact chromaticNumber_le_iff_colorable.mpr (Nonempty.intro (cG.sum cH))
 
 中文:
 定理 chromaticNumber_sum
@@ -972,7 +985,8 @@ theorem chromaticNumber_sum
   | top => simp
   | coe n =>
     let cG : G.Coloring (Fin n) := (chromaticNumber_le_iff_colorable.mp hG).some
-    let cH : H.Coloring (Fin n) := (chromaticNumber_le_iff_colorable.mp hH).som
+    let cH : H.Coloring (Fin n) := (chromaticNumber_le_iff_colorable.mp hH).some
+    exact chromaticNumber_le_iff_colorable.mpr (Nonempty.intro (cG.sum cH))
 
 Depends on / 依赖: Coloring, G.Coloring, H.Coloring, Nonempty, Nonempty.intro, cG.sum, chromaticNumber_le_iff_colorable, chromaticNumber_le_iff_colorable.mp, chromaticNumber_le_iff_colorable.mpr, chromaticNumber_le_sum_left, chromaticNumber_le_sum_right, eq_max
 -/

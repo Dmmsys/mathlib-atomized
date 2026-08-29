@@ -69,7 +69,15 @@ definition liftEquiv
     let Gn : AddSubgroup G := (LinearMap.range (LinearMap.lsmul Int G n)).toAddSubgroup
     suffices n • g in (QuotientAddGroup.mk' Gn).ker by
       simp only [AddMonoidHom.coe_comp, comp_apply, ← map_nsmul]
-      change f (QuotientAddGroup.mk' Gn (n • g
+      change f (QuotientAddGroup.mk' Gn (n • g)) = 0 -- Can we avoid `change`?
+      rw [this]; rw [map_zero]
+    simp [QuotientAddGroup.ker_mk', Gn]⟩
+invFun φ := QuotientAddGroup.lift _ φ by rintro - ⟨g, rfl⟩; simpa using φ.property g
+  left_inv f := by
+    ext x
+    induction x using QuotientAddGroup.induction_on
+    rfl -- Should `simp` suffice here?
+  right_inv φ := by aesop
 
 中文:
 定义 liftEquiv
@@ -78,7 +86,15 @@ definition liftEquiv
     let Gn : AddSubgroup G := (LinearMap.range (LinearMap.lsmul Int G n)).toAddSubgroup
     suffices n • g in (QuotientAddGroup.mk' Gn).ker by
       simp only [AddMonoidHom.coe_comp, comp_apply, ← map_nsmul]
-      change f (QuotientAddGroup.mk' Gn (n • g
+      change f (QuotientAddGroup.mk' Gn (n • g)) = 0 -- Can we avoid `change`?
+      rw [this]; rw [map_zero]
+    simp [QuotientAddGroup.ker_mk', Gn]⟩
+invFun φ := QuotientAddGroup.lift _ φ by rintro - ⟨g, rfl⟩; simpa using φ.property g
+  left_inv f := by
+    ext x
+    induction x using QuotientAddGroup.induction_on
+    rfl -- Should `simp` suffice here?
+  right_inv φ := by aesop
 -/
 protected def liftEquiv [AddMonoid M] : (ModN G n ->+ M) ≃ {φ : G ->+ M // forall g, n • φ g = 0} where
   toFun f := ⟨f.comp (QuotientAddGroup.mk' _), fun g => by
@@ -145,7 +161,29 @@ definition basis
   set φ : G ->ₗ[Int] H := nG.mkQ
   let mod : (ι ->₀ Int) ->ₗ[Int] (ι ->₀ ZMod n) := mapRange.linearMap (Int.castAddHom _).toIntLinearMap
   let f : G ->ₗ[Int] (ι ->₀ Int) := b.repr
-  have hker : nG <= LinearMap.ker (mod.comp f
+  have hker : nG <= LinearMap.ker (mod.comp f) := by
+    rintro _ ⟨x, rfl⟩
+    ext b
+    simp [mod, f]
+  let g : H ->ₗ[Int] (ι ->₀ ZMod n) := nG.liftQ (mod.comp f) hker
+  refine ⟨.ofBijective (g.toAddMonoidHom.toZModLinearMap n) ⟨?_, ?_⟩⟩
+  · rw [AddMonoidHom.coe_toZModLinearMap, LinearMap.toAddMonoidHom_coe, injective_iff_map_eq_zero,
+      nG.mkQ_surjective.forall]
+    intro x hx
+    simp only [Submodule.mkQ_apply, g] at hx
+    rw [Submodule.liftQ_apply] at hx
+    replace hx : forall b, ↑n ∣ f x b := by
+      simpa [mod, DFunLike.ext_iff, ZMod.intCast_zmod_eq_zero_iff_dvd] using! hx
+    simp only [Submodule.mkQ_apply]
+    rw [Submodule.Quotient.mk_eq_zero]
+    choose c hc using hx
+    refine ⟨b.repr.symm ⟨(f x).support, c, by simp [hc, NeZero.ne]⟩, b.repr.injective ?_⟩
+    simpa [DFunLike.ext_iff, eq_comm] using! hc
+  · suffices mod ∘ b.repr = g ∘ nG.mkQ by
+      exact (this ▸ (mapRange_surjective _ (map_zero _) ZMod.intCast_surjective).comp
+        b.repr.surjective).of_comp
+    ext x b
+    simp [mod, g, f, H]
 
 中文:
 定义 basis
@@ -156,7 +194,29 @@ definition basis
   set φ : G ->ₗ[Int] H := nG.mkQ
   let mod : (ι ->₀ Int) ->ₗ[Int] (ι ->₀ ZMod n) := mapRange.linearMap (Int.castAddHom _).toIntLinearMap
   let f : G ->ₗ[Int] (ι ->₀ Int) := b.repr
-  have hker : nG <= LinearMap.ker (mod.comp f
+  have hker : nG <= LinearMap.ker (mod.comp f) := by
+    rintro _ ⟨x, rfl⟩
+    ext b
+    simp [mod, f]
+  let g : H ->ₗ[Int] (ι ->₀ ZMod n) := nG.liftQ (mod.comp f) hker
+  refine ⟨.ofBijective (g.toAddMonoidHom.toZModLinearMap n) ⟨?_, ?_⟩⟩
+  · rw [AddMonoidHom.coe_toZModLinearMap, LinearMap.toAddMonoidHom_coe, injective_iff_map_eq_zero,
+      nG.mkQ_surjective.forall]
+    intro x hx
+    simp only [Submodule.mkQ_apply, g] at hx
+    rw [Submodule.liftQ_apply] at hx
+    replace hx : forall b, ↑n ∣ f x b := by
+      simpa [mod, DFunLike.ext_iff, ZMod.intCast_zmod_eq_zero_iff_dvd] using! hx
+    simp only [Submodule.mkQ_apply]
+    rw [Submodule.Quotient.mk_eq_zero]
+    choose c hc using hx
+    refine ⟨b.repr.symm ⟨(f x).support, c, by simp [hc, NeZero.ne]⟩, b.repr.injective ?_⟩
+    simpa [DFunLike.ext_iff, eq_comm] using! hc
+  · suffices mod ∘ b.repr = g ∘ nG.mkQ by
+      exact (this ▸ (mapRange_surjective _ (map_zero _) ZMod.intCast_surjective).comp
+        b.repr.surjective).of_comp
+    ext x b
+    simp [mod, g, f, H]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_toZModLinea, Int.castAddHom, LinearMap, LinearMap.ker, LinearMap.lsmul, LinearMap.range, b.repr, castAddHom, coe_toZModLinea, g.toAddMonoidHom.toZModLinearMap, linearMap, mapRange, mapRange.linearMap, mod.comp, nG.liftQ, nG.mkQ, ofBijective, toAddMonoidHom, toIntLinearMap
 -/

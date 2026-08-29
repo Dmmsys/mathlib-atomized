@@ -286,7 +286,112 @@ instance :
     have h : Q($ctx.C) := h.e
     have pf : Q($ctx.C) := pf.e.e
     have pfg : Q($ctx.C) := pfg.e.e
-    have pfgh : Q($ct
+    have pfgh : Q($ctx.C) := pfgh.e.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    have η_g : Q($pf otimes $g ≅ $pfg) := η_g.e
+    have η_h : Q($pfg otimes $h ≅ $pfgh) := η_h.e
+    return q(naturality_associator $η_f $η_g $η_h)
+  mkNaturalityLeftUnitor p pf f η_f := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have pf : Q($ctx.C) := pf.e.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    return q(naturality_leftUnitor $η_f)
+  mkNaturalityRightUnitor p pf f η_f := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have pf : Q($ctx.C) := pf.e.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    return q(naturality_rightUnitor $η_f)
+  mkNaturalityId p pf f η_f := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have pf : Q($ctx.C) := pf.e.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    return q(naturality_id $η_f)
+  mkNaturalityComp p pf f g h η θ η_f η_g η_h ih_η ih_θ := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have g : Q($ctx.C) := g.e
+    have h : Q($ctx.C) := h.e
+    have pf : Q($ctx.C) := pf.e.e
+    have η : Q($f ≅ $g) := η.e
+    have θ : Q($g ≅ $h) := θ.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    have η_g : Q($p otimes $g ≅ $pf) := η_g.e
+    have η_h : Q($p otimes $h ≅ $pf) := η_h.e
+    have ih_η : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih_η
+    have ih_θ : Q($p ◁ $θ ≪≫ $η_h = $η_g) := ih_θ
+    return q(naturality_comp $η_f $η_g $η_h $ih_η $ih_θ)
+  mkNaturalityWhiskerLeft p pf pfg f g h η η_f η_fg η_fh ih_η := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have g : Q($ctx.C) := g.e
+    have h : Q($ctx.C) := h.e
+    have pf : Q($ctx.C) := pf.e.e
+    have pfg : Q($ctx.C) := pfg.e.e
+    have η : Q($g ≅ $h) := η.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    have η_fg : Q($pf otimes $g ≅ $pfg) := η_fg.e
+    have η_fh : Q($pf otimes $h ≅ $pfg) := η_fh.e
+    have ih_η : Q($pf ◁ $η ≪≫ $η_fh = $η_fg) := ih_η
+    return q(naturality_whiskerLeft $η_f $η_fg $η_fh $ih_η)
+  mkNaturalityWhiskerRight p pf pfh f g h η η_f η_g η_fh ih_η := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have g : Q($ctx.C) := g.e
+    have h : Q($ctx.C) := h.e
+    have pf : Q($ctx.C) := pf.e.e
+    have pfh : Q($ctx.C) := pfh.e.e
+    have η : Q($f ≅ $g) := η.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    have η_g : Q($p otimes $g ≅ $pf) := η_g.e
+    have η_fh : Q($pf otimes $h ≅ $pfh) := η_fh.e
+    have ih_η : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih_η
+    return q(naturality_whiskerRight $η_f $η_g $η_fh $ih_η)
+  mkNaturalityHorizontalComp p pf₁ pf₁f₂ f₁ g₁ f₂ g₂ η θ η_f₁ η_g₁ η_f₂ η_g₂ ih_η ih_θ := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f₁ : Q($ctx.C) := f₁.e
+    have g₁ : Q($ctx.C) := g₁.e
+    have f₂ : Q($ctx.C) := f₂.e
+    have g₂ : Q($ctx.C) := g₂.e
+    have pf₁ : Q($ctx.C) := pf₁.e.e
+    have pf₁f₂ : Q($ctx.C) := pf₁f₂.e.e
+    have η : Q($f₁ ≅ $g₁) := η.e
+    have θ : Q($f₂ ≅ $g₂) := θ.e
+    have η_f₁ : Q($p otimes $f₁ ≅ $pf₁) := η_f₁.e
+    have η_g₁ : Q($p otimes $g₁ ≅ $pf₁) := η_g₁.e
+    have η_f₂ : Q($pf₁ otimes $f₂ ≅ $pf₁f₂) := η_f₂.e
+    have η_g₂ : Q($pf₁ otimes $g₂ ≅ $pf₁f₂) := η_g₂.e
+    have ih_η : Q($p ◁ $η ≪≫ $η_g₁ = $η_f₁) := ih_η
+    have ih_θ : Q($pf₁ ◁ $θ ≪≫ $η_g₂ = $η_f₂) := ih_θ
+    return q(naturality_tensorHom $η_f₁ $η_g₁ $η_f₂ $η_g₂ $ih_η $ih_θ)
+  mkNaturalityInv p pf f g η η_f η_g ih := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have g : Q($ctx.C) := g.e
+    have pf : Q($ctx.C) := pf.e.e
+    have η : Q($f ≅ $g) := η.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    have η_g : Q($p otimes $g ≅ $pf) := η_g.e
+    have ih : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih
+    return q(naturality_inv $η_f $η_g $ih)
 
 中文:
 实例 :
@@ -300,7 +405,112 @@ instance :
     have h : Q($ctx.C) := h.e
     have pf : Q($ctx.C) := pf.e.e
     have pfg : Q($ctx.C) := pfg.e.e
-    have pfgh : Q($ct
+    have pfgh : Q($ctx.C) := pfgh.e.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    have η_g : Q($pf otimes $g ≅ $pfg) := η_g.e
+    have η_h : Q($pfg otimes $h ≅ $pfgh) := η_h.e
+    return q(naturality_associator $η_f $η_g $η_h)
+  mkNaturalityLeftUnitor p pf f η_f := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have pf : Q($ctx.C) := pf.e.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    return q(naturality_leftUnitor $η_f)
+  mkNaturalityRightUnitor p pf f η_f := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have pf : Q($ctx.C) := pf.e.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    return q(naturality_rightUnitor $η_f)
+  mkNaturalityId p pf f η_f := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have pf : Q($ctx.C) := pf.e.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    return q(naturality_id $η_f)
+  mkNaturalityComp p pf f g h η θ η_f η_g η_h ih_η ih_θ := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have g : Q($ctx.C) := g.e
+    have h : Q($ctx.C) := h.e
+    have pf : Q($ctx.C) := pf.e.e
+    have η : Q($f ≅ $g) := η.e
+    have θ : Q($g ≅ $h) := θ.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    have η_g : Q($p otimes $g ≅ $pf) := η_g.e
+    have η_h : Q($p otimes $h ≅ $pf) := η_h.e
+    have ih_η : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih_η
+    have ih_θ : Q($p ◁ $θ ≪≫ $η_h = $η_g) := ih_θ
+    return q(naturality_comp $η_f $η_g $η_h $ih_η $ih_θ)
+  mkNaturalityWhiskerLeft p pf pfg f g h η η_f η_fg η_fh ih_η := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have g : Q($ctx.C) := g.e
+    have h : Q($ctx.C) := h.e
+    have pf : Q($ctx.C) := pf.e.e
+    have pfg : Q($ctx.C) := pfg.e.e
+    have η : Q($g ≅ $h) := η.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    have η_fg : Q($pf otimes $g ≅ $pfg) := η_fg.e
+    have η_fh : Q($pf otimes $h ≅ $pfg) := η_fh.e
+    have ih_η : Q($pf ◁ $η ≪≫ $η_fh = $η_fg) := ih_η
+    return q(naturality_whiskerLeft $η_f $η_fg $η_fh $ih_η)
+  mkNaturalityWhiskerRight p pf pfh f g h η η_f η_g η_fh ih_η := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have g : Q($ctx.C) := g.e
+    have h : Q($ctx.C) := h.e
+    have pf : Q($ctx.C) := pf.e.e
+    have pfh : Q($ctx.C) := pfh.e.e
+    have η : Q($f ≅ $g) := η.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    have η_g : Q($p otimes $g ≅ $pf) := η_g.e
+    have η_fh : Q($pf otimes $h ≅ $pfh) := η_fh.e
+    have ih_η : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih_η
+    return q(naturality_whiskerRight $η_f $η_g $η_fh $ih_η)
+  mkNaturalityHorizontalComp p pf₁ pf₁f₂ f₁ g₁ f₂ g₂ η θ η_f₁ η_g₁ η_f₂ η_g₂ ih_η ih_θ := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f₁ : Q($ctx.C) := f₁.e
+    have g₁ : Q($ctx.C) := g₁.e
+    have f₂ : Q($ctx.C) := f₂.e
+    have g₂ : Q($ctx.C) := g₂.e
+    have pf₁ : Q($ctx.C) := pf₁.e.e
+    have pf₁f₂ : Q($ctx.C) := pf₁f₂.e.e
+    have η : Q($f₁ ≅ $g₁) := η.e
+    have θ : Q($f₂ ≅ $g₂) := θ.e
+    have η_f₁ : Q($p otimes $f₁ ≅ $pf₁) := η_f₁.e
+    have η_g₁ : Q($p otimes $g₁ ≅ $pf₁) := η_g₁.e
+    have η_f₂ : Q($pf₁ otimes $f₂ ≅ $pf₁f₂) := η_f₂.e
+    have η_g₂ : Q($pf₁ otimes $g₂ ≅ $pf₁f₂) := η_g₂.e
+    have ih_η : Q($p ◁ $η ≪≫ $η_g₁ = $η_f₁) := ih_η
+    have ih_θ : Q($pf₁ ◁ $θ ≪≫ $η_g₂ = $η_f₂) := ih_θ
+    return q(naturality_tensorHom $η_f₁ $η_g₁ $η_f₂ $η_g₂ $ih_η $ih_θ)
+  mkNaturalityInv p pf f g η η_f η_g ih := do
+    let ctx ← read
+    let some _monoidal := ctx.instMonoidal? | synthMonoidalError
+    have p : Q($ctx.C) := p.e.e
+    have f : Q($ctx.C) := f.e
+    have g : Q($ctx.C) := g.e
+    have pf : Q($ctx.C) := pf.e.e
+    have η : Q($f ≅ $g) := η.e
+    have η_f : Q($p otimes $f ≅ $pf) := η_f.e
+    have η_g : Q($p otimes $g ≅ $pf) := η_g.e
+    have ih : Q($p ◁ $η ≪≫ $η_g = $η_f) := ih
+    return q(naturality_inv $η_f $η_g $ih)
 -/
 instance : MonadNormalizeNaturality MonoidalM where
   mkNaturalityAssociator p pf pfg pfgh f g h η_f η_g η_h := do
@@ -515,7 +725,17 @@ instance :
     have f : Q($ctx.C) := f.e
     have g : Q($ctx.C) := g.e
     have f' : Q($ctx.C) := f'.e
-    have η : Q($f
+    have η : Q($f ⟶ $g) := η
+    have θ : Q($f ⟶ $g) := θ
+    have η'_e : Q($f ≅ $g) := η'.e
+    have θ'_e : Q($f ≅ $g) := θ'.e
+    have η_f : Q(𝟙_ _ otimes $f ≅ $f') := η_f.e
+    have η_g : Q(𝟙_ _ otimes $g ≅ $f') := η_g.e
+    have η_hom : Q(Iso.hom $η'_e = $η) := ηIso.eq
+    have Θ_hom : Q(Iso.hom $θ'_e = $θ) := θIso.eq
+    have Hη : Q(whiskerLeftIso (𝟙_ _) $η'_e ≪≫ $η_g = $η_f) := Hη
+    have Hθ : Q(whiskerLeftIso (𝟙_ _) $θ'_e ≪≫ $η_g = $η_f) := Hθ
+    return q(mk_eq_of_naturality $η_f $η_g $η_hom $Θ_hom $Hη $Hθ)
 
 中文:
 实例 :
@@ -531,7 +751,17 @@ instance :
     have f : Q($ctx.C) := f.e
     have g : Q($ctx.C) := g.e
     have f' : Q($ctx.C) := f'.e
-    have η : Q($f
+    have η : Q($f ⟶ $g) := η
+    have θ : Q($f ⟶ $g) := θ
+    have η'_e : Q($f ≅ $g) := η'.e
+    have θ'_e : Q($f ≅ $g) := θ'.e
+    have η_f : Q(𝟙_ _ otimes $f ≅ $f') := η_f.e
+    have η_g : Q(𝟙_ _ otimes $g ≅ $f') := η_g.e
+    have η_hom : Q(Iso.hom $η'_e = $η) := ηIso.eq
+    have Θ_hom : Q(Iso.hom $θ'_e = $θ) := θIso.eq
+    have Hη : Q(whiskerLeftIso (𝟙_ _) $η'_e ≪≫ $η_g = $η_f) := Hη
+    have Hθ : Q(whiskerLeftIso (𝟙_ _) $θ'_e ≪≫ $η_g = $η_f) := Hθ
+    return q(mk_eq_of_naturality $η_f $η_g $η_hom $Θ_hom $Hη $Hθ)
 -/
 instance : MkEqOfNaturality MonoidalM where
   mkEqOfNaturality η θ ηIso θIso η_f η_g Hη Hθ := do

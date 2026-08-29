@@ -136,7 +136,7 @@ lemma dynEntourage_mem_uniformity
     rw [Set.biInter_lt_succ]
     apply Filter.inter_mem ih
     rw [map_iterate T T n]
-    exact uniformContinuous_def.1 (UniformContin
+    exact uniformContinuous_def.1 (UniformContinuous.iterate T n h) U U_uni
 
 中文:
 引理 dynEntourage_mem_uniformity
@@ -150,7 +150,7 @@ lemma dynEntourage_mem_uniformity
     rw [Set.biInter_lt_succ]
     apply Filter.inter_mem ih
     rw [map_iterate T T n]
-    exact uniformContinuous_def.1 (UniformContin
+    exact uniformContinuous_def.1 (UniformContinuous.iterate T n h) U U_uni
 
 Depends on / 依赖: Filter, Filter.inter_mem, Nat.zero_le, Set.biInter_lt_succ, U_uni, UniformContinuous, UniformContinuous.iterate, biInter_lt_succ, dynEntourage_eq_inter_Ico, iInter_coe_set, inter_mem, iterate, map_iterate, mem_Ico, true_and, uniformContinuous_def, zero_le
 -/

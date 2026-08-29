@@ -336,7 +336,13 @@ theorem minpoly_coeff_zero_of_injective
     rw [h]; rw [mul_zero] at hP
     exact minpoly.ne_zero (isIntegral f) hP
   have hPmonic : P.Monic := by
-    suffices (minpol
+    suffices (minpoly R f).Monic by
+      rwa [Monic.def, hP, mul_comm, leadingCoeff_mul_X, ← Monic.def] at this
+    exact minpoly.monic (isIntegral f)
+  have hzero : aeval f (minpoly R f) = 0 := minpoly.aeval _ _
+  simp only [hP, Module.End.mul_eq_comp, LinearMap.ext_iff, hf, aeval_X, map_eq_zero_iff, coe_comp,
+    map_mul, zero_apply, Function.comp_apply] at hzero
+  exact not_le.2 hdegP (minpoly.min _ _ hPmonic (LinearMap.ext hzero))
 
 中文:
 定理 minpoly_coeff_zero_of_injective
@@ -350,7 +356,13 @@ theorem minpoly_coeff_zero_of_injective
     rw [h]; rw [mul_zero] at hP
     exact minpoly.ne_zero (isIntegral f) hP
   have hPmonic : P.Monic := by
-    suffices (minpol
+    suffices (minpoly R f).Monic by
+      rwa [Monic.def, hP, mul_comm, leadingCoeff_mul_X, ← Monic.def] at this
+    exact minpoly.monic (isIntegral f)
+  have hzero : aeval f (minpoly R f) = 0 := minpoly.aeval _ _
+  simp only [hP, Module.End.mul_eq_comp, LinearMap.ext_iff, hf, aeval_X, map_eq_zero_iff, coe_comp,
+    map_mul, zero_apply, Function.comp_apply] at hzero
+  exact not_le.2 hdegP (minpoly.min _ _ hPmonic (LinearMap.ext hzero))
 
 Depends on / 依赖: LinearM, Module, Module.End.mul_eq_comp, Monic.def, P.Monic, P.degree, X_dvd_iff, degree, degree_lt_degree_mul_X, hPmonic, isIntegral, leadingCoeff_mul_X, minpoly, minpoly.aeval, minpoly.monic, minpoly.ne_zero, mul_comm, mul_eq_comp, mul_zero, ne_zero
 -/

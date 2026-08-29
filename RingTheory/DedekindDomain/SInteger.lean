@@ -270,7 +270,10 @@ definition unitEquivUnitsInteger
   invFun x :=
     ⟨Units.mk0 x fun hx => x.ne_zero (ZeroMemClass.coe_eq_zero.mp hx),
     fun v hv =>
-eq_one_of_one_le_mul_lef
+eq_one_of_one_le_mul_left (x.val.property v hv) (x.inv.property v hv)
+Eq.ge by
+          rw [← map_mul]; rw [Units.val_mk0]; rw [Subtype.mk_eq_mk.mp x.val_inv]; rw [map_one]⟩
+  map_mul' _ _ := by ext; rfl
 
 中文:
 定义 unitEquivUnits整数eger
@@ -281,7 +284,10 @@ eq_one_of_one_le_mul_lef
   invFun x :=
     ⟨Units.mk0 x fun hx => x.ne_zero (ZeroMemClass.coe_eq_zero.mp hx),
     fun v hv =>
-eq_one_of_one_le_mul_lef
+eq_one_of_one_le_mul_left (x.val.property v hv) (x.inv.property v hv)
+Eq.ge by
+          rw [← map_mul]; rw [Units.val_mk0]; rw [Subtype.mk_eq_mk.mp x.val_inv]; rw [map_one]⟩
+  map_mul' _ _ := by ext; rfl
 
 Depends on / 依赖: Eq.ge, Subtype, Subtype.ext, Subtype.mk_eq_mk.mp, Units.mk0, Units.val_mk0, ZeroMemClass, ZeroMemClass.coe_eq_zero.mp, coe_eq_zero, eq_one_of_one_le_mul_left, invFun, inv_val, map_mul, map_one, mk_eq_mk, ne_zero, property, val_inv, val_mk0, x.inv.property
 -/

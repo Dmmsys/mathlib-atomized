@@ -84,7 +84,9 @@ definition inverse
             ext ⟨x : A, y : A⟩
             exact CommMonoid.mul_comm y x } }
   map f := InducedCategory.homMk
-    (GrpTypeEquivalenceGrp.inverse.map ((forget₂ CommGrpCat GrpCat).map f)
+    (GrpTypeEquivalenceGrp.inverse.map ((forget₂ CommGrpCat GrpCat).map f))
+
+@[simp]
 
 中文:
 定义 inverse
@@ -95,7 +97,9 @@ definition inverse
             ext ⟨x : A, y : A⟩
             exact CommMonoid.mul_comm y x } }
   map f := InducedCategory.homMk
-    (GrpTypeEquivalenceGrp.inverse.map ((forget₂ CommGrpCat GrpCat).map f)
+    (GrpTypeEquivalenceGrp.inverse.map ((forget₂ CommGrpCat GrpCat).map f))
+
+@[simp]
 
 Depends on / 依赖: CommGrpCat, CommMonoid, CommMonoid.mul_comm, GrpCat, GrpTypeEquivalenceGrp, GrpTypeEquivalenceGrp.inverse.map, InducedCategory, InducedCategory.homMk, grpTypeEquivalenceGrp, grpTypeEquivalenceGrp.inverse.obj, inverse, mul_comm
 -/

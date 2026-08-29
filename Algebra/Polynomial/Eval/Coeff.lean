@@ -268,7 +268,9 @@ definition piEquiv
   body: .ofBijective (RingHom.pi fun i => mapRingHom (Pi.evalRingHom R i))
     ⟨fun p q h => by ext n i; simpa using congr_arg (fun p => coeff (p i) n) h,
 fun p => ⟨.ofFinsupp .ofCoeff .ofSupportFinite (fun n i => coeff (p i) n)
-        (Set.finite_iUnion fun i => (p i).support.finite_toSet).subset fun n hn
+        (Set.finite_iUnion fun i => (p i).support.finite_toSet).subset fun n hn => by
+          simp only [Set.mem_iUnion, Finset.mem_coe, mem_support_iff, Function.mem_support] at hn ⊢
+          contrapose! hn; exact funext hn, by ext i n; exact coeff_map _ _⟩⟩
 
 中文:
 定义 piEquiv
@@ -276,7 +278,9 @@ fun p => ⟨.ofFinsupp .ofCoeff .ofSupportFinite (fun n i => coeff (p i) n)
   定义体: .ofBijective (RingHom.pi fun i => mapRingHom (Pi.evalRingHom R i))
     ⟨fun p q h => by ext n i; simpa using congr_arg (fun p => coeff (p i) n) h,
 fun p => ⟨.ofFinsupp .ofCoeff .ofSupportFinite (fun n i => coeff (p i) n)
-        (Set.finite_iUnion fun i => (p i).support.finite_toSet).subset fun n hn
+        (Set.finite_iUnion fun i => (p i).support.finite_toSet).subset fun n hn => by
+          simp only [Set.mem_iUnion, Finset.mem_coe, mem_support_iff, Function.mem_support] at hn ⊢
+          contrapose! hn; exact funext hn, by ext i n; exact coeff_map _ _⟩⟩
 
 Depends on / 依赖: Finset, Finset.mem_coe, Function, Function.mem_support, Pi.evalRingHom, RingHom, RingHom.pi, Set.finite_iUnion, Set.mem_iUnion, coeff_map, congr_arg, contrapose, evalRingHom, finite_iUnion, finite_toSet, mapRingHom, mem_coe, mem_iUnion, mem_support, mem_support_iff
 -/

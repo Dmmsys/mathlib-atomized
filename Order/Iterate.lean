@@ -93,7 +93,8 @@ theorem seq_pos_lt_seq_of_lt_of_le
   cases n with
   | zero => exact h₀
   | succ n =>
-    refine (ihn n.zero_lt_succ (fun k hk => hx _ ?_) fun k hk => hy _ ?_).le <;
+    refine (ihn n.zero_lt_succ (fun k hk => hx _ ?_) fun k hk => hy _ ?_).le <;>
+    exact hk.trans n.succ.lt_succ_self
 
 中文:
 定理 seq_pos_lt_seq_of_lt_of_le
@@ -106,7 +107,8 @@ theorem seq_pos_lt_seq_of_lt_of_le
   cases n with
   | zero => exact h₀
   | succ n =>
-    refine (ihn n.zero_lt_succ (fun k hk => hx _ ?_) fun k hk => hy _ ?_).le <;
+    refine (ihn n.zero_lt_succ (fun k hk => hx _ ?_) fun k hk => hy _ ?_).le <;>
+    exact hk.trans n.succ.lt_succ_self
 
 Depends on / 依赖: hk.trans, hn.false.elim, lt_succ_self, n.lt_succ_self, n.succ.lt_succ_self, n.zero_lt_succ, trans_le, zero_lt_succ
 -/

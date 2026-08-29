@@ -43,7 +43,18 @@ theorem Convex.toWeakSpace_closure
     (Set.compl_subset_compl.mp fun x hx => ?_)
 .symm.subset hx obtain ⟨x, -, rfl⟩ := (toWeakSpace 𝕜 E).toEquiv.image_compl (closure s)
   have : ContinuousSMul Real E := IsScalarTower.continuousSMul 𝕜
-  obtain ⟨
+  obtain ⟨f, u, hus, hux⟩ := RCLike.geometric_hahn_banach_closed_point (𝕜 := 𝕜)
+    hs.closure isClosed_closure (by simpa using hx)
+  let f' : StrongDual 𝕜 (WeakSpace 𝕜 E) :=
+    { toLinearMap := (f : E ->ₗ[𝕜] 𝕜).comp ((toWeakSpace 𝕜 E).symm : WeakSpace 𝕜 E ->ₗ[𝕜] E)
+      cont := WeakBilin.eval_continuous (topDualPairing 𝕜 E).flip _ }
+  have hux' : u < RCLike.reCLM.comp (f'.restrictScalars Real) (toWeakSpace 𝕜 E x) := by simpa [f']
+  have hus' : closure (toWeakSpace 𝕜 E '' s) subseteq
+      {y | RCLike.reCLM.comp (f'.restrictScalars Real) y <= u} := by
+refine closure_minimal ?_ isClosed_le (by fun_prop) (by fun_prop)
+    rintro - ⟨y, hy, rfl⟩
+    simpa [f'] using (hus y <| subset_closure hy).le
+  exact (hux'.not_ge <| hus' ·)
 
 中文:
 定理 凸.toWeakSpace_closure
@@ -53,7 +64,18 @@ theorem Convex.toWeakSpace_closure
     (Set.compl_subset_compl.mp fun x hx => ?_)
 .symm.subset hx obtain ⟨x, -, rfl⟩ := (toWeakSpace 𝕜 E).toEquiv.image_compl (closure s)
   have : ContinuousSMul Real E := IsScalarTower.continuousSMul 𝕜
-  obtain ⟨
+  obtain ⟨f, u, hus, hux⟩ := RCLike.geometric_hahn_banach_closed_point (𝕜 := 𝕜)
+    hs.closure isClosed_closure (by simpa using hx)
+  let f' : StrongDual 𝕜 (WeakSpace 𝕜 E) :=
+    { toLinearMap := (f : E ->ₗ[𝕜] 𝕜).comp ((toWeakSpace 𝕜 E).symm : WeakSpace 𝕜 E ->ₗ[𝕜] E)
+      cont := WeakBilin.eval_continuous (topDualPairing 𝕜 E).flip _ }
+  have hux' : u < RCLike.reCLM.comp (f'.restrictScalars Real) (toWeakSpace 𝕜 E x) := by simpa [f']
+  have hus' : closure (toWeakSpace 𝕜 E '' s) subseteq
+      {y | RCLike.reCLM.comp (f'.restrictScalars Real) y <= u} := by
+refine closure_minimal ?_ isClosed_le (by fun_prop) (by fun_prop)
+    rintro - ⟨y, hy, rfl⟩
+    simpa [f'] using (hus y <| subset_closure hy).le
+  exact (hux'.not_ge <| hus' ·)
 
 Depends on / 依赖: ContinuousSMul, IsScalarTower, IsScalarTower.continuousSMul, RCLike, RCLike.geometric_hahn_banach_closed_point, Set.compl_subset_compl.mp, StrongDual, WeakSpace, closure, compl_subset_compl, continuousOn, continuousOn.image_closure, continuousSMul, geometric_hahn_banach_closed_point, hs.closure, image_closure, image_compl, isClosed_closure, le_antisymm, map_continuous
 -/
@@ -114,7 +136,11 @@ theorem LinearMap.image_closure_of_convex
   suffices he' : Continuous (toWeakSpace 𝕜 F <| e <| (toWeakSpace 𝕜 E).symm ·) by
     have h_convex : Convex Real (e '' s) := hs.linear_image (F := F) e
     rw [← Set.image_subset_image_iff (toWeakSpace 𝕜 F).injective]; rw [h_convex.toWeakSpace_closure 𝕜]
-    simpa only [Set.image_image, ← hs.toW
+    simpa only [Set.image_image, ← hs.toWeakSpace_closure 𝕜, LinearEquiv.symm_apply_apply]
+      using he'.continuousOn.image_closure (s := toWeakSpace 𝕜 E '' s)
+  exact WeakBilin.continuous_of_continuous_eval _ fun f => WeakBilin.eval_continuous _ ({
+      toLinearMap := e.dualMap f
+      cont := by dsimp; fun_prop } : StrongDual 𝕜 E)
 
 中文:
 定理 线性映射.image_closure_of_convex
@@ -123,7 +149,11 @@ theorem LinearMap.image_closure_of_convex
   suffices he' : Continuous (toWeakSpace 𝕜 F <| e <| (toWeakSpace 𝕜 E).symm ·) by
     have h_convex : Convex Real (e '' s) := hs.linear_image (F := F) e
     rw [← Set.image_subset_image_iff (toWeakSpace 𝕜 F).injective]; rw [h_convex.toWeakSpace_closure 𝕜]
-    simpa only [Set.image_image, ← hs.toW
+    simpa only [Set.image_image, ← hs.toWeakSpace_closure 𝕜, LinearEquiv.symm_apply_apply]
+      using he'.continuousOn.image_closure (s := toWeakSpace 𝕜 E '' s)
+  exact WeakBilin.continuous_of_continuous_eval _ fun f => WeakBilin.eval_continuous _ ({
+      toLinearMap := e.dualMap f
+      cont := by dsimp; fun_prop } : StrongDual 𝕜 E)
 
 Depends on / 依赖: Continuous, Convex, LinearEquiv, LinearEquiv.symm_apply_apply, Set.image_image, Set.image_subset_image_iff, WeakBilin, WeakBilin.continuous_of_continuous_eval, WeakBilin.eval_continuous, continuousOn, continuousOn.image_closure, continuous_of_continuous_eval, eval_continuous, h_convex, h_convex.toWeakSpace_closure, hs.linear_image, hs.toWeakSpace_closure, image_closure, image_image, image_subset_image_iff
 -/
@@ -183,7 +213,12 @@ theorem LinearEquiv.image_closure_of_convex'
     have (g : StrongDual 𝕜 E) : ⇑g = e_dual.symm g ∘ e := by
       have := he _ ▸ congr(⇑$(e_dual.apply_symm_apply g)).symm
       simpa
-  
+    ext x
+    conv_rhs => rw [LinearEquiv.dualMap_apply, ContinuousLinearMap.coe_coe, this]
+    simp
+  refine e.image_closure_of_convex hs ?_ ?_
+  · simpa [← he] using fun f => map_continuous (e_dual f)
+  · simpa [← he'] using fun f => map_continuous (e_dual.symm f)
 
 中文:
 定理 线性等价.image_closure_of_convex'
@@ -194,7 +229,12 @@ theorem LinearEquiv.image_closure_of_convex'
     have (g : StrongDual 𝕜 E) : ⇑g = e_dual.symm g ∘ e := by
       have := he _ ▸ congr(⇑$(e_dual.apply_symm_apply g)).symm
       simpa
-  
+    ext x
+    conv_rhs => rw [LinearEquiv.dualMap_apply, ContinuousLinearMap.coe_coe, this]
+    simp
+  refine e.image_closure_of_convex hs ?_ ?_
+  · simpa [← he] using fun f => map_continuous (e_dual f)
+  · simpa [← he'] using fun f => map_continuous (e_dual.symm f)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_coe, DFunLike, DFunLike.ext, LinearEquiv, LinearEquiv.dualMap_apply, StrongDual, _iff, apply_symm_apply, coe_coe, conv_rhs, dualMap, dualMap_apply, e.image_closure_of_convex, e.symm.dualMap, e_dual, e_dual.apply_symm_apply, e_dual.symm, image_closure_of_convex, map_co
 -/

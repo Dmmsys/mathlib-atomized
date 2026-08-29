@@ -48,7 +48,10 @@ lemma Complex.cot_eq_exp_ratio
     ring_nf
   have h2 : (exp (-z * I) - exp (z * I)) = exp (-(z * I)) * ((1 - exp (2 * I * z))) := by
     ring_nf
- 
+    rw [mul_assoc]; rw [← Complex.exp_add]
+    ring_nf
+  rw [h1]; rw [h2]
+  field
 
 中文:
 引理 复形.cot_eq_exp_ratio
@@ -60,7 +63,10 @@ lemma Complex.cot_eq_exp_ratio
     ring_nf
   have h2 : (exp (-z * I) - exp (z * I)) = exp (-(z * I)) * ((1 - exp (2 * I * z))) := by
     ring_nf
- 
+    rw [mul_assoc]; rw [← Complex.exp_add]
+    ring_nf
+  rw [h1]; rw [h2]
+  field
 
 Depends on / 依赖: Complex.cos, Complex.cot, Complex.exp_add, Complex.sin, exp_add, mul_add, mul_assoc, ring_nf
 -/
@@ -112,7 +118,10 @@ theorem pi_mul_cot_pi_q_exp
       -π * I * ((exp (2 * π * I * z) + 1) * (1 / (1 - exp (2 * π * I * z)))) := by
     simp only [div_mul_eq_div_mul_one_div, div_I, one_div, neg_mul, mul_neg, neg_inj]
     ring
-  rw [cot_pi_eq_exp_ratio]; rw [h1]; rw
+  rw [cot_pi_eq_exp_ratio]; rw [h1]; rw [one_div]; rw [(tsum_geometric_of_norm_lt_one
+    (UpperHalfPlane.norm_exp_two_pi_I_lt_one z)).symm]; rw [add_comm]; rw [geom_series_mul_one_add
+      (Complex.exp (2 * π * I * (z : Complex))) (UpperHalfPlane.norm_exp_two_pi_I_lt_one _)]
+  ring
 
 中文:
 定理 pi_mul_cot_pi_q_exp
@@ -122,7 +131,10 @@ theorem pi_mul_cot_pi_q_exp
       -π * I * ((exp (2 * π * I * z) + 1) * (1 / (1 - exp (2 * π * I * z)))) := by
     simp only [div_mul_eq_div_mul_one_div, div_I, one_div, neg_mul, mul_neg, neg_inj]
     ring
-  rw [cot_pi_eq_exp_ratio]; rw [h1]; rw
+  rw [cot_pi_eq_exp_ratio]; rw [h1]; rw [one_div]; rw [(tsum_geometric_of_norm_lt_one
+    (UpperHalfPlane.norm_exp_two_pi_I_lt_one z)).symm]; rw [add_comm]; rw [geom_series_mul_one_add
+      (Complex.exp (2 * π * I * (z : Complex))) (UpperHalfPlane.norm_exp_two_pi_I_lt_one _)]
+  ring
 
 Depends on / 依赖: Complex.exp, UpperHalfPlane, UpperHalfPlane.norm_exp_two_pi_I_, UpperHalfPlane.norm_exp_two_pi_I_lt_one, add_comm, cot_pi_eq_exp_ratio, div_I, div_mul_eq_div_mul_one_div, geom_series_mul_one_add, mul_neg, neg_inj, neg_mul, norm_exp_two_pi_I_, norm_exp_two_pi_I_lt_one, one_div, tsum_geometric_of_norm_lt_one
 -/
@@ -286,7 +298,11 @@ lemma sineTerm_bound_aux
   obtain ⟨s, hs⟩ := bddAbove_def.mp (IsCompact.bddAbove_image hZ hf)
   refine ⟨fun n : Nat => ‖(s : Complex) / (n + 1) ^ 2‖, ?_, ?_⟩
   · simpa using summable_pow_div_add (s : Complex) 2 1 (Nat.one_lt_two)
-  · simp only [n
+  · simp only [norm_neg, norm_pow, Set.mem_image, forall_exists_index, and_imp,
+      forall_apply_eq_imp_iff₂, sineTerm, norm_div, norm_real, norm_eq_abs] at *
+    intro n x hx
+    gcongr
+    apply le_trans (hs x hx) (le_abs_self s)
 
 中文:
 引理 sineTerm_bound_aux
@@ -297,7 +313,11 @@ lemma sineTerm_bound_aux
   obtain ⟨s, hs⟩ := bddAbove_def.mp (IsCompact.bddAbove_image hZ hf)
   refine ⟨fun n : Nat => ‖(s : Complex) / (n + 1) ^ 2‖, ?_, ?_⟩
   · simpa using summable_pow_div_add (s : Complex) 2 1 (Nat.one_lt_two)
-  · simp only [n
+  · simp only [norm_neg, norm_pow, Set.mem_image, forall_exists_index, and_imp,
+      forall_apply_eq_imp_iff₂, sineTerm, norm_div, norm_real, norm_eq_abs] at *
+    intro n x hx
+    gcongr
+    apply le_trans (hs x hx) (le_abs_self s)
 -/
 private lemma sineTerm_bound_aux (hZ : IsCompact Z) :
     exists u : Nat -> Real, Summable u ∧ forall j z, z in Z -> ‖sineTerm z j‖ <= u j := by
@@ -457,7 +477,7 @@ lemma tendsto_logDeriv_euler_sin_div
       HasProdLocallyUniformlyOn_euler_sin_prod.tendstoLocallyUniformlyOn_finsetRange ?_ ?_
   · filter_upwards with n using by fun_prop
   · simp only [ne_eq, div_eq_zero_iff, mul_eq_zero, ofReal_eq_zero, not_or]
-    exact ⟨sin_pi_mul_ne_zero 
+    exact ⟨sin_pi_mul_ne_zero hx, Real.pi_ne_zero, integerComplement.ne_zero hx⟩
 
 中文:
 引理 tendsto_logDeriv_euler_sin_div
@@ -467,7 +487,7 @@ lemma tendsto_logDeriv_euler_sin_div
       HasProdLocallyUniformlyOn_euler_sin_prod.tendstoLocallyUniformlyOn_finsetRange ?_ ?_
   · filter_upwards with n using by fun_prop
   · simp only [ne_eq, div_eq_zero_iff, mul_eq_zero, ofReal_eq_zero, not_or]
-    exact ⟨sin_pi_mul_ne_zero 
+    exact ⟨sin_pi_mul_ne_zero hx, Real.pi_ne_zero, integerComplement.ne_zero hx⟩
 
 Depends on / 依赖: HasProdLocallyUniformlyOn_euler_sin_prod, HasProdLocallyUniformlyOn_euler_sin_prod.tendstoLocallyUniformlyOn_finsetRange, Real.pi_ne_zero, div_eq_zero_iff, filter_upwards, fun_prop, integerComplement, integerComplement.ne_zero, isOpen_compl_range_intCast, logDeriv_tendsto, mul_eq_zero, ne_eq, ne_zero, not_or, ofReal_eq_zero, pi_ne_zero, sin_pi_mul_ne_zero, tendstoLocallyUniformlyOn_finsetRange
 -/
@@ -490,7 +510,11 @@ lemma logDeriv_sin_div_eq_cot
   have : (fun t => (Complex.sin (π * t) / (π * t))) = fun z =>
     (Complex.sin ∘ fun t => π * t) z / (π * z) := by simp
   rw [this]; rw [logDeriv_div _ (by apply sin_pi_mul_ne_zero hz) ?_
-    (DifferentiableAt.comp _ (Complex.differentiableAt_sin) (by fun_prop)) (by fun_prop)]; rw [logDeriv_comp
+    (DifferentiableAt.comp _ (Complex.differentiableAt_sin) (by fun_prop)) (by fun_prop)]; rw [logDeriv_comp (Complex.differentiableAt_sin) (by fun_prop)]; rw [Complex.logDeriv_sin]; rw [deriv_const_mul_id]; rw [logDeriv_const_mul]; rw [logDeriv_id']
+  · ring
+  · simp
+  · simp only [ne_eq, mul_eq_zero, ofReal_eq_zero, not_or]
+    exact ⟨Real.pi_ne_zero, integerComplement.ne_zero hz⟩
 
 中文:
 引理 logDeriv_sin_div_eq_cot
@@ -499,7 +523,11 @@ lemma logDeriv_sin_div_eq_cot
   have : (fun t => (Complex.sin (π * t) / (π * t))) = fun z =>
     (Complex.sin ∘ fun t => π * t) z / (π * z) := by simp
   rw [this]; rw [logDeriv_div _ (by apply sin_pi_mul_ne_zero hz) ?_
-    (DifferentiableAt.comp _ (Complex.differentiableAt_sin) (by fun_prop)) (by fun_prop)]; rw [logDeriv_comp
+    (DifferentiableAt.comp _ (Complex.differentiableAt_sin) (by fun_prop)) (by fun_prop)]; rw [logDeriv_comp (Complex.differentiableAt_sin) (by fun_prop)]; rw [Complex.logDeriv_sin]; rw [deriv_const_mul_id]; rw [logDeriv_const_mul]; rw [logDeriv_id']
+  · ring
+  · simp
+  · simp only [ne_eq, mul_eq_zero, ofReal_eq_zero, not_or]
+    exact ⟨Real.pi_ne_zero, integerComplement.ne_zero hz⟩
 
 Depends on / 依赖: Complex.differentiableAt_sin, Complex.logDeriv_sin, Complex.sin, DifferentiableAt, DifferentiableAt.comp, deriv_const_mul_id, differentiableAt_sin, fun_prop, logDeriv_comp, logDeriv_const_mul, logDeriv_div, logDeriv_id, logDeriv_sin, mul_eq_zero, ne_eq, not_or, ofReal_eq_zero, sin_pi_mul_ne_zero
 -/
@@ -541,7 +569,12 @@ lemma logDeriv_sineTerm_eq_cotTerm
     simpa [sub_eq_add_neg] using integerComplement_add_ne_zero hx (-(i + 1))
   have h3 : (i + 1) ^ 2 + - x ^ 2 != 0 := by
       have := (integerComplement_pow_two_ne_pow_two hx ((i + 1) : Int))
-
+      rw [← sub_eq_add_neg]; rw [sub_ne_zero]
+      aesop
+  simp only [Int.cast_add, Int.cast_natCast, Int.cast_one, ne_eq, sineTerm, logDeriv_apply,
+    deriv_const_add', deriv_div_const, deriv.fun_neg', differentiableAt_fun_id, deriv_fun_pow,
+    Nat.cast_ofNat, deriv_id'', cotTerm] at *
+  field
 
 中文:
 引理 logDeriv_sineTerm_eq_cotTerm
@@ -552,7 +585,12 @@ lemma logDeriv_sineTerm_eq_cotTerm
     simpa [sub_eq_add_neg] using integerComplement_add_ne_zero hx (-(i + 1))
   have h3 : (i + 1) ^ 2 + - x ^ 2 != 0 := by
       have := (integerComplement_pow_two_ne_pow_two hx ((i + 1) : Int))
-
+      rw [← sub_eq_add_neg]; rw [sub_ne_zero]
+      aesop
+  simp only [Int.cast_add, Int.cast_natCast, Int.cast_one, ne_eq, sineTerm, logDeriv_apply,
+    deriv_const_add', deriv_div_const, deriv.fun_neg', differentiableAt_fun_id, deriv_fun_pow,
+    Nat.cast_ofNat, deriv_id'', cotTerm] at *
+  field
 
 Depends on / 依赖: Int.cast_add, Int.cast_natCast, Int.cast_one, cast_add, cast_natCast, cast_one, deriv.fun_neg, deriv_const_add, deriv_div_const, differentiableAt_fun_id, fun_neg, integerComplement_add_ne_zero, integerComplement_pow_two_ne_pow_two, logDeriv_apply, ne_eq, sineTerm, sub_eq_add_neg, sub_ne_zero
 -/
@@ -672,7 +710,12 @@ lemma summable_cotTerm
   suffices Summable fun i : Nat => (x - (↑i : Complex))⁻¹ * (x + (↑i : Complex))⁻¹ by
     rw [← summable_nat_add_iff 1] at this
     simpa using this
-  suffices Summable fun i : Int => (x - (↑i : Complex))⁻¹ * (x + (↑i : Comple
+  suffices Summable fun i : Int => (x - (↑i : Complex))⁻¹ * (x + (↑i : Complex))⁻¹ by
+    apply this.comp_injective CharZero.cast_injective
+  apply (EisensteinSeries.summable_linear_sub_mul_linear_add x 1 1).congr
+  simp [mul_comm]
+
+@[deprecated (since := "2026-01-28")] alias Summable_cotTerm := summable_cotTerm
 
 中文:
 引理 summable_cotTerm
@@ -684,7 +727,12 @@ lemma summable_cotTerm
   suffices Summable fun i : Nat => (x - (↑i : Complex))⁻¹ * (x + (↑i : Complex))⁻¹ by
     rw [← summable_nat_add_iff 1] at this
     simpa using this
-  suffices Summable fun i : Int => (x - (↑i : Complex))⁻¹ * (x + (↑i : Comple
+  suffices Summable fun i : Int => (x - (↑i : Complex))⁻¹ * (x + (↑i : Complex))⁻¹ by
+    apply this.comp_injective CharZero.cast_injective
+  apply (EisensteinSeries.summable_linear_sub_mul_linear_add x 1 1).congr
+  simp [mul_comm]
+
+@[deprecated (since := "2026-01-28")] alias Summable_cotTerm := summable_cotTerm
 
 Depends on / 依赖: CharZero, CharZero.cast_injective, EisensteinSeries, EisensteinSeries.summable_linear_sub_mul_linear_add, Summable, Summable.mul_left, cast_injective, comp_injective, cotTerm_identity, mul_comm, mul_left, summable_linear_sub_mul_linear_add, summable_nat_add_iff, this.comp_injective
 -/
@@ -805,7 +853,12 @@ lemma eqOn_iteratedDeriv_cotTerm
   · have h2 := iter_deriv_inv_linear_sub k 1 ((d + 1 : Complex))
     have h3 := iter_deriv_inv_linear k 1 (d + 1 : Complex)
     simp only [one_div, one_mul, one_pow, mul_one, Int.reduceNeg, iteratedDeriv_eq_iterate] at *
-    rw [h2]; rw [h3
+    rw [h2]; rw [h3]
+    ring
+  · simpa [sub_eq_add_neg] using (contDiffOn_inv_linear k (-(d + 1))).contDiffAt
+      (isOpen_compl_range_intCast.mem_nhds hz)
+  · simpa using (contDiffOn_inv_linear k (d + 1)).contDiffAt
+      (isOpen_compl_range_intCast.mem_nhds hz)
 
 中文:
 引理 eqOn_iteratedDeriv_cotTerm
@@ -816,7 +869,12 @@ lemma eqOn_iteratedDeriv_cotTerm
   · have h2 := iter_deriv_inv_linear_sub k 1 ((d + 1 : Complex))
     have h3 := iter_deriv_inv_linear k 1 (d + 1 : Complex)
     simp only [one_div, one_mul, one_pow, mul_one, Int.reduceNeg, iteratedDeriv_eq_iterate] at *
-    rw [h2]; rw [h3
+    rw [h2]; rw [h3]
+    ring
+  · simpa [sub_eq_add_neg] using (contDiffOn_inv_linear k (-(d + 1))).contDiffAt
+      (isOpen_compl_range_intCast.mem_nhds hz)
+  · simpa using (contDiffOn_inv_linear k (d + 1)).contDiffAt
+      (isOpen_compl_range_intCast.mem_nhds hz)
 
 Depends on / 依赖: Int.reduceNeg, Pi.add_def, add_def, contDiffAt, contDiffOn_inv_linear, isOpen_compl_range_intCast, isOpen_compl_range_intCast.mem_, isOpen_compl_range_intCast.mem_nhds, iter_deriv_inv_linear, iter_deriv_inv_linear_sub, iteratedDeriv_add, iteratedDeriv_eq_iterate, mem_, mem_nhds, mul_one, one_div, one_mul, one_pow, reduceNeg, sub_eq_add_neg
 -/
@@ -875,7 +933,7 @@ lemma eqOn_iteratedDerivWithin_cotTerm_upperHalfPlaneSet
     isOpen_upperHalfPlaneSet (isOpen_compl_range_intCast))
   intro z hz
   simpa using! eqOn_iteratedDerivWithin_cotTerm_integerComplement k d
-    (coe_mem_intege
+    (coe_mem_integerComplement ⟨z, hz⟩)
 
 中文:
 引理 eqOn_iteratedDerivWithin_cotTerm_upperHalfPlaneSet
@@ -886,7 +944,7 @@ lemma eqOn_iteratedDerivWithin_cotTerm_upperHalfPlaneSet
     isOpen_upperHalfPlaneSet (isOpen_compl_range_intCast))
   intro z hz
   simpa using! eqOn_iteratedDerivWithin_cotTerm_integerComplement k d
-    (coe_mem_intege
+    (coe_mem_integerComplement ⟨z, hz⟩)
 
 Depends on / 依赖: Set.EqOn.trans, coe_mem_integerComplement, cotTerm, eqOn_iteratedDerivWithin_cotTerm_integerComplement, isOpen_compl_range_intCast, isOpen_upperHalfPlaneSet, iteratedDerivWithin_congr_right_of_isOpen, upperHalfPlane_inter_integerComplement
 -/
@@ -931,7 +989,7 @@ lemma summable_cotTermUpperBound
   conv => enter [1, n]; rw [show (-1 - k : Int) = -(1 + k :) by lia, zpow_neg, zpow_natCast];
           enter [1, 1, 1]; norm_cast
   rw [summable_norm_iff]; rw [summable_nat_add_iff (f := fun n : Nat => ((n : Real) ^ (1 + k))⁻¹)]
-exact summable_na
+exact summable_nat_pow_inv.mpr by lia
 
 中文:
 引理 summable_cotTermUpperBound
@@ -942,7 +1000,7 @@ exact summable_na
   conv => enter [1, n]; rw [show (-1 - k : Int) = -(1 + k :) by lia, zpow_neg, zpow_natCast];
           enter [1, 1, 1]; norm_cast
   rw [summable_norm_iff]; rw [summable_nat_add_iff (f := fun n : Nat => ((n : Real) ^ (1 + k))⁻¹)]
-exact summable_na
+exact summable_nat_pow_inv.mpr by lia
 -/
 private lemma summable_cotTermUpperBound (A B : Real) (hB : 0 < B) {k : Nat} (hk : 1 <= k) :
     Summable fun a : Nat => cotTermUpperBound k A B hB a := by
@@ -964,7 +1022,15 @@ lemma iteratedDerivWithin_cotTerm_bounded_uniformly
   simp only [eqOn_iteratedDerivWithin_cotTerm_upperHalfPlaneSet k n a.im_pos, Complex.norm_mul,
     norm_pow, norm_neg, norm_one, one_pow, Complex.norm_natCast, one_mul, cotTermUpperBound,
     Int.reduceNeg, norm_zpow, Real.norm_eq_abs, two_mul, add_mul]
-  gco
+  gcongr
+  have h1 := summand_bound_of_mem_verticalStrip (k := k + 1) (by positivity) ![1, n + 1] hB haAB
+  have h2 := abs_norm_eq_max_natAbs_neg n ▸ summand_bound_of_mem_verticalStrip (k := k + 1)
+    (by positivity) ![1, -(n + 1)] hB haAB
+  apply norm_add_le_of_le
+  · simpa (disch := positivity) [sub_eq_add_neg, ← Real.rpow_intCast, abs_norm_eq_max_natAbs,
+      abs_of_nonneg] using h1
+  · simpa (disch := positivity) [sub_eq_add_neg, ← Real.rpow_intCast, abs_norm_eq_max_natAbs,
+      abs_of_nonneg] using h2
 
 中文:
 引理 iteratedDerivWithin_cotTerm_bounded_uniformly
@@ -973,7 +1039,15 @@ lemma iteratedDerivWithin_cotTerm_bounded_uniformly
   simp only [eqOn_iteratedDerivWithin_cotTerm_upperHalfPlaneSet k n a.im_pos, Complex.norm_mul,
     norm_pow, norm_neg, norm_one, one_pow, Complex.norm_natCast, one_mul, cotTermUpperBound,
     Int.reduceNeg, norm_zpow, Real.norm_eq_abs, two_mul, add_mul]
-  gco
+  gcongr
+  have h1 := summand_bound_of_mem_verticalStrip (k := k + 1) (by positivity) ![1, n + 1] hB haAB
+  have h2 := abs_norm_eq_max_natAbs_neg n ▸ summand_bound_of_mem_verticalStrip (k := k + 1)
+    (by positivity) ![1, -(n + 1)] hB haAB
+  apply norm_add_le_of_le
+  · simpa (disch := positivity) [sub_eq_add_neg, ← Real.rpow_intCast, abs_norm_eq_max_natAbs,
+      abs_of_nonneg] using h1
+  · simpa (disch := positivity) [sub_eq_add_neg, ← Real.rpow_intCast, abs_norm_eq_max_natAbs,
+      abs_of_nonneg] using h2
 -/
 private lemma iteratedDerivWithin_cotTerm_bounded_uniformly
     {k : Nat} {K : Set Complex} (A B : Real) (hB : 0 < B)
@@ -1005,7 +1079,8 @@ lemma summableLocallyUniformlyOn_iteratedDerivWithin_cotTerm
   lift K to Set ℍ using hK
   obtain ⟨A, B, hB, HABK⟩ := subset_verticalStrip_of_isCompact
     (isEmbedding_coe.isCompact_iff.mpr hKc)
-  exact ⟨cotTermUpperBound k A B hB, summable_cotTermUpperBound A B
+  exact ⟨cotTermUpperBound k A B hB, summable_cotTermUpperBound A B hB hk,
+iteratedDerivWithin_cotTerm_bounded_uniformly A B hB by gcongr⟩
 
 中文:
 引理 summableLocallyUniformlyOn_iteratedDerivWithin_cotTerm
@@ -1016,7 +1091,8 @@ lemma summableLocallyUniformlyOn_iteratedDerivWithin_cotTerm
   lift K to Set ℍ using hK
   obtain ⟨A, B, hB, HABK⟩ := subset_verticalStrip_of_isCompact
     (isEmbedding_coe.isCompact_iff.mpr hKc)
-  exact ⟨cotTermUpperBound k A B hB, summable_cotTermUpperBound A B
+  exact ⟨cotTermUpperBound k A B hB, summable_cotTermUpperBound A B hB hk,
+iteratedDerivWithin_cotTerm_bounded_uniformly A B hB by gcongr⟩
 
 Depends on / 依赖: SummableLocallyUniformlyOn_of_locally_bounded, cotTermUpperBound, isCompact_iff, isEmbedding_coe, isEmbedding_coe.isCompact_iff.mpr, isOpen_upperHalfPlaneSet, iteratedDerivWithin_cotTerm_bounded_uniformly, subset_verticalStrip_of_isCompact, summable_cotTermUpperBound
 -/
@@ -1041,7 +1117,9 @@ lemma differentiableOn_iteratedDerivWithin_cotTerm
     (z - (n + 1)) ^ (-1 - l : Int))) ℍₒ by
     exact this.congr fun z hz => eqOn_iteratedDerivWithin_cotTerm_upperHalfPlaneSet l n hz
   apply DifferentiableOn.const_mul
-apply DifferentiableO
+apply DifferentiableOn.add <;> refine DifferentiableOn.zpow (by fun_prop) .inl fun x hx => ?_
+  · simpa [add_eq_zero_iff_neg_eq'] using (UpperHalfPlane.ne_intCast (.mk x hx) (-(n + 1))).symm
+  · simpa [sub_eq_zero] using (UpperHalfPlane.ne_intCast (.mk x hx) (n + 1))
 
 中文:
 引理 differentiableOn_iteratedDerivWithin_cotTerm
@@ -1051,7 +1129,9 @@ apply DifferentiableO
     (z - (n + 1)) ^ (-1 - l : Int))) ℍₒ by
     exact this.congr fun z hz => eqOn_iteratedDerivWithin_cotTerm_upperHalfPlaneSet l n hz
   apply DifferentiableOn.const_mul
-apply DifferentiableO
+apply DifferentiableOn.add <;> refine DifferentiableOn.zpow (by fun_prop) .inl fun x hx => ?_
+  · simpa [add_eq_zero_iff_neg_eq'] using (UpperHalfPlane.ne_intCast (.mk x hx) (-(n + 1))).symm
+  · simpa [sub_eq_zero] using (UpperHalfPlane.ne_intCast (.mk x hx) (n + 1))
 
 Depends on / 依赖: DifferentiableOn, DifferentiableOn.add, DifferentiableOn.const_mul, DifferentiableOn.zpow, UpperHalfPlane, UpperHalfPlane.ne_intCast, add_eq_zero_iff_neg_eq, const_mul, eqOn_iteratedDerivWithin_cotTerm_upperHalfPlaneSet, fun_prop, ne_intCast, sub_eq_zero, this.congr
 -/
@@ -1128,7 +1208,16 @@ lemma aux_iteratedDeriv_tsum_cotTerm
   rw [iteratedDerivWithin_tsum k isOpen_upperHalfPlaneSet hz
     (fun t ht => summable_cotTerm (coe_mem_integerComplement ⟨t]; rw [ht⟩))
     (fun l hl hl2 => summableLocallyUniformlyOn_iteratedDerivWithin_cotTerm hl)
-    (fun n l z hl hz => (differentiableOn_iteratedDerivWithin_cotTerm n l).diffe
+    (fun n l z hl hz => (differentiableOn_iteratedDerivWithin_cotTerm n l).differentiableAt
+    (isOpen_upperHalfPlaneSet.mem_nhds hz))]
+  conv =>
+    enter [1, 2, 1, n]
+    rw [eqOn_iteratedDerivWithin_cotTerm_upperHalfPlaneSet k n (by simp [hz])]
+  rw [tsum_of_add_one_of_neg_add_one (by simpa using aux_summable_add hk z)
+    (by simpa [sub_eq_add_neg] using aux_summable_sub hk z),
+    tsum_mul_left, Summable.tsum_add (aux_summable_add hk z) (aux_summable_sub hk z)]
+  push_cast
+  ring_nf
 
 中文:
 引理 aux_iteratedDeriv_tsum_cotTerm
@@ -1137,7 +1226,16 @@ lemma aux_iteratedDeriv_tsum_cotTerm
   rw [iteratedDerivWithin_tsum k isOpen_upperHalfPlaneSet hz
     (fun t ht => summable_cotTerm (coe_mem_integerComplement ⟨t]; rw [ht⟩))
     (fun l hl hl2 => summableLocallyUniformlyOn_iteratedDerivWithin_cotTerm hl)
-    (fun n l z hl hz => (differentiableOn_iteratedDerivWithin_cotTerm n l).diffe
+    (fun n l z hl hz => (differentiableOn_iteratedDerivWithin_cotTerm n l).differentiableAt
+    (isOpen_upperHalfPlaneSet.mem_nhds hz))]
+  conv =>
+    enter [1, 2, 1, n]
+    rw [eqOn_iteratedDerivWithin_cotTerm_upperHalfPlaneSet k n (by simp [hz])]
+  rw [tsum_of_add_one_of_neg_add_one (by simpa using aux_summable_add hk z)
+    (by simpa [sub_eq_add_neg] using aux_summable_sub hk z),
+    tsum_mul_left, Summable.tsum_add (aux_summable_add hk z) (aux_summable_sub hk z)]
+  push_cast
+  ring_nf
 -/
 private lemma aux_iteratedDeriv_tsum_cotTerm {k : Nat} (hk : 1 <= k) (hz : z in ℍₒ) :
     (-1) ^ k * (k !) * z ^ (-1 - k : Int) +
@@ -1197,7 +1295,10 @@ lemma iteratedDerivWithin_cot_pi_mul_sub_inv
   · simpa [iteratedDerivWithin_fun_neg] using! iteratedDerivWithin_one_div k
       isOpen_upperHalfPlaneSet hz
   · exact ContDiffWithinAt.mul (by fun_prop) (cot_pi_mul_contDiffWithinAt k
-      (
+      (UpperHalfPlane.coe_mem_integerComplement ⟨z, hz⟩))
+  · simp only [one_div]
+    apply ContDiffWithinAt.neg
+    exact ContDiffWithinAt.inv (by fun_prop) (ne_zero ⟨z, hz⟩)
 
 中文:
 引理 iteratedDerivWithin_cot_pi_mul_sub_inv
@@ -1208,7 +1309,10 @@ lemma iteratedDerivWithin_cot_pi_mul_sub_inv
   · simpa [iteratedDerivWithin_fun_neg] using! iteratedDerivWithin_one_div k
       isOpen_upperHalfPlaneSet hz
   · exact ContDiffWithinAt.mul (by fun_prop) (cot_pi_mul_contDiffWithinAt k
-      (
+      (UpperHalfPlane.coe_mem_integerComplement ⟨z, hz⟩))
+  · simp only [one_div]
+    apply ContDiffWithinAt.neg
+    exact ContDiffWithinAt.inv (by fun_prop) (ne_zero ⟨z, hz⟩)
 -/
 private lemma iteratedDerivWithin_cot_pi_mul_sub_inv {z : Complex} (hz : z in ℍₒ) :
     iteratedDerivWithin k (fun x : Complex => π * cot (π * x) - 1 / x) ℍₒ z =

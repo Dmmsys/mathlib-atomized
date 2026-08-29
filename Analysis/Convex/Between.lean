@@ -2020,7 +2020,8 @@ theorem sbtw_iff_mem_image_Ioo_and_ne
   refine ⟨fun h => ⟨h.mem_image_Ioo, h.left_ne_right⟩, fun h => ?_⟩
   rcases h with ⟨⟨t, ht, rfl⟩, hxz⟩
   refine ⟨⟨t, Set.mem_Icc_of_Ioo ht, rfl⟩, ?_⟩
-  rw [lineMap_apply]; rw [← @vsub_ne_zero V]; rw [← @vsub_ne_zero V _ _ _ _ z]; rw [vadd_vsub_assoc]; rw [vsub_self]; rw [vadd_vsub_assoc]; rw [← 
+  rw [lineMap_apply]; rw [← @vsub_ne_zero V]; rw [← @vsub_ne_zero V _ _ _ _ z]; rw [vadd_vsub_assoc]; rw [vsub_self]; rw [vadd_vsub_assoc]; rw [← neg_vsub_eq_vsub_rev z x]; rw [← @neg_one_smul R]; rw [← add_smul]; rw [← sub_eq_add_neg]
+  simp [sub_eq_zero, ht.1.ne.symm, ht.2.ne, hxz.symm]
 
 中文:
 定理 sbtw_iff_mem_image_Ioo_and_ne
@@ -2028,7 +2029,8 @@ theorem sbtw_iff_mem_image_Ioo_and_ne
   refine ⟨fun h => ⟨h.mem_image_Ioo, h.left_ne_right⟩, fun h => ?_⟩
   rcases h with ⟨⟨t, ht, rfl⟩, hxz⟩
   refine ⟨⟨t, Set.mem_Icc_of_Ioo ht, rfl⟩, ?_⟩
-  rw [lineMap_apply]; rw [← @vsub_ne_zero V]; rw [← @vsub_ne_zero V _ _ _ _ z]; rw [vadd_vsub_assoc]; rw [vsub_self]; rw [vadd_vsub_assoc]; rw [← 
+  rw [lineMap_apply]; rw [← @vsub_ne_zero V]; rw [← @vsub_ne_zero V _ _ _ _ z]; rw [vadd_vsub_assoc]; rw [vsub_self]; rw [vadd_vsub_assoc]; rw [← neg_vsub_eq_vsub_rev z x]; rw [← @neg_one_smul R]; rw [← add_smul]; rw [← sub_eq_add_neg]
+  simp [sub_eq_zero, ht.1.ne.symm, ht.2.ne, hxz.symm]
 
 Depends on / 依赖: Set.mem_Icc_of_Ioo, add_smul, h.left_ne_right, h.mem_image_Ioo, hxz.symm, left_ne_right, lineMap_apply, mem_Icc_of_Ioo, mem_image_Ioo, ne.symm, neg_one_smul, neg_vsub_eq_vsub_rev, sub_eq_add_neg, sub_eq_zero, vadd_vsub_assoc, vsub_ne_zero, vsub_self
 -/
@@ -2053,7 +2055,19 @@ theorem wbtw_swap_left_iff
     rcases hxyz with ⟨ty, hty, rfl⟩
     rcases hyxz with ⟨tx, htx, hx⟩
     rw [lineMap_apply]; rw [lineMap_apply]; rw [← add_vadd] at hx
-    rw [← @vsub_eq_zero_iff_eq V]; rw [vadd_vsub]; rw [vsub_vadd_eq_vsub_sub]; rw [smul_sub]; rw [smul_smul]; rw [← sub_sm
+    rw [← @vsub_eq_zero_iff_eq V]; rw [vadd_vsub]; rw [vsub_vadd_eq_vsub_sub]; rw [smul_sub]; rw [smul_smul]; rw [← sub_smul]; rw [← add_smul]; rw [smul_eq_zero] at hx
+    rcases hx with (h | h)
+    · nth_rw 1 [← mul_one tx] at h
+      rw [← mul_sub]; rw [add_eq_zero_iff_neg_eq] at h
+      have h' : ty = 0 := by
+        refine le_antisymm ?_ hty.1
+        rw [← h]; rw [Left.neg_nonpos_iff]
+        exact mul_nonneg htx.1 (sub_nonneg.2 hty.2)
+      simp [h']
+    · rw [vsub_eq_zero_iff_eq] at h
+      rw [h]; rw [lineMap_same_apply]
+  · rintro rfl
+    exact ⟨wbtw_self_left _ _ _, wbtw_self_left _ _ _⟩
 
 中文:
 定理 wbtw_swap_left_iff
@@ -2064,7 +2078,19 @@ theorem wbtw_swap_left_iff
     rcases hxyz with ⟨ty, hty, rfl⟩
     rcases hyxz with ⟨tx, htx, hx⟩
     rw [lineMap_apply]; rw [lineMap_apply]; rw [← add_vadd] at hx
-    rw [← @vsub_eq_zero_iff_eq V]; rw [vadd_vsub]; rw [vsub_vadd_eq_vsub_sub]; rw [smul_sub]; rw [smul_smul]; rw [← sub_sm
+    rw [← @vsub_eq_zero_iff_eq V]; rw [vadd_vsub]; rw [vsub_vadd_eq_vsub_sub]; rw [smul_sub]; rw [smul_smul]; rw [← sub_smul]; rw [← add_smul]; rw [smul_eq_zero] at hx
+    rcases hx with (h | h)
+    · nth_rw 1 [← mul_one tx] at h
+      rw [← mul_sub]; rw [add_eq_zero_iff_neg_eq] at h
+      have h' : ty = 0 := by
+        refine le_antisymm ?_ hty.1
+        rw [← h]; rw [Left.neg_nonpos_iff]
+        exact mul_nonneg htx.1 (sub_nonneg.2 hty.2)
+      simp [h']
+    · rw [vsub_eq_zero_iff_eq] at h
+      rw [h]; rw [lineMap_same_apply]
+  · rintro rfl
+    exact ⟨wbtw_self_left _ _ _, wbtw_self_left _ _ _⟩
 
 Depends on / 依赖: Left.n, add_eq_zero_iff_neg_eq, add_smul, add_vadd, le_antisymm, lineMap_apply, mul_one, mul_sub, nth_rw, smul_eq_zero, smul_smul, smul_sub, sub_smul, vadd_vsub, vsub_eq_zero_iff_eq, vsub_vadd_eq_vsub_sub
 -/
@@ -2566,7 +2592,13 @@ theorem Sbtw.affineCombination_of_mem_affineSpan_pair
   rw [hr i his]; rw [sbtw_mul_sub_add_iff] at hs
   change forall i in s, w i = (r • (w₂ - w₁) + w₁) i at hr
   rw [s.affineCombination_congr hr fun _ _ => rfl]
-  rw [← s.weightedVSub_vadd_affineCombination]; rw
+  rw [← s.weightedVSub_vadd_affineCombination]; rw [s.weightedVSub_const_smul]; rw [← s.affineCombination_vsub]; rw [← lineMap_apply]; rw [sbtw_lineMap_iff]; rw [and_iff_left hs.2]; rw [← @vsub_ne_zero V]; rw [s.affineCombination_vsub]
+  intro hz
+  have hw₁w₂ : (∑ i in s, (w₁ - w₂) i) = 0 := by
+    simp_rw [Pi.sub_apply, Finset.sum_sub_distrib, hw₁, hw₂, sub_self]
+  refine hs.1 ?_
+  have ha' := ha s (w₁ - w₂) hw₁w₂ hz i his
+  rwa [Pi.sub_apply, sub_eq_zero] at ha'
 
 中文:
 定理 Sbtw.affineCombination_of_mem_affineSpan_pair
@@ -2577,7 +2609,13 @@ theorem Sbtw.affineCombination_of_mem_affineSpan_pair
   rw [hr i his]; rw [sbtw_mul_sub_add_iff] at hs
   change forall i in s, w i = (r • (w₂ - w₁) + w₁) i at hr
   rw [s.affineCombination_congr hr fun _ _ => rfl]
-  rw [← s.weightedVSub_vadd_affineCombination]; rw
+  rw [← s.weightedVSub_vadd_affineCombination]; rw [s.weightedVSub_const_smul]; rw [← s.affineCombination_vsub]; rw [← lineMap_apply]; rw [sbtw_lineMap_iff]; rw [and_iff_left hs.2]; rw [← @vsub_ne_zero V]; rw [s.affineCombination_vsub]
+  intro hz
+  have hw₁w₂ : (∑ i in s, (w₁ - w₂) i) = 0 := by
+    simp_rw [Pi.sub_apply, Finset.sum_sub_distrib, hw₁, hw₂, sub_self]
+  refine hs.1 ?_
+  have ha' := ha s (w₁ - w₂) hw₁w₂ hz i his
+  rwa [Pi.sub_apply, sub_eq_zero] at ha'
 
 Depends on / 依赖: affineCombination_congr, affineCombination_mem_affineSpan_pair, affineCombination_vsub, and_iff_left, lineMap_apply, s.affineCombination_congr, s.affineCombination_vsub, s.weightedVSub_const_smul, s.weightedVSub_vadd_affineCombination, sbtw_lineMap_iff, sbtw_mul_sub_add_iff, vsub_ne_zero, weightedVSub_const_smul, weightedVSub_vadd_affineCombination
 -/
@@ -2620,7 +2658,15 @@ lemma closedInterior_eq_affineSegment
       rw [Fin.sum_univ_two] at hw
       ext i
       fin_cases i <;> simp [← hw]
-    rw [h]; rw [Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_un
+    rw [h]; rw [Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_univ _)
+      (Finset.mem_univ _)]
+    exact Set.mem_image_of_mem _ (h01 _)
+  · rintro ⟨r, ⟨h0, h1⟩, rfl⟩
+    rw [← Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_univ _)
+      (Finset.mem_univ _)]; rw [affineCombination_mem_closedInterior_iff
+        (Finset.sum_affineCombinationLineMapWeights _ (Finset.mem_univ _) (Finset.mem_univ _) _)]
+    intro i
+    fin_cases i <;> simp [h0, h1]
 
 中文:
 引理 closed整数erior_eq_affineSegment
@@ -2633,7 +2679,15 @@ lemma closedInterior_eq_affineSegment
       rw [Fin.sum_univ_two] at hw
       ext i
       fin_cases i <;> simp [← hw]
-    rw [h]; rw [Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_un
+    rw [h]; rw [Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_univ _)
+      (Finset.mem_univ _)]
+    exact Set.mem_image_of_mem _ (h01 _)
+  · rintro ⟨r, ⟨h0, h1⟩, rfl⟩
+    rw [← Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_univ _)
+      (Finset.mem_univ _)]; rw [affineCombination_mem_closedInterior_iff
+        (Finset.sum_affineCombinationLineMapWeights _ (Finset.mem_univ _) (Finset.mem_univ _) _)]
+    intro i
+    fin_cases i <;> simp [h0, h1]
 
 Depends on / 依赖: Fin.sum_univ_two, Finset, Finset.affineCombinationLineMapWeights, Finset.mem_univ, Finset.univ.affineCombination_affineCombinationLineMapWeights, Set.mem_image_of_mem, affineCombinationLineMapWeights, affineCombination_affineCombinationLineMapWeights, affineCombination_mem_cl, fin_cases, mem_image_of_mem, mem_univ, sum_univ_two
 -/
@@ -2689,7 +2743,15 @@ lemma closedInterior_face_eq_affineSegment
     rcases h.lt_or_gt with hij | hji
     · simp [min_eq_left hij.le, max_eq_right hij.le]
     · nth_rw 2 [affineSegment_comm]
-      simp [max_eq_left hji.le, min_eq_right 
+      simp [max_eq_left hji.le, min_eq_right hji.le]
+  rw [h']; rw [(s.face (Finset.card_pair h)).closedInterior_eq_affineSegment]; rw [face_points]; rw [face_points]
+  congr 2
+  · convert! Finset.orderEmbOfFin_zero _ _
+    · exact (Finset.min'_pair i j).symm
+    · lia
+  · convert! Finset.orderEmbOfFin_last _ _
+    · exact (Finset.max'_pair i j).symm
+    · lia
 
 中文:
 引理 closed整数erior_face_eq_affineSegment
@@ -2700,7 +2762,15 @@ lemma closedInterior_face_eq_affineSegment
     rcases h.lt_or_gt with hij | hji
     · simp [min_eq_left hij.le, max_eq_right hij.le]
     · nth_rw 2 [affineSegment_comm]
-      simp [max_eq_left hji.le, min_eq_right 
+      simp [max_eq_left hji.le, min_eq_right hji.le]
+  rw [h']; rw [(s.face (Finset.card_pair h)).closedInterior_eq_affineSegment]; rw [face_points]; rw [face_points]
+  congr 2
+  · convert! Finset.orderEmbOfFin_zero _ _
+    · exact (Finset.min'_pair i j).symm
+    · lia
+  · convert! Finset.orderEmbOfFin_last _ _
+    · exact (Finset.max'_pair i j).symm
+    · lia
 
 Depends on / 依赖: Finset, Finset.card_pair, Finset.min, Finset.orderEmbOfFin_zero, _pair, affineSegment, affineSegment_comm, card_pair, closedInterior_eq_affineSegment, convert, face_points, h.lt_or_gt, hij.le, hji.le, lt_or_gt, max_eq_left, max_eq_right, min_eq_left, min_eq_right, nth_rw
 -/
@@ -2759,7 +2829,15 @@ lemma interior_eq_image_Ioo
       rw [Fin.sum_univ_two] at hw
       ext i
       fin_cases i <;> simp [← hw]
-    rw [h]; rw [Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_un
+    rw [h]; rw [Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_univ _)
+      (Finset.mem_univ _)]
+    exact Set.mem_image_of_mem _ (h01 _)
+  · rintro ⟨r, ⟨h0, h1⟩, rfl⟩
+    rw [← Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_univ _)
+      (Finset.mem_univ _)]; rw [affineCombination_mem_interior_iff
+        (Finset.sum_affineCombinationLineMapWeights _ (Finset.mem_univ _) (Finset.mem_univ _) _)]
+    intro i
+    fin_cases i <;> simp [h0, h1]
 
 中文:
 引理 interior_eq_image_Ioo
@@ -2772,7 +2850,15 @@ lemma interior_eq_image_Ioo
       rw [Fin.sum_univ_two] at hw
       ext i
       fin_cases i <;> simp [← hw]
-    rw [h]; rw [Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_un
+    rw [h]; rw [Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_univ _)
+      (Finset.mem_univ _)]
+    exact Set.mem_image_of_mem _ (h01 _)
+  · rintro ⟨r, ⟨h0, h1⟩, rfl⟩
+    rw [← Finset.univ.affineCombination_affineCombinationLineMapWeights _ (Finset.mem_univ _)
+      (Finset.mem_univ _)]; rw [affineCombination_mem_interior_iff
+        (Finset.sum_affineCombinationLineMapWeights _ (Finset.mem_univ _) (Finset.mem_univ _) _)]
+    intro i
+    fin_cases i <;> simp [h0, h1]
 
 Depends on / 依赖: Fin.sum_univ_two, Finset, Finset.affineCombinationLineMapWeights, Finset.mem_univ, Finset.univ.affineCombination_affineCombinationLineMapWeights, Set.mem_image_of_mem, affineCombinationLineMapWeights, affineCombination_affineCombinationLineMapWeights, affineCombination_mem_in, fin_cases, mem_image_of_mem, mem_univ, sum_univ_two
 -/
@@ -2832,7 +2918,14 @@ lemma mem_interior_face_iff_sbtw
     · simp [min_eq_left hij.le, max_eq_right hij.le]
     · nth_rw 2 [sbtw_comm]
       simp [max_eq_left hji.le, min_eq_right hji.le]
-  rw [h']; rw [
+  rw [h']; rw [mem_interior_iff_sbtw]; rw [face_points]; rw [face_points]
+  congr! 4
+  · convert! Finset.orderEmbOfFin_zero _ _
+    · exact (Finset.min'_pair i j).symm
+    · lia
+  · convert! Finset.orderEmbOfFin_last _ _
+    · exact (Finset.max'_pair i j).symm
+    · lia
 
 中文:
 引理 mem_interior_face_iff_sbtw
@@ -2844,7 +2937,14 @@ lemma mem_interior_face_iff_sbtw
     · simp [min_eq_left hij.le, max_eq_right hij.le]
     · nth_rw 2 [sbtw_comm]
       simp [max_eq_left hji.le, min_eq_right hji.le]
-  rw [h']; rw [
+  rw [h']; rw [mem_interior_iff_sbtw]; rw [face_points]; rw [face_points]
+  congr! 4
+  · convert! Finset.orderEmbOfFin_zero _ _
+    · exact (Finset.min'_pair i j).symm
+    · lia
+  · convert! Finset.orderEmbOfFin_last _ _
+    · exact (Finset.max'_pair i j).symm
+    · lia
 
 Depends on / 依赖: Finset, Finset.max, Finset.min, Finset.orderEmbOfFin_last, Finset.orderEmbOfFin_zero, _pair, convert, face_points, h.lt_or_gt, hij.le, hji.le, lt_or_gt, max_eq_left, max_eq_right, mem_interior_iff_sbtw, min_eq_left, min_eq_right, nth_rw, orderEmbOfFin_last, orderEmbOfFin_zero
 -/
@@ -2975,7 +3075,54 @@ theorem sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair
   have hu : (Finset.univ : Finset (Fin 3)) = {i₁, i₂, i₃} := by
     clear h₁ h₂ h₁' h₂'
     decide +revert
-  have hp
+  have hp : p in affineSpan R (Set.range t.points) := by
+    have hle : line[R, t.points i₁, p₁] <= affineSpan R (Set.range t.points) := by
+      refine affineSpan_pair_le_of_mem_of_mem (mem_affineSpan R (Set.mem_range_self _)) ?_
+      have hle : line[R, t.points i₂, t.points i₃] <= affineSpan R (Set.range t.points) := by
+        refine affineSpan_mono R ?_
+        simp [Set.insert_subset_iff]
+      rw [AffineSubspace.le_def'] at hle
+      exact hle _ h₁.wbtw.mem_affineSpan
+    rw [AffineSubspace.le_def'] at hle
+    exact hle _ h₁'
+  have h₁i := h₁.mem_image_Ioo
+  have h₂i := h₂.mem_image_Ioo
+  rw [Set.mem_image] at h₁i h₂i
+  rcases h₁i with ⟨r₁, ⟨hr₁0, hr₁1⟩, rfl⟩
+  rcases h₂i with ⟨r₂, ⟨hr₂0, hr₂1⟩, rfl⟩
+  rcases eq_affineCombination_of_mem_affineSpan_of_fintype hp with ⟨w, hw, rfl⟩
+  have h₁s :=
+    sign_eq_of_affineCombination_mem_affineSpan_single_lineMap t.independent hw (Finset.mem_univ _)
+      (Finset.mem_univ _) (Finset.mem_univ _) h₁₂ h₁₃ h₂₃ hr₁0 hr₁1 h₁'
+  have h₂s :=
+    sign_eq_of_affineCombination_mem_affineSpan_single_lineMap t.independent hw (Finset.mem_univ _)
+      (Finset.mem_univ _) (Finset.mem_univ _) h₁₂.symm h₂₃ h₁₃ hr₂0 hr₂1 h₂'
+  rw [← Finset.univ.affineCombination_piSingle R t.points
+      (Finset.mem_univ i₁)]; rw [← Finset.univ.affineCombination_affineCombinationLineMapWeights t.points (Finset.mem_univ _)
+      (Finset.mem_univ _)] at h₁' ⊢
+  refine
+    Sbtw.affineCombination_of_mem_affineSpan_pair t.independent hw (Fintype.sum_pi_single' _ _)
+      (Finset.univ.sum_affineCombinationLineMapWeights (Finset.mem_univ _) (Finset.mem_univ _) _)
+      h₁' (Finset.mem_univ i₁) ?_
+  rw [Pi.single_eq_same]; rw [Finset.affineCombinationLineMapWeights_apply_of_ne h₁₂ h₁₃]; rw [sbtw_one_zero_iff]
+  have hs : forall i : Fin 3, SignType.sign (w i) = SignType.sign (w i₃) := by
+    intro i
+    rcases h3 i with (rfl | rfl | rfl)
+    · exact h₂s
+    · exact h₁s
+    · rfl
+  have hss : SignType.sign (∑ i, w i) = 1 := by simp [hw]
+  have hs' := sign_sum Finset.univ_nonempty (SignType.sign (w i₃)) fun i _ => hs i
+  rw [hs'] at hss
+  simp_rw [hss, sign_eq_one_iff] at hs
+  refine ⟨hs i₁, ?_⟩
+  rw [hu] at hw
+  rw [Finset.sum_insert]; rw [Finset.sum_insert]; rw [Finset.sum_singleton] at hw
+  · by_contra hle
+    rw [not_lt] at hle
+    exact (hle.trans_lt (lt_add_of_pos_right _ (Left.add_pos (hs i₂) (hs i₃)))).ne' hw
+  · simpa using h₂₃
+  · simpa [not_or] using ⟨h₁₂, h₁₃⟩
 
 中文:
 定理 sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair
@@ -2991,7 +3138,54 @@ theorem sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair
   have hu : (Finset.univ : Finset (Fin 3)) = {i₁, i₂, i₃} := by
     clear h₁ h₂ h₁' h₂'
     decide +revert
-  have hp
+  have hp : p in affineSpan R (Set.range t.points) := by
+    have hle : line[R, t.points i₁, p₁] <= affineSpan R (Set.range t.points) := by
+      refine affineSpan_pair_le_of_mem_of_mem (mem_affineSpan R (Set.mem_range_self _)) ?_
+      have hle : line[R, t.points i₂, t.points i₃] <= affineSpan R (Set.range t.points) := by
+        refine affineSpan_mono R ?_
+        simp [Set.insert_subset_iff]
+      rw [AffineSubspace.le_def'] at hle
+      exact hle _ h₁.wbtw.mem_affineSpan
+    rw [AffineSubspace.le_def'] at hle
+    exact hle _ h₁'
+  have h₁i := h₁.mem_image_Ioo
+  have h₂i := h₂.mem_image_Ioo
+  rw [Set.mem_image] at h₁i h₂i
+  rcases h₁i with ⟨r₁, ⟨hr₁0, hr₁1⟩, rfl⟩
+  rcases h₂i with ⟨r₂, ⟨hr₂0, hr₂1⟩, rfl⟩
+  rcases eq_affineCombination_of_mem_affineSpan_of_fintype hp with ⟨w, hw, rfl⟩
+  have h₁s :=
+    sign_eq_of_affineCombination_mem_affineSpan_single_lineMap t.independent hw (Finset.mem_univ _)
+      (Finset.mem_univ _) (Finset.mem_univ _) h₁₂ h₁₃ h₂₃ hr₁0 hr₁1 h₁'
+  have h₂s :=
+    sign_eq_of_affineCombination_mem_affineSpan_single_lineMap t.independent hw (Finset.mem_univ _)
+      (Finset.mem_univ _) (Finset.mem_univ _) h₁₂.symm h₂₃ h₁₃ hr₂0 hr₂1 h₂'
+  rw [← Finset.univ.affineCombination_piSingle R t.points
+      (Finset.mem_univ i₁)]; rw [← Finset.univ.affineCombination_affineCombinationLineMapWeights t.points (Finset.mem_univ _)
+      (Finset.mem_univ _)] at h₁' ⊢
+  refine
+    Sbtw.affineCombination_of_mem_affineSpan_pair t.independent hw (Fintype.sum_pi_single' _ _)
+      (Finset.univ.sum_affineCombinationLineMapWeights (Finset.mem_univ _) (Finset.mem_univ _) _)
+      h₁' (Finset.mem_univ i₁) ?_
+  rw [Pi.single_eq_same]; rw [Finset.affineCombinationLineMapWeights_apply_of_ne h₁₂ h₁₃]; rw [sbtw_one_zero_iff]
+  have hs : forall i : Fin 3, SignType.sign (w i) = SignType.sign (w i₃) := by
+    intro i
+    rcases h3 i with (rfl | rfl | rfl)
+    · exact h₂s
+    · exact h₁s
+    · rfl
+  have hss : SignType.sign (∑ i, w i) = 1 := by simp [hw]
+  have hs' := sign_sum Finset.univ_nonempty (SignType.sign (w i₃)) fun i _ => hs i
+  rw [hs'] at hss
+  simp_rw [hss, sign_eq_one_iff] at hs
+  refine ⟨hs i₁, ?_⟩
+  rw [hu] at hw
+  rw [Finset.sum_insert]; rw [Finset.sum_insert]; rw [Finset.sum_singleton] at hw
+  · by_contra hle
+    rw [not_lt] at hle
+    exact (hle.trans_lt (lt_add_of_pos_right _ (Left.add_pos (hs i₂) (hs i₃)))).ne' hw
+  · simpa using h₂₃
+  · simpa [not_or] using ⟨h₁₂, h₁₃⟩
 
 Depends on / 依赖: Finset, Finset.univ, Set.mem_range_self, Set.range, affineSpan, affineSpan_pair_le_of_mem_of_mem, mem_affineSpan, mem_range_self, points, revert, t.points
 -/
@@ -3083,7 +3277,8 @@ lemma wbtw_iff_of_le
     have hxz' : 0 < z - x := sub_pos.mpr hxz
     let r := (y - x) / (z - x)
     have hy : y = r * (z - x) + x := by simp [r, hxz'.ne']
-    simp [hy, wbtw_mul_sub_add_
+    simp [hy, wbtw_mul_sub_add_iff, mul_nonneg_iff_of_pos_right hxz', ← le_sub_iff_add_le,
+      mul_le_iff_le_one_left hxz', hxz.ne]
 
 中文:
 引理 wbtw_iff_of_le
@@ -3098,7 +3293,8 @@ lemma wbtw_iff_of_le
     have hxz' : 0 < z - x := sub_pos.mpr hxz
     let r := (y - x) / (z - x)
     have hy : y = r * (z - x) + x := by simp [r, hxz'.ne']
-    simp [hy, wbtw_mul_sub_add_
+    simp [hy, wbtw_mul_sub_add_iff, mul_nonneg_iff_of_pos_right hxz', ← le_sub_iff_add_le,
+      mul_le_iff_le_one_left hxz', hxz.ne]
 
 Depends on / 依赖: eq_comm, eq_or_lt, hxz.eq_or_lt, hxz.ne, le_antisymm_iff, le_sub_iff_add_le, mul_le_iff_le_one_left, mul_nonneg_iff_of_pos_right, sub_pos, sub_pos.mpr, wbtw_mul_sub_add_iff, wbtw_self_iff
 -/
@@ -3168,7 +3364,14 @@ theorem wbtw_iff_left_eq_or_right_mem_image_Ici
     · rw [Set.mem_image]
       refine .inr ⟨r⁻¹, (one_le_inv₀ hr0').2 hr1, ?_⟩
       simp only [lineMap_apply, smul_smul, vadd_vsub]
-      rw [inv_mul_cancel₀ hr0'.ne']; rw [one_sm
+      rw [inv_mul_cancel₀ hr0'.ne']; rw [one_smul]; rw [vsub_vadd]
+    · simp
+  · rcases h with (rfl | ⟨r, ⟨hr, rfl⟩⟩)
+    · exact wbtw_self_left _ _ _
+    · rw [Set.mem_Ici] at hr
+      refine ⟨r⁻¹, ⟨inv_nonneg.2 (zero_le_one.trans hr), inv_le_one_of_one_le₀ hr⟩, ?_⟩
+      simp only [lineMap_apply, smul_smul, vadd_vsub]
+      rw [inv_mul_cancel₀ (one_pos.trans_le hr).ne']; rw [one_smul]; rw [vsub_vadd]
 
 中文:
 定理 wbtw_iff_left_eq_or_right_mem_image_Ici
@@ -3180,7 +3383,14 @@ theorem wbtw_iff_left_eq_or_right_mem_image_Ici
     · rw [Set.mem_image]
       refine .inr ⟨r⁻¹, (one_le_inv₀ hr0').2 hr1, ?_⟩
       simp only [lineMap_apply, smul_smul, vadd_vsub]
-      rw [inv_mul_cancel₀ hr0'.ne']; rw [one_sm
+      rw [inv_mul_cancel₀ hr0'.ne']; rw [one_smul]; rw [vsub_vadd]
+    · simp
+  · rcases h with (rfl | ⟨r, ⟨hr, rfl⟩⟩)
+    · exact wbtw_self_left _ _ _
+    · rw [Set.mem_Ici] at hr
+      refine ⟨r⁻¹, ⟨inv_nonneg.2 (zero_le_one.trans hr), inv_le_one_of_one_le₀ hr⟩, ?_⟩
+      simp only [lineMap_apply, smul_smul, vadd_vsub]
+      rw [inv_mul_cancel₀ (one_pos.trans_le hr).ne']; rw [one_smul]; rw [vsub_vadd]
 
 Depends on / 依赖: Set.mem_Ici, Set.mem_image, hr0.lt_or_eq, inv_nonneg, lineMap_apply, lt_or_eq, mem_Ici, mem_image, one_smul, smul_smul, vadd_vsub, vsub_vadd, wbtw_self_left, zero_le_one, zero_le_one.trans
 -/
@@ -3260,7 +3470,15 @@ theorem sbtw_iff_left_ne_and_right_mem_image_Ioi
     · exact Set.mem_image_of_mem _ hrlt
     · simp at h
   · rcases h with ⟨hne, r, hr, rfl⟩
-    rw [Set
+    rw [Set.mem_Ioi] at hr
+    refine
+      ⟨wbtw_iff_left_eq_or_right_mem_image_Ici.2
+          (Or.inr (Set.mem_image_of_mem _ (Set.mem_of_mem_of_subset hr Set.Ioi_subset_Ici_self))),
+        hne.symm, ?_⟩
+    rw [lineMap_apply]; rw [← @vsub_ne_zero V]; rw [vsub_vadd_eq_vsub_sub]
+    nth_rw 1 [← one_smul R (y -ᵥ x)]
+    rw [← sub_smul]; rw [smul_ne_zero_iff]; rw [vsub_ne_zero]; rw [sub_ne_zero]
+    exact ⟨hr.ne, hne.symm⟩
 
 中文:
 定理 sbtw_iff_left_ne_and_right_mem_image_Ioi
@@ -3273,7 +3491,15 @@ theorem sbtw_iff_left_ne_and_right_mem_image_Ioi
     · exact Set.mem_image_of_mem _ hrlt
     · simp at h
   · rcases h with ⟨hne, r, hr, rfl⟩
-    rw [Set
+    rw [Set.mem_Ioi] at hr
+    refine
+      ⟨wbtw_iff_left_eq_or_right_mem_image_Ici.2
+          (Or.inr (Set.mem_image_of_mem _ (Set.mem_of_mem_of_subset hr Set.Ioi_subset_Ici_self))),
+        hne.symm, ?_⟩
+    rw [lineMap_apply]; rw [← @vsub_ne_zero V]; rw [vsub_vadd_eq_vsub_sub]
+    nth_rw 1 [← one_smul R (y -ᵥ x)]
+    rw [← sub_smul]; rw [smul_ne_zero_iff]; rw [vsub_ne_zero]; rw [sub_ne_zero]
+    exact ⟨hr.ne, hne.symm⟩
 
 Depends on / 依赖: Ioi_subset_Ici_self, Or.inr, Set.Ioi_subset_Ici_self, Set.mem_Ici, Set.mem_Ioi, Set.mem_image_of_mem, Set.mem_of_mem_of_subset, h.left_ne, h.wbtw.right_mem_image_Ici_of_left_ne, hne.symm, hr.lt_or_eq, left_ne, lineMap_apply, lt_or_eq, mem_Ici, mem_Ioi, mem_image_of_mem, mem_of_mem_of_subset, right_mem_image_Ici_of_left_ne, vsub_ne_zero
 -/
@@ -3675,7 +3901,21 @@ theorem Wbtw.trans_left_right
     ⟨(t₁ - t₂ * t₁) / (1 - t₂ * t₁),
       ⟨div_nonneg (sub_nonneg.2 (mul_le_of_le_one_left ht₁.1 ht₂.2))
           (sub_nonneg.2 (mul_le_one₀ ht₂.2 ht₁.1 ht₁.2)), div_le_one_of_le₀
-            (sub_le_sub_right ht₁.2 _) (su
+            (sub_le_sub_right ht₁.2 _) (sub_nonneg.2 (mul_le_one₀ ht₂.2 ht₁.1 ht₁.2))⟩,
+      ?_⟩
+  simp only [lineMap_apply, smul_smul, ← add_vadd, vsub_vadd_eq_vsub_sub, smul_sub, ← sub_smul,
+    ← add_smul, vadd_vsub, vadd_right_cancel_iff, div_mul_eq_mul_div, div_sub_div_same]
+  nth_rw 1 [← mul_one (t₁ - t₂ * t₁)]
+  rw [← mul_sub]; rw [mul_div_assoc]
+  by_cases h : 1 - t₂ * t₁ = 0
+  · rw [sub_eq_zero, eq_comm] at h
+    rw [h]
+    suffices t₁ = 1 by simp [this]
+    exact
+      eq_of_le_of_not_lt ht₁.2 fun ht₁lt =>
+        (mul_lt_one_of_nonneg_of_lt_one_right ht₂.2 ht₁.1 ht₁lt).ne h
+  · rw [div_self h]
+    ring_nf
 
 中文:
 定理 Wbtw.trans_left_right
@@ -3687,7 +3927,21 @@ theorem Wbtw.trans_left_right
     ⟨(t₁ - t₂ * t₁) / (1 - t₂ * t₁),
       ⟨div_nonneg (sub_nonneg.2 (mul_le_of_le_one_left ht₁.1 ht₂.2))
           (sub_nonneg.2 (mul_le_one₀ ht₂.2 ht₁.1 ht₁.2)), div_le_one_of_le₀
-            (sub_le_sub_right ht₁.2 _) (su
+            (sub_le_sub_right ht₁.2 _) (sub_nonneg.2 (mul_le_one₀ ht₂.2 ht₁.1 ht₁.2))⟩,
+      ?_⟩
+  simp only [lineMap_apply, smul_smul, ← add_vadd, vsub_vadd_eq_vsub_sub, smul_sub, ← sub_smul,
+    ← add_smul, vadd_vsub, vadd_right_cancel_iff, div_mul_eq_mul_div, div_sub_div_same]
+  nth_rw 1 [← mul_one (t₁ - t₂ * t₁)]
+  rw [← mul_sub]; rw [mul_div_assoc]
+  by_cases h : 1 - t₂ * t₁ = 0
+  · rw [sub_eq_zero, eq_comm] at h
+    rw [h]
+    suffices t₁ = 1 by simp [this]
+    exact
+      eq_of_le_of_not_lt ht₁.2 fun ht₁lt =>
+        (mul_lt_one_of_nonneg_of_lt_one_right ht₂.2 ht₁.1 ht₁lt).ne h
+  · rw [div_self h]
+    ring_nf
 
 Depends on / 依赖: add_smul, add_vadd, div_mul_eq_mul_div, div_nonneg, div_sub_div_same, lineMap_apply, mul_le_of_le_one_left, nth_rw, smul_smul, smul_sub, sub_le_sub_right, sub_nonneg, sub_smul, vadd_right_cancel_iff, vadd_vsub, vsub_vadd_eq_vsub_sub
 -/
@@ -3792,7 +4046,15 @@ theorem Wbtw.trans_expand_left
       nlinarith [ht₁.1, ht₁.2, ht₂.1, ht₂.2]
     · apply div_le_one_of_le₀
       · grind
-      · nlinarith [ht₁.1, ht₁.2, h
+      · nlinarith [ht₁.1, ht₁.2, ht₂.1, ht₂.2]
+  have h_denom : 1 - t₁ + t₁ * t₂ != 0 := by
+    contrapose h_ne
+    have h1 : t₁ = 1 := by nlinarith [ht₁.1, ht₁.2, ht₂.1, ht₂.2]
+    rw [← hx]; rw [h1]; rw [lineMap_apply_one]
+  rw [← hy]; rw [lineMap_apply]; rw [lineMap_apply]; rw [eq_comm]; rw [eq_vadd_iff_vsub_eq] at hx
+  rw [lineMap_apply]; rw [eq_comm]; rw [eq_vadd_iff_vsub_eq]; rw [div_eq_mul_inv]; rw [mul_comm]; rw [mul_smul]; rw [eq_inv_smul_iff₀ h_denom]; rw [add_smul]; rw [sub_smul]; rw [one_smul]
+  nth_rw 1 [hx]
+  rw [← smul_sub]; rw [mul_smul]; rw [mul_smul]; rw [vsub_sub_vsub_cancel_right]; rw [vadd_vsub]; rw [← smul_assoc]; rw [← smul_assoc]; rw [← smul_assoc]; rw [← smul_add]; rw [vsub_add_vsub_cancel]
 
 中文:
 定理 Wbtw.trans_expand_left
@@ -3806,7 +4068,15 @@ theorem Wbtw.trans_expand_left
       nlinarith [ht₁.1, ht₁.2, ht₂.1, ht₂.2]
     · apply div_le_one_of_le₀
       · grind
-      · nlinarith [ht₁.1, ht₁.2, h
+      · nlinarith [ht₁.1, ht₁.2, ht₂.1, ht₂.2]
+  have h_denom : 1 - t₁ + t₁ * t₂ != 0 := by
+    contrapose h_ne
+    have h1 : t₁ = 1 := by nlinarith [ht₁.1, ht₁.2, ht₂.1, ht₂.2]
+    rw [← hx]; rw [h1]; rw [lineMap_apply_one]
+  rw [← hy]; rw [lineMap_apply]; rw [lineMap_apply]; rw [eq_comm]; rw [eq_vadd_iff_vsub_eq] at hx
+  rw [lineMap_apply]; rw [eq_comm]; rw [eq_vadd_iff_vsub_eq]; rw [div_eq_mul_inv]; rw [mul_comm]; rw [mul_smul]; rw [eq_inv_smul_iff₀ h_denom]; rw [add_smul]; rw [sub_smul]; rw [one_smul]
+  nth_rw 1 [hx]
+  rw [← smul_sub]; rw [mul_smul]; rw [mul_smul]; rw [vsub_sub_vsub_cancel_right]; rw [vadd_vsub]; rw [← smul_assoc]; rw [← smul_assoc]; rw [← smul_assoc]; rw [← smul_add]; rw [vsub_add_vsub_cancel]
 
 Depends on / 依赖: contrapose, div_nonneg, h_denom, h_ne, lineMap_apply, lineMap_apply_one, mul_nonneg
 -/
@@ -3929,7 +4199,20 @@ theorem Collinear.wbtw_or_wbtw_or_wbtw
   have hz := h z (Or.inr (Or.inr rfl))
   rcases hy with ⟨ty, rfl⟩
   rcases hz with ⟨tz, rfl⟩
-  rcases lt_trichotomy ty 0 w
+  rcases lt_trichotomy ty 0 with (hy0 | rfl | hy0)
+  · rcases lt_trichotomy tz 0 with (hz0 | rfl | hz0)
+    · rw [wbtw_comm (z := x)]
+      rw [← or_assoc]
+      exact Or.inl (wbtw_or_wbtw_smul_vadd_of_nonpos _ _ hy0.le hz0.le)
+    · simp
+    · exact Or.inr (Or.inr (wbtw_smul_vadd_smul_vadd_of_nonneg_of_nonpos _ _ hz0.le hy0.le))
+  · simp
+  · rcases lt_trichotomy tz 0 with (hz0 | rfl | hz0)
+    · refine Or.inr (Or.inr (wbtw_smul_vadd_smul_vadd_of_nonpos_of_nonneg _ _ hz0.le hy0.le))
+    · simp
+    · rw [wbtw_comm (z := x)]
+      rw [← or_assoc]
+      exact Or.inl (wbtw_or_wbtw_smul_vadd_of_nonneg _ _ hy0.le hz0.le)
 
 中文:
 定理 Collinear.wbtw_or_wbtw_or_wbtw
@@ -3942,7 +4225,20 @@ theorem Collinear.wbtw_or_wbtw_or_wbtw
   have hz := h z (Or.inr (Or.inr rfl))
   rcases hy with ⟨ty, rfl⟩
   rcases hz with ⟨tz, rfl⟩
-  rcases lt_trichotomy ty 0 w
+  rcases lt_trichotomy ty 0 with (hy0 | rfl | hy0)
+  · rcases lt_trichotomy tz 0 with (hz0 | rfl | hz0)
+    · rw [wbtw_comm (z := x)]
+      rw [← or_assoc]
+      exact Or.inl (wbtw_or_wbtw_smul_vadd_of_nonpos _ _ hy0.le hz0.le)
+    · simp
+    · exact Or.inr (Or.inr (wbtw_smul_vadd_smul_vadd_of_nonneg_of_nonpos _ _ hz0.le hy0.le))
+  · simp
+  · rcases lt_trichotomy tz 0 with (hz0 | rfl | hz0)
+    · refine Or.inr (Or.inr (wbtw_smul_vadd_smul_vadd_of_nonpos_of_nonneg _ _ hz0.le hy0.le))
+    · simp
+    · rw [wbtw_comm (z := x)]
+      rw [← or_assoc]
+      exact Or.inl (wbtw_or_wbtw_smul_vadd_of_nonneg _ _ hy0.le hz0.le)
 
 Depends on / 依赖: Or.inl, Or.inr, Set.mem_insert, Set.mem_insert_iff, Set.mem_singleton_iff, collinear_iff_of_mem, hy0.le, hz0.le, lt_trichotomy, mem_insert, mem_insert_iff, mem_singleton_iff, or_assoc, simp_rw, wbtw_comm, wbtw_or_wbtw_smul_vadd_of_nonpos
 -/
@@ -4007,7 +4303,10 @@ lemma wbtw_total_of_sameRay_vsub_left
     apply this r₂ r₁ hr₂ hr₁ h.symm (Std.le_of_not_ge hr)
   left
   refine ⟨r₂ / r₁, ⟨div_nonneg hr₂.le hr₁.le, div_le_one_of_le₀ hr hr₁.le⟩, ?_⟩
-  have h' : y = r
+  have h' : y = r₁⁻¹ • r₂ • (z -ᵥ x) +ᵥ x := by simp [← h, hr₁.ne']
+  simp only [lineMap_apply, h', vadd_vsub_assoc, smul_smul, eq_vadd_iff_vsub_eq, vsub_self,
+    add_zero]
+  ring_nf
 
 中文:
 引理 wbtw_total_of_sameRay_vsub_left
@@ -4021,7 +4320,10 @@ lemma wbtw_total_of_sameRay_vsub_left
     apply this r₂ r₁ hr₂ hr₁ h.symm (Std.le_of_not_ge hr)
   left
   refine ⟨r₂ / r₁, ⟨div_nonneg hr₂.le hr₁.le, div_le_one_of_le₀ hr hr₁.le⟩, ?_⟩
-  have h' : y = r
+  have h' : y = r₁⁻¹ • r₂ • (z -ᵥ x) +ᵥ x := by simp [← h, hr₁.ne']
+  simp only [lineMap_apply, h', vadd_vsub_assoc, smul_smul, eq_vadd_iff_vsub_eq, vsub_self,
+    add_zero]
+  ring_nf
 
 Depends on / 依赖: Std.le_of_not_ge, add_zero, div_nonneg, eq_vadd_iff_vsub_eq, generalizing, h.symm, le_of_not_ge, lineMap_apply, or_comm, ring_nf, smul_smul, vadd_vsub_assoc, vsub_self
 -/

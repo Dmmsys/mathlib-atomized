@@ -53,7 +53,7 @@ instance :
   one_smul x := show map _ _ _ = _ by simp [map_one, Module.End.one_eq_id]
   mul_smul g g' x := show map _ _ _ = map _ _ (map _ _ _) by
     simp_rw [map_mul, Module.End.mul_eq_comp]
-    rw [map_comp]; rw 
+    rw [map_comp]; rw [Function.comp_apply]
 
 中文:
 实例 :
@@ -63,7 +63,7 @@ instance :
   one_smul x := show map _ _ _ = _ by simp [map_one, Module.End.one_eq_id]
   mul_smul g g' x := show map _ _ _ = map _ _ (map _ _ _) by
     simp_rw [map_mul, Module.End.mul_eq_comp]
-    rw [map_comp]; rw 
+    rw [map_comp]; rw [Function.comp_apply]
 
 Depends on / 依赖: DistribMulAction, DistribMulAction.toModuleEnd, toModuleEnd, x.map
 -/
@@ -153,7 +153,22 @@ instance linearEquiv_is_two_pretransitive
   have qD {D D' : ℙ K V} (hD : LinearIndependent K ![D.rep, D'.rep]) :
     hD.linearCombinationEquiv (Finsupp.single 0 1) = D.rep := by simp
   have qD' {D D' : ℙ K V} (hD : LinearIndependent K ![D.rep, D'.rep]) :
-    hD.linearCombinationEqui
+    hD.linearCombinationEquiv (Finsupp.single 1 1) = D'.rep := by simp
+  rw [← linearIndependent_pair_iff_ne] at hD hE
+  let f := hD.linearCombinationEquiv.symm ≪≫ₗ hE.linearCombinationEquiv
+  have : FiniteDimensional K (Submodule.span K (Set.range ![D.rep, D'.rep])) :=
+    span_of_finite K (Set.finite_range _)
+  obtain ⟨g, hg⟩ := Submodule.exists_linearEquiv_restrict_eq f
+  use g
+  constructor
+  · rw [← mk_rep D, ← mk_rep E, smul_mk, mk_eq_mk_iff]
+    use 1
+    simp only [one_smul, LinearEquiv.smul_def, ← qD hD, ← hg, ← qD hE]
+    simp [f]
+  · rw [← mk_rep D', ← mk_rep E', smul_mk, mk_eq_mk_iff]
+    use 1
+    simp only [one_smul, LinearEquiv.smul_def, ← qD' hD, ← hg, ← qD' hE]
+    simp [f]
 
 中文:
 实例 linearEquiv_is_two_pretransitive
@@ -164,7 +179,22 @@ instance linearEquiv_is_two_pretransitive
   have qD {D D' : ℙ K V} (hD : LinearIndependent K ![D.rep, D'.rep]) :
     hD.linearCombinationEquiv (Finsupp.single 0 1) = D.rep := by simp
   have qD' {D D' : ℙ K V} (hD : LinearIndependent K ![D.rep, D'.rep]) :
-    hD.linearCombinationEqui
+    hD.linearCombinationEquiv (Finsupp.single 1 1) = D'.rep := by simp
+  rw [← linearIndependent_pair_iff_ne] at hD hE
+  let f := hD.linearCombinationEquiv.symm ≪≫ₗ hE.linearCombinationEquiv
+  have : FiniteDimensional K (Submodule.span K (Set.range ![D.rep, D'.rep])) :=
+    span_of_finite K (Set.finite_range _)
+  obtain ⟨g, hg⟩ := Submodule.exists_linearEquiv_restrict_eq f
+  use g
+  constructor
+  · rw [← mk_rep D, ← mk_rep E, smul_mk, mk_eq_mk_iff]
+    use 1
+    simp only [one_smul, LinearEquiv.smul_def, ← qD hD, ← hg, ← qD hE]
+    simp [f]
+  · rw [← mk_rep D', ← mk_rep E', smul_mk, mk_eq_mk_iff]
+    use 1
+    simp only [one_smul, LinearEquiv.smul_def, ← qD' hD, ← hg, ← qD' hE]
+    simp [f]
 
 Depends on / 依赖: D.rep, FiniteDimensional, Finsupp, Finsupp.single, LinearIndependent, Set.range, Submodule, Submodule.span, hD.linearCombinationEquiv, hD.linearCombinationEquiv.symm, hE.linearCombinationEquiv, is_two_pretransitive_iff, linearCombinationEquiv, linearIndependent_pair_iff_ne, single
 -/
@@ -272,7 +302,47 @@ instance specialLinearGroup_is_two_pretransitive
   obtain ⟨g, gD, gE⟩ := this hD hE
   by_cases hV : FiniteDimensional K V
   · suffices forall a : Kˣ, exists h : V ≃ₗ[K] V, h.det = a ∧ h • D = D ∧ h • D' = D' by
-      obtain ⟨h, hdet,
+      obtain ⟨h, hdet, hD, hE⟩ := this (g.det)⁻¹
+      use ⟨g * h, by simp [hdet]⟩
+      simp [specialLinearGroup_smul_def, toLinearEquiv_eq_coe, mul_smul, gD, hD, gE, hE]
+    intro a
+    rw [← linearIndependent_pair_iff_ne] at hD
+    have := linearIndepOn_pair D D'
+    let s := (linearIndepOn_pair D D').extend (Set.subset_univ _)
+    let b : Module.Basis s K V := Module.Basis.extend this
+    rw [← mk_rep D]; rw [← mk_rep D']
+    have hD_mem : D.rep in s := LinearIndepOn.subset_extend _ _ (by simp)
+    have hD'_mem : D'.rep in s := LinearIndepOn.subset_extend _ _ (by simp)
+    refine ⟨dilatransvection (f := b.coord ⟨D.rep, hD_mem⟩)
+      (v := (a.val - 1) • b ⟨D.rep, hD_mem⟩) (by simp), ?_, ?_, ?_⟩
+    · simp [← Units.val_inj, coe_det, LinearMap.transvection.det]
+    · rw [smul_mk, mk_eq_mk_iff, LinearEquiv.smul_def]
+      use a
+      rw [← coe_coe]; rw [dilatransvection.coe_toLinearMap]; rw [LinearMap.transvection.apply]; rw [Module.Basis.coord_apply]
+      suffices (b.repr D.rep) ⟨D.rep, hD_mem⟩ = 1 by
+        rw [this]; rw [Module.Basis.extend_apply_self]; rw [Units.smul_def]
+        module
+      nth_rewrite 1 [show D.rep = (⟨D.rep, hD_mem⟩ : s) by rfl]
+      rw [← Module.Basis.extend_apply_self]; rw [Module.Basis.repr_self]
+      simp
+    · rw [smul_mk, mk_eq_mk_iff, LinearEquiv.smul_def]
+      use 1
+      rw [one_smul]; rw [← coe_coe]; rw [dilatransvection.coe_toLinearMap]; rw [LinearMap.transvection.apply]; rw [Module.Basis.coord_apply]
+      suffices (b.repr D'.rep) ⟨D.rep, hD_mem⟩ = 0 by
+        rw [Module.Basis.extend_apply_self]
+        simp [this]
+      nth_rewrite 1 [show D'.rep = (⟨D'.rep, hD'_mem⟩ : s) by rfl]
+      rw [← Module.Basis.extend_apply_self]; rw [Module.Basis.repr_self]
+      apply Finsupp.single_eq_of_ne
+      simp only [ne_eq, ← Subtype.coe_inj]
+      intro h
+      apply Fin.zero_ne_one
+      apply hD.injective
+      simp [h]
+  use ⟨g, by
+    rw [← Units.val_inj]; rw [coe_det]
+    apply LinearMap.det_eq_one_of_not_module_finite hV⟩
+  simp [← gD, ← gE, specialLinearGroup_smul_def, toLinearEquiv_eq_coe]
 
 中文:
 实例 specialLinearGroup_is_two_pretransitive
@@ -284,7 +354,47 @@ instance specialLinearGroup_is_two_pretransitive
   obtain ⟨g, gD, gE⟩ := this hD hE
   by_cases hV : FiniteDimensional K V
   · suffices forall a : Kˣ, exists h : V ≃ₗ[K] V, h.det = a ∧ h • D = D ∧ h • D' = D' by
-      obtain ⟨h, hdet,
+      obtain ⟨h, hdet, hD, hE⟩ := this (g.det)⁻¹
+      use ⟨g * h, by simp [hdet]⟩
+      simp [specialLinearGroup_smul_def, toLinearEquiv_eq_coe, mul_smul, gD, hD, gE, hE]
+    intro a
+    rw [← linearIndependent_pair_iff_ne] at hD
+    have := linearIndepOn_pair D D'
+    let s := (linearIndepOn_pair D D').extend (Set.subset_univ _)
+    let b : Module.Basis s K V := Module.Basis.extend this
+    rw [← mk_rep D]; rw [← mk_rep D']
+    have hD_mem : D.rep in s := LinearIndepOn.subset_extend _ _ (by simp)
+    have hD'_mem : D'.rep in s := LinearIndepOn.subset_extend _ _ (by simp)
+    refine ⟨dilatransvection (f := b.coord ⟨D.rep, hD_mem⟩)
+      (v := (a.val - 1) • b ⟨D.rep, hD_mem⟩) (by simp), ?_, ?_, ?_⟩
+    · simp [← Units.val_inj, coe_det, LinearMap.transvection.det]
+    · rw [smul_mk, mk_eq_mk_iff, LinearEquiv.smul_def]
+      use a
+      rw [← coe_coe]; rw [dilatransvection.coe_toLinearMap]; rw [LinearMap.transvection.apply]; rw [Module.Basis.coord_apply]
+      suffices (b.repr D.rep) ⟨D.rep, hD_mem⟩ = 1 by
+        rw [this]; rw [Module.Basis.extend_apply_self]; rw [Units.smul_def]
+        module
+      nth_rewrite 1 [show D.rep = (⟨D.rep, hD_mem⟩ : s) by rfl]
+      rw [← Module.Basis.extend_apply_self]; rw [Module.Basis.repr_self]
+      simp
+    · rw [smul_mk, mk_eq_mk_iff, LinearEquiv.smul_def]
+      use 1
+      rw [one_smul]; rw [← coe_coe]; rw [dilatransvection.coe_toLinearMap]; rw [LinearMap.transvection.apply]; rw [Module.Basis.coord_apply]
+      suffices (b.repr D'.rep) ⟨D.rep, hD_mem⟩ = 0 by
+        rw [Module.Basis.extend_apply_self]
+        simp [this]
+      nth_rewrite 1 [show D'.rep = (⟨D'.rep, hD'_mem⟩ : s) by rfl]
+      rw [← Module.Basis.extend_apply_self]; rw [Module.Basis.repr_self]
+      apply Finsupp.single_eq_of_ne
+      simp only [ne_eq, ← Subtype.coe_inj]
+      intro h
+      apply Fin.zero_ne_one
+      apply hD.injective
+      simp [h]
+  use ⟨g, by
+    rw [← Units.val_inj]; rw [coe_det]
+    apply LinearMap.det_eq_one_of_not_module_finite hV⟩
+  simp [← gD, ← gE, specialLinearGroup_smul_def, toLinearEquiv_eq_coe]
 
 Depends on / 依赖: FiniteDimensional, g.det, h.det, is_two_pretransitive_iff, linearEquiv_is_two_pretransitive, linearIndepOn_pair, linearIndependent_pair_iff_ne, mul_smul, specialLinearGroup_smul_def, toLinearEquiv_eq_coe
 -/
@@ -369,7 +479,7 @@ instance :
   let f : ℙ K (ι -> K) ->ₑ[φ] ℙ K (ι -> K) :=
     { toFun := id
       map_smul' g D := by simp [φ, matrixSpecialLinearGroup_smul_def]}
-  IsPretransitive.of_embedding
+  IsPretransitive.of_embedding (f := f) Function.surjective_id
 
 中文:
 实例 :
@@ -379,7 +489,7 @@ instance :
   let f : ℙ K (ι -> K) ->ₑ[φ] ℙ K (ι -> K) :=
     { toFun := id
       map_smul' g D := by simp [φ, matrixSpecialLinearGroup_smul_def]}
-  IsPretransitive.of_embedding
+  IsPretransitive.of_embedding (f := f) Function.surjective_id
 
 Depends on / 依赖: Function, Function.surjective_id, IsPretransitive, IsPretransitive.of_embedding, Matrix, Matrix.SpecialLinearGroup, Matrix.SpecialLinearGroup.toLin, SpecialLinearGroup, _equiv, _equiv.symm.toMonoidHom, map_smul, matrixSpecialLinearGroup_smul_def, of_embedding, surjective_id, toMonoidHom
 -/
@@ -419,7 +529,22 @@ lemma SL_mulAction_ker
   simp only [MonoidHom.mem_ker, toPermHom_apply, Equiv.Perm.one_def, DFunLike.ext_iff, toPerm_apply,
     Equiv.refl_apply, Matrix.SpecialLinearGroup.mem_center_iff]
   refine ⟨fun hm => ?_, fun ⟨r, hr1, hr2⟩ l => ?_⟩
-  · set f : (ι -> K) ->ₗ[K] ι -> K := (Matrix.SpecialLinearGroup.toLin' m
+  · set f : (ι -> K) ->ₗ[K] ι -> K := (Matrix.SpecialLinearGroup.toLin' m).toLinearMap with hf
+    obtain ⟨a, ha⟩ := f.exists_eq_smul_id_of_forall_notLinearIndependent fun (v : ι -> K) => by
+      by_cases hv : v = 0
+      · simp [hv, linearIndependent_fin2]
+      · simpa [LinearIndependent.pair_iff' hv, mk_eq_mk_iff'] using! hm (.mk K v hv)
+    have hscalar : m.1 = Matrix.scalar ι a := calc
+      m.1 = LinearMap.toMatrix' f := by
+        rw [hf]; rw [Matrix.SpecialLinearGroup.toLin'_to_linearMap]; rw [LinearMap.toMatrix'_toLin']
+      _ = (algebraMap K (Module.End K (ι -> K)) a).toMatrix' := congrArg LinearMap.toMatrix' ha
+      _ = Matrix.scalar ι a := LinearMap.toMatrix'_algebraMap a
+    exact ⟨a, by simpa [hscalar] using m.2, hscalar.symm⟩
+  · induction l using Projectivization.ind with | _ v hv =>
+    simp only [smul_mk, mk_eq_mk_iff']
+    use r
+    change _ = m.1 • v
+    simp [← hr2]
 
 中文:
 引理 SL_mulAction_ker
@@ -428,7 +553,22 @@ lemma SL_mulAction_ker
   simp only [MonoidHom.mem_ker, toPermHom_apply, Equiv.Perm.one_def, DFunLike.ext_iff, toPerm_apply,
     Equiv.refl_apply, Matrix.SpecialLinearGroup.mem_center_iff]
   refine ⟨fun hm => ?_, fun ⟨r, hr1, hr2⟩ l => ?_⟩
-  · set f : (ι -> K) ->ₗ[K] ι -> K := (Matrix.SpecialLinearGroup.toLin' m
+  · set f : (ι -> K) ->ₗ[K] ι -> K := (Matrix.SpecialLinearGroup.toLin' m).toLinearMap with hf
+    obtain ⟨a, ha⟩ := f.exists_eq_smul_id_of_forall_notLinearIndependent fun (v : ι -> K) => by
+      by_cases hv : v = 0
+      · simp [hv, linearIndependent_fin2]
+      · simpa [LinearIndependent.pair_iff' hv, mk_eq_mk_iff'] using! hm (.mk K v hv)
+    have hscalar : m.1 = Matrix.scalar ι a := calc
+      m.1 = LinearMap.toMatrix' f := by
+        rw [hf]; rw [Matrix.SpecialLinearGroup.toLin'_to_linearMap]; rw [LinearMap.toMatrix'_toLin']
+      _ = (algebraMap K (Module.End K (ι -> K)) a).toMatrix' := congrArg LinearMap.toMatrix' ha
+      _ = Matrix.scalar ι a := LinearMap.toMatrix'_algebraMap a
+    exact ⟨a, by simpa [hscalar] using m.2, hscalar.symm⟩
+  · induction l using Projectivization.ind with | _ v hv =>
+    simp only [smul_mk, mk_eq_mk_iff']
+    use r
+    change _ = m.1 • v
+    simp [← hr2]
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, Equiv.Perm.one_def, Equiv.refl_apply, InnerRegular, InnerRegularCompactLTTop, LinearIndependent, LinearIndependent.pair_iff, Matrix, Matrix.SpecialLinearGroup.mem_center_iff, Matrix.SpecialLinearGroup.toLin, MonoidHom, MonoidHom.mem_ker, SpecialLinearGroup, exists_eq_smul_id_of_forall_notLinearIndependent, ext_iff, f.exists_eq_smul_id_of_forall_notLinearIndependent, linearIndependent_fin2, mem_center_iff, mem_ker
 -/

@@ -68,7 +68,7 @@ lemma tendsto_finsetProd_atTop
     use (Finset.image Prod.fst b, Finset.image Prod.snd b)
     exact Finset.subset_product
 
-@[deprecated (since := "2026-04-08")] alias tendsto_finset_prod_atTo
+@[deprecated (since := "2026-04-08")] alias tendsto_finset_prod_atTop := tendsto_finsetProd_atTop
 
 中文:
 引理 tendsto_finsetProd_atTop
@@ -81,7 +81,7 @@ lemma tendsto_finsetProd_atTop
     use (Finset.image Prod.fst b, Finset.image Prod.snd b)
     exact Finset.subset_product
 
-@[deprecated (since := "2026-04-08")] alias tendsto_finset_prod_atTo
+@[deprecated (since := "2026-04-08")] alias tendsto_finset_prod_atTop := tendsto_finsetProd_atTop
 
 Depends on / 依赖: Finset, Finset.image, Finset.product_subset_product, Finset.subset_product, Monotone, Monotone.tendsto_atTop_atTop, Prod.fst, Prod.snd, classical, product_subset_product, subset_product, tendsto_atTop_atTop
 -/

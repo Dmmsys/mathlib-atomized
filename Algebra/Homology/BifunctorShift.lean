@@ -439,14 +439,22 @@ lemma mapBifunctorShift₁Iso_trans_mapBifunctorShift₂Iso
   proof: by
   ext1
   dsimp [mapBifunctorShift₁Iso, mapBifunctorShift₂Iso]
-  rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← HomologicalComplex₂.totalShift₁Iso_hom_naturality_assoc]; rw [HomologicalComplex₂.totalShift₁Iso_hom_totalShift₂Iso_hom]; rw [← HomologicalComple
+  rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← HomologicalComplex₂.totalShift₁Iso_hom_naturality_assoc]; rw [HomologicalComplex₂.totalShift₁Iso_hom_totalShift₂Iso_hom]; rw [← HomologicalComplex₂.totalShift₂Iso_hom_naturality_assoc]; rw [Linear.comp_units_smul]; rw [Linear.comp_units_smul]; rw [smul_left_cancel_iff]; rw [← HomologicalComplex₂.total.map_comp_assoc]; rw [← HomologicalComplex₂.total.map_comp_assoc]; rw [← HomologicalComplex₂.total.map_comp_assoc]
+  congr 2
+  ext a b
+  dsimp [HomologicalComplex₂.shiftFunctor₁₂CommIso]
+  simp only [id_comp]
 
 中文:
 引理 mapBifunctorShift₁Iso_trans_mapBifunctorShift₂Iso
   证明: by
   ext1
   dsimp [mapBifunctorShift₁Iso, mapBifunctorShift₂Iso]
-  rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← HomologicalComplex₂.totalShift₁Iso_hom_naturality_assoc]; rw [HomologicalComplex₂.totalShift₁Iso_hom_totalShift₂Iso_hom]; rw [← HomologicalComple
+  rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← HomologicalComplex₂.totalShift₁Iso_hom_naturality_assoc]; rw [HomologicalComplex₂.totalShift₁Iso_hom_totalShift₂Iso_hom]; rw [← HomologicalComplex₂.totalShift₂Iso_hom_naturality_assoc]; rw [Linear.comp_units_smul]; rw [Linear.comp_units_smul]; rw [smul_left_cancel_iff]; rw [← HomologicalComplex₂.total.map_comp_assoc]; rw [← HomologicalComplex₂.total.map_comp_assoc]; rw [← HomologicalComplex₂.total.map_comp_assoc]
+  congr 2
+  ext a b
+  dsimp [HomologicalComplex₂.shiftFunctor₁₂CommIso]
+  simp only [id_comp]
 
 Depends on / 依赖: Functor, Functor.map_comp, Linear, Linear.comp_units_smul, comp_units_smul, map_comp, map_comp_assoc, smul_left_cancel_iff, total.map_comp_assoc
 -/

@@ -80,6 +80,8 @@ definition cochainsMap
     simpa [inhomogeneousCochains.d_hom_apply, Fin.comp_contractNth, CochainComplex.of.d]
       using! (hom_comm_apply φ _ _).symm
 
+@[simp]
+
 中文:
 定义 cochainsMap
   签名: :
@@ -90,6 +92,8 @@ definition cochainsMap
     ext
     simpa [inhomogeneousCochains.d_hom_apply, Fin.comp_contractNth, CochainComplex.of.d]
       using! (hom_comm_apply φ _ _).symm
+
+@[simp]
 
 Depends on / 依赖: ModuleCat, ModuleCat.ofHom
 -/
@@ -571,7 +575,11 @@ definition mapIso
     rw [e'.toLinearMap_symm_comp_eq]; rw [← LinearMap.comp_assoc]
     simp [he, LinearMap.comp_assoc]⟩) n
   hom_inv_id := by
-    rw [← groupCohomology.map_comp]; rw [← groupCo
+    rw [← groupCohomology.map_comp]; rw [← groupCohomology.map_id]
+    exact map_congr (by simp) (by simp [res_id]) n
+  inv_hom_id := by
+    rw [← groupCohomology.map_comp]; rw [← groupCohomology.map_id]
+    exact groupCohomology.map_congr (by simp) e'.comp_symm n
 
 中文:
 定义 mapIso
@@ -581,7 +589,11 @@ definition mapIso
     rw [e'.toLinearMap_symm_comp_eq]; rw [← LinearMap.comp_assoc]
     simp [he, LinearMap.comp_assoc]⟩) n
   hom_inv_id := by
-    rw [← groupCohomology.map_comp]; rw [← groupCo
+    rw [← groupCohomology.map_comp]; rw [← groupCohomology.map_id]
+    exact map_congr (by simp) (by simp [res_id]) n
+  inv_hom_id := by
+    rw [← groupCohomology.map_comp]; rw [← groupCohomology.map_id]
+    exact groupCohomology.map_congr (by simp) e'.comp_symm n
 
 Depends on / 依赖: e.symm, groupCohomology, groupCohomology.map
 -/
@@ -898,7 +910,9 @@ definition mapShortComplexH1
   comm₂₃ := by
     ext x
     funext g
-    simpa [shortComplexH1, d₁₂, cochainsMap₁, cochainsMap₂] using (hom_comm_a
+    simpa [shortComplexH1, d₁₂, cochainsMap₁, cochainsMap₂] using (hom_comm_apply φ _ _).symm
+
+@[simp]
 
 中文:
 定义 mapShortComplexH1
@@ -913,7 +927,9 @@ definition mapShortComplexH1
   comm₂₃ := by
     ext x
     funext g
-    simpa [shortComplexH1, d₁₂, cochainsMap₁, cochainsMap₂] using (hom_comm_a
+    simpa [shortComplexH1, d₁₂, cochainsMap₁, cochainsMap₂] using (hom_comm_apply φ _ _).symm
+
+@[simp]
 
 Depends on / 依赖: toModuleCatHom
 -/
@@ -1195,7 +1211,8 @@ definition H1InfRes
   X₃ := groupCohomology (res S.subtype A) 1
   f := map (QuotientGroup.mk' S) (ofHom <| A.ρ.quotientToInvariants_lift S) 1
   g := map S.subtype (𝟙 _) 1
-  zero := by rw [← map_comp, Category.comp_id, congr (QuotientGroup.mk'_comp
+  zero := by rw [← map_comp, Category.comp_id, congr (QuotientGroup.mk'_comp_subtype S)
+    (fun f φ => map f φ 1), map₁_one]
 
 中文:
 定义 H1InfRes
@@ -1205,7 +1222,8 @@ definition H1InfRes
   X₃ := groupCohomology (res S.subtype A) 1
   f := map (QuotientGroup.mk' S) (ofHom <| A.ρ.quotientToInvariants_lift S) 1
   g := map S.subtype (𝟙 _) 1
-  zero := by rw [← map_comp, Category.comp_id, congr (QuotientGroup.mk'_comp
+  zero := by rw [← map_comp, Category.comp_id, congr (QuotientGroup.mk'_comp_subtype S)
+    (fun f φ => map f φ 1), map₁_one]
 
 Depends on / 依赖: A.quotientToInvariants, groupCohomology, quotientToInvariants
 -/
@@ -1233,7 +1251,10 @@ instance :
   induction x using H1_induction_on with | @h x =>
   simp_all only [H1InfRes_X₂, H1InfRes_X₁, H1InfRes_f, H1π_comp_map_apply (QuotientGroup.mk' S)]
   rcases (H1π_eq_zero_iff _).1 hx with ⟨y, hy⟩
-  refine (H1π_eq_zero
+  refine (H1π_eq_zero_iff _).2 ⟨⟨y, fun s => ?_⟩, funext fun g => QuotientGroup.induction_on g
+fun g => Subtype.ext by simpa [-SetLike.coe_eq_coe] using! congr_fun hy g⟩
+  simpa [coe_mapCocycles₁ (x := x), sub_eq_zero, (QuotientGroup.eq_one_iff s.1).2 s.2] using!
+    congr_fun hy s.1
 
 中文:
 实例 :
@@ -1244,7 +1265,10 @@ instance :
   induction x using H1_induction_on with | @h x =>
   simp_all only [H1InfRes_X₂, H1InfRes_X₁, H1InfRes_f, H1π_comp_map_apply (QuotientGroup.mk' S)]
   rcases (H1π_eq_zero_iff _).1 hx with ⟨y, hy⟩
-  refine (H1π_eq_zero
+  refine (H1π_eq_zero_iff _).2 ⟨⟨y, fun s => ?_⟩, funext fun g => QuotientGroup.induction_on g
+fun g => Subtype.ext by simpa [-SetLike.coe_eq_coe] using! congr_fun hy g⟩
+  simpa [coe_mapCocycles₁ (x := x), sub_eq_zero, (QuotientGroup.eq_one_iff s.1).2 s.2] using!
+    congr_fun hy s.1
 
 Depends on / 依赖: H1InfRes_f, H1_induction_on, ModuleCat, ModuleCat.mono_iff_injective, QuotientGroup, QuotientGroup.e, QuotientGroup.induction_on, QuotientGroup.mk, SetLike, SetLike.coe_eq_coe, Subtype, Subtype.ext, coe_eq_coe, congr_fun, induction_on, injective_iff_map_eq_zero, mono_iff_injective, sub_eq_zero
 -/
@@ -1274,7 +1298,36 @@ lemma H1InfRes_exact
   simp_all only [H1InfRes_X₂, H1InfRes_X₃, H1InfRes_g, H1InfRes_X₁, LinearMap.mem_ker,
     H1π_comp_map_apply S.subtype, H1InfRes_f]
   rcases (H1π_eq_zero_iff _).1 hx with ⟨(y : A), hy⟩
-  have
+  have h1 := (mem_cocycles₁_iff x).1 x.2
+  have h2 : forall s in S, x s = A.ρ s y - y :=
+    fun s hs => funext_iff.1 hy.symm ⟨s, hs⟩
+  refine ⟨H1π _ ⟨fun g => Quotient.liftOn' g (fun g => ⟨x.1 g - A.ρ g y + y, ?_⟩) ?_, ?_⟩, ?_⟩
+  · intro s
+    calc
+      _ = x (s * g) - x s - A.ρ s (A.ρ g y) + (x s + y) := by
+        simp [add_eq_of_eq_sub (h2 s s.2), sub_eq_of_eq_add (h1 s g)]
+      _ = x (g * (g⁻¹ * s * g)) - A.ρ g (A.ρ (g⁻¹ * s * g) y - y) - A.ρ g y + y := by
+        simp only [mul_assoc, mul_inv_cancel_left, map_mul, Module.End.mul_apply, map_sub,
+          Representation.self_inv_apply]
+        abel
+      _ = x g - A.ρ g y + y := by
+        simp [eq_sub_of_add_eq' (h1 g (g⁻¹ * s * g)).symm,
+          h2 (g⁻¹ * s * g) (Subgroup.Normal.conj_mem' ‹_› _ s.2 _)]
+  · intro g h hgh
+    have := congr(A.ρ g $(h2 (g⁻¹ * h) <| QuotientGroup.leftRel_apply.1 hgh))
+    simp_all [← sub_eq_add_neg, sub_eq_sub_iff_sub_eq_sub]
+  · rw [mem_cocycles₁_iff]
+    intro g h
+    induction g using QuotientGroup.induction_on with | @H g =>
+    induction h using QuotientGroup.induction_on with | @H h =>
+    apply Subtype.ext
+    simp [← QuotientGroup.mk_mul, h1 g h, sub_add_eq_add_sub, add_assoc]
+  · symm
+    simp only [H1π_comp_map_apply, H1π_eq_iff (A := A)]
+    use y
+    ext g
+    simp [coe_mapCocycles₁ (QuotientGroup.mk' S),
+      cocycles₁.coe_mk (A := A.quotientToInvariants S), ← sub_sub]
 
 中文:
 引理 H1InfRes_exact
@@ -1286,7 +1339,36 @@ lemma H1InfRes_exact
   simp_all only [H1InfRes_X₂, H1InfRes_X₃, H1InfRes_g, H1InfRes_X₁, LinearMap.mem_ker,
     H1π_comp_map_apply S.subtype, H1InfRes_f]
   rcases (H1π_eq_zero_iff _).1 hx with ⟨(y : A), hy⟩
-  have
+  have h1 := (mem_cocycles₁_iff x).1 x.2
+  have h2 : forall s in S, x s = A.ρ s y - y :=
+    fun s hs => funext_iff.1 hy.symm ⟨s, hs⟩
+  refine ⟨H1π _ ⟨fun g => Quotient.liftOn' g (fun g => ⟨x.1 g - A.ρ g y + y, ?_⟩) ?_, ?_⟩, ?_⟩
+  · intro s
+    calc
+      _ = x (s * g) - x s - A.ρ s (A.ρ g y) + (x s + y) := by
+        simp [add_eq_of_eq_sub (h2 s s.2), sub_eq_of_eq_add (h1 s g)]
+      _ = x (g * (g⁻¹ * s * g)) - A.ρ g (A.ρ (g⁻¹ * s * g) y - y) - A.ρ g y + y := by
+        simp only [mul_assoc, mul_inv_cancel_left, map_mul, Module.End.mul_apply, map_sub,
+          Representation.self_inv_apply]
+        abel
+      _ = x g - A.ρ g y + y := by
+        simp [eq_sub_of_add_eq' (h1 g (g⁻¹ * s * g)).symm,
+          h2 (g⁻¹ * s * g) (Subgroup.Normal.conj_mem' ‹_› _ s.2 _)]
+  · intro g h hgh
+    have := congr(A.ρ g $(h2 (g⁻¹ * h) <| QuotientGroup.leftRel_apply.1 hgh))
+    simp_all [← sub_eq_add_neg, sub_eq_sub_iff_sub_eq_sub]
+  · rw [mem_cocycles₁_iff]
+    intro g h
+    induction g using QuotientGroup.induction_on with | @H g =>
+    induction h using QuotientGroup.induction_on with | @H h =>
+    apply Subtype.ext
+    simp [← QuotientGroup.mk_mul, h1 g h, sub_add_eq_add_sub, add_assoc]
+  · symm
+    simp only [H1π_comp_map_apply, H1π_eq_iff (A := A)]
+    use y
+    ext g
+    simp [coe_mapCocycles₁ (QuotientGroup.mk' S),
+      cocycles₁.coe_mk (A := A.quotientToInvariants S), ← sub_sub]
 
 Depends on / 依赖: H1InfRes_f, H1InfRes_g, H1_induction_on, LinearMap, LinearMap.mem_ker, Quotient, Quotient.liftOn, S.subtype, funext_iff, hy.symm, liftOn, mem_ker, moduleCat_exact_iff_ker_sub_range, subtype
 -/
@@ -1695,7 +1777,8 @@ definition resNatTrans
     simp only [functor_map, Functor.comp_map,
       ← cancel_epi (groupCohomology.π _ n), HomologicalComplex.homologyπ_naturality_assoc,
       HomologicalComplex.homologyπ_naturality, ← HomologicalComplex.cyclesMap_comp_assoc,
-      ← cochainsMap_comp, res_ob
+      ← cochainsMap_comp, res_obj_ρ, Category.comp_id]
+    rfl
 
 中文:
 定义 res自然数Trans
@@ -1705,7 +1788,8 @@ definition resNatTrans
     simp only [functor_map, Functor.comp_map,
       ← cancel_epi (groupCohomology.π _ n), HomologicalComplex.homologyπ_naturality_assoc,
       HomologicalComplex.homologyπ_naturality, ← HomologicalComplex.cyclesMap_comp_assoc,
-      ← cochainsMap_comp, res_ob
+      ← cochainsMap_comp, res_obj_ρ, Category.comp_id]
+    rfl
 -/
 noncomputable def resNatTrans (n : Nat) :
     functor k H n ⟶ resFunctor f ⋙ functor k G n where
@@ -1731,7 +1815,8 @@ definition infNatTrans
   naturality {X Y} φ := by
     simp only [Functor.comp_map, functor_map, ← cancel_epi (groupCohomology.π _ n),
       HomologicalComplex.homologyπ_naturality_assoc, HomologicalComplex.homologyπ_naturality,
-      ← HomologicalCompl
+      ← HomologicalComplex.cyclesMap_comp_assoc, ← cochainsMap_comp]
+    congr 1
 
 中文:
 定义 inf自然数Trans
@@ -1740,7 +1825,8 @@ definition infNatTrans
   naturality {X Y} φ := by
     simp only [Functor.comp_map, functor_map, ← cancel_epi (groupCohomology.π _ n),
       HomologicalComplex.homologyπ_naturality_assoc, HomologicalComplex.homologyπ_naturality,
-      ← HomologicalCompl
+      ← HomologicalComplex.cyclesMap_comp_assoc, ← cochainsMap_comp]
+    congr 1
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.mk, quotientToInvariants_lift
 -/

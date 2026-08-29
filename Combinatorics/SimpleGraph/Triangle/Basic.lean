@@ -247,7 +247,44 @@ lemma edgeDisjointTriangles_iff_mem_sym2_subsingleton
     = {s | G.Adj a b ∧ exists c, G.Adj a c ∧ G.Adj b c ∧ s = {a, b, c}} := by
     ext s
     simp only [mem_sym2_iff, Sym2.mem_iff, forall_eq_or_imp, forall_eq,
-      mem_cliqueSet_if
+      mem_cliqueSet_iff, Set.mem_ofPred_eq,
+      is3Clique_iff]
+    constructor
+    · rintro ⟨⟨c, d, e, hcd, hce, hde, rfl⟩, hab⟩
+      simp only [mem_insert, mem_singleton] at hab
+      obtain ⟨rfl | rfl | rfl, rfl | rfl | rfl⟩ := hab
+      any_goals
+        simp only [*, adj_comm, true_and, Ne, not_true] at *
+      any_goals
+        first
+        | exact ⟨c, by aesop⟩
+        | exact ⟨d, by aesop⟩
+        | exact ⟨e, by aesop⟩
+        | simp only [*, true_and] at *
+          exact ⟨c, by aesop⟩
+        | simp only [*, true_and] at *
+          exact ⟨d, by aesop⟩
+        | simp only [*, true_and] at *
+          exact ⟨e, by aesop⟩
+    · rintro ⟨hab, c, hac, hbc, rfl⟩
+      refine ⟨⟨a, b, c, ?_⟩, ?_⟩ <;> simp [*]
+  constructor
+  · rw [Sym2.forall]
+    rintro hG a b hab
+    simp only [Sym2.mk_isDiag_iff] at hab
+    rw [this _ _ (Sym2.mk_isDiag_iff.not.2 hab)]
+    rintro _ ⟨hab, c, hac, hbc, rfl⟩ _ ⟨-, d, had, hbd, rfl⟩
+    refine hG.eq ?_ ?_ (Set.Nontrivial.not_subsingleton ⟨a, ?_, b, ?_, hab.ne⟩) <;>
+      simp [is3Clique_triple_iff, *]
+  · simp only [EdgeDisjointTriangles, is3Clique_iff, Set.Pairwise, mem_cliqueSet_iff, Ne,
+      forall_exists_index, and_imp, ← Set.not_nontrivial_iff (s := _ inter _), not_imp_not,
+      Set.Nontrivial, Set.mem_inter_iff, mem_coe]
+    rintro hG _ a b c hab hac hbc rfl _ d e f hde hdf hef rfl g hg₁ hg₂ h hh₁ hh₂ hgh
+    refine hG (Sym2.mk_isDiag_iff.not.2 hgh) ⟨⟨a, b, c, ?_⟩, by simpa using And.intro hg₁ hh₁⟩
+      ⟨⟨d, e, f, ?_⟩, by simpa using And.intro hg₂ hh₂⟩ <;> simp [*]
+
+alias ⟨EdgeDisjointTriangles.mem_sym2_subsingleton, _⟩ :=
+  edgeDisjointTriangles_iff_mem_sym2_subsingleton
 
 中文:
 引理 edgeDisjointTriangles_iff_mem_sym2_subsingleton
@@ -257,7 +294,44 @@ lemma edgeDisjointTriangles_iff_mem_sym2_subsingleton
     = {s | G.Adj a b ∧ exists c, G.Adj a c ∧ G.Adj b c ∧ s = {a, b, c}} := by
     ext s
     simp only [mem_sym2_iff, Sym2.mem_iff, forall_eq_or_imp, forall_eq,
-      mem_cliqueSet_if
+      mem_cliqueSet_iff, Set.mem_ofPred_eq,
+      is3Clique_iff]
+    constructor
+    · rintro ⟨⟨c, d, e, hcd, hce, hde, rfl⟩, hab⟩
+      simp only [mem_insert, mem_singleton] at hab
+      obtain ⟨rfl | rfl | rfl, rfl | rfl | rfl⟩ := hab
+      any_goals
+        simp only [*, adj_comm, true_and, Ne, not_true] at *
+      any_goals
+        first
+        | exact ⟨c, by aesop⟩
+        | exact ⟨d, by aesop⟩
+        | exact ⟨e, by aesop⟩
+        | simp only [*, true_and] at *
+          exact ⟨c, by aesop⟩
+        | simp only [*, true_and] at *
+          exact ⟨d, by aesop⟩
+        | simp only [*, true_and] at *
+          exact ⟨e, by aesop⟩
+    · rintro ⟨hab, c, hac, hbc, rfl⟩
+      refine ⟨⟨a, b, c, ?_⟩, ?_⟩ <;> simp [*]
+  constructor
+  · rw [Sym2.forall]
+    rintro hG a b hab
+    simp only [Sym2.mk_isDiag_iff] at hab
+    rw [this _ _ (Sym2.mk_isDiag_iff.not.2 hab)]
+    rintro _ ⟨hab, c, hac, hbc, rfl⟩ _ ⟨-, d, had, hbd, rfl⟩
+    refine hG.eq ?_ ?_ (Set.Nontrivial.not_subsingleton ⟨a, ?_, b, ?_, hab.ne⟩) <;>
+      simp [is3Clique_triple_iff, *]
+  · simp only [EdgeDisjointTriangles, is3Clique_iff, Set.Pairwise, mem_cliqueSet_iff, Ne,
+      forall_exists_index, and_imp, ← Set.not_nontrivial_iff (s := _ inter _), not_imp_not,
+      Set.Nontrivial, Set.mem_inter_iff, mem_coe]
+    rintro hG _ a b c hab hac hbc rfl _ d e f hde hdf hef rfl g hg₁ hg₂ h hh₁ hh₂ hgh
+    refine hG (Sym2.mk_isDiag_iff.not.2 hgh) ⟨⟨a, b, c, ?_⟩, by simpa using And.intro hg₁ hh₁⟩
+      ⟨⟨d, e, f, ?_⟩, by simpa using And.intro hg₂ hh₂⟩ <;> simp [*]
+
+alias ⟨EdgeDisjointTriangles.mem_sym2_subsingleton, _⟩ :=
+  edgeDisjointTriangles_iff_mem_sym2_subsingleton
 
 Depends on / 依赖: Finset, G.Adj, G.cliqueSet, Set.mem_ofPred_eq, Sym2.mem_iff, adj_comm, any_goals, classical, cliqueSet, forall_eq, forall_eq_or_imp, is3Clique_iff, mem_cliqueSet_iff, mem_iff, mem_insert, mem_ofPred_eq, mem_singleton, mem_sym2_iff
 -/
@@ -360,7 +434,14 @@ lemma EdgeDisjointTriangles.card_edgeFinset_le
   refine card_mul_le_card_mul (fun s e => e in s.sym2) ?_ (fun e he => ?_)
   · simp only [is3Clique_iff, mem_cliqueFinset_iff, mem_sym2_iff, forall_exists_index, and_imp]
     rintro _ a b c hab hac hbc rfl
-    have : #{s(a, b), s(a, c), s(b, c)} = 3 :
+    have : #{s(a, b), s(a, c), s(b, c)} = 3 := by
+      refine card_eq_three.2 ⟨_, _, _, ?_, ?_, ?_, rfl⟩ <;> simp [hab.ne, hac.ne, hbc.ne]
+    rw [← this]
+    refine card_mono ?_
+    simp [insert_subset, *]
+  · simpa only [card_le_one, mem_bipartiteBelow, and_imp, Set.Subsingleton, Set.mem_ofPred_eq,
+      mem_cliqueFinset_iff, mem_cliqueSet_iff]
+      using hG.mem_sym2_subsingleton (G.not_isDiag_of_mem_edgeSet <| mem_edgeFinset.1 he)
 
 中文:
 引理 EdgeDisjointTriangles.card_edgeFinset_le
@@ -370,7 +451,14 @@ lemma EdgeDisjointTriangles.card_edgeFinset_le
   refine card_mul_le_card_mul (fun s e => e in s.sym2) ?_ (fun e he => ?_)
   · simp only [is3Clique_iff, mem_cliqueFinset_iff, mem_sym2_iff, forall_exists_index, and_imp]
     rintro _ a b c hab hac hbc rfl
-    have : #{s(a, b), s(a, c), s(b, c)} = 3 :
+    have : #{s(a, b), s(a, c), s(b, c)} = 3 := by
+      refine card_eq_three.2 ⟨_, _, _, ?_, ?_, ?_, rfl⟩ <;> simp [hab.ne, hac.ne, hbc.ne]
+    rw [← this]
+    refine card_mono ?_
+    simp [insert_subset, *]
+  · simpa only [card_le_one, mem_bipartiteBelow, and_imp, Set.Subsingleton, Set.mem_ofPred_eq,
+      mem_cliqueFinset_iff, mem_cliqueSet_iff]
+      using hG.mem_sym2_subsingleton (G.not_isDiag_of_mem_edgeSet <| mem_edgeFinset.1 he)
 
 Depends on / 依赖: G.edgeFinset, Set.Subsingle, Subsingle, and_imp, card_eq_three, card_le_one, card_mono, card_mul_le_card_mul, edgeFinset, forall_exists_index, hab.ne, hac.ne, hbc.ne, insert_subset, is3Clique_iff, mem_bipartiteBelow, mem_cliqueFinset_iff, mem_sym2_iff, mul_comm, mul_one
 -/
@@ -402,7 +490,16 @@ lemma LocallyLinear.card_edgeFinset
   · simpa [Sym2.forall, Nat.one_le_iff_ne_zero, -Finset.card_eq_zero, Finset.card_ne_zero,
         Finset.Nonempty]
       using hG.2
-
+  simp only [mem_cliqueFinset_iff, is3Clique_iff, forall_exists_index, and_imp]
+  rintro _ a b c hab hac hbc rfl
+  calc
+    _ <= #{s(a, b), s(a, c), s(b, c)} := card_le_card ?_
+    _ <= 3 := (card_insert_le _ _).trans (succ_le_succ <| (card_insert_le _ _).trans_eq <| by
+      rw [card_singleton])
+  simp only [subset_iff, Sym2.forall, mem_sym2_iff, mem_bipartiteBelow, mem_insert,
+    mem_edgeFinset, mem_singleton, and_imp, mem_edgeSet, Sym2.mem_iff, forall_eq_or_imp,
+    forall_eq]
+  rintro d e hde (rfl | rfl | rfl) (rfl | rfl | rfl) <;> simp [*] at *
 
 中文:
 引理 LocallyLinear.card_edgeFinset
@@ -414,7 +511,16 @@ lemma LocallyLinear.card_edgeFinset
   · simpa [Sym2.forall, Nat.one_le_iff_ne_zero, -Finset.card_eq_zero, Finset.card_ne_zero,
         Finset.Nonempty]
       using hG.2
-
+  simp only [mem_cliqueFinset_iff, is3Clique_iff, forall_exists_index, and_imp]
+  rintro _ a b c hab hac hbc rfl
+  calc
+    _ <= #{s(a, b), s(a, c), s(b, c)} := card_le_card ?_
+    _ <= 3 := (card_insert_le _ _).trans (succ_le_succ <| (card_insert_le _ _).trans_eq <| by
+      rw [card_singleton])
+  simp only [subset_iff, Sym2.forall, mem_sym2_iff, mem_bipartiteBelow, mem_insert,
+    mem_edgeFinset, mem_singleton, and_imp, mem_edgeSet, Sym2.mem_iff, forall_eq_or_imp,
+    forall_eq]
+  rintro d e hde (rfl | rfl | rfl) (rfl | rfl | rfl) <;> simp [*] at *
 
 Depends on / 依赖: Finset, Finset.Nonempty, Finset.card_eq_zero, Finset.card_ne_zero, Nat.one_le_iff_ne_zero, Nonempty, Sym2.forall, and_imp, antisymm, card_edgeFinset_le, card_eq_zero, card_insert_le, card_le_card, card_mul_le_card_mul, card_ne_zero, edgeDisjointTriangles, forall_exists_index, hG.edgeDisjointTriangles.card_edgeFinset_le.antisymm, is3Clique_iff, mem_cliqueFinset_iff
 -/
@@ -535,7 +641,21 @@ lemma farFromTriangleFree_of_disjoint_triangles_aux
     exists x y, x in t ∧ y in t ∧ x != y ∧ s(x, y) in G.edgeFinset \ H.edgeFinset := by
     by_contra! h
     refine hH t ?_
-    simp only [not_and, mem_sdiff, not_not, mem_edgeFin
+    simp only [not_and, mem_sdiff, not_not, mem_edgeFinset, mem_edgeSet] at h
+    obtain ⟨x, y, z, xy, xz, yz, rfl⟩ := is3Clique_iff.1 (mem_cliqueFinset_iff.1 <| htris ht)
+    rw [is3Clique_triple_iff]
+    refine ⟨h _ _ ?_ ?_ xy.ne xy, h _ _ ?_ ?_ xz.ne xz, h _ _ ?_ ?_ yz.ne yz⟩ <;> simp
+  choose fx fy hfx hfy hfne fmem using this
+  let f (t : {x // x in tris}) : Sym2 α := s(fx t.2, fy t.2)
+  have hf (x) (_ : x in tris.attach) : f x in G.edgeFinset \ H.edgeFinset := fmem _
+  obtain ⟨⟨t₁, ht₁⟩, -, ⟨t₂, ht₂⟩, -, tne, t : s(_, _) = s(_, _)⟩ :=
+    exists_ne_map_eq_of_card_lt_of_maps_to hG hf
+  dsimp at t
+  have i := pd ht₁ ht₂ (Subtype.val_injective.ne tne)
+  rw [Sym2.eq_iff] at t
+  obtain t | t := t
+  · exact hfne _ (i ⟨hfx ht₁, t.1.symm ▸ hfx ht₂⟩ ⟨hfy ht₁, t.2.symm ▸ hfy ht₂⟩)
+  · exact hfne _ (i ⟨hfx ht₁, t.1.symm ▸ hfy ht₂⟩ ⟨hfy ht₁, t.2.symm ▸ hfx ht₂⟩)
 
 中文:
 引理 farFromTriangleFree_of_disjoint_triangles_aux
@@ -547,7 +667,21 @@ lemma farFromTriangleFree_of_disjoint_triangles_aux
     exists x y, x in t ∧ y in t ∧ x != y ∧ s(x, y) in G.edgeFinset \ H.edgeFinset := by
     by_contra! h
     refine hH t ?_
-    simp only [not_and, mem_sdiff, not_not, mem_edgeFin
+    simp only [not_and, mem_sdiff, not_not, mem_edgeFinset, mem_edgeSet] at h
+    obtain ⟨x, y, z, xy, xz, yz, rfl⟩ := is3Clique_iff.1 (mem_cliqueFinset_iff.1 <| htris ht)
+    rw [is3Clique_triple_iff]
+    refine ⟨h _ _ ?_ ?_ xy.ne xy, h _ _ ?_ ?_ xz.ne xz, h _ _ ?_ ?_ yz.ne yz⟩ <;> simp
+  choose fx fy hfx hfy hfne fmem using this
+  let f (t : {x // x in tris}) : Sym2 α := s(fx t.2, fy t.2)
+  have hf (x) (_ : x in tris.attach) : f x in G.edgeFinset \ H.edgeFinset := fmem _
+  obtain ⟨⟨t₁, ht₁⟩, -, ⟨t₂, ht₂⟩, -, tne, t : s(_, _) = s(_, _)⟩ :=
+    exists_ne_map_eq_of_card_lt_of_maps_to hG hf
+  dsimp at t
+  have i := pd ht₁ ht₂ (Subtype.val_injective.ne tne)
+  rw [Sym2.eq_iff] at t
+  obtain t | t := t
+  · exact hfne _ (i ⟨hfx ht₁, t.1.symm ▸ hfx ht₂⟩ ⟨hfy ht₁, t.2.symm ▸ hfy ht₂⟩)
+  · exact hfne _ (i ⟨hfx ht₁, t.1.symm ▸ hfy ht₂⟩ ⟨hfy ht₁, t.2.symm ▸ hfx ht₂⟩)
 -/
 private lemma farFromTriangleFree_of_disjoint_triangles_aux {tris : Finset (Finset α)}
     (htris : tris subseteq G.cliqueFinset 3)
@@ -646,7 +780,8 @@ lemma FarFromTriangleFree.lt_half
         ε * Fintype.card α ^ 2
     _ <= #G.edgeFinset := by simpa using hε.le_card_edgeFinset (by simp)
     _ <= (Fintype.card α).choose 2 := by gcongr; exact card_edgeFinset_le_card_choose_two
-    _ < 2⁻
+    _ < 2⁻¹ * Fintype.card α ^ 2 := by
+      simpa [← div_eq_inv_mul] using Nat.choose_lt_pow_div (by positivity) le_rfl
 
 中文:
 引理 FarFromTriangleFree.lt_half
@@ -658,7 +793,8 @@ lemma FarFromTriangleFree.lt_half
         ε * Fintype.card α ^ 2
     _ <= #G.edgeFinset := by simpa using hε.le_card_edgeFinset (by simp)
     _ <= (Fintype.card α).choose 2 := by gcongr; exact card_edgeFinset_le_card_choose_two
-    _ < 2⁻
+    _ < 2⁻¹ * Fintype.card α ^ 2 := by
+      simpa [← div_eq_inv_mul] using Nat.choose_lt_pow_div (by positivity) le_rfl
 
 Depends on / 依赖: Fintype, Fintype.card, G.edgeFinset, Nat.choose_lt_pow_div, card_edgeFinset_le_card_choose_two, choose_lt_pow_div, div_eq_inv_mul, edgeFinset, le_card_edgeFinset, le_rfl, lt_of_mul_lt_mul_right
 -/

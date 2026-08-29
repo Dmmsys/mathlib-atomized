@@ -504,7 +504,9 @@ lemma le_inter
   · rw [cons_inter_of_pos _ h, ← erase_le_iff_le_cons]
     exact IH (erase_le_iff_le_cons.2 h₁) (erase_le_erase _ h₂)
   · rw [cons_inter_of_neg _ h]
- 
+    exact IH ((le_cons_of_notMem <| mt (mem_of_le h₂) h).1 h₁) h₂
+
+@[simp]
 
 中文:
 引理 le_inter
@@ -517,7 +519,9 @@ lemma le_inter
   · rw [cons_inter_of_pos _ h, ← erase_le_iff_le_cons]
     exact IH (erase_le_iff_le_cons.2 h₁) (erase_le_erase _ h₂)
   · rw [cons_inter_of_neg _ h]
- 
+    exact IH ((le_cons_of_notMem <| mt (mem_of_le h₂) h).1 h₁) h₂
+
+@[simp]
 
 Depends on / 依赖: Multiset, Multiset.induction_on, cons_inter_of_neg, cons_inter_of_pos, erase_le_erase, erase_le_iff_le_cons, induction_on, le_cons_of_notMem, mem_of_le, revert, zero_inter
 -/
@@ -831,7 +835,7 @@ obtain ⟨a, ha⟩ := lt_iff_cons_le.1 h.lt_of_le le_inter
   rw [← cons_add] at ha
 exact (lt_cons_self (s inter t) a).not_ge le_inter
     (Multiset.le_of_add_le_add_right (ha.trans inter_le_left))
-
+    (Multiset.le_of_add_le_add_right (ha.trans inter_le_right))
 
 中文:
 引理 inter_add_distrib
@@ -844,7 +848,7 @@ obtain ⟨a, ha⟩ := lt_iff_cons_le.1 h.lt_of_le le_inter
   rw [← cons_add] at ha
 exact (lt_cons_self (s inter t) a).not_ge le_inter
     (Multiset.le_of_add_le_add_right (ha.trans inter_le_left))
-
+    (Multiset.le_of_add_le_add_right (ha.trans inter_le_right))
 
 Depends on / 依赖: Multiset, Multiset.add_le_add_right, Multiset.le_of_add_le_add_right, add_le_add_right, cons_add, h.lt_of_le, ha.trans, inter_le_left, inter_le_right, le_inter, le_of_add_le_add_right, lt_cons_self, lt_iff_cons_le, lt_of_le, not_ge
 -/
@@ -913,7 +917,9 @@ lemma union_add_inter
     rw [Multiset.add_comm]
     exact Multiset.add_le_add_right inter_le_left
   · rw [Multiset.add_comm, add_inter_distrib]
-    refine le_inter (Multiset.add_le_add_right le_union
+    refine le_inter (Multiset.add_le_add_right le_union_right) ?_
+    rw [Multiset.add_comm]
+    exact Multiset.add_le_add_right le_union_left
 
 中文:
 引理 union_add_inter
@@ -926,7 +932,9 @@ lemma union_add_inter
     rw [Multiset.add_comm]
     exact Multiset.add_le_add_right inter_le_left
   · rw [Multiset.add_comm, add_inter_distrib]
-    refine le_inter (Multiset.add_le_add_right le_union
+    refine le_inter (Multiset.add_le_add_right le_union_right) ?_
+    rw [Multiset.add_comm]
+    exact Multiset.add_le_add_right le_union_left
 
 Depends on / 依赖: Multiset, Multiset.add_comm, Multiset.add_le_add_left, Multiset.add_le_add_right, _root_, _root_.le_antisymm, add_comm, add_inter_distrib, add_le_add_left, add_le_add_right, inter_le_left, inter_le_right, le_antisymm, le_inter, le_union_left, le_union_right, union_add_distrib, union_le
 -/
@@ -1210,7 +1218,9 @@ theorem disjoint_left
   · rw [le_bot_iff, bot_eq_zero, eq_zero_iff_forall_notMem]
     exact fun a ha => h (subset_of_le hs ha) (subset_of_le ht ha)
 
-alias ⟨_root_.Disjoint.notMem_of_mem_left_multiset, _⟩ :
+alias ⟨_root_.Disjoint.notMem_of_mem_left_multiset, _⟩ := disjoint_left
+
+@[simp, norm_cast]
 
 中文:
 定理 disjoint_left
@@ -1222,7 +1232,9 @@ alias ⟨_root_.Disjoint.notMem_of_mem_left_multiset, _⟩ :
   · rw [le_bot_iff, bot_eq_zero, eq_zero_iff_forall_notMem]
     exact fun a ha => h (subset_of_le hs ha) (subset_of_le ht ha)
 
-alias ⟨_root_.Disjoint.notMem_of_mem_left_multiset, _⟩ :
+alias ⟨_root_.Disjoint.notMem_of_mem_left_multiset, _⟩ := disjoint_left
+
+@[simp, norm_cast]
 
 Depends on / 依赖: bot_eq_zero, eq_zero_iff_forall_notMem, le_bot_iff, singleton_le, singleton_le.mpr, subset_of_le
 -/

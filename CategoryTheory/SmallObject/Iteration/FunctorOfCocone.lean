@@ -108,7 +108,9 @@ definition map
     have h₂' : i₂ = j := le_antisymm hi₂ (by simpa using h₂)
     if h₁ : i₁ < j then
       (objIso c i₁ h₁).hom ≫ c.ι.app ⟨i₁, h₁⟩ ≫ (objIsoPt c).inv ≫ eqToHom (by subst h₂'; rfl)
-    
+    else
+      have h₁' : i₁ = j := le_antisymm (hi.trans hi₂) (by simpa using h₁)
+      eqToHom (by subst h₁' h₂'; rfl)
 
 中文:
 定义 map
@@ -119,7 +121,9 @@ definition map
     have h₂' : i₂ = j := le_antisymm hi₂ (by simpa using h₂)
     if h₁ : i₁ < j then
       (objIso c i₁ h₁).hom ≫ c.ι.app ⟨i₁, h₁⟩ ≫ (objIsoPt c).inv ≫ eqToHom (by subst h₂'; rfl)
-    
+    else
+      have h₁' : i₁ = j := le_antisymm (hi.trans hi₂) (by simpa using h₁)
+      eqToHom (by subst h₁' h₂'; rfl)
 
 Depends on / 依赖: F.map, eqToHom, hi.trans, homOfLE, le_antisymm, lt_of_le_of_lt, objIso, objIsoPt
 -/
@@ -171,7 +175,11 @@ lemma map_comp
       obtain hi₃' | rfl := hi₃.lt_or_eq
       · rw [dif_pos hi₃', dif_pos (hi₂₃.trans hi₃'), dif_pos hi₃', assoc, assoc,
           Iso.inv_hom_id_assoc, ← Functor.map_comp_assoc, homOfLE_comp]
-      · rw [d
+      · rw [dif_neg (by simp), dif_pos (hi₁₂.trans hi₂₃), dif_pos hi₂₃, dif_neg (by simp),
+          dif_pos hi₂₃, eqToHom_refl, comp_id, assoc, assoc, Iso.inv_hom_id_assoc,
+          Cocone.w_assoc]
+    · rw [map_id, comp_id]
+  · rw [map_id, id_comp]
 
 中文:
 引理 map_comp
@@ -183,7 +191,11 @@ lemma map_comp
       obtain hi₃' | rfl := hi₃.lt_or_eq
       · rw [dif_pos hi₃', dif_pos (hi₂₃.trans hi₃'), dif_pos hi₃', assoc, assoc,
           Iso.inv_hom_id_assoc, ← Functor.map_comp_assoc, homOfLE_comp]
-      · rw [d
+      · rw [dif_neg (by simp), dif_pos (hi₁₂.trans hi₂₃), dif_pos hi₂₃, dif_neg (by simp),
+          dif_pos hi₂₃, eqToHom_refl, comp_id, assoc, assoc, Iso.inv_hom_id_assoc,
+          Cocone.w_assoc]
+    · rw [map_id, comp_id]
+  · rw [map_id, id_comp]
 
 Depends on / 依赖: Cocone, Cocone.w_assoc, Functor, Functor.map_comp_assoc, Iso.inv_hom_id_assoc, comp_id, dif_neg, dif_pos, eqToHom_refl, hi.lt_or_eq, homOfLE_comp, id_comp, inv_hom_id_assoc, lt_or_eq, map_comp_assoc, map_id, w_assoc
 -/

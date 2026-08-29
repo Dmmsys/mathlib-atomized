@@ -104,7 +104,8 @@ protected nonrec theorem ContinuousAt.eval (hf : ContinuousAt f z) (hg : Continu
   hf.eval hg
 
 protected nonrec theorem ContinuousWithinAt.eval (hf : ContinuousWithinAt f s z)
-
+    (hg : ContinuousWithinAt g s z) : ContinuousWithinAt (fun z => f z (g z)) s z :=
+  hf.eval hg
 
 中文:
 定理 滤子.收敛.eval
@@ -116,7 +117,8 @@ protected nonrec theorem ContinuousAt.eval (hf : ContinuousAt f z) (hg : Continu
   hf.eval hg
 
 protected nonrec theorem ContinuousWithinAt.eval (hf : ContinuousWithinAt f s z)
-
+    (hg : ContinuousWithinAt g s z) : ContinuousWithinAt (fun z => f z (g z)) s z :=
+  hf.eval hg
 -/
 protected theorem Filter.Tendsto.eval {α : Type*} {l : Filter α} {f : α -> F} {f₀ : F}
     {g : α -> X} {x₀ : X} (hf : Tendsto f l (𝓝 f₀)) (hg : Tendsto g l (𝓝 x₀)) :

@@ -243,7 +243,7 @@ instance [F.Final]
   convert! (bijective_pushforwardSections φ M).comp (unitHomEquiv _).bijective
   ext f : 1
   dsimp
-  rw [pushforwa
+  rw [pushforwardSections_unitHomEquiv]; rw [EmbeddingLike.apply_eq_iff_eq]; rw [Adjunction.homEquiv_naturality_right]; rw [pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit]
 
 中文:
 实例 [F.终]
@@ -255,7 +255,7 @@ instance [F.Final]
   convert! (bijective_pushforwardSections φ M).comp (unitHomEquiv _).bijective
   ext f : 1
   dsimp
-  rw [pushforwa
+  rw [pushforwardSections_unitHomEquiv]; rw [EmbeddingLike.apply_eq_iff_eq]; rw [Adjunction.homEquiv_naturality_right]; rw [pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit]
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_right, EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, apply_eq_iff_eq, bijective, bijective.of_comp_iff, bijective_pushforwardSections, convert, homEquiv, homEquiv_naturality_right, isIso_iff_coyoneda_map_bijective, of_comp_iff, pullbackPushforwardAdjunction, pullbackPushforwardAdjunction_homEquiv_pullbackObjUnitToUnit, pushforwardSections_unitHomEquiv, unitHomEquiv
 -/

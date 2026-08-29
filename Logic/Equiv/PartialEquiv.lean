@@ -1775,7 +1775,8 @@ theorem ext
   have I : e '' e.source = e.target := e.image_source_eq_target
   have I' : e' '' e'.source = e'.target := e'.image_source_eq_target
   rw [A]; rw [hs]; rw [I'] at I
-
+  cases e; cases e'
+  simp_all
 
 中文:
 定理 ext
@@ -1790,7 +1791,8 @@ theorem ext
   have I : e '' e.source = e.target := e.image_source_eq_target
   have I' : e' '' e'.source = e'.target := e'.image_source_eq_target
   rw [A]; rw [hs]; rw [I'] at I
-
+  cases e; cases e'
+  simp_all
 -/
 protected theorem ext {e e' : PartialEquiv α β} (h : forall x, e x = e' x)
     (hsymm : forall x, e.symm x = e'.symm x) (hs : e.source = e'.source) : e = e' := by
@@ -3311,7 +3313,7 @@ definition piecewise
   map_source' := H.mapsTo.piecewise_ite H'.compl.mapsTo
   map_target' := H.symm.mapsTo.piecewise_ite H'.symm.compl.mapsTo
   left_inv' := H.leftInvOn_piecewise H'
-  right_
+  right_inv' := H.symm.leftInvOn_piecewise H'.symm
 
 中文:
 定义 piecewise
@@ -3323,7 +3325,7 @@ definition piecewise
   map_source' := H.mapsTo.piecewise_ite H'.compl.mapsTo
   map_target' := H.symm.mapsTo.piecewise_ite H'.symm.compl.mapsTo
   left_inv' := H.leftInvOn_piecewise H'
-  right_
+  right_inv' := H.symm.leftInvOn_piecewise H'.symm
 
 Depends on / 依赖: piecewise, s.piecewise
 -/
@@ -3428,7 +3430,10 @@ definition pi
   target := pi univ fun i => (ei i).target
   map_source' _ hf i hi := (ei i).map_source (hf i hi)
   map_target' _ hf i hi := (ei i).map_target (hf i hi)
-  left_inv' _ hf := funext fun i => (ei i).
+  left_inv' _ hf := funext fun i => (ei i).left_inv (hf i trivial)
+  right_inv' _ hf := funext fun i => (ei i).right_inv (hf i trivial)
+
+@[simp, mfld_simps]
 
 中文:
 定义 pi
@@ -3439,7 +3444,10 @@ definition pi
   target := pi univ fun i => (ei i).target
   map_source' _ hf i hi := (ei i).map_source (hf i hi)
   map_target' _ hf i hi := (ei i).map_target (hf i hi)
-  left_inv' _ hf := funext fun i => (ei i).
+  left_inv' _ hf := funext fun i => (ei i).left_inv (hf i trivial)
+  right_inv' _ hf := funext fun i => (ei i).right_inv (hf i trivial)
+
+@[simp, mfld_simps]
 -/
 protected def pi (ei : forall i, PartialEquiv (αi i) (βi i)) : PartialEquiv (forall i, αi i) (forall i, βi i) where
   toFun := Pi.map fun i => ei i

@@ -119,14 +119,14 @@ lemma doubleCoset_eq_of_mem
   given: {H K : Subgroup G} {a b : G} (hb : b in doubleCoset a H K)
   proof: by
   obtain ⟨h, hh, k, hk, rfl⟩ := mem_doubleCoset.1 hb
-  rw [doubleCoset]; rw [doubleCoset]; rw [← Set.singleton_mul_singleton]; rw [← Set.singleton_mul_singleton]; rw [mul_assoc]; rw [mul_assoc]; rw [Subgroup.singleton_mul_subgroup hk]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Subgroup.subgroup_mul
+  rw [doubleCoset]; rw [doubleCoset]; rw [← Set.singleton_mul_singleton]; rw [← Set.singleton_mul_singleton]; rw [mul_assoc]; rw [mul_assoc]; rw [Subgroup.singleton_mul_subgroup hk]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Subgroup.subgroup_mul_singleton hh]
 
 中文:
 引理 doubleCoset_eq_of_mem
   条件: {H K : 子群 G} {a b : G} (hb : b in doubleCoset a H K)
   证明: by
   obtain ⟨h, hh, k, hk, rfl⟩ := mem_doubleCoset.1 hb
-  rw [doubleCoset]; rw [doubleCoset]; rw [← Set.singleton_mul_singleton]; rw [← Set.singleton_mul_singleton]; rw [mul_assoc]; rw [mul_assoc]; rw [Subgroup.singleton_mul_subgroup hk]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Subgroup.subgroup_mul
+  rw [doubleCoset]; rw [doubleCoset]; rw [← Set.singleton_mul_singleton]; rw [← Set.singleton_mul_singleton]; rw [mul_assoc]; rw [mul_assoc]; rw [Subgroup.singleton_mul_subgroup hk]; rw [← mul_assoc]; rw [← mul_assoc]; rw [Subgroup.subgroup_mul_singleton hh]
 
 Depends on / 依赖: Set.singleton_mul_singleton, Subgroup, Subgroup.singleton_mul_subgroup, Subgroup.subgroup_mul_singleton, doubleCoset, mem_doubleCoset, mul_assoc, singleton_mul_singleton, singleton_mul_subgroup, subgroup_mul_singleton
 -/
@@ -146,7 +146,7 @@ lemma mem_doubleCoset_of_not_disjoint
   simp only [mem_doubleCoset] at *
   obtain ⟨x, ⟨l, hl, r, hr, hrx⟩, y, hy, ⟨r', hr', rfl⟩⟩ := h
   refine ⟨y⁻¹ * l, H.mul_mem (H.inv_mem hy) hl, r * r'⁻¹, K.mul_mem hr (K.inv_mem hr'), ?_⟩
-  rwa [mul_assoc, mul_assoc, eq_inv_mul_iff_mul_eq, ← mul_assoc, ← mul_asso
+  rwa [mul_assoc, mul_assoc, eq_inv_mul_iff_mul_eq, ← mul_assoc, ← mul_assoc, eq_mul_inv_iff_mul_eq]
 
 中文:
 引理 mem_doubleCoset_of_not_disjoint
@@ -156,7 +156,7 @@ lemma mem_doubleCoset_of_not_disjoint
   simp only [mem_doubleCoset] at *
   obtain ⟨x, ⟨l, hl, r, hr, hrx⟩, y, hy, ⟨r', hr', rfl⟩⟩ := h
   refine ⟨y⁻¹ * l, H.mul_mem (H.inv_mem hy) hl, r * r'⁻¹, K.mul_mem hr (K.inv_mem hr'), ?_⟩
-  rwa [mul_assoc, mul_assoc, eq_inv_mul_iff_mul_eq, ← mul_assoc, ← mul_asso
+  rwa [mul_assoc, mul_assoc, eq_inv_mul_iff_mul_eq, ← mul_assoc, ← mul_assoc, eq_mul_inv_iff_mul_eq]
 
 Depends on / 依赖: H.inv_mem, H.mul_mem, K.inv_mem, K.mul_mem, Set.not_disjoint_iff, eq_inv_mul_iff_mul_eq, eq_mul_inv_iff_mul_eq, inv_mem, mem_doubleCoset, mul_assoc, mul_mem, not_disjoint_iff
 -/
@@ -568,7 +568,10 @@ lemma iUnion_quotToDoubleCoset
   use mk H K x
   obtain ⟨h, k, h3, h4, h5⟩ := mk_out_eq_mul H K x
   refine ⟨h⁻¹, H.inv_mem h3, k⁻¹, K.inv_mem h4, ?_⟩
-  simp only [h5, ← mul_assoc, one_mul, inv_mul_cancel, mul_in
+  simp only [h5, ← mul_assoc, one_mul, inv_mul_cancel, mul_inv_cancel_right]
+
+@[deprecated (since := "2026-04-03")]
+alias union_quotToDoubleCoset := iUnion_quotToDoubleCoset
 
 中文:
 引理 iUnion_quotToDoubleCoset
@@ -581,7 +584,10 @@ lemma iUnion_quotToDoubleCoset
   use mk H K x
   obtain ⟨h, k, h3, h4, h5⟩ := mk_out_eq_mul H K x
   refine ⟨h⁻¹, H.inv_mem h3, k⁻¹, K.inv_mem h4, ?_⟩
-  simp only [h5, ← mul_assoc, one_mul, inv_mul_cancel, mul_in
+  simp only [h5, ← mul_assoc, one_mul, inv_mul_cancel, mul_inv_cancel_right]
+
+@[deprecated (since := "2026-04-03")]
+alias union_quotToDoubleCoset := iUnion_quotToDoubleCoset
 
 Depends on / 依赖: H.inv_mem, K.inv_mem, Set.mem_iUnion, Set.mem_univ, SetLike, SetLike.mem_coe, iff_true, inv_mem, inv_mul_cancel, mem_coe, mem_doubleCoset, mem_iUnion, mem_univ, mk_out_eq_mul, mul_assoc, mul_inv_cancel_right, one_mul, quotToDoubleCoset
 -/
@@ -612,7 +618,8 @@ lemma doubleCoset_union_rightCoset
     refine ⟨x * (y⁻¹ * a⁻¹), h_h, y, y.2, ?_⟩
     simp only [← mul_assoc, inv_mul_cancel_right, InvMemClass.coe_inv]
   · rintro ⟨x, hx, y, hy, hxy⟩
-    ref
+    refine ⟨⟨y, hy⟩, ?_⟩
+    simp only [hxy, ← mul_assoc, hx, mul_inv_cancel_right]
 
 中文:
 引理 doubleCoset_union_rightCoset
@@ -626,7 +633,8 @@ lemma doubleCoset_union_rightCoset
     refine ⟨x * (y⁻¹ * a⁻¹), h_h, y, y.2, ?_⟩
     simp only [← mul_assoc, inv_mul_cancel_right, InvMemClass.coe_inv]
   · rintro ⟨x, hx, y, hy, hxy⟩
-    ref
+    refine ⟨⟨y, hy⟩, ?_⟩
+    simp only [hxy, ← mul_assoc, hx, mul_inv_cancel_right]
 
 Depends on / 依赖: InvMemClass, InvMemClass.coe_inv, Set.mem_iUnion, SetLike, SetLike.mem_coe, coe_inv, inv_mul_cancel_right, mem_coe, mem_doubleCoset, mem_iUnion, mem_rightCoset_iff, mul_assoc, mul_inv_cancel_right, mul_inv_rev
 -/
@@ -657,7 +665,8 @@ lemma doubleCoset_union_leftCoset
     refine ⟨y, y.2, a⁻¹ * y⁻¹ * x, h_h, ?_⟩
     simp only [← mul_assoc, one_mul, mul_inv_cancel, mul_inv_cancel_right, InvMemClass.coe_inv]
   · rintro ⟨x, hx, y, hy, hxy⟩
-    re
+    refine ⟨⟨x, hx⟩, ?_⟩
+    simp only [hxy, ← mul_assoc, hy, one_mul, inv_mul_cancel, inv_mul_cancel_right]
 
 中文:
 引理 doubleCoset_union_leftCoset
@@ -670,7 +679,8 @@ lemma doubleCoset_union_leftCoset
     refine ⟨y, y.2, a⁻¹ * y⁻¹ * x, h_h, ?_⟩
     simp only [← mul_assoc, one_mul, mul_inv_cancel, mul_inv_cancel_right, InvMemClass.coe_inv]
   · rintro ⟨x, hx, y, hy, hxy⟩
-    re
+    refine ⟨⟨x, hx⟩, ?_⟩
+    simp only [hxy, ← mul_assoc, hy, one_mul, inv_mul_cancel, inv_mul_cancel_right]
 
 Depends on / 依赖: InvMemClass, InvMemClass.coe_inv, Set.mem_iUnion, coe_inv, inv_mul_cancel, inv_mul_cancel_right, mem_doubleCoset, mem_iUnion, mem_leftCoset_iff, mul_assoc, mul_inv_cancel, mul_inv_cancel_right, mul_inv_rev, one_mul
 -/
@@ -762,7 +772,10 @@ lemma finite_quotient_iff_exists_finset_iUnion_eq_univ
   · rintro ⟨I, hI⟩
     suffices (I : Set (Quotient (H : Set G) K)) = Set.univ by
       simp_rw [← Set.finite_univ_iff, ← this, I.finite_toSet]
-    rw
+    rw [Set.eq_univ_iff_forall] at hI ⊢
+    rintro ⟨g⟩
+    obtain ⟨_, ⟨i, _, rfl⟩, T, ⟨hi, rfl⟩, hT : g in quotToDoubleCoset H K i⟩ := hI g
+    simpa [← (mem_quotToDoubleCoset_iff _ _).mp hT] using! hi
 
 中文:
 引理 finite_quotient_iff_存在_finset_iUnion_eq_univ
@@ -775,7 +788,10 @@ lemma finite_quotient_iff_exists_finset_iUnion_eq_univ
   · rintro ⟨I, hI⟩
     suffices (I : Set (Quotient (H : Set G) K)) = Set.univ by
       simp_rw [← Set.finite_univ_iff, ← this, I.finite_toSet]
-    rw
+    rw [Set.eq_univ_iff_forall] at hI ⊢
+    rintro ⟨g⟩
+    obtain ⟨_, ⟨i, _, rfl⟩, T, ⟨hi, rfl⟩, hT : g in quotToDoubleCoset H K i⟩ := hI g
+    simpa [← (mem_quotToDoubleCoset_iff _ _).mp hT] using! hi
 
 Depends on / 依赖: Finset, Finset.univ, I.finite_toSet, Quotient, Set.eq_univ_iff_forall, Set.finite_univ_iff, Set.univ, eq_univ_iff_forall, finite_toSet, finite_univ_iff, iUnion_quotToDoubleCoset, mem_quotToDoubleCoset_iff, nonempty_fintype, quotToDoubleCoset, simp_rw
 -/
@@ -808,7 +824,7 @@ lemma iUnion_image_mk_leftRel
   have ⟨i, hi⟩ : exists i : Quotient H K, y in doubleCoset (out i) H K := by
     contrapose cover
     exact (Set.ne_univ_iff_exists_notMem _).mpr ⟨y, by simpa using! cover⟩
-  exac
+  exact ⟨i, y, hi, hy⟩
 
 中文:
 引理 iUnion_image_mk_leftRel
@@ -821,7 +837,7 @@ lemma iUnion_image_mk_leftRel
   have ⟨i, hi⟩ : exists i : Quotient H K, y in doubleCoset (out i) H K := by
     contrapose cover
     exact (Set.ne_univ_iff_exists_notMem _).mpr ⟨y, by simpa using! cover⟩
-  exac
+  exact ⟨i, y, hi, hy⟩
 
 Depends on / 依赖: Quotient, Set.iUnion_eq_univ_iff, Set.ne_univ_iff_exists_notMem, contrapose, doubleCoset, exists_rep, iUnion_eq_univ_iff, iUnion_quotToDoubleCoset, ne_univ_iff_exists_notMem
 -/
@@ -850,7 +866,7 @@ lemma iUnion_image_mk_rightRel
   have ⟨i, hi⟩ : exists i : Quotient H K, y in doubleCoset (out i) H K := by
     contrapose cover
     exact (Set.ne_univ_iff_exists_notMem _).mpr ⟨y, by simpa using! cover⟩
-  exac
+  exact ⟨i, y, hi, hy⟩
 
 中文:
 引理 iUnion_image_mk_rightRel
@@ -863,7 +879,7 @@ lemma iUnion_image_mk_rightRel
   have ⟨i, hi⟩ : exists i : Quotient H K, y in doubleCoset (out i) H K := by
     contrapose cover
     exact (Set.ne_univ_iff_exists_notMem _).mpr ⟨y, by simpa using! cover⟩
-  exac
+  exact ⟨i, y, hi, hy⟩
 
 Depends on / 依赖: Quotient, Set.iUnion_eq_univ_iff, Set.ne_univ_iff_exists_notMem, contrapose, doubleCoset, exists_rep, iUnion_eq_univ_iff, iUnion_quotToDoubleCoset, ne_univ_iff_exists_notMem
 -/
@@ -891,6 +907,13 @@ lemma iUnion_finset_leftRel_eq_univ_of_leftRel
   refine (Set.ne_univ_iff_exists_notMem _).mpr ⟨Quot.mk (leftRel K) x, ?_⟩
   simp only [Set.mem_iUnion, Set.mem_image, exists_prop, not_exists, not_and]
   intro y hy q hq
+  contrapose hx
+  simp only [Set.mem_iUnion, exists_prop]
+  refine ⟨y, hy, ?_⟩
+  rw [← doubleCoset_eq_of_mem hq]; rw [mem_doubleCoset]
+  obtain ⟨a', ha'⟩ := Quotient.eq.mp hx
+  exact ⟨1, one_mem H, MulOpposite.unop a'⁻¹, Subgroup.mem_op.mp (by simp), by simpa
+    using (eq_mul_inv_of_mul_eq ha')⟩
 
 中文:
 引理 iUnion_finset_leftRel_eq_univ_of_leftRel
@@ -902,6 +925,13 @@ lemma iUnion_finset_leftRel_eq_univ_of_leftRel
   refine (Set.ne_univ_iff_exists_notMem _).mpr ⟨Quot.mk (leftRel K) x, ?_⟩
   simp only [Set.mem_iUnion, Set.mem_image, exists_prop, not_exists, not_and]
   intro y hy q hq
+  contrapose hx
+  simp only [Set.mem_iUnion, exists_prop]
+  refine ⟨y, hy, ?_⟩
+  rw [← doubleCoset_eq_of_mem hq]; rw [mem_doubleCoset]
+  obtain ⟨a', ha'⟩ := Quotient.eq.mp hx
+  exact ⟨1, one_mem H, MulOpposite.unop a'⁻¹, Subgroup.mem_op.mp (by simp), by simpa
+    using (eq_mul_inv_of_mul_eq ha')⟩
 
 Depends on / 依赖: MulOpposite, MulOpposite.unop, Quot.mk, Quotient, Quotient.eq.mp, Set.mem_iUnion, Set.mem_image, Set.ne_univ_iff_exists_notMem, Set.univ_subset_iff, contrapose, doubleCoset_eq_of_mem, exists_prop, leftRel, mem_doubleCoset, mem_iUnion, mem_image, ne_eq, ne_univ_iff_exists_notMem, not_and, not_exists
 -/
@@ -934,7 +964,15 @@ lemma iUnion_finset_rightRel_eq_univ_of_rightRel
   obtain ⟨x, hx⟩ := (Set.ne_univ_iff_exists_notMem _).mp ht
   refine (Set.ne_univ_iff_exists_notMem _).mpr ⟨Quot.mk (rightRel H) x, ?_⟩
   simp only [Set.mem_iUnion, Set.mem_image, exists_prop, not_exists, not_and]
-  intro y hy q h
+  intro y hy q hq
+  contrapose hx
+  simp only [Set.mem_iUnion, exists_prop]
+  refine ⟨y, hy, ?_⟩
+  rw [← doubleCoset_eq_of_mem hq]; rw [mem_doubleCoset]
+  obtain ⟨a, ha⟩ : exists a : H, x = a * q := by
+    obtain ⟨a, ha⟩ : exists a : H, a * x = q := Quotient.eq.mp hx
+    exact ⟨⟨a⁻¹, by simp⟩, eq_inv_mul_of_mul_eq ha⟩
+  exact ⟨a.1, a.2, ⟨1, Subgroup.one_mem K, by simpa using ha⟩⟩
 
 中文:
 引理 iUnion_finset_rightRel_eq_univ_of_rightRel
@@ -945,7 +983,15 @@ lemma iUnion_finset_rightRel_eq_univ_of_rightRel
   obtain ⟨x, hx⟩ := (Set.ne_univ_iff_exists_notMem _).mp ht
   refine (Set.ne_univ_iff_exists_notMem _).mpr ⟨Quot.mk (rightRel H) x, ?_⟩
   simp only [Set.mem_iUnion, Set.mem_image, exists_prop, not_exists, not_and]
-  intro y hy q h
+  intro y hy q hq
+  contrapose hx
+  simp only [Set.mem_iUnion, exists_prop]
+  refine ⟨y, hy, ?_⟩
+  rw [← doubleCoset_eq_of_mem hq]; rw [mem_doubleCoset]
+  obtain ⟨a, ha⟩ : exists a : H, x = a * q := by
+    obtain ⟨a, ha⟩ : exists a : H, a * x = q := Quotient.eq.mp hx
+    exact ⟨⟨a⁻¹, by simp⟩, eq_inv_mul_of_mul_eq ha⟩
+  exact ⟨a.1, a.2, ⟨1, Subgroup.one_mem K, by simpa using ha⟩⟩
 
 Depends on / 依赖: Quot.mk, Set.mem_iUnion, Set.mem_image, Set.ne_univ_iff_exists_notMem, Set.univ_subset_iff, contrapose, doubleCoset_eq_of_mem, exists_prop, mem_doubleCoset, mem_iUnion, mem_image, ne_eq, ne_univ_iff_exists_notMem, not_and, not_exists, rightRel, univ_subset_iff
 -/

@@ -382,6 +382,8 @@ theorem isSpecial_iff
     simp only [← coe_inj, mul_coe, mk_coe] at *
   · simp_all [← h]; ring
   · simp only [Nat.mul_add, Nat.add_mul, one_mul, mul_one, ← Nat.add_assoc,
+      Nat.add_right_cancel_iff] at h
+    rw [← h]; ring
 
 中文:
 定理 isSpecial_iff
@@ -393,6 +395,8 @@ theorem isSpecial_iff
     simp only [← coe_inj, mul_coe, mk_coe] at *
   · simp_all [← h]; ring
   · simp only [Nat.mul_add, Nat.add_mul, one_mul, mul_one, ← Nat.add_assoc,
+      Nat.add_right_cancel_iff] at h
+    rw [← h]; ring
 
 Depends on / 依赖: IsSpecial, Nat.add_assoc, Nat.add_mul, Nat.add_right_cancel_iff, Nat.mul_add, add_assoc, add_mul, add_right_cancel_iff, coe_inj, mk_coe, mul_add, mul_coe, mul_one, one_mul, succPNat, succ_eq_add_one
 -/
@@ -907,7 +911,9 @@ theorem finish_v
     have : u.wp + 1 = u.w := rfl
     rw [this]; rw [← ha]; rw [u.qp_eq hr]
     ring
-  · change u.y * u.b + (u.y * u.qp + u.z) * u.
+  · change u.y * u.b + (u.y * u.qp + u.z) * u.b = u.y * u.a + u.z * u.b
+    rw [← ha]; rw [u.qp_eq hr]
+    ring
 
 中文:
 定理 finish_v
@@ -921,7 +927,9 @@ theorem finish_v
     have : u.wp + 1 = u.w := rfl
     rw [this]; rw [← ha]; rw [u.qp_eq hr]
     ring
-  · change u.y * u.b + (u.y * u.qp + u.z) * u.
+  · change u.y * u.b + (u.y * u.qp + u.z) * u.b = u.y * u.a + u.z * u.b
+    rw [← ha]; rw [u.qp_eq hr]
+    ring
 
 Depends on / 依赖: qp_eq, rq_eq, u.qp, u.qp_eq, u.rq_eq, u.wp, zero_add
 -/
@@ -1031,7 +1039,9 @@ theorem step_v
   · change ((u.y * u.q + u.z) * u.b + u.y * (u.r - 1 + 1) : Nat) = u.y * u.a + u.z * u.b
     rw [← ha]; rw [hr]
     ring
-  · change ((u.w * u.q + 
+  · change ((u.w * u.q + u.x) * u.b + u.w * (u.r - 1 + 1) : Nat) = u.w * u.a + u.x * u.b
+    rw [← ha]; rw [hr]
+    ring
 
 中文:
 定理 step_v
@@ -1044,7 +1054,9 @@ theorem step_v
   · change ((u.y * u.q + u.z) * u.b + u.y * (u.r - 1 + 1) : Nat) = u.y * u.a + u.z * u.b
     rw [← ha]; rw [hr]
     ring
-  · change ((u.w * u.q + 
+  · change ((u.w * u.q + u.x) * u.b + u.w * (u.r - 1 + 1) : Nat) = u.w * u.a + u.x * u.b
+    rw [← ha]; rw [hr]
+    ring
 
 Depends on / 依赖: Nat.pos_of_ne_zero, add_comm, add_tsub_cancel_of_le, pos_of_ne_zero, rq_eq, u.rq_eq
 -/
@@ -1454,7 +1466,39 @@ theorem gcd_props
       a = a' * d ∧
         b = b' * d ∧
           z * a' = succPNat (x * b') ∧
-            w * b' = succPNat (y * a') ∧ (z *
+            w * b' = succPNat (y * a') ∧ (z * a : Nat) = x * b + d ∧ (w * b : Nat) = y * a + d := by
+  intro d w x y z a' b'
+  let u := XgcdType.start a b
+  let ur := u.reduce
+  have hb : d = ur.b := u.reduce_isReduced'
+  have ha' : (a' : Nat) = w + x := gcdA'_coe a b
+  have hb' : (b' : Nat) = y + z := gcdB'_coe a b
+  have hdet : w * z = succPNat (x * y) := u.reduce_isSpecial' rfl
+  constructor
+  · exact hdet
+  have hdet' : (w * z : Nat) = x * y + 1 := by rw [← mul_coe, hdet, succPNat_coe]
+  let hv : Prod.mk (w * d + x * ur.b : Nat) (y * d + z * ur.b : Nat) = ⟨a, b⟩ :=
+    u.reduce_v.trans (XgcdType.start_v a b)
+  rw [← hb]; rw [← add_mul]; rw [← add_mul]; rw [← ha']; rw [← hb'] at hv
+  have ha'' : (a : Nat) = a' * d := (congr_arg Prod.fst hv).symm
+  have hb'' : (b : Nat) = b' * d := (congr_arg Prod.snd hv).symm
+  constructor
+  · exact eq ha''
+  constructor
+  · exact eq hb''
+  have hza' : (z * a' : Nat) = x * b' + 1 := by
+    rw [ha']; rw [hb']; rw [mul_add]; rw [mul_add]; rw [mul_comm (z : Nat)]; rw [hdet']
+    ring
+  have hwb' : (w * b' : Nat) = y * a' + 1 := by
+    rw [ha']; rw [hb']; rw [mul_add]; rw [mul_add]; rw [hdet']
+    ring
+  constructor
+  · apply eq
+    rw [succPNat_coe]; rw [Nat.succ_eq_add_one]; rw [mul_coe]; rw [hza']
+  constructor
+  · apply eq
+    rw [succPNat_coe]; rw [Nat.succ_eq_add_one]; rw [mul_coe]; rw [hwb']
+  grind
 
 中文:
 定理 gcd_props
@@ -1469,7 +1513,39 @@ theorem gcd_props
       a = a' * d ∧
         b = b' * d ∧
           z * a' = succPNat (x * b') ∧
-            w * b' = succPNat (y * a') ∧ (z *
+            w * b' = succPNat (y * a') ∧ (z * a : Nat) = x * b + d ∧ (w * b : Nat) = y * a + d := by
+  intro d w x y z a' b'
+  let u := XgcdType.start a b
+  let ur := u.reduce
+  have hb : d = ur.b := u.reduce_isReduced'
+  have ha' : (a' : Nat) = w + x := gcdA'_coe a b
+  have hb' : (b' : Nat) = y + z := gcdB'_coe a b
+  have hdet : w * z = succPNat (x * y) := u.reduce_isSpecial' rfl
+  constructor
+  · exact hdet
+  have hdet' : (w * z : Nat) = x * y + 1 := by rw [← mul_coe, hdet, succPNat_coe]
+  let hv : Prod.mk (w * d + x * ur.b : Nat) (y * d + z * ur.b : Nat) = ⟨a, b⟩ :=
+    u.reduce_v.trans (XgcdType.start_v a b)
+  rw [← hb]; rw [← add_mul]; rw [← add_mul]; rw [← ha']; rw [← hb'] at hv
+  have ha'' : (a : Nat) = a' * d := (congr_arg Prod.fst hv).symm
+  have hb'' : (b : Nat) = b' * d := (congr_arg Prod.snd hv).symm
+  constructor
+  · exact eq ha''
+  constructor
+  · exact eq hb''
+  have hza' : (z * a' : Nat) = x * b' + 1 := by
+    rw [ha']; rw [hb']; rw [mul_add]; rw [mul_add]; rw [mul_comm (z : Nat)]; rw [hdet']
+    ring
+  have hwb' : (w * b' : Nat) = y * a' + 1 := by
+    rw [ha']; rw [hb']; rw [mul_add]; rw [mul_add]; rw [hdet']
+    ring
+  constructor
+  · apply eq
+    rw [succPNat_coe]; rw [Nat.succ_eq_add_one]; rw [mul_coe]; rw [hza']
+  constructor
+  · apply eq
+    rw [succPNat_coe]; rw [Nat.succ_eq_add_one]; rw [mul_coe]; rw [hwb']
+  grind
 -/
 theorem gcd_props :
     let d := gcdD a b
@@ -1529,7 +1605,11 @@ theorem gcd_eq
   · apply dvd_gcd
     · exact Dvd.intro (gcdA' a b) (h₁.trans (mul_comm _ _)).symm
     · exact Dvd.intro (gcdB' a b) (h₂.trans (mul_comm _ _)).symm
-  · have h₇ : (gcd a b : Nat) ∣ gcdZ a b * a := (Nat.gcd_dvd_left a b).tran
+  · have h₇ : (gcd a b : Nat) ∣ gcdZ a b * a := (Nat.gcd_dvd_left a b).trans (dvd_mul_left _ _)
+    have h₈ : (gcd a b : Nat) ∣ gcdX a b * b := (Nat.gcd_dvd_right a b).trans (dvd_mul_left _ _)
+    rw [h₅] at h₇
+    rw [dvd_iff]
+    exact (Nat.dvd_add_iff_right h₈).mpr h₇
 
 中文:
 定理 gcd_eq
@@ -1540,7 +1620,11 @@ theorem gcd_eq
   · apply dvd_gcd
     · exact Dvd.intro (gcdA' a b) (h₁.trans (mul_comm _ _)).symm
     · exact Dvd.intro (gcdB' a b) (h₂.trans (mul_comm _ _)).symm
-  · have h₇ : (gcd a b : Nat) ∣ gcdZ a b * a := (Nat.gcd_dvd_left a b).tran
+  · have h₇ : (gcd a b : Nat) ∣ gcdZ a b * a := (Nat.gcd_dvd_left a b).trans (dvd_mul_left _ _)
+    have h₈ : (gcd a b : Nat) ∣ gcdX a b * b := (Nat.gcd_dvd_right a b).trans (dvd_mul_left _ _)
+    rw [h₅] at h₇
+    rw [dvd_iff]
+    exact (Nat.dvd_add_iff_right h₈).mpr h₇
 
 Depends on / 依赖: Dvd.intro, Nat.dvd_add_iff_right, Nat.gcd_dvd_left, Nat.gcd_dvd_right, dvd_add_iff_right, dvd_antisymm, dvd_gcd, dvd_iff, dvd_mul_left, gcd_dvd_left, gcd_dvd_right, gcd_props, mul_comm
 -/

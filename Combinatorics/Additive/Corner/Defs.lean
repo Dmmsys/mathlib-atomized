@@ -284,7 +284,7 @@ lemma isCorner_image
   · exact hf'.mem_image_iff hAs (mk_mem_prod hx₁ hy₁)
   · exact hf'.mem_image_iff hAs (mk_mem_prod hx₁ hy₂)
   · exact hf'.mem_image_iff hAs (mk_mem_prod hx₂ hy₁)
-  · exact hf.add_eq_add hx₁ hy₂ hx₂
+  · exact hf.add_eq_add hx₁ hy₂ hx₂ hy₁
 
 中文:
 引理 isCorner_image
@@ -296,7 +296,7 @@ lemma isCorner_image
   · exact hf'.mem_image_iff hAs (mk_mem_prod hx₁ hy₁)
   · exact hf'.mem_image_iff hAs (mk_mem_prod hx₁ hy₂)
   · exact hf'.mem_image_iff hAs (mk_mem_prod hx₂ hy₁)
-  · exact hf.add_eq_add hx₁ hy₂ hx₂
+  · exact hf.add_eq_add hx₁ hy₂ hx₂ hy₁
 
 Depends on / 依赖: add_eq_add, hf.add_eq_add, hf.bijOn.injOn, hf.bijOn.injOn.prodMap, isCorner_iff, mem_image_iff, mk_mem_prod, prodMap
 -/
@@ -323,7 +323,8 @@ lemma isCornerFree_image
   rw [isCornerFree_iff hAs]; rw [isCornerFree_iff this]
   simp +contextual only [hf.bijOn.forall, isCorner_image hf hAs, hf.bijOn.injOn.eq_iff]
 
-alias ⟨IsCorner.of_image,
+alias ⟨IsCorner.of_image, _⟩ := isCorner_image
+alias ⟨_, IsCornerFree.image⟩ := isCornerFree_image
 
 中文:
 引理 isCornerFree_image
@@ -334,7 +335,8 @@ alias ⟨IsCorner.of_image,
   rw [isCornerFree_iff hAs]; rw [isCornerFree_iff this]
   simp +contextual only [hf.bijOn.forall, isCorner_image hf hAs, hf.bijOn.injOn.eq_iff]
 
-alias ⟨IsCorner.of_image,
+alias ⟨IsCorner.of_image, _⟩ := isCorner_image
+alias ⟨_, IsCornerFree.image⟩ := isCornerFree_image
 
 Depends on / 依赖: Prod.map, Subset, Subset.rfl, contextual, eq_iff, hf.bijOn.forall, hf.bijOn.injOn.eq_iff, hf.bijOn.mapsTo, hf.bijOn.mapsTo.prodMap, image_subset, isCornerFree_iff, isCorner_image, mapsTo, prodMap, subseteq
 -/

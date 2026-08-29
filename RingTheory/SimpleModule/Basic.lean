@@ -487,7 +487,7 @@ theorem isSimpleModule_iff_quot_maximal
     have ⟨m, hm⟩ := exists_ne (0 : M)
     exact ⟨_, ker_toSpanSingleton_isMaximal R hm,
       ⟨(LinearMap.quotKerEquivOfSurjective _ <| toSpanSingleton_surjective R hm).symm⟩⟩
-  · convert! congr equ
+  · convert! congr equiv; rwa [isSimpleModule_iff_isCoatom]
 
 中文:
 定理 isSimpleModule_iff_quot_maximal
@@ -497,7 +497,7 @@ theorem isSimpleModule_iff_quot_maximal
     have ⟨m, hm⟩ := exists_ne (0 : M)
     exact ⟨_, ker_toSpanSingleton_isMaximal R hm,
       ⟨(LinearMap.quotKerEquivOfSurjective _ <| toSpanSingleton_surjective R hm).symm⟩⟩
-  · convert! congr equ
+  · convert! congr equiv; rwa [isSimpleModule_iff_isCoatom]
 
 Depends on / 依赖: IsSimpleModule, IsSimpleModule.nontrivial, LinearMap, LinearMap.quotKerEquivOfSurjective, coatom, convert, exists_ne, isSimpleModule_iff_isCoatom, ker_toSpanSingleton_isMaximal, nontrivial, quotKerEquivOfSurjective, toSpanSingleton_surjective
 -/
@@ -574,7 +574,8 @@ theorem isSimpleModule_self_iff_isUnit
     refine ⟨fun h x hx => ?_, fun h x hx => (h x hx).unit.mulRight_bijective.surjective⟩
     obtain ⟨y, hyx : y * x = 1⟩ := h x hx 1
     have hy : y != 0 := left_ne_zero_of_mul (hyx.symm ▸ one_ne_zero)
-    obtain ⟨z, hzy
+    obtain ⟨z, hzy : z * y = 1⟩ := h y hy 1
+    exact ⟨⟨x, y, left_inv_eq_right_inv hzy hyx ▸ hzy, hyx⟩, rfl⟩
 
 中文:
 定理 isSimpleModule_self_iff_isUnit
@@ -582,7 +583,8 @@ theorem isSimpleModule_self_iff_isUnit
     refine ⟨fun h x hx => ?_, fun h x hx => (h x hx).unit.mulRight_bijective.surjective⟩
     obtain ⟨y, hyx : y * x = 1⟩ := h x hx 1
     have hy : y != 0 := left_ne_zero_of_mul (hyx.symm ▸ one_ne_zero)
-    obtain ⟨z, hzy
+    obtain ⟨z, hzy : z * y = 1⟩ := h y hy 1
+    exact ⟨⟨x, y, left_inv_eq_right_inv hzy hyx ▸ hzy, hyx⟩, rfl⟩
 
 Depends on / 依赖: and_congr_right, hyx.symm, isSimpleModule_iff_toSpanSingleton_surjective, isSimpleModule_iff_toSpanSingleton_surjective.trans, left_inv_eq_right_inv, left_ne_zero_of_mul, mulRight_bijective, one_ne_zero, surjective, unit.mulRight_bijective.surjective
 -/
@@ -719,7 +721,7 @@ theorem eq_bot_or_exists_simple_le
   rw [← N.subsingleton_iff_eq_bot]; rw [← Submodule.subsingleton_iff R]; rw [← subsingleton_iff_bot_eq_top]
   refine (eq_bot_or_exists_atom_le _).imp .symm fun ⟨m, h, _⟩ => ⟨_, N.map_subtype_le m, ?_⟩
   rw [← isSimpleModule_iff_isAtom] at h
-  exact .congr (m.equivMapOfInjective _ N.subtype_inject
+  exact .congr (m.equivMapOfInjective _ N.subtype_injective).symm
 
 中文:
 定理 eq_bot_or_存在_simple_le
@@ -728,7 +730,7 @@ theorem eq_bot_or_exists_simple_le
   rw [← N.subsingleton_iff_eq_bot]; rw [← Submodule.subsingleton_iff R]; rw [← subsingleton_iff_bot_eq_top]
   refine (eq_bot_or_exists_atom_le _).imp .symm fun ⟨m, h, _⟩ => ⟨_, N.map_subtype_le m, ?_⟩
   rw [← isSimpleModule_iff_isAtom] at h
-  exact .congr (m.equivMapOfInjective _ N.subtype_inject
+  exact .congr (m.equivMapOfInjective _ N.subtype_injective).symm
 
 Depends on / 依赖: N.map_subtype_le, N.subsingleton_iff_eq_bot, N.subtype_injective, Sigma.mk, Submodule, Submodule.subsingleton_iff, UCompactlyGeneratedSpace, UCompactlyGeneratedSpace.isClosed, continuous_sigmaMk, continuous_sigmaMk.comp, eq_bot_or_exists_atom_le, equivMapOfInjective, isClosed, isClosed_sigma_iff, isSimpleModule_iff_isAtom, m.equivMapOfInjective, map_subtype_le, subsingleton_iff, subsingleton_iff_bot_eq_top, subsingleton_iff_eq_bot
 -/
@@ -813,7 +815,8 @@ theorem lifting_property
   let e := (Submodule.quotientEquivOfIsCompl _ m compl).symm ≪≫ₗ f.quotKerEquivOfSurjective hf
   refine ⟨Submodule.subtype _ ∘ₗ e.symm.toLinearMap ∘ₗ g, LinearMap.ext fun x => ?_⟩
   obtain ⟨z, eq⟩ := e.surjective (g x)
-  simp only [LinearMap.c
+  simp only [LinearMap.comp_apply, ← eq, LinearEquiv.coe_coe, e.symm_apply_apply]
+  simp [e]
 
 中文:
 定理 lifting_property
@@ -823,7 +826,8 @@ theorem lifting_property
   let e := (Submodule.quotientEquivOfIsCompl _ m compl).symm ≪≫ₗ f.quotKerEquivOfSurjective hf
   refine ⟨Submodule.subtype _ ∘ₗ e.symm.toLinearMap ∘ₗ g, LinearMap.ext fun x => ?_⟩
   obtain ⟨z, eq⟩ := e.surjective (g x)
-  simp only [LinearMap.c
+  simp only [LinearMap.comp_apply, ← eq, LinearEquiv.coe_coe, e.symm_apply_apply]
+  simp [e]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.comp_apply, LinearMap.ext, LinearMap.ker, Submodule, Submodule.quotientEquivOfIsCompl, Submodule.subtype, coe_coe, comp_apply, e.surjective, e.symm.toLinearMap, e.symm_apply_apply, exists_isCompl, f.quotKerEquivOfSurjective, quotKerEquivOfSurjective, quotientEquivOfIsCompl, subtype, surjective
 -/
@@ -1252,7 +1256,7 @@ theorem IsSemisimpleModule.exists_linearEquiv_dfinsupp
   refine ⟨s, ?_, ind, SetCoe.forall.mpr simple⟩
   rw [sSupIndep_iff] at ind
 exact .symm .trans (.ofInjective _ ind.dfinsupp_lsum_injective) .trans (.ofEq _ ⊤ <|
-    by rw [← Submodule.iSup_eq_range_dfinsu
+    by rw [← Submodule.iSup_eq_range_dfinsupp_lsum, ← sSup, sSup_eq_iSup']) Submodule.topEquiv
 
 中文:
 定理 是半单模.存在_linearEquiv_dfinsupp
@@ -1262,7 +1266,7 @@ exact .symm .trans (.ofInjective _ ind.dfinsupp_lsum_injective) .trans (.ofEq _ 
   refine ⟨s, ?_, ind, SetCoe.forall.mpr simple⟩
   rw [sSupIndep_iff] at ind
 exact .symm .trans (.ofInjective _ ind.dfinsupp_lsum_injective) .trans (.ofEq _ ⊤ <|
-    by rw [← Submodule.iSup_eq_range_dfinsu
+    by rw [← Submodule.iSup_eq_range_dfinsupp_lsum, ← sSup, sSup_eq_iSup']) Submodule.topEquiv
 
 Depends on / 依赖: IsSemisimpleModule, IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top, SetCoe, SetCoe.forall.mpr, Submodule, Submodule.iSup_eq_range_dfinsupp_lsum, Submodule.topEquiv, dfinsupp_lsum_injective, exists_sSupIndep_sSup_simples_eq_top, iSup_eq_range_dfinsupp_lsum, ind.dfinsupp_lsum_injective, ofInjective, sSupIndep_iff, sSup_eq_iSup, simple, topEquiv
 -/
@@ -1461,7 +1465,12 @@ instance [hR
   let : Module (R × S) S := Module.compHom _ (.snd R S)
   -- e₁, e₂ got falsely flagged by the unused argument linter
   let _e₁ : R ->ₛₗ[.fst R S] R := { AddMonoidHom.id R with map_smul' := fun _ _ => rfl }
-  let _e₂ : S ->ₛₗ[.snd R S] S := 
+  let _e₂ : S ->ₛₗ[.snd R S] S := { AddMonoidHom.id S with map_smul' := fun _ _ => rfl }
+  rw [IsSemisimpleRing]; rw [← _e₁.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hR
+  rw [IsSemisimpleRing]; rw [← _e₂.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hS
+  rw [IsSemisimpleRing]; rw [← Submodule.topEquiv.isSemisimpleModule_iff_of_bijective
+    (LinearEquiv.bijective _)]; rw [← LinearMap.sup_range_inl_inr]
+  exact .sup (.range _) (.range _)
 
 中文:
 实例 [hR
@@ -1471,7 +1480,12 @@ instance [hR
   let : Module (R × S) S := Module.compHom _ (.snd R S)
   -- e₁, e₂ got falsely flagged by the unused argument linter
   let _e₁ : R ->ₛₗ[.fst R S] R := { AddMonoidHom.id R with map_smul' := fun _ _ => rfl }
-  let _e₂ : S ->ₛₗ[.snd R S] S := 
+  let _e₂ : S ->ₛₗ[.snd R S] S := { AddMonoidHom.id S with map_smul' := fun _ _ => rfl }
+  rw [IsSemisimpleRing]; rw [← _e₁.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hR
+  rw [IsSemisimpleRing]; rw [← _e₂.isSemisimpleModule_iff_of_bijective Function.bijective_id] at hS
+  rw [IsSemisimpleRing]; rw [← Submodule.topEquiv.isSemisimpleModule_iff_of_bijective
+    (LinearEquiv.bijective _)]; rw [← LinearMap.sup_range_inl_inr]
+  exact .sup (.range _) (.range _)
 
 Depends on / 依赖: Module, Module.compHom, compHom
 -/
@@ -1530,7 +1544,7 @@ theorem IsSemisimpleRing.ideal_eq_span_idempotent
   obtain ⟨J, h⟩ := exists_isCompl I
   obtain ⟨f, idem, rfl⟩ := I.isIdempotentElemEquiv.symm (I.isComplEquivProj ⟨J, h⟩)
   exact ⟨f 1, LinearMap.isIdempotentElem_map_one_iff.mpr idem, by
-    rw [LinearMap.range_eq_map]; rw [← Ideal.span_one]; rw [← Ideal.submodule_span_eq]; rw [LinearMap.map_span]
+    rw [LinearMap.range_eq_map]; rw [← Ideal.span_one]; rw [← Ideal.submodule_span_eq]; rw [LinearMap.map_span]; rw [Set.image_one]; rw [Ideal.submodule_span_eq]⟩
 
 中文:
 定理 IsSemisimpleRing.ideal_eq_span_idempotent
@@ -1539,7 +1553,7 @@ theorem IsSemisimpleRing.ideal_eq_span_idempotent
   obtain ⟨J, h⟩ := exists_isCompl I
   obtain ⟨f, idem, rfl⟩ := I.isIdempotentElemEquiv.symm (I.isComplEquivProj ⟨J, h⟩)
   exact ⟨f 1, LinearMap.isIdempotentElem_map_one_iff.mpr idem, by
-    rw [LinearMap.range_eq_map]; rw [← Ideal.span_one]; rw [← Ideal.submodule_span_eq]; rw [LinearMap.map_span]
+    rw [LinearMap.range_eq_map]; rw [← Ideal.span_one]; rw [← Ideal.submodule_span_eq]; rw [LinearMap.map_span]; rw [Set.image_one]; rw [Ideal.submodule_span_eq]⟩
 
 Depends on / 依赖: I.isComplEquivProj, I.isIdempotentElemEquiv.symm, Ideal.span_one, Ideal.submodule_span_eq, LinearMap, LinearMap.isIdempotentElem_map_one_iff.mpr, LinearMap.map_span, LinearMap.range_eq_map, Set.image_one, exists_isCompl, image_one, isComplEquivProj, isIdempotentElemEquiv, isIdempotentElem_map_one_iff, map_span, range_eq_map, span_one, submodule_span_eq
 -/
@@ -1753,7 +1767,11 @@ instance _root_.Module.End.instDivisionRing
   mul_inv_cancel a a0 := by
     simp_rw [dif_neg a0]; ext
     exact (LinearEquiv.ofBijective _ <| bijective_of_ne_zero a0).right_inv _
-  
+  inv_zero := dif_pos rfl
+  nnqsmul := _
+  nnqsmul_def := fun _ _ => rfl
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
 
 中文:
 实例 _root_.模.End.instDivisionRing
@@ -1762,7 +1780,11 @@ instance _root_.Module.End.instDivisionRing
   mul_inv_cancel a a0 := by
     simp_rw [dif_neg a0]; ext
     exact (LinearEquiv.ofBijective _ <| bijective_of_ne_zero a0).right_inv _
-  
+  inv_zero := dif_pos rfl
+  nnqsmul := _
+  nnqsmul_def := fun _ _ => rfl
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, bijective_of_ne_zero, ofBijective
 -/
@@ -1798,7 +1820,7 @@ definition Iso.linearEquiv
   body: letI e : Submodule R M × Submodule R M -> Submodule R M × Submodule R M -> Prop :=
 fun X Y => Nonempty (X.2 ⧸ X.1.comap X.2.subtype) ≃ₗ[R] Y.2 ⧸ Y.1.comap Y.2.subtype
 Nonempty.some h.rel e ⟨.refl R _⟩ (fun ⟨f⟩ => ⟨f.symm⟩) (fun ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩)
-    fun h => by rw [sup_comm, inf_comm]; exact ⟨
+    fun h => by rw [sup_comm, inf_comm]; exact ⟨(LinearMap.quotientInfEquivSupQuotient ..).symm⟩
 
 中文:
 定义 同构.linearEquiv
@@ -1806,7 +1828,7 @@ Nonempty.some h.rel e ⟨.refl R _⟩ (fun ⟨f⟩ => ⟨f.symm⟩) (fun ⟨f⟩
   定义体: letI e : Submodule R M × Submodule R M -> Submodule R M × Submodule R M -> Prop :=
 fun X Y => Nonempty (X.2 ⧸ X.1.comap X.2.subtype) ≃ₗ[R] Y.2 ⧸ Y.1.comap Y.2.subtype
 Nonempty.some h.rel e ⟨.refl R _⟩ (fun ⟨f⟩ => ⟨f.symm⟩) (fun ⟨f⟩ ⟨g⟩ => ⟨f.trans g⟩)
-    fun h => by rw [sup_comm, inf_comm]; exact ⟨
+    fun h => by rw [sup_comm, inf_comm]; exact ⟨(LinearMap.quotientInfEquivSupQuotient ..).symm⟩
 
 Depends on / 依赖: LinearMap, LinearMap.quotientInfEquivSupQuotient, Nonempty, Nonempty.some, Submodule, f.symm, f.trans, h.rel, inf_comm, quotientInfEquivSupQuotient, subtype, sup_comm
 -/
@@ -1838,7 +1860,9 @@ theorem jacobson_density
   let p := projection _ _ h
   let f := End.ringHomEndFinsupp s f
   have : f (p • x) = f x := congr(f $(projection_apply_left h ⟨x, mem_span_singleton_self x⟩))
-  have : f x in R ∙ x := by rw [← this, map_sm
+  have : f x in R ∙ x := by rw [← this, map_smul, End.smul_def]; apply projection_apply_mem
+  have ⟨r, hr⟩ := mem_span_singleton.mp this
+  ⟨r, fun m hm => by simpa [x] using! congr($hr ⟨m, hm⟩).symm⟩
 
 中文:
 定理 jacobson_density
@@ -1848,7 +1872,9 @@ theorem jacobson_density
   let p := projection _ _ h
   let f := End.ringHomEndFinsupp s f
   have : f (p • x) = f x := congr(f $(projection_apply_left h ⟨x, mem_span_singleton_self x⟩))
-  have : f x in R ∙ x := by rw [← this, map_sm
+  have : f x in R ∙ x := by rw [← this, map_smul, End.smul_def]; apply projection_apply_mem
+  have ⟨r, hr⟩ := mem_span_singleton.mp this
+  ⟨r, fun m hm => by simpa [x] using! congr($hr ⟨m, hm⟩).symm⟩
 
 Depends on / 依赖: End.ringHomEndFinsupp, End.smul_def, Finsupp, Finsupp.equivFunOnFinite.symm, equivFunOnFinite, exists_isCompl, map_smul, mem_span_singleton, mem_span_singleton.mp, mem_span_singleton_self, projection, projection_apply_left, projection_apply_mem, ringHomEndFinsupp, smul_def
 -/
@@ -1878,7 +1904,8 @@ theorem Module.Finite.toModuleEnd_moduleEnd_surjective
   induction hs.ge (trivial : m in ⊤) using Submodule.span_induction with
   | mem m hm => exact (hr m hm).symm
   | zero => simp
-  | add _ _ _ _ h₁
+  | add _ _ _ _ h₁ h₂ => simpa using congr($h₁ + $h₂)
+  | smul g _ _ h => simp_rw [map_smul, h]
 
 中文:
 定理 模.有限.toModuleEnd_moduleEnd_surjective
@@ -1891,7 +1918,8 @@ theorem Module.Finite.toModuleEnd_moduleEnd_surjective
   induction hs.ge (trivial : m in ⊤) using Submodule.span_induction with
   | mem m hm => exact (hr m hm).symm
   | zero => simp
-  | add _ _ _ _ h₁
+  | add _ _ _ _ h₁ h₂ => simpa using congr($h₁ + $h₂)
+  | smul g _ _ h => simp_rw [map_smul, h]
 -/
 protected theorem Module.Finite.toModuleEnd_moduleEnd_surjective [Module.Finite (End R M) M] :
     Function.Surjective (Module.toModuleEnd (End R M) (S := R) M) := by

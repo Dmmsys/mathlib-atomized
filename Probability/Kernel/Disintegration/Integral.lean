@@ -728,7 +728,7 @@ theorem Integrable.norm_integral_condKernel
   refine Filter.Eventually.of_forall fun x => ?_
   rw [norm_norm]
   refine (norm_integral_le_integral_norm _).trans_eq (Real.norm_of_nonneg ?_).symm
-  exact integral_nonneg_of_ae (Filter.Eventually.of_forall fun y 
+  exact integral_nonneg_of_ae (Filter.Eventually.of_forall fun y => norm_nonneg _)
 
 中文:
 定理 可积.norm_integral_condKernel
@@ -738,7 +738,7 @@ theorem Integrable.norm_integral_condKernel
   refine Filter.Eventually.of_forall fun x => ?_
   rw [norm_norm]
   refine (norm_integral_le_integral_norm _).trans_eq (Real.norm_of_nonneg ?_).symm
-  exact integral_nonneg_of_ae (Filter.Eventually.of_forall fun y 
+  exact integral_nonneg_of_ae (Filter.Eventually.of_forall fun y => norm_nonneg _)
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually.of_forall, Real.norm_of_nonneg, hf_int, hf_int.integral_norm_condKernel.mono, integral_condKernel, integral_condKernel.norm, integral_nonneg_of_ae, integral_norm_condKernel, norm_integral_le_integral_norm, norm_nonneg, norm_norm, norm_of_nonneg, of_forall, trans_eq
 -/

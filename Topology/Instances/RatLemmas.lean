@@ -120,7 +120,7 @@ theorem not_countably_generated_cocompact
   rw [tendsto_inf] at hx; rcases hx with ⟨hxc, hx0⟩
   obtain ⟨n, hn⟩ : exists n : Nat, x n ∉ insert (0 : Rat) (range x) :=
     (hxc.eventually hx0.isCompact_insert_range.compl_mem_cocompact).exists
-  exact hn (Or.inr ⟨n, rfl
+  exact hn (Or.inr ⟨n, rfl⟩)
 
 中文:
 定理 not_countably_generated_cocompact
@@ -131,7 +131,7 @@ theorem not_countably_generated_cocompact
   rw [tendsto_inf] at hx; rcases hx with ⟨hxc, hx0⟩
   obtain ⟨n, hn⟩ : exists n : Nat, x n ∉ insert (0 : Rat) (range x) :=
     (hxc.eventually hx0.isCompact_insert_range.compl_mem_cocompact).exists
-  exact hn (Or.inr ⟨n, rfl
+  exact hn (Or.inr ⟨n, rfl⟩)
 
 Depends on / 依赖: Or.inr, cocompact, compl_mem_cocompact, eventually, exists_seq_tendsto, hx0.isCompact_insert_range.compl_mem_cocompact, hxc.eventually, insert, isCompact_insert_range, tendsto_inf
 -/
@@ -232,7 +232,10 @@ instance :
 · apply this s hs y hy x hx H.symm H.lt_or_gt.resolve_left hlt
   rcases exists_irrational_btwn (Rat.cast_lt.2 hlt) with ⟨z, hz, hxz, hzy⟩
   have := hs.image _ continuous_coe_real.continuousOn
-
+  rw [isPreconnected_iff_ordConnected] at this
+  have : z in Rat.cast '' s :=
+    this.out (mem_image_of_mem _ hx) (mem_image_of_mem _ hy) ⟨hxz.le, hzy.le⟩
+  exact hz (image_subset_range _ _ this)
 
 中文:
 实例 :
@@ -245,7 +248,10 @@ instance :
 · apply this s hs y hy x hx H.symm H.lt_or_gt.resolve_left hlt
   rcases exists_irrational_btwn (Rat.cast_lt.2 hlt) with ⟨z, hz, hxz, hzy⟩
   have := hs.image _ continuous_coe_real.continuousOn
-
+  rw [isPreconnected_iff_ordConnected] at this
+  have : z in Rat.cast '' s :=
+    this.out (mem_image_of_mem _ hx) (mem_image_of_mem _ hy) ⟨hxz.le, hzy.le⟩
+  exact hz (image_subset_range _ _ this)
 
 Depends on / 依赖: H.lt_or_gt.resolve_left, H.symm, Rat.cast, Rat.cast_lt, cast_lt, continuousOn, continuous_coe_real, continuous_coe_real.continuousOn, exists_irrational_btwn, hs.image, hxz.le, hzy.le, image_subset_range, isPreconnected_iff_ordConnected, lt_or_gt, mem_image_of_mem, resolve_left, this.out
 -/

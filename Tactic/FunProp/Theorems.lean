@@ -147,7 +147,16 @@ definition detectLambdaTheoremArgs
     unless xBody.hasLooseBVars do return some .const
     match xBody with
     | .bvar 0 => return some .id
-    | .app (.b
+    | .app (.bvar 0) (.fvar _) => return some .apply
+    | .app (.fvar fId) (.app (.fvar gId) (.bvar 0)) =>
+      -- fun x => f (g x)
+      let some argId_f := ctxVars.findIdx? (fun x => x == (.fvar fId)) | return none
+      let some argId_g := ctxVars.findIdx? (fun x => x == (.fvar gId)) | return none
+return some .comp argId_f argId_g
+    | .lam _ _ (.app (.app (.fvar _) (.bvar 1)) (.bvar 0)) _ =>
+      return some .pi
+    | _ => return none
+  | _ => return none
 
 中文:
 定义 detectLambdaTheoremArgs
@@ -163,7 +172,16 @@ definition detectLambdaTheoremArgs
     unless xBody.hasLooseBVars do return some .const
     match xBody with
     | .bvar 0 => return some .id
-    | .app (.b
+    | .app (.bvar 0) (.fvar _) => return some .apply
+    | .app (.fvar fId) (.app (.fvar gId) (.bvar 0)) =>
+      -- fun x => f (g x)
+      let some argId_f := ctxVars.findIdx? (fun x => x == (.fvar fId)) | return none
+      let some argId_g := ctxVars.findIdx? (fun x => x == (.fvar gId)) | return none
+return some .comp argId_f argId_g
+    | .lam _ _ (.app (.app (.fvar _) (.bvar 1)) (.bvar 0)) _ =>
+      return some .pi
+    | _ => return none
+  | _ => return none
 -/
 def detectLambdaTheoremArgs (f : Expr) (ctxVars : Array Expr) :
     MetaM (Option LambdaTheoremArgs) := do
@@ -667,7 +685,23 @@ definition getTheoremFromConst
       | throwError "unrecognized function property `{← ppExpr b}`"
     let funPropName := decl.funPropName
     let fData? ←
-withConfig (fun cfg => { cfg with zeta := false}) getFunc
+withConfig (fun cfg => { cfg with zeta := false}) getFunctionData? f defaultUnfoldPred
+    if let some thmArgs ← detectLambdaTheoremArgs (← fData?.get) xs then
+      return .lam {
+        funPropName := funPropName
+        thmName := declName
+        thmArgs := thmArgs
+      }
+
+    let .data fData := fData?
+      | throwError s!"function in invalid form {← ppExpr f}"
+
+    match fData.fn with
+    | .const funName _ =>
+
+      let dec ← fData.decomposition
+
+      return .function {
 
 中文:
 定义 getTheoremFromConst
@@ -679,7 +713,23 @@ withConfig (fun cfg => { cfg with zeta := false}) getFunc
       | throwError "unrecognized function property `{← ppExpr b}`"
     let funPropName := decl.funPropName
     let fData? ←
-withConfig (fun cfg => { cfg with zeta := false}) getFunc
+withConfig (fun cfg => { cfg with zeta := false}) getFunctionData? f defaultUnfoldPred
+    if let some thmArgs ← detectLambdaTheoremArgs (← fData?.get) xs then
+      return .lam {
+        funPropName := funPropName
+        thmName := declName
+        thmArgs := thmArgs
+      }
+
+    let .data fData := fData?
+      | throwError s!"function in invalid form {← ppExpr f}"
+
+    match fData.fn with
+    | .const funName _ =>
+
+      let dec ← fData.decomposition
+
+      return .function {
 
 Depends on / 依赖: Theorem, eval_prio
 -/
@@ -755,7 +805,24 @@ function property: {thm.funPropName}
 type: {repr thm.thmArgs.type}"
     lambdaTheoremsExt.add thm attrKind
   | .function thm =>
-    trace[Meta.Tactic.fun_prop.a
+    trace[Meta.Tactic.fun_prop.attr] "\
+function theorem: {thm.thmOrigin.name}
+function property: {thm.funPropName}
+function name: {thm.funOrigin.name}
+main arguments: {thm.mainArgs}
+applied arguments: {thm.appliedArgs}
+form: {toString thm.form} form"
+    functionTheoremsExt.add thm attrKind
+  | .mor thm =>
+    trace[Meta.Tactic.fun_prop.attr] "\
+morphism theorem: {thm.thmName}
+function property: {thm.funPropName}"
+    morTheoremsExt.add thm attrKind
+  | .transition thm =>
+    trace[Meta.Tactic.fun_prop.attr] "\
+transition theorem: {thm.thmName}
+function property: {thm.funPropName}"
+    transitionTheoremsExt.add thm attrKind
 
 中文:
 定义 addTheorem
@@ -769,7 +836,24 @@ function property: {thm.funPropName}
 type: {repr thm.thmArgs.type}"
     lambdaTheoremsExt.add thm attrKind
   | .function thm =>
-    trace[Meta.Tactic.fun_prop.a
+    trace[Meta.Tactic.fun_prop.attr] "\
+function theorem: {thm.thmOrigin.name}
+function property: {thm.funPropName}
+function name: {thm.funOrigin.name}
+main arguments: {thm.mainArgs}
+applied arguments: {thm.appliedArgs}
+form: {toString thm.form} form"
+    functionTheoremsExt.add thm attrKind
+  | .mor thm =>
+    trace[Meta.Tactic.fun_prop.attr] "\
+morphism theorem: {thm.thmName}
+function property: {thm.funPropName}"
+    morTheoremsExt.add thm attrKind
+  | .transition thm =>
+    trace[Meta.Tactic.fun_prop.attr] "\
+transition theorem: {thm.thmName}
+function property: {thm.funPropName}"
+    transitionTheoremsExt.add thm attrKind
 
 Depends on / 依赖: global
 -/

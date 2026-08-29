@@ -95,7 +95,7 @@ theorem polar_closure
 (topDualPairing 𝕜 E).flip.polar_gc.l_le
 closure_minimal ((topDualPairing 𝕜 E).flip.polar_gc.le_u_l s) by
         simpa [LinearMap.flip_flip] using!
-          (isClosed_polar _ _).preimage (ContinuousLinearMap.apply 𝕜 𝕜 (E := E)).cont
+          (isClosed_polar _ _).preimage (ContinuousLinearMap.apply 𝕜 𝕜 (E := E)).continuous
 
 中文:
 定理 polar_closure
@@ -105,7 +105,7 @@ closure_minimal ((topDualPairing 𝕜 E).flip.polar_gc.le_u_l s) by
 (topDualPairing 𝕜 E).flip.polar_gc.l_le
 closure_minimal ((topDualPairing 𝕜 E).flip.polar_gc.le_u_l s) by
         simpa [LinearMap.flip_flip] using!
-          (isClosed_polar _ _).preimage (ContinuousLinearMap.apply 𝕜 𝕜 (E := E)).cont
+          (isClosed_polar _ _).preimage (ContinuousLinearMap.apply 𝕜 𝕜 (E := E)).continuous
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.apply, LinearMap, LinearMap.flip_flip, antisymm, closure_minimal, continuous, flip.polar_antitone, flip.polar_gc.l_le, flip.polar_gc.le_u_l, flip_flip, isClosed_polar, l_le, le_u_l, polar_antitone, polar_gc, preimage, subset_closure, topDualPairing
 -/
@@ -131,7 +131,11 @@ theorem smul_mem_polar
   have eq : forall z, ‖c⁻¹ • x' z‖ = ‖c⁻¹‖ * ‖x' z‖ := fun z => norm_smul c⁻¹ _
   have le : forall z, z in s -> ‖c⁻¹ • x' z‖ <= ‖c⁻¹‖ * ‖c‖ := by
     intro z hzs
-    rw [eq z
+    rw [eq z]
+    apply mul_le_mul (le_of_eq rfl) (hc z hzs) (norm_nonneg _) (norm_nonneg _)
+  have cancel : ‖c⁻¹‖ * ‖c‖ = 1 := by
+    simp only [c_zero, norm_eq_zero, Ne, not_false_iff, inv_mul_cancel₀, norm_inv]
+  rwa [cancel] at le
 
 中文:
 定理 smul_mem_polar
@@ -143,7 +147,11 @@ theorem smul_mem_polar
   have eq : forall z, ‖c⁻¹ • x' z‖ = ‖c⁻¹‖ * ‖x' z‖ := fun z => norm_smul c⁻¹ _
   have le : forall z, z in s -> ‖c⁻¹ • x' z‖ <= ‖c⁻¹‖ * ‖c‖ := by
     intro z hzs
-    rw [eq z
+    rw [eq z]
+    apply mul_le_mul (le_of_eq rfl) (hc z hzs) (norm_nonneg _) (norm_nonneg _)
+  have cancel : ‖c⁻¹‖ * ‖c‖ = 1 := by
+    simp only [c_zero, norm_eq_zero, Ne, not_false_iff, inv_mul_cancel₀, norm_inv]
+  rwa [cancel] at le
 
 Depends on / 依赖: c_zero, cancel, flip.zero_mem_polar, inv_zero, le_of_eq, mul_le_mul, norm_eq_zero, norm_inv, norm_nonneg, norm_smul, not_false_iff, topDualPairing, zero_mem_polar, zero_smul
 -/
@@ -175,7 +183,7 @@ theorem polar_ball_subset_closedBall_div
   refine ContinuousLinearMap.opNorm_le_of_shell hr hcr.le hc fun x h₁ h₂ => ?_
   calc
     ‖x' x‖ <= 1 := hx' _ h₂
-    _
+    _ <= ‖c‖ / r * ‖x‖ := (inv_le_iff_one_le_mul₀' hcr).1 (by rwa [inv_div])
 
 中文:
 定理 polar_ball_subset_closedBall_div
@@ -188,7 +196,7 @@ theorem polar_ball_subset_closedBall_div
   refine ContinuousLinearMap.opNorm_le_of_shell hr hcr.le hc fun x h₁ h₂ => ?_
   calc
     ‖x' x‖ <= 1 := hx' _ h₂
-    _
+    _ <= ‖c‖ / r * ‖x‖ := (inv_le_iff_one_le_mul₀' hcr).1 (by rwa [inv_div])
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.opNorm_le_of_shell, StrongDual, StrongDual.mem_polar_iff, div_pos, hcr.le, inv_div, mem_ball_zero_iff, mem_closedBall_zero_iff, mem_polar_iff, opNorm_le_of_shell, zero_lt_one, zero_lt_one.trans
 -/
@@ -314,7 +322,7 @@ theorem isBounded_polar_of_mem_nhds_zero
   obtain ⟨r, r_pos, r_ball⟩ : exists r : Real, 0 < r ∧ ball 0 r subseteq s := Metric.mem_nhds_iff.1 s_nhds
   exact isBounded_closedBall.subset
     (((topDualPairing 𝕜 E).flip.polar_antitone r_ball).trans <|
-      polar_b
+      polar_ball_subset_closedBall_div ha r_pos)
 
 中文:
 定理 isBounded_polar_of_mem_nhds_zero
@@ -324,7 +332,7 @@ theorem isBounded_polar_of_mem_nhds_zero
   obtain ⟨r, r_pos, r_ball⟩ : exists r : Real, 0 < r ∧ ball 0 r subseteq s := Metric.mem_nhds_iff.1 s_nhds
   exact isBounded_closedBall.subset
     (((topDualPairing 𝕜 E).flip.polar_antitone r_ball).trans <|
-      polar_b
+      polar_ball_subset_closedBall_div ha r_pos)
 
 Depends on / 依赖: Metric, Metric.mem_nhds_iff, NormedField, NormedField.exists_one_lt_norm, exists_one_lt_norm, flip.polar_antitone, isBounded_closedBall, isBounded_closedBall.subset, mem_nhds_iff, polar_antitone, polar_ball_subset_closedBall_div, r_ball, r_pos, s_nhds, subset, subseteq, topDualPairing
 -/

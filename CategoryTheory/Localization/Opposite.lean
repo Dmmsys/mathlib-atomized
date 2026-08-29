@@ -42,7 +42,8 @@ definition StrictUniversalPropertyFixedTarget.op
   uniq F₁ F₂ eq := by
     suffices F₁.rightOp = F₂.rightOp by
       rw [← F₁.rightOp_leftOp_eq]; rw [← F₂.rightOp_leftOp_eq]; rw [this]
-    have eq' :=
+    have eq' := congr_arg Functor.rightOp eq
+    exact h.uniq _ _ eq'
 
 中文:
 定义 StrictUniversalPropertyFixedTarget.op
@@ -54,7 +55,8 @@ definition StrictUniversalPropertyFixedTarget.op
   uniq F₁ F₂ eq := by
     suffices F₁.rightOp = F₂.rightOp by
       rw [← F₁.rightOp_leftOp_eq]; rw [← F₂.rightOp_leftOp_eq]; rw [this]
-    have eq' :=
+    have eq' := congr_arg Functor.rightOp eq
+    exact h.uniq _ _ eq'
 
 Depends on / 依赖: h.inverts.op, inverts
 -/
@@ -133,7 +135,11 @@ instance IsLocalization.unop
     (opOpEquivalence C) (opOpEquivalence D)
     (fun _ _ _ hf => MorphismProperty.le_isoClosure _ _ hf)
     (fun _ _ _ hf => by
-      have := Localizatio
+      have := Localization.inverts L W _ hf
+      dsimp
+      infer_instance)
+
+@[simp]
 
 中文:
 实例 是Localization.unop
@@ -144,7 +150,11 @@ instance IsLocalization.unop
     (opOpEquivalence C) (opOpEquivalence D)
     (fun _ _ _ hf => MorphismProperty.le_isoClosure _ _ hf)
     (fun _ _ _ hf => by
-      have := Localizatio
+      have := Localization.inverts L W _ hf
+      dsimp
+      infer_instance)
+
+@[simp]
 
 Depends on / 依赖: CatCommSq, Iso.refl, L.op, L.unop, Localization, Localization.inverts, MorphismProperty, MorphismProperty.le_isoClosure, W.op, W.unop, functor, infer_instance, inverts, le_isoClosure, of_equivalences, opOpEquivalence
 -/

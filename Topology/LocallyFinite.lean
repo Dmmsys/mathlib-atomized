@@ -271,7 +271,11 @@ theorem nhdsWithin_iUnion
   calc
     𝓝[⋃ i, f i] a = 𝓝[⋃ i, f i inter U] a := by
       rw [← iUnion_inter]; rw [← nhdsWithin_inter_of_mem' (nhdsWithin_le_nhds haU)]
-    _ = 𝓝[⋃ i in {j | (f j inter U).Nonempty}, (
+    _ = 𝓝[⋃ i in {j | (f j inter U).Nonempty}, (f i inter U)] a := by
+      simp only [mem_ofPred_eq, iUnion_nonempty_self]
+    _ = ⨆ i in {j | (f j inter U).Nonempty}, 𝓝[f i inter U] a := nhdsWithin_biUnion hfin _ _
+    _ <= ⨆ i, 𝓝[f i inter U] a := iSup₂_le_iSup _ _
+    _ <= ⨆ i, 𝓝[f i] a := iSup_mono fun i => nhdsWithin_mono _ inter_subset_left
 
 中文:
 定理 nhdsWithin_iUnion
@@ -282,7 +286,11 @@ theorem nhdsWithin_iUnion
   calc
     𝓝[⋃ i, f i] a = 𝓝[⋃ i, f i inter U] a := by
       rw [← iUnion_inter]; rw [← nhdsWithin_inter_of_mem' (nhdsWithin_le_nhds haU)]
-    _ = 𝓝[⋃ i in {j | (f j inter U).Nonempty}, (
+    _ = 𝓝[⋃ i in {j | (f j inter U).Nonempty}, (f i inter U)] a := by
+      simp only [mem_ofPred_eq, iUnion_nonempty_self]
+    _ = ⨆ i in {j | (f j inter U).Nonempty}, 𝓝[f i inter U] a := nhdsWithin_biUnion hfin _ _
+    _ <= ⨆ i, 𝓝[f i inter U] a := iSup₂_le_iSup _ _
+    _ <= ⨆ i, 𝓝[f i] a := iSup_mono fun i => nhdsWithin_mono _ inter_subset_left
 -/
 protected theorem nhdsWithin_iUnion (hf : LocallyFinite f) (a : X) :
     𝓝[⋃ i, f i] a = ⨆ i, 𝓝[f i] a := by
@@ -514,7 +522,15 @@ theorem exists_forall_eventually_eq_prod
   choose N hN using fun x => (hU x).bddAbove
   replace hN : forall (x), forall n > N x, forall y in U x, f (n + 1) y = f n y :=
 fun x n hn y hy => by_contra fun hne => hn.lt.not_ge hN x ⟨y, hne, hy⟩
-  replace hN : forall (x), forall n >= N x + 1, forall y in U x, f n y 
+  replace hN : forall (x), forall n >= N x + 1, forall y in U x, f n y = f (N x + 1) y :=
+    fun x n hn y hy => Nat.le_induction rfl (fun k hle => (hN x _ hle _ hy).trans) n hn
+  refine ⟨fun x => f (N x + 1) x, fun x => ?_⟩
+  filter_upwards [Filter.prod_mem_prod (eventually_gt_atTop (N x)) (hUx x)]
+  rintro ⟨n, y⟩ ⟨hn : N x < n, hy : y in U x⟩
+  calc
+    f n y = f (N x + 1) y := hN _ _ hn _ hy
+    _ = f (max (N x + 1) (N y + 1)) y := (hN _ _ (le_max_left _ _) _ hy).symm
+    _ = f (N y + 1) y := hN _ _ (le_max_right _ _) _ (mem_of_mem_nhds <| hUx y)
 
 中文:
 定理 存在_对任意_eventually_eq_prod
@@ -524,7 +540,15 @@ fun x n hn y hy => by_contra fun hne => hn.lt.not_ge hN x ⟨y, hne, hy⟩
   choose N hN using fun x => (hU x).bddAbove
   replace hN : forall (x), forall n > N x, forall y in U x, f (n + 1) y = f n y :=
 fun x n hn y hy => by_contra fun hne => hn.lt.not_ge hN x ⟨y, hne, hy⟩
-  replace hN : forall (x), forall n >= N x + 1, forall y in U x, f n y 
+  replace hN : forall (x), forall n >= N x + 1, forall y in U x, f n y = f (N x + 1) y :=
+    fun x n hn y hy => Nat.le_induction rfl (fun k hle => (hN x _ hle _ hy).trans) n hn
+  refine ⟨fun x => f (N x + 1) x, fun x => ?_⟩
+  filter_upwards [Filter.prod_mem_prod (eventually_gt_atTop (N x)) (hUx x)]
+  rintro ⟨n, y⟩ ⟨hn : N x < n, hy : y in U x⟩
+  calc
+    f n y = f (N x + 1) y := hN _ _ hn _ hy
+    _ = f (max (N x + 1) (N y + 1)) y := (hN _ _ (le_max_left _ _) _ hy).symm
+    _ = f (N y + 1) y := hN _ _ (le_max_right _ _) _ (mem_of_mem_nhds <| hUx y)
 
 Depends on / 依赖: Filter, Filter.prod_mem_prod, Nat.le_induction, bddAbove, eventually_gt_atTop, filter_upwards, hn.lt.not_ge, le_induction, not_ge, prod_mem_prod, replace
 -/

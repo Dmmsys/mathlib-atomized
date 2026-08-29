@@ -215,7 +215,7 @@ lemma IsDynCoverOf.nonempty_inter
   simp only [Finset.coe_filter, Finset.mem_filter, and_imp, imp_self, implies_true, and_true]
   refine ⟨fun y y_F => ?_, Finset.card_mono (Finset.filter_subset _ s)⟩
   obtain ⟨z, z_s, y_Bz⟩ := h y_F
-  exact ⟨z, ⟨z_s, _, (
+  exact ⟨z, ⟨z_s, _, (dynEntourage T U n).symm y_Bz, y_F⟩, y_Bz⟩
 
 中文:
 引理 IsDynCoverOf.nonempty_inter
@@ -226,7 +226,7 @@ lemma IsDynCoverOf.nonempty_inter
   simp only [Finset.coe_filter, Finset.mem_filter, and_imp, imp_self, implies_true, and_true]
   refine ⟨fun y y_F => ?_, Finset.card_mono (Finset.filter_subset _ s)⟩
   obtain ⟨z, z_s, y_Bz⟩ := h y_F
-  exact ⟨z, ⟨z_s, _, (
+  exact ⟨z, ⟨z_s, _, (dynEntourage T U n).symm y_Bz, y_F⟩, y_Bz⟩
 
 Depends on / 依赖: Finset, Finset.card_mono, Finset.coe_filter, Finset.filter_subset, Finset.mem_filter, Nonempty, and_imp, and_true, card_mono, classical, coe_filter, dynEntourage, filter_subset, imp_self, implies_true, mem_filter, y_Bz
 -/
@@ -256,7 +256,60 @@ lemma IsDynCoverOf.iterate_le_pow
   obtain ⟨x, x_F⟩ := F_nemp
   rcases m.eq_zero_or_pos with rfl | m_pos
   · use {x}
-  
+    simp only [zero_mul, Finset.coe_singleton, Finset.card_singleton]
+    exact ⟨isDynCoverOf_zero T F (U ○ U) (singleton_nonempty x),
+      one_le_pow_of_one_le' (Nat.one_le_of_lt (Finset.Nonempty.card_pos s_nemp)) n⟩
+  -- The proof goes as follows. Given an orbit of length `(m * n)` starting from `y`, each of its
+  -- iterates `y`, `T^[m] y`, `T^[m]^[2] y` ... is `(dynEntourage T U m)`-close to a point of `s`.
+  -- Conversely, given a sequence `t 0`, `t 1`, `t 2` of points in `s`, we choose a point
+  -- `z = dyncover t` such that `z`, `T^[m] z`, `T^[m]^[2] z` ... are `(dynEntourage T U m)`-close
+  -- to `t 0`, `t 1`, `t 2`... Then `y`, `T^[m] y`, `T^[m]^[2] y` ... are
+  -- `(dynEntourage T (U ○ U) m)`-close to `z`, `T^[m] z`, `T^[m]^[2] z`, so that the union of such
+  -- `z` provides the desired cover. Since there are at most `s.card ^ n` sequences of
+  -- length `n` with values in `s`, we get the upper bound we want on the cardinality.
+  -- First step: construct `dyncover`. Given `t 0`, `t 1`, `t 2`, if we cannot find such a point
+  -- `dyncover t`, we use the dummy `x`.
+  have (t : Fin n -> s) : exists y : X, (⋂ k : Fin n, T^[m * k] ⁻¹' ball (t k) (dynEntourage T U m)) subseteq
+      ball y (dynEntourage T (U ○ U) (m * n)) := by
+    rcases (⋂ k : Fin n, T^[m * k] ⁻¹' ball (t k) (dynEntourage T U m)).eq_empty_or_nonempty
+      with inter_empt | inter_nemp
+    · exact inter_empt ▸ ⟨x, empty_subset _⟩
+    · obtain ⟨y, y_int⟩ := inter_nemp
+      refine ⟨y, fun z z_int => ?_⟩
+      simp only [ball, dynEntourage, Prod.map_iterate, mem_iInter, Set.mem_preimage, Prod.map_apply,
+        mem_comp] at y_int z_int ⊢
+      intro k k_mn
+      replace k_mn := Nat.div_lt_of_lt_mul k_mn
+      specialize z_int ⟨(k / m), k_mn⟩ (k % m) (Nat.mod_lt k m_pos)
+      specialize y_int ⟨(k / m), k_mn⟩ (k % m) (Nat.mod_lt k m_pos)
+      rw [← Function.iterate_add_apply T (k % m) (m * (k / m))]; rw [Nat.mod_add_div k m] at y_int z_int
+      exact mem_comp_of_mem_ball y_int z_int
+  choose! dyncover h_dyncover using this
+  -- The cover we want is the set of all `dyncover t`, that is, `range dyncover`. We need to check
+  -- that it is indeed a `(U ○ U, m * n)` cover, and that its cardinality is at most `card s ^ n`.
+  -- Only the first point requires significant work.
+  let sn := range dyncover
+  refine ⟨sn.toFinset, ?_, ?_⟩
+  · -- We implement the argument at the beginning: given `y ∈ F`, we extract `t 0`, `t 1`, `t 2`
+    -- such that `y`, `T^[m] y`, `T^[m]^[2] y` ... is `(dynEntourage T U m)`-close to `t 0`, `t 1`,
+    -- `t 2`... Then `dyncover t` is a point of `range dyncover` which satisfies the conclusion
+    -- of the lemma.
+    rw [Finset.coe_nonempty] at s_nemp
+    have _ : Nonempty s := Finset.Nonempty.coe_sort s_nemp
+    intro y y_F
+    have key : forall k : Fin n, exists z : s, y in T^[m * k] ⁻¹' ball z (dynEntourage T U m) := by
+      intro k
+      have := h (MapsTo.iterate F_inv (m * k) y_F)
+      simp only [Finset.mem_coe] at this
+      obtain ⟨z, z_s, hz⟩ := this
+      exact ⟨⟨z, z_s⟩, (dynEntourage T U m).symm hz⟩
+    choose! t ht using key
+    simp only [toFinset_range, Finset.coe_image, Finset.coe_univ, image_univ, mem_range,
+      exists_exists_eq_and, sn]
+refine ⟨t, (dynEntourage T (U ○ U) (m * n)).symm h_dyncover t by simpa using ht⟩
+  · rw [toFinset_card]
+    apply (Fintype.card_range_le dyncover).trans
+    simp only [Fintype.card_fun, Fintype.card_coe, Fintype.card_fin, le_refl]
 
 中文:
 引理 IsDynCoverOf.iterate_le_pow
@@ -271,7 +324,60 @@ lemma IsDynCoverOf.iterate_le_pow
   obtain ⟨x, x_F⟩ := F_nemp
   rcases m.eq_zero_or_pos with rfl | m_pos
   · use {x}
-  
+    simp only [zero_mul, Finset.coe_singleton, Finset.card_singleton]
+    exact ⟨isDynCoverOf_zero T F (U ○ U) (singleton_nonempty x),
+      one_le_pow_of_one_le' (Nat.one_le_of_lt (Finset.Nonempty.card_pos s_nemp)) n⟩
+  -- The proof goes as follows. Given an orbit of length `(m * n)` starting from `y`, each of its
+  -- iterates `y`, `T^[m] y`, `T^[m]^[2] y` ... is `(dynEntourage T U m)`-close to a point of `s`.
+  -- Conversely, given a sequence `t 0`, `t 1`, `t 2` of points in `s`, we choose a point
+  -- `z = dyncover t` such that `z`, `T^[m] z`, `T^[m]^[2] z` ... are `(dynEntourage T U m)`-close
+  -- to `t 0`, `t 1`, `t 2`... Then `y`, `T^[m] y`, `T^[m]^[2] y` ... are
+  -- `(dynEntourage T (U ○ U) m)`-close to `z`, `T^[m] z`, `T^[m]^[2] z`, so that the union of such
+  -- `z` provides the desired cover. Since there are at most `s.card ^ n` sequences of
+  -- length `n` with values in `s`, we get the upper bound we want on the cardinality.
+  -- First step: construct `dyncover`. Given `t 0`, `t 1`, `t 2`, if we cannot find such a point
+  -- `dyncover t`, we use the dummy `x`.
+  have (t : Fin n -> s) : exists y : X, (⋂ k : Fin n, T^[m * k] ⁻¹' ball (t k) (dynEntourage T U m)) subseteq
+      ball y (dynEntourage T (U ○ U) (m * n)) := by
+    rcases (⋂ k : Fin n, T^[m * k] ⁻¹' ball (t k) (dynEntourage T U m)).eq_empty_or_nonempty
+      with inter_empt | inter_nemp
+    · exact inter_empt ▸ ⟨x, empty_subset _⟩
+    · obtain ⟨y, y_int⟩ := inter_nemp
+      refine ⟨y, fun z z_int => ?_⟩
+      simp only [ball, dynEntourage, Prod.map_iterate, mem_iInter, Set.mem_preimage, Prod.map_apply,
+        mem_comp] at y_int z_int ⊢
+      intro k k_mn
+      replace k_mn := Nat.div_lt_of_lt_mul k_mn
+      specialize z_int ⟨(k / m), k_mn⟩ (k % m) (Nat.mod_lt k m_pos)
+      specialize y_int ⟨(k / m), k_mn⟩ (k % m) (Nat.mod_lt k m_pos)
+      rw [← Function.iterate_add_apply T (k % m) (m * (k / m))]; rw [Nat.mod_add_div k m] at y_int z_int
+      exact mem_comp_of_mem_ball y_int z_int
+  choose! dyncover h_dyncover using this
+  -- The cover we want is the set of all `dyncover t`, that is, `range dyncover`. We need to check
+  -- that it is indeed a `(U ○ U, m * n)` cover, and that its cardinality is at most `card s ^ n`.
+  -- Only the first point requires significant work.
+  let sn := range dyncover
+  refine ⟨sn.toFinset, ?_, ?_⟩
+  · -- We implement the argument at the beginning: given `y ∈ F`, we extract `t 0`, `t 1`, `t 2`
+    -- such that `y`, `T^[m] y`, `T^[m]^[2] y` ... is `(dynEntourage T U m)`-close to `t 0`, `t 1`,
+    -- `t 2`... Then `dyncover t` is a point of `range dyncover` which satisfies the conclusion
+    -- of the lemma.
+    rw [Finset.coe_nonempty] at s_nemp
+    have _ : Nonempty s := Finset.Nonempty.coe_sort s_nemp
+    intro y y_F
+    have key : forall k : Fin n, exists z : s, y in T^[m * k] ⁻¹' ball z (dynEntourage T U m) := by
+      intro k
+      have := h (MapsTo.iterate F_inv (m * k) y_F)
+      simp only [Finset.mem_coe] at this
+      obtain ⟨z, z_s, hz⟩ := this
+      exact ⟨⟨z, z_s⟩, (dynEntourage T U m).symm hz⟩
+    choose! t ht using key
+    simp only [toFinset_range, Finset.coe_image, Finset.coe_univ, image_univ, mem_range,
+      exists_exists_eq_and, sn]
+refine ⟨t, (dynEntourage T (U ○ U) (m * n)).symm h_dyncover t by simpa using ht⟩
+  · rw [toFinset_card]
+    apply (Fintype.card_range_le dyncover).trans
+    simp only [Fintype.card_fun, Fintype.card_coe, Fintype.card_fin, le_refl]
 
 Depends on / 依赖: classical
 -/
@@ -353,7 +459,7 @@ lemma exists_isDynCoverOf_of_isCompact_uniformContinuous
   have uni_ite := dynEntourage_mem_uniformity h hV n
   let openCover x := ball x (dynEntourage T V n)
   obtain ⟨s, _, s_cover⟩ := F_comp.elim_nhds_subcover openCover fun x _ => ball_mem_nhds x uni_ite
-exact ⟨s, .of_entourage
+exact ⟨s, .of_entourage_subset hVU .of_subset_iUnion_ball s_cover⟩
 
 中文:
 引理 存在_isDynCoverOf_of_isCompact_uniformContinuous
@@ -363,7 +469,7 @@ exact ⟨s, .of_entourage
   have uni_ite := dynEntourage_mem_uniformity h hV n
   let openCover x := ball x (dynEntourage T V n)
   obtain ⟨s, _, s_cover⟩ := F_comp.elim_nhds_subcover openCover fun x _ => ball_mem_nhds x uni_ite
-exact ⟨s, .of_entourage
+exact ⟨s, .of_entourage_subset hVU .of_subset_iUnion_ball s_cover⟩
 
 Depends on / 依赖: F_comp, F_comp.elim_nhds_subcover, SetRel, U_uni, ball_mem_nhds, dynEntourage, dynEntourage_mem_uniformity, elim_nhds_subcover, hVsymm, of_entourage_subset, of_subset_iUnion_ball, openCover, s_cover, symm_of_uniformity, uni_ite
 -/
@@ -387,7 +493,9 @@ lemma exists_isDynCoverOf_of_isCompact_invariant
   obtain ⟨s, _, s_cover⟩ := F_comp.elim_nhds_subcover (ball · V)
     fun (x : X) _ => ball_mem_nhds x V_uni
 have : IsDynCoverOf T F V 1 s := .of_subset_iUnion_ball by simpa using s_cover
-  obtain ⟨t, t_dyncover
+  obtain ⟨t, t_dyncover, t_card⟩ := this.iterate_le_pow F_inv n
+  rw [one_mul n] at t_dyncover
+  exact ⟨t, t_dyncover.of_entourage_subset V_U⟩
 
 中文:
 引理 存在_isDynCoverOf_of_isCompact_invariant
@@ -397,7 +505,9 @@ have : IsDynCoverOf T F V 1 s := .of_subset_iUnion_ball by simpa using s_cover
   obtain ⟨s, _, s_cover⟩ := F_comp.elim_nhds_subcover (ball · V)
     fun (x : X) _ => ball_mem_nhds x V_uni
 have : IsDynCoverOf T F V 1 s := .of_subset_iUnion_ball by simpa using s_cover
-  obtain ⟨t, t_dyncover
+  obtain ⟨t, t_dyncover, t_card⟩ := this.iterate_le_pow F_inv n
+  rw [one_mul n] at t_dyncover
+  exact ⟨t, t_dyncover.of_entourage_subset V_U⟩
 
 Depends on / 依赖: F_comp, F_comp.elim_nhds_subcover, F_inv, IsDynCoverOf, SetRel, U_uni, V_symm, V_uni, ball_mem_nhds, comp_symm_mem_uniformity_sets, elim_nhds_subcover, iterate_le_pow, of_entourage_subset, of_subset_iUnion_ball, one_mul, s_cover, t_card, t_dyncover, t_dyncover.of_entourage_subset, this.iterate_le_pow
 -/
@@ -500,7 +610,18 @@ lemma coverMincard_finite_iff
   simp only [Nat.cast_inj]
   have : Nonempty {s : Finset X // IsDynCoverOf T F U n s} := by
     by_contra h
-    apply ENat.
+    apply ENat.natCast_ne_top k
+    rw [k_min]; rw [coverMincard]; rw [iInf₂_eq_top]
+    simp only [ENat.natCast_ne_top, imp_false]
+    rw [nonempty_subtype]; rw [not_exists] at h
+    exact h
+  have key := ciInf_mem fun s : {s : Finset X // IsDynCoverOf T F U n s} => (s.val.card : Nat∞)
+  rw [coverMincard]; rw [iInf_subtype'] at k_min
+  rw [← k_min]; rw [mem_range]; rw [Subtype.exists] at key
+  simp only [Nat.cast_inj, exists_prop] at key
+  exact key
+
+@[simp]
 
 中文:
 引理 coverMincard_finite_iff
@@ -512,7 +633,18 @@ lemma coverMincard_finite_iff
   simp only [Nat.cast_inj]
   have : Nonempty {s : Finset X // IsDynCoverOf T F U n s} := by
     by_contra h
-    apply ENat.
+    apply ENat.natCast_ne_top k
+    rw [k_min]; rw [coverMincard]; rw [iInf₂_eq_top]
+    simp only [ENat.natCast_ne_top, imp_false]
+    rw [nonempty_subtype]; rw [not_exists] at h
+    exact h
+  have key := ciInf_mem fun s : {s : Finset X // IsDynCoverOf T F U n s} => (s.val.card : Nat∞)
+  rw [coverMincard]; rw [iInf_subtype'] at k_min
+  rw [← k_min]; rw [mem_range]; rw [Subtype.exists] at key
+  simp only [Nat.cast_inj, exists_prop] at key
+  exact key
+
+@[simp]
 
 Depends on / 依赖: ENat.natCast_ne_top, ENat.ne_top_iff_exists.mp, Finset, IsDynCover, IsDynCoverOf, Nat.cast_inj, Nonempty, WithTop, WithTop.coe_lt_top, cast_inj, ciInf_mem, coe_lt_top, coverMincard, h_fin, h_fin.ne, imp_false, k_min, natCast_ne_top, ne_top_iff_exists, nonempty_subtype
 -/
@@ -691,7 +823,10 @@ lemma coverMincard_mul_le_pow
   · rw [mul_zero, coverMincard_zero T F_nonempty (U ○ U), pow_zero]
   rcases eq_top_or_lt_top (coverMincard T F U m) with h | h
   · simp [*]
-  · obtain ⟨s, s_cover, s_coverMincard⟩ := (coverMincard_fi
+  · obtain ⟨s, s_cover, s_coverMincard⟩ := (coverMincard_finite_iff T F U m).1 h
+    obtain ⟨t, t_cover, t_sn⟩ := s_cover.iterate_le_pow F_inv n
+    rw [← s_coverMincard]
+    exact t_cover.coverMincard_le_card.trans (WithTop.coe_le_coe.2 t_sn)
 
 中文:
 引理 coverMincard_mul_le_pow
@@ -703,7 +838,10 @@ lemma coverMincard_mul_le_pow
   · rw [mul_zero, coverMincard_zero T F_nonempty (U ○ U), pow_zero]
   rcases eq_top_or_lt_top (coverMincard T F U m) with h | h
   · simp [*]
-  · obtain ⟨s, s_cover, s_coverMincard⟩ := (coverMincard_fi
+  · obtain ⟨s, s_cover, s_coverMincard⟩ := (coverMincard_finite_iff T F U m).1 h
+    obtain ⟨t, t_cover, t_sn⟩ := s_cover.iterate_le_pow F_inv n
+    rw [← s_coverMincard]
+    exact t_cover.coverMincard_le_card.trans (WithTop.coe_le_coe.2 t_sn)
 
 Depends on / 依赖: F.eq_empty_or_nonempty, F_inv, F_nonempty, WithTop, WithTop.coe_le_coe, coe_le_coe, coverMincard, coverMincard_finite_iff, coverMincard_le_card, coverMincard_zero, eq_empty_or_nonempty, eq_or_ne, eq_top_or_lt_top, iterate_le_pow, mul_zero, pow_zero, s_cover, s_cover.iterate_le_pow, s_coverMincard, t_cover
 -/
@@ -806,7 +944,15 @@ lemma nonempty_inter_of_coverMincard
     intro y y_F
     specialize h y_F
     simp only [s.mem_coe] at h
-    simp only [s.coe_era
+    simp only [s.coe_erase, mem_sdiff, s.mem_coe, mem_singleton_iff]
+    obtain ⟨z, z_s, hz⟩ := h
+    refine ⟨z, ⟨z_s, fun z_x => notMem_empty y ?_⟩, hz⟩
+    rw [← ball_empt]
+    rw [z_x] at hz
+exact mem_inter y_F (dynEntourage T U n).symm hz
+  apply smaller_cover.coverMincard_le_card.not_gt
+  rw [← h']
+  exact_mod_cast s.card_erase_lt_of_mem x_s
 
 中文:
 引理 nonempty_inter_of_coverMincard
@@ -819,7 +965,15 @@ lemma nonempty_inter_of_coverMincard
     intro y y_F
     specialize h y_F
     simp only [s.mem_coe] at h
-    simp only [s.coe_era
+    simp only [s.coe_erase, mem_sdiff, s.mem_coe, mem_singleton_iff]
+    obtain ⟨z, z_s, hz⟩ := h
+    refine ⟨z, ⟨z_s, fun z_x => notMem_empty y ?_⟩, hz⟩
+    rw [← ball_empt]
+    rw [z_x] at hz
+exact mem_inter y_F (dynEntourage T U n).symm hz
+  apply smaller_cover.coverMincard_le_card.not_gt
+  rw [← h']
+  exact_mod_cast s.card_erase_lt_of_mem x_s
 
 Depends on / 依赖: IsUnit, IsUnit.liftRight, MonoidHom, MonoidHom.coe_mk, MonoidHom.domRestrict_apply, OneHom, OneHom.coe_mk, Units.liftRight, coe_mk, coe_mul, domRestrict_apply, f.map_units, liftRight, map_mul, map_units, mul_inv_left, mul_left_comm, mul_mul_mul_comm, toMonoidHom_apply
 -/
@@ -1107,7 +1261,13 @@ lemma coverEntropyEntourage_le_log_coverMincard_div
   have cv_mono : Monotone fun m => (coverMincard T F (U ○ U) m).toENNReal :=
     fun _ _ k_m => ENat.toENNReal_mono (coverMincard_monotone_time T F (U ○ U) k_m)
   have h := cv_mono.expGrowthSup_comp_mul n_pos
-  rw [mul_comm]; rw [← div_eq_iff (natCast_ne_bot n) (natCast_ne_top n) (Nat.cast_ne_zer
+  rw [mul_comm]; rw [← div_eq_iff (natCast_ne_bot n) (natCast_ne_top n) (Nat.cast_ne_zero.2 n_pos)] at h
+  rw [coverEntropyEntourage]; rw [← h]
+  apply monotone_div_right_of_nonneg n.cast_nonneg'
+  rw [← expGrowthSup_pow]
+  refine expGrowthSup_monotone fun m => ?_
+  rw [← ENat.toENNReal_pow]
+  exact ENat.toENNReal_mono (coverMincard_mul_le_pow F_inv n m)
 
 中文:
 引理 coverEntropyEntourage_le_log_coverMincard_div
@@ -1116,7 +1276,13 @@ lemma coverEntropyEntourage_le_log_coverMincard_div
   have cv_mono : Monotone fun m => (coverMincard T F (U ○ U) m).toENNReal :=
     fun _ _ k_m => ENat.toENNReal_mono (coverMincard_monotone_time T F (U ○ U) k_m)
   have h := cv_mono.expGrowthSup_comp_mul n_pos
-  rw [mul_comm]; rw [← div_eq_iff (natCast_ne_bot n) (natCast_ne_top n) (Nat.cast_ne_zer
+  rw [mul_comm]; rw [← div_eq_iff (natCast_ne_bot n) (natCast_ne_top n) (Nat.cast_ne_zero.2 n_pos)] at h
+  rw [coverEntropyEntourage]; rw [← h]
+  apply monotone_div_right_of_nonneg n.cast_nonneg'
+  rw [← expGrowthSup_pow]
+  refine expGrowthSup_monotone fun m => ?_
+  rw [← ENat.toENNReal_pow]
+  exact ENat.toENNReal_mono (coverMincard_mul_le_pow F_inv n m)
 
 Depends on / 依赖: ENat.toEN, ENat.toENNReal_mono, ENat.toENNReal_pow, Monotone, Nat.cast_ne_zero, cast_ne_zero, cast_nonneg, coverEntropyEntourage, coverMincard, coverMincard_monotone_time, cv_mono, cv_mono.expGrowthSup_comp_mul, div_eq_iff, expGrowthSup_comp_mul, expGrowthSup_monotone, expGrowthSup_pow, monotone_div_right_of_nonneg, mul_comm, n.cast_nonneg, n_pos
 -/
@@ -1196,7 +1362,9 @@ lemma coverEntropyEntourage_finite_of_isCompact_invariant
   obtain ⟨V, V_uni, V_symm, V_U⟩ := comp_symm_mem_uniformity_sets U_uni
   obtain ⟨s, s_cover⟩ := exists_isDynCoverOf_of_isCompact_invariant F_comp F_inv V_uni 1
   apply (coverEntropyEntourage_antitone T F V_U).trans_lt
-  apply (s_cover.coverEntropyEntourage_le_log_card_div F_inv one_ne_zero).tran
+  apply (s_cover.coverEntropyEntourage_le_log_card_div F_inv one_ne_zero).trans_lt
+  rw [Nat.cast_one]; rw [div_one]; rw [log_lt_top_iff]; rw [← ENat.toENNReal_top]
+  exact_mod_cast (ENat.natCast_ne_top (Finset.card s)).lt_top
 
 中文:
 引理 coverEntropyEntourage_finite_of_isCompact_invariant
@@ -1205,7 +1373,9 @@ lemma coverEntropyEntourage_finite_of_isCompact_invariant
   obtain ⟨V, V_uni, V_symm, V_U⟩ := comp_symm_mem_uniformity_sets U_uni
   obtain ⟨s, s_cover⟩ := exists_isDynCoverOf_of_isCompact_invariant F_comp F_inv V_uni 1
   apply (coverEntropyEntourage_antitone T F V_U).trans_lt
-  apply (s_cover.coverEntropyEntourage_le_log_card_div F_inv one_ne_zero).tran
+  apply (s_cover.coverEntropyEntourage_le_log_card_div F_inv one_ne_zero).trans_lt
+  rw [Nat.cast_one]; rw [div_one]; rw [log_lt_top_iff]; rw [← ENat.toENNReal_top]
+  exact_mod_cast (ENat.natCast_ne_top (Finset.card s)).lt_top
 
 Depends on / 依赖: ENat.natCast_ne_top, ENat.toENNReal_top, F_comp, F_inv, Finset, Finset.card, Nat.cast_one, Submonoid, Submonoid.coe_mul, U_uni, V_symm, V_uni, _eq_of_eq, cast_one, coe_mul, comp_symm_mem_uniformity_sets, coverEntropyEntourage_antitone, coverEntropyEntourage_le_log_card_div, div_one, exists_isDynCoverOf_of_isCompact_invariant
 -/
@@ -1348,7 +1518,7 @@ lemma coverEntropy_eq_iSup_basis
     (iSup₂_mono' fun i h_i => ⟨s i, HasBasis.mem_of_mem h h_i, le_refl _⟩)
   obtain ⟨i, h_i, si_U⟩ := (HasBasis.mem_iff h).1 U_uni
   exact (coverEntropyEntourage_antitone T F si_U).trans
-    (le_iSup₂ (f := fun (i : ι) (_ : p i) => coverEntropyEntour
+    (le_iSup₂ (f := fun (i : ι) (_ : p i) => coverEntropyEntourage T F (s i)) i h_i)
 
 中文:
 引理 coverEntropy_eq_iSup_basis
@@ -1358,7 +1528,7 @@ lemma coverEntropy_eq_iSup_basis
     (iSup₂_mono' fun i h_i => ⟨s i, HasBasis.mem_of_mem h h_i, le_refl _⟩)
   obtain ⟨i, h_i, si_U⟩ := (HasBasis.mem_iff h).1 U_uni
   exact (coverEntropyEntourage_antitone T F si_U).trans
-    (le_iSup₂ (f := fun (i : ι) (_ : p i) => coverEntropyEntour
+    (le_iSup₂ (f := fun (i : ι) (_ : p i) => coverEntropyEntourage T F (s i)) i h_i)
 
 Depends on / 依赖: HasBasis, HasBasis.mem_iff, HasBasis.mem_of_mem, U_uni, _one_eq_mk, _self, antisymm, coverEntropyEntourage, coverEntropyEntourage_antitone, le_refl, map_mul, mem_iff, mem_of_mem, mul_assoc, mul_mk, mul_one, si_U
 -/
@@ -1382,7 +1552,7 @@ lemma coverEntropyInf_eq_iSup_basis
     (iSup₂_mono' fun i h_i => ⟨s i, HasBasis.mem_of_mem h h_i, le_refl _⟩)
   obtain ⟨i, h_i, si_U⟩ := (HasBasis.mem_iff h).1 U_uni
   exact (coverEntropyInfEntourage_antitone T F si_U).trans
-    (le_iSup₂ (f := fun (i : ι) (_ : p i) => coverEntropyInf
+    (le_iSup₂ (f := fun (i : ι) (_ : p i) => coverEntropyInfEntourage T F (s i)) i h_i)
 
 中文:
 引理 coverEntropyInf_eq_iSup_basis
@@ -1392,7 +1562,7 @@ lemma coverEntropyInf_eq_iSup_basis
     (iSup₂_mono' fun i h_i => ⟨s i, HasBasis.mem_of_mem h h_i, le_refl _⟩)
   obtain ⟨i, h_i, si_U⟩ := (HasBasis.mem_iff h).1 U_uni
   exact (coverEntropyInfEntourage_antitone T F si_U).trans
-    (le_iSup₂ (f := fun (i : ι) (_ : p i) => coverEntropyInf
+    (le_iSup₂ (f := fun (i : ι) (_ : p i) => coverEntropyInfEntourage T F (s i)) i h_i)
 
 Depends on / 依赖: HasBasis, HasBasis.mem_iff, HasBasis.mem_of_mem, U_uni, _mul_cancel_right, antisymm, coverEntropyInfEntourage, coverEntropyInfEntourage_antitone, le_refl, mem_iff, mem_of_mem, mul_comm, si_U
 -/

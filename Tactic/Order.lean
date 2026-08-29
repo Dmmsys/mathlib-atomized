@@ -169,7 +169,16 @@ definition findContradictionWithNe
     -- It is possible that `lhs` or `rhs` is not in the `≤`-graph if there were no `≤`-facts
     -- involving them. In this case we can use this fact only if `lhs = rhs`
     if lhs == rhs then
-return
+return some mkApp neProof (← mkEqRefl (← get).atoms[lhs]!)
+    if !scc.contains lhs || !scc.contains rhs || scc[lhs]! != scc[rhs]! then
+      continue
+    let some pf1 ← graph.buildTransitiveLeProof lhs rhs
+      | panic! "Cannot find path in strongly connected component"
+    let some pf2 ← graph.buildTransitiveLeProof rhs lhs
+      | panic! "Cannot find path in strongly connected component"
+    let pf3 ← mkAppM ``le_antisymm #[pf1, pf2]
+return some mkApp neProof pf3
+  return none
 
 中文:
 定义 findContradictionWithNe
@@ -181,7 +190,16 @@ return
     -- It is possible that `lhs` or `rhs` is not in the `≤`-graph if there were no `≤`-facts
     -- involving them. In this case we can use this fact only if `lhs = rhs`
     if lhs == rhs then
-return
+return some mkApp neProof (← mkEqRefl (← get).atoms[lhs]!)
+    if !scc.contains lhs || !scc.contains rhs || scc[lhs]! != scc[rhs]! then
+      continue
+    let some pf1 ← graph.buildTransitiveLeProof lhs rhs
+      | panic! "Cannot find path in strongly connected component"
+    let some pf2 ← graph.buildTransitiveLeProof rhs lhs
+      | panic! "Cannot find path in strongly connected component"
+    let pf3 ← mkAppM ``le_antisymm #[pf1, pf2]
+return some mkApp neProof pf3
+  return none
 -/
 def findContradictionWithNe (graph : Graph) (facts : Array AtomicFact) : AtomM (Option Expr) := do
   let scc := graph.findSCCs
@@ -243,7 +261,37 @@ definition updateGraphWithNltInfSup
   let mut usedNltFacts : Vector Bool _ := .replicate nltFacts.size false
   let infSupFacts := facts.filter fun fact => fact matches .isInf .. | .isSup ..
   let mut g := g
-  let vertices : Std.HashSet Nat := g.fold (init := ∅) fun acc
+  let vertices : Std.HashSet Nat := g.fold (init := ∅) fun acc v edges =>
+(acc.insert v).insertMany edges.map (fun e => e.dst)
+  repeat do
+    let mut changed : Bool := false
+    for h : i in [:nltFacts.size] do
+      if usedNltFacts[i] then
+        continue
+      let .nlt lhs rhs proof := nltFacts[i] | panic! "Non-nlt fact in nltFacts."
+      let some pf ← g.buildTransitiveLeProof lhs rhs | continue
+      g := g.addEdge ⟨rhs, lhs, ← mkAppM ``le_of_not_lt_le #[proof, pf]⟩
+      changed := true
+      usedNltFacts := usedNltFacts.set i true
+    for fact in infSupFacts do
+      for idx in vertices do
+        match fact with
+        | .isSup lhs rhs sup =>
+          let some pf1 ← g.buildTransitiveLeProof lhs idx | continue
+          let some pf2 ← g.buildTransitiveLeProof rhs idx | continue
+          if (← g.buildTransitiveLeProof sup idx).isNone then
+            g := g.addEdge ⟨sup, idx, ← mkAppM ``sup_le #[pf1, pf2]⟩
+            changed := true
+        | .isInf lhs rhs inf =>
+          let some pf1 ← g.buildTransitiveLeProof idx lhs | continue
+          let some pf2 ← g.buildTransitiveLeProof idx rhs | continue
+          if (← g.buildTransitiveLeProof idx inf).isNone then
+            g := g.addEdge ⟨idx, inf, ← mkAppM ``le_inf #[pf1, pf2]⟩
+            changed := true
+        | _ => panic! "Non-isInf or isSup fact in infSupFacts."
+    if !changed then
+      break
+  return g
 
 中文:
 定义 updateGraphWithNltInfSup
@@ -253,7 +301,37 @@ definition updateGraphWithNltInfSup
   let mut usedNltFacts : Vector Bool _ := .replicate nltFacts.size false
   let infSupFacts := facts.filter fun fact => fact matches .isInf .. | .isSup ..
   let mut g := g
-  let vertices : Std.HashSet Nat := g.fold (init := ∅) fun acc
+  let vertices : Std.HashSet Nat := g.fold (init := ∅) fun acc v edges =>
+(acc.insert v).insertMany edges.map (fun e => e.dst)
+  repeat do
+    let mut changed : Bool := false
+    for h : i in [:nltFacts.size] do
+      if usedNltFacts[i] then
+        continue
+      let .nlt lhs rhs proof := nltFacts[i] | panic! "Non-nlt fact in nltFacts."
+      let some pf ← g.buildTransitiveLeProof lhs rhs | continue
+      g := g.addEdge ⟨rhs, lhs, ← mkAppM ``le_of_not_lt_le #[proof, pf]⟩
+      changed := true
+      usedNltFacts := usedNltFacts.set i true
+    for fact in infSupFacts do
+      for idx in vertices do
+        match fact with
+        | .isSup lhs rhs sup =>
+          let some pf1 ← g.buildTransitiveLeProof lhs idx | continue
+          let some pf2 ← g.buildTransitiveLeProof rhs idx | continue
+          if (← g.buildTransitiveLeProof sup idx).isNone then
+            g := g.addEdge ⟨sup, idx, ← mkAppM ``sup_le #[pf1, pf2]⟩
+            changed := true
+        | .isInf lhs rhs inf =>
+          let some pf1 ← g.buildTransitiveLeProof idx lhs | continue
+          let some pf2 ← g.buildTransitiveLeProof idx rhs | continue
+          if (← g.buildTransitiveLeProof idx inf).isNone then
+            g := g.addEdge ⟨idx, inf, ← mkAppM ``le_inf #[pf1, pf2]⟩
+            changed := true
+        | _ => panic! "Non-isInf or isSup fact in infSupFacts."
+    if !changed then
+      break
+  return g
 -/
 def updateGraphWithNltInfSup (g : Graph)
     (facts : Array AtomicFact) : AtomM Graph := do
@@ -310,7 +388,47 @@ let atomsMsg := String.intercalate "\n" Array.toList
       ← (← get).atoms.mapIdxM
         fun idx atom => do return s!"#{idx} := {← ppExpr atom}"
     trace[order] "Collected atoms:\n{atomsMsg}"
-    for (type, facts) in Type
+    for (type, facts) in TypeToFacts do
+      let some orderType ← findBestOrderInstance type | continue
+      trace[order] "Working on type {← ppExpr type} ({orderType})"
+      let factsMsg := String.intercalate "\n" (facts.map toString).toList
+      trace[order] "Collected facts:\n{factsMsg}"
+      let facts ← replaceBotTop facts
+      let processedFacts : Array AtomicFact ← preprocessFacts facts orderType
+      let factsMsg := String.intercalate "\n" (processedFacts.map toString).toList
+      trace[order] "Processed facts:\n{factsMsg}"
+      let mut graph ← Graph.constructLeGraph processedFacts
+      graph ← updateGraphWithNltInfSup graph processedFacts
+      if orderType == .pre then
+        let some pf ← findContradictionWithNle graph processedFacts | continue
+        g.assign pf
+        return
+      if let some pf ← findContradictionWithNe graph processedFacts then
+        g.assign pf
+        return
+      -- if fast procedure failed and order is linear, we try `omega`
+      if orderType == .lin then
+        let ⟨u, type⟩ ← getLevelQ' type
+        let instLinearOrder ← synthInstanceQ q(LinearOrder $type)
+        -- Here we only need to translate the hypotheses,
+        -- since the goal will remain to derive `False`.
+        let (_, factsNat) ← translateToInt type instLinearOrder facts
+        let factsExpr : Array Expr := factsNat.filterMap fun factNat =>
+          match factNat with
+          | .eq _ _ proof => some proof
+          | .ne _ _ proof => some proof
+          | .le _ _ proof => some proof
+          | .nle _ _ proof => some proof
+          | .lt _ _ proof => some proof
+          | .nlt _ _ proof => some proof
+          | _ => none
+        try
+          Omega.omega factsExpr.toList g
+          return
+        catch _ => pure ()
+    throwError ("No contradiction found.\n\n" ++
+      "Additional diagnostic information may be available using " ++
+      "the `set_option trace.order true` command.")
 
 中文:
 定义 orderCoreImp
@@ -322,7 +440,47 @@ let atomsMsg := String.intercalate "\n" Array.toList
       ← (← get).atoms.mapIdxM
         fun idx atom => do return s!"#{idx} := {← ppExpr atom}"
     trace[order] "Collected atoms:\n{atomsMsg}"
-    for (type, facts) in Type
+    for (type, facts) in TypeToFacts do
+      let some orderType ← findBestOrderInstance type | continue
+      trace[order] "Working on type {← ppExpr type} ({orderType})"
+      let factsMsg := String.intercalate "\n" (facts.map toString).toList
+      trace[order] "Collected facts:\n{factsMsg}"
+      let facts ← replaceBotTop facts
+      let processedFacts : Array AtomicFact ← preprocessFacts facts orderType
+      let factsMsg := String.intercalate "\n" (processedFacts.map toString).toList
+      trace[order] "Processed facts:\n{factsMsg}"
+      let mut graph ← Graph.constructLeGraph processedFacts
+      graph ← updateGraphWithNltInfSup graph processedFacts
+      if orderType == .pre then
+        let some pf ← findContradictionWithNle graph processedFacts | continue
+        g.assign pf
+        return
+      if let some pf ← findContradictionWithNe graph processedFacts then
+        g.assign pf
+        return
+      -- if fast procedure failed and order is linear, we try `omega`
+      if orderType == .lin then
+        let ⟨u, type⟩ ← getLevelQ' type
+        let instLinearOrder ← synthInstanceQ q(LinearOrder $type)
+        -- Here we only need to translate the hypotheses,
+        -- since the goal will remain to derive `False`.
+        let (_, factsNat) ← translateToInt type instLinearOrder facts
+        let factsExpr : Array Expr := factsNat.filterMap fun factNat =>
+          match factNat with
+          | .eq _ _ proof => some proof
+          | .ne _ _ proof => some proof
+          | .le _ _ proof => some proof
+          | .nle _ _ proof => some proof
+          | .lt _ _ proof => some proof
+          | .nlt _ _ proof => some proof
+          | _ => none
+        try
+          Omega.omega factsExpr.toList g
+          return
+        catch _ => pure ()
+    throwError ("No contradiction found.\n\n" ++
+      "Additional diagnostic information may be available using " ++
+      "the `set_option trace.order true` command.")
 -/
 def orderCoreImp (only? : Bool) (hyps : Array Expr) (negGoal : Expr) (g : MVarId) : AtomM Unit := do
   g.withContext do

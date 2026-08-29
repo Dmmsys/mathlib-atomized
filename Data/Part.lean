@@ -2277,7 +2277,17 @@ instance :
   map_const := by simp [Functor.mapConst, Functor.map]
   --Porting TODO : In Lean3 these were automatic by a tactic
   seqLeft_eq x y := ext'
-    (by simp [SeqLeft.seqLeft, Part.bind, assert, Seq.seq
+    (by simp [SeqLeft.seqLeft, Part.bind, assert, Seq.seq, (· <$> ·), and_comm])
+    (fun _ _ => rfl)
+  seqRight_eq x y := ext'
+    (by simp [SeqRight.seqRight, Part.bind, assert, Seq.seq, (· <$> ·)])
+    (fun _ _ => rfl)
+  pure_seq x y := ext'
+    (by simp [Seq.seq, Part.bind, assert, (· <$> ·), pure])
+    (fun _ _ => rfl)
+  bind_map x y := ext'
+    (by simp [(· >>= ·), Part.bind, assert, Seq.seq, (· <$> ·)])
+    (fun _ _ => rfl)
 
 中文:
 实例 :
@@ -2289,7 +2299,17 @@ instance :
   map_const := by simp [Functor.mapConst, Functor.map]
   --Porting TODO : In Lean3 these were automatic by a tactic
   seqLeft_eq x y := ext'
-    (by simp [SeqLeft.seqLeft, Part.bind, assert, Seq.seq
+    (by simp [SeqLeft.seqLeft, Part.bind, assert, Seq.seq, (· <$> ·), and_comm])
+    (fun _ _ => rfl)
+  seqRight_eq x y := ext'
+    (by simp [SeqRight.seqRight, Part.bind, assert, Seq.seq, (· <$> ·)])
+    (fun _ _ => rfl)
+  pure_seq x y := ext'
+    (by simp [Seq.seq, Part.bind, assert, (· <$> ·), pure])
+    (fun _ _ => rfl)
+  bind_map x y := ext'
+    (by simp [(· >>= ·), Part.bind, assert, Seq.seq, (· <$> ·)])
+    (fun _ _ => rfl)
 
 Depends on / 依赖: Algebra, Algebra.smul_def, RatFunc, RatFunc.induction_on, bind_some_eq_map, induction_on, simp_rw, smul_assoc, smul_def, smul_right_inj
 -/

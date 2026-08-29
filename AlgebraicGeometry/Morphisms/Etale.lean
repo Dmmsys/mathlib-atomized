@@ -189,7 +189,7 @@ lemma eq_smoothOfRelativeDimension_zero
     ext; apply RingHom.etale_iff_isStandardSmoothOfRelativeDimension_zero
   rw [← this]; rw [RingHom.locally_iff_of_localizationSpanTarget]
   · exact RingHom.Etale.respectsIso
-  
+  · exact RingHom.Etale.ofLocalizationSpanTarget
 
 中文:
 引理 eq_smoothOfRelativeDimension_zero
@@ -201,7 +201,7 @@ lemma eq_smoothOfRelativeDimension_zero
     ext; apply RingHom.etale_iff_isStandardSmoothOfRelativeDimension_zero
   rw [← this]; rw [RingHom.locally_iff_of_localizationSpanTarget]
   · exact RingHom.Etale.respectsIso
-  
+  · exact RingHom.Etale.ofLocalizationSpanTarget
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.ext, IsStandardSmoothOfRelativeDimension, RingHom, RingHom.Etale, RingHom.Etale.ofLocalizationSpanTarget, RingHom.Etale.respectsIso, RingHom.IsStandardSmoothOfRelativeDimension, RingHom.etale_iff_isStandardSmoothOfRelativeDimension_zero, RingHom.locally_iff_of_localizationSpanTarget, etale_iff_isStandardSmoothOfRelativeDimension_zero, introv, locally_iff_of_localizationSpanTarget, ofLocalizationSpanTarget, respectsIso
 -/

@@ -100,7 +100,8 @@ theorem completeOrthogonalIdempotents_idempotent
   complete := by
     apply (decompose V).injective
     refine DFunLike.ext _ _ fun i => ?_
-    rw [
+    rw [decompose_sum]; rw [DFinsupp.finsetSum_apply]
+    simp [idempotent, of_apply]
 
 中文:
 定理 completeOrthogonalIdempotents_idempotent
@@ -112,7 +113,8 @@ theorem completeOrthogonalIdempotents_idempotent
   complete := by
     apply (decompose V).injective
     refine DFunLike.ext _ _ fun i => ?_
-    rw [
+    rw [decompose_sum]; rw [DFinsupp.finsetSum_apply]
+    simp [idempotent, of_apply]
 
 Depends on / 依赖: isIdempotentElem_idempotent
 -/

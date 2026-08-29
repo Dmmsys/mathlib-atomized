@@ -49,7 +49,19 @@ lemma apply_eq_of_mem_of_comm_of_isFinitelySemisimple_of_isNil
   set p := f.genEigenspace μ l
   have h₁ : MapsTo g p p := mapsTo_genEigenspace_of_comm hfg μ l
   have h₂ : MapsTo (g - algebraMap R (End R M) μ) p p :=
-    mapsTo_genEigenspace_of_comm (hfg.sub_righ
+    mapsTo_genEigenspace_of_comm (hfg.sub_right <| Algebra.commute_algebraMap_right μ f) μ l
+  have h₃ : MapsTo (f - g) p p :=
+    mapsTo_genEigenspace_of_comm (Commute.sub_right rfl hfg) μ l
+  have h₄ : MapsTo (f - algebraMap R (End R M) μ) p p :=
+    mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f μ) μ l
+  replace hfg : Commute (f - algebraMap R (End R M) μ) (f - g) :=
+(Commute.sub_right rfl hfg).sub_left Algebra.commute_algebraMap_left μ (f - g)
+  suffices IsNilpotent ((g - algebraMap R (End R M) μ).restrict h₂) by
+    replace this : g.restrict h₁ - algebraMap R (End R p) μ = 0 :=
+      eq_zero_of_isNilpotent_of_isFinitelySemisimple this (by simpa using hss.restrict _)
+    simpa [LinearMap.restrict_apply, sub_eq_zero] using LinearMap.congr_fun this ⟨m, hm⟩
+  simpa [LinearMap.restrict_sub h₄ h₃] using (LinearMap.restrict_commute hfg h₄ h₃).isNilpotent_sub
+    (f.isNilpotent_restrict_sub_algebraMap μ l) (Module.End.isNilpotent.restrict h₃ hnil)
 
 中文:
 引理 apply_eq_of_mem_of_comm_of_isFinitelySemisimple_of_isNil
@@ -60,7 +72,19 @@ lemma apply_eq_of_mem_of_comm_of_isFinitelySemisimple_of_isNil
   set p := f.genEigenspace μ l
   have h₁ : MapsTo g p p := mapsTo_genEigenspace_of_comm hfg μ l
   have h₂ : MapsTo (g - algebraMap R (End R M) μ) p p :=
-    mapsTo_genEigenspace_of_comm (hfg.sub_righ
+    mapsTo_genEigenspace_of_comm (hfg.sub_right <| Algebra.commute_algebraMap_right μ f) μ l
+  have h₃ : MapsTo (f - g) p p :=
+    mapsTo_genEigenspace_of_comm (Commute.sub_right rfl hfg) μ l
+  have h₄ : MapsTo (f - algebraMap R (End R M) μ) p p :=
+    mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f μ) μ l
+  replace hfg : Commute (f - algebraMap R (End R M) μ) (f - g) :=
+(Commute.sub_right rfl hfg).sub_left Algebra.commute_algebraMap_left μ (f - g)
+  suffices IsNilpotent ((g - algebraMap R (End R M) μ).restrict h₂) by
+    replace this : g.restrict h₁ - algebraMap R (End R p) μ = 0 :=
+      eq_zero_of_isNilpotent_of_isFinitelySemisimple this (by simpa using hss.restrict _)
+    simpa [LinearMap.restrict_apply, sub_eq_zero] using LinearMap.congr_fun this ⟨m, hm⟩
+  simpa [LinearMap.restrict_sub h₄ h₃] using (LinearMap.restrict_commute hfg h₄ h₃).isNilpotent_sub
+    (f.isNilpotent_restrict_sub_algebraMap μ l) (Module.End.isNilpotent.restrict h₃ hnil)
 
 Depends on / 依赖: Algebra, Algebra.commute_algebraMap_right, Commute, Commute.sub_right, MapsTo, algebraMap, commute_algebraMap_right, f.genEigenspace, f.mem_genEigenspace, f.mem_genEigenspace_nat, genEigenspace, hfg.sub_right, mapsTo_genEigenspace_, mapsTo_genEigenspace_of_comm, mem_genEigenspace, mem_genEigenspace_nat, sub_right
 -/
@@ -218,7 +242,13 @@ lemma IsSemisimple.eq_zero_iff_forall_eigenvalue
     rw [mem_eigenspace_iff] at hx
     exact hx_ne ((smul_eq_zero.mp hx.symm).resolve_left hμ0)
   · intro h
-    suffices f.eigenspace 0 = ⊤ by rwa [eigenspace_zero, LinearMap.ker_eq_top]
+    suffices f.eigenspace 0 = ⊤ by rwa [eigenspace_zero, LinearMap.ker_eq_top] at this
+    rw [← hf.iSup_eigenspace_eq_top]
+    refine le_antisymm (le_iSup _ 0) (iSup_le fun μ => ?_)
+    rcases eq_or_ne μ 0 with rfl | hμ
+    · exact le_refl _
+    · have : f.eigenspace μ = ⊥ := not_not.mp (hasEigenvalue_iff.not.mp fun he => hμ (h μ he))
+      simp [this]
 
 中文:
 引理 是半单.eq_zero_iff_对任意_eigenvalue
@@ -231,7 +261,13 @@ lemma IsSemisimple.eq_zero_iff_forall_eigenvalue
     rw [mem_eigenspace_iff] at hx
     exact hx_ne ((smul_eq_zero.mp hx.symm).resolve_left hμ0)
   · intro h
-    suffices f.eigenspace 0 = ⊤ by rwa [eigenspace_zero, LinearMap.ker_eq_top]
+    suffices f.eigenspace 0 = ⊤ by rwa [eigenspace_zero, LinearMap.ker_eq_top] at this
+    rw [← hf.iSup_eigenspace_eq_top]
+    refine le_antisymm (le_iSup _ 0) (iSup_le fun μ => ?_)
+    rcases eq_or_ne μ 0 with rfl | hμ
+    · exact le_refl _
+    · have : f.eigenspace μ = ⊥ := not_not.mp (hasEigenvalue_iff.not.mp fun he => hμ (h μ he))
+      simp [this]
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_top, Submodule, Submodule.ne_bot_iff, eigenspace, eigenspace_zero, eq_or_ne, f.eigenspace, hasEigenvalue_iff, hasEigenvalue_iff.not.mp, hf.iSup_eigenspace_eq_top, hx.symm, hx_ne, iSup_eigenspace_eq_top, iSup_le, ker_eq_top, le_antisymm, le_iSup, le_refl, mem_eigenspace_iff
 -/

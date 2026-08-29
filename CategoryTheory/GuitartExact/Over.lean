@@ -69,7 +69,18 @@ instance [forall
     let P : (TwoSquare.overPost F X).StructuredArrowRightwards g :=
       TwoSquare.StructuredArrowRightwards.mk _ _ (Over.mk (Y := X ⨯ Z) prod.fst)
         (Over.homMk (prod.lift (show W.left ⟶ F.obj X from W.hom) g ≫ inv (prodComparison F X Z))
-            (by simp [inv_prodComparison_map_fst])
+            (by simp [inv_prodComparison_map_fst])) prod.snd
+            (by simp [inv_prodComparison_map_snd])
+    have := Nonempty.intro P
+    let φ (Q) : Q ⟶ P := StructuredArrow.homMk (CostructuredArrow.homMk
+      (Over.homMk (prod.lift Q.right.left.hom Q.right.hom))) (by
+        ext
+        dsimp
+        rw [← cancel_mono (prodComparison F X _)]
+        ext
+        · simpa [← Functor.map_comp, P] using Over.w Q.hom.left
+        · simpa [← Functor.map_comp, P] using CostructuredArrow.w Q.hom)
+    exact zigzag_isConnected (fun Q₁ Q₂ => (Zigzag.of_hom (φ Q₁)).trans (Zigzag.of_inv (φ Q₂)))
 
 中文:
 实例 [对任意
@@ -78,7 +89,18 @@ instance [forall
     let P : (TwoSquare.overPost F X).StructuredArrowRightwards g :=
       TwoSquare.StructuredArrowRightwards.mk _ _ (Over.mk (Y := X ⨯ Z) prod.fst)
         (Over.homMk (prod.lift (show W.left ⟶ F.obj X from W.hom) g ≫ inv (prodComparison F X Z))
-            (by simp [inv_prodComparison_map_fst])
+            (by simp [inv_prodComparison_map_fst])) prod.snd
+            (by simp [inv_prodComparison_map_snd])
+    have := Nonempty.intro P
+    let φ (Q) : Q ⟶ P := StructuredArrow.homMk (CostructuredArrow.homMk
+      (Over.homMk (prod.lift Q.right.left.hom Q.right.hom))) (by
+        ext
+        dsimp
+        rw [← cancel_mono (prodComparison F X _)]
+        ext
+        · simpa [← Functor.map_comp, P] using Over.w Q.hom.left
+        · simpa [← Functor.map_comp, P] using CostructuredArrow.w Q.hom)
+    exact zigzag_isConnected (fun Q₁ Q₂ => (Zigzag.of_hom (φ Q₁)).trans (Zigzag.of_inv (φ Q₂)))
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, F.obj, Nonempty, Nonempty.intro, Over.homMk, Over.mk, Q.right.hom, Q.right.left.hom, StructuredArrow, StructuredArrow.homMk, StructuredArrowRightwards, TwoSquare, TwoSquare.StructuredArrowRightwards.mk, TwoSquare.overPost, W.hom, W.left, cancel_mono, inv_prodComparison_map_fst, inv_prodComparison_map_snd
 -/

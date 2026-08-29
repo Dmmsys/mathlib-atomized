@@ -250,7 +250,28 @@ definition isPointwiseLeftKanExtensionAtOfIsoOfIsLocalization
     refine Localization.induction_costructuredArrow L W _ (by simp)
       (fun X₁ X₂ f φ hφ => ?_) (fun X₁ X₂ w hw φ hφ => ?_) j
     · have eq := s.ι.naturality
-        (CostructuredArrow.homMk f : CostructuredArrow.mk (L.map
+        (CostructuredArrow.homMk f : CostructuredArrow.mk (L.map f ≫ φ) ⟶ CostructuredArrow.mk φ)
+      dsimp at eq hφ ⊢
+      rw [comp_id] at eq
+      rw [assoc] at hφ
+      rw [assoc]; rw [map_comp_assoc]; rw [← eq]; rw [← hφ]; rw [NatTrans.naturality_assoc]; rw [comp_map]
+    · have : IsIso (F.map w) := by
+        have := Localization.inverts L W w hw
+        rw [← NatIso.naturality_2 e w]
+        dsimp
+        infer_instance
+      have eq := s.ι.naturality
+        (CostructuredArrow.homMk w : CostructuredArrow.mk φ ⟶ CostructuredArrow.mk
+          ((Localization.isoOfHom L W w hw).inv ≫ φ))
+      dsimp at eq hφ ⊢
+      rw [comp_id] at eq
+      rw [assoc] at hφ
+      rw [map_comp]; rw [assoc]; rw [assoc]; rw [← cancel_epi (F.map w)]; rw [eq]; rw [← hφ]; rw [NatTrans.naturality_assoc]; rw [comp_map]; rw [← G.map_comp_assoc]
+      simp
+  uniq s m hm := by
+    have := hm (CostructuredArrow.mk (𝟙 (L.obj Y)))
+    dsimp at this m hm ⊢
+    simp only [← this, map_id, comp_id, Iso.inv_hom_id_app_assoc]
 
 中文:
 定义 isPointwiseLeftKanExtensionAtOfIsoOfIsLocalization
@@ -259,7 +280,28 @@ definition isPointwiseLeftKanExtensionAtOfIsoOfIsLocalization
     refine Localization.induction_costructuredArrow L W _ (by simp)
       (fun X₁ X₂ f φ hφ => ?_) (fun X₁ X₂ w hw φ hφ => ?_) j
     · have eq := s.ι.naturality
-        (CostructuredArrow.homMk f : CostructuredArrow.mk (L.map
+        (CostructuredArrow.homMk f : CostructuredArrow.mk (L.map f ≫ φ) ⟶ CostructuredArrow.mk φ)
+      dsimp at eq hφ ⊢
+      rw [comp_id] at eq
+      rw [assoc] at hφ
+      rw [assoc]; rw [map_comp_assoc]; rw [← eq]; rw [← hφ]; rw [NatTrans.naturality_assoc]; rw [comp_map]
+    · have : IsIso (F.map w) := by
+        have := Localization.inverts L W w hw
+        rw [← NatIso.naturality_2 e w]
+        dsimp
+        infer_instance
+      have eq := s.ι.naturality
+        (CostructuredArrow.homMk w : CostructuredArrow.mk φ ⟶ CostructuredArrow.mk
+          ((Localization.isoOfHom L W w hw).inv ≫ φ))
+      dsimp at eq hφ ⊢
+      rw [comp_id] at eq
+      rw [assoc] at hφ
+      rw [map_comp]; rw [assoc]; rw [assoc]; rw [← cancel_epi (F.map w)]; rw [eq]; rw [← hφ]; rw [NatTrans.naturality_assoc]; rw [comp_map]; rw [← G.map_comp_assoc]
+      simp
+  uniq s m hm := by
+    have := hm (CostructuredArrow.mk (𝟙 (L.obj Y)))
+    dsimp at this m hm ⊢
+    simp only [← this, map_id, comp_id, Iso.inv_hom_id_app_assoc]
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, L.obj, e.inv.app
 -/

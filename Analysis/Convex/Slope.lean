@@ -110,7 +110,8 @@ theorem StrictConvexOn.slope_strict_mono_adjacent
   have key := hf.2 hx hz hxz' ha hb (by field)
   simp only [smul_eq_mul] at key
   ring_nf at key
-  field_simp at 
+  field_simp at key ⊢
+  linarith
 
 中文:
 定理 StrictConvexOn.slope_strict_mono_adjacent
@@ -124,7 +125,8 @@ theorem StrictConvexOn.slope_strict_mono_adjacent
   have key := hf.2 hx hz hxz' ha hb (by field)
   simp only [smul_eq_mul] at key
   ring_nf at key
-  field_simp at 
+  field_simp at key ⊢
+  linarith
 
 Depends on / 依赖: hxy.trans, hxz.ne, ring_nf, smul_eq_mul, sub_pos
 -/
@@ -180,7 +182,9 @@ theorem convexOn_of_slope_mono_adjacent
     have hxy : x < a * x + b * z := by linear_combination b * hxz - x * hab
     have hyz : a * x + b * z < z := by linear_combination a * hxz + z * hab
     have key := hf hx hz hxy hyz
-    field_simp [sub
+    field_simp [sub_pos.2 hxy, sub_pos.2 hyz] at key
+    apply le_of_mul_le_mul_left ?_ (sub_pos.2 hxz)
+    linear_combination key + (- f x * z + x * f z) * hab
 
 中文:
 定理 convexOn_of_slope_mono_adjacent
@@ -190,7 +194,9 @@ theorem convexOn_of_slope_mono_adjacent
     have hxy : x < a * x + b * z := by linear_combination b * hxz - x * hab
     have hyz : a * x + b * z < z := by linear_combination a * hxz + z * hab
     have key := hf hx hz hxy hyz
-    field_simp [sub
+    field_simp [sub_pos.2 hxy, sub_pos.2 hyz] at key
+    apply le_of_mul_le_mul_left ?_ (sub_pos.2 hxz)
+    linear_combination key + (- f x * z + x * f z) * hab
 
 Depends on / 依赖: LinearOrder, LinearOrder.convexOn_of_lt, convexOn_of_lt, le_of_mul_le_mul_left, linear_combination, smul_eq_mul, sub_pos
 -/
@@ -252,7 +258,9 @@ theorem strictConvexOn_of_slope_strict_mono_adjacent
     have hxy : x < a * x + b * z := by linear_combination b * hxz - x * hab
     have hyz : a * x + b * z < z := by linear_combination a * hxz + z * hab
     have key := hf hx hz hxy hyz
-    field_sim
+    field_simp [sub_pos.2 hxy, sub_pos.2 hyz] at key
+    apply lt_of_mul_lt_mul_left ?_ (sub_pos.2 hxz).le
+    linear_combination key + (- f x * z + x * f z) * hab
 
 中文:
 定理 strictConvexOn_of_slope_strict_mono_adjacent
@@ -262,7 +270,9 @@ theorem strictConvexOn_of_slope_strict_mono_adjacent
     have hxy : x < a * x + b * z := by linear_combination b * hxz - x * hab
     have hyz : a * x + b * z < z := by linear_combination a * hxz + z * hab
     have key := hf hx hz hxy hyz
-    field_sim
+    field_simp [sub_pos.2 hxy, sub_pos.2 hyz] at key
+    apply lt_of_mul_lt_mul_left ?_ (sub_pos.2 hxz).le
+    linear_combination key + (- f x * z + x * f z) * hab
 
 Depends on / 依赖: LinearOrder, LinearOrder.strictConvexOn_of_lt, linear_combination, lt_of_mul_lt_mul_left, smul_eq_mul, strictConvexOn_of_lt, sub_pos
 -/
@@ -418,7 +428,10 @@ theorem ConvexOn.secant_mono_aux1
   have hb : 0 <= (y - x) / (z - x) := by positivity
   have key := hf.2 hx hz ha hb ?_
   · simp only [smul_eq_mul] at key
-    rin
+    ring_nf at key
+    field_simp at key
+    linear_combination key
+  · field
 
 中文:
 定理 ConvexOn.secant_mono_aux1
@@ -431,7 +444,10 @@ theorem ConvexOn.secant_mono_aux1
   have hb : 0 <= (y - x) / (z - x) := by positivity
   have key := hf.2 hx hz ha hb ?_
   · simp only [smul_eq_mul] at key
-    rin
+    ring_nf at key
+    field_simp at key
+    linear_combination key
+  · field
 
 Depends on / 依赖: linear_combination, ring_nf, smul_eq_mul
 -/
@@ -522,7 +538,8 @@ theorem ConvexOn.secant_mono
   · rcases lt_or_gt_of_ne hya with hya | hya
     · convert! hf.secant_mono_aux3 hx ha hxy hya using 1 <;> rw [← neg_div_neg_eq] <;> simp
     · convert! hf.slope_mono_adjacent hx hy hxa hya using 1
-   
+      rw [← neg_div_neg_eq]; simp
+  · exact hf.secant_mono_aux2 ha hy hxa hxy
 
 中文:
 定理 ConvexOn.secant_mono
@@ -534,7 +551,8 @@ theorem ConvexOn.secant_mono
   · rcases lt_or_gt_of_ne hya with hya | hya
     · convert! hf.secant_mono_aux3 hx ha hxy hya using 1 <;> rw [← neg_div_neg_eq] <;> simp
     · convert! hf.slope_mono_adjacent hx hy hxa hya using 1
-   
+      rw [← neg_div_neg_eq]; simp
+  · exact hf.secant_mono_aux2 ha hy hxa hxy
 
 Depends on / 依赖: convert, eq_or_lt_of_le, hf.secant_mono_aux2, hf.secant_mono_aux3, hf.slope_mono_adjacent, lt_or_gt_of_ne, neg_div_neg_eq, secant_mono_aux2, secant_mono_aux3, slope_mono_adjacent
 -/
@@ -563,7 +581,11 @@ theorem StrictConvexOn.secant_strict_mono_aux1
   have ha : 0 < (z - y) / (z - x) := by positivity
   have hb : 0 < (y - x) / (z - x) := by positivity
   have key := hf.2 hx hz (by linarith) ha hb ?_
-  · simp only [smul_eq_mul] at
+  · simp only [smul_eq_mul] at key
+    ring_nf at key
+    field_simp at key
+    linear_combination key
+  · field
 
 中文:
 定理 StrictConvexOn.secant_strict_mono_aux1
@@ -575,7 +597,11 @@ theorem StrictConvexOn.secant_strict_mono_aux1
   have ha : 0 < (z - y) / (z - x) := by positivity
   have hb : 0 < (y - x) / (z - x) := by positivity
   have key := hf.2 hx hz (by linarith) ha hb ?_
-  · simp only [smul_eq_mul] at
+  · simp only [smul_eq_mul] at key
+    ring_nf at key
+    field_simp at key
+    linear_combination key
+  · field
 
 Depends on / 依赖: linear_combination, ring_nf, smul_eq_mul
 -/
@@ -666,7 +692,7 @@ theorem StrictConvexOn.secant_strict_mono
         simp
     · convert! hf.slope_strict_mono_adjacent hx hy hxa hya using 1
       rw [← neg_div_neg_eq]; simp
- 
+  · exact hf.secant_strict_mono_aux2 ha hy hxa hxy
 
 中文:
 定理 StrictConvexOn.secant_strict_mono
@@ -678,7 +704,7 @@ theorem StrictConvexOn.secant_strict_mono
         simp
     · convert! hf.slope_strict_mono_adjacent hx hy hxa hya using 1
       rw [← neg_div_neg_eq]; simp
- 
+  · exact hf.secant_strict_mono_aux2 ha hy hxa hxy
 
 Depends on / 依赖: convert, hf.secant_strict_mono_aux2, hf.secant_strict_mono_aux3, hf.slope_strict_mono_adjacent, lt_or_gt_of_ne, neg_div_neg_eq, secant_strict_mono_aux2, secant_strict_mono_aux3, slope_strict_mono_adjacent
 -/
@@ -735,7 +761,13 @@ theorem ConvexOn.strictMonoOn
     rw [openSegment_eq_Ioo (hxy.trans hz.2)]
     exact ⟨hxy, hz.2⟩
   rcases eq_or_lt_of_le hu.2 with (rfl | hu2)
-  · exact step1 ⟨hv.1, h
+  · exact step1 ⟨hv.1, huv⟩
+  · refine hf.lt_right_of_left_lt ?_ hv.1 ?_ (step1 ⟨hu.1, hu2⟩)
+    · apply hf.1.segment_subset hx hu.1
+      rw [segment_eq_Icc (hxy.le.trans hu.2)]
+      exact ⟨hxy.le, hu.2⟩
+    · rw [openSegment_eq_Ioo (hu2.trans huv)]
+      exact ⟨hu2, huv⟩
 
 中文:
 定理 ConvexOn.strictMonoOn
@@ -748,7 +780,13 @@ theorem ConvexOn.strictMonoOn
     rw [openSegment_eq_Ioo (hxy.trans hz.2)]
     exact ⟨hxy, hz.2⟩
   rcases eq_or_lt_of_le hu.2 with (rfl | hu2)
-  · exact step1 ⟨hv.1, h
+  · exact step1 ⟨hv.1, huv⟩
+  · refine hf.lt_right_of_left_lt ?_ hv.1 ?_ (step1 ⟨hu.1, hu2⟩)
+    · apply hf.1.segment_subset hx hu.1
+      rw [segment_eq_Icc (hxy.le.trans hu.2)]
+      exact ⟨hxy.le, hu.2⟩
+    · rw [openSegment_eq_Ioo (hu2.trans huv)]
+      exact ⟨hu2, huv⟩
 
 Depends on / 依赖: Set.Ioi, eq_or_lt_of_le, hf.lt_right_of_left_lt, hu2.trans, hxy.le, hxy.le.trans, hxy.trans, lt_right_of_left_lt, openSegment_eq_Ioo, segment_eq_Icc, segment_subset
 -/

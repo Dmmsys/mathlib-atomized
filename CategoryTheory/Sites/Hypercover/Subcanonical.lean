@@ -179,7 +179,11 @@ instance :
   refine .mk_of_isStableUnderBaseChange fun {X Y} f 𝒰 (H : forall i, IsIso _) => ⟨?_, ?_, ?_⟩
   · refine 𝒰.glueMorphisms (fun i => inv (pullback.snd f (𝒰.f i)) ≫ pullback.fst _ _) fun i j => ?_
     let f := pullback.map (pullback.fst f (𝒰.f i) ≫ f) (𝒰.f j) (𝒰.f i) (𝒰.f j) (pullback.snd _ _)
-     
+      (𝟙 _) (𝟙 _) (by simp [pullback.condition]) (by simp)
+    rw [← cancel_epi ((pullbackRightPullbackFstIso _ _ _).hom ≫ f)]
+    simp [pullback.condition, f]
+  · exact (𝒰.pullback₁ f).hom_ext fun i => by simp [pullback.condition_assoc]
+  · exact 𝒰.hom_ext fun i => by simp [pullback.condition]
 
 中文:
 实例 :
@@ -188,7 +192,11 @@ instance :
   refine .mk_of_isStableUnderBaseChange fun {X Y} f 𝒰 (H : forall i, IsIso _) => ⟨?_, ?_, ?_⟩
   · refine 𝒰.glueMorphisms (fun i => inv (pullback.snd f (𝒰.f i)) ≫ pullback.fst _ _) fun i j => ?_
     let f := pullback.map (pullback.fst f (𝒰.f i) ≫ f) (𝒰.f j) (𝒰.f i) (𝒰.f j) (pullback.snd _ _)
-     
+      (𝟙 _) (𝟙 _) (by simp [pullback.condition]) (by simp)
+    rw [← cancel_epi ((pullbackRightPullbackFstIso _ _ _).hom ≫ f)]
+    simp [pullback.condition, f]
+  · exact (𝒰.pullback₁ f).hom_ext fun i => by simp [pullback.condition_assoc]
+  · exact 𝒰.hom_ext fun i => by simp [pullback.condition]
 
 Depends on / 依赖: cancel_epi, conditio, condition, glueMorphisms, hom_ext, mk_of_isStableUnderBaseChange, pullback, pullback.conditio, pullback.condition, pullback.fst, pullback.map, pullback.snd, pullbackRightPullbackFstIso
 -/
@@ -215,7 +223,24 @@ lemma isPullback_of_forall_isPullback
     simpa [pullback.condition_assoc] using (H i).w
   suffices IsIso (pullback.lift fst snd h) from
     .of_iso_pullback ⟨h⟩ (asIso (pullback.lift _ _ h)) (by simp) (by simp)
-  simp_rw [← isomorphisms.iff, IsLocalAtTarget.iff_of
+  simp_rw [← isomorphisms.iff, IsLocalAtTarget.iff_of_zeroHypercover (P := isomorphisms C)
+    (𝒰.pullbackCoverOfLeft f g), isomorphisms.iff]
+  intro i
+  let m := pullback.map (𝒰.f i ≫ f) g f g (𝒰.f i) (𝟙 Y) (𝟙 Z) (by simp) (by simp)
+  have : IsPullback (pullback.fst (𝒰.f i ≫ f) g) m (𝒰.f i) (pullback.fst _ _) := by
+    simpa [← IsPullback.paste_vert_iff (.of_hasPullback _ _), m] using .of_hasPullback _ _
+  have H' : IsPullback (pullback.fst fst (𝒰.f i))
+      (pullback.lift (pullback.snd _ _) (pullback.fst _ _ ≫ snd)
+        (by simp [← h, pullback.condition_assoc]))
+      (pullback.lift fst snd h) m := by
+    rw [← IsPullback.paste_vert_iff this.flip (by ext <;> simp [m]; rw [pullback.condition])]
+    simpa using .of_hasPullback _ _
+  have heq : pullback.snd (pullback.lift fst snd h) ((𝒰.pullbackCoverOfLeft f g).f i) =
+      H'.isoPullback.inv ≫ (H i).isoPullback.hom := by
+    rw [Iso.eq_inv_comp]
+    cat_disch
+  rw [heq]
+  infer_instance
 
 中文:
 引理 isPullback_of_对任意_isPullback
@@ -225,7 +250,24 @@ lemma isPullback_of_forall_isPullback
     simpa [pullback.condition_assoc] using (H i).w
   suffices IsIso (pullback.lift fst snd h) from
     .of_iso_pullback ⟨h⟩ (asIso (pullback.lift _ _ h)) (by simp) (by simp)
-  simp_rw [← isomorphisms.iff, IsLocalAtTarget.iff_of
+  simp_rw [← isomorphisms.iff, IsLocalAtTarget.iff_of_zeroHypercover (P := isomorphisms C)
+    (𝒰.pullbackCoverOfLeft f g), isomorphisms.iff]
+  intro i
+  let m := pullback.map (𝒰.f i ≫ f) g f g (𝒰.f i) (𝟙 Y) (𝟙 Z) (by simp) (by simp)
+  have : IsPullback (pullback.fst (𝒰.f i ≫ f) g) m (𝒰.f i) (pullback.fst _ _) := by
+    simpa [← IsPullback.paste_vert_iff (.of_hasPullback _ _), m] using .of_hasPullback _ _
+  have H' : IsPullback (pullback.fst fst (𝒰.f i))
+      (pullback.lift (pullback.snd _ _) (pullback.fst _ _ ≫ snd)
+        (by simp [← h, pullback.condition_assoc]))
+      (pullback.lift fst snd h) m := by
+    rw [← IsPullback.paste_vert_iff this.flip (by ext <;> simp [m]; rw [pullback.condition])]
+    simpa using .of_hasPullback _ _
+  have heq : pullback.snd (pullback.lift fst snd h) ((𝒰.pullbackCoverOfLeft f g).f i) =
+      H'.isoPullback.inv ≫ (H i).isoPullback.hom := by
+    rw [Iso.eq_inv_comp]
+    cat_disch
+  rw [heq]
+  infer_instance
 
 Depends on / 依赖: IsLocalAtTarget, IsLocalAtTarget.iff_of_zeroHypercover, IsPullback, condition_assoc, hom_ext, iff_of_zeroHypercover, isomorphisms, isomorphisms.iff, of_iso_pullback, pullback, pullback.condition_assoc, pullback.fst, pullback.lift, pullback.map, pullbackCoverOfLeft, simp_rw
 -/

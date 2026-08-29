@@ -504,7 +504,11 @@ theorem map_eq_cons
       exact mem_cons_self _ _
     obtain ⟨a, h1, rfl⟩ := mem_map.mp this
     obtain ⟨u, rfl⟩ := exists_cons_of_mem h1
-    rw [map_cons]; rw [cons_inj_
+    rw [map_cons]; rw [cons_inj_right] at h
+    refine ⟨a, mem_cons_self _ _, rfl, ?_⟩
+    rw [Multiset.erase_cons_head]; rw [h]
+
+@[simp 1100]
 
 中文:
 定理 map_eq_cons
@@ -519,7 +523,11 @@ theorem map_eq_cons
       exact mem_cons_self _ _
     obtain ⟨a, h1, rfl⟩ := mem_map.mp this
     obtain ⟨u, rfl⟩ := exists_cons_of_mem h1
-    rw [map_cons]; rw [cons_inj_
+    rw [map_cons]; rw [cons_inj_right] at h
+    refine ⟨a, mem_cons_self _ _, rfl, ?_⟩
+    rw [Multiset.erase_cons_head]; rw [h]
+
+@[simp 1100]
 
 Depends on / 依赖: Multiset, Multiset.cons_erase, Multiset.erase_cons_head, cons_erase, cons_inj_right, erase_cons_head, exists_cons_of_mem, map_cons, mem_cons_self, mem_map, mem_map.mp, s.map
 -/
@@ -864,7 +872,7 @@ theorem map_erase_of_mem
   rcases eq_or_ne y x with rfl | hxy
   · simp
   replace h : x in s := by simpa [hxy.symm] using h
-  rw [s.erase_cons_tail hxy]; rw [map_cons]; rw [map_cons]; rw [ih h]; rw [erase_cons_tail_of_mem (mem_map_of_mem f 
+  rw [s.erase_cons_tail hxy]; rw [map_cons]; rw [map_cons]; rw [ih h]; rw [erase_cons_tail_of_mem (mem_map_of_mem f h)]
 
 中文:
 定理 map_erase_of_mem
@@ -874,7 +882,7 @@ theorem map_erase_of_mem
   rcases eq_or_ne y x with rfl | hxy
   · simp
   replace h : x in s := by simpa [hxy.symm] using h
-  rw [s.erase_cons_tail hxy]; rw [map_cons]; rw [map_cons]; rw [ih h]; rw [erase_cons_tail_of_mem (mem_map_of_mem f 
+  rw [s.erase_cons_tail hxy]; rw [map_cons]; rw [map_cons]; rw [ih h]; rw [erase_cons_tail_of_mem (mem_map_of_mem f h)]
 
 Depends on / 依赖: Multiset, Multiset.induction_on, eq_or_ne, erase_cons_tail, erase_cons_tail_of_mem, hxy.symm, induction_on, map_cons, mem_map_of_mem, replace, s.erase_cons_tail
 -/
@@ -1939,7 +1947,7 @@ theorem map_eq_map_of_bij_of_nodup
   calc
     s.map f = s.pmap (fun x _ => f x) fun _ => id := by rw [pmap_eq_map]
     _ = s.attach.map fun x => f x.1 := by rw [pmap_eq_map_attach]
- 
+    _ = t.map g := by rw [this, Multiset.map_map]; exact map_congr rfl fun x _ => h _ _
 
 中文:
 定理 map_eq_map_of_bij_of_nodup
@@ -1952,7 +1960,7 @@ theorem map_eq_map_of_bij_of_nodup
   calc
     s.map f = s.pmap (fun x _ => f x) fun _ => id := by rw [pmap_eq_map]
     _ = s.attach.map fun x => f x.1 := by rw [pmap_eq_map_attach]
- 
+    _ = t.map g := by rw [this, Multiset.map_map]; exact map_congr rfl fun x _ => h _ _
 
 Depends on / 依赖: Multiset, Multiset.map_map, Subtype, Subtype.ext, attach, hs.attach.map, ht.ext, i_inj, map_congr, map_map, pmap_eq_map, pmap_eq_map_attach, s.attach.map, s.map, s.pmap, t.map
 -/

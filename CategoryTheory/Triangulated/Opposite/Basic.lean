@@ -209,14 +209,16 @@ lemma shiftFunctorAdd'_op_inv_app
   statement: (X : Cᵒᵖ) (a₁ a₂ a₃ : Int) (h : a₁ + a₂ = a₃)
   proof: by
   rw [← cancel_epi ((shiftFunctorAdd' Cᵒᵖ a₁ a₂ a₃ h).hom.app X)]; rw [Iso.hom_inv_id_app]; rw [shiftFunctorAdd'_op_hom_app X a₁ a₂ a₃ h b₁ b₂ b₃ h₁ h₂ h₃]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id_app]
-  erw [Functor.map_id, id_comp, Iso.inv_hom_id_ap
+  erw [Functor.map_id, id_comp, Iso.inv_hom_id_app_assoc]
+  rw [← op_comp_assoc]; rw [Iso.hom_inv_id_app]; rw [op_id]; rw [id_comp]; rw [Iso.hom_inv_id_app]
 
 中文:
 引理 shiftFunctorAdd'_op_inv_app
   结论: (X : Cᵒᵖ) (a₁ a₂ a₃ : 整数) (h : a₁ + a₂ = a₃)
   证明: by
   rw [← cancel_epi ((shiftFunctorAdd' Cᵒᵖ a₁ a₂ a₃ h).hom.app X)]; rw [Iso.hom_inv_id_app]; rw [shiftFunctorAdd'_op_hom_app X a₁ a₂ a₃ h b₁ b₂ b₃ h₁ h₂ h₃]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id_app]
-  erw [Functor.map_id, id_comp, Iso.inv_hom_id_ap
+  erw [Functor.map_id, id_comp, Iso.inv_hom_id_app_assoc]
+  rw [← op_comp_assoc]; rw [Iso.hom_inv_id_app]; rw [op_id]; rw [id_comp]; rw [Iso.hom_inv_id_app]
 -/
 lemma shiftFunctorAdd'_op_inv_app (X : Cᵒᵖ) (a₁ a₂ a₃ : Int) (h : a₁ + a₂ = a₃)
     (b₁ b₂ b₃ : Int) (h₁ : a₁ + b₁ = 0) (h₂ : a₂ + b₂ = 0) (h₃ : a₃ + b₃ = 0) :
@@ -268,7 +270,16 @@ definition opShiftFunctorEquivalence
   inverse := (shiftFunctor C n).op
   unitIso := NatIso.op (shiftFunctorCompIsoId C (-n) n n.add_left_neg) ≪≫
     Functor.isoWhiskerRight (shiftFunctorOpIso C n (-n) n.add_right_neg).symm (shiftFunctor C n).op
-  counitIso := Functor.isoWhiskerLeft _ (shiftFunctorOpIso C n (-n) n.ad
+  counitIso := Functor.isoWhiskerLeft _ (shiftFunctorOpIso C n (-n) n.add_right_neg) ≪≫
+    NatIso.op (shiftFunctorCompIsoId C n (-n) n.add_right_neg).symm
+  functor_unitIso_comp X := Quiver.Hom.unop_inj (by
+    dsimp [shiftFunctorOpIso]
+    erw [comp_id, Functor.map_id, comp_id]
+    change (shiftFunctorCompIsoId C n (-n) (add_neg_cancel n)).inv.app (X.unop⟦-n⟧) ≫
+      ((shiftFunctorCompIsoId C (-n) n (neg_add_cancel n)).hom.app X.unop)⟦-n⟧' = 𝟙 _
+    rw [shift_shiftFunctorCompIsoId_neg_add_cancel_hom_app n X.unop]; rw [Iso.inv_hom_id_app])
+
+#adaptation_note
 
 中文:
 定义 opShiftFunctorEquivalence
@@ -277,7 +288,16 @@ definition opShiftFunctorEquivalence
   inverse := (shiftFunctor C n).op
   unitIso := NatIso.op (shiftFunctorCompIsoId C (-n) n n.add_left_neg) ≪≫
     Functor.isoWhiskerRight (shiftFunctorOpIso C n (-n) n.add_right_neg).symm (shiftFunctor C n).op
-  counitIso := Functor.isoWhiskerLeft _ (shiftFunctorOpIso C n (-n) n.ad
+  counitIso := Functor.isoWhiskerLeft _ (shiftFunctorOpIso C n (-n) n.add_right_neg) ≪≫
+    NatIso.op (shiftFunctorCompIsoId C n (-n) n.add_right_neg).symm
+  functor_unitIso_comp X := Quiver.Hom.unop_inj (by
+    dsimp [shiftFunctorOpIso]
+    erw [comp_id, Functor.map_id, comp_id]
+    change (shiftFunctorCompIsoId C n (-n) (add_neg_cancel n)).inv.app (X.unop⟦-n⟧) ≫
+      ((shiftFunctorCompIsoId C (-n) n (neg_add_cancel n)).hom.app X.unop)⟦-n⟧' = 𝟙 _
+    rw [shift_shiftFunctorCompIsoId_neg_add_cancel_hom_app n X.unop]; rw [Iso.inv_hom_id_app])
+
+#adaptation_note
 
 Depends on / 依赖: shiftFunctor
 -/
@@ -607,7 +627,14 @@ lemma opShiftFunctorEquivalence_add_unitIso_hom_app_eq
   simp only [shiftFunctorAdd'_op_inv_app _ n m p (by lia) _ _ _ (add_neg_cancel n)
     (add_neg_cancel m) (add_neg_cancel p), shiftFunctor_op_map _ m (-m),
     Category.assoc, Iso.inv_hom_id_app_assoc]
-  erw [Functor.map_id, Functor.map_id, Functor.map_id, Func
+  erw [Functor.map_id, Functor.map_id, Functor.map_id, Functor.map_id,
+    id_comp, id_comp, id_comp, comp_id, comp_id]
+  dsimp
+  rw [comp_id]; rw [shiftFunctorCompIsoId_add'_hom_app _ _ _ _ _ _
+    (neg_add_cancel m) (neg_add_cancel n) (neg_add_cancel p) h]
+  dsimp
+  rw [Category.assoc]; rw [Category.assoc]
+  rfl
 
 中文:
 引理 opShiftFunctorEquivalence_add_unitIso_hom_app_eq
@@ -616,7 +643,14 @@ lemma opShiftFunctorEquivalence_add_unitIso_hom_app_eq
   simp only [shiftFunctorAdd'_op_inv_app _ n m p (by lia) _ _ _ (add_neg_cancel n)
     (add_neg_cancel m) (add_neg_cancel p), shiftFunctor_op_map _ m (-m),
     Category.assoc, Iso.inv_hom_id_app_assoc]
-  erw [Functor.map_id, Functor.map_id, Functor.map_id, Func
+  erw [Functor.map_id, Functor.map_id, Functor.map_id, Functor.map_id,
+    id_comp, id_comp, id_comp, comp_id, comp_id]
+  dsimp
+  rw [comp_id]; rw [shiftFunctorCompIsoId_add'_hom_app _ _ _ _ _ _
+    (neg_add_cancel m) (neg_add_cancel n) (neg_add_cancel p) h]
+  dsimp
+  rw [Category.assoc]; rw [Category.assoc]
+  rfl
 
 Depends on / 依赖: Category, Category.asso, _op_inv_app, add_neg_cancel, hom.app, inv.app, opShiftFunctorEquivalence, shiftFunctorAdd, shiftFunctor_op_map, unitIso, unitIso.hom.app
 -/
@@ -651,7 +685,9 @@ lemma opShiftFunctorEquivalence_add_unitIso_inv_app_eq
   rw [← cancel_mono ((opShiftFunctorEquivalence C p).unitIso.hom.app X)]; rw [Iso.inv_hom_id_app]; rw [opShiftFunctorEquivalence_add_unitIso_hom_app_eq _ _ _ _ h]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_app_assoc]
   apply Quiver.Hom.unop_inj
   dsimp
-  si
+  simp only [Category.assoc,
+    ← unop_comp, Iso.inv_hom_id_app, Functor.comp_obj, Functor.op_obj, unop_id,
+    Functor.map_id, id_comp, ← Functor.map_comp, Iso.hom_inv_id_app]
 
 中文:
 引理 opShiftFunctorEquivalence_add_unitIso_inv_app_eq
@@ -659,7 +695,9 @@ lemma opShiftFunctorEquivalence_add_unitIso_inv_app_eq
   rw [← cancel_mono ((opShiftFunctorEquivalence C p).unitIso.hom.app X)]; rw [Iso.inv_hom_id_app]; rw [opShiftFunctorEquivalence_add_unitIso_hom_app_eq _ _ _ _ h]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_app_assoc]
   apply Quiver.Hom.unop_inj
   dsimp
-  si
+  simp only [Category.assoc,
+    ← unop_comp, Iso.inv_hom_id_app, Functor.comp_obj, Functor.op_obj, unop_id,
+    Functor.map_id, id_comp, ← Functor.map_comp, Iso.hom_inv_id_app]
 
 Depends on / 依赖: Category, Category.a, Category.assoc, Iso.inv_hom_id_app, cancel_mono, hom.app, inv.app, inv_hom_id_app, opShiftFunctorEquivalence, opShiftFunctorEquivalence_add_unitIso_hom_app_eq, shiftFunctorAdd, unitIso, unitIso.hom.app, unitIso.inv.app
 -/
@@ -830,7 +868,10 @@ lemma shift_opShiftFunctorEquivalence_counitIso_inv_app
   simp only [shiftFunctor_op_map _ (-n) n, shiftFunctor_op_map _ n (-n),
     shiftFunctorComm_inv_app_of_add_eq_zero n (-n) (by lia), assoc,
     shiftFunctorCompIsoId_op_inv_app, shiftFunctorCompIsoId_op_hom_app,
-    shift_shiftF
+    shift_shiftFunctorCompIsoId_hom_app, op_comp, unop_comp, Quiver.Hom.unop_op,
+    Functor.map_comp, Iso.inv_hom_id_app_assoc, Functor.op_obj]
+  apply Quiver.Hom.unop_inj
+  simp
 
 中文:
 引理 shift_opShiftFunctorEquivalence_counitIso_inv_app
@@ -840,7 +881,10 @@ lemma shift_opShiftFunctorEquivalence_counitIso_inv_app
   simp only [shiftFunctor_op_map _ (-n) n, shiftFunctor_op_map _ n (-n),
     shiftFunctorComm_inv_app_of_add_eq_zero n (-n) (by lia), assoc,
     shiftFunctorCompIsoId_op_inv_app, shiftFunctorCompIsoId_op_hom_app,
-    shift_shiftF
+    shift_shiftFunctorCompIsoId_hom_app, op_comp, unop_comp, Quiver.Hom.unop_op,
+    Functor.map_comp, Iso.inv_hom_id_app_assoc, Functor.op_obj]
+  apply Quiver.Hom.unop_inj
+  simp
 
 Depends on / 依赖: Opposite, Opposite.op, counitIso, counitIso.inv.app, hom.app, inv.app, opShiftFunctorEquivalence, shiftFunctorComm, shiftFunctorOpIso, shiftFunctor_op_map
 -/

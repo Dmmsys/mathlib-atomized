@@ -830,7 +830,12 @@ definition supClosure
   (by
     classical
     rintro s _ ⟨t, ht, hts, rfl⟩ _ ⟨u, hu, hus, rfl⟩
-    refine ⟨_, ht.mono subset_union_left, ?_, sup'_union h
+    refine ⟨_, ht.mono subset_union_left, ?_, sup'_union ht hu _⟩
+    rw [coe_union]
+    exact Set.union_subset hts hus)
+  (by rintro s₁ s₂ hs h₂ _ ⟨t, ht, hts, rfl⟩; exact h₂.finsetSup'_mem ht fun i hi => hs <| hts hi)
+
+@[to_dual (attr := simp)]
 
 中文:
 定义 supClosure
@@ -842,7 +847,12 @@ definition supClosure
   (by
     classical
     rintro s _ ⟨t, ht, hts, rfl⟩ _ ⟨u, hu, hus, rfl⟩
-    refine ⟨_, ht.mono subset_union_left, ?_, sup'_union h
+    refine ⟨_, ht.mono subset_union_left, ?_, sup'_union ht hu _⟩
+    rw [coe_union]
+    exact Set.union_subset hts hus)
+  (by rintro s₁ s₂ hs h₂ _ ⟨t, ht, hts, rfl⟩; exact h₂.finsetSup'_mem ht fun i hi => hs <| hts hi)
+
+@[to_dual (attr := simp)]
 
 Depends on / 依赖: ofPred
 -/
@@ -1157,7 +1167,8 @@ lemma Set.Finite.supClosure
     fun t => t.1.sup' (mem_filter.1 t.2).2 id).finite_toSet.subset ?_
   rintro _ ⟨t, ht, hts, rfl⟩
   simp only [id_eq, coe_image, mem_image, mem_coe, mem_attach, true_and, Subtype.exists,
-    Finset.me
+    Finset.mem_powerset, mem_filter]
+  exact ⟨t, ⟨hts, ht⟩, rfl⟩
 
 中文:
 引理 集合.有限.supClosure
@@ -1170,7 +1181,8 @@ lemma Set.Finite.supClosure
     fun t => t.1.sup' (mem_filter.1 t.2).2 id).finite_toSet.subset ?_
   rintro _ ⟨t, ht, hts, rfl⟩
   simp only [id_eq, coe_image, mem_image, mem_coe, mem_attach, true_and, Subtype.exists,
-    Finset.me
+    Finset.mem_powerset, mem_filter]
+  exact ⟨t, ⟨hts, ht⟩, rfl⟩
 -/
 protected lemma Set.Finite.supClosure (hs : s.Finite) : (supClosure s).Finite := by
   lift s to Finset α using hs
@@ -1192,7 +1204,8 @@ lemma supClosure_prod
     supClosed_supClosure.prod supClosed_supClosure) <| by
       rintro ⟨_, _⟩ ⟨⟨u, hu, hus, rfl⟩, v, hv, hvt, rfl⟩
       refine ⟨u ×ˢ v, hu.product hv, ?_, ?_⟩
-      · simpa only [coe_product] using Set.prod_mono hus 
+      · simpa only [coe_product] using Set.prod_mono hus hvt
+      · simp [prodMk_sup'_sup']
 
 中文:
 引理 supClosure_prod
@@ -1201,7 +1214,8 @@ lemma supClosure_prod
     supClosed_supClosure.prod supClosed_supClosure) <| by
       rintro ⟨_, _⟩ ⟨⟨u, hu, hus, rfl⟩, v, hv, hvt, rfl⟩
       refine ⟨u ×ˢ v, hu.product hv, ?_, ?_⟩
-      · simpa only [coe_product] using Set.prod_mono hus 
+      · simpa only [coe_product] using Set.prod_mono hus hvt
+      · simp [prodMk_sup'_sup']
 -/
 @[to_dual (attr := simp)] lemma supClosure_prod (s : Set α) (t : Set β) :
     supClosure (s ×ˢ t) = supClosure s ×ˢ supClosure t :=
@@ -1302,7 +1316,9 @@ lemma latticeClosure_sup_inf_induction
     supClosed := fun a ⟨has, hpa⟩ b ⟨hbs, hpb⟩ =>
       ⟨isSublattice_latticeClosure.supClosed has hbs, sup a has b hbs hpa hpb⟩
     infClosed := fun a ⟨has, hpa⟩ b ⟨hbs, hpb⟩ =>
-      ⟨isSublattice_latticeClosur
+      ⟨isSublattice_latticeClosure.infClosed has hbs, inf a has b hbs hpa hpb⟩ }
+  refine (latticeClosure_min (fun a ha => ?_) h has).choose_spec
+  exact ⟨subset_latticeClosure ha, mem a ha⟩
 
 中文:
 引理 latticeClosure_sup_inf_induction
@@ -1312,7 +1328,9 @@ lemma latticeClosure_sup_inf_induction
     supClosed := fun a ⟨has, hpa⟩ b ⟨hbs, hpb⟩ =>
       ⟨isSublattice_latticeClosure.supClosed has hbs, sup a has b hbs hpa hpb⟩
     infClosed := fun a ⟨has, hpa⟩ b ⟨hbs, hpb⟩ =>
-      ⟨isSublattice_latticeClosur
+      ⟨isSublattice_latticeClosure.infClosed has hbs, inf a has b hbs hpa hpb⟩ }
+  refine (latticeClosure_min (fun a ha => ?_) h has).choose_spec
+  exact ⟨subset_latticeClosure ha, mem a ha⟩
 
 Depends on / 依赖: IsSublattice, choose_spec, infClosed, isSublattice_latticeClosure, isSublattice_latticeClosure.infClosed, isSublattice_latticeClosure.supClosed, latticeClosure, latticeClosure_min, subset_latticeClosure, supClosed
 -/
@@ -1453,7 +1471,13 @@ lemma image_latticeClosure
 · exact fun a ha => subset_latticeClosure Set.mem_image_of_mem _ ha
   · rintro a - b - ha hb
     simpa [map_sup] using isSublattice_latticeClosure.supClosed ha hb
-  · rintro a - b - ha
+  · rintro a - b - ha hb
+    simpa [map_inf] using isSublattice_latticeClosure.infClosed ha hb
+  · exact Set.image_mono subset_latticeClosure
+  · rintro _ - _ - ⟨a, ha, rfl⟩ ⟨b, hb, rfl⟩
+    exact ⟨a ⊔ b, isSublattice_latticeClosure.supClosed ha hb, map_sup ..⟩
+  · rintro _ - _ - ⟨a, ha, rfl⟩ ⟨b, hb, rfl⟩
+    exact ⟨a ⊓ b, isSublattice_latticeClosure.infClosed ha hb, map_inf ..⟩
 
 中文:
 引理 image_latticeClosure
@@ -1464,7 +1488,13 @@ lemma image_latticeClosure
 · exact fun a ha => subset_latticeClosure Set.mem_image_of_mem _ ha
   · rintro a - b - ha hb
     simpa [map_sup] using isSublattice_latticeClosure.supClosed ha hb
-  · rintro a - b - ha
+  · rintro a - b - ha hb
+    simpa [map_inf] using isSublattice_latticeClosure.infClosed ha hb
+  · exact Set.image_mono subset_latticeClosure
+  · rintro _ - _ - ⟨a, ha, rfl⟩ ⟨b, hb, rfl⟩
+    exact ⟨a ⊔ b, isSublattice_latticeClosure.supClosed ha hb, map_sup ..⟩
+  · rintro _ - _ - ⟨a, ha, rfl⟩ ⟨b, hb, rfl⟩
+    exact ⟨a ⊓ b, isSublattice_latticeClosure.infClosed ha hb, map_inf ..⟩
 
 Depends on / 依赖: Set.image_mono, Set.image_subset_iff, Set.mem_image_of_mem, image_mono, image_subset_iff, infClosed, isSublattice_latticeClosure, isSublattice_latticeClosure.infClosed, isSublattice_latticeClosure.supClosed, latticeClosure_sup_inf_induction, map_inf, map_sup, mem_image_of_mem, subset_antisymm_iff, subset_latticeClosure, supClosed
 -/

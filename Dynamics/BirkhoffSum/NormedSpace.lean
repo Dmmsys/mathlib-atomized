@@ -176,7 +176,7 @@ theorem tendsto_birkhoffAverage_apply_sub_birkhoffAverage
   refine squeeze_zero_norm (fun n => ?_) this
   rw [← dist_eq_norm]; rw [dist_birkhoffAverage_apply_birkhoffAverage]
   gcongr
-  
+  exact hC n 0
 
 中文:
 定理 tendsto_birkhoffAverage_apply_sub_birkhoffAverage
@@ -188,7 +188,7 @@ theorem tendsto_birkhoffAverage_apply_sub_birkhoffAverage
   refine squeeze_zero_norm (fun n => ?_) this
   rw [← dist_eq_norm]; rw [dist_birkhoffAverage_apply_birkhoffAverage]
   gcongr
-  
+  exact hC n 0
 
 Depends on / 依赖: Metric, Metric.isBounded_range_iff, Tendsto, dist_birkhoffAverage_apply_birkhoffAverage, dist_eq_norm, div_atTop, isBounded_range_iff, squeeze_zero_norm, tendsto_const_nhds, tendsto_const_nhds.div_atTop, tendsto_natCast_atTop_atTop
 -/
@@ -241,7 +241,16 @@ theorem uniformEquicontinuous_birkhoffAverage
     with ⟨δ, hδ₀, hδε⟩
   refine mem_uniformity_edist.2 ⟨δ, hδ₀, fun {x y} h n => ?_⟩
   calc
-    dist (birk
+    dist (birkhoffAverage 𝕜 f g n x) (birkhoffAverage 𝕜 f g n y)
+      <= (∑ k in Finset.range n, dist (g (f^[k] x)) (g (f^[k] y))) / n :=
+      dist_birkhoffAverage_birkhoffAverage_le ..
+    _ <= (∑ _k in Finset.range n, ε) / n := by
+      gcongr
+      refine hδε _ _ ?_
+      simpa using (hf.iterate _).edist_le_mul_of_le h.le
+    _ = n * ε / n := by simp
+    _ <= ε := by
+      rcases eq_or_ne n 0 with hn | hn <;> simp [hn, hε.le, mul_div_cancel_left₀]
 
 中文:
 定理 uniformEquicontinuous_birkhoffAverage
@@ -252,7 +261,16 @@ theorem uniformEquicontinuous_birkhoffAverage
     with ⟨δ, hδ₀, hδε⟩
   refine mem_uniformity_edist.2 ⟨δ, hδ₀, fun {x y} h n => ?_⟩
   calc
-    dist (birk
+    dist (birkhoffAverage 𝕜 f g n x) (birkhoffAverage 𝕜 f g n y)
+      <= (∑ k in Finset.range n, dist (g (f^[k] x)) (g (f^[k] y))) / n :=
+      dist_birkhoffAverage_birkhoffAverage_le ..
+    _ <= (∑ _k in Finset.range n, ε) / n := by
+      gcongr
+      refine hδε _ _ ?_
+      simpa using (hf.iterate _).edist_le_mul_of_le h.le
+    _ = n * ε / n := by simp
+    _ <= ε := by
+      rcases eq_or_ne n 0 with hn | hn <;> simp [hn, hε.le, mul_div_cancel_left₀]
 
 Depends on / 依赖: Finset, Finset.range, Metric, Metric.uniformity_basis_dist_le, Metric.uniformity_basis_dist_le.uniformEquicontinuous_iff_right, birkhoffAverage, dist_birkhoffAverage_birkhoffAverage_le, mem_uniformity_edist, uniformContinuous_iff, uniformEquicontinuous_iff_right, uniformity_basis_dist_le, uniformity_basis_edist_le, uniformity_basis_edist_le.uniformContinuous_iff
 -/

@@ -61,7 +61,18 @@ lemma hasPeriod_iff_getElem?
     have min : p < w.length := by lia
     have : j + p - (List.take p w).length = j := by
       simp_all [min_eq_left_of_lt]
-    simp_all [getElem_append_right, IsPr
+    simp_all [getElem_append_right, IsPrefix.getElem pref, min_eq_left_of_lt]
+  · intro lhs
+    rw [HasPeriod]
+    have drop : drop p w <+: w := by
+      simp only [prefix_iff_getElem?, length_drop, getElem_drop]
+      intro i leni
+      have len : i + p < w.length := by lia
+      simp_all only [getElem?_pos, add_comm p i]
+    rw [← prefix_append_right_inj (w.take p)] at drop
+    simp_all
+
+@[simp]
 
 中文:
 引理 hasPeriod_iff_getElem?
@@ -75,7 +86,18 @@ lemma hasPeriod_iff_getElem?
     have min : p < w.length := by lia
     have : j + p - (List.take p w).length = j := by
       simp_all [min_eq_left_of_lt]
-    simp_all [getElem_append_right, IsPr
+    simp_all [getElem_append_right, IsPrefix.getElem pref, min_eq_left_of_lt]
+  · intro lhs
+    rw [HasPeriod]
+    have drop : drop p w <+: w := by
+      simp only [prefix_iff_getElem?, length_drop, getElem_drop]
+      intro i leni
+      have len : i + p < w.length := by lia
+      simp_all only [getElem?_pos, add_comm p i]
+    rw [← prefix_append_right_inj (w.take p)] at drop
+    simp_all
+
+@[simp]
 
 Depends on / 依赖: HasPeriod, IsPrefix, IsPrefix.getElem, List.take, getElem, getElem_append_right, getElem_drop, length, length_drop, min_eq_left_of_lt, prefix_iff_getElem, w.length
 -/
@@ -185,7 +207,13 @@ lemma HasPeriod.getElem?_mod
         rw [eq]
     | inr large =>
         have len' : i - p < w.length := by lia
-        have IH : w[(i - p) % p]? = w[i - p]? := per.getElem?_mod 
+        have IH : w[(i - p) % p]? = w[i - p]? := per.getElem?_mod p (i - p) w len'
+        rw [hasPeriod_iff_getElem?] at per
+        have minus : i - p < w.length - p := by lia
+        have per' := per (i - p) minus
+        simp only [large, Nat.sub_add_cancel] at per'
+        have mod : i % p = (i - p) % p := mod_eq_sub_mod large
+        aesop
 
 中文:
 引理 HasPeriod.getElem?_mod
@@ -199,7 +227,13 @@ lemma HasPeriod.getElem?_mod
         rw [eq]
     | inr large =>
         have len' : i - p < w.length := by lia
-        have IH : w[(i - p) % p]? = w[i - p]? := per.getElem?_mod 
+        have IH : w[(i - p) % p]? = w[i - p]? := per.getElem?_mod p (i - p) w len'
+        rw [hasPeriod_iff_getElem?] at per
+        have minus : i - p < w.length - p := by lia
+        have per' := per (i - p) minus
+        simp only [large, Nat.sub_add_cancel] at per'
+        have mod : i % p = (i - p) % p := mod_eq_sub_mod large
+        aesop
 
 Depends on / 依赖: Nat.sub_add_cancel, _mod, getElem, hasPeriod_iff_getElem, length, lt_or_ge, mod_eq_of_lt, mod_eq_sub_mod, mod_zero, p_zero, per.getElem, sub_add_cancel, w.length
 -/
@@ -272,7 +306,18 @@ lemma HasPeriod.factor
   have shift_position : (u ++ (v ++ w))[j + u.length]? = v[j]? := by
     rw [getElem?_append_right]; rw [Nat.add_sub_cancel]; rw [getElem?_append_left]
     all_goals lia
-  have shift_position' : 
+  have shift_position' : (u ++ (v ++ w))[j + u.length + p]? = v[j + p]? := by
+    have eq : j + u.length + p - u.length = j + p := by lia
+    rw [getElem?_append_right]
+    · rw [getElem?_append_left]
+      · exact congrArg (getElem? v) eq
+      · lia
+    · lia
+  have : forall i < u.length + (v.length + w.length) - p,
+      (u ++ (v ++ w))[i]? = (u ++ (v ++ w))[i + p]? := by
+    simp_all [hasPeriod_iff_getElem?]
+  rw [← shift_position']; rw [← shift_position]
+  exact this (j + u.length) (by lia)
 
 中文:
 引理 HasPeriod.factor
@@ -283,7 +328,18 @@ lemma HasPeriod.factor
   have shift_position : (u ++ (v ++ w))[j + u.length]? = v[j]? := by
     rw [getElem?_append_right]; rw [Nat.add_sub_cancel]; rw [getElem?_append_left]
     all_goals lia
-  have shift_position' : 
+  have shift_position' : (u ++ (v ++ w))[j + u.length + p]? = v[j + p]? := by
+    have eq : j + u.length + p - u.length = j + p := by lia
+    rw [getElem?_append_right]
+    · rw [getElem?_append_left]
+      · exact congrArg (getElem? v) eq
+      · lia
+    · lia
+  have : forall i < u.length + (v.length + w.length) - p,
+      (u ++ (v ++ w))[i]? = (u ++ (v ++ w))[i + p]? := by
+    simp_all [hasPeriod_iff_getElem?]
+  rw [← shift_position']; rw [← shift_position]
+  exact this (j + u.length) (by lia)
 
 Depends on / 依赖: Nat.add_sub_cancel, _append_left, _append_right, add_sub_cancel, all_goals, getElem, hasPeriod_iff_getElem, length, shift_position, u.length, v.length
 -/
@@ -368,7 +424,31 @@ lemma HasPeriod.take_append
   · simp_all
   rw [hasPeriod_iff_forall_getElem?_mod]
   have mod_w : forall i < w.length, w[i % p]? = w[i]? := (per.getElem?_mod)
-  suffices forall i < n + w.length, (take n w ++ w
+  suffices forall i < n + w.length, (take n w ++ w)[i]? = (take n w ++ w)[i % p]? by simp_all
+  intro i less_i
+  have mod_p : forall j < n + length w, (take n w ++ w)[j]? = w[j % p]? := by
+    intro j less_j
+    by_cases j_lt_n : j < n
+    · -- indices within `take n w` can be reduced due to the period of `w`
+      calc
+        (take n w ++ w)[j]? = (take n w)[j]? := getElem?_append_left (by simp_all)
+        _ = w[j]? := getElem?_take_of_lt j_lt_n
+        _ = w[j % p]? := Eq.symm (mod_w j (by lia))
+    · -- larger indices are indices of `w` decreased by `n`
+      have j_minus : j - n < w.length := by lia
+      have n_le_j : n <= j := le_of_not_gt j_lt_n; clear j_lt_n;
+      have j_mod : (j - n) % p = j % p := by
+        calc
+          (j - n) % p = (j - p * (n / p)) % p := by rw [Nat.mul_div_cancel' dvd]
+          _ = j % p := sub_mul_mod ((Nat.mul_div_cancel' dvd).symm ▸ n_le_j)
+      calc
+        (take n w ++ w)[j]? = w[j - (take n w).length]? := getElem?_append_right (by simp_all)
+        _ = w[j - n]? := by simp_all
+        _ = w[(j - n) % p]? := Eq.symm (mod_w (j - n) (by lia))
+        _ = w[j % p]? := by rw [j_mod]
+  have less_mod : i % p < n + w.length := by
+    have : i % p < p := mod_lt i p_pos; have : p <= n := le_of_dvd pos dvd; lia
+  rw [mod_p i less_i]; rw [mod_p (i % p) less_mod]; rw [mod_mod]
 
 中文:
 引理 HasPeriod.take_append
@@ -380,7 +460,31 @@ lemma HasPeriod.take_append
   · simp_all
   rw [hasPeriod_iff_forall_getElem?_mod]
   have mod_w : forall i < w.length, w[i % p]? = w[i]? := (per.getElem?_mod)
-  suffices forall i < n + w.length, (take n w ++ w
+  suffices forall i < n + w.length, (take n w ++ w)[i]? = (take n w ++ w)[i % p]? by simp_all
+  intro i less_i
+  have mod_p : forall j < n + length w, (take n w ++ w)[j]? = w[j % p]? := by
+    intro j less_j
+    by_cases j_lt_n : j < n
+    · -- indices within `take n w` can be reduced due to the period of `w`
+      calc
+        (take n w ++ w)[j]? = (take n w)[j]? := getElem?_append_left (by simp_all)
+        _ = w[j]? := getElem?_take_of_lt j_lt_n
+        _ = w[j % p]? := Eq.symm (mod_w j (by lia))
+    · -- larger indices are indices of `w` decreased by `n`
+      have j_minus : j - n < w.length := by lia
+      have n_le_j : n <= j := le_of_not_gt j_lt_n; clear j_lt_n;
+      have j_mod : (j - n) % p = j % p := by
+        calc
+          (j - n) % p = (j - p * (n / p)) % p := by rw [Nat.mul_div_cancel' dvd]
+          _ = j % p := sub_mul_mod ((Nat.mul_div_cancel' dvd).symm ▸ n_le_j)
+      calc
+        (take n w ++ w)[j]? = w[j - (take n w).length]? := getElem?_append_right (by simp_all)
+        _ = w[j - n]? := by simp_all
+        _ = w[(j - n) % p]? := Eq.symm (mod_w (j - n) (by lia))
+        _ = w[j % p]? := by rw [j_mod]
+  have less_mod : i % p < n + w.length := by
+    have : i % p < p := mod_lt i p_pos; have : p <= n := le_of_dvd pos dvd; lia
+  rw [mod_p i less_i]; rw [mod_p (i % p) less_mod]; rw [mod_mod]
 
 Depends on / 依赖: HasPeriod, Nat.eq_zero_or_pos, _mod, eq_zero_or_pos, getElem, hasPeriod_iff_forall_getElem, indices, j_lt_n, length, less_i, less_j, mod_p, mod_w, p_pos, per.getElem, w.length, within
 -/
@@ -432,7 +536,7 @@ lemma HasPeriod.drop_of_hasPeriod_add
      w[q + i]? = w[i + q]? := congrArg (getElem? w) (add_comm q i)
      _ = w[i]? := (per_q i (by lia)).symm
      _ = w[i + (k + q)]? := per_plus i (by lia)
-     _ = w[q + (i + k)]? :=
+     _ = w[q + (i + k)]? := congr_arg (getElem? w) (by lia)
 
 中文:
 引理 HasPeriod.drop_of_hasPeriod_add
@@ -445,7 +549,7 @@ lemma HasPeriod.drop_of_hasPeriod_add
      w[q + i]? = w[i + q]? := congrArg (getElem? w) (add_comm q i)
      _ = w[i]? := (per_q i (by lia)).symm
      _ = w[i + (k + q)]? := per_plus i (by lia)
-     _ = w[q + (i + k)]? :=
+     _ = w[q + (i + k)]? := congr_arg (getElem? w) (by lia)
 
 Depends on / 依赖: _drop, add_comm, congr_arg, getElem, hasPeriod_iff_getElem, i_lt, length_drop, per_plus, per_q
 -/
@@ -475,7 +579,41 @@ theorem HasPeriod.gcd
   cases hyp : compare p q with
   | lt => -- if `p` is less than `q`, switch the two periods
       have p_lt_q := Nat.compare_eq_lt.mp hyp
-      exact (gcd_comm q p ▸
+      exact (gcd_comm q p ▸ per_q.gcd) per_p (add_comm p q ▸ len)
+  | eq => simpa [(Nat.compare_eq_eq).mp hyp]
+  | gt =>
+      have q_lt_p : q < p := Nat.compare_eq_gt.mp hyp
+      have gcd_lt_p : p.gcd q < p := by
+        have : p.gcd q != p := by
+          simp [gcd_eq_left_iff_dvd, not_dvd_of_pos_of_lt q_pos q_lt_p]
+        exact this.lt_of_le (gcd_le_left q p_pos)
+      have per_diff : HasPeriod (drop q w) (p - q) := by
+        have : p = (p - q) + q := by lia
+        exact per_q.drop_of_hasPeriod_add (this ▸ per_p)
+      have per_q' : HasPeriod (drop q w) q := by
+        apply @HasPeriod.factor _ (take q w) (drop q w) [] q
+        all_goals simp_all
+      have gcd_stable : (p - q).gcd q = p.gcd q := gcd_sub_self_left (le_of_lt q_lt_p)
+      have drop_len : q <= (drop q w).length := by
+        rw [length_drop]
+        have : p.gcd q <= p - q := by
+          rw [← gcd_stable]; apply gcd_le_left q; lia
+        lia
+      have take_eq : take q (drop q w) = take q w := by
+          let ⟨z, hz⟩ := per_q.drop_prefix
+          convert_to take q (drop q w) = take q (drop q w ++ z)
+          · rw [hz]
+          exact (take_append_of_le_length drop_len).symm
+      -- the induction step
+      have IH : HasPeriod (drop q w) ((p - q).gcd q) :=
+        per_diff.gcd per_q' (by simp; lia)
+      convert_to HasPeriod (take q (drop q w) ++ drop q w) (p.gcd q)
+      · rw [take_eq, take_append_drop q w]
+      · exact (gcd_stable ▸ IH).take_append (p.gcd q) q (drop q w)
+          (gcd_dvd_right p q) drop_len
+  termination_by (q, p)
+  decreasing_by
+    all_goals grind
 
 中文:
 定理 HasPeriod.最大公约数
@@ -488,7 +626,41 @@ theorem HasPeriod.gcd
   cases hyp : compare p q with
   | lt => -- if `p` is less than `q`, switch the two periods
       have p_lt_q := Nat.compare_eq_lt.mp hyp
-      exact (gcd_comm q p ▸
+      exact (gcd_comm q p ▸ per_q.gcd) per_p (add_comm p q ▸ len)
+  | eq => simpa [(Nat.compare_eq_eq).mp hyp]
+  | gt =>
+      have q_lt_p : q < p := Nat.compare_eq_gt.mp hyp
+      have gcd_lt_p : p.gcd q < p := by
+        have : p.gcd q != p := by
+          simp [gcd_eq_left_iff_dvd, not_dvd_of_pos_of_lt q_pos q_lt_p]
+        exact this.lt_of_le (gcd_le_left q p_pos)
+      have per_diff : HasPeriod (drop q w) (p - q) := by
+        have : p = (p - q) + q := by lia
+        exact per_q.drop_of_hasPeriod_add (this ▸ per_p)
+      have per_q' : HasPeriod (drop q w) q := by
+        apply @HasPeriod.factor _ (take q w) (drop q w) [] q
+        all_goals simp_all
+      have gcd_stable : (p - q).gcd q = p.gcd q := gcd_sub_self_left (le_of_lt q_lt_p)
+      have drop_len : q <= (drop q w).length := by
+        rw [length_drop]
+        have : p.gcd q <= p - q := by
+          rw [← gcd_stable]; apply gcd_le_left q; lia
+        lia
+      have take_eq : take q (drop q w) = take q w := by
+          let ⟨z, hz⟩ := per_q.drop_prefix
+          convert_to take q (drop q w) = take q (drop q w ++ z)
+          · rw [hz]
+          exact (take_append_of_le_length drop_len).symm
+      -- the induction step
+      have IH : HasPeriod (drop q w) ((p - q).gcd q) :=
+        per_diff.gcd per_q' (by simp; lia)
+      convert_to HasPeriod (take q (drop q w) ++ drop q w) (p.gcd q)
+      · rw [take_eq, take_append_drop q w]
+      · exact (gcd_stable ▸ IH).take_append (p.gcd q) q (drop q w)
+          (gcd_dvd_right p q) drop_len
+  termination_by (q, p)
+  decreasing_by
+    all_goals grind
 
 Depends on / 依赖: HasPeriod, Nat.compare_eq_eq, Nat.compare_eq_gt.mp, Nat.compare_eq_lt.mp, Nat.eq_zero_or_pos, add_comm, compare, compare_eq_eq, compare_eq_gt, compare_eq_lt, eq_zero_or_pos, gcd_comm, gcd_eq_left_iff_dvd, gcd_lt_p, p.gcd, p_lt_q, p_pos, per_p, per_q, per_q.gcd
 -/

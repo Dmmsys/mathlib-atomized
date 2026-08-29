@@ -201,7 +201,26 @@ theorem exists_nat_bool_continuous_surjective_of_compact
   let : TopologicalSpace.SeparableSpace X :=
     TopologicalSpace.SecondCountableTopology.to_separableSpace
   obtain ⟨emb, h_emb⟩ := Metric.PiNatEmbed.exists_embedding_to_hilbert_cube (X := X)
-  let KH : Set (Nat -> unitInterva
+  let KH : Set (Nat -> unitInterval) := Set.range emb
+  let g : X ≃ₜ KH := h_emb.toHomeomorph
+  -- `KC` is the closed preimage of `KH` under the continuous surjection `cantorToHilbert`.
+  let KC : Set (Nat -> Bool) := cantorToHilbert ⁻¹' KH
+  have hKC_closed : IsClosed KC :=
+    IsClosed.preimage cantorToHilbert_continuous (Topology.IsClosedEmbedding.isClosed_range
+ Continuous.isClosedEmbedding (Topology.IsEmbedding.continuous h_emb) h_emb.injective)
+  -- Take a retraction `f'` from the Cantor space to `KC`.
+  obtain ⟨f, hf_continuous, hf_surjective⟩ := exists_retractionCantorSet hKC_closed
+ Set.Nonempty.preimage (Set.range_nonempty emb) cantorToHilbert_surjective
+  let f' : (Nat -> Bool) -> KC := Subtype.coind f (by simp [← hf_surjective])
+  have hf'_surjective : Function.Surjective f' := Subtype.coind_surjective _ (by grind [Set.SurjOn])
+  -- Let `h` be the restriction of `cantorToHilbert` to `KC → KH`.
+  let h : KC -> KH := KH.restrictPreimage cantorToHilbert
+  have hh_continuous : Continuous h := Continuous.restrictPreimage cantorToHilbert_continuous
+  have hh_surjective : Function.Surjective h :=
+    Set.restrictPreimage_surjective _ cantorToHilbert_surjective
+  -- Take the composition `g.symm ∘ h ∘ f'` as the desired continuous surjection from the Cantor
+  -- space to `X`.
+exact ⟨g.symm ∘ h ∘ f', by fun_prop, g.symm.surjective.comp hh_surjective.comp hf'_surjective⟩
 
 中文:
 定理 存在_nat_bool_continuous_surjective_of_compact
@@ -211,7 +230,26 @@ theorem exists_nat_bool_continuous_surjective_of_compact
   let : TopologicalSpace.SeparableSpace X :=
     TopologicalSpace.SecondCountableTopology.to_separableSpace
   obtain ⟨emb, h_emb⟩ := Metric.PiNatEmbed.exists_embedding_to_hilbert_cube (X := X)
-  let KH : Set (Nat -> unitInterva
+  let KH : Set (Nat -> unitInterval) := Set.range emb
+  let g : X ≃ₜ KH := h_emb.toHomeomorph
+  -- `KC` is the closed preimage of `KH` under the continuous surjection `cantorToHilbert`.
+  let KC : Set (Nat -> Bool) := cantorToHilbert ⁻¹' KH
+  have hKC_closed : IsClosed KC :=
+    IsClosed.preimage cantorToHilbert_continuous (Topology.IsClosedEmbedding.isClosed_range
+ Continuous.isClosedEmbedding (Topology.IsEmbedding.continuous h_emb) h_emb.injective)
+  -- Take a retraction `f'` from the Cantor space to `KC`.
+  obtain ⟨f, hf_continuous, hf_surjective⟩ := exists_retractionCantorSet hKC_closed
+ Set.Nonempty.preimage (Set.range_nonempty emb) cantorToHilbert_surjective
+  let f' : (Nat -> Bool) -> KC := Subtype.coind f (by simp [← hf_surjective])
+  have hf'_surjective : Function.Surjective f' := Subtype.coind_surjective _ (by grind [Set.SurjOn])
+  -- Let `h` be the restriction of `cantorToHilbert` to `KC → KH`.
+  let h : KC -> KH := KH.restrictPreimage cantorToHilbert
+  have hh_continuous : Continuous h := Continuous.restrictPreimage cantorToHilbert_continuous
+  have hh_surjective : Function.Surjective h :=
+    Set.restrictPreimage_surjective _ cantorToHilbert_surjective
+  -- Take the composition `g.symm ∘ h ∘ f'` as the desired continuous surjection from the Cantor
+  -- space to `X`.
+exact ⟨g.symm ∘ h ∘ f', by fun_prop, g.symm.surjective.comp hh_surjective.comp hf'_surjective⟩
 -/
 theorem exists_nat_bool_continuous_surjective_of_compact (X : Type*) [Nonempty X] [MetricSpace X]
     [CompactSpace X] : exists f : (Nat -> Bool) -> X, Continuous f ∧ Function.Surjective f := by

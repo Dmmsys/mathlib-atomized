@@ -276,14 +276,16 @@ theorem k_mul_k
   statement: q.k * q.k = -((c₁ * c₃) • (1 : A))
   proof: by
   rw [← i_mul_j]; rw [mul_assoc]; rw [← mul_assoc q.j _ _]; rw [j_mul_i]; rw [← i_mul_j]; rw [← mul_assoc]; rw [mul_sub]; rw [←
-    mul_assoc]; rw [i_mul_i]; rw [add_mul]; rw [smul_mul_assoc]; rw [one_mul]; rw [sub_mul]; rw [smul_mul_assoc]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [mul_assoc]
+    mul_assoc]; rw [i_mul_i]; rw [add_mul]; rw [smul_mul_assoc]; rw [one_mul]; rw [sub_mul]; rw [smul_mul_assoc]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [mul_assoc]; rw [j_mul_j]; rw [add_mul]; rw [smul_mul_assoc]; rw [j_mul_j]; rw [smul_smul]; rw [smul_mul_assoc]; rw [mul_assoc]; rw [j_mul_j]
+  linear_combination (norm := module)
 
 中文:
 定理 k_mul_k
   结论: q.k * q.k = -((c₁ * c₃) • (1 : A))
   证明: by
   rw [← i_mul_j]; rw [mul_assoc]; rw [← mul_assoc q.j _ _]; rw [j_mul_i]; rw [← i_mul_j]; rw [← mul_assoc]; rw [mul_sub]; rw [←
-    mul_assoc]; rw [i_mul_i]; rw [add_mul]; rw [smul_mul_assoc]; rw [one_mul]; rw [sub_mul]; rw [smul_mul_assoc]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [mul_assoc]
+    mul_assoc]; rw [i_mul_i]; rw [add_mul]; rw [smul_mul_assoc]; rw [one_mul]; rw [sub_mul]; rw [smul_mul_assoc]; rw [mul_smul_comm]; rw [smul_mul_assoc]; rw [mul_assoc]; rw [j_mul_j]; rw [add_mul]; rw [smul_mul_assoc]; rw [j_mul_j]; rw [smul_smul]; rw [smul_mul_assoc]; rw [mul_assoc]; rw [j_mul_j]
+  linear_combination (norm := module)
 
 Depends on / 依赖: add_mul, i_mul_i, i_mul_j, j_mul_i, j_mul_j, linear_combination, module, mul_assoc, mul_smul_comm, mul_sub, one_mul, smul_mul_assoc, smul_smul, sub_mul
 -/
@@ -377,7 +379,13 @@ theorem lift_mul
   simp only [lift, Algebra.algebraMap_eq_smul_one]
   simp_rw [add_mul, mul_add, smul_mul_assoc, mul_smul_comm, one_mul, mul_one, smul_smul]
   simp only [i_mul_i, j_mul_j, i_mul_j, j_mul_i, i_mul_k, k_mul_i, k_mul_j, j_mul_k, k_mul_k]
-  simp only [smul_smul, smul_neg, sub_eq_add_neg, ← add_assoc, 
+  simp only [smul_smul, smul_neg, sub_eq_add_neg, ← add_assoc, neg_smul]
+  simp only [mul_right_comm _ _ (c₁ * c₃), mul_comm _ (c₁ * c₃)]
+  simp only [mul_comm _ c₁]
+  simp only [mul_right_comm _ _ c₃]
+  simp only [← mul_assoc]
+  simp only [re_mul, sub_eq_add_neg, add_smul, neg_smul, imI_mul, ← add_assoc, imJ_mul, imK_mul]
+  linear_combination (norm := module)
 
 中文:
 定理 lift_mul
@@ -387,7 +395,13 @@ theorem lift_mul
   simp only [lift, Algebra.algebraMap_eq_smul_one]
   simp_rw [add_mul, mul_add, smul_mul_assoc, mul_smul_comm, one_mul, mul_one, smul_smul]
   simp only [i_mul_i, j_mul_j, i_mul_j, j_mul_i, i_mul_k, k_mul_i, k_mul_j, j_mul_k, k_mul_k]
-  simp only [smul_smul, smul_neg, sub_eq_add_neg, ← add_assoc, 
+  simp only [smul_smul, smul_neg, sub_eq_add_neg, ← add_assoc, neg_smul]
+  simp only [mul_right_comm _ _ (c₁ * c₃), mul_comm _ (c₁ * c₃)]
+  simp only [mul_comm _ c₁]
+  simp only [mul_right_comm _ _ c₃]
+  simp only [← mul_assoc]
+  simp only [re_mul, sub_eq_add_neg, add_smul, neg_smul, imI_mul, ← add_assoc, imJ_mul, imK_mul]
+  linear_combination (norm := module)
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, add_assoc, add_mul, add_smul, algebraMap_eq_smul_one, i_mul_i, i_mul_j, i_mul_k, j_mul_i, j_mul_j, j_mul_k, k_mul_i, k_mul_j, k_mul_k, mul_add, mul_assoc, mul_comm, mul_one, mul_right_comm
 -/
@@ -480,7 +494,8 @@ theorem range_liftHom
       exact Subalgebra.smul_mem _ (Algebra.subset_adjoin <| by simp) _
   · rw [Algebra.adjoin_le_iff]
     rintro x (rfl | rfl | rfl)
-      <;> [use (Basis.self
+      <;> [use (Basis.self R).i; use (Basis.self R).j; use (Basis.self R).k]
+    all_goals simp [lift]
 
 中文:
 定理 range_liftHom
@@ -494,7 +509,8 @@ theorem range_liftHom
       exact Subalgebra.smul_mem _ (Algebra.subset_adjoin <| by simp) _
   · rw [Algebra.adjoin_le_iff]
     rintro x (rfl | rfl | rfl)
-      <;> [use (Basis.self
+      <;> [use (Basis.self R).i; use (Basis.self R).j; use (Basis.self R).k]
+    all_goals simp [lift]
 
 Depends on / 依赖: Algebra, Algebra.adjoin_le_iff, Algebra.subset_adjoin, Basis.self, Subalgebra, Subalgebra.smul_mem, add_mem, adjoin_le_iff, algebraMap_mem, all_goals, le_antisymm, smul_mem, subset_adjoin
 -/

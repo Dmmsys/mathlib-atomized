@@ -655,7 +655,8 @@ theorem smeval_at_zero
   | monomial n a =>
     cases n with
     | zero => simp only [monomial_zero_left, smeval_C, npow_zero, coeff_C_zero]
-    | succ n => rw [coeff_monomial_succ, smeval_monomial, npo
+    | succ n => rw [coeff_monomial_succ, smeval_monomial, npow_add, npow_one, mul_zero, zero_smul,
+        smul_zero]
 
 中文:
 定理 smeval_at_zero
@@ -666,7 +667,8 @@ theorem smeval_at_zero
   | monomial n a =>
     cases n with
     | zero => simp only [monomial_zero_left, smeval_C, npow_zero, coeff_C_zero]
-    | succ n => rw [coeff_monomial_succ, smeval_monomial, npo
+    | succ n => rw [coeff_monomial_succ, smeval_monomial, npow_add, npow_one, mul_zero, zero_smul,
+        smul_zero]
 
 Depends on / 依赖: Polynomial, Polynomial.induction_on, add_smul, coeff_C_zero, coeff_add, coeff_monomial_succ, induction_on, monomial, monomial_zero_left, mul_zero, npow_add, npow_one, npow_zero, smeval_C, smeval_add, smeval_monomial, smul_zero, zero_smul
 -/
@@ -692,7 +694,7 @@ theorem smeval_X_mul
     induction p using Polynomial.induction_on' with
   | add p q ph qh => simp only [smeval_add, ph, qh, mul_add]
   | monomial n a =>
-    rw [← monomial_one_one_eq_X]; rw [monomial_mul_monomial]; rw [smeval_monomial]; rw [one_mul]; rw [npow_add]; rw [npow_one]; rw [← mul_smul_comm]; rw [smeval_mon
+    rw [← monomial_one_one_eq_X]; rw [monomial_mul_monomial]; rw [smeval_monomial]; rw [one_mul]; rw [npow_add]; rw [npow_one]; rw [← mul_smul_comm]; rw [smeval_monomial]
 
 中文:
 定理 smeval_X_mul
@@ -701,7 +703,7 @@ theorem smeval_X_mul
     induction p using Polynomial.induction_on' with
   | add p q ph qh => simp only [smeval_add, ph, qh, mul_add]
   | monomial n a =>
-    rw [← monomial_one_one_eq_X]; rw [monomial_mul_monomial]; rw [smeval_monomial]; rw [one_mul]; rw [npow_add]; rw [npow_one]; rw [← mul_smul_comm]; rw [smeval_mon
+    rw [← monomial_one_one_eq_X]; rw [monomial_mul_monomial]; rw [smeval_monomial]; rw [one_mul]; rw [npow_add]; rw [npow_one]; rw [← mul_smul_comm]; rw [smeval_monomial]
 
 Depends on / 依赖: Polynomial, Polynomial.induction_on, induction_on, monomial, monomial_mul_monomial, monomial_one_one_eq_X, mul_add, mul_smul_comm, npow_add, npow_one, one_mul, smeval_add, smeval_monomial
 -/
@@ -767,7 +769,7 @@ theorem smeval_monomial_mul
     simp only [smeval_add]
     rw [← C_mul_X_pow_eq_monomial]; rw [mul_assoc]; rw [smeval_C_mul]; rw [smeval_X_pow_mul]; rw [smeval_add]
   | monomial n a =>
-    rw [smeval_monomial]; rw [monomial_mul_monomial]; rw [smeval_mono
+    rw [smeval_monomial]; rw [monomial_mul_monomial]; rw [smeval_monomial]; rw [npow_add]; rw [mul_smul]; rw [mul_smul_comm]
 
 中文:
 定理 smeval_monomial_mul
@@ -778,7 +780,7 @@ theorem smeval_monomial_mul
     simp only [smeval_add]
     rw [← C_mul_X_pow_eq_monomial]; rw [mul_assoc]; rw [smeval_C_mul]; rw [smeval_X_pow_mul]; rw [smeval_add]
   | monomial n a =>
-    rw [smeval_monomial]; rw [monomial_mul_monomial]; rw [smeval_mono
+    rw [smeval_monomial]; rw [monomial_mul_monomial]; rw [smeval_monomial]; rw [npow_add]; rw [mul_smul]; rw [mul_smul_comm]
 
 Depends on / 依赖: C_mul_X_pow_eq_monomial, Polynomial, Polynomial.induction_on, induction_on, monomial, monomial_mul_monomial, mul_assoc, mul_smul, mul_smul_comm, npow_add, smeval_C_mul, smeval_X_pow_mul, smeval_add, smeval_monomial
 -/
@@ -998,7 +1000,13 @@ theorem smeval_commute
     refine Commute.smul_left ?_ a
     induction n with
     | zero => simp only [npow_zero, Commute.one_left]
-    | succ n 
+    | succ n ih =>
+      refine (commute_iff_eq (x ^ (n + 1)) (q.smeval y)).mpr ?_
+      rw [commute_iff_eq (x ^ n) (q.smeval y)] at ih
+      have hxq : x * q.smeval y = q.smeval y * x := by
+        refine (commute_iff_eq x (q.smeval y)).mp ?_
+        exact Commute.symm (smeval_commute_left R q (Commute.symm hc))
+      rw [pow_succ]; rw [← mul_assoc]; rw [← ih]; rw [mul_assoc]; rw [hxq]; rw [mul_assoc]
 
 中文:
 定理 smeval_commute
@@ -1012,7 +1020,13 @@ theorem smeval_commute
     refine Commute.smul_left ?_ a
     induction n with
     | zero => simp only [npow_zero, Commute.one_left]
-    | succ n 
+    | succ n ih =>
+      refine (commute_iff_eq (x ^ (n + 1)) (q.smeval y)).mpr ?_
+      rw [commute_iff_eq (x ^ n) (q.smeval y)] at ih
+      have hxq : x * q.smeval y = q.smeval y * x := by
+        refine (commute_iff_eq x (q.smeval y)).mp ?_
+        exact Commute.symm (smeval_commute_left R q (Commute.symm hc))
+      rw [pow_succ]; rw [← mul_assoc]; rw [← ih]; rw [mul_assoc]; rw [hxq]; rw [mul_assoc]
 
 Depends on / 依赖: Commute, Commute.add_left, Commute.one_left, Commute.smul_left, Commute.symm, Polynomial, Polynomial.induction_on, add_left, commute_iff_eq, induction_on, monomial, npow_zero, one_left, q.smeval, smeval, smeval_add, smeval_monomial, smul_left
 -/

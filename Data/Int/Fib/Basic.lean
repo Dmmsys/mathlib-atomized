@@ -299,7 +299,19 @@ theorem fib_add_two
   · dsimp
     rw [← Nat.cast_ofNat]; rw [← Nat.cast_add]; rw [← Nat.cast_add_one]; rw [fib_natCast]; rw [fib_natCast]; rw [Nat.fib_add_two]; rw [Nat.cast_add]
   · rw [negSucc_eq, ← Nat.cast_add_one, fib_neg_natCast]
-    simp only [Nat.cast_add, Nat.cast_one, neg_add_rev, r
+    simp only [Nat.cast_add, Nat.cast_one, neg_add_rev, reduceNeg, add_comm,
+      add_assoc, reduceAdd, add_neg_cancel_comm_assoc, fib_neg_natCast]
+    if hn0 : n = 0 then simp [hn0] else
+    symm
+    calc _ = (-1) ^ (n + 1) * ((n.fib - (n + 1).fib : Int)) := by grind
+      _ = _ := by
+        have : -(n : Int) + 1 = -((n - 1 : Nat) : Int) := by grind
+        obtain (⟨n, rfl⟩ | ⟨n, rfl⟩) := n.even_or_odd
+        · rw [Nat.fib_add_one hn0, this, fib_neg_natCast, pow_add, ← two_mul,
+            Nat.sub_add_cancel (by grind)]
+          simp
+        · rw [Nat.fib_add_one hn0, this, fib_neg_natCast, pow_add]
+          simp
 
 中文:
 定理 fib_add_two
@@ -310,7 +322,19 @@ theorem fib_add_two
   · dsimp
     rw [← Nat.cast_ofNat]; rw [← Nat.cast_add]; rw [← Nat.cast_add_one]; rw [fib_natCast]; rw [fib_natCast]; rw [Nat.fib_add_two]; rw [Nat.cast_add]
   · rw [negSucc_eq, ← Nat.cast_add_one, fib_neg_natCast]
-    simp only [Nat.cast_add, Nat.cast_one, neg_add_rev, r
+    simp only [Nat.cast_add, Nat.cast_one, neg_add_rev, reduceNeg, add_comm,
+      add_assoc, reduceAdd, add_neg_cancel_comm_assoc, fib_neg_natCast]
+    if hn0 : n = 0 then simp [hn0] else
+    symm
+    calc _ = (-1) ^ (n + 1) * ((n.fib - (n + 1).fib : Int)) := by grind
+      _ = _ := by
+        have : -(n : Int) + 1 = -((n - 1 : Nat) : Int) := by grind
+        obtain (⟨n, rfl⟩ | ⟨n, rfl⟩) := n.even_or_odd
+        · rw [Nat.fib_add_one hn0, this, fib_neg_natCast, pow_add, ← two_mul,
+            Nat.sub_add_cancel (by grind)]
+          simp
+        · rw [Nat.fib_add_one hn0, this, fib_neg_natCast, pow_add]
+          simp
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_add_one, Nat.cast_ofNat, Nat.cast_one, Nat.fib_add_two, add_assoc, add_comm, add_neg_cancel_comm_assoc, cast_add, cast_add_one, cast_ofNat, cast_one, fib_add_two, fib_natCast, fib_neg_natCast, n.fib, negSucc_eq, neg_add_rev, reduceAdd, reduceNeg
 -/
@@ -407,7 +431,7 @@ theorem fib_natCast_add
         rw [fib_natCast_add]; grind
       _ = fib (m - 1) * fib n + fib m * fib (n + 1) + fib m * fib n +
           fib (m + 1) * fib (n + 1) := by rw [fib_natCast_add]; grind
-      _ = _ := by
+      _ = _ := by grind [fib_add_two]
 
 中文:
 定理 fib_natCast_add
@@ -416,7 +440,7 @@ theorem fib_natCast_add
         rw [fib_natCast_add]; grind
       _ = fib (m - 1) * fib n + fib m * fib (n + 1) + fib m * fib n +
           fib (m + 1) * fib (n + 1) := by rw [fib_natCast_add]; grind
-      _ = _ := by
+      _ = _ := by grind [fib_add_two]
 -/
 private theorem fib_natCast_add :
     forall (m : Nat) (n : Int), fib (m + n) = fib (m - 1) * fib n + fib m * fib (n + 1)
@@ -441,7 +465,7 @@ theorem fib_add_natCast
         rw [fib_natCast_add]; grind
       _ = fib (m - 1) * fib n + fib m * fib (n + 1) + fib m * fib n +
           fib (m + 1) * fib (n + 1) := by rw [fib_natCast_add]; grind
-      _ = _ := by
+      _ = _ := by grind [fib_add_two]
 
 中文:
 定理 fib_add_natCast
@@ -450,7 +474,7 @@ theorem fib_add_natCast
         rw [fib_natCast_add]; grind
       _ = fib (m - 1) * fib n + fib m * fib (n + 1) + fib m * fib n +
           fib (m + 1) * fib (n + 1) := by rw [fib_natCast_add]; grind
-      _ = _ := by
+      _ = _ := by grind [fib_add_two]
 -/
 private theorem fib_add_natCast :
     forall (m : Int) (n : Nat), fib (m + n) = fib (m - 1) * fib n + fib m * fib (n + 1)

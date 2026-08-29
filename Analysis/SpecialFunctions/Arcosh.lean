@@ -465,7 +465,9 @@ definition coshOpenPartialHomeomorph
   left_inv' _ hr := arcosh_cosh (le_of_lt hr)
   right_inv' _ hr := cosh_arcosh (le_of_lt hr)
   open_source := isOpen_Ioi
-  open_target := isOpen_Io
+  open_target := isOpen_Ioi
+  continuousOn_toFun := by fun_prop
+  continuousOn_invFun := continuousOn_arcosh.mono Ioi_subset_Ici_self
 
 中文:
 定义 coshOpenPartialHomeomorph
@@ -479,7 +481,9 @@ definition coshOpenPartialHomeomorph
   left_inv' _ hr := arcosh_cosh (le_of_lt hr)
   right_inv' _ hr := cosh_arcosh (le_of_lt hr)
   open_source := isOpen_Ioi
-  open_target := isOpen_Io
+  open_target := isOpen_Ioi
+  continuousOn_toFun := by fun_prop
+  continuousOn_invFun := continuousOn_arcosh.mono Ioi_subset_Ici_self
 -/
 def coshOpenPartialHomeomorph : OpenPartialHomeomorph Real Real where
   toFun := cosh

@@ -182,7 +182,14 @@ haveI' : e =Q ite p a b := ⟨⟩
 guard ← withDefault withNewMCtxDepth isDefEq f q(ite (α := $α))
 id
   match ra, rb with
-
+  | .positive pa, .positive pb => pure (.positive q(ite_pos $p $pa $pb))
+  | .positive pa, .nonnegative pb => pure (.nonnegative q(ite_nonneg_of_pos_of_nonneg $p $pa $pb))
+  | .nonnegative pa, .positive pb => pure (.nonnegative q(ite_nonneg_of_nonneg_of_pos $p $pa $pb))
+  | .nonnegative pa, .nonnegative pb => pure (.nonnegative q(ite_nonneg $p $pa $pb))
+  | .positive pa, .nonzero pb => pure (.nonzero q(ite_ne_zero_of_pos_of_ne_zero $p $pa $pb))
+  | .nonzero pa, .positive pb => pure (.nonzero q(ite_ne_zero_of_ne_zero_of_pos $p $pa $pb))
+  | .nonzero pa, .nonzero pb => pure (.nonzero q(ite_ne_zero $p $pa $pb))
+  | _, _ => pure .none
 
 中文:
 定义 evalIte
@@ -195,7 +202,14 @@ haveI' : e =Q ite p a b := ⟨⟩
 guard ← withDefault withNewMCtxDepth isDefEq f q(ite (α := $α))
 id
   match ra, rb with
-
+  | .positive pa, .positive pb => pure (.positive q(ite_pos $p $pa $pb))
+  | .positive pa, .nonnegative pb => pure (.nonnegative q(ite_nonneg_of_pos_of_nonneg $p $pa $pb))
+  | .nonnegative pa, .positive pb => pure (.nonnegative q(ite_nonneg_of_nonneg_of_pos $p $pa $pb))
+  | .nonnegative pa, .nonnegative pb => pure (.nonnegative q(ite_nonneg $p $pa $pb))
+  | .positive pa, .nonzero pb => pure (.nonzero q(ite_ne_zero_of_pos_of_ne_zero $p $pa $pb))
+  | .nonzero pa, .positive pb => pure (.nonzero q(ite_ne_zero_of_ne_zero_of_pos $p $pa $pb))
+  | .nonzero pa, .nonzero pb => pure (.nonzero q(ite_ne_zero $p $pa $pb))
+  | _, _ => pure .none
 -/
 @[positivity ite _ _ _] def evalIte : PositivityExt where eval {u α} zα pα? e := do
   let .app (.app (.app (.app f (p : Q(Prop))) (_ : Q(Decidable $p))) (a : Q($α))) (b : Q($α))
@@ -338,7 +352,28 @@ let _e_eq : e =Q f a b := ⟨⟩
   let _a ← synthInstanceQ q(LinearOrder $α)
 let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(min)
   assumeInstancesCommute
-  match (dependent := true) ← c
+  match (dependent := true) ← core zα pα? a, ← core zα pα? b with
+  | .positive (pα := pα') pa, .positive pb =>
+    assumeInstancesCommute
+    pure (.positive q(lt_min $pa $pb))
+  | .positive (pα := pα') pa, .nonnegative pb =>
+    assumeInstancesCommute
+    pure (.nonnegative q(le_min_of_lt_of_le $pa $pb))
+  | .nonnegative (pα := pα') pa, .positive pb =>
+    assumeInstancesCommute
+    pure (.nonnegative q(le_min_of_le_of_lt $pa $pb))
+  | .nonnegative pa (pα := pα'), .nonnegative pb =>
+    assumeInstancesCommute
+    pure (.nonnegative q(le_min $pa $pb))
+  | .positive pa, .nonzero pb =>
+    assumeInstancesCommute
+    pure (.nonzero q(min_ne_of_lt_of_ne $pa $pb))
+  | .nonzero pa, .positive pb =>
+    assumeInstancesCommute
+    pure (.nonzero q(min_ne_of_ne_of_lt $pa $pb))
+  | .nonzero pa, .nonzero pb => do
+    pure (.nonzero q(min_ne $pa $pb))
+  | _, _ => pure .none
 
 中文:
 定义 evalMin
@@ -349,7 +384,28 @@ let _e_eq : e =Q f a b := ⟨⟩
   let _a ← synthInstanceQ q(LinearOrder $α)
 let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(min)
   assumeInstancesCommute
-  match (dependent := true) ← c
+  match (dependent := true) ← core zα pα? a, ← core zα pα? b with
+  | .positive (pα := pα') pa, .positive pb =>
+    assumeInstancesCommute
+    pure (.positive q(lt_min $pa $pb))
+  | .positive (pα := pα') pa, .nonnegative pb =>
+    assumeInstancesCommute
+    pure (.nonnegative q(le_min_of_lt_of_le $pa $pb))
+  | .nonnegative (pα := pα') pa, .positive pb =>
+    assumeInstancesCommute
+    pure (.nonnegative q(le_min_of_le_of_lt $pa $pb))
+  | .nonnegative pa (pα := pα'), .nonnegative pb =>
+    assumeInstancesCommute
+    pure (.nonnegative q(le_min $pa $pb))
+  | .positive pa, .nonzero pb =>
+    assumeInstancesCommute
+    pure (.nonzero q(min_ne_of_lt_of_ne $pa $pb))
+  | .nonzero pa, .positive pb =>
+    assumeInstancesCommute
+    pure (.nonzero q(min_ne_of_ne_of_lt $pa $pb))
+  | .nonzero pa, .nonzero pb => do
+    pure (.nonzero q(min_ne $pa $pb))
+  | _, _ => pure .none
 -/
 @[positivity min _ _] def evalMin : PositivityExt where eval {u α} zα pα? e := do
   let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not min"
@@ -392,7 +448,32 @@ let _e_eq : e =Q f a b := ⟨⟩
   let _a ← synthInstanceQ q(LinearOrder $α)
 let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(max)
   let result : Strictness zα e pα? ← catchNone do
-    le
+    let ra ← core zα pα? a
+    match (dependent := true) ra with
+    | .positive pa =>
+      assumeInstancesCommute
+      pure (.positive q(lt_max_of_lt_left $pa))
+    | .nonnegative pa =>
+      assumeInstancesCommute
+      pure (.nonnegative q(le_max_of_le_left $pa))
+    -- If `a ≠ 0`, we might prove `max a b ≠ 0` if `b ≠ 0` but we don't want to evaluate
+    -- `b` before having ruled out `0 < a`, for performance. So we do that in the second branch
+    -- of the `orElse'`.
+    | _ => pure .none
+  orElse result do
+    let rb ← core zα pα? b
+    match (dependent := true) rb with
+    | .positive pb =>
+      assumeInstancesCommute
+      pure (.positive q(lt_max_of_lt_right $pb))
+    | .nonnegative pb =>
+      assumeInstancesCommute
+      pure (.nonnegative q(le_max_of_le_right $pb))
+    | .nonzero pb => do
+      match ← core zα pα? a with
+      | .nonzero pa => pure (.nonzero q(max_ne $pa $pb))
+      | _ => pure .none
+    | _ => pure .none
 
 中文:
 定义 evalMax
@@ -403,7 +484,32 @@ let _e_eq : e =Q f a b := ⟨⟩
   let _a ← synthInstanceQ q(LinearOrder $α)
 let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(max)
   let result : Strictness zα e pα? ← catchNone do
-    le
+    let ra ← core zα pα? a
+    match (dependent := true) ra with
+    | .positive pa =>
+      assumeInstancesCommute
+      pure (.positive q(lt_max_of_lt_left $pa))
+    | .nonnegative pa =>
+      assumeInstancesCommute
+      pure (.nonnegative q(le_max_of_le_left $pa))
+    -- If `a ≠ 0`, we might prove `max a b ≠ 0` if `b ≠ 0` but we don't want to evaluate
+    -- `b` before having ruled out `0 < a`, for performance. So we do that in the second branch
+    -- of the `orElse'`.
+    | _ => pure .none
+  orElse result do
+    let rb ← core zα pα? b
+    match (dependent := true) rb with
+    | .positive pb =>
+      assumeInstancesCommute
+      pure (.positive q(lt_max_of_lt_right $pb))
+    | .nonnegative pb =>
+      assumeInstancesCommute
+      pure (.nonnegative q(le_max_of_le_right $pb))
+    | .nonzero pb => do
+      match ← core zα pα? a with
+      | .nonzero pa => pure (.nonzero q(max_ne $pa $pb))
+      | _ => pure .none
+    | _ => pure .none
 -/
 @[positivity max _ _] def evalMax : PositivityExt where eval {u α} zα pα? e := do
   let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not max"
@@ -449,7 +555,22 @@ definition evalAdd
 let _e_eq : e =Q f a b := ⟨⟩
   let _a ← synthInstanceQ q(AddZeroClass $α)
   assumeInstancesCommute
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDef
+let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HAdd.hAdd)
+  let ra ← core zα pα a; let rb ← core zα pα b
+  match ra, rb with
+  | .positive pa, .positive pb =>
+    let _a ← synthInstanceQ q(AddLeftMono $α)
+    pure (.positive q(add_pos' $pa $pb))
+  | .positive pa, .nonnegative pb =>
+    let _a ← synthInstanceQ q(AddLeftMono $α)
+    pure (.positive q(add_pos_of_pos_of_nonneg $pa $pb))
+  | .nonnegative pa, .positive pb =>
+    let _a ← synthInstanceQ q(AddRightMono $α)
+    pure (.positive q(Right.add_pos_of_nonneg_of_pos $pa $pb))
+  | .nonnegative pa, .nonnegative pb =>
+    let _a ← synthInstanceQ q(AddLeftMono $α)
+    pure (.nonnegative q(add_nonneg $pa $pb))
+  | _, _ => failure
 
 中文:
 定义 evalAdd
@@ -459,7 +580,22 @@ let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDef
 let _e_eq : e =Q f a b := ⟨⟩
   let _a ← synthInstanceQ q(AddZeroClass $α)
   assumeInstancesCommute
-let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDef
+let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HAdd.hAdd)
+  let ra ← core zα pα a; let rb ← core zα pα b
+  match ra, rb with
+  | .positive pa, .positive pb =>
+    let _a ← synthInstanceQ q(AddLeftMono $α)
+    pure (.positive q(add_pos' $pa $pb))
+  | .positive pa, .nonnegative pb =>
+    let _a ← synthInstanceQ q(AddLeftMono $α)
+    pure (.positive q(add_pos_of_pos_of_nonneg $pa $pb))
+  | .nonnegative pa, .positive pb =>
+    let _a ← synthInstanceQ q(AddRightMono $α)
+    pure (.positive q(Right.add_pos_of_nonneg_of_pos $pa $pb))
+  | .nonnegative pa, .nonnegative pb =>
+    let _a ← synthInstanceQ q(AddLeftMono $α)
+    pure (.nonnegative q(add_nonneg $pa $pb))
+  | _, _ => failure
 -/
 @[positivity _ + _] def evalAdd : PositivityExt where eval {u α} zα pα? e :=
   match pα? with | none => pure .none | some pα => do
@@ -498,7 +634,59 @@ let _e_eq : e =Q f a b := ⟨⟩
 let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HSub.hSub)
 id
   match pα? with
-  | some p
+  | some pα => do
+    let mut result := .none
+    for decl in ← getLCtx do
+      unless decl.isImplementationDetail do
+        have e' : Q(Prop) := decl.type
+        have p : Q($e') := .fvar decl.fvarId
+        result ← orElse result do
+          match e' with
+          | ~q(@LE.le.{u} $β $le $lo $hi) =>
+            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
+            let .defEq _ ← isDefEqQ q($le) q(($pα).toLE) | return .none
+            let .defEq (_ : $a =Q $hi) ← isDefEqQ a hi | return .none
+            let .defEq (_ : $b =Q $lo) ← isDefEqQ b lo | return .none
+            let _ ← synthInstanceQ q(AddRightMono $α)
+            return .nonnegative q(sub_nonneg_of_le $p)
+          | ~q(@LT.lt.{u} $β $lt $lo $hi) =>
+            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
+            let .defEq _ ← isDefEqQ q($lt) q(($pα).toLT) | return .none
+            let .defEq (_ : $a =Q $hi) ← isDefEqQ a hi | return .none
+            let .defEq (_ : $b =Q $lo) ← isDefEqQ b lo | return .none
+            let _i ← synthInstanceQ q(AddRightStrictMono $α)
+            assumeInstancesCommute
+            return .positive (q(sub_pos_of_lt $p):)
+          | ~q(@Ne.{u + 1} $β $lhs $rhs) =>
+            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
+            if let .defEq (_ : $a =Q $lhs) ← isDefEqQ a lhs then
+              let .defEq (_ : $b =Q $rhs) ← isDefEqQ b rhs | return .none
+              return .nonzero (q(sub_ne_zero_of_ne $p):)
+            if let .defEq _ ← isDefEqQ a rhs then
+              let .defEq _ ← isDefEqQ b lhs | return .none
+              return .nonzero (q(sub_ne_zero_of_ne ($p).symm):)
+            return .none
+          | _ => return .none
+    return result
+  | none => do
+    let mut result := .none
+    for decl in ← getLCtx do
+      unless decl.isImplementationDetail do
+        have e' : Q(Prop) := decl.type
+        have p : Q($e') := .fvar decl.fvarId
+        result ← orElse result do
+          match e' with
+          | ~q(@Ne.{u + 1} $β $lhs $rhs) =>
+            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
+            if let .defEq (_ : $a =Q $lhs) ← isDefEqQ a lhs then
+              let .defEq (_ : $b =Q $rhs) ← isDefEqQ b rhs | return .none
+              return .nonzero (q(sub_ne_zero_of_ne $p):)
+            if let .defEq _ ← isDefEqQ a rhs then
+              let .defEq _ ← isDefEqQ b lhs | return .none
+              return .nonzero (q(sub_ne_zero_of_ne ($p).symm):)
+            return .none
+          | _ => return .none
+    return result
 
 中文:
 定义 evalSub
@@ -511,7 +699,59 @@ let _e_eq : e =Q f a b := ⟨⟩
 let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HSub.hSub)
 id
   match pα? with
-  | some p
+  | some pα => do
+    let mut result := .none
+    for decl in ← getLCtx do
+      unless decl.isImplementationDetail do
+        have e' : Q(Prop) := decl.type
+        have p : Q($e') := .fvar decl.fvarId
+        result ← orElse result do
+          match e' with
+          | ~q(@LE.le.{u} $β $le $lo $hi) =>
+            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
+            let .defEq _ ← isDefEqQ q($le) q(($pα).toLE) | return .none
+            let .defEq (_ : $a =Q $hi) ← isDefEqQ a hi | return .none
+            let .defEq (_ : $b =Q $lo) ← isDefEqQ b lo | return .none
+            let _ ← synthInstanceQ q(AddRightMono $α)
+            return .nonnegative q(sub_nonneg_of_le $p)
+          | ~q(@LT.lt.{u} $β $lt $lo $hi) =>
+            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
+            let .defEq _ ← isDefEqQ q($lt) q(($pα).toLT) | return .none
+            let .defEq (_ : $a =Q $hi) ← isDefEqQ a hi | return .none
+            let .defEq (_ : $b =Q $lo) ← isDefEqQ b lo | return .none
+            let _i ← synthInstanceQ q(AddRightStrictMono $α)
+            assumeInstancesCommute
+            return .positive (q(sub_pos_of_lt $p):)
+          | ~q(@Ne.{u + 1} $β $lhs $rhs) =>
+            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
+            if let .defEq (_ : $a =Q $lhs) ← isDefEqQ a lhs then
+              let .defEq (_ : $b =Q $rhs) ← isDefEqQ b rhs | return .none
+              return .nonzero (q(sub_ne_zero_of_ne $p):)
+            if let .defEq _ ← isDefEqQ a rhs then
+              let .defEq _ ← isDefEqQ b lhs | return .none
+              return .nonzero (q(sub_ne_zero_of_ne ($p).symm):)
+            return .none
+          | _ => return .none
+    return result
+  | none => do
+    let mut result := .none
+    for decl in ← getLCtx do
+      unless decl.isImplementationDetail do
+        have e' : Q(Prop) := decl.type
+        have p : Q($e') := .fvar decl.fvarId
+        result ← orElse result do
+          match e' with
+          | ~q(@Ne.{u + 1} $β $lhs $rhs) =>
+            let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
+            if let .defEq (_ : $a =Q $lhs) ← isDefEqQ a lhs then
+              let .defEq (_ : $b =Q $rhs) ← isDefEqQ b rhs | return .none
+              return .nonzero (q(sub_ne_zero_of_ne $p):)
+            if let .defEq _ ← isDefEqQ a rhs then
+              let .defEq _ ← isDefEqQ b lhs | return .none
+              return .nonzero (q(sub_ne_zero_of_ne ($p).symm):)
+            return .none
+          | _ => return .none
+    return result
 -/
 @[positivity _ - _] def evalSub : PositivityExt where eval {u α} _zα pα? e := do
   let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not -"
@@ -587,7 +827,38 @@ let _e_eq : e =Q f a b := ⟨⟩
   let _a ← synthInstanceQ q(Mul $α)
 let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HMul.hMul)
   let ra ← core zα pα? a; let rb ← core zα pα? b
-  let tryPr
+  let tryProveNonzero (pα? : Option Q(PartialOrder $α))
+      (pa? : Option Q($a != 0)) (pb? : Option Q($b != 0)) : MetaM (Strictness zα e pα?) := do
+    let pa ← liftOption pa?
+    let pb ← liftOption pb?
+    let _a ← synthInstanceQ q(NoZeroDivisors $α)
+    pure (.nonzero q(mul_ne_zero $pa $pb))
+  let tryProveNonneg (pα : Q(PartialOrder $α)) (pa? : Option Q(0 <= $a)) (pb? : Option Q(0 <= $b)) :
+      MetaM (Strictness zα e pα) := do
+    let pa ← liftOption pa?
+    let pb ← liftOption pb?
+    let _a ← synthInstanceQ q(MulZeroClass $α)
+    let _a ← synthInstanceQ q(PosMulMono $α)
+    assumeInstancesCommute
+    pure (.nonnegative q(mul_nonneg $pa $pb))
+  let tryProvePositive (pα : Q(PartialOrder $α)) (pa? : Option Q(0 < $a)) (pb? : Option Q(0 < $b)) :
+      MetaM (Strictness zα e pα) := do
+    let pa ← liftOption pa?
+    let pb ← liftOption pb?
+    let _a ← synthInstanceQ q(MulZeroClass $α)
+    let _a ← synthInstanceQ q(PosMulStrictMono $α)
+    assumeInstancesCommute
+    pure (.positive q(mul_pos $pa $pb))
+id
+  match pα? with
+  | some pα => do
+    let mut result : Strictness zα e (some pα) := .none
+    result ← orElse result (tryProvePositive pα ra.toPositive rb.toPositive)
+    result ← orElse result (tryProveNonneg pα ra.toNonneg rb.toNonneg)
+    result ← orElse result (tryProveNonzero pα ra.toNonzero rb.toNonzero)
+    return result
+  | none =>
+return ← catchNone tryProveNonzero .none ra.toNonzero rb.toNonzero
 
 中文:
 定义 evalMul
@@ -598,7 +869,38 @@ let _e_eq : e =Q f a b := ⟨⟩
   let _a ← synthInstanceQ q(Mul $α)
 let ⟨_f_eq⟩ ← withDefault withNewMCtxDepth assertDefEqQ q($f) q(HMul.hMul)
   let ra ← core zα pα? a; let rb ← core zα pα? b
-  let tryPr
+  let tryProveNonzero (pα? : Option Q(PartialOrder $α))
+      (pa? : Option Q($a != 0)) (pb? : Option Q($b != 0)) : MetaM (Strictness zα e pα?) := do
+    let pa ← liftOption pa?
+    let pb ← liftOption pb?
+    let _a ← synthInstanceQ q(NoZeroDivisors $α)
+    pure (.nonzero q(mul_ne_zero $pa $pb))
+  let tryProveNonneg (pα : Q(PartialOrder $α)) (pa? : Option Q(0 <= $a)) (pb? : Option Q(0 <= $b)) :
+      MetaM (Strictness zα e pα) := do
+    let pa ← liftOption pa?
+    let pb ← liftOption pb?
+    let _a ← synthInstanceQ q(MulZeroClass $α)
+    let _a ← synthInstanceQ q(PosMulMono $α)
+    assumeInstancesCommute
+    pure (.nonnegative q(mul_nonneg $pa $pb))
+  let tryProvePositive (pα : Q(PartialOrder $α)) (pa? : Option Q(0 < $a)) (pb? : Option Q(0 < $b)) :
+      MetaM (Strictness zα e pα) := do
+    let pa ← liftOption pa?
+    let pb ← liftOption pb?
+    let _a ← synthInstanceQ q(MulZeroClass $α)
+    let _a ← synthInstanceQ q(PosMulStrictMono $α)
+    assumeInstancesCommute
+    pure (.positive q(mul_pos $pa $pb))
+id
+  match pα? with
+  | some pα => do
+    let mut result : Strictness zα e (some pα) := .none
+    result ← orElse result (tryProvePositive pα ra.toPositive rb.toPositive)
+    result ← orElse result (tryProveNonneg pα ra.toNonneg rb.toNonneg)
+    result ← orElse result (tryProveNonzero pα ra.toNonzero rb.toNonzero)
+    return result
+  | none =>
+return ← catchNone tryProveNonzero .none ra.toNonzero rb.toNonzero
 -/
 @[positivity _ * _] def evalMul : PositivityExt where eval {u α} zα pα? e := do
   let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | throwError "not *"
@@ -734,7 +1036,20 @@ definition evalIntDiv
     let rb ← core q(inferInstance) (some q(inferInstance)) b
     assertInstancesCommute
     match ra, rb with
-    | .positive (pa : Q(0 
+    | .positive (pa : Q(0 < $a)), .positive (pb : Q(0 < $b)) =>
+      -- Only attempts to prove `0 < a / a`, otherwise falls back to `0 ≤ a / b`
+      let _ := q(int_div_self_pos $pa)
+      match ← isDefEqQ a b with
+      | .defEq _ => pure (.positive q(int_div_self_pos $pa))
+      | .notDefEq => pure (.nonnegative q(int_div_nonneg_of_pos_of_pos $pa $pb))
+    | .positive (pa : Q(0 < $a)), .nonnegative (pb : Q(0 <= $b)) =>
+      pure (.nonnegative q(int_div_nonneg_of_pos_of_nonneg $pa $pb))
+    | .nonnegative (pa : Q(0 <= $a)), .positive (pb : Q(0 < $b)) =>
+      pure (.nonnegative q(int_div_nonneg_of_nonneg_of_pos $pa $pb))
+    | .nonnegative (pa : Q(0 <= $a)), .nonnegative (pb : Q(0 <= $b)) =>
+      pure (.nonnegative q(Int.ediv_nonneg $pa $pb))
+    | _, _ => pure .none
+  | _, _, _ => throwError "not /"
 
 中文:
 定义 eval整数Div
@@ -746,7 +1061,20 @@ definition evalIntDiv
     let rb ← core q(inferInstance) (some q(inferInstance)) b
     assertInstancesCommute
     match ra, rb with
-    | .positive (pa : Q(0 
+    | .positive (pa : Q(0 < $a)), .positive (pb : Q(0 < $b)) =>
+      -- Only attempts to prove `0 < a / a`, otherwise falls back to `0 ≤ a / b`
+      let _ := q(int_div_self_pos $pa)
+      match ← isDefEqQ a b with
+      | .defEq _ => pure (.positive q(int_div_self_pos $pa))
+      | .notDefEq => pure (.nonnegative q(int_div_nonneg_of_pos_of_pos $pa $pb))
+    | .positive (pa : Q(0 < $a)), .nonnegative (pb : Q(0 <= $b)) =>
+      pure (.nonnegative q(int_div_nonneg_of_pos_of_nonneg $pa $pb))
+    | .nonnegative (pa : Q(0 <= $a)), .positive (pb : Q(0 < $b)) =>
+      pure (.nonnegative q(int_div_nonneg_of_nonneg_of_pos $pa $pb))
+    | .nonnegative (pa : Q(0 <= $a)), .nonnegative (pb : Q(0 <= $b)) =>
+      pure (.nonnegative q(Int.ediv_nonneg $pa $pb))
+    | _, _ => pure .none
+  | _, _, _ => throwError "not /"
 -/
 @[positivity (_ : Int) / (_ : Int)] def evalIntDiv : PositivityExt where eval {u α} _ pα? e :=
   match pα? with | none => pure .none | some _ => do

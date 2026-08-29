@@ -50,7 +50,9 @@ definition localized₀
   add_mem' := fun {x y} ⟨m, hm, s, hx⟩ ⟨n, hn, t, hy⟩ => ⟨t • m + s • n, add_mem (M'.smul_mem t hm)
     (M'.smul_mem s hn), s * t, by rw [← hx, ← hy, IsLocalizedModule.mk'_add_mk']⟩
   zero_mem' := ⟨0, zero_mem _, 1, by simp⟩
-  smu
+  smul_mem' r x := by
+    rintro ⟨m, hm, s, hx⟩
+    exact ⟨r • m, smul_mem M' _ hm, s, by rw [IsLocalizedModule.mk'_smul, hx]⟩
 
 中文:
 定义 localized₀
@@ -59,7 +61,9 @@ definition localized₀
   add_mem' := fun {x y} ⟨m, hm, s, hx⟩ ⟨n, hn, t, hy⟩ => ⟨t • m + s • n, add_mem (M'.smul_mem t hm)
     (M'.smul_mem s hn), s * t, by rw [← hx, ← hy, IsLocalizedModule.mk'_add_mk']⟩
   zero_mem' := ⟨0, zero_mem _, 1, by simp⟩
-  smu
+  smul_mem' r x := by
+    rintro ⟨m, hm, s, hx⟩
+    exact ⟨r • m, smul_mem M' _ hm, s, by rw [IsLocalizedModule.mk'_smul, hx]⟩
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.mk
 -/
@@ -214,7 +218,10 @@ definition localized'gi
   le_l_u N' n hn := by
     obtain ⟨⟨m, s⟩, rfl⟩ := IsLocalizedModule.mk'_surjective p f n
     refine ⟨m, ?_, s, rfl⟩
-    rw [mem_comap]; rw [restrictScalars_mem]; rw [← IsLoc
+    rw [mem_comap]; rw [restrictScalars_mem]; rw [← IsLocalizedModule.mk'_cancel' _ _ s]; rw [Submonoid.smul_def]; rw [← algebraMap_smul S]
+    exact smul_mem _ _ hn
+  choice x _ := localized' S p f x
+  choice_eq _ _ := rfl
 
 中文:
 定义 localized'gi
@@ -224,7 +231,10 @@ definition localized'gi
   le_l_u N' n hn := by
     obtain ⟨⟨m, s⟩, rfl⟩ := IsLocalizedModule.mk'_surjective p f n
     refine ⟨m, ?_, s, rfl⟩
-    rw [mem_comap]; rw [restrictScalars_mem]; rw [← IsLoc
+    rw [mem_comap]; rw [restrictScalars_mem]; rw [← IsLocalizedModule.mk'_cancel' _ _ s]; rw [Submonoid.smul_def]; rw [← algebraMap_smul S]
+    exact smul_mem _ _ hn
+  choice x _ := localized' S p f x
+  choice_eq _ _ := rfl
 -/
 def localized'gi : GaloisInsertion (localized' S p f) (comap f <| ·.restrictScalars R) where
   gc M' N' := ⟨fun h m hm => h ⟨m, hm, 1, by simp⟩, fun h => by
@@ -374,7 +384,10 @@ theorem localized₀_inf
   have h := ht.trans hs.symm
   rw [IsLocalizedModule.mk'_eq_mk'_iff] at h
   obtain ⟨k, hk⟩ := h
-  refine ⟨(k * t) • i, ⟨M'.smul_of_tower_mem (k * t) hi, ?_⟩,
+  refine ⟨(k * t) • i, ⟨M'.smul_of_tower_mem (k * t) hi, ?_⟩, k * s * t, ?_⟩
+  · rw [mul_smul, hk, smul_smul]
+    exact M''.smul_of_tower_mem (k * s) hj
+  · rwa [mul_smul, hk, smul_smul, IsLocalizedModule.mk'_cancel_left]
 
 中文:
 定理 localized₀_inf
@@ -385,7 +398,10 @@ theorem localized₀_inf
   have h := ht.trans hs.symm
   rw [IsLocalizedModule.mk'_eq_mk'_iff] at h
   obtain ⟨k, hk⟩ := h
-  refine ⟨(k * t) • i, ⟨M'.smul_of_tower_mem (k * t) hi, ?_⟩,
+  refine ⟨(k * t) • i, ⟨M'.smul_of_tower_mem (k * t) hi, ?_⟩, k * s * t, ?_⟩
+  · rw [mul_smul, hk, smul_smul]
+    exact M''.smul_of_tower_mem (k * s) hj
+  · rwa [mul_smul, hk, smul_smul, IsLocalizedModule.mk'_cancel_left]
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.mk, Submodule, Submodule.ext_iff, Submodule.mem_inf, _cancel_left, _eq_mk, _iff, ext_iff, hs.symm, ht.trans, mem_inf, mul_smul, smul_of_tower_mem, smul_smul
 -/
@@ -594,7 +610,10 @@ lemma localized₀_smul
       rw [IsLocalizedModule.mk'_smul]
       exact Submodule.smul_mem_smul hr ⟨n, hn, s, rfl⟩
     · simp +contextual only [IsLocalizedModule.mk'_add, add_mem, implies_true]
-  · re
+  · refine Submodule.smul_le.mpr ?_
+    rintro r hr _ ⟨a, ha, s, rfl⟩
+    rw [← IsLocalizedModule.mk'_smul]
+    exact ⟨_, Submodule.smul_mem_smul hr ha, s, rfl⟩
 
 中文:
 引理 localized₀_smul
@@ -608,7 +627,10 @@ lemma localized₀_smul
       rw [IsLocalizedModule.mk'_smul]
       exact Submodule.smul_mem_smul hr ⟨n, hn, s, rfl⟩
     · simp +contextual only [IsLocalizedModule.mk'_add, add_mem, implies_true]
-  · re
+  · refine Submodule.smul_le.mpr ?_
+    rintro r hr _ ⟨a, ha, s, rfl⟩
+    rw [← IsLocalizedModule.mk'_smul]
+    exact ⟨_, Submodule.smul_mem_smul hr ha, s, rfl⟩
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.mk, Submodule, Submodule.smul_induction_on, Submodule.smul_le.mpr, Submodule.smul_mem_smul, _add, _smul, add_mem, contextual, implies_true, le_antisymm, single_mem_span_single, smul_induction_on, smul_le, smul_mem_smul
 -/
@@ -635,7 +657,10 @@ lemma restrictScalars_localized'_smul
   refine le_antisymm (fun x hx => ?_) (Submodule.smul_le.mpr fun r hr n hn => ?_)
   · refine smul_induction_on ((Submodule.restrictScalars_mem _ _ _).mp hx) ?_ fun _ _ => add_mem
     rintro _ ⟨r, hr, s, rfl⟩ n hn
-    rw [← IsLocalization.mk'_eq_mk']; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [mu
+    rw [← IsLocalization.mk'_eq_mk']; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [mul_smul]; rw [algebraMap_smul]
+    exact smul_mem_smul hr ((Submodule.restrictScalars_mem _ _ _).mpr <| smul_mem _ _ hn)
+  · rw [← algebraMap_smul S, Submodule.restrictScalars_mem]
+    exact Submodule.smul_mem_smul ⟨_, hr, 1, by simp⟩ hn
 
 中文:
 引理 restrictScalars_localized'_smul
@@ -644,7 +669,10 @@ lemma restrictScalars_localized'_smul
   refine le_antisymm (fun x hx => ?_) (Submodule.smul_le.mpr fun r hr n hn => ?_)
   · refine smul_induction_on ((Submodule.restrictScalars_mem _ _ _).mp hx) ?_ fun _ _ => add_mem
     rintro _ ⟨r, hr, s, rfl⟩ n hn
-    rw [← IsLocalization.mk'_eq_mk']; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [mu
+    rw [← IsLocalization.mk'_eq_mk']; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [mul_smul]; rw [algebraMap_smul]
+    exact smul_mem_smul hr ((Submodule.restrictScalars_mem _ _ _).mpr <| smul_mem _ _ hn)
+  · rw [← algebraMap_smul S, Submodule.restrictScalars_mem]
+    exact Submodule.smul_mem_smul ⟨_, hr, 1, by simp⟩ hn
 -/
 lemma restrictScalars_localized'_smul (I : Submodule R R) (N' : Submodule S N) :
     (I.localized' S p (Algebra.linearMap R S) • N').restrictScalars R =
@@ -744,7 +772,12 @@ instance :
         (IsLocalizedModule.smul_injective f x (congr_arg Subtype.val e))
     · rintro ⟨_, m, hm, s, rfl⟩
       refine ⟨⟨IsLocalizedModule.mk' f m (s * x), ⟨_, hm, _, rfl⟩⟩, Subtype.ext ?_⟩
-      rw [Module.al
+      rw [Module.algebraMap_end_apply]; rw [SetLike.val_smul_of_tower]; rw [← IsLocalizedModule.mk'_smul]; rw [← Submonoid.smul_def]; rw [IsLocalizedModule.mk'_cancel_right]
+  surj := by
+    rintro ⟨y, x, hx, s, rfl⟩
+    exact ⟨⟨⟨x, hx⟩, s⟩, by ext; simp⟩
+  exists_of_eq e := by simpa [Subtype.ext_iff] using
+      IsLocalizedModule.exists_of_eq (S := p) (f := f) (congr_arg Subtype.val e)
 
 中文:
 实例 :
@@ -756,7 +789,12 @@ instance :
         (IsLocalizedModule.smul_injective f x (congr_arg Subtype.val e))
     · rintro ⟨_, m, hm, s, rfl⟩
       refine ⟨⟨IsLocalizedModule.mk' f m (s * x), ⟨_, hm, _, rfl⟩⟩, Subtype.ext ?_⟩
-      rw [Module.al
+      rw [Module.algebraMap_end_apply]; rw [SetLike.val_smul_of_tower]; rw [← IsLocalizedModule.mk'_smul]; rw [← Submonoid.smul_def]; rw [IsLocalizedModule.mk'_cancel_right]
+  surj := by
+    rintro ⟨y, x, hx, s, rfl⟩
+    exact ⟨⟨⟨x, hx⟩, s⟩, by ext; simp⟩
+  exists_of_eq e := by simpa [Subtype.ext_iff] using
+      IsLocalizedModule.exists_of_eq (S := p) (f := f) (congr_arg Subtype.val e)
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.mk, IsLocalizedModule.smul_injective, Module, Module.End.isUnit_iff, Module.algebraMap_end_apply, SetLike, SetLike.val_smul_of_tower, Submonoid, Submonoid.smul_def, Subtype, Subtype.ext, Subtype.val, _cancel_right, _smul, algebraMap_end_apply, congr_arg, exists_of, isUnit_iff, simp_rw
 -/
@@ -940,7 +978,20 @@ instance IsLocalizedModule.toLocalizedQuotient'
     refine (Module.End.isUnit_iff _).mpr ⟨fun m n e => ?_, fun m => ⟨(IsLocalization.mk' S 1 x) • m,
       by rw [Module.algebraMap_end_apply, ← smul_assoc, smul_mk'_one, mk'_self', one_smul]⟩⟩
     obtain ⟨⟨m, rfl⟩, n, rfl⟩ := PProd.mk (mk_surjective _ m) (mk_surjective _ n)
-    simp only [Module
+    simp only [Module.algebraMap_end_apply, ← mk_smul, Submodule.Quotient.eq, ← smul_sub] at e
+    replace e := Submodule.smul_mem _ (IsLocalization.mk' S 1 x) e
+    rwa [smul_comm, ← smul_assoc, smul_mk'_one, mk'_self', one_smul, ← Submodule.Quotient.eq] at e
+  surj y := by
+    obtain ⟨y, rfl⟩ := mk_surjective _ y
+    obtain ⟨⟨y, s⟩, rfl⟩ := IsLocalizedModule.mk'_surjective p f y
+    exact ⟨⟨Submodule.Quotient.mk y, s⟩,
+      by simp only [Function.uncurry_apply_pair, toLocalizedQuotient'_mk, ← mk_smul, mk'_cancel']⟩
+  exists_of_eq {m n} e := by
+    obtain ⟨⟨m, rfl⟩, n, rfl⟩ := PProd.mk (mk_surjective _ m) (mk_surjective _ n)
+    obtain ⟨x, hx, s, hs⟩ : f (m - n) in _ := by simpa [Submodule.Quotient.eq] using! e
+    obtain ⟨c, hc⟩ := exists_of_eq (S := p) (show f (s • (m - n)) = f x by simp [-map_sub, ← hs])
+    exact ⟨c * s, by simpa only [← Quotient.mk_smul, Submodule.Quotient.eq,
+      ← smul_sub, mul_smul, hc] using! M'.smul_mem c hx⟩
 
 中文:
 实例 是Localized模.toLocalizedQuotient'
@@ -949,7 +1000,20 @@ instance IsLocalizedModule.toLocalizedQuotient'
     refine (Module.End.isUnit_iff _).mpr ⟨fun m n e => ?_, fun m => ⟨(IsLocalization.mk' S 1 x) • m,
       by rw [Module.algebraMap_end_apply, ← smul_assoc, smul_mk'_one, mk'_self', one_smul]⟩⟩
     obtain ⟨⟨m, rfl⟩, n, rfl⟩ := PProd.mk (mk_surjective _ m) (mk_surjective _ n)
-    simp only [Module
+    simp only [Module.algebraMap_end_apply, ← mk_smul, Submodule.Quotient.eq, ← smul_sub] at e
+    replace e := Submodule.smul_mem _ (IsLocalization.mk' S 1 x) e
+    rwa [smul_comm, ← smul_assoc, smul_mk'_one, mk'_self', one_smul, ← Submodule.Quotient.eq] at e
+  surj y := by
+    obtain ⟨y, rfl⟩ := mk_surjective _ y
+    obtain ⟨⟨y, s⟩, rfl⟩ := IsLocalizedModule.mk'_surjective p f y
+    exact ⟨⟨Submodule.Quotient.mk y, s⟩,
+      by simp only [Function.uncurry_apply_pair, toLocalizedQuotient'_mk, ← mk_smul, mk'_cancel']⟩
+  exists_of_eq {m n} e := by
+    obtain ⟨⟨m, rfl⟩, n, rfl⟩ := PProd.mk (mk_surjective _ m) (mk_surjective _ n)
+    obtain ⟨x, hx, s, hs⟩ : f (m - n) in _ := by simpa [Submodule.Quotient.eq] using! e
+    obtain ⟨c, hc⟩ := exists_of_eq (S := p) (show f (s • (m - n)) = f x by simp [-map_sub, ← hs])
+    exact ⟨c * s, by simpa only [← Quotient.mk_smul, Submodule.Quotient.eq,
+      ← smul_sub, mul_smul, hc] using! M'.smul_mem c hx⟩
 
 Depends on / 依赖: IsLocalization, IsLocalization.mk, Module, Module.End.isUnit_iff, Module.algebraMap_end_apply, PProd.mk, Quotient, Submodule, Submodule.Quot, Submodule.Quotient.eq, Submodule.smul_mem, _one, _self, algebraMap_end_apply, isUnit_iff, mk_smul, mk_surjective, one_smul, replace, smul_assoc
 -/
@@ -1025,7 +1089,9 @@ lemma ker_localizedMap_eq_localized₀_ker
   · obtain ⟨⟨a, b⟩, rfl⟩ := IsLocalizedModule.mk'_surjective p f x
     simp only [Function.uncurry_apply_pair, map_mk', mk'_eq_zero, eq_zero_iff p f'] at h
     obtain ⟨c, hc⟩ := h
-    refine ⟨c • a, by simpa, c * b
+    refine ⟨c • a, by simpa, c * b, by simp⟩
+  · rintro ⟨m, hm, a, ha, rfl⟩
+    simp [IsLocalizedModule.map_mk', hm]
 
 中文:
 引理 ker_localizedMap_eq_localized₀_ker
@@ -1037,7 +1103,9 @@ lemma ker_localizedMap_eq_localized₀_ker
   · obtain ⟨⟨a, b⟩, rfl⟩ := IsLocalizedModule.mk'_surjective p f x
     simp only [Function.uncurry_apply_pair, map_mk', mk'_eq_zero, eq_zero_iff p f'] at h
     obtain ⟨c, hc⟩ := h
-    refine ⟨c • a, by simpa, c * b
+    refine ⟨c • a, by simpa, c * b, by simp⟩
+  · rintro ⟨m, hm, a, ha, rfl⟩
+    simp [IsLocalizedModule.map_mk', hm]
 
 Depends on / 依赖: Function, Function.uncurry_apply_pair, IsLocalizedModule, IsLocalizedModule.map_mk, IsLocalizedModule.mk, Submodule, Submodule.mem_localized, _eq_zero, _surjective, eq_zero_iff, map_mk, mem_ker, uncurry_apply_pair
 -/

@@ -187,7 +187,8 @@ theorem local_hom_TFAE
   tfae_have 4 -> 1 := fun h => ⟨fun x => not_imp_not.1 (@h x)⟩
   tfae_have 1 -> 5
   | _ => by ext; exact not_iff_not.2 (isUnit_map_iff f _)
- 
+  tfae_have 5 -> 4 := fun h => le_of_eq h.symm
+  tfae_finish
 
 中文:
 定理 local_hom_TFAE
@@ -200,7 +201,8 @@ theorem local_hom_TFAE
   tfae_have 4 -> 1 := fun h => ⟨fun x => not_imp_not.1 (@h x)⟩
   tfae_have 1 -> 5
   | _ => by ext; exact not_iff_not.2 (isUnit_map_iff f _)
- 
+  tfae_have 5 -> 4 := fun h => le_of_eq h.symm
+  tfae_finish
 
 Depends on / 依赖: Ideal.map_le_iff_le_comap, Set.image_subset_iff, h.symm, image_subset_iff, isUnit_map_iff, le_of_eq, map_le_iff_le_comap, map_nonunit, not_iff_not, not_imp_not, tfae_finish, tfae_have
 -/
@@ -334,7 +336,7 @@ lemma _root_.IsLocalHom.of_surjective
   have := Ideal.comap_isMaximal_of_surjective f hf (K := maximalIdeal S)
   exact ((maximal_ideal_unique R).unique (inferInstanceAs (maximalIdeal R).IsMaximal) this).le
 
-alias _root_.Function.Surjective.isLocalH
+alias _root_.Function.Surjective.isLocalHom := _root_.IsLocalHom.of_surjective
 
 中文:
 引理 _root_.是Local态射.of_surjective
@@ -345,7 +347,7 @@ alias _root_.Function.Surjective.isLocalH
   have := Ideal.comap_isMaximal_of_surjective f hf (K := maximalIdeal S)
   exact ((maximal_ideal_unique R).unique (inferInstanceAs (maximalIdeal R).IsMaximal) this).le
 
-alias _root_.Function.Surjective.isLocalH
+alias _root_.Function.Surjective.isLocalHom := _root_.IsLocalHom.of_surjective
 
 Depends on / 依赖: Ideal.comap_isMaximal_of_surjective, IsLocalRing, IsLocalRing.of_surjective, IsMaximal, comap_isMaximal_of_surjective, local_hom_TFAE, maximalIdeal, maximal_ideal_unique, of_surjective, unique
 -/

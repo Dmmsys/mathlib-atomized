@@ -330,7 +330,9 @@ nonrec lemma AffineEquiv.midpoint_pointReflection_left (x y : P) :
 
 nonrec lemma AffineEquiv.midpoint_pointReflection_right (x y : P) :
     midpoint R y (pointReflection R x y) = x :=
-  midpoin
+  midpoint_pointReflection_right x y
+
+@[simp]
 
 中文:
 定理 midpoint_pointReflection_right
@@ -343,7 +345,9 @@ nonrec lemma AffineEquiv.midpoint_pointReflection_left (x y : P) :
 
 nonrec lemma AffineEquiv.midpoint_pointReflection_right (x y : P) :
     midpoint R y (pointReflection R x y) = x :=
-  midpoin
+  midpoint_pointReflection_right x y
+
+@[simp]
 
 Depends on / 依赖: midpoint_eq_iff
 -/
@@ -1035,7 +1039,10 @@ definition ofMapMidpoint
       f (x + y) = f 0 + f (x + y) := by rw [h0, zero_add]
       _ = midpoint R' (f 0) (f (x + y)) + midpoint R' (f 0) (f (x + y)) :=
         (midpoint_add_self _ _ _).symm
-      _ = f (midpoint R x y) + f (midpoint R x y) := by rw [← hm, midpoint_zero_a
+      _ = f (midpoint R x y) + f (midpoint R x y) := by rw [← hm, midpoint_zero_add]
+      _ = f x + f y := by rw [hm, midpoint_add_self]
+
+@[simp]
 
 中文:
 定义 ofMapMidpoint
@@ -1047,7 +1054,10 @@ definition ofMapMidpoint
       f (x + y) = f 0 + f (x + y) := by rw [h0, zero_add]
       _ = midpoint R' (f 0) (f (x + y)) + midpoint R' (f 0) (f (x + y)) :=
         (midpoint_add_self _ _ _).symm
-      _ = f (midpoint R x y) + f (midpoint R x y) := by rw [← hm, midpoint_zero_a
+      _ = f (midpoint R x y) + f (midpoint R x y) := by rw [← hm, midpoint_zero_add]
+      _ = f x + f y := by rw [hm, midpoint_add_self]
+
+@[simp]
 -/
 def ofMapMidpoint (f : E -> F) (h0 : f 0 = 0)
     (hm : forall x y, f (midpoint R x y) = midpoint R' (f x) (f y)) : E ->+ F where

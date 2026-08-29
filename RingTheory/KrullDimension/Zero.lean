@@ -199,7 +199,9 @@ theorem Ideal.krullDimLE_zero_quotient_iff_forall_minimalPrimes_isMaximal
   rw [Ring.krullDimLE_zero_iff_forall_minimalPrimes_isMaximal]; rw [minimalPrimes_eq_comap]; rw [Set.forall_mem_image]
   refine forall₂_congr fun J hJ => ⟨fun h => ?_, fun h => ?_⟩
   · exact comap_isMaximal_of_surjective (Quotient.mk I) Quotient.mk_surjective
-  · have := map_eq_top_or_isMaximal_o
+  · have := map_eq_top_or_isMaximal_of_surjective (Quotient.mk I) Quotient.mk_surjective h
+    rw [map_comap_of_surjective (Quotient.mk I) Quotient.mk_surjective] at this
+    exact this.resolve_left hJ.1.1.ne_top
 
 中文:
 定理 理想.krullDimLE_zero_quotient_iff_对任意_minimalPrimes_isMaximal
@@ -207,7 +209,9 @@ theorem Ideal.krullDimLE_zero_quotient_iff_forall_minimalPrimes_isMaximal
   rw [Ring.krullDimLE_zero_iff_forall_minimalPrimes_isMaximal]; rw [minimalPrimes_eq_comap]; rw [Set.forall_mem_image]
   refine forall₂_congr fun J hJ => ⟨fun h => ?_, fun h => ?_⟩
   · exact comap_isMaximal_of_surjective (Quotient.mk I) Quotient.mk_surjective
-  · have := map_eq_top_or_isMaximal_o
+  · have := map_eq_top_or_isMaximal_of_surjective (Quotient.mk I) Quotient.mk_surjective h
+    rw [map_comap_of_surjective (Quotient.mk I) Quotient.mk_surjective] at this
+    exact this.resolve_left hJ.1.1.ne_top
 
 Depends on / 依赖: Quotient, Quotient.mk, Quotient.mk_surjective, Ring.krullDimLE_zero_iff_forall_minimalPrimes_isMaximal, Set.forall_mem_image, comap_isMaximal_of_surjective, forall_mem_image, krullDimLE_zero_iff_forall_minimalPrimes_isMaximal, map_comap_of_surjective, map_eq_top_or_isMaximal_of_surjective, minimalPrimes_eq_comap, mk_surjective, ne_top, resolve_left, this.resolve_left
 -/
@@ -237,7 +241,21 @@ lemma Ring.krullDimLE_zero_and_isLocalRing_tfae
     rw [nilradical]; rw [Ideal.radical_eq_sInf]
     simp [← Ideal.isMaximal_iff_isPrime, IsLocalRing.isMaximal_iff]
   tfae_have 3 -> 4 := by
-    refine fun H => ⟨fun e => ?_, fun I hI => ?
+    refine fun H => ⟨fun e => ?_, fun I hI => ?_⟩
+    · obtain ⟨n, hn⟩ := (Ideal.eq_top_iff_one _).mp e
+      exact (H 0).mp .zero ((show (1 : R) = 0 by simpa using hn) ▸ isUnit_one)
+    · obtain ⟨x, hx, hx'⟩ := (SetLike.lt_iff_le_and_exists.mp hI).2
+      exact Ideal.eq_top_of_isUnit_mem _ hx (not_not.mp ((H x).not.mp hx'))
+  tfae_have 4 -> 2 := fun H => ⟨_, H.isPrime, fun p (hp : p.IsPrime) =>
+      (H.eq_of_le hp.ne_top (nilradical_le_prime p)).symm⟩
+  tfae_have 2 -> 1 := by
+    rintro ⟨P, hP₁, hP₂⟩
+    obtain ⟨P, hP₃, -⟩ := P.exists_le_maximal hP₁.ne_top
+    obtain rfl := hP₂ P hP₃.isPrime
+    exact ⟨.mk₀ fun Q h => hP₂ Q h ▸ hP₃, .of_unique_max_ideal ⟨P, hP₃, fun Q h => hP₂ Q h.isPrime⟩⟩
+  tfae_finish
+
+@[simp]
 
 中文:
 引理 环.krullDimLE_zero_and_isLocalRing_tfae
@@ -248,7 +266,21 @@ lemma Ring.krullDimLE_zero_and_isLocalRing_tfae
     rw [nilradical]; rw [Ideal.radical_eq_sInf]
     simp [← Ideal.isMaximal_iff_isPrime, IsLocalRing.isMaximal_iff]
   tfae_have 3 -> 4 := by
-    refine fun H => ⟨fun e => ?_, fun I hI => ?
+    refine fun H => ⟨fun e => ?_, fun I hI => ?_⟩
+    · obtain ⟨n, hn⟩ := (Ideal.eq_top_iff_one _).mp e
+      exact (H 0).mp .zero ((show (1 : R) = 0 by simpa using hn) ▸ isUnit_one)
+    · obtain ⟨x, hx, hx'⟩ := (SetLike.lt_iff_le_and_exists.mp hI).2
+      exact Ideal.eq_top_of_isUnit_mem _ hx (not_not.mp ((H x).not.mp hx'))
+  tfae_have 4 -> 2 := fun H => ⟨_, H.isPrime, fun p (hp : p.IsPrime) =>
+      (H.eq_of_le hp.ne_top (nilradical_le_prime p)).symm⟩
+  tfae_have 2 -> 1 := by
+    rintro ⟨P, hP₁, hP₂⟩
+    obtain ⟨P, hP₃, -⟩ := P.exists_le_maximal hP₁.ne_top
+    obtain rfl := hP₂ P hP₃.isPrime
+    exact ⟨.mk₀ fun Q h => hP₂ Q h ▸ hP₃, .of_unique_max_ideal ⟨P, hP₃, fun Q h => hP₂ Q h.isPrime⟩⟩
+  tfae_finish
+
+@[simp]
 
 Depends on / 依赖: Ideal.eq_top_iff_one, Ideal.eq_top_of_isUnit_mem, Ideal.isMaximal_iff_isPrime, Ideal.radical_eq_sInf, IsLocalRing, IsLocalRing.isMaximal_iff, IsLocalRing.maximalIdeal, SetLike, SetLike.lt_iff_le_and_exists.mp, eq_top_iff_one, eq_top_of_isUnit_mem, isMaximal_iff, isMaximal_iff_isPrime, isUnit_one, lt_iff_le_and_exists, maximalIdeal, nilradical, radical_eq_sInf, tfae_have
 -/

@@ -61,7 +61,8 @@ definition DirectLimit
         (exists i j H x, of (⟨j, f i j H x⟩ : Σ i, G i) - of ⟨i, x⟩ = a) ∨
           (exists i, of (⟨i, 1⟩ : Σ i, G i) - 1 = a) ∨
             (exists i x y, of (⟨i, x + y⟩ : Σ i, G i) - (of ⟨i, x⟩ + of ⟨i, y⟩) = a) ∨
-              exists i x y, of
+              exists i x y, of (⟨i, x * y⟩ : Σ i, G i) - of ⟨i, x⟩ * of ⟨i, y⟩ = a }
+deriving Zero, One, AddCommMonoid, Ring, CommRing, Inhabited
 
 中文:
 定义 DirectLimit
@@ -72,7 +73,8 @@ definition DirectLimit
         (exists i j H x, of (⟨j, f i j H x⟩ : Σ i, G i) - of ⟨i, x⟩ = a) ∨
           (exists i, of (⟨i, 1⟩ : Σ i, G i) - 1 = a) ∨
             (exists i x y, of (⟨i, x + y⟩ : Σ i, G i) - (of ⟨i, x⟩ + of ⟨i, y⟩) = a) ∨
-              exists i x y, of
+              exists i x y, of (⟨i, x * y⟩ : Σ i, G i) - of ⟨i, x⟩ * of ⟨i, y⟩ = a }
+deriving Zero, One, AddCommMonoid, Ring, CommRing, Inhabited
 
 Depends on / 依赖: FreeCommRing, Ideal.span
 -/
@@ -145,7 +147,8 @@ theorem exists_of
   obtain ⟨z, rfl⟩ := Ideal.Quotient.mk_surjective z
   refine z.induction_on ⟨Classical.arbitrary ι, -1, by simp; rfl⟩ (fun ⟨i, x⟩ => ⟨i, x, rfl⟩) ?_ ?_
     <;> rintro x' y' ⟨i, x, hx⟩ ⟨j, y, hy⟩ <;> have ⟨k, hik, hjk⟩ := exists_ge_ge i j
-  · exact ⟨k, f i k hik x + f j k hjk y, by rw [map_add, of
+  · exact ⟨k, f i k hik x + f j k hjk y, by rw [map_add, of_f, of_f, hx, hy]; rfl⟩
+  · exact ⟨k, f i k hik x * f j k hjk y, by rw [map_mul, of_f, of_f, hx, hy]; rfl⟩
 
 中文:
 定理 存在_of
@@ -154,7 +157,8 @@ theorem exists_of
   obtain ⟨z, rfl⟩ := Ideal.Quotient.mk_surjective z
   refine z.induction_on ⟨Classical.arbitrary ι, -1, by simp; rfl⟩ (fun ⟨i, x⟩ => ⟨i, x, rfl⟩) ?_ ?_
     <;> rintro x' y' ⟨i, x, hx⟩ ⟨j, y, hy⟩ <;> have ⟨k, hik, hjk⟩ := exists_ge_ge i j
-  · exact ⟨k, f i k hik x + f j k hjk y, by rw [map_add, of
+  · exact ⟨k, f i k hik x + f j k hjk y, by rw [map_add, of_f, of_f, hx, hy]; rfl⟩
+  · exact ⟨k, f i k hik x * f j k hjk y, by rw [map_mul, of_f, of_f, hx, hy]; rfl⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, Ideal.Quotient.mk_surjective, Quotient, arbitrary, exists_ge_ge, induction_on, map_add, map_mul, mk_surjective, of_f, z.induction_on
 -/
@@ -232,7 +236,10 @@ definition lift
         exact (mem_bot P).1 (this hx)
       rw [Ideal.span_le]
       intro x hx
-     
+      rw [SetLike.mem_coe]; rw [Ideal.mem_comap]; rw [mem_bot]
+      rcases hx with (⟨i, j, hij, x, rfl⟩ | ⟨i, rfl⟩ | ⟨i, x, y, rfl⟩ | ⟨i, x, y, rfl⟩) <;>
+        simp only [map_sub, lift_of, Hg, map_one, map_add, map_mul,
+          (g i).map_one, (g i).map_add, (g i).map_mul, sub_self])
 
 中文:
 定义 lift
@@ -245,7 +252,10 @@ definition lift
         exact (mem_bot P).1 (this hx)
       rw [Ideal.span_le]
       intro x hx
-     
+      rw [SetLike.mem_coe]; rw [Ideal.mem_comap]; rw [mem_bot]
+      rcases hx with (⟨i, j, hij, x, rfl⟩ | ⟨i, rfl⟩ | ⟨i, x, y, rfl⟩ | ⟨i, x, y, rfl⟩) <;>
+        simp only [map_sub, lift_of, Hg, map_one, map_add, map_mul,
+          (g i).map_one, (g i).map_add, (g i).map_mul, sub_self])
 
 Depends on / 依赖: FreeCommRing, FreeCommRing.lift, Ideal.Quotient.lift, Ideal.comap, Ideal.mem_comap, Ideal.span, Ideal.span_le, Quotient, SetLike, SetLike.mem_coe, lift_of, map_add, map_mul, map_one, map_sub, mem_bot, mem_coe, mem_comap, span_le, sub_s
 -/
@@ -635,7 +645,9 @@ definition congr
     (map (fun i => (e i).symm) fun i j h => DFunLike.ext _ _ fun x => by
       have eq1 := DFunLike.congr_fun (he i j h) ((e i).symm x)
       simp only [RingEquiv.toRingHom_eq_coe, RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply,
-        RingEquiv.apply_
+        RingEquiv.apply_symm_apply] at eq1 ⊢
+      simp [← eq1])
+    (by simp [map_comp]) (by simp [map_comp])
 
 中文:
 定义 congr
@@ -645,7 +657,9 @@ definition congr
     (map (fun i => (e i).symm) fun i j h => DFunLike.ext _ _ fun x => by
       have eq1 := DFunLike.congr_fun (he i j h) ((e i).symm x)
       simp only [RingEquiv.toRingHom_eq_coe, RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply,
-        RingEquiv.apply_
+        RingEquiv.apply_symm_apply] at eq1 ⊢
+      simp [← eq1])
+    (by simp [map_comp]) (by simp [map_comp])
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, DFunLike.ext, Function, Function.comp_apply, RingEquiv, RingEquiv.apply_symm_apply, RingEquiv.ofRingHom, RingEquiv.toRingHom_eq_coe, RingHom, RingHom.coe_coe, RingHom.coe_comp, apply_symm_apply, coe_coe, coe_comp, comp_apply, congr_fun, map_comp, ofRingHom, toRingHom_eq_coe
 -/
@@ -734,7 +748,7 @@ instance nontrivial
         rw [← (Ring.DirectLimit.of _ _ _).map_one]
         · intro H; rcases Ring.DirectLimit.of.zero_exact H.symm with ⟨j, hij, hf⟩
           rw [(f' i j hij).map_one] at hf
-     
+          exact one_ne_zero hf⟩⟩
 
 中文:
 实例 nontrivial
@@ -745,7 +759,7 @@ instance nontrivial
         rw [← (Ring.DirectLimit.of _ _ _).map_one]
         · intro H; rcases Ring.DirectLimit.of.zero_exact H.symm with ⟨j, hij, hf⟩
           rw [(f' i j hij).map_one] at hf
-     
+          exact one_ne_zero hf⟩⟩
 
 Depends on / 依赖: DirectLimit, H.symm, Nonempty, Nonempty.elim, Ring.DirectLimit, Ring.DirectLimit.of, Ring.DirectLimit.of.zero_exact, infer_instance, map_one, one_ne_zero, zero_exact
 -/

@@ -1567,7 +1567,12 @@ instance smul
         ⟨dist r 0 * b, fun x => by
           have := dist_smul_pair r (f x) (f 0)
           rw [map_zero]; rw [smul_zero]; rw [dist_zero_right]; rw [dist_zero_right] at this
-          
+          rw [mul_assoc]
+          refine this.trans ?_
+          gcongr
+          exact hb x⟩ }
+
+@[simp]
 
 中文:
 实例 smul
@@ -1579,7 +1584,12 @@ instance smul
         ⟨dist r 0 * b, fun x => by
           have := dist_smul_pair r (f x) (f 0)
           rw [map_zero]; rw [smul_zero]; rw [dist_zero_right]; rw [dist_zero_right] at this
-          
+          rw [mul_assoc]
+          refine this.trans ?_
+          gcongr
+          exact hb x⟩ }
+
+@[simp]
 
 Depends on / 依赖: dist_smul_pair, dist_zero_right, f.bound, f.toAddMonoidHom, map_add, map_zero, mul_assoc, smul_zero, this.trans, toAddMonoidHom
 -/

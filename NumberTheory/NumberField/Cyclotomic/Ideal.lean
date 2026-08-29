@@ -96,7 +96,8 @@ theorem associated_norm_zeta_sub_one
       rw [hζ.norm_toInteger_sub_one_of_eq_two]; rw [h]; rw [Int.ofNat_two]; rw [Associated.neg_left_iff]
     | succ n =>
       rw [h]; rw [add_assoc]; rw [one_add_one_eq_two] at hK hζ
-      rw [
+      rw [hζ.norm_toInteger_sub_one_of_eq_two_pow]; rw [h]; rw [Int.ofNat_two]
+  · rw [hζ.norm_toInteger_sub_one_of_prime_ne_two h]
 
 中文:
 定理 associated_norm_zeta_sub_one
@@ -109,7 +110,8 @@ theorem associated_norm_zeta_sub_one
       rw [hζ.norm_toInteger_sub_one_of_eq_two]; rw [h]; rw [Int.ofNat_two]; rw [Associated.neg_left_iff]
     | succ n =>
       rw [h]; rw [add_assoc]; rw [one_add_one_eq_two] at hK hζ
-      rw [
+      rw [hζ.norm_toInteger_sub_one_of_eq_two_pow]; rw [h]; rw [Int.ofNat_two]
+  · rw [hζ.norm_toInteger_sub_one_of_prime_ne_two h]
 
 Depends on / 依赖: Associated, Associated.neg_left_iff, Int.ofNat_two, add_assoc, neg_left_iff, norm_toInteger_sub_one_of_eq_two, norm_toInteger_sub_one_of_eq_two_pow, norm_toInteger_sub_one_of_prime_ne_two, ofNat_two, one_add_one_eq_two, pow_one, zero_add
 -/
@@ -278,7 +280,15 @@ theorem map_eq_span_zeta_sub_one_pow
   have : IsGalois (FractionRing Int) (FractionRing (𝓞 K)) := by
     refine IsGalois.of_equiv_equiv (f := (FractionRing.algEquiv Int Rat).toRingEquiv.symm)
 (g := (FractionRing.algEquiv (𝓞 K) K).toRingEquiv.symm)
-        RingHom.ext fun x => I
+        RingHom.ext fun x => IsFractionRing.algEquiv_commutes (FractionRing.algEquiv Int Rat).symm
+          (FractionRing.algEquiv (𝓞 K) K).symm _
+  rw [map_span]; rw [Set.image_singleton]; rw [span_singleton_eq_span_singleton.mpr
+    ((associated_norm_zeta_sub_one p k hζ).symm.map (algebraMap Int (𝓞 K)))]; rw [← Algebra.intNorm_eq_norm]; rw [Algebra.algebraMap_intNorm_of_isGalois]; rw [← prod_span_singleton]
+  conv_lhs =>
+    enter [2, σ]
+    rw [span_singleton_eq_span_singleton.mpr
+      (hζ.toInteger_isPrimitiveRoot.associated_sub_one_map_sub_one σ).symm]
+  rw [Finset.prod_const]; rw [Finset.card_univ]; rw [← Fintype.card_congr (galRestrict Int Rat K (𝓞 K)).toEquiv]; rw [← Nat.card_eq_fintype_card]; rw [IsGalois.card_aut_eq_finrank]
 
 中文:
 定理 map_eq_span_zeta_sub_one_pow
@@ -287,7 +297,15 @@ theorem map_eq_span_zeta_sub_one_pow
   have : IsGalois (FractionRing Int) (FractionRing (𝓞 K)) := by
     refine IsGalois.of_equiv_equiv (f := (FractionRing.algEquiv Int Rat).toRingEquiv.symm)
 (g := (FractionRing.algEquiv (𝓞 K) K).toRingEquiv.symm)
-        RingHom.ext fun x => I
+        RingHom.ext fun x => IsFractionRing.algEquiv_commutes (FractionRing.algEquiv Int Rat).symm
+          (FractionRing.algEquiv (𝓞 K) K).symm _
+  rw [map_span]; rw [Set.image_singleton]; rw [span_singleton_eq_span_singleton.mpr
+    ((associated_norm_zeta_sub_one p k hζ).symm.map (algebraMap Int (𝓞 K)))]; rw [← Algebra.intNorm_eq_norm]; rw [Algebra.algebraMap_intNorm_of_isGalois]; rw [← prod_span_singleton]
+  conv_lhs =>
+    enter [2, σ]
+    rw [span_singleton_eq_span_singleton.mpr
+      (hζ.toInteger_isPrimitiveRoot.associated_sub_one_map_sub_one σ).symm]
+  rw [Finset.prod_const]; rw [Finset.card_univ]; rw [← Fintype.card_congr (galRestrict Int Rat K (𝓞 K)).toEquiv]; rw [← Nat.card_eq_fintype_card]; rw [IsGalois.card_aut_eq_finrank]
 
 Depends on / 依赖: FractionRing, FractionRing.algEquiv, IsFractionRing, IsFractionRing.algEquiv_commutes, IsGalois, IsGalois.of_equiv_equiv, RingHom, RingHom.ext, Set.image_singleton, algEquiv, algEquiv_commutes, associated_norm_zeta_sub, image_singleton, isGalois, map_span, of_equiv_equiv, span_singleton_eq_span_singleton, span_singleton_eq_span_singleton.mpr, toRingEquiv, toRingEquiv.symm
 -/
@@ -315,14 +333,16 @@ theorem ramificationIdx_span_zeta_sub_one
   proof: by
   have h := isPrime_span_zeta_sub_one p k hζ
   have hp0 : 𝒑 != ⊥ := by simpa using hp.out.ne_zero
-  rw [← Nat.totient_prime_pow_succ hp.out]; rw [← finrank _ K]; rw [IsDedekindDomain.ramificationIdx_eq_multiplicity 𝒑]; rw [map_eq_span_zeta_sub_one_pow p k hζ]; rw [multiplicity_pow_self (span_zeta
+  rw [← Nat.totient_prime_pow_succ hp.out]; rw [← finrank _ K]; rw [IsDedekindDomain.ramificationIdx_eq_multiplicity 𝒑]; rw [map_eq_span_zeta_sub_one_pow p k hζ]; rw [multiplicity_pow_self (span_zeta_sub_one_ne_bot p k hζ) (isUnit_iff.not.mpr h.ne_top)]
+  exact map_ne_bot_of_ne_bot hp0
 
 中文:
 定理 ramificationIdx_span_zeta_sub_one
   证明: by
   have h := isPrime_span_zeta_sub_one p k hζ
   have hp0 : 𝒑 != ⊥ := by simpa using hp.out.ne_zero
-  rw [← Nat.totient_prime_pow_succ hp.out]; rw [← finrank _ K]; rw [IsDedekindDomain.ramificationIdx_eq_multiplicity 𝒑]; rw [map_eq_span_zeta_sub_one_pow p k hζ]; rw [multiplicity_pow_self (span_zeta
+  rw [← Nat.totient_prime_pow_succ hp.out]; rw [← finrank _ K]; rw [IsDedekindDomain.ramificationIdx_eq_multiplicity 𝒑]; rw [map_eq_span_zeta_sub_one_pow p k hζ]; rw [multiplicity_pow_self (span_zeta_sub_one_ne_bot p k hζ) (isUnit_iff.not.mpr h.ne_top)]
+  exact map_ne_bot_of_ne_bot hp0
 
 Depends on / 依赖: IsDedekindDomain, IsDedekindDomain.ramificationIdx_eq_multiplicity, Nat.totient_prime_pow_succ, finrank, h.ne_top, hp.out, hp.out.ne_zero, isPrime_span_zeta_sub_one, isUnit_iff, isUnit_iff.not.mpr, map_eq_span_zeta_sub_one_pow, map_ne_bot_of_ne_bot, multiplicity_pow_self, ne_top, ne_zero, ramificationIdx_eq_multiplicity, span_zeta_sub_one_ne_bot, totient_prime_pow_succ
 -/
@@ -346,7 +366,12 @@ theorem ncard_primesOver_of_prime_pow
   have h_main := ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn 𝒑 (𝓞 K) Gal(K/Rat)
   have hζ := hK.zeta_spec
   have := liesOver_span_zeta_sub_one p k hζ
-  rwa [ramificationIdxIn_eq_ramificationIdx 𝒑 (span {hζ.toInteger - 1}) Gal(K/R
+  rwa [ramificationIdxIn_eq_ramificationIdx 𝒑 (span {hζ.toInteger - 1}) Gal(K/Rat),
+    inertiaDegIn_eq_inertiaDeg 𝒑 (span {hζ.toInteger - 1}) Gal(K/Rat),
+    inertiaDeg_span_zeta_sub_one,
+    ramificationIdx_span_zeta_sub_one, mul_one, ← Nat.totient_prime_pow_succ hp.out,
+    ← finrank _ K, IsGaloisGroup.card_eq_finrank Gal(K/Rat) Rat K, Nat.mul_eq_right] at h_main
+  exact Module.finrank_pos.ne'
 
 中文:
 定理 ncard_primesOver_of_prime_pow
@@ -355,7 +380,12 @@ theorem ncard_primesOver_of_prime_pow
   have h_main := ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn 𝒑 (𝓞 K) Gal(K/Rat)
   have hζ := hK.zeta_spec
   have := liesOver_span_zeta_sub_one p k hζ
-  rwa [ramificationIdxIn_eq_ramificationIdx 𝒑 (span {hζ.toInteger - 1}) Gal(K/R
+  rwa [ramificationIdxIn_eq_ramificationIdx 𝒑 (span {hζ.toInteger - 1}) Gal(K/Rat),
+    inertiaDegIn_eq_inertiaDeg 𝒑 (span {hζ.toInteger - 1}) Gal(K/Rat),
+    inertiaDeg_span_zeta_sub_one,
+    ramificationIdx_span_zeta_sub_one, mul_one, ← Nat.totient_prime_pow_succ hp.out,
+    ← finrank _ K, IsGaloisGroup.card_eq_finrank Gal(K/Rat) Rat K, Nat.mul_eq_right] at h_main
+  exact Module.finrank_pos.ne'
 
 Depends on / 依赖: IsGalois, IsGaloisGrou, Nat.totient_prime_pow_succ, finrank, hK.zeta_spec, h_main, hp.out, inertiaDegIn_eq_inertiaDeg, inertiaDeg_span_zeta_sub_one, isGalois, liesOver_span_zeta_sub_one, mul_one, ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn, ramificationIdxIn_eq_ramificationIdx, ramificationIdx_span_zeta_sub_one, toInteger, totient_prime_pow_succ, zeta_spec
 -/
@@ -614,14 +644,22 @@ theorem associated_zeta_sub_one_pow_prime
   proof: by
   rw [← eval_one_cyclotomic_prime (R := 𝓞 K) (p := p)]; rw [cyclotomic_eq_prod_X_sub_primitiveRoots hζ.toInteger_isPrimitiveRoot]; rw [eval_prod]
   simp only [eval_sub, eval_X, eval_C]
-  rw [← Nat.totient_prime hp.out]; rw [← hζ.toInteger_isPrimitiveRoot.card_primitiveRoots]; rw [← Finset.prod_co
+  rw [← Nat.totient_prime hp.out]; rw [← hζ.toInteger_isPrimitiveRoot.card_primitiveRoots]; rw [← Finset.prod_const]
+  refine Associated.prod _ _ _ fun η hη => ?_
+  have hη' : IsPrimitiveRoot (η : K) p :=
+    (isPrimitiveRoot_of_mem_primitiveRoots hη).map_of_injective RingOfIntegers.coe_injective
+  simpa using (associated_sub_one_of_isPrimitiveRoot p hζ hη').neg_right
 
 中文:
 定理 associated_zeta_sub_one_pow_prime
   证明: by
   rw [← eval_one_cyclotomic_prime (R := 𝓞 K) (p := p)]; rw [cyclotomic_eq_prod_X_sub_primitiveRoots hζ.toInteger_isPrimitiveRoot]; rw [eval_prod]
   simp only [eval_sub, eval_X, eval_C]
-  rw [← Nat.totient_prime hp.out]; rw [← hζ.toInteger_isPrimitiveRoot.card_primitiveRoots]; rw [← Finset.prod_co
+  rw [← Nat.totient_prime hp.out]; rw [← hζ.toInteger_isPrimitiveRoot.card_primitiveRoots]; rw [← Finset.prod_const]
+  refine Associated.prod _ _ _ fun η hη => ?_
+  have hη' : IsPrimitiveRoot (η : K) p :=
+    (isPrimitiveRoot_of_mem_primitiveRoots hη).map_of_injective RingOfIntegers.coe_injective
+  simpa using (associated_sub_one_of_isPrimitiveRoot p hζ hη').neg_right
 
 Depends on / 依赖: Associated, Associated.prod, Finset, Finset.prod_const, IsPrimitiveRoot, Nat.totient_prime, RingOfIntegers, RingOfIntegers.coe_injective, associated_sub_, card_primitiveRoots, coe_injective, cyclotomic_eq_prod_X_sub_primitiveRoots, eval_C, eval_X, eval_one_cyclotomic_prime, eval_prod, eval_sub, hp.out, isPrimitiveRoot_of_mem_primitiveRoots, map_of_injective
 -/
@@ -646,7 +684,7 @@ theorem isCoprime_of_not_zeta_sub_one_dvd
     (associated_zeta_sub_one_pow_prime p hζ), ← span_singleton_pow,
     IsCoprime.pow_left_iff (by grind [hp.out.one_lt]), isCoprime_iff_gcd,
     (prime_span_singleton_iff.mpr
-    hζ.zeta_sub_one_prime').irreducible.gcd
+    hζ.zeta_sub_one_prime').irreducible.gcd_eq_one_iff, dvd_span_singleton, mem_span_singleton]
 
 中文:
 定理 isCoprime_of_not_zeta_sub_one_dvd
@@ -656,7 +694,7 @@ theorem isCoprime_of_not_zeta_sub_one_dvd
     (associated_zeta_sub_one_pow_prime p hζ), ← span_singleton_pow,
     IsCoprime.pow_left_iff (by grind [hp.out.one_lt]), isCoprime_iff_gcd,
     (prime_span_singleton_iff.mpr
-    hζ.zeta_sub_one_prime').irreducible.gcd
+    hζ.zeta_sub_one_prime').irreducible.gcd_eq_one_iff, dvd_span_singleton, mem_span_singleton]
 
 Depends on / 依赖: IsCoprime, IsCoprime.pow_left_iff, associated_zeta_sub_one_pow_prime, dvd_span_singleton, gcd_eq_one_iff, hp.out.one_lt, irreducible, irreducible.gcd_eq_one_iff, isCoprime_iff_gcd, isCoprime_span_singleton_iff, mem_span_singleton, one_lt, pow_left_iff, prime_span_singleton_iff, prime_span_singleton_iff.mpr, span_singleton_eq_span_singleton, span_singleton_eq_span_singleton.mpr, span_singleton_pow, zeta_sub_one_prime
 -/
@@ -913,7 +951,17 @@ theorem inertiaDeg_eq_of_not_dvd
   have h₁ : ¬ p ∣ exponent ζ := by
     rw [exponent_eq_one_iff.mpr <| adjoin_singleton_eq_top (zeta_spec m Rat K)]
     exact hp.out.not_dvd_one
-  have h₂ := (primesOverSpanEquivMonicFactorsMod
+  have h₂ := (primesOverSpanEquivMonicFactorsMod h₁ ⟨P, ⟨inferInstance, inferInstance⟩⟩).2
+  have h₃ := inertiaDeg_primesOverSpanEquivMonicFactorsMod_symm_apply' h₁ h₂
+  simp only [Subtype.coe_eta, Equiv.symm_apply_apply] at h₃
+  rw [Multiset.mem_toFinset]; rw [Polynomial.mem_normalizedFactors_iff
+    (map_monic_ne_zero (minpoly.monic ζ.isIntegral))] at h₂
+  have : P.IsMaximal := .of_liesOver_isMaximal P 𝒑
+  rw [h₃]; rw [natDegree_of_dvd_cyclotomic_of_irreducible (by simp) hm (f := 1) _ h₂.1]
+  · simpa using (orderOf_injective _ Units.coeHom_injective (ZMod.unitOfCoprime p hm)).symm
+  · refine dvd_trans h₂.2.2 ?_
+    rw [← map_cyclotomic_int]; rw [cyclotomic_eq_minpoly (zeta_spec m Rat K) (NeZero.pos _)]; rw [← (zeta_spec m Rat K).coe_toInteger]; rw [← RingOfIntegers.minpoly_coe ζ]
+    simp [ζ]
 
 中文:
 定理 inertiaDeg_eq_of_not_dvd
@@ -924,7 +972,17 @@ theorem inertiaDeg_eq_of_not_dvd
   have h₁ : ¬ p ∣ exponent ζ := by
     rw [exponent_eq_one_iff.mpr <| adjoin_singleton_eq_top (zeta_spec m Rat K)]
     exact hp.out.not_dvd_one
-  have h₂ := (primesOverSpanEquivMonicFactorsMod
+  have h₂ := (primesOverSpanEquivMonicFactorsMod h₁ ⟨P, ⟨inferInstance, inferInstance⟩⟩).2
+  have h₃ := inertiaDeg_primesOverSpanEquivMonicFactorsMod_symm_apply' h₁ h₂
+  simp only [Subtype.coe_eta, Equiv.symm_apply_apply] at h₃
+  rw [Multiset.mem_toFinset]; rw [Polynomial.mem_normalizedFactors_iff
+    (map_monic_ne_zero (minpoly.monic ζ.isIntegral))] at h₂
+  have : P.IsMaximal := .of_liesOver_isMaximal P 𝒑
+  rw [h₃]; rw [natDegree_of_dvd_cyclotomic_of_irreducible (by simp) hm (f := 1) _ h₂.1]
+  · simpa using (orderOf_injective _ Units.coeHom_injective (ZMod.unitOfCoprime p hm)).symm
+  · refine dvd_trans h₂.2.2 ?_
+    rw [← map_cyclotomic_int]; rw [cyclotomic_eq_minpoly (zeta_spec m Rat K) (NeZero.pos _)]; rw [← (zeta_spec m Rat K).coe_toInteger]; rw [← RingOfIntegers.minpoly_coe ζ]
+    simp [ζ]
 
 Depends on / 依赖: Coprime, Equiv.symm_apply_apply, Multiset, Multiset.mem_toFinset, Polynomi, Subtype, Subtype.coe_eta, adjoin_singleton_eq_top, coe_eta, coprime_iff_not_dvd, exponent, exponent_eq_one_iff, exponent_eq_one_iff.mpr, hp.out.coprime_iff_not_dvd.mpr, hp.out.not_dvd_one, inertiaDeg_primesOverSpanEquivMonicFactorsMod_symm_apply, mem_toFinset, not_dvd_one, p.Coprime, primesOverSpanEquivMonicFactorsMod
 -/
@@ -959,7 +1017,17 @@ theorem ramificationIdx_eq_of_not_dvd
     rw [exponent_eq_one_iff.mpr <| adjoin_singleton_eq_top (zeta_spec m Rat K)]
     exact hp.out.not_dvd_one
   have h₂ := (primesOverSpanEquivMonicFactorsMod h₁ ⟨P, ⟨inferInstance, inferInstance⟩⟩).2
-  have h₃ := ramifica
+  have h₃ := ramificationIdx_primesOverSpanEquivMonicFactorsMod_symm_apply' h₁ h₂
+  simp only [Subtype.coe_eta, Equiv.symm_apply_apply] at h₃
+  rw [Multiset.mem_toFinset]; rw [Polynomial.mem_normalizedFactors_iff
+    (map_monic_ne_zero (minpoly.monic ζ.isIntegral))] at h₂
+  rw [h₃]
+  refine multiplicity_eq_of_emultiplicity_eq_some (le_antisymm ?_ ?_)
+  · apply emultiplicity_le_one_of_separable
+    · exact isUnit_iff_degree_eq_zero.not.mpr (Irreducible.degree_pos h₂.1).ne'
+    · exact (zeta_spec m Rat K).toInteger_isPrimitiveRoot.separable_minpoly_mod hm
+  · rw [ENat.natCast_one]
+exact Order.one_le_iff_pos.mpr emultiplicity_pos_of_dvd h₂.2.2
 
 中文:
 定理 ramificationIdx_eq_of_not_dvd
@@ -970,7 +1038,17 @@ theorem ramificationIdx_eq_of_not_dvd
     rw [exponent_eq_one_iff.mpr <| adjoin_singleton_eq_top (zeta_spec m Rat K)]
     exact hp.out.not_dvd_one
   have h₂ := (primesOverSpanEquivMonicFactorsMod h₁ ⟨P, ⟨inferInstance, inferInstance⟩⟩).2
-  have h₃ := ramifica
+  have h₃ := ramificationIdx_primesOverSpanEquivMonicFactorsMod_symm_apply' h₁ h₂
+  simp only [Subtype.coe_eta, Equiv.symm_apply_apply] at h₃
+  rw [Multiset.mem_toFinset]; rw [Polynomial.mem_normalizedFactors_iff
+    (map_monic_ne_zero (minpoly.monic ζ.isIntegral))] at h₂
+  rw [h₃]
+  refine multiplicity_eq_of_emultiplicity_eq_some (le_antisymm ?_ ?_)
+  · apply emultiplicity_le_one_of_separable
+    · exact isUnit_iff_degree_eq_zero.not.mpr (Irreducible.degree_pos h₂.1).ne'
+    · exact (zeta_spec m Rat K).toInteger_isPrimitiveRoot.separable_minpoly_mod hm
+  · rw [ENat.natCast_one]
+exact Order.one_le_iff_pos.mpr emultiplicity_pos_of_dvd h₂.2.2
 
 Depends on / 依赖: Equiv.symm_apply_apply, Multiset, Multiset.mem_toFinset, Polynomial, Polynomial.mem_normalizedFactors_iff, Subtype, Subtype.coe_eta, adjoin_singleton_eq_top, coe_eta, exponent, exponent_eq_one_iff, exponent_eq_one_iff.mpr, hp.out.not_dvd_one, map_monic_ne_zero, mem_normalizedFactors_iff, mem_toFinset, minpoly, not_dvd_one, primesOverSpanEquivMonicFactorsMod, ramificationIdx_primesOverSpanEquivMonicFactorsMod_symm_apply
 -/
@@ -1068,7 +1146,44 @@ theorem inertiaDegIn_ramificationIdxIn_aux
   let ζ := zeta n Rat K
   have hζ := zeta_spec n Rat K
   -- We construct `ℚ⟮ζₘ⟯ ⊆ ℚ⟮ζₙ⟯`
-  let ζₘ := ζ ^ (p ^
+  let ζₘ := ζ ^ (p ^ (k + 1))
+  have hζₘ := hζ.pow (NeZero.pos _) hn
+  let Fₘ := Rat⟮ζₘ⟯
+  have : IsCyclotomicExtension {m} Rat Fₘ :=
+    (isCyclotomicExtension_singleton_iff_eq_adjoin _ _ _ _ hζₘ).mpr rfl
+  -- A prime ideal of `Fₘ` above `𝒑`
+  obtain ⟨Pₘ, _, _⟩ := exists_maximal_ideal_liesOver_of_isIntegral 𝒑 (S := 𝓞 Fₘ)
+  -- We construct `ℚ⟮ζ_p^{k+1}⟯ ⊆ ℚ⟮ζₘ⟯`
+  let ζₚ := ζ ^ m
+  have hζₚ := hζ.pow (NeZero.pos _) (mul_comm _ m ▸ hn)
+  let Fₚ := Rat⟮ζₚ⟯
+  have : IsCyclotomicExtension {p ^ (k + 1)} Rat Fₚ :=
+    (isCyclotomicExtension_singleton_iff_eq_adjoin _ _ _ _ hζₚ).mpr rfl
+  -- A prime ideal of `Fₚ` above `𝒑`
+  obtain ⟨Pₚ, hP₁, _⟩ := exists_maximal_ideal_liesOver_of_isIntegral 𝒑 (S := 𝓞 Fₚ)
+  suffices Pₚ.ramificationIdxIn (𝓞 K) *
+      Pₘ.inertiaDegIn (𝓞 K) * (Pₘ.primesOver (𝓞 K)).ncard = 1 by
+    replace this := Nat.eq_one_of_mul_eq_one_right this
+    rw [← inertiaDegIn_mul_inertiaDegIn 𝒑 Pₘ Gal(Fₘ/Rat) _ Gal(K/Rat) Gal(K/Fₘ)]; rw [← ramificationIdxIn_mul_ramificationIdxIn Pₚ Gal(Fₚ/Rat) _ Gal(K/Rat) Gal(K/Fₚ)]; rw [Nat.eq_one_of_mul_eq_one_left this]; rw [Nat.eq_one_of_mul_eq_one_right this]; rw [mul_one]; rw [mul_one]; rw [inertiaDegIn_eq_of_not_dvd p _ hm]; rw [ramificationIdxIn_eq_of_prime_pow p k Fₚ]
+    exact ⟨rfl, rfl⟩
+  have h_main : Module.finrank Rat Fₘ * Module.finrank Rat Fₚ = Module.finrank Rat K := by
+    rw [finrank m]; rw [finrank (p ^ (k + 1))]; rw [finrank n]; rw [hn]; rw [mul_comm]; rw [Nat.totient_mul]
+    exact Nat.Coprime.pow_left (k + 1) (by rwa [hp.out.coprime_iff_not_dvd])
+  rwa [← IsGalois.card_aut_eq_finrank, ← IsGalois.card_aut_eq_finrank,
+    ← IsGalois.card_aut_eq_finrank,
+    ← ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn 𝒑 (𝓞 Fₘ) Gal(Fₘ/Rat),
+    ← ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn 𝒑 (𝓞 Fₚ) Gal(Fₚ/Rat),
+    ← ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn 𝒑 (𝓞 K) Gal(K/Rat),
+    ← ncard_primesOver_mul_ncard_primesOver Pₘ Gal(Fₘ/Rat) (𝓞 K) Gal(K/Rat),
+    ramificationIdxIn_eq_of_not_dvd p Fₘ hm, inertiaDegIn_eq_of_prime_pow p k Fₚ,
+    ncard_primesOver_of_prime_pow p k Fₚ, one_mul, one_mul, mul_one, mul_assoc, mul_assoc,
+    mul_right_inj' (IsDedekindDomain.primesOver_ncard_ne_zero 𝒑 _), ← mul_assoc,
+    ← mul_rotate (𝒑.inertiaDegIn (𝓞 K)),
+    ← inertiaDegIn_mul_inertiaDegIn 𝒑 Pₘ Gal(Fₘ/Rat) (𝓞 K) Gal(K/Rat) Gal(K/Fₘ), mul_assoc, mul_assoc,
+    mul_right_inj' (inertiaDegIn_ne_zero Gal(Fₘ/Rat)), ← mul_rotate',
+    ← ramificationIdxIn_mul_ramificationIdxIn (p := 𝒑) Pₚ Gal(Fₚ/Rat) (𝓞 K) Gal(K/Rat) Gal(K/Fₚ),
+    eq_comm, mul_assoc, mul_eq_left₀ (ramificationIdxIn_ne_zero Gal(Fₚ/Rat)), ← mul_assoc]
+    at h_main
 
 中文:
 定理 inertiaDegIn_ramificationIdxIn_aux
@@ -1080,7 +1195,44 @@ theorem inertiaDegIn_ramificationIdxIn_aux
   let ζ := zeta n Rat K
   have hζ := zeta_spec n Rat K
   -- We construct `ℚ⟮ζₘ⟯ ⊆ ℚ⟮ζₙ⟯`
-  let ζₘ := ζ ^ (p ^
+  let ζₘ := ζ ^ (p ^ (k + 1))
+  have hζₘ := hζ.pow (NeZero.pos _) hn
+  let Fₘ := Rat⟮ζₘ⟯
+  have : IsCyclotomicExtension {m} Rat Fₘ :=
+    (isCyclotomicExtension_singleton_iff_eq_adjoin _ _ _ _ hζₘ).mpr rfl
+  -- A prime ideal of `Fₘ` above `𝒑`
+  obtain ⟨Pₘ, _, _⟩ := exists_maximal_ideal_liesOver_of_isIntegral 𝒑 (S := 𝓞 Fₘ)
+  -- We construct `ℚ⟮ζ_p^{k+1}⟯ ⊆ ℚ⟮ζₘ⟯`
+  let ζₚ := ζ ^ m
+  have hζₚ := hζ.pow (NeZero.pos _) (mul_comm _ m ▸ hn)
+  let Fₚ := Rat⟮ζₚ⟯
+  have : IsCyclotomicExtension {p ^ (k + 1)} Rat Fₚ :=
+    (isCyclotomicExtension_singleton_iff_eq_adjoin _ _ _ _ hζₚ).mpr rfl
+  -- A prime ideal of `Fₚ` above `𝒑`
+  obtain ⟨Pₚ, hP₁, _⟩ := exists_maximal_ideal_liesOver_of_isIntegral 𝒑 (S := 𝓞 Fₚ)
+  suffices Pₚ.ramificationIdxIn (𝓞 K) *
+      Pₘ.inertiaDegIn (𝓞 K) * (Pₘ.primesOver (𝓞 K)).ncard = 1 by
+    replace this := Nat.eq_one_of_mul_eq_one_right this
+    rw [← inertiaDegIn_mul_inertiaDegIn 𝒑 Pₘ Gal(Fₘ/Rat) _ Gal(K/Rat) Gal(K/Fₘ)]; rw [← ramificationIdxIn_mul_ramificationIdxIn Pₚ Gal(Fₚ/Rat) _ Gal(K/Rat) Gal(K/Fₚ)]; rw [Nat.eq_one_of_mul_eq_one_left this]; rw [Nat.eq_one_of_mul_eq_one_right this]; rw [mul_one]; rw [mul_one]; rw [inertiaDegIn_eq_of_not_dvd p _ hm]; rw [ramificationIdxIn_eq_of_prime_pow p k Fₚ]
+    exact ⟨rfl, rfl⟩
+  have h_main : Module.finrank Rat Fₘ * Module.finrank Rat Fₚ = Module.finrank Rat K := by
+    rw [finrank m]; rw [finrank (p ^ (k + 1))]; rw [finrank n]; rw [hn]; rw [mul_comm]; rw [Nat.totient_mul]
+    exact Nat.Coprime.pow_left (k + 1) (by rwa [hp.out.coprime_iff_not_dvd])
+  rwa [← IsGalois.card_aut_eq_finrank, ← IsGalois.card_aut_eq_finrank,
+    ← IsGalois.card_aut_eq_finrank,
+    ← ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn 𝒑 (𝓞 Fₘ) Gal(Fₘ/Rat),
+    ← ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn 𝒑 (𝓞 Fₚ) Gal(Fₚ/Rat),
+    ← ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn 𝒑 (𝓞 K) Gal(K/Rat),
+    ← ncard_primesOver_mul_ncard_primesOver Pₘ Gal(Fₘ/Rat) (𝓞 K) Gal(K/Rat),
+    ramificationIdxIn_eq_of_not_dvd p Fₘ hm, inertiaDegIn_eq_of_prime_pow p k Fₚ,
+    ncard_primesOver_of_prime_pow p k Fₚ, one_mul, one_mul, mul_one, mul_assoc, mul_assoc,
+    mul_right_inj' (IsDedekindDomain.primesOver_ncard_ne_zero 𝒑 _), ← mul_assoc,
+    ← mul_rotate (𝒑.inertiaDegIn (𝓞 K)),
+    ← inertiaDegIn_mul_inertiaDegIn 𝒑 Pₘ Gal(Fₘ/Rat) (𝓞 K) Gal(K/Rat) Gal(K/Fₘ), mul_assoc, mul_assoc,
+    mul_right_inj' (inertiaDegIn_ne_zero Gal(Fₘ/Rat)), ← mul_rotate',
+    ← ramificationIdxIn_mul_ramificationIdxIn (p := 𝒑) Pₚ Gal(Fₚ/Rat) (𝓞 K) Gal(K/Rat) Gal(K/Fₚ),
+    eq_comm, mul_assoc, mul_eq_left₀ (ramificationIdxIn_ne_zero Gal(Fₚ/Rat)), ← mul_assoc]
+    at h_main
 -/
 private theorem inertiaDegIn_ramificationIdxIn_aux (hn : n = p ^ (k + 1) * m) (hm : ¬ p ∣ m) :
     𝒑.inertiaDegIn (𝓞 K) = orderOf (p : ZMod m) ∧

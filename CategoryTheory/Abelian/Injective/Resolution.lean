@@ -353,14 +353,18 @@ definition descHomotopyZeroSucc
   signature: {Y Z : C} {I : InjectiveResolution Y} {J : InjectiveResolution Z}
   body: (I.exact_succ (n + 1)).descToInjective (f.f (n + 2) - g' ≫ J.cocomplex.d _ _) (by
       dsimp
-      rw [Preadditive.comp_sub]; rw [← HomologicalComplex.Hom.comm]; rw [w]; rw [Preadditive.add_comp]; rw [Category.assoc]; rw [Category.assoc]; rw [HomologicalComplex.d_comp_d]; rw [comp_zero]; rw [add_ze
+      rw [Preadditive.comp_sub]; rw [← HomologicalComplex.Hom.comm]; rw [w]; rw [Preadditive.add_comp]; rw [Category.assoc]; rw [Category.assoc]; rw [HomologicalComplex.d_comp_d]; rw [comp_zero]; rw [add_zero]; rw [sub_self])
+
+@[reassoc (attr := simp)]
 
 中文:
 定义 descHomotopyZeroSucc
   签名: {Y Z : C} {I : 单射消解 Y} {J : 单射消解 Z}
   定义体: (I.exact_succ (n + 1)).descToInjective (f.f (n + 2) - g' ≫ J.cocomplex.d _ _) (by
       dsimp
-      rw [Preadditive.comp_sub]; rw [← HomologicalComplex.Hom.comm]; rw [w]; rw [Preadditive.add_comp]; rw [Category.assoc]; rw [Category.assoc]; rw [HomologicalComplex.d_comp_d]; rw [comp_zero]; rw [add_ze
+      rw [Preadditive.comp_sub]; rw [← HomologicalComplex.Hom.comm]; rw [w]; rw [Preadditive.add_comp]; rw [Category.assoc]; rw [Category.assoc]; rw [HomologicalComplex.d_comp_d]; rw [comp_zero]; rw [add_zero]; rw [sub_self])
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Category, Category.assoc, HomologicalComplex, HomologicalComplex.Hom.comm, HomologicalComplex.d_comp_d, I.exact_succ, J.cocomplex.d, Preadditive, Preadditive.add_comp, Preadditive.comp_sub, add_comp, add_zero, cocomplex, comp_sub, comp_zero, d_comp_d, descToInjective, exact_succ, sub_self
 -/
@@ -604,7 +608,11 @@ definition injectiveResolutions
   map_id X := by
     rw [← (HomotopyCategory.quotient _ _).map_id]
     apply HomotopyCategory.eq_of_homotopy
-    apply InjectiveResolution.descIdHomot
+    apply InjectiveResolution.descIdHomotopy
+  map_comp f g := by
+    rw [← (HomotopyCategory.quotient _ _).map_comp]
+    apply HomotopyCategory.eq_of_homotopy
+    apply InjectiveResolution.descCompHomotopy
 
 中文:
 定义 injectiveResolutions
@@ -614,7 +622,11 @@ definition injectiveResolutions
   map_id X := by
     rw [← (HomotopyCategory.quotient _ _).map_id]
     apply HomotopyCategory.eq_of_homotopy
-    apply InjectiveResolution.descIdHomot
+    apply InjectiveResolution.descIdHomotopy
+  map_comp f g := by
+    rw [← (HomotopyCategory.quotient _ _).map_comp]
+    apply HomotopyCategory.eq_of_homotopy
+    apply InjectiveResolution.descCompHomotopy
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.quotient, cocomplex, injectiveResolution, quotient
 -/
@@ -831,7 +843,10 @@ lemma ofCocomplex_exactAt_succ
   simp only [HomologicalComplex.sc', HomologicalComplex.shortComplexFunctor', ofCocomplex,
     CochainComplex.mk', CochainComplex.mk, CochainComplex.of_d]
   match n with
-  | 0 => apply exact_f_d ((CochainComplex.mk
+  | 0 => apply exact_f_d ((CochainComplex.mkAux _ _ _
+      (d (Injective.ι Z)) (d (d (Injective.ι Z))) _ _ 0).f)
+  | n + 1 => apply exact_f_d ((CochainComplex.mkAux _ _ _
+      (d (Injective.ι Z)) (d (d (Injective.ι Z))) _ _ (n + 1)).f)
 
 中文:
 引理 ofCocomplex_exactAt_succ
@@ -841,7 +856,10 @@ lemma ofCocomplex_exactAt_succ
   simp only [HomologicalComplex.sc', HomologicalComplex.shortComplexFunctor', ofCocomplex,
     CochainComplex.mk', CochainComplex.mk, CochainComplex.of_d]
   match n with
-  | 0 => apply exact_f_d ((CochainComplex.mk
+  | 0 => apply exact_f_d ((CochainComplex.mkAux _ _ _
+      (d (Injective.ι Z)) (d (d (Injective.ι Z))) _ _ 0).f)
+  | n + 1 => apply exact_f_d ((CochainComplex.mkAux _ _ _
+      (d (Injective.ι Z)) (d (d (Injective.ι Z))) _ _ (n + 1)).f)
 
 Depends on / 依赖: CochainComplex, CochainComplex.mk, CochainComplex.mkAux, CochainComplex.of_d, HomologicalComplex, HomologicalComplex.exactAt_iff, HomologicalComplex.sc, HomologicalComplex.shortComplexFunctor, Injective, exactAt_iff, exact_f_d, ofCocomplex, of_d, shortComplexFunctor
 -/

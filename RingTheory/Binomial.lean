@@ -299,6 +299,9 @@ theorem ascPochhammer_succ_succ
   simp only [smeval_mul, smeval_comp, smeval_add, smeval_X]
   rw [Nat.factorial]; rw [mul_smul]; rw [factorial_nsmul_multichoose_eq_ascPochhammer]
   simp only [smeval_one, npow_one, npow_zero, one_smul]
+  rw [← C_eq_natCast]; rw [smeval_C]; rw [npow_zero]; rw [add_assoc]; rw [add_mul]; rw [add_comm 1]; rw [@nsmul_one]; rw [add_mul]
+  rw [← @nsmul_eq_mul]; rw [@add_rotate']; rw [@succ_nsmul]; rw [add_assoc]
+  simp_all only [Nat.cast_id, nsmul_eq_mul, one_mul]
 
 中文:
 定理 ascPochhammer_succ_succ
@@ -308,6 +311,9 @@ theorem ascPochhammer_succ_succ
   simp only [smeval_mul, smeval_comp, smeval_add, smeval_X]
   rw [Nat.factorial]; rw [mul_smul]; rw [factorial_nsmul_multichoose_eq_ascPochhammer]
   simp only [smeval_one, npow_one, npow_zero, one_smul]
+  rw [← C_eq_natCast]; rw [smeval_C]; rw [npow_zero]; rw [add_assoc]; rw [add_mul]; rw [add_comm 1]; rw [@nsmul_one]; rw [add_mul]
+  rw [← @nsmul_eq_mul]; rw [@add_rotate']; rw [@succ_nsmul]; rw [add_assoc]
+  simp_all only [Nat.cast_id, nsmul_eq_mul, one_mul]
 
 Depends on / 依赖: C_eq_natCast, Nat.factorial, add_assoc, add_comm, add_mul, add_rotate, ascPochhammer, ascPochhammer_succ_left, ascPochhammer_succ_right, factorial, factorial_nsmul_multichoose_eq_ascPochhammer, mul_comm, mul_smul, npow_one, npow_zero, nsmul_eq_mul, nsmul_one, nth_rw, one_smul, smeval_C
 -/
@@ -475,7 +481,7 @@ theorem ascPochhammer_smeval_cast
   | succ n hn =>
     simp only [ascPochhammer_succ_right, mul_add, smeval_add, smeval_mul_X, ← Nat.cast_comm]
     simp only [← C_eq_natCast, smeval_C_mul, hn, Nat.cast_smul_eq_nsmul R n]
-    simp only [nsmul_eq_mul, Nat.cas
+    simp only [nsmul_eq_mul, Nat.cast_id]
 
 中文:
 定理 ascPochhammer_smeval_cast
@@ -486,7 +492,7 @@ theorem ascPochhammer_smeval_cast
   | succ n hn =>
     simp only [ascPochhammer_succ_right, mul_add, smeval_add, smeval_mul_X, ← Nat.cast_comm]
     simp only [← C_eq_natCast, smeval_C_mul, hn, Nat.cast_smul_eq_nsmul R n]
-    simp only [nsmul_eq_mul, Nat.cas
+    simp only [nsmul_eq_mul, Nat.cast_id]
 
 Depends on / 依赖: C_eq_natCast, Nat.cast_comm, Nat.cast_id, Nat.cast_smul_eq_nsmul, ascPochhammer_succ_right, ascPochhammer_zero, cast_comm, cast_id, cast_smul_eq_nsmul, mul_add, nsmul_eq_mul, smeval_C_mul, smeval_add, smeval_mul_X, smeval_one
 -/
@@ -535,7 +541,8 @@ theorem descPochhammer_smeval_eq_ascPochhammer
   induction n with
   | zero => simp only [descPochhammer_zero, ascPochhammer_zero, smeval_one, npow_zero]
   | succ n ih =>
-    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_right]; rw [smeval_mul]; rw [ih]; rw [ascPochhammer_succ_left]; rw [X_mul]; rw [smeva
+    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_right]; rw [smeval_mul]; rw [ih]; rw [ascPochhammer_succ_left]; rw [X_mul]; rw [smeval_mul_X]; rw [smeval_comp]; rw [smeval_sub]; rw [← C_eq_natCast]; rw [smeval_add]; rw [smeval_one]; rw [smeval_C]
+    simp only [smeval_X, npow_one, npow_zero, zsmul_one, Int.cast_natCast, one_smul]
 
 中文:
 定理 descPochhammer_smeval_eq_ascPochhammer
@@ -544,7 +551,8 @@ theorem descPochhammer_smeval_eq_ascPochhammer
   induction n with
   | zero => simp only [descPochhammer_zero, ascPochhammer_zero, smeval_one, npow_zero]
   | succ n ih =>
-    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_right]; rw [smeval_mul]; rw [ih]; rw [ascPochhammer_succ_left]; rw [X_mul]; rw [smeva
+    rw [Nat.cast_succ]; rw [sub_add]; rw [add_sub_cancel_right]; rw [descPochhammer_succ_right]; rw [smeval_mul]; rw [ih]; rw [ascPochhammer_succ_left]; rw [X_mul]; rw [smeval_mul_X]; rw [smeval_comp]; rw [smeval_sub]; rw [← C_eq_natCast]; rw [smeval_add]; rw [smeval_one]; rw [smeval_C]
+    simp only [smeval_X, npow_one, npow_zero, zsmul_one, Int.cast_natCast, one_smul]
 
 Depends on / 依赖: C_eq_natCast, Int.cast_natCast, Nat.cast_succ, X_mul, add_sub_cancel_right, ascPochhammer_succ_left, ascPochhammer_zero, cast_natCast, cast_succ, descPochhammer_succ_right, descPochhammer_zero, npow_one, npow_zero, one_smul, smeval_C, smeval_X, smeval_add, smeval_comp, smeval_mul, smeval_mul_X
 -/
@@ -567,7 +575,10 @@ theorem descPochhammer_smeval_eq_descFactorial
   | zero =>
     rw [descPochhammer_zero]; rw [Nat.descFactorial_zero]; rw [Nat.cast_one]; rw [smeval_one]; rw [npow_zero]; rw [one_smul]
   | succ k ih =>
-    rw [descPochhammer_succ_right]; rw [Nat.descFactorial_succ]; rw [smeval_mul]; rw [ih]; rw [mul_comm]; rw [Nat.cast_mul];
+    rw [descPochhammer_succ_right]; rw [Nat.descFactorial_succ]; rw [smeval_mul]; rw [ih]; rw [mul_comm]; rw [Nat.cast_mul]; rw [smeval_sub]; rw [smeval_X]; rw [smeval_natCast]; rw [npow_one]; rw [npow_zero]; rw [nsmul_one]
+    by_cases! h : n < k
+    · simp only [Nat.descFactorial_eq_zero_iff_lt.mpr h, Nat.cast_zero, zero_mul]
+    · rw [Nat.cast_sub h]
 
 中文:
 定理 descPochhammer_smeval_eq_descFactorial
@@ -577,7 +588,10 @@ theorem descPochhammer_smeval_eq_descFactorial
   | zero =>
     rw [descPochhammer_zero]; rw [Nat.descFactorial_zero]; rw [Nat.cast_one]; rw [smeval_one]; rw [npow_zero]; rw [one_smul]
   | succ k ih =>
-    rw [descPochhammer_succ_right]; rw [Nat.descFactorial_succ]; rw [smeval_mul]; rw [ih]; rw [mul_comm]; rw [Nat.cast_mul];
+    rw [descPochhammer_succ_right]; rw [Nat.descFactorial_succ]; rw [smeval_mul]; rw [ih]; rw [mul_comm]; rw [Nat.cast_mul]; rw [smeval_sub]; rw [smeval_X]; rw [smeval_natCast]; rw [npow_one]; rw [npow_zero]; rw [nsmul_one]
+    by_cases! h : n < k
+    · simp only [Nat.descFactorial_eq_zero_iff_lt.mpr h, Nat.cast_zero, zero_mul]
+    · rw [Nat.cast_sub h]
 
 Depends on / 依赖: Nat.cast_mul, Nat.cast_one, Nat.cast_s, Nat.cast_zero, Nat.descFactorial_eq_zero_iff_lt.mpr, Nat.descFactorial_succ, Nat.descFactorial_zero, cast_mul, cast_one, cast_s, cast_zero, descFactorial_eq_zero_iff_lt, descFactorial_succ, descFactorial_zero, descPochhammer_succ_right, descPochhammer_zero, mul_comm, npow_one, npow_zero, nsmul_one
 -/
@@ -605,7 +619,7 @@ theorem ascPochhammer_smeval_neg_eq_descPochhammer
     simp only [ascPochhammer_succ_right, smeval_mul, ih, descPochhammer_succ_right, sub_eq_add_neg]
     have h : (X + (k : Nat[X])).smeval (-r) = -(X + (-k : Int[X])).smeval r := by
       simp [smeval_natCast, add_comm]
-    rw [h]; rw [← neg_mu
+    rw [h]; rw [← neg_mul_comm]; rw [Int.natCast_add]; rw [Int.natCast_one]; rw [Int.negOnePow_succ]; rw [Units.neg_smul]; rw [Units.smul_def]; rw [Units.smul_def]; rw [← smul_mul_assoc]; rw [neg_mul]
 
 中文:
 定理 ascPochhammer_smeval_neg_eq_descPochhammer
@@ -617,7 +631,7 @@ theorem ascPochhammer_smeval_neg_eq_descPochhammer
     simp only [ascPochhammer_succ_right, smeval_mul, ih, descPochhammer_succ_right, sub_eq_add_neg]
     have h : (X + (k : Nat[X])).smeval (-r) = -(X + (-k : Int[X])).smeval r := by
       simp [smeval_natCast, add_comm]
-    rw [h]; rw [← neg_mu
+    rw [h]; rw [← neg_mul_comm]; rw [Int.natCast_add]; rw [Int.natCast_one]; rw [Int.negOnePow_succ]; rw [Units.neg_smul]; rw [Units.smul_def]; rw [Units.smul_def]; rw [← smul_mul_assoc]; rw [neg_mul]
 
 Depends on / 依赖: Int.natCast_add, Int.natCast_one, Int.negOnePow_succ, Units.neg_smul, Units.smul_def, add_comm, ascPochhammer_succ_right, descPochhammer_succ_right, natCast_add, natCast_one, negOnePow_succ, neg_mul, neg_mul_comm, neg_smul, smeval, smeval_mul, smeval_natCast, smul_def, smul_mul_assoc, sub_eq_add_neg
 -/
@@ -699,7 +713,11 @@ instance Int.instBinomialRing
     cases r with
     | ofNat n =>
       simp only [Int.ofNat_eq_natCast, Int.ofNat_mul_ofNat]
-      rw [← Nat.descFactorial_eq_factorial_mul_choose]; rw [smeval_at_natCast]; rw [← eval_eq_smeva
+      rw [← Nat.descFactorial_eq_factorial_mul_choose]; rw [smeval_at_natCast]; rw [← eval_eq_smeval n]; rw [ascPochhammer_nat_eq_descFactorial]
+    | negSucc n =>
+      simp only
+      rw [mul_comm]; rw [mul_assoc]; rw [← Nat.cast_mul]; rw [mul_comm _ (k.factorial)]; rw [← Nat.descFactorial_eq_factorial_mul_choose]; rw [← descPochhammer_smeval_eq_descFactorial]; rw [← Int.neg_ofNat_succ]; rw [ascPochhammer_smeval_neg_eq_descPochhammer]
+      norm_cast
 
 中文:
 实例 整数.instBinomialRing
@@ -710,7 +728,11 @@ instance Int.instBinomialRing
     cases r with
     | ofNat n =>
       simp only [Int.ofNat_eq_natCast, Int.ofNat_mul_ofNat]
-      rw [← Nat.descFactorial_eq_factorial_mul_choose]; rw [smeval_at_natCast]; rw [← eval_eq_smeva
+      rw [← Nat.descFactorial_eq_factorial_mul_choose]; rw [smeval_at_natCast]; rw [← eval_eq_smeval n]; rw [ascPochhammer_nat_eq_descFactorial]
+    | negSucc n =>
+      simp only
+      rw [mul_comm]; rw [mul_assoc]; rw [← Nat.cast_mul]; rw [mul_comm _ (k.factorial)]; rw [← Nat.descFactorial_eq_factorial_mul_choose]; rw [← descPochhammer_smeval_eq_descFactorial]; rw [← Int.neg_ofNat_succ]; rw [ascPochhammer_smeval_neg_eq_descPochhammer]
+      norm_cast
 
 Depends on / 依赖: Int.multichoose, multichoose
 -/
@@ -1058,7 +1080,9 @@ theorem descPochhammer_eq_factorial_smul_choose
   proof: by
   rw [choose]; rw [factorial_nsmul_multichoose_eq_ascPochhammer]; rw [descPochhammer_eq_ascPochhammer]; rw [smeval_comp]; rw [add_comm_sub]; rw [smeval_add]; rw [smeval_X]; rw [npow_one]
   have h : smeval (1 - n : Polynomial Int) r = 1 - n := by
-    rw [← C_eq_natCast]; rw [← C_1]; rw [← C_sub]; 
+    rw [← C_eq_natCast]; rw [← C_1]; rw [← C_sub]; rw [smeval_C]
+    simp only [npow_zero, zsmul_one, Int.cast_sub, Int.cast_one, Int.cast_natCast]
+  rw [h]; rw [ascPochhammer_smeval_cast]; rw [add_comm_sub]
 
 中文:
 定理 descPochhammer_eq_factorial_smul_choose
@@ -1066,7 +1090,9 @@ theorem descPochhammer_eq_factorial_smul_choose
   证明: by
   rw [choose]; rw [factorial_nsmul_multichoose_eq_ascPochhammer]; rw [descPochhammer_eq_ascPochhammer]; rw [smeval_comp]; rw [add_comm_sub]; rw [smeval_add]; rw [smeval_X]; rw [npow_one]
   have h : smeval (1 - n : Polynomial Int) r = 1 - n := by
-    rw [← C_eq_natCast]; rw [← C_1]; rw [← C_sub]; 
+    rw [← C_eq_natCast]; rw [← C_1]; rw [← C_sub]; rw [smeval_C]
+    simp only [npow_zero, zsmul_one, Int.cast_sub, Int.cast_one, Int.cast_natCast]
+  rw [h]; rw [ascPochhammer_smeval_cast]; rw [add_comm_sub]
 
 Depends on / 依赖: C_eq_natCast, C_sub, Int.cast_natCast, Int.cast_one, Int.cast_sub, Polynomial, add_comm_sub, ascPochhammer_smeval_cast, cast_natCast, cast_one, cast_sub, descPochhammer_eq_ascPochhammer, factorial_nsmul_multichoose_eq_ascPochhammer, npow_one, npow_zero, smeval, smeval_C, smeval_X, smeval_add, smeval_comp
 -/
@@ -1286,14 +1312,14 @@ theorem choose_neg
   given: [NatPowAssoc R] (r : R) (n : Nat)
   proof: by
   apply (nsmul_right_inj (Nat.factorial_ne_zero n)).mp
-  rw [← descPochhammer_eq_factorial_smul_choose]; rw [smul_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [descPochhammer_smeval_eq_ascPochhammer]; rw [show (-r - n + 1) = -(r + n - 1) by abel]; rw [ascPochhammer_smeval_neg_eq_desc
+  rw [← descPochhammer_eq_factorial_smul_choose]; rw [smul_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [descPochhammer_smeval_eq_ascPochhammer]; rw [show (-r - n + 1) = -(r + n - 1) by abel]; rw [ascPochhammer_smeval_neg_eq_descPochhammer]
 
 中文:
 定理 choose_neg
   条件: [自然数PowAssoc R] (r : R) (n : 自然数)
   证明: by
   apply (nsmul_right_inj (Nat.factorial_ne_zero n)).mp
-  rw [← descPochhammer_eq_factorial_smul_choose]; rw [smul_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [descPochhammer_smeval_eq_ascPochhammer]; rw [show (-r - n + 1) = -(r + n - 1) by abel]; rw [ascPochhammer_smeval_neg_eq_desc
+  rw [← descPochhammer_eq_factorial_smul_choose]; rw [smul_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [descPochhammer_smeval_eq_ascPochhammer]; rw [show (-r - n + 1) = -(r + n - 1) by abel]; rw [ascPochhammer_smeval_neg_eq_descPochhammer]
 
 Depends on / 依赖: Nat.factorial_ne_zero, ascPochhammer_smeval_neg_eq_descPochhammer, descPochhammer_eq_factorial_smul_choose, descPochhammer_smeval_eq_ascPochhammer, factorial_ne_zero, nsmul_right_inj, smul_comm
 -/
@@ -1334,7 +1360,7 @@ theorem descPochhammer_succ_succ_smeval
   rw [descPochhammer_succ_right]; rw [mul_comm (descPochhammer Int k)]
   simp only [smeval_comp, smeval_sub, smeval_mul, smeval_X, smeval_one, npow_one,
     npow_zero, one_smul, add_sub_cancel_right, sub_mul, add_mul, add_smul, one_mul]
-  rw [← C_eq_natCast];
+  rw [← C_eq_natCast]; rw [smeval_C]; rw [npow_zero]; rw [add_comm (k • smeval (descPochhammer Int k) r) _]; rw [add_assoc]; rw [add_comm (k • smeval (descPochhammer Int k) r) _]; rw [← add_assoc]; rw [← add_sub_assoc]; rw [nsmul_eq_mul]; rw [zsmul_one]; rw [Int.cast_natCast]; rw [sub_add_cancel]; rw [add_comm]
 
 中文:
 定理 descPochhammer_succ_succ_smeval
@@ -1344,7 +1370,7 @@ theorem descPochhammer_succ_succ_smeval
   rw [descPochhammer_succ_right]; rw [mul_comm (descPochhammer Int k)]
   simp only [smeval_comp, smeval_sub, smeval_mul, smeval_X, smeval_one, npow_one,
     npow_zero, one_smul, add_sub_cancel_right, sub_mul, add_mul, add_smul, one_mul]
-  rw [← C_eq_natCast];
+  rw [← C_eq_natCast]; rw [smeval_C]; rw [npow_zero]; rw [add_comm (k • smeval (descPochhammer Int k) r) _]; rw [add_assoc]; rw [add_comm (k • smeval (descPochhammer Int k) r) _]; rw [← add_assoc]; rw [← add_sub_assoc]; rw [nsmul_eq_mul]; rw [zsmul_one]; rw [Int.cast_natCast]; rw [sub_add_cancel]; rw [add_comm]
 
 Depends on / 依赖: C_eq_natCast, add_assoc, add_comm, add_mul, add_smul, add_sub_assoc, add_sub_cancel_right, descPochhammer, descPochhammer_succ_left, descPochhammer_succ_right, mul_comm, npow_one, npow_zero, nsmul_eq_m, nth_rw, one_mul, one_smul, smeval, smeval_C, smeval_X
 -/
@@ -1391,13 +1417,17 @@ English:
 theorem choose_smul_choose
   given: [NatPowAssoc R] (r : R) {n k : Nat} (hkn : k <= n)
   proof: by
-  rw [← nsmul_right_inj (Nat.factorial_ne_zero n)]; rw [nsmul_left_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [← Nat.choose_mul_factorial_mul_factorial hkn]; rw [← smul_mul_smul_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [mul_nsmul']; rw [← descPochhammer_eq_factoria
+  rw [← nsmul_right_inj (Nat.factorial_ne_zero n)]; rw [nsmul_left_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [← Nat.choose_mul_factorial_mul_factorial hkn]; rw [← smul_mul_smul_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [mul_nsmul']; rw [← descPochhammer_eq_factorial_smul_choose]; rw [smul_mul_assoc]
+  nth_rw 2 [← Nat.sub_add_cancel hkn]
+  rw [add_comm]; rw [← descPochhammer_mul]; rw [smeval_mul]; rw [smeval_comp]; rw [smeval_sub]; rw [smeval_X]; rw [← C_eq_natCast]; rw [smeval_C]; rw [npow_one]; rw [npow_zero]; rw [zsmul_one]; rw [Int.cast_natCast]; rw [nsmul_eq_mul]
 
 中文:
 定理 choose_smul_choose
   条件: [自然数PowAssoc R] (r : R) {n k : 自然数} (hkn : k <= n)
   证明: by
-  rw [← nsmul_right_inj (Nat.factorial_ne_zero n)]; rw [nsmul_left_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [← Nat.choose_mul_factorial_mul_factorial hkn]; rw [← smul_mul_smul_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [mul_nsmul']; rw [← descPochhammer_eq_factoria
+  rw [← nsmul_right_inj (Nat.factorial_ne_zero n)]; rw [nsmul_left_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [← Nat.choose_mul_factorial_mul_factorial hkn]; rw [← smul_mul_smul_comm]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [mul_nsmul']; rw [← descPochhammer_eq_factorial_smul_choose]; rw [smul_mul_assoc]
+  nth_rw 2 [← Nat.sub_add_cancel hkn]
+  rw [add_comm]; rw [← descPochhammer_mul]; rw [smeval_mul]; rw [smeval_comp]; rw [smeval_sub]; rw [smeval_X]; rw [← C_eq_natCast]; rw [smeval_C]; rw [npow_one]; rw [npow_zero]; rw [zsmul_one]; rw [Int.cast_natCast]; rw [nsmul_eq_mul]
 
 Depends on / 依赖: C_eq_natCast, Nat.choose_mul_factorial_mul_factorial, Nat.factorial_ne_zero, Nat.sub_add_cancel, add_comm, choose_mul_factorial_mul_factorial, descPochhammer_eq_factorial_smul_choose, descPochhammer_mul, factorial_ne_zero, mul_nsmul, nsmul_left_comm, nsmul_right_inj, nth_rw, smeval_X, smeval_comp, smeval_mul, smeval_sub, smul_mul_assoc, smul_mul_smul_comm, sub_add_cancel
 -/
@@ -1467,7 +1497,23 @@ theorem descPochhammer_smeval_add
   | zero => simp
   | succ k ih =>
     rw [descPochhammer_succ_right]; rw [mul_comm]; rw [smeval_mul]; rw [sum_antidiagonal_choose_succ_mul
-      fun i j => ((descPochhammer Int i).smeval r * (descPochhammer Int j).smeval s)]; rw [← sum_add_distrib]; rw [smeval_sub]; rw [smeval_
+      fun i j => ((descPochhammer Int i).smeval r * (descPochhammer Int j).smeval s)]; rw [← sum_add_distrib]; rw [smeval_sub]; rw [smeval_X]; rw [smeval_natCast]; rw [pow_zero]; rw [pow_one]; rw [ih]; rw [mul_sum]
+    refine sum_congr rfl ?_
+    intro ij hij -- try to move `descPochhammer`s to right, gather multipliers.
+    have hdx : (descPochhammer Int ij.1).smeval r * (X - (ij.2 : Int[X])).smeval s =
+        (X - (ij.2 : Int[X])).smeval s * (descPochhammer Int ij.1).smeval r := by
+      refine (commute_iff_eq ((descPochhammer Int ij.1).smeval r)
+        ((X - (ij.2 : Int[X])).smeval s)).mp ?_
+      exact smeval_commute Int (descPochhammer Int ij.1) (X - (ij.2 : Int[X])) h
+    rw [descPochhammer_succ_right]; rw [mul_comm]; rw [smeval_mul]; rw [descPochhammer_succ_right]; rw [mul_comm]; rw [smeval_mul]; rw [← mul_assoc ((descPochhammer Int ij.1).smeval r)]; rw [hdx]
+    simp only [mul_assoc _ ((descPochhammer Int ij.1).smeval r) _,
+      ← mul_assoc _ _ (((descPochhammer Int ij.1).smeval r) * _)]
+    have hl : (r + s - k • 1) * (k.choose ij.1) = (k.choose ij.1) * (X - (ij.2 : Int[X])).smeval s +
+        ↑(k.choose ij.2) * (X - (ij.1 : Int[X])).smeval r := by
+      simp only [smeval_sub, smeval_X, pow_one, smeval_natCast, pow_zero]
+      rw [← Nat.choose_symm_of_eq_add (List.Nat.mem_antidiagonal.mp hij).symm]; rw [(List.Nat.mem_antidiagonal.mp hij).symm]; rw [← mul_add]; rw [Nat.cast_comm]; rw [add_smul]
+      abel_nf
+    rw [hl]; rw [← add_mul]
 
 中文:
 定理 descPochhammer_smeval_add
@@ -1477,7 +1523,23 @@ theorem descPochhammer_smeval_add
   | zero => simp
   | succ k ih =>
     rw [descPochhammer_succ_right]; rw [mul_comm]; rw [smeval_mul]; rw [sum_antidiagonal_choose_succ_mul
-      fun i j => ((descPochhammer Int i).smeval r * (descPochhammer Int j).smeval s)]; rw [← sum_add_distrib]; rw [smeval_sub]; rw [smeval_
+      fun i j => ((descPochhammer Int i).smeval r * (descPochhammer Int j).smeval s)]; rw [← sum_add_distrib]; rw [smeval_sub]; rw [smeval_X]; rw [smeval_natCast]; rw [pow_zero]; rw [pow_one]; rw [ih]; rw [mul_sum]
+    refine sum_congr rfl ?_
+    intro ij hij -- try to move `descPochhammer`s to right, gather multipliers.
+    have hdx : (descPochhammer Int ij.1).smeval r * (X - (ij.2 : Int[X])).smeval s =
+        (X - (ij.2 : Int[X])).smeval s * (descPochhammer Int ij.1).smeval r := by
+      refine (commute_iff_eq ((descPochhammer Int ij.1).smeval r)
+        ((X - (ij.2 : Int[X])).smeval s)).mp ?_
+      exact smeval_commute Int (descPochhammer Int ij.1) (X - (ij.2 : Int[X])) h
+    rw [descPochhammer_succ_right]; rw [mul_comm]; rw [smeval_mul]; rw [descPochhammer_succ_right]; rw [mul_comm]; rw [smeval_mul]; rw [← mul_assoc ((descPochhammer Int ij.1).smeval r)]; rw [hdx]
+    simp only [mul_assoc _ ((descPochhammer Int ij.1).smeval r) _,
+      ← mul_assoc _ _ (((descPochhammer Int ij.1).smeval r) * _)]
+    have hl : (r + s - k • 1) * (k.choose ij.1) = (k.choose ij.1) * (X - (ij.2 : Int[X])).smeval s +
+        ↑(k.choose ij.2) * (X - (ij.1 : Int[X])).smeval r := by
+      simp only [smeval_sub, smeval_X, pow_one, smeval_natCast, pow_zero]
+      rw [← Nat.choose_symm_of_eq_add (List.Nat.mem_antidiagonal.mp hij).symm]; rw [(List.Nat.mem_antidiagonal.mp hij).symm]; rw [← mul_add]; rw [Nat.cast_comm]; rw [add_smul]
+      abel_nf
+    rw [hl]; rw [← add_mul]
 
 Depends on / 依赖: descPochhammer, descPochhammer_succ_right, gather, mul_comm, mul_sum, multipliers, pow_one, pow_zero, smeval, smeval_X, smeval_mul, smeval_natCast, smeval_sub, sum_add_distrib, sum_antidiagonal_choose_succ_mul, sum_congr
 -/
@@ -1516,7 +1578,8 @@ theorem add_choose_eq
   rw [← nsmul_right_inj (Nat.factorial_ne_zero k)]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [smul_sum]; rw [descPochhammer_smeval_add _ h]
   refine sum_congr rfl ?_
   intro x hx
-  rw [← Nat.choose_mul_factorial_mul_factorial (HasAntidiagonal.antidiagonal.fst_le hx)]; rw [tsub_eq_of_eq_
+  rw [← Nat.choose_mul_factorial_mul_factorial (HasAntidiagonal.antidiagonal.fst_le hx)]; rw [tsub_eq_of_eq_add_rev (List.Nat.mem_antidiagonal.mp hx).symm]; rw [mul_assoc]; rw [nsmul_eq_mul]; rw [Nat.cast_mul]; rw [Nat.cast_mul]; rw [← mul_assoc _ (x.1.factorial : R)]; rw [mul_assoc _ (x.2.factorial : R)]; rw [← mul_assoc (x.2.factorial : R)]; rw [Nat.cast_commute x.2.factorial]; rw [mul_assoc _ (x.2.factorial : R)]; rw [← nsmul_eq_mul x.2.factorial]
+  simp [mul_assoc, descPochhammer_eq_factorial_smul_choose]
 
 中文:
 定理 add_choose_eq
@@ -1525,7 +1588,8 @@ theorem add_choose_eq
   rw [← nsmul_right_inj (Nat.factorial_ne_zero k)]; rw [← descPochhammer_eq_factorial_smul_choose]; rw [smul_sum]; rw [descPochhammer_smeval_add _ h]
   refine sum_congr rfl ?_
   intro x hx
-  rw [← Nat.choose_mul_factorial_mul_factorial (HasAntidiagonal.antidiagonal.fst_le hx)]; rw [tsub_eq_of_eq_
+  rw [← Nat.choose_mul_factorial_mul_factorial (HasAntidiagonal.antidiagonal.fst_le hx)]; rw [tsub_eq_of_eq_add_rev (List.Nat.mem_antidiagonal.mp hx).symm]; rw [mul_assoc]; rw [nsmul_eq_mul]; rw [Nat.cast_mul]; rw [Nat.cast_mul]; rw [← mul_assoc _ (x.1.factorial : R)]; rw [mul_assoc _ (x.2.factorial : R)]; rw [← mul_assoc (x.2.factorial : R)]; rw [Nat.cast_commute x.2.factorial]; rw [mul_assoc _ (x.2.factorial : R)]; rw [← nsmul_eq_mul x.2.factorial]
+  simp [mul_assoc, descPochhammer_eq_factorial_smul_choose]
 
 Depends on / 依赖: HasAntidiagonal, HasAntidiagonal.antidiagonal.fst_le, List.Nat.mem_antidiagonal.mp, Nat.cast_mul, Nat.choose_mul_factorial_mul_factorial, Nat.factorial_ne_zero, antidiagonal, cast_mul, choose_mul_factorial_mul_factorial, descPochhammer_eq_factorial_smul_choose, descPochhammer_smeval_add, factorial, factorial_ne_zero, fst_le, mem_antidiagonal, mul_assoc, nsmul_eq_mul, nsmul_right_inj, smul_sum, sum_congr
 -/

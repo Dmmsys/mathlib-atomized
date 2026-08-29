@@ -76,7 +76,8 @@ lemma preservesFiniteLimits_of_preservesHomology
   have : HasBinaryBiproducts C := HasBinaryBiproducts.of_hasBinaryProducts
   have : HasEqualizers C := Preadditive.hasEqualizers_of_hasKernels
   have : HasZeroObject D :=
-    ⟨F.obj 0, by rw [IsZero.iff_id_eq_zero, ← F.m
+    ⟨F.obj 0, by rw [IsZero.iff_id_eq_zero, ← F.map_id, id_zero, F.map_zero]⟩
+  exact preservesFiniteLimits_of_preservesKernels F
 
 中文:
 引理 preservesFiniteLimits_of_preservesHomology
@@ -85,7 +86,8 @@ lemma preservesFiniteLimits_of_preservesHomology
   have : HasBinaryBiproducts C := HasBinaryBiproducts.of_hasBinaryProducts
   have : HasEqualizers C := Preadditive.hasEqualizers_of_hasKernels
   have : HasZeroObject D :=
-    ⟨F.obj 0, by rw [IsZero.iff_id_eq_zero, ← F.m
+    ⟨F.obj 0, by rw [IsZero.iff_id_eq_zero, ← F.map_id, id_zero, F.map_zero]⟩
+  exact preservesFiniteLimits_of_preservesKernels F
 
 Depends on / 依赖: F.map_id, F.map_zero, F.obj, HasBinaryBiproducts, HasBinaryBiproducts.of_hasBinaryProducts, HasEqualizers, HasZeroObject, IsZero, IsZero.iff_id_eq_zero, Preadditive, Preadditive.hasEqualizers_of_hasKernels, PreservesHomology, PreservesHomology.preservesKernel, hasEqualizers_of_hasKernels, id_zero, iff_id_eq_zero, map_id, map_zero, of_hasBinaryProducts, preservesFiniteLimits_of_preservesKernels
 -/
@@ -108,7 +110,8 @@ lemma preservesFiniteColimits_of_preservesHomology
   have : HasBinaryBiproducts C := HasBinaryBiproducts.of_hasBinaryCoproducts
   have : HasCoequalizers C := Preadditive.hasCoequalizers_of_hasCokernels
   have : HasZeroObject D :=
-    ⟨F.obj 0, by rw [IsZero.iff_id_eq_z
+    ⟨F.obj 0, by rw [IsZero.iff_id_eq_zero, ← F.map_id, id_zero, F.map_zero]⟩
+  exact preservesFiniteColimits_of_preservesCokernels F
 
 中文:
 引理 preservesFiniteColimits_of_preservesHomology
@@ -117,7 +120,8 @@ lemma preservesFiniteColimits_of_preservesHomology
   have : HasBinaryBiproducts C := HasBinaryBiproducts.of_hasBinaryCoproducts
   have : HasCoequalizers C := Preadditive.hasCoequalizers_of_hasCokernels
   have : HasZeroObject D :=
-    ⟨F.obj 0, by rw [IsZero.iff_id_eq_z
+    ⟨F.obj 0, by rw [IsZero.iff_id_eq_zero, ← F.map_id, id_zero, F.map_zero]⟩
+  exact preservesFiniteColimits_of_preservesCokernels F
 
 Depends on / 依赖: F.map_id, F.map_zero, F.obj, HasBinaryBiproducts, HasBinaryBiproducts.of_hasBinaryCoproducts, HasCoequalizers, HasZeroObject, IsZero, IsZero.iff_id_eq_zero, Preadditive, Preadditive.hasCoequalizers_of_hasCokernels, PreservesHomology, PreservesHomology.preservesCokernel, hasCoequalizers_of_hasCokernels, id_zero, iff_id_eq_zero, map_id, map_zero, of_hasBinaryCoproducts, preservesCokernel
 -/
@@ -170,7 +174,26 @@ lemma preservesFiniteLimits_tfae
     let T := ShortComplex.mk S.f (Abelian.coimage.π S.g) (Abelian.comp_coimage_π_eq_zero S.zero)
     let φ : T.map F ⟶ S.map F :=
       { τ₁ := 𝟙 _
-    
+        τ₂ := 𝟙 _
+τ₃ := F.map Abelian.factorThruCoimage S.g
+        comm₂₃ := show 𝟙 _ ≫ F.map _ = F.map (cokernel.π _) ≫ _ by
+          rw [Category.id_comp]; rw [← F.map_comp]; rw [cokernel.π_desc] }
+    exact (exact_iff_of_epi_of_isIso_of_mono φ).1 (hF T ⟨(S.exact_iff_exact_coimage_π).1 hS⟩).1
+  tfae_have 2 -> 3
+  | hF, X, Y, f => by
+    refine preservesLimit_of_preserves_limit_cone (kernelIsKernel f) ?_
+    apply (KernelFork.isLimitMapConeEquiv _ F).2
+    let S := ShortComplex.mk _ _ (kernel.condition f)
+    let hS := hF S ⟨exact_kernel f, inferInstance⟩
+    have : Mono (S.map F).f := hS.2
+    exact hS.1.fIsKernel
+  tfae_have 3 -> 4
+  | hF => by
+    exact preservesFiniteLimits_of_preservesKernels F
+  tfae_have 4 -> 1
+  | ⟨_⟩, S, hS =>
+.2 ⟨KernelFork.mapIsLimit _ hS.fIsKernel F⟩ (S.map F).exact_and_mono_f_iff_f_is_kernel
+  tfae_finish
 
 中文:
 引理 preservesFiniteLimits_tfae
@@ -183,7 +206,26 @@ lemma preservesFiniteLimits_tfae
     let T := ShortComplex.mk S.f (Abelian.coimage.π S.g) (Abelian.comp_coimage_π_eq_zero S.zero)
     let φ : T.map F ⟶ S.map F :=
       { τ₁ := 𝟙 _
-    
+        τ₂ := 𝟙 _
+τ₃ := F.map Abelian.factorThruCoimage S.g
+        comm₂₃ := show 𝟙 _ ≫ F.map _ = F.map (cokernel.π _) ≫ _ by
+          rw [Category.id_comp]; rw [← F.map_comp]; rw [cokernel.π_desc] }
+    exact (exact_iff_of_epi_of_isIso_of_mono φ).1 (hF T ⟨(S.exact_iff_exact_coimage_π).1 hS⟩).1
+  tfae_have 2 -> 3
+  | hF, X, Y, f => by
+    refine preservesLimit_of_preserves_limit_cone (kernelIsKernel f) ?_
+    apply (KernelFork.isLimitMapConeEquiv _ F).2
+    let S := ShortComplex.mk _ _ (kernel.condition f)
+    let hS := hF S ⟨exact_kernel f, inferInstance⟩
+    have : Mono (S.map F).f := hS.2
+    exact hS.1.fIsKernel
+  tfae_have 3 -> 4
+  | hF => by
+    exact preservesFiniteLimits_of_preservesKernels F
+  tfae_have 4 -> 1
+  | ⟨_⟩, S, hS =>
+.2 ⟨KernelFork.mapIsLimit _ hS.fIsKernel F⟩ (S.map F).exact_and_mono_f_iff_f_is_kernel
+  tfae_finish
 
 Depends on / 依赖: Abelian, Abelian.coimage, Abelian.comp_coimage_, Abelian.factorThruCoimage, Category, Category.id_comp, F.map, F.map_comp, S.map, S.zero, ShortComplex, ShortComplex.mk, T.map, coimage, cokernel, exact_iff_of_epi_of_isIso_of_mono, factorThruCoimage, id_comp, map_comp, preservesMonomorphisms_of_preserves_shortExact_left
 -/
@@ -272,7 +314,27 @@ lemma preservesFiniteColimits_tfae
     refine ⟨?_, inferInstance⟩
     let T := ShortComplex.mk (Abelian.image.ι S.f) S.g (Abelian.image_ι_comp_eq_zero S.zero)
     let φ : S.map F ⟶ T.map F :=
-      { τ₁ := F.map <| Abe
+      { τ₁ := F.map <| Abelian.factorThruImage S.f
+        τ₂ := 𝟙 _
+        τ₃ := 𝟙 _
+        comm₁₂ := show _ ≫ F.map (kernel.ι _) = F.map _ ≫ 𝟙 _ by
+          rw [← F.map_comp]; rw [Abelian.image.fac]; rw [Category.comp_id] }
+    exact (exact_iff_of_epi_of_isIso_of_mono φ).2 (hF T ⟨(S.exact_iff_exact_image_ι).1 hS⟩).1
+  tfae_have 2 -> 3
+  | hF, X, Y, f => by
+    refine preservesColimit_of_preserves_colimit_cocone (cokernelIsCokernel f) ?_
+    apply (CokernelCofork.isColimitMapCoconeEquiv _ F).2
+    let S := ShortComplex.mk _ _ (cokernel.condition f)
+    let hS := hF S ⟨exact_cokernel f, inferInstance⟩
+    have : Epi (S.map F).g := hS.2
+    exact hS.1.gIsCokernel
+  tfae_have 3 -> 4
+  | hF => by
+    exact preservesFiniteColimits_of_preservesCokernels F
+  tfae_have 4 -> 1
+.2 | ⟨_⟩, S, hS => (S.map F).exact_and_epi_g_iff_g_is_cokernel
+    ⟨CokernelCofork.mapIsColimit _ hS.gIsCokernel F⟩
+  tfae_finish
 
 中文:
 引理 preservesFiniteColimits_tfae
@@ -284,7 +346,27 @@ lemma preservesFiniteColimits_tfae
     refine ⟨?_, inferInstance⟩
     let T := ShortComplex.mk (Abelian.image.ι S.f) S.g (Abelian.image_ι_comp_eq_zero S.zero)
     let φ : S.map F ⟶ T.map F :=
-      { τ₁ := F.map <| Abe
+      { τ₁ := F.map <| Abelian.factorThruImage S.f
+        τ₂ := 𝟙 _
+        τ₃ := 𝟙 _
+        comm₁₂ := show _ ≫ F.map (kernel.ι _) = F.map _ ≫ 𝟙 _ by
+          rw [← F.map_comp]; rw [Abelian.image.fac]; rw [Category.comp_id] }
+    exact (exact_iff_of_epi_of_isIso_of_mono φ).2 (hF T ⟨(S.exact_iff_exact_image_ι).1 hS⟩).1
+  tfae_have 2 -> 3
+  | hF, X, Y, f => by
+    refine preservesColimit_of_preserves_colimit_cocone (cokernelIsCokernel f) ?_
+    apply (CokernelCofork.isColimitMapCoconeEquiv _ F).2
+    let S := ShortComplex.mk _ _ (cokernel.condition f)
+    let hS := hF S ⟨exact_cokernel f, inferInstance⟩
+    have : Epi (S.map F).g := hS.2
+    exact hS.1.gIsCokernel
+  tfae_have 3 -> 4
+  | hF => by
+    exact preservesFiniteColimits_of_preservesCokernels F
+  tfae_have 4 -> 1
+.2 | ⟨_⟩, S, hS => (S.map F).exact_and_epi_g_iff_g_is_cokernel
+    ⟨CokernelCofork.mapIsColimit _ hS.gIsCokernel F⟩
+  tfae_finish
 
 Depends on / 依赖: Abelian, Abelian.factorThruImage, Abelian.image, Abelian.image.fac, Abelian.image_, Category, Category.comp_id, F.map, F.map_comp, S.map, S.zero, ShortComplex, ShortComplex.mk, T.map, comp_id, exact_iff_of_epi_of_isIso_of_mono, factorThruImage, kernel, map_comp, preservesEpimorphisms_of_preserves_shortExact_right
 -/
@@ -337,7 +419,22 @@ lemma exact_tfae
     · have h := (preservesFiniteLimits_tfae F |>.out 0 2 |>.1 fun S hS =>
         And.intro (hF S hS).exact (hF S hS).mono_f)
       exact h f
-    · have h := (preservesFiniteColimits_tfae F |>.out 0 2 |>.1 fun S hS 
+    · have h := (preservesFiniteColimits_tfae F |>.out 0 2 |>.1 fun S hS =>
+        And.intro (hF S hS).exact (hF S hS).epi_g)
+      exact h f
+  tfae_have 2 -> 1
+  | hF, S, hS => by
+.1 have : Mono (S.map F).f := exact_iff_mono _ (by simp)
+      hF (.mk (0 : 0 ⟶ S.X₁) S.f <| by simp) (exact_iff_mono _ (by simp) |>.2 hS.mono_f)
+.1 have : Epi (S.map F).g := exact_iff_epi _ (by simp)
+      hF (.mk S.g (0 : S.X₃ ⟶ 0) <| by simp) (exact_iff_epi _ (by simp) |>.2 hS.epi_g)
+    exact ⟨hF S hS.exact⟩
+  tfae_have 3 -> 4
+  | h => ⟨preservesFiniteLimits_of_preservesHomology F,
+      preservesFiniteColimits_of_preservesHomology F⟩
+  tfae_have 4 -> 2
+  | ⟨h1, h2⟩, _, h => h.map F
+  tfae_finish
 
 中文:
 引理 exact_tfae
@@ -349,7 +446,22 @@ lemma exact_tfae
     · have h := (preservesFiniteLimits_tfae F |>.out 0 2 |>.1 fun S hS =>
         And.intro (hF S hS).exact (hF S hS).mono_f)
       exact h f
-    · have h := (preservesFiniteColimits_tfae F |>.out 0 2 |>.1 fun S hS 
+    · have h := (preservesFiniteColimits_tfae F |>.out 0 2 |>.1 fun S hS =>
+        And.intro (hF S hS).exact (hF S hS).epi_g)
+      exact h f
+  tfae_have 2 -> 1
+  | hF, S, hS => by
+.1 have : Mono (S.map F).f := exact_iff_mono _ (by simp)
+      hF (.mk (0 : 0 ⟶ S.X₁) S.f <| by simp) (exact_iff_mono _ (by simp) |>.2 hS.mono_f)
+.1 have : Epi (S.map F).g := exact_iff_epi _ (by simp)
+      hF (.mk S.g (0 : S.X₃ ⟶ 0) <| by simp) (exact_iff_epi _ (by simp) |>.2 hS.epi_g)
+    exact ⟨hF S hS.exact⟩
+  tfae_have 3 -> 4
+  | h => ⟨preservesFiniteLimits_of_preservesHomology F,
+      preservesFiniteColimits_of_preservesHomology F⟩
+  tfae_have 4 -> 2
+  | ⟨h1, h2⟩, _, h => h.map F
+  tfae_finish
 
 Depends on / 依赖: And.intro, S.map, epi_g, exact_iff_mono, hS.mono_f, mono_f, preservesFiniteColimits_tfae, preservesFiniteLimits_tfae, tfae_have
 -/

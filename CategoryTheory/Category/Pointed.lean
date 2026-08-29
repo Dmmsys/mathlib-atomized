@@ -348,7 +348,12 @@ definition typeToPointedForgetAdjunction
             apply Pointed.Hom.ext
             funext x
             cases x
-            · exact f.m
+            · exact f.map_point.symm
+            · rfl }
+    homEquiv_naturality_left_symm := fun f g => by
+      apply Pointed.Hom.ext
+      funext x
+      cases x <;> rfl }
 
 中文:
 定义 typeToPointedForgetAdjunction
@@ -361,7 +366,12 @@ definition typeToPointedForgetAdjunction
             apply Pointed.Hom.ext
             funext x
             cases x
-            · exact f.m
+            · exact f.map_point.symm
+            · rfl }
+    homEquiv_naturality_left_symm := fun f g => by
+      apply Pointed.Hom.ext
+      funext x
+      cases x <;> rfl }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Option.some, Pointed, Pointed.Hom.ext, Y.point, f.map_point.symm, f.toFun, homEquiv, homEquiv_naturality_left_symm, invFun, left_inv, map_point, mkOfHomEquiv, o.elim
 -/

@@ -727,7 +727,7 @@ definition restrictScalarsEquivalenceOfRingEquiv
   unitIso := (restrictScalarsId S).symm ≪≫
     restrictScalarsComp' _ _ _ e.toRingHom_comp_symm_toRingHom.symm
   counitIso := (restrictScalarsComp' _ _ _ e.symm_toRingHom_comp_toRingHom.symm).symm ≪≫
-    (restrictSca
+    (restrictScalarsId R)
 
 中文:
 定义 restrictScalarsEquivalenceOfRingEquiv
@@ -737,7 +737,7 @@ definition restrictScalarsEquivalenceOfRingEquiv
   unitIso := (restrictScalarsId S).symm ≪≫
     restrictScalarsComp' _ _ _ e.toRingHom_comp_symm_toRingHom.symm
   counitIso := (restrictScalarsComp' _ _ _ e.symm_toRingHom_comp_toRingHom.symm).symm ≪≫
-    (restrictSca
+    (restrictScalarsId R)
 
 Depends on / 依赖: ModuleCat, ModuleCat.restrictScalars, e.toRingHom, restrictScalars, toRingHom
 -/
@@ -1092,7 +1092,7 @@ lemma hom_ext
   change α (s otimesₜ m) = β (s otimesₜ m)
   have : s otimesₜ[R] (m : M) = s • (1 : S) otimesₜ[R] m := by
     rw [ExtendScalars.smul_tmul]; rw [mul_one]
-  simp only [this, map_smu
+  simp only [this, map_smul, h]
 
 中文:
 引理 hom_ext
@@ -1106,7 +1106,7 @@ lemma hom_ext
   change α (s otimesₜ m) = β (s otimesₜ m)
   have : s otimesₜ[R] (m : M) = s • (1 : S) otimesₜ[R] m := by
     rw [ExtendScalars.smul_tmul]; rw [mul_one]
-  simp only [this, map_smu
+  simp only [this, map_smul, h]
 
 Depends on / 依赖: ExtendScalars, ExtendScalars.smul_tmul, TensorProduct, TensorProduct.ext, f.toAlgebra, map_injective, map_smul, mul_one, restrictScalars, smul_tmul, toAlgebra
 -/
@@ -1454,7 +1454,11 @@ definition HomEquiv.fromRestriction
         map_add' := fun s1 s2 : S => by simp [add_smul]
         map_smul' := fun r (s : S) => by
           rw [← g.hom.map_smul]
-          simp [ModuleCat.restrictScalars.smul_def (M := Mo
+          simp [ModuleCat.restrictScalars.smul_def (M := ModuleCat.of S S), mul_smul] }
+map_add' (y1 y2 : Y) := (CoextendScalars.equiv _ _).injective
+      LinearMap.ext fun s : S => by simp
+map_smul' (s : S) (y : Y) := (CoextendScalars.equiv _ _).injective
+      LinearMap.ext fun t : S => by simp [mul_smul] }
 
 中文:
 定义 态射等价.fromRestriction
@@ -1465,7 +1469,11 @@ definition HomEquiv.fromRestriction
         map_add' := fun s1 s2 : S => by simp [add_smul]
         map_smul' := fun r (s : S) => by
           rw [← g.hom.map_smul]
-          simp [ModuleCat.restrictScalars.smul_def (M := Mo
+          simp [ModuleCat.restrictScalars.smul_def (M := ModuleCat.of S S), mul_smul] }
+map_add' (y1 y2 : Y) := (CoextendScalars.equiv _ _).injective
+      LinearMap.ext fun s : S => by simp
+map_smul' (s : S) (y : Y) := (CoextendScalars.equiv _ _).injective
+      LinearMap.ext fun t : S => by simp [mul_smul] }
 
 Depends on / 依赖: CoextendScalars, CoextendScalars.equiv, LinearMap, LinearMap.ext, ModuleCat, ModuleCat.of, ModuleCat.restrictScalars.smul_def, add_smul, g.hom.map_smul, injective, map_add, map_smul, mul_smul, restrictScalars, smul_def
 -/
@@ -1513,7 +1521,8 @@ definition HomEquiv.toRestriction
   { toFun y := (g y) (1 : S)
     map_add' x y := by simp
     map_smul' r (y : Y) := by
-      
+      rw [← map_smul]
+      simp [ModuleCat.restrictScalars.smul_def (M := ModuleCat.of S S)] }
 
 中文:
 定义 态射等价.toRestriction
@@ -1524,7 +1533,8 @@ definition HomEquiv.toRestriction
   { toFun y := (g y) (1 : S)
     map_add' x y := by simp
     map_smul' r (y : Y) := by
-      
+      rw [← map_smul]
+      simp [ModuleCat.restrictScalars.smul_def (M := ModuleCat.of S S)] }
 -/
 def HomEquiv.toRestriction {X : ModuleCat R} {Y : ModuleCat S} (g : Y ⟶ (coextendScalars f).obj X) :
     (restrictScalars f).obj Y ⟶ X :=
@@ -1569,7 +1579,11 @@ definition app'
         map_smul' r (s : S) := by
           simp [ModuleCat.restrictScalars.smul_def (M := ModuleCat.of S S), mul_smul] }
 map_add' y1 y2 := (CoextendScalars.equiv _ _).injective
-      
+      LinearMap.ext fun s : S => by
+        simp [smul_add]
+map_smul' s (y : Y) := (CoextendScalars.equiv _ _).injective
+      LinearMap.ext fun t : S => by
+        simp [mul_smul] }
 
 中文:
 定义 app'
@@ -1580,7 +1594,11 @@ map_add' y1 y2 := (CoextendScalars.equiv _ _).injective
         map_smul' r (s : S) := by
           simp [ModuleCat.restrictScalars.smul_def (M := ModuleCat.of S S), mul_smul] }
 map_add' y1 y2 := (CoextendScalars.equiv _ _).injective
-      
+      LinearMap.ext fun s : S => by
+        simp [smul_add]
+map_smul' s (y : Y) := (CoextendScalars.equiv _ _).injective
+      LinearMap.ext fun t : S => by
+        simp [mul_smul] }
 
 Depends on / 依赖: CoextendScalars, CoextendScalars.equiv, LinearMap, LinearMap.ext, ModuleCat, ModuleCat.of, ModuleCat.restrictScalars.smul_def, add_smul, injective, map_add, map_smul, mul_smul, restrictScalars, smul_add, smul_def
 -/
@@ -1612,7 +1630,9 @@ definition noncomputable
   naturality Y Y' g :=
 hom_ext LinearMap.ext fun y : Y => CoextendScalars.ext LinearMap.ext fun s : S => by
       -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10745): previously simp [CoextendScalars.map_apply]
-      simp only [Functor.id_map, Functor.id_
+      simp only [Functor.id_map, Functor.id_obj, Functor.comp_map]
+      change s • (g y) = g (s • y)
+      rw [map_smul]
 
 中文:
 定义 noncomputable
@@ -1621,7 +1641,9 @@ hom_ext LinearMap.ext fun y : Y => CoextendScalars.ext LinearMap.ext fun s : S =
   naturality Y Y' g :=
 hom_ext LinearMap.ext fun y : Y => CoextendScalars.ext LinearMap.ext fun s : S => by
       -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10745): previously simp [CoextendScalars.map_apply]
-      simp only [Functor.id_map, Functor.id_
+      simp only [Functor.id_map, Functor.id_obj, Functor.comp_map]
+      change s • (g y) = g (s • y)
+      rw [map_smul]
 
 Depends on / 依赖: f.hom
 -/
@@ -1652,7 +1674,8 @@ definition noncomputable
         dsimp
         rw [CoextendScalars.smul_apply]; rw [one_mul]; rw [← map_smul]
         congr
-        change f r = f r 
+        change f r = f r • (1 : S)
+        simp }
 
 中文:
 定义 noncomputable
@@ -1664,7 +1687,8 @@ definition noncomputable
         dsimp
         rw [CoextendScalars.smul_apply]; rw [one_mul]; rw [← map_smul]
         congr
-        change f r = f r 
+        change f r = f r • (1 : S)
+        simp }
 -/
 protected noncomputable def counit' : coextendScalars f ⋙ restrictScalars f ⟶ 𝟭 (ModuleCat R) where
   -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(X := ...)`.
@@ -1696,7 +1720,12 @@ definition restrictCoextendScalarsAdj
         invFun := RestrictionCoextensionAdj.HomEquiv.toRestriction.{u₁, u₂, v} f
         left_inv g := by ext; simp
         right_inv g := by ext; simp }
-    unit := Restrict
+    unit := RestrictionCoextensionAdj.unit'.{u₁, u₂, v} f
+    counit := RestrictionCoextensionAdj.counit'.{u₁, u₂, v} f
+homEquiv_unit := hom_ext LinearMap.ext fun _ => rfl
+    homEquiv_counit {X Y g} := by
+      ext
+      simp [RestrictionCoextensionAdj.counit'] }
 
 中文:
 定义 restrictCoextendScalarsAdj
@@ -1707,7 +1736,12 @@ definition restrictCoextendScalarsAdj
         invFun := RestrictionCoextensionAdj.HomEquiv.toRestriction.{u₁, u₂, v} f
         left_inv g := by ext; simp
         right_inv g := by ext; simp }
-    unit := Restrict
+    unit := RestrictionCoextensionAdj.unit'.{u₁, u₂, v} f
+    counit := RestrictionCoextensionAdj.counit'.{u₁, u₂, v} f
+homEquiv_unit := hom_ext LinearMap.ext fun _ => rfl
+    homEquiv_counit {X Y g} := by
+      ext
+      simp [RestrictionCoextensionAdj.counit'] }
 
 Depends on / 依赖: Adjunction, Adjunction.mk, HomEquiv, LinearMap, LinearMap.ext, RestrictionCoextensionAdj, RestrictionCoextensionAdj.HomEquiv.fromRestriction, RestrictionCoextensionAdj.HomEquiv.toRestriction, RestrictionCoextensionAdj.counit, RestrictionCoextensionAdj.unit, counit, fromRestriction, homEquiv, homEquiv_counit, homEquiv_unit, hom_ext, invFun, left_inv, right_inv, toRestriction
 -/
@@ -1757,7 +1791,12 @@ definition HomEquiv.toRestrictScalars
   -- This suggests `restrictScalars` needs to be redesigned.
   ofHom (Y := (restrictScalars f).obj Y)
   { toFun := fun x => g <| (1 : S) otimesₜ[R,f] x
-    map_add' := fun _ _ => by dsimp; rw [tm
+    map_add' := fun _ _ => by dsimp; rw [tmul_add, map_add]
+    map_smul' := fun r s => by
+      dsimp
+      rw [RestrictScalars.smul_def]; rw [← LinearMap.map_smul]
+      erw [tmul_smul]
+      congr }
 
 中文:
 定义 态射等价.toRestrictScalars
@@ -1766,7 +1805,12 @@ definition HomEquiv.toRestrictScalars
   -- This suggests `restrictScalars` needs to be redesigned.
   ofHom (Y := (restrictScalars f).obj Y)
   { toFun := fun x => g <| (1 : S) otimesₜ[R,f] x
-    map_add' := fun _ _ => by dsimp; rw [tm
+    map_add' := fun _ _ => by dsimp; rw [tmul_add, map_add]
+    map_smul' := fun r s => by
+      dsimp
+      rw [RestrictScalars.smul_def]; rw [← LinearMap.map_smul]
+      erw [tmul_smul]
+      congr }
 -/
 def HomEquiv.toRestrictScalars {X : ModuleCat R} {Y : ModuleCat S}
     (g : (extendScalars f).obj X ⟶ Y) :
@@ -1804,7 +1848,7 @@ definition HomEquiv.evalAt
         rw [map_add]; rw [smul_add] }
     (by
       intro r x
-      rw [AddHom.toFun_eq_coe]; rw [AddHom.coe_mk]; rw 
+      rw [AddHom.toFun_eq_coe]; rw [AddHom.coe_mk]; rw [RingHom.id_apply]; rw [map_smul]; rw [smul_comm r s (g x : Y)])
 
 中文:
 定义 态射等价.evalAt
@@ -1819,7 +1863,7 @@ definition HomEquiv.evalAt
         rw [map_add]; rw [smul_add] }
     (by
       intro r x
-      rw [AddHom.toFun_eq_coe]; rw [AddHom.coe_mk]; rw 
+      rw [AddHom.toFun_eq_coe]; rw [AddHom.coe_mk]; rw [RingHom.id_apply]; rw [map_smul]; rw [smul_comm r s (g x : Y)])
 
 Depends on / 依赖: Module, Module.compHom, compHom
 -/
@@ -1856,7 +1900,19 @@ definition HomEquiv.fromExtendScalars
     { toFun z := TensorProduct.lift (σ₁₂ := .id _) ?_ z, map_add' := ?_, map_smul' := ?_ }
   · refine
     { toFun s := HomEquiv.evalAt f s g, map_add' := fun (s₁ s₂ : S) => ?_,
-      map_smul' 
+      map_smul' := fun (r : R) (s : S) => ?_ }
+    · ext
+      dsimp only [m2, evalAt_apply, LinearMap.add_apply]
+      rw [← add_smul]
+    · ext x
+      apply mul_smul (f r) s (g x)
+  · simp
+  · intro s z
+    change lift _ (s • z) = s • lift _ z
+    induction z using TensorProduct.induction_on with
+    | zero => rw [smul_zero, map_zero, smul_zero]
+    | tmul s' x => simp [mul_smul]
+    | add _ _ ih1 ih2 => rw [smul_add, map_add, ih1, ih2, map_add, smul_add]
 
 中文:
 定义 态射等价.fromExtendScalars
@@ -1867,7 +1923,19 @@ definition HomEquiv.fromExtendScalars
     { toFun z := TensorProduct.lift (σ₁₂ := .id _) ?_ z, map_add' := ?_, map_smul' := ?_ }
   · refine
     { toFun s := HomEquiv.evalAt f s g, map_add' := fun (s₁ s₂ : S) => ?_,
-      map_smul' 
+      map_smul' := fun (r : R) (s : S) => ?_ }
+    · ext
+      dsimp only [m2, evalAt_apply, LinearMap.add_apply]
+      rw [← add_smul]
+    · ext x
+      apply mul_smul (f r) s (g x)
+  · simp
+  · intro s z
+    change lift _ (s • z) = s • lift _ z
+    induction z using TensorProduct.induction_on with
+    | zero => rw [smul_zero, map_zero, smul_zero]
+    | tmul s' x => simp [mul_smul]
+    | add _ _ ih1 ih2 => rw [smul_add, map_add, ih1, ih2, map_add, smul_add]
 
 Depends on / 依赖: HomEquiv, HomEquiv.evalAt, LinearMap, LinearMap.add_apply, Module, Module.compHom, TensorProduct, TensorProduct.lift, add_apply, add_smul, compHom, evalAt, evalAt_apply, map_add, map_smul, mul_smul
 -/
@@ -1911,7 +1979,25 @@ definition homEquiv
     let m1 : Module R S := Module.compHom S f; let m2 : Module R Y := Module.compHom Y f
     apply hom_ext
     apply LinearMap.ext; intro z
-    induction z using TensorProduct.induction_o
+    induction z using TensorProduct.induction_on with
+    | zero => rw [map_zero, map_zero]
+    | tmul x s =>
+      erw [TensorProduct.lift.tmul]
+      simp only [LinearMap.coe_mk]
+      change S at x
+      dsimp
+      erw [← map_smul, ExtendScalars.smul_tmul, mul_one x]
+      rfl
+    | add _ _ ih1 ih2 => rw [map_add, map_add, ih1, ih2]
+  right_inv g := by
+    let m1 : Module R S := Module.compHom S f; let m2 : Module R Y := Module.compHom Y f
+    ext x
+    rw [HomEquiv.toRestrictScalars_hom_apply]
+    -- This needs to be `erw` because of some unfolding in `fromExtendScalars`
+    erw [HomEquiv.fromExtendScalars_hom_apply]
+    rw [lift.tmul]; rw [LinearMap.coe_mk]; rw [LinearMap.coe_mk]
+    dsimp
+    rw [one_smul]
 
 中文:
 定义 homEquiv
@@ -1922,7 +2008,25 @@ definition homEquiv
     let m1 : Module R S := Module.compHom S f; let m2 : Module R Y := Module.compHom Y f
     apply hom_ext
     apply LinearMap.ext; intro z
-    induction z using TensorProduct.induction_o
+    induction z using TensorProduct.induction_on with
+    | zero => rw [map_zero, map_zero]
+    | tmul x s =>
+      erw [TensorProduct.lift.tmul]
+      simp only [LinearMap.coe_mk]
+      change S at x
+      dsimp
+      erw [← map_smul, ExtendScalars.smul_tmul, mul_one x]
+      rfl
+    | add _ _ ih1 ih2 => rw [map_add, map_add, ih1, ih2]
+  right_inv g := by
+    let m1 : Module R S := Module.compHom S f; let m2 : Module R Y := Module.compHom Y f
+    ext x
+    rw [HomEquiv.toRestrictScalars_hom_apply]
+    -- This needs to be `erw` because of some unfolding in `fromExtendScalars`
+    erw [HomEquiv.fromExtendScalars_hom_apply]
+    rw [lift.tmul]; rw [LinearMap.coe_mk]; rw [LinearMap.coe_mk]
+    dsimp
+    rw [one_smul]
 
 Depends on / 依赖: HomEquiv, HomEquiv.toRestrictScalars, toRestrictScalars
 -/
@@ -1967,7 +2071,10 @@ definition Unit.map
   -- This suggests `restrictScalars` needs to be redesigned.
   ofHom (Y := (extendScalars f ⋙ restrictScalars f).obj X)
   { toFun := fun x => (1 : S) otimesₜ[R,f] x
-    map_add' := fun x x' => by
+    map_add' := fun x x' => by dsimp; rw [TensorProduct.tmul_add]
+    map_smul' := fun r x => by
+      let m1 : Module R S := Module.compHom S f
+      dsimp; rw [← TensorProduct.smul_tmul, TensorProduct.smul_tmul'] }
 
 中文:
 定义 单元.map
@@ -1976,7 +2083,10 @@ definition Unit.map
   -- This suggests `restrictScalars` needs to be redesigned.
   ofHom (Y := (extendScalars f ⋙ restrictScalars f).obj X)
   { toFun := fun x => (1 : S) otimesₜ[R,f] x
-    map_add' := fun x x' => by
+    map_add' := fun x x' => by dsimp; rw [TensorProduct.tmul_add]
+    map_smul' := fun r x => by
+      let m1 : Module R S := Module.compHom S f
+      dsimp; rw [← TensorProduct.smul_tmul, TensorProduct.smul_tmul'] }
 -/
 def Unit.map {X : ModuleCat R} : X ⟶ (extendScalars f ⋙ restrictScalars f).obj X :=
   -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(Y := ...)`.
@@ -2030,7 +2140,24 @@ definition Counit.map
         { toFun := fun y : Y => s • y,
           map_add' := smul_add _
           map_smul' := fun r y => by
-    
+            change s • f r • y = f r • s • y
+            rw [← mul_smul]; rw [mul_comm]; rw [mul_smul] },
+        map_add' := fun s₁ s₂ => by
+          ext y
+          change (s₁ + s₂) • y = s₁ • y + s₂ • y
+          rw [add_smul]
+        map_smul' := fun r s => by
+          ext y
+          change (f r • s) • y = (f r) • s • y
+          rw [smul_eq_mul]; rw [mul_smul] }
+    map_add' := fun _ _ => by rw [map_add]
+    map_smul' := fun s z => by
+      let m1 : Module R S := Module.compHom S f
+      let m2 : Module R Y := Module.compHom Y f
+      induction z using TensorProduct.induction_on with
+      | zero => rw [smul_zero, map_zero, smul_zero]
+      | tmul s' y => simp [mul_smul]
+      | add _ _ ih1 ih2 => rw [smul_add, map_add, map_add, ih1, ih2, smul_add] }
 
 中文:
 定义 Counit.map
@@ -2044,7 +2171,24 @@ definition Counit.map
         { toFun := fun y : Y => s • y,
           map_add' := smul_add _
           map_smul' := fun r y => by
-    
+            change s • f r • y = f r • s • y
+            rw [← mul_smul]; rw [mul_comm]; rw [mul_smul] },
+        map_add' := fun s₁ s₂ => by
+          ext y
+          change (s₁ + s₂) • y = s₁ • y + s₂ • y
+          rw [add_smul]
+        map_smul' := fun r s => by
+          ext y
+          change (f r • s) • y = (f r) • s • y
+          rw [smul_eq_mul]; rw [mul_smul] }
+    map_add' := fun _ _ => by rw [map_add]
+    map_smul' := fun s z => by
+      let m1 : Module R S := Module.compHom S f
+      let m2 : Module R Y := Module.compHom Y f
+      induction z using TensorProduct.induction_on with
+      | zero => rw [smul_zero, map_zero, smul_zero]
+      | tmul s' y => simp [mul_smul]
+      | add _ _ ih1 ih2 => rw [smul_add, map_add, map_add, ih1, ih2, smul_add] }
 
 Depends on / 依赖: Module, Module.compHom, TensorProduct, TensorProduct.lift, add_smul, compHom, map_add, map_smul, mul_comm, mul_smul, smul_add, smul_eq_mul
 -/
@@ -2118,7 +2262,17 @@ definition counit
     let m2 : Module R Y := Module.compHom Y f
     let m2 : Module R Y' := Module.compHom Y' f
     ext z
-    induction z us
+    induction z using TensorProduct.induction_on with
+    | zero => rw [map_zero, map_zero]
+    | tmul s' y =>
+      dsimp
+      -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
+      erw [Counit.map_hom_apply]
+      rw [lift.tmul]; rw [LinearMap.coe_mk]; rw [LinearMap.coe_mk]
+      set s' : S := s'
+      change s' • g y = g (s' • y)
+      rw [map_smul]
+    | add _ _ ih₁ ih₂ => rw [map_add, map_add]; congr 1
 
 中文:
 定义 counit
@@ -2130,7 +2284,17 @@ definition counit
     let m2 : Module R Y := Module.compHom Y f
     let m2 : Module R Y' := Module.compHom Y' f
     ext z
-    induction z us
+    induction z using TensorProduct.induction_on with
+    | zero => rw [map_zero, map_zero]
+    | tmul s' y =>
+      dsimp
+      -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
+      erw [Counit.map_hom_apply]
+      rw [lift.tmul]; rw [LinearMap.coe_mk]; rw [LinearMap.coe_mk]
+      set s' : S := s'
+      change s' • g y = g (s' • y)
+      rw [map_smul]
+    | add _ _ ih₁ ih₂ => rw [map_add, map_add]; congr 1
 
 Depends on / 依赖: Counit, Counit.map
 -/
@@ -2169,7 +2333,16 @@ definition extendRestrictScalarsAdj
 homEquiv_unit := fun {X Y g} => hom_ext LinearMap.ext fun x => by
       dsimp
       rfl
-homE
+homEquiv_counit := fun {X Y g} => hom_ext LinearMap.ext fun x => by
+        induction x using TensorProduct.induction_on with
+        | zero => rw [map_zero, map_zero]
+        | tmul =>
+          rw [ExtendRestrictScalarsAdj.homEquiv_symm_apply]
+          dsimp
+          -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
+          erw [ExtendRestrictScalarsAdj.Counit.map_hom_apply,
+              ExtendRestrictScalarsAdj.HomEquiv.fromExtendScalars_hom_apply]
+        | add => rw [map_add, map_add]; congr 1 }
 
 中文:
 定义 extendRestrictScalarsAdj
@@ -2181,7 +2354,16 @@ homE
 homEquiv_unit := fun {X Y g} => hom_ext LinearMap.ext fun x => by
       dsimp
       rfl
-homE
+homEquiv_counit := fun {X Y g} => hom_ext LinearMap.ext fun x => by
+        induction x using TensorProduct.induction_on with
+        | zero => rw [map_zero, map_zero]
+        | tmul =>
+          rw [ExtendRestrictScalarsAdj.homEquiv_symm_apply]
+          dsimp
+          -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
+          erw [ExtendRestrictScalarsAdj.Counit.map_hom_apply,
+              ExtendRestrictScalarsAdj.HomEquiv.fromExtendScalars_hom_apply]
+        | add => rw [map_add, map_add]; congr 1 }
 
 Depends on / 依赖: Adjunction, Adjunction.mk, ExtendRestrictScalarsAdj, ExtendRestrictScalarsAdj.counit, ExtendRestrictScalarsAdj.homEquiv, ExtendRestrictScalarsAdj.homEquiv_symm_apply, ExtendRestrictScalarsAdj.unit, LinearMap, LinearMap.ext, TensorProduct, TensorProduct.induction_on, counit, homEquiv, homEquiv_counit, homEquiv_symm_apply, homEquiv_unit, hom_ext, induction_on, map_zero
 -/
@@ -2306,7 +2488,9 @@ instance preservesColimit_restrictScalars
   have : HasColimit ((F ⋙ restrictScalars f) ⋙ forget₂ (ModuleCat R) AddCommGrpCat) :=
     inferInstanceAs (HasColimit (F ⋙ forget₂ _ AddCommGrpCat))
   apply preservesColimit_of_preserves_colimit_cocone (HasColimit.isColimitColimitCocone F)
-  apply isColimitOfReflects (forget₂ (ModuleCat.{v} R) A
+  apply isColimitOfReflects (forget₂ (ModuleCat.{v} R) AddCommGrpCat)
+  apply isColimitOfPreserves (forget₂ (ModuleCat.{v} S) AddCommGrpCat.{v})
+  exact HasColimit.isColimitColimitCocone F
 
 中文:
 实例 preservesColimit_restrictScalars
@@ -2315,7 +2499,9 @@ instance preservesColimit_restrictScalars
   have : HasColimit ((F ⋙ restrictScalars f) ⋙ forget₂ (ModuleCat R) AddCommGrpCat) :=
     inferInstanceAs (HasColimit (F ⋙ forget₂ _ AddCommGrpCat))
   apply preservesColimit_of_preserves_colimit_cocone (HasColimit.isColimitColimitCocone F)
-  apply isColimitOfReflects (forget₂ (ModuleCat.{v} R) A
+  apply isColimitOfReflects (forget₂ (ModuleCat.{v} R) AddCommGrpCat)
+  apply isColimitOfPreserves (forget₂ (ModuleCat.{v} S) AddCommGrpCat.{v})
+  exact HasColimit.isColimitColimitCocone F
 
 Depends on / 依赖: AddCommGrpCat, HasColimit, HasColimit.isColimitColimitCocone, ModuleCat, isColimitColimitCocone, isColimitOfPreserves, isColimitOfReflects, preservesColimit_of_preserves_colimit_cocone, restrictScalars
 -/
@@ -2466,7 +2652,8 @@ lemma homEquiv_extendScalarsComp
   simp only [Functor.comp_obj, Category.assoc, Category.id_comp,
     Category.comp_id, Adjunction.comp_unit_app, Adjunction.homEquiv_unit,
     Functor.map_comp, Adjunction.unit_naturality_assoc,
-    Adjunction.right_triangle_component
+    Adjunction.right_triangle_components]
+  rfl
 
 中文:
 引理 homEquiv_extendScalarsComp
@@ -2476,7 +2663,8 @@ lemma homEquiv_extendScalarsComp
   simp only [Functor.comp_obj, Category.assoc, Category.id_comp,
     Category.comp_id, Adjunction.comp_unit_app, Adjunction.homEquiv_unit,
     Functor.map_comp, Adjunction.unit_naturality_assoc,
-    Adjunction.right_triangle_component
+    Adjunction.right_triangle_components]
+  rfl
 
 Depends on / 依赖: Adjunction, Adjunction.comp_unit_app, Adjunction.homEquiv_unit, Adjunction.right_triangle_components, Adjunction.unit_naturality_assoc, Category, Category.assoc, Category.comp_id, Category.id_comp, Functor, Functor.comp_obj, Functor.map_comp, comp_id, comp_obj, comp_unit_app, conjugateEquiv, conjugateIsoEquiv, extendScalarsComp, homEquiv_unit, id_comp
 -/
@@ -2534,7 +2722,9 @@ lemma extendScalars_assoc
   have h₃ := extendScalarsComp_hom_app_one_tmul f₂₃ f₃₄
   have h₄ := extendScalarsComp_hom_app_one_tmul f₁₂ f₂₃ M m
   dsimp at h₁ h₂ h₃ h₄ ⊢
-  rw
+  rw [h₁]
+  erw [h₂]
+  rw [h₃]; rw [ExtendScalars.map_tmul]; rw [h₄]
 
 中文:
 引理 extendScalars_assoc
@@ -2545,7 +2735,9 @@ lemma extendScalars_assoc
   have h₃ := extendScalarsComp_hom_app_one_tmul f₂₃ f₃₄
   have h₄ := extendScalarsComp_hom_app_one_tmul f₁₂ f₂₃ M m
   dsimp at h₁ h₂ h₃ h₄ ⊢
-  rw
+  rw [h₁]
+  erw [h₂]
+  rw [h₃]; rw [ExtendScalars.map_tmul]; rw [h₄]
 
 Depends on / 依赖: ExtendScalars, ExtendScalars.map_tmul, extendScalarsComp_hom_app_one_tmul, map_tmul
 -/

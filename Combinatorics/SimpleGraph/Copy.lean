@@ -1320,7 +1320,7 @@ apply le_antisymm Copy.maxDegree_mono .toCopy Embedding.induce s
   by_cases hv : G.IsIsolated v
   · simp [hv]
   grw [← degree_le_maxDegree _ ⟨v, h <| G.mem_support_iff_not_isIsolated.mpr hv⟩,
-degree_induce_of_neighborSet_subset .trans h] G
+degree_induce_of_neighborSet_subset .trans h] G.neighborSet_subset_support v
 
 中文:
 定理 maxDegree_induce_of_support_subset
@@ -1331,7 +1331,7 @@ apply le_antisymm Copy.maxDegree_mono .toCopy Embedding.induce s
   by_cases hv : G.IsIsolated v
   · simp [hv]
   grw [← degree_le_maxDegree _ ⟨v, h <| G.mem_support_iff_not_isIsolated.mpr hv⟩,
-degree_induce_of_neighborSet_subset .trans h] G
+degree_induce_of_neighborSet_subset .trans h] G.neighborSet_subset_support v
 
 Depends on / 依赖: Copy.maxDegree_mono, Embedding, Embedding.induce, G.IsIsolated, G.maxDegree_le_of_forall_degree_le, G.mem_support_iff_not_isIsolated.mpr, G.neighborSet_subset_support, IsIsolated, degree_induce_of_neighborSet_subset, degree_le_maxDegree, induce, le_antisymm, maxDegree_le_of_forall_degree_le, maxDegree_mono, mem_support_iff_not_isIsolated, neighborSet_subset_support, toCopy
 -/
@@ -1796,7 +1796,8 @@ lemma isIndContained_iff_exists_iso_subgraph
   · rintro ⟨H', e, hH'⟩
     exact e.isIndContained.trans hH'.isIndContained
 
-alias ⟨IsIndContained.exists_iso_subgraph, IsIndContained.of_
+alias ⟨IsIndContained.exists_iso_subgraph, IsIndContained.of_exists_iso_subgraph⟩ :=
+  isIndContained_iff_exists_iso_subgraph
 
 中文:
 引理 isIndContained_iff_存在_iso_subgraph
@@ -1808,7 +1809,8 @@ alias ⟨IsIndContained.exists_iso_subgraph, IsIndContained.of_
   · rintro ⟨H', e, hH'⟩
     exact e.isIndContained.trans hH'.isIndContained
 
-alias ⟨IsIndContained.exists_iso_subgraph, IsIndContained.of_
+alias ⟨IsIndContained.exists_iso_subgraph, IsIndContained.of_exists_iso_subgraph⟩ :=
+  isIndContained_iff_exists_iso_subgraph
 
 Depends on / 依赖: IsInduced, Relation, Relation.map_apply_apply, Subgraph, Subgraph.IsInduced, e.isIndContained.trans, f.injective, f.toCopy.isoToSubgraph, f.toCopy.toSubgraph, injective, isIndContained, isoToSubgraph, map_apply_apply, toCopy, toSubgraph
 -/
@@ -2200,7 +2202,11 @@ lemma copyCount_bot
         adj_sub := False.elim
         edge_vert := False.elim }
   simp only [eq_singleton_iff_unique_mem, mem_filter_univ, Nonempty.forall]
-  refine ⟨⟨⟨(Equiv.Set.univ _).symm, by 
+  refine ⟨⟨⟨(Equiv.Set.univ _).symm, by simp⟩⟩, fun H' e =>
+    Subgraph.ext ((set_fintype_card_eq_univ_iff _).1 <| Fintype.card_congr e.toEquiv.symm) ?_⟩
+  ext a b
+  simp only [Prop.bot_eq_false, Pi.bot_apply, iff_false]
+  exact fun hab => e.symm.map_rel_iff.2 hab.coe
 
 中文:
 引理 copyCount_bot
@@ -2216,7 +2222,11 @@ lemma copyCount_bot
         adj_sub := False.elim
         edge_vert := False.elim }
   simp only [eq_singleton_iff_unique_mem, mem_filter_univ, Nonempty.forall]
-  refine ⟨⟨⟨(Equiv.Set.univ _).symm, by 
+  refine ⟨⟨⟨(Equiv.Set.univ _).symm, by simp⟩⟩, fun H' e =>
+    Subgraph.ext ((set_fintype_card_eq_univ_iff _).1 <| Fintype.card_congr e.toEquiv.symm) ?_⟩
+  ext a b
+  simp only [Prop.bot_eq_false, Pi.bot_apply, iff_false]
+  exact fun hab => e.symm.map_rel_iff.2 hab.coe
 -/
 @[simp] lemma copyCount_bot (G : SimpleGraph V) : copyCount G (⊥ : SimpleGraph V) = 1 := by
   classical
@@ -2388,7 +2398,7 @@ lemma killCopies_eq_left
     @forall_comm _ G.Subgraph, deleteEdges_eq_self, Set.mem_iUnion,
     not_exists, not_nonempty_iff, Nonempty.forall, Free]
   exact forall_congr' fun G' => ⟨fun h => ⟨fun f => h _
-    (Subgraph.edgeSet_
+    (Subgraph.edgeSet_subset _ <| (aux hH ⟨f⟩).choose_spec) f rfl⟩, fun h _ _ => h.elim⟩
 
 中文:
 引理 killCopies_eq_left
@@ -2399,7 +2409,7 @@ lemma killCopies_eq_left
     @forall_comm _ G.Subgraph, deleteEdges_eq_self, Set.mem_iUnion,
     not_exists, not_nonempty_iff, Nonempty.forall, Free]
   exact forall_congr' fun G' => ⟨fun h => ⟨fun f => h _
-    (Subgraph.edgeSet_
+    (Subgraph.edgeSet_subset _ <| (aux hH ⟨f⟩).choose_spec) f rfl⟩, fun h _ _ => h.elim⟩
 
 Depends on / 依赖: G.Subgraph, Nonempty, Nonempty.forall, Set.disjoint_left, Set.mem_iUnion, Subgraph, Subgraph.edgeSet_subset, choose_spec, deleteEdges_eq_self, disjoint_left, edgeSet_subset, forall_comm, forall_congr, h.elim, isContained_iff_exists_iso_subgraph, killCopies_of_ne_bot, mem_iUnion, not_exists, not_nonempty_iff
 -/
@@ -2451,7 +2461,21 @@ lemma free_killCopies
     rw [Subgraph.edgeSet_map]
     exact (aux hH hHG').image _
   set e := hG'.some with he
-  have 
+  have : e in _ := hG'.some_mem
+  clear_value e
+  rw [← Subgraph.image_coe_edgeSet_coe] at this
+  subst he
+  obtain ⟨e, he₀, he₁⟩ := this
+  let e' : Sym2 G'.verts := Sym2.map (Copy.isoSubgraphMap (.ofLE _ _ _) _).symm e
+  have he' : e' in G'.coe.edgeSet := (Iso.map_mem_edgeSet_iff _).2 he₀
+  rw [Subgraph.edgeSet_coe] at he'
+  have := Subgraph.edgeSet_subset _ he'
+  simp only [edgeSet_sdiff, edgeSet_fromEdgeSet, edgeSet_sdiff_sdiff_isDiag, Set.mem_sdiff,
+    Set.mem_iUnion, not_exists] at this
+  refine this.2 (G'.map <| .ofLE sdiff_le) ⟨((Copy.ofLE _ _ _).isoSubgraphMap _).comp hHG'.some⟩ ?_
+  rw [Sym2.map_map]; rw [Set.mem_singleton_iff]; rw [← he₁]
+  congr 1 with x
+  exact congr_arg _ (Equiv.Set.image_symm_apply _ _ injective_id _ _)
 
 中文:
 引理 free_killCopies
@@ -2464,7 +2488,21 @@ lemma free_killCopies
     rw [Subgraph.edgeSet_map]
     exact (aux hH hHG').image _
   set e := hG'.some with he
-  have 
+  have : e in _ := hG'.some_mem
+  clear_value e
+  rw [← Subgraph.image_coe_edgeSet_coe] at this
+  subst he
+  obtain ⟨e, he₀, he₁⟩ := this
+  let e' : Sym2 G'.verts := Sym2.map (Copy.isoSubgraphMap (.ofLE _ _ _) _).symm e
+  have he' : e' in G'.coe.edgeSet := (Iso.map_mem_edgeSet_iff _).2 he₀
+  rw [Subgraph.edgeSet_coe] at he'
+  have := Subgraph.edgeSet_subset _ he'
+  simp only [edgeSet_sdiff, edgeSet_fromEdgeSet, edgeSet_sdiff_sdiff_isDiag, Set.mem_sdiff,
+    Set.mem_iUnion, not_exists] at this
+  refine this.2 (G'.map <| .ofLE sdiff_le) ⟨((Copy.ofLE _ _ _).isoSubgraphMap _).comp hHG'.some⟩ ?_
+  rw [Sym2.map_map]; rw [Set.mem_singleton_iff]; rw [← he₁]
+  congr 1 with x
+  exact congr_arg _ (Equiv.Set.image_symm_apply _ _ injective_id _ _)
 
 Depends on / 依赖: Copy.isoSubgraphMap, Nonempty, Subgraph, Subgraph.edgeSet_map, Subgraph.image_coe_edgeSet_coe, Sym2.map, clear_value, deleteEdges, edgeSet, edgeSet.Nonempty, edgeSet_map, image_coe_edgeSet_coe, isContained_iff_exists_iso_subgraph, isoSubgraphMap, killCopies_of_ne_bot, sdiff_le, some_mem
 -/
@@ -2524,7 +2562,16 @@ lemma le_card_edgeFinset_killCopies
   let f (G' : {G' : G.Subgraph // Nonempty (H ≃g G'.coe)}) := (aux hH G'.2).some
   calc
     _ = #G.edgeFinset - card {G' : G.Subgraph // Nonempty (H ≃g G'.coe)} := ?_
-    _ <= #G.edgeFinset - #(univ.image f) := Nat.sub_le_sub
+    _ <= #G.edgeFinset - #(univ.image f) := Nat.sub_le_sub_left card_image_le _
+    _ = #G.edgeFinset - #(Set.range f).toFinset := by rw [Set.toFinset_range]
+    _ <= #(G.edgeFinset \ (Set.range f).toFinset) := le_card_sdiff ..
+    _ = #(G.killCopies H).edgeFinset := ?_
+  · simp only [edgeFinset, Set.toFinset_card]
+    rw [← Set.toFinset_card]; rw [← edgeFinset]; rw [copyCount]; rw [← card_subtype]; rw [subtype_univ]; rw [card_univ]
+  congr 1
+  ext e
+  induction e using Sym2.inductionOn with | hf v w
+  simp [mem_edgeSet, killCopies_of_ne_bot hH, f, eq_comm]
 
 中文:
 引理 le_card_edgeFinset_killCopies
@@ -2536,7 +2583,16 @@ lemma le_card_edgeFinset_killCopies
   let f (G' : {G' : G.Subgraph // Nonempty (H ≃g G'.coe)}) := (aux hH G'.2).some
   calc
     _ = #G.edgeFinset - card {G' : G.Subgraph // Nonempty (H ≃g G'.coe)} := ?_
-    _ <= #G.edgeFinset - #(univ.image f) := Nat.sub_le_sub
+    _ <= #G.edgeFinset - #(univ.image f) := Nat.sub_le_sub_left card_image_le _
+    _ = #G.edgeFinset - #(Set.range f).toFinset := by rw [Set.toFinset_range]
+    _ <= #(G.edgeFinset \ (Set.range f).toFinset) := le_card_sdiff ..
+    _ = #(G.killCopies H).edgeFinset := ?_
+  · simp only [edgeFinset, Set.toFinset_card]
+    rw [← Set.toFinset_card]; rw [← edgeFinset]; rw [copyCount]; rw [← card_subtype]; rw [subtype_univ]; rw [card_univ]
+  congr 1
+  ext e
+  induction e using Sym2.inductionOn with | hf v w
+  simp [mem_edgeSet, killCopies_of_ne_bot hH, f, eq_comm]
 
 Depends on / 依赖: G.Subgraph, G.edgeFinset, G.killCopies, Nat.sub_le_sub_left, Nonempty, Set.range, Set.toFinset_range, Subgraph, card_edgeSet, card_image_le, classical, edgeFinset, eq_or_ne, killCopies, le_card_sdiff, sub_le_sub_left, toFinset, toFinset_range, univ.image
 -/

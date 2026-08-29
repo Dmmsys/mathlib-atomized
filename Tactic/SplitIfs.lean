@@ -52,7 +52,14 @@ definition getSplitCandidates
       let typ ← instantiateMVars (← inferType (mkFVar fvarId))
       return (SplitPosition.hyp fvarId, typ))
   pure ((SplitPosition.target, ← getMainTarget) :: candidates.toList)
-| Location.
+| Location.targets hyps tgt => do
+  let candidates ← (← hyps.mapM getFVarId).mapM
+    (fun fvarId => do
+      let typ ← instantiateMVars (← inferType (mkFVar fvarId))
+      return (SplitPosition.hyp fvarId, typ))
+  if tgt
+  then return (SplitPosition.target, ← getMainTarget) :: candidates.toList
+  else return candidates.toList
 
 中文:
 定义 getSplitCandidates
@@ -64,7 +71,14 @@ definition getSplitCandidates
       let typ ← instantiateMVars (← inferType (mkFVar fvarId))
       return (SplitPosition.hyp fvarId, typ))
   pure ((SplitPosition.target, ← getMainTarget) :: candidates.toList)
-| Location.
+| Location.targets hyps tgt => do
+  let candidates ← (← hyps.mapM getFVarId).mapM
+    (fun fvarId => do
+      let typ ← instantiateMVars (← inferType (mkFVar fvarId))
+      return (SplitPosition.hyp fvarId, typ))
+  if tgt
+  then return (SplitPosition.target, ← getMainTarget) :: candidates.toList
+  else return candidates.toList
 -/
 private def getSplitCandidates (loc : Location) : TacticM (List (SplitPosition × Expr)) :=
 match loc with
@@ -306,7 +320,14 @@ definition splitIfsCore
   -- If `cond` is `¬p` then use `p` instead.
   let cond := if cond.isAppOf `Not then cond.getAppArgs[0]! else cond
 
-  if done.contains co
+  if done.contains cond then return ()
+  let no_split ← valueKnown cond
+  if no_split then
+    andThenOnSubgoals (reduceIfsAt loc) (splitIfsCore loc hNames (cond::done) <|> pure ())
+  else do
+    let hName ← getNextName hNames
+    andThenOnSubgoals (splitIf1 cond hName loc) ((splitIfsCore loc hNames (cond::done)) <|>
+      pure ())
 
 中文:
 定义 splitIfsCore
@@ -317,7 +338,14 @@ definition splitIfsCore
   -- If `cond` is `¬p` then use `p` instead.
   let cond := if cond.isAppOf `Not then cond.getAppArgs[0]! else cond
 
-  if done.contains co
+  if done.contains cond then return ()
+  let no_split ← valueKnown cond
+  if no_split then
+    andThenOnSubgoals (reduceIfsAt loc) (splitIfsCore loc hNames (cond::done) <|> pure ())
+  else do
+    let hName ← getNextName hNames
+    andThenOnSubgoals (splitIf1 cond hName loc) ((splitIfsCore loc hNames (cond::done)) <|>
+      pure ())
 -/
 private partial def splitIfsCore
     (loc : Location)

@@ -1095,7 +1095,8 @@ lemma coinvariantsShortComplex_shortExact
     (ShortComplex.moduleCat_exact_iff _).2
     fun x hx => ⟨(⟨x, (Submodule.Quotient.mk_eq_zero _).1 hx⟩ : Representation.Coinvariants.ker <|
       A.ρ.comp S.subtype), rfl⟩
-  mono_f := (Rep.mono_iff_injective _).2 fun _ _ h => Subty
+  mono_f := (Rep.mono_iff_injective _).2 fun _ _ h => Subtype.ext h
+epi_g := (Rep.epi_iff_surjective _).2 Submodule.mkQ_surjective _
 
 中文:
 引理 coinvariantsShortComplex_shortExact
@@ -1104,7 +1105,8 @@ lemma coinvariantsShortComplex_shortExact
     (ShortComplex.moduleCat_exact_iff _).2
     fun x hx => ⟨(⟨x, (Submodule.Quotient.mk_eq_zero _).1 hx⟩ : Representation.Coinvariants.ker <|
       A.ρ.comp S.subtype), rfl⟩
-  mono_f := (Rep.mono_iff_injective _).2 fun _ _ h => Subty
+  mono_f := (Rep.mono_iff_injective _).2 fun _ _ h => Subtype.ext h
+epi_g := (Rep.epi_iff_surjective _).2 Submodule.mkQ_surjective _
 
 Depends on / 依赖: ModuleCat, reflects_exact_of_faithful
 -/
@@ -1599,7 +1601,12 @@ abbreviation coinvariantsTensorFreeLEquiv
     (lhom_ext fun i x => by
       simp [finsuppToCoinvariantsTensorFree_single,
         coinvariantsTensorFreeToFinsupp_mk_tmul_single]) <|
-Coinvariants.hom_ext TensorProduct.ext LinearMap.ext fun a => lhom_ext'
+Coinvariants.hom_ext TensorProduct.ext LinearMap.ext fun a => lhom_ext' fun i =>
+      MonoidAlgebra.lhom_ext' fun g => LinearMap.ext fun r => by
+        simp [coinvariantsTensorFreeToFinsupp_mk_tmul_single _,
+          finsuppToCoinvariantsTensorFree_single (A := A) i, TensorProduct.smul_tmul]
+
+@[simp]
 
 中文:
 缩写 coinvariantsTensorFreeLEquiv
@@ -1608,7 +1615,12 @@ Coinvariants.hom_ext TensorProduct.ext LinearMap.ext fun a => lhom_ext'
     (lhom_ext fun i x => by
       simp [finsuppToCoinvariantsTensorFree_single,
         coinvariantsTensorFreeToFinsupp_mk_tmul_single]) <|
-Coinvariants.hom_ext TensorProduct.ext LinearMap.ext fun a => lhom_ext'
+Coinvariants.hom_ext TensorProduct.ext LinearMap.ext fun a => lhom_ext' fun i =>
+      MonoidAlgebra.lhom_ext' fun g => LinearMap.ext fun r => by
+        simp [coinvariantsTensorFreeToFinsupp_mk_tmul_single _,
+          finsuppToCoinvariantsTensorFree_single (A := A) i, TensorProduct.smul_tmul]
+
+@[simp]
 
 Depends on / 依赖: Coinvariants, Coinvariants.hom_ext, LinearMap, LinearMap.ext, MonoidAlgebra, MonoidAlgebra.lhom_ext, TensorProduct, TensorProduct.ext, TensorProduct.smul_tmul, coinvariantsTensorFreeToFinsupp, coinvariantsTensorFreeToFinsupp_mk_tmul_single, finsuppToCoinvariantsTensorFree, finsuppToCoinvariantsTensorFree_single, hom_ext, lhom_ext, ofLinearMap, smul_tmul
 -/

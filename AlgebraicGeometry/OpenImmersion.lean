@@ -84,7 +84,8 @@ definition scheme
     refine ⟨⟨⟨_, h₂.base_open.isOpen_range⟩, h₁⟩, R, ⟨?_⟩⟩
     apply LocallyRingedSpace.isoOfSheafedSpaceIso
     refine SheafedSpace.forgetToPresheafedSpace.preimageIso ?_
-    apply PresheafedSpace.IsOpenImmersion.isoOfRangeEq (Pres
+    apply PresheafedSpace.IsOpenImmersion.isoOfRangeEq (PresheafedSpace.ofRestrict _ _) f.1
+    exact Subtype.range_coe_subtype
 
 中文:
 定义 scheme
@@ -96,7 +97,8 @@ definition scheme
     refine ⟨⟨⟨_, h₂.base_open.isOpen_range⟩, h₁⟩, R, ⟨?_⟩⟩
     apply LocallyRingedSpace.isoOfSheafedSpaceIso
     refine SheafedSpace.forgetToPresheafedSpace.preimageIso ?_
-    apply PresheafedSpace.IsOpenImmersion.isoOfRangeEq (Pres
+    apply PresheafedSpace.IsOpenImmersion.isoOfRangeEq (PresheafedSpace.ofRestrict _ _) f.1
+    exact Subtype.range_coe_subtype
 -/
 protected def scheme (X : LocallyRingedSpace.{u})
     (h :
@@ -1275,7 +1277,11 @@ lemma _root_.AlgebraicGeometry.IsOpenImmersion.of_isLocalization
     (Localization.Away f)).symm.toAlgHom.comp_algebraMap
   rw [← e]; rw [CommRingCat.ofHom_comp]; rw [Spec.map_comp]
   have H : IsIso (CommRingCat.ofHom (IsLocalization.algEquiv
-    (Submonoid.powers f) S (Localization.Away f)).symm.toAlgHom.toRi
+    (Submonoid.powers f) S (Localization.Away f)).symm.toAlgHom.toRingHom) := by
+    exact inferInstanceAs (IsIso <| (IsLocalization.algEquiv
+      (Submonoid.powers f) S (Localization.Away f)).toRingEquiv.toCommRingCatIso.inv)
+  simp only [AlgHom.toRingHom_eq_coe, AlgEquiv.toAlgHom_toRingHom] at H ⊢
+  infer_instance
 
 中文:
 引理 _root_.AlgebraicGeometry.是开浸入.of_isLocalization
@@ -1285,7 +1291,11 @@ lemma _root_.AlgebraicGeometry.IsOpenImmersion.of_isLocalization
     (Localization.Away f)).symm.toAlgHom.comp_algebraMap
   rw [← e]; rw [CommRingCat.ofHom_comp]; rw [Spec.map_comp]
   have H : IsIso (CommRingCat.ofHom (IsLocalization.algEquiv
-    (Submonoid.powers f) S (Localization.Away f)).symm.toAlgHom.toRi
+    (Submonoid.powers f) S (Localization.Away f)).symm.toAlgHom.toRingHom) := by
+    exact inferInstanceAs (IsIso <| (IsLocalization.algEquiv
+      (Submonoid.powers f) S (Localization.Away f)).toRingEquiv.toCommRingCatIso.inv)
+  simp only [AlgHom.toRingHom_eq_coe, AlgEquiv.toAlgHom_toRingHom] at H ⊢
+  infer_instance
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.toAlgHom_toRingHom, AlgHom, AlgHom.toRingHom_eq_coe, CommRingCat, CommRingCat.ofHom, CommRingCat.ofHom_comp, IsLocalization, IsLocalization.algEquiv, Localization, Localization.Away, Spec.map_comp, Submonoid, Submonoid.powers, algEquiv, comp_algebraMap, map_comp, ofHom_comp, powers, symm.toAlgHom.comp_algebraMap
 -/
@@ -1313,7 +1323,13 @@ theorem exists_affine_mem_range_and_range_subset
   have : e.hom.base ⟨x, hxV⟩ in (Opens.map (e.inv.base ≫ V.inclusion')).obj U :=
     show ((e.hom ≫ e.inv).base ⟨x, hxV⟩).1 in U from e.hom_inv_id ▸ hxU
   obtain ⟨_, ⟨_, ⟨r : R, rfl⟩, rfl⟩, hr, hr'⟩ :=
-    PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem
+    PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open this (Opens.is_open' _)
+  let f : Spec (.of <| Localization.Away r) ⟶ X :=
+    Spec.map (CommRingCat.ofHom (algebraMap R (Localization.Away r))) ≫ ⟨e.inv ≫ X.ofRestrict _⟩
+  refine ⟨.of (Localization.Away r), f, inferInstance, ?_⟩
+  rw [Scheme.Hom.comp_base]; rw [TopCat.coe_comp]; rw [Set.range_comp]
+  erw [PrimeSpectrum.localization_away_comap_range (Localization.Away r) r]
+  exact ⟨⟨_, hr, congr(($(e.hom_inv_id).base ⟨x, hxV⟩).1)⟩, Set.image_subset_iff.mpr hr'⟩
 
 中文:
 定理 存在_affine_mem_range_and_range_subset
@@ -1322,7 +1338,13 @@ theorem exists_affine_mem_range_and_range_subset
   have : e.hom.base ⟨x, hxV⟩ in (Opens.map (e.inv.base ≫ V.inclusion')).obj U :=
     show ((e.hom ≫ e.inv).base ⟨x, hxV⟩).1 in U from e.hom_inv_id ▸ hxU
   obtain ⟨_, ⟨_, ⟨r : R, rfl⟩, rfl⟩, hr, hr'⟩ :=
-    PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem
+    PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open this (Opens.is_open' _)
+  let f : Spec (.of <| Localization.Away r) ⟶ X :=
+    Spec.map (CommRingCat.ofHom (algebraMap R (Localization.Away r))) ≫ ⟨e.inv ≫ X.ofRestrict _⟩
+  refine ⟨.of (Localization.Away r), f, inferInstance, ?_⟩
+  rw [Scheme.Hom.comp_base]; rw [TopCat.coe_comp]; rw [Set.range_comp]
+  erw [PrimeSpectrum.localization_away_comap_range (Localization.Away r) r]
+  exact ⟨⟨_, hr, congr(($(e.hom_inv_id).base ⟨x, hxV⟩).1)⟩, Set.image_subset_iff.mpr hr'⟩
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, Localization, Localization.Away, Opens.is_open, Opens.map, PrimeSpectrum, PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open, Spec.map, V.inclusion, X.ofRestrict, algebraMap, e.hom, e.hom.base, e.hom_inv_id, e.inv, e.inv.base, exists_subset_of_mem_open, hom_inv_id, inclusion
 -/
@@ -1362,7 +1384,11 @@ definition toScheme
   intro x
   obtain ⟨R, i, _, h₁, h₂⟩ :=
     Scheme.exists_affine_mem_range_and_range_subset (U := ⟨_, H.base_open.isOpen_range⟩) ⟨x, rfl⟩
-  refine ⟨R, LocallyRingedSpace.IsOpenImmersion.lift (toLocallyRingedSpaceHom _ f)
+  refine ⟨R, LocallyRingedSpace.IsOpenImmersion.lift (toLocallyRingedSpaceHom _ f) _ h₂, ?_, ?_⟩
+  · rw [LocallyRingedSpace.IsOpenImmersion.lift_range]; exact h₁
+  · delta LocallyRingedSpace.IsOpenImmersion.lift; infer_instance
+
+@[simp]
 
 中文:
 定义 toScheme
@@ -1372,7 +1398,11 @@ definition toScheme
   intro x
   obtain ⟨R, i, _, h₁, h₂⟩ :=
     Scheme.exists_affine_mem_range_and_range_subset (U := ⟨_, H.base_open.isOpen_range⟩) ⟨x, rfl⟩
-  refine ⟨R, LocallyRingedSpace.IsOpenImmersion.lift (toLocallyRingedSpaceHom _ f)
+  refine ⟨R, LocallyRingedSpace.IsOpenImmersion.lift (toLocallyRingedSpaceHom _ f) _ h₂, ?_, ?_⟩
+  · rw [LocallyRingedSpace.IsOpenImmersion.lift_range]; exact h₁
+  · delta LocallyRingedSpace.IsOpenImmersion.lift; infer_instance
+
+@[simp]
 
 Depends on / 依赖: H.base_open.isOpen_range, IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.IsOpenImmersion.lift, LocallyRingedSpace.IsOpenImmersion.lift_range, LocallyRingedSpace.IsOpenImmersion.scheme, Scheme, Scheme.exists_affine_mem_range_and_range_subset, base_open, exists_affine_mem_range_and_range_subset, infer_instance, isOpen_range, lift_range, scheme, toLocallyRingedSpace, toLocallyRingedSpaceHom
 -/
@@ -1764,7 +1794,7 @@ lemma of_comp
       infer_instance
     IsIso.of_isIso_comp_left (f := g.stalkMap (f x)) _
 IsOpenImmersion.of_isIso_stalkMap _
-    IsOpenEmbedding.of_comp _ (Scheme.Hom.isOpenEmbe
+    IsOpenEmbedding.of_comp _ (Scheme.Hom.isOpenEmbedding g) (Scheme.Hom.isOpenEmbedding (f ≫ g))
 
 中文:
 引理 of_comp
@@ -1775,7 +1805,7 @@ IsOpenImmersion.of_isIso_stalkMap _
       infer_instance
     IsIso.of_isIso_comp_left (f := g.stalkMap (f x)) _
 IsOpenImmersion.of_isIso_stalkMap _
-    IsOpenEmbedding.of_comp _ (Scheme.Hom.isOpenEmbe
+    IsOpenEmbedding.of_comp _ (Scheme.Hom.isOpenEmbedding g) (Scheme.Hom.isOpenEmbedding (f ≫ g))
 
 Depends on / 依赖: IsIso.of_isIso_comp_left, IsOpenEmbedding, IsOpenEmbedding.of_comp, IsOpenImmersion, IsOpenImmersion.of_isIso_stalkMap, Scheme, Scheme.Hom.isOpenEmbedding, Scheme.Hom.stalkMap_comp, f.stalkMap, g.stalkMap, infer_instance, isOpenEmbedding, of_comp, of_isIso_comp_left, of_isIso_stalkMap, stalkMap, stalkMap_comp
 -/
@@ -1861,7 +1891,10 @@ theorem _root_.AlgebraicGeometry.isIso_iff_isIso_stalkMap
       IsIso
         (TopCat.isoOfHomeo
           (Equiv.toHomeomorphOfContinuousOpen
-            (.ofBije
+            (.ofBijective _ ⟨h₂.injective, (TopCat.epi_iff_surjective _).mp h₁⟩) h₂.continuous
+            h₂.isOpenMap)).hom
+    infer_instance
+  · intro H; exact ⟨inferInstance, (TopCat.homeoOfIso (asIso f.base)).isOpenEmbedding⟩
 
 中文:
 定理 _root_.AlgebraicGeometry.isIso_iff_isIso_stalkMap
@@ -1874,7 +1907,10 @@ theorem _root_.AlgebraicGeometry.isIso_iff_isIso_stalkMap
       IsIso
         (TopCat.isoOfHomeo
           (Equiv.toHomeomorphOfContinuousOpen
-            (.ofBije
+            (.ofBijective _ ⟨h₂.injective, (TopCat.epi_iff_surjective _).mp h₁⟩) h₂.continuous
+            h₂.isOpenMap)).hom
+    infer_instance
+  · intro H; exact ⟨inferInstance, (TopCat.homeoOfIso (asIso f.base)).isOpenEmbedding⟩
 
 Depends on / 依赖: Equiv.toHomeomorphOfContinuousOpen, Iff.rfl, IsOpenImmersion, IsOpenImmersion.iff_isIso_stalkMap, TopCat, TopCat.epi_iff_surjective, TopCat.homeoOfIso, TopCat.isoOfHomeo, and_assoc, and_comm, and_congr, continuous, convert_to, epi_iff_surjective, f.base, homeoOfIso, iff_isIso_stalkMap, infer_instance, injective, isIso_iff_isOpenImmersion_and_epi_base
 -/
@@ -2278,7 +2314,8 @@ instance :
     (G := LocallyRingedSpace.forgetToTop) ?_ ?_
   · infer_instance
   refine @preservesLimit_of_iso_diagram _ _ _ _ _ _ _ _ _ (diagramIsoCospan.{u} _).symm ?_
-  dsimp [LocallyRingedSpace
+  dsimp [LocallyRingedSpace.forgetToTop]
+  infer_instance
 
 中文:
 实例 :
@@ -2289,7 +2326,8 @@ instance :
     (G := LocallyRingedSpace.forgetToTop) ?_ ?_
   · infer_instance
   refine @preservesLimit_of_iso_diagram _ _ _ _ _ _ _ _ _ (diagramIsoCospan.{u} _).symm ?_
-  dsimp [LocallyRingedSpace
+  dsimp [LocallyRingedSpace.forgetToTop]
+  infer_instance
 
 Depends on / 依赖: Limits, Limits.comp_preservesLimit, LocallyRingedSpace, LocallyRingedSpace.forgetToTop, Scheme, Scheme.forgetToTop, comp_preservesLimit, cospan, diagramIsoCospan, forget, forgetToTop, infer_instance, preservesLimit_of_iso_diagram
 -/
@@ -2363,14 +2401,24 @@ theorem range_pullbackSnd
   proof: by
   rw [← show _ = (pullback.snd f g).base from
     PreservesPullback.iso_hom_snd Scheme.forgetToTop f g]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [Set.range_eq_univ.mpr]; rw [← @Set.preimage_univ _ _ (pullback.fst f.base g.base)]
-  -- Porting note (https://github.com/leanprover-community/mat
+  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): was `rw`
+  · erw [TopCat.pullback_snd_image_fst_preimage]
+    rw [Set.image_univ]
+    rfl
+  rw [← TopCat.epi_iff_surjective]
+  infer_instance
 
 中文:
 定理 range_pullbackSnd
   证明: by
   rw [← show _ = (pullback.snd f g).base from
     PreservesPullback.iso_hom_snd Scheme.forgetToTop f g]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [Set.range_eq_univ.mpr]; rw [← @Set.preimage_univ _ _ (pullback.fst f.base g.base)]
-  -- Porting note (https://github.com/leanprover-community/mat
+  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): was `rw`
+  · erw [TopCat.pullback_snd_image_fst_preimage]
+    rw [Set.image_univ]
+    rfl
+  rw [← TopCat.epi_iff_surjective]
+  infer_instance
 
 Depends on / 依赖: PreservesPullback, PreservesPullback.iso_hom_snd, Scheme, Scheme.forgetToTop, Set.preimage_univ, Set.range_comp, Set.range_eq_univ.mpr, TopCat, TopCat.coe_comp, coe_comp, f.base, forgetToTop, g.base, iso_hom_snd, preimage_univ, pullback, pullback.fst, pullback.snd, range_comp, range_eq_univ
 -/
@@ -2411,14 +2459,24 @@ theorem range_pullbackFst
   proof: by
   rw [← show _ = (pullback.fst g f).base from
     PreservesPullback.iso_hom_fst Scheme.forgetToTop g f]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [Set.range_eq_univ.mpr]; rw [← @Set.preimage_univ _ _ (pullback.snd g.base f.base)]
-  -- Porting note (https://github.com/leanprover-community/mat
+  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): was `rw`
+  · erw [TopCat.pullback_fst_image_snd_preimage]
+    rw [Set.image_univ]
+    rfl
+  rw [← TopCat.epi_iff_surjective]
+  infer_instance
 
 中文:
 定理 range_pullbackFst
   证明: by
   rw [← show _ = (pullback.fst g f).base from
     PreservesPullback.iso_hom_fst Scheme.forgetToTop g f]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [Set.range_eq_univ.mpr]; rw [← @Set.preimage_univ _ _ (pullback.snd g.base f.base)]
-  -- Porting note (https://github.com/leanprover-community/mat
+  -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): was `rw`
+  · erw [TopCat.pullback_fst_image_snd_preimage]
+    rw [Set.image_univ]
+    rfl
+  rw [← TopCat.epi_iff_surjective]
+  infer_instance
 
 Depends on / 依赖: PreservesPullback, PreservesPullback.iso_hom_fst, Scheme, Scheme.forgetToTop, Set.preimage_univ, Set.range_comp, Set.range_eq_univ.mpr, TopCat, TopCat.coe_comp, coe_comp, f.base, forgetToTop, g.base, iso_hom_fst, preimage_univ, pullback, pullback.fst, pullback.snd, range_comp, range_eq_univ
 -/
@@ -2503,7 +2561,9 @@ lemma image_preimage_eq_preimage_image_of_isPullback
   · constructor
     · rintro ⟨x, hx, rfl⟩; cases hx ⟨x, rfl⟩
     · rintro ⟨y, hy, e : iV y = f x⟩
-      obtain ⟨x, rfl⟩ := 
+      obtain ⟨x, rfl⟩ := (IsOpenImmersion.range_pullbackSnd iV f).ge ⟨y, e⟩
+      rw [← H.isoPullback_inv_snd] at hx
+      cases hx ⟨_, rfl⟩
 
 中文:
 引理 image_preimage_eq_preimage_image_of_isPullback
@@ -2517,7 +2577,9 @@ lemma image_preimage_eq_preimage_image_of_isPullback
   · constructor
     · rintro ⟨x, hx, rfl⟩; cases hx ⟨x, rfl⟩
     · rintro ⟨y, hy, e : iV y = f x⟩
-      obtain ⟨x, rfl⟩ := 
+      obtain ⟨x, rfl⟩ := (IsOpenImmersion.range_pullbackSnd iV f).ge ⟨y, e⟩
+      rw [← H.isoPullback_inv_snd] at hx
+      cases hx ⟨_, rfl⟩
 
 Depends on / 依赖: H.isoPullback_inv_snd, IsOpenImmersion, IsOpenImmersion.range_pullbackSnd, Opens.map_coe, Scheme, Scheme.Hom.comp_apply, Set.mem_preimage, Set.range, SetLike, SetLike.mem_coe, comp_apply, isoPullback_inv_snd, map_coe, mem_coe, mem_preimage, range_pullbackSnd
 -/
@@ -2760,14 +2822,14 @@ theorem app_eq_appIso_inv_app_of_comp_eq
   statement: {X Y U : Scheme.{u}} (f : Y ⟶ U) (g : U ⟶ X) (fg : Y ⟶ X)
   proof: by
   subst H
-  rw [Scheme.Hom.comp_app]; rw [Category.assoc]; rw [Scheme.Hom.appIso_inv_app_assoc]; rw [f.naturality_assoc]; rw [← Functor.map_comp]; rw [← op_comp]; rw [Quiver.Hom.unop_op]; rw [eqToHom_map]; rw [eqToHom_trans]; rw [eqToHom_op]; rw [eqToHom_refl]; rw [CategoryTheory.Functor.map_id];
+  rw [Scheme.Hom.comp_app]; rw [Category.assoc]; rw [Scheme.Hom.appIso_inv_app_assoc]; rw [f.naturality_assoc]; rw [← Functor.map_comp]; rw [← op_comp]; rw [Quiver.Hom.unop_op]; rw [eqToHom_map]; rw [eqToHom_trans]; rw [eqToHom_op]; rw [eqToHom_refl]; rw [CategoryTheory.Functor.map_id]; rw [Category.comp_id]
 
 中文:
 定理 app_eq_appIso_inv_app_of_comp_eq
   结论: {X Y U : 概形.{u}} (f : Y ⟶ U) (g : U ⟶ X) (fg : Y ⟶ X)
   证明: by
   subst H
-  rw [Scheme.Hom.comp_app]; rw [Category.assoc]; rw [Scheme.Hom.appIso_inv_app_assoc]; rw [f.naturality_assoc]; rw [← Functor.map_comp]; rw [← op_comp]; rw [Quiver.Hom.unop_op]; rw [eqToHom_map]; rw [eqToHom_trans]; rw [eqToHom_op]; rw [eqToHom_refl]; rw [CategoryTheory.Functor.map_id];
+  rw [Scheme.Hom.comp_app]; rw [Category.assoc]; rw [Scheme.Hom.appIso_inv_app_assoc]; rw [f.naturality_assoc]; rw [← Functor.map_comp]; rw [← op_comp]; rw [Quiver.Hom.unop_op]; rw [eqToHom_map]; rw [eqToHom_trans]; rw [eqToHom_op]; rw [eqToHom_refl]; rw [CategoryTheory.Functor.map_id]; rw [Category.comp_id]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, CategoryTheory, CategoryTheory.Functor.map_id, Functor, Functor.map_comp, Quiver, Quiver.Hom.unop_op, Scheme, Scheme.Hom.appIso_inv_app_assoc, Scheme.Hom.comp_app, appIso_inv_app_assoc, comp_app, comp_id, eqToHom_map, eqToHom_op, eqToHom_refl, eqToHom_trans, f.naturality_assoc
 -/
@@ -2812,7 +2874,7 @@ lemma isPullback
     (IsPullback.of_horiz_isIso
           (show CommSq e.inv iU (pullback.snd iV f) (𝟙 X) from ⟨by simp [e]⟩)).paste_horiz
       (IsPullback.of_hasPullback iV f)
-  simp
+  simp [← cancel_mono iV, e, pullback.condition, H]
 
 中文:
 引理 isPullback
@@ -2824,7 +2886,7 @@ lemma isPullback
     (IsPullback.of_horiz_isIso
           (show CommSq e.inv iU (pullback.snd iV f) (𝟙 X) from ⟨by simp [e]⟩)).paste_horiz
       (IsPullback.of_hasPullback iV f)
-  simp
+  simp [← cancel_mono iV, e, pullback.condition, H]
 
 Depends on / 依赖: CommSq, IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, IsPullback, IsPullback.of_hasPullback, IsPullback.of_horiz_isIso, cancel_mono, condition, convert, e.inv, isoOfRangeEq, of_hasPullback, of_horiz_isIso, paste_horiz, pullback, pullback.condition, pullback.snd, range_pullbackSnd
 -/
@@ -3114,7 +3176,8 @@ theorem image_basicOpen
   have e := Scheme.preimage_basicOpen f ((f.appIso U).inv r)
   rw [Scheme.Hom.appIso_inv_app_apply]; rw [Scheme.basicOpen_res]; rw [inf_eq_right.mpr _] at e
   · rw [← e, f.image_preimage_eq_opensRange_inf, inf_eq_right]
-    refine Set.Subset.trans (Scheme.basicOpen_le _ _) (Set.image_subset_range
+    refine Set.Subset.trans (Scheme.basicOpen_le _ _) (Set.image_subset_range _ _)
+  · exact (X.basicOpen_le r).trans (f.preimage_image_eq _).ge
 
 中文:
 定理 image_basicOpen
@@ -3123,7 +3186,8 @@ theorem image_basicOpen
   have e := Scheme.preimage_basicOpen f ((f.appIso U).inv r)
   rw [Scheme.Hom.appIso_inv_app_apply]; rw [Scheme.basicOpen_res]; rw [inf_eq_right.mpr _] at e
   · rw [← e, f.image_preimage_eq_opensRange_inf, inf_eq_right]
-    refine Set.Subset.trans (Scheme.basicOpen_le _ _) (Set.image_subset_range
+    refine Set.Subset.trans (Scheme.basicOpen_le _ _) (Set.image_subset_range _ _)
+  · exact (X.basicOpen_le r).trans (f.preimage_image_eq _).ge
 
 Depends on / 依赖: Scheme, Scheme.Hom.appIso_inv_app_apply, Scheme.basicOpen_le, Scheme.basicOpen_res, Scheme.preimage_basicOpen, Set.Subset.trans, Set.image_subset_range, Subset, X.basicOpen_le, appIso, appIso_inv_app_apply, basicOpen_le, basicOpen_res, f.appIso, f.image_preimage_eq_opensRange_inf, f.preimage_image_eq, image_preimage_eq_opensRange_inf, image_subset_range, inf_eq_right, inf_eq_right.mpr
 -/
@@ -3183,7 +3247,11 @@ definition stalkMapIsoOfIsPullback
     (TopCat.Presheaf.stalkCongr _ (.of_eq <| by rw [← hx, ← Scheme.Hom.comp_apply, h.w]; simp) ≪≫
       asIso (g.stalkMap (snd p)))
     (TopCat.Presheaf.stalkCongr _ (.of_eq <| by rw [hx]) ≪≫
-      asIso (fst
+      asIso (fst.stalkMap p))
+    (by
+      subst hx
+      simp [← Scheme.Hom.stalkMap_comp, ← Scheme.Hom.stalkMap_comp,
+        Scheme.Hom.stalkMap_congr_hom _ _ h.w])
 
 中文:
 定义 stalkMapIsoOfIsPullback
@@ -3193,7 +3261,11 @@ definition stalkMapIsoOfIsPullback
     (TopCat.Presheaf.stalkCongr _ (.of_eq <| by rw [← hx, ← Scheme.Hom.comp_apply, h.w]; simp) ≪≫
       asIso (g.stalkMap (snd p)))
     (TopCat.Presheaf.stalkCongr _ (.of_eq <| by rw [hx]) ≪≫
-      asIso (fst
+      asIso (fst.stalkMap p))
+    (by
+      subst hx
+      simp [← Scheme.Hom.stalkMap_comp, ← Scheme.Hom.stalkMap_comp,
+        Scheme.Hom.stalkMap_congr_hom _ _ h.w])
 
 Depends on / 依赖: cat_disch
 -/

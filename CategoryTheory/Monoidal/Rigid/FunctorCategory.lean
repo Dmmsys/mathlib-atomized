@@ -41,7 +41,12 @@ instance functorHasRightDual
         { app := fun _ => ε_ _ _
           naturality := fun X Y f => by
             dsimp
-            rw [Category.comp_id]; rw [Functor
+            rw [Category.comp_id]; rw [Functor.map_inv]; rw [← id_tensor_comp_tensor_id]; rw [Category.assoc]; rw [id_tensorHom]; rw [tensorHom_id]; rw [rightAdjointMate_comp_evaluation]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [IsIso.hom_inv_id]; rw [MonoidalCategory.whiskerLeft_id]; rw [Category.id_comp] }
+      coevaluation' :=
+        { app := fun _ => η_ _ _
+          naturality := fun X Y f => by
+            dsimp
+            rw [Functor.map_inv]; rw [Category.id_comp]; rw [← id_tensor_comp_tensor_id]; rw [id_tensorHom]; rw [tensorHom_id]; rw [← Category.assoc]; rw [coevaluation_comp_rightAdjointMate]; rw [Category.assoc]; rw [← comp_whiskerRight]; rw [IsIso.inv_hom_id]; rw [id_whiskerRight]; rw [Category.comp_id] } }
 
 中文:
 实例 functorHasRightDual
@@ -54,7 +59,12 @@ instance functorHasRightDual
         { app := fun _ => ε_ _ _
           naturality := fun X Y f => by
             dsimp
-            rw [Category.comp_id]; rw [Functor
+            rw [Category.comp_id]; rw [Functor.map_inv]; rw [← id_tensor_comp_tensor_id]; rw [Category.assoc]; rw [id_tensorHom]; rw [tensorHom_id]; rw [rightAdjointMate_comp_evaluation]; rw [← MonoidalCategory.whiskerLeft_comp_assoc]; rw [IsIso.hom_inv_id]; rw [MonoidalCategory.whiskerLeft_id]; rw [Category.id_comp] }
+      coevaluation' :=
+        { app := fun _ => η_ _ _
+          naturality := fun X Y f => by
+            dsimp
+            rw [Functor.map_inv]; rw [Category.id_comp]; rw [← id_tensor_comp_tensor_id]; rw [id_tensorHom]; rw [tensorHom_id]; rw [← Category.assoc]; rw [coevaluation_comp_rightAdjointMate]; rw [Category.assoc]; rw [← comp_whiskerRight]; rw [IsIso.inv_hom_id]; rw [id_whiskerRight]; rw [Category.comp_id] } }
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, F.map, F.obj, Functor, Functor.map_inv, IsIso.hom_inv_id, MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, MonoidalCategory.whiskerLeft_id, comp_id, comp_rightAdjointMate, evaluation, hom_inv_id, id_tensorHom, id_tensor_comp_tensor_id, map_comp, map_inv, naturality
 -/
@@ -101,7 +111,11 @@ instance functorHasLeftDual
     { evaluation' :=
         { app := fun _ => ε_ _ _
           naturality := fun X Y f => by
-            simp [tensorHom_def, leftAdjointMate_comp_evaluation]
+            simp [tensorHom_def, leftAdjointMate_comp_evaluation] }
+      coevaluation' :=
+        { app := fun _ => η_ _ _
+          naturality := fun X Y f => by
+            simp [tensorHom_def, coevaluation_comp_leftAdjointMate_assoc] } }
 
 中文:
 实例 functorHasLeftDual
@@ -113,7 +127,11 @@ instance functorHasLeftDual
     { evaluation' :=
         { app := fun _ => ε_ _ _
           naturality := fun X Y f => by
-            simp [tensorHom_def, leftAdjointMate_comp_evaluation]
+            simp [tensorHom_def, leftAdjointMate_comp_evaluation] }
+      coevaluation' :=
+        { app := fun _ => η_ _ _
+          naturality := fun X Y f => by
+            simp [tensorHom_def, coevaluation_comp_leftAdjointMate_assoc] } }
 
 Depends on / 依赖: F.map, F.obj, coevaluation, coevaluation_comp_leftAdjointMate_assoc, comp_leftAdjointMate, evaluation, leftAdjointMate_comp_evaluation, map_comp, naturality, tensorHom_def
 -/

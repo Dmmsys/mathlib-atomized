@@ -254,7 +254,13 @@ theorem pairMap_mem_pairs
     simp only [card_erase_of_mem h1, tsub_le_iff_right, mem_erase, ne_eq, h1]
     refine ⟨le_succ_of_le h, ?_⟩
     by_contra h2
-    simp only [n
+    simp only [not_true_eq_false, and_true, not_forall, not_false_eq_true, exists_prop] at h2
+    rw [← h2] at h
+    exact not_le_of_gt (sub_lt (card_pos.mpr ⟨t.snd, h1⟩) zero_lt_one) h
+  · rw [pairMap_of_snd_notMem_fst σ h1]
+    simp only [h1] at h
+    simp only [card_cons, mem_cons, true_or, implies_true, and_true]
+    exact (le_iff_eq_or_lt.mp h.left).resolve_left h.right
 
 中文:
 定理 pairMap_mem_pairs
@@ -267,7 +273,13 @@ theorem pairMap_mem_pairs
     simp only [card_erase_of_mem h1, tsub_le_iff_right, mem_erase, ne_eq, h1]
     refine ⟨le_succ_of_le h, ?_⟩
     by_contra h2
-    simp only [n
+    simp only [not_true_eq_false, and_true, not_forall, not_false_eq_true, exists_prop] at h2
+    rw [← h2] at h
+    exact not_le_of_gt (sub_lt (card_pos.mpr ⟨t.snd, h1⟩) zero_lt_one) h
+  · rw [pairMap_of_snd_notMem_fst σ h1]
+    simp only [h1] at h
+    simp only [card_cons, mem_cons, true_or, implies_true, and_true]
+    exact (le_iff_eq_or_lt.mp h.left).resolve_left h.right
 -/
 private theorem pairMap_mem_pairs {k : Nat} (t : Finset σ × σ) (h : t in pairs σ k) :
     pairMap σ t in pairs σ k := by
@@ -298,7 +310,21 @@ theorem weight_add_weight_pairMap
   have h2 (n : Nat) : -(-1 : MvPolynomial σ R) ^ n = (-1) ^ (n + 1) := by
     rw [← neg_one_mul ((-1 : MvPolynomial σ R) ^ n)]; rw [pow_add]; rw [pow_one]; rw [mul_comm]
   rcases (em (t.snd in t.fst)) with h1 | h1
-  · rw [pairMap_of_snd_mem_fst σ h
+  · rw [pairMap_of_snd_mem_fst σ h1]
+    simp only [← prod_erase_mul t.fst (fun j => (X j : MvPolynomial σ R)) h1,
+      mul_assoc (∏ a in erase t.fst t.snd, X a), card_erase_of_mem h1]
+    nth_rewrite 1 [← pow_one (X t.snd)]
+    simp only [← pow_add, add_comm]
+    have h3 : 1 <= #t.1 := lt_iff_add_one_le.mp (card_pos.mpr ⟨t.snd, h1⟩)
+    rw [← tsub_tsub_assoc h.left h3]; rw [← neg_neg ((-1 : MvPolynomial σ R) ^ (#t.1 - 1))]; rw [h2 (#t.1 - 1)]; rw [Nat.sub_add_cancel h3]
+    simp
+  · rw [pairMap_of_snd_notMem_fst σ h1]
+    simp only [mul_comm, mul_assoc (∏ a in t.fst, X a), card_cons, prod_cons]
+    nth_rewrite 2 [← pow_one (X t.snd)]
+    simp only [← pow_add, ← Nat.add_sub_assoc (Nat.lt_of_le_of_ne h.left (mt h.right h1)), add_comm,
+      Nat.succ_eq_add_one, Nat.add_sub_add_right]
+    rw [← neg_neg ((-1 : MvPolynomial σ R) ^ #t.1)]; rw [h2]
+    simp
 
 中文:
 定理 weight_add_weight_pairMap
@@ -309,7 +335,21 @@ theorem weight_add_weight_pairMap
   have h2 (n : Nat) : -(-1 : MvPolynomial σ R) ^ n = (-1) ^ (n + 1) := by
     rw [← neg_one_mul ((-1 : MvPolynomial σ R) ^ n)]; rw [pow_add]; rw [pow_one]; rw [mul_comm]
   rcases (em (t.snd in t.fst)) with h1 | h1
-  · rw [pairMap_of_snd_mem_fst σ h
+  · rw [pairMap_of_snd_mem_fst σ h1]
+    simp only [← prod_erase_mul t.fst (fun j => (X j : MvPolynomial σ R)) h1,
+      mul_assoc (∏ a in erase t.fst t.snd, X a), card_erase_of_mem h1]
+    nth_rewrite 1 [← pow_one (X t.snd)]
+    simp only [← pow_add, add_comm]
+    have h3 : 1 <= #t.1 := lt_iff_add_one_le.mp (card_pos.mpr ⟨t.snd, h1⟩)
+    rw [← tsub_tsub_assoc h.left h3]; rw [← neg_neg ((-1 : MvPolynomial σ R) ^ (#t.1 - 1))]; rw [h2 (#t.1 - 1)]; rw [Nat.sub_add_cancel h3]
+    simp
+  · rw [pairMap_of_snd_notMem_fst σ h1]
+    simp only [mul_comm, mul_assoc (∏ a in t.fst, X a), card_cons, prod_cons]
+    nth_rewrite 2 [← pow_one (X t.snd)]
+    simp only [← pow_add, ← Nat.add_sub_assoc (Nat.lt_of_le_of_ne h.left (mt h.right h1)), add_comm,
+      Nat.succ_eq_add_one, Nat.add_sub_add_right]
+    rw [← neg_neg ((-1 : MvPolynomial σ R) ^ #t.1)]; rw [h2]
+    simp
 -/
 private theorem weight_add_weight_pairMap {k : Nat} (t : Finset σ × σ) (h : t in pairs σ k) :
     weight σ R k t + weight σ R k (pairMap σ t) = 0 := by
@@ -533,14 +573,14 @@ theorem esymm_to_weight
   given: [DecidableEq σ] (k : Nat)
   statement: k * esymm σ R k =
   proof: by
-  rw [esymm]; rw [sum_filter_pairs_eq_sum_powersetCard_sum σ R k (fun t => weight σ R k t)]; rw [sum_congr rfl (esymm_summand_to_weight σ R k)]; rw [mul_comm (k : MvPolynomial σ R) ((-1) ^ k)]; rw [← mul_sum]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← pow_add]; rw [Even.neg_one_pow ⟨k]; rw [rfl⟩]
+  rw [esymm]; rw [sum_filter_pairs_eq_sum_powersetCard_sum σ R k (fun t => weight σ R k t)]; rw [sum_congr rfl (esymm_summand_to_weight σ R k)]; rw [mul_comm (k : MvPolynomial σ R) ((-1) ^ k)]; rw [← mul_sum]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← pow_add]; rw [Even.neg_one_pow ⟨k]; rw [rfl⟩]; rw [one_mul]
 
 中文:
 定理 esymm_to_weight
   条件: [DecidableEq σ] (k : 自然数)
   结论: k * esymm σ R k =
   证明: by
-  rw [esymm]; rw [sum_filter_pairs_eq_sum_powersetCard_sum σ R k (fun t => weight σ R k t)]; rw [sum_congr rfl (esymm_summand_to_weight σ R k)]; rw [mul_comm (k : MvPolynomial σ R) ((-1) ^ k)]; rw [← mul_sum]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← pow_add]; rw [Even.neg_one_pow ⟨k]; rw [rfl⟩]
+  rw [esymm]; rw [sum_filter_pairs_eq_sum_powersetCard_sum σ R k (fun t => weight σ R k t)]; rw [sum_congr rfl (esymm_summand_to_weight σ R k)]; rw [mul_comm (k : MvPolynomial σ R) ((-1) ^ k)]; rw [← mul_sum]; rw [← mul_assoc]; rw [← mul_assoc]; rw [← pow_add]; rw [Even.neg_one_pow ⟨k]; rw [rfl⟩]; rw [one_mul]
 -/
 private theorem esymm_to_weight [DecidableEq σ] (k : Nat) : k * esymm σ R k =
     (-1) ^ k * ∑ t in pairs σ k with #t.1 = k, weight σ R k t := by
@@ -615,7 +655,7 @@ theorem mul_esymm_eq_sum
   classical
   rw [NewtonIdentities.esymm_to_weight σ R k]; rw [NewtonIdentities.esymm_mul_psum_to_weight σ R k]; rw [eq_comm]; rw [← sub_eq_zero]; rw [sub_eq_add_neg]; rw [neg_mul_eq_neg_mul]; rw [neg_eq_neg_one_mul ((-1 : MvPolynomial σ R) ^ k)]
   nth_rw 2 [← pow_one (-1 : MvPolynomial σ R)]
-  r
+  rw [← pow_add]; rw [add_comm 1 k]; rw [← left_distrib]; rw [← sum_disjUnion (NewtonIdentities.disjoint_filter_pairs_lt_filter_pairs_eq σ k)]; rw [NewtonIdentities.disjUnion_filter_pairs_eq_pairs σ k]; rw [NewtonIdentities.weight_sum σ R k]; rw [neg_one_pow_mul_eq_zero_iff.mpr rfl]
 
 中文:
 定理 mul_esymm_eq_sum
@@ -624,7 +664,7 @@ theorem mul_esymm_eq_sum
   classical
   rw [NewtonIdentities.esymm_to_weight σ R k]; rw [NewtonIdentities.esymm_mul_psum_to_weight σ R k]; rw [eq_comm]; rw [← sub_eq_zero]; rw [sub_eq_add_neg]; rw [neg_mul_eq_neg_mul]; rw [neg_eq_neg_one_mul ((-1 : MvPolynomial σ R) ^ k)]
   nth_rw 2 [← pow_one (-1 : MvPolynomial σ R)]
-  r
+  rw [← pow_add]; rw [add_comm 1 k]; rw [← left_distrib]; rw [← sum_disjUnion (NewtonIdentities.disjoint_filter_pairs_lt_filter_pairs_eq σ k)]; rw [NewtonIdentities.disjUnion_filter_pairs_eq_pairs σ k]; rw [NewtonIdentities.weight_sum σ R k]; rw [neg_one_pow_mul_eq_zero_iff.mpr rfl]
 
 Depends on / 依赖: MvPolynomial, NewtonIdentities, NewtonIdentities.disjUnion_filter_pairs_eq_pairs, NewtonIdentities.disjoint_filter_pairs_lt_filter_pairs_eq, NewtonIdentities.esymm_mul_psum_to_weight, NewtonIdentities.esymm_to_weight, add_comm, classical, disjUnion_filter_pairs_eq_pairs, disjoint_filter_pairs_lt_filter_pairs_eq, eq_comm, esymm_mul_psum_to_weight, esymm_to_weight, left_distrib, neg_eq_neg_one_mul, neg_mul_eq_neg_mul, nth_rw, pow_add, pow_one, sub_eq_add_neg
 -/
@@ -647,7 +687,7 @@ theorem sum_antidiagonal_card_esymm_psum_eq_zero
       ∑ a in antidiagonal k, (-1) ^ a.fst * esymm σ R a.fst * psum σ R a.snd = 0 by
     simpa using this
   simp [k, ← sum_filter_add_sum_filter_not (antidiagonal k) (fun a => a.fst < k),
-    ← mul_esymm_eq_sum, mul_add, ← mu
+    ← mul_esymm_eq_sum, mul_add, ← mul_assoc, ← pow_add, mul_comm ↑k (esymm σ R k)]
 
 中文:
 定理 sum_antidiagonal_card_esymm_psum_eq_zero
@@ -657,7 +697,7 @@ theorem sum_antidiagonal_card_esymm_psum_eq_zero
       ∑ a in antidiagonal k, (-1) ^ a.fst * esymm σ R a.fst * psum σ R a.snd = 0 by
     simpa using this
   simp [k, ← sum_filter_add_sum_filter_not (antidiagonal k) (fun a => a.fst < k),
-    ← mul_esymm_eq_sum, mul_add, ← mu
+    ← mul_esymm_eq_sum, mul_add, ← mul_assoc, ← pow_add, mul_comm ↑k (esymm σ R k)]
 
 Depends on / 依赖: Fintype, Fintype.card, MvPolynomial, a.fst, a.snd, antidiagonal, mul_add, mul_assoc, mul_comm, mul_esymm_eq_sum, pow_add, sum_filter_add_sum_filter_not
 -/
@@ -681,7 +721,23 @@ theorem psum_eq_mul_esymm_sub_sum
   have hesymm := mul_esymm_eq_sum σ R k
   rw [← (sum_filter_add_sum_filter_not {a in antidiagonal k | a.fst < k}
     (fun a => 0 < a.fst) (fun a => (-1) ^ a.fst * esymm σ R a.fst * psum σ R a.snd))] at hesymm
-  have sub_both_sides := congrArg (· 
+  have sub_both_sides := congrArg (· - (-1 : MvPolynomial σ R) ^ (k + 1) *
+    ∑ a in {a in antidiagonal k | a.fst < k} with 0 < a.fst,
+    (-1) ^ a.fst * esymm σ R a.fst * psum σ R a.snd) hesymm
+  simp only [left_distrib, add_sub_cancel_left] at sub_both_sides
+  have sub_both_sides := congrArg ((-1 : MvPolynomial σ R) ^ (k + 1) * ·) sub_both_sides
+  simp only [mul_sub_left_distrib, ← mul_assoc, ← pow_add, Even.neg_one_pow ⟨k + 1, rfl⟩, one_mul,
+    filter_filter (fun a : Nat × Nat => a.fst < k) (fun a => ¬0 < a.fst)]
+    at sub_both_sides
+  have : {a in antidiagonal k | a.fst < k ∧ ¬0 < a.fst} = {(0, k)} := by
+    ext a
+    rw [mem_filter]; rw [mem_antidiagonal]; rw [mem_singleton]
+    refine ⟨?_, by rintro rfl; lia⟩
+    rintro ⟨ha, ⟨_, ha0⟩⟩
+    rw [← ha]; rw [Nat.eq_zero_of_not_pos ha0]; rw [zero_add]; rw [← Nat.eq_zero_of_not_pos ha0]
+  rw [this]; rw [sum_singleton] at sub_both_sides
+  simp only [_root_.pow_zero, esymm_zero, mul_one, one_mul, filter_filter] at sub_both_sides
+  exact sub_both_sides.symm
 
 中文:
 定理 psum_eq_mul_esymm_sub_sum
@@ -691,7 +747,23 @@ theorem psum_eq_mul_esymm_sub_sum
   have hesymm := mul_esymm_eq_sum σ R k
   rw [← (sum_filter_add_sum_filter_not {a in antidiagonal k | a.fst < k}
     (fun a => 0 < a.fst) (fun a => (-1) ^ a.fst * esymm σ R a.fst * psum σ R a.snd))] at hesymm
-  have sub_both_sides := congrArg (· 
+  have sub_both_sides := congrArg (· - (-1 : MvPolynomial σ R) ^ (k + 1) *
+    ∑ a in {a in antidiagonal k | a.fst < k} with 0 < a.fst,
+    (-1) ^ a.fst * esymm σ R a.fst * psum σ R a.snd) hesymm
+  simp only [left_distrib, add_sub_cancel_left] at sub_both_sides
+  have sub_both_sides := congrArg ((-1 : MvPolynomial σ R) ^ (k + 1) * ·) sub_both_sides
+  simp only [mul_sub_left_distrib, ← mul_assoc, ← pow_add, Even.neg_one_pow ⟨k + 1, rfl⟩, one_mul,
+    filter_filter (fun a : Nat × Nat => a.fst < k) (fun a => ¬0 < a.fst)]
+    at sub_both_sides
+  have : {a in antidiagonal k | a.fst < k ∧ ¬0 < a.fst} = {(0, k)} := by
+    ext a
+    rw [mem_filter]; rw [mem_antidiagonal]; rw [mem_singleton]
+    refine ⟨?_, by rintro rfl; lia⟩
+    rintro ⟨ha, ⟨_, ha0⟩⟩
+    rw [← ha]; rw [Nat.eq_zero_of_not_pos ha0]; rw [zero_add]; rw [← Nat.eq_zero_of_not_pos ha0]
+  rw [this]; rw [sum_singleton] at sub_both_sides
+  simp only [_root_.pow_zero, esymm_zero, mul_one, one_mul, filter_filter] at sub_both_sides
+  exact sub_both_sides.symm
 
 Depends on / 依赖: MvPolynomial, Set.Ioo, Set.mem_ofPred_eq, a.fst, a.snd, add_sub_cancel_left, and_comm, antidiagonal, hesymm, left_distrib, mem_ofPred_eq, mul_esymm_eq_sum, sub_both_sid, sub_both_sides, sum_filter_add_sum_filter_not
 -/

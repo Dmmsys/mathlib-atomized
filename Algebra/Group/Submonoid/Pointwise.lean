@@ -399,7 +399,8 @@ theorem pow_smul_mem_closure_smul
   | mul x y _ _ hx hy =>
     obtain ⟨⟨nx, hx⟩, ⟨ny, hy⟩⟩ := And.intro hx hy
     use ny + nx
-    rw [pow_add]; rw [mul_smul]; rw [← smul_mul_assoc]; rw [mul_
+    rw [pow_add]; rw [mul_smul]; rw [← smul_mul_assoc]; rw [mul_comm]; rw [← smul_mul_assoc]
+    exact mul_mem hy hx
 
 中文:
 定理 pow_smul_mem_closure_smul
@@ -411,7 +412,8 @@ theorem pow_smul_mem_closure_smul
   | mul x y _ _ hx hy =>
     obtain ⟨⟨nx, hx⟩, ⟨ny, hy⟩⟩ := And.intro hx hy
     use ny + nx
-    rw [pow_add]; rw [mul_smul]; rw [← smul_mul_assoc]; rw [mul_
+    rw [pow_add]; rw [mul_smul]; rw [← smul_mul_assoc]; rw [mul_comm]; rw [← smul_mul_assoc]
+    exact mul_mem hy hx
 
 Depends on / 依赖: And.intro, closure_induction, mul_comm, mul_mem, mul_smul, pow_add, pow_one, smul_mul_assoc, subset_closure
 -/
@@ -847,7 +849,9 @@ definition pointwiseMulAction
     (congr_arg (fun f : Monoid.End M => S.map f) (map_mul _ _ _)).trans
       (S.map_map _ _).symm
 
-scoped[Pointwise] attribute [instance] Submonoid.po
+scoped[Pointwise] attribute [instance] Submonoid.pointwiseMulAction
+
+@[simp, norm_cast]
 
 中文:
 定义 pointwiseMulAction
@@ -860,7 +864,9 @@ scoped[Pointwise] attribute [instance] Submonoid.po
     (congr_arg (fun f : Monoid.End M => S.map f) (map_mul _ _ _)).trans
       (S.map_map _ _).symm
 
-scoped[Pointwise] attribute [instance] Submonoid.po
+scoped[Pointwise] attribute [instance] Submonoid.pointwiseMulAction
+
+@[simp, norm_cast]
 -/
 protected def pointwiseMulAction : MulAction α (Submonoid M) where
   smul a S := S.map (MulDistribMulAction.toMonoidEnd _ M a)

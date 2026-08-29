@@ -452,7 +452,7 @@ definition effectiveEpiStructOfEffectiveEpiFamilySingleton
   fac e h := EffectiveEpiFamily.fac
     (fun () => X) (fun () => f) (fun () => e) (fun _ _ g₁ g₂ hg => h g₁ g₂ hg) ()
   uniq e h m hm := EffectiveEpiFamily.uniq
-    (fun () => X) (fun () => f) (fun
+    (fun () => X) (fun () => f) (fun () => e) (fun _ _ g₁ g₂ hg => h g₁ g₂ hg) m (fun _ => hm)
 
 中文:
 定义 effectiveEpiStructOfEffectiveEpiFamilySingleton
@@ -462,7 +462,7 @@ definition effectiveEpiStructOfEffectiveEpiFamilySingleton
   fac e h := EffectiveEpiFamily.fac
     (fun () => X) (fun () => f) (fun () => e) (fun _ _ g₁ g₂ hg => h g₁ g₂ hg) ()
   uniq e h m hm := EffectiveEpiFamily.uniq
-    (fun () => X) (fun () => f) (fun
+    (fun () => X) (fun () => f) (fun () => e) (fun _ _ g₁ g₂ hg => h g₁ g₂ hg) m (fun _ => hm)
 
 Depends on / 依赖: EffectiveEpiFamily, EffectiveEpiFamily.desc, preservesFiniteColimits_of_createsFiniteColimits_and_hasFiniteColimits
 -/
@@ -516,7 +516,13 @@ definition effectiveEpiFamilyStructOfIsIsoDesc
       colimit.ι_desc, Cofan.mk_ι_app]
     rw [this]; rw [assoc]
     simp only [asIso_hom, asIso_inv, IsIso.hom_inv_id_assoc, colimit.ι_desc,
- 
+      Cofan.mk_ι_app]
+  uniq e h m hm := by
+    simp only [asIso_inv, IsIso.eq_inv_comp]
+    ext a
+    simp only [colimit.ι_desc_assoc, Discrete.functor_obj, Cofan.mk_ι_app,
+      colimit.ι_desc]
+    exact hm a
 
 中文:
 定义 effectiveEpiFamilyStructOfIsIsoDesc
@@ -528,7 +534,13 @@ definition effectiveEpiFamilyStructOfIsIsoDesc
       colimit.ι_desc, Cofan.mk_ι_app]
     rw [this]; rw [assoc]
     simp only [asIso_hom, asIso_inv, IsIso.hom_inv_id_assoc, colimit.ι_desc,
- 
+      Cofan.mk_ι_app]
+  uniq e h m hm := by
+    simp only [asIso_inv, IsIso.eq_inv_comp]
+    ext a
+    simp only [colimit.ι_desc_assoc, Discrete.functor_obj, Cofan.mk_ι_app,
+      colimit.ι_desc]
+    exact hm a
 
 Depends on / 依赖: Sigma.desc, createsColimitsOfShapeOfCreatesFiniteProducts
 -/

@@ -254,7 +254,19 @@ theorem mem_jacobson_iff
         let ⟨p, hpi, q, hq, hpq⟩ := Submodule.mem_sup.1 ((eq_top_iff_one _).1 hxy)
         let ⟨r, hr⟩ := mem_span_singleton'.1 hq
         ⟨r, by
-          rw [mul_assoc]; rw [← mul_add_one]; rw [hr]; rw [← hpq]; rw [← neg_sub]; 
+          rw [mul_assoc]; rw [← mul_add_one]; rw [hr]; rw [← hpq]; rw [← neg_sub]; rw [add_sub_cancel_right]
+          exact I.neg_mem hpi⟩)
+      fun hxy : I ⊔ span {y * x + 1} != ⊤ => let ⟨M, hm1, hm2⟩ := exists_le_maximal _ hxy
+      suffices x ∉ M from (this <| mem_sInf.1 hx ⟨le_trans le_sup_left hm2, hm1⟩).elim
+fun hxm => hm1.1.1 (eq_top_iff_one _).2 add_sub_cancel_left (y * x) 1 ▸
+        M.sub_mem (le_sup_right.trans hm2 <| subset_span rfl) (M.mul_mem_left _ hxm),
+    fun hx => mem_sInf.2 fun M ⟨him, hm⟩ => by_contradiction fun hxm =>
+      let ⟨y, i, hi, df⟩ := hm.exists_inv hxm
+      let ⟨z, hz⟩ := hx (-y)
+hm.1.1 (eq_top_iff_one _).2 sub_sub_cancel (z * -y * x + z) 1 ▸
+        M.sub_mem (by
+          rw [mul_assoc]; rw [← mul_add_one]; rw [neg_mul]; rw [← sub_eq_iff_eq_add.mpr df.symm]; rw [neg_sub]; rw [sub_add_cancel]
+          exact M.mul_mem_left _ hi) <| him hz⟩
 
 中文:
 定理 mem_jacobson_iff
@@ -266,7 +278,19 @@ theorem mem_jacobson_iff
         let ⟨p, hpi, q, hq, hpq⟩ := Submodule.mem_sup.1 ((eq_top_iff_one _).1 hxy)
         let ⟨r, hr⟩ := mem_span_singleton'.1 hq
         ⟨r, by
-          rw [mul_assoc]; rw [← mul_add_one]; rw [hr]; rw [← hpq]; rw [← neg_sub]; 
+          rw [mul_assoc]; rw [← mul_add_one]; rw [hr]; rw [← hpq]; rw [← neg_sub]; rw [add_sub_cancel_right]
+          exact I.neg_mem hpi⟩)
+      fun hxy : I ⊔ span {y * x + 1} != ⊤ => let ⟨M, hm1, hm2⟩ := exists_le_maximal _ hxy
+      suffices x ∉ M from (this <| mem_sInf.1 hx ⟨le_trans le_sup_left hm2, hm1⟩).elim
+fun hxm => hm1.1.1 (eq_top_iff_one _).2 add_sub_cancel_left (y * x) 1 ▸
+        M.sub_mem (le_sup_right.trans hm2 <| subset_span rfl) (M.mul_mem_left _ hxm),
+    fun hx => mem_sInf.2 fun M ⟨him, hm⟩ => by_contradiction fun hxm =>
+      let ⟨y, i, hi, df⟩ := hm.exists_inv hxm
+      let ⟨z, hz⟩ := hx (-y)
+hm.1.1 (eq_top_iff_one _).2 sub_sub_cancel (z * -y * x + z) 1 ▸
+        M.sub_mem (by
+          rw [mul_assoc]; rw [← mul_add_one]; rw [neg_mul]; rw [← sub_eq_iff_eq_add.mpr df.symm]; rw [neg_sub]; rw [sub_add_cancel]
+          exact M.mul_mem_left _ hi) <| him hz⟩
 
 Depends on / 依赖: I.neg_mem, Submodule, Submodule.mem_sup, add_sub_cancel_right, eq_top_iff_, eq_top_iff_one, exists_le_maximal, le_sup_left, le_trans, mem_sInf, mem_span_singleton, mem_sup, mul_add_one, mul_assoc, neg_mem, neg_sub
 -/
@@ -357,7 +381,8 @@ theorem eq_jacobson_iff_sInf_maximal
   rw [hInf]; rw [mem_sInf]
   intro I hI
   rcases hM I hI with is_max | is_top
-  · exact (mem_sInf.1 hx) ⟨le_sInf_iff.1 (le_of_e
+  · exact (mem_sInf.1 hx) ⟨le_sInf_iff.1 (le_of_eq hInf) I hI, is_max⟩
+  · exact is_top.symm ▸ Submodule.mem_top
 
 中文:
 定理 eq_jacobson_iff_sInf_maximal
@@ -368,7 +393,8 @@ theorem eq_jacobson_iff_sInf_maximal
   rw [hInf]; rw [mem_sInf]
   intro I hI
   rcases hM I hI with is_max | is_top
-  · exact (mem_sInf.1 hx) ⟨le_sInf_iff.1 (le_of_e
+  · exact (mem_sInf.1 hx) ⟨le_sInf_iff.1 (le_of_eq hInf) I hI, is_max⟩
+  · exact is_top.symm ▸ Submodule.mem_top
 
 Depends on / 依赖: IsMaximal, J.IsMaximal, Or.inl, Submodule, Submodule.mem_top, hI.symm, hJ.right, is_max, is_top, is_top.symm, le_antisymm, le_jacobson, le_of_eq, le_sInf_iff, mem_sInf, mem_top
 -/
@@ -399,7 +425,8 @@ theorem eq_jacobson_iff_sInf_maximal'
       let ⟨M, hM⟩ := h
       ⟨M,
         ⟨fun J hJ =>
-         
+          Or.recOn (Classical.em (J = ⊤)) (fun h => Or.inr h) fun h => Or.inl ⟨⟨h, hM.1 J hJ⟩⟩,
+          hM.2⟩⟩⟩
 
 中文:
 定理 eq_jacobson_iff_sInf_maximal'
@@ -414,7 +441,8 @@ theorem eq_jacobson_iff_sInf_maximal'
       let ⟨M, hM⟩ := h
       ⟨M,
         ⟨fun J hJ =>
-         
+          Or.recOn (Classical.em (J = ⊤)) (fun h => Or.inr h) fun h => Or.inl ⟨⟨h, hM.1 J hJ⟩⟩,
+          hM.2⟩⟩⟩
 
 Depends on / 依赖: Classical, Classical.em, Or.inl, Or.inr, Or.recOn, eq_jacobson_iff_sInf_maximal, eq_jacobson_iff_sInf_maximal.trans, eq_top_iff, le_of_lt
 -/
@@ -492,7 +520,17 @@ theorem map_jacobson_of_surjective
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11036): dot notation for `RingHom.ker` does not work
   have : forall J in { J : Ideal R | I <= J ∧ J.IsMaximal }, RingHom.ker f <= J :=
     fun J hJ => le_trans h hJ.left
-  refine Trans.tr
+  refine Trans.trans (map_sInf hf this) (le_antisymm ?_ ?_)
+  · refine
+      sInf_le_sInf fun J hJ =>
+        ⟨comap f J, ⟨⟨le_comap_of_map_le hJ.1, ?_⟩, map_comap_of_surjective f hf J⟩⟩
+    have : J.IsMaximal := hJ.right
+    exact comap_isMaximal_of_surjective f hf
+  · refine sInf_le_sInf_of_subset_insert_top fun j hj => hj.recOn fun J hJ => ?_
+    rw [← hJ.2]
+    rcases map_eq_top_or_isMaximal_of_surjective f hf hJ.left.right with htop | hmax
+    · exact htop.symm ▸ Set.mem_insert ⊤ _
+    · exact Set.mem_insert_of_mem ⊤ ⟨map_mono hJ.1.1, hmax⟩
 
 中文:
 定理 map_jacobson_of_surjective
@@ -503,7 +541,17 @@ theorem map_jacobson_of_surjective
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11036): dot notation for `RingHom.ker` does not work
   have : forall J in { J : Ideal R | I <= J ∧ J.IsMaximal }, RingHom.ker f <= J :=
     fun J hJ => le_trans h hJ.left
-  refine Trans.tr
+  refine Trans.trans (map_sInf hf this) (le_antisymm ?_ ?_)
+  · refine
+      sInf_le_sInf fun J hJ =>
+        ⟨comap f J, ⟨⟨le_comap_of_map_le hJ.1, ?_⟩, map_comap_of_surjective f hf J⟩⟩
+    have : J.IsMaximal := hJ.right
+    exact comap_isMaximal_of_surjective f hf
+  · refine sInf_le_sInf_of_subset_insert_top fun j hj => hj.recOn fun J hJ => ?_
+    rw [← hJ.2]
+    rcases map_eq_top_or_isMaximal_of_surjective f hf hJ.left.right with htop | hmax
+    · exact htop.symm ▸ Set.mem_insert ⊤ _
+    · exact Set.mem_insert_of_mem ⊤ ⟨map_mono hJ.1.1, hmax⟩
 
 Depends on / 依赖: Ideal.jacobson, jacobson
 -/
@@ -580,7 +628,18 @@ theorem comap_jacobson_of_surjective
     refine iInf_le_iInf_of_subset fun J hJ => ?_
     have : comap f (map f J) = J :=
       Trans.trans (comap_map_of_surjective f hf J)
-        (le_antisymm (sup_le_iff.2 ⟨l
+        (le_antisymm (sup_le_iff.2 ⟨le_of_eq rfl, le_trans (comap_mono bot_le) hJ.left⟩)
+          le_sup_left)
+    rcases map_eq_top_or_isMaximal_of_surjective _ hf hJ.right with htop | hmax
+    · exact ⟨⊤, Set.mem_insert ⊤ _, htop ▸ this⟩
+    · exact ⟨map f J, Set.mem_insert_of_mem _ ⟨le_map_of_comap_le_of_surjective f hf hJ.1, hmax⟩,
+        this⟩
+  · simp_rw [comap_sInf, le_iInf_iff]
+    intro J hJ
+    have : J.IsMaximal := hJ.right
+    exact sInf_le ⟨comap_mono hJ.left, comap_isMaximal_of_surjective _ hf⟩
+
+@[gcongr, mono]
 
 中文:
 定理 comap_jacobson_of_surjective
@@ -592,7 +651,18 @@ theorem comap_jacobson_of_surjective
     refine iInf_le_iInf_of_subset fun J hJ => ?_
     have : comap f (map f J) = J :=
       Trans.trans (comap_map_of_surjective f hf J)
-        (le_antisymm (sup_le_iff.2 ⟨l
+        (le_antisymm (sup_le_iff.2 ⟨le_of_eq rfl, le_trans (comap_mono bot_le) hJ.left⟩)
+          le_sup_left)
+    rcases map_eq_top_or_isMaximal_of_surjective _ hf hJ.right with htop | hmax
+    · exact ⟨⊤, Set.mem_insert ⊤ _, htop ▸ this⟩
+    · exact ⟨map f J, Set.mem_insert_of_mem _ ⟨le_map_of_comap_le_of_surjective f hf hJ.1, hmax⟩,
+        this⟩
+  · simp_rw [comap_sInf, le_iInf_iff]
+    intro J hJ
+    have : J.IsMaximal := hJ.right
+    exact sInf_le ⟨comap_mono hJ.left, comap_isMaximal_of_surjective _ hf⟩
+
+@[gcongr, mono]
 
 Depends on / 依赖: Ideal.jacobson, Set.mem_insert, Set.mem_insert_of_mem, Trans.trans, bot_le, comap_map_of_surjective, comap_mono, comap_sInf, hJ.left, hJ.right, iInf_le_iInf_of_subset, jacobson, le_antisymm, le_of_eq, le_sup_left, le_trans, map_eq_top_or_isMaximal_of_surjective, mem_insert, mem_insert_of_mem, sInf_eq_iInf
 -/
@@ -803,7 +873,7 @@ theorem mem_jacobson_bot
     fun h =>
     mem_jacobson_iff.mpr fun y =>
       let ⟨b, hb⟩ := isUnit_iff_exists_inv.1 (h y)
-      ⟨b, (Submod
+      ⟨b, (Submodule.mem_bot R).2 (hb ▸ by ring)⟩⟩
 
 中文:
 定理 mem_jacobson_bot
@@ -816,7 +886,7 @@ theorem mem_jacobson_bot
     fun h =>
     mem_jacobson_iff.mpr fun y =>
       let ⟨b, hb⟩ := isUnit_iff_exists_inv.1 (h y)
-      ⟨b, (Submod
+      ⟨b, (Submodule.mem_bot R).2 (hb ▸ by ring)⟩⟩
 
 Depends on / 依赖: Submodule, Submodule.mem_bot, add_mul, isUnit_iff_exists_inv, mem_bot, mem_jacobson_iff, mem_jacobson_iff.mpr, mul_comm, mul_right_comm, one_mul, sub_eq_zero
 -/
@@ -843,7 +913,9 @@ theorem jacobson_eq_iff_jacobson_quotient_eq_bot
     rw [map_jacobson_of_surjective hf (le_of_eq mk_ker)] at h
     simpa using h
   · intro h
-    replace h := congr_a
+    replace h := congr_arg (comap (Ideal.Quotient.mk I)) h
+    rw [comap_jacobson_of_surjective hf]; rw [← RingHom.ker_eq_comap_bot (Ideal.Quotient.mk I)] at h
+    simpa using h
 
 中文:
 定理 jacobson_eq_iff_jacobson_quotient_eq_bot
@@ -855,7 +927,9 @@ theorem jacobson_eq_iff_jacobson_quotient_eq_bot
     rw [map_jacobson_of_surjective hf (le_of_eq mk_ker)] at h
     simpa using h
   · intro h
-    replace h := congr_a
+    replace h := congr_arg (comap (Ideal.Quotient.mk I)) h
+    rw [comap_jacobson_of_surjective hf]; rw [← RingHom.ker_eq_comap_bot (Ideal.Quotient.mk I)] at h
+    simpa using h
 
 Depends on / 依赖: Function, Function.Surjective, Ideal.Quotient.mk, Ideal.map, Quotient, RingHom, RingHom.ker_eq_comap_bot, Submodule, Submodule.Quotient.mk_surjective, Surjective, comap_jacobson_of_surjective, congr_arg, ker_eq_comap_bot, le_of_eq, map_jacobson_of_surjective, mk_ker, mk_surjective, replace
 -/
@@ -883,7 +957,11 @@ theorem radical_eq_jacobson_iff_radical_quotient_eq_jacobson_bot
   · intro h
     have := congr_arg (map (Ideal.Quotient.mk I)) h
     rw [map_radical_of_surjective hf (le_of_eq mk_ker)]; rw [map_jacobson_of_surjective hf (le_of_eq mk_ker)] at this
-    simpa
+    simpa using this
+  · intro h
+    have := congr_arg (comap (Ideal.Quotient.mk I)) h
+    rw [comap_radical]; rw [comap_jacobson_of_surjective hf]; rw [← RingHom.ker_eq_comap_bot (Ideal.Quotient.mk I)] at this
+    simpa using this
 
 中文:
 定理 radical_eq_jacobson_iff_radical_quotient_eq_jacobson_bot
@@ -893,7 +971,11 @@ theorem radical_eq_jacobson_iff_radical_quotient_eq_jacobson_bot
   · intro h
     have := congr_arg (map (Ideal.Quotient.mk I)) h
     rw [map_radical_of_surjective hf (le_of_eq mk_ker)]; rw [map_jacobson_of_surjective hf (le_of_eq mk_ker)] at this
-    simpa
+    simpa using this
+  · intro h
+    have := congr_arg (comap (Ideal.Quotient.mk I)) h
+    rw [comap_radical]; rw [comap_jacobson_of_surjective hf]; rw [← RingHom.ker_eq_comap_bot (Ideal.Quotient.mk I)] at this
+    simpa using this
 
 Depends on / 依赖: Function, Function.Surjective, Ideal.Quotient.mk, Quotient, RingHom, RingHom.ker_eq_comap_bot, Submodule, Submodule.Quotient.mk_surjective, Surjective, comap_jacobson_of_surjective, comap_radical, congr_arg, ker_eq_comap_bot, le_of_eq, map_jacobson_of_surjective, map_radical_of_surjective, mk_ker, mk_surjective
 -/
@@ -1045,7 +1127,9 @@ theorem IsLocal.mem_jacobson_or_exists_inv
       let ⟨r, hr⟩ := mem_span_singleton.1 hq
       Or.inr ⟨r, by
         rw [← hpq]; rw [mul_comm]; rw [← hr]; rw [← neg_sub]; rw [add_sub_cancel_right]; exact I.neg_mem hpi⟩)
-   
+    fun h : I ⊔ span {x} != ⊤ =>
+Or.inl
+le_trans le_sup_right (hi.le_jacobson le_sup_left h) mem_span_singleton.2 dvd_refl x
 
 中文:
 定理 是Local.mem_jacobson_or_存在_inv
@@ -1056,7 +1140,9 @@ theorem IsLocal.mem_jacobson_or_exists_inv
       let ⟨r, hr⟩ := mem_span_singleton.1 hq
       Or.inr ⟨r, by
         rw [← hpq]; rw [mul_comm]; rw [← hr]; rw [← neg_sub]; rw [add_sub_cancel_right]; exact I.neg_mem hpi⟩)
-   
+    fun h : I ⊔ span {x} != ⊤ =>
+Or.inl
+le_trans le_sup_right (hi.le_jacobson le_sup_left h) mem_span_singleton.2 dvd_refl x
 
 Depends on / 依赖: I.neg_mem, Or.inl, Or.inr, Submodule, Submodule.mem_sup, add_sub_cancel_right, dvd_refl, eq_top_iff_one, hi.le_jacobson, le_jacobson, le_sup_left, le_sup_right, le_trans, mem_span_singleton, mem_sup, mul_comm, neg_mem, neg_sub
 -/

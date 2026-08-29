@@ -212,7 +212,8 @@ theorem derivWithin_pi
     simp [derivWithin]
     -- TODO: restore exact (hasDerivWithinAt_pi.2 fun i => (h i).hasDerivWithinAt).derivWithin hsx
   · rw [uniqueDiffWithinAt_iff_accPt] at hsx
-    simp [derivWithin, fderivWithin_zero_of_
+    simp [derivWithin, fderivWithin_zero_of_not_accPt hsx, Pi.zero_def]
+    -- TODO: restore simp only [derivWithin_zero_of_not_uniqueDiffWithinAt hsx, Pi.zero_def]
 
 中文:
 定理 derivWithin_pi
@@ -223,7 +224,8 @@ theorem derivWithin_pi
     simp [derivWithin]
     -- TODO: restore exact (hasDerivWithinAt_pi.2 fun i => (h i).hasDerivWithinAt).derivWithin hsx
   · rw [uniqueDiffWithinAt_iff_accPt] at hsx
-    simp [derivWithin, fderivWithin_zero_of_
+    simp [derivWithin, fderivWithin_zero_of_not_accPt hsx, Pi.zero_def]
+    -- TODO: restore simp only [derivWithin_zero_of_not_uniqueDiffWithinAt hsx, Pi.zero_def]
 
 Depends on / 依赖: UniqueDiffWithinAt, derivWithin, fderivWithin_pi
 -/

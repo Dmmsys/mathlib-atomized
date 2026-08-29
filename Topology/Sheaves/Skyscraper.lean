@@ -69,7 +69,12 @@ if h : p₀ in unop V then eqToHom by rw [if_pos h, if_pos (by simpa using i.uno
     else ((if_neg h).symm.ndrec terminalIsTerminal).from _
   map_id U :=
     (em (p₀ in U.unop)).elim (fun h => dif_pos h) fun h =>
-      ((if_neg h).symm.nd
+      ((if_neg h).symm.ndrec terminalIsTerminal).hom_ext _ _
+  map_comp {U V W} iVU iWV := by
+    by_cases hW : p₀ in unop W
+    · have hV : p₀ in unop V := leOfHom iWV.unop hW
+      simp only [dif_pos hW, dif_pos hV, eqToHom_trans]
+    · dsimp; rw [dif_neg hW]; apply ((if_neg hW).symm.ndrec terminalIsTerminal).hom_ext
 
 中文:
 定义 skyscraperPresheaf
@@ -80,7 +85,12 @@ if h : p₀ in unop V then eqToHom by rw [if_pos h, if_pos (by simpa using i.uno
     else ((if_neg h).symm.ndrec terminalIsTerminal).from _
   map_id U :=
     (em (p₀ in U.unop)).elim (fun h => dif_pos h) fun h =>
-      ((if_neg h).symm.nd
+      ((if_neg h).symm.ndrec terminalIsTerminal).hom_ext _ _
+  map_comp {U V W} iVU iWV := by
+    by_cases hW : p₀ in unop W
+    · have hV : p₀ in unop V := leOfHom iWV.unop hW
+      simp only [dif_pos hW, dif_pos hV, eqToHom_trans]
+    · dsimp; rw [dif_neg hW]; apply ((if_neg hW).symm.ndrec terminalIsTerminal).hom_ext
 
 Depends on / 依赖: terminal
 -/
@@ -144,7 +154,9 @@ definition SkyscraperPresheafFunctor.map'
     simp only [skyscraperPresheaf_map]
     by_cases hV : p₀ in V.unop
     · have hU : p₀ in U.unop := leOfHom i.unop hV
-      simp only [skysc
+      simp only [skyscraperPresheaf_obj, hU, hV, ↓reduceDIte, eqToHom_trans_assoc, Category.assoc,
+        eqToHom_trans]
+    · apply ((if_neg hV).symm.ndrec terminalIsTerminal).hom_ext
 
 中文:
 定义 SkyscraperPresheafFunctor.map'
@@ -155,7 +167,9 @@ definition SkyscraperPresheafFunctor.map'
     simp only [skyscraperPresheaf_map]
     by_cases hV : p₀ in V.unop
     · have hU : p₀ in U.unop := leOfHom i.unop hV
-      simp only [skysc
+      simp only [skyscraperPresheaf_obj, hU, hV, ↓reduceDIte, eqToHom_trans_assoc, Category.assoc,
+        eqToHom_trans]
+    · apply ((if_neg hV).symm.ndrec terminalIsTerminal).hom_ext
 
 Depends on / 依赖: Category, Category.assoc, U.unop, V.unop, eqToHom, eqToHom_trans, eqToHom_trans_assoc, hom_ext, i.unop, if_neg, if_pos, leOfHom, naturality, reduceDIte, skyscraperPresheaf_map, skyscraperPresheaf_obj, symm.ndrec, terminalIsTerminal
 -/
@@ -280,7 +294,8 @@ definition skyscraperPresheafCoconeOfSpecializes
         change dite _ _ _ ≫ _ = _; rw [dif_pos]
         swap
         · exact h.mem_open V.unop.1.2 V.unop.2
-        · simp only [Functor.comp_obj, Functor.op_obj, skyscraperPreshe
+        · simp only [Functor.comp_obj, Functor.op_obj, skyscraperPresheaf_obj, unop_op,
+            Functor.const_obj_obj, eqToHom_trans, Functor.const_obj_map, Category.comp_id] }
 
 中文:
 定义 skyscraperPresheafCoconeOfSpecializes
@@ -292,7 +307,8 @@ definition skyscraperPresheafCoconeOfSpecializes
         change dite _ _ _ ≫ _ = _; rw [dif_pos]
         swap
         · exact h.mem_open V.unop.1.2 V.unop.2
-        · simp only [Functor.comp_obj, Functor.op_obj, skyscraperPreshe
+        · simp only [Functor.comp_obj, Functor.op_obj, skyscraperPresheaf_obj, unop_op,
+            Functor.const_obj_obj, eqToHom_trans, Functor.const_obj_map, Category.comp_id] }
 -/
 def skyscraperPresheafCoconeOfSpecializes {y : X} (h : p₀ ⤳ y) :
     Cocone ((OpenNhds.inclusion y).op ⋙ skyscraperPresheaf p₀ A) where
@@ -322,7 +338,10 @@ definition skyscraperPresheafCoconeIsColimitOfSpecializes
     rw [dif_pos]
     · simp only [eqToHom_trans_assoc,
         eqToHom_refl, Category.id_comp, op_unop]
-    · exact h.mem_open U.unop.1
+    · exact h.mem_open U.unop.1.2 U.unop.2
+  uniq c f h := by
+    dsimp
+    rw [← h]; rw [skyscraperPresheafCoconeOfSpecializes_ι_app]; rw [eqToHom_trans_assoc]; rw [eqToHom_refl]; rw [Category.id_comp]
 
 中文:
 定义 skyscraperPresheafCoconeIsColimitOfSpecializes
@@ -335,7 +354,10 @@ definition skyscraperPresheafCoconeIsColimitOfSpecializes
     rw [dif_pos]
     · simp only [eqToHom_trans_assoc,
         eqToHom_refl, Category.id_comp, op_unop]
-    · exact h.mem_open U.unop.1
+    · exact h.mem_open U.unop.1.2 U.unop.2
+  uniq c f h := by
+    dsimp
+    rw [← h]; rw [skyscraperPresheafCoconeOfSpecializes_ι_app]; rw [eqToHom_trans_assoc]; rw [eqToHom_refl]; rw [Category.id_comp]
 
 Depends on / 依赖: eqToHom, if_pos
 -/
@@ -443,7 +465,15 @@ definition skyscraperPresheafCoconeIsColimitOfNotSpecializes
   { desc := fun c => eqToHom (if_neg h1.choose_spec).symm ≫ c.ι.app (op h1.choose)
     fac := fun c U => by
       change _ = c.ι.app (op U.unop)
-      simp only [← c.w 
+      simp only [← c.w (homOfLE <| @inf_le_left _ _ h1.choose U.unop).op, ←
+        c.w (homOfLE <| @inf_le_right _ _ h1.choose U.unop).op, ← Category.assoc]
+      congr 1
+      refine ((if_neg ?_).symm.ndrec terminalIsTerminal).hom_ext _ _
+      exact fun h => h1.choose_spec h.1
+    uniq := fun c f H => by
+      dsimp
+      rw [← Category.id_comp f]; rw [← H]; rw [← Category.assoc]
+      congr 1; apply terminalIsTerminal.hom_ext }
 
 中文:
 定义 skyscraperPresheafCoconeIsColimitOfNotSpecializes
@@ -454,7 +484,15 @@ definition skyscraperPresheafCoconeIsColimitOfNotSpecializes
   { desc := fun c => eqToHom (if_neg h1.choose_spec).symm ≫ c.ι.app (op h1.choose)
     fac := fun c U => by
       change _ = c.ι.app (op U.unop)
-      simp only [← c.w 
+      simp only [← c.w (homOfLE <| @inf_le_left _ _ h1.choose U.unop).op, ←
+        c.w (homOfLE <| @inf_le_right _ _ h1.choose U.unop).op, ← Category.assoc]
+      congr 1
+      refine ((if_neg ?_).symm.ndrec terminalIsTerminal).hom_ext _ _
+      exact fun h => h1.choose_spec h.1
+    uniq := fun c f H => by
+      dsimp
+      rw [← Category.id_comp f]; rw [← H]; rw [← Category.assoc]
+      congr 1; apply terminalIsTerminal.hom_ext }
 
 Depends on / 依赖: Category, Category.assoc, OpenNhds, U.unop, choose_spe, choose_spec, eqToHom, h1.choose, h1.choose_spe, h1.choose_spec, homOfLE, hom_ext, if_neg, inf_le_left, inf_le_right, not_specializes_iff_exists_open, not_specializes_iff_exists_open.mp, symm.ndrec, terminalIsTerminal
 -/
@@ -528,7 +566,9 @@ theorem skyscraperPresheaf_isSheaf
           dsimp [skyscraperPresheaf]
           rw [if_neg]
           · exact terminalIsTerminal
-   
+          · #adaptation_note /-- 2024-03-24
+            Previously the universe annotation was not needed here. -/
+            exact Set.notMem_empty PUnit.unit.{u + 1})))
 
 中文:
 定理 skyscraperPresheaf_isSheaf
@@ -541,7 +581,9 @@ theorem skyscraperPresheaf_isSheaf
           dsimp [skyscraperPresheaf]
           rw [if_neg]
           · exact terminalIsTerminal
-   
+          · #adaptation_note /-- 2024-03-24
+            Previously the universe annotation was not needed here. -/
+            exact Set.notMem_empty PUnit.unit.{u + 1})))
 
 Depends on / 依赖: PUnit.unit, Presheaf, Presheaf.isSheaf_iso_iff, Presheaf.isSheaf_on_punit_of_isTerminal, Previously, Set.notMem_empty, Sheaf.pushforward_sheaf_of_sheaf, adaptation_note, annotation, classical, eqToIso, if_neg, isSheaf_iso_iff, isSheaf_on_punit_of_isTerminal, needed, notMem_empty, pushforward_sheaf_of_sheaf, skyscraperPresheaf, skyscraperPresheaf_eq_pushforward, terminalIsTerminal
 -/
@@ -630,7 +672,9 @@ definition toSkyscraperPresheaf
     by_cases hV : p₀ in V.unop
     · have hU : p₀ in U.unop := leOfHom inc.unop hV
       split_ifs
-      rw [← Category.assoc]; rw [𝓕.g
+      rw [← Category.assoc]; rw [𝓕.germ_res' inc]; rw [Category.assoc]; rw [Category.assoc]; rw [eqToHom_trans]
+    · split_ifs
+      exact ((if_neg hV).symm.ndrec terminalIsTerminal).hom_ext ..
 
 中文:
 定义 toSkyscraperPresheaf
@@ -642,7 +686,9 @@ definition toSkyscraperPresheaf
     by_cases hV : p₀ in V.unop
     · have hU : p₀ in U.unop := leOfHom inc.unop hV
       split_ifs
-      rw [← Category.assoc]; rw [𝓕.g
+      rw [← Category.assoc]; rw [𝓕.germ_res' inc]; rw [Category.assoc]; rw [Category.assoc]; rw [eqToHom_trans]
+    · split_ifs
+      exact ((if_neg hV).symm.ndrec terminalIsTerminal).hom_ext ..
 
 Depends on / 依赖: Category, Category.assoc, U.unop, V.unop, eqToHom, eqToHom_trans, germ_res, hom_ext, if_neg, if_pos, inc.unop, leOfHom, naturality, split_ifs, symm.ndrec, terminalIsTerminal
 -/
@@ -673,7 +719,13 @@ Cocone.mk c
       { app := fun U => f.app ((OpenNhds.inclusion p₀).op.obj U) ≫ eqToHom (if_pos U.unop.2)
         naturality := fun U V inc => by
           dsimp only [Functor.const_obj_map, Functor.const_obj_obj, Functor.comp_map,
-            Functo
+            Functor.comp_obj, Functor.op_obj, skyscraperPresheaf_obj]
+          rw [Category.comp_id]; rw [← Category.assoc]; rw [comp_eqToHom_iff]; rw [Category.assoc]; rw [eqToHom_trans]; rw [f.naturality]; rw [skyscraperPresheaf_map]
+          have hV : p₀ in (OpenNhds.inclusion p₀).obj V.unop := V.unop.2
+          simp only [dif_pos hV] }
+  colimit.desc _ χ
+
+@[reassoc (attr := simp)]
 
 中文:
 定义 fromStalk
@@ -683,7 +735,13 @@ Cocone.mk c
       { app := fun U => f.app ((OpenNhds.inclusion p₀).op.obj U) ≫ eqToHom (if_pos U.unop.2)
         naturality := fun U V inc => by
           dsimp only [Functor.const_obj_map, Functor.const_obj_obj, Functor.comp_map,
-            Functo
+            Functor.comp_obj, Functor.op_obj, skyscraperPresheaf_obj]
+          rw [Category.comp_id]; rw [← Category.assoc]; rw [comp_eqToHom_iff]; rw [Category.assoc]; rw [eqToHom_trans]; rw [f.naturality]; rw [skyscraperPresheaf_map]
+          have hV : p₀ in (OpenNhds.inclusion p₀).obj V.unop := V.unop.2
+          simp only [dif_pos hV] }
+  colimit.desc _ χ
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Cocone, Cocone.mk, Functor, Functor.comp_map, Functor.comp_obj, Functor.const_obj_map, Functor.const_obj_obj, Functor.op_obj, OpenNhds, OpenNhds.i, OpenNhds.inclusion, U.unop, comp_eqToHom_iff, comp_id, comp_map, comp_obj, const_obj_map
 -/
@@ -799,7 +857,7 @@ definition unit
     split_ifs with h
     · simp only [Category.id_comp, Category.assoc, eqToHom_trans_assoc, eqToHom_refl,
         Presheaf.stalkFunctor_map_germ_assoc, Presheaf.stalkFunctor_obj]
-    · apply ((if_neg h).symm.ndrec terminalIsTermin
+    · apply ((if_neg h).symm.ndrec terminalIsTerminal).hom_ext
 
 中文:
 定义 unit
@@ -810,7 +868,7 @@ definition unit
     split_ifs with h
     · simp only [Category.id_comp, Category.assoc, eqToHom_trans_assoc, eqToHom_refl,
         Presheaf.stalkFunctor_map_germ_assoc, Presheaf.stalkFunctor_obj]
-    · apply ((if_neg h).symm.ndrec terminalIsTermin
+    · apply ((if_neg h).symm.ndrec terminalIsTerminal).hom_ext
 -/
 protected def unit :
     𝟭 (Presheaf C X) ⟶ Presheaf.stalkFunctor C p₀ ⋙ skyscraperPresheafFunctor p₀ where
@@ -867,7 +925,26 @@ definition skyscraperPresheafStalkAdjunction
     dsimp [Presheaf.stalkFunctor, toSkyscraperPresheaf]
     ext
     simp only [Functor.comp_obj, Functor.op_obj, ι_colimMap_assoc, skyscraperPresheaf_obj,
-      
+      Functor.whiskerLeft_app, Category.comp_id]
+    split_ifs with h
+    · simp [skyscraperPresheafStalkOfSpecializes]
+      rfl
+    · simp only [skyscraperPresheafStalkOfSpecializes, colimit.isoColimitCocone_ι_hom,
+        skyscraperPresheafCoconeOfSpecializes_pt, skyscraperPresheafCoconeOfSpecializes_ι_app,
+        Functor.comp_obj, Functor.op_obj, skyscraperPresheaf_obj, Functor.const_obj_obj]
+      rw [comp_eqToHom_iff]
+      apply ((if_neg h).symm.ndrec terminalIsTerminal).hom_ext
+  right_triangle_components Y := by
+    ext
+    simp only [skyscraperPresheafFunctor_obj, Functor.id_obj, skyscraperPresheaf_obj,
+      Presheaf.stalkFunctor_obj, unit_app, counit_app,
+      skyscraperPresheafStalkOfSpecializes, skyscraperPresheafFunctor_map, Presheaf.comp_app,
+      toSkyscraperPresheaf_app, Category.id_comp, SkyscraperPresheafFunctor.map'_app]
+    split_ifs with h
+    · simp [Presheaf.germ]
+      rfl
+    · simp
+      rfl
 
 中文:
 定义 skyscraperPresheafStalkAdjunction
@@ -878,7 +955,26 @@ definition skyscraperPresheafStalkAdjunction
     dsimp [Presheaf.stalkFunctor, toSkyscraperPresheaf]
     ext
     simp only [Functor.comp_obj, Functor.op_obj, ι_colimMap_assoc, skyscraperPresheaf_obj,
-      
+      Functor.whiskerLeft_app, Category.comp_id]
+    split_ifs with h
+    · simp [skyscraperPresheafStalkOfSpecializes]
+      rfl
+    · simp only [skyscraperPresheafStalkOfSpecializes, colimit.isoColimitCocone_ι_hom,
+        skyscraperPresheafCoconeOfSpecializes_pt, skyscraperPresheafCoconeOfSpecializes_ι_app,
+        Functor.comp_obj, Functor.op_obj, skyscraperPresheaf_obj, Functor.const_obj_obj]
+      rw [comp_eqToHom_iff]
+      apply ((if_neg h).symm.ndrec terminalIsTerminal).hom_ext
+  right_triangle_components Y := by
+    ext
+    simp only [skyscraperPresheafFunctor_obj, Functor.id_obj, skyscraperPresheaf_obj,
+      Presheaf.stalkFunctor_obj, unit_app, counit_app,
+      skyscraperPresheafStalkOfSpecializes, skyscraperPresheafFunctor_map, Presheaf.comp_app,
+      toSkyscraperPresheaf_app, Category.id_comp, SkyscraperPresheafFunctor.map'_app]
+    split_ifs with h
+    · simp [Presheaf.germ]
+      rfl
+    · simp
+      rfl
 
 Depends on / 依赖: StalkSkyscraperPresheafAdjunctionAuxs, StalkSkyscraperPresheafAdjunctionAuxs.unit
 -/
@@ -962,7 +1058,9 @@ naturality := fun 𝓐 𝓑 f => Sheaf.hom_ext by
         apply (StalkSkyscraperPresheafAdjunctionAuxs.unit p₀).naturality }
   counit := StalkSkyscraperPresheafAdjunctionAuxs.counit p₀
   left_triangle_components X :=
-    ((skyscra
+    ((skyscraperPresheafStalkAdjunction p₀).left_triangle_components X.obj)
+  right_triangle_components _ :=
+    Sheaf.hom_ext ((skyscraperPresheafStalkAdjunction p₀).right_triangle_components _)
 
 中文:
 定义 stalkSkyscraperSheafAdjunction
@@ -972,7 +1070,9 @@ naturality := fun 𝓐 𝓑 f => Sheaf.hom_ext by
         apply (StalkSkyscraperPresheafAdjunctionAuxs.unit p₀).naturality }
   counit := StalkSkyscraperPresheafAdjunctionAuxs.counit p₀
   left_triangle_components X :=
-    ((skyscra
+    ((skyscraperPresheafStalkAdjunction p₀).left_triangle_components X.obj)
+  right_triangle_components _ :=
+    Sheaf.hom_ext ((skyscraperPresheafStalkAdjunction p₀).right_triangle_components _)
 
 Depends on / 依赖: Sheaf.hom_ext, StalkSkyscraperPresheafAdjunctionAuxs, StalkSkyscraperPresheafAdjunctionAuxs.counit, StalkSkyscraperPresheafAdjunctionAuxs.unit, X.obj, counit, hom_ext, left_triangle_components, naturality, right_triangle_components, skyscraperPresheafStalkAdjunction
 -/

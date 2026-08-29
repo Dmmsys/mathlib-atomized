@@ -895,7 +895,8 @@ lemma Subgroup.index_mul_measure
     H.index * μ H = ∑' a : s, μ (a.val • H) := by simp [measure_smul, hs.encard_left]
     _ = μ univ := by
       rw [← measure_iUnion _ fun _ => hH.const_smul _]
-      · simp [
+      · simp [hs.mul_eq]
+      · exact fun a b hab => hs.pairwiseDisjoint_smul a.2 b.2 (Subtype.val_injective.ne hab)
 
 中文:
 引理 子群.index_mul_measure
@@ -907,7 +908,8 @@ lemma Subgroup.index_mul_measure
     H.index * μ H = ∑' a : s, μ (a.val • H) := by simp [measure_smul, hs.encard_left]
     _ = μ univ := by
       rw [← measure_iUnion _ fun _ => hH.const_smul _]
-      · simp [
+      · simp [hs.mul_eq]
+      · exact fun a b hab => hs.pairwiseDisjoint_smul a.2 b.2 (Subtype.val_injective.ne hab)
 
 Depends on / 依赖: Finite, H.exists_isComplement_left, H.index, IsDedekindDomain, IsDedekindDomain.ramificationIdx, Subtype, Subtype.val_injective.ne, _ne_zero, a.val, const_smul, encard_left, exists_isComplement_left, finite_left_iff, hH.const_smul, hs.encard_left, hs.finite_left_iff.mpr, hs.mul_eq, hs.pairwiseDisjoint_smul, le_of_eq, liesOver_iff
 -/
@@ -1494,7 +1496,11 @@ theorem IsMulLeftInvariant.comap
       · rintro ⟨y, hy, rfl⟩
         exact ⟨g * y, hy, by simp⟩
       · intro ⟨y, yins, hy⟩
-        exact ⟨g⁻¹ * y, by simp [yins],
+        exact ⟨g⁻¹ * y, by simp [yins], by simp [hy]⟩
+    rw [this]; rw [← map_apply (by fun_prop)]; rw [IsMulLeftInvariant.map_mul_left_eq_self]
+    exact hf.measurableSet_image.mpr hs
+
+@[to_additive]
 
 中文:
 定理 是MulLeftInvariant.comap
@@ -1509,7 +1515,11 @@ theorem IsMulLeftInvariant.comap
       · rintro ⟨y, hy, rfl⟩
         exact ⟨g * y, hy, by simp⟩
       · intro ⟨y, yins, hy⟩
-        exact ⟨g⁻¹ * y, by simp [yins],
+        exact ⟨g⁻¹ * y, by simp [yins], by simp [hy]⟩
+    rw [this]; rw [← map_apply (by fun_prop)]; rw [IsMulLeftInvariant.map_mul_left_eq_self]
+    exact hf.measurableSet_image.mpr hs
+
+@[to_additive]
 -/
 protected theorem IsMulLeftInvariant.comap {H} [Group H] {mH : MeasurableSpace H} [MeasurableMul H]
     (μ : Measure H) [IsMulLeftInvariant μ] {f : G ->* H} (hf : MeasurableEmbedding f) :
@@ -1545,7 +1555,9 @@ theorem IsMulRightInvariant.comap
       · rintro ⟨y, hy, rfl⟩
         exact ⟨y * g, hy, by simp⟩
       · intro ⟨y, yins, hy⟩
-        exact ⟨y * g⁻¹, by simp [yins],
+        exact ⟨y * g⁻¹, by simp [yins], by simp [hy]⟩
+    rw [this]; rw [← map_apply (by fun_prop)]; rw [IsMulRightInvariant.map_mul_right_eq_self]
+    exact hf.measurableSet_image.mpr hs
 
 中文:
 定理 是MulRightInvariant.comap
@@ -1560,7 +1572,9 @@ theorem IsMulRightInvariant.comap
       · rintro ⟨y, hy, rfl⟩
         exact ⟨y * g, hy, by simp⟩
       · intro ⟨y, yins, hy⟩
-        exact ⟨y * g⁻¹, by simp [yins],
+        exact ⟨y * g⁻¹, by simp [yins], by simp [hy]⟩
+    rw [this]; rw [← map_apply (by fun_prop)]; rw [IsMulRightInvariant.map_mul_right_eq_self]
+    exact hf.measurableSet_image.mpr hs
 -/
 protected theorem IsMulRightInvariant.comap {H} [Group H] {mH : MeasurableSpace H} [MeasurableMul H]
     (μ : Measure H) [IsMulRightInvariant μ] {f : G ->* H} (hf : MeasurableEmbedding f) :
@@ -1848,7 +1862,13 @@ lemma eventually_nhds_one_measure_smul_sdiff_lt
   obtain ⟨V, hV1, hVkU⟩ : exists V in 𝓝 (1 : G), V * k subseteq U := compact_open_separated_mul_left hk hU hUk
   filter_upwards [hV1] with g hg
   calc
-    μ (g • k \ k) <= μ
+    μ (g • k \ k) <= μ (U \ k) := by
+      gcongr
+      exact (smul_set_subset_smul hg).trans hVkU
+    _ < ε := measure_sdiff_lt_of_lt_add h'k.nullMeasurableSet hUk hk.measure_lt_top.ne hμUk
+
+@[deprecated (since := "2026-06-03")]
+alias eventually_nhds_one_measure_smul_diff_lt := eventually_nhds_one_measure_smul_sdiff_lt
 
 中文:
 引理 eventually_nhds_one_measure_smul_sdiff_lt
@@ -1859,7 +1879,13 @@ lemma eventually_nhds_one_measure_smul_sdiff_lt
   obtain ⟨V, hV1, hVkU⟩ : exists V in 𝓝 (1 : G), V * k subseteq U := compact_open_separated_mul_left hk hU hUk
   filter_upwards [hV1] with g hg
   calc
-    μ (g • k \ k) <= μ
+    μ (g • k \ k) <= μ (U \ k) := by
+      gcongr
+      exact (smul_set_subset_smul hg).trans hVkU
+    _ < ε := measure_sdiff_lt_of_lt_add h'k.nullMeasurableSet hUk hk.measure_lt_top.ne hμUk
+
+@[deprecated (since := "2026-06-03")]
+alias eventually_nhds_one_measure_smul_diff_lt := eventually_nhds_one_measure_smul_sdiff_lt
 
 Depends on / 依赖: IsOpen, compact_open_separated_mul_left, exists_isOpen_lt_add, filter_upwards, hk.exists_isOpen_lt_add, hk.measure_lt_top.ne, k.nullMeasurableSet, measure_lt_top, measure_sdiff_lt_of_lt_add, nullMeasurableSet, smul_set_subset_smul, subseteq
 -/
@@ -1941,7 +1967,9 @@ theorem isOpenPosMeasure_of_mulLeftInvariant_of_compact
   obtain ⟨t, hKt⟩ : exists t : Finset G, K subseteq ⋃ (g : G) (_ : g in t), (fun h : G => g * h) ⁻¹' U :=
     compact_covered_by_mul_left_translates hK hne
   calc
-    μ K <= μ (⋃ (g : G) (_ : g
+    μ K <= μ (⋃ (g : G) (_ : g in t), (fun h : G => g * h) ⁻¹' U) := measure_mono hKt
+    _ <= ∑ g in t, μ ((fun h : G => g * h) ⁻¹' U) := measure_biUnion_finset_le _ _
+    _ = 0 := by simp [measure_preimage_mul, h]
 
 中文:
 定理 isOpenPosMeasure_of_mulLeftInvariant_of_compact
@@ -1954,7 +1982,9 @@ theorem isOpenPosMeasure_of_mulLeftInvariant_of_compact
   obtain ⟨t, hKt⟩ : exists t : Finset G, K subseteq ⋃ (g : G) (_ : g in t), (fun h : G => g * h) ⁻¹' U :=
     compact_covered_by_mul_left_translates hK hne
   calc
-    μ K <= μ (⋃ (g : G) (_ : g
+    μ K <= μ (⋃ (g : G) (_ : g in t), (fun h : G => g * h) ⁻¹' U) := measure_mono hKt
+    _ <= ∑ g in t, μ ((fun h : G => g * h) ⁻¹' U) := measure_biUnion_finset_le _ _
+    _ = 0 := by simp [measure_preimage_mul, h]
 
 Depends on / 依赖: Finset, compact_covered_by_mul_left_translates, contrapose, hU.interior_eq, interior_eq, measure_biUnion_finset_le, measure_mono, measure_preimage_mul, nonpos_iff_eq_zero, subseteq
 -/
@@ -2142,7 +2172,45 @@ theorem measure_univ_of_isMulLeftInvariant
   /- Consider a closed compact set `K` with nonempty interior. For any compact set `L`, one may
     find `g = g (L)` such that `L` is disjoint from `g • K`. Iterating this, one finds
     infinitely many translates of `K` which are disjoint from each other. As they all have the
-    same positive m
+    same positive mass, it follows that the space has infinite measure. -/
+  obtain ⟨K, K1, hK, Kclosed⟩ : exists K in 𝓝 (1 : G), IsCompact K ∧ IsClosed K :=
+    exists_mem_nhds_isCompact_isClosed 1
+  have K_pos : 0 < μ K := measure_pos_of_mem_nhds μ K1
+  have A : forall L : Set G, IsCompact L -> exists g : G, Disjoint L (g • K) := fun L hL =>
+    exists_disjoint_smul_of_isCompact hL hK
+  choose! g hg using A
+  set L : Nat -> Set G := fun n => (fun T => T union g T • K)^[n] K
+  have Lcompact : forall n, IsCompact (L n) := fun n => by
+    induction n with
+    | zero => exact hK
+    | succ n IH =>
+      simp_rw [L, iterate_succ']
+      apply IsCompact.union IH (hK.smul (g (L n)))
+  have Lclosed : forall n, IsClosed (L n) := fun n => by
+    induction n with
+    | zero => exact Kclosed
+    | succ n IH =>
+      simp_rw [L, iterate_succ']
+      apply IsClosed.union IH (Kclosed.smul (g (L n)))
+  have M : forall n, μ (L n) = (n + 1 : Nat) * μ K := fun n => by
+    induction n with
+    | zero => simp only [L, one_mul, Nat.cast_one, iterate_zero, id, Nat.zero_add]
+    | succ n IH =>
+      calc
+        μ (L (n + 1)) = μ (L n) + μ (g (L n) • K) := by
+          simp_rw [L, iterate_succ']
+          exact measure_union' (hg _ (Lcompact _)) (Lclosed _).measurableSet
+        _ = (n + 1 + 1 : Nat) * μ K := by
+          simp only [IH, measure_smul, add_mul, Nat.cast_add, Nat.cast_one, one_mul]
+  have N : Tendsto (fun n => μ (L n)) atTop (𝓝 (∞ * μ K)) := by
+    simp_rw [M]
+    apply ENNReal.Tendsto.mul_const _ (Or.inl ENNReal.top_ne_zero)
+    exact ENNReal.tendsto_nat_nhds_top.comp (tendsto_add_atTop_nat _)
+  simp only [ENNReal.top_mul', K_pos.ne', if_false] at N
+  apply top_le_iff.1
+  exact le_of_tendsto' N fun n => measure_mono (subset_univ _)
+
+@[to_additive]
 
 中文:
 定理 measure_univ_of_isMulLeftInvariant
@@ -2151,7 +2219,45 @@ theorem measure_univ_of_isMulLeftInvariant
   /- Consider a closed compact set `K` with nonempty interior. For any compact set `L`, one may
     find `g = g (L)` such that `L` is disjoint from `g • K`. Iterating this, one finds
     infinitely many translates of `K` which are disjoint from each other. As they all have the
-    same positive m
+    same positive mass, it follows that the space has infinite measure. -/
+  obtain ⟨K, K1, hK, Kclosed⟩ : exists K in 𝓝 (1 : G), IsCompact K ∧ IsClosed K :=
+    exists_mem_nhds_isCompact_isClosed 1
+  have K_pos : 0 < μ K := measure_pos_of_mem_nhds μ K1
+  have A : forall L : Set G, IsCompact L -> exists g : G, Disjoint L (g • K) := fun L hL =>
+    exists_disjoint_smul_of_isCompact hL hK
+  choose! g hg using A
+  set L : Nat -> Set G := fun n => (fun T => T union g T • K)^[n] K
+  have Lcompact : forall n, IsCompact (L n) := fun n => by
+    induction n with
+    | zero => exact hK
+    | succ n IH =>
+      simp_rw [L, iterate_succ']
+      apply IsCompact.union IH (hK.smul (g (L n)))
+  have Lclosed : forall n, IsClosed (L n) := fun n => by
+    induction n with
+    | zero => exact Kclosed
+    | succ n IH =>
+      simp_rw [L, iterate_succ']
+      apply IsClosed.union IH (Kclosed.smul (g (L n)))
+  have M : forall n, μ (L n) = (n + 1 : Nat) * μ K := fun n => by
+    induction n with
+    | zero => simp only [L, one_mul, Nat.cast_one, iterate_zero, id, Nat.zero_add]
+    | succ n IH =>
+      calc
+        μ (L (n + 1)) = μ (L n) + μ (g (L n) • K) := by
+          simp_rw [L, iterate_succ']
+          exact measure_union' (hg _ (Lcompact _)) (Lclosed _).measurableSet
+        _ = (n + 1 + 1 : Nat) * μ K := by
+          simp only [IH, measure_smul, add_mul, Nat.cast_add, Nat.cast_one, one_mul]
+  have N : Tendsto (fun n => μ (L n)) atTop (𝓝 (∞ * μ K)) := by
+    simp_rw [M]
+    apply ENNReal.Tendsto.mul_const _ (Or.inl ENNReal.top_ne_zero)
+    exact ENNReal.tendsto_nat_nhds_top.comp (tendsto_add_atTop_nat _)
+  simp only [ENNReal.top_mul', K_pos.ne', if_false] at N
+  apply top_le_iff.1
+  exact le_of_tendsto' N fun n => measure_mono (subset_univ _)
+
+@[to_additive]
 -/
 theorem measure_univ_of_isMulLeftInvariant [WeaklyLocallyCompactSpace G] [NoncompactSpace G]
     (μ : Measure G) [IsOpenPosMeasure μ] [μ.IsMulLeftInvariant] : μ univ = ∞ := by
@@ -2506,7 +2612,10 @@ theorem isHaarMeasure_map
       intro K hK
       rw [← hK.measure_closure]; rw [map_apply hf.measurable isClosed_closure.measurableSet]
       set g : CocompactMap G H := ⟨⟨f, hf⟩, h_prop⟩
-      exact IsCompact.measu
+      exact IsCompact.measure_lt_top (g.isCompact_preimage_of_isClosed hK.closure isClosed_closure)
+    toIsOpenPosMeasure := hf.isOpenPosMeasure_map h_surj }
+
+@[to_additive]
 
 中文:
 定理 isHaarMeasure_map
@@ -2516,7 +2625,10 @@ theorem isHaarMeasure_map
       intro K hK
       rw [← hK.measure_closure]; rw [map_apply hf.measurable isClosed_closure.measurableSet]
       set g : CocompactMap G H := ⟨⟨f, hf⟩, h_prop⟩
-      exact IsCompact.measu
+      exact IsCompact.measure_lt_top (g.isCompact_preimage_of_isClosed hK.closure isClosed_closure)
+    toIsOpenPosMeasure := hf.isOpenPosMeasure_map h_surj }
+
+@[to_additive]
 
 Depends on / 依赖: CocompactMap, IsCompact, IsCompact.measure_lt_top, closure, f.toMulHom, g.isCompact_preimage_of_isClosed, hK.closure, hK.measure_closure, h_prop, h_surj, hf.isOpenPosMeasure_map, hf.measurable, isClosed_closure, isClosed_closure.measurableSet, isCompact_preimage_of_isClosed, isMulLeftInvariant_map, isOpenPosMeasure_map, lt_top_of_isCompact, map_apply, measurable
 -/
@@ -2605,7 +2717,7 @@ instance isHaarMeasure_map_smul
     rw [F.map_apply K]
 exact IsCompact.measure_lt_top (Homeomorph.isCompact_preimage (Homeomorph.smul a)).2 hK
   toIsOpenPosMeasure :=
-    (continuous_c
+    (continuous_const_smul a).isOpenPosMeasure_map (MulAction.surjective a)
 
 中文:
 实例 isHaarMeasure_map_smul
@@ -2617,7 +2729,7 @@ exact IsCompact.measure_lt_top (Homeomorph.isCompact_preimage (Homeomorph.smul a
     rw [F.map_apply K]
 exact IsCompact.measure_lt_top (Homeomorph.isCompact_preimage (Homeomorph.smul a)).2 hK
   toIsOpenPosMeasure :=
-    (continuous_c
+    (continuous_const_smul a).isOpenPosMeasure_map (MulAction.surjective a)
 
 Depends on / 依赖: isMulLeftInvariant_map_smul
 -/

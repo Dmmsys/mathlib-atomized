@@ -44,7 +44,11 @@ lemma mem_range_nerve_σ_iff
     rw [nerve.σ_obj]; rw [nerve.δ_obj]
     by_cases h₁ : i.castSucc < j
     · obtain ⟨j, rfl⟩ := Fin.eq_succ_of_ne_zero (Fin.ne_zero_of_lt h₁)
-      rw [Fin.predAbo
+      rw [Fin.predAbove_of_castSucc_lt _ _ h₁]; rw [Fin.pred_succ]; rw [Fin.succAbove_of_le_castSucc _ _ (Fin.le_castSucc_iff.2 h₁)]
+    · simp only [not_lt] at h₁
+      grind [-> Fin.succAbove_of_castSucc_lt,
+        -> Fin.predAbove_of_le_castSucc, Fin.castSucc_castPred, Fin.castPred_castSucc,
+        Fin.succAbove_castSucc_self, -> LE.le.lt_or_eq]
 
 中文:
 引理 mem_range_nerve_σ_iff
@@ -59,7 +63,11 @@ lemma mem_range_nerve_σ_iff
     rw [nerve.σ_obj]; rw [nerve.δ_obj]
     by_cases h₁ : i.castSucc < j
     · obtain ⟨j, rfl⟩ := Fin.eq_succ_of_ne_zero (Fin.ne_zero_of_lt h₁)
-      rw [Fin.predAbo
+      rw [Fin.predAbove_of_castSucc_lt _ _ h₁]; rw [Fin.pred_succ]; rw [Fin.succAbove_of_le_castSucc _ _ (Fin.le_castSucc_iff.2 h₁)]
+    · simp only [not_lt] at h₁
+      grind [-> Fin.succAbove_of_castSucc_lt,
+        -> Fin.predAbove_of_le_castSucc, Fin.castSucc_castPred, Fin.castPred_castSucc,
+        Fin.succAbove_castSucc_self, -> LE.le.lt_or_eq]
 
 Depends on / 依赖: Fin.castSucc_castPred, Fin.eq_succ_of_ne_zero, Fin.le_castSucc_iff, Fin.ne_zero_of_lt, Fin.predAbove_of_castSucc_lt, Fin.predAbove_of_le_castSucc, Fin.pred_succ, Fin.succAbove_of_castSucc_lt, Fin.succAbove_of_le_castSucc, castSucc, castSucc_castPred, eq_succ_of_ne_zero, i.castSucc, le_castSucc_iff, ne_zero_of_lt, nerve_obj, not_lt, predAbove_of_castSucc_lt, predAbove_of_le_castSucc, pred_succ
 -/
@@ -119,7 +127,9 @@ lemma mem_nerve_nonDegenerate_iff_strictMono
       Fin.strictMono_iff_lt_succ, SSet.degenerate_eq_iUnion_range_σ, Set.mem_iUnion]
     simp only [mem_range_nerve_σ_iff, not_forall]
     apply exists_congr
-    in
+    intro i
+    have := s.monotone i.castSucc_le_succ
+    grind [lt_self_iff_false, LE.le.lt_or_eq]
 
 中文:
 引理 mem_nerve_nonDegenerate_iff_strictMono
@@ -131,7 +141,9 @@ lemma mem_nerve_nonDegenerate_iff_strictMono
       Fin.strictMono_iff_lt_succ, SSet.degenerate_eq_iUnion_range_σ, Set.mem_iUnion]
     simp only [mem_range_nerve_σ_iff, not_forall]
     apply exists_congr
-    in
+    intro i
+    have := s.monotone i.castSucc_le_succ
+    grind [lt_self_iff_false, LE.le.lt_or_eq]
 
 Depends on / 依赖: Fin.strictMono_iff_lt_succ, LE.le.lt_or_eq, SSet.degenerate_eq_iUnion_range_, SSet.mem_degenerate_iff_notMem_nonDegenerate, Set.mem_iUnion, Subsingleton, Subsingleton.strictMono, castSucc_le_succ, exists_congr, i.castSucc_le_succ, lt_or_eq, lt_self_iff_false, mem_degenerate_iff_notMem_nonDegenerate, mem_iUnion, monotone, not_forall, not_iff_not, s.monotone, strictMono, strictMono_iff_lt_succ
 -/

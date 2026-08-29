@@ -88,7 +88,23 @@ instance :
 · have hab := Function.ne_iff.mp HahnSeries.ext_iff.ne.mp hab
       let u := {i : Γ | (ofLex a).coeff i != 0} union {i : Γ | (ofLex b).coeff i != 0}
       let v := {i : Γ | (ofLex a).coeff i != (ofLex b).coeff i}
-      have hvu : v 
+      have hvu : v subseteq u := by
+        intro i h
+        rw [Set.mem_union]; rw [Set.mem_ofPred_eq]; rw [Set.mem_ofPred_eq]
+        contrapose! h
+        rw [Set.notMem_ofPred_iff]; rw [not_not]; rw [h.1]; rw [h.2]
+      have hv : v.IsWF :=
+        ((ofLex a).isPWO_support'.isWF.union (ofLex b).isPWO_support'.isWF).subset hvu
+      let i := hv.min hab
+      have hji (j) : j < i -> (ofLex a).coeff j = (ofLex b).coeff j :=
+not_imp_not.mp fun h' => hv.not_lt_min hab h'
+      have hne : (ofLex a).coeff i != (ofLex b).coeff i := hv.min_mem hab
+      obtain hi | hi := lt_or_gt_of_ne hne
+      · exact Or.inl (le_of_lt ⟨i, hji, hi⟩)
+      · exact Or.inr (le_of_lt ⟨i, fun j hj => (hji j hj).symm, hi⟩)
+  toDecidableLE := Classical.decRel _
+
+@[simp]
 
 中文:
 实例 :
@@ -99,7 +115,23 @@ instance :
 · have hab := Function.ne_iff.mp HahnSeries.ext_iff.ne.mp hab
       let u := {i : Γ | (ofLex a).coeff i != 0} union {i : Γ | (ofLex b).coeff i != 0}
       let v := {i : Γ | (ofLex a).coeff i != (ofLex b).coeff i}
-      have hvu : v 
+      have hvu : v subseteq u := by
+        intro i h
+        rw [Set.mem_union]; rw [Set.mem_ofPred_eq]; rw [Set.mem_ofPred_eq]
+        contrapose! h
+        rw [Set.notMem_ofPred_iff]; rw [not_not]; rw [h.1]; rw [h.2]
+      have hv : v.IsWF :=
+        ((ofLex a).isPWO_support'.isWF.union (ofLex b).isPWO_support'.isWF).subset hvu
+      let i := hv.min hab
+      have hji (j) : j < i -> (ofLex a).coeff j = (ofLex b).coeff j :=
+not_imp_not.mp fun h' => hv.not_lt_min hab h'
+      have hne : (ofLex a).coeff i != (ofLex b).coeff i := hv.min_mem hab
+      obtain hi | hi := lt_or_gt_of_ne hne
+      · exact Or.inl (le_of_lt ⟨i, hji, hi⟩)
+      · exact Or.inr (le_of_lt ⟨i, fun j hj => (hji j hj).symm, hi⟩)
+  toDecidableLE := Classical.decRel _
+
+@[simp]
 
 Depends on / 依赖: Function, Function.ne_iff.mp, HahnSeries, HahnSeries.ext_iff.ne.mp, Or.inl, Set.mem_ofPred_eq, Set.mem_union, Set.notMem_ofPred_iff, contrapose, eq_or_ne, ext_iff, hab.le, isPWO_support, isWF.union, mem_ofPred_eq, mem_union, ne_iff, notMem_ofPred_iff, not_not, subseteq
 -/
@@ -142,7 +174,21 @@ theorem leadingCoeff_pos_iff
     have htop : (ofLex x).orderTop != ⊤ := orderTop_ne_top.2 hne
     refine ⟨(ofLex x).orderTop.untop htop, ?_, by simpa [coeff_untop_eq_leadingCoeff] using hpos⟩
     intro j hj
-    si
+    simpa using (coeff_eq_zero_of_lt_orderTop ((WithTop.lt_untop_iff htop).mp hj)).symm
+  · intro ⟨i, hj, hi⟩
+    have horder : (ofLex x).orderTop = WithTop.some i := by
+      apply orderTop_eq_of_le
+      · simpa using hi.ne.symm
+      · intro g hg
+        contrapose! hg
+        simpa using (hj g hg).symm
+    have htop : (ofLex x).orderTop != ⊤ := WithTop.ne_top_iff_exists.mpr ⟨i, horder.symm⟩
+    have hne : ofLex x != 0 := orderTop_ne_top.1 htop
+    have horder' : (ofLex x).orderTop.untop htop = i := (WithTop.untop_eq_iff _).mpr horder
+    rw [leadingCoeff_of_ne_zero hne]; rw [horder']
+    simpa using hi
+
+@[simp]
 
 中文:
 定理 leadingCoeff_pos_iff
@@ -156,7 +202,21 @@ theorem leadingCoeff_pos_iff
     have htop : (ofLex x).orderTop != ⊤ := orderTop_ne_top.2 hne
     refine ⟨(ofLex x).orderTop.untop htop, ?_, by simpa [coeff_untop_eq_leadingCoeff] using hpos⟩
     intro j hj
-    si
+    simpa using (coeff_eq_zero_of_lt_orderTop ((WithTop.lt_untop_iff htop).mp hj)).symm
+  · intro ⟨i, hj, hi⟩
+    have horder : (ofLex x).orderTop = WithTop.some i := by
+      apply orderTop_eq_of_le
+      · simpa using hi.ne.symm
+      · intro g hg
+        contrapose! hg
+        simpa using (hj g hg).symm
+    have htop : (ofLex x).orderTop != ⊤ := WithTop.ne_top_iff_exists.mpr ⟨i, horder.symm⟩
+    have hne : ofLex x != 0 := orderTop_ne_top.1 htop
+    have horder' : (ofLex x).orderTop.untop htop = i := (WithTop.untop_eq_iff _).mpr horder
+    rw [leadingCoeff_of_ne_zero hne]; rw [horder']
+    simpa using hi
+
+@[simp]
 
 Depends on / 依赖: WithTop, WithTop.lt_untop_iff, WithTop.some, coeff_eq_zero_of_lt_orderTop, coeff_untop_eq_leadingCoeff, contra, hi.ne.symm, horder, hpos.ne.symm, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mp, lt_iff, lt_untop_iff, orderTop, orderTop.untop, orderTop_eq_of_le, orderTop_ne_top
 -/
@@ -443,7 +503,7 @@ theorem leadingCoeff_abs
     rw [abs_eq_neg_self.mpr hlt.le]; rw [abs_eq_neg_self.mpr hlt'.le]; rw [ofLex_neg]; rw [leadingCoeff_neg]
   · simp
   · obtain hgt' := leadingCoeff_pos_iff.mpr hgt
-    rw [abs_eq_self.mpr hgt.le]; rw [
+    rw [abs_eq_self.mpr hgt.le]; rw [abs_eq_self.mpr hgt'.le]
 
 中文:
 定理 leadingCoeff_abs
@@ -454,7 +514,7 @@ theorem leadingCoeff_abs
     rw [abs_eq_neg_self.mpr hlt.le]; rw [abs_eq_neg_self.mpr hlt'.le]; rw [ofLex_neg]; rw [leadingCoeff_neg]
   · simp
   · obtain hgt' := leadingCoeff_pos_iff.mpr hgt
-    rw [abs_eq_self.mpr hgt.le]; rw [
+    rw [abs_eq_self.mpr hgt.le]; rw [abs_eq_self.mpr hgt'.le]
 
 Depends on / 依赖: abs_eq_neg_self, abs_eq_neg_self.mpr, abs_eq_self, abs_eq_self.mpr, hgt.le, hlt.le, leadingCoeff_neg, leadingCoeff_neg_iff, leadingCoeff_neg_iff.mpr, leadingCoeff_pos_iff, leadingCoeff_pos_iff.mpr, lt_trichotomy, ofLex_neg
 -/
@@ -478,7 +538,7 @@ theorem abs_lt_abs_of_orderTop_ofLex
   refine (lt_iff _ _).mpr ⟨(ofLex |y|).orderTop.untop h.ne_top, ?_, ?_⟩
   · simp +contextual [-orderTop_abs, coeff_eq_zero_of_lt_orderTop, h.trans']
   · simpa [-orderTop_abs, coeff_eq_zero_of_lt_orderTop, coeff_untop_eq_leadingCoeff, h]
-      us
+      using h.ne_top
 
 中文:
 定理 abs_lt_abs_of_orderTop_ofLex
@@ -488,7 +548,7 @@ theorem abs_lt_abs_of_orderTop_ofLex
   refine (lt_iff _ _).mpr ⟨(ofLex |y|).orderTop.untop h.ne_top, ?_, ?_⟩
   · simp +contextual [-orderTop_abs, coeff_eq_zero_of_lt_orderTop, h.trans']
   · simpa [-orderTop_abs, coeff_eq_zero_of_lt_orderTop, coeff_untop_eq_leadingCoeff, h]
-      us
+      using h.ne_top
 
 Depends on / 依赖: coeff_eq_zero_of_lt_orderTop, coeff_untop_eq_leadingCoeff, contextual, h.ne_top, h.trans, lt_iff, ne_top, orderTop, orderTop.untop, orderTop_abs
 -/
@@ -514,7 +574,45 @@ theorem archimedeanClassMk_le_archimedeanClassMk_iff_of_orderTop_ofLex
     simp_all
   -- general case: `x` and `y` are not zero
 have hx : x != 0 := by simpa using orderTop_ne_top.1 h ▸ orderTop_ne_top.2 (by simpa using hy)
-  have h' : (ofLex |x|).or
+  have h' : (ofLex |x|).orderTop = (ofLex |y|).orderTop := by simpa using h
+  constructor
+  · -- `mk x ≤ mk y → mk x.leadingCoeff ≤ mk y.leadingCoeff`
+    intro ⟨n, hn⟩
+    refine ⟨n + 1, ?_⟩
+    have hn' : |y| < (n + 1) • |x| :=
+lt_of_le_of_lt hn nsmul_lt_nsmul_left (by simpa using hx) (by simp)
+    obtain ⟨j, hj, hi⟩ := (lt_iff _ _).mp hn'
+    simp_rw [ofLex_smul, coeff_smul] at hj hi
+    simp_rw [← leadingCoeff_abs]
+    rw [leadingCoeff_of_ne_zero (by simpa using hy)]; rw [leadingCoeff_of_ne_zero (by simpa using hx)]
+    simp_rw [← h']
+    obtain hjlt | hjeq | hjgt := lt_trichotomy (WithTop.some j) (ofLex |x|).orderTop
+    · -- impossible case: `x` and `y` differ before their leading coefficients
+      have hjlt' : j < (ofLex |y|).orderTop := h'.symm ▸ hjlt
+      simp [coeff_eq_zero_of_lt_orderTop hjlt, coeff_eq_zero_of_lt_orderTop hjlt'] at hi
+    · convert! hi.le <;> exact (WithTop.untop_eq_iff _).mpr hjeq.symm
+    · exact (hj _ ((WithTop.untop_lt_iff _).mpr hjgt)).le
+  · -- `mk x.leadingCoeff ≤ mk y.leadingCoeff → mk x ≤ mk y`
+    intro ⟨n, hn⟩
+    refine ⟨n + 1, ((lt_iff _ _).mpr ?_).le⟩
+    refine ⟨(ofLex x).orderTop.untop (by simpa using hx), ?_, ?_⟩
+    · -- all coefficients before the leading coefficient are zero
+      intro j hj
+      trans 0
+      · apply coeff_eq_zero_of_lt_orderTop
+        simpa [← h] using hj
+      · suffices (ofLex |x|).coeff j = 0 by simp [this]
+        apply coeff_eq_zero_of_lt_orderTop
+        simpa using hj
+    -- the leading coefficient determines the relation
+    rw [ofLex_smul]; rw [coeff_smul]
+    suffices |(ofLex y).leadingCoeff| < (n + 1) • |(ofLex x).leadingCoeff| by
+      simp_rw [← leadingCoeff_abs] at this
+      rw [leadingCoeff_of_ne_zero (by simpa using hy)]; rw [leadingCoeff_of_ne_zero (by simpa using hx)]
+        at this
+      convert! this using 3 <;> simp [h]
+refine lt_of_le_of_lt hn nsmul_lt_nsmul_left ?_ (by simp)
+    rwa [abs_pos, leadingCoeff_ne_zero]
 
 中文:
 定理 archimedeanClassMk_le_archimedeanClassMk_iff_of_orderTop_ofLex
@@ -526,7 +624,45 @@ have hx : x != 0 := by simpa using orderTop_ne_top.1 h ▸ orderTop_ne_top.2 (by
     simp_all
   -- general case: `x` and `y` are not zero
 have hx : x != 0 := by simpa using orderTop_ne_top.1 h ▸ orderTop_ne_top.2 (by simpa using hy)
-  have h' : (ofLex |x|).or
+  have h' : (ofLex |x|).orderTop = (ofLex |y|).orderTop := by simpa using h
+  constructor
+  · -- `mk x ≤ mk y → mk x.leadingCoeff ≤ mk y.leadingCoeff`
+    intro ⟨n, hn⟩
+    refine ⟨n + 1, ?_⟩
+    have hn' : |y| < (n + 1) • |x| :=
+lt_of_le_of_lt hn nsmul_lt_nsmul_left (by simpa using hx) (by simp)
+    obtain ⟨j, hj, hi⟩ := (lt_iff _ _).mp hn'
+    simp_rw [ofLex_smul, coeff_smul] at hj hi
+    simp_rw [← leadingCoeff_abs]
+    rw [leadingCoeff_of_ne_zero (by simpa using hy)]; rw [leadingCoeff_of_ne_zero (by simpa using hx)]
+    simp_rw [← h']
+    obtain hjlt | hjeq | hjgt := lt_trichotomy (WithTop.some j) (ofLex |x|).orderTop
+    · -- impossible case: `x` and `y` differ before their leading coefficients
+      have hjlt' : j < (ofLex |y|).orderTop := h'.symm ▸ hjlt
+      simp [coeff_eq_zero_of_lt_orderTop hjlt, coeff_eq_zero_of_lt_orderTop hjlt'] at hi
+    · convert! hi.le <;> exact (WithTop.untop_eq_iff _).mpr hjeq.symm
+    · exact (hj _ ((WithTop.untop_lt_iff _).mpr hjgt)).le
+  · -- `mk x.leadingCoeff ≤ mk y.leadingCoeff → mk x ≤ mk y`
+    intro ⟨n, hn⟩
+    refine ⟨n + 1, ((lt_iff _ _).mpr ?_).le⟩
+    refine ⟨(ofLex x).orderTop.untop (by simpa using hx), ?_, ?_⟩
+    · -- all coefficients before the leading coefficient are zero
+      intro j hj
+      trans 0
+      · apply coeff_eq_zero_of_lt_orderTop
+        simpa [← h] using hj
+      · suffices (ofLex |x|).coeff j = 0 by simp [this]
+        apply coeff_eq_zero_of_lt_orderTop
+        simpa using hj
+    -- the leading coefficient determines the relation
+    rw [ofLex_smul]; rw [coeff_smul]
+    suffices |(ofLex y).leadingCoeff| < (n + 1) • |(ofLex x).leadingCoeff| by
+      simp_rw [← leadingCoeff_abs] at this
+      rw [leadingCoeff_of_ne_zero (by simpa using hy)]; rw [leadingCoeff_of_ne_zero (by simpa using hx)]
+        at this
+      convert! this using 3 <;> simp [h]
+refine lt_of_le_of_lt hn nsmul_lt_nsmul_left ?_ (by simp)
+    rwa [abs_pos, leadingCoeff_ne_zero]
 
 Depends on / 依赖: ArchimedeanClass, ArchimedeanClass.mk_le_mk, eq_or_ne, mk_le_mk, simp_rw, special
 -/
@@ -592,7 +728,19 @@ theorem archimedeanClassMk_le_archimedeanClassMk_iff
   · -- when `x`'s order is less than `y`'s, this reduces to abs_lt_abs_of_orderTop_ofLex
     simpa [ArchimedeanClass.mk_le_mk, hlt] using
       ⟨1, by simpa using (abs_lt_abs_of_orderTop_ofLex hlt).le⟩
-  · -- when `x`
+  · -- when `x` and `y` have the same order, this reduces to
+    -- `archimedeanClass_le_iff_of_orderTop_eq`
+    simpa [heq] using archimedeanClassMk_le_archimedeanClassMk_iff_of_orderTop_ofLex heq
+  -- when `x`'s order is greater than `y`'s, neither side is true
+  simp_rw [ArchimedeanClass.mk_le_mk]
+  refine ⟨?_, by simp [hgt.not_gt, hgt.ne']⟩
+  intro ⟨n, hn⟩
+  contrapose! hn
+  rw [← abs_nsmul]
+  have hgt' : (ofLex y).orderTop < (ofLex (n • x)).orderTop := by
+    apply lt_of_lt_of_le hgt
+    simpa using orderTop_smul_not_lt n (ofLex x)
+  exact abs_lt_abs_of_orderTop_ofLex hgt'
 
 中文:
 定理 archimedeanClassMk_le_archimedeanClassMk_iff
@@ -602,7 +750,19 @@ theorem archimedeanClassMk_le_archimedeanClassMk_iff
   · -- when `x`'s order is less than `y`'s, this reduces to abs_lt_abs_of_orderTop_ofLex
     simpa [ArchimedeanClass.mk_le_mk, hlt] using
       ⟨1, by simpa using (abs_lt_abs_of_orderTop_ofLex hlt).le⟩
-  · -- when `x`
+  · -- when `x` and `y` have the same order, this reduces to
+    -- `archimedeanClass_le_iff_of_orderTop_eq`
+    simpa [heq] using archimedeanClassMk_le_archimedeanClassMk_iff_of_orderTop_ofLex heq
+  -- when `x`'s order is greater than `y`'s, neither side is true
+  simp_rw [ArchimedeanClass.mk_le_mk]
+  refine ⟨?_, by simp [hgt.not_gt, hgt.ne']⟩
+  intro ⟨n, hn⟩
+  contrapose! hn
+  rw [← abs_nsmul]
+  have hgt' : (ofLex y).orderTop < (ofLex (n • x)).orderTop := by
+    apply lt_of_lt_of_le hgt
+    simpa using orderTop_smul_not_lt n (ofLex x)
+  exact abs_lt_abs_of_orderTop_ofLex hgt'
 
 Depends on / 依赖: ArchimedeanClass, ArchimedeanClass.mk_le_mk, abs_lt_abs_of_orderTop_ofLex, lt_trichotomy, mk_le_mk, orderTop, reduces
 -/
@@ -640,7 +800,7 @@ theorem archimedeanClassMk_eq_archimedeanClassMk_iff
   constructor
   · simpa +contextual [or_imp, ne_of_gt, le_of_lt] using fun _ => le_antisymm
   · intro ⟨horder, hcoeff⟩
-    exact ⟨.inr ⟨horder, hcoeff.le⟩, .inr ⟨horder.sym
+    exact ⟨.inr ⟨horder, hcoeff.le⟩, .inr ⟨horder.symm, hcoeff.ge⟩⟩
 
 中文:
 定理 archimedeanClassMk_eq_archimedeanClassMk_iff
@@ -650,7 +810,7 @@ theorem archimedeanClassMk_eq_archimedeanClassMk_iff
   constructor
   · simpa +contextual [or_imp, ne_of_gt, le_of_lt] using fun _ => le_antisymm
   · intro ⟨horder, hcoeff⟩
-    exact ⟨.inr ⟨horder, hcoeff.le⟩, .inr ⟨horder.sym
+    exact ⟨.inr ⟨horder, hcoeff.le⟩, .inr ⟨horder.symm, hcoeff.ge⟩⟩
 
 Depends on / 依赖: archimedeanClassMk_le_archimedeanClassMk_iff, contextual, hcoeff, hcoeff.ge, hcoeff.le, horder, horder.symm, le_antisymm, le_antisymm_iff, le_of_lt, ne_of_gt, or_imp
 -/
@@ -676,7 +836,11 @@ definition finiteArchimedeanClassOrderHomLex
       ⟨(ofLex x).orderTop.untop (by simp [orderTop_of_ne_zero (show ofLex x != 0 by exact hx)]),
       FiniteArchimedeanClass.mk (ofLex x).leadingCoeff (leadingCoeff_ne_zero.mpr hx)⟩)
     fun ⟨a, ha⟩ ⟨b, hb⟩ h => by
-      rw [Prod.Lex.le_
+      rw [Prod.Lex.le_iff]
+      simp only [ofLex_toLex]
+      rw [FiniteArchimedeanClass.mk_le_mk] at ⊢ h
+      rw [WithTop.untop_eq_iff]
+      simpa using archimedeanClassMk_le_archimedeanClassMk_iff.mp h
 
 中文:
 定义 finiteArchimedeanClassOrderHomLex
@@ -686,7 +850,11 @@ definition finiteArchimedeanClassOrderHomLex
       ⟨(ofLex x).orderTop.untop (by simp [orderTop_of_ne_zero (show ofLex x != 0 by exact hx)]),
       FiniteArchimedeanClass.mk (ofLex x).leadingCoeff (leadingCoeff_ne_zero.mpr hx)⟩)
     fun ⟨a, ha⟩ ⟨b, hb⟩ h => by
-      rw [Prod.Lex.le_
+      rw [Prod.Lex.le_iff]
+      simp only [ofLex_toLex]
+      rw [FiniteArchimedeanClass.mk_le_mk] at ⊢ h
+      rw [WithTop.untop_eq_iff]
+      simpa using archimedeanClassMk_le_archimedeanClassMk_iff.mp h
 
 Depends on / 依赖: FiniteArchimedeanClass, FiniteArchimedeanClass.liftOrderHom, FiniteArchimedeanClass.mk, FiniteArchimedeanClass.mk_le_mk, Prod.Lex.le_iff, WithTop, WithTop.untop_eq_iff, archimedeanClassMk_le_archimedeanClassMk_iff, archimedeanClassMk_le_archimedeanClassMk_iff.mp, le_iff, leadingCoeff, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, liftOrderHom, mk_le_mk, ofLex_toLex, orderTop, orderTop.untop, orderTop_of_ne_zero, untop_eq_iff
 -/
@@ -716,7 +884,14 @@ definition finiteArchimedeanClassOrderHomInvLex
     fun ⟨a, ha⟩ ⟨b, hb⟩ h => by
       rw [FiniteArchimedeanClass.mk_le_mk]; rw [archimedeanClassMk_le_archimedeanClassMk_iff]
       simpa [ha, hb] using! h
-  monotone' 
+  monotone' a b := a.rec fun (ao, ac) => b.rec fun (bo, bc) h => by
+    obtain h | ⟨rfl, hle⟩ := Prod.Lex.le_iff.mp h
+    · induction ac using FiniteArchimedeanClass.ind with | mk a ha
+      induction bc using FiniteArchimedeanClass.ind with | mk b hb
+      simp only [ne_eq, ofLex_toLex, FiniteArchimedeanClass.liftOrderHom_mk]
+      rw [FiniteArchimedeanClass.mk_le_mk]; rw [archimedeanClassMk_le_archimedeanClassMk_iff]
+      exact .inl (by simpa [ha, hb] using! h)
+    · exact OrderHom.monotone _ hle
 
 中文:
 定义 finiteArchimedeanClassOrderHomInvLex
@@ -727,7 +902,14 @@ definition finiteArchimedeanClassOrderHomInvLex
     fun ⟨a, ha⟩ ⟨b, hb⟩ h => by
       rw [FiniteArchimedeanClass.mk_le_mk]; rw [archimedeanClassMk_le_archimedeanClassMk_iff]
       simpa [ha, hb] using! h
-  monotone' 
+  monotone' a b := a.rec fun (ao, ac) => b.rec fun (bo, bc) h => by
+    obtain h | ⟨rfl, hle⟩ := Prod.Lex.le_iff.mp h
+    · induction ac using FiniteArchimedeanClass.ind with | mk a ha
+      induction bc using FiniteArchimedeanClass.ind with | mk b hb
+      simp only [ne_eq, ofLex_toLex, FiniteArchimedeanClass.liftOrderHom_mk]
+      rw [FiniteArchimedeanClass.mk_le_mk]; rw [archimedeanClassMk_le_archimedeanClassMk_iff]
+      exact .inl (by simpa [ha, hb] using! h)
+    · exact OrderHom.monotone _ hle
 
 Depends on / 依赖: liftOrderHom
 -/
@@ -763,7 +945,13 @@ definition finiteArchimedeanClassOrderIsoLex
     cases x with | h x
     obtain ⟨order, coeff⟩ := x
     induction coeff using FiniteArchimedeanClass.ind with | mk a ha
-    simp [finiteArchimedeanClassOrderHomLex, finiteA
+    simp [finiteArchimedeanClassOrderHomLex, finiteArchimedeanClassOrderHomInvLex, ha]
+  · ext x
+    induction x using FiniteArchimedeanClass.ind with | mk a ha
+    simp [finiteArchimedeanClassOrderHomLex, finiteArchimedeanClassOrderHomInvLex,
+      archimedeanClassMk_eq_archimedeanClassMk_iff, ha]
+
+@[simp]
 
 中文:
 定义 finiteArchimedeanClassOrderIsoLex
@@ -775,7 +963,13 @@ definition finiteArchimedeanClassOrderIsoLex
     cases x with | h x
     obtain ⟨order, coeff⟩ := x
     induction coeff using FiniteArchimedeanClass.ind with | mk a ha
-    simp [finiteArchimedeanClassOrderHomLex, finiteA
+    simp [finiteArchimedeanClassOrderHomLex, finiteArchimedeanClassOrderHomInvLex, ha]
+  · ext x
+    induction x using FiniteArchimedeanClass.ind with | mk a ha
+    simp [finiteArchimedeanClassOrderHomLex, finiteArchimedeanClassOrderHomInvLex,
+      archimedeanClassMk_eq_archimedeanClassMk_iff, ha]
+
+@[simp]
 
 Depends on / 依赖: FiniteArchimedeanClass, FiniteArchimedeanClass.ind, OrderIso, OrderIso.ofHomInv, archimedeanClassMk_eq_archimedeanClassMk_i, finiteArchimedeanClassOrderHomInvLex, finiteArchimedeanClassOrderHomLex, ofHomInv
 -/
@@ -971,7 +1165,12 @@ instance [IsOrderedRing
     apply mul_nonneg
     · simpa
     · rwa [leadingCoeff_nonneg_iff]
-  mul_le_mul_of_nonneg_righ
+  mul_le_mul_of_nonneg_right a ha b c hbc := by
+    rw [← sub_nonneg] at hbc ⊢
+    rw [← sub_mul]; rw [← leadingCoeff_nonneg_iff]; rw [ofLex_mul]; rw [leadingCoeff_mul]
+    apply mul_nonneg
+    · rwa [leadingCoeff_nonneg_iff]
+    · simpa
 
 中文:
 实例 [是Ordered环
@@ -983,7 +1182,12 @@ instance [IsOrderedRing
     apply mul_nonneg
     · simpa
     · rwa [leadingCoeff_nonneg_iff]
-  mul_le_mul_of_nonneg_righ
+  mul_le_mul_of_nonneg_right a ha b c hbc := by
+    rw [← sub_nonneg] at hbc ⊢
+    rw [← sub_mul]; rw [← leadingCoeff_nonneg_iff]; rw [ofLex_mul]; rw [leadingCoeff_mul]
+    apply mul_nonneg
+    · rwa [leadingCoeff_nonneg_iff]
+    · simpa
 
 Depends on / 依赖: leadingCoeff_mul, leadingCoeff_nonneg_iff, mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_right, mul_nonneg, mul_sub, ofLex_mul, sub_mul, sub_nonneg
 -/
@@ -1035,7 +1239,21 @@ definition embDomainOrderEmbedding
     simp_rw [le_iff_lt_or_eq, lt_iff]
     simp only [Function.Embedding.coeFn_mk, ofLex_toLex, EmbeddingLike.apply_eq_iff_eq]
     constructor
-    · rintro (⟨i, hj, hi⟩
+    · rintro (⟨i, hj, hi⟩ | heq)
+      · have himem : i in Set.range f := by
+          contrapose hi
+          simp [embDomain_of_notMem_range hi]
+        obtain ⟨k, rfl⟩ := himem
+        refine Or.inl ⟨k, fun j hjk => ?_, by simpa using hi⟩
+        simpa using hj (f j) (f.lt_iff_lt.mpr hjk)
+· exact Or.inr embDomain_injective.comp (ofLex.injective) heq
+    · rintro (⟨i, hj, hi⟩ | rfl)
+      · refine Or.inl ⟨f i, fun k hki => ?_, by simpa using hi⟩
+        by_cases hkmem : k in Set.range f
+        · obtain ⟨j', rfl⟩ := hkmem
+simpa using hj _ f.lt_iff_lt.mp hki
+        · simp_rw [embDomain_of_notMem_range hkmem]
+      · simp
 
 中文:
 定义 embDomainOrderEmbedding
@@ -1046,7 +1264,21 @@ definition embDomainOrderEmbedding
     simp_rw [le_iff_lt_or_eq, lt_iff]
     simp only [Function.Embedding.coeFn_mk, ofLex_toLex, EmbeddingLike.apply_eq_iff_eq]
     constructor
-    · rintro (⟨i, hj, hi⟩
+    · rintro (⟨i, hj, hi⟩ | heq)
+      · have himem : i in Set.range f := by
+          contrapose hi
+          simp [embDomain_of_notMem_range hi]
+        obtain ⟨k, rfl⟩ := himem
+        refine Or.inl ⟨k, fun j hjk => ?_, by simpa using hi⟩
+        simpa using hj (f j) (f.lt_iff_lt.mpr hjk)
+· exact Or.inr embDomain_injective.comp (ofLex.injective) heq
+    · rintro (⟨i, hj, hi⟩ | rfl)
+      · refine Or.inl ⟨f i, fun k hki => ?_, by simpa using hi⟩
+        by_cases hkmem : k in Set.range f
+        · obtain ⟨j', rfl⟩ := hkmem
+simpa using hj _ f.lt_iff_lt.mp hki
+        · simp_rw [embDomain_of_notMem_range hkmem]
+      · simp
 
 Depends on / 依赖: embDomain
 -/

@@ -94,7 +94,7 @@ theorem withDensity_apply_le
     lintegral_mono_set (subset_toMeasurable (withDensity μ f) s)
   _ = μ.withDensity f t :=
     (withDensity_apply f (measurableSet_toMeasurable (withDensity μ f) s)).symm
-  _ = μ.withDensity f s := mea
+  _ = μ.withDensity f s := measure_toMeasurable s
 
 中文:
 定理 withDensity_apply_le
@@ -106,7 +106,7 @@ theorem withDensity_apply_le
     lintegral_mono_set (subset_toMeasurable (withDensity μ f) s)
   _ = μ.withDensity f t :=
     (withDensity_apply f (measurableSet_toMeasurable (withDensity μ f) s)).symm
-  _ = μ.withDensity f s := mea
+  _ = μ.withDensity f s := measure_toMeasurable s
 
 Depends on / 依赖: lintegral_mono_set, measurableSet_toMeasurable, measure_toMeasurable, subset_toMeasurable, toMeasurable, withDensity, withDensity_apply
 -/
@@ -134,7 +134,9 @@ theorem withDensity_apply'
   calc
   μ.withDensity f s <= μ.withDensity f t := measure_mono (subset_toMeasurable μ s)
   _ = ∫⁻ a in t, f a ∂μ := withDensity_apply f (measurableSet_toMeasurable μ s)
-  _ = ∫⁻ a in s, f a ∂μ := by congr 1; exact rest
+  _ = ∫⁻ a in s, f a ∂μ := by congr 1; exact restrict_toMeasurable_of_sFinite s
+
+@[simp]
 
 中文:
 定理 withDensity_apply'
@@ -145,7 +147,9 @@ theorem withDensity_apply'
   calc
   μ.withDensity f s <= μ.withDensity f t := measure_mono (subset_toMeasurable μ s)
   _ = ∫⁻ a in t, f a ∂μ := withDensity_apply f (measurableSet_toMeasurable μ s)
-  _ = ∫⁻ a in s, f a ∂μ := by congr 1; exact rest
+  _ = ∫⁻ a in s, f a ∂μ := by congr 1; exact restrict_toMeasurable_of_sFinite s
+
+@[simp]
 
 Depends on / 依赖: le_antisymm, measurableSet_toMeasurable, measure_mono, restrict_toMeasurable_of_sFinite, subset_toMeasurable, toMeasurable, withDensity, withDensity_apply, withDensity_apply_le
 -/
@@ -480,7 +484,7 @@ theorem withDensity_apply₀
   have B : μ.withDensity f t = μ.withDensity f s :=
     measure_congr (withDensity_absolutelyContinuous μ f hs.toMeasurable_ae_eq)
   rw [← A]; rw [← B]
-  exact withDensity_
+  exact withDensity_apply _ (measurableSet_toMeasurable μ s)
 
 中文:
 定理 withDensity_apply₀
@@ -492,7 +496,7 @@ theorem withDensity_apply₀
   have B : μ.withDensity f t = μ.withDensity f s :=
     measure_congr (withDensity_absolutelyContinuous μ f hs.toMeasurable_ae_eq)
   rw [← A]; rw [← B]
-  exact withDensity_
+  exact withDensity_apply _ (measurableSet_toMeasurable μ s)
 
 Depends on / 依赖: hs.toMeasurable_ae_eq, measurableSet_toMeasurable, measure_congr, setLIntegral_congr, toMeasurable, toMeasurable_ae_eq, withDensity, withDensity_absolutelyContinuous, withDensity_apply
 -/
@@ -712,7 +716,11 @@ theorem withDensity_ofReal_mutuallySingular
   have hS : MeasurableSet S := measurableSet_lt hf measurable_const
   refine ⟨S, hS, ?_, ?_⟩
   · rw [withDensity_apply _ hS, lintegral_eq_zero_iff hf.ennreal_ofReal, EventuallyEq]
-    exact (ae_restrict_mem hS).mono fun x hx => ENNReal.ofReal_eq_zero.2 (le_of_lt
+    exact (ae_restrict_mem hS).mono fun x hx => ENNReal.ofReal_eq_zero.2 (le_of_lt hx)
+  · rw [withDensity_apply _ hS.compl, lintegral_eq_zero_iff hf.fun_neg.ennreal_ofReal, EventuallyEq]
+    exact
+      (ae_restrict_mem hS.compl).mono fun x hx =>
+        ENNReal.ofReal_eq_zero.2 (not_lt.1 <| mt neg_pos.1 hx)
 
 中文:
 定理 withDensity_of实数_mutuallySingular
@@ -722,7 +730,11 @@ theorem withDensity_ofReal_mutuallySingular
   have hS : MeasurableSet S := measurableSet_lt hf measurable_const
   refine ⟨S, hS, ?_, ?_⟩
   · rw [withDensity_apply _ hS, lintegral_eq_zero_iff hf.ennreal_ofReal, EventuallyEq]
-    exact (ae_restrict_mem hS).mono fun x hx => ENNReal.ofReal_eq_zero.2 (le_of_lt
+    exact (ae_restrict_mem hS).mono fun x hx => ENNReal.ofReal_eq_zero.2 (le_of_lt hx)
+  · rw [withDensity_apply _ hS.compl, lintegral_eq_zero_iff hf.fun_neg.ennreal_ofReal, EventuallyEq]
+    exact
+      (ae_restrict_mem hS.compl).mono fun x hx =>
+        ENNReal.ofReal_eq_zero.2 (not_lt.1 <| mt neg_pos.1 hx)
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_eq_zero, EventuallyEq, MeasurableSet, ae_restrict_mem, ennreal_ofReal, fun_neg, hS.compl, hf.ennreal_ofReal, hf.fun_neg.ennreal_ofReal, le_of_lt, lintegral_eq_zero_iff, measurableSet_lt, measurable_const, neg_pos, not_lt, ofReal_eq_zero, withDensity_apply
 -/
@@ -875,7 +887,38 @@ theorem withDensity_apply_eq_zero'
     let t := toMeasurable (μ.withDensity f) s
     apply measure_mono_null (inter_subset_inter_right _ (subset_toMeasurable (μ.withDensity f) s))
     have A : μ.withDensity f t = 0 := by rw [measure_toMeasurable, hs]
-    rw [withDensity_apply f (measurableSet_toMeasurabl
+    rw [withDensity_apply f (measurableSet_toMeasurable _ s)]; rw [lintegral_eq_zero_iff' (AEMeasurable.restrict hf)]; rw [EventuallyEq]; rw [ae_restrict_iff'₀]; rw [ae_iff] at A
+    swap
+    · simp only [measurableSet_toMeasurable, MeasurableSet.nullMeasurableSet]
+    simp only [Pi.zero_apply] at A
+    convert! A using 2
+    ext x
+    simp only [and_comm, exists_prop, mem_inter_iff, mem_ofPred_eq,
+      not_forall]
+  · intro hs
+    let t := toMeasurable μ ({ x | f x != 0 } inter s)
+    have A : s subseteq t union { x | f x = 0 } := by
+      intro x hx
+      rcases eq_or_ne (f x) 0 with (fx | fx)
+      · simp only [fx, mem_union, mem_ofPred_eq, or_true]
+      · left
+        apply subset_toMeasurable _ _
+        exact ⟨fx, hx⟩
+    apply measure_mono_null A (measure_union_null _ _)
+    · apply withDensity_absolutelyContinuous
+      rwa [measure_toMeasurable]
+    rcases hf with ⟨g, hg, hfg⟩
+    have t : {x | f x = 0} =ᵐ[μ.withDensity f] {x | g x = 0} := by
+      apply withDensity_absolutelyContinuous
+      filter_upwards [hfg] with a ha
+      rw [eq_iff_iff]
+      exact ⟨fun h => by rw [h] at ha; exact ha.symm,
+             fun h => by rw [h] at ha; exact ha⟩
+    rw [measure_congr t]; rw [withDensity_congr_ae hfg]
+    have M : MeasurableSet { x : α | g x = 0 } := hg (measurableSet_singleton _)
+    rw [withDensity_apply _ M]; rw [lintegral_eq_zero_iff hg]
+    filter_upwards [ae_restrict_mem M]
+    simp only [imp_self, Pi.zero_apply, imp_true_iff]
 
 中文:
 定理 withDensity_apply_eq_zero'
@@ -886,7 +929,38 @@ theorem withDensity_apply_eq_zero'
     let t := toMeasurable (μ.withDensity f) s
     apply measure_mono_null (inter_subset_inter_right _ (subset_toMeasurable (μ.withDensity f) s))
     have A : μ.withDensity f t = 0 := by rw [measure_toMeasurable, hs]
-    rw [withDensity_apply f (measurableSet_toMeasurabl
+    rw [withDensity_apply f (measurableSet_toMeasurable _ s)]; rw [lintegral_eq_zero_iff' (AEMeasurable.restrict hf)]; rw [EventuallyEq]; rw [ae_restrict_iff'₀]; rw [ae_iff] at A
+    swap
+    · simp only [measurableSet_toMeasurable, MeasurableSet.nullMeasurableSet]
+    simp only [Pi.zero_apply] at A
+    convert! A using 2
+    ext x
+    simp only [and_comm, exists_prop, mem_inter_iff, mem_ofPred_eq,
+      not_forall]
+  · intro hs
+    let t := toMeasurable μ ({ x | f x != 0 } inter s)
+    have A : s subseteq t union { x | f x = 0 } := by
+      intro x hx
+      rcases eq_or_ne (f x) 0 with (fx | fx)
+      · simp only [fx, mem_union, mem_ofPred_eq, or_true]
+      · left
+        apply subset_toMeasurable _ _
+        exact ⟨fx, hx⟩
+    apply measure_mono_null A (measure_union_null _ _)
+    · apply withDensity_absolutelyContinuous
+      rwa [measure_toMeasurable]
+    rcases hf with ⟨g, hg, hfg⟩
+    have t : {x | f x = 0} =ᵐ[μ.withDensity f] {x | g x = 0} := by
+      apply withDensity_absolutelyContinuous
+      filter_upwards [hfg] with a ha
+      rw [eq_iff_iff]
+      exact ⟨fun h => by rw [h] at ha; exact ha.symm,
+             fun h => by rw [h] at ha; exact ha⟩
+    rw [measure_congr t]; rw [withDensity_congr_ae hfg]
+    have M : MeasurableSet { x : α | g x = 0 } := hg (measurableSet_singleton _)
+    rw [withDensity_apply _ M]; rw [lintegral_eq_zero_iff hg]
+    filter_upwards [ae_restrict_mem M]
+    simp only [imp_self, Pi.zero_apply, imp_true_iff]
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.restrict, EventuallyEq, MeasurableSet, MeasurableSet.nullMeasurableSet, Pi.ze, ae_iff, ae_restrict_iff, inter_subset_inter_right, lintegral_eq_zero_iff, measurableSet_toMeasurable, measure_mono_null, measure_toMeasurable, nullMeasurableSet, restrict, subset_toMeasurable, toMeasurable, withDensity, withDensity_apply
 -/
@@ -1011,7 +1085,12 @@ theorem ae_withDensity_iff_ae_restrict'
     have nonneg_eq_ae : {x | g x != 0} =ᵐ[μ] {x | f x != 0} := by
       filter_upwards [hfg] with a ha
       simp only [eq_iff_iff]
-      exact ⟨fun (h : g a != 0) => by rwa [← ha] at 
+      exact ⟨fun (h : g a != 0) => by rwa [← ha] at h,
+             fun (h : f a != 0) => by rwa [ha] at h⟩
+    exact NullMeasurableSet.congr
+      (MeasurableSet.nullMeasurableSet
+ hg (measurableSet_singleton _)).compl
+      nonneg_eq_ae
 
 中文:
 定理 ae_withDensity_iff_ae_restrict'
@@ -1023,7 +1102,12 @@ theorem ae_withDensity_iff_ae_restrict'
     have nonneg_eq_ae : {x | g x != 0} =ᵐ[μ] {x | f x != 0} := by
       filter_upwards [hfg] with a ha
       simp only [eq_iff_iff]
-      exact ⟨fun (h : g a != 0) => by rwa [← ha] at 
+      exact ⟨fun (h : g a != 0) => by rwa [← ha] at h,
+             fun (h : f a != 0) => by rwa [ha] at h⟩
+    exact NullMeasurableSet.congr
+      (MeasurableSet.nullMeasurableSet
+ hg (measurableSet_singleton _)).compl
+      nonneg_eq_ae
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.nullMeasurableSet, NullMeasurableSet, NullMeasurableSet.congr, ae_restrict_iff, ae_withDensity_iff, eq_iff_iff, filter_upwards, measurableSet_singleton, mem_ofPred, nonneg_eq_ae, nullMeasurableSet
 -/
@@ -1075,7 +1159,25 @@ theorem aemeasurable_withDensity_ennreal_iff'
   · rintro ⟨g', g'meas, hg'⟩
     have A : MeasurableSet {x | f' x != 0} := hf'_m (measurableSet_singleton _).compl
     refine ⟨fun x => f' x * g' x, hf'_m.coe_nnreal_ennreal.smul g'meas, ?_⟩
- 
+    apply ae_of_ae_restrict_of_ae_restrict_compl { x | f' x != 0 }
+    · rw [EventuallyEq, ae_withDensity_iff' hf.coe_nnreal_ennreal] at hg'
+      rw [ae_restrict_iff' A]
+      filter_upwards [hg', hf'_ae] with a ha h'a h_a_nonneg
+      have : (f' a : Real>=0∞) != 0 := by simpa only [Ne, ENNReal.coe_eq_zero] using h_a_nonneg
+      rw [← h'a] at this ⊢
+      rw [ha this]
+    · rw [ae_restrict_iff' A.compl]
+      filter_upwards [hf'_ae] with a ha ha_null
+      have ha_null : f' a = 0 := Function.notMem_support.mp ha_null
+      rw [ha_null] at ha ⊢
+      rw [ha]
+      simp only [ENNReal.coe_zero, zero_mul]
+  · rintro ⟨g', g'meas, hg'⟩
+    refine ⟨fun x => ((f' x)⁻¹ : Real>=0∞) * g' x, hf'_m.coe_nnreal_ennreal.inv.smul g'meas, ?_⟩
+    rw [EventuallyEq]; rw [ae_withDensity_iff' hf.coe_nnreal_ennreal]
+    filter_upwards [hg', hf'_ae] with a hfga hff'a h'a
+    rw [hff'a] at hfga h'a
+    rw [← hfga]; rw [← mul_assoc]; rw [ENNReal.inv_mul_cancel h'a ENNReal.coe_ne_top]; rw [one_mul]
 
 中文:
 定理 aemeasurable_withDensity_ennreal_iff'
@@ -1087,7 +1189,25 @@ theorem aemeasurable_withDensity_ennreal_iff'
   · rintro ⟨g', g'meas, hg'⟩
     have A : MeasurableSet {x | f' x != 0} := hf'_m (measurableSet_singleton _).compl
     refine ⟨fun x => f' x * g' x, hf'_m.coe_nnreal_ennreal.smul g'meas, ?_⟩
- 
+    apply ae_of_ae_restrict_of_ae_restrict_compl { x | f' x != 0 }
+    · rw [EventuallyEq, ae_withDensity_iff' hf.coe_nnreal_ennreal] at hg'
+      rw [ae_restrict_iff' A]
+      filter_upwards [hg', hf'_ae] with a ha h'a h_a_nonneg
+      have : (f' a : Real>=0∞) != 0 := by simpa only [Ne, ENNReal.coe_eq_zero] using h_a_nonneg
+      rw [← h'a] at this ⊢
+      rw [ha this]
+    · rw [ae_restrict_iff' A.compl]
+      filter_upwards [hf'_ae] with a ha ha_null
+      have ha_null : f' a = 0 := Function.notMem_support.mp ha_null
+      rw [ha_null] at ha ⊢
+      rw [ha]
+      simp only [ENNReal.coe_zero, zero_mul]
+  · rintro ⟨g', g'meas, hg'⟩
+    refine ⟨fun x => ((f' x)⁻¹ : Real>=0∞) * g' x, hf'_m.coe_nnreal_ennreal.inv.smul g'meas, ?_⟩
+    rw [EventuallyEq]; rw [ae_withDensity_iff' hf.coe_nnreal_ennreal]
+    filter_upwards [hg', hf'_ae] with a hfga hff'a h'a
+    rw [hff'a] at hfga h'a
+    rw [← hfga]; rw [← mul_assoc]; rw [ENNReal.inv_mul_cancel h'a ENNReal.coe_ne_top]; rw [one_mul]
 
 Depends on / 依赖: EventuallyEq, Measurable, MeasurableSet, _m.coe_nnreal_ennreal.smul, ae_of_ae_restrict_of_ae_restrict_compl, ae_restrict_iff, ae_withDensity_iff, coe_nnreal_ennreal, filter_upwards, h_a_nonneg, hf.coe_nnreal_ennreal, measurableSet_singleton
 -/
@@ -1291,7 +1411,8 @@ theorem lintegral_withDensity_eq_lintegral_mul
   · intro g h _ h_mea_g _ h_ind_g h_ind_h
     simp [mul_add, *, Measurable.fun_mul]
   · intro g h_mea_g h_mono_g h_ind
-    have : Monotone fun n a => f a * g n a := fun m n hmn x => by dsimp;
+    have : Monotone fun n a => f a * g n a := fun m n hmn x => by dsimp; grw [h_mono_g hmn x]
+    simp [lintegral_iSup, ENNReal.mul_iSup, h_mf.fun_mul (h_mea_g _), *]
 
 中文:
 定理 lintegral_withDensity_eq_lintegral_mul
@@ -1303,7 +1424,8 @@ theorem lintegral_withDensity_eq_lintegral_mul
   · intro g h _ h_mea_g _ h_ind_g h_ind_h
     simp [mul_add, *, Measurable.fun_mul]
   · intro g h_mea_g h_mono_g h_ind
-    have : Monotone fun n a => f a * g n a := fun m n hmn x => by dsimp;
+    have : Monotone fun n a => f a * g n a := fun m n hmn x => by dsimp; grw [h_mono_g hmn x]
+    simp [lintegral_iSup, ENNReal.mul_iSup, h_mf.fun_mul (h_mea_g _), *]
 
 Depends on / 依赖: ENNReal, ENNReal.mul_iSup, Measurable, Measurable.ennreal_induction, Measurable.fun_mul, Monotone, ennreal_induction, fun_mul, h_ind, h_ind_g, h_ind_h, h_mea_g, h_mf, h_mf.fun_mul, h_mono_g, h_ms, indicator_mul_right, lintegral_iSup, mul_add, mul_comm
 -/
@@ -1355,7 +1477,26 @@ theorem lintegral_withDensity_eq_lintegral_mul₀'
   calc
     ∫⁻ a, g a ∂μ.withDensity f' = ∫⁻ a, g' a ∂μ.withDensity f' := lintegral_congr_ae hg.ae_eq_mk
     _ = ∫⁻ a, (f' * g') a ∂μ :=
-      (lintegral_with
+      (lintegral_withDensity_eq_lintegral_mul _ hf.measurable_mk hg.measurable_mk)
+    _ = ∫⁻ a, (f' * g) a ∂μ := by
+      apply lintegral_congr_ae
+      apply ae_of_ae_restrict_of_ae_restrict_compl { x | f' x != 0 }
+      · have Z := hg.ae_eq_mk
+        rw [EventuallyEq]; rw [ae_withDensity_iff_ae_restrict hf.measurable_mk] at Z
+        filter_upwards [Z]
+        intro x hx
+        simp only [g', hx, Pi.mul_apply]
+      · have M : MeasurableSet { x : α | f' x != 0 }ᶜ :=
+          (hf.measurable_mk (measurableSet_singleton 0).compl).compl
+        filter_upwards [ae_restrict_mem M]
+        intro x hx
+        simp only [Classical.not_not, mem_ofPred_eq, mem_compl_iff] at hx
+        simp only [hx, zero_mul, Pi.mul_apply]
+    _ = ∫⁻ a : α, (f * g) a ∂μ := by
+      apply lintegral_congr_ae
+      filter_upwards [hf.ae_eq_mk]
+      intro x hx
+      simp only [f', hx, Pi.mul_apply]
 
 中文:
 定理 lintegral_withDensity_eq_lintegral_mul₀'
@@ -1368,7 +1509,26 @@ theorem lintegral_withDensity_eq_lintegral_mul₀'
   calc
     ∫⁻ a, g a ∂μ.withDensity f' = ∫⁻ a, g' a ∂μ.withDensity f' := lintegral_congr_ae hg.ae_eq_mk
     _ = ∫⁻ a, (f' * g') a ∂μ :=
-      (lintegral_with
+      (lintegral_withDensity_eq_lintegral_mul _ hf.measurable_mk hg.measurable_mk)
+    _ = ∫⁻ a, (f' * g) a ∂μ := by
+      apply lintegral_congr_ae
+      apply ae_of_ae_restrict_of_ae_restrict_compl { x | f' x != 0 }
+      · have Z := hg.ae_eq_mk
+        rw [EventuallyEq]; rw [ae_withDensity_iff_ae_restrict hf.measurable_mk] at Z
+        filter_upwards [Z]
+        intro x hx
+        simp only [g', hx, Pi.mul_apply]
+      · have M : MeasurableSet { x : α | f' x != 0 }ᶜ :=
+          (hf.measurable_mk (measurableSet_singleton 0).compl).compl
+        filter_upwards [ae_restrict_mem M]
+        intro x hx
+        simp only [Classical.not_not, mem_ofPred_eq, mem_compl_iff] at hx
+        simp only [hx, zero_mul, Pi.mul_apply]
+    _ = ∫⁻ a : α, (f * g) a ∂μ := by
+      apply lintegral_congr_ae
+      filter_upwards [hf.ae_eq_mk]
+      intro x hx
+      simp only [f', hx, Pi.mul_apply]
 
 Depends on / 依赖: EventuallyEq, ae_eq_mk, ae_of_ae_restrict_of_ae_restrict_compl, hf.ae_eq_mk, hf.measurable_mk, hf.mk, hg.ae_eq_mk, hg.measurable_mk, hg.mk, lintegral_congr_ae, lintegral_withDensity_eq_lintegral_mul, measurable_mk, withDensity, withDensity_congr_ae
 -/
@@ -1486,7 +1646,7 @@ theorem lintegral_withDensity_le_lintegral_mul
   rw [← iSup_lintegral_measurable_le_eq_lintegral]; rw [← iSup_lintegral_measurable_le_eq_lintegral]
   refine iSup₂_le fun i i_meas => iSup_le fun hi => ?_
   rw [lintegral_withDensity_eq_lintegral_mul _ f_meas i_meas]
-exact le_iSup₂_of_le (f * i) (f_meas.mul i_meas) le_iSup_of_le (by grw [hi]) le
+exact le_iSup₂_of_le (f * i) (f_meas.mul i_meas) le_iSup_of_le (by grw [hi]) le_rfl
 
 中文:
 定理 lintegral_withDensity_le_lintegral_mul
@@ -1495,7 +1655,7 @@ exact le_iSup₂_of_le (f * i) (f_meas.mul i_meas) le_iSup_of_le (by grw [hi]) l
   rw [← iSup_lintegral_measurable_le_eq_lintegral]; rw [← iSup_lintegral_measurable_le_eq_lintegral]
   refine iSup₂_le fun i i_meas => iSup_le fun hi => ?_
   rw [lintegral_withDensity_eq_lintegral_mul _ f_meas i_meas]
-exact le_iSup₂_of_le (f * i) (f_meas.mul i_meas) le_iSup_of_le (by grw [hi]) le
+exact le_iSup₂_of_le (f * i) (f_meas.mul i_meas) le_iSup_of_le (by grw [hi]) le_rfl
 
 Depends on / 依赖: f_meas, f_meas.mul, iSup_le, iSup_lintegral_measurable_le_eq_lintegral, i_meas, le_iSup_of_le, le_rfl, lintegral_withDensity_eq_lintegral_mul
 -/
@@ -1518,7 +1678,22 @@ theorem lintegral_withDensity_eq_lintegral_mul_non_measurable
   refine iSup₂_le fun i i_meas => iSup_le fun hi => ?_
   have A : (fun x => (f x)⁻¹ * i x) <= g := by
     intro x
-    ds
+    dsimp
+    rw [mul_comm]; rw [← div_eq_mul_inv]
+    exact div_le_of_le_mul' (hi x)
+  refine le_iSup_of_le (fun x => (f x)⁻¹ * i x) (le_iSup_of_le (f_meas.fun_inv.mul i_meas) ?_)
+  refine le_iSup_of_le A ?_
+  rw [lintegral_withDensity_eq_lintegral_mul _ f_meas (f_meas.fun_inv.fun_mul i_meas)]
+  apply lintegral_mono_ae
+  filter_upwards [hf]
+  intro x h'x
+  rcases eq_or_ne (f x) 0 with (hx | hx)
+  · have := hi x
+    simp only [hx, zero_mul, Pi.mul_apply, nonpos_iff_eq_zero] at this
+    simp [this]
+  · apply le_of_eq _
+    dsimp
+    rw [← mul_assoc]; rw [ENNReal.mul_inv_cancel hx h'x.ne]; rw [one_mul]
 
 中文:
 定理 lintegral_withDensity_eq_lintegral_mul_non_measurable
@@ -1529,7 +1704,22 @@ theorem lintegral_withDensity_eq_lintegral_mul_non_measurable
   refine iSup₂_le fun i i_meas => iSup_le fun hi => ?_
   have A : (fun x => (f x)⁻¹ * i x) <= g := by
     intro x
-    ds
+    dsimp
+    rw [mul_comm]; rw [← div_eq_mul_inv]
+    exact div_le_of_le_mul' (hi x)
+  refine le_iSup_of_le (fun x => (f x)⁻¹ * i x) (le_iSup_of_le (f_meas.fun_inv.mul i_meas) ?_)
+  refine le_iSup_of_le A ?_
+  rw [lintegral_withDensity_eq_lintegral_mul _ f_meas (f_meas.fun_inv.fun_mul i_meas)]
+  apply lintegral_mono_ae
+  filter_upwards [hf]
+  intro x h'x
+  rcases eq_or_ne (f x) 0 with (hx | hx)
+  · have := hi x
+    simp only [hx, zero_mul, Pi.mul_apply, nonpos_iff_eq_zero] at this
+    simp [this]
+  · apply le_of_eq _
+    dsimp
+    rw [← mul_assoc]; rw [ENNReal.mul_inv_cancel hx h'x.ne]; rw [one_mul]
 
 Depends on / 依赖: div_eq_mul_inv, div_le_of_le_mul, f_meas, f_meas.fun_inv.mul, fun_inv, iSup_le, iSup_lintegral_measurable_le_eq_lintegral, i_meas, isGLB_sInf, le_antisymm, le_iSup_of_le, lintegral_withDensity, lintegral_withDensity_le_lintegral_mul, mul_comm
 -/
@@ -1595,7 +1785,13 @@ theorem lintegral_withDensity_eq_lintegral_mul_non_measurable₀
     _ = ∫⁻ a, (f' * g) a ∂μ := by
       apply lintegral_withDensity_eq_lintegral_mul_non_measurable _ hf.measurable_mk
       filter_upwards [h'f, hf.ae_eq_mk]
-
+      intro x hx h'x
+      rwa [← h'x]
+    _ = ∫⁻ a, (f * g) a ∂μ := by
+      apply lintegral_congr_ae
+      filter_upwards [hf.ae_eq_mk]
+      intro x hx
+      simp only [f', hx, Pi.mul_apply]
 
 中文:
 定理 lintegral_withDensity_eq_lintegral_mul_non_measurable₀
@@ -1608,7 +1804,13 @@ theorem lintegral_withDensity_eq_lintegral_mul_non_measurable₀
     _ = ∫⁻ a, (f' * g) a ∂μ := by
       apply lintegral_withDensity_eq_lintegral_mul_non_measurable _ hf.measurable_mk
       filter_upwards [h'f, hf.ae_eq_mk]
-
+      intro x hx h'x
+      rwa [← h'x]
+    _ = ∫⁻ a, (f * g) a ∂μ := by
+      apply lintegral_congr_ae
+      filter_upwards [hf.ae_eq_mk]
+      intro x hx
+      simp only [f', hx, Pi.mul_apply]
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.toPartialOrder, PartialOrder, Pi.mul_apply, ae_eq_mk, filter_upwards, hf.ae_eq_mk, hf.measurable_mk, hf.mk, lintegral_congr_ae, lintegral_withDensity_eq_lintegral_mul_non_measurable, measurable_mk, mul_apply, toPartialOrder, withDensity, withDensity_congr_ae
 -/
@@ -1771,7 +1973,7 @@ lemma withDensity_inv_same₀
     rw [withDensity_congr_ae this]; rw [withDensity_one]
   filter_upwards [hf_ne_zero, hf_ne_top] with x hf_ne_zero hf_ne_top
   simp only [Pi.mul_apply]
-  rw [ENNReal.mul_inv_cancel hf_ne_zero hf_ne_top]; rw [Pi.
+  rw [ENNReal.mul_inv_cancel hf_ne_zero hf_ne_top]; rw [Pi.one_apply]
 
 中文:
 引理 withDensity_inv_same₀
@@ -1782,7 +1984,7 @@ lemma withDensity_inv_same₀
     rw [withDensity_congr_ae this]; rw [withDensity_one]
   filter_upwards [hf_ne_zero, hf_ne_top] with x hf_ne_zero hf_ne_top
   simp only [Pi.mul_apply]
-  rw [ENNReal.mul_inv_cancel hf_ne_zero hf_ne_top]; rw [Pi.
+  rw [ENNReal.mul_inv_cancel hf_ne_zero hf_ne_top]; rw [Pi.one_apply]
 
 Depends on / 依赖: ENNReal, ENNReal.mul_inv_cancel, Pi.mul_apply, Pi.one_apply, filter_upwards, fun_inv, hf.fun_inv, hf_ne_top, hf_ne_zero, mul_apply, mul_inv_cancel, one_apply, withDensity_congr_ae, withDensity_one
 -/
@@ -1825,7 +2027,12 @@ lemma withDensity_absolutelyContinuous'
   proof: by
   refine Measure.AbsolutelyContinuous.mk (fun s hs hμs => ?_)
   rw [withDensity_apply _ hs]; rw [lintegral_eq_zero_iff' hf.restrict]; rw [ae_eq_restrict_iff_indicator_ae_eq hs]; rw [Set.indicator_zero']; rw [Filter.EventuallyEq]; rw [ae_iff] at hμs
-  simp only [ae_iff, ne_eq, not_not] at hf_ne_ze
+  simp only [ae_iff, ne_eq, not_not] at hf_ne_zero
+  simp only [Pi.zero_apply, Set.indicator_apply_eq_zero, not_forall, exists_prop] at hμs
+  have hle : s subseteq {a | a in s ∧ ¬f a = 0} union {a | f a = 0} :=
+fun x hx => or_iff_not_imp_right.mpr fun hnx => ⟨hx, hnx⟩
+exact measure_mono_null hle nonpos_iff_eq_zero.1 le_trans (measure_union_le _ _)
+ .symm ▸ hf_ne_zero.le hμs.symm ▸ zero_add _
 
 中文:
 引理 withDensity_absolutelyContinuous'
@@ -1833,7 +2040,12 @@ lemma withDensity_absolutelyContinuous'
   证明: by
   refine Measure.AbsolutelyContinuous.mk (fun s hs hμs => ?_)
   rw [withDensity_apply _ hs]; rw [lintegral_eq_zero_iff' hf.restrict]; rw [ae_eq_restrict_iff_indicator_ae_eq hs]; rw [Set.indicator_zero']; rw [Filter.EventuallyEq]; rw [ae_iff] at hμs
-  simp only [ae_iff, ne_eq, not_not] at hf_ne_ze
+  simp only [ae_iff, ne_eq, not_not] at hf_ne_zero
+  simp only [Pi.zero_apply, Set.indicator_apply_eq_zero, not_forall, exists_prop] at hμs
+  have hle : s subseteq {a | a in s ∧ ¬f a = 0} union {a | f a = 0} :=
+fun x hx => or_iff_not_imp_right.mpr fun hnx => ⟨hx, hnx⟩
+exact measure_mono_null hle nonpos_iff_eq_zero.1 le_trans (measure_union_le _ _)
+ .symm ▸ hf_ne_zero.le hμs.symm ▸ zero_add _
 
 Depends on / 依赖: AbsolutelyContinuous, EventuallyEq, Filter, Filter.EventuallyEq, Measure, Measure.AbsolutelyContinuous.mk, Pi.zero_apply, Set.indicator_apply_eq_zero, Set.indicator_zero, ae_eq_restrict_iff_indicator_ae_eq, ae_iff, exists_prop, hf.restrict, hf_ne_zero, indicator_apply_eq_zero, indicator_zero, lintegral_eq_zero_iff, ne_eq, not_forall, not_not
 -/
@@ -1892,7 +2104,11 @@ instance SigmaFinite.withDensity
   · rw [withDensity_apply']
     apply setLIntegral_lt_top_of_bddAbove
     · exact ((measure_mono inter_subset_left).trans_lt (measure_spanningSets_lt_top μ n)).ne
-    · exact ⟨n, forall_mem_image.2 fun
+    · exact ⟨n, forall_mem_image.2 fun x hx => hx.2⟩
+  · rw [iUnion_eq_univ_iff]
+    refine fun x => ⟨max (spanningSetsIndex μ x) ⌈f x⌉₊, ?_, ?_⟩
+    · exact mem_spanningSets_of_index_le _ _ (le_max_left ..)
+    · simp [Nat.le_ceil]
 
 中文:
 实例 σ有限.withDensity
@@ -1902,7 +2118,11 @@ instance SigmaFinite.withDensity
   · rw [withDensity_apply']
     apply setLIntegral_lt_top_of_bddAbove
     · exact ((measure_mono inter_subset_left).trans_lt (measure_spanningSets_lt_top μ n)).ne
-    · exact ⟨n, forall_mem_image.2 fun
+    · exact ⟨n, forall_mem_image.2 fun x hx => hx.2⟩
+  · rw [iUnion_eq_univ_iff]
+    refine fun x => ⟨max (spanningSetsIndex μ x) ⌈f x⌉₊, ?_, ?_⟩
+    · exact mem_spanningSets_of_index_le _ _ (le_max_left ..)
+    · simp [Nat.le_ceil]
 -/
 protected instance SigmaFinite.withDensity [SigmaFinite μ] (f : α -> Real>=0) :
     SigmaFinite (μ.withDensity (fun x => f x)) := by
@@ -2026,7 +2246,27 @@ instance Measure.withDensity.instSFinite
     exact h ▸ this hgm
   wlog hμ : IsFiniteMeasure μ generalizing μ
   · rw [← sum_sfiniteSeq μ, withDensity_sum]
-    have (n : Nat) : SFinite ((sfiniteSeq μ n).withDensity f) := this in
+    have (n : Nat) : SFinite ((sfiniteSeq μ n).withDensity f) := this inferInstance
+    infer_instance
+  set s := {x | f x = ∞}
+  have hs : MeasurableSet s := hfm (measurableSet_singleton _)
+  have key := calc
+    μ.withDensity f = μ.withDensity (sᶜ.indicator f) + μ.withDensity (s.indicator f) := by
+      simp (disch := measurability) [withDensity_indicator, ← restrict_withDensity]
+    _ = μ.withDensity (sᶜ.indicator f) + .sum fun _ : Nat => μ.withDensity (s.indicator 1) := by
+      rw [← withDensity_tsum (by measurability)]
+      congr 2 with x
+      rw [ENNReal.tsum_apply]
+      if hx : x in s then simpa [hx, ENNReal.tsum_const_eq_top_of_ne_zero]
+      else simp [hx]
+  have : SigmaFinite (μ.withDensity (sᶜ.indicator f)) := by
+refine SigmaFinite.withDensity_of_ne_top ae_of_all _ fun x hx => ?_
+    simp [indicator_apply, ite_eq_iff, s] at hx
+  have : SigmaFinite (μ.withDensity (s.indicator 1)) := by
+    rw [withDensity_indicator hs]
+    exact SigmaFinite.withDensity 1
+  rw [key]
+  infer_instance
 
 中文:
 实例 测度.withDensity.instSFinite
@@ -2037,7 +2277,27 @@ instance Measure.withDensity.instSFinite
     exact h ▸ this hgm
   wlog hμ : IsFiniteMeasure μ generalizing μ
   · rw [← sum_sfiniteSeq μ, withDensity_sum]
-    have (n : Nat) : SFinite ((sfiniteSeq μ n).withDensity f) := this in
+    have (n : Nat) : SFinite ((sfiniteSeq μ n).withDensity f) := this inferInstance
+    infer_instance
+  set s := {x | f x = ∞}
+  have hs : MeasurableSet s := hfm (measurableSet_singleton _)
+  have key := calc
+    μ.withDensity f = μ.withDensity (sᶜ.indicator f) + μ.withDensity (s.indicator f) := by
+      simp (disch := measurability) [withDensity_indicator, ← restrict_withDensity]
+    _ = μ.withDensity (sᶜ.indicator f) + .sum fun _ : Nat => μ.withDensity (s.indicator 1) := by
+      rw [← withDensity_tsum (by measurability)]
+      congr 2 with x
+      rw [ENNReal.tsum_apply]
+      if hx : x in s then simpa [hx, ENNReal.tsum_const_eq_top_of_ne_zero]
+      else simp [hx]
+  have : SigmaFinite (μ.withDensity (sᶜ.indicator f)) := by
+refine SigmaFinite.withDensity_of_ne_top ae_of_all _ fun x hx => ?_
+    simp [indicator_apply, ite_eq_iff, s] at hx
+  have : SigmaFinite (μ.withDensity (s.indicator 1)) := by
+    rw [withDensity_indicator hs]
+    exact SigmaFinite.withDensity 1
+  rw [key]
+  infer_instance
 
 Depends on / 依赖: IsFiniteMeasure, Measurable, MeasurableSet, SFinite, exists_measurable_le_withDensity_eq, generalizing, indicator, infer_instance, measurableSet_singleton, s.indicator, sfiniteSeq, sum_sfiniteSeq, withDensity, withDensity_sum
 -/
@@ -2163,7 +2423,9 @@ theorem prod_withDensity_left₀
   refine ext_of_lintegral _ fun φ hφ => ?_
   rw [lintegral_prod _ hφ.aemeasurable]; rw [lintegral_withDensity_eq_lintegral_mul₀ hf]; rw [lintegral_withDensity_eq_lintegral_mul₀ _ hφ.aemeasurable]; rw [lintegral_prod]
   · refine lintegral_congr (fun x => ?_)
-    rw [Pi.mul_apply]; rw [← lintegral_
+    rw [Pi.mul_apply]; rw [← lintegral_const_mul'' _ (by fun_prop)]
+    simp
+  all_goals fun_prop (disch := intro _ hs; simp [hs])
 
 中文:
 定理 prod_withDensity_left₀
@@ -2172,7 +2434,9 @@ theorem prod_withDensity_left₀
   refine ext_of_lintegral _ fun φ hφ => ?_
   rw [lintegral_prod _ hφ.aemeasurable]; rw [lintegral_withDensity_eq_lintegral_mul₀ hf]; rw [lintegral_withDensity_eq_lintegral_mul₀ _ hφ.aemeasurable]; rw [lintegral_prod]
   · refine lintegral_congr (fun x => ?_)
-    rw [Pi.mul_apply]; rw [← lintegral_
+    rw [Pi.mul_apply]; rw [← lintegral_const_mul'' _ (by fun_prop)]
+    simp
+  all_goals fun_prop (disch := intro _ hs; simp [hs])
 
 Depends on / 依赖: Pi.mul_apply, aemeasurable, all_goals, ext_of_lintegral, fun_prop, lintegral_congr, lintegral_const_mul, lintegral_prod, mul_apply
 -/
@@ -2216,7 +2480,7 @@ theorem prod_withDensity_right₀
   · refine lintegral_congr (fun x => ?_)
     rw [lintegral_withDensity_eq_lintegral_mul₀ hg (by fun_prop)]
     simp
-  all_goals f
+  all_goals fun_prop (disch := intro _ hs; simp [hs])
 
 中文:
 定理 prod_withDensity_right₀
@@ -2227,7 +2491,7 @@ theorem prod_withDensity_right₀
   · refine lintegral_congr (fun x => ?_)
     rw [lintegral_withDensity_eq_lintegral_mul₀ hg (by fun_prop)]
     simp
-  all_goals f
+  all_goals fun_prop (disch := intro _ hs; simp [hs])
 
 Depends on / 依赖: aemeasurable, all_goals, ext_of_lintegral, fun_prop, lintegral_congr, lintegral_prod
 -/
@@ -2357,7 +2621,7 @@ lemma IsLocallyFiniteMeasure.withDensity_coe
     ((hf.tendsto x).eventually_le_const (lt_add_one _))) with ⟨U, ⟨⟨hUx, hUo⟩, hUf⟩, hμU⟩
   refine ⟨U, hUx, ?_⟩
   rw [withDensity_apply _ hUo.measurableSet]
-  exact setLIntegral_lt_top_of_b
+  exact setLIntegral_lt_top_of_bddAbove hμU.ne ⟨f x + 1, forall_mem_image.2 hUf⟩
 
 中文:
 引理 是局部有限测度.withDensity_coe
@@ -2368,7 +2632,7 @@ lemma IsLocallyFiniteMeasure.withDensity_coe
     ((hf.tendsto x).eventually_le_const (lt_add_one _))) with ⟨U, ⟨⟨hUx, hUo⟩, hUf⟩, hμU⟩
   refine ⟨U, hUx, ?_⟩
   rw [withDensity_apply _ hUo.measurableSet]
-  exact setLIntegral_lt_top_of_b
+  exact setLIntegral_lt_top_of_bddAbove hμU.ne ⟨f x + 1, forall_mem_image.2 hUf⟩
 
 Depends on / 依赖: U.ne, eventually_le_const, exists_mem_basis, finiteAt_nhds, forall_mem_image, hUo.measurableSet, hf.tendsto, lt_add_one, measurableSet, nhds_basis_opens, restrict_subset, setLIntegral_lt_top_of_bddAbove, tendsto, withDensity_apply
 -/
@@ -2443,14 +2707,24 @@ theorem mconv_withDensity_eq_mlconvolution₀
   statement: {f g : G -> Real>=0∞}
   proof: by
   refine ext_of_lintegral _ fun φ hφ => ?_
-  rw [lintegral_mconv_eq_lintegral_prod hφ]; rw [prod_withDensity₀ hf hg]; rw [lintegral_withDensity_eq_lintegral_mul₀]; rw [lintegral_withDensity_eq_lintegral_mul₀]; rw [lintegral_prod]; rw [lintegral_congr (fun x => by apply (lintegral_mul_left_eq_self
+  rw [lintegral_mconv_eq_lintegral_prod hφ]; rw [prod_withDensity₀ hf hg]; rw [lintegral_withDensity_eq_lintegral_mul₀]; rw [lintegral_withDensity_eq_lintegral_mul₀]; rw [lintegral_prod]; rw [lintegral_congr (fun x => by apply (lintegral_mul_left_eq_self _ x⁻¹).symm)]; rw [lintegral_lintegral_swap]
+  · simp only [Pi.mul_apply, mul_inv_cancel_left, mlconvolution_def]
+    conv in (∫⁻ _, _ ∂μ) * φ _ => rw [(lintegral_mul_const'' _ (by fun_prop)).symm]
+  all_goals first | fun_prop | dsimp; fun_prop
+
+@[to_additive]
 
 中文:
 定理 mconv_withDensity_eq_mlconvolution₀
   结论: {f g : G -> 实数>=0∞}
   证明: by
   refine ext_of_lintegral _ fun φ hφ => ?_
-  rw [lintegral_mconv_eq_lintegral_prod hφ]; rw [prod_withDensity₀ hf hg]; rw [lintegral_withDensity_eq_lintegral_mul₀]; rw [lintegral_withDensity_eq_lintegral_mul₀]; rw [lintegral_prod]; rw [lintegral_congr (fun x => by apply (lintegral_mul_left_eq_self
+  rw [lintegral_mconv_eq_lintegral_prod hφ]; rw [prod_withDensity₀ hf hg]; rw [lintegral_withDensity_eq_lintegral_mul₀]; rw [lintegral_withDensity_eq_lintegral_mul₀]; rw [lintegral_prod]; rw [lintegral_congr (fun x => by apply (lintegral_mul_left_eq_self _ x⁻¹).symm)]; rw [lintegral_lintegral_swap]
+  · simp only [Pi.mul_apply, mul_inv_cancel_left, mlconvolution_def]
+    conv in (∫⁻ _, _ ∂μ) * φ _ => rw [(lintegral_mul_const'' _ (by fun_prop)).symm]
+  all_goals first | fun_prop | dsimp; fun_prop
+
+@[to_additive]
 
 Depends on / 依赖: Pi.mul_apply, all_goals, ext_of_lintegral, fun_prop, lintegral_congr, lintegral_lintegral_swap, lintegral_mconv_eq_lintegral_prod, lintegral_mul_const, lintegral_mul_left_eq_self, lintegral_prod, mlconvolution_def, mul_apply, mul_inv_cancel_left
 -/

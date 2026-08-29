@@ -623,7 +623,8 @@ instance :
     simp_rw [HPow.hPow, Pow.pow]
     simp_rw [map_def, pow_zero, one_def i]
   npow_succ n := DirectLimit.induction _ fun i _ => by
-    simp_rw [HPow.h
+    simp_rw [HPow.hPow, Pow.pow]
+    simp_rw [map_def, pow_succ, mul_def]
 
 中文:
 实例 :
@@ -635,7 +636,8 @@ instance :
     simp_rw [HPow.hPow, Pow.pow]
     simp_rw [map_def, pow_zero, one_def i]
   npow_succ n := DirectLimit.induction _ fun i _ => by
-    simp_rw [HPow.h
+    simp_rw [HPow.hPow, Pow.pow]
+    simp_rw [map_def, pow_succ, mul_def]
 -/
 @[to_additive] instance : Monoid (DirectLimit G f) where
   one_mul := one_mul
@@ -747,7 +749,15 @@ instance :
   div := map₂ _ _ _ (fun _ => (· / ·)) fun _ _ _ => map_div _
   zpow n := map _ _ (fun _ => (· ^ n)) fun _ _ _ x => map_zpow _ x n
   div_eq_mul_inv := DirectLimit.induction₂ _ fun i _ _ => show map₂ .. = _ * map .. by
-    simp_rw [map₂_def, map_def, di
+    simp_rw [map₂_def, map_def, div_eq_mul_inv, mul_def]
+  zpow_zero' := DirectLimit.induction _ fun i _ => by
+    simp_rw [HPow.hPow, Pow.pow, map_def, zpow_zero, one_def i]
+  zpow_succ' n := DirectLimit.induction _ fun i x => by
+    simp_rw [HPow.hPow, Pow.pow, map_def, mul_def]; congr; apply DivInvMonoid.zpow_succ'
+  zpow_neg' n := DirectLimit.induction _ fun i x => by
+    simp_rw [HPow.hPow, Pow.pow, map_def]; congr; apply DivInvMonoid.zpow_neg'
+  inv_mul_cancel := DirectLimit.induction _ fun i _ => by
+    simp_rw [map_def, mul_def, inv_mul_cancel, one_def i]
 
 中文:
 实例 :
@@ -756,7 +766,15 @@ instance :
   div := map₂ _ _ _ (fun _ => (· / ·)) fun _ _ _ => map_div _
   zpow n := map _ _ (fun _ => (· ^ n)) fun _ _ _ x => map_zpow _ x n
   div_eq_mul_inv := DirectLimit.induction₂ _ fun i _ _ => show map₂ .. = _ * map .. by
-    simp_rw [map₂_def, map_def, di
+    simp_rw [map₂_def, map_def, div_eq_mul_inv, mul_def]
+  zpow_zero' := DirectLimit.induction _ fun i _ => by
+    simp_rw [HPow.hPow, Pow.pow, map_def, zpow_zero, one_def i]
+  zpow_succ' n := DirectLimit.induction _ fun i x => by
+    simp_rw [HPow.hPow, Pow.pow, map_def, mul_def]; congr; apply DivInvMonoid.zpow_succ'
+  zpow_neg' n := DirectLimit.induction _ fun i x => by
+    simp_rw [HPow.hPow, Pow.pow, map_def]; congr; apply DivInvMonoid.zpow_neg'
+  inv_mul_cancel := DirectLimit.induction _ fun i _ => by
+    simp_rw [map_def, mul_def, inv_mul_cancel, one_def i]
 -/
 @[to_additive] instance : Group (DirectLimit G f) where
   inv := map _ _ (fun _ => (·⁻¹)) fun _ _ _ => map_inv _
@@ -1069,7 +1087,17 @@ instance :
   div := map₂ _ _ _ (fun _ => (· / ·)) fun _ _ _ => map_div₀ _
   zpow n := map _ _ (fun _ => (· ^ n)) fun _ _ _ x => map_zpow₀ _ x n
   div_eq_mul_inv := DirectLimit.induction₂ _ fun i _ _ => show map₂ .. = _ * map .. by
-    simp_rw [map₂_def, map_def,
+    simp_rw [map₂_def, map_def, div_eq_mul_inv, mul_def]
+  zpow_zero' := DirectLimit.induction _ fun i _ => by
+    simp_rw [HPow.hPow, Pow.pow, map_def, zpow_zero, one_def i]
+  zpow_succ' n := DirectLimit.induction _ fun i x => by
+    simp_rw [HPow.hPow, Pow.pow, map_def, mul_def]; congr; apply DivInvMonoid.zpow_succ'
+  zpow_neg' n := DirectLimit.induction _ fun i x => by
+    simp_rw [HPow.hPow, Pow.pow, map_def]; congr; apply DivInvMonoid.zpow_neg'
+  inv_zero := show ⟦_⟧ = ⟦_⟧ by simp_rw [inv_zero]
+  mul_inv_cancel := DirectLimit.induction _ fun i x ne => by
+    have : x != 0 := by rintro rfl; exact ne (zero_def i).symm
+    simp_rw [map_def, mul_def, mul_inv_cancel₀ this, one_def i]
 
 中文:
 实例 :
@@ -1078,7 +1106,17 @@ instance :
   div := map₂ _ _ _ (fun _ => (· / ·)) fun _ _ _ => map_div₀ _
   zpow n := map _ _ (fun _ => (· ^ n)) fun _ _ _ x => map_zpow₀ _ x n
   div_eq_mul_inv := DirectLimit.induction₂ _ fun i _ _ => show map₂ .. = _ * map .. by
-    simp_rw [map₂_def, map_def,
+    simp_rw [map₂_def, map_def, div_eq_mul_inv, mul_def]
+  zpow_zero' := DirectLimit.induction _ fun i _ => by
+    simp_rw [HPow.hPow, Pow.pow, map_def, zpow_zero, one_def i]
+  zpow_succ' n := DirectLimit.induction _ fun i x => by
+    simp_rw [HPow.hPow, Pow.pow, map_def, mul_def]; congr; apply DivInvMonoid.zpow_succ'
+  zpow_neg' n := DirectLimit.induction _ fun i x => by
+    simp_rw [HPow.hPow, Pow.pow, map_def]; congr; apply DivInvMonoid.zpow_neg'
+  inv_zero := show ⟦_⟧ = ⟦_⟧ by simp_rw [inv_zero]
+  mul_inv_cancel := DirectLimit.induction _ fun i x ne => by
+    have : x != 0 := by rintro rfl; exact ne (zero_def i).symm
+    simp_rw [map_def, mul_def, mul_inv_cancel₀ this, one_def i]
 -/
 instance : GroupWithZero (DirectLimit G f) where
   inv := map _ _ (fun _ => (·⁻¹)) fun _ _ _ => map_inv₀ _
@@ -1930,7 +1968,8 @@ instance :
   nnratCast_def q := show ⟦_⟧ = ⟦_⟧ / ⟦_⟧ by simp_rw [div₀_def]; rw [NNRat.cast_def]
   nnqsmul q := map _ _ (fun _ => (q • ·)) fun _ _ _ x => by
     simp_rw [NNRat.smul_def, map_mul, map_nnratCast]
-  nnqsmul_def _ :=
+  nnqsmul_def _ := DirectLimit.induction _ fun i x => show ⟦_⟧ = map₀ .. * _ by
+    simp_rw [map₀_def _ _ (fun _ _ _ => map_nnratCast _ _) i, mul_def, NNRat.smul_def]
 
 中文:
 实例 :
@@ -1941,7 +1980,8 @@ instance :
   nnratCast_def q := show ⟦_⟧ = ⟦_⟧ / ⟦_⟧ by simp_rw [div₀_def]; rw [NNRat.cast_def]
   nnqsmul q := map _ _ (fun _ => (q • ·)) fun _ _ _ x => by
     simp_rw [NNRat.smul_def, map_mul, map_nnratCast]
-  nnqsmul_def _ :=
+  nnqsmul_def _ := DirectLimit.induction _ fun i x => show ⟦_⟧ = map₀ .. * _ by
+    simp_rw [map₀_def _ _ (fun _ _ _ => map_nnratCast _ _) i, mul_def, NNRat.smul_def]
 -/
 instance : DivisionSemiring (DirectLimit G f) where
   __ : GroupWithZero _ := inferInstance
@@ -2040,7 +2080,8 @@ instance :
   ratCast_def q := show ⟦_⟧ = ⟦_⟧ / ⟦_⟧ by simp_rw [div₀_def]; rw [Rat.cast_def]
   qsmul q := map _ _ (fun _ => (q • ·)) fun _ _ _ x => by
     simp_rw [Rat.smul_def, map_mul, map_ratCast]
-  qsmul_def _ := DirectLimit.induc
+  qsmul_def _ := DirectLimit.induction _ fun i x => show ⟦_⟧ = map₀ .. * _ by
+    simp_rw [map₀_def _ _ (fun _ _ _ => map_ratCast _ _) i, mul_def, Rat.smul_def]
 
 中文:
 实例 :
@@ -2051,7 +2092,8 @@ instance :
   ratCast_def q := show ⟦_⟧ = ⟦_⟧ / ⟦_⟧ by simp_rw [div₀_def]; rw [Rat.cast_def]
   qsmul q := map _ _ (fun _ => (q • ·)) fun _ _ _ x => by
     simp_rw [Rat.smul_def, map_mul, map_ratCast]
-  qsmul_def _ := DirectLimit.induc
+  qsmul_def _ := DirectLimit.induction _ fun i x => show ⟦_⟧ = map₀ .. * _ by
+    simp_rw [map₀_def _ _ (fun _ _ _ => map_ratCast _ _) i, mul_def, Rat.smul_def]
 -/
 instance : DivisionRing (DirectLimit G f) where
   __ : DivisionSemiring _ := inferInstance
@@ -2171,7 +2213,8 @@ instance :
     dsimp [Pi.algebraMap_def, map₀RingHom]
     rw [map₀_algebraMap i]; rw [mul_def]; rw [mul_def]; rw [Algebra.commutes]
   smul_def' r := DirectLimit.induction _ fun i _ => by
-    dsimp [P
+    dsimp [Pi.algebraMap_def, map₀RingHom]
+    rw [smul_def]; rw [map₀_algebraMap i]; rw [mul_def]; rw [Algebra.smul_def']
 
 中文:
 实例 :
@@ -2181,7 +2224,8 @@ instance :
     dsimp [Pi.algebraMap_def, map₀RingHom]
     rw [map₀_algebraMap i]; rw [mul_def]; rw [mul_def]; rw [Algebra.commutes]
   smul_def' r := DirectLimit.induction _ fun i _ => by
-    dsimp [P
+    dsimp [Pi.algebraMap_def, map₀RingHom]
+    rw [smul_def]; rw [map₀_algebraMap i]; rw [mul_def]; rw [Algebra.smul_def']
 
 Depends on / 依赖: algebraMap
 -/

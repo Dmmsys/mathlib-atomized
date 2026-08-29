@@ -58,7 +58,32 @@ lemma Module.free_quotSMulTop_iff_free
   have := Module.Finite.of_restrictScalars_finite R (R ⧸ Ideal.span {x}) (QuotSMulTop x M)
   let I := Module.Free.ChooseBasisIndex (R ⧸ Ideal.span {x}) (QuotSMulTop x M)
   let b := Module.Free.chooseBasis (R ⧸ Ideal.span {x}) (QuotSMulTop x M)
-
+  let b' : QuotSMulTop x M ≃ₗ[R] I ->₀ R ⧸ Ideal.span {x} := b.1.restrictScalars R
+  let f := b'.symm.toLinearMap.comp (Finsupp.mapRange.linearMap (Submodule.mkQ (Ideal.span {x})))
+  rcases Module.projective_lifting_property (Submodule.mkQ (x • (⊤ : Submodule R M))) f
+    (Submodule.mkQ_surjective _) with ⟨g, hg⟩
+  have surjf : Function.Surjective f := by
+    simpa [f] using! Finsupp.mapRange_surjective _ rfl (Submodule.mkQ_surjective (Ideal.span {x}))
+  have lejac : Ideal.span {x} <= (⊥ :Ideal R).jacobson := by simpa
+  have surjg : Function.Surjective g := by
+    apply g.surjective_of_surjective_comp_mkQ (Ideal.span {x}) lejac
+    rwa [Submodule.ideal_span_singleton_smul x ⊤, hg]
+  have kerf : LinearMap.ker f = x • (⊤ : Submodule R (I ->₀ R)) := by
+    simp only [LinearEquiv.ker_comp, f]
+    rw [Finsupp.ker_mapRange]; rw [Submodule.ker_mkQ]; rw [← (Ideal.span {x}).mul_top]; rw [← smul_eq_mul]; rw [Finsupp.submodule_smul]
+    simp [Submodule.ideal_span_singleton_smul]
+  have injg : Function.Injective g := by
+    rw [← LinearMap.ker_eq_bot]
+    have fg : (LinearMap.ker g).FG := Module.FinitePresentation.fg_ker g surjg
+    apply Submodule.eq_bot_of_le_smul_of_le_jacobson_bot (Ideal.span {x}) _ fg _ lejac
+    rw [Submodule.ideal_span_singleton_smul]
+    intro y hy
+    have : y in x • (⊤ : Submodule R (I ->₀ R)) := by simp [← kerf, ← hg, LinearMap.mem_ker.mp hy]
+    rcases (Submodule.mem_smul_pointwise_iff_exists _ _ _).mp this with ⟨z, _, hz⟩
+    simp only [← hz, LinearMap.mem_ker, map_smul] at hy
+    have := LinearMap.mem_ker.mpr (IsSMulRegular.right_eq_zero_of_smul reg hy)
+    simpa [hz] using Submodule.smul_mem_pointwise_smul z x _ this
+  exact Module.Free.of_equiv (LinearEquiv.ofBijective g ⟨injg, surjg⟩)
 
 中文:
 引理 模.free_quotSMulTop_iff_free
@@ -68,7 +93,32 @@ lemma Module.free_quotSMulTop_iff_free
   have := Module.Finite.of_restrictScalars_finite R (R ⧸ Ideal.span {x}) (QuotSMulTop x M)
   let I := Module.Free.ChooseBasisIndex (R ⧸ Ideal.span {x}) (QuotSMulTop x M)
   let b := Module.Free.chooseBasis (R ⧸ Ideal.span {x}) (QuotSMulTop x M)
-
+  let b' : QuotSMulTop x M ≃ₗ[R] I ->₀ R ⧸ Ideal.span {x} := b.1.restrictScalars R
+  let f := b'.symm.toLinearMap.comp (Finsupp.mapRange.linearMap (Submodule.mkQ (Ideal.span {x})))
+  rcases Module.projective_lifting_property (Submodule.mkQ (x • (⊤ : Submodule R M))) f
+    (Submodule.mkQ_surjective _) with ⟨g, hg⟩
+  have surjf : Function.Surjective f := by
+    simpa [f] using! Finsupp.mapRange_surjective _ rfl (Submodule.mkQ_surjective (Ideal.span {x}))
+  have lejac : Ideal.span {x} <= (⊥ :Ideal R).jacobson := by simpa
+  have surjg : Function.Surjective g := by
+    apply g.surjective_of_surjective_comp_mkQ (Ideal.span {x}) lejac
+    rwa [Submodule.ideal_span_singleton_smul x ⊤, hg]
+  have kerf : LinearMap.ker f = x • (⊤ : Submodule R (I ->₀ R)) := by
+    simp only [LinearEquiv.ker_comp, f]
+    rw [Finsupp.ker_mapRange]; rw [Submodule.ker_mkQ]; rw [← (Ideal.span {x}).mul_top]; rw [← smul_eq_mul]; rw [Finsupp.submodule_smul]
+    simp [Submodule.ideal_span_singleton_smul]
+  have injg : Function.Injective g := by
+    rw [← LinearMap.ker_eq_bot]
+    have fg : (LinearMap.ker g).FG := Module.FinitePresentation.fg_ker g surjg
+    apply Submodule.eq_bot_of_le_smul_of_le_jacobson_bot (Ideal.span {x}) _ fg _ lejac
+    rw [Submodule.ideal_span_singleton_smul]
+    intro y hy
+    have : y in x • (⊤ : Submodule R (I ->₀ R)) := by simp [← kerf, ← hg, LinearMap.mem_ker.mp hy]
+    rcases (Submodule.mem_smul_pointwise_iff_exists _ _ _).mp this with ⟨z, _, hz⟩
+    simp only [← hz, LinearMap.mem_ker, map_smul] at hy
+    have := LinearMap.mem_ker.mpr (IsSMulRegular.right_eq_zero_of_smul reg hy)
+    simpa [hz] using Submodule.smul_mem_pointwise_smul z x _ this
+  exact Module.Free.of_equiv (LinearEquiv.ofBijective g ⟨injg, surjg⟩)
 
 Depends on / 依赖: ChooseBasisIndex, Finite, Finsupp, Finsupp.mapRange.linearMap, Ideal.span, Module, Module.Finite.of_restrictScalars_finite, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, Module.projective_liftin, QuotSMulTop, Submodule, Submodule.mkQ, chooseBasis, linearMap, mapRange, of_restrictScalars_finite, projective_liftin, restrictScalars, symm.toLinearMap.comp
 -/

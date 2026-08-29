@@ -1734,7 +1734,7 @@ lemma card_product_filter_lt
   have disj : Disjoint u v := by grind [disjoint_left]
   have union : u.disjUnion v disj = s.offDiag := by grind
   have swap : #u = #v := Finset.card_equiv (Equiv.prodComm α α) (by grind)
- 
+  grind [Nat.mul_sub_one, offDiag_card, Nat.choose_two_right]
 
 中文:
 引理 card_product_filter_lt
@@ -1745,7 +1745,7 @@ lemma card_product_filter_lt
   have disj : Disjoint u v := by grind [disjoint_left]
   have union : u.disjUnion v disj = s.offDiag := by grind
   have swap : #u = #v := Finset.card_equiv (Equiv.prodComm α α) (by grind)
- 
+  grind [Nat.mul_sub_one, offDiag_card, Nat.choose_two_right]
 
 Depends on / 依赖: Disjoint, Equiv.prodComm, Finset, Finset.card_equiv, Nat.choose_two_right, Nat.mul_sub_one, card_equiv, choose_two_right, disjUnion, disjoint_left, mul_sub_one, offDiag, offDiag_card, prodComm, s.offDiag, u.disjUnion
 -/

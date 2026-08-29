@@ -282,7 +282,11 @@ theorem cof_eq_one_iff
     rwa [isCofinal_singleton_iff] at hs
   · apply le_antisymm
     · apply (cof_le (s := {t}) _).trans_eq (mk_singleton _)
-      rwa [
+      rwa [isCofinal_singleton_iff]
+    · rw [Cardinal.one_le_iff_ne_zero, cof_ne_zero_iff]
+      use t
+
+@[simp]
 
 中文:
 定理 cof_eq_one_iff
@@ -296,7 +300,11 @@ theorem cof_eq_one_iff
     rwa [isCofinal_singleton_iff] at hs
   · apply le_antisymm
     · apply (cof_le (s := {t}) _).trans_eq (mk_singleton _)
-      rwa [
+      rwa [isCofinal_singleton_iff]
+    · rw [Cardinal.one_le_iff_ne_zero, cof_ne_zero_iff]
+      use t
+
+@[simp]
 
 Depends on / 依赖: Cardinal, Cardinal.one_le_iff_ne_zero, cof_le, cof_ne_zero_iff, exists_cof_eq, isCofinal_singleton_iff, le_antisymm, mk_set_eq_one_iff, mk_singleton, one_le_iff_ne_zero, trans_eq
 -/
@@ -474,7 +482,11 @@ theorem lift_cof_congr_of_strictMono
     choose g hg using H
     refine (lift_le.2 <| cof_le (s := range g) fun a => ?_).trans mk_range_le_lift
     obtain ⟨_, ⟨b, rfl⟩, hb⟩ := hf' (f a)
-    obtain ⟨c, hc, h
+    obtain ⟨c, hc, hc'⟩ := hs (f b)
+    refine ⟨_, Set.mem_range_self ⟨c, hc⟩, ?_⟩
+    rw [← hf.le_iff_le]
+    exact hb.trans (hc'.trans (hg ⟨c, hc⟩))
+  · exact (lift_le.2 <| cof_le (hs.image hf.monotone hf')).trans mk_image_le_lift
 
 中文:
 定理 lift_cof_congr_of_strictMono
@@ -485,7 +497,11 @@ theorem lift_cof_congr_of_strictMono
     choose g hg using H
     refine (lift_le.2 <| cof_le (s := range g) fun a => ?_).trans mk_range_le_lift
     obtain ⟨_, ⟨b, rfl⟩, hb⟩ := hf' (f a)
-    obtain ⟨c, hc, h
+    obtain ⟨c, hc, hc'⟩ := hs (f b)
+    refine ⟨_, Set.mem_range_self ⟨c, hc⟩, ?_⟩
+    rw [← hf.le_iff_le]
+    exact hb.trans (hc'.trans (hg ⟨c, hc⟩))
+  · exact (lift_le.2 <| cof_le (hs.image hf.monotone hf')).trans mk_image_le_lift
 
 Depends on / 依赖: Set.mem_range_self, cof_le, hb.trans, hf.le_iff_le, hf.monotone, hs.image, le_antisymm, le_iff_le, le_lift_cof_iff, lift_le, mem_range_self, mk_image_le_lift, mk_range_le_lift, monotone
 -/
@@ -564,7 +580,7 @@ theorem cof_lt_aleph0_iff
   apply (cof_le ht').trans
   simpa
 
-@[sim
+@[simp]
 
 中文:
 定理 cof_lt_aleph0_iff
@@ -579,7 +595,7 @@ theorem cof_lt_aleph0_iff
   apply (cof_le ht').trans
   simpa
 
-@[sim
+@[simp]
 
 Depends on / 依赖: Finite, Set.Finite, cof_le, exists_cof_eq, exists_subsingleton_isCofinal, hf.exists_subsingleton_isCofinal, lt_of_le_of_lt, mk_lt_aleph0_iff, one_lt_aleph0, s.Finite, trans_lt
 -/

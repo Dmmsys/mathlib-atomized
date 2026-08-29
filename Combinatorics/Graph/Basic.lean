@@ -1403,7 +1403,13 @@ definition copy
     simp_rw [← hIsLink]
     exact G.eq_or_eq_of_isLink_of_isLink
   edge_mem_iff_exists_isLink := by
-    si
+    simp_rw [← hIsLink, ← hedgeSet]
+    exact G.edge_mem_iff_exists_isLink
+  left_mem_of_isLink := by
+    simp_rw [← hIsLink, ← hvertexSet]
+    exact G.left_mem_of_isLink
+
+@[simp]
 
 中文:
 定义 copy
@@ -1418,7 +1424,13 @@ definition copy
     simp_rw [← hIsLink]
     exact G.eq_or_eq_of_isLink_of_isLink
   edge_mem_iff_exists_isLink := by
-    si
+    simp_rw [← hIsLink, ← hedgeSet]
+    exact G.edge_mem_iff_exists_isLink
+  left_mem_of_isLink := by
+    simp_rw [← hIsLink, ← hvertexSet]
+    exact G.left_mem_of_isLink
+
+@[simp]
 
 Depends on / 依赖: vertexSet
 -/
@@ -2253,7 +2265,8 @@ lemma eq_bouquet_of_subsingleton
   · simp [← mem_singleton_iff, ← hrw, h.edge_mem, h.vertex_mem]
   simp only [bouquet_inc] at h
   obtain ⟨z, w, hzw⟩ := exists_isLink_of_mem_edgeSet h.1
-  rw [h.2]; rw [← show z = v fro
+  rw [h.2]; rw [← show z = v from (show z in {v} from hrw ▸ hzw.left_mem)]
+  exact hzw.inc_left
 
 中文:
 引理 eq_bouquet_of_subsingleton
@@ -2264,7 +2277,8 @@ lemma eq_bouquet_of_subsingleton
   · simp [← mem_singleton_iff, ← hrw, h.edge_mem, h.vertex_mem]
   simp only [bouquet_inc] at h
   obtain ⟨z, w, hzw⟩ := exists_isLink_of_mem_edgeSet h.1
-  rw [h.2]; rw [← show z = v fro
+  rw [h.2]; rw [← show z = v from (show z in {v} from hrw ▸ hzw.left_mem)]
+  exact hzw.inc_left
 
 Depends on / 依赖: Graph.ext_inc, bouquet_inc, edge_mem, eq_singleton_of_mem, exists_isLink_of_mem_edgeSet, ext_inc, h.edge_mem, h.vertex_mem, hss.eq_singleton_of_mem, hzw.inc_left, hzw.left_mem, inc_left, left_mem, mem_singleton_iff, vertex_mem
 -/

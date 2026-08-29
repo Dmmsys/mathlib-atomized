@@ -98,7 +98,8 @@ lemma integrable_llr_of_integrable_llr_compProd
   have ⟨hμν_ac, hκη_ac⟩ := Measure.absolutelyContinuous_compProd_iff.mp h_ac
   rw [← integrable_rnDeriv_mul_log_iff h_ac] at h_int
   replace h_int := convexOn_mul_log.integrable_apply_rnDeriv_of_integrable_compProd
-    continuous_mul_log.stronglyMeasurable continuous_mul_log.continuousWithinAt h_
+    continuous_mul_log.stronglyMeasurable continuous_mul_log.continuousWithinAt h_int hκη_ac
+  exact (integrable_rnDeriv_mul_log_iff hμν_ac).mp h_int
 
 中文:
 引理 integrable_llr_of_integrable_llr_compProd
@@ -106,7 +107,8 @@ lemma integrable_llr_of_integrable_llr_compProd
   have ⟨hμν_ac, hκη_ac⟩ := Measure.absolutelyContinuous_compProd_iff.mp h_ac
   rw [← integrable_rnDeriv_mul_log_iff h_ac] at h_int
   replace h_int := convexOn_mul_log.integrable_apply_rnDeriv_of_integrable_compProd
-    continuous_mul_log.stronglyMeasurable continuous_mul_log.continuousWithinAt h_
+    continuous_mul_log.stronglyMeasurable continuous_mul_log.continuousWithinAt h_int hκη_ac
+  exact (integrable_rnDeriv_mul_log_iff hμν_ac).mp h_int
 
 Depends on / 依赖: Measure, Measure.absolutelyContinuous_compProd_iff.mp, absolutelyContinuous_compProd_iff, continuousWithinAt, continuous_mul_log, continuous_mul_log.continuousWithinAt, continuous_mul_log.stronglyMeasurable, convexOn_mul_log, convexOn_mul_log.integrable_apply_rnDeriv_of_integrable_compProd, h_ac, h_int, integrable_apply_rnDeriv_of_integrable_compProd, integrable_rnDeriv_mul_log_iff, replace, stronglyMeasurable
 -/
@@ -169,7 +171,31 @@ lemma integrable_llr_compProd_iff
   proof: by
   have ⟨h_ac_μν, h_ac_κη⟩ := Measure.absolutelyContinuous_compProd_iff.mp h_ac
   rw [← integrable_rnDeriv_mul_log_iff h_ac]; rw [integrable_congr (rnDeriv_compProd_mul_log_eq_mul_add h_ac_κη)]; rw [integrable_toReal_rnDeriv_mul_iff h_ac]
-  have h_iff_κ : Integrable (llr μ ν) μ ↔ Integrable (fun x
+  have h_iff_κ : Integrable (llr μ ν) μ ↔ Integrable (fun x => llr μ ν x.1) (μ otimesₘ κ) := by
+    rw [Measure.integrable_compProd_iff]
+    swap; · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+    simp only [ne_eq, enorm_ne_top, not_false_eq_true, integrable_const_enorm,
+      Filter.eventually_true, integral_const, probReal_univ, smul_eq_mul, one_mul, true_and]
+    rw [← integrable_norm_iff (by fun_prop)]
+  rw [h_iff_κ]
+  -- Goal of the form `Integrable (f + g) ↔ Integrable f ∧ Integrable g`
+  refine ⟨fun h_int => ?_, fun ⟨h_int1, h_int2⟩ => h_int1.add h_int2⟩
+  -- We now prove `Integrable (f + g) → Integrable f ∧ Integrable g`.
+  -- We have one of those implications from the lemma `integrable_llr_of_integrable_llr_compProd`,
+  -- say `Integrable (f + g) → Integrable f`.
+  -- But given `Integrable f`, we have `Integrable (f + g) ↔ Integrable g` and thus we can also
+  -- conclude `Integrable g`.
+  have h_int_iff : Integrable (llr (μ otimesₘ κ) (ν otimesₘ η)) (μ otimesₘ κ) ↔
+      Integrable (fun x => log ((∂μ/∂ν) x.1).toReal +
+        log ((∂μ otimesₘ κ/∂μ otimesₘ η) x).toReal) (μ otimesₘ κ) := by
+    have ⟨h_ac_μν, h_ac_κη⟩ := Measure.absolutelyContinuous_compProd_iff.mp h_ac
+    rw [← integrable_rnDeriv_mul_log_iff h_ac]; rw [integrable_congr (rnDeriv_compProd_mul_log_eq_mul_add h_ac_κη)]
+    exact integrable_toReal_rnDeriv_mul_iff h_ac
+  have h_int1 := integrable_llr_of_integrable_llr_compProd h_ac (h_int_iff.2 h_int)
+  rw [h_iff_κ] at h_int1
+  rw [integrable_add_iff_integrable_right'] at h_int
+  · exact ⟨h_int1, h_int⟩
+  · exact h_int1
 
 中文:
 引理 integrable_llr_compProd_iff
@@ -177,7 +203,31 @@ lemma integrable_llr_compProd_iff
   证明: by
   have ⟨h_ac_μν, h_ac_κη⟩ := Measure.absolutelyContinuous_compProd_iff.mp h_ac
   rw [← integrable_rnDeriv_mul_log_iff h_ac]; rw [integrable_congr (rnDeriv_compProd_mul_log_eq_mul_add h_ac_κη)]; rw [integrable_toReal_rnDeriv_mul_iff h_ac]
-  have h_iff_κ : Integrable (llr μ ν) μ ↔ Integrable (fun x
+  have h_iff_κ : Integrable (llr μ ν) μ ↔ Integrable (fun x => llr μ ν x.1) (μ otimesₘ κ) := by
+    rw [Measure.integrable_compProd_iff]
+    swap; · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+    simp only [ne_eq, enorm_ne_top, not_false_eq_true, integrable_const_enorm,
+      Filter.eventually_true, integral_const, probReal_univ, smul_eq_mul, one_mul, true_and]
+    rw [← integrable_norm_iff (by fun_prop)]
+  rw [h_iff_κ]
+  -- Goal of the form `Integrable (f + g) ↔ Integrable f ∧ Integrable g`
+  refine ⟨fun h_int => ?_, fun ⟨h_int1, h_int2⟩ => h_int1.add h_int2⟩
+  -- We now prove `Integrable (f + g) → Integrable f ∧ Integrable g`.
+  -- We have one of those implications from the lemma `integrable_llr_of_integrable_llr_compProd`,
+  -- say `Integrable (f + g) → Integrable f`.
+  -- But given `Integrable f`, we have `Integrable (f + g) ↔ Integrable g` and thus we can also
+  -- conclude `Integrable g`.
+  have h_int_iff : Integrable (llr (μ otimesₘ κ) (ν otimesₘ η)) (μ otimesₘ κ) ↔
+      Integrable (fun x => log ((∂μ/∂ν) x.1).toReal +
+        log ((∂μ otimesₘ κ/∂μ otimesₘ η) x).toReal) (μ otimesₘ κ) := by
+    have ⟨h_ac_μν, h_ac_κη⟩ := Measure.absolutelyContinuous_compProd_iff.mp h_ac
+    rw [← integrable_rnDeriv_mul_log_iff h_ac]; rw [integrable_congr (rnDeriv_compProd_mul_log_eq_mul_add h_ac_κη)]
+    exact integrable_toReal_rnDeriv_mul_iff h_ac
+  have h_int1 := integrable_llr_of_integrable_llr_compProd h_ac (h_int_iff.2 h_int)
+  rw [h_iff_κ] at h_int1
+  rw [integrable_add_iff_integrable_right'] at h_int
+  · exact ⟨h_int1, h_int⟩
+  · exact h_int1
 
 Depends on / 依赖: Integrable, Measure, Measure.absolutelyContinuous_compProd_iff.mp, Measure.integrable_compProd_iff, StronglyMeasurable, StronglyMeasurable.aestronglyMeasurable, absolutelyContinuous_compProd_iff, aestronglyMeasurable, enorm_ne_top, fun_prop, h_ac, integrable_co, integrable_compProd_iff, integrable_congr, integrable_rnDeriv_mul_log_iff, integrable_toReal_rnDeriv_mul_iff, ne_eq, not_false_eq_true, rnDeriv_compProd_mul_log_eq_mul_add
 -/
@@ -223,7 +273,26 @@ lemma integral_llr_compProd_eq_add
   have ⟨h_int_μν, h_int_κη⟩ := (integrable_llr_compProd_iff h_ac).mp h_int
   have h_int1 : Integrable (fun p => log ((∂μ/∂ν) p.1).toReal) (μ otimesₘ κ) := by
     rw [Measure.integrable_compProd_iff]
-    · simp only [ne
+    · simp only [ne_eq, enorm_ne_top, not_false_eq_true, integrable_const_enorm,
+      Filter.eventually_true, integral_const, probReal_univ, smul_eq_mul, one_mul, true_and]
+      rwa [← integrable_norm_iff (by fun_prop)] at h_int_μν
+    · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  calc ∫ p, llr (μ otimesₘ κ) (ν otimesₘ η) p ∂μ otimesₘ κ
+  _ = ∫ p, ((∂μ otimesₘ κ/∂ν otimesₘ η) p).toReal * log ((∂μ otimesₘ κ/∂ν otimesₘ η) p).toReal ∂(ν otimesₘ η) := by
+    rw [integral_rnDeriv_mul_log h_ac]
+  _ = ∫ p, ((∂μ otimesₘ κ/∂ν otimesₘ η) p).toReal *
+      (log ((∂μ/∂ν) p.1).toReal + log ((∂μ otimesₘ κ/∂μ otimesₘ η) p).toReal) ∂(ν otimesₘ η) :=
+    integral_congr_ae (rnDeriv_compProd_mul_log_eq_mul_add h_ac_κη)
+  _ = ∫ p, (log ((∂μ/∂ν) p.1).toReal + log ((∂μ otimesₘ κ/∂μ otimesₘ η) p).toReal) ∂(μ otimesₘ κ) :=
+    integral_rnDeriv_smul h_ac
+  _ = ∫ p, log ((∂μ/∂ν) p.1).toReal ∂(μ otimesₘ κ) +
+      ∫ p, log ((∂μ otimesₘ κ/∂μ otimesₘ η) p).toReal ∂(μ otimesₘ κ) := by
+    rw [integral_add h_int1]
+    exact h_int_κη.ofReal
+  _ = ∫ a, llr μ ν a ∂μ + ∫ p, llr (μ otimesₘ κ) (μ otimesₘ η) p ∂(μ otimesₘ κ) := by
+    congr
+    rw [Measure.integral_compProd h_int1]
+    simp [llr]
 
 中文:
 引理 integral_llr_compProd_eq_add
@@ -233,7 +302,26 @@ lemma integral_llr_compProd_eq_add
   have ⟨h_int_μν, h_int_κη⟩ := (integrable_llr_compProd_iff h_ac).mp h_int
   have h_int1 : Integrable (fun p => log ((∂μ/∂ν) p.1).toReal) (μ otimesₘ κ) := by
     rw [Measure.integrable_compProd_iff]
-    · simp only [ne
+    · simp only [ne_eq, enorm_ne_top, not_false_eq_true, integrable_const_enorm,
+      Filter.eventually_true, integral_const, probReal_univ, smul_eq_mul, one_mul, true_and]
+      rwa [← integrable_norm_iff (by fun_prop)] at h_int_μν
+    · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
+  calc ∫ p, llr (μ otimesₘ κ) (ν otimesₘ η) p ∂μ otimesₘ κ
+  _ = ∫ p, ((∂μ otimesₘ κ/∂ν otimesₘ η) p).toReal * log ((∂μ otimesₘ κ/∂ν otimesₘ η) p).toReal ∂(ν otimesₘ η) := by
+    rw [integral_rnDeriv_mul_log h_ac]
+  _ = ∫ p, ((∂μ otimesₘ κ/∂ν otimesₘ η) p).toReal *
+      (log ((∂μ/∂ν) p.1).toReal + log ((∂μ otimesₘ κ/∂μ otimesₘ η) p).toReal) ∂(ν otimesₘ η) :=
+    integral_congr_ae (rnDeriv_compProd_mul_log_eq_mul_add h_ac_κη)
+  _ = ∫ p, (log ((∂μ/∂ν) p.1).toReal + log ((∂μ otimesₘ κ/∂μ otimesₘ η) p).toReal) ∂(μ otimesₘ κ) :=
+    integral_rnDeriv_smul h_ac
+  _ = ∫ p, log ((∂μ/∂ν) p.1).toReal ∂(μ otimesₘ κ) +
+      ∫ p, log ((∂μ otimesₘ κ/∂μ otimesₘ η) p).toReal ∂(μ otimesₘ κ) := by
+    rw [integral_add h_int1]
+    exact h_int_κη.ofReal
+  _ = ∫ a, llr μ ν a ∂μ + ∫ p, llr (μ otimesₘ κ) (μ otimesₘ η) p ∂(μ otimesₘ κ) := by
+    congr
+    rw [Measure.integral_compProd h_int1]
+    simp [llr]
 
 Depends on / 依赖: Filter, Filter.eventually_true, Integrable, Measure, Measure.absolutelyContinuous_compProd_iff.mp, Measure.integrable_compProd_iff, absolutelyContinuous_compProd_iff, enorm_ne_top, eventually_true, fun_prop, h_ac, h_int, h_int1, integrable_compProd_iff, integrable_const_enorm, integrable_llr_compProd_iff, integrable_norm_iff, integral_const, ne_eq, not_false_eq_true
 -/
@@ -280,7 +368,16 @@ lemma klDiv_compProd_left
   swap
   · rw [klDiv_of_not_ac h_ac, klDiv_of_not_ac]
     rwa [Measure.absolutelyContinuous_compProd_left_iff] at h_ac
-  -- we can now express the KL divergences with an integral of a 
+  -- we can now express the KL divergences with an integral of a log-likelihood ratio
+  rw [klDiv_eq_lintegral_klFun_of_ac h_ac]; rw [klDiv_eq_lintegral_klFun_of_ac (Measure.absolutelyContinuous_compProd_left_iff.mp h_ac)]
+  rw [Measure.absolutelyContinuous_compProd_left_iff] at h_ac
+  calc ∫⁻ p, ENNReal.ofReal (klFun ((∂μ otimesₘ κ/∂ν otimesₘ κ) p).toReal) ∂(ν otimesₘ κ)
+  _ = ∫⁻ p, ENNReal.ofReal (klFun ((∂μ/∂ν) p.1).toReal) ∂(ν otimesₘ κ) := by
+    refine lintegral_congr_ae ?_
+    filter_upwards [rnDeriv_measure_compProd_left μ ν κ] with p hp using by simp_rw [hp]
+  _ = ∫⁻ x, ENNReal.ofReal (klFun ((∂μ/∂ν) x).toReal) ∂ν := by
+    rw [Measure.lintegral_compProd (by fun_prop)]
+    simp
 
 中文:
 引理 klDiv_compProd_left
@@ -291,7 +388,16 @@ lemma klDiv_compProd_left
   swap
   · rw [klDiv_of_not_ac h_ac, klDiv_of_not_ac]
     rwa [Measure.absolutelyContinuous_compProd_left_iff] at h_ac
-  -- we can now express the KL divergences with an integral of a 
+  -- we can now express the KL divergences with an integral of a log-likelihood ratio
+  rw [klDiv_eq_lintegral_klFun_of_ac h_ac]; rw [klDiv_eq_lintegral_klFun_of_ac (Measure.absolutelyContinuous_compProd_left_iff.mp h_ac)]
+  rw [Measure.absolutelyContinuous_compProd_left_iff] at h_ac
+  calc ∫⁻ p, ENNReal.ofReal (klFun ((∂μ otimesₘ κ/∂ν otimesₘ κ) p).toReal) ∂(ν otimesₘ κ)
+  _ = ∫⁻ p, ENNReal.ofReal (klFun ((∂μ/∂ν) p.1).toReal) ∂(ν otimesₘ κ) := by
+    refine lintegral_congr_ae ?_
+    filter_upwards [rnDeriv_measure_compProd_left μ ν κ] with p hp using by simp_rw [hp]
+  _ = ∫⁻ x, ENNReal.ofReal (klFun ((∂μ/∂ν) x).toReal) ∂ν := by
+    rw [Measure.lintegral_compProd (by fun_prop)]
+    simp
 -/
 lemma klDiv_compProd_left : klDiv (μ otimesₘ κ) (ν otimesₘ κ) = klDiv μ ν := by
   -- first, if we don't have absolute continuity, both sides are `∞`
@@ -326,7 +432,29 @@ theorem klDiv_compProd_eq_add
     simp only [not_and_or] at h_ac
     cases h_ac with
     | inl h => simp [h]
-    | inr
+    | inr h => simp [h]
+  -- same if we don't have integrability
+  by_cases h_int : Integrable (llr (μ otimesₘ κ) (ν otimesₘ η)) (μ otimesₘ κ)
+  swap
+  · rw [klDiv_of_not_integrable h_int]
+    rw [integrable_llr_compProd_iff h_ac] at h_int
+    simp only [not_and_or] at h_int
+    cases h_int with
+    | inl h => simp [h]
+    | inr h => simp [h]
+  -- now we can use express the KL divergences with an integral of a log-likelihood ratio
+  have ⟨h_ac_μν, h_ac_κη⟩ := Measure.absolutelyContinuous_compProd_iff.mp h_ac
+  have ⟨h_int_μν, h_int_κη⟩ := (integrable_llr_compProd_iff h_ac).mp h_int
+  simp_rw [klDiv_of_ac_of_integrable h_ac h_int, klDiv_of_ac_of_integrable h_ac_μν h_int_μν,
+    klDiv_of_ac_of_integrable h_ac_κη h_int_κη,
+    ← ENNReal.ofReal_add (integral_llr_add_sub_measure_univ_nonneg h_ac_μν h_int_μν)
+    (integral_llr_add_sub_measure_univ_nonneg h_ac_κη h_int_κη), measureReal_def,
+    Measure.compProd_apply_univ, add_sub_cancel_right]
+  -- it suffices to prove the chain rule for the integrals of log-likelihood ratios
+  suffices ∫ p, llr (μ otimesₘ κ) (ν otimesₘ η) p ∂μ otimesₘ κ =
+      ∫ a, llr μ ν a ∂μ + ∫ p, llr (μ otimesₘ κ) (μ otimesₘ η) p ∂(μ otimesₘ κ) by rw [this]; ring_nf
+  -- the result follows from a previous lemma
+  exact integral_llr_compProd_eq_add h_ac h_int
 
 中文:
 定理 klDiv_compProd_eq_add
@@ -340,7 +468,29 @@ theorem klDiv_compProd_eq_add
     simp only [not_and_or] at h_ac
     cases h_ac with
     | inl h => simp [h]
-    | inr
+    | inr h => simp [h]
+  -- same if we don't have integrability
+  by_cases h_int : Integrable (llr (μ otimesₘ κ) (ν otimesₘ η)) (μ otimesₘ κ)
+  swap
+  · rw [klDiv_of_not_integrable h_int]
+    rw [integrable_llr_compProd_iff h_ac] at h_int
+    simp only [not_and_or] at h_int
+    cases h_int with
+    | inl h => simp [h]
+    | inr h => simp [h]
+  -- now we can use express the KL divergences with an integral of a log-likelihood ratio
+  have ⟨h_ac_μν, h_ac_κη⟩ := Measure.absolutelyContinuous_compProd_iff.mp h_ac
+  have ⟨h_int_μν, h_int_κη⟩ := (integrable_llr_compProd_iff h_ac).mp h_int
+  simp_rw [klDiv_of_ac_of_integrable h_ac h_int, klDiv_of_ac_of_integrable h_ac_μν h_int_μν,
+    klDiv_of_ac_of_integrable h_ac_κη h_int_κη,
+    ← ENNReal.ofReal_add (integral_llr_add_sub_measure_univ_nonneg h_ac_μν h_int_μν)
+    (integral_llr_add_sub_measure_univ_nonneg h_ac_κη h_int_κη), measureReal_def,
+    Measure.compProd_apply_univ, add_sub_cancel_right]
+  -- it suffices to prove the chain rule for the integrals of log-likelihood ratios
+  suffices ∫ p, llr (μ otimesₘ κ) (ν otimesₘ η) p ∂μ otimesₘ κ =
+      ∫ a, llr μ ν a ∂μ + ∫ p, llr (μ otimesₘ κ) (μ otimesₘ η) p ∂(μ otimesₘ κ) by rw [this]; ring_nf
+  -- the result follows from a previous lemma
+  exact integral_llr_compProd_eq_add h_ac h_int
 -/
 theorem klDiv_compProd_eq_add : klDiv (μ otimesₘ κ) (ν otimesₘ η) = klDiv μ ν + klDiv (μ otimesₘ κ) (μ otimesₘ η) := by
   -- first, if we don't have absolute continuity, both sides are `∞`

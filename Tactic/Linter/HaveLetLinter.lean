@@ -134,7 +134,22 @@ definition nonPropHaves
     let .original .. := stx.getHeadInfo | return #[]
     unless isHave? stx do return #[]
     let mctx := i.mctxAfter
-    let mvdecls := i.goalsAfter.filterMa
+    let mvdecls := i.goalsAfter.filterMap (mctx.decls.find? ·)
+    -- We extract the `MetavarDecl` with largest index after a `have`, since this one
+    -- holds information about the metavariable where `have` introduces the new hypothesis,
+    -- and determine the relevant `LocalContext`.
+.lctx .getD default let lc := mvdecls.toArray.getMax? (·.index < ·.index)
+    -- we also accumulate all `fvarId`s from all local contexts before the use of `have`
+    -- so that we can then isolate the `fvarId`s that are created by `have`
+    let oldMvdecls := i.goalsBefore.filterMap (mctx.decls.find? ·)
+    let oldFVars := (oldMvdecls.map (·.lctx.decls.toList.reduceOption)).flatten.map (·.fvarId)
+    -- `newDecls` are the local declarations whose `FVarID` did not exist before the `have`.
+    -- Effectively they are the declarations that we want to test for being in `Prop` or not.
+    let newDecls := lc.decls.toList.reduceOption.filter (! oldFVars.contains ·.fvarId)
+    -- Now, we get the `MetaM` state up and running to find the types of each entry of `newDecls`.
+    -- For each entry which is a `Type`, we print a warning on `have`.
+    let fmts ← toFormat_propTypes ctx lc (newDecls.map (fun e => (e.type, e.userName))).toArray
+    return fmts.map fun (fmt, na) => (stx, f!"{na} : {fmt}")))
 
 中文:
 定义 nonPropHaves
@@ -145,7 +160,22 @@ definition nonPropHaves
     let .original .. := stx.getHeadInfo | return #[]
     unless isHave? stx do return #[]
     let mctx := i.mctxAfter
-    let mvdecls := i.goalsAfter.filterMa
+    let mvdecls := i.goalsAfter.filterMap (mctx.decls.find? ·)
+    -- We extract the `MetavarDecl` with largest index after a `have`, since this one
+    -- holds information about the metavariable where `have` introduces the new hypothesis,
+    -- and determine the relevant `LocalContext`.
+.lctx .getD default let lc := mvdecls.toArray.getMax? (·.index < ·.index)
+    -- we also accumulate all `fvarId`s from all local contexts before the use of `have`
+    -- so that we can then isolate the `fvarId`s that are created by `have`
+    let oldMvdecls := i.goalsBefore.filterMap (mctx.decls.find? ·)
+    let oldFVars := (oldMvdecls.map (·.lctx.decls.toList.reduceOption)).flatten.map (·.fvarId)
+    -- `newDecls` are the local declarations whose `FVarID` did not exist before the `have`.
+    -- Effectively they are the declarations that we want to test for being in `Prop` or not.
+    let newDecls := lc.decls.toList.reduceOption.filter (! oldFVars.contains ·.fvarId)
+    -- Now, we get the `MetaM` state up and running to find the types of each entry of `newDecls`.
+    -- For each entry which is a `Type`, we print a warning on `have`.
+    let fmts ← toFormat_propTypes ctx lc (newDecls.map (fun e => (e.type, e.userName))).toArray
+    return fmts.map fun (fmt, na) => (stx, f!"{na} : {fmt}")))
 
 Depends on / 依赖: InfoTree, InfoTree.foldInfoM, filterMap, foldInfoM, getHeadInfo, goalsAfter, i.goalsAfter.filterMap, i.mctxAfter, i.stx, isHave, mctx.decls.find, mctxAfter, mvdecls, ofTacticInfo, original, return, stx.getHeadInfo, unless
 -/
@@ -187,7 +217,8 @@ definition haveLetLinter
     let trees ← getInfoTrees
     for t in trees do
       for (s, fmt) in ← nonPropHaves t do
- 
+        logLint0Disable linter.haveLet s
+          m!"'{fmt}' is a Type and not a Prop. Consider using 'let' instead of 'have'."
 
 中文:
 定义 haveLetLinter
@@ -200,7 +231,8 @@ definition haveLetLinter
     let trees ← getInfoTrees
     for t in trees do
       for (s, fmt) in ← nonPropHaves t do
- 
+        logLint0Disable linter.haveLet s
+          m!"'{fmt}' is a Type and not a Prop. Consider using 'let' instead of 'have'."
 
 Depends on / 依赖: _stx, withSetOptionIn
 -/

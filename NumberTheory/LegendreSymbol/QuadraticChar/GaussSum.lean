@@ -67,7 +67,8 @@ theorem FiniteField.isSquare_two_iff
     simp only [FiniteField.isSquare_of_char_two hF, true_iff]
     lia
   · have h := FiniteField.odd_card_of_char_ne_two hF
-    rw [← quadraticChar_one_iff_isSquare (Ring.two_ne_zero hF)]; rw [quadraticCh
+    rw [← quadraticChar_one_iff_isSquare (Ring.two_ne_zero hF)]; rw [quadraticChar_two hF]; rw [χ₈_nat_eq_if_mod_eight]
+    lia
 
 中文:
 定理 FiniteField.isSquare_two_iff
@@ -78,7 +79,8 @@ theorem FiniteField.isSquare_two_iff
     simp only [FiniteField.isSquare_of_char_two hF, true_iff]
     lia
   · have h := FiniteField.odd_card_of_char_ne_two hF
-    rw [← quadraticChar_one_iff_isSquare (Ring.two_ne_zero hF)]; rw [quadraticCh
+    rw [← quadraticChar_one_iff_isSquare (Ring.two_ne_zero hF)]; rw [quadraticChar_two hF]; rw [χ₈_nat_eq_if_mod_eight]
+    lia
 
 Depends on / 依赖: FiniteField, FiniteField.even_card_of_char_two, FiniteField.isSquare_of_char_two, FiniteField.odd_card_of_char_ne_two, Ring.two_ne_zero, classical, even_card_of_char_two, isSquare_of_char_two, odd_card_of_char_ne_two, quadraticChar_one_iff_isSquare, quadraticChar_two, ringChar, true_iff, two_ne_zero
 -/
@@ -126,7 +128,8 @@ theorem FiniteField.isSquare_neg_two_iff
     simp only [FiniteField.isSquare_of_char_two hF, true_iff]
     lia
   · have h := FiniteField.odd_card_of_char_ne_two hF
-    rw [← quadraticChar_one_iff_isSquare (neg_ne_zero.mpr (Ring.two_ne_zero hF))
+    rw [← quadraticChar_one_iff_isSquare (neg_ne_zero.mpr (Ring.two_ne_zero hF))]; rw [quadraticChar_neg_two hF]; rw [χ₈'_nat_eq_if_mod_eight]
+    lia
 
 中文:
 定理 FiniteField.isSquare_neg_two_iff
@@ -137,7 +140,8 @@ theorem FiniteField.isSquare_neg_two_iff
     simp only [FiniteField.isSquare_of_char_two hF, true_iff]
     lia
   · have h := FiniteField.odd_card_of_char_ne_two hF
-    rw [← quadraticChar_one_iff_isSquare (neg_ne_zero.mpr (Ring.two_ne_zero hF))
+    rw [← quadraticChar_one_iff_isSquare (neg_ne_zero.mpr (Ring.two_ne_zero hF))]; rw [quadraticChar_neg_two hF]; rw [χ₈'_nat_eq_if_mod_eight]
+    lia
 
 Depends on / 依赖: FiniteField, FiniteField.even_card_of_char_two, FiniteField.isSquare_of_char_two, FiniteField.odd_card_of_char_ne_two, Ring.two_ne_zero, _nat_eq_if_mod_eight, classical, even_card_of_char_two, isSquare_of_char_two, neg_ne_zero, neg_ne_zero.mpr, odd_card_of_char_ne_two, quadraticChar_neg_two, quadraticChar_one_iff_isSquare, ringChar, true_iff, two_ne_zero
 -/
@@ -164,7 +168,11 @@ theorem quadraticChar_card_card
     obtain ⟨a, ha⟩ := quadraticChar_exists_neg_one' hF
     refine ne_one_iff.mpr ⟨a, ?_⟩
     simpa only [ringHomComp_apply, ha, eq_intCast, Int.cast_neg, Int.cast_one, χ] using
-      Ring.neg_one_ne_one_of_char
+      Ring.neg_one_ne_one_of_char_ne_two hF'
+  have h := Char.card_pow_card hχ₁ ((quadraticChar_isQuadratic F).comp _) h hF'
+  rw [← quadraticChar_eq_pow_of_char_ne_two' hF'] at h
+  exact (IsQuadratic.eq_of_eq_coe (quadraticChar_isQuadratic F')
+    (quadraticChar_isQuadratic F) hF' h).symm
 
 中文:
 定理 quadraticChar_card_card
@@ -175,7 +183,11 @@ theorem quadraticChar_card_card
     obtain ⟨a, ha⟩ := quadraticChar_exists_neg_one' hF
     refine ne_one_iff.mpr ⟨a, ?_⟩
     simpa only [ringHomComp_apply, ha, eq_intCast, Int.cast_neg, Int.cast_one, χ] using
-      Ring.neg_one_ne_one_of_char
+      Ring.neg_one_ne_one_of_char_ne_two hF'
+  have h := Char.card_pow_card hχ₁ ((quadraticChar_isQuadratic F).comp _) h hF'
+  rw [← quadraticChar_eq_pow_of_char_ne_two' hF'] at h
+  exact (IsQuadratic.eq_of_eq_coe (quadraticChar_isQuadratic F')
+    (quadraticChar_isQuadratic F) hF' h).symm
 
 Depends on / 依赖: Char.card_pow_card, Int.cast_neg, Int.cast_one, IsQuadratic, IsQuadratic.eq_of_eq_coe, Ring.neg_one_ne_one_of_char_ne_two, algebraMap, card_pow_card, cast_neg, cast_one, eq_intCast, eq_of_eq_coe, ne_one_iff, ne_one_iff.mpr, neg_one_ne_one_of_char_ne_two, quadraticChar, quadraticChar_eq_pow_of_char_ne_two, quadraticChar_exists_neg_one, quadraticChar_i, quadraticChar_isQuadratic
 -/

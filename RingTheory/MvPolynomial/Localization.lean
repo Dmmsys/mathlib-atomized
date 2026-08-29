@@ -174,7 +174,8 @@ IsLocalization.Away.lift (S := S) (g := g) r by
     simp only [RingHom.coe_comp, Function.comp_apply, g]
     rw [isUnit_iff_exists_inv]
     use (Ideal.Quotient.mk _ <| X ())
-    rw [← map_mul]; 
+    rw [← map_mul]; rw [← map_one (Ideal.Quotient.mk _)]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]
+    exact Ideal.mem_span_singleton_self (C r * X () - 1)
 
 中文:
 定义 auxInv
@@ -185,7 +186,8 @@ IsLocalization.Away.lift (S := S) (g := g) r by
     simp only [RingHom.coe_comp, Function.comp_apply, g]
     rw [isUnit_iff_exists_inv]
     use (Ideal.Quotient.mk _ <| X ())
-    rw [← map_mul]; 
+    rw [← map_mul]; rw [← map_one (Ideal.Quotient.mk _)]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]
+    exact Ideal.mem_span_singleton_self (C r * X () - 1)
 
 Depends on / 依赖: Function, Function.comp_apply, Ideal.Quotient.mk, Ideal.Quotient.mk_eq_mk_iff_sub_mem, Ideal.mem_span_singleton_self, Ideal.span, IsLocalization, IsLocalization.Away.lift, MvPolynomial, Quotient, RingHom, RingHom.coe_comp, coe_comp, comp_apply, isUnit_iff_exists_inv, map_mul, map_one, mem_span_singleton_self, mk_eq_mk_iff_sub_mem
 -/
@@ -236,7 +238,9 @@ lemma auxInv_auxHom
   · simp only [auxInv, AlgHom.toRingHom_eq_coe, RingHom.coe_comp, RingHom.coe_coe,
       Function.comp_apply, auxHom_mk, aeval_X, RingHomCompTriple.comp_eq, invSelf, Away.lift,
       lift_mk'_spec]
-    simp onl
+    simp only [map_one]
+    rw [← map_one (Ideal.Quotient.mk _)]; rw [← map_mul]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [← Ideal.neg_mem_iff]; rw [neg_sub]
+    exact Ideal.mem_span_singleton_self (C r * X x - 1)
 
 中文:
 引理 auxInv_auxHom
@@ -248,7 +252,9 @@ lemma auxInv_auxHom
   · simp only [auxInv, AlgHom.toRingHom_eq_coe, RingHom.coe_comp, RingHom.coe_coe,
       Function.comp_apply, auxHom_mk, aeval_X, RingHomCompTriple.comp_eq, invSelf, Away.lift,
       lift_mk'_spec]
-    simp onl
+    simp only [map_one]
+    rw [← map_one (Ideal.Quotient.mk _)]; rw [← map_mul]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [← Ideal.neg_mem_iff]; rw [neg_sub]
+    exact Ideal.mem_span_singleton_self (C r * X x - 1)
 -/
 private lemma auxInv_auxHom : (auxInv S r).comp (auxHom (S := S) r).toRingHom = RingHom.id _ := by
   rw [← RingHom.cancel_right (Ideal.Quotient.mk_surjective)]

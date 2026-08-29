@@ -124,7 +124,35 @@ theorem exists_approx_aux
   intro ε hε b hb A
   let M := h.card ε
   -- By the "nicer" pigeonhole principle, we can find a collection `s`
-  -- of more than `M ^ n` rema
+  -- of more than `M ^ n` remainders where the first components lie close together:
+  obtain ⟨s, s_inj, hs⟩ :
+    exists s : Fin (M ^ n).succ -> Fin (M ^ n.succ).succ,
+      Function.Injective s ∧ forall i₀ i₁, (abv (A (s i₁) 0 % b - A (s i₀) 0 % b) : Real) < abv b • ε := by
+    -- We can partition the `A`s into `M` subsets where
+    -- the first components lie close together:
+    obtain ⟨t, ht⟩ :
+      exists t : Fin (M ^ n.succ).succ -> Fin M,
+        forall i₀ i₁, t i₀ = t i₁ -> (abv (A i₁ 0 % b - A i₀ 0 % b) : Real) < abv b • ε :=
+      h.exists_partition hε hb fun x => A x 0
+    -- Since the `M` subsets contain more than `M * M^n` elements total,
+    -- there must be a subset that contains more than `M^n` elements.
+    obtain ⟨s, hs⟩ :=
+      Fintype.exists_lt_card_fiber_of_mul_lt_card (f := t)
+        (by simpa only [Fintype.card_fin, pow_succ'] using Nat.lt_succ_self (M ^ n.succ))
+    have : (M ^ n).succ <= (Finset.toList {x | t x = s}).length := by
+      rwa [Finset.length_toList]
+    refine ⟨fun i => (Finset.toList {x | t x = s})[i.castLE this], fun i j h => ?_,
+      fun i₀ i₁ => ht _ _ ?_⟩
+    · simpa [(Finset.nodup_toList _).getElem_inj_iff, Fin.val_inj] using h
+    · have (i : Fin (M ^ n).succ) : t (Finset.toList {x | t x = s})[i.castLE this] = s :=
+        (Finset.mem_filter.mp ((Finset.mem_toList (s := {x | t x = s})).mp (List.getElem_mem _))).2
+      simp_rw [this]
+  -- Since `s` is large enough, there are two elements of `A ∘ s`
+  -- where the second components lie close together.
+  obtain ⟨k₀, k₁, hk, h⟩ := ih hε hb fun x => Fin.tail (A (s x))
+  refine ⟨s k₀, s k₁, fun h => hk (s_inj h), fun i => Fin.cases ?_ (fun i => ?_) i⟩
+  · exact hs k₀ k₁
+  · exact h i
 
 中文:
 定理 存在_approx_aux
@@ -141,7 +169,35 @@ theorem exists_approx_aux
   intro ε hε b hb A
   let M := h.card ε
   -- By the "nicer" pigeonhole principle, we can find a collection `s`
-  -- of more than `M ^ n` rema
+  -- of more than `M ^ n` remainders where the first components lie close together:
+  obtain ⟨s, s_inj, hs⟩ :
+    exists s : Fin (M ^ n).succ -> Fin (M ^ n.succ).succ,
+      Function.Injective s ∧ forall i₀ i₁, (abv (A (s i₁) 0 % b - A (s i₀) 0 % b) : Real) < abv b • ε := by
+    -- We can partition the `A`s into `M` subsets where
+    -- the first components lie close together:
+    obtain ⟨t, ht⟩ :
+      exists t : Fin (M ^ n.succ).succ -> Fin M,
+        forall i₀ i₁, t i₀ = t i₁ -> (abv (A i₁ 0 % b - A i₀ 0 % b) : Real) < abv b • ε :=
+      h.exists_partition hε hb fun x => A x 0
+    -- Since the `M` subsets contain more than `M * M^n` elements total,
+    -- there must be a subset that contains more than `M^n` elements.
+    obtain ⟨s, hs⟩ :=
+      Fintype.exists_lt_card_fiber_of_mul_lt_card (f := t)
+        (by simpa only [Fintype.card_fin, pow_succ'] using Nat.lt_succ_self (M ^ n.succ))
+    have : (M ^ n).succ <= (Finset.toList {x | t x = s}).length := by
+      rwa [Finset.length_toList]
+    refine ⟨fun i => (Finset.toList {x | t x = s})[i.castLE this], fun i j h => ?_,
+      fun i₀ i₁ => ht _ _ ?_⟩
+    · simpa [(Finset.nodup_toList _).getElem_inj_iff, Fin.val_inj] using h
+    · have (i : Fin (M ^ n).succ) : t (Finset.toList {x | t x = s})[i.castLE this] = s :=
+        (Finset.mem_filter.mp ((Finset.mem_toList (s := {x | t x = s})).mp (List.getElem_mem _))).2
+      simp_rw [this]
+  -- Since `s` is large enough, there are two elements of `A ∘ s`
+  -- where the second components lie close together.
+  obtain ⟨k₀, k₁, hk, h⟩ := ih hε hb fun x => Fin.tail (A (s x))
+  refine ⟨s k₀, s k₁, fun h => hk (s_inj h), fun i => Fin.cases ?_ (fun i => ?_) i⟩
+  · exact hs k₀ k₁
+  · exact h i
 
 Depends on / 依赖: Classical, Classical.decEq, h.card
 -/

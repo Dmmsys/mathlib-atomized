@@ -119,7 +119,7 @@ lemma pow_smul_esymm
   trans ((powersetCard n m).map (fun x : Multiset R => s ^ card x • x.prod)).sum
   · refine congr_arg _ (map_congr rfl (fun x hx => ?_))
     rw [Function.comp_apply]; rw [(mem_powersetCard.1 hx).2]
-  · simp_rw [smul_prod, esymm, powersetCard_map, map_map,
+  · simp_rw [smul_prod, esymm, powersetCard_map, map_map, Function.comp_def]
 
 中文:
 引理 pow_smul_esymm
@@ -129,7 +129,7 @@ lemma pow_smul_esymm
   trans ((powersetCard n m).map (fun x : Multiset R => s ^ card x • x.prod)).sum
   · refine congr_arg _ (map_congr rfl (fun x hx => ?_))
     rw [Function.comp_apply]; rw [(mem_powersetCard.1 hx).2]
-  · simp_rw [smul_prod, esymm, powersetCard_map, map_map,
+  · simp_rw [smul_prod, esymm, powersetCard_map, map_map, Function.comp_def]
 
 Depends on / 依赖: Function, Function.comp_apply, Function.comp_def, Multiset, comp_apply, comp_def, congr_arg, map_congr, map_map, mem_powersetCard, powersetCard, powersetCard_map, simp_rw, smul_prod, smul_sum, x.prod
 -/
@@ -527,7 +527,7 @@ definition renameSymmetricSubalgebra
     (((rename e).comp (symmetricSubalgebra σ R).val).codRestrict _ <| fun x => x.2.rename e)
     (((rename e.symm).comp <| Subalgebra.val _).codRestrict _ <| fun x => x.2.rename e.symm)
     (AlgHom.ext <| fun p => Subtype.ext <| by simp)
-    (AlgHom.ext <| fun p => Subtype.ext <| b
+    (AlgHom.ext <| fun p => Subtype.ext <| by simp)
 
 中文:
 定义 renameSymmetricSubalgebra
@@ -536,7 +536,7 @@ definition renameSymmetricSubalgebra
     (((rename e).comp (symmetricSubalgebra σ R).val).codRestrict _ <| fun x => x.2.rename e)
     (((rename e.symm).comp <| Subalgebra.val _).codRestrict _ <| fun x => x.2.rename e.symm)
     (AlgHom.ext <| fun p => Subtype.ext <| by simp)
-    (AlgHom.ext <| fun p => Subtype.ext <| b
+    (AlgHom.ext <| fun p => Subtype.ext <| by simp)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, AlgHom, AlgHom.ext, Subalgebra, Subalgebra.val, Subtype, Subtype.ext, codRestrict, e.symm, ofAlgHom, symmetricSubalgebra
 -/
@@ -795,7 +795,7 @@ theorem rename_esymm
       simp_rw [esymm, map_sum, map_prod, rename_X]
     _ = ∑ t in powersetCard n (univ.map e.toEmbedding), ∏ i in t, X i := by
       simp [powersetCard_map, -map_univ_equiv, (mapEmbedding_apply)]
-    _ = ∑ t in pow
+    _ = ∑ t in powersetCard n univ, ∏ i in t, X i := by rw [map_univ_equiv]
 
 中文:
 定理 rename_esymm
@@ -806,7 +806,7 @@ theorem rename_esymm
       simp_rw [esymm, map_sum, map_prod, rename_X]
     _ = ∑ t in powersetCard n (univ.map e.toEmbedding), ∏ i in t, X i := by
       simp [powersetCard_map, -map_univ_equiv, (mapEmbedding_apply)]
-    _ = ∑ t in pow
+    _ = ∑ t in powersetCard n univ, ∏ i in t, X i := by rw [map_univ_equiv]
 
 Depends on / 依赖: e.toEmbedding, mapEmbedding_apply, map_prod, map_sum, map_univ_equiv, powersetCard, powersetCard_map, rename_X, simp_rw, toEmbedding, univ.map
 -/
@@ -855,7 +855,13 @@ theorem support_esymm''
   simp only [support, MvPolynomial, AddMonoidAlgebra.coeff_sum, AddMonoidAlgebra.coeff_single]
   refine Finsupp.support_sum_eq_biUnion _ fun s t hst => ?_
   rw [disjoint_left]; rw [Finsupp.support_single _ one_ne_zero]
-  rw [Finsupp.
+  rw [Finsupp.support_single _ one_ne_zero]
+  simp only [mem_singleton]
+  rintro a h rfl
+  have := congr_arg Finsupp.support h
+  rw [Finsupp.support_sum_eq_biUnion _ (by simp)]; rw [Finsupp.support_sum_eq_biUnion _ (by simp)]
+    at this
+  simp_all
 
 中文:
 定理 support_esymm''
@@ -866,7 +872,13 @@ theorem support_esymm''
   simp only [support, MvPolynomial, AddMonoidAlgebra.coeff_sum, AddMonoidAlgebra.coeff_single]
   refine Finsupp.support_sum_eq_biUnion _ fun s t hst => ?_
   rw [disjoint_left]; rw [Finsupp.support_single _ one_ne_zero]
-  rw [Finsupp.
+  rw [Finsupp.support_single _ one_ne_zero]
+  simp only [mem_singleton]
+  rintro a h rfl
+  have := congr_arg Finsupp.support h
+  rw [Finsupp.support_sum_eq_biUnion _ (by simp)]; rw [Finsupp.support_sum_eq_biUnion _ (by simp)]
+    at this
+  simp_all
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.coeff_single, AddMonoidAlgebra.coeff_sum, Finsupp, Finsupp.support, Finsupp.support_single, Finsupp.support_sum_eq_biUnion, MvPolynomial, coeff_single, coeff_sum, congr_arg, disjoint_left, esymm_eq_sum_monomial, mem_singleton, one_ne_zero, single_eq_monomial, support, support_single, support_sum_eq_biUnion
 -/
@@ -959,7 +971,11 @@ theorem degrees_esymm
       simp
     rw [degrees_def]; rw [support_esymm]; rw [sup_image]; rw [this]
     have : ((powersetCard n univ).sup (fun (x : Finset σ) => x)).val
-        = sup (powerset
+        = sup (powersetCard n univ) val := by
+      refine apply_sup_eq_sup_comp _ ?_ ?_ <;> simp
+    rw [← this]
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hpos.ne'
+    simpa using! powersetCard_sup _ _ (Nat.lt_of_succ_le hn)
 
 中文:
 定理 degrees_esymm
@@ -972,7 +988,11 @@ theorem degrees_esymm
       simp
     rw [degrees_def]; rw [support_esymm]; rw [sup_image]; rw [this]
     have : ((powersetCard n univ).sup (fun (x : Finset σ) => x)).val
-        = sup (powerset
+        = sup (powersetCard n univ) val := by
+      refine apply_sup_eq_sup_comp _ ?_ ?_ <;> simp
+    rw [← this]
+    obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hpos.ne'
+    simpa using! powersetCard_sup _ _ (Nat.lt_of_succ_le hn)
 
 Depends on / 依赖: Finset, Finsupp, Finsupp.single, Finsupp.toMultiset, Nat.exists_eq_succ_of_ne_zero, Nat.lt_of_succ_le, apply_sup_eq_sup_comp, classical, degrees_def, exists_eq_succ_of_ne_zero, hpos.ne, lt_of_succ_le, powersetCard, powersetCard_sup, single, sup_image, support_esymm, toMultiset
 -/
@@ -1433,7 +1453,15 @@ theorem msymm_one
     simp_rw [Set.mem_univ, Nat.Partition.ofSym_one]
   symm
   rw [Fintype.sum_equiv (Equiv.trans Sym.oneEquiv (Equiv.Set.univ (Sym σ 1)).symm)
-    _ (fun s => (s.1.1.map X).pro
+    _ (fun s => (s.1.1.map X).prod)]
+  · apply Fintype.sum_equiv (Equiv.subtypeEquivProp this)
+    intro x
+    congr
+  · intro x
+    rw [← Multiset.prod_singleton (X x)]; rw [← Multiset.map_singleton]
+    congr
+
+@[simp]
 
 中文:
 定理 msymm_one
@@ -1444,7 +1472,15 @@ theorem msymm_one
     simp_rw [Set.mem_univ, Nat.Partition.ofSym_one]
   symm
   rw [Fintype.sum_equiv (Equiv.trans Sym.oneEquiv (Equiv.Set.univ (Sym σ 1)).symm)
-    _ (fun s => (s.1.1.map X).pro
+    _ (fun s => (s.1.1.map X).prod)]
+  · apply Fintype.sum_equiv (Equiv.subtypeEquivProp this)
+    intro x
+    congr
+  · intro x
+    rw [← Multiset.prod_singleton (X x)]; rw [← Multiset.map_singleton]
+    congr
+
+@[simp]
 
 Depends on / 依赖: Equiv.Set.univ, Equiv.subtypeEquivProp, Equiv.trans, Fintype, Fintype.sum_equiv, Multiset, Multiset.map_singleton, Multiset.prod_singleton, Nat.Partition.indiscrete, Nat.Partition.ofSym, Nat.Partition.ofSym_one, Partition, Set.mem_univ, Set.univ, Sym.oneEquiv, indiscrete, map_singleton, mem_univ, ofSym_one, oneEquiv
 -/

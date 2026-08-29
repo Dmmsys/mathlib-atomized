@@ -207,7 +207,7 @@ alias cartesianMonoidalCategoryLift_val := cartesianMonoidalCategoryLift_hom
 @[deprecated (since := "2026-03-05")]
 alias cartesianMonoidalCategoryWhiskerLeft_val := cartesianMonoidalCategoryWhiskerLeft_hom
 @[deprecated (since := "2026-03-05")]
-alias cartesi
+alias cartesianMonoidalCategoryWhiskerRight_val := cartesianMonoidalCategoryWhiskerRight_hom
 
 中文:
 引理 cartesianMonoidalCategoryWhiskerRight_hom
@@ -219,7 +219,7 @@ alias cartesianMonoidalCategoryLift_val := cartesianMonoidalCategoryLift_hom
 @[deprecated (since := "2026-03-05")]
 alias cartesianMonoidalCategoryWhiskerLeft_val := cartesianMonoidalCategoryWhiskerLeft_hom
 @[deprecated (since := "2026-03-05")]
-alias cartesi
+alias cartesianMonoidalCategoryWhiskerRight_val := cartesianMonoidalCategoryWhiskerRight_hom
 -/
 lemma cartesianMonoidalCategoryWhiskerRight_hom : (f ▷ X).hom = f.hom ▷ X.obj := rfl
 

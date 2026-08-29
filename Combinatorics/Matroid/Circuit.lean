@@ -489,7 +489,9 @@ lemma isCircuit_iff_dep_forall_sdiff_singleton_indep
     minimal_iff_forall_sdiff_singleton (P := (¬ M.Indep ·))
     (fun _ _ hY hYX hX => hY <| hX.subset hYX)]
 
-@[depr
+@[deprecated (since := "2026-06-03")]
+alias isCircuit_iff_dep_forall_diff_singleton_indep :=
+  isCircuit_iff_dep_forall_sdiff_singleton_indep
 
 中文:
 引理 isCircuit_iff_dep_对任意_sdiff_singleton_indep
@@ -500,7 +502,9 @@ lemma isCircuit_iff_dep_forall_sdiff_singleton_indep
     minimal_iff_forall_sdiff_singleton (P := (¬ M.Indep ·))
     (fun _ _ hY hYX hX => hY <| hX.subset hYX)]
 
-@[depr
+@[deprecated (since := "2026-06-03")]
+alias isCircuit_iff_dep_forall_diff_singleton_indep :=
+  isCircuit_iff_dep_forall_sdiff_singleton_indep
 
 Depends on / 依赖: IsCircuit, IsCircuit.subset_ground, M.Indep, hX.subset, iff_of_false, isCircuit_iff_minimal_not_indep, minimal_iff_forall_sdiff_singleton, not_indep_iff, subset, subset_ground, subseteq
 -/
@@ -528,7 +532,7 @@ lemma Indep.insert_isCircuit_of_forall
   rintro f (rfl | hfI)
   · simpa [heI]
   rw [← insert_sdiff_singleton_comm (by rintro rfl; contradiction)]; rw [(hI.sdiff _).insert_indep_iff_of_notMem (by simp [heI])]
-  exact ⟨mem_gr
+  exact ⟨mem_ground_of_mem_closure he, h f hfI⟩
 
 中文:
 引理 Indep.insert_isCircuit_of_对任意
@@ -538,7 +542,7 @@ lemma Indep.insert_isCircuit_of_forall
   rintro f (rfl | hfI)
   · simpa [heI]
   rw [← insert_sdiff_singleton_comm (by rintro rfl; contradiction)]; rw [(hI.sdiff _).insert_indep_iff_of_notMem (by simp [heI])]
-  exact ⟨mem_gr
+  exact ⟨mem_ground_of_mem_closure he, h f hfI⟩
 
 Depends on / 依赖: and_iff_right, hI.insert_dep_iff, hI.sdiff, insert_dep_iff, insert_indep_iff_of_notMem, insert_sdiff_singleton_comm, isCircuit_iff_dep_forall_sdiff_singleton_indep, mem_ground_of_mem_closure
 -/
@@ -589,7 +593,7 @@ lemma IsCircuit.sdiff_singleton_isBasis
   exact Or.inl hC.dep
 
 @[deprecated (since := "2026-06-03")]
-alias IsCircuit.diff_singleton_isBasis := IsCircuit.sdiff_s
+alias IsCircuit.diff_singleton_isBasis := IsCircuit.sdiff_singleton_isBasis
 
 中文:
 引理 是Circuit.sdiff_singleton_isBasis
@@ -600,7 +604,7 @@ alias IsCircuit.diff_singleton_isBasis := IsCircuit.sdiff_s
   exact Or.inl hC.dep
 
 @[deprecated (since := "2026-06-03")]
-alias IsCircuit.diff_singleton_isBasis := IsCircuit.sdiff_s
+alias IsCircuit.diff_singleton_isBasis := IsCircuit.sdiff_singleton_isBasis
 
 Depends on / 依赖: Or.inl, hC.dep, hC.sdiff_singleton_indep, insert_eq_of_mem, insert_sdiff_singleton, isBasis_insert_iff, nth_rw, sdiff_singleton_indep
 -/
@@ -625,7 +629,11 @@ lemma IsCircuit.isBasis_iff_eq_sdiff_singleton
       (h.subset.ssubset_of_ne (by rintro rfl; exact hC.dep.not_indep h.indep))
     exact ⟨e, he.1, h.eq_of_subset_indep (hC.sdiff_singleton_indep he.1)
       (subset_sdiff_singleton h.subset he.2) sdiff_subset⟩
-  rintro ⟨e, he, rf
+  rintro ⟨e, he, rfl⟩
+  exact hC.sdiff_singleton_isBasis he
+
+@[deprecated (since := "2026-06-03")]
+alias IsCircuit.isBasis_iff_eq_diff_singleton := IsCircuit.isBasis_iff_eq_sdiff_singleton
 
 中文:
 引理 是Circuit.isBasis_iff_eq_sdiff_singleton
@@ -636,7 +644,11 @@ lemma IsCircuit.isBasis_iff_eq_sdiff_singleton
       (h.subset.ssubset_of_ne (by rintro rfl; exact hC.dep.not_indep h.indep))
     exact ⟨e, he.1, h.eq_of_subset_indep (hC.sdiff_singleton_indep he.1)
       (subset_sdiff_singleton h.subset he.2) sdiff_subset⟩
-  rintro ⟨e, he, rf
+  rintro ⟨e, he, rfl⟩
+  exact hC.sdiff_singleton_isBasis he
+
+@[deprecated (since := "2026-06-03")]
+alias IsCircuit.isBasis_iff_eq_diff_singleton := IsCircuit.isBasis_iff_eq_sdiff_singleton
 
 Depends on / 依赖: eq_of_subset_indep, exists_of_ssubset, h.eq_of_subset_indep, h.indep, h.subset, h.subset.ssubset_of_ne, hC.dep.not_indep, hC.sdiff_singleton_indep, hC.sdiff_singleton_isBasis, not_indep, sdiff_singleton_indep, sdiff_singleton_isBasis, sdiff_subset, ssubset_of_ne, subset, subset_sdiff_singleton
 -/
@@ -944,7 +956,10 @@ lemma Indep.fundCircuit_isCircuit
   rw [fundCircuit_eq_sInter hecl]
   refine (hI.subset aux).insert_isCircuit_of_forall ?_ ?_ ?_
   · simp [show exists x subseteq I, e in M.closure x ∧ e ∉ x from ⟨I, by simp [hecl, heI]⟩]
-  · rw [hI
+  · rw [hI.closure_sInter_eq_biInter_closure_of_forall_subset ⟨I, by simpa⟩ (by simp +contextual)]
+    simp
+  simp only [mem_sInter, mem_ofPred_eq, and_imp]
+  exact fun f hf hecl => (hf _ (sdiff_subset.trans aux) hecl).2 rfl
 
 中文:
 引理 Indep.fundCircuit_isCircuit
@@ -954,7 +969,10 @@ lemma Indep.fundCircuit_isCircuit
   rw [fundCircuit_eq_sInter hecl]
   refine (hI.subset aux).insert_isCircuit_of_forall ?_ ?_ ?_
   · simp [show exists x subseteq I, e in M.closure x ∧ e ∉ x from ⟨I, by simp [hecl, heI]⟩]
-  · rw [hI
+  · rw [hI.closure_sInter_eq_biInter_closure_of_forall_subset ⟨I, by simpa⟩ (by simp +contextual)]
+    simp
+  simp only [mem_sInter, mem_ofPred_eq, and_imp]
+  exact fun f hf hecl => (hf _ (sdiff_subset.trans aux) hecl).2 rfl
 
 Depends on / 依赖: M.closure, and_imp, closure, closure_sInter_eq_biInter_closure_of_forall_subset, contextual, fundCircuit_eq_sInter, hI.closure_sInter_eq_biInter_closure_of_forall_subset, hI.subset, insert_isCircuit_of_forall, mem_ofPred_eq, mem_sInter, sInter_subset_of_mem, sdiff_subset, sdiff_subset.trans, subset, subseteq
 -/
@@ -980,7 +998,9 @@ lemma Indep.mem_fundCircuit_iff
   · simp [hI.sdiff, mem_fundCircuit]
   suffices (forall t subseteq I, e in M.closure t -> x in t) ↔ e ∉ M.closure (I \ {x}) by
     simpa [fundCircuit_eq_sInter hecl, hne, ← insert_sdiff_singleton_comm hne.symm,
-      (hI.sdiff _).insert_indep_iff, mem_ground_of_
+      (hI.sdiff _).insert_indep_iff, mem_ground_of_mem_closure hecl, heI]
+  refine ⟨fun h hecl => (h _ sdiff_subset hecl).2 rfl, fun h J hJ heJ => by_contra fun hxJ => h ?_⟩
+  exact M.closure_subset_closure (subset_sdiff_singleton hJ hxJ) heJ
 
 中文:
 引理 Indep.mem_fundCircuit_iff
@@ -990,7 +1010,9 @@ lemma Indep.mem_fundCircuit_iff
   · simp [hI.sdiff, mem_fundCircuit]
   suffices (forall t subseteq I, e in M.closure t -> x in t) ↔ e ∉ M.closure (I \ {x}) by
     simpa [fundCircuit_eq_sInter hecl, hne, ← insert_sdiff_singleton_comm hne.symm,
-      (hI.sdiff _).insert_indep_iff, mem_ground_of_
+      (hI.sdiff _).insert_indep_iff, mem_ground_of_mem_closure hecl, heI]
+  refine ⟨fun h hecl => (h _ sdiff_subset hecl).2 rfl, fun h J hJ heJ => by_contra fun hxJ => h ?_⟩
+  exact M.closure_subset_closure (subset_sdiff_singleton hJ hxJ) heJ
 
 Depends on / 依赖: M.closure, M.closure_subset_closure, closure, closure_subset_closure, eq_or_ne, fundCircuit_eq_sInter, hI.sdiff, hne.symm, insert_indep_iff, insert_sdiff_singleton_comm, mem_fundCircuit, mem_ground_of_mem_closure, sdiff_subset, subset_sdiff_singleton, subseteq
 -/
@@ -1035,7 +1057,13 @@ lemma IsCircuit.eq_fundCircuit_of_subset
   suffices hss : M.fundCircuit e I subseteq C by
     refine hC.eq_of_superset_isCircuit (hI.fundCircuit_isCircuit ?_ fun heI => ?_) hss
     · rw [hI.mem_closure_iff]
-      exact .inl (hC.dep.supers
+      exact .inl (hC.dep.superset hCs (insert_subset (hC.subset_ground heC) hI.subset_ground))
+    exact hC.not_indep (hI.subset (hCs.trans (by simp [heI])))
+  have heCcl := (hC.sdiff_singleton_isBasis heC).subset_closure heC
+  have heI : e in M.closure I := M.closure_subset_closure hCeI heCcl
+  rw [fundCircuit_eq_sInter heI]
+refine insert_subset heC (sInter_subset_of_mem (t := C \ {e}) ?_).trans sdiff_subset
+  exact ⟨hCeI, heCcl⟩
 
 中文:
 引理 是Circuit.eq_fundCircuit_of_subset
@@ -1046,7 +1074,13 @@ lemma IsCircuit.eq_fundCircuit_of_subset
   suffices hss : M.fundCircuit e I subseteq C by
     refine hC.eq_of_superset_isCircuit (hI.fundCircuit_isCircuit ?_ fun heI => ?_) hss
     · rw [hI.mem_closure_iff]
-      exact .inl (hC.dep.supers
+      exact .inl (hC.dep.superset hCs (insert_subset (hC.subset_ground heC) hI.subset_ground))
+    exact hC.not_indep (hI.subset (hCs.trans (by simp [heI])))
+  have heCcl := (hC.sdiff_singleton_isBasis heC).subset_closure heC
+  have heI : e in M.closure I := M.closure_subset_closure hCeI heCcl
+  rw [fundCircuit_eq_sInter heI]
+refine insert_subset heC (sInter_subset_of_mem (t := C \ {e}) ?_).trans sdiff_subset
+  exact ⟨hCeI, heCcl⟩
 
 Depends on / 依赖: M.closure, M.fundCircuit, closure, eq_of_superset_isCircuit, fundCircuit, fundCircuit_isCircuit, hC.dep.superset, hC.eq_of_superset_isCircuit, hC.not_indep, hC.sdiff_singleton_isBasis, hC.subset_ground, hCs.trans, hI.fundCircuit_isCircuit, hI.mem_closure_iff, hI.subset, hI.subset_ground, insert_subset, mem_closure_iff, not_indep, sdiff_singleton_isBasis
 -/
@@ -1078,7 +1112,11 @@ lemma fundCircuit_restrict
     simp only [restrict_closure_eq']
     refine (inter_subset_inter_left _ ?_).trans subset_union_left
     rwa [inter_eq_self_of_subset_left (hJI.trans hIR)]
-  
+  gcongr 5 with J hJI; intro heJ
+  refine closure_subset_closure_of_subset_closure ?_
+  rw [restrict_closure_eq _ (hJI.trans hIR) hR] at heJ
+  simp only [subset_inter_iff, inter_subset_right, and_true] at heJ
+  exact subset_trans (by simpa [M.mem_closure_of_mem' (mem_singleton e) (hR heR)]) heJ
 
 中文:
 引理 fundCircuit_restrict
@@ -1090,7 +1128,11 @@ lemma fundCircuit_restrict
     simp only [restrict_closure_eq']
     refine (inter_subset_inter_left _ ?_).trans subset_union_left
     rwa [inter_eq_self_of_subset_left (hJI.trans hIR)]
-  
+  gcongr 5 with J hJI; intro heJ
+  refine closure_subset_closure_of_subset_closure ?_
+  rw [restrict_closure_eq _ (hJI.trans hIR) hR] at heJ
+  simp only [subset_inter_iff, inter_subset_right, and_true] at heJ
+  exact subset_trans (by simpa [M.mem_closure_of_mem' (mem_singleton e) (hR heR)]) heJ
 
 Depends on / 依赖: M.restrict_closure_eq, and_true, closure_subset_closure_of_subset_closure, fundCircuit, hJI.trans, inter_eq_self_of_subset_left, inter_subset_inter_left, inter_subset_right, restrict_closure_eq, simp_rw, subset_antisymm, subset_inter_iff, subset_trans, subset_union_left
 -/
@@ -1152,7 +1194,7 @@ lemma Dep.exists_isCircuit_subset
   obtain ⟨e, heX, heI⟩ := exists_of_ssubset
     (hI.subset.ssubset_of_ne (by rintro rfl; exact hI.indep.not_dep hX))
   exact ⟨M.fundCircuit e I, (M.fundCircuit_subset_insert e I).trans (insert_subset heX hI.subset),
-    hI.indep.fundCircuit_isCircuit (hI.sub
+    hI.indep.fundCircuit_isCircuit (hI.subset_closure heX) heI⟩
 
 中文:
 引理 Dep.存在_isCircuit_subset
@@ -1163,7 +1205,7 @@ lemma Dep.exists_isCircuit_subset
   obtain ⟨e, heX, heI⟩ := exists_of_ssubset
     (hI.subset.ssubset_of_ne (by rintro rfl; exact hI.indep.not_dep hX))
   exact ⟨M.fundCircuit e I, (M.fundCircuit_subset_insert e I).trans (insert_subset heX hI.subset),
-    hI.indep.fundCircuit_isCircuit (hI.sub
+    hI.indep.fundCircuit_isCircuit (hI.subset_closure heX) heI⟩
 
 Depends on / 依赖: M.exists_isBasis, M.fundCircuit, M.fundCircuit_subset_insert, exists_isBasis, exists_of_ssubset, fundCircuit, fundCircuit_isCircuit, fundCircuit_subset_insert, hI.indep.fundCircuit_isCircuit, hI.indep.not_dep, hI.subset, hI.subset.ssubset_of_ne, hI.subset_closure, insert_subset, not_dep, ssubset_of_ne, subset, subset_closure
 -/
@@ -1415,7 +1457,8 @@ lemma ext_isCircuit
     (em (C subseteq M₁.E)).elim (h (C := C)) (fun hC => iff_of_false (mt IsCircuit.subset_ground hC)
       (mt IsCircuit.subset_ground fun hss => hC (hss.trans_eq hE.symm)))
   refine ext_indep hE fun I hI => ?_
-  simp_rw [indep_iff_forall_subset_
+  simp_rw [indep_iff_forall_subset_not_isCircuit hI, h',
+    indep_iff_forall_subset_not_isCircuit (hI.trans_eq hE)]
 
 中文:
 引理 ext_isCircuit
@@ -1425,7 +1468,8 @@ lemma ext_isCircuit
     (em (C subseteq M₁.E)).elim (h (C := C)) (fun hC => iff_of_false (mt IsCircuit.subset_ground hC)
       (mt IsCircuit.subset_ground fun hss => hC (hss.trans_eq hE.symm)))
   refine ext_indep hE fun I hI => ?_
-  simp_rw [indep_iff_forall_subset_
+  simp_rw [indep_iff_forall_subset_not_isCircuit hI, h',
+    indep_iff_forall_subset_not_isCircuit (hI.trans_eq hE)]
 
 Depends on / 依赖: IsCircuit, IsCircuit.subset_ground, ext_indep, hE.symm, hI.trans_eq, hss.trans_eq, iff_of_false, indep_iff_forall_subset_not_isCircuit, simp_rw, subset_ground, subseteq, trans_eq
 -/
@@ -1448,7 +1492,8 @@ lemma ext_isCircuit_not_indep
   refine ext_isCircuit hE fun C hCE => ⟨fun hC => ?_, fun hC => ?_⟩
   · obtain ⟨C', hC'C, hC'⟩ := ((not_indep_iff (by rwa [← hE])).1 (h₁ C hC)).exists_isCircuit_subset
     rwa [← hC.eq_of_not_indep_subset (h₂ C' hC') hC'C]
-  obtain ⟨C', hC'C, hC'⟩ := ((not_indep_iff hCE).1 (h₂ C hC)).exists_isCir
+  obtain ⟨C', hC'C, hC'⟩ := ((not_indep_iff hCE).1 (h₂ C hC)).exists_isCircuit_subset
+  rwa [← hC.eq_of_not_indep_subset (h₁ C' hC') hC'C]
 
 中文:
 引理 ext_isCircuit_not_indep
@@ -1457,7 +1502,8 @@ lemma ext_isCircuit_not_indep
   refine ext_isCircuit hE fun C hCE => ⟨fun hC => ?_, fun hC => ?_⟩
   · obtain ⟨C', hC'C, hC'⟩ := ((not_indep_iff (by rwa [← hE])).1 (h₁ C hC)).exists_isCircuit_subset
     rwa [← hC.eq_of_not_indep_subset (h₂ C' hC') hC'C]
-  obtain ⟨C', hC'C, hC'⟩ := ((not_indep_iff hCE).1 (h₂ C hC)).exists_isCir
+  obtain ⟨C', hC'C, hC'⟩ := ((not_indep_iff hCE).1 (h₂ C hC)).exists_isCircuit_subset
+  rwa [← hC.eq_of_not_indep_subset (h₁ C' hC') hC'C]
 
 Depends on / 依赖: eq_of_not_indep_subset, exists_isCircuit_subset, ext_isCircuit, hC.eq_of_not_indep_subset, not_indep_iff
 -/
@@ -1506,7 +1552,19 @@ lemma IsCircuit.strong_multi_elimination_insert
   -- `z` is spanned by the union of the `I` and `J \ {z}`.
   obtain hι | hι := isEmpty_or_nonempty ι
   · exact ⟨J, by simp, by simpa [range_eq_empty] using hJx, hzJ⟩
-  suffices hcl : z in M.closure ((⋃ i, I i) union (J \ {z})) 
+  suffices hcl : z in M.closure ((⋃ i, I i) union (J \ {z})) by
+    rw [mem_closure_iff_exists_isCircuit (by simp [hzI])] at hcl
+    obtain ⟨C', hC'ss, hC', hzC'⟩ := hcl
+    refine ⟨C', ?_, hC', hzC'⟩
+    rwa [union_comm, ← insert_union, insert_sdiff_singleton, insert_eq_of_mem hzJ] at hC'ss
+  have hC' (i) : M.closure (I i) = M.closure (insert (x i) (I i)) := by
+    simpa [sdiff_singleton_eq_self (hxI _)] using (hC i).closure_sdiff_singleton_eq (x i)
+  -- This is true because each `I i` spans `x i` and `(range x) ∪ (J \ {z})` spans `z`.
+  rw [closure_union_congr_left <| closure_iUnion_congr _ _ hC']; rw [iUnion_insert_eq_range_union_iUnion]; rw [union_right_comm]
+  refine mem_of_mem_of_subset (hJx.mem_closure_sdiff_singleton_of_mem (.inl hzJ))
+    (M.closure_subset_closure (subset_trans ?_ subset_union_left))
+  rw [union_sdiff_distrib]; rw [union_comm]
+  exact union_subset_union_left _ sdiff_subset
 
 中文:
 引理 是Circuit.strong_multi_elimination_insert
@@ -1516,7 +1574,19 @@ lemma IsCircuit.strong_multi_elimination_insert
   -- `z` is spanned by the union of the `I` and `J \ {z}`.
   obtain hι | hι := isEmpty_or_nonempty ι
   · exact ⟨J, by simp, by simpa [range_eq_empty] using hJx, hzJ⟩
-  suffices hcl : z in M.closure ((⋃ i, I i) union (J \ {z})) 
+  suffices hcl : z in M.closure ((⋃ i, I i) union (J \ {z})) by
+    rw [mem_closure_iff_exists_isCircuit (by simp [hzI])] at hcl
+    obtain ⟨C', hC'ss, hC', hzC'⟩ := hcl
+    refine ⟨C', ?_, hC', hzC'⟩
+    rwa [union_comm, ← insert_union, insert_sdiff_singleton, insert_eq_of_mem hzJ] at hC'ss
+  have hC' (i) : M.closure (I i) = M.closure (insert (x i) (I i)) := by
+    simpa [sdiff_singleton_eq_self (hxI _)] using (hC i).closure_sdiff_singleton_eq (x i)
+  -- This is true because each `I i` spans `x i` and `(range x) ∪ (J \ {z})` spans `z`.
+  rw [closure_union_congr_left <| closure_iUnion_congr _ _ hC']; rw [iUnion_insert_eq_range_union_iUnion]; rw [union_right_comm]
+  refine mem_of_mem_of_subset (hJx.mem_closure_sdiff_singleton_of_mem (.inl hzJ))
+    (M.closure_subset_closure (subset_trans ?_ subset_union_left))
+  rw [union_sdiff_distrib]; rw [union_comm]
+  exact union_subset_union_left _ sdiff_subset
 -/
 lemma IsCircuit.strong_multi_elimination_insert (x : ι -> α) (I : ι -> Set α) (z : α)
     (hxI : forall i, x i ∉ I i) (hC : forall i, M.IsCircuit (insert (x i) (I i)))
@@ -1551,7 +1621,21 @@ lemma IsCircuit.strong_multi_elimination
     (J := C₀ \ range x) (z := z) (by simp) (fun i => ?_) ?_ ⟨hzC₀, ?_⟩ ?_
   · obtain ⟨C', hC'ss, hC', hzC'⟩ := hwin
     refine ⟨C', hC'ss.trans ?_, hC', hzC'⟩
-    refine union_subset (sdiff_subset_sdiff_l
+    refine union_subset (sdiff_subset_sdiff_left subset_union_left)
+      (iUnion_subset fun i => subset_sdiff.2
+        ⟨sdiff_subset.trans (subset_union_of_subset_right (subset_iUnion ..) _), ?_⟩)
+    rw [disjoint_iff_forall_ne]
+    rintro _ he _ ⟨j, hj, rfl⟩ rfl
+    obtain rfl : j = i := h_unique he.1
+    simp at he
+  · simpa [insert_eq_of_mem (h_mem i)] using hC i
+  · rwa [sdiff_union_self, union_eq_self_of_subset_right]
+    rintro _ ⟨i, hi, rfl⟩
+    exact h_mem_C₀ i
+  · rintro ⟨i, hi, rfl⟩
+    exact hzC _ (h_mem i)
+  simp only [mem_sdiff, mem_singleton_iff, not_and, not_not]
+  exact fun i hzi => (hzC i hzi).elim
 
 中文:
 引理 是Circuit.strong_multi_elimination
@@ -1561,7 +1645,21 @@ lemma IsCircuit.strong_multi_elimination
     (J := C₀ \ range x) (z := z) (by simp) (fun i => ?_) ?_ ⟨hzC₀, ?_⟩ ?_
   · obtain ⟨C', hC'ss, hC', hzC'⟩ := hwin
     refine ⟨C', hC'ss.trans ?_, hC', hzC'⟩
-    refine union_subset (sdiff_subset_sdiff_l
+    refine union_subset (sdiff_subset_sdiff_left subset_union_left)
+      (iUnion_subset fun i => subset_sdiff.2
+        ⟨sdiff_subset.trans (subset_union_of_subset_right (subset_iUnion ..) _), ?_⟩)
+    rw [disjoint_iff_forall_ne]
+    rintro _ he _ ⟨j, hj, rfl⟩ rfl
+    obtain rfl : j = i := h_unique he.1
+    simp at he
+  · simpa [insert_eq_of_mem (h_mem i)] using hC i
+  · rwa [sdiff_union_self, union_eq_self_of_subset_right]
+    rintro _ ⟨i, hi, rfl⟩
+    exact h_mem_C₀ i
+  · rintro ⟨i, hi, rfl⟩
+    exact hzC _ (h_mem i)
+  simp only [mem_sdiff, mem_singleton_iff, not_and, not_not]
+  exact fun i hzi => (hzC i hzi).elim
 
 Depends on / 依赖: IsCircuit, IsCircuit.strong_multi_elimination_insert, disjoint_iff_forall_ne, iUnion_subset, sdiff_subset, sdiff_subset.trans, sdiff_subset_sdiff_left, ss.trans, strong_multi_elimination_insert, subset_iUnion, subset_sdiff, subset_union_left, subset_union_of_subset_right, union_subset
 -/
@@ -1601,7 +1699,15 @@ lemma IsCircuit.strong_multi_elimination_set
   have hwin := hC₀.strong_multi_elimination (fun x : X => x) (fun x => C x) z ?_ ?_ ?_ ?_ hzC₀ ?_
   · obtain ⟨C', hC'ss, hC', hz⟩ := hwin
     refine ⟨C', hC'ss.trans (sdiff_subset_sdiff (union_subset_union_right _ ?_) (by simp)), hC', hz⟩
-   
+    simpa using fun e heX => (subset_sUnion_of_mem (hC.1 e heX))
+· simpa using fun e heX => hCS _ hC.1 e heX
+  · simpa using fun e heX => hXC₀ heX
+  · simp only [Subtype.forall, ← singleton_subset_iff (s := C _)]
+    exact fun e heX => by simp [← hC.2 e heX]
+  · simp only [Subtype.forall, Subtype.mk.injEq]
+    refine fun e heX f hfX hef => ?_
+    simpa [hC.2 f hfX] using subset_inter (singleton_subset_iff.2 hef) (singleton_subset_iff.2 heX)
+  simpa using fun e heX heC => hz _ (hC.1 e heX) heC
 
 中文:
 引理 是Circuit.strong_multi_elimination_set
@@ -1612,7 +1718,15 @@ lemma IsCircuit.strong_multi_elimination_set
   have hwin := hC₀.strong_multi_elimination (fun x : X => x) (fun x => C x) z ?_ ?_ ?_ ?_ hzC₀ ?_
   · obtain ⟨C', hC'ss, hC', hz⟩ := hwin
     refine ⟨C', hC'ss.trans (sdiff_subset_sdiff (union_subset_union_right _ ?_) (by simp)), hC', hz⟩
-   
+    simpa using fun e heX => (subset_sUnion_of_mem (hC.1 e heX))
+· simpa using fun e heX => hCS _ hC.1 e heX
+  · simpa using fun e heX => hXC₀ heX
+  · simp only [Subtype.forall, ← singleton_subset_iff (s := C _)]
+    exact fun e heX => by simp [← hC.2 e heX]
+  · simp only [Subtype.forall, Subtype.mk.injEq]
+    refine fun e heX f hfX hef => ?_
+    simpa [hC.2 f hfX] using subset_inter (singleton_subset_iff.2 hef) (singleton_subset_iff.2 heX)
+  simpa using fun e heX heC => hz _ (hC.1 e heX) heC
 
 Depends on / 依赖: Subtype, Subtype.forall, forall_and, sdiff_subset_sdiff, singleton_subset_iff, ss.trans, strong_multi_elimination, subset_sUnion_of_mem, union_subset_union_right
 -/
@@ -1675,7 +1789,8 @@ have hnss : ¬ (C₁ subseteq C₂) := fun hss => h hC₁.eq_of_subset_isCircuit
   · by_cases he₂ : e in C₂
     · obtain ⟨C, hC, hC', -⟩ := hC₁.strong_elimination hC₂ he₁ he₂ hf₁ hf₂
       exact ⟨C, hC, hC'⟩
-    exact ⟨C₂, subs
+    exact ⟨C₂, subset_sdiff_singleton subset_union_right he₂, hC₂⟩
+  exact ⟨C₁, subset_sdiff_singleton subset_union_left he₁, hC₁⟩
 
 中文:
 引理 是Circuit.elimination
@@ -1687,7 +1802,8 @@ have hnss : ¬ (C₁ subseteq C₂) := fun hss => h hC₁.eq_of_subset_isCircuit
   · by_cases he₂ : e in C₂
     · obtain ⟨C, hC, hC', -⟩ := hC₁.strong_elimination hC₂ he₁ he₂ hf₁ hf₂
       exact ⟨C, hC, hC'⟩
-    exact ⟨C₂, subs
+    exact ⟨C₂, subset_sdiff_singleton subset_union_right he₂, hC₂⟩
+  exact ⟨C₁, subset_sdiff_singleton subset_union_left he₁, hC₁⟩
 
 Depends on / 依赖: eq_of_subset_isCircuit, not_subset, strong_elimination, subset_sdiff_singleton, subset_union_left, subset_union_right, subseteq
 -/
@@ -1782,7 +1898,8 @@ lemma exists_mem_finite_closure_of_mem_closure
     exact ⟨J, hJ.subset.trans (by simpa), (finite_singleton e).subset hJ.subset, hJ.indep,
       by simpa using hJ.subset_closure⟩
   obtain ⟨C, hCs, hC, heC⟩ := exists_isCircuit_of_mem_closure he heY
-  exact ⟨C \ {e}, by simpa, hC
+  exact ⟨C \ {e}, by simpa, hC.finite.sdiff, hC.sdiff_singleton_indep heC,
+    hC.mem_closure_sdiff_singleton_of_mem heC⟩
 
 中文:
 引理 存在_mem_finite_closure_of_mem_closure
@@ -1793,7 +1910,8 @@ lemma exists_mem_finite_closure_of_mem_closure
     exact ⟨J, hJ.subset.trans (by simpa), (finite_singleton e).subset hJ.subset, hJ.indep,
       by simpa using hJ.subset_closure⟩
   obtain ⟨C, hCs, hC, heC⟩ := exists_isCircuit_of_mem_closure he heY
-  exact ⟨C \ {e}, by simpa, hC
+  exact ⟨C \ {e}, by simpa, hC.finite.sdiff, hC.sdiff_singleton_indep heC,
+    hC.mem_closure_sdiff_singleton_of_mem heC⟩
 
 Depends on / 依赖: M.exists_isBasis, exists_isBasis, exists_isCircuit_of_mem_closure, finite, finite_singleton, hC.finite.sdiff, hC.mem_closure_sdiff_singleton_of_mem, hC.sdiff_singleton_indep, hJ.indep, hJ.subset, hJ.subset.trans, hJ.subset_closure, mem_closure_sdiff_singleton_of_mem, sdiff_singleton_indep, subset, subset_closure
 -/
@@ -1818,7 +1936,10 @@ lemma exists_subset_finite_closure_of_subset_closure
     obtain ⟨T, hT, hTfin, hXT⟩ := aux
     obtain ⟨I, hI⟩ := M.exists_isBasis' T
     exact ⟨_, hI.subset.trans hT, hTfin.subset hI.subset, hI.indep, by rwa [hI.closure_eq_closure]⟩
-  refine Finite.induction_on_subset X hX ⟨
+  refine Finite.induction_on_subset X hX ⟨∅, by simp⟩ (fun {e Z} heX _ heZ ⟨T, hTY, hTfin, hT⟩ => ?_)
+  obtain ⟨S, hSY, hSfin, -, heS⟩ := exists_mem_finite_closure_of_mem_closure (hXY heX)
+  exact ⟨S union T, union_subset hSY hTY, hSfin.union hTfin, insert_subset
+    (M.closure_mono subset_union_left heS) (hT.trans (M.closure_mono subset_union_right))⟩
 
 中文:
 引理 存在_subset_finite_closure_of_subset_closure
@@ -1828,7 +1949,10 @@ lemma exists_subset_finite_closure_of_subset_closure
     obtain ⟨T, hT, hTfin, hXT⟩ := aux
     obtain ⟨I, hI⟩ := M.exists_isBasis' T
     exact ⟨_, hI.subset.trans hT, hTfin.subset hI.subset, hI.indep, by rwa [hI.closure_eq_closure]⟩
-  refine Finite.induction_on_subset X hX ⟨
+  refine Finite.induction_on_subset X hX ⟨∅, by simp⟩ (fun {e Z} heX _ heZ ⟨T, hTY, hTfin, hT⟩ => ?_)
+  obtain ⟨S, hSY, hSfin, -, heS⟩ := exists_mem_finite_closure_of_mem_closure (hXY heX)
+  exact ⟨S union T, union_subset hSY hTY, hSfin.union hTfin, insert_subset
+    (M.closure_mono subset_union_left heS) (hT.trans (M.closure_mono subset_union_right))⟩
 
 Depends on / 依赖: Finite, Finite.induction_on_subset, M.closure, M.exists_isBasis, T.Finite, closure, closure_eq_closure, exists_isBasis, exists_mem_finite_closure_of_mem_closure, hI.closure_eq_closure, hI.indep, hI.subset, hI.subset.trans, hSfin.union, hTfin.subset, induction_on_subset, insert_subse, subset, subseteq, union_subset
 -/
@@ -2014,7 +2138,9 @@ lemma isCocircuit_iff_minimal
     ext; apply dual_dep_iff_forall
   rw [isCocircuit_def]; rw [isCircuit_def]; rw [aux]; rw [iff_comm]
   refine minimal_iff_minimal_of_imp_of_forall (fun _ h => h.1) fun X hX =>
-    ⟨X inter M.E, 
+    ⟨X inter M.E, inter_subset_left, fun B hB => ?_, inter_subset_right⟩
+  rw [inter_assoc]; rw [inter_eq_self_of_subset_right hB.subset_ground]
+  exact hX B hB
 
 中文:
 引理 isCocircuit_iff_minimal
@@ -2023,7 +2149,9 @@ lemma isCocircuit_iff_minimal
     ext; apply dual_dep_iff_forall
   rw [isCocircuit_def]; rw [isCircuit_def]; rw [aux]; rw [iff_comm]
   refine minimal_iff_minimal_of_imp_of_forall (fun _ h => h.1) fun X hX =>
-    ⟨X inter M.E, 
+    ⟨X inter M.E, inter_subset_left, fun B hB => ?_, inter_subset_right⟩
+  rw [inter_assoc]; rw [inter_eq_self_of_subset_right hB.subset_ground]
+  exact hX B hB
 
 Depends on / 依赖: IsBase, M.IsBase, Nonempty, dual_dep_iff_forall, hB.subset_ground, iff_comm, inter_assoc, inter_eq_self_of_subset_right, inter_subset_left, inter_subset_right, isCircuit_def, isCocircuit_def, minimal_iff_minimal_of_imp_of_forall, subset_ground, subseteq
 -/
@@ -2074,7 +2202,20 @@ lemma IsBase.compl_closure_sdiff_singleton_isCocircuit
   proof: by
   rw [isCocircuit_iff_minimal_compl_nonspanning]; rw [minimal_subset_iff]; rw [sdiff_sdiff_cancel_left (M.closure_subset_ground _)]; rw [closure_spanning_iff (sdiff_subset.trans hB.subset_ground)]
   have hB' := (isBase_iff_minimal_spanning.1 hB)
-  refine ⟨fun hsp => hB'.notMem_of_prop_sdiff_singl
+  refine ⟨fun hsp => hB'.notMem_of_prop_sdiff_singleton hsp he, fun X hX hXss => hXss.antisymm' ?_⟩
+  rw [sdiff_subset_comm]
+  refine fun f hf => by_contra fun fcl => hX ?_
+  rw [subset_sdiff] at hXss
+  suffices hsp : M.IsBase (insert f (B \ {e})) by
+refine hsp.spanning.superset insert_subset hf
+      (M.subset_closure _ (sdiff_subset.trans hB.subset_ground)).trans ?_
+    rw [subset_sdiff]; rw [and_iff_left hXss.2.symm]
+    apply closure_subset_ground
+  exact hB.exchange_base_of_notMem_closure he fcl
+
+@[deprecated (since := "2026-06-03")]
+alias IsBase.compl_closure_diff_singleton_isCocircuit :=
+  IsBase.compl_closure_sdiff_singleton_isCocircuit
 
 中文:
 引理 IsBase.compl_closure_sdiff_singleton_isCocircuit
@@ -2082,7 +2223,20 @@ lemma IsBase.compl_closure_sdiff_singleton_isCocircuit
   证明: by
   rw [isCocircuit_iff_minimal_compl_nonspanning]; rw [minimal_subset_iff]; rw [sdiff_sdiff_cancel_left (M.closure_subset_ground _)]; rw [closure_spanning_iff (sdiff_subset.trans hB.subset_ground)]
   have hB' := (isBase_iff_minimal_spanning.1 hB)
-  refine ⟨fun hsp => hB'.notMem_of_prop_sdiff_singl
+  refine ⟨fun hsp => hB'.notMem_of_prop_sdiff_singleton hsp he, fun X hX hXss => hXss.antisymm' ?_⟩
+  rw [sdiff_subset_comm]
+  refine fun f hf => by_contra fun fcl => hX ?_
+  rw [subset_sdiff] at hXss
+  suffices hsp : M.IsBase (insert f (B \ {e})) by
+refine hsp.spanning.superset insert_subset hf
+      (M.subset_closure _ (sdiff_subset.trans hB.subset_ground)).trans ?_
+    rw [subset_sdiff]; rw [and_iff_left hXss.2.symm]
+    apply closure_subset_ground
+  exact hB.exchange_base_of_notMem_closure he fcl
+
+@[deprecated (since := "2026-06-03")]
+alias IsBase.compl_closure_diff_singleton_isCocircuit :=
+  IsBase.compl_closure_sdiff_singleton_isCocircuit
 
 Depends on / 依赖: IsBase, M.IsBase, M.closure_subset_ground, antisymm, closure_spanning_iff, closure_subset_ground, hB.subset_ground, hXss.antisymm, hsp.spa, insert, isBase_iff_minimal_spanning, isCocircuit_iff_minimal_compl_nonspanning, minimal_subset_iff, notMem_of_prop_sdiff_singleton, sdiff_sdiff_cancel_left, sdiff_subset, sdiff_subset.trans, sdiff_subset_comm, subset_ground, subset_sdiff
 -/
@@ -2146,7 +2300,14 @@ lemma IsCircuit.inter_isCocircuit_ne_singleton
   have' hKe := hK.2 (t := K \ {e}) (sdiff_singleton_ssubset.2 (he.symm.subset rfl).2)
   apply hK.1
   rw [spanning_iff_ground_subset_closure]
-  
+  nth_rw 1 [← hKe.closure_eq, sdiff_sdiff_eq_sdiff_union]
+  · refine (M.closure_subset_closure (subset_union_left (t := C))).trans ?_
+    rw [union_assoc]; rw [singleton_union]; rw [insert_eq_of_mem heC]; rw [← closure_union_congr_right
+      (hC.closure_sdiff_singleton_eq e)]; rw [union_eq_self_of_subset_right]
+    rw [← he]; rw [sdiff_self_inter]
+    exact sdiff_subset_sdiff_left hC.subset_ground
+  rw [← he]
+  exact inter_subset_left.trans hC.subset_ground
 
 中文:
 引理 是Circuit.inter_isCocircuit_ne_singleton
@@ -2158,7 +2319,14 @@ lemma IsCircuit.inter_isCocircuit_ne_singleton
   have' hKe := hK.2 (t := K \ {e}) (sdiff_singleton_ssubset.2 (he.symm.subset rfl).2)
   apply hK.1
   rw [spanning_iff_ground_subset_closure]
-  
+  nth_rw 1 [← hKe.closure_eq, sdiff_sdiff_eq_sdiff_union]
+  · refine (M.closure_subset_closure (subset_union_left (t := C))).trans ?_
+    rw [union_assoc]; rw [singleton_union]; rw [insert_eq_of_mem heC]; rw [← closure_union_congr_right
+      (hC.closure_sdiff_singleton_eq e)]; rw [union_eq_self_of_subset_right]
+    rw [← he]; rw [sdiff_self_inter]
+    exact sdiff_subset_sdiff_left hC.subset_ground
+  rw [← he]
+  exact inter_subset_left.trans hC.subset_ground
 
 Depends on / 依赖: M.closure_subset_closure, closure_eq, closure_subset_closure, closure_uni, hKe.closure_eq, he.symm.subset, insert_eq_of_mem, isCocircuit_iff_minimal_compl_nonspanning, minimal_iff_forall_ssubset, not_not, nth_rw, sdiff_sdiff_eq_sdiff_union, sdiff_singleton_ssubset, simp_rw, singleton_union, spanning_iff_ground_subset_closure, subset, subset_union_left, union_assoc
 -/
@@ -2485,7 +2653,8 @@ lemma Indep.exists_isCocircuit_inter_eq_mem
   obtain ⟨B, hB, hIB⟩ := hI.exists_isBase_superset
   refine ⟨M.fundCocircuit e B, fundCocircuit_isCocircuit (hIB heI) hB, ?_⟩
   rw [subset_antisymm_iff]; rw [subset_inter_iff]; rw [singleton_subset_iff]; rw [and_iff_right
-    (mem_fundCocircuit _ _ _)]; rw [singleton_subset_iff]; rw [and_iff_left
+    (mem_fundCocircuit _ _ _)]; rw [singleton_subset_iff]; rw [and_iff_left heI]; rw [← M.fundCocircuit_inter_eq (hIB heI)]
+  exact inter_subset_inter_right _ hIB
 
 中文:
 引理 Indep.存在_isCocircuit_inter_eq_mem
@@ -2494,7 +2663,8 @@ lemma Indep.exists_isCocircuit_inter_eq_mem
   obtain ⟨B, hB, hIB⟩ := hI.exists_isBase_superset
   refine ⟨M.fundCocircuit e B, fundCocircuit_isCocircuit (hIB heI) hB, ?_⟩
   rw [subset_antisymm_iff]; rw [subset_inter_iff]; rw [singleton_subset_iff]; rw [and_iff_right
-    (mem_fundCocircuit _ _ _)]; rw [singleton_subset_iff]; rw [and_iff_left
+    (mem_fundCocircuit _ _ _)]; rw [singleton_subset_iff]; rw [and_iff_left heI]; rw [← M.fundCocircuit_inter_eq (hIB heI)]
+  exact inter_subset_inter_right _ hIB
 
 Depends on / 依赖: M.fundCocircuit, M.fundCocircuit_inter_eq, and_iff_left, and_iff_right, exists_isBase_superset, fundCocircuit, fundCocircuit_inter_eq, fundCocircuit_isCocircuit, hI.exists_isBase_superset, inter_subset_inter_right, mem_fundCocircuit, singleton_subset_iff, subset_antisymm_iff, subset_inter_iff
 -/
@@ -2517,7 +2687,30 @@ lemma IsBase.mem_fundCocircuit_iff_mem_fundCircuit
   suffices aux : forall {N : Matroid α} {B' : Set α} (hB' : N.IsBase B') {e f},
       e in N.fundCocircuit f B' -> f in N.fundCircuit e B' from
 ⟨fun h => aux hB h, fun h => aux hB.compl_isBase_dual by
-      simpa 
+      simpa [fundCocircuit, inter_eq_self_of_subset_right hB.subset_ground]⟩
+  clear! B M e f
+  intro M B hB e f he
+  -- discharge the various degenerate cases.
+  obtain rfl | hne := eq_or_ne e f
+  · simp [mem_fundCircuit]
+  have hB' : M✶.IsBase (M✶.E \ B) := hB.compl_isBase_dual
+obtain hfE | hfE := em' f in M.E
+  · rw [fundCocircuit, fundCircuit_eq_of_notMem_ground (by simpa)] at he
+    contradiction
+obtain hfB | hfB := em' f in B
+  · rw [fundCocircuit, fundCircuit_eq_of_mem (by simp [hfE, hfB])] at he
+    contradiction
+  obtain ⟨heE, heB⟩ : e in M.E \ B := by
+    simpa [hne] using (M.fundCocircuit_subset_insert_compl f B) he
+  -- Use basis exchange to argue the equivalence.
+  rw [fundCocircuit]; rw [hB'.indep.mem_fundCircuit_iff (by rwa [hB'.closure_eq]) (by simp [hfB])] at he
+  rw [hB.indep.mem_fundCircuit_iff (by rwa [hB.closure_eq]) heB]
+  have hB' : M.IsBase (M.E \ (insert f (M✶.E \ B) \ {e})) :=
+    (hB'.exchange_isBase_of_indep' ⟨heE, heB⟩ (by simp [hfE, hfB]) he).compl_isBase_of_dual
+  refine hB'.indep.subset ?_
+  simp only [dual_ground, sdiff_singleton_subset_iff]
+  rw [sdiff_sdiff_right]; rw [inter_eq_self_of_subset_right (by simpa)]; rw [union_singleton]; rw [insert_comm]; rw [← union_singleton (s := M.E \ B)]; rw [← sdiff_sdiff]; rw [sdiff_sdiff_cancel_left hB.subset_ground]
+  simp [hfB]
 
 中文:
 引理 IsBase.mem_fundCocircuit_iff_mem_fundCircuit
@@ -2527,7 +2720,30 @@ lemma IsBase.mem_fundCocircuit_iff_mem_fundCircuit
   suffices aux : forall {N : Matroid α} {B' : Set α} (hB' : N.IsBase B') {e f},
       e in N.fundCocircuit f B' -> f in N.fundCircuit e B' from
 ⟨fun h => aux hB h, fun h => aux hB.compl_isBase_dual by
-      simpa 
+      simpa [fundCocircuit, inter_eq_self_of_subset_right hB.subset_ground]⟩
+  clear! B M e f
+  intro M B hB e f he
+  -- discharge the various degenerate cases.
+  obtain rfl | hne := eq_or_ne e f
+  · simp [mem_fundCircuit]
+  have hB' : M✶.IsBase (M✶.E \ B) := hB.compl_isBase_dual
+obtain hfE | hfE := em' f in M.E
+  · rw [fundCocircuit, fundCircuit_eq_of_notMem_ground (by simpa)] at he
+    contradiction
+obtain hfB | hfB := em' f in B
+  · rw [fundCocircuit, fundCircuit_eq_of_mem (by simp [hfE, hfB])] at he
+    contradiction
+  obtain ⟨heE, heB⟩ : e in M.E \ B := by
+    simpa [hne] using (M.fundCocircuit_subset_insert_compl f B) he
+  -- Use basis exchange to argue the equivalence.
+  rw [fundCocircuit]; rw [hB'.indep.mem_fundCircuit_iff (by rwa [hB'.closure_eq]) (by simp [hfB])] at he
+  rw [hB.indep.mem_fundCircuit_iff (by rwa [hB.closure_eq]) heB]
+  have hB' : M.IsBase (M.E \ (insert f (M✶.E \ B) \ {e})) :=
+    (hB'.exchange_isBase_of_indep' ⟨heE, heB⟩ (by simp [hfE, hfB]) he).compl_isBase_of_dual
+  refine hB'.indep.subset ?_
+  simp only [dual_ground, sdiff_singleton_subset_iff]
+  rw [sdiff_sdiff_right]; rw [inter_eq_self_of_subset_right (by simpa)]; rw [union_singleton]; rw [insert_comm]; rw [← union_singleton (s := M.E \ B)]; rw [← sdiff_sdiff]; rw [sdiff_sdiff_cancel_left hB.subset_ground]
+  simp [hfB]
 -/
 lemma IsBase.mem_fundCocircuit_iff_mem_fundCircuit {e f : α} (hB : M.IsBase B) :
     e in M.fundCocircuit f B ↔ f in M.fundCircuit e B := by

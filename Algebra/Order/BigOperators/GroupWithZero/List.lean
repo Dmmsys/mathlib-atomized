@@ -113,7 +113,7 @@ theorem prod_map_le_prod_map₀
       simp
     · grind
     · grind [prod_nonneg]
-    · apply (h0 _ _).trans (h _ _) <;> simp only [mem_cons, true_o
+    · apply (h0 _ _).trans (h _ _) <;> simp only [mem_cons, true_or]
 
 中文:
 定理 prod_map_le_prod_map₀
@@ -129,7 +129,7 @@ theorem prod_map_le_prod_map₀
       simp
     · grind
     · grind [prod_nonneg]
-    · apply (h0 _ _).trans (h _ _) <;> simp only [mem_cons, true_o
+    · apply (h0 _ _).trans (h _ _) <;> simp only [mem_cons, true_or]
 
 Depends on / 依赖: PosMulMono, map_cons, mem_cons, mul_le_mul, posMulMono_iff_mulPosMono, prod_cons, prod_nonneg, true_or
 -/
@@ -235,7 +235,15 @@ theorem prod_map_lt_prod_map
     · apply prod_map_le_prod_map₀
       · intro i hi
         apply le_of_lt
-        apply
+        apply h0
+        simp [hi]
+      · intro i hi
+        apply le_of_lt
+        apply h
+        simp [hi]
+    · apply prod_pos
+      grind
+    · apply le_of_lt ((h0 _ _).trans (h _ _)) <;> simp
 
 中文:
 定理 prod_map_lt_prod_map
@@ -252,7 +260,15 @@ theorem prod_map_lt_prod_map
     · apply prod_map_le_prod_map₀
       · intro i hi
         apply le_of_lt
-        apply
+        apply h0
+        simp [hi]
+      · intro i hi
+        apply le_of_lt
+        apply h
+        simp [hi]
+    · apply prod_pos
+      grind
+    · apply le_of_lt ((h0 _ _).trans (h _ _)) <;> simp
 
 Depends on / 依赖: PosMulStrictMono, le_of_lt, map_cons, mul_lt_mul, posMulStrictMono_iff_mulPosStrictMono, prod_cons, prod_pos
 -/

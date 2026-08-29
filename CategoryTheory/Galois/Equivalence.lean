@@ -110,7 +110,30 @@ instance :
   let : FiberFunctor F' := FiberFunctor.comp_right _
   have : (functorToContAction F').EssSurj := inferInstance
   let f : Aut F ≃ₜ* Aut F' :=
-    (autEquivAutWhiskerRight F (FintypeCat.uSwitchEquivalence.{w, u₁}).fullyFaithfulFuncto
+    (autEquivAutWhiskerRight F (FintypeCat.uSwitchEquivalence.{w, u₁}).fullyFaithfulFunctor)
+  let equiv : ContAction FintypeCat.{u₁} (Aut F') ≌ ContAction FintypeCat.{w} (Aut F) :=
+    (FintypeCat.uSwitchEquivalence.{u₁, w}.mapContAction (Aut F')
+       (fun X => by
+          rw [Action.isContinuous_def]
+          change Continuous ((fun p => (FintypeCat.uSwitchEquiv X.obj.V).symm p) ∘
+              (fun p : Aut F' × _ => (X.obj.ρ p.1).hom p.2) ∘
+              (fun p : Aut F' × _ => (p.1, FintypeCat.uSwitchEquiv _ p.2)))
+          exact Continuous.comp (by fun_prop) (Continuous.comp X.2.1 (by fun_prop)))
+       (fun X => by
+          rw [Action.isContinuous_def]
+          change Continuous ((fun p => (FintypeCat.uSwitchEquiv X.obj.V).symm p) ∘
+              (fun p : Aut F' × _ => (X.obj.ρ p.1).hom p.2) ∘
+              (fun p : Aut F' × _ => (p.1, FintypeCat.uSwitchEquiv _ p.2)))
+          exact Continuous.comp (by fun_prop) (Continuous.comp X.2.1 (by fun_prop)))).trans <|
+      ContAction.resEquiv _ f
+  have : functorToContAction F ≅ functorToContAction F' ⋙ equiv.functor :=
+    NatIso.ofComponents
+      (fun X => ObjectProperty.isoMk _ (Action.mkIso (FintypeCat.uSwitchEquivalence.unitIso.app _)
+      (fun g => FintypeCat.uSwitchEquivalence.unitIso.hom.naturality (g.hom.app X))))
+      (fun f => by
+        ext : 2
+        exact FintypeCat.uSwitchEquivalence.unitIso.hom.naturality (F.map f))
+  exact Functor.essSurj_of_iso this.symm
 
 中文:
 实例 :
@@ -120,7 +143,30 @@ instance :
   let : FiberFunctor F' := FiberFunctor.comp_right _
   have : (functorToContAction F').EssSurj := inferInstance
   let f : Aut F ≃ₜ* Aut F' :=
-    (autEquivAutWhiskerRight F (FintypeCat.uSwitchEquivalence.{w, u₁}).fullyFaithfulFuncto
+    (autEquivAutWhiskerRight F (FintypeCat.uSwitchEquivalence.{w, u₁}).fullyFaithfulFunctor)
+  let equiv : ContAction FintypeCat.{u₁} (Aut F') ≌ ContAction FintypeCat.{w} (Aut F) :=
+    (FintypeCat.uSwitchEquivalence.{u₁, w}.mapContAction (Aut F')
+       (fun X => by
+          rw [Action.isContinuous_def]
+          change Continuous ((fun p => (FintypeCat.uSwitchEquiv X.obj.V).symm p) ∘
+              (fun p : Aut F' × _ => (X.obj.ρ p.1).hom p.2) ∘
+              (fun p : Aut F' × _ => (p.1, FintypeCat.uSwitchEquiv _ p.2)))
+          exact Continuous.comp (by fun_prop) (Continuous.comp X.2.1 (by fun_prop)))
+       (fun X => by
+          rw [Action.isContinuous_def]
+          change Continuous ((fun p => (FintypeCat.uSwitchEquiv X.obj.V).symm p) ∘
+              (fun p : Aut F' × _ => (X.obj.ρ p.1).hom p.2) ∘
+              (fun p : Aut F' × _ => (p.1, FintypeCat.uSwitchEquiv _ p.2)))
+          exact Continuous.comp (by fun_prop) (Continuous.comp X.2.1 (by fun_prop)))).trans <|
+      ContAction.resEquiv _ f
+  have : functorToContAction F ≅ functorToContAction F' ⋙ equiv.functor :=
+    NatIso.ofComponents
+      (fun X => ObjectProperty.isoMk _ (Action.mkIso (FintypeCat.uSwitchEquivalence.unitIso.app _)
+      (fun g => FintypeCat.uSwitchEquivalence.unitIso.hom.naturality (g.hom.app X))))
+      (fun f => by
+        ext : 2
+        exact FintypeCat.uSwitchEquivalence.unitIso.hom.naturality (F.map f))
+  exact Functor.essSurj_of_iso this.symm
 
 Depends on / 依赖: Action, Action.isContinuous_def, ContAction, Continuous, EssSurj, FiberFunctor, FiberFunctor.comp_right, FintypeCat, FintypeCat.uSwitch, FintypeCat.uSwitchEquivalence, autEquivAutWhiskerRight, comp_right, fullyFaithfulFunctor, functorToContAction, isContinuous_def, mapContAction, uSwitch, uSwitchEquivalence
 -/

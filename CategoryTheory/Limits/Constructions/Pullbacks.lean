@@ -41,7 +41,14 @@ PullbackCone.mk (e ≫ π₁) (e ≫ π₂) by
           rw [Category.assoc]; rw [equalizer.condition]
           simp [e]
       isLimit :=
-        PullbackCone.IsLimit.mk _ (fun
+        PullbackCone.IsLimit.mk _ (fun s => equalizer.lift
+(prod.lift (s.π.app WalkingCospan.left) (s.π.app WalkingCospan.right)) by
+            rw [← Category.assoc]; rw [limit.lift_π]; rw [← Category.assoc]; rw [limit.lift_π]
+            exact PullbackCone.condition _)
+          (by simp [π₁, e]) (by simp [π₂, e]) fun s m h₁ h₂ => by
+          ext
+          · simpa using h₁
+          · simpa using h₂ }
 
 中文:
 定理 hasLimit_cospan_of_hasLimit_pair_of_hasLimit_parallelPair
@@ -55,7 +62,14 @@ PullbackCone.mk (e ≫ π₁) (e ≫ π₂) by
           rw [Category.assoc]; rw [equalizer.condition]
           simp [e]
       isLimit :=
-        PullbackCone.IsLimit.mk _ (fun
+        PullbackCone.IsLimit.mk _ (fun s => equalizer.lift
+(prod.lift (s.π.app WalkingCospan.left) (s.π.app WalkingCospan.right)) by
+            rw [← Category.assoc]; rw [limit.lift_π]; rw [← Category.assoc]; rw [limit.lift_π]
+            exact PullbackCone.condition _)
+          (by simp [π₁, e]) (by simp [π₂, e]) fun s m h₁ h₂ => by
+          ext
+          · simpa using h₁
+          · simpa using h₂ }
 
 Depends on / 依赖: Category, Category.assoc, HasLimit, HasLimit.mk, IsLimit, PullbackCone, PullbackCone.IsLimit.mk, PullbackCone.condition, PullbackCone.mk, UnivLE, WalkingCospan, WalkingCospan.left, WalkingCospan.right, condition, equalizer, equalizer.condition, equalizer.lift, hasColimitsOfSize, isLimit, limit.lift_
 -/
@@ -120,7 +134,15 @@ theorem hasColimit_span_of_hasColimit_pair_of_hasColimit_parallelPair
 PushoutCocone.mk (ι₁ ≫ c) (ι₂ ≫ c) by
           rw [← Category.assoc]; rw [← Category.assoc]; rw [coequalizer.condition]
       isColimit :=
-        PushoutCo
+        PushoutCocone.IsColimit.mk _
+          (fun s => coequalizer.desc
+(coprod.desc (s.ι.app WalkingSpan.left) (s.ι.app WalkingSpan.right)) by
+            rw [Category.assoc]; rw [colimit.ι_desc]; rw [Category.assoc]; rw [colimit.ι_desc]
+            exact PushoutCocone.condition _)
+          (by simp [ι₁, c]) (by simp [ι₂, c]) fun s m h₁ h₂ => by
+          ext
+          · simpa using h₁
+          · simpa using h₂ }
 
 中文:
 定理 hasColimit_span_of_hasColimit_pair_of_hasColimit_parallelPair
@@ -133,7 +155,15 @@ PushoutCocone.mk (ι₁ ≫ c) (ι₂ ≫ c) by
 PushoutCocone.mk (ι₁ ≫ c) (ι₂ ≫ c) by
           rw [← Category.assoc]; rw [← Category.assoc]; rw [coequalizer.condition]
       isColimit :=
-        PushoutCo
+        PushoutCocone.IsColimit.mk _
+          (fun s => coequalizer.desc
+(coprod.desc (s.ι.app WalkingSpan.left) (s.ι.app WalkingSpan.right)) by
+            rw [Category.assoc]; rw [colimit.ι_desc]; rw [Category.assoc]; rw [colimit.ι_desc]
+            exact PushoutCocone.condition _)
+          (by simp [ι₁, c]) (by simp [ι₂, c]) fun s m h₁ h₂ => by
+          ext
+          · simpa using h₁
+          · simpa using h₂ }
 
 Depends on / 依赖: Category, Category.assoc, HasColimit, HasColimit.mk, IsColimit, PushoutCocone, PushoutCocone.IsColimit.mk, PushoutCocone.condition, PushoutCocone.mk, WalkingSpan, WalkingSpan.left, WalkingSpan.right, cocone, coequalizer, coequalizer.condition, coequalizer.desc, colimit, condition, coprod, coprod.desc
 -/

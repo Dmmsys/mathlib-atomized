@@ -82,7 +82,8 @@ lemma oreEqv_eq_r
     rw [mul_comm]; rw [mul_smul]; rw [← h₁]; rw [mul_comm]; rw [mul_smul]; rw [Submonoid.smul_def]
   · rintro ⟨u, hu⟩
     use u * a.2, u * b.2
-    rw [mul_smul]; rw [← hu]; rw [mul_smul];
+    rw [mul_smul]; rw [← hu]; rw [mul_smul]; rw [Submonoid.coe_mul]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_comm (a.2 : R)]
+    simp [Submonoid.smul_def]
 
 中文:
 引理 oreEqv_eq_r
@@ -96,7 +97,8 @@ lemma oreEqv_eq_r
     rw [mul_comm]; rw [mul_smul]; rw [← h₁]; rw [mul_comm]; rw [mul_smul]; rw [Submonoid.smul_def]
   · rintro ⟨u, hu⟩
     use u * a.2, u * b.2
-    rw [mul_smul]; rw [← hu]; rw [mul_smul];
+    rw [mul_smul]; rw [← hu]; rw [mul_smul]; rw [Submonoid.coe_mul]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_comm (a.2 : R)]
+    simp [Submonoid.smul_def]
 
 Depends on / 依赖: Submonoid, Submonoid.coe_mul, Submonoid.smul_def, coe_mul, mul_assoc, mul_comm, mul_smul, smul_def, smul_smul
 -/
@@ -123,7 +125,10 @@ theorem r.isEquiv
       use u1 * u2 * s2
       -- Put everything in the same shape, sorting the terms using `simp`
       have hu1' := congr_arg ((u2 * s3) • ·) hu1.symm
-      have hu2' := congr_arg ((u1
+      have hu2' := congr_arg ((u1 * s1) • ·) hu2.symm
+      simp only [← mul_smul, mul_comm, mul_left_comm] at hu1' hu2' ⊢
+      rw [hu2']; rw [hu1']
+    symm := fun ⟨_, _⟩ ⟨_, _⟩ ⟨u, hu⟩ => ⟨u, hu.symm⟩ }
 
 中文:
 定理 r.isEquiv
@@ -133,7 +138,10 @@ theorem r.isEquiv
       use u1 * u2 * s2
       -- Put everything in the same shape, sorting the terms using `simp`
       have hu1' := congr_arg ((u2 * s3) • ·) hu1.symm
-      have hu2' := congr_arg ((u1
+      have hu2' := congr_arg ((u1 * s1) • ·) hu2.symm
+      simp only [← mul_smul, mul_comm, mul_left_comm] at hu1' hu2' ⊢
+      rw [hu2']; rw [hu1']
+    symm := fun ⟨_, _⟩ ⟨_, _⟩ ⟨u, hu⟩ => ⟨u, hu.symm⟩ }
 
 Depends on / 依赖: one_smul
 -/
@@ -472,7 +480,7 @@ definition mul
     rw [mk_eq]
     use u₁ * u₂
     dsimp [Submonoid.smul_def] at *
-    simp only [mul_smul_mul_comm, e₁, e₂]
+    simp only [mul_smul_mul_comm, e₁, e₂])
 
 中文:
 定义 mul
@@ -483,7 +491,7 @@ definition mul
     rw [mk_eq]
     use u₁ * u₂
     dsimp [Submonoid.smul_def] at *
-    simp only [mul_smul_mul_comm, e₁, e₂]
+    simp only [mul_smul_mul_comm, e₁, e₂])
 -/
 protected def mul {A : Type*} [Semiring A] [Algebra R A] {S : Submonoid R}
     (m₁ m₂ : LocalizedModule S A) : LocalizedModule S A :=
@@ -731,7 +739,9 @@ abbreviation smulOfIsLocalization
         calc
           _ = a.2 • a.1 • s • p'.2 • p.1 := by
             simp_rw [Submonoid.smul_def, Submonoid.coe_mul, ← mul_smul]; ring_nf
-      
+          _ = a.2 • a.1 • s • p.2 • p'.1 := by rw [h]
+          _ = s • (a.2 * p.2) • a.1 • p'.1 := by
+            simp_rw [Submonoid.smul_def, ← mul_smul, Submonoid.coe_mul]; ring_nf)
 
 中文:
 缩写 smulOfIsLocalization
@@ -744,7 +754,9 @@ abbreviation smulOfIsLocalization
         calc
           _ = a.2 • a.1 • s • p'.2 • p.1 := by
             simp_rw [Submonoid.smul_def, Submonoid.coe_mul, ← mul_smul]; ring_nf
-      
+          _ = a.2 • a.1 • s • p.2 • p'.1 := by rw [h]
+          _ = s • (a.2 * p.2) • a.1 • p'.1 := by
+            simp_rw [Submonoid.smul_def, ← mul_smul, Submonoid.coe_mul]; ring_nf)
 
 Depends on / 依赖: IsLocalization, IsLocalization.sec, Submonoid, Submonoid.coe_mul, Submonoid.smul_def, coe_mul, liftOn, mk_eq, mk_eq.mpr, mul_smul, ring_nf, simp_rw, smul_def
 -/
@@ -924,7 +936,9 @@ theorem smul_add_aux
   rw [smul_def]; rw [smul_def]; rw [mk_add_mk]; rw [mk_add_mk]
   rw [show x • _ = IsLocalization.mk' T _ _ • _ by rw [IsLocalization.mk'_sec (M := S) T]]
   rw [← IsLocalization.mk'_cancel _ _ (IsLocalization.sec S x).2]; rw [mk'_smul_mk]
-  con
+  congr 1
+  · simp only [Submonoid.smul_def, smul_add, ← mul_smul, Submonoid.coe_mul]; ring_nf
+  · rw [mul_mul_mul_comm] -- ring does not work here
 
 中文:
 定理 smul_add_aux
@@ -935,7 +949,9 @@ theorem smul_add_aux
   rw [smul_def]; rw [smul_def]; rw [mk_add_mk]; rw [mk_add_mk]
   rw [show x • _ = IsLocalization.mk' T _ _ • _ by rw [IsLocalization.mk'_sec (M := S) T]]
   rw [← IsLocalization.mk'_cancel _ _ (IsLocalization.sec S x).2]; rw [mk'_smul_mk]
-  con
+  congr 1
+  · simp only [Submonoid.smul_def, smul_add, ← mul_smul, Submonoid.coe_mul]; ring_nf
+  · rw [mul_mul_mul_comm] -- ring does not work here
 -/
 private theorem smul_add_aux (x : T) (p q : LocalizedModule S M) :
     x • (p + q) = x • p + x • q := by
@@ -979,7 +995,11 @@ theorem add_smul_aux
   proof: by
   induction p with | _ m s
   rw [smul_def T x]; rw [smul_def T y]; rw [mk_add_mk]; rw [show (x + y) • _ = IsLocalization.mk' T _ _ • _ by
-    rw [← IsLocalization.mk'_sec (M := S) T x]; rw [← IsLocalization.mk'_sec (M := S) T y]; rw [← IsLocalization.mk'_add]; rw [IsLocalization.mk'_cancel _ _ s]
+    rw [← IsLocalization.mk'_sec (M := S) T x]; rw [← IsLocalization.mk'_sec (M := S) T y]; rw [← IsLocalization.mk'_add]; rw [IsLocalization.mk'_cancel _ _ s], mk'_smul_mk, ← smul_assoc,
+    ← smul_assoc, ← add_smul]
+  congr 1
+  · simp only [Submonoid.smul_def, Submonoid.coe_mul, smul_eq_mul]; ring_nf
+  · rw [mul_mul_mul_comm, mul_assoc] -- ring does not work here
 
 中文:
 定理 add_smul_aux
@@ -987,7 +1007,11 @@ theorem add_smul_aux
   证明: by
   induction p with | _ m s
   rw [smul_def T x]; rw [smul_def T y]; rw [mk_add_mk]; rw [show (x + y) • _ = IsLocalization.mk' T _ _ • _ by
-    rw [← IsLocalization.mk'_sec (M := S) T x]; rw [← IsLocalization.mk'_sec (M := S) T y]; rw [← IsLocalization.mk'_add]; rw [IsLocalization.mk'_cancel _ _ s]
+    rw [← IsLocalization.mk'_sec (M := S) T x]; rw [← IsLocalization.mk'_sec (M := S) T y]; rw [← IsLocalization.mk'_add]; rw [IsLocalization.mk'_cancel _ _ s], mk'_smul_mk, ← smul_assoc,
+    ← smul_assoc, ← add_smul]
+  congr 1
+  · simp only [Submonoid.smul_def, Submonoid.coe_mul, smul_eq_mul]; ring_nf
+  · rw [mul_mul_mul_comm, mul_assoc] -- ring does not work here
 -/
 private theorem add_smul_aux (x y : T) (p : LocalizedModule S M) :
     (x + y) • p = x • p + y • p := by
@@ -1159,7 +1183,11 @@ lemma smul_eq_iff_of_mem
       simp only [Subtype.exists, Submonoid.mk_smul, exists_prop]
       fconstructor
       · rintro ⟨a, ha, eq1⟩
-   
+        refine ⟨a, ha, ?_⟩
+        rw [mul_smul]; rw [← eq1]; rw [Submonoid.mk_smul]; rw [smul_comm r t]
+      · rintro ⟨a, ha, eq1⟩
+        refine ⟨a, ha, ?_⟩
+        rw [← eq1]; rw [mul_comm]; rw [mul_smul]; rw [Submonoid.mk_smul]; rw [Submonoid.smul_def]; rw [Submonoid.mk_smul]
 
 中文:
 引理 smul_eq_iff_of_mem
@@ -1172,7 +1200,11 @@ lemma smul_eq_iff_of_mem
       simp only [Subtype.exists, Submonoid.mk_smul, exists_prop]
       fconstructor
       · rintro ⟨a, ha, eq1⟩
-   
+        refine ⟨a, ha, ?_⟩
+        rw [mul_smul]; rw [← eq1]; rw [Submonoid.mk_smul]; rw [smul_comm r t]
+      · rintro ⟨a, ha, eq1⟩
+        refine ⟨a, ha, ?_⟩
+        rw [← eq1]; rw [mul_comm]; rw [mul_smul]; rw [Submonoid.mk_smul]; rw [Submonoid.smul_def]; rw [Submonoid.mk_smul]
 
 Depends on / 依赖: Submonoid, Submonoid.mk_s, Submonoid.mk_smul, Submonoid.smul_def, Subtype, Subtype.exists, exists_prop, fconstructor, induction_on, mk_eq, mk_s, mk_smul, mk_smul_mk, mul_comm, mul_smul, one_smul, smul_comm, smul_def
 -/
@@ -1469,7 +1501,12 @@ definition divBy
   map_add' x y := by
     refine x.induction_on₂ ?_ y
     intro m₁ m₂ t₁ t₂
-    simp_rw [mk_add_mk, LocalizedMo
+    simp_rw [mk_add_mk, LocalizedModule.liftOn_mk, mk_add_mk, mul_smul, mul_comm _ s, mul_assoc,
+      smul_comm _ s, ← smul_add, mul_left_comm s t₁ t₂, mk_cancel_common_left s]
+  map_smul' r x := by
+    refine x.induction_on (fun _ _ => ?_)
+    simp_rw [smul'_mk, liftOn_mk, smul'_mk]
+    congr!
 
 中文:
 定义 divBy
@@ -1480,7 +1517,12 @@ definition divBy
   map_add' x y := by
     refine x.induction_on₂ ?_ y
     intro m₁ m₂ t₁ t₂
-    simp_rw [mk_add_mk, LocalizedMo
+    simp_rw [mk_add_mk, LocalizedModule.liftOn_mk, mk_add_mk, mul_smul, mul_comm _ s, mul_assoc,
+      smul_comm _ s, ← smul_add, mul_left_comm s t₁ t₂, mk_cancel_common_left s]
+  map_smul' r x := by
+    refine x.induction_on (fun _ _ => ?_)
+    simp_rw [smul'_mk, liftOn_mk, smul'_mk]
+    congr!
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.liftOn_mk, induction_on, liftOn, liftOn_mk, map_add, map_smul, mk_add_mk, mk_cancel_common_left, mk_eq, mk_eq.mpr, mul_assoc, mul_comm, mul_left_comm, mul_smul, p.liftOn, simp_rw, smul_add, smul_comm, x.induction_on
 -/
@@ -1642,14 +1684,32 @@ instance IsLocalizedModule.of_linearEquiv
   signature: (e : M' ≃ₗ[R] M'') [hf : IsLocalizedModule S f]
   body: by
     rw [show algebraMap R (Module.End R M'') s = e ∘ₗ (algebraMap R (Module.End R M') s) ∘ₗ e.symm
-      by ext; simp]; rw [Module.End.isUnit_iff]; rw [LinearMap.coe_comp]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp_bijective]; rw [EquivLike.bi
+      by ext; simp]; rw [Module.End.isUnit_iff]; rw [LinearMap.coe_comp]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp_bijective]; rw [EquivLike.bijective_comp]
+exact (Module.End.isUnit_iff _).mp hf.map_units s
+  surj x := by
+    obtain ⟨p, h⟩ := hf.surj (e.symm x)
+    exact ⟨p, by rw [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, ← e.congr_arg h,
+      Submonoid.smul_def, Submonoid.smul_def, map_smul, LinearEquiv.apply_symm_apply]⟩
+  exists_of_eq h := by
+    simp_rw [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
+      EmbeddingLike.apply_eq_iff_eq] at h
+    exact hf.exists_of_eq h
 
 中文:
 实例 是Localized模.of_linearEquiv
   签名: (e : M' ≃ₗ[R] M'') [hf : 是Localized模 S f]
   定义体: by
     rw [show algebraMap R (Module.End R M'') s = e ∘ₗ (algebraMap R (Module.End R M') s) ∘ₗ e.symm
-      by ext; simp]; rw [Module.End.isUnit_iff]; rw [LinearMap.coe_comp]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp_bijective]; rw [EquivLike.bi
+      by ext; simp]; rw [Module.End.isUnit_iff]; rw [LinearMap.coe_comp]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp_bijective]; rw [EquivLike.bijective_comp]
+exact (Module.End.isUnit_iff _).mp hf.map_units s
+  surj x := by
+    obtain ⟨p, h⟩ := hf.surj (e.symm x)
+    exact ⟨p, by rw [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply, ← e.congr_arg h,
+      Submonoid.smul_def, Submonoid.smul_def, map_smul, LinearEquiv.apply_symm_apply]⟩
+  exists_of_eq h := by
+    simp_rw [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
+      EmbeddingLike.apply_eq_iff_eq] at h
+    exact hf.exists_of_eq h
 
 Depends on / 依赖: EquivLike, EquivLike.bijective_comp, EquivLike.comp_bijective, Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, Module, Module.End, Module.End.isUnit_iff, algebraMap, bijective_comp, coe_coe, coe_comp, comp_apply, comp_bijective, congr_arg, e.congr_arg
 -/
@@ -1682,7 +1742,8 @@ instance IsLocalizedModule.of_linearEquiv_right
   exists_of_eq h := by
     simp_rw [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply] at h
     obtain ⟨c, hc⟩ := hf.exists_of_eq h
-    exact ⟨c, by simpa only [Submonoid.smul_def
+    exact ⟨c, by simpa only [Submonoid.smul_def, map_smul, e.symm_apply_apply]
+      using congr(e.symm $hc)⟩
 
 中文:
 实例 是Localized模.of_linearEquiv_right
@@ -1694,7 +1755,8 @@ instance IsLocalizedModule.of_linearEquiv_right
   exists_of_eq h := by
     simp_rw [LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply] at h
     obtain ⟨c, hc⟩ := hf.exists_of_eq h
-    exact ⟨c, by simpa only [Submonoid.smul_def
+    exact ⟨c, by simpa only [Submonoid.smul_def, map_smul, e.symm_apply_apply]
+      using congr(e.symm $hc)⟩
 
 Depends on / 依赖: hf.map_units, map_units
 -/
@@ -1814,7 +1876,15 @@ definition lift'
     dsimp only
     simp only [Submonoid.smul_def] at eq1
     rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← map_smul]; rw [eq_comm]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]
-    have : 
+    have : c • s • g m' = c • s' • g m := by
+      simp only [Submonoid.smul_def, ← g.map_smul, eq1]
+    have : Function.Injective (h c).unit.inv := ((Module.End.isUnit_iff _).1 (by simp)).1
+    apply_fun (h c).unit.inv
+    rw [Units.inv_eq_val_inv]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [←
+      (h c).unit⁻¹.val.map_smul]
+    symm
+    rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← g.map_smul]; rw [← g.map_smul]; rw [← g.map_smul]; rw [←
+      g.map_smul]; rw [eq1]
 
 中文:
 定义 lift'
@@ -1824,7 +1894,15 @@ definition lift'
     dsimp only
     simp only [Submonoid.smul_def] at eq1
     rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← map_smul]; rw [eq_comm]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]
-    have : 
+    have : c • s • g m' = c • s' • g m := by
+      simp only [Submonoid.smul_def, ← g.map_smul, eq1]
+    have : Function.Injective (h c).unit.inv := ((Module.End.isUnit_iff _).1 (by simp)).1
+    apply_fun (h c).unit.inv
+    rw [Units.inv_eq_val_inv]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [←
+      (h c).unit⁻¹.val.map_smul]
+    symm
+    rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← g.map_smul]; rw [← g.map_smul]; rw [← g.map_smul]; rw [←
+      g.map_smul]; rw [eq1]
 
 Depends on / 依赖: Finsupp, Finsupp.zero_apply, Function, Function.Injective, Injective, Module, Module.End.algebraMap_isUnit_inv_apply_eq_iff, Module.End.isUnit_iff, Submonoid, Submonoid.smul_def, Units.inv_eq_val_in, _apply, add_comm, algebraMap_isUnit_inv_apply_eq_iff, apply_fun, coeff_modOf_of_not_exists_add, coeff_modOf_self_add, coeff_mul_single_of_forall_add_ne, coeff_zero, eq_comm
 -/
@@ -1875,7 +1953,15 @@ theorem lift'_add
     (by
       intro a a' b b'
       rw [mk_add_mk]; rw [LocalizedModule.lift'_mk]; rw [LocalizedModule.lift'_mk]; rw [LocalizedModule.lift'_mk]
-      rw [map_add]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [smul_add]; rw [← map_smul]; rw [← map_smul]; rw [←
+      rw [map_add]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [smul_add]; rw [← map_smul]; rw [← map_smul]; rw [← map_smul]
+      congr 1 <;> symm
+      · rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]
+        simp only [Submonoid.coe_mul, LinearMap.map_smul_of_tower]
+        rw [mul_smul]; rw [Submonoid.smul_def]
+      · dsimp
+        rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [mul_comm]; rw [mul_smul]; rw [← map_smul]
+        rfl)
+    x y
 
 中文:
 定理 lift'_add
@@ -1884,7 +1970,15 @@ theorem lift'_add
     (by
       intro a a' b b'
       rw [mk_add_mk]; rw [LocalizedModule.lift'_mk]; rw [LocalizedModule.lift'_mk]; rw [LocalizedModule.lift'_mk]
-      rw [map_add]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [smul_add]; rw [← map_smul]; rw [← map_smul]; rw [←
+      rw [map_add]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [smul_add]; rw [← map_smul]; rw [← map_smul]; rw [← map_smul]
+      congr 1 <;> symm
+      · rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]
+        simp only [Submonoid.coe_mul, LinearMap.map_smul_of_tower]
+        rw [mul_smul]; rw [Submonoid.smul_def]
+      · dsimp
+        rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [mul_comm]; rw [mul_smul]; rw [← map_smul]
+        rfl)
+    x y
 -/
 theorem lift'_add (g : M ->ₗ[R] M'') (h : forall x : S, IsUnit ((algebraMap R (Module.End R M'')) x))
     (x y) :
@@ -2026,7 +2120,8 @@ theorem lift_unique
   ext x; induction x with | _ m s
   rw [LocalizedModule.lift_mk]
   rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← hl]; rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [LocalizedModule.mkLinearMap_apply]; rw [← l.map_smul]; rw [LocalizedModule.smul'_mk]
-  congr 1; rw [LocalizedMod
+  congr 1; rw [LocalizedModule.mk_eq]
+  refine ⟨1, ?_⟩; simp only [one_smul, Submonoid.smul_def]
 
 中文:
 定理 lift_unique
@@ -2035,7 +2130,8 @@ theorem lift_unique
   ext x; induction x with | _ m s
   rw [LocalizedModule.lift_mk]
   rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← hl]; rw [LinearMap.coe_comp]; rw [Function.comp_apply]; rw [LocalizedModule.mkLinearMap_apply]; rw [← l.map_smul]; rw [LocalizedModule.smul'_mk]
-  congr 1; rw [LocalizedMod
+  congr 1; rw [LocalizedModule.mk_eq]
+  refine ⟨1, ?_⟩; simp only [one_smul, Submonoid.smul_def]
 
 Depends on / 依赖: Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LocalizedModule, LocalizedModule.lift_mk, LocalizedModule.mkLinearMap_apply, LocalizedModule.mk_eq, LocalizedModule.smul, Module, Module.End.algebraMap_isUnit_inv_apply_eq_iff, Submonoid, Submonoid.smul_def, algebraMap_isUnit_inv_apply_eq_iff, coe_comp, comp_apply, l.map_smul, lift_mk, map_smul, mkLinearMap_apply
 -/
@@ -2064,7 +2160,10 @@ p.induction_on by
           intros
           rfl⟩
   surj p :=
-    p.induction_on fun m t 
+    p.induction_on fun m t => by
+      refine ⟨⟨m, t⟩, ?_⟩
+      rw [Submonoid.smul_def]; rw [LocalizedModule.smul'_mk]; rw [LocalizedModule.mkLinearMap_apply]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel t]
+  exists_of_eq eq1 := by simpa only [eq_comm, one_smul] using LocalizedModule.mk_eq.mp eq1
 
 中文:
 实例 localizedModuleIsLocalizedModule
@@ -2077,7 +2176,10 @@ p.induction_on by
           intros
           rfl⟩
   surj p :=
-    p.induction_on fun m t 
+    p.induction_on fun m t => by
+      refine ⟨⟨m, t⟩, ?_⟩
+      rw [Submonoid.smul_def]; rw [LocalizedModule.smul'_mk]; rw [LocalizedModule.mkLinearMap_apply]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel t]
+  exists_of_eq eq1 := by simpa only [eq_comm, one_smul] using LocalizedModule.mk_eq.mp eq1
 
 Depends on / 依赖: DFunLike, DFunLike.ext, LocalizedModule, LocalizedModule.divBy, LocalizedModule.divBy_mul_by, LocalizedModule.mkLinearMap_apply, LocalizedModule.mk_cancel, LocalizedModule.mul_by_divBy, LocalizedModule.smul, Module, Module.End, Submonoid, Submonoid.smul_def, algebraMap, divBy_mul_by, eq_comm, exists_of_eq, induction_on, intros, mkLinearMap_apply
 -/
@@ -2109,7 +2211,10 @@ lemma IsLocalizedModule.restrictScalars
     exact this
   surj y := by
     obtain ⟨⟨x, ⟨_, ⟨r, ⟨hr₁, rfl⟩⟩⟩⟩, hx⟩ := h.2 y
-    exact ⟨⟨x, ⟨r, hr₁⟩⟩, by simpa [Submonoid.smul_def] 
+    exact ⟨⟨x, ⟨r, hr₁⟩⟩, by simpa [Submonoid.smul_def] using hx⟩
+  exists_of_eq {x₁ x₂} e := by
+    obtain ⟨⟨_, ⟨r, ⟨hr, rfl⟩⟩⟩, hc⟩ := h.3 e
+    exact ⟨⟨r, hr⟩, by simpa [Submonoid.smul_def] using hc⟩
 
 中文:
 引理 是Localized模.restrictScalars
@@ -2120,7 +2225,10 @@ lemma IsLocalizedModule.restrictScalars
     exact this
   surj y := by
     obtain ⟨⟨x, ⟨_, ⟨r, ⟨hr₁, rfl⟩⟩⟩⟩, hx⟩ := h.2 y
-    exact ⟨⟨x, ⟨r, hr₁⟩⟩, by simpa [Submonoid.smul_def] 
+    exact ⟨⟨x, ⟨r, hr₁⟩⟩, by simpa [Submonoid.smul_def] using hx⟩
+  exists_of_eq {x₁ x₂} e := by
+    obtain ⟨⟨_, ⟨r, ⟨hr, rfl⟩⟩⟩, hc⟩ := h.3 e
+    exact ⟨⟨r, hr⟩, by simpa [Submonoid.smul_def] using hc⟩
 
 Depends on / 依赖: Algebra, Algebra.mem_algebraMapSubmonoid_of_mem, IsScalarTower, IsScalarTower.algebraMap_apply, Module, Module.End.isUnit_iff, Submonoid, Submonoid.smul_def, algebraMap, algebraMap_apply, exists_of_eq, isUnit_iff, mem_algebraMapSubmonoid_of_mem, smul_def
 -/
@@ -2180,7 +2288,10 @@ lemma IsLocalizedModule.of_restrictScalars
     exact this
   surj y := by
     obtain ⟨⟨x, t⟩, e⟩ := IsLocalizedModule.surj S (f.restrictScalars R) y
-    exac
+    exact ⟨⟨x, ⟨_, t, t.2, rfl⟩⟩, by simpa [Submonoid.smul_def] using e⟩
+  exists_of_eq {x₁ x₂} e := by
+    obtain ⟨c, hc⟩ := IsLocalizedModule.exists_of_eq (S := S) (f := f.restrictScalars R) e
+    refine ⟨⟨_, c, c.2, rfl⟩, by simpa [Submonoid.smul_def]⟩
 
 中文:
 引理 是Localized模.of_restrictScalars
@@ -2192,7 +2303,10 @@ lemma IsLocalizedModule.of_restrictScalars
     exact this
   surj y := by
     obtain ⟨⟨x, t⟩, e⟩ := IsLocalizedModule.surj S (f.restrictScalars R) y
-    exac
+    exact ⟨⟨x, ⟨_, t, t.2, rfl⟩⟩, by simpa [Submonoid.smul_def] using e⟩
+  exists_of_eq {x₁ x₂} e := by
+    obtain ⟨c, hc⟩ := IsLocalizedModule.exists_of_eq (S := S) (f := f.restrictScalars R) e
+    refine ⟨⟨_, c, c.2, rfl⟩, by simpa [Submonoid.smul_def]⟩
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.exists_of_eq, IsLocalizedModule.map_units, IsLocalizedModule.surj, IsScalarTower, IsScalarTower.algebraMap_apply, Module, Module.End.isUnit_iff, Submonoid, Submonoid.smul_def, algebraMap_apply, exists_of_eq, f.restrictScalars, isUnit_iff, map_units, restrictScalars, smul_def
 -/
@@ -2249,7 +2363,9 @@ lemma IsLocalizedModule.of_exists_mul_mem
   surj y := by
     obtain ⟨⟨x, t⟩, e⟩ := IsLocalizedModule.surj S f y
     exact ⟨⟨x, ⟨t, h t.2⟩⟩, e⟩
-  exists_of_eq {x₁
+  exists_of_eq {x₁ x₂} e := by
+    obtain ⟨c, hc⟩ := IsLocalizedModule.exists_of_eq (S := S) (f := f) e
+    exact ⟨⟨c, h c.2⟩, hc⟩
 
 中文:
 引理 是Localized模.of_存在_mul_mem
@@ -2262,7 +2378,9 @@ lemma IsLocalizedModule.of_exists_mul_mem
   surj y := by
     obtain ⟨⟨x, t⟩, e⟩ := IsLocalizedModule.surj S f y
     exact ⟨⟨x, ⟨t, h t.2⟩⟩, e⟩
-  exists_of_eq {x₁
+  exists_of_eq {x₁ x₂} e := by
+    obtain ⟨c, hc⟩ := IsLocalizedModule.exists_of_eq (S := S) (f := f) e
+    exact ⟨⟨c, h c.2⟩, hc⟩
 
 Depends on / 依赖: Algebra, Algebra.commute_algebraMap_left, IsLocalizedModule, IsLocalizedModule.exists_of_eq, IsLocalizedModule.map_units, IsLocalizedModule.surj, commute_algebraMap_left, exists_of_eq, isUnit_mul_iff, map_mul, map_units
 -/
@@ -2297,7 +2415,10 @@ definition fromLocalizedModule'
     (by
       rintro ⟨a, b⟩ ⟨a', b'⟩ ⟨c, eq1⟩
       dsimp
-      rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← map_smul]; rw [← map_smul]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff']; rw [← map_s
+      rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← map_smul]; rw [← map_smul]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff']; rw [← map_smul]
+      exact (IsLocalizedModule.eq_iff_exists S f).mpr ⟨c, eq1.symm⟩)
+
+@[simp]
 
 中文:
 定义 fromLocalizedModule'
@@ -2307,7 +2428,10 @@ definition fromLocalizedModule'
     (by
       rintro ⟨a, b⟩ ⟨a', b'⟩ ⟨c, eq1⟩
       dsimp
-      rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← map_smul]; rw [← map_smul]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff']; rw [← map_s
+      rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← map_smul]; rw [← map_smul]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff']; rw [← map_smul]
+      exact (IsLocalizedModule.eq_iff_exists S f).mpr ⟨c, eq1.symm⟩)
+
+@[simp]
 -/
 noncomputable def fromLocalizedModule' : LocalizedModule S M -> M' := fun p =>
   p.liftOn (fun x => (IsLocalizedModule.map_units f x.2).unit⁻¹.val (f x.1))
@@ -2348,7 +2472,10 @@ theorem fromLocalizedModule'_add
       simp only [LocalizedModule.mk_add_mk, fromLocalizedModule'_mk]
       rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [smul_add]; rw [← map_smul]; rw [← map_smul]; rw [← map_smul]; rw [map_add]
       congr 1
-      all_goals rw [
+      all_goals rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff']
+      · simp [mul_smul, Submonoid.smul_def]
+      · rw [Submonoid.coe_mul, LinearMap.map_smul_of_tower, mul_comm, mul_smul, Submonoid.smul_def])
+    x y
 
 中文:
 定理 fromLocalizedModule'_add
@@ -2359,7 +2486,10 @@ theorem fromLocalizedModule'_add
       simp only [LocalizedModule.mk_add_mk, fromLocalizedModule'_mk]
       rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [smul_add]; rw [← map_smul]; rw [← map_smul]; rw [← map_smul]; rw [map_add]
       congr 1
-      all_goals rw [
+      all_goals rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff']
+      · simp [mul_smul, Submonoid.smul_def]
+      · rw [Submonoid.coe_mul, LinearMap.map_smul_of_tower, mul_comm, mul_smul, Submonoid.smul_def])
+    x y
 -/
 theorem fromLocalizedModule'_add (x y : LocalizedModule S M) :
     fromLocalizedModule' S f (x + y) = fromLocalizedModule' S f x + fromLocalizedModule' S f y :=
@@ -2456,7 +2586,7 @@ theorem fromLocalizedModule.inj
   induction y with | _ a' b'
   simp only [fromLocalizedModule_mk] at eq1
   rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← map_smul]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff'] at eq1
-  rw [LocalizedModule.mk_eq]; rw [← IsLocalizedModul
+  rw [LocalizedModule.mk_eq]; rw [← IsLocalizedModule.eq_iff_exists S f]; rw [Submonoid.smul_def]; rw [Submonoid.smul_def]; rw [f.map_smul]; rw [f.map_smul]; rw [eq1]
 
 中文:
 定理 fromLocalizedModule.inj
@@ -2466,7 +2596,7 @@ theorem fromLocalizedModule.inj
   induction y with | _ a' b'
   simp only [fromLocalizedModule_mk] at eq1
   rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff]; rw [← map_smul]; rw [Module.End.algebraMap_isUnit_inv_apply_eq_iff'] at eq1
-  rw [LocalizedModule.mk_eq]; rw [← IsLocalizedModul
+  rw [LocalizedModule.mk_eq]; rw [← IsLocalizedModule.eq_iff_exists S f]; rw [Submonoid.smul_def]; rw [Submonoid.smul_def]; rw [f.map_smul]; rw [f.map_smul]; rw [eq1]
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.eq_iff_exists, LocalizedModule, LocalizedModule.mk_eq, Module, Module.End.algebraMap_isUnit_inv_apply_eq_iff, Submonoid, Submonoid.smul_def, algebraMap_isUnit_inv_apply_eq_iff, eq_iff_exists, f.map_smul, fromLocalizedModule_mk, map_smul, mk_eq, smul_def
 -/
@@ -2624,14 +2754,14 @@ theorem iso_symm_apply'
   given: (m : M') (a : M) (b : S) (eq1 : b • m = f a)
   proof: (iso_symm_apply_aux S f m).trans
 LocalizedModule.mk_eq.mpr by
-      rw [← IsLocalizedModule.eq_iff_exists S f]; rw [Submonoid.smul_def]; rw [Submonoid.smul_def]; rw [f.map_smul]; rw [f.map_smul]; rw [← (surj _ _ _).choose_spec]; rw [← Submonoid.smul_def]; rw [← Submonoid.smul_def]; rw [← mul_smul]; 
+      rw [← IsLocalizedModule.eq_iff_exists S f]; rw [Submonoid.smul_def]; rw [Submonoid.smul_def]; rw [f.map_smul]; rw [f.map_smul]; rw [← (surj _ _ _).choose_spec]; rw [← Submonoid.smul_def]; rw [← Submonoid.smul_def]; rw [← mul_smul]; rw [mul_comm]; rw [mul_smul]; rw [eq1]
 
 中文:
 定理 iso_symm_apply'
   条件: (m : M') (a : M) (b : S) (eq1 : b • m = f a)
   证明: (iso_symm_apply_aux S f m).trans
 LocalizedModule.mk_eq.mpr by
-      rw [← IsLocalizedModule.eq_iff_exists S f]; rw [Submonoid.smul_def]; rw [Submonoid.smul_def]; rw [f.map_smul]; rw [f.map_smul]; rw [← (surj _ _ _).choose_spec]; rw [← Submonoid.smul_def]; rw [← Submonoid.smul_def]; rw [← mul_smul]; 
+      rw [← IsLocalizedModule.eq_iff_exists S f]; rw [Submonoid.smul_def]; rw [Submonoid.smul_def]; rw [f.map_smul]; rw [f.map_smul]; rw [← (surj _ _ _).choose_spec]; rw [← Submonoid.smul_def]; rw [← Submonoid.smul_def]; rw [← mul_smul]; rw [mul_comm]; rw [mul_smul]; rw [eq1]
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.eq_iff_exists, LocalizedModule, LocalizedModule.mk_eq.mpr, Submonoid, Submonoid.smul_def, choose_spec, eq_iff_exists, f.map_smul, iso_symm_apply_aux, map_smul, mk_eq, mul_comm, mul_smul, smul_def
 -/
@@ -2817,7 +2947,8 @@ theorem lift_unique
   dsimp only [IsLocalizedModule.lift]
   rw [LocalizedModule.lift_unique S g h (l.comp (iso S f).toLinearMap)]; rw [LinearMap.comp_assoc]; rw [LinearEquiv.comp_coe]; rw [LinearEquiv.symm_trans_self]; rw [LinearEquiv.refl_toLinearMap]; rw [LinearMap.comp_id]
   rw [LinearMap.comp_assoc]; rw [← hl]
- 
+  ext x
+  simp
 
 中文:
 定理 lift_unique
@@ -2826,7 +2957,8 @@ theorem lift_unique
   dsimp only [IsLocalizedModule.lift]
   rw [LocalizedModule.lift_unique S g h (l.comp (iso S f).toLinearMap)]; rw [LinearMap.comp_assoc]; rw [LinearEquiv.comp_coe]; rw [LinearEquiv.symm_trans_self]; rw [LinearEquiv.refl_toLinearMap]; rw [LinearMap.comp_id]
   rw [LinearMap.comp_assoc]; rw [← hl]
- 
+  ext x
+  simp
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.lift, LinearEquiv, LinearEquiv.comp_coe, LinearEquiv.refl_toLinearMap, LinearEquiv.symm_trans_self, LinearMap, LinearMap.comp_assoc, LinearMap.comp_id, LocalizedModule, LocalizedModule.lift_unique, comp_assoc, comp_coe, comp_id, l.comp, lift_unique, refl_toLinearMap, symm_trans_self, toLinearMap
 -/
@@ -3749,7 +3881,10 @@ instance :
     intro x₁ x₂ e
     obtain ⟨x₁, s₁, rfl⟩ := mk'_surjective S₁ f₁ x₁
     obtain ⟨x₂, s₂, rfl⟩ := mk'_surjective S₁ f₁ x₂
-    simp only [Function.uncurry, liftO
+    simp only [Function.uncurry, liftOfLE_mk', mk'_eq_mk'_iff,
+      Submonoid.smul_def, ← mk'_smul] at e ⊢
+    obtain ⟨c, e⟩ := e
+    exact ⟨c, 1, by simpa [← smul_comm c.1]⟩
 
 中文:
 实例 :
@@ -3762,7 +3897,10 @@ instance :
     intro x₁ x₂ e
     obtain ⟨x₁, s₁, rfl⟩ := mk'_surjective S₁ f₁ x₁
     obtain ⟨x₂, s₂, rfl⟩ := mk'_surjective S₁ f₁ x₂
-    simp only [Function.uncurry, liftO
+    simp only [Function.uncurry, liftOfLE_mk', mk'_eq_mk'_iff,
+      Submonoid.smul_def, ← mk'_smul] at e ⊢
+    obtain ⟨c, e⟩ := e
+    exact ⟨c, 1, by simpa [← smul_comm c.1]⟩
 
 Depends on / 依赖: map_units
 -/
@@ -3796,7 +3934,8 @@ lemma injective_of_map_eq
   suffices h : g (f (n.val • x)) = g (f (m.val • y)) by
     apply H at h
     rw [map_smul]; rw [map_smul] at h
-    rwa [← IsLocalizedModule
+    rwa [← IsLocalizedModule.smul_inj f (n * m), mul_smul, mul_comm, mul_smul, hxm, hym]
+  simp [← hxm, ← hym, hab, ← S.smul_def, ← mul_smul, mul_comm, ← mul_smul]
 
 中文:
 引理 injective_of_map_eq
@@ -3808,7 +3947,8 @@ lemma injective_of_map_eq
   suffices h : g (f (n.val • x)) = g (f (m.val • y)) by
     apply H at h
     rw [map_smul]; rw [map_smul] at h
-    rwa [← IsLocalizedModule
+    rwa [← IsLocalizedModule.smul_inj f (n * m), mul_smul, mul_comm, mul_smul, hxm, hym]
+  simp [← hxm, ← hym, hab, ← S.smul_def, ← mul_smul, mul_comm, ← mul_smul]
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.smul_inj, IsLocalizedModule.surj, S.smul_def, m.val, map_smul, mul_comm, mul_smul, n.val, smul_def, smul_inj
 -/
@@ -3873,7 +4013,7 @@ definition map
     simp only [lift_comp, LinearMap.add_comp, LinearMap.comp_add]
   map_smul' r h := by
     apply IsLocalizedModule.ext S f (IsLocalizedModule.map_units g)
-   
+    simp only [lift_comp, LinearMap.smul_comp, LinearMap.comp_smul, RingHom.id_apply]
 
 中文:
 定义 map
@@ -3884,7 +4024,7 @@ definition map
     simp only [lift_comp, LinearMap.add_comp, LinearMap.comp_add]
   map_smul' r h := by
     apply IsLocalizedModule.ext S f (IsLocalizedModule.map_units g)
-   
+    simp only [lift_comp, LinearMap.smul_comp, LinearMap.comp_smul, RingHom.id_apply]
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.map_units, map_units
 -/
@@ -4025,7 +4165,10 @@ theorem map_injective
   obtain ⟨⟨y, t⟩, rfl⟩ := IsLocalizedModule.mk'_surjective S f y
   simp only [Function.uncurry_apply_pair, map_mk', mk'_eq_mk'_iff, Subtype.exists,
     Submonoid.mk_smul, exists_prop, forall_exists_index, and_imp]
-  intr
+  intro c hc e
+  exact ⟨c, hc, h_inj (by simpa)⟩
+
+@[simp]
 
 中文:
 定理 map_injective
@@ -4036,7 +4179,10 @@ theorem map_injective
   obtain ⟨⟨y, t⟩, rfl⟩ := IsLocalizedModule.mk'_surjective S f y
   simp only [Function.uncurry_apply_pair, map_mk', mk'_eq_mk'_iff, Subtype.exists,
     Submonoid.mk_smul, exists_prop, forall_exists_index, and_imp]
-  intr
+  intro c hc e
+  exact ⟨c, hc, h_inj (by simpa)⟩
+
+@[simp]
 
 Depends on / 依赖: Function, Function.uncurry_apply_pair, IsLocalizedModule, IsLocalizedModule.mk, Submonoid, Submonoid.mk_smul, Subtype, Subtype.exists, _eq_mk, _iff, _surjective, and_imp, exists_prop, forall_exists_index, h_inj, map_mk, mk_smul, uncurry_apply_pair
 -/
@@ -4158,7 +4304,8 @@ lemma map_iso_commute
   ext x
   induction x using induction_on with | _ m s
   refine ((Module.End.isUnit_iff _).1 (map_units f₁ s)).1 ?_
-  rw [Module.algebraMap_end_apply]; rw [Module.algebraMap_end_apply]; rw [← CompatibleSMul.map_smul]; rw [← CompatibleSMul.map_smul]; rw [smul'_mk]; rw [← mk_smul _ s.2]; rw [mk_canc
+  rw [Module.algebraMap_end_apply]; rw [Module.algebraMap_end_apply]; rw [← CompatibleSMul.map_smul]; rw [← CompatibleSMul.map_smul]; rw [smul'_mk]; rw [← mk_smul _ s.2]; rw [mk_cancel]
+  simp [map, lift, iso_localizedModule_eq_refl, lift_mk]
 
 中文:
 引理 map_iso_commute
@@ -4168,7 +4315,8 @@ lemma map_iso_commute
   ext x
   induction x using induction_on with | _ m s
   refine ((Module.End.isUnit_iff _).1 (map_units f₁ s)).1 ?_
-  rw [Module.algebraMap_end_apply]; rw [Module.algebraMap_end_apply]; rw [← CompatibleSMul.map_smul]; rw [← CompatibleSMul.map_smul]; rw [smul'_mk]; rw [← mk_smul _ s.2]; rw [mk_canc
+  rw [Module.algebraMap_end_apply]; rw [Module.algebraMap_end_apply]; rw [← CompatibleSMul.map_smul]; rw [← CompatibleSMul.map_smul]; rw [smul'_mk]; rw [← mk_smul _ s.2]; rw [mk_cancel]
+  simp [map, lift, iso_localizedModule_eq_refl, lift_mk]
 
 Depends on / 依赖: CompatibleSMul, CompatibleSMul.map_smul, Module, Module.End.isUnit_iff, Module.algebraMap_end_apply, algebraMap_end_apply, induction_on, isUnit_iff, iso_localizedModule_eq_refl, lift_mk, map_smul, map_units, mk_cancel, mk_smul
 -/
@@ -4238,7 +4386,17 @@ theorem mkOfAlgebra
     rw [Module.End.isUnit_iff]
     constructor
     · rintro a b (e : x • a = x • b)
-     
+      simp_rw [Submonoid.smul_def, Algebra.smul_def] at e
+      exact (h₁ x x.2).mul_left_cancel e
+    · intro a
+      refine ⟨((h₁ x x.2).unit⁻¹ :) * a, ?_⟩
+      rw [Module.algebraMap_end_apply]; rw [Algebra.smul_def]; rw [← mul_assoc]; rw [IsUnit.mul_val_inv]; rw [one_mul]
+  · exact h₂
+  · intro x y
+    dsimp only [AlgHom.toLinearMap_apply]
+    rw [← sub_eq_zero]; rw [← map_sub]; rw [h₃]
+    simp_rw [smul_sub, sub_eq_zero]
+    exact id
 
 中文:
 定理 mkOfAlgebra
@@ -4254,7 +4412,17 @@ theorem mkOfAlgebra
     rw [Module.End.isUnit_iff]
     constructor
     · rintro a b (e : x • a = x • b)
-     
+      simp_rw [Submonoid.smul_def, Algebra.smul_def] at e
+      exact (h₁ x x.2).mul_left_cancel e
+    · intro a
+      refine ⟨((h₁ x x.2).unit⁻¹ :) * a, ?_⟩
+      rw [Module.algebraMap_end_apply]; rw [Algebra.smul_def]; rw [← mul_assoc]; rw [IsUnit.mul_val_inv]; rw [one_mul]
+  · exact h₂
+  · intro x y
+    dsimp only [AlgHom.toLinearMap_apply]
+    rw [← sub_eq_zero]; rw [← map_sub]; rw [h₃]
+    simp_rw [smul_sub, sub_eq_zero]
+    exact id
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Iff.intro, IsUnit, IsUnit.mul_val_inv, Module, Module.End.isUnit_iff, Module.algebraMap_end_apply, Submonoid, Submonoid.smul_def, algebraMap_end_apply, congr_arg, f.congr_arg, isUnit_iff, mul_assoc, mul_left_cancel, mul_val_inv, replace, simp_rw, smul_def
 -/
@@ -4556,7 +4724,13 @@ lemma isTorsionFree_of_forall_isRegular
       exact Subsingleton.elim ..
     obtain ⟨⟨a, s⟩, rfl⟩ := IsLocalization.mk'_surjective S c
     obtain ⟨⟨m₁, t₁⟩, rfl⟩ := IsLocalizedModule.mk'_surjective S f x
-    ob
+    obtain ⟨⟨m₂, t₂⟩, rfl⟩ := IsLocalizedModule.mk'_surjective S f y
+replace hS : forall s in S, IsRegular s := fun s hs => hS s hs ne_of_mem_of_not_mem hs hS₀
+    rw [IsLocalization.isRegular_mk' hS] at hc
+    have (s : S) (x y : M) : s • x = s • y ↔ x = y := (hS _ s.2).isSMulRegular.eq_iff
+    simp only [Function.uncurry_apply_pair, mk'_smul_mk', mk'_eq_mk'_iff, mul_smul, this,
+      exists_const] at hxy ⊢
+    simpa [smul_comm _ a, hc.isSMulRegular.eq_iff] using hxy
 
 中文:
 引理 isTorsionFree_of_对任意_isRegular
@@ -4567,7 +4741,13 @@ lemma isTorsionFree_of_forall_isRegular
       exact Subsingleton.elim ..
     obtain ⟨⟨a, s⟩, rfl⟩ := IsLocalization.mk'_surjective S c
     obtain ⟨⟨m₁, t₁⟩, rfl⟩ := IsLocalizedModule.mk'_surjective S f x
-    ob
+    obtain ⟨⟨m₂, t₂⟩, rfl⟩ := IsLocalizedModule.mk'_surjective S f y
+replace hS : forall s in S, IsRegular s := fun s hs => hS s hs ne_of_mem_of_not_mem hs hS₀
+    rw [IsLocalization.isRegular_mk' hS] at hc
+    have (s : S) (x y : M) : s • x = s • y ↔ x = y := (hS _ s.2).isSMulRegular.eq_iff
+    simp only [Function.uncurry_apply_pair, mk'_smul_mk', mk'_eq_mk'_iff, mul_smul, this,
+      exists_const] at hxy ⊢
+    simpa [smul_comm _ a, hc.isSMulRegular.eq_iff] using hxy
 
 Depends on / 依赖: IsLocalization, IsLocalization.isRegular_mk, IsLocalization.mk, IsLocalizedModule, IsLocalizedModule.mk, IsLocalizedModule.subsingleton_iff, IsRegular, Subsingleton, Subsingleton.elim, _surjective, isRegular_mk, ne_of_mem_of_not_mem, replace, subsingleton_iff
 -/

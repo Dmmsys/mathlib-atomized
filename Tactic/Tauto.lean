@@ -38,7 +38,57 @@ definition distribNotOnceAt
   let e : Q(Prop) ← (do guard <| ← Meta.isProp h.type; pure h.type)
   let replace (p : Expr) : MetaM AssertAfterResult := do
     commitIfNoEx do
-      let result ← g.assertAfter fvarId h.userNam
+      let result ← g.assertAfter fvarId h.userName (← inferType p) p
+      /-
+        We attempt to clear the old hypothesis. Doing so is crucial for
+        avoiding infinite loops. On failure, we roll back the MetaM state
+        and ignore this hypothesis. See
+        https://github.com/leanprover-community/mathlib4/issues/10590.
+      -/
+      let newGoal ← result.mvarId.clear fvarId
+      return { result with mvarId := newGoal }
+
+  match e with
+  | ~q(¬ ($a : Prop) = $b) => do
+    let h' : Q(¬$a = $b) := h.toExpr
+    replace q(mt propext $h')
+  | ~q(($a : Prop) = $b) => do
+    let h' : Q($a = $b) := h.toExpr
+    replace q(Eq.to_iff $h')
+  | ~q(¬ (($a : Prop) ∧ $b)) => do
+    let h' : Q(¬($a ∧ $b)) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $b)
+    replace q(Decidable.not_and_iff_not_or_not'.mp $h')
+  | ~q(¬ (($a : Prop) ∨ $b)) => do
+    let h' : Q(¬($a ∨ $b)) := h.toExpr
+    replace q(not_or.mp $h')
+  | ~q(¬ (($a : Prop) != $b)) => do
+    let h' : Q(¬($a != $b)) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable ($a = $b))
+    replace q(Decidable.of_not_not $h')
+  | ~q(¬¬ ($a : Prop)) => do
+    let h' : Q(¬¬$a) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $a)
+    replace q(Decidable.of_not_not $h')
+  | ~q(¬ ((($a : Prop)) -> $b)) => do
+    let h' : Q(¬($a -> $b)) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $a)
+    replace q(Decidable.not_imp_iff_and_not.mp $h')
+  | ~q(¬ (($a : Prop) ↔ $b)) => do
+    let h' : Q(¬($a ↔ $b)) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $b)
+    replace q(Decidable.not_iff.mp $h')
+  | ~q(($a : Prop) ↔ $b) => do
+    let h' : Q($a ↔ $b) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $b)
+    replace q(Decidable.iff_iff_and_or_not_and_not.mp $h')
+  | ~q((((($a : Prop)) -> False) : Prop)) =>
+    throwError "distribNot found nothing to work on with negation"
+  | ~q((((($a : Prop)) -> $b) : Prop)) => do
+    let h' : Q($a -> $b) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $a)
+    replace q(Decidable.not_or_of_imp $h')
+  | _ => throwError "distribNot found nothing to work on"
 
 中文:
 定义 distribNotOnceAt
@@ -49,7 +99,57 @@ definition distribNotOnceAt
   let e : Q(Prop) ← (do guard <| ← Meta.isProp h.type; pure h.type)
   let replace (p : Expr) : MetaM AssertAfterResult := do
     commitIfNoEx do
-      let result ← g.assertAfter fvarId h.userNam
+      let result ← g.assertAfter fvarId h.userName (← inferType p) p
+      /-
+        We attempt to clear the old hypothesis. Doing so is crucial for
+        avoiding infinite loops. On failure, we roll back the MetaM state
+        and ignore this hypothesis. See
+        https://github.com/leanprover-community/mathlib4/issues/10590.
+      -/
+      let newGoal ← result.mvarId.clear fvarId
+      return { result with mvarId := newGoal }
+
+  match e with
+  | ~q(¬ ($a : Prop) = $b) => do
+    let h' : Q(¬$a = $b) := h.toExpr
+    replace q(mt propext $h')
+  | ~q(($a : Prop) = $b) => do
+    let h' : Q($a = $b) := h.toExpr
+    replace q(Eq.to_iff $h')
+  | ~q(¬ (($a : Prop) ∧ $b)) => do
+    let h' : Q(¬($a ∧ $b)) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $b)
+    replace q(Decidable.not_and_iff_not_or_not'.mp $h')
+  | ~q(¬ (($a : Prop) ∨ $b)) => do
+    let h' : Q(¬($a ∨ $b)) := h.toExpr
+    replace q(not_or.mp $h')
+  | ~q(¬ (($a : Prop) != $b)) => do
+    let h' : Q(¬($a != $b)) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable ($a = $b))
+    replace q(Decidable.of_not_not $h')
+  | ~q(¬¬ ($a : Prop)) => do
+    let h' : Q(¬¬$a) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $a)
+    replace q(Decidable.of_not_not $h')
+  | ~q(¬ ((($a : Prop)) -> $b)) => do
+    let h' : Q(¬($a -> $b)) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $a)
+    replace q(Decidable.not_imp_iff_and_not.mp $h')
+  | ~q(¬ (($a : Prop) ↔ $b)) => do
+    let h' : Q(¬($a ↔ $b)) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $b)
+    replace q(Decidable.not_iff.mp $h')
+  | ~q(($a : Prop) ↔ $b) => do
+    let h' : Q($a ↔ $b) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $b)
+    replace q(Decidable.iff_iff_and_or_not_and_not.mp $h')
+  | ~q((((($a : Prop)) -> False) : Prop)) =>
+    throwError "distribNot found nothing to work on with negation"
+  | ~q((((($a : Prop)) -> $b) : Prop)) => do
+    let h' : Q($a -> $b) := h.toExpr
+    let _inst ← synthInstanceQ q(Decidable $a)
+    replace q(Decidable.not_or_of_imp $h')
+  | _ => throwError "distribNot found nothing to work on"
 
 Depends on / 依赖: g.withContext, withContext
 -/
@@ -151,7 +251,7 @@ definition distribNotAt
       let result ← distribNotOnceAt fv state.currentGoal
       let newFVars := mkFVar result.fvarId :: fvs.map (fun x => result.subst.apply x)
       distribNotAt n ⟨newFVars, result.mvarId⟩
-    catch _ => 
+    catch _ => pure state
 
 中文:
 定义 distribNotAt
@@ -163,7 +263,7 @@ definition distribNotAt
       let result ← distribNotOnceAt fv state.currentGoal
       let newFVars := mkFVar result.fvarId :: fvs.map (fun x => result.subst.apply x)
       distribNotAt n ⟨newFVars, result.mvarId⟩
-    catch _ => 
+    catch _ => pure state
 -/
 partial def distribNotAt (nIters : Nat) (state : DistribNotState) : MetaM DistribNotState :=
   match nIters, state.fvars with
@@ -335,7 +435,16 @@ definition tautoCore
     allGoals (
       liftMetaTactic (fun m => do pure [(← m.intros!).2]) <;>
       distribNot <;>
-      liftMetaTactic (casesMatc
+      liftMetaTactic (casesMatching casesMatcher (recursive := true) (throwOnNoMatch := false)) <;>
+      (do _ ← tryTactic (evalTactic (← `(tactic| contradiction)))) <;>
+      (do _ ← tryTactic (evalTactic (← `(tactic| refine or_iff_not_imp_left.mpr ?_)))) <;>
+      liftMetaTactic (fun m => do pure [(← m.intros!).2]) <;>
+      liftMetaTactic (constructorMatching · coreConstructorMatcher
+        (recursive := true) (throwOnNoMatch := false)) <;>
+      do _ ← tryTactic (evalTactic (← `(tactic| assumption))))
+    let gs' ← getUnsolvedGoals
+    if gs == gs' then failure -- no progress
+    pure ()
 
 中文:
 定义 tautoCore
@@ -348,7 +457,16 @@ definition tautoCore
     allGoals (
       liftMetaTactic (fun m => do pure [(← m.intros!).2]) <;>
       distribNot <;>
-      liftMetaTactic (casesMatc
+      liftMetaTactic (casesMatching casesMatcher (recursive := true) (throwOnNoMatch := false)) <;>
+      (do _ ← tryTactic (evalTactic (← `(tactic| contradiction)))) <;>
+      (do _ ← tryTactic (evalTactic (← `(tactic| refine or_iff_not_imp_left.mpr ?_)))) <;>
+      liftMetaTactic (fun m => do pure [(← m.intros!).2]) <;>
+      liftMetaTactic (constructorMatching · coreConstructorMatcher
+        (recursive := true) (throwOnNoMatch := false)) <;>
+      do _ ← tryTactic (evalTactic (← `(tactic| assumption))))
+    let gs' ← getUnsolvedGoals
+    if gs == gs' then failure -- no progress
+    pure ()
 -/
 def tautoCore : TacticM Unit := do
   _ ← tryTactic (evalTactic (← `(tactic| contradiction)))
@@ -417,7 +535,7 @@ definition tautology
 evalTactic (← `(tactic| solve_by_elim)) >
       liftMetaTactic (constructorMatching · finishingConstructorMatcher)))
     unless (← getUnsolvedGoals).isEmpty do
-   
+      throwTacticEx `tauto g
 
 中文:
 定义 tautology
@@ -431,7 +549,7 @@ evalTactic (← `(tactic| solve_by_elim)) >
 evalTactic (← `(tactic| solve_by_elim)) >
       liftMetaTactic (constructorMatching · finishingConstructorMatcher)))
     unless (← getUnsolvedGoals).isEmpty do
-   
+      throwTacticEx `tauto g
 -/
 def tautology : TacticM Unit := focus do
   classical do

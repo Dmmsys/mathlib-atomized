@@ -1216,7 +1216,8 @@ theorem log_intCast_nonneg
       | inl hn => simp [hn.symm]
       | inr hn =>
           have : (1 : Real) <= -n := by rw [← neg_zero, ← lt_neg] at hn; exact mod_cast hn
-    
+          rw [← log_neg_eq_log]
+          exact log_nonneg this
 
 中文:
 定理 log_intCast_nonneg
@@ -1232,7 +1233,8 @@ theorem log_intCast_nonneg
       | inl hn => simp [hn.symm]
       | inr hn =>
           have : (1 : Real) <= -n := by rw [← neg_zero, ← lt_neg] at hn; exact mod_cast hn
-    
+          rw [← log_neg_eq_log]
+          exact log_nonneg this
 
 Depends on / 依赖: backward, backward.isDefEq.respectTransparency.types, comp_assoc, hn.symm, isDefEq, log_neg_eq_log, log_nonneg, lt_neg, lt_trichotomy, mod_cast, neg_zero, normalizeAux, respectTransparency, set_option
 -/
@@ -1404,7 +1406,8 @@ theorem log_eq_zero
       rw [← log_neg_eq_log x] at h
       exact eq_one_of_pos_of_log_eq_zero (neg_pos.mpr x_lt_zero) h
     · exact Or.inl rfl
-    · exact Or.inr (Or.inl 
+    · exact Or.inr (Or.inl (eq_one_of_pos_of_log_eq_zero x_gt_zero h))
+  · rintro (rfl | rfl | rfl) <;> simp only [log_one, log_zero, log_neg_eq_log]
 
 中文:
 定理 log_eq_zero
@@ -1418,7 +1421,8 @@ theorem log_eq_zero
       rw [← log_neg_eq_log x] at h
       exact eq_one_of_pos_of_log_eq_zero (neg_pos.mpr x_lt_zero) h
     · exact Or.inl rfl
-    · exact Or.inr (Or.inl 
+    · exact Or.inr (Or.inl (eq_one_of_pos_of_log_eq_zero x_gt_zero h))
+  · rintro (rfl | rfl | rfl) <;> simp only [log_one, log_zero, log_neg_eq_log]
 
 Depends on / 依赖: Or.inl, Or.inr, eq_one_of_pos_of_log_eq_zero, log_neg_eq_log, log_one, log_zero, lt_trichotomy, neg_eq_iff_eq_neg, neg_eq_iff_eq_neg.mp, neg_pos, neg_pos.mpr, x_gt_zero, x_lt_zero
 -/
@@ -1673,7 +1677,13 @@ theorem abs_log_mul_self_lt
   replace : log (1 / x) < 1 / x := by linarith
   rw [log_div one_ne_zero h1.ne']; rw [log_one]; rw [zero_sub]; rw [lt_div_iff₀ h1] at this
   have aux : 0 <= -log x * x := by
-    refine mul_nonn
+    refine mul_nonneg ?_ h1.le
+    rw [← log_inv]
+    apply log_nonneg
+    rw [← le_inv_comm₀ h1 zero_lt_one]; rw [inv_one]
+    exact h2
+  rw [← abs_of_nonneg aux]; rw [neg_mul]; rw [abs_neg] at this
+  exact this
 
 中文:
 定理 abs_log_mul_self_lt
@@ -1685,7 +1695,13 @@ theorem abs_log_mul_self_lt
   replace : log (1 / x) < 1 / x := by linarith
   rw [log_div one_ne_zero h1.ne']; rw [log_one]; rw [zero_sub]; rw [lt_div_iff₀ h1] at this
   have aux : 0 <= -log x * x := by
-    refine mul_nonn
+    refine mul_nonneg ?_ h1.le
+    rw [← log_inv]
+    apply log_nonneg
+    rw [← le_inv_comm₀ h1 zero_lt_one]; rw [inv_one]
+    exact h2
+  rw [← abs_of_nonneg aux]; rw [neg_mul]; rw [abs_neg] at this
+  exact this
 
 Depends on / 依赖: abs_neg, abs_of_nonneg, h1.le, h1.ne, inv_one, inv_pos, log_div, log_inv, log_le_sub_one_of_pos, log_nonneg, log_one, mul_nonneg, neg_mul, one_div, one_ne_zero, replace, zero_lt_one, zero_sub
 -/
@@ -2083,7 +2099,9 @@ lemma log_finprod
   have H' : HasFiniteMulSupport f ↔ HasFiniteSupport fun a => log (f a) := by
     simp [HasFiniteMulSupport, HasFiniteSupport, H]
   simp only [finprod_def, finsum_def]
-  b
+  by_cases h' : HasFiniteMulSupport f
+  · simp [h', log_prod (fun a _ => (h a).ne'), H'.mp h', H]
+  · simp [h', mt H'.mpr h']
 
 中文:
 引理 log_finprod
@@ -2095,7 +2113,9 @@ lemma log_finprod
   have H' : HasFiniteMulSupport f ↔ HasFiniteSupport fun a => log (f a) := by
     simp [HasFiniteMulSupport, HasFiniteSupport, H]
   simp only [finprod_def, finsum_def]
-  b
+  by_cases h' : HasFiniteMulSupport f
+  · simp [h', log_prod (fun a _ => (h a).ne'), H'.mp h', H]
+  · simp [h', mt H'.mpr h']
 
 Depends on / 依赖: HasFiniteMulSupport, HasFiniteSupport, classical, f.mulSupport, finprod_def, finsum_def, log_eq_zero, log_prod, mem_mulSupport, mem_support, mulSupport, support
 -/
@@ -2123,7 +2143,7 @@ theorem log_nat_eq_sum_factorization
   · simp only [← log_pow, ← Nat.cast_pow]
     rw [← Finsupp.log_prod]; rw [← Nat.cast_finsuppProd]; rw [Nat.prod_factorization_pow_eq_self hn]
     intro p hp
-    rw [eq_zero_of_pow_eq_zero (Na
+    rw [eq_zero_of_pow_eq_zero (Nat.cast_eq_zero.1 hp)]; rw [Nat.factorization_zero_right]
 
 中文:
 定理 log_nat_eq_sum_factorization
@@ -2134,7 +2154,7 @@ theorem log_nat_eq_sum_factorization
   · simp only [← log_pow, ← Nat.cast_pow]
     rw [← Finsupp.log_prod]; rw [← Nat.cast_finsuppProd]; rw [Nat.prod_factorization_pow_eq_self hn]
     intro p hp
-    rw [eq_zero_of_pow_eq_zero (Na
+    rw [eq_zero_of_pow_eq_zero (Nat.cast_eq_zero.1 hp)]; rw [Nat.factorization_zero_right]
 
 Depends on / 依赖: Finsupp, Finsupp.log_prod, Nat.cast_eq_zero, Nat.cast_finsuppProd, Nat.cast_pow, Nat.factorization, Nat.factorization_zero_right, Nat.prod_factorization_pow_eq_self, cast_eq_zero, cast_finsuppProd, cast_pow, eq_or_ne, eq_zero_of_pow_eq_zero, factorization, factorization_zero_right, log_pow, log_prod, prod_factorization_pow_eq_self, relies, values
 -/
@@ -2263,7 +2283,9 @@ definition expPartialHomeomorph
   open_source := isOpen_univ
   open_target := isOpen_Ioi
   continuousOn_toFun := continuousOn_exp
-  cont
+  continuousOn_invFun x hx := (continuousAt_log (ne_of_gt hx)).continuousWithinAt
+
+@[simp]
 
 中文:
 定义 expPartialHomeomorph
@@ -2279,7 +2301,9 @@ definition expPartialHomeomorph
   open_source := isOpen_univ
   open_target := isOpen_Ioi
   continuousOn_toFun := continuousOn_exp
-  cont
+  continuousOn_invFun x hx := (continuousAt_log (ne_of_gt hx)).continuousWithinAt
+
+@[simp]
 -/
 @[simps] noncomputable def expPartialHomeomorph : OpenPartialHomeomorph Real Real where
   toFun := Real.exp
@@ -2628,7 +2652,10 @@ nonrec theorem ContinuousAt.log (hf : ContinuousAt f a) (h₀ : f a != 0) :
   hf.log h₀
 
 nonrec theorem ContinuousWithinAt.log (hf : ContinuousWithinAt f s a) (h₀ : f a != 0) :
-    ContinuousWithinAt (fun x 
+    ContinuousWithinAt (fun x => log (f x)) s a :=
+  hf.log h₀
+
+@[fun_prop]
 
 中文:
 定理 连续.log
@@ -2642,7 +2669,10 @@ nonrec theorem ContinuousAt.log (hf : ContinuousAt f a) (h₀ : f a != 0) :
   hf.log h₀
 
 nonrec theorem ContinuousWithinAt.log (hf : ContinuousWithinAt f s a) (h₀ : f a != 0) :
-    ContinuousWithinAt (fun x 
+    ContinuousWithinAt (fun x => log (f x)) s a :=
+  hf.log h₀
+
+@[fun_prop]
 
 Depends on / 依赖: comp_continuous, continuousOn_log, continuousOn_log.comp_continuous
 -/
@@ -2694,7 +2724,8 @@ theorem tendsto_log_comp_add_sub_log
     tendsto_const_nhds.add (tendsto_const_nhds.div_atTop tendsto_id)
   rw [← comap_exp_nhds_exp]; rw [exp_zero]; rw [tendsto_comap_iff]; rw [← add_zero (1 : Real)]
   refine this.congr' ?_
-  filter_upwards [eventually_gt_atTop (0 : Real), 
+  filter_upwards [eventually_gt_atTop (0 : Real), eventually_gt_atTop (-y)] with x hx₀ hxy
+  rw [comp_apply]; rw [exp_sub]; rw [exp_log]; rw [exp_log]; rw [one_add_div] <;> linarith
 
 中文:
 定理 tendsto_log_comp_add_sub_log
@@ -2704,7 +2735,8 @@ theorem tendsto_log_comp_add_sub_log
     tendsto_const_nhds.add (tendsto_const_nhds.div_atTop tendsto_id)
   rw [← comap_exp_nhds_exp]; rw [exp_zero]; rw [tendsto_comap_iff]; rw [← add_zero (1 : Real)]
   refine this.congr' ?_
-  filter_upwards [eventually_gt_atTop (0 : Real), 
+  filter_upwards [eventually_gt_atTop (0 : Real), eventually_gt_atTop (-y)] with x hx₀ hxy
+  rw [comp_apply]; rw [exp_sub]; rw [exp_log]; rw [exp_log]; rw [one_add_div] <;> linarith
 
 Depends on / 依赖: Tendsto, add_zero, comap_exp_nhds_exp, comp_apply, div_atTop, eventually_gt_atTop, exp_log, exp_sub, exp_zero, filter_upwards, one_add_div, tendsto_comap_iff, tendsto_const_nhds, tendsto_const_nhds.add, tendsto_const_nhds.div_atTop, tendsto_id, this.congr
 -/

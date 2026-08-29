@@ -71,7 +71,11 @@ theorem ae_eq_zero_of_forall_inner
   have hf' : forallᵐ x ∂μ, forall n : Nat, ⟪s n, f x⟫_𝕜 = 0 := ae_all_iff.mpr fun n => hf (s n)
   refine hf'.mono fun x hx => ?_
   rw [Pi.zero_apply]; rw [← @inner_self_eq_zero 𝕜]
-  have h_closed : IsClosed {c : E | ⟪c, f x⟫_
+  have h_closed : IsClosed {c : E | ⟪c, f x⟫_𝕜 = 0} :=
+    isClosed_eq (by fun_prop) (by fun_prop)
+  exact @isClosed_property Nat E _ s (fun c => ⟪c, f x⟫_𝕜 = 0) hs h_closed hx _
+
+local notation "⟪" x ", " y "⟫" => y x
 
 中文:
 定理 ae_eq_zero_of_对任意_inner
@@ -82,7 +86,11 @@ theorem ae_eq_zero_of_forall_inner
   have hf' : forallᵐ x ∂μ, forall n : Nat, ⟪s n, f x⟫_𝕜 = 0 := ae_all_iff.mpr fun n => hf (s n)
   refine hf'.mono fun x hx => ?_
   rw [Pi.zero_apply]; rw [← @inner_self_eq_zero 𝕜]
-  have h_closed : IsClosed {c : E | ⟪c, f x⟫_
+  have h_closed : IsClosed {c : E | ⟪c, f x⟫_𝕜 = 0} :=
+    isClosed_eq (by fun_prop) (by fun_prop)
+  exact @isClosed_property Nat E _ s (fun c => ⟪c, f x⟫_𝕜 = 0) hs h_closed hx _
+
+local notation "⟪" x ", " y "⟫" => y x
 
 Depends on / 依赖: DenseRange, IsClosed, Pi.zero_apply, ae_all_iff, ae_all_iff.mpr, denseRange_denseSeq, denseSeq, fun_prop, h_closed, inner_self_eq_zero, isClosed_eq, isClosed_property, zero_apply
 -/
@@ -114,7 +122,31 @@ theorem ae_eq_zero_of_forall_dual_of_isSeparable
   have : forall x : d, exists g : StrongDual 𝕜 E, ‖g‖ <= 1 ∧ g x = ‖(x : E)‖ :=
     fun x => exists_dual_vector'' 𝕜 (x : E)
   choose s hs using this
-  have A : forall a : E, a in t -> (forall x, ⟪a, s x⟫ = (0 : 𝕜)) -> a
+  have A : forall a : E, a in t -> (forall x, ⟪a, s x⟫ = (0 : 𝕜)) -> a = 0 := by
+    intro a hat ha
+    contrapose! ha
+    have a_pos : 0 < ‖a‖ := by simp only [ha, norm_pos_iff, Ne, not_false_iff]
+    have a_mem : a in closure d := hd hat
+    obtain ⟨x, hx⟩ : exists x : d, dist a x < ‖a‖ / 2 := by
+      rcases Metric.mem_closure_iff.1 a_mem (‖a‖ / 2) (half_pos a_pos) with ⟨x, h'x, hx⟩
+      exact ⟨⟨x, h'x⟩, hx⟩
+    use x
+    have I : ‖a‖ / 2 < ‖(x : E)‖ := by
+      have : ‖a‖ <= ‖(x : E)‖ + ‖a - x‖ := norm_le_insert' _ _
+      have : ‖a - x‖ < ‖a‖ / 2 := by rwa [dist_eq_norm] at hx
+      linarith
+    intro h
+    apply lt_irrefl ‖s x x‖
+    calc
+      ‖s x x‖ = ‖s x (x - a)‖ := by simp only [h, sub_zero, map_sub]
+      _ <= 1 * ‖(x : E) - a‖ := ContinuousLinearMap.le_of_opNorm_le _ (hs x).1 _
+      _ < ‖a‖ / 2 := by rw [one_mul]; rwa [dist_eq_norm'] at hx
+      _ < ‖(x : E)‖ := I
+      _ = ‖s x x‖ := by simp [(hs x).2]
+  have hfs : forall y : d, forallᵐ x ∂μ, ⟪f x, s y⟫ = (0 : 𝕜) := fun y => hf (s y)
+  have hf' : forallᵐ x ∂μ, forall y : d, ⟪f x, s y⟫ = (0 : 𝕜) := by rwa [ae_all_iff]
+  filter_upwards [hf', h't] with x hx h'x
+  exact A (f x) h'x hx
 
 中文:
 定理 ae_eq_zero_of_对任意_dual_of_isSeparable
@@ -125,7 +157,31 @@ theorem ae_eq_zero_of_forall_dual_of_isSeparable
   have : forall x : d, exists g : StrongDual 𝕜 E, ‖g‖ <= 1 ∧ g x = ‖(x : E)‖ :=
     fun x => exists_dual_vector'' 𝕜 (x : E)
   choose s hs using this
-  have A : forall a : E, a in t -> (forall x, ⟪a, s x⟫ = (0 : 𝕜)) -> a
+  have A : forall a : E, a in t -> (forall x, ⟪a, s x⟫ = (0 : 𝕜)) -> a = 0 := by
+    intro a hat ha
+    contrapose! ha
+    have a_pos : 0 < ‖a‖ := by simp only [ha, norm_pos_iff, Ne, not_false_iff]
+    have a_mem : a in closure d := hd hat
+    obtain ⟨x, hx⟩ : exists x : d, dist a x < ‖a‖ / 2 := by
+      rcases Metric.mem_closure_iff.1 a_mem (‖a‖ / 2) (half_pos a_pos) with ⟨x, h'x, hx⟩
+      exact ⟨⟨x, h'x⟩, hx⟩
+    use x
+    have I : ‖a‖ / 2 < ‖(x : E)‖ := by
+      have : ‖a‖ <= ‖(x : E)‖ + ‖a - x‖ := norm_le_insert' _ _
+      have : ‖a - x‖ < ‖a‖ / 2 := by rwa [dist_eq_norm] at hx
+      linarith
+    intro h
+    apply lt_irrefl ‖s x x‖
+    calc
+      ‖s x x‖ = ‖s x (x - a)‖ := by simp only [h, sub_zero, map_sub]
+      _ <= 1 * ‖(x : E) - a‖ := ContinuousLinearMap.le_of_opNorm_le _ (hs x).1 _
+      _ < ‖a‖ / 2 := by rw [one_mul]; rwa [dist_eq_norm'] at hx
+      _ < ‖(x : E)‖ := I
+      _ = ‖s x x‖ := by simp [(hs x).2]
+  have hfs : forall y : d, forallᵐ x ∂μ, ⟪f x, s y⟫ = (0 : 𝕜) := fun y => hf (s y)
+  have hf' : forallᵐ x ∂μ, forall y : d, ⟪f x, s y⟫ = (0 : 𝕜) := by rwa [ae_all_iff]
+  filter_upwards [hf', h't] with x hx h'x
+  exact A (f x) h'x hx
 
 Depends on / 依赖: Encodable, StrongDual, a_mem, a_pos, closure, contrapose, d_count, d_count.toEncodable, exists_dual_vector, norm_pos_iff, not_false_iff, toEncodable
 -/
@@ -211,7 +267,18 @@ theorem ae_nonneg_of_forall_setIntegral_nonneg
   let s := {x | f x <= b}
   have hs : NullMeasurableSet s μ := nullMeasurableSet_le hf.1.aemeasurable aemeasurable_const
   have mus : μ s < ∞ := Integrable.measure_le_lt_top hf hb_neg
-  have h_i
+  have h_int_gt : (∫ x in s, f x ∂μ) <= b * μ.real s := by
+    have h_const_le : (∫ x in s, f x ∂μ) <= ∫ _ in s, b ∂μ := by
+      refine setIntegral_mono_ae_restrict hf.integrableOn (integrableOn_const mus.ne) ?_
+      rw [EventuallyLE]; rw [ae_restrict_iff₀ (hs.mono μ.restrict_le_self)]
+      exact Eventually.of_forall fun x hxs => hxs
+    rwa [setIntegral_const, smul_eq_mul, mul_comm] at h_const_le
+  contrapose! h_int_gt with H
+  calc
+b * μ.real s < 0 := mul_neg_of_neg_of_pos hb_neg ENNReal.toReal_pos H mus.ne
+    _ <= ∫ x in s, f x ∂μ := by
+      rw [← μ.restrict_toMeasurable mus.ne]
+      exact hf_zero _ (measurableSet_toMeasurable ..) (by rwa [measure_toMeasurable])
 
 中文:
 定理 ae_nonneg_of_对任意_set整数egral_nonneg
@@ -223,7 +290,18 @@ theorem ae_nonneg_of_forall_setIntegral_nonneg
   let s := {x | f x <= b}
   have hs : NullMeasurableSet s μ := nullMeasurableSet_le hf.1.aemeasurable aemeasurable_const
   have mus : μ s < ∞ := Integrable.measure_le_lt_top hf hb_neg
-  have h_i
+  have h_int_gt : (∫ x in s, f x ∂μ) <= b * μ.real s := by
+    have h_const_le : (∫ x in s, f x ∂μ) <= ∫ _ in s, b ∂μ := by
+      refine setIntegral_mono_ae_restrict hf.integrableOn (integrableOn_const mus.ne) ?_
+      rw [EventuallyLE]; rw [ae_restrict_iff₀ (hs.mono μ.restrict_le_self)]
+      exact Eventually.of_forall fun x hxs => hxs
+    rwa [setIntegral_const, smul_eq_mul, mul_comm] at h_const_le
+  contrapose! h_int_gt with H
+  calc
+b * μ.real s < 0 := mul_neg_of_neg_of_pos hb_neg ENNReal.toReal_pos H mus.ne
+    _ <= ∫ x in s, f x ∂μ := by
+      rw [← μ.restrict_toMeasurable mus.ne]
+      exact hf_zero _ (measurableSet_toMeasurable ..) (by rwa [measure_toMeasurable])
 
 Depends on / 依赖: EventuallyLE, Integrable, Integrable.measure_le_lt_top, NullMeasurableSet, Pi.zero_apply, ae_const_le_iff_forall_lt_measure_zero, aemeasurable, aemeasurable_const, h_const_le, h_int_gt, hb_neg, hf.integrableOn, integrableOn, integrableOn_const, measure_le_lt_top, mus.ne, nullMeasurableSet_le, setIntegral_mono_ae_restrict, simp_rw, zero_apply
 -/
@@ -324,7 +402,7 @@ theorem ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite
   intro s s_meas _
   exact
     hf_zero _ (s_meas.inter t_meas)
-      (lt_of_le_of_lt (measure_mono (Set.inter_subset_right)) t_
+      (lt_of_le_of_lt (measure_mono (Set.inter_subset_right)) t_lt_top)
 
 中文:
 定理 ae_nonneg_of_对任意_set整数egral_nonneg_of_sigmaFinite
@@ -336,7 +414,7 @@ theorem ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite
   intro s s_meas _
   exact
     hf_zero _ (s_meas.inter t_meas)
-      (lt_of_le_of_lt (measure_mono (Set.inter_subset_right)) t_
+      (lt_of_le_of_lt (measure_mono (Set.inter_subset_right)) t_lt_top)
 
 Depends on / 依赖: Set.inter_subset_right, ae_nonneg_restrict_of_forall_setIntegral_nonneg_inter, ae_of_forall_measure_lt_top_ae_restrict, hf_int_finite, hf_zero, inter_subset_right, lt_of_le_of_lt, measure_mono, s_meas, s_meas.inter, t_lt_top, t_meas
 -/
@@ -363,7 +441,13 @@ theorem AEFinStronglyMeasurable.ae_nonneg_of_forall_setIntegral_nonneg
     ae_of_ae_restrict_of_ae_restrict_compl _ this hf.ae_eq_zero_compl.symm.le
   have : SigmaFinite (μ.restrict t) := hf.sigmaFinite_restrict
   refine
-    ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite (fun s hs hμts => ?_) 
+    ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite (fun s hs hμts => ?_) fun s hs hμts => ?_
+  · rw [IntegrableOn, Measure.restrict_restrict hs]
+    rw [Measure.restrict_apply hs] at hμts
+    exact hf_int_finite (s inter t) (hs.inter hf.measurableSet) hμts
+  · rw [Measure.restrict_restrict hs]
+    rw [Measure.restrict_apply hs] at hμts
+    exact hf_zero (s inter t) (hs.inter hf.measurableSet) hμts
 
 中文:
 定理 AEFinStronglyMeasurable.ae_nonneg_of_对任意_set整数egral_nonneg
@@ -374,7 +458,13 @@ theorem AEFinStronglyMeasurable.ae_nonneg_of_forall_setIntegral_nonneg
     ae_of_ae_restrict_of_ae_restrict_compl _ this hf.ae_eq_zero_compl.symm.le
   have : SigmaFinite (μ.restrict t) := hf.sigmaFinite_restrict
   refine
-    ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite (fun s hs hμts => ?_) 
+    ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite (fun s hs hμts => ?_) fun s hs hμts => ?_
+  · rw [IntegrableOn, Measure.restrict_restrict hs]
+    rw [Measure.restrict_apply hs] at hμts
+    exact hf_int_finite (s inter t) (hs.inter hf.measurableSet) hμts
+  · rw [Measure.restrict_restrict hs]
+    rw [Measure.restrict_apply hs] at hμts
+    exact hf_zero (s inter t) (hs.inter hf.measurableSet) hμts
 
 Depends on / 依赖: IntegrableOn, Measure, Measure.restrict_apply, Measure.restrict_restrict, SigmaFinite, ae_eq_zero_compl, ae_nonneg_of_forall_setIntegral_nonneg_of_sigmaFinite, ae_of_ae_restrict_of_ae_restrict_compl, hf.ae_eq_zero_compl.symm.le, hf.measurableSet, hf.sigmaFiniteSet, hf.sigmaFinite_restrict, hf_int_finite, hs.inter, measurableSet, restrict, restrict_apply, restrict_restrict, sigmaFiniteSet, sigmaFinite_restrict
 -/
@@ -443,7 +533,16 @@ theorem ae_eq_zero_restrict_of_forall_setIntegral_eq_zero_real
     ⟨?_,
       ae_nonneg_restrict_of_forall_setIntegral_nonneg hf_int_finite
         (fun s hs hμs => (hf_zero s hs hμs).symm.le) ht hμt⟩
-  suffices h_
+  suffices h_neg : 0 <=ᵐ[μ.restrict t] -f by
+    refine h_neg.mono fun x hx => ?_
+    rw [Pi.neg_apply] at hx
+    simpa using hx
+  refine
+    ae_nonneg_restrict_of_forall_setIntegral_nonneg (fun s hs hμs => (hf_int_finite s hs hμs).neg)
+      (fun s hs hμs => ?_) ht hμt
+  simp_rw [Pi.neg_apply]
+  rw [integral_neg]; rw [neg_nonneg]
+  exact (hf_zero s hs hμs).le
 
 中文:
 定理 ae_eq_zero_restrict_of_对任意_set整数egral_eq_zero_real
@@ -455,7 +554,16 @@ theorem ae_eq_zero_restrict_of_forall_setIntegral_eq_zero_real
     ⟨?_,
       ae_nonneg_restrict_of_forall_setIntegral_nonneg hf_int_finite
         (fun s hs hμs => (hf_zero s hs hμs).symm.le) ht hμt⟩
-  suffices h_
+  suffices h_neg : 0 <=ᵐ[μ.restrict t] -f by
+    refine h_neg.mono fun x hx => ?_
+    rw [Pi.neg_apply] at hx
+    simpa using hx
+  refine
+    ae_nonneg_restrict_of_forall_setIntegral_nonneg (fun s hs hμs => (hf_int_finite s hs hμs).neg)
+      (fun s hs hμs => ?_) ht hμt
+  simp_rw [Pi.neg_apply]
+  rw [integral_neg]; rw [neg_nonneg]
+  exact (hf_zero s hs hμs).le
 
 Depends on / 依赖: Pi.neg_apply, ae_nonneg_restrict_of_forall_setIntegral_nonneg, h_and, h_neg, h_neg.mono, hf_int_finite, hf_zero, le_antisymm, neg_apply, restrict, symm.le
 -/
@@ -494,7 +602,10 @@ theorem ae_eq_zero_restrict_of_forall_setIntegral_eq_zero
   refine ae_eq_zero_of_forall_dual_of_isSeparable Real u_sep (fun c => ?_) hu
   refine ae_eq_zero_restrict_of_forall_setIntegral_eq_zero_real ?_ ?_ ht hμt
   · intro s hs hμs
-    exact Contin
+    exact ContinuousLinearMap.integrable_comp c (hf_int_finite s hs hμs)
+  · intro s hs hμs
+    rw [ContinuousLinearMap.integral_comp_comm c (hf_int_finite s hs hμs)]; rw [hf_zero s hs hμs]
+    exact map_zero _
 
 中文:
 定理 ae_eq_zero_restrict_of_对任意_set整数egral_eq_zero
@@ -505,7 +616,10 @@ theorem ae_eq_zero_restrict_of_forall_setIntegral_eq_zero
   refine ae_eq_zero_of_forall_dual_of_isSeparable Real u_sep (fun c => ?_) hu
   refine ae_eq_zero_restrict_of_forall_setIntegral_eq_zero_real ?_ ?_ ht hμt
   · intro s hs hμs
-    exact Contin
+    exact ContinuousLinearMap.integrable_comp c (hf_int_finite s hs hμs)
+  · intro s hs hμs
+    rw [ContinuousLinearMap.integral_comp_comm c (hf_int_finite s hs hμs)]; rw [hf_zero s hs hμs]
+    exact map_zero _
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.integrable_comp, ContinuousLinearMap.integral_comp_comm, ae_eq_zero_of_forall_dual_of_isSeparable, ae_eq_zero_restrict_of_forall_setIntegral_eq_zero_real, aestronglyMeasurable, aestronglyMeasurable.isSeparable_ae_range, hf_int_finite, hf_zero, integrable_comp, integral_comp_comm, isSeparable_ae_range, lt_top, map_zero, t.lt_top, u_sep
 -/
@@ -535,7 +649,9 @@ theorem ae_eq_restrict_of_forall_setIntegral_eq
     intro s hs hμs
     rw [integral_sub' (hf_int_finite s hs hμs) (hg_int_finite s hs hμs)]
     exact sub_eq_zero.mpr (hfg_zero s hs hμs)
-  have hfg_int : forall s, MeasurableS
+  have hfg_int : forall s, MeasurableSet s -> μ s < ∞ -> IntegrableOn (f - g) s μ := fun s hs hμs =>
+    (hf_int_finite s hs hμs).sub (hg_int_finite s hs hμs)
+  exact ae_eq_zero_restrict_of_forall_setIntegral_eq_zero hfg_int hfg' ht hμt
 
 中文:
 定理 ae_eq_restrict_of_对任意_set整数egral_eq
@@ -546,7 +662,9 @@ theorem ae_eq_restrict_of_forall_setIntegral_eq
     intro s hs hμs
     rw [integral_sub' (hf_int_finite s hs hμs) (hg_int_finite s hs hμs)]
     exact sub_eq_zero.mpr (hfg_zero s hs hμs)
-  have hfg_int : forall s, MeasurableS
+  have hfg_int : forall s, MeasurableSet s -> μ s < ∞ -> IntegrableOn (f - g) s μ := fun s hs hμs =>
+    (hf_int_finite s hs hμs).sub (hg_int_finite s hs hμs)
+  exact ae_eq_zero_restrict_of_forall_setIntegral_eq_zero hfg_int hfg' ht hμt
 
 Depends on / 依赖: IntegrableOn, MeasurableSet, ae_eq_zero_restrict_of_forall_setIntegral_eq_zero, hf_int_finite, hfg_int, hfg_zero, hg_int_finite, integral_sub, sub_ae_eq_zero, sub_eq_zero, sub_eq_zero.mpr
 -/
@@ -575,7 +693,10 @@ theorem ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite
   rw [← @Measure.restrict_univ _ _ μ]; rw [← iUnion_spanningSets μ]; rw [EventuallyEq]; rw [ae_iff]; rw [Measure.restrict_apply' (MeasurableSet.iUnion (measurableSet_spanningSets μ))]
   rw [Set.inter_iUnion]; rw [measure_iUnion_null_iff]
   intro n
-  have h_meas_n : Measu
+  have h_meas_n : MeasurableSet (S n) := measurableSet_spanningSets μ n
+  have hμn : μ (S n) < ∞ := measure_spanningSets_lt_top μ n
+  rw [← Measure.restrict_apply' h_meas_n]
+  exact ae_eq_zero_restrict_of_forall_setIntegral_eq_zero hf_int_finite hf_zero h_meas_n hμn.ne
 
 中文:
 定理 ae_eq_zero_of_对任意_set整数egral_eq_of_sigmaFinite
@@ -585,7 +706,10 @@ theorem ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite
   rw [← @Measure.restrict_univ _ _ μ]; rw [← iUnion_spanningSets μ]; rw [EventuallyEq]; rw [ae_iff]; rw [Measure.restrict_apply' (MeasurableSet.iUnion (measurableSet_spanningSets μ))]
   rw [Set.inter_iUnion]; rw [measure_iUnion_null_iff]
   intro n
-  have h_meas_n : Measu
+  have h_meas_n : MeasurableSet (S n) := measurableSet_spanningSets μ n
+  have hμn : μ (S n) < ∞ := measure_spanningSets_lt_top μ n
+  rw [← Measure.restrict_apply' h_meas_n]
+  exact ae_eq_zero_restrict_of_forall_setIntegral_eq_zero hf_int_finite hf_zero h_meas_n hμn.ne
 
 Depends on / 依赖: EventuallyEq, MeasurableSet, MeasurableSet.iUnion, Measure, Measure.restrict_apply, Measure.restrict_univ, Set.inter_iUnion, ae_eq_zero_restrict_of_forall_setIntegral_eq_zero, ae_iff, h_meas_n, hf_int_, iUnion, iUnion_spanningSets, inter_iUnion, measurableSet_spanningSets, measure_iUnion_null_iff, measure_spanningSets_lt_top, restrict_apply, restrict_univ, spanningSets
 -/
@@ -612,7 +736,9 @@ theorem ae_eq_of_forall_setIntegral_eq_of_sigmaFinite
   have hfg : forall s : Set α, MeasurableSet s -> μ s < ∞ -> (∫ x in s, (f - g) x ∂μ) = 0 := by
     intro s hs hμs
     rw [integral_sub' (hf_int_finite s hs hμs) (hg_int_finite s hs hμs)]; rw [sub_eq_zero.mpr (hfg_eq s hs hμs)]
-  have hfg_int : forall s, MeasurableSet s ->
+  have hfg_int : forall s, MeasurableSet s -> μ s < ∞ -> IntegrableOn (f - g) s μ := fun s hs hμs =>
+    (hf_int_finite s hs hμs).sub (hg_int_finite s hs hμs)
+  exact ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite hfg_int hfg
 
 中文:
 定理 ae_eq_of_对任意_set整数egral_eq_of_sigmaFinite
@@ -622,7 +748,9 @@ theorem ae_eq_of_forall_setIntegral_eq_of_sigmaFinite
   have hfg : forall s : Set α, MeasurableSet s -> μ s < ∞ -> (∫ x in s, (f - g) x ∂μ) = 0 := by
     intro s hs hμs
     rw [integral_sub' (hf_int_finite s hs hμs) (hg_int_finite s hs hμs)]; rw [sub_eq_zero.mpr (hfg_eq s hs hμs)]
-  have hfg_int : forall s, MeasurableSet s ->
+  have hfg_int : forall s, MeasurableSet s -> μ s < ∞ -> IntegrableOn (f - g) s μ := fun s hs hμs =>
+    (hf_int_finite s hs hμs).sub (hg_int_finite s hs hμs)
+  exact ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite hfg_int hfg
 
 Depends on / 依赖: IntegrableOn, MeasurableSet, ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite, hf_int_finite, hfg_eq, hfg_int, hg_int_finite, integral_sub, sub_ae_eq_zero, sub_eq_zero, sub_eq_zero.mpr
 -/
@@ -652,7 +780,13 @@ theorem AEFinStronglyMeasurable.ae_eq_zero_of_forall_setIntegral_eq_zero
   have : SigmaFinite (μ.restrict t) := hf.sigmaFinite_restrict
   refine ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite ?_ ?_
   · intro s hs hμs
-    rw [Integ
+    rw [IntegrableOn]; rw [Measure.restrict_restrict hs]
+    rw [Measure.restrict_apply hs] at hμs
+    exact hf_int_finite _ (hs.inter hf.measurableSet) hμs
+  · intro s hs hμs
+    rw [Measure.restrict_restrict hs]
+    rw [Measure.restrict_apply hs] at hμs
+    exact hf_zero _ (hs.inter hf.measurableSet) hμs
 
 中文:
 定理 AEFinStronglyMeasurable.ae_eq_zero_of_对任意_set整数egral_eq_zero
@@ -664,7 +798,13 @@ theorem AEFinStronglyMeasurable.ae_eq_zero_of_forall_setIntegral_eq_zero
   have : SigmaFinite (μ.restrict t) := hf.sigmaFinite_restrict
   refine ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite ?_ ?_
   · intro s hs hμs
-    rw [Integ
+    rw [IntegrableOn]; rw [Measure.restrict_restrict hs]
+    rw [Measure.restrict_apply hs] at hμs
+    exact hf_int_finite _ (hs.inter hf.measurableSet) hμs
+  · intro s hs hμs
+    rw [Measure.restrict_restrict hs]
+    rw [Measure.restrict_apply hs] at hμs
+    exact hf_zero _ (hs.inter hf.measurableSet) hμs
 
 Depends on / 依赖: IntegrableOn, Measure, Measure.restrict_apply, Measure.restrict_restrict, SigmaFinite, ae_eq_zero_compl, ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite, ae_of_ae_restrict_of_ae_restrict_compl, hf.ae_eq_zero_compl, hf.measurableSet, hf.sigmaFiniteSet, hf.sigmaFinite_restrict, hf_int_finite, hs.inter, measurableSet, restrict, restrict_apply, restrict_restrict, sigmaFiniteSet, sigmaFinite_restrict
 -/
@@ -697,7 +837,9 @@ theorem AEFinStronglyMeasurable.ae_eq_of_forall_setIntegral_eq
   have hfg : forall s : Set α, MeasurableSet s -> μ s < ∞ -> (∫ x in s, (f - g) x ∂μ) = 0 := by
     intro s hs hμs
     rw [integral_sub' (hf_int_finite s hs hμs) (hg_int_finite s hs hμs)]; rw [sub_eq_zero.mpr (hfg_eq s hs hμs)]
-  have hfg_int : forall s, MeasurableSet s ->
+  have hfg_int : forall s, MeasurableSet s -> μ s < ∞ -> IntegrableOn (f - g) s μ := fun s hs hμs =>
+    (hf_int_finite s hs hμs).sub (hg_int_finite s hs hμs)
+  exact (hf.sub hg).ae_eq_zero_of_forall_setIntegral_eq_zero hfg_int hfg
 
 中文:
 定理 AEFinStronglyMeasurable.ae_eq_of_对任意_set整数egral_eq
@@ -707,7 +849,9 @@ theorem AEFinStronglyMeasurable.ae_eq_of_forall_setIntegral_eq
   have hfg : forall s : Set α, MeasurableSet s -> μ s < ∞ -> (∫ x in s, (f - g) x ∂μ) = 0 := by
     intro s hs hμs
     rw [integral_sub' (hf_int_finite s hs hμs) (hg_int_finite s hs hμs)]; rw [sub_eq_zero.mpr (hfg_eq s hs hμs)]
-  have hfg_int : forall s, MeasurableSet s ->
+  have hfg_int : forall s, MeasurableSet s -> μ s < ∞ -> IntegrableOn (f - g) s μ := fun s hs hμs =>
+    (hf_int_finite s hs hμs).sub (hg_int_finite s hs hμs)
+  exact (hf.sub hg).ae_eq_zero_of_forall_setIntegral_eq_zero hfg_int hfg
 
 Depends on / 依赖: IntegrableOn, MeasurableSet, ae_eq_zero_of_forall_setIntegral_eq_zero, hf.sub, hf_int_finite, hfg_eq, hfg_int, hg_int_finite, integral_sub, sub_ae_eq_zero, sub_eq_zero, sub_eq_zero.mpr
 -/
@@ -786,7 +930,23 @@ theorem ae_eq_zero_of_forall_setIntegral_eq_of_finStronglyMeasurable_trim
   have : SigmaFinite ((μ.restrict t).trim hm) := by rwa [restrict_trim hm μ ht_meas] at htμ
   have htf_zero : f =ᵐ[μ.restrict tᶜ] 0 := by
     rw [EventuallyEq]; rw [ae_restrict_iff' (MeasurableSet.compl (hm _ ht_meas))]
-    exact E
+    exact Eventually.of_forall htf_zero
+  have hf_meas_m : StronglyMeasurable[m] f := hf.stronglyMeasurable
+  suffices f =ᵐ[μ.restrict t] 0 from
+    ae_of_ae_restrict_of_ae_restrict_compl _ this htf_zero
+  refine measure_eq_zero_of_trim_eq_zero hm ?_
+  refine ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite ?_ ?_
+  · intro s hs hμs
+    unfold IntegrableOn
+    rw [restrict_trim hm (μ.restrict t) hs]; rw [Measure.restrict_restrict (hm s hs)]
+    rw [← restrict_trim hm μ ht_meas]; rw [Measure.restrict_apply hs]; rw [trim_measurableSet_eq hm (hs.inter ht_meas)] at hμs
+    refine Integrable.trim hm ?_ hf_meas_m
+    exact hf_int_finite _ (hs.inter ht_meas) hμs
+  · intro s hs hμs
+    rw [restrict_trim hm (μ.restrict t) hs]; rw [Measure.restrict_restrict (hm s hs)]
+    rw [← restrict_trim hm μ ht_meas]; rw [Measure.restrict_apply hs]; rw [trim_measurableSet_eq hm (hs.inter ht_meas)] at hμs
+    rw [← integral_trim hm hf_meas_m]
+    exact hf_zero _ (hs.inter ht_meas) hμs
 
 中文:
 定理 ae_eq_zero_of_对任意_set整数egral_eq_of_finStronglyMeasurable_trim
@@ -796,7 +956,23 @@ theorem ae_eq_zero_of_forall_setIntegral_eq_of_finStronglyMeasurable_trim
   have : SigmaFinite ((μ.restrict t).trim hm) := by rwa [restrict_trim hm μ ht_meas] at htμ
   have htf_zero : f =ᵐ[μ.restrict tᶜ] 0 := by
     rw [EventuallyEq]; rw [ae_restrict_iff' (MeasurableSet.compl (hm _ ht_meas))]
-    exact E
+    exact Eventually.of_forall htf_zero
+  have hf_meas_m : StronglyMeasurable[m] f := hf.stronglyMeasurable
+  suffices f =ᵐ[μ.restrict t] 0 from
+    ae_of_ae_restrict_of_ae_restrict_compl _ this htf_zero
+  refine measure_eq_zero_of_trim_eq_zero hm ?_
+  refine ae_eq_zero_of_forall_setIntegral_eq_of_sigmaFinite ?_ ?_
+  · intro s hs hμs
+    unfold IntegrableOn
+    rw [restrict_trim hm (μ.restrict t) hs]; rw [Measure.restrict_restrict (hm s hs)]
+    rw [← restrict_trim hm μ ht_meas]; rw [Measure.restrict_apply hs]; rw [trim_measurableSet_eq hm (hs.inter ht_meas)] at hμs
+    refine Integrable.trim hm ?_ hf_meas_m
+    exact hf_int_finite _ (hs.inter ht_meas) hμs
+  · intro s hs hμs
+    rw [restrict_trim hm (μ.restrict t) hs]; rw [Measure.restrict_restrict (hm s hs)]
+    rw [← restrict_trim hm μ ht_meas]; rw [Measure.restrict_apply hs]; rw [trim_measurableSet_eq hm (hs.inter ht_meas)] at hμs
+    rw [← integral_trim hm hf_meas_m]
+    exact hf_zero _ (hs.inter ht_meas) hμs
 
 Depends on / 依赖: Eventually, Eventually.of_forall, EventuallyEq, MeasurableSet, MeasurableSet.compl, SigmaFinite, StronglyMeasurable, ae_of_ae_restrict_of_ae_restrict_compl, ae_restrict_iff, exists_set_sigmaFinite, hf.exists_set_sigmaFinite, hf.stronglyMeasurable, hf_meas_m, ht_meas, htf_zero, measure_eq_zero_of_tri, of_forall, restrict, restrict_trim, stronglyMeasurable
 -/
@@ -886,7 +1062,13 @@ lemma ae_eq_zero_of_forall_setIntegral_isClosed_eq_zero
   have A : forall (t : Set β), MeasurableSet t -> ∫ (x : β) in t, f x ∂μ = 0
       -> ∫ (x : β) in tᶜ, f x ∂μ = 0 := by
     intro t t_meas ht
-    have I : ∫ 
+    have I : ∫ x, f x ∂μ = 0 := by rw [← setIntegral_univ]; exact h'f _ isClosed_univ
+    simpa [ht, I] using integral_add_compl t_meas hf
+  intro s hs
+  induction s, hs using MeasurableSet.induction_on_open with
+  | isOpen U hU => exact compl_compl U ▸ A _ hU.measurableSet.compl (h'f _ hU.isClosed_compl)
+  | compl s hs ihs => exact A s hs ihs
+  | iUnion g g_disj g_meas hg => simp [integral_iUnion g_meas g_disj hf.integrableOn, hg]
 
 中文:
 引理 ae_eq_zero_of_对任意_set整数egral_isClosed_eq_zero
@@ -897,7 +1079,13 @@ lemma ae_eq_zero_of_forall_setIntegral_isClosed_eq_zero
   have A : forall (t : Set β), MeasurableSet t -> ∫ (x : β) in t, f x ∂μ = 0
       -> ∫ (x : β) in tᶜ, f x ∂μ = 0 := by
     intro t t_meas ht
-    have I : ∫ 
+    have I : ∫ x, f x ∂μ = 0 := by rw [← setIntegral_univ]; exact h'f _ isClosed_univ
+    simpa [ht, I] using integral_add_compl t_meas hf
+  intro s hs
+  induction s, hs using MeasurableSet.induction_on_open with
+  | isOpen U hU => exact compl_compl U ▸ A _ hU.measurableSet.compl (h'f _ hU.isClosed_compl)
+  | compl s hs ihs => exact A s hs ihs
+  | iUnion g g_disj g_meas hg => simp [integral_iUnion g_meas g_disj hf.integrableOn, hg]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.induction_on_open, ae_eq_zero_of_forall_setIntegral_eq_zero, compl_com, hf.ae_eq_zero_of_forall_setIntegral_eq_zero, induction_on_open, integral_add_compl, isClosed_univ, isOpen, setIntegral_univ, t_meas
 -/
@@ -927,7 +1115,19 @@ lemma ae_eq_zero_of_forall_setIntegral_isCompact_eq_zero
   let t : Nat -> Set β := fun n => closure (compactCovering β n) inter s
   suffices H : Tendsto (fun n => ∫ x in t n, f x ∂μ) atTop (𝓝 (∫ x in s, f x ∂μ)) by
     have A : forall n, ∫ x in t n, f x ∂μ = 0 :=
-      fun n 
+      fun n => h'f _ ((isCompact_compactCovering β n).closure.inter_right hs)
+    simp_rw [A, tendsto_const_nhds_iff] at H
+    exact H.symm
+  have B : s = ⋃ n, t n := by
+    rw [← Set.iUnion_inter]; rw [iUnion_closure_compactCovering]; rw [Set.univ_inter]
+  rw [B]
+  apply tendsto_setIntegral_of_monotone
+  · intro n
+    exact (isClosed_closure.inter hs).measurableSet
+  · intro m n hmn
+    simp only [t]
+    gcongr
+  · exact hf.integrableOn
 
 中文:
 引理 ae_eq_zero_of_对任意_set整数egral_isCompact_eq_zero
@@ -936,7 +1136,19 @@ lemma ae_eq_zero_of_forall_setIntegral_isCompact_eq_zero
   let t : Nat -> Set β := fun n => closure (compactCovering β n) inter s
   suffices H : Tendsto (fun n => ∫ x in t n, f x ∂μ) atTop (𝓝 (∫ x in s, f x ∂μ)) by
     have A : forall n, ∫ x in t n, f x ∂μ = 0 :=
-      fun n 
+      fun n => h'f _ ((isCompact_compactCovering β n).closure.inter_right hs)
+    simp_rw [A, tendsto_const_nhds_iff] at H
+    exact H.symm
+  have B : s = ⋃ n, t n := by
+    rw [← Set.iUnion_inter]; rw [iUnion_closure_compactCovering]; rw [Set.univ_inter]
+  rw [B]
+  apply tendsto_setIntegral_of_monotone
+  · intro n
+    exact (isClosed_closure.inter hs).measurableSet
+  · intro m n hmn
+    simp only [t]
+    gcongr
+  · exact hf.integrableOn
 
 Depends on / 依赖: H.symm, Set.iUnion_inter, Tendsto, ae_eq_zero_of_forall_setIntegral_isClosed_eq_zero, closure, closure.inter_right, compactCovering, iUnion_closure_compactCovering, iUnion_inter, inter_right, isCompact_compactCovering, simp_rw, tendsto_const_nhds_iff
 -/
@@ -973,7 +1185,8 @@ lemma ae_eq_zero_of_forall_setIntegral_isCompact_eq_zero'
   apply ae_eq_zero_of_forall_setIntegral_isCompact_eq_zero
   · exact hf.integrableOn_isCompact (isCompact_compactCovering β n).closure
   · intro s hs
-    rw [Measure.restrict_restr
+    rw [Measure.restrict_restrict' measurableSet_closure]
+    exact h'f _ (hs.inter_right isClosed_closure)
 
 中文:
 引理 ae_eq_zero_of_对任意_set整数egral_isCompact_eq_zero'
@@ -983,7 +1196,8 @@ lemma ae_eq_zero_of_forall_setIntegral_isCompact_eq_zero'
   apply ae_eq_zero_of_forall_setIntegral_isCompact_eq_zero
   · exact hf.integrableOn_isCompact (isCompact_compactCovering β n).closure
   · intro s hs
-    rw [Measure.restrict_restr
+    rw [Measure.restrict_restrict' measurableSet_closure]
+    exact h'f _ (hs.inter_right isClosed_closure)
 
 Depends on / 依赖: Measure, Measure.restrict_restrict, ae_eq_zero_of_forall_setIntegral_isCompact_eq_zero, ae_restrict_iUnion_iff, closure, hf.integrableOn_isCompact, hs.inter_right, iUnion_closure_compactCovering, integrableOn_isCompact, inter_right, isClosed_closure, isCompact_compactCovering, measurableSet_closure, restrict_restrict, restrict_univ
 -/

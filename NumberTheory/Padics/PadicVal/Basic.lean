@@ -621,7 +621,12 @@ theorem defn
   let ⟨c, hc1, hc2⟩ := Rat.num_den_mk hd qdf
   rw [padicValRat.multiplicity_sub_multiplicity hp.1.ne_one hqz]
   simp only [hc1, hc2]
-  rw [multiplicity_mul (Nat.prime_iff_prime_int.1 hp.1)]; rw [multiplicity_mul (Nat.prime_iff_prime_in
+  rw [multiplicity_mul (Nat.prime_iff_prime_int.1 hp.1)]; rw [multiplicity_mul (Nat.prime_iff_prime_int.1 hp.1)]
+  · rw [Nat.cast_add, Nat.cast_add]
+    simp_rw [Int.natCast_multiplicity p q.den]
+    ring
+  · simpa [finite_int_prime_iff, hc2] using hd
+  · simpa [finite_int_prime_iff, hqz, hc2] using hd
 
 中文:
 定理 defn
@@ -631,7 +636,12 @@ theorem defn
   let ⟨c, hc1, hc2⟩ := Rat.num_den_mk hd qdf
   rw [padicValRat.multiplicity_sub_multiplicity hp.1.ne_one hqz]
   simp only [hc1, hc2]
-  rw [multiplicity_mul (Nat.prime_iff_prime_int.1 hp.1)]; rw [multiplicity_mul (Nat.prime_iff_prime_in
+  rw [multiplicity_mul (Nat.prime_iff_prime_int.1 hp.1)]; rw [multiplicity_mul (Nat.prime_iff_prime_int.1 hp.1)]
+  · rw [Nat.cast_add, Nat.cast_add]
+    simp_rw [Int.natCast_multiplicity p q.den]
+    ring
+  · simpa [finite_int_prime_iff, hc2] using hd
+  · simpa [finite_int_prime_iff, hqz, hc2] using hd
 -/
 protected theorem defn (p : Nat) [hp : Fact p.Prime] {q : Rat} {n d : Int} (hqz : q != 0)
     (qdf : q = n /. d) :
@@ -658,7 +668,14 @@ theorem mul
     rw [Rat.mul_eq_mkRat]; rw [Rat.mkRat_eq_divInt]; rw [Nat.cast_mul]
   have hq' : q.num /. q.den != 0 := by rwa [Rat.num_divInt_den]
   have hr' : r.num /. r.den != 0 := by rwa [Rat.num_divInt_den]
-  have hp' : Prime (p : Int) := Nat.prim
+  have hp' : Prime (p : Int) := Nat.prime_iff_prime_int.1 hp.1
+  rw [padicValRat.defn p (mul_ne_zero hq hr) this]
+  conv_rhs =>
+    rw [← q.num_divInt_den]; rw [padicValRat.defn p hq']; rw [← r.num_divInt_den]; rw [padicValRat.defn p hr']
+  rw [multiplicity_mul hp']; rw [multiplicity_mul hp']; rw [Nat.cast_add]; rw [Nat.cast_add]
+  · ring
+  · simp [finite_int_prime_iff]
+  · simp [finite_int_prime_iff, hq, hr]
 
 中文:
 定理 mul
@@ -668,7 +685,14 @@ theorem mul
     rw [Rat.mul_eq_mkRat]; rw [Rat.mkRat_eq_divInt]; rw [Nat.cast_mul]
   have hq' : q.num /. q.den != 0 := by rwa [Rat.num_divInt_den]
   have hr' : r.num /. r.den != 0 := by rwa [Rat.num_divInt_den]
-  have hp' : Prime (p : Int) := Nat.prim
+  have hp' : Prime (p : Int) := Nat.prime_iff_prime_int.1 hp.1
+  rw [padicValRat.defn p (mul_ne_zero hq hr) this]
+  conv_rhs =>
+    rw [← q.num_divInt_den]; rw [padicValRat.defn p hq']; rw [← r.num_divInt_den]; rw [padicValRat.defn p hr']
+  rw [multiplicity_mul hp']; rw [multiplicity_mul hp']; rw [Nat.cast_add]; rw [Nat.cast_add]
+  · ring
+  · simp [finite_int_prime_iff]
+  · simp [finite_int_prime_iff, hq, hr]
 -/
 protected theorem mul {q r : Rat} (hq : q != 0) (hr : r != 0) :
     padicValRat p (q * r) = padicValRat p q + padicValRat p r := by
@@ -800,7 +824,10 @@ theorem padicValRat_le_padicValRat_iff
   have hf2 : FiniteMultiplicity (p : Int) (n₂ * d₁) := finite_int_prime_iff.2 (mul_ne_zero hn₂ hd₁)
   conv =>
     lhs
-    rw [padicValRat.defn p (Rat.divInt_ne_zero_of_ne_zero hn₁ hd₁) rfl]; rw [pa
+    rw [padicValRat.defn p (Rat.divInt_ne_zero_of_ne_zero hn₁ hd₁) rfl]; rw [padicValRat.defn p (Rat.divInt_ne_zero_of_ne_zero hn₂ hd₂) rfl]; rw [sub_le_iff_le_add']; rw [←
+      add_sub_assoc]; rw [le_sub_iff_add_le]
+    norm_cast
+    rw [← multiplicity_mul (Nat.prime_iff_prime_int.1 hp.1) hf1]; rw [add_comm]; rw [← multiplicity_mul (Nat.prime_iff_prime_int.1 hp.1) hf2]; rw [hf1.multiplicity_le_multiplicity_iff hf2]
 
 中文:
 定理 padicValRat_le_padicValRat_iff
@@ -810,7 +837,10 @@ theorem padicValRat_le_padicValRat_iff
   have hf2 : FiniteMultiplicity (p : Int) (n₂ * d₁) := finite_int_prime_iff.2 (mul_ne_zero hn₂ hd₁)
   conv =>
     lhs
-    rw [padicValRat.defn p (Rat.divInt_ne_zero_of_ne_zero hn₁ hd₁) rfl]; rw [pa
+    rw [padicValRat.defn p (Rat.divInt_ne_zero_of_ne_zero hn₁ hd₁) rfl]; rw [padicValRat.defn p (Rat.divInt_ne_zero_of_ne_zero hn₂ hd₂) rfl]; rw [sub_le_iff_le_add']; rw [←
+      add_sub_assoc]; rw [le_sub_iff_add_le]
+    norm_cast
+    rw [← multiplicity_mul (Nat.prime_iff_prime_int.1 hp.1) hf1]; rw [add_comm]; rw [← multiplicity_mul (Nat.prime_iff_prime_int.1 hp.1) hf2]; rw [hf1.multiplicity_le_multiplicity_iff hf2]
 
 Depends on / 依赖: FiniteMultiplicity, Nat.prime_iff_prime_int, Rat.divInt_ne_zero_of_ne_zero, add_c, add_sub_assoc, divInt_ne_zero_of_ne_zero, finite_int_prime_iff, le_sub_iff_add_le, mul_ne_zero, multiplicity_mul, padicValRat, padicValRat.defn, prime_iff_prime_int, sub_le_iff_le_add
 -/
@@ -840,7 +870,21 @@ theorem le_padicValRat_add_of_le
       have hqn : q.num != 0 := Rat.num_ne_zero.2 hq
       have hqd : (q.den : Int) != 0 := mod_cast Rat.den_nz _
       have hrn : r.num != 0 := Rat.num_ne_zero.2 hr
-      have hrd : (r.den : Int) != 0 := 
+      have hrd : (r.den : Int) != 0 := mod_cast Rat.den_nz _
+      have hqreq : q + r = (q.num * r.den + q.den * r.num) /. (q.den * r.den) := Rat.add_num_den _ _
+      have hqrd : q.num * r.den + q.den * r.num != 0 := Rat.mk_num_ne_zero_of_ne_zero hqr hqreq
+      conv_lhs => rw [← q.num_divInt_den]
+      rw [hqreq]; rw [padicValRat_le_padicValRat_iff hqn hqrd hqd (mul_ne_zero hqd hrd)]; rw [←
+        emultiplicity_le_emultiplicity_iff]; rw [mul_left_comm]; rw [emultiplicity_mul (Nat.prime_iff_prime_int.1 hp.1)]; rw [add_mul]
+      rw [← q.num_divInt_den]; rw [← r.num_divInt_den]; rw [padicValRat_le_padicValRat_iff hqn hrn hqd hrd]; rw [←
+        emultiplicity_le_emultiplicity_iff] at h
+      calc
+        _ <= min (emultiplicity ↑p (q.num * r.den * q.den))
+                (emultiplicity ↑p (q.den * r.num * q.den)) :=
+          le_min
+            (by rw [emultiplicity_mul (a := _ * _) (Nat.prime_iff_prime_int.1 hp.1), add_comm])
+            (by grw [mul_assoc, emultiplicity_mul (b := _ * _) (Nat.prime_iff_prime_int.1 hp.1), h])
+        _ <= _ := min_le_emultiplicity_add
 
 中文:
 定理 le_padicValRat_add_of_le
@@ -852,7 +896,21 @@ theorem le_padicValRat_add_of_le
       have hqn : q.num != 0 := Rat.num_ne_zero.2 hq
       have hqd : (q.den : Int) != 0 := mod_cast Rat.den_nz _
       have hrn : r.num != 0 := Rat.num_ne_zero.2 hr
-      have hrd : (r.den : Int) != 0 := 
+      have hrd : (r.den : Int) != 0 := mod_cast Rat.den_nz _
+      have hqreq : q + r = (q.num * r.den + q.den * r.num) /. (q.den * r.den) := Rat.add_num_den _ _
+      have hqrd : q.num * r.den + q.den * r.num != 0 := Rat.mk_num_ne_zero_of_ne_zero hqr hqreq
+      conv_lhs => rw [← q.num_divInt_den]
+      rw [hqreq]; rw [padicValRat_le_padicValRat_iff hqn hqrd hqd (mul_ne_zero hqd hrd)]; rw [←
+        emultiplicity_le_emultiplicity_iff]; rw [mul_left_comm]; rw [emultiplicity_mul (Nat.prime_iff_prime_int.1 hp.1)]; rw [add_mul]
+      rw [← q.num_divInt_den]; rw [← r.num_divInt_den]; rw [padicValRat_le_padicValRat_iff hqn hrn hqd hrd]; rw [←
+        emultiplicity_le_emultiplicity_iff] at h
+      calc
+        _ <= min (emultiplicity ↑p (q.num * r.den * q.den))
+                (emultiplicity ↑p (q.den * r.num * q.den)) :=
+          le_min
+            (by rw [emultiplicity_mul (a := _ * _) (Nat.prime_iff_prime_int.1 hp.1), add_comm])
+            (by grw [mul_assoc, emultiplicity_mul (b := _ * _) (Nat.prime_iff_prime_int.1 hp.1), h])
+        _ <= _ := min_le_emultiplicity_add
 
 Depends on / 依赖: Rat.add_num_den, Rat.den_nz, Rat.mk_num_ne_zero_of_ne_zero, Rat.num_ne_zero, add_num_den, conv_lhs, den_nz, mk_num_ne_zero_of_ne_zero, mod_cast, num_div, num_ne_zero, q.den, q.num, q.num_div, r.den, r.num
 -/
@@ -917,7 +975,8 @@ lemma add_eq_min
   have h2 := min_le_padicValRat_add (p := p) (ne_of_eq_of_ne (add_neg_cancel_right q r) hq)
   have h3 := min_le_padicValRat_add (p := p) (ne_of_eq_of_ne (add_neg_cancel_right r q) hr)
   rw [add_neg_cancel_right]; rw [padicValRat.neg] at h2 h3
-  rw 
+  rw [add_comm] at h3
+  omega
 
 中文:
 引理 add_eq_min
@@ -927,7 +986,8 @@ lemma add_eq_min
   have h2 := min_le_padicValRat_add (p := p) (ne_of_eq_of_ne (add_neg_cancel_right q r) hq)
   have h3 := min_le_padicValRat_add (p := p) (ne_of_eq_of_ne (add_neg_cancel_right r q) hr)
   rw [add_neg_cancel_right]; rw [padicValRat.neg] at h2 h3
-  rw 
+  rw [add_comm] at h3
+  omega
 
 Depends on / 依赖: add_comm, add_neg_cancel_right, min_le_padicValRat_add, ne_of_eq_of_ne, padicValRat, padicValRat.neg
 -/
@@ -1020,7 +1080,8 @@ theorem sum_pos_of_pos
     · rw [h, zero_add]
       exact hF d (lt_add_one _)
     · refine lt_of_lt_of_le ?_ (min_le_padicValRat_add hn0)
-      refine lt_min
+      refine lt_min (hd (fun i hi => ?_) h) (hF d (lt_add_one _))
+      exact hF _ (lt_trans hi (lt_add_one _))
 
 中文:
 定理 sum_pos_of_pos
@@ -1034,7 +1095,8 @@ theorem sum_pos_of_pos
     · rw [h, zero_add]
       exact hF d (lt_add_one _)
     · refine lt_of_lt_of_le ?_ (min_le_padicValRat_add hn0)
-      refine lt_min
+      refine lt_min (hd (fun i hi => ?_) h) (hF d (lt_add_one _))
+      exact hF _ (lt_trans hi (lt_add_one _))
 
 Depends on / 依赖: False.elim, Finset, Finset.range, Finset.sum_range_succ, lt_add_one, lt_min, lt_of_lt_of_le, lt_trans, min_le_padicValRat_add, sum_range_succ, zero_add
 -/
@@ -1065,7 +1127,9 @@ theorem lt_sum_of_lt
   | cons s S' Hnot Hne Hind =>
     rw [Finset.cons_eq_insert]; rw [Finset.sum_insert Hnot]
     exact padicValRat.lt_add_of_lt
-      (ne_of_gt (add_pos (hn1 s) (Finset
+      (ne_of_gt (add_pos (hn1 s) (Finset.sum_pos (fun i _ => hn1 i) Hne)))
+      (hF _ (by simp [Finset.mem_insert, true_or]))
+      (Hind (fun i hi => hF _ (by rw [Finset.cons_eq_insert, Finset.mem_insert]; exact Or.inr hi)))
 
 中文:
 定理 lt_sum_of_lt
@@ -1078,7 +1142,9 @@ theorem lt_sum_of_lt
   | cons s S' Hnot Hne Hind =>
     rw [Finset.cons_eq_insert]; rw [Finset.sum_insert Hnot]
     exact padicValRat.lt_add_of_lt
-      (ne_of_gt (add_pos (hn1 s) (Finset
+      (ne_of_gt (add_pos (hn1 s) (Finset.sum_pos (fun i _ => hn1 i) Hne)))
+      (hF _ (by simp [Finset.mem_insert, true_or]))
+      (Hind (fun i hi => hF _ (by rw [Finset.cons_eq_insert, Finset.mem_insert]; exact Or.inr hi)))
 
 Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Finset.cons_eq_insert, Finset.mem_insert, Finset.sum_insert, Finset.sum_pos, Finset.sum_singleton, Nonempty, Or.inr, add_pos, cons_eq_insert, cons_induction, lt_add_of_lt, mem_insert, ne_of_gt, padicValRat, padicValRat.lt_add_of_lt, singleton, sum_insert, sum_pos
 -/
@@ -1534,7 +1600,9 @@ lemma padicValNat_add_le_self
     rw [hk]; rw [padicValNat.mul (by lia) (by lia)]; rw [padicValNat_self]
     calc
       _ <= p + k := by lia
-      _ 
+      _ <= _ := Nat.add_le_mul hp.out.two_le (by lia)
+  · rw [padicValNat.eq_zero_of_not_dvd dvd]
+    lia
 
 中文:
 引理 padicVal自然数_add_le_self
@@ -1548,7 +1616,9 @@ lemma padicValNat_add_le_self
     rw [hk]; rw [padicValNat.mul (by lia) (by lia)]; rw [padicValNat_self]
     calc
       _ <= p + k := by lia
-      _ 
+      _ <= _ := Nat.add_le_mul hp.out.two_le (by lia)
+  · rw [padicValNat.eq_zero_of_not_dvd dvd]
+    lia
 
 Depends on / 依赖: Nat.add_le_mul, add_le_mul, eq_zero_of_not_dvd, hp.out.two_le, log_lt_self, padicValNat, padicValNat.eq_zero_of_not_dvd, padicValNat.mul, padicValNat_le_nat_log, padicValNat_self, two_le
 -/
@@ -1603,7 +1673,8 @@ lemma Nat.log_ne_padicValNat_succ
   rw [← Nat.lt_add_one_iff]; rw [← mul_one (2 ^ _)] at h1
   rw [← add_one_le_iff]; rw [Nat.pow_succ] at h2
   refine not_dvd_of_lt_of_lt_mul_succ h1 (lt_of_le_of_ne' h2 ?_) pow_padicValNat_dvd
-  -- TODO(kmill): Why is this `p := 2` necess
+  -- TODO(kmill): Why is this `p := 2` necessary?
+  exact pow_succ_padicValNat_not_dvd (p := 2) n.succ_ne_zero ∘ dvd_of_eq
 
 中文:
 引理 自然数.log_ne_padicVal自然数_succ
@@ -1615,7 +1686,8 @@ lemma Nat.log_ne_padicValNat_succ
   rw [← Nat.lt_add_one_iff]; rw [← mul_one (2 ^ _)] at h1
   rw [← add_one_le_iff]; rw [Nat.pow_succ] at h2
   refine not_dvd_of_lt_of_lt_mul_succ h1 (lt_of_le_of_ne' h2 ?_) pow_padicValNat_dvd
-  -- TODO(kmill): Why is this `p := 2` necess
+  -- TODO(kmill): Why is this `p := 2` necessary?
+  exact pow_succ_padicValNat_not_dvd (p := 2) n.succ_ne_zero ∘ dvd_of_eq
 
 Depends on / 依赖: Nat.lt_add_one_iff, Nat.pow_succ, add_one_le_iff, log_eq_iff, lt_add_one_iff, lt_of_le_of_ne, mul_one, not_dvd_of_lt_of_lt_mul_succ, pow_padicValNat_dvd, pow_succ
 -/
@@ -1640,7 +1712,8 @@ lemma Nat.max_log_padicValNat_succ_eq_log_succ
   rw [le_max_iff]; rw [or_iff_not_imp_left]; rw [not_le]
   intro h
   replace h := le_antisymm (add_one_le_iff.mpr (lt_pow_of_log_lt hp.out.one_lt h))
-    (pow_log_le_self p 
+    (pow_log_le_self p n.succ_ne_zero)
+  rw [h]; rw [padicValNat.prime_pow]; rw [← h]
 
 中文:
 引理 自然数.max_log_padicVal自然数_succ_eq_log_succ
@@ -1651,7 +1724,8 @@ lemma Nat.max_log_padicValNat_succ_eq_log_succ
   rw [le_max_iff]; rw [or_iff_not_imp_left]; rw [not_le]
   intro h
   replace h := le_antisymm (add_one_le_iff.mpr (lt_pow_of_log_lt hp.out.one_lt h))
-    (pow_log_le_self p 
+    (pow_log_le_self p n.succ_ne_zero)
+  rw [h]; rw [padicValNat.prime_pow]; rw [← h]
 
 Depends on / 依赖: add_one_le_iff, add_one_le_iff.mpr, hp.out.one_lt, le_antisymm, le_log_of_pow_le, le_max_iff, lt_pow_of_log_lt, max_le, n.succ_ne_zero, not_le, one_lt, or_iff_not_imp_left, padicValNat, padicValNat.prime_pow, padicValNat_le_nat_log, pow_log_le_add_one, pow_log_le_self, prime_pow, replace, succ_ne_zero
 -/
@@ -1712,7 +1786,7 @@ theorem range_pow_padicValNat_subset_divisors'
   obtain ⟨k, hk, rfl⟩ := ht
   rw [Finset.mem_erase]; rw [Nat.mem_divisors]
   refine ⟨?_, (pow_dvd_pow p <| succ_le_iff.2 hk).trans pow_padicValNat_dvd, hn⟩
-  exact (Nat.one_lt_pow k.
+  exact (Nat.one_lt_pow k.succ_ne_zero hp.out.one_lt).ne'
 
 中文:
 定理 range_pow_padicVal自然数_subset_divisors'
@@ -1725,7 +1799,7 @@ theorem range_pow_padicValNat_subset_divisors'
   obtain ⟨k, hk, rfl⟩ := ht
   rw [Finset.mem_erase]; rw [Nat.mem_divisors]
   refine ⟨?_, (pow_dvd_pow p <| succ_le_iff.2 hk).trans pow_padicValNat_dvd, hn⟩
-  exact (Nat.one_lt_pow k.
+  exact (Nat.one_lt_pow k.succ_ne_zero hp.out.one_lt).ne'
 
 Depends on / 依赖: Finset, Finset.mem_erase, Finset.mem_image, Finset.mem_range, Nat.mem_divisors, Nat.one_lt_pow, eq_or_ne, hp.out.one_lt, k.succ_ne_zero, mem_divisors, mem_erase, mem_image, mem_range, one_lt, one_lt_pow, pow_dvd_pow, pow_padicValNat_dvd, succ_le_iff, succ_ne_zero
 -/
@@ -1796,7 +1870,7 @@ theorem padicValNat_factorial_mul_add
   induction n with
   | zero => rw [add_zero]
   | succ n hn =>
-    rw [add_succ]; rw [factorial_succ]; rw [padicValNat.mul (succ_ne_zero (p * m + n)) factorial_ne_zero (p * m + _)]; rw [hn lt_of_succ_lt h]; rw [← add_succ]; rw [padicValNat_eq_zero_of_mem_Ioo ⟨(Nat.lt_add_of_pos_right <| succ_pos n
+    rw [add_succ]; rw [factorial_succ]; rw [padicValNat.mul (succ_ne_zero (p * m + n)) factorial_ne_zero (p * m + _)]; rw [hn lt_of_succ_lt h]; rw [← add_succ]; rw [padicValNat_eq_zero_of_mem_Ioo ⟨(Nat.lt_add_of_pos_right <| succ_pos n)]; rw [(Nat.mul_add _ _ _▸ Nat.mul_one _ ▸ ((add_lt_add_iff_left (p * m)).mpr h))⟩]; rw [zero_add]
 
 中文:
 定理 padicVal自然数_factorial_mul_add
@@ -1805,7 +1879,7 @@ theorem padicValNat_factorial_mul_add
   induction n with
   | zero => rw [add_zero]
   | succ n hn =>
-    rw [add_succ]; rw [factorial_succ]; rw [padicValNat.mul (succ_ne_zero (p * m + n)) factorial_ne_zero (p * m + _)]; rw [hn lt_of_succ_lt h]; rw [← add_succ]; rw [padicValNat_eq_zero_of_mem_Ioo ⟨(Nat.lt_add_of_pos_right <| succ_pos n
+    rw [add_succ]; rw [factorial_succ]; rw [padicValNat.mul (succ_ne_zero (p * m + n)) factorial_ne_zero (p * m + _)]; rw [hn lt_of_succ_lt h]; rw [← add_succ]; rw [padicValNat_eq_zero_of_mem_Ioo ⟨(Nat.lt_add_of_pos_right <| succ_pos n)]; rw [(Nat.mul_add _ _ _▸ Nat.mul_one _ ▸ ((add_lt_add_iff_left (p * m)).mpr h))⟩]; rw [zero_add]
 
 Depends on / 依赖: Nat.lt_add_of_pos_right, Nat.mul_add, Nat.mul_one, add_lt_add_iff_left, add_succ, add_zero, factorial_ne_zero, factorial_succ, lt_add_of_pos_right, lt_of_succ_lt, mul_add, mul_one, padicValNat, padicValNat.mul, padicValNat_eq_zero_of_mem_Ioo, succ_ne_zero, succ_pos, zero_add
 -/
@@ -2042,7 +2116,10 @@ theorem sub_one_mul_padicValNat_choose_eq_sub_sum_digits'
   have h : k <= n + k := by exact Nat.le_add_left k n
   simp only [Nat.choose_eq_factorial_div_factorial h]
   rw [padicValNat.div_of_dvd <| factorial_mul_factorial_dvd_factorial h]; rw [Nat.mul_sub_left_distrib]; rw [padicValNat.mul (factorial_ne_zero _) (factorial_ne_zero _)]; rw [Nat.mul_add]
- 
+  simp only [sub_one_mul_padicValNat_factorial]
+  rw [← Nat.sub_add_comm <| digit_sum_le p k]; rw [Nat.add_sub_cancel n k]; rw [← Nat.add_sub_assoc <|
+      digit_sum_le p n]; rw [Nat.sub_sub (k + n)]; rw [← Nat.sub_right_comm]; rw [Nat.sub_sub]; rw [sub_add_eq]; rw [add_comm]; rw [tsub_tsub_assoc (Nat.le_refl (k + n)) (add_comm k n) ▸ (Nat.add_le_add
+      (digit_sum_le p n) (digit_sum_le p k))]; rw [Nat.sub_self (k + n)]; rw [zero_add]; rw [add_comm]
 
 中文:
 定理 sub_one_mul_padicVal自然数_choose_eq_sub_sum_digits'
@@ -2051,7 +2128,10 @@ theorem sub_one_mul_padicValNat_choose_eq_sub_sum_digits'
   have h : k <= n + k := by exact Nat.le_add_left k n
   simp only [Nat.choose_eq_factorial_div_factorial h]
   rw [padicValNat.div_of_dvd <| factorial_mul_factorial_dvd_factorial h]; rw [Nat.mul_sub_left_distrib]; rw [padicValNat.mul (factorial_ne_zero _) (factorial_ne_zero _)]; rw [Nat.mul_add]
- 
+  simp only [sub_one_mul_padicValNat_factorial]
+  rw [← Nat.sub_add_comm <| digit_sum_le p k]; rw [Nat.add_sub_cancel n k]; rw [← Nat.add_sub_assoc <|
+      digit_sum_le p n]; rw [Nat.sub_sub (k + n)]; rw [← Nat.sub_right_comm]; rw [Nat.sub_sub]; rw [sub_add_eq]; rw [add_comm]; rw [tsub_tsub_assoc (Nat.le_refl (k + n)) (add_comm k n) ▸ (Nat.add_le_add
+      (digit_sum_le p n) (digit_sum_le p k))]; rw [Nat.sub_self (k + n)]; rw [zero_add]; rw [add_comm]
 
 Depends on / 依赖: Nat.add_sub_assoc, Nat.add_sub_cancel, Nat.choose_eq_factorial_div_factorial, Nat.le_add_left, Nat.mul_add, Nat.mul_sub_left_distrib, Nat.sub_add_comm, Nat.sub_r, Nat.sub_sub, add_sub_assoc, add_sub_cancel, choose_eq_factorial_div_factorial, digit_sum_le, div_of_dvd, factorial_mul_factorial_dvd_factorial, factorial_ne_zero, le_add_left, mul_add, mul_sub_left_distrib, padicValNat
 -/

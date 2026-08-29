@@ -85,7 +85,16 @@ lemma eq_condKernel_of_measure_eq_compProd_real
   suffices forallᵐ x ∂ρ.fst, forall ⦃t⦄, MeasurableSet t -> κ x t = ρ.condKernel x t by
     filter_upwards [this] with x hx
     ext t ht; exact hx ht
-  appl
+  apply MeasurableSpace.ae_induction_on_inter Real.borel_eq_generateFrom_Iic_rat
+    Real.isPiSystem_Iic_rat
+  · simp
+  · simp only [iUnion_singleton_eq_range, mem_range, forall_exists_index, forall_apply_eq_imp_iff]
+    exact ae_all_iff.2 fun q => eq_condKernel_of_measure_eq_compProd' κ hκ measurableSet_Iic
+  · filter_upwards [huniv] with x hxuniv t ht heq
+    rw [measure_compl ht <| measure_ne_top _ _]; rw [heq]; rw [hxuniv]; rw [measure_compl ht <| measure_ne_top _ _]
+  · refine ae_of_all _ (fun x f hdisj hf heq => ?_)
+    rw [measure_iUnion hdisj hf]; rw [measure_iUnion hdisj hf]
+    exact tsum_congr heq
 
 中文:
 引理 eq_condKernel_of_measure_eq_compProd_real
@@ -96,7 +105,16 @@ lemma eq_condKernel_of_measure_eq_compProd_real
   suffices forallᵐ x ∂ρ.fst, forall ⦃t⦄, MeasurableSet t -> κ x t = ρ.condKernel x t by
     filter_upwards [this] with x hx
     ext t ht; exact hx ht
-  appl
+  apply MeasurableSpace.ae_induction_on_inter Real.borel_eq_generateFrom_Iic_rat
+    Real.isPiSystem_Iic_rat
+  · simp
+  · simp only [iUnion_singleton_eq_range, mem_range, forall_exists_index, forall_apply_eq_imp_iff]
+    exact ae_all_iff.2 fun q => eq_condKernel_of_measure_eq_compProd' κ hκ measurableSet_Iic
+  · filter_upwards [huniv] with x hxuniv t ht heq
+    rw [measure_compl ht <| measure_ne_top _ _]; rw [heq]; rw [hxuniv]; rw [measure_compl ht <| measure_ne_top _ _]
+  · refine ae_of_all _ (fun x f hdisj hf heq => ?_)
+    rw [measure_iUnion hdisj hf]; rw [measure_iUnion hdisj hf]
+    exact tsum_congr heq
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ, MeasurableSpace, MeasurableSpace.ae_induction_on_inter, Real.borel_eq_generateFrom_Iic_rat, Real.isPiSystem_Iic_rat, Set.univ, ae_all_if, ae_induction_on_inter, borel_eq_generateFrom_Iic_rat, condKernel, eq_condKernel_of_measure_eq_compProd, filter_upwards, forall_apply_eq_imp_iff, forall_exists_index, iUnion_singleton_eq_range, isPiSystem_Iic_rat, mem_range
 -/
@@ -131,7 +149,38 @@ theorem eq_condKernel_of_measure_eq_compProd
   let f := embeddingReal Ω
   have hf := measurableEmbedding_embeddingReal Ω
   set ρ' : Measure (α × Real) := ρ.map (Prod.map id f) with hρ'def
-  have hρ' : ρ'.fst = ρ.fst 
+  have hρ' : ρ'.fst = ρ.fst := by
+    ext s hs
+    rw [hρ'def]; rw [Measure.fst_apply]; rw [Measure.fst_apply]; rw [Measure.map_apply]
+    exacts [rfl, Measurable.prod measurable_fst <| hf.measurable.comp measurable_snd,
+      measurable_fst hs, hs, hs]
+  have hρ'' : forallᵐ x ∂ρ.fst, Kernel.map κ f x = ρ'.condKernel x := by
+    rw [← hρ']
+    refine eq_condKernel_of_measure_eq_compProd_real (Kernel.map κ f) ?_
+    ext s hs
+    conv_lhs => rw [hρ'def, hκ]
+    rw [Measure.map_apply (measurable_id.prodMap hf.measurable) hs]; rw [hρ']; rw [Measure.compProd_apply hs]; rw [Measure.compProd_apply (measurable_id.prodMap hf.measurable hs)]
+    congr with a
+    rw [Kernel.map_apply' _ hf.measurable]
+    exacts [rfl, measurable_prodMk_left hs]
+  suffices forallᵐ x ∂ρ.fst, forall s, MeasurableSet s -> ρ'.condKernel x s = ρ.condKernel x (f ⁻¹' s) by
+    filter_upwards [hρ'', this] with x hx h
+    rw [Kernel.map_apply _ hf.measurable] at hx
+    ext s hs
+    rw [← Set.preimage_image_eq s hf.injective]; rw [← Measure.map_apply hf.measurable hf.measurableSet_image.2 hs]; rw [hx]; rw [h _ hf.measurableSet_image.2 hs]
+  suffices ρ.map (Prod.map id f) = (ρ.fst otimesₘ (Kernel.map ρ.condKernel f)) by
+    rw [← hρ'] at this
+    have heq := eq_condKernel_of_measure_eq_compProd_real _ this
+    rw [hρ'] at heq
+    filter_upwards [heq] with x hx s hs
+    rw [← hx]; rw [Kernel.map_apply _ hf.measurable]; rw [Measure.map_apply hf.measurable hs]
+  ext s hs
+  conv_lhs => rw [← ρ.disintegrate ρ.condKernel]
+  rw [Measure.compProd_apply hs]; rw [Measure.map_apply (measurable_id.prodMap hf.measurable) hs]; rw [Measure.compProd_apply]
+  · congr with a
+    rw [Kernel.map_apply' _ hf.measurable]
+    exacts [rfl, measurable_prodMk_left hs]
+  · exact measurable_id.prodMap hf.measurable hs
 
 中文:
 定理 eq_condKernel_of_measure_eq_compProd
@@ -142,7 +191,38 @@ theorem eq_condKernel_of_measure_eq_compProd
   let f := embeddingReal Ω
   have hf := measurableEmbedding_embeddingReal Ω
   set ρ' : Measure (α × Real) := ρ.map (Prod.map id f) with hρ'def
-  have hρ' : ρ'.fst = ρ.fst 
+  have hρ' : ρ'.fst = ρ.fst := by
+    ext s hs
+    rw [hρ'def]; rw [Measure.fst_apply]; rw [Measure.fst_apply]; rw [Measure.map_apply]
+    exacts [rfl, Measurable.prod measurable_fst <| hf.measurable.comp measurable_snd,
+      measurable_fst hs, hs, hs]
+  have hρ'' : forallᵐ x ∂ρ.fst, Kernel.map κ f x = ρ'.condKernel x := by
+    rw [← hρ']
+    refine eq_condKernel_of_measure_eq_compProd_real (Kernel.map κ f) ?_
+    ext s hs
+    conv_lhs => rw [hρ'def, hκ]
+    rw [Measure.map_apply (measurable_id.prodMap hf.measurable) hs]; rw [hρ']; rw [Measure.compProd_apply hs]; rw [Measure.compProd_apply (measurable_id.prodMap hf.measurable hs)]
+    congr with a
+    rw [Kernel.map_apply' _ hf.measurable]
+    exacts [rfl, measurable_prodMk_left hs]
+  suffices forallᵐ x ∂ρ.fst, forall s, MeasurableSet s -> ρ'.condKernel x s = ρ.condKernel x (f ⁻¹' s) by
+    filter_upwards [hρ'', this] with x hx h
+    rw [Kernel.map_apply _ hf.measurable] at hx
+    ext s hs
+    rw [← Set.preimage_image_eq s hf.injective]; rw [← Measure.map_apply hf.measurable hf.measurableSet_image.2 hs]; rw [hx]; rw [h _ hf.measurableSet_image.2 hs]
+  suffices ρ.map (Prod.map id f) = (ρ.fst otimesₘ (Kernel.map ρ.condKernel f)) by
+    rw [← hρ'] at this
+    have heq := eq_condKernel_of_measure_eq_compProd_real _ this
+    rw [hρ'] at heq
+    filter_upwards [heq] with x hx s hs
+    rw [← hx]; rw [Kernel.map_apply _ hf.measurable]; rw [Measure.map_apply hf.measurable hs]
+  ext s hs
+  conv_lhs => rw [← ρ.disintegrate ρ.condKernel]
+  rw [Measure.compProd_apply hs]; rw [Measure.map_apply (measurable_id.prodMap hf.measurable) hs]; rw [Measure.compProd_apply]
+  · congr with a
+    rw [Kernel.map_apply' _ hf.measurable]
+    exacts [rfl, measurable_prodMk_left hs]
+  · exact measurable_id.prodMap hf.measurable hs
 -/
 theorem eq_condKernel_of_measure_eq_compProd (κ : Kernel α Ω) [IsFiniteKernel κ]
     (hκ : ρ = ρ.fst otimesₘ κ) :
@@ -229,7 +309,8 @@ lemma Kernel.apply_eq_measure_condKernel_of_compProd_eq
     rfl
   have h := eq_condKernel_of_measure_eq_compProd _ this
   rw [Kernel.fst_apply]
-  filter_
+  filter_upwards [h] with b hb
+  rw [← hb]; rw [Kernel.comap_apply]
 
 中文:
 引理 核.apply_eq_measure_condKernel_of_compProd_eq
@@ -241,7 +322,8 @@ lemma Kernel.apply_eq_measure_condKernel_of_compProd_eq
     rfl
   have h := eq_condKernel_of_measure_eq_compProd _ this
   rw [Kernel.fst_apply]
-  filter_
+  filter_upwards [h] with b hb
+  rw [← hb]; rw [Kernel.comap_apply]
 
 Depends on / 依赖: Kernel, Kernel.comap, Kernel.comap_apply, Kernel.compProd_apply, Kernel.fst_apply, Measure, Measure.compProd_apply, comap_apply, compProd_apply, conv_lhs, eq_condKernel_of_measure_eq_compProd, filter_upwards, fst_apply, measurable_prodMk_left
 -/

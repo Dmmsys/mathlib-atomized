@@ -351,7 +351,7 @@ definition orderIsoOfIso
     exact y.notMem)
   left_inv _ := by aesop
   right_inv _ := by aesop
-  map_rel_iff' {_ _} := (SSet.N.orderIsoOfIso e).m
+  map_rel_iff' {_ _} := (SSet.N.orderIsoOfIso e).map_rel_iff'
 
 中文:
 定义 orderIsoOfIso
@@ -362,7 +362,7 @@ definition orderIsoOfIso
     exact y.notMem)
   left_inv _ := by aesop
   right_inv _ := by aesop
-  map_rel_iff' {_ _} := (SSet.N.orderIsoOfIso e).m
+  map_rel_iff' {_ _} := (SSet.N.orderIsoOfIso e).map_rel_iff'
 
 Depends on / 依赖: N.mk, SSet.N.orderIsoOfIso, notMem, orderIsoOfIso, x.notMem, x.toN
 -/

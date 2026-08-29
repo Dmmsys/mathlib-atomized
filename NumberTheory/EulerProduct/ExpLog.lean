@@ -35,7 +35,7 @@ lemma Summable.clog_one_sub
     fun_prop
   have : (fun z => log (1 - z)) =O[𝓝 0] id := by
     simpa only [sub_zero, log_one] using! hg.isBigO_sub
-  exact this.comp_summable h
+  exact this.comp_summable hsum
 
 中文:
 引理 Summable.clog_one_sub
@@ -46,7 +46,7 @@ lemma Summable.clog_one_sub
     fun_prop
   have : (fun z => log (1 - z)) =O[𝓝 0] id := by
     simpa only [sub_zero, log_one] using! hg.isBigO_sub
-  exact this.comp_summable h
+  exact this.comp_summable hsum
 
 Depends on / 依赖: DifferentiableAt, comp_summable, fun_prop, hg.isBigO_sub, isBigO_sub, log_one, one_mem_slitPlane, slitPlane, sub_zero, this.comp_summable
 -/
@@ -72,7 +72,9 @@ theorem exp_tsum_primes_log_eq_tsum
   have hs {p : Nat} (hp : 1 < p) : ‖f p‖ < 1 := hsum.of_norm.norm_lt_one (f := f.toMonoidHom) hp
   have hp (p : Nat.Primes) : 1 - f p != 0 :=
     fun h => (norm_one (α := Complex) ▸ (sub_eq_zero.mp h) ▸ hs p.prop.one_lt).false
-.hasSum.cexp.tprod_eq have H := hsum.of_norm.clog_one_sub.neg.subtype 
+.hasSum.cexp.tprod_eq have H := hsum.of_norm.clog_one_sub.neg.subtype Nat.Prime
+  simp only [Function.comp_apply, exp_neg, exp_log (hp _)] at H
+exact H.symm.trans eulerProduct_completely_multiplicative_tprod hsum
 
 中文:
 定理 exp_tsum_primes_log_eq_tsum
@@ -81,7 +83,9 @@ theorem exp_tsum_primes_log_eq_tsum
   have hs {p : Nat} (hp : 1 < p) : ‖f p‖ < 1 := hsum.of_norm.norm_lt_one (f := f.toMonoidHom) hp
   have hp (p : Nat.Primes) : 1 - f p != 0 :=
     fun h => (norm_one (α := Complex) ▸ (sub_eq_zero.mp h) ▸ hs p.prop.one_lt).false
-.hasSum.cexp.tprod_eq have H := hsum.of_norm.clog_one_sub.neg.subtype 
+.hasSum.cexp.tprod_eq have H := hsum.of_norm.clog_one_sub.neg.subtype Nat.Prime
+  simp only [Function.comp_apply, exp_neg, exp_log (hp _)] at H
+exact H.symm.trans eulerProduct_completely_multiplicative_tprod hsum
 
 Depends on / 依赖: Function, Function.comp_apply, H.symm.trans, Nat.Prime, Nat.Primes, Primes, clog_one_sub, comp_apply, eulerProduct_completely_multiplicative_tprod, exp_log, exp_neg, f.toMonoidHom, hasSum, hasSum.cexp.tprod_eq, hsum.of_norm.clog_one_sub.neg.subtype, hsum.of_norm.norm_lt_one, norm_lt_one, norm_one, of_norm, one_lt
 -/

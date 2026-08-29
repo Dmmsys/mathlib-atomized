@@ -227,7 +227,10 @@ theorem exist_integer_multiples
   · exact (∏ j in s.erase i, (sec M (f j)).2) * (sec M (f i)).1
   rw [map_mul]; rw [sec_spec']; rw [← mul_assoc]; rw [← (algebraMap R S).map_mul]; rw [← Algebra.smul_def]
   congr 2
-  refine _root_.trans ?
+  refine _root_.trans ?_ (map_prod (Submonoid.subtype M) _ _).symm
+  rw [mul_comm]; rw [Submonoid.coe_finsetProd]; rw [-- Porting note: explicitly supplied `f`
+    ← Finset.prod_insert (f := fun i => ((sec M (f i)).snd : R)) (s.notMem_erase i)]; rw [Finset.insert_erase hi]
+  rfl
 
 中文:
 定理 exist_integer_multiples
@@ -238,7 +241,10 @@ theorem exist_integer_multiples
   · exact (∏ j in s.erase i, (sec M (f j)).2) * (sec M (f i)).1
   rw [map_mul]; rw [sec_spec']; rw [← mul_assoc]; rw [← (algebraMap R S).map_mul]; rw [← Algebra.smul_def]
   congr 2
-  refine _root_.trans ?
+  refine _root_.trans ?_ (map_prod (Submonoid.subtype M) _ _).symm
+  rw [mul_comm]; rw [Submonoid.coe_finsetProd]; rw [-- Porting note: explicitly supplied `f`
+    ← Finset.prod_insert (f := fun i => ((sec M (f i)).snd : R)) (s.notMem_erase i)]; rw [Finset.insert_erase hi]
+  rfl
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Classical, Classical.propDecidable, Finset, Finset.prod_insert, Porting, Submonoid, Submonoid.coe_finsetProd, Submonoid.subtype, _root_, _root_.trans, algebraMap, coe_finsetProd, explicitly, map_mul, map_prod, mul_assoc, mul_comm, notMem_erase
 -/
@@ -370,7 +376,8 @@ theorem integerMultiple_injective
   intro i j h
   rw [← SetLike.coe_eq_coe]; rw [← hf.eq_iff]; rw [← (IsLocalization.smul_bijective S (commonDenom M s f)).injective.eq_iff]; rw [← map_integerMultiple M s f i]; rw [← map_integerMultiple M s f j]; rw [h]
 
-@[deprecated (since := "2026-07-18")] alias integerMultipleMultiple_injective
+@[deprecated (since := "2026-07-18")] alias integerMultipleMultiple_injective :=
+  integerMultiple_injective
 
 中文:
 定理 integerMultiple_injective
@@ -379,7 +386,8 @@ theorem integerMultiple_injective
   intro i j h
   rw [← SetLike.coe_eq_coe]; rw [← hf.eq_iff]; rw [← (IsLocalization.smul_bijective S (commonDenom M s f)).injective.eq_iff]; rw [← map_integerMultiple M s f i]; rw [← map_integerMultiple M s f j]; rw [h]
 
-@[deprecated (since := "2026-07-18")] alias integerMultipleMultiple_injective
+@[deprecated (since := "2026-07-18")] alias integerMultipleMultiple_injective :=
+  integerMultiple_injective
 
 Depends on / 依赖: IsLocalization, IsLocalization.smul_bijective, SetLike, SetLike.coe_eq_coe, coe_eq_coe, commonDenom, eq_iff, hf.eq_iff, injective, injective.eq_iff, map_integerMultiple, smul_bijective
 -/

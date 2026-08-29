@@ -145,7 +145,7 @@ theorem coeff_p_pow_eq_zero
     rw [pow_succ]; rw [← frobenius_verschiebung]; rw [coeff_frobenius_charP]
     cases j
     · rw [verschiebung_coeff_zero, zero_pow hp.out.ne_zero]
-    · rw 
+    · rw [verschiebung_coeff_succ, hi (ne_of_apply_ne _ hj), zero_pow hp.out.ne_zero]
 
 中文:
 定理 coeff_p_pow_eq_zero
@@ -160,7 +160,7 @@ theorem coeff_p_pow_eq_zero
     rw [pow_succ]; rw [← frobenius_verschiebung]; rw [coeff_frobenius_charP]
     cases j
     · rw [verschiebung_coeff_zero, zero_pow hp.out.ne_zero]
-    · rw 
+    · rw [verschiebung_coeff_succ, hi (ne_of_apply_ne _ hj), zero_pow hp.out.ne_zero]
 
 Depends on / 依赖: Nat.pos_of_ne_zero, coeff_frobenius_charP, frobenius_verschiebung, generalizing, hp.out.ne_zero, ne_of_apply_ne, ne_zero, one_coeff_eq_of_pos, pos_of_ne_zero, pow_succ, pow_zero, verschiebung_coeff_succ, verschiebung_coeff_zero, zero_pow
 -/
@@ -318,7 +318,9 @@ theorem verschiebung_mul_frobenius
     IsPoly.comp₂ (hg := verschiebung_isPoly)
       (hf := IsPoly₂.comp (hh := mulIsPoly₂) (hf := idIsPolyI' p) (hg := frobenius_isPoly p))
   have : IsPoly₂ p fun {R} [CommRing R] x y => verschiebung x * y :=
-  
+    IsPoly₂.comp (hh := mulIsPoly₂) (hf := verschiebung_isPoly) (hg := idIsPolyI' p)
+  ghost_calc x y
+  rintro ⟨⟩ <;> ghost_simp [mul_assoc]
 
 中文:
 定理 verschiebung_mul_frobenius
@@ -328,7 +330,9 @@ theorem verschiebung_mul_frobenius
     IsPoly.comp₂ (hg := verschiebung_isPoly)
       (hf := IsPoly₂.comp (hh := mulIsPoly₂) (hf := idIsPolyI' p) (hg := frobenius_isPoly p))
   have : IsPoly₂ p fun {R} [CommRing R] x y => verschiebung x * y :=
-  
+    IsPoly₂.comp (hh := mulIsPoly₂) (hf := verschiebung_isPoly) (hg := idIsPolyI' p)
+  ghost_calc x y
+  rintro ⟨⟩ <;> ghost_simp [mul_assoc]
 
 Depends on / 依赖: CommRing, IsPoly, IsPoly.comp, frobenius, frobenius_isPoly, ghost_calc, ghost_simp, idIsPolyI, mul_assoc, verschiebung, verschiebung_isPoly
 -/
@@ -639,7 +643,15 @@ theorem iterate_verschiebung_mul
     _ = verschiebung^[i] (x * frobenius^[i] (verschiebung^[j] y)) := ?_
     _ = verschiebung^[i] (x * verschiebung^[j] (frobenius^[i] y)) := ?_
     _ = verschiebung^[i] (verschiebung^[j] (frobenius^[i] y) * x) := ?_
-    _ = verschiebung^[i] (verschiebung^[j] (frobenius^[i] y * frobenius^[j
+    _ = verschiebung^[i] (verschiebung^[j] (frobenius^[i] y * frobenius^[j] x)) := ?_
+    _ = verschiebung^[i + j] (frobenius^[i] y * frobenius^[j] x) := ?_
+    _ = _ := ?_
+  · apply iterate_verschiebung_mul_left
+  · rw [verschiebung_frobenius_comm.iterate_iterate]
+  · rw [mul_comm]
+  · rw [iterate_verschiebung_mul_left]
+  · rw [iterate_add_apply]
+  · rw [mul_comm]
 
 中文:
 定理 iterate_verschiebung_mul
@@ -649,7 +661,15 @@ theorem iterate_verschiebung_mul
     _ = verschiebung^[i] (x * frobenius^[i] (verschiebung^[j] y)) := ?_
     _ = verschiebung^[i] (x * verschiebung^[j] (frobenius^[i] y)) := ?_
     _ = verschiebung^[i] (verschiebung^[j] (frobenius^[i] y) * x) := ?_
-    _ = verschiebung^[i] (verschiebung^[j] (frobenius^[i] y * frobenius^[j
+    _ = verschiebung^[i] (verschiebung^[j] (frobenius^[i] y * frobenius^[j] x)) := ?_
+    _ = verschiebung^[i + j] (frobenius^[i] y * frobenius^[j] x) := ?_
+    _ = _ := ?_
+  · apply iterate_verschiebung_mul_left
+  · rw [verschiebung_frobenius_comm.iterate_iterate]
+  · rw [mul_comm]
+  · rw [iterate_verschiebung_mul_left]
+  · rw [iterate_add_apply]
+  · rw [mul_comm]
 
 Depends on / 依赖: frobenius, iterate_iterate, iterate_verschie, iterate_verschiebung_mul_left, mul_comm, verschiebung, verschiebung_frobenius_comm, verschiebung_frobenius_comm.iterate_iterate
 -/
@@ -710,7 +730,10 @@ theorem iterate_verschiebung_mul_coeff
     _ = (frobenius^[j] x).coeff 0 * (frobenius^[i] y).coeff 0 := ?_
     _ = _ := ?_
   · rw [iterate_verschiebung_mul]
-  · convert! iterate_versch
+  · convert! iterate_verschiebung_coeff (p := p) (R := R) _ _ _ using 2
+    rw [zero_add]
+  · apply mul_coeff_zero
+  · simp only [iterate_frobenius_coeff]
 
 中文:
 定理 iterate_verschiebung_mul_coeff
@@ -722,7 +745,10 @@ theorem iterate_verschiebung_mul_coeff
     _ = (frobenius^[j] x).coeff 0 * (frobenius^[i] y).coeff 0 := ?_
     _ = _ := ?_
   · rw [iterate_verschiebung_mul]
-  · convert! iterate_versch
+  · convert! iterate_verschiebung_coeff (p := p) (R := R) _ _ _ using 2
+    rw [zero_add]
+  · apply mul_coeff_zero
+  · simp only [iterate_frobenius_coeff]
 
 Depends on / 依赖: convert, frobenius, iterate_frobenius_coeff, iterate_verschiebung_coeff, iterate_verschiebung_mul, mul_coeff_zero, verschiebung, zero_add
 -/

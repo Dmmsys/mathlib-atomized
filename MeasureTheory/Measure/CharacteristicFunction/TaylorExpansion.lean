@@ -89,7 +89,7 @@ theorem contDiff_charFun'
   simp only [Pi.one_apply, one_mem, CStarRing.norm_of_mem_unitary, mul_one]
   refine MemLp.integrable_norm_pow' ((hint k).mono_exponent (by simp_all))
 
-@[fun_pr
+@[fun_prop]
 
 中文:
 定理 contDiff_charFun'
@@ -100,7 +100,7 @@ theorem contDiff_charFun'
   simp only [Pi.one_apply, one_mem, CStarRing.norm_of_mem_unitary, mul_one]
   refine MemLp.integrable_norm_pow' ((hint k).mono_exponent (by simp_all))
 
-@[fun_pr
+@[fun_prop]
 
 Depends on / 依赖: CStarRing, CStarRing.norm_of_mem_unitary, MemLp.integrable_norm_pow, Pi.one_apply, charFun_eq_fourierIntegral, contDiff_fourierIntegral, fun_prop, innerSL, integrable_norm_pow, mono_exponent, mul_one, norm_of_mem_unitary, one_apply, one_mem, simp_rw
 -/
@@ -145,7 +145,28 @@ theorem iteratedFDeriv_charFun
   have h : innerₗ E = (innerSL Real).toLinearMap₁₂ := rfl
   have hint' (k : Nat) (hk : k <= (n : Nat∞)) : Integrable (fun x => ‖x‖ ^ k * ‖(1 : E -> Complex) x‖) μ := by
     simp only [Pi.one_apply, one_mem, CStarRing.norm_of_mem_unitary, mul_one]
-    refine MemLp.integrable_norm_pow' (hint.mono_e
+    refine MemLp.integrable_norm_pow' (hint.mono_exponent (by simp_all))
+  simp_rw [funext charFun_eq_fourierIntegral']
+  rw [iteratedFDeriv_comp_const_smul]
+  swap
+  · rw [h]
+    exact contDiff_fourierIntegral _ hint'
+  simp only [mul_inv_rev, neg_smul]
+  rw [h]; rw [iteratedFDeriv_fourierIntegral _ hint' (by fun_prop) le_rfl]
+  simp only [smul_apply, real_smul, ofReal_pow, ofReal_neg, ofReal_mul, ofReal_inv, ofReal_ofNat,
+    ofReal_prod]
+  rw [fourierIntegral_continuousMultilinearMap_apply Real.continuous_fourierChar]
+  swap;
+  · exact integrable_fourierPowSMulRight _ (by simpa using hint.integrable_norm_pow') (by fun_prop)
+  simp only [fourierIntegral, Real.fourierChar, Circle.coe_exp, ofReal_mul,
+    ofReal_ofNat, innerSL, map_neg, map_smul, ContinuousLinearMap.toLinearMap₁₂_apply_apply_apply,
+    LinearMap.mkContinuous₂_apply, innerₛₗ_apply_apply, smul_eq_mul, neg_neg, AddChar.coe_mk,
+    ofReal_inv, fourierPowSMulRight_apply, Pi.ofNat_apply, real_smul, ofReal_prod, mul_one,
+    Circle.smul_def]
+  simp_rw [mul_left_comm (exp _), integral_const_mul, ← mul_assoc, ← mul_pow]
+  field_simp
+  congr with
+  ring
 
 中文:
 定理 iteratedFDeriv_charFun
@@ -154,7 +175,28 @@ theorem iteratedFDeriv_charFun
   have h : innerₗ E = (innerSL Real).toLinearMap₁₂ := rfl
   have hint' (k : Nat) (hk : k <= (n : Nat∞)) : Integrable (fun x => ‖x‖ ^ k * ‖(1 : E -> Complex) x‖) μ := by
     simp only [Pi.one_apply, one_mem, CStarRing.norm_of_mem_unitary, mul_one]
-    refine MemLp.integrable_norm_pow' (hint.mono_e
+    refine MemLp.integrable_norm_pow' (hint.mono_exponent (by simp_all))
+  simp_rw [funext charFun_eq_fourierIntegral']
+  rw [iteratedFDeriv_comp_const_smul]
+  swap
+  · rw [h]
+    exact contDiff_fourierIntegral _ hint'
+  simp only [mul_inv_rev, neg_smul]
+  rw [h]; rw [iteratedFDeriv_fourierIntegral _ hint' (by fun_prop) le_rfl]
+  simp only [smul_apply, real_smul, ofReal_pow, ofReal_neg, ofReal_mul, ofReal_inv, ofReal_ofNat,
+    ofReal_prod]
+  rw [fourierIntegral_continuousMultilinearMap_apply Real.continuous_fourierChar]
+  swap;
+  · exact integrable_fourierPowSMulRight _ (by simpa using hint.integrable_norm_pow') (by fun_prop)
+  simp only [fourierIntegral, Real.fourierChar, Circle.coe_exp, ofReal_mul,
+    ofReal_ofNat, innerSL, map_neg, map_smul, ContinuousLinearMap.toLinearMap₁₂_apply_apply_apply,
+    LinearMap.mkContinuous₂_apply, innerₛₗ_apply_apply, smul_eq_mul, neg_neg, AddChar.coe_mk,
+    ofReal_inv, fourierPowSMulRight_apply, Pi.ofNat_apply, real_smul, ofReal_prod, mul_one,
+    Circle.smul_def]
+  simp_rw [mul_left_comm (exp _), integral_const_mul, ← mul_assoc, ← mul_pow]
+  field_simp
+  congr with
+  ring
 
 Depends on / 依赖: CStarRing, CStarRing.norm_of_mem_unitary, Integrable, MemLp.integrable_norm_pow, Pi.one_apply, charFun_eq_fourierIntegral, contDiff_fourierIntegral, hint.mono_exponent, innerSL, integrable_norm_pow, iteratedF, iteratedFDeriv_comp_const_smul, mono_exponent, mul_inv_rev, mul_one, neg_smul, norm_of_mem_unitary, one_apply, one_mem, simp_rw
 -/
@@ -287,7 +329,13 @@ lemma taylorWithinEval_charFun_two_zero
   have : IsProbabilityMeasure (P.map X) := Measure.isProbabilityMeasure_map hX
   convert! taylorWithinEval_charFun_zero hint t with x
   simp only [Pi.pow_apply, Nat.reduceAdd, Finset.sum_range_succ, Finset.range_one,
-    Finset.sum_singleton, Nat.factorial_zero, Nat.cast_one, inv_one, pow_zero, m
+    Finset.sum_singleton, Nat.factorial_zero, Nat.cast_one, inv_one, pow_zero, mul_one,
+    integral_const, probReal_univ, smul_eq_mul, ofReal_one, Nat.factorial_one, pow_one, one_mul,
+    Nat.factorial_two, Nat.cast_ofNat]
+  rw [integral_map]; rw [integral_map]
+  any_goals fun_prop
+  simp [field]
+  ring
 
 中文:
 引理 taylorWithinEval_charFun_two_zero
@@ -296,7 +344,13 @@ lemma taylorWithinEval_charFun_two_zero
   have : IsProbabilityMeasure (P.map X) := Measure.isProbabilityMeasure_map hX
   convert! taylorWithinEval_charFun_zero hint t with x
   simp only [Pi.pow_apply, Nat.reduceAdd, Finset.sum_range_succ, Finset.range_one,
-    Finset.sum_singleton, Nat.factorial_zero, Nat.cast_one, inv_one, pow_zero, m
+    Finset.sum_singleton, Nat.factorial_zero, Nat.cast_one, inv_one, pow_zero, mul_one,
+    integral_const, probReal_univ, smul_eq_mul, ofReal_one, Nat.factorial_one, pow_one, one_mul,
+    Nat.factorial_two, Nat.cast_ofNat]
+  rw [integral_map]; rw [integral_map]
+  any_goals fun_prop
+  simp [field]
+  ring
 
 Depends on / 依赖: Finset, Finset.range_one, Finset.sum_range_succ, Finset.sum_singleton, IsProbabilityMeasure, Measure, Measure.isProbabilityMeasure_map, Nat.cast_ofNat, Nat.cast_one, Nat.factorial_one, Nat.factorial_two, Nat.factorial_zero, Nat.reduceAdd, P.map, Pi.pow_apply, any_goals, cast_ofNat, cast_one, convert, factorial_one
 -/

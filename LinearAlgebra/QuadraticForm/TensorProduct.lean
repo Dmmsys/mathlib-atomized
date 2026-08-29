@@ -51,7 +51,13 @@ definition tensorDistrib
   -- while `letI`s would produce a better term than `let`, they would make this already-slow
   -- definition even slower.
   let toQ := BilinMap.toQuadraticMapLinearMap A A (M₁ otimes[R] M₂)
-  let tmulB := Bi
+  let tmulB := BilinMap.tensorDistrib R A (M₁ := M₁) (M₂ := M₂)
+  let toB := AlgebraTensorModule.map
+      (QuadraticMap.associated : QuadraticMap A M₁ N₁ ->ₗ[A] BilinMap A M₁ N₁)
+      (QuadraticMap.associated : QuadraticMap R M₂ N₂ ->ₗ[R] BilinMap R M₂ N₂)
+  toQ ∘ₗ tmulB ∘ₗ toB
+
+@[simp]
 
 中文:
 定义 tensorDistrib
@@ -60,7 +66,13 @@ definition tensorDistrib
   -- while `letI`s would produce a better term than `let`, they would make this already-slow
   -- definition even slower.
   let toQ := BilinMap.toQuadraticMapLinearMap A A (M₁ otimes[R] M₂)
-  let tmulB := Bi
+  let tmulB := BilinMap.tensorDistrib R A (M₁ := M₁) (M₂ := M₂)
+  let toB := AlgebraTensorModule.map
+      (QuadraticMap.associated : QuadraticMap A M₁ N₁ ->ₗ[A] BilinMap A M₁ N₁)
+      (QuadraticMap.associated : QuadraticMap R M₂ N₂ ->ₗ[R] BilinMap R M₂ N₂)
+  toQ ∘ₗ tmulB ∘ₗ toB
+
+@[simp]
 
 Depends on / 依赖: Invertible, Invertible.map, algebraMap, map_ofNat
 -/
@@ -131,7 +143,8 @@ theorem associated_tmul
   have : Subsingleton (Invertible (2 : A)) := inferInstance
   convert!
     associated_left_inverse A
-      (LinearMap.BilinMap.tmul_isSymm (QuadraticMap.assoc
+      (LinearMap.BilinMap.tmul_isSymm (QuadraticMap.associated_isSymm A Q₁)
+        (QuadraticMap.associated_isSymm R Q₂))
 
 中文:
 定理 associated_tmul
@@ -142,7 +155,8 @@ theorem associated_tmul
   have : Subsingleton (Invertible (2 : A)) := inferInstance
   convert!
     associated_left_inverse A
-      (LinearMap.BilinMap.tmul_isSymm (QuadraticMap.assoc
+      (LinearMap.BilinMap.tmul_isSymm (QuadraticMap.associated_isSymm A Q₁)
+        (QuadraticMap.associated_isSymm R Q₂))
 
 Depends on / 依赖: BilinMap, BilinMap.tmul, Invertible, Invertible.map, LinearMap, LinearMap.BilinMap.tmul_isSymm, QuadraticMap, QuadraticMap.associated_isSymm, QuadraticMap.tmul, Subsingleton, algebraMap, associated_isSymm, associated_left_inverse, convert, map_ofNat, tmul_isSymm
 -/
@@ -359,13 +373,13 @@ English:
 theorem polarBilin_baseChange
   given: [Invertible (2 : A)] (Q : QuadraticForm R M₂)
   proof: by
-  rw [QuadraticForm.baseChange]; rw [BilinForm.baseChange]; rw [polarBilin_tmul]; rw [BilinForm.tmul]; rw [← map_smul]; rw [smul_tmul']; rw [← two_nsmul_associated R]; rw [coe_associatedHom]; rw [associated_sq]; rw [smul_comm]; rw [← smul_assoc]; rw [two_smul]; rw [invOf_two_add_invOf_two]; rw [o
+  rw [QuadraticForm.baseChange]; rw [BilinForm.baseChange]; rw [polarBilin_tmul]; rw [BilinForm.tmul]; rw [← map_smul]; rw [smul_tmul']; rw [← two_nsmul_associated R]; rw [coe_associatedHom]; rw [associated_sq]; rw [smul_comm]; rw [← smul_assoc]; rw [two_smul]; rw [invOf_two_add_invOf_two]; rw [one_smul]
 
 中文:
 定理 polarBilin_baseChange
   条件: [可逆 (2 : A)] (Q : QuadraticForm R M₂)
   证明: by
-  rw [QuadraticForm.baseChange]; rw [BilinForm.baseChange]; rw [polarBilin_tmul]; rw [BilinForm.tmul]; rw [← map_smul]; rw [smul_tmul']; rw [← two_nsmul_associated R]; rw [coe_associatedHom]; rw [associated_sq]; rw [smul_comm]; rw [← smul_assoc]; rw [two_smul]; rw [invOf_two_add_invOf_two]; rw [o
+  rw [QuadraticForm.baseChange]; rw [BilinForm.baseChange]; rw [polarBilin_tmul]; rw [BilinForm.tmul]; rw [← map_smul]; rw [smul_tmul']; rw [← two_nsmul_associated R]; rw [coe_associatedHom]; rw [associated_sq]; rw [smul_comm]; rw [← smul_assoc]; rw [two_smul]; rw [invOf_two_add_invOf_two]; rw [one_smul]
 
 Depends on / 依赖: BilinForm, BilinForm.baseChange, BilinForm.tmul, QuadraticForm, QuadraticForm.baseChange, associated_sq, baseChange, coe_associatedHom, invOf_two_add_invOf_two, map_smul, one_smul, polarBilin_tmul, smul_assoc, smul_comm, smul_tmul, two_nsmul_associated, two_smul
 -/
@@ -399,7 +413,13 @@ theorem baseChange_ext
   | tmul => simp [h]
   | zero => simp
   | add x y hx hy =>
-    have : Q₁.polarBilin 
+    have : Q₁.polarBilin = Q₂.polarBilin := by
+      ext
+      dsimp [polar]
+      rw [← TensorProduct.tmul_add]; rw [h]; rw [h]; rw [h]
+    replace := congr($this x y)
+    dsimp [polar] at this
+    linear_combination (norm := module) this + hx + hy
 
 中文:
 定理 baseChange_ext
@@ -413,7 +433,13 @@ theorem baseChange_ext
   | tmul => simp [h]
   | zero => simp
   | add x y hx hy =>
-    have : Q₁.polarBilin 
+    have : Q₁.polarBilin = Q₂.polarBilin := by
+      ext
+      dsimp [polar]
+      rw [← TensorProduct.tmul_add]; rw [h]; rw [h]; rw [h]
+    replace := congr($this x y)
+    dsimp [polar] at this
+    linear_combination (norm := module) this + hx + hy
 
 Depends on / 依赖: QuadraticMap, QuadraticMap.map_smul, TensorProduct, TensorProduct.tmul_add, linear_combination, map_smul, module, mul_one, polarBilin, replace, smul_eq_mul, smul_tmul, tmul_add
 -/

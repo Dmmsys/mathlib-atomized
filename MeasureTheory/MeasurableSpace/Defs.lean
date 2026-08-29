@@ -1716,7 +1716,10 @@ theorem measurableSet_bot_iff
       measurableSet_compl := by simp +contextual [or_imp]
       measurableSet_iUnion := fun _ hf => sUnion_mem_empty_univ (forall_mem_range.2 hf) }
   have : b = ⊥ :=
-    bot_unique 
+    bot_unique fun _ hs =>
+      hs.elim (fun s => s.symm ▸ @measurableSet_empty _ ⊥) fun s =>
+        s.symm ▸ @MeasurableSet.univ _ ⊥
+  this ▸ Iff.rfl
 
 中文:
 定理 measurableSet_bot_iff
@@ -1728,7 +1731,10 @@ theorem measurableSet_bot_iff
       measurableSet_compl := by simp +contextual [or_imp]
       measurableSet_iUnion := fun _ hf => sUnion_mem_empty_univ (forall_mem_range.2 hf) }
   have : b = ⊥ :=
-    bot_unique 
+    bot_unique fun _ hs =>
+      hs.elim (fun s => s.symm ▸ @measurableSet_empty _ ⊥) fun s =>
+        s.symm ▸ @MeasurableSet.univ _ ⊥
+  this ▸ Iff.rfl
 
 Depends on / 依赖: Iff.rfl, MeasurableSet, MeasurableSet.univ, MeasurableSpace, Or.inl, bot_unique, contextual, forall_mem_range, hs.elim, measurableSet_compl, measurableSet_empty, measurableSet_iUnion, or_imp, s.symm, sUnion_mem_empty_univ
 -/

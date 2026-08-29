@@ -1091,7 +1091,17 @@ theorem quotient_preimage_image_eq_union_mul
   · rintro ⟨b, hb, hab⟩
     obtain ⟨g, rfl⟩ := Quotient.exact hab
     rw [Set.mem_iUnion]
-    exact ⟨g⁻¹, g •
+    exact ⟨g⁻¹, g • a, hb, inv_smul_smul g a⟩
+  · intro hx
+    rw [Set.mem_iUnion] at hx
+    obtain ⟨g, u, hu₁, hu₂⟩ := hx
+    rw [Set.mem_preimage]; rw [Set.mem_image]
+    refine ⟨g⁻¹ • a, ?_, by simp +instances [f, orbitRel, Quotient.eq']⟩
+    rw [← hu₂]
+    convert! hu₁
+    simp only [inv_smul_smul]
+
+@[to_additive]
 
 中文:
 定理 quotient_preimage_image_eq_union_mul
@@ -1105,7 +1115,17 @@ theorem quotient_preimage_image_eq_union_mul
   · rintro ⟨b, hb, hab⟩
     obtain ⟨g, rfl⟩ := Quotient.exact hab
     rw [Set.mem_iUnion]
-    exact ⟨g⁻¹, g •
+    exact ⟨g⁻¹, g • a, hb, inv_smul_smul g a⟩
+  · intro hx
+    rw [Set.mem_iUnion] at hx
+    obtain ⟨g, u, hu₁, hu₂⟩ := hx
+    rw [Set.mem_preimage]; rw [Set.mem_image]
+    refine ⟨g⁻¹ • a, ?_, by simp +instances [f, orbitRel, Quotient.eq']⟩
+    rw [← hu₂]
+    convert! hu₁
+    simp only [inv_smul_smul]
+
+@[to_additive]
 
 Depends on / 依赖: orbitRel
 -/
@@ -1142,7 +1162,15 @@ theorem disjoint_image_image_iff
   set f : α -> Quotient (MulAction.orbitRel G α) := Quotient.mk'
   refine
     ⟨fun h a a_in_U g g_in_V =>
-      h.le_bot ⟨⟨a, a_in_U, Quotient.sound ⟨g⁻¹, ?_⟩⟩, ⟨g •
+      h.le_bot ⟨⟨a, a_in_U, Quotient.sound ⟨g⁻¹, ?_⟩⟩, ⟨g • a, g_in_V, rfl⟩⟩, ?_⟩
+  · simp
+  · intro h
+    rw [Set.disjoint_left]
+    rintro _ ⟨b, hb₁, hb₂⟩ ⟨c, hc₁, hc₂⟩
+    obtain ⟨g, rfl⟩ := Quotient.exact (hc₂.trans hb₂.symm)
+    exact h b hb₁ g hc₁
+
+@[to_additive]
 
 中文:
 定理 disjoint_image_image_iff
@@ -1153,7 +1181,15 @@ theorem disjoint_image_image_iff
   set f : α -> Quotient (MulAction.orbitRel G α) := Quotient.mk'
   refine
     ⟨fun h a a_in_U g g_in_V =>
-      h.le_bot ⟨⟨a, a_in_U, Quotient.sound ⟨g⁻¹, ?_⟩⟩, ⟨g •
+      h.le_bot ⟨⟨a, a_in_U, Quotient.sound ⟨g⁻¹, ?_⟩⟩, ⟨g • a, g_in_V, rfl⟩⟩, ?_⟩
+  · simp
+  · intro h
+    rw [Set.disjoint_left]
+    rintro _ ⟨b, hb₁, hb₂⟩ ⟨c, hc₁, hc₂⟩
+    obtain ⟨g, rfl⟩ := Quotient.exact (hc₂.trans hb₂.symm)
+    exact h b hb₁ g hc₁
+
+@[to_additive]
 
 Depends on / 依赖: orbitRel
 -/
@@ -1430,7 +1466,12 @@ nonrec lemma orbitRel.Quotient.nonempty_orbit (x : orbitRel.Quotient G α) :
   exact nonempty_orbit _
 
 @[to_additive]
-nonrec lemma orbitRel.Quot
+nonrec lemma orbitRel.Quotient.mapsTo_smul_orbit (g : G) (x : orbitRel.Quotient G α) :
+    Set.MapsTo (g • ·) x.orbit x.orbit := by
+  rw [orbitRel.Quotient.orbit_eq_orbit_out x Quotient.out_eq']
+  exact mapsTo_smul_orbit g x.out
+
+@[to_additive]
 
 中文:
 引理 orbitRel.quotient_eq_of_quotient_subgroup_eq'
@@ -1444,7 +1485,12 @@ nonrec lemma orbitRel.Quotient.nonempty_orbit (x : orbitRel.Quotient G α) :
   exact nonempty_orbit _
 
 @[to_additive]
-nonrec lemma orbitRel.Quot
+nonrec lemma orbitRel.Quotient.mapsTo_smul_orbit (g : G) (x : orbitRel.Quotient G α) :
+    Set.MapsTo (g • ·) x.orbit x.orbit := by
+  rw [orbitRel.Quotient.orbit_eq_orbit_out x Quotient.out_eq']
+  exact mapsTo_smul_orbit g x.out
+
+@[to_additive]
 
 Depends on / 依赖: orbitRel, orbitRel.quotient_eq_of_quotient_subgroup_eq, quotient_eq_of_quotient_subgroup_eq
 -/
@@ -1584,7 +1630,10 @@ lemma orbitRel.Quotient.mem_subgroup_orbit_iff'
   suffices hb : ↑b in orbitRel.Quotient.orbit (⟦a⟧ : orbitRel.Quotient H x.orbit) by
     rw [orbitRel.Quotient.orbit_eq_orbit_out (⟦a⟧ : orbitRel.Quotient H x.orbit) Quotient.out_eq']
        at hb
-    rw [orbitRel
+    rw [orbitRel.Quotient.mem_subgroup_orbit_iff]
+    convert! hb using 1
+    rw [orbit_eq_iff]; rw [← orbitRel_apply]; rw [← Quotient.eq'']; rw [Quotient.out_eq']; rw [@Quotient.mk''_eq_mk]
+  rw [orbitRel.Quotient.mem_orbit]; rw [h]; rw [@Quotient.mk''_eq_mk]
 
 中文:
 引理 orbitRel.商.mem_subgroup_orbit_iff'
@@ -1596,7 +1645,10 @@ lemma orbitRel.Quotient.mem_subgroup_orbit_iff'
   suffices hb : ↑b in orbitRel.Quotient.orbit (⟦a⟧ : orbitRel.Quotient H x.orbit) by
     rw [orbitRel.Quotient.orbit_eq_orbit_out (⟦a⟧ : orbitRel.Quotient H x.orbit) Quotient.out_eq']
        at hb
-    rw [orbitRel
+    rw [orbitRel.Quotient.mem_subgroup_orbit_iff]
+    convert! hb using 1
+    rw [orbit_eq_iff]; rw [← orbitRel_apply]; rw [← Quotient.eq'']; rw [Quotient.out_eq']; rw [@Quotient.mk''_eq_mk]
+  rw [orbitRel.Quotient.mem_orbit]; rw [h]; rw [@Quotient.mk''_eq_mk]
 
 Depends on / 依赖: Iff.rfl, Quotient, Quotient.eq, Quotient.mk, Quotient.out_eq, _eq_mk, convert, mem_orbit, mem_orbit_symm, mem_subgroup_orbit_iff, orbitRel, orbitRel.Quotient, orbitRel.Quotient.mem_orbit, orbitRel.Quotient.mem_subgroup_orbit_iff, orbitRel.Quotient.orbit, orbitRel.Quotient.orbit_eq_orbit_out, orbitRel_apply, orbit_eq_iff, orbit_eq_orbit_out, out_eq
 -/

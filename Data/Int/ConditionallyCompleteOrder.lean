@@ -40,7 +40,16 @@ instance :
     else 0
   sInf s :=
     if h : s.Nonempty ∧ BddBelow s then
-      leastOfBdd (Classical.choose h.2) (Classical.choose_spec h
+      leastOfBdd (Classical.choose h.2) (Classical.choose_spec h.2) h.1
+    else 0
+  isLUB_csSup _ hn hb := by
+    rw [dif_pos ⟨hn]; rw [hb⟩]
+    exact (isGreatest_coe_greatestOfBdd ..).isLUB
+  isGLB_csInf _ hn hb := by
+    rw [dif_pos ⟨hn]; rw [hb⟩]
+    exact (isLeast_coe_leastOfBdd ..).isGLB
+  csSup_of_not_bddAbove := fun s hs => by simp [hs]
+  csInf_of_not_bddBelow := fun s hs => by simp [hs]
 
 中文:
 实例 :
@@ -53,7 +62,16 @@ instance :
     else 0
   sInf s :=
     if h : s.Nonempty ∧ BddBelow s then
-      leastOfBdd (Classical.choose h.2) (Classical.choose_spec h
+      leastOfBdd (Classical.choose h.2) (Classical.choose_spec h.2) h.1
+    else 0
+  isLUB_csSup _ hn hb := by
+    rw [dif_pos ⟨hn]; rw [hb⟩]
+    exact (isGreatest_coe_greatestOfBdd ..).isLUB
+  isGLB_csInf _ hn hb := by
+    rw [dif_pos ⟨hn]; rw [hb⟩]
+    exact (isLeast_coe_leastOfBdd ..).isGLB
+  csSup_of_not_bddAbove := fun s hs => by simp [hs]
+  csInf_of_not_bddBelow := fun s hs => by simp [hs]
 
 Depends on / 依赖: instLinearOrder
 -/

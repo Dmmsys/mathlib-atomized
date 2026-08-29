@@ -1382,7 +1382,7 @@ theorem injOn_union
     exact h.le_bot ⟨hx, hy⟩
   · rintro ⟨h₁, h₂, h₁₂⟩
     rintro x (hx | hx) y (hy | hy) hxy
-    exacts [h₁ hx hy hxy, (h₁₂ _ hx _ hy hx
+    exacts [h₁ hx hy hxy, (h₁₂ _ hx _ hy hxy).elim, (h₁₂ _ hy _ hx hxy.symm).elim, h₂ hx hy hxy]
 
 中文:
 定理 injOn_union
@@ -1394,7 +1394,7 @@ theorem injOn_union
     exact h.le_bot ⟨hx, hy⟩
   · rintro ⟨h₁, h₂, h₁₂⟩
     rintro x (hx | hx) y (hy | hy) hxy
-    exacts [h₁ hx hy hxy, (h₁₂ _ hx _ hy hx
+    exacts [h₁ hx hy hxy, (h₁₂ _ hx _ hy hxy).elim, (h₁₂ _ hy _ hx hxy.symm).elim, h₂ hx hy hxy]
 
 Depends on / 依赖: H.mono, Or.inl, Or.inr, exacts, h.le_bot, hxy.symm, le_bot, subset_union_left, subset_union_right
 -/
@@ -1971,7 +1971,7 @@ lemma InjOn.image_sdiff
     (sdiff_subset_iff.2 (by rw [← image_union, inter_union_sdiff]))
   exact Disjoint.image disjoint_sdiff_inter h sdiff_subset inter_subset_left
 
-@[deprecated (since := "2026-06-03")] alias InjOn.image_diff := InjOn.image_sdi
+@[deprecated (since := "2026-06-03")] alias InjOn.image_diff := InjOn.image_sdiff
 
 中文:
 引理 单射限制.image_sdiff
@@ -1982,7 +1982,7 @@ lemma InjOn.image_sdiff
     (sdiff_subset_iff.2 (by rw [← image_union, inter_union_sdiff]))
   exact Disjoint.image disjoint_sdiff_inter h sdiff_subset inter_subset_left
 
-@[deprecated (since := "2026-06-03")] alias InjOn.image_diff := InjOn.image_sdi
+@[deprecated (since := "2026-06-03")] alias InjOn.image_diff := InjOn.image_sdiff
 
 Depends on / 依赖: Disjoint, Disjoint.image, disjoint_sdiff_inter, image_mono, image_union, inter_subset_left, inter_union_sdiff, sdiff_subset, sdiff_subset_iff, subset_antisymm, subset_sdiff
 -/
@@ -2006,7 +2006,7 @@ lemma InjOn.image_sdiff_subset
 
 alias image_sdiff_of_injOn := InjOn.image_sdiff_subset
 
-@[deprecated (since := "2026-06-03")] alias image_diff_of_injOn := image_sdiff_of_
+@[deprecated (since := "2026-06-03")] alias image_diff_of_injOn := image_sdiff_of_injOn
 
 中文:
 引理 单射限制.image_sdiff_subset
@@ -2018,7 +2018,7 @@ alias image_sdiff_of_injOn := InjOn.image_sdiff_subset
 
 alias image_sdiff_of_injOn := InjOn.image_sdiff_subset
 
-@[deprecated (since := "2026-06-03")] alias image_diff_of_injOn := image_sdiff_of_
+@[deprecated (since := "2026-06-03")] alias image_diff_of_injOn := image_sdiff_of_injOn
 
 Depends on / 依赖: h.image_sdiff, image_sdiff, inter_eq_self_of_subset_right
 -/
@@ -2125,7 +2125,8 @@ exact InjOn.image_of_comp injOn_id _
     choose! f hf using this
     rw [forall_mem_image] at hf
     use f
-    rw [graphOn]; rw [image
+    rw [graphOn]; rw [image_image]; rw [EqOn.image_eq_self]
+    exact fun x hx => h (hf hx) hx rfl
 
 中文:
 引理 存在_eq_graphOn_image_fst
@@ -2139,7 +2140,8 @@ exact InjOn.image_of_comp injOn_id _
     choose! f hf using this
     rw [forall_mem_image] at hf
     use f
-    rw [graphOn]; rw [image
+    rw [graphOn]; rw [image_image]; rw [EqOn.image_eq_self]
+    exact fun x hx => h (hf hx) hx rfl
 
 Depends on / 依赖: EqOn.image_eq_self, InjOn.image_of_comp, Prod.fst, forall_mem_image, graphOn, image_eq_self, image_image, image_of_comp, injOn_id
 -/
@@ -3770,7 +3772,17 @@ theorem BijOn.insert_iff
     simp only [mem_singleton_iff, insert_sdiff_of_mem] at this
     rw [sdiff_singleton_eq_self hfa]; rw [sdiff_singleton_eq_self] at this
     · exact ⟨by simp [← this, mapsTo_iff_image_subset], h.injOn.mono (subset_insert ..),
-      
+        by simp [← this, surjOn_image]⟩
+    simp only [mem_image, not_exists, not_and]
+    intro x hx
+    rw [h.injOn.eq_iff (by simp [hx]) (by simp)]
+    exact ha ∘ (· ▸ hx)
+  mpr h := by
+    repeat rw [insert_eq]
+    refine (bijOn_singleton.mpr rfl).union h ?_
+    simp only [singleton_union, injOn_insert fun x => (hfa (h.mapsTo x)), h.injOn, mem_image,
+      not_exists, not_and, true_and]
+    exact fun _ hx h₂ => hfa (h₂ ▸ h.mapsTo hx)
 
 中文:
 定理 双射限制.insert_iff
@@ -3780,7 +3792,17 @@ theorem BijOn.insert_iff
     simp only [mem_singleton_iff, insert_sdiff_of_mem] at this
     rw [sdiff_singleton_eq_self hfa]; rw [sdiff_singleton_eq_self] at this
     · exact ⟨by simp [← this, mapsTo_iff_image_subset], h.injOn.mono (subset_insert ..),
-      
+        by simp [← this, surjOn_image]⟩
+    simp only [mem_image, not_exists, not_and]
+    intro x hx
+    rw [h.injOn.eq_iff (by simp [hx]) (by simp)]
+    exact ha ∘ (· ▸ hx)
+  mpr h := by
+    repeat rw [insert_eq]
+    refine (bijOn_singleton.mpr rfl).union h ?_
+    simp only [singleton_union, injOn_insert fun x => (hfa (h.mapsTo x)), h.injOn, mem_image,
+      not_exists, not_and, true_and]
+    exact fun _ hx h₂ => hfa (h₂ ▸ h.mapsTo hx)
 
 Depends on / 依赖: bijOn_singleton, bijOn_singleton.mpr, eq_iff, h.image_eq, h.injOn.eq_iff, h.injOn.mono, image_eq, image_insert_eq, insert_eq, insert_sdiff_of_mem, mapsTo_iff_image_subset, mem_image, mem_singleton_iff, not_and, not_exists, repeat, sdiff_singleton_eq_self, subset_insert, surjOn_image
 -/
@@ -4437,7 +4459,7 @@ theorem image_eq_preimage_of_leftInvOn_injOn
     simpa [hgf hy] using hy
 
 @[deprecated (since := "2026-03-27")]
-alias image_eq
+alias image_eq_preimage_of_leftInvOn_injOn_mapsTo := image_eq_preimage_of_leftInvOn_injOn
 
 中文:
 定理 image_eq_preimage_of_leftInvOn_injOn
@@ -4453,7 +4475,7 @@ alias image_eq
     simpa [hgf hy] using hy
 
 @[deprecated (since := "2026-03-27")]
-alias image_eq
+alias image_eq_preimage_of_leftInvOn_injOn_mapsTo := image_eq_preimage_of_leftInvOn_injOn
 
 Depends on / 依赖: Set.InjOn.rightInvOn_of_leftInvOn, Set.mapsTo_preimage, mapsTo_preimage, mem_preimage, rightInvOn_of_leftInvOn
 -/
@@ -5044,7 +5066,9 @@ theorem surjOn_iff_exists_bijOn_subset
       have : Nonempty α := ⟨Classical.choose (h.comap_nonempty ht)⟩
       exact ⟨_, h.mapsTo_invFunOn.image_subset, h.bijOn_subset⟩
   · rintro ⟨s', hs', hfs'⟩
-    
+    exact hfs'.surjOn.mono hs' (Subset.refl _)
+
+alias ⟨SurjOn.exists_bijOn_subset, _⟩ := Set.surjOn_iff_exists_bijOn_subset
 
 中文:
 定理 surjOn_iff_存在_bijOn_subset
@@ -5057,7 +5081,9 @@ theorem surjOn_iff_exists_bijOn_subset
       have : Nonempty α := ⟨Classical.choose (h.comap_nonempty ht)⟩
       exact ⟨_, h.mapsTo_invFunOn.image_subset, h.bijOn_subset⟩
   · rintro ⟨s', hs', hfs'⟩
-    
+    exact hfs'.surjOn.mono hs' (Subset.refl _)
+
+alias ⟨SurjOn.exists_bijOn_subset, _⟩ := Set.surjOn_iff_exists_bijOn_subset
 
 Depends on / 依赖: Classical, Classical.choose, Nonempty, Subset, Subset.refl, bijOn_empty, bijOn_subset, comap_nonempty, empty_subset, eq_empty_or_nonempty, h.bijOn_subset, h.comap_nonempty, h.mapsTo_invFunOn.image_subset, image_subset, mapsTo_invFunOn, surjOn, surjOn.mono
 -/
@@ -5146,7 +5172,15 @@ theorem BijOn.exists_extend_of_subset
   rw [image_sdiff_preimage]; rw [image_inter_preimage] at hbij
   refine ⟨s union r, subset_union_left, ?_, ?_, ?_, fun y hyt' => ?_⟩
 · exact union_subset hss₁ hrss.trans sdiff_subset.trans inter_subset_left
-  · rw [
+  · rw [mapsTo_iff_image_subset, image_union, hbij.image_eq, h.image_eq, union_subset_iff]
+    exact ⟨htt', sdiff_subset.trans inter_subset_right⟩
+  · rw [injOn_union, and_iff_right h.injOn, and_iff_right hbij.injOn]
+    · refine fun x hxs y hyr hxy => (hrss hyr).2 ?_
+      rw [← h.image_eq]
+      exact ⟨x, hxs, hxy⟩
+    exact (subset_sdiff.1 hrss).2.symm.mono_left h.mapsTo
+  rw [image_union]; rw [h.image_eq]; rw [hbij.image_eq]; rw [union_sdiff_self]
+  exact .inr ⟨ht' hyt', hyt'⟩
 
 中文:
 定理 双射限制.存在_extend_of_subset
@@ -5156,7 +5190,15 @@ theorem BijOn.exists_extend_of_subset
   rw [image_sdiff_preimage]; rw [image_inter_preimage] at hbij
   refine ⟨s union r, subset_union_left, ?_, ?_, ?_, fun y hyt' => ?_⟩
 · exact union_subset hss₁ hrss.trans sdiff_subset.trans inter_subset_left
-  · rw [
+  · rw [mapsTo_iff_image_subset, image_union, hbij.image_eq, h.image_eq, union_subset_iff]
+    exact ⟨htt', sdiff_subset.trans inter_subset_right⟩
+  · rw [injOn_union, and_iff_right h.injOn, and_iff_right hbij.injOn]
+    · refine fun x hxs y hyr hxy => (hrss hyr).2 ?_
+      rw [← h.image_eq]
+      exact ⟨x, hxs, hxy⟩
+    exact (subset_sdiff.1 hrss).2.symm.mono_left h.mapsTo
+  rw [image_union]; rw [h.image_eq]; rw [hbij.image_eq]; rw [union_sdiff_self]
+  exact .inr ⟨ht' hyt', hyt'⟩
 
 Depends on / 依赖: and_iff_right, exists_subset_bijOn, h.image_eq, h.injOn, hbij.image_eq, hbij.injOn, hrss.trans, image_eq, image_inter_preimage, image_sdiff_preimage, image_union, injOn_union, inter_subset_left, inter_subset_right, mapsTo_iff_image_subset, sdiff_subset, sdiff_subset.trans, subset_union_left, union_subset, union_subset_iff
 -/

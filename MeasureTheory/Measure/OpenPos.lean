@@ -430,7 +430,10 @@ theorem eqOn_open_of_ae_eq
     refine isOpen_iff_mem_nhds.mpr fun a ha => inter_mem (hU.mem_nhds ha.1) ?_
     rcases ha with ⟨ha : a in U, ha' : (f a, g a) in (diagonal Y)ᶜ⟩
     exact
-     
+      (hf.continuousAt (hU.mem_nhds ha)).prodMk_nhds (hg.continuousAt (hU.mem_nhds ha))
+        (isClosed_diagonal.isOpen_compl.mem_nhds ha')
+  replace := (this.eq_empty_of_measure_zero h).le
+  exact fun x hx => Classical.not_not.1 fun h => this ⟨hx, h⟩
 
 中文:
 定理 eqOn_open_of_ae_eq
@@ -442,7 +445,10 @@ theorem eqOn_open_of_ae_eq
     refine isOpen_iff_mem_nhds.mpr fun a ha => inter_mem (hU.mem_nhds ha.1) ?_
     rcases ha with ⟨ha : a in U, ha' : (f a, g a) in (diagonal Y)ᶜ⟩
     exact
-     
+      (hf.continuousAt (hU.mem_nhds ha)).prodMk_nhds (hg.continuousAt (hU.mem_nhds ha))
+        (isClosed_diagonal.isOpen_compl.mem_nhds ha')
+  replace := (this.eq_empty_of_measure_zero h).le
+  exact fun x hx => Classical.not_not.1 fun h => this ⟨hx, h⟩
 
 Depends on / 依赖: Classical, Classical.not_imp, Classical.not_not, IsOpen, ae_iff, ae_imp_of_ae_restrict, continuousAt, diagonal, eq_empty_of_measure_zero, hU.mem_nhds, hf.continuousAt, hg.continuousAt, inter_mem, isClosed_diagonal, isClosed_diagonal.isOpen_compl.mem_nhds, isOpen_compl, isOpen_iff_mem_nhds, isOpen_iff_mem_nhds.mpr, mem_nhds, not_imp
 -/
@@ -932,7 +938,7 @@ lemma IsMeagre.of_isSigmaCompact_null
     have : μ (K n) = 0 := measure_mono_null (hcover ▸ subset_iUnion K n) h₂s
     exact .of_isClosed_null (hcompact n).isClosed this
   rw [isMeagre_iff_countable_union_isNowhereDense]
-  exact ⟨range K, fun t ⟨n
+  exact ⟨range K, fun t ⟨n, hn⟩ => hn ▸ h n, countable_range K, hcover.symm.subset⟩
 
 中文:
 引理 IsMeagre.of_isSigmaCompact_null
@@ -943,7 +949,7 @@ lemma IsMeagre.of_isSigmaCompact_null
     have : μ (K n) = 0 := measure_mono_null (hcover ▸ subset_iUnion K n) h₂s
     exact .of_isClosed_null (hcompact n).isClosed this
   rw [isMeagre_iff_countable_union_isNowhereDense]
-  exact ⟨range K, fun t ⟨n
+  exact ⟨range K, fun t ⟨n, hn⟩ => hn ▸ h n, countable_range K, hcover.symm.subset⟩
 
 Depends on / 依赖: IsNowhereDense, countable_range, hcompact, hcover, hcover.symm.subset, isClosed, isMeagre_iff_countable_union_isNowhereDense, measure_mono_null, of_isClosed_null, subset, subset_iUnion
 -/

@@ -63,7 +63,25 @@ theorem HarmonicOnNhd.circleAverage_re_herglotzRieszKernel_smul
     (isOpen_setOfPred_harmonicAt f) (by aesop)
   rw [thickening_closedBall h₁e (pos_of_mem_ball hw).le] at h₂e
   obtain ⟨F, h₁F, h₂F⟩ := HarmonicOnNhd.exists_analyticOnNhd_ball_re_eq h₂e
-  have h₃F : Differentiable
+  have h₃F : DifferentiableOn Complex F (closure (ball c R)) := by
+    intro x hx
+    apply (h₁F x _).differentiableWithinAt
+    grind [mem_ball, mem_closedBall.1 (closure_ball_subset_closedBall hx)]
+  have h₄F : Set.EqOn (re ∘ herglotzRieszKernel c w • f)
+      (reCLM ∘ (fun z => ((z - c + (w - c)) / (z - c - (w - c))).re • F z))
+      (sphere c R) := by
+    intro x hx
+    simp [h₂F (sphere_subset_ball (lt_add_of_pos_left R h₁e) hx), herglotzRieszKernel_def]
+  rw [← abs_of_pos (pos_of_mem_ball hw)] at h₄F
+  rw [circleAverage_congr_sphere h₄F]; rw [reCLM.circleAverage_comp_comm]; rw [h₃F.diffContOnCl.circleAverage_re_herglotzRieszKernel_smul' hw]
+  · apply h₂F
+    grind [mem_ball]
+  -- CircleIntegrable (fun z ↦ ((z - c + (w - c)) / (z - c - (w - c))).re • F z) c R
+  apply (ContinuousOn.fun_smul _ _).circleIntegrable'
+  · apply (continuousOn_herglotz_riesz hw).mono
+    grind [mem_ball, dist_eq_norm, mem_sphere_iff_norm, (pos_of_mem_ball hw)]
+  · apply (h₁F.mono _).continuousOn (𝕜 := Complex)
+    grind [mem_sphere, mem_ball, (pos_of_mem_ball hw)]
 
 中文:
 定理 HarmonicOnNhd.circleAverage_re_herglotzRieszKernel_smul
@@ -72,7 +90,25 @@ theorem HarmonicOnNhd.circleAverage_re_herglotzRieszKernel_smul
     (isOpen_setOfPred_harmonicAt f) (by aesop)
   rw [thickening_closedBall h₁e (pos_of_mem_ball hw).le] at h₂e
   obtain ⟨F, h₁F, h₂F⟩ := HarmonicOnNhd.exists_analyticOnNhd_ball_re_eq h₂e
-  have h₃F : Differentiable
+  have h₃F : DifferentiableOn Complex F (closure (ball c R)) := by
+    intro x hx
+    apply (h₁F x _).differentiableWithinAt
+    grind [mem_ball, mem_closedBall.1 (closure_ball_subset_closedBall hx)]
+  have h₄F : Set.EqOn (re ∘ herglotzRieszKernel c w • f)
+      (reCLM ∘ (fun z => ((z - c + (w - c)) / (z - c - (w - c))).re • F z))
+      (sphere c R) := by
+    intro x hx
+    simp [h₂F (sphere_subset_ball (lt_add_of_pos_left R h₁e) hx), herglotzRieszKernel_def]
+  rw [← abs_of_pos (pos_of_mem_ball hw)] at h₄F
+  rw [circleAverage_congr_sphere h₄F]; rw [reCLM.circleAverage_comp_comm]; rw [h₃F.diffContOnCl.circleAverage_re_herglotzRieszKernel_smul' hw]
+  · apply h₂F
+    grind [mem_ball]
+  -- CircleIntegrable (fun z ↦ ((z - c + (w - c)) / (z - c - (w - c))).re • F z) c R
+  apply (ContinuousOn.fun_smul _ _).circleIntegrable'
+  · apply (continuousOn_herglotz_riesz hw).mono
+    grind [mem_ball, dist_eq_norm, mem_sphere_iff_norm, (pos_of_mem_ball hw)]
+  · apply (h₁F.mono _).continuousOn (𝕜 := Complex)
+    grind [mem_sphere, mem_ball, (pos_of_mem_ball hw)]
 
 Depends on / 依赖: DifferentiableOn, HarmonicOnNhd, HarmonicOnNhd.exists_analyticOnNhd_ball_re_eq, Set.EqOn, closure, closure_ball_subset_closedBall, differentiableWithinAt, exists_analyticOnNhd_ball_re_eq, exists_thickening_subset_open, herglotzRieszKernel, isCompact_closedBall, isOpen_setOfPred_harmonicAt, mem_ball, mem_closedBall, pos_of_mem_ball, thickening_closedBall
 -/
@@ -114,7 +150,11 @@ theorem HarmonicContOnCl.circleAverage_re_herglotzRieszKernel_smul
     · rw [herglotzRieszKernel_fun_def]
       apply (continuousOn_herglotz_riesz hw).smul (hf.2.mono _)
       grind [closure_ball c (pos_of_mem_ball hw).ne', mem_closedBall_iff_norm]
-    · grind [norm_nonneg (w
+    · grind [norm_nonneg (w - c)]
+  · grind [mem_ball_iff_norm]
+  · intro r hr
+    rw [HarmonicOnNhd.circleAverage_re_herglotzRieszKernel_smul
+      (hf.1.mono (closedBall_subset_ball hr.2)) (by grind [mem_ball_iff_norm])]
 
 中文:
 定理 HarmonicContOnCl.circleAverage_re_herglotzRieszKernel_smul
@@ -124,7 +164,11 @@ theorem HarmonicContOnCl.circleAverage_re_herglotzRieszKernel_smul
     · rw [herglotzRieszKernel_fun_def]
       apply (continuousOn_herglotz_riesz hw).smul (hf.2.mono _)
       grind [closure_ball c (pos_of_mem_ball hw).ne', mem_closedBall_iff_norm]
-    · grind [norm_nonneg (w
+    · grind [norm_nonneg (w - c)]
+  · grind [mem_ball_iff_norm]
+  · intro r hr
+    rw [HarmonicOnNhd.circleAverage_re_herglotzRieszKernel_smul
+      (hf.1.mono (closedBall_subset_ball hr.2)) (by grind [mem_ball_iff_norm])]
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.circleAverage, ContinuousOn.eq_of_eqOn_Ioo, HarmonicOnNhd, HarmonicOnNhd.circleAverage_re_herglotzRieszKernel_smul, circleAverage, circleAverage_re_herglotzRieszKernel_smul, closedBall_subset_ball, closure_ball, continuousOn_herglotz_riesz, eq_of_eqOn_Ioo, herglotzRieszKernel_fun_def, mem_ball_iff_norm, mem_closedBall_iff_norm, norm_nonneg, pos_of_mem_ball
 -/

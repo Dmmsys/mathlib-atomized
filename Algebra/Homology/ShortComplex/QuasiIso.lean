@@ -336,7 +336,8 @@ lemma LeftHomologyMapData.quasiIso_iff
     have : IsIso (γ.φH ≫ (LeftHomologyData.homologyIso h₂).inv) :=
       IsIso.of_isIso_comp_left (LeftHomologyData.homologyIso h₁).hom _
     exact IsIso.of_isIso_comp_right _ (LeftHomologyData.homologyIso h₂).inv
- 
+  · intro h
+    infer_instance
 
 中文:
 引理 LeftHomologyMapData.quasiIso_iff
@@ -348,7 +349,8 @@ lemma LeftHomologyMapData.quasiIso_iff
     have : IsIso (γ.φH ≫ (LeftHomologyData.homologyIso h₂).inv) :=
       IsIso.of_isIso_comp_left (LeftHomologyData.homologyIso h₁).hom _
     exact IsIso.of_isIso_comp_right _ (LeftHomologyData.homologyIso h₂).inv
- 
+  · intro h
+    infer_instance
 
 Depends on / 依赖: IsIso.of_isIso_comp_left, IsIso.of_isIso_comp_right, LeftHomologyData, LeftHomologyData.homologyIso, ShortComplex, ShortComplex.quasiIso_iff, homologyIso, homologyMap_eq, infer_instance, of_isIso_comp_left, of_isIso_comp_right, quasiIso_iff
 -/
@@ -376,7 +378,9 @@ lemma RightHomologyMapData.quasiIso_iff
   · intro h
     have : IsIso (γ.φH ≫ (RightHomologyData.homologyIso h₂).inv) :=
       IsIso.of_isIso_comp_left (RightHomologyData.homologyIso h₁).hom _
-    exact IsIso.of_isIso_comp_right _ (RightHomologyData.homologyIso h₂).in
+    exact IsIso.of_isIso_comp_right _ (RightHomologyData.homologyIso h₂).inv
+  · intro h
+    infer_instance
 
 中文:
 引理 RightHomologyMapData.quasiIso_iff
@@ -387,7 +391,9 @@ lemma RightHomologyMapData.quasiIso_iff
   · intro h
     have : IsIso (γ.φH ≫ (RightHomologyData.homologyIso h₂).inv) :=
       IsIso.of_isIso_comp_left (RightHomologyData.homologyIso h₁).hom _
-    exact IsIso.of_isIso_comp_right _ (RightHomologyData.homologyIso h₂).in
+    exact IsIso.of_isIso_comp_right _ (RightHomologyData.homologyIso h₂).inv
+  · intro h
+    infer_instance
 
 Depends on / 依赖: IsIso.of_isIso_comp_left, IsIso.of_isIso_comp_right, RightHomologyData, RightHomologyData.homologyIso, ShortComplex, ShortComplex.quasiIso_iff, homologyIso, homologyMap_eq, infer_instance, of_isIso_comp_left, of_isIso_comp_right, quasiIso_iff
 -/
@@ -609,7 +615,7 @@ lemma quasiIso_iff_isIso_liftCycles
       (LeftHomologyData.ofIsLimitKernelFork S₂ hf₂ _ S₂.cyclesIsKernel) :=
     { φK := S₂.liftCycles φ.τ₂ (by rw [φ.comm₂₃, hg₁, zero_comp])
       φH := S₂.liftCycles φ.τ₂ (by rw [φ.comm₂₃, hg₁, zero_comp]) }
-  exact H.quasiIso
+  exact H.quasiIso_iff
 
 中文:
 引理 quasiIso_iff_isIso_liftCycles
@@ -619,7 +625,7 @@ lemma quasiIso_iff_isIso_liftCycles
       (LeftHomologyData.ofIsLimitKernelFork S₂ hf₂ _ S₂.cyclesIsKernel) :=
     { φK := S₂.liftCycles φ.τ₂ (by rw [φ.comm₂₃, hg₁, zero_comp])
       φH := S₂.liftCycles φ.τ₂ (by rw [φ.comm₂₃, hg₁, zero_comp]) }
-  exact H.quasiIso
+  exact H.quasiIso_iff
 
 Depends on / 依赖: H.quasiIso_iff, LeftHomologyData, LeftHomologyData.ofIsLimitKernelFork, LeftHomologyData.ofZeros, LeftHomologyMapData, cyclesIsKernel, liftCycles, ofIsLimitKernelFork, ofZeros, quasiIso_iff, zero_comp
 -/
@@ -645,7 +651,8 @@ lemma quasiIso_iff_isIso_descOpcycles
       (RightHomologyData.ofIsColimitCokernelCofork S₁ hg₁ _ S₁.opcyclesIsCokernel)
         (RightHomologyData.ofZeros S₂ hf₂ hg₂) :=
     { φQ := S₁.descOpcycles φ.τ₂ (by rw [← φ.comm₁₂, hf₂, comp_zero])
-      φH := S₁.descOpcycles φ.τ₂ (by rw [← φ.comm₁₂, hf₂, com
+      φH := S₁.descOpcycles φ.τ₂ (by rw [← φ.comm₁₂, hf₂, comp_zero]) }
+  exact H.quasiIso_iff
 
 中文:
 引理 quasiIso_iff_isIso_descOpcycles
@@ -655,7 +662,8 @@ lemma quasiIso_iff_isIso_descOpcycles
       (RightHomologyData.ofIsColimitCokernelCofork S₁ hg₁ _ S₁.opcyclesIsCokernel)
         (RightHomologyData.ofZeros S₂ hf₂ hg₂) :=
     { φQ := S₁.descOpcycles φ.τ₂ (by rw [← φ.comm₁₂, hf₂, comp_zero])
-      φH := S₁.descOpcycles φ.τ₂ (by rw [← φ.comm₁₂, hf₂, com
+      φH := S₁.descOpcycles φ.τ₂ (by rw [← φ.comm₁₂, hf₂, comp_zero]) }
+  exact H.quasiIso_iff
 
 Depends on / 依赖: H.quasiIso_iff, RightHomologyData, RightHomologyData.ofIsColimitCokernelCofork, RightHomologyData.ofZeros, RightHomologyMapData, comp_zero, descOpcycles, ofIsColimitCokernelCofork, ofZeros, opcyclesIsCokernel, quasiIso_iff
 -/

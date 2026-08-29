@@ -215,7 +215,34 @@ instance RelCWComplex.Subcomplex.instRelCWComplex
   continuousOn_symm n i := continuousOn_symm (C := C) n i
   pairwiseDisjoint' := by
     intro ⟨n, i⟩ _ ⟨m, j⟩ _ hne
-    refine @pairwiseDisjoint' _ _ C D _ ⟨n, i⟩ trivial ⟨m,
+    refine @pairwiseDisjoint' _ _ C D _ ⟨n, i⟩ trivial ⟨m, j⟩ trivial ?_
+.ne hne exact Function.injective_id.sigma_map (fun _ => Subtype.val_injective)
+  disjointBase' n i := disjointBase' (C := C) n i
+  mapsTo := by
+    intro n i
+    rcases cellFrontier_subset_finite_openCell (C := C) n i with ⟨J, hJ⟩
+    use fun m => Finset.preimage (J m) Subtype.val Subtype.val_injective.injOn
+    rw [mapsTo_iff_image_subset]
+    intro x hx
+    specialize hJ hx
+    simp_rw [iUnion_coe_set, mem_union, mem_iUnion, Finset.mem_preimage, exists_prop,
+      Decidable.or_iff_not_imp_left] at hJ ⊢
+    intro h
+    specialize hJ h
+    obtain ⟨m, hmn, j, hj, hxj⟩ := hJ
+    suffices j in E.I m from ⟨m, hmn, j, this, hj, openCell_subset_closedCell _ _ hxj⟩
+    have : x in (E : Set X) := E.cellFrontier_subset_of_mem i.2 hx
+    by_contra hj'
+.notMem_of_mem_left hxj this exact E.disjoint_openCell_subcomplex_of_not_mem hj'
+  closed' A hA h := by
+    apply isClosed_of_disjoint_openCell_or_isClosed_inter_closedCell
+      (subset_trans hA (subset_complex (C := C) E)) h.2
+    intro n _ j
+    by_cases hj : j in E.I n
+    · exact Or.intro_right _ (h.1 n ⟨j, hj⟩)
+    · exact Or.intro_left _ ((disjoint_openCell_subcomplex_of_not_mem E hj).symm.mono_left hA)
+  isClosedBase := isClosedBase (C := C)
+  union' := union_closedCell E
 
 中文:
 实例 RelCWComplex.子复形.instRelCWComplex
@@ -227,7 +254,34 @@ instance RelCWComplex.Subcomplex.instRelCWComplex
   continuousOn_symm n i := continuousOn_symm (C := C) n i
   pairwiseDisjoint' := by
     intro ⟨n, i⟩ _ ⟨m, j⟩ _ hne
-    refine @pairwiseDisjoint' _ _ C D _ ⟨n, i⟩ trivial ⟨m,
+    refine @pairwiseDisjoint' _ _ C D _ ⟨n, i⟩ trivial ⟨m, j⟩ trivial ?_
+.ne hne exact Function.injective_id.sigma_map (fun _ => Subtype.val_injective)
+  disjointBase' n i := disjointBase' (C := C) n i
+  mapsTo := by
+    intro n i
+    rcases cellFrontier_subset_finite_openCell (C := C) n i with ⟨J, hJ⟩
+    use fun m => Finset.preimage (J m) Subtype.val Subtype.val_injective.injOn
+    rw [mapsTo_iff_image_subset]
+    intro x hx
+    specialize hJ hx
+    simp_rw [iUnion_coe_set, mem_union, mem_iUnion, Finset.mem_preimage, exists_prop,
+      Decidable.or_iff_not_imp_left] at hJ ⊢
+    intro h
+    specialize hJ h
+    obtain ⟨m, hmn, j, hj, hxj⟩ := hJ
+    suffices j in E.I m from ⟨m, hmn, j, this, hj, openCell_subset_closedCell _ _ hxj⟩
+    have : x in (E : Set X) := E.cellFrontier_subset_of_mem i.2 hx
+    by_contra hj'
+.notMem_of_mem_left hxj this exact E.disjoint_openCell_subcomplex_of_not_mem hj'
+  closed' A hA h := by
+    apply isClosed_of_disjoint_openCell_or_isClosed_inter_closedCell
+      (subset_trans hA (subset_complex (C := C) E)) h.2
+    intro n _ j
+    by_cases hj : j in E.I n
+    · exact Or.intro_right _ (h.1 n ⟨j, hj⟩)
+    · exact Or.intro_left _ ((disjoint_openCell_subcomplex_of_not_mem E hj).symm.mono_left hA)
+  isClosedBase := isClosedBase (C := C)
+  union' := union_closedCell E
 -/
 instance RelCWComplex.Subcomplex.instRelCWComplex [T2Space X] [RelCWComplex C D]
     (E : Subcomplex C) : RelCWComplex E D where

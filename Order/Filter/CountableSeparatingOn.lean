@@ -206,7 +206,7 @@ theorem HasCountableSeparatingOn.of_subtype
   refine ⟨⟨V '' S, hSc.image _, forall_mem_image.2 hpV, fun x hx y hy h => ?_⟩⟩
   refine congr_arg Subtype.val (hS ⟨x, hx⟩ trivial ⟨y, hy⟩ trivial fun U hU => ?_)
   rw [← hV U hU]
-  exact h _ (mem_image_of_m
+  exact h _ (mem_image_of_mem _ hU)
 
 中文:
 定理 有余untableSeparatingOn.of_subtype
@@ -217,7 +217,7 @@ theorem HasCountableSeparatingOn.of_subtype
   refine ⟨⟨V '' S, hSc.image _, forall_mem_image.2 hpV, fun x hx y hy h => ?_⟩⟩
   refine congr_arg Subtype.val (hS ⟨x, hx⟩ trivial ⟨y, hy⟩ trivial fun U hU => ?_)
   rw [← hV U hU]
-  exact h _ (mem_image_of_m
+  exact h _ (mem_image_of_mem _ hU)
 
 Depends on / 依赖: Subtype, Subtype.val, congr_arg, forall_mem_image, hSc.image, mem_image_of_mem
 -/
@@ -245,7 +245,8 @@ theorem HasCountableSeparatingOn.subtype_iff
   · rintro u ⟨t, tS, rfl⟩
     exact ⟨t, Sp _ tS, rfl⟩
   rintro x - y - hxy
-exact Subtype.val_injective hS _ (Subtype.coe_prop _) _ (Subtype.coe_prop 
+exact Subtype.val_injective hS _ (Subtype.coe_prop _) _ (Subtype.coe_prop _)
+    fun s hs => hxy (Subtype.val ⁻¹' s) ⟨s, hs, rfl⟩
 
 中文:
 定理 有余untableSeparatingOn.subtype_iff
@@ -258,7 +259,8 @@ exact Subtype.val_injective hS _ (Subtype.coe_prop _) _ (Subtype.coe_prop
   · rintro u ⟨t, tS, rfl⟩
     exact ⟨t, Sp _ tS, rfl⟩
   rintro x - y - hxy
-exact Subtype.val_injective hS _ (Subtype.coe_prop _) _ (Subtype.coe_prop 
+exact Subtype.val_injective hS _ (Subtype.coe_prop _) _ (Subtype.coe_prop _)
+    fun s hs => hxy (Subtype.val ⁻¹' s) ⟨s, hs, rfl⟩
 
 Depends on / 依赖: Sct.image, Subtype, Subtype.coe_prop, Subtype.val, Subtype.val_injective, coe_prop, h.of_subtype, of_subtype, val_injective
 -/
@@ -293,7 +295,12 @@ theorem exists_subset_subsingleton_mem_of_forall_separating
   · intro x hx y hy
     simp only [mem_sInter, mem_inter_iff, mem_iInter, mem_compl_iff] at hx hy
     refine hS x hx.1.1 y hy.1.1 (fun s hsS => ?_)
-
+    cases hl s (hSp s hsS) with
+    | inl hsl => simp only [hx.1.2 s ⟨hsS, hsl⟩, hy.1.2 s ⟨hsS, hsl⟩]
+    | inr hsl => simp only [hx.2 s hsS hsl, hy.2 s hsS hsl]
+  · exact inter_mem
+      (inter_mem hs ((countable_sInter_mem (hSc.mono inter_subset_left)).2 fun _ h => h.2))
+      ((countable_bInter_mem hSc).2 fun U hU => iInter_mem'.2 id)
 
 中文:
 定理 存在_subset_subsingleton_mem_of_对任意_separating
@@ -305,7 +312,12 @@ theorem exists_subset_subsingleton_mem_of_forall_separating
   · intro x hx y hy
     simp only [mem_sInter, mem_inter_iff, mem_iInter, mem_compl_iff] at hx hy
     refine hS x hx.1.1 y hy.1.1 (fun s hsS => ?_)
-
+    cases hl s (hSp s hsS) with
+    | inl hsl => simp only [hx.1.2 s ⟨hsS, hsl⟩, hy.1.2 s ⟨hsS, hsl⟩]
+    | inr hsl => simp only [hx.2 s hsS hsl, hy.2 s hsS hsl]
+  · exact inter_mem
+      (inter_mem hs ((countable_sInter_mem (hSc.mono inter_subset_left)).2 fun _ h => h.2))
+      ((countable_bInter_mem hSc).2 fun U hU => iInter_mem'.2 id)
 
 Depends on / 依赖: countable_sInter_mem, hSc.mono, inter_mem, l.sets, mem_compl_iff, mem_iInter, mem_inter_iff, mem_sInter
 -/

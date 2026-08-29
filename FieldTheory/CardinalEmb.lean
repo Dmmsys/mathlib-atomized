@@ -176,7 +176,22 @@ wellFounded_lt.min {k | b k ∉ adjoin F s} by
       rw [← compl_ofPred]; rw [nonempty_compl]; by_contra!
       simp_rw [eq_univ_iff_forall, mem_ofPred] at this
       have := adjoin_le_iff.mpr (range_subset_iff.mpr this)
- 
+      rw [adjoin_basis_eq_top]; rw [← eq_top_iff] at this
+      apply_fun Module.rank F at this
+      refine ne_of_lt ?_ this
+      conv_rhs => rw [topEquiv.toLinearEquiv.rank_eq]
+      have := mk_Iio_lt i (by simp)
+      rw [mk_toType]; rw [card_ord] at this
+      obtain eq | lt := rank_inf.out.eq_or_lt
+      · simp_rw [← eq, mk_lt_aleph0_iff] at this
+        have : FiniteDimensional F (adjoin F s) :=
+          finiteDimensional_adjoin fun x _ => (IsAlgebraic.isAlgebraic x).isIntegral
+        exact (Module.rank_lt_aleph0 _ _).trans_eq eq
+      · exact (Subalgebra.equivOfEq _ _ <| adjoin_toSubalgebra_of_isAlgebraic
+          fun x _ => IsAlgebraic.isAlgebraic x) |>.toLinearEquiv.rank_eq.trans_lt <|
+          (Algebra.rank_adjoin_le _).trans_lt (max_lt (mk_range_le.trans_lt this) lt)
+
+local notation "φ" => leastExt F E
 
 中文:
 定义 leastExt
@@ -187,7 +202,22 @@ wellFounded_lt.min {k | b k ∉ adjoin F s} by
       rw [← compl_ofPred]; rw [nonempty_compl]; by_contra!
       simp_rw [eq_univ_iff_forall, mem_ofPred] at this
       have := adjoin_le_iff.mpr (range_subset_iff.mpr this)
- 
+      rw [adjoin_basis_eq_top]; rw [← eq_top_iff] at this
+      apply_fun Module.rank F at this
+      refine ne_of_lt ?_ this
+      conv_rhs => rw [topEquiv.toLinearEquiv.rank_eq]
+      have := mk_Iio_lt i (by simp)
+      rw [mk_toType]; rw [card_ord] at this
+      obtain eq | lt := rank_inf.out.eq_or_lt
+      · simp_rw [← eq, mk_lt_aleph0_iff] at this
+        have : FiniteDimensional F (adjoin F s) :=
+          finiteDimensional_adjoin fun x _ => (IsAlgebraic.isAlgebraic x).isIntegral
+        exact (Module.rank_lt_aleph0 _ _).trans_eq eq
+      · exact (Subalgebra.equivOfEq _ _ <| adjoin_toSubalgebra_of_isAlgebraic
+          fun x _ => IsAlgebraic.isAlgebraic x) |>.toLinearEquiv.rank_eq.trans_lt <|
+          (Algebra.rank_adjoin_le _).trans_lt (max_lt (mk_range_le.trans_lt this) lt)
+
+local notation "φ" => leastExt F E
 
 Depends on / 依赖: Module, Module.rank, adjoin, adjoin_basis_eq_top, adjoin_le_iff, adjoin_le_iff.mpr, apply_fun, card_ord, compl_ofPred, conv_rhs, eq_top_iff, eq_univ_iff_forall, mem_ofPred, mk_Iio_lt, mk_toType, ne_of_lt, nonempty_compl, range_subset_iff, range_subset_iff.mpr, rank_eq
 -/
@@ -255,7 +285,7 @@ theorem strictMono_leastExt
   obtain eq | lt := this.eq_or_lt
   · exact (least j).1 (subset_adjoin _ _ ⟨i, h, congr_arg b eq.symm⟩)
   · refine ((least i).2 <| mt (adjoin.mono _ _ _ (image_mono ?_) ·) (least j).1).not_gt lt
-    exact fun k (hk : k <
+    exact fun k (hk : k < i) => hk.trans h
 
 中文:
 定理 strictMono_leastExt
@@ -266,7 +296,7 @@ theorem strictMono_leastExt
   obtain eq | lt := this.eq_or_lt
   · exact (least j).1 (subset_adjoin _ _ ⟨i, h, congr_arg b eq.symm⟩)
   · refine ((least i).2 <| mt (adjoin.mono _ _ _ (image_mono ?_) ·) (least j).1).not_gt lt
-    exact fun k (hk : k <
+    exact fun k (hk : k < i) => hk.trans h
 
 Depends on / 依赖: adjoin, adjoin.mono, congr_arg, eq.symm, eq_or_lt, hk.trans, image_mono, isLeast_leastExt, not_gt, subset_adjoin, this.eq_or_lt
 -/
@@ -393,7 +423,7 @@ definition succEquiv
   body: (((show _ ≃ₐ[F] E⟮<i⟯⟮b (φ i)⟯ from equivOfEq (filtration_succ i))).arrowCongr .refl).trans
 algHomEquivSigma (B := E⟮<i⟯).trans .sigmaEquivProdOfEquiv fun _ =>
       (@Field.embEquivOfIsAlgClosed _ _ _ _ _ _ _ (_) <|
-        (Algebra.IsAlgebraic.tower_top (K := F) _).of_injective (val _) Subtype.val
+        (Algebra.IsAlgebraic.tower_top (K := F) _).of_injective (val _) Subtype.val_injective).symm
 
 中文:
 定义 succEquiv
@@ -401,7 +431,7 @@ algHomEquivSigma (B := E⟮<i⟯).trans .sigmaEquivProdOfEquiv fun _ =>
   定义体: (((show _ ≃ₐ[F] E⟮<i⟯⟮b (φ i)⟯ from equivOfEq (filtration_succ i))).arrowCongr .refl).trans
 algHomEquivSigma (B := E⟮<i⟯).trans .sigmaEquivProdOfEquiv fun _ =>
       (@Field.embEquivOfIsAlgClosed _ _ _ _ _ _ _ (_) <|
-        (Algebra.IsAlgebraic.tower_top (K := F) _).of_injective (val _) Subtype.val
+        (Algebra.IsAlgebraic.tower_top (K := F) _).of_injective (val _) Subtype.val_injective).symm
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.tower_top, Field.embEquivOfIsAlgClosed, IsAlgebraic, Subtype, Subtype.val_injective, algHomEquivSigma, arrowCongr, embEquivOfIsAlgClosed, equivOfEq, filtration_succ, of_injective, sigmaEquivProdOfEquiv, tower_top, val_injective
 -/
@@ -470,7 +500,7 @@ definition filtration
     · obtain ⟨i, rfl⟩ := ne_top_iff_exists.mp h.ne
       exact ⟨le_top, fun incl => (isLeast_leastExt i).1 (incl trivial)⟩
     · obtain ⟨i, rfl⟩ := ne_top_iff_exists.mp (h.trans <| coe_lt_top _).ne
-      exact strictMono_filt
+      exact strictMono_filtration (coe_lt_coe.mp h)
 
 中文:
 定义 filtration
@@ -480,7 +510,7 @@ definition filtration
     · obtain ⟨i, rfl⟩ := ne_top_iff_exists.mp h.ne
       exact ⟨le_top, fun incl => (isLeast_leastExt i).1 (incl trivial)⟩
     · obtain ⟨i, rfl⟩ := ne_top_iff_exists.mp (h.trans <| coe_lt_top _).ne
-      exact strictMono_filt
+      exact strictMono_filtration (coe_lt_coe.mp h)
 -/
 @[simps!] def filtration : WithTop ι ↪o IntermediateField F E :=
   .ofStrictMono (fun i => i.recTopCoe ⊤ (E⟮<·⟯)) fun i j h => by
@@ -523,7 +553,9 @@ theorem two_le_deg
   proof: by
   rw [← Nat.cast_ofNat]; rw [← toNat_le_iff_le_of_lt_aleph0 natCast_lt_aleph0 (deg_lt_aleph0 i)]; rw [toNat_natCast]; rw [← Nat.card]; rw [← finSepDegree]; rw [finSepDegree_eq_finrank_of_isSeparable]; rw [Nat.succ_le_iff]
   by_contra!
-  obtain ⟨x, hx⟩ := finrank_adjoin_simple_eq_one_iff.mp (this.
+  obtain ⟨x, hx⟩ := finrank_adjoin_simple_eq_one_iff.mp (this.antisymm Module.finrank_pos)
+  refine (isLeast_leastExt i).1 (hx ▸ ?_)
+  exact x.2
 
 中文:
 定理 two_le_deg
@@ -532,7 +564,9 @@ theorem two_le_deg
   证明: by
   rw [← Nat.cast_ofNat]; rw [← toNat_le_iff_le_of_lt_aleph0 natCast_lt_aleph0 (deg_lt_aleph0 i)]; rw [toNat_natCast]; rw [← Nat.card]; rw [← finSepDegree]; rw [finSepDegree_eq_finrank_of_isSeparable]; rw [Nat.succ_le_iff]
   by_contra!
-  obtain ⟨x, hx⟩ := finrank_adjoin_simple_eq_one_iff.mp (this.
+  obtain ⟨x, hx⟩ := finrank_adjoin_simple_eq_one_iff.mp (this.antisymm Module.finrank_pos)
+  refine (isLeast_leastExt i).1 (hx ▸ ?_)
+  exact x.2
 
 Depends on / 依赖: Module, Module.finrank_pos, Nat.card, Nat.cast_ofNat, Nat.succ_le_iff, antisymm, cast_ofNat, deg_lt_aleph0, finSepDegree, finSepDegree_eq_finrank_of_isSeparable, finrank_adjoin_simple_eq_one_iff, finrank_adjoin_simple_eq_one_iff.mp, finrank_pos, isLeast_leastExt, natCast_lt_aleph0, succ_le_iff, this.antisymm, toNat_le_iff_le_of_lt_aleph0, toNat_natCast
 -/
@@ -669,7 +703,7 @@ theorem iSup_filtration
   refine (iSup_le fun j => filtration.monotone (mem_Iio.1 j.2).le).antisymm (adjoin_le_iff.2 ?_)
   rintro _ ⟨j, hj, rfl⟩
   refine le_iSup (α := IntermediateField F E) _ ⟨j⁺, ?_⟩ (subset_adjoin F _ ?_)
-  exacts [⟨j, lt_succ j, r
+  exacts [⟨j, lt_succ j, rfl⟩, hi.succ_lt (coe_lt_coe.mpr hj)]
 
 中文:
 定理 iSup_filtration
@@ -680,7 +714,7 @@ theorem iSup_filtration
   refine (iSup_le fun j => filtration.monotone (mem_Iio.1 j.2).le).antisymm (adjoin_le_iff.2 ?_)
   rintro _ ⟨j, hj, rfl⟩
   refine le_iSup (α := IntermediateField F E) _ ⟨j⁺, ?_⟩ (subset_adjoin F _ ?_)
-  exacts [⟨j, lt_succ j, r
+  exacts [⟨j, lt_succ j, rfl⟩, hi.succ_lt (coe_lt_coe.mpr hj)]
 
 Depends on / 依赖: IntermediateField, adjoin_le_iff, antisymm, coe_lt_coe, coe_lt_coe.mpr, exacts, filtration, filtration.monotone, hi.succ_lt, iSup_adjoin_eq_top, iSup_le, iSup_range, le_iSup, lt_succ, mem_Iio, monotone, range_coe, subset_adjoin, succ_lt
 -/
@@ -737,7 +771,20 @@ definition equivLim
   invFun f := if h : Nonempty (Iio i) then
     Subalgebra.iSupLift _ directed_filtration f.1
 (fun _ _ h => (f.2 <| filtration.map_rel_iff.mp h).symm) _ by
-        rw [← iSup_filtration hi]; rw [toSubalgebra_iSup_of_directed directed_f
+        rw [← iSup_filtration hi]; rw [toSubalgebra_iSup_of_directed directed_filtration]
+    else (Algebra.ofId F Ē).comp ((equivOfEq (eq_bot_of_not_nonempty hi h)).trans <| botEquiv F E)
+  left_inv f := by
+    split_ifs with h
+    · ext ⟨x, hx⟩
+      rw [← iSup_filtration hi]; rw [mem_toSubalgebra]; rw [← SetLike.mem_coe]; rw [coe_iSup_of_directed directed_filtration]; rw [mem_iUnion] at hx
+      rw [Subalgebra.iSupLift_of_mem _ _ (by exact hx.choose_spec)]; rfl
+    · apply AlgHom.ext
+      rw [((equivOfEq (eq_bot_of_not_nonempty hi h)).trans <| botEquiv F E).forall_congr_left]
+      simp
+right_inv f := Subtype.ext funext fun j => by
+    have := Nonempty.intro j
+    simp_rw [dif_pos this]
+    apply Subalgebra.iSupLift_comp_inclusion
 
 中文:
 定义 equivLim
@@ -746,7 +793,20 @@ definition equivLim
   invFun f := if h : Nonempty (Iio i) then
     Subalgebra.iSupLift _ directed_filtration f.1
 (fun _ _ h => (f.2 <| filtration.map_rel_iff.mp h).symm) _ by
-        rw [← iSup_filtration hi]; rw [toSubalgebra_iSup_of_directed directed_f
+        rw [← iSup_filtration hi]; rw [toSubalgebra_iSup_of_directed directed_filtration]
+    else (Algebra.ofId F Ē).comp ((equivOfEq (eq_bot_of_not_nonempty hi h)).trans <| botEquiv F E)
+  left_inv f := by
+    split_ifs with h
+    · ext ⟨x, hx⟩
+      rw [← iSup_filtration hi]; rw [mem_toSubalgebra]; rw [← SetLike.mem_coe]; rw [coe_iSup_of_directed directed_filtration]; rw [mem_iUnion] at hx
+      rw [Subalgebra.iSupLift_of_mem _ _ (by exact hx.choose_spec)]; rfl
+    · apply AlgHom.ext
+      rw [((equivOfEq (eq_bot_of_not_nonempty hi h)).trans <| botEquiv F E).forall_congr_left]
+      simp
+right_inv f := Subtype.ext funext fun j => by
+    have := Nonempty.intro j
+    simp_rw [dif_pos this]
+    apply Subalgebra.iSupLift_comp_inclusion
 
 Depends on / 依赖: embFunctor
 -/
@@ -835,7 +895,9 @@ theorem cardinal_eq_two_pow_rank
   apply le_antisymm
   · rw [← power_eq_two_power rank_inf natCast_le_aleph0 rank_inf]
     conv_rhs => rw [← mk_ord_toType (Module.rank F E), ← prod_const']
-    exact prod_le_prod _ _ fun i => (Emb.Cardinal.deg_lt_al
+    exact prod_le_prod _ _ fun i => (Emb.Cardinal.deg_lt_aleph0 _).le
+  · conv_lhs => rw [← mk_ord_toType (Module.rank F E), ← prod_const']
+    exact prod_le_prod _ _ Emb.Cardinal.two_le_deg
 
 中文:
 定理 cardinal_eq_two_pow_rank
@@ -846,7 +908,9 @@ theorem cardinal_eq_two_pow_rank
   apply le_antisymm
   · rw [← power_eq_two_power rank_inf natCast_le_aleph0 rank_inf]
     conv_rhs => rw [← mk_ord_toType (Module.rank F E), ← prod_const']
-    exact prod_le_prod _ _ fun i => (Emb.Cardinal.deg_lt_al
+    exact prod_le_prod _ _ fun i => (Emb.Cardinal.deg_lt_aleph0 _).le
+  · conv_lhs => rw [← mk_ord_toType (Module.rank F E), ← prod_const']
+    exact prod_le_prod _ _ Emb.Cardinal.two_le_deg
 
 Depends on / 依赖: Cardinal, Emb.Cardinal.deg_lt_aleph0, Emb.Cardinal.embEquivPi.cardinal_eq, Emb.Cardinal.two_le_deg, Fact.mk, Module, Module.rank, cardinal_eq, conv_lhs, conv_rhs, deg_lt_aleph0, embEquivPi, le_antisymm, mk_ord_toType, mk_pi, natCast_le_aleph0, power_eq_two_power, prod_const, prod_le_prod, rank_inf
 -/

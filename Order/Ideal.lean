@@ -1313,7 +1313,16 @@ instance :
         obtain ⟨w, h⟩ := inter_nonempty I J
         exact ⟨w, w, h.1, w, h.2, le_sup_left⟩
       directed' := fun x ⟨xi, _, xj, _, _⟩ y ⟨yi, _, yj, _, _⟩ =>
-        ⟨x ⊔ y, ⟨xi ⊔ yi, sup_mem ‹_› ‹_›, 
+        ⟨x ⊔ y, ⟨xi ⊔ yi, sup_mem ‹_› ‹_›, xj ⊔ yj, sup_mem ‹_› ‹_›,
+            sup_le
+              (calc
+                x <= xi ⊔ xj := ‹_›
+                _ <= xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_left le_sup_left)
+              (calc
+                y <= yi ⊔ yj := ‹_›
+                _ <= xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_right le_sup_right)⟩,
+          le_sup_left, le_sup_right⟩
+      lower' := fun _ _ h ⟨yi, hi, yj, hj, hxy⟩ => ⟨yi, hi, yj, hj, h.trans hxy⟩ }⟩
 
 中文:
 实例 :
@@ -1324,7 +1333,16 @@ instance :
         obtain ⟨w, h⟩ := inter_nonempty I J
         exact ⟨w, w, h.1, w, h.2, le_sup_left⟩
       directed' := fun x ⟨xi, _, xj, _, _⟩ y ⟨yi, _, yj, _, _⟩ =>
-        ⟨x ⊔ y, ⟨xi ⊔ yi, sup_mem ‹_› ‹_›, 
+        ⟨x ⊔ y, ⟨xi ⊔ yi, sup_mem ‹_› ‹_›, xj ⊔ yj, sup_mem ‹_› ‹_›,
+            sup_le
+              (calc
+                x <= xi ⊔ xj := ‹_›
+                _ <= xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_left le_sup_left)
+              (calc
+                y <= yi ⊔ yj := ‹_›
+                _ <= xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_right le_sup_right)⟩,
+          le_sup_left, le_sup_right⟩
+      lower' := fun _ _ h ⟨yi, hi, yj, hj, hxy⟩ => ⟨yi, hi, yj, hj, h.trans hxy⟩ }⟩
 
 Depends on / 依赖: carrier, directed, inter_nonempty, le_sup_left, le_sup_rig, le_sup_right, nonempty, sup_le, sup_le_sup, sup_mem
 -/
@@ -1360,7 +1378,13 @@ instance :
     let ⟨w, hw⟩ := I.nonempty
     ⟨w, hw, j, hj, le_sup_right⟩
   sup_le := fun _ _ K hIK hJK _ ⟨_, hi, _, hj, ha⟩ =>
-K.lower ha sup_mem (mem_of_mem_of_le hi hIK) (
+K.lower ha sup_mem (mem_of_mem_of_le hi hIK) (mem_of_mem_of_le hj hJK)
+  inf := (· ⊓ ·)
+  inf_le_left := fun _ _ => inter_subset_left
+  inf_le_right := fun _ _ => inter_subset_right
+  le_inf := fun _ _ _ => subset_inter
+
+@[simp]
 
 中文:
 实例 :
@@ -1373,7 +1397,13 @@ K.lower ha sup_mem (mem_of_mem_of_le hi hIK) (
     let ⟨w, hw⟩ := I.nonempty
     ⟨w, hw, j, hj, le_sup_right⟩
   sup_le := fun _ _ K hIK hJK _ ⟨_, hi, _, hj, ha⟩ =>
-K.lower ha sup_mem (mem_of_mem_of_le hi hIK) (
+K.lower ha sup_mem (mem_of_mem_of_le hi hIK) (mem_of_mem_of_le hj hJK)
+  inf := (· ⊓ ·)
+  inf_le_left := fun _ _ => inter_subset_left
+  inf_le_right := fun _ _ => inter_subset_right
+  le_inf := fun _ _ _ => subset_inter
+
+@[simp]
 
 Depends on / 依赖: P.cotangentSpaceBasis, cotangentSpaceBasis, of_basis
 -/
@@ -1517,7 +1547,8 @@ instance :
       directed' := fun a ha b hb =>
         ⟨a ⊔ b,
           ⟨by
-            rw [LowerSe
+            rw [LowerSet.carrier_eq_coe]; rw [LowerSet.coe_iInf₂]; rw [Set.mem_iInter₂] at ha hb ⊢
+            exact fun s hs => sup_mem (ha _ hs) (hb _ hs), le_sup_left, le_sup_right⟩⟩ }⟩
 
 中文:
 实例 :
@@ -1531,7 +1562,8 @@ instance :
       directed' := fun a ha b hb =>
         ⟨a ⊔ b,
           ⟨by
-            rw [LowerSe
+            rw [LowerSet.carrier_eq_coe]; rw [LowerSet.coe_iInf₂]; rw [Set.mem_iInter₂] at ha hb ⊢
+            exact fun s hs => sup_mem (ha _ hs) (hb _ hs), le_sup_left, le_sup_right⟩⟩ }⟩
 
 Depends on / 依赖: LowerSet, LowerSet.carrier_eq_coe, LowerSet.coe_iInf, Set.mem_iInter, bot_mem, carrier_eq_coe, directed, le_sup_left, le_sup_right, nonempty, s.bot_mem, sup_mem, toLowerSet
 -/
@@ -1605,7 +1637,8 @@ instance :
   __ := (inferInstance : OrderBot (Ideal P))
   __ := completeLatticeOfInf (Ideal P) fun S => by
       refine ⟨fun s hs => ?_, fun s hs => by rwa [← coe_subset_coe, coe_sInf, subset_iInter₂_iff]⟩
-      rw [← coe_subset_c
+      rw [← coe_subset_coe]; rw [coe_sInf]
+      exact biInter_subset_of_mem hs
 
 中文:
 实例 :
@@ -1615,7 +1648,8 @@ instance :
   __ := (inferInstance : OrderBot (Ideal P))
   __ := completeLatticeOfInf (Ideal P) fun S => by
       refine ⟨fun s hs => ?_, fun s hs => by rwa [← coe_subset_coe, coe_sInf, subset_iInter₂_iff]⟩
-      rw [← coe_subset_c
+      rw [← coe_subset_coe]; rw [coe_sInf]
+      exact biInter_subset_of_mem hs
 
 Depends on / 依赖: Extension, Extension.H1Cotangent.map, Generators, Generators.defaultHom, H1Cotangent, Lattice, defaultHom, toExtensionHom
 -/
@@ -2063,7 +2097,7 @@ definition idealOfCofinals
   nonempty' := ⟨p, 0, le_rfl⟩
   directed' := fun _ ⟨n, hn⟩ _ ⟨m, hm⟩ =>
 ⟨_, ⟨max n m, le_rfl⟩, le_trans hn sequenceOfCofinals.monotone p 𝒟 (le_max_left _ _),
-le_trans hm sequenceOfCofinals.mon
+le_trans hm sequenceOfCofinals.monotone p 𝒟 (le_max_right _ _)⟩
 
 中文:
 定义 idealOfCofinals
@@ -2073,7 +2107,7 @@ le_trans hm sequenceOfCofinals.mon
   nonempty' := ⟨p, 0, le_rfl⟩
   directed' := fun _ ⟨n, hn⟩ _ ⟨m, hm⟩ =>
 ⟨_, ⟨max n m, le_rfl⟩, le_trans hn sequenceOfCofinals.monotone p 𝒟 (le_max_left _ _),
-le_trans hm sequenceOfCofinals.mon
+le_trans hm sequenceOfCofinals.monotone p 𝒟 (le_max_right _ _)⟩
 
 Depends on / 依赖: sequenceOfCofinals
 -/
@@ -2195,7 +2229,9 @@ refine ⟨IsIdeal.toIdeal isIdeal_sUnion_of_isChain (C := SetLike.coe '' S) ?_
     (hS₁.image_of_map_rel _ _ _ ?_) (hS₂.image _), ?_, ?_⟩
   · simp [Ideal.isIdeal]
   · simp
-  · simpa [top_notMem_iff, lt_top_iff_ne_top, ← top_mem_iff_eq_top]
+  · simpa [top_notMem_iff, lt_top_iff_ne_top, ← top_mem_iff_eq_top] using hS₃
+  · intro J hJ
+    simpa [le_toIdeal] using Set.subset_biUnion_of_mem hJ
 
 中文:
 实例 [LE
@@ -2207,7 +2243,9 @@ refine ⟨IsIdeal.toIdeal isIdeal_sUnion_of_isChain (C := SetLike.coe '' S) ?_
     (hS₁.image_of_map_rel _ _ _ ?_) (hS₂.image _), ?_, ?_⟩
   · simp [Ideal.isIdeal]
   · simp
-  · simpa [top_notMem_iff, lt_top_iff_ne_top, ← top_mem_iff_eq_top]
+  · simpa [top_notMem_iff, lt_top_iff_ne_top, ← top_mem_iff_eq_top] using hS₃
+  · intro J hJ
+    simpa [le_toIdeal] using Set.subset_biUnion_of_mem hJ
 
 Depends on / 依赖: Ideal.isIdeal, IsCoatomic, IsCoatomic.of_isChain_bounded, IsIdeal, IsIdeal.toIdeal, Set.subset_biUnion_of_mem, SetLike, SetLike.coe, image_of_map_rel, isIdeal, isIdeal_sUnion_of_isChain, le_toIdeal, lt_top_iff_ne_top, of_isChain_bounded, subset_biUnion_of_mem, toIdeal, top_mem_iff_eq_top, top_notMem_iff
 -/

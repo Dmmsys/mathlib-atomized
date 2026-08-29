@@ -795,7 +795,14 @@ definition pullbackObjObjOfImageOpen
   have hx : IsTerminal x :=
     { lift := fun s => by
         fapply CostructuredArrow.homMk
-        · change op (unop _) ⟶ op (⟨_, H⟩ : Ope
+        · change op (unop _) ⟶ op (⟨_, H⟩ : Opens _)
+          refine (homOfLE ?_).op
+          apply (Set.image_mono s.pt.hom.unop.le).trans
+          exact Set.image_preimage.l_u_le (SetLike.coe s.pt.left.unop)
+        · simp [eq_iff_true_of_subsingleton] }
+  exact IsColimit.coconePointUniqueUpToIso
+    ((Opens.map f).op.isPointwiseLeftKanExtensionLeftKanExtensionUnit ℱ (op U))
+    (colimitOfDiagramTerminal hx _)
 
 中文:
 定义 pullbackObjObjOfImageOpen
@@ -806,7 +813,14 @@ definition pullbackObjObjOfImageOpen
   have hx : IsTerminal x :=
     { lift := fun s => by
         fapply CostructuredArrow.homMk
-        · change op (unop _) ⟶ op (⟨_, H⟩ : Ope
+        · change op (unop _) ⟶ op (⟨_, H⟩ : Opens _)
+          refine (homOfLE ?_).op
+          apply (Set.image_mono s.pt.hom.unop.le).trans
+          exact Set.image_preimage.l_u_le (SetLike.coe s.pt.left.unop)
+        · simp [eq_iff_true_of_subsingleton] }
+  exact IsColimit.coconePointUniqueUpToIso
+    ((Opens.map f).op.isPointwiseLeftKanExtensionLeftKanExtensionUnit ℱ (op U))
+    (colimitOfDiagramTerminal hx _)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.mk, IsColimit, IsColimit.coconePointUniqueUpToIso, IsTerminal, Opens.map, Set.image_mono, Set.image_preimage.l_u_le, Set.image_preimage.le_u_l, SetLike, SetLike.coe, coconePointUniqueUpToIso, eq_iff_true_of_subsingleton, fapply, homOfLE, image_mono, image_preimage, l_u_le, le_u_l
 -/
@@ -839,7 +853,14 @@ theorem pullbackObjObjOfImageOpen_hom_naturality
     (fun j => ?_)
   have eq : ((LeftExtension.mk ((Opens.map f).op.leftKanExtension ℱ)
       ((Opens.map f).op.leftKanExtensionUnit ℱ)).coconeAt
-      (op V)).ι.app j ≫
+      (op V)).ι.app j ≫ ((pullback C f).obj ℱ).map (homOfLE le).op =
+      ((LeftExtension.mk ((Opens.map f).op.leftKanExtension ℱ)
+      ((Opens.map f).op.leftKanExtensionUnit ℱ)).coconeAt
+      (op U)).ι.app ((CostructuredArrow.map (homOfLE le).op).obj j) := by cat_disch
+  rw [Limits.IsColimit.comp_coconePointUniqueUpToIso_hom_assoc]; rw [reassoc_of% eq]; rw [Limits.IsColimit.comp_coconePointUniqueUpToIso_hom]; rw [Limits.coconeOfDiagramTerminal_ι_app]; rw [Limits.coconeOfDiagramTerminal_ι_app]
+  dsimp
+  rw [← Functor.map_comp]
+  cat_disch
 
 中文:
 定理 pullbackObjObjOfImageOpen_hom_naturality
@@ -850,7 +871,14 @@ theorem pullbackObjObjOfImageOpen_hom_naturality
     (fun j => ?_)
   have eq : ((LeftExtension.mk ((Opens.map f).op.leftKanExtension ℱ)
       ((Opens.map f).op.leftKanExtensionUnit ℱ)).coconeAt
-      (op V)).ι.app j ≫
+      (op V)).ι.app j ≫ ((pullback C f).obj ℱ).map (homOfLE le).op =
+      ((LeftExtension.mk ((Opens.map f).op.leftKanExtension ℱ)
+      ((Opens.map f).op.leftKanExtensionUnit ℱ)).coconeAt
+      (op U)).ι.app ((CostructuredArrow.map (homOfLE le).op).obj j) := by cat_disch
+  rw [Limits.IsColimit.comp_coconePointUniqueUpToIso_hom_assoc]; rw [reassoc_of% eq]; rw [Limits.IsColimit.comp_coconePointUniqueUpToIso_hom]; rw [Limits.coconeOfDiagramTerminal_ι_app]; rw [Limits.coconeOfDiagramTerminal_ι_app]
+  dsimp
+  rw [← Functor.map_comp]
+  cat_disch
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.map, LeftExtension, LeftExtension.mk, Opens.map, coconeAt, homOfLE, hom_ext, isPointwiseLeftKanExtensionLeftKanExtensionUnit, leftKanExtension, leftKanExtensionUnit, op.isPointwiseLeftKanExtensionLeftKanExtensionUnit, op.leftKanExtension, op.leftKanExtensionUnit, pullback, pullbackObjObjOfImageOpen
 -/
@@ -931,7 +959,20 @@ lemma pullbackObjIso_hom_naturality
   refine ((Opens.map f).op.isPointwiseLeftKanExtensionLeftKanExtensionUnit ℱ (op U)).hom_ext
     (fun j => ?_)
   have eq : ((LeftExtension.mk ((Opens.map f).op.leftKanExtension ℱ)
-      ((Opens.map f).op.leftKanExtensionUnit ℱ)).coconeAt
+      ((Opens.map f).op.leftKanExtensionUnit ℱ)).coconeAt (op U)).ι.app j
+      ≫ ((pullback C f).map u).app (op U) = NatTrans.app (Functor.whiskerLeft _ u) j ≫
+      ((LeftExtension.mk ((Opens.map f).op.leftKanExtension 𝒢)
+      ((Opens.map f).op.leftKanExtensionUnit 𝒢)).coconeAt (op U)).ι.app j := by
+    dsimp [pullback]
+    simp only [Category.assoc, NatTrans.naturality]
+    have := NatTrans.congr_app ((Opens.map f).op.lanUnit.naturality u) j.left
+    dsimp [lanUnit] at this
+    rw [reassoc_of% this]
+    rfl
+  rw [Limits.IsColimit.comp_coconePointUniqueUpToIso_hom_assoc]; rw [reassoc_of% eq]; rw [Limits.IsColimit.comp_coconePointUniqueUpToIso_hom]
+  dsimp
+  rw [← u.naturality]
+  rfl
 
 中文:
 引理 pullbackObjIso_hom_naturality
@@ -942,7 +983,20 @@ lemma pullbackObjIso_hom_naturality
   refine ((Opens.map f).op.isPointwiseLeftKanExtensionLeftKanExtensionUnit ℱ (op U)).hom_ext
     (fun j => ?_)
   have eq : ((LeftExtension.mk ((Opens.map f).op.leftKanExtension ℱ)
-      ((Opens.map f).op.leftKanExtensionUnit ℱ)).coconeAt
+      ((Opens.map f).op.leftKanExtensionUnit ℱ)).coconeAt (op U)).ι.app j
+      ≫ ((pullback C f).map u).app (op U) = NatTrans.app (Functor.whiskerLeft _ u) j ≫
+      ((LeftExtension.mk ((Opens.map f).op.leftKanExtension 𝒢)
+      ((Opens.map f).op.leftKanExtensionUnit 𝒢)).coconeAt (op U)).ι.app j := by
+    dsimp [pullback]
+    simp only [Category.assoc, NatTrans.naturality]
+    have := NatTrans.congr_app ((Opens.map f).op.lanUnit.naturality u) j.left
+    dsimp [lanUnit] at this
+    rw [reassoc_of% this]
+    rfl
+  rw [Limits.IsColimit.comp_coconePointUniqueUpToIso_hom_assoc]; rw [reassoc_of% eq]; rw [Limits.IsColimit.comp_coconePointUniqueUpToIso_hom]
+  dsimp
+  rw [← u.naturality]
+  rfl
 
 Depends on / 依赖: Functor, Functor.whiskerLeft, LeftExtension, LeftExtension.mk, NatTrans, NatTrans.app, Opens.map, coconeAt, hom_ext, isPointwiseLeftKanExtensionLeftKanExtensionUnit, leftKanExtension, leftKanExtensionUnit, op.isPointwiseLeftKanExtensionLeftKanExtensionUnit, op.leftKanExtension, op.leftKanExtensionUnit, pullback, pullbackObjIso, pullbackObjObjOfImageOpen, whiskerLeft
 -/

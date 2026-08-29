@@ -163,7 +163,10 @@ lemma wf_ancestralRel
       inferInstance ⟨fun n => (g n).1.dim,
         monotone_nat_of_le_succ (fun n => (hg n).dim_le)⟩
   dsimp at hn₀
-  refine not_stric
+  refine not_strictAnti_of_wellFoundedLT (fun n => f.rank (g (n₀ + n)))
+    (strictAnti_nat_of_succ_lt (fun n => ?_))
+  rw [← add_assoc]
+  exact f.lt (hg _) (by rw [← hn₀ (n₀ + n + 1) (by lia), ← hn₀ (n₀ + n) (by lia)])
 
 中文:
 引理 wf_ancestralRel
@@ -176,7 +179,10 @@ lemma wf_ancestralRel
       inferInstance ⟨fun n => (g n).1.dim,
         monotone_nat_of_le_succ (fun n => (hg n).dim_le)⟩
   dsimp at hn₀
-  refine not_stric
+  refine not_strictAnti_of_wellFoundedLT (fun n => f.rank (g (n₀ + n)))
+    (strictAnti_nat_of_succ_lt (fun n => ?_))
+  rw [← add_assoc]
+  exact f.lt (hg _) (by rw [← hn₀ (n₀ + n + 1) (by lia), ← hn₀ (n₀ + n) (by lia)])
 
 Depends on / 依赖: add_assoc, dim_le, f.lt, f.rank, monotone_nat_of_le_succ, not_strictAnti_of_wellFoundedLT, strictAnti_nat_of_succ_lt, wellFoundedGT_iff_monotone_chain_condition, wellFounded_iff_isEmpty_descending_chain
 -/
@@ -303,7 +309,11 @@ definition rankFunctionEquiv
         simpa using f.lt hxy }
   invFun g :=
     { rank x := g.rank (h.equivII x)
-      lt hxy := 
+      lt hxy := by
+        rw [ancestralRel_iff] at hxy
+        exact g.lt hxy }
+  left_inv _ := by simp
+  right_inv _ := by simp
 
 中文:
 定义 rankFunctionEquiv
@@ -316,7 +326,11 @@ definition rankFunctionEquiv
         simpa using f.lt hxy }
   invFun g :=
     { rank x := g.rank (h.equivII x)
-      lt hxy := 
+      lt hxy := by
+        rw [ancestralRel_iff] at hxy
+        exact g.lt hxy }
+  left_inv _ := by simp
+  right_inv _ := by simp
 
 Depends on / 依赖: ancestralRel_iff, equivII, f.lt, f.rank, g.lt, g.rank, h.equivII, h.equivII.surjective, h.equivII.symm, invFun, left_inv, right_inv, surjective
 -/
@@ -352,7 +366,11 @@ definition weakRankFunctionEquiv
         simpa using f.lt hxy }
   invFun g :=
     { rank x := g.rank (h.equivII x)
-      lt hxy := 
+      lt hxy := by
+        rw [ancestralRel_iff] at hxy
+        exact g.lt hxy }
+  left_inv _ := by simp
+  right_inv _ := by simp
 
 中文:
 定义 weakRankFunctionEquiv
@@ -365,7 +383,11 @@ definition weakRankFunctionEquiv
         simpa using f.lt hxy }
   invFun g :=
     { rank x := g.rank (h.equivII x)
-      lt hxy := 
+      lt hxy := by
+        rw [ancestralRel_iff] at hxy
+        exact g.lt hxy }
+  left_inv _ := by simp
+  right_inv _ := by simp
 
 Depends on / 依赖: ancestralRel_iff, equivII, f.lt, f.rank, g.lt, g.rank, h.equivII, h.equivII.surjective, h.equivII.symm, invFun, left_inv, right_inv, surjective
 -/

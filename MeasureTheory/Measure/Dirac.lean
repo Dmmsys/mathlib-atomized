@@ -241,7 +241,7 @@ theorem dirac_apply
   rw [indicator_of_notMem h]; rw [← nonpos_iff_eq_zero]
   calc
     dirac a s <= dirac a {a}ᶜ := measure_mono (subset_compl_comm.1 <| singleton_subset_iff.2 h)
-    _ = 0 := by simp [dirac_apply' _ (measurableSet_s
+    _ = 0 := by simp [dirac_apply' _ (measurableSet_singleton _).compl]
 
 中文:
 定理 dirac_apply
@@ -251,7 +251,7 @@ theorem dirac_apply
   rw [indicator_of_notMem h]; rw [← nonpos_iff_eq_zero]
   calc
     dirac a s <= dirac a {a}ᶜ := measure_mono (subset_compl_comm.1 <| singleton_subset_iff.2 h)
-    _ = 0 := by simp [dirac_apply' _ (measurableSet_s
+    _ = 0 := by simp [dirac_apply' _ (measurableSet_singleton _).compl]
 
 Depends on / 依赖: Pi.one_apply, dirac_apply, dirac_apply_of_mem, indicator_of_mem, indicator_of_notMem, measurableSet_singleton, measure_mono, nonpos_iff_eq_zero, one_apply, singleton_subset_iff, subset_compl_comm
 -/
@@ -329,7 +329,9 @@ lemma map_const
   rw [Measure.map_apply measurable_const hs]; rw [Set.preimage_const]
   by_cases hsc : c in s
   · rw [(Set.indicator_eq_one_iff_mem _).mpr hsc, mul_one, if_pos hsc]
-  · rw [if_neg hsc, (Set.in
+  · rw [if_neg hsc, (Set.indicator_eq_zero_iff_notMem _).mpr hsc, measure_empty, mul_zero]
+
+@[simp]
 
 中文:
 引理 map_const
@@ -343,7 +345,9 @@ lemma map_const
   rw [Measure.map_apply measurable_const hs]; rw [Set.preimage_const]
   by_cases hsc : c in s
   · rw [(Set.indicator_eq_one_iff_mem _).mpr hsc, mul_one, if_pos hsc]
-  · rw [if_neg hsc, (Set.in
+  · rw [if_neg hsc, (Set.indicator_eq_zero_iff_notMem _).mpr hsc, measure_empty, mul_zero]
+
+@[simp]
 
 Depends on / 依赖: Measure, Measure.coe_smul, Measure.map_apply, Pi.smul_apply, Set.indicator_eq_one_iff_mem, Set.indicator_eq_zero_iff_notMem, Set.preimage_const, classical, coe_smul, dirac_apply, if_neg, if_pos, indicator_eq_one_iff_mem, indicator_eq_zero_iff_notMem, map_apply, measurable_const, measure_empty, mul_one, mul_zero, preimage_const
 -/
@@ -556,7 +560,34 @@ lemma exists_sum_smul_dirac
     rw [← hy]
     exact ⟨y, mem_measurableAtom_self y⟩
   let points : measurableAtoms -> α := fun s => (h_nonempty s).some
-  have h_points_me
+  have h_points_mem (s : measurableAtoms) : points s in s.1 := (h_nonempty s).some_mem
+  refine ⟨Set.range points, ext_of_measurableAtoms fun x => ?_⟩
+  rw [sum_apply _ (MeasurableSet.measurableAtom_of_countable x)]
+  simp only [Measure.smul_apply, smul_eq_mul]
+  simp_rw [dirac_apply' _ (MeasurableSet.measurableAtom_of_countable x)]
+  rw [tsum_eq_single ⟨points ⟨measurableAtom x]; rw [by simp [measurableAtoms]⟩, by simp⟩]
+  · rw [indicator_of_mem]
+    · simp only [Pi.one_apply, mul_one]
+      congr 1
+      refine (measurableAtom_eq_of_mem ?_).symm
+      convert! h_points_mem _
+      simp
+    · convert! h_points_mem _
+      simp
+  · simp only [ne_eq, mul_eq_zero, indicator_apply_eq_zero, Pi.one_apply, one_ne_zero, imp_false,
+      Subtype.forall, Set.mem_range, Subtype.exists, Subtype.mk.injEq, forall_exists_index]
+    refine fun y s hs hsy hyx => .inr fun hyx' => hyx ?_
+    rw [← hsy]
+    congr
+    have h1 : measurableAtom y = measurableAtom x := measurableAtom_eq_of_mem hyx'
+    have h2 : measurableAtom y = s := by
+      specialize h_points_mem ⟨s, hs⟩
+      obtain ⟨z, _, hz⟩ := hs
+      simp only at h_points_mem
+      rw [← hz]; rw [← hsy]
+      refine measurableAtom_eq_of_mem ?_
+      convert! h_points_mem
+    rw [← h2]; rw [h1]
 
 中文:
 引理 存在_sum_smul_dirac
@@ -568,7 +599,34 @@ lemma exists_sum_smul_dirac
     rw [← hy]
     exact ⟨y, mem_measurableAtom_self y⟩
   let points : measurableAtoms -> α := fun s => (h_nonempty s).some
-  have h_points_me
+  have h_points_mem (s : measurableAtoms) : points s in s.1 := (h_nonempty s).some_mem
+  refine ⟨Set.range points, ext_of_measurableAtoms fun x => ?_⟩
+  rw [sum_apply _ (MeasurableSet.measurableAtom_of_countable x)]
+  simp only [Measure.smul_apply, smul_eq_mul]
+  simp_rw [dirac_apply' _ (MeasurableSet.measurableAtom_of_countable x)]
+  rw [tsum_eq_single ⟨points ⟨measurableAtom x]; rw [by simp [measurableAtoms]⟩, by simp⟩]
+  · rw [indicator_of_mem]
+    · simp only [Pi.one_apply, mul_one]
+      congr 1
+      refine (measurableAtom_eq_of_mem ?_).symm
+      convert! h_points_mem _
+      simp
+    · convert! h_points_mem _
+      simp
+  · simp only [ne_eq, mul_eq_zero, indicator_apply_eq_zero, Pi.one_apply, one_ne_zero, imp_false,
+      Subtype.forall, Set.mem_range, Subtype.exists, Subtype.mk.injEq, forall_exists_index]
+    refine fun y s hs hsy hyx => .inr fun hyx' => hyx ?_
+    rw [← hsy]
+    congr
+    have h1 : measurableAtom y = measurableAtom x := measurableAtom_eq_of_mem hyx'
+    have h2 : measurableAtom y = s := by
+      specialize h_points_mem ⟨s, hs⟩
+      obtain ⟨z, _, hz⟩ := hs
+      simp only at h_points_mem
+      rw [← hz]; rw [← hsy]
+      refine measurableAtom_eq_of_mem ?_
+      convert! h_points_mem
+    rw [← h2]; rw [h1]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.measurableAtom_of_countable, Measure, Measure.smul_ap, Nonempty, Set.Nonempty, Set.range, Set.univ, ext_of_measurableAtoms, h_nonempty, h_points_mem, measurableAtom, measurableAtom_of_countable, measurableAtoms, mem_measurableAtom_self, points, smul_ap, some_mem, sum_apply
 -/
@@ -622,7 +680,7 @@ theorem tsum_indicator_apply_singleton
       Measure.sum (fun a => μ {a} • Measure.dirac a) s := by
       simp only [Measure.sum_apply _ hs, Measure.smul_apply, smul_eq_mul, Measure.dirac_apply,
         Set.indicator_apply, mul_ite, Pi.one_apply, mul_one, mul_zero]
-  
+    _ = μ s := by rw [μ.sum_smul_dirac]
 
 中文:
 定理 tsum_indicator_apply_singleton
@@ -634,7 +692,7 @@ theorem tsum_indicator_apply_singleton
       Measure.sum (fun a => μ {a} • Measure.dirac a) s := by
       simp only [Measure.sum_apply _ hs, Measure.smul_apply, smul_eq_mul, Measure.dirac_apply,
         Set.indicator_apply, mul_ite, Pi.one_apply, mul_one, mul_zero]
-  
+    _ = μ s := by rw [μ.sum_smul_dirac]
 
 Depends on / 依赖: Measure, Measure.dirac, Measure.dirac_apply, Measure.smul_apply, Measure.sum, Measure.sum_apply, Pi.one_apply, Set.indicator_apply, classical, dirac_apply, indicator, indicator_apply, mul_ite, mul_one, mul_zero, one_apply, s.indicator, smul_apply, smul_eq_mul, sum_apply
 -/
@@ -1088,7 +1146,17 @@ lemma dirac_eq_dirac_iff_forall_mem_iff_mem
     simp only [Measure.dirac_apply' _ A_mble] at obs
     by_cases x_in_A : x in A
     · simpa only [x_in_A, indicator_of_mem, Pi.one_apply, true_iff, Eq.comm (a := (1 : Real>=0∞)),
-                  indicator_eq_one_iff
+                  indicator_eq_one_iff_mem] using obs
+    · simpa only [x_in_A, indicator_of_notMem, Eq.comm (a := (0 : Real>=0∞)), indicator_apply_eq_zero,
+                  false_iff, not_false_eq_true, Pi.one_apply, one_ne_zero, imp_false] using obs
+  · intro h
+    ext A A_mble
+    by_cases x_in_A : x in A
+    · simp only [Measure.dirac_apply' _ A_mble, x_in_A, indicator_of_mem, Pi.one_apply,
+                 (h A A_mble).mp x_in_A]
+    · have y_notin_A : y ∉ A := by simp_all only [not_false_eq_true]
+      simp only [Measure.dirac_apply' _ A_mble, x_in_A, y_notin_A,
+                 not_false_eq_true, indicator_of_notMem]
 
 中文:
 引理 dirac_eq_dirac_iff_对任意_mem_iff_mem
@@ -1100,7 +1168,17 @@ lemma dirac_eq_dirac_iff_forall_mem_iff_mem
     simp only [Measure.dirac_apply' _ A_mble] at obs
     by_cases x_in_A : x in A
     · simpa only [x_in_A, indicator_of_mem, Pi.one_apply, true_iff, Eq.comm (a := (1 : Real>=0∞)),
-                  indicator_eq_one_iff
+                  indicator_eq_one_iff_mem] using obs
+    · simpa only [x_in_A, indicator_of_notMem, Eq.comm (a := (0 : Real>=0∞)), indicator_apply_eq_zero,
+                  false_iff, not_false_eq_true, Pi.one_apply, one_ne_zero, imp_false] using obs
+  · intro h
+    ext A A_mble
+    by_cases x_in_A : x in A
+    · simp only [Measure.dirac_apply' _ A_mble, x_in_A, indicator_of_mem, Pi.one_apply,
+                 (h A A_mble).mp x_in_A]
+    · have y_notin_A : y ∉ A := by simp_all only [not_false_eq_true]
+      simp only [Measure.dirac_apply' _ A_mble, x_in_A, y_notin_A,
+                 not_false_eq_true, indicator_of_notMem]
 
 Depends on / 依赖: A_mble, Eq.comm, Measure, Measure.dirac_apply, Pi.one_apply, congr_arg, dirac_apply, false_iff, imp_false, indicator_apply_eq_zero, indicator_eq_one_iff_mem, indicator_of_mem, indicator_of_notMem, not_false_eq_true, one_apply, one_ne_zero, true_iff, x_in_A
 -/
@@ -1136,7 +1214,7 @@ lemma dirac_ne_dirac_iff_exists_measurableSet
   refine ⟨fun h A A_mble => by simp only [h A A_mble, imp_self], fun h A A_mble => ?_⟩
   by_cases x_in_A : x in A
   · simp only [x_in_A, h A A_mble x_in_A]
-  · simpa only [x_in_A, false
+  · simpa only [x_in_A, false_iff] using! h Aᶜ (MeasurableSet.compl_iff.mpr A_mble) x_in_A
 
 中文:
 引理 dirac_ne_dirac_iff_存在_measurableSet
@@ -1147,7 +1225,7 @@ lemma dirac_ne_dirac_iff_exists_measurableSet
   refine ⟨fun h A A_mble => by simp only [h A A_mble, imp_self], fun h A A_mble => ?_⟩
   by_cases x_in_A : x in A
   · simp only [x_in_A, h A A_mble x_in_A]
-  · simpa only [x_in_A, false
+  · simpa only [x_in_A, false_iff] using! h Aᶜ (MeasurableSet.compl_iff.mpr A_mble) x_in_A
 
 Depends on / 依赖: A_mble, MeasurableSet, MeasurableSet.compl_iff.mpr, compl_iff, dirac_eq_dirac_iff_forall_mem_iff_mem, false_iff, imp_self, ne_eq, not_and, not_exists, not_iff_not, not_iff_not.mp, not_not, x_in_A
 -/
@@ -1262,7 +1340,11 @@ lemma ae_mem_finset_iff
     simp_rw [Finset.mem_coe, Set.inter_iUnion]
     rw [measure_biUnion_finset (fun i hi j hj hij => .inter_left' _ <| .inter_right' _ ?_)
       (by measurability)]
-  
+    · simp only [coe_finsetSum, Finset.sum_apply, smul_apply]
+      congr with a
+      by_cases ha : a in t <;> simp [*]
+    simpa
+  mpr hμ := by rw [hμ, ae_finsetSum_measure_iff]; exact fun i hi => ae_smul_measure (by simpa) _
 
 中文:
 引理 ae_mem_finset_iff
@@ -1275,7 +1357,11 @@ lemma ae_mem_finset_iff
     simp_rw [Finset.mem_coe, Set.inter_iUnion]
     rw [measure_biUnion_finset (fun i hi j hj hij => .inter_left' _ <| .inter_right' _ ?_)
       (by measurability)]
-  
+    · simp only [coe_finsetSum, Finset.sum_apply, smul_apply]
+      congr with a
+      by_cases ha : a in t <;> simp [*]
+    simpa
+  mpr hμ := by rw [hμ, ae_finsetSum_measure_iff]; exact fun i hi => ae_smul_measure (by simpa) _
 
 Depends on / 依赖: Finset, Finset.mem_coe, Finset.sum_apply, Set.inter_iUnion, Set.sdiff_compl, ae_finsetSum_measure_iff, ae_smul_measure, biUnion_of_singleton, coe_finsetSum, inter_iUnion, inter_left, inter_right, measurability, measure_biUnion_finset, measure_sdiff_null, mem_coe, sdiff_compl, simp_rw, smul_apply, sum_apply
 -/

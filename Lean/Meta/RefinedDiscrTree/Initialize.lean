@@ -328,7 +328,21 @@ definition addConstToPreDiscrTree
   -- because it compiles to more performant code
   if constInfo.isUnsafe then pure tree else
   if blacklistInsertion env name then pure tree else
-  /- For efficiency, we leave it up to the implementation of `act` 
+  /- For efficiency, we leave it up to the implementation of `act` to reset the states if needed -/
+  -- mstate.modify fun s => { cache := s.cache }
+  -- cstate.modify fun s => { env := s.env, cache := s.cache, ngen := s.ngen }
+  let mctx := { keyedConfig := Config.toConfigWithKey { transparency := .reducible } }
+  match ← (((act name constInfo) mctx mstate) cctx cstate).toBaseIO with
+  | .ok a =>
+    return a.foldl (fun t (val, entries) =>
+      entries.foldl (fun t (key, entry) => t.push key (entry, val)) t) tree
+  | .error e =>
+    let i : ImportFailure := {
+      module := modName,
+      const := name,
+      exception := e }
+    data.errors.modify (·.push i)
+    return tree
 
 中文:
 定义 addConstToPreDiscrTree
@@ -337,7 +351,21 @@ definition addConstToPreDiscrTree
   -- because it compiles to more performant code
   if constInfo.isUnsafe then pure tree else
   if blacklistInsertion env name then pure tree else
-  /- For efficiency, we leave it up to the implementation of `act` 
+  /- For efficiency, we leave it up to the implementation of `act` to reset the states if needed -/
+  -- mstate.modify fun s => { cache := s.cache }
+  -- cstate.modify fun s => { env := s.env, cache := s.cache, ngen := s.ngen }
+  let mctx := { keyedConfig := Config.toConfigWithKey { transparency := .reducible } }
+  match ← (((act name constInfo) mctx mstate) cctx cstate).toBaseIO with
+  | .ok a =>
+    return a.foldl (fun t (val, entries) =>
+      entries.foldl (fun t (key, entry) => t.push key (entry, val)) t) tree
+  | .error e =>
+    let i : ImportFailure := {
+      module := modName,
+      const := name,
+      exception := e }
+    data.errors.modify (·.push i)
+    return tree
 -/
 @[inline] private def addConstToPreDiscrTree
     (cctx : Core.Context)
@@ -466,7 +494,8 @@ definition loadImportedModule
     let constInfo := mdata.constants[i]!
     let state ← addConstToPreDiscrTree cctx env mname data mstate cstate act tree name constInfo
     loadImportedModule cctx env data mstate cstate act mname mdata state (i+1)
-  el
+  else
+    return tree
 
 中文:
 定义 loadImportedModule
@@ -476,7 +505,8 @@ definition loadImportedModule
     let constInfo := mdata.constants[i]!
     let state ← addConstToPreDiscrTree cctx env mname data mstate cstate act tree name constInfo
     loadImportedModule cctx env data mstate cstate act mname mdata state (i+1)
-  el
+  else
+    return tree
 -/
 private partial def loadImportedModule
     (cctx : Core.Context)
@@ -590,7 +620,28 @@ definition createImportedDiscrTree
     /-- Allocate constants to tasks according to `constantsPerTask`. -/
     go (ngen : NameGenerator) (tasks : Array (Task (InitResults α))) (start cnt idx : Nat) := do
       if h : idx < numModules then
-        let mdata 
+        let mdata := env.header.moduleData[idx]
+        let cnt := cnt + mdata.constants.size
+        if cnt > constantsPerTask then
+          let (childNGen, ngen) := ngen.mkChild
+          let t ← (createImportInitResults
+            cctx childNGen env act capacityPerTask start (idx+1)).asTask
+          go ngen (tasks.push t) (idx+1) 0 (idx+1)
+        else
+          go ngen tasks start cnt (idx+1)
+      else
+        if start < numModules then
+          let (childNGen, _) := ngen.mkChild
+          let t ← (createImportInitResults
+            cctx childNGen env act capacityPerTask start numModules).asTask
+          pure (tasks.push t)
+        else
+          pure tasks
+    termination_by env.header.moduleData.size - idx
+  let tasks ← go ngen #[] 0 0 0
+  let r : InitResults α := tasks.foldl (init := {}) (· ++ ·.get)
+  r.errors.forM logImportFailure
+  return r.tree.toRefinedDiscrTree
 
 中文:
 定义 createImportedDiscrTree
@@ -602,7 +653,28 @@ definition createImportedDiscrTree
     /-- Allocate constants to tasks according to `constantsPerTask`. -/
     go (ngen : NameGenerator) (tasks : Array (Task (InitResults α))) (start cnt idx : Nat) := do
       if h : idx < numModules then
-        let mdata 
+        let mdata := env.header.moduleData[idx]
+        let cnt := cnt + mdata.constants.size
+        if cnt > constantsPerTask then
+          let (childNGen, ngen) := ngen.mkChild
+          let t ← (createImportInitResults
+            cctx childNGen env act capacityPerTask start (idx+1)).asTask
+          go ngen (tasks.push t) (idx+1) 0 (idx+1)
+        else
+          go ngen tasks start cnt (idx+1)
+      else
+        if start < numModules then
+          let (childNGen, _) := ngen.mkChild
+          let t ← (createImportInitResults
+            cctx childNGen env act capacityPerTask start numModules).asTask
+          pure (tasks.push t)
+        else
+          pure tasks
+    termination_by env.header.moduleData.size - idx
+  let tasks ← go ngen #[] 0 0 0
+  let r : InitResults α := tasks.foldl (init := {}) (· ++ ·.get)
+  r.errors.forM logImportFailure
+  return r.tree.toRefinedDiscrTree
 -/
 def createImportedDiscrTree (ngen : NameGenerator) (env : Environment)
     (act : Name -> ConstantInfo -> MetaM (List (α × List (Key × LazyEntry))))

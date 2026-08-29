@@ -2706,7 +2706,10 @@ lemma ofReal_iInf
   replace h i : 0 <= f i := le_of_not_ge fun hi => h ⟨i, hi⟩
   refine eq_of_forall_le_iff fun a => ?_
   obtain rfl | ha := eq_or_ne a ∞
-  · si
+  · simp
+  rw [le_iInf_iff]; rw [le_ofReal_iff_toReal_le ha]; rw [le_ciInf_iff ⟨0]; rw [by simpa [mem_lowerBounds]⟩]
+  · exact forall_congr' fun i => (le_ofReal_iff_toReal_le ha (h _)).symm
+  · exact Real.iInf_nonneg h
 
 中文:
 引理 of实数_iInf
@@ -2718,7 +2721,10 @@ lemma ofReal_iInf
   replace h i : 0 <= f i := le_of_not_ge fun hi => h ⟨i, hi⟩
   refine eq_of_forall_le_iff fun a => ?_
   obtain rfl | ha := eq_or_ne a ∞
-  · si
+  · simp
+  rw [le_iInf_iff]; rw [le_ofReal_iff_toReal_le ha]; rw [le_ciInf_iff ⟨0]; rw [by simpa [mem_lowerBounds]⟩]
+  · exact forall_congr' fun i => (le_ofReal_iff_toReal_le ha (h _)).symm
+  · exact Real.iInf_nonneg h
 
 Depends on / 依赖: blockDiag
 -/
@@ -2835,7 +2841,7 @@ theorem iInf_add_iInf
   calc
     ⨅ a, f a + g a <= ⨅ (a) (a'), f a + g a' :=
       le_iInf₂ fun a a' => let ⟨k, h⟩ := h a a'; iInf_le_of_le k h
-    _ = iInf f + iInf g := by simp_rw [iInf_add, ad
+    _ = iInf f + iInf g := by simp_rw [iInf_add, add_iInf]
 
 中文:
 定理 iInf_add_iInf
@@ -2846,7 +2852,7 @@ theorem iInf_add_iInf
   calc
     ⨅ a, f a + g a <= ⨅ (a) (a'), f a + g a' :=
       le_iInf₂ fun a a' => let ⟨k, h⟩ := h a a'; iInf_le_of_le k h
-    _ = iInf f + iInf g := by simp_rw [iInf_add, ad
+    _ = iInf f + iInf g := by simp_rw [iInf_add, add_iInf]
 
 Depends on / 依赖: add_iInf, add_le_add, iInf_add, iInf_le, iInf_le_of_le, le_antisymm, le_iInf, simp_rw
 -/
@@ -3528,7 +3534,12 @@ lemma sub_iSup
   · rw [tsub_eq_zero_iff_le.2 <| le_iSup_of_le _ hi.le, iInf_eq_bot.2, bot_eq_zero]
     exact fun x hx => ⟨i, by simpa [hi.le, tsub_eq_zero_of_le]⟩
   simp_rw [not_exists, not_lt] at h
-refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..
+refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..) _)
+ENNReal.le_sub_of_add_le_left (ne_top_of_le_ne_top ha <| iSup_le h)
+add_le_of_le_tsub_right_of_le (iInf_le_of_le (Classical.arbitrary _) tsub_le_self)
+    iSup_le fun i => ?_
+  rw [← sub_sub_cancel ha (h _)]
+  exact tsub_le_tsub_left (iInf_le (a - f ·) i) _
 
 中文:
 引理 sub_iSup
@@ -3539,7 +3550,12 @@ refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..
   · rw [tsub_eq_zero_iff_le.2 <| le_iSup_of_le _ hi.le, iInf_eq_bot.2, bot_eq_zero]
     exact fun x hx => ⟨i, by simpa [hi.le, tsub_eq_zero_of_le]⟩
   simp_rw [not_exists, not_lt] at h
-refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..
+refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..) _)
+ENNReal.le_sub_of_add_le_left (ne_top_of_le_ne_top ha <| iSup_le h)
+add_le_of_le_tsub_right_of_le (iInf_le_of_le (Classical.arbitrary _) tsub_le_self)
+    iSup_le fun i => ?_
+  rw [← sub_sub_cancel ha (h _)]
+  exact tsub_le_tsub_left (iInf_le (a - f ·) i) _
 
 Depends on / 依赖: Classical, Classical.arbitrary, ENNReal, ENNReal.le_sub_of_add_le_left, add_le_of_le_tsub_right_of_le, arbitrary, bot_eq_zero, hi.le, iInf_eq_bot, iInf_le_of_le, iSup_le, le_antisymm, le_iInf, le_iSup, le_iSup_of_le, le_sub_of_add_le_left, ne_top_of_le_ne_top, not_exists, not_lt, simp_rw
 -/

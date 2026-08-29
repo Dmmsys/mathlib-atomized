@@ -590,7 +590,7 @@ instance instLawfulMonad
   (bind_assoc := fun x f g => FreeMagma.recOnPure x (fun _ => rfl) fun x y ih1 ih2 => by
     rw [mul_bind]; rw [mul_bind]; rw [mul_bind]; rw [ih1]; rw [ih2])
   (id_map := fun x => FreeMagma.recOnPure x (fun _ => rfl) fun x y ih1 ih2 => by
-    rw [map_m
+    rw [map_mul']; rw [ih1]; rw [ih2])
 
 中文:
 实例 instLawfulMonad
@@ -600,7 +600,7 @@ instance instLawfulMonad
   (bind_assoc := fun x f g => FreeMagma.recOnPure x (fun _ => rfl) fun x y ih1 ih2 => by
     rw [mul_bind]; rw [mul_bind]; rw [mul_bind]; rw [ih1]; rw [ih2])
   (id_map := fun x => FreeMagma.recOnPure x (fun _ => rfl) fun x y ih1 ih2 => by
-    rw [map_m
+    rw [map_mul']; rw [ih1]; rw [ih2])
 
 Depends on / 依赖: LawfulMonad, LawfulMonad.mk
 -/
@@ -799,7 +799,18 @@ instance :
         rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [seq_pure]; rw [map_pure]; rw [map_pure]
     comp_traverse := fun f g x =>
       FreeMagma.recOnPure x
-        (fun x => by simp only 
+        (fun x => by simp only [Function.comp_def, traverse_pure, functor_norm])
+        (fun x y ih1 ih2 => by
+          rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [traverse_mul]
+          simp [Functor.Comp.map_mk, Functor.map_map, Function.comp_def, Comp.seq_mk, seq_map_assoc,
+            map_seq, traverse_mul])
+    naturality := fun η α β f x =>
+      FreeMagma.recOnPure x
+        (fun x => by simp only [traverse_pure, functor_norm, Function.comp_apply])
+        (fun x y ih1 ih2 => by simp only [traverse_mul, functor_norm, ih1, ih2])
+    traverse_eq_map_id := fun f x =>
+      FreeMagma.recOnPure x (fun _ => rfl) fun x y ih1 ih2 => by
+        rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [map_mul']; rw [map_pure]; rw [seq_pure]; rw [map_pure] }
 
 中文:
 实例 :
@@ -810,7 +821,18 @@ instance :
         rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [seq_pure]; rw [map_pure]; rw [map_pure]
     comp_traverse := fun f g x =>
       FreeMagma.recOnPure x
-        (fun x => by simp only 
+        (fun x => by simp only [Function.comp_def, traverse_pure, functor_norm])
+        (fun x y ih1 ih2 => by
+          rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [traverse_mul]
+          simp [Functor.Comp.map_mk, Functor.map_map, Function.comp_def, Comp.seq_mk, seq_map_assoc,
+            map_seq, traverse_mul])
+    naturality := fun η α β f x =>
+      FreeMagma.recOnPure x
+        (fun x => by simp only [traverse_pure, functor_norm, Function.comp_apply])
+        (fun x y ih1 ih2 => by simp only [traverse_mul, functor_norm, ih1, ih2])
+    traverse_eq_map_id := fun f x =>
+      FreeMagma.recOnPure x (fun _ => rfl) fun x y ih1 ih2 => by
+        rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [map_mul']; rw [map_pure]; rw [seq_pure]; rw [map_pure] }
 
 Depends on / 依赖: Comp.seq_mk, FreeMagma, FreeMagma.recOnPure, Function, Function.comp_def, Functor, Functor.Comp.map_mk, Functor.map_map, comp_def, comp_traverse, functor_norm, id_traverse, instLawfulMonad, map_map, map_mk, map_pure, map_seq, recOnPure, seq_map_assoc, seq_mk
 -/
@@ -1064,7 +1086,11 @@ instance :
       · exact quot_mk_assoc_left _ _ _ _
       · rw [← quot_mk_assoc, quot_mk_assoc_left, quot_mk_assoc]
     · rintro a₁ a₂ b (⟨c, d, e⟩ | ⟨c, d, e, f⟩)
-      · simp only [quot_mk_asso
+      · simp only [quot_mk_assoc, quot_mk_assoc_left]
+      · rw [quot_mk_assoc, quot_mk_assoc, quot_mk_assoc_left, quot_mk_assoc_left,
+          quot_mk_assoc_left, ← quot_mk_assoc c d, ← quot_mk_assoc c d, quot_mk_assoc_left]
+  mul_assoc x y z :=
+    Quot.induction_on₃ x y z fun a b c => quot_mk_assoc a b c
 
 中文:
 实例 :
@@ -1075,7 +1101,11 @@ instance :
       · exact quot_mk_assoc_left _ _ _ _
       · rw [← quot_mk_assoc, quot_mk_assoc_left, quot_mk_assoc]
     · rintro a₁ a₂ b (⟨c, d, e⟩ | ⟨c, d, e, f⟩)
-      · simp only [quot_mk_asso
+      · simp only [quot_mk_assoc, quot_mk_assoc_left]
+      · rw [quot_mk_assoc, quot_mk_assoc, quot_mk_assoc_left, quot_mk_assoc_left,
+          quot_mk_assoc_left, ← quot_mk_assoc c d, ← quot_mk_assoc c d, quot_mk_assoc_left]
+  mul_assoc x y z :=
+    Quot.induction_on₃ x y z fun a b c => quot_mk_assoc a b c
 
 Depends on / 依赖: Quot.induction_on, Quot.liftOn, Quot.mk, mul_assoc, quot_mk_assoc, quot_mk_assoc_left
 -/
@@ -2170,7 +2200,10 @@ theorem traverse_mul
     (fun hd tl ih x => show
 (· * ·) < > pure < > F x <*> traverse F (mk hd tl * mk y L2) =
 (· * ·) < > ((· * ·) <$> pure <$> F x <*> traverse F (mk hd tl)) <*> traverse F (mk y L2)
-        by rw [ih]; simp only [Function.comp_def, (m
+        by rw [ih]; simp only [Function.comp_def, (mul_assoc _ _ _).symm, functor_norm])
+    x
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 traverse_mul
@@ -2181,7 +2214,10 @@ theorem traverse_mul
     (fun hd tl ih x => show
 (· * ·) < > pure < > F x <*> traverse F (mk hd tl * mk y L2) =
 (· * ·) < > ((· * ·) <$> pure <$> F x <*> traverse F (mk hd tl)) <*> traverse F (mk y L2)
-        by rw [ih]; simp only [Function.comp_def, (m
+        by rw [ih]; simp only [Function.comp_def, (mul_assoc _ _ _).symm, functor_norm])
+    x
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Function, Function.comp_def, List.recOn, comp_def, functor_norm, mul_assoc, traverse
 -/
@@ -2251,7 +2287,16 @@ instance :
       FreeSemigroup.recOnMul x (fun _ => rfl) fun x y ih1 ih2 => by
         rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [seq_pure]; rw [map_pure]; rw [map_pure]
     comp_traverse := fun f g x =>
-      recOnPure x (fun x => by simp only [traverse_pure,
+      recOnPure x (fun x => by simp only [traverse_pure, functor_norm, Function.comp_def])
+        fun x y ih1 ih2 => by
+          rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [traverse_mul]; rw [Functor.Comp.map_mk]
+          simp only [Function.comp_def, functor_norm, traverse_mul]
+    naturality := fun η α β f x =>
+      recOnPure x (fun x => by simp only [traverse_pure, functor_norm, Function.comp])
+          (fun x y ih1 ih2 => by simp only [traverse_mul, functor_norm, ih1, ih2])
+    traverse_eq_map_id := fun f x =>
+      FreeSemigroup.recOnMul x (fun _ => rfl) fun x y ih1 ih2 => by
+        rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [map_mul']; rw [map_pure]; rw [seq_pure]; rw [map_pure] }
 
 中文:
 实例 :
@@ -2261,7 +2306,16 @@ instance :
       FreeSemigroup.recOnMul x (fun _ => rfl) fun x y ih1 ih2 => by
         rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [seq_pure]; rw [map_pure]; rw [map_pure]
     comp_traverse := fun f g x =>
-      recOnPure x (fun x => by simp only [traverse_pure,
+      recOnPure x (fun x => by simp only [traverse_pure, functor_norm, Function.comp_def])
+        fun x y ih1 ih2 => by
+          rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [traverse_mul]; rw [Functor.Comp.map_mk]
+          simp only [Function.comp_def, functor_norm, traverse_mul]
+    naturality := fun η α β f x =>
+      recOnPure x (fun x => by simp only [traverse_pure, functor_norm, Function.comp])
+          (fun x y ih1 ih2 => by simp only [traverse_mul, functor_norm, ih1, ih2])
+    traverse_eq_map_id := fun f x =>
+      FreeSemigroup.recOnMul x (fun _ => rfl) fun x y ih1 ih2 => by
+        rw [traverse_mul]; rw [ih1]; rw [ih2]; rw [map_mul']; rw [map_pure]; rw [seq_pure]; rw [map_pure] }
 
 Depends on / 依赖: FreeSemigroup, FreeSemigroup.recOnMul, Function, Function.comp_def, Functor, Functor.Comp.map_mk, comp_def, comp_traverse, functor_norm, id_traverse, instLawfulMonad, map_mk, map_pure, naturality, recOnMul, recOnPure, seq_pure, traverse_mul, traverse_pure
 -/

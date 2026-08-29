@@ -105,7 +105,10 @@ lemma isSifted_of_equiv
     have sq : (e.inverse ⋙ diag D ⋙ this.functor ≅ diag C) :=
         NatIso.ofComponents (fun c => by dsimp [this]
                                         exact Iso.prod (e.counitIso.app c) (e.counitIso.app c))
-    apply_ru
+    apply_rules [final_iff_comp_equivalence _ this.functor |>.mpr,
+.mpr, final_of_natIso sq.symm] final_iff_final_comp e.inverse _
+  letI : _root_.Nonempty D := ⟨e.inverse.obj (_root_.Nonempty.some IsSifted.nonempty)⟩
+  ⟨⟩
 
 中文:
 引理 isSifted_of_equiv
@@ -116,7 +119,10 @@ lemma isSifted_of_equiv
     have sq : (e.inverse ⋙ diag D ⋙ this.functor ≅ diag C) :=
         NatIso.ofComponents (fun c => by dsimp [this]
                                         exact Iso.prod (e.counitIso.app c) (e.counitIso.app c))
-    apply_ru
+    apply_rules [final_iff_comp_equivalence _ this.functor |>.mpr,
+.mpr, final_of_natIso sq.symm] final_iff_final_comp e.inverse _
+  letI : _root_.Nonempty D := ⟨e.inverse.obj (_root_.Nonempty.some IsSifted.nonempty)⟩
+  ⟨⟩
 
 Depends on / 依赖: Equivalence, Equivalence.prod, IsSifted, IsSifted.nonempty, Iso.prod, NatIso, NatIso.ofComponents, Nonempty, _root_, _root_.Nonempty, _root_.Nonempty.some, apply_rules, counitIso, e.counitIso.app, e.inverse, e.inverse.obj, final_iff_comp_equivalence, final_iff_final_comp, final_of_natIso, functor
 -/
@@ -166,7 +172,9 @@ instance [IsSifted
         use [X.right, c₂]
         constructor
         · constructor
-          · exact Zag.of_hom
+          · exact Zag.of_hom X.hom.fst
+          · simpa using Zag.of_inv X.hom.snd
+        · rfl)
 
 中文:
 实例 [是Sifted
@@ -179,7 +187,9 @@ instance [IsSifted
         use [X.right, c₂]
         constructor
         · constructor
-          · exact Zag.of_hom
+          · exact Zag.of_hom X.hom.fst
+          · simpa using Zag.of_inv X.hom.snd
+        · rfl)
 
 Depends on / 依赖: Nonempty, Nonempty.some, S.out, StructuredArrow, X.hom.fst, X.hom.snd, X.right, Zag.of_hom, Zag.of_inv, infer_instance, isConnected_of_zigzag, is_nonempty, of_hom, of_inv
 -/
@@ -212,7 +222,12 @@ have : _root_.Nonempty StructuredArrow (c₁, c₂) (diag C) :=
     apply isConnected_of_zigzag
     rintro ⟨_, c, f⟩ ⟨_, c', g⟩
     dsimp only [const_obj_obj, diag_obj] at f g
-    use [.mk ((cop
+    use [.mk ((coprod.inl : c₁ ⟶ c₁ ⨿ c₂), (coprod.inr : c₂ ⟶ c₁ ⨿ c₂)), .mk (g.fst, g.snd)]
+    simp only [colimit.cocone_x, diag_obj, Prod.mk.eta, List.isChain_cons_cons,
+      List.isChain_singleton, and_true, ne_eq, reduceCtorEq, not_false_eq_true,
+      List.getLast_cons, List.cons_ne_self, List.getLast_singleton]
+exact ⟨⟨Zag.of_inv StructuredArrow.homMk coprod.desc f.fst f.snd,
+Zag.of_hom StructuredArrow.homMk coprod.desc g.fst g.snd⟩, rfl⟩
 
 中文:
 实例 [HasBinaryCoproducts
@@ -225,7 +240,12 @@ have : _root_.Nonempty StructuredArrow (c₁, c₂) (diag C) :=
     apply isConnected_of_zigzag
     rintro ⟨_, c, f⟩ ⟨_, c', g⟩
     dsimp only [const_obj_obj, diag_obj] at f g
-    use [.mk ((cop
+    use [.mk ((coprod.inl : c₁ ⟶ c₁ ⨿ c₂), (coprod.inr : c₂ ⟶ c₁ ⨿ c₂)), .mk (g.fst, g.snd)]
+    simp only [colimit.cocone_x, diag_obj, Prod.mk.eta, List.isChain_cons_cons,
+      List.isChain_singleton, and_true, ne_eq, reduceCtorEq, not_false_eq_true,
+      List.getLast_cons, List.cons_ne_self, List.getLast_singleton]
+exact ⟨⟨Zag.of_inv StructuredArrow.homMk coprod.desc f.fst f.snd,
+Zag.of_hom StructuredArrow.homMk coprod.desc g.fst g.snd⟩, rfl⟩
 
 Depends on / 依赖: List.isChain_cons_cons, List.isChain_singleton, Nonempty, Prod.mk.eta, StructuredArrow, _root_, _root_.Nonempty, and_true, cocone_x, colimit, colimit.cocone_x, const_obj_obj, coprod, coprod.inl, coprod.inr, diag_obj, g.fst, g.snd, isChain_cons_cons, isChain_singleton
 -/
@@ -463,7 +483,8 @@ instance colim_preservesTerminal_of_isSifted
   apply (_ : ⊤_ (Type u) ≅ PUnit.{u + 1}).trans
   · apply_rules [(Types.colimitConstPUnitIsoPUnit C).symm.trans, HasColimit.isoOfNatIso,
       IsTerminal.uniqueUpToIso _ terminalIsTerminal, evaluationJointlyReflectsLimits]
-exact fun _ => isLimitChangeEmptyC
+exact fun _ => isLimitChangeEmptyCone _ Types.isTerminalPUnit _ Iso.refl _
+.toFun terminalIsTerminal · exact Types.isTerminalEquivIsoPUnit (⊤_ (Type u))
 
 中文:
 实例 colim_preservesTerminal_of_isSifted
@@ -474,7 +495,8 @@ exact fun _ => isLimitChangeEmptyC
   apply (_ : ⊤_ (Type u) ≅ PUnit.{u + 1}).trans
   · apply_rules [(Types.colimitConstPUnitIsoPUnit C).symm.trans, HasColimit.isoOfNatIso,
       IsTerminal.uniqueUpToIso _ terminalIsTerminal, evaluationJointlyReflectsLimits]
-exact fun _ => isLimitChangeEmptyC
+exact fun _ => isLimitChangeEmptyCone _ Types.isTerminalPUnit _ Iso.refl _
+.toFun terminalIsTerminal · exact Types.isTerminalEquivIsoPUnit (⊤_ (Type u))
 
 Depends on / 依赖: HasColimit, HasColimit.isoOfNatIso, IsTerminal, IsTerminal.uniqueUpToIso, Iso.refl, Types.colimitConstPUnitIsoPUnit, Types.isTerminalEquivIsoPUnit, Types.isTerminalPUnit, apply_rules, colimitConstPUnitIsoPUnit, evaluationJointlyReflectsLimits, isLimitChangeEmptyCone, isTerminalEquivIsoPUnit, isTerminalPUnit, isoOfNatIso, preservesTerminal_of_iso, symm.trans, terminalIsTerminal, uniqueUpToIso
 -/
@@ -546,7 +568,10 @@ calc colimit diag C ⋙ coyoneda.obj (op (c₁, c₂))
 _ ≅ colimit _ ⋙ (coyoneda.obj _) ⊠ (coyoneda.obj _) :=
 HasColimit.isoOfNatIso isoWhiskerLeft _ .refl _
 _ ≅ colimit (_ otimes _) := HasColimit.isoOfNatIso .refl _
-    _ ≅ (colimit _)
+    _ ≅ (colimit _) otimes (colimit _) := CartesianMonoidalCategory.prodComparisonIso colim _ _
+    _ ≅ PUnit otimes PUnit :=
+      (Coyoneda.colimitCoyonedaIso _) otimesᵢ (Coyoneda.colimitCoyonedaIso _)
+    _ ≅ PUnit := fun_ _
 
 中文:
 定理 isSiftedOrEmpty_of_colim_preservesBinaryProducts
@@ -557,7 +582,10 @@ calc colimit diag C ⋙ coyoneda.obj (op (c₁, c₂))
 _ ≅ colimit _ ⋙ (coyoneda.obj _) ⊠ (coyoneda.obj _) :=
 HasColimit.isoOfNatIso isoWhiskerLeft _ .refl _
 _ ≅ colimit (_ otimes _) := HasColimit.isoOfNatIso .refl _
-    _ ≅ (colimit _)
+    _ ≅ (colimit _) otimes (colimit _) := CartesianMonoidalCategory.prodComparisonIso colim _ _
+    _ ≅ PUnit otimes PUnit :=
+      (Coyoneda.colimitCoyonedaIso _) otimesᵢ (Coyoneda.colimitCoyonedaIso _)
+    _ ≅ PUnit := fun_ _
 
 Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.prodComparisonIso, Coyoneda, Coyoneda.colimitCoyonedaIso, HasColimit, HasColimit.isoOfNatIso, colimit, colimitCoyonedaIso, coyoneda, coyoneda.obj, final_of_colimit_comp_coyoneda_iso_pUnit, fun_, isoOfNatIso, isoWhiskerLeft, otimes, prodComparisonIso
 -/
@@ -604,7 +632,12 @@ lemma nonempty_of_colim_preservesLimitsOfShapeFinZero
   constructor
   haveI : PreservesLimitsOfShape (Discrete PEmpty) (colim : (C ⥤ _) ⥤ Type u) :=
     preservesLimitsOfShape_of_equiv (Discrete.equivalence finZeroEquiv') _
-.trans 
+.trans apply HasColimit.isoOfNatIso (_ : Types.constPUnitFunctor C ≅ (⊤_ (C ⥤ Type u)))
+.trans · apply PreservesTerminal.iso colim
+    exact Types.terminalIso
+  · apply_rules [IsTerminal.uniqueUpToIso _ terminalIsTerminal, evaluationJointlyReflectsLimits]
+    intro _
+exact isLimitChangeEmptyCone _ Types.isTerminalPUnit _ Iso.refl _
 
 中文:
 引理 nonempty_of_colim_preservesLimitsOfShapeFinZero
@@ -614,7 +647,12 @@ lemma nonempty_of_colim_preservesLimitsOfShapeFinZero
   constructor
   haveI : PreservesLimitsOfShape (Discrete PEmpty) (colim : (C ⥤ _) ⥤ Type u) :=
     preservesLimitsOfShape_of_equiv (Discrete.equivalence finZeroEquiv') _
-.trans 
+.trans apply HasColimit.isoOfNatIso (_ : Types.constPUnitFunctor C ≅ (⊤_ (C ⥤ Type u)))
+.trans · apply PreservesTerminal.iso colim
+    exact Types.terminalIso
+  · apply_rules [IsTerminal.uniqueUpToIso _ terminalIsTerminal, evaluationJointlyReflectsLimits]
+    intro _
+exact isLimitChangeEmptyCone _ Types.isTerminalPUnit _ Iso.refl _
 
 Depends on / 依赖: Discrete, Discrete.equivalence, HasColimit, HasColimit.isoOfNatIso, IsConnected, IsTerminal, IsTerminal.uniqueUpToIso, PEmpty, PreservesLimitsOfShape, PreservesTerminal, PreservesTerminal.iso, Types.constPUnitFunctor, Types.isConnected_iff_colimit_constPUnitFunctor_iso_pUnit, Types.terminalIso, apply_rules, connected, constPUnitFunctor, equivalence, finZeroEquiv, infer_instance
 -/

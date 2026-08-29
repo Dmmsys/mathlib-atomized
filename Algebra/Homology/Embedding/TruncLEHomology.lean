@@ -350,7 +350,7 @@ lemma shortComplexTruncLE_shortExact_δ_eq_zero
     rw [← cancel_mono (homologyMap (K.ιTruncLE e) (e.f j))]; rw [zero_comp]
     exact (K.shortComplexTruncLE_shortExact e).δ_comp i' _ hij'
   · apply ((K.truncLE e).exactAt_of_isSupported e j'
-      (by simpa using hj)).isZero_homolog
+      (by simpa using hj)).isZero_homology.eq_of_tgt
 
 中文:
 引理 shortComplexTruncLE_shortExact_δ_eq_zero
@@ -361,7 +361,7 @@ lemma shortComplexTruncLE_shortExact_δ_eq_zero
     rw [← cancel_mono (homologyMap (K.ιTruncLE e) (e.f j))]; rw [zero_comp]
     exact (K.shortComplexTruncLE_shortExact e).δ_comp i' _ hij'
   · apply ((K.truncLE e).exactAt_of_isSupported e j'
-      (by simpa using hj)).isZero_homolog
+      (by simpa using hj)).isZero_homology.eq_of_tgt
 
 Depends on / 依赖: K.shortComplexTruncLE_shortExact, K.truncLE, cancel_mono, eq_of_tgt, exactAt_of_isSupported, homologyMap, isZero_homology, isZero_homology.eq_of_tgt, shortComplexTruncLE_shortExact, truncLE, zero_comp
 -/
@@ -465,7 +465,11 @@ lemma shortComplexTruncLE_X₃_isSupportedOutside
     · obtain ⟨j', hj'⟩ := hi
       apply ((K.shortComplexTruncLE_shortExact e).homology_exact₃ (e.f i) j' hj').isZero_X₂
       · rw [← cancel_epi (homologyMap (K.ιTruncLE e) (e.f i)), comp_zero]
-        dsimp [sho
+        dsimp [shortComplexTruncLE]
+        rw [← homologyMap_comp]; rw [cokernel.condition]; rw [homologyMap_zero]
+      · simp
+    · have : IsIso (homologyMap (K.shortComplexTruncLE e).f (e.f i)) := by dsimp; infer_instance
+      rw [IsZero.iff_id_eq_zero]; rw [← cancel_epi (homologyMap (K.shortComplexTruncLE e).g (e.f i))]; rw [comp_id]; rw [comp_zero]; rw [← cancel_epi (homologyMap (K.shortComplexTruncLE e).f (e.f i))]; rw [comp_zero]; rw [← homologyMap_comp]; rw [ShortComplex.zero]; rw [homologyMap_zero]
 
 中文:
 引理 shortComplexTruncLE_X₃_isSupportedOutside
@@ -475,7 +479,11 @@ lemma shortComplexTruncLE_X₃_isSupportedOutside
     · obtain ⟨j', hj'⟩ := hi
       apply ((K.shortComplexTruncLE_shortExact e).homology_exact₃ (e.f i) j' hj').isZero_X₂
       · rw [← cancel_epi (homologyMap (K.ιTruncLE e) (e.f i)), comp_zero]
-        dsimp [sho
+        dsimp [shortComplexTruncLE]
+        rw [← homologyMap_comp]; rw [cokernel.condition]; rw [homologyMap_zero]
+      · simp
+    · have : IsIso (homologyMap (K.shortComplexTruncLE e).f (e.f i)) := by dsimp; infer_instance
+      rw [IsZero.iff_id_eq_zero]; rw [← cancel_epi (homologyMap (K.shortComplexTruncLE e).g (e.f i))]; rw [comp_id]; rw [comp_zero]; rw [← cancel_epi (homologyMap (K.shortComplexTruncLE e).f (e.f i))]; rw [comp_zero]; rw [← homologyMap_comp]; rw [ShortComplex.zero]; rw [homologyMap_zero]
 
 Depends on / 依赖: IsZero, IsZero.iff_id_eq_zero, K.shortComplexTruncLE, K.shortComplexTruncLE_shortExact, cancel_e, cancel_epi, cokernel, cokernel.condition, comp_zero, condition, exactAt_iff_isZero_homology, homologyMap, homologyMap_comp, homologyMap_zero, iff_id_eq_zero, infer_instance, shortComplexTruncLE, shortComplexTruncLE_shortExact
 -/

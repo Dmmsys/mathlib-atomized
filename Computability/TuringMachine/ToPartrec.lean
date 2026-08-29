@@ -323,7 +323,13 @@ instance Λ'.instDecidableEq
   case move.move p k₁ k₂ q _ p' k₁' k₂' q' =>
     exact decidable_of_iff' (p = p' ∧ k₁ = k₁' ∧ k₂ = k₂' ∧ q = q') (by simp)
   case clear.clear p k q _ p' k' q' => exact decidable_of_iff' (p = p' ∧ k = k' ∧ q = q') (by simp)
-  case copy.copy q _ 
+  case copy.copy q _ q' => exact decidable_of_iff' (q = q') (by simp)
+  case push.push k s q _ k' s' q' => exact decidable_of_iff' (k = k' ∧ s = s' ∧ q = q') (by simp)
+  case read.read f _ f' => exact decidable_of_iff' (forall a, f a = f' a) (by simp [funext_iff])
+  case succ.succ q _ q' => exact decidable_of_iff' (q = q') (by simp)
+  case pred.pred q₁ q₂ _ _ q₁' q₂' => exact decidable_of_iff' (q₁ = q₁' ∧ q₂ = q₂') (by simp)
+  case ret.ret k k' => exact decidable_of_iff' (k = k') (by simp)
+  all_goals exact .isFalse (by rintro ⟨⟨⟩⟩)
 
 中文:
 实例 Λ'.instDecidableEq
@@ -333,7 +339,13 @@ instance Λ'.instDecidableEq
   case move.move p k₁ k₂ q _ p' k₁' k₂' q' =>
     exact decidable_of_iff' (p = p' ∧ k₁ = k₁' ∧ k₂ = k₂' ∧ q = q') (by simp)
   case clear.clear p k q _ p' k' q' => exact decidable_of_iff' (p = p' ∧ k = k' ∧ q = q') (by simp)
-  case copy.copy q _ 
+  case copy.copy q _ q' => exact decidable_of_iff' (q = q') (by simp)
+  case push.push k s q _ k' s' q' => exact decidable_of_iff' (k = k' ∧ s = s' ∧ q = q') (by simp)
+  case read.read f _ f' => exact decidable_of_iff' (forall a, f a = f' a) (by simp [funext_iff])
+  case succ.succ q _ q' => exact decidable_of_iff' (q = q') (by simp)
+  case pred.pred q₁ q₂ _ _ q₁' q₂' => exact decidable_of_iff' (q₁ = q₁' ∧ q₂ = q₂') (by simp)
+  case ret.ret k k' => exact decidable_of_iff' (k = k') (by simp)
+  all_goals exact .isFalse (by rintro ⟨⟨⟩⟩)
 -/
 instance Λ'.instDecidableEq : DecidableEq Λ' := fun a b => by
   induction a generalizing b <;> cases b
@@ -1338,7 +1350,9 @@ theorem splitAtPred_eq
       rw [h₁ a (List.Mem.head _)]; rw [cond]; rw [IH L none [] _ ⟨rfl, rfl⟩]
       exact fun x h => h₁ x (List.Mem.tail _ h)
     · rcases l₁ with - | ⟨a', l₁⟩ <;> rcases h₂ with ⟨h₂, ⟨⟩⟩
-      ·
+      · rw [h₂, cond]
+      rw [h₁ a (List.Mem.head _)]; rw [cond]; rw [IH l₁ (some o) l₂ _ ⟨h₂]; rw [_⟩] <;> try rfl
+      exact fun x h => h₁ x (List.Mem.tail _ h)
 
 中文:
 定理 splitAtPred_eq
@@ -1349,7 +1363,9 @@ theorem splitAtPred_eq
       rw [h₁ a (List.Mem.head _)]; rw [cond]; rw [IH L none [] _ ⟨rfl, rfl⟩]
       exact fun x h => h₁ x (List.Mem.tail _ h)
     · rcases l₁ with - | ⟨a', l₁⟩ <;> rcases h₂ with ⟨h₂, ⟨⟩⟩
-      ·
+      · rw [h₂, cond]
+      rw [h₁ a (List.Mem.head _)]; rw [cond]; rw [IH l₁ (some o) l₂ _ ⟨h₂]; rw [_⟩] <;> try rfl
+      exact fun x h => h₁ x (List.Mem.tail _ h)
 
 Depends on / 依赖: splitAtPred_eq
 -/
@@ -1407,7 +1423,21 @@ theorem move_ok
     refine TransGen.head' rfl ?_
     simp only [tr_move, pop', TM2.stepAux]
     grind [splitAtPred.eq_def]
-  | cons a 
+  | cons a L₁ IH =>
+    refine TransGen.head rfl ?_
+    rw [tr]; simp only [pop', Option.elim, TM2.stepAux, push']
+    rcases e₁ : S k₁ with - | ⟨a', Sk⟩ <;> rw [e₁, splitAtPred] at e
+    · cases e
+    cases e₂ : p a' <;> simp only [e₂, cond] at e
+    swap
+    · cases e
+    rcases e₃ : splitAtPred p Sk with ⟨_, _, _⟩
+    rw [e₃] at e
+    cases e
+    simp only [List.head?_cons, e₂, List.tail_cons, cond_false]
+    convert! @IH _ (update (update S k₁ Sk) k₂ (a :: S k₂)) _ using 2 <;>
+      simp [Function.update_of_ne, h₁, h₁.symm, e₃, List.reverseAux]
+    simp [Function.update_comm h₁.symm]
 
 中文:
 定理 move_ok
@@ -1421,7 +1451,21 @@ theorem move_ok
     refine TransGen.head' rfl ?_
     simp only [tr_move, pop', TM2.stepAux]
     grind [splitAtPred.eq_def]
-  | cons a 
+  | cons a L₁ IH =>
+    refine TransGen.head rfl ?_
+    rw [tr]; simp only [pop', Option.elim, TM2.stepAux, push']
+    rcases e₁ : S k₁ with - | ⟨a', Sk⟩ <;> rw [e₁, splitAtPred] at e
+    · cases e
+    cases e₂ : p a' <;> simp only [e₂, cond] at e
+    swap
+    · cases e
+    rcases e₃ : splitAtPred p Sk with ⟨_, _, _⟩
+    rw [e₃] at e
+    cases e
+    simp only [List.head?_cons, e₂, List.tail_cons, cond_false]
+    convert! @IH _ (update (update S k₁ Sk) k₂ (a :: S k₂)) _ using 2 <;>
+      simp [Function.update_of_ne, h₁, h₁.symm, e₃, List.reverseAux]
+    simp [Function.update_comm h₁.symm]
 
 Depends on / 依赖: Function, Function.update_eq_self, Function.update_of_ne, List.reverseAux_nil, Option.elim, TM2.stepAux, TransGen, TransGen.head, eq_def, generalizing, reverseAux, reverseAux_nil, splitAtPred, splitAtPred.eq_def, stepAux, tr_move, update_eq_self, update_of_ne
 -/
@@ -1485,7 +1529,18 @@ theorem move₂_ok
   cases o <;> simp only <;> rw [tr]
     <;> simp only [id, TM2.stepAux, Option.isSome, cond_true, cond_false]
   · convert! move_ok h₁.2.1.symm (splitAtPred_false _) using 2
-    simp only [Fu
+    simp only [Function.update_comm h₁.1, Function.update_idem]
+    rw [show update S rev [] = S by rw [← h₂, Function.update_eq_self]]
+    simp only [Function.update_of_ne h₁.2.2.symm, Function.update_of_ne h₁.2.1,
+      Function.update_of_ne h₁.1.symm, List.reverseAux_eq, h₂, Function.update_self,
+      List.append_nil, List.reverse_reverse]
+  · simp only [Option.getD_some]
+    convert! move_ok h₁.2.1.symm (splitAtPred_false _) using 2
+    simp only [h₂, Function.update_comm h₁.1, List.reverseAux_eq, Function.update_self,
+      List.append_nil, Function.update_idem]
+    rw [show update S rev [] = S by rw [← h₂, Function.update_eq_self]]
+    simp only [Function.update_of_ne h₁.1.symm, Function.update_of_ne h₁.2.2.symm,
+      Function.update_of_ne h₁.2.1, Function.update_self, List.reverse_reverse]
 
 中文:
 定理 move₂_ok
@@ -1496,7 +1551,18 @@ theorem move₂_ok
   cases o <;> simp only <;> rw [tr]
     <;> simp only [id, TM2.stepAux, Option.isSome, cond_true, cond_false]
   · convert! move_ok h₁.2.1.symm (splitAtPred_false _) using 2
-    simp only [Fu
+    simp only [Function.update_comm h₁.1, Function.update_idem]
+    rw [show update S rev [] = S by rw [← h₂, Function.update_eq_self]]
+    simp only [Function.update_of_ne h₁.2.2.symm, Function.update_of_ne h₁.2.1,
+      Function.update_of_ne h₁.1.symm, List.reverseAux_eq, h₂, Function.update_self,
+      List.append_nil, List.reverse_reverse]
+  · simp only [Option.getD_some]
+    convert! move_ok h₁.2.1.symm (splitAtPred_false _) using 2
+    simp only [h₂, Function.update_comm h₁.1, List.reverseAux_eq, Function.update_self,
+      List.append_nil, Function.update_idem]
+    rw [show update S rev [] = S by rw [← h₂, Function.update_eq_self]]
+    simp only [Function.update_of_ne h₁.1.symm, Function.update_of_ne h₁.2.2.symm,
+      Function.update_of_ne h₁.2.1, Function.update_self, List.reverse_reverse]
 
 Depends on / 依赖: Function, Function.update_comm, Function.update_eq_self, Function.update_idem, Function.update_of_ne, Option.elim, Option.isSome, Option.mem_def, TM2.step, TM2.stepAux, TransGen, TransGen.head, cond_false, cond_true, convert, isSome, mem_def, move_ok, splitAtPred_false, stepAux
 -/
@@ -1536,7 +1602,24 @@ theorem clear_ok
     revert e; rcases S k with - | ⟨a, Sk⟩ <;> intro e
     · cases e
       rfl
-    simp only [splitAtPred, List.head?, List.tail_cons] 
+    simp only [splitAtPred, List.head?, List.tail_cons] at e ⊢
+    revert e; cases p a <;> intro e <;>
+      simp only [cond_false, cond_true, Prod.mk.injEq, true_and, false_and, reduceCtorEq] at e ⊢
+    rcases e with ⟨e₁, e₂⟩
+    rw [e₁]; rw [e₂]
+  | cons a L₁ IH =>
+    refine TransGen.head rfl ?_
+    rw [tr]; simp only [pop', TM2.step, Option.mem_def, TM2.stepAux, Option.elim]
+    rcases e₁ : S k with - | ⟨a', Sk⟩ <;> rw [e₁, splitAtPred] at e
+    · cases e
+    cases e₂ : p a' <;> simp only [e₂, cond] at e
+    swap
+    · cases e
+    rcases e₃ : splitAtPred p Sk with ⟨_, _, _⟩
+    rw [e₃] at e
+    cases e
+    simp only [List.head?_cons, e₂, List.tail_cons, cond_false]
+    convert! @IH _ (update S k Sk) _ using 2 <;> simp [e₃]
 
 中文:
 定理 clear_ok
@@ -1549,7 +1632,24 @@ theorem clear_ok
     revert e; rcases S k with - | ⟨a, Sk⟩ <;> intro e
     · cases e
       rfl
-    simp only [splitAtPred, List.head?, List.tail_cons] 
+    simp only [splitAtPred, List.head?, List.tail_cons] at e ⊢
+    revert e; cases p a <;> intro e <;>
+      simp only [cond_false, cond_true, Prod.mk.injEq, true_and, false_and, reduceCtorEq] at e ⊢
+    rcases e with ⟨e₁, e₂⟩
+    rw [e₁]; rw [e₂]
+  | cons a L₁ IH =>
+    refine TransGen.head rfl ?_
+    rw [tr]; simp only [pop', TM2.step, Option.mem_def, TM2.stepAux, Option.elim]
+    rcases e₁ : S k with - | ⟨a', Sk⟩ <;> rw [e₁, splitAtPred] at e
+    · cases e
+    cases e₂ : p a' <;> simp only [e₂, cond] at e
+    swap
+    · cases e
+    rcases e₃ : splitAtPred p Sk with ⟨_, _, _⟩
+    rw [e₃] at e
+    cases e
+    simp only [List.head?_cons, e₂, List.tail_cons, cond_false]
+    convert! @IH _ (update S k Sk) _ using 2 <;> simp [e₃]
 
 Depends on / 依赖: List.head, List.tail_cons, Option.elim, Option.mem_def, Prod.mk.injEq, TM2.step, TM2.stepAux, TransGen, TransGen.head, cond_false, cond_true, false_and, generalizing, mem_def, reduceCtorEq, revert, splitAtPred, stepAux, tail_cons, true_and
 -/
@@ -1597,7 +1697,9 @@ theorem copy_ok
     refine TransGen.head rfl ?_
     rw [tr]
     simp only [TM2.step, Option.mem_def, TM2.stepAux, elim_rev, List.head?_cons, Option.isSome_some,
-      List.tail_cons, elim_update_rev, elim_m
+      List.tail_cons, elim_update_rev, elim_main, elim_update_main,
+      elim_stack, elim_update_stack, cond_true, List.reverseAux_cons, pop', push']
+    exact IH _ _ _
 
 中文:
 定理 copy_ok
@@ -1611,7 +1713,9 @@ theorem copy_ok
     refine TransGen.head rfl ?_
     rw [tr]
     simp only [TM2.step, Option.mem_def, TM2.stepAux, elim_rev, List.head?_cons, Option.isSome_some,
-      List.tail_cons, elim_update_rev, elim_m
+      List.tail_cons, elim_update_rev, elim_main, elim_update_main,
+      elim_stack, elim_update_stack, cond_true, List.reverseAux_cons, pop', push']
+    exact IH _ _ _
 
 Depends on / 依赖: List.head, List.reverseAux_cons, List.tail_cons, Option.isSome_some, Option.mem_def, TM2.step, TM2.stepAux, TransGen, TransGen.head, TransGen.single, _cons, cond_true, elim_main, elim_rev, elim_stack, elim_update_main, elim_update_rev, elim_update_stack, generalizing, isSome_some
 -/
@@ -1726,7 +1830,12 @@ theorem head_main_ok
       (TransGen.head rfl (TransGen.head rfl ?_))
   · cases L <;> simp [o]
   rw [tr]
-  simp only [TM2.ste
+  simp only [TM2.step, Option.mem_def, TM2.stepAux, elim_update_main, elim_rev, elim_update_rev,
+    Function.update_self, trList]
+  rw [if_neg (show o != some Γ'.consₗ by cases L <;> simp [o])]
+  refine (clear_ok (splitAtPred_eq _ _ _ none [] ?_ ⟨rfl, rfl⟩)).trans ?_
+  · exact fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)
+  convert! unrev_ok using 2; simp [List.reverseAux_eq]
 
 中文:
 定理 head_main_ok
@@ -1739,7 +1848,12 @@ theorem head_main_ok
       (TransGen.head rfl (TransGen.head rfl ?_))
   · cases L <;> simp [o]
   rw [tr]
-  simp only [TM2.ste
+  simp only [TM2.step, Option.mem_def, TM2.stepAux, elim_update_main, elim_rev, elim_update_rev,
+    Function.update_self, trList]
+  rw [if_neg (show o != some Γ'.consₗ by cases L <;> simp [o])]
+  refine (clear_ok (splitAtPred_eq _ _ _ none [] ?_ ⟨rfl, rfl⟩)).trans ?_
+  · exact fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)
+  convert! unrev_ok using 2; simp [List.reverseAux_eq]
 
 Depends on / 依赖: Function, Function.update_self, L.headI, L.tail, List.casesOn, Option.mem_def, TM2.step, TM2.stepAux, TransGen, TransGen.head, casesOn, clear_ok, elim_rev, elim_update_main, elim_update_rev, if_neg, mem_def, move_ok, splitAtPred_eq, stepAux
 -/
@@ -1774,7 +1888,28 @@ theorem head_stack_ok
           (splitAtPred_eq _ _ [] (some Γ'.consₗ) L₃ (by rintro _ ⟨⟩) ⟨rfl, rfl⟩))
         (TransGen.head rfl (TransGen.head rfl ?_))
     rw [tr]
-    simp only [TM2.step, Option.mem_def, TM2.stepAux, ite_true
+    simp only [TM2.step, Option.mem_def, TM2.stepAux, ite_true, id_eq, trList, List.nil_append,
+      elim_update_stack, elim_rev, List.reverseAux_nil, elim_update_rev, Function.update_self,
+      List.headI_nil, trNat_default]
+    convert! unrev_ok using 2
+    simp
+  · refine
+      TransGen.trans
+        (move_ok (by decide)
+          (splitAtPred_eq _ _ (trNat a) (some Γ'.cons) (trList L₂ ++ Γ'.consₗ :: L₃)
+            (trNat_natEnd _) ⟨rfl, by simp⟩))
+        (TransGen.head rfl (TransGen.head rfl ?_))
+    simp only [TM2.step, Option.mem_def, trList, List.append_assoc,
+      List.cons_append, elim_update_stack, elim_rev, elim_update_rev, Function.update_self,
+      List.headI_cons]
+    refine
+      TransGen.trans
+        (clear_ok
+          (splitAtPred_eq _ _ (trList L₂) (some Γ'.consₗ) L₃
+            (fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)) ⟨rfl, by simp⟩))
+        ?_
+    convert! unrev_ok using 2
+    simp [List.reverseAux_eq]
 
 中文:
 定理 head_stack_ok
@@ -1787,7 +1922,28 @@ theorem head_stack_ok
           (splitAtPred_eq _ _ [] (some Γ'.consₗ) L₃ (by rintro _ ⟨⟩) ⟨rfl, rfl⟩))
         (TransGen.head rfl (TransGen.head rfl ?_))
     rw [tr]
-    simp only [TM2.step, Option.mem_def, TM2.stepAux, ite_true
+    simp only [TM2.step, Option.mem_def, TM2.stepAux, ite_true, id_eq, trList, List.nil_append,
+      elim_update_stack, elim_rev, List.reverseAux_nil, elim_update_rev, Function.update_self,
+      List.headI_nil, trNat_default]
+    convert! unrev_ok using 2
+    simp
+  · refine
+      TransGen.trans
+        (move_ok (by decide)
+          (splitAtPred_eq _ _ (trNat a) (some Γ'.cons) (trList L₂ ++ Γ'.consₗ :: L₃)
+            (trNat_natEnd _) ⟨rfl, by simp⟩))
+        (TransGen.head rfl (TransGen.head rfl ?_))
+    simp only [TM2.step, Option.mem_def, trList, List.append_assoc,
+      List.cons_append, elim_update_stack, elim_rev, elim_update_rev, Function.update_self,
+      List.headI_cons]
+    refine
+      TransGen.trans
+        (clear_ok
+          (splitAtPred_eq _ _ (trList L₂) (some Γ'.consₗ) L₃
+            (fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)) ⟨rfl, by simp⟩))
+        ?_
+    convert! unrev_ok using 2
+    simp [List.reverseAux_eq]
 
 Depends on / 依赖: Function, Function.update_self, List.headI_nil, List.nil_append, List.reverseAux_nil, Option.mem_def, TM2.step, TM2.stepAux, TransGen, TransGen.head, TransGen.trans, convert, elim_rev, elim_update_rev, elim_update_stack, headI_nil, id_eq, ite_true, mem_def, move_ok
 -/
@@ -1840,7 +1996,31 @@ theorem succ_ok
     convert! unrev_ok using 1
     simp only [elim_update_rev, elim_rev, elim_main, List.reverseAux_nil, elim_update_main]
     rfl
-  simp only [
+  simp only [trNum, Num.succ, Num.succ']
+  suffices forall l₁, exists l₁' l₂' s',
+      List.reverseAux l₁ (trPosNum a.succ) = List.reverseAux l₁' l₂' ∧
+        Reaches₁ (TM2.step tr) ⟨some q.succ, s, K'.elim (trPosNum a ++ [Γ'.cons]) l₁ c d⟩
+          ⟨some (unrev q), s', K'.elim (l₂' ++ [Γ'.cons]) l₁' c d⟩ by
+    obtain ⟨l₁', l₂', s', e, h⟩ := this []
+    simp only [List.reverseAux] at e
+    refine h.trans ?_
+    convert! unrev_ok using 2
+    simp [e, List.reverseAux_eq]
+  induction a generalizing s with intro l₁
+  | one =>
+    refine ⟨Γ'.bit0 :: l₁, [Γ'.bit1], some Γ'.cons, rfl, TransGen.head rfl (TransGen.single ?_)⟩
+    simp [trPosNum]
+  | bit1 m IH =>
+    obtain ⟨l₁', l₂', s', e, h⟩ := IH (Γ'.bit0 :: l₁)
+    refine ⟨l₁', l₂', s', e, TransGen.head ?_ h⟩
+    simp [trPosNum]
+    rfl
+  | bit0 m _ =>
+    refine ⟨l₁, _, some Γ'.bit0, rfl, TransGen.single ?_⟩
+    simp only [TM2.step]; rw [tr]
+    simp only [TM2.stepAux, pop', elim_main, elim_update_main,
+      elim_rev, elim_update_rev, Function.update_self, Option.mem_def, Option.some.injEq]
+    rfl
 
 中文:
 定理 succ_ok
@@ -1853,7 +2033,31 @@ theorem succ_ok
     convert! unrev_ok using 1
     simp only [elim_update_rev, elim_rev, elim_main, List.reverseAux_nil, elim_update_main]
     rfl
-  simp only [
+  simp only [trNum, Num.succ, Num.succ']
+  suffices forall l₁, exists l₁' l₂' s',
+      List.reverseAux l₁ (trPosNum a.succ) = List.reverseAux l₁' l₂' ∧
+        Reaches₁ (TM2.step tr) ⟨some q.succ, s, K'.elim (trPosNum a ++ [Γ'.cons]) l₁ c d⟩
+          ⟨some (unrev q), s', K'.elim (l₂' ++ [Γ'.cons]) l₁' c d⟩ by
+    obtain ⟨l₁', l₂', s', e, h⟩ := this []
+    simp only [List.reverseAux] at e
+    refine h.trans ?_
+    convert! unrev_ok using 2
+    simp [e, List.reverseAux_eq]
+  induction a generalizing s with intro l₁
+  | one =>
+    refine ⟨Γ'.bit0 :: l₁, [Γ'.bit1], some Γ'.cons, rfl, TransGen.head rfl (TransGen.single ?_)⟩
+    simp [trPosNum]
+  | bit1 m IH =>
+    obtain ⟨l₁', l₂', s', e, h⟩ := IH (Γ'.bit0 :: l₁)
+    refine ⟨l₁', l₂', s', e, TransGen.head ?_ h⟩
+    simp [trPosNum]
+    rfl
+  | bit0 m _ =>
+    refine ⟨l₁, _, some Γ'.bit0, rfl, TransGen.single ?_⟩
+    simp only [TM2.step]; rw [tr]
+    simp only [TM2.stepAux, pop', elim_main, elim_update_main,
+      elim_rev, elim_update_rev, Function.update_self, Option.mem_def, Option.some.injEq]
+    rfl
 
 Depends on / 依赖: List.reverseAux, List.reverseAux_nil, Nat.cast_succ, Num.add_one, Num.succ, Option.mem_def, TM2.step, TransGen, TransGen.head, a.succ, add_one, cast_succ, convert, elim_main, elim_rev, elim_update_main, elim_update_rev, eq_1, mem_def, q.succ
 -/
@@ -1910,7 +2114,39 @@ theorem pred_ok
   refine ⟨none, ?_⟩
   simp only [trList, trNat.eq_1, trNum, Nat.cast_succ, Num.add_one, Num.succ,
     List.tail_cons, List.headI_cons]
-  rcases (n : Num) with - |
+  rcases (n : Num) with - | a
+  · simp only [trPosNum, Num.succ', List.singleton_append, List.nil_append]
+    refine TransGen.head rfl ?_
+    rw [tr]; simp only [pop', TM2.stepAux]
+    convert! unrev_ok using 2
+    simp
+  simp only [Num.succ']
+  suffices forall l₁, exists l₁' l₂' s',
+    List.reverseAux l₁ (trPosNum a) = List.reverseAux l₁' l₂' ∧
+      Reaches₁ (TM2.step tr)
+        ⟨some (q₁.pred q₂), s, K'.elim (trPosNum a.succ ++ Γ'.cons :: trList v) l₁ c d⟩
+        ⟨some (unrev q₂), s', K'.elim (l₂' ++ Γ'.cons :: trList v) l₁' c d⟩ by
+    obtain ⟨l₁', l₂', s', e, h⟩ := this []
+    simp only [List.reverseAux] at e
+    refine h.trans ?_
+    convert! unrev_ok using 2
+    simp [e, List.reverseAux_eq]
+  induction a generalizing s with intro l₁
+  | one =>
+    refine ⟨Γ'.bit1::l₁, [], some Γ'.cons, rfl, TransGen.head rfl (TransGen.single ?_)⟩
+    simp [trPosNum, show PosNum.one.succ = PosNum.one.bit0 from rfl]
+  | bit1 m IH =>
+    obtain ⟨l₁', l₂', s', e, h⟩ := IH (some Γ'.bit0) (Γ'.bit1 :: l₁)
+    refine ⟨l₁', l₂', s', e, TransGen.head ?_ h⟩
+    simp
+    rfl
+  | bit0 m IH =>
+    obtain ⟨a, l, e, h⟩ : exists a l, (trPosNum m = a::l) ∧ natEnd a = false := by
+      cases m <;> refine ⟨_, _, rfl, rfl⟩
+    refine ⟨Γ'.bit0 :: l₁, _, some a, rfl, TransGen.single ?_⟩
+    simp [trPosNum, PosNum.succ, e, h, show some Γ'.bit1 != some Γ'.bit0 by decide,
+      Option.getD, -natEnd]
+    rfl
 
 中文:
 定理 pred_ok
@@ -1925,7 +2161,39 @@ theorem pred_ok
   refine ⟨none, ?_⟩
   simp only [trList, trNat.eq_1, trNum, Nat.cast_succ, Num.add_one, Num.succ,
     List.tail_cons, List.headI_cons]
-  rcases (n : Num) with - |
+  rcases (n : Num) with - | a
+  · simp only [trPosNum, Num.succ', List.singleton_append, List.nil_append]
+    refine TransGen.head rfl ?_
+    rw [tr]; simp only [pop', TM2.stepAux]
+    convert! unrev_ok using 2
+    simp
+  simp only [Num.succ']
+  suffices forall l₁, exists l₁' l₂' s',
+    List.reverseAux l₁ (trPosNum a) = List.reverseAux l₁' l₂' ∧
+      Reaches₁ (TM2.step tr)
+        ⟨some (q₁.pred q₂), s, K'.elim (trPosNum a.succ ++ Γ'.cons :: trList v) l₁ c d⟩
+        ⟨some (unrev q₂), s', K'.elim (l₂' ++ Γ'.cons :: trList v) l₁' c d⟩ by
+    obtain ⟨l₁', l₂', s', e, h⟩ := this []
+    simp only [List.reverseAux] at e
+    refine h.trans ?_
+    convert! unrev_ok using 2
+    simp [e, List.reverseAux_eq]
+  induction a generalizing s with intro l₁
+  | one =>
+    refine ⟨Γ'.bit1::l₁, [], some Γ'.cons, rfl, TransGen.head rfl (TransGen.single ?_)⟩
+    simp [trPosNum, show PosNum.one.succ = PosNum.one.bit0 from rfl]
+  | bit1 m IH =>
+    obtain ⟨l₁', l₂', s', e, h⟩ := IH (some Γ'.bit0) (Γ'.bit1 :: l₁)
+    refine ⟨l₁', l₂', s', e, TransGen.head ?_ h⟩
+    simp
+    rfl
+  | bit0 m IH =>
+    obtain ⟨a, l, e, h⟩ : exists a l, (trPosNum m = a::l) ∧ natEnd a = false := by
+      cases m <;> refine ⟨_, _, rfl, rfl⟩
+    refine ⟨Γ'.bit0 :: l₁, _, some a, rfl, TransGen.single ?_⟩
+    simp [trPosNum, PosNum.succ, e, h, show some Γ'.bit1 != some Γ'.bit0 by decide,
+      Option.getD, -natEnd]
+    rfl
 
 Depends on / 依赖: List.headI_cons, List.nil_append, List.singleton_append, List.tail_cons, Nat.cast_succ, Num.add_one, Num.succ, TM2.stepAux, TransGen, TransGen.head, TransGen.single, add_one, cast_succ, convert, eq_1, headI_cons, nil_append, single, singleton_append, stepAux
 -/
@@ -1988,7 +2256,30 @@ theorem trNormal_respects
   | succ => refine ⟨_, ⟨none, rfl⟩, head_main_ok.trans succ_ok⟩
   | tail =>
     let o : Option Γ' := List.casesOn v none fun _ _ => some Γ'.cons
-    refine ⟨_, ⟨o, rfl⟩, ?_⟩; convert! clear_ok _ usin
+    refine ⟨_, ⟨o, rfl⟩, ?_⟩; convert! clear_ok _ using 2
+    · simp; rfl
+    swap
+    refine splitAtPred_eq _ _ (trNat v.headI) _ _ (trNat_natEnd _) ?_
+    cases v <;> simp [o]
+  | cons f fs IHf _ =>
+    obtain ⟨c, h₁, h₂⟩ := IHf (Cont.cons₁ fs v k) v none
+refine ⟨c, h₁, TransGen.head rfl (move_ok (by decide) (splitAtPred_false _)).trans ?_⟩
+    simp only [TM2.step, Option.mem_def, elim_stack, elim_update_stack, elim_update_main,
+      elim_main, elim_rev, elim_update_rev]
+    refine (copy_ok _ none [] (trList v).reverse _ _).trans ?_
+    convert! h₂ using 2
+    simp [List.reverseAux_eq, trContStack]
+  | comp f _ _ IHg => exact IHg (Cont.comp f k) v s
+  | case f g IHf IHg =>
+    rw [stepNormal]
+    simp only
+    obtain ⟨s', h⟩ := pred_ok _ _ s v _ _
+    revert h; rcases v.headI with - | n <;> intro h
+    · obtain ⟨c, h₁, h₂⟩ := IHf k _ s'
+      exact ⟨_, h₁, h.trans h₂⟩
+    · obtain ⟨c, h₁, h₂⟩ := IHg k _ s'
+      exact ⟨_, h₁, h.trans h₂⟩
+  | fix f IH => apply IH
 
 中文:
 定理 trNormal_respects
@@ -1999,7 +2290,30 @@ theorem trNormal_respects
   | succ => refine ⟨_, ⟨none, rfl⟩, head_main_ok.trans succ_ok⟩
   | tail =>
     let o : Option Γ' := List.casesOn v none fun _ _ => some Γ'.cons
-    refine ⟨_, ⟨o, rfl⟩, ?_⟩; convert! clear_ok _ usin
+    refine ⟨_, ⟨o, rfl⟩, ?_⟩; convert! clear_ok _ using 2
+    · simp; rfl
+    swap
+    refine splitAtPred_eq _ _ (trNat v.headI) _ _ (trNat_natEnd _) ?_
+    cases v <;> simp [o]
+  | cons f fs IHf _ =>
+    obtain ⟨c, h₁, h₂⟩ := IHf (Cont.cons₁ fs v k) v none
+refine ⟨c, h₁, TransGen.head rfl (move_ok (by decide) (splitAtPred_false _)).trans ?_⟩
+    simp only [TM2.step, Option.mem_def, elim_stack, elim_update_stack, elim_update_main,
+      elim_main, elim_rev, elim_update_rev]
+    refine (copy_ok _ none [] (trList v).reverse _ _).trans ?_
+    convert! h₂ using 2
+    simp [List.reverseAux_eq, trContStack]
+  | comp f _ _ IHg => exact IHg (Cont.comp f k) v s
+  | case f g IHf IHg =>
+    rw [stepNormal]
+    simp only
+    obtain ⟨s', h⟩ := pred_ok _ _ s v _ _
+    revert h; rcases v.headI with - | n <;> intro h
+    · obtain ⟨c, h₁, h₂⟩ := IHf k _ s'
+      exact ⟨_, h₁, h.trans h₂⟩
+    · obtain ⟨c, h₁, h₂⟩ := IHg k _ s'
+      exact ⟨_, h₁, h.trans h₂⟩
+  | fix f IH => apply IH
 
 Depends on / 依赖: Cont.cons, List.casesOn, TransGen, TransGen.head, TransGen.single, casesOn, clear_ok, convert, generalizing, head_main_ok, head_main_ok.trans, single, splitAtPred_eq, succ_ok, trNat_natEnd, v.headI
 -/
@@ -2052,7 +2366,51 @@ theorem tr_ret_respects
   | cons₁ fs as k _ =>
     obtain ⟨s', h₁, h₂⟩ := trNormal_respects fs (Cont.cons₂ v k) as none
     refine ⟨s', h₁, TransGen.head rfl ?_⟩; simp
-    refine (move₂_ok (by decide) ?_ (splitAtPred_false _)).trans ?_; 
+    refine (move₂_ok (by decide) ?_ (splitAtPred_false _)).trans ?_; · rfl
+    simp only [TM2.step, Option.mem_def, Option.elim, id_eq, elim_update_main, elim_main, elim_aux,
+      List.append_nil, elim_update_aux]
+    refine (move₂_ok (L₁ := ?_) (o := ?_) (L₂ := ?_) (by decide) rfl ?_).trans ?_
+    pick_goal 4
+    · exact splitAtPred_eq _ _ _ (some Γ'.consₗ) _
+        (fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)) ⟨rfl, rfl⟩
+    refine (move₂_ok (by decide) ?_ (splitAtPred_false _)).trans ?_; · rfl
+    simp only [TM2.step, Option.mem_def, Option.elim, elim_update_stack, elim_main,
+      List.append_nil, elim_update_main, id_eq, elim_update_aux,
+      elim_aux, elim_stack]
+    exact h₂
+  | cons₂ ns k IH =>
+    obtain ⟨c, h₁, h₂⟩ := IH (ns.headI :: v) none
+exact ⟨c, h₁, TransGen.head rfl head_stack_ok.trans h₂⟩
+  | comp f k _ =>
+    obtain ⟨s', h₁, h₂⟩ := trNormal_respects f k v s
+    exact ⟨_, h₁, TransGen.head rfl h₂⟩
+  | fix f k IH =>
+    rw [stepRet]
+    have :
+      if v.headI = 0 then natEnd ((trList v).head?.getD default) = true ∧
+          (trList v).tail = trList v.tail
+      else
+        natEnd ((trList v).head?.getD default) = false ∧
+          (trList v).tail = (trNat v.headI).tail ++ Γ'.cons :: trList v.tail := by
+      obtain - | n := v
+      · exact ⟨rfl, rfl⟩
+      rcases n with - | n
+      · simp
+      rw [trList]; rw [List.headI]; rw [trNat]; rw [Nat.cast_succ]; rw [Num.add_one]; rw [Num.succ]; rw [List.tail]
+      cases (n : Num).succ' <;> exact ⟨rfl, rfl⟩
+    by_cases h : v.headI = 0 <;> simp only [h, ite_true, ite_false] at this ⊢
+    · obtain ⟨c, h₁, h₂⟩ := IH v.tail (trList v).head?
+      refine ⟨c, h₁, TransGen.head rfl ?_⟩
+      rw [trCont]; rw [tr]; simp only [pop', TM2.stepAux, elim_main, this, elim_update_main]
+      exact h₂
+    · obtain ⟨s', h₁, h₂⟩ := trNormal_respects f (Cont.fix f k) v.tail (some Γ'.cons)
+refine ⟨_, h₁, TransGen.head rfl TransGen.trans ?_ h₂⟩
+      rw [trCont]; rw [tr]; simp only [pop', TM2.stepAux, elim_main, this.1]
+      convert! clear_ok (splitAtPred_eq _ _ (trNat v.headI).tail (some Γ'.cons) _ _ _) using 2
+      · simp
+        convert! rfl
+      · exact fun x h => trNat_natEnd _ _ (List.tail_subset _ h)
+      · exact ⟨rfl, this.2⟩
 
 中文:
 定理 tr_ret_respects
@@ -2064,7 +2422,51 @@ theorem tr_ret_respects
   | cons₁ fs as k _ =>
     obtain ⟨s', h₁, h₂⟩ := trNormal_respects fs (Cont.cons₂ v k) as none
     refine ⟨s', h₁, TransGen.head rfl ?_⟩; simp
-    refine (move₂_ok (by decide) ?_ (splitAtPred_false _)).trans ?_; 
+    refine (move₂_ok (by decide) ?_ (splitAtPred_false _)).trans ?_; · rfl
+    simp only [TM2.step, Option.mem_def, Option.elim, id_eq, elim_update_main, elim_main, elim_aux,
+      List.append_nil, elim_update_aux]
+    refine (move₂_ok (L₁ := ?_) (o := ?_) (L₂ := ?_) (by decide) rfl ?_).trans ?_
+    pick_goal 4
+    · exact splitAtPred_eq _ _ _ (some Γ'.consₗ) _
+        (fun x h => Bool.decide_false (trList_ne_consₗ _ _ h)) ⟨rfl, rfl⟩
+    refine (move₂_ok (by decide) ?_ (splitAtPred_false _)).trans ?_; · rfl
+    simp only [TM2.step, Option.mem_def, Option.elim, elim_update_stack, elim_main,
+      List.append_nil, elim_update_main, id_eq, elim_update_aux,
+      elim_aux, elim_stack]
+    exact h₂
+  | cons₂ ns k IH =>
+    obtain ⟨c, h₁, h₂⟩ := IH (ns.headI :: v) none
+exact ⟨c, h₁, TransGen.head rfl head_stack_ok.trans h₂⟩
+  | comp f k _ =>
+    obtain ⟨s', h₁, h₂⟩ := trNormal_respects f k v s
+    exact ⟨_, h₁, TransGen.head rfl h₂⟩
+  | fix f k IH =>
+    rw [stepRet]
+    have :
+      if v.headI = 0 then natEnd ((trList v).head?.getD default) = true ∧
+          (trList v).tail = trList v.tail
+      else
+        natEnd ((trList v).head?.getD default) = false ∧
+          (trList v).tail = (trNat v.headI).tail ++ Γ'.cons :: trList v.tail := by
+      obtain - | n := v
+      · exact ⟨rfl, rfl⟩
+      rcases n with - | n
+      · simp
+      rw [trList]; rw [List.headI]; rw [trNat]; rw [Nat.cast_succ]; rw [Num.add_one]; rw [Num.succ]; rw [List.tail]
+      cases (n : Num).succ' <;> exact ⟨rfl, rfl⟩
+    by_cases h : v.headI = 0 <;> simp only [h, ite_true, ite_false] at this ⊢
+    · obtain ⟨c, h₁, h₂⟩ := IH v.tail (trList v).head?
+      refine ⟨c, h₁, TransGen.head rfl ?_⟩
+      rw [trCont]; rw [tr]; simp only [pop', TM2.stepAux, elim_main, this, elim_update_main]
+      exact h₂
+    · obtain ⟨s', h₁, h₂⟩ := trNormal_respects f (Cont.fix f k) v.tail (some Γ'.cons)
+refine ⟨_, h₁, TransGen.head rfl TransGen.trans ?_ h₂⟩
+      rw [trCont]; rw [tr]; simp only [pop', TM2.stepAux, elim_main, this.1]
+      convert! clear_ok (splitAtPred_eq _ _ (trNat v.headI).tail (some Γ'.cons) _ _ _) using 2
+      · simp
+        convert! rfl
+      · exact fun x h => trNat_natEnd _ _ (List.tail_subset _ h)
+      · exact ⟨rfl, this.2⟩
 
 Depends on / 依赖: Cont.cons, List.append_nil, Option.elim, Option.mem_def, TM2.step, TransGen, TransGen.head, TransGen.single, append_nil, elim_aux, elim_main, elim_update_aux, elim_update_main, generalizing, id_eq, mem_def, single, splitAtPred_false, trNormal_respects
 -/
@@ -2189,7 +2591,15 @@ theorem tr_eval
   rw [reaches_eval h₂.to_reflTransGen]; simp only [Part.map_eq_map, Part.mem_map_iff]
   refine ⟨fun h => ?_, ?_⟩
   · obtain ⟨c, hc₁, hc₂⟩ := tr_eval_rev tr_respects h₁ h
-    simp only [stepNormal_eval, Part.map_eq_map, Part.mem_map
+    simp only [stepNormal_eval, Part.map_eq_map, Part.mem_map_iff] at hc₂
+    obtain ⟨v', hv, rfl⟩ := hc₂
+    exact ⟨_, hv, hc₁.symm⟩
+  · rintro ⟨v', hv, rfl⟩
+    have := StateTransition.tr_eval (b₁ := Cfg.halt v') tr_respects h₁
+    simp only [stepNormal_eval, Part.map_eq_map, Part.mem_map_iff, Cfg.halt.injEq,
+      exists_eq_right] at this
+    obtain ⟨_, ⟨⟩, h⟩ := this hv
+    exact h
 
 中文:
 定理 tr_eval
@@ -2201,7 +2611,15 @@ theorem tr_eval
   rw [reaches_eval h₂.to_reflTransGen]; simp only [Part.map_eq_map, Part.mem_map_iff]
   refine ⟨fun h => ?_, ?_⟩
   · obtain ⟨c, hc₁, hc₂⟩ := tr_eval_rev tr_respects h₁ h
-    simp only [stepNormal_eval, Part.map_eq_map, Part.mem_map
+    simp only [stepNormal_eval, Part.map_eq_map, Part.mem_map_iff] at hc₂
+    obtain ⟨v', hv, rfl⟩ := hc₂
+    exact ⟨_, hv, hc₁.symm⟩
+  · rintro ⟨v', hv, rfl⟩
+    have := StateTransition.tr_eval (b₁ := Cfg.halt v') tr_respects h₁
+    simp only [stepNormal_eval, Part.map_eq_map, Part.mem_map_iff, Cfg.halt.injEq,
+      exists_eq_right] at this
+    obtain ⟨_, ⟨⟩, h⟩ := this hv
+    exact h
 
 Depends on / 依赖: Cfg.halt, Part.ext, Part.map_eq_map, Part.mem_map_i, Part.mem_map_iff, StateTransition, StateTransition.tr_eval, map_eq_map, mem_map_i, mem_map_iff, reaches_eval, stepNormal_eval, to_reflTransGen, tr_eval, tr_eval_rev, tr_init, tr_respects
 -/
@@ -2256,7 +2674,22 @@ theorem trStmts₁_trans
   | read q q_ih => _ | succ q q_ih => _ | pred q₁ q₂ q₁_ih q₂_ih => _ | ret => _ <;>
   all_goals
     simp +contextual only [trStmts₁, Finset.mem_insert, Finset.mem_union,
-      or_imp, 
+      or_imp, Finset.mem_singleton, Finset.Subset.refl, imp_true_iff, true_and]
+    repeat exact fun h => Finset.Subset.trans (q_ih h) (Finset.subset_insert _ _)
+  · simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, forall_exists_index]
+    intro s h x h'
+    simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, Finset.mem_insert]
+    exact Or.inr ⟨_, q_ih s h h'⟩
+  · constructor
+    · rintro rfl
+      apply Finset.subset_insert
+    · intro h x h'
+      simp only [Finset.mem_insert]
+      exact Or.inr (Or.inr <| q_ih h h')
+  · refine ⟨fun h x h' => ?_, fun _ x h' => ?_, fun h x h' => ?_⟩ <;> simp
+    · exact Or.inr (Or.inr <| Or.inl <| q₁_ih h h')
+    · rcases Finset.mem_insert.1 h' with h' | h' <;> simp [h', unrev]
+    · exact Or.inr (Or.inr <| Or.inr <| q₂_ih h h')
 
 中文:
 定理 trStmts₁_trans
@@ -2268,7 +2701,22 @@ theorem trStmts₁_trans
   | read q q_ih => _ | succ q q_ih => _ | pred q₁ q₂ q₁_ih q₂_ih => _ | ret => _ <;>
   all_goals
     simp +contextual only [trStmts₁, Finset.mem_insert, Finset.mem_union,
-      or_imp, 
+      or_imp, Finset.mem_singleton, Finset.Subset.refl, imp_true_iff, true_and]
+    repeat exact fun h => Finset.Subset.trans (q_ih h) (Finset.subset_insert _ _)
+  · simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, forall_exists_index]
+    intro s h x h'
+    simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, Finset.mem_insert]
+    exact Or.inr ⟨_, q_ih s h h'⟩
+  · constructor
+    · rintro rfl
+      apply Finset.subset_insert
+    · intro h x h'
+      simp only [Finset.mem_insert]
+      exact Or.inr (Or.inr <| q_ih h h')
+  · refine ⟨fun h x h' => ?_, fun _ x h' => ?_, fun h x h' => ?_⟩ <;> simp
+    · exact Or.inr (Or.inr <| Or.inl <| q₁_ih h h')
+    · rcases Finset.mem_insert.1 h' with h' | h' <;> simp [h', unrev]
+    · exact Or.inr (Or.inr <| Or.inr <| q₂_ih h h')
 
 Depends on / 依赖: Finset, Finset.Subset.refl, Finset.Subset.trans, Finset.mem_biUnion, Finset.mem_insert, Finset.mem_singleton, Finset.mem_union, Finset.mem_univ, Finset.subset_insert, Subset, all_goals, contextual, forall_exists_, imp_true_iff, mem_biUnion, mem_insert, mem_singleton, mem_union, mem_univ, or_imp
 -/
@@ -2896,7 +3344,13 @@ theorem ret_supports
   | halt => trivial
   | cons₁ => rw [contSupp_cons₁, Finset.union_subset_iff] at H₁; exact fun _ => H₁.1 W
   | cons₂ => rw [contSupp_cons₂, Finset.union_subset_iff] at H₁; exact fun _ => H₁.1 W
-  | comp => rw [contSupp_comp] at H₁; exact fun _
+  | comp => rw [contSupp_comp] at H₁; exact fun _ => H₁ (codeSupp_self _ _ W)
+  | fix =>
+    rw [contSupp_fix] at H₁
+    have L := @Finset.mem_union_left; have R := @Finset.mem_union_right
+    intro s; dsimp only; cases natEnd (s.getD default)
+    · refine H₁ (R _ <| L _ <| R _ <| R _ <| L _ W)
+    · exact H₁ (R _ <| L _ <| R _ <| R _ <| R _ <| Finset.mem_singleton_self _)
 
 中文:
 定理 ret_supports
@@ -2908,7 +3362,13 @@ theorem ret_supports
   | halt => trivial
   | cons₁ => rw [contSupp_cons₁, Finset.union_subset_iff] at H₁; exact fun _ => H₁.1 W
   | cons₂ => rw [contSupp_cons₂, Finset.union_subset_iff] at H₁; exact fun _ => H₁.1 W
-  | comp => rw [contSupp_comp] at H₁; exact fun _
+  | comp => rw [contSupp_comp] at H₁; exact fun _ => H₁ (codeSupp_self _ _ W)
+  | fix =>
+    rw [contSupp_fix] at H₁
+    have L := @Finset.mem_union_left; have R := @Finset.mem_union_right
+    intro s; dsimp only; cases natEnd (s.getD default)
+    · refine H₁ (R _ <| L _ <| R _ <| R _ <| L _ W)
+    · exact H₁ (R _ <| L _ <| R _ <| R _ <| R _ <| Finset.mem_singleton_self _)
 
 Depends on / 依赖: Finset, Finset.mem_union_left, Finset.mem_union_right, Finset.union_subset_iff, codeSupp_self, contSupp_comp, contSupp_fix, mem_union_left, mem_union_right, natEnd, s.getD, union_subset_iff
 -/
@@ -2940,7 +3400,25 @@ theorem trStmts₁_supports
   | move _ _ _ q q_ih => _ | clear _ _ q q_ih => _ | copy q q_ih => _ | push _ _ q q_ih => _
   | read q q_ih => _ | succ q q_ih => _ | pred q₁ q₂ q₁_ih q₂_ih => _ | ret => _ <;>
     simp [trStmts₁, -Finset.singleton_subset_iff] at HS₁ ⊢
-  
+  any_goals
+    obtain ⟨h₁, h₂⟩ := Finset.insert_subset_iff.1 HS₁
+    first | have h₃ := h₂ W | try simp [Finset.subset_iff] at h₂
+  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₁⟩, q_ih H₁ h₂⟩ -- move
+  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₁⟩, q_ih H₁ h₂⟩ -- clear
+  · exact supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₃⟩, q_ih H₁ h₂⟩ -- copy
+  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₃⟩, q_ih H₁ h₂⟩ -- push
+  · refine supports_insert.2 ⟨fun _ => h₂ _ W, ?_⟩ -- read
+    exact supports_biUnion.2 fun _ => q_ih _ (H₁ _) fun _ h => h₂ _ h
+  · refine supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₂.1, fun _ => h₂.1⟩, ?_⟩ -- succ
+    exact supports_insert.2 ⟨⟨fun _ => h₂.2 _ W, fun _ => h₂.1⟩, q_ih H₁ h₂.2⟩
+  · refine -- pred
+      supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₂.2 _ (Or.inl W),
+                          fun _ => h₂.1, fun _ => h₂.1⟩, ?_⟩
+    refine supports_insert.2 ⟨⟨fun _ => h₂.2 _ (Or.inr W), fun _ => h₂.1⟩, ?_⟩
+    refine supports_union.2 ⟨?_, ?_⟩
+    · exact q₁_ih H₁.1 fun _ h => h₂.2 _ (Or.inl h)
+    · exact q₂_ih H₁.2 fun _ h => h₂.2 _ (Or.inr h)
+  · exact supports_singleton.2 (ret_supports H₁) -- ret
 
 中文:
 定理 trStmts₁_supports
@@ -2951,7 +3429,25 @@ theorem trStmts₁_supports
   | move _ _ _ q q_ih => _ | clear _ _ q q_ih => _ | copy q q_ih => _ | push _ _ q q_ih => _
   | read q q_ih => _ | succ q q_ih => _ | pred q₁ q₂ q₁_ih q₂_ih => _ | ret => _ <;>
     simp [trStmts₁, -Finset.singleton_subset_iff] at HS₁ ⊢
-  
+  any_goals
+    obtain ⟨h₁, h₂⟩ := Finset.insert_subset_iff.1 HS₁
+    first | have h₃ := h₂ W | try simp [Finset.subset_iff] at h₂
+  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₁⟩, q_ih H₁ h₂⟩ -- move
+  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₁⟩, q_ih H₁ h₂⟩ -- clear
+  · exact supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₃⟩, q_ih H₁ h₂⟩ -- copy
+  · exact supports_insert.2 ⟨⟨fun _ => h₃, fun _ => h₃⟩, q_ih H₁ h₂⟩ -- push
+  · refine supports_insert.2 ⟨fun _ => h₂ _ W, ?_⟩ -- read
+    exact supports_biUnion.2 fun _ => q_ih _ (H₁ _) fun _ h => h₂ _ h
+  · refine supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₂.1, fun _ => h₂.1⟩, ?_⟩ -- succ
+    exact supports_insert.2 ⟨⟨fun _ => h₂.2 _ W, fun _ => h₂.1⟩, q_ih H₁ h₂.2⟩
+  · refine -- pred
+      supports_insert.2 ⟨⟨fun _ => h₁, fun _ => h₂.2 _ (Or.inl W),
+                          fun _ => h₂.1, fun _ => h₂.1⟩, ?_⟩
+    refine supports_insert.2 ⟨⟨fun _ => h₂.2 _ (Or.inr W), fun _ => h₂.1⟩, ?_⟩
+    refine supports_union.2 ⟨?_, ?_⟩
+    · exact q₁_ih H₁.1 fun _ h => h₂.2 _ (Or.inl h)
+    · exact q₂_ih H₁.2 fun _ h => h₂.2 _ (Or.inr h)
+  · exact supports_singleton.2 (ret_supports H₁) -- ret
 
 Depends on / 依赖: Finset, Finset.insert_subset_iff, Finset.singleton_subset_iff, Finset.subset_iff, any_goals, insert_subset_iff, q_ih, singleton_subset_iff, subset_iff, supports_i, supports_insert
 -/
@@ -3022,7 +3518,12 @@ theorem trNormal_supports
   | cons f fs IHf _ =>
     apply IHf
     rw [codeSupp_cons] at Hk
-    exact
+    exact Finset.union_subset_right Hk
+  | comp f g _ IHg => apply IHg; rw [codeSupp_comp] at Hk; exact Finset.union_subset_right Hk
+  | case f g IHf IHg =>
+    simp only [codeSupp_case, Finset.union_subset_iff] at Hk
+    exact ⟨IHf Hk.2.1, IHg Hk.2.2⟩
+  | fix f IHf => apply IHf; rw [codeSupp_fix] at Hk; exact Finset.union_subset_right Hk
 
 中文:
 定理 trNormal_supports
@@ -3036,7 +3537,12 @@ theorem trNormal_supports
   | cons f fs IHf _ =>
     apply IHf
     rw [codeSupp_cons] at Hk
-    exact
+    exact Finset.union_subset_right Hk
+  | comp f g _ IHg => apply IHg; rw [codeSupp_comp] at Hk; exact Finset.union_subset_right Hk
+  | case f g IHf IHg =>
+    simp only [codeSupp_case, Finset.union_subset_iff] at Hk
+    exact ⟨IHf Hk.2.1, IHg Hk.2.2⟩
+  | fix f IHf => apply IHf; rw [codeSupp_fix] at Hk; exact Finset.union_subset_right Hk
 
 Depends on / 依赖: Finset, Finset.union_subset_iff, Finset.union_subset_right, Supports, codeSupp_case, codeSupp_comp, codeSupp_cons, generalizing, split_ifs, union_subset_iff, union_subset_right
 -/
@@ -3068,7 +3574,37 @@ theorem codeSupp'_supports
     have H' := H; simp only [codeSupp_cons, Finset.union_subset_iff] at H'
     refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
     refine supports_union.2 ⟨IHf H'.2, ?_⟩
-    refine trStmts₁_suppor
+    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun h => ?_
+    · simp only [codeSupp, Finset.union_subset_iff, contSupp] at h H ⊢
+      exact ⟨h.2.2.1, h.2.2.2, H.2⟩
+    refine supports_union.2 ⟨IHfs ?_, ?_⟩
+    · rw [codeSupp, contSupp_cons₁] at H'
+      exact Finset.union_subset_right (Finset.union_subset_right H'.2)
+    exact
+      trStmts₁_supports (head_supports <| Finset.union_subset_right H)
+        (Finset.union_subset_right h)
+  | comp f g IHf IHg =>
+    have H' := H; rw [codeSupp_comp] at H'; have H' := Finset.union_subset_right H'
+    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
+    refine supports_union.2 ⟨IHg H', ?_⟩
+    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun _ => ?_
+    · simp only [codeSupp', codeSupp, Finset.union_subset_iff] at h H ⊢
+      exact ⟨h.2.2, H.2⟩
+    exact IHf (Finset.union_subset_right H')
+  | case f g IHf IHg =>
+    have H' := H; simp only [codeSupp_case, Finset.union_subset_iff] at H'
+    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun _ => ?_
+    exact supports_union.2 ⟨IHf H'.2.1, IHg H'.2.2⟩
+  | fix f IHf =>
+    have H' := H; simp only [codeSupp_fix, Finset.union_subset_iff] at H'
+    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
+    refine supports_union.2 ⟨IHf H'.2, ?_⟩
+    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun _ => ?_
+    · simp only [codeSupp', codeSupp, Finset.union_subset_iff, contSupp, trStmts₁,
+        Finset.insert_subset_iff] at h H ⊢
+      exact ⟨h.1, ⟨H.1.1, h⟩, H.2⟩
+    exact supports_singleton.2 (ret_supports <| Finset.union_subset_right H)
+  | _ => exact trStmts₁_supports (trNormal_supports H) (Finset.Subset.trans (codeSupp_self _ _) H)
 
 中文:
 定理 codeSupp'_supports
@@ -3080,7 +3616,37 @@ theorem codeSupp'_supports
     have H' := H; simp only [codeSupp_cons, Finset.union_subset_iff] at H'
     refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
     refine supports_union.2 ⟨IHf H'.2, ?_⟩
-    refine trStmts₁_suppor
+    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun h => ?_
+    · simp only [codeSupp, Finset.union_subset_iff, contSupp] at h H ⊢
+      exact ⟨h.2.2.1, h.2.2.2, H.2⟩
+    refine supports_union.2 ⟨IHfs ?_, ?_⟩
+    · rw [codeSupp, contSupp_cons₁] at H'
+      exact Finset.union_subset_right (Finset.union_subset_right H'.2)
+    exact
+      trStmts₁_supports (head_supports <| Finset.union_subset_right H)
+        (Finset.union_subset_right h)
+  | comp f g IHf IHg =>
+    have H' := H; rw [codeSupp_comp] at H'; have H' := Finset.union_subset_right H'
+    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
+    refine supports_union.2 ⟨IHg H', ?_⟩
+    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun _ => ?_
+    · simp only [codeSupp', codeSupp, Finset.union_subset_iff] at h H ⊢
+      exact ⟨h.2.2, H.2⟩
+    exact IHf (Finset.union_subset_right H')
+  | case f g IHf IHg =>
+    have H' := H; simp only [codeSupp_case, Finset.union_subset_iff] at H'
+    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun _ => ?_
+    exact supports_union.2 ⟨IHf H'.2.1, IHg H'.2.2⟩
+  | fix f IHf =>
+    have H' := H; simp only [codeSupp_fix, Finset.union_subset_iff] at H'
+    refine trStmts₁_supports' (trNormal_supports H) (Finset.union_subset_left H) fun h => ?_
+    refine supports_union.2 ⟨IHf H'.2, ?_⟩
+    refine trStmts₁_supports' (trNormal_supports ?_) (Finset.union_subset_right h) fun _ => ?_
+    · simp only [codeSupp', codeSupp, Finset.union_subset_iff, contSupp, trStmts₁,
+        Finset.insert_subset_iff] at h H ⊢
+      exact ⟨h.1, ⟨H.1.1, h⟩, H.2⟩
+    exact supports_singleton.2 (ret_supports <| Finset.union_subset_right H)
+  | _ => exact trStmts₁_supports (trNormal_supports H) (Finset.Subset.trans (codeSupp_self _ _) H)
 -/
 theorem codeSupp'_supports {S c k} (H : codeSupp c k subseteq S) : Supports (codeSupp' c k) S := by
   induction c generalizing k with
@@ -3134,7 +3700,17 @@ theorem contSupp_supports
     have H₁ := H; rw [contSupp_cons₁] at H₁; have H₂ := Finset.union_subset_right H₁
     refine trStmts₁_supports' (trNormal_supports H₂) H₁ fun h => ?_
     refine supports_union.2 ⟨codeSupp'_supports H₂, ?_⟩
-    si
+    simp only [codeSupp, contSupp_cons₂, Finset.union_subset_iff] at H₂
+    exact trStmts₁_supports' (head_supports H₂.2.2) (Finset.union_subset_right h) IH
+  | cons₂ k IH =>
+    have H' := H; rw [contSupp_cons₂] at H'
+    exact trStmts₁_supports' (head_supports <| Finset.union_subset_right H') H' IH
+  | comp f k IH =>
+    have H' := H; rw [contSupp_comp] at H'; have H₂ := Finset.union_subset_right H'
+    exact supports_union.2 ⟨codeSupp'_supports H', IH H₂⟩
+  | fix f k IH =>
+    rw [contSupp] at H
+    exact supports_union.2 ⟨codeSupp'_supports H, IH (Finset.union_subset_right H)⟩
 
 中文:
 定理 contSupp_supports
@@ -3147,7 +3723,17 @@ theorem contSupp_supports
     have H₁ := H; rw [contSupp_cons₁] at H₁; have H₂ := Finset.union_subset_right H₁
     refine trStmts₁_supports' (trNormal_supports H₂) H₁ fun h => ?_
     refine supports_union.2 ⟨codeSupp'_supports H₂, ?_⟩
-    si
+    simp only [codeSupp, contSupp_cons₂, Finset.union_subset_iff] at H₂
+    exact trStmts₁_supports' (head_supports H₂.2.2) (Finset.union_subset_right h) IH
+  | cons₂ k IH =>
+    have H' := H; rw [contSupp_cons₂] at H'
+    exact trStmts₁_supports' (head_supports <| Finset.union_subset_right H') H' IH
+  | comp f k IH =>
+    have H' := H; rw [contSupp_comp] at H'; have H₂ := Finset.union_subset_right H'
+    exact supports_union.2 ⟨codeSupp'_supports H', IH H₂⟩
+  | fix f k IH =>
+    rw [contSupp] at H
+    exact supports_union.2 ⟨codeSupp'_supports H, IH (Finset.union_subset_right H)⟩
 
 Depends on / 依赖: Finset, Finset.union_subset_iff, Finset.union_subset_right, Supports, _supports, codeSupp, contSupp_halt, head_supports, supports_union, trNormal_supports, union_subset_iff, union_subset_right
 -/

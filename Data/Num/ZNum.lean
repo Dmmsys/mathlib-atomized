@@ -615,7 +615,15 @@ theorem cast_sub'
     have : ((-b + (a + (-b + -1)) : Int) : α) = (a + -1 + (-b + -b) : Int) := by
       simp [add_comm, add_left_comm]
     simpa [sub_eq_add_neg] using this
- 
+  | bit1 a, bit0 b => by
+    rw [sub']; rw [ZNum.cast_bit1]; rw [cast_sub' a b]
+    have : ((-b + (a + (-b + 1)) : Int) : α) = (a + 1 + (-b + -b) : Int) := by
+      simp [add_comm, add_left_comm]
+    simpa [sub_eq_add_neg] using this
+  | bit1 a, bit1 b => by
+    rw [sub']; rw [ZNum.cast_bit0]; rw [cast_sub' a b]
+    have : ((-b + (a + -b) : Int) : α) = a + (-b + -b) := by simp [add_left_comm]
+    simpa [sub_eq_add_neg] using this
 
 中文:
 定理 cast_sub'
@@ -628,7 +636,15 @@ theorem cast_sub'
     have : ((-b + (a + (-b + -1)) : Int) : α) = (a + -1 + (-b + -b) : Int) := by
       simp [add_comm, add_left_comm]
     simpa [sub_eq_add_neg] using this
- 
+  | bit1 a, bit0 b => by
+    rw [sub']; rw [ZNum.cast_bit1]; rw [cast_sub' a b]
+    have : ((-b + (a + (-b + 1)) : Int) : α) = (a + 1 + (-b + -b) : Int) := by
+      simp [add_comm, add_left_comm]
+    simpa [sub_eq_add_neg] using this
+  | bit1 a, bit1 b => by
+    rw [sub']; rw [ZNum.cast_bit0]; rw [cast_sub' a b]
+    have : ((-b + (a + -b) : Int) : α) = a + (-b + -b) := by simp [add_left_comm]
+    simpa [sub_eq_add_neg] using this
 
 Depends on / 依赖: ZNum.cast_bit1, ZNum.cast_bitm1, add_comm, add_left_comm, cast_bit1, cast_bitm1, cast_sub, sub_eq_add_neg
 -/
@@ -941,7 +957,9 @@ theorem cast_add
 (PosNum.cast_sub' _ _).trans (sub_eq_add_neg _ _).trans this
   | neg a, neg b =>
     show -(↑(a + b) : α) = -a + -b by
-      rw [PosNum.cast_add]; rw [neg_eq_iff_eq_
+      rw [PosNum.cast_add]; rw [neg_eq_iff_eq_neg]; rw [neg_add_rev]; rw [neg_neg]; rw [neg_neg]; rw [← PosNum.cast_to_int a]; rw [← PosNum.cast_to_int b]; rw [← Int.cast_add]; rw [← Int.cast_add]; rw [add_comm]
+
+@[simp]
 
 中文:
 定理 cast_add
@@ -953,7 +971,9 @@ theorem cast_add
 (PosNum.cast_sub' _ _).trans (sub_eq_add_neg _ _).trans this
   | neg a, neg b =>
     show -(↑(a + b) : α) = -a + -b by
-      rw [PosNum.cast_add]; rw [neg_eq_iff_eq_
+      rw [PosNum.cast_add]; rw [neg_eq_iff_eq_neg]; rw [neg_add_rev]; rw [neg_neg]; rw [neg_neg]; rw [← PosNum.cast_to_int a]; rw [← PosNum.cast_to_int b]; rw [← Int.cast_add]; rw [← Int.cast_add]; rw [add_comm]
+
+@[simp]
 -/
 theorem cast_add [AddGroupWithOne α] : forall m n, ((m + n : ZNum) : α) = m + n
   | 0, a => by cases a <;> exact (_root_.zero_add _).symm
@@ -1104,7 +1124,11 @@ theorem cmp_to_int
   | pos _, 0 => PosNum.cast_pos _
   | pos _, neg _ => lt_trans (neg_lt_zero.2 <| PosNum.cast_pos _) (PosNum.cast_pos _)
 | 0, neg _ => neg_lt_zero.2 PosNum.cast_pos _
-| neg _, 0 => neg_lt_zero.
+| neg _, 0 => neg_lt_zero.2 PosNum.cast_pos _
+  | neg _, pos _ => lt_trans (neg_lt_zero.2 <| PosNum.cast_pos _) (PosNum.cast_pos _)
+  | 0, pos _ => PosNum.cast_pos _
+
+@[norm_cast]
 
 中文:
 定理 cmp_to_int
@@ -1114,7 +1138,11 @@ theorem cmp_to_int
   | pos _, 0 => PosNum.cast_pos _
   | pos _, neg _ => lt_trans (neg_lt_zero.2 <| PosNum.cast_pos _) (PosNum.cast_pos _)
 | 0, neg _ => neg_lt_zero.2 PosNum.cast_pos _
-| neg _, 0 => neg_lt_zero.
+| neg _, 0 => neg_lt_zero.2 PosNum.cast_pos _
+  | neg _, pos _ => lt_trans (neg_lt_zero.2 <| PosNum.cast_pos _) (PosNum.cast_pos _)
+  | 0, pos _ => PosNum.cast_pos _
+
+@[norm_cast]
 
 Depends on / 依赖: PosNum, PosNum.cmp_to_nat, cmp_to_nat, revert
 -/
@@ -1310,7 +1338,11 @@ instance linearOrder
     intro a b
     transfer_rw
     apply le_total
-  -- This
+  -- This is relying on an automatically generated instance name, generated in a `deriving` handler.
+  -- See https://github.com/leanprover/lean4/issues/2343
+  toDecidableEq := instDecidableEqZNum
+  toDecidableLE := ZNum.decidableLE
+  toDecidableLT := ZNum.decidableLT
 
 中文:
 实例 linearOrder
@@ -1332,7 +1364,11 @@ instance linearOrder
     intro a b
     transfer_rw
     apply le_total
-  -- This
+  -- This is relying on an automatically generated instance name, generated in a `deriving` handler.
+  -- See https://github.com/leanprover/lean4/issues/2343
+  toDecidableEq := instDecidableEqZNum
+  toDecidableLE := ZNum.decidableLE
+  toDecidableLT := ZNum.decidableLT
 
 Depends on / 依赖: le_antisymm, le_refl, le_total, le_trans, lt_iff_le_not_ge, transfer, transfer_rw
 -/
@@ -1425,7 +1461,7 @@ instance addMonoidWithOne
     natCast_zero := show (Num.ofNat' 0).toZNum = 0 by rw [Num.ofNat'_zero]; rfl
     natCast_succ := fun n =>
       show (Num.ofNat' (n + 1)).toZNum = (Num.ofNat' n).toZNum + 1 by
-        rw [Num.ofNat'_succ]; rw [Num.add_one]; rw [Num.toZNu
+        rw [Num.ofNat'_succ]; rw [Num.add_one]; rw [Num.toZNum_succ]; rw [ZNum.add_one] }
 
 中文:
 实例 addMonoidWithOne
@@ -1435,7 +1471,7 @@ instance addMonoidWithOne
     natCast_zero := show (Num.ofNat' 0).toZNum = 0 by rw [Num.ofNat'_zero]; rfl
     natCast_succ := fun n =>
       show (Num.ofNat' (n + 1)).toZNum = (Num.ofNat' n).toZNum + 1 by
-        rw [Num.ofNat'_succ]; rw [Num.add_one]; rw [Num.toZNu
+        rw [Num.ofNat'_succ]; rw [Num.add_one]; rw [Num.toZNum_succ]; rw [ZNum.add_one] }
 
 Depends on / 依赖: Num.add_one, Num.ofNat, Num.toZNum_succ, ZNum.addMonoid, ZNum.add_one, ZNum.ofInt, _succ, _zero, addMonoid, add_one, natCast, natCast_succ, natCast_zero, toZNum, toZNum_succ
 -/
@@ -1484,7 +1520,8 @@ instance commRing
       simp [mul_add]
     right_distrib := by
       transfer
-      sim
+      simp [mul_add, _root_.mul_comm]
+    mul_comm := mul_comm }
 
 中文:
 实例 commRing
@@ -1500,7 +1537,8 @@ instance commRing
       simp [mul_add]
     right_distrib := by
       transfer
-      sim
+      simp [mul_add, _root_.mul_comm]
+    mul_comm := mul_comm }
 
 Depends on / 依赖: ZNum.addCommGroup, ZNum.addMonoidWithOne, _root_, _root_.mul_comm, addCommGroup, addMonoidWithOne, left_distrib, mul_add, mul_assoc, mul_comm, mul_one, mul_zero, one_mul, right_distrib, transfer, zero_mul
 -/
@@ -1844,7 +1882,17 @@ theorem divMod_to_nat_aux
     apply Num.mem_ofZNum'.trans
     rw [← ZNum.to_int_inj]; rw [Num.cast_toZNum]; rw [Num.cast_sub']; rw [sub_eq_iff_eq_add]; rw [← Int.natCast_inj]
     simp
-  rcases e 
+  rcases e : Num.ofZNum' (Num.sub' r (Num.pos d)) with - | r₂
+  · rw [Num.cast_bit0, two_mul]
+    refine ⟨h₁, lt_of_not_ge fun h => ?_⟩
+    obtain ⟨r₂, e'⟩ := Nat.le.dest h
+    rw [← Num.to_of_nat r₂]; rw [add_comm] at e'
+    cases e.symm.trans (this.2 e'.symm)
+  · have := this.1 e
+    simp only [Num.cast_bit1]
+    constructor
+    · rwa [two_mul, add_comm _ 1, mul_add, mul_one, ← add_assoc, ← this]
+    · rwa [this, two_mul, add_lt_add_iff_right] at h₂
 
 中文:
 定理 divMod_to_nat_aux
@@ -1856,7 +1904,17 @@ theorem divMod_to_nat_aux
     apply Num.mem_ofZNum'.trans
     rw [← ZNum.to_int_inj]; rw [Num.cast_toZNum]; rw [Num.cast_sub']; rw [sub_eq_iff_eq_add]; rw [← Int.natCast_inj]
     simp
-  rcases e 
+  rcases e : Num.ofZNum' (Num.sub' r (Num.pos d)) with - | r₂
+  · rw [Num.cast_bit0, two_mul]
+    refine ⟨h₁, lt_of_not_ge fun h => ?_⟩
+    obtain ⟨r₂, e'⟩ := Nat.le.dest h
+    rw [← Num.to_of_nat r₂]; rw [add_comm] at e'
+    cases e.symm.trans (this.2 e'.symm)
+  · have := this.1 e
+    simp only [Num.cast_bit1]
+    constructor
+    · rwa [two_mul, add_comm _ 1, mul_add, mul_one, ← add_assoc, ← this]
+    · rwa [this, two_mul, add_lt_add_iff_right] at h₂
 
 Depends on / 依赖: Int.natCast_inj, Nat.le.dest, Num.cast_bit0, Num.cast_sub, Num.cast_toZNum, Num.mem_ofZNum, Num.ofZNum, Num.pos, Num.sub, Num.to_of_nat, ZNum.to_int_inj, add_comm, cast_bit0, cast_sub, cast_toZNum, divModAux, e.symm.trans, lt_of_not_ge, mem_ofZNum, natCast_inj
 -/
@@ -1894,7 +1952,23 @@ theorem divMod_to_nat
     exact divMod_to_nat_aux (by simp) (Nat.mul_le_mul_left 2 (PosNum.cast_pos d : (0 : Nat) < d))
   | bit1 n IH =>
     unfold divMod
-    -- Porting note: `cases'` didn't rewrite at `this`, so `revert` & `intro` are requir
+    -- Porting note: `cases'` didn't rewrite at `this`, so `revert` & `intro` are required.
+    revert IH; obtain ⟨q, r⟩ := divMod d n; intro IH
+    simp only at IH ⊢
+    apply divMod_to_nat_aux <;> simp only [Num.cast_bit1, cast_bit1]
+    · rw [← two_mul, ← two_mul, add_right_comm, mul_left_comm, ← mul_add, IH.1]
+    · lia
+  | bit0 n IH =>
+    unfold divMod
+    -- Porting note: `cases'` didn't rewrite at `this`, so `revert` & `intro` are required.
+    revert IH; obtain ⟨q, r⟩ := divMod d n; intro IH
+    simp only at IH ⊢
+    apply divMod_to_nat_aux
+    · simp only [Num.cast_bit0, cast_bit0]
+      rw [← two_mul]; rw [← two_mul]; rw [mul_left_comm]; rw [← mul_add]; rw [← IH.1]
+    · simpa using IH.2
+
+@[simp]
 
 中文:
 定理 divMod_to_nat
@@ -1906,7 +1980,23 @@ theorem divMod_to_nat
     exact divMod_to_nat_aux (by simp) (Nat.mul_le_mul_left 2 (PosNum.cast_pos d : (0 : Nat) < d))
   | bit1 n IH =>
     unfold divMod
-    -- Porting note: `cases'` didn't rewrite at `this`, so `revert` & `intro` are requir
+    -- Porting note: `cases'` didn't rewrite at `this`, so `revert` & `intro` are required.
+    revert IH; obtain ⟨q, r⟩ := divMod d n; intro IH
+    simp only at IH ⊢
+    apply divMod_to_nat_aux <;> simp only [Num.cast_bit1, cast_bit1]
+    · rw [← two_mul, ← two_mul, add_right_comm, mul_left_comm, ← mul_add, IH.1]
+    · lia
+  | bit0 n IH =>
+    unfold divMod
+    -- Porting note: `cases'` didn't rewrite at `this`, so `revert` & `intro` are required.
+    revert IH; obtain ⟨q, r⟩ := divMod d n; intro IH
+    simp only at IH ⊢
+    apply divMod_to_nat_aux
+    · simp only [Num.cast_bit0, cast_bit0]
+      rw [← two_mul]; rw [← two_mul]; rw [mul_left_comm]; rw [← mul_add]; rw [← IH.1]
+    · simpa using IH.2
+
+@[simp]
 
 Depends on / 依赖: Nat.div_mod_unique, Nat.mul_le_mul_left, PosNum, PosNum.cast_pos, cast_pos, divMod, divMod_to_nat_aux, div_mod_unique, mul_le_mul_left
 -/
@@ -2126,7 +2216,10 @@ theorem gcd_to_nat
     exact mul_lt_mul'' (Nat.lt_size_self _) (Nat.lt_size_self _) (Nat.zero_le _) (Nat.zero_le _)
   intros
   unfold gcd
-  split_ifs with 
+  split_ifs with h
+  · exact gcd_to_nat_aux h (this _ _)
+  · rw [Nat.gcd_comm]
+    exact gcd_to_nat_aux (le_of_not_ge h) (this _ _)
 
 中文:
 定理 gcd_to_nat
@@ -2139,7 +2232,10 @@ theorem gcd_to_nat
     exact mul_lt_mul'' (Nat.lt_size_self _) (Nat.lt_size_self _) (Nat.zero_le _) (Nat.zero_le _)
   intros
   unfold gcd
-  split_ifs with 
+  split_ifs with h
+  · exact gcd_to_nat_aux h (this _ _)
+  · rw [Nat.gcd_comm]
+    exact gcd_to_nat_aux (le_of_not_ge h) (this _ _)
 
 Depends on / 依赖: Nat.gcd_comm, Nat.lt_size_self, Nat.size_le, Nat.zero_le, a.natSize, b.natSize, cast_mul, gcd_comm, gcd_to_nat_aux, intros, le_of_not_ge, lt_size_self, mul_lt_mul, natSize, natSize_to_nat, pow_add, size_le, split_ifs, zero_le
 -/

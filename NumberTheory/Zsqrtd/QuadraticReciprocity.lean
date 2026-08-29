@@ -43,7 +43,35 @@ theorem mod_four_eq_three_of_nat_prime_of_prime
       simp [hp2, Zsqrtd.ext_iff, ← norm_eq_one_iff, norm_def] at this)
     fun hp1 =>
     by_contradiction fun hp3 : p % 4 != 3 => by
-      let ⟨k, hk⟩ := (ZMod.exists_sq_eq_neg_one
+      let ⟨k, hk⟩ := (ZMod.exists_sq_eq_neg_one_iff (p := p)).2 hp3
+      obtain ⟨k, k_lt_p, rfl⟩ : exists (k' : Nat) (_ : k' < p), (k' : ZMod p) = k := by
+        exact ⟨k.val, k.val_lt, ZMod.natCast_zmod_val k⟩
+      have hpk : p ∣ k ^ 2 + 1 := by
+        rw [pow_two]; rw [← CharP.cast_eq_zero_iff (ZMod p) p]; rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [Nat.cast_one]; rw [← hk]; rw [neg_add_cancel]
+      have hkmul : (k ^ 2 + 1 : Int[i]) = ⟨k, 1⟩ * ⟨k, -1⟩ := by ext <;> simp [sq]
+      have hk₀ : k != 0 := by rintro rfl; simp at hk
+      have hkltp := calc
+          1 + k * k <= k * (k + 1) := by lia
+          _ < p * p := mul_lt_mul k_lt_p k_lt_p (Nat.succ_pos _) (Nat.zero_le _)
+      have hpk₁ : ¬(p : Int[i]) ∣ ⟨k, -1⟩ := fun ⟨x, hx⟩ =>
+lt_irrefl (p * x : Int[i]).norm.natAbs
+          calc
+            (norm (p * x : Int[i])).natAbs = (Zsqrtd.norm ⟨k, -1⟩).natAbs := by rw [hx]
+            _ < (norm (p : Int[i])).natAbs := by simpa [add_comm, Zsqrtd.norm] using! hkltp
+            _ <= (norm (p * x : Int[i])).natAbs :=
+              norm_le_norm_mul_left _ fun hx0 =>
+show (-1 : Int) != 0 by decide by simpa [hx0] using! congr_arg Zsqrtd.im hx
+      have hpk₂ : ¬(p : Int[i]) ∣ ⟨k, 1⟩ := fun ⟨x, hx⟩ =>
+lt_irrefl (p * x : Int[i]).norm.natAbs
+          calc
+            (norm (p * x : Int[i])).natAbs = (Zsqrtd.norm ⟨k, 1⟩).natAbs := by rw [hx]
+            _ < (norm (p : Int[i])).natAbs := by simpa [add_comm, Zsqrtd.norm] using! hkltp
+            _ <= (norm (p * x : Int[i])).natAbs :=
+              norm_le_norm_mul_left _ fun hx0 =>
+show (1 : Int) != 0 by decide by simpa [hx0] using! congr_arg Zsqrtd.im hx
+      obtain ⟨y, hy⟩ := hpk
+      have := hpi.2.2 ⟨k, 1⟩ ⟨k, -1⟩ ⟨y, by rw [← hkmul, ← Nat.cast_mul p, ← hy]; simp⟩
+      tauto
 
 中文:
 定理 mod_four_eq_three_of_nat_prime_of_prime
@@ -54,7 +82,35 @@ theorem mod_four_eq_three_of_nat_prime_of_prime
       simp [hp2, Zsqrtd.ext_iff, ← norm_eq_one_iff, norm_def] at this)
     fun hp1 =>
     by_contradiction fun hp3 : p % 4 != 3 => by
-      let ⟨k, hk⟩ := (ZMod.exists_sq_eq_neg_one
+      let ⟨k, hk⟩ := (ZMod.exists_sq_eq_neg_one_iff (p := p)).2 hp3
+      obtain ⟨k, k_lt_p, rfl⟩ : exists (k' : Nat) (_ : k' < p), (k' : ZMod p) = k := by
+        exact ⟨k.val, k.val_lt, ZMod.natCast_zmod_val k⟩
+      have hpk : p ∣ k ^ 2 + 1 := by
+        rw [pow_two]; rw [← CharP.cast_eq_zero_iff (ZMod p) p]; rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [Nat.cast_one]; rw [← hk]; rw [neg_add_cancel]
+      have hkmul : (k ^ 2 + 1 : Int[i]) = ⟨k, 1⟩ * ⟨k, -1⟩ := by ext <;> simp [sq]
+      have hk₀ : k != 0 := by rintro rfl; simp at hk
+      have hkltp := calc
+          1 + k * k <= k * (k + 1) := by lia
+          _ < p * p := mul_lt_mul k_lt_p k_lt_p (Nat.succ_pos _) (Nat.zero_le _)
+      have hpk₁ : ¬(p : Int[i]) ∣ ⟨k, -1⟩ := fun ⟨x, hx⟩ =>
+lt_irrefl (p * x : Int[i]).norm.natAbs
+          calc
+            (norm (p * x : Int[i])).natAbs = (Zsqrtd.norm ⟨k, -1⟩).natAbs := by rw [hx]
+            _ < (norm (p : Int[i])).natAbs := by simpa [add_comm, Zsqrtd.norm] using! hkltp
+            _ <= (norm (p * x : Int[i])).natAbs :=
+              norm_le_norm_mul_left _ fun hx0 =>
+show (-1 : Int) != 0 by decide by simpa [hx0] using! congr_arg Zsqrtd.im hx
+      have hpk₂ : ¬(p : Int[i]) ∣ ⟨k, 1⟩ := fun ⟨x, hx⟩ =>
+lt_irrefl (p * x : Int[i]).norm.natAbs
+          calc
+            (norm (p * x : Int[i])).natAbs = (Zsqrtd.norm ⟨k, 1⟩).natAbs := by rw [hx]
+            _ < (norm (p : Int[i])).natAbs := by simpa [add_comm, Zsqrtd.norm] using! hkltp
+            _ <= (norm (p * x : Int[i])).natAbs :=
+              norm_le_norm_mul_left _ fun hx0 =>
+show (1 : Int) != 0 by decide by simpa [hx0] using! congr_arg Zsqrtd.im hx
+      obtain ⟨y, hy⟩ := hpk
+      have := hpi.2.2 ⟨k, 1⟩ ⟨k, -1⟩ ⟨y, by rw [← hkmul, ← Nat.cast_mul p, ← hy]; simp⟩
+      tauto
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, ZMod.exists_sq_eq_neg_one_iff, ZMod.natCast_zmod_val, Zsqrtd, Zsqrtd.ext_iff, by_contradiction, cast_eq_zero_iff, eq_two_or_odd, eq_two_or_odd.elim, exists_sq_eq_neg_one_iff, ext_iff, hpi.irreducible.isUnit_or_isUnit, irreducible, isUnit_or_isUnit, k.val, k.val_lt, k_lt_p, natCast_zmod_val, norm_def, norm_eq_one_iff
 -/

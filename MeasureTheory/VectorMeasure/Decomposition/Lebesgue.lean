@@ -194,7 +194,8 @@ instance haveLebesgueDecomposition_smul_real
           rw [toJordanDecomposition_smul_real]; rw [JordanDecomposition.real_smul_posPart_neg _ _ hr]
           infer_instance
         negPart := by
-          rw 
+          rw [toJordanDecomposition_smul_real]; rw [JordanDecomposition.real_smul_negPart_neg _ _ hr]
+          infer_instance }
 
 中文:
 实例 haveLebesgueDecomposition_smul_real
@@ -208,7 +209,8 @@ instance haveLebesgueDecomposition_smul_real
           rw [toJordanDecomposition_smul_real]; rw [JordanDecomposition.real_smul_posPart_neg _ _ hr]
           infer_instance
         negPart := by
-          rw 
+          rw [toJordanDecomposition_smul_real]; rw [JordanDecomposition.real_smul_negPart_neg _ _ hr]
+          infer_instance }
 
 Depends on / 依赖: JordanDecomposition, JordanDecomposition.real_smul_negPart_neg, JordanDecomposition.real_smul_posPart_neg, haveLebesgueDecomposition_smul, infer_instance, negPart, posPart, real_smul_negPart_neg, real_smul_posPart_neg, s.haveLebesgueDecomposition_smul, toJordanDecomposition_smul_real
 -/
@@ -280,7 +282,13 @@ theorem singularPart_totalVariation
       ⟨s.toJordanDecomposition.posPart.singularPart μ,
         s.toJordanDecomposition.negPart.singularPart μ, singularPart_mutuallySingular s μ⟩ := by
     refine JordanDecomposition.toSignedMeasure_injective ?_
-    rw [toSignedMeasure_toJor
+    rw [toSignedMeasure_toJordanDecomposition]; rw [singularPart]; rw [JordanDecomposition.toSignedMeasure]
+  rw [totalVariation]; rw [this]
+
+nonrec theorem mutuallySingular_singularPart (s : SignedMeasure α) (μ : Measure α) :
+    singularPart s μ ⟂ᵥ μ.toENNRealVectorMeasure := by
+  rw [mutuallySingular_ennreal_iff]; rw [singularPart_totalVariation]; rw [VectorMeasure.ennrealToMeasure_toENNRealVectorMeasure]
+  exact (mutuallySingular_singularPart _ _).add_left (mutuallySingular_singularPart _ _)
 
 中文:
 定理 singularPart_totalVariation
@@ -291,7 +299,13 @@ theorem singularPart_totalVariation
       ⟨s.toJordanDecomposition.posPart.singularPart μ,
         s.toJordanDecomposition.negPart.singularPart μ, singularPart_mutuallySingular s μ⟩ := by
     refine JordanDecomposition.toSignedMeasure_injective ?_
-    rw [toSignedMeasure_toJor
+    rw [toSignedMeasure_toJordanDecomposition]; rw [singularPart]; rw [JordanDecomposition.toSignedMeasure]
+  rw [totalVariation]; rw [this]
+
+nonrec theorem mutuallySingular_singularPart (s : SignedMeasure α) (μ : Measure α) :
+    singularPart s μ ⟂ᵥ μ.toENNRealVectorMeasure := by
+  rw [mutuallySingular_ennreal_iff]; rw [singularPart_totalVariation]; rw [VectorMeasure.ennrealToMeasure_toENNRealVectorMeasure]
+  exact (mutuallySingular_singularPart _ _).add_left (mutuallySingular_singularPart _ _)
 
 Depends on / 依赖: JordanDecomposition, JordanDecomposition.toSignedMeasure, JordanDecomposition.toSignedMeasure_injective, negPart, posPart, s.singularPart, s.toJordanDecomposition.negPart.singularPart, s.toJordanDecomposition.posPart.singularPart, singularPart, singularPart_mutuallySingular, toJordanDecomposition, toSignedMeasure, toSignedMeasure_injective, toSignedMeasure_toJordanDecomposition, totalVariation
 -/
@@ -430,7 +444,16 @@ theorem singularPart_add_withDensity_rnDeriv_eq
   conv_rhs =>
     rw [← toSignedMeasure_toJordanDecomposition s]; rw [JordanDecomposition.toSignedMeasure]
   rw [singularPart]; rw [rnDeriv_def]; rw [withDensityᵥ_sub' (integrable_toReal_of_lintegral_ne_top _ _)
-      (integrable_toReal_of_lintegral_ne_top _ _)]; rw [withDensityᵥ_toReal]; rw [wit
+      (integrable_toReal_of_lintegral_ne_top _ _)]; rw [withDensityᵥ_toReal]; rw [withDensityᵥ_toReal]; rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [add_comm (s.toJordanDecomposition.posPart.singularPart μ).toSignedMeasure]; rw [← add_assoc]; rw [add_assoc (-(s.toJordanDecomposition.negPart.singularPart μ).toSignedMeasure)]; rw [← toSignedMeasure_add]; rw [add_comm]; rw [← add_assoc]; rw [← neg_add]; rw [← toSignedMeasure_add]; rw [add_comm]; rw [← sub_eq_add_neg]
+  · convert! rfl
+    -- `convert rfl` much faster than `congr`
+    · exact s.toJordanDecomposition.posPart.haveLebesgueDecomposition_add μ
+    · rw [add_comm]
+      exact s.toJordanDecomposition.negPart.haveLebesgueDecomposition_add μ
+  all_goals
+    first
+    | exact (lintegral_rnDeriv_lt_top _ _).ne
+    | measurability
 
 中文:
 定理 singularPart_add_withDensity_rnDeriv_eq
@@ -439,7 +462,16 @@ theorem singularPart_add_withDensity_rnDeriv_eq
   conv_rhs =>
     rw [← toSignedMeasure_toJordanDecomposition s]; rw [JordanDecomposition.toSignedMeasure]
   rw [singularPart]; rw [rnDeriv_def]; rw [withDensityᵥ_sub' (integrable_toReal_of_lintegral_ne_top _ _)
-      (integrable_toReal_of_lintegral_ne_top _ _)]; rw [withDensityᵥ_toReal]; rw [wit
+      (integrable_toReal_of_lintegral_ne_top _ _)]; rw [withDensityᵥ_toReal]; rw [withDensityᵥ_toReal]; rw [sub_eq_add_neg]; rw [sub_eq_add_neg]; rw [add_comm (s.toJordanDecomposition.posPart.singularPart μ).toSignedMeasure]; rw [← add_assoc]; rw [add_assoc (-(s.toJordanDecomposition.negPart.singularPart μ).toSignedMeasure)]; rw [← toSignedMeasure_add]; rw [add_comm]; rw [← add_assoc]; rw [← neg_add]; rw [← toSignedMeasure_add]; rw [add_comm]; rw [← sub_eq_add_neg]
+  · convert! rfl
+    -- `convert rfl` much faster than `congr`
+    · exact s.toJordanDecomposition.posPart.haveLebesgueDecomposition_add μ
+    · rw [add_comm]
+      exact s.toJordanDecomposition.negPart.haveLebesgueDecomposition_add μ
+  all_goals
+    first
+    | exact (lintegral_rnDeriv_lt_top _ _).ne
+    | measurability
 
 Depends on / 依赖: JordanDecomposition, JordanDecomposition.toSignedMeasure, add_assoc, add_comm, conv_rhs, integrable_toReal_of_lintegral_ne_top, negPart, posPart, rnDeriv_def, s.toJordanDecomposition.negPart.singul, s.toJordanDecomposition.posPart.singularPart, singul, singularPart, sub_eq_add_neg, toJordanDecomposition, toSignedMeasure, toSignedMeasure_toJordanDecomposition
 -/
@@ -472,7 +504,8 @@ theorem jordanDecomposition_add_withDensity_mutuallySingular
   exact
     ((JordanDecomposition.mutuallySingular _).add_right
           (htμ.1.mono_ac (refl _) (withDensity_absolutelyContinuous _ _))).add_left
-    
+      ((htμ.2.symm.mono_ac (withDensity_absolutelyContinuous _ _) (refl _)).add_right
+        (withDensity_ofReal_mutuallySingular hf))
 
 中文:
 定理 jordanDecomposition_add_withDensity_mutuallySingular
@@ -482,7 +515,8 @@ theorem jordanDecomposition_add_withDensity_mutuallySingular
   exact
     ((JordanDecomposition.mutuallySingular _).add_right
           (htμ.1.mono_ac (refl _) (withDensity_absolutelyContinuous _ _))).add_left
-    
+      ((htμ.2.symm.mono_ac (withDensity_absolutelyContinuous _ _) (refl _)).add_right
+        (withDensity_ofReal_mutuallySingular hf))
 
 Depends on / 依赖: JordanDecomposition, JordanDecomposition.mutuallySingular, VectorMeasure, VectorMeasure.ennrealToMeasure_toENNRealVectorMeasure, add_left, add_right, ennrealToMeasure_toENNRealVectorMeasure, mono_ac, mutuallySingular, mutuallySingular_ennreal_iff, symm.mono_ac, totalVariation_mutuallySingular_iff, withDensity_absolutelyContinuous, withDensity_ofReal_mutuallySingular
 -/
@@ -509,7 +543,7 @@ theorem toJordanDecomposition_eq_of_eq_add_withDensity
   refine toJordanDecomposition_eq ?_
   simp_rw [JordanDecomposition.toSignedMeasure, hadd]
   ext i hi
-  rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_ap
+  rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_add_apply]; rw [measureReal_add_apply]; rw [add_sub_add_comm]; rw [← toSignedMeasure_apply_measurable hi]; rw [← toSignedMeasure_apply_measurable hi]; rw [← _root_.sub_apply]; rw [← JordanDecomposition.toSignedMeasure]; rw [toSignedMeasure_toJordanDecomposition]; rw [_root_.add_apply]; rw [← toSignedMeasure_apply_measurable hi]; rw [← toSignedMeasure_apply_measurable hi]; rw [withDensityᵥ_eq_withDensity_pos_part_sub_withDensity_neg_part hfi]; rw [_root_.sub_apply]
 
 中文:
 定理 toJordanDecomposition_eq_of_eq_add_withDensity
@@ -520,7 +554,7 @@ theorem toJordanDecomposition_eq_of_eq_add_withDensity
   refine toJordanDecomposition_eq ?_
   simp_rw [JordanDecomposition.toSignedMeasure, hadd]
   ext i hi
-  rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_ap
+  rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_add_apply]; rw [measureReal_add_apply]; rw [add_sub_add_comm]; rw [← toSignedMeasure_apply_measurable hi]; rw [← toSignedMeasure_apply_measurable hi]; rw [← _root_.sub_apply]; rw [← JordanDecomposition.toSignedMeasure]; rw [toSignedMeasure_toJordanDecomposition]; rw [_root_.add_apply]; rw [← toSignedMeasure_apply_measurable hi]; rw [← toSignedMeasure_apply_measurable hi]; rw [withDensityᵥ_eq_withDensity_pos_part_sub_withDensity_neg_part hfi]; rw [_root_.sub_apply]
 
 Depends on / 依赖: infer_instance, isFiniteMeasure_withDensity_ofReal
 -/
@@ -553,7 +587,13 @@ theorem haveLebesgueDecomposition_mk'
   rw [VectorMeasure.equivMeasure.right_inv]; rw [totalVariation_mutuallySingular_iff] at htμ
   refine
     { posPart := by
-        use ⟨t.toJord
+        use ⟨t.toJordanDecomposition.posPart, fun x => ENNReal.ofReal (f x)⟩
+        refine ⟨hf.ennreal_ofReal, htμ.1, ?_⟩
+        rw [toJordanDecomposition_eq_of_eq_add_withDensity hf hfi htμ' hadd]
+      negPart := by
+        use ⟨t.toJordanDecomposition.negPart, fun x => ENNReal.ofReal (-f x)⟩
+        refine ⟨hf.neg.ennreal_ofReal, htμ.2, ?_⟩
+        rw [toJordanDecomposition_eq_of_eq_add_withDensity hf hfi htμ' hadd] }
 
 中文:
 定理 haveLebesgueDecomposition_mk'
@@ -565,7 +605,13 @@ theorem haveLebesgueDecomposition_mk'
   rw [VectorMeasure.equivMeasure.right_inv]; rw [totalVariation_mutuallySingular_iff] at htμ
   refine
     { posPart := by
-        use ⟨t.toJord
+        use ⟨t.toJordanDecomposition.posPart, fun x => ENNReal.ofReal (f x)⟩
+        refine ⟨hf.ennreal_ofReal, htμ.1, ?_⟩
+        rw [toJordanDecomposition_eq_of_eq_add_withDensity hf hfi htμ' hadd]
+      negPart := by
+        use ⟨t.toJordanDecomposition.negPart, fun x => ENNReal.ofReal (-f x)⟩
+        refine ⟨hf.neg.ennreal_ofReal, htμ.2, ?_⟩
+        rw [toJordanDecomposition_eq_of_eq_add_withDensity hf hfi htμ' hadd] }
 -/
 private theorem haveLebesgueDecomposition_mk' (μ : Measure α) {f : α -> Real} (hf : Measurable f)
     (hfi : Integrable f μ) (htμ : t ⟂ᵥ μ.toENNRealVectorMeasure) (hadd : s = t + μ.withDensityᵥ f) :
@@ -629,7 +675,12 @@ theorem eq_singularPart'
   rw [mutuallySingular_ennreal_iff]; rw [totalVariation_mutuallySingular_iff]; rw [VectorMeasure.ennrealToMeasure_toENNRealVectorMeasure] at htμ
   rw [singularPart]; rw [← t.toSignedMeasure_toJordanDecomposition]; rw [JordanDecomposition.toSignedMeasure]
   congr
-  · have hfpos 
+  · have hfpos : Measurable fun x => ENNReal.ofReal (f x) := by fun_prop
+    refine eq_singularPart hfpos htμ.1 ?_
+    rw [toJordanDecomposition_eq_of_eq_add_withDensity hf hfi htμ' hadd]
+  · have hfneg : Measurable fun x => ENNReal.ofReal (-f x) := by fun_prop
+    refine eq_singularPart hfneg htμ.2 ?_
+    rw [toJordanDecomposition_eq_of_eq_add_withDensity hf hfi htμ' hadd]
 
 中文:
 定理 eq_singularPart'
@@ -639,7 +690,12 @@ theorem eq_singularPart'
   rw [mutuallySingular_ennreal_iff]; rw [totalVariation_mutuallySingular_iff]; rw [VectorMeasure.ennrealToMeasure_toENNRealVectorMeasure] at htμ
   rw [singularPart]; rw [← t.toSignedMeasure_toJordanDecomposition]; rw [JordanDecomposition.toSignedMeasure]
   congr
-  · have hfpos 
+  · have hfpos : Measurable fun x => ENNReal.ofReal (f x) := by fun_prop
+    refine eq_singularPart hfpos htμ.1 ?_
+    rw [toJordanDecomposition_eq_of_eq_add_withDensity hf hfi htμ' hadd]
+  · have hfneg : Measurable fun x => ENNReal.ofReal (-f x) := by fun_prop
+    refine eq_singularPart hfneg htμ.2 ?_
+    rw [toJordanDecomposition_eq_of_eq_add_withDensity hf hfi htμ' hadd]
 -/
 private theorem eq_singularPart' (t : SignedMeasure α) {f : α -> Real} (hf : Measurable f)
     (hfi : Integrable f μ) (htμ : t ⟂ᵥ μ.toENNRealVectorMeasure) (hadd : s = t + μ.withDensityᵥ f) :
@@ -667,7 +723,8 @@ theorem eq_singularPart
     convert! hadd using 2
     exact WithDensityᵥEq.congr_ae hfi.1.ae_eq_mk.symm
   · rw [withDensityᵥ, dif_neg hfi, add_zero] at hadd
-    refine eq_singularPart' t measurable_zero (i
+    refine eq_singularPart' t measurable_zero (integrable_zero _ _ μ) htμ ?_
+    rwa [withDensityᵥ_zero, add_zero]
 
 中文:
 定理 eq_singularPart
@@ -678,7 +735,8 @@ theorem eq_singularPart
     convert! hadd using 2
     exact WithDensityᵥEq.congr_ae hfi.1.ae_eq_mk.symm
   · rw [withDensityᵥ, dif_neg hfi, add_zero] at hadd
-    refine eq_singularPart' t measurable_zero (i
+    refine eq_singularPart' t measurable_zero (integrable_zero _ _ μ) htμ ?_
+    rwa [withDensityᵥ_zero, add_zero]
 
 Depends on / 依赖: Eq.congr_ae, Integrable, add_zero, ae_eq_mk, ae_eq_mk.symm, congr_ae, convert, dif_neg, eq_singularPart, hfi.congr, integrable_zero, measurable_mk, measurable_zero
 -/
@@ -751,7 +809,25 @@ theorem singularPart_smul_nnreal
     · congr
       · rw [toJordanDecomposition_smul, JordanDecomposition.smul_posPart, singularPart_smul]
     · congr
-      rw [toJordanDecomposition_smul]; rw [J
+      rw [toJordanDecomposition_smul]; rw [JordanDecomposition.smul_negPart]; rw [singularPart_smul]
+
+nonrec theorem singularPart_smul (s : SignedMeasure α) (μ : Measure α) (r : Real) :
+    (r • s).singularPart μ = r • s.singularPart μ := by
+  cases le_or_gt 0 r with
+  | inl hr =>
+    lift r to Real>=0 using hr
+    exact singularPart_smul_nnreal s μ r
+  | inr hr =>
+    rw [singularPart]; rw [singularPart]
+    conv_lhs =>
+      congr
+      · congr
+        · rw [toJordanDecomposition_smul_real,
+            JordanDecomposition.real_smul_posPart_neg _ _ hr, singularPart_smul]
+      · congr
+        · rw [toJordanDecomposition_smul_real,
+            JordanDecomposition.real_smul_negPart_neg _ _ hr, singularPart_smul]
+    rw [toSignedMeasure_smul]; rw [toSignedMeasure_smul]; rw [← neg_sub]; rw [← smul_sub]; rw [NNReal.smul_def]; rw [← neg_smul]; rw [Real.coe_toNNReal _ (le_of_lt (neg_pos.mpr hr))]; rw [neg_neg]
 
 中文:
 定理 singularPart_smul_nnreal
@@ -763,7 +839,25 @@ theorem singularPart_smul_nnreal
     · congr
       · rw [toJordanDecomposition_smul, JordanDecomposition.smul_posPart, singularPart_smul]
     · congr
-      rw [toJordanDecomposition_smul]; rw [J
+      rw [toJordanDecomposition_smul]; rw [JordanDecomposition.smul_negPart]; rw [singularPart_smul]
+
+nonrec theorem singularPart_smul (s : SignedMeasure α) (μ : Measure α) (r : Real) :
+    (r • s).singularPart μ = r • s.singularPart μ := by
+  cases le_or_gt 0 r with
+  | inl hr =>
+    lift r to Real>=0 using hr
+    exact singularPart_smul_nnreal s μ r
+  | inr hr =>
+    rw [singularPart]; rw [singularPart]
+    conv_lhs =>
+      congr
+      · congr
+        · rw [toJordanDecomposition_smul_real,
+            JordanDecomposition.real_smul_posPart_neg _ _ hr, singularPart_smul]
+      · congr
+        · rw [toJordanDecomposition_smul_real,
+            JordanDecomposition.real_smul_negPart_neg _ _ hr, singularPart_smul]
+    rw [toSignedMeasure_smul]; rw [toSignedMeasure_smul]; rw [← neg_sub]; rw [← smul_sub]; rw [NNReal.smul_def]; rw [← neg_smul]; rw [Real.coe_toNNReal _ (le_of_lt (neg_pos.mpr hr))]; rw [neg_neg]
 
 Depends on / 依赖: JordanDecomposition, JordanDecomposition.smul_negPart, JordanDecomposition.smul_posPart, conv_lhs, singularPart, singularPart_smul, smul_negPart, smul_posPart, smul_sub, toJordanDecomposition_smul, toSignedMeasure_smul
 -/
@@ -806,7 +900,7 @@ theorem singularPart_add
     (eq_singularPart _ (s.rnDeriv μ + t.rnDeriv μ)
         ((mutuallySingular_singularPart s μ).add_left (mutuallySingular_singularPart t μ))
         ?_).symm
-  rw [withDensityᵥ_add (integrable_rnDeriv s μ) (integrable_rnDeriv t μ)]; rw [add_assoc]; rw [add_comm (t.singularPart μ)]; rw [
+  rw [withDensityᵥ_add (integrable_rnDeriv s μ) (integrable_rnDeriv t μ)]; rw [add_assoc]; rw [add_comm (t.singularPart μ)]; rw [add_assoc]; rw [add_comm _ (t.singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [← add_assoc]; rw [singularPart_add_withDensity_rnDeriv_eq]
 
 中文:
 定理 singularPart_add
@@ -816,7 +910,7 @@ theorem singularPart_add
     (eq_singularPart _ (s.rnDeriv μ + t.rnDeriv μ)
         ((mutuallySingular_singularPart s μ).add_left (mutuallySingular_singularPart t μ))
         ?_).symm
-  rw [withDensityᵥ_add (integrable_rnDeriv s μ) (integrable_rnDeriv t μ)]; rw [add_assoc]; rw [add_comm (t.singularPart μ)]; rw [
+  rw [withDensityᵥ_add (integrable_rnDeriv s μ) (integrable_rnDeriv t μ)]; rw [add_assoc]; rw [add_comm (t.singularPart μ)]; rw [add_assoc]; rw [add_comm _ (t.singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [← add_assoc]; rw [singularPart_add_withDensity_rnDeriv_eq]
 
 Depends on / 依赖: add_assoc, add_comm, add_left, eq_singularPart, integrable_rnDeriv, mutuallySingular_singularPart, rnDeriv, s.rnDeriv, singularPart, singularPart_add_withDensity_rnDeriv_eq, t.rnDeriv, t.singularPart
 -/
@@ -863,7 +957,8 @@ theorem eq_rnDeriv
     convert! hadd using 2
     exact WithDensityᵥEq.congr_ae hfi.1.ae_eq_mk.symm
   have := haveLebesgueDecomposition_mk μ hfi.1.measurable_mk htμ hadd'
-  refine (Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _) hfi ?
+  refine (Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _) hfi ?_).symm
+  rw [← add_right_inj t]; rw [← hadd]; rw [eq_singularPart _ f htμ hadd]; rw [singularPart_add_withDensity_rnDeriv_eq]
 
 中文:
 定理 eq_rnDeriv
@@ -874,7 +969,8 @@ theorem eq_rnDeriv
     convert! hadd using 2
     exact WithDensityᵥEq.congr_ae hfi.1.ae_eq_mk.symm
   have := haveLebesgueDecomposition_mk μ hfi.1.measurable_mk htμ hadd'
-  refine (Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _) hfi ?
+  refine (Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _) hfi ?_).symm
+  rw [← add_right_inj t]; rw [← hadd]; rw [eq_singularPart _ f htμ hadd]; rw [singularPart_add_withDensity_rnDeriv_eq]
 
 Depends on / 依赖: Eq.congr_ae, Integrable, Integrable.ae_eq_of_withDensity, add_right_inj, ae_eq_mk, ae_eq_mk.symm, congr_ae, convert, eq_singularPart, haveLebesgueDecomposition_mk, integrable_rnDeriv, measurable_mk, singularPart_add_withDensity_rnDeriv_eq
 -/
@@ -898,7 +994,7 @@ theorem rnDeriv_neg
   proof: by
   refine
     Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _) (integrable_rnDeriv _ _).neg ?_
-  rw [withDensityᵥ_neg]; rw [← add_right_inj ((-s).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [singularPart_neg]; rw [← neg_add]; rw [singularPart_add_withDensity_rnDe
+  rw [withDensityᵥ_neg]; rw [← add_right_inj ((-s).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [singularPart_neg]; rw [← neg_add]; rw [singularPart_add_withDensity_rnDeriv_eq]
 
 中文:
 定理 rnDeriv_neg
@@ -906,7 +1002,7 @@ theorem rnDeriv_neg
   证明: by
   refine
     Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _) (integrable_rnDeriv _ _).neg ?_
-  rw [withDensityᵥ_neg]; rw [← add_right_inj ((-s).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [singularPart_neg]; rw [← neg_add]; rw [singularPart_add_withDensity_rnDe
+  rw [withDensityᵥ_neg]; rw [← add_right_inj ((-s).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [singularPart_neg]; rw [← neg_add]; rw [singularPart_add_withDensity_rnDeriv_eq]
 
 Depends on / 依赖: Integrable, Integrable.ae_eq_of_withDensity, add_right_inj, integrable_rnDeriv, neg_add, singularPart, singularPart_add_withDensity_rnDeriv_eq, singularPart_neg
 -/
@@ -926,7 +1022,7 @@ theorem rnDeriv_smul
   refine
     Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _)
       ((integrable_rnDeriv _ _).smul r) ?_
-  rw [withDensityᵥ_smul (rnDeriv s μ) r]; rw [← add_right_inj ((r • s).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [singularPart_smul]; rw [← smul_add]; rw [
+  rw [withDensityᵥ_smul (rnDeriv s μ) r]; rw [← add_right_inj ((r • s).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [singularPart_smul]; rw [← smul_add]; rw [singularPart_add_withDensity_rnDeriv_eq]
 
 中文:
 定理 rnDeriv_smul
@@ -935,7 +1031,7 @@ theorem rnDeriv_smul
   refine
     Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _)
       ((integrable_rnDeriv _ _).smul r) ?_
-  rw [withDensityᵥ_smul (rnDeriv s μ) r]; rw [← add_right_inj ((r • s).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [singularPart_smul]; rw [← smul_add]; rw [
+  rw [withDensityᵥ_smul (rnDeriv s μ) r]; rw [← add_right_inj ((r • s).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [singularPart_smul]; rw [← smul_add]; rw [singularPart_add_withDensity_rnDeriv_eq]
 
 Depends on / 依赖: Integrable, Integrable.ae_eq_of_withDensity, add_right_inj, integrable_rnDeriv, rnDeriv, singularPart, singularPart_add_withDensity_rnDeriv_eq, singularPart_smul, smul_add
 -/
@@ -956,7 +1052,7 @@ theorem rnDeriv_add
   refine
     Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _)
       ((integrable_rnDeriv _ _).add (integrable_rnDeriv _ _)) ?_
-  rw [← add_right_inj ((s + t).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [withDensityᵥ_add (integrable_rnDeriv _ _) (integrable_rnDer
+  rw [← add_right_inj ((s + t).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [withDensityᵥ_add (integrable_rnDeriv _ _) (integrable_rnDeriv _ _)]; rw [singularPart_add]; rw [add_assoc]; rw [add_comm (t.singularPart μ)]; rw [add_assoc]; rw [add_comm _ (t.singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [← add_assoc]; rw [singularPart_add_withDensity_rnDeriv_eq]
 
 中文:
 定理 rnDeriv_add
@@ -965,7 +1061,7 @@ theorem rnDeriv_add
   refine
     Integrable.ae_eq_of_withDensityᵥ_eq (integrable_rnDeriv _ _)
       ((integrable_rnDeriv _ _).add (integrable_rnDeriv _ _)) ?_
-  rw [← add_right_inj ((s + t).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [withDensityᵥ_add (integrable_rnDeriv _ _) (integrable_rnDer
+  rw [← add_right_inj ((s + t).singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [withDensityᵥ_add (integrable_rnDeriv _ _) (integrable_rnDeriv _ _)]; rw [singularPart_add]; rw [add_assoc]; rw [add_comm (t.singularPart μ)]; rw [add_assoc]; rw [add_comm _ (t.singularPart μ)]; rw [singularPart_add_withDensity_rnDeriv_eq]; rw [← add_assoc]; rw [singularPart_add_withDensity_rnDeriv_eq]
 
 Depends on / 依赖: Integrable, Integrable.ae_eq_of_withDensity, add_assoc, add_comm, add_right_inj, integrable_rnDeriv, singularPar, singularPart, singularPart_add, singularPart_add_withDensity_rnDeriv_eq, t.singularPart
 -/
@@ -1115,7 +1211,17 @@ theorem singularPart_add_withDensity_rnDeriv_eq
   rw [add_apply]; rw [SignedMeasure.toComplexMeasure_apply]
   apply Complex.ext
   · rw [Complex.add_re, withDensityᵥ_apply (c.integrable_rnDeriv μ) hi, ← RCLike.re_eq_complex_re,
-      ← integral_re (c.integrable_rnDeriv μ).i
+      ← integral_re (c.integrable_rnDeriv μ).integrableOn, RCLike.re_eq_complex_re,
+      ← withDensityᵥ_apply _ hi]
+    · change (c.re.singularPart μ + μ.withDensityᵥ (c.re.rnDeriv μ)) i = _
+      rw [c.re.singularPart_add_withDensity_rnDeriv_eq μ]
+    · exact SignedMeasure.integrable_rnDeriv _ _
+  · rw [Complex.add_im, withDensityᵥ_apply (c.integrable_rnDeriv μ) hi, ← RCLike.im_eq_complex_im,
+      ← integral_im (c.integrable_rnDeriv μ).integrableOn, RCLike.im_eq_complex_im,
+      ← withDensityᵥ_apply _ hi]
+    · change (c.im.singularPart μ + μ.withDensityᵥ (c.im.rnDeriv μ)) i = _
+      rw [c.im.singularPart_add_withDensity_rnDeriv_eq μ]
+    · exact SignedMeasure.integrable_rnDeriv _ _
 
 中文:
 定理 singularPart_add_withDensity_rnDeriv_eq
@@ -1126,7 +1232,17 @@ theorem singularPart_add_withDensity_rnDeriv_eq
   rw [add_apply]; rw [SignedMeasure.toComplexMeasure_apply]
   apply Complex.ext
   · rw [Complex.add_re, withDensityᵥ_apply (c.integrable_rnDeriv μ) hi, ← RCLike.re_eq_complex_re,
-      ← integral_re (c.integrable_rnDeriv μ).i
+      ← integral_re (c.integrable_rnDeriv μ).integrableOn, RCLike.re_eq_complex_re,
+      ← withDensityᵥ_apply _ hi]
+    · change (c.re.singularPart μ + μ.withDensityᵥ (c.re.rnDeriv μ)) i = _
+      rw [c.re.singularPart_add_withDensity_rnDeriv_eq μ]
+    · exact SignedMeasure.integrable_rnDeriv _ _
+  · rw [Complex.add_im, withDensityᵥ_apply (c.integrable_rnDeriv μ) hi, ← RCLike.im_eq_complex_im,
+      ← integral_im (c.integrable_rnDeriv μ).integrableOn, RCLike.im_eq_complex_im,
+      ← withDensityᵥ_apply _ hi]
+    · change (c.im.singularPart μ + μ.withDensityᵥ (c.im.rnDeriv μ)) i = _
+      rw [c.im.singularPart_add_withDensity_rnDeriv_eq μ]
+    · exact SignedMeasure.integrable_rnDeriv _ _
 
 Depends on / 依赖: Complex.add_re, Complex.ext, RCLike, RCLike.re_eq_complex_re, SignedMeasure, SignedMeasure.integr, SignedMeasure.toComplexMeasure_apply, add_apply, add_re, c.integrable_rnDeriv, c.re.rnDeriv, c.re.singularPart, c.re.singularPart_add_withDensity_rnDeriv_eq, c.toComplexMeasure_to_signedMeasure, cardinal_bInter_mem, conv_rhs, integr, integrableOn, integrable_rnDeriv, integral_re
 -/

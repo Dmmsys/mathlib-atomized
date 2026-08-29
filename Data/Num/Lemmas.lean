@@ -440,7 +440,32 @@ theorem cmp_to_nat
 | 1, bit1 b => Nat.succ_lt_succ to_nat_pos bit0 b
   | bit0 a, bit0 b => by
     dsimp [cmp]
-    have := cmp_to_nat a b; revert this;
+    have := cmp_to_nat a b; revert this; cases cmp a b <;> dsimp <;> intro this
+    · exact Nat.add_lt_add this this
+    · rw [this]
+    · exact Nat.add_lt_add this this
+  | bit0 a, bit1 b => by
+    dsimp [cmp]
+    have := cmp_to_nat a b; revert this; cases cmp a b <;> dsimp <;> intro this
+    · exact Nat.le_succ_of_le (Nat.add_lt_add this this)
+    · rw [this]
+      apply Nat.lt_succ_self
+    · exact cmp_to_nat_lemma this
+  | bit1 a, bit0 b => by
+    dsimp [cmp]
+    have := cmp_to_nat a b; revert this; cases cmp a b <;> dsimp <;> intro this
+    · exact cmp_to_nat_lemma this
+    · rw [this]
+      apply Nat.lt_succ_self
+    · exact Nat.le_succ_of_le (Nat.add_lt_add this this)
+  | bit1 a, bit1 b => by
+    dsimp [cmp]
+    have := cmp_to_nat a b; revert this; cases cmp a b <;> dsimp <;> intro this
+    · exact Nat.succ_lt_succ (Nat.add_lt_add this this)
+    · rw [this]
+    · exact Nat.succ_lt_succ (Nat.add_lt_add this this)
+
+@[norm_cast]
 
 中文:
 定理 cmp_to_nat
@@ -454,7 +479,32 @@ theorem cmp_to_nat
 | 1, bit1 b => Nat.succ_lt_succ to_nat_pos bit0 b
   | bit0 a, bit0 b => by
     dsimp [cmp]
-    have := cmp_to_nat a b; revert this;
+    have := cmp_to_nat a b; revert this; cases cmp a b <;> dsimp <;> intro this
+    · exact Nat.add_lt_add this this
+    · rw [this]
+    · exact Nat.add_lt_add this this
+  | bit0 a, bit1 b => by
+    dsimp [cmp]
+    have := cmp_to_nat a b; revert this; cases cmp a b <;> dsimp <;> intro this
+    · exact Nat.le_succ_of_le (Nat.add_lt_add this this)
+    · rw [this]
+      apply Nat.lt_succ_self
+    · exact cmp_to_nat_lemma this
+  | bit1 a, bit0 b => by
+    dsimp [cmp]
+    have := cmp_to_nat a b; revert this; cases cmp a b <;> dsimp <;> intro this
+    · exact cmp_to_nat_lemma this
+    · rw [this]
+      apply Nat.lt_succ_self
+    · exact Nat.le_succ_of_le (Nat.add_lt_add this this)
+  | bit1 a, bit1 b => by
+    dsimp [cmp]
+    have := cmp_to_nat a b; revert this; cases cmp a b <;> dsimp <;> intro this
+    · exact Nat.succ_lt_succ (Nat.add_lt_add this this)
+    · rw [this]
+    · exact Nat.succ_lt_succ (Nat.add_lt_add this this)
+
+@[norm_cast]
 
 Depends on / 依赖: to_nat_pos
 -/
@@ -739,7 +789,9 @@ theorem ofNat'_succ
       simp only [← bit1_of_bit1, ← bit0_of_bit0, cond]
     · rw [show n.bit true + 1 = (n + 1).bit false by simp [Nat.bit, mul_add],
         ofNat'_bit, ofNat'_bit, ih]
-      simp only [cond, 
+      simp only [cond, add_one, bit1_succ])
+
+@[simp]
 
 中文:
 定理 of自然数'_succ
@@ -750,7 +802,9 @@ theorem ofNat'_succ
       simp only [← bit1_of_bit1, ← bit0_of_bit0, cond]
     · rw [show n.bit true + 1 = (n + 1).bit false by simp [Nat.bit, mul_add],
         ofNat'_bit, ofNat'_bit, ih]
-      simp only [cond, 
+      simp only [cond, add_one, bit1_succ])
+
+@[simp]
 -/
 theorem ofNat'_succ : forall {n}, ofNat' (n + 1) = ofNat' n + 1 :=
   @(Nat.binaryRec (by simp [zero_add]) fun b n ih => by
@@ -1238,7 +1292,12 @@ instance commSemiring
   mul_zero _ := by rw [← to_nat_inj, mul_to_nat, cast_zero, mul_zero]
   zero_mul _ := by rw [← to_nat_inj, mul_to_nat, cast_zero, zero_mul]
   mul_one _ := by rw [← to_nat_inj, mul_to_nat, cast_one, mul_one]
-  one_mul _ :
+  one_mul _ := by rw [← to_nat_inj, mul_to_nat, cast_one, one_mul]
+  add_comm _ _ := by simp_rw [← to_nat_inj, add_to_nat, add_comm]
+  mul_comm _ _ := by simp_rw [← to_nat_inj, mul_to_nat, mul_comm]
+  mul_assoc _ _ _ := by simp_rw [← to_nat_inj, mul_to_nat, mul_assoc]
+  left_distrib _ _ _ := by simp only [← to_nat_inj, mul_to_nat, add_to_nat, mul_add]
+  right_distrib _ _ _ := by simp only [← to_nat_inj, mul_to_nat, add_to_nat, add_mul]
 
 中文:
 实例 commSemiring
@@ -1249,7 +1308,12 @@ instance commSemiring
   mul_zero _ := by rw [← to_nat_inj, mul_to_nat, cast_zero, mul_zero]
   zero_mul _ := by rw [← to_nat_inj, mul_to_nat, cast_zero, zero_mul]
   mul_one _ := by rw [← to_nat_inj, mul_to_nat, cast_one, mul_one]
-  one_mul _ :
+  one_mul _ := by rw [← to_nat_inj, mul_to_nat, cast_one, one_mul]
+  add_comm _ _ := by simp_rw [← to_nat_inj, add_to_nat, add_comm]
+  mul_comm _ _ := by simp_rw [← to_nat_inj, mul_to_nat, mul_comm]
+  mul_assoc _ _ _ := by simp_rw [← to_nat_inj, mul_to_nat, mul_assoc]
+  left_distrib _ _ _ := by simp only [← to_nat_inj, mul_to_nat, add_to_nat, mul_add]
+  right_distrib _ _ _ := by simp only [← to_nat_inj, mul_to_nat, add_to_nat, add_mul]
 
 Depends on / 依赖: Num.addMonoid, addMonoid
 -/
@@ -1329,7 +1393,8 @@ instance linearOrder
     toDecidableLE := Num.decidableLE
     -- This is relying on an automatically generated instance name,
     -- generated in a `deriving` handler.
-    -- See https://github.com/leanprover/lea
+    -- See https://github.com/leanprover/lean4/issues/2343
+    toDecidableEq := instDecidableEqNum }
 
 中文:
 实例 linearOrder
@@ -1342,7 +1407,8 @@ instance linearOrder
     toDecidableLE := Num.decidableLE
     -- This is relying on an automatically generated instance name,
     -- generated in a `deriving` handler.
-    -- See https://github.com/leanprover/lea
+    -- See https://github.com/leanprover/lean4/issues/2343
+    toDecidableEq := instDecidableEqNum }
 
 Depends on / 依赖: Num.decidableLE, Num.decidableLT, decidableLE, decidableLT, le_total, toDecidableLE, toDecidableLT, transfer_rw
 -/
@@ -1653,7 +1719,10 @@ theorem pred'_to_nat
         forall k : Num, Nat.succ ↑k = ↑n -> ↑(Num.casesOn k 1 bit1 : PosNum) = Nat.pred (n + n))
       pred' n, this with
     | 0, (h : ((1 : Num) : Nat) = n) => by rw [← to_nat_inj.1 h]; rfl
-    | Num.pos
+    | Num.pos p, (h : Nat.succ ↑p = n) => by rw [← h]; exact (Nat.succ_add p p).symm
+  | bit1 _ => rfl
+
+@[simp]
 
 中文:
 定理 pred'_to_nat
@@ -1664,7 +1733,10 @@ theorem pred'_to_nat
         forall k : Num, Nat.succ ↑k = ↑n -> ↑(Num.casesOn k 1 bit1 : PosNum) = Nat.pred (n + n))
       pred' n, this with
     | 0, (h : ((1 : Num) : Nat) = n) => by rw [← to_nat_inj.1 h]; rfl
-    | Num.pos
+    | Num.pos p, (h : Nat.succ ↑p = n) => by rw [← h]; exact (Nat.succ_add p p).symm
+  | bit1 _ => rfl
+
+@[simp]
 
 Depends on / 依赖: Nat.pred, Nat.succ, Nat.succ_add, Nat.succ_pred_eq_of_pos, Num.casesOn, Num.pos, PosNum, _to_nat, casesOn, motive, succ_add, succ_pred_eq_of_pos, to_nat_inj, to_nat_pos
 -/
@@ -1971,7 +2043,11 @@ instance linearOrder
     intro a b
     transfer_rw
     apply le_total
-  toDecid
+  toDecidableLT := by infer_instance
+  toDecidableLE := by infer_instance
+  toDecidableEq := by infer_instance
+
+@[simp]
 
 中文:
 实例 linearOrder
@@ -1993,7 +2069,11 @@ instance linearOrder
     intro a b
     transfer_rw
     apply le_total
-  toDecid
+  toDecidableLT := by infer_instance
+  toDecidableLE := by infer_instance
+  toDecidableEq := by infer_instance
+
+@[simp]
 
 Depends on / 依赖: infer_instance, le_antisymm, le_refl, le_total, le_trans, lt_iff_le_not_ge, toDecidableEq, toDecidableLE, toDecidableLT, transfer, transfer_rw
 -/
@@ -3018,7 +3098,28 @@ theorem castNum_eq_bitwise
   · rw [f0n, Nat.bitwise_zero_left]
     cases g false true <;> rfl
   · rw [fn0, Nat.bitwise_zero_right]
-    cases g true 
+    cases g true false <;> rfl
+  · rw [fnn]
+    have this b (n : PosNum) : (cond b (↑n) 0 : Nat) = ↑(cond b (pos n) 0 : Num) := by
+      cases b <;> rfl
+    have this' b (n : PosNum) : ↑(pos (PosNum.bit b n)) = Nat.bit b ↑n := by
+      cases b <;> simp
+    induction m generalizing n with | one => ?_ | bit1 m IH => ?_ | bit0 m IH => ?_ <;>
+    obtain - | n | n := n
+    any_goals simp only [show one = 1 from rfl, show pos 1 = 1 from rfl,
+      show PosNum.bit0 = PosNum.bit false from rfl, show PosNum.bit1 = PosNum.bit true from rfl,
+      show ((1 : Num) : Nat) = Nat.bit true 0 from rfl]
+    all_goals
+      repeat rw [this']
+      rw [Nat.bitwise_bit gff]
+    any_goals rw [Nat.bitwise_zero, p11]; cases g true true <;> rfl
+    any_goals rw [Nat.bitwise_zero_left, ← Bool.cond_eq_ite, this, ← bit_to_nat, p1b]
+    any_goals rw [Nat.bitwise_zero_right, ← Bool.cond_eq_ite, this, ← bit_to_nat, pb1]
+    all_goals
+      rw [← show forall n : PosNum]; rw [↑(p m n) = Nat.bitwise g ↑m ↑n from IH]
+      rw [← bit_to_nat]; rw [pbb]
+
+@[simp, norm_cast]
 
 中文:
 定理 castNum_eq_bitwise
@@ -3031,7 +3132,28 @@ theorem castNum_eq_bitwise
   · rw [f0n, Nat.bitwise_zero_left]
     cases g false true <;> rfl
   · rw [fn0, Nat.bitwise_zero_right]
-    cases g true 
+    cases g true false <;> rfl
+  · rw [fnn]
+    have this b (n : PosNum) : (cond b (↑n) 0 : Nat) = ↑(cond b (pos n) 0 : Num) := by
+      cases b <;> rfl
+    have this' b (n : PosNum) : ↑(pos (PosNum.bit b n)) = Nat.bit b ↑n := by
+      cases b <;> simp
+    induction m generalizing n with | one => ?_ | bit1 m IH => ?_ | bit0 m IH => ?_ <;>
+    obtain - | n | n := n
+    any_goals simp only [show one = 1 from rfl, show pos 1 = 1 from rfl,
+      show PosNum.bit0 = PosNum.bit false from rfl, show PosNum.bit1 = PosNum.bit true from rfl,
+      show ((1 : Num) : Nat) = Nat.bit true 0 from rfl]
+    all_goals
+      repeat rw [this']
+      rw [Nat.bitwise_bit gff]
+    any_goals rw [Nat.bitwise_zero, p11]; cases g true true <;> rfl
+    any_goals rw [Nat.bitwise_zero_left, ← Bool.cond_eq_ite, this, ← bit_to_nat, p1b]
+    any_goals rw [Nat.bitwise_zero_right, ← Bool.cond_eq_ite, this, ← bit_to_nat, pb1]
+    all_goals
+      rw [← show forall n : PosNum]; rw [↑(p m n) = Nat.bitwise g ↑m ↑n from IH]
+      rw [← bit_to_nat]; rw [pbb]
+
+@[simp, norm_cast]
 
 Depends on / 依赖: Nat.bit, Nat.bitwise_zero, Nat.bitwise_zero_left, Nat.bitwise_zero_right, PosNum, PosNum.bit, bitwise_zero, bitwise_zero_left, bitwise_zero_right
 -/
@@ -3193,7 +3315,9 @@ theorem castNum_shiftLeft
   | zero => rfl
   | succ n IH =>
     simp [PosNum.shiftl_succ_eq_bit0_shiftl, Nat.shiftLeft_succ, IH, mul_comm,
-      -shiftl_eq_shiftLeft, -PosNum.shiftl_eq_sh
+      -shiftl_eq_shiftLeft, -PosNum.shiftl_eq_shiftLeft, mul_two]
+
+@[simp, norm_cast]
 
 中文:
 定理 castNum_shiftLeft
@@ -3208,7 +3332,9 @@ theorem castNum_shiftLeft
   | zero => rfl
   | succ n IH =>
     simp [PosNum.shiftl_succ_eq_bit0_shiftl, Nat.shiftLeft_succ, IH, mul_comm,
-      -shiftl_eq_shiftLeft, -PosNum.shiftl_eq_sh
+      -shiftl_eq_shiftLeft, -PosNum.shiftl_eq_shiftLeft, mul_two]
+
+@[simp, norm_cast]
 
 Depends on / 依赖: Nat.shiftLeft_succ, Nat.zero_shiftLeft, PosNum, PosNum.shiftl_eq_shiftLeft, PosNum.shiftl_succ_eq_bit0_shiftl, cast_pos, mul_comm, mul_two, shiftLeft_succ, shiftl, shiftl_eq_shiftLeft, shiftl_succ_eq_bit0_shiftl, zero_shiftLeft
 -/
@@ -3239,7 +3365,25 @@ theorem castNum_shiftRight
   | zero => cases m <;> rfl
   | succ n IH => ?_
   have hdiv2 : forall m, Nat.div2 (m + m) = m := by intro; rw [Nat.div2_val]; lia
-  obtain - | m | m := m <;
+  obtain - | m | m := m <;> dsimp only [PosNum.shiftr, ← PosNum.shiftr_eq_shiftRight]
+  · rw [Nat.shiftRight_eq_div_pow]
+    symm
+    apply Nat.div_eq_of_lt
+    simp
+  · trans
+    · apply IH
+    change Nat.shiftRight m n = Nat.shiftRight (m + m + 1) (n + 1)
+    rw [add_comm n 1]; rw [@Nat.shiftRight_eq _ (1 + n)]; rw [Nat.shiftRight_add]
+    apply congr_arg fun x => Nat.shiftRight x n
+    simp [-add_assoc, Nat.shiftRight_succ, Nat.shiftRight_zero, ← Nat.div2_val, hdiv2]
+  · trans
+    · apply IH
+    change Nat.shiftRight m n = Nat.shiftRight (m + m) (n + 1)
+    rw [add_comm n 1]; rw [@Nat.shiftRight_eq _ (1 + n)]; rw [Nat.shiftRight_add]
+    apply congr_arg fun x => Nat.shiftRight x n
+    simp [-add_assoc, Nat.shiftRight_succ, Nat.shiftRight_zero, ← Nat.div2_val, hdiv2]
+
+@[simp]
 
 中文:
 定理 castNum_shiftRight
@@ -3253,7 +3397,25 @@ theorem castNum_shiftRight
   | zero => cases m <;> rfl
   | succ n IH => ?_
   have hdiv2 : forall m, Nat.div2 (m + m) = m := by intro; rw [Nat.div2_val]; lia
-  obtain - | m | m := m <;
+  obtain - | m | m := m <;> dsimp only [PosNum.shiftr, ← PosNum.shiftr_eq_shiftRight]
+  · rw [Nat.shiftRight_eq_div_pow]
+    symm
+    apply Nat.div_eq_of_lt
+    simp
+  · trans
+    · apply IH
+    change Nat.shiftRight m n = Nat.shiftRight (m + m + 1) (n + 1)
+    rw [add_comm n 1]; rw [@Nat.shiftRight_eq _ (1 + n)]; rw [Nat.shiftRight_add]
+    apply congr_arg fun x => Nat.shiftRight x n
+    simp [-add_assoc, Nat.shiftRight_succ, Nat.shiftRight_zero, ← Nat.div2_val, hdiv2]
+  · trans
+    · apply IH
+    change Nat.shiftRight m n = Nat.shiftRight (m + m) (n + 1)
+    rw [add_comm n 1]; rw [@Nat.shiftRight_eq _ (1 + n)]; rw [Nat.shiftRight_add]
+    apply congr_arg fun x => Nat.shiftRight x n
+    simp [-add_assoc, Nat.shiftRight_succ, Nat.shiftRight_zero, ← Nat.div2_val, hdiv2]
+
+@[simp]
 
 Depends on / 依赖: Nat.div2, Nat.div2_val, Nat.div_eq_of_lt, Nat.shiftRight, Nat.shiftRight_eq_div_pow, Nat.zero_shiftRight, PosNum, PosNum.shiftr, PosNum.shiftr_eq_shiftRight, add_co, div2_val, div_eq_of_lt, generalizing, shiftRight, shiftRight_eq_div_pow, shiftr, shiftr_eq_shiftRight, zero_shiftRight
 -/
@@ -3300,7 +3462,13 @@ theorem castNum_testBit
     induction n generalizing m <;> obtain - | m | m := m
         <;> simp only [PosNum.testBit]
     · rfl
-    · rw [PosNum.cast_bit1, ← two_mul, ← cong
+    · rw [PosNum.cast_bit1, ← two_mul, ← congr_fun Nat.bit_true, Nat.testBit_bit_zero]
+    · rw [PosNum.cast_bit0, ← two_mul, ← congr_fun Nat.bit_false, Nat.testBit_bit_zero]
+    · simp [Nat.testBit_add_one]
+    case succ.bit1 n IH =>
+      rw [PosNum.cast_bit1]; rw [← two_mul]; rw [← congr_fun Nat.bit_true]; rw [Nat.testBit_bit_succ]; rw [IH]
+    case succ.bit0 n IH =>
+      rw [PosNum.cast_bit0]; rw [← two_mul]; rw [← congr_fun Nat.bit_false]; rw [Nat.testBit_bit_succ]; rw [IH]
 
 中文:
 定理 castNum_testBit
@@ -3315,7 +3483,13 @@ theorem castNum_testBit
     induction n generalizing m <;> obtain - | m | m := m
         <;> simp only [PosNum.testBit]
     · rfl
-    · rw [PosNum.cast_bit1, ← two_mul, ← cong
+    · rw [PosNum.cast_bit1, ← two_mul, ← congr_fun Nat.bit_true, Nat.testBit_bit_zero]
+    · rw [PosNum.cast_bit0, ← two_mul, ← congr_fun Nat.bit_false, Nat.testBit_bit_zero]
+    · simp [Nat.testBit_add_one]
+    case succ.bit1 n IH =>
+      rw [PosNum.cast_bit1]; rw [← two_mul]; rw [← congr_fun Nat.bit_true]; rw [Nat.testBit_bit_succ]; rw [IH]
+    case succ.bit0 n IH =>
+      rw [PosNum.cast_bit0]; rw [← two_mul]; rw [← congr_fun Nat.bit_false]; rw [Nat.testBit_bit_succ]; rw [IH]
 
 Depends on / 依赖: Nat.bit_false, Nat.bit_true, Nat.testBit_add_one, Nat.testBit_bit_zero, Nat.zero_testBit, Num.zero, PosNum, PosNum.cast_bit0, PosNum.cast_bit1, PosNum.testBit, bit_false, bit_true, cast_bit0, cast_bit1, cast_pos, congr_fun, generalizing, succ.bit1, testBit, testBit_add_one
 -/

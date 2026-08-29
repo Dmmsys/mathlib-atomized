@@ -50,7 +50,8 @@ definition valueGroup₀_equiv_withZeroMulInt
     (Subgroup.zpowers_inv (g := hv.generator') ▸ hv.generator'_zpowers_eq_top)).symm
   map_le_map_iff' {x y} := by
     rw [(WithZero.map'_strictMono (MulEquiv.strictMono_symm (mulintEquivOfZPowersEqTop_strictMono
-    (Subgroup.zpowers_inv (g := hv.generato
+    (Subgroup.zpowers_inv (g := hv.generator') ▸ hv.generator'_zpowers_eq_top)
+    (Left.one_lt_inv_iff.mpr hv.generator'_lt_one)))).le_iff_le]
 
 中文:
 定义 valueGroup₀_equiv_withZeroMul整数
@@ -59,7 +60,8 @@ definition valueGroup₀_equiv_withZeroMulInt
     (Subgroup.zpowers_inv (g := hv.generator') ▸ hv.generator'_zpowers_eq_top)).symm
   map_le_map_iff' {x y} := by
     rw [(WithZero.map'_strictMono (MulEquiv.strictMono_symm (mulintEquivOfZPowersEqTop_strictMono
-    (Subgroup.zpowers_inv (g := hv.generato
+    (Subgroup.zpowers_inv (g := hv.generator') ▸ hv.generator'_zpowers_eq_top)
+    (Left.one_lt_inv_iff.mpr hv.generator'_lt_one)))).le_iff_le]
 
 Depends on / 依赖: MulEquiv, MulEquiv.withZero, intEquivOfZPowersEqTop, withZero
 -/
@@ -186,7 +188,11 @@ lemma valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective
   simp only [MonoidWithZeroHom.coe_ofClass] at h0
   · simp [h0]
   · rw [WithZero.map'_coe, ← coe_unzero h0, WithZero.coe_inj,
-    ← (MulEquiv.injective (intEquivOf
+    ← (MulEquiv.injective (intEquivOfZPowersEqTop _
+    (Subgroup.zpowers_inv (g := hv.generator') ▸ hv.generator'_zpowers_eq_top))).eq_iff]
+    ext
+    simp [generator', generator_eq_exp_neg_one_of_surjective hsurj, toAdd_unzero_eq_log h0,
+      exp_log h0]
 
 中文:
 引理 valueGroup₀_equiv_withZeroMul整数_restrict_apply_of_surjective
@@ -198,7 +204,11 @@ lemma valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective
   simp only [MonoidWithZeroHom.coe_ofClass] at h0
   · simp [h0]
   · rw [WithZero.map'_coe, ← coe_unzero h0, WithZero.coe_inj,
-    ← (MulEquiv.injective (intEquivOf
+    ← (MulEquiv.injective (intEquivOfZPowersEqTop _
+    (Subgroup.zpowers_inv (g := hv.generator') ▸ hv.generator'_zpowers_eq_top))).eq_iff]
+    ext
+    simp [generator', generator_eq_exp_neg_one_of_surjective hsurj, toAdd_unzero_eq_log h0,
+      exp_log h0]
 
 Depends on / 依赖: MonoidWithZeroHom, MonoidWithZeroHom.coe_ofClass, MulEquiv, MulEquiv.injective, Subgroup, Subgroup.zpowers_inv, Valuation, Valuation.restrict_def, WithZero, WithZero.coe_inj, WithZero.map, _coe, _zpowers_eq_top, coe_inj, coe_ofClass, coe_unzero, eq_iff, exp_log, generator, generator_eq_exp_neg_one_of_surjective
 -/

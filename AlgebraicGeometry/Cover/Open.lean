@@ -91,7 +91,9 @@ definition affineCover
     f x := ⟨(e x).inv ≫ X.toLocallyRingedSpace.ofRestrict _⟩
     mem₀ := by
       rw [presieve₀_mem_precoverage_iff]
-      refine ⟨fun x => ⟨x, ⟨(e x).hom.base ⟨x, (U x).2⟩, ?_⟩⟩, inferInstance
+      refine ⟨fun x => ⟨x, ⟨(e x).hom.base ⟨x, (U x).2⟩, ?_⟩⟩, inferInstance⟩
+      change ((((e x).hom ≫ (e x).inv).base ≫ (X.ofRestrict _).base)) ⟨x, _⟩ = x
+      cat_disch }
 
 中文:
 定义 affineCover
@@ -105,7 +107,9 @@ definition affineCover
     f x := ⟨(e x).inv ≫ X.toLocallyRingedSpace.ofRestrict _⟩
     mem₀ := by
       rw [presieve₀_mem_precoverage_iff]
-      refine ⟨fun x => ⟨x, ⟨(e x).hom.base ⟨x, (U x).2⟩, ?_⟩⟩, inferInstance
+      refine ⟨fun x => ⟨x, ⟨(e x).hom.base ⟨x, (U x).2⟩, ?_⟩⟩, inferInstance⟩
+      change ((((e x).hom ≫ (e x).inv).base ≫ (X.ofRestrict _).base)) ⟨x, _⟩ = x
+      cat_disch }
 
 Depends on / 依赖: X.local_affine, X.ofRestrict, X.toLocallyRingedSpace.ofRestrict, cat_disch, hom.base, local_affine, ofRestrict, toLocallyRingedSpace
 -/
@@ -194,7 +198,17 @@ definition OpenCover.finiteSubcover
   let t := this.choose
   have h : forall x : X, exists y : t, x in Set.range (𝒰.f (𝒰.idx y)) := by
     intro x
-    have
+    have h' : x in (⊤ : Set X) := trivial
+    rw [← Classical.choose_spec this]; rw [Set.mem_iUnion] at h'
+    rcases h' with ⟨y, _, ⟨hy, rfl⟩, hy'⟩
+    exact ⟨⟨y, hy⟩, hy'⟩
+  exact
+    { I₀ := t
+      X := fun x => 𝒰.X (𝒰.idx x.1)
+      f := fun x => 𝒰.f (𝒰.idx x.1)
+      mem₀ := by
+        rw [presieve₀_mem_precoverage_iff]
+        exact ⟨h, inferInstance⟩ }
 
 中文:
 定义 OpenCover.finiteSubcover
@@ -206,7 +220,17 @@ definition OpenCover.finiteSubcover
   let t := this.choose
   have h : forall x : X, exists y : t, x in Set.range (𝒰.f (𝒰.idx y)) := by
     intro x
-    have
+    have h' : x in (⊤ : Set X) := trivial
+    rw [← Classical.choose_spec this]; rw [Set.mem_iUnion] at h'
+    rcases h' with ⟨y, _, ⟨hy, rfl⟩, hy'⟩
+    exact ⟨⟨y, hy⟩, hy'⟩
+  exact
+    { I₀ := t
+      X := fun x => 𝒰.X (𝒰.idx x.1)
+      f := fun x => 𝒰.f (𝒰.idx x.1)
+      mem₀ := by
+        rw [presieve₀_mem_precoverage_iff]
+        exact ⟨h, inferInstance⟩ }
 
 Depends on / 依赖: Classical, Classical.choose_spec, CompactSpace, CompactSpace.elim_nhds_subcover, IsOpenImmersion, IsOpenImmersion.isOpen_range, Set.mem_iUnion, Set.range, choose_spec, covers, elim_nhds_subcover, isOpen_range, mem_iUnion, mem_nhds, this.choose
 -/
@@ -267,7 +291,8 @@ theorem OpenCover.compactSpace
       (TopCat.homeoOfIso
         (asIso
           (IsOpenImmersion.isoOfRangeEq (𝒰.f i)
-        
+            (X.ofRestrict (Opens.isOpenEmbedding ⟨_, (𝒰.map_prop i).base_open.isOpen_range⟩))
+            Subtype.range_coe.symm).hom.base))
 
 中文:
 定理 OpenCover.compactSpace
@@ -283,7 +308,8 @@ theorem OpenCover.compactSpace
       (TopCat.homeoOfIso
         (asIso
           (IsOpenImmersion.isoOfRangeEq (𝒰.f i)
-        
+            (X.ofRestrict (Opens.isOpenEmbedding ⟨_, (𝒰.map_prop i).base_open.isOpen_range⟩))
+            Subtype.range_coe.symm).hom.base))
 
 Depends on / 依赖: Homeomorph, Homeomorph.compactSpace, IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, Opens.isOpenEmbedding, Subtype, Subtype.range_coe.symm, TopCat, TopCat.homeoOfIso, X.ofRestrict, base_open, base_open.isOpen_range, compactSpace, hom.base, homeoOfIso, iUnion_range, isCompact_iUnion, isCompact_iff_compactSpace, isCompact_univ_iff, isOpenEmbedding
 -/
@@ -469,7 +495,12 @@ lemma OpenCover.pullbackCoverAffineRefinementObjIso_inv_map
   simp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
     PreZeroHypercover.pullback₁_X, AffineOpenCover.openCover_X, AffineOpenCover.openCover_f,
     pullbackCoverAffineRefinementObjIso, Iso.trans_inv, asIso_inv, Iso.symm_inv, Category.assoc,
-    PreZeroHypercover.pullback₁_f, p
+    PreZeroHypercover.pullback₁_f, pullbackSymmetry_inv_comp_fst, IsIso.inv_comp_eq,
+    limit.lift_π_assoc, PullbackCone.mk_pt, cospan_left, PullbackCone.mk_π_app,
+    pullbackSymmetry_hom_comp_fst]
+  convert!
+    pullbackSymmetry_inv_comp_snd_assoc ((𝒰.X i.1).affineCover.f i.2) (pullback.fst _ _) _ using 2
+  exact pullbackRightPullbackFstIso_hom_snd _ _ _
 
 中文:
 引理 OpenCover.pullbackCoverAffineRefinementObjIso_inv_map
@@ -478,7 +509,12 @@ lemma OpenCover.pullbackCoverAffineRefinementObjIso_inv_map
   simp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
     PreZeroHypercover.pullback₁_X, AffineOpenCover.openCover_X, AffineOpenCover.openCover_f,
     pullbackCoverAffineRefinementObjIso, Iso.trans_inv, asIso_inv, Iso.symm_inv, Category.assoc,
-    PreZeroHypercover.pullback₁_f, p
+    PreZeroHypercover.pullback₁_f, pullbackSymmetry_inv_comp_fst, IsIso.inv_comp_eq,
+    limit.lift_π_assoc, PullbackCone.mk_pt, cospan_left, PullbackCone.mk_π_app,
+    pullbackSymmetry_hom_comp_fst]
+  convert!
+    pullbackSymmetry_inv_comp_snd_assoc ((𝒰.X i.1).affineCover.f i.2) (pullback.fst _ _) _ using 2
+  exact pullbackRightPullbackFstIso_hom_snd _ _ _
 
 Depends on / 依赖: AffineOpenCover, AffineOpenCover.openCover_X, AffineOpenCover.openCover_f, Category, Category.assoc, IsIso.inv_comp_eq, Iso.symm_inv, Iso.trans_inv, PreZeroHypercover, PreZeroHypercover.pullback, Precoverage, Precoverage.ZeroHypercover.pullback, PullbackCone, PullbackCone.mk_, PullbackCone.mk_pt, ZeroHypercover, asIso_inv, convert, cospan_left, inv_comp_eq
 -/
@@ -508,7 +544,8 @@ lemma OpenCover.pullbackCoverAffineRefinementObjIso_inv_pullbackHom
   simp only [Cover.pullbackHom, pullbackCoverAffineRefinementObjIso, Iso.trans_inv, asIso_inv,
     Iso.symm_inv, Category.assoc, pullbackSymmetry_inv_comp_snd, IsIso.inv_comp_eq, limit.lift_π,
     PullbackCone.mk_π_app, Category.comp_id]
-  convert! pullbackSymmetry_inv_comp_fst ((𝒰.X i.1).affineC
+  convert! pullbackSymmetry_inv_comp_fst ((𝒰.X i.1).affineCover.f i.2) (pullback.fst _ _)
+  exact pullbackRightPullbackFstIso_hom_fst _ _ _
 
 中文:
 引理 OpenCover.pullbackCoverAffineRefinementObjIso_inv_pullbackHom
@@ -516,7 +553,8 @@ lemma OpenCover.pullbackCoverAffineRefinementObjIso_inv_pullbackHom
   simp only [Cover.pullbackHom, pullbackCoverAffineRefinementObjIso, Iso.trans_inv, asIso_inv,
     Iso.symm_inv, Category.assoc, pullbackSymmetry_inv_comp_snd, IsIso.inv_comp_eq, limit.lift_π,
     PullbackCone.mk_π_app, Category.comp_id]
-  convert! pullbackSymmetry_inv_comp_fst ((𝒰.X i.1).affineC
+  convert! pullbackSymmetry_inv_comp_fst ((𝒰.X i.1).affineCover.f i.2) (pullback.fst _ _)
+  exact pullbackRightPullbackFstIso_hom_fst _ _ _
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Cover.pullbackHom, IsIso.inv_comp_eq, Iso.symm_inv, Iso.trans_inv, PullbackCone, PullbackCone.mk_, affineCover, affineCover.f, asIso_inv, comp_id, convert, inv_comp_eq, limit.lift_, pullback, pullback.fst, pullbackCoverAffineRefinementObjIso, pullbackHom
 -/
@@ -547,7 +585,11 @@ definition affineOpenCoverOfSpanRangeEqTop
     have : exists i, s i ∉ x.asIdeal := by
       by_contra! h; apply x.2.ne_top; rwa [← top_le_iff, ← hs, Ideal.span_le, Set.range_subset_iff]
     exact this.choose
- 
+  covers x := by
+    generalize_proofs H
+    let i := H.choose
+    have := PrimeSpectrum.localization_away_comap_range (Localization.Away (s i)) (s i)
+    exact (eq_iff_iff.mp congr(x in $this)).mpr H.choose_spec
 
 中文:
 定义 affineOpenCoverOfSpanRangeEqTop
@@ -559,7 +601,11 @@ definition affineOpenCoverOfSpanRangeEqTop
     have : exists i, s i ∉ x.asIdeal := by
       by_contra! h; apply x.2.ne_top; rwa [← top_le_iff, ← hs, Ideal.span_le, Set.range_subset_iff]
     exact this.choose
- 
+  covers x := by
+    generalize_proofs H
+    let i := H.choose
+    have := PrimeSpectrum.localization_away_comap_range (Localization.Away (s i)) (s i)
+    exact (eq_iff_iff.mp congr(x in $this)).mpr H.choose_spec
 -/
 def affineOpenCoverOfSpanRangeEqTop {R : CommRingCat} {ι : Type*} (s : ι -> R)
     (hs : Ideal.span (Set.range s) = ⊤) : (Spec R).AffineOpenCover where
@@ -609,7 +655,13 @@ lemma OpenCover.ext_elem
     (fun i => (𝒰.f (𝒰.idx i)).opensRange ⊓ U) _ (fun _ => homOfLE inf_le_right)
   · intro x hx
     simp only [Opens.iSup_mk, Opens.carrier_eq_coe, Opens.coe_inf, Hom.coe_opensRange, Opens.mem_mk,
-      Set.mem_iUnion, Set.mem_inter_iff, Set.mem_rang
+      Set.mem_iUnion, Set.mem_inter_iff, Set.mem_range, SetLike.mem_coe, exists_and_right]
+    refine ⟨?_, hx⟩
+    simpa using ⟨_, 𝒰.covers x⟩
+  · intro x
+    replace h := h (𝒰.idx x)
+    rw [← IsOpenImmersion.map_ΓIso_inv] at h
+    exact (IsOpenImmersion.ΓIso (𝒰.f (𝒰.idx x)) U).commRingCatIsoToRingEquiv.symm.injective h
 
 中文:
 引理 OpenCover.ext_elem
@@ -619,7 +671,13 @@ lemma OpenCover.ext_elem
     (fun i => (𝒰.f (𝒰.idx i)).opensRange ⊓ U) _ (fun _ => homOfLE inf_le_right)
   · intro x hx
     simp only [Opens.iSup_mk, Opens.carrier_eq_coe, Opens.coe_inf, Hom.coe_opensRange, Opens.mem_mk,
-      Set.mem_iUnion, Set.mem_inter_iff, Set.mem_rang
+      Set.mem_iUnion, Set.mem_inter_iff, Set.mem_range, SetLike.mem_coe, exists_and_right]
+    refine ⟨?_, hx⟩
+    simpa using ⟨_, 𝒰.covers x⟩
+  · intro x
+    replace h := h (𝒰.idx x)
+    rw [← IsOpenImmersion.map_ΓIso_inv] at h
+    exact (IsOpenImmersion.ΓIso (𝒰.f (𝒰.idx x)) U).commRingCatIsoToRingEquiv.symm.injective h
 
 Depends on / 依赖: Hom.coe_opensRange, IsOpenImmersion, IsOpenImmersion.map_, Opens.carrier_eq_coe, Opens.coe_inf, Opens.iSup_mk, Opens.mem_mk, Set.mem_iUnion, Set.mem_inter_iff, Set.mem_range, SetLike, SetLike.mem_coe, TopCat, TopCat.Sheaf.eq_of_locally_eq, X.sheaf, carrier_eq_coe, coe_inf, coe_opensRange, commRingCatIs, covers
 -/
@@ -669,7 +727,10 @@ lemma isNilpotent_of_isNilpotent_cover
   let N : Nat := Finset.sup Finset.univ fn
   have hfnleN (i : 𝒰.I₀) : fn i <= N := Finset.le_sup (Finset.mem_univ i)
   use N
-  apply zero_of_zero_cover (𝒰 :=
+  apply zero_of_zero_cover (𝒰 := 𝒰)
+  on_goal 1 => intro i; simp only [map_pow]
+  -- This closes both remaining goals at once.
+  exact pow_eq_zero_of_le (hfnleN i) (hfn i)
 
 中文:
 引理 isNilpotent_of_isNilpotent_cover
@@ -681,7 +742,10 @@ lemma isNilpotent_of_isNilpotent_cover
   let N : Nat := Finset.sup Finset.univ fn
   have hfnleN (i : 𝒰.I₀) : fn i <= N := Finset.le_sup (Finset.mem_univ i)
   use N
-  apply zero_of_zero_cover (𝒰 :=
+  apply zero_of_zero_cover (𝒰 := 𝒰)
+  on_goal 1 => intro i; simp only [map_pow]
+  -- This closes both remaining goals at once.
+  exact pow_eq_zero_of_le (hfnleN i) (hfn i)
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, ofFinite
 -/
@@ -713,7 +777,9 @@ X r := Spec .of Localization.Away r
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ⟨1, ?_⟩, AlgebraicGeometry.Scheme.isOpenImmersion_SpecMap_localizationAway⟩
-    rw [Set.range_eq_univ.mpr ((TopCat
+    rw [Set.range_eq_univ.mpr ((TopCat.epi_iff_surjective _).mp _)]
+    · exact trivial
+    · infer_instance
 
 中文:
 定义 affineBasisCoverOfAffine
@@ -724,7 +790,9 @@ X r := Spec .of Localization.Away r
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ⟨1, ?_⟩, AlgebraicGeometry.Scheme.isOpenImmersion_SpecMap_localizationAway⟩
-    rw [Set.range_eq_univ.mpr ((TopCat
+    rw [Set.range_eq_univ.mpr ((TopCat.epi_iff_surjective _).mp _)]
+    · exact trivial
+    · infer_instance
 -/
 def affineBasisCoverOfAffine (R : CommRingCat.{u}) : OpenCover (Spec R) where
   I₀ := R
@@ -838,7 +906,14 @@ theorem affineBasisCover_is_basis
   · rintro a U haU hU
     rcases X.affineCover.covers a with ⟨x, e⟩
     let U' := (X.affineCover.f (X.affineCover.idx a)) ⁻¹' U
-    have hxU' : x in 
+    have hxU' : x in U' := by rw [← e] at haU; exact haU
+    rcases PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxU'
+        ((X.affineCover.f (X.affineCover.idx a)).continuous.isOpen_preimage _
+          hU) with
+      ⟨_, ⟨_, ⟨s, rfl⟩, rfl⟩, hxV, hVU⟩
+    refine ⟨_, ⟨⟨_, s⟩, rfl⟩, ?_, ?_⟩ <;> rw [affineBasisCover_map_range]
+    · exact ⟨x, hxV, e⟩
+    · rw [Set.image_subset_iff]; exact hVU
 
 中文:
 定理 affineBasisCover_is_basis
@@ -850,7 +925,14 @@ theorem affineBasisCover_is_basis
   · rintro a U haU hU
     rcases X.affineCover.covers a with ⟨x, e⟩
     let U' := (X.affineCover.f (X.affineCover.idx a)) ⁻¹' U
-    have hxU' : x in 
+    have hxU' : x in U' := by rw [← e] at haU; exact haU
+    rcases PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxU'
+        ((X.affineCover.f (X.affineCover.idx a)).continuous.isOpen_preimage _
+          hU) with
+      ⟨_, ⟨_, ⟨s, rfl⟩, rfl⟩, hxV, hVU⟩
+    refine ⟨_, ⟨⟨_, s⟩, rfl⟩, ?_, ?_⟩ <;> rw [affineBasisCover_map_range]
+    · exact ⟨x, hxV, e⟩
+    · rw [Set.image_subset_iff]; exact hVU
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isOpen_range, PrimeSpectrum, PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open, TopologicalSpace, TopologicalSpace.isTopologicalBasis_of_isOpen_of_nhds, X.affineBasisCover.f, X.affineCover.covers, X.affineCover.f, X.affineCover.idx, affineBasisCover, affineCover, continuous, continuous.isOpen_preimage, covers, exists_subset_of_mem_open, isBasis_basic_opens, isOpen_preimage, isOpen_range, isTopologicalBasis_of_isOpen_of_nhds
 -/

@@ -646,7 +646,7 @@ theorem comp
     (fun p : ↥(Set.Iic i) × Ω => u (p.fst : ι) p.snd) ∘ fun p : ↥(Set.Iic i) × Ω =>
       (⟨t (p.fst : ι) p.snd, Set.mem_Iic.mpr ((ht_le _ _).trans p.fst.prop)⟩, p.snd) := rfl
   rw [this]
-  exact (h i).comp ((ht i).s
+  exact (h i).comp ((ht i).subtype_mk.prodMk measurable_snd)
 
 中文:
 定理 comp
@@ -657,7 +657,7 @@ theorem comp
     (fun p : ↥(Set.Iic i) × Ω => u (p.fst : ι) p.snd) ∘ fun p : ↥(Set.Iic i) × Ω =>
       (⟨t (p.fst : ι) p.snd, Set.mem_Iic.mpr ((ht_le _ _).trans p.fst.prop)⟩, p.snd) := rfl
   rw [this]
-  exact (h i).comp ((ht i).s
+  exact (h i).comp ((ht i).subtype_mk.prodMk measurable_snd)
 -/
 protected theorem comp {t : ι -> Ω -> ι} (h : IsProgressive f u) (ht : IsProgressive f t)
     (ht_le : forall i ω, t i ω <= i) :
@@ -865,7 +865,7 @@ theorem comp
     (fun p : ↥(Set.Iic i) × Ω => u (p.fst : ι) p.snd) ∘ fun p : ↥(Set.Iic i) × Ω =>
       (⟨t (p.fst : ι) p.snd, Set.mem_Iic.mpr ((ht_le _ _).trans p.fst.prop)⟩, p.snd) := rfl
   rw [this]
-  exact (h i).comp_measurabl
+  exact (h i).comp_measurable ((ht i).measurable.subtype_mk.prodMk measurable_snd)
 
 中文:
 定理 comp
@@ -876,7 +876,7 @@ theorem comp
     (fun p : ↥(Set.Iic i) × Ω => u (p.fst : ι) p.snd) ∘ fun p : ↥(Set.Iic i) × Ω =>
       (⟨t (p.fst : ι) p.snd, Set.mem_Iic.mpr ((ht_le _ _).trans p.fst.prop)⟩, p.snd) := rfl
   rw [this]
-  exact (h i).comp_measurabl
+  exact (h i).comp_measurable ((ht i).measurable.subtype_mk.prodMk measurable_snd)
 -/
 protected theorem comp {t : ι -> Ω -> ι} [TopologicalSpace ι] [BorelSpace ι] [PseudoMetrizableSpace ι]
     (h : IsStronglyProgressive f u) (ht : IsStronglyProgressive f t) (ht_le : forall i ω, t i ω <= i) :
@@ -928,7 +928,9 @@ theorem finsetProd'
 protected alias finset_sum' := MeasureTheory.IsStronglyProgressive.finsetSum'
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-protected alia
+protected alias finset_prod' := MeasureTheory.IsStronglyProgressive.finsetProd'
+
+@[to_additive]
 
 中文:
 定理 finsetProd'
@@ -940,7 +942,9 @@ protected alia
 protected alias finset_sum' := MeasureTheory.IsStronglyProgressive.finsetSum'
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-protected alia
+protected alias finset_prod' := MeasureTheory.IsStronglyProgressive.finsetProd'
+
+@[to_additive]
 -/
 protected theorem finsetProd' {γ} [CommMonoid β] [ContinuousMul β] {U : γ -> ι -> Ω -> β}
     {s : Finset γ} (h : forall c in s, IsStronglyProgressive f (U c)) :
@@ -968,7 +972,9 @@ theorem finsetProd
 protected alias finset_sum := MeasureTheory.IsStronglyProgressive.finsetSum
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-protected alias finset_p
+protected alias finset_prod := MeasureTheory.IsStronglyProgressive.finsetProd
+
+@[to_additive]
 
 中文:
 定理 finsetProd
@@ -980,7 +986,9 @@ protected alias finset_p
 protected alias finset_sum := MeasureTheory.IsStronglyProgressive.finsetSum
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-protected alias finset_p
+protected alias finset_prod := MeasureTheory.IsStronglyProgressive.finsetProd
+
+@[to_additive]
 -/
 protected theorem finsetProd {γ} [CommMonoid β] [ContinuousMul β] {U : γ -> ι -> Ω -> β}
     {s : Finset γ} (h : forall c in s, IsStronglyProgressive f (U c)) :
@@ -1186,7 +1194,53 @@ theorem StronglyAdapted.isStronglyProgressive_of_discrete
 @[deprecated (since := "2026-04-24")] alias progMeasurable_const := isStronglyProgressive_const
 
 @[deprecated (since := "2026-04-24")]
-a
+alias ProgMeasurable.stronglyAdapted := IsStronglyProgressive.stronglyAdapted
+
+@[deprecated (since := "2026-04-24")] alias ProgMeasurable.comp := IsStronglyProgressive.comp
+
+@[deprecated (since := "2026-04-24")] alias ProgMeasurable.add := IsStronglyProgressive.add
+
+@[to_additive existing, deprecated (since := "2026-04-24")]
+alias ProgMeasurable.mul := IsStronglyProgressive.mul
+
+@[deprecated (since := "2026-04-24")]
+alias ProgMeasurable.finset_sum' := IsStronglyProgressive.finsetSum'
+
+@[to_additive existing, deprecated (since := "2026-04-24")]
+alias ProgMeasurable.finset_prod' := IsStronglyProgressive.finsetProd'
+
+@[deprecated (since := "2026-04-24")]
+alias ProgMeasurable.finset_sum := IsStronglyProgressive.finsetSum
+
+@[to_additive existing, deprecated (since := "2026-04-24")]
+alias ProgMeasurable.finset_prod := IsStronglyProgressive.finsetProd
+
+@[deprecated (since := "2026-04-24")]
+alias ProgMeasurable.neg := IsStronglyProgressive.neg
+
+@[to_additive existing, deprecated (since := "2026-04-24")]
+alias ProgMeasurable.inv := IsStronglyProgressive.inv
+
+@[deprecated (since := "2026-04-24")] alias ProgMeasurable.sub := IsStronglyProgressive.sub
+
+@[to_additive existing ProgMeasurable.sub, deprecated (since := "2026-04-24")]
+alias ProgMeasurable.div' := IsStronglyProgressive.div'
+
+@[deprecated (since := "2026-04-24")] alias ProgMeasurable.norm := IsStronglyProgressive.norm
+
+@[deprecated (since := "2026-04-24")]
+alias progMeasurable_of_tendsto := isStronglyProgressive_of_tendsto
+
+@[deprecated (since := "2026-04-24")]
+alias progMeasurable_of_tendsto' := isStronglyProgressive_of_tendsto'
+
+@[deprecated (since := "2026-04-24")]
+alias StronglyAdapted.progMeasurable_of_continuous :=
+  StronglyAdapted.isStronglyProgressive_of_continuous
+
+@[deprecated (since := "2026-04-24")]
+alias StronglyAdapted.progMeasurable_of_discrete :=
+  StronglyAdapted.isStronglyProgressive_of_discrete
 
 中文:
 定理 StronglyAdapted.isStronglyProgressive_of_discrete
@@ -1198,7 +1252,53 @@ a
 @[deprecated (since := "2026-04-24")] alias progMeasurable_const := isStronglyProgressive_const
 
 @[deprecated (since := "2026-04-24")]
-a
+alias ProgMeasurable.stronglyAdapted := IsStronglyProgressive.stronglyAdapted
+
+@[deprecated (since := "2026-04-24")] alias ProgMeasurable.comp := IsStronglyProgressive.comp
+
+@[deprecated (since := "2026-04-24")] alias ProgMeasurable.add := IsStronglyProgressive.add
+
+@[to_additive existing, deprecated (since := "2026-04-24")]
+alias ProgMeasurable.mul := IsStronglyProgressive.mul
+
+@[deprecated (since := "2026-04-24")]
+alias ProgMeasurable.finset_sum' := IsStronglyProgressive.finsetSum'
+
+@[to_additive existing, deprecated (since := "2026-04-24")]
+alias ProgMeasurable.finset_prod' := IsStronglyProgressive.finsetProd'
+
+@[deprecated (since := "2026-04-24")]
+alias ProgMeasurable.finset_sum := IsStronglyProgressive.finsetSum
+
+@[to_additive existing, deprecated (since := "2026-04-24")]
+alias ProgMeasurable.finset_prod := IsStronglyProgressive.finsetProd
+
+@[deprecated (since := "2026-04-24")]
+alias ProgMeasurable.neg := IsStronglyProgressive.neg
+
+@[to_additive existing, deprecated (since := "2026-04-24")]
+alias ProgMeasurable.inv := IsStronglyProgressive.inv
+
+@[deprecated (since := "2026-04-24")] alias ProgMeasurable.sub := IsStronglyProgressive.sub
+
+@[to_additive existing ProgMeasurable.sub, deprecated (since := "2026-04-24")]
+alias ProgMeasurable.div' := IsStronglyProgressive.div'
+
+@[deprecated (since := "2026-04-24")] alias ProgMeasurable.norm := IsStronglyProgressive.norm
+
+@[deprecated (since := "2026-04-24")]
+alias progMeasurable_of_tendsto := isStronglyProgressive_of_tendsto
+
+@[deprecated (since := "2026-04-24")]
+alias progMeasurable_of_tendsto' := isStronglyProgressive_of_tendsto'
+
+@[deprecated (since := "2026-04-24")]
+alias StronglyAdapted.progMeasurable_of_continuous :=
+  StronglyAdapted.isStronglyProgressive_of_continuous
+
+@[deprecated (since := "2026-04-24")]
+alias StronglyAdapted.progMeasurable_of_discrete :=
+  StronglyAdapted.isStronglyProgressive_of_discrete
 
 Depends on / 依赖: continuous_of_discreteTopology, h.isStronglyProgressive_of_continuous, isStronglyProgressive_of_continuous
 -/

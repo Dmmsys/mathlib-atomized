@@ -560,7 +560,9 @@ definition ofIsLimitKernelFork
   wπ := Fork.IsLimit.hom_ext hc (by
     dsimp
     simp only [comp_id, zero_comp, Fork.IsLimit.lift_ι, Fork.ι_ofι, hf])
-  hπ := CokernelCofork.IsColimit.ofId _ (Fork.IsLimit.hom
+  hπ := CokernelCofork.IsColimit.ofId _ (Fork.IsLimit.hom_ext hc (by
+    dsimp
+    simp only [comp_id, zero_comp, Fork.IsLimit.lift_ι, Fork.ι_ofι, hf]))
 
 中文:
 定义 ofIsLimitKernelFork
@@ -574,7 +576,9 @@ definition ofIsLimitKernelFork
   wπ := Fork.IsLimit.hom_ext hc (by
     dsimp
     simp only [comp_id, zero_comp, Fork.IsLimit.lift_ι, Fork.ι_ofι, hf])
-  hπ := CokernelCofork.IsColimit.ofId _ (Fork.IsLimit.hom
+  hπ := CokernelCofork.IsColimit.ofId _ (Fork.IsLimit.hom_ext hc (by
+    dsimp
+    simp only [comp_id, zero_comp, Fork.IsLimit.lift_ι, Fork.ι_ofι, hf]))
 
 Depends on / 依赖: c.pt
 -/
@@ -714,7 +718,8 @@ definition copy
   hi := IsKernel.isoKernel _ _ h.hi eK (by simp)
   wπ := by simp [IsKernel.isoKernel]
   hπ := IsColimit.equivOfNatIsoOfIso
-    (parallelPair.ext (Iso.refl S.X₁) eK.symm (by simp [IsKernel.isoKernel])
+    (parallelPair.ext (Iso.refl S.X₁) eK.symm (by simp [IsKernel.isoKernel]) (by simp)) _ _
+    (Cocone.ext (by exact eH.symm) (by rintro (_ | _) <;> simp [IsKernel.isoKernel])) h.hπ
 
 中文:
 定义 copy
@@ -727,7 +732,8 @@ definition copy
   hi := IsKernel.isoKernel _ _ h.hi eK (by simp)
   wπ := by simp [IsKernel.isoKernel]
   hπ := IsColimit.equivOfNatIsoOfIso
-    (parallelPair.ext (Iso.refl S.X₁) eK.symm (by simp [IsKernel.isoKernel])
+    (parallelPair.ext (Iso.refl S.X₁) eK.symm (by simp [IsKernel.isoKernel]) (by simp)) _ _
+    (Cocone.ext (by exact eH.symm) (by rintro (_ | _) <;> simp [IsKernel.isoKernel])) h.hπ
 -/
 @[simps] def copy {K' H' : C} (eK : K' ≅ h.K) (eH : H' ≅ h.H) : S.LeftHomologyData where
   K := K'
@@ -1034,7 +1040,10 @@ instance :
   let φK : h₁.K ⟶ h₂.K := h₂.liftK (h₁.i ≫ φ.τ₂)
     (by rw [assoc, φ.comm₂₃, h₁.wi_assoc, zero_comp])
   have commf' : h₁.f' ≫ φK = φ.τ₁ ≫ h₂.f' := by
-    rw [← cancel_mono h₂.i]; rw [assoc]; rw [assoc]; rw [LeftHomologyData.liftK_i]; rw [LeftHomologyData.f'_i_assoc]; rw [LeftHomologyData.f'_i];
+    rw [← cancel_mono h₂.i]; rw [assoc]; rw [assoc]; rw [LeftHomologyData.liftK_i]; rw [LeftHomologyData.f'_i_assoc]; rw [LeftHomologyData.f'_i]; rw [φ.comm₁₂]
+  let φH : h₁.H ⟶ h₂.H := h₁.descH (φK ≫ h₂.π)
+    (by rw [reassoc_of% commf', h₂.f'_π, comp_zero])
+  exact ⟨φK, φH, by simp [φK], commf', by simp [φH]⟩⟩
 
 中文:
 实例 :
@@ -1043,7 +1052,10 @@ instance :
   let φK : h₁.K ⟶ h₂.K := h₂.liftK (h₁.i ≫ φ.τ₂)
     (by rw [assoc, φ.comm₂₃, h₁.wi_assoc, zero_comp])
   have commf' : h₁.f' ≫ φK = φ.τ₁ ≫ h₂.f' := by
-    rw [← cancel_mono h₂.i]; rw [assoc]; rw [assoc]; rw [LeftHomologyData.liftK_i]; rw [LeftHomologyData.f'_i_assoc]; rw [LeftHomologyData.f'_i];
+    rw [← cancel_mono h₂.i]; rw [assoc]; rw [assoc]; rw [LeftHomologyData.liftK_i]; rw [LeftHomologyData.f'_i_assoc]; rw [LeftHomologyData.f'_i]; rw [φ.comm₁₂]
+  let φH : h₁.H ⟶ h₂.H := h₁.descH (φK ≫ h₂.π)
+    (by rw [reassoc_of% commf', h₂.f'_π, comp_zero])
+  exact ⟨φK, φH, by simp [φK], commf', by simp [φH]⟩⟩
 
 Depends on / 依赖: LeftHomologyData, LeftHomologyData.f, LeftHomologyData.liftK_i, _i_assoc, cancel_mono, comp_zero, liftK_i, reassoc_of, wi_assoc, zero_comp
 -/
@@ -2912,7 +2924,20 @@ definition ofEpiOfIsIsoOfMono
   have wi : i ≫ S₂.g = 0 := by simp only [i, assoc, φ.comm₂₃, h.wi_assoc, zero_comp]
   have hi : IsLimit (KernelFork.ofι i wi) := KernelFork.IsLimit.ofι _ _
     (fun x hx => h.liftK (x ≫ inv φ.τ₂) (by rw [assoc, ← cancel_mono φ.τ₃, assoc,
-      assoc, ← φ.comm₂
+      assoc, ← φ.comm₂₃, IsIso.inv_hom_id_assoc, hx, zero_comp]))
+    (fun x hx => by simp [i]) (fun x hx b hb => by
+      rw [← cancel_mono h.i]; rw [← cancel_mono φ.τ₂]; rw [assoc]; rw [assoc]; rw [liftK_i_assoc]; rw [assoc]; rw [IsIso.inv_hom_id]; rw [comp_id]; rw [hb])
+  let f' := hi.lift (KernelFork.ofι S₂.f S₂.zero)
+  have hf' : φ.τ₁ ≫ f' = h.f' := by
+    have eq := @Fork.IsLimit.lift_ι _ _ _ _ _ _ _ ((KernelFork.ofι S₂.f S₂.zero)) hi
+    simp only [Fork.ι_ofι] at eq
+    rw [← cancel_mono h.i]; rw [← cancel_mono φ.τ₂]; rw [assoc]; rw [assoc]; rw [eq]; rw [f'_i]; rw [φ.comm₁₂]
+  have wπ : f' ≫ h.π = 0 := by
+    rw [← cancel_epi φ.τ₁]; rw [comp_zero]; rw [reassoc_of% hf']; rw [h.f'_π]
+  have hπ : IsColimit (CokernelCofork.ofπ h.π wπ) := CokernelCofork.IsColimit.ofπ _ _
+    (fun x hx => h.descH x (by rw [← hf', assoc, hx, comp_zero]))
+    (fun x hx => by simp) (fun x hx b hb => by rw [← cancel_epi h.π, π_descH, hb])
+  exact ⟨h.K, h.H, i, h.π, wi, hi, wπ, hπ⟩
 
 中文:
 定义 ofEpiOfIsIsoOfMono
@@ -2922,7 +2947,20 @@ definition ofEpiOfIsIsoOfMono
   have wi : i ≫ S₂.g = 0 := by simp only [i, assoc, φ.comm₂₃, h.wi_assoc, zero_comp]
   have hi : IsLimit (KernelFork.ofι i wi) := KernelFork.IsLimit.ofι _ _
     (fun x hx => h.liftK (x ≫ inv φ.τ₂) (by rw [assoc, ← cancel_mono φ.τ₃, assoc,
-      assoc, ← φ.comm₂
+      assoc, ← φ.comm₂₃, IsIso.inv_hom_id_assoc, hx, zero_comp]))
+    (fun x hx => by simp [i]) (fun x hx b hb => by
+      rw [← cancel_mono h.i]; rw [← cancel_mono φ.τ₂]; rw [assoc]; rw [assoc]; rw [liftK_i_assoc]; rw [assoc]; rw [IsIso.inv_hom_id]; rw [comp_id]; rw [hb])
+  let f' := hi.lift (KernelFork.ofι S₂.f S₂.zero)
+  have hf' : φ.τ₁ ≫ f' = h.f' := by
+    have eq := @Fork.IsLimit.lift_ι _ _ _ _ _ _ _ ((KernelFork.ofι S₂.f S₂.zero)) hi
+    simp only [Fork.ι_ofι] at eq
+    rw [← cancel_mono h.i]; rw [← cancel_mono φ.τ₂]; rw [assoc]; rw [assoc]; rw [eq]; rw [f'_i]; rw [φ.comm₁₂]
+  have wπ : f' ≫ h.π = 0 := by
+    rw [← cancel_epi φ.τ₁]; rw [comp_zero]; rw [reassoc_of% hf']; rw [h.f'_π]
+  have hπ : IsColimit (CokernelCofork.ofπ h.π wπ) := CokernelCofork.IsColimit.ofπ _ _
+    (fun x hx => h.descH x (by rw [← hf', assoc, hx, comp_zero]))
+    (fun x hx => by simp) (fun x hx b hb => by rw [← cancel_epi h.π, π_descH, hb])
+  exact ⟨h.K, h.H, i, h.π, wi, hi, wπ, hπ⟩
 
 Depends on / 依赖: IsIso.inv_hom_id, IsIso.inv_hom_id_assoc, IsLimit, KernelFork, KernelFork.IsLimit.of, KernelFork.of, cancel_mono, h.liftK, h.wi_assoc, inv_hom_id, inv_hom_id_assoc, liftK_i_assoc, wi_assoc, zero_comp
 -/
@@ -2986,7 +3024,21 @@ definition ofEpiOfIsIsoOfMono'
   have wi : i ≫ S₁.g = 0 := by
     rw [assoc]; rw [← cancel_mono φ.τ₃]; rw [zero_comp]; rw [assoc]; rw [assoc]; rw [← φ.comm₂₃]; rw [IsIso.inv_hom_id_assoc]; rw [h.wi]
   have hi : IsLimit (KernelFork.ofι i wi) := KernelFork.IsLimit.ofι _ _
-    (fun x hx => 
+    (fun x hx => h.liftK (x ≫ φ.τ₂)
+      (by rw [assoc, φ.comm₂₃, reassoc_of% hx, zero_comp]))
+    (fun x hx => by simp [i])
+    (fun x hx b hb => by rw [← cancel_mono h.i, ← cancel_mono (inv φ.τ₂), assoc, assoc,
+      hb, liftK_i_assoc, assoc, IsIso.hom_inv_id, comp_id])
+  let f' := hi.lift (KernelFork.ofι S₁.f S₁.zero)
+  have hf' : f' ≫ i = S₁.f := Fork.IsLimit.lift_ι _
+  have hf'' : f' = φ.τ₁ ≫ h.f' := by
+    rw [← cancel_mono h.i]; rw [← cancel_mono (inv φ.τ₂)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [hf']; rw [f'_i_assoc]; rw [φ.comm₁₂_assoc]; rw [IsIso.hom_inv_id]; rw [comp_id]
+  have wπ : f' ≫ h.π = 0 := by simp only [hf'', assoc, f'_π, comp_zero]
+  have hπ : IsColimit (CokernelCofork.ofπ h.π wπ) := CokernelCofork.IsColimit.ofπ _ _
+    (fun x hx => h.descH x (by rw [← cancel_epi φ.τ₁, ← reassoc_of% hf'', hx, comp_zero]))
+    (fun x hx => π_descH _ _ _)
+    (fun x hx b hx => by rw [← cancel_epi h.π, π_descH, hx])
+  exact ⟨h.K, h.H, i, h.π, wi, hi, wπ, hπ⟩
 
 中文:
 定义 ofEpiOfIsIsoOfMono'
@@ -2996,7 +3048,21 @@ definition ofEpiOfIsIsoOfMono'
   have wi : i ≫ S₁.g = 0 := by
     rw [assoc]; rw [← cancel_mono φ.τ₃]; rw [zero_comp]; rw [assoc]; rw [assoc]; rw [← φ.comm₂₃]; rw [IsIso.inv_hom_id_assoc]; rw [h.wi]
   have hi : IsLimit (KernelFork.ofι i wi) := KernelFork.IsLimit.ofι _ _
-    (fun x hx => 
+    (fun x hx => h.liftK (x ≫ φ.τ₂)
+      (by rw [assoc, φ.comm₂₃, reassoc_of% hx, zero_comp]))
+    (fun x hx => by simp [i])
+    (fun x hx b hb => by rw [← cancel_mono h.i, ← cancel_mono (inv φ.τ₂), assoc, assoc,
+      hb, liftK_i_assoc, assoc, IsIso.hom_inv_id, comp_id])
+  let f' := hi.lift (KernelFork.ofι S₁.f S₁.zero)
+  have hf' : f' ≫ i = S₁.f := Fork.IsLimit.lift_ι _
+  have hf'' : f' = φ.τ₁ ≫ h.f' := by
+    rw [← cancel_mono h.i]; rw [← cancel_mono (inv φ.τ₂)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [hf']; rw [f'_i_assoc]; rw [φ.comm₁₂_assoc]; rw [IsIso.hom_inv_id]; rw [comp_id]
+  have wπ : f' ≫ h.π = 0 := by simp only [hf'', assoc, f'_π, comp_zero]
+  have hπ : IsColimit (CokernelCofork.ofπ h.π wπ) := CokernelCofork.IsColimit.ofπ _ _
+    (fun x hx => h.descH x (by rw [← cancel_epi φ.τ₁, ← reassoc_of% hf'', hx, comp_zero]))
+    (fun x hx => π_descH _ _ _)
+    (fun x hx b hx => by rw [← cancel_epi h.π, π_descH, hx])
+  exact ⟨h.K, h.H, i, h.π, wi, hi, wπ, hπ⟩
 
 Depends on / 依赖: IsIso.inv_hom_id_assoc, IsLimit, KernelFork, KernelFork.IsLimit.of, KernelFork.of, cancel_mono, h.liftK, h.wi, inv_hom_id_assoc, liftK_i_assoc, reassoc_of, zero_comp
 -/
@@ -3581,7 +3647,7 @@ lemma hasCokernel
   let e : parallelPair (kernel.lift S.g S.f S.zero) 0 ≅ parallelPair h.f' 0 :=
     parallelPair.ext (Iso.refl _) (IsLimit.conePointUniqueUpToIso (kernelIsKernel S.g) h.hi)
       (by cat_disch) (by simp)
-  ex
+  exact hasColimit_of_iso e
 
 中文:
 引理 hasCokernel
@@ -3592,7 +3658,7 @@ lemma hasCokernel
   let e : parallelPair (kernel.lift S.g S.f S.zero) 0 ≅ parallelPair h.f' 0 :=
     parallelPair.ext (Iso.refl _) (IsLimit.conePointUniqueUpToIso (kernelIsKernel S.g) h.hi)
       (by cat_disch) (by simp)
-  ex
+  exact hasColimit_of_iso e
 
 Depends on / 依赖: HasColimit, IsLimit, IsLimit.conePointUniqueUpToIso, Iso.refl, S.leftHomologyData, S.zero, cat_disch, conePointUniqueUpToIso, h.hi, hasColimit_of_iso, kernel, kernel.lift, kernelIsKernel, leftHomologyData, parallelPair, parallelPair.ext
 -/
@@ -3639,7 +3705,8 @@ lemma isIso_cyclesMap'_of_isIso_of_mono
   · simp only [assoc, ← cancel_mono φ.τ₃, zero_comp, ← φ.comm₂₃, IsIso.inv_hom_id_assoc, h₂.wi]
   · simp only [← cancel_mono h₁.i, assoc, h₁.liftK_i, cyclesMap'_i_assoc,
       IsIso.hom_inv_id, comp_id, id_comp]
-  · simp only [← cancel_mono h₂.i, a
+  · simp only [← cancel_mono h₂.i, assoc, cyclesMap'_i, h₁.liftK_i_assoc,
+      IsIso.inv_hom_id, comp_id, id_comp]
 
 中文:
 引理 isIso_cyclesMap'_of_isIso_of_mono
@@ -3649,7 +3716,8 @@ lemma isIso_cyclesMap'_of_isIso_of_mono
   · simp only [assoc, ← cancel_mono φ.τ₃, zero_comp, ← φ.comm₂₃, IsIso.inv_hom_id_assoc, h₂.wi]
   · simp only [← cancel_mono h₁.i, assoc, h₁.liftK_i, cyclesMap'_i_assoc,
       IsIso.hom_inv_id, comp_id, id_comp]
-  · simp only [← cancel_mono h₂.i, a
+  · simp only [← cancel_mono h₂.i, assoc, cyclesMap'_i, h₁.liftK_i_assoc,
+      IsIso.inv_hom_id, comp_id, id_comp]
 -/
 lemma isIso_cyclesMap'_of_isIso_of_mono (φ : S₁ ⟶ S₂) (h₂ : IsIso φ.τ₂) (h₃ : Mono φ.τ₃)
     (h₁ : S₁.LeftHomologyData) (h₂ : S₂.LeftHomologyData) :

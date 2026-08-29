@@ -1034,7 +1034,11 @@ protected nonrec theorem HasDerivAtFilter.iterate {f : 𝕜 -> 𝕜} {f' : 𝕜}
     (hf : HasDerivAtFilter f f' L) (hL : Tendsto (Prod.map f f) L L) (n : Nat) :
     HasDerivAtFilter f^[n] (f' ^ n) L := by
   have := hf.hasFDerivAtFilter.iterate hL n
-  rwa [Continuous
+  rwa [ContinuousLinearMap.toSpanSingleton_pow] at this
+
+protected nonrec theorem HasDerivAt.iterate {f : 𝕜 -> 𝕜} {f' : 𝕜} (hf : HasDerivAt f f' x)
+    (hx : f x = x) (n : Nat) : HasDerivAt f^[n] (f' ^ n) x :=
+  hf.iterate (by simpa [hx] using hf.continuousAt.tendsto.prodMap <| tendsto_pure_pure f x) _
 
 中文:
 定理 deriv_comp_of_eq
@@ -1046,7 +1050,11 @@ protected nonrec theorem HasDerivAtFilter.iterate {f : 𝕜 -> 𝕜} {f' : 𝕜}
     (hf : HasDerivAtFilter f f' L) (hL : Tendsto (Prod.map f f) L L) (n : Nat) :
     HasDerivAtFilter f^[n] (f' ^ n) L := by
   have := hf.hasFDerivAtFilter.iterate hL n
-  rwa [Continuous
+  rwa [ContinuousLinearMap.toSpanSingleton_pow] at this
+
+protected nonrec theorem HasDerivAt.iterate {f : 𝕜 -> 𝕜} {f' : 𝕜} (hf : HasDerivAt f f' x)
+    (hx : f x = x) (n : Nat) : HasDerivAt f^[n] (f' ^ n) x :=
+  hf.iterate (by simpa [hx] using hf.continuousAt.tendsto.prodMap <| tendsto_pure_pure f x) _
 
 Depends on / 依赖: deriv_comp
 -/

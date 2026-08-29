@@ -820,7 +820,10 @@ _ = μ (f ⁻¹' (m • ·) ⁻¹' S) := map_apply hf hS.preimage (measurable_co
     _ = μ ((m • f ·) ⁻¹' S) := by rw [preimage_preimage]
     _ = μ ((f <| m • ·) ⁻¹' S) := by simp_rw [hsmul]
     _ = μ ((m • ·) ⁻¹' f ⁻¹' S) := by rw [← preimage_preimage]
-    _ = μ (f
+    _ = μ (f ⁻¹' S) := by rw [SMulInvariantMeasure.measure_preimage_smul m (hS.preimage hf)]
+    _ = map f μ S := (map_apply hf hS).symm
+
+@[to_additive]
 
 中文:
 定理 smulInvariantMeasure_map
@@ -831,7 +834,10 @@ _ = μ (f ⁻¹' (m • ·) ⁻¹' S) := map_apply hf hS.preimage (measurable_co
     _ = μ ((m • f ·) ⁻¹' S) := by rw [preimage_preimage]
     _ = μ ((f <| m • ·) ⁻¹' S) := by simp_rw [hsmul]
     _ = μ ((m • ·) ⁻¹' f ⁻¹' S) := by rw [← preimage_preimage]
-    _ = μ (f
+    _ = μ (f ⁻¹' S) := by rw [SMulInvariantMeasure.measure_preimage_smul m (hS.preimage hf)]
+    _ = map f μ S := (map_apply hf hS).symm
+
+@[to_additive]
 -/
 theorem smulInvariantMeasure_map [SMul M α] [SMul M β]
     [MeasurableConstSMul M β]
@@ -902,7 +908,15 @@ theorem smulInvariantMeasure_tfae
   tfae_have 6 -> 7 := fun H c => ⟨measurable_const_smul c, H c⟩
   tfae_have 7 -> 4 := fun H c => (H c).measure_preimage_emb (measurableEmbedding_const_smul c)
   tfae_have 4 -> 5
-
+  | H, c, s => by
+    rw [← preimage_smul_inv]
+    apply H
+  tfae_have 5 -> 3 := fun H c s _ => H c s
+  tfae_have 3 -> 2
+  | H, c, s, hs => by
+    rw [preimage_smul]
+    exact H c⁻¹ s hs
+  tfae_finish
 
 中文:
 定理 smulInvariantMeasure_tfae
@@ -912,7 +926,15 @@ theorem smulInvariantMeasure_tfae
   tfae_have 6 -> 7 := fun H c => ⟨measurable_const_smul c, H c⟩
   tfae_have 7 -> 4 := fun H c => (H c).measure_preimage_emb (measurableEmbedding_const_smul c)
   tfae_have 4 -> 5
-
+  | H, c, s => by
+    rw [← preimage_smul_inv]
+    apply H
+  tfae_have 5 -> 3 := fun H c s _ => H c s
+  tfae_have 3 -> 2
+  | H, c, s, hs => by
+    rw [preimage_smul]
+    exact H c⁻¹ s hs
+  tfae_finish
 
 Depends on / 依赖: map_eq, measurableEmbedding_const_smul, measurable_const_smul, measurePreserving_smul, measure_preimage_emb, preimage_smul, preimage_smul_inv, tfae_finish, tfae_have
 -/

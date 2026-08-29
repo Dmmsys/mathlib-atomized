@@ -313,7 +313,8 @@ lemma dropUntil_eq_drop
     by_cases! h' : w = a
     · subst h'
       simp [dropUntil_first]
-    · rw [drop_cons
+    · rw [drop_cons_eq _ _ _ (by grind), support_copy, dropUntil]
+      grind
 
 中文:
 引理 dropUntil_eq_drop
@@ -328,7 +329,8 @@ lemma dropUntil_eq_drop
     by_cases! h' : w = a
     · subst h'
       simp [dropUntil_first]
-    · rw [drop_cons
+    · rw [drop_cons_eq _ _ _ (by grind), support_copy, dropUntil]
+      grind
 
 Depends on / 依赖: dropUntil, dropUntil_first, drop_cons_eq, eq_mpr_eq_cast, ext_support, getVert_nil, mem_support_nil_iff, support_copy, support_nil
 -/
@@ -508,7 +510,13 @@ theorem count_edges_takeUntil_le_one
         simp
       · rw [edges_cons, List.count_cons]
         split_ifs with h''
-        · simp only [beq_iff_
+        · simp only [beq_iff_eq, Sym2.eq, Sym2.rel_iff'] at h''
+          obtain ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ := h''
+          · exact (h' rfl).elim
+          · cases p' <;> simp!
+        · apply ih
+
+@[simp]
 
 中文:
 定理 count_edges_takeUntil_le_one
@@ -528,7 +536,13 @@ theorem count_edges_takeUntil_le_one
         simp
       · rw [edges_cons, List.count_cons]
         split_ifs with h''
-        · simp only [beq_iff_
+        · simp only [beq_iff_eq, Sym2.eq, Sym2.rel_iff'] at h''
+          obtain ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ := h''
+          · exact (h' rfl).elim
+          · cases p' <;> simp!
+        · apply ih
+
+@[simp]
 
 Depends on / 依赖: List.count_cons, Sym2.eq, Sym2.rel_iff, beq_iff_eq, count_cons, edges_cons, mem_support_nil_iff, rel_iff, split_ifs
 -/
@@ -1055,7 +1069,8 @@ lemma getVert_lt_length_takeUntil_ne
   have : p.getVert n in (p.takeUntil _ h).support.dropLast := by
     simp_rw [p.getVert_takeUntil h hn.le ▸ getVert_eq_support_getElem _ hn.le,
       ← List.getElem_dropLast h₁, List.getElem_mem h₁]
-  have := dropL
+  have := dropLast_support_concat _ ▸ p.count_support_takeUntil_eq_one h
+  grind [List.not_mem_of_count_eq_zero]
 
 中文:
 引理 getVert_lt_length_takeUntil_ne
@@ -1066,7 +1081,8 @@ lemma getVert_lt_length_takeUntil_ne
   have : p.getVert n in (p.takeUntil _ h).support.dropLast := by
     simp_rw [p.getVert_takeUntil h hn.le ▸ getVert_eq_support_getElem _ hn.le,
       ← List.getElem_dropLast h₁, List.getElem_mem h₁]
-  have := dropL
+  have := dropLast_support_concat _ ▸ p.count_support_takeUntil_eq_one h
+  grind [List.not_mem_of_count_eq_zero]
 
 Depends on / 依赖: List.getElem_dropLast, List.getElem_mem, List.not_mem_of_count_eq_zero, count_support_takeUntil_eq_one, dropLast, dropLast_support_concat, getElem_dropLast, getElem_mem, getVert, getVert_eq_support_getElem, getVert_takeUntil, hn.le, length, not_mem_of_count_eq_zero, p.count_support_takeUntil_eq_one, p.getVert, p.getVert_takeUntil, p.takeUntil, simp_rw, support
 -/
@@ -1190,7 +1206,10 @@ lemma notMem_support_takeUntil_support_takeUntil_subset
   have h1 : (((p.takeUntil w hw).takeUntil x hx).takeUntil w hw').length
       < ((p.takeUntil w hw).takeUntil x hx).length := by
     exact length_takeUntil_lt_length _ h.symm
-  have h2 : ((p.takeUntil w hw).takeUntil x hx).length < (p.takeUntil w 
+  have h2 : ((p.takeUntil w hw).takeUntil x hx).length < (p.takeUntil w hw).length := by
+    exact length_takeUntil_lt_length _ h
+  simp only [takeUntil_takeUntil] at h1 h2
+  lia
 
 中文:
 引理 notMem_support_takeUntil_support_takeUntil_subset
@@ -1201,7 +1220,10 @@ lemma notMem_support_takeUntil_support_takeUntil_subset
   have h1 : (((p.takeUntil w hw).takeUntil x hx).takeUntil w hw').length
       < ((p.takeUntil w hw).takeUntil x hx).length := by
     exact length_takeUntil_lt_length _ h.symm
-  have h2 : ((p.takeUntil w hw).takeUntil x hx).length < (p.takeUntil w 
+  have h2 : ((p.takeUntil w hw).takeUntil x hx).length < (p.takeUntil w hw).length := by
+    exact length_takeUntil_lt_length _ h
+  simp only [takeUntil_takeUntil] at h1 h2
+  lia
 
 Depends on / 依赖: h.symm, length, length_takeUntil_lt_length, p.takeUntil, takeUntil, takeUntil_takeUntil
 -/

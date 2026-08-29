@@ -420,7 +420,8 @@ lemma injective_iff_subsingleton_ext_one
     fun h => ⟨fun f g _ => ?_⟩⟩
   obtain ⟨φ, hφ⟩ := Ext.contravariant_sequence_exact₁ { exact := ShortComplex.exact_cokernel g } _
     (Ext.mk₀ f) (zero_add 1) (by subsingleton)
-  obtain ⟨φ, rfl⟩ := Ext.homEquiv₀.symm.surject
+  obtain ⟨φ, rfl⟩ := Ext.homEquiv₀.symm.surjective φ
+  exact ⟨φ, Ext.homEquiv₀.symm.injective (by simpa using hφ)⟩
 
 中文:
 引理 injective_iff_subsingleton_ext_one
@@ -430,7 +431,8 @@ lemma injective_iff_subsingleton_ext_one
     fun h => ⟨fun f g _ => ?_⟩⟩
   obtain ⟨φ, hφ⟩ := Ext.contravariant_sequence_exact₁ { exact := ShortComplex.exact_cokernel g } _
     (Ext.mk₀ f) (zero_add 1) (by subsingleton)
-  obtain ⟨φ, rfl⟩ := Ext.homEquiv₀.symm.surject
+  obtain ⟨φ, rfl⟩ := Ext.homEquiv₀.symm.surjective φ
+  exact ⟨φ, Ext.homEquiv₀.symm.injective (by simpa using hφ)⟩
 
 Depends on / 依赖: Ext.contravariant_sequence_exact, Ext.homEquiv, Ext.mk, HasInjectiveDimensionLT, HasInjectiveDimensionLT.subsingleton, ShortComplex, ShortComplex.exact_cokernel, exact_cokernel, injective, subsingleton, surjective, symm.injective, symm.surjective, zero_add
 -/
@@ -586,7 +588,7 @@ lemma hasInjectiveDimensionLT_X₁
   · simp at hi
   · obtain ⟨x₁, rfl⟩ := Ext.covariant_sequence_exact₁ _ hS x₃
       (Ext.eq_zero_of_hasInjectiveDimensionLT _ (n + 1) hi) rfl
-    rw [x₁.eq_zero_of_hasInjectiveDimensionLT n (by lia)]; rw [Ext.ze
+    rw [x₁.eq_zero_of_hasInjectiveDimensionLT n (by lia)]; rw [Ext.zero_comp]
 
 中文:
 引理 hasInjectiveDimensionLT_X₁
@@ -598,7 +600,7 @@ lemma hasInjectiveDimensionLT_X₁
   · simp at hi
   · obtain ⟨x₁, rfl⟩ := Ext.covariant_sequence_exact₁ _ hS x₃
       (Ext.eq_zero_of_hasInjectiveDimensionLT _ (n + 1) hi) rfl
-    rw [x₁.eq_zero_of_hasInjectiveDimensionLT n (by lia)]; rw [Ext.ze
+    rw [x₁.eq_zero_of_hasInjectiveDimensionLT n (by lia)]; rw [Ext.zero_comp]
 
 Depends on / 依赖: Ext.covariant_sequence_exact, Ext.eq_zero_of_hasInjectiveDimensionLT, Ext.zero_comp, HasExt, HasExt.standard, eq_zero_of_hasInjectiveDimensionLT, hasInjectiveDimensionLT_iff, standard, zero_comp
 -/
@@ -695,7 +697,16 @@ lemma hasInjectiveDimensionLT_of_enoughProjectives
   intro d Y e k hd
   induction k generalizing d Y with
   | zero =>
-    obtain rfl
+    obtain rfl : d = n := by simpa using hd
+    subsingleton
+  | succ k hk =>
+    let ⟨p⟩ := EnoughProjectives.presentation Y
+    have h : (ShortComplex.mk _ _ (kernel.condition p.f)).ShortExact :=
+      { exact := ShortComplex.exact_kernel p.f }
+    have hd : (n + k) + 1 = d := by lia
+    obtain ⟨x, rfl⟩ := Ext.contravariant_sequence_exact₃ h X e
+      (by subst hd; apply Ext.eq_zero_of_projective) ((add_comm _ _).trans hd)
+    simp [hk x rfl]
 
 中文:
 引理 hasInjectiveDimensionLT_of_enoughProjectives
@@ -708,7 +719,16 @@ lemma hasInjectiveDimensionLT_of_enoughProjectives
   intro d Y e k hd
   induction k generalizing d Y with
   | zero =>
-    obtain rfl
+    obtain rfl : d = n := by simpa using hd
+    subsingleton
+  | succ k hk =>
+    let ⟨p⟩ := EnoughProjectives.presentation Y
+    have h : (ShortComplex.mk _ _ (kernel.condition p.f)).ShortExact :=
+      { exact := ShortComplex.exact_kernel p.f }
+    have hd : (n + k) + 1 = d := by lia
+    obtain ⟨x, rfl⟩ := Ext.contravariant_sequence_exact₃ h X e
+      (by subst hd; apply Ext.eq_zero_of_projective) ((add_comm _ _).trans hd)
+    simp [hk x rfl]
 
 Depends on / 依赖: EnoughProjectives, EnoughProjectives.presentation, HasInjectiveDimensionLT, HasInjectiveDimensionLT.mk, Nat.exists_eq_add_of_le, ShortComplex, ShortComplex.exact_kernel, ShortComplex.mk, ShortExact, condition, exact_kernel, exists_eq_add_of_le, generalizing, kernel, kernel.condition, presentation, subsingleton
 -/
@@ -836,7 +856,8 @@ lemma injectiveDimension_lt_iff
     exact this _ h
   · obtain _ | n := n
     · exact ⟨⊥, fun _ _ => hasInjectiveDimensionLT_of_ge _ 0 _ (by simp), by decide⟩
-    · exact ⟨n, 
+    · exact ⟨n, fun i hi => hasInjectiveDimensionLT_of_ge _ (n + 1) _ (by simpa using hi),
+        by simp [ENat.WithBot.lt_add_one_iff]⟩
 
 中文:
 引理 injectiveDimension_lt_iff
@@ -848,7 +869,8 @@ lemma injectiveDimension_lt_iff
     exact this _ h
   · obtain _ | n := n
     · exact ⟨⊥, fun _ _ => hasInjectiveDimensionLT_of_ge _ 0 _ (by simp), by decide⟩
-    · exact ⟨n, 
+    · exact ⟨n, fun i hi => hasInjectiveDimensionLT_of_ge _ (n + 1) _ (by simpa using hi),
+        by simp [ENat.WithBot.lt_add_one_iff]⟩
 
 Depends on / 依赖: ENat.WithBot.lt_add_one_iff, Set.mem_ofPred_eq, WithBot, csInf_mem, hasInjectiveDimensionLT_of_ge, injectiveDimension, lt_add_one_iff, mem_ofPred_eq, sInf_lt_iff
 -/
@@ -942,7 +964,13 @@ lemma injectiveDimension_ne_top_iff
     induction d with
     | top =>
       by_contra!
-      simp only [WithBot.coe_top, ne_eq,
+      simp only [WithBot.coe_top, ne_eq, not_true_eq_false, false_and, true_and, false_or] at this
+      obtain ⟨n, hn⟩ := this
+      rw [← injectiveDimension_le_iff]; rw [hd]; rw [WithBot.coe_top]; rw [top_le_iff] at hn
+      exact ENat.natCast_ne_top _ ((WithBot.coe_eq_coe).1 hn)
+    | coe d =>
+      simp only [ne_eq, WithBot.coe_eq_top, ENat.natCast_ne_top, not_false_eq_true, true_iff]
+      exact ⟨d, by simpa only [← injectiveDimension_le_iff] using! hd.le⟩
 
 中文:
 引理 injectiveDimension_ne_top_iff
@@ -957,7 +985,13 @@ lemma injectiveDimension_ne_top_iff
     induction d with
     | top =>
       by_contra!
-      simp only [WithBot.coe_top, ne_eq,
+      simp only [WithBot.coe_top, ne_eq, not_true_eq_false, false_and, true_and, false_or] at this
+      obtain ⟨n, hn⟩ := this
+      rw [← injectiveDimension_le_iff]; rw [hd]; rw [WithBot.coe_top]; rw [top_le_iff] at hn
+      exact ENat.natCast_ne_top _ ((WithBot.coe_eq_coe).1 hn)
+    | coe d =>
+      simp only [ne_eq, WithBot.coe_eq_top, ENat.natCast_ne_top, not_false_eq_true, true_iff]
+      exact ⟨d, by simpa only [← injectiveDimension_le_iff] using! hd.le⟩
 
 Depends on / 依赖: ENat.natCast_ne_top, WithBot, WithBot.coe_eq_coe, WithBot.coe_top, bot_ne_top, coe_eq_coe, coe_top, false_and, false_or, generalize, injectiveDimension, injectiveDimension_le_iff, natCast_ne_top, ne_eq, not_false_eq_true, not_true_eq_false, top_le_iff, true_and, true_iff
 -/

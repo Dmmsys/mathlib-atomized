@@ -375,7 +375,14 @@ theorem prodMk
     _ =ᶠ[𝓝 a] (fun x => (iteratedFDeriv Real k f x - iteratedFDeriv Real k f a).prod
                 (iteratedFDeriv Real k g x - iteratedFDeriv Real k g a)) := by
       filter_upwards [hf.contDiffAt.eventually (by simp),
-        hg.contDiffAt.even
+        hg.contDiffAt.eventually (by simp)] with x hfx hgx
+      apply DFunLike.ext
+      rw [iteratedFDeriv_prodMk _ _ le_rfl]; rw [iteratedFDeriv_prodMk _ _ le_rfl] <;>
+        simp [hfx, hgx, hf.contDiffAt, hg.contDiffAt]
+    _ =O[𝓝 a] fun x => ‖x - a‖ ^ (α : Real) := by
+      refine .of_norm_left ?_
+      simp only [ContinuousMultilinearMap.opNorm_prod, ← Prod.norm_mk]
+      exact (hf.isBigO.prod_left hg.isBigO).norm_left
 
 中文:
 定理 prodMk
@@ -385,7 +392,14 @@ theorem prodMk
     _ =ᶠ[𝓝 a] (fun x => (iteratedFDeriv Real k f x - iteratedFDeriv Real k f a).prod
                 (iteratedFDeriv Real k g x - iteratedFDeriv Real k g a)) := by
       filter_upwards [hf.contDiffAt.eventually (by simp),
-        hg.contDiffAt.even
+        hg.contDiffAt.eventually (by simp)] with x hfx hgx
+      apply DFunLike.ext
+      rw [iteratedFDeriv_prodMk _ _ le_rfl]; rw [iteratedFDeriv_prodMk _ _ le_rfl] <;>
+        simp [hfx, hgx, hf.contDiffAt, hg.contDiffAt]
+    _ =O[𝓝 a] fun x => ‖x - a‖ ^ (α : Real) := by
+      refine .of_norm_left ?_
+      simp only [ContinuousMultilinearMap.opNorm_prod, ← Prod.norm_mk]
+      exact (hf.isBigO.prod_left hg.isBigO).norm_left
 
 Depends on / 依赖: contDiffAt, hf.contDiffAt.prodMk, hg.contDiffAt, prodMk
 -/
@@ -418,7 +432,29 @@ theorem comp_of_differentiableAt
     (iteratedFDeriv Real k (g ∘ f) · - iteratedFDeriv Real k (g ∘ f) a)
       =ᶠ[𝓝 a] fun x => (ftaylorSeries Real g (f x)).taylorComp (ftaylorSeries Real f x) k -
         (ftaylorSeries Real g (f a)).taylorComp (ftaylorSeries Real f a) k := by
-   
+      filter_upwards [hf.contDiffAt.eventually (by simp),
+        hf.continuousAt.eventually (hg.contDiffAt.eventually (by simp))] with x hfx hgx
+      rw [iteratedFDeriv_comp hgx hfx le_rfl]; rw [iteratedFDeriv_comp hg.contDiffAt hf.contDiffAt le_rfl]
+    _ =O[𝓝 a] fun x => ‖x - a‖ ^ (α : Real) := by
+      apply FormalMultilinearSeries.taylorComp_sub_taylorComp_isBigO <;> intro i hi
+      · exact ((hg.contDiffAt.continuousAt_iteratedFDeriv (mod_cast hi)).comp hf.continuousAt)
+.norm.isBoundedUnder_le
+      · by_cases hfd : DifferentiableAt Real f a
+        · refine ((hg.of_order_le hi).isBigO.comp_tendsto hf.continuousAt).trans ?_
+refine .rpow α.2.1 (.of_forall fun _ => norm_nonneg _) .norm_norm ?_
+          exact hfd.isBigO_sub
+        · obtain rfl : k = 0 := by
+            contrapose! hfd
+            exact hf.differentiableAt hfd
+          obtain rfl : i = 0 := by rwa [nonpos_iff_eq_zero] at hi
+          refine .of_norm_left ?_
+          simp only [ftaylorSeries, iteratedFDeriv_zero_eq_comp, Function.comp_apply, ← map_sub,
+            LinearIsometryEquiv.norm_map, isBigO_norm_left]
+          refine ((hd.resolve_right hfd).isBigO_sub.comp_tendsto hf.continuousAt).trans ?_
+          exact (zero_order_iff.mp hf).2
+      · exact (hf.contDiffAt.continuousAt_iteratedFDeriv (mod_cast hi)).norm.isBoundedUnder_le
+      · exact isBoundedUnder_const
+      · exact (hf.of_order_le hi).isBigO
 
 中文:
 定理 comp_of_differentiableAt
@@ -428,7 +464,29 @@ theorem comp_of_differentiableAt
     (iteratedFDeriv Real k (g ∘ f) · - iteratedFDeriv Real k (g ∘ f) a)
       =ᶠ[𝓝 a] fun x => (ftaylorSeries Real g (f x)).taylorComp (ftaylorSeries Real f x) k -
         (ftaylorSeries Real g (f a)).taylorComp (ftaylorSeries Real f a) k := by
-   
+      filter_upwards [hf.contDiffAt.eventually (by simp),
+        hf.continuousAt.eventually (hg.contDiffAt.eventually (by simp))] with x hfx hgx
+      rw [iteratedFDeriv_comp hgx hfx le_rfl]; rw [iteratedFDeriv_comp hg.contDiffAt hf.contDiffAt le_rfl]
+    _ =O[𝓝 a] fun x => ‖x - a‖ ^ (α : Real) := by
+      apply FormalMultilinearSeries.taylorComp_sub_taylorComp_isBigO <;> intro i hi
+      · exact ((hg.contDiffAt.continuousAt_iteratedFDeriv (mod_cast hi)).comp hf.continuousAt)
+.norm.isBoundedUnder_le
+      · by_cases hfd : DifferentiableAt Real f a
+        · refine ((hg.of_order_le hi).isBigO.comp_tendsto hf.continuousAt).trans ?_
+refine .rpow α.2.1 (.of_forall fun _ => norm_nonneg _) .norm_norm ?_
+          exact hfd.isBigO_sub
+        · obtain rfl : k = 0 := by
+            contrapose! hfd
+            exact hf.differentiableAt hfd
+          obtain rfl : i = 0 := by rwa [nonpos_iff_eq_zero] at hi
+          refine .of_norm_left ?_
+          simp only [ftaylorSeries, iteratedFDeriv_zero_eq_comp, Function.comp_apply, ← map_sub,
+            LinearIsometryEquiv.norm_map, isBigO_norm_left]
+          refine ((hd.resolve_right hfd).isBigO_sub.comp_tendsto hf.continuousAt).trans ?_
+          exact (zero_order_iff.mp hf).2
+      · exact (hf.contDiffAt.continuousAt_iteratedFDeriv (mod_cast hi)).norm.isBoundedUnder_le
+      · exact isBoundedUnder_const
+      · exact (hf.of_order_le hi).isBigO
 
 Depends on / 依赖: contDiffAt, hf.contDiffAt, hg.contDiffAt.comp
 -/

@@ -471,7 +471,7 @@ instance [HasFiniteLimits
     constructor
     intro _ _ _
     infer_instance
-  apply comp_pre
+  apply comp_preservesFiniteLimits
 
 中文:
 实例 [有有限极限
@@ -483,7 +483,7 @@ instance [HasFiniteLimits
     constructor
     intro _ _ _
     infer_instance
-  apply comp_pre
+  apply comp_preservesFiniteLimits
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, PreservesFiniteLimits, SingleObj, SingleObj.star, comp_preservesFiniteLimits, evaluation, functor, functorCategoryEquivalence, infer_instance
 -/
@@ -509,7 +509,7 @@ instance [HasFiniteColimits
     constructor
     intro _ _ _
     infer_instance
-  apply comp
+  apply comp_preservesFiniteColimits
 
 中文:
 实例 [有有限余极限
@@ -521,7 +521,7 @@ instance [HasFiniteColimits
     constructor
     intro _ _ _
     infer_instance
-  apply comp
+  apply comp_preservesFiniteColimits
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, PreservesFiniteColimits, SingleObj, SingleObj.star, comp_preservesFiniteColimits, evaluation, functor, functorCategoryEquivalence, infer_instance
 -/
@@ -1086,7 +1086,10 @@ instance :
       smul_zero := by intros; ext; exact smul_zero _
       zero_smul := by intros; ext; exact zero_smul _ _
       add_smul := by intros; ext; exact add_smul _ _ _
-      smul_add := by intros; ext;
+      smul_add := by intros; ext; exact smul_add _ _ _
+      mul_smul := by intros; ext; exact mul_smul _ _ _ }
+  smul_comp := by intros; ext; exact Linear.smul_comp _ _ _ _ _ _
+  comp_smul := by intros; ext; exact Linear.comp_smul _ _ _ _ _ _
 
 中文:
 实例 :
@@ -1096,7 +1099,10 @@ instance :
       smul_zero := by intros; ext; exact smul_zero _
       zero_smul := by intros; ext; exact zero_smul _ _
       add_smul := by intros; ext; exact add_smul _ _ _
-      smul_add := by intros; ext;
+      smul_add := by intros; ext; exact smul_add _ _ _
+      mul_smul := by intros; ext; exact mul_smul _ _ _ }
+  smul_comp := by intros; ext; exact Linear.smul_comp _ _ _ _ _ _
+  comp_smul := by intros; ext; exact Linear.comp_smul _ _ _ _ _ _
 
 Depends on / 依赖: Linear, Linear.comp_smul, Linear.smul_comp, add_smul, comp_smul, f.comm, f.hom, intros, mul_smul, one_smul, smul_add, smul_comp, smul_zero, zero_smul
 -/

@@ -400,7 +400,7 @@ theorem isCofinal_iff_iUnion_Iio_eq_univ
     intro x
     obtain ⟨y, hy⟩ := exists_gt x
     obtain ⟨z, hz, hz'⟩ := hs y
-    exact ⟨z, hz, hy.trans_le
+    exact ⟨z, hz, hy.trans_le hz'⟩
 
 中文:
 定理 isCofinal_iff_iUnion_Iio_eq_univ
@@ -414,7 +414,7 @@ theorem isCofinal_iff_iUnion_Iio_eq_univ
     intro x
     obtain ⟨y, hy⟩ := exists_gt x
     obtain ⟨z, hz, hz'⟩ := hs y
-    exact ⟨z, hz, hy.trans_le
+    exact ⟨z, hz, hy.trans_le hz'⟩
 
 Depends on / 依赖: Iio_subset_Iic_self, eq_univ_iff_forall, exists_gt, exists_prop, hy.trans_le, isCofinal_iff_iUnion_Iic_eq_univ, mem_iUnion, simp_rw, trans_le, univ_subset_iff
 -/

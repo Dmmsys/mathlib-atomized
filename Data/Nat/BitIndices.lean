@@ -277,7 +277,9 @@ theorem sum_map_two_pow_bitIndices
       ext i; simp [pow_add, mul_comm]
     cases b
     · simpa [hrw, List.sum_map_mul_left]
-    simp [hrw, List.sum_map_mul_left, hs, add_comm (a := 1
+    simp [hrw, List.sum_map_mul_left, hs, add_comm (a := 1)]
+
+@[deprecated (since := "2026-05-15")] alias twoPowSum_bitIndices := sum_map_two_pow_bitIndices
 
 中文:
 定理 sum_map_two_pow_bitIndices
@@ -290,7 +292,9 @@ theorem sum_map_two_pow_bitIndices
       ext i; simp [pow_add, mul_comm]
     cases b
     · simpa [hrw, List.sum_map_mul_left]
-    simp [hrw, List.sum_map_mul_left, hs, add_comm (a := 1
+    simp [hrw, List.sum_map_mul_left, hs, add_comm (a := 1)]
+
+@[deprecated (since := "2026-05-15")] alias twoPowSum_bitIndices := sum_map_two_pow_bitIndices
 -/
 @[simp] theorem sum_map_two_pow_bitIndices (n : Nat) :
     (n.bitIndices.map (fun i => 2 ^ i)).sum = n := by
@@ -343,7 +347,23 @@ theorem bitIndices_sum_map_two_pow
   simp_rw [Nat.lt_iff_add_one_le] at haL
   have h' : exists (L₀ : List Nat), L₀.SortedLT ∧ L = L₀.map (· + a + 1) := by
     refine ⟨L.map (· - (a+1)), ?_, ?_⟩
-    · rwa [sortedLT_iff_pairwise, pairwise_ma
+    · rwa [sortedLT_iff_pairwise, pairwise_map, Pairwise.and_mem,
+        Pairwise.iff (S := fun x y => x in L ∧ y in L ∧ x < y), ← Pairwise.and_mem]
+      simp only [and_congr_right_iff]
+      exact fun x y hx _ => by rw [tsub_lt_tsub_iff_right (haL _ hx)]
+    have h' : forall x in L, ((fun x => x + a + 1) ∘ (fun x => x - (a + 1))) x = x := fun x hx => by
+      simp only [add_assoc, Function.comp_apply]; rw [tsub_add_cancel_of_le (haL _ hx)]
+    simp [List.map_congr_left h']
+  obtain ⟨L₀, hL₀, rfl⟩ := h'
+  have hrw : (2 ^ ·) ∘ (· + a + 1) = fun i => 2 ^ a * (2 * 2 ^ i) := by
+    ext x; simp only [Function.comp_apply, pow_add, pow_one]; ac_rfl
+  simp only [List.map_cons, List.map_map, List.sum_map_mul_left, List.sum_cons, hrw]
+  nth_rw 1 [← mul_one (a := 2 ^ a)]
+  rw [← mul_add]; rw [bitIndices_two_pow_mul]; rw [add_comm]; rw [bitIndices_two_mul_add_one]; rw [bitIndices_sum_map_two_pow hL₀]
+  simp [add_comm (a := 1), add_assoc]
+termination_by L.length
+
+@[deprecated (since := "2026-05-15")] alias bitIndices_twoPowsum := bitIndices_sum_map_two_pow
 
 中文:
 定理 bitIndices_sum_map_two_pow
@@ -354,7 +374,23 @@ theorem bitIndices_sum_map_two_pow
   simp_rw [Nat.lt_iff_add_one_le] at haL
   have h' : exists (L₀ : List Nat), L₀.SortedLT ∧ L = L₀.map (· + a + 1) := by
     refine ⟨L.map (· - (a+1)), ?_, ?_⟩
-    · rwa [sortedLT_iff_pairwise, pairwise_ma
+    · rwa [sortedLT_iff_pairwise, pairwise_map, Pairwise.and_mem,
+        Pairwise.iff (S := fun x y => x in L ∧ y in L ∧ x < y), ← Pairwise.and_mem]
+      simp only [and_congr_right_iff]
+      exact fun x y hx _ => by rw [tsub_lt_tsub_iff_right (haL _ hx)]
+    have h' : forall x in L, ((fun x => x + a + 1) ∘ (fun x => x - (a + 1))) x = x := fun x hx => by
+      simp only [add_assoc, Function.comp_apply]; rw [tsub_add_cancel_of_le (haL _ hx)]
+    simp [List.map_congr_left h']
+  obtain ⟨L₀, hL₀, rfl⟩ := h'
+  have hrw : (2 ^ ·) ∘ (· + a + 1) = fun i => 2 ^ a * (2 * 2 ^ i) := by
+    ext x; simp only [Function.comp_apply, pow_add, pow_one]; ac_rfl
+  simp only [List.map_cons, List.map_map, List.sum_map_mul_left, List.sum_cons, hrw]
+  nth_rw 1 [← mul_one (a := 2 ^ a)]
+  rw [← mul_add]; rw [bitIndices_two_pow_mul]; rw [add_comm]; rw [bitIndices_two_mul_add_one]; rw [bitIndices_sum_map_two_pow hL₀]
+  simp [add_comm (a := 1), add_assoc]
+termination_by L.length
+
+@[deprecated (since := "2026-05-15")] alias bitIndices_twoPowsum := bitIndices_sum_map_two_pow
 
 Depends on / 依赖: L.map, Nat.lt_iff_add_one_le, Pairwise, Pairwise.and_mem, Pairwise.iff, SortedLT, and_congr_right_iff, and_mem, hL.pairwise, lt_iff_add_one_le, pairwise, pairwise_cons, pairwise_map, simp_rw, sortedLT_iff_pairwise, tsub_lt_tsub_iff_right
 -/

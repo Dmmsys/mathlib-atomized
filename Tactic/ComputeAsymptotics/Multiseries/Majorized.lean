@@ -86,7 +86,13 @@ theorem self
       (h.eventually_gt_atTop 0).mono (fun _ h => by simp [← Real.rpow_sub h])
     apply Tendsto.congr' this.symm
     conv =>
-  
+      arg 1
+      rw [show (fun t => f t ^ (exp - exp')) = ((fun t => t ^ (-(exp' - exp))) ∘ f) by ext; simp]
+    exact (tendsto_rpow_neg_atTop (by linarith)).comp h
+  · apply (Tendsto.eventually_gt_atTop h 0).mono
+    intro t h1 h2
+    absurd h2
+    exact (Real.rpow_pos_of_pos h1 _).ne.symm
 
 中文:
 定理 self
@@ -99,7 +105,13 @@ theorem self
       (h.eventually_gt_atTop 0).mono (fun _ h => by simp [← Real.rpow_sub h])
     apply Tendsto.congr' this.symm
     conv =>
-  
+      arg 1
+      rw [show (fun t => f t ^ (exp - exp')) = ((fun t => t ^ (-(exp' - exp))) ∘ f) by ext; simp]
+    exact (tendsto_rpow_neg_atTop (by linarith)).comp h
+  · apply (Tendsto.eventually_gt_atTop h 0).mono
+    intro t h1 h2
+    absurd h2
+    exact (Real.rpow_pos_of_pos h1 _).ne.symm
 
 Depends on / 依赖: Majorized, Real.rpow_sub, Tendsto, Tendsto.congr, Tendsto.eventually_gt_atTop, absurd, eventually_gt_atTop, h.eventually_gt_atTop, h_exp, isLittleO_iff_tendsto, rpow_sub, tendsto_rpow_neg_atTop, this.symm
 -/
@@ -276,7 +288,10 @@ theorem mul
   specialize hf (f_exp + ε) (by dsimp [ε]; linarith)
   specialize hg (g_exp + ε) (by dsimp [ε]; linarith)
   apply (hf.mul hg).trans_eventuallyEq (g₁ := fun t => b t ^ (f_exp + ε) * b t ^ (g_exp + ε))
-  apply h_pos
+  apply h_pos.mono
+  intro t hx
+  simp only [Pi.pow_apply]
+  conv_rhs => rw [show exp = (f_exp + ε) + (g_exp + ε) by dsimp [ε]; ring_nf, Real.rpow_add hx]
 
 中文:
 定理 mul
@@ -288,7 +303,10 @@ theorem mul
   specialize hf (f_exp + ε) (by dsimp [ε]; linarith)
   specialize hg (g_exp + ε) (by dsimp [ε]; linarith)
   apply (hf.mul hg).trans_eventuallyEq (g₁ := fun t => b t ^ (f_exp + ε) * b t ^ (g_exp + ε))
-  apply h_pos
+  apply h_pos.mono
+  intro t hx
+  simp only [Pi.pow_apply]
+  conv_rhs => rw [show exp = (f_exp + ε) + (g_exp + ε) by dsimp [ε]; ring_nf, Real.rpow_add hx]
 
 Depends on / 依赖: Majorized, Pi.pow_apply, Real.rpow_add, conv_rhs, f_exp, g_exp, h_exp, h_pos, h_pos.mono, hf.mul, pow_apply, ring_nf, rpow_add, specialize, trans_eventuallyEq
 -/

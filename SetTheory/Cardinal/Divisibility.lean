@@ -56,7 +56,11 @@ theorem isUnit_iff
   obtain ⟨t, ht⟩ := h 1
   rw [eq_comm]; rw [mul_eq_one_iff_of_one_le] at ht
   · exact ht.1
-  · exact Cardinal.one_le_if
+  · exact Cardinal.one_le_iff_ne_zero.mpr ha
+  · apply Cardinal.one_le_iff_ne_zero.mpr
+    intro h
+    rw [h]; rw [mul_zero] at ht
+    exact zero_ne_one ht
 
 中文:
 定理 isUnit_iff
@@ -72,7 +76,11 @@ theorem isUnit_iff
   obtain ⟨t, ht⟩ := h 1
   rw [eq_comm]; rw [mul_eq_one_iff_of_one_le] at ht
   · exact ht.1
-  · exact Cardinal.one_le_if
+  · exact Cardinal.one_le_iff_ne_zero.mpr ha
+  · apply Cardinal.one_le_iff_ne_zero.mpr
+    intro h
+    rw [h]; rw [mul_zero] at ht
+    exact zero_ne_one ht
 
 Depends on / 依赖: Cardinal, Cardinal.one_le_iff_ne_zero.mpr, eq_comm, eq_or_ne, isUnit_iff_forall_dvd, isUnit_one, mul_eq_one_iff_of_one_le, mul_zero, not_isUnit_zero, one_le_iff_ne_zero, zero_ne_one
 -/
@@ -180,7 +188,12 @@ theorem prime_of_aleph0_le
   · rcases mul_eq_zero.mp hz with (rfl | rfl) <;> simp
   wlog h : c <= b
   · cases le_total c b <;> [solve_by_elim; rw [or_comm]]
- 
+    apply_assumption
+    assumption'
+    all_goals rwa [mul_comm]
+  left
+  have habc := le_of_dvd hz hbc
+  rwa [mul_eq_max' <| ha.trans <| habc, max_def', if_pos h] at hbc
 
 中文:
 定理 prime_of_aleph0_le
@@ -194,7 +207,12 @@ theorem prime_of_aleph0_le
   · rcases mul_eq_zero.mp hz with (rfl | rfl) <;> simp
   wlog h : c <= b
   · cases le_total c b <;> [solve_by_elim; rw [or_comm]]
- 
+    apply_assumption
+    assumption'
+    all_goals rwa [mul_comm]
+  left
+  have habc := le_of_dvd hz hbc
+  rwa [mul_eq_max' <| ha.trans <| habc, max_def', if_pos h] at hbc
 
 Depends on / 依赖: aleph0_pos, aleph0_pos.trans_le, all_goals, apply_assumption, eq_or_ne, ha.trans, if_pos, isUnit_iff, le_of_dvd, le_total, max_def, mul_comm, mul_eq_max, mul_eq_zero, mul_eq_zero.mp, one_lt_aleph0, one_lt_aleph0.trans_le, or_comm, solve_by_elim, trans_le
 -/
@@ -263,7 +281,9 @@ theorem nat_coe_dvd_iff
   rcases this with (h | h | ⟨-, hk'⟩)
   iterate 2 simp only [h, mul_zero, zero_mul, Nat.cast_eq_zero] at hk; simp [hk]
   lift k to Nat using hk'
-  exact 
+  exact ⟨k, mod_cast hk⟩
+
+@[simp]
 
 中文:
 定理 nat_coe_dvd_iff
@@ -276,7 +296,9 @@ theorem nat_coe_dvd_iff
   rcases this with (h | h | ⟨-, hk'⟩)
   iterate 2 simp only [h, mul_zero, zero_mul, Nat.cast_eq_zero] at hk; simp [hk]
   lift k to Nat using hk'
-  exact 
+  exact ⟨k, mod_cast hk⟩
+
+@[simp]
 
 Depends on / 依赖: Nat.cast_eq_zero, cast_eq_zero, iterate, mod_cast, mul_lt_aleph0_iff, mul_zero, natCast_lt_aleph0, zero_mul
 -/
@@ -304,7 +326,22 @@ theorem nat_is_prime_iff
     exact mod_cast Iff.rfl
   · exact mod_cast h b c (mod_cast hbc)
   rcases lt_or_ge (b * c) ℵ₀ with h' | h'
-  · rcases mul_lt_aleph
+  · rcases mul_lt_aleph0_iff.mp h' with (rfl | rfl | ⟨hb, hc⟩)
+    · simp
+    · simp
+    lift b to Nat using hb
+    lift c to Nat using hc
+    exact mod_cast h b c (mod_cast hbc)
+  rcases aleph0_le_mul_iff.mp h' with ⟨hb, hc, hℵ₀⟩
+  have hn : (n : Cardinal) != 0 := by
+    intro h
+    rw [h]; rw [zero_dvd_iff]; rw [mul_eq_zero] at hbc
+    cases hbc <;> contradiction
+  wlog hℵ₀b : ℵ₀ <= b
+  apply (this h c b _ _ hc hb hℵ₀.symm hn (hℵ₀.resolve_left hℵ₀b)).symm <;> try assumption
+  · rwa [mul_comm] at hbc
+  · rwa [mul_comm] at h'
+  · exact Or.inl (dvd_of_le_of_aleph0_le hn (natCast_lt_aleph0.le.trans hℵ₀b) hℵ₀b)
 
 中文:
 定理 nat_is_prime_iff
@@ -316,7 +353,22 @@ theorem nat_is_prime_iff
     exact mod_cast Iff.rfl
   · exact mod_cast h b c (mod_cast hbc)
   rcases lt_or_ge (b * c) ℵ₀ with h' | h'
-  · rcases mul_lt_aleph
+  · rcases mul_lt_aleph0_iff.mp h' with (rfl | rfl | ⟨hb, hc⟩)
+    · simp
+    · simp
+    lift b to Nat using hb
+    lift c to Nat using hc
+    exact mod_cast h b c (mod_cast hbc)
+  rcases aleph0_le_mul_iff.mp h' with ⟨hb, hc, hℵ₀⟩
+  have hn : (n : Cardinal) != 0 := by
+    intro h
+    rw [h]; rw [zero_dvd_iff]; rw [mul_eq_zero] at hbc
+    cases hbc <;> contradiction
+  wlog hℵ₀b : ℵ₀ <= b
+  apply (this h c b _ _ hc hb hℵ₀.symm hn (hℵ₀.resolve_left hℵ₀b)).symm <;> try assumption
+  · rwa [mul_comm] at hbc
+  · rwa [mul_comm] at h'
+  · exact Or.inl (dvd_of_le_of_aleph0_le hn (natCast_lt_aleph0.le.trans hℵ₀b) hℵ₀b)
 
 Depends on / 依赖: Cardinal, Iff.rfl, Nat.isUnit_iff, Nat.prime_iff, aleph0_le_mul_iff, aleph0_le_mul_iff.mp, and_congr, isUnit_iff, lt_or_ge, mod_cast, mul_lt_aleph0_iff, mul_lt_aleph0_iff.mp, prime_iff
 -/
@@ -390,7 +442,13 @@ theorem isPrimePow_iff
   rw [isPrimePow_def]
   refine
     ⟨?_, fun ⟨n, han, p, k, hp, hk, h⟩ =>
-          ⟨p, k, nat_is_prime_iff.2 hp, hk, by rw [han]; exact mod_cast h
+          ⟨p, k, nat_is_prime_iff.2 hp, hk, by rw [han]; exact mod_cast h⟩⟩
+  rintro ⟨p, k, hp, hk, hpk⟩
+  have key : p ^ (1 : Cardinal) <= ↑a := by
+    rw [← hpk]; apply power_le_power_left hp.ne_zero; exact mod_cast hk
+  rw [power_one] at key
+  lift p to Nat using key.trans_lt natCast_lt_aleph0
+  exact ⟨a, rfl, p, k, nat_is_prime_iff.mp hp, hk, mod_cast hpk⟩
 
 中文:
 定理 isPrimePow_iff
@@ -404,7 +462,13 @@ theorem isPrimePow_iff
   rw [isPrimePow_def]
   refine
     ⟨?_, fun ⟨n, han, p, k, hp, hk, h⟩ =>
-          ⟨p, k, nat_is_prime_iff.2 hp, hk, by rw [han]; exact mod_cast h
+          ⟨p, k, nat_is_prime_iff.2 hp, hk, by rw [han]; exact mod_cast h⟩⟩
+  rintro ⟨p, k, hp, hk, hpk⟩
+  have key : p ^ (1 : Cardinal) <= ↑a := by
+    rw [← hpk]; apply power_le_power_left hp.ne_zero; exact mod_cast hk
+  rw [power_one] at key
+  lift p to Nat using key.trans_lt natCast_lt_aleph0
+  exact ⟨a, rfl, p, k, nat_is_prime_iff.mp hp, hk, mod_cast hpk⟩
 
 Depends on / 依赖: Cardinal, false_or, hp.ne_zero, isPrimePow, isPrimePow_def, isPrimePow_nat_iff, key.trans_lt, mod_cast, natCast_lt_aleph0, nat_is_prime_iff, ne_zero, not_le, not_le.mp, power_le_power_left, power_one, prime_of_aleph0_le, trans_lt
 -/

@@ -234,7 +234,7 @@ theorem add_of_commute
   obtain ⟨na, ha⟩ := ha.exists_pow_mem_of_mem_nhds I_mem_nhds
   obtain ⟨nb, hb⟩ := hb.exists_pow_mem_of_mem_nhds I_mem_nhds
   exact ⟨na + nb, fun m hm =>
-    I.add_po
+    I.add_pow_mem_of_pow_mem_of_le_of_commute ha hb (le_trans hm (Nat.le_add_right _ _)) h⟩
 
 中文:
 定理 add_of_commute
@@ -246,7 +246,7 @@ theorem add_of_commute
   obtain ⟨na, ha⟩ := ha.exists_pow_mem_of_mem_nhds I_mem_nhds
   obtain ⟨nb, hb⟩ := hb.exists_pow_mem_of_mem_nhds I_mem_nhds
   exact ⟨na + nb, fun m hm =>
-    I.add_po
+    I.add_pow_mem_of_pow_mem_of_le_of_commute ha hb (le_trans hm (Nat.le_add_right _ _)) h⟩
 
 Depends on / 依赖: I.add_pow_mem_of_pow_mem_of_le_of_commute, I_mem_nhds, IsLinearTopology, IsLinearTopology.hasBasis_ideal, IsTopologicallyNilpotent, Nat.le_add_right, add_pow_mem_of_pow_mem_of_le_of_commute, atTop_basis, atTop_basis.tendsto_iff, exists_pow_mem_of_mem_nhds, ha.exists_pow_mem_of_mem_nhds, hasBasis_ideal, hb.exists_pow_mem_of_mem_nhds, le_add_right, le_trans, tendsto_iff, true_and
 -/

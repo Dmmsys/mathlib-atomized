@@ -800,7 +800,7 @@ theorem evalAt_mul
   ext f
   rw [← left_invariant]; rw [hfdifferential_apply]; rw [hfdifferential_apply]; rw [L_mul]; rw [fdifferential_comp]; rw [fdifferential_apply]
   simp only [ContMDiffMap.comp_apply, LinearMap.comp_apply]
-  rw [fdifferential_apply]; rw [← hfdifferential_apply (smoothLeftMul_one I h)]; rw [lef
+  rw [fdifferential_apply]; rw [← hfdifferential_apply (smoothLeftMul_one I h)]; rw [left_invariant]
 
 中文:
 定理 evalAt_mul
@@ -809,7 +809,7 @@ theorem evalAt_mul
   ext f
   rw [← left_invariant]; rw [hfdifferential_apply]; rw [hfdifferential_apply]; rw [L_mul]; rw [fdifferential_comp]; rw [fdifferential_apply]
   simp only [ContMDiffMap.comp_apply, LinearMap.comp_apply]
-  rw [fdifferential_apply]; rw [← hfdifferential_apply (smoothLeftMul_one I h)]; rw [lef
+  rw [fdifferential_apply]; rw [← hfdifferential_apply (smoothLeftMul_one I h)]; rw [left_invariant]
 
 Depends on / 依赖: ContMDiffMap, ContMDiffMap.comp_apply, L_mul, LinearMap, LinearMap.comp_apply, comp_apply, fdifferential_apply, fdifferential_comp, hfdifferential_apply, left_invariant, smoothLeftMul_one
 -/
@@ -853,7 +853,14 @@ instance :
       ext f
       have hX := Derivation.congr_fun (left_invariant' g X) (Y f)
       have hY := Derivation.congr_fun (left_invariant' g Y) (X f)
-      rw [hfdifferential_apply]; rw [fdifferential_apply]; rw [Derivation.evalAt_apply] at h
+      rw [hfdifferential_apply]; rw [fdifferential_apply]; rw [Derivation.evalAt_apply] at hX hY ⊢
+      rw [comp_L] at hX hY
+      rw [Derivation.commutator_apply]; rw [ContMDiffMap.coe_sub]; rw [Pi.sub_apply]; rw [coe_derivation]
+      rw [coe_derivation] at hX hY ⊢
+      rw [hX]; rw [hY]
+      rfl⟩
+
+@[simp]
 
 中文:
 实例 :
@@ -862,7 +869,14 @@ instance :
       ext f
       have hX := Derivation.congr_fun (left_invariant' g X) (Y f)
       have hY := Derivation.congr_fun (left_invariant' g Y) (X f)
-      rw [hfdifferential_apply]; rw [fdifferential_apply]; rw [Derivation.evalAt_apply] at h
+      rw [hfdifferential_apply]; rw [fdifferential_apply]; rw [Derivation.evalAt_apply] at hX hY ⊢
+      rw [comp_L] at hX hY
+      rw [Derivation.commutator_apply]; rw [ContMDiffMap.coe_sub]; rw [Pi.sub_apply]; rw [coe_derivation]
+      rw [coe_derivation] at hX hY ⊢
+      rw [hX]; rw [hY]
+      rfl⟩
+
+@[simp]
 
 Depends on / 依赖: ContMDiffMap, ContMDiffMap.coe_sub, Derivation, Derivation.commutator_apply, Derivation.congr_fun, Derivation.evalAt_apply, Pi.sub_apply, coe_derivation, coe_sub, commutator_apply, comp_L, congr_fun, evalAt_apply, fdifferential_apply, hfdifferential_apply, left_invariant, sub_apply
 -/
@@ -930,7 +944,8 @@ instance :
   lie_self X := by ext1; simp only [commutator_apply, sub_self]; rfl
   leibniz_lie X Y Z := by
     ext1
-    s
+    simp only [commutator_apply, coe_add, map_sub, Pi.add_apply]
+    ring
 
 中文:
 实例 :
@@ -946,7 +961,8 @@ instance :
   lie_self X := by ext1; simp only [commutator_apply, sub_self]; rfl
   leibniz_lie X Y Z := by
     ext1
-    s
+    simp only [commutator_apply, coe_add, map_sub, Pi.add_apply]
+    ring
 
 Depends on / 依赖: Pi.add_apply, add_apply, coe_add, commutator_apply, leibniz_lie, lie_add, lie_self, map_add, map_sub, sub_self
 -/

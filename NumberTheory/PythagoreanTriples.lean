@@ -362,7 +362,27 @@ theorem even_odd_of_coprime
     apply Nat.not_coprime_of_dvd_of_dvd (by decide : 1 < 2) _ _ hc
     · apply Int.natCast_dvd.1
       apply Int.dvd_of_emod_eq_zero hx
-    · apply Int.nat
+    · apply Int.natCast_dvd.1
+      apply Int.dvd_of_emod_eq_zero hy
+  -- x even, y odd
+  · left
+    exact ⟨hx, hy⟩
+  -- x odd, y even
+  · right
+    exact ⟨hx, hy⟩
+  -- x odd, y odd
+  · exfalso
+    obtain ⟨x0, y0, rfl, rfl⟩ : exists x0 y0, x = x0 * 2 + 1 ∧ y = y0 * 2 + 1 := by
+      obtain ⟨x0, hx2⟩ := exists_eq_mul_left_of_dvd (Int.dvd_self_sub_of_emod_eq hx)
+      obtain ⟨y0, hy2⟩ := exists_eq_mul_left_of_dvd (Int.dvd_self_sub_of_emod_eq hy)
+      rw [sub_eq_iff_eq_add] at hx2 hy2
+      exact ⟨x0, y0, hx2, hy2⟩
+    apply Int.sq_ne_two_mod_four z
+    rw [show z * z = 4 * (x0 * x0 + x0 + y0 * y0 + y0) + 2 by
+        rw [← h.eq]
+        ring]
+    simp only [Int.add_emod, Int.mul_emod_right, zero_add]
+    decide
 
 中文:
 定理 even_odd_of_coprime
@@ -375,7 +395,27 @@ theorem even_odd_of_coprime
     apply Nat.not_coprime_of_dvd_of_dvd (by decide : 1 < 2) _ _ hc
     · apply Int.natCast_dvd.1
       apply Int.dvd_of_emod_eq_zero hx
-    · apply Int.nat
+    · apply Int.natCast_dvd.1
+      apply Int.dvd_of_emod_eq_zero hy
+  -- x even, y odd
+  · left
+    exact ⟨hx, hy⟩
+  -- x odd, y even
+  · right
+    exact ⟨hx, hy⟩
+  -- x odd, y odd
+  · exfalso
+    obtain ⟨x0, y0, rfl, rfl⟩ : exists x0 y0, x = x0 * 2 + 1 ∧ y = y0 * 2 + 1 := by
+      obtain ⟨x0, hx2⟩ := exists_eq_mul_left_of_dvd (Int.dvd_self_sub_of_emod_eq hx)
+      obtain ⟨y0, hy2⟩ := exists_eq_mul_left_of_dvd (Int.dvd_self_sub_of_emod_eq hy)
+      rw [sub_eq_iff_eq_add] at hx2 hy2
+      exact ⟨x0, y0, hx2, hy2⟩
+    apply Int.sq_ne_two_mod_four z
+    rw [show z * z = 4 * (x0 * x0 + x0 + y0 * y0 + y0) + 2 by
+        rw [← h.eq]
+        ring]
+    simp only [Int.add_emod, Int.mul_emod_right, zero_add]
+    decide
 
 Depends on / 依赖: Int.emod_two_eq_zero_or_one, emod_two_eq_zero_or_one
 -/
@@ -424,7 +464,12 @@ theorem gcd_dvd
         or_self_iff] using h
     simp [h0, hz]
   obtain ⟨k, x0, y0, _, h2, rfl, rfl⟩ :
-    exists (k : Nat) (x0 
+    exists (k : Nat) (x0 y0 : _), 0 < k ∧ Int.gcd x0 y0 = 1 ∧ x = x0 * k ∧ y = y0 * k :=
+    Int.exists_gcd_one' (Nat.pos_of_ne_zero h0)
+  rw [Int.gcd_mul_right]; rw [h2]; rw [Int.natAbs_natCast]; rw [one_mul]
+  rw [← Int.pow_dvd_pow_iff two_ne_zero]; rw [sq z]; rw [← h.eq]
+  rw [(by ring : x0 * k * (x0 * k) + y0 * k * (y0 * k) = (k : Int) ^ 2 * (x0 * x0 + y0 * y0))]
+  exact dvd_mul_right _ _
 
 中文:
 定理 gcd_dvd
@@ -437,7 +482,12 @@ theorem gcd_dvd
         or_self_iff] using h
     simp [h0, hz]
   obtain ⟨k, x0, y0, _, h2, rfl, rfl⟩ :
-    exists (k : Nat) (x0 
+    exists (k : Nat) (x0 y0 : _), 0 < k ∧ Int.gcd x0 y0 = 1 ∧ x = x0 * k ∧ y = y0 * k :=
+    Int.exists_gcd_one' (Nat.pos_of_ne_zero h0)
+  rw [Int.gcd_mul_right]; rw [h2]; rw [Int.natAbs_natCast]; rw [one_mul]
+  rw [← Int.pow_dvd_pow_iff two_ne_zero]; rw [sq z]; rw [← h.eq]
+  rw [(by ring : x0 * k * (x0 * k) + y0 * k * (y0 * k) = (k : Int) ^ 2 * (x0 * x0 + y0 * y0))]
+  exact dvd_mul_right _ _
 
 Depends on / 依赖: Int.exists_gcd_one, Int.gcd, Int.gcd_eq_zero_iff.mp, Int.gcd_mul_right, Int.natAbs_natCast, Int.pow_dvd_pow_iff, Nat.pos_of_ne_zero, PythagoreanTriple, add_zero, exists_gcd_one, gcd_eq_zero_iff, gcd_mul_right, mul_zero, natAbs_natCast, one_mul, or_self_iff, pos_of_ne_zero, pow_dvd_pow_iff, two_ne_zero, zero_eq_mul
 -/
@@ -470,7 +520,15 @@ theorem normalize
         or_self_iff] using h
     simpa [h0, hx, hy, hz] using zero
   rcases h.gcd_dvd with ⟨z0, rfl⟩
-  obtain ⟨k
+  obtain ⟨k, x0, y0, k0, h2, rfl, rfl⟩ :
+    exists (k : Nat) (x0 y0 : _), 0 < k ∧ Int.gcd x0 y0 = 1 ∧ x = x0 * k ∧ y = y0 * k :=
+    Int.exists_gcd_one' (Nat.pos_of_ne_zero h0)
+  have hk : (k : Int) != 0 := by
+    norm_cast
+    rwa [pos_iff_ne_zero] at k0
+  rw [Int.gcd_mul_right]; rw [h2]; rw [Int.natAbs_natCast]; rw [one_mul] at h ⊢
+  rw [mul_comm x0]; rw [mul_comm y0]; rw [mul_iff k hk] at h
+  rwa [Int.mul_ediv_cancel _ hk, Int.mul_ediv_cancel _ hk, Int.mul_ediv_cancel_left _ hk]
 
 中文:
 定理 normalize
@@ -483,7 +541,15 @@ theorem normalize
         or_self_iff] using h
     simpa [h0, hx, hy, hz] using zero
   rcases h.gcd_dvd with ⟨z0, rfl⟩
-  obtain ⟨k
+  obtain ⟨k, x0, y0, k0, h2, rfl, rfl⟩ :
+    exists (k : Nat) (x0 y0 : _), 0 < k ∧ Int.gcd x0 y0 = 1 ∧ x = x0 * k ∧ y = y0 * k :=
+    Int.exists_gcd_one' (Nat.pos_of_ne_zero h0)
+  have hk : (k : Int) != 0 := by
+    norm_cast
+    rwa [pos_iff_ne_zero] at k0
+  rw [Int.gcd_mul_right]; rw [h2]; rw [Int.natAbs_natCast]; rw [one_mul] at h ⊢
+  rw [mul_comm x0]; rw [mul_comm y0]; rw [mul_iff k hk] at h
+  rwa [Int.mul_ediv_cancel _ hk, Int.mul_ediv_cancel _ hk, Int.mul_ediv_cancel_left _ hk]
 
 Depends on / 依赖: Int.exists_gcd_one, Int.gcd, Int.gcd_eq_zero_iff.mp, Nat.pos_of_ne_zero, PythagoreanTriple, add_zero, exists_gcd_one, gcd_dvd, gcd_eq_zero_iff, h.gcd_dvd, mul_zero, or_self_iff, pos_iff_ne_zero, pos_of_ne_zero, zero_eq_mul
 -/
@@ -589,7 +655,7 @@ theorem ne_zero_of_coprime
     exact one_ne_zero
   rcases Int.ne_zero_of_gcd hc' with hxz | hyz
   · apply lt_add_of_pos_of_le (sq_pos_of_ne_zero hxz) (sq_nonneg y)
-  · apply lt_add
+  · apply lt_add_of_le_of_pos (sq_nonneg x) (sq_pos_of_ne_zero hyz)
 
 中文:
 定理 ne_zero_of_coprime
@@ -605,7 +671,7 @@ theorem ne_zero_of_coprime
     exact one_ne_zero
   rcases Int.ne_zero_of_gcd hc' with hxz | hyz
   · apply lt_add_of_pos_of_le (sq_pos_of_ne_zero hxz) (sq_nonneg y)
-  · apply lt_add
+  · apply lt_add_of_le_of_pos (sq_nonneg x) (sq_pos_of_ne_zero hyz)
 
 Depends on / 依赖: Int.gcd, Int.ne_zero_of_gcd, MeasurableSet, h.eq, h_indep, lt_add_of_le_of_pos, lt_add_of_pos_of_le, measurableSet_generateFrom, ne_zero_of_gcd, one_ne_zero, sq_nonneg, sq_pos_of_ne_zero
 -/
@@ -684,7 +750,7 @@ theorem coprime_of_coprime
   apply Nat.dvd_gcd (Int.Prime.dvd_natAbs_of_coe_dvd_sq hp _ _) hpy
   rw [sq]; rw [eq_sub_of_add_eq h]
   rw [← Int.natCast_dvd] at hpy hpz
-  exact dvd_sub (hpz.mul_right _) (hpy.mul_r
+  exact dvd_sub (hpz.mul_right _) (hpy.mul_right _)
 
 中文:
 定理 coprime_of_coprime
@@ -698,7 +764,7 @@ theorem coprime_of_coprime
   apply Nat.dvd_gcd (Int.Prime.dvd_natAbs_of_coe_dvd_sq hp _ _) hpy
   rw [sq]; rw [eq_sub_of_add_eq h]
   rw [← Int.natCast_dvd] at hpy hpz
-  exact dvd_sub (hpz.mul_right _) (hpy.mul_r
+  exact dvd_sub (hpz.mul_right _) (hpy.mul_right _)
 
 Depends on / 依赖: Int.Prime.dvd_natAbs_of_coe_dvd_sq, Int.natCast_dvd, Nat.Prime.not_coprime_iff_dvd.mp, Nat.dvd_gcd, dvd_gcd, dvd_natAbs_of_coe_dvd_sq, dvd_sub, eq_sub_of_add_eq, hp.not_dvd_one, hpy.mul_right, hpz.mul_right, mul_right, natCast_dvd, not_coprime_iff_dvd, not_dvd_one
 -/
@@ -738,7 +804,27 @@ definition circleEquivGen
       simpa only [eq_neg_iff_add_eq_zero, one_pow] using hk 1⟩
   invFun p := (p : K × K).1 / ((p : K × K).2 + 1)
   left_inv x := by
+    have h2 : (1 + 1 : K) = 2 := by norm_num
+    have h3 : (2 : K) != 0 := by
+      convert! hk 1
+      rw [one_pow 2]; rw [h2]
+    simp [field, hk x, h2, add_assoc, add_comm, add_sub_cancel, mul_comm]
+  right_inv := fun ⟨⟨x, y⟩, hxy, hy⟩ => by
+    change x ^ 2 + y ^ 2 = 1 at hxy
+    have h2 : y + 1 != 0 := mt eq_neg_of_add_eq_zero_left hy
+    have h3 : (y + 1) ^ 2 + x ^ 2 = 2 * (y + 1) := by
+      rw [(add_neg_eq_iff_eq_add.mpr hxy.symm).symm]
+      ring
+    have h4 : (2 : K) != 0 := by
+      convert! hk 1
+      rw [one_pow 2]
+      ring
+    simp only [Prod.mk_inj, Subtype.mk_eq_mk]
+    constructor
+    · simp [field, h3]
+    · grind
 
+@[simp]
 
 中文:
 定义 circleEquivGen
@@ -748,7 +834,27 @@ definition circleEquivGen
       simpa only [eq_neg_iff_add_eq_zero, one_pow] using hk 1⟩
   invFun p := (p : K × K).1 / ((p : K × K).2 + 1)
   left_inv x := by
+    have h2 : (1 + 1 : K) = 2 := by norm_num
+    have h3 : (2 : K) != 0 := by
+      convert! hk 1
+      rw [one_pow 2]; rw [h2]
+    simp [field, hk x, h2, add_assoc, add_comm, add_sub_cancel, mul_comm]
+  right_inv := fun ⟨⟨x, y⟩, hxy, hy⟩ => by
+    change x ^ 2 + y ^ 2 = 1 at hxy
+    have h2 : y + 1 != 0 := mt eq_neg_of_add_eq_zero_left hy
+    have h3 : (y + 1) ^ 2 + x ^ 2 = 2 * (y + 1) := by
+      rw [(add_neg_eq_iff_eq_add.mpr hxy.symm).symm]
+      ring
+    have h4 : (2 : K) != 0 := by
+      convert! hk 1
+      rw [one_pow 2]
+      ring
+    simp only [Prod.mk_inj, Subtype.mk_eq_mk]
+    constructor
+    · simp [field, h3]
+    · grind
 
+@[simp]
 
 Depends on / 依赖: Filter, Filter.eventually_true, IndepSets, IndepSets.indep_aux, Set.empty_inter, Set.inter_comm, Set.s, Set.sdiff_self_inter, add_assoc, add_comm, add_left_inj, add_sub_cancel, convert, div_eq_iff, empty_inter, eq_neg_iff_add_eq_zero, eq_zero_or_isMarkovKernel, eventually_true, filter_upwards, indep_aux
 -/
@@ -841,7 +947,20 @@ theorem coprime_sq_sub_sq_add_of_even_odd
   have h2n : (p : Int) ∣ 2 * n ^ 2 := by
     convert! dvd_sub hp2 hp1 using 1
     ring
-  have h
+  have hmc : p = 2 ∨ p ∣ Int.natAbs m := prime_two_or_dvd_of_dvd_two_mul_pow_self_two hp h2m
+  have hnc : p = 2 ∨ p ∣ Int.natAbs n := prime_two_or_dvd_of_dvd_two_mul_pow_self_two hp h2n
+  by_cases h2 : p = 2
+  · have h3 : (m ^ 2 + n ^ 2) % 2 = 1 := by
+      simp only [sq, Int.add_emod, Int.mul_emod, hm, hn, dvd_refl, Int.emod_emod_of_dvd]
+      decide
+    have h4 : (m ^ 2 + n ^ 2) % 2 = 0 := by
+      apply Int.emod_eq_zero_of_dvd
+      rwa [h2] at hp2
+    rw [h4] at h3
+    exact zero_ne_one h3
+  · apply hp.not_dvd_one
+    rw [← h]
+    exact Nat.dvd_gcd (Or.resolve_left hmc h2) (Or.resolve_left hnc h2)
 
 中文:
 定理 coprime_sq_sub_sq_add_of_even_odd
@@ -856,7 +975,20 @@ theorem coprime_sq_sub_sq_add_of_even_odd
   have h2n : (p : Int) ∣ 2 * n ^ 2 := by
     convert! dvd_sub hp2 hp1 using 1
     ring
-  have h
+  have hmc : p = 2 ∨ p ∣ Int.natAbs m := prime_two_or_dvd_of_dvd_two_mul_pow_self_two hp h2m
+  have hnc : p = 2 ∨ p ∣ Int.natAbs n := prime_two_or_dvd_of_dvd_two_mul_pow_self_two hp h2n
+  by_cases h2 : p = 2
+  · have h3 : (m ^ 2 + n ^ 2) % 2 = 1 := by
+      simp only [sq, Int.add_emod, Int.mul_emod, hm, hn, dvd_refl, Int.emod_emod_of_dvd]
+      decide
+    have h4 : (m ^ 2 + n ^ 2) % 2 = 0 := by
+      apply Int.emod_eq_zero_of_dvd
+      rwa [h2] at hp2
+    rw [h4] at h3
+    exact zero_ne_one h3
+  · apply hp.not_dvd_one
+    rw [← h]
+    exact Nat.dvd_gcd (Or.resolve_left hmc h2) (Or.resolve_left hnc h2)
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.symm, Indep.congr, IndepSets, IndepSets.indep, IsMarkovKernel, Kernel, ae_isProbabilityMeasure, eq_or_ne, exists_ae_eq_isMarkovKernel, generateFrom_piiUnionInter_le, generateFrom_piiUnionInter_singleton_left, hs.ae_isProbabilityMeasure, measura, measurableSet_generateFrom
 -/
@@ -926,7 +1058,27 @@ theorem coprime_sq_sub_mul_of_even_odd
     norm_cast
     exact mt Nat.dvd_one.mp (Nat.Prime.ne_one hp)
   rcases Int.Prime.dvd_mul hp hp2 with hp2m | hpn
-  · rw [Int.n
+  · rw [Int.natAbs_mul] at hp2m
+    rcases (Nat.Prime.dvd_mul hp).mp hp2m with hp2 | hpm
+    · have hp2' : p = 2 := (Nat.le_of_dvd zero_lt_two hp2).antisymm hp.two_le
+      revert hp1
+      rw [hp2']
+      apply mt Int.emod_eq_zero_of_dvd
+      simp only [sq, Nat.cast_ofNat, Int.sub_emod, Int.mul_emod, hm, hn,
+        mul_zero, EuclideanDomain.zero_mod, mul_one, zero_sub]
+      decide
+    apply mt (Int.dvd_coe_gcd (Int.natCast_dvd.mpr hpm)) hnp
+    apply or_self_iff.mp
+    apply Int.Prime.dvd_mul' hp
+    rw [(by ring : n * n = -(m ^ 2 - n ^ 2) + m * m)]
+    exact hp1.neg_right.add ((Int.natCast_dvd.2 hpm).mul_right _)
+  rw [Int.gcd_comm] at hnp
+  apply mt (Int.dvd_coe_gcd (Int.natCast_dvd.mpr hpn)) hnp
+  apply or_self_iff.mp
+  apply Int.Prime.dvd_mul' hp
+  rw [(by ring : m * m = m ^ 2 - n ^ 2 + n * n)]
+  apply dvd_add hp1
+  exact (Int.natCast_dvd.mpr hpn).mul_right n
 
 中文:
 定理 coprime_sq_sub_mul_of_even_odd
@@ -940,7 +1092,27 @@ theorem coprime_sq_sub_mul_of_even_odd
     norm_cast
     exact mt Nat.dvd_one.mp (Nat.Prime.ne_one hp)
   rcases Int.Prime.dvd_mul hp hp2 with hp2m | hpn
-  · rw [Int.n
+  · rw [Int.natAbs_mul] at hp2m
+    rcases (Nat.Prime.dvd_mul hp).mp hp2m with hp2 | hpm
+    · have hp2' : p = 2 := (Nat.le_of_dvd zero_lt_two hp2).antisymm hp.two_le
+      revert hp1
+      rw [hp2']
+      apply mt Int.emod_eq_zero_of_dvd
+      simp only [sq, Nat.cast_ofNat, Int.sub_emod, Int.mul_emod, hm, hn,
+        mul_zero, EuclideanDomain.zero_mod, mul_one, zero_sub]
+      decide
+    apply mt (Int.dvd_coe_gcd (Int.natCast_dvd.mpr hpm)) hnp
+    apply or_self_iff.mp
+    apply Int.Prime.dvd_mul' hp
+    rw [(by ring : n * n = -(m ^ 2 - n ^ 2) + m * m)]
+    exact hp1.neg_right.add ((Int.natCast_dvd.2 hpm).mul_right _)
+  rw [Int.gcd_comm] at hnp
+  apply mt (Int.dvd_coe_gcd (Int.natCast_dvd.mpr hpn)) hnp
+  apply or_self_iff.mp
+  apply Int.Prime.dvd_mul' hp
+  rw [(by ring : m * m = m ^ 2 - n ^ 2 + n * n)]
+  apply dvd_add hp1
+  exact (Int.natCast_dvd.mpr hpn).mul_right n
 -/
 private theorem coprime_sq_sub_mul_of_even_odd {m n : Int} (h : Int.gcd m n = 1) (hm : m % 2 = 0)
     (hn : n % 2 = 1) : Int.gcd (m ^ 2 - n ^ 2) (2 * m * n) = 1 := by
@@ -1041,7 +1213,27 @@ theorem coprime_sq_sub_sq_sum_of_odd_odd
   rw [sub_eq_iff_eq_add] at hm2 hn2
   subst m
   subst n
-  have h1 : (m0 * 2 + 1) ^ 2 + (n0 * 2 + 1) ^ 2 = 2 * (2 * (m0 ^ 2 + n0 ^ 2 + m
+  have h1 : (m0 * 2 + 1) ^ 2 + (n0 * 2 + 1) ^ 2 = 2 * (2 * (m0 ^ 2 + n0 ^ 2 + m0 + n0) + 1) := by
+    ring
+  have h2 : (m0 * 2 + 1) ^ 2 - (n0 * 2 + 1) ^ 2 = 2 * (2 * (m0 ^ 2 - n0 ^ 2 + m0 - n0)) := by ring
+  have h3 : ((m0 * 2 + 1) ^ 2 - (n0 * 2 + 1) ^ 2) / 2 % 2 = 0 := by
+    rw [h2]; rw [Int.mul_ediv_cancel_left]; rw [Int.mul_emod_right]
+    decide
+  refine ⟨⟨_, h1⟩, ⟨_, h2⟩, h3, ?_⟩
+  have h20 : (2 : Int) != 0 := by decide
+  rw [h1]; rw [h2]; rw [Int.mul_ediv_cancel_left _ h20]; rw [Int.mul_ediv_cancel_left _ h20]
+  by_contra h4
+  obtain ⟨p, hp, hp1, hp2⟩ := Nat.Prime.not_coprime_iff_dvd.mp h4
+  apply hp.not_dvd_one
+  rw [← h]
+  rw [← Int.natCast_dvd] at hp1 hp2
+  apply Nat.dvd_gcd
+  · apply Int.Prime.dvd_natAbs_of_coe_dvd_sq hp
+    convert! dvd_add hp1 hp2
+    ring
+  · apply Int.Prime.dvd_natAbs_of_coe_dvd_sq hp
+    convert! dvd_sub hp2 hp1
+    ring
 
 中文:
 定理 coprime_sq_sub_sq_sum_of_odd_odd
@@ -1052,7 +1244,27 @@ theorem coprime_sq_sub_sq_sum_of_odd_odd
   rw [sub_eq_iff_eq_add] at hm2 hn2
   subst m
   subst n
-  have h1 : (m0 * 2 + 1) ^ 2 + (n0 * 2 + 1) ^ 2 = 2 * (2 * (m0 ^ 2 + n0 ^ 2 + m
+  have h1 : (m0 * 2 + 1) ^ 2 + (n0 * 2 + 1) ^ 2 = 2 * (2 * (m0 ^ 2 + n0 ^ 2 + m0 + n0) + 1) := by
+    ring
+  have h2 : (m0 * 2 + 1) ^ 2 - (n0 * 2 + 1) ^ 2 = 2 * (2 * (m0 ^ 2 - n0 ^ 2 + m0 - n0)) := by ring
+  have h3 : ((m0 * 2 + 1) ^ 2 - (n0 * 2 + 1) ^ 2) / 2 % 2 = 0 := by
+    rw [h2]; rw [Int.mul_ediv_cancel_left]; rw [Int.mul_emod_right]
+    decide
+  refine ⟨⟨_, h1⟩, ⟨_, h2⟩, h3, ?_⟩
+  have h20 : (2 : Int) != 0 := by decide
+  rw [h1]; rw [h2]; rw [Int.mul_ediv_cancel_left _ h20]; rw [Int.mul_ediv_cancel_left _ h20]
+  by_contra h4
+  obtain ⟨p, hp, hp1, hp2⟩ := Nat.Prime.not_coprime_iff_dvd.mp h4
+  apply hp.not_dvd_one
+  rw [← h]
+  rw [← Int.natCast_dvd] at hp1 hp2
+  apply Nat.dvd_gcd
+  · apply Int.Prime.dvd_natAbs_of_coe_dvd_sq hp
+    convert! dvd_add hp1 hp2
+    ring
+  · apply Int.Prime.dvd_natAbs_of_coe_dvd_sq hp
+    convert! dvd_sub hp2 hp1
+    ring
 
 Depends on / 依赖: iIndepSet, iIndepSet.indep_generateFrom_le, indep_generateFrom_le, lt_succ_self, n.lt_succ_self
 -/
@@ -1108,7 +1320,8 @@ theorem isPrimitiveClassified_aux
   apply And.intro _ (And.intro co pp)
   right
   refine ⟨?_, h2.left⟩
-  rw [← Rat.intCast_inj]; rw [←
+  rw [← Rat.intCast_inj]; rw [← div_left_inj' (mt Rat.intCast_inj.mp hz)]; rw [hv2]; rw [h2.right]
+  norm_cast
 
 中文:
 定理 isPrimitiveClassified_aux
@@ -1123,7 +1336,8 @@ theorem isPrimitiveClassified_aux
   apply And.intro _ (And.intro co pp)
   right
   refine ⟨?_, h2.left⟩
-  rw [← Rat.intCast_inj]; rw [←
+  rw [← Rat.intCast_inj]; rw [← div_left_inj' (mt Rat.intCast_inj.mp hz)]; rw [hv2]; rw [h2.right]
+  norm_cast
 
 Depends on / 依赖: And.intro, Rat.div_int_inj, Rat.intCast_inj, Rat.intCast_inj.mp, coprime_of_coprime, div_int_inj, div_left_inj, h.coprime_of_coprime, h2.left, h2.right, intCast_inj, ne_of_gt
 -/
@@ -1159,7 +1373,79 @@ theorem isPrimitiveClassified_of_coprime_of_odd_of_pos
     simp [field, v, w]
     simp only [sq]
     norm_cast
-  have hvz : v != 0 := by simp [field, v, -mul_eq_zero, -div_eq_zero_
+  have hvz : v != 0 := by simp [field, v, -mul_eq_zero, -div_eq_zero_iff, h0]
+  have hw1 : w != -1 := by
+    contrapose hvz with hw1
+    rw [hw1]; rw [neg_sq]; rw [one_pow]; rw [add_eq_right] at hq
+    exact eq_zero_of_pow_eq_zero hq
+  have hQ : forall x : Rat, 1 + x ^ 2 != 0 := by
+    intro q
+    apply ne_of_gt
+    exact lt_add_of_pos_of_le zero_lt_one (sq_nonneg q)
+  have hp : (⟨v, w⟩ : Rat × Rat) in { p : Rat × Rat | p.1 ^ 2 + p.2 ^ 2 = 1 ∧ p.2 != -1 } := ⟨hq, hw1⟩
+  let q := (circleEquivGen hQ).symm ⟨⟨v, w⟩, hp⟩
+  have ht4 : v = 2 * q / (1 + q ^ 2) ∧ w = (1 - q ^ 2) / (1 + q ^ 2) := by
+    apply Prod.mk.inj
+    exact congr_arg Subtype.val ((circleEquivGen hQ).apply_symm_apply ⟨⟨v, w⟩, hp⟩).symm
+  let m := (q.den : Int)
+  let n := q.num
+  have hm0 : m != 0 := by
+    -- Added to adapt to https://github.com/leanprover/lean4/pull/2734.
+    -- Without `unfold`, `norm_cast` can't see the coercion.
+    -- One might try `zeta := true` in `Tactic.NormCast.derive`,
+    -- but that seems to break many other things.
+    unfold m
+    norm_cast
+    apply Rat.den_nz q
+  have hq2 : q = n / m := (Rat.num_div_den q).symm
+  have hm2n2 : 0 < m ^ 2 + n ^ 2 := by positivity
+  have hm2n20 : (m ^ 2 + n ^ 2 : Rat) != 0 := by positivity
+  have hw2 : w = ((m : Rat) ^ 2 - (n : Rat) ^ 2) / ((m : Rat) ^ 2 + (n : Rat) ^ 2) := by
+    calc
+      w = (1 - q ^ 2) / (1 + q ^ 2) := by apply ht4.2
+      _ = (1 - (↑n / ↑m) ^ 2) / (1 + (↑n / ↑m) ^ 2) := by rw [hq2]
+      _ = _ := by field
+  have hv2 : v = 2 * m * n / ((m : Rat) ^ 2 + (n : Rat) ^ 2) := by
+    calc
+      v = 2 * q / (1 + q ^ 2) := by apply ht4.1
+      _ = 2 * (n / m) / (1 + (↑n / ↑m) ^ 2) := by rw [hq2]
+      _ = _ := by field
+  have hnmcp : Int.gcd n m = 1 := q.reduced
+  have hmncp : Int.gcd m n = 1 := by
+    rw [Int.gcd_comm]
+    exact hnmcp
+  rcases Int.emod_two_eq_zero_or_one m with hm2 | hm2 <;>
+    rcases Int.emod_two_eq_zero_or_one n with hn2 | hn2
+  · -- m even, n even
+    exfalso
+    have h1 : 2 ∣ (Int.gcd n m : Int) :=
+      Int.dvd_coe_gcd (Int.dvd_of_emod_eq_zero hn2) (Int.dvd_of_emod_eq_zero hm2)
+    lia
+  · -- m even, n odd
+    apply h.isPrimitiveClassified_aux hc hzpos hm2n2 hv2 hw2 _ hmncp
+    · apply Or.intro_left
+      exact And.intro hm2 hn2
+    · apply coprime_sq_sub_sq_add_of_even_odd hmncp hm2 hn2
+  · -- m odd, n even
+    apply h.isPrimitiveClassified_aux hc hzpos hm2n2 hv2 hw2 _ hmncp
+    · apply Or.intro_right
+      exact And.intro hm2 hn2
+    apply coprime_sq_sub_sq_add_of_odd_even hmncp hm2 hn2
+  · -- m odd, n odd
+    exfalso
+    have h1 :
+      2 ∣ m ^ 2 + n ^ 2 ∧
+        2 ∣ m ^ 2 - n ^ 2 ∧
+          (m ^ 2 - n ^ 2) / 2 % 2 = 0 ∧ Int.gcd ((m ^ 2 - n ^ 2) / 2) ((m ^ 2 + n ^ 2) / 2) = 1 :=
+      coprime_sq_sub_sq_sum_of_odd_odd hmncp hm2 hn2
+    have h2 : y = (m ^ 2 - n ^ 2) / 2 ∧ z = (m ^ 2 + n ^ 2) / 2 := by
+      apply Rat.div_int_inj hzpos _ (h.coprime_of_coprime hc) h1.2.2.2
+      · change w = _
+        rw [← Rat.divInt_eq_div]; rw [← Rat.divInt_mul_right (by simp : (2 : Int) != 0)]
+        rw [Int.ediv_mul_cancel h1.1]; rw [Int.ediv_mul_cancel h1.2.1]; rw [hw2]; rw [Rat.divInt_eq_div]
+        norm_cast
+      · lia
+    norm_num [h2.1, h1.2.2.1] at hyo
 
 中文:
 定理 isPrimitiveClassified_of_coprime_of_odd_of_pos
@@ -1173,7 +1459,79 @@ theorem isPrimitiveClassified_of_coprime_of_odd_of_pos
     simp [field, v, w]
     simp only [sq]
     norm_cast
-  have hvz : v != 0 := by simp [field, v, -mul_eq_zero, -div_eq_zero_
+  have hvz : v != 0 := by simp [field, v, -mul_eq_zero, -div_eq_zero_iff, h0]
+  have hw1 : w != -1 := by
+    contrapose hvz with hw1
+    rw [hw1]; rw [neg_sq]; rw [one_pow]; rw [add_eq_right] at hq
+    exact eq_zero_of_pow_eq_zero hq
+  have hQ : forall x : Rat, 1 + x ^ 2 != 0 := by
+    intro q
+    apply ne_of_gt
+    exact lt_add_of_pos_of_le zero_lt_one (sq_nonneg q)
+  have hp : (⟨v, w⟩ : Rat × Rat) in { p : Rat × Rat | p.1 ^ 2 + p.2 ^ 2 = 1 ∧ p.2 != -1 } := ⟨hq, hw1⟩
+  let q := (circleEquivGen hQ).symm ⟨⟨v, w⟩, hp⟩
+  have ht4 : v = 2 * q / (1 + q ^ 2) ∧ w = (1 - q ^ 2) / (1 + q ^ 2) := by
+    apply Prod.mk.inj
+    exact congr_arg Subtype.val ((circleEquivGen hQ).apply_symm_apply ⟨⟨v, w⟩, hp⟩).symm
+  let m := (q.den : Int)
+  let n := q.num
+  have hm0 : m != 0 := by
+    -- Added to adapt to https://github.com/leanprover/lean4/pull/2734.
+    -- Without `unfold`, `norm_cast` can't see the coercion.
+    -- One might try `zeta := true` in `Tactic.NormCast.derive`,
+    -- but that seems to break many other things.
+    unfold m
+    norm_cast
+    apply Rat.den_nz q
+  have hq2 : q = n / m := (Rat.num_div_den q).symm
+  have hm2n2 : 0 < m ^ 2 + n ^ 2 := by positivity
+  have hm2n20 : (m ^ 2 + n ^ 2 : Rat) != 0 := by positivity
+  have hw2 : w = ((m : Rat) ^ 2 - (n : Rat) ^ 2) / ((m : Rat) ^ 2 + (n : Rat) ^ 2) := by
+    calc
+      w = (1 - q ^ 2) / (1 + q ^ 2) := by apply ht4.2
+      _ = (1 - (↑n / ↑m) ^ 2) / (1 + (↑n / ↑m) ^ 2) := by rw [hq2]
+      _ = _ := by field
+  have hv2 : v = 2 * m * n / ((m : Rat) ^ 2 + (n : Rat) ^ 2) := by
+    calc
+      v = 2 * q / (1 + q ^ 2) := by apply ht4.1
+      _ = 2 * (n / m) / (1 + (↑n / ↑m) ^ 2) := by rw [hq2]
+      _ = _ := by field
+  have hnmcp : Int.gcd n m = 1 := q.reduced
+  have hmncp : Int.gcd m n = 1 := by
+    rw [Int.gcd_comm]
+    exact hnmcp
+  rcases Int.emod_two_eq_zero_or_one m with hm2 | hm2 <;>
+    rcases Int.emod_two_eq_zero_or_one n with hn2 | hn2
+  · -- m even, n even
+    exfalso
+    have h1 : 2 ∣ (Int.gcd n m : Int) :=
+      Int.dvd_coe_gcd (Int.dvd_of_emod_eq_zero hn2) (Int.dvd_of_emod_eq_zero hm2)
+    lia
+  · -- m even, n odd
+    apply h.isPrimitiveClassified_aux hc hzpos hm2n2 hv2 hw2 _ hmncp
+    · apply Or.intro_left
+      exact And.intro hm2 hn2
+    · apply coprime_sq_sub_sq_add_of_even_odd hmncp hm2 hn2
+  · -- m odd, n even
+    apply h.isPrimitiveClassified_aux hc hzpos hm2n2 hv2 hw2 _ hmncp
+    · apply Or.intro_right
+      exact And.intro hm2 hn2
+    apply coprime_sq_sub_sq_add_of_odd_even hmncp hm2 hn2
+  · -- m odd, n odd
+    exfalso
+    have h1 :
+      2 ∣ m ^ 2 + n ^ 2 ∧
+        2 ∣ m ^ 2 - n ^ 2 ∧
+          (m ^ 2 - n ^ 2) / 2 % 2 = 0 ∧ Int.gcd ((m ^ 2 - n ^ 2) / 2) ((m ^ 2 + n ^ 2) / 2) = 1 :=
+      coprime_sq_sub_sq_sum_of_odd_odd hmncp hm2 hn2
+    have h2 : y = (m ^ 2 - n ^ 2) / 2 ∧ z = (m ^ 2 + n ^ 2) / 2 := by
+      apply Rat.div_int_inj hzpos _ (h.coprime_of_coprime hc) h1.2.2.2
+      · change w = _
+        rw [← Rat.divInt_eq_div]; rw [← Rat.divInt_mul_right (by simp : (2 : Int) != 0)]
+        rw [Int.ediv_mul_cancel h1.1]; rw [Int.ediv_mul_cancel h1.2.1]; rw [hw2]; rw [Rat.divInt_eq_div]
+        norm_cast
+      · lia
+    norm_num [h2.1, h1.2.2.1] at hyo
 
 Depends on / 依赖: add_eq_right, contrapose, div_eq_zero_iff, eq_zero_of_pow_eq_zero, h.isPrimitiveClassified_of_coprime_of_zero_left, isPrimitiveClassified_of_coprime_of_zero_left, mul_eq_zero, ne_of_gt, neg_sq, one_pow
 -/
@@ -1307,7 +1665,7 @@ theorem isPrimitiveClassified_of_coprime
   have h' : PythagoreanTriple x y (-z) := by simpa [PythagoreanTriple, neg_mul_neg] using h.eq
   apply h'.isPrimitiveClassified_of_coprime_of_pos hc
   apply lt_of_le_of_ne _ (h'.ne_zero_of_coprime hc).symm
-  exact le
+  exact le_neg.mp hz
 
 中文:
 定理 isPrimitiveClassified_of_coprime
@@ -1319,7 +1677,7 @@ theorem isPrimitiveClassified_of_coprime
   have h' : PythagoreanTriple x y (-z) := by simpa [PythagoreanTriple, neg_mul_neg] using h.eq
   apply h'.isPrimitiveClassified_of_coprime_of_pos hc
   apply lt_of_le_of_ne _ (h'.ne_zero_of_coprime hc).symm
-  exact le
+  exact le_neg.mp hz
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.symm, Finset, Finset.induction, IsMarkovKernel, Kernel, MeasurableSet, PythagoreanTriple, ae_isProbabilityMeasure, classical, eq_or_ne, exists_ae_eq_isMarkovKernel, generateFrom, h.eq, h.isPrimitiveClassified_of_coprime_of_pos, hS_eq_generate, h_ind, h_ind.ae_isProbabilityMeasure, h_rec
 -/
@@ -1383,7 +1741,18 @@ theorem coprime_classification
     · refine ⟨Or.inl ⟨rfl, rfl⟩, ?_, co, pp⟩
       have : z ^ 2 = (m ^ 2 + n ^ 2) ^ 2 := by
         rw [sq]; rw [← h.left.eq]
-        
+        ring
+      simpa using eq_or_eq_neg_of_sq_eq_sq _ _ this
+    · refine ⟨Or.inr ⟨rfl, rfl⟩, ?_, co, pp⟩
+      have : z ^ 2 = (m ^ 2 + n ^ 2) ^ 2 := by
+        rw [sq]; rw [← h.left.eq]
+        ring
+      simpa using eq_or_eq_neg_of_sq_eq_sq _ _ this
+  · delta PythagoreanTriple
+    rintro ⟨m, n, ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩, rfl | rfl, co, pp⟩ <;>
+      first
+      | constructor; ring; exact coprime_sq_sub_mul co pp
+      | constructor; ring; rw [Int.gcd_comm]; exact coprime_sq_sub_mul co pp
 
 中文:
 定理 coprime_classification
@@ -1396,7 +1765,18 @@ theorem coprime_classification
     · refine ⟨Or.inl ⟨rfl, rfl⟩, ?_, co, pp⟩
       have : z ^ 2 = (m ^ 2 + n ^ 2) ^ 2 := by
         rw [sq]; rw [← h.left.eq]
-        
+        ring
+      simpa using eq_or_eq_neg_of_sq_eq_sq _ _ this
+    · refine ⟨Or.inr ⟨rfl, rfl⟩, ?_, co, pp⟩
+      have : z ^ 2 = (m ^ 2 + n ^ 2) ^ 2 := by
+        rw [sq]; rw [← h.left.eq]
+        ring
+      simpa using eq_or_eq_neg_of_sq_eq_sq _ _ this
+  · delta PythagoreanTriple
+    rintro ⟨m, n, ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩, rfl | rfl, co, pp⟩ <;>
+      first
+      | constructor; ring; exact coprime_sq_sub_mul co pp
+      | constructor; ring; rw [Int.gcd_comm]; exact coprime_sq_sub_mul co pp
 
 Depends on / 依赖: Or.inl, Or.inr, PythagoreanTriple, eq_or_eq_neg_of_sq_eq_sq, h.left.eq, h.left.isPrimitiveClassified_of_coprime, h.right, iIndep, iIndep.iIndepSets, iIndepSets, isPrimitiveClassified_of_coprime
 -/
@@ -1442,7 +1822,40 @@ theorem coprime_classification'
     · apply And.intro h_odd.1
       apply And.intro h_odd.2
       rcases ht2 with h_pos | h_neg
-      ·
+      · apply And.intro h_pos (And.intro ht3 (And.intro ht4 hm))
+      · exfalso
+        revert h_pos
+        rw [h_neg]
+        exact imp_false.mpr (not_lt.mpr (neg_nonpos.mpr (by positivity)))
+    exfalso
+    rcases h_even with ⟨rfl, -⟩
+    rw [mul_assoc]; rw [Int.mul_emod_right] at h_parity
+    exact zero_ne_one h_parity
+  · use -m, -n
+    rcases ht1 with h_odd | h_even
+    · rw [neg_sq m]
+      rw [neg_sq n]
+      apply And.intro h_odd.1
+      constructor
+      · rw [h_odd.2]
+        ring
+      rcases ht2 with h_pos | h_neg
+      · apply And.intro h_pos
+        constructor
+        · delta Int.gcd
+          rw [Int.natAbs_neg]; rw [Int.natAbs_neg]
+          exact ht3
+        · rw [Int.neg_emod_two, Int.neg_emod_two]
+          apply And.intro ht4
+          lia
+      · exfalso
+        revert h_pos
+        rw [h_neg]
+        exact imp_false.mpr (not_lt.mpr (neg_nonpos.mpr (by positivity)))
+    exfalso
+    rcases h_even with ⟨rfl, -⟩
+    rw [mul_assoc]; rw [Int.mul_emod_right] at h_parity
+    exact zero_ne_one h_parity
 
 中文:
 定理 coprime_classification'
@@ -1456,7 +1869,40 @@ theorem coprime_classification'
     · apply And.intro h_odd.1
       apply And.intro h_odd.2
       rcases ht2 with h_pos | h_neg
-      ·
+      · apply And.intro h_pos (And.intro ht3 (And.intro ht4 hm))
+      · exfalso
+        revert h_pos
+        rw [h_neg]
+        exact imp_false.mpr (not_lt.mpr (neg_nonpos.mpr (by positivity)))
+    exfalso
+    rcases h_even with ⟨rfl, -⟩
+    rw [mul_assoc]; rw [Int.mul_emod_right] at h_parity
+    exact zero_ne_one h_parity
+  · use -m, -n
+    rcases ht1 with h_odd | h_even
+    · rw [neg_sq m]
+      rw [neg_sq n]
+      apply And.intro h_odd.1
+      constructor
+      · rw [h_odd.2]
+        ring
+      rcases ht2 with h_pos | h_neg
+      · apply And.intro h_pos
+        constructor
+        · delta Int.gcd
+          rw [Int.natAbs_neg]; rw [Int.natAbs_neg]
+          exact ht3
+        · rw [Int.neg_emod_two, Int.neg_emod_two]
+          apply And.intro ht4
+          lia
+      · exfalso
+        revert h_pos
+        rw [h_neg]
+        exact imp_false.mpr (not_lt.mpr (neg_nonpos.mpr (by positivity)))
+    exfalso
+    rcases h_even with ⟨rfl, -⟩
+    rw [mul_assoc]; rw [Int.mul_emod_right] at h_parity
+    exact zero_ne_one h_parity
 
 Depends on / 依赖: And.intro, Int.mul_emod_right, PythagoreanTriple, PythagoreanTriple.coprime_classification.mp, coprime_classification, h_coprime, h_even, h_neg, h_odd, h_pos, imp_false, imp_false.mpr, le_or_gt, mul_assoc, mul_emod_right, neg_nonpos, neg_nonpos.mpr, not_lt, not_lt.mpr, revert
 -/
@@ -1525,7 +1971,13 @@ theorem classification
       have : z ^ 2 = (k * (m ^ 2 + n ^ 2)) ^ 2 := by
         rw [sq]; rw [← h.eq]
         ring
-      simpa using eq_or_eq_neg_of_sq_eq
+      simpa using eq_or_eq_neg_of_sq_eq_sq _ _ this
+    · refine ⟨Or.inr ⟨rfl, rfl⟩, ?_⟩
+      have : z ^ 2 = (k * (m ^ 2 + n ^ 2)) ^ 2 := by
+        rw [sq]; rw [← h.eq]
+        ring
+      simpa using eq_or_eq_neg_of_sq_eq_sq _ _ this
+  · rintro ⟨k, m, n, ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩, rfl | rfl⟩ <;> delta PythagoreanTriple <;> ring
 
 中文:
 定理 classification
@@ -1539,7 +1991,13 @@ theorem classification
       have : z ^ 2 = (k * (m ^ 2 + n ^ 2)) ^ 2 := by
         rw [sq]; rw [← h.eq]
         ring
-      simpa using eq_or_eq_neg_of_sq_eq
+      simpa using eq_or_eq_neg_of_sq_eq_sq _ _ this
+    · refine ⟨Or.inr ⟨rfl, rfl⟩, ?_⟩
+      have : z ^ 2 = (k * (m ^ 2 + n ^ 2)) ^ 2 := by
+        rw [sq]; rw [← h.eq]
+        ring
+      simpa using eq_or_eq_neg_of_sq_eq_sq _ _ this
+  · rintro ⟨k, m, n, ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩, rfl | rfl⟩ <;> delta PythagoreanTriple <;> ring
 
 Depends on / 依赖: Or.inl, Or.inr, PythagoreanTriple, classified, eq_or_eq_neg_of_sq_eq_sq, h.classified, h.eq, iIndepSet_iff_meas_biInter, meas_biInter
 -/

@@ -284,7 +284,9 @@ lemma restrictSupport_add
     intro x hx y hy
     simp [show monomial (x + y) (1 : R) = monomial x 1 * monomial y 1 by simp, -monomial_mul,
       *, Submodule.mul_mem_mul]
-  · rw [restrictSupport_eq_span, rest
+  · rw [restrictSupport_eq_span, restrictSupport_eq_span, Submodule.span_mul_span,
+      Submodule.span_le, Set.mul_subset_iff]
+    simp +contextual [Set.add_mem_add]
 
 中文:
 引理 restrictSupport_add
@@ -295,7 +297,9 @@ lemma restrictSupport_add
     intro x hx y hy
     simp [show monomial (x + y) (1 : R) = monomial x 1 * monomial y 1 by simp, -monomial_mul,
       *, Submodule.mul_mem_mul]
-  · rw [restrictSupport_eq_span, rest
+  · rw [restrictSupport_eq_span, restrictSupport_eq_span, Submodule.span_mul_span,
+      Submodule.span_le, Set.mul_subset_iff]
+    simp +contextual [Set.add_mem_add]
 
 Depends on / 依赖: Set.add_mem_add, Set.add_subset_iff, Set.image_subset_iff, Set.mul_subset_iff, Submodule, Submodule.mul_mem_mul, Submodule.span_le, Submodule.span_mul_span, add_mem_add, add_subset_iff, contextual, image_subset_iff, le_antisymm, monomial, monomial_mul, mul_mem_mul, mul_subset_iff, restrictSupport_eq_span, span_le, span_mul_span
 -/
@@ -324,6 +328,11 @@ lemma restrictSupport_zero
     simp only [monomial, AddMonoidAlgebra.lsingle_apply, zero_subset, mem_preimage,
       ← AddMonoidAlgebra.one_def, SetLike.mem_coe, Submodule.mem_one, algebraMap_eq]
     exact ⟨1, by simp⟩
+  · rintro _ ⟨x, rfl⟩
+    simp [mem_restrictSupport_iff, subset_def, coeff, AddMonoidAlgebra.one_def,
+      Finsupp.single_apply]
+
+@[simp]
 
 中文:
 引理 restrictSupport_zero
@@ -335,6 +344,11 @@ lemma restrictSupport_zero
     simp only [monomial, AddMonoidAlgebra.lsingle_apply, zero_subset, mem_preimage,
       ← AddMonoidAlgebra.one_def, SetLike.mem_coe, Submodule.mem_one, algebraMap_eq]
     exact ⟨1, by simp⟩
+  · rintro _ ⟨x, rfl⟩
+    simp [mem_restrictSupport_iff, subset_def, coeff, AddMonoidAlgebra.one_def,
+      Finsupp.single_apply]
+
+@[simp]
 -/
 @[simp] lemma restrictSupport_zero : restrictSupport R (0 : Set (σ ->₀ Nat)) = 1 := by
   classical
@@ -711,7 +725,8 @@ instance [Finite
     rw [Set.finite_coe_iff] at this ⊢
     exact this.subset fun n hn i => (eq_or_ne (n i) 0).elim
       (fun h => h.trans_le N.zero_le) fun h =>
-        (Finset.single_le_sum (fun _ _ => Nat.zero_l
+        (Finset.single_le_sum (fun _ _ => Nat.zero_le _) <| Finsupp.mem_support_iff.mpr h).trans hn
+  Module.Finite.of_basis (basisRestrictSupport R _)
 
 中文:
 实例 [有限
@@ -721,7 +736,8 @@ instance [Finite
     rw [Set.finite_coe_iff] at this ⊢
     exact this.subset fun n hn i => (eq_or_ne (n i) 0).elim
       (fun h => h.trans_le N.zero_le) fun h =>
-        (Finset.single_le_sum (fun _ _ => Nat.zero_l
+        (Finset.single_le_sum (fun _ _ => Nat.zero_le _) <| Finsupp.mem_support_iff.mpr h).trans hn
+  Module.Finite.of_basis (basisRestrictSupport R _)
 
 Depends on / 依赖: Finite, Finset, Finset.single_le_sum, Finsupp, Finsupp.mem_support_iff.mpr, Module, Module.Finite.of_basis, N.zero_le, Nat.zero_le, Set.finite_coe_iff, basisRestrictSupport, eq_or_ne, finite_coe_iff, finite_setOfPred_bounded, h.trans_le, mem_support_iff, of_basis, s.sum, single_le_sum, subset
 -/

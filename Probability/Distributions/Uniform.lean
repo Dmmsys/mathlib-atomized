@@ -93,7 +93,7 @@ theorem aemeasurable
   calc
     0 = (0 : Measure E) Set.univ := rfl
     _ = _ := by rw [hu, Measure.smul_apply, restrict_apply MeasurableSet.univ,
-      Set.univ_inter, smul_eq_mul, ENN
+      Set.univ_inter, smul_eq_mul, ENNReal.inv_mul_cancel hns hnt]
 
 中文:
 定理 aemeasurable
@@ -106,7 +106,7 @@ theorem aemeasurable
   calc
     0 = (0 : Measure E) Set.univ := rfl
     _ = _ := by rw [hu, Measure.smul_apply, restrict_apply MeasurableSet.univ,
-      Set.univ_inter, smul_eq_mul, ENN
+      Set.univ_inter, smul_eq_mul, ENNReal.inv_mul_cancel hns hnt]
 
 Depends on / 依赖: ENNReal, ENNReal.inv_mul_cancel, IsUniform, MeasurableSet, MeasurableSet.univ, Measure, Measure.smul_apply, ProbabilityTheory, ProbabilityTheory.cond, Set.univ, Set.univ_inter, inv_mul_cancel, map_of_not_aemeasurable, restrict_apply, smul_apply, smul_eq_mul, univ_inter, zero_ne_one
 -/
@@ -244,7 +244,7 @@ theorem hasPDF
   let t := toMeasurable μ s
 apply hasPDF_of_map_eq_withDensity (hu.aemeasurable hns hnt) (t.indicator ((μ t)⁻¹ • 1))
     (measurable_one.aemeasurable.const_smul (μ t)⁻¹).indicator (measurableSet_toMeasurable μ s)
-  rw [hu]; rw [withDensity_indicator (measurableSet_toMeasurable μ s)]; rw [withDens
+  rw [hu]; rw [withDensity_indicator (measurableSet_toMeasurable μ s)]; rw [withDensity_smul _ measurable_one]; rw [withDensity_one]; rw [restrict_toMeasurable hnt]; rw [measure_toMeasurable]; rw [ProbabilityTheory.cond]
 
 中文:
 定理 hasPDF
@@ -253,7 +253,7 @@ apply hasPDF_of_map_eq_withDensity (hu.aemeasurable hns hnt) (t.indicator ((μ t
   let t := toMeasurable μ s
 apply hasPDF_of_map_eq_withDensity (hu.aemeasurable hns hnt) (t.indicator ((μ t)⁻¹ • 1))
     (measurable_one.aemeasurable.const_smul (μ t)⁻¹).indicator (measurableSet_toMeasurable μ s)
-  rw [hu]; rw [withDensity_indicator (measurableSet_toMeasurable μ s)]; rw [withDens
+  rw [hu]; rw [withDensity_indicator (measurableSet_toMeasurable μ s)]; rw [withDensity_smul _ measurable_one]; rw [withDensity_one]; rw [restrict_toMeasurable hnt]; rw [measure_toMeasurable]; rw [ProbabilityTheory.cond]
 
 Depends on / 依赖: ProbabilityTheory, ProbabilityTheory.cond, aemeasurable, const_smul, hasPDF_of_map_eq_withDensity, hu.aemeasurable, indicator, measurableSet_toMeasurable, measurable_one, measurable_one.aemeasurable.const_smul, measure_toMeasurable, restrict_toMeasurable, t.indicator, toMeasurable, withDensity_indicator, withDensity_one, withDensity_smul
 -/
@@ -313,7 +313,12 @@ theorem pdf_eq
   · filter_upwards [measure_eq_zero_iff_ae_notMem.mp hns,
       pdf_eq_zero_of_measure_eq_zero_or_top hu (Or.inl hns)] with x hx h'x
     simp [hx, h'x, hns]
-  have : HasPDF X ℙ 
+  have : HasPDF X ℙ μ := hasPDF hns hnt hu
+  have : IsProbabilityMeasure ℙ := isProbabilityMeasure hns hnt hu
+  apply (eq_of_map_eq_withDensity _ _).mp
+  · rw [hu, withDensity_indicator hms, withDensity_smul _ measurable_one, withDensity_one,
+      ProbabilityTheory.cond]
+  · exact (measurable_one.aemeasurable.const_smul (μ s)⁻¹).indicator hms
 
 中文:
 定理 pdf_eq
@@ -325,7 +330,12 @@ theorem pdf_eq
   · filter_upwards [measure_eq_zero_iff_ae_notMem.mp hns,
       pdf_eq_zero_of_measure_eq_zero_or_top hu (Or.inl hns)] with x hx h'x
     simp [hx, h'x, hns]
-  have : HasPDF X ℙ 
+  have : HasPDF X ℙ μ := hasPDF hns hnt hu
+  have : IsProbabilityMeasure ℙ := isProbabilityMeasure hns hnt hu
+  apply (eq_of_map_eq_withDensity _ _).mp
+  · rw [hu, withDensity_indicator hms, withDensity_smul _ measurable_one, withDensity_one,
+      ProbabilityTheory.cond]
+  · exact (measurable_one.aemeasurable.const_smul (μ s)⁻¹).indicator hms
 
 Depends on / 依赖: HasPDF, IsProbabilityMeasure, Or.inl, Or.inr, eq_of_map_eq_withDensity, filter_upwards, hasPDF, isProbabilityMeasure, measurable_one, measure_eq_zero_iff_ae_notMem, measure_eq_zero_iff_ae_notMem.mp, pdf_eq_zero_of_measure_eq_zero_or_top, withDensity_indicator, withDensity_one, withDensity_smul
 -/
@@ -380,7 +390,19 @@ theorem mul_pdf_integrable
     filter_upwards [pdf_eq_zero_of_measure_eq_zero_or_top huX hnt] with x hx
     simp [hx]
   simp only [not_or] at hnt
-  have : IsProbabilityMeasure ℙ := isProbabili
+  have : IsProbabilityMeasure ℙ := isProbabilityMeasure hnt.1 hnt.2 huX
+  constructor
+  · exact aestronglyMeasurable_id.mul
+      (measurable_pdf X ℙ).aemeasurable.ennreal_toReal.aestronglyMeasurable
+  refine hasFiniteIntegral_mul (pdf_eq hcs.measurableSet huX) ?_
+  set ind := (volume s)⁻¹ • (1 : Real -> Real>=0∞)
+  have : forall x, ‖x‖ₑ * s.indicator ind x = s.indicator (fun x => ‖x‖ₑ * ind x) x := fun x =>
+    (s.indicator_mul_right (fun x => ↑‖x‖₊) ind).symm
+  simp only [ind, this, lintegral_indicator hcs.measurableSet, mul_one, smul_eq_mul,
+    Pi.one_apply, Pi.smul_apply]
+  rw [lintegral_mul_const _ measurable_enorm]
+  exact ENNReal.mul_ne_top (setLIntegral_lt_top_of_isCompact hnt.2 hcs continuous_nnnorm).ne
+    (ENNReal.inv_lt_top.2 (pos_iff_ne_zero.mpr hnt.1)).ne
 
 中文:
 定理 mul_pdf_integrable
@@ -392,7 +414,19 @@ theorem mul_pdf_integrable
     filter_upwards [pdf_eq_zero_of_measure_eq_zero_or_top huX hnt] with x hx
     simp [hx]
   simp only [not_or] at hnt
-  have : IsProbabilityMeasure ℙ := isProbabili
+  have : IsProbabilityMeasure ℙ := isProbabilityMeasure hnt.1 hnt.2 huX
+  constructor
+  · exact aestronglyMeasurable_id.mul
+      (measurable_pdf X ℙ).aemeasurable.ennreal_toReal.aestronglyMeasurable
+  refine hasFiniteIntegral_mul (pdf_eq hcs.measurableSet huX) ?_
+  set ind := (volume s)⁻¹ • (1 : Real -> Real>=0∞)
+  have : forall x, ‖x‖ₑ * s.indicator ind x = s.indicator (fun x => ‖x‖ₑ * ind x) x := fun x =>
+    (s.indicator_mul_right (fun x => ↑‖x‖₊) ind).symm
+  simp only [ind, this, lintegral_indicator hcs.measurableSet, mul_one, smul_eq_mul,
+    Pi.one_apply, Pi.smul_apply]
+  rw [lintegral_mul_const _ measurable_enorm]
+  exact ENNReal.mul_ne_top (setLIntegral_lt_top_of_isCompact hnt.2 hcs continuous_nnnorm).ne
+    (ENNReal.inv_lt_top.2 (pos_iff_ne_zero.mpr hnt.1)).ne
 
 Depends on / 依赖: ENNReal, ENNReal.toReal, I.congr, Integrable, IsProbabilityMeasure, aemeasurable, aemeasurable.ennreal_toReal.aestronglyMeasurable, aestronglyMeasurable, aestronglyMeasurable_id, aestronglyMeasurable_id.mul, ennreal_toReal, filter_upwards, hasFiniteIntegral_mul, hcs.measurableSet, isProbabilityMeasure, measurableSet, measurable_pdf, not_or, pdf_eq, pdf_eq_zero_of_measure_eq_zero_or_top
 -/
@@ -430,7 +464,8 @@ theorem integral_eq
   rw [← huX]
   by_cases hX : AEMeasurable X ℙ
   · exact (integral_map hX aestronglyMeasurable_id).symm
-  · rw [map_of_not_aemeasurable hX, integral_zero_measure, integral_non_aestronglyMeasu
+  · rw [map_of_not_aemeasurable hX, integral_zero_measure, integral_non_aestronglyMeasurable]
+    rwa [aestronglyMeasurable_iff_aemeasurable]
 
 中文:
 定理 integral_eq
@@ -441,7 +476,8 @@ theorem integral_eq
   rw [← huX]
   by_cases hX : AEMeasurable X ℙ
   · exact (integral_map hX aestronglyMeasurable_id).symm
-  · rw [map_of_not_aemeasurable hX, integral_zero_measure, integral_non_aestronglyMeasu
+  · rw [map_of_not_aemeasurable hX, integral_zero_measure, integral_non_aestronglyMeasurable]
+    rwa [aestronglyMeasurable_iff_aemeasurable]
 
 Depends on / 依赖: AEMeasurable, IsUniform, ProbabilityTheory, ProbabilityTheory.cond, aestronglyMeasurable_id, aestronglyMeasurable_iff_aemeasurable, integral_map, integral_non_aestronglyMeasurable, integral_smul_measure, integral_zero_measure, map_of_not_aemeasurable, smul_eq_mul
 -/
@@ -561,7 +597,9 @@ definition uniformOfFinset
   · simp only [Finset.sum_ite_mem, Finset.inter_self, Finset.sum_const, nsmul_eq_mul]
     have : (s.card : Real>=0∞) != 0 := by
       simpa only [Ne, Nat.cast_eq_zero, Finset.card_eq_zero] using
-        Finset.nonempt
+        Finset.nonempty_iff_ne_empty.1 hs
+exact ENNReal.mul_inv_cancel this ENNReal.natCast_ne_top s.card
+  · exact fun x hx => by simp only [hx, if_false]
 
 中文:
 定义 uniformOfFinset
@@ -572,7 +610,9 @@ definition uniformOfFinset
   · simp only [Finset.sum_ite_mem, Finset.inter_self, Finset.sum_const, nsmul_eq_mul]
     have : (s.card : Real>=0∞) != 0 := by
       simpa only [Ne, Nat.cast_eq_zero, Finset.card_eq_zero] using
-        Finset.nonempt
+        Finset.nonempty_iff_ne_empty.1 hs
+exact ENNReal.mul_inv_cancel this ENNReal.natCast_ne_top s.card
+  · exact fun x hx => by simp only [hx, if_false]
 
 Depends on / 依赖: ENNReal, ENNReal.mul_inv_cancel, ENNReal.natCast_ne_top, Finset, Finset.card_eq_zero, Finset.inter_self, Finset.nonempty_iff_ne_empty, Finset.sum_const, Finset.sum_ite_mem, Nat.cast_eq_zero, card_eq_zero, cast_eq_zero, classical, if_false, inter_self, mul_inv_cancel, natCast_ne_top, nonempty_iff_ne_empty, nsmul_eq_mul, ofFinset
 -/
@@ -708,7 +748,15 @@ theorem toOuterMeasure_uniformOfFinset_apply
     (uniformOfFinset s hs).toOuterMeasure t = ∑' x, if x in t then uniformOfFinset s hs x else 0 :=
       toOuterMeasure_apply (uniformOfFinset s hs) t
     _ = ∑' x, if x in s ∧ x in t then (#s : Real>=0∞)⁻¹ else 0 :=
-      tsum_congr fun x => by simp_rw [uniformOfFinset_apply, ← ite_and, and_c
+      tsum_congr fun x => by simp_rw [uniformOfFinset_apply, ← ite_and, and_comm]
+    _ = ∑ x in s with x in t, if x in s ∧ x in t then (#s : Real>=0∞)⁻¹ else 0 :=
+      tsum_eq_sum fun _ hx => if_neg fun h => hx (Finset.mem_filter.2 h)
+    _ = ∑ x in s with x in t, (#s : Real>=0∞)⁻¹ :=
+      Finset.sum_congr rfl fun x hx => by
+        have : x in s ∧ x in t := by simpa using hx
+        simp only [this, and_self_iff, if_true]
+    _ = #{x in s | x in t} / #s := by
+        simp only [div_eq_mul_inv, Finset.sum_const, nsmul_eq_mul]
 
 中文:
 定理 toOuterMeasure_uniformOfFinset_apply
@@ -716,7 +764,15 @@ theorem toOuterMeasure_uniformOfFinset_apply
     (uniformOfFinset s hs).toOuterMeasure t = ∑' x, if x in t then uniformOfFinset s hs x else 0 :=
       toOuterMeasure_apply (uniformOfFinset s hs) t
     _ = ∑' x, if x in s ∧ x in t then (#s : Real>=0∞)⁻¹ else 0 :=
-      tsum_congr fun x => by simp_rw [uniformOfFinset_apply, ← ite_and, and_c
+      tsum_congr fun x => by simp_rw [uniformOfFinset_apply, ← ite_and, and_comm]
+    _ = ∑ x in s with x in t, if x in s ∧ x in t then (#s : Real>=0∞)⁻¹ else 0 :=
+      tsum_eq_sum fun _ hx => if_neg fun h => hx (Finset.mem_filter.2 h)
+    _ = ∑ x in s with x in t, (#s : Real>=0∞)⁻¹ :=
+      Finset.sum_congr rfl fun x hx => by
+        have : x in s ∧ x in t := by simpa using hx
+        simp only [this, and_self_iff, if_true]
+    _ = #{x in s | x in t} / #s := by
+        simp only [div_eq_mul_inv, Finset.sum_const, nsmul_eq_mul]
 
 Depends on / 依赖: Finset, Finset.mem_filter, Finset.sum_congr, and_comm, if_neg, ite_and, mem_filter, simp_rw, sum_congr, toOuterMeasure, toOuterMeasure_apply, tsum_congr, tsum_eq_sum, uniformOfFinset, uniformOfFinset_apply
 -/
@@ -918,7 +974,14 @@ definition ofMultiset
         (∑' b : α, (s.count b : Real>=0∞) / (Multiset.card s))
           = (Multiset.card s : Real>=0∞)⁻¹ * ∑' b, (s.count b : Real>=0∞) := by
             simp_rw [ENNReal.div_eq_inv_mul, ENNReal.tsum_mul_left]
-  
+        _ = (Multiset.card s : Real>=0∞)⁻¹ * ∑ b in s.toFinset, (s.count b : Real>=0∞) :=
+          (congr_arg (fun x => (Multiset.card s : Real>=0∞)⁻¹ * x)
+            (tsum_eq_sum fun a ha =>
+Nat.cast_eq_zero.2 by rwa [Multiset.count_eq_zero, ← Multiset.mem_toFinset]))
+        _ = 1 := by
+          rw [← Nat.cast_sum]; rw [Multiset.toFinset_sum_count_eq s]; rw [ENNReal.inv_mul_cancel (Nat.cast_ne_zero.2 (hs ∘ Multiset.card_eq_zero.1))
+              (ENNReal.natCast_ne_top _)]
+        )⟩
 
 中文:
 定义 ofMultiset
@@ -929,7 +992,14 @@ definition ofMultiset
         (∑' b : α, (s.count b : Real>=0∞) / (Multiset.card s))
           = (Multiset.card s : Real>=0∞)⁻¹ * ∑' b, (s.count b : Real>=0∞) := by
             simp_rw [ENNReal.div_eq_inv_mul, ENNReal.tsum_mul_left]
-  
+        _ = (Multiset.card s : Real>=0∞)⁻¹ * ∑ b in s.toFinset, (s.count b : Real>=0∞) :=
+          (congr_arg (fun x => (Multiset.card s : Real>=0∞)⁻¹ * x)
+            (tsum_eq_sum fun a ha =>
+Nat.cast_eq_zero.2 by rwa [Multiset.count_eq_zero, ← Multiset.mem_toFinset]))
+        _ = 1 := by
+          rw [← Nat.cast_sum]; rw [Multiset.toFinset_sum_count_eq s]; rw [ENNReal.inv_mul_cancel (Nat.cast_ne_zero.2 (hs ∘ Multiset.card_eq_zero.1))
+              (ENNReal.natCast_ne_top _)]
+        )⟩
 
 Depends on / 依赖: ENNReal, ENNReal.div_eq_inv_mul, ENNReal.summable.hasSum_iff, ENNReal.tsum_mul_left, Multiset, Multiset.card, Multiset.count_eq_zero, Multiset.mem_toFinset, Nat.cast_eq_zero, cast_eq_zero, congr_arg, count_eq_zero, div_eq_inv_mul, hasSum_iff, mem_toFinset, s.count, s.toFinset, simp_rw, summable, toFinset
 -/

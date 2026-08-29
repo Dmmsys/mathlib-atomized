@@ -56,7 +56,9 @@ definition kroneckerTMulLinearEquiv
       simp [single_kroneckerTMul_single])
     (by
       ext : 5
-      simp [
+      simp [single_kroneckerTMul_single])
+
+@[simp]
 
 中文:
 定义 kroneckerTMulLinearEquiv
@@ -70,7 +72,9 @@ definition kroneckerTMulLinearEquiv
       simp [single_kroneckerTMul_single])
     (by
       ext : 5
-      simp [
+      simp [single_kroneckerTMul_single])
+
+@[simp]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.lift, AlgebraTensorModule.map, Matrix, Matrix.liftLinear, kroneckerTMulBilinear, liftLinear, ofLinearMap, singleLinearMap, single_kroneckerTMul_single
 -/
@@ -343,7 +347,12 @@ definition toFunAlgHom
       ext
       dsimp
       simp_rw [Matrix.mul_apply, Matrix.smul_apply, Matrix.map_apply, smul_eq_mul, Finset.mul_sum,
-        _root_.mul_assoc, Algeb
+        _root_.mul_assoc, Algebra.left_comm])
+    (by
+      simp_rw [toFunLinear, lift.tmul, toFunBilinear_apply,
+        Matrix.map_one (algebraMap R A) (map_zero _) (map_one _), one_smul])
+
+@[simp]
 
 中文:
 定义 toFunAlgHom
@@ -355,7 +364,12 @@ definition toFunAlgHom
       ext
       dsimp
       simp_rw [Matrix.mul_apply, Matrix.smul_apply, Matrix.map_apply, smul_eq_mul, Finset.mul_sum,
-        _root_.mul_assoc, Algeb
+        _root_.mul_assoc, Algebra.left_comm])
+    (by
+      simp_rw [toFunLinear, lift.tmul, toFunBilinear_apply,
+        Matrix.map_one (algebraMap R A) (map_zero _) (map_one _), one_smul])
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.left_comm, Finset, Finset.mul_sum, Matrix, Matrix.map_apply, Matrix.map_mul, Matrix.map_one, Matrix.mul_apply, Matrix.smul_apply, _root_, _root_.mul_assoc, algHomOfLinearMapTensorProduct, algebraMap, intros, left_comm, lift.tmul, map_apply, map_mul, map_one
 -/

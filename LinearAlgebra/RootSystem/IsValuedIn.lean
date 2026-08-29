@@ -454,7 +454,8 @@ lemma coroot'_apply_apply_mem_of_mem_span
     obtain ⟨k, rfl⟩ := hx
     simpa using! RootPairing.exists_value k i
   | zero => simp
-  | add x y _ _ hx hy => simpa only [map_add] using
+  | add x y _ _ hx hy => simpa only [map_add] using! add_mem hx hy
+  | smul t x _ hx => simpa only [LinearMap.map_smul_of_tower] using! Submodule.smul_mem _ t hx
 
 中文:
 引理 coroot'_apply_apply_mem_of_mem_span
@@ -466,7 +467,8 @@ lemma coroot'_apply_apply_mem_of_mem_span
     obtain ⟨k, rfl⟩ := hx
     simpa using! RootPairing.exists_value k i
   | zero => simp
-  | add x y _ _ hx hy => simpa only [map_add] using
+  | add x y _ _ hx hy => simpa only [map_add] using! add_mem hx hy
+  | smul t x _ hx => simpa only [LinearMap.map_smul_of_tower] using! Submodule.smul_mem _ t hx
 -/
 lemma coroot'_apply_apply_mem_of_mem_span [Module S M] [IsScalarTower S R M] [P.IsValuedIn S]
     {x : M} (hx : x in span S (range P.root)) (i : ι) :
@@ -855,7 +857,11 @@ lemma rootSpan_mem_invtSubmodule_reflection
     obtain ⟨j, rfl⟩ := hy
     rw [Submodule.mem_comap]; rw [LinearEquiv.coe_coe]; rw [reflection_apply_root]
     apply Submodule.sub_mem
-· exact Submodule.subset_span
+· exact Submodule.subset_span mem_range_self j
+· exact Submodule.smul_mem _ _ Submodule.subset_span mem_range_self i
+  | zero => simp
+  | add y z hy hz hy' hz' => simpa using Submodule.add_mem _ hy' hz'
+  | smul y t hy hy' => simpa using Submodule.smul_mem _ _ hy'
 
 中文:
 引理 rootSpan_mem_invtSubmodule_reflection
@@ -868,7 +874,11 @@ lemma rootSpan_mem_invtSubmodule_reflection
     obtain ⟨j, rfl⟩ := hy
     rw [Submodule.mem_comap]; rw [LinearEquiv.coe_coe]; rw [reflection_apply_root]
     apply Submodule.sub_mem
-· exact Submodule.subset_span
+· exact Submodule.subset_span mem_range_self j
+· exact Submodule.smul_mem _ _ Submodule.subset_span mem_range_self i
+  | zero => simp
+  | add y z hy hz hy' hz' => simpa using Submodule.add_mem _ hy' hz'
+  | smul y t hy hy' => simpa using Submodule.smul_mem _ _ hy'
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, Module, Module.End.mem_invtSubmodule, Submodule, Submodule.add_mem, Submodule.mem_comap, Submodule.smul_me, Submodule.smul_mem, Submodule.span_induction, Submodule.sub_mem, Submodule.subset_span, add_mem, coe_coe, mem_comap, mem_invtSubmodule, mem_range_self, reflection_apply_root, rootSpan, smul_me
 -/

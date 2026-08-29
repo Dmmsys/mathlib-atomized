@@ -714,7 +714,8 @@ definition copy
   hp := IsCokernel.cokernelIso _ _ h.hp eQ.symm (by simp)
   wι := by simp [IsCokernel.cokernelIso]
   hι := IsLimit.equivOfNatIsoOfIso
-    (parallelPair.ext eQ.symm (Iso.refl S.X₃) (by simp [IsCoker
+    (parallelPair.ext eQ.symm (Iso.refl S.X₃) (by simp [IsCokernel.cokernelIso]) (by simp)) _ _
+    (Cone.ext (by exact eH.symm) (by rintro (_ | _) <;> simp [IsCokernel.cokernelIso])) h.hι
 
 中文:
 定义 copy
@@ -727,7 +728,8 @@ definition copy
   hp := IsCokernel.cokernelIso _ _ h.hp eQ.symm (by simp)
   wι := by simp [IsCokernel.cokernelIso]
   hι := IsLimit.equivOfNatIsoOfIso
-    (parallelPair.ext eQ.symm (Iso.refl S.X₃) (by simp [IsCoker
+    (parallelPair.ext eQ.symm (Iso.refl S.X₃) (by simp [IsCokernel.cokernelIso]) (by simp)) _ _
+    (Cone.ext (by exact eH.symm) (by rintro (_ | _) <;> simp [IsCokernel.cokernelIso])) h.hι
 -/
 @[simps] def copy {Q' H' : C} (eQ : Q' ≅ h.Q) (eH : H' ≅ h.H) : S.RightHomologyData where
   Q := Q'
@@ -1384,7 +1386,10 @@ instance :
   body: ⟨by
   let φQ : h₁.Q ⟶ h₂.Q := h₁.descQ (φ.τ₂ ≫ h₂.p) (by rw [← φ.comm₁₂_assoc, h₂.wp, comp_zero])
   have commg' : φQ ≫ h₂.g' = h₁.g' ≫ φ.τ₃ := by
-    rw [← cancel_epi h₁.p]; rw [RightHomologyData.p_descQ_assoc]; rw [assoc]; rw [RightHomologyData.p_g']; rw [φ.comm₂₃]; rw [RightHomologyData.p_g'_assoc
+    rw [← cancel_epi h₁.p]; rw [RightHomologyData.p_descQ_assoc]; rw [assoc]; rw [RightHomologyData.p_g']; rw [φ.comm₂₃]; rw [RightHomologyData.p_g'_assoc]
+  let φH : h₁.H ⟶ h₂.H := h₂.liftH (h₁.ι ≫ φQ)
+    (by rw [assoc, commg', RightHomologyData.ι_g'_assoc, zero_comp])
+  exact ⟨φQ, φH, by simp [φQ], commg', by simp [φH]⟩⟩
 
 中文:
 实例 :
@@ -1392,7 +1397,10 @@ instance :
   定义体: ⟨by
   let φQ : h₁.Q ⟶ h₂.Q := h₁.descQ (φ.τ₂ ≫ h₂.p) (by rw [← φ.comm₁₂_assoc, h₂.wp, comp_zero])
   have commg' : φQ ≫ h₂.g' = h₁.g' ≫ φ.τ₃ := by
-    rw [← cancel_epi h₁.p]; rw [RightHomologyData.p_descQ_assoc]; rw [assoc]; rw [RightHomologyData.p_g']; rw [φ.comm₂₃]; rw [RightHomologyData.p_g'_assoc
+    rw [← cancel_epi h₁.p]; rw [RightHomologyData.p_descQ_assoc]; rw [assoc]; rw [RightHomologyData.p_g']; rw [φ.comm₂₃]; rw [RightHomologyData.p_g'_assoc]
+  let φH : h₁.H ⟶ h₂.H := h₂.liftH (h₁.ι ≫ φQ)
+    (by rw [assoc, commg', RightHomologyData.ι_g'_assoc, zero_comp])
+  exact ⟨φQ, φH, by simp [φQ], commg', by simp [φH]⟩⟩
 
 Depends on / 依赖: RightHomologyData, RightHomologyData.p_descQ_assoc, RightHomologyData.p_g, _assoc, cancel_epi, comp_zero, p_descQ_assoc, zero_comp
 -/
@@ -4634,7 +4642,8 @@ lemma hasKernel
   have : HasLimit (parallelPair h.g' 0) := ⟨⟨⟨_, h.hι'⟩⟩⟩
   let e : parallelPair (cokernel.desc S.f S.g S.zero) 0 ≅ parallelPair h.g' 0 :=
     parallelPair.ext (IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) h.hp)
-      (Iso.refl _) (coequalizer.hom_ext (b
+      (Iso.refl _) (coequalizer.hom_ext (by simp)) (by simp)
+  exact hasLimit_of_iso e.symm
 
 中文:
 引理 hasKernel
@@ -4644,7 +4653,8 @@ lemma hasKernel
   have : HasLimit (parallelPair h.g' 0) := ⟨⟨⟨_, h.hι'⟩⟩⟩
   let e : parallelPair (cokernel.desc S.f S.g S.zero) 0 ≅ parallelPair h.g' 0 :=
     parallelPair.ext (IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) h.hp)
-      (Iso.refl _) (coequalizer.hom_ext (b
+      (Iso.refl _) (coequalizer.hom_ext (by simp)) (by simp)
+  exact hasLimit_of_iso e.symm
 
 Depends on / 依赖: HasLimit, IsColimit, IsColimit.coconePointUniqueUpToIso, Iso.refl, S.rightHomologyData, S.zero, coconePointUniqueUpToIso, coequalizer, coequalizer.hom_ext, cokernel, cokernel.desc, colimit, colimit.isColimit, e.symm, h.hp, hasLimit_of_iso, hom_ext, isColimit, parallelPair, parallelPair.ext
 -/
@@ -4691,7 +4701,8 @@ lemma isIso_opcyclesMap'_of_isIso_of_epi
   · simp only [← cancel_epi φ.τ₁, comp_zero, φ.comm₁₂_assoc, IsIso.hom_inv_id_assoc, h₁.wp]
   · simp only [← cancel_epi h₁.p, p_opcyclesMap'_assoc, h₂.p_descQ,
       IsIso.hom_inv_id_assoc, comp_id]
-  · simp only [← cancel_epi h₂.p, h₂.p_descQ_asso
+  · simp only [← cancel_epi h₂.p, h₂.p_descQ_assoc, assoc, p_opcyclesMap',
+      IsIso.inv_hom_id_assoc, comp_id]
 
 中文:
 引理 isIso_opcyclesMap'_of_isIso_of_epi
@@ -4701,7 +4712,8 @@ lemma isIso_opcyclesMap'_of_isIso_of_epi
   · simp only [← cancel_epi φ.τ₁, comp_zero, φ.comm₁₂_assoc, IsIso.hom_inv_id_assoc, h₁.wp]
   · simp only [← cancel_epi h₁.p, p_opcyclesMap'_assoc, h₂.p_descQ,
       IsIso.hom_inv_id_assoc, comp_id]
-  · simp only [← cancel_epi h₂.p, h₂.p_descQ_asso
+  · simp only [← cancel_epi h₂.p, h₂.p_descQ_assoc, assoc, p_opcyclesMap',
+      IsIso.inv_hom_id_assoc, comp_id]
 -/
 lemma isIso_opcyclesMap'_of_isIso_of_epi (φ : S₁ ⟶ S₂) (h₂ : IsIso φ.τ₂) (h₁ : Epi φ.τ₁)
     (h₁ : S₁.RightHomologyData) (h₂ : S₂.RightHomologyData) :

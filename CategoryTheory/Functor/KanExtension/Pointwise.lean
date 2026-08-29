@@ -118,7 +118,8 @@ lemma hasPointwiseLeftKanExtensionAt_iff_of_iso
       HasPointwiseLeftKanExtensionAt L F Y₂ from
     fun Y₁ Y₂ e => ⟨fun _ => this e, fun _ => this e.symm⟩
   intro Y₁ Y₂ e _
-  change HasColimit ((CostructuredArrow.mapIso e.symm).functor ⋙ Cost
+  change HasColimit ((CostructuredArrow.mapIso e.symm).functor ⋙ CostructuredArrow.proj L Y₁ ⋙ F)
+  infer_instance
 
 中文:
 引理 hasPointwiseLeftKanExtensionAt_iff_of_iso
@@ -129,7 +130,8 @@ lemma hasPointwiseLeftKanExtensionAt_iff_of_iso
       HasPointwiseLeftKanExtensionAt L F Y₂ from
     fun Y₁ Y₂ e => ⟨fun _ => this e, fun _ => this e.symm⟩
   intro Y₁ Y₂ e _
-  change HasColimit ((CostructuredArrow.mapIso e.symm).functor ⋙ Cost
+  change HasColimit ((CostructuredArrow.mapIso e.symm).functor ⋙ CostructuredArrow.proj L Y₁ ⋙ F)
+  infer_instance
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mapIso, CostructuredArrow.proj, HasColimit, HasPointwiseLeftKanExtensionAt, e.symm, functor, infer_instance, mapIso, revert
 -/
@@ -156,7 +158,8 @@ lemma hasPointwiseRightKanExtensionAt_iff_of_iso
       HasPointwiseRightKanExtensionAt L F Y₂ from
     fun Y₁ Y₂ e => ⟨fun _ => this e, fun _ => this e.symm⟩
   intro Y₁ Y₂ e _
-  change HasLimit ((StructuredArrow.mapIso e.symm).functor ⋙ Struct
+  change HasLimit ((StructuredArrow.mapIso e.symm).functor ⋙ StructuredArrow.proj Y₁ L ⋙ F)
+  infer_instance
 
 中文:
 引理 hasPointwiseRightKanExtensionAt_iff_of_iso
@@ -167,7 +170,8 @@ lemma hasPointwiseRightKanExtensionAt_iff_of_iso
       HasPointwiseRightKanExtensionAt L F Y₂ from
     fun Y₁ Y₂ e => ⟨fun _ => this e, fun _ => this e.symm⟩
   intro Y₁ Y₂ e _
-  change HasLimit ((StructuredArrow.mapIso e.symm).functor ⋙ Struct
+  change HasLimit ((StructuredArrow.mapIso e.symm).functor ⋙ StructuredArrow.proj Y₁ L ⋙ F)
+  infer_instance
 
 Depends on / 依赖: HasLimit, HasPointwiseRightKanExtensionAt, StructuredArrow, StructuredArrow.mapIso, StructuredArrow.proj, e.symm, functor, infer_instance, mapIso, revert
 -/
@@ -195,7 +199,10 @@ lemma hasPointwiseLeftKanExtensionAt_iff_of_natIso_left
       HasPointwiseLeftKanExtensionAt L' F Y from
     fun L L' e => ⟨fun _ => this e, fun _ => this e.symm⟩
   intro L L' e _
-  let Φ : CostructuredArrow L' Y ≌ CostructuredArrow L Y := Comma.mapLe
+  let Φ : CostructuredArrow L' Y ≌ CostructuredArrow L Y := Comma.mapLeftIso _ e.symm
+  let e' : CostructuredArrow.proj L' Y ⋙ F ≅
+    Φ.functor ⋙ CostructuredArrow.proj L Y ⋙ F := Iso.refl _
+  exact hasColimit_of_iso e'
 
 中文:
 引理 hasPointwiseLeftKanExtensionAt_iff_of_natIso_left
@@ -206,7 +213,10 @@ lemma hasPointwiseLeftKanExtensionAt_iff_of_natIso_left
       HasPointwiseLeftKanExtensionAt L' F Y from
     fun L L' e => ⟨fun _ => this e, fun _ => this e.symm⟩
   intro L L' e _
-  let Φ : CostructuredArrow L' Y ≌ CostructuredArrow L Y := Comma.mapLe
+  let Φ : CostructuredArrow L' Y ≌ CostructuredArrow L Y := Comma.mapLeftIso _ e.symm
+  let e' : CostructuredArrow.proj L' Y ⋙ F ≅
+    Φ.functor ⋙ CostructuredArrow.proj L Y ⋙ F := Iso.refl _
+  exact hasColimit_of_iso e'
 -/
 private lemma hasPointwiseLeftKanExtensionAt_iff_of_natIso_left {L' : C ⥤ D} (e : L ≅ L') (Y : D) :
     HasPointwiseLeftKanExtensionAt L F Y ↔
@@ -234,7 +244,10 @@ lemma hasPointwiseRightKanExtensionAt_iff_of_natIso_left
       HasPointwiseRightKanExtensionAt L' F Y from
     fun L L' e => ⟨fun _ => this e, fun _ => this e.symm⟩
   intro L L' e _
-  let Φ : StructuredArrow Y L' ≌ StructuredArrow Y L := Comma.mapRigh
+  let Φ : StructuredArrow Y L' ≌ StructuredArrow Y L := Comma.mapRightIso _ e.symm
+  let e' : StructuredArrow.proj Y L' ⋙ F ≅
+    Φ.functor ⋙ StructuredArrow.proj Y L ⋙ F := Iso.refl _
+  exact hasLimit_of_iso e'.symm
 
 中文:
 引理 hasPointwiseRightKanExtensionAt_iff_of_natIso_left
@@ -245,7 +258,10 @@ lemma hasPointwiseRightKanExtensionAt_iff_of_natIso_left
       HasPointwiseRightKanExtensionAt L' F Y from
     fun L L' e => ⟨fun _ => this e, fun _ => this e.symm⟩
   intro L L' e _
-  let Φ : StructuredArrow Y L' ≌ StructuredArrow Y L := Comma.mapRigh
+  let Φ : StructuredArrow Y L' ≌ StructuredArrow Y L := Comma.mapRightIso _ e.symm
+  let e' : StructuredArrow.proj Y L' ⋙ F ≅
+    Φ.functor ⋙ StructuredArrow.proj Y L ⋙ F := Iso.refl _
+  exact hasLimit_of_iso e'.symm
 -/
 private lemma hasPointwiseRightKanExtensionAt_iff_of_natIso_left {L' : C ⥤ D} (e : L ≅ L') (Y : D) :
     HasPointwiseRightKanExtensionAt L F Y ↔
@@ -270,7 +286,8 @@ lemma hasPointwiseLeftKanExtensionAt_of_equivalence
   let Φ := CostructuredArrow.post L E.functor Y
   have : HasColimit ((asEquivalence Φ).functor ⋙
     CostructuredArrow.proj (L ⋙ E.functor) (E.functor.obj Y) ⋙ F) :=
-    (inf
+    (inferInstance : HasPointwiseLeftKanExtensionAt L F Y)
+  exact hasColimit_of_equivalence_comp (asEquivalence Φ)
 
 中文:
 引理 hasPointwiseLeftKanExtensionAt_of_equivalence
@@ -279,7 +296,8 @@ lemma hasPointwiseLeftKanExtensionAt_of_equivalence
   let Φ := CostructuredArrow.post L E.functor Y
   have : HasColimit ((asEquivalence Φ).functor ⋙
     CostructuredArrow.proj (L ⋙ E.functor) (E.functor.obj Y) ⋙ F) :=
-    (inf
+    (inferInstance : HasPointwiseLeftKanExtensionAt L F Y)
+  exact hasColimit_of_equivalence_comp (asEquivalence Φ)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.post, CostructuredArrow.proj, E.functor, E.functor.obj, HasColimit, HasPointwiseLeftKanExtensionAt, asEquivalence, e.symm, functor, hasColimit_of_equivalence_comp, hasPointwiseLeftKanExtensionAt_iff_of_iso, hasPointwiseLeftKanExtensionAt_iff_of_natIso_left
 -/
@@ -306,7 +324,8 @@ lemma hasPointwiseLeftKanExtensionAt_iff_of_equivalence
   · intro
     exact hasPointwiseLeftKanExtensionAt_of_equivalence L' L F E.symm
       (isoWhiskerRight eL.symm _ ≪≫ Functor.associator _ _ _ ≪≫
-        isoWhiskerLeft L E.unitIso.symm ≪≫ L.rightUnit
+        isoWhiskerLeft L E.unitIso.symm ≪≫ L.rightUnitor) Y' Y
+      (E.inverse.mapIso e.symm ≪≫ E.unitIso.symm.app Y)
 
 中文:
 引理 hasPointwiseLeftKanExtensionAt_iff_of_equivalence
@@ -317,7 +336,8 @@ lemma hasPointwiseLeftKanExtensionAt_iff_of_equivalence
   · intro
     exact hasPointwiseLeftKanExtensionAt_of_equivalence L' L F E.symm
       (isoWhiskerRight eL.symm _ ≪≫ Functor.associator _ _ _ ≪≫
-        isoWhiskerLeft L E.unitIso.symm ≪≫ L.rightUnit
+        isoWhiskerLeft L E.unitIso.symm ≪≫ L.rightUnitor) Y' Y
+      (E.inverse.mapIso e.symm ≪≫ E.unitIso.symm.app Y)
 
 Depends on / 依赖: E.inverse.mapIso, E.symm, E.unitIso.symm, E.unitIso.symm.app, Functor, Functor.associator, L.rightUnitor, associator, e.symm, eL.symm, hasPointwiseLeftKanExtensionAt_of_equivalence, inverse, isoWhiskerLeft, isoWhiskerRight, mapIso, rightUnitor, unitIso
 -/
@@ -344,7 +364,8 @@ lemma hasPointwiseRightKanExtensionAt_of_equivalence
   let Φ := StructuredArrow.post Y L E.functor
   have : HasLimit ((asEquivalence Φ).functor ⋙
     StructuredArrow.proj (E.functor.obj Y) (L ⋙ E.functor) ⋙ F) :=
-    (inferIn
+    (inferInstance : HasPointwiseRightKanExtensionAt L F Y)
+  exact hasLimit_of_equivalence_comp (asEquivalence Φ)
 
 中文:
 引理 hasPointwiseRightKanExtensionAt_of_equivalence
@@ -353,7 +374,8 @@ lemma hasPointwiseRightKanExtensionAt_of_equivalence
   let Φ := StructuredArrow.post Y L E.functor
   have : HasLimit ((asEquivalence Φ).functor ⋙
     StructuredArrow.proj (E.functor.obj Y) (L ⋙ E.functor) ⋙ F) :=
-    (inferIn
+    (inferInstance : HasPointwiseRightKanExtensionAt L F Y)
+  exact hasLimit_of_equivalence_comp (asEquivalence Φ)
 
 Depends on / 依赖: E.functor, E.functor.obj, HasLimit, HasPointwiseRightKanExtensionAt, StructuredArrow, StructuredArrow.post, StructuredArrow.proj, asEquivalence, e.symm, functor, hasLimit_of_equivalence_comp, hasPointwiseRightKanExtensionAt_iff_of_iso, hasPointwiseRightKanExtensionAt_iff_of_natIso_left
 -/
@@ -380,7 +402,8 @@ lemma hasPointwiseRightKanExtensionAt_iff_of_equivalence
   · intro
     exact hasPointwiseRightKanExtensionAt_of_equivalence L' L F E.symm
       (isoWhiskerRight eL.symm _ ≪≫ Functor.associator _ _ _ ≪≫
-        isoWhiskerLeft L E.unitIso.symm ≪≫ L.rightUn
+        isoWhiskerLeft L E.unitIso.symm ≪≫ L.rightUnitor) Y' Y
+      (E.inverse.mapIso e.symm ≪≫ E.unitIso.symm.app Y)
 
 中文:
 引理 hasPointwiseRightKanExtensionAt_iff_of_equivalence
@@ -391,7 +414,8 @@ lemma hasPointwiseRightKanExtensionAt_iff_of_equivalence
   · intro
     exact hasPointwiseRightKanExtensionAt_of_equivalence L' L F E.symm
       (isoWhiskerRight eL.symm _ ≪≫ Functor.associator _ _ _ ≪≫
-        isoWhiskerLeft L E.unitIso.symm ≪≫ L.rightUn
+        isoWhiskerLeft L E.unitIso.symm ≪≫ L.rightUnitor) Y' Y
+      (E.inverse.mapIso e.symm ≪≫ E.unitIso.symm.app Y)
 
 Depends on / 依赖: E.inverse.mapIso, E.symm, E.unitIso.symm, E.unitIso.symm.app, Functor, Functor.associator, L.rightUnitor, associator, e.symm, eL.symm, hasPointwiseRightKanExtensionAt_of_equivalence, inverse, isoWhiskerLeft, isoWhiskerRight, mapIso, rightUnitor, unitIso
 -/
@@ -1050,7 +1074,7 @@ definition IsPointwiseLeftKanExtension.homFrom
         simpa using (h Y₂).fac (coconeAt G Y₂) ((CostructuredArrow.map φ).obj X)) }
     (by
       ext X
- 
+      simpa using (h (L.obj X)).fac (LeftExtension.coconeAt G _) (CostructuredArrow.mk (𝟙 _)))
 
 中文:
 定义 IsPointwiseLeftKanExtension.homFrom
@@ -1062,7 +1086,7 @@ definition IsPointwiseLeftKanExtension.homFrom
         simpa using (h Y₂).fac (coconeAt G Y₂) ((CostructuredArrow.map φ).obj X)) }
     (by
       ext X
- 
+      simpa using (h (L.obj X)).fac (LeftExtension.coconeAt G _) (CostructuredArrow.mk (𝟙 _)))
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.map, CostructuredArrow.mk, L.obj, LeftExtension, LeftExtension.coconeAt, StructuredArrow, StructuredArrow.homMk, coconeAt, fac_assoc, hom_ext, naturality
 -/
@@ -1622,7 +1646,8 @@ definition IsPointwiseRightKanExtension.homTo
         rw [assoc]; rw [(h Y₂).fac (coneAt G Y₂) X]
         simpa using ((h Y₁).fac (coneAt G Y₁) ((StructuredArrow.map φ).obj X)).symm) }
     (by
-     
+      ext X
+      simpa using (h (L.obj X)).fac (RightExtension.coneAt G _) (StructuredArrow.mk (𝟙 _)))
 
 中文:
 定义 IsPointwiseRightKanExtension.homTo
@@ -1633,7 +1658,8 @@ definition IsPointwiseRightKanExtension.homTo
         rw [assoc]; rw [(h Y₂).fac (coneAt G Y₂) X]
         simpa using ((h Y₁).fac (coneAt G Y₁) ((StructuredArrow.map φ).obj X)).symm) }
     (by
-     
+      ext X
+      simpa using (h (L.obj X)).fac (RightExtension.coneAt G _) (StructuredArrow.mk (𝟙 _)))
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, L.obj, RightExtension, RightExtension.coneAt, StructuredArrow, StructuredArrow.map, StructuredArrow.mk, coneAt, hom_ext, naturality
 -/
@@ -1784,7 +1810,19 @@ definition pointwiseLeftKanExtension
       (Cocone.mk (colimit (CostructuredArrow.proj L Y₂ ⋙ F))
         { app := fun g => colimit.ι (CostructuredArrow.proj L Y₂ ⋙ F)
             ((CostructuredArrow.map f).obj g)
-          na
+          naturality := fun g₁ g₂ φ => by
+            simpa using colimit.w (CostructuredArrow.proj L Y₂ ⋙ F)
+              ((CostructuredArrow.map f).map φ) })
+  map_id Y := colimit.hom_ext (fun j => by
+    dsimp
+    simp only [colimit.ι_desc, comp_id]
+    congr
+    apply CostructuredArrow.map_id)
+  map_comp {Y₁ Y₂ Y₃} f f' := colimit.hom_ext (fun j => by
+    dsimp
+    simp only [colimit.ι_desc, colimit.ι_desc_assoc, comp_obj, CostructuredArrow.proj_obj]
+    congr 1
+    apply CostructuredArrow.map_comp)
 
 中文:
 定义 pointwiseLeftKanExtension
@@ -1795,7 +1833,19 @@ definition pointwiseLeftKanExtension
       (Cocone.mk (colimit (CostructuredArrow.proj L Y₂ ⋙ F))
         { app := fun g => colimit.ι (CostructuredArrow.proj L Y₂ ⋙ F)
             ((CostructuredArrow.map f).obj g)
-          na
+          naturality := fun g₁ g₂ φ => by
+            simpa using colimit.w (CostructuredArrow.proj L Y₂ ⋙ F)
+              ((CostructuredArrow.map f).map φ) })
+  map_id Y := colimit.hom_ext (fun j => by
+    dsimp
+    simp only [colimit.ι_desc, comp_id]
+    congr
+    apply CostructuredArrow.map_id)
+  map_comp {Y₁ Y₂ Y₃} f f' := colimit.hom_ext (fun j => by
+    dsimp
+    simp only [colimit.ι_desc, colimit.ι_desc_assoc, comp_obj, CostructuredArrow.proj_obj]
+    congr 1
+    apply CostructuredArrow.map_comp)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.proj, colimit
 -/
@@ -1836,7 +1886,9 @@ definition pointwiseLeftKanExtensionUnit
     simp only [comp_map,
       pointwiseLeftKanExtension_map, colimit.ι_desc, CostructuredArrow.map_mk]
     rw [id_comp]
-    let φ : CostructuredArrow.mk (L.map f) ⟶ CostructuredA
+    let φ : CostructuredArrow.mk (L.map f) ⟶ CostructuredArrow.mk (𝟙 (L.obj X₂)) :=
+      CostructuredArrow.homMk f
+    exact colimit.w (CostructuredArrow.proj L (L.obj X₂) ⋙ F) φ
 
 中文:
 定义 pointwiseLeftKanExtensionUnit
@@ -1847,7 +1899,9 @@ definition pointwiseLeftKanExtensionUnit
     simp only [comp_map,
       pointwiseLeftKanExtension_map, colimit.ι_desc, CostructuredArrow.map_mk]
     rw [id_comp]
-    let φ : CostructuredArrow.mk (L.map f) ⟶ CostructuredA
+    let φ : CostructuredArrow.mk (L.map f) ⟶ CostructuredArrow.mk (𝟙 (L.obj X₂)) :=
+      CostructuredArrow.homMk f
+    exact colimit.w (CostructuredArrow.proj L (L.obj X₂) ⋙ F) φ
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.proj, L.obj, colimit
 -/
@@ -1996,7 +2050,9 @@ lemma pointwiseLeftKanExtension_desc_app
     { app := fun Y => colimit.desc _ (costructuredArrowMapCocone L F G α Y) }
   have h : (pointwiseLeftKanExtension L F).descOfIsLeftKanExtension
       (pointwiseLeftKanExtensionUnit L F) G α = β := by
-    apply hom_ext_of_isLeftKanExtension (α :
+    apply hom_ext_of_isLeftKanExtension (α := pointwiseLeftKanExtensionUnit L F)
+    aesop
+  exact NatTrans.congr_app h Y
 
 中文:
 引理 pointwiseLeftKanExtension_desc_app
@@ -2006,7 +2062,9 @@ lemma pointwiseLeftKanExtension_desc_app
     { app := fun Y => colimit.desc _ (costructuredArrowMapCocone L F G α Y) }
   have h : (pointwiseLeftKanExtension L F).descOfIsLeftKanExtension
       (pointwiseLeftKanExtensionUnit L F) G α = β := by
-    apply hom_ext_of_isLeftKanExtension (α :
+    apply hom_ext_of_isLeftKanExtension (α := pointwiseLeftKanExtensionUnit L F)
+    aesop
+  exact NatTrans.congr_app h Y
 
 Depends on / 依赖: L.pointwiseLeftKanExtension, NatTrans, NatTrans.congr_app, colimit, colimit.desc, congr_app, costructuredArrowMapCocone, descOfIsLeftKanExtension, hom_ext_of_isLeftKanExtension, pointwiseLeftKanExtension, pointwiseLeftKanExtensionUnit
 -/
@@ -2074,7 +2132,19 @@ definition pointwiseRightKanExtension
       (Cone.mk (limit (StructuredArrow.proj Y₁ L ⋙ F))
         { app := fun g => limit.π (StructuredArrow.proj Y₁ L ⋙ F)
             ((StructuredArrow.map f).obj g)
-          naturality := fun g₁ g₂ φ 
+          naturality := fun g₁ g₂ φ => by
+            simpa using (limit.w (StructuredArrow.proj Y₁ L ⋙ F)
+              ((StructuredArrow.map f).map φ)).symm })
+  map_id Y := limit.hom_ext (fun j => by
+    dsimp
+    simp only [limit.lift_π, id_comp]
+    congr
+    apply StructuredArrow.map_id)
+  map_comp {Y₁ Y₂ Y₃} f f' := limit.hom_ext (fun j => by
+    dsimp
+    simp only [limit.lift_π, assoc]
+    congr 1
+    apply StructuredArrow.map_comp)
 
 中文:
 定义 pointwiseRightKanExtension
@@ -2084,7 +2154,19 @@ definition pointwiseRightKanExtension
       (Cone.mk (limit (StructuredArrow.proj Y₁ L ⋙ F))
         { app := fun g => limit.π (StructuredArrow.proj Y₁ L ⋙ F)
             ((StructuredArrow.map f).obj g)
-          naturality := fun g₁ g₂ φ 
+          naturality := fun g₁ g₂ φ => by
+            simpa using (limit.w (StructuredArrow.proj Y₁ L ⋙ F)
+              ((StructuredArrow.map f).map φ)).symm })
+  map_id Y := limit.hom_ext (fun j => by
+    dsimp
+    simp only [limit.lift_π, id_comp]
+    congr
+    apply StructuredArrow.map_id)
+  map_comp {Y₁ Y₂ Y₃} f f' := limit.hom_ext (fun j => by
+    dsimp
+    simp only [limit.lift_π, assoc]
+    congr 1
+    apply StructuredArrow.map_comp)
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.proj
 -/
@@ -2124,7 +2206,9 @@ definition pointwiseRightKanExtensionCounit
     simp only [comp_map,
       pointwiseRightKanExtension_map, limit.lift_π, StructuredArrow.map_mk]
     rw [comp_id]
-    let φ : StructuredArrow.mk (𝟙 (L.obj X₁)) ⟶ StructuredArrow.mk 
+    let φ : StructuredArrow.mk (𝟙 (L.obj X₁)) ⟶ StructuredArrow.mk (L.map f) :=
+      StructuredArrow.homMk f
+    exact (limit.w (StructuredArrow.proj (L.obj X₁) L ⋙ F) φ).symm
 
 中文:
 定义 pointwiseRightKanExtensionCounit
@@ -2135,7 +2219,9 @@ definition pointwiseRightKanExtensionCounit
     simp only [comp_map,
       pointwiseRightKanExtension_map, limit.lift_π, StructuredArrow.map_mk]
     rw [comp_id]
-    let φ : StructuredArrow.mk (𝟙 (L.obj X₁)) ⟶ StructuredArrow.mk 
+    let φ : StructuredArrow.mk (𝟙 (L.obj X₁)) ⟶ StructuredArrow.mk (L.map f) :=
+      StructuredArrow.homMk f
+    exact (limit.w (StructuredArrow.proj (L.obj X₁) L ⋙ F) φ).symm
 
 Depends on / 依赖: L.obj, StructuredArrow, StructuredArrow.proj
 -/
@@ -2285,7 +2371,9 @@ lemma pointwiseRightKanExtension_lift_app
     { app := fun Y => limit.lift _ (structuredArrowMapCone L F G α Y) }
   have h : (pointwiseRightKanExtension L F).liftOfIsRightKanExtension
       (pointwiseRightKanExtensionCounit L F) G α = β := by
-    apply hom_ext_of_isRightKanExtension (α := p
+    apply hom_ext_of_isRightKanExtension (α := pointwiseRightKanExtensionCounit L F)
+    aesop
+  exact NatTrans.congr_app h Y
 
 中文:
 引理 pointwiseRightKanExtension_lift_app
@@ -2295,7 +2383,9 @@ lemma pointwiseRightKanExtension_lift_app
     { app := fun Y => limit.lift _ (structuredArrowMapCone L F G α Y) }
   have h : (pointwiseRightKanExtension L F).liftOfIsRightKanExtension
       (pointwiseRightKanExtensionCounit L F) G α = β := by
-    apply hom_ext_of_isRightKanExtension (α := p
+    apply hom_ext_of_isRightKanExtension (α := pointwiseRightKanExtensionCounit L F)
+    aesop
+  exact NatTrans.congr_app h Y
 
 Depends on / 依赖: HasCoequalizers, L.pointwiseRightKanExtension, NatTrans, NatTrans.congr_app, congr_app, hasCokernels_of_hasCoequalizers, hom_ext_of_isRightKanExtension, liftOfIsRightKanExtension, limit.lift, pointwiseRightKanExtension, pointwiseRightKanExtensionCounit, structuredArrowMapCone
 -/

@@ -37,7 +37,18 @@ theorem exists_homeomorph_extension
   -- on the whole space, with a slightly worse Lipschitz constant. Then `f' + u` will be the
   -- desired homeomorphism.
   obtain ⟨u, hu, uf⟩ :
-    exists u : E -> F, LipschitzWith (lipschitzExtension
+    exists u : E -> F, LipschitzWith (lipschitzExtensionConstant F * c) u ∧ EqOn (f - ⇑f') u s :=
+    hf.lipschitzOnWith.extend_finite_dimension
+  let g : E -> F := fun x => f' x + u x
+  have fg : EqOn f g s := fun x hx => by simp_rw [g, ← uf hx, Pi.sub_apply, add_sub_cancel]
+  have hg : ApproximatesLinearOn g (f' : E ->L[Real] F) univ (lipschitzExtensionConstant F * c) := by
+    apply LipschitzOnWith.approximatesLinearOn
+    rw [lipschitzOnWith_univ]
+    convert! hu
+    ext x
+    simp only [g, add_sub_cancel_left, ContinuousLinearEquiv.coe_coe, Pi.sub_apply]
+  have : FiniteDimensional Real E := f'.symm.finiteDimensional
+  exact ⟨hg.toHomeomorph g hc, fg⟩
 
 中文:
 定理 存在_homeomorph_extension
@@ -47,7 +58,18 @@ theorem exists_homeomorph_extension
   -- on the whole space, with a slightly worse Lipschitz constant. Then `f' + u` will be the
   -- desired homeomorphism.
   obtain ⟨u, hu, uf⟩ :
-    exists u : E -> F, LipschitzWith (lipschitzExtension
+    exists u : E -> F, LipschitzWith (lipschitzExtensionConstant F * c) u ∧ EqOn (f - ⇑f') u s :=
+    hf.lipschitzOnWith.extend_finite_dimension
+  let g : E -> F := fun x => f' x + u x
+  have fg : EqOn f g s := fun x hx => by simp_rw [g, ← uf hx, Pi.sub_apply, add_sub_cancel]
+  have hg : ApproximatesLinearOn g (f' : E ->L[Real] F) univ (lipschitzExtensionConstant F * c) := by
+    apply LipschitzOnWith.approximatesLinearOn
+    rw [lipschitzOnWith_univ]
+    convert! hu
+    ext x
+    simp only [g, add_sub_cancel_left, ContinuousLinearEquiv.coe_coe, Pi.sub_apply]
+  have : FiniteDimensional Real E := f'.symm.finiteDimensional
+  exact ⟨hg.toHomeomorph g hc, fg⟩
 -/
 theorem exists_homeomorph_extension {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E]
     {F : Type*} [NormedAddCommGroup F] [NormedSpace Real F] [FiniteDimensional Real F] {s : Set E}

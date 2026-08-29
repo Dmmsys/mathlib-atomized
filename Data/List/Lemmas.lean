@@ -62,7 +62,13 @@ theorem injOn_insertIdx_index_of_notMem
     simp only [mem_cons, not_or] at hx
     cases n <;> cases m
     · rfl
-    · simp [
+    · simp [hx.left] at h
+    · simp [Ne.symm hx.left] at h
+    · simp only [insertIdx_succ_cons, cons.injEq, true_and] at h
+      rw [Nat.succ_inj]
+      refine IH hx.right ?_ ?_ h
+      · simpa [Nat.succ_le_succ_iff] using hn
+      · simpa [Nat.succ_le_succ_iff] using hm
 
 中文:
 定理 injOn_insertIdx_index_of_notMem
@@ -77,7 +83,13 @@ theorem injOn_insertIdx_index_of_notMem
     simp only [mem_cons, not_or] at hx
     cases n <;> cases m
     · rfl
-    · simp [
+    · simp [hx.left] at h
+    · simp [Ne.symm hx.left] at h
+    · simp only [insertIdx_succ_cons, cons.injEq, true_and] at h
+      rw [Nat.succ_inj]
+      refine IH hx.right ?_ ?_ h
+      · simpa [Nat.succ_le_succ_iff] using hn
+      · simpa [Nat.succ_le_succ_iff] using hm
 
 Depends on / 依赖: Nat.succ_inj, Nat.succ_le_succ_iff, Ne.symm, Set.mem_ofPred_eq, Set.mem_singleton_iff, Set.ofPred_eq_eq_singleton, cons.injEq, generalizing, hx.left, hx.right, insertIdx_succ_cons, length, mem_cons, mem_ofPred_eq, mem_singleton_iff, not_or, ofPred_eq_eq_singleton, succ_inj, succ_le_succ_iff, true_and
 -/
@@ -153,7 +165,7 @@ theorem foldl_range_subset_of_range_subset
   -- Porting note: have to write `(foldr_reverse)` instead of `foldr_reverse`.
   simp_rw [← (foldr_reverse), Set.range_comp' _ reverse,
     reverse_involutive.bijective.surjective.range_eq, Set.image_univ]
-  exact foldr_range_subset_of
+  exact foldr_range_subset_of_range_subset hfg a
 
 中文:
 定理 foldl_range_subset_of_range_subset
@@ -163,7 +175,7 @@ theorem foldl_range_subset_of_range_subset
   -- Porting note: have to write `(foldr_reverse)` instead of `foldr_reverse`.
   simp_rw [← (foldr_reverse), Set.range_comp' _ reverse,
     reverse_involutive.bijective.surjective.range_eq, Set.image_univ]
-  exact foldr_range_subset_of
+  exact foldr_range_subset_of_range_subset hfg a
 
 Depends on / 依赖: Set.range, subseteq
 -/

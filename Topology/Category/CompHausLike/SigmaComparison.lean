@@ -83,7 +83,15 @@ theorem sigmaComparison_eq_comp_isos
     PreservesProduct.iso_hom, comp_apply, Types.productIso_hom_comp_eval_apply]
   have := ConcreteCategory.congr_hom (piComparison_comp_π X (fun a => ⟨of P (σ a)⟩) a)
   simp only [comp_apply] at this
-  rw 
+  rw [this]; rw [← comp_apply]; rw [← Functor.map_comp]
+  simp only [sigmaComparison, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk]
+  apply ConcreteCategory.congr_hom
+  congr 2
+  rw [← opCoproductIsoProduct_inv_comp_ι]
+  simp only [Opposite.unop_op, unop_comp, Quiver.Hom.unop_op, Category.assoc]
+  simp only [opCoproductIsoProduct, ← unop_comp, opCoproductIsoProduct'_comp_self]
+  erw [IsColimit.fac]
+  rfl
 
 中文:
 定理 sigmaComparison_eq_comp_isos
@@ -94,7 +102,15 @@ theorem sigmaComparison_eq_comp_isos
     PreservesProduct.iso_hom, comp_apply, Types.productIso_hom_comp_eval_apply]
   have := ConcreteCategory.congr_hom (piComparison_comp_π X (fun a => ⟨of P (σ a)⟩) a)
   simp only [comp_apply] at this
-  rw 
+  rw [this]; rw [← comp_apply]; rw [← Functor.map_comp]
+  simp only [sigmaComparison, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk]
+  apply ConcreteCategory.congr_hom
+  congr 2
+  rw [← opCoproductIsoProduct_inv_comp_ι]
+  simp only [Opposite.unop_op, unop_comp, Quiver.Hom.unop_op, Category.assoc]
+  simp only [opCoproductIsoProduct, ← unop_comp, opCoproductIsoProduct'_comp_self]
+  erw [IsColimit.fac]
+  rfl
 
 Depends on / 依赖: Cofan.mk_pt, ConcreteCategory, ConcreteCategory.congr_hom, ConcreteCategory.hom_ofHom, Fan.mk_pt, Functor, Functor.mapIso_hom, Functor.map_comp, PreservesProduct, PreservesProduct.iso_hom, TypeCat, TypeCat.Fun.coe_mk, TypeCat.Fun.toFun_apply, Types.productIso_hom_comp_eval_apply, coe_mk, comp_apply, congr_hom, hom_ofHom, iso_hom, mapIso_hom
 -/

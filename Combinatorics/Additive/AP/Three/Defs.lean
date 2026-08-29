@@ -296,7 +296,7 @@ lemma threeGPFree_image
     [((hf.bijOn.injOn.mono hAs).bijOn_image (f := f)).forall,
     hf.mul_eq_mul (hAs _) (hAs _) (hAs _) (hAs _), this.injOn.eq_iff]
 
-@[to_additive] alias ⟨_, ThreeGPFree.image⟩ :=
+@[to_additive] alias ⟨_, ThreeGPFree.image⟩ := threeGPFree_image
 
 中文:
 引理 threeGPFree_image
@@ -308,7 +308,7 @@ lemma threeGPFree_image
     [((hf.bijOn.injOn.mono hAs).bijOn_image (f := f)).forall,
     hf.mul_eq_mul (hAs _) (hAs _) (hAs _) (hAs _), this.injOn.eq_iff]
 
-@[to_additive] alias ⟨_, ThreeGPFree.image⟩ :=
+@[to_additive] alias ⟨_, ThreeGPFree.image⟩ := threeGPFree_image
 
 Depends on / 依赖: ThreeGPFree, bijOn_image, contextual, eq_iff, hf.bijOn.injOn.mono, hf.mul_eq_mul, mul_eq_mul, this.injOn.eq_iff
 -/
@@ -437,7 +437,18 @@ lemma threeGPFree_insert
     fun b hb c hc => hs (Or.inr hb) (Or.inl rfl) (Or.inr hc)⟩, ?_⟩
   rintro ⟨hs, ha, ha'⟩ b hb c hc d hd h
   rw [mem_insert_iff] at hb hc hd
-  obtain rfl | hb := hb <;> obtain rfl | hc 
+  obtain rfl | hb := hb <;> obtain rfl | hc := hc
+  · rfl
+  all_goals obtain rfl | hd := hd
+  · exact (ha' hc hc h.symm).symm
+  · exact ha hc hd h
+  · exact mul_right_cancel h
+  · exact ha' hb hd h
+  · obtain rfl := ha hc hb ((mul_comm _ _).trans h)
+    exact ha' hb hc h
+  · exact hs hb hc hd h
+
+@[to_additive]
 
 中文:
 引理 threeGPFree_insert
@@ -447,7 +458,18 @@ lemma threeGPFree_insert
     fun b hb c hc => hs (Or.inr hb) (Or.inl rfl) (Or.inr hc)⟩, ?_⟩
   rintro ⟨hs, ha, ha'⟩ b hb c hc d hd h
   rw [mem_insert_iff] at hb hc hd
-  obtain rfl | hb := hb <;> obtain rfl | hc 
+  obtain rfl | hb := hb <;> obtain rfl | hc := hc
+  · rfl
+  all_goals obtain rfl | hd := hd
+  · exact (ha' hc hc h.symm).symm
+  · exact ha hc hd h
+  · exact mul_right_cancel h
+  · exact ha' hb hd h
+  · obtain rfl := ha hc hb ((mul_comm _ _).trans h)
+    exact ha' hb hc h
+  · exact hs hb hc hd h
+
+@[to_additive]
 -/
 @[to_additive] lemma threeGPFree_insert :
     ThreeGPFree (insert a s) ↔ ThreeGPFree s ∧
@@ -871,7 +893,11 @@ theorem mulRothNumber_union_le
     mulRothNumber (s union t) = #u := hcard.symm
     _ = #(u inter s union u inter t) := by rw [← inter_union_distrib_left, inter_eq_left.2 hus]
     _ <= #(u inter s) + #(u inter t) := card_union_le _ _
-    _ <= mulRothNumber s + mulRo
+    _ <= mulRothNumber s + mulRothNumber t := _root_.add_le_add
+      ((hu.mono inter_subset_left).le_mulRothNumber inter_subset_right)
+      ((hu.mono inter_subset_left).le_mulRothNumber inter_subset_right)
+
+@[to_additive]
 
 中文:
 定理 mulRothNumber_union_le
@@ -881,7 +907,11 @@ theorem mulRothNumber_union_le
     mulRothNumber (s union t) = #u := hcard.symm
     _ = #(u inter s union u inter t) := by rw [← inter_union_distrib_left, inter_eq_left.2 hus]
     _ <= #(u inter s) + #(u inter t) := card_union_le _ _
-    _ <= mulRothNumber s + mulRo
+    _ <= mulRothNumber s + mulRothNumber t := _root_.add_le_add
+      ((hu.mono inter_subset_left).le_mulRothNumber inter_subset_right)
+      ((hu.mono inter_subset_left).le_mulRothNumber inter_subset_right)
+
+@[to_additive]
 
 Depends on / 依赖: _root_, _root_.add_le_add, add_le_add, card_union_le, hcard.symm, hu.mono, inter_eq_left, inter_subset_left, inter_subset_right, inter_union_distrib_left, le_mulRothNumber, mulRothNumber, mulRothNumber_spec
 -/
@@ -988,7 +1018,10 @@ lemma IsMulFreimanHom.mulRothNumber_mono
   have hsA : invFunOn f A '' s subseteq A :=
     (hf'.surjOn.mapsTo_invFunOn.mono (coe_subset.2 hsB) Subset.rfl).image_subset
   have hfsA : Set.SurjOn f A s := hf'.surjOn.mono Subset.rfl (coe_subset.2 hsB)
-  rw [← hcard]; rw [← s.card_image_of_
+  rw [← hcard]; rw [← s.card_image_of_injOn ((invFunOn_injOn_image f _).mono hfsA)]
+  refine ThreeGPFree.le_mulRothNumber ?_ (mod_cast hsA)
+  rw [coe_image]
+  simpa using (hf.subset hsA hfsA.bijOn_subset.mapsTo).threeGPFree (hf'.injOn.mono hsA) hs
 
 中文:
 引理 是MulFreiman态射.mulRothNumber_mono
@@ -998,7 +1031,10 @@ lemma IsMulFreimanHom.mulRothNumber_mono
   have hsA : invFunOn f A '' s subseteq A :=
     (hf'.surjOn.mapsTo_invFunOn.mono (coe_subset.2 hsB) Subset.rfl).image_subset
   have hfsA : Set.SurjOn f A s := hf'.surjOn.mono Subset.rfl (coe_subset.2 hsB)
-  rw [← hcard]; rw [← s.card_image_of_
+  rw [← hcard]; rw [← s.card_image_of_injOn ((invFunOn_injOn_image f _).mono hfsA)]
+  refine ThreeGPFree.le_mulRothNumber ?_ (mod_cast hsA)
+  rw [coe_image]
+  simpa using (hf.subset hsA hfsA.bijOn_subset.mapsTo).threeGPFree (hf'.injOn.mono hsA) hs
 
 Depends on / 依赖: Set.SurjOn, Subset, Subset.rfl, SurjOn, ThreeGPFree, ThreeGPFree.le_mulRothNumber, bijOn_subset, card_image_of_injOn, coe_image, coe_subset, hf.subset, hfsA.bijOn_subset.mapsTo, image_subset, injOn.mono, invFunOn, invFunOn_injOn_image, le_mulRothNumber, mapsTo, mapsTo_invFunOn, mod_cast
 -/
@@ -1027,7 +1063,11 @@ lemma IsMulFreimanIso.mulRothNumber_congr
   rw [← coe_subset] at hsA
   have hfs : Set.InjOn f s := hf.bijOn.injOn.mono hsA
   have := (hf.subset hsA hfs.bijOn_image).threeGPFree_congr.1 hs
-  rw [← coe_image] at thi
+  rw [← coe_image] at this
+  rw [← hcard]; rw [← Finset.card_image_of_injOn hfs]
+  refine this.le_mulRothNumber ?_
+  rw [← coe_subset]; rw [coe_image]
+  exact (hf.bijOn.mapsTo.mono hsA Subset.rfl).image_subset
 
 中文:
 引理 是MulFreimanIso.mulRothNumber_congr
@@ -1038,7 +1078,11 @@ lemma IsMulFreimanIso.mulRothNumber_congr
   rw [← coe_subset] at hsA
   have hfs : Set.InjOn f s := hf.bijOn.injOn.mono hsA
   have := (hf.subset hsA hfs.bijOn_image).threeGPFree_congr.1 hs
-  rw [← coe_image] at thi
+  rw [← coe_image] at this
+  rw [← hcard]; rw [← Finset.card_image_of_injOn hfs]
+  refine this.le_mulRothNumber ?_
+  rw [← coe_subset]; rw [coe_image]
+  exact (hf.bijOn.mapsTo.mono hsA Subset.rfl).image_subset
 
 Depends on / 依赖: Finset, Finset.card_image_of_injOn, Set.InjOn, Subset, Subset.rfl, bijOn_image, card_image_of_injOn, coe_image, coe_subset, hf.bijOn, hf.bijOn.injOn.mono, hf.bijOn.mapsTo.mono, hf.isMulFreimanHom.mulRothNumber_mono, hf.subset, hfs.bijOn_image, image_subset, isMulFreimanHom, le_antisymm, le_mulRothNumber, mapsTo
 -/
@@ -1075,7 +1119,12 @@ theorem mulRothNumber_map_mul_left
     rw [coe_map] at hu
     rw [← hcard]; rw [card_map]
     exact (threeGPFree_smul_set.1 hu).le_mulRothNumber hus
-  · obtain
+  · obtain ⟨u, hus, hcard, hu⟩ := mulRothNumber_spec s
+    have h : ThreeGPFree (u.map <| mulLeftEmbedding a : Set α) := by rw [coe_map]; exact hu.smul_set
+    convert! h.le_mulRothNumber (map_subset_map.2 hus) using 1
+    rw [card_map]; rw [hcard]
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 mulRothNumber_map_mul_left
@@ -1087,7 +1136,12 @@ theorem mulRothNumber_map_mul_left
     rw [coe_map] at hu
     rw [← hcard]; rw [card_map]
     exact (threeGPFree_smul_set.1 hu).le_mulRothNumber hus
-  · obtain
+  · obtain ⟨u, hus, hcard, hu⟩ := mulRothNumber_spec s
+    have h : ThreeGPFree (u.map <| mulLeftEmbedding a : Set α) := by rw [coe_map]; exact hu.smul_set
+    convert! h.le_mulRothNumber (map_subset_map.2 hus) using 1
+    rw [card_map]; rw [hcard]
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: ThreeGPFree, card_map, coe_map, convert, h.le_mulRothNumber, hu.smul_set, le_antisymm, le_mulRothNumber, map_subset_map, mulLeftEmbedding, mulRothNumber_spec, s.map, smul_set, subset_map_iff, threeGPFree_smul_set, u.map
 -/
@@ -1341,7 +1395,10 @@ lemma Fin.addRothNumber_le_rothNumberNat
   open Fin.CommRing in -- TODO: should this be refactored to avoid needing the coercion?
   suffices h : Set.BijOn (Nat.cast : Nat -> Fin n.succ) (range k) (Iio k : Finset (Fin n.succ)) by
     exact (AddHomClass.isAddFreimanHom (Nat.castRingHom _) h.mapsTo).addRothNumber_mono h
-  refine ⟨?_, (Char
+  refine ⟨?_, (CharP.natCast_injOn_Iio _ n.succ).mono (by simp), ?_⟩
+  · simpa using! fun x => natCast_strictMono (is_le k)
+  simp only [Set.SurjOn, coe_Iio, Set.subset_def, Set.mem_Iio, Set.mem_image, lt_def, coe_range]
+  exact fun x hx => ⟨x, hx, by simp⟩
 
 中文:
 引理 有限集.addRothNumber_le_rothNumber自然数
@@ -1350,7 +1407,10 @@ lemma Fin.addRothNumber_le_rothNumberNat
   open Fin.CommRing in -- TODO: should this be refactored to avoid needing the coercion?
   suffices h : Set.BijOn (Nat.cast : Nat -> Fin n.succ) (range k) (Iio k : Finset (Fin n.succ)) by
     exact (AddHomClass.isAddFreimanHom (Nat.castRingHom _) h.mapsTo).addRothNumber_mono h
-  refine ⟨?_, (Char
+  refine ⟨?_, (CharP.natCast_injOn_Iio _ n.succ).mono (by simp), ?_⟩
+  · simpa using! fun x => natCast_strictMono (is_le k)
+  simp only [Set.SurjOn, coe_Iio, Set.subset_def, Set.mem_Iio, Set.mem_image, lt_def, coe_range]
+  exact fun x hx => ⟨x, hx, by simp⟩
 
 Depends on / 依赖: AddHomClass, AddHomClass.isAddFreimanHom, CharP.natCast_injOn_Iio, CommRing, Fin.CommRing, Finset, Nat.cast, Nat.castRingHom, Set.BijOn, Set.SurjOn, Set.mem_Iio, Set.mem_image, Set.subset_def, SurjOn, addRothNumber_mono, castRingHom, coe_Iio, coe_range, coercion, h.mapsTo
 -/

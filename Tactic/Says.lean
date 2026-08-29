@@ -62,7 +62,20 @@ let { trees, ..} ← withResetServerInfo evalTactic tac
     | throwError m!"Tactic `{tac}` did not produce a 'Try this:' suggestion."
   let suggestion ← do
     if let some msg := s.messageData? then
-pure Suggestion
+pure SuggestionText.string ← msg.toString
+    else
+pure s.suggestion
+  match suggestion with
+  | .tsyntax (kind := ``tacticSeq) stx =>
+    return stx
+  | .tsyntax (kind := `tactic) stx =>
+    return ← `(tacticSeq| $stx:tactic)
+  | .tsyntax stx =>
+    throwError m!"Tactic `{tac}` produced a 'Try this:' suggestion with a non-tactic syntax: {stx}"
+  | .string s =>
+    match Mathlib.GuardExceptions.parseAsTacticSeq (← getEnv) s with
+    | .ok stx => return stx
+    | .error err => throwError m!"Failed to parse 'Try this:' suggestion: {s}\n{err}"
 
 中文:
 定义 evalTacticCapturingTryThis
@@ -74,7 +87,20 @@ let { trees, ..} ← withResetServerInfo evalTactic tac
     | throwError m!"Tactic `{tac}` did not produce a 'Try this:' suggestion."
   let suggestion ← do
     if let some msg := s.messageData? then
-pure Suggestion
+pure SuggestionText.string ← msg.toString
+    else
+pure s.suggestion
+  match suggestion with
+  | .tsyntax (kind := ``tacticSeq) stx =>
+    return stx
+  | .tsyntax (kind := `tactic) stx =>
+    return ← `(tacticSeq| $stx:tactic)
+  | .tsyntax stx =>
+    throwError m!"Tactic `{tac}` produced a 'Try this:' suggestion with a non-tactic syntax: {stx}"
+  | .string s =>
+    match Mathlib.GuardExceptions.parseAsTacticSeq (← getEnv) s with
+    | .ok stx => return stx
+    | .error err => throwError m!"Failed to parse 'Try this:' suggestion: {s}\n{err}"
 -/
 def evalTacticCapturingTryThis (tac : TSyntax `tactic) : TacticM (TSyntax ``tacticSeq) := do
 let { trees, ..} ← withResetServerInfo evalTactic tac

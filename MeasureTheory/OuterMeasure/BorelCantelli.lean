@@ -48,7 +48,7 @@ refine bot_unique ge_of_tendsto' (ENNReal.tendsto_tsum_compl_atTop_zero hs) fun 
       gcongr
       rw [hasBasis_cofinite.limsup_eq_iInf_iSup]; rw [iUnion_subtype]
       exact iInter₂_subset _ t.finite_toSet
-    _ <= ∑' 
+    _ <= ∑' i : {i // i ∉ t}, μ (s i) := measure_iUnion_le _
 
 中文:
 定理 measure_limsup_cofinite_eq_zero
@@ -60,7 +60,7 @@ refine bot_unique ge_of_tendsto' (ENNReal.tendsto_tsum_compl_atTop_zero hs) fun 
       gcongr
       rw [hasBasis_cofinite.limsup_eq_iInf_iSup]; rw [iUnion_subtype]
       exact iInter₂_subset _ t.finite_toSet
-    _ <= ∑' 
+    _ <= ∑' i : {i // i ∉ t}, μ (s i) := measure_iUnion_le _
 
 Depends on / 依赖: ENNReal, ENNReal.tendsto_tsum_compl_atTop_zero, bot_unique, cofinite, finite_toSet, ge_of_tendsto, hasBasis_cofinite, hasBasis_cofinite.limsup_eq_iInf_iSup, iUnion_subtype, limsup, limsup_eq_iInf_iSup, measure_iUnion_le, t.finite_toSet, tendsto_tsum_compl_atTop_zero
 -/

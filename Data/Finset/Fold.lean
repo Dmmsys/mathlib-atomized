@@ -444,7 +444,9 @@ theorem fold_ite'
       simp only [Finset.fold_insert hx]
       split_ifs with h
       · have : x ∉ Finset.filter p s := by simp [hx]
-        simp [Finset.filter_insert, h, Finset.fold_insert this, ha.asso
+        simp [Finset.filter_insert, h, Finset.fold_insert this, ha.assoc, IH]
+      · have : x ∉ Finset.filter (fun i => ¬ p i) s := by simp [hx]
+        simp [Finset.filter_insert, h, Finset.fold_insert this, IH, ← ha.assoc, hc.comm]
 
 中文:
 定理 fold_ite'
@@ -457,7 +459,9 @@ theorem fold_ite'
       simp only [Finset.fold_insert hx]
       split_ifs with h
       · have : x ∉ Finset.filter p s := by simp [hx]
-        simp [Finset.filter_insert, h, Finset.fold_insert this, ha.asso
+        simp [Finset.filter_insert, h, Finset.fold_insert this, ha.assoc, IH]
+      · have : x ∉ Finset.filter (fun i => ¬ p i) s := by simp [hx]
+        simp [Finset.filter_insert, h, Finset.fold_insert this, IH, ← ha.assoc, hc.comm]
 
 Depends on / 依赖: Finset, Finset.filter, Finset.filter_insert, Finset.fold_insert, Finset.induction_on, classical, filter, filter_insert, fold_insert, ha.assoc, hc.comm, induction_on, insert, split_ifs
 -/

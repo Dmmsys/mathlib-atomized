@@ -49,7 +49,26 @@ theorem condExp_indep_eq
   refine (ae_eq_condExp_of_forall_setIntegral_eq hle₂ hfint
     (fun s _ hs => integrableOn_const hs.ne) (fun s hms hs => ?_)
       stronglyMeasurable_const.aestronglyMeasurable).symm
-  rw 
+  rw [setIntegral_const]
+  rw [← memLp_one_iff_integrable] at hfint
+  refine MemLp.induction_stronglyMeasurable hle₁ ENNReal.one_ne_top _ ?_ ?_ ?_ ?_ hfint ?_
+  · exact ⟨f, hf, EventuallyEq.rfl⟩
+  · intro c t hmt _
+    rw [Indep_iff] at hindp
+    rw [integral_indicator (hle₁ _ hmt)]; rw [setIntegral_const]; rw [smul_smul]; rw [measureReal_def]; rw [measureReal_def]; rw [← ENNReal.toReal_mul]; rw [mul_comm]; rw [← hindp _ _ hmt hms]; rw [setIntegral_indicator (hle₁ _ hmt)]; rw [setIntegral_const]; rw [Set.inter_comm]; rw [measureReal_def]
+  · intro u v _ huint hvint hu hv hu_eq hv_eq
+    rw [memLp_one_iff_integrable] at huint hvint
+    rw [integral_add' huint hvint]; rw [smul_add]; rw [hu_eq]; rw [hv_eq]; rw [integral_add' huint.integrableOn hvint.integrableOn]
+  · have h_integral : Continuous fun f : lpMeas E Real m₁ 1 μ => ∫ x, (f : Ω -> E) x ∂μ := by
+      simpa using! continuous_integral.comp (ContinuousLinearMap.continuous (Submodule.subtypeL _))
+    have h_setIntegral : Continuous fun f : lpMeas E Real m₁ 1 μ => ∫ x in s, (f : Ω -> E) x ∂μ := by
+      simpa using! (continuous_setIntegral s).comp
+        (ContinuousLinearMap.continuous (Submodule.subtypeL _))
+    exact isClosed_eq (Continuous.const_smul h_integral _) h_setIntegral
+  · intro u v huv _ hueq
+    rwa [← integral_congr_ae huv, ←
+      (setIntegral_congr_ae (hle₂ _ hms) _ : ∫ x in s, u x ∂μ = ∫ x in s, v x ∂μ)]
+    filter_upwards [huv] with x hx _ using hx
 
 中文:
 定理 condExp_indep_eq
@@ -60,7 +79,26 @@ theorem condExp_indep_eq
   refine (ae_eq_condExp_of_forall_setIntegral_eq hle₂ hfint
     (fun s _ hs => integrableOn_const hs.ne) (fun s hms hs => ?_)
       stronglyMeasurable_const.aestronglyMeasurable).symm
-  rw 
+  rw [setIntegral_const]
+  rw [← memLp_one_iff_integrable] at hfint
+  refine MemLp.induction_stronglyMeasurable hle₁ ENNReal.one_ne_top _ ?_ ?_ ?_ ?_ hfint ?_
+  · exact ⟨f, hf, EventuallyEq.rfl⟩
+  · intro c t hmt _
+    rw [Indep_iff] at hindp
+    rw [integral_indicator (hle₁ _ hmt)]; rw [setIntegral_const]; rw [smul_smul]; rw [measureReal_def]; rw [measureReal_def]; rw [← ENNReal.toReal_mul]; rw [mul_comm]; rw [← hindp _ _ hmt hms]; rw [setIntegral_indicator (hle₁ _ hmt)]; rw [setIntegral_const]; rw [Set.inter_comm]; rw [measureReal_def]
+  · intro u v _ huint hvint hu hv hu_eq hv_eq
+    rw [memLp_one_iff_integrable] at huint hvint
+    rw [integral_add' huint hvint]; rw [smul_add]; rw [hu_eq]; rw [hv_eq]; rw [integral_add' huint.integrableOn hvint.integrableOn]
+  · have h_integral : Continuous fun f : lpMeas E Real m₁ 1 μ => ∫ x, (f : Ω -> E) x ∂μ := by
+      simpa using! continuous_integral.comp (ContinuousLinearMap.continuous (Submodule.subtypeL _))
+    have h_setIntegral : Continuous fun f : lpMeas E Real m₁ 1 μ => ∫ x in s, (f : Ω -> E) x ∂μ := by
+      simpa using! (continuous_setIntegral s).comp
+        (ContinuousLinearMap.continuous (Submodule.subtypeL _))
+    exact isClosed_eq (Continuous.const_smul h_integral _) h_setIntegral
+  · intro u v huv _ hueq
+    rwa [← integral_congr_ae huv, ←
+      (setIntegral_congr_ae (hle₂ _ hms) _ : ∫ x in s, u x ∂μ = ∫ x in s, v x ∂μ)]
+    filter_upwards [huv] with x hx _ using hx
 
 Depends on / 依赖: ENNReal, ENNReal.one_ne_top, EventuallyEq, EventuallyEq.rfl, Indep_iff, Integrable, MemLp.induction_stronglyMeasurable, ae_eq_condExp_of_forall_setIntegral_eq, aestronglyMeasurable, condExp_of_not_integrable, hs.ne, induction_stronglyMeasurable, integrableOn_const, integral_undef, memLp_one_iff_integrable, one_ne_top, setIntegral_const, stronglyMeasurable_const, stronglyMeasurable_const.aestronglyMeasurable
 -/

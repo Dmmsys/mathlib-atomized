@@ -1774,7 +1774,16 @@ definition sumProdDistrib
       measurable_of_measurable_union_cover (range Sum.inl ×ˢ (univ : Set γ))
         (range Sum.inr ×ˢ (univ : Set γ)) (measurableSet_range_inl.prod MeasurableSet.univ)
         (measurableSet_range_inr.prod MeasurableSet.univ)
-        (by rin
+        (by rintro ⟨a | b, c⟩ <;> simp [Set.prod_eq]) ?_ ?_
+    · refine (Set.prod (range Sum.inl) univ).symm.measurable_comp_iff.1 ?_
+      refine (prodCongr Set.rangeInl (Set.univ _)).symm.measurable_comp_iff.1 ?_
+      exact measurable_inl
+    · refine (Set.prod (range Sum.inr) univ).symm.measurable_comp_iff.1 ?_
+      refine (prodCongr Set.rangeInr (Set.univ _)).symm.measurable_comp_iff.1 ?_
+      exact measurable_inr
+  measurable_invFun :=
+    measurable_fun_sum ((measurable_inl.comp measurable_fst).prodMk measurable_snd)
+      ((measurable_inr.comp measurable_fst).prodMk measurable_snd)
 
 中文:
 定义 sumProdDistrib
@@ -1785,7 +1794,16 @@ definition sumProdDistrib
       measurable_of_measurable_union_cover (range Sum.inl ×ˢ (univ : Set γ))
         (range Sum.inr ×ˢ (univ : Set γ)) (measurableSet_range_inl.prod MeasurableSet.univ)
         (measurableSet_range_inr.prod MeasurableSet.univ)
-        (by rin
+        (by rintro ⟨a | b, c⟩ <;> simp [Set.prod_eq]) ?_ ?_
+    · refine (Set.prod (range Sum.inl) univ).symm.measurable_comp_iff.1 ?_
+      refine (prodCongr Set.rangeInl (Set.univ _)).symm.measurable_comp_iff.1 ?_
+      exact measurable_inl
+    · refine (Set.prod (range Sum.inr) univ).symm.measurable_comp_iff.1 ?_
+      refine (prodCongr Set.rangeInr (Set.univ _)).symm.measurable_comp_iff.1 ?_
+      exact measurable_inr
+  measurable_invFun :=
+    measurable_fun_sum ((measurable_inl.comp measurable_fst).prodMk measurable_snd)
+      ((measurable_inr.comp measurable_fst).prodMk measurable_snd)
 
 Depends on / 依赖: sumProdDistrib
 -/
@@ -2025,7 +2043,7 @@ exact MeasurableSet.preimage h
       measurable_pi_iff.mpr fun _ => hβ.measurable.comp (measurable_pi_apply _)
   measurable_invFun _ h := by
 exact MeasurableSet.preimage h
-      measurable_pi_iff.mpr fun _ => hβ.symm.measurable.comp (measurable_pi
+      measurable_pi_iff.mpr fun _ => hβ.symm.measurable.comp (measurable_pi_apply _)
 
 中文:
 定义 arrowCongr'
@@ -2036,7 +2054,7 @@ exact MeasurableSet.preimage h
       measurable_pi_iff.mpr fun _ => hβ.measurable.comp (measurable_pi_apply _)
   measurable_invFun _ h := by
 exact MeasurableSet.preimage h
-      measurable_pi_iff.mpr fun _ => hβ.symm.measurable.comp (measurable_pi
+      measurable_pi_iff.mpr fun _ => hβ.symm.measurable.comp (measurable_pi_apply _)
 
 Depends on / 依赖: Equiv.arrowCongr, arrowCongr
 -/
@@ -2177,7 +2195,7 @@ definition piFinSuccAbove
 measurable_toFun := (measurable_pi_apply i).prodMk measurable_pi_iff.2 fun _ =>
     measurable_pi_apply _
 measurable_invFun := measurable_pi_iff.2 i.forall_iff_succAbove.2
-    ⟨by simp [measurable_fst], fun j => by simpa using! (measurable_pi_apply _).comp measurable_sn
+    ⟨by simp [measurable_fst], fun j => by simpa using! (measurable_pi_apply _).comp measurable_snd⟩
 
 中文:
 定义 piFinSuccAbove
@@ -2186,7 +2204,7 @@ measurable_invFun := measurable_pi_iff.2 i.forall_iff_succAbove.2
 measurable_toFun := (measurable_pi_apply i).prodMk measurable_pi_iff.2 fun _ =>
     measurable_pi_apply _
 measurable_invFun := measurable_pi_iff.2 i.forall_iff_succAbove.2
-    ⟨by simp [measurable_fst], fun j => by simpa using! (measurable_pi_apply _).comp measurable_sn
+    ⟨by simp [measurable_fst], fun j => by simpa using! (measurable_pi_apply _).comp measurable_snd⟩
 
 Depends on / 依赖: Fin.insertNthEquiv, insertNthEquiv
 -/
@@ -2299,7 +2317,13 @@ definition piOptionEquivProd
   let em1 : ((i : δ oplus Unit) -> α (e.symm i)) ≃ᵐ ((a : Option δ) -> α a) :=
     MeasurableEquiv.piCongrLeft α e.symm
   let em2 : ((i : δ oplus Unit) -> α (e.symm i)) ≃ᵐ ((i : δ) -> α (e.symm (Sum.inl i)))
-      × ((i' : Unit) -> α (e.
+      × ((i' : Unit) -> α (e.symm (Sum.inr i'))) :=
+    MeasurableEquiv.sumPiEquivProdPi (fun i => α (e.symm i))
+  let em3 : ((i : δ) -> α (e.symm (Sum.inl i))) × ((i' : Unit) -> α (e.symm (Sum.inr i')))
+      ≃ᵐ ((i : δ) -> α (some i)) × α none :=
+    MeasurableEquiv.prodCongr (MeasurableEquiv.refl ((i : δ) -> α (e.symm (Sum.inl i))))
+      (MeasurableEquiv.piUnique fun i => α (e.symm (Sum.inr i)))
+em1.symm.trans em2.trans em3
 
 中文:
 定义 piOptionEquivProd
@@ -2308,7 +2332,13 @@ definition piOptionEquivProd
   let em1 : ((i : δ oplus Unit) -> α (e.symm i)) ≃ᵐ ((a : Option δ) -> α a) :=
     MeasurableEquiv.piCongrLeft α e.symm
   let em2 : ((i : δ oplus Unit) -> α (e.symm i)) ≃ᵐ ((i : δ) -> α (e.symm (Sum.inl i)))
-      × ((i' : Unit) -> α (e.
+      × ((i' : Unit) -> α (e.symm (Sum.inr i'))) :=
+    MeasurableEquiv.sumPiEquivProdPi (fun i => α (e.symm i))
+  let em3 : ((i : δ) -> α (e.symm (Sum.inl i))) × ((i' : Unit) -> α (e.symm (Sum.inr i')))
+      ≃ᵐ ((i : δ) -> α (some i)) × α none :=
+    MeasurableEquiv.prodCongr (MeasurableEquiv.refl ((i : δ) -> α (e.symm (Sum.inl i))))
+      (MeasurableEquiv.piUnique fun i => α (e.symm (Sum.inr i)))
+em1.symm.trans em2.trans em3
 
 Depends on / 依赖: Equiv.optionEquivSumPUnit, Measur, MeasurableEquiv, MeasurableEquiv.piCongrLeft, MeasurableEquiv.sumPiEquivProdPi, Sum.inl, Sum.inr, e.symm, optionEquivSumPUnit, piCongrLeft, sumPiEquivProdPi
 -/
@@ -2448,7 +2478,7 @@ protected alias setOf := MeasurableEquiv.setOfPred
 alias setOf_apply := MeasurableEquiv.setOfPred_apply
 
 @[deprecated (since := "2026-07-09")]
-alias setOf_symm_apply := MeasurableEquiv.setO
+alias setOf_symm_apply := MeasurableEquiv.setOfPred_symm_apply
 
 中文:
 定义 setOfPred
@@ -2463,7 +2493,7 @@ protected alias setOf := MeasurableEquiv.setOfPred
 alias setOf_apply := MeasurableEquiv.setOfPred_apply
 
 @[deprecated (since := "2026-07-09")]
-alias setOf_symm_apply := MeasurableEquiv.setO
+alias setOf_symm_apply := MeasurableEquiv.setOfPred_symm_apply
 -/
 protected def setOfPred {α : Type*} : (α -> Prop) ≃ᵐ Set α where
   toFun p := {a | p a}
@@ -2541,7 +2571,7 @@ theorem iff_comap_eq
       measurableSet_image' := by
         rw [← hf.2.1]
         rintro _ ⟨s, hs, rfl⟩
-        simpa only [image_preimage_eq_inter_range] usi
+        simpa only [image_preimage_eq_inter_range] using hs.inter hf.2.2 }⟩
 
 中文:
 定理 iff_comap_eq
@@ -2551,7 +2581,7 @@ theorem iff_comap_eq
       measurableSet_image' := by
         rw [← hf.2.1]
         rintro _ ⟨s, hs, rfl⟩
-        simpa only [image_preimage_eq_inter_range] usi
+        simpa only [image_preimage_eq_inter_range] using hs.inter hf.2.2 }⟩
 
 Depends on / 依赖: comap_eq, comap_measurable, hf.comap_eq, hf.injective, hf.measurableSet_range, hs.inter, image_preimage_eq_inter_range, injective, measurable, measurableSet_image, measurableSet_range
 -/
@@ -2681,7 +2711,49 @@ definition schroederBernstein
   -- We follow the proof of the usual SB theorem in mathlib,
   -- the crux of which is finding a fixed point of this F.
   -- However, we must find this fixed point manually instead of invoking Knaster-Tarski
-  -- in order to make sure it is m
+  -- in order to make sure it is measurable.
+  suffices Σ' A : Set α, MeasurableSet A ∧ F A = A by
+    classical
+    rcases this with ⟨A, Ameas, Afp⟩
+    let B := f '' A
+    have Bmeas : MeasurableSet B := hf.measurableSet_image' Ameas
+    refine (MeasurableEquiv.sumCompl Ameas).symm.trans
+      (MeasurableEquiv.trans ?_ (MeasurableEquiv.sumCompl Bmeas))
+    apply MeasurableEquiv.sumCongr (hf.equivImage _)
+    have : Aᶜ = g '' Bᶜ := by
+      apply compl_injective
+      rw [← Afp]
+      simp [F, B]
+    rw [this]
+    exact (hg.equivImage _).symm
+  have Fmono : forall {A B}, A subseteq B -> F A subseteq F B := fun h =>
+compl_subset_compl.mpr Set.image_mono compl_subset_compl.mpr Set.image_mono h
+  let X : Nat -> Set α := fun n => F^[n] univ
+  refine ⟨iInter X, ?_, ?_⟩
+  · refine MeasurableSet.iInter fun n => ?_
+    induction n with
+    | zero => exact MeasurableSet.univ
+    | succ n ih =>
+      rw [Function.iterate_succ']; rw [Function.comp_apply]
+      exact (hg.measurableSet_image' (hf.measurableSet_image' ih).compl).compl
+  apply subset_antisymm
+  · apply subset_iInter
+    intro n
+    cases n
+    · exact subset_univ _
+    rw [Function.iterate_succ']; rw [Function.comp_apply]
+    exact Fmono (iInter_subset _ _)
+  rintro x hx ⟨y, hy, rfl⟩
+  rw [mem_iInter] at hx
+  apply hy
+  rw [hf.injective.injOn.image_iInter_eq]
+  rw [mem_iInter]
+  intro n
+  specialize hx n.succ
+  rw [Function.iterate_succ']; rw [Function.comp_apply] at hx
+  by_contra h
+  apply hx
+  exact ⟨y, h, rfl⟩
 
 中文:
 定义 schroederBernstein
@@ -2691,7 +2763,49 @@ definition schroederBernstein
   -- We follow the proof of the usual SB theorem in mathlib,
   -- the crux of which is finding a fixed point of this F.
   -- However, we must find this fixed point manually instead of invoking Knaster-Tarski
-  -- in order to make sure it is m
+  -- in order to make sure it is measurable.
+  suffices Σ' A : Set α, MeasurableSet A ∧ F A = A by
+    classical
+    rcases this with ⟨A, Ameas, Afp⟩
+    let B := f '' A
+    have Bmeas : MeasurableSet B := hf.measurableSet_image' Ameas
+    refine (MeasurableEquiv.sumCompl Ameas).symm.trans
+      (MeasurableEquiv.trans ?_ (MeasurableEquiv.sumCompl Bmeas))
+    apply MeasurableEquiv.sumCongr (hf.equivImage _)
+    have : Aᶜ = g '' Bᶜ := by
+      apply compl_injective
+      rw [← Afp]
+      simp [F, B]
+    rw [this]
+    exact (hg.equivImage _).symm
+  have Fmono : forall {A B}, A subseteq B -> F A subseteq F B := fun h =>
+compl_subset_compl.mpr Set.image_mono compl_subset_compl.mpr Set.image_mono h
+  let X : Nat -> Set α := fun n => F^[n] univ
+  refine ⟨iInter X, ?_, ?_⟩
+  · refine MeasurableSet.iInter fun n => ?_
+    induction n with
+    | zero => exact MeasurableSet.univ
+    | succ n ih =>
+      rw [Function.iterate_succ']; rw [Function.comp_apply]
+      exact (hg.measurableSet_image' (hf.measurableSet_image' ih).compl).compl
+  apply subset_antisymm
+  · apply subset_iInter
+    intro n
+    cases n
+    · exact subset_univ _
+    rw [Function.iterate_succ']; rw [Function.comp_apply]
+    exact Fmono (iInter_subset _ _)
+  rintro x hx ⟨y, hy, rfl⟩
+  rw [mem_iInter] at hx
+  apply hy
+  rw [hf.injective.injOn.image_iInter_eq]
+  rw [mem_iInter]
+  intro n
+  specialize hx n.succ
+  rw [Function.iterate_succ']; rw [Function.comp_apply] at hx
+  by_contra h
+  apply hx
+  exact ⟨y, h, rfl⟩
 -/
 noncomputable def schroederBernstein {f : α -> β} {g : β -> α} (hf : MeasurableEmbedding f)
     (hg : MeasurableEmbedding g) : α ≃ᵐ β := by

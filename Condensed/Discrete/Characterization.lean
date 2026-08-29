@@ -75,7 +75,7 @@ lemma mem_locallyConstant_essImage_of_isColimit_mapCocone
     (Condensed.ProfiniteCompHaus.equivalence (Type (u + 1))).symm
   let i : (e.functor.obj X).obj ≅ (e.functor.obj (LocallyConstant.functor.obj _)).obj :=
     Condensed.isoLocallyConstantOfIsColimit _ h
-  exact ⟨_, ⟨e.functor.pr
+  exact ⟨_, ⟨e.functor.preimageIso ((sheafToPresheaf _ _).preimageIso i.symm)⟩⟩
 
 中文:
 引理 mem_locallyConstant_essImage_of_isColimit_mapCocone
@@ -85,7 +85,7 @@ lemma mem_locallyConstant_essImage_of_isColimit_mapCocone
     (Condensed.ProfiniteCompHaus.equivalence (Type (u + 1))).symm
   let i : (e.functor.obj X).obj ≅ (e.functor.obj (LocallyConstant.functor.obj _)).obj :=
     Condensed.isoLocallyConstantOfIsColimit _ h
-  exact ⟨_, ⟨e.functor.pr
+  exact ⟨_, ⟨e.functor.preimageIso ((sheafToPresheaf _ _).preimageIso i.symm)⟩⟩
 
 Depends on / 依赖: Condensed, Condensed.ProfiniteCompHaus.equivalence, Condensed.isoLocallyConstantOfIsColimit, CondensedSet, LocallyConstant, LocallyConstant.functor.obj, Profinite, ProfiniteCompHaus, coherentTopology, e.functor.obj, e.functor.preimageIso, equivalence, functor, i.symm, isoLocallyConstantOfIsColimit, preimageIso, sheafToPresheaf
 -/
@@ -133,7 +133,20 @@ theorem isDiscrete_tfae
   tfae_have 1 ↔ 4 := Sheaf.isConstant_iff_mem_essImage _ CompHaus.isTerminalPUnit adjunction _
   tfae_have 1 ↔ 5 :=
     have : functor.Faithful := inferInstance
-    have : functor.Fu
+    have : functor.Full := inferInstance
+    -- These `have` statements above shouldn't be needed, but they are.
+    Sheaf.isConstant_iff_isIso_counit_app' _ CompHaus.isTerminalPUnit adjunction _
+  tfae_have 1 ↔ 6 :=
+    (Sheaf.isConstant_iff_of_equivalence (coherentTopology Profinite)
+      (coherentTopology CompHaus) profiniteToCompHaus Profinite.isTerminalPUnit
+      CompHaus.isTerminalPUnit _).symm
+  tfae_have 7 -> 4 := fun h =>
+    mem_locallyConstant_essImage_of_isColimit_mapCocone X (fun S => (h S).some)
+  tfae_have 4 -> 7 := fun ⟨Y, ⟨i⟩⟩ S =>
+    ⟨IsColimit.mapCoconeEquiv (isoWhiskerLeft profiniteToCompHaus.op
+      ((sheafToPresheaf _ _).mapIso i))
+      (Condensed.isColimitLocallyConstantPresheafDiagram Y S)⟩
+  tfae_finish
 
 中文:
 定理 isDiscrete_tfae
@@ -144,7 +157,20 @@ theorem isDiscrete_tfae
   tfae_have 1 ↔ 4 := Sheaf.isConstant_iff_mem_essImage _ CompHaus.isTerminalPUnit adjunction _
   tfae_have 1 ↔ 5 :=
     have : functor.Faithful := inferInstance
-    have : functor.Fu
+    have : functor.Full := inferInstance
+    -- These `have` statements above shouldn't be needed, but they are.
+    Sheaf.isConstant_iff_isIso_counit_app' _ CompHaus.isTerminalPUnit adjunction _
+  tfae_have 1 ↔ 6 :=
+    (Sheaf.isConstant_iff_of_equivalence (coherentTopology Profinite)
+      (coherentTopology CompHaus) profiniteToCompHaus Profinite.isTerminalPUnit
+      CompHaus.isTerminalPUnit _).symm
+  tfae_have 7 -> 4 := fun h =>
+    mem_locallyConstant_essImage_of_isColimit_mapCocone X (fun S => (h S).some)
+  tfae_have 4 -> 7 := fun ⟨Y, ⟨i⟩⟩ S =>
+    ⟨IsColimit.mapCoconeEquiv (isoWhiskerLeft profiniteToCompHaus.op
+      ((sheafToPresheaf _ _).mapIso i))
+      (Condensed.isColimitLocallyConstantPresheafDiagram Y S)⟩
+  tfae_finish
 
 Depends on / 依赖: CompHaus, CompHaus.isTerminalPUnit, Faithful, Sheaf.isConstant_iff_isIso_counit_app, Sheaf.isConstant_iff_mem_essImage, adjunction, functor, functor.Faithful, functor.Full, isConstant_iff_isIso_counit_app, isConstant_iff_mem_essImage, isTerminalPUnit, tfae_have
 -/
@@ -239,7 +265,27 @@ theorem isDiscrete_tfae
   tfae_have 1 ↔ 4 := Sheaf.isConstant_iff_mem_essImage _ CompHaus.isTerminalPUnit (adjunction R) _
   tfae_have 1 ↔ 5 :=
     have : (functor R).Faithful := inferInstance
-    have : (f
+    have : (functor R).Full := inferInstance
+    -- These `have` statements above shouldn't be needed, but they are.
+    Sheaf.isConstant_iff_isIso_counit_app' _ CompHaus.isTerminalPUnit (adjunction R) _
+  tfae_have 1 ↔ 6 :=
+    (Sheaf.isConstant_iff_of_equivalence (coherentTopology Profinite)
+      (coherentTopology CompHaus) profiniteToCompHaus Profinite.isTerminalPUnit
+      CompHaus.isTerminalPUnit _).symm
+  tfae_have 7 -> 1 := by
+    intro h
+    rw [isDiscrete_iff_isDiscrete_forget]; rw [((CondensedSet.isDiscrete_tfae _).out 0 6 :)]
+    intro S
+    let : PreservesFilteredColimitsOfSize.{u, u} (forget (ModuleCat R)) :=
+      preservesFilteredColimitsOfSize_shrink.{u, u + 1, u, u + 1} _
+    exact ⟨isColimitOfPreserves (forget (ModuleCat R)) (h S).some⟩
+  tfae_have 1 -> 7 := by
+    intro h S
+    rw [isDiscrete_iff_isDiscrete_forget]; rw [((CondensedSet.isDiscrete_tfae _).out 0 6 :)] at h
+    let : ReflectsFilteredColimitsOfSize.{u, u} (forget (ModuleCat R)) :=
+      reflectsFilteredColimitsOfSize_shrink.{u, u + 1, u, u + 1} _
+    exact ⟨isColimitOfReflects (forget (ModuleCat R)) (h S).some⟩
+  tfae_finish
 
 中文:
 定理 isDiscrete_tfae
@@ -250,7 +296,27 @@ theorem isDiscrete_tfae
   tfae_have 1 ↔ 4 := Sheaf.isConstant_iff_mem_essImage _ CompHaus.isTerminalPUnit (adjunction R) _
   tfae_have 1 ↔ 5 :=
     have : (functor R).Faithful := inferInstance
-    have : (f
+    have : (functor R).Full := inferInstance
+    -- These `have` statements above shouldn't be needed, but they are.
+    Sheaf.isConstant_iff_isIso_counit_app' _ CompHaus.isTerminalPUnit (adjunction R) _
+  tfae_have 1 ↔ 6 :=
+    (Sheaf.isConstant_iff_of_equivalence (coherentTopology Profinite)
+      (coherentTopology CompHaus) profiniteToCompHaus Profinite.isTerminalPUnit
+      CompHaus.isTerminalPUnit _).symm
+  tfae_have 7 -> 1 := by
+    intro h
+    rw [isDiscrete_iff_isDiscrete_forget]; rw [((CondensedSet.isDiscrete_tfae _).out 0 6 :)]
+    intro S
+    let : PreservesFilteredColimitsOfSize.{u, u} (forget (ModuleCat R)) :=
+      preservesFilteredColimitsOfSize_shrink.{u, u + 1, u, u + 1} _
+    exact ⟨isColimitOfPreserves (forget (ModuleCat R)) (h S).some⟩
+  tfae_have 1 -> 7 := by
+    intro h S
+    rw [isDiscrete_iff_isDiscrete_forget]; rw [((CondensedSet.isDiscrete_tfae _).out 0 6 :)] at h
+    let : ReflectsFilteredColimitsOfSize.{u, u} (forget (ModuleCat R)) :=
+      reflectsFilteredColimitsOfSize_shrink.{u, u + 1, u, u + 1} _
+    exact ⟨isColimitOfReflects (forget (ModuleCat R)) (h S).some⟩
+  tfae_finish
 
 Depends on / 依赖: CompHaus, CompHaus.isTerminalPUnit, Faithful, Sheaf.isConstant_iff_isIso_counit_app, Sheaf.isConstant_iff_mem_essImage, adjunction, functor, isConstant_iff_isIso_counit_app, isConstant_iff_mem_essImage, isTerminalPUnit, tfae_have
 -/
@@ -379,7 +445,15 @@ theorem isDiscrete_tfae
   tfae_have 1 ↔ 4 := Sheaf.isConstant_iff_mem_essImage _ LightProfinite.isTerminalPUnit adjunction X
   tfae_have 1 ↔ 5 :=
     have : functor.Faithful := inferInstance
-    have : func
+    have : functor.Full := inferInstance
+    -- These `have` statements above shouldn't be needed, but they are.
+    Sheaf.isConstant_iff_isIso_counit_app' _ LightProfinite.isTerminalPUnit adjunction X
+  tfae_have 6 -> 4 := fun h =>
+    mem_locallyConstant_essImage_of_isColimit_mapCocone X (fun S => (h S).some)
+  tfae_have 4 -> 6 := fun ⟨Y, ⟨i⟩⟩ S =>
+    ⟨IsColimit.mapCoconeEquiv ((sheafToPresheaf _ _).mapIso i)
+      (LightCondensed.isColimitLocallyConstantPresheafDiagram Y S)⟩
+  tfae_finish
 
 中文:
 定理 isDiscrete_tfae
@@ -390,7 +464,15 @@ theorem isDiscrete_tfae
   tfae_have 1 ↔ 4 := Sheaf.isConstant_iff_mem_essImage _ LightProfinite.isTerminalPUnit adjunction X
   tfae_have 1 ↔ 5 :=
     have : functor.Faithful := inferInstance
-    have : func
+    have : functor.Full := inferInstance
+    -- These `have` statements above shouldn't be needed, but they are.
+    Sheaf.isConstant_iff_isIso_counit_app' _ LightProfinite.isTerminalPUnit adjunction X
+  tfae_have 6 -> 4 := fun h =>
+    mem_locallyConstant_essImage_of_isColimit_mapCocone X (fun S => (h S).some)
+  tfae_have 4 -> 6 := fun ⟨Y, ⟨i⟩⟩ S =>
+    ⟨IsColimit.mapCoconeEquiv ((sheafToPresheaf _ _).mapIso i)
+      (LightCondensed.isColimitLocallyConstantPresheafDiagram Y S)⟩
+  tfae_finish
 
 Depends on / 依赖: Faithful, LightProfinite, LightProfinite.isTerminalPUnit, Sheaf.isConstant_iff_isIso_counit_app, Sheaf.isConstant_iff_mem_essImage, adjunction, functor, functor.Faithful, functor.Full, isConstant_iff_isIso_counit_app, isConstant_iff_mem_essImage, isTerminalPUnit, tfae_have
 -/
@@ -461,7 +543,23 @@ theorem isDiscrete_tfae
     LightProfinite.isTerminalPUnit (adjunction R) _
   tfae_have 1 ↔ 5 :=
     have : (functor R).Faithful := inferInstance
-   
+    have : (functor R).Full := inferInstance
+    -- These `have` statements above shouldn't be needed, but they are.
+    Sheaf.isConstant_iff_isIso_counit_app' _ LightProfinite.isTerminalPUnit (adjunction R) _
+  tfae_have 6 -> 1 := by
+    intro h
+    rw [isDiscrete_iff_isDiscrete_forget]; rw [((LightCondSet.isDiscrete_tfae _).out 0 5 :)]
+    intro S
+    let : PreservesFilteredColimitsOfSize.{0, 0} (forget (ModuleCat R)) :=
+      preservesFilteredColimitsOfSize_shrink.{0, u, 0, u} _
+    exact ⟨isColimitOfPreserves (forget (ModuleCat R)) (h S).some⟩
+  tfae_have 1 -> 6 := by
+    intro h S
+    rw [isDiscrete_iff_isDiscrete_forget]; rw [((LightCondSet.isDiscrete_tfae _).out 0 5 :)] at h
+    let : ReflectsFilteredColimitsOfSize.{0, 0} (forget (ModuleCat R)) :=
+      reflectsFilteredColimitsOfSize_shrink.{0, u, 0, u} _
+    exact ⟨isColimitOfReflects (forget (ModuleCat R)) (h S).some⟩
+  tfae_finish
 
 中文:
 定理 isDiscrete_tfae
@@ -473,7 +571,23 @@ theorem isDiscrete_tfae
     LightProfinite.isTerminalPUnit (adjunction R) _
   tfae_have 1 ↔ 5 :=
     have : (functor R).Faithful := inferInstance
-   
+    have : (functor R).Full := inferInstance
+    -- These `have` statements above shouldn't be needed, but they are.
+    Sheaf.isConstant_iff_isIso_counit_app' _ LightProfinite.isTerminalPUnit (adjunction R) _
+  tfae_have 6 -> 1 := by
+    intro h
+    rw [isDiscrete_iff_isDiscrete_forget]; rw [((LightCondSet.isDiscrete_tfae _).out 0 5 :)]
+    intro S
+    let : PreservesFilteredColimitsOfSize.{0, 0} (forget (ModuleCat R)) :=
+      preservesFilteredColimitsOfSize_shrink.{0, u, 0, u} _
+    exact ⟨isColimitOfPreserves (forget (ModuleCat R)) (h S).some⟩
+  tfae_have 1 -> 6 := by
+    intro h S
+    rw [isDiscrete_iff_isDiscrete_forget]; rw [((LightCondSet.isDiscrete_tfae _).out 0 5 :)] at h
+    let : ReflectsFilteredColimitsOfSize.{0, 0} (forget (ModuleCat R)) :=
+      reflectsFilteredColimitsOfSize_shrink.{0, u, 0, u} _
+    exact ⟨isColimitOfReflects (forget (ModuleCat R)) (h S).some⟩
+  tfae_finish
 
 Depends on / 依赖: Faithful, LightProfinite, LightProfinite.isTerminalPUnit, Sheaf.isConstant_iff_isIso_counit_app, Sheaf.isConstant_iff_mem_essImage, adjunction, functor, isConstant_iff_isIso_counit_app, isConstant_iff_mem_essImage, isTerminalPUnit, tfae_have
 -/

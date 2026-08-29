@@ -202,7 +202,13 @@ lemma dist_convexCombPair_left
       dist (convexCombPair s t hs ht h x y) x <= t * dist x y by
     refine (H ..).antisymm ?_
     conv_lhs => rw [eq_sub_iff_add_eq'.mpr h, sub_mul, one_mul]
-    grw [sub_le_iff_le_add, dist_com
+    grw [sub_le_iff_le_add, dist_comm x y, ← H ht hs ((add_comm _ _).trans h) y x, dist_comm,
+      convexCombPair_symm, ← dist_triangle_left]
+  intro s t hs ht h x y
+  grw [convexCombPair, dist_sConvexComb_left_le]
+  simp [iConvexComb_eq_sum, Finsupp.sum_add_index, add_mul, dist_comm y x]
+
+@[simp]
 
 中文:
 引理 dist_convexCombPair_left
@@ -212,7 +218,13 @@ lemma dist_convexCombPair_left
       dist (convexCombPair s t hs ht h x y) x <= t * dist x y by
     refine (H ..).antisymm ?_
     conv_lhs => rw [eq_sub_iff_add_eq'.mpr h, sub_mul, one_mul]
-    grw [sub_le_iff_le_add, dist_com
+    grw [sub_le_iff_le_add, dist_comm x y, ← H ht hs ((add_comm _ _).trans h) y x, dist_comm,
+      convexCombPair_symm, ← dist_triangle_left]
+  intro s t hs ht h x y
+  grw [convexCombPair, dist_sConvexComb_left_le]
+  simp [iConvexComb_eq_sum, Finsupp.sum_add_index, add_mul, dist_comm y x]
+
+@[simp]
 
 Depends on / 依赖: Finsupp, Finsupp.sum_add_index, add_comm, antisymm, classical, conv_lhs, convexCombPair, convexCombPair_symm, dist_comm, dist_sConvexComb_left_le, dist_triangle_left, eq_sub_iff_add_eq, iConvexComb_eq_sum, one_mul, sub_le_iff_le_add, sub_mul, sum_add_index
 -/
@@ -312,7 +324,27 @@ lemma dist_convexCombPair_convexCombPair
   suffices dist (convexCombPair s t hs ht h x y) (convexCombPair s' t' hs' ht' h' x y) <=
       |s - s'| * dist x y by
     refine this.antisymm ?_
-    nth_grw 2 [← abs_dist_sub_le (z := x)
+    nth_grw 2 [← abs_dist_sub_le (z := x)]
+    have : |t - t'| = |s - s'| := by
+      rw [eq_sub_iff_add_eq.mpr h]; rw [eq_sub_iff_add_eq.mpr h']; simp [abs_sub_comm t t']
+    simp [← sub_mul, this]
+  let f : StdSimplex Real (Fin 3) :=
+  { weights := Finsupp.equivFunOnFinite.symm ![s', s - s', t]
+    nonneg i := by fin_cases i <;> simp [*]
+    total := by simp [Finsupp.sum_fintype, Fin.sum_univ_succ, ← add_assoc, h] }
+  convert dist_iConvexComb_le f ![x, x, y] ![x, y, y] using 1
+  swap; · simp [Finsupp.sum_fintype, Fin.sum_univ_succ, f, hss', iConvexComb_eq_sum]
+  congr 1
+  · delta convexCombPair
+    congr 1
+    ext a
+    simp [StdSimplex.duple, StdSimplex.map, Finsupp.mapDomain,
+      Finsupp.sum_fintype, Fin.sum_univ_succ, f, ← add_assoc]
+  · delta convexCombPair
+    congr 1
+    ext a
+    simp [StdSimplex.duple, StdSimplex.map, Finsupp.mapDomain,
+      Finsupp.sum_fintype, Fin.sum_univ_succ, f, show t' = s - s' + t by grind]
 
 中文:
 引理 dist_convexCombPair_convexCombPair
@@ -322,7 +354,27 @@ lemma dist_convexCombPair_convexCombPair
   suffices dist (convexCombPair s t hs ht h x y) (convexCombPair s' t' hs' ht' h' x y) <=
       |s - s'| * dist x y by
     refine this.antisymm ?_
-    nth_grw 2 [← abs_dist_sub_le (z := x)
+    nth_grw 2 [← abs_dist_sub_le (z := x)]
+    have : |t - t'| = |s - s'| := by
+      rw [eq_sub_iff_add_eq.mpr h]; rw [eq_sub_iff_add_eq.mpr h']; simp [abs_sub_comm t t']
+    simp [← sub_mul, this]
+  let f : StdSimplex Real (Fin 3) :=
+  { weights := Finsupp.equivFunOnFinite.symm ![s', s - s', t]
+    nonneg i := by fin_cases i <;> simp [*]
+    total := by simp [Finsupp.sum_fintype, Fin.sum_univ_succ, ← add_assoc, h] }
+  convert dist_iConvexComb_le f ![x, x, y] ![x, y, y] using 1
+  swap; · simp [Finsupp.sum_fintype, Fin.sum_univ_succ, f, hss', iConvexComb_eq_sum]
+  congr 1
+  · delta convexCombPair
+    congr 1
+    ext a
+    simp [StdSimplex.duple, StdSimplex.map, Finsupp.mapDomain,
+      Finsupp.sum_fintype, Fin.sum_univ_succ, f, ← add_assoc]
+  · delta convexCombPair
+    congr 1
+    ext a
+    simp [StdSimplex.duple, StdSimplex.map, Finsupp.mapDomain,
+      Finsupp.sum_fintype, Fin.sum_univ_succ, f, show t' = s - s' + t by grind]
 
 Depends on / 依赖: Finsupp, Finsupp.equivFunOnFinite.sym, StdSimplex, abs_dist_sub_le, abs_sub_comm, antisymm, convexCombPair, dist_comm, eq_sub_iff_add_eq, eq_sub_iff_add_eq.mpr, equivFunOnFinite, generalizing, le_of_not_ge, nth_grw, sub_mul, this.antisymm, weights
 -/
@@ -399,7 +451,18 @@ lemma continuous_convexCombPair
     simp only [← coe_nnreal_ennreal_nndist, ENNReal.coe_one, one_mul, ENNReal.coe_le_coe,
       NNReal.toReal_le, coe_nndist]
     grw [dist_convexCombPair_convexCombPair_le, Prod.dist_eq]
-    nth_grw 1 [le_max_left (dis
+    nth_grw 1 [le_max_left (dist x.1 y.1) (dist x.2 y.2)]
+    swap; · simpa using i.prop.left
+    nth_grw 2 [le_max_right (dist x.1 y.1) (dist x.2 y.2)]
+    swap; · simpa using i.prop.right
+    rw [← add_mul]; rw [add_sub_cancel]; rw [one_mul]
+  · intro b
+    refine LipschitzWith.continuous (K := nndist b.1 b.2) fun x y => ?_
+    rw [mul_comm]
+    simp [← coe_nnreal_ennreal_nndist, ← ENNReal.coe_mul, NNReal.toReal_le,
+      dist_convexCombPair_convexCombPair, Subtype.dist_eq, dist_eq_norm]
+
+@[deprecated (since := "2026-05-15")] alias continuous_convexComboPair := continuous_convexCombPair
 
 中文:
 引理 continuous_convexCombPair
@@ -409,7 +472,18 @@ lemma continuous_convexCombPair
     simp only [← coe_nnreal_ennreal_nndist, ENNReal.coe_one, one_mul, ENNReal.coe_le_coe,
       NNReal.toReal_le, coe_nndist]
     grw [dist_convexCombPair_convexCombPair_le, Prod.dist_eq]
-    nth_grw 1 [le_max_left (dis
+    nth_grw 1 [le_max_left (dist x.1 y.1) (dist x.2 y.2)]
+    swap; · simpa using i.prop.left
+    nth_grw 2 [le_max_right (dist x.1 y.1) (dist x.2 y.2)]
+    swap; · simpa using i.prop.right
+    rw [← add_mul]; rw [add_sub_cancel]; rw [one_mul]
+  · intro b
+    refine LipschitzWith.continuous (K := nndist b.1 b.2) fun x y => ?_
+    rw [mul_comm]
+    simp [← coe_nnreal_ennreal_nndist, ← ENNReal.coe_mul, NNReal.toReal_le,
+      dist_convexCombPair_convexCombPair, Subtype.dist_eq, dist_eq_norm]
+
+@[deprecated (since := "2026-05-15")] alias continuous_convexComboPair := continuous_convexCombPair
 -/
 lemma continuous_convexCombPair :
     Continuous fun x : Set.Icc (0 : Real) 1 × (X × X) => convexCombPair (R := Real)
@@ -444,7 +518,41 @@ lemma continuous_convexCombPair_of_isBounded
   replace hD := fun t₁ t₂ => hD (.inl (Set.mem_range_self t₁)) (.inr (Set.mem_range_self t₂))
   rw [continuous_iff_continuousAt]
   intro t
-  by_cases ht : f t in Set.Ioo 0
+  by_cases ht : f t in Set.Ioo 0 1
+  · exact ((isOpen_Ioo.preimage hf).isOpenEmbedding_subtypeVal.continuousAt_iff
+      (x := ⟨t, ht⟩)).mp ((continuous_convexCombPair (X := X)).comp₃ (W := f ⁻¹' Set.Ioo 0 1)
+      (e := fun i => ⟨f i, Set.Ioo_subset_Icc_self i.prop⟩) (f := x ∘ (↑)) (k := y ∘ (↑))
+      (by fun_prop) (hx.comp_continuous continuous_subtype_val (by simp_all; grind))
+      (hy.comp_continuous continuous_subtype_val (by simp_all; grind))).continuousAt
+  obtain ht | ht : f t = 0 ∨ f t = 1 := by
+    simpa [le_antisymm_iff, hf0, hf1, -not_and, not_and_or] using ht
+  · simp only [ContinuousAt, ht, sub_zero, convexCombPair_zero]
+    rw [Metric.nhds_basis_ball.tendsto_right_iff]
+    intro r hr
+    filter_upwards [hy.continuousAt ((hf.isOpen_preimage _ isClosed_singleton.isOpen_compl).mem_nhds
+      (x := t) (by simp [*])) (Metric.ball_mem_nhds _ (show 0 < r / 3 by simpa)),
+      hf.tendsto' _ _ ht (Metric.ball_mem_nhds _ (show 0 < r / D / 3 by simp [*]))] with j hj hj'
+    simp only [Set.mem_preimage, Metric.mem_ball, dist_zero_right, Real.norm_eq_abs] at hj hj' ⊢
+    grw [dist_triangle _ (convexCombPair (f j) (1 - f j) (hf0 _) (by simpa using hf1 _)
+      (add_sub_cancel ..) (x j) (y t)), dist_convexCombPair_convexCombPair_le]
+    simp only [dist_self, mul_zero, zero_add, dist_convexCombPair_right]
+    grw [sub_le_self _ (hf0 _), hj, hD, (le_abs_self _).trans hj'.le]
+    · field_simp; norm_num
+    · exact hf0 _
+  · simp only [ContinuousAt, ht, sub_self, convexCombPair_one]
+    rw [Metric.nhds_basis_ball.tendsto_right_iff]
+    intro r hr
+    filter_upwards [hx.continuousAt ((hf.isOpen_preimage _ isClosed_singleton.isOpen_compl).mem_nhds
+      (x := t) (by simp [*])) (Metric.ball_mem_nhds _ (show 0 < r / 3 by simpa)),
+      hf.tendsto' _ _ ht (Metric.ball_mem_nhds _ (show 0 < r / D / 3 by simp [*]))] with j hj hj'
+    simp only [Set.mem_preimage, Metric.mem_ball, Real.dist_eq] at hj hj' ⊢
+    grw [dist_triangle _ (convexCombPair (f j) (1 - f j) (hf0 _) (by simpa using hf1 _)
+      (add_sub_cancel ..) (x t) (y j)), dist_convexCombPair_convexCombPair_le]
+    simp only [dist_self, mul_zero, add_zero, dist_convexCombPair_left]
+    grw [abs_sub_comm, ← le_abs_self] at hj'
+    grw [hj.le, hj'.le, hf1, hD]
+    · field_simp; norm_num
+    · exact hf0 _
 
 中文:
 引理 continuous_convexCombPair_of_isBounded
@@ -454,7 +562,41 @@ lemma continuous_convexCombPair_of_isBounded
   replace hD := fun t₁ t₂ => hD (.inl (Set.mem_range_self t₁)) (.inr (Set.mem_range_self t₂))
   rw [continuous_iff_continuousAt]
   intro t
-  by_cases ht : f t in Set.Ioo 0
+  by_cases ht : f t in Set.Ioo 0 1
+  · exact ((isOpen_Ioo.preimage hf).isOpenEmbedding_subtypeVal.continuousAt_iff
+      (x := ⟨t, ht⟩)).mp ((continuous_convexCombPair (X := X)).comp₃ (W := f ⁻¹' Set.Ioo 0 1)
+      (e := fun i => ⟨f i, Set.Ioo_subset_Icc_self i.prop⟩) (f := x ∘ (↑)) (k := y ∘ (↑))
+      (by fun_prop) (hx.comp_continuous continuous_subtype_val (by simp_all; grind))
+      (hy.comp_continuous continuous_subtype_val (by simp_all; grind))).continuousAt
+  obtain ht | ht : f t = 0 ∨ f t = 1 := by
+    simpa [le_antisymm_iff, hf0, hf1, -not_and, not_and_or] using ht
+  · simp only [ContinuousAt, ht, sub_zero, convexCombPair_zero]
+    rw [Metric.nhds_basis_ball.tendsto_right_iff]
+    intro r hr
+    filter_upwards [hy.continuousAt ((hf.isOpen_preimage _ isClosed_singleton.isOpen_compl).mem_nhds
+      (x := t) (by simp [*])) (Metric.ball_mem_nhds _ (show 0 < r / 3 by simpa)),
+      hf.tendsto' _ _ ht (Metric.ball_mem_nhds _ (show 0 < r / D / 3 by simp [*]))] with j hj hj'
+    simp only [Set.mem_preimage, Metric.mem_ball, dist_zero_right, Real.norm_eq_abs] at hj hj' ⊢
+    grw [dist_triangle _ (convexCombPair (f j) (1 - f j) (hf0 _) (by simpa using hf1 _)
+      (add_sub_cancel ..) (x j) (y t)), dist_convexCombPair_convexCombPair_le]
+    simp only [dist_self, mul_zero, zero_add, dist_convexCombPair_right]
+    grw [sub_le_self _ (hf0 _), hj, hD, (le_abs_self _).trans hj'.le]
+    · field_simp; norm_num
+    · exact hf0 _
+  · simp only [ContinuousAt, ht, sub_self, convexCombPair_one]
+    rw [Metric.nhds_basis_ball.tendsto_right_iff]
+    intro r hr
+    filter_upwards [hx.continuousAt ((hf.isOpen_preimage _ isClosed_singleton.isOpen_compl).mem_nhds
+      (x := t) (by simp [*])) (Metric.ball_mem_nhds _ (show 0 < r / 3 by simpa)),
+      hf.tendsto' _ _ ht (Metric.ball_mem_nhds _ (show 0 < r / D / 3 by simp [*]))] with j hj hj'
+    simp only [Set.mem_preimage, Metric.mem_ball, Real.dist_eq] at hj hj' ⊢
+    grw [dist_triangle _ (convexCombPair (f j) (1 - f j) (hf0 _) (by simpa using hf1 _)
+      (add_sub_cancel ..) (x t) (y j)), dist_convexCombPair_convexCombPair_le]
+    simp only [dist_self, mul_zero, add_zero, dist_convexCombPair_left]
+    grw [abs_sub_comm, ← le_abs_self] at hj'
+    grw [hj.le, hj'.le, hf1, hD]
+    · field_simp; norm_num
+    · exact hf0 _
 
 Depends on / 依赖: Filter, Filter.eventually_gt_atTop, Ioo_subset_Icc_self, Metric, Metric.isBounded_iff_eventually.mp, Set.Ioo, Set.Ioo_subset_Icc_self, Set.mem_range_self, continuousAt_iff, continuous_convexCombPair, continuous_iff_continuousAt, eventually_gt_atTop, isBounded_iff_eventually, isOpenEmbedding_subtypeVal, isOpenEmbedding_subtypeVal.continuousAt_iff, isOpen_Ioo, isOpen_Ioo.preimage, mem_range_self, preimage, replace
 -/

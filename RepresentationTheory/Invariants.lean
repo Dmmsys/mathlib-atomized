@@ -67,7 +67,7 @@ theorem mul_average_left
     MonoidAlgebra.single_mul_single]
   set f : G -> k[G] := fun x => .single x 1
   change ⅟(Fintype.card G : k) • ∑ x : G, f (g * x) = ⅟(Fintype.card G : k) • ∑ x : G, f x
-  rw [Function.Bijective.sum_co
+  rw [Function.Bijective.sum_comp (Group.mulLeft_bijective g) _]
 
 中文:
 定理 mul_average_left
@@ -78,7 +78,7 @@ theorem mul_average_left
     MonoidAlgebra.single_mul_single]
   set f : G -> k[G] := fun x => .single x 1
   change ⅟(Fintype.card G : k) • ∑ x : G, f (g * x) = ⅟(Fintype.card G : k) • ∑ x : G, f x
-  rw [Function.Bijective.sum_co
+  rw [Function.Bijective.sum_comp (Group.mulLeft_bijective g) _]
 
 Depends on / 依赖: Algebra, Algebra.mul_smul_comm, Bijective, Finset, Finset.mul_sum, Fintype, Fintype.card, Function, Function.Bijective.sum_comp, Group.mulLeft_bijective, MonoidAlgebra, MonoidAlgebra.of_apply, MonoidAlgebra.single_mul_single, average, mulLeft_bijective, mul_one, mul_smul_comm, mul_sum, of_apply, single
 -/
@@ -105,7 +105,7 @@ theorem mul_average_right
     MonoidAlgebra.single_mul_single]
   set f : G -> k[G] := fun x => .single x 1
   change ⅟(Fintype.card G : k) • ∑ x : G, f (x * g) = ⅟(Fintype.card G : k) • ∑ x : G, f x
-  rw [Function.Bijective.sum_c
+  rw [Function.Bijective.sum_comp (Group.mulRight_bijective g) _]
 
 中文:
 定理 mul_average_right
@@ -116,7 +116,7 @@ theorem mul_average_right
     MonoidAlgebra.single_mul_single]
   set f : G -> k[G] := fun x => .single x 1
   change ⅟(Fintype.card G : k) • ∑ x : G, f (x * g) = ⅟(Fintype.card G : k) • ∑ x : G, f x
-  rw [Function.Bijective.sum_c
+  rw [Function.Bijective.sum_comp (Group.mulRight_bijective g) _]
 
 Depends on / 依赖: Algebra, Algebra.smul_mul_assoc, Bijective, Finset, Finset.sum_mul, Fintype, Fintype.card, Function, Function.Bijective.sum_comp, Group.mulRight_bijective, MonoidAlgebra, MonoidAlgebra.of_apply, MonoidAlgebra.single_mul_single, average, mulRight_bijective, mul_one, of_apply, single, single_mul_single, smul_mul_assoc
 -/
@@ -301,7 +301,8 @@ definition invariantsEquivIntertwiningMap
   map_smul' _ _ := IntertwiningMap.ext_iff.mpr rfl
   invFun g :=
     { val := g.toLinearMap
-      property := (mem_linH
+      property := (mem_linHom_invariants_iff_isIntertwining g.toLinearMap).mpr
+        { isIntertwining := g.isIntertwining } }
 
 中文:
 定义 invariantsEquiv整数ertwiningMap
@@ -312,7 +313,8 @@ definition invariantsEquivIntertwiningMap
   map_smul' _ _ := IntertwiningMap.ext_iff.mpr rfl
   invFun g :=
     { val := g.toLinearMap
-      property := (mem_linH
+      property := (mem_linHom_invariants_iff_isIntertwining g.toLinearMap).mpr
+        { isIntertwining := g.isIntertwining } }
 
 Depends on / 依赖: f.val.intertwiningMap_of_isIntertwiningMap, intertwiningMap_of_isIntertwiningMap
 -/
@@ -544,7 +546,7 @@ theorem mem_invariants_iff_comm
     nth_rw 1 [← h]
     rw [LinearMap.comp_assoc]; rw [LinearMap.comp_assoc]; rw [← Rep.ρ_mul]; rw [inv_mul_cancel]; rw [map_one]; rw [Module.End.one_eq_id]; rw [LinearMap.comp_id]
   · intro h
-    rw [← LinearMap.comp_assoc]; rw [← h]; rw [LinearMap.comp_assoc]; r
+    rw [← LinearMap.comp_assoc]; rw [← h]; rw [LinearMap.comp_assoc]; rw [← Rep.ρ_mul]; rw [mul_inv_cancel]; rw [map_one]; rw [Module.End.one_eq_id]; rw [LinearMap.comp_id]
 
 中文:
 定理 mem_invariants_iff_comm
@@ -556,7 +558,7 @@ theorem mem_invariants_iff_comm
     nth_rw 1 [← h]
     rw [LinearMap.comp_assoc]; rw [LinearMap.comp_assoc]; rw [← Rep.ρ_mul]; rw [inv_mul_cancel]; rw [map_one]; rw [Module.End.one_eq_id]; rw [LinearMap.comp_id]
   · intro h
-    rw [← LinearMap.comp_assoc]; rw [← h]; rw [LinearMap.comp_assoc]; r
+    rw [← LinearMap.comp_assoc]; rw [← h]; rw [LinearMap.comp_assoc]; rw [← Rep.ρ_mul]; rw [mul_inv_cancel]; rw [map_one]; rw [Module.End.one_eq_id]; rw [LinearMap.comp_id]
 
 Depends on / 依赖: LinearMap, LinearMap.comp_assoc, LinearMap.comp_id, Module, Module.End.one_eq_id, comp_assoc, comp_id, inv_mul_cancel, map_one, mul_inv_cancel, nth_rw, one_eq_id
 -/

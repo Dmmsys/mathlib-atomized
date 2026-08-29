@@ -41,7 +41,14 @@ lemma exists_finite_sum_smul_approximation_of_mem_uniformity
   have hS' : {(f, g) | forall y, (f y, g y) in S} in 𝓤 C(Y, V) :=
     (mem_compactConvergence_entourage_iff _).mpr
       ⟨_, _, isCompact_univ, hS, by simp only [Set.mem_univ, true_implies, subset_refl]⟩
-  obtain ⟨n, U, v, hv⟩ := exists_finite_sum_const_indicator_approximation_of_mem_nhds_diagona
+  obtain ⟨n, U, v, hv⟩ := exists_finite_sum_const_indicator_approximation_of_mem_nhds_diagonal
+    f.curry (nhdsSet_diagonal_le_uniformity hS')
+refine ⟨n, fun i => ⟨_, (U i).isClopen.continuous_indicator continuous_const (y := 1)⟩,
+    v, fun x y => ?_⟩
+  convert! hv x y using 2
+  simp only [sum_apply]
+  congr 1 with i
+  by_cases hi : x in U i <;> simp [hi]
 
 中文:
 引理 存在_finite_sum_smul_approximation_of_mem_uniformity
@@ -50,7 +57,14 @@ lemma exists_finite_sum_smul_approximation_of_mem_uniformity
   have hS' : {(f, g) | forall y, (f y, g y) in S} in 𝓤 C(Y, V) :=
     (mem_compactConvergence_entourage_iff _).mpr
       ⟨_, _, isCompact_univ, hS, by simp only [Set.mem_univ, true_implies, subset_refl]⟩
-  obtain ⟨n, U, v, hv⟩ := exists_finite_sum_const_indicator_approximation_of_mem_nhds_diagona
+  obtain ⟨n, U, v, hv⟩ := exists_finite_sum_const_indicator_approximation_of_mem_nhds_diagonal
+    f.curry (nhdsSet_diagonal_le_uniformity hS')
+refine ⟨n, fun i => ⟨_, (U i).isClopen.continuous_indicator continuous_const (y := 1)⟩,
+    v, fun x y => ?_⟩
+  convert! hv x y using 2
+  simp only [sum_apply]
+  congr 1 with i
+  by_cases hi : x in U i <;> simp [hi]
 
 Depends on / 依赖: Set.mem_univ, continuous_const, continuous_indicator, convert, exists_finite_sum_const_indicator_approximation_of_mem_nhds_diagonal, f.curry, isClopen, isClopen.continuous_indicator, isCompact_univ, mem_compactConvergence_entourage_iff, mem_univ, nhdsSet_diagonal_le_uniformity, subset_refl, sum_apply, true_implies
 -/
@@ -219,7 +233,11 @@ lemma denseRange_tensorHom
   simp_rw [mem_closure_iff, Set.nonempty_def]
   intro U hUo hUf
   have := mem_nhds_uniformity_iff_right.mp (hUo.mem_nhds hUf)
-  obtain ⟨J, hJu, hJ'⟩ := (h
+  obtain ⟨J, hJu, hJ'⟩ := (hasBasis_compactConvergenceUniformity_of_compact).mem_iff.mp this
+  obtain ⟨n, g, h, hgh⟩ := exists_finite_sum_mul_approximation_of_mem_uniformity f hJu
+  have hG := Set.mem_of_subset_of_mem hJ' (a := (f, tensorHom <| ∑ i, g i otimesₜ h i))
+  simp only [Prod.forall, Set.mem_ofPred_eq, forall_const] at hG
+simpa using ⟨_, hG by simpa [tensorHom] using hgh⟩
 
 中文:
 引理 denseRange_tensorHom
@@ -231,7 +249,11 @@ lemma denseRange_tensorHom
   simp_rw [mem_closure_iff, Set.nonempty_def]
   intro U hUo hUf
   have := mem_nhds_uniformity_iff_right.mp (hUo.mem_nhds hUf)
-  obtain ⟨J, hJu, hJ'⟩ := (h
+  obtain ⟨J, hJu, hJ'⟩ := (hasBasis_compactConvergenceUniformity_of_compact).mem_iff.mp this
+  obtain ⟨n, g, h, hgh⟩ := exists_finite_sum_mul_approximation_of_mem_uniformity f hJu
+  have hG := Set.mem_of_subset_of_mem hJ' (a := (f, tensorHom <| ∑ i, g i otimesₜ h i))
+  simp only [Prod.forall, Set.mem_ofPred_eq, forall_const] at hG
+simpa using ⟨_, hG by simpa [tensorHom] using hgh⟩
 
 Depends on / 依赖: IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsUniformAddGroup, Set.mem_of_subset_of_mem, Set.nonempty_def, UniformSpace, exists_finite_sum_mul_approximation_of_mem_uniformity, hUo.mem_nhds, hasBasis_compactConvergenceUniformity_of_compact, isUniformAddGroup_of_addCommGroup, mem_closure_iff, mem_iff, mem_iff.mp, mem_nhds, mem_nhds_uniformity_iff_right, mem_nhds_uniformity_iff_right.mp, mem_of_subset_of_mem, nonempty_def, rightUniformSpace, simp_rw
 -/

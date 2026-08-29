@@ -44,7 +44,13 @@ definition commaMapEquivalenceFunctor
     homMk Y.right.hom
       (by simpa only [Functor.const_obj_obj, map₂_obj_left, mk_left, map₂_obj_right, mk_right,
         map₂_obj_hom, mk_hom_eq_self, Category.id_comp, Category.assoc, NatIso.isIso_inv_app,
-        Functor.comp_obj, Comma.map_obj_right, Comma.map_
+        Functor.comp_obj, Comma.map_obj_right, Comma.map_obj_left, Comma.map_obj_hom,
+        IsIso.hom_inv_id, Category.comp_id] using
+        congrFun (congrArg CategoryStruct.comp Y.hom.w) (inv (β.app Y.right.right) :))⟩
+  map {Y Z} f := ⟨homMk f.right.left (congrArg CommaMorphism.left (StructuredArrow.w f)),
+    homMk f.right.right (congrArg CommaMorphism.right (StructuredArrow.w f)),
+    by simp only [map₂_obj_right, mk_right, hom_eq_iff, comp_right,
+      map₂_map_right, homMk_right, CommaMorphism.w] ⟩
 
 中文:
 定义 commaMapEquivalenceFunctor
@@ -53,7 +59,13 @@ definition commaMapEquivalenceFunctor
     homMk Y.right.hom
       (by simpa only [Functor.const_obj_obj, map₂_obj_left, mk_left, map₂_obj_right, mk_right,
         map₂_obj_hom, mk_hom_eq_self, Category.id_comp, Category.assoc, NatIso.isIso_inv_app,
-        Functor.comp_obj, Comma.map_obj_right, Comma.map_
+        Functor.comp_obj, Comma.map_obj_right, Comma.map_obj_left, Comma.map_obj_hom,
+        IsIso.hom_inv_id, Category.comp_id] using
+        congrFun (congrArg CategoryStruct.comp Y.hom.w) (inv (β.app Y.right.right) :))⟩
+  map {Y Z} f := ⟨homMk f.right.left (congrArg CommaMorphism.left (StructuredArrow.w f)),
+    homMk f.right.right (congrArg CommaMorphism.right (StructuredArrow.w f)),
+    by simp only [map₂_obj_right, mk_right, hom_eq_iff, comp_right,
+      map₂_map_right, homMk_right, CommaMorphism.w] ⟩
 
 Depends on / 依赖: CreatesLimitsOfShape, Discrete, Ind.equivalence, ObjectProperty, Y.hom.left, Y.hom.right, equivalence, functor
 -/
@@ -86,7 +98,7 @@ definition commaMapEquivalenceInverse
       simpa using congrFun (congrArg CategoryStruct.comp (StructuredArrow.w Y.hom))
         (β.app Y.right.right)⟩
   map {Y Z} f := homMk ⟨by exact f.left.right, by exact f.right.right,
-    congrA
+    congrArg CommaMorphism.right f.w⟩
 
 中文:
 定义 commaMapEquivalenceInverse
@@ -96,7 +108,7 @@ definition commaMapEquivalenceInverse
       simpa using congrFun (congrArg CategoryStruct.comp (StructuredArrow.w Y.hom))
         (β.app Y.right.right)⟩
   map {Y Z} f := homMk ⟨by exact f.left.right, by exact f.right.right,
-    congrA
+    congrArg CommaMorphism.right f.w⟩
 
 Depends on / 依赖: Ind.inclusion, Y.hom.right, Y.left.right, Y.right.right, hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape, inclusion
 -/

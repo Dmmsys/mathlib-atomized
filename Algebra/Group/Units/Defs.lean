@@ -806,7 +806,8 @@ mul_assoc := fun _ _ _ => ext mul_assoc _ _ _,
         inv := a⁻¹ ^ n
         val_inv := by rw [← a.commute_coe_inv.mul_pow]; simp
         inv_val := by rw [← a.commute_inv_coe.mul_pow]; simp }
-    npow_zero := fun a
+    npow_zero := fun a => by simp only [HPow.hPow, Pow.pow]; ext; simp
+    npow_succ := fun n a => by simp only [HPow.hPow, Pow.pow]; ext; simp [pow_succ] }
 
 中文:
 实例 instMonoid
@@ -818,7 +819,8 @@ mul_assoc := fun _ _ _ => ext mul_assoc _ _ _,
         inv := a⁻¹ ^ n
         val_inv := by rw [← a.commute_coe_inv.mul_pow]; simp
         inv_val := by rw [← a.commute_inv_coe.mul_pow]; simp }
-    npow_zero := fun a
+    npow_zero := fun a => by simp only [HPow.hPow, Pow.pow]; ext; simp
+    npow_succ := fun n a => by simp only [HPow.hPow, Pow.pow]; ext; simp [pow_succ] }
 
 Depends on / 依赖: HPow.hPow, MulOneClass, Pow.pow, a.commute_coe_inv.mul_pow, a.commute_inv_coe.mul_pow, commute_coe_inv, commute_inv_coe, inv_val, mul_assoc, mul_pow, npow_succ, npow_zero, pow_succ, val_inv
 -/

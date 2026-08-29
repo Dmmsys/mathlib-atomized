@@ -374,7 +374,14 @@ definition whiskerRight
     ext x
     dsimp
     simp only [CatCommSq.vComp_iso_hom_app, Category.assoc]
-    rw [← Functor.map_comp_assoc]; rw [← left_coherence_app]; rw [Fun
+    rw [← Functor.map_comp_assoc]; rw [← left_coherence_app]; rw [Functor.map_comp_assoc]
+    simp
+  right_coherence := by
+    ext x
+    dsimp
+    simp only [CatCommSq.vComp_iso_hom_app, Category.assoc]
+    rw [← Functor.map_comp_assoc]; rw [← right_coherence_app]; rw [Functor.map_comp_assoc]
+    simp
 
 中文:
 定义 whiskerRight
@@ -386,7 +393,14 @@ definition whiskerRight
     ext x
     dsimp
     simp only [CatCommSq.vComp_iso_hom_app, Category.assoc]
-    rw [← Functor.map_comp_assoc]; rw [← left_coherence_app]; rw [Fun
+    rw [← Functor.map_comp_assoc]; rw [← left_coherence_app]; rw [Functor.map_comp_assoc]
+    simp
+  right_coherence := by
+    ext x
+    dsimp
+    simp only [CatCommSq.vComp_iso_hom_app, Category.assoc]
+    rw [← Functor.map_comp_assoc]; rw [← right_coherence_app]; rw [Functor.map_comp_assoc]
+    simp
 
 Depends on / 依赖: Functor, Functor.whiskerRight, whiskerRight
 -/
@@ -432,6 +446,10 @@ definition mkIso
         simpa using ψ'.squareLeft.iso.hom ≫=
           IsIso.inv_eq_inv.mpr left_coherence =≫
           ψ.squareLeft.iso.hom
+      right_coherence := by
+        simpa using ψ'.squareRight.iso.hom ≫=
+          IsIso.inv_eq_inv.mpr right_coherence =≫
+          ψ.squareRight.iso.hom }
 
 中文:
 定义 mkIso
@@ -447,6 +465,10 @@ definition mkIso
         simpa using ψ'.squareLeft.iso.hom ≫=
           IsIso.inv_eq_inv.mpr left_coherence =≫
           ψ.squareLeft.iso.hom
+      right_coherence := by
+        simpa using ψ'.squareRight.iso.hom ≫=
+          IsIso.inv_eq_inv.mpr right_coherence =≫
+          ψ.squareRight.iso.hom }
 
 Depends on / 依赖: Functor, Functor.whiskerLeft, Functor.whiskerRight, IsIso.inv_eq_in, IsIso.inv_eq_inv.mpr, base.hom, base.inv, cat_disch, inv_eq_in, inv_eq_inv, left.hom, left.inv, left_coherence, right.hom, right.inv, right_coherence, squareLeft, squareLeft.iso.hom, squareRight, squareRight.iso.hom
 -/

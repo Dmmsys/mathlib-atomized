@@ -617,6 +617,10 @@ lemma eq_of_circleMap_eq
     I_ne_zero, or_false] at hn
   norm_cast at hn
   simp only [hn, Int.cast_mul, Int.cast_ofNat, mul_assoc, add_sub_cancel_left, abs_mul,
+    Nat.abs_ofNat, abs_of_pos Real.pi_pos] at h_dist
+  simp (disch := positivity) at h_dist
+  norm_cast at h_dist
+  simp [hn, Int.abs_lt_one_iff.mp h_dist]
 
 中文:
 引理 eq_of_circleMap_eq
@@ -628,6 +632,10 @@ lemma eq_of_circleMap_eq
     I_ne_zero, or_false] at hn
   norm_cast at hn
   simp only [hn, Int.cast_mul, Int.cast_ofNat, mul_assoc, add_sub_cancel_left, abs_mul,
+    Nat.abs_ofNat, abs_of_pos Real.pi_pos] at h_dist
+  simp (disch := positivity) at h_dist
+  norm_cast at h_dist
+  simp [hn, Int.abs_lt_one_iff.mp h_dist]
 
 Depends on / 依赖: I_ne_zero, Int.abs_lt_one_iff.mp, Int.cast_mul, Int.cast_ofNat, Nat.abs_ofNat, Real.pi_pos, abs_lt_one_iff, abs_mul, abs_ofNat, abs_of_pos, add_mul, add_sub_cancel_left, cast_mul, cast_ofNat, circleMap_eq_circleMap_iff, h_dist, mul_assoc, mul_eq_mul_right_iff, or_false, pi_pos
 -/

@@ -215,7 +215,7 @@ lemma δ₀Iter_δ'
   | succ j hj =>
     rw [δ₀Iter_succ'_assoc ..]; rw [δ₀Iter_succ' ..]; rw [← reassoc_of% dsimp% δ_comp_δ (i := 0) (j := i) (by simp)]; rw [← hj _ i' _ (by grind)]
 
-@[reassoc
+@[reassoc]
 
 中文:
 引理 δ₀Iter_δ'
@@ -229,7 +229,7 @@ lemma δ₀Iter_δ'
   | succ j hj =>
     rw [δ₀Iter_succ'_assoc ..]; rw [δ₀Iter_succ' ..]; rw [← reassoc_of% dsimp% δ_comp_δ (i := 0) (j := i) (by simp)]; rw [← hj _ i' _ (by grind)]
 
-@[reassoc
+@[reassoc]
 
 Depends on / 依赖: _assoc, generalizing, i.val, reassoc_of
 -/
@@ -300,7 +300,7 @@ lemma δ₀Iter_σ'
     · grind
     · obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero
         (by rintro rfl; dsimp at hj'; lia)
-      rw [δ₀Iter_succ_assoc ..]; 
+      rw [δ₀Iter_succ_assoc ..]; rw [δ₀Iter_succ ..]; rw [dsimp% δ_comp_σ_of_le (i := 0) (j := j) (by simp)]; rw [reassoc_of% hi j j' (by lia) (by grind)]
 
 中文:
 引理 δ₀Iter_σ'
@@ -316,7 +316,7 @@ lemma δ₀Iter_σ'
     · grind
     · obtain ⟨j, rfl⟩ := j.eq_succ_of_ne_zero
         (by rintro rfl; dsimp at hj'; lia)
-      rw [δ₀Iter_succ_assoc ..]; 
+      rw [δ₀Iter_succ_assoc ..]; rw [δ₀Iter_succ ..]; rw [dsimp% δ_comp_σ_of_le (i := 0) (j := j) (by simp)]; rw [reassoc_of% hi j j' (by lia) (by grind)]
 
 Depends on / 依赖: eq_succ_of_ne_zero, generalizing, j.eq_succ_of_ne_zero, j.val, reassoc_of
 -/
@@ -536,7 +536,15 @@ lemma σ₀Iter_succ
   by_cases! hk : k.val <= i
   · rw [σ₀Iter_coe_eq_of_lt .., coe_σ]
     obtain hk | rfl := hk.lt_or_eq
-    · grind [Fin.predAbove_of_le_castSucc, Fin.coe_castPred, σ₀Iter_coe_eq_of_
+    · grind [Fin.predAbove_of_le_castSucc, Fin.coe_castPred, σ₀Iter_coe_eq_of_lt]
+    · grind [Fin.predAbove_of_le_castSucc, Fin.coe_castPred, σ₀Iter_coe_eq_of_ge, tsub_self]
+  · rw [σ₀Iter_coe_eq_of_ge .., coe_σ,
+      Fin.predAbove_of_castSucc_lt _ _ ?_, Fin.val_pred,
+      σ₀Iter_coe_eq_of_ge .., Nat.sub_add_eq]
+    rw [Fin.lt_def]; rw [Fin.castSucc_zero]; rw [σ₀Iter_coe_eq_of_ge ..]; rw [Fin.coe_ofNat_eq_mod]; rw [Nat.zero_mod]
+    lia
+
+@[reassoc]
 
 中文:
 引理 σ₀Iter_succ
@@ -548,7 +556,15 @@ lemma σ₀Iter_succ
   by_cases! hk : k.val <= i
   · rw [σ₀Iter_coe_eq_of_lt .., coe_σ]
     obtain hk | rfl := hk.lt_or_eq
-    · grind [Fin.predAbove_of_le_castSucc, Fin.coe_castPred, σ₀Iter_coe_eq_of_
+    · grind [Fin.predAbove_of_le_castSucc, Fin.coe_castPred, σ₀Iter_coe_eq_of_lt]
+    · grind [Fin.predAbove_of_le_castSucc, Fin.coe_castPred, σ₀Iter_coe_eq_of_ge, tsub_self]
+  · rw [σ₀Iter_coe_eq_of_ge .., coe_σ,
+      Fin.predAbove_of_castSucc_lt _ _ ?_, Fin.val_pred,
+      σ₀Iter_coe_eq_of_ge .., Nat.sub_add_eq]
+    rw [Fin.lt_def]; rw [Fin.castSucc_zero]; rw [σ₀Iter_coe_eq_of_ge ..]; rw [Fin.coe_ofNat_eq_mod]; rw [Nat.zero_mod]
+    lia
+
+@[reassoc]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, ConcreteCategory.hom_ext, Fin.coe_castPred, Fin.predAbove_of_castSucc_lt, Fin.predAbove_of_le_castSucc, Fin.val_pred, Nat.sub_add_e, coe_castPred, comp_apply, hk.lt_or_eq, hom_ext, k.val, lt_or_eq, predAbove_of_castSucc_lt, predAbove_of_le_castSucc, sub_add_e, tsub_self, val_pred
 -/
@@ -624,7 +640,16 @@ lemma δ_σ₀Iter
   by_cases! hk : j <= k.val
   · rw [σ₀Iter_coe_eq_of_ge j .., coe_δ]
     by_cases! hk' : i <= k.castSucc
-    · rw [Fin.succAbove_of_le_castSucc _ _ hk', σ₀Iter_coe_eq
+    · rw [Fin.succAbove_of_le_castSucc _ _ hk', σ₀Iter_coe_eq_of_ge ..]
+      simp
+    · obtain rfl : j = k.val := by grind [dsimp% Fin.lt_def.1 hk']
+      rw [Fin.succAbove_of_castSucc_lt _ _ (by lia)]; rw [σ₀Iter_coe_eq_of_lt ..]; rw [tsub_self]
+  · rw [σ₀Iter_coe_eq_of_lt j .., coe_δ]
+    by_cases! hk' : i <= k.castSucc
+    · rw [Fin.succAbove_of_le_castSucc _ _ hk', σ₀Iter_coe_eq_of_lt ..]
+    · rw [Fin.succAbove_of_castSucc_lt _ _ (by lia), σ₀Iter_coe_eq_of_lt ..]
+
+@[reassoc]
 
 中文:
 引理 δ_σ₀Iter
@@ -637,7 +662,16 @@ lemma δ_σ₀Iter
   by_cases! hk : j <= k.val
   · rw [σ₀Iter_coe_eq_of_ge j .., coe_δ]
     by_cases! hk' : i <= k.castSucc
-    · rw [Fin.succAbove_of_le_castSucc _ _ hk', σ₀Iter_coe_eq
+    · rw [Fin.succAbove_of_le_castSucc _ _ hk', σ₀Iter_coe_eq_of_ge ..]
+      simp
+    · obtain rfl : j = k.val := by grind [dsimp% Fin.lt_def.1 hk']
+      rw [Fin.succAbove_of_castSucc_lt _ _ (by lia)]; rw [σ₀Iter_coe_eq_of_lt ..]; rw [tsub_self]
+  · rw [σ₀Iter_coe_eq_of_lt j .., coe_δ]
+    by_cases! hk' : i <= k.castSucc
+    · rw [Fin.succAbove_of_le_castSucc _ _ hk', σ₀Iter_coe_eq_of_lt ..]
+    · rw [Fin.succAbove_of_castSucc_lt _ _ (by lia), σ₀Iter_coe_eq_of_lt ..]
+
+@[reassoc]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, ConcreteCategory.hom_ext, Fin.lt_def, Fin.succAbove_of_castSucc_lt, Fin.succAbove_of_le_castSucc, castSucc, comp_apply, hom_ext, i.val, k.castSucc, k.val, lt_def, succAbove_of_castSucc_lt, succAbove_of_le_castSucc
 -/
@@ -675,7 +709,9 @@ lemma δ_σ₀Iter'
     simp
   | succ j hj =>
     rw [σ₀Iter_succ _]; rw [σ₀Iter_succ_assoc _]; rw [reassoc_of% hj _ i'.succ (by lia) (by lia) (by grind)]; rw [dsimp% δ_comp_σ_of_gt (i := i') (j := 0)
- 
+        (by rw [Fin.lt_def]; dsimp; lia)]
+
+@[reassoc]
 
 中文:
 引理 δ_σ₀Iter'
@@ -688,7 +724,9 @@ lemma δ_σ₀Iter'
     simp
   | succ j hj =>
     rw [σ₀Iter_succ _]; rw [σ₀Iter_succ_assoc _]; rw [reassoc_of% hj _ i'.succ (by lia) (by lia) (by grind)]; rw [dsimp% δ_comp_σ_of_gt (i := i') (j := 0)
- 
+        (by rw [Fin.lt_def]; dsimp; lia)]
+
+@[reassoc]
 
 Depends on / 依赖: Fin.lt_def, generalizing, i.val, lt_def, reassoc_of
 -/
@@ -722,7 +760,13 @@ lemma σ_σ₀Iter
       Fin.predAbove_of_castSucc_lt _ _ (by grind),
       σ₀Iter_coe_eq_of_ge ..]
     grind
-  · rw [σ₀
+  · rw [σ₀Iter_coe_eq_of_lt (i + 1) ..]
+    rw [σ₀Iter_coe_eq_of_le _ _ _ ?_]
+    by_cases! hk' : k <= j.castSucc
+    · rwa [Fin.predAbove_of_le_castSucc _ _ (by lia)]
+    · grind [Fin.predAbove]
+
+@[reassoc]
 
 中文:
 引理 σ_σ₀Iter
@@ -736,7 +780,13 @@ lemma σ_σ₀Iter
       Fin.predAbove_of_castSucc_lt _ _ (by grind),
       σ₀Iter_coe_eq_of_ge ..]
     grind
-  · rw [σ₀
+  · rw [σ₀Iter_coe_eq_of_lt (i + 1) ..]
+    rw [σ₀Iter_coe_eq_of_le _ _ _ ?_]
+    by_cases! hk' : k <= j.castSucc
+    · rwa [Fin.predAbove_of_le_castSucc _ _ (by lia)]
+    · grind [Fin.predAbove]
+
+@[reassoc]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, ConcreteCategory.hom_ext, Fin.predAbove_of_castSucc_lt, Fin.predAbove_of_le_castSucc, castSucc, comp_apply, hom_ext, j.castSucc, j.val, k.val, predAbove_of_castSucc_lt, predAbove_of_le_castSucc
 -/
@@ -773,7 +823,7 @@ lemma σ_σ₀Iter'
   | succ i hi' =>
     rw [σ₀Iter_succ]; rw [σ₀Iter_succ_assoc]; rw [reassoc_of% hi' _ j'.succ (by lia) (by grind)]; rw [← σ_comp_σ (by simp)]; rw [Fin.castSucc_zero]
 
-@[reas
+@[reassoc (attr := simp)]
 
 中文:
 引理 σ_σ₀Iter'
@@ -787,7 +837,7 @@ lemma σ_σ₀Iter'
   | succ i hi' =>
     rw [σ₀Iter_succ]; rw [σ₀Iter_succ_assoc]; rw [reassoc_of% hi' _ j'.succ (by lia) (by grind)]; rw [← σ_comp_σ (by simp)]; rw [Fin.castSucc_zero]
 
-@[reas
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Fin.castSucc_zero, castSucc_zero, generalizing, j.val, reassoc_of
 -/

@@ -120,7 +120,9 @@ abbreviation auxContinuousLinearEquiv
     simp [smul_smul, hα2, this, hα, ← mul_assoc]
   right_inv x := by
     have := by simpa using congr($he' x)
-    simp [smul_smul, hα2,
+    simp [smul_smul, hα2, this, hα, ← mul_assoc]
+  continuous_toFun := (α' • e.toContinuousLinearMap).continuous
+  continuous_invFun := (α' • e.toContinuousLinearMap.adjoint).continuous
 
 中文:
 缩写 auxContinuousLinearEquiv
@@ -132,7 +134,9 @@ abbreviation auxContinuousLinearEquiv
     simp [smul_smul, hα2, this, hα, ← mul_assoc]
   right_inv x := by
     have := by simpa using congr($he' x)
-    simp [smul_smul, hα2,
+    simp [smul_smul, hα2, this, hα, ← mul_assoc]
+  continuous_toFun := (α' • e.toContinuousLinearMap).continuous
+  continuous_invFun := (α' • e.toContinuousLinearMap.adjoint).continuous
 
 Depends on / 依赖: e.toContinuousLinearMap, toContinuousLinearMap, toLinearMap
 -/
@@ -173,7 +177,8 @@ abbreviation auxIsometry
   body: auxContinuousLinearEquiv e hα hα2 he he'
   norm_map' := by
     rw [ContinuousLinearEquiv.coe_toLinearEquiv]; rw [← ContinuousLinearEquiv.coe_coe]; rw [norm_map_iff_adjoint_comp_self]; rw [coe_auxContinuousLinearEquiv]; rw [MulActionSemiHomClass.map_smulₛₗ]
-    simp only [hαa, comp_smulₛₗ, RingHom.id
+    simp only [hαa, comp_smulₛₗ, RingHom.id_apply, smul_comp, smul_smul, hα2]
+    simp [he, smul_smul, hα, one_def]
 
 中文:
 缩写 auxIsometry
@@ -181,7 +186,8 @@ abbreviation auxIsometry
   定义体: auxContinuousLinearEquiv e hα hα2 he he'
   norm_map' := by
     rw [ContinuousLinearEquiv.coe_toLinearEquiv]; rw [← ContinuousLinearEquiv.coe_coe]; rw [norm_map_iff_adjoint_comp_self]; rw [coe_auxContinuousLinearEquiv]; rw [MulActionSemiHomClass.map_smulₛₗ]
-    simp only [hαa, comp_smulₛₗ, RingHom.id
+    simp only [hαa, comp_smulₛₗ, RingHom.id_apply, smul_comp, smul_smul, hα2]
+    simp [he, smul_smul, hα, one_def]
 
 Depends on / 依赖: auxContinuousLinearEquiv
 -/

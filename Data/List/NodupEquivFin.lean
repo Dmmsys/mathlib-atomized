@@ -244,7 +244,20 @@ theorem sublist_of_orderEmbedding_getElem?_eq
   rw [eq_comm]; rw [List.getElem?_eq_some_iff] at this
   obtain ⟨w, h⟩ := this
   let f' : Nat ↪o Nat :=
-    OrderEmbedding.ofMapLEIff (fun i => f (i + 1) - (f 0 + 1)) fu
+    OrderEmbedding.ofMapLEIff (fun i => f (i + 1) - (f 0 + 1)) fun a b => by
+      rw [Nat.sub_le_sub_iff_right]; rw [OrderEmbedding.le_iff_le]; rw [Nat.succ_le_succ_iff]
+      rw [Nat.succ_le_iff]; rw [OrderEmbedding.lt_iff_lt]
+      exact b.succ_pos
+  have : forall ix, tl[ix]? = (l'.drop (f 0 + 1))[f' ix]? := by
+    intro ix
+    rw [List.getElem?_drop]; rw [OrderEmbedding.coe_ofMapLEIff]; rw [Nat.add_sub_cancel']; rw [← hf]
+    · simp only [getElem?_cons_succ]
+    rw [Nat.succ_le_iff]; rw [OrderEmbedding.lt_iff_lt]
+    exact ix.succ_pos
+  rw [← List.take_append_drop (f 0 + 1) l']; rw [← List.singleton_append]
+  apply List.Sublist.append _ (IH _ this)
+  rw [List.singleton_sublist]; rw [← h]; rw [l'.getElem_take' _ (Nat.lt_succ_self _)]
+  exact List.getElem_mem _
 
 中文:
 定理 sublist_of_orderEmbedding_getElem?_eq
@@ -257,7 +270,20 @@ theorem sublist_of_orderEmbedding_getElem?_eq
   rw [eq_comm]; rw [List.getElem?_eq_some_iff] at this
   obtain ⟨w, h⟩ := this
   let f' : Nat ↪o Nat :=
-    OrderEmbedding.ofMapLEIff (fun i => f (i + 1) - (f 0 + 1)) fu
+    OrderEmbedding.ofMapLEIff (fun i => f (i + 1) - (f 0 + 1)) fun a b => by
+      rw [Nat.sub_le_sub_iff_right]; rw [OrderEmbedding.le_iff_le]; rw [Nat.succ_le_succ_iff]
+      rw [Nat.succ_le_iff]; rw [OrderEmbedding.lt_iff_lt]
+      exact b.succ_pos
+  have : forall ix, tl[ix]? = (l'.drop (f 0 + 1))[f' ix]? := by
+    intro ix
+    rw [List.getElem?_drop]; rw [OrderEmbedding.coe_ofMapLEIff]; rw [Nat.add_sub_cancel']; rw [← hf]
+    · simp only [getElem?_cons_succ]
+    rw [Nat.succ_le_iff]; rw [OrderEmbedding.lt_iff_lt]
+    exact ix.succ_pos
+  rw [← List.take_append_drop (f 0 + 1) l']; rw [← List.singleton_append]
+  apply List.Sublist.append _ (IH _ this)
+  rw [List.singleton_sublist]; rw [← h]; rw [l'.getElem_take' _ (Nat.lt_succ_self _)]
+  exact List.getElem_mem _
 
 Depends on / 依赖: List.getElem, Nat.sub_le_sub_iff_right, Nat.succ_le_iff, Nat.succ_le_succ_iff, OrderEmbedding, OrderEmbedding.le_iff_le, OrderEmbedding.lt_iff_lt, OrderEmbedding.ofMapLEIff, _eq_some_iff, b.succ_pos, eq_comm, generalizing, getElem, le_iff_le, lt_iff_lt, ofMapLEIff, sub_le_sub_iff_right, succ_le_iff, succ_le_succ_iff, succ_pos
 -/
@@ -304,7 +330,13 @@ theorem sublist_iff_exists_orderEmbedding_getElem?_eq
     | cons_cons _ _ IH =>
       obtain ⟨f, hf⟩ := IH
       refine
-        ⟨Orde
+        ⟨OrderEmbedding.ofMapLEIff (fun ix : Nat => if ix = 0 then 0 else (f ix.pred).succ) ?_, ?_⟩
+      · rintro ⟨_ | a⟩ ⟨_ | b⟩ <;> simp [Nat.succ_le_succ_iff]
+      · rintro ⟨_ | i⟩
+        · simp
+        · simpa using hf _
+  · rintro ⟨f, hf⟩
+    exact sublist_of_orderEmbedding_getElem?_eq f hf
 
 中文:
 定理 sublist_iff_存在_orderEmbedding_getElem?_eq
@@ -321,7 +353,13 @@ theorem sublist_iff_exists_orderEmbedding_getElem?_eq
     | cons_cons _ _ IH =>
       obtain ⟨f, hf⟩ := IH
       refine
-        ⟨Orde
+        ⟨OrderEmbedding.ofMapLEIff (fun ix : Nat => if ix = 0 then 0 else (f ix.pred).succ) ?_, ?_⟩
+      · rintro ⟨_ | a⟩ ⟨_ | b⟩ <;> simp [Nat.succ_le_succ_iff]
+      · rintro ⟨_ | i⟩
+        · simp
+        · simpa using hf _
+  · rintro ⟨f, hf⟩
+    exact sublist_of_orderEmbedding_getElem?_eq f hf
 
 Depends on / 依赖: Nat.succ_le_succ_iff, OrderEmbedding, OrderEmbedding.ofMapLEIff, OrderEmbedding.ofStrictMono, cons_cons, f.trans, ix.pred, ofMapLEIff, ofStrictMono, sublist_of_orderEmbedding_getElem, succ_le_succ_iff
 -/
@@ -360,7 +398,26 @@ theorem sublist_iff_exists_fin_orderEmbedding_get_eq
       intro i hi
       specialize hf i
       rw [getElem?_eq_getElem hi]; rw [eq_comm]; rw [getElem?_eq_some_iff] at hf
-      obtain ⟨h, -⟩ :=
+      obtain ⟨h, -⟩ := hf
+      exact h
+    refine ⟨OrderEmbedding.ofMapLEIff (fun ix => ⟨f ix, h ix.is_lt⟩) ?_, ?_⟩
+    · simp
+    · intro i
+      apply Option.some_injective
+      simpa [getElem?_eq_getElem i.2, getElem?_eq_getElem (h i.2)] using hf i
+  · rintro ⟨f, hf⟩
+    refine
+      ⟨OrderEmbedding.ofStrictMono (fun i => if hi : i < l.length then f ⟨i, hi⟩ else i + l'.length)
+          ?_,
+        ?_⟩
+    · intro i j h
+      dsimp only
+      split_ifs with hi hj hj
+      · rwa [Fin.val_fin_lt, f.lt_iff_lt]
+      · lia
+      · exact absurd (h.trans hj) hi
+      · simpa using h
+    · grind
 
 中文:
 定理 sublist_iff_存在_fin_orderEmbedding_get_eq
@@ -373,7 +430,26 @@ theorem sublist_iff_exists_fin_orderEmbedding_get_eq
       intro i hi
       specialize hf i
       rw [getElem?_eq_getElem hi]; rw [eq_comm]; rw [getElem?_eq_some_iff] at hf
-      obtain ⟨h, -⟩ :=
+      obtain ⟨h, -⟩ := hf
+      exact h
+    refine ⟨OrderEmbedding.ofMapLEIff (fun ix => ⟨f ix, h ix.is_lt⟩) ?_, ?_⟩
+    · simp
+    · intro i
+      apply Option.some_injective
+      simpa [getElem?_eq_getElem i.2, getElem?_eq_getElem (h i.2)] using hf i
+  · rintro ⟨f, hf⟩
+    refine
+      ⟨OrderEmbedding.ofStrictMono (fun i => if hi : i < l.length then f ⟨i, hi⟩ else i + l'.length)
+          ?_,
+        ?_⟩
+    · intro i j h
+      dsimp only
+      split_ifs with hi hj hj
+      · rwa [Fin.val_fin_lt, f.lt_iff_lt]
+      · lia
+      · exact absurd (h.trans hj) hi
+      · simpa using h
+    · grind
 
 Depends on / 依赖: Option.some_injective, OrderEm, OrderEmbedding, OrderEmbedding.ofMapLEIff, _eq_getElem, _eq_some_iff, eq_comm, getElem, is_lt, ix.is_lt, l.length, length, ofMapLEIff, some_injective, specialize, sublist_iff_exists_orderEmbedding_getElem
 -/
@@ -423,7 +499,17 @@ theorem duplicate_iff_exists_distinct_get
     · rintro ⟨f, hf⟩
       refine ⟨f ⟨0, by simp⟩, f ⟨1, by simp⟩, f.lt_iff_lt.2 (Nat.zero_lt_one), ?_⟩
       rw [← hf]; rw [← hf]; simp
-    · rintro ⟨n
+    · rintro ⟨n, m, hnm, h, h'⟩
+      refine ⟨OrderEmbedding.ofStrictMono (fun i => if (i : Nat) = 0 then n else m) ?_, ?_⟩
+      · rintro ⟨⟨_ | i⟩, hi⟩ ⟨⟨_ | j⟩, hj⟩
+        · simp
+        · simp [hnm]
+        · simp
+        · simp only [Nat.lt_succ_iff, Nat.succ_le_succ_iff, replicate, length, Nat.le_zero] at hi hj
+          simp [hi, hj]
+      · rintro ⟨⟨_ | i⟩, hi⟩
+        · simpa using h
+        · simpa using h'
 
 中文:
 定理 duplicate_iff_存在_distinct_get
@@ -435,7 +521,17 @@ theorem duplicate_iff_exists_distinct_get
     · rintro ⟨f, hf⟩
       refine ⟨f ⟨0, by simp⟩, f ⟨1, by simp⟩, f.lt_iff_lt.2 (Nat.zero_lt_one), ?_⟩
       rw [← hf]; rw [← hf]; simp
-    · rintro ⟨n
+    · rintro ⟨n, m, hnm, h, h'⟩
+      refine ⟨OrderEmbedding.ofStrictMono (fun i => if (i : Nat) = 0 then n else m) ?_, ?_⟩
+      · rintro ⟨⟨_ | i⟩, hi⟩ ⟨⟨_ | j⟩, hj⟩
+        · simp
+        · simp [hnm]
+        · simp
+        · simp only [Nat.lt_succ_iff, Nat.succ_le_succ_iff, replicate, length, Nat.le_zero] at hi hj
+          simp [hi, hj]
+      · rintro ⟨⟨_ | i⟩, hi⟩
+        · simpa using h
+        · simpa using h'
 
 Depends on / 依赖: Nat.lt_succ_iff, Nat.succ_le_succ_iff, Nat.zero_lt_one, OrderEmbedding, OrderEmbedding.ofStrictMono, classical, duplicate_iff_two_le_count, f.lt_iff_lt, lt_iff_lt, lt_succ_iff, ofStrictMono, replicate, replicate_sublist_iff, sublist_iff_exists_fin_orderEmbedding_get_eq, succ_le_succ_iff, zero_lt_one
 -/

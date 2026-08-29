@@ -144,7 +144,7 @@ lemma isSetSemiring
     · simp only [coe_singleton, Set.singleton_subset_iff]
       exact hC.sdiff_mem hs ht
     · simp only [coe_singleton, pairwiseDisjoint_singleton]
-    · simp o
+    · simp only [coe_singleton, sUnion_singleton]
 
 中文:
 引理 isSetSemiring
@@ -157,7 +157,7 @@ lemma isSetSemiring
     · simp only [coe_singleton, Set.singleton_subset_iff]
       exact hC.sdiff_mem hs ht
     · simp only [coe_singleton, pairwiseDisjoint_singleton]
-    · simp o
+    · simp only [coe_singleton, sUnion_singleton]
 
 Depends on / 依赖: empty_mem, hC.empty_mem
 -/
@@ -224,7 +224,8 @@ lemma biInter_mem
   | cons i S hiS _ h =>
     simp_rw [← Finset.mem_coe, Finset.coe_cons, Set.biInter_insert]
     simp only [cons_eq_insert, Finset.mem_insert, forall_eq_or_imp] at hs
-    refine hC.inter_mem hs.1 ?
+    refine hC.inter_mem hs.1 ?_
+    exact h (fun n hnS => hs.2 n hnS)
 
 中文:
 引理 bi整数er_mem
@@ -236,7 +237,8 @@ lemma biInter_mem
   | cons i S hiS _ h =>
     simp_rw [← Finset.mem_coe, Finset.coe_cons, Set.biInter_insert]
     simp only [cons_eq_insert, Finset.mem_insert, forall_eq_or_imp] at hs
-    refine hC.inter_mem hs.1 ?
+    refine hC.inter_mem hs.1 ?_
+    exact h (fun n hnS => hs.2 n hnS)
 
 Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Finset.coe_cons, Finset.mem_coe, Finset.mem_insert, Nonempty, Set.biInter_insert, biInter_insert, classical, coe_cons, cons_eq_insert, cons_induction, forall_eq_or_imp, hC.inter_mem, inter_mem, mem_coe, mem_insert, simp_rw, singleton
 -/
@@ -432,7 +434,7 @@ theorem exists_finpartition_sdiff
   · rw [sup_id_eq_sSup, sSup_eq_sUnion, hst]
   · grw [Finpartition.ofErase_parts, Finset.erase_subset, hIC]
 
-@[deprecated (since := "2026-06-03")] alias exists_finpartit
+@[deprecated (since := "2026-06-03")] alias exists_finpartition_diff := exists_finpartition_sdiff
 
 中文:
 定理 存在_finpartition_sdiff
@@ -443,7 +445,7 @@ theorem exists_finpartition_sdiff
   · rw [sup_id_eq_sSup, sSup_eq_sUnion, hst]
   · grw [Finpartition.ofErase_parts, Finset.erase_subset, hIC]
 
-@[deprecated (since := "2026-06-03")] alias exists_finpartit
+@[deprecated (since := "2026-06-03")] alias exists_finpartition_diff := exists_finpartition_sdiff
 
 Depends on / 依赖: Finpartition, Finpartition.ofErase_parts, Finset, Finset.erase_subset, erase_subset, hC.sdiff_eq_sUnion, ofErase, ofErase_parts, sSup_eq_sUnion, sdiff_eq_sUnion, supIndep_iff_pairwiseDisjoint, supIndep_iff_pairwiseDisjoint.mpr, sup_id_eq_sSup
 -/
@@ -473,7 +475,24 @@ theorem mem_supClosure_iff
     | insert s S _ ih =>
       rw [coe_insert]; rw [insert_subset_iff] at hSC
       obtain ⟨hsC, hSC⟩ := hSC
-      obtain ⟨P, 
+      obtain ⟨P, hP⟩ := ih hSC
+      rw [sup_insert]; rw [sup_comm]; rw [id]
+      rcases eq_or_ne s ⊥ with rfl | hs
+      · rw [sup_bot_eq]; exact ⟨P, hP⟩
+      choose Q hQ using show forall t in (P.avoid s).parts, exists Q : Finpartition t, ↑Q.parts subseteq C by
+        simp_rw [Finpartition.mem_avoid]
+        rintro _ ⟨t, ht, -, rfl⟩
+        exact hC.exists_finpartition_sdiff (hP ht) hsC
+.extend hs disjoint_sdiff_left (sdiff_sup_self _ _) .bind Q exists P.avoid s
+      rw [Finpartition.extend_parts]; rw [coe_insert]; rw [insert_subset_iff]; rw [Finpartition.bind_parts]; rw [coe_biUnion]; rw [iUnion₂_subset_iff]; rw [Subtype.forall]
+      exact ⟨hsC, fun t ht _ => hQ t ht⟩
+  mpr := by
+    intro ⟨P, hP⟩
+    rw [← P.sup_parts]; rw [sup_id_set_eq_sUnion]
+    exact supClosed_supClosure.sSup_mem
+      (Finset.finite_toSet _)
+      (subset_supClosure hC.empty_mem)
+      (hP.trans subset_supClosure)
 
 中文:
 定理 mem_supClosure_iff
@@ -489,7 +508,24 @@ theorem mem_supClosure_iff
     | insert s S _ ih =>
       rw [coe_insert]; rw [insert_subset_iff] at hSC
       obtain ⟨hsC, hSC⟩ := hSC
-      obtain ⟨P, 
+      obtain ⟨P, hP⟩ := ih hSC
+      rw [sup_insert]; rw [sup_comm]; rw [id]
+      rcases eq_or_ne s ⊥ with rfl | hs
+      · rw [sup_bot_eq]; exact ⟨P, hP⟩
+      choose Q hQ using show forall t in (P.avoid s).parts, exists Q : Finpartition t, ↑Q.parts subseteq C by
+        simp_rw [Finpartition.mem_avoid]
+        rintro _ ⟨t, ht, -, rfl⟩
+        exact hC.exists_finpartition_sdiff (hP ht) hsC
+.extend hs disjoint_sdiff_left (sdiff_sup_self _ _) .bind Q exists P.avoid s
+      rw [Finpartition.extend_parts]; rw [coe_insert]; rw [insert_subset_iff]; rw [Finpartition.bind_parts]; rw [coe_biUnion]; rw [iUnion₂_subset_iff]; rw [Subtype.forall]
+      exact ⟨hsC, fun t ht _ => hQ t ht⟩
+  mpr := by
+    intro ⟨P, hP⟩
+    rw [← P.sup_parts]; rw [sup_id_set_eq_sUnion]
+    exact supClosed_supClosure.sSup_mem
+      (Finset.finite_toSet _)
+      (subset_supClosure hC.empty_mem)
+      (hP.trans subset_supClosure)
 
 Depends on / 依赖: Finpartition, Finpartition.mem_avo, Finset, Finset.induction, P.avoid, Q.parts, _eq_sup, coe_insert, eq_or_ne, insert, insert_subset_iff, mem_avo, simp_rw, subseteq, sup_bot_eq, sup_comm, sup_empty, sup_insert
 -/
@@ -566,7 +602,14 @@ theorem isSetRing_supClosure
     induction T using Finset.induction generalizing s with
     | empty => simpa
     | insert t T _ ih =>
-      simp_rw [sup_inser
+      simp_rw [sup_insert, id, sup_eq_union, ← sdiff_sdiff]
+      rw [coe_insert]; rw [insert_subset_iff] at hTC
+      obtain ⟨htC, hTC⟩ := hTC
+      refine ih ?_ hTC
+      obtain ⟨S, hS, hSC, rfl⟩ := hs
+      rw [sup'_eq_sup]; rw [← Finset.sup_sdiff_right]
+      refine supClosed_supClosure.finsetSup_mem hS fun s hs => ?_
+      exact hC.sdiff_mem_supClosure (hSC hs) htC
 
 中文:
 定理 isSetRing_supClosure
@@ -581,7 +624,14 @@ theorem isSetRing_supClosure
     induction T using Finset.induction generalizing s with
     | empty => simpa
     | insert t T _ ih =>
-      simp_rw [sup_inser
+      simp_rw [sup_insert, id, sup_eq_union, ← sdiff_sdiff]
+      rw [coe_insert]; rw [insert_subset_iff] at hTC
+      obtain ⟨htC, hTC⟩ := hTC
+      refine ih ?_ hTC
+      obtain ⟨S, hS, hSC, rfl⟩ := hs
+      rw [sup'_eq_sup]; rw [← Finset.sup_sdiff_right]
+      refine supClosed_supClosure.finsetSup_mem hS fun s hs => ?_
+      exact hC.sdiff_mem_supClosure (hSC hs) htC
 
 Depends on / 依赖: empty_mem, hC.empty_mem, subset_supClosure
 -/
@@ -1095,7 +1145,9 @@ lemma disjoint_disjointOfDiffUnion
   have h_disj : u <= ⊥ :=
     hC.disjoint_sUnion_disjointOfDiffUnion hs hI (subset_sUnion_of_mem huI)
     (subset_sUnion_of_mem hu_disjointOfDiffUnion)
-  simp only [Set.bot_eq_empty, subset_empty_iff]
+  simp only [Set.bot_eq_empty, subset_empty_iff] at h_disj
+  refine hC.empty_notMem_disjointOfDiffUnion hs hI ?_
+  rwa [h_disj] at hu_disjointOfDiffUnion
 
 中文:
 引理 disjoint_disjointOfDiffUnion
@@ -1107,7 +1159,9 @@ lemma disjoint_disjointOfDiffUnion
   have h_disj : u <= ⊥ :=
     hC.disjoint_sUnion_disjointOfDiffUnion hs hI (subset_sUnion_of_mem huI)
     (subset_sUnion_of_mem hu_disjointOfDiffUnion)
-  simp only [Set.bot_eq_empty, subset_empty_iff]
+  simp only [Set.bot_eq_empty, subset_empty_iff] at h_disj
+  refine hC.empty_notMem_disjointOfDiffUnion hs hI ?_
+  rwa [h_disj] at hu_disjointOfDiffUnion
 
 Depends on / 依赖: Finset, Finset.not_disjoint_iff, Set.bot_eq_empty, bot_eq_empty, disjoint_sUnion_disjointOfDiffUnion, empty_notMem_disjointOfDiffUnion, hC.disjoint_sUnion_disjointOfDiffUnion, hC.empty_notMem_disjointOfDiffUnion, h_disj, hu_disjointOfDiffUnion, not_disjoint_iff, subset_empty_iff, subset_sUnion_of_mem
 -/
@@ -1378,7 +1432,7 @@ lemma pairwiseDisjoint_biUnion_disjointOfUnion
     (fun _ => hC.pairwiseDisjoint_disjointOfUnion_of_mem hJ)
   simp_rw [Function.onFun, disjointOfUnion_coe, SetLike.mem_coe, ← Finset.sup_eq_iSup,
     Finpartition.sup_parts]
-  exact (disjoin
+  exact (disjoint_disjointed _).comp_of_injective J.equivFin.injective
 
 中文:
 引理 pairwiseDisjoint_biUnion_disjointOfUnion
@@ -1390,7 +1444,7 @@ lemma pairwiseDisjoint_biUnion_disjointOfUnion
     (fun _ => hC.pairwiseDisjoint_disjointOfUnion_of_mem hJ)
   simp_rw [Function.onFun, disjointOfUnion_coe, SetLike.mem_coe, ← Finset.sup_eq_iSup,
     Finpartition.sup_parts]
-  exact (disjoin
+  exact (disjoint_disjointed _).comp_of_injective J.equivFin.injective
 
 Depends on / 依赖: Finpartition, Finpartition.sup_parts, Finset, Finset.sup_eq_iSup, Function, Function.onFun, J.equivFin.injective, Pairwise, Pairwise.set_of_subtype, PairwiseDisjoint, Set.PairwiseDisjoint.biUnion, SetLike, SetLike.mem_coe, biUnion, comp_of_injective, disjointOfUnion_coe, disjoint_disjointed, equivFin, hC.pairwiseDisjoint_disjointOfUnion_of_mem, injective
 -/
@@ -1581,7 +1635,19 @@ lemma Ioc
     apply Ioc_mem_ofPred_Ioc_le
   sdiff_eq_sUnion' := by
     rintro s ⟨u, v, huv, rfl⟩ t ⟨u', v', hu'v', rfl⟩
-    rcases le_or_gt u' u with
+    rcases le_or_gt u' u with hu | hu
+    · rcases Ioc_mem_ofPred_Ioc_le (max u v') v with ⟨u'', v'', h'', heq⟩
+      exists {Set.Ioc u'' v''}
+      grind [coe_singleton, pairwiseDisjoint_singleton]
+    rcases le_or_gt v v' with hv | hv
+    · rcases Ioc_mem_ofPred_Ioc_le u (min u' v) with ⟨u'', v'', h'', heq⟩
+      exists {Set.Ioc u'' v''}
+      grind [coe_singleton, pairwiseDisjoint_singleton]
+    rw [show Set.Ioc u v \ Set.Ioc u' v' = Set.Ioc u u' union Set.Ioc v' v by grind]
+    refine ⟨{Set.Ioc u u', Set.Ioc v' v}, by grind, ?_, by simp⟩
+    intro a ha b hb hab
+    simp [Function.onFun]
+    grind
 
 中文:
 引理 左开右闭区间
@@ -1595,7 +1661,19 @@ lemma Ioc
     apply Ioc_mem_ofPred_Ioc_le
   sdiff_eq_sUnion' := by
     rintro s ⟨u, v, huv, rfl⟩ t ⟨u', v', hu'v', rfl⟩
-    rcases le_or_gt u' u with
+    rcases le_or_gt u' u with hu | hu
+    · rcases Ioc_mem_ofPred_Ioc_le (max u v') v with ⟨u'', v'', h'', heq⟩
+      exists {Set.Ioc u'' v''}
+      grind [coe_singleton, pairwiseDisjoint_singleton]
+    rcases le_or_gt v v' with hv | hv
+    · rcases Ioc_mem_ofPred_Ioc_le u (min u' v) with ⟨u'', v'', h'', heq⟩
+      exists {Set.Ioc u'' v''}
+      grind [coe_singleton, pairwiseDisjoint_singleton]
+    rw [show Set.Ioc u v \ Set.Ioc u' v' = Set.Ioc u u' union Set.Ioc v' v by grind]
+    refine ⟨{Set.Ioc u u', Set.Ioc v' v}, by grind, ?_, by simp⟩
+    intro a ha b hb hab
+    simp [Function.onFun]
+    grind
 -/
 protected lemma Ioc [LinearOrder α] [Nonempty α] :
     IsSetSemiring {s : Set α | exists u v, u <= v ∧ s = Set.Ioc u v} where

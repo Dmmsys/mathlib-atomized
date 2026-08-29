@@ -60,7 +60,23 @@ fun i hi j => (hf' _ hi).squarefree_of_dvd div_dvd_of_dvd gcd_dvd_left _ _
   refine lt_irrefl n ?_
   calc
     n = #𝒜 := ?_
-    _ <= #(𝒜 \\ 𝒜
+    _ <= #(𝒜 \\ 𝒜) := 𝒜.card_le_card_diffs
+    _ <= #(Ioo 0 n) := card_le_card_of_injOn (fun s => ∏ p in s, p) ?_ ?_
+    _ = n - 1 := by rw [card_Ioo, tsub_zero]
+    _ < n := tsub_lt_self hn.bot_lt zero_lt_one
+  · rw [Finset.card_image_of_injOn, card_Iio]
+    simpa using! prod_primeFactors_invOn_squarefree.2.injOn.comp hf.injOn hf'
+  · simp only [𝒜, forall_mem_diffs, forall_mem_image, mem_Ioo, mem_Iio, Set.MapsTo, mem_coe]
+    rintro i hi j hj
+    rw [← primeFactors_div_gcd (hf' _ hi) (hf' _ hj).ne_zero]; rw [prod_primeFactors_of_squarefree hf'' _ hi _]
+exact ⟨Nat.div_pos (gcd_le_left _ (hf' _ hi).ne_zero.bot_lt)
+Nat.gcd_pos_of_pos_left _ (hf' _ hi).ne_zero.bot_lt, Nat.div_lt_of_lt_mul this _ hi _ hj⟩
+  · simp only [𝒜, Set.InjOn, mem_coe, forall_mem_diffs, forall_mem_image, mem_Iio]
+    rintro a ha b hb c hc d hd
+    rw [← primeFactors_div_gcd (hf' _ ha) (hf' _ hb).ne_zero]; rw [← primeFactors_div_gcd
+      (hf' _ hc) (hf' _ hd).ne_zero]; rw [prod_primeFactors_of_squarefree (hf'' _ ha _)]; rw [prod_primeFactors_of_squarefree (hf'' _ hc _)]
+    rintro h
+    rw [h]
 
 中文:
 引理 grahamConjecture_of_squarefree
@@ -74,7 +90,23 @@ fun i hi j => (hf' _ hi).squarefree_of_dvd div_dvd_of_dvd gcd_dvd_left _ _
   refine lt_irrefl n ?_
   calc
     n = #𝒜 := ?_
-    _ <= #(𝒜 \\ 𝒜
+    _ <= #(𝒜 \\ 𝒜) := 𝒜.card_le_card_diffs
+    _ <= #(Ioo 0 n) := card_le_card_of_injOn (fun s => ∏ p in s, p) ?_ ?_
+    _ = n - 1 := by rw [card_Ioo, tsub_zero]
+    _ < n := tsub_lt_self hn.bot_lt zero_lt_one
+  · rw [Finset.card_image_of_injOn, card_Iio]
+    simpa using! prod_primeFactors_invOn_squarefree.2.injOn.comp hf.injOn hf'
+  · simp only [𝒜, forall_mem_diffs, forall_mem_image, mem_Ioo, mem_Iio, Set.MapsTo, mem_coe]
+    rintro i hi j hj
+    rw [← primeFactors_div_gcd (hf' _ hi) (hf' _ hj).ne_zero]; rw [prod_primeFactors_of_squarefree hf'' _ hi _]
+exact ⟨Nat.div_pos (gcd_le_left _ (hf' _ hi).ne_zero.bot_lt)
+Nat.gcd_pos_of_pos_left _ (hf' _ hi).ne_zero.bot_lt, Nat.div_lt_of_lt_mul this _ hi _ hj⟩
+  · simp only [𝒜, Set.InjOn, mem_coe, forall_mem_diffs, forall_mem_image, mem_Iio]
+    rintro a ha b hb c hc d hd
+    rw [← primeFactors_div_gcd (hf' _ ha) (hf' _ hb).ne_zero]; rw [← primeFactors_div_gcd
+      (hf' _ hc) (hf' _ hd).ne_zero]; rw [prod_primeFactors_of_squarefree (hf'' _ ha _)]; rw [prod_primeFactors_of_squarefree (hf'' _ hc _)]
+    rintro h
+    rw [h]
 
 Depends on / 依赖: Finset, Finset.card_image_of_injOn, Squarefree, bot_lt, card_, card_Ioo, card_image_of_injOn, card_le_card_diffs, card_le_card_of_injOn, div_dvd_of_dvd, gcd_dvd_left, hn.bot_lt, lt_irrefl, primeFactors, squarefree_of_dvd, tsub_lt_self, tsub_zero, zero_lt_one
 -/

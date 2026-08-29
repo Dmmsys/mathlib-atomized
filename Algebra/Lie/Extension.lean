@@ -504,7 +504,27 @@ instance :
   add_lie x y z := by
     rw [← of_add]
     refine Equiv.congr_arg ?_
-    simp only
+    simp only [of_symm_add, Prod.fst_add, add_lie, twoCochain_val_apply, map_add,
+      LinearMap.add_apply, Prod.snd_add, lie_add, Prod.mk_add_mk, Prod.mk.injEq, true_and]
+    abel
+  lie_add x y z := by
+    rw [← of_add]
+    exact Equiv.congr_arg (by simp; abel)
+  lie_self x := by
+    rw [← of_zero]; rw [c.1.2]
+    exact Equiv.congr_arg (by simp)
+  leibniz_lie x y z := by
+    rw [← of_add]
+    refine Equiv.congr_arg ?_
+    simp only [twoCochain_val_apply, Equiv.symm_apply_apply, lie_lie, Prod.mk_add_mk,
+      sub_add_cancel, Prod.mk.injEq, true_and, lie_add, lie_sub]
+    have hc := c.2
+    rw [mem_twoCocycle_iff] at hc
+    have := d₂₃_apply R L M c ((ofProd c).symm x).1 ((ofProd c).symm y).1 ((ofProd c).symm z).1
+    simp only [hc, LinearMap.zero_apply] at this
+    rw [← twoCochain_skew _ _ ⁅((ofProd c).symm x).1]; rw [((ofProd c).symm z).1⁆]; rw [← twoCochain_skew _ _ ⁅((ofProd c).symm y).1]; rw [((ofProd c).symm z).1⁆]; rw [eq_sub_iff_add_eq]; rw [zero_add]; rw [neg_eq_iff_eq_neg] at this
+    rw [this]
+    abel
 
 中文:
 实例 :
@@ -515,7 +535,27 @@ instance :
   add_lie x y z := by
     rw [← of_add]
     refine Equiv.congr_arg ?_
-    simp only
+    simp only [of_symm_add, Prod.fst_add, add_lie, twoCochain_val_apply, map_add,
+      LinearMap.add_apply, Prod.snd_add, lie_add, Prod.mk_add_mk, Prod.mk.injEq, true_and]
+    abel
+  lie_add x y z := by
+    rw [← of_add]
+    exact Equiv.congr_arg (by simp; abel)
+  lie_self x := by
+    rw [← of_zero]; rw [c.1.2]
+    exact Equiv.congr_arg (by simp)
+  leibniz_lie x y z := by
+    rw [← of_add]
+    refine Equiv.congr_arg ?_
+    simp only [twoCochain_val_apply, Equiv.symm_apply_apply, lie_lie, Prod.mk_add_mk,
+      sub_add_cancel, Prod.mk.injEq, true_and, lie_add, lie_sub]
+    have hc := c.2
+    rw [mem_twoCocycle_iff] at hc
+    have := d₂₃_apply R L M c ((ofProd c).symm x).1 ((ofProd c).symm y).1 ((ofProd c).symm z).1
+    simp only [hc, LinearMap.zero_apply] at this
+    rw [← twoCochain_skew _ _ ⁅((ofProd c).symm x).1]; rw [((ofProd c).symm z).1⁆]; rw [← twoCochain_skew _ _ ⁅((ofProd c).symm y).1]; rw [((ofProd c).symm z).1⁆]; rw [eq_sub_iff_add_eq]; rw [zero_add]; rw [neg_eq_iff_eq_neg] at this
+    rw [this]
+    abel
 
 Depends on / 依赖: Equiv.congr_arg, LinearMap, LinearMap.add_apply, Prod.fst_add, Prod.mk.injEq, Prod.mk_add_mk, Prod.snd_add, add_apply, add_lie, congr_arg, fst_add, lie_add, map_add, mk_add_mk, ofProd, of_add, of_symm_add, snd_add, true_and, twoCochain_val_apply
 -/
@@ -615,7 +655,9 @@ definition LieEquiv.ofCoboundary
     ofProd c (y.1, y.2 + x y.1)
   map_add' _ _ := by simp [← of_add]; abel
   map_smul' := by simp [← of_smul, smul_sub]
-map_lie' := ((ofProd c').eq_symm_apply).1 by simp [bracket_ofTwoCocycle,
+map_lie' := ((ofProd c').eq_symm_apply).1 by simp [bracket_ofTwoCocycle, h]; abel
+  left_inv y := by simp
+  right_inv z := by simp
 
 中文:
 定义 Lie等价.ofCoboundary
@@ -627,7 +669,9 @@ map_lie' := ((ofProd c').eq_symm_apply).1 by simp [bracket_ofTwoCocycle,
     ofProd c (y.1, y.2 + x y.1)
   map_add' _ _ := by simp [← of_add]; abel
   map_smul' := by simp [← of_smul, smul_sub]
-map_lie' := ((ofProd c').eq_symm_apply).1 by simp [bracket_ofTwoCocycle,
+map_lie' := ((ofProd c').eq_symm_apply).1 by simp [bracket_ofTwoCocycle, h]; abel
+  left_inv y := by simp
+  right_inv z := by simp
 
 Depends on / 依赖: bracket_ofTwoCocycle, eq_symm_apply, invFun, left_inv, map_add, map_lie, map_smul, ofProd, of_add, of_smul, right_inv, smul_sub
 -/
@@ -672,7 +716,34 @@ definition ofTwoCocycle
       map_add' _ _ := by simp [← of_add]
       map_smul' _ _ := by simp [← of_smul]
       map_lie' {_ _} := by simp [trivial_lie_zero, bracket_ofTwoCocycle] }
-  proj 
+  proj :=
+    { toFun x := ((ofProd c).symm x).1
+      map_add' _ _ := by simp
+      map_smul' _ _ := by simp
+      map_lie' {_ _} := by simp [bracket_ofTwoCocycle] }
+  IsExtension :=
+    { ker_eq_bot := by
+        rw [LieHom.ker_eq_bot]
+        intro x y
+        simp
+      range_eq_top := by
+        rw [LieHom.range_eq_top]
+        intro x
+        use (ofProd c (x, 0))
+        simp
+      exact := by
+        ext x
+        constructor
+        · intro hx
+          obtain ⟨n, h⟩ := hx
+          rw [← h]
+          rfl
+        · intro hx
+          have : ((ofProd c).symm x).1 = 0 := hx
+          simp only [LieHom.mem_range, LieHom.coe_mk]
+          use ((ofProd c).symm x).2
+          nth_rw 2 [← Equiv.apply_symm_apply (ofProd c) x]
+          rw [← this] }
 
 中文:
 定义 ofTwoCocycle
@@ -685,7 +756,34 @@ definition ofTwoCocycle
       map_add' _ _ := by simp [← of_add]
       map_smul' _ _ := by simp [← of_smul]
       map_lie' {_ _} := by simp [trivial_lie_zero, bracket_ofTwoCocycle] }
-  proj 
+  proj :=
+    { toFun x := ((ofProd c).symm x).1
+      map_add' _ _ := by simp
+      map_smul' _ _ := by simp
+      map_lie' {_ _} := by simp [bracket_ofTwoCocycle] }
+  IsExtension :=
+    { ker_eq_bot := by
+        rw [LieHom.ker_eq_bot]
+        intro x y
+        simp
+      range_eq_top := by
+        rw [LieHom.range_eq_top]
+        intro x
+        use (ofProd c (x, 0))
+        simp
+      exact := by
+        ext x
+        constructor
+        · intro hx
+          obtain ⟨n, h⟩ := hx
+          rw [← h]
+          rfl
+        · intro hx
+          have : ((ofProd c).symm x).1 = 0 := hx
+          simp only [LieHom.mem_range, LieHom.coe_mk]
+          use ((ofProd c).symm x).2
+          nth_rw 2 [← Equiv.apply_symm_apply (ofProd c) x]
+          rw [← this] }
 
 Depends on / 依赖: LieAlgebra, LieAlgebra.ofTwoCocycle, ofTwoCocycle
 -/
@@ -843,7 +941,9 @@ definition toKer
   map_lie' {x y} := by ext; simp [← LieHom.map_lie]
   invFun := (Equiv.ofInjective E.incl E.incl_injective).symm ∘ E.IsExtension.kerEquivRange
   left_inv _ := by
-    simp [IsExtension.kerEquivRange, Equiv.symm_ap
+    simp [IsExtension.kerEquivRange, Equiv.symm_apply_eq]
+    rfl
+  right_inv x := by simpa [Subtype.ext_iff] using! Equiv.apply_ofInjective_symm E.incl_injective _
 
 中文:
 定义 toKer
@@ -854,7 +954,9 @@ definition toKer
   map_lie' {x y} := by ext; simp [← LieHom.map_lie]
   invFun := (Equiv.ofInjective E.incl E.incl_injective).symm ∘ E.IsExtension.kerEquivRange
   left_inv _ := by
-    simp [IsExtension.kerEquivRange, Equiv.symm_ap
+    simp [IsExtension.kerEquivRange, Equiv.symm_apply_eq]
+    rfl
+  right_inv x := by simpa [Subtype.ext_iff] using! Equiv.apply_ofInjective_symm E.incl_injective _
 
 Depends on / 依赖: E.incl, E.incl_apply_mem_ker, incl_apply_mem_ker
 -/
@@ -924,7 +1026,14 @@ definition ringModuleOf
   add_lie x y m := by
     set h := E.proj_surjective.hasRightInverse
     rw [← map_add]; rw [← add_lie]; rw [eq_comm]; rw [EquivLike.apply_eq_iff_eq]; rw [← sub_eq_zero]; rw [← sub_lie]
-    exact trivial_lie_zero E.proj.ker _ ⟨_, b
+    exact trivial_lie_zero E.proj.ker _ ⟨_, by simp [h.choose_spec _]⟩ (E.toKer m)
+  lie_add x m n := by simp [← map_add, ← lie_add]
+  leibniz_lie x y m := by
+    set h := E.proj_surjective.hasRightInverse
+    have aux (z : E.proj.ker) : ⁅⁅h.choose x, h.choose y⁆, z⁆ = ⁅h.choose ⁅x, y⁆, z⁆ := by
+      rw [← sub_eq_zero]; rw [← sub_lie]
+      exact trivial_lie_zero E.proj.ker _ ⟨_, by simp [h.choose_spec _]⟩ z
+    rw [← map_add]; rw [EquivLike.apply_eq_iff_eq]; rw [LieEquiv.apply_symm_apply]; rw [LieEquiv.apply_symm_apply]; rw [leibniz_lie]; rw [aux]
 
 中文:
 定义 ringModuleOf
@@ -933,7 +1042,14 @@ definition ringModuleOf
   add_lie x y m := by
     set h := E.proj_surjective.hasRightInverse
     rw [← map_add]; rw [← add_lie]; rw [eq_comm]; rw [EquivLike.apply_eq_iff_eq]; rw [← sub_eq_zero]; rw [← sub_lie]
-    exact trivial_lie_zero E.proj.ker _ ⟨_, b
+    exact trivial_lie_zero E.proj.ker _ ⟨_, by simp [h.choose_spec _]⟩ (E.toKer m)
+  lie_add x m n := by simp [← map_add, ← lie_add]
+  leibniz_lie x y m := by
+    set h := E.proj_surjective.hasRightInverse
+    have aux (z : E.proj.ker) : ⁅⁅h.choose x, h.choose y⁆, z⁆ = ⁅h.choose ⁅x, y⁆, z⁆ := by
+      rw [← sub_eq_zero]; rw [← sub_lie]
+      exact trivial_lie_zero E.proj.ker _ ⟨_, by simp [h.choose_spec _]⟩ z
+    rw [← map_add]; rw [EquivLike.apply_eq_iff_eq]; rw [LieEquiv.apply_symm_apply]; rw [LieEquiv.apply_symm_apply]; rw [leibniz_lie]; rw [aux]
 
 Depends on / 依赖: E.proj_surjective.hasRightInverse.choose, E.toKer, E.toKer.symm, hasRightInverse, proj_surjective
 -/
@@ -963,7 +1079,7 @@ lemma ringModuleOf_bracket_proj
     rw [E.IsExtension.exact]
     change _ in E.proj.ker
     simp [E.proj_surjective.hasRightInverse.choose_spec (E.proj z)]
-  rw [ring
+  rw [ringModuleOf_bracket]; rw [EmbeddingLike.apply_eq_iff_eq]; rw [← sub_eq_zero]; rw [← sub_lie]; rw [Subtype.ext_iff]; rw [LieSubmodule.coe_bracket]; rw [lie_toKer_apply]; rw [ZeroMemClass.coe_zero]; rw [← hx]; rw [LieHom.coe_toLinearMap]; rw [← LieHom.map_lie]; rw [trivial_lie_zero M M x y]; rw [map_zero]
 
 中文:
 引理 ringModuleOf_bracket_proj
@@ -974,7 +1090,7 @@ lemma ringModuleOf_bracket_proj
     rw [E.IsExtension.exact]
     change _ in E.proj.ker
     simp [E.proj_surjective.hasRightInverse.choose_spec (E.proj z)]
-  rw [ring
+  rw [ringModuleOf_bracket]; rw [EmbeddingLike.apply_eq_iff_eq]; rw [← sub_eq_zero]; rw [← sub_lie]; rw [Subtype.ext_iff]; rw [LieSubmodule.coe_bracket]; rw [lie_toKer_apply]; rw [ZeroMemClass.coe_zero]; rw [← hx]; rw [LieHom.coe_toLinearMap]; rw [← LieHom.map_lie]; rw [trivial_lie_zero M M x y]; rw [map_zero]
 
 Depends on / 依赖: E.ringModuleOf, ringModuleOf
 -/
@@ -999,7 +1115,9 @@ lemma lieModuleOf
   set h := E.proj_surjective.hasRightInverse
   exact
     { smul_lie r x m := by
-        rw [ringModuleOf_bracket]; rw [ringModuleOf_bracket]; rw [← map_smul]; rw [← smul_lie]; rw [EquivLike.apply_eq_iff_eq]; rw [← sub_eq_zero]; rw [← s
+        rw [ringModuleOf_bracket]; rw [ringModuleOf_bracket]; rw [← map_smul]; rw [← smul_lie]; rw [EquivLike.apply_eq_iff_eq]; rw [← sub_eq_zero]; rw [← sub_lie]
+        exact trivial_lie_zero E.proj.ker _ ⟨_, by simp [h.choose_spec _]⟩ (E.toKer m)
+      lie_smul r x m := by simp }
 
 中文:
 引理 lieModuleOf
@@ -1010,7 +1128,9 @@ lemma lieModuleOf
   set h := E.proj_surjective.hasRightInverse
   exact
     { smul_lie r x m := by
-        rw [ringModuleOf_bracket]; rw [ringModuleOf_bracket]; rw [← map_smul]; rw [← smul_lie]; rw [EquivLike.apply_eq_iff_eq]; rw [← sub_eq_zero]; rw [← s
+        rw [ringModuleOf_bracket]; rw [ringModuleOf_bracket]; rw [← map_smul]; rw [← smul_lie]; rw [EquivLike.apply_eq_iff_eq]; rw [← sub_eq_zero]; rw [← sub_lie]
+        exact trivial_lie_zero E.proj.ker _ ⟨_, by simp [h.choose_spec _]⟩ (E.toKer m)
+      lie_smul r x m := by simp }
 
 Depends on / 依赖: E.ringModuleOf, Finite, FinitePresentation, Function, Function.Exact, LinearMap, LinearMap.exact_iff, LinearMap.ker, LinearMap.lTensor_surjective, Module, Module.Finite, Module.Finite.exists_fin, Module.FinitePresentation.fg_ker, Module.finitePresentation_of_projective, Module.finitePresentation_of_surjective, baseChange, exact_iff, exact_subtype_ker_map, exists_fin, f.baseChange
 -/
@@ -1123,7 +1243,25 @@ definition twoCocycleOf
   property := by
     -- TODO Try to golf this after https://github.com/leanprover-community/mathlib4/pull/27306 lands
     ext x y z
-    suffices ⁅s x, ⁅s y, s z⁆⁆ - ⁅s x, 
+    suffices ⁅s x, ⁅s y, s z⁆⁆ - ⁅s x, s ⁅y, z⁆⁆ -
+        (⁅s y, ⁅s x, s z⁆⁆ - ⁅s y, s ⁅x, z⁆⁆) + (⁅s z, ⁅s x, s y⁆⁆ - ⁅s z, s ⁅x, y⁆⁆) -
+          (⁅s ⁅x, y⁆, s z⁆ - (s ⁅x, ⁅y, z⁆⁆ - s ⁅y, ⁅x, z⁆⁆)) +
+        (⁅s ⁅x, z⁆, s y⁆ - (s ⁅x, ⁅z, y⁆⁆ - s ⁅z, ⁅x, y⁆⁆)) -
+        (⁅s ⁅y, z⁆, s x⁆ - (s ⁅y, ⁅z, x⁆⁆ - s ⁅z, ⁅y, x⁆⁆)) = 0 by
+      set h := E.proj_surjective.hasRightInverse
+      have aux (u : L) (v : E.proj.ker) : ⁅h.choose u, v⁆ = ⁅s u, v⁆ := by
+        rw [← E.lie_apply_proj_of_leftInverse_eq hs]; rw [h.choose_spec _]
+      simpa [← map_sub, ← map_add, ← twoCochain_val_apply, Subtype.ext_iff, twoCocycleAux, aux]
+    have hjac := lie_lie (s x) (s y) (s z)
+    rw [← lie_skew]; rw [neg_eq_iff_eq_neg] at hjac
+    have hja := congr_arg s (lie_lie x y z)
+    rw [← lie_skew]; rw [map_neg]; rw [neg_eq_iff_eq_neg] at hja
+    have hj := congr_arg s (lie_lie y x z)
+    rw [← lie_skew]; rw [map_neg]; rw [neg_eq_iff_eq_neg] at hj
+    rw [hjac]; rw [hj]; rw [hja]; rw [← lie_skew y z]; rw [← lie_skew _ (s (-⁅z]; rw [y⁆))]; rw [← lie_skew (s ⁅x]; rw [z⁆)]; rw [← lie_skew (s ⁅x]; rw [y⁆)]; rw [← lie_skew x z]
+    simp only [map_neg, neg_lie, neg_neg, neg_sub, lie_neg, sub_neg_eq_add,
+      sub_add_cancel_right, map_add, neg_add_rev]
+    abel_nf
 
 中文:
 定义 twoCocycleOf
@@ -1135,7 +1273,25 @@ definition twoCocycleOf
   property := by
     -- TODO Try to golf this after https://github.com/leanprover-community/mathlib4/pull/27306 lands
     ext x y z
-    suffices ⁅s x, ⁅s y, s z⁆⁆ - ⁅s x, 
+    suffices ⁅s x, ⁅s y, s z⁆⁆ - ⁅s x, s ⁅y, z⁆⁆ -
+        (⁅s y, ⁅s x, s z⁆⁆ - ⁅s y, s ⁅x, z⁆⁆) + (⁅s z, ⁅s x, s y⁆⁆ - ⁅s z, s ⁅x, y⁆⁆) -
+          (⁅s ⁅x, y⁆, s z⁆ - (s ⁅x, ⁅y, z⁆⁆ - s ⁅y, ⁅x, z⁆⁆)) +
+        (⁅s ⁅x, z⁆, s y⁆ - (s ⁅x, ⁅z, y⁆⁆ - s ⁅z, ⁅x, y⁆⁆)) -
+        (⁅s ⁅y, z⁆, s x⁆ - (s ⁅y, ⁅z, x⁆⁆ - s ⁅z, ⁅y, x⁆⁆)) = 0 by
+      set h := E.proj_surjective.hasRightInverse
+      have aux (u : L) (v : E.proj.ker) : ⁅h.choose u, v⁆ = ⁅s u, v⁆ := by
+        rw [← E.lie_apply_proj_of_leftInverse_eq hs]; rw [h.choose_spec _]
+      simpa [← map_sub, ← map_add, ← twoCochain_val_apply, Subtype.ext_iff, twoCocycleAux, aux]
+    have hjac := lie_lie (s x) (s y) (s z)
+    rw [← lie_skew]; rw [neg_eq_iff_eq_neg] at hjac
+    have hja := congr_arg s (lie_lie x y z)
+    rw [← lie_skew]; rw [map_neg]; rw [neg_eq_iff_eq_neg] at hja
+    have hj := congr_arg s (lie_lie y x z)
+    rw [← lie_skew]; rw [map_neg]; rw [neg_eq_iff_eq_neg] at hj
+    rw [hjac]; rw [hj]; rw [hja]; rw [← lie_skew y z]; rw [← lie_skew _ (s (-⁅z]; rw [y⁆))]; rw [← lie_skew (s ⁅x]; rw [z⁆)]; rw [← lie_skew (s ⁅x]; rw [y⁆)]; rw [← lie_skew x z]
+    simp only [map_neg, neg_lie, neg_neg, neg_sub, lie_neg, sub_neg_eq_add,
+      sub_add_cancel_right, map_add, neg_add_rev]
+    abel_nf
 
 Depends on / 依赖: E.ringModuleOf, ringModuleOf
 -/
@@ -1180,7 +1336,7 @@ definition oneCochainOfTwoSplitting
   map_add' _ _ := by
     rw [← map_add]; rw [AddMemClass.mk_add_mk]; rw [EquivLike.apply_eq_iff_eq]; rw [Subtype.mk_eq_mk]; rw [map_add]; rw [map_add]; rw [add_sub_add_comm]
   map_smul' _ _ := by
-    rw [Ring
+    rw [RingHom.id_apply]; rw [← map_smul]; rw [EquivLike.apply_eq_iff_eq]; rw [SetLike.mk_smul_of_tower_mk]; rw [Subtype.mk_eq_mk]; rw [LinearMap.map_smul_of_tower]; rw [smul_sub]; rw [LinearMap.map_smul_of_tower]
 
 中文:
 定义 oneCochainOfTwoSplitting
@@ -1189,7 +1345,7 @@ definition oneCochainOfTwoSplitting
   map_add' _ _ := by
     rw [← map_add]; rw [AddMemClass.mk_add_mk]; rw [EquivLike.apply_eq_iff_eq]; rw [Subtype.mk_eq_mk]; rw [map_add]; rw [map_add]; rw [add_sub_add_comm]
   map_smul' _ _ := by
-    rw [Ring
+    rw [RingHom.id_apply]; rw [← map_smul]; rw [EquivLike.apply_eq_iff_eq]; rw [SetLike.mk_smul_of_tower_mk]; rw [Subtype.mk_eq_mk]; rw [LinearMap.map_smul_of_tower]; rw [smul_sub]; rw [LinearMap.map_smul_of_tower]
 
 Depends on / 依赖: AddMemClass, AddMemClass.mk_add_mk, E.toKer.symm, EquivLike, EquivLike.apply_eq_iff_eq, LieHom, LieHom.mem_ker.mpr, LinearMap, LinearMap.map_smul_of_tower, RingHom, RingHom.id_apply, SetLike, SetLike.mk_smul_of_tower_mk, Subtype, Subtype.mk_eq_mk, add_sub_add_comm, apply_eq_iff_eq, id_apply, map_add, map_smul
 -/
@@ -1215,7 +1371,24 @@ lemma d₁₂_oneCochainOfTwoSplitting
   ext x y
   choose s hs using E.proj_surjective
   have {s' : L -> E.L} (h : LeftInverse E.proj s') : ⁅s x - s' x, s' y - s y⁆ = (0 : E.L) := by
-    have aux := 
+    have aux := trivial_lie_zero E.proj.ker E.proj.ker
+      ⟨s x - s' x, by rw [LieHom.mem_ker, map_sub, sub_eq_zero, h, hs]⟩
+      ⟨s' y - s y, by rw [LieHom.mem_ker, map_sub, sub_eq_zero, h, hs]⟩
+    simpa only [Subtype.ext_iff, LieSubmodule.coe_zero, LieIdeal.coe_bracket_of_module,
+      LieSubmodule.coe_bracket] using aux
+  replace this {s' : L -> E.L} (h : LeftInverse E.proj s') :
+      ⁅s x, s' y⁆ = ⁅s' x, s' y⁆ + (⁅s x, s y⁆ - ⁅s' x, s y⁆) := by
+    simpa [sub_sub, sub_eq_zero] using this h
+  simp only [d₁₂_apply_coe_apply_apply, oneCochainOfTwoSplitting_apply, AddSubgroupClass.coe_sub,
+    twoCocycleOf_coe_coe, LinearMap.sub_apply, LinearMap.compr₂_apply, LinearMap.coe_mk,
+    AddHom.coe_mk, LinearEquiv.coe_coe, LieEquiv.coe_toLinearEquiv]
+  nth_rw 1 [← hs x]
+  nth_rw 4 [← hs y]
+  simp only [← EmbeddingLike.apply_eq_iff_eq E.toKer, ringModuleOf_bracket_proj,
+    LieEquiv.apply_symm_apply, map_sub, Subtype.ext_iff, AddSubgroupClass.coe_sub,
+    LieSubmodule.coe_bracket, lie_sub, this hs₁, this hs₂, ← lie_skew (s₁ x) (s y),
+    ← lie_skew (s₂ x) (s y)]
+  abel
 
 中文:
 引理 d₁₂_oneCochainOfTwoSplitting
@@ -1226,7 +1399,24 @@ lemma d₁₂_oneCochainOfTwoSplitting
   ext x y
   choose s hs using E.proj_surjective
   have {s' : L -> E.L} (h : LeftInverse E.proj s') : ⁅s x - s' x, s' y - s y⁆ = (0 : E.L) := by
-    have aux := 
+    have aux := trivial_lie_zero E.proj.ker E.proj.ker
+      ⟨s x - s' x, by rw [LieHom.mem_ker, map_sub, sub_eq_zero, h, hs]⟩
+      ⟨s' y - s y, by rw [LieHom.mem_ker, map_sub, sub_eq_zero, h, hs]⟩
+    simpa only [Subtype.ext_iff, LieSubmodule.coe_zero, LieIdeal.coe_bracket_of_module,
+      LieSubmodule.coe_bracket] using aux
+  replace this {s' : L -> E.L} (h : LeftInverse E.proj s') :
+      ⁅s x, s' y⁆ = ⁅s' x, s' y⁆ + (⁅s x, s y⁆ - ⁅s' x, s y⁆) := by
+    simpa [sub_sub, sub_eq_zero] using this h
+  simp only [d₁₂_apply_coe_apply_apply, oneCochainOfTwoSplitting_apply, AddSubgroupClass.coe_sub,
+    twoCocycleOf_coe_coe, LinearMap.sub_apply, LinearMap.compr₂_apply, LinearMap.coe_mk,
+    AddHom.coe_mk, LinearEquiv.coe_coe, LieEquiv.coe_toLinearEquiv]
+  nth_rw 1 [← hs x]
+  nth_rw 4 [← hs y]
+  simp only [← EmbeddingLike.apply_eq_iff_eq E.toKer, ringModuleOf_bracket_proj,
+    LieEquiv.apply_symm_apply, map_sub, Subtype.ext_iff, AddSubgroupClass.coe_sub,
+    LieSubmodule.coe_bracket, lie_sub, this hs₁, this hs₂, ← lie_skew (s₁ x) (s y),
+    ← lie_skew (s₂ x) (s y)]
+  abel
 
 Depends on / 依赖: E.ringModuleOf, ringModuleOf
 -/

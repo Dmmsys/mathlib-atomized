@@ -111,7 +111,9 @@ instance :
   zero_add := fun a => by ext <;> apply zero_add
   neg_add_cancel := fun a => by ext <;> apply neg_add_cancel
   add_comm := fun a b => by ext <;> apply add_comm
-  sub_eq_add_neg := fun a b => by ext <;> apply su
+  sub_eq_add_neg := fun a b => by ext <;> apply sub_eq_add_neg
+  nsmul := nsmulRec
+  zsmul := zsmulRec
 
 中文:
 实例 :
@@ -121,7 +123,9 @@ instance :
   zero_add := fun a => by ext <;> apply zero_add
   neg_add_cancel := fun a => by ext <;> apply neg_add_cancel
   add_comm := fun a b => by ext <;> apply add_comm
-  sub_eq_add_neg := fun a b => by ext <;> apply su
+  sub_eq_add_neg := fun a b => by ext <;> apply sub_eq_add_neg
+  nsmul := nsmulRec
+  zsmul := zsmulRec
 
 Depends on / 依赖: add_assoc
 -/
@@ -1598,7 +1602,8 @@ definition compLeft
   h₃ := ψ.τ₃ ≫ h.h₃
   g_h₃ := by rw [← ψ.comm₂₃_assoc, h.g_h₃, comp_zero]
   comm₁ := by rw [comp_τ₁, comp_τ₁, h.comm₁, comp_add, comp_add, add_left_inj, ψ.comm₁₂_assoc]
-  comm₂ := by rw [comp_τ₂, comp_τ₂, h.comm₂, comp_add, comp_add, assoc, ψ.comm₂
+  comm₂ := by rw [comp_τ₂, comp_τ₂, h.comm₂, comp_add, comp_add, assoc, ψ.comm₂₃_assoc]
+  comm₃ := by rw [comp_τ₃, comp_τ₃, h.comm₃, comp_add, comp_add, assoc]
 
 中文:
 定义 compLeft
@@ -1609,7 +1614,8 @@ definition compLeft
   h₃ := ψ.τ₃ ≫ h.h₃
   g_h₃ := by rw [← ψ.comm₂₃_assoc, h.g_h₃, comp_zero]
   comm₁ := by rw [comp_τ₁, comp_τ₁, h.comm₁, comp_add, comp_add, add_left_inj, ψ.comm₁₂_assoc]
-  comm₂ := by rw [comp_τ₂, comp_τ₂, h.comm₂, comp_add, comp_add, assoc, ψ.comm₂
+  comm₂ := by rw [comp_τ₂, comp_τ₂, h.comm₂, comp_add, comp_add, assoc, ψ.comm₂₃_assoc]
+  comm₃ := by rw [comp_τ₃, comp_τ₃, h.comm₃, comp_add, comp_add, assoc]
 -/
 def compLeft (h : Homotopy φ₁ φ₂) (ψ : S₃ ⟶ S₁) : Homotopy (ψ ≫ φ₁) (ψ ≫ φ₂) where
   h₀ := ψ.τ₁ ≫ h.h₀
@@ -1635,7 +1641,7 @@ definition compRight
   h₃ := h.h₃ ≫ ψ.τ₃
   comm₁ := by rw [comp_τ₁, comp_τ₁, h.comm₁, add_comp, add_comp, assoc]
   comm₂ := by rw [comp_τ₂, comp_τ₂, h.comm₂, add_comp, add_comp, assoc, assoc, assoc, ψ.comm₁₂]
-  comm₃ := by rw [comp_τ₃, comp_τ₃, h.comm₃, add_comp, add_c
+  comm₃ := by rw [comp_τ₃, comp_τ₃, h.comm₃, add_comp, add_comp, assoc, assoc, ψ.comm₂₃]
 
 中文:
 定义 compRight
@@ -1646,7 +1652,7 @@ definition compRight
   h₃ := h.h₃ ≫ ψ.τ₃
   comm₁ := by rw [comp_τ₁, comp_τ₁, h.comm₁, add_comp, add_comp, assoc]
   comm₂ := by rw [comp_τ₂, comp_τ₂, h.comm₂, add_comp, add_comp, assoc, assoc, assoc, ψ.comm₁₂]
-  comm₃ := by rw [comp_τ₃, comp_τ₃, h.comm₃, add_comp, add_c
+  comm₃ := by rw [comp_τ₃, comp_τ₃, h.comm₃, add_comp, add_comp, assoc, assoc, ψ.comm₂₃]
 -/
 def compRight (h : Homotopy φ₁ φ₂) (ψ : S₂ ⟶ S₃) : Homotopy (φ₁ ≫ ψ) (φ₂ ≫ ψ) where
   h₀ := h.h₀ ≫ ψ.τ₁
@@ -1697,7 +1703,7 @@ definition op
   g_h₃ := Quiver.Hom.unop_inj h.h₀_f
   comm₁ := Quiver.Hom.unop_inj (by dsimp; rw [h.comm₃]; abel)
   comm₂ := Quiver.Hom.unop_inj (by dsimp; rw [h.comm₂]; abel)
-  comm₃ := Quiver.Hom.unop_inj (by dsimp; rw [
+  comm₃ := Quiver.Hom.unop_inj (by dsimp; rw [h.comm₁]; abel)
 
 中文:
 定义 op
@@ -1710,7 +1716,7 @@ definition op
   g_h₃ := Quiver.Hom.unop_inj h.h₀_f
   comm₁ := Quiver.Hom.unop_inj (by dsimp; rw [h.comm₃]; abel)
   comm₂ := Quiver.Hom.unop_inj (by dsimp; rw [h.comm₂]; abel)
-  comm₃ := Quiver.Hom.unop_inj (by dsimp; rw [
+  comm₃ := Quiver.Hom.unop_inj (by dsimp; rw [h.comm₁]; abel)
 -/
 def op (h : Homotopy φ₁ φ₂) : Homotopy (opMap φ₁) (opMap φ₂) where
   h₀ := h.h₃.op
@@ -1742,7 +1748,7 @@ definition unop
   g_h₃ := Quiver.Hom.op_inj h.h₀_f
   comm₁ := Quiver.Hom.op_inj (by dsimp; rw [h.comm₃]; abel)
   comm₂ := Quiver.Hom.op_inj (by dsimp; rw [h.comm₂]; abel)
-  comm₃ := Quiver.Hom.op_inj (by dsimp; rw [h.
+  comm₃ := Quiver.Hom.op_inj (by dsimp; rw [h.comm₁]; abel)
 
 中文:
 定义 unop
@@ -1755,7 +1761,7 @@ definition unop
   g_h₃ := Quiver.Hom.op_inj h.h₀_f
   comm₁ := Quiver.Hom.op_inj (by dsimp; rw [h.comm₃]; abel)
   comm₂ := Quiver.Hom.op_inj (by dsimp; rw [h.comm₂]; abel)
-  comm₃ := Quiver.Hom.op_inj (by dsimp; rw [h.
+  comm₃ := Quiver.Hom.op_inj (by dsimp; rw [h.comm₁]; abel)
 -/
 def unop {S₁ S₂ : ShortComplex Cᵒᵖ} {φ₁ φ₂ : S₁ ⟶ S₂} (h : Homotopy φ₁ φ₂) :
     Homotopy (unopMap φ₁) (unopMap φ₂) where
@@ -1895,14 +1901,18 @@ definition LeftHomologyMapData.ofNullHomotopic
   body: H₂.liftK (H₁.i ≫ h₁ ≫ S₂.f) (by simp)
   φH := 0
   commf' := by
-    rw [← cancel_mono H₂.i]; rw [assoc]; rw [LeftHomologyData.liftK_i]; rw [LeftHomologyData.f'_i_assoc]; rw [nullHomotopic_τ₁]; rw [add_comp]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [LeftHomologyData.f'_i]; rw [right_eq_a
+    rw [← cancel_mono H₂.i]; rw [assoc]; rw [LeftHomologyData.liftK_i]; rw [LeftHomologyData.f'_i_assoc]; rw [nullHomotopic_τ₁]; rw [add_comp]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [LeftHomologyData.f'_i]; rw [right_eq_add]; rw [h₀_f]
+  commπ := by
+    rw [H₂.liftK_π_eq_zero_of_boundary (H₁.i ≫ h₁ ≫ S₂.f) (H₁.i ≫ h₁) (by rw [assoc]), comp_zero]
 
 中文:
 定义 LeftHomologyMapData.ofNullHomotopic
   定义体: H₂.liftK (H₁.i ≫ h₁ ≫ S₂.f) (by simp)
   φH := 0
   commf' := by
-    rw [← cancel_mono H₂.i]; rw [assoc]; rw [LeftHomologyData.liftK_i]; rw [LeftHomologyData.f'_i_assoc]; rw [nullHomotopic_τ₁]; rw [add_comp]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [LeftHomologyData.f'_i]; rw [right_eq_a
+    rw [← cancel_mono H₂.i]; rw [assoc]; rw [LeftHomologyData.liftK_i]; rw [LeftHomologyData.f'_i_assoc]; rw [nullHomotopic_τ₁]; rw [add_comp]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [LeftHomologyData.f'_i]; rw [right_eq_add]; rw [h₀_f]
+  commπ := by
+    rw [H₂.liftK_π_eq_zero_of_boundary (H₁.i ≫ h₁ ≫ S₂.f) (H₁.i ≫ h₁) (by rw [assoc]), comp_zero]
 -/
 def LeftHomologyMapData.ofNullHomotopic
     (H₁ : S₁.LeftHomologyData) (H₂ : S₂.LeftHomologyData)
@@ -1926,7 +1936,9 @@ definition RightHomologyMapData.ofNullHomotopic
   commg' := by
     rw [← cancel_epi H₁.p]; rw [RightHomologyData.p_descQ_assoc]; rw [RightHomologyData.p_g'_assoc]; rw [nullHomotopic_τ₃]; rw [comp_add]; rw [assoc]; rw [assoc]; rw [RightHomologyData.p_g']; rw [g_h₃]; rw [add_zero]
   commι := by
-    rw
+    rw [H₁.ι_descQ_eq_zero_of_boundary (S₁.g ≫ h₂ ≫ H₂.p) (h₂ ≫ H₂.p) rfl]; rw [zero_comp]
+
+@[simp]
 
 中文:
 定义 RightHomologyMapData.ofNullHomotopic
@@ -1935,7 +1947,9 @@ definition RightHomologyMapData.ofNullHomotopic
   commg' := by
     rw [← cancel_epi H₁.p]; rw [RightHomologyData.p_descQ_assoc]; rw [RightHomologyData.p_g'_assoc]; rw [nullHomotopic_τ₃]; rw [comp_add]; rw [assoc]; rw [assoc]; rw [RightHomologyData.p_g']; rw [g_h₃]; rw [add_zero]
   commι := by
-    rw
+    rw [H₁.ι_descQ_eq_zero_of_boundary (S₁.g ≫ h₂ ≫ H₂.p) (h₂ ≫ H₂.p) rfl]; rw [zero_comp]
+
+@[simp]
 -/
 def RightHomologyMapData.ofNullHomotopic
     (H₁ : S₁.RightHomologyData) (H₂ : S₂.RightHomologyData)
@@ -2336,7 +2350,8 @@ definition trans
     (((e'.homotopyHomInvId.compRight e.inv).compLeft e.hom).trans
       ((Homotopy.ofEq (by simp)).trans e.homotopyHomInvId))
   homotopyInvHomId := (Homotopy.ofEq (by simp)).trans
-    (((e.homotopyInvHomId.c
+    (((e.homotopyInvHomId.compRight e'.hom).compLeft e'.inv).trans
+      ((Homotopy.ofEq (by simp)).trans e'.homotopyInvHomId))
 
 中文:
 定义 trans
@@ -2347,7 +2362,8 @@ definition trans
     (((e'.homotopyHomInvId.compRight e.inv).compLeft e.hom).trans
       ((Homotopy.ofEq (by simp)).trans e.homotopyHomInvId))
   homotopyInvHomId := (Homotopy.ofEq (by simp)).trans
-    (((e.homotopyInvHomId.c
+    (((e.homotopyInvHomId.compRight e'.hom).compLeft e'.inv).trans
+      ((Homotopy.ofEq (by simp)).trans e'.homotopyInvHomId))
 
 Depends on / 依赖: e.hom
 -/

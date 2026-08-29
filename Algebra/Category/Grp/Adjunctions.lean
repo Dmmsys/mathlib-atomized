@@ -126,7 +126,13 @@ definition adj
     { homEquiv X Y := by
         refine ConcreteCategory.homEquiv.trans (Equiv.trans ?_ TypeCat.homEquiv.symm)
         exact FreeAbelianGroup.lift.symm
-      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be just `by intros; ext; rfl`
+      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be just `by intros; ext; rfl`.
+      homEquiv_naturality_left_symm := by
+        intros
+        ext
+        dsimp [ConcreteCategory.homEquiv]
+        rw [← FreeAbelianGroup.lift_comp]
+        rfl }
 
 中文:
 定义 adj
@@ -135,7 +141,13 @@ definition adj
     { homEquiv X Y := by
         refine ConcreteCategory.homEquiv.trans (Equiv.trans ?_ TypeCat.homEquiv.symm)
         exact FreeAbelianGroup.lift.symm
-      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be just `by intros; ext; rfl`
+      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be just `by intros; ext; rfl`.
+      homEquiv_naturality_left_symm := by
+        intros
+        ext
+        dsimp [ConcreteCategory.homEquiv]
+        rw [← FreeAbelianGroup.lift_comp]
+        rfl }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, ConcreteCategory, ConcreteCategory.homEquiv.trans, Equiv.trans, FreeAbelianGroup, FreeAbelianGroup.lift.symm, TypeCat, TypeCat.homEquiv.symm, homEquiv, mkOfHomEquiv
 -/
@@ -206,7 +218,8 @@ instance :
         ((Types.initial_iff_empty X).2 hX).some).isZero.eq_of_tgt
     · have hf : Function.Injective f := by rwa [← mono_iff_injective]
       obtain ⟨g, hg⟩ := hf.hasLeftInverse
-      have : IsS
+      have : IsSplitMono f := IsSplitMono.mk' { retraction := ↾g }
+      infer_instance
 
 中文:
 实例 :
@@ -219,7 +232,8 @@ instance :
         ((Types.initial_iff_empty X).2 hX).some).isZero.eq_of_tgt
     · have hf : Function.Injective f := by rwa [← mono_iff_injective]
       obtain ⟨g, hg⟩ := hf.hasLeftInverse
-      have : IsS
+      have : IsSplitMono f := IsSplitMono.mk' { retraction := ↾g }
+      infer_instance
 
 Depends on / 依赖: Function, Function.Injective, Injective, IsEmpty, IsInitial, IsInitial.isInitialObj, IsSplitMono, IsSplitMono.mk, Types.initial_iff_empty, eq_of_tgt, hasLeftInverse, hf.hasLeftInverse, infer_instance, initial_iff_empty, intros, isInitialObj, isZero, isZero.eq_of_tgt, mono_iff_injective, retraction
 -/
@@ -273,7 +287,10 @@ definition adj
       homEquiv_naturality_left_symm := by
         intros
         ext : 1
-        -- Porting note (https://github.com/leanprover-community/mathlib4
+        -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` doesn't apply this theorem anymore
+        apply FreeGroup.ext_hom
+        intros
+        rfl }
 
 中文:
 定义 adj
@@ -285,7 +302,10 @@ definition adj
       homEquiv_naturality_left_symm := by
         intros
         ext : 1
-        -- Porting note (https://github.com/leanprover-community/mathlib4
+        -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` doesn't apply this theorem anymore
+        apply FreeGroup.ext_hom
+        intros
+        rfl }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, ConcreteCategory, ConcreteCategory.homEquiv.trans, Equiv.trans, FreeGroup, FreeGroup.lift.symm, TypeCat, TypeCat.homEquiv.symm, homEquiv, homEquiv_naturality_left_symm, intros, mkOfHomEquiv
 -/
@@ -336,7 +356,8 @@ definition abelianize
   map_comp := by
     intros
     ext : 1
-    apply (Equiv.eq_symm_apply Abelianization
+    apply (Equiv.eq_symm_apply Abelianization.lift).mp
+    rfl
 
 中文:
 定义 abelianize
@@ -351,7 +372,8 @@ definition abelianize
   map_comp := by
     intros
     ext : 1
-    apply (Equiv.eq_symm_apply Abelianization
+    apply (Equiv.eq_symm_apply Abelianization.lift).mp
+    rfl
 
 Depends on / 依赖: Abelianization, CommGrpCat, CommGrpCat.of
 -/
@@ -379,7 +401,15 @@ definition abelianizeAdj
     { homEquiv := fun _ _ => ((ConcreteCategory.homEquiv (C := CommGrpCat)).trans
         Abelianization.lift.symm).trans
         (ConcreteCategory.homEquiv (C := GrpCat)).symm
-      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be j
+      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be just `by intros; ext1; rfl`.
+      homEquiv_naturality_left_symm := by
+        intros
+        ext
+        simp +instances only
+        apply Eq.symm
+        apply Abelianization.lift_unique
+        intros
+        apply Abelianization.lift_apply_of }
 
 中文:
 定义 abelianizeAdj
@@ -388,7 +418,15 @@ definition abelianizeAdj
     { homEquiv := fun _ _ => ((ConcreteCategory.homEquiv (C := CommGrpCat)).trans
         Abelianization.lift.symm).trans
         (ConcreteCategory.homEquiv (C := GrpCat)).symm
-      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be j
+      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be just `by intros; ext1; rfl`.
+      homEquiv_naturality_left_symm := by
+        intros
+        ext
+        simp +instances only
+        apply Eq.symm
+        apply Abelianization.lift_unique
+        intros
+        apply Abelianization.lift_apply_of }
 
 Depends on / 依赖: Abelianization, Abelianization.lift.symm, Adjunction, Adjunction.mkOfHomEquiv, CommGrpCat, ConcreteCategory, ConcreteCategory.homEquiv, GrpCat, homEquiv, mkOfHomEquiv
 -/
@@ -454,7 +492,8 @@ definition GrpCat.forget₂MonAdj
     { app X := ofHom (@toUnits X _)
       naturality _ _ _ := GrpCat.ext fun _ => Units.ext rfl }
   counit :=
-    { app X := MonCat.ofHom (U
+    { app X := MonCat.ofHom (Units.coeHom X)
+      naturality _ _ _ := MonCat.ext fun _ => rfl } }
 
 中文:
 定义 群范畴.forget₂MonAdj
@@ -467,7 +506,8 @@ definition GrpCat.forget₂MonAdj
     { app X := ofHom (@toUnits X _)
       naturality _ _ _ := GrpCat.ext fun _ => Units.ext rfl }
   counit :=
-    { app X := MonCat.ofHom (U
+    { app X := MonCat.ofHom (Units.coeHom X)
+      naturality _ _ _ := MonCat.ext fun _ => rfl } }
 
 Depends on / 依赖: Adjunction, Adjunction.mk
 -/
@@ -541,7 +581,14 @@ definition CommGrpCat.forget₂CommMonAdj
         invFun f := CommMonCat.ofHom ((Units.coeHom Y).comp f.hom) }
     unit.app X := ofHom toUnits.toMonoidHom
     -- `aesop` can find the following proof but it takes `0.5`s.
-    unit.naturality _ _ 
+    unit.naturality _ _ _ := CommGrpCat.ext fun _ => Units.ext rfl
+    counit.app X := CommMonCat.ofHom (Units.coeHom X)
+    -- `aesop` can find the following proof but it takes `0.5`s.
+    counit.naturality _ _ _ := CommMonCat.ext fun _ => rfl
+    -- `aesop` can find the following proof but it takes `0.2`s.
+    homEquiv_unit := by intros; rfl
+    -- `aesop` can find the following proof but it takes `0.2`s.
+    homEquiv_counit := by intros; rfl }
 
 中文:
 定义 交换群范畴.forget₂CommMonAdj
@@ -552,7 +599,14 @@ definition CommGrpCat.forget₂CommMonAdj
         invFun f := CommMonCat.ofHom ((Units.coeHom Y).comp f.hom) }
     unit.app X := ofHom toUnits.toMonoidHom
     -- `aesop` can find the following proof but it takes `0.5`s.
-    unit.naturality _ _ 
+    unit.naturality _ _ _ := CommGrpCat.ext fun _ => Units.ext rfl
+    counit.app X := CommMonCat.ofHom (Units.coeHom X)
+    -- `aesop` can find the following proof but it takes `0.5`s.
+    counit.naturality _ _ _ := CommMonCat.ext fun _ => rfl
+    -- `aesop` can find the following proof but it takes `0.2`s.
+    homEquiv_unit := by intros; rfl
+    -- `aesop` can find the following proof but it takes `0.2`s.
+    homEquiv_counit := by intros; rfl }
 
 Depends on / 依赖: Adjunction, Adjunction.mk, CommMonCat, CommMonCat.ofHom, MonoidHom, MonoidHom.toHomUnits, Units.coeHom, coeHom, f.hom, homEquiv, invFun, toHomUnits, toMonoidHom, toUnits, toUnits.toMonoidHom, unit.app
 -/

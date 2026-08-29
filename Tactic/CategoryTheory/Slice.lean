@@ -46,7 +46,10 @@ definition evalSlice
       evalTactic (← `(tactic| rotate_left))
   let k ← iterateUntilFailureCount
  evalTactic (← `(conv| rw [← Category.assoc]))
-  let c :
+  let c := k+1+a-b
+iterateRange c c evalTactic (← `(conv| congr))
+  let _ ← iterateUntilFailureWithResults do
+    evalTactic (← `(conv| rw [Category.assoc]))
 
 中文:
 定义 evalSlice
@@ -59,7 +62,10 @@ definition evalSlice
       evalTactic (← `(tactic| rotate_left))
   let k ← iterateUntilFailureCount
  evalTactic (← `(conv| rw [← Category.assoc]))
-  let c :
+  let c := k+1+a-b
+iterateRange c c evalTactic (← `(conv| congr))
+  let _ ← iterateUntilFailureWithResults do
+    evalTactic (← `(conv| rw [Category.assoc]))
 -/
 def evalSlice (a b : Nat) : TacticM Unit := do
   let _ ← iterateUntilFailureWithResults do

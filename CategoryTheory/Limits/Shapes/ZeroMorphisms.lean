@@ -541,7 +541,7 @@ theorem iff_id_eq_zero
     ⟨fun Y => ⟨⟨⟨0⟩, fun f => by
         rw [← id_comp f]; rw [← id_comp (0 : X ⟶ Y)]; rw [h]; rw [zero_comp]; rw [zero_comp]; simp only⟩⟩,
     fun Y => ⟨⟨⟨0⟩, fun f => by
-        rw [← comp_id f]; rw [← comp_id (0 : Y ⟶ X)]; rw [h]; rw [comp_zero]; rw [comp_zero]
+        rw [← comp_id f]; rw [← comp_id (0 : Y ⟶ X)]; rw [h]; rw [comp_zero]; rw [comp_zero]; simp only ⟩⟩⟩⟩
 
 中文:
 定理 iff_id_eq_zero
@@ -551,7 +551,7 @@ theorem iff_id_eq_zero
     ⟨fun Y => ⟨⟨⟨0⟩, fun f => by
         rw [← id_comp f]; rw [← id_comp (0 : X ⟶ Y)]; rw [h]; rw [zero_comp]; rw [zero_comp]; simp only⟩⟩,
     fun Y => ⟨⟨⟨0⟩, fun f => by
-        rw [← comp_id f]; rw [← comp_id (0 : Y ⟶ X)]; rw [h]; rw [comp_zero]; rw [comp_zero]
+        rw [← comp_id f]; rw [← comp_id (0 : Y ⟶ X)]; rw [h]; rw [comp_zero]; rw [comp_zero]; simp only ⟩⟩⟩⟩
 
 Depends on / 依赖: comp_id, comp_zero, eq_of_src, h.eq_of_src, id_comp, zero_comp
 -/
@@ -808,7 +808,8 @@ definition IsZero.hasZeroMorphisms
   comp_zero {X Y} f Z := by
     change f ≫ (hO.from_ Y ≫ hO.to_ Z) = hO.from_ X ≫ hO.to_ Z
     rw [← Category.assoc]
- 
+    congr
+    apply hO.eq_of_tgt
 
 中文:
 定义 是零.hasZeroMorphisms
@@ -822,7 +823,8 @@ definition IsZero.hasZeroMorphisms
   comp_zero {X Y} f Z := by
     change f ≫ (hO.from_ Y ≫ hO.to_ Z) = hO.from_ X ≫ hO.to_ Z
     rw [← Category.assoc]
- 
+    congr
+    apply hO.eq_of_tgt
 
 Depends on / 依赖: from_, hO.from_, hO.to_
 -/
@@ -867,7 +869,10 @@ definition zeroMorphismsOfZeroObject
     congr
     simp only [eq_iff_true_of_subsingleton]
   comp_zero {X Y} f Z := by
-    change f ≫ (default : Y ⟶ 0) ≫ default = (defau
+    change f ≫ (default : Y ⟶ 0) ≫ default = (default : X ⟶ 0) ≫ default
+    rw [← Category.assoc]
+    congr
+    simp only [eq_iff_true_of_subsingleton]
 
 中文:
 定义 zeroMorphismsOfZeroObject
@@ -879,7 +884,10 @@ definition zeroMorphismsOfZeroObject
     congr
     simp only [eq_iff_true_of_subsingleton]
   comp_zero {X Y} f Z := by
-    change f ≫ (default : Y ⟶ 0) ≫ default = (defau
+    change f ≫ (default : Y ⟶ 0) ≫ default = (default : X ⟶ 0) ≫ default
+    rw [← Category.assoc]
+    congr
+    simp only [eq_iff_true_of_subsingleton]
 -/
 def zeroMorphismsOfZeroObject : HasZeroMorphisms C where
   zero X _ := { zero := (default : X ⟶ 0) ≫ default }
@@ -1643,7 +1651,11 @@ definition isIsoZeroEquivIsoZero
     · exact (idZeroEquivIsoZero X).symm eX
     · exact (idZeroEquivIsoZero Y).symm eY
   · rintro ⟨hX, hY⟩
-
+    fconstructor
+    · exact (idZeroEquivIsoZero X) hX
+    · exact (idZeroEquivIsoZero Y) hY
+  · cat_disch
+  · cat_disch
 
 中文:
 定义 isIsoZeroEquivIsoZero
@@ -1658,7 +1670,11 @@ definition isIsoZeroEquivIsoZero
     · exact (idZeroEquivIsoZero X).symm eX
     · exact (idZeroEquivIsoZero Y).symm eY
   · rintro ⟨hX, hY⟩
-
+    fconstructor
+    · exact (idZeroEquivIsoZero X) hX
+    · exact (idZeroEquivIsoZero Y) hY
+  · cat_disch
+  · cat_disch
 -/
 def isIsoZeroEquivIsoZero (X Y : C) : IsIso (0 : X ⟶ Y) ≃ (X ≅ 0) × (Y ≅ 0) := by
   -- This is lame, because `Prod` can't cope with `Prop`, so we can't use `Equiv.prodCongr`.

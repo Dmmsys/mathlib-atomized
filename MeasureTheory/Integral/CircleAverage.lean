@@ -194,7 +194,13 @@ theorem circleAverage_eq_circleIntegral
     simp [circleAverage, ← coe_smul]
   _ = (2 * π * I)⁻¹ • ∫ θ in 0..2 * π, I • f (circleMap c R θ) := by
     rw [intervalIntegral.integral_smul]; rw [mul_inv_rev]; rw [smul_smul]
-    match_scalar
+    match_scalars
+    field
+  _ = (2 * π * I)⁻¹ • (∮ z in C(c, R), (z - c)⁻¹ • f z) := by
+    unfold circleIntegral
+    congr with θ
+    simp [deriv_circleMap, circleMap_sub_center, smul_smul]
+    field_simp [circleMap_ne_center h]
 
 中文:
 定理 circleAverage_eq_circle整数egral
@@ -205,7 +211,13 @@ theorem circleAverage_eq_circleIntegral
     simp [circleAverage, ← coe_smul]
   _ = (2 * π * I)⁻¹ • ∫ θ in 0..2 * π, I • f (circleMap c R θ) := by
     rw [intervalIntegral.integral_smul]; rw [mul_inv_rev]; rw [smul_smul]
-    match_scalar
+    match_scalars
+    field
+  _ = (2 * π * I)⁻¹ • (∮ z in C(c, R), (z - c)⁻¹ • f z) := by
+    unfold circleIntegral
+    congr with θ
+    simp [deriv_circleMap, circleMap_sub_center, smul_smul]
+    field_simp [circleMap_ne_center h]
 
 Depends on / 依赖: circleAverage, circleIntegral, circleMap, circleMap_ne_center, circleMap_sub_center, coe_smul, deriv_circleMap, integral_smul, intervalIntegral, intervalIntegral.integral_smul, match_scalars, mul_inv_rev, smul_smul
 -/
@@ -242,7 +254,8 @@ lemma circleAverage_eq_integral_add
   have := t₀.intervalIntegral_add_eq 0 η
   rw [zero_add]; rw [add_comm] at this
   rw [zero_add]
-  simp only
+  simp only [circleAverage, mul_inv_rev]
+  congr
 
 中文:
 引理 circleAverage_eq_integral_add
@@ -254,7 +267,8 @@ lemma circleAverage_eq_integral_add
   have := t₀.intervalIntegral_add_eq 0 η
   rw [zero_add]; rw [add_comm] at this
   rw [zero_add]
-  simp only
+  simp only [circleAverage, mul_inv_rev]
+  congr
 
 Depends on / 依赖: Periodic, add_comm, circleAverage, circleMap, integral_comp_add_right, intervalIntegral, intervalIntegral.integral_comp_add_right, intervalIntegral_add_eq, mul_inv_rev, periodic_circleMap, zero_add
 -/
@@ -418,7 +432,9 @@ theorem circleAverage_zero_one_congr_inv
     simp [circleMap_zero_inv]
   _ = ∫ θ in 0..2 * π, f (circleMap 0 1 θ) := by
     rw [intervalIntegral.integral_comp_neg (fun w => f (circleMap 0 1 w))]
-    have t₀ 
+    have t₀ : Function.Periodic (fun w => f (circleMap 0 1 w)) (2 * π) :=
+      fun x => by simp [periodic_circleMap 0 1 x]
+    simpa using (t₀.intervalIntegral_add_eq (-(2 * π)) 0)
 
 中文:
 定理 circleAverage_zero_one_congr_inv
@@ -431,7 +447,9 @@ theorem circleAverage_zero_one_congr_inv
     simp [circleMap_zero_inv]
   _ = ∫ θ in 0..2 * π, f (circleMap 0 1 θ) := by
     rw [intervalIntegral.integral_comp_neg (fun w => f (circleMap 0 1 w))]
-    have t₀ 
+    have t₀ : Function.Periodic (fun w => f (circleMap 0 1 w)) (2 * π) :=
+      fun x => by simp [periodic_circleMap 0 1 x]
+    simpa using (t₀.intervalIntegral_add_eq (-(2 * π)) 0)
 
 Depends on / 依赖: Function, Function.Periodic, Periodic, circleAverage, circleMap, circleMap_zero_inv, integral_comp_neg, intervalIntegral, intervalIntegral.integral_comp_neg, intervalIntegral_add_eq, periodic_circleMap
 -/
@@ -482,7 +500,8 @@ theorem ContinuousOn.circleAverage
   apply (intervalIntegral.continuous_parametric_intervalIntegral_of_continuous' _ _ _).const_smul
   have (x : s × Real) : circleMap c x.1 x.2 in {z | ‖z - c‖ in s} := by
     simp [abs_of_nonneg (hs x.1 (Subtype.coe_prop x.1))]
-  apply hf.comp (f
+  apply hf.comp (f := (fun x => ⟨circleMap c x.1 x.2, this x⟩))
+  fun_prop
 
 中文:
 定理 ContinuousOn.circleAverage
@@ -492,7 +511,8 @@ theorem ContinuousOn.circleAverage
   apply (intervalIntegral.continuous_parametric_intervalIntegral_of_continuous' _ _ _).const_smul
   have (x : s × Real) : circleMap c x.1 x.2 in {z | ‖z - c‖ in s} := by
     simp [abs_of_nonneg (hs x.1 (Subtype.coe_prop x.1))]
-  apply hf.comp (f
+  apply hf.comp (f := (fun x => ⟨circleMap c x.1 x.2, this x⟩))
+  fun_prop
 
 Depends on / 依赖: Subtype, Subtype.coe_prop, abs_of_nonneg, circleMap, coe_prop, const_smul, continuousOn_iff_continuous_domRestrict, continuous_parametric_intervalIntegral_of_continuous, fun_prop, hf.comp, intervalIntegral, intervalIntegral.continuous_parametric_intervalIntegral_of_continuous
 -/
@@ -544,7 +564,7 @@ lemma ContinuousOn.eq_of_eqOn_Ioo
     use r
     simp_all [Ioo_subset_Ioc_self]
   apply tendsto_nhds_unique this (tendsto_const_nhds.congr' _)
-  apply Filter.ev
+  apply Filter.eventuallyEq_of_mem (Ioo_mem_nhdsLT hR) (fun _ hx => (h₂f hx).symm)
 
 中文:
 引理 ContinuousOn.eq_of_eqOn_Ioo
@@ -556,7 +576,7 @@ lemma ContinuousOn.eq_of_eqOn_Ioo
     use r
     simp_all [Ioo_subset_Ioc_self]
   apply tendsto_nhds_unique this (tendsto_const_nhds.congr' _)
-  apply Filter.ev
+  apply Filter.eventuallyEq_of_mem (Ioo_mem_nhdsLT hR) (fun _ hx => (h₂f hx).symm)
 
 Depends on / 依赖: Filter, Filter.Tendsto, Filter.eventuallyEq_of_mem, Ioo_mem_nhdsLT, Ioo_subset_Ioc_self, Tendsto, eventuallyEq_of_mem, mem_nhdsLT_iff_exists_Ioo_subset, mono_left, nhdsWithin_le_iff, right_mem_Ioc, right_mem_Ioc.mpr, tendsto_const_nhds, tendsto_const_nhds.congr, tendsto_nhds_unique
 -/
@@ -685,7 +705,7 @@ theorem circleAverage_mono_on_of_le_circle
   proof: by
   rw [← circleAverage_const a c |R|]; rw [circleAverage]; rw [circleAverage]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_le_mul_iff_of_pos_left (inv_pos.2 two_pi_pos)]
   exact intervalIntegral.integral_mono_on_of_le_Ioo (le_of_lt two_pi_pos) hf
-    intervalIntegrable_const (fun θ _ => h₂f (circl
+    intervalIntegrable_const (fun θ _ => h₂f (circleMap c R θ) (circleMap_mem_sphere' c R θ))
 
 中文:
 定理 circleAverage_mono_on_of_le_circle
@@ -693,7 +713,7 @@ theorem circleAverage_mono_on_of_le_circle
   证明: by
   rw [← circleAverage_const a c |R|]; rw [circleAverage]; rw [circleAverage]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_le_mul_iff_of_pos_left (inv_pos.2 two_pi_pos)]
   exact intervalIntegral.integral_mono_on_of_le_Ioo (le_of_lt two_pi_pos) hf
-    intervalIntegrable_const (fun θ _ => h₂f (circl
+    intervalIntegrable_const (fun θ _ => h₂f (circleMap c R θ) (circleMap_mem_sphere' c R θ))
 
 Depends on / 依赖: circleAverage, circleAverage_const, circleMap, circleMap_mem_sphere, integral_mono_on_of_le_Ioo, intervalIntegrable_const, intervalIntegral, intervalIntegral.integral_mono_on_of_le_Ioo, inv_pos, le_of_lt, mul_le_mul_iff_of_pos_left, smul_eq_mul, two_pi_pos
 -/
@@ -739,7 +759,8 @@ theorem circleAverage_nonneg_of_nonneg
   · rw [← circleAverage_const 0 c |R|, circleAverage, circleAverage, smul_eq_mul, smul_eq_mul,
       mul_le_mul_iff_of_pos_left (inv_pos.2 two_pi_pos)]
     apply intervalIntegral.integral_mono_on_of_le_Ioo (le_of_lt two_pi_pos)
-      intervalIntegrable_const
+      intervalIntegrable_const hf (fun θ _ => h₂f (circleMap c R θ) (circleMap_mem_sphere' c R θ))
+  · rw [circleAverage.integral_undef hf]
 
 中文:
 定理 circleAverage_nonneg_of_nonneg
@@ -749,7 +770,8 @@ theorem circleAverage_nonneg_of_nonneg
   · rw [← circleAverage_const 0 c |R|, circleAverage, circleAverage, smul_eq_mul, smul_eq_mul,
       mul_le_mul_iff_of_pos_left (inv_pos.2 two_pi_pos)]
     apply intervalIntegral.integral_mono_on_of_le_Ioo (le_of_lt two_pi_pos)
-      intervalIntegrable_const
+      intervalIntegrable_const hf (fun θ _ => h₂f (circleMap c R θ) (circleMap_mem_sphere' c R θ))
+  · rw [circleAverage.integral_undef hf]
 
 Depends on / 依赖: CircleIntegrable, circleAverage, circleAverage.integral_undef, circleAverage_const, circleMap, circleMap_mem_sphere, integral_mono_on_of_le_Ioo, integral_undef, intervalIntegrable_const, intervalIntegral, intervalIntegral.integral_mono_on_of_le_Ioo, inv_pos, le_of_lt, mul_le_mul_iff_of_pos_left, smul_eq_mul, two_pi_pos
 -/

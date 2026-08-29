@@ -170,7 +170,16 @@ lemma monotone_transfiniteIterate
   | succ k' hk' hkk' =>
     obtain hkj | rfl := hkj.lt_or_eq
     · refine (hkk' ((Order.lt_succ_iff_of_not_isMax hk').mp hkj)).trans ?_
-
+      dsimp
+      rw [transfiniteIterate_succ _ _ _ hk']
+      apply hφ
+    · rfl
+  | isSuccLimit k' hk' _ =>
+    obtain hkj | rfl := hkj.lt_or_eq
+    · dsimp
+      rw [transfiniteIterate_limit _ _ _ hk']
+      exact le_iSup (fun (⟨l, hl⟩ : Set.Iio k') => transfiniteIterate φ l i₀) ⟨k, hkj⟩
+    · rfl
 
 中文:
 引理 monotone_transfiniteIterate
@@ -185,7 +194,16 @@ lemma monotone_transfiniteIterate
   | succ k' hk' hkk' =>
     obtain hkj | rfl := hkj.lt_or_eq
     · refine (hkk' ((Order.lt_succ_iff_of_not_isMax hk').mp hkj)).trans ?_
-
+      dsimp
+      rw [transfiniteIterate_succ _ _ _ hk']
+      apply hφ
+    · rfl
+  | isSuccLimit k' hk' _ =>
+    obtain hkj | rfl := hkj.lt_or_eq
+    · dsimp
+      rw [transfiniteIterate_limit _ _ _ hk']
+      exact le_iSup (fun (⟨l, hl⟩ : Set.Iio k') => transfiniteIterate φ l i₀) ⟨k, hkj⟩
+    · rfl
 
 Depends on / 依赖: Order.lt_succ_iff_of_not_isMax, Set.Iio, SuccOrder, SuccOrder.limitRecOn, eq_bot, hk.eq_bot, hkj.lt_or_eq, isSuccLimit, le_iSup, limitRecOn, lt_or_eq, lt_succ_iff_of_not_isMax, transfiniteItera, transfiniteIterate_limit, transfiniteIterate_succ
 -/
@@ -226,7 +244,14 @@ lemma top_mem_range_transfiniteIterate
       transfiniteIterate φ j₁ i₀ = transfiniteIterate φ j₂ i₀ := by
     grind [Function.Injective]
   by_contra!
-  suff
+  suffices transfiniteIterate φ j₁ i₀ < transfiniteIterate φ j₂ i₀ by
+    simp only [eq, lt_self_iff_false] at this
+  have hj₁ : ¬ IsMax j₁ := by
+    simp only [not_isMax_iff]
+    exact ⟨_, hj⟩
+  refine lt_of_lt_of_le (hφ' _ (this j₁)) ?_
+  rw [← transfiniteIterate_succ φ i₀ j₁ hj₁]
+  exact monotone_transfiniteIterate _ _ hφ (Order.succ_le_of_lt hj)
 
 中文:
 引理 top_mem_range_transfiniteIterate
@@ -240,7 +265,14 @@ lemma top_mem_range_transfiniteIterate
       transfiniteIterate φ j₁ i₀ = transfiniteIterate φ j₂ i₀ := by
     grind [Function.Injective]
   by_contra!
-  suff
+  suffices transfiniteIterate φ j₁ i₀ < transfiniteIterate φ j₂ i₀ by
+    simp only [eq, lt_self_iff_false] at this
+  have hj₁ : ¬ IsMax j₁ := by
+    simp only [not_isMax_iff]
+    exact ⟨_, hj⟩
+  refine lt_of_lt_of_le (hφ' _ (this j₁)) ?_
+  rw [← transfiniteIterate_succ φ i₀ j₁ hj₁]
+  exact monotone_transfiniteIterate _ _ hφ (Order.succ_le_of_lt hj)
 
 Depends on / 依赖: Function, Function.Injective, Injective, lt_of_lt_of_le, lt_self_iff_false, not_isMax_iff, transfiniteIt, transfiniteIterate
 -/

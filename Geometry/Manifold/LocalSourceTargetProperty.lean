@@ -432,7 +432,14 @@ lemma congr_of_eventuallyEq
   obtain ⟨s, hss', hs, hxs⟩ := mem_nhds_iff.mp hxs'
   refine ⟨hf.domChart.restr s, hf.codChart, ?_, ?_, ?_, hf.codChart_mem_maximalAtlas, ?_, ?_⟩
   · simpa using ⟨mem_domChart_source hf, by rwa [interior_eq_iff_isOpen.mpr hs]⟩
-  · exact hfg (mem_of_mem_nh
+  · exact hfg (mem_of_mem_nhds hxs') ▸ mem_codChart_source hf
+  · exact restr_mem_maximalAtlas _ hf.domChart_mem_maximalAtlas hs
+  · trans s' inter f ⁻¹' hf.codChart.source
+    · apply subset_inter
+      · exact Subset.trans (by simp [interior_eq_iff_isOpen.mpr hs]) hss'
+      · exact Subset.trans (by simp) hf.source_subset_preimage_source
+    · rw [hfg.inter_preimage_eq]; exact inter_subset_right
+· exact hP.congr (hfg.mono hss' |>.mono (by grind)) hP.mono_source hs hf.property
 
 中文:
 引理 congr_of_eventuallyEq
@@ -442,7 +449,14 @@ lemma congr_of_eventuallyEq
   obtain ⟨s, hss', hs, hxs⟩ := mem_nhds_iff.mp hxs'
   refine ⟨hf.domChart.restr s, hf.codChart, ?_, ?_, ?_, hf.codChart_mem_maximalAtlas, ?_, ?_⟩
   · simpa using ⟨mem_domChart_source hf, by rwa [interior_eq_iff_isOpen.mpr hs]⟩
-  · exact hfg (mem_of_mem_nh
+  · exact hfg (mem_of_mem_nhds hxs') ▸ mem_codChart_source hf
+  · exact restr_mem_maximalAtlas _ hf.domChart_mem_maximalAtlas hs
+  · trans s' inter f ⁻¹' hf.codChart.source
+    · apply subset_inter
+      · exact Subset.trans (by simp [interior_eq_iff_isOpen.mpr hs]) hss'
+      · exact Subset.trans (by simp) hf.source_subset_preimage_source
+    · rw [hfg.inter_preimage_eq]; exact inter_subset_right
+· exact hP.congr (hfg.mono hss' |>.mono (by grind)) hP.mono_source hs hf.property
 
 Depends on / 依赖: Subset, Subset.trans, codChart, codChart_mem_maximalAtlas, domChart, domChart_mem_maximalAtlas, exists_mem, hf.codChart, hf.codChart.source, hf.codChart_mem_maximalAtlas, hf.domChart.restr, hf.domChart_mem_maximalAtlas, interior_eq_iff_i, interior_eq_iff_isOpen, interior_eq_iff_isOpen.mpr, mem_codChart_source, mem_domChart_source, mem_nhds_iff, mem_nhds_iff.mp, mem_of_mem_nhds
 -/
@@ -492,7 +506,10 @@ lemma _root_.IsOpen.liftSourceTargetPropertyAt
   -- Suppose the lifted property `P` holds at `x`:
   -- choose slice charts `φ` near `x` and `ψ` near `f x` s.t. `P f φ ψ` holds.
   -- Then the same charts witness that `P f φ ψ` holds at any `y ∈ φ.source`.
-  refine ⟨hx.domChart.source, fun y hy => 
+  refine ⟨hx.domChart.source, fun y hy => ?_, hx.domChart.open_source, hx.mem_domChart_source⟩
+  exact ⟨hx.domChart, hx.codChart, hy, hx.source_subset_preimage_source hy,
+    hx.domChart_mem_maximalAtlas, hx.codChart_mem_maximalAtlas, hx.source_subset_preimage_source,
+    hx.property⟩
 
 中文:
 引理 _root_.是开集.liftSourceTargetPropertyAt
@@ -502,7 +519,10 @@ lemma _root_.IsOpen.liftSourceTargetPropertyAt
   -- Suppose the lifted property `P` holds at `x`:
   -- choose slice charts `φ` near `x` and `ψ` near `f x` s.t. `P f φ ψ` holds.
   -- Then the same charts witness that `P f φ ψ` holds at any `y ∈ φ.source`.
-  refine ⟨hx.domChart.source, fun y hy => 
+  refine ⟨hx.domChart.source, fun y hy => ?_, hx.domChart.open_source, hx.mem_domChart_source⟩
+  exact ⟨hx.domChart, hx.codChart, hy, hx.source_subset_preimage_source hy,
+    hx.domChart_mem_maximalAtlas, hx.codChart_mem_maximalAtlas, hx.source_subset_preimage_source,
+    hx.property⟩
 
 Depends on / 依赖: isOpen_iff_forall_mem_open
 -/
@@ -530,7 +550,12 @@ lemma prodMap
   · simp [mem_codChart_source hf, mem_codChart_source hg]
   · exact IsManifold.mem_maximalAtlas_prod
       (domChart_mem_maximalAtlas hf) (domChart_mem_maximalAtlas hg)
-  · a
+  · apply IsManifold.mem_maximalAtlas_prod
+      (codChart_mem_maximalAtlas hf) (codChart_mem_maximalAtlas hg)
+  · simp only [OpenPartialHomeomorph.prod_toPartialHomeomorph, PartialEquiv.prod_source,
+      preimage_prod_map_prod]
+    exact prod_mono hf.source_subset_preimage_source hg.source_subset_preimage_source
+  · exact h hf.property hg.property
 
 中文:
 引理 prodMap
@@ -541,7 +566,12 @@ lemma prodMap
   · simp [mem_codChart_source hf, mem_codChart_source hg]
   · exact IsManifold.mem_maximalAtlas_prod
       (domChart_mem_maximalAtlas hf) (domChart_mem_maximalAtlas hg)
-  · a
+  · apply IsManifold.mem_maximalAtlas_prod
+      (codChart_mem_maximalAtlas hf) (codChart_mem_maximalAtlas hg)
+  · simp only [OpenPartialHomeomorph.prod_toPartialHomeomorph, PartialEquiv.prod_source,
+      preimage_prod_map_prod]
+    exact prod_mono hf.source_subset_preimage_source hg.source_subset_preimage_source
+  · exact h hf.property hg.property
 
 Depends on / 依赖: IsManifold, IsManifold.mem_maximalAtlas_prod, OpenPartialHomeomorph, OpenPartialHomeomorph.prod_toPartialHomeomorph, PartialEquiv, PartialEquiv.prod_source, codChart, codChart_mem_maximalAtlas, domChart, domChart_mem_maximalAtlas, hf.codChart.prod, hf.domChart.prod, hf.mem_domChart_source, hg.codChart, hg.domChart, hg.mem_domChart_source, mem_codChart_source, mem_domChart_source, mem_maximalAtlas_prod, preimage_prod_map_prod
 -/

@@ -36,7 +36,7 @@ instance hasEnoughRootsOfUnity
     exact IsCyclotomicExtension.exists_isPrimitiveRoot (S := {n}) F _ rfl (NeZero.ne _)
   cyc :=
     have : NeZero n := .of_neZero_natCast F
-    rootsOfUn
+    rootsOfUnity.isCyclic F n
 
 中文:
 实例 hasEnoughRootsOfUnity
@@ -47,7 +47,7 @@ instance hasEnoughRootsOfUnity
     exact IsCyclotomicExtension.exists_isPrimitiveRoot (S := {n}) F _ rfl (NeZero.ne _)
   cyc :=
     have : NeZero n := .of_neZero_natCast F
-    rootsOfUn
+    rootsOfUnity.isCyclic F n
 
 Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.exists_isPrimitiveRoot, NeZero, NeZero.ne, Set.mem_singleton_iff.mp, exists_isPrimitiveRoot, isCyclic, isCyclotomicExtension, mem_singleton_iff, of_neZero_natCast, rootsOfUnity, rootsOfUnity.isCyclic
 -/

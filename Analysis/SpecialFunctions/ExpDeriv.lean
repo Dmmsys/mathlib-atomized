@@ -242,7 +242,9 @@ theorem hasDerivAt_exp
   refine (IsBigO.of_bound ‖exp x‖ ?_).trans_isLittleO (isLittleO_pow_id this)
   filter_upwards [Metric.ball_mem_nhds (0 : Complex) zero_lt_one]
   simp only [Metric.mem_ball, dist_zero_right, norm_pow]
-  exact fun z hz => 
+  exact fun z hz => exp_bound_sq x z hz.le
+
+@[simp]
 
 中文:
 定理 hasDerivAt_exp
@@ -254,7 +256,9 @@ theorem hasDerivAt_exp
   refine (IsBigO.of_bound ‖exp x‖ ?_).trans_isLittleO (isLittleO_pow_id this)
   filter_upwards [Metric.ball_mem_nhds (0 : Complex) zero_lt_one]
   simp only [Metric.mem_ball, dist_zero_right, norm_pow]
-  exact fun z hz => 
+  exact fun z hz => exp_bound_sq x z hz.le
+
+@[simp]
 
 Depends on / 依赖: Action, Action.functorCategoryEquivalence, HasLimit, IsBigO, IsBigO.of_bound, Metric, Metric.ball_mem_nhds, Metric.mem_ball, PreservesLimit, SingleObj, SingleObj.star, ball_mem_nhds, dist_zero_right, evaluation, exp_bound_sq, filter_upwards, flip.obj, forget, functor, functorCategoryEquivalence
 -/

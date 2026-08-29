@@ -39,7 +39,10 @@ instance Discrete.monoidal
   whiskerRight f X := eqToHom (by rw [eq_of_hom f])
   tensorHom f g := eqToHom (by rw [eq_of_hom f, eq_of_hom g])
   leftUnitor X := Discrete.eqToIso (one_mul X.as)
-  rightUnitor X := Dis
+  rightUnitor X := Discrete.eqToIso (mul_one X.as)
+  associator _ _ _ := Discrete.eqToIso (mul_assoc _ _ _)
+
+@[to_additive (attr := simp) Discrete.addMonoidal_tensorUnit_as]
 
 中文:
 实例 离散.monoidal
@@ -50,7 +53,10 @@ instance Discrete.monoidal
   whiskerRight f X := eqToHom (by rw [eq_of_hom f])
   tensorHom f g := eqToHom (by rw [eq_of_hom f, eq_of_hom g])
   leftUnitor X := Discrete.eqToIso (one_mul X.as)
-  rightUnitor X := Dis
+  rightUnitor X := Discrete.eqToIso (mul_one X.as)
+  associator _ _ _ := Discrete.eqToIso (mul_assoc _ _ _)
+
+@[to_additive (attr := simp) Discrete.addMonoidal_tensorUnit_as]
 
 Depends on / 依赖: Discrete, Discrete.mk
 -/

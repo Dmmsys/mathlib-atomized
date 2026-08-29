@@ -43,7 +43,58 @@ theorem lintegral_iSup
   rw [lintegral_eq_nnreal]
   refine iSup_le fun s => iSup_le fun hsf => ?_
   refine ENNReal.le_of_forall_lt_one_mul_le fun a ha => ?_
-  rcases ENNReal.lt_iff_exists_coe.1 ha with 
+  rcases ENNReal.lt_iff_exists_coe.1 ha with ⟨r, rfl, _⟩
+  have ha : r < 1 := ENNReal.coe_lt_coe.1 ha
+  let rs := s.map fun a => r * a
+  have eq_rs : rs.map c = (const α r : α ->ₛ Real>=0∞) * map c s := rfl
+  have eq : forall p, rs.map c ⁻¹' {p} = ⋃ n, rs.map c ⁻¹' {p} inter { a | p <= f n a } := by
+    intro p
+    rw [← inter_iUnion]; nth_rw 1 [← inter_univ (map c rs ⁻¹' {p})]
+    refine Set.ext fun x => and_congr_right fun hx => (iff_of_eq (true_iff _)).2 ?_
+    by_cases p_eq : p = 0
+    · simp [p_eq]
+    simp only [coe_map, mem_preimage, Function.comp_apply, mem_singleton_iff] at hx
+    subst hx
+    have : r * s x != 0 := by rwa [Ne, ← ENNReal.coe_eq_zero]
+    have : s x != 0 := right_ne_zero_of_mul this
+    have : (rs.map c) x < ⨆ n : Nat, f n x := by
+      refine lt_of_lt_of_le (ENNReal.coe_lt_coe.2 ?_) (hsf x)
+      suffices r * s x < 1 * s x by simpa
+      gcongr
+    rcases lt_iSup_iff.1 this with ⟨i, hi⟩
+    exact mem_iUnion.2 ⟨i, le_of_lt hi⟩
+  have mono : forall r : Real>=0∞, Monotone fun n => rs.map c ⁻¹' {r} inter { a | r <= f n a } := by
+    intro r i j h
+    refine inter_subset_inter_right _ ?_
+    simp_rw [subset_def, mem_ofPred]
+    intro x hx
+    exact le_trans hx (h_mono h x)
+  have h_meas : forall n, MeasurableSet {a : α | map c rs a <= f n a} := fun n =>
+    measurableSet_le (SimpleFunc.measurable _) (hf n)
+  calc
+    (r : Real>=0∞) * (s.map c).lintegral μ = ∑ r in (rs.map c).range, r * μ (rs.map c ⁻¹' {r}) := by
+      rw [← const_mul_lintegral]; rw [eq_rs]; rw [SimpleFunc.lintegral]
+    _ = ∑ r in (rs.map c).range, r * μ (⋃ n, rs.map c ⁻¹' {r} inter { a | r <= f n a }) := by
+      simp only [(eq _).symm]
+    _ = ∑ r in (rs.map c).range, ⨆ n, r * μ (rs.map c ⁻¹' {r} inter { a | r <= f n a }) :=
+      Finset.sum_congr rfl fun x _ => by rw [(mono x).measure_iUnion, ENNReal.mul_iSup]
+    _ = ⨆ n, ∑ r in (rs.map c).range, r * μ (rs.map c ⁻¹' {r} inter { a | r <= f n a }) := by
+      refine ENNReal.finsetSum_iSup_of_monotone fun p i j h => ?_
+      gcongr _ * μ ?_
+      exact mono p h
+    _ <= ⨆ n : Nat, ((rs.map c).restrict { a | (rs.map c) a <= f n a }).lintegral μ := by
+      gcongr with n
+      rw [restrict_lintegral _ (h_meas n)]
+      refine le_of_eq (Finset.sum_congr rfl fun r _ => ?_)
+      congr 2 with a
+      refine and_congr_right ?_
+      simp +contextual
+    _ <= ⨆ n, ∫⁻ a, f n a ∂μ := by
+      simp only [← SimpleFunc.lintegral_eq_lintegral]
+      gcongr with n a
+      simp only [map_apply] at h_meas
+      simp only [coe_map, restrict_apply _ (h_meas _), (· ∘ ·)]
+      exact indicator_apply_le id
 
 中文:
 定理 lintegral_iSup
@@ -55,7 +106,58 @@ theorem lintegral_iSup
   rw [lintegral_eq_nnreal]
   refine iSup_le fun s => iSup_le fun hsf => ?_
   refine ENNReal.le_of_forall_lt_one_mul_le fun a ha => ?_
-  rcases ENNReal.lt_iff_exists_coe.1 ha with 
+  rcases ENNReal.lt_iff_exists_coe.1 ha with ⟨r, rfl, _⟩
+  have ha : r < 1 := ENNReal.coe_lt_coe.1 ha
+  let rs := s.map fun a => r * a
+  have eq_rs : rs.map c = (const α r : α ->ₛ Real>=0∞) * map c s := rfl
+  have eq : forall p, rs.map c ⁻¹' {p} = ⋃ n, rs.map c ⁻¹' {p} inter { a | p <= f n a } := by
+    intro p
+    rw [← inter_iUnion]; nth_rw 1 [← inter_univ (map c rs ⁻¹' {p})]
+    refine Set.ext fun x => and_congr_right fun hx => (iff_of_eq (true_iff _)).2 ?_
+    by_cases p_eq : p = 0
+    · simp [p_eq]
+    simp only [coe_map, mem_preimage, Function.comp_apply, mem_singleton_iff] at hx
+    subst hx
+    have : r * s x != 0 := by rwa [Ne, ← ENNReal.coe_eq_zero]
+    have : s x != 0 := right_ne_zero_of_mul this
+    have : (rs.map c) x < ⨆ n : Nat, f n x := by
+      refine lt_of_lt_of_le (ENNReal.coe_lt_coe.2 ?_) (hsf x)
+      suffices r * s x < 1 * s x by simpa
+      gcongr
+    rcases lt_iSup_iff.1 this with ⟨i, hi⟩
+    exact mem_iUnion.2 ⟨i, le_of_lt hi⟩
+  have mono : forall r : Real>=0∞, Monotone fun n => rs.map c ⁻¹' {r} inter { a | r <= f n a } := by
+    intro r i j h
+    refine inter_subset_inter_right _ ?_
+    simp_rw [subset_def, mem_ofPred]
+    intro x hx
+    exact le_trans hx (h_mono h x)
+  have h_meas : forall n, MeasurableSet {a : α | map c rs a <= f n a} := fun n =>
+    measurableSet_le (SimpleFunc.measurable _) (hf n)
+  calc
+    (r : Real>=0∞) * (s.map c).lintegral μ = ∑ r in (rs.map c).range, r * μ (rs.map c ⁻¹' {r}) := by
+      rw [← const_mul_lintegral]; rw [eq_rs]; rw [SimpleFunc.lintegral]
+    _ = ∑ r in (rs.map c).range, r * μ (⋃ n, rs.map c ⁻¹' {r} inter { a | r <= f n a }) := by
+      simp only [(eq _).symm]
+    _ = ∑ r in (rs.map c).range, ⨆ n, r * μ (rs.map c ⁻¹' {r} inter { a | r <= f n a }) :=
+      Finset.sum_congr rfl fun x _ => by rw [(mono x).measure_iUnion, ENNReal.mul_iSup]
+    _ = ⨆ n, ∑ r in (rs.map c).range, r * μ (rs.map c ⁻¹' {r} inter { a | r <= f n a }) := by
+      refine ENNReal.finsetSum_iSup_of_monotone fun p i j h => ?_
+      gcongr _ * μ ?_
+      exact mono p h
+    _ <= ⨆ n : Nat, ((rs.map c).restrict { a | (rs.map c) a <= f n a }).lintegral μ := by
+      gcongr with n
+      rw [restrict_lintegral _ (h_meas n)]
+      refine le_of_eq (Finset.sum_congr rfl fun r _ => ?_)
+      congr 2 with a
+      refine and_congr_right ?_
+      simp +contextual
+    _ <= ⨆ n, ∫⁻ a, f n a ∂μ := by
+      simp only [← SimpleFunc.lintegral_eq_lintegral]
+      gcongr with n a
+      simp only [map_apply] at h_meas
+      simp only [coe_map, restrict_apply _ (h_meas _), (· ∘ ·)]
+      exact indicator_apply_le id
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_coe, ENNReal.le_of_forall_lt_one_mul_le, ENNReal.lt_iff_exists_coe, coe_lt_coe, eq_rs, iSup_le, iSup_lintegral_le, le_antisymm, le_of_forall_lt_one_mul_le, lintegral_eq_nnreal, lt_iff_exists_coe, rs.map, s.map
 -/
@@ -133,7 +235,13 @@ theorem lintegral_iSup'
   have h_ae_seq_mono : Monotone (aeSeq hf p) := by
     intro n m hnm x
     by_cases hx : x in aeSeqSet hf p
-    · exact aeSeq.prop_of_mem_aeSeqSet hf
+    · exact aeSeq.prop_of_mem_aeSeqSet hf hx hnm
+    · simp only [aeSeq, hx, if_false, le_rfl]
+  rw [lintegral_congr_ae (aeSeq.iSup hf hp).symm]
+  simp_rw [iSup_apply]
+  rw [lintegral_iSup (aeSeq.measurable hf p) h_ae_seq_mono]
+  congr with n
+  exact lintegral_congr_ae (aeSeq.aeSeq_n_eq_fun_n_ae hf hp n)
 
 中文:
 定理 lintegral_iSup'
@@ -145,7 +253,13 @@ theorem lintegral_iSup'
   have h_ae_seq_mono : Monotone (aeSeq hf p) := by
     intro n m hnm x
     by_cases hx : x in aeSeqSet hf p
-    · exact aeSeq.prop_of_mem_aeSeqSet hf
+    · exact aeSeq.prop_of_mem_aeSeqSet hf hx hnm
+    · simp only [aeSeq, hx, if_false, le_rfl]
+  rw [lintegral_congr_ae (aeSeq.iSup hf hp).symm]
+  simp_rw [iSup_apply]
+  rw [lintegral_iSup (aeSeq.measurable hf p) h_ae_seq_mono]
+  congr with n
+  exact lintegral_congr_ae (aeSeq.aeSeq_n_eq_fun_n_ae hf hp n)
 
 Depends on / 依赖: Monotone, aeSeq.iSup, aeSeq.measurable, aeSeq.prop_of_mem_aeSeqSet, aeSeqSet, h_ae_seq_mono, h_mono, iSup_apply, if_false, le_rfl, lintegral_congr_ae, lintegral_iSup, measurable, prop_of_mem_aeSeqSet, simp_rw
 -/
@@ -179,7 +293,8 @@ theorem lintegral_tendsto_of_tendsto_of_monotone
     exact tendsto_atTop_iSup this
   rw [← lintegral_iSup' hf h_mono]
   refine lintegral_congr_ae ?_
-  filter_upwar
+  filter_upwards [h_mono, h_tendsto] with _ hx_mono hx_tendsto using
+    tendsto_nhds_unique hx_tendsto (tendsto_atTop_iSup hx_mono)
 
 中文:
 定理 lintegral_tendsto_of_tendsto_of_monotone
@@ -192,7 +307,8 @@ theorem lintegral_tendsto_of_tendsto_of_monotone
     exact tendsto_atTop_iSup this
   rw [← lintegral_iSup' hf h_mono]
   refine lintegral_congr_ae ?_
-  filter_upwar
+  filter_upwards [h_mono, h_tendsto] with _ hx_mono hx_tendsto using
+    tendsto_nhds_unique hx_tendsto (tendsto_atTop_iSup hx_mono)
 
 Depends on / 依赖: Monotone, filter_upwards, h_mono, h_mono.mono, h_tendsto, hx_mono, hx_tendsto, lintegral_congr_ae, lintegral_iSup, lintegral_mono_ae, tendsto_atTop_iSup, tendsto_nhds_unique
 -/
@@ -223,7 +339,18 @@ theorem lintegral_iSup_ae
   have g_eq_f : forallᵐ a ∂μ, forall n, g n a = f n a :=
     (measure_eq_zero_iff_ae_notMem.1 hs.2.2).mono fun a ha n => if_neg ha
   calc
-    ∫⁻ a, ⨆ n, f n 
+    ∫⁻ a, ⨆ n, f n a ∂μ = ∫⁻ a, ⨆ n, g n a ∂μ :=
+lintegral_congr_ae g_eq_f.mono fun a ha => by simp only [ha]
+    _ = ⨆ n, ∫⁻ a, g n a ∂μ :=
+      (lintegral_iSup (fun n => measurable_const.piecewise hs.2.1 (hf n))
+        (monotone_nat_of_le_succ fun n a => ?_))
+    _ = ⨆ n, ∫⁻ a, f n a ∂μ := by simp only [lintegral_congr_ae (g_eq_f.mono fun _a ha => ha _)]
+  simp only [g]
+  split_ifs with h
+  · rfl
+  · have := Set.notMem_subset hs.1 h
+    simp only [not_forall, not_le, mem_ofPred_eq, not_exists, not_lt] at this
+    exact this n
 
 中文:
 定理 lintegral_iSup_ae
@@ -235,7 +362,18 @@ theorem lintegral_iSup_ae
   have g_eq_f : forallᵐ a ∂μ, forall n, g n a = f n a :=
     (measure_eq_zero_iff_ae_notMem.1 hs.2.2).mono fun a ha n => if_neg ha
   calc
-    ∫⁻ a, ⨆ n, f n 
+    ∫⁻ a, ⨆ n, f n a ∂μ = ∫⁻ a, ⨆ n, g n a ∂μ :=
+lintegral_congr_ae g_eq_f.mono fun a ha => by simp only [ha]
+    _ = ⨆ n, ∫⁻ a, g n a ∂μ :=
+      (lintegral_iSup (fun n => measurable_const.piecewise hs.2.1 (hf n))
+        (monotone_nat_of_le_succ fun n a => ?_))
+    _ = ⨆ n, ∫⁻ a, f n a ∂μ := by simp only [lintegral_congr_ae (g_eq_f.mono fun _a ha => ha _)]
+  simp only [g]
+  split_ifs with h
+  · rfl
+  · have := Set.notMem_subset hs.1 h
+    simp only [not_forall, not_le, mem_ofPred_eq, not_exists, not_lt] at this
+    exact this n
 
 Depends on / 依赖: ae_all_iff, ae_iff, classical, exists_measurable_superset_of_null, g_eq_f, g_eq_f.mono, h_mono, if_neg, lintegral_congr_ae, lintegral_iSup, measurable_const, measurable_const.piecewise, measure_eq_zero_iff_ae_notMem, monotone_nat_of_le_succ, piecewise
 -/
@@ -275,7 +413,15 @@ theorem lintegral_iSup_directed_of_measurable
   have : forall a, ⨆ b, f b a = ⨆ n, f (h_directed.sequence f n) a := by
     intro a
     refine le_antisymm (iSup_le fun b => ?_) (iSup_le fun n => le_iSup (fun n => f n a) _)
-    exact le_iSup_of_le (encode b + 1) (h
+    exact le_iSup_of_le (encode b + 1) (h_directed.le_sequence b a)
+  calc
+    ∫⁻ a, ⨆ b, f b a ∂μ = ∫⁻ a, ⨆ n, f (h_directed.sequence f n) a ∂μ := by simp only [this]
+    _ = ⨆ n, ∫⁻ a, f (h_directed.sequence f n) a ∂μ :=
+      (lintegral_iSup (fun n => hf _) h_directed.sequence_mono)
+    _ = ⨆ b, ∫⁻ a, f b a ∂μ := by
+      refine le_antisymm (iSup_le fun n => ?_) (iSup_le fun b => ?_)
+      · exact le_iSup (fun b => ∫⁻ a, f b a ∂μ) _
+      · exact le_iSup_of_le (encode b + 1) (lintegral_mono <| h_directed.le_sequence b)
 
 中文:
 定理 lintegral_iSup_directed_of_measurable
@@ -288,7 +434,15 @@ theorem lintegral_iSup_directed_of_measurable
   have : forall a, ⨆ b, f b a = ⨆ n, f (h_directed.sequence f n) a := by
     intro a
     refine le_antisymm (iSup_le fun b => ?_) (iSup_le fun n => le_iSup (fun n => f n a) _)
-    exact le_iSup_of_le (encode b + 1) (h
+    exact le_iSup_of_le (encode b + 1) (h_directed.le_sequence b a)
+  calc
+    ∫⁻ a, ⨆ b, f b a ∂μ = ∫⁻ a, ⨆ n, f (h_directed.sequence f n) a ∂μ := by simp only [this]
+    _ = ⨆ n, ∫⁻ a, f (h_directed.sequence f n) a ∂μ :=
+      (lintegral_iSup (fun n => hf _) h_directed.sequence_mono)
+    _ = ⨆ b, ∫⁻ a, f b a ∂μ := by
+      refine le_antisymm (iSup_le fun n => ?_) (iSup_le fun b => ?_)
+      · exact le_iSup (fun b => ∫⁻ a, f b a ∂μ) _
+      · exact le_iSup_of_le (encode b + 1) (lintegral_mono <| h_directed.le_sequence b)
 
 Depends on / 依赖: encode, h_directed, h_directed.le_sequence, h_directed.sequenc, h_directed.sequence, iSup_le, inhabit, isEmpty_or_nonempty, le_antisymm, le_iSup, le_iSup_of_le, le_sequence, lintegral_iSup, nonempty_encodable, sequenc, sequence
 -/
@@ -325,7 +479,24 @@ theorem lintegral_iSup_directed
     filter_upwards [] with x i j
     obtain ⟨z, hz₁, hz₂⟩ := h_directed i j
     exact ⟨z, hz₁ x, hz₂ x⟩
-  have h_ae_seq_directed : Directed LE.le (aeS
+  have h_ae_seq_directed : Directed LE.le (aeSeq hf p) := by
+    intro b₁ b₂
+    obtain ⟨z, hz₁, hz₂⟩ := h_directed b₁ b₂
+    refine ⟨z, ?_, ?_⟩ <;>
+      · intro x
+        by_cases hx : x in aeSeqSet hf p
+        · repeat rw [aeSeq.aeSeq_eq_fun_of_mem_aeSeqSet hf hx]
+          apply_rules [hz₁, hz₂]
+        · simp only [aeSeq, hx, if_false]
+          exact le_rfl
+  convert! lintegral_iSup_directed_of_measurable (aeSeq.measurable hf p) h_ae_seq_directed using 1
+  · simp_rw [← iSup_apply]
+    rw [lintegral_congr_ae (aeSeq.iSup hf hp).symm]
+  · congr 1
+    ext1 b
+    rw [lintegral_congr_ae]
+    apply EventuallyEq.symm
+    exact aeSeq.aeSeq_n_eq_fun_n_ae hf hp _
 
 中文:
 定理 lintegral_iSup_directed
@@ -337,7 +508,24 @@ theorem lintegral_iSup_directed
     filter_upwards [] with x i j
     obtain ⟨z, hz₁, hz₂⟩ := h_directed i j
     exact ⟨z, hz₁ x, hz₂ x⟩
-  have h_ae_seq_directed : Directed LE.le (aeS
+  have h_ae_seq_directed : Directed LE.le (aeSeq hf p) := by
+    intro b₁ b₂
+    obtain ⟨z, hz₁, hz₂⟩ := h_directed b₁ b₂
+    refine ⟨z, ?_, ?_⟩ <;>
+      · intro x
+        by_cases hx : x in aeSeqSet hf p
+        · repeat rw [aeSeq.aeSeq_eq_fun_of_mem_aeSeqSet hf hx]
+          apply_rules [hz₁, hz₂]
+        · simp only [aeSeq, hx, if_false]
+          exact le_rfl
+  convert! lintegral_iSup_directed_of_measurable (aeSeq.measurable hf p) h_ae_seq_directed using 1
+  · simp_rw [← iSup_apply]
+    rw [lintegral_congr_ae (aeSeq.iSup hf hp).symm]
+  · congr 1
+    ext1 b
+    rw [lintegral_congr_ae]
+    apply EventuallyEq.symm
+    exact aeSeq.aeSeq_n_eq_fun_n_ae hf hp _
 
 Depends on / 依赖: Directed, ENNReal, LE.le, aeSeq.aeSeq_eq_fun_of_mem_aeSeqSet, aeSeqSet, aeSeq_eq_fun_of_mem_aeSeqSet, apply_rules, filter_upwards, h_ae_seq_directed, h_directed, iSup_apply, repeat, simp_rw
 -/
@@ -379,7 +567,9 @@ theorem lintegral_liminf_nat_le'
       simp only [liminf_eq_iSup_iInf_of_nat]
     _ = ⨆ n : Nat, ∫⁻ a, ⨅ i >= n, f i a ∂μ :=
       (lintegral_iSup' (fun _ => .biInf _ (to_countable _) (fun i _ => h_meas i))
-        (ae_of_all μ fun _ _ _ hnm
+        (ae_of_all μ fun _ _ _ hnm => iInf_le_iInf_of_subset fun _ hi => le_trans hnm hi))
+    _ <= ⨆ n : Nat, ⨅ i >= n, ∫⁻ a, f i a ∂μ := iSup_mono fun _ => le_iInf₂_lintegral _
+    _ = atTop.liminf fun n => ∫⁻ a, f n a ∂μ := Filter.liminf_eq_iSup_iInf_of_nat.symm
 
 中文:
 定理 lintegral_liminf_nat_le'
@@ -389,7 +579,9 @@ theorem lintegral_liminf_nat_le'
       simp only [liminf_eq_iSup_iInf_of_nat]
     _ = ⨆ n : Nat, ∫⁻ a, ⨅ i >= n, f i a ∂μ :=
       (lintegral_iSup' (fun _ => .biInf _ (to_countable _) (fun i _ => h_meas i))
-        (ae_of_all μ fun _ _ _ hnm
+        (ae_of_all μ fun _ _ _ hnm => iInf_le_iInf_of_subset fun _ hi => le_trans hnm hi))
+    _ <= ⨆ n : Nat, ⨅ i >= n, ∫⁻ a, f i a ∂μ := iSup_mono fun _ => le_iInf₂_lintegral _
+    _ = atTop.liminf fun n => ∫⁻ a, f n a ∂μ := Filter.liminf_eq_iSup_iInf_of_nat.symm
 -/
 private theorem lintegral_liminf_nat_le' {f : Nat -> α -> Real>=0∞} (h_meas : forall n, AEMeasurable (f n) μ) :
     ∫⁻ a, liminf (fun n => f n a) atTop ∂μ <= liminf (fun n => ∫⁻ a, f n a ∂μ) atTop :=
@@ -416,7 +608,11 @@ theorem lintegral_liminf_le'
         Tendsto g atTop u :=
       exists_seq_tendsto_liminf
     calc
-    _ <= ∫⁻ a, liminf (fun n => f (g n) a) atTop ∂
+    _ <= ∫⁻ a, liminf (fun n => f (g n) a) atTop ∂μ :=
+      lintegral_mono fun a => hg.2.liminf_le_liminf_comp
+    _ <= liminf (fun n => ∫⁻ a, f (g n) a ∂μ) atTop :=
+      lintegral_liminf_nat_le' (fun n => h_meas (g n))
+    _ = _ := hg.1.liminf_eq
 
 中文:
 定理 lintegral_liminf_le'
@@ -429,7 +625,11 @@ theorem lintegral_liminf_le'
         Tendsto g atTop u :=
       exists_seq_tendsto_liminf
     calc
-    _ <= ∫⁻ a, liminf (fun n => f (g n) a) atTop ∂
+    _ <= ∫⁻ a, liminf (fun n => f (g n) a) atTop ∂μ :=
+      lintegral_mono fun a => hg.2.liminf_le_liminf_comp
+    _ <= liminf (fun n => ∫⁻ a, f (g n) a ∂μ) atTop :=
+      lintegral_liminf_nat_le' (fun n => h_meas (g n))
+    _ = _ := hg.1.liminf_eq
 
 Depends on / 依赖: Tendsto, exists_seq_tendsto_liminf, h_meas, liminf, liminf_eq, liminf_le_liminf_comp, lintegral_liminf_nat_le, lintegral_mono, u.NeBot
 -/
@@ -487,7 +687,8 @@ theorem lintegral_eq_iSup_eapprox_lintegral
       · fun_prop
       · intro i j h
         exact monotone_eapprox f h
-    _ = ⨆ n, (eapp
+    _ = ⨆ n, (eapprox f n).lintegral μ := by
+      congr; ext n; rw [(eapprox f n).lintegral_eq_lintegral]
 
 中文:
 定理 lintegral_eq_iSup_eapprox_lintegral
@@ -500,7 +701,8 @@ theorem lintegral_eq_iSup_eapprox_lintegral
       · fun_prop
       · intro i j h
         exact monotone_eapprox f h
-    _ = ⨆ n, (eapp
+    _ = ⨆ n, (eapprox f n).lintegral μ := by
+      congr; ext n; rw [(eapprox f n).lintegral_eq_lintegral]
 
 Depends on / 依赖: eapprox, fun_prop, iSup_eapprox_apply, lintegral, lintegral_eq_lintegral, lintegral_iSup, monotone_eapprox
 -/
@@ -628,7 +830,28 @@ theorem lintegral_add_aux
       simp only [iSup_eapprox_apply, hf, hg]
     _ = ∫⁻ a, ⨆ n, (eapprox f n + eapprox g n : α -> Real>=0∞) a ∂μ := by
       congr; funext a
-      rw [ENNReal.iSup_add_i
+      rw [ENNReal.iSup_add_iSup_of_monotone]
+      · simp only [Pi.add_apply]
+      · intro i j h
+        exact monotone_eapprox _ h a
+      · intro i j h
+        exact monotone_eapprox _ h a
+    _ = ⨆ n, (eapprox f n).lintegral μ + (eapprox g n).lintegral μ := by
+      rw [lintegral_iSup]
+      · congr
+        funext n
+        rw [← SimpleFunc.add_lintegral]; rw [← SimpleFunc.lintegral_eq_lintegral]
+        simp only [Pi.add_apply, SimpleFunc.coe_add]
+      · fun_prop
+      · intro i j h a
+        dsimp
+        gcongr <;> exact monotone_eapprox _ h _
+    _ = (⨆ n, (eapprox f n).lintegral μ) + ⨆ n, (eapprox g n).lintegral μ := by
+      refine (ENNReal.iSup_add_iSup_of_monotone ?_ ?_).symm <;>
+        · intro i j h
+          exact SimpleFunc.lintegral_mono (monotone_eapprox _ h) le_rfl
+    _ = ∫⁻ a, f a ∂μ + ∫⁻ a, g a ∂μ := by
+      rw [lintegral_eq_iSup_eapprox_lintegral hf]; rw [lintegral_eq_iSup_eapprox_lintegral hg]
 
 中文:
 定理 lintegral_add_aux
@@ -639,7 +862,28 @@ theorem lintegral_add_aux
       simp only [iSup_eapprox_apply, hf, hg]
     _ = ∫⁻ a, ⨆ n, (eapprox f n + eapprox g n : α -> Real>=0∞) a ∂μ := by
       congr; funext a
-      rw [ENNReal.iSup_add_i
+      rw [ENNReal.iSup_add_iSup_of_monotone]
+      · simp only [Pi.add_apply]
+      · intro i j h
+        exact monotone_eapprox _ h a
+      · intro i j h
+        exact monotone_eapprox _ h a
+    _ = ⨆ n, (eapprox f n).lintegral μ + (eapprox g n).lintegral μ := by
+      rw [lintegral_iSup]
+      · congr
+        funext n
+        rw [← SimpleFunc.add_lintegral]; rw [← SimpleFunc.lintegral_eq_lintegral]
+        simp only [Pi.add_apply, SimpleFunc.coe_add]
+      · fun_prop
+      · intro i j h a
+        dsimp
+        gcongr <;> exact monotone_eapprox _ h _
+    _ = (⨆ n, (eapprox f n).lintegral μ) + ⨆ n, (eapprox g n).lintegral μ := by
+      refine (ENNReal.iSup_add_iSup_of_monotone ?_ ?_).symm <;>
+        · intro i j h
+          exact SimpleFunc.lintegral_mono (monotone_eapprox _ h) le_rfl
+    _ = ∫⁻ a, f a ∂μ + ∫⁻ a, g a ∂μ := by
+      rw [lintegral_eq_iSup_eapprox_lintegral hf]; rw [lintegral_eq_iSup_eapprox_lintegral hg]
 
 Depends on / 依赖: ENNReal, ENNReal.iSup_add_iSup_of_monotone, Pi.add_apply, add_apply, eapprox, iSup_add_iSup_of_monotone, iSup_eapprox_apply, lintegral, lintegral_iSup, monotone_eapprox
 -/
@@ -690,7 +934,8 @@ theorem lintegral_add_left
   calc
     ∫⁻ a, f a + g a ∂μ = ∫⁻ a, φ a ∂μ := hφ_eq
     _ <= ∫⁻ a, f a + (φ a - f a) ∂μ := lintegral_mono fun a => le_add_tsub
-    _ = ∫⁻ a, f a ∂μ + ∫⁻ a, 
+    _ = ∫⁻ a, f a ∂μ + ∫⁻ a, φ a - f a ∂μ := lintegral_add_aux hf (hφm.sub hf)
+_ <= ∫⁻ a, f a ∂μ + ∫⁻ a, g a ∂μ := by gcongr with a; exact tsub_le_iff_left.2 hφ_le _
 
 中文:
 定理 lintegral_add_left
@@ -701,7 +946,8 @@ theorem lintegral_add_left
   calc
     ∫⁻ a, f a + g a ∂μ = ∫⁻ a, φ a ∂μ := hφ_eq
     _ <= ∫⁻ a, f a + (φ a - f a) ∂μ := lintegral_mono fun a => le_add_tsub
-    _ = ∫⁻ a, f a ∂μ + ∫⁻ a, 
+    _ = ∫⁻ a, f a ∂μ + ∫⁻ a, φ a - f a ∂μ := lintegral_add_aux hf (hφm.sub hf)
+_ <= ∫⁻ a, f a ∂μ + ∫⁻ a, g a ∂μ := by gcongr with a; exact tsub_le_iff_left.2 hφ_le _
 
 Depends on / 依赖: exists_measurable_le_lintegral_eq, le_add_tsub, le_antisymm, le_lintegral_add, lintegral_add_aux, lintegral_mono, m.sub, tsub_le_iff_left
 -/
@@ -795,7 +1041,7 @@ theorem lintegral_finsetSum'
     rw [Finset.forall_mem_insert] at hf
     rw [lintegral_add_left' hf.1]; rw [ih hf.2]
 
-@[deprecated (since := "2026-04-08")] alias lintegral_finset_sum' := l
+@[deprecated (since := "2026-04-08")] alias lintegral_finset_sum' := lintegral_finsetSum'
 
 中文:
 定理 lintegral_finsetSum'
@@ -809,7 +1055,7 @@ theorem lintegral_finsetSum'
     rw [Finset.forall_mem_insert] at hf
     rw [lintegral_add_left' hf.1]; rw [ih hf.2]
 
-@[deprecated (since := "2026-04-08")] alias lintegral_finset_sum' := l
+@[deprecated (since := "2026-04-08")] alias lintegral_finset_sum' := lintegral_finsetSum'
 
 Depends on / 依赖: Finset, Finset.forall_mem_insert, Finset.induction_on, Finset.sum_insert, classical, forall_mem_insert, induction_on, insert, lintegral_add_left, sum_insert
 -/
@@ -867,7 +1113,8 @@ theorem lintegral_tsum
   · intro s t
     use s union t
     constructor
-    · exact fun a => Finset.sum_le_sum_of_subset 
+    · exact fun a => Finset.sum_le_sum_of_subset Finset.subset_union_left
+    · exact fun a => Finset.sum_le_sum_of_subset Finset.subset_union_right
 
 中文:
 定理 lintegral_tsum
@@ -882,7 +1129,8 @@ theorem lintegral_tsum
   · intro s t
     use s union t
     constructor
-    · exact fun a => Finset.sum_le_sum_of_subset 
+    · exact fun a => Finset.sum_le_sum_of_subset Finset.subset_union_left
+    · exact fun a => Finset.sum_le_sum_of_subset Finset.subset_union_right
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_eq_iSup_sum, Finset, Finset.aemeasurable_fun_sum, Finset.subset_union_left, Finset.subset_union_right, Finset.sum_le_sum_of_subset, aemeasurable_fun_sum, classical, lintegral_finsetSum, lintegral_iSup_directed, subset_union_left, subset_union_right, sum_le_sum_of_subset, tsum_eq_iSup_sum
 -/
@@ -921,7 +1169,14 @@ theorem lintegral_const_mul
       rw [lintegral_iSup]
       · congr
         funext n
-        rw [← SimpleFu
+        rw [← SimpleFunc.const_mul_lintegral]; rw [← SimpleFunc.lintegral_eq_lintegral]
+      · intro n
+        exact SimpleFunc.measurable _
+      · intro i j h a
+        dsimp
+        gcongr
+        exact monotone_eapprox _ h _
+    _ = r * ∫⁻ a, f a ∂μ := by rw [← ENNReal.mul_iSup, lintegral_eq_iSup_eapprox_lintegral hf]
 
 中文:
 定理 lintegral_const_mul
@@ -936,7 +1191,14 @@ theorem lintegral_const_mul
       rw [lintegral_iSup]
       · congr
         funext n
-        rw [← SimpleFu
+        rw [← SimpleFunc.const_mul_lintegral]; rw [← SimpleFunc.lintegral_eq_lintegral]
+      · intro n
+        exact SimpleFunc.measurable _
+      · intro i j h a
+        dsimp
+        gcongr
+        exact monotone_eapprox _ h _
+    _ = r * ∫⁻ a, f a ∂μ := by rw [← ENNReal.mul_iSup, lintegral_eq_iSup_eapprox_lintegral hf]
 
 Depends on / 依赖: ENNReal, ENNReal.mul_iSup, SimpleFunc, SimpleFunc.const_mul_lintegral, SimpleFunc.lintegral_eq_lintegral, SimpleFunc.measurable, const_mul_lintegral, eapprox, iSup_eapprox_apply, lintegral, lintegral_eq_iSup_eapprox_lintegral, lintegral_eq_lintegral, lintegral_iSup, measurable, monotone_eapprox, mul_iSup
 -/
@@ -1048,7 +1310,8 @@ theorem lintegral_const_mul'
     rw [mul_comm]
     exact rinv
   have := lintegral_const_mul_le (μ := μ) r⁻¹ fun x => r * f x
-  simp only [(mul_assoc _ 
+  simp only [(mul_assoc _ _ _).symm, rinv'] at this
+  simpa [(mul_assoc _ _ _).symm, rinv] using mul_le_mul_right this r
 
 中文:
 定理 lintegral_const_mul'
@@ -1062,7 +1325,8 @@ theorem lintegral_const_mul'
     rw [mul_comm]
     exact rinv
   have := lintegral_const_mul_le (μ := μ) r⁻¹ fun x => r * f x
-  simp only [(mul_assoc _ 
+  simp only [(mul_assoc _ _ _).symm, rinv'] at this
+  simpa [(mul_assoc _ _ _).symm, rinv] using mul_le_mul_right this r
 
 Depends on / 依赖: ENNReal, ENNReal.mul_inv_cancel, le_antisymm, lintegral_const_mul_le, mul_assoc, mul_comm, mul_inv_cancel, mul_le_mul_right
 -/
@@ -1193,7 +1457,17 @@ theorem lintegral_trim
     @Measurable.ennreal_induction α m (fun f => ∫⁻ a, f a ∂μ.trim hm = ∫⁻ a, f a ∂μ) ?_ ?_ ?_ f hf
   · intro c s hs
     rw [lintegral_indicator hs]; rw [lintegral_indicator (hm s hs)]; rw [setLIntegral_const]; rw [setLIntegral_const]
-    suffices h_trim_s : μ.trim hm s = μ s by rw [h_tri
+    suffices h_trim_s : μ.trim hm s = μ s by rw [h_trim_s]
+    exact trim_measurableSet_eq hm hs
+  · intro f g _ hf _ hf_prop hg_prop
+    have h_m := lintegral_add_left (μ := Measure.trim μ hm) hf g
+    have h_m0 := lintegral_add_left (μ := μ) (Measurable.mono hf hm le_rfl) g
+    rwa [hf_prop, hg_prop, ← h_m0] at h_m
+  · intro f hf hf_mono hf_prop
+    rw [lintegral_iSup hf hf_mono]
+    rw [lintegral_iSup (fun n => Measurable.mono (hf n) hm le_rfl) hf_mono]
+    congr with n
+    exact hf_prop n
 
 中文:
 定理 lintegral_trim
@@ -1203,7 +1477,17 @@ theorem lintegral_trim
     @Measurable.ennreal_induction α m (fun f => ∫⁻ a, f a ∂μ.trim hm = ∫⁻ a, f a ∂μ) ?_ ?_ ?_ f hf
   · intro c s hs
     rw [lintegral_indicator hs]; rw [lintegral_indicator (hm s hs)]; rw [setLIntegral_const]; rw [setLIntegral_const]
-    suffices h_trim_s : μ.trim hm s = μ s by rw [h_tri
+    suffices h_trim_s : μ.trim hm s = μ s by rw [h_trim_s]
+    exact trim_measurableSet_eq hm hs
+  · intro f g _ hf _ hf_prop hg_prop
+    have h_m := lintegral_add_left (μ := Measure.trim μ hm) hf g
+    have h_m0 := lintegral_add_left (μ := μ) (Measurable.mono hf hm le_rfl) g
+    rwa [hf_prop, hg_prop, ← h_m0] at h_m
+  · intro f hf hf_mono hf_prop
+    rw [lintegral_iSup hf hf_mono]
+    rw [lintegral_iSup (fun n => Measurable.mono (hf n) hm le_rfl) hf_mono]
+    congr with n
+    exact hf_prop n
 
 Depends on / 依赖: Measurable, Measurable.ennreal_induction, Measurable.mono, Measure, Measure.trim, ennreal_induction, h_m0, h_trim_s, hf_prop, hg_prop, le_rfl, lintegral_add_left, lintegral_indicator, setLIntegral_const, trim_measurableSet_eq
 -/

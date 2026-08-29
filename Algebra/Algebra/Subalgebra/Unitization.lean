@@ -198,7 +198,8 @@ theorem _root_.AlgHomClass.unitization_injective'
     by_cases hr : r = 0
     · ext
       · simp [hr]
-      · simpa [hr]
+      · simpa [hr] using hx
+    · exact (h r hr <| hx ▸ (neg_mem a.property)).elim
 
 中文:
 定理 _root_.代数态射类.unitization_injective'
@@ -212,7 +213,8 @@ theorem _root_.AlgHomClass.unitization_injective'
     by_cases hr : r = 0
     · ext
       · simp [hr]
-      · simpa [hr]
+      · simpa [hr] using hx
+    · exact (h r hr <| hx ▸ (neg_mem a.property)).elim
 
 Depends on / 依赖: AlgHomClass, AlgHomClass.commutes, Unitization, Unitization.algebraMap_eq_inl, a.property, add_eq_zero_iff_eq_neg, algebraMap_eq_inl, commutes, injective_iff_map_eq_zero, inl_add_inr, map_add, neg_mem, property, simp_rw
 -/
@@ -301,7 +303,12 @@ fun x => (unitization_range s).le AlgHom.mem_range_self _ x)
 AlgEquiv.ofBijective algHom by
     refine ⟨?_, fun x => ?_⟩
     · have := AlgHomClass.unitization_injective s h1
-        ((Subalgebra.va
+        ((Subalgebra.val _).comp algHom) fun _ => by simp [algHom]
+      rw [AlgHom.coe_comp] at this
+      exact this.of_comp
+    · obtain (⟨a, ha⟩ : (x : A) in (unitization s).range) :=
+        (unitization_range s).ge x.property
+      exact ⟨a, Subtype.ext ha⟩
 
 中文:
 定义 unitizationAlgEquiv
@@ -312,7 +319,12 @@ fun x => (unitization_range s).le AlgHom.mem_range_self _ x)
 AlgEquiv.ofBijective algHom by
     refine ⟨?_, fun x => ?_⟩
     · have := AlgHomClass.unitization_injective s h1
-        ((Subalgebra.va
+        ((Subalgebra.val _).comp algHom) fun _ => by simp [algHom]
+      rw [AlgHom.coe_comp] at this
+      exact this.of_comp
+    · obtain (⟨a, ha⟩ : (x : A) in (unitization s).range) :=
+        (unitization_range s).ge x.property
+      exact ⟨a, Subtype.ext ha⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, AlgHom, AlgHom.coe_comp, AlgHom.mem_range_self, AlgHomClass, AlgHomClass.unitization_injective, Algebra, Algebra.adjoin, Subalgebra, Subalgebra.val, Subtype, Subtype.ext, Unitization, adjoin, algHom, codRestrict, coe_comp, mem_range_self, ofBijective
 -/
@@ -666,7 +678,13 @@ definition unitizationStarAlgEquiv
 fun x => (unitization_range s).le Set.mem_range_self x)
 StarAlgEquiv.ofBijective starAlgHom by
     refine ⟨?_, fun x => ?_⟩
-    · have := AlgHomClass.unitization_injective s h1 ((StarSubal
+    · have := AlgHomClass.unitization_injective s h1 ((StarSubalgebra.subtype _).comp starAlgHom)
+        fun _ => by simp [starAlgHom]
+      rw [StarAlgHom.coe_comp] at this
+      exact this.of_comp
+    · obtain (⟨a, ha⟩ : (x : A) in (unitization s).range) :=
+        (unitization_range s).ge x.property
+      exact ⟨a, Subtype.ext ha⟩
 
 中文:
 定义 unitizationStarAlgEquiv
@@ -676,7 +694,13 @@ StarAlgEquiv.ofBijective starAlgHom by
 fun x => (unitization_range s).le Set.mem_range_self x)
 StarAlgEquiv.ofBijective starAlgHom by
     refine ⟨?_, fun x => ?_⟩
-    · have := AlgHomClass.unitization_injective s h1 ((StarSubal
+    · have := AlgHomClass.unitization_injective s h1 ((StarSubalgebra.subtype _).comp starAlgHom)
+        fun _ => by simp [starAlgHom]
+      rw [StarAlgHom.coe_comp] at this
+      exact this.of_comp
+    · obtain (⟨a, ha⟩ : (x : A) in (unitization s).range) :=
+        (unitization_range s).ge x.property
+      exact ⟨a, Subtype.ext ha⟩
 
 Depends on / 依赖: AlgHomClass, AlgHomClass.unitization_injective, Set.mem_range_self, StarAlgEquiv, StarAlgEquiv.ofBijective, StarAlgHom, StarAlgHom.coe_comp, StarAlgebra, StarAlgebra.adjoin, StarSubalgebra, StarSubalgebra.subtype, Unitization, adjoin, codRestrict, coe_comp, mem_range_self, ofBijective, of_comp, property, starAlgHom
 -/

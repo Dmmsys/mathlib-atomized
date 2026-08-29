@@ -169,7 +169,17 @@ theorem pcontinuous_iff'
   rw [isOpen_iff_nhds]
   rintro x ⟨y, ys, fxy⟩ t
   rw [mem_principal]
-  intro (h : f.preimag
+  intro (h : f.preimage s subseteq t)
+  grw [← h]
+  have h' : forall s in 𝓝 y, f.preimage s in 𝓝 x := by
+    intro s hs
+    have : PTendsto' f (𝓝 x) (𝓝 y) := hf fxy
+    rw [ptendsto'_def] at this
+    exact this s hs
+  change f.preimage s in 𝓝 x
+  apply h'
+  rw [mem_nhds_iff]
+  exact ⟨s, Set.Subset.refl _, os, ys⟩
 
 中文:
 定理 pcontinuous_iff'
@@ -184,7 +194,17 @@ theorem pcontinuous_iff'
   rw [isOpen_iff_nhds]
   rintro x ⟨y, ys, fxy⟩ t
   rw [mem_principal]
-  intro (h : f.preimag
+  intro (h : f.preimage s subseteq t)
+  grw [← h]
+  have h' : forall s in 𝓝 y, f.preimage s in 𝓝 x := by
+    intro s hs
+    have : PTendsto' f (𝓝 x) (𝓝 y) := hf fxy
+    rw [ptendsto'_def] at this
+    exact this s hs
+  change f.preimage s in 𝓝 x
+  apply h'
+  rw [mem_nhds_iff]
+  exact ⟨s, Set.Subset.refl _, os, ys⟩
 
 Depends on / 依赖: PFun.preimage_mono, PTendsto, _def, f.preimage, isOpen_iff_nhds, mem_nhds_iff, mem_principal, preimage, preimage_mono, ptendsto, subseteq
 -/

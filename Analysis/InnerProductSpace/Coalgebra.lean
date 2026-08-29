@@ -110,7 +110,14 @@ abbreviation coalgebraOfAlgebra
   counit := innerₛₗ 𝕜 (e.symm 1)
   coassoc := by
     rw [← adjoint_lTensor]; rw [← adjoint_rTensor]; rw [← toLinearEquiv_assocIsometry]; rw [← (assocIsometry 𝕜 _ _ _).symm_symm]; rw [← adjoint_toLinearMap_eq_symm]
-    simp_r
+    simp_rw [← adjoint_comp]
+    congr 1; ext; simp [mul_assoc]
+  rTensor_counit_comp_comul := by
+    rw [← adjoint_toSpanSingleton]; rw [← adjoint_rTensor]; rw [← adjoint_comp]; rw [← toLinearMap_symm_lid]; rw [← toLinearEquiv_lidIsometry]; rw [← toLinearEquiv_symm]; rw [← adjoint_toLinearMap_eq_symm]
+    congr 1; ext; simp
+  lTensor_counit_comp_comul := by
+    rw [← adjoint_toSpanSingleton]; rw [← adjoint_lTensor]; rw [← adjoint_comp]; rw [← toLinearMap_symm_rid]; rw [← comm_trans_lid]; rw [← toLinearEquiv_commIsometry]; rw [← toLinearEquiv_lidIsometry]; rw [← toLinearEquiv_trans]; rw [← toLinearEquiv_symm]; rw [← adjoint_toLinearMap_eq_symm]
+    congr 1; ext; simp
 
 中文:
 缩写 coalgebraOfAlgebra
@@ -119,7 +126,14 @@ abbreviation coalgebraOfAlgebra
   counit := innerₛₗ 𝕜 (e.symm 1)
   coassoc := by
     rw [← adjoint_lTensor]; rw [← adjoint_rTensor]; rw [← toLinearEquiv_assocIsometry]; rw [← (assocIsometry 𝕜 _ _ _).symm_symm]; rw [← adjoint_toLinearMap_eq_symm]
-    simp_r
+    simp_rw [← adjoint_comp]
+    congr 1; ext; simp [mul_assoc]
+  rTensor_counit_comp_comul := by
+    rw [← adjoint_toSpanSingleton]; rw [← adjoint_rTensor]; rw [← adjoint_comp]; rw [← toLinearMap_symm_lid]; rw [← toLinearEquiv_lidIsometry]; rw [← toLinearEquiv_symm]; rw [← adjoint_toLinearMap_eq_symm]
+    congr 1; ext; simp
+  lTensor_counit_comp_comul := by
+    rw [← adjoint_toSpanSingleton]; rw [← adjoint_lTensor]; rw [← adjoint_comp]; rw [← toLinearMap_symm_rid]; rw [← comm_trans_lid]; rw [← toLinearEquiv_commIsometry]; rw [← toLinearEquiv_lidIsometry]; rw [← toLinearEquiv_trans]; rw [← toLinearEquiv_symm]; rw [← adjoint_toLinearMap_eq_symm]
+    congr 1; ext; simp
 
 Depends on / 依赖: adjoint, e.symm.toLinearMap, e.toLinearMap, toLinearMap
 -/
@@ -192,7 +206,19 @@ abbreviation ringOfCoalgebra
   mul_zero x := by simp
   mul_assoc x y z := by
     simp_rw [AlgebraOfCoalgebra.mul_def, ← rTensor_tmul, ← comp_apply, ← adjoint_rTensor,
-      ← adjoint_comp, ← coassoc_symm, adjoint_comp, adjoint_lTensor, comp_a
+      ← adjoint_comp, ← coassoc_symm, adjoint_comp, adjoint_lTensor, comp_apply,
+      ← toLinearEquiv_assocIsometry, ← toLinearEquiv_symm, adjoint_toLinearMap_eq_symm]
+    simp only [symm_symm, toLinearEquiv_assocIsometry, LinearEquiv.coe_coe, assoc_tmul,
+      lTensor_tmul]
+  one := adjoint (counit (R := 𝕜) (A := E)) 1
+  one_mul x := by
+    dsimp [OfNat.ofNat]
+    rw [← rTensor_tmul]; rw [← comp_apply]; rw [← adjoint_rTensor]; rw [← adjoint_comp]; rw [rTensor_counit_comp_comul]; rw [← toLinearMap_symm_lid]; rw [← toLinearEquiv_lidIsometry]; rw [← toLinearEquiv_symm]; rw [adjoint_toLinearMap_eq_symm]
+    exact one_smul _ _
+  mul_one x := by
+    dsimp [OfNat.ofNat]
+    rw [← lTensor_tmul]; rw [← comp_apply]; rw [← adjoint_lTensor]; rw [← adjoint_comp]; rw [lTensor_counit_comp_comul]; rw [← toLinearMap_symm_rid]; rw [← comm_trans_lid]; rw [← toLinearEquiv_commIsometry]; rw [← toLinearEquiv_lidIsometry]; rw [← toLinearEquiv_trans]; rw [← toLinearEquiv_symm]; rw [adjoint_toLinearMap_eq_symm]
+    exact one_smul _ _
 
 中文:
 缩写 ringOfCoalgebra
@@ -203,7 +229,19 @@ abbreviation ringOfCoalgebra
   mul_zero x := by simp
   mul_assoc x y z := by
     simp_rw [AlgebraOfCoalgebra.mul_def, ← rTensor_tmul, ← comp_apply, ← adjoint_rTensor,
-      ← adjoint_comp, ← coassoc_symm, adjoint_comp, adjoint_lTensor, comp_a
+      ← adjoint_comp, ← coassoc_symm, adjoint_comp, adjoint_lTensor, comp_apply,
+      ← toLinearEquiv_assocIsometry, ← toLinearEquiv_symm, adjoint_toLinearMap_eq_symm]
+    simp only [symm_symm, toLinearEquiv_assocIsometry, LinearEquiv.coe_coe, assoc_tmul,
+      lTensor_tmul]
+  one := adjoint (counit (R := 𝕜) (A := E)) 1
+  one_mul x := by
+    dsimp [OfNat.ofNat]
+    rw [← rTensor_tmul]; rw [← comp_apply]; rw [← adjoint_rTensor]; rw [← adjoint_comp]; rw [rTensor_counit_comp_comul]; rw [← toLinearMap_symm_lid]; rw [← toLinearEquiv_lidIsometry]; rw [← toLinearEquiv_symm]; rw [adjoint_toLinearMap_eq_symm]
+    exact one_smul _ _
+  mul_one x := by
+    dsimp [OfNat.ofNat]
+    rw [← lTensor_tmul]; rw [← comp_apply]; rw [← adjoint_lTensor]; rw [← adjoint_comp]; rw [lTensor_counit_comp_comul]; rw [← toLinearMap_symm_rid]; rw [← comm_trans_lid]; rw [← toLinearEquiv_commIsometry]; rw [← toLinearEquiv_lidIsometry]; rw [← toLinearEquiv_trans]; rw [← toLinearEquiv_symm]; rw [adjoint_toLinearMap_eq_symm]
+    exact one_smul _ _
 
 Depends on / 依赖: AlgebraOfCoalgebra, AlgebraOfCoalgebra.mul_def, LinearEquiv, LinearEquiv.coe_coe, add_tmul, adjoint, adjoint_comp, adjoint_lTensor, adjoint_rTensor, adjoint_toLinearMap_eq_symm, assoc_tmul, coassoc_symm, coe_coe, comp_apply, counit, lTensor_tmul, mul_assoc, mul_def, mul_zero, rTensor_tmul
 -/
@@ -241,7 +279,27 @@ abbreviation algebraOfCoalgebra
       map_mul' x y := by
         simp_rw [AlgebraOfCoalgebra.mul_def, ← map_tmul, ← adjoint_map, ← comp_apply,
           ← adjoint_comp, ← lTensor_comp_rTensor, comp_assoc, rTensor_counit_comp_comul,
-          adjoint_comp
+          adjoint_comp, ← toLinearMap_symm_lid, ← toLinearEquiv_lidIsometry, ← toLinearEquiv_symm,
+          adjoint_toLinearMap_eq_symm]
+        simp only [LinearIsometryEquiv.symm_symm, toLinearEquiv_lidIsometry, adjoint_lTensor,
+          coe_comp, LinearEquiv.coe_coe, Function.comp_apply, lTensor_tmul, lid_tmul]
+        rw [← smul_eq_mul]; rw [← _root_.map_smul]
+      map_zero' := map_zero _
+      map_add' := map_add _ }
+  commutes' r x := by
+    dsimp
+    simp_rw [← rTensor_tmul, ← lTensor_tmul, ← adjoint_lTensor, ← adjoint_rTensor,
+      ← comp_apply, ← adjoint_comp, rTensor_counit_comp_comul, lTensor_counit_comp_comul,
+      ← toLinearMap_symm_rid, ← toLinearMap_symm_lid, ← comm_trans_lid,
+      ← toLinearEquiv_commIsometry, ← toLinearEquiv_lidIsometry, ← toLinearEquiv_trans,
+      ← toLinearEquiv_symm, adjoint_toLinearMap_eq_symm]
+    simp
+  smul_def' r x := by
+    dsimp
+    simp_rw [← rTensor_tmul, ← adjoint_rTensor, ← comp_apply, ← adjoint_comp,
+      rTensor_counit_comp_comul, ← toLinearMap_symm_lid, ← toLinearEquiv_lidIsometry,
+      ← toLinearEquiv_symm, adjoint_toLinearMap_eq_symm]
+    simp
 
 中文:
 缩写 algebraOfCoalgebra
@@ -251,7 +309,27 @@ abbreviation algebraOfCoalgebra
       map_mul' x y := by
         simp_rw [AlgebraOfCoalgebra.mul_def, ← map_tmul, ← adjoint_map, ← comp_apply,
           ← adjoint_comp, ← lTensor_comp_rTensor, comp_assoc, rTensor_counit_comp_comul,
-          adjoint_comp
+          adjoint_comp, ← toLinearMap_symm_lid, ← toLinearEquiv_lidIsometry, ← toLinearEquiv_symm,
+          adjoint_toLinearMap_eq_symm]
+        simp only [LinearIsometryEquiv.symm_symm, toLinearEquiv_lidIsometry, adjoint_lTensor,
+          coe_comp, LinearEquiv.coe_coe, Function.comp_apply, lTensor_tmul, lid_tmul]
+        rw [← smul_eq_mul]; rw [← _root_.map_smul]
+      map_zero' := map_zero _
+      map_add' := map_add _ }
+  commutes' r x := by
+    dsimp
+    simp_rw [← rTensor_tmul, ← lTensor_tmul, ← adjoint_lTensor, ← adjoint_rTensor,
+      ← comp_apply, ← adjoint_comp, rTensor_counit_comp_comul, lTensor_counit_comp_comul,
+      ← toLinearMap_symm_rid, ← toLinearMap_symm_lid, ← comm_trans_lid,
+      ← toLinearEquiv_commIsometry, ← toLinearEquiv_lidIsometry, ← toLinearEquiv_trans,
+      ← toLinearEquiv_symm, adjoint_toLinearMap_eq_symm]
+    simp
+  smul_def' r x := by
+    dsimp
+    simp_rw [← rTensor_tmul, ← adjoint_rTensor, ← comp_apply, ← adjoint_comp,
+      rTensor_counit_comp_comul, ← toLinearMap_symm_lid, ← toLinearEquiv_lidIsometry,
+      ← toLinearEquiv_symm, adjoint_toLinearMap_eq_symm]
+    simp
 
 Depends on / 依赖: AlgebraOfCoalgebra, AlgebraOfCoalgebra.mul_def, Coalgebra, Coalgebra.counit, Function, Function.comp_app, LinearEquiv, LinearEquiv.coe_coe, LinearIsometryEquiv, LinearIsometryEquiv.symm_symm, adjoint, adjoint_comp, adjoint_lTensor, adjoint_map, adjoint_toLinearMap_eq_symm, coe_coe, coe_comp, comp_app, comp_apply, comp_assoc
 -/

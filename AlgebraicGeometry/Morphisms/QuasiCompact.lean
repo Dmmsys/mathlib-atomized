@@ -291,7 +291,10 @@ theorem isCompact_basicOpen
   obtain ⟨s, hs, e⟩ := isCompact_iff_finite_and_eq_biUnion_affineOpens.mp hU
   let g : s -> X.affineOpens := fun V => ⟨V.1 ⊓ X.basicOpen f, by
     rw [← X.basicOpen_res _ (homOfLE ((le_iSup₂ V.1 V.2).trans_eq e.symm)).op]
-    exact V
+    exact V.1.2.basicOpen _⟩
+  have : Finite s := hs.to_subtype
+  refine ⟨Set.range g, Set.finite_range g, ?_⟩
+  rw [iSup_range]; rw [← iSup_inf_eq]; rw [iSup_subtype]; rw [← e]; rw [inf_eq_right.mpr (X.basicOpen_le f)]
 
 中文:
 定理 isCompact_basicOpen
@@ -301,7 +304,10 @@ theorem isCompact_basicOpen
   obtain ⟨s, hs, e⟩ := isCompact_iff_finite_and_eq_biUnion_affineOpens.mp hU
   let g : s -> X.affineOpens := fun V => ⟨V.1 ⊓ X.basicOpen f, by
     rw [← X.basicOpen_res _ (homOfLE ((le_iSup₂ V.1 V.2).trans_eq e.symm)).op]
-    exact V
+    exact V.1.2.basicOpen _⟩
+  have : Finite s := hs.to_subtype
+  refine ⟨Set.range g, Set.finite_range g, ?_⟩
+  rw [iSup_range]; rw [← iSup_inf_eq]; rw [iSup_subtype]; rw [← e]; rw [inf_eq_right.mpr (X.basicOpen_le f)]
 
 Depends on / 依赖: Finite, Set.finite_range, Set.range, X.affineOpens, X.basicOpen, X.basicOpen_le, X.basicOpen_res, affineOpens, basicOpen, basicOpen_le, basicOpen_res, e.symm, finite_range, homOfLE, hs.to_subtype, iSup_inf_eq, iSup_range, iSup_subtype, inf_eq_right, inf_eq_right.mpr
 -/
@@ -330,7 +336,14 @@ instance :
   isLocal_affineProperty := by
     constructor
     · apply AffineTargetMorphismProperty.respectsIso_mk <;> rintro X Y Z e _ _ H
-      exacts [@Homeomor
+      exacts [@Homeomorph.compactSpace _ _ _ _ H (TopCat.homeoOfIso (asIso e.inv.base)), H]
+    · introv _ H
+      rw [Scheme.preimage_basicOpen f r]
+      exact (isCompact_iff_compactSpace.mp (isCompact_basicOpen _ isCompact_univ _))
+    · rintro X Y H f S hS hS'
+      rw [← (isAffineOpen_top _).iSup_basicOpen_eq_self_iff] at hS
+      rw [← isCompact_univ_iff]; rw [← Opens.coe_top]; rw [← f.preimage_top]; rw [← hS]; rw [Scheme.Hom.preimage_iSup]; rw [Opens.iSup_mk]; rw [Opens.coe_mk]
+      exact isCompact_iUnion fun i => isCompact_iff_compactSpace.mpr (hS' i)
 
 中文:
 实例 :
@@ -343,7 +356,14 @@ instance :
   isLocal_affineProperty := by
     constructor
     · apply AffineTargetMorphismProperty.respectsIso_mk <;> rintro X Y Z e _ _ H
-      exacts [@Homeomor
+      exacts [@Homeomorph.compactSpace _ _ _ _ H (TopCat.homeoOfIso (asIso e.inv.base)), H]
+    · introv _ H
+      rw [Scheme.preimage_basicOpen f r]
+      exact (isCompact_iff_compactSpace.mp (isCompact_basicOpen _ isCompact_univ _))
+    · rintro X Y H f S hS hS'
+      rw [← (isAffineOpen_top _).iSup_basicOpen_eq_self_iff] at hS
+      rw [← isCompact_univ_iff]; rw [← Opens.coe_top]; rw [← f.preimage_top]; rw [← hS]; rw [Scheme.Hom.preimage_iSup]; rw [Opens.iSup_mk]; rw [Opens.coe_mk]
+      exact isCompact_iUnion fun i => isCompact_iff_compactSpace.mpr (hS' i)
 
 Depends on / 依赖: AffineTargetMorphismProperty, AffineTargetMorphismProperty.respectsIso_mk, Homeomorph, Homeomorph.compactSpace, Scheme, Scheme.preimage_basicOpen, Subtype, Subtype.forall, TopCat, TopCat.homeoOfIso, compactSpace, e.inv.base, exacts, homeoOfIso, introv, isCompact_basicOpen, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, isCompact_univ, isLocal_affineProperty
 -/
@@ -467,7 +487,9 @@ instance quasiCompact_isStableUnderBaseChange
   apply AffineTargetMorphismProperty.IsStableUnderBaseChange.mk
   intro X Y S _ _ f g h
   let 𝒰 := Scheme.Pullback.openCoverOfRight Y.affineCover.finiteSubcover f g
-  have : Finite 𝒰.
+  have : Finite 𝒰.I₀ := by dsimp [𝒰]; infer_instance
+  have : forall i, CompactSpace (𝒰.X i) := by intro i; dsimp [𝒰]; infer_instance
+  exact 𝒰.compactSpace
 
 中文:
 实例 quasiCompact_isStableUnderBaseChange
@@ -478,7 +500,9 @@ instance quasiCompact_isStableUnderBaseChange
   apply AffineTargetMorphismProperty.IsStableUnderBaseChange.mk
   intro X Y S _ _ f g h
   let 𝒰 := Scheme.Pullback.openCoverOfRight Y.affineCover.finiteSubcover f g
-  have : Finite 𝒰.
+  have : Finite 𝒰.I₀ := by dsimp [𝒰]; infer_instance
+  have : forall i, CompactSpace (𝒰.X i) := by intro i; dsimp [𝒰]; infer_instance
+  exact 𝒰.compactSpace
 
 Depends on / 依赖: AffineTargetMorphismProperty, AffineTargetMorphismProperty.IsStableUnderBaseChange.mk, CompactSpace, Finite, HasAffineProperty, HasAffineProperty.isLocal_affineProperty, HasAffineProperty.isStableUnderBaseChange, IsStableUnderBaseChange, Pullback, QuasiCompact, Scheme, Scheme.Pullback.openCoverOfRight, Y.affineCover.finiteSubcover, affineCover, compactSpace, finiteSubcover, infer_instance, isLocal_affineProperty, isStableUnderBaseChange, openCoverOfRight
 -/
@@ -548,7 +572,9 @@ lemma isCompact_iff_exists
   refine ⟨fun ⟨R, f, hf⟩ => ⟨R, f ≫ U.ι, by simp [hf.range_comp]⟩, fun ⟨R, f, hf⟩ => ?_⟩
   refine ⟨R, IsOpenImmersion.lift U.ι f (by simp [hf]), ?_⟩
   rw [← Set.range_eq_univ]
-  apply show Function.Injective (
+  apply show Function.Injective (U.ι '' ·) from Set.image_val_injective
+  simp only [Set.image_univ, Scheme.Opens.range_ι]
+  rwa [← Set.range_comp, ← TopCat.coe_comp, ← Scheme.Hom.comp_base, IsOpenImmersion.lift_fac]
 
 中文:
 引理 isCompact_iff_存在
@@ -558,7 +584,9 @@ lemma isCompact_iff_exists
   refine ⟨fun ⟨R, f, hf⟩ => ⟨R, f ≫ U.ι, by simp [hf.range_comp]⟩, fun ⟨R, f, hf⟩ => ?_⟩
   refine ⟨R, IsOpenImmersion.lift U.ι f (by simp [hf]), ?_⟩
   rw [← Set.range_eq_univ]
-  apply show Function.Injective (
+  apply show Function.Injective (U.ι '' ·) from Set.image_val_injective
+  simp only [Set.image_univ, Scheme.Opens.range_ι]
+  rwa [← Set.range_comp, ← TopCat.coe_comp, ← Scheme.Hom.comp_base, IsOpenImmersion.lift_fac]
 
 Depends on / 依赖: Function, Function.Injective, Injective, IsOpenImmersion, IsOpenImmersion.lift, IsOpenImmersion.lift_fac, Scheme, Scheme.Hom.comp_base, Scheme.Opens.range_, Set.image_univ, Set.image_val_injective, Set.range_comp, Set.range_eq_univ, TopCat, TopCat.coe_comp, coe_comp, comp_base, compactSpace_iff_exists, hf.range_comp, image_univ
 -/
@@ -674,7 +702,36 @@ theorem exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isCompact
   have h₁ (i : s) : i.1.1 <= U := by
     rw [e]
     exact le_iSup (fun (i : s) => (i : Opens (X.toPresheafedSpace))) _
-  h
+  have H' := fun i : s =>
+    exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isAffineOpen X i.1.2
+      (X.presheaf.map (homOfLE (h₁ i)).op x) (X.presheaf.map (homOfLE (h₁ i)).op f) ?_
+  swap
+  · change (X.presheaf.map (homOfLE _).op) ((X.presheaf.map (homOfLE _).op).hom x) = 0
+    have H : (X.presheaf.map (homOfLE _).op) x = 0 := H
+    convert! congr_arg (X.presheaf.map (homOfLE _).op).hom H
+    · simp only [← CommRingCat.comp_apply, ← Functor.map_comp]
+      · rfl
+    · rw [map_zero]
+    · simp only [Scheme.basicOpen_res, inf_le_right]
+  choose n hn using H'
+  have := hs.to_subtype
+  cases nonempty_fintype s
+  use Finset.univ.sup n
+  suffices forall i : s, X.presheaf.map (homOfLE (h₁ i)).op (f ^ Finset.univ.sup n * x) = 0 by
+    subst e
+    apply TopCat.Sheaf.eq_of_locally_eq X.sheaf fun i : s => (i : X.Opens)
+    intro i
+    change _ = (X.sheaf.obj.map _) 0
+    rw [map_zero]
+    apply this
+  intro i
+  replace hn :=
+    congr_arg (fun x => X.presheaf.map (homOfLE (h₁ i)).op (f ^ (Finset.univ.sup n - n i)) * x)
+      (hn i)
+  dsimp at hn
+  simp only [← map_mul, ← map_pow] at hn
+  rwa [mul_zero, ← mul_assoc, ← pow_add, tsub_add_cancel_of_le] at hn
+  apply Finset.le_sup (Finset.mem_univ i)
 
 中文:
 定理 存在_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isCompact
@@ -686,7 +743,36 @@ theorem exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isCompact
   have h₁ (i : s) : i.1.1 <= U := by
     rw [e]
     exact le_iSup (fun (i : s) => (i : Opens (X.toPresheafedSpace))) _
-  h
+  have H' := fun i : s =>
+    exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isAffineOpen X i.1.2
+      (X.presheaf.map (homOfLE (h₁ i)).op x) (X.presheaf.map (homOfLE (h₁ i)).op f) ?_
+  swap
+  · change (X.presheaf.map (homOfLE _).op) ((X.presheaf.map (homOfLE _).op).hom x) = 0
+    have H : (X.presheaf.map (homOfLE _).op) x = 0 := H
+    convert! congr_arg (X.presheaf.map (homOfLE _).op).hom H
+    · simp only [← CommRingCat.comp_apply, ← Functor.map_comp]
+      · rfl
+    · rw [map_zero]
+    · simp only [Scheme.basicOpen_res, inf_le_right]
+  choose n hn using H'
+  have := hs.to_subtype
+  cases nonempty_fintype s
+  use Finset.univ.sup n
+  suffices forall i : s, X.presheaf.map (homOfLE (h₁ i)).op (f ^ Finset.univ.sup n * x) = 0 by
+    subst e
+    apply TopCat.Sheaf.eq_of_locally_eq X.sheaf fun i : s => (i : X.Opens)
+    intro i
+    change _ = (X.sheaf.obj.map _) 0
+    rw [map_zero]
+    apply this
+  intro i
+  replace hn :=
+    congr_arg (fun x => X.presheaf.map (homOfLE (h₁ i)).op (f ^ (Finset.univ.sup n - n i)) * x)
+      (hn i)
+  dsimp at hn
+  simp only [← map_mul, ← map_pow] at hn
+  rwa [mul_zero, ← mul_assoc, ← pow_add, tsub_add_cancel_of_le] at hn
+  apply Finset.le_sup (Finset.mem_univ i)
 
 Depends on / 依赖: X.Opens, X.presheaf.map, X.toPresheafedSpace, exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isAffineOpen, homOfLE, isCompact_and_isOpen_iff_finite_and_eq_biUnion_affineOpens, isCompact_and_isOpen_iff_finite_and_eq_biUnion_affineOpens.mp, le_iSup, presheaf, replace, toPresheafedSpace
 -/
@@ -744,7 +830,10 @@ lemma Scheme.isNilpotent_iff_basicOpen_eq_bot_of_isCompact
     rw [← TopCat.Presheaf.restrict_restrict e bot_le]
     rw [Subsingleton.eq_zero (1 |_ ⊥)]
     change X.presheaf.map _ 0 = 0
-    rw 
+    rw [map_zero]
+  obtain ⟨n, hn⟩ := exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isCompact X hU 1 f h
+  rw [mul_one] at hn
+  use n
 
 中文:
 引理 概形.isNilpotent_iff_basicOpen_eq_bot_of_isCompact
@@ -756,7 +845,10 @@ lemma Scheme.isNilpotent_iff_basicOpen_eq_bot_of_isCompact
     rw [← TopCat.Presheaf.restrict_restrict e bot_le]
     rw [Subsingleton.eq_zero (1 |_ ⊥)]
     change X.presheaf.map _ 0 = 0
-    rw 
+    rw [map_zero]
+  obtain ⟨n, hn⟩ := exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isCompact X hU 1 f h
+  rw [mul_one] at hn
+  use n
 
 Depends on / 依赖: Presheaf, Subsingleton, Subsingleton.eq_zero, TopCat, TopCat.Presheaf.restrict_restrict, X.basicOpen, X.basicOpen_eq_bot_of_isNilpotent, X.presheaf.map, basicOpen, basicOpen_eq_bot_of_isNilpotent, bot_le, eq_zero, exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isCompact, map_zero, mul_one, presheaf, restrict_restrict
 -/

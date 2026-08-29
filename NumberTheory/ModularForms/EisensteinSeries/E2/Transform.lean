@@ -180,7 +180,8 @@ lemma G2Term_summable
     simp_rw [G2Term, add_sub_cancel_right]
     apply summable_of_isBigO_rpow_norm (a := 3) (by linarith)
     simpa [pow_three, pow_two, ← mul_assoc] using ((isBigO_linear_add_const_vec z 0 1).mul
-      (isBigO_linear_add_const_vec z 0 0)).mul (i
+      (isBigO_linear_add_const_vec z 0 0)).mul (isBigO_linear_add_const_vec z 0 0)
+exact H.congr_cofinite δ_eventually_cofinite.mp .of_forall by simp +contextual
 
 中文:
 引理 G2Term_summable
@@ -191,7 +192,8 @@ lemma G2Term_summable
     simp_rw [G2Term, add_sub_cancel_right]
     apply summable_of_isBigO_rpow_norm (a := 3) (by linarith)
     simpa [pow_three, pow_two, ← mul_assoc] using ((isBigO_linear_add_const_vec z 0 1).mul
-      (isBigO_linear_add_const_vec z 0 0)).mul (i
+      (isBigO_linear_add_const_vec z 0 0)).mul (isBigO_linear_add_const_vec z 0 0)
+exact H.congr_cofinite δ_eventually_cofinite.mp .of_forall by simp +contextual
 
 Depends on / 依赖: G2Term, H.congr_cofinite, Summable, _eventually_cofinite.mp, add_sub_cancel_right, congr_cofinite, contextual, isBigO_linear_add_const_vec, mul_assoc, of_forall, pow_three, pow_two, simp_rw, summable_of_isBigO_rpow_norm
 -/
@@ -243,7 +245,13 @@ lemma aux_identity
         ring
       · have hn0 : (n : Complex) != 0 := by aesop
         have hn1 : (n : Complex) + 1 != 0 := by norm_cast; grind
-        
+        simp [δ, h, hb, hn]
+        grind
+    · have h0 : (b : Complex) * z + n + 1 != 0 := by
+        simpa [add_assoc] using linear_ne_zero (cd := ![b, n + 1]) z (by aesop)
+      have h1 : (b : Complex) * z + n != 0 := linear_ne_zero (cd := ![b, n]) z (by aesop)
+      simp [δ]
+      grind
 
 中文:
 引理 aux_identity
@@ -259,7 +267,13 @@ lemma aux_identity
         ring
       · have hn0 : (n : Complex) != 0 := by aesop
         have hn1 : (n : Complex) + 1 != 0 := by norm_cast; grind
-        
+        simp [δ, h, hb, hn]
+        grind
+    · have h0 : (b : Complex) * z + n + 1 != 0 := by
+        simpa [add_assoc] using linear_ne_zero (cd := ![b, n + 1]) z (by aesop)
+      have h1 : (b : Complex) * z + n != 0 := linear_ne_zero (cd := ![b, n]) z (by aesop)
+      simp [δ]
+      grind
 
 Depends on / 依赖: add_assoc, linear_ne_zero, not_and
 -/
@@ -295,7 +309,15 @@ lemma G2_eq_tsum_G2Term
   · rw [← tsum_eq_of_summable_unconditional (L := symmetricIcc Int)]
     · congr with a
       rw [e2Summand]; rw [tsum_eq_of_summable_unconditional
-  
+        (summable_right_one_div_linear_sub_one_div_linear_succ z a)]; rw [← Summable.tsum_add
+        ((G2Term_prod_summable z).prod_factor _)
+        (summable_right_one_div_linear_sub_one_div_linear_succ z a)]
+      exact tsum_congr (fun b => by simp [eisSummand, G2Term, aux_identity z a b, zpow_ofNat])
+    · simpa only [tsum_symmetricIco_linear_sub_linear_add_one_eq_zero z, add_zero]
+        using (G2Term_prod_summable z).prod
+  · exact (G2Term_prod_summable z).prod
+  · exact summable_zero.congr
+      fun b => by simp [← tsum_symmetricIco_linear_sub_linear_add_one_eq_zero z b]
 
 中文:
 引理 G2_eq_tsum_G2Term
@@ -307,7 +329,15 @@ lemma G2_eq_tsum_G2Term
   · rw [← tsum_eq_of_summable_unconditional (L := symmetricIcc Int)]
     · congr with a
       rw [e2Summand]; rw [tsum_eq_of_summable_unconditional
-  
+        (summable_right_one_div_linear_sub_one_div_linear_succ z a)]; rw [← Summable.tsum_add
+        ((G2Term_prod_summable z).prod_factor _)
+        (summable_right_one_div_linear_sub_one_div_linear_succ z a)]
+      exact tsum_congr (fun b => by simp [eisSummand, G2Term, aux_identity z a b, zpow_ofNat])
+    · simpa only [tsum_symmetricIco_linear_sub_linear_add_one_eq_zero z, add_zero]
+        using (G2Term_prod_summable z).prod
+  · exact (G2Term_prod_summable z).prod
+  · exact summable_zero.congr
+      fun b => by simp [← tsum_symmetricIco_linear_sub_linear_add_one_eq_zero z b]
 
 Depends on / 依赖: G2Term, G2Term_prod_summable, Summable, Summable.tsum_add, e2Summand, prod_factor, summable_right_one_div_linear_sub_one_div_linear_succ, symmetricIcc, tsum_add, tsum_congr, tsum_eq_of_summable_unconditional, tsum_tsum_symmetricIco_sub_eq
 -/
@@ -339,7 +369,23 @@ lemma G2_S_action_eq_tsum_G2Term
   · apply tsum_congr (fun N => ?_)
     rw [← Summable.tsum_sub]
     · apply tsum_congr (fun M => ?_)
-      simp only [one_
+      simp only [one_div, G2Term, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
+        Matrix.cons_val_fin_one, mul_inv_rev]
+      nth_rw 1 [← aux_identity z M N]
+      ring
+    · simpa using! linear_left_summable (ne_zero z) N le_rfl
+    · simpa [add_assoc] using! summable_left_one_div_linear_sub_one_div_linear z N (N + 1)
+  · apply HasSum.summable (a := (z.1 ^ 2)⁻¹ * G2 (S • z))
+    rw [hasSum_symmetricIco_int_iff]
+    apply (tendsto_double_sum_S_act z).congr (fun x => ?_)
+    rw [Summable.tsum_finsetSum (fun i hi => ?_)]
+    simpa using! linear_left_summable (ne_zero z) i (k := 2) (by norm_num)
+  · apply HasSum.summable (a := -2 * π * I / z)
+    rw [hasSum_symmetricIco_int_iff]; rw [← tendsto_comp_val_Ioi_atTop]
+    exact tendsto_tsum_one_div_linear_sub_succ_eq z
+  · have := G2Term_summable z
+    rw [← ((finTwoArrowEquiv _).trans (.prodComm ..)).symm.summable_iff] at this
+    exact this.prod
 
 中文:
 引理 G2_S_action_eq_tsum_G2Term
@@ -350,7 +396,23 @@ lemma G2_S_action_eq_tsum_G2Term
   · apply tsum_congr (fun N => ?_)
     rw [← Summable.tsum_sub]
     · apply tsum_congr (fun M => ?_)
-      simp only [one_
+      simp only [one_div, G2Term, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
+        Matrix.cons_val_fin_one, mul_inv_rev]
+      nth_rw 1 [← aux_identity z M N]
+      ring
+    · simpa using! linear_left_summable (ne_zero z) N le_rfl
+    · simpa [add_assoc] using! summable_left_one_div_linear_sub_one_div_linear z N (N + 1)
+  · apply HasSum.summable (a := (z.1 ^ 2)⁻¹ * G2 (S • z))
+    rw [hasSum_symmetricIco_int_iff]
+    apply (tendsto_double_sum_S_act z).congr (fun x => ?_)
+    rw [Summable.tsum_finsetSum (fun i hi => ?_)]
+    simpa using! linear_left_summable (ne_zero z) i (k := 2) (by norm_num)
+  · apply HasSum.summable (a := -2 * π * I / z)
+    rw [hasSum_symmetricIco_int_iff]; rw [← tendsto_comp_val_Ioi_atTop]
+    exact tendsto_tsum_one_div_linear_sub_succ_eq z
+  · have := G2Term_summable z
+    rw [← ((finTwoArrowEquiv _).trans (.prodComm ..)).symm.summable_iff] at this
+    exact this.prod
 
 Depends on / 依赖: Fin.isValue, G2Term, Matrix, Matrix.cons_val_fin_one, Matrix.cons_val_one, Matrix.cons_val_zero, Summable, Summable.tsum_sub, add_asso, aux_identity, cons_val_fin_one, cons_val_one, cons_val_zero, isValue, le_rfl, linear_left_summable, mul_inv_rev, ne_zero, nth_rw, one_div
 -/
@@ -518,7 +580,25 @@ lemma G2_slash_action
   | one => simp only [SlashAction.slash_one, D2_one, sub_zero]
   | mem g hg =>
       simp only [mem_insert_iff, mem_singleton_iff] at hg
-      rcases hg wit
+      rcases hg with (h1 | h2)
+      · ext z
+        simp only [Pi.sub_apply, h1, D2_S z, SlashInvariantForm.slash_S_apply G2 2 z, mul_comm,
+          G2_S_transform z, modular_S_smul]
+        ring_nf
+        aesop
+      · simpa only [h2, D2_T, sub_zero] using G2_T_transform
+  | mul g h _ _ ig ih =>
+      rw [D2_mul]; rw [SlashAction.slash_mul]; rw [ig]; rw [sub_eq_add_neg]; rw [SlashAction.add_slash]; rw [ih]
+      grind [SlashAction.neg_slash, SL_slash]
+  | inv g _ ig =>
+      have H1 : (G2 ∣[(2 : Int)] g) ∣[(2 : Int)] g⁻¹ = (G2 - D2 g) ∣[(2 : Int)] g⁻¹ := by
+        rw [ig]
+      simp_rw [← SlashAction.slash_mul, sub_eq_add_neg, SlashAction.add_slash, mul_inv_cancel,
+        SlashAction.slash_one, SL_slash, SlashAction.neg_slash] at H1
+      nth_rw 2 [H1]
+      have := D2_inv g
+      simp only [SL_slash] at this
+      rw [← sub_eq_add_neg]; rw [this]; rw [SL_slash]; rw [sub_neg_eq_add]; rw [add_sub_cancel_right]
 
 中文:
 引理 G2_slash_action
@@ -530,7 +610,25 @@ lemma G2_slash_action
   | one => simp only [SlashAction.slash_one, D2_one, sub_zero]
   | mem g hg =>
       simp only [mem_insert_iff, mem_singleton_iff] at hg
-      rcases hg wit
+      rcases hg with (h1 | h2)
+      · ext z
+        simp only [Pi.sub_apply, h1, D2_S z, SlashInvariantForm.slash_S_apply G2 2 z, mul_comm,
+          G2_S_transform z, modular_S_smul]
+        ring_nf
+        aesop
+      · simpa only [h2, D2_T, sub_zero] using G2_T_transform
+  | mul g h _ _ ig ih =>
+      rw [D2_mul]; rw [SlashAction.slash_mul]; rw [ig]; rw [sub_eq_add_neg]; rw [SlashAction.add_slash]; rw [ih]
+      grind [SlashAction.neg_slash, SL_slash]
+  | inv g _ ig =>
+      have H1 : (G2 ∣[(2 : Int)] g) ∣[(2 : Int)] g⁻¹ = (G2 - D2 g) ∣[(2 : Int)] g⁻¹ := by
+        rw [ig]
+      simp_rw [← SlashAction.slash_mul, sub_eq_add_neg, SlashAction.add_slash, mul_inv_cancel,
+        SlashAction.slash_one, SL_slash, SlashAction.neg_slash] at H1
+      nth_rw 2 [H1]
+      have := D2_inv g
+      simp only [SL_slash] at this
+      rw [← sub_eq_add_neg]; rw [this]; rw [SL_slash]; rw [sub_neg_eq_add]; rw [add_sub_cancel_right]
 
 Depends on / 依赖: D2_S, D2_T, D2_one, G2_S_transform, G2_T_transform, Pi.sub_apply, SL2Z_generators, SlashAction, SlashAction.slash_one, SlashInvariantForm, SlashInvariantForm.slash_S_apply, SpecialLinearGroup, SpecialLinearGroup.SL2Z_generators, Subgroup, Subgroup.closure, Subgroup.closure_induction, closure, closure_induction, mem_insert_iff, mem_singleton_iff
 -/

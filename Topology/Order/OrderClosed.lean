@@ -433,7 +433,9 @@ theorem disjoint_nhds_atBot_iff
   · simp only [IsBot, not_forall]
     rintro ⟨b, hb⟩
     refine disjoint_of_disjoint_of_mem disjoint_compl_left ?_ (Iic_mem_atBot b)
-    exact isClosed_Iic.isOpen_compl.
+    exact isClosed_Iic.isOpen_compl.mem_nhds hb
+
+@[to_dual]
 
 中文:
 定理 disjoint_nhds_atBot_iff
@@ -446,7 +448,9 @@ theorem disjoint_nhds_atBot_iff
   · simp only [IsBot, not_forall]
     rintro ⟨b, hb⟩
     refine disjoint_of_disjoint_of_mem disjoint_compl_left ?_ (Iic_mem_atBot b)
-    exact isClosed_Iic.isOpen_compl.
+    exact isClosed_Iic.isOpen_compl.mem_nhds hb
+
+@[to_dual]
 
 Depends on / 依赖: Iic_mem_atBot, atBot_eq, disjoint_compl_left, disjoint_of_disjoint_of_mem, disjoint_principal_right, hbot.atBot_eq, isClosed_Iic, isClosed_Iic.isOpen_compl.mem_nhds, isOpen_compl, le_rfl, mem_nhds, mem_of_mem_nhds, not_forall
 -/
@@ -2711,7 +2715,11 @@ theorem Filter.Tendsto.eventually_lt
     h _ h₁ _ h₂
 
 @[to_dual self (reorder := f g, hf hg)]
-nonrec theorem ContinuousAt.eventually_lt {x₀ : β} (hf : ContinuousAt f x₀) (hg : ContinuousAt g 
+nonrec theorem ContinuousAt.eventually_lt {x₀ : β} (hf : ContinuousAt f x₀) (hg : ContinuousAt g x₀)
+    (hfg : f x₀ < g x₀) : forallᶠ x in 𝓝 x₀, f x < g x :=
+  hf.eventually_lt hg hfg
+
+@[to_dual (attr := continuity, fun_prop)]
 
 中文:
 定理 滤子.收敛.eventually_lt
@@ -2721,7 +2729,11 @@ nonrec theorem ContinuousAt.eventually_lt {x₀ : β} (hf : ContinuousAt f x₀)
     h _ h₁ _ h₂
 
 @[to_dual self (reorder := f g, hf hg)]
-nonrec theorem ContinuousAt.eventually_lt {x₀ : β} (hf : ContinuousAt f x₀) (hg : ContinuousAt g 
+nonrec theorem ContinuousAt.eventually_lt {x₀ : β} (hf : ContinuousAt f x₀) (hg : ContinuousAt g x₀)
+    (hfg : f x₀ < g x₀) : forallᶠ x in 𝓝 x₀, f x < g x :=
+  hf.eventually_lt hg hfg
+
+@[to_dual (attr := continuity, fun_prop)]
 
 Depends on / 依赖: Iio_mem_nhds, Ioi_mem_nhds, eventually, exists_disjoint_Iio_Ioi, hf.eventually, hg.eventually, hyz.exists_disjoint_Iio_Ioi
 -/

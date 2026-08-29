@@ -299,7 +299,7 @@ instance :
   have : PreservesFiniteLimits (G C) := by rw [G]; apply preservesFiniteLimits_rightOp
   have : PreservesFiniteLimits (H C) :=
     IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteLimits_embedding _
-  inf
+  infer_instance
 
 中文:
 实例 :
@@ -310,7 +310,7 @@ instance :
   have : PreservesFiniteLimits (G C) := by rw [G]; apply preservesFiniteLimits_rightOp
   have : PreservesFiniteLimits (H C) :=
     IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteLimits_embedding _
-  inf
+  infer_instance
 
 Depends on / 依赖: IsGrothendieckAbelian, IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteLimits_embedding, OppositeModuleEmbedding, PreservesFiniteLimits, functor, infer_instance, preservesFiniteLimits_embedding, preservesFiniteLimits_rightOp
 -/
@@ -333,7 +333,8 @@ instance :
   have : PreservesFiniteColimits (F C) := by rw [F]; infer_instance
   have : PreservesFiniteColimits (G C) := by rw [G]; apply preservesFiniteColimits_rightOp
   have : PreservesFiniteColimits (H C) :=
-    IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteColimits_embeddi
+    IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteColimits_embedding _
+  infer_instance
 
 中文:
 实例 :
@@ -343,7 +344,8 @@ instance :
   have : PreservesFiniteColimits (F C) := by rw [F]; infer_instance
   have : PreservesFiniteColimits (G C) := by rw [G]; apply preservesFiniteColimits_rightOp
   have : PreservesFiniteColimits (H C) :=
-    IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteColimits_embeddi
+    IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteColimits_embedding _
+  infer_instance
 
 Depends on / 依赖: IsGrothendieckAbelian, IsGrothendieckAbelian.OppositeModuleEmbedding.preservesFiniteColimits_embedding, OppositeModuleEmbedding, PreservesFiniteColimits, functor, infer_instance, preservesFiniteColimits_embedding, preservesFiniteColimits_rightOp
 -/

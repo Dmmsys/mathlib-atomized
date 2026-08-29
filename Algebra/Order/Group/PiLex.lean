@@ -33,7 +33,7 @@ instance isOrderedCancelMonoid
       Or.inr ⟨i, fun j hji => congr_arg (· * z j) (hi.1 j hji), mul_lt_mul_left hi.2 _⟩
   le_of_mul_le_mul_left _ _ _ hxyz :=
     hxyz.elim (fun h => (mul_left_cancel h).le) fun ⟨i, hi⟩ =>
-      Or.inr ⟨i, fun j hj => (mul_left_cancel <| hi.1 j hj)
+      Or.inr ⟨i, fun j hj => (mul_left_cancel <| hi.1 j hj), lt_of_mul_lt_mul_left' hi.2⟩
 
 中文:
 实例 isOrderedCancelMonoid
@@ -42,7 +42,7 @@ instance isOrderedCancelMonoid
       Or.inr ⟨i, fun j hji => congr_arg (· * z j) (hi.1 j hji), mul_lt_mul_left hi.2 _⟩
   le_of_mul_le_mul_left _ _ _ hxyz :=
     hxyz.elim (fun h => (mul_left_cancel h).le) fun ⟨i, hi⟩ =>
-      Or.inr ⟨i, fun j hj => (mul_left_cancel <| hi.1 j hj)
+      Or.inr ⟨i, fun j hj => (mul_left_cancel <| hi.1 j hj), lt_of_mul_lt_mul_left' hi.2⟩
 
 Depends on / 依赖: IsStrictOrderedRing, IsStrictOrderedRing.toIsStrictOrderedModule, Or.inr, congr_arg, hxy.elim, hxyz.elim, le_of_mul_le_mul_left, le_rfl, lt_of_mul_lt_mul_left, mul_left_cancel, mul_lt_mul_left, toIsStrictOrderedModule
 -/

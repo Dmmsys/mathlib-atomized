@@ -440,7 +440,7 @@ lemma find?_ofFn_eq_some
         using! hfb, fun j hj => by simpa using! h j hj⟩⟩,
     fun ⟨hpb, i, hfb, h⟩ =>
       ⟨hpb, ⟨i, (length_ofFn (f := f)).symm ▸ i.isLt, by simpa using! hfb,
-        fun 
+        fun j hj => by simpa using! h ⟨j, by lia⟩ (by simpa using! hj)⟩⟩⟩
 
 中文:
 引理 find?_ofFn_eq_some
@@ -452,7 +452,7 @@ lemma find?_ofFn_eq_some
         using! hfb, fun j hj => by simpa using! h j hj⟩⟩,
     fun ⟨hpb, i, hfb, h⟩ =>
       ⟨hpb, ⟨i, (length_ofFn (f := f)).symm ▸ i.isLt, by simpa using! hfb,
-        fun 
+        fun j hj => by simpa using! h ⟨j, by lia⟩ (by simpa using! hj)⟩⟩⟩
 -/
 lemma find?_ofFn_eq_some {n} {f : Fin n -> α} {p : α -> Bool} {b : α} :
     (ofFn f).find? p = some b ↔ p b = true ∧ exists i, f i = b ∧ forall j < i, ¬(p (f j) = true) := by

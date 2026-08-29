@@ -50,7 +50,20 @@ lemma PrimeSpectrum.isHomeomorph_comap
     rw [← q.2.pow_mem_iff_mem _ hn]; rw [← q'.2.pow_mem_iff_mem _ hn]; rw [← hy]
     rw [PrimeSpectrum.ext_iff]; rw [SetLike.ext_iff] at hqq'
     apply hqq'
-  have hint : f.kerLift.IsInte
+  have hint : f.kerLift.IsIntegral := fun x =>
+    have ⟨n, hn, y, hy⟩ := H x
+    let _ := f.kerLift.toAlgebra
+    IsIntegral.of_pow hn (hy ▸ f.kerLift.isIntegralElem_map (x := ⟦y⟧))
+  have hbij : Function.Bijective (comap f) :=
+⟨h1, (comap_quotientMk_bijective_of_le_nilradical hker).2.comp
+      hint.comap_surjective f.kerLift_injective⟩
+  refine ⟨continuous_comap f, ?_, h1, hbij.2⟩
+  rw [isTopologicalBasis_basic_opens.isOpenMap_iff]
+  rintro - ⟨s, rfl⟩
+  obtain ⟨n, hn, r, hr⟩ := H s
+  have : (comap f) '' (basicOpen s) = basicOpen r :=
+(Set.eq_preimage_iff_image_eq hbij).mp by rw [← basicOpen_pow _ n hn, ← hr]; rfl
+  exact this ▸ isOpen_basicOpen
 
 中文:
 引理 素谱.isHomeomorph_comap
@@ -63,7 +76,20 @@ lemma PrimeSpectrum.isHomeomorph_comap
     rw [← q.2.pow_mem_iff_mem _ hn]; rw [← q'.2.pow_mem_iff_mem _ hn]; rw [← hy]
     rw [PrimeSpectrum.ext_iff]; rw [SetLike.ext_iff] at hqq'
     apply hqq'
-  have hint : f.kerLift.IsInte
+  have hint : f.kerLift.IsIntegral := fun x =>
+    have ⟨n, hn, y, hy⟩ := H x
+    let _ := f.kerLift.toAlgebra
+    IsIntegral.of_pow hn (hy ▸ f.kerLift.isIntegralElem_map (x := ⟦y⟧))
+  have hbij : Function.Bijective (comap f) :=
+⟨h1, (comap_quotientMk_bijective_of_le_nilradical hker).2.comp
+      hint.comap_surjective f.kerLift_injective⟩
+  refine ⟨continuous_comap f, ?_, h1, hbij.2⟩
+  rw [isTopologicalBasis_basic_opens.isOpenMap_iff]
+  rintro - ⟨s, rfl⟩
+  obtain ⟨n, hn, r, hr⟩ := H s
+  have : (comap f) '' (basicOpen s) = basicOpen r :=
+(Set.eq_preimage_iff_image_eq hbij).mp by rw [← basicOpen_pow _ n hn, ← hr]; rfl
+  exact this ▸ isOpen_basicOpen
 
 Depends on / 依赖: Bijective, Function, Function.Bijective, Function.Injective, Injective, IsIntegral, IsIntegral.of_pow, PrimeSpectrum, PrimeSpectrum.ext_iff, SetLike, SetLike.ext_iff, comap_quotientMk_bijective_of_le_nilr, ext_iff, f.kerLift.IsIntegral, f.kerLift.isIntegralElem_map, f.kerLift.toAlgebra, isIntegralElem_map, kerLift, of_pow, pow_mem_iff_mem
 -/
@@ -136,7 +162,16 @@ lemma PrimeSpectrum.isHomeomorph_comap_tensorProductMap_of_isPurelyInseparable
   let e : (L otimes[R] S) ≃ₐ[K] L otimes[K] (K otimes[R] S) :=
     (Algebra.TensorProduct.cancelBaseChange R K K L S).symm
   let e2 : L otimes[K] (K otimes[R] S) ≃ₐ[K] (K otimes[R] S) otimes[K] L := Algebra.TensorProduct.comm ..
-  have heq : Algebra.TensorProduct.map (Algebra.ofId K L) (AlgHom.id
+  have heq : Algebra.TensorProduct.map (Algebra.ofId K L) (AlgHom.id R S) =
+      (e.symm.toAlgHom.comp e2.symm.toAlgHom).comp
+        (IsScalarTower.toAlgHom K (K otimes[R] S) ((K otimes[R] S) otimes[K] L)) := by
+    ext; simp [e, e2]
+  rw [heq]
+  simp only [AlgHom.toRingHom_eq_coe, AlgHom.comp_toRingHom,
+    AlgEquiv.toAlgHom_toRingHom, IsScalarTower.coe_toAlgHom, comap_comp]
+exact (isHomeomorph_comap_of_isPurelyInseparable K L (K otimes[R] S)).comp
+(isHomeomorph_comap_of_bijective e2.symm.bijective).comp
+    isHomeomorph_comap_of_bijective e.symm.bijective
 
 中文:
 引理 素谱.isHomeomorph_comap_tensorProductMap_of_isPurelyInseparable
@@ -145,7 +180,16 @@ lemma PrimeSpectrum.isHomeomorph_comap_tensorProductMap_of_isPurelyInseparable
   let e : (L otimes[R] S) ≃ₐ[K] L otimes[K] (K otimes[R] S) :=
     (Algebra.TensorProduct.cancelBaseChange R K K L S).symm
   let e2 : L otimes[K] (K otimes[R] S) ≃ₐ[K] (K otimes[R] S) otimes[K] L := Algebra.TensorProduct.comm ..
-  have heq : Algebra.TensorProduct.map (Algebra.ofId K L) (AlgHom.id
+  have heq : Algebra.TensorProduct.map (Algebra.ofId K L) (AlgHom.id R S) =
+      (e.symm.toAlgHom.comp e2.symm.toAlgHom).comp
+        (IsScalarTower.toAlgHom K (K otimes[R] S) ((K otimes[R] S) otimes[K] L)) := by
+    ext; simp [e, e2]
+  rw [heq]
+  simp only [AlgHom.toRingHom_eq_coe, AlgHom.comp_toRingHom,
+    AlgEquiv.toAlgHom_toRingHom, IsScalarTower.coe_toAlgHom, comap_comp]
+exact (isHomeomorph_comap_of_isPurelyInseparable K L (K otimes[R] S)).comp
+(isHomeomorph_comap_of_bijective e2.symm.bijective).comp
+    isHomeomorph_comap_of_bijective e.symm.bijective
 
 Depends on / 依赖: AlgHom, AlgHom.comp_toR, AlgHom.id, AlgHom.toRingHom_eq_coe, Algebra, Algebra.TensorProduct.cancelBaseChange, Algebra.TensorProduct.comm, Algebra.TensorProduct.map, Algebra.ofId, IsScalarTower, IsScalarTower.toAlgHom, TensorProduct, cancelBaseChange, comp_toR, e.symm.toAlgHom.comp, e2.symm.toAlgHom, otimes, toAlgHom, toRingHom_eq_coe
 -/

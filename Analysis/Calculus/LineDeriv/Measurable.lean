@@ -182,7 +182,8 @@ theorem measurableSet_lineDifferentiableAt_uncurry
 hf.comp (continuous_fst.comp continuous_fst).add
  continuous_snd.smul (continuous_snd.comp continuous_fst)
   have M_meas : MeasurableSet {q : (E × E) × 𝕜 | DifferentiableAt 𝕜 (g q.1) q.2} :=
-
+    measurableSet_of_differentiableAt_with_param 𝕜 this
+  exact measurable_prodMk_right M_meas
 
 中文:
 定理 measurableSet_lineDifferentiableAt_uncurry
@@ -194,7 +195,8 @@ hf.comp (continuous_fst.comp continuous_fst).add
 hf.comp (continuous_fst.comp continuous_fst).add
  continuous_snd.smul (continuous_snd.comp continuous_fst)
   have M_meas : MeasurableSet {q : (E × E) × 𝕜 | DifferentiableAt 𝕜 (g q.1) q.2} :=
-
+    measurableSet_of_differentiableAt_with_param 𝕜 this
+  exact measurable_prodMk_right M_meas
 
 Depends on / 依赖: Continuous, DifferentiableAt, M_meas, MeasurableSet, borelize, continuous_fst, continuous_fst.comp, continuous_snd, continuous_snd.comp, continuous_snd.smul, g.uncurry, hf.comp, measurableSet_of_differentiableAt_with_param, measurable_prodMk_right, uncurry
 -/
@@ -257,7 +259,7 @@ theorem stronglyMeasurable_lineDeriv_uncurry
   have : Continuous g.uncurry :=
 hf.comp (continuous_fst.comp continuous_fst).add
  continuous_snd.smul (continuous_snd.comp continuous_fst)
-  exact (stronglyMeasurable_deriv_with_param this).comp_measurable measurable_prodMk
+  exact (stronglyMeasurable_deriv_with_param this).comp_measurable measurable_prodMk_right
 
 中文:
 定理 stronglyMeasurable_lineDeriv_uncurry
@@ -268,7 +270,7 @@ hf.comp (continuous_fst.comp continuous_fst).add
   have : Continuous g.uncurry :=
 hf.comp (continuous_fst.comp continuous_fst).add
  continuous_snd.smul (continuous_snd.comp continuous_fst)
-  exact (stronglyMeasurable_deriv_with_param this).comp_measurable measurable_prodMk
+  exact (stronglyMeasurable_deriv_with_param this).comp_measurable measurable_prodMk_right
 
 Depends on / 依赖: Continuous, borelize, comp_measurable, continuous_fst, continuous_fst.comp, continuous_snd, continuous_snd.comp, continuous_snd.smul, g.uncurry, hf.comp, measurable_prodMk_right, stronglyMeasurable_deriv_with_param, uncurry
 -/

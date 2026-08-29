@@ -60,7 +60,18 @@ definition checkComposition
       withReducibleAndInstances do
         if !(← isDefEq X' X) then
           logInfo m!"In composition\n {e}\nthe source of\n {f}\nis\n {X'}\nbut should be\n {X}"
-       
+        if !(← isDefEq Y' Y) then
+          logInfo m!"In composition\n {e}\nthe target of\n {f}\nis\n {Y'}\nbut should be\n {Y}"
+    | _ => throwError "In composition\n {e}\nthe type of\n {f}\nis not a morphism."
+    match_expr ← inferType g with
+    | Quiver.Hom _ _ Y' Z' =>
+      withReducibleAndInstances do
+        if !(← isDefEq Y' Y) then
+          logInfo m!"In composition\n {e}\nthe source of\n {g}\nis\n {Y'}\nbut should be\n {Y}"
+        if !(← isDefEq Z' Z) then
+          logInfo m!"In composition\n {e}\nthe target of\n {g}\nis\n {Z'}\nbut should be\n {Z}"
+    | _ => throwError "In composition\n {e}\nthe type of\n {g}\nis not a morphism."
+  | _ => throwError "{e} is not a composition."
 
 中文:
 定义 checkComposition
@@ -73,7 +84,18 @@ definition checkComposition
       withReducibleAndInstances do
         if !(← isDefEq X' X) then
           logInfo m!"In composition\n {e}\nthe source of\n {f}\nis\n {X'}\nbut should be\n {X}"
-       
+        if !(← isDefEq Y' Y) then
+          logInfo m!"In composition\n {e}\nthe target of\n {f}\nis\n {Y'}\nbut should be\n {Y}"
+    | _ => throwError "In composition\n {e}\nthe type of\n {f}\nis not a morphism."
+    match_expr ← inferType g with
+    | Quiver.Hom _ _ Y' Z' =>
+      withReducibleAndInstances do
+        if !(← isDefEq Y' Y) then
+          logInfo m!"In composition\n {e}\nthe source of\n {g}\nis\n {Y'}\nbut should be\n {Y}"
+        if !(← isDefEq Z' Z) then
+          logInfo m!"In composition\n {e}\nthe target of\n {g}\nis\n {Z'}\nbut should be\n {Z}"
+    | _ => throwError "In composition\n {e}\nthe type of\n {g}\nis not a morphism."
+  | _ => throwError "{e} is not a composition."
 -/
 def checkComposition (e : Expr) : MetaM Unit := do
   match_expr e with

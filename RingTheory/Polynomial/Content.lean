@@ -386,7 +386,18 @@ theorem content_X_mul
     ext a
     simp only [Finset.mem_map, Function.Embedding.coeFn_mk, Ne, mem_support_iff]
     rcases a with - | a
-    · sim
+    · simp
+    rw [mul_comm]; rw [coeff_mul_X]
+    constructor
+    · intro h
+      use a
+    · rintro ⟨b, ⟨h1, h2⟩⟩
+      rw [← Nat.succ_injective h2]
+      apply h1
+  rw [h]
+  simp
+
+@[simp]
 
 中文:
 定理 content_X_mul
@@ -399,7 +410,18 @@ theorem content_X_mul
     ext a
     simp only [Finset.mem_map, Function.Embedding.coeFn_mk, Ne, mem_support_iff]
     rcases a with - | a
-    · sim
+    · simp
+    rw [mul_comm]; rw [coeff_mul_X]
+    constructor
+    · intro h
+      use a
+    · rintro ⟨b, ⟨h1, h2⟩⟩
+      rw [← Nat.succ_injective h2]
+      apply h1
+  rw [h]
+  simp
+
+@[simp]
 
 Depends on / 依赖: Embedding, Finset, Finset.gcd_def, Finset.mem_map, Function, Function.Embedding.coeFn_mk, Nat.succ, Nat.succ_injective, coeFn_mk, coeff_mul_X, content, gcd_def, mem_map, mem_support_iff, mul_comm, p.support.map, succ_injective, support
 -/
@@ -719,7 +741,9 @@ theorem content_eq_gcd_leadingCoeff_content_eraseLead
   · simp [h]
   rw [← leadingCoeff_eq_zero]; rw [leadingCoeff]; rw [← Ne]; rw [← mem_support_iff] at h
   rw [content]; rw [← Finset.insert_erase h]; rw [Finset.gcd_insert]; rw [leadingCoeff]; rw [content]; rw [eraseLead_support]
-  refine congr rfl (Finset.gcd_congr rfl fun i h
+  refine congr rfl (Finset.gcd_congr rfl fun i hi => ?_)
+  rw [Finset.mem_erase] at hi
+  rw [eraseLead_coeff]; rw [if_neg hi.1]
 
 中文:
 定理 content_eq_gcd_leadingCoeff_content_eraseLead
@@ -729,7 +753,9 @@ theorem content_eq_gcd_leadingCoeff_content_eraseLead
   · simp [h]
   rw [← leadingCoeff_eq_zero]; rw [leadingCoeff]; rw [← Ne]; rw [← mem_support_iff] at h
   rw [content]; rw [← Finset.insert_erase h]; rw [Finset.gcd_insert]; rw [leadingCoeff]; rw [content]; rw [eraseLead_support]
-  refine congr rfl (Finset.gcd_congr rfl fun i h
+  refine congr rfl (Finset.gcd_congr rfl fun i hi => ?_)
+  rw [Finset.mem_erase] at hi
+  rw [eraseLead_coeff]; rw [if_neg hi.1]
 
 Depends on / 依赖: Finset, Finset.gcd_congr, Finset.gcd_insert, Finset.insert_erase, Finset.mem_erase, content, eraseLead_coeff, eraseLead_support, gcd_congr, gcd_insert, if_neg, insert_erase, leadingCoeff, leadingCoeff_eq_zero, mem_erase, mem_support_iff
 -/
@@ -1083,7 +1109,9 @@ theorem isUnit_primPart_C
       ?_⟩
   rw [← normalize_eq_zero]; rw [← C_eq_zero] at h0
   apply mul_left_cancel₀ h0
-  conv_r
+  conv_rhs => rw [← content_C, ← (C r).eq_C_content_mul_primPart]
+  simp only [normalize_apply, map_mul]
+  rw [mul_assoc]; rw [← map_mul]; rw [Units.mul_inv]; rw [C_1]; rw [mul_one]
 
 中文:
 定理 isUnit_primPart_C
@@ -1099,7 +1127,9 @@ theorem isUnit_primPart_C
       ?_⟩
   rw [← normalize_eq_zero]; rw [← C_eq_zero] at h0
   apply mul_left_cancel₀ h0
-  conv_r
+  conv_rhs => rw [← content_C, ← (C r).eq_C_content_mul_primPart]
+  simp only [normalize_apply, map_mul]
+  rw [mul_assoc]; rw [← map_mul]; rw [Units.mul_inv]; rw [C_1]; rw [mul_one]
 
 Depends on / 依赖: C_eq_zero, IsUnit, Units.inv_mul, Units.mul_inv, content_C, conv_rhs, eq_C_content_mul_primPart, inv_mul, map_mul, mul_assoc, mul_inv, mul_one, normUnit, normalize_apply, normalize_eq_zero
 -/
@@ -1212,7 +1242,11 @@ theorem gcd_content_eq_of_dvd_sub
       (lt_of_le_of_lt (le_max_left _ _) (Nat.lt_succ_self _))]
   rw [content_eq_gcd_range_of_lt q (max p.natDegree q.natDegree).succ
       (lt_of_le_of_lt (le_max_right _ _) (Nat.lt_succ_self _))]
-  apply Finset.gcd_eq_of_dvd_s
+  apply Finset.gcd_eq_of_dvd_sub
+  intro x _
+  obtain ⟨w, hw⟩ := h
+  use w.coeff x
+  rw [← coeff_sub]; rw [hw]; rw [coeff_C_mul]
 
 中文:
 定理 gcd_content_eq_of_dvd_sub
@@ -1222,7 +1256,11 @@ theorem gcd_content_eq_of_dvd_sub
       (lt_of_le_of_lt (le_max_left _ _) (Nat.lt_succ_self _))]
   rw [content_eq_gcd_range_of_lt q (max p.natDegree q.natDegree).succ
       (lt_of_le_of_lt (le_max_right _ _) (Nat.lt_succ_self _))]
-  apply Finset.gcd_eq_of_dvd_s
+  apply Finset.gcd_eq_of_dvd_sub
+  intro x _
+  obtain ⟨w, hw⟩ := h
+  use w.coeff x
+  rw [← coeff_sub]; rw [hw]; rw [coeff_C_mul]
 
 Depends on / 依赖: Finset, Finset.gcd_eq_of_dvd_sub, Nat.lt_succ_self, coeff_C_mul, coeff_sub, content_eq_gcd_range_of_lt, gcd_eq_of_dvd_sub, le_max_left, le_max_right, lt_of_le_of_lt, lt_succ_self, natDegree, p.natDegree, q.natDegree, w.coeff
 -/
@@ -1247,7 +1285,8 @@ theorem content_mul_aux
   proof: by
   rw [gcd_comm (content _) _]; rw [gcd_comm (content _) _]
   apply gcd_content_eq_of_dvd_sub
-  rw [← self_sub_C_mul_X_pow]; rw [← self_sub_C_mul_X_pow]; rw [sub_mul]; rw [sub_sub]; rw [add_comm]; rw [sub_add]; rw [sub_sub_cancel]; rw [leadingCoeff_mul]; rw [map_mul]; rw [mul_assoc]; rw [mul_assoc
+  rw [← self_sub_C_mul_X_pow]; rw [← self_sub_C_mul_X_pow]; rw [sub_mul]; rw [sub_sub]; rw [add_comm]; rw [sub_add]; rw [sub_sub_cancel]; rw [leadingCoeff_mul]; rw [map_mul]; rw [mul_assoc]; rw [mul_assoc]
+  apply dvd_sub (Dvd.intro _ rfl) (Dvd.intro _ rfl)
 
 中文:
 定理 content_mul_aux
@@ -1255,7 +1294,8 @@ theorem content_mul_aux
   证明: by
   rw [gcd_comm (content _) _]; rw [gcd_comm (content _) _]
   apply gcd_content_eq_of_dvd_sub
-  rw [← self_sub_C_mul_X_pow]; rw [← self_sub_C_mul_X_pow]; rw [sub_mul]; rw [sub_sub]; rw [add_comm]; rw [sub_add]; rw [sub_sub_cancel]; rw [leadingCoeff_mul]; rw [map_mul]; rw [mul_assoc]; rw [mul_assoc
+  rw [← self_sub_C_mul_X_pow]; rw [← self_sub_C_mul_X_pow]; rw [sub_mul]; rw [sub_sub]; rw [add_comm]; rw [sub_add]; rw [sub_sub_cancel]; rw [leadingCoeff_mul]; rw [map_mul]; rw [mul_assoc]; rw [mul_assoc]
+  apply dvd_sub (Dvd.intro _ rfl) (Dvd.intro _ rfl)
 
 Depends on / 依赖: Dvd.intro, add_comm, content, dvd_sub, gcd_comm, gcd_content_eq_of_dvd_sub, leadingCoeff_mul, map_mul, mul_assoc, self_sub_C_mul_X_pow, sub_add, sub_mul, sub_sub, sub_sub_cancel
 -/
@@ -1281,7 +1321,38 @@ theorem associated_content_mul
       apply h
       apply lt_of_le_of_lt degree_le_natDegree (WithBot.coe_lt_coe.2 (Nat.lt_succ_self _))
     intro n p q hpq
-    indu
+    induction n generalizing p q with
+    | zero =>
+      rw [Nat.cast_zero]; rw [Nat.WithBot.lt_zero_iff]; rw [degree_eq_bot]; rw [mul_eq_zero] at hpq
+      rcases hpq with (rfl | rfl) <;> simp
+    | succ n ih => ?_
+    by_cases p0 : p = 0
+    · simp [p0]
+    by_cases q0 : q = 0
+    · simp [q0]
+    rw [degree_eq_natDegree (mul_ne_zero p0 q0)]; rw [Nat.cast_lt]; rw [Nat.lt_succ_iff_lt_or_eq]; rw [← Nat.cast_lt (α := WithBot Nat)]; rw [← degree_eq_natDegree (mul_ne_zero p0 q0)]; rw [natDegree_mul p0 q0] at hpq
+    rcases hpq with (hlt | heq)
+    · apply ih _ _ hlt
+    rw [← p.natDegree_primPart]; rw [← q.natDegree_primPart]; rw [← Nat.cast_inj (R := WithBot Nat)]; rw [Nat.cast_add]; rw [← degree_eq_natDegree p.primPart_ne_zero]; rw [← degree_eq_natDegree q.primPart_ne_zero] at heq
+    rw [p.eq_C_content_mul_primPart]; rw [q.eq_C_content_mul_primPart]
+    suffices h : (q.primPart * p.primPart).content = 1 by
+      grw [mul_assoc, associated_content_C_mul, associated_content_C_mul, mul_comm p.primPart,
+        mul_assoc, associated_content_C_mul, associated_content_C_mul, h, mul_one,
+        content_primPart, content_primPart, mul_one, mul_one]
+    rw [← normalize_content]; rw [normalize_eq_one]; rw [isUnit_iff_dvd_one]; rw [content_eq_gcd_leadingCoeff_content_eraseLead]; rw [leadingCoeff_mul]; rw [gcd_comm]
+    apply (gcd_mul_dvd_mul_gcd _ _ _).trans
+    rw [content_mul_aux]; rw [(ih ..).gcd_eq_left]; rw [content_primPart]; rw [mul_one]; rw [gcd_comm]; rw [←
+      content_eq_gcd_leadingCoeff_content_eraseLead]; rw [content_primPart]; rw [one_mul]; rw [mul_comm q.primPart]; rw [content_mul_aux]; rw [(ih ..).gcd_eq_left]; rw [content_primPart]; rw [mul_one]; rw [gcd_comm]; rw [← content_eq_gcd_leadingCoeff_content_eraseLead]; rw [content_primPart]
+    · rw [← heq, degree_mul, WithBot.add_lt_add_iff_right]
+      · apply degree_erase_lt p.primPart_ne_zero
+      · rw [Ne, degree_eq_bot]
+        apply q.primPart_ne_zero
+    · rw [mul_comm, ← heq, degree_mul, WithBot.add_lt_add_iff_left]
+      · apply degree_erase_lt q.primPart_ne_zero
+      · rw [Ne, degree_eq_bot]
+        apply p.primPart_ne_zero
+
+@[simp]
 
 中文:
 定理 associated_content_mul
@@ -1294,7 +1365,38 @@ theorem associated_content_mul
       apply h
       apply lt_of_le_of_lt degree_le_natDegree (WithBot.coe_lt_coe.2 (Nat.lt_succ_self _))
     intro n p q hpq
-    indu
+    induction n generalizing p q with
+    | zero =>
+      rw [Nat.cast_zero]; rw [Nat.WithBot.lt_zero_iff]; rw [degree_eq_bot]; rw [mul_eq_zero] at hpq
+      rcases hpq with (rfl | rfl) <;> simp
+    | succ n ih => ?_
+    by_cases p0 : p = 0
+    · simp [p0]
+    by_cases q0 : q = 0
+    · simp [q0]
+    rw [degree_eq_natDegree (mul_ne_zero p0 q0)]; rw [Nat.cast_lt]; rw [Nat.lt_succ_iff_lt_or_eq]; rw [← Nat.cast_lt (α := WithBot Nat)]; rw [← degree_eq_natDegree (mul_ne_zero p0 q0)]; rw [natDegree_mul p0 q0] at hpq
+    rcases hpq with (hlt | heq)
+    · apply ih _ _ hlt
+    rw [← p.natDegree_primPart]; rw [← q.natDegree_primPart]; rw [← Nat.cast_inj (R := WithBot Nat)]; rw [Nat.cast_add]; rw [← degree_eq_natDegree p.primPart_ne_zero]; rw [← degree_eq_natDegree q.primPart_ne_zero] at heq
+    rw [p.eq_C_content_mul_primPart]; rw [q.eq_C_content_mul_primPart]
+    suffices h : (q.primPart * p.primPart).content = 1 by
+      grw [mul_assoc, associated_content_C_mul, associated_content_C_mul, mul_comm p.primPart,
+        mul_assoc, associated_content_C_mul, associated_content_C_mul, h, mul_one,
+        content_primPart, content_primPart, mul_one, mul_one]
+    rw [← normalize_content]; rw [normalize_eq_one]; rw [isUnit_iff_dvd_one]; rw [content_eq_gcd_leadingCoeff_content_eraseLead]; rw [leadingCoeff_mul]; rw [gcd_comm]
+    apply (gcd_mul_dvd_mul_gcd _ _ _).trans
+    rw [content_mul_aux]; rw [(ih ..).gcd_eq_left]; rw [content_primPart]; rw [mul_one]; rw [gcd_comm]; rw [←
+      content_eq_gcd_leadingCoeff_content_eraseLead]; rw [content_primPart]; rw [one_mul]; rw [mul_comm q.primPart]; rw [content_mul_aux]; rw [(ih ..).gcd_eq_left]; rw [content_primPart]; rw [mul_one]; rw [gcd_comm]; rw [← content_eq_gcd_leadingCoeff_content_eraseLead]; rw [content_primPart]
+    · rw [← heq, degree_mul, WithBot.add_lt_add_iff_right]
+      · apply degree_erase_lt p.primPart_ne_zero
+      · rw [Ne, degree_eq_bot]
+        apply q.primPart_ne_zero
+    · rw [mul_comm, ← heq, degree_mul, WithBot.add_lt_add_iff_left]
+      · apply degree_erase_lt q.primPart_ne_zero
+      · rw [Ne, degree_eq_bot]
+        apply p.primPart_ne_zero
+
+@[simp]
 
 Depends on / 依赖: Associated, Nat.WithBot.lt_zero_iff, Nat.cast_zero, Nat.lt_succ_self, WithBot, WithBot.coe_lt_coe, cast_zero, classical, coe_lt_coe, content, degree, degree_eq_bot, degree_le_natDegree, generalizing, lt_of_le_of_lt, lt_succ_self, lt_zero_iff, mul_eq_zero, nontriviality, p.content
 -/
@@ -1399,7 +1501,7 @@ theorem associated_primPart_mul
   gcongr
   exact (associated_content_mul ..).symm.map _
 
-@
+@[simp]
 
 中文:
 定理 associated_primPart_mul
@@ -1412,7 +1514,7 @@ theorem associated_primPart_mul
   gcongr
   exact (associated_content_mul ..).symm.map _
 
-@
+@[simp]
 
 Depends on / 依赖: C_eq_zero, C_mul, associated_content_mul, content_eq_zero_iff, conv_lhs, eq_C_content_mul_primPart, mul_mul_mul_comm, of_mul_left, p.eq_C_content_mul_primPart, q.eq_C_content_mul_primPart, symm.map
 -/
@@ -1500,7 +1602,42 @@ theorem exists_primitive_lcm_of_isPrimitive
     have h : exists (n : Nat) (r : R[X]), r.natDegree = n ∧ r.IsPrimitive ∧ p ∣ r ∧ q ∣ r :=
       ⟨(p * q).natDegree, p * q, rfl, hp.mul hq, dvd_mul_right _ _, dvd_mul_left _ _⟩
     rcases Nat.find_spec h with ⟨r, rdeg, rprim, pr, qr⟩
-    refine ⟨r, rprim, fun s => ⟨?_, fun rs => ⟨pr
+    refine ⟨r, rprim, fun s => ⟨?_, fun rs => ⟨pr.trans rs, qr.trans rs⟩⟩⟩
+    suffices hs : forall (n : Nat) (s : R[X]), s.natDegree = n -> p ∣ s ∧ q ∣ s -> r ∣ s from
+      hs s.natDegree s rfl
+    clear s
+    by_contra! con
+    rcases Nat.find_spec con with ⟨s, sdeg, ⟨ps, qs⟩, rs⟩
+    have s0 : s != 0 := by
+      contrapose rs
+      simp [rs]
+    have hs :=
+      Nat.find_min' h
+        ⟨_, s.natDegree_primPart, s.isPrimitive_primPart, (hp.dvd_primPart_iff_dvd s0).2 ps,
+          (hq.dvd_primPart_iff_dvd s0).2 qs⟩
+    rw [← rdeg] at hs
+    by_cases! sC : s.natDegree <= 0
+    · rw [eq_C_of_natDegree_le_zero (le_trans hs sC), isPrimitive_iff_content_eq_one, content_C,
+        normalize_eq_one] at rprim
+      rw [eq_C_of_natDegree_le_zero (le_trans hs sC)]; rw [← dvd_content_iff_C_dvd] at rs
+      apply rs rprim.dvd
+    have hcancel := natDegree_cancelLeads_lt_of_natDegree_le_natDegree hs sC
+    rw [sdeg] at hcancel
+    apply Nat.find_min con hcancel
+    refine
+      ⟨_, rfl, ⟨dvd_cancelLeads_of_dvd_of_dvd pr ps, dvd_cancelLeads_of_dvd_of_dvd qr qs⟩,
+        fun rcs => rs ?_⟩
+    rw [← rprim.dvd_primPart_iff_dvd s0]
+    rw [cancelLeads]; rw [tsub_eq_zero_iff_le.mpr hs]; rw [pow_zero]; rw [mul_one] at rcs
+    have h :=
+      dvd_add rcs (Dvd.intro_left (C (leadingCoeff s) * X ^ (natDegree s - natDegree r)) rfl)
+    nontriviality R
+    have hC0 := rprim.ne_zero
+    rw [Ne]; rw [← leadingCoeff_eq_zero]; rw [← C_eq_zero] at hC0
+    rw [sub_add_cancel]; rw [← rprim.dvd_primPart_iff_dvd (mul_ne_zero hC0 s0)] at h
+    refine h.trans (Associated.dvd ?_)
+    grw [associated_primPart_mul (mul_ne_zero hC0 s0)]
+    exact associated_unit_mul_left _ _ (isUnit_primPart_C _)
 
 中文:
 定理 存在_primitive_lcm_of_isPrimitive
@@ -1510,7 +1647,42 @@ theorem exists_primitive_lcm_of_isPrimitive
     have h : exists (n : Nat) (r : R[X]), r.natDegree = n ∧ r.IsPrimitive ∧ p ∣ r ∧ q ∣ r :=
       ⟨(p * q).natDegree, p * q, rfl, hp.mul hq, dvd_mul_right _ _, dvd_mul_left _ _⟩
     rcases Nat.find_spec h with ⟨r, rdeg, rprim, pr, qr⟩
-    refine ⟨r, rprim, fun s => ⟨?_, fun rs => ⟨pr
+    refine ⟨r, rprim, fun s => ⟨?_, fun rs => ⟨pr.trans rs, qr.trans rs⟩⟩⟩
+    suffices hs : forall (n : Nat) (s : R[X]), s.natDegree = n -> p ∣ s ∧ q ∣ s -> r ∣ s from
+      hs s.natDegree s rfl
+    clear s
+    by_contra! con
+    rcases Nat.find_spec con with ⟨s, sdeg, ⟨ps, qs⟩, rs⟩
+    have s0 : s != 0 := by
+      contrapose rs
+      simp [rs]
+    have hs :=
+      Nat.find_min' h
+        ⟨_, s.natDegree_primPart, s.isPrimitive_primPart, (hp.dvd_primPart_iff_dvd s0).2 ps,
+          (hq.dvd_primPart_iff_dvd s0).2 qs⟩
+    rw [← rdeg] at hs
+    by_cases! sC : s.natDegree <= 0
+    · rw [eq_C_of_natDegree_le_zero (le_trans hs sC), isPrimitive_iff_content_eq_one, content_C,
+        normalize_eq_one] at rprim
+      rw [eq_C_of_natDegree_le_zero (le_trans hs sC)]; rw [← dvd_content_iff_C_dvd] at rs
+      apply rs rprim.dvd
+    have hcancel := natDegree_cancelLeads_lt_of_natDegree_le_natDegree hs sC
+    rw [sdeg] at hcancel
+    apply Nat.find_min con hcancel
+    refine
+      ⟨_, rfl, ⟨dvd_cancelLeads_of_dvd_of_dvd pr ps, dvd_cancelLeads_of_dvd_of_dvd qr qs⟩,
+        fun rcs => rs ?_⟩
+    rw [← rprim.dvd_primPart_iff_dvd s0]
+    rw [cancelLeads]; rw [tsub_eq_zero_iff_le.mpr hs]; rw [pow_zero]; rw [mul_one] at rcs
+    have h :=
+      dvd_add rcs (Dvd.intro_left (C (leadingCoeff s) * X ^ (natDegree s - natDegree r)) rfl)
+    nontriviality R
+    have hC0 := rprim.ne_zero
+    rw [Ne]; rw [← leadingCoeff_eq_zero]; rw [← C_eq_zero] at hC0
+    rw [sub_add_cancel]; rw [← rprim.dvd_primPart_iff_dvd (mul_ne_zero hC0 s0)] at h
+    refine h.trans (Associated.dvd ?_)
+    grw [associated_primPart_mul (mul_ne_zero hC0 s0)]
+    exact associated_unit_mul_left _ _ (isUnit_primPart_C _)
 
 Depends on / 依赖: IsPrimitive, Nat.find_spec, classical, dvd_mul_left, dvd_mul_right, find_spec, hp.mul, natDegree, pr.trans, qr.trans, r.IsPrimitive, r.natDegree, s.natDegree
 -/
@@ -1569,7 +1741,8 @@ theorem dvd_iff_content_dvd_content_and_primPart_dvd_primPart
     rw [(associated_content_mul ..).dvd_iff_dvd_right]; rw [p.isPrimitive_primPart.dvd_primPart_iff_dvd hq]
     exact ⟨dvd_mul_right .., dvd_mul_of_dvd_left p.primPart_dvd _⟩
   · rintro ⟨h₁, h₂⟩
-    rw [p.eq_C_content_mul_primPart]; rw [q.eq_C_content_mul_primPar
+    rw [p.eq_C_content_mul_primPart]; rw [q.eq_C_content_mul_primPart]
+    gcongr
 
 中文:
 定理 dvd_iff_content_dvd_content_and_primPart_dvd_primPart
@@ -1580,7 +1753,8 @@ theorem dvd_iff_content_dvd_content_and_primPart_dvd_primPart
     rw [(associated_content_mul ..).dvd_iff_dvd_right]; rw [p.isPrimitive_primPart.dvd_primPart_iff_dvd hq]
     exact ⟨dvd_mul_right .., dvd_mul_of_dvd_left p.primPart_dvd _⟩
   · rintro ⟨h₁, h₂⟩
-    rw [p.eq_C_content_mul_primPart]; rw [q.eq_C_content_mul_primPar
+    rw [p.eq_C_content_mul_primPart]; rw [q.eq_C_content_mul_primPart]
+    gcongr
 
 Depends on / 依赖: associated_content_mul, dvd_iff_dvd_right, dvd_mul_of_dvd_left, dvd_mul_right, dvd_primPart_iff_dvd, eq_C_content_mul_primPart, isPrimitive_primPart, p.eq_C_content_mul_primPart, p.isPrimitive_primPart.dvd_primPart_iff_dvd, p.primPart_dvd, primPart_dvd, q.eq_C_content_mul_primPart
 -/
@@ -1608,7 +1782,13 @@ instance normalizedGcdMonoid
     refine ⟨C (lcm p.content q.content) * r, fun s => ?_⟩
     by_cases hs : s = 0
     · simp [hs]
-  
+    by_cases hpq : C (lcm p.content q.content) = 0
+    · rw [C_eq_zero, lcm_eq_zero_iff, content_eq_zero_iff, content_eq_zero_iff] at hpq
+      rcases hpq with (hpq | hpq) <;> simp [hpq, hs]
+    iterate 3 rw [dvd_iff_content_dvd_content_and_primPart_dvd_primPart hs]
+    nontriviality R
+    rw [(associated_content_mul ..).dvd_iff_dvd_left]; rw [rprim.content_eq_one]; rw [mul_one]; rw [content_C]; rw [(associated_primPart_mul (mul_ne_zero hpq rprim.ne_zero)).dvd_iff_dvd_left]; rw [rprim.primPart_eq]; rw [normalize_lcm]; rw [lcm_dvd_iff]; rw [(isUnit_primPart_C (lcm p.content q.content)).mul_left_dvd]; rw [← hr s.primPart]
+    tauto
 
 中文:
 实例 normalizedGcdMonoid
@@ -1621,7 +1801,13 @@ instance normalizedGcdMonoid
     refine ⟨C (lcm p.content q.content) * r, fun s => ?_⟩
     by_cases hs : s = 0
     · simp [hs]
-  
+    by_cases hpq : C (lcm p.content q.content) = 0
+    · rw [C_eq_zero, lcm_eq_zero_iff, content_eq_zero_iff, content_eq_zero_iff] at hpq
+      rcases hpq with (hpq | hpq) <;> simp [hpq, hs]
+    iterate 3 rw [dvd_iff_content_dvd_content_and_primPart_dvd_primPart hs]
+    nontriviality R
+    rw [(associated_content_mul ..).dvd_iff_dvd_left]; rw [rprim.content_eq_one]; rw [mul_one]; rw [content_C]; rw [(associated_primPart_mul (mul_ne_zero hpq rprim.ne_zero)).dvd_iff_dvd_left]; rw [rprim.primPart_eq]; rw [normalize_lcm]; rw [lcm_dvd_iff]; rw [(isUnit_primPart_C (lcm p.content q.content)).mul_left_dvd]; rw [← hr s.primPart]
+    tauto
 
 Depends on / 依赖: C_eq_zero, Classical, Classical.decEq, content, content_eq_zero_iff, dvd_iff_content_dvd_content_and_primPart_dv, exists_primitive_lcm_of_isPrimitive, isPrimitive_primPart, iterate, lcm_eq_zero_iff, normalizedGCDMonoidOfExistsLCM, p.content, p.isPrimitive_primPart, q.content, q.isPrimitive_primPart
 -/

@@ -119,7 +119,9 @@ theorem linear_ne_zero_of_im
     apply_fun Complex.im at h
     simpa only [Complex.add_im, Complex.mul_im, Complex.ofReal_im, zero_mul, add_zero,
       Complex.zero_im, mul_eq_zero, hz, or_false] using! h
-  simp only [this, zero_mul, Complex.ofReal_zero, z
+  simp only [this, zero_mul, Complex.ofReal_zero, zero_add, Complex.ofReal_eq_zero] at h
+  ext i
+  fin_cases i <;> assumption
 
 中文:
 定理 linear_ne_zero_of_im
@@ -131,7 +133,9 @@ theorem linear_ne_zero_of_im
     apply_fun Complex.im at h
     simpa only [Complex.add_im, Complex.mul_im, Complex.ofReal_im, zero_mul, add_zero,
       Complex.zero_im, mul_eq_zero, hz, or_false] using! h
-  simp only [this, zero_mul, Complex.ofReal_zero, z
+  simp only [this, zero_mul, Complex.ofReal_zero, zero_add, Complex.ofReal_eq_zero] at h
+  ext i
+  fin_cases i <;> assumption
 
 Depends on / 依赖: contrapose
 -/
@@ -525,7 +529,8 @@ lemma σ_mul
   rcases g'.det_ne_zero.lt_or_gt with (h' | h')
   · simp [mul_pos_of_neg_of_neg h h', h.not_gt, h'.not_gt]
   · simp [(mul_neg_of_neg_of_pos h h').not_gt, h.not_gt, h']
-  · simp [(mul_neg_of_pos_of_neg h h').n
+  · simp [(mul_neg_of_pos_of_neg h h').not_gt, h, h'.not_gt]
+  · simp [mul_pos h h', h, h']
 
 中文:
 引理 σ_mul
@@ -537,7 +542,8 @@ lemma σ_mul
   rcases g'.det_ne_zero.lt_or_gt with (h' | h')
   · simp [mul_pos_of_neg_of_neg h h', h.not_gt, h'.not_gt]
   · simp [(mul_neg_of_neg_of_pos h h').not_gt, h.not_gt, h']
-  · simp [(mul_neg_of_pos_of_neg h h').n
+  · simp [(mul_neg_of_pos_of_neg h h').not_gt, h, h'.not_gt]
+  · simp [mul_pos h h', h, h']
 
 Depends on / 依赖: Units.val_mul, det_ne_zero, det_ne_zero.lt_or_gt, g.det_ne_zero.lt_or_gt, h.not_gt, lt_or_gt, map_mul, mul_neg_of_neg_of_pos, mul_neg_of_pos_of_neg, mul_pos, mul_pos_of_neg_of_neg, not_gt, val_mul
 -/
@@ -702,7 +708,15 @@ theorem mul_smul'
   have hu : u.im != 0 := by simpa only [← hu, σ_im_ne_zero] using! z.im_ne_zero
   have hu' : (num h u / denom h u).im != 0 := by
     rw [moebius_im]
-    exact div_ne_zero (mul_ne_z
+    exact div_ne_zero (mul_ne_zero h.det_ne_zero hu) (normSq_denom_ne_zero _ hu)
+  rw [div_eq_div_iff (denom_ne_zero_of_im _ hu) (denom_ne_zero_of_im _ hu')]; rw [denom]; rw [mul_div]; rw [div_add' _ _ _ (denom_ne_zero_of_im _ hu)]; rw [mul_div]
+  conv_rhs => rw [num]
+  rw [mul_div]; rw [div_add' _ _ _ (denom_ne_zero_of_im _ hu)]; rw [div_mul_eq_mul_div]
+  congr 1
+  simp only [num, denom, Units.val_mul, mul_apply, Fin.sum_univ_succ,
+    Finset.univ_unique, Fin.default_eq_zero, Finset.sum_singleton, Fin.succ_zero_eq_one,
+    Complex.ofReal_add, Complex.ofReal_mul]
+  ring
 
 中文:
 定理 mul_smul'
@@ -714,7 +728,15 @@ theorem mul_smul'
   have hu : u.im != 0 := by simpa only [← hu, σ_im_ne_zero] using! z.im_ne_zero
   have hu' : (num h u / denom h u).im != 0 := by
     rw [moebius_im]
-    exact div_ne_zero (mul_ne_z
+    exact div_ne_zero (mul_ne_zero h.det_ne_zero hu) (normSq_denom_ne_zero _ hu)
+  rw [div_eq_div_iff (denom_ne_zero_of_im _ hu) (denom_ne_zero_of_im _ hu')]; rw [denom]; rw [mul_div]; rw [div_add' _ _ _ (denom_ne_zero_of_im _ hu)]; rw [mul_div]
+  conv_rhs => rw [num]
+  rw [mul_div]; rw [div_add' _ _ _ (denom_ne_zero_of_im _ hu)]; rw [div_mul_eq_mul_div]
+  congr 1
+  simp only [num, denom, Units.val_mul, mul_apply, Fin.sum_univ_succ,
+    Finset.univ_unique, Fin.default_eq_zero, Finset.sum_singleton, Fin.succ_zero_eq_one,
+    Complex.ofReal_add, Complex.ofReal_mul]
+  ring
 
 Depends on / 依赖: coe_mk, conv_, denom_ne_zero_of_im, det_ne_zero, div_add, div_eq_div_iff, div_ne_zero, generalize, h.det_ne_zero, im_ne_zero, moebius_im, mul_div, mul_ne_zero, normSq_denom_ne_zero, smulAux, u.im, z.im_ne_zero
 -/
@@ -884,7 +906,8 @@ theorem im_smul
   simp only [smulAux', σ, DFunLike.ite_apply, ContinuousAlgEquiv.refl_apply, apply_ite, moebius_im,
     Complex.conjCAE_apply, Complex.conj_im, ← neg_div, ← neg_mul, abs_div, abs_mul,
     abs_of_pos (show 0 < (z : Complex).im from z.coe_im ▸ z.im_pos),
-abs_of_nonneg
+abs_of_nonneg Complex.normSq_nonneg _]
+  split_ifs with h <;> [rw [abs_of_pos h]; rw [abs_of_nonpos (not_lt.mp h)]]
 
 中文:
 定理 im_smul
@@ -894,7 +917,8 @@ abs_of_nonneg
   simp only [smulAux', σ, DFunLike.ite_apply, ContinuousAlgEquiv.refl_apply, apply_ite, moebius_im,
     Complex.conjCAE_apply, Complex.conj_im, ← neg_div, ← neg_mul, abs_div, abs_mul,
     abs_of_pos (show 0 < (z : Complex).im from z.coe_im ▸ z.im_pos),
-abs_of_nonneg
+abs_of_nonneg Complex.normSq_nonneg _]
+  split_ifs with h <;> [rw [abs_of_pos h]; rw [abs_of_nonpos (not_lt.mp h)]]
 
 Depends on / 依赖: Complex.conjCAE_apply, Complex.conj_im, Complex.normSq_nonneg, ContinuousAlgEquiv, ContinuousAlgEquiv.refl_apply, DFunLike, DFunLike.ite_apply, abs_div, abs_mul, abs_of_nonneg, abs_of_nonpos, abs_of_pos, apply_ite, coe_im, conjCAE_apply, conj_im, im_pos, ite_apply, moebius_im, neg_div
 -/
@@ -1400,7 +1424,12 @@ theorem exists_SL2_smul_eq_of_apply_zero_one_ne_zero
   replace hc : c != 0 := by simpa using! hc
   refine ⟨⟨_, mul_self_pos.mpr hc⟩, c * d, a / c, ?_⟩
   ext1 ⟨z, hz⟩; ext1
-  suffices (↑a * z + b) / (↑c * z + d) = a / 
+  suffices (↑a * z + b) / (↑c * z + d) = a / c - (c * d + ↑c * ↑c * z)⁻¹ by
+    simpa [modular_S_smul, coe_specialLinearGroup_apply]
+  replace hc : (c : Complex) != 0 := by norm_cast
+  replace h_denom : ↑c * z + d != 0 := by simpa using! h_denom ⟨z, hz⟩
+  replace h : (a * d - b * c : Complex) = (1 : Complex) := by norm_cast
+  grind
 
 中文:
 定理 存在_SL2_smul_eq_of_apply_zero_one_ne_zero
@@ -1411,7 +1440,12 @@ theorem exists_SL2_smul_eq_of_apply_zero_one_ne_zero
   replace hc : c != 0 := by simpa using! hc
   refine ⟨⟨_, mul_self_pos.mpr hc⟩, c * d, a / c, ?_⟩
   ext1 ⟨z, hz⟩; ext1
-  suffices (↑a * z + b) / (↑c * z + d) = a / 
+  suffices (↑a * z + b) / (↑c * z + d) = a / c - (c * d + ↑c * ↑c * z)⁻¹ by
+    simpa [modular_S_smul, coe_specialLinearGroup_apply]
+  replace hc : (c : Complex) != 0 := by norm_cast
+  replace h_denom : ↑c * z + d != 0 := by simpa using! h_denom ⟨z, hz⟩
+  replace h : (a * d - b * c : Complex) = (1 : Complex) := by norm_cast
+  grind
 
 Depends on / 依赖: Matrix, Matrix.SpecialLinearGroup.fin_two_induction, SpecialLinearGroup, coe_specialLinearGroup_apply, denom_ne_zero, fin_two_induction, h_denom, modular_S_smul, mul_self_pos, mul_self_pos.mpr, replace
 -/
@@ -1505,7 +1539,7 @@ lemma toSL2R_smul_I
   suffices z.re / √z.im + √z.im * Complex.I = z * (↑√z.im)⁻¹ by
     rw [coe_specialLinearGroup_apply]; rw [div_eq_iff (mod_cast denom_ne_zero z.toSL2R I)]
     simpa [add_comm]
-  rw [div_add' (hc := this)]; rw [m
+  rw [div_add' (hc := this)]; rw [mul_right_comm]; rw [← Complex.ofReal_mul]; rw [← Real.sqrt_mul z.im_pos.le]; rw [Real.sqrt_mul_self z.im_pos.le]; rw [re_add_im]; rw [div_eq_mul_inv]
 
 中文:
 引理 toSL2R_smul_I
@@ -1517,7 +1551,7 @@ lemma toSL2R_smul_I
   suffices z.re / √z.im + √z.im * Complex.I = z * (↑√z.im)⁻¹ by
     rw [coe_specialLinearGroup_apply]; rw [div_eq_iff (mod_cast denom_ne_zero z.toSL2R I)]
     simpa [add_comm]
-  rw [div_add' (hc := this)]; rw [m
+  rw [div_add' (hc := this)]; rw [mul_right_comm]; rw [← Complex.ofReal_mul]; rw [← Real.sqrt_mul z.im_pos.le]; rw [Real.sqrt_mul_self z.im_pos.le]; rw [re_add_im]; rw [div_eq_mul_inv]
 -/
 @[simp] lemma toSL2R_smul_I (z : ℍ) : z.toSL2R • I = z := by
   have : √z.im != (0 : Complex) := by simpa [Real.sqrt_ne_zero'] using z.im_pos

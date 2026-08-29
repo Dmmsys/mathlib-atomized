@@ -150,7 +150,13 @@ lemma traceForm_apply_lie_apply
       = trace R _ (φ ⁅x, y⁆ ∘ₗ φ z) := by simp only [traceForm_apply_apply]
     _ = trace R _ ((φ x * φ y - φ y * φ x) * φ z) := ?_
     _ = trace R _ (φ x * (φ y * φ z)) - trace R _ (φ y * (φ x * φ z)) := ?_
-    _ = trace R _ (φ x * (φ y * φ z)) - trace R _ (φ x * 
+    _ = trace R _ (φ x * (φ y * φ z)) - trace R _ (φ x * (φ z * φ y)) := ?_
+    _ = traceForm R L M x ⁅y, z⁆ := ?_
+  · simp only [LieHom.map_lie, Ring.lie_def, ← Module.End.mul_eq_comp]
+  · simp only [sub_mul, map_sub, mul_assoc]
+  · simp only [LinearMap.trace_mul_cycle' R (φ x) (φ z) (φ y)]
+  · simp only [traceForm_apply_apply, LieHom.map_lie, Ring.lie_def, mul_sub, map_sub,
+      ← Module.End.mul_eq_comp]
 
 中文:
 引理 traceForm_apply_lie_apply
@@ -160,7 +166,13 @@ lemma traceForm_apply_lie_apply
       = trace R _ (φ ⁅x, y⁆ ∘ₗ φ z) := by simp only [traceForm_apply_apply]
     _ = trace R _ ((φ x * φ y - φ y * φ x) * φ z) := ?_
     _ = trace R _ (φ x * (φ y * φ z)) - trace R _ (φ y * (φ x * φ z)) := ?_
-    _ = trace R _ (φ x * (φ y * φ z)) - trace R _ (φ x * 
+    _ = trace R _ (φ x * (φ y * φ z)) - trace R _ (φ x * (φ z * φ y)) := ?_
+    _ = traceForm R L M x ⁅y, z⁆ := ?_
+  · simp only [LieHom.map_lie, Ring.lie_def, ← Module.End.mul_eq_comp]
+  · simp only [sub_mul, map_sub, mul_assoc]
+  · simp only [LinearMap.trace_mul_cycle' R (φ x) (φ z) (φ y)]
+  · simp only [traceForm_apply_apply, LieHom.map_lie, Ring.lie_def, mul_sub, map_sub,
+      ← Module.End.mul_eq_comp]
 
 Depends on / 依赖: IsLocalization, IsLocalization.smul_mk, LieHom, LieHom.map_lie, LinearMap, LinearMap.trace_mul_cycle, Module, Module.End.mul_eq_comp, Ring.lie_def, Submonoid, Submonoid.smul_def, _cancel, _self, algebraMap_smul, conv_lhs, lie_def, map_lie, map_smul, map_sub, mul_assoc
 -/
@@ -311,7 +323,14 @@ lemma trace_toEnd_mul_eq_zero_of_traceForm_eq_zero
   induction hx using Submodule.span_induction with
   | mem u hu =>
     obtain ⟨a, b, rfl⟩ := hu
-    obtain ⟨c : L, hbc : φ c = ⁅y, φ b⁆⟩ := hy (φ b) (LieHom.mem_range_sel
+    obtain ⟨c : L, hbc : φ c = ⁅y, φ b⁆⟩ := hy (φ b) (LieHom.mem_range_self φ b)
+    replace hbc : ⁅φ b, y⁆ = -φ c := by rw [hbc, Module.End.instLieRingModule_eq, lie_skew]
+    rw [LieHom.map_lie]; rw [LinearMap.trace_lie_mul_eq]; rw [Ring.lie_def]; rw [← LieRing.of_associative_ring_bracket]; rw [hbc]; rw [mul_neg]; rw [map_neg]; rw [neg_eq_zero]; rw [Module.End.mul_eq_comp]; rw [← traceForm_apply_apply]; rw [h]; rw [LinearMap.zero_apply]; rw [LinearMap.zero_apply]
+  | zero => simp
+  | add u v _ _ hu hv => simp [add_mul, hu, hv]
+  | smul t u _ hu => simp [hu]
+
+@[simp]
 
 中文:
 引理 trace_toEnd_mul_eq_zero_of_traceForm_eq_zero
@@ -322,7 +341,14 @@ lemma trace_toEnd_mul_eq_zero_of_traceForm_eq_zero
   induction hx using Submodule.span_induction with
   | mem u hu =>
     obtain ⟨a, b, rfl⟩ := hu
-    obtain ⟨c : L, hbc : φ c = ⁅y, φ b⁆⟩ := hy (φ b) (LieHom.mem_range_sel
+    obtain ⟨c : L, hbc : φ c = ⁅y, φ b⁆⟩ := hy (φ b) (LieHom.mem_range_self φ b)
+    replace hbc : ⁅φ b, y⁆ = -φ c := by rw [hbc, Module.End.instLieRingModule_eq, lie_skew]
+    rw [LieHom.map_lie]; rw [LinearMap.trace_lie_mul_eq]; rw [Ring.lie_def]; rw [← LieRing.of_associative_ring_bracket]; rw [hbc]; rw [mul_neg]; rw [map_neg]; rw [neg_eq_zero]; rw [Module.End.mul_eq_comp]; rw [← traceForm_apply_apply]; rw [h]; rw [LinearMap.zero_apply]; rw [LinearMap.zero_apply]
+  | zero => simp
+  | add u v _ _ hu hv => simp [add_mul, hu, hv]
+  | smul t u _ hu => simp [hu]
+
+@[simp]
 
 Depends on / 依赖: LieAlgebra, LieAlgebra.coe_derivedSeries_one_eq, LieHom, LieHom.map_lie, LieHom.mem_range_self, LieRing, LieRing.of_associative_ring_bracket, LinearMap, LinearMap.trace_lie_mul_eq, Module, Module.End.instLieRingModule_eq, Ring.lie_def, Submodule, Submodule.span, Submodule.span_induction, coe_derivedSeries_one_eq, instLieRingModule_eq, lie_def, lie_skew, map_lie
 -/
@@ -354,7 +380,16 @@ lemma traceForm_genWeightSpace_eq
   have h₁ : χ y • d • χ x - χ y • χ x • (d : R) = 0 := by simp [mul_comm (χ x)]
   have h₂ : χ x • d • χ y = d • (χ x * χ y) := by
     simpa [nsmul_eq_mul, smul_eq_mul] using mul_left_comm (χ x) d (χ y)
-  have := traceForm_eq_zero_of_isNilpotent R L (shift
+  have := traceForm_eq_zero_of_isNilpotent R L (shiftedGenWeightSpace R L M χ)
+  replace this := LinearMap.congr_fun (LinearMap.congr_fun this x) y
+  rwa [LinearMap.zero_apply, LinearMap.zero_apply, traceForm_apply_apply,
+    shiftedGenWeightSpace.toEnd_eq, shiftedGenWeightSpace.toEnd_eq,
+    ← LinearEquiv.conj_comp, LinearMap.trace_conj', LinearMap.comp_sub, LinearMap.sub_comp,
+    LinearMap.sub_comp, map_sub, map_sub, map_sub, LinearMap.comp_smul, LinearMap.smul_comp,
+    LinearMap.comp_id, LinearMap.id_comp, map_smul, map_smul,
+    trace_toEnd_genWeightSpace, trace_toEnd_genWeightSpace,
+    LinearMap.comp_smul, LinearMap.smul_comp, LinearMap.id_comp, map_smul, map_smul,
+    LinearMap.trace_id, ← traceForm_apply_apply, h₁, h₂, sub_zero, sub_eq_zero] at this
 
 中文:
 引理 traceForm_genWeightSpace_eq
@@ -364,7 +399,16 @@ lemma traceForm_genWeightSpace_eq
   have h₁ : χ y • d • χ x - χ y • χ x • (d : R) = 0 := by simp [mul_comm (χ x)]
   have h₂ : χ x • d • χ y = d • (χ x * χ y) := by
     simpa [nsmul_eq_mul, smul_eq_mul] using mul_left_comm (χ x) d (χ y)
-  have := traceForm_eq_zero_of_isNilpotent R L (shift
+  have := traceForm_eq_zero_of_isNilpotent R L (shiftedGenWeightSpace R L M χ)
+  replace this := LinearMap.congr_fun (LinearMap.congr_fun this x) y
+  rwa [LinearMap.zero_apply, LinearMap.zero_apply, traceForm_apply_apply,
+    shiftedGenWeightSpace.toEnd_eq, shiftedGenWeightSpace.toEnd_eq,
+    ← LinearEquiv.conj_comp, LinearMap.trace_conj', LinearMap.comp_sub, LinearMap.sub_comp,
+    LinearMap.sub_comp, map_sub, map_sub, map_sub, LinearMap.comp_smul, LinearMap.smul_comp,
+    LinearMap.comp_id, LinearMap.id_comp, map_smul, map_smul,
+    trace_toEnd_genWeightSpace, trace_toEnd_genWeightSpace,
+    LinearMap.comp_smul, LinearMap.smul_comp, LinearMap.id_comp, map_smul, map_smul,
+    LinearMap.trace_id, ← traceForm_apply_apply, h₁, h₂, sub_zero, sub_eq_zero] at this
 
 Depends on / 依赖: LinearMap, LinearMap.congr_fun, LinearMap.zero_apply, congr_fun, finrank, genWeightSpace, mul_comm, mul_left_comm, nsmul_eq_mul, replace, shiftedGenWeigh, shiftedGenWeightSpace, shiftedGenWeightSpace.toEnd_eq, smul_eq_mul, toEnd_eq, traceForm_apply_apply, traceForm_eq_zero_of_isNilpotent, zero_apply
 -/
@@ -401,7 +445,14 @@ lemma traceForm_eq_zero_if_mem_lcs_of_mem_ucs
   | succ k ih =>
     rw [LieSubmodule.ucs_succ]; rw [LieSubmodule.mem_normalizer] at hy
     simp_rw [LieIdeal.lcs_succ, ← LieSubmodule.mem_toSubmodule,
-      LieSubmodule.lieIdeal_oper_eq_lin
+      LieSubmodule.lieIdeal_oper_eq_linear_span', LieSubmodule.mem_top, true_and] at hx
+    refine Submodule.span_induction ?_ ?_ (fun z w _ _ hz hw => ?_) (fun t z _ hz => ?_) hx
+    · rintro - ⟨z, w, hw, rfl⟩
+      rw [← lie_skew]; rw [map_neg]; rw [LinearMap.neg_apply]; rw [neg_eq_zero]; rw [traceForm_apply_lie_apply]
+      exact ih hw (hy _)
+    · simp
+    · simp [hz, hw]
+    · simp [hz]
 
 中文:
 引理 traceForm_eq_zero_if_mem_lcs_of_mem_ucs
@@ -414,7 +465,14 @@ lemma traceForm_eq_zero_if_mem_lcs_of_mem_ucs
   | succ k ih =>
     rw [LieSubmodule.ucs_succ]; rw [LieSubmodule.mem_normalizer] at hy
     simp_rw [LieIdeal.lcs_succ, ← LieSubmodule.mem_toSubmodule,
-      LieSubmodule.lieIdeal_oper_eq_lin
+      LieSubmodule.lieIdeal_oper_eq_linear_span', LieSubmodule.mem_top, true_and] at hx
+    refine Submodule.span_induction ?_ ?_ (fun z w _ _ hz hw => ?_) (fun t z _ hz => ?_) hx
+    · rintro - ⟨z, w, hw, rfl⟩
+      rw [← lie_skew]; rw [map_neg]; rw [LinearMap.neg_apply]; rw [neg_eq_zero]; rw [traceForm_apply_lie_apply]
+      exact ih hw (hy _)
+    · simp
+    · simp [hz, hw]
+    · simp [hz]
 
 Depends on / 依赖: LieIdeal, LieIdeal.lcs_succ, LieSubmodule, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.mem_normalizer, LieSubmodule.mem_toSubmodule, LieSubmodule.mem_top, LieSubmodule.ucs_succ, LinearMap, LinearMap.neg_apply, Submodule, Submodule.span_induction, generalizing, lcs_succ, lieIdeal_oper_eq_linear_span, lie_skew, map_neg, mem_normalizer, mem_toSubmodule, mem_top
 -/
@@ -510,7 +568,17 @@ lemma eq_zero_of_mem_genWeightSpace_mem_posFitting
     | succ k ih =>
     intro m n
     replace hB : forall m, B m (φ x n) = (-1 : R) • B (φ x m) n := by simp [hB]
-    have : (-1 : R) ^ k • (-1 : 
+    have : (-1 : R) ^ k • (-1 : R) = (-1 : R) ^ (k + 1) := by rw [pow_succ (-1 : R), smul_eq_mul]
+    conv_lhs => rw [pow_succ, Module.End.mul_eq_comp, LinearMap.comp_apply, ih, hB,
+      ← (φ x).comp_apply, ← Module.End.mul_eq_comp, ← pow_succ', ← smul_assoc, this]
+  suffices forall (x : L) m, m in posFittingCompOf R M x -> B m₀ m = 0 by
+    refine LieSubmodule.iSup_induction (motive := fun m => (B m₀) m = 0) _ hm₁ this (map_zero _) ?_
+    simp_all
+  clear hm₁ m₁; intro x m₁ hm₁
+  simp only [mem_genWeightSpace, Pi.zero_apply, zero_smul, sub_zero] at hm₀
+  obtain ⟨k, hk⟩ := hm₀ x
+  obtain ⟨m, rfl⟩ := (mem_posFittingCompOf R x m₁).mp hm₁ k
+  simp [hB, hk]
 
 中文:
 引理 eq_zero_of_mem_genWeightSpace_mem_posFitting
@@ -523,7 +591,17 @@ lemma eq_zero_of_mem_genWeightSpace_mem_posFitting
     | succ k ih =>
     intro m n
     replace hB : forall m, B m (φ x n) = (-1 : R) • B (φ x m) n := by simp [hB]
-    have : (-1 : R) ^ k • (-1 : 
+    have : (-1 : R) ^ k • (-1 : R) = (-1 : R) ^ (k + 1) := by rw [pow_succ (-1 : R), smul_eq_mul]
+    conv_lhs => rw [pow_succ, Module.End.mul_eq_comp, LinearMap.comp_apply, ih, hB,
+      ← (φ x).comp_apply, ← Module.End.mul_eq_comp, ← pow_succ', ← smul_assoc, this]
+  suffices forall (x : L) m, m in posFittingCompOf R M x -> B m₀ m = 0 by
+    refine LieSubmodule.iSup_induction (motive := fun m => (B m₀) m = 0) _ hm₁ this (map_zero _) ?_
+    simp_all
+  clear hm₁ m₁; intro x m₁ hm₁
+  simp only [mem_genWeightSpace, Pi.zero_apply, zero_smul, sub_zero] at hm₀
+  obtain ⟨k, hk⟩ := hm₀ x
+  obtain ⟨m, rfl⟩ := (mem_posFittingCompOf R x m₁).mp hm₁ k
+  simp [hB, hk]
 
 Depends on / 依赖: LinearMap, LinearMap.comp_apply, Module, Module.End.mul_eq_comp, comp_apply, conv_lhs, mul_eq_comp, pow_succ, replace, smul_assoc, smul_eq_mul
 -/
@@ -559,7 +637,16 @@ lemma trace_toEnd_eq_zero_of_mem_lcs
   replace hx : x in lowerCentralSeries R L L 1 := antitone_lowerCentralSeries _ _ _ hk hx
   replace hx : x in Submodule.span R {m | exists u v : L, ⁅u, v⁆ = m} := by
     rw [lowerCentralSeries_succ]; rw [← LieSubmodule.mem_toSubmodule]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span'] at hx
-    si
+    simpa using hx
+  refine Submodule.span_induction (p := fun x _ => trace R _ (toEnd R L M x) = 0)
+    ?_ ?_ (fun u v _ _ hu hv => ?_) (fun t u _ hu => ?_) hx
+  · intro y ⟨u, v, huv⟩
+    simp [← huv]
+  · simp
+  · simp [hu, hv]
+  · simp [hu]
+
+@[simp]
 
 中文:
 引理 trace_toEnd_eq_zero_of_mem_lcs
@@ -567,7 +654,16 @@ lemma trace_toEnd_eq_zero_of_mem_lcs
   replace hx : x in lowerCentralSeries R L L 1 := antitone_lowerCentralSeries _ _ _ hk hx
   replace hx : x in Submodule.span R {m | exists u v : L, ⁅u, v⁆ = m} := by
     rw [lowerCentralSeries_succ]; rw [← LieSubmodule.mem_toSubmodule]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span'] at hx
-    si
+    simpa using hx
+  refine Submodule.span_induction (p := fun x _ => trace R _ (toEnd R L M x) = 0)
+    ?_ ?_ (fun u v _ _ hu hv => ?_) (fun t u _ hu => ?_) hx
+  · intro y ⟨u, v, huv⟩
+    simp [← huv]
+  · simp
+  · simp [hu, hv]
+  · simp [hu]
+
+@[simp]
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.mem_toSubmodule, Submodule, Submodule.span, Submodule.span_induction, antitone_lowerCentralSeries, lieIdeal_oper_eq_linear_span, lowerCentralSeries, lowerCentralSeries_succ, mem_toSubmodule, replace, span_induction
 -/
@@ -642,7 +738,15 @@ lemma traceForm_eq_sum_genWeightSpaceOf
       (genWeightSpaceOf M χ z) (genWeightSpaceOf M χ z) :=
 fun χ m hm => LieSubmodule.lie_mem _ LieSubmodule.lie_mem _ hm
   have hfin : {χ : R | (genWeightSpaceOf M χ z : Submodule R M) != ⊥}.Finite := by
-    simp_
+    simp_rw [ne_eq, LieSubmodule.toSubmodule_eq_bot (genWeightSpaceOf M _ _)]
+    exact finite_genWeightSpaceOf_ne_bot R L M z
+  classical
+have h := LieSubmodule.iSupIndep_toSubmodule.mpr iSupIndep_genWeightSpaceOf R L M z
+have hds := DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top h by
+    simp [← LieSubmodule.iSup_toSubmodule]
+  simp only [LinearMap.coe_sum, Finset.sum_apply, traceForm_apply_apply,
+    LinearMap.trace_eq_sum_trace_restrict' hds hfin hxy]
+  exact Finset.sum_congr (by simp) (fun χ _ => rfl)
 
 中文:
 引理 traceForm_eq_sum_genWeightSpaceOf
@@ -653,7 +757,15 @@ fun χ m hm => LieSubmodule.lie_mem _ LieSubmodule.lie_mem _ hm
       (genWeightSpaceOf M χ z) (genWeightSpaceOf M χ z) :=
 fun χ m hm => LieSubmodule.lie_mem _ LieSubmodule.lie_mem _ hm
   have hfin : {χ : R | (genWeightSpaceOf M χ z : Submodule R M) != ⊥}.Finite := by
-    simp_
+    simp_rw [ne_eq, LieSubmodule.toSubmodule_eq_bot (genWeightSpaceOf M _ _)]
+    exact finite_genWeightSpaceOf_ne_bot R L M z
+  classical
+have h := LieSubmodule.iSupIndep_toSubmodule.mpr iSupIndep_genWeightSpaceOf R L M z
+have hds := DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top h by
+    simp [← LieSubmodule.iSup_toSubmodule]
+  simp only [LinearMap.coe_sum, Finset.sum_apply, traceForm_apply_apply,
+    LinearMap.trace_eq_sum_trace_restrict' hds hfin hxy]
+  exact Finset.sum_congr (by simp) (fun χ _ => rfl)
 
 Depends on / 依赖: Finite, LieSubmodule, LieSubmodule.iSupIndep_toSubmodule.mpr, LieSubmodule.lie_mem, LieSubmodule.toSubmodule_eq_bot, MapsTo, Submodule, classical, finite_genWeightSpaceOf_ne_bot, genWeightSpaceOf, iSupIndep_genWeightSpaceOf, iSupIndep_toSubmodule, lie_mem, ne_eq, simp_rw, toSubmodule_eq_bot
 -/
@@ -692,7 +804,43 @@ lemma lowerCentralSeries_one_inf_center_le_ker_traceForm
   `trace (φ x ∘ φ z) = 0` where `φ z : End R M` indicates the action of `z` on `M` (and likewise
   for `φ x`).
 
-  Because `z` belongs to the indicated intersect
+  Because `z` belongs to the indicated intersection, it has two key properties:
+  (a) the trace of the action of `z` vanishes on any Lie module of `L`
+      (see `LieModule.trace_toEnd_eq_zero_of_mem_lcs`),
+  (b) `z` commutes with all elements of `L`.
+
+  If `φ x` were triangularizable, we could write `M` as a direct sum of generalized eigenspaces of
+  `φ x`. Because `L` is nilpotent these are all Lie submodules, thus Lie modules in their own right,
+  and thus by (a) above we learn that `trace (φ z) = 0` restricted to each generalized eigenspace.
+  Because `z` commutes with `x`, this forces `trace (φ x ∘ φ z) = 0` on each generalized eigenspace,
+  and so by summing the traces on each generalized eigenspace we learn the total trace is zero, as
+  required (see `LinearMap.trace_comp_eq_zero_of_commute_of_trace_restrict_eq_zero`).
+
+  To cater for the fact that `φ x` may not be triangularizable, we first extend the scalars from `R`
+  to `AlgebraicClosure (FractionRing R)` and argue using the action of `A ⊗ L` on `A ⊗ M`. -/
+  rintro z ⟨hz : z in lowerCentralSeries R L L 1, hzc : z in LieAlgebra.center R L⟩
+  ext x
+  rw [traceForm_apply_apply]; rw [LinearMap.zero_apply]
+  let A := AlgebraicClosure (FractionRing R)
+  suffices algebraMap R A (trace R _ ((φ z).comp (φ x))) = 0 by
+    have that : Module.IsTorsionFree R A := .trans_faithfulSMul R (FractionRing R) A
+    rw [← map_zero (algebraMap R A)] at this
+    exact FaithfulSMul.algebraMap_injective R A this
+  rw [← LinearMap.trace_baseChange]; rw [LinearMap.baseChange_comp]; rw [← toEnd_baseChange]; rw [← toEnd_baseChange]
+  replace hz : 1 otimesₜ z in lowerCentralSeries A (A otimes[R] L) (A otimes[R] L) 1 := by
+    simp only [lowerCentralSeries_succ, lowerCentralSeries_zero] at hz ⊢
+    rw [← LieSubmodule.baseChange_top]; rw [← LieSubmodule.lie_baseChange]
+    exact Submodule.tmul_mem_baseChange_of_mem 1 hz
+  replace hzc : 1 otimesₜ[R] z in LieAlgebra.center A (A otimes[R] L) := by
+    simp only [mem_maxTrivSubmodule] at hzc ⊢
+    intro y
+    exact y.induction_on rfl (fun a u => by simp [hzc u])
+      (fun u v hu hv => by simp [A, hu, hv])
+  apply LinearMap.trace_comp_eq_zero_of_commute_of_trace_restrict_eq_zero
+  · exact IsTriangularizable.maxGenEigenspace_eq_top (1 otimesₜ[R] x)
+  · exact fun μ => trace_toEnd_eq_zero_of_mem_lcs A (A otimes[R] L)
+      (genWeightSpaceOf (A otimes[R] M) μ ((1 : A) otimesₜ[R] x)) (le_refl 1) hz
+  · exact commute_toEnd_of_mem_center_right (A otimes[R] M) hzc (1 otimesₜ x)
 
 中文:
 引理 lowerCentralSeries_one_inf_center_le_ker_traceForm
@@ -704,7 +852,43 @@ lemma lowerCentralSeries_one_inf_center_le_ker_traceForm
   `trace (φ x ∘ φ z) = 0` where `φ z : End R M` indicates the action of `z` on `M` (and likewise
   for `φ x`).
 
-  Because `z` belongs to the indicated intersect
+  Because `z` belongs to the indicated intersection, it has two key properties:
+  (a) the trace of the action of `z` vanishes on any Lie module of `L`
+      (see `LieModule.trace_toEnd_eq_zero_of_mem_lcs`),
+  (b) `z` commutes with all elements of `L`.
+
+  If `φ x` were triangularizable, we could write `M` as a direct sum of generalized eigenspaces of
+  `φ x`. Because `L` is nilpotent these are all Lie submodules, thus Lie modules in their own right,
+  and thus by (a) above we learn that `trace (φ z) = 0` restricted to each generalized eigenspace.
+  Because `z` commutes with `x`, this forces `trace (φ x ∘ φ z) = 0` on each generalized eigenspace,
+  and so by summing the traces on each generalized eigenspace we learn the total trace is zero, as
+  required (see `LinearMap.trace_comp_eq_zero_of_commute_of_trace_restrict_eq_zero`).
+
+  To cater for the fact that `φ x` may not be triangularizable, we first extend the scalars from `R`
+  to `AlgebraicClosure (FractionRing R)` and argue using the action of `A ⊗ L` on `A ⊗ M`. -/
+  rintro z ⟨hz : z in lowerCentralSeries R L L 1, hzc : z in LieAlgebra.center R L⟩
+  ext x
+  rw [traceForm_apply_apply]; rw [LinearMap.zero_apply]
+  let A := AlgebraicClosure (FractionRing R)
+  suffices algebraMap R A (trace R _ ((φ z).comp (φ x))) = 0 by
+    have that : Module.IsTorsionFree R A := .trans_faithfulSMul R (FractionRing R) A
+    rw [← map_zero (algebraMap R A)] at this
+    exact FaithfulSMul.algebraMap_injective R A this
+  rw [← LinearMap.trace_baseChange]; rw [LinearMap.baseChange_comp]; rw [← toEnd_baseChange]; rw [← toEnd_baseChange]
+  replace hz : 1 otimesₜ z in lowerCentralSeries A (A otimes[R] L) (A otimes[R] L) 1 := by
+    simp only [lowerCentralSeries_succ, lowerCentralSeries_zero] at hz ⊢
+    rw [← LieSubmodule.baseChange_top]; rw [← LieSubmodule.lie_baseChange]
+    exact Submodule.tmul_mem_baseChange_of_mem 1 hz
+  replace hzc : 1 otimesₜ[R] z in LieAlgebra.center A (A otimes[R] L) := by
+    simp only [mem_maxTrivSubmodule] at hzc ⊢
+    intro y
+    exact y.induction_on rfl (fun a u => by simp [hzc u])
+      (fun u v hu hv => by simp [A, hu, hv])
+  apply LinearMap.trace_comp_eq_zero_of_commute_of_trace_restrict_eq_zero
+  · exact IsTriangularizable.maxGenEigenspace_eq_top (1 otimesₜ[R] x)
+  · exact fun μ => trace_toEnd_eq_zero_of_mem_lcs A (A otimes[R] L)
+      (genWeightSpaceOf (A otimes[R] M) μ ((1 : A) otimesₜ[R] x)) (le_refl 1) hz
+  · exact commute_toEnd_of_mem_center_right (A otimes[R] M) hzc (1 otimesₜ x)
 -/
 lemma lowerCentralSeries_one_inf_center_le_ker_traceForm [Module.Free R M] [Module.Finite R M] :
     lowerCentralSeries R L L 1 ⊓ LieAlgebra.center R L <= LinearMap.ker (traceForm R L M) := by
@@ -872,7 +1056,7 @@ lemma traceForm_eq_zero_of_isTrivial
     simp [this, N.trace_eq_trace_restrict_of_le_idealizer I h x hy]
   ext (n : N)
   suffices ⁅y, (n : M)⁆ = 0 by simp [this]
-  exact Submodule.coe_eq_ze
+  exact Submodule.coe_eq_zero.mpr (LieModule.IsTrivial.trivial (⟨y, hy⟩ : I) n)
 
 中文:
 引理 traceForm_eq_zero_of_isTrivial
@@ -883,7 +1067,7 @@ lemma traceForm_eq_zero_of_isTrivial
     simp [this, N.trace_eq_trace_restrict_of_le_idealizer I h x hy]
   ext (n : N)
   suffices ⁅y, (n : M)⁆ = 0 by simp [this]
-  exact Submodule.coe_eq_ze
+  exact Submodule.coe_eq_zero.mpr (LieModule.IsTrivial.trivial (⟨y, hy⟩ : I) n)
 
 Depends on / 依赖: IsTrivial, LieModule, LieModule.IsTrivial.trivial, N.lie_mem, N.mem_idealizer.mp, N.trace_eq_trace_restrict_of_le_idealizer, Submodule, Submodule.coe_eq_zero.mpr, coe_eq_zero, lie_mem, mem_idealizer, restrict, trace_eq_trace_restrict_of_le_idealizer
 -/
@@ -1127,7 +1311,11 @@ lemma traceForm_eq_sum_finrank_nsmul_mul
 fun χ m hm => LieSubmodule.lie_mem _ LieSubmodule.lie_mem _ hm
   classical
   have hds := DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top
-    (LieSubmodule.iS
+    (LieSubmodule.iSupIndep_toSubmodule.mpr <| iSupIndep_genWeightSpace' K L M)
+    (LieSubmodule.iSup_toSubmodule_eq_top.mpr <| iSup_genWeightSpace_eq_top' K L M)
+  simp_rw [traceForm_apply_apply, LinearMap.trace_eq_sum_trace_restrict hds hxy,
+    ← traceForm_genWeightSpace_eq K L M _ x y]
+  rfl
 
 中文:
 引理 traceForm_eq_sum_finrank_nsmul_mul
@@ -1138,7 +1326,11 @@ fun χ m hm => LieSubmodule.lie_mem _ LieSubmodule.lie_mem _ hm
 fun χ m hm => LieSubmodule.lie_mem _ LieSubmodule.lie_mem _ hm
   classical
   have hds := DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top
-    (LieSubmodule.iS
+    (LieSubmodule.iSupIndep_toSubmodule.mpr <| iSupIndep_genWeightSpace' K L M)
+    (LieSubmodule.iSup_toSubmodule_eq_top.mpr <| iSup_genWeightSpace_eq_top' K L M)
+  simp_rw [traceForm_apply_apply, LinearMap.trace_eq_sum_trace_restrict hds hxy,
+    ← traceForm_genWeightSpace_eq K L M _ x y]
+  rfl
 
 Depends on / 依赖: DirectSum, DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top, LieSubmodule, LieSubmodule.iSupIndep_toSubmodule.mpr, LieSubmodule.iSup_toSubmodule_eq_top.mpr, LieSubmodule.lie_mem, LinearMap, LinearMap.trace_eq_sum_trace_restrict, MapsTo, Weight, classical, genWeightSpace, iSupIndep_genWeightSpace, iSupIndep_toSubmodule, iSup_genWeightSpace_eq_top, iSup_toSubmodule_eq_top, isInternal_submodule_of_iSupIndep_of_iSup_eq_top, lie_mem, simp_rw, traceForm_apply_apply
 -/
@@ -1192,7 +1384,9 @@ lemma traceForm_eq_sum_finrank_nsmul'
       (χ : L ->ₗ[K] K).smulRight (χ : L ->ₗ[K] K) = 0 by
     rw [traceForm_eq_sum_finrank_nsmul]; rw [← Finset.sum_filter_add_sum_filter_not (p := fun χ : Weight K L M => χ.IsNonZero)]
     simp [this]
-  
+  refine Finset.sum_eq_zero fun χ hχ => ?_
+  replace hχ : (χ : L ->ₗ[K] K) = 0 := by simpa [← Weight.coe_toLinear_eq_zero_iff] using hχ
+  simp [hχ]
 
 中文:
 引理 traceForm_eq_sum_finrank_nsmul'
@@ -1202,7 +1396,9 @@ lemma traceForm_eq_sum_finrank_nsmul'
       (χ : L ->ₗ[K] K).smulRight (χ : L ->ₗ[K] K) = 0 by
     rw [traceForm_eq_sum_finrank_nsmul]; rw [← Finset.sum_filter_add_sum_filter_not (p := fun χ : Weight K L M => χ.IsNonZero)]
     simp [this]
-  
+  refine Finset.sum_eq_zero fun χ hχ => ?_
+  replace hχ : (χ : L ->ₗ[K] K) = 0 := by simpa [← Weight.coe_toLinear_eq_zero_iff] using hχ
+  simp [hχ]
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, Finset.sum_filter_add_sum_filter_not, IsNonZero, IsZero, Weight, Weight.coe_toLinear_eq_zero_iff, classical, coe_toLinear_eq_zero_iff, finrank, genWeightSpace, replace, smulRight, sum_eq_zero, sum_filter_add_sum_filter_not, traceForm_eq_sum_finrank_nsmul
 -/
@@ -1230,7 +1426,7 @@ lemma range_traceForm_le_span_weight
   refine Submodule.sum_mem _ fun χ _ => ?_
   simp_rw [LinearMap.smul_apply, LinearMap.coe_smulRight, Weight.toLinear_apply,
     ← Nat.cast_smul_eq_nsmul K]
-exact Submodule.smul_mem _
+exact Submodule.smul_mem _ _ Submodule.smul_mem _ _ subset_span mem_range_self χ
 
 中文:
 引理 range_traceForm_le_span_weight
@@ -1240,7 +1436,7 @@ exact Submodule.smul_mem _
   refine Submodule.sum_mem _ fun χ _ => ?_
   simp_rw [LinearMap.smul_apply, LinearMap.coe_smulRight, Weight.toLinear_apply,
     ← Nat.cast_smul_eq_nsmul K]
-exact Submodule.smul_mem _
+exact Submodule.smul_mem _ _ Submodule.smul_mem _ _ subset_span mem_range_self χ
 
 Depends on / 依赖: Finset, Finset.sum_apply, LieModule, LieModule.traceForm_eq_sum_finrank_nsmul, LinearMap, LinearMap.coe_smulRight, LinearMap.coe_sum, LinearMap.smul_apply, Nat.cast_smul_eq_nsmul, Submodule, Submodule.smul_mem, Submodule.sum_mem, Weight, Weight.toLinear_apply, cast_smul_eq_nsmul, coe_smulRight, coe_sum, mem_range_self, simp_rw, smul_apply
 -/

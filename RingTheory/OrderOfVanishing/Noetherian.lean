@@ -199,7 +199,13 @@ lemma ord_eq_addVal
     have art := this.2
     rw [Ideal.span_singleton_zero] at art
     have : IsArtinianRing R :=
-      (Linear
+      (LinearEquiv.isArtinian_iff (Submodule.quotEquivOfEqBot ⊥ rfl).symm).mpr art
+    exact IsDiscreteValuationRing.not_krullDimLE_zero R inferInstance
+  obtain ⟨ϖ, hϖ⟩ := IsDiscreteValuationRing.exists_irreducible R
+  obtain ⟨m, α, rfl⟩ := IsDiscreteValuationRing.eq_unit_mul_pow_irreducible hx hϖ
+  rw [ord_mul]; rw [ord_pow]; rw [ord_of_irreducible hϖ]
+  · simp [IsDiscreteValuationRing.addVal_uniformizer hϖ]
+  all_goals simp_all [Irreducible.ne_zero hϖ]
 
 中文:
 引理 ord_eq_addVal
@@ -214,7 +220,13 @@ lemma ord_eq_addVal
     have art := this.2
     rw [Ideal.span_singleton_zero] at art
     have : IsArtinianRing R :=
-      (Linear
+      (LinearEquiv.isArtinian_iff (Submodule.quotEquivOfEqBot ⊥ rfl).symm).mpr art
+    exact IsDiscreteValuationRing.not_krullDimLE_zero R inferInstance
+  obtain ⟨ϖ, hϖ⟩ := IsDiscreteValuationRing.exists_irreducible R
+  obtain ⟨m, α, rfl⟩ := IsDiscreteValuationRing.eq_unit_mul_pow_irreducible hx hϖ
+  rw [ord_mul]; rw [ord_pow]; rw [ord_of_irreducible hϖ]
+  · simp [IsDiscreteValuationRing.addVal_uniformizer hϖ]
+  all_goals simp_all [Irreducible.ne_zero hϖ]
 
 Depends on / 依赖: AddValuation, AddValuation.map_zero, Ideal.span_singleton_zero, IsArtinianRing, IsDiscreteVal, IsDiscreteValuationRing, IsDiscreteValuationRing.exists_irreducible, IsDiscreteValuationRing.not_krullDimLE_zero, LinearEquiv, LinearEquiv.isArtinian_iff, Module, Module.length_ne_top_iff, Submodule, Submodule.quotEquivOfEqBot, exists_irreducible, isArtinian_iff, isFiniteLength_iff_isNoetherian_isArtinian, length_ne_top_iff, map_zero, not_krullDimLE_zero
 -/

@@ -200,7 +200,17 @@ lemma EssentiallySmall.exists_small_le
   have h (X' : Subtype P') : exists (X : Subtype P), Nonempty (X'.1 ≅ X.1) :=
     ⟨⟨X'.2.2.choose, X'.2.2.choose_spec.choose⟩, X'.2.2.choose_spec.choose_spec⟩
   choose φ hφ using h
-  refine ⟨fun X => X in Set.range (Subtype.va
+  refine ⟨fun X => X in Set.range (Subtype.val ∘ φ), ?_, ?_, ?_⟩
+  · exact small_of_surjective (f := fun X => ⟨(φ X).1, by tauto⟩)
+      (by rintro ⟨_, Z, rfl⟩; exact ⟨Z, rfl⟩)
+  · intro X hX
+    simp only [Set.mem_range, Function.comp_apply, Subtype.exists] at hX
+    obtain ⟨Y, hY, rfl⟩ := hX
+    exact (φ ⟨Y, hY⟩).2
+  · intro X hX
+    obtain ⟨Y, hY, ⟨e⟩⟩ := hQ _ hX
+    let Z : Subtype P' := ⟨Y, hY, ⟨X, hX, ⟨e.symm⟩⟩⟩
+    exact ⟨_, ⟨Z, rfl⟩, ⟨e ≪≫ (hφ Z).some⟩⟩
 
 中文:
 引理 EssentiallySmall.存在_small_le
@@ -211,7 +221,17 @@ lemma EssentiallySmall.exists_small_le
   have h (X' : Subtype P') : exists (X : Subtype P), Nonempty (X'.1 ≅ X.1) :=
     ⟨⟨X'.2.2.choose, X'.2.2.choose_spec.choose⟩, X'.2.2.choose_spec.choose_spec⟩
   choose φ hφ using h
-  refine ⟨fun X => X in Set.range (Subtype.va
+  refine ⟨fun X => X in Set.range (Subtype.val ∘ φ), ?_, ?_, ?_⟩
+  · exact small_of_surjective (f := fun X => ⟨(φ X).1, by tauto⟩)
+      (by rintro ⟨_, Z, rfl⟩; exact ⟨Z, rfl⟩)
+  · intro X hX
+    simp only [Set.mem_range, Function.comp_apply, Subtype.exists] at hX
+    obtain ⟨Y, hY, rfl⟩ := hX
+    exact (φ ⟨Y, hY⟩).2
+  · intro X hX
+    obtain ⟨Y, hY, ⟨e⟩⟩ := hQ _ hX
+    let Z : Subtype P' := ⟨Y, hY, ⟨X, hX, ⟨e.symm⟩⟩⟩
+    exact ⟨_, ⟨Z, rfl⟩, ⟨e ≪≫ (hφ Z).some⟩⟩
 
 Depends on / 依赖: Function, Function.comp_apply, Nonempty, P.isoClosure, Set.mem_range, Set.range, Subtype, Subtype.exists, Subtype.val, choose_spec, choose_spec.choose, choose_spec.choose_spec, comp_apply, exists_small_le, isoClosure, mem_range, small_of_surjective
 -/
@@ -330,7 +350,9 @@ lemma essentiallySmall_op_iff
   · obtain ⟨Q, h₁, _, h₂⟩ := EssentiallySmall.exists_small_le P.op
     exact ⟨Q.unop, inferInstance, by rwa [← unop_isoClosure, ← op_monotone_iff, op_unop]⟩
   · obtain ⟨Q, h₁, _, h₂⟩ := EssentiallySmall.exists_small_le P
-    exact ⟨Q.op, inferInstance, by rwa [
+    exact ⟨Q.op, inferInstance, by rwa [← op_isoClosure, op_monotone_iff]⟩
+
+@[simp]
 
 中文:
 引理 essentiallySmall_op_iff
@@ -340,7 +362,9 @@ lemma essentiallySmall_op_iff
   · obtain ⟨Q, h₁, _, h₂⟩ := EssentiallySmall.exists_small_le P.op
     exact ⟨Q.unop, inferInstance, by rwa [← unop_isoClosure, ← op_monotone_iff, op_unop]⟩
   · obtain ⟨Q, h₁, _, h₂⟩ := EssentiallySmall.exists_small_le P
-    exact ⟨Q.op, inferInstance, by rwa [
+    exact ⟨Q.op, inferInstance, by rwa [← op_isoClosure, op_monotone_iff]⟩
+
+@[simp]
 
 Depends on / 依赖: EssentiallySmall, EssentiallySmall.exists_small_le, P.op, Q.op, Q.unop, exists_small_le, op_isoClosure, op_monotone_iff, op_unop, unop_isoClosure
 -/
@@ -468,7 +492,7 @@ lemma EssentiallySmall.of_functor
   let f : Subtype P -> Σ i : Subtype P₁, Subtype (P₂ i.1) := fun c =>
     ⟨⟨_, hP₁x _ _⟩, _, hP₂y _ c ⟨c.2, hx _ ⟨_, c.2, ⟨.refl _⟩⟩⟩⟩
   let g : (Σ i : Subtype P₁, Subtype (P₂ i.1)) -> C := fun i => i.2.1
-  exa
+  exact ⟨.ofObj g, inferInstance, fun X hX => ⟨_, ⟨f ⟨X, hX⟩⟩, hy _ _ _⟩⟩
 
 中文:
 引理 EssentiallySmall.of_functor
@@ -479,7 +503,7 @@ lemma EssentiallySmall.of_functor
   let f : Subtype P -> Σ i : Subtype P₁, Subtype (P₂ i.1) := fun c =>
     ⟨⟨_, hP₁x _ _⟩, _, hP₂y _ c ⟨c.2, hx _ ⟨_, c.2, ⟨.refl _⟩⟩⟩⟩
   let g : (Σ i : Subtype P₁, Subtype (P₂ i.1)) -> C := fun i => i.2.1
-  exa
+  exact ⟨.ofObj g, inferInstance, fun X hX => ⟨_, ⟨f ⟨X, hX⟩⟩, hy _ _ _⟩⟩
 
 Depends on / 依赖: Subtype
 -/
@@ -505,7 +529,9 @@ lemma exists_equivalence_iff
   · exact ⟨.ofObj (e.inverse ⋙ P.ι).obj, inferInstance,
       fun X hX => ⟨_, ⟨⟨(e.functor.obj ⟨X, hX⟩)⟩, ⟨P.ι.mapIso (e.unitIso.app ⟨X, hX⟩)⟩⟩⟩⟩
   · obtain ⟨Q, _, h₁, h₂⟩ := EssentiallySmall.exists_small_le.{w} P
-    rw [← isEquivalence_ιOfLE_iff h₁]
+    rw [← isEquivalence_ιOfLE_iff h₁] at h₂
+    exact ⟨_, _, ⟨((ιOfLE h₁).asEquivalence.symm.trans
+      (Shrink.equivalence.{w} Q.FullSubcategory)).trans (ShrinkHoms.equivalence.{w'} _)⟩⟩
 
 中文:
 引理 存在_equivalence_iff
@@ -515,7 +541,9 @@ lemma exists_equivalence_iff
   · exact ⟨.ofObj (e.inverse ⋙ P.ι).obj, inferInstance,
       fun X hX => ⟨_, ⟨⟨(e.functor.obj ⟨X, hX⟩)⟩, ⟨P.ι.mapIso (e.unitIso.app ⟨X, hX⟩)⟩⟩⟩⟩
   · obtain ⟨Q, _, h₁, h₂⟩ := EssentiallySmall.exists_small_le.{w} P
-    rw [← isEquivalence_ιOfLE_iff h₁]
+    rw [← isEquivalence_ιOfLE_iff h₁] at h₂
+    exact ⟨_, _, ⟨((ιOfLE h₁).asEquivalence.symm.trans
+      (Shrink.equivalence.{w} Q.FullSubcategory)).trans (ShrinkHoms.equivalence.{w'} _)⟩⟩
 
 Depends on / 依赖: EssentiallySmall, EssentiallySmall.exists_small_le, FullSubcategory, Q.FullSubcategory, Shrink, Shrink.equivalence, ShrinkHoms, ShrinkHoms.equivalence, asEquivalence, asEquivalence.symm.trans, e.functor.obj, e.inverse, e.unitIso.app, equivalence, exists_small_le, functor, inverse, mapIso, unitIso
 -/

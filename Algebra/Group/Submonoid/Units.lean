@@ -1538,7 +1538,7 @@ theorem MonoidHom.isUnit_eqLocusM_mk_iff
   suffices exists a, r * a = 1 ∧ f a = g a ∧ a * r = 1 by
     simpa [isUnit_iff_exists, ← Subtype.val_inj]
   refine ⟨s, hs.left, ?_, hs.right⟩
-  rw [← mul_one (f s)]; rw [← map_one g]; rw 
+  rw [← mul_one (f s)]; rw [← map_one g]; rw [← hs.left]; rw [map_mul]; rw [← mul_assoc]; rw [← hr]; rw [← map_mul]; rw [hs.right]; rw [map_one]; rw [one_mul]
 
 中文:
 定理 幺半群态射.isUnit_eqLocusM_mk_iff
@@ -1549,7 +1549,7 @@ theorem MonoidHom.isUnit_eqLocusM_mk_iff
   suffices exists a, r * a = 1 ∧ f a = g a ∧ a * r = 1 by
     simpa [isUnit_iff_exists, ← Subtype.val_inj]
   refine ⟨s, hs.left, ?_, hs.right⟩
-  rw [← mul_one (f s)]; rw [← map_one g]; rw 
+  rw [← mul_one (f s)]; rw [← map_one g]; rw [← hs.left]; rw [map_mul]; rw [← mul_assoc]; rw [← hr]; rw [← map_mul]; rw [hs.right]; rw [map_one]; rw [one_mul]
 
 Depends on / 依赖: SubmonoidClass, SubmonoidClass.subtype, Subtype, Subtype.val_inj, h.map, hs.left, hs.right, isUnit_iff_exists, isUnit_iff_exists.mp, map_mul, map_one, mul_assoc, mul_one, one_mul, subtype, val_inj
 -/

@@ -55,7 +55,7 @@ definition ofBaseChangeAux
   body: CliffordAlgebra.lift Q by
     refine ⟨(ι (Q.baseChange A)).restrictScalars R ∘ₗ TensorProduct.mk R A V 1, fun v => ?_⟩
     refine (CliffordAlgebra.ι_sq_scalar (Q.baseChange A) (1 otimesₜ v)).trans ?_
-    rw [QuadraticForm.baseChange_tmul]; rw [one_mul]; rw [← Algebra.algebraMap_eq_smul_one]; rw [← I
+    rw [QuadraticForm.baseChange_tmul]; rw [one_mul]; rw [← Algebra.algebraMap_eq_smul_one]; rw [← IsScalarTower.algebraMap_apply]
 
 中文:
 定义 ofBaseChangeAux
@@ -63,7 +63,7 @@ definition ofBaseChangeAux
   定义体: CliffordAlgebra.lift Q by
     refine ⟨(ι (Q.baseChange A)).restrictScalars R ∘ₗ TensorProduct.mk R A V 1, fun v => ?_⟩
     refine (CliffordAlgebra.ι_sq_scalar (Q.baseChange A) (1 otimesₜ v)).trans ?_
-    rw [QuadraticForm.baseChange_tmul]; rw [one_mul]; rw [← Algebra.algebraMap_eq_smul_one]; rw [← I
+    rw [QuadraticForm.baseChange_tmul]; rw [one_mul]; rw [← Algebra.algebraMap_eq_smul_one]; rw [← IsScalarTower.algebraMap_apply]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, CliffordAlgebra, CliffordAlgebra.lift, IsScalarTower, IsScalarTower.algebraMap_apply, Q.baseChange, QuadraticForm, QuadraticForm.baseChange_tmul, TensorProduct, TensorProduct.mk, algebraMap_apply, algebraMap_eq_smul_one, baseChange, baseChange_tmul, one_mul, restrictScalars
 -/
@@ -169,7 +169,18 @@ definition toBaseChange
     refine ⟨TensorProduct.AlgebraTensorModule.map (LinearMap.id : A ->ₗ[A] A) (ι Q), ?_⟩
     let : Invertible (2 : A) := (Invertible.map (algebraMap R A) 2).copy 2 (map_ofNat _ _).symm
     let : Invertible (2 : A otimes[R] CliffordAlgebra Q) :=
-      (Invertible.map (algebr
+      (Invertible.map (algebraMap R _) 2).copy 2 (map_ofNat _ _).symm
+    suffices hpure_tensor : forall v w, (1 * 1) otimesₜ[R] (ι Q v * ι Q w) + (1 * 1) otimesₜ[R] (ι Q w * ι Q v) =
+        QuadraticMap.polarBilin (Q.baseChange A) (1 otimesₜ[R] v) (1 otimesₜ[R] w) otimesₜ[R] 1 by
+      -- the crux is that by converting to a statement about linear maps instead of quadratic forms,
+      -- we then have access to all the partially-applied `ext` lemmas.
+      rw [CliffordAlgebra.forall_mul_self_eq_iff (isUnit_of_invertible _)]
+      refine TensorProduct.AlgebraTensorModule.curry_injective ?_
+      ext v w
+      dsimp
+      exact hpure_tensor v w
+    intro v w
+    rw [← TensorProduct.tmul_add]; rw [CliffordAlgebra.ι_mul_ι_add_swap]; rw [QuadraticForm.polarBilin_baseChange]; rw [LinearMap.BilinForm.baseChange_tmul]; rw [one_mul]; rw [TensorProduct.smul_tmul]; rw [Algebra.algebraMap_eq_smul_one]; rw [QuadraticMap.polarBilin_apply_apply]
 
 中文:
 定义 toBaseChange
@@ -178,7 +189,18 @@ definition toBaseChange
     refine ⟨TensorProduct.AlgebraTensorModule.map (LinearMap.id : A ->ₗ[A] A) (ι Q), ?_⟩
     let : Invertible (2 : A) := (Invertible.map (algebraMap R A) 2).copy 2 (map_ofNat _ _).symm
     let : Invertible (2 : A otimes[R] CliffordAlgebra Q) :=
-      (Invertible.map (algebr
+      (Invertible.map (algebraMap R _) 2).copy 2 (map_ofNat _ _).symm
+    suffices hpure_tensor : forall v w, (1 * 1) otimesₜ[R] (ι Q v * ι Q w) + (1 * 1) otimesₜ[R] (ι Q w * ι Q v) =
+        QuadraticMap.polarBilin (Q.baseChange A) (1 otimesₜ[R] v) (1 otimesₜ[R] w) otimesₜ[R] 1 by
+      -- the crux is that by converting to a statement about linear maps instead of quadratic forms,
+      -- we then have access to all the partially-applied `ext` lemmas.
+      rw [CliffordAlgebra.forall_mul_self_eq_iff (isUnit_of_invertible _)]
+      refine TensorProduct.AlgebraTensorModule.curry_injective ?_
+      ext v w
+      dsimp
+      exact hpure_tensor v w
+    intro v w
+    rw [← TensorProduct.tmul_add]; rw [CliffordAlgebra.ι_mul_ι_add_swap]; rw [QuadraticForm.polarBilin_baseChange]; rw [LinearMap.BilinForm.baseChange_tmul]; rw [one_mul]; rw [TensorProduct.smul_tmul]; rw [Algebra.algebraMap_eq_smul_one]; rw [QuadraticMap.polarBilin_apply_apply]
 
 Depends on / 依赖: AlgebraTensorModule, CliffordAlgebra, CliffordAlgebra.lift, Invertible, Invertible.map, LinearMap, LinearMap.id, Q.baseChange, QuadraticMap, QuadraticMap.polarBilin, TensorProduct, TensorProduct.AlgebraTensorModule.map, algebraMap, baseChange, hpure_tensor, map_ofNat, otimes, polarBilin
 -/
@@ -230,7 +252,7 @@ theorem toBaseChange_comp_involute
     = (Algebra.TensorProduct.map (AlgHom.id _ _) involute :
         A otimes[R] CliffordAlgebra Q ->ₐ[A] _)
       (toBaseChange A Q (ι (Q.baseChange A) (1 otimesₜ[R] v)))
-  rw [toBaseChange_ι]; rw [involute_ι]; rw 
+  rw [toBaseChange_ι]; rw [involute_ι]; rw [map_neg (toBaseChange A Q)]; rw [toBaseChange_ι]; rw [Algebra.TensorProduct.map_tmul]; rw [AlgHom.id_apply]; rw [involute_ι]; rw [TensorProduct.tmul_neg]
 
 中文:
 定理 toBaseChange_comp_involute
@@ -241,7 +263,7 @@ theorem toBaseChange_comp_involute
     = (Algebra.TensorProduct.map (AlgHom.id _ _) involute :
         A otimes[R] CliffordAlgebra Q ->ₐ[A] _)
       (toBaseChange A Q (ι (Q.baseChange A) (1 otimesₜ[R] v)))
-  rw [toBaseChange_ι]; rw [involute_ι]; rw 
+  rw [toBaseChange_ι]; rw [involute_ι]; rw [map_neg (toBaseChange A Q)]; rw [toBaseChange_ι]; rw [Algebra.TensorProduct.map_tmul]; rw [AlgHom.id_apply]; rw [involute_ι]; rw [TensorProduct.tmul_neg]
 
 Depends on / 依赖: AlgHom, AlgHom.id, AlgHom.id_apply, Algebra, Algebra.TensorProduct.map, Algebra.TensorProduct.map_tmul, CliffordAlgebra, Q.baseChange, TensorProduct, TensorProduct.tmul_neg, baseChange, id_apply, involute, map_neg, map_tmul, otimes, tmul_neg, toBaseChange
 -/
@@ -288,7 +310,9 @@ theorem toBaseChange_comp_reverseOp
   change op (toBaseChange A Q (reverse (ι (Q.baseChange A) (1 otimesₜ[R] v)))) =
     Algebra.TensorProduct.opAlgEquiv R A A (CliffordAlgebra Q)
       (Algebra.TensorProduct.map (AlgEquiv.toOpposite A A).toAlgHom (reverseOp (Q := Q))
-        (toBaseChange A Q (ι (Q.baseChange A) (1 otimesₜ
+        (toBaseChange A Q (ι (Q.baseChange A) (1 otimesₜ[R] v))))
+  rw [toBaseChange_ι]; rw [reverse_ι]; rw [toBaseChange_ι]; rw [Algebra.TensorProduct.map_tmul]; rw [Algebra.TensorProduct.opAlgEquiv_tmul]; rw [reverseOp_ι]
+  rfl
 
 中文:
 定理 toBaseChange_comp_reverseOp
@@ -298,7 +322,9 @@ theorem toBaseChange_comp_reverseOp
   change op (toBaseChange A Q (reverse (ι (Q.baseChange A) (1 otimesₜ[R] v)))) =
     Algebra.TensorProduct.opAlgEquiv R A A (CliffordAlgebra Q)
       (Algebra.TensorProduct.map (AlgEquiv.toOpposite A A).toAlgHom (reverseOp (Q := Q))
-        (toBaseChange A Q (ι (Q.baseChange A) (1 otimesₜ
+        (toBaseChange A Q (ι (Q.baseChange A) (1 otimesₜ[R] v))))
+  rw [toBaseChange_ι]; rw [reverse_ι]; rw [toBaseChange_ι]; rw [Algebra.TensorProduct.map_tmul]; rw [Algebra.TensorProduct.opAlgEquiv_tmul]; rw [reverseOp_ι]
+  rfl
 -/
 theorem toBaseChange_comp_reverseOp (Q : QuadraticForm R V) :
     (toBaseChange A Q).op.comp reverseOp =
@@ -324,7 +350,11 @@ theorem toBaseChange_reverse
   have := DFunLike.congr_fun (toBaseChange_comp_reverseOp A Q) x
   refine (congr_arg unop this).trans ?_; clear this
   refine (LinearMap.congr_fun (TensorProduct.AlgebraTensorModule.map_comp _ _ _ _).symm _).trans ?_
-  rw [reverse]; rw [AlgEquiv.toAlgHom_toLinearMap]; rw [AlgEquiv.toLinearEquiv_t
+  rw [reverse]; rw [AlgEquiv.toAlgHom_toLinearMap]; rw [AlgEquiv.toLinearEquiv_toOpposite]
+  dsimp
+  -- `simp` fails here due to a timeout looking for a `Subsingleton` instance!?
+  rw [LinearEquiv.self_trans_symm]
+  rfl
 
 中文:
 定理 toBaseChange_reverse
@@ -333,7 +363,11 @@ theorem toBaseChange_reverse
   have := DFunLike.congr_fun (toBaseChange_comp_reverseOp A Q) x
   refine (congr_arg unop this).trans ?_; clear this
   refine (LinearMap.congr_fun (TensorProduct.AlgebraTensorModule.map_comp _ _ _ _).symm _).trans ?_
-  rw [reverse]; rw [AlgEquiv.toAlgHom_toLinearMap]; rw [AlgEquiv.toLinearEquiv_t
+  rw [reverse]; rw [AlgEquiv.toAlgHom_toLinearMap]; rw [AlgEquiv.toLinearEquiv_toOpposite]
+  dsimp
+  -- `simp` fails here due to a timeout looking for a `Subsingleton` instance!?
+  rw [LinearEquiv.self_trans_symm]
+  rfl
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.toAlgHom_toLinearMap, AlgEquiv.toLinearEquiv_toOpposite, AlgebraTensorModule, DFunLike, DFunLike.congr_fun, LinearMap, LinearMap.congr_fun, TensorProduct, TensorProduct.AlgebraTensorModule.map_comp, congr_arg, congr_fun, map_comp, reverse, toAlgHom_toLinearMap, toBaseChange_comp_reverseOp, toLinearEquiv_toOpposite
 -/

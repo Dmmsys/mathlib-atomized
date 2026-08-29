@@ -41,7 +41,107 @@ lemma toAddSubgroup_index_eq_pow_mul_prod
   let bN' : Basis (Fin n) R N' := bN.map (bM.equivFun.submoduleMap N)
   have snf' : forall i, (bN' i : ι -> R) = Pi.single (f i) (a i) := by
     intro i
-    sim
+    simp only [map_apply, bN']
+    rw [LinearEquiv.submoduleMap_apply]
+    simp only [equivFun_apply, snf, map_smul, repr_self, Finsupp.single_eq_pi_single]
+    ext j
+    simp [Pi.single_apply]
+  have hNN' : N.toAddSubgroup.index = N'.toAddSubgroup.index := by
+    set e : (ι -> R) ≃+ M := ↑bM.equivFun.symm with he
+    let e' : (ι -> R) ->+ M := e
+    have he' : Function.Surjective e' := e.surjective
+    convert! (AddSubgroup.index_comap_of_surjective N.toAddSubgroup he').symm using 2
+    rw [AddSubgroup.comap_equiv_eq_map_symm]; rw [he]; rw [hN']; rw [LinearEquiv.coe_toAddEquiv_symm]; rw [AddEquiv.symm_symm]
+    exact Submodule.map_toAddSubgroup ..
+  rw [hNN']
+  have hN' : N'.toAddSubgroup = AddSubgroup.pi Set.univ
+      (fun i => (Ideal.span {if h : exists j, f j = i then a h.choose else 0}).toAddSubgroup) := by
+    ext g
+    simp only [Submodule.mem_toAddSubgroup, bN'.mem_submodule_iff', snf', AddSubgroup.mem_pi,
+      Set.mem_univ, true_implies, Ideal.mem_span_singleton]
+    refine ⟨fun h => ?_, fun h => ?_⟩
+    · rcases h with ⟨c, rfl⟩
+      intro i
+      simp only [Finset.sum_apply, Pi.smul_apply, Pi.single_apply]
+      split_ifs with h
+      · convert! dvd_mul_left (a h.choose) (c h.choose)
+        calc ∑ x : Fin n, _ = c h.choose * if i = f h.choose then a h.choose else 0 := by
+              refine Finset.sum_eq_single h.choose ?_ (by simp)
+              rintro j - hj
+              have hinj := f.injective.ne hj
+              rw [h.choose_spec] at hinj
+              simp [hinj.symm]
+          _ = c h.choose * a h.choose := by simp [h.choose_spec]
+      · convert! dvd_refl (0 : R)
+        convert! Finset.sum_const_zero with j
+        rw [not_exists] at h
+        specialize h j
+        rw [eq_comm] at h
+        simp [h]
+    · refine ⟨fun j => (h (f j)).choose, ?_⟩
+      ext i
+      simp only [EmbeddingLike.apply_eq_iff_eq, exists_eq, ↓reduceDIte, Classical.choose_eq,
+        Finset.sum_apply, Pi.smul_apply, Pi.single_apply, smul_ite, smul_zero]
+      rw [eq_comm]
+      by_cases! hj : exists j, f j = i
+      · calc ∑ x : Fin n, _ =
+            if i = f hj.choose then (h (f hj.choose)).choose * a hj.choose else 0 := by
+              convert! Finset.sum_eq_single (M := R) hj.choose ?_ ?_
+              · simp
+              · rintro j - h
+                have hinj := f.injective.ne h
+                rw [hj.choose_spec] at hinj
+                simp [hinj.symm]
+              · simp
+          _ = g i := by
+              simp only [hj.choose_spec, ↓reduceIte]
+              rw [mul_comm]
+              conv_rhs =>
+                rw [← hj.choose_spec]; rw [(h (f hj.choose)).choose_spec]
+              simp only [EmbeddingLike.apply_eq_iff_eq, exists_eq, ↓reduceDIte, Classical.choose_eq]
+              congr!
+              · exact hj.choose_spec.symm
+              · simp [hj]
+      · convert! Finset.sum_const_zero with x
+        · specialize hj x
+          rw [ne_comm] at hj
+          simp [hj]
+        · rw [← zero_dvd_iff]
+          convert! h i
+          simp [hj]
+  simp only [hN', AddSubgroup.index_pi, apply_dite, Finset.prod_dite, Set.singleton_zero,
+    Ideal.span_zero, Submodule.bot_toAddSubgroup, AddSubgroup.index_pi, AddSubgroup.index_bot,
+    Finset.prod_const, Finset.univ_eq_attach, Finset.card_attach]
+  rw [mul_comm]
+  congr
+  · convert! Finset.card_compl {x | exists j, f j = x} using 2
+    · exact (Finset.compl_filter _).symm
+    · convert! (Finset.card_image_of_injective Finset.univ f.injective).symm <;> simp
+  · rw [Finset.attach_eq_univ]
+    let f' : Fin n -> { x // x in Finset.filter (fun x => exists j, f j = x) Finset.univ } :=
+      fun i => ⟨f i, by simp⟩
+    have hf' : Function.Injective f' := fun i j hij => by
+      rw [Subtype.ext_iff] at hij
+      exact f.injective hij
+    let f'' : Fin n ↪ { x // x in Finset.filter (fun x => exists j, f j = x) Finset.univ } :=
+      ⟨f', hf'⟩
+    have hu : (Finset.univ : Finset { x // x in Finset.filter (fun x => exists j, f j = x) Finset.univ }) =
+      Finset.univ.map f'' := by
+      ext x
+      simp only [Finset.univ_eq_attach, Finset.mem_attach, Finset.mem_map, Finset.mem_univ,
+        true_and, true_iff]
+      have hx := x.property
+      simp only [Finset.univ_filter_exists, Finset.mem_image, Finset.mem_univ, true_and] at hx
+      rcases hx with ⟨i, hi⟩
+      refine ⟨i, ?_⟩
+      rw [Subtype.ext_iff]
+      exact hi
+    rw [hu]; rw [Finset.prod_map]
+    congr! with i
+    rw [← f.injective.eq_iff]
+    generalize_proofs h
+    rw [h.choose_spec]
+    rfl
 
 中文:
 引理 toAddSubgroup_index_eq_pow_mul_prod
@@ -54,7 +154,107 @@ lemma toAddSubgroup_index_eq_pow_mul_prod
   let bN' : Basis (Fin n) R N' := bN.map (bM.equivFun.submoduleMap N)
   have snf' : forall i, (bN' i : ι -> R) = Pi.single (f i) (a i) := by
     intro i
-    sim
+    simp only [map_apply, bN']
+    rw [LinearEquiv.submoduleMap_apply]
+    simp only [equivFun_apply, snf, map_smul, repr_self, Finsupp.single_eq_pi_single]
+    ext j
+    simp [Pi.single_apply]
+  have hNN' : N.toAddSubgroup.index = N'.toAddSubgroup.index := by
+    set e : (ι -> R) ≃+ M := ↑bM.equivFun.symm with he
+    let e' : (ι -> R) ->+ M := e
+    have he' : Function.Surjective e' := e.surjective
+    convert! (AddSubgroup.index_comap_of_surjective N.toAddSubgroup he').symm using 2
+    rw [AddSubgroup.comap_equiv_eq_map_symm]; rw [he]; rw [hN']; rw [LinearEquiv.coe_toAddEquiv_symm]; rw [AddEquiv.symm_symm]
+    exact Submodule.map_toAddSubgroup ..
+  rw [hNN']
+  have hN' : N'.toAddSubgroup = AddSubgroup.pi Set.univ
+      (fun i => (Ideal.span {if h : exists j, f j = i then a h.choose else 0}).toAddSubgroup) := by
+    ext g
+    simp only [Submodule.mem_toAddSubgroup, bN'.mem_submodule_iff', snf', AddSubgroup.mem_pi,
+      Set.mem_univ, true_implies, Ideal.mem_span_singleton]
+    refine ⟨fun h => ?_, fun h => ?_⟩
+    · rcases h with ⟨c, rfl⟩
+      intro i
+      simp only [Finset.sum_apply, Pi.smul_apply, Pi.single_apply]
+      split_ifs with h
+      · convert! dvd_mul_left (a h.choose) (c h.choose)
+        calc ∑ x : Fin n, _ = c h.choose * if i = f h.choose then a h.choose else 0 := by
+              refine Finset.sum_eq_single h.choose ?_ (by simp)
+              rintro j - hj
+              have hinj := f.injective.ne hj
+              rw [h.choose_spec] at hinj
+              simp [hinj.symm]
+          _ = c h.choose * a h.choose := by simp [h.choose_spec]
+      · convert! dvd_refl (0 : R)
+        convert! Finset.sum_const_zero with j
+        rw [not_exists] at h
+        specialize h j
+        rw [eq_comm] at h
+        simp [h]
+    · refine ⟨fun j => (h (f j)).choose, ?_⟩
+      ext i
+      simp only [EmbeddingLike.apply_eq_iff_eq, exists_eq, ↓reduceDIte, Classical.choose_eq,
+        Finset.sum_apply, Pi.smul_apply, Pi.single_apply, smul_ite, smul_zero]
+      rw [eq_comm]
+      by_cases! hj : exists j, f j = i
+      · calc ∑ x : Fin n, _ =
+            if i = f hj.choose then (h (f hj.choose)).choose * a hj.choose else 0 := by
+              convert! Finset.sum_eq_single (M := R) hj.choose ?_ ?_
+              · simp
+              · rintro j - h
+                have hinj := f.injective.ne h
+                rw [hj.choose_spec] at hinj
+                simp [hinj.symm]
+              · simp
+          _ = g i := by
+              simp only [hj.choose_spec, ↓reduceIte]
+              rw [mul_comm]
+              conv_rhs =>
+                rw [← hj.choose_spec]; rw [(h (f hj.choose)).choose_spec]
+              simp only [EmbeddingLike.apply_eq_iff_eq, exists_eq, ↓reduceDIte, Classical.choose_eq]
+              congr!
+              · exact hj.choose_spec.symm
+              · simp [hj]
+      · convert! Finset.sum_const_zero with x
+        · specialize hj x
+          rw [ne_comm] at hj
+          simp [hj]
+        · rw [← zero_dvd_iff]
+          convert! h i
+          simp [hj]
+  simp only [hN', AddSubgroup.index_pi, apply_dite, Finset.prod_dite, Set.singleton_zero,
+    Ideal.span_zero, Submodule.bot_toAddSubgroup, AddSubgroup.index_pi, AddSubgroup.index_bot,
+    Finset.prod_const, Finset.univ_eq_attach, Finset.card_attach]
+  rw [mul_comm]
+  congr
+  · convert! Finset.card_compl {x | exists j, f j = x} using 2
+    · exact (Finset.compl_filter _).symm
+    · convert! (Finset.card_image_of_injective Finset.univ f.injective).symm <;> simp
+  · rw [Finset.attach_eq_univ]
+    let f' : Fin n -> { x // x in Finset.filter (fun x => exists j, f j = x) Finset.univ } :=
+      fun i => ⟨f i, by simp⟩
+    have hf' : Function.Injective f' := fun i j hij => by
+      rw [Subtype.ext_iff] at hij
+      exact f.injective hij
+    let f'' : Fin n ↪ { x // x in Finset.filter (fun x => exists j, f j = x) Finset.univ } :=
+      ⟨f', hf'⟩
+    have hu : (Finset.univ : Finset { x // x in Finset.filter (fun x => exists j, f j = x) Finset.univ }) =
+      Finset.univ.map f'' := by
+      ext x
+      simp only [Finset.univ_eq_attach, Finset.mem_attach, Finset.mem_map, Finset.mem_univ,
+        true_and, true_iff]
+      have hx := x.property
+      simp only [Finset.univ_filter_exists, Finset.mem_image, Finset.mem_univ, true_and] at hx
+      rcases hx with ⟨i, hi⟩
+      refine ⟨i, ?_⟩
+      rw [Subtype.ext_iff]
+      exact hi
+    rw [hu]; rw [Finset.prod_map]
+    congr! with i
+    rw [← f.injective.eq_iff]
+    generalize_proofs h
+    rw [h.choose_spec]
+    rfl
 
 Depends on / 依赖: Finsupp, Finsupp.single_eq_pi_single, LinearEquiv, LinearEquiv.submoduleMap_apply, N.map, N.toAddSubgroup.index, Pi.single, Pi.single_apply, Submodule, bM.equivFun.submoduleMap, bM.equivFun.toLinearMap, bN.map, classical, equivFun, equivFun_apply, map_apply, map_smul, repr_self, single, single_apply
 -/
@@ -224,7 +424,8 @@ lemma toAddSubgroup_index_ne_zero_iff
     specialize snf i
     simpa [hi] using snf
   intro h
-  sim
+  simpa [Ideal.span_singleton_toAddSubgroup_eq_zmultiples, Int.index_zmultiples,
+    Finset.prod_eq_zero_iff] using ha
 
 中文:
 引理 toAddSubgroup_index_ne_zero_iff
@@ -239,7 +440,8 @@ lemma toAddSubgroup_index_ne_zero_iff
     specialize snf i
     simpa [hi] using snf
   intro h
-  sim
+  simpa [Ideal.span_singleton_toAddSubgroup_eq_zmultiples, Int.index_zmultiples,
+    Finset.prod_eq_zero_iff] using ha
 
 Depends on / 依赖: Basis.ne_zero, Classical, Classical.not_imp, Finset, Finset.prod_eq_zero_iff, Ideal.span_singleton_toAddSubgroup_eq_zmultiples, Int.index_zmultiples, NeZero, Regular, and_iff_left_iff_imp, index_zmultiples, isOpenPosMeasure_of_mulLeftInvariant_of_regular, ite_eq_right_iff, ne_eq, ne_zero, not_imp, prod_eq_zero_iff, snf.toAddSubgroup_index_eq_ite, span_singleton_toAddSubgroup_eq_zmultiples, specialize
 -/
@@ -277,7 +479,8 @@ obtain ⟨n, snf⟩ := N.smithNormalForm .ofEquivFun .refl ..
   refine ⟨fun h => ?_, fun ⟨e⟩ => ?_⟩
   · subst h
     exact ⟨(bN.reindex (Fintype.equivFin _).symm).equivFun⟩
-· have hc := card_eq_o
+· have hc := card_eq_of_linearEquiv Int bN.equivFun.symm.trans e
+    simpa using hc
 
 中文:
 引理 submodule_toAddSubgroup_index_ne_zero_iff
@@ -290,7 +493,8 @@ obtain ⟨n, snf⟩ := N.smithNormalForm .ofEquivFun .refl ..
   refine ⟨fun h => ?_, fun ⟨e⟩ => ?_⟩
   · subst h
     exact ⟨(bN.reindex (Fintype.equivFin _).symm).equivFun⟩
-· have hc := card_eq_o
+· have hc := card_eq_of_linearEquiv Int bN.equivFun.symm.trans e
+    simpa using hc
 
 Depends on / 依赖: Fintype, Fintype.equivFin, Fintype.ofFinite, N.smithNormalForm, bN.equivFun.symm.trans, bN.reindex, card_eq_of_linearEquiv, equivFin, equivFun, isOpenPosMeasure_of_mulLeftInvariant_of_innerRegular, ofEquivFun, ofFinite, reindex, smithNormalForm, snf.toAddSubgroup_index_ne_zero_iff, toAddSubgroup_index_ne_zero_iff
 -/
@@ -342,7 +546,12 @@ lemma subgroup_index_ne_zero_iff
     MulEquiv.funMultiplicative _ _
   let H' : Subgroup (Multiplicative (ι -> Int)) := H.comap em
   let eH' : H' ≃* H := (MulEquiv.subgroupCongr <| Subgroup.comap_equiv_eq_map_symm em H).trans
-    (MulEquiv.subgroupMap em.symm _)
+    (MulEquiv.subgroupMap em.symm _).symm
+  have h : H'.index = H.index := Subgroup.index_comap_of_surjective _ em.surjective
+  rw [← h]; rw [← Subgroup.index_toAddSubgroup]; rw [addSubgroup_index_ne_zero_iff]
+  exact ⟨fun ⟨e⟩ => ⟨(eH'.symm.trans (AddEquiv.toMultiplicative e)).trans em⟩,
+    fun ⟨e⟩ => ⟨(MulEquiv.toAdditive ((eH'.trans e).trans em.symm)).trans
+      (AddEquiv.additiveMultiplicative _)⟩⟩
 
 中文:
 引理 subgroup_index_ne_zero_iff
@@ -352,7 +561,12 @@ lemma subgroup_index_ne_zero_iff
     MulEquiv.funMultiplicative _ _
   let H' : Subgroup (Multiplicative (ι -> Int)) := H.comap em
   let eH' : H' ≃* H := (MulEquiv.subgroupCongr <| Subgroup.comap_equiv_eq_map_symm em H).trans
-    (MulEquiv.subgroupMap em.symm _)
+    (MulEquiv.subgroupMap em.symm _).symm
+  have h : H'.index = H.index := Subgroup.index_comap_of_surjective _ em.surjective
+  rw [← h]; rw [← Subgroup.index_toAddSubgroup]; rw [addSubgroup_index_ne_zero_iff]
+  exact ⟨fun ⟨e⟩ => ⟨(eH'.symm.trans (AddEquiv.toMultiplicative e)).trans em⟩,
+    fun ⟨e⟩ => ⟨(MulEquiv.toAdditive ((eH'.trans e).trans em.symm)).trans
+      (AddEquiv.additiveMultiplicative _)⟩⟩
 
 Depends on / 依赖: AddEquiv, H.comap, H.index, MulEquiv, MulEquiv.funMultiplicative, MulEquiv.subgroupCongr, MulEquiv.subgroupMap, Multiplicative, Subgroup, Subgroup.comap_equiv_eq_map_symm, Subgroup.index_comap_of_surjective, Subgroup.index_toAddSubgroup, addSubgroup_index_ne_zero_iff, comap_equiv_eq_map_symm, em.surjective, em.symm, funMultiplicative, index_comap_of_surjective, index_toAddSubgroup, subgroupCongr
 -/

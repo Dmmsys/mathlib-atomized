@@ -183,7 +183,7 @@ theorem finiteIndex_iff_sup_torsion_finiteIndex
   rw [Subgroup.finiteIndex_iff]; rw [← Subgroup.relIndex_mul_index (le_sup_left : s <= s ⊔ torsion K)]
   refine Nat.mul_ne_zero ?_ (Subgroup.finiteIndex_iff.mp h)
   rw [Subgroup.relIndex_sup_left]
-  exact Subgroup.FiniteIndex
+  exact Subgroup.FiniteIndex.index_ne_zero
 
 中文:
 定理 finiteIndex_iff_sup_torsion_finiteIndex
@@ -193,7 +193,7 @@ theorem finiteIndex_iff_sup_torsion_finiteIndex
   rw [Subgroup.finiteIndex_iff]; rw [← Subgroup.relIndex_mul_index (le_sup_left : s <= s ⊔ torsion K)]
   refine Nat.mul_ne_zero ?_ (Subgroup.finiteIndex_iff.mp h)
   rw [Subgroup.relIndex_sup_left]
-  exact Subgroup.FiniteIndex
+  exact Subgroup.FiniteIndex.index_ne_zero
 
 Depends on / 依赖: FiniteIndex, Nat.mul_ne_zero, Subgroup, Subgroup.FiniteIndex.index_ne_zero, Subgroup.finiteIndex_iff, Subgroup.finiteIndex_iff.mp, Subgroup.finiteIndex_of_le, Subgroup.relIndex_mul_index, Subgroup.relIndex_sup_left, finiteIndex_iff, finiteIndex_of_le, index_ne_zero, le_sup_left, mul_ne_zero, relIndex_mul_index, relIndex_sup_left, torsion
 -/
@@ -218,7 +218,22 @@ theorem isMaxRank_iff_closure_finiteIndex
   have h₁ : (closure (Set.range u) ⊔ torsion K).index != 0 ↔
       Finite (unitLattice K ⧸ span Int (Set.range ((logEmbeddingEquiv K) ∘ Additive.toMul.symm ∘
         QuotientGroup.mk ∘ u))) := by
-    change _ ↔ Finite ((unitLattice K).toAddSubgroup ⧸ (span Int (Set.range _)).toAddSubg
+    change _ ↔ Finite ((unitLattice K).toAddSubgroup ⧸ (span Int (Set.range _)).toAddSubgroup)
+    rw [← AddSubgroup.index_ne_zero_iff_finite]
+    have := index_map (closure (Set.range u)) (QuotientGroup.mk' (torsion K))
+    rw [QuotientGroup.ker_mk']; rw [QuotientGroup.range_mk']; rw [index_top]; rw [mul_one] at this
+    rw [← this]; rw [← index_toAddSubgroup]; rw [← AddSubgroup.index_map_equiv
+        _ (logEmbeddingEquiv K).toAddEquiv]; rw [Set.range_comp]; rw [← LinearEquiv.coe_coe]; rw [← map_span (logEmbeddingEquiv K).toLinearMap]; rw [map_toAddSubgroup]; rw [span_int_eq_addSubgroupClosure]; rw [MonoidHom.map_closure]; rw [toAddSubgroup_closure]; rw [Set.range_comp]; rw [Set.range_comp]; rw [QuotientGroup.coe_mk']; rw [← Equiv.image_symm_eq_preimage]
+    rfl
+  have h₂ : DiscreteTopology
+      (span Int (Set.range fun i => (logEmbedding K) (Additive.ofMul (u i)))) := by
+    rw [← SetLike.isDiscrete_iff_discreteTopology]
+    refine (inferInstance : DiscreteTopology (unitLattice K)).isDiscrete.mono ?_
+    rw [SetLike.coe_subset_coe]; rw [Submodule.span_le]
+    rintro _ ⟨i, rfl⟩
+    exact ⟨Additive.ofMul (u i), mem_top, rfl⟩
+  rw [finiteIndex_iff_sup_torsion_finiteIndex]; rw [finiteIndex_iff]; rw [h₁]; rw [finiteQuotient_iff]; rw [unitLattice_rank]; rw [← Set.finrank]; rw [IsMaxRank]; rw [linearIndependent_iff_card_eq_finrank_span]; rw [Real.finrank_eq_int_finrank_of_discrete h₂]; rw [Set.finrank]; rw [Set.finrank]; rw [← finrank_map_subtype_eq]; rw [map_span]; rw [← Set.range_comp']; rw [eq_comm]
+  simp
 
 中文:
 定理 isMaxRank_iff_closure_finiteIndex
@@ -228,7 +243,22 @@ theorem isMaxRank_iff_closure_finiteIndex
   have h₁ : (closure (Set.range u) ⊔ torsion K).index != 0 ↔
       Finite (unitLattice K ⧸ span Int (Set.range ((logEmbeddingEquiv K) ∘ Additive.toMul.symm ∘
         QuotientGroup.mk ∘ u))) := by
-    change _ ↔ Finite ((unitLattice K).toAddSubgroup ⧸ (span Int (Set.range _)).toAddSubg
+    change _ ↔ Finite ((unitLattice K).toAddSubgroup ⧸ (span Int (Set.range _)).toAddSubgroup)
+    rw [← AddSubgroup.index_ne_zero_iff_finite]
+    have := index_map (closure (Set.range u)) (QuotientGroup.mk' (torsion K))
+    rw [QuotientGroup.ker_mk']; rw [QuotientGroup.range_mk']; rw [index_top]; rw [mul_one] at this
+    rw [← this]; rw [← index_toAddSubgroup]; rw [← AddSubgroup.index_map_equiv
+        _ (logEmbeddingEquiv K).toAddEquiv]; rw [Set.range_comp]; rw [← LinearEquiv.coe_coe]; rw [← map_span (logEmbeddingEquiv K).toLinearMap]; rw [map_toAddSubgroup]; rw [span_int_eq_addSubgroupClosure]; rw [MonoidHom.map_closure]; rw [toAddSubgroup_closure]; rw [Set.range_comp]; rw [Set.range_comp]; rw [QuotientGroup.coe_mk']; rw [← Equiv.image_symm_eq_preimage]
+    rfl
+  have h₂ : DiscreteTopology
+      (span Int (Set.range fun i => (logEmbedding K) (Additive.ofMul (u i)))) := by
+    rw [← SetLike.isDiscrete_iff_discreteTopology]
+    refine (inferInstance : DiscreteTopology (unitLattice K)).isDiscrete.mono ?_
+    rw [SetLike.coe_subset_coe]; rw [Submodule.span_le]
+    rintro _ ⟨i, rfl⟩
+    exact ⟨Additive.ofMul (u i), mem_top, rfl⟩
+  rw [finiteIndex_iff_sup_torsion_finiteIndex]; rw [finiteIndex_iff]; rw [h₁]; rw [finiteQuotient_iff]; rw [unitLattice_rank]; rw [← Set.finrank]; rw [IsMaxRank]; rw [linearIndependent_iff_card_eq_finrank_span]; rw [Real.finrank_eq_int_finrank_of_discrete h₂]; rw [Set.finrank]; rw [Set.finrank]; rw [← finrank_map_subtype_eq]; rw [map_span]; rw [← Set.range_comp']; rw [eq_comm]
+  simp
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.index_ne_zero_iff_finite, Additive, Additive.toMul.symm, Finite, QuotientGroup, QuotientGroup.ker_mk, QuotientGroup.mk, QuotientGroup.range_mk, Set.range, classical, closure, index_map, index_ne_zero_iff_finite, index_top, ker_mk, logEmbeddingEquiv, mul_one, range_mk, toAddSubgroup
 -/
@@ -400,7 +430,8 @@ theorem regOfFamily_eq_det'
       (((basisOfIsMaxRank hu).restrictScalars Int).reindex (equivFinRank K)), Basis.coe_reindex]
     congr 3 with i
     simp [basisOfIsMaxRank_apply hu]
-  · rw [regOfFamily_eq_zero hu, det_eq_zero_of_not_l
+  · rw [regOfFamily_eq_zero hu, det_eq_zero_of_not_linearIndependent_rows, abs_zero]
+    rwa [IsMaxRank, ← linearIndependent_equiv (equivFinRank K).symm] at hu
 
 中文:
 定理 regOfFamily_eq_det'
@@ -411,7 +442,8 @@ theorem regOfFamily_eq_det'
       (((basisOfIsMaxRank hu).restrictScalars Int).reindex (equivFinRank K)), Basis.coe_reindex]
     congr 3 with i
     simp [basisOfIsMaxRank_apply hu]
-  · rw [regOfFamily_eq_zero hu, det_eq_zero_of_not_l
+  · rw [regOfFamily_eq_zero hu, det_eq_zero_of_not_linearIndependent_rows, abs_zero]
+    rwa [IsMaxRank, ← linearIndependent_equiv (equivFinRank K).symm] at hu
 
 Depends on / 依赖: Basis.coe_reindex, IsMaxRank, ZLattice, ZLattice.covolume_eq_det, abs_zero, basisOfIsMaxRank, basisOfIsMaxRank_apply, coe_reindex, covolume_eq_det, det_eq_zero_of_not_linearIndependent_rows, equivFinRank, linearIndependent_equiv, regOfFamily_eq_zero, regOfFamily_of_isMaxRank, reindex, restrictScalars
 -/
@@ -438,7 +470,27 @@ theorem abs_det_eq_abs_det
   let f : Fin (rank K + 1) ≃ InfinitePlace K :=
     (finSuccEquiv _).trans ((Equiv.optionSubtype _).symm e₁.symm).val
   -- And `g` corresponds to the restriction of `f⁻¹` to `{w // w ≠ w₂}`
-  let g : {w // w != w₂} ≃ F
+  let g : {w // w != w₂} ≃ Fin (rank K) :=
+    (Equiv.subtypeEquiv f.symm (fun _ => by simp [f])).trans
+      (finSuccAboveEquiv (f.symm w₂)).symm
+have h_col := congr_arg abs det_permute (g.trans e₂.symm)
+    (of fun i w : {w // w != w₂} => (mult w.val : Real) * (w.val (u (e₂ i) : K)).log)
+  rw [abs_mul]; rw [← Int.cast_abs]; rw [Equiv.Perm.sign_abs]; rw [Int.cast_one]; rw [one_mul] at h_col
+  rw [← h_col]
+have h := congr_arg abs submatrix_succAbove_det_eq_negOnePow_submatrix_succAbove_det'
+    (of fun i w => (mult (f w) : Real) * ((f w) (u i)).log) ?_ 0 (f.symm w₂)
+  · rw [← det_reindex_self e₁, ← det_reindex_self g]
+    · rw [Units.smul_def, abs_zsmul, Int.abs_negOnePow, one_smul] at h
+      convert! h
+      · ext; simp only [ne_eq, reindex_apply, submatrix_apply, of_apply, Equiv.apply_symm_apply,
+          Equiv.trans_apply, Fin.succAbove_zero, id_eq, finSuccEquiv_succ,
+          Equiv.optionSubtype_symm_apply_apply_coe, f]
+      · ext; simp only [ne_eq, Equiv.coe_trans, reindex_apply, submatrix_apply, Function.comp_apply,
+          Equiv.apply_symm_apply, id_eq, of_apply]; rfl
+  · intro _
+    simp_rw [of_apply, ← Real.log_pow]
+    rw [← Real.log_prod]; rw [Equiv.prod_comp f (fun w => (w (u _) ^ (mult w)))]; rw [prod_eq_abs_norm]; rw [Units.norm]; rw [Rat.cast_one]; rw [Real.log_one]
+exact fun _ _ => pow_ne_zero _ (map_ne_zero _).mpr (coe_ne_zero _)
 
 中文:
 定理 abs_det_eq_abs_det
@@ -448,7 +500,27 @@ theorem abs_det_eq_abs_det
   let f : Fin (rank K + 1) ≃ InfinitePlace K :=
     (finSuccEquiv _).trans ((Equiv.optionSubtype _).symm e₁.symm).val
   -- And `g` corresponds to the restriction of `f⁻¹` to `{w // w ≠ w₂}`
-  let g : {w // w != w₂} ≃ F
+  let g : {w // w != w₂} ≃ Fin (rank K) :=
+    (Equiv.subtypeEquiv f.symm (fun _ => by simp [f])).trans
+      (finSuccAboveEquiv (f.symm w₂)).symm
+have h_col := congr_arg abs det_permute (g.trans e₂.symm)
+    (of fun i w : {w // w != w₂} => (mult w.val : Real) * (w.val (u (e₂ i) : K)).log)
+  rw [abs_mul]; rw [← Int.cast_abs]; rw [Equiv.Perm.sign_abs]; rw [Int.cast_one]; rw [one_mul] at h_col
+  rw [← h_col]
+have h := congr_arg abs submatrix_succAbove_det_eq_negOnePow_submatrix_succAbove_det'
+    (of fun i w => (mult (f w) : Real) * ((f w) (u i)).log) ?_ 0 (f.symm w₂)
+  · rw [← det_reindex_self e₁, ← det_reindex_self g]
+    · rw [Units.smul_def, abs_zsmul, Int.abs_negOnePow, one_smul] at h
+      convert! h
+      · ext; simp only [ne_eq, reindex_apply, submatrix_apply, of_apply, Equiv.apply_symm_apply,
+          Equiv.trans_apply, Fin.succAbove_zero, id_eq, finSuccEquiv_succ,
+          Equiv.optionSubtype_symm_apply_apply_coe, f]
+      · ext; simp only [ne_eq, Equiv.coe_trans, reindex_apply, submatrix_apply, Function.comp_apply,
+          Equiv.apply_symm_apply, id_eq, of_apply]; rfl
+  · intro _
+    simp_rw [of_apply, ← Real.log_pow]
+    rw [← Real.log_prod]; rw [Equiv.prod_comp f (fun w => (w (u _) ^ (mult w)))]; rw [prod_eq_abs_norm]; rw [Units.norm]; rw [Rat.cast_one]; rw [Real.log_one]
+exact fun _ _ => pow_ne_zero _ (map_ne_zero _).mpr (coe_ne_zero _)
 -/
 theorem abs_det_eq_abs_det (u : Fin (rank K) -> (𝓞 K)ˣ)
     {w₁ w₂ : InfinitePlace K} (e₁ : {w // w != w₁} ≃ Fin (rank K))
@@ -517,7 +589,20 @@ theorem finrank_mul_regOfFamily_eq_det
     (finSuccEquiv _).trans ((Equiv.optionSubtype _).symm e.symm).val
   let g : {w // w != w'} ≃ Fin (rank K) :=
     (Equiv.subtypeEquiv f.symm (fun _ => by simp [f])).trans (finSuccAboveEquiv (f.symm w')).symm
-  rw [← det_reindex_self f.symm]; rw [d
+  rw [← det_reindex_self f.symm]; rw [det_eq_sum_row_mul_submatrix_succAbove_succAbove_det _ (f.symm w')
+    (f.symm w')]; rw [abs_mul]; rw [abs_mul]; rw [abs_neg_one_pow]; rw [one_mul]
+  · simp_rw [reindex_apply, submatrix_submatrix, ← f.symm.sum_comp, f.symm_symm, submatrix_apply,
+      Function.comp_def, Equiv.apply_symm_apply, of_apply, dif_pos, ← Nat.cast_sum, sum_mult_eq,
+      Nat.abs_cast]
+    rw [regOfFamily_eq_det u w' e]; rw [← Matrix.det_reindex_self g]
+    congr with i j
+    rw [reindex_apply]; rw [submatrix_apply]; rw [submatrix_apply]; rw [of_apply]; rw [of_apply]; rw [dif_neg]
+    rfl
+  · simp_rw [Equiv.forall_congr_left f, ← f.symm.sum_comp, reindex_apply, submatrix_apply,
+      of_apply, f.symm_symm, f.apply_symm_apply, Finset.sum_dite_irrel, ne_eq,
+      EmbeddingLike.apply_eq_iff_eq]
+    intro _ h
+    rw [dif_neg h]; rw [sum_mult_mul_log]
 
 中文:
 定理 finrank_mul_regOfFamily_eq_det
@@ -527,7 +612,20 @@ theorem finrank_mul_regOfFamily_eq_det
     (finSuccEquiv _).trans ((Equiv.optionSubtype _).symm e.symm).val
   let g : {w // w != w'} ≃ Fin (rank K) :=
     (Equiv.subtypeEquiv f.symm (fun _ => by simp [f])).trans (finSuccAboveEquiv (f.symm w')).symm
-  rw [← det_reindex_self f.symm]; rw [d
+  rw [← det_reindex_self f.symm]; rw [det_eq_sum_row_mul_submatrix_succAbove_succAbove_det _ (f.symm w')
+    (f.symm w')]; rw [abs_mul]; rw [abs_mul]; rw [abs_neg_one_pow]; rw [one_mul]
+  · simp_rw [reindex_apply, submatrix_submatrix, ← f.symm.sum_comp, f.symm_symm, submatrix_apply,
+      Function.comp_def, Equiv.apply_symm_apply, of_apply, dif_pos, ← Nat.cast_sum, sum_mult_eq,
+      Nat.abs_cast]
+    rw [regOfFamily_eq_det u w' e]; rw [← Matrix.det_reindex_self g]
+    congr with i j
+    rw [reindex_apply]; rw [submatrix_apply]; rw [submatrix_apply]; rw [of_apply]; rw [of_apply]; rw [dif_neg]
+    rfl
+  · simp_rw [Equiv.forall_congr_left f, ← f.symm.sum_comp, reindex_apply, submatrix_apply,
+      of_apply, f.symm_symm, f.apply_symm_apply, Finset.sum_dite_irrel, ne_eq,
+      EmbeddingLike.apply_eq_iff_eq]
+    intro _ h
+    rw [dif_neg h]; rw [sum_mult_mul_log]
 
 Depends on / 依赖: Equiv.optionSubtype, Equiv.subtypeEquiv, InfinitePlace, abs_mul, abs_neg_one_pow, det_eq_sum_row_mul_submatrix_succAbove_succAbove_det, det_reindex_self, e.symm, f.sym, f.symm, f.symm.sum_comp, finSuccAboveEquiv, finSuccEquiv, one_mul, optionSubtype, reindex_apply, simp_rw, submatrix_submatrix, subtypeEquiv, sum_comp
 -/
@@ -770,7 +868,16 @@ theorem regOfFamily_div_regOfFamily
   classical
   by_cases hu : IsMaxRank u
   · have : span Int (Set.range (basisOfIsMaxRank hu)) <= span Int (Set.range (basisOfIsMaxRank hv)) := by
-      rw [← toAddSubgroup_le]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.
+      rw [← toAddSubgroup_le]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range u)).toAddSubgroup]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range v)).toAddSubgroup]; rw [← SupHomClass.map_sup]; rw [← SupHomClass.map_sup]
+exact AddSubgroup.map_mono (OrderIso.le_iff_le Subgroup.toAddSubgroup).mpr h
+    rw [regOfFamily_of_isMaxRank hu]; rw [regOfFamily_of_isMaxRank hv]; rw [covolume_div_covolume_eq_relIndex _ _ this]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [AddSubgroup.relIndex_map_map]; rw [logEmbedding_ker]; rw [← OrderIso.map_sup]; rw [← OrderIso.map_sup]; rw [← Subgroup.relIndex_toAddSubgroup]
+  · rw [regOfFamily_eq_zero hu, zero_div, eq_comm, Nat.cast_eq_zero]
+    have : (Subgroup.closure (Set.range v) ⊔ torsion K).index != 0 := by
+      rw [← Subgroup.finiteIndex_iff]; rw [← finiteIndex_iff_sup_torsion_finiteIndex]
+      exact isMaxRank_iff_closure_finiteIndex.mp hv
+    rwa [← mul_eq_zero_iff_right this, Subgroup.relIndex_mul_index h,
+      ← Subgroup.not_finiteIndex_iff, ← finiteIndex_iff_sup_torsion_finiteIndex,
+      ← isMaxRank_iff_closure_finiteIndex.not]
 
 中文:
 定理 regOfFamily_div_regOfFamily
@@ -779,7 +886,16 @@ theorem regOfFamily_div_regOfFamily
   classical
   by_cases hu : IsMaxRank u
   · have : span Int (Set.range (basisOfIsMaxRank hu)) <= span Int (Set.range (basisOfIsMaxRank hv)) := by
-      rw [← toAddSubgroup_le]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.
+      rw [← toAddSubgroup_le]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range u)).toAddSubgroup]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range v)).toAddSubgroup]; rw [← SupHomClass.map_sup]; rw [← SupHomClass.map_sup]
+exact AddSubgroup.map_mono (OrderIso.le_iff_le Subgroup.toAddSubgroup).mpr h
+    rw [regOfFamily_of_isMaxRank hu]; rw [regOfFamily_of_isMaxRank hv]; rw [covolume_div_covolume_eq_relIndex _ _ this]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [AddSubgroup.relIndex_map_map]; rw [logEmbedding_ker]; rw [← OrderIso.map_sup]; rw [← OrderIso.map_sup]; rw [← Subgroup.relIndex_toAddSubgroup]
+  · rw [regOfFamily_eq_zero hu, zero_div, eq_comm, Nat.cast_eq_zero]
+    have : (Subgroup.closure (Set.range v) ⊔ torsion K).index != 0 := by
+      rw [← Subgroup.finiteIndex_iff]; rw [← finiteIndex_iff_sup_torsion_finiteIndex]
+      exact isMaxRank_iff_closure_finiteIndex.mp hv
+    rwa [← mul_eq_zero_iff_right this, Subgroup.relIndex_mul_index h,
+      ← Subgroup.not_finiteIndex_iff, ← finiteIndex_iff_sup_torsion_finiteIndex,
+      ← isMaxRank_iff_closure_finiteIndex.not]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.map_mono, IsMaxRank, OrderIso, OrderIso.le_iff_le, Set.range, Subgroup, Subgroup.closure, SupHomClass, SupHomClass.map_sup, basisOfIsMaxRank, classical, closure, le_iff_le, map_logEmbedding_sup_torsion, map_mono, map_sup, span_basisOfIsMaxRank, toAddSubgroup, toAddSubgroup_le
 -/

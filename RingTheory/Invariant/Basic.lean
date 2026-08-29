@@ -337,7 +337,15 @@ theorem exists_smul_of_under_eq
     intro P Q hP hQ hPQ
     rw [← Ideal.subset_union_prime 1 1 (fun _ _ _ _ => hP.smul _)]
     intro b hb
-    suffices h : exists g in Fi
+    suffices h : exists g in Finset.univ, g • b in P by
+      obtain ⟨g, -, hg⟩ := h
+      apply Set.mem_biUnion (Finset.mem_univ g⁻¹) (Ideal.mem_inv_pointwise_smul_iff.mpr hg)
+    obtain ⟨a, ha⟩ := isInvariant (A := A) (∏ g : G, g • b) (Finset.smul_prod_perm b)
+    rw [← hP.prod_mem_iff]; rw [← ha]; rw [← P.mem_comap]; rw [← P.under_def A]; rw [hPQ]; rw [Q.mem_comap]; rw [ha]; rw [hQ.prod_mem_iff]
+    exact ⟨1, Finset.mem_univ 1, (one_smul G b).symm ▸ hb⟩
+  obtain ⟨g, -, hg⟩ := this P Q hPQ
+  obtain ⟨g', -, hg'⟩ := this Q (g • P) ((P.under_smul A g).trans hPQ).symm
+  exact ⟨g, le_antisymm hg (smul_eq_of_le_smul (hg.trans hg') ▸ hg')⟩
 
 中文:
 定理 存在_smul_of_under_eq
@@ -349,7 +357,15 @@ theorem exists_smul_of_under_eq
     intro P Q hP hQ hPQ
     rw [← Ideal.subset_union_prime 1 1 (fun _ _ _ _ => hP.smul _)]
     intro b hb
-    suffices h : exists g in Fi
+    suffices h : exists g in Finset.univ, g • b in P by
+      obtain ⟨g, -, hg⟩ := h
+      apply Set.mem_biUnion (Finset.mem_univ g⁻¹) (Ideal.mem_inv_pointwise_smul_iff.mpr hg)
+    obtain ⟨a, ha⟩ := isInvariant (A := A) (∏ g : G, g • b) (Finset.smul_prod_perm b)
+    rw [← hP.prod_mem_iff]; rw [← ha]; rw [← P.mem_comap]; rw [← P.under_def A]; rw [hPQ]; rw [Q.mem_comap]; rw [ha]; rw [hQ.prod_mem_iff]
+    exact ⟨1, Finset.mem_univ 1, (one_smul G b).symm ▸ hb⟩
+  obtain ⟨g, -, hg⟩ := this P Q hPQ
+  obtain ⟨g', -, hg'⟩ := this Q (g • P) ((P.under_smul A g).trans hPQ).symm
+  exact ⟨g, le_antisymm hg (smul_eq_of_le_smul (hg.trans hg') ▸ hg')⟩
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.smul_prod_perm, Finset.univ, Ideal.mem_inv_pointwise_smul_iff.mpr, Ideal.subset_union_prime, IsPrime, P.IsPrime, P.under, Q.IsPrime, Q.under, Set.mem_biUnion, hP.p, hP.smul, isInvariant, mem_biUnion, mem_inv_pointwise_smul_iff, mem_univ, nonempty_fintype, smul_prod_perm
 -/
@@ -433,7 +449,50 @@ theorem fixed_of_fixed1_aux1
     rw [Ideal.IsPrime.inf_le' inferInstance]
     rintro ⟨g, hg1, hg2⟩
     exact (Finset.mem_filter.mp hg1).2 (smul_eq_of_smul_le hg2)
-  obtain ⟨b, hbP, hbQ⟩ := SetLike.not_le_
+  obtain ⟨b, hbP, hbQ⟩ := SetLike.not_le_iff_exists.mp h1
+  replace hbP : forall g : G, g • Q != Q -> b in g • Q :=
+    fun g hg => (Finset.inf_le (Finset.mem_filter.mpr ⟨Finset.mem_univ g, hg⟩) : P <= g • Q) hbP
+  let f := MulSemiringAction.charpoly G b
+  obtain ⟨q, hq, hq0⟩ :=
+    (f.map (algebraMap B (B ⧸ Q))).exists_eq_pow_rootMultiplicity_mul_and_not_dvd
+      (Polynomial.map_monic_ne_zero (MulSemiringAction.monic_charpoly G b)) 0
+  rw [map_zero]; rw [sub_zero] at hq hq0
+  let j := (f.map (algebraMap B (B ⧸ Q))).rootMultiplicity 0
+  let k := q.natDegree
+  let r := ∑ i in Finset.range (k + 1), Polynomial.monomial i (f.coeff (i + j))
+  have hr : r.map (algebraMap B (B ⧸ Q)) = q := by
+    ext n
+    rw [Polynomial.coeff_map]; rw [Polynomial.finsetSum_coeff]
+    simp only [Polynomial.coeff_monomial, Finset.sum_ite_eq', Finset.mem_range_succ_iff]
+    split_ifs with hn
+    · rw [← Polynomial.coeff_map, hq, Polynomial.coeff_X_pow_mul]
+    · rw [map_zero, eq_comm, Polynomial.coeff_eq_zero_of_natDegree_lt (lt_of_not_ge hn)]
+  have hf : f.eval b = 0 := MulSemiringAction.eval_charpoly G b
+  have hr : r.eval b in Q := by
+    rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [← Ideal.Quotient.algebraMap_eq] at hbQ ⊢
+    replace hf := congrArg (algebraMap B (B ⧸ Q)) hf
+    rw [← Polynomial.eval₂_at_apply]; rw [← Polynomial.eval_map] at hf ⊢
+    rwa [map_zero, hq, ← hr, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_X,
+      mul_eq_zero, or_iff_right (pow_ne_zero _ hbQ)] at hf
+  let a := f.coeff j
+  have ha : forall g : G, g • a = a := MulSemiringAction.smul_coeff_charpoly b j
+  have hr' : forall g : G, g • Q != Q -> a - r.eval b in g • Q := by
+    intro g hg
+    have hr : r = ∑ i in Finset.range (k + 1), Polynomial.monomial i (f.coeff (i + j)) := rfl
+    rw [← Ideal.neg_mem_iff]; rw [neg_sub]; rw [hr]; rw [Finset.sum_range_succ']; rw [Polynomial.eval_add]; rw [Polynomial.eval_monomial]; rw [zero_add]; rw [pow_zero]; rw [mul_one]; rw [add_sub_cancel_right]
+    simp only [← Polynomial.monomial_mul_X]
+    rw [← Finset.sum_mul]; rw [Polynomial.eval_mul_X]
+    exact Ideal.mul_mem_left (g • Q) _ (hbP g hg)
+  refine ⟨a, a - r.eval b, ha, ?_, fun h => ?_⟩
+  · rwa [← Ideal.Quotient.eq_zero_iff_mem, ← Ideal.Quotient.algebraMap_eq, ← Polynomial.coeff_map,
+      ← zero_add j, hq, Polynomial.coeff_X_pow_mul, ← Polynomial.X_dvd_iff]
+  · rw [← sub_eq_zero, ← map_sub, Ideal.Quotient.algebraMap_eq, Ideal.Quotient.eq_zero_iff_mem,
+      ← Ideal.smul_mem_pointwise_smul_iff (a := h⁻¹), smul_sub, inv_smul_smul]
+    simp only [← eq_inv_smul_iff (g := h), eq_comm (a := Q)]
+    split_ifs with hh
+    · rwa [ha, sub_sub_cancel_left, hh, Q.neg_mem_iff]
+    · rw [smul_zero, sub_zero]
+      exact hr' h⁻¹ hh
 
 中文:
 定理 fixed_of_fixed1_aux1
@@ -444,7 +503,50 @@ theorem fixed_of_fixed1_aux1
     rw [Ideal.IsPrime.inf_le' inferInstance]
     rintro ⟨g, hg1, hg2⟩
     exact (Finset.mem_filter.mp hg1).2 (smul_eq_of_smul_le hg2)
-  obtain ⟨b, hbP, hbQ⟩ := SetLike.not_le_
+  obtain ⟨b, hbP, hbQ⟩ := SetLike.not_le_iff_exists.mp h1
+  replace hbP : forall g : G, g • Q != Q -> b in g • Q :=
+    fun g hg => (Finset.inf_le (Finset.mem_filter.mpr ⟨Finset.mem_univ g, hg⟩) : P <= g • Q) hbP
+  let f := MulSemiringAction.charpoly G b
+  obtain ⟨q, hq, hq0⟩ :=
+    (f.map (algebraMap B (B ⧸ Q))).exists_eq_pow_rootMultiplicity_mul_and_not_dvd
+      (Polynomial.map_monic_ne_zero (MulSemiringAction.monic_charpoly G b)) 0
+  rw [map_zero]; rw [sub_zero] at hq hq0
+  let j := (f.map (algebraMap B (B ⧸ Q))).rootMultiplicity 0
+  let k := q.natDegree
+  let r := ∑ i in Finset.range (k + 1), Polynomial.monomial i (f.coeff (i + j))
+  have hr : r.map (algebraMap B (B ⧸ Q)) = q := by
+    ext n
+    rw [Polynomial.coeff_map]; rw [Polynomial.finsetSum_coeff]
+    simp only [Polynomial.coeff_monomial, Finset.sum_ite_eq', Finset.mem_range_succ_iff]
+    split_ifs with hn
+    · rw [← Polynomial.coeff_map, hq, Polynomial.coeff_X_pow_mul]
+    · rw [map_zero, eq_comm, Polynomial.coeff_eq_zero_of_natDegree_lt (lt_of_not_ge hn)]
+  have hf : f.eval b = 0 := MulSemiringAction.eval_charpoly G b
+  have hr : r.eval b in Q := by
+    rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [← Ideal.Quotient.algebraMap_eq] at hbQ ⊢
+    replace hf := congrArg (algebraMap B (B ⧸ Q)) hf
+    rw [← Polynomial.eval₂_at_apply]; rw [← Polynomial.eval_map] at hf ⊢
+    rwa [map_zero, hq, ← hr, Polynomial.eval_mul, Polynomial.eval_pow, Polynomial.eval_X,
+      mul_eq_zero, or_iff_right (pow_ne_zero _ hbQ)] at hf
+  let a := f.coeff j
+  have ha : forall g : G, g • a = a := MulSemiringAction.smul_coeff_charpoly b j
+  have hr' : forall g : G, g • Q != Q -> a - r.eval b in g • Q := by
+    intro g hg
+    have hr : r = ∑ i in Finset.range (k + 1), Polynomial.monomial i (f.coeff (i + j)) := rfl
+    rw [← Ideal.neg_mem_iff]; rw [neg_sub]; rw [hr]; rw [Finset.sum_range_succ']; rw [Polynomial.eval_add]; rw [Polynomial.eval_monomial]; rw [zero_add]; rw [pow_zero]; rw [mul_one]; rw [add_sub_cancel_right]
+    simp only [← Polynomial.monomial_mul_X]
+    rw [← Finset.sum_mul]; rw [Polynomial.eval_mul_X]
+    exact Ideal.mul_mem_left (g • Q) _ (hbP g hg)
+  refine ⟨a, a - r.eval b, ha, ?_, fun h => ?_⟩
+  · rwa [← Ideal.Quotient.eq_zero_iff_mem, ← Ideal.Quotient.algebraMap_eq, ← Polynomial.coeff_map,
+      ← zero_add j, hq, Polynomial.coeff_X_pow_mul, ← Polynomial.X_dvd_iff]
+  · rw [← sub_eq_zero, ← map_sub, Ideal.Quotient.algebraMap_eq, Ideal.Quotient.eq_zero_iff_mem,
+      ← Ideal.smul_mem_pointwise_smul_iff (a := h⁻¹), smul_sub, inv_smul_smul]
+    simp only [← eq_inv_smul_iff (g := h), eq_comm (a := Q)]
+    split_ifs with hh
+    · rwa [ha, sub_sub_cancel_left, hh, Q.neg_mem_iff]
+    · rw [smul_zero, sub_zero]
+      exact hr' h⁻¹ hh
 -/
 private theorem fixed_of_fixed1_aux1 :
     exists a b : B, (forall g : G, g • a = a) ∧ a ∉ Q ∧
@@ -552,7 +654,9 @@ theorem fixed_of_fixed1_aux3
   have hf := congrArg (eval b) (congrArg (Polynomial.mapAlgHom f.toAlgHom) h)
   rw [coe_mapAlgHom]; rw [map_map]; rw [f.toAlgHom.comp_algebraMap]; rw [h] at hf
   simp_rw [Polynomial.map_mul, Polynomial.map_pow, Polynomial.map_sub, map_X, map_C,
-    eval
+    eval_mul, eval_pow, eval_sub, eval_X, eval_C, sub_self, zero_pow hi, zero_mul,
+    zero_eq_mul, or_iff_left (pow_ne_zero j ha), pow_eq_zero_iff hi, sub_eq_zero] at hf
+  exact hf.symm
 
 中文:
 定理 fixed_of_fixed1_aux3
@@ -563,7 +667,9 @@ theorem fixed_of_fixed1_aux3
   have hf := congrArg (eval b) (congrArg (Polynomial.mapAlgHom f.toAlgHom) h)
   rw [coe_mapAlgHom]; rw [map_map]; rw [f.toAlgHom.comp_algebraMap]; rw [h] at hf
   simp_rw [Polynomial.map_mul, Polynomial.map_pow, Polynomial.map_sub, map_X, map_C,
-    eval
+    eval_mul, eval_pow, eval_sub, eval_X, eval_C, sub_self, zero_pow hi, zero_mul,
+    zero_eq_mul, or_iff_left (pow_ne_zero j ha), pow_eq_zero_iff hi, sub_eq_zero] at hf
+  exact hf.symm
 -/
 private theorem fixed_of_fixed1_aux3 [NoZeroDivisors B] {b : B} {i j : Nat} {p : Polynomial A}
     (h : p.map (algebraMap A B) = (X - C b) ^ i * X ^ j) (f : B ≃ₐ[A] B) (hi : i != 0) :
@@ -589,7 +695,27 @@ theorem fixed_of_fixed1
   rw [← Ideal.Quotient.algebraMap_eq]
   obtain ⟨a, b, ha1, ha2, hb⟩ := fixed_of_fixed1_aux2 G Q b₀ (fun g hg => hx ⟨g, hg⟩)
   obtain ⟨M, key⟩ := (mem_lifts _).mp (Algebra.IsInvariant.charpoly_mem_lifts A B G b)
-  repl
+  replace key := congrArg (map (algebraMap B (B ⧸ Q))) key
+  rw [map_map]; rw [← algebraMap_eq]; rw [algebraMap_eq A (A ⧸ P) (B ⧸ Q)]; rw [← map_map]; rw [MulSemiringAction.charpoly]; rw [Polynomial.map_prod] at key
+  have key₀ : forall g : G, (X - C (g • b)).map (algebraMap B (B ⧸ Q)) =
+      if g • Q = Q then X - C (algebraMap B (B ⧸ Q) (a * b₀)) else X := by
+    intro g
+    rw [Polynomial.map_sub]; rw [map_X]; rw [map_C]; rw [hb]
+    split_ifs
+    · rfl
+    · rw [map_zero, map_zero, sub_zero]
+  simp only [key₀, Finset.prod_ite, Finset.prod_const] at key
+  replace key := congrArg (map (algebraMap (B ⧸ Q) L)) key
+  rw [map_map]; rw [← algebraMap_eq]; rw [algebraMap_eq (A ⧸ P) K L]; rw [← map_map]; rw [Polynomial.map_mul]; rw [Polynomial.map_pow]; rw [Polynomial.map_pow]; rw [Polynomial.map_sub]; rw [map_X]; rw [map_C] at key
+  replace key := fixed_of_fixed1_aux3 key f (Finset.card_ne_zero_of_mem
+    (Finset.mem_filter.mpr ⟨Finset.mem_univ 1, one_smul G Q⟩))
+  simp only [map_mul] at key
+  obtain ⟨a, rfl⟩ := Algebra.IsInvariant.isInvariant (A := A) a ha1
+  rwa [← algebraMap_apply A B (B ⧸ Q), algebraMap_apply A (A ⧸ P) (B ⧸ Q),
+      ← algebraMap_apply, algebraMap_apply (A ⧸ P) K L, f.commutes, mul_right_inj'] at key
+  rwa [← algebraMap_apply, algebraMap_apply (A ⧸ P) (B ⧸ Q) L,
+      ← algebraMap_apply A (A ⧸ P) (B ⧸ Q), algebraMap_apply A B (B ⧸ Q),
+      Ne, algebraMap_eq_zero_iff, Ideal.Quotient.algebraMap_eq, Ideal.Quotient.eq_zero_iff_mem]
 
 中文:
 定理 fixed_of_fixed1
@@ -600,7 +726,27 @@ theorem fixed_of_fixed1
   rw [← Ideal.Quotient.algebraMap_eq]
   obtain ⟨a, b, ha1, ha2, hb⟩ := fixed_of_fixed1_aux2 G Q b₀ (fun g hg => hx ⟨g, hg⟩)
   obtain ⟨M, key⟩ := (mem_lifts _).mp (Algebra.IsInvariant.charpoly_mem_lifts A B G b)
-  repl
+  replace key := congrArg (map (algebraMap B (B ⧸ Q))) key
+  rw [map_map]; rw [← algebraMap_eq]; rw [algebraMap_eq A (A ⧸ P) (B ⧸ Q)]; rw [← map_map]; rw [MulSemiringAction.charpoly]; rw [Polynomial.map_prod] at key
+  have key₀ : forall g : G, (X - C (g • b)).map (algebraMap B (B ⧸ Q)) =
+      if g • Q = Q then X - C (algebraMap B (B ⧸ Q) (a * b₀)) else X := by
+    intro g
+    rw [Polynomial.map_sub]; rw [map_X]; rw [map_C]; rw [hb]
+    split_ifs
+    · rfl
+    · rw [map_zero, map_zero, sub_zero]
+  simp only [key₀, Finset.prod_ite, Finset.prod_const] at key
+  replace key := congrArg (map (algebraMap (B ⧸ Q) L)) key
+  rw [map_map]; rw [← algebraMap_eq]; rw [algebraMap_eq (A ⧸ P) K L]; rw [← map_map]; rw [Polynomial.map_mul]; rw [Polynomial.map_pow]; rw [Polynomial.map_pow]; rw [Polynomial.map_sub]; rw [map_X]; rw [map_C] at key
+  replace key := fixed_of_fixed1_aux3 key f (Finset.card_ne_zero_of_mem
+    (Finset.mem_filter.mpr ⟨Finset.mem_univ 1, one_smul G Q⟩))
+  simp only [map_mul] at key
+  obtain ⟨a, rfl⟩ := Algebra.IsInvariant.isInvariant (A := A) a ha1
+  rwa [← algebraMap_apply A B (B ⧸ Q), algebraMap_apply A (A ⧸ P) (B ⧸ Q),
+      ← algebraMap_apply, algebraMap_apply (A ⧸ P) K L, f.commutes, mul_right_inj'] at key
+  rwa [← algebraMap_apply, algebraMap_apply (A ⧸ P) (B ⧸ Q) L,
+      ← algebraMap_apply A (A ⧸ P) (B ⧸ Q), algebraMap_apply A B (B ⧸ Q),
+      Ne, algebraMap_eq_zero_iff, Ideal.Quotient.algebraMap_eq, Ideal.Quotient.eq_zero_iff_mem]
 -/
 private theorem fixed_of_fixed1 [Module.IsTorsionFree (B ⧸ Q) L] (f : Gal(L/K)) (b : B ⧸ Q)
     (hx : forall g : MulAction.stabilizer G Q, Ideal.Quotient.stabilizerHom Q P G g b = b) :
@@ -720,7 +866,20 @@ theorem fixed_of_fixed2
   have : P.IsPrime := Ideal.over_def Q P ▸ Ideal.IsPrime.under A Q
   have : Algebra.IsIntegral A B := Algebra.IsInvariant.isIntegral A B G
   obtain ⟨x, y, hy, rfl⟩ := IsFractionRing.div_surjective (B ⧸ Q) x
-  obtain ⟨b, a, ha, h⟩ := (Algebra.IsAlgebraic.isAlgebr
+  obtain ⟨b, a, ha, h⟩ := (Algebra.IsAlgebraic.isAlgebraic (R := A ⧸ P) y).exists_smul_eq_mul x hy
+  replace ha : algebraMap (A ⧸ P) L a != 0 := by
+    rwa [Ne, algebraMap_apply (A ⧸ P) K L, algebraMap_eq_zero_iff, algebraMap_eq_zero_iff]
+  replace hy : algebraMap (B ⧸ Q) L y != 0 :=
+    mt (algebraMap_eq_zero_iff (B ⧸ Q) L).mp (nonZeroDivisors.ne_zero hy)
+  replace h : algebraMap (B ⧸ Q) L x / algebraMap (B ⧸ Q) L y =
+      algebraMap (B ⧸ Q) L b / algebraMap (A ⧸ P) L a := by
+    rw [mul_comm]; rw [Algebra.smul_def]; rw [mul_comm] at h
+    rw [div_eq_div_iff hy ha]; rw [← map_mul]; rw [← h]; rw [map_mul]; rw [← algebraMap_apply]
+  simp only [h, map_div₀, algebraMap_apply (A ⧸ P) K L, AlgEquiv.commutes] at hx ⊢
+  simp only [← algebraMap_apply, div_left_inj' ha] at hx ⊢
+  exact fixed_of_fixed1 G P Q K L f b (fun g => IsFractionRing.injective (B ⧸ Q) L
+    ((IsFractionRing.fieldEquivOfAlgEquiv_algebraMap K L L
+      (Ideal.Quotient.stabilizerHom Q P G g) b).symm.trans (hx g)))
 
 中文:
 定理 fixed_of_fixed2
@@ -730,7 +889,20 @@ theorem fixed_of_fixed2
   have : P.IsPrime := Ideal.over_def Q P ▸ Ideal.IsPrime.under A Q
   have : Algebra.IsIntegral A B := Algebra.IsInvariant.isIntegral A B G
   obtain ⟨x, y, hy, rfl⟩ := IsFractionRing.div_surjective (B ⧸ Q) x
-  obtain ⟨b, a, ha, h⟩ := (Algebra.IsAlgebraic.isAlgebr
+  obtain ⟨b, a, ha, h⟩ := (Algebra.IsAlgebraic.isAlgebraic (R := A ⧸ P) y).exists_smul_eq_mul x hy
+  replace ha : algebraMap (A ⧸ P) L a != 0 := by
+    rwa [Ne, algebraMap_apply (A ⧸ P) K L, algebraMap_eq_zero_iff, algebraMap_eq_zero_iff]
+  replace hy : algebraMap (B ⧸ Q) L y != 0 :=
+    mt (algebraMap_eq_zero_iff (B ⧸ Q) L).mp (nonZeroDivisors.ne_zero hy)
+  replace h : algebraMap (B ⧸ Q) L x / algebraMap (B ⧸ Q) L y =
+      algebraMap (B ⧸ Q) L b / algebraMap (A ⧸ P) L a := by
+    rw [mul_comm]; rw [Algebra.smul_def]; rw [mul_comm] at h
+    rw [div_eq_div_iff hy ha]; rw [← map_mul]; rw [← h]; rw [map_mul]; rw [← algebraMap_apply]
+  simp only [h, map_div₀, algebraMap_apply (A ⧸ P) K L, AlgEquiv.commutes] at hx ⊢
+  simp only [← algebraMap_apply, div_left_inj' ha] at hx ⊢
+  exact fixed_of_fixed1 G P Q K L f b (fun g => IsFractionRing.injective (B ⧸ Q) L
+    ((IsFractionRing.fieldEquivOfAlgEquiv_algebraMap K L L
+      (Ideal.Quotient.stabilizerHom Q P G g) b).symm.trans (hx g)))
 -/
 private theorem fixed_of_fixed2 (f : Gal(L/K)) (x : L)
     (hx : forall g : MulAction.stabilizer G Q, IsFractionRing.stabilizerHom G P Q K L g x = x) :
@@ -795,7 +967,9 @@ theorem Ideal.Quotient.stabilizerHom_surjective
   let _ := FractionRing.liftAlgebra (A ⧸ P) (FractionRing (B ⧸ Q))
   have key := IsFractionRing.stabilizerHom_surjective G P Q
     (FractionRing (A ⧸ P)) (FractionRing (B ⧸ Q))
-  rw [IsFractionRing.stabilizerHom]; rw [MonoidHom.co
+  rw [IsFractionRing.stabilizerHom]; rw [MonoidHom.coe_comp] at key
+  exact key.of_comp_left (IsFractionRing.fieldEquivOfAlgEquivHom_injective (A ⧸ P) (B ⧸ Q)
+    (FractionRing (A ⧸ P)) (FractionRing (B ⧸ Q)))
 
 中文:
 定理 理想.商.stabilizerHom_surjective
@@ -804,7 +978,9 @@ theorem Ideal.Quotient.stabilizerHom_surjective
   let _ := FractionRing.liftAlgebra (A ⧸ P) (FractionRing (B ⧸ Q))
   have key := IsFractionRing.stabilizerHom_surjective G P Q
     (FractionRing (A ⧸ P)) (FractionRing (B ⧸ Q))
-  rw [IsFractionRing.stabilizerHom]; rw [MonoidHom.co
+  rw [IsFractionRing.stabilizerHom]; rw [MonoidHom.coe_comp] at key
+  exact key.of_comp_left (IsFractionRing.fieldEquivOfAlgEquivHom_injective (A ⧸ P) (B ⧸ Q)
+    (FractionRing (A ⧸ P)) (FractionRing (B ⧸ Q)))
 
 Depends on / 依赖: FractionRing, FractionRing.liftAlgebra, Ideal.IsPrime.under, Ideal.over_def, IsFractionRing, IsFractionRing.fieldEquivOfAlgEquivHom_injective, IsFractionRing.stabilizerHom, IsFractionRing.stabilizerHom_surjective, IsPrime, MonoidHom, MonoidHom.coe_comp, P.IsPrime, coe_comp, fieldEquivOfAlgEquivHom_injective, key.of_comp_left, liftAlgebra, of_comp_left, over_def, stabilizerHom, stabilizerHom_surjective
 -/
@@ -926,7 +1102,30 @@ lemma Ideal.Quotient.exists_algHom_fixedPoint_quotient_under
   have hf : Function.Injective f := FaithfulSMul.algebraMap_injective _ _
   suffices (σ.comp f).range <= f.range by
     let e := (AlgEquiv.ofInjective f hf)
-    exact ⟨(e.symm.toAlgHom.comp (Subalgebra.inclusion this)).comp (σ.comp f)
+    exact ⟨(e.symm.toAlgHom.comp (Subalgebra.inclusion this)).comp (σ.comp f).rangeRestrict,
+      fun x => congr_arg Subtype.val (e.apply_symm_apply ⟨_, _⟩)⟩
+  rintro _ ⟨x, rfl⟩
+  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+  cases nonempty_fintype G
+  algebraize [(algebraMap (A ⧸ P) k).comp (algebraMap A (A ⧸ P)),
+    (algebraMap (B ⧸ Q) k).comp (algebraMap B (B ⧸ Q))]
+  have : IsScalarTower A (B ⧸ Q) k := .of_algebraMap_eq fun x =>
+    (IsScalarTower.algebraMap_apply (A ⧸ P) (B ⧸ Q) k (mk P x))
+  have : IsScalarTower A B k := .of_algebraMap_eq fun x =>
+    (IsScalarTower.algebraMap_apply (A ⧸ P) (B ⧸ Q) k (mk P x))
+  obtain ⟨P, hp⟩ := Algebra.IsInvariant.charpoly_mem_lifts A B G x
+  have : Polynomial.aeval x P = 0 := by
+    rw [Polynomial.aeval_def]; rw [← Polynomial.eval_map]; rw [← Polynomial.coe_mapRingHom (R := A)]; rw [hp]; rw [MulSemiringAction.eval_charpoly]
+  have : Polynomial.aeval (σ (algebraMap (B ⧸ Q) k (mk _ x))) P = 0 := by
+    refine (DFunLike.congr_fun (Polynomial.aeval_algHom ((σ.restrictScalars A).comp
+      (IsScalarTower.toAlgHom A (B ⧸ Q) k)) _) P).trans ?_
+    rw [AlgHom.comp_apply]; rw [← algebraMap_eq]; rw [Polynomial.aeval_algebraMap_apply]; rw [this]; rw [map_zero]; rw [map_zero]
+  rw [← Polynomial.aeval_map_algebraMap B]; rw [← Polynomial.coe_mapRingHom]; rw [hp] at this
+  obtain ⟨τ, hτ⟩ : exists τ : G, σ (algebraMap _ _ x) = algebraMap _ _ (τ • x) := by
+    simpa [MulSemiringAction.charpoly, sub_eq_zero, Finset.prod_eq_zero_iff] using! this
+  exact ⟨Ideal.Quotient.mk _ (τ • x), hτ.symm⟩
+
+include G in
 
 中文:
 引理 理想.商.存在_algHom_fixedPoint_quotient_under
@@ -935,7 +1134,30 @@ lemma Ideal.Quotient.exists_algHom_fixedPoint_quotient_under
   have hf : Function.Injective f := FaithfulSMul.algebraMap_injective _ _
   suffices (σ.comp f).range <= f.range by
     let e := (AlgEquiv.ofInjective f hf)
-    exact ⟨(e.symm.toAlgHom.comp (Subalgebra.inclusion this)).comp (σ.comp f)
+    exact ⟨(e.symm.toAlgHom.comp (Subalgebra.inclusion this)).comp (σ.comp f).rangeRestrict,
+      fun x => congr_arg Subtype.val (e.apply_symm_apply ⟨_, _⟩)⟩
+  rintro _ ⟨x, rfl⟩
+  obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+  cases nonempty_fintype G
+  algebraize [(algebraMap (A ⧸ P) k).comp (algebraMap A (A ⧸ P)),
+    (algebraMap (B ⧸ Q) k).comp (algebraMap B (B ⧸ Q))]
+  have : IsScalarTower A (B ⧸ Q) k := .of_algebraMap_eq fun x =>
+    (IsScalarTower.algebraMap_apply (A ⧸ P) (B ⧸ Q) k (mk P x))
+  have : IsScalarTower A B k := .of_algebraMap_eq fun x =>
+    (IsScalarTower.algebraMap_apply (A ⧸ P) (B ⧸ Q) k (mk P x))
+  obtain ⟨P, hp⟩ := Algebra.IsInvariant.charpoly_mem_lifts A B G x
+  have : Polynomial.aeval x P = 0 := by
+    rw [Polynomial.aeval_def]; rw [← Polynomial.eval_map]; rw [← Polynomial.coe_mapRingHom (R := A)]; rw [hp]; rw [MulSemiringAction.eval_charpoly]
+  have : Polynomial.aeval (σ (algebraMap (B ⧸ Q) k (mk _ x))) P = 0 := by
+    refine (DFunLike.congr_fun (Polynomial.aeval_algHom ((σ.restrictScalars A).comp
+      (IsScalarTower.toAlgHom A (B ⧸ Q) k)) _) P).trans ?_
+    rw [AlgHom.comp_apply]; rw [← algebraMap_eq]; rw [Polynomial.aeval_algebraMap_apply]; rw [this]; rw [map_zero]; rw [map_zero]
+  rw [← Polynomial.aeval_map_algebraMap B]; rw [← Polynomial.coe_mapRingHom]; rw [hp] at this
+  obtain ⟨τ, hτ⟩ : exists τ : G, σ (algebraMap _ _ x) = algebraMap _ _ (τ • x) := by
+    simpa [MulSemiringAction.charpoly, sub_eq_zero, Finset.prod_eq_zero_iff] using! this
+  exact ⟨Ideal.Quotient.mk _ (τ • x), hτ.symm⟩
+
+include G in
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjective, FaithfulSMul, FaithfulSMul.algebraMap_injective, Function, Function.Injective, Ideal.Quotient.mk_surjective, Injective, IsScalarTower, IsScalarTower.toAlgHom, Quotient, Subalgebra, Subalgebra.inclusion, Subtype, Subtype.val, algebraMap, algebraMap_injective, algebraize, apply_symm_apply, congr_arg
 -/
@@ -980,7 +1202,22 @@ lemma Ideal.Quotient.exists_algEquiv_fixedPoint_quotient_under
   let f : (B ⧸ Q) ->ₐ[A ⧸ P] k := IsScalarTower.toAlgHom _ _ _
   have hf : Function.Injective f := FaithfulSMul.algebraMap_injective _ _
   obtain ⟨τ₁, h₁⟩ := Ideal.Quotient.exists_algHom_fixedPoint_quotient_under G P Q σ.toAlgHom
-  obtain ⟨τ₂, h₂⟩ := Ideal.Quotient.exists_algHom_fixedPoint_quotie
+  obtain ⟨τ₂, h₂⟩ := Ideal.Quotient.exists_algHom_fixedPoint_quotient_under G P Q σ.symm.toAlgHom
+  refine ⟨{ __ := τ₁, invFun := τ₂, left_inv := ?_, right_inv := ?_ }, h₁⟩
+  · intro x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    obtain ⟨y, e⟩ := Ideal.Quotient.mk_surjective (τ₁ (Ideal.Quotient.mk Q x))
+    apply hf
+    dsimp [f] at h₁ h₂ ⊢
+    refine .trans ?_ (σ.symm_apply_apply _)
+    rw [← h₁]; rw [← e]; rw [h₂]
+  · intro x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    obtain ⟨y, e⟩ := Ideal.Quotient.mk_surjective (τ₂ (Ideal.Quotient.mk Q x))
+    apply hf
+    dsimp [f] at h₁ h₂ ⊢
+    refine .trans ?_ (σ.apply_symm_apply _)
+    rw [← h₂]; rw [← e]; rw [h₁]
 
 中文:
 引理 理想.商.存在_algEquiv_fixedPoint_quotient_under
@@ -988,7 +1225,22 @@ lemma Ideal.Quotient.exists_algEquiv_fixedPoint_quotient_under
   let f : (B ⧸ Q) ->ₐ[A ⧸ P] k := IsScalarTower.toAlgHom _ _ _
   have hf : Function.Injective f := FaithfulSMul.algebraMap_injective _ _
   obtain ⟨τ₁, h₁⟩ := Ideal.Quotient.exists_algHom_fixedPoint_quotient_under G P Q σ.toAlgHom
-  obtain ⟨τ₂, h₂⟩ := Ideal.Quotient.exists_algHom_fixedPoint_quotie
+  obtain ⟨τ₂, h₂⟩ := Ideal.Quotient.exists_algHom_fixedPoint_quotient_under G P Q σ.symm.toAlgHom
+  refine ⟨{ __ := τ₁, invFun := τ₂, left_inv := ?_, right_inv := ?_ }, h₁⟩
+  · intro x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    obtain ⟨y, e⟩ := Ideal.Quotient.mk_surjective (τ₁ (Ideal.Quotient.mk Q x))
+    apply hf
+    dsimp [f] at h₁ h₂ ⊢
+    refine .trans ?_ (σ.symm_apply_apply _)
+    rw [← h₁]; rw [← e]; rw [h₂]
+  · intro x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    obtain ⟨y, e⟩ := Ideal.Quotient.mk_surjective (τ₂ (Ideal.Quotient.mk Q x))
+    apply hf
+    dsimp [f] at h₁ h₂ ⊢
+    refine .trans ?_ (σ.apply_symm_apply _)
+    rw [← h₂]; rw [← e]; rw [h₁]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, Function, Function.Injective, Ideal.Quotient.exists_algHom_fixedPoint_quotient_under, Ideal.Quotient.mk_surjectiv, Ideal.Quotient.mk_surjective, Injective, IsScalarTower, IsScalarTower.toAlgHom, Quotient, algebraMap_injective, exists_algHom_fixedPoint_quotient_under, invFun, left_inv, mk_surjectiv, mk_surjective, right_inv, symm.toAlgHom, toAlgHom
 -/
@@ -1037,7 +1289,21 @@ theorem isInvariant_of_isIntegral
   have hc (a : A) : (algebraMap K L) (algebraMap A K a) = (algebraMap B L) (algebraMap A B a) := by
     simp_rw [← IsScalarTower.algebraMap_apply]
   have : Nontrivial A := (IsFractionRing.nontrivial_iff_nontrivial A K).mpr inferInstance
-  have : Nontrivial B := (IsFractio
+  have : Nontrivial B := (IsFractionRing.nontrivial_iff_nontrivial B L).mpr inferInstance
+  obtain ⟨x, y, hy, rfl⟩ := IsFractionRing.div_surjective B x
+  have hy' : algebraMap B L y != 0 := by simpa using nonZeroDivisors.ne_zero hy
+  obtain ⟨b, a, ha, hb⟩ := (Algebra.IsAlgebraic.isAlgebraic (R := A) y).exists_smul_eq_mul x hy
+  rw [mul_comm]; rw [Algebra.smul_def]; rw [mul_comm] at hb
+  replace ha : (algebraMap B L) (algebraMap A B a) != 0 := by simpa [← hc]
+  have hxy : algebraMap B L x / algebraMap B L y =
+    algebraMap B L b / algebraMap B L (algebraMap A B a) := by
+    rw [div_eq_div_iff hy' ha]; rw [← map_mul]; rw [hb]; rw [map_mul]
+  obtain ⟨b, rfl⟩ := hAB.isInvariant b
+    (by simpa [ha, hxy, smul_div₀', ← algebraMap.coe_smul'] using h)
+  use algebraMap A K b / algebraMap A K a
+  rw [hxy]; rw [map_div₀]; rw [hc]; rw [hc]
+
+include A B in
 
 中文:
 定理 isInvariant_of_is整数egral
@@ -1048,7 +1314,21 @@ theorem isInvariant_of_isIntegral
   have hc (a : A) : (algebraMap K L) (algebraMap A K a) = (algebraMap B L) (algebraMap A B a) := by
     simp_rw [← IsScalarTower.algebraMap_apply]
   have : Nontrivial A := (IsFractionRing.nontrivial_iff_nontrivial A K).mpr inferInstance
-  have : Nontrivial B := (IsFractio
+  have : Nontrivial B := (IsFractionRing.nontrivial_iff_nontrivial B L).mpr inferInstance
+  obtain ⟨x, y, hy, rfl⟩ := IsFractionRing.div_surjective B x
+  have hy' : algebraMap B L y != 0 := by simpa using nonZeroDivisors.ne_zero hy
+  obtain ⟨b, a, ha, hb⟩ := (Algebra.IsAlgebraic.isAlgebraic (R := A) y).exists_smul_eq_mul x hy
+  rw [mul_comm]; rw [Algebra.smul_def]; rw [mul_comm] at hb
+  replace ha : (algebraMap B L) (algebraMap A B a) != 0 := by simpa [← hc]
+  have hxy : algebraMap B L x / algebraMap B L y =
+    algebraMap B L b / algebraMap B L (algebraMap A B a) := by
+    rw [div_eq_div_iff hy' ha]; rw [← map_mul]; rw [hb]; rw [map_mul]
+  obtain ⟨b, rfl⟩ := hAB.isInvariant b
+    (by simpa [ha, hxy, smul_div₀', ← algebraMap.coe_smul'] using h)
+  use algebraMap A K b / algebraMap A K a
+  rw [hxy]; rw [map_div₀]; rw [hc]; rw [hc]
+
+include A B in
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.div_surjective, IsFractionRing.nontrivial_iff_nontrivial, IsScalarTower, IsScalarTower.algebraMap_apply, Nontrivial, algebraMap, algebraMap_apply, div_surjective, ne_zero, nonZeroDivisors, nonZeroDivisors.ne_zero, nontrivial_iff_nontrivial, simp_rw
 -/

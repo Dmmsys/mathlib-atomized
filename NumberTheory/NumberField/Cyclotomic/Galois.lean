@@ -135,7 +135,11 @@ theorem galEquivZMod_restrictNormal_apply
   have hζ := IsCyclotomicExtension.zeta_spec m Rat F
   let ζ := IsCyclotomicExtension.zeta m Rat F
   suffices ζ ^ (galEquivZMod m F (σ.restrictNormal F)).val.val = ζ ^ (galEquivZMod n K σ).val.val by
-    rw [(hζ.isOfFinOrder (NeZero.ne _)).pow_inj_mod]; rw [← hζ.eq_orderOf]; rw [← ZMod.natCast_eq
+    rw [(hζ.isOfFinOrder (NeZero.ne _)).pow_inj_mod]; rw [← hζ.eq_orderOf]; rw [← ZMod.natCast_eq_natCast_iff']; rw [ZMod.natCast_val]; rw [ZMod.natCast_val]; rw [ZMod.cast_id] at this
+    rwa [Units.ext_iff]
+  apply FaithfulSMul.algebraMap_injective F K
+  rw [map_pow]; rw [map_pow]; rw [← galEquivZMod_apply_of_pow_eq]; rw [← AlgEquiv.restrictNormal_commutes]; rw [galEquivZMod_apply_of_pow_eq m _ _ hζ.pow_eq_one]; rw [map_pow]
+  rw [← map_pow]; rw [(hζ.pow_eq_one_iff_dvd _).mpr h]; rw [map_one]
 
 中文:
 定理 galEquivZMod_restrictNormal_apply
@@ -144,7 +148,11 @@ theorem galEquivZMod_restrictNormal_apply
   have hζ := IsCyclotomicExtension.zeta_spec m Rat F
   let ζ := IsCyclotomicExtension.zeta m Rat F
   suffices ζ ^ (galEquivZMod m F (σ.restrictNormal F)).val.val = ζ ^ (galEquivZMod n K σ).val.val by
-    rw [(hζ.isOfFinOrder (NeZero.ne _)).pow_inj_mod]; rw [← hζ.eq_orderOf]; rw [← ZMod.natCast_eq
+    rw [(hζ.isOfFinOrder (NeZero.ne _)).pow_inj_mod]; rw [← hζ.eq_orderOf]; rw [← ZMod.natCast_eq_natCast_iff']; rw [ZMod.natCast_val]; rw [ZMod.natCast_val]; rw [ZMod.cast_id] at this
+    rwa [Units.ext_iff]
+  apply FaithfulSMul.algebraMap_injective F K
+  rw [map_pow]; rw [map_pow]; rw [← galEquivZMod_apply_of_pow_eq]; rw [← AlgEquiv.restrictNormal_commutes]; rw [galEquivZMod_apply_of_pow_eq m _ _ hζ.pow_eq_one]; rw [map_pow]
+  rw [← map_pow]; rw [(hζ.pow_eq_one_iff_dvd _).mpr h]; rw [map_one]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsCyclotomicExtension, IsCyclotomicExtension.zeta, IsCyclotomicExtension.zeta_spec, NeZero, NeZero.ne, Units.ext_iff, ZMod.cast_id, ZMod.natCast_eq_natCast_iff, ZMod.natCast_val, algebraMap_injective, cast_id, eq_orderOf, ext_iff, galEquivZMod, galEquivZMod_apply_of_po, isOfFinOrder, map_pow, natCast_eq_natCast_iff
 -/
@@ -182,7 +190,22 @@ theorem mem_zpowers_galEquivZMod_of_mem_stabilizer
   let τ := IsFractionRing.stabilizerHom Gal(K/Rat) (Ideal.span {(p : Int)}) P
      (Int ⧸ span {(p : Int)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩
 have : CharP (Int ⧸ span {(p : Int)}) p := ringChar.of_eq Int.ringChar_idealQuot p
-  have : Finite (𝓞 K ⧸ P) := Ring.H
+  have : Finite (𝓞 K ⧸ P) := Ring.HasFiniteQuotients.finiteQuotient (NeZero.ne P)
+  obtain ⟨i, hi⟩ := FiniteField.exists_forall_apply_eq_pow (Int ⧸ span {(p : Int)}) p (𝓞 K ⧸ P) τ
+  refine ⟨i, ?_⟩
+  have h₀ : IsPrimitiveRoot (Ideal.Quotient.mk P hζ.toInteger) n := by
+    refine hζ.toInteger_isPrimitiveRoot.idealQuotient_mk
+      (by simpa using IsMaximal.ne_top inferInstance) ?_
+    rw [← pow_inertiaDeg p]
+    exact Nat.Coprime.pow_left _ hn
+  have h₁ := IsFractionRing.stabilizerHom_apply_apply_mk Gal(K/Rat) (Ideal.span {(p : Int)}) P
+      (Int ⧸ span {(p : Int)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩ hζ.toInteger
+  simp only [Algebra.algebraMap_self, RingHomCompTriple.comp_apply] at h₁
+  specialize hi (Ideal.Quotient.mk P hζ.toInteger)
+  rwa [h₁, Int.card_ideal_quot, galEquivZMod_smul_of_pow_eq n _ _
+    (hζ.toInteger_isPrimitiveRoot.pow_eq_one), map_pow, (h₀.isOfFinOrder (NeZero.ne _)).pow_inj_mod,
+    ← h₀.eq_orderOf, ← ZMod.natCast_eq_natCast_iff', Nat.cast_pow, ← ZMod.coe_unitOfCoprime p hn,
+    ← Units.val_pow_eq_pow_val, ZMod.natCast_zmod_val, ← Units.ext_iff, eq_comm] at hi
 
 中文:
 定理 mem_zpowers_galEquivZMod_of_mem_stabilizer
@@ -192,7 +215,22 @@ have : CharP (Int ⧸ span {(p : Int)}) p := ringChar.of_eq Int.ringChar_idealQu
   let τ := IsFractionRing.stabilizerHom Gal(K/Rat) (Ideal.span {(p : Int)}) P
      (Int ⧸ span {(p : Int)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩
 have : CharP (Int ⧸ span {(p : Int)}) p := ringChar.of_eq Int.ringChar_idealQuot p
-  have : Finite (𝓞 K ⧸ P) := Ring.H
+  have : Finite (𝓞 K ⧸ P) := Ring.HasFiniteQuotients.finiteQuotient (NeZero.ne P)
+  obtain ⟨i, hi⟩ := FiniteField.exists_forall_apply_eq_pow (Int ⧸ span {(p : Int)}) p (𝓞 K ⧸ P) τ
+  refine ⟨i, ?_⟩
+  have h₀ : IsPrimitiveRoot (Ideal.Quotient.mk P hζ.toInteger) n := by
+    refine hζ.toInteger_isPrimitiveRoot.idealQuotient_mk
+      (by simpa using IsMaximal.ne_top inferInstance) ?_
+    rw [← pow_inertiaDeg p]
+    exact Nat.Coprime.pow_left _ hn
+  have h₁ := IsFractionRing.stabilizerHom_apply_apply_mk Gal(K/Rat) (Ideal.span {(p : Int)}) P
+      (Int ⧸ span {(p : Int)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩ hζ.toInteger
+  simp only [Algebra.algebraMap_self, RingHomCompTriple.comp_apply] at h₁
+  specialize hi (Ideal.Quotient.mk P hζ.toInteger)
+  rwa [h₁, Int.card_ideal_quot, galEquivZMod_smul_of_pow_eq n _ _
+    (hζ.toInteger_isPrimitiveRoot.pow_eq_one), map_pow, (h₀.isOfFinOrder (NeZero.ne _)).pow_inj_mod,
+    ← h₀.eq_orderOf, ← ZMod.natCast_eq_natCast_iff', Nat.cast_pow, ← ZMod.coe_unitOfCoprime p hn,
+    ← Units.val_pow_eq_pow_val, ZMod.natCast_zmod_val, ← Units.ext_iff, eq_comm] at hi
 
 Depends on / 依赖: Finite, FiniteField, FiniteField.exists_forall_apply_eq_pow, HasFiniteQuotients, Ideal.Quotient.mk, Ideal.span, Int.ringChar_idealQuot, IsCyclotomicExtension, IsCyclotomicExtension.zeta_spec, IsFractionRing, IsFractionRing.stabilizerHom, IsPrimitiveRoot, NeZero, NeZero.ne, Quotient, Ring.HasFiniteQuotients.finiteQuotient, exists_forall_apply_eq_pow, finiteQuotient, of_eq, ringChar
 -/
@@ -231,7 +269,10 @@ theorem galEquivZMod_stabilizer
   refine Set.eq_of_subset_of_card_le ?_ ?_
   · rintro _ ⟨σ, hσ, rfl⟩
     exact mem_zpowers_galEquivZMod_of_mem_stabilizer n K p P hn hσ
-  · replace hn : ¬ p ∣ n := (Nat.Prime.coprime_iff_not_dvd h
+  · replace hn : ¬ p ∣ n := (Nat.Prime.coprime_iff_not_dvd hp.out).mp hn
+    rw [Fintype.card_eq_nat_card]; rw [Fintype.card_eq_nat_card]; rw [SetLike.coe_sort_coe]; rw [Nat.card_zpowers]; rw [MulEquiv.mapSubgroup_apply]; rw [Subgroup.coe_map]
+    change _ <= Nat.card ((galEquivZMod n K).toEquiv '' _)
+    rw [Nat.card_image_equiv]; rw [SetLike.coe_sort_coe]; rw [Ideal.card_stabilizer_eq (span {(p : Int)})]; rw [ramificationIdxIn_eq_of_not_dvd p K hn]; rw [one_mul]; rw [← orderOf_injective _ Units.coeHom_injective]; rw [Units.coeHom_apply]; rw [ZMod.coe_unitOfCoprime]; rw [inertiaDegIn_eq_of_not_dvd p K hn]
 
 中文:
 定理 galEquivZMod_stabilizer
@@ -242,7 +283,10 @@ theorem galEquivZMod_stabilizer
   refine Set.eq_of_subset_of_card_le ?_ ?_
   · rintro _ ⟨σ, hσ, rfl⟩
     exact mem_zpowers_galEquivZMod_of_mem_stabilizer n K p P hn hσ
-  · replace hn : ¬ p ∣ n := (Nat.Prime.coprime_iff_not_dvd h
+  · replace hn : ¬ p ∣ n := (Nat.Prime.coprime_iff_not_dvd hp.out).mp hn
+    rw [Fintype.card_eq_nat_card]; rw [Fintype.card_eq_nat_card]; rw [SetLike.coe_sort_coe]; rw [Nat.card_zpowers]; rw [MulEquiv.mapSubgroup_apply]; rw [Subgroup.coe_map]
+    change _ <= Nat.card ((galEquivZMod n K).toEquiv '' _)
+    rw [Nat.card_image_equiv]; rw [SetLike.coe_sort_coe]; rw [Ideal.card_stabilizer_eq (span {(p : Int)})]; rw [ramificationIdxIn_eq_of_not_dvd p K hn]; rw [one_mul]; rw [← orderOf_injective _ Units.coeHom_injective]; rw [Units.coeHom_apply]; rw [ZMod.coe_unitOfCoprime]; rw [inertiaDegIn_eq_of_not_dvd p K hn]
 
 Depends on / 依赖: Fintype, Fintype.card_eq_nat_card, IsCyclotomicExtension, IsCyclotomicExtension.isGalois, IsGalois, MulEquiv, MulEquiv.mapSubgroup_apply, Nat.Prime.coprime_iff_not_dvd, Nat.card, Nat.card_zpowers, Set.eq_of_subset_of_card_le, SetLike, SetLike.coe_sort_coe, SetLike.ext, Subgroup, Subgroup.coe_map, card_eq_nat_card, card_zpowers, classical, coe_map
 -/
@@ -402,14 +446,18 @@ theorem card_intermediateFieldEquivSubgroupChar
   given: (F : IntermediateField Rat K)
   proof: by
   unfold intermediateFieldEquivSubgroupChar
-  rw [OrderIso.trans_apply]; rw [OrderIso.trans_apply]; rw [OrderIso.dualDual_symm_apply]; rw [IsGalois.intermediateFieldEquivSubgroup_apply]; rw [OrderIso.dual_apply]; rw [OrderDual.ofDual_toDual]; rw [OrderDual.ofDual_toDual]; rw [card_subgroupGalEqui
+  rw [OrderIso.trans_apply]; rw [OrderIso.trans_apply]; rw [OrderIso.dualDual_symm_apply]; rw [IsGalois.intermediateFieldEquivSubgroup_apply]; rw [OrderIso.dual_apply]; rw [OrderDual.ofDual_toDual]; rw [OrderDual.ofDual_toDual]; rw [card_subgroupGalEquivSubgroupChar]; rw [finrank_eq_fixingSubgroup_index]; rw [← Subgroup.index_eq_card]
+
+@[simp]
 
 中文:
 定理 card_intermediateFieldEquivSubgroupChar
   条件: (F : 中间域 有理数 K)
   证明: by
   unfold intermediateFieldEquivSubgroupChar
-  rw [OrderIso.trans_apply]; rw [OrderIso.trans_apply]; rw [OrderIso.dualDual_symm_apply]; rw [IsGalois.intermediateFieldEquivSubgroup_apply]; rw [OrderIso.dual_apply]; rw [OrderDual.ofDual_toDual]; rw [OrderDual.ofDual_toDual]; rw [card_subgroupGalEqui
+  rw [OrderIso.trans_apply]; rw [OrderIso.trans_apply]; rw [OrderIso.dualDual_symm_apply]; rw [IsGalois.intermediateFieldEquivSubgroup_apply]; rw [OrderIso.dual_apply]; rw [OrderDual.ofDual_toDual]; rw [OrderDual.ofDual_toDual]; rw [card_subgroupGalEquivSubgroupChar]; rw [finrank_eq_fixingSubgroup_index]; rw [← Subgroup.index_eq_card]
+
+@[simp]
 
 Depends on / 依赖: IsGalois, IsGalois.intermediateFieldEquivSubgroup_apply, OrderDual, OrderDual.ofDual_toDual, OrderIso, OrderIso.dualDual_symm_apply, OrderIso.dual_apply, OrderIso.trans_apply, Subgroup, Subgroup.index_eq_card, card_subgroupGalEquivSubgroupChar, dualDual_symm_apply, dual_apply, finrank_eq_fixingSubgroup_index, index_eq_card, intermediateFieldEquivSubgroupChar, intermediateFieldEquivSubgroup_apply, ofDual_toDual, trans_apply
 -/
@@ -453,7 +501,10 @@ theorem mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd
   simp_rw [← χ.mem_conductorSet_iff_conductor_dvd hdiv, χ.mem_conductorSet_iff,
     factorsThrough_iff_ker_unitsMap hdiv, mem_intermediateFieldEquivSubgroupChar_iff,
     SetLike.le_def, ← (galEquivZMod n K).forall_congr_right, MonoidHom.mem_ker,
-    MulEquiv.toEquiv_eq_coe, EquivLike.coe_coe, ← (
+    MulEquiv.toEquiv_eq_coe, EquivLike.coe_coe, ← (galEquivZMod_restrictNormal_apply n K F hdiv _),
+    EmbeddingLike.map_eq_one_iff, AlgEquiv.restrictNormal_eq_one_iff,
+    IntermediateField.mem_fixingSubgroup_iff, Units.ext_iff, toUnitHom_eq, coe_equivToUnitHom,
+    Units.val_one]
 
 中文:
 定理 mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd
@@ -462,7 +513,10 @@ theorem mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd
   simp_rw [← χ.mem_conductorSet_iff_conductor_dvd hdiv, χ.mem_conductorSet_iff,
     factorsThrough_iff_ker_unitsMap hdiv, mem_intermediateFieldEquivSubgroupChar_iff,
     SetLike.le_def, ← (galEquivZMod n K).forall_congr_right, MonoidHom.mem_ker,
-    MulEquiv.toEquiv_eq_coe, EquivLike.coe_coe, ← (
+    MulEquiv.toEquiv_eq_coe, EquivLike.coe_coe, ← (galEquivZMod_restrictNormal_apply n K F hdiv _),
+    EmbeddingLike.map_eq_one_iff, AlgEquiv.restrictNormal_eq_one_iff,
+    IntermediateField.mem_fixingSubgroup_iff, Units.ext_iff, toUnitHom_eq, coe_equivToUnitHom,
+    Units.val_one]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.restrictNormal_eq_one_iff, EmbeddingLike, EmbeddingLike.map_eq_one_iff, EquivLike, EquivLike.coe_coe, IntermediateField, IntermediateField.mem_fixingSubgroup_iff, MonoidHom, MonoidHom.mem_ker, MulEquiv, MulEquiv.toEquiv_eq_coe, SetLike, SetLike.le_def, Units.ext_iff, Units.va, coe_coe, coe_equivToUnitHom, ext_iff, factorsThrough_iff_ker_unitsMap
 -/

@@ -511,7 +511,11 @@ instance preservesLimit_rightOp_Γ.{v,
   have (i : _) : IsIso (α.app i) := IsAffine.affine
   have : IsIso α := NatIso.isIso_of_isIso_app α
   suffices PreservesLimit ((D ⋙ Scheme.Γ.rightOp) ⋙ Scheme.Spec) Scheme.Γ.rightOp from
-    preservesLimit_o
+    preservesLimit_of_iso_diagram _ (asIso α).symm
+  have := monadicCreatesLimits.{v, w} Scheme.Spec.{u}
+  suffices PreservesLimit (D ⋙ Scheme.Γ.rightOp) (Scheme.Spec ⋙ Scheme.Γ.rightOp) from
+    preservesLimit_comp_of_createsLimit _ _
+  exact preservesLimit_of_natIso _ (NatIso.op Scheme.SpecΓIdentity)
 
 中文:
 实例 preservesLimit_rightOp_Γ.{v,
@@ -521,7 +525,11 @@ instance preservesLimit_rightOp_Γ.{v,
   have (i : _) : IsIso (α.app i) := IsAffine.affine
   have : IsIso α := NatIso.isIso_of_isIso_app α
   suffices PreservesLimit ((D ⋙ Scheme.Γ.rightOp) ⋙ Scheme.Spec) Scheme.Γ.rightOp from
-    preservesLimit_o
+    preservesLimit_of_iso_diagram _ (asIso α).symm
+  have := monadicCreatesLimits.{v, w} Scheme.Spec.{u}
+  suffices PreservesLimit (D ⋙ Scheme.Γ.rightOp) (Scheme.Spec ⋙ Scheme.Γ.rightOp) from
+    preservesLimit_comp_of_createsLimit _ _
+  exact preservesLimit_of_natIso _ (NatIso.op Scheme.SpecΓIdentity)
 
 Depends on / 依赖: D.whiskerLeft, IsAffine, IsAffine.affine, NatIso, NatIso.isIso_of_isIso_app, PreservesLimit, Scheme, Scheme.Spec, Spec.adjunction.unit, adjunction, affine, isIso_of_isIso_app, monadicCreatesLimits, preservesLimit_comp_of_createsLimit, preservesLimit_of_iso_diagram, rightOp, whiskerLeft
 -/
@@ -1502,7 +1510,9 @@ lemma isoSpec_hom_apply
   proof: by
   dsimp [IsAffineOpen.isoSpec_hom, Scheme.isoSpec_hom, Scheme.toSpecΓ_apply, Scheme.Opens.toSpecΓ,
     TopCat.Presheaf.Γgerm]
-  rw [← Scheme.Hom.comp_apply]; rw [← Spec.map_comp]; rw [(Iso.eq_comp_inv _).mpr (Scheme.Opens.germ_stalkIso_hom U (V := ⊤) x trivial)]; rw [X.presheaf.germ_res_assoc]; r
+  rw [← Scheme.Hom.comp_apply]; rw [← Spec.map_comp]; rw [(Iso.eq_comp_inv _).mpr (Scheme.Opens.germ_stalkIso_hom U (V := ⊤) x trivial)]; rw [X.presheaf.germ_res_assoc]; rw [Spec.map_comp]; rw [Scheme.Hom.comp_apply]
+  congr 1
+  exact IsLocalRing.comap_closedPoint (U.stalkIso x).inv.hom
 
 中文:
 引理 isoSpec_hom_apply
@@ -1510,7 +1520,9 @@ lemma isoSpec_hom_apply
   证明: by
   dsimp [IsAffineOpen.isoSpec_hom, Scheme.isoSpec_hom, Scheme.toSpecΓ_apply, Scheme.Opens.toSpecΓ,
     TopCat.Presheaf.Γgerm]
-  rw [← Scheme.Hom.comp_apply]; rw [← Spec.map_comp]; rw [(Iso.eq_comp_inv _).mpr (Scheme.Opens.germ_stalkIso_hom U (V := ⊤) x trivial)]; rw [X.presheaf.germ_res_assoc]; r
+  rw [← Scheme.Hom.comp_apply]; rw [← Spec.map_comp]; rw [(Iso.eq_comp_inv _).mpr (Scheme.Opens.germ_stalkIso_hom U (V := ⊤) x trivial)]; rw [X.presheaf.germ_res_assoc]; rw [Spec.map_comp]; rw [Scheme.Hom.comp_apply]
+  congr 1
+  exact IsLocalRing.comap_closedPoint (U.stalkIso x).inv.hom
 
 Depends on / 依赖: IsAffineOpen, IsAffineOpen.isoSpec_hom, IsLocalRing, IsLocalRing.comap_closedPoint, Iso.eq_comp_inv, Presheaf, Scheme, Scheme.Hom.comp_apply, Scheme.Opens.germ_stalkIso_hom, Scheme.Opens.toSpec, Scheme.isoSpec_hom, Scheme.toSpec, Spec.map_comp, TopCat, TopCat.Presheaf, U.stalkIso, X.presheaf.germ_res_assoc, comap_closedPoint, comp_apply, eq_comp_inv
 -/
@@ -1774,7 +1786,8 @@ theorem map_fromSpec
   have : IsAffine _ := hV
   conv_rhs =>
     rw [fromSpec]; rw [← X.homOfLE_ι (V := U) f.unop.le]; rw [isoSpec_inv]; rw [Category.assoc]; rw [← Scheme.isoSpec_inv_naturality_assoc]; rw [← Spec.map_comp_assoc]; rw [Scheme.homOfLE_appTop]; rw [← Functor.map_comp]
-  rw [from
+  rw [fromSpec]; rw [isoSpec_inv]; rw [Category.assoc]; rw [← Spec.map_comp_assoc]; rw [← Functor.map_comp]
+  rfl
 
 中文:
 定理 map_fromSpec
@@ -1784,7 +1797,8 @@ theorem map_fromSpec
   have : IsAffine _ := hV
   conv_rhs =>
     rw [fromSpec]; rw [← X.homOfLE_ι (V := U) f.unop.le]; rw [isoSpec_inv]; rw [Category.assoc]; rw [← Scheme.isoSpec_inv_naturality_assoc]; rw [← Spec.map_comp_assoc]; rw [Scheme.homOfLE_appTop]; rw [← Functor.map_comp]
-  rw [from
+  rw [fromSpec]; rw [isoSpec_inv]; rw [Category.assoc]; rw [← Spec.map_comp_assoc]; rw [← Functor.map_comp]
+  rfl
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp, IsAffine, Scheme, Scheme.homOfLE_appTop, Scheme.isoSpec_inv_naturality_assoc, Spec.map_comp_assoc, X.homOfLE_, conv_rhs, f.unop.le, fromSpec, homOfLE_appTop, isoSpec_inv, isoSpec_inv_naturality_assoc, map_comp, map_comp_assoc
 -/
@@ -1809,7 +1823,7 @@ lemma SpecMap_appLE_fromSpec
   have : IsAffine U := hU
   simp only [IsAffineOpen.fromSpec, Category.assoc, isoSpec_inv]
   simp_rw [← Scheme.homOfLE_ι _ i]
-  rw [Category.assoc]; rw [← morphismRestrict_ι]; rw [← Category.assoc _ (f ∣_ U) U.ι]; rw [← @Scheme.isoSpec_inv_naturality_assoc]; rw [← Spec.map_comp_assoc]; rw [← Spec
+  rw [Category.assoc]; rw [← morphismRestrict_ι]; rw [← Category.assoc _ (f ∣_ U) U.ι]; rw [← @Scheme.isoSpec_inv_naturality_assoc]; rw [← Spec.map_comp_assoc]; rw [← Spec.map_comp_assoc]; rw [Scheme.Hom.comp_appTop]; rw [morphismRestrict_appTop]; rw [Scheme.homOfLE_appTop]; rw [Scheme.Hom.app_eq_appLE]; rw [Scheme.Hom.appLE_map]; rw [Scheme.Hom.appLE_map]; rw [Scheme.Hom.appLE_map]; rw [Scheme.Hom.map_appLE]
 
 中文:
 引理 SpecMap_appLE_fromSpec
@@ -1818,7 +1832,7 @@ lemma SpecMap_appLE_fromSpec
   have : IsAffine U := hU
   simp only [IsAffineOpen.fromSpec, Category.assoc, isoSpec_inv]
   simp_rw [← Scheme.homOfLE_ι _ i]
-  rw [Category.assoc]; rw [← morphismRestrict_ι]; rw [← Category.assoc _ (f ∣_ U) U.ι]; rw [← @Scheme.isoSpec_inv_naturality_assoc]; rw [← Spec.map_comp_assoc]; rw [← Spec
+  rw [Category.assoc]; rw [← morphismRestrict_ι]; rw [← Category.assoc _ (f ∣_ U) U.ι]; rw [← @Scheme.isoSpec_inv_naturality_assoc]; rw [← Spec.map_comp_assoc]; rw [← Spec.map_comp_assoc]; rw [Scheme.Hom.comp_appTop]; rw [morphismRestrict_appTop]; rw [Scheme.homOfLE_appTop]; rw [Scheme.Hom.app_eq_appLE]; rw [Scheme.Hom.appLE_map]; rw [Scheme.Hom.appLE_map]; rw [Scheme.Hom.appLE_map]; rw [Scheme.Hom.map_appLE]
 
 Depends on / 依赖: Category, Category.assoc, IsAffine, IsAffineOpen, IsAffineOpen.fromSpec, Scheme, Scheme.Hom.appL, Scheme.Hom.appLE_map, Scheme.Hom.app_eq_appLE, Scheme.Hom.comp_appTop, Scheme.homOfLE_, Scheme.homOfLE_appTop, Scheme.isoSpec_inv_naturality_assoc, Spec.map_comp_assoc, appLE_map, app_eq_appLE, comp_appTop, fromSpec, homOfLE_appTop, isoSpec_inv
 -/
@@ -1865,7 +1879,11 @@ lemma fromSpec_app_of_le
   proof: by
   have : U.ι ⁻¹ᵁ V = ⊤ := eq_top_iff.mpr fun x _ => h x.2
   rw [IsAffineOpen.fromSpec]; rw [Scheme.Hom.comp_app]; rw [Scheme.Opens.ι_app]; rw [Scheme.Hom.app_eq _ this]; rw [← Scheme.Hom.appTop]; rw [IsAffineOpen.isoSpec_inv_appTop]
-  simp only [Scheme.Opens.toScheme_presheaf_map, Scheme.Opens.to
+  simp only [Scheme.Opens.toScheme_presheaf_map, Scheme.Opens.topIso_hom,
+    Category.assoc, ← X.presheaf.map_comp_assoc]
+  rfl
+
+include hU in
 
 中文:
 引理 fromSpec_app_of_le
@@ -1873,7 +1891,11 @@ lemma fromSpec_app_of_le
   证明: by
   have : U.ι ⁻¹ᵁ V = ⊤ := eq_top_iff.mpr fun x _ => h x.2
   rw [IsAffineOpen.fromSpec]; rw [Scheme.Hom.comp_app]; rw [Scheme.Opens.ι_app]; rw [Scheme.Hom.app_eq _ this]; rw [← Scheme.Hom.appTop]; rw [IsAffineOpen.isoSpec_inv_appTop]
-  simp only [Scheme.Opens.toScheme_presheaf_map, Scheme.Opens.to
+  simp only [Scheme.Opens.toScheme_presheaf_map, Scheme.Opens.topIso_hom,
+    Category.assoc, ← X.presheaf.map_comp_assoc]
+  rfl
+
+include hU in
 
 Depends on / 依赖: Category, Category.assoc, IsAffineOpen, IsAffineOpen.fromSpec, IsAffineOpen.isoSpec_inv_appTop, Scheme, Scheme.Hom.appTop, Scheme.Hom.app_eq, Scheme.Hom.comp_app, Scheme.Opens, Scheme.Opens.toScheme_presheaf_map, Scheme.Opens.topIso_hom, X.presheaf.map_comp_assoc, appTop, app_eq, comp_app, eq_top_iff, eq_top_iff.mpr, fromSpec, isoSpec_inv_appTop
 -/
@@ -2017,7 +2039,7 @@ definition _root_.AlgebraicGeometry.IsOpenImmersion.affineOpensEquiv
   invFun U := ⟨f ⁻¹ᵁ U, U.1.2.preimage_of_isOpenImmersion _ U.2⟩
   left_inv _ := Subtype.ext (f.preimage_image_eq _)
   right_inv U := Subtype.ext (Subtype.ext (Opens.ext (Set.image_preimage_eq_of_subset U.2)))
-  map_rel_iff' := 
+  map_rel_iff' := f.image_le_image_iff _ _
 
 中文:
 定义 _root_.AlgebraicGeometry.是开浸入.affineOpensEquiv
@@ -2026,7 +2048,7 @@ definition _root_.AlgebraicGeometry.IsOpenImmersion.affineOpensEquiv
   invFun U := ⟨f ⁻¹ᵁ U, U.1.2.preimage_of_isOpenImmersion _ U.2⟩
   left_inv _ := Subtype.ext (f.preimage_image_eq _)
   right_inv U := Subtype.ext (Subtype.ext (Opens.ext (Set.image_preimage_eq_of_subset U.2)))
-  map_rel_iff' := 
+  map_rel_iff' := f.image_le_image_iff _ _
 
 Depends on / 依赖: Set.image_subset_range, image_of_isOpenImmersion, image_subset_range
 -/
@@ -2261,7 +2283,7 @@ theorem basicOpen
   convert!
     isAffineOpen_opensRange
       (Spec.map (CommRingCat.ofHom <| algebraMap Γ(X, U) (Localization.Away f)))
-  exact Opens.ext (PrimeSpectrum.localization_away_comap_range (Localization.Away f) f)
+  exact Opens.ext (PrimeSpectrum.localization_away_comap_range (Localization.Away f) f).symm
 
 中文:
 定理 basicOpen
@@ -2270,7 +2292,7 @@ theorem basicOpen
   convert!
     isAffineOpen_opensRange
       (Spec.map (CommRingCat.ofHom <| algebraMap Γ(X, U) (Localization.Away f)))
-  exact Opens.ext (PrimeSpectrum.localization_away_comap_range (Localization.Away f) f)
+  exact Opens.ext (PrimeSpectrum.localization_away_comap_range (Localization.Away f) f).symm
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, Localization, Localization.Away, Opens.ext, PrimeSpectrum, PrimeSpectrum.localization_away_comap_range, Scheme, Scheme.Hom.isAffineOpen_iff_of_isOpenImmersion, Spec.map, algebraMap, convert, fromSpec_image_basicOpen, hU.fromSpec_image_basicOpen, isAffineOpen_iff_of_isOpenImmersion, isAffineOpen_opensRange, localization_away_comap_range
 -/
@@ -2364,7 +2386,9 @@ theorem exists_basicOpen_le
   obtain ⟨_, ⟨_, ⟨r, rfl⟩, rfl⟩, h₁, h₂ : _ <= U.ι ⁻¹ᵁ V⟩ :=
     (isBasis_basicOpen U).exists_subset_of_mem_open (x.2 : (⟨x, h⟩ : U) in _) (U.ι ⁻¹ᵁ V).isOpen
   replace h₁ : x.1 in X.basicOpen r := by simpa [U.mem_basicOpen_toScheme] using! h₁
-  replace h₂ : X.basicOpen r
+  replace h₂ : X.basicOpen r <= V := by
+    simpa [Scheme.image_basicOpen] using! (U.ι.image_mono h₂).trans (U.ι.image_preimage_le _)
+  exact ⟨U.topIso.hom.hom r, by simp [Scheme.Opens.toScheme_presheaf_obj, h₁, h₂]⟩
 
 中文:
 定理 存在_basicOpen_le
@@ -2374,7 +2398,9 @@ theorem exists_basicOpen_le
   obtain ⟨_, ⟨_, ⟨r, rfl⟩, rfl⟩, h₁, h₂ : _ <= U.ι ⁻¹ᵁ V⟩ :=
     (isBasis_basicOpen U).exists_subset_of_mem_open (x.2 : (⟨x, h⟩ : U) in _) (U.ι ⁻¹ᵁ V).isOpen
   replace h₁ : x.1 in X.basicOpen r := by simpa [U.mem_basicOpen_toScheme] using! h₁
-  replace h₂ : X.basicOpen r
+  replace h₂ : X.basicOpen r <= V := by
+    simpa [Scheme.image_basicOpen] using! (U.ι.image_mono h₂).trans (U.ι.image_preimage_le _)
+  exact ⟨U.topIso.hom.hom r, by simp [Scheme.Opens.toScheme_presheaf_obj, h₁, h₂]⟩
 
 Depends on / 依赖: IsAffine, Scheme, Scheme.Opens.toScheme_presheaf_obj, Scheme.image_basicOpen, U.mem_basicOpen_toScheme, U.topIso.hom.hom, X.basicOpen, basicOpen, exists_subset_of_mem_open, image_basicOpen, image_mono, image_preimage_le, isBasis_basicOpen, isOpen, mem_basicOpen_toScheme, replace, toScheme_presheaf_obj, topIso
 -/
@@ -2478,7 +2504,10 @@ theorem isLocalization_basicOpen
   apply Algebra.algebra_ext
   intro _
   congr 1
-  dsimp [CommRingCat.of
+  dsimp [CommRingCat.ofHom, RingHom.algebraMap_toAlgebra, ← CommRingCat.hom_comp,
+    basicOpenSectionsToAffine]
+  rw [hU.fromSpec.naturality_assoc]; rw [hU.fromSpec_app_self]
+  rfl
 
 中文:
 定理 isLocalization_basicOpen
@@ -2490,7 +2519,10 @@ theorem isLocalization_basicOpen
   apply Algebra.algebra_ext
   intro _
   congr 1
-  dsimp [CommRingCat.of
+  dsimp [CommRingCat.ofHom, RingHom.algebraMap_toAlgebra, ← CommRingCat.hom_comp,
+    basicOpenSectionsToAffine]
+  rw [hU.fromSpec.naturality_assoc]; rw [hU.fromSpec_app_self]
+  rfl
 
 Depends on / 依赖: Algebra, Algebra.algebra_ext, CommRingCat, CommRingCat.hom_comp, CommRingCat.ofHom, IsLocalization, IsLocalization.isLocalization_iff_of_ringEquiv, RingHom, RingHom.algebraMap_toAlgebra, StructureSheaf, StructureSheaf.IsLocalization.to_basicOpen, Submonoid, Submonoid.powers, algebraMap_toAlgebra, algebra_ext, basicOpenSectionsToAffine, commRingCatIsoToRingEquiv, convert, fromSpec, fromSpec_app_self
 -/
@@ -2536,7 +2568,11 @@ lemma appLE_eq_away_map
     letI := hV.isLocalization_basicOpen (f.appLE U V e r)
     f.appLE (Y.basicOpen r) (X.basicOpen (f.appLE U V e r)) (by simp [Scheme.Hom.appLE]) =
         CommRingCat.ofHom (IsLocalization.Away.map _ _ (f.appLE U V e).hom r) := by
-  let := hU.isLocalization_basicOpen 
+  let := hU.isLocalization_basicOpen r
+  let := hV.isLocalization_basicOpen (f.appLE U V e r)
+  ext : 1
+  apply IsLocalization.ringHom_ext (.powers r)
+  rw [IsLocalization.Away.map]; rw [CommRingCat.hom_ofHom]; rw [IsLocalization.map_comp]; rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.algebraMap_toAlgebra]; rw [← CommRingCat.hom_comp]; rw [← CommRingCat.hom_comp]; rw [Scheme.Hom.appLE_map]; rw [Scheme.Hom.map_appLE]
 
 中文:
 引理 appLE_eq_away_map
@@ -2545,7 +2581,11 @@ lemma appLE_eq_away_map
     letI := hV.isLocalization_basicOpen (f.appLE U V e r)
     f.appLE (Y.basicOpen r) (X.basicOpen (f.appLE U V e r)) (by simp [Scheme.Hom.appLE]) =
         CommRingCat.ofHom (IsLocalization.Away.map _ _ (f.appLE U V e).hom r) := by
-  let := hU.isLocalization_basicOpen 
+  let := hU.isLocalization_basicOpen r
+  let := hV.isLocalization_basicOpen (f.appLE U V e r)
+  ext : 1
+  apply IsLocalization.ringHom_ext (.powers r)
+  rw [IsLocalization.Away.map]; rw [CommRingCat.hom_ofHom]; rw [IsLocalization.map_comp]; rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.algebraMap_toAlgebra]; rw [← CommRingCat.hom_comp]; rw [← CommRingCat.hom_comp]; rw [Scheme.Hom.appLE_map]; rw [Scheme.Hom.map_appLE]
 
 Depends on / 依赖: hU.isLocalization_basicOpen, isLocalization_basicOpen
 -/
@@ -2574,7 +2614,12 @@ lemma app_basicOpen_eq_away_map
       (CommRingCat.ofHom
         (IsLocalization.Away.map Γ(Y, Y.basicOpen r) Γ(X, X.basicOpen (f.app U r)) (f.app U).hom r)
         ≫ X.presheaf.map (eqToHom (by simp)).op) := by
-  have := 
+  have := hU.isLocalization_basicOpen r
+  have := h.isLocalization_basicOpen (f.app U r)
+  ext : 1
+  apply IsLocalization.ringHom_ext (.powers r)
+  rw [IsLocalization.Away.map]; rw [CommRingCat.hom_comp]; rw [RingHom.comp_assoc]; rw [CommRingCat.hom_ofHom]; rw [IsLocalization.map_comp]; rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.algebraMap_toAlgebra]; rw [← RingHom.comp_assoc]; rw [← CommRingCat.hom_comp]; rw [← CommRingCat.hom_comp]; rw [← X.presheaf.map_comp]
+  simp
 
 中文:
 引理 app_basicOpen_eq_away_map
@@ -2585,7 +2630,12 @@ lemma app_basicOpen_eq_away_map
       (CommRingCat.ofHom
         (IsLocalization.Away.map Γ(Y, Y.basicOpen r) Γ(X, X.basicOpen (f.app U r)) (f.app U).hom r)
         ≫ X.presheaf.map (eqToHom (by simp)).op) := by
-  have := 
+  have := hU.isLocalization_basicOpen r
+  have := h.isLocalization_basicOpen (f.app U r)
+  ext : 1
+  apply IsLocalization.ringHom_ext (.powers r)
+  rw [IsLocalization.Away.map]; rw [CommRingCat.hom_comp]; rw [RingHom.comp_assoc]; rw [CommRingCat.hom_ofHom]; rw [IsLocalization.map_comp]; rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.algebraMap_toAlgebra]; rw [← RingHom.comp_assoc]; rw [← CommRingCat.hom_comp]; rw [← CommRingCat.hom_comp]; rw [← X.presheaf.map_comp]
+  simp
 
 Depends on / 依赖: IsSeparated, QuasiSeparated, hU.isLocalization_basicOpen, isLocalization_basicOpen
 -/
@@ -2616,7 +2666,11 @@ definition appBasicOpenIsoAwayMap
     Arrow.mk (f.app (Y.basicOpen r)) ≅
       Arrow.mk (CommRingCat.ofHom (IsLocalization.Away.map Γ(Y, Y.basicOpen r)
         Γ(X, X.basicOpen (f.app U r)) (f.app U).hom r)) :=
-Arrow.isoMk (Iso.refl _) (X.presheaf.mapI
+Arrow.isoMk (Iso.refl _) (X.presheaf.mapIso (eqToIso (by simp)).op) by
+    simp [hU.app_basicOpen_eq_away_map f h]
+    rfl
+
+include hU in
 
 中文:
 定义 appBasicOpenIsoAwayMap
@@ -2626,7 +2680,11 @@ Arrow.isoMk (Iso.refl _) (X.presheaf.mapI
     Arrow.mk (f.app (Y.basicOpen r)) ≅
       Arrow.mk (CommRingCat.ofHom (IsLocalization.Away.map Γ(Y, Y.basicOpen r)
         Γ(X, X.basicOpen (f.app U r)) (f.app U).hom r)) :=
-Arrow.isoMk (Iso.refl _) (X.presheaf.mapI
+Arrow.isoMk (Iso.refl _) (X.presheaf.mapIso (eqToIso (by simp)).op) by
+    simp [hU.app_basicOpen_eq_away_map f h]
+    rfl
+
+include hU in
 
 Depends on / 依赖: hU.isLocalization_basicOpen, isLocalization_basicOpen
 -/
@@ -2697,7 +2755,13 @@ theorem basicOpen_basicOpen_is_basicOpen
   obtain ⟨x, ⟨_, n, rfl⟩, rfl⟩ := IsLocalization.surj'' (Submonoid.powers f) g
   use f * x
   rw [Algebra.smul_def]; rw [Scheme.basicOpen_mul]; rw [Scheme.basicOpen_mul]; rw [RingHom.algebraMap_toAlgebra]; rw [Scheme.basicOpen_res]
-  refine (inf_eq_left.mpr 
+  refine (inf_eq_left.mpr (inf_le_left.trans_eq (Scheme.basicOpen_of_isUnit _ ?_).symm)).symm
+  exact
+    Submonoid.leftInv_le_isUnit _
+      (IsLocalization.toInvSubmonoid (Submonoid.powers f) (Γ(X, X.basicOpen f))
+        _).prop
+
+include hU in
 
 中文:
 定理 basicOpen_basicOpen_is_basicOpen
@@ -2707,7 +2771,13 @@ theorem basicOpen_basicOpen_is_basicOpen
   obtain ⟨x, ⟨_, n, rfl⟩, rfl⟩ := IsLocalization.surj'' (Submonoid.powers f) g
   use f * x
   rw [Algebra.smul_def]; rw [Scheme.basicOpen_mul]; rw [Scheme.basicOpen_mul]; rw [RingHom.algebraMap_toAlgebra]; rw [Scheme.basicOpen_res]
-  refine (inf_eq_left.mpr 
+  refine (inf_eq_left.mpr (inf_le_left.trans_eq (Scheme.basicOpen_of_isUnit _ ?_).symm)).symm
+  exact
+    Submonoid.leftInv_le_isUnit _
+      (IsLocalization.toInvSubmonoid (Submonoid.powers f) (Γ(X, X.basicOpen f))
+        _).prop
+
+include hU in
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsLocalization, IsLocalization.surj, IsLocalization.toInvSubmonoid, RingHom, RingHom.algebraMap_toAlgebra, Scheme, Scheme.basicOpen_mul, Scheme.basicOpen_of_isUnit, Scheme.basicOpen_res, Submonoid, Submonoid.leftInv_le_isUnit, Submonoid.powers, X.basicOpen, algebraMap_toAlgebra, basicOpen, basicOpen_mul, basicOpen_of_isUnit, basicOpen_res
 -/
@@ -2734,7 +2804,8 @@ theorem _root_.AlgebraicGeometry.exists_basicOpen_le_affine_inter
   obtain ⟨g, hg₁, hg₂⟩ := hV.exists_basicOpen_le ⟨x, hf₂⟩ hx.2
   obtain ⟨f', hf'⟩ :=
     basicOpen_basicOpen_is_basicOpen hU f (X.presheaf.map (homOfLE hf₁ : _ ⟶ V).op g)
-  replace hf' := (hf'.trans (RingedSpace.basicOpen_res _ _ _))
+  replace hf' := (hf'.trans (RingedSpace.basicOpen_res _ _ _)).trans (inf_eq_right.mpr hg₁)
+  exact ⟨f', g, hf', hf'.symm ▸ hg₂⟩
 
 中文:
 定理 _root_.AlgebraicGeometry.存在_basicOpen_le_affine_inter
@@ -2743,7 +2814,8 @@ theorem _root_.AlgebraicGeometry.exists_basicOpen_le_affine_inter
   obtain ⟨g, hg₁, hg₂⟩ := hV.exists_basicOpen_le ⟨x, hf₂⟩ hx.2
   obtain ⟨f', hf'⟩ :=
     basicOpen_basicOpen_is_basicOpen hU f (X.presheaf.map (homOfLE hf₁ : _ ⟶ V).op g)
-  replace hf' := (hf'.trans (RingedSpace.basicOpen_res _ _ _))
+  replace hf' := (hf'.trans (RingedSpace.basicOpen_res _ _ _)).trans (inf_eq_right.mpr hg₁)
+  exact ⟨f', g, hf', hf'.symm ▸ hg₂⟩
 
 Depends on / 依赖: RingedSpace, RingedSpace.basicOpen_res, X.presheaf.map, basicOpen_basicOpen_is_basicOpen, basicOpen_res, exists_basicOpen_le, hU.exists_basicOpen_le, hV.exists_basicOpen_le, homOfLE, inf_eq_right, inf_eq_right.mpr, presheaf, replace
 -/
@@ -2838,7 +2910,7 @@ lemma comap_primeIdealOf_appLE
   simp only [Scheme.Hom.comp_apply]
   congr 1
   apply Subtype.ext
-  si
+  simp
 
 中文:
 引理 comap_primeIdealOf_appLE
@@ -2850,7 +2922,7 @@ lemma comap_primeIdealOf_appLE
   simp only [Scheme.Hom.comp_apply]
   congr 1
   apply Subtype.ext
-  si
+  simp
 
 Depends on / 依赖: IsAffineOpen, IsAffineOpen.isoSpec_hom, IsAffineOpen.primeIdealOf, Scheme, Scheme.Hom.comp_apply, Scheme.Hom.resLE, Scheme.Opens.toSpec, Spec.map, Subtype, Subtype.ext, comp_apply, f.appLE, hU.primeIdealOf, hV.primeIdealOf, infer_instance, isoSpec_hom, primeIdealOf
 -/
@@ -2878,7 +2950,10 @@ theorem primeIdealOf_isMaximal_of_isClosed
       using hx.preimage U.isOpenEmbedding'.continuous
   apply (hU.primeIdealOf x).isClosed_singleton_iff_isMaximal.mp
   rw [primeIdealOf]; rw [← Set.image_singleton]
-  refine (Topology
+  refine (Topology.IsClosedEmbedding.isClosed_iff_image_isClosed <|
+    IsHomeomorph.isClosedEmbedding ?_).mp hx₀
+  apply (TopCat.isIso_iff_isHomeomorph _).mp
+  infer_instance
 
 中文:
 定理 primeIdealOf_isMaximal_of_isClosed
@@ -2889,7 +2964,10 @@ theorem primeIdealOf_isMaximal_of_isClosed
       using hx.preimage U.isOpenEmbedding'.continuous
   apply (hU.primeIdealOf x).isClosed_singleton_iff_isMaximal.mp
   rw [primeIdealOf]; rw [← Set.image_singleton]
-  refine (Topology
+  refine (Topology.IsClosedEmbedding.isClosed_iff_image_isClosed <|
+    IsHomeomorph.isClosedEmbedding ?_).mp hx₀
+  apply (TopCat.isIso_iff_isHomeomorph _).mp
+  infer_instance
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lmul, CommRingCat, CommRingCat.ofHom, IsClosed, IsClosedEmbedding, IsClosedImmersion, IsHomeomorph, IsHomeomorph.isClosedEmbedding, Limits, Limits.pullback.diagonal, MorphismProperty, MorphismProperty.cancel_right_of_respectsIso, Set.image_singleton, Set.preimage_image_eq, Spec.map, Subtype, Subtype.val_injective, TensorProduct, TopCat
 -/
@@ -2917,7 +2995,12 @@ theorem isLocalization_stalk'
     (@IsLocalization.isLocalization_iff_of_ringEquiv (R := Γ(X, U))
       (S := X.presheaf.stalk (hU.fromSpec y)) _ y.asIdeal.primeCompl _
       (TopCat.Presheaf.algebra_section_stalk X.presheaf ⟨hU.fromSpec y, hy⟩) _ _
-      (asIso <| hU.fromSpec.stalkMap y).commRingCatIsoToRingEquiv).mp
+      (asIso <| hU.fromSpec.stalkMap y).commRingCatIsoToRingEquiv).mpr
+  convert StructureSheaf.IsLocalization.to_stalk Γ(X, U) y
+  delta IsLocalization.AtPrime StructureSheaf.stalkAlgebra
+  congr!
+  simp [RingHom.algebraMap_toAlgebra, ← CommRingCat.hom_comp, IsAffineOpen.fromSpec_app_self]
+  rfl
 
 中文:
 定理 isLocalization_stalk'
@@ -2927,7 +3010,12 @@ theorem isLocalization_stalk'
     (@IsLocalization.isLocalization_iff_of_ringEquiv (R := Γ(X, U))
       (S := X.presheaf.stalk (hU.fromSpec y)) _ y.asIdeal.primeCompl _
       (TopCat.Presheaf.algebra_section_stalk X.presheaf ⟨hU.fromSpec y, hy⟩) _ _
-      (asIso <| hU.fromSpec.stalkMap y).commRingCatIsoToRingEquiv).mp
+      (asIso <| hU.fromSpec.stalkMap y).commRingCatIsoToRingEquiv).mpr
+  convert StructureSheaf.IsLocalization.to_stalk Γ(X, U) y
+  delta IsLocalization.AtPrime StructureSheaf.stalkAlgebra
+  congr!
+  simp [RingHom.algebraMap_toAlgebra, ← CommRingCat.hom_comp, IsAffineOpen.fromSpec_app_self]
+  rfl
 -/
 theorem isLocalization_stalk' (y : PrimeSpectrum Γ(X, U)) (hy : hU.fromSpec y in U) :
     @IsLocalization.AtPrime
@@ -3024,7 +3112,15 @@ lemma mem_ideal_iff
   let (x : _) : Algebra Γ(X, U) (X.presheaf.stalk (hU.fromSpec x)) :=
     TopCat.Presheaf.algebra_section_stalk X.presheaf _
   have (P : Ideal Γ(X, U)) [hP : P.IsPrime] : IsLocalization.AtPrime _ P :=
-      hU.isLocalization_stalk'
+      hU.isLocalization_stalk' ⟨P, hP⟩ (hU.isoSpec.inv _).2
+  refine Submodule.mem_of_localization_maximal
+      (fun P hP => X.presheaf.stalk (hU.fromSpec ⟨P, hP.isPrime⟩))
+      (fun P hP => Algebra.linearMap _ _) _ _ ?_
+  intro P hP
+  rw [Ideal.localized₀_eq_restrictScalars_map]
+  exact H _ _
+
+include hU in
 
 中文:
 引理 mem_ideal_iff
@@ -3034,7 +3130,15 @@ lemma mem_ideal_iff
   let (x : _) : Algebra Γ(X, U) (X.presheaf.stalk (hU.fromSpec x)) :=
     TopCat.Presheaf.algebra_section_stalk X.presheaf _
   have (P : Ideal Γ(X, U)) [hP : P.IsPrime] : IsLocalization.AtPrime _ P :=
-      hU.isLocalization_stalk'
+      hU.isLocalization_stalk' ⟨P, hP⟩ (hU.isoSpec.inv _).2
+  refine Submodule.mem_of_localization_maximal
+      (fun P hP => X.presheaf.stalk (hU.fromSpec ⟨P, hP.isPrime⟩))
+      (fun P hP => Algebra.linearMap _ _) _ _ ?_
+  intro P hP
+  rw [Ideal.localized₀_eq_restrictScalars_map]
+  exact H _ _
+
+include hU in
 
 Depends on / 依赖: Algebra, Algebra.linearMap, AtPrime, Ideal.localized, Ideal.mem_map_of_mem, IsLocalization, IsLocalization.AtPrime, IsPrime, P.IsPrime, Presheaf, Submodule, Submodule.mem_of_localization_maximal, TopCat, TopCat.Presheaf.algebra_section_stalk, X.presheaf, X.presheaf.stalk, algebra_section_stalk, fromSpec, hP.isPrime, hU.fromSpec
 -/
@@ -3117,7 +3221,23 @@ definition arrowStalkMapIso
   let := X.presheaf.algebra_section_stalk ⟨x, hx⟩
   have := hV.isLocalization_stalk ⟨x, hx⟩
   refine Arrow.isoMk' _ _ ?_ ?_ ?_
-  · exact ((IsLocalization.algEquiv (hU.primeIdealOf ⟨f x, hVU hx⟩
+  · exact ((IsLocalization.algEquiv (hU.primeIdealOf ⟨f x, hVU hx⟩).asIdeal.primeCompl
+      (Y.presheaf.stalk (f x))
+      (Localization.AtPrime (hU.primeIdealOf ⟨f x, hVU hx⟩).asIdeal)).toCommRingCatIso:)
+  · exact ((IsLocalization.algEquiv (hV.primeIdealOf ⟨x, hx⟩).asIdeal.primeCompl
+      (X.presheaf.stalk x)
+      (Localization.AtPrime (hV.primeIdealOf ⟨x, hx⟩).asIdeal)).toCommRingCatIso:)
+  · rw [← Iso.comp_inv_eq]
+    ext1
+    apply IsLocalization.ringHom_ext
+      (hU.primeIdealOf ⟨f x, hVU hx⟩).asIdeal.primeCompl
+    ext a
+    dsimp [← AlgEquiv.symm_toRingEquiv]
+    simp only [IsLocalization.map_eq, RingHom.id_apply, Localization.localRingHom_to_map,
+      RingHomCompTriple.comp_apply]
+    simp only [RingHom.algebraMap_toAlgebra, Scheme.Hom.germ_stalkMap_apply, Scheme.Hom.appLE,
+      homOfLE_leOfHom, CommRingCat.hom_comp, RingHom.coe_comp, Function.comp_apply,
+      X.presheaf.germ_res_apply]
 
 中文:
 定义 arrowStalkMapIso
@@ -3128,7 +3248,23 @@ definition arrowStalkMapIso
   let := X.presheaf.algebra_section_stalk ⟨x, hx⟩
   have := hV.isLocalization_stalk ⟨x, hx⟩
   refine Arrow.isoMk' _ _ ?_ ?_ ?_
-  · exact ((IsLocalization.algEquiv (hU.primeIdealOf ⟨f x, hVU hx⟩
+  · exact ((IsLocalization.algEquiv (hU.primeIdealOf ⟨f x, hVU hx⟩).asIdeal.primeCompl
+      (Y.presheaf.stalk (f x))
+      (Localization.AtPrime (hU.primeIdealOf ⟨f x, hVU hx⟩).asIdeal)).toCommRingCatIso:)
+  · exact ((IsLocalization.algEquiv (hV.primeIdealOf ⟨x, hx⟩).asIdeal.primeCompl
+      (X.presheaf.stalk x)
+      (Localization.AtPrime (hV.primeIdealOf ⟨x, hx⟩).asIdeal)).toCommRingCatIso:)
+  · rw [← Iso.comp_inv_eq]
+    ext1
+    apply IsLocalization.ringHom_ext
+      (hU.primeIdealOf ⟨f x, hVU hx⟩).asIdeal.primeCompl
+    ext a
+    dsimp [← AlgEquiv.symm_toRingEquiv]
+    simp only [IsLocalization.map_eq, RingHom.id_apply, Localization.localRingHom_to_map,
+      RingHomCompTriple.comp_apply]
+    simp only [RingHom.algebraMap_toAlgebra, Scheme.Hom.germ_stalkMap_apply, Scheme.Hom.appLE,
+      homOfLE_leOfHom, CommRingCat.hom_comp, RingHom.coe_comp, Function.comp_apply,
+      X.presheaf.germ_res_apply]
 
 Depends on / 依赖: Arrow.isoMk, AtPrime, IsLocalization, IsLocalization.algEquiv, Localization, Localization.AtPrime, X.presheaf.algebra_section_stalk, Y.presheaf.algebra_section_stalk, Y.presheaf.stalk, algEquiv, algebra_section_stalk, asIdeal, asIdeal.primeCompl, hU.isLocalization_stalk, hU.primeIdealOf, hV.isLocalization_stalk, hV.primeIdealOf, isLocalization_stalk, presheaf, primeCompl
 -/
@@ -3214,7 +3350,26 @@ theorem iSup_basicOpen_eq_self_iff
     · refine ⟨fun h => by rw [h], ?_⟩
       intro h
       apply_fun Set.image hU.fromSpec at h
-      rw [Set.image_preimage_eq_inter_range]; rw [Set.i
+      rw [Set.image_preimage_eq_inter_range]; rw [Set.image_preimage_eq_inter_range]; rw [hU.range_fromSpec]
+        at h
+      simp only [Set.inter_self, Opens.carrier_eq_coe, Set.inter_eq_right] at h
+      ext1
+      refine Set.Subset.antisymm ?_ h
+      simp only [Set.iUnion_subset_iff, SetCoe.forall, Opens.coe_iSup]
+      intro x _
+      exact X.basicOpen_le x
+    · simp only [Opens.iSup_def, Set.preimage_iUnion]
+      congr! 1
+      · refine congr_arg (Set.iUnion ·) ?_
+        ext1 x
+        exact congr_arg Opens.carrier (hU.fromSpec_preimage_basicOpen _)
+      · exact congr_arg Opens.carrier hU.fromSpec_preimage_self
+  · simp only [Opens.carrier_eq_coe, PrimeSpectrum.basicOpen_eq_zeroLocus_compl]
+    rw [← Set.compl_iInter]; rw [Set.compl_univ_iff]; rw [← PrimeSpectrum.zeroLocus_iUnion]; rw [←
+      PrimeSpectrum.zeroLocus_empty_iff_eq_top]; rw [PrimeSpectrum.zeroLocus_span]
+    simp only [Set.iUnion_singleton_eq_range, Subtype.range_val_subtype, Set.ofPred_mem_eq]
+
+include hU in
 
 中文:
 定理 iSup_basicOpen_eq_self_iff
@@ -3225,7 +3380,26 @@ theorem iSup_basicOpen_eq_self_iff
     · refine ⟨fun h => by rw [h], ?_⟩
       intro h
       apply_fun Set.image hU.fromSpec at h
-      rw [Set.image_preimage_eq_inter_range]; rw [Set.i
+      rw [Set.image_preimage_eq_inter_range]; rw [Set.image_preimage_eq_inter_range]; rw [hU.range_fromSpec]
+        at h
+      simp only [Set.inter_self, Opens.carrier_eq_coe, Set.inter_eq_right] at h
+      ext1
+      refine Set.Subset.antisymm ?_ h
+      simp only [Set.iUnion_subset_iff, SetCoe.forall, Opens.coe_iSup]
+      intro x _
+      exact X.basicOpen_le x
+    · simp only [Opens.iSup_def, Set.preimage_iUnion]
+      congr! 1
+      · refine congr_arg (Set.iUnion ·) ?_
+        ext1 x
+        exact congr_arg Opens.carrier (hU.fromSpec_preimage_basicOpen _)
+      · exact congr_arg Opens.carrier hU.fromSpec_preimage_self
+  · simp only [Opens.carrier_eq_coe, PrimeSpectrum.basicOpen_eq_zeroLocus_compl]
+    rw [← Set.compl_iInter]; rw [Set.compl_univ_iff]; rw [← PrimeSpectrum.zeroLocus_iUnion]; rw [←
+      PrimeSpectrum.zeroLocus_empty_iff_eq_top]; rw [PrimeSpectrum.zeroLocus_span]
+    simp only [Set.iUnion_singleton_eq_range, Subtype.range_val_subtype, Set.ofPred_mem_eq]
+
+include hU in
 
 Depends on / 依赖: Opens.c, Opens.carrier_eq_coe, PrimeSpectrum, PrimeSpectrum.basicOpen, Set.Subset.antisymm, Set.iUnion_subset_iff, Set.image, Set.image_preimage_eq_inter_range, Set.inter_eq_right, Set.inter_self, Set.univ, SetCoe, SetCoe.forall, Subset, X.basicOpen, antisymm, apply_fun, basicOpen, carrier_eq_coe, fromSpec
 -/
@@ -3342,7 +3516,12 @@ definition SpecMapRestrictBasicOpenIso
   · exact basicOpenIsoSpecAway r
   · have hcomp : CommRingCat.ofHom (algebraMap R (Localization.Away r)) ≫
         CommRingCat.ofHom (Localization.awayMap f.hom r) =
-        f ≫ CommRi
+        f ≫ CommRingCat.ofHom (algebraMap S (Localization.Away (f.hom r))) := by
+      ext x
+      simp [Localization.awayMap, IsLocalization.Away.map]
+    rw [← cancel_mono (Spec.map (CommRingCat.ofHom (algebraMap R _)))]
+    simp only [Arrow.mk_hom, Category.assoc, ← Spec.map_comp]
+    simp [hcomp]
 
 中文:
 定义 SpecMapRestrictBasicOpenIso
@@ -3353,7 +3532,12 @@ definition SpecMapRestrictBasicOpenIso
   · exact basicOpenIsoSpecAway r
   · have hcomp : CommRingCat.ofHom (algebraMap R (Localization.Away r)) ≫
         CommRingCat.ofHom (Localization.awayMap f.hom r) =
-        f ≫ CommRi
+        f ≫ CommRingCat.ofHom (algebraMap S (Localization.Away (f.hom r))) := by
+      ext x
+      simp [Localization.awayMap, IsLocalization.Away.map]
+    rw [← cancel_mono (Spec.map (CommRingCat.ofHom (algebraMap R _)))]
+    simp only [Arrow.mk_hom, Category.assoc, ← Spec.map_comp]
+    simp [hcomp]
 
 Depends on / 依赖: Arrow.isoMk, Arrow.mk_hom, Category, Category.a, CommRingCat, CommRingCat.ofHom, IsLocalization, IsLocalization.Away.map, Localization, Localization.Away, Localization.awayMap, Spec.map, algebraMap, awayMap, basicOpenIsoSpecAway, cancel_mono, comap_basicOpen, f.hom, isoOfEq, mk_hom
 -/
@@ -3406,7 +3590,13 @@ lemma iSup_basicOpen_of_span_eq_top
   · intro x hx
     obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open hx U.2
     refine SetLike.mem_of_subset ?_ hxV
-    rw [← (hV.iSup_basicOpen_eq_self_iff (s := X.presheaf.map (ho
+    rw [← (hV.iSup_basicOpen_eq_self_iff (s := X.presheaf.map (homOfLE hVU).op '' s)).mpr
+      (by rw [← Ideal.map_span]; rw [hs]; rw [Ideal.map_top])]
+    simp only [Opens.iSup_mk, Opens.carrier_eq_coe, Set.iUnion_coe_set, Set.mem_image,
+      Set.iUnion_exists, Set.biUnion_and', Set.iUnion_iUnion_eq_right, Scheme.basicOpen_res,
+      Opens.coe_inf, Opens.coe_mk, Set.iUnion_subset_iff]
+    exact fun i hi => (Set.inter_subset_right.trans
+      (Set.subset_iUnion₂ (s := fun x _ => (X.basicOpen x : Set X)) i hi))
 
 中文:
 引理 iSup_basicOpen_of_span_eq_top
@@ -3418,7 +3608,13 @@ lemma iSup_basicOpen_of_span_eq_top
   · intro x hx
     obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_subset_of_mem_open hx U.2
     refine SetLike.mem_of_subset ?_ hxV
-    rw [← (hV.iSup_basicOpen_eq_self_iff (s := X.presheaf.map (ho
+    rw [← (hV.iSup_basicOpen_eq_self_iff (s := X.presheaf.map (homOfLE hVU).op '' s)).mpr
+      (by rw [← Ideal.map_span]; rw [hs]; rw [Ideal.map_top])]
+    simp only [Opens.iSup_mk, Opens.carrier_eq_coe, Set.iUnion_coe_set, Set.mem_image,
+      Set.iUnion_exists, Set.biUnion_and', Set.iUnion_iUnion_eq_right, Scheme.basicOpen_res,
+      Opens.coe_inf, Opens.coe_mk, Set.iUnion_subset_iff]
+    exact fun i hi => (Set.inter_subset_right.trans
+      (Set.subset_iUnion₂ (s := fun x _ => (X.basicOpen x : Set X)) i hi))
 
 Depends on / 依赖: Ideal.map_span, Ideal.map_top, Opens.carrier_eq_coe, Opens.iSup_mk, Set.biUnion_and, Set.iUnion_coe_set, Set.iUnion_exists, Set.iUnion_iUnion_eq, Set.mem_image, SetLike, SetLike.mem_of_subset, X.basicOpen_le, X.isBasis_affineOpens.exists_subset_of_mem_open, X.presheaf.map, basicOpen_le, biUnion_and, carrier_eq_coe, exists_subset_of_mem_open, hV.iSup_basicOpen_eq_self_iff, homOfLE
 -/
@@ -3459,7 +3655,20 @@ theorem of_affine_open_cover
     obtain ⟨i, hi⟩ := Opens.mem_iSup.mp (iSup_U.ge (Set.mem_univ x))
     obtain ⟨f, g, e, hf⟩ := exists_basicOpen_le_affine_inter V.prop (U i).prop x ⟨x.prop, hi⟩
     refine ⟨f, hf, ?_⟩
-
+    convert! basicOpen _ g (hU i) using 1
+    ext1
+    exact e
+  choose f hf₁ hf₂ using this
+  suffices Ideal.span (Set.range f) = ⊤ by
+    obtain ⟨t, ht₁, ht₂⟩ := (Ideal.span_eq_top_iff_finite _).mp this
+    apply openCover V t ht₂
+    rintro ⟨i, hi⟩
+    obtain ⟨x, rfl⟩ := ht₁ hi
+    exact hf₂ x
+  rw [← V.prop.self_le_iSup_basicOpen_iff]
+  intro x hx
+  rw [iSup_range']; rw [Opens.mem_iSup]
+  exact ⟨_, hf₁ ⟨x, hx⟩⟩
 
 中文:
 定理 of_affine_open_cover
@@ -3470,7 +3679,20 @@ theorem of_affine_open_cover
     obtain ⟨i, hi⟩ := Opens.mem_iSup.mp (iSup_U.ge (Set.mem_univ x))
     obtain ⟨f, g, e, hf⟩ := exists_basicOpen_le_affine_inter V.prop (U i).prop x ⟨x.prop, hi⟩
     refine ⟨f, hf, ?_⟩
-
+    convert! basicOpen _ g (hU i) using 1
+    ext1
+    exact e
+  choose f hf₁ hf₂ using this
+  suffices Ideal.span (Set.range f) = ⊤ by
+    obtain ⟨t, ht₁, ht₂⟩ := (Ideal.span_eq_top_iff_finite _).mp this
+    apply openCover V t ht₂
+    rintro ⟨i, hi⟩
+    obtain ⟨x, rfl⟩ := ht₁ hi
+    exact hf₂ x
+  rw [← V.prop.self_le_iSup_basicOpen_iff]
+  intro x hx
+  rw [iSup_range']; rw [Opens.mem_iSup]
+  exact ⟨_, hf₁ ⟨x, hx⟩⟩
 
 Depends on / 依赖: Ideal.span, Ideal.span_eq_top_iff_finite, Opens.mem_iSup.mp, Set.mem_univ, Set.range, V.prop, X.affineBasicOpen, X.basicOpen, affineBasicOpen, basicOpen, convert, exists_basicOpen_le_affine_inter, iSup_U, iSup_U.ge, mem_iSup, mem_univ, openCover, span_eq_top_iff_finite, x.prop
 -/
@@ -3514,7 +3736,8 @@ lemma eq_of_SpecMap_comp_eq_of_isAffineOpen
   rw [← IsOpenImmersion.lift_fac U.ι f (by simpa [Set.range_subset_iff] using fun x hx => hUf.ge hx),
     ← IsOpenImmersion.lift_fac U.ι g (by simpa [Set.range_subset_iff] using fun x hx => hUg.ge hx)]
   congr 1
-  rw [← cancel_mono hU.iso
+  rw [← cancel_mono hU.isoSpec.hom]; rw [← Spec.homEquiv.injective.eq_iff]; rw [← cancel_mono φ]; rw [← Spec.map_injective.eq_iff]
+  simp [← cancel_mono U.ι, H]
 
 中文:
 引理 eq_of_SpecMap_comp_eq_of_isAffineOpen
@@ -3524,7 +3747,8 @@ lemma eq_of_SpecMap_comp_eq_of_isAffineOpen
   rw [← IsOpenImmersion.lift_fac U.ι f (by simpa [Set.range_subset_iff] using fun x hx => hUf.ge hx),
     ← IsOpenImmersion.lift_fac U.ι g (by simpa [Set.range_subset_iff] using fun x hx => hUg.ge hx)]
   congr 1
-  rw [← cancel_mono hU.iso
+  rw [← cancel_mono hU.isoSpec.hom]; rw [← Spec.homEquiv.injective.eq_iff]; rw [← cancel_mono φ]; rw [← Spec.map_injective.eq_iff]
+  simp [← cancel_mono U.ι, H]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.mono_of_injective, IsOpenImmersion, IsOpenImmersion.lift_fac, Set.range_subset_iff, Spec.homEquiv.injective.eq_iff, Spec.map_injective.eq_iff, cancel_mono, eq_iff, hU.isoSpec.hom, hUf.ge, hUg.ge, homEquiv, injective, isoSpec, lift_fac, map_injective, mono_of_injective, range_subset_iff
 -/
@@ -3672,7 +3896,11 @@ lemma eq_zeroLocus_of_isClosed_of_isAffine
     have hZ : IsClosed Z := (X.isoSpec.hom.homeomorph).isClosedMap _ hs
     obtain ⟨I, (hI : Z = _)⟩ := (PrimeSpectrum.isClosed_iff_zeroLocus_ideal _).mp hZ
     use I
-    simp only [← Scheme.toSpecΓ_preimage_zeroLocus
+    simp only [← Scheme.toSpecΓ_preimage_zeroLocus, ← hI, Z]
+    symm
+    exact Set.preimage_image_eq _ (bijective_of_isIso X.isoSpec.hom.base).injective
+  · rintro ⟨I, rfl⟩
+    exact zeroLocus_isClosed X I.carrier
 
 中文:
 引理 eq_zeroLocus_of_isClosed_of_isAffine
@@ -3683,7 +3911,11 @@ lemma eq_zeroLocus_of_isClosed_of_isAffine
     have hZ : IsClosed Z := (X.isoSpec.hom.homeomorph).isClosedMap _ hs
     obtain ⟨I, (hI : Z = _)⟩ := (PrimeSpectrum.isClosed_iff_zeroLocus_ideal _).mp hZ
     use I
-    simp only [← Scheme.toSpecΓ_preimage_zeroLocus
+    simp only [← Scheme.toSpecΓ_preimage_zeroLocus, ← hI, Z]
+    symm
+    exact Set.preimage_image_eq _ (bijective_of_isIso X.isoSpec.hom.base).injective
+  · rintro ⟨I, rfl⟩
+    exact zeroLocus_isClosed X I.carrier
 
 Depends on / 依赖: I.carrier, IsClosed, PrimeSpectrum, PrimeSpectrum.isClosed_iff_zeroLocus_ideal, Scheme, Scheme.toSpec, Set.preimage_image_eq, X.isoSpec.hom.base, X.isoSpec.hom.homeomorph, X.to, bijective_of_isIso, carrier, homeomorph, injective, isClosedMap, isClosed_iff_zeroLocus_ideal, isoSpec, preimage_image_eq, zeroLocus_isClosed
 -/
@@ -3839,7 +4071,10 @@ lemma Scheme.zeroLocus_inf
     by_cases hxU : x in U
     · simpa [hxU] using congr(⟨x, hxU⟩ in $this)
     · simp only [Submodule.coe_inf, Set.mem_union,
-        codisjoint_iff_compl_le
+        codisjoint_iff_compl_le_left.mp (X.codisjoint_zeroLocus (U := U) (I inter J)) hxU,
+        codisjoint_iff_compl_le_left.mp (X.codisjoint_zeroLocus (U := U) I) hxU, true_or]
+  simp only [← U.toSpecΓ_preimage_zeroLocus, PrimeSpectrum.zeroLocus_inf I J,
+    Set.preimage_union]
 
 中文:
 引理 概形.zeroLocus_inf
@@ -3851,7 +4086,10 @@ lemma Scheme.zeroLocus_inf
     by_cases hxU : x in U
     · simpa [hxU] using congr(⟨x, hxU⟩ in $this)
     · simp only [Submodule.coe_inf, Set.mem_union,
-        codisjoint_iff_compl_le
+        codisjoint_iff_compl_le_left.mp (X.codisjoint_zeroLocus (U := U) (I inter J)) hxU,
+        codisjoint_iff_compl_le_left.mp (X.codisjoint_zeroLocus (U := U) I) hxU, true_or]
+  simp only [← U.toSpecΓ_preimage_zeroLocus, PrimeSpectrum.zeroLocus_inf I J,
+    Set.preimage_union]
 
 Depends on / 依赖: Set.mem_union, Submodule, Submodule.coe_inf, U.toSpec, X.codisjoint_zeroLocus, X.zeroLocus, codisjoint_iff_compl_le_left, codisjoint_iff_compl_le_left.mp, codisjoint_zeroLocus, coe_inf, mem_union, toSpec, true_or, zeroLocus
 -/
@@ -4013,7 +4251,8 @@ lemma Scheme.Hom.liftQuotient_comp
   proof: by
   rw [Scheme.Hom.liftQuotient]; rw [Category.assoc]; rw [← Spec.map_comp]; rw [← CommRingCat.ofHom_comp]; rw [Ideal.Quotient.lift_comp_mk]
   simp only [CommRingCat.hom_comp, CommRingCat.ofHom_comp, CommRingCat.ofHom_hom, Spec.map_comp, ←
-    Scheme.toSpecΓ_naturality_assoc, ← SpecMap_ΓSpecIso_hom
+    Scheme.toSpecΓ_naturality_assoc, ← SpecMap_ΓSpecIso_hom]
+  simp
 
 中文:
 引理 概形.态射.liftQuotient_comp
@@ -4021,7 +4260,8 @@ lemma Scheme.Hom.liftQuotient_comp
   证明: by
   rw [Scheme.Hom.liftQuotient]; rw [Category.assoc]; rw [← Spec.map_comp]; rw [← CommRingCat.ofHom_comp]; rw [Ideal.Quotient.lift_comp_mk]
   simp only [CommRingCat.hom_comp, CommRingCat.ofHom_comp, CommRingCat.ofHom_hom, Spec.map_comp, ←
-    Scheme.toSpecΓ_naturality_assoc, ← SpecMap_ΓSpecIso_hom
+    Scheme.toSpecΓ_naturality_assoc, ← SpecMap_ΓSpecIso_hom]
+  simp
 
 Depends on / 依赖: Category, Category.assoc, CommRingCat, CommRingCat.hom_comp, CommRingCat.ofHom_comp, CommRingCat.ofHom_hom, Ideal.Quotient.lift_comp_mk, Quotient, Scheme, Scheme.Hom.liftQuotient, Scheme.toSpec, Spec.map_comp, hom_comp, liftQuotient, lift_comp_mk, map_comp, ofHom_comp, ofHom_hom
 -/
@@ -4136,7 +4376,10 @@ lemma specTargetImageFactorization_app_injective
   let φ' : specTargetImage f ⟶ Scheme.Γ.obj (op X) := CommRingCat.ofHom (RingHom.kerLift φ.hom)
 change Function.Injective ((ΓSpec.adjunction.homEquiv X _) φ'.op).appTop
   rw [ΓSpec_adjunction_homEquiv_eq]
-  apply (RingH
+  apply (RingHom.kerLift_injective φ.hom).comp
+  exact ((ConcreteCategory.isIso_iff_bijective (Scheme.ΓSpecIso _).hom).mp inferInstance).injective
+
+@[reassoc (attr := simp)]
 
 中文:
 引理 specTargetImageFactorization_app_injective
@@ -4145,7 +4388,10 @@ change Function.Injective ((ΓSpec.adjunction.homEquiv X _) φ'.op).appTop
   let φ' : specTargetImage f ⟶ Scheme.Γ.obj (op X) := CommRingCat.ofHom (RingHom.kerLift φ.hom)
 change Function.Injective ((ΓSpec.adjunction.homEquiv X _) φ'.op).appTop
   rw [ΓSpec_adjunction_homEquiv_eq]
-  apply (RingH
+  apply (RingHom.kerLift_injective φ.hom).comp
+  exact ((ConcreteCategory.isIso_iff_bijective (Scheme.ΓSpecIso _).hom).mp inferInstance).injective
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, ConcreteCategory, ConcreteCategory.isIso_iff_bijective, Function, Function.Injective, Injective, RingHom, RingHom.kerLift, RingHom.kerLift_injective, Scheme, Spec.adjunction, Spec.adjunction.homEquiv, adjunction, appTop, homEquiv, injective, isIso_iff_bijective, kerLift, kerLift_injective
 -/

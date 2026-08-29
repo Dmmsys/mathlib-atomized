@@ -2167,7 +2167,15 @@ lemma holderTriple_coe_iff
         rintro rfl
         apply hr
         exact_mod_cast (coe_zero ▸ h).unique _ _ r 0
-    exact ⟨by exact_mod_cast h.inv_add_inv_eq_inv, hp.bot_lt,
+    exact ⟨by exact_mod_cast h.inv_add_inv_eq_inv, hp.bot_lt, hq.bot_lt⟩
+  · rw [holderTriple_iff]
+    have hp := h.ne_zero
+    have hq := h.symm.ne_zero
+    exact_mod_cast h.inv_add_inv_eq_inv
+
+alias ⟨_, _root_.NNReal.HolderTriple.coe_ennreal⟩ := holderTriple_coe_iff
+
+@[simp, norm_cast]
 
 中文:
 引理 holderTriple_coe_iff
@@ -2181,7 +2189,15 @@ lemma holderTriple_coe_iff
         rintro rfl
         apply hr
         exact_mod_cast (coe_zero ▸ h).unique _ _ r 0
-    exact ⟨by exact_mod_cast h.inv_add_inv_eq_inv, hp.bot_lt,
+    exact ⟨by exact_mod_cast h.inv_add_inv_eq_inv, hp.bot_lt, hq.bot_lt⟩
+  · rw [holderTriple_iff]
+    have hp := h.ne_zero
+    have hq := h.symm.ne_zero
+    exact_mod_cast h.inv_add_inv_eq_inv
+
+alias ⟨_, _root_.NNReal.HolderTriple.coe_ennreal⟩ := holderTriple_coe_iff
+
+@[simp, norm_cast]
 
 Depends on / 依赖: NNReal, NNReal.holderTriple_iff, all_goals, bot_lt, coe_zero, h.inv_add_inv_eq_inv, h.ne_zero, h.symm.ne_zero, holderTriple_iff, hp.bot_lt, hq.bot_lt, inv_add_inv_eq_inv, ne_zero, unique
 -/
@@ -2613,7 +2629,13 @@ lemma conjExponent
   rw [inv_eq_iff_eq_inv]
   obtain rfl | hp₁ := hp.eq_or_lt
   · simp
-  ob
+  obtain rfl | hp := eq_or_ne p ∞
+  · simp
+  calc
+    1 + (p - 1)⁻¹ = (p - 1 + 1) / (p - 1) := by
+      rw [ENNReal.add_div]; rw [ENNReal.div_self ((tsub_pos_of_lt hp₁).ne') (sub_ne_top hp)]; rw [one_div]
+    _ = (1⁻¹ - p⁻¹)⁻¹ := by
+      rw [tsub_add_cancel_of_le]; rw [← inv_eq_iff_eq_inv]; rw [div_eq_mul_inv]; rw [ENNReal.mul_inv]; rw [inv_inv]; rw [ENNReal.mul_sub]; rw [ENNReal.inv_mul_cancel]; rw [mul_one] <;> simp [*]
 
 中文:
 引理 conjExponent
@@ -2626,7 +2648,13 @@ lemma conjExponent
   rw [inv_eq_iff_eq_inv]
   obtain rfl | hp₁ := hp.eq_or_lt
   · simp
-  ob
+  obtain rfl | hp := eq_or_ne p ∞
+  · simp
+  calc
+    1 + (p - 1)⁻¹ = (p - 1 + 1) / (p - 1) := by
+      rw [ENNReal.add_div]; rw [ENNReal.div_self ((tsub_pos_of_lt hp₁).ne') (sub_ne_top hp)]; rw [one_div]
+    _ = (1⁻¹ - p⁻¹)⁻¹ := by
+      rw [tsub_add_cancel_of_le]; rw [← inv_eq_iff_eq_inv]; rw [div_eq_mul_inv]; rw [ENNReal.mul_inv]; rw [inv_inv]; rw [ENNReal.mul_sub]; rw [ENNReal.inv_mul_cancel]; rw [mul_one] <;> simp [*]
 -/
 protected lemma conjExponent {p : Real>=0∞} (hp : 1 <= p) : p.HolderConjugate (conjExponent p) := by
   have : p != 0 := (zero_lt_one.trans_le hp).ne'

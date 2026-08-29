@@ -2991,7 +2991,7 @@ lemma zeroLocus_span
   refine ⟨fun H f hfs => H f (Ideal.subset_span hfs), fun H f => Submodule.span_induction H ?_ ?_ ?_⟩
   · simp only [Scheme.basicOpen_zero]; exact not_false
   · exact fun a b _ _ ha hb H => (X.basicOpen_add_le a b H).elim ha hb
-  · s
+  · simp +contextual
 
 中文:
 引理 zeroLocus_span
@@ -3002,7 +3002,7 @@ lemma zeroLocus_span
   refine ⟨fun H f hfs => H f (Ideal.subset_span hfs), fun H f => Submodule.span_induction H ?_ ?_ ?_⟩
   · simp only [Scheme.basicOpen_zero]; exact not_false
   · exact fun a b _ _ ha hb H => (X.basicOpen_add_le a b H).elim ha hb
-  · s
+  · simp +contextual
 
 Depends on / 依赖: Ideal.span, Ideal.subset_span, Scheme, Scheme.basicOpen_zero, Scheme.mem_zeroLocus_iff, SetLike, SetLike.mem_coe, Submodule, Submodule.span_induction, X.basicOpen_add_le, X.zeroLocus, basicOpen_add_le, basicOpen_zero, contextual, mem_coe, mem_zeroLocus_iff, not_false, span_induction, subset_span, zeroLocus
 -/
@@ -3271,7 +3271,7 @@ theorem basicOpen_eq_of_affine
   suffices IsUnit (algebraMap _ ((structurePresheafInCommRingCat ↑R).stalk x) f) ↔
     f ∉ PrimeSpectrum.asIdeal x by exact this
   rw [← isUnit_map_iff (StructureSheaf.stalkIso R x).symm]; rw [AlgEquiv.commutes]
-  exact IsLocalizatio
+  exact IsLocalization.AtPrime.isUnit_to_map_iff _ (PrimeSpectrum.asIdeal x) f
 
 中文:
 定理 basicOpen_eq_of_affine
@@ -3282,7 +3282,7 @@ theorem basicOpen_eq_of_affine
   suffices IsUnit (algebraMap _ ((structurePresheafInCommRingCat ↑R).stalk x) f) ↔
     f ∉ PrimeSpectrum.asIdeal x by exact this
   rw [← isUnit_map_iff (StructureSheaf.stalkIso R x).symm]; rw [AlgEquiv.commutes]
-  exact IsLocalizatio
+  exact IsLocalization.AtPrime.isUnit_to_map_iff _ (PrimeSpectrum.asIdeal x) f
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.commutes, AtPrime, IsLocalization, IsLocalization.AtPrime.isUnit_to_map_iff, IsUnit, PrimeSpectrum, PrimeSpectrum.asIdeal, Scheme, Scheme.mem_basicOpen_top, SetLike, SetLike.mem_coe, StructureSheaf, StructureSheaf.stalkIso, algebraMap, asIdeal, commutes, isUnit_map_iff, isUnit_to_map_iff, mem_basicOpen_top
 -/

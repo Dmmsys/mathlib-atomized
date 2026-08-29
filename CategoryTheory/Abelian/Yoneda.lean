@@ -45,7 +45,16 @@ theorem preadditiveCoyonedaObj_map_surjective
   rw [← Functor.coe_mapAddHom]; rw [← AddCommGrpCat.hom_ofHom (preadditiveCoyonedaObj G).mapAddHom]; rw [← AddCommGrpCat.epi_iff_surjective]
   let cm : ShortComplex C := ⟨kernel.ι p, p, by simp⟩
   have exact : cm.Exact := ShortComplex.exact_of_f_is_kernel _ (kernelIsKernel _)
-  have mono : Mono c
+  have mono : Mono cm.op.f := by dsimp [cm]; infer_instance
+  let φ := preadditiveCoyonedaObj G
+  have faithful : φ.Faithful := by rwa [← isSeparator_iff_faithful_preadditiveCoyonedaObj]
+  apply ShortComplex.epi_of_mono_of_epi_of_mono (cm.op.mapNatTrans (preadditiveYonedaMap _ _))
+  · exact exact.op.map_of_mono_of_preservesKernel _ mono inferInstance
+  · simp only [ShortComplex.map_f]
+    infer_instance
+  · suffices φ.map.Surjective by simpa [AddCommGrpCat.epi_iff_surjective, Functor.coe_mapAddHom]
+    exact fun f => ⟨f (𝟙 G), by cat_disch⟩
+  · simp [AddCommGrpCat.mono_iff_injective, Functor.coe_mapAddHom, Functor.map_injective]
 
 中文:
 定理 preadditiveCoyonedaObj_map_surjective
@@ -54,7 +63,16 @@ theorem preadditiveCoyonedaObj_map_surjective
   rw [← Functor.coe_mapAddHom]; rw [← AddCommGrpCat.hom_ofHom (preadditiveCoyonedaObj G).mapAddHom]; rw [← AddCommGrpCat.epi_iff_surjective]
   let cm : ShortComplex C := ⟨kernel.ι p, p, by simp⟩
   have exact : cm.Exact := ShortComplex.exact_of_f_is_kernel _ (kernelIsKernel _)
-  have mono : Mono c
+  have mono : Mono cm.op.f := by dsimp [cm]; infer_instance
+  let φ := preadditiveCoyonedaObj G
+  have faithful : φ.Faithful := by rwa [← isSeparator_iff_faithful_preadditiveCoyonedaObj]
+  apply ShortComplex.epi_of_mono_of_epi_of_mono (cm.op.mapNatTrans (preadditiveYonedaMap _ _))
+  · exact exact.op.map_of_mono_of_preservesKernel _ mono inferInstance
+  · simp only [ShortComplex.map_f]
+    infer_instance
+  · suffices φ.map.Surjective by simpa [AddCommGrpCat.epi_iff_surjective, Functor.coe_mapAddHom]
+    exact fun f => ⟨f (𝟙 G), by cat_disch⟩
+  · simp [AddCommGrpCat.mono_iff_injective, Functor.coe_mapAddHom, Functor.map_injective]
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.epi_iff_surjective, AddCommGrpCat.hom_ofHom, Faithful, Functor, Functor.coe_mapAddHom, ShortComplex, ShortComplex.epi_of_mono_of_epi_of_mono, ShortComplex.exact_of_f_is_kernel, cm.Exact, cm.op.f, coe_mapAddHom, epi_iff_surjective, epi_of_mono_of_epi_of_mono, exact_of_f_is_kernel, faithful, hom_ofHom, infer_instance, isSeparator_iff_faithful_preadditiveCoyonedaObj, kernel
 -/

@@ -88,7 +88,11 @@ definition counitCoequalises
     · rw [← cancel_epi (adj₁.counit.app (h X).W)]
       rw [← adj₁.counit_naturality_assoc (h X).left]
       dsimp
-      rw [← dsimp% s.condition]; rw [← F.map_comp_assoc]; rw [← U.map_comp]; rw 
+      rw [← dsimp% s.condition]; rw [← F.map_comp_assoc]; rw [← U.map_comp]; rw [RegularEpi.w]; rw [U.map_comp]; rw [F.map_comp_assoc]; rw [s.condition]; rw [← adj₁.counit_naturality_assoc (h X).right]
+    · apply ((h X).desc' s.π _).2
+    · intro m hm
+      rw [← cancel_epi (adj₁.counit.app X)]
+      apply hm.trans ((h _).desc' s.π _).2.symm
 
 中文:
 定义 counitCoequalises
@@ -99,7 +103,11 @@ definition counitCoequalises
     · rw [← cancel_epi (adj₁.counit.app (h X).W)]
       rw [← adj₁.counit_naturality_assoc (h X).left]
       dsimp
-      rw [← dsimp% s.condition]; rw [← F.map_comp_assoc]; rw [← U.map_comp]; rw 
+      rw [← dsimp% s.condition]; rw [← F.map_comp_assoc]; rw [← U.map_comp]; rw [RegularEpi.w]; rw [U.map_comp]; rw [F.map_comp_assoc]; rw [s.condition]; rw [← adj₁.counit_naturality_assoc (h X).right]
+    · apply ((h X).desc' s.π _).2
+    · intro m hm
+      rw [← cancel_epi (adj₁.counit.app X)]
+      apply hm.trans ((h _).desc' s.π _).2.symm
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.mk, F.map_comp_assoc, IsColimit, RegularEpi, RegularEpi.w, U.map_comp, cancel_epi, condition, counit, counit.app, counit_naturality_assoc, hm.trans, map_comp, map_comp_assoc, s.condition
 -/
@@ -190,7 +198,19 @@ definition constructLeftAdjointEquiv
           F'.map (U.map (adj₁.counit.app X)) ≫ f = otherMap _ _ adj₁ adj₂ _ ≫ f } :=
       Cofork.IsColimit.homIso (colimit.isColimit _) _
     _ ≃ { g : U.obj X ⟶ U.obj (R.obj Y) //
-          U.map (F.map 
+          U.map (F.map g ≫ adj₁.counit.app _) = U.map (adj₁.counit.app _) ≫ g } := by
+      apply (adj₂.homEquiv _ _).subtypeEquiv _
+      intro f
+      rw [← (adj₂.homEquiv _ _).injective.eq_iff]; rw [eq_comm]; rw [adj₂.homEquiv_naturality_left]; rw [otherMap]; rw [assoc]; rw [adj₂.homEquiv_naturality_left]; rw [← adj₂.counit_naturality]; rw [adj₂.homEquiv_naturality_left]; rw [adj₂.homEquiv_unit]; rw [adj₂.right_triangle_components]; rw [comp_id]; rw [Functor.comp_map]; rw [← U.map_comp]; rw [assoc]
+      dsimp
+      rw [← adj₁.counit_naturality]
+      simp [dsimp% adj₂.homEquiv_unit _ _ f ]
+    _ ≃ { z : F.obj (U.obj X) ⟶ R.obj Y // _ } := by
+      apply (adj₁.homEquiv _ _).symm.subtypeEquiv
+      intro g
+      rw [← (adj₁.homEquiv _ _).symm.injective.eq_iff]; rw [adj₁.homEquiv_counit]; rw [adj₁.homEquiv_counit]; rw [adj₁.homEquiv_counit]; rw [F.map_comp]; rw [assoc]; rw [U.map_comp]; rw [F.map_comp]; rw [assoc]; rw [adj₁.counit_naturality]; rw [adj₁.counit_naturality_assoc]
+      apply eq_comm
+    _ ≃ (X ⟶ R.obj Y) := (Cofork.IsColimit.homIso (counitCoequalises adj₁ h X) _).symm
 
 中文:
 定义 constructLeftAdjointEquiv
@@ -201,7 +221,19 @@ definition constructLeftAdjointEquiv
           F'.map (U.map (adj₁.counit.app X)) ≫ f = otherMap _ _ adj₁ adj₂ _ ≫ f } :=
       Cofork.IsColimit.homIso (colimit.isColimit _) _
     _ ≃ { g : U.obj X ⟶ U.obj (R.obj Y) //
-          U.map (F.map 
+          U.map (F.map g ≫ adj₁.counit.app _) = U.map (adj₁.counit.app _) ≫ g } := by
+      apply (adj₂.homEquiv _ _).subtypeEquiv _
+      intro f
+      rw [← (adj₂.homEquiv _ _).injective.eq_iff]; rw [eq_comm]; rw [adj₂.homEquiv_naturality_left]; rw [otherMap]; rw [assoc]; rw [adj₂.homEquiv_naturality_left]; rw [← adj₂.counit_naturality]; rw [adj₂.homEquiv_naturality_left]; rw [adj₂.homEquiv_unit]; rw [adj₂.right_triangle_components]; rw [comp_id]; rw [Functor.comp_map]; rw [← U.map_comp]; rw [assoc]
+      dsimp
+      rw [← adj₁.counit_naturality]
+      simp [dsimp% adj₂.homEquiv_unit _ _ f ]
+    _ ≃ { z : F.obj (U.obj X) ⟶ R.obj Y // _ } := by
+      apply (adj₁.homEquiv _ _).symm.subtypeEquiv
+      intro g
+      rw [← (adj₁.homEquiv _ _).symm.injective.eq_iff]; rw [adj₁.homEquiv_counit]; rw [adj₁.homEquiv_counit]; rw [adj₁.homEquiv_counit]; rw [F.map_comp]; rw [assoc]; rw [U.map_comp]; rw [F.map_comp]; rw [assoc]; rw [adj₁.counit_naturality]; rw [adj₁.counit_naturality_assoc]
+      apply eq_comm
+    _ ≃ (X ⟶ R.obj Y) := (Cofork.IsColimit.homIso (counitCoequalises adj₁ h X) _).symm
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.homIso, F.map, IsColimit, R.obj, U.map, U.obj, colimit, colimit.isColimit, constructLeftAdjointObj, counit, counit.app, eq_comm, eq_iff, homEquiv, homEquiv_naturality_left, homIso, injective, injective.eq_iff, isColimit
 -/
@@ -242,7 +274,12 @@ definition constructLeftAdjoint
   intro X Y Y' g h
   rw [constructLeftAdjointEquiv_apply]; rw [constructLeftAdjointEquiv_apply]; rw [Equiv.symm_apply_eq]; rw [Subtype.ext_iff]
   dsimp
-  -- This used to be `rw`, but we need `erw`
+  -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
+  erw [Cofork.IsColimit.homIso_natural, Cofork.IsColimit.homIso_natural]
+  erw [adj₂.homEquiv_naturality_right]
+  simp_rw [Functor.comp_map]
+  -- This used to be `simp`, but we need `cat_disch` after https://github.com/leanprover/lean4/pull/2644
+  cat_disch
 
 中文:
 定义 constructLeftAdjoint
@@ -252,7 +289,12 @@ definition constructLeftAdjoint
   intro X Y Y' g h
   rw [constructLeftAdjointEquiv_apply]; rw [constructLeftAdjointEquiv_apply]; rw [Equiv.symm_apply_eq]; rw [Subtype.ext_iff]
   dsimp
-  -- This used to be `rw`, but we need `erw`
+  -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
+  erw [Cofork.IsColimit.homIso_natural, Cofork.IsColimit.homIso_natural]
+  erw [adj₂.homEquiv_naturality_right]
+  simp_rw [Functor.comp_map]
+  -- This used to be `simp`, but we need `cat_disch` after https://github.com/leanprover/lean4/pull/2644
+  cat_disch
 
 Depends on / 依赖: Adjunction, Adjunction.leftAdjointOfEquiv, Equiv.symm_apply_eq, Subtype, Subtype.ext_iff, constructLeftAdjointEquiv, constructLeftAdjointEquiv_apply, ext_iff, leftAdjointOfEquiv, symm_apply_eq
 -/
@@ -306,7 +348,16 @@ lemma isRightAdjoint_triangle_lift_monadic
   · let : (R' ⋙ (Monad.comparison (monadicAdjunction U)).inv).IsRightAdjoint := by
       infer_instance
     refine ((Adjunction.ofIsRightAdjoint
-      (R' ⋙ (Monad.comparison (monadicAdjunction U)).inv)
+      (R' ⋙ (Monad.comparison (monadicAdjunction U)).inv)).ofNatIsoRight ?_).isRightAdjoint
+    exact Functor.isoWhiskerLeft R (Monad.comparison _).asEquivalence.unitIso.symm ≪≫ R.rightUnitor
+  let : (R' ⋙ Monad.forget (monadicAdjunction U).toMonad).IsRightAdjoint := by
+    refine ((Adjunction.ofIsRightAdjoint (R ⋙ U)).ofNatIsoRight ?_).isRightAdjoint
+    exact Functor.isoWhiskerLeft R (Monad.comparisonForget (monadicAdjunction U)).symm
+  let : forall X, RegularEpi ((Monad.adj (monadicAdjunction U).toMonad).counit.app X) := by
+    intro X
+    simp only [Monad.adj_counit]
+    exact ⟨_, _, _, _, Monad.beckAlgebraCoequalizer X⟩
+  exact isRightAdjoint_triangle_lift R' (Monad.adj _) this
 
 中文:
 引理 isRightAdjoint_triangle_lift_monadic
@@ -317,7 +368,16 @@ lemma isRightAdjoint_triangle_lift_monadic
   · let : (R' ⋙ (Monad.comparison (monadicAdjunction U)).inv).IsRightAdjoint := by
       infer_instance
     refine ((Adjunction.ofIsRightAdjoint
-      (R' ⋙ (Monad.comparison (monadicAdjunction U)).inv)
+      (R' ⋙ (Monad.comparison (monadicAdjunction U)).inv)).ofNatIsoRight ?_).isRightAdjoint
+    exact Functor.isoWhiskerLeft R (Monad.comparison _).asEquivalence.unitIso.symm ≪≫ R.rightUnitor
+  let : (R' ⋙ Monad.forget (monadicAdjunction U).toMonad).IsRightAdjoint := by
+    refine ((Adjunction.ofIsRightAdjoint (R ⋙ U)).ofNatIsoRight ?_).isRightAdjoint
+    exact Functor.isoWhiskerLeft R (Monad.comparisonForget (monadicAdjunction U)).symm
+  let : forall X, RegularEpi ((Monad.adj (monadicAdjunction U).toMonad).counit.app X) := by
+    intro X
+    simp only [Monad.adj_counit]
+    exact ⟨_, _, _, _, Monad.beckAlgebraCoequalizer X⟩
+  exact isRightAdjoint_triangle_lift R' (Monad.adj _) this
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, Functor, Functor.isoWhiskerLeft, IsRightAdjoint, Monad.comparison, Monad.forget, R.rightUnitor, asEquivalence, asEquivalence.unitIso.symm, comparison, forget, infer_instance, isRightAdjoint, isoWhiskerLeft, monadicAdjunction, ofIsRightAdjoint, ofNatIsoRight, rightUnitor, rsuffices
 -/

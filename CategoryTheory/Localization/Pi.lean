@@ -42,7 +42,38 @@ instance pi
     let E := Pi.equivalenceOfEquiv C₂ e
     let E' := Pi.equivalenceOfEquiv D₂ e
     have : CatCommSq E.functor (Functor.pi L₁) (Functor.pi L₂) E'.functor :=
-      (CatComm
+      (CatCommSq.hInvEquiv E (Functor.pi L₁) (Functor.pi L₂) E').symm ⟨Iso.refl _⟩
+    refine IsLocalization.of_equivalences (Functor.pi L₁)
+      (MorphismProperty.pi (fun j => (W₂ (e j)))) (Functor.pi L₂)
+      (MorphismProperty.pi W₂) E E' ?_
+      (MorphismProperty.IsInvertedBy.pi _ _ (fun _ => Localization.inverts _ _))
+    intro _ _ f hf
+    refine ⟨_, _, E.functor.map f, fun i => ?_, ⟨Iso.refl _⟩⟩
+    have H : forall {j j' : J₂} (h : j = j') {X Y : C₂ j} (g : X ⟶ Y) (_ : W₂ j g),
+        W₂ j' ((Pi.eqToEquivalence C₂ h).functor.map g) := by
+      rintro j _ rfl _ _ g hg
+      exact hg
+    exact H (e.apply_symm_apply i) _ (hf (e.symm i))
+  · intro C D _ _ L W _ _
+    have : forall j, IsEquivalence (L j) := by rintro ⟨⟩
+    refine IsLocalization.of_isEquivalence _ _ (fun _ _ _ _ => ?_)
+    rw [MorphismProperty.isomorphisms.iff]; rw [isIso_pi_iff]
+    rintro ⟨⟩
+  · intro J _ hJ C D _ _ L W _ _
+    let L₁ := (L none).prod (Functor.pi (fun j => L (some j)))
+    have : CatCommSq (Pi.optionEquivalence C).symm.functor L₁ (Functor.pi L)
+      (Pi.optionEquivalence D).symm.functor :=
+        ⟨NatIso.pi' (by rintro (_ | i) <;> apply Iso.refl)⟩
+    refine IsLocalization.of_equivalences L₁
+      ((W none).prod (MorphismProperty.pi (fun j => W (some j)))) (Functor.pi L) _
+      (Pi.optionEquivalence C).symm (Pi.optionEquivalence D).symm ?_ ?_
+    · intro ⟨X₁, X₂⟩ ⟨Y₁, Y₂⟩ f ⟨hf₁, hf₂⟩
+      refine ⟨_, _, (Pi.optionEquivalence C).inverse.map f, ?_, ⟨Iso.refl _⟩⟩
+      rintro (_ | i)
+      · exact hf₁
+      · apply hf₂
+    · apply MorphismProperty.IsInvertedBy.pi
+      rintro (_ | i) <;> apply Localization.inverts
 
 中文:
 实例 pi
@@ -55,7 +86,38 @@ instance pi
     let E := Pi.equivalenceOfEquiv C₂ e
     let E' := Pi.equivalenceOfEquiv D₂ e
     have : CatCommSq E.functor (Functor.pi L₁) (Functor.pi L₂) E'.functor :=
-      (CatComm
+      (CatCommSq.hInvEquiv E (Functor.pi L₁) (Functor.pi L₂) E').symm ⟨Iso.refl _⟩
+    refine IsLocalization.of_equivalences (Functor.pi L₁)
+      (MorphismProperty.pi (fun j => (W₂ (e j)))) (Functor.pi L₂)
+      (MorphismProperty.pi W₂) E E' ?_
+      (MorphismProperty.IsInvertedBy.pi _ _ (fun _ => Localization.inverts _ _))
+    intro _ _ f hf
+    refine ⟨_, _, E.functor.map f, fun i => ?_, ⟨Iso.refl _⟩⟩
+    have H : forall {j j' : J₂} (h : j = j') {X Y : C₂ j} (g : X ⟶ Y) (_ : W₂ j g),
+        W₂ j' ((Pi.eqToEquivalence C₂ h).functor.map g) := by
+      rintro j _ rfl _ _ g hg
+      exact hg
+    exact H (e.apply_symm_apply i) _ (hf (e.symm i))
+  · intro C D _ _ L W _ _
+    have : forall j, IsEquivalence (L j) := by rintro ⟨⟩
+    refine IsLocalization.of_isEquivalence _ _ (fun _ _ _ _ => ?_)
+    rw [MorphismProperty.isomorphisms.iff]; rw [isIso_pi_iff]
+    rintro ⟨⟩
+  · intro J _ hJ C D _ _ L W _ _
+    let L₁ := (L none).prod (Functor.pi (fun j => L (some j)))
+    have : CatCommSq (Pi.optionEquivalence C).symm.functor L₁ (Functor.pi L)
+      (Pi.optionEquivalence D).symm.functor :=
+        ⟨NatIso.pi' (by rintro (_ | i) <;> apply Iso.refl)⟩
+    refine IsLocalization.of_equivalences L₁
+      ((W none).prod (MorphismProperty.pi (fun j => W (some j)))) (Functor.pi L) _
+      (Pi.optionEquivalence C).symm (Pi.optionEquivalence D).symm ?_ ?_
+    · intro ⟨X₁, X₂⟩ ⟨Y₁, Y₂⟩ f ⟨hf₁, hf₂⟩
+      refine ⟨_, _, (Pi.optionEquivalence C).inverse.map f, ?_, ⟨Iso.refl _⟩⟩
+      rintro (_ | i)
+      · exact hf₁
+      · apply hf₂
+    · apply MorphismProperty.IsInvertedBy.pi
+      rintro (_ | i) <;> apply Localization.inverts
 
 Depends on / 依赖: CatCommSq, CatCommSq.hInvEquiv, E.functor, Finite, Finite.induction_empty_option, Functor, Functor.pi, IsLocalization, IsLocalization.of_equivalences, Iso.refl, MorphismPro, MorphismProperty, MorphismProperty.pi, Pi.equivalenceOfEquiv, equivalenceOfEquiv, functor, hInvEquiv, induction_empty_option, of_equivalences, revert
 -/

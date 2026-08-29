@@ -603,7 +603,11 @@ theorem ofModule_asAlgebraHom_apply_apply
       Representation.asAlgebraHom_single, Representation.ofModule,
       RestrictScalars.lsmul_apply_apply]
   · intro f g fw gw
-    simp only [fw, gw, map_add, add_smul
+    simp only [fw, gw, map_add, add_smul, LinearMap.add_apply]
+  · intro r f w
+    simp only [w, map_smul, LinearMap.smul_apply, RestrictScalars.addEquiv_symm_map_smul_smul]
+
+@[simp]
 
 中文:
 定理 ofModule_asAlgebraHom_apply_apply
@@ -615,7 +619,11 @@ theorem ofModule_asAlgebraHom_apply_apply
       Representation.asAlgebraHom_single, Representation.ofModule,
       RestrictScalars.lsmul_apply_apply]
   · intro f g fw gw
-    simp only [fw, gw, map_add, add_smul
+    simp only [fw, gw, map_add, add_smul, LinearMap.add_apply]
+  · intro r f w
+    simp only [w, map_smul, LinearMap.smul_apply, RestrictScalars.addEquiv_symm_map_smul_smul]
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.add_apply, LinearMap.smul_apply, MonoidAlgebra, MonoidAlgebra.induction_on, MonoidAlgebra.lift_symm_apply, MonoidAlgebra.of_apply, Representation, Representation.asAlgebraHom_single, Representation.ofModule, RestrictScalars, RestrictScalars.addEquiv_symm_map_smul_smul, RestrictScalars.lsmul_apply_apply, addEquiv_symm_map_smul_smul, add_apply, add_smul, asAlgebraHom_single, induction_on, lift_symm_apply, lsmul_apply_apply
 -/
@@ -1086,7 +1094,8 @@ lemma apply_sub_id_partialSum_eq
   | succ n h =>
     have : Fin.init (fun (j : Fin (n + 2)) => ρ (g ^ (j : Nat)) x) =
       fun (j : Fin (n + 1)) => ρ (g ^ (j : Nat)) x := by ext; simp [Fin.init]
-    rw [← Fin.succ_eq_last_succ.2 rfl]; rw [Fin.partialSum_succ]; rw [← Fin.parti
+    rw [← Fin.succ_eq_last_succ.2 rfl]; rw [Fin.partialSum_succ]; rw [← Fin.partialSum_init]; rw [map_add]; rw [this]; rw [h]
+    simp [pow_succ']
 
 中文:
 引理 apply_sub_id_partialSum_eq
@@ -1097,7 +1106,8 @@ lemma apply_sub_id_partialSum_eq
   | succ n h =>
     have : Fin.init (fun (j : Fin (n + 2)) => ρ (g ^ (j : Nat)) x) =
       fun (j : Fin (n + 1)) => ρ (g ^ (j : Nat)) x := by ext; simp [Fin.init]
-    rw [← Fin.succ_eq_last_succ.2 rfl]; rw [Fin.partialSum_succ]; rw [← Fin.parti
+    rw [← Fin.succ_eq_last_succ.2 rfl]; rw [Fin.partialSum_succ]; rw [← Fin.partialSum_init]; rw [map_add]; rw [this]; rw [h]
+    simp [pow_succ']
 
 Depends on / 依赖: Fin.last, partialSum
 -/
@@ -1657,7 +1667,10 @@ lemma coeff_of_leftRegular_of_generator
   | succ n h =>
     simpa [← h, zpow_natCast, zpow_add_one, pow_mul_comm', pow_succ'] using (hx (g ^ (n + 1))).symm
   | pred n h =>
-    simpa [zpow_sub, ← h, ← mul_
+    simpa [zpow_sub, ← h, ← mul_inv_rev, ← pow_mul_comm'] using hx (g ^ (-n : Int))
+
+@[deprecated (since := "2026-06-18")]
+alias apply_eq_of_leftRegular_eq_of_generator := coeff_of_leftRegular_of_generator
 
 中文:
 引理 coeff_of_leftRegular_of_generator
@@ -1670,7 +1683,10 @@ lemma coeff_of_leftRegular_of_generator
   | succ n h =>
     simpa [← h, zpow_natCast, zpow_add_one, pow_mul_comm', pow_succ'] using (hx (g ^ (n + 1))).symm
   | pred n h =>
-    simpa [zpow_sub, ← h, ← mul_
+    simpa [zpow_sub, ← h, ← mul_inv_rev, ← pow_mul_comm'] using hx (g ^ (-n : Int))
+
+@[deprecated (since := "2026-06-18")]
+alias apply_eq_of_leftRegular_eq_of_generator := coeff_of_leftRegular_of_generator
 
 Depends on / 依赖: Finsupp, Finsupp.ext_iff, MonoidAlgebra, MonoidAlgebra.ext_iff, ext_iff, mul_inv_rev, pow_mul_comm, pow_succ, zpow_add_one, zpow_natCast, zpow_sub
 -/
@@ -1839,7 +1855,8 @@ theorem smul_tprod_one_asModule
   change asAlgebraHom (ρV otimes 1) _ _ = asAlgebraHom ρV _ _ otimesₜ _
   simp only [asAlgebraHom_def, MonoidAlgebra.lift_apply, tprod_apply, MonoidHom.one_apply,
     LinearMap.finsupp_sum_apply, LinearMap.smul_apply, TensorProduct.map_tmul, Module.End.one_apply]
-  simp only [Finsupp.sum, TensorP
+  simp only [Finsupp.sum, TensorProduct.sum_tmul]
+  rfl
 
 中文:
 定理 smul_tprod_one_asModule
@@ -1848,7 +1865,8 @@ theorem smul_tprod_one_asModule
   change asAlgebraHom (ρV otimes 1) _ _ = asAlgebraHom ρV _ _ otimesₜ _
   simp only [asAlgebraHom_def, MonoidAlgebra.lift_apply, tprod_apply, MonoidHom.one_apply,
     LinearMap.finsupp_sum_apply, LinearMap.smul_apply, TensorProduct.map_tmul, Module.End.one_apply]
-  simp only [Finsupp.sum, TensorP
+  simp only [Finsupp.sum, TensorProduct.sum_tmul]
+  rfl
 
 Depends on / 依赖: Finsupp, Finsupp.sum, LinearMap, LinearMap.finsupp_sum_apply, LinearMap.smul_apply, Module, Module.End.one_apply, MonoidAlgebra, MonoidAlgebra.lift_apply, MonoidHom, MonoidHom.one_apply, TensorProduct, TensorProduct.map_tmul, TensorProduct.sum_tmul, asAlgebraHom, asAlgebraHom_def, finsupp_sum_apply, lift_apply, map_tmul, one_apply
 -/
@@ -1871,7 +1889,7 @@ theorem smul_one_tprod_asModule
   change asAlgebraHom (1 otimes ρW) _ _ = _ otimesₜ asAlgebraHom ρW _ _
   simp only [asAlgebraHom_def, MonoidAlgebra.lift_apply, tprod_apply, MonoidHom.one_apply,
     LinearMap.finsupp_sum_apply, LinearMap.smul_apply, TensorProduct.map_tmul, Module.End.one_apply]
-  simp only [Finsupp.sum, TensorP
+  simp only [Finsupp.sum, TensorProduct.tmul_sum, TensorProduct.tmul_smul]
 
 中文:
 定理 smul_one_tprod_asModule
@@ -1880,7 +1898,7 @@ theorem smul_one_tprod_asModule
   change asAlgebraHom (1 otimes ρW) _ _ = _ otimesₜ asAlgebraHom ρW _ _
   simp only [asAlgebraHom_def, MonoidAlgebra.lift_apply, tprod_apply, MonoidHom.one_apply,
     LinearMap.finsupp_sum_apply, LinearMap.smul_apply, TensorProduct.map_tmul, Module.End.one_apply]
-  simp only [Finsupp.sum, TensorP
+  simp only [Finsupp.sum, TensorProduct.tmul_sum, TensorProduct.tmul_smul]
 
 Depends on / 依赖: Finsupp, Finsupp.sum, LinearMap, LinearMap.finsupp_sum_apply, LinearMap.smul_apply, Module, Module.End.one_apply, MonoidAlgebra, MonoidAlgebra.lift_apply, MonoidHom, MonoidHom.one_apply, TensorProduct, TensorProduct.map_tmul, TensorProduct.tmul_smul, TensorProduct.tmul_sum, asAlgebraHom, asAlgebraHom_def, finsupp_sum_apply, lift_apply, map_tmul
 -/
@@ -1909,7 +1927,9 @@ definition linHom
       map_add' := fun f₁ f₂ => by simp_rw [add_comp, comp_add]
       map_smul' := fun r f => by simp_rw [RingHom.id_apply, smul_comp, comp_smul] }
   map_one' := ext fun x => by simp [Module.End.one_eq_id]
-  map_mul' g h := ext fun x => by simp [Module.End.mul_
+  map_mul' g h := ext fun x => by simp [Module.End.mul_eq_comp, comp_assoc]
+
+@[simp]
 
 中文:
 定义 linHom
@@ -1918,7 +1938,9 @@ definition linHom
       map_add' := fun f₁ f₂ => by simp_rw [add_comp, comp_add]
       map_smul' := fun r f => by simp_rw [RingHom.id_apply, smul_comp, comp_smul] }
   map_one' := ext fun x => by simp [Module.End.one_eq_id]
-  map_mul' g h := ext fun x => by simp [Module.End.mul_
+  map_mul' g h := ext fun x => by simp [Module.End.mul_eq_comp, comp_assoc]
+
+@[simp]
 
 Depends on / 依赖: Module, Module.End.mul_eq_comp, Module.End.one_eq_id, RingHom, RingHom.id_apply, add_comp, comp_add, comp_assoc, comp_smul, id_apply, map_add, map_mul, map_one, map_smul, mul_eq_comp, one_eq_id, simp_rw, smul_comp
 -/
@@ -2144,7 +2166,18 @@ definition finsuppLEquivFreeAsModule
     simp only [AddHom.toFun_eq_coe, coe_toAddHom, LinearEquiv.coe_coe, RingHom.id_apply,
       (free k G α).asModuleEquiv.symm_apply_eq, asModuleEquiv_map_smul,
       LinearEquiv.apply_symm_apply]
-    induction x using MonoidAlgebra.induction_l
+    induction x using MonoidAlgebra.induction_linear with
+    | zero => simp
+    | add => simp [*, add_smul]
+    | single g a =>
+    induction y using Finsupp.induction_linear with
+    | zero => simp
+    | add => simp [*]
+    | single h y =>
+    induction y using MonoidAlgebra.induction_linear with
+    | zero => simp
+    | add => simp [*]
+    | single i b => simp
 
 中文:
 定义 finsuppLEquivFreeAsModule
@@ -2154,7 +2187,18 @@ definition finsuppLEquivFreeAsModule
     simp only [AddHom.toFun_eq_coe, coe_toAddHom, LinearEquiv.coe_coe, RingHom.id_apply,
       (free k G α).asModuleEquiv.symm_apply_eq, asModuleEquiv_map_smul,
       LinearEquiv.apply_symm_apply]
-    induction x using MonoidAlgebra.induction_l
+    induction x using MonoidAlgebra.induction_linear with
+    | zero => simp
+    | add => simp [*, add_smul]
+    | single g a =>
+    induction y using Finsupp.induction_linear with
+    | zero => simp
+    | add => simp [*]
+    | single h y =>
+    induction y using MonoidAlgebra.induction_linear with
+    | zero => simp
+    | add => simp [*]
+    | single i b => simp
 
 Depends on / 依赖: asModuleEquiv, symm.toAddEquiv, toAddEquiv
 -/

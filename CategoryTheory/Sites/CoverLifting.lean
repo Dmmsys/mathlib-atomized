@@ -236,7 +236,12 @@ refine J.superset_covering ?_ h.cover_lift (K.pullback_stable (adj.counit.app _)
     intro X f hf
     refine ⟨F.obj X, F.map f ≫ adj.counit.app _, adj.unit.app _, hf, by simp⟩
   · intro U S hS
-    refine J.superset_covering ?_ (J.pullba
+    refine J.superset_covering ?_ (J.pullback_stable (adj.unit.app U) <| h.cover_preserve hS)
+    intro X f ⟨Y, g, u, hg, heq⟩
+    suffices F.map f = (adj.homEquiv _ _).symm u ≫ g by
+      simp [this, S.downward_closed hg]
+    simp [← Adjunction.homEquiv_naturality_right_symm, ← heq,
+      Adjunction.homEquiv_naturality_left_symm]
 
 中文:
 引理 伴随.isCocontinuous_iff_coverPreserving
@@ -248,7 +253,12 @@ refine J.superset_covering ?_ h.cover_lift (K.pullback_stable (adj.counit.app _)
     intro X f hf
     refine ⟨F.obj X, F.map f ≫ adj.counit.app _, adj.unit.app _, hf, by simp⟩
   · intro U S hS
-    refine J.superset_covering ?_ (J.pullba
+    refine J.superset_covering ?_ (J.pullback_stable (adj.unit.app U) <| h.cover_preserve hS)
+    intro X f ⟨Y, g, u, hg, heq⟩
+    suffices F.map f = (adj.homEquiv _ _).symm u ≫ g by
+      simp [this, S.downward_closed hg]
+    simp [← Adjunction.homEquiv_naturality_right_symm, ← heq,
+      Adjunction.homEquiv_naturality_left_symm]
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_right_symm, F.map, F.obj, J.pullback_stable, J.superset_covering, K.pullback_stable, S.downward_closed, adj.counit.app, adj.homEquiv, adj.unit.app, counit, cover_lift, cover_preserve, downward_closed, h.cover_lift, h.cover_preserve, homEquiv, homEquiv_naturality_right_symm, pullback_stable
 -/
@@ -353,7 +363,15 @@ definition liftAux
     (fun k => s.ι (⟨_, G.map k.f ≫ f, k.hf⟩) ≫ α.app (op k.Y)) (by
       intro { fst := ⟨Y₁, p₁, hp₁⟩, snd := ⟨Y₂, p₂, hp₂⟩, r := ⟨W, g₁, g₂, w⟩ }
       dsimp at g₁ g₂ w ⊢
-      simp only [Category.assoc, ← 
+      simp only [Category.assoc, ← α.naturality, Functor.comp_map,
+        Functor.op_map, Quiver.Hom.unop_op]
+      apply s.condition_assoc
+        { fst.hf := hp₁
+          snd.hf := hp₂
+          r.g₁ := G.map g₁
+          r.g₂ := G.map g₂
+          r.w := by simpa using G.congr_map w =≫ f
+          .. })
 
 中文:
 定义 liftAux
@@ -362,7 +380,15 @@ definition liftAux
     (fun k => s.ι (⟨_, G.map k.f ≫ f, k.hf⟩) ≫ α.app (op k.Y)) (by
       intro { fst := ⟨Y₁, p₁, hp₁⟩, snd := ⟨Y₂, p₂, hp₂⟩, r := ⟨W, g₁, g₂, w⟩ }
       dsimp at g₁ g₂ w ⊢
-      simp only [Category.assoc, ← 
+      simp only [Category.assoc, ← α.naturality, Functor.comp_map,
+        Functor.op_map, Quiver.Hom.unop_op]
+      apply s.condition_assoc
+        { fst.hf := hp₁
+          snd.hf := hp₂
+          r.g₁ := G.map g₁
+          r.g₂ := G.map g₂
+          r.w := by simpa using G.congr_map w =≫ f
+          .. })
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.comp_map, Functor.op_map, G.congr_map, G.cover_lift, G.map, IsLimit, K.pullback_stable, Multifork, Multifork.IsLimit.lift, Quiver, Quiver.Hom.unop_op, comp_map, condition_assoc, congr_map, cover_lift, fst.hf, hF.isLimitMultifork
 -/
@@ -394,7 +420,17 @@ lemma liftAux_map
       ⟨W, g, by simpa only [Sieve.functorPullback_apply, functorPullback_mem,
         Sieve.pullback_apply, ← w] using S.1.downward_closed i.hf h⟩).trans (by
         dsimp
-        simp only [← Catego
+        simp only [← Category.assoc]
+        congr 1
+        let r : S.Relation :=
+          { fst.f := G.map g ≫ f
+            fst.hf := by simpa only [← w] using S.1.downward_closed i.hf h
+            snd := i
+            r.g₁ := 𝟙 _
+            r.g₂ := h
+            r.w := by simpa using w.symm
+            .. }
+        simpa [r] using s.condition r)
 
 中文:
 引理 liftAux_map
@@ -404,7 +440,17 @@ lemma liftAux_map
       ⟨W, g, by simpa only [Sieve.functorPullback_apply, functorPullback_mem,
         Sieve.pullback_apply, ← w] using S.1.downward_closed i.hf h⟩).trans (by
         dsimp
-        simp only [← Catego
+        simp only [← Category.assoc]
+        congr 1
+        let r : S.Relation :=
+          { fst.f := G.map g ≫ f
+            fst.hf := by simpa only [← w] using S.1.downward_closed i.hf h
+            snd := i
+            r.g₁ := 𝟙 _
+            r.g₂ := h
+            r.w := by simpa using w.symm
+            .. }
+        simpa [r] using s.condition r)
 
 Depends on / 依赖: Category, Category.assoc, G.cover_lift, G.map, IsLimit, K.pullback_stable, Multifork, Multifork.IsLimit.fac, Relation, S.Relation, Sieve.functorPullback_apply, Sieve.pullback_apply, condition, cover_lift, downward_closed, fst.f, fst.hf, functorPullback_apply, functorPullback_mem, hF.isLimitMultifork
 -/
@@ -441,7 +487,8 @@ lemma liftAux_map'
   have eq₁ := liftAux_map hF α s f (g ≫ a) ⟨_, _, hg⟩ (𝟙 _) (by simp)
   have eq₂ := liftAux_map hF α s f' (g ≫ b) ⟨_, _, hg⟩ (𝟙 _) (by simp [w])
   dsimp at eq₁ eq₂
-  simp only [Functor.map_c
+  simp only [Functor.map_comp, Functor.map_id] at eq₁ eq₂
+  simp only [Category.assoc, eq₁, eq₂]
 
 中文:
 引理 liftAux_map'
@@ -453,7 +500,8 @@ lemma liftAux_map'
   have eq₁ := liftAux_map hF α s f (g ≫ a) ⟨_, _, hg⟩ (𝟙 _) (by simp)
   have eq₂ := liftAux_map hF α s f' (g ≫ b) ⟨_, _, hg⟩ (𝟙 _) (by simp [w])
   dsimp at eq₁ eq₂
-  simp only [Functor.map_c
+  simp only [Functor.map_comp, Functor.map_id] at eq₁ eq₂
+  simp only [Category.assoc, eq₁, eq₂]
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.map_comp, Functor.map_id, G.cover_lift, G.map, K.pullback_stable, cover_lift, hF.hom_ext, hom_ext, liftAux_map, map_comp, map_id, pullback_stable
 -/
@@ -583,7 +631,9 @@ lemma hom_ext
   intro ⟨W, i, hi⟩
   have eq := h (GrothendieckTopology.Cover.Arrow.mk _ (G.map i ≫ j.hom.unop) hi)
   dsimp at eq ⊢
-  simp only [Category.assoc, ← NatTrans.naturality, Functor.comp_ma
+  simp only [Category.assoc, ← NatTrans.naturality, Functor.comp_map, ← Functor.map_comp_assoc,
+    Functor.op_map, Quiver.Hom.unop_op]
+  rw [reassoc_of% eq]
 
 中文:
 引理 hom_ext
@@ -595,7 +645,9 @@ lemma hom_ext
   intro ⟨W, i, hi⟩
   have eq := h (GrothendieckTopology.Cover.Arrow.mk _ (G.map i ≫ j.hom.unop) hi)
   dsimp at eq ⊢
-  simp only [Category.assoc, ← NatTrans.naturality, Functor.comp_ma
+  simp only [Category.assoc, ← NatTrans.naturality, Functor.comp_map, ← Functor.map_comp_assoc,
+    Functor.op_map, Quiver.Hom.unop_op]
+  rw [reassoc_of% eq]
 
 Depends on / 依赖: Category, Category.assoc, Functor, Functor.comp_map, Functor.map_comp_assoc, Functor.op_map, G.cover_lift, G.map, GrothendieckTopology, GrothendieckTopology.Cover.Arrow.mk, K.pullback_stable, NatTrans, NatTrans.naturality, Quiver, Quiver.Hom.unop_op, comp_map, cover_lift, hF.hom_ext, hom_ext, j.hom.unop
 -/
@@ -773,7 +825,13 @@ lemma sheafAdjunctionCocontinuous_unit_app_hom
     (G.sheafPushforwardContinuousCompSheafToPresheafIso A J K).symm
     (G.sheafPushforwardCocontinuousCompSheafToPresheafIso A J K).symm F).trans
   dsimp
- 
+  erw [Functor.map_id]
+  change _ ≫ 𝟙 _ ≫ 𝟙 _ = _
+  simp only [Category.comp_id]
+
+@[deprecated (since := "2026-03-05")]
+alias sheafAdjunctionCocontinuous_unit_app_val :=
+  sheafAdjunctionCocontinuous_unit_app_hom
 
 中文:
 引理 sheafAdjunctionCocontinuous_unit_app_hom
@@ -784,7 +842,13 @@ lemma sheafAdjunctionCocontinuous_unit_app_hom
     (G.sheafPushforwardContinuousCompSheafToPresheafIso A J K).symm
     (G.sheafPushforwardCocontinuousCompSheafToPresheafIso A J K).symm F).trans
   dsimp
- 
+  erw [Functor.map_id]
+  change _ ≫ 𝟙 _ ≫ 𝟙 _ = _
+  simp only [Category.comp_id]
+
+@[deprecated (since := "2026-03-05")]
+alias sheafAdjunctionCocontinuous_unit_app_val :=
+  sheafAdjunctionCocontinuous_unit_app_hom
 
 Depends on / 依赖: Category, Category.comp_id, Functor, Functor.map_id, G.op.ranAdjunction, G.sheafPushforwardCocontinuousCompSheafToPresheafIso, G.sheafPushforwardContinuousCompSheafToPresheafIso, comp_id, fullyFaithfulSheafToPresheaf, map_id, map_restrictFullyFaithful_unit_app, ranAdjunction, sheafPushforwardCocontinuousCompSheafToPresheafIso, sheafPushforwardContinuousCompSheafToPresheafIso
 -/
@@ -816,7 +880,11 @@ lemma sheafAdjunctionCocontinuous_counit_app_hom
     (fullyFaithfulSheafToPresheaf K A) (fullyFaithfulSheafToPresheaf J A)
     (G.sheafPushforwardContinuousCompSheafToPresheafIso A J K).symm
     (G.sheafPushforwardCocontinuousCompSheafToPresheafIso A J K).symm F).trans
-      (by cat_disc
+      (by cat_disch)
+
+@[deprecated (since := "2026-03-05")]
+alias sheafAdjunctionCocontinuous_counit_app_val :=
+  sheafAdjunctionCocontinuous_counit_app_hom
 
 中文:
 引理 sheafAdjunctionCocontinuous_counit_app_hom
@@ -825,7 +893,11 @@ lemma sheafAdjunctionCocontinuous_counit_app_hom
     (fullyFaithfulSheafToPresheaf K A) (fullyFaithfulSheafToPresheaf J A)
     (G.sheafPushforwardContinuousCompSheafToPresheafIso A J K).symm
     (G.sheafPushforwardCocontinuousCompSheafToPresheafIso A J K).symm F).trans
-      (by cat_disc
+      (by cat_disch)
+
+@[deprecated (since := "2026-03-05")]
+alias sheafAdjunctionCocontinuous_counit_app_val :=
+  sheafAdjunctionCocontinuous_counit_app_hom
 
 Depends on / 依赖: G.op.ranAdjunction, G.sheafPushforwardCocontinuousCompSheafToPresheafIso, G.sheafPushforwardContinuousCompSheafToPresheafIso, cat_disch, fullyFaithfulSheafToPresheaf, map_restrictFullyFaithful_counit_app, ranAdjunction, sheafPushforwardCocontinuousCompSheafToPresheafIso, sheafPushforwardContinuousCompSheafToPresheafIso
 -/
@@ -854,7 +926,14 @@ lemma sheafAdjunctionCocontinuous_homEquiv_apply_hom
     (((G.op.ranAdjunction A).restrictFullyFaithful_homEquiv_apply
       (fullyFaithfulSheafToPresheaf K A) (fullyFaithfulSheafToPresheaf J A)
       (G.sheafPushforwardContinuousCompSheafToPresheafIso A J K).symm
-      (G.sheafPushforwardCocontinuousCompSheafToPreshea
+      (G.sheafPushforwardCocontinuousCompSheafToPresheafIso A J K).symm f))).trans (by
+        dsimp
+        erw [Functor.map_id, Category.comp_id, Category.id_comp,
+          Adjunction.homEquiv_unit])
+
+@[deprecated (since := "2026-03-05")]
+alias sheafAdjunctionCocontinuous_homEquiv_apply_val :=
+  sheafAdjunctionCocontinuous_homEquiv_apply_hom
 
 中文:
 引理 sheafAdjunctionCocontinuous_homEquiv_apply_hom
@@ -863,7 +942,14 @@ lemma sheafAdjunctionCocontinuous_homEquiv_apply_hom
     (((G.op.ranAdjunction A).restrictFullyFaithful_homEquiv_apply
       (fullyFaithfulSheafToPresheaf K A) (fullyFaithfulSheafToPresheaf J A)
       (G.sheafPushforwardContinuousCompSheafToPresheafIso A J K).symm
-      (G.sheafPushforwardCocontinuousCompSheafToPreshea
+      (G.sheafPushforwardCocontinuousCompSheafToPresheafIso A J K).symm f))).trans (by
+        dsimp
+        erw [Functor.map_id, Category.comp_id, Category.id_comp,
+          Adjunction.homEquiv_unit])
+
+@[deprecated (since := "2026-03-05")]
+alias sheafAdjunctionCocontinuous_homEquiv_apply_val :=
+  sheafAdjunctionCocontinuous_homEquiv_apply_hom
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_unit, Category, Category.comp_id, Category.id_comp, Functor, Functor.map_id, G.op.ranAdjunction, G.sheafPushforwardCocontinuousCompSheafToPresheafIso, G.sheafPushforwardContinuousCompSheafToPresheafIso, comp_id, congr_map, fullyFaithfulSheafToPresheaf, homEquiv_unit, id_comp, map_id, ranAdjunction, restrictFullyFaithful_homEquiv_apply, sheafPushforwardCocontinuousCompSheafToPresheafIso, sheafPushforwardContinuousCompSheafToPresheafIso
 -/
@@ -922,7 +1008,19 @@ lemma toSheafify_pullbackSheafificationCompatibility
   let adj₃ := sheafificationAdjunction K A
   let adj₄ := G.sheafAdjunctionCocontinuous A J K
   change adj₂.unit.app (((whiskeringLeft Cᵒᵖ Dᵒᵖ A).obj G.op).obj F) ≫
-    (sheafToPresheaf J A).map (((adj₁.comp adj₂).leftAd
+    (sheafToPresheaf J A).map (((adj₁.comp adj₂).leftAdjointUniq (adj₃.comp adj₄)).hom.app F) =
+      ((whiskeringLeft Cᵒᵖ Dᵒᵖ A).obj G.op).map (adj₃.unit.app F)
+  apply (adj₁.homEquiv _ _).injective
+  have eq := (adj₁.comp adj₂).unit_leftAdjointUniq_hom_app (adj₃.comp adj₄) F
+  rw [Adjunction.comp_unit_app]; rw [Adjunction.comp_unit_app]; rw [comp_map]; rw [Category.assoc] at eq
+  rw [adj₁.homEquiv_unit]; rw [Functor.map_comp]; rw [eq]
+  apply (adj₁.homEquiv _ _).symm.injective
+  simp only [Adjunction.homEquiv_counit, map_comp, Category.assoc,
+    Adjunction.homEquiv_unit, Adjunction.unit_naturality]
+  congr 3
+  exact G.sheafAdjunctionCocontinuous_unit_app_hom A J K ((presheafToSheaf K A).obj F)
+
+@[simp]
 
 中文:
 引理 toSheafify_pullbackSheafificationCompatibility
@@ -933,7 +1031,19 @@ lemma toSheafify_pullbackSheafificationCompatibility
   let adj₃ := sheafificationAdjunction K A
   let adj₄ := G.sheafAdjunctionCocontinuous A J K
   change adj₂.unit.app (((whiskeringLeft Cᵒᵖ Dᵒᵖ A).obj G.op).obj F) ≫
-    (sheafToPresheaf J A).map (((adj₁.comp adj₂).leftAd
+    (sheafToPresheaf J A).map (((adj₁.comp adj₂).leftAdjointUniq (adj₃.comp adj₄)).hom.app F) =
+      ((whiskeringLeft Cᵒᵖ Dᵒᵖ A).obj G.op).map (adj₃.unit.app F)
+  apply (adj₁.homEquiv _ _).injective
+  have eq := (adj₁.comp adj₂).unit_leftAdjointUniq_hom_app (adj₃.comp adj₄) F
+  rw [Adjunction.comp_unit_app]; rw [Adjunction.comp_unit_app]; rw [comp_map]; rw [Category.assoc] at eq
+  rw [adj₁.homEquiv_unit]; rw [Functor.map_comp]; rw [eq]
+  apply (adj₁.homEquiv _ _).symm.injective
+  simp only [Adjunction.homEquiv_counit, map_comp, Category.assoc,
+    Adjunction.homEquiv_unit, Adjunction.unit_naturality]
+  congr 3
+  exact G.sheafAdjunctionCocontinuous_unit_app_hom A J K ((presheafToSheaf K A).obj F)
+
+@[simp]
 
 Depends on / 依赖: G.op, G.op.ranAdjunction, G.sheafAdjunctionCocontinuous, hom.app, homEquiv, injective, leftAdjointUniq, ranAdjunction, sheafAdjunctionCocontinuous, sheafToPresheaf, sheafificationAdjunction, unit.app, unit_leftAdjointUniq_hom_app, whiskeringLeft
 -/

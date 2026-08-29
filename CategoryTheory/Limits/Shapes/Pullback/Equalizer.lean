@@ -33,7 +33,11 @@ lemma isPullback_equalizer_prod
   refine ⟨⟨by ext <;> simp [equalizer.condition f g]⟩, ⟨PullbackCone.IsLimit.mk _ ?_ ?_ ?_ ?_⟩⟩
   · refine fun s => equalizer.lift s.fst ?_
     have H₁ : s.fst ≫ f = s.snd := by simpa using congr($s.condition ≫ prod.fst)
-    have H₂ : s.fst ≫ g = s.snd := by simpa using congr($s.condition ≫ prod.
+    have H₂ : s.fst ≫ g = s.snd := by simpa using congr($s.condition ≫ prod.snd)
+    exact H₁.trans H₂.symm
+  · exact fun s => by simp
+  · exact fun s => by simpa using congr($s.condition ≫ prod.fst)
+  · exact fun s m hm _ => by ext; simp [*]
 
 中文:
 引理 isPullback_equalizer_prod
@@ -42,7 +46,11 @@ lemma isPullback_equalizer_prod
   refine ⟨⟨by ext <;> simp [equalizer.condition f g]⟩, ⟨PullbackCone.IsLimit.mk _ ?_ ?_ ?_ ?_⟩⟩
   · refine fun s => equalizer.lift s.fst ?_
     have H₁ : s.fst ≫ f = s.snd := by simpa using congr($s.condition ≫ prod.fst)
-    have H₂ : s.fst ≫ g = s.snd := by simpa using congr($s.condition ≫ prod.
+    have H₂ : s.fst ≫ g = s.snd := by simpa using congr($s.condition ≫ prod.snd)
+    exact H₁.trans H₂.symm
+  · exact fun s => by simp
+  · exact fun s => by simpa using congr($s.condition ≫ prod.fst)
+  · exact fun s m hm _ => by ext; simp [*]
 
 Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.mk, condition, equalizer, equalizer.condition, equalizer.lift, prod.fst, prod.snd, s.condition, s.fst, s.snd
 -/
@@ -68,7 +76,11 @@ lemma isPushout_coequalizer_coprod
   refine ⟨⟨by ext <;> simp [coequalizer.condition f g]⟩, ⟨PushoutCocone.IsColimit.mk _ ?_ ?_ ?_ ?_⟩⟩
   · refine fun s => coequalizer.desc s.inl ?_
     have H₁ : f ≫ s.inl = s.inr := by simpa using congr(coprod.inl ≫ $s.condition)
-    have H₂ : g ≫ s.inl = s.inr := by simpa using congr(coprod.inr 
+    have H₂ : g ≫ s.inl = s.inr := by simpa using congr(coprod.inr ≫ $s.condition)
+    exact H₁.trans H₂.symm
+  · exact fun s => by simp
+  · exact fun s => by simpa using congr(coprod.inl ≫ $s.condition)
+  · exact fun s m hm _ => by ext; simp [*]
 
 中文:
 引理 isPushout_coequalizer_coprod
@@ -77,7 +89,11 @@ lemma isPushout_coequalizer_coprod
   refine ⟨⟨by ext <;> simp [coequalizer.condition f g]⟩, ⟨PushoutCocone.IsColimit.mk _ ?_ ?_ ?_ ?_⟩⟩
   · refine fun s => coequalizer.desc s.inl ?_
     have H₁ : f ≫ s.inl = s.inr := by simpa using congr(coprod.inl ≫ $s.condition)
-    have H₂ : g ≫ s.inl = s.inr := by simpa using congr(coprod.inr 
+    have H₂ : g ≫ s.inl = s.inr := by simpa using congr(coprod.inr ≫ $s.condition)
+    exact H₁.trans H₂.symm
+  · exact fun s => by simp
+  · exact fun s => by simpa using congr(coprod.inl ≫ $s.condition)
+  · exact fun s m hm _ => by ext; simp [*]
 
 Depends on / 依赖: IsColimit, PushoutCocone, PushoutCocone.IsColimit.mk, coequalizer, coequalizer.condition, coequalizer.desc, condition, coprod, coprod.inl, coprod.inr, s.condition, s.inl, s.inr
 -/
@@ -108,7 +124,20 @@ definition equalizerPullbackMapIso
   letI rhs := pullback.map s v t v g (𝟙 T) (𝟙 S) (by simp [hg]) (by simp)
   haveI hl : pullback.fst s v ≫ f = lhs ≫ pullback.fst _ _ := by simp [lhs]
   haveI hr : pullback.fst s v ≫ g = rhs ≫ pullback.fst _ _ := by simp [rhs]
-  
+  letI e : equalizer lhs rhs ≅ pullback (equalizer.ι f g) (pullback.fst s v) :=
+    { hom := pullback.lift
+        (equalizer.lift (equalizer.ι _ _ ≫ pullback.fst _ _) (by
+          simp [hl, hr, equalizer.condition_assoc lhs rhs]))
+        (pullback.lift (equalizer.ι _ _ ≫ pullback.fst _ _)
+          (equalizer.ι _ _ ≫ pullback.snd _ _) (by simp [pullback.condition]))
+        (by simp)
+      inv := equalizer.lift
+        (pullback.map _ _ _ _ (equalizer.ι _ _) (pullback.snd _ _) s rfl
+          (by simp [pullback.condition]))
+        (by ext <;> simp [lhs, rhs, equalizer.condition f g])
+      hom_inv_id := by ext <;> simp
+      inv_hom_id := by ext <;> simp [pullback.condition] }
+  e
 
 中文:
 定义 equalizerPullbackMapIso
@@ -117,7 +146,20 @@ definition equalizerPullbackMapIso
   letI rhs := pullback.map s v t v g (𝟙 T) (𝟙 S) (by simp [hg]) (by simp)
   haveI hl : pullback.fst s v ≫ f = lhs ≫ pullback.fst _ _ := by simp [lhs]
   haveI hr : pullback.fst s v ≫ g = rhs ≫ pullback.fst _ _ := by simp [rhs]
-  
+  letI e : equalizer lhs rhs ≅ pullback (equalizer.ι f g) (pullback.fst s v) :=
+    { hom := pullback.lift
+        (equalizer.lift (equalizer.ι _ _ ≫ pullback.fst _ _) (by
+          simp [hl, hr, equalizer.condition_assoc lhs rhs]))
+        (pullback.lift (equalizer.ι _ _ ≫ pullback.fst _ _)
+          (equalizer.ι _ _ ≫ pullback.snd _ _) (by simp [pullback.condition]))
+        (by simp)
+      inv := equalizer.lift
+        (pullback.map _ _ _ _ (equalizer.ι _ _) (pullback.snd _ _) s rfl
+          (by simp [pullback.condition]))
+        (by ext <;> simp [lhs, rhs, equalizer.condition f g])
+      hom_inv_id := by ext <;> simp
+      inv_hom_id := by ext <;> simp [pullback.condition] }
+  e
 
 Depends on / 依赖: condition_assoc, equalizer, equalizer.condition_assoc, equalizer.lift, pullback, pullback.fst, pullback.lift, pullback.map
 -/

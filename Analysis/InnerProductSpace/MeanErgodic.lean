@@ -39,7 +39,26 @@ theorem LinearMap.tendsto_birkhoffAverage_of_ker_subset_closure
   obtain ⟨y, hy, z, hz, rfl⟩ : exists y, g y = 0 ∧ exists z, IsFixedPt f z ∧ x = y + z :=
     ⟨x - g x, by simp [hg_proj], g x, (g x).2, by simp⟩
   /- For a fixed point, the theorem is trivial,
-  so it s
+  so it suffices to prove it for `y ∈ LinearMap.ker g`. -/
+  suffices Tendsto (birkhoffAverage 𝕜 f _root_.id · y) atTop (𝓝 0) by
+    have hgz : g z = z := congr_arg Subtype.val (hg_proj ⟨z, hz⟩)
+    simpa [hy, hgz, birkhoffAverage, birkhoffSum, Finset.sum_add_distrib, smul_add]
+      using this.add (hz.tendsto_birkhoffAverage 𝕜 _root_.id)
+  /- By continuity, it suffices to prove the theorem on a dense subset of `LinearMap.ker g`.
+  By assumption, `LinearMap.range (f - 1)` is dense in the kernel of `g`,
+  so it suffices to prove the theorem for `y = f x - x`. -/
+  have : IsClosed {x | Tendsto (birkhoffAverage 𝕜 f _root_.id · x) atTop (𝓝 0)} :=
+    isClosed_setOfPred_tendsto_birkhoffAverage 𝕜 hf uniformContinuous_id continuous_const
+  refine closure_minimal (Set.forall_mem_range.2 fun x => ?_) this (hg_ker hy)
+  /- Finally, for `y = f x - x` the average is equal to the difference between averages
+  along the orbits of `f x` and `x`, and most of the terms cancel. -/
+  have : IsBounded (Set.range (_root_.id <| f^[·] x)) :=
+    isBounded_iff_forall_norm_le.2 ⟨‖x‖, Set.forall_mem_range.2 fun n => by
+      have H : f^[n] 0 = 0 := iterate_map_zero (f : E ->+ E) n
+      simpa [H] using (hf.iterate n).dist_le_mul x 0⟩
+  have H : forall n x y, f^[n] (x - y) = f^[n] x - f^[n] y := iterate_map_sub (f : E ->+ E)
+  simpa [birkhoffAverage, birkhoffSum, Finset.sum_sub_distrib, smul_sub, H]
+    using tendsto_birkhoffAverage_apply_sub_birkhoffAverage 𝕜 this
 
 中文:
 定理 线性映射.tendsto_birkhoffAverage_of_ker_subset_closure
@@ -49,7 +68,26 @@ theorem LinearMap.tendsto_birkhoffAverage_of_ker_subset_closure
   obtain ⟨y, hy, z, hz, rfl⟩ : exists y, g y = 0 ∧ exists z, IsFixedPt f z ∧ x = y + z :=
     ⟨x - g x, by simp [hg_proj], g x, (g x).2, by simp⟩
   /- For a fixed point, the theorem is trivial,
-  so it s
+  so it suffices to prove it for `y ∈ LinearMap.ker g`. -/
+  suffices Tendsto (birkhoffAverage 𝕜 f _root_.id · y) atTop (𝓝 0) by
+    have hgz : g z = z := congr_arg Subtype.val (hg_proj ⟨z, hz⟩)
+    simpa [hy, hgz, birkhoffAverage, birkhoffSum, Finset.sum_add_distrib, smul_add]
+      using this.add (hz.tendsto_birkhoffAverage 𝕜 _root_.id)
+  /- By continuity, it suffices to prove the theorem on a dense subset of `LinearMap.ker g`.
+  By assumption, `LinearMap.range (f - 1)` is dense in the kernel of `g`,
+  so it suffices to prove the theorem for `y = f x - x`. -/
+  have : IsClosed {x | Tendsto (birkhoffAverage 𝕜 f _root_.id · x) atTop (𝓝 0)} :=
+    isClosed_setOfPred_tendsto_birkhoffAverage 𝕜 hf uniformContinuous_id continuous_const
+  refine closure_minimal (Set.forall_mem_range.2 fun x => ?_) this (hg_ker hy)
+  /- Finally, for `y = f x - x` the average is equal to the difference between averages
+  along the orbits of `f x` and `x`, and most of the terms cancel. -/
+  have : IsBounded (Set.range (_root_.id <| f^[·] x)) :=
+    isBounded_iff_forall_norm_le.2 ⟨‖x‖, Set.forall_mem_range.2 fun n => by
+      have H : f^[n] 0 = 0 := iterate_map_zero (f : E ->+ E) n
+      simpa [H] using (hf.iterate n).dist_le_mul x 0⟩
+  have H : forall n x y, f^[n] (x - y) = f^[n] x - f^[n] y := iterate_map_sub (f : E ->+ E)
+  simpa [birkhoffAverage, birkhoffSum, Finset.sum_sub_distrib, smul_sub, H]
+    using tendsto_birkhoffAverage_apply_sub_birkhoffAverage 𝕜 this
 -/
 theorem LinearMap.tendsto_birkhoffAverage_of_ker_subset_closure [NormedSpace 𝕜 E]
     (f : E ->ₗ[𝕜] E) (hf : LipschitzWith 1 f) (g : E ->L[𝕜] LinearMap.eqLocus f 1)
@@ -97,7 +135,17 @@ theorem ContinuousLinearMap.tendsto_birkhoffAverage_orthogonalProjection
   that the range of `f - 1` is dense in the orthogonal complement
   to the submodule of fixed points of `f`. -/
   apply (f : E ->ₗ[𝕜] E).tendsto_birkhoffAverage_of_ker_subset_closure (f.lipschitz.weaken hf)
-  · exact (f.eqLocus (1 : E ->L[𝕜]
+  · exact (f.eqLocus (1 : E ->L[𝕜] E)).orthogonalProjectionOnto_mem_subspace_eq_self
+  · clear x
+    /- In other words, we need to verify that any vector that is orthogonal to the range of `f - 1`
+    is a fixed point of `f`. -/
+    rw [Submodule.ker_orthogonalProjectionOnto]; rw [← Submodule.topologicalClosure_coe]; rw [SetLike.coe_subset_coe]; rw [← Submodule.orthogonal_orthogonal_eq_closure]
+    /- To verify this, we verify `‖f x‖ ≤ ‖x‖` (because `‖f‖ ≤ 1`) and `⟪f x, x⟫ = ‖x‖²`. -/
+    refine Submodule.orthogonal_le fun x hx => eq_of_norm_le_re_inner_eq_norm_sq (𝕜 := 𝕜) ?_ ?_
+    · simpa using f.le_of_opNorm_le hf x
+    · have : forall y, ⟪f y, x⟫ = ⟪y, x⟫ := by
+        simpa [Submodule.mem_orthogonal, inner_sub_left, sub_eq_zero] using hx
+      simp [this]
 
 中文:
 定理 连续线性映射.tendsto_birkhoffAverage_orthogonalProjection
@@ -107,7 +155,17 @@ theorem ContinuousLinearMap.tendsto_birkhoffAverage_orthogonalProjection
   that the range of `f - 1` is dense in the orthogonal complement
   to the submodule of fixed points of `f`. -/
   apply (f : E ->ₗ[𝕜] E).tendsto_birkhoffAverage_of_ker_subset_closure (f.lipschitz.weaken hf)
-  · exact (f.eqLocus (1 : E ->L[𝕜]
+  · exact (f.eqLocus (1 : E ->L[𝕜] E)).orthogonalProjectionOnto_mem_subspace_eq_self
+  · clear x
+    /- In other words, we need to verify that any vector that is orthogonal to the range of `f - 1`
+    is a fixed point of `f`. -/
+    rw [Submodule.ker_orthogonalProjectionOnto]; rw [← Submodule.topologicalClosure_coe]; rw [SetLike.coe_subset_coe]; rw [← Submodule.orthogonal_orthogonal_eq_closure]
+    /- To verify this, we verify `‖f x‖ ≤ ‖x‖` (because `‖f‖ ≤ 1`) and `⟪f x, x⟫ = ‖x‖²`. -/
+    refine Submodule.orthogonal_le fun x hx => eq_of_norm_le_re_inner_eq_norm_sq (𝕜 := 𝕜) ?_ ?_
+    · simpa using f.le_of_opNorm_le hf x
+    · have : forall y, ⟪f y, x⟫ = ⟪y, x⟫ := by
+        simpa [Submodule.mem_orthogonal, inner_sub_left, sub_eq_zero] using hx
+      simp [this]
 -/
 theorem ContinuousLinearMap.tendsto_birkhoffAverage_orthogonalProjection (f : E ->L[𝕜] E)
     (hf : ‖f‖ <= 1) (x : E) :

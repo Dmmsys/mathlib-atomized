@@ -70,7 +70,13 @@ definition toExprMData
     e := match v with
           | ofString v => mkApp3 (mkConst ``KVMap.setString) e k (mkStrLit v)
           | ofBool v => mkApp3 (mkConst ``KVMap.setBool) e k (toExpr v)
-          | ofName v => mkApp3 (mkCon
+          | ofName v => mkApp3 (mkConst ``KVMap.setName) e k (toExpr v)
+          | ofNat v => mkApp3 (mkConst ``KVMap.setNat) e k (mkNatLit v)
+          | ofInt v => mkApp3 (mkConst ``KVMap.setInt) e k (toExpr v)
+          | ofSyntax v => mkApp3 (mkConst ``KVMap.setSyntax) e k (toExpr v)
+  return e
+
+@[no_expose]
 
 中文:
 定义 toExprMData
@@ -82,7 +88,13 @@ definition toExprMData
     e := match v with
           | ofString v => mkApp3 (mkConst ``KVMap.setString) e k (mkStrLit v)
           | ofBool v => mkApp3 (mkConst ``KVMap.setBool) e k (toExpr v)
-          | ofName v => mkApp3 (mkCon
+          | ofName v => mkApp3 (mkConst ``KVMap.setName) e k (toExpr v)
+          | ofNat v => mkApp3 (mkConst ``KVMap.setNat) e k (mkNatLit v)
+          | ofInt v => mkApp3 (mkConst ``KVMap.setInt) e k (toExpr v)
+          | ofSyntax v => mkApp3 (mkConst ``KVMap.setSyntax) e k (toExpr v)
+  return e
+
+@[no_expose]
 -/
 private def toExprMData (md : MData) : Expr := Id.run do
   let mut e := mkConst ``MData.empty

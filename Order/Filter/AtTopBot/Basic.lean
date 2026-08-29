@@ -845,7 +845,9 @@ theorem map_atTop_eq_of_gc_preorder
     exact ⟨g d, hcd.trans (hfg d hbd).ge⟩
   · have : Nonempty α := ⟨g b⟩
     rw [(atTop_basis.map f).ge_iff]
-  
+    intro a _
+    filter_upwards [eventually_ge_atTop (f a), eventually_ge_atTop b] with c hac hbc
+    exact ⟨g c, (hgle _ hbc _).1 hac, hfg _ hbc⟩
 
 中文:
 定理 map_atTop_eq_of_gc_preorder
@@ -857,7 +859,9 @@ theorem map_atTop_eq_of_gc_preorder
     exact ⟨g d, hcd.trans (hfg d hbd).ge⟩
   · have : Nonempty α := ⟨g b⟩
     rw [(atTop_basis.map f).ge_iff]
-  
+    intro a _
+    filter_upwards [eventually_ge_atTop (f a), eventually_ge_atTop b] with c hac hbc
+    exact ⟨g c, (hgle _ hbc _).1 hac, hfg _ hbc⟩
 
 Depends on / 依赖: Nonempty, atTop_basis, atTop_basis.map, eventually_ge_atTop, exists_ge_ge, filter_upwards, ge_iff, hcd.trans, hf.tendsto_atTop_atTop, le_antisymm, le_rfl, nonempty, tendsto_atTop_atTop
 -/
@@ -924,7 +928,10 @@ theorem map_val_atTop_of_Ici_subset
   have : IsDirectedOrder s := by
     rw [directedOn_iff_directed] at this
     rwa [IsDirectedOrder, ← directed_id_iff]
-  refine m
+  refine map_atTop_eq_of_gc_preorder (Subtype.mono_coe _) a fun c hc => ?_
+  exact ⟨⟨c, h hc⟩, rfl, fun _ => .rfl⟩
+
+@[simp]
 
 中文:
 定理 map_val_atTop_of_Ici_subset
@@ -936,7 +943,10 @@ theorem map_val_atTop_of_Ici_subset
   have : IsDirectedOrder s := by
     rw [directedOn_iff_directed] at this
     rwa [IsDirectedOrder, ← directed_id_iff]
-  refine m
+  refine map_atTop_eq_of_gc_preorder (Subtype.mono_coe _) a fun c hc => ?_
+  exact ⟨⟨c, h hc⟩, rfl, fun _ => .rfl⟩
+
+@[simp]
 
 Depends on / 依赖: DirectedOn, IsDirectedOrder, Subtype, Subtype.mono_coe, directedOn_iff_directed, directed_id_iff, exists_ge_ge, map_atTop_eq_of_gc_preorder, mono_coe
 -/

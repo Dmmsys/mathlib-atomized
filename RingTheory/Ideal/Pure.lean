@@ -68,7 +68,15 @@ Submodule.mapQ _ _ J.subtype by
   have : J.subtype.lTensor (R ⧸ I) =
       (TensorProduct.rid R (R ⧸ I)).symm ∘ₗ f ∘ₗ TensorProduct.quotTensorEquivQuotSMul J I := by
     ext
-    s
+    simp [f, ← Ideal.Quotient.algebraMap_eq, Algebra.TensorProduct.tmul_one_eq_one_tmul]
+  rw [this]
+  simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, EmbeddingLike.comp_injective,
+    EquivLike.injective_comp, ← LinearMap.ker_eq_bot, f, Submodule.ker_mapQ,
+    ← LinearMap.le_ker_iff_map, Submodule.ker_mkQ,
+    ← (Submodule.map_le_map_iff_of_injective J.injective_subtype)]
+  simp [inf_comm, le_antisymm_iff, Ideal.mul_le_inf (I := I) (J := J)]
+
+@[stacks 04PS "(1) => (2)"]
 
 中文:
 引理 injective_lTensor_quotient_iff_inf_eq_mul
@@ -80,7 +88,15 @@ Submodule.mapQ _ _ J.subtype by
   have : J.subtype.lTensor (R ⧸ I) =
       (TensorProduct.rid R (R ⧸ I)).symm ∘ₗ f ∘ₗ TensorProduct.quotTensorEquivQuotSMul J I := by
     ext
-    s
+    simp [f, ← Ideal.Quotient.algebraMap_eq, Algebra.TensorProduct.tmul_one_eq_one_tmul]
+  rw [this]
+  simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, EmbeddingLike.comp_injective,
+    EquivLike.injective_comp, ← LinearMap.ker_eq_bot, f, Submodule.ker_mapQ,
+    ← LinearMap.le_ker_iff_map, Submodule.ker_mkQ,
+    ← (Submodule.map_le_map_iff_of_injective J.injective_subtype)]
+  simp [inf_comm, le_antisymm_iff, Ideal.mul_le_inf (I := I) (J := J)]
+
+@[stacks 04PS "(1) => (2)"]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.tmul_one_eq_one_tmul, EmbeddingLike, EmbeddingLike.comp_injective, EquivLike, EquivLike.injective_comp, Ideal.Quotient.algebraMap_eq, Ideal.mul_le_left, J.subtype, J.subtype.lTensor, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, LinearMap.ker_eq_bot, Quotient, Submodule, Submodule.mapQ, Submodule.map_le_iff_le_comap, TensorProduct
 -/
@@ -162,7 +178,10 @@ lemma Ideal.Pure.of_isIdempotentElem
   have : Module.Flat R ((R ⧸ R ∙ e) × R ⧸ span {1 - e}) :=
 .of_linearEquiv AlgEquiv.prodQuotientOfIsIdempotentElem R he he.one_sub (by simp)
 .toLinearEquiv.symm (by grind [IsIdempotentElem])
-  apply Module.Flat.of_retra
+  apply Module.Flat.of_retract (LinearMap.inl R _ (R ⧸ span {1 - e})) (LinearMap.fst R _ _)
+  simp
+
+@[stacks 04PS "(3) => (1)"]
 
 中文:
 引理 理想.Pure.of_isIdempotentElem
@@ -173,7 +192,10 @@ lemma Ideal.Pure.of_isIdempotentElem
   have : Module.Flat R ((R ⧸ R ∙ e) × R ⧸ span {1 - e}) :=
 .of_linearEquiv AlgEquiv.prodQuotientOfIsIdempotentElem R he he.one_sub (by simp)
 .toLinearEquiv.symm (by grind [IsIdempotentElem])
-  apply Module.Flat.of_retra
+  apply Module.Flat.of_retract (LinearMap.inl R _ (R ⧸ span {1 - e})) (LinearMap.fst R _ _)
+  simp
+
+@[stacks 04PS "(3) => (1)"]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.prodQuotientOfIsIdempotentElem, Ideal.isIdempotentElem_iff_of_fg, IsIdempotentElem, LinearMap, LinearMap.fst, LinearMap.inl, Module, Module.Flat, Module.Flat.of_retract, he.one_sub, isIdempotentElem_iff_of_fg, of_linearEquiv, of_retract, one_sub, prodQuotientOfIsIdempotentElem, toLinearEquiv, toLinearEquiv.symm
 -/
@@ -275,7 +297,8 @@ lemma Ideal.le_ker_atPrime_of_forall_exists_eq_mul
     refine ⟨1 - y, fun hz => p.one_notMem ?_, by simp⟩
     rw [← sub_add_cancel 1 y]
     exact Ideal.add_mem _ hz (hle hy)
-
+  have hzero : x * (1 - y) = 0 := by simp [mul_sub, ← heq]
+  simp only [RingHom.mem_ker, ← this.mul_left_eq_zero, ← RingHom.map_mul, hzero, RingHom.map_zero]
 
 中文:
 引理 理想.le_ker_atPrime_of_对任意_存在_eq_mul
@@ -288,7 +311,8 @@ lemma Ideal.le_ker_atPrime_of_forall_exists_eq_mul
     refine ⟨1 - y, fun hz => p.one_notMem ?_, by simp⟩
     rw [← sub_add_cancel 1 y]
     exact Ideal.add_mem _ hz (hle hy)
-
+  have hzero : x * (1 - y) = 0 := by simp [mul_sub, ← heq]
+  simp only [RingHom.mem_ker, ← this.mul_left_eq_zero, ← RingHom.map_mul, hzero, RingHom.map_zero]
 
 Depends on / 依赖: AtPrime, Ideal.add_mem, IsLocalization, IsLocalization.algebraMap_isUnit_iff, IsUnit, Localization, Localization.AtPrime, RingHom, RingHom.map_mul, RingHom.map_zero, RingHom.mem_ker, add_mem, algebraMap, algebraMap_isUnit_iff, map_mul, map_zero, mem_ker, mul_left_eq_zero, mul_sub, one_notMem
 -/
@@ -320,7 +344,10 @@ lemma Ideal.ker_piRingHom_atPrime_eq_of_pure
   · rw [RingHom.mem_ker]
     ext p
     rw [RingHom.pi_apply]; rw [Pi.zero_apply]
-    exact Ideal.le_ker_atP
+    exact Ideal.le_ker_atPrime_of_forall_exists_eq_mul
+      (fun x hx => Ideal.exists_eq_mul_of_pure hx) p.2 hx
+
+@[stacks 04PT]
 
 中文:
 引理 理想.ker_piRingHom_atPrime_eq_of_pure
@@ -334,7 +361,10 @@ lemma Ideal.ker_piRingHom_atPrime_eq_of_pure
   · rw [RingHom.mem_ker]
     ext p
     rw [RingHom.pi_apply]; rw [Pi.zero_apply]
-    exact Ideal.le_ker_atP
+    exact Ideal.le_ker_atPrime_of_forall_exists_eq_mul
+      (fun x hx => Ideal.exists_eq_mul_of_pure hx) p.2 hx
+
+@[stacks 04PT]
 
 Depends on / 依赖: I.iInf_ker_le, Ideal.exists_eq_mul_of_pure, Ideal.le_ker_atPrime_of_forall_exists_eq_mul, Pi.ker_ringHom, Pi.zero_apply, RingHom, RingHom.mem_ker, RingHom.pi_apply, exists_eq_mul_of_pure, iInf_ker_le, iInf_le_of_le, ker_ringHom, le_antisymm, le_iInf_iff, le_ker_atPrime_of_forall_exists_eq_mul, le_rfl, le_trans, mem_ker, pi_apply, zero_apply
 -/

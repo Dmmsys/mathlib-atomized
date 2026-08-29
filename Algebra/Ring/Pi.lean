@@ -367,6 +367,7 @@ definition NonUnitalRingHom.pi
 
 @[deprecated (since := "2026-05-30")] protected alias Pi.nonUnitalRingHom := NonUnitalRingHom.pi
 @[deprecated (since := "2026-05-30")] protected alias Pi.nonUnitalRingHom_apply :=
+  NonUnitalRingHom.pi_apply
 
 中文:
 定义 非幺环态射.pi
@@ -376,6 +377,7 @@ definition NonUnitalRingHom.pi
 
 @[deprecated (since := "2026-05-30")] protected alias Pi.nonUnitalRingHom := NonUnitalRingHom.pi
 @[deprecated (since := "2026-05-30")] protected alias Pi.nonUnitalRingHom_apply :=
+  NonUnitalRingHom.pi_apply
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.pi, MulHom, MulHom.pi, toAddMonoidHom, toMulHom
 -/

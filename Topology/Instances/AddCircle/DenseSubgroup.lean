@@ -35,7 +35,18 @@ theorem dense_addSubgroupClosure_pair_iff
   constructor
   · rintro hd ⟨r, hr⟩
 refine not_denseRange_zsmul (a := b / r.den) hd.mono ?_
-    rw [← AddSubgroup.coe_zmultiples]; rw [SetLike.coe_subset_coe]; rw [Ad
+    rw [← AddSubgroup.coe_zmultiples]; rw [SetLike.coe_subset_coe]; rw [AddSubgroup.closure_le]; rw [AddSubgroup.coe_zmultiples]; rw [pair_subset_iff]
+    refine ⟨⟨r.num, ?_⟩, r.den, ?_⟩
+    · simp [field, mul_div_left_comm _ b, ← Rat.cast_def, hr]
+    · simp [field]
+  · intro h
+    contrapose h
+    rcases (AddSubgroup.dense_or_cyclic _).resolve_left h with ⟨c, hc⟩
+    have : {a, b} subseteq range (· • c : Int -> Real) := by
+      rw [← AddSubgroup.coe_zmultiples]; rw [AddSubgroup.zmultiples_eq_closure]; rw [← hc]
+      apply AddSubgroup.subset_closure
+    rcases pair_subset_iff.1 this with ⟨⟨m, rfl⟩, n, rfl⟩
+    simp_all [mul_div_mul_right]
 
 中文:
 定理 dense_addSubgroupClosure_pair_iff
@@ -47,7 +58,18 @@ refine not_denseRange_zsmul (a := b / r.den) hd.mono ?_
   constructor
   · rintro hd ⟨r, hr⟩
 refine not_denseRange_zsmul (a := b / r.den) hd.mono ?_
-    rw [← AddSubgroup.coe_zmultiples]; rw [SetLike.coe_subset_coe]; rw [Ad
+    rw [← AddSubgroup.coe_zmultiples]; rw [SetLike.coe_subset_coe]; rw [AddSubgroup.closure_le]; rw [AddSubgroup.coe_zmultiples]; rw [pair_subset_iff]
+    refine ⟨⟨r.num, ?_⟩, r.den, ?_⟩
+    · simp [field, mul_div_left_comm _ b, ← Rat.cast_def, hr]
+    · simp [field]
+  · intro h
+    contrapose h
+    rcases (AddSubgroup.dense_or_cyclic _).resolve_left h with ⟨c, hc⟩
+    have : {a, b} subseteq range (· • c : Int -> Real) := by
+      rw [← AddSubgroup.coe_zmultiples]; rw [AddSubgroup.zmultiples_eq_closure]; rw [← hc]
+      apply AddSubgroup.subset_closure
+    rcases pair_subset_iff.1 this with ⟨⟨m, rfl⟩, n, rfl⟩
+    simp_all [mul_div_mul_right]
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.closure_le, AddSubgroup.coe_zmultiples, AddSubgroup.zmultiples_eq_closure, Rat.cast_def, SetLike, SetLike.coe_subset_coe, cast_def, closure_le, coe_subset_coe, coe_zmultiples, contrapose, eq_or_ne, hd.mono, mul_div_left_comm, not_denseRange_zsmul, pair_comm, pair_subset_iff, r.den, r.num
 -/
@@ -81,13 +103,13 @@ English:
 theorem denseRange_zsmul_coe_iff
   given: {a p : Real}
   proof: by
-  rw [← dense_addSubgroupClosure_pair_iff]; rw [DenseRange]; rw [← QuotientAddGroup.dense_preimage_mk]; rw [← QuotientAddGroup.coe_mk']; rw [← AddSubgroup.coe_zmultiples]; rw [← AddSubgroup.coe_comap]; rw [← AddMonoidHom.map_zmultiples]; rw [AddSubgroup.comap_map_eq]; rw [QuotientAddGroup.ker_mk'
+  rw [← dense_addSubgroupClosure_pair_iff]; rw [DenseRange]; rw [← QuotientAddGroup.dense_preimage_mk]; rw [← QuotientAddGroup.coe_mk']; rw [← AddSubgroup.coe_zmultiples]; rw [← AddSubgroup.coe_comap]; rw [← AddMonoidHom.map_zmultiples]; rw [AddSubgroup.comap_map_eq]; rw [QuotientAddGroup.ker_mk']; rw [AddSubgroup.zmultiples_eq_closure]; rw [AddSubgroup.zmultiples_eq_closure]; rw [← AddSubgroup.closure_union]; rw [insert_eq]
 
 中文:
 定理 denseRange_zsmul_coe_iff
   条件: {a p : 实数}
   证明: by
-  rw [← dense_addSubgroupClosure_pair_iff]; rw [DenseRange]; rw [← QuotientAddGroup.dense_preimage_mk]; rw [← QuotientAddGroup.coe_mk']; rw [← AddSubgroup.coe_zmultiples]; rw [← AddSubgroup.coe_comap]; rw [← AddMonoidHom.map_zmultiples]; rw [AddSubgroup.comap_map_eq]; rw [QuotientAddGroup.ker_mk'
+  rw [← dense_addSubgroupClosure_pair_iff]; rw [DenseRange]; rw [← QuotientAddGroup.dense_preimage_mk]; rw [← QuotientAddGroup.coe_mk']; rw [← AddSubgroup.coe_zmultiples]; rw [← AddSubgroup.coe_comap]; rw [← AddMonoidHom.map_zmultiples]; rw [AddSubgroup.comap_map_eq]; rw [QuotientAddGroup.ker_mk']; rw [AddSubgroup.zmultiples_eq_closure]; rw [AddSubgroup.zmultiples_eq_closure]; rw [← AddSubgroup.closure_union]; rw [insert_eq]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.map_zmultiples, AddSubgroup, AddSubgroup.closure_union, AddSubgroup.coe_comap, AddSubgroup.coe_zmultiples, AddSubgroup.comap_map_eq, AddSubgroup.zmultiples_eq_closure, DenseRange, QuotientAddGroup, QuotientAddGroup.coe_mk, QuotientAddGroup.dense_preimage_mk, QuotientAddGroup.ker_mk, closure_union, coe_comap, coe_mk, coe_zmultiples, comap_map_eq, dense_addSubgroupClosure_pair_iff, dense_preimage_mk
 -/
@@ -133,7 +155,12 @@ theorem dense_addSubgroup_iff_ne_zmultiples
   · intro h
     contrapose! h
     obtain ⟨a, rfl⟩ : exists a, s = .zmultiples a := by
-      rw [← QuotientAddGroup.dense_preimage_mk]; rw [← QuotientAddGrou
+      rw [← QuotientAddGroup.dense_preimage_mk]; rw [← QuotientAddGroup.coe_mk']; rw [← AddSubgroup.coe_comap]; rw [xor_iff_not_iff'.1 (AddSubgroup.dense_xor_cyclic _)] at h
+      rcases h with ⟨a, ha⟩
+      use a
+      rw [← QuotientAddGroup.coe_mk']; rw [← AddMonoidHom.map_zmultiples]; rw [← ha]; rw [AddSubgroup.map_comap_eq_self_of_surjective]
+      exact Quot.mk_surjective
+    exact ⟨a, denseRange_zsmul_iff.not.mp h, rfl⟩
 
 中文:
 定理 dense_addSubgroup_iff_ne_zmultiples
@@ -146,7 +173,12 @@ theorem dense_addSubgroup_iff_ne_zmultiples
   · intro h
     contrapose! h
     obtain ⟨a, rfl⟩ : exists a, s = .zmultiples a := by
-      rw [← QuotientAddGroup.dense_preimage_mk]; rw [← QuotientAddGrou
+      rw [← QuotientAddGroup.dense_preimage_mk]; rw [← QuotientAddGroup.coe_mk']; rw [← AddSubgroup.coe_comap]; rw [xor_iff_not_iff'.1 (AddSubgroup.dense_xor_cyclic _)] at h
+      rcases h with ⟨a, ha⟩
+      use a
+      rw [← QuotientAddGroup.coe_mk']; rw [← AddMonoidHom.map_zmultiples]; rw [← ha]; rw [AddSubgroup.map_comap_eq_self_of_surjective]
+      exact Quot.mk_surjective
+    exact ⟨a, denseRange_zsmul_iff.not.mp h, rfl⟩
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.map_zmultiples, AddSubgroup, AddSubgroup.coe_comap, AddSubgroup.coe_zmultiples, AddSubgroup.dense_xor_cyclic, DenseRange, QuotientAddGroup, QuotientAddGroup.coe_mk, QuotientAddGroup.dense_preimage_mk, coe_comap, coe_mk, coe_zmultiples, contrapose, denseRange_zsmul_iff, dense_preimage_mk, dense_xor_cyclic, map_zmultiples, xor_iff_not_iff, zmultiples
 -/

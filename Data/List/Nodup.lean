@@ -259,7 +259,7 @@ theorem nodup_iff_injective_getElem
       · exact (h i j hi hj hij hg).elim
       · rfl
       · exact (h j i hj hi hji hg.symm).elim,
-      fun hinj i j hi hj hij h => Nat.ne_of_lt
+      fun hinj i j hi hj hij h => Nat.ne_of_lt hij (Fin.val_eq_of_eq (@hinj ⟨i, hi⟩ ⟨j, hj⟩ h))⟩
 
 中文:
 定理 nodup_iff_injective_getElem
@@ -271,7 +271,7 @@ theorem nodup_iff_injective_getElem
       · exact (h i j hi hj hij hg).elim
       · rfl
       · exact (h j i hj hi hji hg.symm).elim,
-      fun hinj i j hi hj hij h => Nat.ne_of_lt
+      fun hinj i j hi hj hij h => Nat.ne_of_lt hij (Fin.val_eq_of_eq (@hinj ⟨i, hi⟩ ⟨j, hj⟩ h))⟩
 
 Depends on / 依赖: Fin.val_eq_of_eq, Nat.lt_trichotomy, Nat.ne_of_lt, hg.symm, lt_trichotomy, ne_of_lt, pairwise_iff_getElem, pairwise_iff_getElem.trans, val_eq_of_eq
 -/
@@ -421,7 +421,8 @@ theorem Nodup.ne_singleton_iff
     · rw [← Ne, hl] at hx
       rcases hx with (rfl | ⟨y, hy, hx⟩)
       · simp
-      · suffices exists y in hd :: tl, y != x by simpa [ne
+      · suffices exists y in hd :: tl, y != x by simpa [ne_nil_of_mem hy]
+        exact ⟨y, mem_cons_of_mem _ hy, hx⟩
 
 中文:
 定理 Nodup.ne_singleton_iff
@@ -436,7 +437,8 @@ theorem Nodup.ne_singleton_iff
     · rw [← Ne, hl] at hx
       rcases hx with (rfl | ⟨y, hy, hx⟩)
       · simp
-      · suffices exists y in hd :: tl, y != x by simpa [ne
+      · suffices exists y in hd :: tl, y != x by simpa [ne_nil_of_mem hy]
+        exact ⟨y, mem_cons_of_mem _ hy, hx⟩
 
 Depends on / 依赖: and_comm, and_or_left, h.of_cons, mem_cons_of_mem, ne_nil_of_mem, of_cons, specialize
 -/
@@ -843,7 +845,7 @@ theorem inj_on_of_nodup_map
     · rfl
     · apply (d.1 _ h₂ h₃.symm).elim
     · apply (d.1 _ h₁ h₃).elim
-    · apply ih d.2 
+    · apply ih d.2 h₁ h₂ h₃
 
 中文:
 定理 inj_on_of_nodup_map
@@ -858,7 +860,7 @@ theorem inj_on_of_nodup_map
     · rfl
     · apply (d.1 _ h₂ h₃.symm).elim
     · apply (d.1 _ h₁ h₃).elim
-    · apply ih d.2 
+    · apply ih d.2 h₁ h₂ h₃
 
 Depends on / 依赖: Ne.eq_def, eq_def, mem_cons, mem_map, nodup_cons, not_and, not_exists
 -/
@@ -1090,7 +1092,12 @@ lemma nodup_tail_reverse
     · simp_all only [List.tail_reverse, List.nodup_reverse,
         List.dropLast_cons_of_ne_nil hl, List.tail_cons]
       simp only [length_cons, Nat.zero_lt_succ, getElem?_eq_getElem,
-        Nat.add_o
+        Nat.add_one_sub_one, Nat.lt_add_one, Option.some.injEq, List.getElem_cons,
+        show l.length != 0 by aesop, ↓reduceDIte, getLast?_eq_getElem?] at h
+      rw [h]; rw [show l.Nodup = (l.dropLast ++ [l.getLast hl]).Nodup by
+          simp [List.dropLast_eq_take],
+        List.nodup_append_comm]
+      simp [List.getLast_eq_getElem]
 
 中文:
 引理 nodup_tail_reverse
@@ -1104,7 +1111,12 @@ lemma nodup_tail_reverse
     · simp_all only [List.tail_reverse, List.nodup_reverse,
         List.dropLast_cons_of_ne_nil hl, List.tail_cons]
       simp only [length_cons, Nat.zero_lt_succ, getElem?_eq_getElem,
-        Nat.add_o
+        Nat.add_one_sub_one, Nat.lt_add_one, Option.some.injEq, List.getElem_cons,
+        show l.length != 0 by aesop, ↓reduceDIte, getLast?_eq_getElem?] at h
+      rw [h]; rw [show l.Nodup = (l.dropLast ++ [l.getLast hl]).Nodup by
+          simp [List.dropLast_eq_take],
+        List.nodup_append_comm]
+      simp [List.getLast_eq_getElem]
 
 Depends on / 依赖: List.dropLast_cons_of_ne_nil, List.dropLast_eq_take, List.getElem_cons, List.nod, List.nodup_reverse, List.tail_cons, List.tail_reverse, Nat.add_one_sub_one, Nat.lt_add_one, Nat.zero_lt_succ, Option.some.injEq, _eq_getElem, add_one_sub_one, dropLast, dropLast_cons_of_ne_nil, dropLast_eq_take, getElem, getElem_cons, getLast, l.Nodup
 -/

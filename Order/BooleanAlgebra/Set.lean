@@ -963,7 +963,9 @@ lemma disjoint_compl_right_iff_subset
 alias ⟨_, _root_.Disjoint.subset_compl_right⟩ := subset_compl_iff_disjoint_right
 alias ⟨_, _root_.Disjoint.subset_compl_left⟩ := subset_compl_iff_disjoint_left
 @[deprecated LE.le.disjoint_compl_left (since := "2026-06-05")]
-alias ⟨_, _root_.HasSubset.Subset.disjoint_compl_l
+alias ⟨_, _root_.HasSubset.Subset.disjoint_compl_left⟩ := disjoint_compl_left_iff_subset
+@[deprecated LE.le.disjoint_compl_right (since := "2026-06-05")]
+alias ⟨_, _root_.HasSubset.Subset.disjoint_compl_right⟩ := disjoint_compl_right_iff_subset
 
 中文:
 引理 disjoint_compl_right_iff_subset
@@ -973,7 +975,9 @@ alias ⟨_, _root_.HasSubset.Subset.disjoint_compl_l
 alias ⟨_, _root_.Disjoint.subset_compl_right⟩ := subset_compl_iff_disjoint_right
 alias ⟨_, _root_.Disjoint.subset_compl_left⟩ := subset_compl_iff_disjoint_left
 @[deprecated LE.le.disjoint_compl_left (since := "2026-06-05")]
-alias ⟨_, _root_.HasSubset.Subset.disjoint_compl_l
+alias ⟨_, _root_.HasSubset.Subset.disjoint_compl_left⟩ := disjoint_compl_left_iff_subset
+@[deprecated LE.le.disjoint_compl_right (since := "2026-06-05")]
+alias ⟨_, _root_.HasSubset.Subset.disjoint_compl_right⟩ := disjoint_compl_right_iff_subset
 
 Depends on / 依赖: disjoint_compl_right_iff
 -/
@@ -2644,7 +2648,7 @@ alias _root_.HasSubset.Subset.sdiff_ssubset_of_nonempty := LE.le.sdiff_ssubset_o
 
 @[deprecated (since := "2026-06-03")]
 alias _root_.HasSubset.Subset.diff_ssubset_of_nonempty :=
-  _root_.LE.le.sdiff_ssubs
+  _root_.LE.le.sdiff_ssubset_of_nonempty
 
 中文:
 引理 _root_.LE.le.sdiff_ssubset_of_nonempty
@@ -2657,7 +2661,7 @@ alias _root_.HasSubset.Subset.sdiff_ssubset_of_nonempty := LE.le.sdiff_ssubset_o
 
 @[deprecated (since := "2026-06-03")]
 alias _root_.HasSubset.Subset.diff_ssubset_of_nonempty :=
-  _root_.LE.le.sdiff_ssubs
+  _root_.LE.le.sdiff_ssubset_of_nonempty
 
 Depends on / 依赖: inter_eq_self_of_subset_right
 -/

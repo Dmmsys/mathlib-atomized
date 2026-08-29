@@ -208,7 +208,10 @@ instance :
       exact ⟨x, hx, 1, one_smul _ _⟩
   one_mul a := by
     ext x
-    simp only [mem_mul, mem_one, smul_mul_assoc, exists
+    simp only [mem_mul, mem_one, smul_mul_assoc, exists_exists_eq_and, one_mul]
+    refine ⟨?_, fun hx => ⟨1, x, hx, one_smul _ _⟩⟩
+    rintro ⟨r, y, hy, rfl⟩
+    exact smul_mem _ _ hy
 
 中文:
 实例 :
@@ -223,7 +226,10 @@ instance :
       exact ⟨x, hx, 1, one_smul _ _⟩
   one_mul a := by
     ext x
-    simp only [mem_mul, mem_one, smul_mul_assoc, exists
+    simp only [mem_mul, mem_one, smul_mul_assoc, exists_exists_eq_and, one_mul]
+    refine ⟨?_, fun hx => ⟨1, x, hx, one_smul _ _⟩⟩
+    rintro ⟨r, y, hy, rfl⟩
+    exact smul_mem _ _ hy
 
 Depends on / 依赖: exists_exists_eq_and, mem_mul, mem_one, mul_one, mul_smul_comm, one_mul, one_smul, smul_mem, smul_mul_assoc
 -/

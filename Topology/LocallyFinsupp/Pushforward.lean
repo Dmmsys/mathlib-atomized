@@ -58,7 +58,17 @@ definition map
     obtain ⟨U, hU⟩ := (PrespectralSpace.isTopologicalBasis (X := Y)).exists_subset_of_mem_open
       (by simp : y in ⊤) (by simp)
     refine ⟨U, IsOpen.mem_nhds hU.1.1 hU.2.1, ?_⟩
-    suffice
+    suffices h : (U inter {z | (f ⁻¹' {z} inter support ⇑c).Nonempty}).Finite by
+      refine h.subset (inter_subset_inter_right U fun y hy => ?_)
+      obtain ⟨x, (hx : f x = y), h'⟩ := exists_ne_zero_of_finsum_mem_ne_zero hy
+      use x
+      grind [mem_support]
+    suffices (f ⁻¹' (U inter {z | (f ⁻¹' {z} inter c.support).Nonempty}) inter c.support).Finite from
+      (this.image f).subset (fun a ha => by grind [Set.Nonempty])
+    exact (c.locallyFiniteSupport.finite_inter_support_of_isCompact <| hf.2 hU.1.1 hU.1.2).subset
+      (by simp; grind)
+
+@[simp]
 
 中文:
 定义 map
@@ -69,7 +79,17 @@ definition map
     obtain ⟨U, hU⟩ := (PrespectralSpace.isTopologicalBasis (X := Y)).exists_subset_of_mem_open
       (by simp : y in ⊤) (by simp)
     refine ⟨U, IsOpen.mem_nhds hU.1.1 hU.2.1, ?_⟩
-    suffice
+    suffices h : (U inter {z | (f ⁻¹' {z} inter support ⇑c).Nonempty}).Finite by
+      refine h.subset (inter_subset_inter_right U fun y hy => ?_)
+      obtain ⟨x, (hx : f x = y), h'⟩ := exists_ne_zero_of_finsum_mem_ne_zero hy
+      use x
+      grind [mem_support]
+    suffices (f ⁻¹' (U inter {z | (f ⁻¹' {z} inter c.support).Nonempty}) inter c.support).Finite from
+      (this.image f).subset (fun a ha => by grind [Set.Nonempty])
+    exact (c.locallyFiniteSupport.finite_inter_support_of_isCompact <| hf.2 hU.1.1 hU.1.2).subset
+      (by simp; grind)
+
+@[simp]
 -/
 def map (hf : IsSpectralMap f) (c : locallyFinsupp X R) : Function.locallyFinsupp Y R where
   toFun z := ∑ᶠ x in f ⁻¹' {z}, c x * w x

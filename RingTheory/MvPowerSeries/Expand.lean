@@ -357,7 +357,12 @@ theorem coeff_expand_smul
   have {d : σ ->₀ Nat} : (d.prod fun s e => (X s (R := R) ^ p) ^ e) = monomial (p • d) 1 := by
     simp [monomial_smul_eq]
   rw [finsum_eq_single _ m]
-  · rw [this, coeff_monomial, if_pos rfl, mul_on
+  · rw [this, coeff_monomial, if_pos rfl, mul_one]
+  · intro d hd
+    rw [this]; rw [coeff_monomial]; rw [if_neg _]; rw [mul_zero]
+    simp [nsmul_right_inj hp, hd.symm]
+
+@[simp]
 
 中文:
 定理 coeff_expand_smul
@@ -368,7 +373,12 @@ theorem coeff_expand_smul
   have {d : σ ->₀ Nat} : (d.prod fun s e => (X s (R := R) ^ p) ^ e) = monomial (p • d) 1 := by
     simp [monomial_smul_eq]
   rw [finsum_eq_single _ m]
-  · rw [this, coeff_monomial, if_pos rfl, mul_on
+  · rw [this, coeff_monomial, if_pos rfl, mul_one]
+  · intro d hd
+    rw [this]; rw [coeff_monomial]; rw [if_neg _]; rw [mul_zero]
+    simp [nsmul_right_inj hp, hd.symm]
+
+@[simp]
 
 Depends on / 依赖: HasSubst, HasSubst.X_pow, X_pow, classical, coeff_monomial, coeff_subst, d.prod, expand, finsum_eq_single, hd.symm, if_neg, if_pos, monomial, monomial_smul_eq, mul_one, mul_zero, nsmul_right_inj, smul_eq_mul, substAlgHom_apply
 -/
@@ -421,7 +431,16 @@ theorem coeff_expand_of_not_dvd
   simp only [expand, substAlgHom_apply, coeff_subst (HasSubst.X_pow hp)] at h
   obtain ⟨d, hd⟩ : exists (d : σ ->₀ Nat), (coeff m) (d.prod fun s e => ((X s (R := R)) ^ p) ^ e) != 0 := by
     by_contra! hc
-    rw [finsum_eq_zero_of_forall_eq_zero fun d => by simp [hc d]
+    rw [finsum_eq_zero_of_forall_eq_zero fun d => by simp [hc d]] at h
+    contradiction
+  have : (d.prod fun s e => ((X s (R := R)) ^ p) ^ e) = monomial (p • d) 1 := by
+    simp [monomial_smul_eq]
+  rw [this]; rw [coeff_monomial] at hd
+  have meq : m = p • d := by
+    by_contra hc
+    rw [if_neg hc] at hd
+    contradiction
+  simp [meq]
 
 中文:
 定理 coeff_expand_of_not_dvd
@@ -432,7 +451,16 @@ theorem coeff_expand_of_not_dvd
   simp only [expand, substAlgHom_apply, coeff_subst (HasSubst.X_pow hp)] at h
   obtain ⟨d, hd⟩ : exists (d : σ ->₀ Nat), (coeff m) (d.prod fun s e => ((X s (R := R)) ^ p) ^ e) != 0 := by
     by_contra! hc
-    rw [finsum_eq_zero_of_forall_eq_zero fun d => by simp [hc d]
+    rw [finsum_eq_zero_of_forall_eq_zero fun d => by simp [hc d]] at h
+    contradiction
+  have : (d.prod fun s e => ((X s (R := R)) ^ p) ^ e) = monomial (p • d) 1 := by
+    simp [monomial_smul_eq]
+  rw [this]; rw [coeff_monomial] at hd
+  have meq : m = p • d := by
+    by_contra hc
+    rw [if_neg hc] at hd
+    contradiction
+  simp [meq]
 
 Depends on / 依赖: HasSubst, HasSubst.X_pow, X_pow, classical, coeff_monomial, coeff_subst, contrapose, d.prod, expand, finsum_eq_zero_of_forall_eq_zero, if_neg, monomial, monomial_smul_eq, substAlgHom_apply
 -/
@@ -466,7 +494,8 @@ theorem support_expand_subset
   have : forall i, p ∣ d i := fun _ => by_contra fun hc => hd (coeff_expand_of_not_dvd p hp φ hc)
   let m := d.mapRange (fun n => n / p) (Nat.zero_div p)
   have eq_aux : p • m = d := (Finsupp.ext fun a => Nat.eq_mul_of_div_eq_right (this a) rfl).symm
-  rw [Function.mem_support]; rw [
+  rw [Function.mem_support]; rw [← eq_aux]; rw [← coeff_apply (expand p hp φ)]; rw [coeff_expand_smul]; rw [coeff_apply] at hd
+  exact ⟨m, hd, eq_aux⟩
 
 中文:
 定理 support_expand_subset
@@ -476,7 +505,8 @@ theorem support_expand_subset
   have : forall i, p ∣ d i := fun _ => by_contra fun hc => hd (coeff_expand_of_not_dvd p hp φ hc)
   let m := d.mapRange (fun n => n / p) (Nat.zero_div p)
   have eq_aux : p • m = d := (Finsupp.ext fun a => Nat.eq_mul_of_div_eq_right (this a) rfl).symm
-  rw [Function.mem_support]; rw [
+  rw [Function.mem_support]; rw [← eq_aux]; rw [← coeff_apply (expand p hp φ)]; rw [coeff_expand_smul]; rw [coeff_apply] at hd
+  exact ⟨m, hd, eq_aux⟩
 
 Depends on / 依赖: Finsupp, Finsupp.ext, Function, Function.mem_support, Nat.eq_mul_of_div_eq_right, Nat.zero_div, coeff_apply, coeff_expand_of_not_dvd, coeff_expand_smul, d.mapRange, eq_aux, eq_mul_of_div_eq_right, expand, mapRange, mem_support, zero_div
 -/
@@ -547,7 +577,16 @@ theorem order_expand
     · obtain ⟨d, hd₁, hd₂⟩ := exists_coeff_ne_zero_and_order (ne_zero_iff_order_finite.mp hφ)
       have : p • φ.order = (p • d).degree := by simp [← hd₂]
       rw [this]
-exact order_le (coeff_
+exact order_le (coeff_expand_smul p hp φ _) ▸ hd₁
+    · refine MvPowerSeries.le_order fun d hd => ?_
+      by_cases! h : forall i, p ∣ d i
+      · obtain ⟨m, hm⟩ : exists m, p • m = d := ⟨d.mapRange (fun a => a / p) (by simp),
+          by ext i; simp [(Nat.mul_div_cancel' (h i))]⟩
+        rw [← hm]; rw [coeff_expand_smul]; rw [coeff_of_lt_order]
+        simp only [← hm, map_nsmul, smul_eq_mul, Nat.cast_mul, nsmul_eq_mul] at hd
+        exact lt_of_mul_lt_mul_left' hd
+      · obtain ⟨i, hi⟩ := h
+        exact coeff_expand_of_not_dvd p hp φ hi
 
 中文:
 定理 order_expand
@@ -559,7 +598,16 @@ exact order_le (coeff_
     · obtain ⟨d, hd₁, hd₂⟩ := exists_coeff_ne_zero_and_order (ne_zero_iff_order_finite.mp hφ)
       have : p • φ.order = (p • d).degree := by simp [← hd₂]
       rw [this]
-exact order_le (coeff_
+exact order_le (coeff_expand_smul p hp φ _) ▸ hd₁
+    · refine MvPowerSeries.le_order fun d hd => ?_
+      by_cases! h : forall i, p ∣ d i
+      · obtain ⟨m, hm⟩ : exists m, p • m = d := ⟨d.mapRange (fun a => a / p) (by simp),
+          by ext i; simp [(Nat.mul_div_cancel' (h i))]⟩
+        rw [← hm]; rw [coeff_expand_smul]; rw [coeff_of_lt_order]
+        simp only [← hm, map_nsmul, smul_eq_mul, Nat.cast_mul, nsmul_eq_mul] at hd
+        exact lt_of_mul_lt_mul_left' hd
+      · obtain ⟨i, hi⟩ := h
+        exact coeff_expand_of_not_dvd p hp φ hi
 
 Depends on / 依赖: ENat.mul_top, MvPowerSeries, MvPowerSeries.le_order, Nat.mul_div_canc, coeff_expand_smul, d.mapRange, degree, eq_of_le_of_ge, exists_coeff_ne_zero_and_order, le_order, mapRange, mul_div_canc, mul_top, ne_zero_iff_order_finite, ne_zero_iff_order_finite.mp, order_le
 -/
@@ -599,7 +647,9 @@ theorem expand_eq_expand
   by_cases! h : forall i, p ∣ n i
   · obtain ⟨m, hm⟩ : exists m, p • m = n := ⟨n.mapRange (fun a => a / p) (by simp),
       by ext i; simp [(Nat.mul_div_cancel' (h i))]⟩
-    rw [← hm]; rw [coeff_expand_smul p hp _ _]; rw [φ.coeff_expand_smul _ hp]; rw 
+    rw [← hm]; rw [coeff_expand_smul p hp _ _]; rw [φ.coeff_expand_smul _ hp]; rw [φ.coeff_coe]
+  · obtain ⟨i, hi⟩ := h
+    rw [coeff_expand_of_not_dvd p hp _ hi]; rw [MvPolynomial.coeff_expand_of_not_dvd _ hi]
 
 中文:
 定理 expand_eq_expand
@@ -610,7 +660,9 @@ theorem expand_eq_expand
   by_cases! h : forall i, p ∣ n i
   · obtain ⟨m, hm⟩ : exists m, p • m = n := ⟨n.mapRange (fun a => a / p) (by simp),
       by ext i; simp [(Nat.mul_div_cancel' (h i))]⟩
-    rw [← hm]; rw [coeff_expand_smul p hp _ _]; rw [φ.coeff_expand_smul _ hp]; rw 
+    rw [← hm]; rw [coeff_expand_smul p hp _ _]; rw [φ.coeff_expand_smul _ hp]; rw [φ.coeff_coe]
+  · obtain ⟨i, hi⟩ := h
+    rw [coeff_expand_of_not_dvd p hp _ hi]; rw [MvPolynomial.coeff_expand_of_not_dvd _ hi]
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.coeff_coe, MvPolynomial.coeff_expand_of_not_dvd, Nat.mul_div_cancel, coeff_coe, coeff_expand_of_not_dvd, coeff_expand_smul, mapRange, mul_div_cancel, n.mapRange
 -/
@@ -638,7 +690,22 @@ theorem trunc'_expand
       by ext i; simp [(Nat.mul_div_cancel' (h i))]⟩
     by_cases h_le : m <= n
     · rw [← hm, coeff_trunc', if_pos (nsmul_le_nsmul_right h_le p), coeff_expand_smul,
-     
+        MvPolynomial.coeff_expand_smul _ hp, coeff_trunc', if_pos h_le]
+    · have not_le : ¬ p • m <= p • n := by
+        obtain ⟨i, hi⟩ : exists i, m i > n i := by
+          by_contra! hc
+          exact h_le (Finsupp.coe_le_coe.mp hc)
+        have : ¬ p • m i <= p • n i := by
+          simp [Nat.mul_lt_mul_of_pos_left hi (p.ne_zero_iff_zero_lt.mp hp)]
+        exact Not.intro fun a => this (a i)
+      rw [coeff_trunc']; rw [← hm]; rw [if_neg not_le]; rw [MvPolynomial.coeff_expand_smul _ hp]; rw [coeff_trunc']; rw [if_neg h_le]
+  · obtain ⟨i, hi⟩ := h
+    rw [MvPolynomial.coeff_expand_of_not_dvd _ hi]
+    by_cases hd : d <= p • n
+    · rw [coeff_trunc', if_pos hd, coeff_expand_of_not_dvd _ hp _ hi]
+    rw [coeff_trunc']; rw [if_neg hd]
+
+include hp in
 
 中文:
 定理 trunc'_expand
@@ -650,7 +717,22 @@ theorem trunc'_expand
       by ext i; simp [(Nat.mul_div_cancel' (h i))]⟩
     by_cases h_le : m <= n
     · rw [← hm, coeff_trunc', if_pos (nsmul_le_nsmul_right h_le p), coeff_expand_smul,
-     
+        MvPolynomial.coeff_expand_smul _ hp, coeff_trunc', if_pos h_le]
+    · have not_le : ¬ p • m <= p • n := by
+        obtain ⟨i, hi⟩ : exists i, m i > n i := by
+          by_contra! hc
+          exact h_le (Finsupp.coe_le_coe.mp hc)
+        have : ¬ p • m i <= p • n i := by
+          simp [Nat.mul_lt_mul_of_pos_left hi (p.ne_zero_iff_zero_lt.mp hp)]
+        exact Not.intro fun a => this (a i)
+      rw [coeff_trunc']; rw [← hm]; rw [if_neg not_le]; rw [MvPolynomial.coeff_expand_smul _ hp]; rw [coeff_trunc']; rw [if_neg h_le]
+  · obtain ⟨i, hi⟩ := h
+    rw [MvPolynomial.coeff_expand_of_not_dvd _ hi]
+    by_cases hd : d <= p • n
+    · rw [coeff_trunc', if_pos hd, coeff_expand_of_not_dvd _ hp _ hi]
+    rw [coeff_trunc']; rw [if_neg hd]
+
+include hp in
 
 Depends on / 依赖: Finsupp, Finsupp.coe_le_coe.mp, MvPolynomial, MvPolynomial.coeff_expand_smul, Nat.mul_div_cancel, coe_le_coe, coeff_expand_smul, coeff_trunc, d.mapRange, h_le, if_pos, mapRange, mul_div_cancel, not_le, nsmul_le_nsmul_right
 -/
@@ -717,7 +799,11 @@ theorem map_frobenius_expand
   use (p • n)
   refine ⟨le_self_nsmul zero_le hp, ?_⟩
   · have : (((trunc' R (p • n) f).expand p).map (frobenius R p)).toMvPowerSeries =
-      MvPowerSeries.map (frobenius R p) ((trunc' R (p • n) f).expand p) :
+      MvPowerSeries.map (frobenius R p) ((trunc' R (p • n) f).expand p) := by
+      simp only [MvPolynomial.map_expand, ← expand_eq_expand p hp, map_expand]
+      congr
+    rw [trunc'_map]; rw [trunc'_expand]; rw [← trunc'_trunc'_pow (Nat.one_le_iff_ne_zero.mpr
+      (expChar_ne_zero R p))]; rw [← MvPolynomial.coe_pow p]; rw [← MvPolynomial.map_frobenius_expand]; rw [this]; rw [trunc'_map]; rw [trunc'_expand_trunc' p hp (le_self_nsmul zero_le hp)]
 
 中文:
 定理 map_frobenius_expand
@@ -729,7 +815,11 @@ theorem map_frobenius_expand
   use (p • n)
   refine ⟨le_self_nsmul zero_le hp, ?_⟩
   · have : (((trunc' R (p • n) f).expand p).map (frobenius R p)).toMvPowerSeries =
-      MvPowerSeries.map (frobenius R p) ((trunc' R (p • n) f).expand p) :
+      MvPowerSeries.map (frobenius R p) ((trunc' R (p • n) f).expand p) := by
+      simp only [MvPolynomial.map_expand, ← expand_eq_expand p hp, map_expand]
+      congr
+    rw [trunc'_map]; rw [trunc'_expand]; rw [← trunc'_trunc'_pow (Nat.one_le_iff_ne_zero.mpr
+      (expChar_ne_zero R p))]; rw [← MvPolynomial.coe_pow p]; rw [← MvPolynomial.map_frobenius_expand]; rw [this]; rw [trunc'_map]; rw [trunc'_expand_trunc' p hp (le_self_nsmul zero_le hp)]
 
 Depends on / 依赖: Filter, Filter.frequently_atTop, MvPolynomial, MvPolynomial.c, MvPolynomial.map_expand, MvPowerSeries, MvPowerSeries.map, Nat.one_le_iff_ne_zero.mpr, _expand, _map, _pow, _trunc, classical, eq_iff_frequently_trunc, expChar_ne_zero, expand, expand_eq_expand, frequently_atTop, frobenius, le_self_nsmul
 -/

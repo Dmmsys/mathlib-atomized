@@ -314,7 +314,7 @@ definition gMulHom
       map_zero' := GNonUnitalNonAssocSemiring.mul_zero _
       map_add' := GNonUnitalNonAssocSemiring.mul_add _ }
   map_zero' := AddMonoidHom.ext fun a => GNonUnitalNonAssocSemiring.zero_mul a
-  map_add' _ _ := AddMonoidHom.ext fun _ => GNonUnitalNonAsso
+  map_add' _ _ := AddMonoidHom.ext fun _ => GNonUnitalNonAssocSemiring.add_mul _ _ _
 
 中文:
 定义 gMulHom
@@ -323,7 +323,7 @@ definition gMulHom
       map_zero' := GNonUnitalNonAssocSemiring.mul_zero _
       map_add' := GNonUnitalNonAssocSemiring.mul_add _ }
   map_zero' := AddMonoidHom.ext fun a => GNonUnitalNonAssocSemiring.zero_mul a
-  map_add' _ _ := AddMonoidHom.ext fun _ => GNonUnitalNonAsso
+  map_add' _ _ := AddMonoidHom.ext fun _ => GNonUnitalNonAssocSemiring.add_mul _ _ _
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, GNonUnitalNonAssocSemiring, GNonUnitalNonAssocSemiring.add_mul, GNonUnitalNonAssocSemiring.mul_add, GNonUnitalNonAssocSemiring.mul_zero, GNonUnitalNonAssocSemiring.zero_mul, GradedMonoid, GradedMonoid.GMul.mul, add_mul, map_add, map_zero, mul_add, mul_zero, zero_mul
 -/
@@ -393,7 +393,7 @@ instance :
   mul_zero := fun _ => by simp only [Mul.mul, HMul.hMul, map_zero]
   left_distrib := fun _ _ _ => by simp only [Mul.mul, HMul.hMul, map_add]
   right_distrib := fun _ _ _ => by
-    simp only [Mul.mul, HMul.hMul, map_add, Ad
+    simp only [Mul.mul, HMul.hMul, map_add, AddMonoidHom.add_apply]
 
 中文:
 实例 :
@@ -402,7 +402,7 @@ instance :
   mul_zero := fun _ => by simp only [Mul.mul, HMul.hMul, map_zero]
   left_distrib := fun _ _ _ => by simp only [Mul.mul, HMul.hMul, map_add]
   right_distrib := fun _ _ _ => by
-    simp only [Mul.mul, HMul.hMul, map_add, Ad
+    simp only [Mul.mul, HMul.hMul, map_add, AddMonoidHom.add_apply]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.zero_apply, HMul.hMul, Mul.mul, map_zero, zero_apply
 -/
@@ -504,7 +504,12 @@ theorem mul_assoc
   -- (`fun a b c => a * b * c` as a bundled hom) = (`fun a b c => a * (b * c)` as a bundled hom)
   suffices AddMonoidHom.mulLeft₃ = AddMonoidHom.mulRight₃ by
       simpa only [AddMonoidHom.mulLeft₃_apply, AddMonoidHom.mulRight₃_apply] using
-        DFunLike.congr_fun (DFunLike.congr_fun (DFunLike
+        DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.congr_fun this a) b) c
+  ext ai ax bi bx ci cx : 6
+  dsimp only [coe_comp, Function.comp_apply, AddMonoidHom.mulLeft₃_apply,
+    AddMonoidHom.mulRight₃_apply]
+  simp_rw [of_mul_of]
+  exact of_eq_of_gradedMonoid_eq (_root_.mul_assoc (GradedMonoid.mk ai ax) ⟨bi, bx⟩ ⟨ci, cx⟩)
 
 中文:
 定理 mul_assoc
@@ -514,7 +519,12 @@ theorem mul_assoc
   -- (`fun a b c => a * b * c` as a bundled hom) = (`fun a b c => a * (b * c)` as a bundled hom)
   suffices AddMonoidHom.mulLeft₃ = AddMonoidHom.mulRight₃ by
       simpa only [AddMonoidHom.mulLeft₃_apply, AddMonoidHom.mulRight₃_apply] using
-        DFunLike.congr_fun (DFunLike.congr_fun (DFunLike
+        DFunLike.congr_fun (DFunLike.congr_fun (DFunLike.congr_fun this a) b) c
+  ext ai ax bi bx ci cx : 6
+  dsimp only [coe_comp, Function.comp_apply, AddMonoidHom.mulLeft₃_apply,
+    AddMonoidHom.mulRight₃_apply]
+  simp_rw [of_mul_of]
+  exact of_eq_of_gradedMonoid_eq (_root_.mul_assoc (GradedMonoid.mk ai ax) ⟨bi, bx⟩ ⟨ci, cx⟩)
 -/
 private theorem mul_assoc (a b c : ⨁ i, A i) : a * b * c = a * (b * c) := by
   -- (`fun a b c => a * b * c` as a bundled hom) = (`fun a b c => a * (b * c)` as a bundled hom)
@@ -559,7 +569,7 @@ instance semiring
   natCast_succ := fun n => by
     simp_rw [NatCast.natCast, GSemiring.natCast_succ]
     rw [map_add]
-   
+    rfl
 
 中文:
 实例 semiring
@@ -572,7 +582,7 @@ instance semiring
   natCast_succ := fun n => by
     simp_rw [NatCast.natCast, GSemiring.natCast_succ]
     rw [map_add]
-   
+    rfl
 
 Depends on / 依赖: one_mul, private
 -/
@@ -691,7 +701,13 @@ theorem mul_eq_dfinsuppSum
   change mulHom _ a a' = _
   -- Porting note: I have no idea how the proof from ml3 worked it used to be
   -- simpa only [mul_hom, to_add_monoid, dfinsupp.lift_add_hom_apply, dfinsupp.sum_add_hom_apply,
-  -- add_monoid_hom.dfinsupp_sum_apply, flip_apply, add_monoid_hom.dfinsupp_sum_add_hom_apply]
+  -- add_monoid_hom.dfinsupp_sum_apply, flip_apply, add_monoid_hom.dfinsupp_sum_add_hom_apply],
+  rw [mulHom]; rw [toAddMonoid]; rw [DFinsupp.liftAddHom_apply]
+  dsimp only [DirectSum]
+  rw [DFinsupp.sumAddHom_apply]; rw [AddMonoidHom.dfinsuppSum_apply]
+  apply congrArg _
+  funext x
+  simp [AddMonoidHom.dfinsuppSum_apply, DFinsupp.sumAddHom_apply, DirectSum.toAddMonoid]
 
 中文:
 定理 mul_eq_dfinsuppSum
@@ -700,7 +716,13 @@ theorem mul_eq_dfinsuppSum
   change mulHom _ a a' = _
   -- Porting note: I have no idea how the proof from ml3 worked it used to be
   -- simpa only [mul_hom, to_add_monoid, dfinsupp.lift_add_hom_apply, dfinsupp.sum_add_hom_apply,
-  -- add_monoid_hom.dfinsupp_sum_apply, flip_apply, add_monoid_hom.dfinsupp_sum_add_hom_apply]
+  -- add_monoid_hom.dfinsupp_sum_apply, flip_apply, add_monoid_hom.dfinsupp_sum_add_hom_apply],
+  rw [mulHom]; rw [toAddMonoid]; rw [DFinsupp.liftAddHom_apply]
+  dsimp only [DirectSum]
+  rw [DFinsupp.sumAddHom_apply]; rw [AddMonoidHom.dfinsuppSum_apply]
+  apply congrArg _
+  funext x
+  simp [AddMonoidHom.dfinsuppSum_apply, DFinsupp.sumAddHom_apply, DirectSum.toAddMonoid]
 
 Depends on / 依赖: mulHom
 -/
@@ -760,7 +782,7 @@ theorem mul_comm
     rw [← mulHom_apply]; rw [this]; rw [AddMonoidHom.flip_apply]; rw [mulHom_apply]
   apply addHom_ext; intro ai ax; apply addHom_ext; intro bi bx
   rw [AddMonoidHom.flip_apply]; rw [mulHom_of_of]; rw [mulHom_of_of]
-  exact of_eq_of_gradedMonoid_eq (GCommS
+  exact of_eq_of_gradedMonoid_eq (GCommSemiring.mul_comm ⟨ai, ax⟩ ⟨bi, bx⟩)
 
 中文:
 定理 mul_comm
@@ -771,7 +793,7 @@ theorem mul_comm
     rw [← mulHom_apply]; rw [this]; rw [AddMonoidHom.flip_apply]; rw [mulHom_apply]
   apply addHom_ext; intro ai ax; apply addHom_ext; intro bi bx
   rw [AddMonoidHom.flip_apply]; rw [mulHom_of_of]; rw [mulHom_of_of]
-  exact of_eq_of_gradedMonoid_eq (GCommS
+  exact of_eq_of_gradedMonoid_eq (GCommSemiring.mul_comm ⟨ai, ax⟩ ⟨bi, bx⟩)
 -/
 private theorem mul_comm (a b : ⨁ i, A i) : a * b = b * a := by
   suffices mulHom A = (mulHom A).flip by
@@ -1240,7 +1262,12 @@ definition toSemiring
     map_mul' := by
       rw [(toAddMonoid f).map_mul_iff]
       refine DirectSum.addHom_ext' (fun xi => AddMonoidHom.ext (fun xv => ?_))
-      ref
+      refine DirectSum.addHom_ext' (fun yi => AddMonoidHom.ext (fun yv => ?_))
+      change
+        toAddMonoid f (of A xi xv * of A yi yv) =
+          toAddMonoid f (of A xi xv) * toAddMonoid f (of A yi yv)
+      simp_rw [of_mul_of, toAddMonoid_of]
+      exact hmul _ _ }
 
 中文:
 定义 toSemiring
@@ -1254,7 +1281,12 @@ definition toSemiring
     map_mul' := by
       rw [(toAddMonoid f).map_mul_iff]
       refine DirectSum.addHom_ext' (fun xi => AddMonoidHom.ext (fun xv => ?_))
-      ref
+      refine DirectSum.addHom_ext' (fun yi => AddMonoidHom.ext (fun yv => ?_))
+      change
+        toAddMonoid f (of A xi xv * of A yi yv) =
+          toAddMonoid f (of A xi xv) * toAddMonoid f (of A yi yv)
+      simp_rw [of_mul_of, toAddMonoid_of]
+      exact hmul _ _ }
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, DirectSum, DirectSum.addHom_ext, addHom_ext, map_mul, map_mul_iff, map_one, of_mul_of, simp_rw, toAddMonoid, toAddMonoid_of
 -/
@@ -1338,7 +1370,14 @@ definition liftRingHom
       by
       intro i j ai aj
       simp only [AddMonoidHom.comp_apply, AddMonoidHom.coe_coe]
-      r
+      rw [← F.map_mul (of A i ai)]; rw [of_mul_of ai]⟩
+  left_inv f := by
+    ext xi xv
+    exact toAddMonoid_of (fun _ => f.1) xi xv
+  right_inv F := by
+    apply RingHom.coe_addMonoidHom_injective
+    refine DirectSum.addHom_ext' (fun xi => AddMonoidHom.ext (fun xv => ?_))
+    simp only [DirectSum.toAddMonoid_of, AddMonoidHom.comp_apply, toSemiring_coe_addMonoidHom]
 
 中文:
 定义 liftRingHom
@@ -1353,7 +1392,14 @@ definition liftRingHom
       by
       intro i j ai aj
       simp only [AddMonoidHom.comp_apply, AddMonoidHom.coe_coe]
-      r
+      rw [← F.map_mul (of A i ai)]; rw [of_mul_of ai]⟩
+  left_inv f := by
+    ext xi xv
+    exact toAddMonoid_of (fun _ => f.1) xi xv
+  right_inv F := by
+    apply RingHom.coe_addMonoidHom_injective
+    refine DirectSum.addHom_ext' (fun xi => AddMonoidHom.ext (fun xv => ?_))
+    simp only [DirectSum.toAddMonoid_of, AddMonoidHom.comp_apply, toSemiring_coe_addMonoidHom]
 
 Depends on / 依赖: toSemiring
 -/

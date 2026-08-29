@@ -327,7 +327,14 @@ lemma localEpi_mem_range_iff_epi
   proof: by
   rw [← dsimp% (localEpi (· in Set.range G.obj)).postcomp_iff _ _ (isLocal_adj_unit_app adj Y)]; rw [dsimp% adj.unit.naturality f]; rw [dsimp% (localEpi (· in Set.range G.obj)).precomp_iff _ _ (isLocal_adj_unit_app adj X)]
   refine ⟨fun h => ⟨fun {Z} u v huv => ?_⟩, ?_⟩
-  · refine G.map_injective
+  · refine G.map_injective ?_
+    apply h ⟨Z, rfl⟩
+    simp [← Functor.map_comp, huv]
+  · rintro h _ ⟨Z, rfl⟩ u v huv
+    obtain ⟨u, rfl⟩ := G.map_surjective u
+    obtain ⟨v, rfl⟩ := G.map_surjective v
+    simp only [← G.map_comp, G.map_injective_iff, cancel_epi] at huv
+    rw [huv]
 
 中文:
 引理 localEpi_mem_range_iff_epi
@@ -335,7 +342,14 @@ lemma localEpi_mem_range_iff_epi
   证明: by
   rw [← dsimp% (localEpi (· in Set.range G.obj)).postcomp_iff _ _ (isLocal_adj_unit_app adj Y)]; rw [dsimp% adj.unit.naturality f]; rw [dsimp% (localEpi (· in Set.range G.obj)).precomp_iff _ _ (isLocal_adj_unit_app adj X)]
   refine ⟨fun h => ⟨fun {Z} u v huv => ?_⟩, ?_⟩
-  · refine G.map_injective
+  · refine G.map_injective ?_
+    apply h ⟨Z, rfl⟩
+    simp [← Functor.map_comp, huv]
+  · rintro h _ ⟨Z, rfl⟩ u v huv
+    obtain ⟨u, rfl⟩ := G.map_surjective u
+    obtain ⟨v, rfl⟩ := G.map_surjective v
+    simp only [← G.map_comp, G.map_injective_iff, cancel_epi] at huv
+    rw [huv]
 
 Depends on / 依赖: Functor, Functor.map_comp, G.map_comp, G.map_injective, G.map_injective_iff, G.map_surjective, G.obj, Set.range, adj.unit.naturality, isLocal_adj_unit_app, localEpi, map_comp, map_injective, map_injective_iff, map_surjective, naturality, postcomp_iff, precomp_iff
 -/

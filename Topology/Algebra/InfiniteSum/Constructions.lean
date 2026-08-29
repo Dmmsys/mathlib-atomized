@@ -218,7 +218,10 @@ lemma HasProd.sum
     convert! (tendsto_mul.comp (nhds_prod_eq (x := a) (y := b) ▸ Tendsto.prodMap h₁ h₂))
     ext s
     simp
-  simpa [Tendsto, ← Filter.map_ma
+  simpa [Tendsto, ← Filter.map_map] using! this
+
+@[to_additive /-- For the statement that `tsum` commutes with `Finset.sum`,
+  see `Summable.tsum_finsetSum`. -/]
 
 中文:
 引理 有积类型.求和
@@ -229,7 +232,10 @@ lemma HasProd.sum
     convert! (tendsto_mul.comp (nhds_prod_eq (x := a) (y := b) ▸ Tendsto.prodMap h₁ h₂))
     ext s
     simp
-  simpa [Tendsto, ← Filter.map_ma
+  simpa [Tendsto, ← Filter.map_map] using! this
+
+@[to_additive /-- For the statement that `tsum` commutes with `Finset.sum`,
+  see `Summable.tsum_finsetSum`. -/]
 
 Depends on / 依赖: Filter, Filter.map_map, Finset, Finset.sumEquiv.map_atTop, Tendsto, Tendsto.prodMap, atTop.map, convert, map_atTop, map_map, nhds_prod_eq, prodMap, prod_atTop_atTop_eq, sumEquiv, sumEquiv.symm, tendsto_mul, tendsto_mul.comp
 -/
@@ -309,7 +315,15 @@ theorem HasProd.sigma
   use u.image Sigma.fst, trivial
   intro bs hbs
   simp only [Set.mem_preimage] at hu
-  have : Tendsto (fun t : Finset (Σ b, γ b) => ∏ p in t with p.1 in
+  have : Tendsto (fun t : Finset (Σ b, γ b) => ∏ p in t with p.1 in bs, f p) atTop
+      (𝓝 <| ∏ b in bs, g b) := by
+    simp only [← sigma_preimage_mk, prod_sigma]
+    refine tendsto_finsetProd _ fun b _ => ?_
+    change
+      Tendsto (fun t => (fun t => ∏ s in t, f ⟨b, s⟩) (preimage t (Sigma.mk b) _)) atTop (𝓝 (g b))
+    exact (hf b).comp (tendsto_finset_preimage_atTop_atTop (sigma_mk_injective))
+  refine hsc.mem_of_tendsto this (eventually_atTop.2 ⟨u, fun t ht => hu _ fun x hx => ?_⟩)
+exact mem_filter.2 ⟨ht hx, hbs mem_image_of_mem _ hx⟩
 
 中文:
 定理 有积类型.sigma
@@ -322,7 +336,15 @@ theorem HasProd.sigma
   use u.image Sigma.fst, trivial
   intro bs hbs
   simp only [Set.mem_preimage] at hu
-  have : Tendsto (fun t : Finset (Σ b, γ b) => ∏ p in t with p.1 in
+  have : Tendsto (fun t : Finset (Σ b, γ b) => ∏ p in t with p.1 in bs, f p) atTop
+      (𝓝 <| ∏ b in bs, g b) := by
+    simp only [← sigma_preimage_mk, prod_sigma]
+    refine tendsto_finsetProd _ fun b _ => ?_
+    change
+      Tendsto (fun t => (fun t => ∏ s in t, f ⟨b, s⟩) (preimage t (Sigma.mk b) _)) atTop (𝓝 (g b))
+    exact (hf b).comp (tendsto_finset_preimage_atTop_atTop (sigma_mk_injective))
+  refine hsc.mem_of_tendsto this (eventually_atTop.2 ⟨u, fun t ht => hu _ fun x hx => ?_⟩)
+exact mem_filter.2 ⟨ht hx, hbs mem_image_of_mem _ hx⟩
 
 Depends on / 依赖: Finset, Set.mem_preimage, Sigma.fst, Sigma.mk, Tendsto, atTop_basis, atTop_basis.tendsto_iff, classical, closed_nhds_basis, mem_atTop_sets, mem_atTop_sets.mp, mem_preimage, preimage, prod_sigma, sigma_preimage_mk, tendsto_finsetProd, tendsto_iff, u.image
 -/
@@ -537,7 +559,20 @@ theorem HasProd.of_sigma
   intro u hu s
   rcases mem_nhds_iff.1 hu with ⟨v, vu, v_open, hv⟩
   obtain ⟨t0, st0, ht0⟩ : exists t0, ∏ i in t0, g i in v ∧ s.image Sigma.fst subseteq t0 := by
-    have A
+    have A : forallᶠ t0 in (atTop : Filter (Finset β)), ∏ i in t0, g i in v := hg (v_open.mem_nhds hv)
+    exact (A.and (Ici_mem_atTop _)).exists
+  have L : Tendsto (fun t : Finset (Σ b, γ b) => ∏ p in t with p.1 in t0, f p) atTop
+      (𝓝 <| ∏ b in t0, g b) := by
+    simp only [← sigma_preimage_mk, prod_sigma]
+    refine tendsto_finsetProd _ fun b _ => ?_
+    change
+      Tendsto (fun t => (fun t => ∏ s in t, f ⟨b, s⟩) (preimage t (Sigma.mk b) _)) atTop (𝓝 (g b))
+    exact (hf b).comp (tendsto_finset_preimage_atTop_atTop (sigma_mk_injective))
+  have : exists t, ∏ p in t with p.1 in t0, f p in v ∧ s subseteq t :=
+    ((Tendsto.eventually_mem L (v_open.mem_nhds st0)).and (Ici_mem_atTop _)).exists
+  obtain ⟨t, tv, st⟩ := this
+  refine ⟨{p in t | p.1 in t0}, fun x hx => ?_, vu tv⟩
+  simpa only [mem_filter, st hx, true_and] using ht0 (mem_image_of_mem Sigma.fst hx)
 
 中文:
 定理 有积类型.of_sigma
@@ -549,7 +584,20 @@ theorem HasProd.of_sigma
   intro u hu s
   rcases mem_nhds_iff.1 hu with ⟨v, vu, v_open, hv⟩
   obtain ⟨t0, st0, ht0⟩ : exists t0, ∏ i in t0, g i in v ∧ s.image Sigma.fst subseteq t0 := by
-    have A
+    have A : forallᶠ t0 in (atTop : Filter (Finset β)), ∏ i in t0, g i in v := hg (v_open.mem_nhds hv)
+    exact (A.and (Ici_mem_atTop _)).exists
+  have L : Tendsto (fun t : Finset (Σ b, γ b) => ∏ p in t with p.1 in t0, f p) atTop
+      (𝓝 <| ∏ b in t0, g b) := by
+    simp only [← sigma_preimage_mk, prod_sigma]
+    refine tendsto_finsetProd _ fun b _ => ?_
+    change
+      Tendsto (fun t => (fun t => ∏ s in t, f ⟨b, s⟩) (preimage t (Sigma.mk b) _)) atTop (𝓝 (g b))
+    exact (hf b).comp (tendsto_finset_preimage_atTop_atTop (sigma_mk_injective))
+  have : exists t, ∏ p in t with p.1 in t0, f p in v ∧ s subseteq t :=
+    ((Tendsto.eventually_mem L (v_open.mem_nhds st0)).and (Ici_mem_atTop _)).exists
+  obtain ⟨t, tv, st⟩ := this
+  refine ⟨{p in t | p.1 in t0}, fun x hx => ?_, vu tv⟩
+  simpa only [mem_filter, st hx, true_and] using ht0 (mem_image_of_mem Sigma.fst hx)
 
 Depends on / 依赖: A.and, Filter, Finset, Ici_mem_atTop, Sigma.fst, Tendsto, classical, frequently_atTop, le_nhds_of_cauchy_adhp, mapClusterPt_def, mapClusterPt_iff_frequently, mem_nhds, mem_nhds_iff, s.image, subseteq, v_open, v_open.mem_nhds
 -/

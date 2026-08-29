@@ -153,7 +153,7 @@ lemma isNoetherianObject_iff_not_strictMono
   refine ⟨fun _ => not_strictMono_of_wellFoundedGT, fun h => ?_⟩
   dsimp only [IsNoetherianObject]
   rw [ObjectProperty.is_iff]; rw [isNoetherianObject]; rw [WellFoundedGT]; rw [isWellFounded_iff]; rw [RelEmbedding.wellFounded_iff_isEmpty]
-  exact ⟨fun f => h f.toFun (fun a b h => f.map_rel_iff.2
+  exact ⟨fun f => h f.toFun (fun a b h => f.map_rel_iff.2 h)⟩
 
 中文:
 引理 isNoetherianObject_iff_not_strictMono
@@ -161,7 +161,7 @@ lemma isNoetherianObject_iff_not_strictMono
   refine ⟨fun _ => not_strictMono_of_wellFoundedGT, fun h => ?_⟩
   dsimp only [IsNoetherianObject]
   rw [ObjectProperty.is_iff]; rw [isNoetherianObject]; rw [WellFoundedGT]; rw [isWellFounded_iff]; rw [RelEmbedding.wellFounded_iff_isEmpty]
-  exact ⟨fun f => h f.toFun (fun a b h => f.map_rel_iff.2
+  exact ⟨fun f => h f.toFun (fun a b h => f.map_rel_iff.2 h)⟩
 
 Depends on / 依赖: IsNoetherianObject, ObjectProperty, ObjectProperty.is_iff, RelEmbedding, RelEmbedding.wellFounded_iff_isEmpty, WellFoundedGT, f.map_rel_iff, f.toFun, isNoetherianObject, isWellFounded_iff, is_iff, map_rel_iff, not_strictMono_of_wellFoundedGT, wellFounded_iff_isEmpty
 -/
@@ -205,7 +205,10 @@ lemma isNoetherianObject_iff_isEventuallyConstant
     refine ⟨n, fun m hm => ?_⟩
     rw [MonoOver.isIso_iff_subobjectMk_eq]
     exact hn m (leOfHom hm)
-  · obtain ⟨n, hn⟩ := h
+  · obtain ⟨n, hn⟩ := h (F.monotone.functor ⋙ Subobject.representative)
+    refine ⟨n, fun m hm => ?_⟩
+    simpa [← MonoOver.isIso_iff_isIso_hom_left, isIso_iff_of_reflects_iso,
+      PartialOrder.isIso_iff_eq] using hn (homOfLE hm)
 
 中文:
 引理 isNoetherianObject_iff_isEventuallyConstant
@@ -216,7 +219,10 @@ lemma isNoetherianObject_iff_isEventuallyConstant
     refine ⟨n, fun m hm => ?_⟩
     rw [MonoOver.isIso_iff_subobjectMk_eq]
     exact hn m (leOfHom hm)
-  · obtain ⟨n, hn⟩ := h
+  · obtain ⟨n, hn⟩ := h (F.monotone.functor ⋙ Subobject.representative)
+    refine ⟨n, fun m hm => ?_⟩
+    simpa [← MonoOver.isIso_iff_isIso_hom_left, isIso_iff_of_reflects_iso,
+      PartialOrder.isIso_iff_eq] using hn (homOfLE hm)
 
 Depends on / 依赖: F.monotone.functor, MonoOver, MonoOver.isIso_iff_isIso_hom_left, MonoOver.isIso_iff_subobjectMk_eq, PartialOrder, PartialOrder.isIso_iff_eq, Subobject, Subobject.equivMonoOver, Subobject.representative, equivMonoOver, functor, homOfLE, inverse, isIso_iff_eq, isIso_iff_isIso_hom_left, isIso_iff_of_reflects_iso, isIso_iff_subobjectMk_eq, isNoetherianObject_iff_monotone_chain_condition, leOfHom, monotone
 -/

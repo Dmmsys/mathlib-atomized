@@ -318,7 +318,10 @@ theorem boundary_le_boundary_sup_sup_boundary_inf_left
   refine ⟨⟨⟨?_, ?_⟩, ⟨?_, ?_⟩⟩, ?_, ?_⟩ <;> try { exact le_sup_of_le_left inf_le_left } <;>
     refine inf_le_of_right_le ?_
   · rw [hnot_le_iff_codisjoint_right, codisjoint_left_comm]
-   
+    exact codisjoint_hnot_left
+  · refine le_sup_of_le_right ?_
+    rw [hnot_le_iff_codisjoint_right]
+    exact codisjoint_hnot_right.mono_right (hnot_anti inf_le_left)
 
 中文:
 定理 boundary_le_boundary_sup_sup_boundary_inf_left
@@ -329,7 +332,10 @@ theorem boundary_le_boundary_sup_sup_boundary_inf_left
   refine ⟨⟨⟨?_, ?_⟩, ⟨?_, ?_⟩⟩, ?_, ?_⟩ <;> try { exact le_sup_of_le_left inf_le_left } <;>
     refine inf_le_of_right_le ?_
   · rw [hnot_le_iff_codisjoint_right, codisjoint_left_comm]
-   
+    exact codisjoint_hnot_left
+  · refine le_sup_of_le_right ?_
+    rw [hnot_le_iff_codisjoint_right]
+    exact codisjoint_hnot_right.mono_right (hnot_anti inf_le_left)
 
 Depends on / 依赖: boundary, codisjoint_hnot_left, codisjoint_hnot_right, codisjoint_hnot_right.mono_right, codisjoint_left_comm, hnot_anti, hnot_le_iff_codisjoint_right, inf_le_left, inf_le_of_right_le, le_inf_iff, le_sup_of_le_left, le_sup_of_le_right, mono_right, sup_assoc, sup_comm, sup_inf_left, sup_inf_right, sup_right_idem
 -/

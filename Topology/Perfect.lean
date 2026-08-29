@@ -246,7 +246,8 @@ theorem Preperfect.perfect_closure
   · exact hC _ h
   have : {x}ᶜ inter C = C := by simp [h]
   rw [AccPt]; rw [nhdsWithin]; rw [inf_assoc]; rw [inf_principal]; rw [this]
-  rw [closure_eq_cluster_pts
+  rw [closure_eq_cluster_pts] at hx
+  exact hx
 
 中文:
 定理 Preperfect.perfect_closure
@@ -259,7 +260,8 @@ theorem Preperfect.perfect_closure
   · exact hC _ h
   have : {x}ᶜ inter C = C := by simp [h]
   rw [AccPt]; rw [nhdsWithin]; rw [inf_assoc]; rw [inf_principal]; rw [this]
-  rw [closure_eq_cluster_pts
+  rw [closure_eq_cluster_pts] at hx
+  exact hx
 
 Depends on / 依赖: AccPt.mono, closure_eq_cluster_pts, inf_assoc, inf_principal, isClosed_closure, nhdsWithin, principal_mono, principal_mono.mpr, subset_closure
 -/
@@ -328,7 +330,11 @@ theorem preperfect_iff_perfect_closure
   rw [accPt_iff_frequently] at *
   have : forall y, y != x ∧ y in closure C -> existsᶠ z in 𝓝 y, z != x ∧ z in C := by
     rintro y ⟨hyx, yC⟩
-    simp only [← mem_c
+    simp only [← mem_compl_singleton_iff, and_comm, ← frequently_nhdsWithin_iff,
+      hyx.nhdsWithin_compl_singleton, ← mem_closure_iff_frequently]
+    exact yC
+  rw [← frequently_frequently_nhds]
+  exact H.mono this
 
 中文:
 定理 preperfect_iff_perfect_closure
@@ -342,7 +348,11 @@ theorem preperfect_iff_perfect_closure
   rw [accPt_iff_frequently] at *
   have : forall y, y != x ∧ y in closure C -> existsᶠ z in 𝓝 y, z != x ∧ z in C := by
     rintro y ⟨hyx, yC⟩
-    simp only [← mem_c
+    simp only [← mem_compl_singleton_iff, and_comm, ← frequently_nhdsWithin_iff,
+      hyx.nhdsWithin_compl_singleton, ← mem_closure_iff_frequently]
+    exact yC
+  rw [← frequently_frequently_nhds]
+  exact H.mono this
 
 Depends on / 依赖: H.mono, accPt_iff_frequently, and_comm, closure, frequently_frequently_nhds, frequently_nhdsWithin_iff, h.acc, h.perfect_closure, hyx.nhdsWithin_compl_singleton, mem_closure_iff_frequently, mem_compl_singleton_iff, nhdsWithin_compl_singleton, perfect_closure, subset_closure
 -/
@@ -407,7 +417,16 @@ theorem Perfect.splitting
     rcases this univ univ_mem with ⟨x, xC, hxy⟩
     exact ⟨x, xC.2, hxy⟩
   obtain ⟨U, xU, Uop, V, yV, Vop, hUV⟩ := exists_open_nhds_disjoint_closure hxy
-  use 
+  use closure (U inter C), closure (V inter C)
+  constructor <;> rw [← and_assoc]
+  · refine ⟨hC.closure_nhds_inter x xC xU Uop, ?_⟩
+    rw [hC.closed.closure_subset_iff]
+    exact inter_subset_right
+  constructor
+  · refine ⟨hC.closure_nhds_inter y yC yV Vop, ?_⟩
+    rw [hC.closed.closure_subset_iff]
+    exact inter_subset_right
+  apply Disjoint.mono _ _ hUV <;> apply closure_mono <;> exact inter_subset_left
 
 中文:
 定理 完美.splitting
@@ -420,7 +439,16 @@ theorem Perfect.splitting
     rcases this univ univ_mem with ⟨x, xC, hxy⟩
     exact ⟨x, xC.2, hxy⟩
   obtain ⟨U, xU, Uop, V, yV, Vop, hUV⟩ := exists_open_nhds_disjoint_closure hxy
-  use 
+  use closure (U inter C), closure (V inter C)
+  constructor <;> rw [← and_assoc]
+  · refine ⟨hC.closure_nhds_inter x xC xU Uop, ?_⟩
+    rw [hC.closed.closure_subset_iff]
+    exact inter_subset_right
+  constructor
+  · refine ⟨hC.closure_nhds_inter y yC yV Vop, ?_⟩
+    rw [hC.closed.closure_subset_iff]
+    exact inter_subset_right
+  apply Disjoint.mono _ _ hUV <;> apply closure_mono <;> exact inter_subset_left
 
 Depends on / 依赖: accPt_iff_nhds, and_assoc, closed, closure, closure_nhds_inte, closure_nhds_inter, closure_subset_iff, exists_open_nhds_disjoint_closure, hC.acc, hC.closed.closure_subset_iff, hC.closure_nhds_inte, hC.closure_nhds_inter, hnonempty, inter_subset_right, univ_mem
 -/
@@ -460,7 +488,14 @@ lemma IsPreconnected.preperfect_of_nontrivial
     apply Set.union_subset_union_right
     exact subset_closure
   · exact Set.inter_singleton_nonempty.mpr hx
-  · obtain 
+  · obtain ⟨y, hy⟩ := Set.Nontrivial.exists_ne hu x
+    use y
+    simp only [Set.mem_inter_iff, hy, true_and]
+    apply subset_closure
+    simp [hy]
+  · apply Set.Nonempty.right at h
+    rw [Set.singleton_inter_nonempty]; rw [mem_closure_iff_clusterPt]; rw [← accPt_principal_iff_clusterPt] at h
+    exact h
 
 中文:
 引理 是预连通.preperfect_of_nontrivial
@@ -474,7 +509,14 @@ lemma IsPreconnected.preperfect_of_nontrivial
     apply Set.union_subset_union_right
     exact subset_closure
   · exact Set.inter_singleton_nonempty.mpr hx
-  · obtain 
+  · obtain ⟨y, hy⟩ := Set.Nontrivial.exists_ne hu x
+    use y
+    simp only [Set.mem_inter_iff, hy, true_and]
+    apply subset_closure
+    simp [hy]
+  · apply Set.Nonempty.right at h
+    rw [Set.singleton_inter_nonempty]; rw [mem_closure_iff_clusterPt]; rw [← accPt_principal_iff_clusterPt] at h
+    exact h
 
 Depends on / 依赖: Nonempty, Nontrivial, Set.Nonempty.right, Set.Nontrivial.exists_ne, Set.inter_singleton_nonempty.mpr, Set.mem_inter_iff, Set.singleton_inter_nonempty, Set.union_subset_union_right, closure, exists_ne, inter_singleton_nonempty, isClosed_closure, isClosed_singleton, isPreconnected_closed_iff, mem_closure_iff_clusterPt, mem_inter_iff, singleton_inter_nonempty, specialize, subset_closure, true_and
 -/
@@ -544,7 +586,30 @@ theorem exists_countable_union_perfect_of_isClosed
   have Vct : (V inter C).Countable := by
     simp only [V, iUnion_inter]
     apply Countable.biUnion
-    · exact bct.mono (sep_subset _ _
+    · exact bct.mono (sep_subset _ _)
+    · exact sep_subset_ofPred _ _
+  refine ⟨V inter C, D, Vct, ⟨?_, ?_⟩, ?_⟩
+  · refine hclosed.sdiff (isOpen_biUnion fun _ => ?_)
+    exact fun ⟨Ub, _⟩ => IsTopologicalBasis.isOpen bbasis Ub
+  · rw [preperfect_iff_nhds]
+    intro x xD E xE
+    have : ¬(E inter D).Countable := by
+      intro h
+      obtain ⟨U, hUb, xU, hU⟩ : exists U in b, x in U ∧ U subseteq E :=
+        (IsTopologicalBasis.mem_nhds_iff bbasis).mp xE
+      have hU_cnt : (U inter C).Countable := by
+        apply @Countable.mono _ _ (E inter D union V inter C)
+        · rintro y ⟨yU, yC⟩
+          by_cases h : y in V
+          · exact mem_union_right _ (mem_inter h yC)
+          · exact mem_union_left _ (mem_inter (hU yU) ⟨yC, h⟩)
+        exact Countable.union h Vct
+      have : U in v := ⟨hUb, hU_cnt⟩
+      apply xD.2
+      exact mem_biUnion this xU
+    by_contra! h
+    exact absurd (Countable.mono h (Set.countable_singleton _)) this
+  · rw [inter_comm, inter_union_sdiff]
 
 中文:
 定理 存在_countable_union_perfect_of_isClosed
@@ -557,7 +622,30 @@ theorem exists_countable_union_perfect_of_isClosed
   have Vct : (V inter C).Countable := by
     simp only [V, iUnion_inter]
     apply Countable.biUnion
-    · exact bct.mono (sep_subset _ _
+    · exact bct.mono (sep_subset _ _)
+    · exact sep_subset_ofPred _ _
+  refine ⟨V inter C, D, Vct, ⟨?_, ?_⟩, ?_⟩
+  · refine hclosed.sdiff (isOpen_biUnion fun _ => ?_)
+    exact fun ⟨Ub, _⟩ => IsTopologicalBasis.isOpen bbasis Ub
+  · rw [preperfect_iff_nhds]
+    intro x xD E xE
+    have : ¬(E inter D).Countable := by
+      intro h
+      obtain ⟨U, hUb, xU, hU⟩ : exists U in b, x in U ∧ U subseteq E :=
+        (IsTopologicalBasis.mem_nhds_iff bbasis).mp xE
+      have hU_cnt : (U inter C).Countable := by
+        apply @Countable.mono _ _ (E inter D union V inter C)
+        · rintro y ⟨yU, yC⟩
+          by_cases h : y in V
+          · exact mem_union_right _ (mem_inter h yC)
+          · exact mem_union_left _ (mem_inter (hU yU) ⟨yC, h⟩)
+        exact Countable.union h Vct
+      have : U in v := ⟨hUb, hU_cnt⟩
+      apply xD.2
+      exact mem_biUnion this xU
+    by_contra! h
+    exact absurd (Countable.mono h (Set.countable_singleton _)) this
+  · rw [inter_comm, inter_union_sdiff]
 
 Depends on / 依赖: Countable, Countable.biUnion, IsTopologicalBasis, IsTopologicalBasis.isOpen, TopologicalSpace, TopologicalSpace.exists_countable_basis, bbasis, bct.mono, biUnion, exists_countable_basis, hclosed, hclosed.sdiff, iUnion_inter, isOpen, isOpen_biUnion, preperfect_iff_nhds, sep_subset, sep_subset_ofPred
 -/

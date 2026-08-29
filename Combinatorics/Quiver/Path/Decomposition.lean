@@ -35,7 +35,15 @@ theorem exists_notMem_mem_hom_path_path_of_notMem_mem
     exact (ha_not_in_S hb_in_S).elim
   | succ n ih =>
     have h_pos : 0 < p.length := by simp [h_len]
-    obtain ⟨c, p', e, rfl⟩ := (length_ne_zero_iff_eq_cons p).mp h
+    obtain ⟨c, p', e, rfl⟩ := (length_ne_zero_iff_eq_cons p).mp h_pos.ne'
+    by_cases hc_in_S : c in S
+    · have p'_len : p'.length = n := by simp_all
+      obtain ⟨u, hu_not_S, v, hv_S, e_uv, p₁, p₂, hp'⟩ :=
+        ih p' S ha_not_in_S hc_in_S p'_len
+      refine ⟨u, hu_not_S, v, hv_S, e_uv, p₁, p₂.comp e.toPath, ?_⟩
+      simp [hp', comp_toPath_eq_cons]
+    · refine ⟨c, hc_in_S, b, hb_in_S, e, p', Path.nil, ?_⟩
+      simp [comp_toPath_eq_cons]
 
 中文:
 定理 存在_notMem_mem_hom_path_path_of_notMem_mem
@@ -47,7 +55,15 @@ theorem exists_notMem_mem_hom_path_path_of_notMem_mem
     exact (ha_not_in_S hb_in_S).elim
   | succ n ih =>
     have h_pos : 0 < p.length := by simp [h_len]
-    obtain ⟨c, p', e, rfl⟩ := (length_ne_zero_iff_eq_cons p).mp h
+    obtain ⟨c, p', e, rfl⟩ := (length_ne_zero_iff_eq_cons p).mp h_pos.ne'
+    by_cases hc_in_S : c in S
+    · have p'_len : p'.length = n := by simp_all
+      obtain ⟨u, hu_not_S, v, hv_S, e_uv, p₁, p₂, hp'⟩ :=
+        ih p' S ha_not_in_S hc_in_S p'_len
+      refine ⟨u, hu_not_S, v, hv_S, e_uv, p₁, p₂.comp e.toPath, ?_⟩
+      simp [hp', comp_toPath_eq_cons]
+    · refine ⟨c, hc_in_S, b, hb_in_S, e, p', Path.nil, ?_⟩
+      simp [comp_toPath_eq_cons]
 
 Depends on / 依赖: _len, e.toPat, e_uv, eq_of_length_zero, generalizing, h_len, h_pos, h_pos.ne, ha_not_in_S, hb_in_S, hc_in_S, hu_not_S, hv_S, length, length_ne_zero_iff_eq_cons, p.length
 -/
@@ -82,7 +98,8 @@ theorem exists_mem_notMem_hom_path_path_of_notMem_mem
   have hb_in_compl : b in Sᶜ := by simpa
   obtain ⟨u, hu_not_in_compl, v, hv_in_compl, e, p₁, p₂, hp⟩ :=
     exists_notMem_mem_hom_path_path_of_notMem_mem p Sᶜ ha_not_in_compl hb_in_compl
-  simp only [Set.mem_compl_iff, not_not] at hu_not_in_compl hv_in
+  simp only [Set.mem_compl_iff, not_not] at hu_not_in_compl hv_in_compl
+  refine ⟨u, hu_not_in_compl, v, hv_in_compl, e, p₁, p₂, hp⟩
 
 中文:
 定理 存在_mem_notMem_hom_path_path_of_notMem_mem
@@ -92,7 +109,8 @@ theorem exists_mem_notMem_hom_path_path_of_notMem_mem
   have hb_in_compl : b in Sᶜ := by simpa
   obtain ⟨u, hu_not_in_compl, v, hv_in_compl, e, p₁, p₂, hp⟩ :=
     exists_notMem_mem_hom_path_path_of_notMem_mem p Sᶜ ha_not_in_compl hb_in_compl
-  simp only [Set.mem_compl_iff, not_not] at hu_not_in_compl hv_in
+  simp only [Set.mem_compl_iff, not_not] at hu_not_in_compl hv_in_compl
+  refine ⟨u, hu_not_in_compl, v, hv_in_compl, e, p₁, p₂, hp⟩
 
 Depends on / 依赖: Set.mem_compl_iff, exists_notMem_mem_hom_path_path_of_notMem_mem, ha_not_in_compl, hb_in_compl, hu_not_in_compl, hv_in_compl, mem_compl_iff, not_not
 -/

@@ -1049,7 +1049,7 @@ theorem subfield_ne_real_of_isComplex
   ext x
   obtain ⟨r, hr⟩ := hv ▸ RingHom.mem_fieldRange_self (extensionEmbedding v) (x : v.Completion)
   rw [extensionEmbedding_coe]; rw [← WithAbs.equiv_symm_apply]; rw [RingEquiv.apply_symm_apply] at hr
-  simp [ComplexEmbedding.
+  simp [ComplexEmbedding.conjugate_coe_eq, ← hr, Complex.conj_ofReal]
 
 中文:
 定理 subfield_ne_real_of_isComplex
@@ -1060,7 +1060,7 @@ theorem subfield_ne_real_of_isComplex
   ext x
   obtain ⟨r, hr⟩ := hv ▸ RingHom.mem_fieldRange_self (extensionEmbedding v) (x : v.Completion)
   rw [extensionEmbedding_coe]; rw [← WithAbs.equiv_symm_apply]; rw [RingEquiv.apply_symm_apply] at hr
-  simp [ComplexEmbedding.
+  simp [ComplexEmbedding.conjugate_coe_eq, ← hr, Complex.conj_ofReal]
 
 Depends on / 依赖: Completion, Complex.conj_ofReal, ComplexEmbedding, ComplexEmbedding.conjugate_coe_eq, RingEquiv, RingEquiv.apply_symm_apply, RingHom, RingHom.mem_fieldRange_self, WithAbs, WithAbs.equiv_symm_apply, apply_symm_apply, conj_ofReal, conjugate_coe_eq, contrapose, equiv_symm_apply, extensionEmbedding, extensionEmbedding_coe, isReal_iff, mem_fieldRange_self, not_isComplex_iff_isReal
 -/
@@ -1352,7 +1352,8 @@ theorem liesOver_extensionEmbedding
         ((isometry_extensionEmbedding w).continuous.comp
           (continuous_algebraMap v.Completion w.Completion))
         (isometry_extensionEmbedding v).continuous
-    · simp [WithAbs.algebraMap_left_apply, WithAbs.algebraM
+    · simp [WithAbs.algebraMap_left_apply, WithAbs.algebraMap_right_apply,
+        ← ComplexEmbedding.LiesOver.over w.embedding v.embedding]
 
 中文:
 定理 liesOver_extensionEmbedding
@@ -1364,7 +1365,8 @@ theorem liesOver_extensionEmbedding
         ((isometry_extensionEmbedding w).continuous.comp
           (continuous_algebraMap v.Completion w.Completion))
         (isometry_extensionEmbedding v).continuous
-    · simp [WithAbs.algebraMap_left_apply, WithAbs.algebraM
+    · simp [WithAbs.algebraMap_left_apply, WithAbs.algebraMap_right_apply,
+        ← ComplexEmbedding.LiesOver.over w.embedding v.embedding]
 
 Depends on / 依赖: Completion, ComplexEmbedding, ComplexEmbedding.LiesOver.over, LiesOver, OrderType, WithAbs, WithAbs.algebraMap_left_apply, WithAbs.algebraMap_right_apply, algebraMap_left_apply, algebraMap_right_apply, continuous, continuous.comp, continuous_algebraMap, embedding, induction_on, isClosed_eq, isometry_extensionEmbedding, v.Completion, v.embedding, w.Completion
 -/
@@ -1394,7 +1396,11 @@ theorem liesOver_conjugate_extensionEmbedding
           ((isometry_extensionEmbedding w).continuous.comp <|
             continuous_algebraMap v.Completion w.Completion))
         (isometry_extensionEmbedding v).continuous
-    · simp [WithAbs.algeb
+    · simp [WithAbs.algebraMap_left_apply, WithAbs.algebraMap_right_apply,
+        ← ComplexEmbedding.LiesOver.over (conjugate w.embedding) v.embedding]
+
+omit [Algebra K L] in
+@[simp]
 
 中文:
 定理 liesOver_conjugate_extensionEmbedding
@@ -1406,7 +1412,11 @@ theorem liesOver_conjugate_extensionEmbedding
           ((isometry_extensionEmbedding w).continuous.comp <|
             continuous_algebraMap v.Completion w.Completion))
         (isometry_extensionEmbedding v).continuous
-    · simp [WithAbs.algeb
+    · simp [WithAbs.algebraMap_left_apply, WithAbs.algebraMap_right_apply,
+        ← ComplexEmbedding.LiesOver.over (conjugate w.embedding) v.embedding]
+
+omit [Algebra K L] in
+@[simp]
 
 Depends on / 依赖: Completion, ComplexEmbedding, ComplexEmbedding.LiesOver.over, LiesOver, WithAbs, WithAbs.algebraMap_left_apply, WithAbs.algebraMap_right_apply, algebraMap_left_apply, algebraMap_right_apply, conjugate, continuous, continuous.comp, continuous_algebraMap, embedding, fun_prop, induction_on, isClosed_eq, isometry_extensionEmbedding, v.Completion, v.embedding
 -/

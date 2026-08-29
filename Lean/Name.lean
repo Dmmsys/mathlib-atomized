@@ -94,7 +94,9 @@ definition allNamesByModule
       -- TODO use `modify` and/or `alter` when available
       match names[m]? with
       | some others => return names.insert m (others.push n)
- 
+      | none => return names.insert m #[n]
+    else
+      return names
 
 中文:
 定义 allNamesByModule
@@ -106,7 +108,9 @@ definition allNamesByModule
       -- TODO use `modify` and/or `alter` when available
       match names[m]? with
       | some others => return names.insert m (others.push n)
- 
+      | none => return names.insert m #[n]
+    else
+      return names
 -/
 def allNamesByModule (p : Name -> Bool) : CoreM (Std.HashMap Name (Array Name)) := do
   (← getEnv).constants.foldM (init := ∅) fun names n _ => do

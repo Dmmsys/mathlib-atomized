@@ -105,7 +105,9 @@ definition e2
     ext1
     simp only [map_map]
     refine (Sym.map_congr fun v hv => ?_).trans (map_id' _)
-    exact Fin.succAbove_predAbov
+    exact Fin.succAbove_predAbove (ne_of_mem_of_not_mem hv s.2)
+  right_inv s := by
+    simp only [map_map, comp_apply, ← Fin.castSucc_zero, Fin.predAbove_succAbove, map_id']
 
 中文:
 定义 e2
@@ -118,7 +120,9 @@ definition e2
     ext1
     simp only [map_map]
     refine (Sym.map_congr fun v hv => ?_).trans (map_id' _)
-    exact Fin.succAbove_predAbov
+    exact Fin.succAbove_predAbove (ne_of_mem_of_not_mem hv s.2)
+  right_inv s := by
+    simp only [map_map, comp_apply, ← Fin.castSucc_zero, Fin.predAbove_succAbove, map_id']
 -/
 protected def e2 {n k : Nat} : { s : Sym (Fin n.succ.succ) k // ↑0 ∉ s } ≃ Sym (Fin n.succ) k where
   toFun s := map (Fin.predAbove 0) s.1
@@ -239,7 +243,9 @@ lemma two_mul_card_image_offDiag
   rw [card_eq_sum_card_image (Sym2.mk.uncurry : α × α -> _)]; rw [sum_const_nat (Sym2.ind _)]; rw [mul_comm]
   -- FIXME: Would be cool for the final `aesop` call not to require this `a ≠ b ∨ b ≠ a` trick.
   have (a b : α) (ha : a in s) (hb : b in s) (hab : a != b ∨ b != a) :
-      {z in s.offDiag
+      {z in s.offDiag | Sym2.mk.uncurry z = s(a, b)} = .cons (a, b) {(b, a)}
+        (by simpa [eq_comm] using hab) := by aesop
+  aesop
 
 中文:
 引理 two_mul_card_image_offDiag
@@ -248,7 +254,9 @@ lemma two_mul_card_image_offDiag
   rw [card_eq_sum_card_image (Sym2.mk.uncurry : α × α -> _)]; rw [sum_const_nat (Sym2.ind _)]; rw [mul_comm]
   -- FIXME: Would be cool for the final `aesop` call not to require this `a ≠ b ∨ b ≠ a` trick.
   have (a b : α) (ha : a in s) (hb : b in s) (hab : a != b ∨ b != a) :
-      {z in s.offDiag
+      {z in s.offDiag | Sym2.mk.uncurry z = s(a, b)} = .cons (a, b) {(b, a)}
+        (by simpa [eq_comm] using hab) := by aesop
+  aesop
 
 Depends on / 依赖: Sym2.ind, Sym2.mk.uncurry, card_eq_sum_card_image, mul_comm, sum_const_nat, uncurry
 -/

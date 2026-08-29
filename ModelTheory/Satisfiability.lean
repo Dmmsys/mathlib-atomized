@@ -235,7 +235,19 @@ theorem isSatisfiable_iff_isFinitelySatisfiable
     set M : Finset T -> Type max u v := fun T0 : Finset T =>
       (h (T0.map (Function.Embedding.subtype fun x => x in T)) T0.map_subtype_subset).some.Carrier
     let M' := Filter.Product (Ultrafilter.of (Filter.atTop : Filter (Finset T))) M
-
+    have h' : M' ⊨ T := by
+      refine ⟨fun φ hφ => ?_⟩
+      rw [Ultraproduct.sentence_realize]
+      refine
+        Filter.Eventually.filter_mono (Ultrafilter.of_le _)
+          (Filter.eventually_atTop.2
+            ⟨{⟨φ, hφ⟩}, fun s h' =>
+              Theory.realize_sentence_of_mem (s.map (Function.Embedding.subtype fun x => x in T))
+                ?_⟩)
+      simp only [Finset.coe_map, Function.Embedding.coe_subtype, Set.mem_image, Finset.mem_coe,
+        Subtype.exists, exists_and_right, exists_eq_right]
+      exact ⟨hφ, h' (Finset.mem_singleton_self _)⟩
+    exact ⟨ModelType.of T M'⟩⟩
 
 中文:
 定理 isSatisfiable_iff_isFinitelySatisfiable
@@ -244,7 +256,19 @@ theorem isSatisfiable_iff_isFinitelySatisfiable
     set M : Finset T -> Type max u v := fun T0 : Finset T =>
       (h (T0.map (Function.Embedding.subtype fun x => x in T)) T0.map_subtype_subset).some.Carrier
     let M' := Filter.Product (Ultrafilter.of (Filter.atTop : Filter (Finset T))) M
-
+    have h' : M' ⊨ T := by
+      refine ⟨fun φ hφ => ?_⟩
+      rw [Ultraproduct.sentence_realize]
+      refine
+        Filter.Eventually.filter_mono (Ultrafilter.of_le _)
+          (Filter.eventually_atTop.2
+            ⟨{⟨φ, hφ⟩}, fun s h' =>
+              Theory.realize_sentence_of_mem (s.map (Function.Embedding.subtype fun x => x in T))
+                ?_⟩)
+      simp only [Finset.coe_map, Function.Embedding.coe_subtype, Set.mem_image, Finset.mem_coe,
+        Subtype.exists, exists_and_right, exists_eq_right]
+      exact ⟨hφ, h' (Finset.mem_singleton_self _)⟩
+    exact ⟨ModelType.of T M'⟩⟩
 
 Depends on / 依赖: Carrier, Embedding, Eventually, Filter, Filter.Eventually.filter_mono, Filter.Product, Filter.atTop, Filter.eventually_atTop, Finset, Function, Function.Embedding.subtype, IsSatisfiable, Product, T0.map, T0.map_subtype_subset, Theory, Theory.IsSatisfiable.isFinitelySatisfiable, Theory.realize_sentenc, Ultrafilter, Ultrafilter.of
 -/
@@ -312,7 +336,15 @@ theorem isSatisfiable_union_distinctConstantsTheory_of_card_le
   rw [Cardinal.lift_mk_le'] at h
   let : (constantsOn α).Structure M := constantsOn.structure (Function.extend (↑) h.some default)
   have : M ⊨ (L.lhomWithConstants α).onTheory T union L.distinctConstantsTheory s := by
-    refi
+    refine ((LHom.onTheory_model _ _).2 inferInstance).union ?_
+    rw [model_distinctConstantsTheory]
+    intro a as b bs ab
+    rw [← Subtype.coe_mk a as]; rw [← Subtype.coe_mk b bs]; rw [← Subtype.ext_iff]
+    exact
+      h.some.injective
+        ((Subtype.coe_injective.extend_apply h.some default ⟨a, as⟩).symm.trans
+          (ab.trans (Subtype.coe_injective.extend_apply h.some default ⟨b, bs⟩)))
+  exact Model.isSatisfiable M
 
 中文:
 定理 isSatisfiable_union_distinctConstantsTheory_of_card_le
@@ -322,7 +354,15 @@ theorem isSatisfiable_union_distinctConstantsTheory_of_card_le
   rw [Cardinal.lift_mk_le'] at h
   let : (constantsOn α).Structure M := constantsOn.structure (Function.extend (↑) h.some default)
   have : M ⊨ (L.lhomWithConstants α).onTheory T union L.distinctConstantsTheory s := by
-    refi
+    refine ((LHom.onTheory_model _ _).2 inferInstance).union ?_
+    rw [model_distinctConstantsTheory]
+    intro a as b bs ab
+    rw [← Subtype.coe_mk a as]; rw [← Subtype.coe_mk b bs]; rw [← Subtype.ext_iff]
+    exact
+      h.some.injective
+        ((Subtype.coe_injective.extend_apply h.some default ⟨a, as⟩).symm.trans
+          (ab.trans (Subtype.coe_injective.extend_apply h.some default ⟨b, bs⟩)))
+  exact Model.isSatisfiable M
 
 Depends on / 依赖: Cardinal, Cardinal.lift_mk_le, Classical, Classical.inhabited_of_nonempty, Function, Function.extend, Inhabited, L.distinctConstantsTheory, L.lhomWithConstants, LHom.onTheory_model, Structure, Subtype, Subtype.coe_mk, Subtype.ext_iff, coe_mk, constantsOn, constantsOn.structure, distinctConstantsTheory, ext_iff, extend
 -/
@@ -355,7 +395,12 @@ theorem isSatisfiable_union_distinctConstantsTheory_of_infinite
   · exact fun t =>
       isSatisfiable_union_distinctConstantsTheory_of_card_le T _ M
         ((lift_le_aleph0.2 (finset_card_lt_aleph0 _).le).trans
-          (aleph0_le_lift.2 (aleph0_le_mk M))
+          (aleph0_le_lift.2 (aleph0_le_mk M)))
+  · apply Monotone.directed_le
+    refine monotone_const.union (monotone_distinctConstantsTheory.comp ?_)
+    simp only [Finset.coe_map, Function.Embedding.coe_subtype]
+    exact Monotone.comp (g := Set.image ((↑) : s -> α)) (f := ((↑) : Finset s -> Set s))
+      Set.monotone_image fun _ _ => Finset.coe_subset.2
 
 中文:
 定理 isSatisfiable_union_distinctConstantsTheory_of_infinite
@@ -365,7 +410,12 @@ theorem isSatisfiable_union_distinctConstantsTheory_of_infinite
   · exact fun t =>
       isSatisfiable_union_distinctConstantsTheory_of_card_le T _ M
         ((lift_le_aleph0.2 (finset_card_lt_aleph0 _).le).trans
-          (aleph0_le_lift.2 (aleph0_le_mk M))
+          (aleph0_le_lift.2 (aleph0_le_mk M)))
+  · apply Monotone.directed_le
+    refine monotone_const.union (monotone_distinctConstantsTheory.comp ?_)
+    simp only [Finset.coe_map, Function.Embedding.coe_subtype]
+    exact Monotone.comp (g := Set.image ((↑) : s -> α)) (f := ((↑) : Finset s -> Set s))
+      Set.monotone_image fun _ _ => Finset.coe_subset.2
 
 Depends on / 依赖: Embedding, Finset, Finset.coe_map, Function, Function.Embedding.coe_subtype, Monotone, Monotone.comp, Monotone.directed_le, Set.image, Set.union_iUnion, aleph0_le_lift, aleph0_le_mk, coe_map, coe_subtype, directed_le, distinctConstantsTheory_eq_iUnion, finset_card_lt_aleph0, isSatisfiable_directed_union_iff, isSatisfiable_union_distinctConstantsTheory_of_card_le, lift_le_aleph0
 -/
@@ -394,7 +444,12 @@ theorem exists_large_model_of_infinite_model
     isSatisfiable_union_distinctConstantsTheory_of_infinite T (Set.univ : Set κ.out) M
   refine ⟨(N.is_model.mono Set.subset_union_left).bundled.reduct _, ?_⟩
   have : N ⊨ distinctConstantsTheory _ _ := N.is_model.mono Set.subset_union_right
-  rw [ModelType.reduct_Carrier]; rw [co
+  rw [ModelType.reduct_Carrier]; rw [coe_of]
+  refine _root_.trans (lift_le.2 (le_of_eq (Cardinal.mk_out κ).symm)) ?_
+  rw [← mk_univ]
+  refine
+    (card_le_of_model_distinctConstantsTheory L Set.univ N).trans (lift_le.{max u v w}.1 ?_)
+  rw [lift_lift]
 
 中文:
 定理 存在_large_model_of_infinite_model
@@ -404,7 +459,12 @@ theorem exists_large_model_of_infinite_model
     isSatisfiable_union_distinctConstantsTheory_of_infinite T (Set.univ : Set κ.out) M
   refine ⟨(N.is_model.mono Set.subset_union_left).bundled.reduct _, ?_⟩
   have : N ⊨ distinctConstantsTheory _ _ := N.is_model.mono Set.subset_union_right
-  rw [ModelType.reduct_Carrier]; rw [co
+  rw [ModelType.reduct_Carrier]; rw [coe_of]
+  refine _root_.trans (lift_le.2 (le_of_eq (Cardinal.mk_out κ).symm)) ?_
+  rw [← mk_univ]
+  refine
+    (card_le_of_model_distinctConstantsTheory L Set.univ N).trans (lift_le.{max u v w}.1 ?_)
+  rw [lift_lift]
 
 Depends on / 依赖: Cardinal, Cardinal.mk_out, ModelType, ModelType.reduct_Carrier, N.is_model.mono, Set.subset_union_left, Set.subset_union_right, Set.univ, _root_, _root_.trans, bundled, bundled.reduct, card_le_of_model_distinctConstantsTheory, coe_of, distinctConstantsTheory, isSatisfiable_union_distinctConstantsTheory_of_infinite, is_model, le_of_eq, lift_le, lift_lift
 -/
@@ -436,7 +496,9 @@ theorem isSatisfiable_iUnion_iff_isSatisfiable_iUnion_finset
   intro s hs
   rw [Set.iUnion_eq_iUnion_finset] at hs
   obtain ⟨t, ht⟩ := Directed.exists_mem_subset_of_finset_subset_biUnion (by
- 
+    exact Monotone.directed_le fun t1 t2 (h : forall ⦃x⦄, x in t1 -> x in t2) =>
+      Set.iUnion_mono fun _ => Set.iUnion_mono' fun h1 => ⟨h h1, refl _⟩) hs
+  exact (h t).mono ht
 
 中文:
 定理 isSatisfiable_iUnion_iff_isSatisfiable_iUnion_finset
@@ -449,7 +511,9 @@ theorem isSatisfiable_iUnion_iff_isSatisfiable_iUnion_finset
   intro s hs
   rw [Set.iUnion_eq_iUnion_finset] at hs
   obtain ⟨t, ht⟩ := Directed.exists_mem_subset_of_finset_subset_biUnion (by
- 
+    exact Monotone.directed_le fun t1 t2 (h : forall ⦃x⦄, x in t1 -> x in t2) =>
+      Set.iUnion_mono fun _ => Set.iUnion_mono' fun h1 => ⟨h h1, refl _⟩) hs
+  exact (h t).mono ht
 
 Depends on / 依赖: Directed, Directed.exists_mem_subset_of_finset_subset_biUnion, Monotone, Monotone.directed_le, Set.iUnion_eq_iUnion_finset, Set.iUnion_mono, Set.iUnion_subset_iff, directed_le, exists_mem_subset_of_finset_subset_biUnion, h.mono, iUnion_eq_iUnion_finset, iUnion_mono, iUnion_subset_iff, isSatisfiable_iff_isFinitelySatisfiable
 -/
@@ -482,7 +546,10 @@ theorem exists_elementaryEmbedding_card_eq_of_le
     rw [← lift_inj.{_]; rw [w + 1}]; rw [lift_lift]; rw [lift_lift] at hS
     exact small_iff_lift_mk_lt_univ.2 (lt_of_eq_of_lt hS κ.lift_lt_univ')
   refine
-    ⟨(equivShrink S).bundle
+    ⟨(equivShrink S).bundledInduced L,
+      ⟨S.subtype.comp (Equiv.bundledInducedEquiv L _).symm.toElementaryEmbedding⟩,
+      lift_inj.1 (_root_.trans ?_ hS)⟩
+  simp only [Equiv.bundledInduced_α, lift_mk_shrink']
 
 中文:
 定理 存在_elementaryEmbedding_card_eq_of_le
@@ -493,7 +560,10 @@ theorem exists_elementaryEmbedding_card_eq_of_le
     rw [← lift_inj.{_]; rw [w + 1}]; rw [lift_lift]; rw [lift_lift] at hS
     exact small_iff_lift_mk_lt_univ.2 (lt_of_eq_of_lt hS κ.lift_lt_univ')
   refine
-    ⟨(equivShrink S).bundle
+    ⟨(equivShrink S).bundledInduced L,
+      ⟨S.subtype.comp (Equiv.bundledInducedEquiv L _).symm.toElementaryEmbedding⟩,
+      lift_inj.1 (_root_.trans ?_ hS)⟩
+  simp only [Equiv.bundledInduced_α, lift_mk_shrink']
 
 Depends on / 依赖: Equiv.bundledInducedEquiv, Equiv.bundledInduced_, S.subtype.comp, _root_, _root_.trans, bundledInduced, bundledInducedEquiv, equivShrink, exists_elementarySubstructure_card_eq, lift_inj, lift_lift, lift_lt_univ, lift_mk_shrink, lt_of_eq_of_lt, small_iff_lift_mk_lt_univ, subtype, symm.toElementaryEmbedding, toElementaryEmbedding
 -/
@@ -524,7 +594,18 @@ theorem exists_elementaryEmbedding_card_eq_of_ge
   rw [← lift_le.{max u v}]; rw [lift_lift]; rw [lift_lift] at h2
   obtain ⟨N, ⟨NN0⟩, hN⟩ :=
     exists_elementaryEmbedding_card_eq_of_le L[[M]] N0 κ
-      (aleph0_le_lift.1 ((aleph0_le_lift.2 (aleph0_le_mk M)).
+      (aleph0_le_lift.1 ((aleph0_le_lift.2 (aleph0_le_mk M)).trans h2))
+      (by
+        simp only [card_withConstants, lift_add, lift_lift]
+        rw [add_comm]; rw [add_eq_max (aleph0_le_lift.2 (infinite_iff.1 iM))]; rw [max_le_iff]
+        rw [← lift_le.{w'}]; rw [lift_lift]; rw [lift_lift] at h1
+        exact ⟨h2, h1⟩)
+      (hN0.trans (by rw [← lift_umax, lift_id]))
+  let := (lhomWithConstants L M).reduct N
+  have h : N ⊨ L.elementaryDiagram M :=
+    (NN0.theory_model_iff (L.elementaryDiagram M)).2 inferInstance
+  refine ⟨Bundled.of N, ⟨?_⟩, hN⟩
+  apply ElementaryEmbedding.ofModelsElementaryDiagram L M N
 
 中文:
 定理 存在_elementaryEmbedding_card_eq_of_ge
@@ -534,7 +615,18 @@ theorem exists_elementaryEmbedding_card_eq_of_ge
   rw [← lift_le.{max u v}]; rw [lift_lift]; rw [lift_lift] at h2
   obtain ⟨N, ⟨NN0⟩, hN⟩ :=
     exists_elementaryEmbedding_card_eq_of_le L[[M]] N0 κ
-      (aleph0_le_lift.1 ((aleph0_le_lift.2 (aleph0_le_mk M)).
+      (aleph0_le_lift.1 ((aleph0_le_lift.2 (aleph0_le_mk M)).trans h2))
+      (by
+        simp only [card_withConstants, lift_add, lift_lift]
+        rw [add_comm]; rw [add_eq_max (aleph0_le_lift.2 (infinite_iff.1 iM))]; rw [max_le_iff]
+        rw [← lift_le.{w'}]; rw [lift_lift]; rw [lift_lift] at h1
+        exact ⟨h2, h1⟩)
+      (hN0.trans (by rw [← lift_umax, lift_id]))
+  let := (lhomWithConstants L M).reduct N
+  have h : N ⊨ L.elementaryDiagram M :=
+    (NN0.theory_model_iff (L.elementaryDiagram M)).2 inferInstance
+  refine ⟨Bundled.of N, ⟨?_⟩, hN⟩
+  apply ElementaryEmbedding.ofModelsElementaryDiagram L M N
 
 Depends on / 依赖: L.elementaryDiagram, add_comm, add_eq_max, aleph0_le_lift, aleph0_le_mk, card_withConstants, elementaryDiagram, exists_elementaryEmbedding_card_eq_of_le, exists_large_model_of_infinite_model, infinite_iff, lift_add, lift_le, lift_lift, max_le_iff
 -/
@@ -574,7 +666,7 @@ theorem exists_elementaryEmbedding_card_eq
     exact ⟨N, Or.inl hN1, hN2⟩
   | inr h =>
     obtain ⟨N, hN1, hN2⟩ := exists_elementaryEmbedding_card_eq_of_ge L M κ h2 (le_of_lt h)
-    exa
+    exact ⟨N, Or.inr hN1, hN2⟩
 
 中文:
 定理 存在_elementaryEmbedding_card_eq
@@ -586,7 +678,7 @@ theorem exists_elementaryEmbedding_card_eq
     exact ⟨N, Or.inl hN1, hN2⟩
   | inr h =>
     obtain ⟨N, hN1, hN2⟩ := exists_elementaryEmbedding_card_eq_of_ge L M κ h2 (le_of_lt h)
-    exa
+    exact ⟨N, Or.inr hN1, hN2⟩
 
 Depends on / 依赖: Cardinal, Cardinal.lift, Or.inl, Or.inr, exists_elementaryEmbedding_card_eq_of_ge, exists_elementaryEmbedding_card_eq_of_le, le_of_lt, le_or_gt
 -/
@@ -772,7 +864,14 @@ theorem models_iff_not_satisfiable
         (realize_sentence_of_mem (T union {Formula.not φ})
           (Set.subset_union_right (Set.mem_singleton _)))
         (h1 (h2.some.subtheoryModel Set.subset_union_left)),
-      fun h 
+      fun h M => ?_⟩
+  contrapose h
+  rw [← Sentence.realize_not] at h
+  refine
+    ⟨{ Carrier := M
+        is_model := ⟨fun ψ hψ => hψ.elim (realize_sentence_of_mem _) fun h' => ?_⟩ }⟩
+  rw [Set.mem_singleton_iff.1 h']
+  exact h
 
 中文:
 定理 models_iff_not_satisfiable
@@ -786,7 +885,14 @@ theorem models_iff_not_satisfiable
         (realize_sentence_of_mem (T union {Formula.not φ})
           (Set.subset_union_right (Set.mem_singleton _)))
         (h1 (h2.some.subtheoryModel Set.subset_union_left)),
-      fun h 
+      fun h M => ?_⟩
+  contrapose h
+  rw [← Sentence.realize_not] at h
+  refine
+    ⟨{ Carrier := M
+        is_model := ⟨fun ψ hψ => hψ.elim (realize_sentence_of_mem _) fun h' => ?_⟩ }⟩
+  rw [Set.mem_singleton_iff.1 h']
+  exact h
 
 Depends on / 依赖: Carrier, Formula, Formula.not, IsSatisfiable, Sentence, Sentence.realize_not, Set.mem_singleton, Set.mem_singleton_iff, Set.subset_union_left, Set.subset_union_right, contrapose, h2.some.subtheoryModel, is_model, mem_singleton, mem_singleton_iff, models_sentence_iff, realize_not, realize_sentence_of_mem, subset_union_left, subset_union_right
 -/
@@ -861,7 +967,11 @@ theorem models_formula_iff_onTheory_models_equivSentence
   · let := (L.lhomWithConstants α).reduct M
     rw [Formula.realize_equivSentence]
     have : M ⊨ T := (LHom.onTheory_model _ _).1 M.is_model -- why isn't M.is_model inferInstance?
-    let M
+    let M' := Theory.ModelType.of T M
+    exact h M' (fun a => (L.con a : M)) _
+  · let : (constantsOn α).Structure M := constantsOn.structure v
+    have : M ⊨ (L.lhomWithConstants α).onTheory T := (LHom.onTheory_model _ _).2 inferInstance
+    exact (Formula.realize_equivSentence _ _).1 (h.realize_sentence M)
 
 中文:
 定理 models_formula_iff_onTheory_models_equivSentence
@@ -872,7 +982,11 @@ theorem models_formula_iff_onTheory_models_equivSentence
   · let := (L.lhomWithConstants α).reduct M
     rw [Formula.realize_equivSentence]
     have : M ⊨ T := (LHom.onTheory_model _ _).1 M.is_model -- why isn't M.is_model inferInstance?
-    let M
+    let M' := Theory.ModelType.of T M
+    exact h M' (fun a => (L.con a : M)) _
+  · let : (constantsOn α).Structure M := constantsOn.structure v
+    have : M ⊨ (L.lhomWithConstants α).onTheory T := (LHom.onTheory_model _ _).2 inferInstance
+    exact (Formula.realize_equivSentence _ _).1 (h.realize_sentence M)
 
 Depends on / 依赖: Formula, Formula.realize_equivSentence, L.con, L.lhomWithConstants, LHom.onTheory_model, M.is_model, ModelType, Structure, Theory, Theory.ModelType.of, constantsOn, constantsOn.structure, is_model, lhomWithConstants, models_formula_iff, models_sentence_iff, onTheory, onTheory_model, realize_equivSentence, reduct
 -/
@@ -932,7 +1046,7 @@ theorem models_toFormula_iff
     simp only [BoundedFormula.realize_toFormula, Sum.elim_comp_inl, Sum.elim_comp_inr] at h'
     exact h'
   · simp only [models_formula_iff, BoundedFormula.realize_toFormula]
-    exact fun h
+    exact fun h M v => h M _ _
 
 中文:
 定理 models_toFormula_iff
@@ -944,7 +1058,7 @@ theorem models_toFormula_iff
     simp only [BoundedFormula.realize_toFormula, Sum.elim_comp_inl, Sum.elim_comp_inr] at h'
     exact h'
   · simp only [models_formula_iff, BoundedFormula.realize_toFormula]
-    exact fun h
+    exact fun h M v => h M _ _
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.realize_toFormula, Realize, Sum.elim, Sum.elim_comp_inl, Sum.elim_comp_inr, elim_comp_inl, elim_comp_inr, h.realize_formula, models_formula_iff, realize_formula, realize_toFormula, toFormula, toFormula.Realize
 -/
@@ -1025,7 +1139,11 @@ theorem models_iff_finset_models
   · intro h T0 hT0
     simpa using h (T0 union {Formula.not φ})
       (by
-        simp only [Finset.coe_union, Fins
+        simp only [Finset.coe_union, Finset.coe_singleton]
+        exact Set.union_subset_union hT0 (Set.Subset.refl _))
+  · intro h T0 hT0
+    exact IsSatisfiable.mono (h (T0.erase (Formula.not φ))
+      (by simpa using hT0)) (by simp)
 
 中文:
 定理 models_iff_finset_models
@@ -1039,7 +1157,11 @@ theorem models_iff_finset_models
   · intro h T0 hT0
     simpa using h (T0 union {Formula.not φ})
       (by
-        simp only [Finset.coe_union, Fins
+        simp only [Finset.coe_union, Finset.coe_singleton]
+        exact Set.union_subset_union hT0 (Set.Subset.refl _))
+  · intro h T0 hT0
+    exact IsSatisfiable.mono (h (T0.erase (Formula.not φ))
+      (by simpa using hT0)) (by simp)
 
 Depends on / 依赖: Classical, Classical.decEq, Finset, Finset.coe_singleton, Finset.coe_union, Formula, Formula.not, IsFinitelySatisfiable, IsSatisfiable, IsSatisfiable.mono, Sentence, Set.Subset.refl, Set.union_subset_union, Subset, T0.erase, coe_singleton, coe_union, contrapose, isSatisfiable_iff_isFinitelySatisfiable, models_iff_not_satisfiable
 -/
@@ -1095,7 +1217,8 @@ theorem models_not_iff
     exact models_sentence_iff.1 hφ _
   · simp only [hφn, true_iff]
     intro hφ
-    rw [models_sente
+    rw [models_sentence_iff] at *
+    exact hφn h.1.some (hφ _)
 
 中文:
 定理 models_not_iff
@@ -1110,7 +1233,8 @@ theorem models_not_iff
     exact models_sentence_iff.1 hφ _
   · simp only [hφn, true_iff]
     intro hφ
-    rw [models_sente
+    rw [models_sentence_iff] at *
+    exact hφn h.1.some (hφ _)
 
 Depends on / 依赖: Classical, Classical.not_not, Sentence, Sentence.realize_not, iff_false, models_sentence_iff, not_forall, not_not, not_true, realize_not, true_iff
 -/
@@ -1174,7 +1298,7 @@ theorem eq_complete_theory
   | inr hT =>
       have : M ⊨ φ.not := hT.realize_sentence M
       rw [Sentence.realize_not] at this
-      contradic
+      contradiction
 
 中文:
 定理 eq_complete_theory
@@ -1188,7 +1312,7 @@ theorem eq_complete_theory
   | inr hT =>
       have : M ⊨ φ.not := hT.realize_sentence M
       rw [Sentence.realize_not] at this
-      contradic
+      contradiction
 
 Depends on / 依赖: L.mem_completeTheory, Sentence, Sentence.realize_not, Set.mem_ofPred_eq, hT.realize_sentence, h_models, h_models.realize_sentence, h_realize, mem_completeTheory, mem_ofPred_eq, realize_not, realize_sentence
 -/
@@ -1221,7 +1345,10 @@ theorem isComplete_iff_models_elementarily_equivalent
     obtain ⟨M⟩ := hsat
     by_cases hφ : M ⊨ φ
     · left
-      exact model
+      exact models_sentence_iff.2 fun N => (elementarilyEquivalent_iff.1 (h M N) φ).1 hφ
+    · right
+      exact models_sentence_iff.2 fun N => (Sentence.realize_not N).2
+        (mt (elementarilyEquivalent_iff.1 (h M N) φ).2 hφ)
 
 中文:
 定理 isComplete_iff_models_elementarily_equivalent
@@ -1237,7 +1364,10 @@ theorem isComplete_iff_models_elementarily_equivalent
     obtain ⟨M⟩ := hsat
     by_cases hφ : M ⊨ φ
     · left
-      exact model
+      exact models_sentence_iff.2 fun N => (elementarilyEquivalent_iff.1 (h M N) φ).1 hφ
+    · right
+      exact models_sentence_iff.2 fun N => (Sentence.realize_not N).2
+        (mt (elementarilyEquivalent_iff.1 (h M N) φ).2 hφ)
 
 Depends on / 依赖: ElementarilyEquivalent, Sentence, Sentence.realize_not, elementarilyEquivalent_iff, eq_complete_theory, hcomp.eq_complete_theory, models_sentence_iff, realize_not
 -/
@@ -1520,7 +1650,13 @@ theorem Categorical.isComplete
     rw [Sentence.realize_not]; rw [Classical.not_not] at hMT
     refine hMF ?_
     have := hT MT
-  
+    have := hT MF
+    obtain ⟨NT, MNT, hNT⟩ := exists_elementarilyEquivalent_card_eq L MT κ h1 h2
+    obtain ⟨NF, MNF, hNF⟩ := exists_elementarilyEquivalent_card_eq L MF κ h1 h2
+    obtain ⟨TF⟩ := h (MNT.toModel T) (MNF.toModel T) hNT hNF
+    exact
+      ((MNT.realize_sentence φ).trans
+        ((StrongHomClass.realize_sentence TF φ).trans (MNF.realize_sentence φ).symm)).1 hMT⟩
 
 中文:
 定理 Categorical.isComplete
@@ -1532,7 +1668,13 @@ theorem Categorical.isComplete
     rw [Sentence.realize_not]; rw [Classical.not_not] at hMT
     refine hMF ?_
     have := hT MT
-  
+    have := hT MF
+    obtain ⟨NT, MNT, hNT⟩ := exists_elementarilyEquivalent_card_eq L MT κ h1 h2
+    obtain ⟨NF, MNF, hNF⟩ := exists_elementarilyEquivalent_card_eq L MF κ h1 h2
+    obtain ⟨TF⟩ := h (MNT.toModel T) (MNF.toModel T) hNT hNF
+    exact
+      ((MNT.realize_sentence φ).trans
+        ((StrongHomClass.realize_sentence TF φ).trans (MNF.realize_sentence φ).symm)).1 hMT⟩
 
 Depends on / 依赖: Classical, Classical.not_not, MNF.toModel, MNT.toModel, Sentence, Sentence.realize_not, Theory, Theory.exists_model_card_eq, Theory.models_sentence_iff, exists_elementarilyEquivalent_card_eq, exists_model_card_eq, hS.some, models_sentence_iff, not_not, realize_not, toModel
 -/
@@ -1584,7 +1726,7 @@ theorem empty_infinite_Theory_isComplete
     ⟨by
       haveI : Language.empty.Structure Nat := emptyStructure
       exact ((model_infiniteTheory_iff Language.empty).2 (inferInstance : Infinite Nat)).bundled⟩
-    fun M => (model_infiniteTheory_iff Language.empty).1 M.is_mo
+    fun M => (model_infiniteTheory_iff Language.empty).1 M.is_model
 
 中文:
 定理 empty_infinite_Theory_isComplete
@@ -1593,7 +1735,7 @@ theorem empty_infinite_Theory_isComplete
     ⟨by
       haveI : Language.empty.Structure Nat := emptyStructure
       exact ((model_infiniteTheory_iff Language.empty).2 (inferInstance : Infinite Nat)).bundled⟩
-    fun M => (model_infiniteTheory_iff Language.empty).1 M.is_mo
+    fun M => (model_infiniteTheory_iff Language.empty).1 M.is_model
 
 Depends on / 依赖: Infinite, Language, Language.empty, Language.empty.Structure, M.is_model, Structure, bundled, emptyStructure, empty_theory_categorical, isComplete, is_model, le_rfl, model_infiniteTheory_iff
 -/

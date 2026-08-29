@@ -89,7 +89,12 @@ theorem not_power_nat_pow
 let f := n.factorization.mapRange (· / q) by simp
   suffices hf : n.factorization = q • f by
     have hf0 : f 0 = 0 := by simpa [hq.ne'] using congr($hf 0)
-    refine ⟨f.prod (· ^ ·), Nat.factorization_inj hn (by s
+    refine ⟨f.prod (· ^ ·), Nat.factorization_inj hn (by simp [hf0]) ?_⟩
+    rwa [Nat.factorization_pow, n.factorization_prod_pow_eq_self_of_le_factorization ?_]
+    exact hf ▸ le_self_nsmul zero_le (by lia)
+  ext z
+  rw [Finsupp.smul_apply]; rw [smul_eq_mul]; rw [Finsupp.mapRange_apply]; rw [Nat.mul_div_cancel']
+  simpa using h_coprime.symm.dvd_of_dvd_mul_left ⟨_, by simpa using congr(Nat.factorization $h z)⟩
 
 中文:
 定理 not_power_nat_pow
@@ -101,7 +106,12 @@ let f := n.factorization.mapRange (· / q) by simp
 let f := n.factorization.mapRange (· / q) by simp
   suffices hf : n.factorization = q • f by
     have hf0 : f 0 = 0 := by simpa [hq.ne'] using congr($hf 0)
-    refine ⟨f.prod (· ^ ·), Nat.factorization_inj hn (by s
+    refine ⟨f.prod (· ^ ·), Nat.factorization_inj hn (by simp [hf0]) ?_⟩
+    rwa [Nat.factorization_pow, n.factorization_prod_pow_eq_self_of_le_factorization ?_]
+    exact hf ▸ le_self_nsmul zero_le (by lia)
+  ext z
+  rw [Finsupp.smul_apply]; rw [smul_eq_mul]; rw [Finsupp.mapRange_apply]; rw [Nat.mul_div_cancel']
+  simpa using h_coprime.symm.dvd_of_dvd_mul_left ⟨_, by simpa using congr(Nat.factorization $h z)⟩
 -/
 private theorem not_power_nat_pow {n p q : Nat} (h_coprime : p.Coprime q) (hq : 0 < q)
     (h : forall m, n != m ^ q) (m : Nat) : n ^ p != m ^ q := by
@@ -236,7 +246,24 @@ theorem not_power_rat_of_num_aux
   rw [← Rat.num_div_den q] at h
   set x' := q.num
   set y := q.den
-  obtain ⟨x, hx'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= x' b
+  obtain ⟨x, hx'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= x' by rwa [Rat.num_nonneg])
+  rw [hx'] at h
+  specialize ha x
+  simp only [Int.cast_natCast, div_pow] at h
+  rw [div_eq_div_iff] at h
+  rotate_left
+  · simpa
+  · simp [y]
+  replace h : a * y ^ d = x ^ d * b := by
+    qify
+    assumption
+  apply ha
+  conv at h => rhs; rw [mul_comm]
+  apply eq_of_mul_eq_mul_of_coprime h_coprime _ h
+  apply Nat.Coprime.pow_left
+  apply Nat.Coprime.pow_right
+  apply Nat.Coprime.symm
+  simpa [hx'] using (show x'.natAbs.Coprime y from Rat.reduced q)
 
 中文:
 定理 not_power_rat_of_num_aux
@@ -253,7 +280,24 @@ theorem not_power_rat_of_num_aux
   rw [← Rat.num_div_den q] at h
   set x' := q.num
   set y := q.den
-  obtain ⟨x, hx'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= x' b
+  obtain ⟨x, hx'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= x' by rwa [Rat.num_nonneg])
+  rw [hx'] at h
+  specialize ha x
+  simp only [Int.cast_natCast, div_pow] at h
+  rw [div_eq_div_iff] at h
+  rotate_left
+  · simpa
+  · simp [y]
+  replace h : a * y ^ d = x ^ d * b := by
+    qify
+    assumption
+  apply ha
+  conv at h => rhs; rw [mul_comm]
+  apply eq_of_mul_eq_mul_of_coprime h_coprime _ h
+  apply Nat.Coprime.pow_left
+  apply Nat.Coprime.pow_right
+  apply Nat.Coprime.symm
+  simpa [hx'] using (show x'.natAbs.Coprime y from Rat.reduced q)
 -/
 private theorem not_power_rat_of_num_aux {a b d : Nat}
     (h_coprime : a.Coprime b) (ha : forall x, a != x ^ d) {q : Rat} (hq : 0 <= q) :
@@ -302,7 +346,7 @@ theorem not_power_rat_of_num
     rwa [h_even.neg_pow] at this
   · contrapose hq
     rw [← h_odd.pow_nonneg_iff]; rw [← hq]
-    positi
+    positivity
 
 中文:
 定理 not_power_rat_of_num
@@ -315,7 +359,7 @@ theorem not_power_rat_of_num
     rwa [h_even.neg_pow] at this
   · contrapose hq
     rw [← h_odd.pow_nonneg_iff]; rw [← hq]
-    positi
+    positivity
 -/
 private theorem not_power_rat_of_num {a b d : Nat}
     (h_coprime : a.Coprime b) (ha : forall x, a != x ^ d) (q : Rat) :
@@ -344,7 +388,19 @@ theorem irrational_rpow_rat_rat_of_num
   rcases hx_isNNRat with ⟨hx_inv, hx_eq⟩
   rcases hy_isNNRat with ⟨hy_inv, hy_eq⟩
   rw [hy_eq]; rw [hx_eq]
-  have h1 : (y_num * ⅟(y_den : Rea
+  have h1 : (y_num * ⅟(y_den : Real) : Real) = ((y_num / y_den : Rat) : Real) := by
+    simp
+    rfl
+  have h2 : (x_num * ⅟(x_den : Real) : Real) = ((x_num / x_den : Rat) : Real) := by
+    simp
+    rfl
+  rw [h1]; rw [h2]
+  refine irrational_rpow_rat_of_not_power ?_ hy_den_pos ?_
+  · simp only [div_pow, ← Nat.cast_pow]
+    apply not_power_rat_of_num
+    · apply Nat.Coprime.pow _ _ hx_coprime
+    · apply not_power_nat_pow_of_bounds hy_den_pos hy_coprime hn1 hn2
+  · positivity
 
 中文:
 定理 irrational_rpow_rat_rat_of_num
@@ -358,7 +414,19 @@ theorem irrational_rpow_rat_rat_of_num
   rcases hx_isNNRat with ⟨hx_inv, hx_eq⟩
   rcases hy_isNNRat with ⟨hy_inv, hy_eq⟩
   rw [hy_eq]; rw [hx_eq]
-  have h1 : (y_num * ⅟(y_den : Rea
+  have h1 : (y_num * ⅟(y_den : Real) : Real) = ((y_num / y_den : Rat) : Real) := by
+    simp
+    rfl
+  have h2 : (x_num * ⅟(x_den : Real) : Real) = ((x_num / x_den : Rat) : Real) := by
+    simp
+    rfl
+  rw [h1]; rw [h2]
+  refine irrational_rpow_rat_of_not_power ?_ hy_den_pos ?_
+  · simp only [div_pow, ← Nat.cast_pow]
+    apply not_power_rat_of_num
+    · apply Nat.Coprime.pow _ _ hx_coprime
+    · apply not_power_nat_pow_of_bounds hy_den_pos hy_coprime hn1 hn2
+  · positivity
 
 Depends on / 依赖: Nat.lt_one_iff, hx_eq, hx_inv, hx_isNNRat, hy_den_pos, hy_eq, hy_inv, hy_isNNRat, irrational_rpow_rat_of_not_power, lt_one_iff, nonpos_iff_eq_zero, pow_zero, x_den, x_num, y_den, y_num
 -/
@@ -404,7 +472,8 @@ theorem irrational_rpow_rat_rat_of_den
   rw [← Real.inv_rpow (by simp only [hx_eq]; rw [invOf_eq_inv]; positivity)]
   apply irrational_rpow_rat_rat_of_num (x_num := x_den) (x_den := x_num) _ hy_isNNRat
     (Nat.coprime_comm.mp hx_coprime) hy_coprime hd1 hd2
-  refine ⟨i
+  refine ⟨invertibleOfNonzero (fun _ => ?_), by simp [hx_eq]⟩
+  simp_all
 
 中文:
 定理 irrational_rpow_rat_rat_of_den
@@ -415,7 +484,8 @@ theorem irrational_rpow_rat_rat_of_den
   rw [← Real.inv_rpow (by simp only [hx_eq]; rw [invOf_eq_inv]; positivity)]
   apply irrational_rpow_rat_rat_of_num (x_num := x_den) (x_den := x_num) _ hy_isNNRat
     (Nat.coprime_comm.mp hx_coprime) hy_coprime hd1 hd2
-  refine ⟨i
+  refine ⟨invertibleOfNonzero (fun _ => ?_), by simp [hx_eq]⟩
+  simp_all
 
 Depends on / 依赖: Irrational, Irrational.of_inv, Nat.coprime_comm.mp, Real.inv_rpow, coprime_comm, hx_coprime, hx_eq, hx_inv, hx_isNNRat, hy_coprime, hy_isNNRat, invOf_eq_inv, inv_rpow, invertibleOfNonzero, irrational_rpow_rat_rat_of_num, of_inv, x_den, x_num
 -/
@@ -640,7 +710,9 @@ definition findNotPowerCertificate
   let mVal := m.natLit!
   let nVal := n.natLit!
   let some k := findNotPowerCertificateCore mVal nVal | failure
-  let .isBool true pf_left ← derive q($k ^ $n < $
+  let .isBool true pf_left ← derive q($k ^ $n < $m) | failure
+  let .isBool true pf_right ← derive q($m < ($k + 1) ^ $n) | failure
+  return ⟨q($k), pf_left, pf_right⟩
 
 中文:
 定义 findNotPowerCertificate
@@ -651,7 +723,9 @@ definition findNotPowerCertificate
   let mVal := m.natLit!
   let nVal := n.natLit!
   let some k := findNotPowerCertificateCore mVal nVal | failure
-  let .isBool true pf_left ← derive q($k ^ $n < $
+  let .isBool true pf_left ← derive q($k ^ $n < $m) | failure
+  let .isBool true pf_right ← derive q($m < ($k + 1) ^ $n) | failure
+  return ⟨q($k), pf_left, pf_right⟩
 -/
 def findNotPowerCertificate (m n : Q(Nat)) : MetaM (NotPowerCertificate m n) := do
   let .isNat (_ : Q(AddMonoidWithOne Nat)) m _ ← derive m | failure
@@ -679,7 +753,29 @@ definition evalIrrationalRpow
     if gy.natLit! != 1 then failure
 let _ : gy =Q 1 := ⟨⟩
     match ← derive x with
-    | .isNa
+    | .isNat sReal ex x_isNat =>
+      let cert ← findNotPowerCertificate q($ex) y_den
+      assumeInstancesCommute
+      return .isTrue q(irrational_rpow_nat_rat $x_isNat $y_isNNRat $hy_coprime
+ cert.pf_left cert.pf_right)
+    | .isNNRat sReal _ x_num x_den x_isNNRat =>
+      let ⟨gx, hx_coprime⟩ := proveNatGCD x_num x_den
+      if gx.natLit! != 1 then failure
+let _ : gx =Q 1 := ⟨⟩
+      let hx_isNNRat' : Q(IsNNRat $x $x_num $x_den) := x_isNNRat
+      let hy_isNNRat' : Q(IsNNRat $y $y_num $y_den) := y_isNNRat
+      try
+        let numCert ← findNotPowerCertificate q($x_num) y_den
+        assumeInstancesCommute
+        return Result.isTrue q(irrational_rpow_rat_rat_of_num $hx_isNNRat' $hy_isNNRat'
+ hx_coprime hy_coprime numCert.pf_left numCert.pf_right)
+      catch _ =>
+        let denCert ← findNotPowerCertificate q($x_den) y_den
+        assumeInstancesCommute
+        return Result.isTrue q(irrational_rpow_rat_rat_of_den $hx_isNNRat' $hy_isNNRat'
+ hx_coprime hy_coprime denCert.pf_left denCert.pf_right)
+    | _ => failure
+  | _, _, _ => failure
 
 中文:
 定义 evalIrrationalRpow
@@ -691,7 +787,29 @@ let _ : gy =Q 1 := ⟨⟩
     if gy.natLit! != 1 then failure
 let _ : gy =Q 1 := ⟨⟩
     match ← derive x with
-    | .isNa
+    | .isNat sReal ex x_isNat =>
+      let cert ← findNotPowerCertificate q($ex) y_den
+      assumeInstancesCommute
+      return .isTrue q(irrational_rpow_nat_rat $x_isNat $y_isNNRat $hy_coprime
+ cert.pf_left cert.pf_right)
+    | .isNNRat sReal _ x_num x_den x_isNNRat =>
+      let ⟨gx, hx_coprime⟩ := proveNatGCD x_num x_den
+      if gx.natLit! != 1 then failure
+let _ : gx =Q 1 := ⟨⟩
+      let hx_isNNRat' : Q(IsNNRat $x $x_num $x_den) := x_isNNRat
+      let hy_isNNRat' : Q(IsNNRat $y $y_num $y_den) := y_isNNRat
+      try
+        let numCert ← findNotPowerCertificate q($x_num) y_den
+        assumeInstancesCommute
+        return Result.isTrue q(irrational_rpow_rat_rat_of_num $hx_isNNRat' $hy_isNNRat'
+ hx_coprime hy_coprime numCert.pf_left numCert.pf_right)
+      catch _ =>
+        let denCert ← findNotPowerCertificate q($x_den) y_den
+        assumeInstancesCommute
+        return Result.isTrue q(irrational_rpow_rat_rat_of_den $hx_isNNRat' $hy_isNNRat'
+ hx_coprime hy_coprime denCert.pf_left denCert.pf_right)
+    | _ => failure
+  | _, _, _ => failure
 
 Depends on / 依赖: Irrational, assumeInstancesCommute, cert.pf_left, cert.pf_right, derive, failure, findNotPowerCertificate, gy.natLit, hy_coprime, irrational_rpow_nat_rat, isNNRat, isTrue, natLit, pf_left, pf_right, proveNatGCD, return, x_isNat, x_num, y_den
 -/
@@ -743,7 +861,22 @@ definition evalIrrationalSqrt
       let cert ← findNotPowerCertificate ex q(nat_lit 2)
       assumeInstancesCommute
       return .isTrue q(irrational_sqrt_nat $pf $cert.pf_left $cert.pf_right)
-    | .isNNRat 
+    | .isNNRat sReal eq en ed pf =>
+      let ⟨g, pf_coprime⟩ := proveNatGCD en ed
+      if g.natLit! != 1 then failure
+let _ : g =Q 1 := ⟨⟩
+      try
+        let numCert ← findNotPowerCertificate en q(nat_lit 2)
+        assumeInstancesCommute
+        return Result.isTrue
+          q(irrational_sqrt_rat_of_num $pf $pf_coprime $numCert.pf_left $numCert.pf_right)
+      catch _ =>
+        let denCert ← findNotPowerCertificate ed q(nat_lit 2)
+        assumeInstancesCommute
+        return Result.isTrue
+          q(irrational_sqrt_rat_of_den $pf $pf_coprime $denCert.pf_left $denCert.pf_right)
+    | _ => failure
+  | _, _, _ => failure
 
 中文:
 定义 evalIrrationalSqrt
@@ -756,7 +889,22 @@ definition evalIrrationalSqrt
       let cert ← findNotPowerCertificate ex q(nat_lit 2)
       assumeInstancesCommute
       return .isTrue q(irrational_sqrt_nat $pf $cert.pf_left $cert.pf_right)
-    | .isNNRat 
+    | .isNNRat sReal eq en ed pf =>
+      let ⟨g, pf_coprime⟩ := proveNatGCD en ed
+      if g.natLit! != 1 then failure
+let _ : g =Q 1 := ⟨⟩
+      try
+        let numCert ← findNotPowerCertificate en q(nat_lit 2)
+        assumeInstancesCommute
+        return Result.isTrue
+          q(irrational_sqrt_rat_of_num $pf $pf_coprime $numCert.pf_left $numCert.pf_right)
+      catch _ =>
+        let denCert ← findNotPowerCertificate ed q(nat_lit 2)
+        assumeInstancesCommute
+        return Result.isTrue
+          q(irrational_sqrt_rat_of_den $pf $pf_coprime $denCert.pf_left $denCert.pf_right)
+    | _ => failure
+  | _, _, _ => failure
 -/
 def evalIrrationalSqrt : NormNumExt where eval {u α} e := do
   match u, α, e with

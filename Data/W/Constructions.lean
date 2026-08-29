@@ -437,7 +437,7 @@ definition ListαEquivPUnitSum
   right_inv x :=
     match x with
     | Sum.inl PUnit.unit => rfl
-    | Sum.inr _ 
+    | Sum.inr _ => rfl
 
 中文:
 定义 ListαEquivPUnitSum
@@ -453,7 +453,7 @@ definition ListαEquivPUnitSum
   right_inv x :=
     match x with
     | Sum.inl PUnit.unit => rfl
-    | Sum.inr _ 
+    | Sum.inr _ => rfl
 
 Depends on / 依赖: PUnit.unit, Sum.elim, Sum.inl, Sum.inr, invFun, left_inv, right_inv
 -/

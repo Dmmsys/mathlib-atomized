@@ -320,7 +320,9 @@ lemma OrthogonalIdempotents.option
     · cases ne rfl
     · simpa only [mul_assoc, Finset.sum_mul, he.mul_eq, Finset.sum_ite_eq', Finset.mem_univ,
         ↓reduceIte, zero_mul] using! congr_arg (· * e j) hx₁
-    · simpa only [Option.el
+    · simpa only [Option.elim_some, Option.elim_none, ← mul_assoc, Finset.mul_sum, he.mul_eq,
+        Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte, mul_zero] using! congr_arg (e i * ·) hx₂
+    · exact he.ortho (Option.some_inj.ne.mp ne)
 
 中文:
 引理 正交幂等.option
@@ -332,7 +334,9 @@ lemma OrthogonalIdempotents.option
     · cases ne rfl
     · simpa only [mul_assoc, Finset.sum_mul, he.mul_eq, Finset.sum_ite_eq', Finset.mem_univ,
         ↓reduceIte, zero_mul] using! congr_arg (· * e j) hx₁
-    · simpa only [Option.el
+    · simpa only [Option.elim_some, Option.elim_none, ← mul_assoc, Finset.mul_sum, he.mul_eq,
+        Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte, mul_zero] using! congr_arg (e i * ·) hx₂
+    · exact he.ortho (Option.some_inj.ne.mp ne)
 
 Depends on / 依赖: he.idem, i.rec
 -/
@@ -622,7 +626,14 @@ theorem isIdempotentElem_one_sub_one_sub_pow_pow
     conv_rhs => rw [pow_two, ← mul_one_sub, sub_sub_cancel]
     nth_rw 1 3 [← one_pow n]
     rw [← (Commute.one_left x).mul_geom_sum₂]; rw [← (Commute.one_left (1 - x ^ n)).mul_geom_sum₂]
-    simp only [sub_sub_can
+    simp only [sub_sub_cancel, one_pow, one_mul]
+    rw [Commute.mul_pow]; rw [Commute.mul_mul_mul_comm]; rw [← Commute.mul_pow]; rw [mul_one_sub]; rw [← pow_two]
+    · exact ⟨_, rfl⟩
+    · simp
+    · refine .pow_right (.sub_right (.one_right _) (.sum_left _ _ _ fun _ _ => .pow_left ?_ _)) _
+      simp
+    · exact .sub_left (.one_left _) (.sum_right _ _ _ fun _ _ => .pow_right rfl _)
+  rwa [hx, zero_dvd_iff, sub_eq_zero, eq_comm, pow_two] at this
 
 中文:
 定理 isIdempotentElem_one_sub_one_sub_pow_pow
@@ -631,7 +642,14 @@ theorem isIdempotentElem_one_sub_one_sub_pow_pow
     conv_rhs => rw [pow_two, ← mul_one_sub, sub_sub_cancel]
     nth_rw 1 3 [← one_pow n]
     rw [← (Commute.one_left x).mul_geom_sum₂]; rw [← (Commute.one_left (1 - x ^ n)).mul_geom_sum₂]
-    simp only [sub_sub_can
+    simp only [sub_sub_cancel, one_pow, one_mul]
+    rw [Commute.mul_pow]; rw [Commute.mul_mul_mul_comm]; rw [← Commute.mul_pow]; rw [mul_one_sub]; rw [← pow_two]
+    · exact ⟨_, rfl⟩
+    · simp
+    · refine .pow_right (.sub_right (.one_right _) (.sum_left _ _ _ fun _ _ => .pow_left ?_ _)) _
+      simp
+    · exact .sub_left (.one_left _) (.sum_right _ _ _ fun _ _ => .pow_right rfl _)
+  rwa [hx, zero_dvd_iff, sub_eq_zero, eq_comm, pow_two] at this
 
 Depends on / 依赖: Commute, Commute.mul_mul_mul_comm, Commute.mul_pow, Commute.one_left, conv_rhs, mul_mul_mul_comm, mul_one_sub, mul_pow, nth_rw, one_left, one_mul, one_pow, one_right, pow_right, pow_two, sub_right, sub_sub_cancel, sum_left
 -/
@@ -663,7 +681,21 @@ theorem exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent_aux
   let a := e₁ - e₁ * e₂
   have ha : f a = f e₁ := by rw [map_sub, map_mul, he₁e₂, sub_zero]
   have ha' : a * e₂ = 0 := by rw [sub_mul, mul_assoc, he₂.eq, sub_self]
-  have
+  have hx' : a - a ^ 2 in RingHom.ker f := by
+    simp [RingHom.mem_ker, pow_two, ha, he₁.eq]
+  obtain ⟨n, hn⟩ := h _ hx'
+  refine ⟨_, isIdempotentElem_one_sub_one_sub_pow_pow _ _ hn, ?_, ?_⟩
+  · rcases n with - | n
+    · simp at hn
+    simp only [map_sub, map_one, map_pow, ha, he₁.pow_succ_eq,
+      he₁.one_sub.pow_succ_eq, sub_sub_cancel]
+  · obtain ⟨k, hk⟩ := (Commute.one_left (MulOpposite.op <| 1 - a ^ n)).sub_dvd_pow_sub_pow n
+    apply_fun MulOpposite.unop at hk
+    have : 1 - (1 - a ^ n) ^ n = MulOpposite.unop k * a ^ n := by simpa using hk
+    rw [this]; rw [mul_assoc]
+    rcases n with - | n
+    · simp at hn
+    rw [pow_succ]; rw [mul_assoc]; rw [ha']; rw [mul_zero]; rw [mul_zero]
 
 中文:
 定理 存在_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent_aux
@@ -674,7 +706,21 @@ theorem exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent_aux
   let a := e₁ - e₁ * e₂
   have ha : f a = f e₁ := by rw [map_sub, map_mul, he₁e₂, sub_zero]
   have ha' : a * e₂ = 0 := by rw [sub_mul, mul_assoc, he₂.eq, sub_self]
-  have
+  have hx' : a - a ^ 2 in RingHom.ker f := by
+    simp [RingHom.mem_ker, pow_two, ha, he₁.eq]
+  obtain ⟨n, hn⟩ := h _ hx'
+  refine ⟨_, isIdempotentElem_one_sub_one_sub_pow_pow _ _ hn, ?_, ?_⟩
+  · rcases n with - | n
+    · simp at hn
+    simp only [map_sub, map_one, map_pow, ha, he₁.pow_succ_eq,
+      he₁.one_sub.pow_succ_eq, sub_sub_cancel]
+  · obtain ⟨k, hk⟩ := (Commute.one_left (MulOpposite.op <| 1 - a ^ n)).sub_dvd_pow_sub_pow n
+    apply_fun MulOpposite.unop at hk
+    have : 1 - (1 - a ^ n) ^ n = MulOpposite.unop k * a ^ n := by simpa using hk
+    rw [this]; rw [mul_assoc]
+    rcases n with - | n
+    · simp at hn
+    rw [pow_succ]; rw [mul_assoc]; rw [ha']; rw [mul_zero]; rw [mul_zero]
 
 Depends on / 依赖: RingHom, RingHom.ker, RingHom.mem_ker, Subsingleton, Subsingleton.elim, isIdempotentElem_one_sub_one_sub_pow_pow, map_mul, map_sub, mem_ker, mul_assoc, pow_two, sub_mul, sub_self, sub_zero, subsingleton_or_nontrivial
 -/
@@ -715,7 +761,9 @@ theorem exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent
     f h e₁ he he₁ e₂ he₂ he₁e₂
   refine ⟨(1 - e₂) * e', ?_, ?_, ?_, ?_⟩
   · rw [IsIdempotentElem, mul_assoc, ← mul_assoc e', mul_sub, mul_one, h₂, sub_zero, h₁.eq]
-  · rw [map_mul, map_sub, map_one, sub_mul, 
+  · rw [map_mul, map_sub, map_one, sub_mul, one_mul, he₂e₁, sub_zero]
+  · rw [mul_assoc, h₂, mul_zero]
+  · rw [← mul_assoc, mul_sub, mul_one, he₂.eq, sub_self, zero_mul]
 
 中文:
 定理 存在_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent
@@ -724,7 +772,9 @@ theorem exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent
     f h e₁ he he₁ e₂ he₂ he₁e₂
   refine ⟨(1 - e₂) * e', ?_, ?_, ?_, ?_⟩
   · rw [IsIdempotentElem, mul_assoc, ← mul_assoc e', mul_sub, mul_one, h₂, sub_zero, h₁.eq]
-  · rw [map_mul, map_sub, map_one, sub_mul, 
+  · rw [map_mul, map_sub, map_one, sub_mul, one_mul, he₂e₁, sub_zero]
+  · rw [mul_assoc, h₂, mul_zero]
+  · rw [← mul_assoc, mul_sub, mul_one, he₂.eq, sub_self, zero_mul]
 
 Depends on / 依赖: IsIdempotentElem, exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent_aux, map_mul, map_one, map_sub, mul_assoc, mul_one, mul_sub, mul_zero, one_mul, sub_mul, sub_self, sub_zero, zero_mul
 -/
@@ -775,7 +825,12 @@ lemma OrthogonalIdempotents.lift_of_isNilpotent_ker_aux
     obtain ⟨e', h₁, h₂⟩ := IH (he.embedding (Fin.succEmb n)) (fun i => he' _)
     have h₂' (i) : f (e' i) = e i.succ := congr_fun h₂ i
     obtain ⟨e₀, h₃, h₄, h₅, h₆⟩ :=
-      exists_isIdemp
+      exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent f h _ (he' 0) (he.idem 0) _
+      h₁.isIdempotentElem_sum
+      (by simp [Finset.mul_sum, h₂', he.mul_eq, eq_comm])
+      (by simp [Finset.sum_mul, h₂', he.mul_eq])
+    refine ⟨_, (h₁.option _ h₃ h₅ h₆).embedding (finSuccEquiv n).toEmbedding, funext fun i => ?_⟩
+    obtain ⟨_ | i, rfl⟩ := (finSuccEquiv n).symm.surjective i <;> simp [*]
 
 中文:
 引理 正交幂等.lift_of_isNilpotent_ker_aux
@@ -786,7 +841,12 @@ lemma OrthogonalIdempotents.lift_of_isNilpotent_ker_aux
     obtain ⟨e', h₁, h₂⟩ := IH (he.embedding (Fin.succEmb n)) (fun i => he' _)
     have h₂' (i) : f (e' i) = e i.succ := congr_fun h₂ i
     obtain ⟨e₀, h₃, h₄, h₅, h₆⟩ :=
-      exists_isIdemp
+      exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent f h _ (he' 0) (he.idem 0) _
+      h₁.isIdempotentElem_sum
+      (by simp [Finset.mul_sum, h₂', he.mul_eq, eq_comm])
+      (by simp [Finset.sum_mul, h₂', he.mul_eq])
+    refine ⟨_, (h₁.option _ h₃ h₅ h₆).embedding (finSuccEquiv n).toEmbedding, funext fun i => ?_⟩
+    obtain ⟨_ | i, rfl⟩ := (finSuccEquiv n).symm.surjective i <;> simp [*]
 
 Depends on / 依赖: Fin.succEmb, Finset, Finset.mul_sum, Finset.sum_mul, congr_fun, embedding, eq_comm, exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent, finZeroElim, he.embedding, he.idem, he.mul_eq, i.succ, isIdempotentElem_sum, mul_eq, mul_sum, option, succEmb, sum_mul
 -/
@@ -937,7 +997,13 @@ lemma CompleteOrthogonalIdempotents.lift_of_isNilpotent_ker_aux
     simp at hn
   rcases n with - | n
   · simpa using he.complete
-  obtain ⟨e', h₁, h₂⟩ := Orthogonal
+  obtain ⟨e', h₁, h₂⟩ := OrthogonalIdempotents.lift_of_isNilpotent_ker f h he.1 he'
+  refine ⟨_, (equiv (finSuccEquiv n)).mpr
+    (CompleteOrthogonalIdempotents.option (h₁.embedding (Fin.succEmb _))), funext fun i => ?_⟩
+  have (i : _) : f (e' i) = e i := congr_fun h₂ i
+  cases i using Fin.cases with
+  | zero => simp [this, Fin.sum_univ_succ, ← he.complete]
+  | succ i => simp [this]
 
 中文:
 引理 余mpleteOrthogonalIdempotents.lift_of_isNilpotent_ker_aux
@@ -950,7 +1016,13 @@ lemma CompleteOrthogonalIdempotents.lift_of_isNilpotent_ker_aux
     simp at hn
   rcases n with - | n
   · simpa using he.complete
-  obtain ⟨e', h₁, h₂⟩ := Orthogonal
+  obtain ⟨e', h₁, h₂⟩ := OrthogonalIdempotents.lift_of_isNilpotent_ker f h he.1 he'
+  refine ⟨_, (equiv (finSuccEquiv n)).mpr
+    (CompleteOrthogonalIdempotents.option (h₁.embedding (Fin.succEmb _))), funext fun i => ?_⟩
+  have (i : _) : f (e' i) = e i := congr_fun h₂ i
+  cases i using Fin.cases with
+  | zero => simp [this, Fin.sum_univ_succ, ← he.complete]
+  | succ i => simp [this]
 
 Depends on / 依赖: CompleteOrthogonalIdempotents, CompleteOrthogonalIdempotents.option, Fin.succEmb, OrthogonalIdempotents, OrthogonalIdempotents.lift_of_isNilpotent_ker, Subsingleton, Subsingleton.elim, complete, congr_fun, embedding, finSuccEquiv, he.complete, lift_of_isNilpotent_ker, of_subsingleton, option, subsingleton_or_nontrivial, succEmb
 -/
@@ -1018,7 +1090,8 @@ theorem eq_of_isNilpotent_sub_of_isIdempotentElem_of_commute
     abel
   obtain ⟨n, hn⟩ := H
   have : (e₁ - e₂) ^ (2 * n + 1) = (e₁ - e₂) := by
-    clear hn; induction n <;> simp [
+    clear hn; induction n <;> simp [mul_add, add_assoc, pow_add _ (2 * _) 3, ← pow_succ, *]
+  rwa [pow_succ, two_mul, pow_add, hn, zero_mul, zero_mul, eq_comm, sub_eq_zero] at this
 
 中文:
 定理 eq_of_isNilpotent_sub_of_isIdempotentElem_of_commute
@@ -1031,7 +1104,8 @@ theorem eq_of_isNilpotent_sub_of_isIdempotentElem_of_commute
     abel
   obtain ⟨n, hn⟩ := H
   have : (e₁ - e₂) ^ (2 * n + 1) = (e₁ - e₂) := by
-    clear hn; induction n <;> simp [
+    clear hn; induction n <;> simp [mul_add, add_assoc, pow_add _ (2 * _) 3, ← pow_succ, *]
+  rwa [pow_succ, two_mul, pow_add, hn, zero_mul, zero_mul, eq_comm, sub_eq_zero] at this
 
 Depends on / 依赖: add_assoc, eq_comm, mul_add, mul_assoc, mul_sub, one_mul, pow_add, pow_succ, pow_zero, sub_eq_zero, sub_mul, two_mul, zero_mul
 -/
@@ -1061,6 +1135,7 @@ theorem CompleteOrthogonalIdempotents.of_ker_isNilpotent_of_isMulCentral
     refine eq_of_isNilpotent_sub_of_isIdempotentElem_of_commute
       (he _) (h₁.idem _) (h _ ?_) ((he' i).comm _)
     simpa [RingHom.mem_ker, sub_eq_zero] using congr_fun h₂.symm i
+  exact h₁
 
 中文:
 定理 余mpleteOrthogonalIdempotents.of_ker_isNilpotent_of_isMulCentral
@@ -1071,6 +1146,7 @@ theorem CompleteOrthogonalIdempotents.of_ker_isNilpotent_of_isMulCentral
     refine eq_of_isNilpotent_sub_of_isIdempotentElem_of_commute
       (he _) (h₁.idem _) (h _ ?_) ((he' i).comm _)
     simpa [RingHom.mem_ker, sub_eq_zero] using congr_fun h₂.symm i
+  exact h₁
 
 Depends on / 依赖: RingHom, RingHom.mem_ker, congr_fun, eq_of_isNilpotent_sub_of_isIdempotentElem_of_commute, lift_of_isNilpotent_ker, mem_ker, sub_eq_zero
 -/
@@ -1162,7 +1238,9 @@ lemma OrthogonalIdempotents.surjective_pi
     obtain ⟨x, rfl⟩ := Ideal.quotientInfToPiQuotient_surj this x
     obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
     exact ⟨x, by ext i; simp [Ideal.quotientInfToPiQuotient]⟩
-  intro i j hi
+  intro i j hij
+  rw [Ideal.isCoprime_span_singleton_iff]
+  exact ⟨1, e i, by simp [mul_sub, he.ortho hij]⟩
 
 中文:
 引理 正交幂等.surjective_pi
@@ -1173,7 +1251,9 @@ lemma OrthogonalIdempotents.surjective_pi
     obtain ⟨x, rfl⟩ := Ideal.quotientInfToPiQuotient_surj this x
     obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
     exact ⟨x, by ext i; simp [Ideal.quotientInfToPiQuotient]⟩
-  intro i j hi
+  intro i j hij
+  rw [Ideal.isCoprime_span_singleton_iff]
+  exact ⟨1, e i, by simp [mul_sub, he.ortho hij]⟩
 
 Depends on / 依赖: Ideal.Quotient.mk_surjective, Ideal.isCoprime_span_singleton_iff, Ideal.quotientInfToPiQuotient, Ideal.quotientInfToPiQuotient_surj, Ideal.span, IsCoprime, Pairwise, Quotient, he.ortho, isCoprime_span_singleton_iff, mk_surjective, mul_sub, quotientInfToPiQuotient, quotientInfToPiQuotient_surj
 -/
@@ -1299,7 +1379,12 @@ lemma CompleteOrthogonalIdempotents.bijective_pi
   simp only [funext_iff, RingHom.pi_apply, Pi.zero_apply, Ideal.Quotient.eq_zero_iff_mem,
     Ideal.mem_span_singleton] at hx
   suffices forall s : Finset I, (∏ i in s, (1 - e i)) * x = x by
-    rw [← this
+    rw [← this Finset.univ]; rw [he.prod_one_sub]; rw [zero_mul]
+  refine fun s => Finset.induction_on s (by simp) ?_
+  intro a s has e'
+  suffices (1 - e a) * x = x by simp [has, mul_assoc, e', this]
+  obtain ⟨c, rfl⟩ := hx a
+  rw [← mul_assoc]; rw [(he.idem a).one_sub.eq]
 
 中文:
 引理 余mpleteOrthogonalIdempotents.bijective_pi
@@ -1312,7 +1397,12 @@ lemma CompleteOrthogonalIdempotents.bijective_pi
   simp only [funext_iff, RingHom.pi_apply, Pi.zero_apply, Ideal.Quotient.eq_zero_iff_mem,
     Ideal.mem_span_singleton] at hx
   suffices forall s : Finset I, (∏ i in s, (1 - e i)) * x = x by
-    rw [← this
+    rw [← this Finset.univ]; rw [he.prod_one_sub]; rw [zero_mul]
+  refine fun s => Finset.induction_on s (by simp) ?_
+  intro a s has e'
+  suffices (1 - e a) * x = x by simp [has, mul_assoc, e', this]
+  obtain ⟨c, rfl⟩ := hx a
+  rw [← mul_assoc]; rw [(he.idem a).one_sub.eq]
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.univ, Ideal.Quotient.eq_zero_iff_mem, Ideal.mem_span_singleton, Pi.zero_apply, Quotient, RingHom, RingHom.pi_apply, classical, eq_zero_iff_mem, funext_iff, he.prod_one_sub, induction_on, injective_iff_map_eq_zero, mem_span_singleton, mul_assoc, pi_apply, prod_one_sub, surjective_pi
 -/
@@ -1398,7 +1488,11 @@ lemma RingHom.prod_bijective_of_isIdempotentElem
   rw [(Equiv.bijective _).of_comp_iff']
   apply pi_bijective_of_isIdempotentElem
   · intro i
-    fin_cases i <;>
+    fin_cases i <;> simpa [o]
+  · intro i j hij
+    fin_cases i <;> fin_cases j <;> simp at hij ⊢ <;>
+      simp [o, mul_comm, hef₂, ← hef₁]
+  · simpa
 
 中文:
 引理 环态射.prod_bijective_of_isIdempotentElem
@@ -1412,7 +1506,11 @@ lemma RingHom.prod_bijective_of_isIdempotentElem
   rw [(Equiv.bijective _).of_comp_iff']
   apply pi_bijective_of_isIdempotentElem
   · intro i
-    fin_cases i <;>
+    fin_cases i <;> simpa [o]
+  · intro i j hij
+    fin_cases i <;> fin_cases j <;> simp at hij ⊢ <;>
+      simp [o, mul_comm, hef₂, ← hef₁]
+  · simpa
 
 Depends on / 依赖: Bijective, Equiv.bijective, Function, Function.Bijective, Ideal.Quotient.mk, Ideal.span, Quotient, RingHom, RingHom.pi, bijective, fin_cases, mul_comm, of_comp_iff, piFinTwoEquiv, pi_bijective_of_isIdempotentElem
 -/
@@ -1472,7 +1570,21 @@ lemma CompleteOrthogonalIdempotents.exists_eq_comp_of_ker_eq_span
   refine ⟨(1 - e₀) • e', ⟨⟨Option.rec he₀ fun i => ?_, ?_⟩, ?_⟩, ?_⟩
   · rintro (_|i) (_|j) h
     · simp at h
-    · dsimp; linear_combi
+    · dsimp; linear_combination - he₀.eq * e' j
+    · dsimp; linear_combination - he₀.eq * e' i
+    · obtain ⟨k, hk⟩ := Ideal.mem_span_singleton.mp
+        (hfe₀.le (show f (e' i * e' j) = 0 by simp [he', he.1.2 (by simpa using h)]))
+      dsimp
+      rw [mul_mul_mul_comm]; rw [hk]; rw [he₀.one_sub.eq]; rw [← mul_assoc]; rw [he₀.one_sub_mul_self]; rw [zero_mul]
+  · obtain ⟨k, hk⟩ := Ideal.mem_span_singleton.mp
+      (hfe₀.le (show f (∑ i, e' i - 1) = 0 by simpa [he', sub_eq_zero] using he.2))
+    simp only [Fintype.sum_option, Pi.smul_apply, smul_eq_mul, ← Finset.mul_sum,
+      sub_eq_iff_eq_add.mp hk]
+    linear_combination - he₀.eq * k
+  · have : f e₀ = 0 := by simpa using hfe₀.ge (Ideal.mem_span_singleton_self _)
+    aesop
+  · dsimp [IsIdempotentElem]
+    linear_combination congr($(he₀.eq) * ((e' i) ^ 2 - k i) + (1 - e₀) * $(hk i))
 
 中文:
 引理 余mpleteOrthogonalIdempotents.存在_eq_comp_of_ker_eq_span
@@ -1483,7 +1595,21 @@ lemma CompleteOrthogonalIdempotents.exists_eq_comp_of_ker_eq_span
   refine ⟨(1 - e₀) • e', ⟨⟨Option.rec he₀ fun i => ?_, ?_⟩, ?_⟩, ?_⟩
   · rintro (_|i) (_|j) h
     · simp at h
-    · dsimp; linear_combi
+    · dsimp; linear_combination - he₀.eq * e' j
+    · dsimp; linear_combination - he₀.eq * e' i
+    · obtain ⟨k, hk⟩ := Ideal.mem_span_singleton.mp
+        (hfe₀.le (show f (e' i * e' j) = 0 by simp [he', he.1.2 (by simpa using h)]))
+      dsimp
+      rw [mul_mul_mul_comm]; rw [hk]; rw [he₀.one_sub.eq]; rw [← mul_assoc]; rw [he₀.one_sub_mul_self]; rw [zero_mul]
+  · obtain ⟨k, hk⟩ := Ideal.mem_span_singleton.mp
+      (hfe₀.le (show f (∑ i, e' i - 1) = 0 by simpa [he', sub_eq_zero] using he.2))
+    simp only [Fintype.sum_option, Pi.smul_apply, smul_eq_mul, ← Finset.mul_sum,
+      sub_eq_iff_eq_add.mp hk]
+    linear_combination - he₀.eq * k
+  · have : f e₀ = 0 := by simpa using hfe₀.ge (Ideal.mem_span_singleton_self _)
+    aesop
+  · dsimp [IsIdempotentElem]
+    linear_combination congr($(he₀.eq) * ((e' i) ^ 2 - k i) + (1 - e₀) * $(hk i))
 
 Depends on / 依赖: Ideal.mem_span_singleton.mp, Option.rec, linear_combination, mem_span_singleton, mul_mul_mul_comm
 -/
@@ -1829,7 +1955,18 @@ definition CompleteOrthogonalIdempotents.ringEquivOfIsMulCentral
 right_inv r := funext fun i => Subtype.ext by
     simp_rw [Finset.mul_sum, Finset.sum_mul]
     rw [Finset.sum_eq_single i _ (by simp at ·)]
-  
+    · have ⟨r', eq⟩ := (r i).2
+      rw [← eq]; simp_rw [← mul_assoc, (he.idem i).eq, mul_assoc, (he.idem i).eq]
+    · intro j _ ne; have ⟨r', eq⟩ := (r j).2
+      rw [← eq]; simp_rw [← mul_assoc, he.ortho ne.symm, zero_mul]
+map_mul' r₁ r₂ := funext fun i => Subtype.ext
+    calc e i * (r₁ * r₂) * e i
+     _ = e i * (r₁ * e i * r₂) * e i := by
+       simp_rw [← ((hc i).comm r₁).eq, ← mul_assoc, (he.idem i).eq]
+     _ = e i * r₁ * e i * (e i * r₂ * e i) := by
+      conv in (r₁ * _ * r₂) => rw [← (he.idem i).eq]
+      simp_rw [mul_assoc]
+map_add' r₁ r₂ := funext fun i => Subtype.ext by simpa [mul_add] using! add_mul ..
 
 中文:
 定义 余mpleteOrthogonalIdempotents.ringEquivOfIsMulCentral
@@ -1841,7 +1978,18 @@ right_inv r := funext fun i => Subtype.ext by
 right_inv r := funext fun i => Subtype.ext by
     simp_rw [Finset.mul_sum, Finset.sum_mul]
     rw [Finset.sum_eq_single i _ (by simp at ·)]
-  
+    · have ⟨r', eq⟩ := (r i).2
+      rw [← eq]; simp_rw [← mul_assoc, (he.idem i).eq, mul_assoc, (he.idem i).eq]
+    · intro j _ ne; have ⟨r', eq⟩ := (r j).2
+      rw [← eq]; simp_rw [← mul_assoc, he.ortho ne.symm, zero_mul]
+map_mul' r₁ r₂ := funext fun i => Subtype.ext
+    calc e i * (r₁ * r₂) * e i
+     _ = e i * (r₁ * e i * r₂) * e i := by
+       simp_rw [← ((hc i).comm r₁).eq, ← mul_assoc, (he.idem i).eq]
+     _ = e i * r₁ * e i * (e i * r₂ * e i) := by
+      conv in (r₁ * _ * r₂) => rw [← (he.idem i).eq]
+      simp_rw [mul_assoc]
+map_add' r₁ r₂ := funext fun i => Subtype.ext by simpa [mul_add] using! add_mul ..
 -/
 def CompleteOrthogonalIdempotents.ringEquivOfIsMulCentral [Semiring R]
     (he : CompleteOrthogonalIdempotents e) (hc : forall i, IsMulCentral (e i)) :
@@ -1896,7 +2044,7 @@ lemma Ideal.mem_map_span_singleton_iff_of_isIdempotentElem
   refine ⟨?_, fun H => ⟨_, H, by simp [sub_mul]⟩⟩
   intro ⟨s, hs, t, hrst⟩
   convert I.mul_mem_left (1 - e) hs using 1
-  linear_combination he.eq * t - (
+  linear_combination he.eq * t - (1 - e) * hrst
 
 中文:
 引理 理想.mem_map_span_singleton_iff_of_isIdempotentElem
@@ -1906,7 +2054,7 @@ lemma Ideal.mem_map_span_singleton_iff_of_isIdempotentElem
   refine ⟨?_, fun H => ⟨_, H, by simp [sub_mul]⟩⟩
   intro ⟨s, hs, t, hrst⟩
   convert I.mul_mem_left (1 - e) hs using 1
-  linear_combination he.eq * t - (
+  linear_combination he.eq * t - (1 - e) * hrst
 
 Depends on / 依赖: I.mul_mem_left, Ideal.Quotient.mk_eq_mk_iff_sub_mem, Ideal.Quotient.mk_surjective, Ideal.mem_map_iff_of_surjective, Ideal.mem_span_singleton, Quotient, convert, he.eq, linear_combination, mem_map_iff_of_surjective, mem_span_singleton, mk_eq_mk_iff_sub_mem, mk_surjective, mul_mem_left, sub_mul
 -/

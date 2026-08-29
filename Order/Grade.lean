@@ -1066,7 +1066,10 @@ lemma coe_wcovBy_coe
   obtain hda | had := le_or_gt (⟨d, hd⟩ : s) a
   · exact .inr ((Subtype.coe_le_coe.2 hda).trans hac.le)
   obtain hbd | hdb := le_or_gt b ⟨d, hd⟩
-  · exact 
+  · exact .inl (hcb.le.trans hbd)
+  · cases h had hdb
+
+@[simp, norm_cast]
 
 中文:
 引理 coe_wcovBy_coe
@@ -1078,7 +1081,10 @@ lemma coe_wcovBy_coe
   obtain hda | had := le_or_gt (⟨d, hd⟩ : s) a
   · exact .inr ((Subtype.coe_le_coe.2 hda).trans hac.le)
   obtain hbd | hdb := le_or_gt b ⟨d, hd⟩
-  · exact 
+  · exact .inl (hcb.le.trans hbd)
+  · cases h had hdb
+
+@[simp, norm_cast]
 
 Depends on / 依赖: Subtype, Subtype.coe_le_coe, and_congr_right, classical, coe_le_coe, hac.le, hcb.le.trans, le_or_gt, mem_iff_forall_le_or_ge
 -/

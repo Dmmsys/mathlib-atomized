@@ -1033,7 +1033,9 @@ theorem map_injective
       fun b₁ b₂ hb => by
       inhabit α
       injection @h (default, b₁) (default, b₂) (congr_arg (Prod.mk (f default)) hb :)⟩,
-    fun h =
+    fun h => h.1.prodMap h.2⟩
+
+@[simp]
 
 中文:
 定理 map_injective
@@ -1046,7 +1048,9 @@ theorem map_injective
       fun b₁ b₂ hb => by
       inhabit α
       injection @h (default, b₁) (default, b₂) (congr_arg (Prod.mk (f default)) hb :)⟩,
-    fun h =
+    fun h => h.1.prodMap h.2⟩
+
+@[simp]
 
 Depends on / 依赖: Prod.mk, congr_arg, inhabit, injection, prodMap
 -/

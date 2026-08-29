@@ -49,7 +49,9 @@ lemma one_isLittleO_logCounting_single
     (IsEquivalent.sub_isLittleO IsEquivalent.refl isLittleO_const_log_atTop).isTheta
   have h₁ : (1 : Real -> Real) =o[atTop] fun r => log r - log ‖e‖ :=
     (hΘ.isLittleO_congr_right).2 isLittleO_const_log_atTop
-  refine h₁.congr' Eventuall
+  refine h₁.congr' EventuallyEq.rfl ?_
+  filter_upwards [eventually_ge_atTop ‖e‖] with r hr
+  simp [logCounting_single_eq_log_sub_const hr]
 
 中文:
 引理 one_isLittleO_logCounting_single
@@ -59,7 +61,9 @@ lemma one_isLittleO_logCounting_single
     (IsEquivalent.sub_isLittleO IsEquivalent.refl isLittleO_const_log_atTop).isTheta
   have h₁ : (1 : Real -> Real) =o[atTop] fun r => log r - log ‖e‖ :=
     (hΘ.isLittleO_congr_right).2 isLittleO_const_log_atTop
-  refine h₁.congr' Eventuall
+  refine h₁.congr' EventuallyEq.rfl ?_
+  filter_upwards [eventually_ge_atTop ‖e‖] with r hr
+  simp [logCounting_single_eq_log_sub_const hr]
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.rfl, IsEquivalent, IsEquivalent.refl, IsEquivalent.sub_isLittleO, eventually_ge_atTop, filter_upwards, isLittleO_congr_right, isLittleO_const_log_atTop, isTheta, logCounting_single_eq_log_sub_const, sub_isLittleO
 -/
@@ -90,7 +94,22 @@ lemma zero_iff_logCounting_bounded
   intro a ha
   simp only [Pi.one_apply, norm_eq_abs, frequently_atTop, abs_one]
   intro b
-  obta
+  obtain ⟨c, hc⟩ := eventually_atTop.1
+    (isLittleO_iff.1 (one_isLittleO_logCounting_single (e := e)) ha)
+  let ℓ := 1 + max ‖e‖ (max |b| |c|)
+  have h₁ℓ : c <= ℓ := by grind
+  have h₂ℓ : 1 <= ℓ := by simp [ℓ]
+  use 1 + ℓ, (show b <= 1 + ℓ by grind)
+  calc 1
+    _ <= (a * |logCounting (single e 1) ℓ|) := by simpa [h₁ℓ] using hc ℓ
+    _ <= (a * |logCounting D ℓ|) := by
+      gcongr
+      · apply logCounting_nonneg (single_pos.2 Int.one_pos).le h₂ℓ
+      · apply logCounting_le he h₂ℓ
+    _ < a * |logCounting D (1 + ℓ)| := by
+      gcongr 2
+      rw [abs_of_nonneg (logCounting_nonneg h h₂ℓ)]; rw [abs_of_nonneg (logCounting_nonneg h (by grind))]
+      apply logCounting_strictMono he <;> grind
 
 中文:
 引理 zero_iff_logCounting_bounded
@@ -106,7 +125,22 @@ lemma zero_iff_logCounting_bounded
   intro a ha
   simp only [Pi.one_apply, norm_eq_abs, frequently_atTop, abs_one]
   intro b
-  obta
+  obtain ⟨c, hc⟩ := eventually_atTop.1
+    (isLittleO_iff.1 (one_isLittleO_logCounting_single (e := e)) ha)
+  let ℓ := 1 + max ‖e‖ (max |b| |c|)
+  have h₁ℓ : c <= ℓ := by grind
+  have h₂ℓ : 1 <= ℓ := by simp [ℓ]
+  use 1 + ℓ, (show b <= 1 + ℓ by grind)
+  calc 1
+    _ <= (a * |logCounting (single e 1) ℓ|) := by simpa [h₁ℓ] using hc ℓ
+    _ <= (a * |logCounting D ℓ|) := by
+      gcongr
+      · apply logCounting_nonneg (single_pos.2 Int.one_pos).le h₂ℓ
+      · apply logCounting_le he h₂ℓ
+    _ < a * |logCounting D (1 + ℓ)| := by
+      gcongr 2
+      rw [abs_of_nonneg (logCounting_nonneg h h₂ℓ)]; rw [abs_of_nonneg (logCounting_nonneg h (by grind))]
+      apply logCounting_strictMono he <;> grind
 
 Depends on / 依赖: Pi.one_apply, abs_one, classical, contrapose, eventually_atTop, exists_single_le_pos, frequently_atTop, isBigO_iff, isBigO_of_le, isLittleO_iff, lt_of_le_of_ne, norm_eq_abs, one_apply, one_isLittleO_logCounting_single
 -/
@@ -152,7 +186,7 @@ lemma logCounting_single_isBigO_log
     rw [logCounting_single_eq_log_sub_const hr]
     ring
   have hb : (n * log ·) =O[atTop] Real.log := isBigO_const_mul_self (n : Real) log atTop
-  exact (hb.sub i
+  exact (hb.sub isLittleO_const_log_atTop.isBigO).congr' h₁.symm EventuallyEq.rfl
 
 中文:
 引理 logCounting_single_isBigO_log
@@ -163,7 +197,7 @@ lemma logCounting_single_isBigO_log
     rw [logCounting_single_eq_log_sub_const hr]
     ring
   have hb : (n * log ·) =O[atTop] Real.log := isBigO_const_mul_self (n : Real) log atTop
-  exact (hb.sub i
+  exact (hb.sub isLittleO_const_log_atTop.isBigO).congr' h₁.symm EventuallyEq.rfl
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.rfl, Real.log, eventually_ge_atTop, filter_upwards, hb.sub, isBigO, isBigO_const_mul_self, isLittleO_const_log_atTop, isLittleO_const_log_atTop.isBigO, logCounting, logCounting_single_eq_log_sub_const, single
 -/
@@ -216,7 +250,41 @@ lemma finite_support_of_logCounting_isBigO_log
   obtain ⟨C, hC⟩ := isBigO_iff.1 hO
   obtain ⟨N, hCN⟩ := exists_nat_gt (max C 0)
   have hCN' : C < N := lt_of_le_of_lt (le_max_left C 0) hCN
-  -- Argue by contradiction, let t be a cardinality=N finite subset in th
+  -- Argue by contradiction, let t be a cardinality=N finite subset in the (infinite) support of D
+  -- and let D' be the divisor for the indicator function of t
+  by_contra! hInf
+  obtain ⟨t, htsub, htcard⟩ := hInf.exists_subset_card_eq N
+  set D' := ∑ z in t, single z (1 : Int) with hD'
+  -- The auxiliary divisor `D'` is bounded above by `D`.
+  have hle : D' <= D := by
+    rw [le_def]; rw [Pi.le_def]
+    intro w
+    simp only [hD', coe_sum, Finset.sum_apply, single_apply, Finset.sum_ite_eq]
+    by_cases hw : w in t
+    · simp only [hw, if_true]
+      have h₁ : D w != 0 := mem_support.mp (htsub (Finset.mem_coe.2 hw))
+      have h₂ : (0 : Int) <= D w := by simpa using (le_def.1 h) w
+      omega
+    · simpa [hw, if_false] using (le_def.1 h) w
+  -- A uniform bound on the norms of points in `t`.
+  obtain ⟨R₀, hR₀⟩ : exists R₀ : Real, forall z in t, ‖z‖ <= R₀ := t.finite_toSet.isBounded.exists_norm_le
+  set K := ∑ z in t, log ‖z‖ with hK
+  -- Eventually, `logCounting D' = N * log - K`.
+  have hEq : forallᶠ r in atTop, logCounting D' r = (N : Real) * log r - K := by
+    filter_upwards [eventually_ge_atTop R₀] with r hr using calc
+      logCounting D' r = ∑ c in t, logCounting (single c 1) r := by simp [hD']
+       _ = ∑ z in t, (log r - log ‖z‖) := by
+        congr! 1 with z hz;
+        simpa using logCounting_single_eq_log_sub_const (e := z) (n := 1) ((hR₀ z hz).trans hr)
+       _ = (N : Real) * log r - K := by simp [Finset.sum_sub_distrib, hK, htcard]
+  -- Combine the bounds into a contradiction with `log → ∞`.
+  have hFinal : forallᶠ r in atTop, ((N : Real) - C) * log r <= K := by
+    filter_upwards [hEq, eventually_ge_atTop (1 : Real), hC] with r hr₁ hr₂ hr₃
+    grind [logCounting_le hle hr₂, norm_eq_abs, abs_of_nonneg, log_nonneg, logCounting_nonneg]
+  have hTendsto : Tendsto (fun r => ((N : Real) - C) * log r) atTop atTop :=
+    tendsto_log_atTop.const_mul_atTop (sub_pos.mpr hCN')
+  obtain ⟨r, hr₁, hr₂⟩ := (hFinal.and (hTendsto.eventually_gt_atTop K)).exists
+  linarith
 
 中文:
 引理 finite_support_of_logCounting_isBigO_log
@@ -227,7 +295,41 @@ lemma finite_support_of_logCounting_isBigO_log
   obtain ⟨C, hC⟩ := isBigO_iff.1 hO
   obtain ⟨N, hCN⟩ := exists_nat_gt (max C 0)
   have hCN' : C < N := lt_of_le_of_lt (le_max_left C 0) hCN
-  -- Argue by contradiction, let t be a cardinality=N finite subset in th
+  -- Argue by contradiction, let t be a cardinality=N finite subset in the (infinite) support of D
+  -- and let D' be the divisor for the indicator function of t
+  by_contra! hInf
+  obtain ⟨t, htsub, htcard⟩ := hInf.exists_subset_card_eq N
+  set D' := ∑ z in t, single z (1 : Int) with hD'
+  -- The auxiliary divisor `D'` is bounded above by `D`.
+  have hle : D' <= D := by
+    rw [le_def]; rw [Pi.le_def]
+    intro w
+    simp only [hD', coe_sum, Finset.sum_apply, single_apply, Finset.sum_ite_eq]
+    by_cases hw : w in t
+    · simp only [hw, if_true]
+      have h₁ : D w != 0 := mem_support.mp (htsub (Finset.mem_coe.2 hw))
+      have h₂ : (0 : Int) <= D w := by simpa using (le_def.1 h) w
+      omega
+    · simpa [hw, if_false] using (le_def.1 h) w
+  -- A uniform bound on the norms of points in `t`.
+  obtain ⟨R₀, hR₀⟩ : exists R₀ : Real, forall z in t, ‖z‖ <= R₀ := t.finite_toSet.isBounded.exists_norm_le
+  set K := ∑ z in t, log ‖z‖ with hK
+  -- Eventually, `logCounting D' = N * log - K`.
+  have hEq : forallᶠ r in atTop, logCounting D' r = (N : Real) * log r - K := by
+    filter_upwards [eventually_ge_atTop R₀] with r hr using calc
+      logCounting D' r = ∑ c in t, logCounting (single c 1) r := by simp [hD']
+       _ = ∑ z in t, (log r - log ‖z‖) := by
+        congr! 1 with z hz;
+        simpa using logCounting_single_eq_log_sub_const (e := z) (n := 1) ((hR₀ z hz).trans hr)
+       _ = (N : Real) * log r - K := by simp [Finset.sum_sub_distrib, hK, htcard]
+  -- Combine the bounds into a contradiction with `log → ∞`.
+  have hFinal : forallᶠ r in atTop, ((N : Real) - C) * log r <= K := by
+    filter_upwards [hEq, eventually_ge_atTop (1 : Real), hC] with r hr₁ hr₂ hr₃
+    grind [logCounting_le hle hr₂, norm_eq_abs, abs_of_nonneg, log_nonneg, logCounting_nonneg]
+  have hTendsto : Tendsto (fun r => ((N : Real) - C) * log r) atTop atTop :=
+    tendsto_log_atTop.const_mul_atTop (sub_pos.mpr hCN')
+  obtain ⟨r, hr₁, hr₂⟩ := (hFinal.and (hTendsto.eventually_gt_atTop K)).exists
+  linarith
 
 Depends on / 依赖: classical
 -/

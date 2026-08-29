@@ -152,7 +152,14 @@ theorem totalVariation_eq_variation
   · obtain ⟨s, hs, hpos, hneg, hposPart, hnegPart⟩ := μ.toJordanDecomposition_spec
     calc μ.totalVariation r
       _ = ‖μ (s inter r)‖ₑ + ‖μ (sᶜ inter r)‖ₑ := by
-          rw [totalVariation]; rw [Measure.add_apply]; rw [hposPart]; rw [hnegPart]; rw [μ.toMeasureOf
+          rw [totalVariation]; rw [Measure.add_apply]; rw [hposPart]; rw [hnegPart]; rw [μ.toMeasureOfZeroLE_apply_eq_enorm hs hpos hr]; rw [μ.toMeasureOfLEZero_apply_eq_enorm hs.compl hneg hr]
+      _ <= μ.variation (s inter r) + μ.variation (sᶜ inter r) :=
+          add_le_add (μ.enorm_measure_le_variation _) (μ.enorm_measure_le_variation _)
+      _ = μ.variation ((s inter r) union (sᶜ inter r)) :=
+        (measure_union (by grind) (hs.compl.inter hr)).symm
+      _ = μ.variation r := by congr; grind
+  · apply VectorMeasure.variation_le_of_forall_enorm_le
+    exact fun s _ => enorm_le_totalVariation μ s
 
 中文:
 定理 totalVariation_eq_variation
@@ -164,7 +171,14 @@ theorem totalVariation_eq_variation
   · obtain ⟨s, hs, hpos, hneg, hposPart, hnegPart⟩ := μ.toJordanDecomposition_spec
     calc μ.totalVariation r
       _ = ‖μ (s inter r)‖ₑ + ‖μ (sᶜ inter r)‖ₑ := by
-          rw [totalVariation]; rw [Measure.add_apply]; rw [hposPart]; rw [hnegPart]; rw [μ.toMeasureOf
+          rw [totalVariation]; rw [Measure.add_apply]; rw [hposPart]; rw [hnegPart]; rw [μ.toMeasureOfZeroLE_apply_eq_enorm hs hpos hr]; rw [μ.toMeasureOfLEZero_apply_eq_enorm hs.compl hneg hr]
+      _ <= μ.variation (s inter r) + μ.variation (sᶜ inter r) :=
+          add_le_add (μ.enorm_measure_le_variation _) (μ.enorm_measure_le_variation _)
+      _ = μ.variation ((s inter r) union (sᶜ inter r)) :=
+        (measure_union (by grind) (hs.compl.inter hr)).symm
+      _ = μ.variation r := by congr; grind
+  · apply VectorMeasure.variation_le_of_forall_enorm_le
+    exact fun s _ => enorm_le_totalVariation μ s
 
 Depends on / 依赖: Measure, Measure.add_apply, add_apply, add_le_add, enorm_measure_le_variation, hnegPart, hposPart, hs.compl, le_antisymm, toJordanDecomposition_spec, toMeasureOfLEZero_apply_eq_enorm, toMeasureOfZeroLE_apply_eq_enorm, totalVariation, variation
 -/

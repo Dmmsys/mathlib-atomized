@@ -66,7 +66,20 @@ have : ($en).ascFactorial el =Q eres := ⟨⟩
     have em : Q(Nat) := mkRawNatLit m
 have : em =Q el / 2 := ⟨⟩
 
-    have r : 
+    have r : Nat := l - m
+    have er : Q(Nat) := mkRawNatLit r
+have : er =Q el - em := ⟨⟩
+have : el =Q ($em + $er) := ⟨⟩
+
+    have nm : Nat := n + m
+    have enm : Q(Nat) := mkRawNatLit nm
+have : enm =Q en + em := ⟨⟩
+
+    let ⟨a, ea, a_prf⟩ := proveAscFactorial n m en em
+    let ⟨b, eb, b_prf⟩ := proveAscFactorial (n + m) r enm er
+    have eab : Q(Nat) := mkRawNatLit (a * b)
+have : eab =Q ea * eb := ⟨⟩
+    ⟨a * b, eab, q(by convert! asc_factorial_aux «$en» «$em» «$er» «$ea» «$eb» «$a_prf» «$b_prf»)⟩
 
 中文:
 定义 proveAscFactorial
@@ -81,7 +94,20 @@ have : ($en).ascFactorial el =Q eres := ⟨⟩
     have em : Q(Nat) := mkRawNatLit m
 have : em =Q el / 2 := ⟨⟩
 
-    have r : 
+    have r : Nat := l - m
+    have er : Q(Nat) := mkRawNatLit r
+have : er =Q el - em := ⟨⟩
+have : el =Q ($em + $er) := ⟨⟩
+
+    have nm : Nat := n + m
+    have enm : Q(Nat) := mkRawNatLit nm
+have : enm =Q en + em := ⟨⟩
+
+    let ⟨a, ea, a_prf⟩ := proveAscFactorial n m en em
+    let ⟨b, eb, b_prf⟩ := proveAscFactorial (n + m) r enm er
+    have eab : Q(Nat) := mkRawNatLit (a * b)
+have : eab =Q ea * eb := ⟨⟩
+    ⟨a * b, eab, q(by convert! asc_factorial_aux «$en» «$em» «$er» «$ea» «$eb» «$a_prf» «$b_prf»)⟩
 -/
 partial def proveAscFactorial (n l : Nat) (en el : Q(Nat)) :
     Nat × (eresult : Q(Nat)) × Q(($en).ascFactorial $el = $eresult) :=
@@ -147,7 +173,8 @@ definition evalNatFactorial
 have : u =QL 0 := ⟨⟩; have : α =Q Nat := ⟨⟩; have : e =Q Nat.factorial x := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨ex, p⟩ ← deriveNat x sNat
-  let ⟨_, val, ascPrf⟩ := proveAscFactorial 1 ex.natLit! q(nat_lit
+  let ⟨_, val, ascPrf⟩ := proveAscFactorial 1 ex.natLit! q(nat_lit 1) ex
+  return .isNat sNat q($val) q(isNat_factorial $p $val $ascPrf)
 
 中文:
 定义 eval自然数Factorial
@@ -157,7 +184,8 @@ have : u =QL 0 := ⟨⟩; have : α =Q Nat := ⟨⟩; have : e =Q Nat.factorial 
 have : u =QL 0 := ⟨⟩; have : α =Q Nat := ⟨⟩; have : e =Q Nat.factorial x := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨ex, p⟩ ← deriveNat x sNat
-  let ⟨_, val, ascPrf⟩ := proveAscFactorial 1 ex.natLit! q(nat_lit
+  let ⟨_, val, ascPrf⟩ := proveAscFactorial 1 ex.natLit! q(nat_lit 1) ex
+  return .isNat sNat q($val) q(isNat_factorial $p $val $ascPrf)
 -/
 def evalNatFactorial : NormNumExt where eval {u α} e := do
   let .app _ (x : Q(Nat)) ← Meta.whnfR e | failure
@@ -205,7 +233,8 @@ have : u =QL 0 := ⟨⟩; have : α =Q Nat := ⟨⟩; have : e =Q Nat.ascFactori
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨ex₁, p₁⟩ ← deriveNat x sNat
   let ⟨ex₂, p₂⟩ ← deriveNat y sNat
-  le
+  let ⟨_, val, ascPrf⟩ := proveAscFactorial ex₁.natLit! ex₂.natLit! ex₁ ex₂
+  return .isNat sNat q($val) q(isNat_ascFactorial $p₁ $p₂ $val $ascPrf)
 
 中文:
 定义 eval自然数AscFactorial
@@ -216,7 +245,8 @@ have : u =QL 0 := ⟨⟩; have : α =Q Nat := ⟨⟩; have : e =Q Nat.ascFactori
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨ex₁, p₁⟩ ← deriveNat x sNat
   let ⟨ex₂, p₂⟩ ← deriveNat y sNat
-  le
+  let ⟨_, val, ascPrf⟩ := proveAscFactorial ex₁.natLit! ex₂.natLit! ex₁ ex₂
+  return .isNat sNat q($val) q(isNat_ascFactorial $p₁ $p₂ $val $ascPrf)
 -/
 def evalNatAscFactorial : NormNumExt where eval {u α} e := do
   let .app (.app _ (x : Q(Nat))) (y : Q(Nat)) ← Meta.whnfR e | failure
@@ -338,7 +368,16 @@ have : e =Q Nat.descFactorial x' y' := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨x, p₁⟩ ← deriveNat x' sNat
   let ⟨y, p₂⟩ ← deriveNat y' sNat
- 
+  if x.natLit! >= y.natLit! then
+    have z : Q(Nat) := mkRawNatLit (x.natLit! - y.natLit!)
+have : x =Q z + y := ⟨⟩
+    let ⟨val, prf⟩ := evalNatDescFactorialNotZero (x' := x') (y' := y') x y z ‹_› p₁ p₂
+    return .isNat sNat val q($prf)
+  else
+    have z : Q(Nat) := mkRawNatLit (y.natLit! - x.natLit! - 1)
+have : y =Q z + x + 1 := ⟨⟩
+    let ⟨val, prf⟩ := evalNatDescFactorialZero (x' := x') (y' := y') x y z ‹_› p₁ p₂
+    return .isNat sNat val q($prf)
 
 中文:
 定义 eval自然数DescFactorial
@@ -351,7 +390,16 @@ have : e =Q Nat.descFactorial x' y' := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨x, p₁⟩ ← deriveNat x' sNat
   let ⟨y, p₂⟩ ← deriveNat y' sNat
- 
+  if x.natLit! >= y.natLit! then
+    have z : Q(Nat) := mkRawNatLit (x.natLit! - y.natLit!)
+have : x =Q z + y := ⟨⟩
+    let ⟨val, prf⟩ := evalNatDescFactorialNotZero (x' := x') (y' := y') x y z ‹_› p₁ p₂
+    return .isNat sNat val q($prf)
+  else
+    have z : Q(Nat) := mkRawNatLit (y.natLit! - x.natLit! - 1)
+have : y =Q z + x + 1 := ⟨⟩
+    let ⟨val, prf⟩ := evalNatDescFactorialZero (x' := x') (y' := y') x y z ‹_› p₁ p₂
+    return .isNat sNat val q($prf)
 -/
 def evalNatDescFactorial : NormNumExt where eval {u α} e := do
   let .app (.app _ (x' : Q(Nat))) (y' : Q(Nat)) ← Meta.whnfR e | failure

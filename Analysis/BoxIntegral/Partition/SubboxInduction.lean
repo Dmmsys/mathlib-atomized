@@ -201,7 +201,25 @@ theorem exists_taggedPartition_isHenstock_isSubordinate_homothetic
     choose! n hn using Hn
     have hP : ((splitCenter J).biUnionTagged πi).IsPartition :=
       (isPartition_splitCenter _).biUnionTagged hP
-    have hsub : forall J' in (splitCenter J).biUnion
+    have hsub : forall J' in (splitCenter J).biUnionTagged πi, exists n : Nat, forall i,
+        (J' :).upper i - J'.lower i = (J.upper i - J.lower i) / 2 ^ n := by
+      intro J' hJ'
+      rcases (splitCenter J).mem_biUnionTagged.1 hJ' with ⟨J₁, h₁, h₂⟩
+      refine ⟨n J₁ J' + 1, fun i => ?_⟩
+      simp only [hn J₁ h₁ J' h₂, upper_sub_lower_of_mem_splitCenter h₁, pow_succ', div_div]
+    refine ⟨_, hP, isHenstock_biUnionTagged.2 hHen, isSubordinate_biUnionTagged.2 hr, hsub, ?_⟩
+    refine TaggedPrepartition.distortion_of_const _ hP.nonempty_boxes fun J' h' => ?_
+    rcases hsub J' h' with ⟨n, hn⟩
+    exact Box.distortion_eq_of_sub_eq_div hn
+  · refine ⟨Box.Icc I inter closedBall z (r z),
+      inter_mem_nhdsWithin _ (closedBall_mem_nhds _ (r z).coe_prop), ?_⟩
+    intro J _ n Hmem HIcc Hsub
+    rw [Set.subset_inter_iff] at HIcc
+    refine ⟨single _ _ le_rfl _ Hmem, isPartition_single _, isHenstock_single _,
+      (isSubordinate_single _ _).2 HIcc.2, ?_, distortion_single _ _⟩
+    simp only [TaggedPrepartition.mem_single, forall_eq]
+    refine ⟨0, fun i => ?_⟩
+    simp
 
 中文:
 定理 存在_taggedPartition_isHenstock_isSubordinate_homothetic
@@ -212,7 +230,25 @@ theorem exists_taggedPartition_isHenstock_isSubordinate_homothetic
     choose! n hn using Hn
     have hP : ((splitCenter J).biUnionTagged πi).IsPartition :=
       (isPartition_splitCenter _).biUnionTagged hP
-    have hsub : forall J' in (splitCenter J).biUnion
+    have hsub : forall J' in (splitCenter J).biUnionTagged πi, exists n : Nat, forall i,
+        (J' :).upper i - J'.lower i = (J.upper i - J.lower i) / 2 ^ n := by
+      intro J' hJ'
+      rcases (splitCenter J).mem_biUnionTagged.1 hJ' with ⟨J₁, h₁, h₂⟩
+      refine ⟨n J₁ J' + 1, fun i => ?_⟩
+      simp only [hn J₁ h₁ J' h₂, upper_sub_lower_of_mem_splitCenter h₁, pow_succ', div_div]
+    refine ⟨_, hP, isHenstock_biUnionTagged.2 hHen, isSubordinate_biUnionTagged.2 hr, hsub, ?_⟩
+    refine TaggedPrepartition.distortion_of_const _ hP.nonempty_boxes fun J' h' => ?_
+    rcases hsub J' h' with ⟨n, hn⟩
+    exact Box.distortion_eq_of_sub_eq_div hn
+  · refine ⟨Box.Icc I inter closedBall z (r z),
+      inter_mem_nhdsWithin _ (closedBall_mem_nhds _ (r z).coe_prop), ?_⟩
+    intro J _ n Hmem HIcc Hsub
+    rw [Set.subset_inter_iff] at HIcc
+    refine ⟨single _ _ le_rfl _ Hmem, isPartition_single _, isHenstock_single _,
+      (isSubordinate_single _ _).2 HIcc.2, ?_, distortion_single _ _⟩
+    simp only [TaggedPrepartition.mem_single, forall_eq]
+    refine ⟨0, fun i => ?_⟩
+    simp
 
 Depends on / 依赖: IsPartition, J.lower, J.upper, biUnionTagged, isPartition_splitCenter, mem_biUnionTagged, splitCenter, subbox_induction_on
 -/
@@ -262,7 +298,9 @@ theorem exists_tagged_le_isHenstock_isSubordinate_iUnion_eq
   have := fun J => Box.exists_taggedPartition_isHenstock_isSubordinate_homothetic J r
   choose! πi πip πiH πir _ πid using this
   refine ⟨π.biUnionTagged πi, biUnion_le _ _, isHenstock_biUnionTagged.2 fun J _ => πiH J,
-    isSubordinate_biUnionTagged.2 fun J _ => πir J, ?_, π.iUnion_biUnion_parti
+    isSubordinate_biUnionTagged.2 fun J _ => πir J, ?_, π.iUnion_biUnion_partition fun J _ => πip J⟩
+  rw [distortion_biUnionTagged]
+  exact sup_congr rfl fun J _ => πid J
 
 中文:
 定理 存在_tagged_le_isHenstock_isSubordinate_iUnion_eq
@@ -271,7 +309,9 @@ theorem exists_tagged_le_isHenstock_isSubordinate_iUnion_eq
   have := fun J => Box.exists_taggedPartition_isHenstock_isSubordinate_homothetic J r
   choose! πi πip πiH πir _ πid using this
   refine ⟨π.biUnionTagged πi, biUnion_le _ _, isHenstock_biUnionTagged.2 fun J _ => πiH J,
-    isSubordinate_biUnionTagged.2 fun J _ => πir J, ?_, π.iUnion_biUnion_parti
+    isSubordinate_biUnionTagged.2 fun J _ => πir J, ?_, π.iUnion_biUnion_partition fun J _ => πip J⟩
+  rw [distortion_biUnionTagged]
+  exact sup_congr rfl fun J _ => πid J
 
 Depends on / 依赖: Box.exists_taggedPartition_isHenstock_isSubordinate_homothetic, biUnionTagged, biUnion_le, distortion_biUnionTagged, exists_taggedPartition_isHenstock_isSubordinate_homothetic, iUnion_biUnion_partition, isHenstock_biUnionTagged, isSubordinate_biUnionTagged, sup_congr
 -/

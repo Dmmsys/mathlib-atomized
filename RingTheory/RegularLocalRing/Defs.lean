@@ -174,7 +174,8 @@ instance [IsLocalRing
   · apply of_spanFinrank_maximalIdeal_le
     rcases IsPrincipalIdealRing.principal (maximalIdeal R) with ⟨x, hx⟩
     simpa only [(IsPrincipalIdealRing.ringKrullDim_eq_one R) isf,
-      Nat.cas
+      Nat.cast_le_one, ← Set.ncard_singleton x, hx] using
+        Submodule.spanFinrank_span_le_ncard_of_finite (Set.finite_singleton x)
 
 中文:
 实例 [是局部环
@@ -186,7 +187,8 @@ instance [IsLocalRing
   · apply of_spanFinrank_maximalIdeal_le
     rcases IsPrincipalIdealRing.principal (maximalIdeal R) with ⟨x, hx⟩
     simpa only [(IsPrincipalIdealRing.ringKrullDim_eq_one R) isf,
-      Nat.cas
+      Nat.cast_le_one, ← Set.ncard_singleton x, hx] using
+        Submodule.spanFinrank_span_le_ncard_of_finite (Set.finite_singleton x)
 
 Depends on / 依赖: IsField, IsPrincipalIdealRing, IsPrincipalIdealRing.principal, IsPrincipalIdealRing.ringKrullDim_eq_one, Nat.cast_le_one, Set.finite_singleton, Set.ncard_singleton, Submodule, Submodule.spanFinrank_span_le_ncard_of_finite, cast_le_one, finite_singleton, isRegularLocalRing_iff, isf.toField, maximalIdeal, maximalIdeal_eq_bot, ncard_singleton, of_spanFinrank_maximalIdeal_le, principal, ringKrullDim_eq_one, spanFinrank_span_le_ncard_of_finite
 -/

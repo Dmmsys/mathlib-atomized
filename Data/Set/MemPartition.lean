@@ -106,7 +106,16 @@ lemma disjoint_memPartition
     intro u v hu hv huv
     rw [memPartition_succ] at hu hv
     obtain ⟨u', hu', hu'_eq⟩ := hu
-  
+    obtain ⟨v', hv', hv'_eq⟩ := hv
+    rcases hu'_eq with rfl | rfl <;> rcases hv'_eq with rfl | rfl
+    · refine Disjoint.mono inter_subset_left inter_subset_left (ih hu' hv' ?_)
+      exact fun huv' => huv (huv' ▸ rfl)
+    · exact Disjoint.mono_left inter_subset_right Set.disjoint_sdiff_right
+    · exact Disjoint.mono_right inter_subset_right Set.disjoint_sdiff_left
+    · refine Disjoint.mono sdiff_subset sdiff_subset (ih hu' hv' ?_)
+      exact fun huv' => huv (huv' ▸ rfl)
+
+@[simp]
 
 中文:
 引理 disjoint_memPartition
@@ -123,7 +132,16 @@ lemma disjoint_memPartition
     intro u v hu hv huv
     rw [memPartition_succ] at hu hv
     obtain ⟨u', hu', hu'_eq⟩ := hu
-  
+    obtain ⟨v', hv', hv'_eq⟩ := hv
+    rcases hu'_eq with rfl | rfl <;> rcases hv'_eq with rfl | rfl
+    · refine Disjoint.mono inter_subset_left inter_subset_left (ih hu' hv' ?_)
+      exact fun huv' => huv (huv' ▸ rfl)
+    · exact Disjoint.mono_left inter_subset_right Set.disjoint_sdiff_right
+    · exact Disjoint.mono_right inter_subset_right Set.disjoint_sdiff_left
+    · refine Disjoint.mono sdiff_subset sdiff_subset (ih hu' hv' ?_)
+      exact fun huv' => huv (huv' ▸ rfl)
+
+@[simp]
 
 Depends on / 依赖: Disjoint, Disjoint.mono, Disjoint.mono_left, absurd, inter_su, inter_subset_left, memPartition_succ, memPartition_zero, mem_singleton_iff, mono_left, revert
 -/
@@ -169,7 +187,8 @@ lemma sUnion_memPartition
       iff_true] at this ⊢
     obtain ⟨t, ht, hxt⟩ := this
     by_cases hxf : x in f n
-    · exact ⟨t inter f n, ⟨t, ht
+    · exact ⟨t inter f n, ⟨t, ht, Or.inl rfl⟩, hxt, hxf⟩
+    · exact ⟨t \ f n, ⟨t, ht, Or.inr rfl⟩, hxt, hxf⟩
 
 中文:
 引理 sUnion_memPartition
@@ -186,7 +205,8 @@ lemma sUnion_memPartition
       iff_true] at this ⊢
     obtain ⟨t, ht, hxt⟩ := this
     by_cases hxf : x in f n
-    · exact ⟨t inter f n, ⟨t, ht
+    · exact ⟨t inter f n, ⟨t, ht, Or.inl rfl⟩, hxt, hxf⟩
+    · exact ⟨t \ f n, ⟨t, ht, Or.inr rfl⟩, hxt, hxf⟩
 
 Depends on / 依赖: Or.inl, Or.inr, iff_true, memPartition, memPartition_succ, mem_sUnion, mem_univ
 -/
@@ -219,7 +239,9 @@ lemma finite_memPartition
     have : Finite (memPartition f n) := Set.finite_coe_iff.mp ih
     rw [← Set.finite_coe_iff]
     simp_rw [ofPred_exists, ← exists_prop, ofPred_exists, ofPred_or]
-    refine Finite.Set.finite_biUnion (memPartition f 
+    refine Finite.Set.finite_biUnion (memPartition f n) _ (fun u _ => ?_)
+    rw [Set.finite_coe_iff]
+    simp
 
 中文:
 引理 finite_memPartition
@@ -233,7 +255,9 @@ lemma finite_memPartition
     have : Finite (memPartition f n) := Set.finite_coe_iff.mp ih
     rw [← Set.finite_coe_iff]
     simp_rw [ofPred_exists, ← exists_prop, ofPred_exists, ofPred_or]
-    refine Finite.Set.finite_biUnion (memPartition f 
+    refine Finite.Set.finite_biUnion (memPartition f n) _ (fun u _ => ?_)
+    rw [Set.finite_coe_iff]
+    simp
 
 Depends on / 依赖: Finite, Finite.Set.finite_biUnion, Set.finite_coe_iff, Set.finite_coe_iff.mp, exists_prop, finite_biUnion, finite_coe_iff, memPartition, memPartition_succ, ofPred_exists, ofPred_or, simp_rw
 -/
@@ -442,7 +466,7 @@ lemma memPartitionSet_eq_iff
     disjoint_memPartition f n hs (memPartitionSet_mem f n a) (Ne.symm h_ne)
   refine absurd h_disj ?_
   rw [not_disjoint_iff_nonempty_inter]
-  exact ⟨a, h, mem_mem
+  exact ⟨a, h, mem_memPartitionSet f n a⟩
 
 中文:
 引理 memPartitionSet_eq_iff
@@ -454,7 +478,7 @@ lemma memPartitionSet_eq_iff
     disjoint_memPartition f n hs (memPartitionSet_mem f n a) (Ne.symm h_ne)
   refine absurd h_disj ?_
   rw [not_disjoint_iff_nonempty_inter]
-  exact ⟨a, h, mem_mem
+  exact ⟨a, h, mem_memPartitionSet f n a⟩
 
 Depends on / 依赖: Disjoint, Ne.symm, absurd, disjoint_memPartition, h_disj, h_ne, memPartitionSet, memPartitionSet_mem, mem_memPartitionSet, not_disjoint_iff_nonempty_inter
 -/

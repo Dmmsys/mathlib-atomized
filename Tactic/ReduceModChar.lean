@@ -101,7 +101,29 @@ definition normBareNumeral
 let rr ← evalIntMod.go _ _ ze q(IsInt.raw_refl $ne) _
     .isNat q(instAddMonoidWithOne) _ q(isNat_natCast _ _ (IsNat.raw_refl $n'))
   let ⟨zr, nr, pr⟩ ← rr.toInt _
-  return .isInt _ nr zr q(CharP.isInt_of_mod $instCharP $pe $p
+  return .isInt _ nr zr q(CharP.isInt_of_mod $instCharP $pe $pn $pr)
+
+mutual
+
+  /-- Given an expression of the form `a ^ b` in a ring of characteristic `n`, reduces `a`
+  modulo `n` recursively and then calculates `a ^ b` using fast modular exponentiation. -/
+  partial def normPow {α : Q(Type u)} (n n' : Q(Nat)) (pn : Q(IsNat «$n» «$n'»)) (e : Q($α))
+      (_ : Q(Ring $α)) (instCharP : Q(CharP $α $n)) : MetaM (Result e) := do
+    let .app (.app (f : Q($α -> Nat -> $α)) (a : Q($α))) (b : Q(Nat)) ← whnfR e | failure
+    let .isNat sα na pa ← normIntNumeral' n n' pn a _ instCharP | failure
+    let ⟨nb, pb⟩ ← Mathlib.Meta.NormNum.deriveNat b q(Nat.instAddMonoidWithOne)
+guard ← withNewMCtxDepth isDefEq f q(HPow.hPow (α := $α))
+haveI' : e =Q a ^ b := ⟨⟩
+haveI' : f =Q HPow.hPow := ⟨⟩
+    have ⟨c, r⟩ := evalNatPowMod na nb n'
+    assumeInstancesCommute
+    return .isNat sα c q(CharP.isNat_pow (f := $f) $instCharP (.refl $f) $pa $pb $pn $r)
+
+  /-- If `e` is of the form `a ^ b`, reduce it using fast modular exponentiation, otherwise
+  reduce it using `norm_num`. -/
+  partial def normIntNumeral' {α : Q(Type u)} (n n' : Q(Nat)) (pn : Q(IsNat «$n» «$n'»))
+      (e : Q($α)) (_ : Q(Ring $α)) (instCharP : Q(CharP $α $n)) : MetaM (Result e) :=
+normPow n n' pn e _ instCharP > normBareNumeral n n' pn e _ instCharP
 
 中文:
 定义 normBareNumeral
@@ -111,7 +133,29 @@ let rr ← evalIntMod.go _ _ ze q(IsInt.raw_refl $ne) _
 let rr ← evalIntMod.go _ _ ze q(IsInt.raw_refl $ne) _
     .isNat q(instAddMonoidWithOne) _ q(isNat_natCast _ _ (IsNat.raw_refl $n'))
   let ⟨zr, nr, pr⟩ ← rr.toInt _
-  return .isInt _ nr zr q(CharP.isInt_of_mod $instCharP $pe $p
+  return .isInt _ nr zr q(CharP.isInt_of_mod $instCharP $pe $pn $pr)
+
+mutual
+
+  /-- Given an expression of the form `a ^ b` in a ring of characteristic `n`, reduces `a`
+  modulo `n` recursively and then calculates `a ^ b` using fast modular exponentiation. -/
+  partial def normPow {α : Q(Type u)} (n n' : Q(Nat)) (pn : Q(IsNat «$n» «$n'»)) (e : Q($α))
+      (_ : Q(Ring $α)) (instCharP : Q(CharP $α $n)) : MetaM (Result e) := do
+    let .app (.app (f : Q($α -> Nat -> $α)) (a : Q($α))) (b : Q(Nat)) ← whnfR e | failure
+    let .isNat sα na pa ← normIntNumeral' n n' pn a _ instCharP | failure
+    let ⟨nb, pb⟩ ← Mathlib.Meta.NormNum.deriveNat b q(Nat.instAddMonoidWithOne)
+guard ← withNewMCtxDepth isDefEq f q(HPow.hPow (α := $α))
+haveI' : e =Q a ^ b := ⟨⟩
+haveI' : f =Q HPow.hPow := ⟨⟩
+    have ⟨c, r⟩ := evalNatPowMod na nb n'
+    assumeInstancesCommute
+    return .isNat sα c q(CharP.isNat_pow (f := $f) $instCharP (.refl $f) $pa $pb $pn $r)
+
+  /-- If `e` is of the form `a ^ b`, reduce it using fast modular exponentiation, otherwise
+  reduce it using `norm_num`. -/
+  partial def normIntNumeral' {α : Q(Type u)} (n n' : Q(Nat)) (pn : Q(IsNat «$n» «$n'»))
+      (e : Q($α)) (_ : Q(Ring $α)) (instCharP : Q(CharP $α $n)) : MetaM (Result e) :=
+normPow n n' pn e _ instCharP > normBareNumeral n n' pn e _ instCharP
 -/
 def normBareNumeral {α : Q(Type u)} (n n' : Q(Nat)) (pn : Q(IsNat «$n» «$n'»))
     (e : Q($α)) (_ : Q(Ring $α)) (instCharP : Q(CharP $α $n)) : MetaM (Result e) := do
@@ -232,7 +276,11 @@ guard ← withNewMCtxDepth isDefEq f q(Neg.neg (α := $α))
   | .isNat sα a p => do
 have : instAddMonoidWithOne =Q sα := ⟨⟩
     let ⟨a', pa'⟩ ← mkOfNat α sα a
-    let pf : Q(-$b = $a' * $b) := q(CharP.ne
+    let pf : Q(-$b = $a' * $b) := q(CharP.neg_eq_sub_one_mul $n $instCharP $b $a $a' $p $pa')
+    return { expr := q($a' * $b), proof? := pf }
+  | .isNegNat _ _ _ =>
+    throwError "normNeg: nothing useful to do in negative characteristic"
+  | _ => throwError "normNeg: evaluating `{n} - 1` should give an integer result"
 
 中文:
 定义 normNeg
@@ -245,7 +293,11 @@ guard ← withNewMCtxDepth isDefEq f q(Neg.neg (α := $α))
   | .isNat sα a p => do
 have : instAddMonoidWithOne =Q sα := ⟨⟩
     let ⟨a', pa'⟩ ← mkOfNat α sα a
-    let pf : Q(-$b = $a' * $b) := q(CharP.ne
+    let pf : Q(-$b = $a' * $b) := q(CharP.neg_eq_sub_one_mul $n $instCharP $b $a $a' $p $pa')
+    return { expr := q($a' * $b), proof? := pf }
+  | .isNegNat _ _ _ =>
+    throwError "normNeg: nothing useful to do in negative characteristic"
+  | _ => throwError "normNeg: evaluating `{n} - 1` should give an integer result"
 -/
 partial def normNeg {α : Q(Type u)} (n : Q(Nat)) (e : Q($α)) (_instRing : Q(Ring $α))
     (instCharP : Q(CharP $α $n)) :
@@ -304,7 +356,14 @@ guard ← withNewMCtxDepth isDefEq mul q(HMul.hMul (α := $α))
   let r ← (derive (α := α) q(($n - 1) * $a))
   match r with
   | .isNat sα na np => do
-have : AddGroupW
+have : AddGroupWithOne.toAddMonoidWithOne =Q sα := ⟨⟩
+    let ⟨na', npa'⟩ ← mkOfNat α sα na
+    let pf : Q(-($a * $b) = $na' * $b) :=
+      q(CharP.neg_mul_eq_sub_one_mul $n $instCharP $a $b $na $na' $np $npa')
+    return { expr := q($na' * $b), proof? := pf }
+  | .isNegNat _ _ _ =>
+    throwError "normNegCoeffMul: nothing useful to do in negative characteristic"
+  | _ => throwError "normNegCoeffMul: evaluating `{n} - 1` should give an integer result"
 
 中文:
 定义 normNegCoeffMul
@@ -316,7 +375,14 @@ guard ← withNewMCtxDepth isDefEq mul q(HMul.hMul (α := $α))
   let r ← (derive (α := α) q(($n - 1) * $a))
   match r with
   | .isNat sα na np => do
-have : AddGroupW
+have : AddGroupWithOne.toAddMonoidWithOne =Q sα := ⟨⟩
+    let ⟨na', npa'⟩ ← mkOfNat α sα na
+    let pf : Q(-($a * $b) = $na' * $b) :=
+      q(CharP.neg_mul_eq_sub_one_mul $n $instCharP $a $b $na $na' $np $npa')
+    return { expr := q($na' * $b), proof? := pf }
+  | .isNegNat _ _ _ =>
+    throwError "normNegCoeffMul: nothing useful to do in negative characteristic"
+  | _ => throwError "normNegCoeffMul: evaluating `{n} - 1` should give an integer result"
 -/
 partial def normNegCoeffMul {α : Q(Type u)} (n : Q(Nat)) (e : Q($α)) (_instRing : Q(Ring $α))
     (instCharP : Q(CharP $α $n)) :
@@ -371,7 +437,22 @@ definition typeToCharP
     (q((ZMod.commRing _).toRing) : Q(Ring (ZMod $n)))
     (q(ZMod.charP _) : Q(CharP (ZMod $n) $n))
 | (``Polynomial, #[(R : Q(Type u)), _]) => do match ← typeToCharP (expensive := expensive) R with
-  | (.intLike n _ _)
+  | (.intLike n _ _) =>
+    return .intLike n
+      (q(Polynomial.ring) : Q(Ring (Polynomial $R)))
+      (q(Polynomial.instCharP _) : Q(CharP (Polynomial $R) $n))
+  | .failure => return .failure
+| _ => if ! expensive then return .failure else do
+  -- Fallback: run an expensive procedures to determine a characteristic,
+  -- by looking for a `CharP` instance.
+  withNewMCtxDepth do
+    /- If we want to support semirings, here we could implement the `natLike` fallback. -/
+    let .some instRing ← trySynthInstanceQ q(Ring $t) | return .failure
+
+    let n ← mkFreshExprMVarQ q(Nat)
+    let some instCharP ← findLocalDeclWithTypeQ? q(CharP $t $n) | return .failure
+
+    return .intLike (← instantiateMVarsQ n) instRing instCharP
 
 中文:
 定义 typeToCharP
@@ -382,7 +463,22 @@ definition typeToCharP
     (q((ZMod.commRing _).toRing) : Q(Ring (ZMod $n)))
     (q(ZMod.charP _) : Q(CharP (ZMod $n) $n))
 | (``Polynomial, #[(R : Q(Type u)), _]) => do match ← typeToCharP (expensive := expensive) R with
-  | (.intLike n _ _)
+  | (.intLike n _ _) =>
+    return .intLike n
+      (q(Polynomial.ring) : Q(Ring (Polynomial $R)))
+      (q(Polynomial.instCharP _) : Q(CharP (Polynomial $R) $n))
+  | .failure => return .failure
+| _ => if ! expensive then return .failure else do
+  -- Fallback: run an expensive procedures to determine a characteristic,
+  -- by looking for a `CharP` instance.
+  withNewMCtxDepth do
+    /- If we want to support semirings, here we could implement the `natLike` fallback. -/
+    let .some instRing ← trySynthInstanceQ q(Ring $t) | return .failure
+
+    let n ← mkFreshExprMVarQ q(Nat)
+    let some instCharP ← findLocalDeclWithTypeQ? q(CharP $t $n) | return .failure
+
+    return .intLike (← instantiateMVarsQ n) instRing instCharP
 -/
 partial def typeToCharP (expensive := false) (t : Q(Type u)) : MetaM (TypeToCharPResult t) :=
 match Expr.getAppFnArgs t with
@@ -421,7 +517,18 @@ definition matchAndNorm
   have α : Q(Type u) := α
   match ← typeToCharP (expensive := expensive) α with
     | (.intLike n instRing instCharP) =>
-      -- Handle the numeric 
+      -- Handle the numeric expressions first, e.g. `-5` (which shouldn't become `-1 * 5`)
+normIntNumeral n e instRing instCharP >>= Result.toSimpResult >
+normNegCoeffMul n e instRing instCharP >-- `-(3 * X) → ((n - 1) * 3) * X`
+      normNeg n e instRing instCharP -- `-X → (n - 1) * X`
+
+    /- Here we could add a `natLike` result using only a `Semiring` instance.
+    This would activate only the less-powerful procedures
+    that cannot handle subtraction.
+    -/
+
+    | .failure =>
+      throwError "inferred type `{α}` does not have a known characteristic"
 
 中文:
 定义 matchAndNorm
@@ -433,7 +540,18 @@ definition matchAndNorm
   have α : Q(Type u) := α
   match ← typeToCharP (expensive := expensive) α with
     | (.intLike n instRing instCharP) =>
-      -- Handle the numeric 
+      -- Handle the numeric expressions first, e.g. `-5` (which shouldn't become `-1 * 5`)
+normIntNumeral n e instRing instCharP >>= Result.toSimpResult >
+normNegCoeffMul n e instRing instCharP >-- `-(3 * X) → ((n - 1) * 3) * X`
+      normNeg n e instRing instCharP -- `-X → (n - 1) * X`
+
+    /- Here we could add a `natLike` result using only a `Semiring` instance.
+    This would activate only the less-powerful procedures
+    that cannot handle subtraction.
+    -/
+
+    | .failure =>
+      throwError "inferred type `{α}` does not have a known characteristic"
 -/
 partial def matchAndNorm (expensive := false) (e : Expr) : MetaM Simp.Result := do
   let α ← inferType e
@@ -478,7 +596,22 @@ definition derive
     iota := false
   }
   let congrTheorems ← Meta.getSimpCongrTheorems
-  let ext? ← getSimpExten
+  let ext? ← getSimpExtension? `reduce_mod_char
+  let ext ← match ext? with
+  | some ext => pure ext
+  | none => throwError "internal error: reduce_mod_char not registered as simp extension"
+  let ctx ← Simp.mkContext config (congrTheorems := congrTheorems)
+    (simpTheorems := #[← ext.getTheorems])
+  let discharge := Mathlib.Meta.NormNum.discharge
+  let r : Simp.Result := {expr := e}
+  let matchAndNorm : Simproc := fun e =>
+      try return (Simp.Step.done (← matchAndNorm (expensive := expensive) e))
+      catch _ => pure .continue
+  let pre := Simp.preDefault #[] >> matchAndNorm
+  let post := Simp.postDefault #[]
+  let r ← r.mkEqTrans (← Simp.main r.expr ctx (methods := { pre, post, discharge? := discharge })).1
+
+  return r
 
 中文:
 定义 derive
@@ -495,7 +628,22 @@ definition derive
     iota := false
   }
   let congrTheorems ← Meta.getSimpCongrTheorems
-  let ext? ← getSimpExten
+  let ext? ← getSimpExtension? `reduce_mod_char
+  let ext ← match ext? with
+  | some ext => pure ext
+  | none => throwError "internal error: reduce_mod_char not registered as simp extension"
+  let ctx ← Simp.mkContext config (congrTheorems := congrTheorems)
+    (simpTheorems := #[← ext.getTheorems])
+  let discharge := Mathlib.Meta.NormNum.discharge
+  let r : Simp.Result := {expr := e}
+  let matchAndNorm : Simproc := fun e =>
+      try return (Simp.Step.done (← matchAndNorm (expensive := expensive) e))
+      catch _ => pure .continue
+  let pre := Simp.preDefault #[] >> matchAndNorm
+  let post := Simp.postDefault #[]
+  let r ← r.mkEqTrans (← Simp.main r.expr ctx (methods := { pre, post, discharge? := discharge })).1
+
+  return r
 -/
 partial def derive (expensive := false) (e : Expr) : MetaM Simp.Result := do
   withTraceNode `Tactic.reduce_mod_char (fun _ => return m!"{e}") do

@@ -38,7 +38,8 @@ definition Lean.Elab.Tactic.withNondepPropLocation
     let mut worked := false
     for hyp in ← (← getMainGoal).getNondepPropHyps do
       worked := worked || (← tryTactic <| atLocal hyp)
-    unless 
+    unless worked || (← tryTactic atTarget) do
+      failed (← getMainGoal)
 
 中文:
 定义 Lean.Elab.Tactic.withNondepPropLocation
@@ -52,7 +53,8 @@ definition Lean.Elab.Tactic.withNondepPropLocation
     let mut worked := false
     for hyp in ← (← getMainGoal).getNondepPropHyps do
       worked := worked || (← tryTactic <| atLocal hyp)
-    unless 
+    unless worked || (← tryTactic atTarget) do
+      failed (← getMainGoal)
 -/
 def Lean.Elab.Tactic.withNondepPropLocation (loc : Location) (atLocal : FVarId -> TacticM Unit)
     (atTarget : TacticM Unit) (failed : MVarId -> TacticM Unit) : TacticM Unit := do
@@ -112,7 +114,17 @@ definition transformAtTarget
   let unchanged := tgt.cleanupAnnotations == r.expr.cleanupAnnotations
   if unchanged then
     match ifUnchanged with
-
+    | .warning => logWarning m!"`{proc}` made no progress on the goal"
+    | .error => throwError "`{proc}` made no progress on the goal"
+    | .silent => pure ()
+  if r.expr.isTrue then
+    goal.assign (← mkOfEqTrue (← r.getProof))
+    pure none
+  else
+    -- this ensures that we really get the same goal as an `MVarId`,
+    -- not a different `MVarId` for which `MVarId.getType` is the same
+    if unchanged then return goal
+    applySimpResultToTarget goal tgt r
 
 中文:
 定义 transformAtTarget
@@ -125,7 +137,17 @@ definition transformAtTarget
   let unchanged := tgt.cleanupAnnotations == r.expr.cleanupAnnotations
   if unchanged then
     match ifUnchanged with
-
+    | .warning => logWarning m!"`{proc}` made no progress on the goal"
+    | .error => throwError "`{proc}` made no progress on the goal"
+    | .silent => pure ()
+  if r.expr.isTrue then
+    goal.assign (← mkOfEqTrue (← r.getProof))
+    pure none
+  else
+    -- this ensures that we really get the same goal as an `MVarId`,
+    -- not a different `MVarId` for which `MVarId.getType` is the same
+    if unchanged then return goal
+    applySimpResultToTarget goal tgt r
 -/
 def transformAtTarget (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc : String)
     (ifUnchanged : BehaviorIfUnchanged) (goal : MVarId) :
@@ -161,7 +183,16 @@ definition transformAtLocalDecl
     throwError "Cannot run `{proc}` at `{Expr.fvar fvarId}`, it is an implementation detail"
   let tgt ← instantiateMVars (← fvarId.getType)
   let eraseFVarId (ctx : Simp.Context) :=
-ctx.setSimpTheorems ctx.simpTheorems.eraseTheo
+ctx.setSimpTheorems ctx.simpTheorems.eraseTheorem (.fvar fvarId)
+let r ← withReader eraseFVarId m tgt
+  -- we use expression equality here (rather than defeq) to be consistent with, e.g.,
+  -- `applySimpResultToLocalDeclCore`
+  if tgt.cleanupAnnotations == r.expr.cleanupAnnotations then
+    match ifUnchanged with
+    | .warning => logWarning m!"`{proc}` made no progress at `{Expr.fvar fvarId}`"
+    | .error => throwError "`{proc}` made no progress at `{Expr.fvar fvarId}`"
+    | .silent => pure ()
+  return (← applySimpResultToLocalDecl goal fvarId r mayCloseGoal).map Prod.snd
 
 中文:
 定义 transformAtLocalDecl
@@ -172,7 +203,16 @@ ctx.setSimpTheorems ctx.simpTheorems.eraseTheo
     throwError "Cannot run `{proc}` at `{Expr.fvar fvarId}`, it is an implementation detail"
   let tgt ← instantiateMVars (← fvarId.getType)
   let eraseFVarId (ctx : Simp.Context) :=
-ctx.setSimpTheorems ctx.simpTheorems.eraseTheo
+ctx.setSimpTheorems ctx.simpTheorems.eraseTheorem (.fvar fvarId)
+let r ← withReader eraseFVarId m tgt
+  -- we use expression equality here (rather than defeq) to be consistent with, e.g.,
+  -- `applySimpResultToLocalDeclCore`
+  if tgt.cleanupAnnotations == r.expr.cleanupAnnotations then
+    match ifUnchanged with
+    | .warning => logWarning m!"`{proc}` made no progress at `{Expr.fvar fvarId}`"
+    | .error => throwError "`{proc}` made no progress at `{Expr.fvar fvarId}`"
+    | .silent => pure ()
+  return (← applySimpResultToLocalDecl goal fvarId r mayCloseGoal).map Prod.snd
 -/
 def transformAtLocalDecl (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc : String)
     (ifUnchanged : BehaviorIfUnchanged) (mayCloseGoal : Bool) (fvarId : FVarId) (goal : MVarId) :

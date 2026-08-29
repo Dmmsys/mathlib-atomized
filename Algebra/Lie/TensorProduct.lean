@@ -73,7 +73,14 @@ instance lieRingModule
   lie_add _ := map_add _
   leibniz_lie x y t := by
     suffices (hasBracketAux x).comp (hasBracketAux y) =
-        hasBracketAux ⁅x, y⁆ + (ha
+        hasBracketAux ⁅x, y⁆ + (hasBracketAux y).comp (hasBracketAux x) by
+      rw [← LinearMap.comp_apply]; rw [this]; rfl
+    ext m n
+    simp only [hasBracketAux, AlgebraTensorModule.curry_apply, curry_apply, sub_tmul, tmul_sub,
+      LinearMap.coe_restrictScalars, Function.comp_apply, LinearMap.coe_comp,
+      LinearMap.rTensor_tmul, LieHom.map_lie, toEnd_apply_apply, LinearMap.add_apply,
+      map_add, LieHom.lie_apply, Module.End.lie_apply, LinearMap.lTensor_tmul]
+    abel
 
 中文:
 实例 lieRingModule
@@ -86,7 +93,14 @@ instance lieRingModule
   lie_add _ := map_add _
   leibniz_lie x y t := by
     suffices (hasBracketAux x).comp (hasBracketAux y) =
-        hasBracketAux ⁅x, y⁆ + (ha
+        hasBracketAux ⁅x, y⁆ + (hasBracketAux y).comp (hasBracketAux x) by
+      rw [← LinearMap.comp_apply]; rw [this]; rfl
+    ext m n
+    simp only [hasBracketAux, AlgebraTensorModule.curry_apply, curry_apply, sub_tmul, tmul_sub,
+      LinearMap.coe_restrictScalars, Function.comp_apply, LinearMap.coe_comp,
+      LinearMap.rTensor_tmul, LieHom.map_lie, toEnd_apply_apply, LinearMap.add_apply,
+      map_add, LieHom.lie_apply, Module.End.lie_apply, LinearMap.lTensor_tmul]
+    abel
 
 Depends on / 依赖: LinearMap, LinearMap.map_smul_of_tower, LocalizedModule, LocalizedModule.smul, hasBracketAux, map_smul_of_tower
 -/
@@ -183,7 +197,10 @@ definition lift
       ext m n
       simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearEquiv.coe_coe,
         AlgebraTensorModule.curry_apply, curry_apply, LinearMap.coe_restrictScalars,
-        lift.equiv_apply, LieHom.lie_app
+        lift.equiv_apply, LieHom.lie_apply, LinearMap.sub_apply, lie_tmul_right, map_add]
+      abel }
+
+@[simp]
 
 中文:
 定义 lift
@@ -193,7 +210,10 @@ definition lift
       ext m n
       simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearEquiv.coe_coe,
         AlgebraTensorModule.curry_apply, curry_apply, LinearMap.coe_restrictScalars,
-        lift.equiv_apply, LieHom.lie_app
+        lift.equiv_apply, LieHom.lie_apply, LinearMap.sub_apply, lie_tmul_right, map_add]
+      abel }
+
+@[simp]
 
 Depends on / 依赖: AddHom, AddHom.toFun_eq_coe, AlgebraTensorModule, AlgebraTensorModule.curry_apply, LieHom, LieHom.lie_apply, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_restrictScalars, LinearMap.coe_toAddHom, LinearMap.sub_apply, Module, Module.End.algebraMap_isUnit_inv_apply_eq_iff, Submonoid, Submonoid.coe_one, TensorProduct, TensorProduct.lift.equiv, algebraMap_isUnit_inv_apply_eq_iff, coe_coe
 -/
@@ -476,14 +496,20 @@ theorem lieIdeal_oper_eq_tensor_map_range
   proof: by
   rw [← toSubmodule_inj]; rw [lieIdeal_oper_eq_linear_span]; rw [LieModuleHom.toSubmodule_range]; rw [LieModuleHom.toLinearMap_comp]; rw [LinearMap.range_comp]; rw [mapIncl_def]; rw [toLinearMap_map]; rw [TensorProduct.range_map_eq_span_tmul]; rw [Submodule.map_span]
   congr; ext m; constructor
- 
+  · rintro ⟨⟨x, hx⟩, ⟨n, hn⟩, rfl⟩; use x otimesₜ n; constructor
+    · use ⟨x, hx⟩, ⟨n, hn⟩; rfl
+    · simp
+  · rintro ⟨t, ⟨⟨x, hx⟩, ⟨n, hn⟩, rfl⟩, h⟩; rw [← h]; use ⟨x, hx⟩, ⟨n, hn⟩; rfl
 
 中文:
 定理 lieIdeal_oper_eq_tensor_map_range
   证明: by
   rw [← toSubmodule_inj]; rw [lieIdeal_oper_eq_linear_span]; rw [LieModuleHom.toSubmodule_range]; rw [LieModuleHom.toLinearMap_comp]; rw [LinearMap.range_comp]; rw [mapIncl_def]; rw [toLinearMap_map]; rw [TensorProduct.range_map_eq_span_tmul]; rw [Submodule.map_span]
   congr; ext m; constructor
- 
+  · rintro ⟨⟨x, hx⟩, ⟨n, hn⟩, rfl⟩; use x otimesₜ n; constructor
+    · use ⟨x, hx⟩, ⟨n, hn⟩; rfl
+    · simp
+  · rintro ⟨t, ⟨⟨x, hx⟩, ⟨n, hn⟩, rfl⟩, h⟩; rw [← h]; use ⟨x, hx⟩, ⟨n, hn⟩; rfl
 
 Depends on / 依赖: LieModuleHom, LieModuleHom.toLinearMap_comp, LieModuleHom.toSubmodule_range, LinearMap, LinearMap.range_comp, Module, Module.End.algebraMap_isUnit_inv_apply_eq_iff, Submodule, Submodule.map_span, Submonoid, Submonoid.coe_mul, Submonoid.smul_def, TensorProduct, TensorProduct.range_map_eq_span_tmul, _cancel, _smul, algebraMap_isUnit_inv_apply_eq_iff, coe_mul, lieIdeal_oper_eq_linear_span, mapIncl_def
 -/

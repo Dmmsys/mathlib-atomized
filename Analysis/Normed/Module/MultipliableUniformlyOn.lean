@@ -37,7 +37,7 @@ lemma TendstoUniformlyOn.comp_cexp
 obtain ⟨v, hv⟩ : exists v, forall x in K, (g x).re <= v := hg.imp by simp [mem_upperBounds]
   have : forallᶠ i in p, forall x in K, (f i x).re <= v + 1 := hf.re.eventually_forall_le (lt_add_one v) hv
   refine (UniformContinuousOn.cexp _).comp_tendstoUniformlyOn_eventually (by simpa) ?_ hf
-  exact
+  exact fun x hx => (hv x hx).trans (lt_add_one v).le
 
 中文:
 引理 TendstoUniformlyOn.comp_cexp
@@ -46,7 +46,7 @@ obtain ⟨v, hv⟩ : exists v, forall x in K, (g x).re <= v := hg.imp by simp [m
 obtain ⟨v, hv⟩ : exists v, forall x in K, (g x).re <= v := hg.imp by simp [mem_upperBounds]
   have : forallᶠ i in p, forall x in K, (f i x).re <= v + 1 := hf.re.eventually_forall_le (lt_add_one v) hv
   refine (UniformContinuousOn.cexp _).comp_tendstoUniformlyOn_eventually (by simpa) ?_ hf
-  exact
+  exact fun x hx => (hv x hx).trans (lt_add_one v).le
 
 Depends on / 依赖: UniformContinuousOn, UniformContinuousOn.cexp, comp_tendstoUniformlyOn_eventually, eventually_forall_le, hf.re.eventually_forall_le, hg.imp, lt_add_one, mem_upperBounds
 -/
@@ -68,7 +68,7 @@ lemma Summable.hasSumUniformlyOn_log_one_add
   simp only [hasSumUniformlyOn_iff_tendstoUniformlyOn]
 apply tendstoUniformlyOn_tsum_of_cofinite_eventually hu.mul_left (3 / 2)
   filter_upwards [h, hu.tendsto_cofinite_zero.eventually_le_const one_half_pos] with i hi hi' x hx
-    using (norm_log_one_add_half_le_self <| (hi x hx).trans hi').trans
+    using (norm_log_one_add_half_le_self <| (hi x hx).trans hi').trans (by simpa using hi x hx)
 
 中文:
 引理 Summable.hasSumUniformlyOn_log_one_add
@@ -77,7 +77,7 @@ apply tendstoUniformlyOn_tsum_of_cofinite_eventually hu.mul_left (3 / 2)
   simp only [hasSumUniformlyOn_iff_tendstoUniformlyOn]
 apply tendstoUniformlyOn_tsum_of_cofinite_eventually hu.mul_left (3 / 2)
   filter_upwards [h, hu.tendsto_cofinite_zero.eventually_le_const one_half_pos] with i hi hi' x hx
-    using (norm_log_one_add_half_le_self <| (hi x hx).trans hi').trans
+    using (norm_log_one_add_half_le_self <| (hi x hx).trans hi').trans (by simpa using hi x hx)
 
 Depends on / 依赖: eventually_le_const, filter_upwards, hasSumUniformlyOn_iff_tendstoUniformlyOn, hu.mul_left, hu.tendsto_cofinite_zero.eventually_le_const, mul_left, norm_log_one_add_half_le_self, one_half_pos, tendstoUniformlyOn_tsum_of_cofinite_eventually, tendsto_cofinite_zero
 -/
@@ -126,7 +126,10 @@ lemma hasProdUniformlyOn_of_clog
   obtain ⟨r, hr⟩ := hf.exists
   suffices H : TendstoUniformlyOn (fun s x => ∏ i in s, f i x) (cexp ∘ r) atTop s by
     refine H.congr_right (hr.tsum_eqOn.comp_left.symm.trans ?_)
-    exact fun x hx => (cexp_tsum_eq_tprod (hfn x hx) (hf.summa
+    exact fun x hx => (cexp_tsum_eq_tprod (hfn x hx) (hf.summable hx))
+  refine (hr.tendstoUniformlyOn.comp_cexp ?_).congr ?_
+  · simpa +contextual [← hr.tsum_eqOn _] using hg
+  · filter_upwards with s i hi using by simp [exp_sum, fun y => exp_log (hfn i hi y)]
 
 中文:
 引理 hasProdUniformlyOn_of_clog
@@ -136,7 +139,10 @@ lemma hasProdUniformlyOn_of_clog
   obtain ⟨r, hr⟩ := hf.exists
   suffices H : TendstoUniformlyOn (fun s x => ∏ i in s, f i x) (cexp ∘ r) atTop s by
     refine H.congr_right (hr.tsum_eqOn.comp_left.symm.trans ?_)
-    exact fun x hx => (cexp_tsum_eq_tprod (hfn x hx) (hf.summa
+    exact fun x hx => (cexp_tsum_eq_tprod (hfn x hx) (hf.summable hx))
+  refine (hr.tendstoUniformlyOn.comp_cexp ?_).congr ?_
+  · simpa +contextual [← hr.tsum_eqOn _] using hg
+  · filter_upwards with s i hi using by simp [exp_sum, fun y => exp_log (hfn i hi y)]
 
 Depends on / 依赖: H.congr_right, TendstoUniformlyOn, cexp_tsum_eq_tprod, comp_cexp, comp_left, congr_right, contextual, exp_log, exp_sum, filter_upwards, hasProdUniformlyOn_iff_tendstoUniformlyOn, hf.exists, hf.summable, hr.tendstoUniformlyOn.comp_cexp, hr.tsum_eqOn, hr.tsum_eqOn.comp_left.symm.trans, summable, tendstoUniformlyOn, tsum_eqOn
 -/
@@ -193,7 +199,16 @@ lemma hasProdUniformlyOn_one_add
   by_cases hKe : K = ∅
   · simp [TendstoUniformly, hKe]
   · have hCK : CompactSpace K := isCompact_iff_compactSpace.mp hK
-    have hne : Nonempty K := by rwa [Set.nonempty_coe_sort, Set.n
+    have hne : Nonempty K := by rwa [Set.nonempty_coe_sort, Set.nonempty_iff_ne_empty]
+    let f' i : C(K, R) := ⟨_, continuousOn_iff_continuous_domRestrict.mp (hcts i)⟩
+    have hf'_bd : forallᶠ i in cofinite, ‖f' i‖ <= u i := by
+      simp only [ContinuousMap.norm_le_of_nonempty]
+      filter_upwards [h] with i hi using fun x => hi x x.2
+    have hM : Multipliable fun i => 1 + f' i :=
+      multipliable_one_add_of_summable (hu.of_norm_bounded_eventually (by simpa using hf'_bd))
+    convert! ContinuousMap.tendsto_iff_tendstoUniformly.mp hM.hasProd
+    · simp [f']
+    · exact funext fun k => ContinuousMap.tprod_apply hM k
 
 中文:
 引理 hasProdUniformlyOn_one_add
@@ -204,7 +219,16 @@ lemma hasProdUniformlyOn_one_add
   by_cases hKe : K = ∅
   · simp [TendstoUniformly, hKe]
   · have hCK : CompactSpace K := isCompact_iff_compactSpace.mp hK
-    have hne : Nonempty K := by rwa [Set.nonempty_coe_sort, Set.n
+    have hne : Nonempty K := by rwa [Set.nonempty_coe_sort, Set.nonempty_iff_ne_empty]
+    let f' i : C(K, R) := ⟨_, continuousOn_iff_continuous_domRestrict.mp (hcts i)⟩
+    have hf'_bd : forallᶠ i in cofinite, ‖f' i‖ <= u i := by
+      simp only [ContinuousMap.norm_le_of_nonempty]
+      filter_upwards [h] with i hi using fun x => hi x x.2
+    have hM : Multipliable fun i => 1 + f' i :=
+      multipliable_one_add_of_summable (hu.of_norm_bounded_eventually (by simpa using hf'_bd))
+    convert! ContinuousMap.tendsto_iff_tendstoUniformly.mp hM.hasProd
+    · simp [f']
+    · exact funext fun k => ContinuousMap.tprod_apply hM k
 
 Depends on / 依赖: CompactSpace, ContinuousMap, ContinuousMap.norm_le_of_nonempty, Nonempty, Set.nonempty_coe_sort, Set.nonempty_iff_ne_empty, TendstoUniformly, cofinite, continuousOn_iff_continuous_domRestrict, continuousOn_iff_continuous_domRestrict.mp, filter_upwar, hasProdUniformlyOn_iff_tendstoUniformlyOn, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, nonempty_coe_sort, nonempty_iff_ne_empty, norm_le_of_nonempty, tendstoUniformlyOn_iff_tendstoUniformly_comp_coe
 -/

@@ -38,7 +38,10 @@ theorem exists_finset_adjoin_eq_top_and_homogeneous
   let ι₀ := Σ (x : F), (DirectSum.decompose 𝒜 x.1).support
   let x (i : ι₀) : S := ((DirectSum.decompose 𝒜) i.1 i.2).1
   refine ⟨Finset.univ.image x, ?_, by simpa using fun f => ⟨_, (DirectSum.decompose 𝒜 f.1 f.2).2⟩⟩
-  rw
+  rw [← top_le_iff]; rw [← hF]; rw [Algebra.adjoin_le_iff]
+  intro s hs
+  rw [← DirectSum.sum_support_decompose 𝒜 s]
+  exact sum_mem fun n hn => Algebra.subset_adjoin (by simpa using ⟨⟨⟨s, hs⟩, n, hn⟩, rfl⟩)
 
 中文:
 定理 存在_finset_adjoin_eq_top_and_homogeneous
@@ -48,7 +51,10 @@ theorem exists_finset_adjoin_eq_top_and_homogeneous
   let ι₀ := Σ (x : F), (DirectSum.decompose 𝒜 x.1).support
   let x (i : ι₀) : S := ((DirectSum.decompose 𝒜) i.1 i.2).1
   refine ⟨Finset.univ.image x, ?_, by simpa using fun f => ⟨_, (DirectSum.decompose 𝒜 f.1 f.2).2⟩⟩
-  rw
+  rw [← top_le_iff]; rw [← hF]; rw [Algebra.adjoin_le_iff]
+  intro s hs
+  rw [← DirectSum.sum_support_decompose 𝒜 s]
+  exact sum_mem fun n hn => Algebra.subset_adjoin (by simpa using ⟨⟨⟨s, hs⟩, n, hn⟩, rfl⟩)
 -/
 theorem exists_finset_adjoin_eq_top_and_homogeneous :
     exists s : Finset S, Algebra.adjoin (A := S) (𝒜 0) s = ⊤ ∧
@@ -75,7 +81,9 @@ theorem exists_finset_adjoin_eq_top_and_homogeneous_ne_zero
   rw [← top_le_iff]; rw [← h₁]; rw [Algebra.adjoin_le_iff]
   rintro i hi
   by_cases hi0 : n i = 0
-  · exact Subalgeb
+  · exact Subalgebra.algebraMap_mem
+      (Algebra.adjoin (𝒜 0) (s.filter (n · != 0) : Set S)) ⟨i, hi0 ▸ hn i hi⟩
+  · exact Algebra.subset_adjoin (by simpa [hi0] using hi)
 
 中文:
 定理 存在_finset_adjoin_eq_top_and_homogeneous_ne_zero
@@ -86,7 +94,9 @@ theorem exists_finset_adjoin_eq_top_and_homogeneous_ne_zero
   rw [← top_le_iff]; rw [← h₁]; rw [Algebra.adjoin_le_iff]
   rintro i hi
   by_cases hi0 : n i = 0
-  · exact Subalgeb
+  · exact Subalgebra.algebraMap_mem
+      (Algebra.adjoin (𝒜 0) (s.filter (n · != 0) : Set S)) ⟨i, hi0 ▸ hn i hi⟩
+  · exact Algebra.subset_adjoin (by simpa [hi0] using hi)
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_le_iff, Algebra.subset_adjoin, Subalgebra, Subalgebra.algebraMap_mem, adjoin, adjoin_le_iff, algebraMap_mem, exists_finset_adjoin_eq_top_and_homogeneous, filter, s.filter, subset_adjoin, top_le_iff
 -/

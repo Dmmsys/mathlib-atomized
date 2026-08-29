@@ -507,7 +507,8 @@ lemma exists_mem_exists_mem_inf'_card_lt
   simp only [← Finset.sum_const]
   calc ∑ j in s, k
     _ <= ∑ j in s, #(f j) := by gcongr with i hi; exact inf'_le _ hi
-    _ = ∑ x in s.biUnion f, #{j | j in s ∧ x in f j} := by r
+    _ = ∑ x in s.biUnion f, #{j | j in s ∧ x in f j} := by rw [sum_card_eq_sum_biUnion_card]
+    _ <= ∑ x in s.biUnion f, k := by gcongr; grind
 
 中文:
 引理 存在_mem_存在_mem_inf'_card_lt
@@ -519,7 +520,8 @@ lemma exists_mem_exists_mem_inf'_card_lt
   simp only [← Finset.sum_const]
   calc ∑ j in s, k
     _ <= ∑ j in s, #(f j) := by gcongr with i hi; exact inf'_le _ hi
-    _ = ∑ x in s.biUnion f, #{j | j in s ∧ x in f j} := by r
+    _ = ∑ x in s.biUnion f, #{j | j in s ∧ x in f j} := by rw [sum_card_eq_sum_biUnion_card]
+    _ <= ∑ x in s.biUnion f, k := by gcongr; grind
 
 Depends on / 依赖: Finset, Finset.sum_const, biUnion, contrapose, s.biUnion, s.inf, sum_card_eq_sum_biUnion_card, sum_const
 -/

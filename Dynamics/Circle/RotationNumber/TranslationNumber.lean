@@ -633,7 +633,11 @@ theorem isUnit_iff_bijective
           { toFun := (Equiv.ofBijective f h).symm
             monotone' := fun x y hxy =>
               (f.strictMono_iff_injective.2 h.1).le_iff_le.1
-                (by simp only [Equiv.ofBijecti
+                (by simp only [Equiv.ofBijective_apply_symm_apply f h, hxy])
+            map_add_one' := fun x =>
+h.1 by simp only [Equiv.ofBijective_apply_symm_apply f, f.map_add_one] }
+val_inv := ext Equiv.ofBijective_apply_symm_apply f h
+inv_val := ext Equiv.ofBijective_symm_apply_apply f h }⟩
 
 中文:
 定理 isUnit_iff_bijective
@@ -646,7 +650,11 @@ theorem isUnit_iff_bijective
           { toFun := (Equiv.ofBijective f h).symm
             monotone' := fun x y hxy =>
               (f.strictMono_iff_injective.2 h.1).le_iff_le.1
-                (by simp only [Equiv.ofBijecti
+                (by simp only [Equiv.ofBijective_apply_symm_apply f h, hxy])
+            map_add_one' := fun x =>
+h.1 by simp only [Equiv.ofBijective_apply_symm_apply f, f.map_add_one] }
+val_inv := ext Equiv.ofBijective_apply_symm_apply f h
+inv_val := ext Equiv.ofBijective_symm_apply_apply f h }⟩
 
 Depends on / 依赖: Equiv.ofBijective, Equiv.ofBijective_apply_symm_apply, Equiv.ofBijective_symm_apply_apply, Units.isUnit, bijective, f.map_add_one, f.strictMono_iff_injective, inv_val, isUnit, le_iff_le, map_add_one, monotone, ofBijective, ofBijective_apply_symm_apply, ofBijective_symm_apply_apply, strictMono_iff_injective, toOrderIso, val_inv
 -/
@@ -1217,7 +1225,20 @@ instance :
       map_add_one' := fun x => by simp [max_add_add_right] }
   le f g := forall x, f x <= g x
   le_refl f x := le_refl (f x)
-  le_trans _ _ _ h₁₂ h₂₃ x := 
+  le_trans _ _ _ h₁₂ h₂₃ x := le_trans (h₁₂ x) (h₂₃ x)
+  le_antisymm _ _ h₁₂ h₂₁ := ext fun x => le_antisymm (h₁₂ x) (h₂₁ x)
+  le_sup_left f g x := le_max_left (f x) (g x)
+  le_sup_right f g x := le_max_right (f x) (g x)
+  sup_le _ _ _ h₁ h₂ x := max_le (h₁ x) (h₂ x)
+  inf f g :=
+    { toFun := fun x => min (f x) (g x)
+      monotone' := fun _ _ h => min_le_min (f.mono h) (g.mono h)
+      map_add_one' := fun x => by simp [min_add_add_right] }
+  inf_le_left f g x := min_le_left (f x) (g x)
+  inf_le_right f g x := min_le_right (f x) (g x)
+  le_inf _ _ _ h₂ h₃ x := le_min (h₂ x) (h₃ x)
+
+@[simp]
 
 中文:
 实例 :
@@ -1228,7 +1249,20 @@ instance :
       map_add_one' := fun x => by simp [max_add_add_right] }
   le f g := forall x, f x <= g x
   le_refl f x := le_refl (f x)
-  le_trans _ _ _ h₁₂ h₂₃ x := 
+  le_trans _ _ _ h₁₂ h₂₃ x := le_trans (h₁₂ x) (h₂₃ x)
+  le_antisymm _ _ h₁₂ h₂₁ := ext fun x => le_antisymm (h₁₂ x) (h₂₁ x)
+  le_sup_left f g x := le_max_left (f x) (g x)
+  le_sup_right f g x := le_max_right (f x) (g x)
+  sup_le _ _ _ h₁ h₂ x := max_le (h₁ x) (h₂ x)
+  inf f g :=
+    { toFun := fun x => min (f x) (g x)
+      monotone' := fun _ _ h => min_le_min (f.mono h) (g.mono h)
+      map_add_one' := fun x => by simp [min_add_add_right] }
+  inf_le_left f g x := min_le_left (f x) (g x)
+  inf_le_right f g x := min_le_right (f x) (g x)
+  le_inf _ _ _ h₂ h₃ x := le_min (h₂ x) (h₃ x)
+
+@[simp]
 
 Depends on / 依赖: f.mono, g.mono, max_le_max, monotone
 -/
@@ -1649,7 +1683,8 @@ theorem dist_map_zero_lt_of_semiconj
     _ = dist (f 0 + g₁ 0) (f (g₁ 0)) + dist (g₂ 0 + f 0) (g₂ (f 0)) := by
       simp only [h.eq, Real.dist_eq, sub_sub, add_comm (f 0), sub_sub_eq_add_sub,
         abs_sub_comm (g₂ (f 0))]
-    _ < 1 + 
+    _ < 1 + 1 := add_lt_add (f.dist_map_map_zero_lt g₁) (g₂.dist_map_map_zero_lt f)
+    _ = 2 := one_add_one_eq_two
 
 中文:
 定理 dist_map_zero_lt_of_semiconj
@@ -1659,7 +1694,8 @@ theorem dist_map_zero_lt_of_semiconj
     _ = dist (f 0 + g₁ 0) (f (g₁ 0)) + dist (g₂ 0 + f 0) (g₂ (f 0)) := by
       simp only [h.eq, Real.dist_eq, sub_sub, add_comm (f 0), sub_sub_eq_add_sub,
         abs_sub_comm (g₂ (f 0))]
-    _ < 1 + 
+    _ < 1 + 1 := add_lt_add (f.dist_map_map_zero_lt g₁) (g₂.dist_map_map_zero_lt f)
+    _ = 2 := one_add_one_eq_two
 
 Depends on / 依赖: Real.dist_eq, abs_sub_comm, add_comm, add_lt_add, dist_eq, dist_map_map_zero_lt, dist_triangle, f.dist_map_map_zero_lt, h.eq, one_add_one_eq_two, sub_sub, sub_sub_eq_add_sub
 -/
@@ -2122,7 +2158,8 @@ theorem transnumAuxSeq_dist_lt
   calc
     _ = dist ((f ^ 2 ^ n) 0 + (f ^ 2 ^ n) 0) ((f ^ 2 ^ n) ((f ^ 2 ^ n) 0)) / |2 ^ (n + 1)| := by
       simp_rw [transnumAuxSeq, Real.dist_eq]
-      rw [← abs_div]; rw [sub_di
+      rw [← abs_div]; rw [sub_div]; rw [pow_succ]; rw [pow_succ']; rw [← two_mul]; rw [mul_div_mul_left _ _ (two_ne_zero' Real)]; rw [pow_mul]; rw [sq]; rw [mul_apply]
+    _ < _ := by gcongr; exact (f ^ 2 ^ n).dist_map_map_zero_lt (f ^ 2 ^ n)
 
 中文:
 定理 transnumAuxSeq_dist_lt
@@ -2133,7 +2170,8 @@ theorem transnumAuxSeq_dist_lt
   calc
     _ = dist ((f ^ 2 ^ n) 0 + (f ^ 2 ^ n) 0) ((f ^ 2 ^ n) ((f ^ 2 ^ n) 0)) / |2 ^ (n + 1)| := by
       simp_rw [transnumAuxSeq, Real.dist_eq]
-      rw [← abs_div]; rw [sub_di
+      rw [← abs_div]; rw [sub_div]; rw [pow_succ]; rw [pow_succ']; rw [← two_mul]; rw [mul_div_mul_left _ _ (two_ne_zero' Real)]; rw [pow_mul]; rw [sq]; rw [mul_apply]
+    _ < _ := by gcongr; exact (f ^ 2 ^ n).dist_map_map_zero_lt (f ^ 2 ^ n)
 
 Depends on / 依赖: Real.dist_eq, abs_div, abs_of_pos, dist_eq, dist_map_map_zero_lt, div_div, mul_apply, mul_div_mul_left, pow_mul, pow_pos, pow_succ, simp_rw, sub_div, transnumAuxSeq, two_mul, two_ne_zero, zero_lt_two
 -/
@@ -2201,7 +2239,9 @@ theorem tendsto_translationNumber_of_dist_bounded_aux
   · intro n
     have : 0 < (2 ^ n : Real) := pow_pos zero_lt_two _
     convert! (div_le_div_iff_of_pos_right this).2 (H (2 ^ n)) using 1
-    rw [transnumAuxSeq]; rw [Real.dist
+    rw [transnumAuxSeq]; rw [Real.dist_eq]; rw [← sub_div]; rw [abs_div]; rw [abs_of_pos this]; rw [Real.dist_eq]
+· exact mul_zero C ▸ tendsto_const_nhds.mul tendsto_inv_atTop_zero.comp
+      tendsto_pow_atTop_atTop_of_one_lt one_lt_two
 
 中文:
 定理 tendsto_translationNumber_of_dist_bounded_aux
@@ -2212,7 +2252,9 @@ theorem tendsto_translationNumber_of_dist_bounded_aux
   · intro n
     have : 0 < (2 ^ n : Real) := pow_pos zero_lt_two _
     convert! (div_le_div_iff_of_pos_right this).2 (H (2 ^ n)) using 1
-    rw [transnumAuxSeq]; rw [Real.dist
+    rw [transnumAuxSeq]; rw [Real.dist_eq]; rw [← sub_div]; rw [abs_div]; rw [abs_of_pos this]; rw [Real.dist_eq]
+· exact mul_zero C ▸ tendsto_const_nhds.mul tendsto_inv_atTop_zero.comp
+      tendsto_pow_atTop_atTop_of_one_lt one_lt_two
 
 Depends on / 依赖: Real.dist_eq, abs_div, abs_of_pos, congr_dist, convert, dist_eq, dist_nonneg, div_le_div_iff_of_pos_right, f.tendsto_translationNumber_aux.congr_dist, mul_zero, one_lt_two, pow_pos, squeeze_zero, sub_div, tendsto_const_nhds, tendsto_const_nhds.mul, tendsto_inv_atTop_zero, tendsto_inv_atTop_zero.comp, tendsto_pow_atTop_atTop_of_one_lt, tendsto_translationNumber_aux
 -/
@@ -2325,7 +2367,9 @@ theorem translationNumber_mul_of_commute
   refine (f * g).tendsto_translationNumber_of_dist_bounded_aux
     (fun n => (f ^ n) 0 + (g ^ n) 0) 1 fun n => ?_
   rw [h.mul_pow]; rw [dist_comm]
-  ex
+  exact le_of_lt ((f ^ n).dist_map_map_zero_lt (g ^ n))
+
+@[simp]
 
 中文:
 定理 translationNumber_mul_of_commute
@@ -2337,7 +2381,9 @@ theorem translationNumber_mul_of_commute
   refine (f * g).tendsto_translationNumber_of_dist_bounded_aux
     (fun n => (f ^ n) 0 + (g ^ n) 0) 1 fun n => ?_
   rw [h.mul_pow]; rw [dist_comm]
-  ex
+  exact le_of_lt ((f ^ n).dist_map_map_zero_lt (g ^ n))
+
+@[simp]
 
 Depends on / 依赖: add_div, dist_comm, dist_map_map_zero_lt, f.tendsto_translationNumber_aux.add, g.tendsto_translationNumber_aux, h.mul_pow, le_of_lt, mul_pow, tendsto_nhds_unique, tendsto_translationNumber_aux, tendsto_translationNumber_of_dist_bounded_aux, transnumAuxSeq
 -/
@@ -2489,7 +2535,8 @@ tendsto_iff_dist_tendsto_zero.2
         ((tendsto_const_div_atTop_nhds_zero_nat 1).comp (tendsto_add_atTop_nat 1))
   dsimp
   have : (0 : Real) < n + 1 := n.cast_add_one_pos
-  rw [Real.dist_eq]; rw [div_sub' (ne_of_gt this)]; rw [abs
+  rw [Real.dist_eq]; rw [div_sub' (ne_of_gt this)]; rw [abs_div]; rw [← Real.dist_eq]; rw [abs_of_pos this]; rw [Nat.cast_add_one]; rw [div_le_div_iff_of_pos_right this]; rw [← Nat.cast_add_one]
+  apply dist_pow_map_zero_mul_translationNumber_le
 
 中文:
 定理 tendsto_translation_number₀'
@@ -2500,7 +2547,8 @@ tendsto_iff_dist_tendsto_zero.2
         ((tendsto_const_div_atTop_nhds_zero_nat 1).comp (tendsto_add_atTop_nat 1))
   dsimp
   have : (0 : Real) < n + 1 := n.cast_add_one_pos
-  rw [Real.dist_eq]; rw [div_sub' (ne_of_gt this)]; rw [abs
+  rw [Real.dist_eq]; rw [div_sub' (ne_of_gt this)]; rw [abs_div]; rw [← Real.dist_eq]; rw [abs_of_pos this]; rw [Nat.cast_add_one]; rw [div_le_div_iff_of_pos_right this]; rw [← Nat.cast_add_one]
+  apply dist_pow_map_zero_mul_translationNumber_le
 
 Depends on / 依赖: Nat.cast_add_one, Real.dist_eq, abs_div, abs_of_pos, cast_add_one, cast_add_one_pos, dist_eq, dist_nonneg, dist_pow_map_zero_mul_translationNumber_le, div_le_div_iff_of_pos_right, div_sub, n.cast_add_one_pos, ne_of_gt, squeeze_zero, tendsto_add_atTop_nat, tendsto_const_div_atTop_nhds_zero_nat, tendsto_iff_dist_tendsto_zero
 -/
@@ -3018,7 +3066,9 @@ theorem translationNumber_lt_of_forall_lt_add
     isCompact_Icc.exists_isMaxOn (nonempty_Icc.2 zero_le_one)
       (hf.sub continuous_id).continuousOn
   refine lt_of_le_of_lt ?_ (sub_lt_iff_lt_add'.2 <| hz x)
-  apply translationNumber_le_of
+  apply translationNumber_le_of_le_add
+  simp only [← sub_le_iff_le_add']
+  exact f.forall_map_sub_of_Icc (fun a => a <= f x - x) hx
 
 中文:
 定理 translationNumber_lt_of_对任意_lt_add
@@ -3028,7 +3078,9 @@ theorem translationNumber_lt_of_forall_lt_add
     isCompact_Icc.exists_isMaxOn (nonempty_Icc.2 zero_le_one)
       (hf.sub continuous_id).continuousOn
   refine lt_of_le_of_lt ?_ (sub_lt_iff_lt_add'.2 <| hz x)
-  apply translationNumber_le_of
+  apply translationNumber_le_of_le_add
+  simp only [← sub_le_iff_le_add']
+  exact f.forall_map_sub_of_Icc (fun a => a <= f x - x) hx
 
 Depends on / 依赖: continuousOn, continuous_id, exists_isMaxOn, f.forall_map_sub_of_Icc, forall_map_sub_of_Icc, hf.sub, isCompact_Icc, isCompact_Icc.exists_isMaxOn, lt_of_le_of_lt, nonempty_Icc, sub_le_iff_le_add, sub_lt_iff_lt_add, translationNumber_le_of_le_add, zero_le_one
 -/
@@ -3052,7 +3104,9 @@ theorem lt_translationNumber_of_forall_add_lt
   obtain ⟨x, -, hx⟩ : exists x in Icc (0 : Real) 1, forall y in Icc (0 : Real) 1, f x - x <= f y - y :=
     isCompact_Icc.exists_isMinOn (nonempty_Icc.2 zero_le_one) (hf.sub continuous_id).continuousOn
   refine lt_of_lt_of_le (lt_sub_iff_add_lt'.2 <| hz x) ?_
-  apply le_translationNumber_of_add_l
+  apply le_translationNumber_of_add_le
+  simp only [← le_sub_iff_add_le']
+  exact f.forall_map_sub_of_Icc _ hx
 
 中文:
 定理 lt_translationNumber_of_对任意_add_lt
@@ -3061,7 +3115,9 @@ theorem lt_translationNumber_of_forall_add_lt
   obtain ⟨x, -, hx⟩ : exists x in Icc (0 : Real) 1, forall y in Icc (0 : Real) 1, f x - x <= f y - y :=
     isCompact_Icc.exists_isMinOn (nonempty_Icc.2 zero_le_one) (hf.sub continuous_id).continuousOn
   refine lt_of_lt_of_le (lt_sub_iff_add_lt'.2 <| hz x) ?_
-  apply le_translationNumber_of_add_l
+  apply le_translationNumber_of_add_le
+  simp only [← le_sub_iff_add_le']
+  exact f.forall_map_sub_of_Icc _ hx
 
 Depends on / 依赖: continuousOn, continuous_id, exists_isMinOn, f.forall_map_sub_of_Icc, forall_map_sub_of_Icc, hf.sub, isCompact_Icc, isCompact_Icc.exists_isMinOn, le_sub_iff_add_le, le_translationNumber_of_add_le, lt_of_lt_of_le, lt_sub_iff_add_lt, nonempty_Icc, zero_le_one
 -/
@@ -3088,7 +3144,7 @@ theorem exists_eq_add_translationNumber
   obtain ⟨b, hb⟩ : exists x, x + τ f <= f x := by
     by_contra! H
     exact lt_irrefl _ (f.translationNumber_lt_of_forall_lt_add hf H)
-  exact intermediate_valu
+  exact intermediate_value_univ₂ hf (by fun_prop) ha hb
 
 中文:
 定理 存在_eq_add_translationNumber
@@ -3101,7 +3157,7 @@ theorem exists_eq_add_translationNumber
   obtain ⟨b, hb⟩ : exists x, x + τ f <= f x := by
     by_contra! H
     exact lt_irrefl _ (f.translationNumber_lt_of_forall_lt_add hf H)
-  exact intermediate_valu
+  exact intermediate_value_univ₂ hf (by fun_prop) ha hb
 
 Depends on / 依赖: f.lt_translationNumber_of_forall_add_lt, f.translationNumber_lt_of_forall_lt_add, fun_prop, lt_irrefl, lt_translationNumber_of_forall_add_lt, translationNumber_lt_of_forall_lt_add
 -/
@@ -3212,7 +3268,27 @@ theorem semiconj_of_group_action_of_forall_translationNumber_eq
     refine fun x => ⟨x + 2, ?_⟩
     rintro _ ⟨g, rfl⟩
     have : τ (f₂ g⁻¹) = -τ (f₂ g) := by
-      rw [← 
+      rw [← MonoidHom.coe_toHomUnits]; rw [map_inv]; rw [translationNumber_units_inv]; rw [MonoidHom.coe_toHomUnits]
+    calc
+      f₂ g⁻¹ (f₁ g x) <= f₂ g⁻¹ (x + τ (f₁ g) + 1) :=
+        mono _ (map_lt_add_translationNumber_add_one _ _).le
+      _ = f₂ g⁻¹ (x + τ (f₂ g)) + 1 := by rw [h, map_add_one]
+      _ <= x + τ (f₂ g) + τ (f₂ g⁻¹) + 1 + 1 := by grw [map_lt_add_translationNumber_add_one]
+      _ = x + 2 := by simp [this, add_assoc, one_add_one_eq_two]
+  -- We have a theorem about actions by `OrderIso`, so we introduce auxiliary maps
+  -- to `ℝ ≃o ℝ`.
+  set F₁ := toOrderIso.comp f₁.toHomUnits
+  set F₂ := toOrderIso.comp f₂.toHomUnits
+  have hF₁ : forall g, ⇑(F₁ g) = f₁ g := fun _ => rfl
+  have hF₂ : forall g, ⇑(F₂ g) = f₂ g := fun _ => rfl
+  -- Now we apply `csSup_div_semiconj` and go back to `f₁` and `f₂`.
+  refine ⟨⟨⟨fun x => ⨆ g', (F₂ g')⁻¹ (F₁ g' x), fun x y hxy => ?_⟩, fun x => ?_⟩,
+    csSup_div_semiconj F₂ F₁ fun x => ?_⟩ <;> simp only [hF₁, hF₂, ← map_inv]
+  · exact ciSup_mono (this y) fun g => mono _ (mono _ hxy)
+  · simp only [map_add_one]
+    exact (Monotone.map_ciSup_of_continuousAt (by fun_prop)
+      (monotone_id.add_const (1 : Real)) (this x)).symm
+  · exact this x
 
 中文:
 定理 semiconj_of_group_action_of_对任意_translationNumber_eq
@@ -3224,7 +3300,27 @@ theorem semiconj_of_group_action_of_forall_translationNumber_eq
     refine fun x => ⟨x + 2, ?_⟩
     rintro _ ⟨g, rfl⟩
     have : τ (f₂ g⁻¹) = -τ (f₂ g) := by
-      rw [← 
+      rw [← MonoidHom.coe_toHomUnits]; rw [map_inv]; rw [translationNumber_units_inv]; rw [MonoidHom.coe_toHomUnits]
+    calc
+      f₂ g⁻¹ (f₁ g x) <= f₂ g⁻¹ (x + τ (f₁ g) + 1) :=
+        mono _ (map_lt_add_translationNumber_add_one _ _).le
+      _ = f₂ g⁻¹ (x + τ (f₂ g)) + 1 := by rw [h, map_add_one]
+      _ <= x + τ (f₂ g) + τ (f₂ g⁻¹) + 1 + 1 := by grw [map_lt_add_translationNumber_add_one]
+      _ = x + 2 := by simp [this, add_assoc, one_add_one_eq_two]
+  -- We have a theorem about actions by `OrderIso`, so we introduce auxiliary maps
+  -- to `ℝ ≃o ℝ`.
+  set F₁ := toOrderIso.comp f₁.toHomUnits
+  set F₂ := toOrderIso.comp f₂.toHomUnits
+  have hF₁ : forall g, ⇑(F₁ g) = f₁ g := fun _ => rfl
+  have hF₂ : forall g, ⇑(F₂ g) = f₂ g := fun _ => rfl
+  -- Now we apply `csSup_div_semiconj` and go back to `f₁` and `f₂`.
+  refine ⟨⟨⟨fun x => ⨆ g', (F₂ g')⁻¹ (F₁ g' x), fun x y hxy => ?_⟩, fun x => ?_⟩,
+    csSup_div_semiconj F₂ F₁ fun x => ?_⟩ <;> simp only [hF₁, hF₂, ← map_inv]
+  · exact ciSup_mono (this y) fun g => mono _ (mono _ hxy)
+  · simp only [map_add_one]
+    exact (Monotone.map_ciSup_of_continuousAt (by fun_prop)
+      (monotone_id.add_const (1 : Real)) (this x)).symm
+  · exact this x
 -/
 theorem semiconj_of_group_action_of_forall_translationNumber_eq {G : Type*} [Group G]
     (f₁ f₂ : G ->* CircleDeg1Lift) (h : forall g, τ (f₁ g) = τ (f₂ g)) :
@@ -3268,7 +3364,7 @@ theorem units_semiconj_of_translationNumber_eq
         τ ((Units.coeHom _).comp (zpowersHom _ f₂) n) := fun n => by
     simp [h]
   (semiconj_of_group_action_of_forall_translationNumber_eq _ _ this).imp fun F hF => by
-    simpa using hF (Multiplicative.ofA
+    simpa using hF (Multiplicative.ofAdd 1)
 
 中文:
 定理 units_semiconj_of_translationNumber_eq
@@ -3278,7 +3374,7 @@ theorem units_semiconj_of_translationNumber_eq
         τ ((Units.coeHom _).comp (zpowersHom _ f₂) n) := fun n => by
     simp [h]
   (semiconj_of_group_action_of_forall_translationNumber_eq _ _ this).imp fun F hF => by
-    simpa using hF (Multiplicative.ofA
+    simpa using hF (Multiplicative.ofAdd 1)
 
 Depends on / 依赖: Multiplicative, Multiplicative.ofAdd, Units.coeHom, coeHom, semiconj_of_group_action_of_forall_translationNumber_eq, zpowersHom
 -/

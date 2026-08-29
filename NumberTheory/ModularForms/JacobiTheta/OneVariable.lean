@@ -124,7 +124,11 @@ theorem jacobiTheta_S_smul
   have h1 : (-I * τ) ^ (1 / 2 : Complex) != 0 := by
     rw [Ne]; rw [cpow_eq_zero_iff]; rw [not_and_or]
 exact Or.inl mul_ne_zero (neg_ne_zero.mpr I_ne_zero) h0
-  simp_rw [UpperHalfPlane.modular_S_smul, jacobiTheta_e
+  simp_rw [UpperHalfPlane.modular_S_smul, jacobiTheta_eq_jacobiTheta₂, ← ofReal_zero]
+  norm_cast
+  simp_rw [jacobiTheta₂_functional_equation 0 τ, zero_pow two_ne_zero, mul_zero, zero_div,
+    Complex.exp_zero, mul_one, ← mul_assoc, mul_one_div, div_self h1, one_mul,
+    inv_neg, neg_div, one_div]
 
 中文:
 定理 jacobiTheta_S_smul
@@ -134,7 +138,11 @@ exact Or.inl mul_ne_zero (neg_ne_zero.mpr I_ne_zero) h0
   have h1 : (-I * τ) ^ (1 / 2 : Complex) != 0 := by
     rw [Ne]; rw [cpow_eq_zero_iff]; rw [not_and_or]
 exact Or.inl mul_ne_zero (neg_ne_zero.mpr I_ne_zero) h0
-  simp_rw [UpperHalfPlane.modular_S_smul, jacobiTheta_e
+  simp_rw [UpperHalfPlane.modular_S_smul, jacobiTheta_eq_jacobiTheta₂, ← ofReal_zero]
+  norm_cast
+  simp_rw [jacobiTheta₂_functional_equation 0 τ, zero_pow two_ne_zero, mul_zero, zero_div,
+    Complex.exp_zero, mul_one, ← mul_assoc, mul_one_div, div_self h1, one_mul,
+    inv_neg, neg_div, one_div]
 
 Depends on / 依赖: Complex.exp_zero, I_ne_zero, Or.inl, UpperHalfPlane, UpperHalfPlane.modular_S_smul, cpow_eq_zero_iff, div_self, exp_zero, inv_n, modular_S_smul, mul_assoc, mul_ne_zero, mul_one, mul_one_div, mul_zero, ne_of_apply_ne, ne_of_gt, neg_ne_zero, neg_ne_zero.mpr, not_and_or
 -/
@@ -162,7 +170,13 @@ theorem norm_exp_mul_sq_le
   refine (le_of_eq ?_).trans (?_ : y ^ n ^ 2 <= _)
   · rw [norm_exp]
     have : (π * I * n ^ 2 * τ : Complex).re = -π * τ.im * (n : Real) ^ 2 := by
-      rw [(by push_cast; ring 
+      rw [(by push_cast; ring : (π * I * n ^ 2 * τ : Complex) = (π * n ^ 2 : Real) * (τ * I))]; rw [re_ofReal_mul]; rw [mul_I_re]
+      ring
+    obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le (sq_nonneg n)
+    rw [this]; rw [exp_mul]; rw [← Int.cast_pow]; rw [rpow_intCast]; rw [hm]; rw [zpow_natCast]
+  · have : n ^ 2 = (n.natAbs ^ 2 :) := by rw [Nat.cast_pow, Int.natAbs_sq]
+    rw [this]; rw [zpow_natCast]
+    exact pow_le_pow_of_le_one (exp_pos _).le h.le ((sq n.natAbs).symm ▸ n.natAbs.le_mul_self)
 
 中文:
 定理 norm_exp_mul_sq_le
@@ -173,7 +187,13 @@ theorem norm_exp_mul_sq_le
   refine (le_of_eq ?_).trans (?_ : y ^ n ^ 2 <= _)
   · rw [norm_exp]
     have : (π * I * n ^ 2 * τ : Complex).re = -π * τ.im * (n : Real) ^ 2 := by
-      rw [(by push_cast; ring 
+      rw [(by push_cast; ring : (π * I * n ^ 2 * τ : Complex) = (π * n ^ 2 : Real) * (τ * I))]; rw [re_ofReal_mul]; rw [mul_I_re]
+      ring
+    obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le (sq_nonneg n)
+    rw [this]; rw [exp_mul]; rw [← Int.cast_pow]; rw [rpow_intCast]; rw [hm]; rw [zpow_natCast]
+  · have : n ^ 2 = (n.natAbs ^ 2 :) := by rw [Nat.cast_pow, Int.natAbs_sq]
+    rw [this]; rw [zpow_natCast]
+    exact pow_le_pow_of_le_one (exp_pos _).le h.le ((sq n.natAbs).symm ▸ n.natAbs.le_mul_self)
 
 Depends on / 依赖: Int.cast_pow, Int.eq_ofNat_of_zero_le, cast_pow, eq_ofNat_of_zero_le, exp_lt_one_iff, exp_lt_one_iff.mpr, exp_mul, le_of_eq, mul_I_re, mul_neg_of_neg_of_pos, neg_lt_zero, neg_lt_zero.mpr, norm_exp, pi_pos, re_ofReal_mul, rpow_in, sq_nonneg
 -/
@@ -204,7 +224,11 @@ theorem hasSum_nat_jacobiTheta
   have := this.nat_add_neg
   rw [← hasSum_nat_add_iff' 1] at this
   simp_rw [Finset.sum_range_one, Int.cast_neg, Int.cast_natCast, Nat.cast_zero, neg_zero,
-    Int.cast
+    Int.cast_zero, sq (0 : Complex), mul_zero, zero_mul, neg_sq, ← mul_two,
+    Complex.exp_zero, add_sub_assoc, (by norm_num : (1 : Complex) - 1 * 2 = -1), ← sub_eq_add_neg,
+    Nat.cast_add, Nat.cast_one] at this
+  convert! this.div_const 2 using 1
+  simp_rw [mul_div_cancel_right₀ _ (two_ne_zero' Complex)]
 
 中文:
 定理 hasSum_nat_jacobiTheta
@@ -215,7 +239,11 @@ theorem hasSum_nat_jacobiTheta
   have := this.nat_add_neg
   rw [← hasSum_nat_add_iff' 1] at this
   simp_rw [Finset.sum_range_one, Int.cast_neg, Int.cast_natCast, Nat.cast_zero, neg_zero,
-    Int.cast
+    Int.cast_zero, sq (0 : Complex), mul_zero, zero_mul, neg_sq, ← mul_two,
+    Complex.exp_zero, add_sub_assoc, (by norm_num : (1 : Complex) - 1 * 2 = -1), ← sub_eq_add_neg,
+    Nat.cast_add, Nat.cast_one] at this
+  convert! this.div_const 2 using 1
+  simp_rw [mul_div_cancel_right₀ _ (two_ne_zero' Complex)]
 
 Depends on / 依赖: Complex.exp_zero, Finset, Finset.sum_range_one, Int.cast_natCast, Int.cast_neg, Int.cast_zero, Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_sub_assoc, cast_add, cast_natCast, cast_neg, cast_one, cast_zero, convert, div_c, exp_zero, hasSum_nat_add_iff, mul_two
 -/
@@ -264,7 +292,20 @@ theorem norm_jacobiTheta_sub_one_le
       rexp (-π * τ.im) / (1 - rexp (-π * τ.im)) by
     calc
       ‖jacobiTheta τ - 1‖ = ↑2 * ‖∑' n : Nat, cexp (π * I * ((n : Complex) + 1) ^ 2 * τ)‖ := by
-        rw [sub_eq_iff_eq_add'.mpr (jacobiTheta_eq_tsum_nat hτ)]; rw [
+        rw [sub_eq_iff_eq_add'.mpr (jacobiTheta_eq_tsum_nat hτ)]; rw [norm_mul]; rw [Complex.norm_two]
+      _ <= 2 * (rexp (-π * τ.im) / (1 - rexp (-π * τ.im))) := by gcongr
+      _ = 2 / (1 - rexp (-π * τ.im)) * rexp (-π * τ.im) := by rw [div_mul_comm, mul_comm]
+  have : forall n : Nat, ‖cexp (π * I * ((n : Complex) + 1) ^ 2 * τ)‖ <= rexp (-π * τ.im) ^ (n + 1) := by
+    intro n
+    simpa only [Int.cast_add, Int.cast_one] using! norm_exp_mul_sq_le hτ (n + 1)
+  have s : HasSum (fun n : Nat =>
+      rexp (-π * τ.im) ^ (n + 1)) (rexp (-π * τ.im) / (1 - rexp (-π * τ.im))) := by
+    simp_rw [pow_succ', div_eq_mul_inv, hasSum_mul_left_iff (Real.exp_ne_zero _)]
+    exact hasSum_geometric_of_lt_one (exp_pos (-π * τ.im)).le
+      (exp_lt_one_iff.mpr <| mul_neg_of_neg_of_pos (neg_lt_zero.mpr pi_pos) hτ)
+  have aux : Summable fun n : Nat => ‖cexp (π * I * ((n : Complex) + 1) ^ 2 * τ)‖ :=
+    .of_nonneg_of_le (fun n => norm_nonneg _) this s.summable
+  exact (norm_tsum_le_tsum_norm aux).trans ((aux.tsum_mono s.summable this).trans_eq s.tsum_eq)
 
 中文:
 定理 norm_jacobiTheta_sub_one_le
@@ -274,7 +315,20 @@ theorem norm_jacobiTheta_sub_one_le
       rexp (-π * τ.im) / (1 - rexp (-π * τ.im)) by
     calc
       ‖jacobiTheta τ - 1‖ = ↑2 * ‖∑' n : Nat, cexp (π * I * ((n : Complex) + 1) ^ 2 * τ)‖ := by
-        rw [sub_eq_iff_eq_add'.mpr (jacobiTheta_eq_tsum_nat hτ)]; rw [
+        rw [sub_eq_iff_eq_add'.mpr (jacobiTheta_eq_tsum_nat hτ)]; rw [norm_mul]; rw [Complex.norm_two]
+      _ <= 2 * (rexp (-π * τ.im) / (1 - rexp (-π * τ.im))) := by gcongr
+      _ = 2 / (1 - rexp (-π * τ.im)) * rexp (-π * τ.im) := by rw [div_mul_comm, mul_comm]
+  have : forall n : Nat, ‖cexp (π * I * ((n : Complex) + 1) ^ 2 * τ)‖ <= rexp (-π * τ.im) ^ (n + 1) := by
+    intro n
+    simpa only [Int.cast_add, Int.cast_one] using! norm_exp_mul_sq_le hτ (n + 1)
+  have s : HasSum (fun n : Nat =>
+      rexp (-π * τ.im) ^ (n + 1)) (rexp (-π * τ.im) / (1 - rexp (-π * τ.im))) := by
+    simp_rw [pow_succ', div_eq_mul_inv, hasSum_mul_left_iff (Real.exp_ne_zero _)]
+    exact hasSum_geometric_of_lt_one (exp_pos (-π * τ.im)).le
+      (exp_lt_one_iff.mpr <| mul_neg_of_neg_of_pos (neg_lt_zero.mpr pi_pos) hτ)
+  have aux : Summable fun n : Nat => ‖cexp (π * I * ((n : Complex) + 1) ^ 2 * τ)‖ :=
+    .of_nonneg_of_le (fun n => norm_nonneg _) this s.summable
+  exact (norm_tsum_le_tsum_norm aux).trans ((aux.tsum_mono s.summable this).trans_eq s.tsum_eq)
 
 Depends on / 依赖: Complex.norm_two, div_mul_comm, jacobiTheta, jacobiTheta_eq_tsum_nat, mul_comm, norm_mul, norm_two, sub_eq_iff_eq_add
 -/
@@ -309,7 +363,8 @@ theorem isBigO_at_im_infty_jacobiTheta_sub_one
   refine ⟨2 / (1 - rexp (-(π * 1))), 1, fun y hy τ hτ =>
     (norm_jacobiTheta_sub_one_le (hτ.symm ▸ zero_lt_one.trans_le hy : 0 < im τ)).trans ?_⟩
   rw [Real.norm_eq_abs]; rw [Real.abs_exp]; rw [hτ]; rw [neg_mul]
-  
+  gcongr
+  simp [pi_pos]
 
 中文:
 定理 isBigO_at_im_infty_jacobiTheta_sub_one
@@ -318,7 +373,8 @@ theorem isBigO_at_im_infty_jacobiTheta_sub_one
   refine ⟨2 / (1 - rexp (-(π * 1))), 1, fun y hy τ hτ =>
     (norm_jacobiTheta_sub_one_le (hτ.symm ▸ zero_lt_one.trans_le hy : 0 < im τ)).trans ?_⟩
   rw [Real.norm_eq_abs]; rw [Real.abs_exp]; rw [hτ]; rw [neg_mul]
-  
+  gcongr
+  simp [pi_pos]
 
 Depends on / 依赖: Filter, Filter.eventually_atTop, Filter.eventually_comap, IsBigO, IsBigOWith, Real.abs_exp, Real.norm_eq_abs, abs_exp, eventually_atTop, eventually_comap, neg_mul, norm_eq_abs, norm_jacobiTheta_sub_one_le, pi_pos, simp_rw, trans_le, zero_lt_one, zero_lt_one.trans_le
 -/

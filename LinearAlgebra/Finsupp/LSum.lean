@@ -197,7 +197,16 @@ definition lsum
     ext x y
     simp
   right_inv F := by
-  
+    ext x y
+    simp
+  map_add' F G := by
+    ext x y
+    simp
+  map_smul' F G := by
+    ext x y
+    simp
+
+@[simp]
 
 中文:
 定义 lsum
@@ -210,7 +219,16 @@ definition lsum
     ext x y
     simp
   right_inv F := by
-  
+    ext x y
+    simp
+  map_add' F G := by
+    ext x y
+    simp
+  map_smul' F G := by
+    ext x y
+    simp
+
+@[simp]
 
 Depends on / 依赖: F.comp, d.sum, invFun, left_inv, liftAddHom, lsingle, map_add, map_smul, right_inv, smul_sum, sum_smul_index, toAddMonoidHom
 -/

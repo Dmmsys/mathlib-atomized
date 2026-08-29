@@ -82,7 +82,16 @@ theorem sum_exp
     exp (-(k / (2 * n) * π * I)) * (exp (k / n * π * I) - 1) = (-1) ^ k - 1 by
     rw [Complex.exp_neg] at this
     have hf {s a b t : Complex} (h : s * a⁻¹ * b = t) (ha : a != 0) (hb : b != 0) : s = a / b * t := by
-      
+      linear_combination (norm := field) h * a / b
+    apply hf this (Complex.exp_ne_zero _) (by grind [exp_sub_one_ne_zero])
+  convert! geom_sum_mul (exp (k / n * π * I)) n using 1
+  · simp_rw [sum_mul]
+    congr! 1 with i hi
+    rw [← Complex.exp_nat_mul]; rw [← Complex.exp_add]
+    grind
+  · rw [← Complex.exp_nat_mul,
+      show (n * (k / n * π * I)) = k * (π * I) by field [show (n : Complex) != 0 by aesop],
+      Complex.exp_int_mul, Complex.exp_pi_mul_I]
 
 中文:
 定理 sum_exp
@@ -92,7 +101,16 @@ theorem sum_exp
     exp (-(k / (2 * n) * π * I)) * (exp (k / n * π * I) - 1) = (-1) ^ k - 1 by
     rw [Complex.exp_neg] at this
     have hf {s a b t : Complex} (h : s * a⁻¹ * b = t) (ha : a != 0) (hb : b != 0) : s = a / b * t := by
-      
+      linear_combination (norm := field) h * a / b
+    apply hf this (Complex.exp_ne_zero _) (by grind [exp_sub_one_ne_zero])
+  convert! geom_sum_mul (exp (k / n * π * I)) n using 1
+  · simp_rw [sum_mul]
+    congr! 1 with i hi
+    rw [← Complex.exp_nat_mul]; rw [← Complex.exp_add]
+    grind
+  · rw [← Complex.exp_nat_mul,
+      show (n * (k / n * π * I)) = k * (π * I) by field [show (n : Complex) != 0 by aesop],
+      Complex.exp_int_mul, Complex.exp_pi_mul_I]
 -/
 private theorem sum_exp {n : Nat} {k : Int} (hn : n != 0) (hk : ¬ (2 * n : Int) ∣ k) :
     ∑ i in range n, exp ((k * ((2 * i + 1) / (2 * n) * π)) * I) =
@@ -220,7 +238,16 @@ theorem sumZeroes_T_of_not_dvd
     rw [sumZeroes]; rw [mul_eq_zero_iff_left (by aesop)]
     rw [← mul_sum]; rw [mul_eq_zero_iff_left (by norm_num)] at this
     simpa [T_real_cos]
-  suffices (∑ i 
+  suffices (∑ i in range n, 2 * cos (k * ((2 * i + 1) / (2 * n) * π)) : Complex) = 0 by norm_cast at this ⊢
+  suffices ∑ i in range n, 2 * Complex.cos (k * ((2 * i + 1) / (2 * n) * π)) = 0 by aesop
+  simp_rw [Complex.two_cos, ← neg_mul, ← Int.cast_neg]
+  have : (-1 : Complex) ^ (-k) = (-1) ^ k := by rw [← Int.cast_negOnePow, ← Int.cast_negOnePow]; simp
+  rw [sum_add_distrib]; rw [sum_exp hn hk]; rw [sum_exp hn (by aesop)]; rw [Int.cast_neg]; rw [neg_div]; rw [neg_mul]; rw [neg_mul]; rw [Complex.exp_neg]; rw [neg_div]; rw [neg_mul]; rw [neg_mul]; rw [Complex.exp_neg]; rw [this]; rw [← add_mul]; rw [mul_eq_zero_of_left]
+  set z := exp (k / (2 * n) * π * I) with hz
+  have hz₂ : exp (k / n * π * I) = z ^ 2 := by rw [hz, ← Complex.exp_nat_mul]; grind
+  rw [hz₂]; rw [← inv_pow z 2]
+  field [show z != 0 by grind [Complex.exp_ne_zero],
+    show (z ^ 2 - 1 != 0) ∧ (1 - z ^ 2 != 0) by grind [exp_sub_one_ne_zero]]
 
 中文:
 定理 sumZeroes_T_of_not_dvd
@@ -232,7 +259,16 @@ theorem sumZeroes_T_of_not_dvd
     rw [sumZeroes]; rw [mul_eq_zero_iff_left (by aesop)]
     rw [← mul_sum]; rw [mul_eq_zero_iff_left (by norm_num)] at this
     simpa [T_real_cos]
-  suffices (∑ i 
+  suffices (∑ i in range n, 2 * cos (k * ((2 * i + 1) / (2 * n) * π)) : Complex) = 0 by norm_cast at this ⊢
+  suffices ∑ i in range n, 2 * Complex.cos (k * ((2 * i + 1) / (2 * n) * π)) = 0 by aesop
+  simp_rw [Complex.two_cos, ← neg_mul, ← Int.cast_neg]
+  have : (-1 : Complex) ^ (-k) = (-1) ^ k := by rw [← Int.cast_negOnePow, ← Int.cast_negOnePow]; simp
+  rw [sum_add_distrib]; rw [sum_exp hn hk]; rw [sum_exp hn (by aesop)]; rw [Int.cast_neg]; rw [neg_div]; rw [neg_mul]; rw [neg_mul]; rw [Complex.exp_neg]; rw [neg_div]; rw [neg_mul]; rw [neg_mul]; rw [Complex.exp_neg]; rw [this]; rw [← add_mul]; rw [mul_eq_zero_of_left]
+  set z := exp (k / (2 * n) * π * I) with hz
+  have hz₂ : exp (k / n * π * I) = z ^ 2 := by rw [hz, ← Complex.exp_nat_mul]; grind
+  rw [hz₂]; rw [← inv_pow z 2]
+  field [show z != 0 by grind [Complex.exp_ne_zero],
+    show (z ^ 2 - 1 != 0) ∧ (1 - z ^ 2 != 0) by grind [exp_sub_one_ne_zero]]
 
 Depends on / 依赖: Complex.cos, Complex.two_cos, T_real_cos, eq_or_ne, mul_eq_zero_iff_left, mul_sum, neg_mul, simp_rw, sumZeroes, two_cos
 -/
@@ -265,7 +301,21 @@ theorem integral_eq_sumZeroes
   have hmem : P in degreeLT Real (2 * n) := by rwa [mem_degreeLT]
   rw [← Sequence.span_degreeLT (chebyshevTsequence Real) (by simp)]; rw [show Set.Iio (2 * n) = Finset.range (2 * n) by simp]; rw [Submodule.mem_span_image_finset_iff_exists_fun'] at hmem
   obtain ⟨c, rfl⟩ := hmem
-  simp_rw [eval_f
+  simp_rw [eval_finsetSum, eval_smul]
+  rw [MeasureTheory.integral_finsetSum]; rw [sumZeroes_sum]
+  · simp_rw [sumZeroes_smul, smul_eq_mul, MeasureTheory.integral_const_mul]
+    congr! with i hrange
+    simp_rw [chebyshevTsequence]
+    by_cases i = 0
+    case pos hi => rw [hi, Nat.cast_zero, integral_eval_T_real_measureT_zero, sumZeroes_T_zero hn]
+    case neg hi =>
+      have : ¬ (2 * n : Int) ∣ i := by
+        refine (Int.not_dvd_iff_lt_mul_succ _ (by grind)).mpr ⟨0, ⟨by grind, ?_⟩⟩
+        rw_mod_cast [zero_add, mul_one]
+        exact mem_range.mp hrange
+      rw [integral_eval_T_real_measureT_of_ne_zero (by grind)]; rw [sumZeroes_T_of_not_dvd this]
+  · simp_rw [← eval_smul]
+    exact fun i hi => integrable_measureT (by fun_prop)
 
 中文:
 定理 integral_eq_sumZeroes
@@ -274,7 +324,21 @@ theorem integral_eq_sumZeroes
   have hmem : P in degreeLT Real (2 * n) := by rwa [mem_degreeLT]
   rw [← Sequence.span_degreeLT (chebyshevTsequence Real) (by simp)]; rw [show Set.Iio (2 * n) = Finset.range (2 * n) by simp]; rw [Submodule.mem_span_image_finset_iff_exists_fun'] at hmem
   obtain ⟨c, rfl⟩ := hmem
-  simp_rw [eval_f
+  simp_rw [eval_finsetSum, eval_smul]
+  rw [MeasureTheory.integral_finsetSum]; rw [sumZeroes_sum]
+  · simp_rw [sumZeroes_smul, smul_eq_mul, MeasureTheory.integral_const_mul]
+    congr! with i hrange
+    simp_rw [chebyshevTsequence]
+    by_cases i = 0
+    case pos hi => rw [hi, Nat.cast_zero, integral_eval_T_real_measureT_zero, sumZeroes_T_zero hn]
+    case neg hi =>
+      have : ¬ (2 * n : Int) ∣ i := by
+        refine (Int.not_dvd_iff_lt_mul_succ _ (by grind)).mpr ⟨0, ⟨by grind, ?_⟩⟩
+        rw_mod_cast [zero_add, mul_one]
+        exact mem_range.mp hrange
+      rw [integral_eval_T_real_measureT_of_ne_zero (by grind)]; rw [sumZeroes_T_of_not_dvd this]
+  · simp_rw [← eval_smul]
+    exact fun i hi => integrable_measureT (by fun_prop)
 
 Depends on / 依赖: Finset, Finset.range, MeasureTheory, MeasureTheory.integral_const_mul, MeasureTheory.integral_finsetSum, Sequence, Sequence.span_degreeLT, Set.Iio, Submodule, Submodule.mem_span_image_finset_iff_exists_fun, by_ca, chebyshevTsequence, degreeLT, eval_finsetSum, eval_smul, hrange, integral_const_mul, integral_finsetSum, mem_degreeLT, mem_span_image_finset_iff_exists_fun
 -/

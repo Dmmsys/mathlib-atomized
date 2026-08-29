@@ -56,7 +56,11 @@ theorem cfc_tsub
   have : (spectrum Real a).EqOn (fun x => ((f x.toNNReal - g x.toNNReal : Real>=0) : Real))
       (fun x => f x.toNNReal - g x.toNNReal) :=
 fun x hx => NNReal.coe_sub hfg _ ha'.apply_mem hx
-  rw [cfc_nnreal_eq_real ..]; rw [cfc_nnreal_eq_real ..
+  rw [cfc_nnreal_eq_real ..]; rw [cfc_nnreal_eq_real ..]; rw [cfc_nnreal_eq_real ..]; rw [cfc_congr this]
+  refine cfc_sub _ _ a ?_ ?_
+  all_goals
+exact continuous_subtype_val.comp_continuousOn
+ContinuousOn.comp ‹_› continuous_real_toNNReal.continuousOn ha'.image ▸ Set.mapsTo_image ..
 
 中文:
 定理 cfc_tsub
@@ -66,7 +70,11 @@ fun x hx => NNReal.coe_sub hfg _ ha'.apply_mem hx
   have : (spectrum Real a).EqOn (fun x => ((f x.toNNReal - g x.toNNReal : Real>=0) : Real))
       (fun x => f x.toNNReal - g x.toNNReal) :=
 fun x hx => NNReal.coe_sub hfg _ ha'.apply_mem hx
-  rw [cfc_nnreal_eq_real ..]; rw [cfc_nnreal_eq_real ..
+  rw [cfc_nnreal_eq_real ..]; rw [cfc_nnreal_eq_real ..]; rw [cfc_nnreal_eq_real ..]; rw [cfc_congr this]
+  refine cfc_sub _ _ a ?_ ?_
+  all_goals
+exact continuous_subtype_val.comp_continuousOn
+ContinuousOn.comp ‹_› continuous_real_toNNReal.continuousOn ha'.image ▸ Set.mapsTo_image ..
 
 Depends on / 依赖: ContinuousOn, NNReal, NNReal.coe_sub, SpectrumRestricts, SpectrumRestricts.nnreal_of_nonneg, apply_mem, cfc_cont_tac, cfc_nnreal_eq_rea, cfc_nnreal_eq_real, cfc_tac, coe_sub, nnreal_of_nonneg, spectrum, toNNReal, x.toNNReal
 -/
@@ -99,7 +107,11 @@ theorem cfcₙ_tsub
   have : (σₙ Real a).EqOn (fun x => ((f x.toNNReal - g x.toNNReal : Real>=0) : Real))
       (fun x => f x.toNNReal - g x.toNNReal) :=
 fun x hx => NNReal.coe_sub hfg _ ha'.apply_mem hx
-  rw [cfcₙ_nnreal_eq_real ..]; rw [cfcₙ_nnreal_eq_real .
+  rw [cfcₙ_nnreal_eq_real ..]; rw [cfcₙ_nnreal_eq_real ..]; rw [cfcₙ_nnreal_eq_real ..]; rw [cfcₙ_congr this]
+  refine cfcₙ_sub _ _ a ?_ (by simpa) ?_
+  all_goals
+exact continuous_subtype_val.comp_continuousOn
+ContinuousOn.comp ‹_› continuous_real_toNNReal.continuousOn ha'.image ▸ Set.mapsTo_image ..
 
 中文:
 定理 cfcₙ_tsub
@@ -109,7 +121,11 @@ fun x hx => NNReal.coe_sub hfg _ ha'.apply_mem hx
   have : (σₙ Real a).EqOn (fun x => ((f x.toNNReal - g x.toNNReal : Real>=0) : Real))
       (fun x => f x.toNNReal - g x.toNNReal) :=
 fun x hx => NNReal.coe_sub hfg _ ha'.apply_mem hx
-  rw [cfcₙ_nnreal_eq_real ..]; rw [cfcₙ_nnreal_eq_real .
+  rw [cfcₙ_nnreal_eq_real ..]; rw [cfcₙ_nnreal_eq_real ..]; rw [cfcₙ_nnreal_eq_real ..]; rw [cfcₙ_congr this]
+  refine cfcₙ_sub _ _ a ?_ (by simpa) ?_
+  all_goals
+exact continuous_subtype_val.comp_continuousOn
+ContinuousOn.comp ‹_› continuous_real_toNNReal.continuousOn ha'.image ▸ Set.mapsTo_image ..
 
 Depends on / 依赖: ContinuousOn, NNReal, NNReal.coe_sub, QuasispectrumRestricts, QuasispectrumRestricts.nnreal_of_nonneg, apply_mem, cfc_cont_tac, cfc_tac, cfc_zero_tac, coe_sub, nnreal_of_nonneg, toNNReal, x.toNNReal
 -/
@@ -180,7 +196,9 @@ lemma inr_le_iff
   proof: by
   -- TODO: prove the more general result for star monomorphisms and use it here.
   rw [← sub_nonneg]; rw [← sub_nonneg (a := b)]; rw [StarOrderedRing.nonneg_iff_spectrum_nonneg (R := Real) _]; rw [← inr_sub Complex b a]; rw [← Unitization.quasispectrum_eq_spectrum_inr' Real Complex]
-.symm exact S
+.symm exact StarOrderedRing.nonneg_iff_quasispectrum_nonneg _
+
+@[simp, norm_cast]
 
 中文:
 引理 inr_le_iff
@@ -188,7 +206,9 @@ lemma inr_le_iff
   证明: by
   -- TODO: prove the more general result for star monomorphisms and use it here.
   rw [← sub_nonneg]; rw [← sub_nonneg (a := b)]; rw [StarOrderedRing.nonneg_iff_spectrum_nonneg (R := Real) _]; rw [← inr_sub Complex b a]; rw [← Unitization.quasispectrum_eq_spectrum_inr' Real Complex]
-.symm exact S
+.symm exact StarOrderedRing.nonneg_iff_quasispectrum_nonneg _
+
+@[simp, norm_cast]
 
 Depends on / 依赖: IsSelfAdjoint, cfc_tac
 -/
@@ -408,7 +428,8 @@ lemma CFC.exists_pos_algebraMap_le_iff
   · rintro ⟨r, hr, hr_le⟩
     exact (hr.trans_le <| hr_le · ·)
   · obtain ⟨r, hr, hr_min⟩ := h_cpct.exists_isMinOn
-      (Conti
+      (ContinuousFunctionalCalculus.spectrum_nonempty a ha) continuousOn_id
+    exact ⟨r, h _ hr, hr_min⟩
 
 中文:
 引理 CFC.存在_pos_algebraMap_le_iff
@@ -420,7 +441,8 @@ lemma CFC.exists_pos_algebraMap_le_iff
   · rintro ⟨r, hr, hr_le⟩
     exact (hr.trans_le <| hr_le · ·)
   · obtain ⟨r, hr, hr_min⟩ := h_cpct.exists_isMinOn
-      (Conti
+      (ContinuousFunctionalCalculus.spectrum_nonempty a ha) continuousOn_id
+    exact ⟨r, h _ hr, hr_min⟩
 
 Depends on / 依赖: ContinuousFunctionalCalculus, ContinuousFunctionalCalculus.spectrum_nonempty, IsCompact, algebraMap, algebraMap_le_iff_le_spectrum, cfc_tac, continuousOn_id, exists_isMinOn, h_cpct, h_cpct.exists_isMinOn, hr.trans_le, hr_le, hr_min, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mpr, simp_rw, spectrum, spectrum_nonempty, trans_le
 -/
@@ -943,7 +965,7 @@ lemma CStarAlgebra.isUnit_of_le
   obtain ⟨r, hr, hr_le⟩ : exists r > 0, (algebraMap Real A) r <= a :=
     (exists_pos_algebraMap_le_iff h.isSelfAdjoint).2 fun x hx => h.spectrum_pos hx
 exact fun h0 => not_le_of_gt hr (algebraMap_le_iff_le_spectrum <| .of_nonneg <|
-    h.n
+    h.nonneg.trans hab).1 (hr_le.trans hab) 0 h0
 
 中文:
 引理 CStar代数.isUnit_of_le
@@ -954,7 +976,7 @@ exact fun h0 => not_le_of_gt hr (algebraMap_le_iff_le_spectrum <| .of_nonneg <|
   obtain ⟨r, hr, hr_le⟩ : exists r > 0, (algebraMap Real A) r <= a :=
     (exists_pos_algebraMap_le_iff h.isSelfAdjoint).2 fun x hx => h.spectrum_pos hx
 exact fun h0 => not_le_of_gt hr (algebraMap_le_iff_le_spectrum <| .of_nonneg <|
-    h.n
+    h.nonneg.trans hab).1 (hr_le.trans hab) 0 h0
 
 Depends on / 依赖: IsUnit, algebraMap, algebraMap_le_iff_le_spectrum, cfc_tac, exists_pos_algebraMap_le_iff, h.isSelfAdjoint, h.nonneg.trans, h.spectrum_pos, hr_le, hr_le.trans, isSelfAdjoint, nonneg, nontriviality, not_le_of_gt, of_nonneg, spectrum, spectrum.zero_notMem_iff, spectrum_pos, zero_notMem_iff
 -/
@@ -978,7 +1000,21 @@ lemma le_iff_norm_sqrt_mul_rpow
   have hbab : 0 <= (b : A) ^ (-(1 / 2) : Real) * a * (b : A) ^ (-(1 / 2) : Real) :=
     conjugate_nonneg_of_nonneg ha rpow_nonneg
   conv_rhs =>
-    rw [← sq_le_one_iff₀ (norm_nonneg _)]; rw [sq]; rw [← CStarRing.norm_star_mul_self]; rw [star_mul]; rw [IsSelfAdjoint.
+    rw [← sq_le_one_iff₀ (norm_nonneg _)]; rw [sq]; rw [← CStarRing.norm_star_mul_self]; rw [star_mul]; rw [IsSelfAdjoint.of_nonneg (sqrt_nonneg a)]; rw [IsSelfAdjoint.of_nonneg rpow_nonneg]; rw [← mul_assoc]; rw [mul_assoc _ _ (sqrt a)]; rw [sqrt_mul_sqrt_self a]; rw [CStarAlgebra.norm_le_one_iff_of_nonneg _ hbab]
+  refine ⟨fun h => ?_, fun h => ?_⟩
+  · calc
+      _ <= ↑b ^ (-(1 / 2) : Real) * (b : A) * ↑b ^ (-(1 / 2) : Real) :=
+.conjugate_le_conjugate h IsSelfAdjoint.of_nonneg rpow_nonneg
+      _ = 1 := conjugate_rpow_neg_one_half (b : A)
+  · calc
+      a = (sqrt ↑b * ↑b ^ (-(1 / 2) : Real)) * a * (↑b ^ (-(1 / 2) : Real) * sqrt ↑b) := by
+        simp only [CFC.sqrt_eq_rpow .., ← CFC.rpow_add b.isUnit]
+        norm_num
+        simp [CFC.rpow_zero (b : A)]
+      _ = sqrt ↑b * (↑b ^ (-(1 / 2) : Real) * a * ↑b ^ (-(1 / 2) : Real)) * sqrt ↑b := by
+        simp only [mul_assoc]
+.trans by _ <= b := conjugate_le_conjugate_of_nonneg h (sqrt_nonneg _)
+        simp [CFC.sqrt_mul_sqrt_self (b : A)]
 
 中文:
 引理 le_iff_norm_sqrt_mul_rpow
@@ -988,7 +1024,21 @@ lemma le_iff_norm_sqrt_mul_rpow
   have hbab : 0 <= (b : A) ^ (-(1 / 2) : Real) * a * (b : A) ^ (-(1 / 2) : Real) :=
     conjugate_nonneg_of_nonneg ha rpow_nonneg
   conv_rhs =>
-    rw [← sq_le_one_iff₀ (norm_nonneg _)]; rw [sq]; rw [← CStarRing.norm_star_mul_self]; rw [star_mul]; rw [IsSelfAdjoint.
+    rw [← sq_le_one_iff₀ (norm_nonneg _)]; rw [sq]; rw [← CStarRing.norm_star_mul_self]; rw [star_mul]; rw [IsSelfAdjoint.of_nonneg (sqrt_nonneg a)]; rw [IsSelfAdjoint.of_nonneg rpow_nonneg]; rw [← mul_assoc]; rw [mul_assoc _ _ (sqrt a)]; rw [sqrt_mul_sqrt_self a]; rw [CStarAlgebra.norm_le_one_iff_of_nonneg _ hbab]
+  refine ⟨fun h => ?_, fun h => ?_⟩
+  · calc
+      _ <= ↑b ^ (-(1 / 2) : Real) * (b : A) * ↑b ^ (-(1 / 2) : Real) :=
+.conjugate_le_conjugate h IsSelfAdjoint.of_nonneg rpow_nonneg
+      _ = 1 := conjugate_rpow_neg_one_half (b : A)
+  · calc
+      a = (sqrt ↑b * ↑b ^ (-(1 / 2) : Real)) * a * (↑b ^ (-(1 / 2) : Real) * sqrt ↑b) := by
+        simp only [CFC.sqrt_eq_rpow .., ← CFC.rpow_add b.isUnit]
+        norm_num
+        simp [CFC.rpow_zero (b : A)]
+      _ = sqrt ↑b * (↑b ^ (-(1 / 2) : Real) * a * ↑b ^ (-(1 / 2) : Real)) * sqrt ↑b := by
+        simp only [mul_assoc]
+.trans by _ <= b := conjugate_le_conjugate_of_nonneg h (sqrt_nonneg _)
+        simp [CFC.sqrt_mul_sqrt_self (b : A)]
 
 Depends on / 依赖: CStarRing, CStarRing.norm_star_mul_self, IsSelfAdjoint, IsSelfAdjoint.of_nonneg, IsStrictlyPositive, cfc_tac, conjugate_nonneg_of_nonneg, conv_rhs, hb.isUnit, isUnit, mul_assoc, norm_nonneg, norm_star_mul_self, of_nonneg, rpow_nonneg, sqrt_nonneg, star_mul
 -/
@@ -1052,7 +1102,9 @@ lemma inv_le_inv
   have hb_inv : (0 : A) <= b⁻¹ := inv_nonneg_of_nonneg b hb
   have ha_inv : (0 : A) <= a⁻¹ := inv_nonneg_of_nonneg a ha
   rw [le_iff_norm_sqrt_mul_sqrt_inv ha hb]; rw [← sq_le_one_iff₀ (norm_nonneg _)]; rw [sq]; rw [← CStarRing.norm_star_mul_self] at hab
-  rw [le_iff_nor
+  rw [le_iff_norm_sqrt_mul_sqrt_inv hb_inv ha_inv]; rw [inv_inv]; rw [← sq_le_one_iff₀ (norm_nonneg _)]; rw [sq]; rw [← CStarRing.norm_self_mul_star]
+  rwa [star_mul, IsSelfAdjoint.of_nonneg (sqrt_nonneg _),
+    IsSelfAdjoint.of_nonneg (sqrt_nonneg _)] at hab ⊢
 
 中文:
 引理 inv_le_inv
@@ -1062,7 +1114,9 @@ lemma inv_le_inv
   have hb_inv : (0 : A) <= b⁻¹ := inv_nonneg_of_nonneg b hb
   have ha_inv : (0 : A) <= a⁻¹ := inv_nonneg_of_nonneg a ha
   rw [le_iff_norm_sqrt_mul_sqrt_inv ha hb]; rw [← sq_le_one_iff₀ (norm_nonneg _)]; rw [sq]; rw [← CStarRing.norm_star_mul_self] at hab
-  rw [le_iff_nor
+  rw [le_iff_norm_sqrt_mul_sqrt_inv hb_inv ha_inv]; rw [inv_inv]; rw [← sq_le_one_iff₀ (norm_nonneg _)]; rw [sq]; rw [← CStarRing.norm_self_mul_star]
+  rwa [star_mul, IsSelfAdjoint.of_nonneg (sqrt_nonneg _),
+    IsSelfAdjoint.of_nonneg (sqrt_nonneg _)] at hab ⊢
 -/
 protected lemma inv_le_inv {a b : Aˣ} (ha : 0 <= (a : A))
     (hab : (a : A) <= b) : (↑b⁻¹ : A) <= a⁻¹ := by
@@ -1455,7 +1509,8 @@ lemma norm_le_norm_of_nonneg_of_le
       this a b (by simpa) (by rwa [Unitization.inr_le_iff a b])
   intro a b ha hab
   have hb : 0 <= b := ha.trans hab
-exact (norm_le_iff_le_algebraMap 
+exact (norm_le_iff_le_algebraMap a (norm_nonneg _) ha).2 hab.trans
+    IsSelfAdjoint.le_algebraMap_norm_self (.of_nonneg hb)
 
 中文:
 引理 norm_le_norm_of_nonneg_of_le
@@ -1467,7 +1522,8 @@ exact (norm_le_iff_le_algebraMap
       this a b (by simpa) (by rwa [Unitization.inr_le_iff a b])
   intro a b ha hab
   have hb : 0 <= b := ha.trans hab
-exact (norm_le_iff_le_algebraMap 
+exact (norm_le_iff_le_algebraMap a (norm_nonneg _) ha).2 hab.trans
+    IsSelfAdjoint.le_algebraMap_norm_self (.of_nonneg hb)
 
 Depends on / 依赖: IsSelfAdjoint, IsSelfAdjoint.le_algebraMap_norm_self, Unitization, Unitization.inr_le_iff, Unitization.norm_inr, cfc_tac, ge_iff_le, ha.trans, hab.trans, inr_le_iff, le_algebraMap_norm_self, norm_inr, norm_le_iff_le_algebraMap, norm_nonneg, of_nonneg
 -/
@@ -1513,7 +1569,9 @@ lemma star_left_conjugate_le_norm_smul
 simpa [Unitization.norm_inr] using this a b hb.inr Complex
   intro a b hb
   calc
-    star a * b * a <= star a * 
+    star a * b * a <= star a * (algebraMap Real A⁺¹ ‖b‖) * a :=
+      star_left_conjugate_le_conjugate hb.le_algebraMap_norm_self _
+    _ = ‖b‖ • (star a * a) := by simp [Algebra.algebraMap_eq_smul_one]
 
 中文:
 引理 star_left_conjugate_le_norm_smul
@@ -1524,7 +1582,9 @@ simpa [Unitization.norm_inr] using this a b hb.inr Complex
 simpa [Unitization.norm_inr] using this a b hb.inr Complex
   intro a b hb
   calc
-    star a * b * a <= star a * 
+    star a * b * a <= star a * (algebraMap Real A⁺¹ ‖b‖) * a :=
+      star_left_conjugate_le_conjugate hb.le_algebraMap_norm_self _
+    _ = ‖b‖ • (star a * a) := by simp [Algebra.algebraMap_eq_smul_one]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, IsSelfAdjoint, IsSelfAdjoint.all, Unitization, Unitization.inr_le_iff, Unitization.norm_inr, algebraMap, algebraMap_eq_smul_one, cfc_tac, hb.inr, hb.le_algebraMap_norm_self, inr_le_iff, le_algebraMap_norm_self, norm_inr, star_left_conjugate_le_conjugate, star_mul_self
 -/
@@ -1571,7 +1631,14 @@ lemma isClosed_nonneg
     rw [Unitization.isometry_inr (𝕜 := Complex) |>.isClosedEmbedding.isClosed_iff_image_isClosed]
 convert! this.inter (Unitization.isometry_inr (𝕜 := Complex)).isClosedEmbedding.isClosed_range
     ext a
-    simp only [Set.mem_image, Set.mem_ofPred_eq, Set
+    simp only [Set.mem_image, Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_range,
+      ← exists_and_left]
+    congr! 2 with x
+    exact and_congr_left fun h => by simp [← h]
+  simp only [nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts,
+    and_congr_right (SpectrumRestricts.nnreal_iff_nnnorm · le_rfl), Set.ofPred_and]
+.inter isClosed_le ?_ ?_ refine isClosed_eq ?_ ?_
+  all_goals fun_prop
 
 中文:
 引理 isClosed_nonneg
@@ -1581,7 +1648,14 @@ convert! this.inter (Unitization.isometry_inr (𝕜 := Complex)).isClosedEmbeddi
     rw [Unitization.isometry_inr (𝕜 := Complex) |>.isClosedEmbedding.isClosed_iff_image_isClosed]
 convert! this.inter (Unitization.isometry_inr (𝕜 := Complex)).isClosedEmbedding.isClosed_range
     ext a
-    simp only [Set.mem_image, Set.mem_ofPred_eq, Set
+    simp only [Set.mem_image, Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_range,
+      ← exists_and_left]
+    congr! 2 with x
+    exact and_congr_left fun h => by simp [← h]
+  simp only [nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts,
+    and_congr_right (SpectrumRestricts.nnreal_iff_nnnorm · le_rfl), Set.ofPred_and]
+.inter isClosed_le ?_ ?_ refine isClosed_eq ?_ ?_
+  all_goals fun_prop
 
 Depends on / 依赖: IsClosed, Set.mem_image, Set.mem_inter_iff, Set.mem_ofPred_eq, Set.mem_range, SpectrumRestricts, SpectrumRestricts.nnrea, Unitization, Unitization.isometry_inr, and_congr_left, and_congr_right, convert, exists_and_left, isClosedEmbedding, isClosedEmbedding.isClosed_iff_image_isClosed, isClosedEmbedding.isClosed_range, isClosed_iff_image_isClosed, isClosed_range, isometry_inr, mem_image
 -/
@@ -1633,7 +1707,16 @@ lemma convexOn_cfcₙ_of_convexOn_cfc
       simp [cfcₙ_apply_of_not_map_zero _ hf₀]
     rw [this]
     refine convexOn_const _ ?_
-    have : Convex Real (inrl ⁻¹' inrl '' s) := Convex
+    have : Convex Real (inrl ⁻¹' inrl '' s) := Convex.linear_preimage hf.1 _
+    rwa [Set.preimage_image_eq _ inrHom_injective] at this
+  refine convexOn_of_convexOn_inr_comp (fun _ => IsSelfAdjoint.cfcₙ) ?_
+  have h₁ : inr (R := Complex) ∘ (cfcₙ f) = fun x : A => ((cfcₙ f x : A) : A⁺¹) := rfl
+  have h₂ : (fun x : A => ((cfcₙ f x : A) : A⁺¹))
+      = fun x : A => cfc f (x : A⁺¹) := by ext1; rw [real_cfcₙ_eq_cfc_inr ..]
+  rw [h₁]; rw [h₂]
+  have h₃ : ConvexOn Real (inrl ⁻¹' inrl '' s) ((cfc f) ∘ inrl) :=
+    ConvexOn.comp_linearMap (g := inrl) hf
+  rwa [Set.preimage_image_eq _ inrHom_injective] at h₃
 
 中文:
 引理 convexOn_cfcₙ_of_convexOn_cfc
@@ -1647,7 +1730,16 @@ lemma convexOn_cfcₙ_of_convexOn_cfc
       simp [cfcₙ_apply_of_not_map_zero _ hf₀]
     rw [this]
     refine convexOn_const _ ?_
-    have : Convex Real (inrl ⁻¹' inrl '' s) := Convex
+    have : Convex Real (inrl ⁻¹' inrl '' s) := Convex.linear_preimage hf.1 _
+    rwa [Set.preimage_image_eq _ inrHom_injective] at this
+  refine convexOn_of_convexOn_inr_comp (fun _ => IsSelfAdjoint.cfcₙ) ?_
+  have h₁ : inr (R := Complex) ∘ (cfcₙ f) = fun x : A => ((cfcₙ f x : A) : A⁺¹) := rfl
+  have h₂ : (fun x : A => ((cfcₙ f x : A) : A⁺¹))
+      = fun x : A => cfc f (x : A⁺¹) := by ext1; rw [real_cfcₙ_eq_cfc_inr ..]
+  rw [h₁]; rw [h₂]
+  have h₃ : ConvexOn Real (inrl ⁻¹' inrl '' s) ((cfc f) ∘ inrl) :=
+    ConvexOn.comp_linearMap (g := inrl) hf
+  rwa [Set.preimage_image_eq _ inrHom_injective] at h₃
 
 Depends on / 依赖: Convex, Convex.linear_preimage, ConvexOn, IsSelfAdjoint, IsSelfAdjoint.cfc, Set.preimage_image_eq, convexOn_const, convexOn_of_convexOn_inr_comp, inrHom, inrHom_injective, linear_preimage, preimage_image_eq
 -/
@@ -1821,7 +1913,12 @@ lemma IsStarProjection.mul_right_and_mul_left_of_nonneg_of_le
   suffices forall a e : A⁺¹, IsStarProjection e -> 0 <= a -> a <= e -> a * e = a from
     mod_cast this a e he.inr ha.inr (inr_le_iff a e |>.mpr hae)
   intro a e he ha hae
-  suffices sqrt
+  suffices sqrt a * (1 - e : A⁺¹) = 0 by
+    simpa [← mul_assoc, sqrt_mul_sqrt_self a, mul_sub, sub_eq_zero, eq_comm (a := a)]
+      using congr(sqrt a * $this)
+  rw [← norm_eq_zero]; rw [← sq_eq_zero_iff]; rw [← norm_star_mul_mul_self_of_nonneg]; rw [norm_eq_zero]
+refine le_antisymm ?_ star_left_conjugate_nonneg ha _
+  grw [star_left_conjugate_le_conjugate hae (1 - e), mul_assoc, he.mul_one_sub_self, mul_zero]
 
 中文:
 引理 是StarProjection.mul_right_and_mul_left_of_nonneg_of_le
@@ -1832,7 +1929,12 @@ lemma IsStarProjection.mul_right_and_mul_left_of_nonneg_of_le
   suffices forall a e : A⁺¹, IsStarProjection e -> 0 <= a -> a <= e -> a * e = a from
     mod_cast this a e he.inr ha.inr (inr_le_iff a e |>.mpr hae)
   intro a e he ha hae
-  suffices sqrt
+  suffices sqrt a * (1 - e : A⁺¹) = 0 by
+    simpa [← mul_assoc, sqrt_mul_sqrt_self a, mul_sub, sub_eq_zero, eq_comm (a := a)]
+      using congr(sqrt a * $this)
+  rw [← norm_eq_zero]; rw [← sq_eq_zero_iff]; rw [← norm_star_mul_mul_self_of_nonneg]; rw [norm_eq_zero]
+refine le_antisymm ?_ star_left_conjugate_nonneg ha _
+  grw [star_left_conjugate_le_conjugate hae (1 - e), mul_assoc, he.mul_one_sub_self, mul_zero]
 
 Depends on / 依赖: IsStarProjection, eq_comm, ha.inr, ha.star_eq, he.inr, he.isSelfAdjoint.star_eq, inr_le_iff, isSelfAdjoint, mod_cast, mul_assoc, mul_sub, norm_eq_zero, norm_star_mul_mul_self_of_nonn, sq_eq_zero_iff, sqrt_mul_sqrt_self, star_eq, sub_eq_zero
 -/

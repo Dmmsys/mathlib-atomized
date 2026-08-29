@@ -228,7 +228,7 @@ theorem polar_add_left_iff
   simp only [← add_assoc]
   simp only [polar, sub_eq_iff_eq_add, eq_sub_iff_add_eq, sub_add_eq_add_sub, add_sub]
   simp only [add_right_comm _ (f y) _, add_right_comm _ (f x') (f x)]
-  rw [add_comm y x]; rw [add_right_comm _ _ (f (x + y))]; rw [add_comm _ (f (x + y))]; rw [add_right_comm (f (x + 
+  rw [add_comm y x]; rw [add_right_comm _ _ (f (x + y))]; rw [add_comm _ (f (x + y))]; rw [add_right_comm (f (x + y))]; rw [add_left_inj]
 
 中文:
 定理 polar_add_left_iff
@@ -237,7 +237,7 @@ theorem polar_add_left_iff
   simp only [← add_assoc]
   simp only [polar, sub_eq_iff_eq_add, eq_sub_iff_add_eq, sub_add_eq_add_sub, add_sub]
   simp only [add_right_comm _ (f y) _, add_right_comm _ (f x') (f x)]
-  rw [add_comm y x]; rw [add_right_comm _ _ (f (x + y))]; rw [add_comm _ (f (x + y))]; rw [add_right_comm (f (x + 
+  rw [add_comm y x]; rw [add_right_comm _ _ (f (x + y))]; rw [add_comm _ (f (x + y))]; rw [add_right_comm (f (x + y))]; rw [add_left_inj]
 
 Depends on / 依赖: add_assoc, add_comm, add_left_inj, add_right_comm, add_sub, eq_sub_iff_add_eq, sub_add_eq_add_sub, sub_eq_iff_eq_add
 -/
@@ -1183,7 +1183,8 @@ definition ofPolar
       (fun x _ _ => by simp_rw [polar_comm _ x, polar_add_left])
       (fun _ _ _ => by rw [polar_comm, polar_smul_left, polar_comm]),
       fun _ _ => by
-        simp only [LinearMap.mk
+        simp only [LinearMap.mk₂_apply]
+        rw [polar]; rw [sub_sub]; rw [add_sub_cancel]⟩ }
 
 中文:
 定义 ofPolar
@@ -1194,7 +1195,8 @@ definition ofPolar
       (fun x _ _ => by simp_rw [polar_comm _ x, polar_add_left])
       (fun _ _ _ => by rw [polar_comm, polar_smul_left, polar_comm]),
       fun _ _ => by
-        simp only [LinearMap.mk
+        simp only [LinearMap.mk₂_apply]
+        rw [polar]; rw [sub_sub]; rw [add_sub_cancel]⟩ }
 
 Depends on / 依赖: LinearMap, LinearMap.mk, add_sub_cancel, exists_companion, polar_add_left, polar_comm, polar_smul_left, simp_rw, sub_sub, toFun_smul
 -/
@@ -1244,7 +1246,13 @@ theorem map_sum
   | cons a s ha ih =>
     simp_rw [Finset.sum_cons, QuadraticMap.map_add, ih, add_assoc, Finset.sym2_cons,
       Finset.sum_filter, Finset.sum_disjUnion, Finset.sum_map, Finset.sum_cons,
-      Sym2.mkEmbedding_apply, Sym2.mk_isDiag_
+      Sym2.mkEmbedding_apply, Sym2.mk_isDiag_iff, not_true, if_false, zero_add,
+      Sym2.map_mk, polarSym2_sym2Mk, ← polarBilin_apply_apply, _root_.map_sum,
+      polarBilin_apply_apply]
+    congr 2
+    rw [add_comm]
+    congr! with i hi
+    rw [if_pos (ne_of_mem_of_not_mem hi ha).symm]
 
 中文:
 定理 map_sum
@@ -1255,7 +1263,13 @@ theorem map_sum
   | cons a s ha ih =>
     simp_rw [Finset.sum_cons, QuadraticMap.map_add, ih, add_assoc, Finset.sym2_cons,
       Finset.sum_filter, Finset.sum_disjUnion, Finset.sum_map, Finset.sum_cons,
-      Sym2.mkEmbedding_apply, Sym2.mk_isDiag_
+      Sym2.mkEmbedding_apply, Sym2.mk_isDiag_iff, not_true, if_false, zero_add,
+      Sym2.map_mk, polarSym2_sym2Mk, ← polarBilin_apply_apply, _root_.map_sum,
+      polarBilin_apply_apply]
+    congr 2
+    rw [add_comm]
+    congr! with i hi
+    rw [if_pos (ne_of_mem_of_not_mem hi ha).symm]
 -/
 protected theorem map_sum {ι} [DecidableEq ι] (Q : QuadraticMap R M N) (s : Finset ι) (f : ι -> M) :
     Q (∑ i in s, f i) = ∑ i in s, Q (f i)
@@ -1285,7 +1299,9 @@ theorem map_sum'
   | cons a s ha ih =>
     simp_rw [Finset.sum_cons, QuadraticMap.map_add Q, ih, add_assoc, Finset.sym2_cons,
       Finset.sum_disjUnion, Finset.sum_map, Finset.sum_cons, Sym2.mkEmbedding_apply,
-      Sym2.map_mk, polarSym2_sym2Mk, ←
+      Sym2.map_mk, polarSym2_sym2Mk, ← polarBilin_apply_apply, _root_.map_sum,
+      polarBilin_apply_apply, polar_self]
+    abel_nf
 
 中文:
 定理 map_sum'
@@ -1296,7 +1312,9 @@ theorem map_sum'
   | cons a s ha ih =>
     simp_rw [Finset.sum_cons, QuadraticMap.map_add Q, ih, add_assoc, Finset.sym2_cons,
       Finset.sum_disjUnion, Finset.sum_map, Finset.sum_cons, Sym2.mkEmbedding_apply,
-      Sym2.map_mk, polarSym2_sym2Mk, ←
+      Sym2.map_mk, polarSym2_sym2Mk, ← polarBilin_apply_apply, _root_.map_sum,
+      polarBilin_apply_apply, polar_self]
+    abel_nf
 -/
 protected theorem map_sum' {ι} (Q : QuadraticMap R M N) (s : Finset ι) (f : ι -> M) :
     Q (∑ i in s, f i) = ∑ ij in s.sym2, polarSym2 Q (ij.map f) - ∑ i in s, Q (f i) := by
@@ -1506,7 +1524,7 @@ instance :
         let ⟨B, h⟩ := Q.exists_companion
         let ⟨B', h'⟩ := Q'.exists_companion
         ⟨B + B', fun x y => by
-          simp_rw [Pi.add_appl
+          simp_rw [Pi.add_apply, h, h', LinearMap.add_apply, add_add_add_comm]⟩ }⟩
 
 中文:
 实例 :
@@ -1518,7 +1536,7 @@ instance :
         let ⟨B, h⟩ := Q.exists_companion
         let ⟨B', h'⟩ := Q'.exists_companion
         ⟨B + B', fun x y => by
-          simp_rw [Pi.add_appl
+          simp_rw [Pi.add_apply, h, h', LinearMap.add_apply, add_add_add_comm]⟩ }⟩
 
 Depends on / 依赖: LinearMap, LinearMap.add_apply, Pi.add_apply, Q.exists_companion, QuadraticMap, QuadraticMap.map_smul, add_add_add_comm, add_apply, exists_companion, map_smul, simp_rw, smul_add, toFun_smul
 -/
@@ -2041,7 +2059,12 @@ definition linMulLin
   toFun_smul a x := by
     rw [Pi.mul_apply]; rw [Pi.mul_apply]; rw [map_smulₛₗ]; rw [RingHom.id_apply]; rw [map_smulₛₗ]; rw [RingHom.id_apply]; rw [smul_mul_assoc]; rw [mul_smul_comm]; rw [← smul_assoc]; rw [smul_eq_mul]
   exists_companion' :=
-    ⟨(LinearMap.mul R A).compl₁₂ f g + (LinearMap
+    ⟨(LinearMap.mul R A).compl₁₂ f g + (LinearMap.mul R A).flip.compl₁₂ g f, fun x y => by
+      simp only [Pi.mul_apply, map_add, left_distrib, right_distrib, LinearMap.add_apply,
+        LinearMap.compl₁₂_apply, LinearMap.mul_apply', LinearMap.flip_apply]
+      abel_nf⟩
+
+@[simp]
 
 中文:
 定义 linMulLin
@@ -2050,7 +2073,12 @@ definition linMulLin
   toFun_smul a x := by
     rw [Pi.mul_apply]; rw [Pi.mul_apply]; rw [map_smulₛₗ]; rw [RingHom.id_apply]; rw [map_smulₛₗ]; rw [RingHom.id_apply]; rw [smul_mul_assoc]; rw [mul_smul_comm]; rw [← smul_assoc]; rw [smul_eq_mul]
   exists_companion' :=
-    ⟨(LinearMap.mul R A).compl₁₂ f g + (LinearMap
+    ⟨(LinearMap.mul R A).compl₁₂ f g + (LinearMap.mul R A).flip.compl₁₂ g f, fun x y => by
+      simp only [Pi.mul_apply, map_add, left_distrib, right_distrib, LinearMap.add_apply,
+        LinearMap.compl₁₂_apply, LinearMap.mul_apply', LinearMap.flip_apply]
+      abel_nf⟩
+
+@[simp]
 -/
 def linMulLin (f g : M ->ₗ[R] A) : QuadraticMap R M A where
   toFun := f * g
@@ -2765,7 +2793,7 @@ instance [Invertible
   mul_invOf_self := by
     ext m
     dsimp [Submonoid.smul_def]
-   
+    rw [← ofNat_smul_eq_nsmul R]; rw [smul_invOf_smul (2 : R) m]
 
 中文:
 实例 [可逆
@@ -2779,7 +2807,7 @@ instance [Invertible
   mul_invOf_self := by
     ext m
     dsimp [Submonoid.smul_def]
-   
+    rw [← ofNat_smul_eq_nsmul R]; rw [smul_invOf_smul (2 : R) m]
 
 Depends on / 依赖: Set.invOf_mem_center, Set.ofNat_mem_center, Submonoid, Submonoid.center, center, invOf_mem_center, ofNat_mem_center
 -/
@@ -3265,7 +3293,7 @@ theorem associated_linMulLin
     LinearMap.smul_apply, compl₁₂_apply, mul_apply', smul_eq_mul, invOf_smul_eq_iff]
   simp only [Module.End.smul_def, Module.End.ofNat_apply, nsmul_eq_mul, Nat.cast_ofNat,
     mul_invOf_cancel_left']
-  
+  ring_nf
 
 中文:
 定理 associated_linMulLin
@@ -3276,7 +3304,7 @@ theorem associated_linMulLin
     LinearMap.smul_apply, compl₁₂_apply, mul_apply', smul_eq_mul, invOf_smul_eq_iff]
   simp only [Module.End.smul_def, Module.End.ofNat_apply, nsmul_eq_mul, Nat.cast_ofNat,
     mul_invOf_cancel_left']
-  
+  ring_nf
 
 Depends on / 依赖: linMulLin
 -/
@@ -3477,7 +3505,7 @@ theorem _root_.LinearMap.BilinForm.toQuadraticMap_isOrtho
   let : AddCancelMonoid R := { ‹IsCancelAdd R›, (inferInstance : AddCommMonoid R) with }
   simp_rw [isOrtho_def, B.toQuadraticMap_apply, map_add,
     LinearMap.add_apply, add_comm _ (B y y), add_add_add_comm _ _ (B y y), add_comm (B y y)]
-  rw [add_eq_left (a := B x x + B y y)]; rw [← h.eq]; rw [
+  rw [add_eq_left (a := B x x + B y y)]; rw [← h.eq]; rw [RingHom.id_apply]; rw [add_self_eq_zero]
 
 中文:
 定理 _root_.线性映射.BilinForm.toQuadraticMap_isOrtho
@@ -3486,7 +3514,7 @@ theorem _root_.LinearMap.BilinForm.toQuadraticMap_isOrtho
   let : AddCancelMonoid R := { ‹IsCancelAdd R›, (inferInstance : AddCommMonoid R) with }
   simp_rw [isOrtho_def, B.toQuadraticMap_apply, map_add,
     LinearMap.add_apply, add_comm _ (B y y), add_add_add_comm _ _ (B y y), add_comm (B y y)]
-  rw [add_eq_left (a := B x x + B y y)]; rw [← h.eq]; rw [
+  rw [add_eq_left (a := B x x + B y y)]; rw [← h.eq]; rw [RingHom.id_apply]; rw [add_self_eq_zero]
 
 Depends on / 依赖: AddCancelMonoid, AddCommMonoid, B.toQuadraticMap_apply, IsCancelAdd, LinearMap, LinearMap.add_apply, RingHom, RingHom.id_apply, add_add_add_comm, add_apply, add_comm, add_eq_left, add_self_eq_zero, h.eq, id_apply, isOrtho_def, map_add, simp_rw, toQuadraticMap_apply
 -/
@@ -4003,7 +4031,10 @@ theorem toMatrix'_comp
 @[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix' := QuadraticForm.toMatrix'
 @[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix'_smul :=
   QuadraticForm.toMatrix'_smul
-@[deprecated
+@[deprecated (since := "2026-05-15")] alias QuadraticMap.isSymm_toMatrix' :=
+  QuadraticForm.isSymm_toMatrix'
+@[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix'_comp :=
+  QuadraticForm.toMatrix'_comp
 
 中文:
 定理 toMatrix'_comp
@@ -4014,7 +4045,10 @@ theorem toMatrix'_comp
 @[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix' := QuadraticForm.toMatrix'
 @[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix'_smul :=
   QuadraticForm.toMatrix'_smul
-@[deprecated
+@[deprecated (since := "2026-05-15")] alias QuadraticMap.isSymm_toMatrix' :=
+  QuadraticForm.isSymm_toMatrix'
+@[deprecated (since := "2026-05-15")] alias QuadraticMap.toMatrix'_comp :=
+  QuadraticForm.toMatrix'_comp
 -/
 theorem toMatrix'_comp (Q : QuadraticForm R (m -> R)) (f : (n -> R) ->ₗ[R] m -> R) :
     QuadraticForm.toMatrix' (Q.comp f) =
@@ -4208,7 +4242,8 @@ theorem discr'_comp
 @[deprecated (since := "2026-05-15")] alias QuadraticMap.discr := QuadraticForm.discr'
 @[deprecated (since := "2026-05-15")] alias QuadraticMap.discr_smul :=
   QuadraticForm.discr'_smul
-@[deprecated (since := "2026-05-15")] alias Quadratic
+@[deprecated (since := "2026-05-15")] alias QuadraticMap.discr_comp :=
+  QuadraticForm.discr'_comp
 
 中文:
 定理 discr'_comp
@@ -4219,7 +4254,8 @@ theorem discr'_comp
 @[deprecated (since := "2026-05-15")] alias QuadraticMap.discr := QuadraticForm.discr'
 @[deprecated (since := "2026-05-15")] alias QuadraticMap.discr_smul :=
   QuadraticForm.discr'_smul
-@[deprecated (since := "2026-05-15")] alias Quadratic
+@[deprecated (since := "2026-05-15")] alias QuadraticMap.discr_comp :=
+  QuadraticForm.discr'_comp
 -/
 theorem discr'_comp (f : (n -> R) ->ₗ[R] n -> R) :
     QuadraticForm.discr' (Q.comp f) = f.toMatrix'.det * f.toMatrix'.det * Q.discr' := by
@@ -4406,7 +4442,41 @@ theorem exists_orthogonal_basis
   induction d generalizing V with
   | zero => exact ⟨basisOfFinrankZero hd, fun _ _ _ => map_zero _⟩
   | succ d ih =>
-  -- either the bilinear form is trivial or we can pick a non-n
+  -- either the bilinear form is trivial or we can pick a non-null `x`
+  obtain rfl | hB₁ := eq_or_ne B 0
+  · let b := Module.finBasis K V
+    rw [hd] at b
+    exact ⟨b, fun i j _ => rfl⟩
+  obtain ⟨x, hx⟩ := exists_bilinForm_self_ne_zero hB₁ hB₂
+  rw [← Submodule.finrank_add_eq_of_isCompl (isCompl_span_singleton_orthogonal hx).symm]; rw [finrank_span_singleton (ne_zero_of_map hx)] at hd
+  let B' := B.domRestrict₁₂ ((K ∙ x).orthogonalBilin B) ((K ∙ x).orthogonalBilin B)
+  obtain ⟨v', hv₁⟩ := ih (hB₂.domRestrict _ : B'.IsSymm) (Nat.succ.inj hd)
+  -- concatenate `x` with the basis obtained by induction
+  let b :=
+    Basis.mkFinCons x v'
+      (by
+        rintro c y hy hc
+        rw [add_eq_zero_iff_neg_eq] at hc
+        rw [← hc]; rw [Submodule.neg_mem_iff] at hy
+        have := (isCompl_span_singleton_orthogonal hx).disjoint
+        rw [Submodule.disjoint_def] at this
+        have := this (c • x) (Submodule.smul_mem _ _ <| Submodule.mem_span_singleton_self _) hy
+exact (smul_eq_zero.1 this).resolve_right fun h => hx h.symm ▸ map_zero _)
+      (by
+        intro y
+        refine ⟨-B x y / B x x, fun z hz => ?_⟩
+        obtain ⟨c, rfl⟩ := Submodule.mem_span_singleton.1 hz
+        rw [map_smul]; rw [smul_apply]; rw [map_add]; rw [map_smul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [div_mul_cancel₀ _ hx]; rw [add_neg_cancel]; rw [mul_zero])
+  refine ⟨b, ?_⟩
+  rw [Basis.coe_mkFinCons]
+  intro j i
+  refine Fin.cases ?_ (fun i => ?_) i <;> refine Fin.cases ?_ (fun j => ?_) j <;> intro hij <;>
+    simp only [Function.onFun, Fin.cons_zero, Fin.cons_succ, Function.comp_apply]
+  · exact (hij rfl).elim
+  · rw [← hB₂.eq]
+    exact (v' j).prop _ (Submodule.mem_span_singleton_self x)
+  · exact (v' i).prop _ (Submodule.mem_span_singleton_self x)
+  · exact hv₁ (ne_of_apply_ne _ hij)
 
 中文:
 定理 存在_orthogonal_basis
@@ -4417,7 +4487,41 @@ theorem exists_orthogonal_basis
   induction d generalizing V with
   | zero => exact ⟨basisOfFinrankZero hd, fun _ _ _ => map_zero _⟩
   | succ d ih =>
-  -- either the bilinear form is trivial or we can pick a non-n
+  -- either the bilinear form is trivial or we can pick a non-null `x`
+  obtain rfl | hB₁ := eq_or_ne B 0
+  · let b := Module.finBasis K V
+    rw [hd] at b
+    exact ⟨b, fun i j _ => rfl⟩
+  obtain ⟨x, hx⟩ := exists_bilinForm_self_ne_zero hB₁ hB₂
+  rw [← Submodule.finrank_add_eq_of_isCompl (isCompl_span_singleton_orthogonal hx).symm]; rw [finrank_span_singleton (ne_zero_of_map hx)] at hd
+  let B' := B.domRestrict₁₂ ((K ∙ x).orthogonalBilin B) ((K ∙ x).orthogonalBilin B)
+  obtain ⟨v', hv₁⟩ := ih (hB₂.domRestrict _ : B'.IsSymm) (Nat.succ.inj hd)
+  -- concatenate `x` with the basis obtained by induction
+  let b :=
+    Basis.mkFinCons x v'
+      (by
+        rintro c y hy hc
+        rw [add_eq_zero_iff_neg_eq] at hc
+        rw [← hc]; rw [Submodule.neg_mem_iff] at hy
+        have := (isCompl_span_singleton_orthogonal hx).disjoint
+        rw [Submodule.disjoint_def] at this
+        have := this (c • x) (Submodule.smul_mem _ _ <| Submodule.mem_span_singleton_self _) hy
+exact (smul_eq_zero.1 this).resolve_right fun h => hx h.symm ▸ map_zero _)
+      (by
+        intro y
+        refine ⟨-B x y / B x x, fun z hz => ?_⟩
+        obtain ⟨c, rfl⟩ := Submodule.mem_span_singleton.1 hz
+        rw [map_smul]; rw [smul_apply]; rw [map_add]; rw [map_smul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [div_mul_cancel₀ _ hx]; rw [add_neg_cancel]; rw [mul_zero])
+  refine ⟨b, ?_⟩
+  rw [Basis.coe_mkFinCons]
+  intro j i
+  refine Fin.cases ?_ (fun i => ?_) i <;> refine Fin.cases ?_ (fun j => ?_) j <;> intro hij <;>
+    simp only [Function.onFun, Fin.cons_zero, Fin.cons_succ, Function.comp_apply]
+  · exact (hij rfl).elim
+  · rw [← hB₂.eq]
+    exact (v' j).prop _ (Submodule.mem_span_singleton_self x)
+  · exact (v' i).prop _ (Submodule.mem_span_singleton_self x)
+  · exact hv₁ (ne_of_apply_ne _ hij)
 
 Depends on / 依赖: B.IsOrtho, basisOfFinrankZero, finrank, generalizing, map_zero
 -/
@@ -4580,7 +4684,12 @@ theorem basisRepr_eq_of_iIsOrtho
   rw [basisRepr_apply]; rw [← @associated_eq_self_apply R]; rw [map_sum]; rw [weightedSumSquares_apply]
   refine sum_congr rfl fun j hj => ?_
   rw [← @associated_eq_self_apply R]; rw [LinearMap.map_sum₂]; rw [sum_eq_single_of_mem j hj]
-  · rw [map_smul, LinearMap.map_smul₂, smul_eq_mul, a
+  · rw [map_smul, LinearMap.map_smul₂, smul_eq_mul, associated_apply, smul_eq_mul,
+      smul_eq_mul, Module.End.smul_def, half_moduleEnd_apply_eq_half_smul]
+    ring_nf
+  · intro i _ hij
+    rw [map_smul]; rw [LinearMap.map_smul₂]; rw [hv₂ hij]
+    module
 
 中文:
 定理 basisRepr_eq_of_iIsOrtho
@@ -4590,7 +4699,12 @@ theorem basisRepr_eq_of_iIsOrtho
   rw [basisRepr_apply]; rw [← @associated_eq_self_apply R]; rw [map_sum]; rw [weightedSumSquares_apply]
   refine sum_congr rfl fun j hj => ?_
   rw [← @associated_eq_self_apply R]; rw [LinearMap.map_sum₂]; rw [sum_eq_single_of_mem j hj]
-  · rw [map_smul, LinearMap.map_smul₂, smul_eq_mul, a
+  · rw [map_smul, LinearMap.map_smul₂, smul_eq_mul, associated_apply, smul_eq_mul,
+      smul_eq_mul, Module.End.smul_def, half_moduleEnd_apply_eq_half_smul]
+    ring_nf
+  · intro i _ hij
+    rw [map_smul]; rw [LinearMap.map_smul₂]; rw [hv₂ hij]
+    module
 -/
 theorem basisRepr_eq_of_iIsOrtho {R M} [CommRing R] [AddCommGroup M] [Module R M]
     [Invertible (2 : R)] (Q : QuadraticForm R M) (v : Basis ι R M)

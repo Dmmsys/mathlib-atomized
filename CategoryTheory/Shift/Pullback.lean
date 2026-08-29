@@ -282,6 +282,9 @@ lemma pullbackShiftFunctorAdd'_inv_app
   change _ ≫ _ = _
   congr 1
   rw [Discrete.addMonoidalFunctor_μ]
+  dsimp [Discrete.eqToHom]
+  congr 2
+  apply eqToHom_map
 
 中文:
 引理 pullbackShiftFunctorAdd'_inv_app
@@ -294,6 +297,9 @@ lemma pullbackShiftFunctorAdd'_inv_app
   change _ ≫ _ = _
   congr 1
   rw [Discrete.addMonoidalFunctor_μ]
+  dsimp [Discrete.eqToHom]
+  congr 2
+  apply eqToHom_map
 
 Depends on / 依赖: Discrete, Discrete.addMonoidalFunctor_, Discrete.eqToHom, Functor, Functor.map_id, NatTrans, NatTrans.naturality_assoc, _eq_shiftFunctorAdd, eqToHom, eqToHom_map, id_comp, map_add, map_id, naturality_assoc, shiftFunctorAdd
 -/
@@ -322,12 +328,14 @@ lemma `pullbackShiftFunctorAdd'_hom_app` / 引理 `pullbackShiftFunctorAdd'_hom_
 English:
 lemma pullbackShiftFunctorAdd'_hom_app
   proof: by
-  rw [← cancel_epi ((shiftFunctorAdd' _ a₁ a₂ a₃ h).inv.app X)]; rw [Iso.inv_hom_id_app]; rw [pullbackShiftFunctorAdd'_inv_app φ X a₁ a₂ a₃ h b₁ b₂ b₃ h₁ h₂ h₃]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← 
+  rw [← cancel_epi ((shiftFunctorAdd' _ a₁ a₂ a₃ h).inv.app X)]; rw [Iso.inv_hom_id_app]; rw [pullbackShiftFunctorAdd'_inv_app φ X a₁ a₂ a₃ h b₁ b₂ b₃ h₁ h₂ h₃]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp]; rw [Iso.hom_inv_id_app]; rw [Functor.map_id]
+  rfl
 
 中文:
 引理 pullbackShiftFunctorAdd'_hom_app
   证明: by
-  rw [← cancel_epi ((shiftFunctorAdd' _ a₁ a₂ a₃ h).inv.app X)]; rw [Iso.inv_hom_id_app]; rw [pullbackShiftFunctorAdd'_inv_app φ X a₁ a₂ a₃ h b₁ b₂ b₃ h₁ h₂ h₃]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← 
+  rw [← cancel_epi ((shiftFunctorAdd' _ a₁ a₂ a₃ h).inv.app X)]; rw [Iso.inv_hom_id_app]; rw [pullbackShiftFunctorAdd'_inv_app φ X a₁ a₂ a₃ h b₁ b₂ b₃ h₁ h₂ h₃]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Iso.hom_inv_id_app_assoc]; rw [← Functor.map_comp]; rw [Iso.hom_inv_id_app]; rw [Functor.map_id]
+  rfl
 -/
 lemma pullbackShiftFunctorAdd'_hom_app :
     (shiftFunctorAdd' _ a₁ a₂ a₃ h).hom.app X =
@@ -388,7 +396,26 @@ instance commShiftPullback
     ext
     dsimp
     simp only [F.commShiftIso_zero' (A := B) (φ 0) (by rw [map_zero]), CommShift.isoZero'_hom_app,
-      assoc, Com
+      assoc, CommShift.isoZero_hom_app, pullbackShiftFunctorZero'_hom_app, map_comp,
+      pullbackShiftFunctorZero'_inv_app]
+    rfl
+  commShiftIso_add _ _ := by
+    ext
+    simp only [PullbackShift.functor, comp_obj, Iso.trans_hom, isoWhiskerRight_hom,
+      isoWhiskerLeft_hom, Iso.symm_hom, NatTrans.comp_app, whiskerRight_app, whiskerLeft_app,
+      CommShift.isoAdd_hom_app, map_comp, assoc]
+    rw [F.commShiftIso_add' (φ.map_add _ _).symm]; rw [← shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [← shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [pullbackShiftFunctorAdd'_hom_app φ _ _ _ _ rfl _ _ _ rfl rfl rfl]; rw [pullbackShiftFunctorAdd'_inv_app φ _ _ _ _ rfl _ _ _ rfl rfl rfl]
+    simp only [CommShift.isoAdd'_hom_app, assoc, map_comp, NatTrans.naturality_assoc,
+      Iso.inv_hom_id_app_assoc]
+    slice_rhs 9 10 => rw [← map_comp, Iso.inv_hom_id_app, map_id]
+    simp only [comp_obj, id_comp]
+    rw [← Functor.comp_map F (shiftFunctor D _)]; rw [← (F.commShiftIso _).hom.naturality_assoc]
+    slice_rhs 4 5 => rw [← map_comp, (pullbackShiftIso C φ _ _ rfl).hom.naturality, map_comp]
+    slice_rhs 3 4 => rw [← map_comp, Iso.inv_hom_id_app, map_id]
+    simp only [comp_obj, id_comp, comp_map, assoc]
+    slice_rhs 3 4 => rw [← map_comp, ← map_comp, Iso.inv_hom_id_app, map_id, map_id]
+    rw [id_comp]; rw [assoc]; rw [assoc]
+    rfl
 
 中文:
 实例 commShiftPullback
@@ -399,7 +426,26 @@ instance commShiftPullback
     ext
     dsimp
     simp only [F.commShiftIso_zero' (A := B) (φ 0) (by rw [map_zero]), CommShift.isoZero'_hom_app,
-      assoc, Com
+      assoc, CommShift.isoZero_hom_app, pullbackShiftFunctorZero'_hom_app, map_comp,
+      pullbackShiftFunctorZero'_inv_app]
+    rfl
+  commShiftIso_add _ _ := by
+    ext
+    simp only [PullbackShift.functor, comp_obj, Iso.trans_hom, isoWhiskerRight_hom,
+      isoWhiskerLeft_hom, Iso.symm_hom, NatTrans.comp_app, whiskerRight_app, whiskerLeft_app,
+      CommShift.isoAdd_hom_app, map_comp, assoc]
+    rw [F.commShiftIso_add' (φ.map_add _ _).symm]; rw [← shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [← shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [pullbackShiftFunctorAdd'_hom_app φ _ _ _ _ rfl _ _ _ rfl rfl rfl]; rw [pullbackShiftFunctorAdd'_inv_app φ _ _ _ _ rfl _ _ _ rfl rfl rfl]
+    simp only [CommShift.isoAdd'_hom_app, assoc, map_comp, NatTrans.naturality_assoc,
+      Iso.inv_hom_id_app_assoc]
+    slice_rhs 9 10 => rw [← map_comp, Iso.inv_hom_id_app, map_id]
+    simp only [comp_obj, id_comp]
+    rw [← Functor.comp_map F (shiftFunctor D _)]; rw [← (F.commShiftIso _).hom.naturality_assoc]
+    slice_rhs 4 5 => rw [← map_comp, (pullbackShiftIso C φ _ _ rfl).hom.naturality, map_comp]
+    slice_rhs 3 4 => rw [← map_comp, Iso.inv_hom_id_app, map_id]
+    simp only [comp_obj, id_comp, comp_map, assoc]
+    slice_rhs 3 4 => rw [← map_comp, ← map_comp, Iso.inv_hom_id_app, map_id, map_id]
+    rw [id_comp]; rw [assoc]; rw [assoc]
+    rfl
 
 Depends on / 依赖: isoWhiskerRight, pullbackShiftIso
 -/
@@ -478,7 +524,7 @@ instance commShiftPullback
       isoWhiskerLeft_hom, Iso.symm_hom, comp_app, whiskerRight_app, whiskerLeft_app,
       assoc]
     rw [← τ.naturality_assoc]
-    simp [← NatTrans.shift_app_comm_a
+    simp [← NatTrans.shift_app_comm_assoc]
 
 中文:
 实例 commShiftPullback
@@ -490,7 +536,7 @@ instance commShiftPullback
       isoWhiskerLeft_hom, Iso.symm_hom, comp_app, whiskerRight_app, whiskerLeft_app,
       assoc]
     rw [← τ.naturality_assoc]
-    simp [← NatTrans.shift_app_comm_a
+    simp [← NatTrans.shift_app_comm_assoc]
 
 Depends on / 依赖: Iso.symm_hom, Iso.trans_hom, NatTrans, NatTrans.shift_app_comm_assoc, PullbackShift, PullbackShift.natTrans, commShiftPullback_iso_eq, comp_app, isoWhiskerLeft_hom, isoWhiskerRight_hom, natTrans, naturality_assoc, shift_app_comm_assoc, symm_hom, trans_hom, whiskerLeft_app, whiskerRight_app
 -/
@@ -591,7 +637,10 @@ instance :
     dsimp [PullbackShift.natIsoComp]
     simp only [commShiftPullback_iso_eq φ _ _ _ rfl, Iso.trans_hom, isoWhiskerRight_hom,
       isoWhiskerLeft_hom, Iso.symm_hom, comp_app, comp_obj, whiskerRight_app, Functor.comp_map,
-      commShiftIso_comp_hom_app, whiskerLeft_app, assoc, map_id, co
+      commShiftIso_comp_hom_app, whiskerLeft_app, assoc, map_id, comp_id, map_comp, id_comp]
+    dsimp [PullbackShift.functor]
+    slice_rhs 3 4 => rw [← G.map_comp, Iso.inv_hom_id_app]
+    simp
 
 中文:
 实例 :
@@ -601,7 +650,10 @@ instance :
     dsimp [PullbackShift.natIsoComp]
     simp only [commShiftPullback_iso_eq φ _ _ _ rfl, Iso.trans_hom, isoWhiskerRight_hom,
       isoWhiskerLeft_hom, Iso.symm_hom, comp_app, comp_obj, whiskerRight_app, Functor.comp_map,
-      commShiftIso_comp_hom_app, whiskerLeft_app, assoc, map_id, co
+      commShiftIso_comp_hom_app, whiskerLeft_app, assoc, map_id, comp_id, map_comp, id_comp]
+    dsimp [PullbackShift.functor]
+    slice_rhs 3 4 => rw [← G.map_comp, Iso.inv_hom_id_app]
+    simp
 
 Depends on / 依赖: Functor, Functor.comp_map, G.map_comp, Iso.inv_hom_id_app, Iso.symm_hom, Iso.trans_hom, PullbackShift, PullbackShift.functor, PullbackShift.natIsoComp, commShiftIso_comp_hom_app, commShiftPullback_iso_eq, comp_app, comp_id, comp_map, comp_obj, functor, id_comp, inv_hom_id_app, isoWhiskerLeft_hom, isoWhiskerRight_hom
 -/
@@ -634,7 +686,12 @@ definition PullbackShift.adjunction
     PullbackShift.natTrans φ adj.unit ≫ (NatTrans.PullbackShift.natIsoComp φ F G).hom
   counit := (NatTrans.PullbackShift.natIsoComp φ G F).inv ≫
     PullbackShift.natTrans φ adj.counit ≫ (NatTrans.PullbackShift.natIsoId D φ).inv
-  left_triangle_components
+  left_triangle_components _ := by
+    simp [PullbackShift.natTrans, NatTrans.PullbackShift.natIsoComp,
+      NatTrans.PullbackShift.natIsoId, PullbackShift.functor]
+  right_triangle_components _ := by
+    simp [PullbackShift.natTrans, NatTrans.PullbackShift.natIsoComp,
+      NatTrans.PullbackShift.natIsoId, PullbackShift.functor]
 
 中文:
 定义 PullbackShift.adjunction
@@ -643,7 +700,12 @@ definition PullbackShift.adjunction
     PullbackShift.natTrans φ adj.unit ≫ (NatTrans.PullbackShift.natIsoComp φ F G).hom
   counit := (NatTrans.PullbackShift.natIsoComp φ G F).inv ≫
     PullbackShift.natTrans φ adj.counit ≫ (NatTrans.PullbackShift.natIsoId D φ).inv
-  left_triangle_components
+  left_triangle_components _ := by
+    simp [PullbackShift.natTrans, NatTrans.PullbackShift.natIsoComp,
+      NatTrans.PullbackShift.natIsoId, PullbackShift.functor]
+  right_triangle_components _ := by
+    simp [PullbackShift.natTrans, NatTrans.PullbackShift.natIsoComp,
+      NatTrans.PullbackShift.natIsoId, PullbackShift.functor]
 
 Depends on / 依赖: NatTrans, NatTrans.PullbackShift.natIsoId, PullbackShift, natIsoId
 -/

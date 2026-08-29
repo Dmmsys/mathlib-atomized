@@ -142,7 +142,10 @@ theorem T_complex_cos
     push_cast
     ring_nf
   | neg_add_one n ih1 ih2 =>
-    simp only [T_
+    simp only [T_sub_one, eval_sub, eval_mul, eval_X, eval_ofNat, ih1, ih2, sub_eq_iff_eq_add',
+      cos_add_cos]
+    push_cast
+    ring_nf
 
 中文:
 定理 T_complex_cos
@@ -158,7 +161,10 @@ theorem T_complex_cos
     push_cast
     ring_nf
   | neg_add_one n ih1 ih2 =>
-    simp only [T_
+    simp only [T_sub_one, eval_sub, eval_mul, eval_X, eval_ofNat, ih1, ih2, sub_eq_iff_eq_add',
+      cos_add_cos]
+    push_cast
+    ring_nf
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, T_add_two, T_sub_one, add_two, cos_add_cos, eval_X, eval_mul, eval_ofNat, eval_sub, induct, neg_add_one, ring_nf, sub_eq_iff_eq_add
 -/
@@ -194,7 +200,13 @@ theorem U_complex_cos
   | add_two n ih1 ih2 =>
     simp only [U_add_two, eval_sub, eval_mul, eval_X, eval_ofNat, sub_mul,
       mul_assoc, ih1, ih2, sub_eq_iff_eq_add, sin_add_sin]
-    push_cas
+    push_cast
+    ring_nf
+  | neg_add_one n ih1 ih2 =>
+    simp only [U_sub_one, eval_sub, eval_mul, eval_X, eval_ofNat, sub_mul,
+      mul_assoc, ih1, ih2, sub_eq_iff_eq_add', sin_add_sin]
+    push_cast
+    ring_nf
 
 中文:
 定理 U_complex_cos
@@ -207,7 +219,13 @@ theorem U_complex_cos
   | add_two n ih1 ih2 =>
     simp only [U_add_two, eval_sub, eval_mul, eval_X, eval_ofNat, sub_mul,
       mul_assoc, ih1, ih2, sub_eq_iff_eq_add, sin_add_sin]
-    push_cas
+    push_cast
+    ring_nf
+  | neg_add_one n ih1 ih2 =>
+    simp only [U_sub_one, eval_sub, eval_mul, eval_X, eval_ofNat, sub_mul,
+      mul_assoc, ih1, ih2, sub_eq_iff_eq_add', sin_add_sin]
+    push_cast
+    ring_nf
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, U_add_two, U_sub_one, add_two, eval_X, eval_mul, eval_ofNat, eval_sub, induct, mul_assoc, neg_add_one, one_add_one_eq_two, ring_nf, sin_add_sin, sin_two_mul, sub_eq_iff_eq_add, sub_mul
 -/
@@ -329,7 +347,7 @@ theorem U_complex_cosh
   _ = sin ((n + 1) * (θ * I)) * (-I) := by rw [U_complex_cos]
   _ = sin ((n + 1) * θ * I) * (-I) := by rw [mul_assoc]
   _ = sinh ((n + 1) * θ) := by
-  
+    rw [sin_mul_I ((n + 1) * θ)]; rw [mul_assoc]; rw [mul_neg]; rw [I_mul_I]; rw [neg_neg]; rw [mul_one]
 
 中文:
 定理 U_complex_cosh
@@ -341,7 +359,7 @@ theorem U_complex_cosh
   _ = sin ((n + 1) * (θ * I)) * (-I) := by rw [U_complex_cos]
   _ = sin ((n + 1) * θ * I) * (-I) := by rw [mul_assoc]
   _ = sinh ((n + 1) * θ) := by
-  
+    rw [sin_mul_I ((n + 1) * θ)]; rw [mul_assoc]; rw [mul_neg]; rw [I_mul_I]; rw [neg_neg]; rw [mul_one]
 -/
 theorem U_complex_cosh (n : Int) : (U Complex n).eval (cosh θ) * sinh θ = sinh ((n + 1) * θ) := calc
   (U Complex n).eval (cosh θ) * sinh θ

@@ -74,7 +74,13 @@ lemma CoproductDisjoint.of_cofan
     let u : t.pt ⟶ (s hij).pt := by
       refine PullbackCone.IsLimit.lift (hs hij) t.fst t.snd ?_
       simp [← heq, t.condition_assoc]
-    refine ⟨(H hij).ofIso ⟨(H hij).to t.pt, u, (H hij).hom_ext 
+    refine ⟨(H hij).ofIso ⟨(H hij).to t.pt, u, (H hij).hom_ext _ _, ?_⟩⟩
+    refine PullbackCone.IsLimit.hom_ext ht ?_ ?_
+    · simp [show (H hij).to (X i) = (s hij).fst from (H hij).hom_ext _ _, u]
+    · simp [show (H hij).to (X j) = (s hij).snd from (H hij).hom_ext _ _, u]
+  mono_inj {d} hd i := by
+    rw [show d.inj i = c.inj i ≫ (hd.uniqueUpToIso hc).inv.hom by simp]
+    infer_instance
 
 中文:
 引理 余productDisjoint.of_cofan
@@ -85,7 +91,13 @@ lemma CoproductDisjoint.of_cofan
     let u : t.pt ⟶ (s hij).pt := by
       refine PullbackCone.IsLimit.lift (hs hij) t.fst t.snd ?_
       simp [← heq, t.condition_assoc]
-    refine ⟨(H hij).ofIso ⟨(H hij).to t.pt, u, (H hij).hom_ext 
+    refine ⟨(H hij).ofIso ⟨(H hij).to t.pt, u, (H hij).hom_ext _ _, ?_⟩⟩
+    refine PullbackCone.IsLimit.hom_ext ht ?_ ?_
+    · simp [show (H hij).to (X i) = (s hij).fst from (H hij).hom_ext _ _, u]
+    · simp [show (H hij).to (X j) = (s hij).snd from (H hij).hom_ext _ _, u]
+  mono_inj {d} hd i := by
+    rw [show d.inj i = c.inj i ≫ (hd.uniqueUpToIso hc).inv.hom by simp]
+    infer_instance
 
 Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.hom_ext, PullbackCone.IsLimit.lift, c.inj, condition_assoc, d.inj, e.hom.hom, e.hom.w, hd.uniqueUpToIso, hom_ext, mono_inj, t.condition_assoc, t.fst, t.pt, t.snd, uniqueUpToIso
 -/
@@ -353,7 +365,12 @@ lemma BinaryCoproductDisjoint.of_binaryCofan
   refine .of_cofan hc (fun {i j} hij => ?_) (fun {i j} hij => ?_) (fun {i j} hij => ?_)
   · match i, j with
     | .left, .right => exact s
-    | .right, .left =>
+    | .right, .left => exact s.flip
+  · dsimp
+    split
+    · exact hs
+    · exact PullbackCone.flipIsLimit hs
+  · dsimp; split <;> exact H
 
 中文:
 引理 BinaryCoproductDisjoint.of_binaryCofan
@@ -366,7 +383,12 @@ lemma BinaryCoproductDisjoint.of_binaryCofan
   refine .of_cofan hc (fun {i j} hij => ?_) (fun {i j} hij => ?_) (fun {i j} hij => ?_)
   · match i, j with
     | .left, .right => exact s
-    | .right, .left =>
+    | .right, .left => exact s.flip
+  · dsimp
+    split
+    · exact hs
+    · exact PullbackCone.flipIsLimit hs
+  · dsimp; split <;> exact H
 
 Depends on / 依赖: Cofan.inj, PullbackCone, PullbackCone.flipIsLimit, WalkingPair, c.inl, c.inr, flipIsLimit, of_cofan, s.flip
 -/
@@ -660,7 +682,7 @@ theorem initialMonoClass_of_coproductsDisjoint
         fac := fun _s j =>
           Discrete.casesOn j fun j => WalkingPair.casesOn j (hI.hom_ext _ _) (id_comp _)
         uniq := fun (_s : BinaryCofan _ _) _m w =>
-          (id_
+          (id_comp _).symm.trans (w ⟨WalkingPair.right⟩) }
 
 中文:
 定理 initialMonoClass_of_coproductsDisjoint
@@ -670,7 +692,7 @@ theorem initialMonoClass_of_coproductsDisjoint
         fac := fun _s j =>
           Discrete.casesOn j fun j => WalkingPair.casesOn j (hI.hom_ext _ _) (id_comp _)
         uniq := fun (_s : BinaryCofan _ _) _m w =>
-          (id_
+          (id_comp _).symm.trans (w ⟨WalkingPair.right⟩) }
 
 Depends on / 依赖: BinaryCofan, CategoryStruct, CategoryTheory, CategoryTheory.CategoryStruct.id, Discrete, Discrete.casesOn, WalkingPair, WalkingPair.casesOn, WalkingPair.right, casesOn, hI.hom_ext, hom_ext, id_comp, of_binaryCoproductDisjoint_left, s.inr, symm.trans
 -/

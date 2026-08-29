@@ -870,7 +870,10 @@ theorem destruct_flatten
   exact
     match c1, c2, h with
     | c, _, Or.inl rfl => by cases c.destruct <;> simp
-    | _, _, Or.inr ⟨c,
+    | _, _, Or.inr ⟨c, rfl, rfl⟩ => by
+      induction c using Computation.recOn with
+      | pure a => simp; cases (destruct a).destruct <;> simp
+      | think c' => simpa using Or.inr ⟨c', rfl, rfl⟩
 
 中文:
 定理 destruct_flatten
@@ -885,7 +888,10 @@ theorem destruct_flatten
   exact
     match c1, c2, h with
     | c, _, Or.inl rfl => by cases c.destruct <;> simp
-    | _, _, Or.inr ⟨c,
+    | _, _, Or.inr ⟨c, rfl, rfl⟩ => by
+      induction c using Computation.recOn with
+      | pure a => simp; cases (destruct a).destruct <;> simp
+      | think c' => simpa using Or.inr ⟨c', rfl, rfl⟩
 
 Depends on / 依赖: Computation, Computation.bind, Computation.eq_of_bisim, Computation.recOn, Or.inl, Or.inr, c.destruct, destruct, eq_of_bisim, flatten
 -/
@@ -1494,7 +1500,9 @@ theorem destruct_some_of_destruct_tail_some
   rcases exists_of_mem_bind h with ⟨t, tm, td⟩; clear h
   rcases Computation.exists_of_mem_map tm with ⟨t', ht', ht2⟩; clear tm
   rcases t' with - | t' <;> rw [← ht2] at td <;> simp only [destruct_nil] at td
-  · have := mem_unique 
+  · have := mem_unique td (ret_mem _)
+    contradiction
+  · exact ⟨_, ht'⟩
 
 中文:
 定理 destruct_some_of_destruct_tail_some
@@ -1504,7 +1512,9 @@ theorem destruct_some_of_destruct_tail_some
   rcases exists_of_mem_bind h with ⟨t, tm, td⟩; clear h
   rcases Computation.exists_of_mem_map tm with ⟨t', ht', ht2⟩; clear tm
   rcases t' with - | t' <;> rw [← ht2] at td <;> simp only [destruct_nil] at td
-  · have := mem_unique 
+  · have := mem_unique td (ret_mem _)
+    contradiction
+  · exact ⟨_, ht'⟩
 
 Depends on / 依赖: Computation, Computation.exists_of_mem_map, Functor, Functor.map, destruct_flatten, destruct_nil, exists_of_mem_bind, exists_of_mem_map, mem_unique, ret_mem
 -/
@@ -1754,7 +1764,22 @@ theorem eq_or_mem_iff_mem
     induction s using WSeq.recOn <;>
     have := congr_arg Computation.destruct m
   case h1.nil | h1.think | h2.nil | h2.cons => simp at this
-  case h2.think => simp at thi
+  case h2.think => simp at this; simp [IH this]
+  case h1.cons =>
+    simp only [destruct_cons, destruct_pure, Sum.inl.injEq, Option.some.injEq,
+      Prod.mk.injEq] at this
+    obtain ⟨i1, i2⟩ := this
+    rw [i1]; rw [i2]
+    dsimp only [cons, Membership.mem, WSeq.Mem, Seq.Mem, Seq.cons]
+    have h_a_eq_a' : a = a' ↔ some (some a) = some (some a') := by simp
+    rw [h_a_eq_a']
+    refine ⟨Stream'.eq_or_mem_of_mem_cons, fun o => ?_⟩
+    rcases o with e | m
+    · rw [e]
+      apply Stream'.mem_cons
+    · exact Stream'.mem_cons_of_mem _ m
+
+@[simp]
 
 中文:
 定理 eq_or_mem_iff_mem
@@ -1767,7 +1792,22 @@ theorem eq_or_mem_iff_mem
     induction s using WSeq.recOn <;>
     have := congr_arg Computation.destruct m
   case h1.nil | h1.think | h2.nil | h2.cons => simp at this
-  case h2.think => simp at thi
+  case h2.think => simp at this; simp [IH this]
+  case h1.cons =>
+    simp only [destruct_cons, destruct_pure, Sum.inl.injEq, Option.some.injEq,
+      Prod.mk.injEq] at this
+    obtain ⟨i1, i2⟩ := this
+    rw [i1]; rw [i2]
+    dsimp only [cons, Membership.mem, WSeq.Mem, Seq.Mem, Seq.cons]
+    have h_a_eq_a' : a = a' ↔ some (some a) = some (some a') := by simp
+    rw [h_a_eq_a']
+    refine ⟨Stream'.eq_or_mem_of_mem_cons, fun o => ?_⟩
+    rcases o with e | m
+    · rw [e]
+      apply Stream'.mem_cons
+    · exact Stream'.mem_cons_of_mem _ m
+
+@[simp]
 
 Depends on / 依赖: Computation, Computation.destruct, Computation.memRecOn, Membership, Membership.mem, Option.some.injEq, Prod.mk.injEq, Sum.inl.injEq, WSeq.Mem, WSeq.recOn, congr_arg, destruct, destruct_cons, destruct_pure, generalize, h1.cons, h1.nil, h1.think, h2.cons, h2.nil
 -/
@@ -1871,7 +1911,11 @@ theorem mem_of_mem_tail
 .mpr Or.inr (by simpa using m) case zero.cons | succ.cons => exact WSeq.mem_cons_iff ..
   case zero.think => injections
   case succ.think n IH s =>
-    simp onl
+    simp only [tail_think, mem_think] at m e ⊢
+    apply IH m
+    rw [e]
+    cases tail s
+    rfl
 
 中文:
 定理 mem_of_mem_tail
@@ -1885,7 +1929,11 @@ theorem mem_of_mem_tail
 .mpr Or.inr (by simpa using m) case zero.cons | succ.cons => exact WSeq.mem_cons_iff ..
   case zero.think => injections
   case succ.think n IH s =>
-    simp onl
+    simp only [tail_think, mem_think] at m e ⊢
+    apply IH m
+    rw [e]
+    cases tail s
+    rfl
 
 Depends on / 依赖: Or.inr, WSeq.mem_cons_iff, WSeq.recOn, injections, mem_cons_iff, mem_think, revert, succ.cons, succ.nil, succ.think, tail_think, zero.cons, zero.nil, zero.think
 -/
@@ -1937,7 +1985,9 @@ theorem get?_mem
     obtain ⟨a', s'⟩ := o
     exact (eq_or_mem_iff_mem h1).2 (Or.inl h'.symm)
   case succ n IH =>
-    have := @IH 
+    have := @IH (tail s)
+    rw [get?_tail] at this
+    exact mem_of_mem_tail (this h)
 
 中文:
 定理 get?_mem
@@ -1953,7 +2003,9 @@ theorem get?_mem
     obtain ⟨a', s'⟩ := o
     exact (eq_or_mem_iff_mem h1).2 (Or.inl h'.symm)
   case succ n IH =>
-    have := @IH 
+    have := @IH (tail s)
+    rw [get?_tail] at this
+    exact mem_of_mem_tail (this h)
 -/
 theorem get?_mem {s : WSeq α} {a n} : some a in get? s n -> a in s := by
   induction n generalizing s <;> intro h
@@ -1990,7 +2042,8 @@ theorem exists_get?_of_mem
   · intro s' h
     obtain ⟨n, h⟩ := h
     exists n
-    simp only [get?, dropn_think
+    simp only [get?, dropn_think, head_think]
+    apply think_mem h
 
 中文:
 定理 存在_get?_of_mem
@@ -2010,7 +2063,8 @@ theorem exists_get?_of_mem
   · intro s' h
     obtain ⟨n, h⟩ := h
     exists n
-    simp only [get?, dropn_think
+    simp only [get?, dropn_think, head_think]
+    apply think_mem h
 
 Depends on / 依赖: dropn_think, head_cons, head_think, mem_rec_on, ret_mem, think_mem
 -/
@@ -2047,7 +2101,7 @@ theorem exists_dropn_of_mem
     obtain ⟨a', s'⟩ := o
     dsimp at i
     rw [i] at om
-   
+    exact ⟨_, om⟩⟩
 
 中文:
 定理 存在_dropn_of_mem
@@ -2062,7 +2116,7 @@ theorem exists_dropn_of_mem
     obtain ⟨a', s'⟩ := o
     dsimp at i
     rw [i] at om
-   
+    exact ⟨_, om⟩⟩
 
 Depends on / 依赖: Computation, Computation.mem_map, Computation.mem_unique, _of_mem, exists_get, head_terminates_iff, injection, mem_map, mem_unique
 -/
@@ -2321,7 +2375,20 @@ theorem toList'_map
             match Seq.destruct s with
             | none => Sum.inl l.reverse
             | some (none, s') => Sum.inr (l, s')
-            | some (so
+            | some (some a, s') => Sum.inr (a::l, s')) (l' ++ l, s) ∧
+            c2 = Computation.map (l.reverse ++ ·) (Computation.corec (fun ⟨l, s⟩ =>
+              match Seq.destruct s with
+              | none => Sum.inl l.reverse
+              | some (none, s') => Sum.inr (l, s')
+              | some (some a, s') => Sum.inr (a::l, s')) (l', s)))
+      ?_ ⟨[], s, rfl, rfl⟩
+  intro s1 s2 h; rcases h with ⟨l', s, h⟩; rw [h.left, h.right]
+  induction s using WSeq.recOn
+  case nil => simp
+  case cons a s => refine ⟨a :: l', s, ?_, ?_⟩ <;> simp
+  case think s => refine ⟨l', s, ?_, ?_⟩ <;> simp
+
+@[simp]
 
 中文:
 定理 toList'_map
@@ -2335,7 +2402,20 @@ theorem toList'_map
             match Seq.destruct s with
             | none => Sum.inl l.reverse
             | some (none, s') => Sum.inr (l, s')
-            | some (so
+            | some (some a, s') => Sum.inr (a::l, s')) (l' ++ l, s) ∧
+            c2 = Computation.map (l.reverse ++ ·) (Computation.corec (fun ⟨l, s⟩ =>
+              match Seq.destruct s with
+              | none => Sum.inl l.reverse
+              | some (none, s') => Sum.inr (l, s')
+              | some (some a, s') => Sum.inr (a::l, s')) (l', s)))
+      ?_ ⟨[], s, rfl, rfl⟩
+  intro s1 s2 h; rcases h with ⟨l', s, h⟩; rw [h.left, h.right]
+  induction s using WSeq.recOn
+  case nil => simp
+  case cons a s => refine ⟨a :: l', s, ?_, ?_⟩ <;> simp
+  case think s => refine ⟨l', s, ?_, ?_⟩ <;> simp
+
+@[simp]
 -/
 theorem toList'_map (l : List α) (s : WSeq α) :
     Computation.corec (fun ⟨l, s⟩ =>
@@ -2468,7 +2548,7 @@ theorem destruct_ofSeq
     dsimp only [(· <$> ·)]
     simp
 
-@[sim
+@[simp]
 
 中文:
 定理 destruct_ofSeq
@@ -2482,7 +2562,7 @@ theorem destruct_ofSeq
     dsimp only [(· <$> ·)]
     simp
 
-@[sim
+@[simp]
 
 Depends on / 依赖: Computation, Computation.corec_eq, Option.map_eq_map, Seq.destruct, Seq.get, Seq.head, Seq.map_get, corec_eq, destruct, destruct_eq_pure, map_eq_map, map_get
 -/
@@ -2804,7 +2884,28 @@ theorem exists_of_mem_join
     from fun S h => (this _ h nil S (by simp) (by simp [h])).resolve_left (notMem_nil _)
   intro ss h
   apply mem_rec_on h
-  · intro b ss o s S ej
+  · intro b ss o s S ej m
+    induction s using WSeq.recOn <;>
+      [induction S using WSeq.recOn; skip; skip] <;>
+      have := congr_arg Seq.destruct ej
+    case nil.nil | nil.cons | nil.think | think => simp at this
+    case cons =>
+      simp only [cons_append, seq_destruct_cons, Option.some.injEq, Prod.mk.injEq] at this
+      cases this with
+      | intro b' s =>
+        subst b' ss
+        simp? at m ⊢ says simp only [cons_append, mem_cons_iff] at m ⊢
+        rcases o with e | IH
+        · simp [e]
+        rcases m with e | m
+        · simp [e]
+        exact Or.imp_left Or.inr (IH _ _ rfl m)
+  · intro ss IH s S ej m
+    induction s using WSeq.recOn <;>
+      [induction S using WSeq.recOn; skip; skip] <;>
+      have := congr_arg Seq.destruct ej
+    case nil.cons | nil.think | think => simp at this; simp_all
+    case nil.nil | cons => simp at this
 
 中文:
 定理 存在_of_mem_join
@@ -2817,7 +2918,28 @@ theorem exists_of_mem_join
     from fun S h => (this _ h nil S (by simp) (by simp [h])).resolve_left (notMem_nil _)
   intro ss h
   apply mem_rec_on h
-  · intro b ss o s S ej
+  · intro b ss o s S ej m
+    induction s using WSeq.recOn <;>
+      [induction S using WSeq.recOn; skip; skip] <;>
+      have := congr_arg Seq.destruct ej
+    case nil.nil | nil.cons | nil.think | think => simp at this
+    case cons =>
+      simp only [cons_append, seq_destruct_cons, Option.some.injEq, Prod.mk.injEq] at this
+      cases this with
+      | intro b' s =>
+        subst b' ss
+        simp? at m ⊢ says simp only [cons_append, mem_cons_iff] at m ⊢
+        rcases o with e | IH
+        · simp [e]
+        rcases m with e | m
+        · simp [e]
+        exact Or.imp_left Or.inr (IH _ _ rfl m)
+  · intro ss IH s S ej m
+    induction s using WSeq.recOn <;>
+      [induction S using WSeq.recOn; skip; skip] <;>
+      have := congr_arg Seq.destruct ej
+    case nil.cons | nil.think | think => simp at this; simp_all
+    case nil.nil | cons => simp at this
 
 Depends on / 依赖: Seq.destruct, WSeq.recOn, append, congr_arg, cons_append, destruct, mem_rec_on, nil.cons, nil.nil, nil.think, notMem_nil, resolve_left, seq_dest
 -/
@@ -2892,7 +3014,9 @@ theorem destruct_map
     obtain ⟨s, h⟩ := h
     rw [h.left]; rw [h.right]
     induction s using WSeq.recOn
-    case nil | c
+    case nil | cons => simp
+    case think s => exact ⟨s, by simp⟩
+  · exact ⟨s, rfl, rfl⟩
 
 中文:
 定理 destruct_map
@@ -2907,7 +3031,9 @@ theorem destruct_map
     obtain ⟨s, h⟩ := h
     rw [h.left]; rw [h.right]
     induction s using WSeq.recOn
-    case nil | c
+    case nil | cons => simp
+    case think s => exact ⟨s, by simp⟩
+  · exact ⟨s, rfl, rfl⟩
 
 Depends on / 依赖: Computation, Computation.eq_of_bisim, Computation.map, Option.map, Prod.map, WSeq.recOn, destruct, eq_of_bisim, h.left, h.right
 -/
@@ -2958,7 +3084,11 @@ theorem destruct_append
   intro c1 c2 h; rcases h with ⟨s, t, h⟩; rw [h.left, h.right]
   induction s using WSeq.recOn
   case nil =>
-    inducti
+    induction t using WSeq.recOn
+    case nil | cons => simp
+    case think t => exact ⟨nil, t, by simp⟩
+  case cons => simp
+  case think s => exact ⟨s, t, by simp⟩
 
 中文:
 定理 destruct_append
@@ -2972,7 +3102,11 @@ theorem destruct_append
   intro c1 c2 h; rcases h with ⟨s, t, h⟩; rw [h.left, h.right]
   induction s using WSeq.recOn
   case nil =>
-    inducti
+    induction t using WSeq.recOn
+    case nil | cons => simp
+    case think t => exact ⟨nil, t, by simp⟩
+  case cons => simp
+  case think s => exact ⟨s, t, by simp⟩
 
 Depends on / 依赖: Computation, Computation.eq_of_bisim, WSeq.recOn, append, destruct, destruct_append, destruct_append.aux, eq_of_bisim, h.left, h.right
 -/
@@ -3025,7 +3159,10 @@ theorem destruct_join
   exact
     match c1, c2, h with
 | c, _, Or.inl rfl => by cases c.destruct <;> simp
-    | _, _, Or.
+    | _, _, Or.inr ⟨S, rfl, rfl⟩ => by
+      induction S using WSeq.recOn
+      case nil | cons => simp
+      case think S => exact Or.inr ⟨S, by simp⟩
 
 中文:
 定理 destruct_join
@@ -3040,7 +3177,10 @@ theorem destruct_join
   exact
     match c1, c2, h with
 | c, _, Or.inl rfl => by cases c.destruct <;> simp
-    | _, _, Or.
+    | _, _, Or.inr ⟨S, rfl, rfl⟩ => by
+      induction S using WSeq.recOn
+      case nil | cons => simp
+      case think S => exact Or.inr ⟨S, by simp⟩
 
 Depends on / 依赖: Computation, Computation.eq_of_bisim, Or.inl, Or.inr, WSeq.recOn, c.destruct, destruct, destruct_join, destruct_join.aux, eq_of_bisim
 -/
@@ -3077,7 +3217,11 @@ theorem map_join
     induction s using WSeq.recOn
     · induction S using WSeq.recOn with
       | nil => simp
-      | cons s S => simpa using ⟨map f s,
+      | cons s S => simpa using ⟨map f s, S, rfl, rfl⟩
+      | think S => simpa using ⟨nil, S, by simp, by simp⟩
+    · simpa using ⟨_, _, rfl, rfl⟩
+    · simpa using ⟨_, _, rfl, rfl⟩
+  · exact ⟨nil, S, by simp, by simp⟩
 
 中文:
 定理 map_join
@@ -3091,7 +3235,11 @@ theorem map_join
     induction s using WSeq.recOn
     · induction S using WSeq.recOn with
       | nil => simp
-      | cons s S => simpa using ⟨map f s,
+      | cons s S => simpa using ⟨map f s, S, rfl, rfl⟩
+      | think S => simpa using ⟨nil, S, by simp, by simp⟩
+    · simpa using ⟨_, _, rfl, rfl⟩
+    · simpa using ⟨_, _, rfl, rfl⟩
+  · exact ⟨nil, S, by simp, by simp⟩
 
 Depends on / 依赖: Seq.eq_of_bisim, WSeq.recOn, append, eq_of_bisim
 -/

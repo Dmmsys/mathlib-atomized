@@ -335,7 +335,8 @@ theorem norm_weightedSMul_le
       norm_smul (μ.real s) (ContinuousLinearMap.id Real F)
     _ <= ‖μ.real s‖ :=
       ((mul_le_mul_of_nonneg_left norm_id_le (norm_nonneg _)).trans (mul_one _).le)
-    _ = abs μ.real s := Real.norm_eq_a
+    _ = abs μ.real s := Real.norm_eq_abs _
+    _ = μ.real s := abs_eq_self.mpr ENNReal.toReal_nonneg
 
 中文:
 定理 norm_weightedSMul_le
@@ -346,7 +347,8 @@ theorem norm_weightedSMul_le
       norm_smul (μ.real s) (ContinuousLinearMap.id Real F)
     _ <= ‖μ.real s‖ :=
       ((mul_le_mul_of_nonneg_left norm_id_le (norm_nonneg _)).trans (mul_one _).le)
-    _ = abs μ.real s := Real.norm_eq_a
+    _ = abs μ.real s := Real.norm_eq_abs _
+    _ = μ.real s := abs_eq_self.mpr ENNReal.toReal_nonneg
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, ENNReal, ENNReal.toReal_nonneg, Real.norm_eq_abs, abs_eq_self, abs_eq_self.mpr, mul_le_mul_of_nonneg_left, mul_one, norm_eq_abs, norm_id_le, norm_nonneg, norm_smul, toReal_nonneg, weightedSMul
 -/
@@ -631,7 +633,7 @@ theorem integral_eq_sum_of_subset
   rw [SimpleFunc.mem_range] at hx
   rw [preimage_eq_empty] <;> simp [Set.disjoint_singleton_left, hx]
 
-@[s
+@[simp]
 
 中文:
 定理 integral_eq_sum_of_subset
@@ -644,7 +646,7 @@ theorem integral_eq_sum_of_subset
   rw [SimpleFunc.mem_range] at hx
   rw [preimage_eq_empty] <;> simp [Set.disjoint_singleton_left, hx]
 
-@[s
+@[simp]
 
 Depends on / 依赖: Classical, Classical.not_not, Finset, Finset.mem_filter, Finset.sum_subset, Set.disjoint_singleton_left, SimpleFunc, SimpleFunc.integral_eq_sum_filter, SimpleFunc.mem_range, disjoint_singleton_left, hx.symm, integral_eq_sum_filter, mem_filter, mem_range, not_and_or, not_not, preimage_eq_empty, sum_subset
 -/
@@ -707,7 +709,11 @@ theorem integral_piecewise_zero
   · intro y hy
     simp only [mem_filter, mem_range, coe_piecewise, coe_zero, piecewise_eq_indicator,
       mem_range_indicator] at *
-    rcases hy with ⟨⟨rfl, 
+    rcases hy with ⟨⟨rfl, -⟩ | ⟨x, -, rfl⟩, h₀⟩
+    exacts [(h₀ rfl).elim, ⟨Set.mem_range_self _, h₀⟩]
+  · dsimp
+    rw [Set.piecewise_eq_indicator]; rw [indicator_preimage_of_notMem]; rw [measureReal_restrict_apply (f.measurableSet_preimage _)]
+    exact fun h₀ => (mem_filter.1 hy).2 (Eq.symm h₀)
 
 中文:
 定理 integral_piecewise_zero
@@ -719,7 +725,11 @@ theorem integral_piecewise_zero
   · intro y hy
     simp only [mem_filter, mem_range, coe_piecewise, coe_zero, piecewise_eq_indicator,
       mem_range_indicator] at *
-    rcases hy with ⟨⟨rfl, 
+    rcases hy with ⟨⟨rfl, -⟩ | ⟨x, -, rfl⟩, h₀⟩
+    exacts [(h₀ rfl).elim, ⟨Set.mem_range_self _, h₀⟩]
+  · dsimp
+    rw [Set.piecewise_eq_indicator]; rw [indicator_preimage_of_notMem]; rw [measureReal_restrict_apply (f.measurableSet_preimage _)]
+    exact fun h₀ => (mem_filter.1 hy).2 (Eq.symm h₀)
 
 Depends on / 依赖: Set.mem_range_self, Set.piecewise_eq_indicator, classical, coe_piecewise, coe_zero, exacts, f.measurableSet_preimage, indicator_preimage_of_notMem, integral_eq_sum_filter, integral_eq_sum_of_subset, measurableSet_preimage, measureReal_restrict_apply, mem_filter, mem_range, mem_range_indicator, mem_range_self, piecewise_eq_indicator, sum_congr
 -/
@@ -767,7 +777,12 @@ theorem integral_eq_lintegral'
   simp only [← map_apply g f, lintegral_eq_lintegral]
   rw [map_integral f _ hf]; rw [map_lintegral]; rw [ENNReal.toReal_sum]
   · refine Finset.sum_congr rfl fun b _ => ?_
-    rw [smul_eq_mul]; rw [toReal_mul]; rw [mul_comm]; rw [Fun
+    rw [smul_eq_mul]; rw [toReal_mul]; rw [mul_comm]; rw [Function.comp_apply]; rw [measureReal_def]
+  · rintro a -
+    by_cases a0 : a = 0
+    · rw [a0, hg0, zero_mul]; exact WithTop.zero_ne_top
+    · apply mul_ne_top (ht a) (hf'.meas_preimage_singleton_ne_zero a0).ne
+  · simp [hg0]
 
 中文:
 定理 integral_eq_lintegral'
@@ -777,7 +792,12 @@ theorem integral_eq_lintegral'
   simp only [← map_apply g f, lintegral_eq_lintegral]
   rw [map_integral f _ hf]; rw [map_lintegral]; rw [ENNReal.toReal_sum]
   · refine Finset.sum_congr rfl fun b _ => ?_
-    rw [smul_eq_mul]; rw [toReal_mul]; rw [mul_comm]; rw [Fun
+    rw [smul_eq_mul]; rw [toReal_mul]; rw [mul_comm]; rw [Function.comp_apply]; rw [measureReal_def]
+  · rintro a -
+    by_cases a0 : a = 0
+    · rw [a0, hg0, zero_mul]; exact WithTop.zero_ne_top
+    · apply mul_ne_top (ht a) (hf'.meas_preimage_singleton_ne_zero a0).ne
+  · simp [hg0]
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_sum, FinMeasSupp, Finset, Finset.sum_congr, Function, Function.comp_apply, WithTop, WithTop.zero_ne_top, comp_apply, f.FinMeasSupp, integrable_iff_finMeasSupp, lintegral_eq_lintegral, map_apply, map_integral, map_lintegral, meas_preimage_singleton_ne_zero, measureReal_def, mul_comm, mul_ne_top
 -/
@@ -1033,7 +1053,8 @@ lemma integral_nonneg
   · suffices μ (f ⁻¹' {f y}) = 0 by simp [this, measureReal_def]
     rw [← nonpos_iff_eq_zero]
     refine le_of_le_of_eq (measure_mono fun x hx => ?_) (ae_iff.mp hf)
-    simp onl
+    simp only [Set.mem_preimage, mem_singleton_iff, mem_ofPred_eq] at hx ⊢
+    exact hx ▸ hy
 
 中文:
 引理 integral_nonneg
@@ -1048,7 +1069,8 @@ lemma integral_nonneg
   · suffices μ (f ⁻¹' {f y}) = 0 by simp [this, measureReal_def]
     rw [← nonpos_iff_eq_zero]
     refine le_of_le_of_eq (measure_mono fun x hx => ?_) (ae_iff.mp hf)
-    simp onl
+    simp only [Set.mem_preimage, mem_singleton_iff, mem_ofPred_eq] at hx ⊢
+    exact hx ▸ hy
 
 Depends on / 依赖: Finset, Finset.sum_nonneg, Set.mem_preimage, ae_iff, ae_iff.mp, forall_mem_range, integral_eq, le_of_le_of_eq, measureReal_def, measure_mono, mem_ofPred_eq, mem_preimage, mem_singleton_iff, nonpos_iff_eq_zero, sum_nonneg
 -/
@@ -1111,7 +1133,11 @@ lemma integral_mono_measure
     gcongr
 .ne exact integrable_iff.mp hfν (f x) hx.ne'
   · suffices ν (f ⁻¹' {f x}) = 0 by
- 
+      have A : μ (f ⁻¹' {f x}) = 0 := by simpa using (hμν _ |>.trans_eq this)
+      simp [measureReal_def, A, this]
+    rw [← nonpos_iff_eq_zero]; rw [← ae_iff.mp hf]
+    refine measure_mono fun y hy => ?_
+    simp_all
 
 中文:
 引理 integral_mono_measure
@@ -1128,7 +1154,11 @@ lemma integral_mono_measure
     gcongr
 .ne exact integrable_iff.mp hfν (f x) hx.ne'
   · suffices ν (f ⁻¹' {f x}) = 0 by
- 
+      have A : μ (f ⁻¹' {f x}) = 0 := by simpa using (hμν _ |>.trans_eq this)
+      simp [measureReal_def, A, this]
+    rw [← nonpos_iff_eq_zero]; rw [← ae_iff.mp hf]
+    refine measure_mono fun y hy => ?_
+    simp_all
 
 Depends on / 依赖: Finset, Finset.sum_le_sum, ae_iff, ae_iff.mp, eq_or_lt, forall_mem_range, hx.eq_or_lt, hx.ne, integrable_iff, integrable_iff.mp, integral_eq, measureReal_def, measure_mono, nonpos_iff_eq_zero, sum_le_sum, trans_eq
 -/
@@ -1497,7 +1527,11 @@ theorem posPart_toSimpleFunc
   have eq : forall a, (toSimpleFunc f).posPart a = max ((toSimpleFunc f) a) 0 := fun a => rfl
   have ae_eq : forallᵐ a ∂μ, toSimpleFunc (posPart f) a = max ((toSimpleFunc f) a) 0 := by
     filter_upwards [toSimpleFunc_eq_toFun (posPart f), Lp.coeFn_posPart (f : α ->₁[μ] Real),
-      toSimpleFunc_
+      toSimpleFunc_eq_toFun f] with _ _ h₂ h₃
+    convert! h₂ using 1
+    rw [h₃]
+  refine ae_eq.mono fun a h => ?_
+  rw [h]; rw [eq]
 
 中文:
 定理 posPart_toSimpleFunc
@@ -1506,7 +1540,11 @@ theorem posPart_toSimpleFunc
   have eq : forall a, (toSimpleFunc f).posPart a = max ((toSimpleFunc f) a) 0 := fun a => rfl
   have ae_eq : forallᵐ a ∂μ, toSimpleFunc (posPart f) a = max ((toSimpleFunc f) a) 0 := by
     filter_upwards [toSimpleFunc_eq_toFun (posPart f), Lp.coeFn_posPart (f : α ->₁[μ] Real),
-      toSimpleFunc_
+      toSimpleFunc_eq_toFun f] with _ _ h₂ h₃
+    convert! h₂ using 1
+    rw [h₃]
+  refine ae_eq.mono fun a h => ?_
+  rw [h]; rw [eq]
 
 Depends on / 依赖: Lp.coeFn_posPart, ae_eq, ae_eq.mono, coeFn_posPart, convert, filter_upwards, posPart, toSimpleFunc, toSimpleFunc_eq_toFun
 -/
@@ -1572,7 +1610,21 @@ theorem integral_eq_norm_posPart_sub
   have ae_eq₁ : (toSimpleFunc f).posPart =ᵐ[μ] (toSimpleFunc (posPart f)).map norm := by
     filter_upwards [posPart_toSimpleFunc f] with _ h
     rw [SimpleFunc.map_apply]; rw [h]
-    conv_lhs => rw [← SimpleFunc.posPart_map_norm, Simp
+    conv_lhs => rw [← SimpleFunc.posPart_map_norm, SimpleFunc.map_apply]
+  -- Convert things in `L¹` to their `SimpleFunc` counterpart
+  have ae_eq₂ : (toSimpleFunc f).negPart =ᵐ[μ] (toSimpleFunc (negPart f)).map norm := by
+    filter_upwards [negPart_toSimpleFunc f] with _ h
+    rw [SimpleFunc.map_apply]; rw [h]
+    conv_lhs => rw [← SimpleFunc.negPart_map_norm, SimpleFunc.map_apply]
+  rw [integral]; rw [norm_eq_integral]; rw [norm_eq_integral]; rw [← SimpleFunc.integral_sub]
+  · change (toSimpleFunc f).integral μ =
+      ((toSimpleFunc (posPart f)).map norm - (toSimpleFunc (negPart f)).map norm).integral μ
+    apply MeasureTheory.SimpleFunc.integral_congr (SimpleFunc.integrable f)
+    filter_upwards [ae_eq₁, ae_eq₂] with _ h₁ h₂
+    rw [SimpleFunc.sub_apply]; rw [← h₁]; rw [← h₂]
+    exact DFunLike.congr_fun (toSimpleFunc f).posPart_sub_negPart.symm _
+  · exact (SimpleFunc.integrable f).pos_part.congr ae_eq₁
+  · exact (SimpleFunc.integrable f).neg_part.congr ae_eq₂
 
 中文:
 定理 integral_eq_norm_posPart_sub
@@ -1583,7 +1635,21 @@ theorem integral_eq_norm_posPart_sub
   have ae_eq₁ : (toSimpleFunc f).posPart =ᵐ[μ] (toSimpleFunc (posPart f)).map norm := by
     filter_upwards [posPart_toSimpleFunc f] with _ h
     rw [SimpleFunc.map_apply]; rw [h]
-    conv_lhs => rw [← SimpleFunc.posPart_map_norm, Simp
+    conv_lhs => rw [← SimpleFunc.posPart_map_norm, SimpleFunc.map_apply]
+  -- Convert things in `L¹` to their `SimpleFunc` counterpart
+  have ae_eq₂ : (toSimpleFunc f).negPart =ᵐ[μ] (toSimpleFunc (negPart f)).map norm := by
+    filter_upwards [negPart_toSimpleFunc f] with _ h
+    rw [SimpleFunc.map_apply]; rw [h]
+    conv_lhs => rw [← SimpleFunc.negPart_map_norm, SimpleFunc.map_apply]
+  rw [integral]; rw [norm_eq_integral]; rw [norm_eq_integral]; rw [← SimpleFunc.integral_sub]
+  · change (toSimpleFunc f).integral μ =
+      ((toSimpleFunc (posPart f)).map norm - (toSimpleFunc (negPart f)).map norm).integral μ
+    apply MeasureTheory.SimpleFunc.integral_congr (SimpleFunc.integrable f)
+    filter_upwards [ae_eq₁, ae_eq₂] with _ h₁ h₂
+    rw [SimpleFunc.sub_apply]; rw [← h₁]; rw [← h₂]
+    exact DFunLike.congr_fun (toSimpleFunc f).posPart_sub_negPart.symm _
+  · exact (SimpleFunc.integrable f).pos_part.congr ae_eq₁
+  · exact (SimpleFunc.integrable f).neg_part.congr ae_eq₂
 -/
 theorem integral_eq_norm_posPart_sub (f : α ->₁ₛ[μ] Real) : integral f = ‖posPart f‖ - ‖negPart f‖ := by
   -- Convert things in `L¹` to their `SimpleFunc` counterpart
@@ -2058,7 +2124,13 @@ theorem integral_eq_norm_posPart_sub
       (fun f : α ->₁[μ] Real => integral f = ‖Lp.posPart f‖ - ‖Lp.negPart f‖)
       (simpleFunc.denseRange one_ne_top) (isClosed_eq ?_ ?_) ?_ f
   · simp only [integral]
-    e
+    exact cont _
+  · refine Continuous.sub (continuous_norm.comp Lp.continuous_posPart)
+      (continuous_norm.comp Lp.continuous_negPart)
+  -- Show that the property holds for all simple functions in the `L¹` space.
+  · intro s
+    norm_cast
+    exact SimpleFunc.integral_eq_norm_posPart_sub _
 
 中文:
 定理 integral_eq_norm_posPart_sub
@@ -2069,7 +2141,13 @@ theorem integral_eq_norm_posPart_sub
       (fun f : α ->₁[μ] Real => integral f = ‖Lp.posPart f‖ - ‖Lp.negPart f‖)
       (simpleFunc.denseRange one_ne_top) (isClosed_eq ?_ ?_) ?_ f
   · simp only [integral]
-    e
+    exact cont _
+  · refine Continuous.sub (continuous_norm.comp Lp.continuous_posPart)
+      (continuous_norm.comp Lp.continuous_negPart)
+  -- Show that the property holds for all simple functions in the `L¹` space.
+  · intro s
+    norm_cast
+    exact SimpleFunc.integral_eq_norm_posPart_sub _
 -/
 theorem integral_eq_norm_posPart_sub (f : α ->₁[μ] Real) :
     integral f = ‖Lp.posPart f‖ - ‖Lp.negPart f‖ := by

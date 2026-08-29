@@ -39,7 +39,15 @@ instance [IsFilteredOrEmpty
       ((F.map (rightToMax c d)).toFunctor.obj g)⟩,
       ⟨leftToMax c d, leftToMax _ _⟩, ⟨rightToMax c d, rightToMax _ _⟩, trivial⟩
   · rintro ⟨c, f⟩ ⟨d, g⟩ ⟨u, x⟩ ⟨v, y⟩
-    refine ⟨⟨coe
+    refine ⟨⟨coeq u v, coeq (eqToHom ?_ ≫
+        (F.map (coeqHom u v)).toFunctor.map x) ((F.map (coeqHom u v)).toFunctor.map y)⟩,
+          ⟨coeqHom u v, coeqHom _ _⟩, ?_⟩
+    · conv_rhs => rw [← Cat.Hom.comp_obj, ← F.map_comp, coeq_condition, F.map_comp,
+        Cat.Hom.comp_obj]
+    · set_option backward.isDefEq.respectTransparency.types false in
+      apply Grothendieck.ext _ _ (coeq_condition u v)
+      refine Eq.trans ?_ (eqToHom _ ≫= coeq_condition _ _)
+      simp
 
 中文:
 实例 [是FilteredOrEmpty
@@ -51,7 +59,15 @@ instance [IsFilteredOrEmpty
       ((F.map (rightToMax c d)).toFunctor.obj g)⟩,
       ⟨leftToMax c d, leftToMax _ _⟩, ⟨rightToMax c d, rightToMax _ _⟩, trivial⟩
   · rintro ⟨c, f⟩ ⟨d, g⟩ ⟨u, x⟩ ⟨v, y⟩
-    refine ⟨⟨coe
+    refine ⟨⟨coeq u v, coeq (eqToHom ?_ ≫
+        (F.map (coeqHom u v)).toFunctor.map x) ((F.map (coeqHom u v)).toFunctor.map y)⟩,
+          ⟨coeqHom u v, coeqHom _ _⟩, ?_⟩
+    · conv_rhs => rw [← Cat.Hom.comp_obj, ← F.map_comp, coeq_condition, F.map_comp,
+        Cat.Hom.comp_obj]
+    · set_option backward.isDefEq.respectTransparency.types false in
+      apply Grothendieck.ext _ _ (coeq_condition u v)
+      refine Eq.trans ?_ (eqToHom _ ≫= coeq_condition _ _)
+      simp
 
 Depends on / 依赖: Cat.Hom, Cat.Hom.comp_obj, F.map, F.map_comp, coeqHom, coeq_condition, comp_obj, conv_rhs, eqToHom, leftToMax, map_comp, rightToMax, toFunctor, toFunctor.map, toFunctor.obj
 -/

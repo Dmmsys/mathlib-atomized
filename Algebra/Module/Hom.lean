@@ -93,7 +93,7 @@ instance instDomMulActModule
   zero_smul _ := AddMonoidHom.ext fun _ => by
     rw [DomMulAct.smul_addMonoidHom_apply]
     -- TODO there should be a simp lemma for `DomMulAct.mk.symm 0`
-    simp [DomMu
+    simp [DomMulAct.mk, MulOpposite.opEquiv]
 
 中文:
 实例 instDomMulActModule
@@ -102,7 +102,7 @@ instance instDomMulActModule
   zero_smul _ := AddMonoidHom.ext fun _ => by
     rw [DomMulAct.smul_addMonoidHom_apply]
     -- TODO there should be a simp lemma for `DomMulAct.mk.symm 0`
-    simp [DomMu
+    simp [DomMulAct.mk, MulOpposite.opEquiv]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.add_apply, AddMonoidHom.ext, DomMulAct, DomMulAct.smul_addMonoidHom_apply, add_apply, add_smul, map_add, simp_rw, smul_addMonoidHom_apply, zero_smul
 -/

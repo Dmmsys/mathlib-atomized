@@ -121,7 +121,15 @@ definition zmultiplesQuotientStabilizerEquiv
             (by
               rw [zmultiples_le]; rw [mem_comap]; rw [mem_stabilizer_iff]; rw [zmultiplesHom_apply]; rw [natCast_zsmul]
               simp_rw [← vadd_iterate]
-            
+              exact isPeriodicPt_minimalPeriod (a +ᵥ ·) b))
+          ⟨by
+            rw [← ker_eq_bot_iff]; rw [eq_bot_iff]
+            refine fun q => induction_on q fun n hn => ?_
+            rw [mem_bot]; rw [eq_zero_iff]; rw [Int.mem_zmultiples_iff]; rw [←
+              zsmul_vadd_eq_iff_minimalPeriod_dvd]
+            exact (eq_zero_iff _).mp hn, fun q =>
+            induction_on q fun ⟨_, n, rfl⟩ => ⟨n, rfl⟩⟩).symm.trans
+    (Int.quotientZMultiplesNatEquivZMod (minimalPeriod (a +ᵥ ·) b))
 
 中文:
 定义 zmultiplesQuotientStabilizerEquiv
@@ -131,7 +139,15 @@ definition zmultiplesQuotientStabilizerEquiv
             (by
               rw [zmultiples_le]; rw [mem_comap]; rw [mem_stabilizer_iff]; rw [zmultiplesHom_apply]; rw [natCast_zsmul]
               simp_rw [← vadd_iterate]
-            
+              exact isPeriodicPt_minimalPeriod (a +ᵥ ·) b))
+          ⟨by
+            rw [← ker_eq_bot_iff]; rw [eq_bot_iff]
+            refine fun q => induction_on q fun n hn => ?_
+            rw [mem_bot]; rw [eq_zero_iff]; rw [Int.mem_zmultiples_iff]; rw [←
+              zsmul_vadd_eq_iff_minimalPeriod_dvd]
+            exact (eq_zero_iff _).mp hn, fun q =>
+            induction_on q fun ⟨_, n, rfl⟩ => ⟨n, rfl⟩⟩).symm.trans
+    (Int.quotientZMultiplesNatEquivZMod (minimalPeriod (a +ᵥ ·) b))
 
 Depends on / 依赖: Int.mem_zmultiples_iff, eq_bot_iff, eq_zero_iff, induction_on, isPeriodicPt_minimalPeriod, ker_eq_bot_iff, mem_bot, mem_comap, mem_stabilizer_iff, mem_zmultiples, mem_zmultiples_iff, natCast_zsmul, ofBijective, simp_rw, stabilizer, vadd_iterate, zmultiples, zmultiplesHom, zmultiplesHom_apply, zmultiples_le
 -/
@@ -563,7 +579,8 @@ lemma index_eq_sum_minimalPeriod
   have (q : Quotient (MulAction.orbitRel (zpowers g) (G ⧸ H))) :
       Fintype (MulAction.orbit (zpowers g) q.out) := Fintype.ofFinite _
   simp only [MulAction.minimalPeriod_eq_card, index_eq_card, Nat.card_eq_fintype_card]
-  rw [← Fintype.card_sigma
+  rw [← Fintype.card_sigma]
+  exact Fintype.card_congr (MulAction.selfEquivSigmaOrbits (zpowers g) (G ⧸ H))
 
 中文:
 引理 index_eq_sum_minimalPeriod
@@ -573,7 +590,8 @@ lemma index_eq_sum_minimalPeriod
   have (q : Quotient (MulAction.orbitRel (zpowers g) (G ⧸ H))) :
       Fintype (MulAction.orbit (zpowers g) q.out) := Fintype.ofFinite _
   simp only [MulAction.minimalPeriod_eq_card, index_eq_card, Nat.card_eq_fintype_card]
-  rw [← Fintype.card_sigma
+  rw [← Fintype.card_sigma]
+  exact Fintype.card_congr (MulAction.selfEquivSigmaOrbits (zpowers g) (G ⧸ H))
 
 Depends on / 依赖: Fintype, Fintype.card_congr, Fintype.card_sigma, Fintype.ofFinite, MulAction, MulAction.minimalPeriod_eq_card, MulAction.orbit, MulAction.orbitRel, MulAction.selfEquivSigmaOrbits, Nat.card_eq_fintype_card, Quotient, card_congr, card_eq_fintype_card, card_sigma, index_eq_card, minimalPeriod_eq_card, ofFinite, orbitRel, q.out, selfEquivSigmaOrbits
 -/

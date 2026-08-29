@@ -2358,7 +2358,7 @@ theorem domRestrict_apply
 @[deprecated (since := "2026-07-19")] alias _root_.AddHom.restrict := _root_.AddHom.domRestrict
 @[deprecated (since := "2026-07-19")] alias restrict_apply := domRestrict_apply
 @[deprecated (since := "2026-07-19")]
-alias _root_.
+alias _root_.AddHom.restrict_apply := _root_.AddHom.domRestrict_apply
 
 中文:
 定理 domRestrict_apply
@@ -2369,7 +2369,7 @@ alias _root_.
 @[deprecated (since := "2026-07-19")] alias _root_.AddHom.restrict := _root_.AddHom.domRestrict
 @[deprecated (since := "2026-07-19")] alias restrict_apply := domRestrict_apply
 @[deprecated (since := "2026-07-19")]
-alias _root_.
+alias _root_.AddHom.restrict_apply := _root_.AddHom.domRestrict_apply
 -/
 theorem domRestrict_apply {N : Type*} [Mul N] [SetLike σ M] [MulMemClass σ M]
     (f : M ->ₙ* N) {S : σ} (x : S) : f.domRestrict S x = f x :=

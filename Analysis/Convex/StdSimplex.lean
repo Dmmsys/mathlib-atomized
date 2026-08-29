@@ -344,7 +344,7 @@ definition stdSimplexEquivIcc
 left_inv f := Subtype.ext funext Fin.forall_fin_two.2 by
     simp [← (show f.1 0 + f.1 1 = 1 by simpa using f.2.2)]
 
-@[si
+@[simp]
 
 中文:
 定义 stdSimplexEquivIcc
@@ -355,7 +355,7 @@ left_inv f := Subtype.ext funext Fin.forall_fin_two.2 by
 left_inv f := Subtype.ext funext Fin.forall_fin_two.2 by
     simp [← (show f.1 0 + f.1 1 = 1 by simpa using f.2.2)]
 
-@[si
+@[simp]
 -/
 def stdSimplexEquivIcc : stdSimplex 𝕜 (Fin 2) ≃ Icc (0 : 𝕜) 1 where
   toFun f := ⟨f.1 1, f.2.1 _, f.2.2 ▸
@@ -417,7 +417,8 @@ theorem convexHull_basis_eq_stdSimplex
   · rintro w ⟨hw₀, hw₁⟩
     rw [pi_eq_sum_univ w]
     rw [← Finset.univ.centerMass_eq_of_sum_1 _ hw₁]
-    exact Finset.univ.centerMass_mem_convexHull (fun i _ => hw₀ i
+    exact Finset.univ.centerMass_mem_convexHull (fun i _ => hw₀ i) (hw₁.symm ▸ zero_lt_one)
+      fun i _ => mem_range_self i
 
 中文:
 定理 convexHull_basis_eq_stdSimplex
@@ -429,7 +430,8 @@ theorem convexHull_basis_eq_stdSimplex
   · rintro w ⟨hw₀, hw₁⟩
     rw [pi_eq_sum_univ w]
     rw [← Finset.univ.centerMass_eq_of_sum_1 _ hw₁]
-    exact Finset.univ.centerMass_mem_convexHull (fun i _ => hw₀ i
+    exact Finset.univ.centerMass_mem_convexHull (fun i _ => hw₀ i) (hw₁.symm ▸ zero_lt_one)
+      fun i _ => mem_range_self i
 
 Depends on / 依赖: Finset, Finset.univ.centerMass_eq_of_sum_1, Finset.univ.centerMass_mem_convexHull, Subset, Subset.antisymm, antisymm, centerMass_eq_of_sum_1, centerMass_mem_convexHull, convexHull_min, convex_stdSimplex, ite_eq_mem_stdSimplex, mem_range_self, pi_eq_sum_univ, zero_lt_one
 -/
@@ -697,7 +699,7 @@ definition stdSimplexHomeomorphUnitInterval
     exact (continuous_pi <| Fin.forall_fin_two.2
       ⟨continuous_const.sub continuous_subtype_val, continuous_subtype_val⟩)
 
-@[si
+@[simp]
 
 中文:
 定义 stdSimplexHomeomorphUnit整数erval
@@ -709,7 +711,7 @@ definition stdSimplexHomeomorphUnitInterval
     exact (continuous_pi <| Fin.forall_fin_two.2
       ⟨continuous_const.sub continuous_subtype_val, continuous_subtype_val⟩)
 
-@[si
+@[simp]
 
 Depends on / 依赖: stdSimplexEquivIcc
 -/
@@ -834,7 +836,8 @@ theorem diam_stdSimplex
   classical
   rw [show (1 : Real) = dist (Pi.single i 1 : ι -> Real) (Pi.single j 1) by
     simp [dist_single_single i j (1 : Real) 1 hij]; rw [Real.dist_eq]]
-  exact Metric.dist_le_diam_of_mem (bounded_stdSimplex
+  exact Metric.dist_le_diam_of_mem (bounded_stdSimplex _)
+    (single_mem_stdSimplex _ _) (single_mem_stdSimplex _ _)
 
 中文:
 定理 diam_stdSimplex
@@ -846,7 +849,8 @@ theorem diam_stdSimplex
   classical
   rw [show (1 : Real) = dist (Pi.single i 1 : ι -> Real) (Pi.single j 1) by
     simp [dist_single_single i j (1 : Real) 1 hij]; rw [Real.dist_eq]]
-  exact Metric.dist_le_diam_of_mem (bounded_stdSimplex
+  exact Metric.dist_le_diam_of_mem (bounded_stdSimplex _)
+    (single_mem_stdSimplex _ _) (single_mem_stdSimplex _ _)
 
 Depends on / 依赖: Metric, Metric.dist_le_diam_of_mem, Pi.single, Real.dist_eq, bounded_stdSimplex, classical, diam_stdSimplex_le, dist_eq, dist_le_diam_of_mem, dist_single_single, exists_pair_ne, le_antisymm, single, single_mem_stdSimplex
 -/

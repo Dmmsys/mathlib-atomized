@@ -65,7 +65,7 @@ lemma LSeries.hasDerivAt_term
   simp_rw [term_of_ne_zero hn, ← neg_div, ← neg_mul, mul_comm, mul_div_assoc, div_eq_mul_inv,
     ← cpow_neg]
   exact HasDerivAt.const_mul (f n) (by simpa only [mul_comm, ← mul_neg_one (log n), ← mul_assoc]
-    using (hasDerivAt_neg'
+    using (hasDerivAt_neg' s).const_cpow (Or.inl <| Nat.cast_ne_zero.mpr hn))
 
 中文:
 引理 LSeries.hasDerivAt_term
@@ -76,7 +76,7 @@ lemma LSeries.hasDerivAt_term
   simp_rw [term_of_ne_zero hn, ← neg_div, ← neg_mul, mul_comm, mul_div_assoc, div_eq_mul_inv,
     ← cpow_neg]
   exact HasDerivAt.const_mul (f n) (by simpa only [mul_comm, ← mul_neg_one (log n), ← mul_assoc]
-    using (hasDerivAt_neg'
+    using (hasDerivAt_neg' s).const_cpow (Or.inl <| Nat.cast_ne_zero.mpr hn))
 
 Depends on / 依赖: HasDerivAt, HasDerivAt.const_mul, Nat.cast_ne_zero.mpr, Or.inl, cast_ne_zero, const_cpow, const_mul, cpow_neg, div_eq_mul_inv, eq_or_ne, hasDerivAt_const, hasDerivAt_neg, mul_assoc, mul_comm, mul_div_assoc, mul_neg_one, neg_div, neg_mul, simp_rw, term_of_ne_zero
 -/
@@ -100,7 +100,19 @@ lemma LSeries.LSeriesSummable_logMul_and_hasDerivAt
   obtain ⟨x, hxs, hf⟩ := LSeriesSummable_lt_re_of_abscissaOfAbsConv_lt_re h
   obtain ⟨y, hxy, hys⟩ := exists_between hxs
   -- We work in the right half-plane `y < re z`, for some `y` such that `x < y < re s`, on which
-  -- we have a un
+  -- we have a uniform summable bound on `‖term f z ·‖`.
+  let S : Set Complex := {z | y < z.re}
+  have h₀ : Summable (fun n => ‖term f x n‖) := summable_norm_iff.mpr hf
+  have h₁ (n) : DifferentiableOn Complex (term f · n) S :=
+    fun z _ => (hasDerivAt_term f n _).differentiableAt.differentiableWithinAt
+  have h₂ : IsOpen S := isOpen_lt continuous_const continuous_re
+  have h₃ (n z) (hz : z in S) : ‖term f z n‖ <= ‖term f x n‖ :=
+    norm_term_le_of_re_le_re f (by simpa using! (hxy.trans hz).le) n
+  have H := hasSum_deriv_of_summable_norm h₀ h₁ h₂ h₃ hys
+  simp_rw [(hasDerivAt_term f _ _).deriv] at H
+  refine ⟨summable_neg_iff.mp H.summable, ?_⟩
+  simpa [← H.tsum_eq, tsum_neg] using! ((differentiableOn_tsum_of_summable_norm
+    h₀ h₁ h₂ h₃).differentiableAt <| h₂.mem_nhds hys).hasDerivAt
 
 中文:
 引理 LSeries.LSeriesSummable_logMul_and_hasDerivAt
@@ -110,7 +122,19 @@ lemma LSeries.LSeriesSummable_logMul_and_hasDerivAt
   obtain ⟨x, hxs, hf⟩ := LSeriesSummable_lt_re_of_abscissaOfAbsConv_lt_re h
   obtain ⟨y, hxy, hys⟩ := exists_between hxs
   -- We work in the right half-plane `y < re z`, for some `y` such that `x < y < re s`, on which
-  -- we have a un
+  -- we have a uniform summable bound on `‖term f z ·‖`.
+  let S : Set Complex := {z | y < z.re}
+  have h₀ : Summable (fun n => ‖term f x n‖) := summable_norm_iff.mpr hf
+  have h₁ (n) : DifferentiableOn Complex (term f · n) S :=
+    fun z _ => (hasDerivAt_term f n _).differentiableAt.differentiableWithinAt
+  have h₂ : IsOpen S := isOpen_lt continuous_const continuous_re
+  have h₃ (n z) (hz : z in S) : ‖term f z n‖ <= ‖term f x n‖ :=
+    norm_term_le_of_re_le_re f (by simpa using! (hxy.trans hz).le) n
+  have H := hasSum_deriv_of_summable_norm h₀ h₁ h₂ h₃ hys
+  simp_rw [(hasDerivAt_term f _ _).deriv] at H
+  refine ⟨summable_neg_iff.mp H.summable, ?_⟩
+  simpa [← H.tsum_eq, tsum_neg] using! ((differentiableOn_tsum_of_summable_norm
+    h₀ h₁ h₂ h₃).differentiableAt <| h₂.mem_nhds hys).hasDerivAt
 -/
 private lemma LSeries.LSeriesSummable_logMul_and_hasDerivAt {f : Nat -> Complex} {s : Complex}
     (h : abscissaOfAbsConv f < s.re) :
@@ -222,7 +246,12 @@ lemma LSeries.abscissaOfAbsConv_logMul
   apply le_antisymm <;> refine abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable' fun s hs => ?_
 · exact LSeriesSummable_logMul_of_lt_re by simp [hs]
   · refine (LSeriesSummable_of_abscissaOfAbsConv_lt_re <| by simp [hs])
-.norm.of_norm_bounded_eventually_nat (g := fun n => ‖term (logMul f) s n‖) 
+.norm.of_norm_bounded_eventually_nat (g := fun n => ‖term (logMul f) s n‖) ?_
+    filter_upwards [Filter.eventually_ge_atTop <| max 1 (Nat.ceil (Real.exp 1))] with n hn
+    simp only [term_of_ne_zero (show n != 0 by omega), logMul, norm_mul, mul_div_assoc,
+      ← natCast_log, norm_real]
+    refine le_mul_of_one_le_left (norm_nonneg _) (.trans ?_ <| Real.le_norm_self _)
+simpa using Real.log_le_log (Real.exp_pos 1) Nat.ceil_le.mp (le_max_right _ _).trans hn
 
 中文:
 引理 LSeries.abscissaOfAbsConv_logMul
@@ -231,7 +260,12 @@ lemma LSeries.abscissaOfAbsConv_logMul
   apply le_antisymm <;> refine abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable' fun s hs => ?_
 · exact LSeriesSummable_logMul_of_lt_re by simp [hs]
   · refine (LSeriesSummable_of_abscissaOfAbsConv_lt_re <| by simp [hs])
-.norm.of_norm_bounded_eventually_nat (g := fun n => ‖term (logMul f) s n‖) 
+.norm.of_norm_bounded_eventually_nat (g := fun n => ‖term (logMul f) s n‖) ?_
+    filter_upwards [Filter.eventually_ge_atTop <| max 1 (Nat.ceil (Real.exp 1))] with n hn
+    simp only [term_of_ne_zero (show n != 0 by omega), logMul, norm_mul, mul_div_assoc,
+      ← natCast_log, norm_real]
+    refine le_mul_of_one_le_left (norm_nonneg _) (.trans ?_ <| Real.le_norm_self _)
+simpa using Real.log_le_log (Real.exp_pos 1) Nat.ceil_le.mp (le_max_right _ _).trans hn
 
 Depends on / 依赖: Filter, Filter.eventually_ge_atTop, LSeriesSummable_logMul_of_lt_re, LSeriesSummable_of_abscissaOfAbsConv_lt_re, Nat.ceil, Real.exp, abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable, eventually_ge_atTop, filter_upwards, le_antisymm, logMul, mul_div_assoc, natCast_log, norm.of_norm_bounded_eventually_nat, norm_mul, norm_real, of_norm_bounded_eventually_nat, term_of_ne_zero
 -/
@@ -297,7 +331,10 @@ lemma LSeries_iteratedDeriv
     have ih' : {s | abscissaOfAbsConv f < re s}.EqOn (iteratedDeriv m (LSeries f))
         ((-1) ^ m * LSeries (logMul^[m] f)) := fun _ hs => ih hs
     have := derivWithin_congr ih' (ih h)
-    simp_rw [derivWithin_of_isOpen (isOp
+    simp_rw [derivWithin_of_isOpen (isOpen_re_gt_EReal _) h] at this
+    rw [iteratedDeriv_succ]; rw [this]
+    simp [Pi.mul_def, pow_succ, Function.iterate_succ',
+LSeries_deriv absicssaOfAbsConv_logPowMul.symm ▸ h, -Function.iterate_succ]
 
 中文:
 引理 LSeries_iteratedDeriv
@@ -309,7 +346,10 @@ lemma LSeries_iteratedDeriv
     have ih' : {s | abscissaOfAbsConv f < re s}.EqOn (iteratedDeriv m (LSeries f))
         ((-1) ^ m * LSeries (logMul^[m] f)) := fun _ hs => ih hs
     have := derivWithin_congr ih' (ih h)
-    simp_rw [derivWithin_of_isOpen (isOp
+    simp_rw [derivWithin_of_isOpen (isOpen_re_gt_EReal _) h] at this
+    rw [iteratedDeriv_succ]; rw [this]
+    simp [Pi.mul_def, pow_succ, Function.iterate_succ',
+LSeries_deriv absicssaOfAbsConv_logPowMul.symm ▸ h, -Function.iterate_succ]
 
 Depends on / 依赖: Function, Function.iterate_succ, LSeries, LSeries_deriv, Pi.mul_def, abscissaOfAbsConv, absicssaOfAbsConv_logPowMul, absicssaOfAbsConv_logPowMul.symm, derivWithin_congr, derivWithin_of_isOpen, generalizing, isOpen_re_gt_EReal, iterate_succ, iteratedDeriv, iteratedDeriv_succ, logMul, mul_def, pow_succ, simp_rw
 -/

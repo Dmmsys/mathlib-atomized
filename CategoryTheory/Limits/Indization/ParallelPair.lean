@@ -440,7 +440,10 @@ definition parallelPairIsoParallelPairCompYoneda
     (P.isColimit₂.coconePointUniqueUpToIso (colimit.isColimit _))
     (P.isColimit₁.hom_ext (fun j => by
       simp [P.hf, P.isColimit₁.ι_map_assoc, P.isColimit₁.comp_coconePointUniqueUpToIso_hom_assoc,
-        P.isCo
+        P.isColimit₂.comp_coconePointUniqueUpToIso_hom]))
+    (P.isColimit₁.hom_ext (fun j => by
+      simp [P.hg, P.isColimit₁.ι_map_assoc, P.isColimit₁.comp_coconePointUniqueUpToIso_hom_assoc,
+        P.isColimit₂.comp_coconePointUniqueUpToIso_hom]))
 
 中文:
 定义 parallelPairIsoParallelPairCompYoneda
@@ -450,7 +453,10 @@ definition parallelPairIsoParallelPairCompYoneda
     (P.isColimit₂.coconePointUniqueUpToIso (colimit.isColimit _))
     (P.isColimit₁.hom_ext (fun j => by
       simp [P.hf, P.isColimit₁.ι_map_assoc, P.isColimit₁.comp_coconePointUniqueUpToIso_hom_assoc,
-        P.isCo
+        P.isColimit₂.comp_coconePointUniqueUpToIso_hom]))
+    (P.isColimit₁.hom_ext (fun j => by
+      simp [P.hg, P.isColimit₁.ι_map_assoc, P.isColimit₁.comp_coconePointUniqueUpToIso_hom_assoc,
+        P.isColimit₂.comp_coconePointUniqueUpToIso_hom]))
 
 Depends on / 依赖: P.hf, P.hg, P.isColimit, coconePointUniqueUpToIso, colimit, colimit.isColimit, comp_coconePointUniqueUpToIso_hom, comp_coconePointUniqueUpToIso_hom_assoc, hom_ext, isColimit, parallelPair, parallelPair.ext
 -/

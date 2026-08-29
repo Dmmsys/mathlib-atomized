@@ -267,7 +267,12 @@ definition ofObj
   hom Y q i₁ i₂ f₁ f₂ hf₁ hf₂ :=
     (F.mapComp' (f i₁).op.toLoc f₁.op.toLoc q.op.toLoc (by grind)).inv.toNatTrans.app _ ≫
       (F.mapComp' (f i₂).op.toLoc f₂.op.toLoc q.op.toLoc (by grind)).hom.toNatTrans.app _
-  pullHom_hom Y' Y g q q' hq i₁ i₂ f₁ f₂ hf₁ hf₂
+  pullHom_hom Y' Y g q q' hq i₁ i₂ f₁ f₂ hf₁ hf₂ gf₁ gf₂ hgf₁ hgf₂ := by
+    simp only [pullHom, Functor.map_comp, Category.assoc,
+      F.mapComp'₀₁₃_inv_app (f i₁).op.toLoc f₁.op.toLoc g.op.toLoc q.op.toLoc
+        gf₁.op.toLoc q'.op.toLoc (by grind) (by grind) (by grind),
+      F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app (f i₂).op.toLoc f₂.op.toLoc g.op.toLoc
+      q.op.toLoc gf₂.op.toLoc q'.op.toLoc (by grind) (by grind) (by grind)]
 
 中文:
 定义 ofObj
@@ -276,7 +281,12 @@ definition ofObj
   hom Y q i₁ i₂ f₁ f₂ hf₁ hf₂ :=
     (F.mapComp' (f i₁).op.toLoc f₁.op.toLoc q.op.toLoc (by grind)).inv.toNatTrans.app _ ≫
       (F.mapComp' (f i₂).op.toLoc f₂.op.toLoc q.op.toLoc (by grind)).hom.toNatTrans.app _
-  pullHom_hom Y' Y g q q' hq i₁ i₂ f₁ f₂ hf₁ hf₂
+  pullHom_hom Y' Y g q q' hq i₁ i₂ f₁ f₂ hf₁ hf₂ gf₁ gf₂ hgf₁ hgf₂ := by
+    simp only [pullHom, Functor.map_comp, Category.assoc,
+      F.mapComp'₀₁₃_inv_app (f i₁).op.toLoc f₁.op.toLoc g.op.toLoc q.op.toLoc
+        gf₁.op.toLoc q'.op.toLoc (by grind) (by grind) (by grind),
+      F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app (f i₂).op.toLoc f₂.op.toLoc g.op.toLoc
+      q.op.toLoc gf₂.op.toLoc q'.op.toLoc (by grind) (by grind) (by grind)]
 
 Depends on / 依赖: F.map, op.toLoc, toFunctor, toFunctor.obj
 -/
@@ -304,7 +314,7 @@ definition isoMk
   inv :=
     { hom i := (e i).inv
       comm Y q i₁ i₂ f₁ f₂ hf₁ hf₂ := by
-        rw [← cancel_mono ((F.map f₂.op.toLoc).toFunctor.map (e i₂).hom)]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.map_inv_hom_id]; rw [Category.comp_id]; rw [← cancel_epi ((F.map f₁.op.toLoc)
+        rw [← cancel_mono ((F.map f₂.op.toLoc).toFunctor.map (e i₂).hom)]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.map_inv_hom_id]; rw [Category.comp_id]; rw [← cancel_epi ((F.map f₁.op.toLoc).toFunctor.map (e i₁).hom)]; rw [Iso.map_hom_inv_id_assoc]; rw [comm q f₁ f₂ hf₁ hf₂] }
 
 中文:
 定义 isoMk
@@ -313,7 +323,7 @@ definition isoMk
   inv :=
     { hom i := (e i).inv
       comm Y q i₁ i₂ f₁ f₂ hf₁ hf₂ := by
-        rw [← cancel_mono ((F.map f₂.op.toLoc).toFunctor.map (e i₂).hom)]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.map_inv_hom_id]; rw [Category.comp_id]; rw [← cancel_epi ((F.map f₁.op.toLoc)
+        rw [← cancel_mono ((F.map f₂.op.toLoc).toFunctor.map (e i₂).hom)]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.map_inv_hom_id]; rw [Category.comp_id]; rw [← cancel_epi ((F.map f₁.op.toLoc).toFunctor.map (e i₁).hom)]; rw [Iso.map_hom_inv_id_assoc]; rw [comm q f₁ f₂ hf₁ hf₂] }
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, F.map, Iso.map_hom_inv_id_assoc, Iso.map_inv_hom_id, cancel_epi, cancel_mono, cat_disch, comp_id, map_hom_inv_id_assoc, map_inv_hom_id, op.toLoc, toFunctor, toFunctor.map
 -/
@@ -439,7 +449,20 @@ definition pullFunctorObj
   body: (F.map (p' _).op.toLoc).toFunctor.obj (D.obj (α j))
   hom Y q j₁ j₂ f₁ f₂ hf₁ hf₂ := pullFunctorObjHom w _ _ _ _
   pullHom_hom Y' Y g q q' hq j₁ j₂ f₁ f₂ hf₁ hf₂ gf₁ gf₂ hgf₁ hgf₂ := by
-    rw [pullFunctorObjHom_eq _ _ _ _ _ (q' ≫ p) (gf₁ ≫ p' j₁) (gf₂ ≫ p' j₂)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (
+    rw [pullFunctorObjHom_eq _ _ _ _ _ (q' ≫ p) (gf₁ ≫ p' j₁) (gf₂ ≫ p' j₂)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₁ ≫ p' j₁) (f₂ ≫ p' j₂)]
+    rw [← D.pullHom_hom g (q ≫ p) (q' ≫ p) (by rw [reassoc_of% hq])
+      (f₁ ≫ p' j₁) (f₂ ≫ p' j₂) (by rw [Category.assoc, w, reassoc_of% hf₁])
+      (by rw [Category.assoc, w, reassoc_of% hf₂]) (gf₁ ≫ p' j₁) (gf₂ ≫ p' j₂)
+      (by cat_disch) (by cat_disch)]
+    dsimp [pullHom]
+    simp only [Functor.map_comp, Category.assoc]
+    rw [F.mapComp'₀₁₃_inv_comp_mapComp'₀₂₃_hom_app_assoc _ _ _ _ _ _ _ _ (by cat_disch)]; rw [mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app _ _ _ _ _ _ _ _ _ (by cat_disch)]
+  hom_self Y q j g hg := by
+    rw [pullFunctorObjHom_eq _ _ _ _ _ _ _ _ rfl rfl rfl rfl rfl]; rw [D.hom_self _ _ (by cat_disch)]
+    simp
+  hom_comp Y q j₁ j₂ j₃ f₁ f₂ f₃ hf₁ hf₂ hf₃ := by
+    rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₁ ≫ p' j₁) (f₂ ≫ p' j₂)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₂ ≫ p' j₂) (f₃ ≫ p' j₃)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₁ ≫ p' j₁) (f₃ ≫ p' j₃)]
+    simp
 
 中文:
 定义 pullFunctorObj
@@ -447,7 +470,20 @@ definition pullFunctorObj
   定义体: (F.map (p' _).op.toLoc).toFunctor.obj (D.obj (α j))
   hom Y q j₁ j₂ f₁ f₂ hf₁ hf₂ := pullFunctorObjHom w _ _ _ _
   pullHom_hom Y' Y g q q' hq j₁ j₂ f₁ f₂ hf₁ hf₂ gf₁ gf₂ hgf₁ hgf₂ := by
-    rw [pullFunctorObjHom_eq _ _ _ _ _ (q' ≫ p) (gf₁ ≫ p' j₁) (gf₂ ≫ p' j₂)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (
+    rw [pullFunctorObjHom_eq _ _ _ _ _ (q' ≫ p) (gf₁ ≫ p' j₁) (gf₂ ≫ p' j₂)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₁ ≫ p' j₁) (f₂ ≫ p' j₂)]
+    rw [← D.pullHom_hom g (q ≫ p) (q' ≫ p) (by rw [reassoc_of% hq])
+      (f₁ ≫ p' j₁) (f₂ ≫ p' j₂) (by rw [Category.assoc, w, reassoc_of% hf₁])
+      (by rw [Category.assoc, w, reassoc_of% hf₂]) (gf₁ ≫ p' j₁) (gf₂ ≫ p' j₂)
+      (by cat_disch) (by cat_disch)]
+    dsimp [pullHom]
+    simp only [Functor.map_comp, Category.assoc]
+    rw [F.mapComp'₀₁₃_inv_comp_mapComp'₀₂₃_hom_app_assoc _ _ _ _ _ _ _ _ (by cat_disch)]; rw [mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app _ _ _ _ _ _ _ _ _ (by cat_disch)]
+  hom_self Y q j g hg := by
+    rw [pullFunctorObjHom_eq _ _ _ _ _ _ _ _ rfl rfl rfl rfl rfl]; rw [D.hom_self _ _ (by cat_disch)]
+    simp
+  hom_comp Y q j₁ j₂ j₃ f₁ f₂ f₃ hf₁ hf₂ hf₃ := by
+    rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₁ ≫ p' j₁) (f₂ ≫ p' j₂)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₂ ≫ p' j₂) (f₃ ≫ p' j₃)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₁ ≫ p' j₁) (f₃ ≫ p' j₃)]
+    simp
 
 Depends on / 依赖: D.obj, F.map, op.toLoc, toFunctor, toFunctor.obj
 -/
@@ -492,7 +528,11 @@ definition pullFunctor
       comm Y q j₁ j₂ f₁ f₂ hf₁ hf₂ := by
         have := φ.comm (q ≫ p) (f₁ ≫ p' j₁) (f₂ ≫ p' j₂)
           (by rw [Category.assoc, w, reassoc_of% hf₁])
-          (by rw [Category.assoc, w, reass
+          (by rw [Category.assoc, w, reassoc_of% hf₂])
+        dsimp at this ⊢
+        rw [pullFunctorObjHom_eq_assoc _ _ _ _ _ (q ≫ p) (f₁ ≫ p' j₁) (f₂ ≫ p' j₂)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₁ ≫ p' j₁) (f₂ ≫ p' j₂)]
+        dsimp
+        rw [mapComp'_inv_naturality_assoc]; rw [← mapComp'_hom_naturality]; rw [reassoc_of% this] }
 
 中文:
 定义 pullFunctor
@@ -503,7 +543,11 @@ definition pullFunctor
       comm Y q j₁ j₂ f₁ f₂ hf₁ hf₂ := by
         have := φ.comm (q ≫ p) (f₁ ≫ p' j₁) (f₂ ≫ p' j₂)
           (by rw [Category.assoc, w, reassoc_of% hf₁])
-          (by rw [Category.assoc, w, reass
+          (by rw [Category.assoc, w, reassoc_of% hf₂])
+        dsimp at this ⊢
+        rw [pullFunctorObjHom_eq_assoc _ _ _ _ _ (q ≫ p) (f₁ ≫ p' j₁) (f₂ ≫ p' j₂)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₁ ≫ p' j₁) (f₂ ≫ p' j₂)]
+        dsimp
+        rw [mapComp'_inv_naturality_assoc]; rw [← mapComp'_hom_naturality]; rw [reassoc_of% this] }
 
 Depends on / 依赖: pullFunctorObj
 -/
@@ -534,7 +578,26 @@ definition toDescentDataCompPullFunctorIso
         dsimp
         rw [F.isoMapOfCommSq_eq _ _ rfl]; rw [F.isoMapOfCommSq_eq _ _ rfl]
         dsimp
-        simp only [Fu
+        simp only [Functor.map_comp, Category.assoc]
+        rw [← F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app_assoc p.op.toLoc
+            (f' i₁).op.toLoc f₁.op.toLoc _ q.op.toLoc (p.op.toLoc ≫ q.op.toLoc) rfl
+            (by grind) (by grind) M]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₁ ≫ p' i₁) (f₂ ≫ p' i₂)]; rw [← cancel_mono ((F.mapComp' (f' i₂).op.toLoc f₂.op.toLoc q.op.toLoc
+            (by grind)).inv.toNatTrans.app _)]
+        dsimp
+        simp only [Category.assoc,
+          ← F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app p.op.toLoc
+            (f' i₂).op.toLoc f₂.op.toLoc _ q.op.toLoc (p.op.toLoc ≫ q.op.toLoc) rfl
+            (by grind) (by grind) M,
+          ← F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app_assoc (f (α i₁)).op.toLoc
+            (p' i₁).op.toLoc f₁.op.toLoc (p.op.toLoc ≫ (f' i₁).op.toLoc) _
+            (p.op.toLoc ≫ q.op.toLoc) (by grind) rfl (by grind) M,
+          F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app_assoc (f (α i₂)).op.toLoc
+            (p' i₂).op.toLoc f₂.op.toLoc (p.op.toLoc ≫ (f' i₂).op.toLoc) _
+            (p.op.toLoc ≫ q.op.toLoc) (by grind) rfl (by grind) M]
+        simp))
+    (fun f => by
+      ext i
+      exact (F.isoMapOfCommSq (CommSq.mk (w i)).op.toLoc).inv.toNatTrans.naturality f)
 
 中文:
 定义 toDescentDataCompPullFunctorIso
@@ -546,7 +609,26 @@ definition toDescentDataCompPullFunctorIso
         dsimp
         rw [F.isoMapOfCommSq_eq _ _ rfl]; rw [F.isoMapOfCommSq_eq _ _ rfl]
         dsimp
-        simp only [Fu
+        simp only [Functor.map_comp, Category.assoc]
+        rw [← F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app_assoc p.op.toLoc
+            (f' i₁).op.toLoc f₁.op.toLoc _ q.op.toLoc (p.op.toLoc ≫ q.op.toLoc) rfl
+            (by grind) (by grind) M]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) (f₁ ≫ p' i₁) (f₂ ≫ p' i₂)]; rw [← cancel_mono ((F.mapComp' (f' i₂).op.toLoc f₂.op.toLoc q.op.toLoc
+            (by grind)).inv.toNatTrans.app _)]
+        dsimp
+        simp only [Category.assoc,
+          ← F.mapComp'₀₂₃_inv_comp_mapComp'₀₁₃_hom_app p.op.toLoc
+            (f' i₂).op.toLoc f₂.op.toLoc _ q.op.toLoc (p.op.toLoc ≫ q.op.toLoc) rfl
+            (by grind) (by grind) M,
+          ← F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app_assoc (f (α i₁)).op.toLoc
+            (p' i₁).op.toLoc f₁.op.toLoc (p.op.toLoc ≫ (f' i₁).op.toLoc) _
+            (p.op.toLoc ≫ q.op.toLoc) (by grind) rfl (by grind) M,
+          F.mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app_assoc (f (α i₂)).op.toLoc
+            (p' i₂).op.toLoc f₂.op.toLoc (p.op.toLoc ≫ (f' i₂).op.toLoc) _
+            (p.op.toLoc ≫ q.op.toLoc) (by grind) rfl (by grind) M]
+        simp))
+    (fun f => by
+      ext i
+      exact (F.isoMapOfCommSq (CommSq.mk (w i)).op.toLoc).inv.toNatTrans.naturality f)
 
 Depends on / 依赖: Cat.Hom.toNatIso, Category, Category.assoc, CommSq, CommSq.mk, F.isoMapOfCommSq, F.isoMapOfCommSq_eq, F.mapComp, Functor, Functor.map_comp, NatIso, NatIso.ofComponents, isoMapOfCommSq, isoMapOfCommSq_eq, mapComp, map_comp, ofComponents, op.toLoc, p.op.toLoc, pullFunctorObjHom_eq
 -/
@@ -594,7 +676,15 @@ definition pullFunctorIso
   body: NatIso.ofComponents (fun D => isoMk (fun j => D.iso _ _ _) (by
     intro Y q j₁ j₂ f₁ f₂ hf₁ hf₂
     dsimp
-    rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) _ _ rfl (by cat_disch) (by cat_disch)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) _ _ rfl (by cat_disch) (by cat_disch)]; rw [map_eq_pullHom_asso
+    rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) _ _ rfl (by cat_disch) (by cat_disch)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) _ _ rfl (by cat_disch) (by cat_disch)]; rw [map_eq_pullHom_assoc _ _ (f₁ ≫ p' j₁) (f₁ ≫ p'' j₁) (by cat_disch) (by cat_disch)]; rw [map_eq_pullHom _ _ (f₂ ≫ p' j₂) (f₂ ≫ p'' j₂) (by cat_disch) (by cat_disch)]
+    simp only [Cat.Hom.hom_inv_id_toNatTrans_app_assoc, Category.assoc]
+    rw [pullHom_hom _ _ _ (q ≫ p) (by rw [w]; rw [reassoc_of% hf₁]) _ _
+        rfl (by cat_disch) _ _ rfl rfl, hom_comp_assoc,
+      pullHom_hom _ _ _ (q ≫ p) (by rw [w, reassoc_of% hf₂]) _ _
+        rfl (by cat_disch) _ _ rfl rfl, hom_comp_assoc]))
+    (fun φ => by
+      ext j
+      exact φ.comm _ _ _ rfl (by cat_disch))
 
 中文:
 定义 pullFunctorIso
@@ -602,7 +692,15 @@ definition pullFunctorIso
   定义体: NatIso.ofComponents (fun D => isoMk (fun j => D.iso _ _ _) (by
     intro Y q j₁ j₂ f₁ f₂ hf₁ hf₂
     dsimp
-    rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) _ _ rfl (by cat_disch) (by cat_disch)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) _ _ rfl (by cat_disch) (by cat_disch)]; rw [map_eq_pullHom_asso
+    rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) _ _ rfl (by cat_disch) (by cat_disch)]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ p) _ _ rfl (by cat_disch) (by cat_disch)]; rw [map_eq_pullHom_assoc _ _ (f₁ ≫ p' j₁) (f₁ ≫ p'' j₁) (by cat_disch) (by cat_disch)]; rw [map_eq_pullHom _ _ (f₂ ≫ p' j₂) (f₂ ≫ p'' j₂) (by cat_disch) (by cat_disch)]
+    simp only [Cat.Hom.hom_inv_id_toNatTrans_app_assoc, Category.assoc]
+    rw [pullHom_hom _ _ _ (q ≫ p) (by rw [w]; rw [reassoc_of% hf₁]) _ _
+        rfl (by cat_disch) _ _ rfl rfl, hom_comp_assoc,
+      pullHom_hom _ _ _ (q ≫ p) (by rw [w, reassoc_of% hf₂]) _ _
+        rfl (by cat_disch) _ _ rfl rfl, hom_comp_assoc]))
+    (fun φ => by
+      ext j
+      exact φ.comm _ _ _ rfl (by cat_disch))
 
 Depends on / 依赖: Cat.Hom.hom_inv_id_toNatTrans_app_assoc, Category, Category.assoc, D.iso, NatIso, NatIso.ofComponents, cat_disch, hom_inv_id_toNatTrans_app_assoc, map_eq_pullHom, map_eq_pullHom_assoc, ofComponents, pullFunctorObjHom_eq
 -/
@@ -672,7 +770,14 @@ definition pullFunctorCompIso
       intro Y s k₁ k₂ f₁ f₂ hf₁ hf₂
       dsimp
       rw [pullFunctorObjHom_eq _ _ _ _ _ (s ≫ r) _ _ rfl]; rw [pullFunctorObjHom_eq _ _ _ _ _ (s ≫ q) (f₁ ≫ q' k₁) (f₂ ≫ q' k₂)]
-      ds
+      dsimp
+      rw [pullFunctorObjHom_eq _ _ _ _ _ (s ≫ r) (f₁ ≫ r' k₁) (f₂ ≫ r' k₂)
+        rfl (by simp [w']; rw [reassoc_of% hf₁]; rw [reassoc_of% hf₂]) (by
+          simp [reassoc_of% w', reassoc_of% hf₁, hr])]
+      dsimp
+      simp only [Category.assoc]
+      rw [mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app_assoc _ _ _ _ _ _ _
+        (by grind) rfl rfl]; rw [mapComp'₀₂₃_hom_app _ _ _ _ _ _ _ _ rfl rfl]))
 
 中文:
 定义 pullFunctorCompIso
@@ -681,7 +786,14 @@ definition pullFunctorCompIso
       intro Y s k₁ k₂ f₁ f₂ hf₁ hf₂
       dsimp
       rw [pullFunctorObjHom_eq _ _ _ _ _ (s ≫ r) _ _ rfl]; rw [pullFunctorObjHom_eq _ _ _ _ _ (s ≫ q) (f₁ ≫ q' k₁) (f₂ ≫ q' k₂)]
-      ds
+      dsimp
+      rw [pullFunctorObjHom_eq _ _ _ _ _ (s ≫ r) (f₁ ≫ r' k₁) (f₂ ≫ r' k₂)
+        rfl (by simp [w']; rw [reassoc_of% hf₁]; rw [reassoc_of% hf₂]) (by
+          simp [reassoc_of% w', reassoc_of% hf₁, hr])]
+      dsimp
+      simp only [Category.assoc]
+      rw [mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app_assoc _ _ _ _ _ _ _
+        (by grind) rfl rfl]; rw [mapComp'₀₂₃_hom_app _ _ _ _ _ _ _ _ rfl rfl]))
 
 Depends on / 依赖: Cat.Hom.toNatIso, Category, Category.assoc, F.mapComp, NatIso, NatIso.ofComponents, cat_disch, mapComp, ofComponents, pullFunctor, pullFunctorObjHom_eq, reassoc_of, symm.app, toNatIso
 -/
@@ -729,7 +841,19 @@ definition pullFunctorEquivalence
       (pullFunctorCompIso _ _ _ _ e.inv_hom_id (fun _ => rfl)).symm
   counitIso :=
     pullFunctorCompIso _ _ _ _ e.hom_inv_id (fun _ => rfl) ≪≫
-      pullFunctorIso _ _ _ ≪≫ pullFun
+      pullFunctorIso _ _ _ ≪≫ pullFunctorIdIso F S'
+  functor_unitIso_comp D := by
+    ext j
+    dsimp
+    simp only [Category.id_comp, Functor.map_comp, Category.assoc]
+    rw [pullFunctorObjHom_eq_assoc _ _ _ _ _ (p' _ ≫ f _) (p' _ ≫ q' _ ≫ p' _) (p' _) (by simp)
+        (by simp [w']; rw [reassoc_of% w]),
+      map_eq_pullHom_assoc _ (p' j) (p' j) (p' _ ≫ q' _ ≫ p' _) (by simp) (by simp),
+      D.pullHom_hom _ _ (p' j ≫ f _) (by simp) _ _ (by simp)
+        (by simp [w, reassoc_of% w']) _ _ (by simp) rfl]
+    dsimp
+    rw [← F.mapComp'₀₁₃_hom_comp_whiskerLeft_mapComp'_hom_app_assoc _ _ _ _ _ _ rfl rfl (by simp)]; rw [mapComp'_comp_id_hom_app]; rw [mapComp'_id_comp_inv_app_assoc]; rw [← Functor.map_comp_assoc]; rw [Cat.Hom.inv_hom_id_toNatTrans_app]
+    simp [D.hom_self _ _ rfl]
 
 中文:
 定义 pullFunctorEquivalence
@@ -741,7 +865,19 @@ definition pullFunctorEquivalence
       (pullFunctorCompIso _ _ _ _ e.inv_hom_id (fun _ => rfl)).symm
   counitIso :=
     pullFunctorCompIso _ _ _ _ e.hom_inv_id (fun _ => rfl) ≪≫
-      pullFunctorIso _ _ _ ≪≫ pullFun
+      pullFunctorIso _ _ _ ≪≫ pullFunctorIdIso F S'
+  functor_unitIso_comp D := by
+    ext j
+    dsimp
+    simp only [Category.id_comp, Functor.map_comp, Category.assoc]
+    rw [pullFunctorObjHom_eq_assoc _ _ _ _ _ (p' _ ≫ f _) (p' _ ≫ q' _ ≫ p' _) (p' _) (by simp)
+        (by simp [w']; rw [reassoc_of% w]),
+      map_eq_pullHom_assoc _ (p' j) (p' j) (p' _ ≫ q' _ ≫ p' _) (by simp) (by simp),
+      D.pullHom_hom _ _ (p' j ≫ f _) (by simp) _ _ (by simp)
+        (by simp [w, reassoc_of% w']) _ _ (by simp) rfl]
+    dsimp
+    rw [← F.mapComp'₀₁₃_hom_comp_whiskerLeft_mapComp'_hom_app_assoc _ _ _ _ _ _ rfl rfl (by simp)]; rw [mapComp'_comp_id_hom_app]; rw [mapComp'_id_comp_inv_app_assoc]; rw [← Functor.map_comp_assoc]; rw [Cat.Hom.inv_hom_id_toNatTrans_app]
+    simp [D.hom_self _ _ rfl]
 
 Depends on / 依赖: pullFunctor
 -/
@@ -782,7 +918,14 @@ lemma exists_equivalence_of_sieve_eq
       rw [h]; apply Sieve.ofArrows_mk
     exact ⟨i, _, fac⟩
   have h₂ (i : ι) : exists (i' : ι') (g : X i ⟶ X' i'), g ≫ f' i' = f i := by
-    obtain ⟨_
+    obtain ⟨_, _, _, ⟨i'⟩, fac⟩ : Sieve.ofArrows X' f' (f i) := by
+      rw [← h]; apply Sieve.ofArrows_mk
+    exact ⟨i', _, fac⟩
+  choose α p' w using h₁
+  choose β q' w' using h₂
+  exact ⟨pullFunctorEquivalence (p' := p') (q' := q') F (Iso.refl _)
+    (by cat_disch) (by cat_disch), ⟨toDescentDataCompPullFunctorIso _ _ ≪≫
+    Functor.isoWhiskerRight (Cat.Hom.toNatIso (F.mapId _)) _ ≪≫ Functor.leftUnitor _⟩⟩
 
 中文:
 引理 存在_equivalence_of_sieve_eq
@@ -792,7 +935,14 @@ lemma exists_equivalence_of_sieve_eq
       rw [h]; apply Sieve.ofArrows_mk
     exact ⟨i, _, fac⟩
   have h₂ (i : ι) : exists (i' : ι') (g : X i ⟶ X' i'), g ≫ f' i' = f i := by
-    obtain ⟨_
+    obtain ⟨_, _, _, ⟨i'⟩, fac⟩ : Sieve.ofArrows X' f' (f i) := by
+      rw [← h]; apply Sieve.ofArrows_mk
+    exact ⟨i', _, fac⟩
+  choose α p' w using h₁
+  choose β q' w' using h₂
+  exact ⟨pullFunctorEquivalence (p' := p') (q' := q') F (Iso.refl _)
+    (by cat_disch) (by cat_disch), ⟨toDescentDataCompPullFunctorIso _ _ ≪≫
+    Functor.isoWhiskerRight (Cat.Hom.toNatIso (F.mapId _)) _ ≪≫ Functor.leftUnitor _⟩⟩
 
 Depends on / 依赖: Iso.refl, Sieve.ofArrows, Sieve.ofArrows_mk, ofArrows, ofArrows_mk, pullFunctorEquivalence
 -/
@@ -889,7 +1039,9 @@ definition subtypeCompatibleHomEquiv
   invFun g :=
     { val := g.hom
       property i₁ i₂ Z f₁ f₂ h := by
-        simpa [map_eq_pullHom (g.hom i₁) f₁.le
+        simpa [map_eq_pullHom (g.hom i₁) f₁.left Z.hom Z.hom (Over.w f₁) (Over.w f₁),
+          map_eq_pullHom (g.hom i₂) f₂.left Z.hom Z.hom (Over.w f₂) (Over.w f₂),
+          cancel_epi, cancel_mono] using g.comm Z.hom f₁.left f₂.left (Over.w f₁) (Over.w f₂) }
 
 中文:
 定义 subtypeCompatibleHomEquiv
@@ -901,7 +1053,9 @@ definition subtypeCompatibleHomEquiv
   invFun g :=
     { val := g.hom
       property i₁ i₂ Z f₁ f₂ h := by
-        simpa [map_eq_pullHom (g.hom i₁) f₁.le
+        simpa [map_eq_pullHom (g.hom i₁) f₁.left Z.hom Z.hom (Over.w f₁) (Over.w f₁),
+          map_eq_pullHom (g.hom i₂) f₂.left Z.hom Z.hom (Over.w f₂) (Over.w f₂),
+          cancel_epi, cancel_mono] using g.comm Z.hom f₁.left f₂.left (Over.w f₁) (Over.w f₂) }
 
 Depends on / 依赖: Over.homMk, Over.mk
 -/
@@ -1244,7 +1398,7 @@ lemma bijective_toDescentData_map_iff
   rw [Presieve.isSheafFor_ofArrows_iff_bijective_toCompabible]; rw [← (DescentData.subtypeCompatibleHomEquiv F f).bijective.of_comp_iff']; rw [← Function.Bijective.of_comp_iff _ (presheafHomObjHomEquiv F).bijective]
   convert! Iff.rfl
   ext φ : 1
-  apply DescentData.subtypeCompatibleHomEquiv_toCo
+  apply DescentData.subtypeCompatibleHomEquiv_toCompatible_presheafHomObjHomEquiv
 
 中文:
 引理 bijective_toDescentData_map_iff
@@ -1253,7 +1407,7 @@ lemma bijective_toDescentData_map_iff
   rw [Presieve.isSheafFor_ofArrows_iff_bijective_toCompabible]; rw [← (DescentData.subtypeCompatibleHomEquiv F f).bijective.of_comp_iff']; rw [← Function.Bijective.of_comp_iff _ (presheafHomObjHomEquiv F).bijective]
   convert! Iff.rfl
   ext φ : 1
-  apply DescentData.subtypeCompatibleHomEquiv_toCo
+  apply DescentData.subtypeCompatibleHomEquiv_toCompatible_presheafHomObjHomEquiv
 
 Depends on / 依赖: Over.mk
 -/
@@ -1280,7 +1434,11 @@ lemma isPrestackFor_iff_isSheafFor
   convert! Iff.rfl
   refine le_antisymm ?_ ?_
   · rintro X f (hf : R.arrows f.left)
-    obtain ⟨X, g, rfl⟩ := Over.m
+    obtain ⟨X, g, rfl⟩ := Over.mk_surjective X
+    obtain rfl : f = Over.homMk g := by ext; simpa using Over.w f
+    exact Presieve.ofArrows.mk (ι := R.arrows.category) ⟨Over.mk g, hf⟩
+  · rintro _ _ ⟨_, h⟩
+    exact h
 
 中文:
 引理 isPrestackFor_iff_isSheafFor
@@ -1292,7 +1450,11 @@ lemma isPrestackFor_iff_isSheafFor
   convert! Iff.rfl
   refine le_antisymm ?_ ?_
   · rintro X f (hf : R.arrows f.left)
-    obtain ⟨X, g, rfl⟩ := Over.m
+    obtain ⟨X, g, rfl⟩ := Over.mk_surjective X
+    obtain rfl : f = Over.homMk g := by ext; simpa using Over.w f
+    exact Presieve.ofArrows.mk (ι := R.arrows.category) ⟨Over.mk g, hf⟩
+  · rintro _ _ ⟨_, h⟩
+    exact h
 
 Depends on / 依赖: F.presheafHom, presheafHom
 -/
@@ -1323,7 +1485,19 @@ lemma isPrestackFor_iff_isSheafFor'
   rw [isPrestackFor_iff_isSheafFor]
   refine ⟨fun h S₀ M N a => ?_, by tauto⟩
   replace h := h ((F.map a.op.toLoc).toFunctor.obj M) ((F.map a.op.toLoc).toFunctor.obj N)
-  rw [← Presieve.isSheafFor_iff_of_iso (F.overMapCompPresheafHomIso M N a)]; rw [Presieve.isSheafFor_over_map_op_comp_iff (X' :=
+  rw [← Presieve.isSheafFor_iff_of_iso (F.overMapCompPresheafHomIso M N a)]; rw [Presieve.isSheafFor_over_map_op_comp_iff (X' := Over.mk a)
+      (e := Over.isoMk (Iso.refl _))] at h
+  convert! h
+  refine le_antisymm ?_ ?_
+  · intro Y f hf
+    exact ⟨Over.mk f.left, Over.homMk f.left, Over.homMk (𝟙 _) (by simpa using Over.w f),
+      hf, by cat_disch⟩
+  · rintro X b ⟨Y, c, d, h, fac⟩
+    replace fac := (Over.forget _).congr_map fac
+    dsimp at fac
+    rw [Category.comp_id] at fac
+    change R.arrows b.left
+    simpa [fac] using R.downward_closed h d.left
 
 中文:
 引理 isPrestackFor_iff_isSheafFor'
@@ -1332,7 +1506,19 @@ lemma isPrestackFor_iff_isSheafFor'
   rw [isPrestackFor_iff_isSheafFor]
   refine ⟨fun h S₀ M N a => ?_, by tauto⟩
   replace h := h ((F.map a.op.toLoc).toFunctor.obj M) ((F.map a.op.toLoc).toFunctor.obj N)
-  rw [← Presieve.isSheafFor_iff_of_iso (F.overMapCompPresheafHomIso M N a)]; rw [Presieve.isSheafFor_over_map_op_comp_iff (X' :=
+  rw [← Presieve.isSheafFor_iff_of_iso (F.overMapCompPresheafHomIso M N a)]; rw [Presieve.isSheafFor_over_map_op_comp_iff (X' := Over.mk a)
+      (e := Over.isoMk (Iso.refl _))] at h
+  convert! h
+  refine le_antisymm ?_ ?_
+  · intro Y f hf
+    exact ⟨Over.mk f.left, Over.homMk f.left, Over.homMk (𝟙 _) (by simpa using Over.w f),
+      hf, by cat_disch⟩
+  · rintro X b ⟨Y, c, d, h, fac⟩
+    replace fac := (Over.forget _).congr_map fac
+    dsimp at fac
+    rw [Category.comp_id] at fac
+    change R.arrows b.left
+    simpa [fac] using R.downward_closed h d.left
 
 Depends on / 依赖: F.map, F.overMapCompPresheafHomIso, Iso.refl, Over.homMk, Over.isoMk, Over.mk, Over.w, Presieve, Presieve.isSheafFor_iff_of_iso, Presieve.isSheafFor_over_map_op_comp_iff, a.op.toLoc, cat_disch, convert, f.left, isPrestackFor_iff_isSheafFor, isSheafFor_iff_of_iso, isSheafFor_over_map_op_comp_iff, le_antisymm, overMapCompPresheafHomIso, replace
 -/
@@ -1399,7 +1585,7 @@ definition fullyFaithfulToDescentData
     intro M N
     refine ((isSheaf_iff_isSheaf_of_type _ _).1
       (IsPrestack.isSheaf J M N)).isSheafFor _ ?_
-    rwa [GrothendieckTopology.mem_over_iff, Sieve.generate_sie
+    rwa [GrothendieckTopology.mem_over_iff, Sieve.generate_sieve, OrderIso.apply_symm_apply])
 
 中文:
 定义 fullyFaithfulToDescentData
@@ -1409,7 +1595,7 @@ definition fullyFaithfulToDescentData
     intro M N
     refine ((isSheaf_iff_isSheaf_of_type _ _).1
       (IsPrestack.isSheaf J M N)).isSheafFor _ ?_
-    rwa [GrothendieckTopology.mem_over_iff, Sieve.generate_sie
+    rwa [GrothendieckTopology.mem_over_iff, Sieve.generate_sieve, OrderIso.apply_symm_apply])
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.mem_over_iff, IsPrestack, IsPrestack.isSheaf, IsPrestackFor_generate_iff, Nonempty, Nonempty.some, OrderIso, OrderIso.apply_symm_apply, Sieve.generate_sieve, apply_symm_apply, generate_sieve, isPrestackFor_iff_isSheafFor, isPrestackFor_ofArrows_iff, isSheaf, isSheafFor, isSheaf_iff_isSheaf_of_type, mem_over_iff
 -/

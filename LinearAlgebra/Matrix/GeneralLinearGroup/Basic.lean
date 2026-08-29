@@ -65,7 +65,10 @@ lemma mem_center_iff_val_mem_range_scalar
     refine Matrix.mem_range_scalar_of_commute_transvectionStruct fun t => ?_
     simpa [Units.ext_iff] using! Subgroup.mem_center_iff.mp hg (.mk _ _ t.mul_inv t.inv_mul)
   · refine fun ⟨a, ha⟩ => Subgroup.mem_center_iff.mpr fun h => ?_
-    simp [-scalar_apply, Units.ext
+    simp [-scalar_apply, Units.ext_iff, ← ha, Matrix.scalar_comm a (Commute.all _)]
+
+@[deprecated (since := "2026-02-08")]
+alias mem_center_iff_val_eq_scalar := mem_center_iff_val_mem_range_scalar
 
 中文:
 引理 mem_center_iff_val_mem_range_scalar
@@ -76,7 +79,10 @@ lemma mem_center_iff_val_mem_range_scalar
     refine Matrix.mem_range_scalar_of_commute_transvectionStruct fun t => ?_
     simpa [Units.ext_iff] using! Subgroup.mem_center_iff.mp hg (.mk _ _ t.mul_inv t.inv_mul)
   · refine fun ⟨a, ha⟩ => Subgroup.mem_center_iff.mpr fun h => ?_
-    simp [-scalar_apply, Units.ext
+    simp [-scalar_apply, Units.ext_iff, ← ha, Matrix.scalar_comm a (Commute.all _)]
+
+@[deprecated (since := "2026-02-08")]
+alias mem_center_iff_val_eq_scalar := mem_center_iff_val_mem_range_scalar
 
 Depends on / 依赖: Commute, Commute.all, Matrix, Matrix.mem_range_scalar_of_commute_transvectionStruct, Matrix.scalar_comm, Subgroup, Subgroup.mem_center_iff.mp, Subgroup.mem_center_iff.mpr, Units.ext_iff, ext_iff, inv_mul, mem_center_iff, mem_range_scalar_of_commute_transvectionStruct, mul_inv, scalar_apply, scalar_comm, t.inv_mul, t.mul_inv
 -/
@@ -106,7 +112,17 @@ lemma center_eq_range_scalar
     cases isEmpty_or_nonempty n with
     | inl hn => simp [nontriviality]
     | inr hn =>
-      obtain ⟨a, h
+      obtain ⟨a, ha⟩ := mem_center_iff_val_mem_range_scalar.mp hg
+      obtain ⟨b, hb⟩ := mem_center_iff_val_mem_range_scalar.mp (Subgroup.inv_mem _ hg)
+      have hab : a * b = 1 := by
+        simpa [-mul_inv_cancel, ← ha, ← hb, ← diagonal_one, Units.ext_iff] using mul_inv_cancel g
+      refine ⟨⟨a, b, hab, mul_comm a b ▸ hab⟩, ?_⟩
+      simp [Units.ext_iff, ← ha]
+  · rintro ⟨a, rfl⟩
+    exact mem_center_iff_val_mem_range_scalar.mpr ⟨a, rfl⟩
+
+@[deprecated (since := "2026-02-08")]
+alias center_eq_range_units := center_eq_range_scalar
 
 中文:
 引理 center_eq_range_scalar
@@ -119,7 +135,17 @@ lemma center_eq_range_scalar
     cases isEmpty_or_nonempty n with
     | inl hn => simp [nontriviality]
     | inr hn =>
-      obtain ⟨a, h
+      obtain ⟨a, ha⟩ := mem_center_iff_val_mem_range_scalar.mp hg
+      obtain ⟨b, hb⟩ := mem_center_iff_val_mem_range_scalar.mp (Subgroup.inv_mem _ hg)
+      have hab : a * b = 1 := by
+        simpa [-mul_inv_cancel, ← ha, ← hb, ← diagonal_one, Units.ext_iff] using mul_inv_cancel g
+      refine ⟨⟨a, b, hab, mul_comm a b ▸ hab⟩, ?_⟩
+      simp [Units.ext_iff, ← ha]
+  · rintro ⟨a, rfl⟩
+    exact mem_center_iff_val_mem_range_scalar.mpr ⟨a, rfl⟩
+
+@[deprecated (since := "2026-02-08")]
+alias center_eq_range_units := center_eq_range_scalar
 
 Depends on / 依赖: matrix, previous, scalar, underlying
 -/
@@ -191,7 +217,13 @@ lemma SpecialLinearGroup.toGL_mem_center_iff
   obtain ⟨i⟩ := hn
   simp only [GeneralLinearGroup.center_eq_range_scalar, MonoidHom.mem_range,
     mem_center_iff, scalar_apply]
-  refine ⟨fun ⟨r, hr⟩ => ⟨r, by simpa [Units.ext_iff] using 
+  refine ⟨fun ⟨r, hr⟩ => ⟨r, by simpa [Units.ext_iff] using congr(GeneralLinearGroup.det $hr),
+    by simpa [Units.ext_iff] using hr⟩, fun ⟨r, hr1, hr⟩ => ⟨⟨r, g⁻¹.1 i i, ?_, ?_⟩,
+      by simp [Units.ext_iff, hr]⟩⟩
+  · simpa [-mul_inv_cancel, ← hr, ← pow_succ',
+      Nat.sub_one_add_one Fintype.card_pos.ne.symm] using
+        Matrix.ext_iff.2 (Subtype.ext_iff.1 (mul_inv_cancel g)) i i
+  · simpa [-inv_mul_cancel, ← hr] using Matrix.ext_iff.2 (Subtype.ext_iff.1 (inv_mul_cancel g)) i i
 
 中文:
 引理 SpecialLinearGroup.toGL_mem_center_iff
@@ -202,7 +234,13 @@ lemma SpecialLinearGroup.toGL_mem_center_iff
   obtain ⟨i⟩ := hn
   simp only [GeneralLinearGroup.center_eq_range_scalar, MonoidHom.mem_range,
     mem_center_iff, scalar_apply]
-  refine ⟨fun ⟨r, hr⟩ => ⟨r, by simpa [Units.ext_iff] using 
+  refine ⟨fun ⟨r, hr⟩ => ⟨r, by simpa [Units.ext_iff] using congr(GeneralLinearGroup.det $hr),
+    by simpa [Units.ext_iff] using hr⟩, fun ⟨r, hr1, hr⟩ => ⟨⟨r, g⁻¹.1 i i, ?_, ?_⟩,
+      by simp [Units.ext_iff, hr]⟩⟩
+  · simpa [-mul_inv_cancel, ← hr, ← pow_succ',
+      Nat.sub_one_add_one Fintype.card_pos.ne.symm] using
+        Matrix.ext_iff.2 (Subtype.ext_iff.1 (mul_inv_cancel g)) i i
+  · simpa [-inv_mul_cancel, ← hr] using Matrix.ext_iff.2 (Subtype.ext_iff.1 (inv_mul_cancel g)) i i
 
 Depends on / 依赖: GeneralLinearGroup, GeneralLinearGroup.center_eq_range_scalar, GeneralLinearGroup.det, IsEmpty, MonoidHom, MonoidHom.mem_range, Nat.sub_one_add_one, Nonempty, Subgroup, Subgroup.center_eq_top, Units.ext_iff, center_eq_range_scalar, center_eq_top, ext_iff, mem_center_iff, mem_range, mul_inv_cancel, pow_succ, replace, scalar_apply
 -/

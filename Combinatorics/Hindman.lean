@@ -294,7 +294,9 @@ theorem FP.mul
     use n + 1
     intro m' hm'
     rw [mul_assoc]
-    exact FP.con
+    exact FP.cons _ _ (hn _ hm')
+
+@[to_additive exists_idempotent_ultrafilter_le_FS]
 
 中文:
 定理 FP.mul
@@ -312,7 +314,9 @@ theorem FP.mul
     use n + 1
     intro m' hm'
     rw [mul_assoc]
-    exact FP.con
+    exact FP.cons _ _ (hn _ hm')
+
+@[to_additive exists_idempotent_ultrafilter_le_FS]
 
 Depends on / 依赖: FP.cons, FP.tail, mul_assoc
 -/
@@ -346,7 +350,28 @@ theorem exists_idempotent_ultrafilter_le_FP
     refine ⟨U, U_idem, ?_⟩
     convert! Set.mem_iInter.mp hU 0
   · exact Ultrafilter.continuous_mul_left
-  · apply
+  · apply IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed
+    · intro n U hU
+      filter_upwards [hU]
+      rw [← Stream'.drop_drop]; rw [← Stream'.tail_eq_drop]
+      exact FP.tail _
+    · intro n
+exact ⟨pure _, mem_pure.mpr FP.head _⟩
+    · exact (ultrafilter_isClosed_basic _).isCompact
+    · intro n
+      apply ultrafilter_isClosed_basic
+  · exact IsClosed.isCompact (isClosed_iInter fun i => ultrafilter_isClosed_basic _)
+  · intro U hU V hV
+    rw [Set.mem_iInter] at *
+    intro n
+    rw [Set.mem_ofPred_eq]; rw [Ultrafilter.eventually_mul]
+    filter_upwards [hU n] with m hm
+    obtain ⟨n', hn⟩ := FP.mul hm
+    filter_upwards [hV (n' + n)] with m' hm'
+    apply hn
+    simpa only [Stream'.drop_drop, add_comm] using hm'
+
+@[to_additive exists_FS_of_large]
 
 中文:
 定理 存在_idempotent_ultrafilter_le_FP
@@ -358,7 +383,28 @@ theorem exists_idempotent_ultrafilter_le_FP
     refine ⟨U, U_idem, ?_⟩
     convert! Set.mem_iInter.mp hU 0
   · exact Ultrafilter.continuous_mul_left
-  · apply
+  · apply IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed
+    · intro n U hU
+      filter_upwards [hU]
+      rw [← Stream'.drop_drop]; rw [← Stream'.tail_eq_drop]
+      exact FP.tail _
+    · intro n
+exact ⟨pure _, mem_pure.mpr FP.head _⟩
+    · exact (ultrafilter_isClosed_basic _).isCompact
+    · intro n
+      apply ultrafilter_isClosed_basic
+  · exact IsClosed.isCompact (isClosed_iInter fun i => ultrafilter_isClosed_basic _)
+  · intro U hU V hV
+    rw [Set.mem_iInter] at *
+    intro n
+    rw [Set.mem_ofPred_eq]; rw [Ultrafilter.eventually_mul]
+    filter_upwards [hU n] with m hm
+    obtain ⟨n', hn⟩ := FP.mul hm
+    filter_upwards [hV (n' + n)] with m' hm'
+    apply hn
+    simpa only [Stream'.drop_drop, add_comm] using hm'
+
+@[to_additive exists_FS_of_large]
 
 Depends on / 依赖: FP.head, FP.tail, IsCompact, IsCompact.nonempty_iInter_of_sequence_nonempty_isCompact_isClosed, Set.mem_iInter.mp, Stream, U_idem, Ultrafilter, Ultrafilter.continuous_mul_left, a.drop, continuous_mul_left, convert, drop_drop, exists_idempotent_in_compact_subsemigroup, filter_upwards, mem_iInter, mem_pure, mem_pure.mpr, nonempty_iInter_of_sequence_nonempty_isCompact_isClosed, tail_eq_drop
 -/
@@ -402,7 +448,36 @@ theorem exists_FP_of_large
   /- Informally: given a `U`-large set `s₀`, the set `s₀ ∩ { m | ∀ᶠ m' in U, m * m' ∈ s₀ }` is also
   `U`-large (since `U` is idempotent). Thus in particular there is an `a₀` in this intersection. Now
   let `s₁` be the intersection `s₀ ∩ { m | a₀ * m ∈ s₀ }`. By choice of `a₀`, this is again
-  `U
+  `U`-large, so we can repeat the argument starting from `s₁`, obtaining `a₁`, `s₂`, etc.
+  This gives the desired infinite sequence. -/
+  have exists_elem : forall {s : Set M} (_hs : s in U), (s inter { m | forallᶠ m' in U, m * m' in s }).Nonempty :=
+    fun {s} hs => Ultrafilter.nonempty_of_mem (inter_mem hs <| by rwa [← U_idem] at hs)
+  let elem : { s // s in U } -> M := fun p => (exists_elem p.property).some
+  let succ : {s // s in U} -> {s // s in U} := fun (p : {s // s in U}) =>
+        ⟨p.val inter {m : M | elem p * m in p.val},
+         inter_mem p.property
+           (show (exists_elem p.property).some in {m : M | forallᶠ (m' : M) in ↑U, m * m' in p.val} from
+              p.val.inter_subset_right (exists_elem p.property).some_mem)⟩
+  use Stream'.corec elem succ (Subtype.mk s₀ sU)
+  suffices forall (a : Stream' M), forall m in FP a, forall p, a = Stream'.corec elem succ p -> m in p.val by
+    intro m hm
+    exact this _ m hm ⟨s₀, sU⟩ rfl
+  clear sU s₀
+  intro a m h
+  induction h with
+  | head' b =>
+    rintro p rfl
+    rw [Stream'.corec_eq]; rw [Stream'.head_cons]
+    exact Set.inter_subset_left (Set.Nonempty.some_mem _)
+  | tail' b n h ih =>
+    rintro p rfl
+    refine Set.inter_subset_left (ih (succ p) ?_)
+    rw [Stream'.corec_eq]; rw [Stream'.tail_cons]
+  | cons' b n h ih =>
+    rintro p rfl
+    have := Set.inter_subset_right (ih (succ p) ?_)
+    · simpa only using! this
+    rw [Stream'.corec_eq]; rw [Stream'.tail_cons]
 
 中文:
 定理 存在_FP_of_large
@@ -411,7 +486,36 @@ theorem exists_FP_of_large
   /- Informally: given a `U`-large set `s₀`, the set `s₀ ∩ { m | ∀ᶠ m' in U, m * m' ∈ s₀ }` is also
   `U`-large (since `U` is idempotent). Thus in particular there is an `a₀` in this intersection. Now
   let `s₁` be the intersection `s₀ ∩ { m | a₀ * m ∈ s₀ }`. By choice of `a₀`, this is again
-  `U
+  `U`-large, so we can repeat the argument starting from `s₁`, obtaining `a₁`, `s₂`, etc.
+  This gives the desired infinite sequence. -/
+  have exists_elem : forall {s : Set M} (_hs : s in U), (s inter { m | forallᶠ m' in U, m * m' in s }).Nonempty :=
+    fun {s} hs => Ultrafilter.nonempty_of_mem (inter_mem hs <| by rwa [← U_idem] at hs)
+  let elem : { s // s in U } -> M := fun p => (exists_elem p.property).some
+  let succ : {s // s in U} -> {s // s in U} := fun (p : {s // s in U}) =>
+        ⟨p.val inter {m : M | elem p * m in p.val},
+         inter_mem p.property
+           (show (exists_elem p.property).some in {m : M | forallᶠ (m' : M) in ↑U, m * m' in p.val} from
+              p.val.inter_subset_right (exists_elem p.property).some_mem)⟩
+  use Stream'.corec elem succ (Subtype.mk s₀ sU)
+  suffices forall (a : Stream' M), forall m in FP a, forall p, a = Stream'.corec elem succ p -> m in p.val by
+    intro m hm
+    exact this _ m hm ⟨s₀, sU⟩ rfl
+  clear sU s₀
+  intro a m h
+  induction h with
+  | head' b =>
+    rintro p rfl
+    rw [Stream'.corec_eq]; rw [Stream'.head_cons]
+    exact Set.inter_subset_left (Set.Nonempty.some_mem _)
+  | tail' b n h ih =>
+    rintro p rfl
+    refine Set.inter_subset_left (ih (succ p) ?_)
+    rw [Stream'.corec_eq]; rw [Stream'.tail_cons]
+  | cons' b n h ih =>
+    rintro p rfl
+    have := Set.inter_subset_right (ih (succ p) ?_)
+    · simpa only using! this
+    rw [Stream'.corec_eq]; rw [Stream'.tail_cons]
 -/
 theorem exists_FP_of_large {M} [Semigroup M] (U : Ultrafilter M) (U_idem : U * U = U) (s₀ : Set M)
     (sU : s₀ in U) : exists a, FP a subseteq s₀ := by
@@ -603,7 +707,7 @@ theorem FP.mul_two
   convert! this
   lia
 
-@[to_
+@[to_additive]
 
 中文:
 定理 FP.mul_two
@@ -618,7 +722,7 @@ theorem FP.mul_two
   convert! this
   lia
 
-@[to_
+@[to_additive]
 
 Depends on / 依赖: FP.cons, FP.singleton, FP_drop_subset_FP, Nat.exists_eq_add_of_le, Nat.succ_le_of_lt, Stream, a.drop, convert, exists_eq_add_of_le, get_drop, head_drop, singleton, succ_le_of_lt, tail_eq_drop
 -/
@@ -646,7 +750,20 @@ theorem FP.finsetProd
   rw [← Finset.mul_prod_erase _ _ (s.min'_mem hs)]; rw [← Stream'.head_drop]
   rcases (s.erase (s.min' hs)).eq_empty_or_nonempty with h | h
   · rw [h, Finset.prod_empty, mul_one]
-    exact FP.
+    exact FP.head _
+  · apply FP.cons
+    rw [Stream'.tail_eq_drop]; rw [Stream'.drop_drop]; rw [add_comm]
+    refine Set.mem_of_subset_of_mem ?_ (ih _ (s.min'_mem hs) h)
+    have : s.min' hs + 1 <= (s.erase (s.min' hs)).min' h :=
+      Nat.succ_le_of_lt (Finset.min'_lt_of_mem_erase_min' _ _ <| Finset.min'_mem _ _)
+    obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le this
+    rw [hd]; rw [← Stream'.drop_drop]; rw [add_comm]
+    apply FP_drop_subset_FP
+
+@[deprecated (since := "2026-04-08")] alias FS.finset_sum := FS.finsetSum
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias FP.finset_prod := FP.finsetProd
 
 中文:
 定理 FP.finsetProd
@@ -657,7 +774,20 @@ theorem FP.finsetProd
   rw [← Finset.mul_prod_erase _ _ (s.min'_mem hs)]; rw [← Stream'.head_drop]
   rcases (s.erase (s.min' hs)).eq_empty_or_nonempty with h | h
   · rw [h, Finset.prod_empty, mul_one]
-    exact FP.
+    exact FP.head _
+  · apply FP.cons
+    rw [Stream'.tail_eq_drop]; rw [Stream'.drop_drop]; rw [add_comm]
+    refine Set.mem_of_subset_of_mem ?_ (ih _ (s.min'_mem hs) h)
+    have : s.min' hs + 1 <= (s.erase (s.min' hs)).min' h :=
+      Nat.succ_le_of_lt (Finset.min'_lt_of_mem_erase_min' _ _ <| Finset.min'_mem _ _)
+    obtain ⟨d, hd⟩ := Nat.exists_eq_add_of_le this
+    rw [hd]; rw [← Stream'.drop_drop]; rw [add_comm]
+    apply FP_drop_subset_FP
+
+@[deprecated (since := "2026-04-08")] alias FS.finset_sum := FS.finsetSum
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias FP.finset_prod := FP.finsetProd
 
 Depends on / 依赖: FP.cons, FP.head, FP_drop_subset_FP, Finset, Finset.eraseInduction, Finset.mul_prod_erase, Finset.prod_empty, Nat.succ_l, Set.mem_of_subset_of_mem, Stream, _mem, add_comm, drop_drop, eq_empty_or_nonempty, eraseInduction, head_drop, mem_of_subset_of_mem, mul_one, mul_prod_erase, prod_empty
 -/

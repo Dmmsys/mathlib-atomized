@@ -720,7 +720,7 @@ definition lanCompIsoOfPreserves
         (whiskerRight (L.leftKanExtensionUnit F) G ≫ (Functor.associator _ _ _).hom)
       dsimp [lan]
       ext
-      simp [← G.map_co
+      simp [← G.map_comp_assoc])
 
 中文:
 定义 lanCompIsoOfPreserves
@@ -731,7 +731,7 @@ definition lanCompIsoOfPreserves
         (whiskerRight (L.leftKanExtensionUnit F) G ≫ (Functor.associator _ _ _).hom)
       dsimp [lan]
       ext
-      simp [← G.map_co
+      simp [← G.map_comp_assoc])
 
 Depends on / 依赖: Functor, Functor.associator, G.map_comp_assoc, L.leftKanExtension, L.leftKanExtensionUnit, NatIso, NatIso.ofComponents, associator, hom_ext_of_isLeftKanExtension, leftKanExtension, leftKanExtensionCompIsoOfPreserves, leftKanExtensionUnit, map_comp_assoc, ofComponents, whiskerRight
 -/
@@ -1428,7 +1428,11 @@ definition ranCompIsoOfPreserves
         (L.rightKanExtensionCounit <| F' ⋙ G)
       dsimp [ran]
       ext
-      simp only [comp_obj, Category.assoc, rig
+      simp only [comp_obj, Category.assoc, rightKanExtensionCompIsoOfPreserves_hom_fac,
+        NatTrans.comp_app, whiskerLeft_app, whiskerRight_app, associator_inv_app, Category.id_comp,
+        liftOfIsRightKanExtension_fac, rightKanExtensionCompIsoOfPreserves_hom_fac_assoc,
+        ← G.map_comp]
+      simp)
 
 中文:
 定义 ranCompIsoOfPreserves
@@ -1440,7 +1444,11 @@ definition ranCompIsoOfPreserves
         (L.rightKanExtensionCounit <| F' ⋙ G)
       dsimp [ran]
       ext
-      simp only [comp_obj, Category.assoc, rig
+      simp only [comp_obj, Category.assoc, rightKanExtensionCompIsoOfPreserves_hom_fac,
+        NatTrans.comp_app, whiskerLeft_app, whiskerRight_app, associator_inv_app, Category.id_comp,
+        liftOfIsRightKanExtension_fac, rightKanExtensionCompIsoOfPreserves_hom_fac_assoc,
+        ← G.map_comp]
+      simp)
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, G.map_comp, L.rightKanExtension, L.rightKanExtensionCounit, NatIso, NatIso.ofComponents, NatTrans, NatTrans.comp_app, associator_inv_app, comp_app, comp_obj, hom_ext_of_isRightKanExtension, id_comp, liftOfIsRightKanExtension_fac, map_comp, ofComponents, rightKanExtension, rightKanExtensionCompIsoOfPreserves
 -/

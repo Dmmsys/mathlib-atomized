@@ -108,14 +108,26 @@ lemma quotMapEquivQuotQuotMap_symm_apply
   statement: (hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤)
   proof: by
   apply (quotMapEquivQuotQuotMap hx hx').injective
-  rw [quotMapEquivQuotQuotMap]; rw [RingEquiv.symm_trans_apply]; rw [RingEquiv.symm_symm]; rw [RingEquiv.coe_trans]; rw [Function.comp_apply]; rw [RingEquiv.symm_apply_apply]; rw [RingEquiv.symm_trans_apply]; rw [quotEquivOfEq_symm]; rw [quotEqui
+  rw [quotMapEquivQuotQuotMap]; rw [RingEquiv.symm_trans_apply]; rw [RingEquiv.symm_symm]; rw [RingEquiv.coe_trans]; rw [Function.comp_apply]; rw [RingEquiv.symm_apply_apply]; rw [RingEquiv.symm_trans_apply]; rw [quotEquivOfEq_symm]; rw [quotEquivOfEq_mk]
+  congr
+  convert! (adjoin.powerBasis' hx').quotientEquivQuotientMinpolyMap_symm_apply_mk I Q
+  apply (quotAdjoinEquivQuotMap hx
+    (FaithfulSMul.algebraMap_injective ((adjoin R {x})) S)).injective
+  simp only [RingEquiv.apply_symm_apply, adjoin.powerBasis'_gen, quotAdjoinEquivQuotMap_apply_mk,
+    coe_aeval_mk_apply]
 
 中文:
 引理 quotMapEquivQuotQuotMap_symm_apply
   结论: (hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤)
   证明: by
   apply (quotMapEquivQuotQuotMap hx hx').injective
-  rw [quotMapEquivQuotQuotMap]; rw [RingEquiv.symm_trans_apply]; rw [RingEquiv.symm_symm]; rw [RingEquiv.coe_trans]; rw [Function.comp_apply]; rw [RingEquiv.symm_apply_apply]; rw [RingEquiv.symm_trans_apply]; rw [quotEquivOfEq_symm]; rw [quotEqui
+  rw [quotMapEquivQuotQuotMap]; rw [RingEquiv.symm_trans_apply]; rw [RingEquiv.symm_symm]; rw [RingEquiv.coe_trans]; rw [Function.comp_apply]; rw [RingEquiv.symm_apply_apply]; rw [RingEquiv.symm_trans_apply]; rw [quotEquivOfEq_symm]; rw [quotEquivOfEq_mk]
+  congr
+  convert! (adjoin.powerBasis' hx').quotientEquivQuotientMinpolyMap_symm_apply_mk I Q
+  apply (quotAdjoinEquivQuotMap hx
+    (FaithfulSMul.algebraMap_injective ((adjoin R {x})) S)).injective
+  simp only [RingEquiv.apply_symm_apply, adjoin.powerBasis'_gen, quotAdjoinEquivQuotMap_apply_mk,
+    coe_aeval_mk_apply]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, Function, Function.comp_apply, RingEquiv, RingEquiv.coe_trans, RingEquiv.symm_apply_apply, RingEquiv.symm_symm, RingEquiv.symm_trans_apply, adjoin, adjoin.powerBasis, algebraMap_injective, coe_trans, comp_apply, convert, injective, powerBasis, quotAdjoinEquivQuotMap, quotEquivOfEq_mk, quotEquivOfEq_symm
 -/
@@ -144,7 +156,9 @@ definition normalizedFactorsMapEquivNormalizedFactorsMinPolyMk
   · rwa [Ne, map_eq_bot_iff_of_injective (FaithfulSMul.algebraMap_injective R S), ← Ne]
   · by_contra h
     exact (show Polynomial.map (Ideal.Quotient.mk I) (minpoly R x) != 0 from
-  
+      Polynomial.map_monic_ne_zero (minpoly.monic hx')) (span_singleton_eq_bot.mp h)
+  · refine (Ideal.normalizedFactorsEquivSpanNormalizedFactors ?_).symm
+    exact Polynomial.map_monic_ne_zero (minpoly.monic hx')
 
 中文:
 定义 normalizedFactorsMapEquivNormalizedFactorsMinPolyMk
@@ -155,7 +169,9 @@ definition normalizedFactorsMapEquivNormalizedFactorsMinPolyMk
   · rwa [Ne, map_eq_bot_iff_of_injective (FaithfulSMul.algebraMap_injective R S), ← Ne]
   · by_contra h
     exact (show Polynomial.map (Ideal.Quotient.mk I) (minpoly R x) != 0 from
-  
+      Polynomial.map_monic_ne_zero (minpoly.monic hx')) (span_singleton_eq_bot.mp h)
+  · refine (Ideal.normalizedFactorsEquivSpanNormalizedFactors ?_).symm
+    exact Polynomial.map_monic_ne_zero (minpoly.monic hx')
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, Ideal.Quotient.mk, Ideal.normalizedFactorsEquivSpanNormalizedFactors, IsDedekindDomain, IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv, Polynomial, Polynomial.map, Polynomial.map_monic_ne_zero, Quotient, algebraMap_injective, map_eq_bot_iff_of_injective, map_monic_ne_zero, minpoly, minpoly.monic, normalizedFactorsEquivOfQuotEquiv, normalizedFactorsEquivSpanNormalizedFactors, quotMapEquivQuotQuotMap, span_singleton_eq_bot, span_singleton_eq_bot.mp
 -/
@@ -180,13 +196,13 @@ English:
 theorem emultiplicity_factors_map_eq_emultiplicity
   proof: by
   classical
-  rw [normalizedFactorsMapEquivNormalizedFactorsMinPolyMk]; rw [Equiv.coe_trans]; rw [Function.comp_apply]; rw [Ideal.emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emultiplicity]; rw [IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity
+  rw [normalizedFactorsMapEquivNormalizedFactorsMinPolyMk]; rw [Equiv.coe_trans]; rw [Function.comp_apply]; rw [Ideal.emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emultiplicity]; rw [IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity]
 
 中文:
 定理 emultiplicity_factors_map_eq_emultiplicity
   证明: by
   classical
-  rw [normalizedFactorsMapEquivNormalizedFactorsMinPolyMk]; rw [Equiv.coe_trans]; rw [Function.comp_apply]; rw [Ideal.emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emultiplicity]; rw [IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity
+  rw [normalizedFactorsMapEquivNormalizedFactorsMinPolyMk]; rw [Equiv.coe_trans]; rw [Function.comp_apply]; rw [Ideal.emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emultiplicity]; rw [IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity]
 
 Depends on / 依赖: Equiv.coe_trans, Function, Function.comp_apply, Ideal.emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emultiplicity, IsDedekindDomain, IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity, classical, coe_trans, comp_apply, emultiplicity_normalizedFactorsEquivSpanNormalizedFactors_symm_eq_emultiplicity, normalizedFactorsEquivOfQuotEquiv_emultiplicity_eq_emultiplicity, normalizedFactorsMapEquivNormalizedFactorsMinPolyMk
 -/
@@ -217,7 +233,30 @@ theorem normalizedFactors_ideal_map_eq_normalizedFactors_min_poly_mk_map
     simp only [not_exists]
     rintro J' ⟨_, rfl⟩
     exact
-      hJ ((normalizedFact
+      hJ ((normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx').symm J').prop
+  -- Then we just have to compare the multiplicities, which we already proved are equal.
+  have := emultiplicity_factors_map_eq_emultiplicity hI hI' hx hx' hJ
+  rw [emultiplicity_eq_count_normalizedFactors]; rw [emultiplicity_eq_count_normalizedFactors]; rw [UniqueFactorizationMonoid.normalize_normalized_factor _ hJ]; rw [UniqueFactorizationMonoid.normalize_normalized_factor]; rw [Nat.cast_inj] at this
+  · refine this.trans ?_
+    -- Get rid of the `map` by applying the equiv to both sides.
+    generalize hJ' :
+      (normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx') ⟨J, hJ⟩ = J'
+    have : ((normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx').symm J' : Ideal S) =
+        J := by
+      rw [← hJ']; rw [Equiv.symm_apply_apply _ _]; rw [Subtype.coe_mk]
+    subst this
+    -- Get rid of the `attach` by applying the subtype `coe` to both sides.
+    rw [Multiset.count_map_eq_count' fun f =>
+        ((normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx').symm f :
+          Ideal S)]; rw [Multiset.count_attach]
+    · exact Subtype.coe_injective.comp (Equiv.injective _)
+  · exact (normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx' _).prop
+  · exact irreducible_of_normalized_factor _
+        (normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx' _).prop
+  · exact Polynomial.map_monic_ne_zero (minpoly.monic hx')
+  · exact irreducible_of_normalized_factor _ hJ
+  · rwa [← bot_eq_zero, Ne,
+      map_eq_bot_iff_of_injective (FaithfulSMul.algebraMap_injective R S)]
 
 中文:
 定理 normalizedFactors_ideal_map_eq_normalizedFactors_min_poly_mk_map
@@ -231,7 +270,30 @@ theorem normalizedFactors_ideal_map_eq_normalizedFactors_min_poly_mk_map
     simp only [not_exists]
     rintro J' ⟨_, rfl⟩
     exact
-      hJ ((normalizedFact
+      hJ ((normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx').symm J').prop
+  -- Then we just have to compare the multiplicities, which we already proved are equal.
+  have := emultiplicity_factors_map_eq_emultiplicity hI hI' hx hx' hJ
+  rw [emultiplicity_eq_count_normalizedFactors]; rw [emultiplicity_eq_count_normalizedFactors]; rw [UniqueFactorizationMonoid.normalize_normalized_factor _ hJ]; rw [UniqueFactorizationMonoid.normalize_normalized_factor]; rw [Nat.cast_inj] at this
+  · refine this.trans ?_
+    -- Get rid of the `map` by applying the equiv to both sides.
+    generalize hJ' :
+      (normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx') ⟨J, hJ⟩ = J'
+    have : ((normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx').symm J' : Ideal S) =
+        J := by
+      rw [← hJ']; rw [Equiv.symm_apply_apply _ _]; rw [Subtype.coe_mk]
+    subst this
+    -- Get rid of the `attach` by applying the subtype `coe` to both sides.
+    rw [Multiset.count_map_eq_count' fun f =>
+        ((normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx').symm f :
+          Ideal S)]; rw [Multiset.count_attach]
+    · exact Subtype.coe_injective.comp (Equiv.injective _)
+  · exact (normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx' _).prop
+  · exact irreducible_of_normalized_factor _
+        (normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx' _).prop
+  · exact Polynomial.map_monic_ne_zero (minpoly.monic hx')
+  · exact irreducible_of_normalized_factor _ hJ
+  · rwa [← bot_eq_zero, Ne,
+      map_eq_bot_iff_of_injective (FaithfulSMul.algebraMap_injective R S)]
 -/
 theorem normalizedFactors_ideal_map_eq_normalizedFactors_min_poly_mk_map (hI : IsMaximal I)
     (hI' : I != ⊥) (hx : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤) (hx' : IsIntegral R x) :
@@ -285,7 +347,26 @@ theorem Ideal.irreducible_map_of_irreducible_minpoly
   have mem_norm_factors : normalize (Polynomial.map (Ideal.Quotient.mk I) (minpoly R x)) in
       normalizedFactors (Polynomial.map (Ideal.Quotient.mk I) (minpoly R x)) := by
     simp [normalizedFactors_irreducible hf]
-  suffices exists y, normalizedFactors (I.map (algebraMap R S)) = 
+  suffices exists y, normalizedFactors (I.map (algebraMap R S)) = {y} by
+    obtain ⟨y, hy⟩ := this
+    have h := prod_normalizedFactors (show I.map (algebraMap R S) != 0 by
+          rwa [← bot_eq_zero, Ne,
+            map_eq_bot_iff_of_injective (FaithfulSMul.algebraMap_injective R S)])
+    rw [associated_iff_eq]; rw [hy]; rw [Multiset.prod_singleton] at h
+    rw [← h]
+    exact
+      irreducible_of_normalized_factor y
+        (show y in normalizedFactors (I.map (algebraMap R S)) by simp [hy])
+  rw [normalizedFactors_ideal_map_eq_normalizedFactors_min_poly_mk_map hI hI' hx hx']
+  use ((normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx').symm
+        ⟨normalize (Polynomial.map (Ideal.Quotient.mk I) (minpoly R x)), mem_norm_factors⟩ :
+      Ideal S)
+  rw [Multiset.map_eq_singleton]
+  use ⟨normalize (Polynomial.map (Ideal.Quotient.mk I) (minpoly R x)), mem_norm_factors⟩
+  refine ⟨?_, rfl⟩
+  apply Multiset.map_injective Subtype.coe_injective
+  rw [Multiset.attach_map_val]; rw [Multiset.map_singleton]; rw [Subtype.coe_mk]
+  exact normalizedFactors_irreducible hf
 
 中文:
 定理 理想.irreducible_map_of_irreducible_minpoly
@@ -295,7 +376,26 @@ theorem Ideal.irreducible_map_of_irreducible_minpoly
   have mem_norm_factors : normalize (Polynomial.map (Ideal.Quotient.mk I) (minpoly R x)) in
       normalizedFactors (Polynomial.map (Ideal.Quotient.mk I) (minpoly R x)) := by
     simp [normalizedFactors_irreducible hf]
-  suffices exists y, normalizedFactors (I.map (algebraMap R S)) = 
+  suffices exists y, normalizedFactors (I.map (algebraMap R S)) = {y} by
+    obtain ⟨y, hy⟩ := this
+    have h := prod_normalizedFactors (show I.map (algebraMap R S) != 0 by
+          rwa [← bot_eq_zero, Ne,
+            map_eq_bot_iff_of_injective (FaithfulSMul.algebraMap_injective R S)])
+    rw [associated_iff_eq]; rw [hy]; rw [Multiset.prod_singleton] at h
+    rw [← h]
+    exact
+      irreducible_of_normalized_factor y
+        (show y in normalizedFactors (I.map (algebraMap R S)) by simp [hy])
+  rw [normalizedFactors_ideal_map_eq_normalizedFactors_min_poly_mk_map hI hI' hx hx']
+  use ((normalizedFactorsMapEquivNormalizedFactorsMinPolyMk hI hI' hx hx').symm
+        ⟨normalize (Polynomial.map (Ideal.Quotient.mk I) (minpoly R x)), mem_norm_factors⟩ :
+      Ideal S)
+  rw [Multiset.map_eq_singleton]
+  use ⟨normalize (Polynomial.map (Ideal.Quotient.mk I) (minpoly R x)), mem_norm_factors⟩
+  refine ⟨?_, rfl⟩
+  apply Multiset.map_injective Subtype.coe_injective
+  rw [Multiset.attach_map_val]; rw [Multiset.map_singleton]; rw [Subtype.coe_mk]
+  exact normalizedFactors_irreducible hf
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, I.map, Ideal.Quotient.mk, Polynomial, Polynomial.map, Quotient, algebraMap, algebraMap_injective, associated_iff_eq, bot_eq_zero, classical, map_eq_bot_iff_of_injective, mem_norm_factors, minpoly, normalize, normalizedFactors, normalizedFactors_irreducible, prod_normalizedFactors
 -/
@@ -340,7 +440,13 @@ theorem normalizedFactorsMapEquivNormalizedFactorsMinPolyMk_symm_apply_eq_span
     Ideal.normalizedFactorsEquivSpanNormalizedFactors
   rw [Equiv.symm_trans_apply]; rw [IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv_symm]
   unfold IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv
-  rw [Equiv.coe_fn_mk]; rw [Eq
+  rw [Equiv.coe_fn_mk]; rw [Equiv.symm_symm]; rw [Equiv.ofBijective_apply]
+  dsimp only
+  unfold IsDedekindDomain.idealFactorsEquivOfQuotEquiv
+  rw [OrderIso.ofHomInv_apply]
+  erw [IsDedekindDomain.idealFactorsFunOfQuotHom_coe_coe]
+  dsimp only
+  rw [map_span]; rw [image_singleton]; rw [map_span]; rw [image_singleton]; rw [coe_coe]; rw [quotMapEquivQuotQuotMap_symm_apply]; rw [span_union]; rw [span_eq]; rw [sup_comm]; rw [← image_singleton]; rw [← map_span]; rw [Ideal.comap_map_of_surjective' _ Ideal.Quotient.mk_surjective]; rw [Ideal.mk_ker]
 
 中文:
 定理 normalizedFactorsMapEquivNormalizedFactorsMinPolyMk_symm_apply_eq_span
@@ -349,7 +455,13 @@ theorem normalizedFactorsMapEquivNormalizedFactorsMinPolyMk_symm_apply_eq_span
     Ideal.normalizedFactorsEquivSpanNormalizedFactors
   rw [Equiv.symm_trans_apply]; rw [IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv_symm]
   unfold IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv
-  rw [Equiv.coe_fn_mk]; rw [Eq
+  rw [Equiv.coe_fn_mk]; rw [Equiv.symm_symm]; rw [Equiv.ofBijective_apply]
+  dsimp only
+  unfold IsDedekindDomain.idealFactorsEquivOfQuotEquiv
+  rw [OrderIso.ofHomInv_apply]
+  erw [IsDedekindDomain.idealFactorsFunOfQuotHom_coe_coe]
+  dsimp only
+  rw [map_span]; rw [image_singleton]; rw [map_span]; rw [image_singleton]; rw [coe_coe]; rw [quotMapEquivQuotQuotMap_symm_apply]; rw [span_union]; rw [span_eq]; rw [sup_comm]; rw [← image_singleton]; rw [← map_span]; rw [Ideal.comap_map_of_surjective' _ Ideal.Quotient.mk_surjective]; rw [Ideal.mk_ker]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Equiv.ofBijective_apply, Equiv.symm_symm, Equiv.symm_trans_apply, Ideal.normalizedFactorsEquivSpanNormalizedFactors, IsDedekindDomain, IsDedekindDomain.idealFactorsEquivOfQuotEquiv, IsDedekindDomain.idealFactorsFunOfQuotHom_coe_coe, IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv, IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv_symm, OrderIso, OrderIso.ofHomInv_apply, coe_fn_mk, idealFactorsEquivOfQuotEquiv, idealFactorsFunOfQuotHom_coe_coe, normalizedFactorsEquivOfQuotEquiv, normalizedFactorsEquivOfQuotEquiv_symm, normalizedFactorsEquivSpanNormalizedFactors, normalizedFactorsMapEquivNormalizedFactorsMinPolyMk, ofBijective_apply
 -/

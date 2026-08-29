@@ -271,7 +271,8 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Int := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let sInt : Q(AddMonoidWithOne Int) := q(instAddMonoidWithOne)
   let ⟨n', p⟩ ← deriveNat n sNat
-haveI' x : e =Q I
+haveI' x : e =Q Int.ofNat n := ⟨⟩
+  return .isNat sInt n' q(isNat_intOfNat $p)
 
 中文:
 定义 eval整数Of自然数
@@ -282,7 +283,8 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Int := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let sInt : Q(AddMonoidWithOne Int) := q(instAddMonoidWithOne)
   let ⟨n', p⟩ ← deriveNat n sNat
-haveI' x : e =Q I
+haveI' x : e =Q Int.ofNat n := ⟨⟩
+  return .isNat sInt n' q(isNat_intOfNat $p)
 -/
 @[norm_num Int.ofNat _] def evalIntOfNat : NormNumExt where eval {u α} e := do
   let .app (.const ``Int.ofNat _) (n : Q(Nat)) ← whnfR e | failure
@@ -387,7 +389,9 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Nat := ⟨⟩
 haveI' : e =Q Int.natAbs x := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   match ← derive (u := .zero) x with
-  | .isNat _ a p => assumeInstancesCommute;
+  | .isNat _ a p => assumeInstancesCommute; return .isNat sNat a q(isNat_natAbs_pos $p)
+  | .isNegNat _ a p => assumeInstancesCommute; return .isNat sNat a q(isNat_natAbs_neg $p)
+  | _ => failure
 
 中文:
 定义 eval整数自然数Abs
@@ -398,7 +402,9 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Nat := ⟨⟩
 haveI' : e =Q Int.natAbs x := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   match ← derive (u := .zero) x with
-  | .isNat _ a p => assumeInstancesCommute;
+  | .isNat _ a p => assumeInstancesCommute; return .isNat sNat a q(isNat_natAbs_pos $p)
+  | .isNegNat _ a p => assumeInstancesCommute; return .isNat sNat a q(isNat_natAbs_neg $p)
+  | _ => failure
 -/
 @[norm_num Int.natAbs (_ : Int)] def evalIntNatAbs : NormNumExt where eval {u α} e := do
   let .app (.const ``Int.natAbs _) (x : Q(Int)) ← whnfR e | failure
@@ -511,7 +517,11 @@ guard ← withNewMCtxDepth isDefEq i q(Int.cast (R := $α))
     assumeInstancesCommute
 haveI' : e =Q Int.cast a := ⟨⟩
     return .isNat _ na q(isNat_intCast $a $na $pa)
-  
+  | .isNegNat _ na pa =>
+    assumeInstancesCommute
+haveI' : e =Q Int.cast a := ⟨⟩
+    return .isNegNat _ na q(isintCast $a (.negOfNat $na) $pa)
+  | _ => failure
 
 中文:
 定义 eval整数Cast
@@ -525,7 +535,11 @@ guard ← withNewMCtxDepth isDefEq i q(Int.cast (R := $α))
     assumeInstancesCommute
 haveI' : e =Q Int.cast a := ⟨⟩
     return .isNat _ na q(isNat_intCast $a $na $pa)
-  
+  | .isNegNat _ na pa =>
+    assumeInstancesCommute
+haveI' : e =Q Int.cast a := ⟨⟩
+    return .isNegNat _ na q(isintCast $a (.negOfNat $na) $pa)
+  | _ => failure
 -/
 @[norm_num Int.cast _, IntCast.intCast _] def evalIntCast : NormNumExt where eval {u α} e := do
   let rα ← inferRing α
@@ -592,6 +606,15 @@ theorem isNNRat_add
   have := invertibleOfMul' (α := α) h₂
   use this
   have H := (Nat.cast_commute (α := α) da db).invOf_left.invOf_right.right_comm
+  have h₁ := congr_arg (↑· * (⅟↑da * ⅟↑db : α)) h₁
+  simp only [Nat.cast_add, Nat.cast_mul, ← mul_assoc,
+    add_mul, mul_invOf_cancel_right] at h₁
+  have h₂ := congr_arg (↑nc * ↑· * (⅟↑da * ⅟↑db * ⅟↑dc : α)) h₂
+  simp only [H, mul_invOf_cancel_right', Nat.cast_mul, ← mul_assoc] at h₁ h₂
+  rw [h₁]; rw [h₂]; rw [Nat.cast_commute]
+  simp only [mul_invOf_cancel_right,
+    (Nat.cast_commute (α := α) da dc).invOf_left.invOf_right.right_comm,
+    (Nat.cast_commute (α := α) db dc).invOf_left.invOf_right.right_comm]
 
 中文:
 定理 isNNRat_add
@@ -602,6 +625,15 @@ theorem isNNRat_add
   have := invertibleOfMul' (α := α) h₂
   use this
   have H := (Nat.cast_commute (α := α) da db).invOf_left.invOf_right.right_comm
+  have h₁ := congr_arg (↑· * (⅟↑da * ⅟↑db : α)) h₁
+  simp only [Nat.cast_add, Nat.cast_mul, ← mul_assoc,
+    add_mul, mul_invOf_cancel_right] at h₁
+  have h₂ := congr_arg (↑nc * ↑· * (⅟↑da * ⅟↑db * ⅟↑dc : α)) h₂
+  simp only [H, mul_invOf_cancel_right', Nat.cast_mul, ← mul_assoc] at h₁ h₂
+  rw [h₁]; rw [h₂]; rw [Nat.cast_commute]
+  simp only [mul_invOf_cancel_right,
+    (Nat.cast_commute (α := α) da dc).invOf_left.invOf_right.right_comm,
+    (Nat.cast_commute (α := α) db dc).invOf_left.invOf_right.right_comm]
 
 Depends on / 依赖: Invertible, Nat.cast_add, Nat.cast_commute, Nat.cast_mul, add_mul, cast_add, cast_commute, cast_mul, congr_arg, invOf_left, invOf_left.invOf_right.right_comm, invOf_right, invertibleMul, invertibleOfMul, mul_assoc, mul_invOf_cancel_right, right_comm
 -/
@@ -639,6 +671,15 @@ theorem isRat_add
   have := invertibleOfMul' (α := α) h₂
   use this
   have H := (Nat.cast_commute (α := α) da db).invOf_left.invOf_right.right_comm
+  have h₁ := congr_arg (↑· * (⅟↑da * ⅟↑db : α)) h₁
+  simp only [Int.cast_add, Int.cast_mul, Int.cast_natCast, ← mul_assoc,
+    add_mul, mul_invOf_cancel_right] at h₁
+  have h₂ := congr_arg (↑nc * ↑· * (⅟↑da * ⅟↑db * ⅟↑dc : α)) h₂
+  simp only [H, mul_invOf_cancel_right', Nat.cast_mul, ← mul_assoc] at h₁ h₂
+  rw [h₁]; rw [h₂]; rw [Nat.cast_commute]
+  simp only [mul_invOf_cancel_right,
+    (Nat.cast_commute (α := α) da dc).invOf_left.invOf_right.right_comm,
+    (Nat.cast_commute (α := α) db dc).invOf_left.invOf_right.right_comm]
 
 中文:
 定理 isRat_add
@@ -649,6 +690,15 @@ theorem isRat_add
   have := invertibleOfMul' (α := α) h₂
   use this
   have H := (Nat.cast_commute (α := α) da db).invOf_left.invOf_right.right_comm
+  have h₁ := congr_arg (↑· * (⅟↑da * ⅟↑db : α)) h₁
+  simp only [Int.cast_add, Int.cast_mul, Int.cast_natCast, ← mul_assoc,
+    add_mul, mul_invOf_cancel_right] at h₁
+  have h₂ := congr_arg (↑nc * ↑· * (⅟↑da * ⅟↑db * ⅟↑dc : α)) h₂
+  simp only [H, mul_invOf_cancel_right', Nat.cast_mul, ← mul_assoc] at h₁ h₂
+  rw [h₁]; rw [h₂]; rw [Nat.cast_commute]
+  simp only [mul_invOf_cancel_right,
+    (Nat.cast_commute (α := α) da dc).invOf_left.invOf_right.right_comm,
+    (Nat.cast_commute (α := α) db dc).invOf_left.invOf_right.right_comm]
 
 Depends on / 依赖: Int.cast_add, Int.cast_mul, Int.cast_natCast, Invertible, Nat.cast_commute, add_mul, cast_add, cast_commute, cast_mul, cast_natCast, congr_arg, invOf_left, invOf_left.invOf_right.right_comm, invOf_right, invertibleMul, invertibleOfMul, mul_assoc, mul_invOf_cancel_right, right_comm
 -/
@@ -705,7 +755,53 @@ definition Result.add
     have c := mkRawIntLit zc
 haveI' : Int.add na nb =Q c := ⟨⟩
     return .isInt rα c zc q(isInt_add (.refl _) $pa $pb (.refl $c))
-  let rec n
+  let rec nnratArm (dsα : Q(DivisionSemiring $α)) : MetaM (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toNNRat' dsα; let ⟨qb, nb, db, pb⟩ ← rb.toNNRat' dsα
+    let qc := qa + qb
+    let dd := qa.den * qb.den
+    let k := dd / qc.den
+    have t1 : Q(Nat) := mkRawNatLit (k * qc.num.toNat)
+    have t2 : Q(Nat) := mkRawNatLit dd
+    have nc : Q(Nat) := mkRawNatLit qc.num.toNat
+    have dc : Q(Nat) := mkRawNatLit qc.den
+    have k : Q(Nat) := mkRawNatLit k
+    let r1 : Q(Nat.add (Nat.mul $na $db) (Nat.mul $nb $da) = Nat.mul $k $nc) :=
+      (q(Eq.refl $t1) : Expr)
+    let r2 : Q(Nat.mul $da $db = Nat.mul $k $dc) := (q(Eq.refl $t2) : Expr)
+    return .isNNRat' dsα qc nc dc q(isNNRat_add (.refl _) $pa $pb $r1 $r2)
+  let rec ratArm (dα : Q(DivisionRing $α)) : MetaM (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα; let ⟨qb, nb, db, pb⟩ ← rb.toRat' dα
+    let qc := qa + qb
+    let dd := qa.den * qb.den
+    let k := dd / qc.den
+    have t1 : Q(Int) := mkRawIntLit (k * qc.num)
+    have t2 : Q(Nat) := mkRawNatLit dd
+    have nc : Q(Int) := mkRawIntLit qc.num
+    have dc : Q(Nat) := mkRawNatLit qc.den
+    have k : Q(Nat) := mkRawNatLit k
+    let r1 : Q(Int.add (Int.mul $na $db) (Int.mul $nb $da) = Int.mul $k $nc) :=
+      (q(Eq.refl $t1) : Expr)
+    let r2 : Q(Nat.mul $da $db = Nat.mul $k $dc) := (q(Eq.refl $t2) : Expr)
+    return .isRat dα qc nc dc q(isRat_add (.refl _) $pa $pb $r1 $r2)
+  match ra, rb with
+  | .isBool .., _ | _, .isBool .. => failure
+  | .isNegNNRat dα .., _ | _, .isNegNNRat dα .. => ratArm dα
+  -- mixing positive rationals and negative naturals means we need to use the full rat handler
+  | .isNNRat _dsα .., .isNegNat _rα .. | .isNegNat _rα .., .isNNRat _dsα .. =>
+    -- could alternatively try to combine `rα` and `dsα` here, but we'd have to do a defeq check
+    -- so would still need to be in `MetaM`.
+    let dα ← synthInstanceQ q(DivisionRing $α)
+    assumeInstancesCommute
+    ratArm q($dα)
+  | .isNNRat dsα .., _ | _, .isNNRat dsα .. => nnratArm dsα
+  | .isNegNat rα .., _ | _, .isNegNat rα .. => intArm rα
+  | .isNat _ na pa, .isNat sα nb pb =>
+    assumeInstancesCommute
+    have c : Q(Nat) := mkRawNatLit (na.natLit! + nb.natLit!)
+haveI' : Nat.add na nb =Q c := ⟨⟩
+    return .isNat sα c q(isNat_add (.refl _) $pa $pb (.refl $c))
 
 中文:
 定义 Result.add
@@ -718,7 +814,53 @@ haveI' : Int.add na nb =Q c := ⟨⟩
     have c := mkRawIntLit zc
 haveI' : Int.add na nb =Q c := ⟨⟩
     return .isInt rα c zc q(isInt_add (.refl _) $pa $pb (.refl $c))
-  let rec n
+  let rec nnratArm (dsα : Q(DivisionSemiring $α)) : MetaM (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toNNRat' dsα; let ⟨qb, nb, db, pb⟩ ← rb.toNNRat' dsα
+    let qc := qa + qb
+    let dd := qa.den * qb.den
+    let k := dd / qc.den
+    have t1 : Q(Nat) := mkRawNatLit (k * qc.num.toNat)
+    have t2 : Q(Nat) := mkRawNatLit dd
+    have nc : Q(Nat) := mkRawNatLit qc.num.toNat
+    have dc : Q(Nat) := mkRawNatLit qc.den
+    have k : Q(Nat) := mkRawNatLit k
+    let r1 : Q(Nat.add (Nat.mul $na $db) (Nat.mul $nb $da) = Nat.mul $k $nc) :=
+      (q(Eq.refl $t1) : Expr)
+    let r2 : Q(Nat.mul $da $db = Nat.mul $k $dc) := (q(Eq.refl $t2) : Expr)
+    return .isNNRat' dsα qc nc dc q(isNNRat_add (.refl _) $pa $pb $r1 $r2)
+  let rec ratArm (dα : Q(DivisionRing $α)) : MetaM (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα; let ⟨qb, nb, db, pb⟩ ← rb.toRat' dα
+    let qc := qa + qb
+    let dd := qa.den * qb.den
+    let k := dd / qc.den
+    have t1 : Q(Int) := mkRawIntLit (k * qc.num)
+    have t2 : Q(Nat) := mkRawNatLit dd
+    have nc : Q(Int) := mkRawIntLit qc.num
+    have dc : Q(Nat) := mkRawNatLit qc.den
+    have k : Q(Nat) := mkRawNatLit k
+    let r1 : Q(Int.add (Int.mul $na $db) (Int.mul $nb $da) = Int.mul $k $nc) :=
+      (q(Eq.refl $t1) : Expr)
+    let r2 : Q(Nat.mul $da $db = Nat.mul $k $dc) := (q(Eq.refl $t2) : Expr)
+    return .isRat dα qc nc dc q(isRat_add (.refl _) $pa $pb $r1 $r2)
+  match ra, rb with
+  | .isBool .., _ | _, .isBool .. => failure
+  | .isNegNNRat dα .., _ | _, .isNegNNRat dα .. => ratArm dα
+  -- mixing positive rationals and negative naturals means we need to use the full rat handler
+  | .isNNRat _dsα .., .isNegNat _rα .. | .isNegNat _rα .., .isNNRat _dsα .. =>
+    -- could alternatively try to combine `rα` and `dsα` here, but we'd have to do a defeq check
+    -- so would still need to be in `MetaM`.
+    let dα ← synthInstanceQ q(DivisionRing $α)
+    assumeInstancesCommute
+    ratArm q($dα)
+  | .isNNRat dsα .., _ | _, .isNNRat dsα .. => nnratArm dsα
+  | .isNegNat rα .., _ | _, .isNegNat rα .. => intArm rα
+  | .isNat _ na pa, .isNat sα nb pb =>
+    assumeInstancesCommute
+    have c : Q(Nat) := mkRawNatLit (na.natLit! + nb.natLit!)
+haveI' : Nat.add na nb =Q c := ⟨⟩
+    return .isNat sα c q(isNat_add (.refl _) $pa $pb (.refl $c))
 
 Depends on / 依赖: DivisionSemiring, Int.add, Result, assumeInstancesCommute, intArm, isInt_add, mkRawIntLit, nnratArm, ra.toInt, ra.toNNRat, rb.toInt, rb.toNNRa, return, toNNRa, toNNRat
 -/
@@ -793,7 +935,15 @@ definition evalAdd
   match ra, rb with
   | .isBool .., _ | _, .isBool .. => failure
   | .isNat _ .., .isNat _ .. | .isNat _ .., .isNegNat _ .. | .isNat _ .., .isNNRat _ ..
-    | .isNat _ .., 
+    | .isNat _ .., .isNegNNRat _ ..
+  | .isNegNat _ .., .isNat _ .. | .isNegNat _ .., .isNegNat _ .. | .isNegNat _ .., .isNNRat _ ..
+    | .isNegNat _ .., .isNegNNRat _ ..
+  | .isNNRat _ .., .isNat _ .. | .isNNRat _ .., .isNegNat _ .. | .isNNRat _ .., .isNNRat _ ..
+    | .isNNRat _ .., .isNegNNRat _ ..
+  | .isNegNNRat _ .., .isNat _ .. | .isNegNNRat _ .., .isNegNat _ ..
+    | .isNegNNRat _ .., .isNNRat _ .. | .isNegNNRat _ .., .isNegNNRat _ .. =>
+guard ← withNewMCtxDepth isDefEq f q(HAdd.hAdd (α := $α))
+    ra.add rb
 
 中文:
 定义 evalAdd
@@ -804,7 +954,15 @@ definition evalAdd
   match ra, rb with
   | .isBool .., _ | _, .isBool .. => failure
   | .isNat _ .., .isNat _ .. | .isNat _ .., .isNegNat _ .. | .isNat _ .., .isNNRat _ ..
-    | .isNat _ .., 
+    | .isNat _ .., .isNegNNRat _ ..
+  | .isNegNat _ .., .isNat _ .. | .isNegNat _ .., .isNegNat _ .. | .isNegNat _ .., .isNNRat _ ..
+    | .isNegNat _ .., .isNegNNRat _ ..
+  | .isNNRat _ .., .isNat _ .. | .isNNRat _ .., .isNegNat _ .. | .isNNRat _ .., .isNNRat _ ..
+    | .isNNRat _ .., .isNegNNRat _ ..
+  | .isNegNNRat _ .., .isNat _ .. | .isNegNNRat _ .., .isNegNat _ ..
+    | .isNegNNRat _ .., .isNNRat _ .. | .isNegNNRat _ .., .isNegNNRat _ .. =>
+guard ← withNewMCtxDepth isDefEq f q(HAdd.hAdd (α := $α))
+    ra.add rb
 -/
 @[norm_num _ + _] def evalAdd : NormNumExt where eval {u α} e := do
   let .app (.app (f : Q($α -> $α -> $α)) (a : Q($α))) (b : Q($α)) ← whnfR e | failure
@@ -873,7 +1031,19 @@ definition Result.neg
     have b := mkRawIntLit zb
 haveI' : Int.neg na =Q b := ⟨⟩
     return .isInt rα b zb q(isInt_neg (.refl _) $pa (.refl $b))
-  let ratArm (dα : Q(DivisionRing $α)) : Option (Result 
+  let ratArm (dα : Q(DivisionRing $α)) : Option (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα
+    let qb := -qa
+    have nb := mkRawIntLit qb.num
+haveI' : Int.neg na =Q nb := ⟨⟩
+    return .isRat dα qb nb da q(isRat_neg (.refl _) $pa (.refl $nb))
+  match ra with
+  | .isBool _ .. => failure
+  | .isNat _ .. => intArm rα
+  | .isNegNat rα .. => intArm rα
+  | .isNNRat _dsα .. => ratArm (← synthInstanceQ q(DivisionRing $α))
+  | .isNegNNRat dα .. => ratArm dα
 
 中文:
 定义 Result.neg
@@ -886,7 +1056,19 @@ haveI' : Int.neg na =Q b := ⟨⟩
     have b := mkRawIntLit zb
 haveI' : Int.neg na =Q b := ⟨⟩
     return .isInt rα b zb q(isInt_neg (.refl _) $pa (.refl $b))
-  let ratArm (dα : Q(DivisionRing $α)) : Option (Result 
+  let ratArm (dα : Q(DivisionRing $α)) : Option (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα
+    let qb := -qa
+    have nb := mkRawIntLit qb.num
+haveI' : Int.neg na =Q nb := ⟨⟩
+    return .isRat dα qb nb da q(isRat_neg (.refl _) $pa (.refl $nb))
+  match ra with
+  | .isBool _ .. => failure
+  | .isNat _ .. => intArm rα
+  | .isNegNat rα .. => intArm rα
+  | .isNNRat _dsα .. => ratArm (← synthInstanceQ q(DivisionRing $α))
+  | .isNegNNRat dα .. => ratArm dα
 
 Depends on / 依赖: DivisionRing, Int.neg, Result, assumeInstancesCommute, intArm, isInt_neg, mkRawIntLit, qb.num, ra.toInt, ra.toRat, ratArm, return
 -/
@@ -1012,7 +1194,30 @@ definition Result.sub
     have c := mkRawIntLit zc
 haveI' : Int.sub na nb =Q c := ⟨⟩
     return Result.isInt rα c zc q(isInt_sub (.refl _) $pa $pb (.refl $c))
-  let r
+  let ratArm (dα : Q(DivisionRing $α)) : MetaM (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα; let ⟨qb, nb, db, pb⟩ ← rb.toRat' dα
+    let qc := qa - qb
+    let dd := qa.den * qb.den
+    let k := dd / qc.den
+    have t1 : Q(Int) := mkRawIntLit (k * qc.num)
+    have t2 : Q(Nat) := mkRawNatLit dd
+    have nc : Q(Int) := mkRawIntLit qc.num
+    have dc : Q(Nat) := mkRawNatLit qc.den
+    have k : Q(Nat) := mkRawNatLit k
+    let r1 : Q(Int.sub (Int.mul $na $db) (Int.mul $nb $da) = Int.mul $k $nc) :=
+      (q(Eq.refl $t1) : Expr)
+    let r2 : Q(Nat.mul $da $db = Nat.mul $k $dc) := (q(Eq.refl $t2) : Expr)
+    return .isRat dα qc nc dc q(isRat_sub (.refl _) $pa $pb $r1 $r2)
+  match ra, rb with
+  | .isBool .., _ | _, .isBool .. => failure
+  | .isNegNNRat dα .., _ | _, .isNegNNRat dα .. =>
+    ratArm dα
+  | _, .isNNRat _dsα .. | .isNNRat _dsα .., _ =>
+    ratArm (← synthInstanceQ q(DivisionRing $α))
+  | .isNegNat _rα .., _ | _, .isNegNat _rα ..
+  | .isNat _ .., .isNat _ .. =>
+    intArm inst
 
 中文:
 定义 Result.sub
@@ -1025,7 +1230,30 @@ haveI' : Int.sub na nb =Q c := ⟨⟩
     have c := mkRawIntLit zc
 haveI' : Int.sub na nb =Q c := ⟨⟩
     return Result.isInt rα c zc q(isInt_sub (.refl _) $pa $pb (.refl $c))
-  let r
+  let ratArm (dα : Q(DivisionRing $α)) : MetaM (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα; let ⟨qb, nb, db, pb⟩ ← rb.toRat' dα
+    let qc := qa - qb
+    let dd := qa.den * qb.den
+    let k := dd / qc.den
+    have t1 : Q(Int) := mkRawIntLit (k * qc.num)
+    have t2 : Q(Nat) := mkRawNatLit dd
+    have nc : Q(Int) := mkRawIntLit qc.num
+    have dc : Q(Nat) := mkRawNatLit qc.den
+    have k : Q(Nat) := mkRawNatLit k
+    let r1 : Q(Int.sub (Int.mul $na $db) (Int.mul $nb $da) = Int.mul $k $nc) :=
+      (q(Eq.refl $t1) : Expr)
+    let r2 : Q(Nat.mul $da $db = Nat.mul $k $dc) := (q(Eq.refl $t2) : Expr)
+    return .isRat dα qc nc dc q(isRat_sub (.refl _) $pa $pb $r1 $r2)
+  match ra, rb with
+  | .isBool .., _ | _, .isBool .. => failure
+  | .isNegNNRat dα .., _ | _, .isNegNNRat dα .. =>
+    ratArm dα
+  | _, .isNNRat _dsα .. | .isNNRat _dsα .., _ =>
+    ratArm (← synthInstanceQ q(DivisionRing $α))
+  | .isNegNat _rα .., _ | _, .isNegNat _rα ..
+  | .isNat _ .., .isNat _ .. =>
+    intArm inst
 
 Depends on / 依赖: DivisionRing, Int.sub, Result, Result.isInt, assumeInstancesCommute, intArm, isInt_sub, mkRawIntLit, ra.toInt, ra.toRat, ratArm, rb.toInt, rb.toRat, return
 -/
@@ -1146,7 +1374,15 @@ theorem isNNRat_mul
   have := invertibleOfMul' (α := α) h₂
   refine ⟨this, ?_⟩
   have H := (Nat.cast_commute (α := α) da db).invOf_left.invOf_right.right_comm
-
+  have h₁ := congr_arg (Nat.cast (R := α)) h₁
+  simp only [Nat.cast_mul] at h₁
+  simp only [← mul_assoc, (Nat.cast_commute (α := α) da nb).invOf_left.right_comm, h₁]
+  have h₂ := congr_arg (↑nc * ↑· * (⅟↑da * ⅟↑db * ⅟↑dc : α)) h₂
+  simp only [Nat.cast_mul, ← mul_assoc] at h₂; rw [H] at h₂
+  simp only [mul_invOf_cancel_right'] at h₂; rw [h₂, Nat.cast_commute]
+  simp only [mul_invOf_cancel_right',
+    (Nat.cast_commute (α := α) da dc).invOf_left.invOf_right.right_comm,
+    (Nat.cast_commute (α := α) db dc).invOf_left.invOf_right.right_comm]
 
 中文:
 定理 isNNRat_mul
@@ -1157,7 +1393,15 @@ theorem isNNRat_mul
   have := invertibleOfMul' (α := α) h₂
   refine ⟨this, ?_⟩
   have H := (Nat.cast_commute (α := α) da db).invOf_left.invOf_right.right_comm
-
+  have h₁ := congr_arg (Nat.cast (R := α)) h₁
+  simp only [Nat.cast_mul] at h₁
+  simp only [← mul_assoc, (Nat.cast_commute (α := α) da nb).invOf_left.right_comm, h₁]
+  have h₂ := congr_arg (↑nc * ↑· * (⅟↑da * ⅟↑db * ⅟↑dc : α)) h₂
+  simp only [Nat.cast_mul, ← mul_assoc] at h₂; rw [H] at h₂
+  simp only [mul_invOf_cancel_right'] at h₂; rw [h₂, Nat.cast_commute]
+  simp only [mul_invOf_cancel_right',
+    (Nat.cast_commute (α := α) da dc).invOf_left.invOf_right.right_comm,
+    (Nat.cast_commute (α := α) db dc).invOf_left.invOf_right.right_comm]
 
 Depends on / 依赖: Invertible, Nat.cast, Nat.cast_commute, Nat.cast_mul, cast_commute, cast_mul, congr_arg, invOf_left, invOf_left.invOf_right.right_comm, invOf_left.right_comm, invOf_right, invertibleMul, invertibleOfMul, mul_assoc, right_comm
 -/
@@ -1193,7 +1437,15 @@ theorem isRat_mul
   have := invertibleOfMul' (α := α) h₂
   refine ⟨this, ?_⟩
   have H := (Nat.cast_commute (α := α) da db).invOf_left.invOf_right.right_comm
-
+  have h₁ := congr_arg (Int.cast (R := α)) h₁
+  simp only [Int.cast_mul, Int.cast_natCast] at h₁
+  simp only [← mul_assoc, (Nat.cast_commute (α := α) da nb).invOf_left.right_comm, h₁]
+  have h₂ := congr_arg (↑nc * ↑· * (⅟↑da * ⅟↑db * ⅟↑dc : α)) h₂
+  simp only [Nat.cast_mul, ← mul_assoc] at h₂; rw [H] at h₂
+  simp only [mul_invOf_cancel_right'] at h₂; rw [h₂, Nat.cast_commute]
+  simp only [mul_invOf_cancel_right,
+    (Nat.cast_commute (α := α) da dc).invOf_left.invOf_right.right_comm,
+    (Nat.cast_commute (α := α) db dc).invOf_left.invOf_right.right_comm]
 
 中文:
 定理 isRat_mul
@@ -1204,7 +1456,15 @@ theorem isRat_mul
   have := invertibleOfMul' (α := α) h₂
   refine ⟨this, ?_⟩
   have H := (Nat.cast_commute (α := α) da db).invOf_left.invOf_right.right_comm
-
+  have h₁ := congr_arg (Int.cast (R := α)) h₁
+  simp only [Int.cast_mul, Int.cast_natCast] at h₁
+  simp only [← mul_assoc, (Nat.cast_commute (α := α) da nb).invOf_left.right_comm, h₁]
+  have h₂ := congr_arg (↑nc * ↑· * (⅟↑da * ⅟↑db * ⅟↑dc : α)) h₂
+  simp only [Nat.cast_mul, ← mul_assoc] at h₂; rw [H] at h₂
+  simp only [mul_invOf_cancel_right'] at h₂; rw [h₂, Nat.cast_commute]
+  simp only [mul_invOf_cancel_right,
+    (Nat.cast_commute (α := α) da dc).invOf_left.invOf_right.right_comm,
+    (Nat.cast_commute (α := α) db dc).invOf_left.invOf_right.right_comm]
 
 Depends on / 依赖: Int.cast, Int.cast_mul, Int.cast_natCast, Invertible, Nat.cast_commute, cast_commute, cast_mul, cast_natCast, congr_arg, invOf_left, invOf_left.invOf_right.right_comm, invOf_left.right_comm, invOf_right, invertibleMul, invertibleOfMul, mul_assoc, right_comm
 -/
@@ -1243,7 +1503,52 @@ definition Result.mul
     have c := mkRawIntLit zc
 haveI' : Int.mul na nb =Q c := ⟨⟩
     return .isInt rα c zc q(isInt_mul (.refl _) $pa $pb (.refl $c))
-  let nnratAr
+  let nnratArm (dsα : Q(DivisionSemiring $α)) : Option (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toNNRat' dsα; let ⟨qb, nb, db, pb⟩ ← rb.toNNRat' dsα
+    let qc := qa * qb
+    let dd := qa.den * qb.den
+    let k := dd / qc.den
+    have nc : Q(Nat) := mkRawNatLit qc.num.toNat
+    have dc : Q(Nat) := mkRawNatLit qc.den
+    have k : Q(Nat) := mkRawNatLit k
+    let r1 : Q(Nat.mul $na $nb = Nat.mul $k $nc) :=
+      (q(Eq.refl (Nat.mul $na $nb)) : Expr)
+    have t2 : Q(Nat) := mkRawNatLit dd
+    let r2 : Q(Nat.mul $da $db = Nat.mul $k $dc) := (q(Eq.refl $t2) : Expr)
+    return .isNNRat' dsα qc nc dc q(isNNRat_mul (.refl _) $pa $pb $r1 $r2)
+  let rec ratArm (dα : Q(DivisionRing $α)) : Option (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα; let ⟨qb, nb, db, pb⟩ ← rb.toRat' dα
+    let qc := qa * qb
+    let dd := qa.den * qb.den
+    let k := dd / qc.den
+    have nc : Q(Int) := mkRawIntLit qc.num
+    have dc : Q(Nat) := mkRawNatLit qc.den
+    have k : Q(Nat) := mkRawNatLit k
+    let r1 : Q(Int.mul $na $nb = Int.mul $k $nc) :=
+      (q(Eq.refl (Int.mul $na $nb)) : Expr)
+    have t2 : Q(Nat) := mkRawNatLit dd
+    let r2 : Q(Nat.mul $da $db = Nat.mul $k $dc) := (q(Eq.refl $t2) : Expr)
+    return .isRat dα qc nc dc q(isRat_mul (.refl _) $pa $pb $r1 $r2)
+  match ra, rb with
+  | .isBool .., _ | _, .isBool .. => failure
+  | .isNegNNRat dα .., _ | _, .isNegNNRat dα .. =>
+    ratArm dα
+  -- mixing positive rationals and negative naturals means we need to use the full rat handler
+  | .isNNRat dsα .., .isNegNat rα .. | .isNegNat rα .., .isNNRat dsα .. =>
+    -- could alternatively try to combine `rα` and `dsα` here, but we'd have to do a defeq check
+    -- so would still need to be in `MetaM`.
+    ratArm (← synthInstanceQ q(DivisionRing $α))
+  | .isNNRat dsα .., _ | _, .isNNRat dsα .. =>
+    nnratArm dsα
+  | .isNegNat rα .., _ | _, .isNegNat rα .. => intArm rα
+  | .isNat mα' na pa, .isNat mα nb pb => do
+haveI' : mα =Q by clear! mα mα'; apply AddCommMonoidWithOne.toAddMonoidWithOne := ⟨⟩
+    assumeInstancesCommute
+    have c : Q(Nat) := mkRawNatLit (na.natLit! * nb.natLit!)
+haveI' : Nat.mul na nb =Q c := ⟨⟩
+    return .isNat mα c q(isNat_mul (.refl _) $pa $pb (.refl $c))
 
 中文:
 定义 Result.mul
@@ -1256,7 +1561,52 @@ haveI' : Int.mul na nb =Q c := ⟨⟩
     have c := mkRawIntLit zc
 haveI' : Int.mul na nb =Q c := ⟨⟩
     return .isInt rα c zc q(isInt_mul (.refl _) $pa $pb (.refl $c))
-  let nnratAr
+  let nnratArm (dsα : Q(DivisionSemiring $α)) : Option (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toNNRat' dsα; let ⟨qb, nb, db, pb⟩ ← rb.toNNRat' dsα
+    let qc := qa * qb
+    let dd := qa.den * qb.den
+    let k := dd / qc.den
+    have nc : Q(Nat) := mkRawNatLit qc.num.toNat
+    have dc : Q(Nat) := mkRawNatLit qc.den
+    have k : Q(Nat) := mkRawNatLit k
+    let r1 : Q(Nat.mul $na $nb = Nat.mul $k $nc) :=
+      (q(Eq.refl (Nat.mul $na $nb)) : Expr)
+    have t2 : Q(Nat) := mkRawNatLit dd
+    let r2 : Q(Nat.mul $da $db = Nat.mul $k $dc) := (q(Eq.refl $t2) : Expr)
+    return .isNNRat' dsα qc nc dc q(isNNRat_mul (.refl _) $pa $pb $r1 $r2)
+  let rec ratArm (dα : Q(DivisionRing $α)) : Option (Result _) := do
+    assumeInstancesCommute
+    let ⟨qa, na, da, pa⟩ ← ra.toRat' dα; let ⟨qb, nb, db, pb⟩ ← rb.toRat' dα
+    let qc := qa * qb
+    let dd := qa.den * qb.den
+    let k := dd / qc.den
+    have nc : Q(Int) := mkRawIntLit qc.num
+    have dc : Q(Nat) := mkRawNatLit qc.den
+    have k : Q(Nat) := mkRawNatLit k
+    let r1 : Q(Int.mul $na $nb = Int.mul $k $nc) :=
+      (q(Eq.refl (Int.mul $na $nb)) : Expr)
+    have t2 : Q(Nat) := mkRawNatLit dd
+    let r2 : Q(Nat.mul $da $db = Nat.mul $k $dc) := (q(Eq.refl $t2) : Expr)
+    return .isRat dα qc nc dc q(isRat_mul (.refl _) $pa $pb $r1 $r2)
+  match ra, rb with
+  | .isBool .., _ | _, .isBool .. => failure
+  | .isNegNNRat dα .., _ | _, .isNegNNRat dα .. =>
+    ratArm dα
+  -- mixing positive rationals and negative naturals means we need to use the full rat handler
+  | .isNNRat dsα .., .isNegNat rα .. | .isNegNat rα .., .isNNRat dsα .. =>
+    -- could alternatively try to combine `rα` and `dsα` here, but we'd have to do a defeq check
+    -- so would still need to be in `MetaM`.
+    ratArm (← synthInstanceQ q(DivisionRing $α))
+  | .isNNRat dsα .., _ | _, .isNNRat dsα .. =>
+    nnratArm dsα
+  | .isNegNat rα .., _ | _, .isNegNat rα .. => intArm rα
+  | .isNat mα' na pa, .isNat mα nb pb => do
+haveI' : mα =Q by clear! mα mα'; apply AddCommMonoidWithOne.toAddMonoidWithOne := ⟨⟩
+    assumeInstancesCommute
+    have c : Q(Nat) := mkRawNatLit (na.natLit! * nb.natLit!)
+haveI' : Nat.mul na nb =Q c := ⟨⟩
+    return .isNat mα c q(isNat_mul (.refl _) $pa $pb (.refl $c))
 
 Depends on / 依赖: DivisionSemiring, Int.mul, Result, assumeInstancesCommute, intArm, isInt_mul, mkRawIntLit, nnratArm, ra.toInt, ra.toNNRat, rb.toInt, rb.toNNRat, return, toNNRat
 -/
@@ -1437,7 +1787,13 @@ haveI' : e =Q a / b := ⟨⟩
 guard ← withNewMCtxDepth isDefEq f q(HDiv.hDiv (α := $α))
   let rab ← derive (q($a * $b⁻¹) : Q($α))
   if let some ⟨qa, na, da, pa⟩ := rab.toNNRat' dsα then
-    assumeInsta
+    assumeInstancesCommute
+    return .isNNRat' dsα qa na da q(isNNRat_div $pa)
+  else
+    let dα ← inferDivisionRing α
+    let ⟨qa, na, da, pa⟩ ← rab.toRat' dα
+    assumeInstancesCommute
+    return .isRat dα qa na da q(isRat_div $pa)
 
 中文:
 定义 evalDiv
@@ -1449,7 +1805,13 @@ haveI' : e =Q a / b := ⟨⟩
 guard ← withNewMCtxDepth isDefEq f q(HDiv.hDiv (α := $α))
   let rab ← derive (q($a * $b⁻¹) : Q($α))
   if let some ⟨qa, na, da, pa⟩ := rab.toNNRat' dsα then
-    assumeInsta
+    assumeInstancesCommute
+    return .isNNRat' dsα qa na da q(isNNRat_div $pa)
+  else
+    let dα ← inferDivisionRing α
+    let ⟨qa, na, da, pa⟩ ← rab.toRat' dα
+    assumeInstancesCommute
+    return .isRat dα qa na da q(isRat_div $pa)
 -/
 @[norm_num _ / _] def evalDiv : NormNumExt where eval {u α} e := do
   let .app (.app f (a : Q($α))) (b : Q($α)) ← whnfR e | failure
@@ -1724,7 +2086,9 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Nat := ⟨⟩
 haveI' : e =Q Nat.succ a := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨na, pa⟩ ← deriveNat a sNat
-  have nc : Q(Nat) := m
+  have nc : Q(Nat) := mkRawNatLit (na.natLit!.succ)
+haveI' : nc =Q ($na).succ := ⟨⟩
+  return .isNat sNat nc q(isNat_natSucc $pa (.refl $nc))
 
 中文:
 定义 eval自然数Succ
@@ -1736,7 +2100,9 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Nat := ⟨⟩
 haveI' : e =Q Nat.succ a := ⟨⟩
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
   let ⟨na, pa⟩ ← deriveNat a sNat
-  have nc : Q(Nat) := m
+  have nc : Q(Nat) := mkRawNatLit (na.natLit!.succ)
+haveI' : nc =Q ($na).succ := ⟨⟩
+  return .isNat sNat nc q(isNat_natSucc $pa (.refl $nc))
 
 Depends on / 依赖: DiscreteTopology, T1Space, isClosed_discrete
 -/
@@ -1778,7 +2144,11 @@ definition evalNatSub
 guard ← withNewMCtxDepth isDefEq f q(HSub.hSub (α := Nat))
 haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Nat := ⟨⟩
 haveI' : e =Q a - b := ⟨⟩
-
+  let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
+  let ⟨na, pa⟩ ← deriveNat a sNat; let ⟨nb, pb⟩ ← deriveNat b sNat
+  have nc : Q(Nat) := mkRawNatLit (na.natLit! - nb.natLit!)
+haveI' : Nat.sub na nb =Q nc := ⟨⟩
+  return .isNat sNat nc q(isNat_natSub $pa $pb (.refl $nc))
 
 中文:
 定义 eval自然数Sub
@@ -1789,7 +2159,11 @@ haveI' : e =Q a - b := ⟨⟩
 guard ← withNewMCtxDepth isDefEq f q(HSub.hSub (α := Nat))
 haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Nat := ⟨⟩
 haveI' : e =Q a - b := ⟨⟩
-
+  let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
+  let ⟨na, pa⟩ ← deriveNat a sNat; let ⟨nb, pb⟩ ← deriveNat b sNat
+  have nc : Q(Nat) := mkRawNatLit (na.natLit! - nb.natLit!)
+haveI' : Nat.sub na nb =Q nc := ⟨⟩
+  return .isNat sNat nc q(isNat_natSub $pa $pb (.refl $nc))
 -/
 @[norm_num (_ : Nat) - _] def evalNatSub :
     NormNumExt where eval {u α} e := do
@@ -1831,7 +2205,11 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Nat := ⟨⟩
 haveI' : e =Q a % b := ⟨⟩
   -- We assert that the default instance for `HMod` is `Nat.mod` when the first parameter is `ℕ`.
 guard ← withNewMCtxDepth isDefEq f q(HMod.hMod (α := Nat))
-
+  let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
+  let ⟨na, pa⟩ ← deriveNat a sNat; let ⟨nb, pb⟩ ← deriveNat b sNat
+  have nc : Q(Nat) := mkRawNatLit (na.natLit! % nb.natLit!)
+haveI' : Nat.mod na nb =Q nc := ⟨⟩
+  return .isNat sNat nc q(isNat_natMod $pa $pb (.refl $nc))
 
 中文:
 定义 eval自然数Mod
@@ -1842,7 +2220,11 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Nat := ⟨⟩
 haveI' : e =Q a % b := ⟨⟩
   -- We assert that the default instance for `HMod` is `Nat.mod` when the first parameter is `ℕ`.
 guard ← withNewMCtxDepth isDefEq f q(HMod.hMod (α := Nat))
-
+  let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
+  let ⟨na, pa⟩ ← deriveNat a sNat; let ⟨nb, pb⟩ ← deriveNat b sNat
+  have nc : Q(Nat) := mkRawNatLit (na.natLit! % nb.natLit!)
+haveI' : Nat.mod na nb =Q nc := ⟨⟩
+  return .isNat sNat nc q(isNat_natMod $pa $pb (.refl $nc))
 -/
 @[norm_num (_ : Nat) % _] def evalNatMod :
     NormNumExt where eval {u α} e := do
@@ -1887,7 +2269,11 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Nat := ⟨⟩
 haveI' : e =Q a / b := ⟨⟩
   -- We assert that the default instance for `HDiv` is `Nat.div` when the first parameter is `ℕ`.
 guard ← withNewMCtxDepth isDefEq f q(HDiv.hDiv (α := Nat))
-
+  let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
+  let ⟨na, pa⟩ ← deriveNat a sNat; let ⟨nb, pb⟩ ← deriveNat b sNat
+  have nc : Q(Nat) := mkRawNatLit (na.natLit! / nb.natLit!)
+haveI' : Nat.div na nb =Q nc := ⟨⟩
+  return .isNat sNat nc q(isNat_natDiv $pa $pb (.refl $nc))
 
 中文:
 定义 eval自然数Div
@@ -1898,7 +2284,11 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Nat := ⟨⟩
 haveI' : e =Q a / b := ⟨⟩
   -- We assert that the default instance for `HDiv` is `Nat.div` when the first parameter is `ℕ`.
 guard ← withNewMCtxDepth isDefEq f q(HDiv.hDiv (α := Nat))
-
+  let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
+  let ⟨na, pa⟩ ← deriveNat a sNat; let ⟨nb, pb⟩ ← deriveNat b sNat
+  have nc : Q(Nat) := mkRawNatLit (na.natLit! / nb.natLit!)
+haveI' : Nat.div na nb =Q nc := ⟨⟩
+  return .isNat sNat nc q(isNat_natDiv $pa $pb (.refl $nc))
 -/
 def evalNatDiv : NormNumExt where eval {u α} e := do
   let .app (.app f (a : Q(Nat))) (b : Q(Nat)) ← whnfR e | failure
@@ -1953,7 +2343,15 @@ definition evalNatDvd
   -- We assert that the default instance for `Dvd` is `Nat.dvd` when the first parameter is `ℕ`.
 guard ← withNewMCtxDepth isDefEq f q(Dvd.dvd (α := Nat))
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
-  let ⟨na
+  let ⟨na, pa⟩ ← deriveNat a sNat; let ⟨nb, pb⟩ ← deriveNat b sNat
+  match nb.natLit! % na.natLit! with
+  | 0 =>
+    have : Q(Nat.mod $nb $na = nat_lit 0) := (q(Eq.refl (nat_lit 0)) : Expr)
+    return .isTrue q(isNat_dvd_true $pa $pb $this)
+  | c+1 =>
+    have nc : Q(Nat) := mkRawNatLit c
+    have : Q(Nat.mod $nb $na = Nat.succ $nc) := (q(Eq.refl (Nat.succ $nc)) : Expr)
+    return .isFalse q(isNat_dvd_false $pa $pb $this)
 
 中文:
 定义 eval自然数Dvd
@@ -1963,7 +2361,15 @@ guard ← withNewMCtxDepth isDefEq f q(Dvd.dvd (α := Nat))
   -- We assert that the default instance for `Dvd` is `Nat.dvd` when the first parameter is `ℕ`.
 guard ← withNewMCtxDepth isDefEq f q(Dvd.dvd (α := Nat))
   let sNat : Q(AddMonoidWithOne Nat) := q(Nat.instAddMonoidWithOne)
-  let ⟨na
+  let ⟨na, pa⟩ ← deriveNat a sNat; let ⟨nb, pb⟩ ← deriveNat b sNat
+  match nb.natLit! % na.natLit! with
+  | 0 =>
+    have : Q(Nat.mod $nb $na = nat_lit 0) := (q(Eq.refl (nat_lit 0)) : Expr)
+    return .isTrue q(isNat_dvd_true $pa $pb $this)
+  | c+1 =>
+    have nc : Q(Nat) := mkRawNatLit c
+    have : Q(Nat.mod $nb $na = Nat.succ $nc) := (q(Eq.refl (Nat.succ $nc)) : Expr)
+    return .isFalse q(isNat_dvd_false $pa $pb $this)
 -/
 @[norm_num (_ : Nat) ∣ _] def evalNatDvd : NormNumExt where eval {u α} e := do
   let .app (.app f (a : Q(Nat))) (b : Q(Nat)) ← whnfR e | failure

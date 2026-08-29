@@ -84,7 +84,7 @@ theorem fromBlocks_eq_of_invertible₂₂
   proof: (Matrix.reindex (Equiv.sumComm _ _) (Equiv.sumComm _ _)).injective by
     simpa [reindex_apply, Equiv.sumComm_symm, ← submatrix_mul_equiv _ _ _ (Equiv.sumComm n m), ←
       submatrix_mul_equiv _ _ _ (Equiv.sumComm n l), Equiv.sumComm_apply,
-      fromBlocks_submatrix_sum_swap_sum_swap] using fromBlo
+      fromBlocks_submatrix_sum_swap_sum_swap] using fromBlocks_eq_of_invertible₁₁ D C B A
 
 中文:
 定理 fromBlocks_eq_of_invertible₂₂
@@ -92,7 +92,7 @@ theorem fromBlocks_eq_of_invertible₂₂
   证明: (Matrix.reindex (Equiv.sumComm _ _) (Equiv.sumComm _ _)).injective by
     simpa [reindex_apply, Equiv.sumComm_symm, ← submatrix_mul_equiv _ _ _ (Equiv.sumComm n m), ←
       submatrix_mul_equiv _ _ _ (Equiv.sumComm n l), Equiv.sumComm_apply,
-      fromBlocks_submatrix_sum_swap_sum_swap] using fromBlo
+      fromBlocks_submatrix_sum_swap_sum_swap] using fromBlocks_eq_of_invertible₁₁ D C B A
 
 Depends on / 依赖: Equiv.sumComm, Equiv.sumComm_apply, Equiv.sumComm_symm, Matrix, Matrix.reindex, fromBlocks_submatrix_sum_swap_sum_swap, injective, reindex, reindex_apply, submatrix_mul_equiv, sumComm, sumComm_apply, sumComm_symm
 -/
@@ -153,7 +153,8 @@ definition fromBlocksZero₁₂Invertible
       (fromBlocks (⅟A) 0 (-(⅟D * C * ⅟A))
         (⅟D)) <| by -- a symmetry argument is more work than just copying the proof
     simp_rw [fromBlocks_multiply, Matrix.mul_zero, Matrix.zero_mul, zero_add, add_zero,
-      Matrix.neg_mul, invOf_mul_self, Matrix.invOf_mul_cance
+      Matrix.neg_mul, invOf_mul_self, Matrix.invOf_mul_cancel_right, neg_add_cancel,
+      fromBlocks_one]
 
 中文:
 定义 fromBlocksZero₁₂Invertible
@@ -162,7 +163,8 @@ definition fromBlocksZero₁₂Invertible
       (fromBlocks (⅟A) 0 (-(⅟D * C * ⅟A))
         (⅟D)) <| by -- a symmetry argument is more work than just copying the proof
     simp_rw [fromBlocks_multiply, Matrix.mul_zero, Matrix.zero_mul, zero_add, add_zero,
-      Matrix.neg_mul, invOf_mul_self, Matrix.invOf_mul_cance
+      Matrix.neg_mul, invOf_mul_self, Matrix.invOf_mul_cancel_right, neg_add_cancel,
+      fromBlocks_one]
 
 Depends on / 依赖: Matrix, Matrix.invOf_mul_cancel_right, Matrix.mul_zero, Matrix.neg_mul, Matrix.zero_mul, add_zero, argument, copying, fromBlocks, fromBlocks_multiply, fromBlocks_one, invOf_mul_cancel_right, invOf_mul_self, invertibleOfLeftInverse, mul_zero, neg_add_cancel, neg_mul, simp_rw, symmetry, zero_add
 -/
@@ -234,7 +236,14 @@ definition invertibleOfFromBlocksZero₂₁Invertible
   body: invertibleOfLeftInverse _ (⅟(fromBlocks A B 0 D)).toBlocks₁₁ by
       have := invOf_mul_self (fromBlocks A B 0 D)
       rw [← fromBlocks_toBlocks (⅟(fromBlocks A B 0 D))]; rw [fromBlocks_multiply] at this
-      simpa only [Matrix.toBlocks_fromBlocks₁₁, Matrix.mul_zero, add_zero, ← fromBlocks_one] us
+      simpa only [Matrix.toBlocks_fromBlocks₁₁, Matrix.mul_zero, add_zero, ← fromBlocks_one] using
+        congr_arg Matrix.toBlocks₁₁ this
+  snd :=
+invertibleOfRightInverse _ (⅟(fromBlocks A B 0 D)).toBlocks₂₂ by
+      have := mul_invOf_self (fromBlocks A B 0 D)
+      rw [← fromBlocks_toBlocks (⅟(fromBlocks A B 0 D))]; rw [fromBlocks_multiply] at this
+      simpa only [Matrix.toBlocks_fromBlocks₂₂, Matrix.zero_mul, zero_add, ← fromBlocks_one] using
+        congr_arg Matrix.toBlocks₂₂ this
 
 中文:
 定义 invertibleOfFromBlocksZero₂₁Invertible
@@ -242,7 +251,14 @@ definition invertibleOfFromBlocksZero₂₁Invertible
   定义体: invertibleOfLeftInverse _ (⅟(fromBlocks A B 0 D)).toBlocks₁₁ by
       have := invOf_mul_self (fromBlocks A B 0 D)
       rw [← fromBlocks_toBlocks (⅟(fromBlocks A B 0 D))]; rw [fromBlocks_multiply] at this
-      simpa only [Matrix.toBlocks_fromBlocks₁₁, Matrix.mul_zero, add_zero, ← fromBlocks_one] us
+      simpa only [Matrix.toBlocks_fromBlocks₁₁, Matrix.mul_zero, add_zero, ← fromBlocks_one] using
+        congr_arg Matrix.toBlocks₁₁ this
+  snd :=
+invertibleOfRightInverse _ (⅟(fromBlocks A B 0 D)).toBlocks₂₂ by
+      have := mul_invOf_self (fromBlocks A B 0 D)
+      rw [← fromBlocks_toBlocks (⅟(fromBlocks A B 0 D))]; rw [fromBlocks_multiply] at this
+      simpa only [Matrix.toBlocks_fromBlocks₂₂, Matrix.zero_mul, zero_add, ← fromBlocks_one] using
+        congr_arg Matrix.toBlocks₂₂ this
 
 Depends on / 依赖: Matrix, Matrix.mul_zero, Matrix.toBlocks, Matrix.toBlocks_fromBlocks, add_zero, congr_arg, fromBlock, fromBlocks, fromBlocks_multiply, fromBlocks_one, fromBlocks_toBlocks, invOf_mul_self, invertibleOfLeftInverse, invertibleOfRightInverse, mul_invOf_self, mul_zero
 -/
@@ -271,7 +287,15 @@ definition invertibleOfFromBlocksZero₁₂Invertible
       have := mul_invOf_self (fromBlocks A 0 C D)
       rw [← fromBlocks_toBlocks (⅟(fromBlocks A 0 C D))]; rw [fromBlocks_multiply] at this
       replace := congr_arg Matrix.toBlocks₁₁ this
-      simpa only [Matrix.toBlocks_fromBlocks
+      simpa only [Matrix.toBlocks_fromBlocks₁₁, Matrix.zero_mul, add_zero, ← fromBlocks_one] using
+        this
+  snd :=
+invertibleOfLeftInverse _ (⅟(fromBlocks A 0 C D)).toBlocks₂₂ by
+      have := invOf_mul_self (fromBlocks A 0 C D)
+      rw [← fromBlocks_toBlocks (⅟(fromBlocks A 0 C D))]; rw [fromBlocks_multiply] at this
+      replace := congr_arg Matrix.toBlocks₂₂ this
+      simpa only [Matrix.toBlocks_fromBlocks₂₂, Matrix.mul_zero, zero_add, ← fromBlocks_one] using
+        this
 
 中文:
 定义 invertibleOfFromBlocksZero₁₂Invertible
@@ -280,7 +304,15 @@ definition invertibleOfFromBlocksZero₁₂Invertible
       have := mul_invOf_self (fromBlocks A 0 C D)
       rw [← fromBlocks_toBlocks (⅟(fromBlocks A 0 C D))]; rw [fromBlocks_multiply] at this
       replace := congr_arg Matrix.toBlocks₁₁ this
-      simpa only [Matrix.toBlocks_fromBlocks
+      simpa only [Matrix.toBlocks_fromBlocks₁₁, Matrix.zero_mul, add_zero, ← fromBlocks_one] using
+        this
+  snd :=
+invertibleOfLeftInverse _ (⅟(fromBlocks A 0 C D)).toBlocks₂₂ by
+      have := invOf_mul_self (fromBlocks A 0 C D)
+      rw [← fromBlocks_toBlocks (⅟(fromBlocks A 0 C D))]; rw [fromBlocks_multiply] at this
+      replace := congr_arg Matrix.toBlocks₂₂ this
+      simpa only [Matrix.toBlocks_fromBlocks₂₂, Matrix.mul_zero, zero_add, ← fromBlocks_one] using
+        this
 
 Depends on / 依赖: Matrix, Matrix.toBlocks, Matrix.toBlocks_fromBlocks, Matrix.zero_mul, add_zero, congr_arg, fromBlocks, fromBlocks_multiply, fromBlocks_one, fromBlocks_toBlocks, invOf_mul_self, invertibleOfLeftInverse, invertibleOfRightInverse, mul_invOf_self, replace, zero_mul
 -/
@@ -442,7 +474,9 @@ theorem inv_fromBlocks_zero₂₁_of_isUnit_iff
     simp_rw [← invOf_eq_nonsing_inv, invOf_fromBlocks_zero₂₁_eq]
   · have hD := hAD.not.mp hA
     have : ¬IsUnit (fromBlocks A B 0 D) :=
-
+      isUnit_fromBlocks_zero₂₁.not.mpr (not_and'.mpr fun _ => hA)
+    simp_rw [nonsing_inv_eq_ringInverse, Ring.inverse_non_unit _ hA, Ring.inverse_non_unit _ hD,
+      Ring.inverse_non_unit _ this, Matrix.zero_mul, neg_zero, fromBlocks_zero]
 
 中文:
 定理 inv_fromBlocks_zero₂₁_of_isUnit_iff
@@ -456,7 +490,9 @@ theorem inv_fromBlocks_zero₂₁_of_isUnit_iff
     simp_rw [← invOf_eq_nonsing_inv, invOf_fromBlocks_zero₂₁_eq]
   · have hD := hAD.not.mp hA
     have : ¬IsUnit (fromBlocks A B 0 D) :=
-
+      isUnit_fromBlocks_zero₂₁.not.mpr (not_and'.mpr fun _ => hA)
+    simp_rw [nonsing_inv_eq_ringInverse, Ring.inverse_non_unit _ hA, Ring.inverse_non_unit _ hD,
+      Ring.inverse_non_unit _ this, Matrix.zero_mul, neg_zero, fromBlocks_zero]
 
 Depends on / 依赖: IsUnit, Matrix, Matrix.zero_mul, Ring.inverse_non_unit, fromBlocks, fromBlocks_zero, hA.nonempty_invertible, hAD.mp, hAD.not.mp, hD.nonempty_invertible, invOf_eq_nonsing_inv, inverse_non_unit, neg_zero, nonempty_invertible, nonsing_inv_eq_ringInverse, not.mpr, not_and, simp_rw, zero_mul
 -/
@@ -490,7 +526,9 @@ theorem inv_fromBlocks_zero₁₂_of_isUnit_iff
     simp_rw [← invOf_eq_nonsing_inv, invOf_fromBlocks_zero₁₂_eq]
   · have hD := hAD.not.mp hA
     have : ¬IsUnit (fromBlocks A 0 C D) :=
-
+      isUnit_fromBlocks_zero₁₂.not.mpr (not_and'.mpr fun _ => hA)
+    simp_rw [nonsing_inv_eq_ringInverse, Ring.inverse_non_unit _ hA, Ring.inverse_non_unit _ hD,
+      Ring.inverse_non_unit _ this, Matrix.zero_mul, neg_zero, fromBlocks_zero]
 
 中文:
 定理 inv_fromBlocks_zero₁₂_of_isUnit_iff
@@ -504,7 +542,9 @@ theorem inv_fromBlocks_zero₁₂_of_isUnit_iff
     simp_rw [← invOf_eq_nonsing_inv, invOf_fromBlocks_zero₁₂_eq]
   · have hD := hAD.not.mp hA
     have : ¬IsUnit (fromBlocks A 0 C D) :=
-
+      isUnit_fromBlocks_zero₁₂.not.mpr (not_and'.mpr fun _ => hA)
+    simp_rw [nonsing_inv_eq_ringInverse, Ring.inverse_non_unit _ hA, Ring.inverse_non_unit _ hD,
+      Ring.inverse_non_unit _ this, Matrix.zero_mul, neg_zero, fromBlocks_zero]
 
 Depends on / 依赖: IsUnit, Matrix, Matrix.zero_mul, Ring.inverse_non_unit, fromBlocks, fromBlocks_zero, hA.nonempty_invertible, hAD.mp, hAD.not.mp, hD.nonempty_invertible, invOf_eq_nonsing_inv, inverse_non_unit, neg_zero, nonempty_invertible, nonsing_inv_eq_ringInverse, not.mpr, not_and, simp_rw, zero_mul
 -/
@@ -548,7 +588,24 @@ definition fromBlocks₂₂Invertible
     Invertible.copy' _ _
       (fromBlocks (⅟(A - B * ⅟D * C)) (-(⅟(A - B * ⅟D * C) * B * ⅟D))
         (-(⅟D * C * ⅟(A - B * ⅟D * C))) (⅟D + ⅟D * C * ⅟(A - B * ⅟D * C) * B * ⅟D))
-      (fromBl
+      (fromBlocks_eq_of_invertible₂₂ _ _ _ _) _
+  · -- the product is invertible because all the factors are
+    letI : Invertible (1 : Matrix n n α) := invertibleOne
+    letI : Invertible (1 : Matrix m m α) := invertibleOne
+    refine Invertible.mul ?_ (fromBlocksZero₁₂Invertible _ _ _)
+    exact
+      Invertible.mul (fromBlocksZero₂₁Invertible _ _ _)
+        (fromBlocksZero₂₁Invertible _ _ _)
+  · -- unfold the `Invertible` instances to get the raw factors
+    change
+      _ =
+        fromBlocks 1 0 (-(1 * (⅟D * C) * 1)) 1 *
+          (fromBlocks (⅟(A - B * ⅟D * C)) (-(⅟(A - B * ⅟D * C) * 0 * ⅟D)) 0 (⅟D) *
+            fromBlocks 1 (-(1 * (B * ⅟D) * 1)) 0 1)
+    -- combine into a single block matrix
+    simp only [fromBlocks_multiply, Matrix.one_mul, Matrix.mul_one, Matrix.zero_mul,
+      Matrix.mul_zero, add_zero, zero_add, neg_zero, Matrix.mul_neg, Matrix.neg_mul, neg_neg, ←
+      Matrix.mul_assoc, add_comm (⅟D)]
 
 中文:
 定义 fromBlocks₂₂Invertible
@@ -559,7 +616,24 @@ definition fromBlocks₂₂Invertible
     Invertible.copy' _ _
       (fromBlocks (⅟(A - B * ⅟D * C)) (-(⅟(A - B * ⅟D * C) * B * ⅟D))
         (-(⅟D * C * ⅟(A - B * ⅟D * C))) (⅟D + ⅟D * C * ⅟(A - B * ⅟D * C) * B * ⅟D))
-      (fromBl
+      (fromBlocks_eq_of_invertible₂₂ _ _ _ _) _
+  · -- the product is invertible because all the factors are
+    letI : Invertible (1 : Matrix n n α) := invertibleOne
+    letI : Invertible (1 : Matrix m m α) := invertibleOne
+    refine Invertible.mul ?_ (fromBlocksZero₁₂Invertible _ _ _)
+    exact
+      Invertible.mul (fromBlocksZero₂₁Invertible _ _ _)
+        (fromBlocksZero₂₁Invertible _ _ _)
+  · -- unfold the `Invertible` instances to get the raw factors
+    change
+      _ =
+        fromBlocks 1 0 (-(1 * (⅟D * C) * 1)) 1 *
+          (fromBlocks (⅟(A - B * ⅟D * C)) (-(⅟(A - B * ⅟D * C) * 0 * ⅟D)) 0 (⅟D) *
+            fromBlocks 1 (-(1 * (B * ⅟D) * 1)) 0 1)
+    -- combine into a single block matrix
+    simp only [fromBlocks_multiply, Matrix.one_mul, Matrix.mul_one, Matrix.zero_mul,
+      Matrix.mul_zero, add_zero, zero_add, neg_zero, Matrix.mul_neg, Matrix.neg_mul, neg_neg, ←
+      Matrix.mul_assoc, add_comm (⅟D)]
 -/
 def fromBlocks₂₂Invertible (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
     (D : Matrix n n α) [Invertible D] [Invertible (A - B * ⅟D * C)] :
@@ -605,7 +679,9 @@ definition fromBlocks₁₁Invertible
   exact
     iDCBA.copy' _
       (fromBlocks (⅟A + ⅟A * B * ⅟(D - C * ⅟A * B) * C * ⅟A) (-(⅟A * B * ⅟(D - C * ⅟A * B)))
-     
+        (-(⅟(D - C * ⅟A * B) * C * ⅟A)) (⅟(D - C * ⅟A * B)))
+      (fromBlocks_submatrix_sum_swap_sum_swap _ _ _ _).symm
+      (fromBlocks_submatrix_sum_swap_sum_swap _ _ _ _).symm
 
 中文:
 定义 fromBlocks₁₁Invertible
@@ -618,7 +694,9 @@ definition fromBlocks₁₁Invertible
   exact
     iDCBA.copy' _
       (fromBlocks (⅟A + ⅟A * B * ⅟(D - C * ⅟A * B) * C * ⅟A) (-(⅟A * B * ⅟(D - C * ⅟A * B)))
-     
+        (-(⅟(D - C * ⅟A * B) * C * ⅟A)) (⅟(D - C * ⅟A * B)))
+      (fromBlocks_submatrix_sum_swap_sum_swap _ _ _ _).symm
+      (fromBlocks_submatrix_sum_swap_sum_swap _ _ _ _).symm
 -/
 def fromBlocks₁₁Invertible (A : Matrix m m α) (B : Matrix m n α) (C : Matrix n m α)
     (D : Matrix n n α) [Invertible A] [Invertible (D - C * ⅟A * B)] :
@@ -704,7 +782,13 @@ definition invertibleOfFromBlocks₂₂Invertible
     exact (invertibleOfFromBlocksZero₁₂Invertible (A - B * ⅟D * C) 0 D).1
   letI : Invertible (1 : Matrix n n α) := invertibleOne
   letI : Invertible (1 : Matrix m m α) := invertibleOne
-  letI iDC : Invertible (fromBlocks 1 0 (⅟D * C) 1
+  letI iDC : Invertible (fromBlocks 1 0 (⅟D * C) 1 : Matrix (m oplus n) (m oplus n) α) :=
+    fromBlocksZero₁₂Invertible _ _ _
+  letI iBD : Invertible (fromBlocks 1 (B * ⅟D) 0 1 : Matrix (m oplus n) (m oplus n) α) :=
+    fromBlocksZero₂₁Invertible _ _ _
+  letI iBDC := Invertible.copy ‹_› _ (fromBlocks_eq_of_invertible₂₂ A B C D).symm
+  refine (iBD.mulLeft _).symm ?_
+  exact (iDC.mulRight _).symm iBDC
 
 中文:
 定义 invertibleOfFromBlocks₂₂Invertible
@@ -714,7 +798,13 @@ definition invertibleOfFromBlocks₂₂Invertible
     exact (invertibleOfFromBlocksZero₁₂Invertible (A - B * ⅟D * C) 0 D).1
   letI : Invertible (1 : Matrix n n α) := invertibleOne
   letI : Invertible (1 : Matrix m m α) := invertibleOne
-  letI iDC : Invertible (fromBlocks 1 0 (⅟D * C) 1
+  letI iDC : Invertible (fromBlocks 1 0 (⅟D * C) 1 : Matrix (m oplus n) (m oplus n) α) :=
+    fromBlocksZero₁₂Invertible _ _ _
+  letI iBD : Invertible (fromBlocks 1 (B * ⅟D) 0 1 : Matrix (m oplus n) (m oplus n) α) :=
+    fromBlocksZero₂₁Invertible _ _ _
+  letI iBDC := Invertible.copy ‹_› _ (fromBlocks_eq_of_invertible₂₂ A B C D).symm
+  refine (iBD.mulLeft _).symm ?_
+  exact (iDC.mulRight _).symm iBDC
 
 Depends on / 依赖: Invertible, Matrix, fromBlocks, invertibleOne
 -/

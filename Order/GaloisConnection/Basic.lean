@@ -1067,7 +1067,7 @@ abbreviation liftSemilatticeSup
 le_sup_left := fun a _ => (gi.le_l_u a).trans gi.gc.monotone_l le_sup_left
 le_sup_right := fun _ b => (gi.le_l_u b).trans gi.gc.monotone_l le_sup_right
     sup_le := fun _ _ _ hac hbc =>
-gi.gc.l_le sup_le (gi.gc.monotone_u hac) (gi.gc.monot
+gi.gc.l_le sup_le (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
 
 中文:
 缩写 liftSemilatticeSup
@@ -1077,7 +1077,7 @@ gi.gc.l_le sup_le (gi.gc.monotone_u hac) (gi.gc.monot
 le_sup_left := fun a _ => (gi.le_l_u a).trans gi.gc.monotone_l le_sup_left
 le_sup_right := fun _ b => (gi.le_l_u b).trans gi.gc.monotone_l le_sup_right
     sup_le := fun _ _ _ hac hbc =>
-gi.gc.l_le sup_le (gi.gc.monotone_u hac) (gi.gc.monot
+gi.gc.l_le sup_le (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
 
 Depends on / 依赖: PartialOrder, gi.gc.l_le, gi.gc.monotone_l, gi.gc.monotone_u, gi.le_l_u, l_le, le_l_u, le_sup_left, le_sup_right, monotone_l, monotone_u, sup_le
 -/
@@ -1104,7 +1104,12 @@ gi.choice (u a ⊓ u b)
         le_inf (gi.gc.monotone_u <| gi.gc.l_le <| inf_le_left)
           (gi.gc.monotone_u <| gi.gc.l_le <| inf_le_right)
     inf_le_left := by simp only [gi.choice_eq]; exact fun a b => gi.gc.l_le inf_le_left
-    inf_le_right := by
+    inf_le_right := by simp only [gi.choice_eq]; exact fun a b => gi.gc.l_le inf_le_right
+    le_inf := by
+      simp only [gi.choice_eq]
+      exact fun a b c hac hbc =>
+(gi.le_l_u a).trans
+gi.gc.monotone_l le_inf (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
 
 中文:
 缩写 liftSemilatticeInf
@@ -1115,7 +1120,12 @@ gi.choice (u a ⊓ u b)
         le_inf (gi.gc.monotone_u <| gi.gc.l_le <| inf_le_left)
           (gi.gc.monotone_u <| gi.gc.l_le <| inf_le_right)
     inf_le_left := by simp only [gi.choice_eq]; exact fun a b => gi.gc.l_le inf_le_left
-    inf_le_right := by
+    inf_le_right := by simp only [gi.choice_eq]; exact fun a b => gi.gc.l_le inf_le_right
+    le_inf := by
+      simp only [gi.choice_eq]
+      exact fun a b c hac hbc =>
+(gi.le_l_u a).trans
+gi.gc.monotone_l le_inf (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
 
 Depends on / 依赖: PartialOrder, choice, choice_eq, gi.choice, gi.choice_eq, gi.gc.l_le, gi.gc.monotone_l, gi.gc.monotone_u, gi.le_l_u, inf_le_left, inf_le_right, l_le, le_inf, le_l_u, monotone_l, monotone_u
 -/
@@ -1238,7 +1248,9 @@ abbreviation liftCompleteLattice
 gi.choice (sInf (u '' s))
 (isGLB_sInf _).2
           gi.gc.monotone_u.mem_lowerBounds_image (gi.isGLB_of_u_image <| isGLB_sInf _).1
-    isGLB_
+    isGLB_sInf _ := by
+      rw [gi.choice_eq]
+      exact gi.isGLB_of_u_image (isGLB_sInf _) }
 
 中文:
 缩写 liftCompleteLattice
@@ -1250,7 +1262,9 @@ gi.choice (sInf (u '' s))
 gi.choice (sInf (u '' s))
 (isGLB_sInf _).2
           gi.gc.monotone_u.mem_lowerBounds_image (gi.isGLB_of_u_image <| isGLB_sInf _).1
-    isGLB_
+    isGLB_sInf _ := by
+      rw [gi.choice_eq]
+      exact gi.isGLB_of_u_image (isGLB_sInf _) }
 
 Depends on / 依赖: choice, choice_eq, gi.choice, gi.choice_eq, gi.gc.monotone_u.mem_lowerBounds_image, gi.isGLB_of_u_image, gi.isLUB_of_u_image, gi.liftBoundedOrder, gi.liftLattice, isGLB_of_u_image, isGLB_sInf, isLUB_of_u_image, isLUB_sSup, liftBoundedOrder, liftLattice, mem_lowerBounds_image, monotone_u
 -/

@@ -376,7 +376,7 @@ instance option
     | succ n =>
       refine ⟨some (ofNat α n), ?_, ?_⟩
       · rw [decode_option_succ, decode_eq_ofNat, Option.map_some, Option.mem_def]
-      rw [encode_some]; rw [en
+      rw [encode_some]; rw [encode_ofNat]⟩
 
 中文:
 实例 option
@@ -389,7 +389,7 @@ instance option
     | succ n =>
       refine ⟨some (ofNat α n), ?_, ?_⟩
       · rw [decode_option_succ, decode_eq_ofNat, Option.map_some, Option.mem_def]
-      rw [encode_some]; rw [en
+      rw [encode_some]; rw [encode_ofNat]⟩
 
 Depends on / 依赖: Option.map_some, Option.mem_def, decode_eq_ofNat, decode_option_succ, decode_option_zero, encode_none, encode_ofNat, encode_some, map_some, mem_def
 -/
@@ -650,7 +650,8 @@ theorem exists_succ
   classical
   exact Fintype.false
     ⟨(((Multiset.range (succ x)).filter (· in s)).pmap
-      (fun (y : Nat) (hy : y in s) => Subtype.mk y
+      (fun (y : Nat) (hy : y in s) => Subtype.mk y hy) (by simp [-Multiset.range_succ])).toFinset,
+      by simpa [Subtype.ext_iff, Multiset.mem_filter, -Multiset.range_succ] ⟩
 
 中文:
 定理 存在_succ
@@ -663,7 +664,8 @@ theorem exists_succ
   classical
   exact Fintype.false
     ⟨(((Multiset.range (succ x)).filter (· in s)).pmap
-      (fun (y : Nat) (hy : y in s) => Subtype.mk y
+      (fun (y : Nat) (hy : y in s) => Subtype.mk y hy) (by simp [-Multiset.range_succ])).toFinset,
+      by simpa [Subtype.ext_iff, Multiset.mem_filter, -Multiset.range_succ] ⟩
 
 Depends on / 依赖: Fintype, Fintype.false, Multiset, Multiset.mem_filter, Multiset.range, Multiset.range_succ, Nat.add_right_comm, Nat.add_sub_cancel, Subtype, Subtype.ext_iff, Subtype.mk, add_right_comm, add_sub_cancel, classical, ext_iff, filter, lt_of_not_ge, mem_filter, range_succ, toFinset
 -/
@@ -838,7 +840,18 @@ theorem ofNat_surjective
         (by intro a ha; simpa using! (List.mem_filter.mp ha).2) with ht
     have hmt : forall {y : s}, y in t ↔ y < ⟨x, hx⟩ := by
       simp [List.mem_filter, Subtype.ext_iff, ht]
-    cases hmax : List.maxi
+    cases hmax : List.maximum t with
+    | bot =>
+      refine ⟨0, le_antisymm bot_le (le_of_not_gt fun h => List.not_mem_nil (a := (⊥ : s)) ?_)⟩
+      rwa [← List.maximum_eq_bot.1 hmax, hmt]
+    | coe m =>
+      have wf : ↑m < x := by simpa using! hmt.mp (List.maximum_mem hmax)
+      rcases ofNat_surjective m with ⟨a, rfl⟩
+      refine ⟨a + 1, le_antisymm (succ_le_of_lt wf) ?_⟩
+      exact le_succ_of_forall_lt_le fun z hz => List.le_maximum_of_mem (hmt.2 hz) hmax
+  termination_by n => n.val
+
+@[simp]
 
 中文:
 定理 of自然数_surjective
@@ -848,7 +861,18 @@ theorem ofNat_surjective
         (by intro a ha; simpa using! (List.mem_filter.mp ha).2) with ht
     have hmt : forall {y : s}, y in t ↔ y < ⟨x, hx⟩ := by
       simp [List.mem_filter, Subtype.ext_iff, ht]
-    cases hmax : List.maxi
+    cases hmax : List.maximum t with
+    | bot =>
+      refine ⟨0, le_antisymm bot_le (le_of_not_gt fun h => List.not_mem_nil (a := (⊥ : s)) ?_)⟩
+      rwa [← List.maximum_eq_bot.1 hmax, hmt]
+    | coe m =>
+      have wf : ↑m < x := by simpa using! hmt.mp (List.maximum_mem hmax)
+      rcases ofNat_surjective m with ⟨a, rfl⟩
+      refine ⟨a + 1, le_antisymm (succ_le_of_lt wf) ?_⟩
+      exact le_succ_of_forall_lt_le fun z hz => List.le_maximum_of_mem (hmt.2 hz) hmax
+  termination_by n => n.val
+
+@[simp]
 
 Depends on / 依赖: List.maximum, List.maximum_eq_bot, List.maximum_mem, List.mem_filter, List.mem_filter.mp, List.not_mem_nil, List.range, Subtype, Subtype.ext_iff, bot_le, ext_iff, filter, hmt.mp, le_antisymm, le_of_not_gt, maximum, maximum_eq_bot, maximum_mem, mem_filter, not_mem_nil
 -/
@@ -966,7 +990,17 @@ theorem right_inverse_aux
     have h₂ : {x in range (succ (ofNat s n)) | x in s} =
         insert ↑(ofNat s n) {x in range (ofNat s n) | x in s} := by
       simp only [Finset.ext_iff, mem_insert, mem_range, mem_filter]
-      ex
+      exact fun m =>
+        ⟨fun h => by
+          simp only [h.2, and_true]
+          exact Or.symm (lt_or_eq_of_le ((@lt_succ_iff_le _ _ _ ⟨m, h.2⟩ _).1 h.1)),
+         fun h =>
+          h.elim (fun h => h.symm ▸ ⟨lt_succ_self _, (ofNat s n).prop⟩) fun h =>
+            ⟨h.1.trans (lt_succ_self _), h.2⟩⟩
+    simp only [toFunAux_eq, ofNat] at ih ⊢
+    conv =>
+      rhs
+      rw [← ih]; rw [← card_insert_of_notMem h₁]; rw [← h₂]
 
 中文:
 定理 right_inverse_aux
@@ -976,7 +1010,17 @@ theorem right_inverse_aux
     have h₂ : {x in range (succ (ofNat s n)) | x in s} =
         insert ↑(ofNat s n) {x in range (ofNat s n) | x in s} := by
       simp only [Finset.ext_iff, mem_insert, mem_range, mem_filter]
-      ex
+      exact fun m =>
+        ⟨fun h => by
+          simp only [h.2, and_true]
+          exact Or.symm (lt_or_eq_of_le ((@lt_succ_iff_le _ _ _ ⟨m, h.2⟩ _).1 h.1)),
+         fun h =>
+          h.elim (fun h => h.symm ▸ ⟨lt_succ_self _, (ofNat s n).prop⟩) fun h =>
+            ⟨h.1.trans (lt_succ_self _), h.2⟩⟩
+    simp only [toFunAux_eq, ofNat] at ih ⊢
+    conv =>
+      rhs
+      rw [← ih]; rw [← card_insert_of_notMem h₁]; rw [← h₂]
 -/
 private theorem right_inverse_aux : forall n, toFunAux (ofNat s n) = n
   | 0 => by

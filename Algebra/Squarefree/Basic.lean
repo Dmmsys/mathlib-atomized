@@ -461,7 +461,7 @@ theorem squarefree_iff_no_irreducibles
   refine ⟨fun h p hp hp' => hp.not_isUnit (h p hp'), fun h d hd => by_contra fun hdu => ?_⟩
   have hd₀ : d != 0 := ne_zero_of_dvd_ne_zero (ne_zero_of_dvd_ne_zero hx₀ hd) (dvd_mul_left d d)
   obtain ⟨p, irr, dvd⟩ := WfDvdMonoid.exists_irreducible_factor hdu hd₀
-  exact h p irr ((mul_dvd_mul dvd dv
+  exact h p irr ((mul_dvd_mul dvd dvd).trans hd)
 
 中文:
 定理 squarefree_iff_no_irreducibles
@@ -470,7 +470,7 @@ theorem squarefree_iff_no_irreducibles
   refine ⟨fun h p hp hp' => hp.not_isUnit (h p hp'), fun h d hd => by_contra fun hdu => ?_⟩
   have hd₀ : d != 0 := ne_zero_of_dvd_ne_zero (ne_zero_of_dvd_ne_zero hx₀ hd) (dvd_mul_left d d)
   obtain ⟨p, irr, dvd⟩ := WfDvdMonoid.exists_irreducible_factor hdu hd₀
-  exact h p irr ((mul_dvd_mul dvd dv
+  exact h p irr ((mul_dvd_mul dvd dvd).trans hd)
 
 Depends on / 依赖: WfDvdMonoid, WfDvdMonoid.exists_irreducible_factor, dvd_mul_left, exists_irreducible_factor, hp.not_isUnit, mul_dvd_mul, ne_zero_of_dvd_ne_zero, not_isUnit
 -/
@@ -669,7 +669,8 @@ have hx' : ¬ p ∣ x' := fun contra => hp.not_isUnit hx p (mul_dvd_mul_left p c
     replace h : p ^ k ∣ x' * y := by
       rw [pow_succ']; rw [mul_assoc] at h
       exact (mul_dvd_mul_iff_left hp.ne_zero).mp h
-    exact hp.pow_dvd_of_dvd_mul_
+    exact hp.pow_dvd_of_dvd_mul_left _ hx' h
+  · exact (pow_dvd_pow _ k.le_succ).trans (hp.pow_dvd_of_dvd_mul_left _ hxp h)
 
 中文:
 定理 pow_dvd_of_squarefree_of_pow_succ_dvd_mul_right
@@ -681,7 +682,8 @@ have hx' : ¬ p ∣ x' := fun contra => hp.not_isUnit hx p (mul_dvd_mul_left p c
     replace h : p ^ k ∣ x' * y := by
       rw [pow_succ']; rw [mul_assoc] at h
       exact (mul_dvd_mul_iff_left hp.ne_zero).mp h
-    exact hp.pow_dvd_of_dvd_mul_
+    exact hp.pow_dvd_of_dvd_mul_left _ hx' h
+  · exact (pow_dvd_pow _ k.le_succ).trans (hp.pow_dvd_of_dvd_mul_left _ hxp h)
 
 Depends on / 依赖: _zero, contra, hp.ne_zero, hp.not_isUnit, hp.pow_dvd_of_dvd_mul_left, k.le_succ, le_succ, mul_assoc, mul_dvd_mul_iff_left, mul_dvd_mul_left, ne_zero, not_isUnit, pow_dvd_of_dvd_mul_left, pow_dvd_pow, pow_succ, preNormEDS, replace
 -/
@@ -737,7 +739,7 @@ theorem dvd_of_squarefree_of_mul_dvd_mul_right
   replace ha : Squarefree a := hx.squarefree_of_dvd ha
   obtain ⟨c, hc⟩ : a ∣ d := ha.isRadical 2 d ⟨b, by rw [sq, eq]⟩
   rw [hc]; rw [mul_assoc]; rw [(mul_right_injective₀ ha.ne_zero).eq_iff] at eq
-  exact dvd_trans
+  exact dvd_trans ⟨c, by rw [hc, ← eq, mul_comm]⟩ hb
 
 中文:
 定理 dvd_of_squarefree_of_mul_dvd_mul_right
@@ -749,7 +751,7 @@ theorem dvd_of_squarefree_of_mul_dvd_mul_right
   replace ha : Squarefree a := hx.squarefree_of_dvd ha
   obtain ⟨c, hc⟩ : a ∣ d := ha.isRadical 2 d ⟨b, by rw [sq, eq]⟩
   rw [hc]; rw [mul_assoc]; rw [(mul_right_injective₀ ha.ne_zero).eq_iff] at eq
-  exact dvd_trans
+  exact dvd_trans ⟨c, by rw [hc, ← eq, mul_comm]⟩ hb
 
 Depends on / 依赖: Squarefree, _two, dvd_trans, eq_iff, exists_dvd_and_dvd_of_dvd_mul, ha.isRadical, ha.ne_zero, hx.squarefree_of_dvd, isRadical, mul_assoc, mul_comm, ne_zero, nontriviality, preNormEDS, replace, squarefree_of_dvd
 -/
@@ -823,7 +825,8 @@ theorem Finset.squarefree_prod_of_pairwise_isCoprime
     rw [Finset.prod_cons]; rw [squarefree_mul_iff]
     rw [Finset.coe_cons]; rw [Set.pairwise_insert] at hs
     refine ⟨.prod_right fun i hi => ?_, hs' a (by simp), ?_⟩
-    · exact (hs.right i (by simp [hi]) fu
+    · exact (hs.right i (by simp [hi]) fun h => ha (h ▸ hi)).left
+· exact ih hs.left fun i hi => hs' i Finset.mem_cons_of_mem hi
 
 中文:
 定理 有限集.squarefree_prod_of_pairwise_isCoprime
@@ -835,7 +838,8 @@ theorem Finset.squarefree_prod_of_pairwise_isCoprime
     rw [Finset.prod_cons]; rw [squarefree_mul_iff]
     rw [Finset.coe_cons]; rw [Set.pairwise_insert] at hs
     refine ⟨.prod_right fun i hi => ?_, hs' a (by simp), ?_⟩
-    · exact (hs.right i (by simp [hi]) fu
+    · exact (hs.right i (by simp [hi]) fun h => ha (h ▸ hi)).left
+· exact ih hs.left fun i hi => hs' i Finset.mem_cons_of_mem hi
 
 Depends on / 依赖: Finset, Finset.coe_cons, Finset.cons_induction, Finset.mem_cons_of_mem, Finset.prod_cons, Set.pairwise_insert, _even, coe_cons, cons_induction, hs.left, hs.right, mem_cons_of_mem, pairwise_insert, preNormEDS, prod_cons, prod_right, squarefree_mul_iff
 -/
@@ -920,7 +924,13 @@ lemma _root_.exists_squarefree_dvd_pow_of_ne_zero
   | mul z p hz hp ih =>
     obtain ⟨y, n, hy, hyx, hy'⟩ := ih hz
     rcases n.eq_zero_or_pos with rfl | hn
-    · exact ⟨p, 1, hp.squarefree, dvd
+    · exact ⟨p, 1, hp.squarefree, dvd_mul_right p z, by simp [isUnit_of_dvd_one (pow_zero y ▸ hy')]⟩
+    by_cases hp' : p ∣ y
+    · exact ⟨y, n + 1, hy, dvd_mul_of_dvd_right hyx _,
+        mul_comm p z ▸ pow_succ y n ▸ mul_dvd_mul hy' hp'⟩
+    · suffices Squarefree (p * y) from ⟨p * y, n, this,
+        mul_dvd_mul_left p hyx, mul_pow p y n ▸ mul_dvd_mul (dvd_pow_self p hn.ne') hy'⟩
+      exact squarefree_mul_iff.mpr ⟨hp.isRelPrime_iff_not_dvd.mpr hp', hp.squarefree, hy⟩
 
 中文:
 引理 _root_.存在_squarefree_dvd_pow_of_ne_zero
@@ -932,7 +942,13 @@ lemma _root_.exists_squarefree_dvd_pow_of_ne_zero
   | mul z p hz hp ih =>
     obtain ⟨y, n, hy, hyx, hy'⟩ := ih hz
     rcases n.eq_zero_or_pos with rfl | hn
-    · exact ⟨p, 1, hp.squarefree, dvd
+    · exact ⟨p, 1, hp.squarefree, dvd_mul_right p z, by simp [isUnit_of_dvd_one (pow_zero y ▸ hy')]⟩
+    by_cases hp' : p ∣ y
+    · exact ⟨y, n + 1, hy, dvd_mul_of_dvd_right hyx _,
+        mul_comm p z ▸ pow_succ y n ▸ mul_dvd_mul hy' hp'⟩
+    · suffices Squarefree (p * y) from ⟨p * y, n, this,
+        mul_dvd_mul_left p hyx, mul_pow p y n ▸ mul_dvd_mul (dvd_pow_self p hn.ne') hy'⟩
+      exact squarefree_mul_iff.mpr ⟨hp.isRelPrime_iff_not_dvd.mpr hp', hp.squarefree, hy⟩
 
 Depends on / 依赖: Squarefree, WfDvdMonoid, WfDvdMonoid.induction_on_irreducible, dvd_mul_of_dvd_right, dvd_mul_right, eq_zero_or_pos, hp.squarefree, hu.dvd, induction_on_irreducible, isUnit_of_dvd_one, mul_comm, mul_dvd_mul, n.eq_zero_or_pos, one_dvd, pow_succ, pow_zero, squarefree, squarefree_one
 -/
@@ -966,7 +982,20 @@ theorem squarefree_iff_nodup_normalizedFactors
   · by_cases hmem : a in normalizedFactors x
     · have ha := irreducible_of_normalized_factor _ hmem
       rcases h a with (h | h)
-      · rw
+      · rw [← normalize_normalized_factor _ hmem]
+        rw [emultiplicity_eq_count_normalizedFactors ha x0] at h
+        assumption_mod_cast
+      · have := ha.1
+        contradiction
+    · simp [Multiset.count_eq_zero_of_notMem hmem]
+  · rw [or_iff_not_imp_right]
+    intro hu
+    rcases eq_or_ne a 0 with rfl | h0
+    · simp [x0]
+    rcases WfDvdMonoid.exists_irreducible_factor hu h0 with ⟨b, hib, hdvd⟩
+    apply le_trans (emultiplicity_le_emultiplicity_of_dvd_left hdvd)
+    rw [emultiplicity_eq_count_normalizedFactors hib x0]
+    exact_mod_cast h (normalize b)
 
 中文:
 定理 squarefree_iff_nodup_normalizedFactors
@@ -979,7 +1008,20 @@ theorem squarefree_iff_nodup_normalizedFactors
   · by_cases hmem : a in normalizedFactors x
     · have ha := irreducible_of_normalized_factor _ hmem
       rcases h a with (h | h)
-      · rw
+      · rw [← normalize_normalized_factor _ hmem]
+        rw [emultiplicity_eq_count_normalizedFactors ha x0] at h
+        assumption_mod_cast
+      · have := ha.1
+        contradiction
+    · simp [Multiset.count_eq_zero_of_notMem hmem]
+  · rw [or_iff_not_imp_right]
+    intro hu
+    rcases eq_or_ne a 0 with rfl | h0
+    · simp [x0]
+    rcases WfDvdMonoid.exists_irreducible_factor hu h0 with ⟨b, hib, hdvd⟩
+    apply le_trans (emultiplicity_le_emultiplicity_of_dvd_left hdvd)
+    rw [emultiplicity_eq_count_normalizedFactors hib x0]
+    exact_mod_cast h (normalize b)
 
 Depends on / 依赖: Multiset, Multiset.count_eq_zero_of_notMem, Multiset.nodup_iff_count_le_one, assumption_mod_cast, classical, count_eq_zero_of_notMem, emultiplicity_eq_count_normalizedFactors, irreducible_of_normalized_factor, nodup_iff_count_le_one, nontrivial_of_ne, normalize_normalized_factor, normalizedFactors, or_iff_not_imp_right, squarefree_iff_emultiplicity_le_one
 -/

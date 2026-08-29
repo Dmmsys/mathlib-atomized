@@ -61,7 +61,17 @@ theorem volume_eq_stieltjes_id
 Eq.symm
         Real.measure_ext_Ioo_rat fun p q => by
           simp only [Measure.map_apply (measurable_const_add a) measurableSet_Ioo,
-            sub_sub_sub_cancel_right, StieltjesFunction.measure_Ioo, StieltjesFunctio
+            sub_sub_sub_cancel_right, StieltjesFunction.measure_Ioo, StieltjesFunction.id_leftLim,
+            StieltjesFunction.id_apply, id, preimage_const_add_Ioo]⟩
+  have A : StieltjesFunction.id.measure (stdOrthonormalBasis Real Real).toBasis.parallelepiped = 1 := by
+    change StieltjesFunction.id.measure (parallelepiped (stdOrthonormalBasis Real Real)) = 1
+    rcases parallelepiped_orthonormalBasis_one_dim (stdOrthonormalBasis Real Real) with (H | H) <;>
+      simp only [H, StieltjesFunction.measure_Icc, StieltjesFunction.id_apply, id, tsub_zero,
+        StieltjesFunction.id_leftLim, sub_neg_eq_add, zero_add, ENNReal.ofReal_one]
+  conv_rhs =>
+    rw [addHaarMeasure_unique StieltjesFunction.id.measure
+        (stdOrthonormalBasis Real Real).toBasis.parallelepiped]; rw [A]
+  simp only [volume, Module.Basis.addHaar, one_smul]
 
 中文:
 定理 volume_eq_stieltjes_id
@@ -72,7 +82,17 @@ Eq.symm
 Eq.symm
         Real.measure_ext_Ioo_rat fun p q => by
           simp only [Measure.map_apply (measurable_const_add a) measurableSet_Ioo,
-            sub_sub_sub_cancel_right, StieltjesFunction.measure_Ioo, StieltjesFunctio
+            sub_sub_sub_cancel_right, StieltjesFunction.measure_Ioo, StieltjesFunction.id_leftLim,
+            StieltjesFunction.id_apply, id, preimage_const_add_Ioo]⟩
+  have A : StieltjesFunction.id.measure (stdOrthonormalBasis Real Real).toBasis.parallelepiped = 1 := by
+    change StieltjesFunction.id.measure (parallelepiped (stdOrthonormalBasis Real Real)) = 1
+    rcases parallelepiped_orthonormalBasis_one_dim (stdOrthonormalBasis Real Real) with (H | H) <;>
+      simp only [H, StieltjesFunction.measure_Icc, StieltjesFunction.id_apply, id, tsub_zero,
+        StieltjesFunction.id_leftLim, sub_neg_eq_add, zero_add, ENNReal.ofReal_one]
+  conv_rhs =>
+    rw [addHaarMeasure_unique StieltjesFunction.id.measure
+        (stdOrthonormalBasis Real Real).toBasis.parallelepiped]; rw [A]
+  simp only [volume, Module.Basis.addHaar, one_smul]
 
 Depends on / 依赖: Eq.symm, IsAddLeftInvariant, Measure, Measure.map_apply, Real.measure_ext_Ioo_rat, StieltjesFunction, StieltjesFunction.id.measure, StieltjesFunction.id_apply, StieltjesFunction.id_leftLim, StieltjesFunction.measure_Ioo, id_apply, id_leftLim, map_apply, measurableSet_Ioo, measurable_const_add, measure, measure_Ioo, measure_ext_Ioo_rat, parallelepiped, preimage_const_add_Ioo
 -/
@@ -623,7 +643,10 @@ theorem volume_eball
   · lift r to Real>=0 using hr
     rw [Metric.eball_coe]; rw [volume_ball]; rw [two_mul]; rw [← NNReal.coe_add]; rw [ENNReal.ofReal_coe_nnreal]; rw [ENNReal.coe_add]; rw [two_mul]
 
-@[deprecated (
+@[deprecated (since := "2026-01-24")]
+alias volume_emetric_ball := volume_eball
+
+@[simp]
 
 中文:
 定理 volume_eball
@@ -635,7 +658,10 @@ theorem volume_eball
   · lift r to Real>=0 using hr
     rw [Metric.eball_coe]; rw [volume_ball]; rw [two_mul]; rw [← NNReal.coe_add]; rw [ENNReal.ofReal_coe_nnreal]; rw [ENNReal.coe_add]; rw [two_mul]
 
-@[deprecated (
+@[deprecated (since := "2026-01-24")]
+alias volume_emetric_ball := volume_eball
+
+@[simp]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_add, ENNReal.ofReal_coe_nnreal, Metric, Metric.eball_coe, Metric.eball_top, NNReal, NNReal.coe_add, _root_, _root_.top_add, coe_add, eball_coe, eball_top, eq_or_ne, ofReal_coe_nnreal, top_add, two_mul, volume_ball, volume_univ
 -/
@@ -660,7 +686,10 @@ theorem volume_closedEBall
   rcases eq_or_ne r ∞ with (rfl | hr)
   · rw [Metric.closedEBall_top, volume_univ, two_mul, _root_.top_add]
   · lift r to Real>=0 using hr
-    rw [Metric.closedEBall_coe]; rw [volume_closedBall]; rw [two_mul]; rw [← NNReal.coe_add]; rw [ENNReal.ofReal_coe_nnreal]; rw [ENNReal.coe_add]; rw [two_mu
+    rw [Metric.closedEBall_coe]; rw [volume_closedBall]; rw [two_mul]; rw [← NNReal.coe_add]; rw [ENNReal.ofReal_coe_nnreal]; rw [ENNReal.coe_add]; rw [two_mul]
+
+@[deprecated (since := "2026-01-24")]
+alias volume_emetric_closedBall := volume_closedEBall
 
 中文:
 定理 volume_closedEBall
@@ -670,7 +699,10 @@ theorem volume_closedEBall
   rcases eq_or_ne r ∞ with (rfl | hr)
   · rw [Metric.closedEBall_top, volume_univ, two_mul, _root_.top_add]
   · lift r to Real>=0 using hr
-    rw [Metric.closedEBall_coe]; rw [volume_closedBall]; rw [two_mul]; rw [← NNReal.coe_add]; rw [ENNReal.ofReal_coe_nnreal]; rw [ENNReal.coe_add]; rw [two_mu
+    rw [Metric.closedEBall_coe]; rw [volume_closedBall]; rw [two_mul]; rw [← NNReal.coe_add]; rw [ENNReal.ofReal_coe_nnreal]; rw [ENNReal.coe_add]; rw [two_mul]
+
+@[deprecated (since := "2026-01-24")]
+alias volume_emetric_closedBall := volume_closedEBall
 
 Depends on / 依赖: ENNReal, ENNReal.coe_add, ENNReal.ofReal_coe_nnreal, Metric, Metric.closedEBall_coe, Metric.closedEBall_top, NNReal, NNReal.coe_add, _root_, _root_.top_add, closedEBall_coe, closedEBall_top, coe_add, eq_or_ne, ofReal_coe_nnreal, top_add, two_mul, volume_closedBall, volume_univ
 -/
@@ -1214,7 +1246,14 @@ theorem volume_pi_Ico_toReal
 @[simp]
 nonrec theorem volume_pi_ball (a : ι -> Real) {r : Real} (hr : 0 < r) :
     volume (Metric.ball a r) = ENNReal.ofReal ((2 * r) ^ Fintype.card ι) := by
-  simp only [MeasureTheory.volume_pi_ball a 
+  simp only [MeasureTheory.volume_pi_ball a hr, volume_ball, Finset.prod_const]
+  exact (ENNReal.ofReal_pow (mul_nonneg zero_le_two hr.le) _).symm
+
+@[simp]
+nonrec theorem volume_pi_closedBall (a : ι -> Real) {r : Real} (hr : 0 <= r) :
+    volume (Metric.closedBall a r) = ENNReal.ofReal ((2 * r) ^ Fintype.card ι) := by
+  simp only [MeasureTheory.volume_pi_closedBall a hr, volume_closedBall, Finset.prod_const]
+  exact (ENNReal.ofReal_pow (mul_nonneg zero_le_two hr) _).symm
 
 中文:
 定理 volume_pi_Ico_to实数
@@ -1225,7 +1264,14 @@ nonrec theorem volume_pi_ball (a : ι -> Real) {r : Real} (hr : 0 < r) :
 @[simp]
 nonrec theorem volume_pi_ball (a : ι -> Real) {r : Real} (hr : 0 < r) :
     volume (Metric.ball a r) = ENNReal.ofReal ((2 * r) ^ Fintype.card ι) := by
-  simp only [MeasureTheory.volume_pi_ball a 
+  simp only [MeasureTheory.volume_pi_ball a hr, volume_ball, Finset.prod_const]
+  exact (ENNReal.ofReal_pow (mul_nonneg zero_le_two hr.le) _).symm
+
+@[simp]
+nonrec theorem volume_pi_closedBall (a : ι -> Real) {r : Real} (hr : 0 <= r) :
+    volume (Metric.closedBall a r) = ENNReal.ofReal ((2 * r) ^ Fintype.card ι) := by
+  simp only [MeasureTheory.volume_pi_closedBall a hr, volume_closedBall, Finset.prod_const]
+  exact (ENNReal.ofReal_pow (mul_nonneg zero_le_two hr) _).symm
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_ofReal, ENNReal.toReal_prod, sub_nonneg, toReal_ofReal, toReal_prod, volume_pi_Ico
 -/
@@ -1257,7 +1303,7 @@ volume.mono
 Subset.trans (subset_pi_eval_image univ s) pi_mono fun _ _ => subset_closure
     _ = ∏ i, volume (closure <| Function.eval i '' s) := volume_pi_pi _
     _ <= ∏ i : ι, ediam (Function.eval i '' s) :=
-      Fi
+      Finset.prod_le_prod' fun _ _ => (volume_le_diam _).trans_eq (ediam_closure _)
 
 中文:
 定理 volume_pi_le_prod_diam
@@ -1268,7 +1314,7 @@ volume.mono
 Subset.trans (subset_pi_eval_image univ s) pi_mono fun _ _ => subset_closure
     _ = ∏ i, volume (closure <| Function.eval i '' s) := volume_pi_pi _
     _ <= ∏ i : ι, ediam (Function.eval i '' s) :=
-      Fi
+      Finset.prod_le_prod' fun _ _ => (volume_le_diam _).trans_eq (ediam_closure _)
 
 Depends on / 依赖: Finset, Finset.prod_le_prod, Function, Function.eval, Subset, Subset.trans, closure, ediam_closure, pi_mono, prod_le_prod, subset_closure, subset_pi_eval_image, trans_eq, volume, volume.mono, volume_le_diam, volume_pi_pi
 -/
@@ -1294,7 +1340,7 @@ theorem volume_pi_le_diam_pow
     _ <= ∏ _i : ι, (1 : Real>=0) * ediam s :=
       (Finset.prod_le_prod' fun i _ => (LipschitzWith.eval i).ediam_image_le s)
     _ = ediam s ^ Fintype.card ι := by
-      simp only [ENNReal.coe_one, one_mul, Finse
+      simp only [ENNReal.coe_one, one_mul, Finset.prod_const, Fintype.card]
 
 中文:
 定理 volume_pi_le_diam_pow
@@ -1305,7 +1351,7 @@ theorem volume_pi_le_diam_pow
     _ <= ∏ _i : ι, (1 : Real>=0) * ediam s :=
       (Finset.prod_le_prod' fun i _ => (LipschitzWith.eval i).ediam_image_le s)
     _ = ediam s ^ Fintype.card ι := by
-      simp only [ENNReal.coe_one, one_mul, Finse
+      simp only [ENNReal.coe_one, one_mul, Finset.prod_const, Fintype.card]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_one, Finset, Finset.prod_const, Finset.prod_le_prod, Fintype, Fintype.card, Function, Function.eval, LipschitzWith, LipschitzWith.eval, coe_one, ediam_image_le, one_mul, prod_const, prod_le_prod, volume, volume_pi_le_prod_diam
 -/
@@ -1330,7 +1376,11 @@ theorem smul_map_volume_mul_left
   rcases lt_or_gt_of_ne h with h | h
   · simp only [Real.volume_Ioo, Measure.smul_apply, ← ENNReal.ofReal_mul (le_of_lt <| neg_pos.2 h),
       Measure.map_apply (measurable_const_mul a) measurableSet_Ioo, neg_sub_neg, neg_mul,
-      preimage_
+      preimage_const_mul_Ioo_of_neg _ _ h, abs_of_neg h, mul_sub, smul_eq_mul,
+      mul_div_cancel₀ _ (ne_of_lt h)]
+  · simp only [Real.volume_Ioo, Measure.smul_apply, ← ENNReal.ofReal_mul (le_of_lt h),
+      Measure.map_apply (measurable_const_mul a) measurableSet_Ioo, preimage_const_mul_Ioo₀ _ _ h,
+      abs_of_pos h, mul_sub, mul_div_cancel₀ _ (ne_of_gt h), smul_eq_mul]
 
 中文:
 定理 smul_map_volume_mul_left
@@ -1340,7 +1390,11 @@ theorem smul_map_volume_mul_left
   rcases lt_or_gt_of_ne h with h | h
   · simp only [Real.volume_Ioo, Measure.smul_apply, ← ENNReal.ofReal_mul (le_of_lt <| neg_pos.2 h),
       Measure.map_apply (measurable_const_mul a) measurableSet_Ioo, neg_sub_neg, neg_mul,
-      preimage_
+      preimage_const_mul_Ioo_of_neg _ _ h, abs_of_neg h, mul_sub, smul_eq_mul,
+      mul_div_cancel₀ _ (ne_of_lt h)]
+  · simp only [Real.volume_Ioo, Measure.smul_apply, ← ENNReal.ofReal_mul (le_of_lt h),
+      Measure.map_apply (measurable_const_mul a) measurableSet_Ioo, preimage_const_mul_Ioo₀ _ _ h,
+      abs_of_pos h, mul_sub, mul_div_cancel₀ _ (ne_of_gt h), smul_eq_mul]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_mul, Measure, Measure.map_apply, Measure.smul_apply, Real.measure_ext_Ioo_rat, Real.volume_Ioo, abs_of_neg, le_of_lt, lt_or_gt_of_ne, map_apply, measurableSet_Ioo, measurable_const_m, measurable_const_mul, measure_ext_Ioo_rat, mul_sub, ne_of_lt, neg_mul, neg_pos, neg_sub_neg
 -/
@@ -1510,7 +1564,19 @@ theorem smul_map_diagonal_volume_pi
   rw [Measure.map_apply _ (MeasurableSet.univ_pi hs)]
   swap; · exact Continuous.measurable (LinearMap.continuous_on_pi _)
   have :
-    (Matrix.toLin' (diagonal D) ⁻¹' Set.pi Set.
+    (Matrix.toLin' (diagonal D) ⁻¹' Set.pi Set.univ fun i : ι => s i) =
+      Set.pi Set.univ fun i : ι => (D i * ·) ⁻¹' s i := by
+    ext f
+    simp only [LinearMap.coe_proj, smul_eq_mul, LinearMap.smul_apply, mem_univ_pi,
+      mem_preimage, LinearMap.pi_apply, diagonal_toLin']
+  have B : forall i, ofReal (abs (D i)) * volume ((D i * ·) ⁻¹' s i) = volume (s i) := by
+    intro i
+    have A : D i != 0 := by
+      simp only [det_diagonal, Ne] at h
+      exact Finset.prod_ne_zero_iff.1 h i (Finset.mem_univ i)
+    rw [volume_preimage_mul_left A]; rw [← mul_assoc]; rw [← ENNReal.ofReal_mul (abs_nonneg _)]; rw [← abs_mul]; rw [mul_inv_cancel₀ A]; rw [abs_one]; rw [ENNReal.ofReal_one]; rw [one_mul]
+  rw [this]; rw [volume_pi_pi]; rw [Finset.abs_prod]; rw [ENNReal.ofReal_prod_of_nonneg fun i _ => abs_nonneg (D i)]; rw [← Finset.prod_mul_distrib]
+  simp only [B]
 
 中文:
 定理 smul_map_diagonal_volume_pi
@@ -1521,7 +1587,19 @@ theorem smul_map_diagonal_volume_pi
   rw [Measure.map_apply _ (MeasurableSet.univ_pi hs)]
   swap; · exact Continuous.measurable (LinearMap.continuous_on_pi _)
   have :
-    (Matrix.toLin' (diagonal D) ⁻¹' Set.pi Set.
+    (Matrix.toLin' (diagonal D) ⁻¹' Set.pi Set.univ fun i : ι => s i) =
+      Set.pi Set.univ fun i : ι => (D i * ·) ⁻¹' s i := by
+    ext f
+    simp only [LinearMap.coe_proj, smul_eq_mul, LinearMap.smul_apply, mem_univ_pi,
+      mem_preimage, LinearMap.pi_apply, diagonal_toLin']
+  have B : forall i, ofReal (abs (D i)) * volume ((D i * ·) ⁻¹' s i) = volume (s i) := by
+    intro i
+    have A : D i != 0 := by
+      simp only [det_diagonal, Ne] at h
+      exact Finset.prod_ne_zero_iff.1 h i (Finset.mem_univ i)
+    rw [volume_preimage_mul_left A]; rw [← mul_assoc]; rw [← ENNReal.ofReal_mul (abs_nonneg _)]; rw [← abs_mul]; rw [mul_inv_cancel₀ A]; rw [abs_one]; rw [ENNReal.ofReal_one]; rw [one_mul]
+  rw [this]; rw [volume_pi_pi]; rw [Finset.abs_prod]; rw [ENNReal.ofReal_prod_of_nonneg fun i _ => abs_nonneg (D i)]; rw [← Finset.prod_mul_distrib]
+  simp only [B]
 
 Depends on / 依赖: Continuous, Continuous.measurable, LinearMap, LinearMap.coe_proj, LinearMap.continuous_on_pi, LinearMap.pi_apply, LinearMap.smul_apply, Matrix, Matrix.toLin, MeasurableSet, MeasurableSet.univ_pi, Measure, Measure.coe_smul, Measure.map_apply, Measure.pi_eq, Pi.smul_apply, Set.pi, Set.univ, coe_proj, coe_smul
 -/
@@ -1559,7 +1637,18 @@ theorem volume_preserving_transvectionStruct
     translation, and therefore preserves Lebesgue. -/
   have ht : Measurable (toLin' t.toMatrix) :=
     (toLin' t.toMatrix).continuous_of_finiteDimensional.measurable
- 
+  refine ⟨ht, ?_⟩
+  refine (pi_eq fun s hs => ?_).symm
+  have h2s : MeasurableSet (univ.pi s) := .pi countable_univ fun i _ => hs i
+  simp_rw [← pi_pi, ← lintegral_indicator_one h2s]
+  rw [lintegral_map (measurable_one.indicator h2s) ht]; rw [volume_pi]
+  refine lintegral_eq_of_lmarginal_eq {t.i} ((measurable_one.indicator h2s).comp ht)
+    (measurable_one.indicator h2s) ?_
+  simp_rw [lmarginal_singleton]
+  ext x
+  cases t with | mk t_i t_j t_hij t_c =>
+  simp [transvection, single_mulVec, t_hij.symm, ← Function.update_add,
+    lintegral_add_right_eq_self fun xᵢ => indicator (univ.pi s) 1 (Function.update x t_i xᵢ)]
 
 中文:
 定理 volume_preserving_transvectionStruct
@@ -1570,7 +1659,18 @@ theorem volume_preserving_transvectionStruct
     translation, and therefore preserves Lebesgue. -/
   have ht : Measurable (toLin' t.toMatrix) :=
     (toLin' t.toMatrix).continuous_of_finiteDimensional.measurable
- 
+  refine ⟨ht, ?_⟩
+  refine (pi_eq fun s hs => ?_).symm
+  have h2s : MeasurableSet (univ.pi s) := .pi countable_univ fun i _ => hs i
+  simp_rw [← pi_pi, ← lintegral_indicator_one h2s]
+  rw [lintegral_map (measurable_one.indicator h2s) ht]; rw [volume_pi]
+  refine lintegral_eq_of_lmarginal_eq {t.i} ((measurable_one.indicator h2s).comp ht)
+    (measurable_one.indicator h2s) ?_
+  simp_rw [lmarginal_singleton]
+  ext x
+  cases t with | mk t_i t_j t_hij t_c =>
+  simp [transvection, single_mulVec, t_hij.symm, ← Function.update_add,
+    lintegral_add_right_eq_self fun xᵢ => indicator (univ.pi s) 1 (Function.update x t_i xᵢ)]
 -/
 theorem volume_preserving_transvectionStruct [DecidableEq ι] (t : TransvectionStruct ι Real) :
     MeasurePreserving (toLin' t.toMatrix) := by
@@ -1604,7 +1704,16 @@ theorem map_matrix_volume_pi_eq_smul_volume_pi
   apply diagonal_transvection_induction_of_det_ne_zero _ M hM
   · intro D hD
     conv_rhs => rw [← smul_map_diagonal_volume_pi hD]
-    rw [smul
+    rw [smul_smul]; rw [← ENNReal.ofReal_mul (abs_nonneg _)]; rw [← abs_mul]; rw [inv_mul_cancel₀ hD]; rw [abs_one]; rw [ENNReal.ofReal_one]; rw [one_smul]
+  · intro t
+    simp_rw [Matrix.TransvectionStruct.det, _root_.inv_one, abs_one, ENNReal.ofReal_one, one_smul,
+      (volume_preserving_transvectionStruct _).map_eq]
+  · intro A B _ _ IHA IHB
+    rw [toLin'_mul]; rw [det_mul]; rw [LinearMap.coe_comp]; rw [← Measure.map_map]; rw [IHB]; rw [Measure.map_smul]; rw [IHA]; rw [smul_smul]; rw [← ENNReal.ofReal_mul (abs_nonneg _)]; rw [← abs_mul]; rw [mul_comm]; rw [mul_inv]
+    · apply Continuous.measurable
+      apply LinearMap.continuous_on_pi
+    · apply Continuous.measurable
+      apply LinearMap.continuous_on_pi
 
 中文:
 定理 map_matrix_volume_pi_eq_smul_volume_pi
@@ -1615,7 +1724,16 @@ theorem map_matrix_volume_pi_eq_smul_volume_pi
   apply diagonal_transvection_induction_of_det_ne_zero _ M hM
   · intro D hD
     conv_rhs => rw [← smul_map_diagonal_volume_pi hD]
-    rw [smul
+    rw [smul_smul]; rw [← ENNReal.ofReal_mul (abs_nonneg _)]; rw [← abs_mul]; rw [inv_mul_cancel₀ hD]; rw [abs_one]; rw [ENNReal.ofReal_one]; rw [one_smul]
+  · intro t
+    simp_rw [Matrix.TransvectionStruct.det, _root_.inv_one, abs_one, ENNReal.ofReal_one, one_smul,
+      (volume_preserving_transvectionStruct _).map_eq]
+  · intro A B _ _ IHA IHB
+    rw [toLin'_mul]; rw [det_mul]; rw [LinearMap.coe_comp]; rw [← Measure.map_map]; rw [IHB]; rw [Measure.map_smul]; rw [IHA]; rw [smul_smul]; rw [← ENNReal.ofReal_mul (abs_nonneg _)]; rw [← abs_mul]; rw [mul_comm]; rw [mul_inv]
+    · apply Continuous.measurable
+      apply LinearMap.continuous_on_pi
+    · apply Continuous.measurable
+      apply LinearMap.continuous_on_pi
 -/
 theorem map_matrix_volume_pi_eq_smul_volume_pi [DecidableEq ι] {M : Matrix ι ι Real} (hM : det M != 0) :
     Measure.map (toLin' M) volume = ENNReal.ofReal (abs (det M)⁻¹) • volume := by
@@ -1648,7 +1766,8 @@ theorem map_linearMap_volume_pi_eq_smul_volume_pi
     have A : LinearMap.det f = det M := by simp only [M, LinearMap.det_toMatrix']
     have B : f = toLin' M := by simp only [M, toLin'_toMatrix']
     rw [A]; rw [B]
-    apply map_matrix_volume_pi_eq_smul_vo
+    apply map_matrix_volume_pi_eq_smul_volume_pi
+    rwa [A] at hf
 
 中文:
 定理 map_linearMap_volume_pi_eq_smul_volume_pi
@@ -1660,7 +1779,8 @@ theorem map_linearMap_volume_pi_eq_smul_volume_pi
     have A : LinearMap.det f = det M := by simp only [M, LinearMap.det_toMatrix']
     have B : f = toLin' M := by simp only [M, toLin'_toMatrix']
     rw [A]; rw [B]
-    apply map_matrix_volume_pi_eq_smul_vo
+    apply map_matrix_volume_pi_eq_smul_volume_pi
+    rwa [A] at hf
 
 Depends on / 依赖: classical
 -/
@@ -1905,7 +2025,13 @@ theorem volume_regionBetween_eq_lintegral'
         funext x
         rw [indicator_apply]
         split_ifs with h
-        · have hx : { a | x in s ∧ a in I
+        · have hx : { a | x in s ∧ a in Ioo (f x) (g x) } = Ioo (f x) (g x) := by simp [h, Ioo]
+          simp only [hx, Real.volume_Ioo]
+        · have hx : { a | x in s ∧ a in Ioo (f x) (g x) } = ∅ := by simp [h]
+          simp only [hx, measure_empty]
+      dsimp only [regionBetween, preimage_ofPred_eq]
+      rw [h]; rw [lintegral_indicator] <;> simp only [hs, Pi.sub_apply]
+    · exact measurableSet_regionBetween hf hg hs
 
 中文:
 定理 volume_regionBetween_eq_lintegral'
@@ -1919,7 +2045,13 @@ theorem volume_regionBetween_eq_lintegral'
         funext x
         rw [indicator_apply]
         split_ifs with h
-        · have hx : { a | x in s ∧ a in I
+        · have hx : { a | x in s ∧ a in Ioo (f x) (g x) } = Ioo (f x) (g x) := by simp [h, Ioo]
+          simp only [hx, Real.volume_Ioo]
+        · have hx : { a | x in s ∧ a in Ioo (f x) (g x) } = ∅ := by simp [h]
+          simp only [hx, measure_empty]
+      dsimp only [regionBetween, preimage_ofPred_eq]
+      rw [h]; rw [lintegral_indicator] <;> simp only [hs, Pi.sub_apply]
+    · exact measurableSet_regionBetween hf hg hs
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, Measure, Measure.prod_apply, Real.volume_Ioo, classical, indicator, indicator_apply, lintegral_indic, measure_empty, ofReal, preimage_ofPred_eq, prod_apply, regionBetween, s.indicator, split_ifs, volume, volume_Ioo
 -/
@@ -1955,7 +2087,22 @@ theorem volume_regionBetween_eq_lintegral
     (hg.ae_eq_mk.sub hf.ae_eq_mk).fun_comp ENNReal.ofReal
   have h₂ :
     (μ.restrict s).prod volume (regionBetween f g s) =
-      (μ.restrict 
+      (μ.restrict s).prod volume
+        (regionBetween (AEMeasurable.mk f hf) (AEMeasurable.mk g hg) s) := by
+    apply measure_congr
+    apply EventuallyEq.rfl.inter
+    exact
+      ((quasiMeasurePreserving_fst.ae_eq_comp hf.ae_eq_mk).comp₂ _ EventuallyEq.rfl).inter
+        (EventuallyEq.rfl.comp₂ _ <| quasiMeasurePreserving_fst.ae_eq_comp hg.ae_eq_mk)
+  rw [lintegral_congr_ae h₁]; rw [←
+    volume_regionBetween_eq_lintegral' hf.measurable_mk hg.measurable_mk hs]
+  convert! h₂ using 1
+  · rw [Measure.restrict_prod_eq_prod_univ]
+    exact (Measure.restrict_eq_self _ (regionBetween_subset f g s)).symm
+  · rw [Measure.restrict_prod_eq_prod_univ]
+    exact
+      (Measure.restrict_eq_self _
+          (regionBetween_subset (AEMeasurable.mk f hf) (AEMeasurable.mk g hg) s)).symm
 
 中文:
 定理 volume_regionBetween_eq_lintegral
@@ -1967,7 +2114,22 @@ theorem volume_regionBetween_eq_lintegral
     (hg.ae_eq_mk.sub hf.ae_eq_mk).fun_comp ENNReal.ofReal
   have h₂ :
     (μ.restrict s).prod volume (regionBetween f g s) =
-      (μ.restrict 
+      (μ.restrict s).prod volume
+        (regionBetween (AEMeasurable.mk f hf) (AEMeasurable.mk g hg) s) := by
+    apply measure_congr
+    apply EventuallyEq.rfl.inter
+    exact
+      ((quasiMeasurePreserving_fst.ae_eq_comp hf.ae_eq_mk).comp₂ _ EventuallyEq.rfl).inter
+        (EventuallyEq.rfl.comp₂ _ <| quasiMeasurePreserving_fst.ae_eq_comp hg.ae_eq_mk)
+  rw [lintegral_congr_ae h₁]; rw [←
+    volume_regionBetween_eq_lintegral' hf.measurable_mk hg.measurable_mk hs]
+  convert! h₂ using 1
+  · rw [Measure.restrict_prod_eq_prod_univ]
+    exact (Measure.restrict_eq_self _ (regionBetween_subset f g s)).symm
+  · rw [Measure.restrict_prod_eq_prod_univ]
+    exact
+      (Measure.restrict_eq_self _
+          (regionBetween_subset (AEMeasurable.mk f hf) (AEMeasurable.mk g hg) s)).symm
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.mk, ENNReal, ENNReal.ofReal, EventuallyEq, EventuallyEq.rfl, EventuallyEq.rfl.inter, ae_eq_comp, ae_eq_mk, fun_comp, hf.ae_eq_mk, hg.ae_eq_mk.sub, measure_congr, ofReal, quasiMeasurePreserving_fst, quasiMeasurePreserving_fst.ae_eq_comp, regionBetween, restrict, volume
 -/
@@ -2040,7 +2202,10 @@ lemma nullMeasurableSet_region_between_oc
           (s_mble.preimage quasiMeasurePreserving_fst) (NullMeasurableSet.inter ?_ ?_)
   · exact nullMeasurableSet_lt (by fun_prop) measurable_snd.aemeasurable
   · change NullMeasurableSet {p : α × Real | p.snd <= g p.fst} (μ.prod volume)
-    rw [show {p : α × Rea
+    rw [show {p : α × Real | p.snd <= g p.fst} = {p : α × Real | g p.fst < p.snd}ᶜ by
+          ext p
+          simp]
+    exact (nullMeasurableSet_lt (by fun_prop) measurable_snd.aemeasurable).compl
 
 中文:
 引理 nullMeasurableSet_region_between_oc
@@ -2050,7 +2215,10 @@ lemma nullMeasurableSet_region_between_oc
           (s_mble.preimage quasiMeasurePreserving_fst) (NullMeasurableSet.inter ?_ ?_)
   · exact nullMeasurableSet_lt (by fun_prop) measurable_snd.aemeasurable
   · change NullMeasurableSet {p : α × Real | p.snd <= g p.fst} (μ.prod volume)
-    rw [show {p : α × Rea
+    rw [show {p : α × Real | p.snd <= g p.fst} = {p : α × Real | g p.fst < p.snd}ᶜ by
+          ext p
+          simp]
+    exact (nullMeasurableSet_lt (by fun_prop) measurable_snd.aemeasurable).compl
 
 Depends on / 依赖: NullMeasurableSet, NullMeasurableSet.inter, aemeasurable, fun_prop, measurable_snd, measurable_snd.aemeasurable, nullMeasurableSet_lt, p.fst, p.snd, preimage, quasiMeasurePreserving_fst, s_mble, s_mble.preimage, volume
 -/
@@ -2078,7 +2246,10 @@ lemma nullMeasurableSet_region_between_co
           (s_mble.preimage quasiMeasurePreserving_fst) (NullMeasurableSet.inter ?_ ?_)
   · change NullMeasurableSet {p : α × Real | f p.fst <= p.snd} (μ.prod volume)
     rw [show {p : α × Real | f p.fst <= p.snd} = {p : α × Real | p.snd < f p.fst}ᶜ by
-          ex
+          ext p
+          simp]
+    exact (nullMeasurableSet_lt measurable_snd.aemeasurable (by fun_prop)).compl
+  · exact nullMeasurableSet_lt measurable_snd.aemeasurable (by fun_prop)
 
 中文:
 引理 nullMeasurableSet_region_between_co
@@ -2088,7 +2259,10 @@ lemma nullMeasurableSet_region_between_co
           (s_mble.preimage quasiMeasurePreserving_fst) (NullMeasurableSet.inter ?_ ?_)
   · change NullMeasurableSet {p : α × Real | f p.fst <= p.snd} (μ.prod volume)
     rw [show {p : α × Real | f p.fst <= p.snd} = {p : α × Real | p.snd < f p.fst}ᶜ by
-          ex
+          ext p
+          simp]
+    exact (nullMeasurableSet_lt measurable_snd.aemeasurable (by fun_prop)).compl
+  · exact nullMeasurableSet_lt measurable_snd.aemeasurable (by fun_prop)
 
 Depends on / 依赖: NullMeasurableSet, NullMeasurableSet.inter, aemeasurable, fun_prop, measurable_snd, measurable_snd.aemeasurable, nullMeasurableSet_lt, p.fst, p.snd, preimage, quasiMeasurePreserving_fst, s_mble, s_mble.preimage, volume
 -/
@@ -2116,7 +2290,14 @@ lemma nullMeasurableSet_region_between_cc
           (s_mble.preimage quasiMeasurePreserving_fst) (NullMeasurableSet.inter ?_ ?_)
   · change NullMeasurableSet {p : α × Real | f p.fst <= p.snd} (μ.prod volume)
     rw [show {p : α × Real | f p.fst <= p.snd} = {p : α × Real | p.snd < f p.fst}ᶜ by
-          ex
+          ext p
+          simp]
+    exact (nullMeasurableSet_lt measurable_snd.aemeasurable (by fun_prop)).compl
+  · change NullMeasurableSet {p : α × Real | p.snd <= g p.fst} (μ.prod volume)
+    rw [show {p : α × Real | p.snd <= g p.fst} = {p : α × Real | g p.fst < p.snd}ᶜ by
+          ext p
+          simp]
+    exact (nullMeasurableSet_lt (by fun_prop) measurable_snd.aemeasurable).compl
 
 中文:
 引理 nullMeasurableSet_region_between_cc
@@ -2126,7 +2307,14 @@ lemma nullMeasurableSet_region_between_cc
           (s_mble.preimage quasiMeasurePreserving_fst) (NullMeasurableSet.inter ?_ ?_)
   · change NullMeasurableSet {p : α × Real | f p.fst <= p.snd} (μ.prod volume)
     rw [show {p : α × Real | f p.fst <= p.snd} = {p : α × Real | p.snd < f p.fst}ᶜ by
-          ex
+          ext p
+          simp]
+    exact (nullMeasurableSet_lt measurable_snd.aemeasurable (by fun_prop)).compl
+  · change NullMeasurableSet {p : α × Real | p.snd <= g p.fst} (μ.prod volume)
+    rw [show {p : α × Real | p.snd <= g p.fst} = {p : α × Real | g p.fst < p.snd}ᶜ by
+          ext p
+          simp]
+    exact (nullMeasurableSet_lt (by fun_prop) measurable_snd.aemeasurable).compl
 
 Depends on / 依赖: NullMeasurableSet, NullMeasurableSet.inter, aemeasurable, fun_prop, measurable_snd, measurable_snd.aemeasurable, nullMeasurableSet_lt, p.fst, p.snd, preimage, quasiMeasurePreserving_fst, s_mble, s_mble.preimage, volume
 -/
@@ -2160,7 +2348,29 @@ theorem ae_restrict_of_ae_restrict_inter_Ioo
     two endpoints, which don't matter since `μ` does not have any atom). -/
   let T : s × s -> Set Real := fun p => Ioo p.1 p.2
   let u := ⋃ i : ↥s × ↥s, T i
-  have hfinite : (s \ u).Finite := s.finit
+  have hfinite : (s \ u).Finite := s.finite_sdiff_iUnion_Ioo'
+  obtain ⟨A, A_count, hA⟩ :
+    exists A : Set (↥s × ↥s), A.Countable ∧ ⋃ i in A, T i = ⋃ i : ↥s × ↥s, T i :=
+    isOpen_iUnion_countable _ fun p => isOpen_Ioo
+  have : s subseteq s \ u union ⋃ p in A, s inter T p := by
+    intro x hx
+    by_cases h'x : x in ⋃ i : ↥s × ↥s, T i
+    · rw [← hA] at h'x
+      obtain ⟨p, pA, xp⟩ : exists p : ↥s × ↥s, p in A ∧ x in T p := by
+        simpa only [mem_iUnion, exists_prop, SetCoe.exists, exists_and_right] using h'x
+      right
+      exact mem_biUnion pA ⟨hx, xp⟩
+    · exact Or.inl ⟨hx, h'x⟩
+  apply ae_restrict_of_ae_restrict_of_subset this
+  rw [ae_restrict_union_iff]; rw [ae_restrict_biUnion_iff _ A_count]
+  constructor
+  · have : μ.restrict (s \ u) = 0 := by simp only [restrict_eq_zero, hfinite.measure_zero]
+    simp only [this, ae_zero, eventually_bot]
+  · rintro ⟨⟨a, as⟩, ⟨b, bs⟩⟩ -
+    dsimp [T]
+    rcases le_or_gt b a with (hba | hab)
+    · simp only [Ioo_eq_empty_of_le hba, inter_empty, restrict_empty, ae_zero, eventually_bot]
+    · exact h a b as bs hab
 
 中文:
 定理 ae_restrict_of_ae_restrict_inter_Ioo
@@ -2170,7 +2380,29 @@ theorem ae_restrict_of_ae_restrict_inter_Ioo
     two endpoints, which don't matter since `μ` does not have any atom). -/
   let T : s × s -> Set Real := fun p => Ioo p.1 p.2
   let u := ⋃ i : ↥s × ↥s, T i
-  have hfinite : (s \ u).Finite := s.finit
+  have hfinite : (s \ u).Finite := s.finite_sdiff_iUnion_Ioo'
+  obtain ⟨A, A_count, hA⟩ :
+    exists A : Set (↥s × ↥s), A.Countable ∧ ⋃ i in A, T i = ⋃ i : ↥s × ↥s, T i :=
+    isOpen_iUnion_countable _ fun p => isOpen_Ioo
+  have : s subseteq s \ u union ⋃ p in A, s inter T p := by
+    intro x hx
+    by_cases h'x : x in ⋃ i : ↥s × ↥s, T i
+    · rw [← hA] at h'x
+      obtain ⟨p, pA, xp⟩ : exists p : ↥s × ↥s, p in A ∧ x in T p := by
+        simpa only [mem_iUnion, exists_prop, SetCoe.exists, exists_and_right] using h'x
+      right
+      exact mem_biUnion pA ⟨hx, xp⟩
+    · exact Or.inl ⟨hx, h'x⟩
+  apply ae_restrict_of_ae_restrict_of_subset this
+  rw [ae_restrict_union_iff]; rw [ae_restrict_biUnion_iff _ A_count]
+  constructor
+  · have : μ.restrict (s \ u) = 0 := by simp only [restrict_eq_zero, hfinite.measure_zero]
+    simp only [this, ae_zero, eventually_bot]
+  · rintro ⟨⟨a, as⟩, ⟨b, bs⟩⟩ -
+    dsimp [T]
+    rcases le_or_gt b a with (hba | hab)
+    · simp only [Ioo_eq_empty_of_le hba, inter_empty, restrict_empty, ae_zero, eventually_bot]
+    · exact h a b as bs hab
 -/
 theorem ae_restrict_of_ae_restrict_inter_Ioo {μ : Measure Real} [NullSingletonClass μ] {s : Set Real}
     {p : Real -> Prop} (h : forall a b, a in s -> b in s -> a < b -> forallᵐ x ∂μ.restrict (s inter Ioo a b), p x) :
@@ -2214,7 +2446,27 @@ theorem ae_of_mem_of_ae_of_mem_inter_Ioo
     two endpoints, which don't matter since `μ` does not have any atom). -/
   let T : s × s -> Set Real := fun p => Ioo p.1 p.2
   let u := ⋃ i : ↥s × ↥s, T i
-  have hfinite : (s \ u).Finite := s.finit
+  have hfinite : (s \ u).Finite := s.finite_sdiff_iUnion_Ioo'
+  obtain ⟨A, A_count, hA⟩ :
+    exists A : Set (↥s × ↥s), A.Countable ∧ ⋃ i in A, T i = ⋃ i : ↥s × ↥s, T i :=
+    isOpen_iUnion_countable _ fun p => isOpen_Ioo
+  have M : forallᵐ x ∂μ, x ∉ s \ u := hfinite.countable.ae_notMem _
+  have M' : forallᵐ x ∂μ, forall (i : ↥s × ↥s), i in A -> x in s inter T i -> p x := by
+    rw [ae_ball_iff A_count]
+    rintro ⟨⟨a, as⟩, ⟨b, bs⟩⟩ -
+    change forallᵐ x : Real ∂μ, x in s inter Ioo a b -> p x
+    rcases le_or_gt b a with (hba | hab)
+    · simp only [Ioo_eq_empty_of_le hba, inter_empty, IsEmpty.forall_iff, eventually_true,
+        mem_empty_iff_false]
+    · exact h a b as bs hab
+  filter_upwards [M, M'] with x hx h'x
+  intro xs
+  by_cases Hx : x in ⋃ i : ↥s × ↥s, T i
+  · rw [← hA] at Hx
+    obtain ⟨p, pA, xp⟩ : exists p : ↥s × ↥s, p in A ∧ x in T p := by
+      simpa only [mem_iUnion, exists_prop, SetCoe.exists, exists_and_right] using Hx
+    apply h'x p pA ⟨xs, xp⟩
+  · exact False.elim (hx ⟨xs, Hx⟩)
 
 中文:
 定理 ae_of_mem_of_ae_of_mem_inter_Ioo
@@ -2224,7 +2476,27 @@ theorem ae_of_mem_of_ae_of_mem_inter_Ioo
     two endpoints, which don't matter since `μ` does not have any atom). -/
   let T : s × s -> Set Real := fun p => Ioo p.1 p.2
   let u := ⋃ i : ↥s × ↥s, T i
-  have hfinite : (s \ u).Finite := s.finit
+  have hfinite : (s \ u).Finite := s.finite_sdiff_iUnion_Ioo'
+  obtain ⟨A, A_count, hA⟩ :
+    exists A : Set (↥s × ↥s), A.Countable ∧ ⋃ i in A, T i = ⋃ i : ↥s × ↥s, T i :=
+    isOpen_iUnion_countable _ fun p => isOpen_Ioo
+  have M : forallᵐ x ∂μ, x ∉ s \ u := hfinite.countable.ae_notMem _
+  have M' : forallᵐ x ∂μ, forall (i : ↥s × ↥s), i in A -> x in s inter T i -> p x := by
+    rw [ae_ball_iff A_count]
+    rintro ⟨⟨a, as⟩, ⟨b, bs⟩⟩ -
+    change forallᵐ x : Real ∂μ, x in s inter Ioo a b -> p x
+    rcases le_or_gt b a with (hba | hab)
+    · simp only [Ioo_eq_empty_of_le hba, inter_empty, IsEmpty.forall_iff, eventually_true,
+        mem_empty_iff_false]
+    · exact h a b as bs hab
+  filter_upwards [M, M'] with x hx h'x
+  intro xs
+  by_cases Hx : x in ⋃ i : ↥s × ↥s, T i
+  · rw [← hA] at Hx
+    obtain ⟨p, pA, xp⟩ : exists p : ↥s × ↥s, p in A ∧ x in T p := by
+      simpa only [mem_iUnion, exists_prop, SetCoe.exists, exists_and_right] using Hx
+    apply h'x p pA ⟨xs, xp⟩
+  · exact False.elim (hx ⟨xs, Hx⟩)
 -/
 theorem ae_of_mem_of_ae_of_mem_inter_Ioo {μ : Measure Real} [NullSingletonClass μ] {s : Set Real}
     {p : Real -> Prop} (h : forall a b, a in s -> b in s -> a < b -> forallᵐ x ∂μ, x in s inter Ioo a b -> p x) :

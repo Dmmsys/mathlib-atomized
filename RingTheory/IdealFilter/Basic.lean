@@ -359,7 +359,9 @@ lemma isPFilter_gabrielComposition
   · rintro I ⟨K, hK, hIK⟩ J ⟨L, hL, hJL⟩
     refine ⟨I ⊓ J, ?_, inf_le_left, inf_le_right⟩
     exact ⟨K ⊓ L, G.inf_mem hK hL,
-      (hIK.anti_right inf_le_l
+      (hIK.anti_right inf_le_left).inf (hJL.anti_right inf_le_right)⟩
+  · intro I J hIJ ⟨K, hK, hIK⟩
+    exact ⟨K, hK, hIK.mono_left hIJ⟩
 
 中文:
 引理 isPFilter_gabrielComposition
@@ -371,7 +373,9 @@ lemma isPFilter_gabrielComposition
   · rintro I ⟨K, hK, hIK⟩ J ⟨L, hL, hJL⟩
     refine ⟨I ⊓ J, ?_, inf_le_left, inf_le_right⟩
     exact ⟨K ⊓ L, G.inf_mem hK hL,
-      (hIK.anti_right inf_le_l
+      (hIK.anti_right inf_le_left).inf (hJL.anti_right inf_le_right)⟩
+  · intro I J hIJ ⟨K, hK, hIK⟩
+    exact ⟨K, hK, hIK.mono_left hIJ⟩
 
 Depends on / 依赖: G.inf_mem, G.nonempty, IsPFilter, Order.IsPFilter.of_def, anti_right, directed, hIK.anti_right, hIK.mono_left, hJL.anti_right, inf_le_left, inf_le_right, inf_mem, isTorsionQuot_self, mem_of_le, mono_left, nonempty, of_def
 -/
@@ -446,7 +450,11 @@ theorem isGabriel_iff
       refine hF.gabriel_closed I ⟨J, hJ, fun x hx => ?_⟩
       rcases htors x hx with ⟨K, hK, hincl⟩
       exact Order.PFilter.mem_of_le hincl hK
-    · exact ⟨I, h
+    · exact ⟨I, hI, isTorsionQuot_self F I⟩
+  · rintro ⟨h₁, h₂⟩
+    refine { toIsUniform := h₁, gabriel_closed := ?_ }
+    rintro I ⟨J, hJ, hcolon⟩
+    exact h₂.le ⟨J, hJ, fun x hx => ⟨I.colon {x}, hcolon x hx, by simp⟩⟩
 
 中文:
 定理 isGabriel_iff
@@ -462,7 +470,11 @@ theorem isGabriel_iff
       refine hF.gabriel_closed I ⟨J, hJ, fun x hx => ?_⟩
       rcases htors x hx with ⟨K, hK, hincl⟩
       exact Order.PFilter.mem_of_le hincl hK
-    · exact ⟨I, h
+    · exact ⟨I, hI, isTorsionQuot_self F I⟩
+  · rintro ⟨h₁, h₂⟩
+    refine { toIsUniform := h₁, gabriel_closed := ?_ }
+    rintro I ⟨J, hJ, hcolon⟩
+    exact h₂.le ⟨J, hJ, fun x hx => ⟨I.colon {x}, hcolon x hx, by simp⟩⟩
 
 Depends on / 依赖: I.colon, Order.PFilter.mem_of_le, PFilter, gabriel_closed, hF.gabriel_closed, hF.toIsUniform, hcolon, isTorsionQuot_self, mem_of_le, toIsUniform
 -/

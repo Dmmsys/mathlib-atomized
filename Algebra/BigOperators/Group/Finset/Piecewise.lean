@@ -36,7 +36,16 @@ theorem prod_apply_dite
         (∏ x in s with p x, h (if hx : p x then f x hx else g x hx)) *
           ∏ x in s with ¬p x, h (if hx : p x then f x hx else g x hx) :=
       (prod_filter_mul_prod_filter_not s p _).symm
-    _ = (∏ x : {x in s | p x}, h (if hx : 
+    _ = (∏ x : {x in s | p x}, h (if hx : p x.1 then f x.1 hx else g x.1 hx)) *
+          ∏ x : {x in s | ¬p x}, h (if hx : p x.1 then f x.1 hx else g x.1 hx) :=
+      congr_arg₂ _ (prod_attach _ _).symm (prod_attach _ _).symm
+    _ = (∏ x : {x in s | p x}, h (f x.1 <| by simpa using (mem_filter.mp x.2).2)) *
+          ∏ x : {x in s | ¬p x}, h (g x.1 <| by simpa using (mem_filter.mp x.2).2) :=
+      congr_arg₂ _ (prod_congr rfl fun x _hx =>
+        congr_arg h (dif_pos <| by simpa using (mem_filter.mp x.2).2))
+        (prod_congr rfl fun x _hx => congr_arg h (dif_neg <| by simpa using (mem_filter.mp x.2).2))
+
+@[to_additive]
 
 中文:
 定理 prod_apply_dite
@@ -46,7 +55,16 @@ theorem prod_apply_dite
         (∏ x in s with p x, h (if hx : p x then f x hx else g x hx)) *
           ∏ x in s with ¬p x, h (if hx : p x then f x hx else g x hx) :=
       (prod_filter_mul_prod_filter_not s p _).symm
-    _ = (∏ x : {x in s | p x}, h (if hx : 
+    _ = (∏ x : {x in s | p x}, h (if hx : p x.1 then f x.1 hx else g x.1 hx)) *
+          ∏ x : {x in s | ¬p x}, h (if hx : p x.1 then f x.1 hx else g x.1 hx) :=
+      congr_arg₂ _ (prod_attach _ _).symm (prod_attach _ _).symm
+    _ = (∏ x : {x in s | p x}, h (f x.1 <| by simpa using (mem_filter.mp x.2).2)) *
+          ∏ x : {x in s | ¬p x}, h (g x.1 <| by simpa using (mem_filter.mp x.2).2) :=
+      congr_arg₂ _ (prod_congr rfl fun x _hx =>
+        congr_arg h (dif_pos <| by simpa using (mem_filter.mp x.2).2))
+        (prod_congr rfl fun x _hx => congr_arg h (dif_neg <| by simpa using (mem_filter.mp x.2).2))
+
+@[to_additive]
 
 Depends on / 依赖: mem_filt, prod_attach, prod_filter_mul_prod_filter_not
 -/
@@ -696,7 +714,9 @@ theorem prod_eq_mul_prod_sdiff_singleton
     apply Finset.prod_congr <;> aesop
 
 @[deprecated (since := "2026-06-03")]
-alias prod_eq_mul_prod_diff_singleton := prod_eq_mul_prod_sdiff_si
+alias prod_eq_mul_prod_diff_singleton := prod_eq_mul_prod_sdiff_singleton
+
+@[to_additive]
 
 中文:
 定理 prod_eq_mul_prod_sdiff_singleton
@@ -709,7 +729,9 @@ alias prod_eq_mul_prod_diff_singleton := prod_eq_mul_prod_sdiff_si
     apply Finset.prod_congr <;> aesop
 
 @[deprecated (since := "2026-06-03")]
-alias prod_eq_mul_prod_diff_singleton := prod_eq_mul_prod_sdiff_si
+alias prod_eq_mul_prod_diff_singleton := prod_eq_mul_prod_sdiff_singleton
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.prod_congr, convert, forall_const, not_false_eq_true, one_mul, prod_congr, prod_inter_mul_prod_sdiff, s.prod_inter_mul_prod_sdiff
 -/

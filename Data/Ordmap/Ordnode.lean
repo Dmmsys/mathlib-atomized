@@ -468,7 +468,26 @@ definition balanceL
         · exact node 2 l x nil
         · exact node 3 (ι lx) lrx ι x
       · rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
-        · exact node 3
+        · exact node 3 ll lx ι x
+        · exact
+            if lrs < ratio * lls then node (ls + 1) ll lx (node (lrs + 1) lr x nil)
+            else
+              node (ls + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
+                (node (size lrr + 1) lrr x nil)
+  · rcases id l with _ | ⟨ls, ll, lx, lr⟩
+    · exact node (rs + 1) nil x r
+    · refine if ls > delta * rs then ?_ else node (ls + rs + 1) l x r
+      rcases id ll with _ | lls
+      · exact nil
+      --should not happen
+      rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
+      · exact nil
+      --should not happen
+      exact
+        if lrs < ratio * lls then node (ls + rs + 1) ll lx (node (rs + lrs + 1) lr x r)
+        else
+          node (ls + rs + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
+            (node (size lrr + rs + 1) lrr x r)
 
 中文:
 定义 balanceL
@@ -482,7 +501,26 @@ definition balanceL
         · exact node 2 l x nil
         · exact node 3 (ι lx) lrx ι x
       · rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
-        · exact node 3
+        · exact node 3 ll lx ι x
+        · exact
+            if lrs < ratio * lls then node (ls + 1) ll lx (node (lrs + 1) lr x nil)
+            else
+              node (ls + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
+                (node (size lrr + 1) lrr x nil)
+  · rcases id l with _ | ⟨ls, ll, lx, lr⟩
+    · exact node (rs + 1) nil x r
+    · refine if ls > delta * rs then ?_ else node (ls + rs + 1) l x r
+      rcases id ll with _ | lls
+      · exact nil
+      --should not happen
+      rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
+      · exact nil
+      --should not happen
+      exact
+        if lrs < ratio * lls then node (ls + rs + 1) ll lx (node (rs + lrs + 1) lr x r)
+        else
+          node (ls + rs + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
+            (node (size lrr + rs + 1) lrr x r)
 -/
 def balanceL (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α := by
   rcases id r with _ | rs
@@ -529,7 +567,26 @@ definition balanceR
         · exact node 2 nil x r
         · exact node 3 (ι x) rlx ι rx
       · rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
-        · exact node 3
+        · exact node 3 (ι x) rx rr
+        · exact
+            if rls < ratio * rrs then node (rs + 1) (node (rls + 1) nil x rl) rx rr
+            else
+              node (rs + 1) (node (size rll + 1) nil x rll) rlx
+                (node (size rlr + rrs + 1) rlr rx rr)
+  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
+    · exact node (ls + 1) l x nil
+    · refine if rs > delta * ls then ?_ else node (ls + rs + 1) l x r
+      rcases id rr with _ | rrs
+      · exact nil
+      --should not happen
+      rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
+      · exact nil
+      --should not happen
+      exact
+        if rls < ratio * rrs then node (ls + rs + 1) (node (ls + rls + 1) l x rl) rx rr
+        else
+          node (ls + rs + 1) (node (ls + size rll + 1) l x rll) rlx
+            (node (size rlr + rrs + 1) rlr rx rr)
 
 中文:
 定义 balanceR
@@ -543,7 +600,26 @@ definition balanceR
         · exact node 2 nil x r
         · exact node 3 (ι x) rlx ι rx
       · rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
-        · exact node 3
+        · exact node 3 (ι x) rx rr
+        · exact
+            if rls < ratio * rrs then node (rs + 1) (node (rls + 1) nil x rl) rx rr
+            else
+              node (rs + 1) (node (size rll + 1) nil x rll) rlx
+                (node (size rlr + rrs + 1) rlr rx rr)
+  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
+    · exact node (ls + 1) l x nil
+    · refine if rs > delta * ls then ?_ else node (ls + rs + 1) l x r
+      rcases id rr with _ | rrs
+      · exact nil
+      --should not happen
+      rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
+      · exact nil
+      --should not happen
+      exact
+        if rls < ratio * rrs then node (ls + rs + 1) (node (ls + rls + 1) l x rl) rx rr
+        else
+          node (ls + rs + 1) (node (ls + size rll + 1) l x rll) rlx
+            (node (size rlr + rrs + 1) rlr rx rr)
 -/
 def balanceR (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α := by
   rcases id l with _ | ls
@@ -590,7 +666,48 @@ definition balance
         · exact node 2 nil x r
         · exact node 3 (ι x) rx rr
       · rcases id rr with _ | rrs
-        · exact node 3 (ι x) r
+        · exact node 3 (ι x) rlx ι rx
+        · exact
+            if rls < ratio * rrs then node (rs + 1) (node (rls + 1) nil x rl) rx rr
+            else
+              node (rs + 1) (node (size rll + 1) nil x rll) rlx
+                (node (size rlr + rrs + 1) rlr rx rr)
+  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
+    · rcases id ll with _ | lls
+      · rcases lr with _ | ⟨_, _, lrx⟩
+        · exact node 2 l x nil
+        · exact node 3 (ι lx) lrx ι x
+      · rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
+        · exact node 3 ll lx ι x
+        · exact
+            if lrs < ratio * lls then node (ls + 1) ll lx (node (lrs + 1) lr x nil)
+            else
+              node (ls + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
+                (node (size lrr + 1) lrr x nil)
+    · refine
+        if delta * ls < rs then ?_ else if delta * rs < ls then ?_ else node (ls + rs + 1) l x r
+      · rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
+        · exact nil
+        --should not happen
+        rcases id rr with _ | rrs
+        · exact nil
+        --should not happen
+        exact
+          if rls < ratio * rrs then node (ls + rs + 1) (node (ls + rls + 1) l x rl) rx rr
+          else
+            node (ls + rs + 1) (node (ls + size rll + 1) l x rll) rlx
+              (node (size rlr + rrs + 1) rlr rx rr)
+      · rcases id ll with _ | lls
+        · exact nil
+        --should not happen
+        rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
+        · exact nil
+        --should not happen
+        exact
+          if lrs < ratio * lls then node (ls + rs + 1) ll lx (node (lrs + rs + 1) lr x r)
+          else
+            node (ls + rs + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
+              (node (size lrr + rs + 1) lrr x r)
 
 中文:
 定义 balance
@@ -604,7 +721,48 @@ definition balance
         · exact node 2 nil x r
         · exact node 3 (ι x) rx rr
       · rcases id rr with _ | rrs
-        · exact node 3 (ι x) r
+        · exact node 3 (ι x) rlx ι rx
+        · exact
+            if rls < ratio * rrs then node (rs + 1) (node (rls + 1) nil x rl) rx rr
+            else
+              node (rs + 1) (node (size rll + 1) nil x rll) rlx
+                (node (size rlr + rrs + 1) rlr rx rr)
+  · rcases id r with _ | ⟨rs, rl, rx, rr⟩
+    · rcases id ll with _ | lls
+      · rcases lr with _ | ⟨_, _, lrx⟩
+        · exact node 2 l x nil
+        · exact node 3 (ι lx) lrx ι x
+      · rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
+        · exact node 3 ll lx ι x
+        · exact
+            if lrs < ratio * lls then node (ls + 1) ll lx (node (lrs + 1) lr x nil)
+            else
+              node (ls + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
+                (node (size lrr + 1) lrr x nil)
+    · refine
+        if delta * ls < rs then ?_ else if delta * rs < ls then ?_ else node (ls + rs + 1) l x r
+      · rcases id rl with _ | ⟨rls, rll, rlx, rlr⟩
+        · exact nil
+        --should not happen
+        rcases id rr with _ | rrs
+        · exact nil
+        --should not happen
+        exact
+          if rls < ratio * rrs then node (ls + rs + 1) (node (ls + rls + 1) l x rl) rx rr
+          else
+            node (ls + rs + 1) (node (ls + size rll + 1) l x rll) rlx
+              (node (size rlr + rrs + 1) rlr rx rr)
+      · rcases id ll with _ | lls
+        · exact nil
+        --should not happen
+        rcases id lr with _ | ⟨lrs, lrl, lrx, lrr⟩
+        · exact nil
+        --should not happen
+        exact
+          if lrs < ratio * lls then node (ls + rs + 1) ll lx (node (lrs + rs + 1) lr x r)
+          else
+            node (ls + rs + 1) (node (lls + size lrl + 1) ll lx lrl) lrx
+              (node (size lrr + rs + 1) lrr x r)
 -/
 def balance (l : Ordnode α) (x : α) (r : Ordnode α) : Ordnode α := by
   rcases id l with _ | ⟨ls, ll, lx, lr⟩
@@ -1022,7 +1180,8 @@ definition merge
         fun rs rl rx rr IHrl _ =>
           if delta * ls < rs then balanceL IHrl rx rr
           else
-            if del
+            if delta * rs < ls then balanceR ll lx (IHlr <| node rs rl rx rr)
+            else glue (node ls ll lx lr) (node rs rl rx rr)
 
 中文:
 定义 merge
@@ -1033,7 +1192,8 @@ definition merge
         fun rs rl rx rr IHrl _ =>
           if delta * ls < rs then balanceL IHrl rx rr
           else
-            if del
+            if delta * rs < ls then balanceR ll lx (IHlr <| node rs rl rx rr)
+            else glue (node ls ll lx lr) (node rs rl rx rr)
 
 Depends on / 依赖: Ordnode, Ordnode.recOn, balanceL, balanceR, motive
 -/

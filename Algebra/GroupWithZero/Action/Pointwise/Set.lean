@@ -348,7 +348,7 @@ instance [Zero
     rw [Ne]; rw [← hst.of_smul_left.subset_zero_iff]; rw [Ne]; rw [← hst.of_smul_right.subset_zero_iff] at H
     simp only [not_subset, mem_zero] at H
     obtain ⟨⟨a, hs, ha⟩, b, ht, hb⟩ := H
-    exact (eq_zero_or_eq_z
+    exact (eq_zero_or_eq_zero_of_mul_eq_zero <| h.subset <| mul_mem_mul hs ht).elim ha hb
 
 中文:
 实例 [零
@@ -359,7 +359,7 @@ instance [Zero
     rw [Ne]; rw [← hst.of_smul_left.subset_zero_iff]; rw [Ne]; rw [← hst.of_smul_right.subset_zero_iff] at H
     simp only [not_subset, mem_zero] at H
     obtain ⟨⟨a, hs, ha⟩, b, ht, hb⟩ := H
-    exact (eq_zero_or_eq_z
+    exact (eq_zero_or_eq_zero_of_mul_eq_zero <| h.subset <| mul_mem_mul hs ht).elim ha hb
 
 Depends on / 依赖: Nonempty, eq_zero_or_eq_zero_of_mul_eq_zero, h.subset, h.symm.subst, hst.of_smul_left.subset_zero_iff, hst.of_smul_right.subset_zero_iff, mem_zero, mul_mem_mul, not_subset, of_smul_left, of_smul_right, subset, subset_zero_iff, zero_nonempty
 -/

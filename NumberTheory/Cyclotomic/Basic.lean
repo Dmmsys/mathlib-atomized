@@ -272,7 +272,19 @@ theorem trans
       refine ⟨algebraMap B C b, ?_⟩
       exact hb.map_of_injective h
     · exact ((isCyclotomicExtension_iff _ _ _).1 hT).1 hn hn'
-  · refine ad
+  · refine adjoin_induction (hx := ((isCyclotomicExtension_iff T B _).1 hT).2 x)
+      (fun c ⟨n, hn⟩ => subset_adjoin ⟨n, Or.inr hn.1, hn.2⟩) (fun b => ?_)
+      (fun x y _ _ hx hy => Subalgebra.add_mem _ hx hy)
+      fun x y _ _ hx hy => Subalgebra.mul_mem _ hx hy
+    let f := IsScalarTower.toAlgHom A B C
+    have hb : f b in (adjoin A {b : B | exists a : Nat, a in S ∧ a != 0 ∧ b ^ a = 1}).map f :=
+      ⟨b, ((isCyclotomicExtension_iff _ _ _).1 hS).2 b, rfl⟩
+    rw [IsScalarTower.toAlgHom_apply]; rw [← adjoin_image] at hb
+    refine adjoin_mono (fun y hy => ?_) hb
+    obtain ⟨b₁, ⟨⟨n, hn⟩, h₁⟩⟩ := hy
+    exact ⟨n, ⟨mem_union_left T hn.1, hn.2.1, by rw [← h₁, ← map_pow, hn.2.2, map_one]⟩⟩
+
+@[nontriviality]
 
 中文:
 定理 trans
@@ -285,7 +297,19 @@ theorem trans
       refine ⟨algebraMap B C b, ?_⟩
       exact hb.map_of_injective h
     · exact ((isCyclotomicExtension_iff _ _ _).1 hT).1 hn hn'
-  · refine ad
+  · refine adjoin_induction (hx := ((isCyclotomicExtension_iff T B _).1 hT).2 x)
+      (fun c ⟨n, hn⟩ => subset_adjoin ⟨n, Or.inr hn.1, hn.2⟩) (fun b => ?_)
+      (fun x y _ _ hx hy => Subalgebra.add_mem _ hx hy)
+      fun x y _ _ hx hy => Subalgebra.mul_mem _ hx hy
+    let f := IsScalarTower.toAlgHom A B C
+    have hb : f b in (adjoin A {b : B | exists a : Nat, a in S ∧ a != 0 ∧ b ^ a = 1}).map f :=
+      ⟨b, ((isCyclotomicExtension_iff _ _ _).1 hS).2 b, rfl⟩
+    rw [IsScalarTower.toAlgHom_apply]; rw [← adjoin_image] at hb
+    refine adjoin_mono (fun y hy => ?_) hb
+    obtain ⟨b₁, ⟨⟨n, hn⟩, h₁⟩⟩ := hy
+    exact ⟨n, ⟨mem_union_left T hn.1, hn.2.1, by rw [← h₁, ← map_pow, hn.2.2, map_one]⟩⟩
+
+@[nontriviality]
 
 Depends on / 依赖: Or.inr, Subalgebra, Subalgebra.add_mem, Subalgebra.mul_mem, add_mem, adjoin_induction, algebraMap, hb.map_of_injective, isCyclotomicExtension_iff, map_of_injective, mul_mem, subset_adjoin
 -/
@@ -324,7 +348,9 @@ theorem subsingleton_iff
   · refine subset_pair_iff.mpr fun s hs => or_iff_not_imp_left.mpr fun hs' => ?_
     obtain ⟨ζ, hζ⟩ := hprim hs hs'
     exact mod_cast hζ.unique (IsPrimitiveRoot.of_subsingleton ζ)
-  · refine ⟨fu
+  · refine ⟨fun {s} hs hs' => ?_, fun x => by convert! (mem_top (R := A) : x in ⊤)⟩
+    · have : s = 1 := (subset_pair_iff.mp hS s hs).resolve_left hs'
+      exact ⟨0, this ▸ IsPrimitiveRoot.of_subsingleton 0⟩
 
 中文:
 定理 subsingleton_iff
@@ -335,7 +361,9 @@ theorem subsingleton_iff
   · refine subset_pair_iff.mpr fun s hs => or_iff_not_imp_left.mpr fun hs' => ?_
     obtain ⟨ζ, hζ⟩ := hprim hs hs'
     exact mod_cast hζ.unique (IsPrimitiveRoot.of_subsingleton ζ)
-  · refine ⟨fu
+  · refine ⟨fun {s} hs hs' => ?_, fun x => by convert! (mem_top (R := A) : x in ⊤)⟩
+    · have : s = 1 := (subset_pair_iff.mp hS s hs).resolve_left hs'
+      exact ⟨0, this ▸ IsPrimitiveRoot.of_subsingleton 0⟩
 
 Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.of_subsingleton, Subalgebra, Subsingleton, convert, mem_top, mod_cast, of_subsingleton, or_iff_not_imp_left, or_iff_not_imp_left.mpr, resolve_left, subset_pair_iff, subset_pair_iff.mp, subset_pair_iff.mpr, unique
 -/
@@ -362,7 +390,14 @@ theorem union_right
         {b : B | exists n : Nat, n in T ∧ n != 0 ∧ b ^ n = 1} := by
     refine le_antisymm ?_ ?_
     · rintro x ⟨n, hn₁ | hn₂, hnpow⟩
-      · left; exact ⟨n, 
+      · left; exact ⟨n, hn₁, hnpow⟩
+      · right; exact ⟨n, hn₂, hnpow⟩
+    · rintro x (⟨n, hn⟩ | ⟨n, hn⟩)
+      · exact ⟨n, Or.inl hn.1, hn.2⟩
+      · exact ⟨n, Or.inr hn.1, hn.2⟩
+  refine ⟨fun hn => ((isCyclotomicExtension_iff _ A _).1 h).1 (mem_union_right S hn), fun b => ?_⟩
+  replace h := ((isCyclotomicExtension_iff _ _ _).1 h).2 b
+  rwa [this, adjoin_union_eq_adjoin_adjoin, Subalgebra.mem_restrictScalars] at h
 
 中文:
 定理 union_right
@@ -373,7 +408,14 @@ theorem union_right
         {b : B | exists n : Nat, n in T ∧ n != 0 ∧ b ^ n = 1} := by
     refine le_antisymm ?_ ?_
     · rintro x ⟨n, hn₁ | hn₂, hnpow⟩
-      · left; exact ⟨n, 
+      · left; exact ⟨n, hn₁, hnpow⟩
+      · right; exact ⟨n, hn₂, hnpow⟩
+    · rintro x (⟨n, hn⟩ | ⟨n, hn⟩)
+      · exact ⟨n, Or.inl hn.1, hn.2⟩
+      · exact ⟨n, Or.inr hn.1, hn.2⟩
+  refine ⟨fun hn => ((isCyclotomicExtension_iff _ A _).1 h).1 (mem_union_right S hn), fun b => ?_⟩
+  replace h := ((isCyclotomicExtension_iff _ _ _).1 h).2 b
+  rwa [this, adjoin_union_eq_adjoin_adjoin, Subalgebra.mem_restrictScalars] at h
 
 Depends on / 依赖: Or.inl, Or.inr, isCyclotomicExtension_iff, le_antisymm, mem_union_right
 -/
@@ -405,7 +447,8 @@ theorem union_left
     refine ⟨⟨b, subset_adjoin ⟨n, hn, hn', hb.pow_eq_one⟩⟩, ?_⟩
     rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk]
   · convert! mem_top (R := A) (x := b)
-    rw
+    rw [← adjoin_adjoin_coe_preimage]; rw [preimage_ofPred_eq]
+    norm_cast
 
 中文:
 定理 union_left
@@ -416,7 +459,8 @@ theorem union_left
     refine ⟨⟨b, subset_adjoin ⟨n, hn, hn', hb.pow_eq_one⟩⟩, ?_⟩
     rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk]
   · convert! mem_top (R := A) (x := b)
-    rw
+    rw [← adjoin_adjoin_coe_preimage]; rw [preimage_ofPred_eq]
+    norm_cast
 
 Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_submonoidClass_iff, Subtype, Subtype.coe_mk, adjoin_adjoin_coe_preimage, coe_mk, coe_submonoidClass_iff, convert, hb.pow_eq_one, isCyclotomicExtension_iff, mem_top, pow_eq_one, preimage_ofPred_eq, subset_adjoin
 -/
@@ -446,7 +490,8 @@ theorem union_of_isPrimitiveRoot
   · obtain hm₁ | rfl := hm₁
     · exact exists_isPrimitiveRoot A B hm₁ hm₂
     · use r
-  · rw [← ((iff_adjoin_eq_to
+  · rw [← ((iff_adjoin_eq_top _ _ _).mp hB).2]
+    exact Algebra.adjoin_mono (by aesop)
 
 中文:
 定理 union_of_isPrimitiveRoot
@@ -459,7 +504,8 @@ theorem union_of_isPrimitiveRoot
   · obtain hm₁ | rfl := hm₁
     · exact exists_isPrimitiveRoot A B hm₁ hm₂
     · use r
-  · rw [← ((iff_adjoin_eq_to
+  · rw [← ((iff_adjoin_eq_top _ _ _).mp hB).2]
+    exact Algebra.adjoin_mono (by aesop)
 
 Depends on / 依赖: Algebra, Algebra.adjoin_mono, Set.union_sdiff_right, adjoin_mono, eq_self_sdiff_zero, exists_isPrimitiveRoot, iff_adjoin_eq_top, le_antisymm, union_sdiff_right
 -/
@@ -492,6 +538,15 @@ theorem of_union_of_dvd
     · obtain ⟨m, hm, hm', ⟨x, rfl⟩⟩ := h
       obtain ⟨ζ, hζ⟩ := H.exists_isPrimitiveRoot hm hm'
       refine ⟨ζ ^ x, ?_⟩
+      have h_xnz : x != 0 := Nat.ne_zero_of_mul_ne_zero_right hm'
+      have := hζ.pow_of_dvd h_xnz (dvd_mul_left x s)
+      rwa [mul_div_cancel_right₀ _ h_xnz] at this
+  · refine _root_.eq_top_iff.2 ?_
+    rw [← ((iff_adjoin_eq_top S A B).1 H).2]
+    refine adjoin_mono fun x hx => ?_
+    simp only [union_singleton, mem_insert_iff, mem_ofPred_eq] at hx ⊢
+    obtain ⟨m, hm, hm'⟩ := hx
+    exact ⟨m, ⟨Or.inr hm, hm'⟩⟩
 
 中文:
 定理 of_union_of_dvd
@@ -504,6 +559,15 @@ theorem of_union_of_dvd
     · obtain ⟨m, hm, hm', ⟨x, rfl⟩⟩ := h
       obtain ⟨ζ, hζ⟩ := H.exists_isPrimitiveRoot hm hm'
       refine ⟨ζ ^ x, ?_⟩
+      have h_xnz : x != 0 := Nat.ne_zero_of_mul_ne_zero_right hm'
+      have := hζ.pow_of_dvd h_xnz (dvd_mul_left x s)
+      rwa [mul_div_cancel_right₀ _ h_xnz] at this
+  · refine _root_.eq_top_iff.2 ?_
+    rw [← ((iff_adjoin_eq_top S A B).1 H).2]
+    refine adjoin_mono fun x hx => ?_
+    simp only [union_singleton, mem_insert_iff, mem_ofPred_eq] at hx ⊢
+    obtain ⟨m, hm, hm'⟩ := hx
+    exact ⟨m, ⟨Or.inr hm, hm'⟩⟩
 
 Depends on / 依赖: H.exists_isPrimitiveRoot, Nat.ne_zero_of_mul_ne_zero_right, _root_, _root_.eq_top_iff, dvd_mul_left, eq_top_iff, exists_isPrimitiveRoot, h_xnz, iff_adjoin_eq_top, mem_singleton_iff, mem_union, ne_zero_of_mul_ne_zero_right, pow_of_dvd
 -/
@@ -539,7 +603,11 @@ theorem iff_union_of_dvd
   · exact H.exists_isPrimitiveRoot (subset_union_left hs)
   · rw [_root_.eq_top_iff, ← ((iff_adjoin_eq_top _ A B).1 H).2]
     refine adjoin_mono fun x hx => ?_
-    simp only [union_singl
+    simp only [union_singleton, mem_insert_iff, mem_ofPred_eq] at hx ⊢
+    obtain ⟨m, rfl | hm, hxpow⟩ := hx
+    · obtain ⟨y, ⟨hy, hy', ⟨z, rfl⟩⟩⟩ := h
+      exact ⟨_, ⟨hy, hy', by simp only [pow_mul, hxpow, one_pow]⟩⟩
+    · exact ⟨m, ⟨hm, hxpow⟩⟩
 
 中文:
 定理 iff_union_of_dvd
@@ -551,7 +619,11 @@ theorem iff_union_of_dvd
   · exact H.exists_isPrimitiveRoot (subset_union_left hs)
   · rw [_root_.eq_top_iff, ← ((iff_adjoin_eq_top _ A B).1 H).2]
     refine adjoin_mono fun x hx => ?_
-    simp only [union_singl
+    simp only [union_singleton, mem_insert_iff, mem_ofPred_eq] at hx ⊢
+    obtain ⟨m, rfl | hm, hxpow⟩ := hx
+    · obtain ⟨y, ⟨hy, hy', ⟨z, rfl⟩⟩⟩ := h
+      exact ⟨_, ⟨hy, hy', by simp only [pow_mul, hxpow, one_pow]⟩⟩
+    · exact ⟨m, ⟨hm, hxpow⟩⟩
 
 Depends on / 依赖: H.exists_isPrimitiveRoot, _root_, _root_.eq_top_iff, adjoin_mono, eq_top_iff, exists_isPrimitiveRoot, iff_adjoin_eq_top, mem_insert_iff, mem_ofPred_eq, of_union_of_dvd, one_pow, pow_mul, subset_union_left, union_singleton
 -/
@@ -582,7 +654,10 @@ theorem iff_union_singleton_one
   · rw [eq_self_sdiff_zero S, eq_self_sdiff_zero (S union {1}), union_sdiff_distrib,
       show S \ {0} = ∅ by aesop, empty_union, show {1} \ {0} = {1} by simp]
     refine ⟨fun H => ?_, fun H => ?_⟩
-    · refine (iff_
+    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs _ => ⟨1, by simp [mem_singleton_iff.1 hs]⟩, ?_⟩
+      simpa [adjoin_singleton_one] using subsingleton_iff_bot_eq_top.mpr inferInstance
+    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs => (notMem_empty s hs).elim, ?_⟩
+      simp [singleton_one]
 
 中文:
 定理 iff_union_singleton_one
@@ -592,7 +667,10 @@ theorem iff_union_singleton_one
   · rw [eq_self_sdiff_zero S, eq_self_sdiff_zero (S union {1}), union_sdiff_distrib,
       show S \ {0} = ∅ by aesop, empty_union, show {1} \ {0} = {1} by simp]
     refine ⟨fun H => ?_, fun H => ?_⟩
-    · refine (iff_
+    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs _ => ⟨1, by simp [mem_singleton_iff.1 hs]⟩, ?_⟩
+      simpa [adjoin_singleton_one] using subsingleton_iff_bot_eq_top.mpr inferInstance
+    · refine (iff_adjoin_eq_top _ A _).2 ⟨fun s hs => (notMem_empty s hs).elim, ?_⟩
+      simp [singleton_one]
 
 Depends on / 依赖: adjoin_singleton_one, empty_union, eq_self_sdiff_zero, iff_adjoin_eq_top, iff_union_of_dvd, mem_singleton_iff, notMem_, subsingleton_iff_bot_eq_top, subsingleton_iff_bot_eq_top.mpr, union_sdiff_distrib
 -/
@@ -826,7 +904,10 @@ theorem _root_.Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot
     induction hx using adjoin_induction with
     | mem x hx =>
       obtain ⟨n, hn1, hn2, hx⟩ := hx
-  
+      exact subset_adjoin ⟨n, hn1, hn2, Subtype.val_injective hx⟩
+    | algebraMap x => exact Subalgebra.algebraMap_mem _ x
+    | add x y hx hy ihx ihy => exact Subalgebra.add_mem _ ihx ihy
+    | mul x y hx hy ihx ihy => exact Subalgebra.mul_mem _ ihx ihy
 
 中文:
 定理 _root_.代数.isCyclotomicExtension_adjoin_of_存在_isPrimitiveRoot
@@ -839,7 +920,10 @@ theorem _root_.Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot
     induction hx using adjoin_induction with
     | mem x hx =>
       obtain ⟨n, hn1, hn2, hx⟩ := hx
-  
+      exact subset_adjoin ⟨n, hn1, hn2, Subtype.val_injective hx⟩
+    | algebraMap x => exact Subalgebra.algebraMap_mem _ x
+    | add x y hx hy ihx ihy => exact Subalgebra.add_mem _ ihx ihy
+    | mul x y hx hy ihx ihy => exact Subalgebra.mul_mem _ ihx ihy
 
 Depends on / 依赖: Subalgebra, Subalgebra.add_mem, Subalgebra.algebraMap_mem, Subalgebra.mul_mem, Subtype, Subtype.val_injective, add_mem, adjoin_induction, adjoin_roots, algebraMap, algebraMap_mem, mul_mem, subset_adjoin, val_injective
 -/
@@ -876,6 +960,9 @@ theorem algEquiv_eq_of_apply_eq
     have := NeZero.mk h1
     obtain ⟨m, -, rfl⟩ := hr1.eq_pow_of_pow_eq_one h2
     simp [hr2]
+  | algebraMap y => simp
+  | add x y hx hy ihx ihy => simp [ihx, ihy]
+  | mul x y hx hy ihx ihy => simp [ihx, ihy]
 
 中文:
 定理 algEquiv_eq_of_apply_eq
@@ -890,6 +977,9 @@ theorem algEquiv_eq_of_apply_eq
     have := NeZero.mk h1
     obtain ⟨m, -, rfl⟩ := hr1.eq_pow_of_pow_eq_one h2
     simp [hr2]
+  | algebraMap y => simp
+  | add x y hx hy ihx ihy => simp [ihx, ihy]
+  | mul x y hx hy ihx ihy => simp [ihx, ihy]
 
 Depends on / 依赖: Algebra, Algebra.adjoin_induction, IsCyclotomicExtension, NeZero, NeZero.mk, adjoin_induction, adjoin_roots, algebraMap, eq_pow_of_pow_eq_one, hr1.eq_pow_of_pow_eq_one
 -/
@@ -920,7 +1010,9 @@ theorem isMulCommutative
   use r, hr
   simp only [AlgEquiv.mul_apply]
   have := NeZero.mk h1
-  obtain ⟨mf, -, hf⟩ := hr.eq_pow_of_pow_eq_one (show f r ^ n = 1 by rw [← map
+  obtain ⟨mf, -, hf⟩ := hr.eq_pow_of_pow_eq_one (show f r ^ n = 1 by rw [← map_pow, hr.1, map_one])
+  obtain ⟨mg, -, hg⟩ := hr.eq_pow_of_pow_eq_one (show g r ^ n = 1 by rw [← map_pow, hr.1, map_one])
+  simp [← hf, ← hg, ← pow_mul, mul_comm mf mg]
 
 中文:
 定理 isMulCommutative
@@ -931,7 +1023,9 @@ theorem isMulCommutative
   use r, hr
   simp only [AlgEquiv.mul_apply]
   have := NeZero.mk h1
-  obtain ⟨mf, -, hf⟩ := hr.eq_pow_of_pow_eq_one (show f r ^ n = 1 by rw [← map
+  obtain ⟨mf, -, hf⟩ := hr.eq_pow_of_pow_eq_one (show f r ^ n = 1 by rw [← map_pow, hr.1, map_one])
+  obtain ⟨mg, -, hg⟩ := hr.eq_pow_of_pow_eq_one (show g r ^ n = 1 by rw [← map_pow, hr.1, map_one])
+  simp [← hf, ← hg, ← pow_mul, mul_comm mf mg]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.mul_apply, IsCyclotomicExtension, NeZero, NeZero.mk, algEquiv_eq_of_apply_eq, eq_pow_of_pow_eq_one, exists_isPrimitiveRoot, hr.eq_pow_of_pow_eq_one, map_one, map_pow, mul_apply, mul_comm, pow_mul
 -/
@@ -962,7 +1056,13 @@ theorem finite_of_singleton
   refine fg_adjoin_of_finite ?_ fun b ⟨n, hb⟩ => ?_
   · simp only [mem_singleton_iff, exists_eq_left]
     have : {b : B | n != 0 ∧ b ^ n = 1} = (nthRoots n (1 : B)).toFinset :=
-      Set.ext fun
+      Set.ext fun x => ⟨fun h => by simpa [n.pos_of_neZero] using h.2,
+        fun h => by simpa [n.pos_of_neZero, NeZero.ne n] using h⟩
+    rw [this]
+    exact (nthRoots n 1).toFinset.finite_toSet
+  · simp only [mem_singleton_iff] at hb
+    exact ⟨X ^ n - 1,
+      ⟨monic_X_pow_sub_C _ (hb.1 ▸ NeZero.ne _), by simpa [sub_eq_zero] using hb.2.2⟩⟩
 
 中文:
 定理 finite_of_singleton
@@ -973,7 +1073,13 @@ theorem finite_of_singleton
   refine fg_adjoin_of_finite ?_ fun b ⟨n, hb⟩ => ?_
   · simp only [mem_singleton_iff, exists_eq_left]
     have : {b : B | n != 0 ∧ b ^ n = 1} = (nthRoots n (1 : B)).toFinset :=
-      Set.ext fun
+      Set.ext fun x => ⟨fun h => by simpa [n.pos_of_neZero] using h.2,
+        fun h => by simpa [n.pos_of_neZero, NeZero.ne n] using h⟩
+    rw [this]
+    exact (nthRoots n 1).toFinset.finite_toSet
+  · simp only [mem_singleton_iff] at hb
+    exact ⟨X ^ n - 1,
+      ⟨monic_X_pow_sub_C _ (hb.1 ▸ NeZero.ne _), by simpa [sub_eq_zero] using hb.2.2⟩⟩
 
 Depends on / 依赖: Module, Module.finite_def, NeZero, NeZero.ne, Set.ext, classical, exists_eq_left, fg_adjoin_of_finite, finite_def, finite_toSet, iff_adjoin_eq_top, mem_singleton_iff, n.pos_of_neZero, nthRoots, pos_of_neZero, toFinset, toFinset.finite_toSet, top_toSubmodule
 -/
@@ -1005,7 +1111,20 @@ theorem finite
     refine Module.finite_def.2 ⟨({1} : Finset B), ?_⟩
     simp [← top_toSubmodule, ← subsingleton_iff_bot_eq_top.mpr inferInstance,
       toSubmodule_bot, Submodule.one_eq_span]
-  | @
+  | @insert n S _ _ H =>
+    by_cases hn : n = 0
+    · have : insert n S \ {0} = S \ {0} := by simp_all
+      rw [eq_self_sdiff_zero]; rw [this]; rw [← eq_self_sdiff_zero] at h₂
+      exact H A B
+    have : IsCyclotomicExtension S A (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) :=
+        union_left _ (insert n S) _ _ (subset_insert n S)
+    have := H A (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1})
+    have : Module.Finite (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) B := by
+      rw [← union_singleton] at h₂
+      let _ := union_right S {n} A B
+      have : NeZero n := ⟨hn⟩
+      exact finite_of_singleton n _ _
+    exact Module.Finite.trans (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) _
 
 中文:
 定理 finite
@@ -1017,7 +1136,20 @@ theorem finite
     refine Module.finite_def.2 ⟨({1} : Finset B), ?_⟩
     simp [← top_toSubmodule, ← subsingleton_iff_bot_eq_top.mpr inferInstance,
       toSubmodule_bot, Submodule.one_eq_span]
-  | @
+  | @insert n S _ _ H =>
+    by_cases hn : n = 0
+    · have : insert n S \ {0} = S \ {0} := by simp_all
+      rw [eq_self_sdiff_zero]; rw [this]; rw [← eq_self_sdiff_zero] at h₂
+      exact H A B
+    have : IsCyclotomicExtension S A (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) :=
+        union_left _ (insert n S) _ _ (subset_insert n S)
+    have := H A (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1})
+    have : Module.Finite (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) B := by
+      rw [← union_singleton] at h₂
+      let _ := union_right S {n} A B
+      have : NeZero n := ⟨hn⟩
+      exact finite_of_singleton n _ _
+    exact Module.Finite.trans (adjoin A {b : B | exists n : Nat, n in S ∧ n != 0 ∧ b ^ n = 1}) _
 -/
 protected theorem finite [IsDomain B] [h₁ : Finite S] [h₂ : IsCyclotomicExtension S A B] :
     Module.Finite A B := by
@@ -1112,6 +1244,13 @@ theorem adjoin_roots_cyclotomic_eq_adjoin_nth_roots
     simp only [mem_ofPred_eq]
     rw [isRoot_of_unity_iff (NeZero.pos n)]
     refine ⟨NeZero.ne n, n, Nat.mem_divisors_self n (NeZero.ne n), ?_⟩
+    rw [IsRoot.def]; rw [← map_cyclotomic n (algebraMap A B)]; rw [eval_map_algebraMap]
+    exact hx.2
+  · simp only [mem_ofPred_eq] at hx
+    obtain ⟨i, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx.2
+    refine SetLike.mem_coe.2 (Subalgebra.pow_mem _ (subset_adjoin ?_) _)
+    rw [mem_rootSet']; rw [map_cyclotomic]; rw [← eval_map_algebraMap]; rw [map_cyclotomic]; rw [← IsRoot]
+    exact ⟨cyclotomic_ne_zero n B, hζ.isRoot_cyclotomic (NeZero.pos n)⟩
 
 中文:
 定理 adjoin_roots_cyclotomic_eq_adjoin_nth_roots
@@ -1123,6 +1262,13 @@ theorem adjoin_roots_cyclotomic_eq_adjoin_nth_roots
     simp only [mem_ofPred_eq]
     rw [isRoot_of_unity_iff (NeZero.pos n)]
     refine ⟨NeZero.ne n, n, Nat.mem_divisors_self n (NeZero.ne n), ?_⟩
+    rw [IsRoot.def]; rw [← map_cyclotomic n (algebraMap A B)]; rw [eval_map_algebraMap]
+    exact hx.2
+  · simp only [mem_ofPred_eq] at hx
+    obtain ⟨i, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx.2
+    refine SetLike.mem_coe.2 (Subalgebra.pow_mem _ (subset_adjoin ?_) _)
+    rw [mem_rootSet']; rw [map_cyclotomic]; rw [← eval_map_algebraMap]; rw [map_cyclotomic]; rw [← IsRoot]
+    exact ⟨cyclotomic_ne_zero n B, hζ.isRoot_cyclotomic (NeZero.pos n)⟩
 
 Depends on / 依赖: IsRoot, IsRoot.def, Nat.mem_divisors_self, NeZero, NeZero.ne, NeZero.pos, SetLike, SetLike.mem_coe, Subalgebra, adjoin_le, adjoin_mono, algebraMap, eq_pow_of_pow_eq_one, eval_map_algebraMap, exists_eq_left, isRoot_of_unity_iff, le_antisymm, map_cyclotomic, mem_coe, mem_divisors_self
 -/
@@ -1155,7 +1301,13 @@ theorem adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic
   · suffices hx : x ^ n = 1 by
       obtain ⟨i, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx
       exact SetLike.mem_coe.2 (Subalgebra.pow_mem _ (subset_adjoin <| mem_singleton ζ) _)
-    refine (isRoot_of_unity_iff (NeZero.pos 
+    refine (isRoot_of_unity_iff (NeZero.pos n) B).2 ?_
+    refine ⟨n, Nat.mem_divisors_self n (NeZero.ne n), ?_⟩
+    rw [mem_rootSet']; rw [← eval_map_algebraMap]; rw [map_cyclotomic]; rw [← IsRoot] at hx
+    exact hx.2
+  · simp only [mem_singleton_iff] at hx
+    simpa only [hx, mem_rootSet', map_cyclotomic, ← eval_map_algebraMap, IsRoot] using
+      And.intro (cyclotomic_ne_zero n B) (hζ.isRoot_cyclotomic (NeZero.pos n))
 
 中文:
 定理 adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic
@@ -1165,7 +1317,13 @@ theorem adjoin_roots_cyclotomic_eq_adjoin_root_cyclotomic
   · suffices hx : x ^ n = 1 by
       obtain ⟨i, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx
       exact SetLike.mem_coe.2 (Subalgebra.pow_mem _ (subset_adjoin <| mem_singleton ζ) _)
-    refine (isRoot_of_unity_iff (NeZero.pos 
+    refine (isRoot_of_unity_iff (NeZero.pos n) B).2 ?_
+    refine ⟨n, Nat.mem_divisors_self n (NeZero.ne n), ?_⟩
+    rw [mem_rootSet']; rw [← eval_map_algebraMap]; rw [map_cyclotomic]; rw [← IsRoot] at hx
+    exact hx.2
+  · simp only [mem_singleton_iff] at hx
+    simpa only [hx, mem_rootSet', map_cyclotomic, ← eval_map_algebraMap, IsRoot] using
+      And.intro (cyclotomic_ne_zero n B) (hζ.isRoot_cyclotomic (NeZero.pos n))
 
 Depends on / 依赖: IsRoot, Nat.mem_divisors_self, NeZero, NeZero.ne, NeZero.pos, SetLike, SetLike.mem_coe, Subalgebra, Subalgebra.pow_mem, adjoin_le, adjoin_mono, eq_pow_of_pow_eq_one, eval_map_algebraMap, isRoot_of_unity_iff, le_antisymm, map_cyclotomic, mem_coe, mem_divisors_self, mem_rootSet, mem_singleton
 -/
@@ -1226,7 +1384,16 @@ refine ⟨⟨ζ, subset_adjoin Set.mem_singleton ζ⟩, ?_⟩
     adjoin_roots := fun ⟨x, hx⟩ => by
       refine
         adjoin_induction
-          (hx :
+          (hx := hx) (fun b hb => ?_) (fun a => ?_) (fun b₁ b₂ _ _ hb₁ hb₂ => ?_)
+          (fun b₁ b₂ _ _ hb₁ hb₂ => ?_)
+      · rw [Set.mem_singleton_iff] at hb
+        refine subset_adjoin ?_
+        simp only [mem_singleton_iff, exists_eq_left, mem_ofPred_eq, hb]
+        rw [← Subalgebra.coe_eq_one]; rw [Subalgebra.coe_pow]; rw [Subtype.coe_mk]
+        exact ⟨NeZero.ne n, ((IsPrimitiveRoot.iff_def ζ n).1 h).1⟩
+      · exact Subalgebra.algebraMap_mem _ _
+      · exact Subalgebra.add_mem _ hb₁ hb₂
+      · exact Subalgebra.mul_mem _ hb₁ hb₂ }
 
 中文:
 定理 _root_.是PrimitiveRoot.adjoin_isCyclotomicExtension
@@ -1238,7 +1405,16 @@ refine ⟨⟨ζ, subset_adjoin Set.mem_singleton ζ⟩, ?_⟩
     adjoin_roots := fun ⟨x, hx⟩ => by
       refine
         adjoin_induction
-          (hx :
+          (hx := hx) (fun b hb => ?_) (fun a => ?_) (fun b₁ b₂ _ _ hb₁ hb₂ => ?_)
+          (fun b₁ b₂ _ _ hb₁ hb₂ => ?_)
+      · rw [Set.mem_singleton_iff] at hb
+        refine subset_adjoin ?_
+        simp only [mem_singleton_iff, exists_eq_left, mem_ofPred_eq, hb]
+        rw [← Subalgebra.coe_eq_one]; rw [Subalgebra.coe_pow]; rw [Subtype.coe_mk]
+        exact ⟨NeZero.ne n, ((IsPrimitiveRoot.iff_def ζ n).1 h).1⟩
+      · exact Subalgebra.algebraMap_mem _ _
+      · exact Subalgebra.add_mem _ hb₁ hb₂
+      · exact Subalgebra.mul_mem _ hb₁ hb₂ }
 
 Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_submonoidClass_iff, Set.mem_singleton, Set.mem_singleton_iff, Subalgebra, Subalgebra.co, Subtype, Subtype.coe_mk, adjoin_induction, adjoin_roots, coe_mk, coe_submonoidClass_iff, exists_eq_left, exists_isPrimitiveRoot, mem_ofPred_eq, mem_singleton, mem_singleton_iff, subset_adjoin
 -/
@@ -1364,7 +1540,8 @@ theorem _root_.IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimit
     rintro b ⟨n, hn, h1, h2⟩
     exact ⟨X ^ n - 1, (monic_X_pow_sub_C (1 : K) h1).ne_zero, by simp [h2]⟩
   change IsCyclotomicExtension S K (IntermediateField.toSubalgebra _)
-  rw [congr(IsCyclotomicExtens
+  rw [congr(IsCyclotomicExtension S K $(IntermediateField.adjoin_toSubalgebra_of_isAlgebraic key))]
+  exact Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S K L h
 
 中文:
 定理 _root_.中间域.isCyclotomicExtension_adjoin_of_存在_isPrimitiveRoot
@@ -1373,7 +1550,8 @@ theorem _root_.IntermediateField.isCyclotomicExtension_adjoin_of_exists_isPrimit
     rintro b ⟨n, hn, h1, h2⟩
     exact ⟨X ^ n - 1, (monic_X_pow_sub_C (1 : K) h1).ne_zero, by simp [h2]⟩
   change IsCyclotomicExtension S K (IntermediateField.toSubalgebra _)
-  rw [congr(IsCyclotomicExtens
+  rw [congr(IsCyclotomicExtension S K $(IntermediateField.adjoin_toSubalgebra_of_isAlgebraic key))]
+  exact Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S K L h
 
 Depends on / 依赖: Algebra, Algebra.isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot, IntermediateField, IntermediateField.adjoin_toSubalgebra_of_isAlgebraic, IntermediateField.toSubalgebra, IsAlgebraic, IsCyclotomicExtension, adjoin_toSubalgebra_of_isAlgebraic, isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot, monic_X_pow_sub_C, ne_zero, toSubalgebra
 -/
@@ -1401,7 +1579,12 @@ theorem isSeparable
   rw [← IntermediateField.adjoin_toSubalgebra_of_isAlgebraic
     fun b _ => Algebra.IsAlgebraic.isAlgebraic b]; rw [← IntermediateField.top_toSubalgebra] at h
   rw [← AlgEquiv.Algebra.isSeparable_iff <|
-  
+    (IntermediateField.equivOfEq (IntermediateField.toSubalgebra_injective h)).trans
+      IntermediateField.topEquiv]; rw [IntermediateField.isSeparable_adjoin_iff_isSeparable]
+  rintro b ⟨n, hn, h1, h2⟩
+  have := NeZero.mk h1
+  have := Polynomial.X_pow_sub_one_separable_iff.2 (neZero_of_mem' n S K L hn).out
+exact this.of_dvd minpoly.dvd K b by simp [h2]
 
 中文:
 定理 isSeparable
@@ -1413,7 +1596,12 @@ theorem isSeparable
   rw [← IntermediateField.adjoin_toSubalgebra_of_isAlgebraic
     fun b _ => Algebra.IsAlgebraic.isAlgebraic b]; rw [← IntermediateField.top_toSubalgebra] at h
   rw [← AlgEquiv.Algebra.isSeparable_iff <|
-  
+    (IntermediateField.equivOfEq (IntermediateField.toSubalgebra_injective h)).trans
+      IntermediateField.topEquiv]; rw [IntermediateField.isSeparable_adjoin_iff_isSeparable]
+  rintro b ⟨n, hn, h1, h2⟩
+  have := NeZero.mk h1
+  have := Polynomial.X_pow_sub_one_separable_iff.2 (neZero_of_mem' n S K L hn).out
+exact this.of_dvd minpoly.dvd K b by simp [h2]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.Algebra.isSeparable_iff, Algebra, Algebra.IsAlgebraic.isAlgebraic, IntermediateField, IntermediateField.adjoin_toSubalgebra_of_isAlgebraic, IntermediateField.equivOfEq, IntermediateField.isSeparable_adjoin_iff_isSeparable, IntermediateField.toSubalgebra_injective, IntermediateField.topEquiv, IntermediateField.top_toSubalgebra, IsAlgebraic, IsCyclotomicExtension, IsCyclotomicExtension.iff_adjoin_eq_top, NeZero, NeZero.mk, adjoin_toSubalgebra_of_isAlgebraic, equivOfEq, iff_adjoin_eq_top, integral
 -/
@@ -1442,7 +1630,17 @@ theorem nonempty_algEquiv_adjoin_of_isSepClosed
   refine ⟨(show L ≃ₐ[K] i.fieldRange from AlgEquiv.ofInjectiveField i).trans
     (IntermediateField.equivOfEq ?_)⟩
   have htop : IntermediateField.adjoin K {x : L | exists n in S, n != 0 ∧ x ^ n = 1} = ⊤ :=
-    IntermediateField
+    IntermediateField.adjoin_eq_top_of_algebra K _ ((iff_adjoin_eq_top S K L).1 ‹_›).2
+  rw [AlgHom.fieldRange_eq_map]; rw [← htop]; rw [IntermediateField.adjoin_map]
+  apply le_antisymm <;> rw [IntermediateField.adjoin_le_iff]
+  · rintro _ ⟨y, ⟨n, hn, h1, h2⟩, rfl⟩
+    exact IntermediateField.subset_adjoin K _ ⟨n, hn, h1, by simpa using congrArg i h2⟩
+  · rintro x ⟨n, hn, h1, h2⟩
+    have : NeZero n := ⟨h1⟩
+    obtain ⟨y, hy⟩ := exists_isPrimitiveRoot K L hn h1
+    obtain ⟨m, -, rfl⟩ := (hy.map_of_injective i.injective).eq_pow_of_pow_eq_one h2
+    exact pow_mem (IntermediateField.subset_adjoin K (i '' {x : L | exists n in S, n != 0 ∧ x ^ n = 1})
+      ⟨y, ⟨n, hn, h1, hy.pow_eq_one⟩, rfl⟩) m
 
 中文:
 定理 nonempty_algEquiv_adjoin_of_isSepClosed
@@ -1453,7 +1651,17 @@ theorem nonempty_algEquiv_adjoin_of_isSepClosed
   refine ⟨(show L ≃ₐ[K] i.fieldRange from AlgEquiv.ofInjectiveField i).trans
     (IntermediateField.equivOfEq ?_)⟩
   have htop : IntermediateField.adjoin K {x : L | exists n in S, n != 0 ∧ x ^ n = 1} = ⊤ :=
-    IntermediateField
+    IntermediateField.adjoin_eq_top_of_algebra K _ ((iff_adjoin_eq_top S K L).1 ‹_›).2
+  rw [AlgHom.fieldRange_eq_map]; rw [← htop]; rw [IntermediateField.adjoin_map]
+  apply le_antisymm <;> rw [IntermediateField.adjoin_le_iff]
+  · rintro _ ⟨y, ⟨n, hn, h1, h2⟩, rfl⟩
+    exact IntermediateField.subset_adjoin K _ ⟨n, hn, h1, by simpa using congrArg i h2⟩
+  · rintro x ⟨n, hn, h1, h2⟩
+    have : NeZero n := ⟨h1⟩
+    obtain ⟨y, hy⟩ := exists_isPrimitiveRoot K L hn h1
+    obtain ⟨m, -, rfl⟩ := (hy.map_of_injective i.injective).eq_pow_of_pow_eq_one h2
+    exact pow_mem (IntermediateField.subset_adjoin K (i '' {x : L | exists n in S, n != 0 ∧ x ^ n = 1})
+      ⟨y, ⟨n, hn, h1, hy.pow_eq_one⟩, rfl⟩) m
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjectiveField, AlgHom, AlgHom.fieldRange_eq_map, IntermediateField, IntermediateField.adjoin, IntermediateField.adjoin_eq_top_of_algebra, IntermediateField.adjoin_le_iff, IntermediateField.adjoin_map, IntermediateField.equivOfEq, IsSepClosed, IsSepClosed.lift, adjoin, adjoin_eq_top_of_algebra, adjoin_le_iff, adjoin_map, equivOfEq, fieldRange, fieldRange_eq_map, i.fieldRange
 -/
@@ -1490,7 +1698,27 @@ theorem isGalois
   obtain ⟨i⟩ := nonempty_algEquiv_adjoin_of_isSepClosed S K L (AlgebraicClosure K)
   rw [i.transfer_normal]; rw [IntermediateField.normal_iff_forall_map_le]
   intro f x hx
-  rw [← IntermediateField.mem_toSubalgebra]; rw [IntermediateField.toSubalgebra_m
+  rw [← IntermediateField.mem_toSubalgebra]; rw [IntermediateField.toSubalgebra_map]; rw [Subalgebra.mem_map] at hx
+  obtain ⟨y, hy, rfl⟩ := hx
+  rw [IntermediateField.mem_toSubalgebra] at hy
+  induction hy using IntermediateField.adjoin_induction with
+  | mem x hx =>
+    obtain ⟨n, hn, h1, h2⟩ := hx
+    apply IntermediateField.subset_adjoin
+    use n, hn, h1
+    rw [← map_pow]; rw [← map_one f]; rw [h2]
+  | algebraMap x =>
+    convert! IntermediateField.algebraMap_mem _ x
+    exact AlgHom.commutes _ x
+  | add x y hx hy ihx ihy =>
+    rw [map_add]
+    exact add_mem ihx ihy
+  | mul x y hx hy ihx ihy =>
+    rw [map_mul]
+    exact mul_mem ihx ihy
+  | inv x hx ihx =>
+    rw [map_inv₀]
+    exact inv_mem ihx
 
 中文:
 定理 isGalois
@@ -1502,7 +1730,27 @@ theorem isGalois
   obtain ⟨i⟩ := nonempty_algEquiv_adjoin_of_isSepClosed S K L (AlgebraicClosure K)
   rw [i.transfer_normal]; rw [IntermediateField.normal_iff_forall_map_le]
   intro f x hx
-  rw [← IntermediateField.mem_toSubalgebra]; rw [IntermediateField.toSubalgebra_m
+  rw [← IntermediateField.mem_toSubalgebra]; rw [IntermediateField.toSubalgebra_map]; rw [Subalgebra.mem_map] at hx
+  obtain ⟨y, hy, rfl⟩ := hx
+  rw [IntermediateField.mem_toSubalgebra] at hy
+  induction hy using IntermediateField.adjoin_induction with
+  | mem x hx =>
+    obtain ⟨n, hn, h1, h2⟩ := hx
+    apply IntermediateField.subset_adjoin
+    use n, hn, h1
+    rw [← map_pow]; rw [← map_one f]; rw [h2]
+  | algebraMap x =>
+    convert! IntermediateField.algebraMap_mem _ x
+    exact AlgHom.commutes _ x
+  | add x y hx hy ihx ihy =>
+    rw [map_add]
+    exact add_mem ihx ihy
+  | mul x y hx hy ihx ihy =>
+    rw [map_mul]
+    exact mul_mem ihx ihy
+  | inv x hx ihx =>
+    rw [map_inv₀]
+    exact inv_mem ihx
 
 Depends on / 依赖: AlgebraicClosure, IntermediateField, IntermediateField.adjoin_induction, IntermediateField.mem_toSubalgebra, IntermediateField.normal_iff_forall_map_le, IntermediateField.toSubalgebra_map, Subalgebra, Subalgebra.mem_map, adjoin_induction, i.transfer_normal, isGalois_iff, isSeparable, mem_map, mem_toSubalgebra, nonempty_algEquiv_adjoin_of_isSepClosed, normal_iff_forall_map_le, toSubalgebra_map, transfer_normal
 -/
@@ -1617,7 +1865,12 @@ theorem isSplittingField_X_pow_sub_one
       congr
       refine Set.ext fun x => ?_
       simp only [mem_singleton_iff, ne_eq, exists_eq_left, NeZero.ne, not_false_eq_true, true_and,
-        mem_o
+        mem_ofPred_eq]
+      simp only [mem_rootSet', map_sub, map_pow, aeval_one, aeval_X, sub_eq_zero, map_X,
+        and_iff_right_iff_imp, Polynomial.map_sub, Polynomial.map_pow, Polynomial.map_one]
+      exact fun _ => X_pow_sub_C_ne_zero (NeZero.pos n) (1 : L) }
+
+scoped[Cyclotomic] attribute [instance] IsCyclotomicExtension.isSplittingField_X_pow_sub_one
 
 中文:
 定理 isSplittingField_X_pow_sub_one
@@ -1628,7 +1881,12 @@ theorem isSplittingField_X_pow_sub_one
       congr
       refine Set.ext fun x => ?_
       simp only [mem_singleton_iff, ne_eq, exists_eq_left, NeZero.ne, not_false_eq_true, true_and,
-        mem_o
+        mem_ofPred_eq]
+      simp only [mem_rootSet', map_sub, map_pow, aeval_one, aeval_X, sub_eq_zero, map_X,
+        and_iff_right_iff_imp, Polynomial.map_sub, Polynomial.map_pow, Polynomial.map_one]
+      exact fun _ => X_pow_sub_C_ne_zero (NeZero.pos n) (1 : L) }
+
+scoped[Cyclotomic] attribute [instance] IsCyclotomicExtension.isSplittingField_X_pow_sub_one
 
 Depends on / 依赖: NeZero, NeZero.ne, NeZero.pos, Polynomial, Polynomial.map_one, Polynomial.map_pow, Polynomial.map_sub, Set.ext, X_pow_sub_C_ne_zero, adjoin_rootSet, aeval_X, aeval_one, and_iff_right_iff_imp, exists_eq_left, iff_adjoin_eq_top, map_X, map_one, map_pow, map_sub, mem_ofPred_eq
 -/
@@ -1658,7 +1916,9 @@ theorem splitting_field_cyclotomic
       let := Classical.decEq L
       obtain ⟨ζ : L, hζ⟩ :=
         IsCyclotomicExtension.exists_isPrimitiveRoot K L (mem_singleton n) (NeZero.ne _)
-      exact 
+      exact adjoin_roots_cyclotomic_eq_adjoin_nth_roots hζ }
+
+scoped[Cyclotomic] attribute [instance] IsCyclotomicExtension.splitting_field_cyclotomic
 
 中文:
 定理 splitting_field_cyclotomic
@@ -1669,7 +1929,9 @@ theorem splitting_field_cyclotomic
       let := Classical.decEq L
       obtain ⟨ζ : L, hζ⟩ :=
         IsCyclotomicExtension.exists_isPrimitiveRoot K L (mem_singleton n) (NeZero.ne _)
-      exact 
+      exact adjoin_roots_cyclotomic_eq_adjoin_nth_roots hζ }
+
+scoped[Cyclotomic] attribute [instance] IsCyclotomicExtension.splitting_field_cyclotomic
 
 Depends on / 依赖: Classical, Classical.decEq, IsCyclotomicExtension, IsCyclotomicExtension.exists_isPrimitiveRoot, NeZero, NeZero.ne, adjoin_rootSet, adjoin_roots_cyclotomic_eq_adjoin_nth_roots, exists_isPrimitiveRoot, iff_adjoin_eq_top, mem_singleton, splits, splits_cyclotomic
 -/
@@ -1769,7 +2031,13 @@ instance isCyclotomicExtension
   let := Classical.decEq (CyclotomicField n K)
   have := (degree_cyclotomic_pos n K (NeZero.pos n)).ne'
   obtain ⟨ζ, hζ⟩ :=
-    Splits.exists_eval_eq_zero (SplittingField.splits (cyclotomic n K)) (
+    Splits.exists_eval_eq_zero (SplittingField.splits (cyclotomic n K)) (by rwa [degree_map])
+  rw [eval_map]; rw [← eval_map]; rw [← IsRoot.def]; rw [map_cyclotomic]; rw [isRoot_cyclotomic_iff] at hζ
+  refine ⟨?_, ?_⟩
+  · simp only [mem_singleton_iff, forall_eq]
+    exact fun _ => ⟨ζ, hζ⟩
+  · rw [← Algebra.eq_top_iff, ← SplittingField.adjoin_rootSet, eq_comm]
+    exact IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots hζ
 
 中文:
 实例 isCyclotomicExtension
@@ -1780,7 +2048,13 @@ instance isCyclotomicExtension
   let := Classical.decEq (CyclotomicField n K)
   have := (degree_cyclotomic_pos n K (NeZero.pos n)).ne'
   obtain ⟨ζ, hζ⟩ :=
-    Splits.exists_eval_eq_zero (SplittingField.splits (cyclotomic n K)) (
+    Splits.exists_eval_eq_zero (SplittingField.splits (cyclotomic n K)) (by rwa [degree_map])
+  rw [eval_map]; rw [← eval_map]; rw [← IsRoot.def]; rw [map_cyclotomic]; rw [isRoot_cyclotomic_iff] at hζ
+  refine ⟨?_, ?_⟩
+  · simp only [mem_singleton_iff, forall_eq]
+    exact fun _ => ⟨ζ, hζ⟩
+  · rw [← Algebra.eq_top_iff, ← SplittingField.adjoin_rootSet, eq_comm]
+    exact IsCyclotomicExtension.adjoin_roots_cyclotomic_eq_adjoin_nth_roots hζ
 
 Depends on / 依赖: Classical, Classical.decEq, CyclotomicField, IsRoot, IsRoot.def, NeZero, NeZero.nat_of_injective, NeZero.pos, Splits, Splits.exists_eval_eq_zero, SplittingField, SplittingField.splits, algebraMap, cyclotomic, degree_cyclotomic_pos, degree_map, eval_map, exists_eval_eq_zero, forall_eq, injective
 -/
@@ -1811,7 +2085,11 @@ instance :
       have : Polynomial.IsSplittingField K K (Polynomial.cyclotomic 0 K) :=
         Polynomial.isSplittingField_C 1
       let e : K ≃ₗ[K] (CyclotomicField 0 K) :=
-        (Polynomial.IsSplittingField.
+        (Polynomial.IsSplittingField.algEquiv K (Polynomial.cyclotomic 0 K)).toLinearEquiv
+      simp [← LinearEquiv.finrank_eq e, finrank_self]
+    simp [Subalgebra.bot_eq_top_iff_finrank_eq_one.mpr finrank]
+
+omit [NeZero n]
 
 中文:
 实例 :
@@ -1822,7 +2100,11 @@ instance :
       have : Polynomial.IsSplittingField K K (Polynomial.cyclotomic 0 K) :=
         Polynomial.isSplittingField_C 1
       let e : K ≃ₗ[K] (CyclotomicField 0 K) :=
-        (Polynomial.IsSplittingField.
+        (Polynomial.IsSplittingField.algEquiv K (Polynomial.cyclotomic 0 K)).toLinearEquiv
+      simp [← LinearEquiv.finrank_eq e, finrank_self]
+    simp [Subalgebra.bot_eq_top_iff_finrank_eq_one.mpr finrank]
+
+omit [NeZero n]
 
 Depends on / 依赖: CyclotomicField, IsSplittingField, LinearEquiv, LinearEquiv.finrank_eq, Module, Module.finrank, Polynomial, Polynomial.IsSplittingField, Polynomial.IsSplittingField.algEquiv, Polynomial.cyclotomic, Polynomial.isSplittingField_C, Subalgebra, Subalgebra.bot_eq_top_iff_finrank_eq_one.mpr, adjoin_roots, algEquiv, bot_eq_top_iff_finrank_eq_one, cyclotomic, finrank, finrank_eq, finrank_self
 -/
@@ -2099,7 +2381,22 @@ instance isCyclotomicExtension
     have := NeZero.of_faithfulSMul A (CyclotomicField n K) n
     obtain ⟨μ, hμ⟩ := (CyclotomicField.isCyclotomicExtension n K).exists_isPrimitiveRoot
       (mem_singleton n) (NeZero.ne n)
-    refine ⟨⟨μ, subset
+    refine ⟨⟨μ, subset_adjoin ?_⟩, ?_⟩
+    · apply (isRoot_of_unity_iff (NeZero.pos n) (CyclotomicField n K)).mpr
+      refine ⟨n, Nat.mem_divisors_self _ (NeZero.ne n), ?_⟩
+      rwa [← isRoot_cyclotomic_iff] at hμ
+    · rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk]
+  adjoin_roots x := by
+    obtain ⟨x, hx⟩ := x
+    refine
+      adjoin_induction (fun y hy => ?_) (fun a => ?_) (fun y z _ _ hy hz => ?_)
+        (fun y z _ _ hy hz => ?_) hx
+    · refine subset_adjoin ?_
+      simp only [mem_singleton_iff, exists_eq_left, mem_ofPred_eq]
+      exact ⟨NeZero.ne n, by rwa [← Subalgebra.coe_eq_one, Subalgebra.coe_pow, Subtype.coe_mk]⟩
+    · exact Subalgebra.algebraMap_mem _ a
+    · exact Subalgebra.add_mem _ hy hz
+    · exact Subalgebra.mul_mem _ hy hz
 
 中文:
 实例 isCyclotomicExtension
@@ -2111,7 +2408,22 @@ instance isCyclotomicExtension
     have := NeZero.of_faithfulSMul A (CyclotomicField n K) n
     obtain ⟨μ, hμ⟩ := (CyclotomicField.isCyclotomicExtension n K).exists_isPrimitiveRoot
       (mem_singleton n) (NeZero.ne n)
-    refine ⟨⟨μ, subset
+    refine ⟨⟨μ, subset_adjoin ?_⟩, ?_⟩
+    · apply (isRoot_of_unity_iff (NeZero.pos n) (CyclotomicField n K)).mpr
+      refine ⟨n, Nat.mem_divisors_self _ (NeZero.ne n), ?_⟩
+      rwa [← isRoot_cyclotomic_iff] at hμ
+    · rwa [← IsPrimitiveRoot.coe_submonoidClass_iff, Subtype.coe_mk]
+  adjoin_roots x := by
+    obtain ⟨x, hx⟩ := x
+    refine
+      adjoin_induction (fun y hy => ?_) (fun a => ?_) (fun y z _ _ hy hz => ?_)
+        (fun y z _ _ hy hz => ?_) hx
+    · refine subset_adjoin ?_
+      simp only [mem_singleton_iff, exists_eq_left, mem_ofPred_eq]
+      exact ⟨NeZero.ne n, by rwa [← Subalgebra.coe_eq_one, Subalgebra.coe_pow, Subtype.coe_mk]⟩
+    · exact Subalgebra.algebraMap_mem _ a
+    · exact Subalgebra.add_mem _ hy hz
+    · exact Subalgebra.mul_mem _ hy hz
 
 Depends on / 依赖: CoheytingAlgebra, CyclotomicField, CyclotomicField.isCyclotomicExtension, IsPrimitiveRoot, IsPrimitiveRoot.coe_submonoidClass_iff, Nat.mem_divisors_self, NeZero, NeZero.ne, NeZero.of_faithfulSMul, NeZero.pos, OrderIsoClass, OrderIsoClass.toCoheytingHomClass, coe_submonoidClass_iff, exists_isPrimitiveRoot, isCyclotomicExtension, isRoot_cyclotomic_iff, isRoot_of_unity_iff, mem_divisors_self, mem_singleton, mem_singleton_iff
 -/
@@ -2156,7 +2468,28 @@ instance [IsFractionRing
     have : NeZero (n : K) := NeZero.nat_of_injective (IsFractionRing.injective A K)
     refine
       Algebra.adjoin_induction
-        (hx := (
+        (hx := ((IsCyclotomicExtension.iff_singleton n K (CyclotomicField n K)).1
+            (CyclotomicField.isCyclotomicExtension n K)).2 x)
+        (fun y hy => ?_) (fun k => ?_) ?_ ?_
+    · exact ⟨⟨⟨y, subset_adjoin hy⟩, 1⟩, by simp; rfl⟩
+    · have : IsLocalization (nonZeroDivisors A) K := inferInstance
+      replace := this.surj
+      obtain ⟨⟨z, w⟩, hw⟩ := this k
+      refine ⟨⟨algebraMap A (CyclotomicRing n A K) z, algebraMap A (CyclotomicRing n A K) w,
+        map_mem_nonZeroDivisors _ (algebraBase_injective n A K) w.2⟩, ?_⟩
+      let : IsScalarTower A K (CyclotomicField n K) :=
+        IsScalarTower.of_algebraMap_eq (congr_fun rfl)
+      rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]; rw [@IsScalarTower.algebraMap_apply A K _ _ _ _ _ (_root_.CyclotomicField.algebra n K) _ _ w]; rw [← map_mul]; rw [hw]; rw [← IsScalarTower.algebraMap_apply]
+    · rintro y z - - ⟨a, ha⟩ ⟨b, hb⟩
+      refine ⟨⟨a.1 * b.2 + b.1 * a.2, a.2 * b.2, mul_mem_nonZeroDivisors.2 ⟨a.2.2, b.2.2⟩⟩, ?_⟩
+      rw [map_mul]; rw [add_mul]; rw [← mul_assoc]; rw [ha]; rw [mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [← mul_assoc]; rw [hb]
+      simp only [map_add, map_mul]
+    · rintro y z - - ⟨a, ha⟩ ⟨b, hb⟩
+      refine ⟨⟨a.1 * b.1, a.2 * b.2, mul_mem_nonZeroDivisors.2 ⟨a.2.2, b.2.2⟩⟩, ?_⟩
+      rw [map_mul]; rw [mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [mul_assoc]; rw [←
+        mul_assoc z]; rw [hb]; rw [← mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [← mul_assoc]; rw [ha]
+      simp only [map_mul]
+  exists_of_eq {x y} h := ⟨1, by rw [adjoin_algebra_injective n A K h]⟩
 
 中文:
 实例 [IsFractionRing
@@ -2170,7 +2503,28 @@ instance [IsFractionRing
     have : NeZero (n : K) := NeZero.nat_of_injective (IsFractionRing.injective A K)
     refine
       Algebra.adjoin_induction
-        (hx := (
+        (hx := ((IsCyclotomicExtension.iff_singleton n K (CyclotomicField n K)).1
+            (CyclotomicField.isCyclotomicExtension n K)).2 x)
+        (fun y hy => ?_) (fun k => ?_) ?_ ?_
+    · exact ⟨⟨⟨y, subset_adjoin hy⟩, 1⟩, by simp; rfl⟩
+    · have : IsLocalization (nonZeroDivisors A) K := inferInstance
+      replace := this.surj
+      obtain ⟨⟨z, w⟩, hw⟩ := this k
+      refine ⟨⟨algebraMap A (CyclotomicRing n A K) z, algebraMap A (CyclotomicRing n A K) w,
+        map_mem_nonZeroDivisors _ (algebraBase_injective n A K) w.2⟩, ?_⟩
+      let : IsScalarTower A K (CyclotomicField n K) :=
+        IsScalarTower.of_algebraMap_eq (congr_fun rfl)
+      rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]; rw [@IsScalarTower.algebraMap_apply A K _ _ _ _ _ (_root_.CyclotomicField.algebra n K) _ _ w]; rw [← map_mul]; rw [hw]; rw [← IsScalarTower.algebraMap_apply]
+    · rintro y z - - ⟨a, ha⟩ ⟨b, hb⟩
+      refine ⟨⟨a.1 * b.2 + b.1 * a.2, a.2 * b.2, mul_mem_nonZeroDivisors.2 ⟨a.2.2, b.2.2⟩⟩, ?_⟩
+      rw [map_mul]; rw [add_mul]; rw [← mul_assoc]; rw [ha]; rw [mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [← mul_assoc]; rw [hb]
+      simp only [map_add, map_mul]
+    · rintro y z - - ⟨a, ha⟩ ⟨b, hb⟩
+      refine ⟨⟨a.1 * b.1, a.2 * b.2, mul_mem_nonZeroDivisors.2 ⟨a.2.2, b.2.2⟩⟩, ?_⟩
+      rw [map_mul]; rw [mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [mul_assoc]; rw [←
+        mul_assoc z]; rw [hb]; rw [← mul_comm ((algebraMap (CyclotomicRing n A K) _) ↑a.2)]; rw [← mul_assoc]; rw [ha]
+      simp only [map_mul]
+  exists_of_eq {x y} h := ⟨1, by rw [adjoin_algebra_injective n A K h]⟩
 
 Depends on / 依赖: Algebra, Algebra.adjoin_induction, BiheytingAlgebra, CyclotomicField, CyclotomicField.isCyclotomicExtension, IsCyclotomicExtension, IsCyclotomicExtension.iff_singleton, IsFractionRing, IsFractionRing.injective, IsLocalization, NeZero, NeZero.nat_of_injective, OrderIsoClass, OrderIsoClass.toBiheytingHomClass, adjoin_algebra_injective, adjoin_induction, iff_singleton, injective, isCyclotomicExtension, isUnit_iff_ne_zero
 -/
@@ -2253,7 +2607,7 @@ refine ⟨fun {a} ha ha' => ?_, Algebra.eq_top_iff.mp Subsingleton.elim _ _⟩
   have := h a ha ha'
   obtain ⟨r, hr⟩ := IsSepClosed.exists_aeval_eq_zero K _
     (degree_cyclotomic_pos a K (Nat.pos_of_ne_zero ha')).ne' (separable_cyclotomic a K)
-  exact ⟨r, by rwa [coe_aeval_eq_eval, ← IsRoot.def, isR
+  exact ⟨r, by rwa [coe_aeval_eq_eval, ← IsRoot.def, isRoot_cyclotomic_iff] at hr⟩
 
 中文:
 定理 是SepClosed.isCyclotomicExtension
@@ -2263,7 +2617,7 @@ refine ⟨fun {a} ha ha' => ?_, Algebra.eq_top_iff.mp Subsingleton.elim _ _⟩
   have := h a ha ha'
   obtain ⟨r, hr⟩ := IsSepClosed.exists_aeval_eq_zero K _
     (degree_cyclotomic_pos a K (Nat.pos_of_ne_zero ha')).ne' (separable_cyclotomic a K)
-  exact ⟨r, by rwa [coe_aeval_eq_eval, ← IsRoot.def, isR
+  exact ⟨r, by rwa [coe_aeval_eq_eval, ← IsRoot.def, isRoot_cyclotomic_iff] at hr⟩
 
 Depends on / 依赖: Algebra, Algebra.eq_top_iff.mp, IsRoot, IsRoot.def, IsSepClosed, IsSepClosed.exists_aeval_eq_zero, Nat.pos_of_ne_zero, Subsingleton, Subsingleton.elim, coe_aeval_eq_eval, degree_cyclotomic_pos, eq_top_iff, exists_aeval_eq_zero, isRoot_cyclotomic_iff, pos_of_ne_zero, separable_cyclotomic
 -/
@@ -2352,7 +2706,11 @@ theorem isCyclotomicExtension_iff_eq_adjoin
   refine ⟨fun h => ?_, fun h => h ▸ isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S A B hS⟩
   have := congr_arg (Subalgebra.map C.val) ((IsCyclotomicExtension.iff_adjoin_eq_top _ _ _).mp h).2
   rw [← Subalgebra.range_val C]; rw [← Algebra.map_top]; rw [← this]; rw [AlgHom.map_adjoin]
-  c
+  congr; ext
+  simp only [Subalgebra.coe_val, ne_eq, ← Subalgebra.coe_eq_one, SubmonoidClass.coe_pow,
+    Set.mem_image, Set.mem_ofPred_eq, Subtype.exists, exists_and_left, exists_prop,
+    exists_eq_right_right, and_iff_left_iff_imp, forall_exists_index, and_imp]
+  exact fun n hn₁ hn₂ hx => h.mem_of_pow_eq_one S C hn₁ hn₂ hx
 
 中文:
 定理 isCyclotomicExtension_iff_eq_adjoin
@@ -2361,7 +2719,11 @@ theorem isCyclotomicExtension_iff_eq_adjoin
   refine ⟨fun h => ?_, fun h => h ▸ isCyclotomicExtension_adjoin_of_exists_isPrimitiveRoot S A B hS⟩
   have := congr_arg (Subalgebra.map C.val) ((IsCyclotomicExtension.iff_adjoin_eq_top _ _ _).mp h).2
   rw [← Subalgebra.range_val C]; rw [← Algebra.map_top]; rw [← this]; rw [AlgHom.map_adjoin]
-  c
+  congr; ext
+  simp only [Subalgebra.coe_val, ne_eq, ← Subalgebra.coe_eq_one, SubmonoidClass.coe_pow,
+    Set.mem_image, Set.mem_ofPred_eq, Subtype.exists, exists_and_left, exists_prop,
+    exists_eq_right_right, and_iff_left_iff_imp, forall_exists_index, and_imp]
+  exact fun n hn₁ hn₂ hx => h.mem_of_pow_eq_one S C hn₁ hn₂ hx
 
 Depends on / 依赖: AlgHom, AlgHom.map_adjoin, Algebra, Algebra.map_top, C.val, IsCyclotomicExtension, IsCyclotomicExtension.iff_adjoin_eq_top, Set.mem_image, Set.mem_ofPred_eq, Subalgebra, Subalgebra.coe_eq_one, Subalgebra.coe_val, Subalgebra.map, Subalgebra.range_val, SubmonoidClass, SubmonoidClass.coe_pow, Subtype, Subtype.exists, and_iff_, coe_eq_one
 -/
@@ -2390,7 +2752,10 @@ theorem isCyclotomicExtension_singleton_iff_eq_adjoin
     apply le_antisymm
     · refine adjoin_le fun x ⟨_, hx⟩ => ?_
       obtain ⟨k, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx
-     
+      exact Subalgebra.pow_mem _ (self_mem_adjoin_singleton A ζ) _
+· exact adjoin_mono Set.singleton_subset_iff.mpr ⟨NeZero.ne n, hζ.pow_eq_one⟩
+  · simpa only [Set.mem_singleton_iff, ne_eq, forall_eq, NeZero.ne n, not_false_eq_true,
+      forall_const] using ⟨ζ, hζ⟩
 
 中文:
 定理 isCyclotomicExtension_singleton_iff_eq_adjoin
@@ -2402,7 +2767,10 @@ theorem isCyclotomicExtension_singleton_iff_eq_adjoin
     apply le_antisymm
     · refine adjoin_le fun x ⟨_, hx⟩ => ?_
       obtain ⟨k, _, rfl⟩ := hζ.eq_pow_of_pow_eq_one hx
-     
+      exact Subalgebra.pow_mem _ (self_mem_adjoin_singleton A ζ) _
+· exact adjoin_mono Set.singleton_subset_iff.mpr ⟨NeZero.ne n, hζ.pow_eq_one⟩
+  · simpa only [Set.mem_singleton_iff, ne_eq, forall_eq, NeZero.ne n, not_false_eq_true,
+      forall_const] using ⟨ζ, hζ⟩
 
 Depends on / 依赖: NeZero, NeZero.ne, Set.mem_singleton_iff, Set.singleton_subset_iff.mpr, Subalgebra, Subalgebra.pow_mem, adjoin, adjoin_le, adjoin_mono, eq_pow_of_pow_eq_one, exists_eq_left, forall_eq, isCyclotomicExtension_iff_eq_adjoin, le_antisymm, mem_singleton_iff, ne_eq, not_false_eq_true, pow_eq_one, pow_mem, self_mem_adjoin_singleton
 -/
@@ -2429,7 +2797,7 @@ theorem IsCyclotomicExtension.eq
   have hC (n) (hn₁ : n in S) (hn₂ : n != 0) : exists x : B, IsPrimitiveRoot x n := by
     obtain ⟨ζ, hζ⟩ := h₁.1 hn₁ hn₂
     exact ⟨ζ, IsPrimitiveRoot.coe_submonoidClass_iff.mpr hζ⟩
-  rw [(isCyclotomicExtension_iff_eq_adjoin S C₁ hC).mp h₁]; rw [(isCyclotomicExtension_iff_eq_adjoin S C₂ hC).mp h₂
+  rw [(isCyclotomicExtension_iff_eq_adjoin S C₁ hC).mp h₁]; rw [(isCyclotomicExtension_iff_eq_adjoin S C₂ hC).mp h₂]
 
 中文:
 定理 是CyclotomicExtension.eq
@@ -2438,7 +2806,7 @@ theorem IsCyclotomicExtension.eq
   have hC (n) (hn₁ : n in S) (hn₂ : n != 0) : exists x : B, IsPrimitiveRoot x n := by
     obtain ⟨ζ, hζ⟩ := h₁.1 hn₁ hn₂
     exact ⟨ζ, IsPrimitiveRoot.coe_submonoidClass_iff.mpr hζ⟩
-  rw [(isCyclotomicExtension_iff_eq_adjoin S C₁ hC).mp h₁]; rw [(isCyclotomicExtension_iff_eq_adjoin S C₂ hC).mp h₂
+  rw [(isCyclotomicExtension_iff_eq_adjoin S C₁ hC).mp h₁]; rw [(isCyclotomicExtension_iff_eq_adjoin S C₂ hC).mp h₂]
 
 Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_submonoidClass_iff.mpr, coe_submonoidClass_iff, isCyclotomicExtension_iff_eq_adjoin
 -/
@@ -2467,7 +2835,11 @@ exact NeZero.ne n₂ eq_zero_of_zero_dvd h
   obtain ⟨ζ₂, hζ₂⟩ := h₂.1 rfl (NeZero.ne n₂)
   replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective C₂ B)
   obtain ⟨d, hd⟩ := h
-  have hζ₁ := IsPrimitiveRoot.pow n₂.pos_of_neZero hζ
+  have hζ₁ := IsPrimitiveRoot.pow n₂.pos_of_neZero hζ₂ (by rwa [mul_comm])
+  simpa [(isCyclotomicExtension_singleton_iff_eq_adjoin n₁ C₁ hζ₁).mp h₁,
+    (isCyclotomicExtension_singleton_iff_eq_adjoin n₂ C₂ hζ₂).mp h₂] using
+adjoin_le Set.singleton_subset_iff.mpr
+      Subalgebra.pow_mem _ (self_mem_adjoin_singleton A _) _
 
 中文:
 定理 是CyclotomicExtension.le_of_dvd
@@ -2481,7 +2853,11 @@ exact NeZero.ne n₂ eq_zero_of_zero_dvd h
   obtain ⟨ζ₂, hζ₂⟩ := h₂.1 rfl (NeZero.ne n₂)
   replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective C₂ B)
   obtain ⟨d, hd⟩ := h
-  have hζ₁ := IsPrimitiveRoot.pow n₂.pos_of_neZero hζ
+  have hζ₁ := IsPrimitiveRoot.pow n₂.pos_of_neZero hζ₂ (by rwa [mul_comm])
+  simpa [(isCyclotomicExtension_singleton_iff_eq_adjoin n₁ C₁ hζ₁).mp h₁,
+    (isCyclotomicExtension_singleton_iff_eq_adjoin n₂ C₂ hζ₂).mp h₂] using
+adjoin_le Set.singleton_subset_iff.mpr
+      Subalgebra.pow_mem _ (self_mem_adjoin_singleton A _) _
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsPrimitiveRoot, IsPrimitiveRoot.pow, NeZero, NeZero.ne, Set.singleton_subset_iff.mpr, Subalgebra, Subalgebra.pow, adjoin_le, algebraMap_injective, eq_zero_of_zero_dvd, isCyclotomicExtension_singleton_iff_eq_adjoin, map_of_injective, mul_comm, pos_of_neZero, replace, singleton_subset_iff
 -/
@@ -2510,7 +2886,10 @@ theorem IsCyclotomicExtension.lcm_sup
   obtain ⟨ζ₂, hζ₂⟩ := h₂.1 rfl (NeZero.ne n₂)
   replace hζ₁ := hζ₁.map_of_injective (FaithfulSMul.algebraMap_injective C₁ B)
   replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective C₂ B)
-  have hζ := hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne
+  have hζ := hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne n₁) (NeZero.ne n₂)
+  rw [sup_comm]; rw [(isCyclotomicExtension_singleton_iff_eq_adjoin n₁ C₁ hζ₁).mp h₁]; rw [(isCyclotomicExtension_singleton_iff_eq_adjoin n₂ C₂ hζ₂).mp h₂]; rw [← adjoin_union]; rw [Set.union_singleton]; rw [hζ₁.adjoin_pair_eq A hζ₂ (NeZero.ne _) (NeZero.ne _) hζ]
+  have : NeZero (n₁.lcm n₂) := ⟨Nat.lcm_ne_zero (NeZero.ne _) (NeZero.ne _)⟩
+  exact (hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne n₁) (NeZero.ne n₂)).adjoin_isCyclotomicExtension A
 
 中文:
 定理 是CyclotomicExtension.lcm_sup
@@ -2520,7 +2899,10 @@ theorem IsCyclotomicExtension.lcm_sup
   obtain ⟨ζ₂, hζ₂⟩ := h₂.1 rfl (NeZero.ne n₂)
   replace hζ₁ := hζ₁.map_of_injective (FaithfulSMul.algebraMap_injective C₁ B)
   replace hζ₂ := hζ₂.map_of_injective (FaithfulSMul.algebraMap_injective C₂ B)
-  have hζ := hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne
+  have hζ := hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne n₁) (NeZero.ne n₂)
+  rw [sup_comm]; rw [(isCyclotomicExtension_singleton_iff_eq_adjoin n₁ C₁ hζ₁).mp h₁]; rw [(isCyclotomicExtension_singleton_iff_eq_adjoin n₂ C₂ hζ₂).mp h₂]; rw [← adjoin_union]; rw [Set.union_singleton]; rw [hζ₁.adjoin_pair_eq A hζ₂ (NeZero.ne _) (NeZero.ne _) hζ]
+  have : NeZero (n₁.lcm n₂) := ⟨Nat.lcm_ne_zero (NeZero.ne _) (NeZero.ne _)⟩
+  exact (hζ₁.pow_mul_pow_lcm hζ₂ (NeZero.ne n₁) (NeZero.ne n₂)).adjoin_isCyclotomicExtension A
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, NeZero, NeZero.ne, Set.union_, adjoin_union, algebraMap_injective, isCyclotomicExtension_singleton_iff_eq_adjoin, map_of_injective, pow_mul_pow_lcm, replace, sup_comm, union_
 -/

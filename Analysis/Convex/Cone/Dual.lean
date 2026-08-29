@@ -335,7 +335,10 @@ theorem hyperplane_separation
   obtain ⟨f, u, v, hu, huv, hv⟩ :=
     geometric_hahn_banach_compact_closed hKconv hKcomp C.convex C.isClosed hKC
   have hv₀ : v < 0 := by simpa using hv 0 C.zero_mem
-refine ⟨f, fun x hx => ?_, fun x hx => (hu x hx).trans_l
+refine ⟨f, fun x hx => ?_, fun x hx => (hu x hx).trans_le huv.le.trans hv₀.le⟩
+  by_contra! hx₀
+  simpa [hx₀.ne] using hv ((v * (f x)⁻¹) • x)
+    (C.smul_mem hx <| le_of_lt <| mul_pos_of_neg_of_neg hv₀ <| inv_neg''.2 hx₀)
 
 中文:
 定理 hyperplane_separation
@@ -346,7 +349,10 @@ refine ⟨f, fun x hx => ?_, fun x hx => (hu x hx).trans_l
   obtain ⟨f, u, v, hu, huv, hv⟩ :=
     geometric_hahn_banach_compact_closed hKconv hKcomp C.convex C.isClosed hKC
   have hv₀ : v < 0 := by simpa using hv 0 C.zero_mem
-refine ⟨f, fun x hx => ?_, fun x hx => (hu x hx).trans_l
+refine ⟨f, fun x hx => ?_, fun x hx => (hu x hx).trans_le huv.le.trans hv₀.le⟩
+  by_contra! hx₀
+  simpa [hx₀.ne] using hv ((v * (f x)⁻¹) • x)
+    (C.smul_mem hx <| le_of_lt <| mul_pos_of_neg_of_neg hv₀ <| inv_neg''.2 hx₀)
 
 Depends on / 依赖: C.convex, C.isClosed, C.smul_mem, C.zero_mem, K.eq_empty_or_nonempty, convex, eq_empty_or_nonempty, geometric_hahn_banach_compact_closed, hKcomp, hKconv, huv.le.trans, inv_neg, isClosed, le_of_lt, mul_pos_of_neg_of_neg, smul_mem, trans_le, zero_mem
 -/

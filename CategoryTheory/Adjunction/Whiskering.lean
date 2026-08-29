@@ -81,7 +81,7 @@ definition whiskerLeft
     { app := fun X =>
         (associator _ _ _).inv ≫ whiskerRight adj.counit X ≫ (leftUnitor _).hom }
   left_triangle_components X := by ext; simp [← X.map_comp]
-  right_triangle_component
+  right_triangle_components X := by ext; simp [← X.map_comp]
 
 中文:
 定义 whiskerLeft
@@ -92,7 +92,7 @@ definition whiskerLeft
     { app := fun X =>
         (associator _ _ _).inv ≫ whiskerRight adj.counit X ≫ (leftUnitor _).hom }
   left_triangle_components X := by ext; simp [← X.map_comp]
-  right_triangle_component
+  right_triangle_components X := by ext; simp [← X.map_comp]
 -/
 protected def whiskerLeft (adj : F ⊣ G) :
     (whiskeringLeft E D C).obj G ⊣ (whiskeringLeft D E C).obj F where

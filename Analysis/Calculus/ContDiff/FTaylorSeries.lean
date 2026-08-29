@@ -234,7 +234,7 @@ theorem HasFTaylorSeriesUpToOn.congr_series
     refine ((hp.fderivWithin m hm x hx).congr' (hpq m hm.le).symm hx).congr_fderiv ?_
     refine congrArg _ (hpq (m + 1) ?_ hx)
     exact ENat.add_one_natCast_le_withTop_of_lt hm
-  cont m hm := (hp.cont m hm).congr (hp
+  cont m hm := (hp.cont m hm).congr (hpq m hm).symm
 
 中文:
 定理 有FTaylorSeriesUpToOn.congr_series
@@ -244,7 +244,7 @@ theorem HasFTaylorSeriesUpToOn.congr_series
     refine ((hp.fderivWithin m hm x hx).congr' (hpq m hm.le).symm hx).congr_fderiv ?_
     refine congrArg _ (hpq (m + 1) ?_ hx)
     exact ENat.add_one_natCast_le_withTop_of_lt hm
-  cont m hm := (hp.cont m hm).congr (hp
+  cont m hm := (hp.cont m hm).congr (hpq m hm).symm
 
 Depends on / 依赖: ENat.add_one_natCast_le_withTop_of_lt, add_one_natCast_le_withTop_of_lt, congr_fderiv, fderivWithin, hm.le, hp.cont, hp.fderivWithin, hp.zero_eq, zero_eq, zero_le
 -/
@@ -336,7 +336,9 @@ theorem hasFTaylorSeriesUpToOn_zero_iff
       ⟨H.2, fun m hm => False.elim (not_le.2 hm bot_le), fun m hm => ?_⟩⟩
   obtain rfl : m = 0 := mod_cast hm.antisymm zero_le
   have : EqOn (p · 0) ((continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f) s := fun x hx =>
-    (continuousMultiline
+    (continuousMultilinearCurryFin0 𝕜 E F).eq_symm_apply.2 (H.2 x hx)
+  rw [continuousOn_congr this]; rw [LinearIsometryEquiv.comp_continuousOn_iff]
+  exact H.1
 
 中文:
 定理 hasFTaylorSeriesUpToOn_zero_iff
@@ -345,7 +347,9 @@ theorem hasFTaylorSeriesUpToOn_zero_iff
       ⟨H.2, fun m hm => False.elim (not_le.2 hm bot_le), fun m hm => ?_⟩⟩
   obtain rfl : m = 0 := mod_cast hm.antisymm zero_le
   have : EqOn (p · 0) ((continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f) s := fun x hx =>
-    (continuousMultiline
+    (continuousMultilinearCurryFin0 𝕜 E F).eq_symm_apply.2 (H.2 x hx)
+  rw [continuousOn_congr this]; rw [LinearIsometryEquiv.comp_continuousOn_iff]
+  exact H.1
 
 Depends on / 依赖: False.elim, H.continuousOn, H.zero_eq, LinearIsometryEquiv, LinearIsometryEquiv.comp_continuousOn_iff, antisymm, bot_le, comp_continuousOn_iff, continuousMultilinearCurryFin0, continuousOn, continuousOn_congr, eq_symm_apply, hm.antisymm, mod_cast, not_le, zero_eq, zero_le
 -/
@@ -472,7 +476,14 @@ theorem HasFTaylorSeriesUpToOn.hasFDerivWithinAt
     (h.zero_eq y hy).symm
   suffices H : HasFDerivWithinAt (continuousMultilinearCurryFin0 𝕜 E F ∘ (p · 0))
     (continuousMultilinearCurryFin1 𝕜 E F (p x 1)) s x from H.congr A (A x hx)
-  rw [LinearIsom
+  rw [LinearIsometryEquiv.comp_hasFDerivWithinAt_iff']
+  have : ((0 : Nat) : Nat∞) < n := pos_iff_ne_zero.mpr hn
+  convert! h.fderivWithin _ this x hx
+  ext y v
+  change (p x 1) (snoc 0 y) = (p x 1) (cons y v)
+  congr with i
+  rw [Unique.eq_default (α := Fin 1) i]
+  rfl
 
 中文:
 定理 有FTaylorSeriesUpToOn.hasFDerivWithinAt
@@ -482,7 +493,14 @@ theorem HasFTaylorSeriesUpToOn.hasFDerivWithinAt
     (h.zero_eq y hy).symm
   suffices H : HasFDerivWithinAt (continuousMultilinearCurryFin0 𝕜 E F ∘ (p · 0))
     (continuousMultilinearCurryFin1 𝕜 E F (p x 1)) s x from H.congr A (A x hx)
-  rw [LinearIsom
+  rw [LinearIsometryEquiv.comp_hasFDerivWithinAt_iff']
+  have : ((0 : Nat) : Nat∞) < n := pos_iff_ne_zero.mpr hn
+  convert! h.fderivWithin _ this x hx
+  ext y v
+  change (p x 1) (snoc 0 y) = (p x 1) (cons y v)
+  congr with i
+  rw [Unique.eq_default (α := Fin 1) i]
+  rfl
 
 Depends on / 依赖: H.congr, HasFDerivWithinAt, LinearIsometryEquiv, LinearIsometryEquiv.comp_hasFDerivWithinAt_iff, Unique, Unique.eq_d, comp_hasFDerivWithinAt_iff, continuousMultilinearCurryFin0, continuousMultilinearCurryFin1, convert, eq_d, fderivWithin, h.fderivWithin, h.zero_eq, pos_iff_ne_zero, pos_iff_ne_zero.mpr, zero_eq
 -/
@@ -593,7 +611,15 @@ theorem hasFTaylorSeriesUpToOn_succ_iff_left
     · intro m hm
       by_cases h' : m < n
       · exact h.1.fderivWithin m (mod_cast h')
-      · have : m
+      · have : m = n := Nat.eq_of_lt_succ_of_not_lt (mod_cast hm) h'
+        rw [this]
+        exact h.2.1
+    · intro m hm
+      by_cases h' : m <= n
+      · apply h.1.cont m (mod_cast h')
+      · have : m = n + 1 := le_antisymm (mod_cast hm) (not_le.1 h')
+        rw [this]
+        exact h.2.2
 
 中文:
 定理 hasFTaylorSeriesUpToOn_succ_iff_left
@@ -608,7 +634,15 @@ theorem hasFTaylorSeriesUpToOn_succ_iff_left
     · intro m hm
       by_cases h' : m < n
       · exact h.1.fderivWithin m (mod_cast h')
-      · have : m
+      · have : m = n := Nat.eq_of_lt_succ_of_not_lt (mod_cast hm) h'
+        rw [this]
+        exact h.2.1
+    · intro m hm
+      by_cases h' : m <= n
+      · apply h.1.cont m (mod_cast h')
+      · have : m = n + 1 := le_antisymm (mod_cast hm) (not_le.1 h')
+        rw [this]
+        exact h.2.2
 
 Depends on / 依赖: Nat.eq_of_lt_succ_of_not_lt, Nat.le_succ, eq_of_lt_succ_of_not_lt, fderivWithin, h.cont, h.fderivWithin, h.of_le, le_antisymm, le_rfl, le_succ, lt_add_one, mod_cast, not_le, of_le, zero_eq
 -/
@@ -650,7 +684,18 @@ theorem HasFTaylorSeriesUpToOn.shift_of_succ
       rw [Nat.cast_lt] at hm ⊢
       exact Nat.succ_lt_succ hm
     change HasFDerivWithinAt (continuousMultilinearCurryRightEquiv' 𝕜 m E F ∘ (p · m.succ))
-      (p x
+      (p x m.succ.succ).curryRight.curryLeft s x
+    rw [(continuousMultilinearCurryRightEquiv' 𝕜 m E F).comp_hasFDerivWithinAt_iff']
+    convert! H.fderivWithin _ A x hx
+    ext y v
+    change p x (m + 2) (snoc (cons y (init v)) (v (last _))) = p x (m + 2) (cons y v)
+    rw [← cons_snoc_eq_snoc_cons]; rw [snoc_init_self]
+  · intro m (hm : (m : Nat∞ω) <= n)
+    suffices A : ContinuousOn (p · (m + 1)) s from
+      (continuousMultilinearCurryRightEquiv' 𝕜 m E F).continuous.comp_continuousOn A
+    refine H.cont _ ?_
+    rw [Nat.cast_le] at hm ⊢
+    exact Nat.succ_le_succ hm
 
 中文:
 定理 有FTaylorSeriesUpToOn.shift_of_succ
@@ -663,7 +708,18 @@ theorem HasFTaylorSeriesUpToOn.shift_of_succ
       rw [Nat.cast_lt] at hm ⊢
       exact Nat.succ_lt_succ hm
     change HasFDerivWithinAt (continuousMultilinearCurryRightEquiv' 𝕜 m E F ∘ (p · m.succ))
-      (p x
+      (p x m.succ.succ).curryRight.curryLeft s x
+    rw [(continuousMultilinearCurryRightEquiv' 𝕜 m E F).comp_hasFDerivWithinAt_iff']
+    convert! H.fderivWithin _ A x hx
+    ext y v
+    change p x (m + 2) (snoc (cons y (init v)) (v (last _))) = p x (m + 2) (cons y v)
+    rw [← cons_snoc_eq_snoc_cons]; rw [snoc_init_self]
+  · intro m (hm : (m : Nat∞ω) <= n)
+    suffices A : ContinuousOn (p · (m + 1)) s from
+      (continuousMultilinearCurryRightEquiv' 𝕜 m E F).continuous.comp_continuousOn A
+    refine H.cont _ ?_
+    rw [Nat.cast_le] at hm ⊢
+    exact Nat.succ_le_succ hm
 
 Depends on / 依赖: H.fderivWithin, HasFDerivWithinAt, Nat.cast_lt, Nat.succ_lt_succ, cast_lt, comp_hasFDerivWithinAt_iff, continuousMultilinearCurryRightEquiv, convert, curryLeft, curryRight, curryRight.curryLeft, fderivWithin, m.succ, m.succ.succ, n.succ, succ_lt_succ
 -/
@@ -708,7 +764,30 @@ theorem hasFTaylorSeriesUpToOn_succ_nat_iff_right
     · exact Hzero_eq
     · intro m (hm : (m : Nat∞ω) < n.succ) x (hx : x in s)
       rcases m with - | m
- 
+      · exact Hfderiv_zero x hx
+      · have A : (m : Nat∞ω) < n := by
+          rw [Nat.cast_lt] at hm ⊢
+          exact Nat.lt_of_succ_lt_succ hm
+        have :
+          HasFDerivWithinAt (𝕜 := 𝕜) (continuousMultilinearCurryRightEquiv' 𝕜 m E F ∘ (p · m.succ))
+            ((p x).shift m.succ).curryLeft s x := Htaylor.fderivWithin _ A x hx
+        rw [LinearIsometryEquiv.comp_hasFDerivWithinAt_iff'
+            (f' := ((p x).shift m.succ).curryLeft)] at this
+        convert! this
+        ext y v
+        change
+          (p x (Nat.succ (Nat.succ m))) (cons y v) =
+            (p x m.succ.succ) (snoc (cons y (init v)) (v (last _)))
+        rw [← cons_snoc_eq_snoc_cons]; rw [snoc_init_self]
+    · intro m (hm : (m : Nat∞ω) <= n.succ)
+      rcases m with - | m
+      · have : DifferentiableOn 𝕜 (fun x => p x 0) s := fun x hx =>
+          (Hfderiv_zero x hx).differentiableWithinAt
+        exact this.continuousOn
+      · refine (continuousMultilinearCurryRightEquiv' 𝕜 m E F).comp_continuousOn_iff.mp ?_
+        refine Htaylor.cont _ ?_
+        rw [Nat.cast_le] at hm ⊢
+        exact Nat.lt_succ_iff.mp hm
 
 中文:
 定理 hasFTaylorSeriesUpToOn_succ_nat_iff_right
@@ -723,7 +802,30 @@ theorem hasFTaylorSeriesUpToOn_succ_nat_iff_right
     · exact Hzero_eq
     · intro m (hm : (m : Nat∞ω) < n.succ) x (hx : x in s)
       rcases m with - | m
- 
+      · exact Hfderiv_zero x hx
+      · have A : (m : Nat∞ω) < n := by
+          rw [Nat.cast_lt] at hm ⊢
+          exact Nat.lt_of_succ_lt_succ hm
+        have :
+          HasFDerivWithinAt (𝕜 := 𝕜) (continuousMultilinearCurryRightEquiv' 𝕜 m E F ∘ (p · m.succ))
+            ((p x).shift m.succ).curryLeft s x := Htaylor.fderivWithin _ A x hx
+        rw [LinearIsometryEquiv.comp_hasFDerivWithinAt_iff'
+            (f' := ((p x).shift m.succ).curryLeft)] at this
+        convert! this
+        ext y v
+        change
+          (p x (Nat.succ (Nat.succ m))) (cons y v) =
+            (p x m.succ.succ) (snoc (cons y (init v)) (v (last _)))
+        rw [← cons_snoc_eq_snoc_cons]; rw [snoc_init_self]
+    · intro m (hm : (m : Nat∞ω) <= n.succ)
+      rcases m with - | m
+      · have : DifferentiableOn 𝕜 (fun x => p x 0) s := fun x hx =>
+          (Hfderiv_zero x hx).differentiableWithinAt
+        exact this.continuousOn
+      · refine (continuousMultilinearCurryRightEquiv' 𝕜 m E F).comp_continuousOn_iff.mp ?_
+        refine Htaylor.cont _ ?_
+        rw [Nat.cast_le] at hm ⊢
+        exact Nat.lt_succ_iff.mp hm
 
 Depends on / 依赖: H.fderivWithin, H.shift_of_succ, H.zero_eq, HasFDerivWithinAt, Hfderiv_zero, Htaylor, Hzero_eq, Nat.cast_lt, Nat.lt_of_succ_lt_succ, Nat.succ_pos, cast_lt, continuousMultilinearCurryRightEquiv, fderivWithin, lt_of_succ_lt_succ, m.succ, n.succ, shift_of_succ, succ_pos, zero_eq
 -/
@@ -779,7 +881,10 @@ theorem hasFTaylorSeriesUpToOn_top_iff_right
     rw [hasFTaylorSeriesUpToOn_top_iff hN]
     exact ⟨(hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h 1)).1,
       (hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h 1)).2.1,
-      fun n => (hasFTaylorSeriesUpT
+      fun n => (hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h n)).2.2⟩
+  · apply (hasFTaylorSeriesUpToOn_top_iff_add hN 1).2 (fun n => ?_)
+    rw [hasFTaylorSeriesUpToOn_succ_nat_iff_right]
+    exact ⟨h.1, h.2.1, (h.2.2).of_le (m := n) (natCast_le_of_coe_top_le_withTop hN n)⟩
 
 中文:
 定理 hasFTaylorSeriesUpToOn_top_iff_right
@@ -790,7 +895,10 @@ theorem hasFTaylorSeriesUpToOn_top_iff_right
     rw [hasFTaylorSeriesUpToOn_top_iff hN]
     exact ⟨(hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h 1)).1,
       (hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h 1)).2.1,
-      fun n => (hasFTaylorSeriesUpT
+      fun n => (hasFTaylorSeriesUpToOn_succ_nat_iff_right.1 (h n)).2.2⟩
+  · apply (hasFTaylorSeriesUpToOn_top_iff_add hN 1).2 (fun n => ?_)
+    rw [hasFTaylorSeriesUpToOn_succ_nat_iff_right]
+    exact ⟨h.1, h.2.1, (h.2.2).of_le (m := n) (natCast_le_of_coe_top_le_withTop hN n)⟩
 
 Depends on / 依赖: hasFTaylorSeriesUpToOn_succ_nat_iff_right, hasFTaylorSeriesUpToOn_top_iff, hasFTaylorSeriesUpToOn_top_iff_add, natCast_le_of_coe_top_le_withTo, of_le
 -/
@@ -1132,7 +1240,29 @@ theorem iteratedFDerivWithin_succ_apply_right
     rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [iteratedFDerivWithin_zero_eq_comp]; rw [iteratedFDerivWithin_zero_apply]; rw [Function.comp_apply]; rw [LinearIsometryEquiv.comp_fderivWithin _ (hs x hx)]
     simp
   | succ n IH =>
-    let I := (con
+    let I := (continuousMultilinearCurryRightEquiv' 𝕜 n E F).symm
+    have A : forall y in s, iteratedFDerivWithin 𝕜 n.succ f s y =
+        (I ∘ iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s) y := fun y hy => by
+      ext m
+      simp [IH hy m, I]
+    calc
+      (iteratedFDerivWithin 𝕜 (n + 2) f s x : (Fin (n + 2) -> E) -> F) m =
+          (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n.succ f s) s x : E -> E [×n + 1]->L[𝕜] F) (m 0)
+            (tail m) := by
+        simp [iteratedFDerivWithin_succ_eq_comp_left]
+      _ = (fderivWithin 𝕜 (I ∘ iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s) s x :
+              E -> E [×n + 1]->L[𝕜] F) (m 0) (tail m) := by
+        rw [fderivWithin_congr A (A x hx)]
+      _ = (I ∘ fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s) s x :
+              E -> E [×n + 1]->L[𝕜] F) (m 0) (tail m) := by
+        simp [LinearIsometryEquiv.comp_fderivWithin _ (hs x hx)]
+      _ = (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s) s x :
+              E -> E [×n]->L[𝕜] E ->L[𝕜] F) (m 0) (init (tail m)) ((tail m) (last n)) := by
+        simp [I]
+      _ = iteratedFDerivWithin 𝕜 (Nat.succ n) (fun y => fderivWithin 𝕜 f s y) s x (init m)
+            (m (last (n + 1))) := by
+        rw [iteratedFDerivWithin_succ_apply_left]; rw [tail_init_eq_init_tail]
+        simp [init, tail]
 
 中文:
 定理 iteratedFDerivWithin_succ_apply_right
@@ -1143,7 +1273,29 @@ theorem iteratedFDerivWithin_succ_apply_right
     rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [iteratedFDerivWithin_zero_eq_comp]; rw [iteratedFDerivWithin_zero_apply]; rw [Function.comp_apply]; rw [LinearIsometryEquiv.comp_fderivWithin _ (hs x hx)]
     simp
   | succ n IH =>
-    let I := (con
+    let I := (continuousMultilinearCurryRightEquiv' 𝕜 n E F).symm
+    have A : forall y in s, iteratedFDerivWithin 𝕜 n.succ f s y =
+        (I ∘ iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s) y := fun y hy => by
+      ext m
+      simp [IH hy m, I]
+    calc
+      (iteratedFDerivWithin 𝕜 (n + 2) f s x : (Fin (n + 2) -> E) -> F) m =
+          (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n.succ f s) s x : E -> E [×n + 1]->L[𝕜] F) (m 0)
+            (tail m) := by
+        simp [iteratedFDerivWithin_succ_eq_comp_left]
+      _ = (fderivWithin 𝕜 (I ∘ iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s) s x :
+              E -> E [×n + 1]->L[𝕜] F) (m 0) (tail m) := by
+        rw [fderivWithin_congr A (A x hx)]
+      _ = (I ∘ fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n (fderivWithin 𝕜 f s) s) s x :
+              E -> E [×n + 1]->L[𝕜] F) (m 0) (tail m) := by
+        simp [LinearIsometryEquiv.comp_fderivWithin _ (hs x hx)]
+      _ = (fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 n (fun y => fderivWithin 𝕜 f s y) s) s x :
+              E -> E [×n]->L[𝕜] E ->L[𝕜] F) (m 0) (init (tail m)) ((tail m) (last n)) := by
+        simp [I]
+      _ = iteratedFDerivWithin 𝕜 (Nat.succ n) (fun y => fderivWithin 𝕜 f s y) s x (init m)
+            (m (last (n + 1))) := by
+        rw [iteratedFDerivWithin_succ_apply_left]; rw [tail_init_eq_init_tail]
+        simp [init, tail]
 
 Depends on / 依赖: Function, Function.comp_apply, LinearIsometryEquiv, LinearIsometryEquiv.comp_fderivWithin, comp_apply, comp_fderivWithin, continuousMultilinearCurryRightEquiv, fderivWithin, generalizing, iteratedFDerivWithin, iteratedFDerivWithin_succ_eq_comp_left, iteratedFDerivWithin_zero_apply, iteratedFDerivWithin_zero_eq_comp, n.succ
 -/
@@ -1656,7 +1808,11 @@ theorem HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn
     have A : m < n := lt_of_lt_of_le (mod_cast lt_add_one m) hmn
     have :
       HasFDerivWithinAt (fun y : E => iteratedFDerivWithin 𝕜 m f s y)
-        (ContinuousMul
+        (ContinuousMultilinearMap.curryLeft (p x (Nat.succ m))) s x :=
+      (h.fderivWithin m A x hx).congr (fun y hy => (IH (le_of_lt A) hy).symm)
+        (IH (le_of_lt A) hx).symm
+    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [Function.comp_apply]; rw [this.fderivWithin (hs x hx)]
+    exact (ContinuousMultilinearMap.uncurry_curryLeft _).symm
 
 中文:
 定理 有FTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn
@@ -1667,7 +1823,11 @@ theorem HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn
     have A : m < n := lt_of_lt_of_le (mod_cast lt_add_one m) hmn
     have :
       HasFDerivWithinAt (fun y : E => iteratedFDerivWithin 𝕜 m f s y)
-        (ContinuousMul
+        (ContinuousMultilinearMap.curryLeft (p x (Nat.succ m))) s x :=
+      (h.fderivWithin m A x hx).congr (fun y hy => (IH (le_of_lt A) hy).symm)
+        (IH (le_of_lt A) hx).symm
+    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [Function.comp_apply]; rw [this.fderivWithin (hs x hx)]
+    exact (ContinuousMultilinearMap.uncurry_curryLeft _).symm
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.curryLeft, Function, Function.comp_apply, HasFDerivWithinAt, Nat.succ, comp_apply, curryLeft, fderivWithin, generalizing, h.fderivWithin, h.zero_eq, iteratedFDerivWithin, iteratedFDerivWithin_succ_eq_comp_left, iteratedFDerivWithin_zero_eq_comp, le_of_lt, lt_add_one, lt_of_lt_of_le, mod_cast, this.f
 -/
@@ -2144,7 +2304,8 @@ lemma HasFTaylorSeriesUpTo.tsupport_mono
     refine subset_trans ?_ (ih hl.le)
     refine Eq.trans_subset ?_ (tsupport_fderiv_subset 𝕜)
     rw [funext <| hf.fderiv_eq (mod_cast hl)]
-.symm refine tsupport_comp_eq (g := 
+.symm refine tsupport_comp_eq (g := ContinuousMultilinearMap.curryLeft) (fun {x} => ?_) _
+    exact (continuousMultilinearCurryLeftEquiv _ _ _).map_eq_zero_iff (x := x)
 
 中文:
 引理 有FTaylorSeriesUpTo.tsupport_mono
@@ -2157,7 +2318,8 @@ lemma HasFTaylorSeriesUpTo.tsupport_mono
     refine subset_trans ?_ (ih hl.le)
     refine Eq.trans_subset ?_ (tsupport_fderiv_subset 𝕜)
     rw [funext <| hf.fderiv_eq (mod_cast hl)]
-.symm refine tsupport_comp_eq (g := 
+.symm refine tsupport_comp_eq (g := ContinuousMultilinearMap.curryLeft) (fun {x} => ?_) _
+    exact (continuousMultilinearCurryLeftEquiv _ _ _).map_eq_zero_iff (x := x)
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.curryLeft, Eq.trans_subset, continuousMultilinearCurryLeftEquiv, curryLeft, fderiv_eq, hf.fderiv_eq, hl.le, lt_add_one, lt_of_lt_of_le, map_eq_zero_iff, mod_cast, subset_trans, trans_subset, tsupport_comp_eq, tsupport_fderiv_subset
 -/
@@ -2421,7 +2583,8 @@ theorem tsupport_iteratedFDeriv_subset
       isClosed_closure
   | succ n IH =>
     rw [iteratedFDeriv_succ_eq_comp_left]
-    exact closure_minimal ((support_comp_subset (map_zero _) 
+    exact closure_minimal ((support_comp_subset (map_zero _) _).trans
+      ((support_fderiv_subset 𝕜).trans IH)) isClosed_closure
 
 中文:
 定理 tsupport_iteratedFDeriv_subset
@@ -2435,7 +2598,8 @@ theorem tsupport_iteratedFDeriv_subset
       isClosed_closure
   | succ n IH =>
     rw [iteratedFDeriv_succ_eq_comp_left]
-    exact closure_minimal ((support_comp_subset (map_zero _) 
+    exact closure_minimal ((support_comp_subset (map_zero _) _).trans
+      ((support_fderiv_subset 𝕜).trans IH)) isClosed_closure
 
 Depends on / 依赖: closure_minimal, isClosed_closure, iteratedFDeriv_succ_eq_comp_left, iteratedFDeriv_zero_eq_comp, map_zero, subset_closure, support_comp_subset, support_fderiv_subset
 -/
@@ -2943,7 +3107,8 @@ lemma iteratedFDerivWithin_comp_neg
         = fun a => (-1 : 𝕜) ^ n • iteratedFDerivWithin 𝕜 n f (-s) (-a) := by
       ext b
       rw [ih b]
-    set g := fun a => iteratedFDerivWithi
+    set g := fun a => iteratedFDerivWithin 𝕜 n f (-s) a
+    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [Function.comp_apply]; rw [Function.comp_apply]; rw [ih']; rw [← Pi.smul_def]; rw [fderivWithin_const_smul_field' ((-1 : 𝕜) ^ n) (f := fun a => g (-a))]; rw [fderivWithin_comp_neg (f := g)]; rw [← neg_one_smul 𝕜 (fderivWithin 𝕜 _ (-s) (-a))]; rw [← mul_smul _ (-1)]; rw [← pow_succ (-1) n]; rw [map_smul]
 
 中文:
 引理 iteratedFDerivWithin_comp_neg
@@ -2956,7 +3121,8 @@ lemma iteratedFDerivWithin_comp_neg
         = fun a => (-1 : 𝕜) ^ n • iteratedFDerivWithin 𝕜 n f (-s) (-a) := by
       ext b
       rw [ih b]
-    set g := fun a => iteratedFDerivWithi
+    set g := fun a => iteratedFDerivWithin 𝕜 n f (-s) a
+    rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [iteratedFDerivWithin_succ_eq_comp_left]; rw [Function.comp_apply]; rw [Function.comp_apply]; rw [ih']; rw [← Pi.smul_def]; rw [fderivWithin_const_smul_field' ((-1 : 𝕜) ^ n) (f := fun a => g (-a))]; rw [fderivWithin_comp_neg (f := g)]; rw [← neg_one_smul 𝕜 (fderivWithin 𝕜 _ (-s) (-a))]; rw [← mul_smul _ (-1)]; rw [← pow_succ (-1) n]; rw [map_smul]
 
 Depends on / 依赖: Function, Function.comp_apply, Pi.smul_def, comp_apply, fderivWithin_const_smul_field, generalizing, iteratedFDerivWithin, iteratedFDerivWithin_succ_eq_comp_left, smul_def
 -/

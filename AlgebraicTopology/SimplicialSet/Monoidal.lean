@@ -241,7 +241,9 @@ definition unitHomEquiv
   left_inv φ := by
     ext Δ ⟨⟩
     dsimp [-Monoidal.tensorUnit_obj]
-
+    rw [← NatTrans.naturality_apply]
+    rfl
+  right_inv x := by simp
 
 中文:
 定义 unitHomEquiv
@@ -257,7 +259,9 @@ definition unitHomEquiv
   left_inv φ := by
     ext Δ ⟨⟩
     dsimp [-Monoidal.tensorUnit_obj]
-
+    rw [← NatTrans.naturality_apply]
+    rfl
+  right_inv x := by simp
 
 Depends on / 依赖: PUnit.unit
 -/
@@ -537,7 +541,8 @@ definition prodIso
       intro _ _ ⟨⟨_, ⟨_, _⟩⟩, _⟩
       cat_disch))
   inv := lift (A.ι otimesₘ B.ι) (by
- 
+    rintro m _ ⟨⟨y₁, y₂⟩, ⟨⟩⟩
+    exact ⟨Subtype.coe_prop _, Subtype.coe_prop _⟩)
 
 中文:
 定义 prodIso
@@ -550,7 +555,8 @@ definition prodIso
       intro _ _ ⟨⟨_, ⟨_, _⟩⟩, _⟩
       cat_disch))
   inv := lift (A.ι otimesₘ B.ι) (by
- 
+    rintro m _ ⟨⟨y₁, y₂⟩, ⟨⟩⟩
+    exact ⟨Subtype.coe_prop _, Subtype.coe_prop _⟩)
 
 Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.lift
 -/

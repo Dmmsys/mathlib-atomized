@@ -127,7 +127,8 @@ definition isLimitKer
   body: isLimitAux (KernelFork.ofι (kerι φ) (kerι_comp φ))
     (fun s => ofHom <| (Fork.ι s).hom.codRestrict φ.hom.ker fun m => by
       rw [LinearMap.mem_ker]; rw [ContinuousLinearMap.coe_coe]; rw [← ConcreteCategory.comp_apply (Fork.ι s) φ]; rw [KernelFork.condition]; rw [hom_zero_apply])
-    (fun s => rf
+    (fun s => rfl)
+    (fun s m h => by dsimp at h ⊢; rw [← cancel_mono (kerι φ), h]; rfl)
 
 中文:
 定义 isLimitKer
@@ -135,7 +136,8 @@ definition isLimitKer
   定义体: isLimitAux (KernelFork.ofι (kerι φ) (kerι_comp φ))
     (fun s => ofHom <| (Fork.ι s).hom.codRestrict φ.hom.ker fun m => by
       rw [LinearMap.mem_ker]; rw [ContinuousLinearMap.coe_coe]; rw [← ConcreteCategory.comp_apply (Fork.ι s) φ]; rw [KernelFork.condition]; rw [hom_zero_apply])
-    (fun s => rf
+    (fun s => rfl)
+    (fun s m h => by dsimp at h ⊢; rw [← cancel_mono (kerι φ), h]; rfl)
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, ContinuousLinearMap, ContinuousLinearMap.coe_coe, KernelFork, KernelFork.condition, KernelFork.of, LinearMap, LinearMap.mem_ker, cancel_mono, codRestrict, coe_coe, comp_apply, condition, hom.codRestrict, hom.ker, hom_zero_apply, isLimitAux, mem_ker
 -/
@@ -276,7 +278,9 @@ definition isColimitCoker
     { toLinearMap := φ.hom.range.liftQ s.π.hom.toLinearMap
         (LinearMap.range_le_ker_iff.mpr <| show (φ ≫ s.π).hom.toLinearMap = 0 by
           rw [s.condition]; rw [hom_zero]; rw [ContinuousLinearMap.toLinearMap_zero])
-      
+      cont := Continuous.quotient_lift s.π.hom.2 _ })
+  (fun s => rfl)
+  (fun s m h => by dsimp at h ⊢; rw [← cancel_epi (cokerπ φ), h]; rfl)
 
 中文:
 定义 isColimitCoker
@@ -286,7 +290,9 @@ definition isColimitCoker
     { toLinearMap := φ.hom.range.liftQ s.π.hom.toLinearMap
         (LinearMap.range_le_ker_iff.mpr <| show (φ ≫ s.π).hom.toLinearMap = 0 by
           rw [s.condition]; rw [hom_zero]; rw [ContinuousLinearMap.toLinearMap_zero])
-      
+      cont := Continuous.quotient_lift s.π.hom.2 _ })
+  (fun s => rfl)
+  (fun s m h => by dsimp at h ⊢; rw [← cancel_epi (cokerπ φ), h]; rfl)
 
 Depends on / 依赖: Continuous, Continuous.quotient_lift, ContinuousLinearMap, ContinuousLinearMap.toLinearMap_zero, LinearMap, LinearMap.range_le_ker_iff.mpr, cancel_epi, condition, hom.range.liftQ, hom.toLinearMap, hom_zero, isColimitAux, quotient_lift, range_le_ker_iff, s.condition, toLinearMap, toLinearMap_zero
 -/
@@ -315,7 +321,30 @@ instance :
   let D₁ : S.LeftHomologyData := ⟨_, _, _, _, _, isLimitKer _, by simp, isColimitCoker _⟩
   let D₂ : S.RightHomologyData := ⟨_, _, _, _, by simp, isColimitCoker _, _, isLimitKer _⟩
   let F := ShortComplex.leftRightHomologyComparison' D₁ D₂
-  suffices IsIso F from ⟨⟨.ofIsIs
+  suffices IsIso F from ⟨⟨.ofIsIsoLeftRightHomologyComparison' D₁ D₂⟩⟩
+  have hF : Function.Bijective F := by
+    change Function.Bijective ((forget₂ _ (ModuleCat R)).map F)
+    rw [← ConcreteCategory.isIso_iff_bijective]; rw [ShortComplex.map_leftRightHomologyComparison']
+    infer_instance
+  have hF' : Topology.IsEmbedding F := by
+    refine .of_comp F.1.2 D₂.ι.1.2 ?_
+    -- `isEmbedding_of_isOpenQuotientMap_of_isInducing` is the key lemma that shows the two
+    -- definitions of homology give the same topology.
+    refine isEmbedding_of_isOpenQuotientMap_of_isInducing
+      D₁.i (F ≫ D₂.ι) D₁.π D₂.p ?_ .subtypeVal
+      (Submodule.isOpenQuotientMap_mkQ _).isQuotientMap
+      (Submodule.isOpenQuotientMap_mkQ _)
+      (Subtype.val_injective.comp hF.1) ?_
+    · rw [← ContinuousLinearMap.coe_comp, ← ContinuousLinearMap.coe_comp,
+        ← hom_comp, ← hom_comp, ShortComplex.π_leftRightHomologyComparison'_ι]
+    · suffices forall x y, S.g y = 0 -> D₂.p y = D₂.p x -> S.g x = 0 by
+        simpa [Set.subset_def, D₁, kerι_apply S.g] using this
+      intro x y hy e
+      obtain ⟨z, hz⟩ := (Submodule.Quotient.eq _).mp e
+      obtain rfl := eq_sub_iff_add_eq.mp hz
+      simpa [show S.g (S.f z) = 0 from ConcreteCategory.congr_hom S.zero z] using hy
+  rw [← isIso_iff_of_reflects_iso _ (forget₂ (TopModuleCat R) TopCat)]; rw [TopCat.isIso_iff_isHomeomorph]; rw [isHomeomorph_iff_isEmbedding_surjective]
+  exact ⟨hF', hF.2⟩
 
 中文:
 实例 :
@@ -326,7 +355,30 @@ instance :
   let D₁ : S.LeftHomologyData := ⟨_, _, _, _, _, isLimitKer _, by simp, isColimitCoker _⟩
   let D₂ : S.RightHomologyData := ⟨_, _, _, _, by simp, isColimitCoker _, _, isLimitKer _⟩
   let F := ShortComplex.leftRightHomologyComparison' D₁ D₂
-  suffices IsIso F from ⟨⟨.ofIsIs
+  suffices IsIso F from ⟨⟨.ofIsIsoLeftRightHomologyComparison' D₁ D₂⟩⟩
+  have hF : Function.Bijective F := by
+    change Function.Bijective ((forget₂ _ (ModuleCat R)).map F)
+    rw [← ConcreteCategory.isIso_iff_bijective]; rw [ShortComplex.map_leftRightHomologyComparison']
+    infer_instance
+  have hF' : Topology.IsEmbedding F := by
+    refine .of_comp F.1.2 D₂.ι.1.2 ?_
+    -- `isEmbedding_of_isOpenQuotientMap_of_isInducing` is the key lemma that shows the two
+    -- definitions of homology give the same topology.
+    refine isEmbedding_of_isOpenQuotientMap_of_isInducing
+      D₁.i (F ≫ D₂.ι) D₁.π D₂.p ?_ .subtypeVal
+      (Submodule.isOpenQuotientMap_mkQ _).isQuotientMap
+      (Submodule.isOpenQuotientMap_mkQ _)
+      (Subtype.val_injective.comp hF.1) ?_
+    · rw [← ContinuousLinearMap.coe_comp, ← ContinuousLinearMap.coe_comp,
+        ← hom_comp, ← hom_comp, ShortComplex.π_leftRightHomologyComparison'_ι]
+    · suffices forall x y, S.g y = 0 -> D₂.p y = D₂.p x -> S.g x = 0 by
+        simpa [Set.subset_def, D₁, kerι_apply S.g] using this
+      intro x y hy e
+      obtain ⟨z, hz⟩ := (Submodule.Quotient.eq _).mp e
+      obtain rfl := eq_sub_iff_add_eq.mp hz
+      simpa [show S.g (S.f z) = 0 from ConcreteCategory.congr_hom S.zero z] using hy
+  rw [← isIso_iff_of_reflects_iso _ (forget₂ (TopModuleCat R) TopCat)]; rw [TopCat.isIso_iff_isHomeomorph]; rw [isHomeomorph_iff_isEmbedding_surjective]
+  exact ⟨hF', hF.2⟩
 
 Depends on / 依赖: Bijective, ConcreteCategory, ConcreteCategory.isIso_iff_bijective, Function, Function.Bijective, LeftHomologyData, ModuleCat, RightHomologyData, S.LeftHomologyData, S.RightHomologyData, ShortComplex, ShortComplex.leftRightHomologyComparison, ShortComplex.map_leftRightHo, isColimitCoker, isIso_iff_bijective, isLimitKer, leftRightHomologyComparison, map_leftRightHo, ofIsIsoLeftRightHomologyComparison
 -/

@@ -51,7 +51,13 @@ definition rotationAux
     (by
       intro x y
       simp only [RCLike.conj_to_real, id, LinearMap.smul_apply, LinearMap.add_apply,
-        LinearMap.id_coe, LinearEquiv.coe_coe, Lin
+        LinearMap.id_coe, LinearEquiv.coe_coe, LinearIsometryEquiv.coe_toLinearEquiv,
+        Orientation.areaForm_rightAngleRotation_left, Orientation.inner_rightAngleRotation_left,
+        Orientation.inner_rightAngleRotation_right, inner_add_left, inner_smul_left,
+        inner_add_right, inner_smul_right]
+      linear_combination ⟪x, y⟫ * θ.cos_sq_add_sin_sq)
+
+@[simp]
 
 中文:
 定义 rotationAux
@@ -62,7 +68,13 @@ definition rotationAux
     (by
       intro x y
       simp only [RCLike.conj_to_real, id, LinearMap.smul_apply, LinearMap.add_apply,
-        LinearMap.id_coe, LinearEquiv.coe_coe, Lin
+        LinearMap.id_coe, LinearEquiv.coe_coe, LinearIsometryEquiv.coe_toLinearEquiv,
+        Orientation.areaForm_rightAngleRotation_left, Orientation.inner_rightAngleRotation_left,
+        Orientation.inner_rightAngleRotation_right, inner_add_left, inner_smul_left,
+        inner_add_right, inner_smul_right]
+      linear_combination ⟪x, y⟫ * θ.cos_sq_add_sin_sq)
+
+@[simp]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, LinearIsometryEquiv, LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.toLinearEquiv, LinearMap, LinearMap.add_apply, LinearMap.id, LinearMap.id_coe, LinearMap.isometryOfInner, LinearMap.smul_apply, Orientation, Orientation.areaForm_rightAngleRotation_left, Orientation.inner_rightAngleRotation_left, Orientation.inner_rightAngleRotation_right, RCLike, RCLike.conj_to_real, Real.Angle.cos, Real.Angle.sin, add_apply
 -/
@@ -109,7 +121,21 @@ definition rotation
     (by
       ext x
       convert! congr_arg (fun t : Real => t • x) θ.cos_sq_add_sin_sq using 1
-      · simp only [o.rightAngleRo
+      · simp only [o.rightAngleRotation_rightAngleRotation, o.rotationAux_apply,
+          Function.comp_apply, id, LinearEquiv.coe_coe, LinearIsometry.coe_toLinearMap,
+          LinearIsometryEquiv.coe_toLinearEquiv, map_smul, map_sub, LinearMap.coe_comp,
+          LinearMap.id_coe, LinearMap.smul_apply, LinearMap.sub_apply]
+        module
+      · simp)
+    (by
+      ext x
+      convert! congr_arg (fun t : Real => t • x) θ.cos_sq_add_sin_sq using 1
+      · simp only [o.rightAngleRotation_rightAngleRotation, o.rotationAux_apply,
+          Function.comp_apply, id, LinearEquiv.coe_coe, LinearIsometry.coe_toLinearMap,
+          LinearIsometryEquiv.coe_toLinearEquiv, map_add, map_smul, LinearMap.coe_comp,
+          LinearMap.id_coe, LinearMap.smul_apply, LinearMap.sub_apply]
+        module
+      · simp)
 
 中文:
 定义 rotation
@@ -120,7 +146,21 @@ definition rotation
     (by
       ext x
       convert! congr_arg (fun t : Real => t • x) θ.cos_sq_add_sin_sq using 1
-      · simp only [o.rightAngleRo
+      · simp only [o.rightAngleRotation_rightAngleRotation, o.rotationAux_apply,
+          Function.comp_apply, id, LinearEquiv.coe_coe, LinearIsometry.coe_toLinearMap,
+          LinearIsometryEquiv.coe_toLinearEquiv, map_smul, map_sub, LinearMap.coe_comp,
+          LinearMap.id_coe, LinearMap.smul_apply, LinearMap.sub_apply]
+        module
+      · simp)
+    (by
+      ext x
+      convert! congr_arg (fun t : Real => t • x) θ.cos_sq_add_sin_sq using 1
+      · simp only [o.rightAngleRotation_rightAngleRotation, o.rotationAux_apply,
+          Function.comp_apply, id, LinearEquiv.coe_coe, LinearIsometry.coe_toLinearMap,
+          LinearIsometryEquiv.coe_toLinearEquiv, map_add, map_smul, LinearMap.coe_comp,
+          LinearMap.id_coe, LinearMap.smul_apply, LinearMap.sub_apply]
+        module
+      · simp)
 
 Depends on / 依赖: Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, LinearIsometry, LinearIsometry.coe_toLinearMap, LinearIsometryEquiv, LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.ofLinearIsometry, LinearIsometryEquiv.toLinearEquiv, LinearMap, LinearMap.coe_comp, LinearMap.id, LinearMap.id_coe, Real.Angle.cos, Real.Angle.sin, coe_coe, coe_comp, coe_toLinearEquiv, coe_toLinearMap
 -/
@@ -917,6 +957,8 @@ theorem oangle_eq_iff_eq_norm_div_norm_smul_rotation_of_ne_zero
   constructor
   · rintro rfl
     rw [← map_smul]; rw [← o.oangle_smul_left_of_pos x y hp]; rw [eq_comm]; rw [rotation_oangle_eq_iff_norm_eq]; rw [norm_smul]; rw [Real.norm_of_nonneg hp.le]; rw [div_mul_cancel₀ _ (norm_ne_zero_iff.2 hx)]
+  · intro hye
+    rw [hye]; rw [o.oangle_smul_right_of_pos _ _ hp]; rw [o.oangle_rotation_self_right hx]
 
 中文:
 定理 oangle_eq_iff_eq_norm_div_norm_smul_rotation_of_ne_zero
@@ -926,6 +968,8 @@ theorem oangle_eq_iff_eq_norm_div_norm_smul_rotation_of_ne_zero
   constructor
   · rintro rfl
     rw [← map_smul]; rw [← o.oangle_smul_left_of_pos x y hp]; rw [eq_comm]; rw [rotation_oangle_eq_iff_norm_eq]; rw [norm_smul]; rw [Real.norm_of_nonneg hp.le]; rw [div_mul_cancel₀ _ (norm_ne_zero_iff.2 hx)]
+  · intro hye
+    rw [hye]; rw [o.oangle_smul_right_of_pos _ _ hp]; rw [o.oangle_rotation_self_right hx]
 
 Depends on / 依赖: Real.norm_of_nonneg, div_pos, eq_comm, hp.le, map_smul, norm_ne_zero_iff, norm_of_nonneg, norm_pos_iff, norm_smul, o.oangle_rotation_self_right, o.oangle_smul_left_of_pos, o.oangle_smul_right_of_pos, oangle_rotation_self_right, oangle_smul_left_of_pos, oangle_smul_right_of_pos, rotation_oangle_eq_iff_norm_eq
 -/
@@ -1060,7 +1104,15 @@ theorem exists_linearIsometryEquiv_eq_of_det_pos
   use o.oangle x (f x)
   apply LinearIsometryEquiv.toLinearEquiv_injective
   apply LinearEquiv.toLinearMap_injective
-  apply (o.basisRightAngleR
+  apply (o.basisRightAngleRotation x hx).ext
+  intro i
+  symm
+  fin_cases i
+  · simp
+  have : o.oangle (J x) (f (J x)) = o.oangle x (f x) := by
+    simp only [oangle, o.linearIsometryEquiv_comp_rightAngleRotation f hd,
+      o.kahler_comp_rightAngleRotation]
+  simp [← this]
 
 中文:
 定理 存在_linearIsometryEquiv_eq_of_det_pos
@@ -1071,7 +1123,15 @@ theorem exists_linearIsometryEquiv_eq_of_det_pos
   use o.oangle x (f x)
   apply LinearIsometryEquiv.toLinearEquiv_injective
   apply LinearEquiv.toLinearMap_injective
-  apply (o.basisRightAngleR
+  apply (o.basisRightAngleRotation x hx).ext
+  intro i
+  symm
+  fin_cases i
+  · simp
+  have : o.oangle (J x) (f (J x)) = o.oangle x (f x) := by
+    simp only [oangle, o.linearIsometryEquiv_comp_rightAngleRotation f hd,
+      o.kahler_comp_rightAngleRotation]
+  simp [← this]
 
 Depends on / 依赖: Fact.out, LinearEquiv, LinearEquiv.toLinearMap_injective, LinearIsometryEquiv, LinearIsometryEquiv.toLinearEquiv_injective, Nontrivial, basisRightAngleRotation, exists_ne, fin_cases, finrank, kahler_comp_rightAngleRotation, linearIsometryEquiv_comp_rightAngleRotation, nontrivial_of_finrank_eq_succ, o.basisRightAngleRotation, o.kahler_comp_rightAngleRotation, o.linearIsometryEquiv_comp_rightAngleRotation, o.oangle, oangle, toLinearEquiv_injective, toLinearMap_injective
 -/
@@ -1388,7 +1448,13 @@ theorem inner_eq_zero_iff_eq_zero_or_eq_smul_rotation_pi_div_two
     o.oangle_eq_iff_eq_pos_smul_rotation_of_ne_zero H.1 H.2, ← o.neg_rotation_pi_div_two, smul_neg]
   constructor
   · grind
-  · rintro ⟨r
+  · rintro ⟨r, rfl⟩
+    rcases lt_trichotomy 0 r with (hr0 | rfl | hr0)
+    · grind
+    · simp_all
+    · right
+      use -r
+      simp_all
 
 中文:
 定理 inner_eq_zero_iff_eq_zero_or_eq_smul_rotation_pi_div_two
@@ -1400,7 +1466,13 @@ theorem inner_eq_zero_iff_eq_zero_or_eq_smul_rotation_pi_div_two
     o.oangle_eq_iff_eq_pos_smul_rotation_of_ne_zero H.1 H.2, ← o.neg_rotation_pi_div_two, smul_neg]
   constructor
   · grind
-  · rintro ⟨r
+  · rintro ⟨r, rfl⟩
+    rcases lt_trichotomy 0 r with (hr0 | rfl | hr0)
+    · grind
+    · simp_all
+    · right
+      use -r
+      simp_all
 
 Depends on / 依赖: distrib, eq_zero_or_oangle_eq_iff_inner_eq_zero, false_or, lt_trichotomy, neg_rotation_pi_div_two, neg_smul, o.eq_zero_or_oangle_eq_iff_inner_eq_zero, o.neg_rotation_pi_div_two, o.oangle_eq_iff_eq_pos_smul_rotation_of_ne_zero, oangle_eq_iff_eq_pos_smul_rotation_of_ne_zero, smul_neg
 -/

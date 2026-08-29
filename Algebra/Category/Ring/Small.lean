@@ -33,7 +33,11 @@ lemma essentiallySmall_of_finiteType
   refine ⟨.ofObj f, inferInstance, fun S hS => ?_⟩
   obtain ⟨R, hR, φ, hφ⟩ := hPQ S hS
   wlog hR' : Q' R generalizing R
-  · obtain
+  · obtain ⟨R', hR', ⟨e⟩⟩ := hQQ' _ hR
+    exact this R' (hQ'Q _ hR') (e.inv ≫ φ)
+      (hφ.comp e.symm.commRingCatIsoToRingEquiv.finite.finiteType) hR'
+  obtain ⟨T, e, he⟩ := hφ.exists_smallRepr
+  exact ⟨_, ⟨⟨_, hR'⟩, T⟩, ⟨RingEquiv.toCommRingCatIso e.symm⟩⟩
 
 中文:
 引理 essentiallySmall_of_finiteType
@@ -44,7 +48,11 @@ lemma essentiallySmall_of_finiteType
   refine ⟨.ofObj f, inferInstance, fun S hS => ?_⟩
   obtain ⟨R, hR, φ, hφ⟩ := hPQ S hS
   wlog hR' : Q' R generalizing R
-  · obtain
+  · obtain ⟨R', hR', ⟨e⟩⟩ := hQQ' _ hR
+    exact this R' (hQ'Q _ hR') (e.inv ≫ φ)
+      (hφ.comp e.symm.commRingCatIsoToRingEquiv.finite.finiteType) hR'
+  obtain ⟨T, e, he⟩ := hφ.exists_smallRepr
+  exact ⟨_, ⟨⟨_, hR'⟩, T⟩, ⟨RingEquiv.toCommRingCatIso e.symm⟩⟩
 
 Depends on / 依赖: CommRingCat, EssentiallySmall, FGAlgCatSkeleton, ObjectProperty, ObjectProperty.EssentiallySmall.exists_small_le, RingEquiv, RingEquiv.to, Subtype, commRingCatIsoToRingEquiv, e.inv, e.symm.commRingCatIsoToRingEquiv.finite.finiteType, eval.obj, exists_smallRepr, exists_small_le, finite, finiteType, generalizing
 -/
@@ -73,7 +81,19 @@ lemma essentiallySmall_of_localizationAway
   let f (S : Σ (n : Nat) (R : Fin n -> Subtype Q'), Subring (Π i, (R i).1)) : CommRingCat := .of S.2.2
   refine ⟨.ofObj f, inferInstance, fun S hS => ?_⟩
   obtain ⟨s, hs, H⟩ := hPQ S hS
-  wlog hs' : s.Finite general
+  wlog hs' : s.Finite generalizing s
+  · obtain ⟨s', hs's, hs'⟩ := (Ideal.span_eq_top_iff_finite _).mp hs
+    exact this s' hs' (fun f hf => H f (hs's hf)) s'.finite_toSet
+  choose S' hS' e using fun (f : s) => hQQ' _ (H _ f.2)
+  let φ : S ->+* Π i, S' (hs'.equivFin.symm i) :=
+    ((RingEquiv.piCongrRight fun i => (e i).some.commRingCatIsoToRingEquiv).trans
+      (RingEquiv.piCongrLeft (S' ·) hs'.equivFin.symm).symm).toRingHom.comp (algebraMap _ _)
+  have hφ : Function.Injective φ := by
+    dsimp only [RingHom.coe_comp, φ]
+    refine (RingEquiv.injective _).comp (Localization.algebraMap_injective_of_span_eq_top _ hs)
+  refine ⟨_, ⟨Nat.card s, (fun f => ⟨S' f, hS' f⟩) ∘ hs'.equivFin.symm, φ.range⟩, ⟨?_⟩⟩
+  exact (RingEquiv.ofBijective φ.rangeRestrict
+    ⟨φ.injective_codRestrict.mpr hφ, φ.rangeRestrict_surjective⟩).toCommRingCatIso
 
 中文:
 引理 essentiallySmall_of_localizationAway
@@ -83,7 +103,19 @@ lemma essentiallySmall_of_localizationAway
   let f (S : Σ (n : Nat) (R : Fin n -> Subtype Q'), Subring (Π i, (R i).1)) : CommRingCat := .of S.2.2
   refine ⟨.ofObj f, inferInstance, fun S hS => ?_⟩
   obtain ⟨s, hs, H⟩ := hPQ S hS
-  wlog hs' : s.Finite general
+  wlog hs' : s.Finite generalizing s
+  · obtain ⟨s', hs's, hs'⟩ := (Ideal.span_eq_top_iff_finite _).mp hs
+    exact this s' hs' (fun f hf => H f (hs's hf)) s'.finite_toSet
+  choose S' hS' e using fun (f : s) => hQQ' _ (H _ f.2)
+  let φ : S ->+* Π i, S' (hs'.equivFin.symm i) :=
+    ((RingEquiv.piCongrRight fun i => (e i).some.commRingCatIsoToRingEquiv).trans
+      (RingEquiv.piCongrLeft (S' ·) hs'.equivFin.symm).symm).toRingHom.comp (algebraMap _ _)
+  have hφ : Function.Injective φ := by
+    dsimp only [RingHom.coe_comp, φ]
+    refine (RingEquiv.injective _).comp (Localization.algebraMap_injective_of_span_eq_top _ hs)
+  refine ⟨_, ⟨Nat.card s, (fun f => ⟨S' f, hS' f⟩) ∘ hs'.equivFin.symm, φ.range⟩, ⟨?_⟩⟩
+  exact (RingEquiv.ofBijective φ.rangeRestrict
+    ⟨φ.injective_codRestrict.mpr hφ, φ.rangeRestrict_surjective⟩).toCommRingCatIso
 
 Depends on / 依赖: CommRingCat, EssentiallySmall, Finite, Ideal.span_eq_top_iff_finite, ObjectProperty, ObjectProperty.EssentiallySmall.exists_small_le, Subring, Subtype, exists_small_le, finite_toSet, generalizing, s.Finite, span_eq_top_iff_finite
 -/

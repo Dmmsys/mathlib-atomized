@@ -72,7 +72,7 @@ theorem independent_iff
   · convert! Independent.mk _ _ h
     · simp only [mk_rep, Function.comp_apply]
     · intro i
-      apply rep_
+      apply rep_nonzero
 
 中文:
 定理 independent_iff
@@ -87,7 +87,7 @@ theorem independent_iff
   · convert! Independent.mk _ _ h
     · simp only [mk_rep, Function.comp_apply]
     · intro i
-      apply rep_
+      apply rep_nonzero
 
 Depends on / 依赖: Function, Function.comp_apply, Independent, Independent.mk, comp_apply, convert, exists_smul_eq_mk_rep, hh.units_smul, mk_rep, rep_nonzero, units_smul
 -/
@@ -116,7 +116,8 @@ theorem independent_iff_iSupIndep
     exact (iSupIndep_iff_linearIndependent_of_ne_zero (R := K) hf).mpr hi
   · rw [independent_iff]
     refine h.linearIndependent (Projectivization.submodule ∘ f) (fun i => ?_) fun i => ?_
-    · simpa only [Function.co
+    · simpa only [Function.comp_apply, submodule_eq] using Submodule.mem_span_singleton_self _
+    · exact rep_nonzero (f i)
 
 中文:
 定理 independent_iff_iSupIndep
@@ -128,7 +129,8 @@ theorem independent_iff_iSupIndep
     exact (iSupIndep_iff_linearIndependent_of_ne_zero (R := K) hf).mpr hi
   · rw [independent_iff]
     refine h.linearIndependent (Projectivization.submodule ∘ f) (fun i => ?_) fun i => ?_
-    · simpa only [Function.co
+    · simpa only [Function.comp_apply, submodule_eq] using Submodule.mem_span_singleton_self _
+    · exact rep_nonzero (f i)
 
 Depends on / 依赖: Function, Function.comp_apply, Projectivization, Projectivization.submodule, Submodule, Submodule.mem_span_singleton_self, comp_apply, h.linearIndependent, iSupIndep_iff_linearIndependent_of_ne_zero, independent_iff, linearIndependent, mem_span_singleton_self, rep_nonzero, submodule, submodule_eq, submodule_mk
 -/
@@ -175,7 +177,9 @@ theorem dependent_iff
     convert! hh1.units_smul a⁻¹
     ext i
     simp only [← ha, inv_smul_smul, Pi.smul_apply', Pi.inv_apply, Function.comp_apply]
-  · convert! Dependent
+  · convert! Dependent.mk _ _ h
+    · simp only [mk_rep, Function.comp_apply]
+    · exact fun i => rep_nonzero (f i)
 
 中文:
 定理 dependent_iff
@@ -188,7 +192,9 @@ theorem dependent_iff
     convert! hh1.units_smul a⁻¹
     ext i
     simp only [← ha, inv_smul_smul, Pi.smul_apply', Pi.inv_apply, Function.comp_apply]
-  · convert! Dependent
+  · convert! Dependent.mk _ _ h
+    · simp only [mk_rep, Function.comp_apply]
+    · exact fun i => rep_nonzero (f i)
 
 Depends on / 依赖: Dependent, Dependent.mk, Function, Function.comp_apply, Pi.inv_apply, Pi.smul_apply, comp_apply, contrapose, convert, exists_smul_eq_mk_rep, hh1.units_smul, inv_apply, inv_smul_smul, mk_rep, rep_nonzero, smul_apply, units_smul
 -/
@@ -258,7 +264,7 @@ theorem dependent_pair_iff_eq
   dsimp only [Function.comp_def, Matrix.cons_val]
   simp only [not_and, not_forall, not_not, ← mk_eq_mk_iff' K _ _ (rep_nonzero u) (rep_nonzero v),
     mk_rep, Classical.imp_iff_right_iff]
-  exact Or.inl (rep_
+  exact Or.inl (rep_nonzero v)
 
 中文:
 定理 dependent_pair_iff_eq
@@ -269,7 +275,7 @@ theorem dependent_pair_iff_eq
   dsimp only [Function.comp_def, Matrix.cons_val]
   simp only [not_and, not_forall, not_not, ← mk_eq_mk_iff' K _ _ (rep_nonzero u) (rep_nonzero v),
     mk_rep, Classical.imp_iff_right_iff]
-  exact Or.inl (rep_
+  exact Or.inl (rep_nonzero v)
 
 Depends on / 依赖: Classical, Classical.imp_iff_right_iff, Function, Function.comp_def, Matrix, Matrix.cons_val, Or.inl, comp_def, cons_val, dependent_iff_not_independent, imp_iff_right_iff, independent_iff, linearIndependent_fin2, mk_eq_mk_iff, mk_rep, not_and, not_forall, not_not, rep_nonzero
 -/

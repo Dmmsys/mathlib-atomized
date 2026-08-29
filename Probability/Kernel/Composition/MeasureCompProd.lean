@@ -337,7 +337,10 @@ lemma compProd_id
   have h_meas a : MeasurableSet (Prod.mk a ⁻¹' s) := measurable_prodMk_left hs
   simp_rw [Kernel.id_apply, dirac_apply' _ (h_meas _)]
   calc ∫⁻ a, (Prod.mk a ⁻¹' s).indicator 1 a ∂μ
-  _ = ∫⁻ a, (Function.dia
+  _ = ∫⁻ a, (Function.diag ⁻¹' s).indicator 1 a ∂μ := rfl
+  _ = μ (Function.diag ⁻¹' s) := by
+    rw [lintegral_indicator_one]
+    exact (measurable_id.prod measurable_id) hs
 
 中文:
 引理 compProd_id
@@ -349,7 +352,10 @@ lemma compProd_id
   have h_meas a : MeasurableSet (Prod.mk a ⁻¹' s) := measurable_prodMk_left hs
   simp_rw [Kernel.id_apply, dirac_apply' _ (h_meas _)]
   calc ∫⁻ a, (Prod.mk a ⁻¹' s).indicator 1 a ∂μ
-  _ = ∫⁻ a, (Function.dia
+  _ = ∫⁻ a, (Function.diag ⁻¹' s).indicator 1 a ∂μ := rfl
+  _ = μ (Function.diag ⁻¹' s) := by
+    rw [lintegral_indicator_one]
+    exact (measurable_id.prod measurable_id) hs
 
 Depends on / 依赖: Function, Function.diag, Kernel, Kernel.id_apply, MeasurableSet, MvPowerSeries, MvPowerSeries.isRestricted.add, Prod.mk, compProd_apply, dirac_apply, h_meas, id_apply, indicator, isRestricted, lintegral_indicator_one, map_apply, measurable_id, measurable_id.prod, measurable_prodMk_left, simp_rw
 -/
@@ -885,7 +891,12 @@ lemma compProd_assoc
   by_cases hη : IsSFiniteKernel η
   swap; · simp [hη]
   ext s hs
-  rw [Measure.compProd_apply hs]; rw [Measure.map_apply (by fun_prop) hs]; rw [Measure.compProd_apply (hs.preimage (by fun_prop))]; 
+  rw [Measure.compProd_apply hs]; rw [Measure.map_apply (by fun_prop) hs]; rw [Measure.compProd_apply (hs.preimage (by fun_prop))]; rw [Measure.lintegral_compProd]
+  swap; · exact Kernel.measurable_kernel_prodMk_left hs
+  congr with a
+  rw [Kernel.compProd_apply]
+  · congr
+  · exact hs.preimage (by fun_prop)
 
 中文:
 引理 compProd_assoc
@@ -898,7 +909,12 @@ lemma compProd_assoc
   by_cases hη : IsSFiniteKernel η
   swap; · simp [hη]
   ext s hs
-  rw [Measure.compProd_apply hs]; rw [Measure.map_apply (by fun_prop) hs]; rw [Measure.compProd_apply (hs.preimage (by fun_prop))]; 
+  rw [Measure.compProd_apply hs]; rw [Measure.map_apply (by fun_prop) hs]; rw [Measure.compProd_apply (hs.preimage (by fun_prop))]; rw [Measure.lintegral_compProd]
+  swap; · exact Kernel.measurable_kernel_prodMk_left hs
+  congr with a
+  rw [Kernel.compProd_apply]
+  · congr
+  · exact hs.preimage (by fun_prop)
 
 Depends on / 依赖: IsSFiniteKernel, Kernel, Kernel.compProd_apply, Kernel.measurable_kernel_prodMk_left, Measure, Measure.compProd_apply, Measure.lintegral_compProd, Measure.map_apply, SFinite, compProd_apply, fun_prop, ha.mul_right, hs.preimage, lintegral_compProd, map_apply, measurable_kernel_prodMk_left, mul_right, preimage
 -/
@@ -956,7 +972,8 @@ lemma AbsolutelyContinuous.compProd_left
     refine Measure.AbsolutelyContinuous.mk fun s hs hs_zero => ?_
     rw [Measure.compProd_apply hs]; rw [lintegral_eq_zero_iff (Kernel.measurable_kernel_prodMk_left hs)]
       at hs_zero ⊢
-    exact hμν
+    exact hμν.ae_eq hs_zero
+  · simp [compProd_of_not_isSFiniteKernel _ _ hκ]
 
 中文:
 引理 AbsolutelyContinuous.compProd_left
@@ -967,7 +984,8 @@ lemma AbsolutelyContinuous.compProd_left
     refine Measure.AbsolutelyContinuous.mk fun s hs hs_zero => ?_
     rw [Measure.compProd_apply hs]; rw [lintegral_eq_zero_iff (Kernel.measurable_kernel_prodMk_left hs)]
       at hs_zero ⊢
-    exact hμν
+    exact hμν.ae_eq hs_zero
+  · simp [compProd_of_not_isSFiniteKernel _ _ hκ]
 
 Depends on / 依赖: AbsolutelyContinuous, IsSFiniteKernel, Kernel, Kernel.measurable_kernel_prodMk_left, Measure, Measure.AbsolutelyContinuous.mk, Measure.compProd_apply, SFinite, ae_eq, compProd_apply, compProd_of_not_isSFiniteKernel, hs_zero, lintegral_eq_zero_iff, measurable_kernel_prodMk_left, sFinite_of_absolutelyContinuous
 -/
@@ -992,7 +1010,8 @@ lemma AbsolutelyContinuous.compProd_right
   · refine Measure.AbsolutelyContinuous.mk fun s hs hs_zero => ?_
     rw [Measure.compProd_apply hs]; rw [lintegral_eq_zero_iff (Kernel.measurable_kernel_prodMk_left hs)]
       at hs_zero ⊢
-    filter_upwards [hs_zero, hκη] with a ha_zero ha_ac using ha_ac ha_zer
+    filter_upwards [hs_zero, hκη] with a ha_zero ha_ac using ha_ac ha_zero
+  · simp [compProd_of_not_isSFiniteKernel _ _ hκ]
 
 中文:
 引理 AbsolutelyContinuous.compProd_right
@@ -1002,7 +1021,8 @@ lemma AbsolutelyContinuous.compProd_right
   · refine Measure.AbsolutelyContinuous.mk fun s hs hs_zero => ?_
     rw [Measure.compProd_apply hs]; rw [lintegral_eq_zero_iff (Kernel.measurable_kernel_prodMk_left hs)]
       at hs_zero ⊢
-    filter_upwards [hs_zero, hκη] with a ha_zero ha_ac using ha_ac ha_zer
+    filter_upwards [hs_zero, hκη] with a ha_zero ha_ac using ha_ac ha_zero
+  · simp [compProd_of_not_isSFiniteKernel _ _ hκ]
 
 Depends on / 依赖: AbsolutelyContinuous, HasSubst, HasSubst.X, IsSFiniteKernel, Kernel, Kernel.measurable_kernel_prodMk_left, Measure, Measure.AbsolutelyContinuous.mk, Measure.compProd_apply, compProd_apply, compProd_of_not_isSFiniteKernel, filter_upwards, ha_ac, ha_zero, hs_zero, lintegral_eq_zero_iff, measurable_kernel_prodMk_left
 -/
@@ -1052,7 +1072,17 @@ lemma absolutelyContinuous_of_compProd
     swap; · simp [compProd_of_not_sfinite _ _ hν]
     by_cases hη : IsSFiniteKernel η
     swap; · simp [compProd_of_not_isSFiniteKernel _ _ hη]
-    rw [Measure
+    rw [Measure.compProd_apply_prod hs MeasurableSet.univ]
+    exact setLIntegral_measure_zero _ _ hs0
+  have h2 : (μ otimesₘ κ) (s ×ˢ univ) = 0 := h h1
+  rw [Measure.compProd_apply_prod hs MeasurableSet.univ]; rw [lintegral_eq_zero_iff] at h2
+  swap; · exact Kernel.measurable_coe _ MeasurableSet.univ
+  by_contra hμs
+  have : Filter.NeBot (ae (μ.restrict s)) := by simp [hμs]
+  obtain ⟨a, ha⟩ : exists a, κ a univ = 0 := h2.exists
+  refine absurd ha ?_
+  simp only [Measure.measure_univ_eq_zero]
+  exact (h_zero a).out
 
 中文:
 引理 absolutelyContinuous_of_compProd
@@ -1064,7 +1094,17 @@ lemma absolutelyContinuous_of_compProd
     swap; · simp [compProd_of_not_sfinite _ _ hν]
     by_cases hη : IsSFiniteKernel η
     swap; · simp [compProd_of_not_isSFiniteKernel _ _ hη]
-    rw [Measure
+    rw [Measure.compProd_apply_prod hs MeasurableSet.univ]
+    exact setLIntegral_measure_zero _ _ hs0
+  have h2 : (μ otimesₘ κ) (s ×ˢ univ) = 0 := h h1
+  rw [Measure.compProd_apply_prod hs MeasurableSet.univ]; rw [lintegral_eq_zero_iff] at h2
+  swap; · exact Kernel.measurable_coe _ MeasurableSet.univ
+  by_contra hμs
+  have : Filter.NeBot (ae (μ.restrict s)) := by simp [hμs]
+  obtain ⟨a, ha⟩ : exists a, κ a univ = 0 := h2.exists
+  refine absurd ha ?_
+  simp only [Measure.measure_univ_eq_zero]
+  exact (h_zero a).out
 
 Depends on / 依赖: AbsolutelyContinuous, IsSFiniteKernel, MeasurableSet, MeasurableSet.univ, Measure, Measure.AbsolutelyContinuous.mk, Measure.compProd_apply_prod, SFinite, compProd_apply_prod, compProd_of_not_isSFiniteKernel, compProd_of_not_sfinite, lintegral_eq_zero_iff, setLIntegral_measure_zero
 -/
@@ -1164,7 +1204,13 @@ lemma MutuallySingular.compProd_of_left
   by_cases hκ : IsSFiniteKernel κ
   swap; · rw [compProd_of_not_isSFiniteKernel _ _ hκ]; simp
   by_cases hη : IsSFiniteKernel η
-  swap; · rw 
+  swap; · rw [compProd_of_not_isSFiniteKernel _ _ hη]; simp
+  refine ⟨hμν.nullSet ×ˢ univ, hμν.measurableSet_nullSet.prod .univ, ?_⟩
+  rw [compProd_apply_prod hμν.measurableSet_nullSet .univ]; rw [compl_prod_eq_union]
+  simp only [MutuallySingular.restrict_nullSet, lintegral_zero_measure, compl_univ,
+    prod_empty, union_empty, true_and]
+  rw [compProd_apply_prod hμν.measurableSet_nullSet.compl .univ]
+  simp
 
 中文:
 引理 互奇异.compProd_of_left
@@ -1177,7 +1223,13 @@ lemma MutuallySingular.compProd_of_left
   by_cases hκ : IsSFiniteKernel κ
   swap; · rw [compProd_of_not_isSFiniteKernel _ _ hκ]; simp
   by_cases hη : IsSFiniteKernel η
-  swap; · rw 
+  swap; · rw [compProd_of_not_isSFiniteKernel _ _ hη]; simp
+  refine ⟨hμν.nullSet ×ˢ univ, hμν.measurableSet_nullSet.prod .univ, ?_⟩
+  rw [compProd_apply_prod hμν.measurableSet_nullSet .univ]; rw [compl_prod_eq_union]
+  simp only [MutuallySingular.restrict_nullSet, lintegral_zero_measure, compl_univ,
+    prod_empty, union_empty, true_and]
+  rw [compProd_apply_prod hμν.measurableSet_nullSet.compl .univ]
+  simp
 
 Depends on / 依赖: IsSFiniteKernel, SFinite, compProd_apply_prod, compProd_of_not_isSFiniteKernel, compProd_of_not_sfinite, compl_prod_eq_union, measurableSet_nullSet, measurableSet_nullSet.prod, nullSet
 -/
@@ -1209,7 +1261,12 @@ lemma mutuallySingular_of_mutuallySingular_compProd
   have hμ_zero : (μ otimesₘ κ) h.nullSet = 0 := h.measure_nullSet
   have hν_zero : (ν otimesₘ η) h.nullSetᶜ = 0 := h.measure_compl_nullSet
   rw [compProd_apply]; rw [lintegral_eq_zero_iff'] at hμ_zero hν_zero
-  · filter_upwards [hμ hμ
+  · filter_upwards [hμ hμ_zero, hν hν_zero] with x hxμ hxν
+    exact ⟨Prod.mk x ⁻¹' h.nullSet, measurable_prodMk_left hs, ⟨hxμ, hxν⟩⟩
+  · exact (Kernel.measurable_kernel_prodMk_left hs.compl).aemeasurable
+  · exact (Kernel.measurable_kernel_prodMk_left hs).aemeasurable
+  · exact hs.compl
+  · exact hs
 
 中文:
 引理 mutuallySingular_of_mutuallySingular_compProd
@@ -1219,7 +1276,12 @@ lemma mutuallySingular_of_mutuallySingular_compProd
   have hμ_zero : (μ otimesₘ κ) h.nullSet = 0 := h.measure_nullSet
   have hν_zero : (ν otimesₘ η) h.nullSetᶜ = 0 := h.measure_compl_nullSet
   rw [compProd_apply]; rw [lintegral_eq_zero_iff'] at hμ_zero hν_zero
-  · filter_upwards [hμ hμ
+  · filter_upwards [hμ hμ_zero, hν hν_zero] with x hxμ hxν
+    exact ⟨Prod.mk x ⁻¹' h.nullSet, measurable_prodMk_left hs, ⟨hxμ, hxν⟩⟩
+  · exact (Kernel.measurable_kernel_prodMk_left hs.compl).aemeasurable
+  · exact (Kernel.measurable_kernel_prodMk_left hs).aemeasurable
+  · exact hs.compl
+  · exact hs
 
 Depends on / 依赖: Kernel, Kernel.measurable_kernel_pr, Kernel.measurable_kernel_prodMk_left, MeasurableSet, Prod.mk, aemeasurable, compProd_apply, filter_upwards, h.measurableSet_nullSet, h.measure_compl_nullSet, h.measure_nullSet, h.nullSet, hs.compl, lintegral_eq_zero_iff, measurableSet_nullSet, measurable_kernel_pr, measurable_kernel_prodMk_left, measurable_prodMk_left, measure_compl_nullSet, measure_nullSet
 -/
@@ -1251,7 +1313,9 @@ lemma mutuallySingular_compProd_left_iff
     (ξ := ν.withDensity (μ.rnDeriv ν))
   rotate_left
   · exact absolutelyContinuous_of_le (μ.withDensity_rnDeriv_le ν)
-  · exact withDens
+  · exact withDensity_absolutelyContinuous _ _
+  simp_rw [MutuallySingular.self_iff, (hκ _).ne] at hh
+  exact ae_eq_bot.mp (Filter.eventually_false_iff_eq_bot.mp hh)
 
 中文:
 引理 mutuallySingular_compProd_left_iff
@@ -1263,7 +1327,9 @@ lemma mutuallySingular_compProd_left_iff
     (ξ := ν.withDensity (μ.rnDeriv ν))
   rotate_left
   · exact absolutelyContinuous_of_le (μ.withDensity_rnDeriv_le ν)
-  · exact withDens
+  · exact withDensity_absolutelyContinuous _ _
+  simp_rw [MutuallySingular.self_iff, (hκ _).ne] at hh
+  exact ae_eq_bot.mp (Filter.eventually_false_iff_eq_bot.mp hh)
 
 Depends on / 依赖: Filter, Filter.eventually_false_iff_eq_bot.mp, MutuallySingular, MutuallySingular.self_iff, absolutelyContinuous_of_le, ae_eq_bot, ae_eq_bot.mp, compProd_of_left, eventually_false_iff_eq_bot, h.compProd_of_left, mutuallySingular_of_mutuallySingular_compProd, rnDeriv, rotate_left, self_iff, simp_rw, withDensity, withDensity_absolutelyContinuous, withDensity_rnDeriv_eq_zero, withDensity_rnDeriv_le
 -/
@@ -1291,7 +1357,8 @@ lemma AbsolutelyContinuous.mutuallySingular_compProd_iff
   rw [compProd_add_left]; rw [MutuallySingular.add_right_iff]
   simp only [(mutuallySingular_singularPart ν μ).symm.compProd_of_left κ η, true_and]
   refine ⟨fun h => h.mono_ac .rfl ?_, fun h => h.mono_ac .rfl ?_⟩
-  · exact (absolutelyContinuou
+  · exact (absolutelyContinuous_withDensity_rnDeriv hμν).compProd_left _
+  · exact (withDensity_absolutelyContinuous μ (ν.rnDeriv μ)).compProd_left _
 
 中文:
 引理 AbsolutelyContinuous.mutuallySingular_compProd_iff
@@ -1301,7 +1368,8 @@ lemma AbsolutelyContinuous.mutuallySingular_compProd_iff
   rw [compProd_add_left]; rw [MutuallySingular.add_right_iff]
   simp only [(mutuallySingular_singularPart ν μ).symm.compProd_of_left κ η, true_and]
   refine ⟨fun h => h.mono_ac .rfl ?_, fun h => h.mono_ac .rfl ?_⟩
-  · exact (absolutelyContinuou
+  · exact (absolutelyContinuous_withDensity_rnDeriv hμν).compProd_left _
+  · exact (withDensity_absolutelyContinuous μ (ν.rnDeriv μ)).compProd_left _
 
 Depends on / 依赖: MutuallySingular, MutuallySingular.add_right_iff, absolutelyContinuous_withDensity_rnDeriv, add_right_iff, compProd_add_left, compProd_left, compProd_of_left, conv_lhs, h.mono_ac, haveLebesgueDecomposition_add, mono_ac, mutuallySingular_singularPart, rnDeriv, symm.compProd_of_left, true_and, withDensity_absolutelyContinuous
 -/
@@ -1326,7 +1394,13 @@ lemma mutuallySingular_compProd_iff
   rw [compProd_add_left]; rw [MutuallySingular.add_left_iff]
   simp only [(mutuallySingular_singularPart μ ν).compProd_of_left κ η, true_and]
   rw [(withDensity_absolutelyContinuous ν (μ.rnDeriv ν)).mutuallySingular_compProd_iff]
-  refine ⟨fun 
+  refine ⟨fun h ξ hξ hξμ hξν => ?_, fun h => ?_⟩
+  · exact h.mono_ac ((hξμ.withDensity_rnDeriv hξν).compProd_left _)
+      ((hξμ.withDensity_rnDeriv hξν).compProd_left _)
+  · refine h _ ?_ ?_ ?_
+    · infer_instance
+    · exact absolutelyContinuous_of_le (withDensity_rnDeriv_le _ _)
+    · exact withDensity_absolutelyContinuous ν (μ.rnDeriv ν)
 
 中文:
 引理 mutuallySingular_compProd_iff
@@ -1336,7 +1410,13 @@ lemma mutuallySingular_compProd_iff
   rw [compProd_add_left]; rw [MutuallySingular.add_left_iff]
   simp only [(mutuallySingular_singularPart μ ν).compProd_of_left κ η, true_and]
   rw [(withDensity_absolutelyContinuous ν (μ.rnDeriv ν)).mutuallySingular_compProd_iff]
-  refine ⟨fun 
+  refine ⟨fun h ξ hξ hξμ hξν => ?_, fun h => ?_⟩
+  · exact h.mono_ac ((hξμ.withDensity_rnDeriv hξν).compProd_left _)
+      ((hξμ.withDensity_rnDeriv hξν).compProd_left _)
+  · refine h _ ?_ ?_ ?_
+    · infer_instance
+    · exact absolutelyContinuous_of_le (withDensity_rnDeriv_le _ _)
+    · exact withDensity_absolutelyContinuous ν (μ.rnDeriv ν)
 
 Depends on / 依赖: MutuallySingular, MutuallySingular.add_left_iff, absolutelyCont, add_left_iff, compProd_add_left, compProd_left, compProd_of_left, conv_lhs, h.mono_ac, haveLebesgueDecomposition_add, infer_instance, mono_ac, mutuallySingular_compProd_iff, mutuallySingular_singularPart, rnDeriv, true_and, withDensity_absolutelyContinuous, withDensity_rnDeriv
 -/
@@ -1367,7 +1447,7 @@ lemma absolutelyContinuous_compProd_of_compProd
   have h := absolutelyContinuous_of_add_of_mutuallySingular hκη
     ((mutuallySingular_singularPart _ _).symm.compProd_of_left _ _)
   refine h.trans (AbsolutelyContinuous.compProd_left ?_ _)
-  exact withDensity
+  exact withDensity_absolutelyContinuous _ _
 
 中文:
 引理 absolutelyContinuous_compProd_of_compProd
@@ -1377,7 +1457,7 @@ lemma absolutelyContinuous_compProd_of_compProd
   have h := absolutelyContinuous_of_add_of_mutuallySingular hκη
     ((mutuallySingular_singularPart _ _).symm.compProd_of_left _ _)
   refine h.trans (AbsolutelyContinuous.compProd_left ?_ _)
-  exact withDensity
+  exact withDensity_absolutelyContinuous _ _
 
 Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.compProd_left, absolutelyContinuous_of_add_of_mutuallySingular, add_comm, compProd_add_left, compProd_left, compProd_of_left, h.trans, haveLebesgueDecomposition_add, mutuallySingular_singularPart, symm.compProd_of_left, withDensity_absolutelyContinuous
 -/

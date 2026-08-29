@@ -1182,7 +1182,12 @@ definition groupEquivQuotientProdSubgroup
       Equiv.sigmaCongrRight fun L => by
         rw [← eq_class_eq_leftCoset]
         change
-          (_root_.Subtype fun x : α => Quotient.mk'
+          (_root_.Subtype fun x : α => Quotient.mk'' x = L) ≃
+            _root_.Subtype fun x : α => Quotient.mk'' x = Quotient.mk'' _
+        simp
+        rfl
+    _ ≃ Σ _L : α ⧸ s, s := Equiv.sigmaCongrRight fun _ => leftCosetEquivSubgroup _
+    _ ≃ (α ⧸ s) × s := Equiv.sigmaEquivProd _ _
 
 中文:
 定义 groupEquivQuotientProdSubgroup
@@ -1193,7 +1198,12 @@ definition groupEquivQuotientProdSubgroup
       Equiv.sigmaCongrRight fun L => by
         rw [← eq_class_eq_leftCoset]
         change
-          (_root_.Subtype fun x : α => Quotient.mk'
+          (_root_.Subtype fun x : α => Quotient.mk'' x = L) ≃
+            _root_.Subtype fun x : α => Quotient.mk'' x = Quotient.mk'' _
+        simp
+        rfl
+    _ ≃ Σ _L : α ⧸ s, s := Equiv.sigmaCongrRight fun _ => leftCosetEquivSubgroup _
+    _ ≃ (α ⧸ s) × s := Equiv.sigmaEquivProd _ _
 
 Depends on / 依赖: Equiv.sigmaCongrRight, Equiv.sigmaEquivProd, Equiv.sigmaFiberEquiv, Quotient, Quotient.mk, Quotient.out, QuotientGroup, QuotientGroup.mk, Subtype, _root_, _root_.Subtype, eq_class_eq_leftCoset, leftCosetEquivSubgroup, sigmaCongrRight, sigmaEquivProd, sigmaFiberEquiv
 -/
@@ -1229,7 +1239,23 @@ definition quotientEquivProdOfLE'
         fun b c h => by
         rw [leftRel_apply]
         change ((f b)⁻¹ * b)⁻¹ * ((f c)⁻¹ * c) in s
-        have key : f b = 
+        have key : f b = f c :=
+          congr_arg f (Quotient.sound' (leftRel_apply.mpr (h_le (leftRel_apply.mp h))))
+        rwa [key, mul_inv_rev, inv_inv, mul_assoc, mul_inv_cancel_left, ← leftRel_apply]⟩
+  invFun a := by
+    refine a.2.map' (fun (b : { x // x in t}) => f a.1 * b) fun b c h => by
+      rw [leftRel_apply] at h ⊢
+      rwa [mul_inv_rev, mul_assoc, inv_mul_cancel_left]
+  left_inv := by
+    refine Quotient.ind' fun a => ?_
+    simp_rw [Quotient.map'_mk'', id, mul_inv_cancel_left]
+  right_inv := by
+    refine Prod.rec ?_
+    refine Quotient.ind' fun a => ?_
+    refine Quotient.ind' fun b => ?_
+    have key : Quotient.mk'' (f (Quotient.mk'' a) * b) = Quotient.mk'' a :=
+      (QuotientGroup.mk_mul_of_mem (f a) b.2).trans (hf a)
+    simp_rw [Quotient.map'_mk'', id, key, inv_mul_cancel_left]
 
 中文:
 定义 quotientEquivProdOfLE'
@@ -1239,7 +1265,23 @@ definition quotientEquivProdOfLE'
         fun b c h => by
         rw [leftRel_apply]
         change ((f b)⁻¹ * b)⁻¹ * ((f c)⁻¹ * c) in s
-        have key : f b = 
+        have key : f b = f c :=
+          congr_arg f (Quotient.sound' (leftRel_apply.mpr (h_le (leftRel_apply.mp h))))
+        rwa [key, mul_inv_rev, inv_inv, mul_assoc, mul_inv_cancel_left, ← leftRel_apply]⟩
+  invFun a := by
+    refine a.2.map' (fun (b : { x // x in t}) => f a.1 * b) fun b c h => by
+      rw [leftRel_apply] at h ⊢
+      rwa [mul_inv_rev, mul_assoc, inv_mul_cancel_left]
+  left_inv := by
+    refine Quotient.ind' fun a => ?_
+    simp_rw [Quotient.map'_mk'', id, mul_inv_cancel_left]
+  right_inv := by
+    refine Prod.rec ?_
+    refine Quotient.ind' fun a => ?_
+    refine Quotient.ind' fun b => ?_
+    have key : Quotient.mk'' (f (Quotient.mk'' a) * b) = Quotient.mk'' a :=
+      (QuotientGroup.mk_mul_of_mem (f a) b.2).trans (hf a)
+    simp_rw [Quotient.map'_mk'', id, key, inv_mul_cancel_left]
 
 Depends on / 依赖: Quotient, Quotient.exact, Quotient.mk, Quotient.sound, a.map, congr_arg, h_le, invFun, inv_inv, leftRel_apply, leftRel_apply.mp, leftRel_apply.mpr, mul_assoc, mul_inv_cancel_left, mul_inv_rev
 -/
@@ -1584,7 +1626,7 @@ definition fiberEquivKer
       rw [mem_preimage]; rw [mem_singleton_iff]; rw [mem_smul_set_iff_inv_smul_mem]; rw [SetLike.mem_coe]; rw [mem_ker]; rw [smul_eq_mul]; rw [map_mul]; rw [map_inv]; rw [inv_mul_eq_one]; rw [eq_comm])
     (Subgroup.leftCosetEquivSubgroup a)
 
-@[to_ad
+@[to_additive (attr := simp)]
 
 中文:
 定义 fiberEquivKer
@@ -1594,7 +1636,7 @@ definition fiberEquivKer
       rw [mem_preimage]; rw [mem_singleton_iff]; rw [mem_smul_set_iff_inv_smul_mem]; rw [SetLike.mem_coe]; rw [mem_ker]; rw [smul_eq_mul]; rw [map_mul]; rw [map_inv]; rw [inv_mul_eq_one]; rw [eq_comm])
     (Subgroup.leftCosetEquivSubgroup a)
 
-@[to_ad
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Equiv.setCongr, Set.ext, SetLike, SetLike.mem_coe, Subgroup, Subgroup.leftCosetEquivSubgroup, eq_comm, inv_mul_eq_one, leftCosetEquivSubgroup, map_inv, map_mul, mem_coe, mem_ker, mem_preimage, mem_singleton_iff, mem_smul_set_iff_inv_smul_mem, setCongr, smul_eq_mul
 -/
@@ -1776,7 +1818,10 @@ definition preimageMkEquivSubgroupProdSet
   invFun a :=
     ⟨Quotient.out a.2.1 * a.1.1,
       show QuotientGroup.mk _ in t by
-        rw [mk_mul_of_mem _ a.1.2]; rw [out_e
+        rw [mk_mul_of_mem _ a.1.2]; rw [out_eq']
+        exact a.2.2⟩
+left_inv := fun ⟨a, _⟩ => Subtype.ext show _ * _ = a by simp
+  right_inv := fun ⟨⟨a, ha⟩, ⟨x, hx⟩⟩ => by ext <;> simp [ha]
 
 中文:
 定义 preimageMkEquivSubgroupProdSet
@@ -1787,7 +1832,10 @@ definition preimageMkEquivSubgroupProdSet
   invFun a :=
     ⟨Quotient.out a.2.1 * a.1.1,
       show QuotientGroup.mk _ in t by
-        rw [mk_mul_of_mem _ a.1.2]; rw [out_e
+        rw [mk_mul_of_mem _ a.1.2]; rw [out_eq']
+        exact a.2.2⟩
+left_inv := fun ⟨a, _⟩ => Subtype.ext show _ * _ = a by simp
+  right_inv := fun ⟨⟨a, ha⟩, ⟨x, hx⟩⟩ => by ext <;> simp [ha]
 
 Depends on / 依赖: Quotient, Quotient.exact, Quotient.out, Quotient.out_eq, QuotientGroup, QuotientGroup.mk, Subtype, Subtype.ext, invFun, leftRel, leftRel_apply, leftRel_apply.mp, left_inv, mk_mul_of_mem, out_eq, right_inv
 -/

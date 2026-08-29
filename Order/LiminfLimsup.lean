@@ -2052,7 +2052,9 @@ theorem limsup_eq_sInf_sSup
     rcases (mem_image _ F.sets x).mp hx with ⟨I, ⟨I_mem_F, hI⟩⟩
     filter_upwards [I_mem_F] with i hi
     exact hI ▸ le_sSup (mem_image_of_mem _ hi)
-· refine le_sInf fun b hb => sInf_le_of_le (mem_image_of_mem _ hb) sS
+· refine le_sInf fun b hb => sInf_le_of_le (mem_image_of_mem _ hb) sSup_le ?_
+    rintro _ ⟨_, h, rfl⟩
+    exact h
 
 中文:
 定理 limsup_eq_sInf_sSup
@@ -2064,7 +2066,9 @@ theorem limsup_eq_sInf_sSup
     rcases (mem_image _ F.sets x).mp hx with ⟨I, ⟨I_mem_F, hI⟩⟩
     filter_upwards [I_mem_F] with i hi
     exact hI ▸ le_sSup (mem_image_of_mem _ hi)
-· refine le_sInf fun b hb => sInf_le_of_le (mem_image_of_mem _ hb) sS
+· refine le_sInf fun b hb => sInf_le_of_le (mem_image_of_mem _ hb) sSup_le ?_
+    rintro _ ⟨_, h, rfl⟩
+    exact h
 
 Depends on / 依赖: F.sets, I_mem_F, filter_upwards, le_antisymm, le_sInf, le_sSup, limsup_eq, mem_image, mem_image_of_mem, sInf_le_of_le, sInf_le_sInf, sSup_le
 -/
@@ -2169,7 +2173,9 @@ theorem _root_.CompleteLatticeHom.apply_limsup_iterate
     ← Nat.add_succ]
   conv_rhs => rw [iInf_split _ (0 < ·)]
   simp only [not_lt, Nat.le_zero, iInf_iInf_eq_left, add_zero, iInf_nat_gt_zero_eq, left_eq_inf]
-  
+  refine (iInf_le (fun i => ⨆ j, f^[j + (i + 1)] a) 0).trans ?_
+  simp only [zero_add, iSup_le_iff]
+  exact fun i => le_iSup (fun i => f^[i] a) (i + 1)
 
 中文:
 定理 _root_.完备格态射.apply_limsup_iterate
@@ -2180,7 +2186,9 @@ theorem _root_.CompleteLatticeHom.apply_limsup_iterate
     ← Nat.add_succ]
   conv_rhs => rw [iInf_split _ (0 < ·)]
   simp only [not_lt, Nat.le_zero, iInf_iInf_eq_left, add_zero, iInf_nat_gt_zero_eq, left_eq_inf]
-  
+  refine (iInf_le (fun i => ⨆ j, f^[j + (i + 1)] a) 0).trans ?_
+  simp only [zero_add, iSup_le_iff]
+  exact fun i => le_iSup (fun i => f^[i] a) (i + 1)
 
 Depends on / 依赖: Function, Function.comp_apply, Function.iterate_succ, Nat.add_succ, Nat.le_zero, _root_, _root_.map_iSup, add_succ, add_zero, comp_apply, conv_rhs, iInf_iInf_eq_left, iInf_le, iInf_nat_gt_zero_eq, iInf_split, iSup_le_iff, iterate_succ, le_iSup, le_zero, left_eq_inf
 -/
@@ -2737,7 +2745,7 @@ lemma limsup_sup_filter
     (sup_le (limsup_le_limsup_of_le le_sup_left) (limsup_le_limsup_of_le le_sup_right))
   simp_rw [limsup_eq, sInf_sup_eq, sup_sInf_eq, mem_ofPred_eq, le_iInf₂_iff]
   intro a ha b hb
-  exact sInf_le ⟨ha.mono fun _ h => h.trans le_sup_left, hb.mono fun _ h => h.trans le_sup
+  exact sInf_le ⟨ha.mono fun _ h => h.trans le_sup_left, hb.mono fun _ h => h.trans le_sup_right⟩
 
 中文:
 引理 limsup_sup_filter
@@ -2748,7 +2756,7 @@ lemma limsup_sup_filter
     (sup_le (limsup_le_limsup_of_le le_sup_left) (limsup_le_limsup_of_le le_sup_right))
   simp_rw [limsup_eq, sInf_sup_eq, sup_sInf_eq, mem_ofPred_eq, le_iInf₂_iff]
   intro a ha b hb
-  exact sInf_le ⟨ha.mono fun _ h => h.trans le_sup_left, hb.mono fun _ h => h.trans le_sup
+  exact sInf_le ⟨ha.mono fun _ h => h.trans le_sup_left, hb.mono fun _ h => h.trans le_sup_right⟩
 
 Depends on / 依赖: h.trans, ha.mono, hb.mono, le_antisymm, le_sup_left, le_sup_right, limsup_eq, limsup_le_limsup_of_le, mem_ofPred_eq, sInf_le, sInf_sup_eq, simp_rw, sup_le, sup_sInf_eq
 -/
@@ -3274,7 +3282,7 @@ theorem cofinite.blimsup_set_eq
   refine ⟨fun h => ?_, fun hx t h => ?_⟩ <;> contrapose h
   · simp only [mem_sInter, mem_ofPred_eq, not_forall, exists_prop]
     exact ⟨{x}ᶜ, by simpa using h, by simp⟩
-  · exact hx.mono fun i hi => ⟨hi
+  · exact hx.mono fun i hi => ⟨hi.1, fun hit => h (hit hi.2)⟩
 
 中文:
 定理 cofinite.blimsup_set_eq
@@ -3284,7 +3292,7 @@ theorem cofinite.blimsup_set_eq
   refine ⟨fun h => ?_, fun hx t h => ?_⟩ <;> contrapose h
   · simp only [mem_sInter, mem_ofPred_eq, not_forall, exists_prop]
     exact ⟨{x}ᶜ, by simpa using h, by simp⟩
-  · exact hx.mono fun i hi => ⟨hi
+  · exact hx.mono fun i hi => ⟨hi.1, fun hit => h (hit hi.2)⟩
 
 Depends on / 依赖: blimsup_eq, contrapose, eventually_cofinite, exists_prop, hx.mono, mem_ofPred_eq, mem_sInter, not_forall, sInf_eq_sInter
 -/
@@ -3378,7 +3386,7 @@ theorem exists_forall_mem_of_hasBasis_mem_blimsup
   choose g hg hg' using hx
   refine ⟨fun i : { i | q i } => g (b i) (hl.mem_of_mem i.2), fun i => ⟨?_, ?_⟩⟩
   · exact hg' (b i) (hl.mem_of_mem i.2)
-  · exact hg (b i) (hl.mem
+  · exact hg (b i) (hl.mem_of_mem i.2)
 
 中文:
 定理 存在_对任意_mem_of_hasBasis_mem_blimsup
@@ -3389,7 +3397,7 @@ theorem exists_forall_mem_of_hasBasis_mem_blimsup
   choose g hg hg' using hx
   refine ⟨fun i : { i | q i } => g (b i) (hl.mem_of_mem i.2), fun i => ⟨?_, ?_⟩⟩
   · exact hg' (b i) (hl.mem_of_mem i.2)
-  · exact hg (b i) (hl.mem
+  · exact hg (b i) (hl.mem_of_mem i.2)
 
 Depends on / 依赖: blimsup_eq_iInf_biSup, exists_prop, hl.mem_of_mem, iInf_eq_iInter, iSup_eq_iUnion, mem_iInter, mem_iUnion, mem_of_mem
 -/
@@ -3699,7 +3707,16 @@ theorem limsup_le_iff
   refine ⟨fun h _ h' => eventually_lt_of_limsup_lt (h.trans_lt h') h₂, fun h => ?_⟩
   --Two cases: Either `x` is a cluster point from above, or it is not.
   --In the first case, we use `forall_gt_iff_le` and split an interval.
-  --In the second case, the function `u` must eventually be smaller or
+  --In the second case, the function `u` must eventually be smaller or equal to `x`.
+  by_cases h' : forall y > x, exists z, x < z ∧ z < y
+  · rw [← forall_gt_iff_le]
+    intro y x_y
+    rcases h' y x_y with ⟨z, x_z, z_y⟩
+    exact (limsup_le_of_le h₁ ((h z x_z).mono (fun _ => le_of_lt))).trans_lt z_y
+  · apply limsup_le_of_le h₁
+    push +distrib Not at h'
+    rcases h' with ⟨z, x_z, hz⟩
+exact (h z x_z).mono fun w hw => (or_iff_left (not_le_of_gt hw)).1 (hz (u w))
 
 中文:
 定理 limsup_le_iff
@@ -3708,7 +3725,16 @@ theorem limsup_le_iff
   refine ⟨fun h _ h' => eventually_lt_of_limsup_lt (h.trans_lt h') h₂, fun h => ?_⟩
   --Two cases: Either `x` is a cluster point from above, or it is not.
   --In the first case, we use `forall_gt_iff_le` and split an interval.
-  --In the second case, the function `u` must eventually be smaller or
+  --In the second case, the function `u` must eventually be smaller or equal to `x`.
+  by_cases h' : forall y > x, exists z, x < z ∧ z < y
+  · rw [← forall_gt_iff_le]
+    intro y x_y
+    rcases h' y x_y with ⟨z, x_z, z_y⟩
+    exact (limsup_le_of_le h₁ ((h z x_z).mono (fun _ => le_of_lt))).trans_lt z_y
+  · apply limsup_le_of_le h₁
+    push +distrib Not at h'
+    rcases h' with ⟨z, x_z, hz⟩
+exact (h z x_z).mono fun w hw => (or_iff_left (not_le_of_gt hw)).1 (hz (u w))
 
 Depends on / 依赖: IsBoundedUnder, eventually_lt_of_limsup_lt, f.IsBoundedUnder, h.trans_lt, isBoundedDefault, limsup, trans_lt
 -/
@@ -3774,7 +3800,16 @@ theorem le_limsup_iff
   refine ⟨fun h _ h' => frequently_lt_of_lt_limsup h₁ (h'.trans_le h), fun h => ?_⟩
   --Two cases: Either `x` is a cluster point from below, or it is not.
   --In the first case, we use `forall_lt_iff_le` and split an interval.
-  --In the second case, the function `u` must frequently be larger or 
+  --In the second case, the function `u` must frequently be larger or equal to `x`.
+  by_cases h' : forall y < x, exists z, y < z ∧ z < x
+  · rw [← forall_lt_iff_le]
+    intro y y_x
+    obtain ⟨z, y_z, z_x⟩ := h' y y_x
+    exact y_z.trans_le (le_limsup_of_frequently_le ((h z z_x).mono (fun _ => le_of_lt)) h₂)
+  · apply le_limsup_of_frequently_le _ h₂
+    push +distrib Not at h'
+    rcases h' with ⟨z, z_x, hz⟩
+exact (h z z_x).mono fun w hw => (or_iff_right (not_le_of_gt hw)).1 (hz (u w))
 
 中文:
 定理 le_limsup_iff
@@ -3783,7 +3818,16 @@ theorem le_limsup_iff
   refine ⟨fun h _ h' => frequently_lt_of_lt_limsup h₁ (h'.trans_le h), fun h => ?_⟩
   --Two cases: Either `x` is a cluster point from below, or it is not.
   --In the first case, we use `forall_lt_iff_le` and split an interval.
-  --In the second case, the function `u` must frequently be larger or 
+  --In the second case, the function `u` must frequently be larger or equal to `x`.
+  by_cases h' : forall y < x, exists z, y < z ∧ z < x
+  · rw [← forall_lt_iff_le]
+    intro y y_x
+    obtain ⟨z, y_z, z_x⟩ := h' y y_x
+    exact y_z.trans_le (le_limsup_of_frequently_le ((h z z_x).mono (fun _ => le_of_lt)) h₂)
+  · apply le_limsup_of_frequently_le _ h₂
+    push +distrib Not at h'
+    rcases h' with ⟨z, z_x, hz⟩
+exact (h z z_x).mono fun w hw => (or_iff_right (not_le_of_gt hw)).1 (hz (u w))
 
 Depends on / 依赖: IsBoundedUnder, f.IsBoundedUnder, frequently_lt_of_lt_limsup, isBoundedDefault, limsup, trans_le
 -/
@@ -3930,7 +3974,13 @@ lemma liminf_le_limsup_of_frequently_le
     obtain ⟨a, ha⟩ := h₂.eventually_le
     apply IsCoboundedUnder.of_frequently_le (a := a)
     exact (h.and_eventually ha).mono fun x ⟨u_x, v_x⟩ => u_x.trans v_x
-  have h₄ : f.IsC
+  have h₄ : f.IsCoboundedUnder (· <= ·) v := by
+    obtain ⟨a, ha⟩ := h₁.eventually_ge
+    apply IsCoboundedUnder.of_frequently_ge (a := a)
+    exact (ha.and_frequently h).mono fun x ⟨u_x, v_x⟩ => u_x.trans v_x
+  refine (le_limsup_iff h₄ h₂).2 fun y y_v => ?_
+  have := (le_liminf_iff h₃ h₁).1 (le_refl (liminf u f)) y y_v
+  exact (h.and_eventually this).mono fun x ⟨ux_vx, y_ux⟩ => y_ux.trans_le ux_vx
 
 中文:
 引理 liminf_le_limsup_of_frequently_le
@@ -3942,7 +3992,13 @@ lemma liminf_le_limsup_of_frequently_le
     obtain ⟨a, ha⟩ := h₂.eventually_le
     apply IsCoboundedUnder.of_frequently_le (a := a)
     exact (h.and_eventually ha).mono fun x ⟨u_x, v_x⟩ => u_x.trans v_x
-  have h₄ : f.IsC
+  have h₄ : f.IsCoboundedUnder (· <= ·) v := by
+    obtain ⟨a, ha⟩ := h₁.eventually_ge
+    apply IsCoboundedUnder.of_frequently_ge (a := a)
+    exact (ha.and_frequently h).mono fun x ⟨u_x, v_x⟩ => u_x.trans v_x
+  refine (le_limsup_iff h₄ h₂).2 fun y y_v => ?_
+  have := (le_liminf_iff h₃ h₁).1 (le_refl (liminf u f)) y y_v
+  exact (h.and_eventually this).mono fun x ⟨ux_vx, y_ux⟩ => y_ux.trans_le ux_vx
 
 Depends on / 依赖: IsBoundedUnder, IsCoboundedUnder, IsCoboundedUnder.of_frequently_ge, IsCoboundedUnder.of_frequently_le, and_eventually, eq_or_neBot, eventually_ge, eventually_le, f.IsBoundedUnder, f.IsCoboundedUnder, f.eq_or_neBot, frequently_bot, h.and_eventually, isBoundedDefault, liminf, limsup, of_frequently_ge, of_frequently_le, u_x.trans
 -/
@@ -4021,7 +4077,13 @@ definition liminfReparam
   have Z : exists n, g n in m ∨ forall j, j ∉ m := by
     by_cases! H : exists j, j in m
     · rcases H with ⟨j, hj⟩
-      rcases (exists_surjective_nat (Subtype p)
+      rcases (exists_surjective_nat (Subtype p)).choose_spec j with ⟨n, rfl⟩
+      exact ⟨n, Or.inl hj⟩
+    · exact ⟨0, Or.inr H⟩
+  if j in m then j else g (Nat.find Z)
+
+@[deprecated (since := "2026-07-18")]
+alias liminf_reparam := liminfReparam
 
 中文:
 定义 liminfReparam
@@ -4030,7 +4092,13 @@ definition liminfReparam
   have Z : exists n, g n in m ∨ forall j, j ∉ m := by
     by_cases! H : exists j, j in m
     · rcases H with ⟨j, hj⟩
-      rcases (exists_surjective_nat (Subtype p)
+      rcases (exists_surjective_nat (Subtype p)).choose_spec j with ⟨n, rfl⟩
+      exact ⟨n, Or.inl hj⟩
+    · exact ⟨0, Or.inr H⟩
+  if j in m then j else g (Nat.find Z)
+
+@[deprecated (since := "2026-07-18")]
+alias liminf_reparam := liminfReparam
 
 Depends on / 依赖: BddBelow, Nat.find, Or.inl, Or.inr, Subtype, choose_spec, exists_surjective_nat
 -/
@@ -4062,7 +4130,32 @@ theorem HasBasis.liminf_eq_ciSup_ciInf
   let m : Set (Subtype p) := {j | BddBelow (range (fun (i : s j) => f i))}
   have : forall (j : Subtype p), Nonempty (s j) := fun j => Nonempty.coe_sort (hs j)
   have A : ⋃ (j : Subtype p), ⋂ (i : s j), Iic (f i) =
-         ⋃ (j : Subtype p), ⋂ (i : s (liminf
+         ⋃ (j : Subtype p), ⋂ (i : s (liminfReparam f s p j)), Iic (f i) := by
+    apply Subset.antisymm
+    · apply iUnion_subset (fun j => ?_)
+      by_cases hj : j in m
+      · have : j = liminfReparam f s p j := by simp only [m, liminfReparam, hj, ite_true]
+        conv_lhs => rw [this]
+        apply subset_iUnion _ j
+      · simp only [m, mem_ofPred_eq, ← nonempty_iInter_Iic_iff, not_nonempty_iff_eq_empty] at hj
+        simp only [hj, empty_subset]
+    · apply iUnion_subset (fun j => ?_)
+      exact subset_iUnion (fun (k : Subtype p) => (⋂ (i : s k), Iic (f i))) (liminfReparam f s p j)
+  have B : forall (j : Subtype p), ⋂ (i : s (liminfReparam f s p j)), Iic (f i) =
+                                Iic (⨅ (i : s (liminfReparam f s p j)), f i) := by
+    intro j
+    apply (Iic_ciInf _).symm
+    change liminfReparam f s p j in m
+    by_cases Hj : j in m
+    · simpa only [m, liminfReparam, if_pos Hj] using Hj
+    · simp only [m, liminfReparam, if_neg Hj]
+      have Z : exists n, (exists_surjective_nat (Subtype p)).choose n in m ∨ forall j, j ∉ m := by
+        rcases (exists_surjective_nat (Subtype p)).choose_spec j0 with ⟨n, rfl⟩
+        exact ⟨n, Or.inl hj0⟩
+      rcases Nat.find_spec Z with hZ | hZ
+      · exact hZ
+      · exact (hZ j0 hj0).elim
+  simp_rw [hv.liminf_eq_sSup_iUnion_iInter, A, B, sSup_iUnion_Iic]
 
 中文:
 定理 有基.liminf_eq_ciSup_ciInf
@@ -4073,7 +4166,32 @@ theorem HasBasis.liminf_eq_ciSup_ciInf
   let m : Set (Subtype p) := {j | BddBelow (range (fun (i : s j) => f i))}
   have : forall (j : Subtype p), Nonempty (s j) := fun j => Nonempty.coe_sort (hs j)
   have A : ⋃ (j : Subtype p), ⋂ (i : s j), Iic (f i) =
-         ⋃ (j : Subtype p), ⋂ (i : s (liminf
+         ⋃ (j : Subtype p), ⋂ (i : s (liminfReparam f s p j)), Iic (f i) := by
+    apply Subset.antisymm
+    · apply iUnion_subset (fun j => ?_)
+      by_cases hj : j in m
+      · have : j = liminfReparam f s p j := by simp only [m, liminfReparam, hj, ite_true]
+        conv_lhs => rw [this]
+        apply subset_iUnion _ j
+      · simp only [m, mem_ofPred_eq, ← nonempty_iInter_Iic_iff, not_nonempty_iff_eq_empty] at hj
+        simp only [hj, empty_subset]
+    · apply iUnion_subset (fun j => ?_)
+      exact subset_iUnion (fun (k : Subtype p) => (⋂ (i : s k), Iic (f i))) (liminfReparam f s p j)
+  have B : forall (j : Subtype p), ⋂ (i : s (liminfReparam f s p j)), Iic (f i) =
+                                Iic (⨅ (i : s (liminfReparam f s p j)), f i) := by
+    intro j
+    apply (Iic_ciInf _).symm
+    change liminfReparam f s p j in m
+    by_cases Hj : j in m
+    · simpa only [m, liminfReparam, if_pos Hj] using Hj
+    · simp only [m, liminfReparam, if_neg Hj]
+      have Z : exists n, (exists_surjective_nat (Subtype p)).choose n in m ∨ forall j, j ∉ m := by
+        rcases (exists_surjective_nat (Subtype p)).choose_spec j0 with ⟨n, rfl⟩
+        exact ⟨n, Or.inl hj0⟩
+      rcases Nat.find_spec Z with hZ | hZ
+      · exact hZ
+      · exact (hZ j0 hj0).elim
+  simp_rw [hv.liminf_eq_sSup_iUnion_iInter, A, B, sSup_iUnion_Iic]
 
 Depends on / 依赖: BddBelow, Nonempty, Nonempty.coe_sort, Subset, Subset.antisymm, Subtype, antisymm, classical, coe_sort, conv_lhs, iUnion_subset, ite_true, liminfReparam
 -/
@@ -4128,7 +4246,16 @@ theorem HasBasis.liminf_eq_ite
     simp [hv.liminf_eq_sSup_univ_of_empty j j.2 hj]
   rw [if_neg H]
   by_cases H' : forall (j : Subtype p), ¬BddBelow (range (fun (i : s j) => f i))
-  · have A : forall (j : Subtype p), ⋂ (i : s j), Iic (f 
+  · have A : forall (j : Subtype p), ⋂ (i : s j), Iic (f i) = ∅ := by
+      simp_rw [← not_nonempty_iff_eq_empty, nonempty_iInter_Iic_iff]
+      exact H'
+    simp_rw [if_pos H', hv.liminf_eq_sSup_iUnion_iInter, A, iUnion_empty]
+  rw [if_neg H']
+  apply hv.liminf_eq_ciSup_ciInf
+  · push Not at H
+    simpa only [nonempty_iff_ne_empty] using H
+  · push Not at H'
+    exact H'
 
 中文:
 定理 有基.liminf_eq_ite
@@ -4140,7 +4267,16 @@ theorem HasBasis.liminf_eq_ite
     simp [hv.liminf_eq_sSup_univ_of_empty j j.2 hj]
   rw [if_neg H]
   by_cases H' : forall (j : Subtype p), ¬BddBelow (range (fun (i : s j) => f i))
-  · have A : forall (j : Subtype p), ⋂ (i : s j), Iic (f 
+  · have A : forall (j : Subtype p), ⋂ (i : s j), Iic (f i) = ∅ := by
+      simp_rw [← not_nonempty_iff_eq_empty, nonempty_iInter_Iic_iff]
+      exact H'
+    simp_rw [if_pos H', hv.liminf_eq_sSup_iUnion_iInter, A, iUnion_empty]
+  rw [if_neg H']
+  apply hv.liminf_eq_ciSup_ciInf
+  · push Not at H
+    simpa only [nonempty_iff_ne_empty] using H
+  · push Not at H'
+    exact H'
 
 Depends on / 依赖: BddBelow, Subtype, hv.liminf_eq_ciSup_ciInf, hv.liminf_eq_sSup_iUnion_iInter, hv.liminf_eq_sSup_univ_of_empty, iUnion_empty, if_neg, if_pos, liminf_eq_ciSup_ciInf, liminf_eq_sSup_iUnion_iInter, liminf_eq_sSup_univ_of_empty, nonempty_iInter_Iic_iff, not_nonempty_iff_eq_empty, simp_rw
 -/
@@ -4292,7 +4428,9 @@ theorem OrderIso.limsup_apply
   refine g.monotone ?_
   have hf : u = fun i => g.symm (g (u i)) := funext fun i => (g.symm_apply_apply (u i)).symm
   nth_rw 2 [hf]
-  
+  refine (OrderIso.to_galoisConnection g.symm).l_limsup_le ?_ hgu_co
+  simp_rw [g.symm_apply_apply]
+  exact hu
 
 中文:
 定理 OrderIso.limsup_apply
@@ -4303,7 +4441,9 @@ theorem OrderIso.limsup_apply
   refine g.monotone ?_
   have hf : u = fun i => g.symm (g (u i)) := funext fun i => (g.symm_apply_apply (u i)).symm
   nth_rw 2 [hf]
-  
+  refine (OrderIso.to_galoisConnection g.symm).l_limsup_le ?_ hgu_co
+  simp_rw [g.symm_apply_apply]
+  exact hu
 
 Depends on / 依赖: IsBoundedUnder, IsCoboundedUnder, OrderIso, OrderIso.to_galoisConnection, f.IsBoundedUnder, f.IsCoboundedUnder, g.monotone, g.symm, g.symm.symm_apply_apply, g.symm_symm, hgu_co, hu_co, isBoundedDefault, l_limsup_le, le_antisymm, limsup, monotone, symm_apply_apply, symm_symm, to_galoisConnection
 -/
@@ -4365,7 +4505,11 @@ theorem limsup_max
   apply le_antisymm
   · refine (limsup_le_iff cobddmax bddmax).2 (fun b hb => ?_)
     have hu := eventually_lt_of_limsup_lt (lt_of_le_of_lt (le_max_left _ _) hb) h₃
-    have hv := eventually_
+    have hv := eventually_lt_of_limsup_lt (lt_of_le_of_lt (le_max_right _ _) hb) h₄
+    refine mem_of_superset (inter_mem hu hv) (fun _ => by simp)
+  · exact max_le (c := limsup (fun a => max (u a) (v a)) f)
+      (limsup_le_limsup (Eventually.of_forall (fun a : α => le_max_left (u a) (v a))) h₁ bddmax)
+      (limsup_le_limsup (Eventually.of_forall (fun a : α => le_max_right (u a) (v a))) h₂ bddmax)
 
 中文:
 定理 limsup_max
@@ -4376,7 +4520,11 @@ theorem limsup_max
   apply le_antisymm
   · refine (limsup_le_iff cobddmax bddmax).2 (fun b hb => ?_)
     have hu := eventually_lt_of_limsup_lt (lt_of_le_of_lt (le_max_left _ _) hb) h₃
-    have hv := eventually_
+    have hv := eventually_lt_of_limsup_lt (lt_of_le_of_lt (le_max_right _ _) hb) h₄
+    refine mem_of_superset (inter_mem hu hv) (fun _ => by simp)
+  · exact max_le (c := limsup (fun a => max (u a) (v a)) f)
+      (limsup_le_limsup (Eventually.of_forall (fun a : α => le_max_left (u a) (v a))) h₁ bddmax)
+      (limsup_le_limsup (Eventually.of_forall (fun a : α => le_max_right (u a) (v a))) h₂ bddmax)
 
 Depends on / 依赖: IsBoundedUnder, IsBoundedUnder.sup, IsCoboundedUnder, Or.inl, bddmax, cobddmax, eventually_lt_of_limsup_lt, f.IsBoundedUnder, f.IsCoboundedUnder, isBoundedDefault, isCoboundedUnder_le_max, le_antisymm, limsup, limsup_le_iff, lt_of_le
 -/
@@ -4436,7 +4584,13 @@ theorem limsup_finset_sup'
       use i, i_s
       exact h₁ i i_s
     have cobddsup := isCoboundedUnder_le_finset_sup' hs h₃
-    refine (limsup_le_iff co
+    refine (limsup_le_iff cobddsup bddsup).2 (fun b hb => ?_)
+    simp only [gt_iff_lt, sup'_lt_iff, eventually_all_finset] at hb ⊢
+    exact fun i i_s => eventually_lt_of_limsup_lt (hb i i_s) (h₂ i i_s)
+  · apply Finset.sup'_le hs (fun i => limsup (F i) f)
+    refine fun i i_s => limsup_le_limsup (Eventually.of_forall (fun a => ?_)) (h₁ i i_s) bddsup
+    simp only [le_sup'_iff]
+    use i, i_s
 
 中文:
 定理 limsup_finset_sup'
@@ -4449,7 +4603,13 @@ theorem limsup_finset_sup'
       use i, i_s
       exact h₁ i i_s
     have cobddsup := isCoboundedUnder_le_finset_sup' hs h₃
-    refine (limsup_le_iff co
+    refine (limsup_le_iff cobddsup bddsup).2 (fun b hb => ?_)
+    simp only [gt_iff_lt, sup'_lt_iff, eventually_all_finset] at hb ⊢
+    exact fun i i_s => eventually_lt_of_limsup_lt (hb i i_s) (h₂ i i_s)
+  · apply Finset.sup'_le hs (fun i => limsup (F i) f)
+    refine fun i i_s => limsup_le_limsup (Eventually.of_forall (fun a => ?_)) (h₁ i i_s) bddsup
+    simp only [le_sup'_iff]
+    use i, i_s
 
 Depends on / 依赖: IsBoundedUnder, IsCoboundedUnder, bddsup, cobdds, cobddsup, f.IsBoundedUnder, f.IsCoboundedUnder, isBoundedDefault, isBoundedUnder_le_finset_sup, isCoboundedUnder_le_finset_sup, le_antisymm, limsup, limsup_le_iff
 -/
@@ -4487,7 +4647,7 @@ theorem limsup_finset_sup
   rw [← Finset.sup'_eq_sup s_nemp fun i => limsup (F i) f]; rw [← limsup_finset_sup' s_nemp h₁ h₂]
   congr
   ext a
-  exact Eq.s
+  exact Eq.symm (Finset.sup'_eq_sup s_nemp (fun i => F i a))
 
 中文:
 定理 limsup_finset_sup
@@ -4500,7 +4660,7 @@ theorem limsup_finset_sup
   rw [← Finset.sup'_eq_sup s_nemp fun i => limsup (F i) f]; rw [← limsup_finset_sup' s_nemp h₁ h₂]
   congr
   ext a
-  exact Eq.s
+  exact Eq.symm (Finset.sup'_eq_sup s_nemp (fun i => F i a))
 
 Depends on / 依赖: Finset, Finset.eq_empty_or_nonempty, Finset.sup, IsBoundedUnder, _eq_sup, csInf_univ, eq_empty_or_nonempty, eq_or_neBot, f.IsBoundedUnder, isBoundedDefault, limsup, limsup_const, limsup_eq, limsup_finset_sup, s_nemp, sup_empty
 -/

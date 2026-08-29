@@ -89,7 +89,17 @@ lemma subobjectMk_of_isColimit_eq_iSup
   · rw [le_iSup_iff]
     intro s H
     induction s using Subobject.ind with | _ g
-    let c' : Cocone (F ⋙ MonoOver.forget _ ⋙ Over.f
+    let c' : Cocone (F ⋙ MonoOver.forget _ ⋙ Over.forget _) := Cocone.mk _
+      { app j := Subobject.ofMkLEMk _ _ (H j)
+        naturality j j' f := by
+          dsimp
+          simpa only [← cancel_mono g, Category.assoc, Subobject.ofMkLEMk_comp,
+            Category.comp_id] using MonoOver.w (F.map f) }
+    exact Subobject.mk_le_mk_of_comm (hc.desc c')
+      (hc.hom_ext (fun j => by rw [hc.fac_assoc c' j, hf, Subobject.ofMkLEMk_comp]))
+  · rw [iSup_le_iff]
+    intro j
+    exact Subobject.mk_le_mk_of_comm (c.ι.app j) (hf j)
 
 中文:
 引理 subobjectMk_of_isColimit_eq_iSup
@@ -100,7 +110,17 @@ lemma subobjectMk_of_isColimit_eq_iSup
   · rw [le_iSup_iff]
     intro s H
     induction s using Subobject.ind with | _ g
-    let c' : Cocone (F ⋙ MonoOver.forget _ ⋙ Over.f
+    let c' : Cocone (F ⋙ MonoOver.forget _ ⋙ Over.forget _) := Cocone.mk _
+      { app j := Subobject.ofMkLEMk _ _ (H j)
+        naturality j j' f := by
+          dsimp
+          simpa only [← cancel_mono g, Category.assoc, Subobject.ofMkLEMk_comp,
+            Category.comp_id] using MonoOver.w (F.map f) }
+    exact Subobject.mk_le_mk_of_comm (hc.desc c')
+      (hc.hom_ext (fun j => by rw [hc.fac_assoc c' j, hf, Subobject.ofMkLEMk_comp]))
+  · rw [iSup_le_iff]
+    intro j
+    exact Subobject.mk_le_mk_of_comm (c.ι.app j) (hf j)
 
 Depends on / 依赖: mono_of_isColimit_monoOver
 -/
@@ -139,7 +159,14 @@ definition isColimitMapCoconeOfSubobjectMkEqISup
       { app j := (F.obj j).obj.hom
         naturality {j j'} g := by simp [MonoOver.forget] })
   haveI := mono_of_isColimit_monoOver F (colimit.isColimit _) f (by simp [f])
-  have := subobjectMk_of_is
+  have := subobjectMk_of_isColimit_eq_iSup F (colimit.isColimit _) f (by simp [f])
+  rw [← h] at this
+  refine IsColimit.ofIsoColimit (colimit.isColimit _)
+    (Cocone.ext (Subobject.isoOfMkEqMk _ _ this) (fun j => ?_))
+  rw [← cancel_mono (c.pt.hom)]
+  dsimp
+  rw [Category.assoc]; rw [Subobject.ofMkLEMk_comp]; rw [Over.w]
+  apply colimit.ι_desc
 
 中文:
 定义 isColimitMapCoconeOfSubobjectMkEqISup
@@ -149,7 +176,14 @@ definition isColimitMapCoconeOfSubobjectMkEqISup
       { app j := (F.obj j).obj.hom
         naturality {j j'} g := by simp [MonoOver.forget] })
   haveI := mono_of_isColimit_monoOver F (colimit.isColimit _) f (by simp [f])
-  have := subobjectMk_of_is
+  have := subobjectMk_of_isColimit_eq_iSup F (colimit.isColimit _) f (by simp [f])
+  rw [← h] at this
+  refine IsColimit.ofIsoColimit (colimit.isColimit _)
+    (Cocone.ext (Subobject.isoOfMkEqMk _ _ this) (fun j => ?_))
+  rw [← cancel_mono (c.pt.hom)]
+  dsimp
+  rw [Category.assoc]; rw [Subobject.ofMkLEMk_comp]; rw [Over.w]
+  apply colimit.ι_desc
 
 Depends on / 依赖: Cocone, Cocone.ext, Cocone.mk, F.obj, IsColimit, IsColimit.ofIsoColimit, MonoOver, MonoOver.forget, Over.forget, Subobject, Subobject.isoOfMkEqMk, c.pt.hom, cancel_mono, colimit, colimit.desc, colimit.isColimit, forget, isColimit, isoOfMkEqMk, mono_of_isColimit_monoOver
 -/
@@ -181,7 +215,20 @@ lemma exists_isIso_of_functor_from_monoOver
   have := mono_of_isColimit_monoOver F hc f hf
   rw [Subobject.epi_iff_mk_eq_top f]; rw [subobjectMk_of_isColimit_eq_iSup F hc f hf] at h
   let s (j : J) : Subobject X := Subobject.mk (F.obj j).obj.hom
-  have h' : Function.Surjective (fun (j : J) => 
+  have h' : Function.Surjective (fun (j : J) => (⟨s j, _, rfl⟩ : Set.range s)) := by
+    rintro ⟨_, j, rfl⟩
+    exact ⟨j, rfl⟩
+  obtain ⟨σ, hσ⟩ := h'.hasRightInverse
+  have hs : HasCardinalLT (Set.range s) κ :=
+    hXκ.of_injective (f := Subtype.val) Subtype.val_injective
+  refine ⟨IsCardinalFiltered.max σ hs, ?_⟩
+  rw [Subobject.isIso_iff_mk_eq_top]; rw [← top_le_iff]; rw [← h]; rw [iSup_le_iff]
+  intro j
+  let t : Set.range s := ⟨_, j, rfl⟩
+  trans Subobject.mk (F.obj (σ t)).obj.hom
+  · exact (hσ t).symm.le
+  · exact MonoOver.subobjectMk_le_mk_of_hom
+      (F.map (IsCardinalFiltered.toMax σ hs t))
 
 中文:
 引理 存在_isIso_of_functor_from_monoOver
@@ -190,7 +237,20 @@ lemma exists_isIso_of_functor_from_monoOver
   have := mono_of_isColimit_monoOver F hc f hf
   rw [Subobject.epi_iff_mk_eq_top f]; rw [subobjectMk_of_isColimit_eq_iSup F hc f hf] at h
   let s (j : J) : Subobject X := Subobject.mk (F.obj j).obj.hom
-  have h' : Function.Surjective (fun (j : J) => 
+  have h' : Function.Surjective (fun (j : J) => (⟨s j, _, rfl⟩ : Set.range s)) := by
+    rintro ⟨_, j, rfl⟩
+    exact ⟨j, rfl⟩
+  obtain ⟨σ, hσ⟩ := h'.hasRightInverse
+  have hs : HasCardinalLT (Set.range s) κ :=
+    hXκ.of_injective (f := Subtype.val) Subtype.val_injective
+  refine ⟨IsCardinalFiltered.max σ hs, ?_⟩
+  rw [Subobject.isIso_iff_mk_eq_top]; rw [← top_le_iff]; rw [← h]; rw [iSup_le_iff]
+  intro j
+  let t : Set.range s := ⟨_, j, rfl⟩
+  trans Subobject.mk (F.obj (σ t)).obj.hom
+  · exact (hσ t).symm.le
+  · exact MonoOver.subobjectMk_le_mk_of_hom
+      (F.map (IsCardinalFiltered.toMax σ hs t))
 
 Depends on / 依赖: F.obj, Function, Function.Surjective, HasCardinalLT, Set.range, Subobject, Subobject.epi_iff_mk_eq_top, Subobject.mk, Subtype, Subtype.val, Subtype.val_injective, Surjective, epi_iff_mk_eq_top, hasRightInverse, isFiltered_of_isCardinalFiltered, mono_of_isColimit_monoOver, obj.hom, of_injective, subobjectMk_of_isColimit_eq_iSup, val_injective
 -/

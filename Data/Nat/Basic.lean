@@ -465,7 +465,7 @@ lemma mul_le_pow
       obtain rfl | ha0 : a = 0 ∨ a > 0 := a.eq_zero_or_pos
       · rw [Nat.zero_mul]; exact Nat.zero_le _
       · have ha1 : a > 1 := Nat.lt_of_le_of_ne ha0 ha.symm
-        rw [Nat.pow_succ']; exact Nat.mul_le_mul_left a (Nat.lt_pow_sel
+        rw [Nat.pow_succ']; exact Nat.mul_le_mul_left a (Nat.lt_pow_self ha1)
 
 中文:
 引理 mul_le_pow
@@ -477,7 +477,7 @@ lemma mul_le_pow
       obtain rfl | ha0 : a = 0 ∨ a > 0 := a.eq_zero_or_pos
       · rw [Nat.zero_mul]; exact Nat.zero_le _
       · have ha1 : a > 1 := Nat.lt_of_le_of_ne ha0 ha.symm
-        rw [Nat.pow_succ']; exact Nat.mul_le_mul_left a (Nat.lt_pow_sel
+        rw [Nat.pow_succ']; exact Nat.mul_le_mul_left a (Nat.lt_pow_self ha1)
 
 Depends on / 依赖: Nat.lt_of_le_of_ne, Nat.lt_pow_self, Nat.mul_le_mul_left, Nat.pow_succ, Nat.zero_le, Nat.zero_mul, a.eq_zero_or_pos, eq_zero_or_pos, ha.symm, lt_of_le_of_ne, lt_pow_self, mul_le_mul_left, pow_succ, zero_le, zero_mul
 -/
@@ -505,7 +505,8 @@ lemma two_mul_sq_add_one_le_two_pow_two_mul
     calc 2 * k ^ 2
       _ < 2 * k ^ 2 + 2 * k ^ 2 := Nat.lt_add_of_pos_left hk0
       _ = (2 * k) ^ 2 := by rw [Nat.mul_pow, ← Nat.add_mul]
-      _ <= (2 ^ k)
+      _ <= (2 ^ k) ^ 2 := Nat.pow_le_pow_left (Nat.mul_le_pow (by decide : 2 != 1) _) 2
+      _ = 2 ^ (2 * k) := (Nat.pow_mul' _ _ _).symm
 
 中文:
 引理 two_mul_sq_add_one_le_two_pow_two_mul
@@ -518,7 +519,8 @@ lemma two_mul_sq_add_one_le_two_pow_two_mul
     calc 2 * k ^ 2
       _ < 2 * k ^ 2 + 2 * k ^ 2 := Nat.lt_add_of_pos_left hk0
       _ = (2 * k) ^ 2 := by rw [Nat.mul_pow, ← Nat.add_mul]
-      _ <= (2 ^ k)
+      _ <= (2 ^ k) ^ 2 := Nat.pow_le_pow_left (Nat.mul_le_pow (by decide : 2 != 1) _) 2
+      _ = 2 ^ (2 * k) := (Nat.pow_mul' _ _ _).symm
 
 Depends on / 依赖: Nat.add_mul, Nat.lt_add_of_pos_left, Nat.mul_le_pow, Nat.mul_pos, Nat.mul_pow, Nat.pow_le_pow_left, Nat.pow_mul, Nat.pow_pos, Nat.two_pos, add_mul, eq_zero_or_pos, k.eq_zero_or_pos, lt_add_of_pos_left, mul_le_pow, mul_pos, mul_pow, pow_le_pow_left, pow_mul, pow_pos, two_pos
 -/

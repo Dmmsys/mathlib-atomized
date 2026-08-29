@@ -186,7 +186,7 @@ lemma IsCoseparating.of_equivalence
     obtain ⟨h', rfl⟩ := (α.symm.toAdjunction.homEquiv _ _).symm.surjective h
     simp only [Equivalence.symm_inverse, Equivalence.symm_functor,
       Adjunction.homEquiv_counit, ← Functor.map_comp_assoc,
-      H _ (P.strictMap_obj _
+      H _ (P.strictMap_obj _ hZ) h']))
 
 中文:
 引理 IsCoseparating.of_equivalence
@@ -195,7 +195,7 @@ lemma IsCoseparating.of_equivalence
     obtain ⟨h', rfl⟩ := (α.symm.toAdjunction.homEquiv _ _).symm.surjective h
     simp only [Equivalence.symm_inverse, Equivalence.symm_functor,
       Adjunction.homEquiv_counit, ← Functor.map_comp_assoc,
-      H _ (P.strictMap_obj _
+      H _ (P.strictMap_obj _ hZ) h']))
 -/
 lemma IsCoseparating.of_equivalence
     (h : IsCoseparating P) {D : Type*} [Category* D] (α : C ≌ D) :
@@ -221,7 +221,7 @@ theorem isSeparating_op_iff
   · refine Quiver.Hom.op_inj (hP _ _ fun G hG h => Quiver.Hom.unop_inj ?_)
     simpa only [unop_comp, Quiver.Hom.unop_op] using hfg _ hG _
   · refine Quiver.Hom.unop_inj (hP _ _ fun G hG h => Quiver.Hom.op_inj ?_)
-    simpa only [op_co
+    simpa only [op_comp, Quiver.Hom.op_unop] using hfg _ hG _
 
 中文:
 定理 isSeparating_op_iff
@@ -231,7 +231,7 @@ theorem isSeparating_op_iff
   · refine Quiver.Hom.op_inj (hP _ _ fun G hG h => Quiver.Hom.unop_inj ?_)
     simpa only [unop_comp, Quiver.Hom.unop_op] using hfg _ hG _
   · refine Quiver.Hom.unop_inj (hP _ _ fun G hG h => Quiver.Hom.op_inj ?_)
-    simpa only [op_co
+    simpa only [op_comp, Quiver.Hom.op_unop] using hfg _ hG _
 
 Depends on / 依赖: Quiver, Quiver.Hom.op_inj, Quiver.Hom.op_unop, Quiver.Hom.unop_inj, Quiver.Hom.unop_op, op_comp, op_inj, op_unop, unop_comp, unop_inj, unop_op
 -/
@@ -253,7 +253,7 @@ theorem isCoseparating_op_iff
   · refine Quiver.Hom.op_inj (hP _ _ fun G hG h => Quiver.Hom.unop_inj ?_)
     simpa only [unop_comp, Quiver.Hom.unop_op] using hfg _ hG _
   · refine Quiver.Hom.unop_inj (hP _ _ fun G hG h => Quiver.Hom.op_inj ?_)
-    simpa only [op_co
+    simpa only [op_comp, Quiver.Hom.op_unop] using hfg _ hG _
 
 中文:
 定理 isCoseparating_op_iff
@@ -263,7 +263,7 @@ theorem isCoseparating_op_iff
   · refine Quiver.Hom.op_inj (hP _ _ fun G hG h => Quiver.Hom.unop_inj ?_)
     simpa only [unop_comp, Quiver.Hom.unop_op] using hfg _ hG _
   · refine Quiver.Hom.unop_inj (hP _ _ fun G hG h => Quiver.Hom.op_inj ?_)
-    simpa only [op_co
+    simpa only [op_comp, Quiver.Hom.op_unop] using hfg _ hG _
 
 Depends on / 依赖: Quiver, Quiver.Hom.op_inj, Quiver.Hom.op_unop, Quiver.Hom.unop_inj, Quiver.Hom.unop_op, op_comp, op_inj, op_unop, unop_comp, unop_inj, unop_op
 -/
@@ -324,7 +324,10 @@ theorem isDetecting_op_iff
     obtain ⟨t, ht, ht'⟩ := hf (unop G) hG h.unop
     exact
       ⟨t.op, Quiver.Hom.unop_inj ht, fun y hy => Quiver.Hom.unop_inj (ht' _ (Quiver.Hom.op_inj hy))⟩
-  · refine (isIso_unop_iff 
+  · refine (isIso_unop_iff _).1 (hP _ fun G hG h => ?_)
+    obtain ⟨t, ht, ht'⟩ := hf (op G) hG h.op
+    refine ⟨t.unop, Quiver.Hom.op_inj ht, fun y hy => Quiver.Hom.op_inj (ht' _ ?_)⟩
+    exact Quiver.Hom.unop_inj (by simpa only using! hy)
 
 中文:
 定理 isDetecting_op_iff
@@ -335,7 +338,10 @@ theorem isDetecting_op_iff
     obtain ⟨t, ht, ht'⟩ := hf (unop G) hG h.unop
     exact
       ⟨t.op, Quiver.Hom.unop_inj ht, fun y hy => Quiver.Hom.unop_inj (ht' _ (Quiver.Hom.op_inj hy))⟩
-  · refine (isIso_unop_iff 
+  · refine (isIso_unop_iff _).1 (hP _ fun G hG h => ?_)
+    obtain ⟨t, ht, ht'⟩ := hf (op G) hG h.op
+    refine ⟨t.unop, Quiver.Hom.op_inj ht, fun y hy => Quiver.Hom.op_inj (ht' _ ?_)⟩
+    exact Quiver.Hom.unop_inj (by simpa only using! hy)
 
 Depends on / 依赖: Quiver, Quiver.Hom.op_inj, Quiver.Hom.unop_inj, h.op, h.unop, isIso_op_iff, isIso_unop_iff, op_inj, t.op, t.unop, unop_inj
 -/
@@ -362,7 +368,10 @@ theorem isCodetecting_op_iff
     obtain ⟨t, ht, ht'⟩ := hf (unop G) hG h.unop
     exact
       ⟨t.op, Quiver.Hom.unop_inj ht, fun y hy => Quiver.Hom.unop_inj (ht' _ (Quiver.Hom.op_inj hy))⟩
-  · refine (isIso_unop_iff 
+  · refine (isIso_unop_iff _).1 (hP _ fun G hG h => ?_)
+    obtain ⟨t, ht, ht'⟩ := hf (op G) hG h.op
+    refine ⟨t.unop, Quiver.Hom.op_inj ht, fun y hy => Quiver.Hom.op_inj (ht' _ ?_)⟩
+    exact Quiver.Hom.unop_inj (by simpa only using! hy)
 
 中文:
 定理 isCodetecting_op_iff
@@ -373,7 +382,10 @@ theorem isCodetecting_op_iff
     obtain ⟨t, ht, ht'⟩ := hf (unop G) hG h.unop
     exact
       ⟨t.op, Quiver.Hom.unop_inj ht, fun y hy => Quiver.Hom.unop_inj (ht' _ (Quiver.Hom.op_inj hy))⟩
-  · refine (isIso_unop_iff 
+  · refine (isIso_unop_iff _).1 (hP _ fun G hG h => ?_)
+    obtain ⟨t, ht, ht'⟩ := hf (op G) hG h.op
+    refine ⟨t.unop, Quiver.Hom.op_inj ht, fun y hy => Quiver.Hom.op_inj (ht' _ ?_)⟩
+    exact Quiver.Hom.unop_inj (by simpa only using! hy)
 
 Depends on / 依赖: Quiver, Quiver.Hom.op_inj, Quiver.Hom.unop_inj, h.op, h.unop, isIso_op_iff, isIso_unop_iff, op_inj, t.op, t.unop, unop_inj
 -/
@@ -532,7 +544,8 @@ theorem IsSeparating.isDetecting
   · obtain ⟨t, -, ht⟩ := hf G hG (i ≫ g ≫ f)
     rw [ht (i ≫ g) (Category.assoc _ _ _)]; rw [ht (i ≫ h) (hgh.symm ▸ Category.assoc _ _ _)]
   · refine hP _ _ fun G hG i => ?_
-
+    obtain ⟨t, rfl, -⟩ := hf G hG i
+    rw [Category.assoc]; rw [hgh]; rw [Category.assoc]
 
 中文:
 定理 IsSeparating.isDetecting
@@ -544,7 +557,8 @@ theorem IsSeparating.isDetecting
   · obtain ⟨t, -, ht⟩ := hf G hG (i ≫ g ≫ f)
     rw [ht (i ≫ g) (Category.assoc _ _ _)]; rw [ht (i ≫ h) (hgh.symm ▸ Category.assoc _ _ _)]
   · refine hP _ _ fun G hG i => ?_
-
+    obtain ⟨t, rfl, -⟩ := hf G hG i
+    rw [Category.assoc]; rw [hgh]; rw [Category.assoc]
 
 Depends on / 依赖: Category, Category.assoc, hgh.symm, isIso_iff_mono_and_epi
 -/
@@ -1289,7 +1303,21 @@ theorem hasInitial_of_isCoseparating
   have := hasProductsOfShape_of_small C (Subtype P)
   have := fun A => hasProductsOfShape_of_small.{w} C (StructuredArrow A P.ι)
   let := completeLatticeOfCompleteSemilatticeInf (Subobject (piObj (Subtype.val : Subtype P -> C)))
-  suffices forall A :
+  suffices forall A : C, Unique (((⊥ : Subobject (piObj (Subtype.val : Subtype P -> C))) : C) ⟶ A) by
+    exact hasInitial_of_unique ((⊥ : Subobject (piObj (Subtype.val : Subtype P -> C))) : C)
+  have := hP.mono_productTo
+  refine fun A => ⟨⟨?_⟩, fun f => ?_⟩
+  · let s : ∏ᶜ (Subtype.val (p := P)) ⟶ ∏ᶜ P.productToFamily A :=
+      Pi.lift (fun f => Pi.π Subtype.val ⟨f.right.obj, f.right.property⟩)
+    exact Subobject.ofLEMk _
+      (pullback.fst _ _ : pullback s (P.productTo A) ⟶ _) bot_le ≫ pullback.snd _ _
+  · suffices forall (g : Subobject.underlying.obj ⊥ ⟶ A), f = g by
+      apply this
+    intro g
+    suffices IsSplitEpi (equalizer.ι f g) by exact eq_of_epi_equalizer
+    exact IsSplitEpi.mk' ⟨Subobject.ofLEMk _ (equalizer.ι f g ≫ Subobject.arrow _) bot_le, by
+      ext
+      simp⟩
 
 中文:
 定理 hasInitial_of_isCoseparating
@@ -1299,7 +1327,21 @@ theorem hasInitial_of_isCoseparating
   have := hasProductsOfShape_of_small C (Subtype P)
   have := fun A => hasProductsOfShape_of_small.{w} C (StructuredArrow A P.ι)
   let := completeLatticeOfCompleteSemilatticeInf (Subobject (piObj (Subtype.val : Subtype P -> C)))
-  suffices forall A :
+  suffices forall A : C, Unique (((⊥ : Subobject (piObj (Subtype.val : Subtype P -> C))) : C) ⟶ A) by
+    exact hasInitial_of_unique ((⊥ : Subobject (piObj (Subtype.val : Subtype P -> C))) : C)
+  have := hP.mono_productTo
+  refine fun A => ⟨⟨?_⟩, fun f => ?_⟩
+  · let s : ∏ᶜ (Subtype.val (p := P)) ⟶ ∏ᶜ P.productToFamily A :=
+      Pi.lift (fun f => Pi.π Subtype.val ⟨f.right.obj, f.right.property⟩)
+    exact Subobject.ofLEMk _
+      (pullback.fst _ _ : pullback s (P.productTo A) ⟶ _) bot_le ≫ pullback.snd _ _
+  · suffices forall (g : Subobject.underlying.obj ⊥ ⟶ A), f = g by
+      apply this
+    intro g
+    suffices IsSplitEpi (equalizer.ι f g) by exact eq_of_epi_equalizer
+    exact IsSplitEpi.mk' ⟨Subobject.ofLEMk _ (equalizer.ι f g ≫ Subobject.arrow _) bot_le, by
+      ext
+      simp⟩
 
 Depends on / 依赖: IsSplitMono, StructuredArrow, Subobject, Subtype, Subtype.val, Unique, completeLatticeOfCompleteSemilatticeInf, hP.mono_productTo, hasFiniteLimits_of_hasLimitsOfSize, hasInitial_of_unique, hasProductsOfShape_of_small, mono_productTo
 -/
@@ -1366,7 +1408,9 @@ theorem eq_of_le_of_isDetecting
   refine h𝒢 _ fun G hG f => ?_
   have : P.Factors (f ≫ Q.arrow) := h₂ _ hG ((factors_iff _ _).2 ⟨_, rfl⟩)
   refine ⟨factorThru _ _ this, ?_, fun g (hg : g ≫ _ = f) => ?_⟩
-  · simp only [← cancel_mono
+  · simp only [← cancel_mono Q.arrow, Category.assoc, ofLE_arrow, factorThru_arrow]
+  · simp only [← cancel_mono (Subobject.ofLE _ _ h₁), ← cancel_mono Q.arrow, hg, Category.assoc,
+      ofLE_arrow, factorThru_arrow]
 
 中文:
 定理 eq_of_le_of_isDetecting
@@ -1376,7 +1420,9 @@ theorem eq_of_le_of_isDetecting
   refine h𝒢 _ fun G hG f => ?_
   have : P.Factors (f ≫ Q.arrow) := h₂ _ hG ((factors_iff _ _).2 ⟨_, rfl⟩)
   refine ⟨factorThru _ _ this, ?_, fun g (hg : g ≫ _ = f) => ?_⟩
-  · simp only [← cancel_mono
+  · simp only [← cancel_mono Q.arrow, Category.assoc, ofLE_arrow, factorThru_arrow]
+  · simp only [← cancel_mono (Subobject.ofLE _ _ h₁), ← cancel_mono Q.arrow, hg, Category.assoc,
+      ofLE_arrow, factorThru_arrow]
 
 Depends on / 依赖: Category, Category.assoc, Factors, P.Factors, Q.arrow, Subobject, Subobject.ofLE, cancel_mono, factorThru, factorThru_arrow, factors_iff, le_antisymm, le_of_comm, ofLE_arrow
 -/
@@ -2631,7 +2677,8 @@ theorem isDetector_iff_reflectsIsomorphisms_coyoneda_obj
   · rw [isIso_iff_bijective, Function.bijective_iff_existsUnique] at hf
     exact hf h
   · suffices IsIso ((coyoneda.obj (op G)).map f) by
-      exact @isIso_of_reflects_iso _ _ _ _
+      exact @isIso_of_reflects_iso _ _ _ _ _ _ _ (coyoneda.obj (op G)) _ h
+    rwa [isIso_iff_bijective, Function.bijective_iff_existsUnique]
 
 中文:
 定理 isDetector_iff_reflectsIsomorphisms_coyoneda_obj
@@ -2643,7 +2690,8 @@ theorem isDetector_iff_reflectsIsomorphisms_coyoneda_obj
   · rw [isIso_iff_bijective, Function.bijective_iff_existsUnique] at hf
     exact hf h
   · suffices IsIso ((coyoneda.obj (op G)).map f) by
-      exact @isIso_of_reflects_iso _ _ _ _
+      exact @isIso_of_reflects_iso _ _ _ _ _ _ _ (coyoneda.obj (op G)) _ h
+    rwa [isIso_iff_bijective, Function.bijective_iff_existsUnique]
 
 Depends on / 依赖: Function, Function.bijective_iff_existsUnique, bijective_iff_existsUnique, coyoneda, coyoneda.obj, hG.def, isDetector_def, isIso_iff_bijective, isIso_of_reflects_iso
 -/
@@ -2670,7 +2718,8 @@ theorem isCodetector_iff_reflectsIsomorphisms_yoneda_obj
     rwa [isIso_iff_bijective, Function.bijective_iff_existsUnique] at hf
   · rw [← isIso_op_iff]
     suffices IsIso ((yoneda.obj G).map f.op) by
-      exact @isI
+      exact @isIso_of_reflects_iso _ _ _ _ _ _ _ (yoneda.obj G) _ h
+    rwa [isIso_iff_bijective, Function.bijective_iff_existsUnique]
 
 中文:
 定理 isCodetector_iff_reflectsIsomorphisms_yoneda_obj
@@ -2681,7 +2730,8 @@ theorem isCodetector_iff_reflectsIsomorphisms_yoneda_obj
     rwa [isIso_iff_bijective, Function.bijective_iff_existsUnique] at hf
   · rw [← isIso_op_iff]
     suffices IsIso ((yoneda.obj G).map f.op) by
-      exact @isI
+      exact @isIso_of_reflects_iso _ _ _ _ _ _ _ (yoneda.obj G) _ h
+    rwa [isIso_iff_bijective, Function.bijective_iff_existsUnique]
 
 Depends on / 依赖: Function, Function.bijective_iff_existsUnique, bijective_iff_existsUnique, f.op, hG.def, isCodetector_def, isIso_iff_bijective, isIso_of_reflects_iso, isIso_op_iff, isIso_unop_iff, yoneda, yoneda.obj
 -/

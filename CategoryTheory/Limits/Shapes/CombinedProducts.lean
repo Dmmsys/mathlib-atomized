@@ -70,7 +70,12 @@ definition combPairIsLimit
     (fun s w => by
       cases w <;>
       · simp only [fan_mk_proj, combPairHoms]
-        erw [← 
+        erw [← Category.assoc, h.fac]
+        simp only [pair_obj_left, mk_π_app, IsLimit.fac])
+    (fun s m hm => Fan.IsLimit.hom_ext h _ _ <| fun w => by
+      cases w
+      · refine Fan.IsLimit.hom_ext h₁ _ _ (fun a => by aesop)
+      · refine Fan.IsLimit.hom_ext h₂ _ _ (fun a => by aesop))
 
 中文:
 定义 combPairIsLimit
@@ -83,7 +88,12 @@ definition combPairIsLimit
     (fun s w => by
       cases w <;>
       · simp only [fan_mk_proj, combPairHoms]
-        erw [← 
+        erw [← Category.assoc, h.fac]
+        simp only [pair_obj_left, mk_π_app, IsLimit.fac])
+    (fun s m hm => Fan.IsLimit.hom_ext h _ _ <| fun w => by
+      cases w
+      · refine Fan.IsLimit.hom_ext h₁ _ _ (fun a => by aesop)
+      · refine Fan.IsLimit.hom_ext h₂ _ _ (fun a => by aesop))
 
 Depends on / 依赖: Category, Category.assoc, Fan.IsLimit.hom_ext, Fan.IsLimit.lift, Fan.IsLimit.mk, IsLimit, IsLimit.fac, combPairHoms, fan_mk_proj, h.fac, hom_ext, pair_obj_left, s.proj
 -/
@@ -145,7 +155,13 @@ definition combPairIsColimit
       · exact Cofan.IsColimit.desc h₂ (fun a => s.inj (.inr a)))
     (fun s w => by
       cases w <;>
-      · simp only [cofan_mk_inj, combPairHoms, 
+      · simp only [cofan_mk_inj, combPairHoms, Category.assoc]
+        erw [h.fac]
+        simp only [Cofan.mk_ι_app, Cofan.IsColimit.fac])
+    (fun s m hm => Cofan.IsColimit.hom_ext h _ _ <| fun w => by
+      cases w
+      · refine Cofan.IsColimit.hom_ext h₁ _ _ (fun a => by aesop)
+      · refine Cofan.IsColimit.hom_ext h₂ _ _ (fun a => by aesop))
 
 中文:
 定义 combPairIsColimit
@@ -157,7 +173,13 @@ definition combPairIsColimit
       · exact Cofan.IsColimit.desc h₂ (fun a => s.inj (.inr a)))
     (fun s w => by
       cases w <;>
-      · simp only [cofan_mk_inj, combPairHoms, 
+      · simp only [cofan_mk_inj, combPairHoms, Category.assoc]
+        erw [h.fac]
+        simp only [Cofan.mk_ι_app, Cofan.IsColimit.fac])
+    (fun s m hm => Cofan.IsColimit.hom_ext h _ _ <| fun w => by
+      cases w
+      · refine Cofan.IsColimit.hom_ext h₁ _ _ (fun a => by aesop)
+      · refine Cofan.IsColimit.hom_ext h₂ _ _ (fun a => by aesop))
 
 Depends on / 依赖: Category, Category.assoc, Cofan.IsColimit.desc, Cofan.IsColimit.fac, Cofan.IsColimit.hom_ext, Cofan.IsColimit.mk, Cofan.mk_, IsColimit, cofan_mk_inj, combPairHoms, h.fac, hom_ext, s.inj
 -/

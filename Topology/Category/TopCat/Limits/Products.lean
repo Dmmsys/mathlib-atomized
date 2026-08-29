@@ -423,7 +423,12 @@ definition prodBinaryFanIsLimit
     ext x
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be part of `ext x`
     refine Prod.ext ?_ ?_
-   
+    · specialize h ⟨WalkingPair.left⟩
+      apply_fun fun e => e x at h
+      exact h
+    · specialize h ⟨WalkingPair.right⟩
+      apply_fun fun e => e x at h
+      exact h
 
 中文:
 定义 prodBinaryFanIsLimit
@@ -436,7 +441,12 @@ definition prodBinaryFanIsLimit
     ext x
     -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be part of `ext x`
     refine Prod.ext ?_ ?_
-   
+    · specialize h ⟨WalkingPair.left⟩
+      apply_fun fun e => e x at h
+      exact h
+    · specialize h ⟨WalkingPair.right⟩
+      apply_fun fun e => e x at h
+      exact h
 
 Depends on / 依赖: BinaryFan, S.fst, S.snd
 -/
@@ -640,7 +650,17 @@ theorem range_prod_map
       Limits.prod.map_fst, Limits.prod.map_snd, ConcreteCategory.comp_apply, exists_apply_eq_apply,
       and_self_iff]
   · rintro ⟨⟨x₁, hx₁⟩, ⟨x₂, hx₂⟩⟩
-    u
+    use (prodIsoProd W X).inv (x₁, x₂)
+    apply Concrete.limit_ext
+    rintro ⟨⟨⟩⟩
+    · rw [← ConcreteCategory.comp_apply]
+      erw [Limits.prod.map_fst]
+      rw [ConcreteCategory.comp_apply]; rw [TopCat.prodIsoProd_inv_fst_apply]
+      exact hx₁
+    · rw [← ConcreteCategory.comp_apply]
+      erw [Limits.prod.map_snd]
+      rw [ConcreteCategory.comp_apply]; rw [TopCat.prodIsoProd_inv_snd_apply]
+      exact hx₂
 
 中文:
 定理 range_prod_map
@@ -653,7 +673,17 @@ theorem range_prod_map
       Limits.prod.map_fst, Limits.prod.map_snd, ConcreteCategory.comp_apply, exists_apply_eq_apply,
       and_self_iff]
   · rintro ⟨⟨x₁, hx₁⟩, ⟨x₂, hx₂⟩⟩
-    u
+    use (prodIsoProd W X).inv (x₁, x₂)
+    apply Concrete.limit_ext
+    rintro ⟨⟨⟩⟩
+    · rw [← ConcreteCategory.comp_apply]
+      erw [Limits.prod.map_fst]
+      rw [ConcreteCategory.comp_apply]; rw [TopCat.prodIsoProd_inv_fst_apply]
+      exact hx₁
+    · rw [← ConcreteCategory.comp_apply]
+      erw [Limits.prod.map_snd]
+      rw [ConcreteCategory.comp_apply]; rw [TopCat.prodIsoProd_inv_snd_apply]
+      exact hx₂
 
 Depends on / 依赖: Concrete, Concrete.limit_ext, ConcreteCategory, ConcreteCategory.comp_apply, Limits, Limits.prod.map_fst, Limits.prod.map_snd, Set.mem_inter_iff, Set.mem_preimage, Set.mem_range, TopCat, TopCat.prodIsoProd_inv_fst_apply, and_self_iff, comp_apply, exists_apply_eq_apply, limit_ext, map_fst, map_snd, mem_inter_iff, mem_preimage
 -/
@@ -775,7 +805,7 @@ definition binaryCofanIsColimit
     rfl
   · intro s m h₁ h₂
     ext (x | x)
-    exacts [ConcreteCategory.congr_hom h₁ x, ConcreteCategory.co
+    exacts [ConcreteCategory.congr_hom h₁ x, ConcreteCategory.congr_hom h₂ x]
 
 中文:
 定义 binaryCofanIsColimit
@@ -792,7 +822,7 @@ definition binaryCofanIsColimit
     rfl
   · intro s m h₁ h₂
     ext (x | x)
-    exacts [ConcreteCategory.congr_hom h₁ x, ConcreteCategory.co
+    exacts [ConcreteCategory.congr_hom h₁ x, ConcreteCategory.congr_hom h₂ x]
 
 Depends on / 依赖: BinaryCofan, ConcreteCategory, ConcreteCategory.congr_hom, Limits, Limits.BinaryCofan.isColimitMk, Sum.elim, congr_hom, continuous_toFun, exacts, fun_prop, isColimitMk, s.inl, s.inr
 -/
@@ -824,7 +854,70 @@ theorem binaryCofan_isColimit_iff
       rw [← show _ = c.inl from
           h.comp_coconePointUniqueUpToIso_inv (binaryCofanIsColimit X Y) ⟨WalkingPair.left⟩]; rw [← show _ = c.inr from
           h.comp_coconePointUniqueUpToIso_inv (binaryCofanIsColimit X Y) ⟨WalkingPair.right⟩]
-      
+      dsimp
+      refine ⟨(homeoOfIso <| h.coconePointUniqueUpToIso
+        (binaryCofanIsColimit X Y)).symm.isOpenEmbedding.comp .inl,
+          (homeoOfIso <| h.coconePointUniqueUpToIso
+            (binaryCofanIsColimit X Y)).symm.isOpenEmbedding.comp .inr, ?_⟩
+      rw [Set.range_comp]; rw [← eq_compl_iff_isCompl]
+      conv_rhs => rw [Set.range_comp]
+      erw [← Set.image_compl_eq (homeoOfIso <| h.coconePointUniqueUpToIso
+            (binaryCofanIsColimit X Y)).symm.bijective, Set.compl_range_inr, Set.image_comp]
+    · rintro ⟨h₁, h₂, h₃⟩
+      have : forall x, x in Set.range c.inl ∨ x in Set.range c.inr := by
+        rw [eq_compl_iff_isCompl.mpr h₃.symm]
+        exact fun _ => or_not
+      refine ⟨BinaryCofan.IsColimit.mk _ ?_ ?_ ?_ ?_⟩
+      · intro T f g
+        refine ofHom (ContinuousMap.mk ?_ ?_)
+        · exact fun x =>
+            if h : x in Set.range c.inl then f ((Equiv.ofInjective _ h₁.injective).symm ⟨x, h⟩)
+            else g ((Equiv.ofInjective _ h₂.injective).symm ⟨x, (this x).resolve_left h⟩)
+        rw [continuous_iff_continuousAt]
+        intro x
+        by_cases h : x in Set.range c.inl
+        · revert h x
+          apply (IsOpen.continuousOn_iff _).mp
+          · rw [continuousOn_iff_continuous_domRestrict]
+            convert_to Continuous (f ∘ h₁.isEmbedding.toHomeomorph.symm)
+            · ext ⟨x, hx⟩
+              exact dif_pos hx
+            fun_prop
+          · exact h₁.isOpen_range
+        · revert h x
+          simp only [← mem_compl_iff]
+          apply (IsOpen.continuousOn_iff _).mp
+          · rw [continuousOn_iff_continuous_domRestrict]
+            have : forall a, a ∉ Set.range c.inl -> a in Set.range c.inr := by
+              rintro a (h : a in (Set.range c.inl)ᶜ)
+              rwa [eq_compl_iff_isCompl.mpr h₃.symm]
+            convert_to! Continuous
+                (g ∘ h₂.isEmbedding.toHomeomorph.symm ∘ Subtype.map _ this)
+            · ext ⟨x, hx⟩
+              exact dif_neg hx
+            apply Continuous.comp
+            · exact g.hom.continuous_toFun
+            · apply Continuous.comp (by fun_prop)
+              rw [IsEmbedding.subtypeVal.isInducing.continuous_iff]
+              exact continuous_subtype_val
+          · change IsOpen (Set.range c.inl)ᶜ
+            rw [← eq_compl_iff_isCompl.mpr h₃.symm]
+            exact h₂.isOpen_range
+      · intro T f g
+        ext x
+        simp
+      · intro T f g
+        ext x
+        dsimp
+        rw [dif_neg]
+        · exact congr_arg g (Equiv.ofInjective_symm_apply _ _)
+        · rintro ⟨y, e⟩
+          have : c.inr x in Set.range c.inl ⊓ Set.range c.inr := ⟨⟨_, e⟩, ⟨_, rfl⟩⟩
+          rwa [disjoint_iff.mp h₃.1] at this
+      · rintro T _ _ m rfl rfl
+        ext x
+        change m x = dite _ _ _
+        split_ifs <;> exact congr_arg _ (Equiv.apply_ofInjective_symm _ ⟨_, _⟩).symm
 
 中文:
 定理 binaryCofan_isColimit_iff
@@ -836,7 +929,70 @@ theorem binaryCofan_isColimit_iff
       rw [← show _ = c.inl from
           h.comp_coconePointUniqueUpToIso_inv (binaryCofanIsColimit X Y) ⟨WalkingPair.left⟩]; rw [← show _ = c.inr from
           h.comp_coconePointUniqueUpToIso_inv (binaryCofanIsColimit X Y) ⟨WalkingPair.right⟩]
-      
+      dsimp
+      refine ⟨(homeoOfIso <| h.coconePointUniqueUpToIso
+        (binaryCofanIsColimit X Y)).symm.isOpenEmbedding.comp .inl,
+          (homeoOfIso <| h.coconePointUniqueUpToIso
+            (binaryCofanIsColimit X Y)).symm.isOpenEmbedding.comp .inr, ?_⟩
+      rw [Set.range_comp]; rw [← eq_compl_iff_isCompl]
+      conv_rhs => rw [Set.range_comp]
+      erw [← Set.image_compl_eq (homeoOfIso <| h.coconePointUniqueUpToIso
+            (binaryCofanIsColimit X Y)).symm.bijective, Set.compl_range_inr, Set.image_comp]
+    · rintro ⟨h₁, h₂, h₃⟩
+      have : forall x, x in Set.range c.inl ∨ x in Set.range c.inr := by
+        rw [eq_compl_iff_isCompl.mpr h₃.symm]
+        exact fun _ => or_not
+      refine ⟨BinaryCofan.IsColimit.mk _ ?_ ?_ ?_ ?_⟩
+      · intro T f g
+        refine ofHom (ContinuousMap.mk ?_ ?_)
+        · exact fun x =>
+            if h : x in Set.range c.inl then f ((Equiv.ofInjective _ h₁.injective).symm ⟨x, h⟩)
+            else g ((Equiv.ofInjective _ h₂.injective).symm ⟨x, (this x).resolve_left h⟩)
+        rw [continuous_iff_continuousAt]
+        intro x
+        by_cases h : x in Set.range c.inl
+        · revert h x
+          apply (IsOpen.continuousOn_iff _).mp
+          · rw [continuousOn_iff_continuous_domRestrict]
+            convert_to Continuous (f ∘ h₁.isEmbedding.toHomeomorph.symm)
+            · ext ⟨x, hx⟩
+              exact dif_pos hx
+            fun_prop
+          · exact h₁.isOpen_range
+        · revert h x
+          simp only [← mem_compl_iff]
+          apply (IsOpen.continuousOn_iff _).mp
+          · rw [continuousOn_iff_continuous_domRestrict]
+            have : forall a, a ∉ Set.range c.inl -> a in Set.range c.inr := by
+              rintro a (h : a in (Set.range c.inl)ᶜ)
+              rwa [eq_compl_iff_isCompl.mpr h₃.symm]
+            convert_to! Continuous
+                (g ∘ h₂.isEmbedding.toHomeomorph.symm ∘ Subtype.map _ this)
+            · ext ⟨x, hx⟩
+              exact dif_neg hx
+            apply Continuous.comp
+            · exact g.hom.continuous_toFun
+            · apply Continuous.comp (by fun_prop)
+              rw [IsEmbedding.subtypeVal.isInducing.continuous_iff]
+              exact continuous_subtype_val
+          · change IsOpen (Set.range c.inl)ᶜ
+            rw [← eq_compl_iff_isCompl.mpr h₃.symm]
+            exact h₂.isOpen_range
+      · intro T f g
+        ext x
+        simp
+      · intro T f g
+        ext x
+        dsimp
+        rw [dif_neg]
+        · exact congr_arg g (Equiv.ofInjective_symm_apply _ _)
+        · rintro ⟨y, e⟩
+          have : c.inr x in Set.range c.inl ⊓ Set.range c.inr := ⟨⟨_, e⟩, ⟨_, rfl⟩⟩
+          rwa [disjoint_iff.mp h₃.1] at this
+      · rintro T _ _ m rfl rfl
+        ext x
+        change m x = dite _ _ _
+        split_ifs <;> exact congr_arg _ (Equiv.apply_ofInjective_symm _ ⟨_, _⟩).symm
 
 Depends on / 依赖: Set.range_comp, WalkingPair, WalkingPair.left, WalkingPair.right, binaryCofanIsColimit, c.inl, c.inr, classical, coconePointUniqueUpToIso, comp_coconePointUniqueUpToIso_inv, h.coconePointUniqueUpToIso, h.comp_coconePointUniqueUpToIso_inv, homeoOfIso, isOpenEmbedding, range_comp, symm.isOpenEmbedding.comp
 -/

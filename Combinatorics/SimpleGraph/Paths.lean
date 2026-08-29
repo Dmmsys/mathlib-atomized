@@ -621,7 +621,8 @@ theorem IsTrail.length_le_card_edgeFinset
     intro e h
     refine mem_edgeFinset.mpr ?_
     apply w.edges_subset_edgeSet
-    simpa [edges] using
+    simpa [edges] using h
+  exact Finset.card_le_card this
 
 中文:
 定理 是Trail.length_le_card_edgeFinset
@@ -635,7 +636,8 @@ theorem IsTrail.length_le_card_edgeFinset
     intro e h
     refine mem_edgeFinset.mpr ?_
     apply w.edges_subset_edgeSet
-    simpa [edges] using
+    simpa [edges] using h
+  exact Finset.card_le_card this
 
 Depends on / 依赖: Finset, Finset.card_le_card, G.edgeFinset, List.toFinset_card_of_nodup, card_le_card, classical, edgeFinset, edges.card, edges_nodup, edges_subset_edgeSet, h.edges_nodup, length, length_edges, mem_edgeFinset, mem_edgeFinset.mpr, subseteq, toFinset, toFinset_card_of_nodup, w.edges.toFinset, w.edges_subset_edgeSet
 -/
@@ -1202,7 +1204,7 @@ lemma IsPath.ne_of_mem_support_of_append
     exact hy.resolve_left hyv
   exact IsPath.disjoint_support_of_append hpq hq hx hx'
 
-@[si
+@[simp]
 
 中文:
 引理 是道路.ne_of_mem_support_of_append
@@ -1218,7 +1220,7 @@ lemma IsPath.ne_of_mem_support_of_append
     exact hy.resolve_left hyv
   exact IsPath.disjoint_support_of_append hpq hq hx hx'
 
-@[si
+@[simp]
 
 Depends on / 依赖: IsPath, IsPath.disjoint_support_of_append, disjoint_support_of_append, hy.resolve_left, mem_support_iff, nil_iff_support_eq, nil_iff_support_eq.mp, q.Nil, q.tail.support, resolve_left, support, support_tail_of_not_nil
 -/
@@ -1662,7 +1664,10 @@ lemma exists_isTrail_forall_isTrail_length_le_length
   have : s.Finite := Set.Finite.subset (Set.finite_le_nat G.edgeFinset.card)
     fun n ⟨_, _, _, hp, hn⟩ => hn ▸ hp.length_le_card_edgeFinset
   obtain ⟨x⟩ := N
-  obtain ⟨_, ⟨⟨u, v, p,
+  obtain ⟨_, ⟨⟨u, v, p, hp, _⟩, hn⟩⟩ := this.exists_maximal ⟨0, ⟨x, x, Walk.nil, by simp⟩⟩
+  refine ⟨u, v, p, hp, fun u' v' p' hp' => ?_⟩
+  have := hn ⟨u', v', p', hp', Eq.refl p'.length⟩
+  lia
 
 中文:
 引理 存在_isTrail_对任意_isTrail_length_le_length
@@ -1673,7 +1678,10 @@ lemma exists_isTrail_forall_isTrail_length_le_length
   have : s.Finite := Set.Finite.subset (Set.finite_le_nat G.edgeFinset.card)
     fun n ⟨_, _, _, hp, hn⟩ => hn ▸ hp.length_le_card_edgeFinset
   obtain ⟨x⟩ := N
-  obtain ⟨_, ⟨⟨u, v, p,
+  obtain ⟨_, ⟨⟨u, v, p, hp, _⟩, hn⟩⟩ := this.exists_maximal ⟨0, ⟨x, x, Walk.nil, by simp⟩⟩
+  refine ⟨u, v, p, hp, fun u' v' p' hp' => ?_⟩
+  have := hn ⟨u', v', p', hp', Eq.refl p'.length⟩
+  lia
 
 Depends on / 依赖: Eq.refl, Finite, Fintype, Fintype.ofFinite, G.Walk, G.edgeFinset.card, G.edgeSet, IsTrail, Set.Finite.subset, Set.finite_le_nat, Walk.nil, edgeFinset, edgeSet, exists_maximal, finite_le_nat, hp.length_le_card_edgeFinset, length, length_le_card_edgeFinset, ofFinite, p.IsTrail
 -/
@@ -1703,7 +1711,10 @@ lemma exists_isPath_forall_isPath_length_le_length
   have : s.Finite := Set.Finite.subset (Set.finite_le_nat G.edgeFinset.card)
     fun n ⟨_, _, _, hp, hn⟩ => hn ▸ hp.isTrail.length_le_card_edgeFinset
   obtain ⟨x⟩ := N
-  obtain ⟨_, ⟨⟨u
+  obtain ⟨_, ⟨⟨u, v, p, hp, _⟩, hn⟩⟩ := this.exists_maximal ⟨0, ⟨x, x, Walk.nil, by simp⟩⟩
+  refine ⟨u, v, p, hp, fun u' v' p' hp' => ?_⟩
+  have := hn ⟨u', v', p', hp', Eq.refl p'.length⟩
+  lia
 
 中文:
 引理 存在_isPath_对任意_isPath_length_le_length
@@ -1714,7 +1725,10 @@ lemma exists_isPath_forall_isPath_length_le_length
   have : s.Finite := Set.Finite.subset (Set.finite_le_nat G.edgeFinset.card)
     fun n ⟨_, _, _, hp, hn⟩ => hn ▸ hp.isTrail.length_le_card_edgeFinset
   obtain ⟨x⟩ := N
-  obtain ⟨_, ⟨⟨u
+  obtain ⟨_, ⟨⟨u, v, p, hp, _⟩, hn⟩⟩ := this.exists_maximal ⟨0, ⟨x, x, Walk.nil, by simp⟩⟩
+  refine ⟨u, v, p, hp, fun u' v' p' hp' => ?_⟩
+  have := hn ⟨u', v', p', hp', Eq.refl p'.length⟩
+  lia
 
 Depends on / 依赖: Eq.refl, Finite, Fintype, Fintype.ofFinite, G.Walk, G.edgeFinset.card, G.edgeSet, IsPath, Set.Finite.subset, Set.finite_le_nat, Walk.nil, edgeFinset, edgeSet, exists_maximal, finite_le_nat, hp.isTrail.length_le_card_edgeFinset, isTrail, length, length_le_card_edgeFinset, ofFinite
 -/
@@ -1795,7 +1809,15 @@ lemma IsPath.getVert_injOn
     by_cases hn0 : n = 0 <;> by_cases hm0 : m = 0
     · lia
     · simp only [hn0, getVert_zero, Walk.getVert_cons p h hm0] at hnm
-  
+      have hvp : v ∉ p.support := by aesop
+      exact (hvp (Walk.mem_support_iff_exists_getVert.mpr ⟨(m - 1), ⟨hnm.symm, by lia⟩⟩)).elim
+    · simp only [hm0, Walk.getVert_cons p h hn0] at hnm
+      have hvp : v ∉ p.support := by simp_all
+      exact (hvp (Walk.mem_support_iff_exists_getVert.mpr ⟨(n - 1), ⟨hnm, by lia⟩⟩)).elim
+    · simp only [Walk.getVert_cons _ _ hn0, Walk.getVert_cons _ _ hm0] at hnm
+      have := ihp hp.of_cons (by lia : (n - 1) <= p.length)
+        (by lia : (m - 1) <= p.length) hnm
+      lia
 
 中文:
 引理 是道路.getVert_injOn
@@ -1809,7 +1831,15 @@ lemma IsPath.getVert_injOn
     by_cases hn0 : n = 0 <;> by_cases hm0 : m = 0
     · lia
     · simp only [hn0, getVert_zero, Walk.getVert_cons p h hm0] at hnm
-  
+      have hvp : v ∉ p.support := by aesop
+      exact (hvp (Walk.mem_support_iff_exists_getVert.mpr ⟨(m - 1), ⟨hnm.symm, by lia⟩⟩)).elim
+    · simp only [hm0, Walk.getVert_cons p h hn0] at hnm
+      have hvp : v ∉ p.support := by simp_all
+      exact (hvp (Walk.mem_support_iff_exists_getVert.mpr ⟨(n - 1), ⟨hnm, by lia⟩⟩)).elim
+    · simp only [Walk.getVert_cons _ _ hn0, Walk.getVert_cons _ _ hm0] at hnm
+      have := ihp hp.of_cons (by lia : (n - 1) <= p.length)
+        (by lia : (m - 1) <= p.length) hnm
+      lia
 
 Depends on / 依赖: Set.mem_ofPred_eq, Walk.getVert_cons, Walk.mem_support_iff_exists_getVert.mpr, generalizing, getVert_cons, getVert_zero, hnm.symm, length_cons, mem_ofPred_eq, mem_support_iff_exists_getVert, p.support, support
 -/
@@ -1947,7 +1977,16 @@ lemma IsPath.getVert_injOn_iff
       intro n hn m hm hnm
       simp only [Set.mem_ofPred_eq] at hn hm
       have := hinj
-        (by rw [length_cons]; lia : n + 1 <= (q.cons h
+        (by rw [length_cons]; lia : n + 1 <= (q.cons h).length)
+        (by rw [length_cons]; lia : m + 1 <= (q.cons h).length)
+        (by simpa [getVert_cons] using hnm)
+      lia), fun h' => ?_⟩
+    obtain ⟨n, ⟨hn, hnl⟩⟩ := mem_support_iff_exists_getVert.mp h'
+    have := hinj
+      (by rw [length_cons]; lia : (n + 1) <= (q.cons h).length)
+      (by lia : 0 <= (q.cons h).length)
+      (by rwa [getVert_cons _ _ n.add_one_ne_zero, getVert_zero])
+    lia
 
 中文:
 引理 是道路.getVert_injOn_iff
@@ -1964,7 +2003,16 @@ lemma IsPath.getVert_injOn_iff
       intro n hn m hm hnm
       simp only [Set.mem_ofPred_eq] at hn hm
       have := hinj
-        (by rw [length_cons]; lia : n + 1 <= (q.cons h
+        (by rw [length_cons]; lia : n + 1 <= (q.cons h).length)
+        (by rw [length_cons]; lia : m + 1 <= (q.cons h).length)
+        (by simpa [getVert_cons] using hnm)
+      lia), fun h' => ?_⟩
+    obtain ⟨n, ⟨hn, hnl⟩⟩ := mem_support_iff_exists_getVert.mp h'
+    have := hinj
+      (by rw [length_cons]; lia : (n + 1) <= (q.cons h).length)
+      (by lia : 0 <= (q.cons h).length)
+      (by rwa [getVert_cons _ _ n.add_one_ne_zero, getVert_zero])
+    lia
 
 Depends on / 依赖: Set.mem_ofPred_eq, a.getVert_injOn, cons_isPath_iff, getVert_cons, getVert_injOn, length, length_cons, mem_ofPred_eq, mem_support_iff_exists_getVert, mem_support_iff_exists_getVert.mp, q.cons
 -/
@@ -2098,7 +2146,9 @@ lemma IsCycle.getVert_injOn
   rw [← SimpleGraph.Walk.length_tail_add_one
     (p.not_nil_of_tail_not_nil (not_nil_of_isCycle_cons hpc))]; rw [Set.mem_ofPred] at hn hm
   have := ((Walk.cons_isCycle_iff _ _).mp hpc).1.getVert_injOn
-    (by lia : n - 1 <= p.tail.l
+    (by lia : n - 1 <= p.tail.length) (by lia : m - 1 <= p.tail.length)
+    (by simp_all)
+  lia
 
 中文:
 引理 是环.getVert_injOn
@@ -2109,7 +2159,9 @@ lemma IsCycle.getVert_injOn
   rw [← SimpleGraph.Walk.length_tail_add_one
     (p.not_nil_of_tail_not_nil (not_nil_of_isCycle_cons hpc))]; rw [Set.mem_ofPred] at hn hm
   have := ((Walk.cons_isCycle_iff _ _).mp hpc).1.getVert_injOn
-    (by lia : n - 1 <= p.tail.l
+    (by lia : n - 1 <= p.tail.length) (by lia : m - 1 <= p.tail.length)
+    (by simp_all)
+  lia
 
 Depends on / 依赖: Set.mem_ofPred, SimpleGraph, SimpleGraph.Walk.length_tail_add_one, Walk.cons_isCycle_iff, cons_isCycle_iff, cons_tail_eq, getVert_injOn, hpc.not_nil, length, length_tail_add_one, mem_ofPred, not_nil, not_nil_of_isCycle_cons, not_nil_of_tail_not_nil, p.cons_tail_eq, p.not_nil_of_tail_not_nil, p.tail.length
 -/
@@ -2136,7 +2188,10 @@ lemma IsCycle.getVert_injOn'
   have := hpc.three_le_length
   have : p.length - n = p.length - m := Walk.length_reverse _ ▸ hpc.reverse.getVert_injOn
     (by simp only [Walk.length_reverse, Set.mem_ofPred_eq]; lia)
-    (by simp only [Walk.length_reverse, Set.mem_ofPre
+    (by simp only [Walk.length_reverse, Set.mem_ofPred_eq]; lia)
+    (by simp [Walk.getVert_reverse, show p.length - (p.length - n) = n by lia, hnm,
+      show p.length - (p.length - m) = m by lia])
+  lia
 
 中文:
 引理 是环.getVert_injOn'
@@ -2147,7 +2202,10 @@ lemma IsCycle.getVert_injOn'
   have := hpc.three_le_length
   have : p.length - n = p.length - m := Walk.length_reverse _ ▸ hpc.reverse.getVert_injOn
     (by simp only [Walk.length_reverse, Set.mem_ofPred_eq]; lia)
-    (by simp only [Walk.length_reverse, Set.mem_ofPre
+    (by simp only [Walk.length_reverse, Set.mem_ofPred_eq]; lia)
+    (by simp [Walk.getVert_reverse, show p.length - (p.length - n) = n by lia, hnm,
+      show p.length - (p.length - m) = m by lia])
+  lia
 
 Depends on / 依赖: Set.mem_ofPred_eq, Walk.getVert_reverse, Walk.length_reverse, getVert_injOn, getVert_reverse, hpc.reverse.getVert_injOn, hpc.three_le_length, length, length_reverse, mem_ofPred_eq, p.length, reverse, three_le_length
 -/
@@ -2241,7 +2299,8 @@ lemma IsCycle.getVert_sub_one_ne_getVert_add_one
       hpc.getVert_endpoint_iff (by lia)] at h'
     lia
   have := hpc.getVert_injOn' (by simp only [Set.mem_ofPred_eq, Nat.sub_le_iff_le_add]; lia)
-    (by si
+    (by simp only [Set.mem_ofPred_eq]; lia) h'
+  lia
 
 中文:
 引理 是环.getVert_sub_one_ne_getVert_add_one
@@ -2254,7 +2313,8 @@ lemma IsCycle.getVert_sub_one_ne_getVert_add_one
       hpc.getVert_endpoint_iff (by lia)] at h'
     lia
   have := hpc.getVert_injOn' (by simp only [Set.mem_ofPred_eq, Nat.sub_le_iff_le_add]; lia)
-    (by si
+    (by simp only [Set.mem_ofPred_eq]; lia) h'
+  lia
 
 Depends on / 依赖: Nat.sub_le_iff_le_add, Set.mem_ofPred_eq, getVert_endpoint_iff, getVert_injOn, getVert_of_length_le, hpc.getVert_endpoint_iff, hpc.getVert_injOn, hpc.three_le_length, length, mem_ofPred_eq, p.getVert_of_length_le, p.length, sub_le_iff_le_add, three_le_length
 -/
@@ -2283,7 +2343,10 @@ theorem isCycle_iff_isPath_tail_and_le_length
   | cons h' p =>
     simp only [getVert_cons_succ, tail_cons, isPath_copy, length_cons] at h₁ h₂
 .mpr ⟨h₁, fun hh => ?_⟩ refine p.cons_isCycle_iff h'
-    have : p.support[0] = p.support[p
+    have : p.support[0] = p.support[p.length - 1] := by
+      simp [← List.head_eq_getElem_zero, h₁.eq_penultimate_of_mem_edges hh]
+    have := p.isPath_iff_injective_get_support.mp h₁ this
+    lia
 
 中文:
 定理 isCycle_iff_isPath_tail_and_le_length
@@ -2295,7 +2358,10 @@ theorem isCycle_iff_isPath_tail_and_le_length
   | cons h' p =>
     simp only [getVert_cons_succ, tail_cons, isPath_copy, length_cons] at h₁ h₂
 .mpr ⟨h₁, fun hh => ?_⟩ refine p.cons_isCycle_iff h'
-    have : p.support[0] = p.support[p
+    have : p.support[0] = p.support[p.length - 1] := by
+      simp [← List.head_eq_getElem_zero, h₁.eq_penultimate_of_mem_edges hh]
+    have := p.isPath_iff_injective_get_support.mp h₁ this
+    lia
 
 Depends on / 依赖: List.head_eq_getElem_zero, cons_isCycle_iff, eq_penultimate_of_mem_edges, getVert_cons_succ, h.isPath_tail, h.three_le_length, head_eq_getElem_zero, isPath_copy, isPath_iff_injective_get_support, isPath_tail, length, length_cons, p.cons_isCycle_iff, p.isPath_iff_injective_get_support.mp, p.length, p.support, support, tail_cons, three_le_length
 -/
@@ -2579,7 +2645,7 @@ lemma endpoint_notMem_support_takeUntil
   have := p.length_takeUntil_lt_length hw h.symm
   have : n = p.length := hp.getVert_injOn (by rw [Set.mem_ofPred]; lia) (by simp)
     (hn.symm ▸ p.getVert_length.symm)
-
+  lia
 
 中文:
 引理 endpoint_notMem_support_takeUntil
@@ -2592,7 +2658,7 @@ lemma endpoint_notMem_support_takeUntil
   have := p.length_takeUntil_lt_length hw h.symm
   have : n = p.length := hp.getVert_injOn (by rw [Set.mem_ofPred]; lia) (by simp)
     (hn.symm ▸ p.getVert_length.symm)
-
+  lia
 
 Depends on / 依赖: Set.mem_ofPred, Walk.mem_support_iff_exists_getVert, getVert_injOn, getVert_length, getVert_takeUntil, h.symm, hn.symm, hp.getVert_injOn, length, length_takeUntil_lt_length, mem_ofPred, mem_support_iff_exists_getVert, p.getVert_length.symm, p.length, p.length_takeUntil_lt_length
 -/
@@ -2621,7 +2687,8 @@ theorem isPath_iff_isSubwalk_imp_nil
   · refine List.pairwise_iff_getElem.mpr fun i j _ _ _ _ => ?_
 .drop i let p' := p.take j
     have : ¬p'.Nil := by grind [nil_drop_iff, take_length]
-.trans p.isSubwalk_take j have : p'.I
+.trans p.isSubwalk_take j have : p'.IsSubwalk p := isSubwalk_drop _ i
+    grind [take_getVert, getVert_eq_support_getElem]
 
 中文:
 定理 isPath_iff_isSubwalk_imp_nil
@@ -2632,7 +2699,8 @@ theorem isPath_iff_isSubwalk_imp_nil
   · refine List.pairwise_iff_getElem.mpr fun i j _ _ _ _ => ?_
 .drop i let p' := p.take j
     have : ¬p'.Nil := by grind [nil_drop_iff, take_length]
-.trans p.isSubwalk_take j have : p'.I
+.trans p.isSubwalk_take j have : p'.IsSubwalk p := isSubwalk_drop _ i
+    grind [take_getVert, getVert_eq_support_getElem]
 
 Depends on / 依赖: IsSubwalk, List.pairwise_iff_getElem.mpr, getVert_eq_support_getElem, isPath_iff_nil, isPath_of_isSubwalk, isSubwalk_drop, isSubwalk_take, nil_drop_iff, p.isSubwalk_take, p.take, pairwise_iff_getElem, take_getVert, take_length, w.isPath_iff_nil.mp
 -/
@@ -2659,7 +2727,11 @@ theorem IsTrail.isPath_iff_isSubwalk_imp_not_isCycle
   | .nil => simp
   | .cons hadj p =>
 .mpr (h · · <| ·.cons hadj) have hp := isPath_iff_isSubwalk_imp_not_isCycle ht.of_cons
-.mpr ⟨hp, fun hup => h u (p.takeUntil u hup |>.cons hadj) ?_ ?_⟩ 
+.mpr ⟨hp, fun hup => h u (p.takeUntil u hup |>.cons hadj) ?_ ?_⟩ refine cons_isPath_iff ..
+    · rw [isSubwalk_iff_support_isInfix, support_cons, support_cons]
+      exact (List.prefix_cons_inj u |>.mpr <| p.support_takeUntil_prefix_support hup).isInfix
+.mpr ⟨hp.takeUntil hup, fun he => ?_⟩ · refine cons_isCycle_iff ..
+exact ht.edges_nodup.notMem p.edges_takeUntil_subset_edges hup he
 
 中文:
 定理 是Trail.isPath_iff_isSubwalk_imp_not_isCycle
@@ -2671,7 +2743,11 @@ theorem IsTrail.isPath_iff_isSubwalk_imp_not_isCycle
   | .nil => simp
   | .cons hadj p =>
 .mpr (h · · <| ·.cons hadj) have hp := isPath_iff_isSubwalk_imp_not_isCycle ht.of_cons
-.mpr ⟨hp, fun hup => h u (p.takeUntil u hup |>.cons hadj) ?_ ?_⟩ 
+.mpr ⟨hp, fun hup => h u (p.takeUntil u hup |>.cons hadj) ?_ ?_⟩ refine cons_isPath_iff ..
+    · rw [isSubwalk_iff_support_isInfix, support_cons, support_cons]
+      exact (List.prefix_cons_inj u |>.mpr <| p.support_takeUntil_prefix_support hup).isInfix
+.mpr ⟨hp.takeUntil hup, fun he => ?_⟩ · refine cons_isCycle_iff ..
+exact ht.edges_nodup.notMem p.edges_takeUntil_subset_edges hup he
 
 Depends on / 依赖: IsCycle, IsCycle.not_nil, List.prefix_cons_inj, classical, cons_isPath_iff, hp.takeUntil, ht.of_cons, isInfix, isPath_iff_isSubwalk_imp_nil, isPath_iff_isSubwalk_imp_not_isCycle, isSubwalk_iff_support_isInfix, not_nil, of_cons, p.support_takeUntil_prefix_support, p.takeUntil, prefix_cons_inj, support_cons, support_takeUntil_prefix_support, takeUntil
 -/
@@ -3007,7 +3083,7 @@ apply p.ext_getVert_le_length by simp [hp.length_eq_one_of_mem_edges h]
   cases Nat.le_one_iff_eq_zero_or_eq_one.mp (hp.length_eq_one_of_mem_edges h ▸ hl) with
   | inl hl => simp [hl]
   | inr hl =>
-    rw [hl]; rw [getVert_cons_succ]; rw [getVert_zero]; rw [← hp.length_eq_one_of_mem_
+    rw [hl]; rw [getVert_cons_succ]; rw [getVert_zero]; rw [← hp.length_eq_one_of_mem_edges h]; rw [getVert_length]
 
 中文:
 定理 是道路.eq_adj_toWalk_of_mem_edges
@@ -3018,7 +3094,7 @@ apply p.ext_getVert_le_length by simp [hp.length_eq_one_of_mem_edges h]
   cases Nat.le_one_iff_eq_zero_or_eq_one.mp (hp.length_eq_one_of_mem_edges h ▸ hl) with
   | inl hl => simp [hl]
   | inr hl =>
-    rw [hl]; rw [getVert_cons_succ]; rw [getVert_zero]; rw [← hp.length_eq_one_of_mem_
+    rw [hl]; rw [getVert_cons_succ]; rw [getVert_zero]; rw [← hp.length_eq_one_of_mem_edges h]; rw [getVert_length]
 
 Depends on / 依赖: Nat.le_one_iff_eq_zero_or_eq_one.mp, ext_getVert_le_length, getVert_cons_succ, getVert_length, getVert_zero, hp.length_eq_one_of_mem_edges, le_one_iff_eq_zero_or_eq_one, length_eq_one_of_mem_edges, p.ext_getVert_le_length
 -/
@@ -3044,7 +3120,8 @@ theorem IsPath.disjoint_edges_of_disjoint_support
 have := p.mem_support_iff.mp p.fst_mem_support_of_mem_edges hep
 have := p.mem_support_iff.mp p.snd_mem_support_of_mem_edges hep
 have := q.mem_support_iff.mp q.fst_mem_support_of_mem_edges heq
-have := q.mem
+have := q.mem_support_iff.mp q.snd_mem_support_of_mem_edges heq
+  grind [p.adj_of_mem_edges hep |>.ne, length_eq_one_of_mem_edges]
 
 中文:
 定理 是道路.disjoint_edges_of_disjoint_support
@@ -3056,7 +3133,8 @@ have := q.mem
 have := p.mem_support_iff.mp p.fst_mem_support_of_mem_edges hep
 have := p.mem_support_iff.mp p.snd_mem_support_of_mem_edges hep
 have := q.mem_support_iff.mp q.fst_mem_support_of_mem_edges heq
-have := q.mem
+have := q.mem_support_iff.mp q.snd_mem_support_of_mem_edges heq
+  grind [p.adj_of_mem_edges hep |>.ne, length_eq_one_of_mem_edges]
 
 Depends on / 依赖: List.disjoint_left, adj_of_mem_edges, contrapose, disjoint_left, fst_mem_support_of_mem_edges, length_eq_one_of_mem_edges, mem_support_iff, p.adj_of_mem_edges, p.fst_mem_support_of_mem_edges, p.mem_support_iff.mp, p.snd_mem_support_of_mem_edges, q.fst_mem_support_of_mem_edges, q.mem_support_iff.mp, q.snd_mem_support_of_mem_edges, snd_mem_support_of_mem_edges
 -/
@@ -3121,7 +3199,15 @@ theorem IsPath.exists_isCycle_of_ne
   · classical
     have ⟨w, hwp, hwq, hwu, hwv⟩ := hw
     by_cases! p.takeUntil w hwp != q.takeUntil w hwq
-    · have := ih _ (hs ▸ length_
+    · have := ih _ (hs ▸ length_takeUntil_lt_length hwp hwv) (hp.takeUntil hwp) (hq.takeUntil hwq)
+      grind [isSubwalk_takeUntil, IsSubwalk.trans]
+    · have := ih _ (hs ▸ length_dropUntil_lt_length hwp hwu) (hp.dropUntil hwp) (hq.dropUntil hwq)
+ by grind [take_spec]
+      grind [isSubwalk_dropUntil, IsSubwalk.trans]
+  · refine ⟨u, v, p, q, p.isSubwalk_rfl, q.isSubwalk_rfl, ?_⟩
+    refine hp.isCycle_append (isPath_reverse_iff q |>.mpr hq) (fun _ => ?_) ?_
+    · grind [dropLast_support_concat, IsPath.support_nodup, support_reverse, cons_tail_support]
+    · grind [length_reverse, eq_of_length_le_one]
 
 中文:
 定理 是道路.存在_isCycle_of_ne
@@ -3132,7 +3218,15 @@ theorem IsPath.exists_isCycle_of_ne
   · classical
     have ⟨w, hwp, hwq, hwu, hwv⟩ := hw
     by_cases! p.takeUntil w hwp != q.takeUntil w hwq
-    · have := ih _ (hs ▸ length_
+    · have := ih _ (hs ▸ length_takeUntil_lt_length hwp hwv) (hp.takeUntil hwp) (hq.takeUntil hwq)
+      grind [isSubwalk_takeUntil, IsSubwalk.trans]
+    · have := ih _ (hs ▸ length_dropUntil_lt_length hwp hwu) (hp.dropUntil hwp) (hq.dropUntil hwq)
+ by grind [take_spec]
+      grind [isSubwalk_dropUntil, IsSubwalk.trans]
+  · refine ⟨u, v, p, q, p.isSubwalk_rfl, q.isSubwalk_rfl, ?_⟩
+    refine hp.isCycle_append (isPath_reverse_iff q |>.mpr hq) (fun _ => ?_) ?_
+    · grind [dropLast_support_concat, IsPath.support_nodup, support_reverse, cons_tail_support]
+    · grind [length_reverse, eq_of_length_le_one]
 
 Depends on / 依赖: IsSubwalk, IsSubwalk.trans, Nat.strongRec, classical, dropUntil, generalizing, hp.dropUntil, hp.takeUntil, hq.dropUntil, hq.takeUntil, isSubwalk_takeUntil, length, length_dropUntil_lt_length, length_takeUntil_lt_length, p.length, p.support, p.takeUntil, q.support, q.takeUntil, strongRec
 -/
@@ -3168,7 +3262,8 @@ theorem IsPath.exists_isCycle_sublist_of_ne
   refine ⟨_, hcyc, ?_⟩
   rw [support_append]; rw [support_reverse]
 refine .append ?_ .tail .reverse ?_
-.sublist · exact isSubwalk_iff_
+.sublist · exact isSubwalk_iff_support_isInfix.mp hp'
+.sublist · exact isSubwalk_iff_support_isInfix.mp hq'
 
 中文:
 定理 是道路.存在_isCycle_sublist_of_ne
@@ -3179,7 +3274,8 @@ refine .append ?_ .tail .reverse ?_
   refine ⟨_, hcyc, ?_⟩
   rw [support_append]; rw [support_reverse]
 refine .append ?_ .tail .reverse ?_
-.sublist · exact isSubwalk_iff_
+.sublist · exact isSubwalk_iff_support_isInfix.mp hp'
+.sublist · exact isSubwalk_iff_support_isInfix.mp hq'
 
 Depends on / 依赖: append, exists_isCycle_of_ne, hp.exists_isCycle_of_ne, isSubwalk_iff_support_isInfix, isSubwalk_iff_support_isInfix.mp, reverse, start_mem_support, sublist, support_append, support_reverse, support_subset
 -/
@@ -3899,7 +3995,7 @@ alias map_isTrail_iff_of_injective := isTrail_map_iff_of_injective
 
 alias ⟨_, IsTrail.map⟩ := isTrail_map_iff_of_injective
 
-@[deprecated (since := "2026-
+@[deprecated (since := "2026-06-16")] alias map_isTrail_of_injective := IsTrail.map
 
 中文:
 定理 isTrail_map_iff_of_injective
@@ -3912,7 +4008,7 @@ alias map_isTrail_iff_of_injective := isTrail_map_iff_of_injective
 
 alias ⟨_, IsTrail.map⟩ := isTrail_map_iff_of_injective
 
-@[deprecated (since := "2026-
+@[deprecated (since := "2026-06-16")] alias map_isTrail_of_injective := IsTrail.map
 
 Depends on / 依赖: List.nodup_map_iff, Sym2.map.injective, edges_map, injective, isTrail_def, nodup_map_iff
 -/
@@ -3967,7 +4063,7 @@ alias map_isPath_iff_of_injective := isPath_map_iff_of_injective
 
 alias ⟨_, IsPath.map⟩ := isPath_map_iff_of_injective
 
-@[deprecated (since := "2026-06-16")] alias map_isPath_
+@[deprecated (since := "2026-06-16")] alias map_isPath_of_injective := IsPath.map
 
 中文:
 定理 isPath_map_iff_of_injective
@@ -3980,7 +4076,7 @@ alias map_isPath_iff_of_injective := isPath_map_iff_of_injective
 
 alias ⟨_, IsPath.map⟩ := isPath_map_iff_of_injective
 
-@[deprecated (since := "2026-06-16")] alias map_isPath_
+@[deprecated (since := "2026-06-16")] alias map_isPath_of_injective := IsPath.map
 
 Depends on / 依赖: List.nodup_map_iff, isPath_def, nodup_map_iff, support_map
 -/
@@ -4084,7 +4180,11 @@ theorem isCycle_map_iff_of_injective
   rw [isCycle_def]; rw [isCycle_def]; rw [isTrail_map_iff_of_injective hinj]; rw [ne_eq]; rw [ne_eq]; rw [eq_nil_iff_nil]; rw [eq_nil_iff_nil]; rw [nil_map_iff]; rw [support_map]; rw [← List.map_tail]; rw [List.nodup_map_iff hinj]
 
 @[deprecated (since := "2026-06-16")]
-alias map_isCycle_iff_of_in
+alias map_isCycle_iff_of_injective := isCycle_map_iff_of_injective
+
+alias ⟨_, IsCycle.map⟩ := isCycle_map_iff_of_injective
+
+@[simp]
 
 中文:
 定理 isCycle_map_iff_of_injective
@@ -4093,7 +4193,11 @@ alias map_isCycle_iff_of_in
   rw [isCycle_def]; rw [isCycle_def]; rw [isTrail_map_iff_of_injective hinj]; rw [ne_eq]; rw [ne_eq]; rw [eq_nil_iff_nil]; rw [eq_nil_iff_nil]; rw [nil_map_iff]; rw [support_map]; rw [← List.map_tail]; rw [List.nodup_map_iff hinj]
 
 @[deprecated (since := "2026-06-16")]
-alias map_isCycle_iff_of_in
+alias map_isCycle_iff_of_injective := isCycle_map_iff_of_injective
+
+alias ⟨_, IsCycle.map⟩ := isCycle_map_iff_of_injective
+
+@[simp]
 
 Depends on / 依赖: List.map_tail, List.nodup_map_iff, eq_nil_iff_nil, isCycle_def, isTrail_map_iff_of_injective, map_tail, ne_eq, nil_map_iff, nodup_map_iff, support_map
 -/

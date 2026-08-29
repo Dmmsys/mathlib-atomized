@@ -36,7 +36,10 @@ lemma mk_biUnion_le_of_le_lift
   rw [mk_toType]
   refine mul_le_mul' ho (ciSup_le' ?_)
   intro i
-  simpa using hA _ i.toOrd.pro
+  simpa using hA _ i.toOrd.prop
+
+@[deprecated (since := "2026-01-26")]
+alias mk_iUnion_Ordinal_lift_le_of_le := mk_biUnion_le_of_le_lift
 
 中文:
 引理 mk_biUnion_le_of_le_lift
@@ -48,7 +51,10 @@ lemma mk_biUnion_le_of_le_lift
   rw [mk_toType]
   refine mul_le_mul' ho (ciSup_le' ?_)
   intro i
-  simpa using hA _ i.toOrd.pro
+  simpa using hA _ i.toOrd.prop
+
+@[deprecated (since := "2026-01-26")]
+alias mk_iUnion_Ordinal_lift_le_of_le := mk_biUnion_le_of_le_lift
 
 Depends on / 依赖: ToType, ToType.mk.symm.surjective.range_comp, aleph0_le_lift, biUnion_eq_iUnion, ciSup_le, i.toOrd.prop, iUnion, lift_le, mem_Iio, mk_iUnion_le_lift, mk_toType, mul_eq_self, mul_le_mul, range_comp, simp_rw, surjective, trans_eq
 -/
@@ -118,7 +124,11 @@ theorem lift_card_iSup_le_sum_card
   simp_rw [← mk_toType]
   rw [← mk_sigma]; rw [← Cardinal.lift_id'.{v} #(Σ _]; rw [_)]; rw [← Cardinal.lift_umax.{v]; rw [u}]
   apply lift_mk_le_lift_mk_of_surjective (f := .mk ∘ (⟨·.2.toOrd,
-    (mem_Iio.mp (ToType.toOrd _
+    (mem_Iio.mp (ToType.toOrd _).2).trans_le (le_ciSup hf _)⟩))
+  rw [EquivLike.comp_surjective]
+  rintro ⟨x, hx⟩
+  obtain ⟨i, hi⟩ := (lt_ciSup_iff' hf).mp hx
+  exact ⟨⟨i, .mk ⟨x, hi⟩⟩, by simp⟩
 
 中文:
 定理 lift_card_iSup_le_sum_card
@@ -129,7 +139,11 @@ theorem lift_card_iSup_le_sum_card
   simp_rw [← mk_toType]
   rw [← mk_sigma]; rw [← Cardinal.lift_id'.{v} #(Σ _]; rw [_)]; rw [← Cardinal.lift_umax.{v]; rw [u}]
   apply lift_mk_le_lift_mk_of_surjective (f := .mk ∘ (⟨·.2.toOrd,
-    (mem_Iio.mp (ToType.toOrd _
+    (mem_Iio.mp (ToType.toOrd _).2).trans_le (le_ciSup hf _)⟩))
+  rw [EquivLike.comp_surjective]
+  rintro ⟨x, hx⟩
+  obtain ⟨i, hi⟩ := (lt_ciSup_iff' hf).mp hx
+  exact ⟨⟨i, .mk ⟨x, hi⟩⟩, by simp⟩
 
 Depends on / 依赖: BddAbove, Cardinal, Cardinal.lift_id, Cardinal.lift_umax, EquivLike, EquivLike.comp_surjective, ToType, ToType.toOrd, ciSup_of_not_bddAbove, comp_surjective, le_ciSup, lift_id, lift_mk_le_lift_mk_of_surjective, lift_umax, lt_ciSup_iff, mem_Iio, mem_Iio.mp, mk_sigma, mk_toType, simp_rw
 -/
@@ -238,7 +252,9 @@ theorem card_iSup_le_lift
     simpa using hf i
   · rw [← Cardinal.lift_le.{u}]
     apply (lift_card_iSup_le_sum_card ..).trans ((sum_le_lift_mk_mul_iSup_lift _).trans _)
-    rw [← mul_eq_self hc]; rw [Cardin
+    rw [← mul_eq_self hc]; rw [Cardinal.lift_mul]
+    apply mul_le_mul' hι (ciSup_le' _)
+    simpa [← lift_card]
 
 中文:
 定理 card_iSup_le_lift
@@ -251,7 +267,9 @@ theorem card_iSup_le_lift
     simpa using hf i
   · rw [← Cardinal.lift_le.{u}]
     apply (lift_card_iSup_le_sum_card ..).trans ((sum_le_lift_mk_mul_iSup_lift _).trans _)
-    rw [← mul_eq_self hc]; rw [Cardin
+    rw [← mul_eq_self hc]; rw [Cardinal.lift_mul]
+    apply mul_le_mul' hι (ciSup_le' _)
+    simpa [← lift_card]
 
 Depends on / 依赖: Cardinal, Cardinal.lift_le, Cardinal.lift_mul, card_le_nat, ciSup_le, lift_card, lift_card_iSup_le_sum_card, lift_le, lift_mul, lt_aleph0, mul_eq_self, mul_le_mul, sum_le_lift_mk_mul_iSup_lift
 -/
@@ -391,7 +409,15 @@ theorem card_opow_le_of_omega0_le_left
     rw [opow_add_one]; rw [card_mul]; rw [card_add_one]; rw [Cardinal.mul_eq_max_of_aleph0_le_right]; rw [max_comm]
     · grw [IH]
       rw [← max_assoc]; rw [max_self]
-      grw [← le_self_a
+      grw [← le_self_add]
+    · rw [ne_eq, card_eq_zero, opow_eq_zero]
+      rintro ⟨rfl, -⟩
+      cases omega0_pos.not_ge ha
+    · rwa [aleph0_le_card]
+  | limit b hb IH =>
+    rw [(isNormal_opow (one_lt_omega0.trans_le ha)).apply_of_isSuccLimit hb]
+    exact card_iSup_Iio_le (le_max_right ..) fun i =>
+      (IH i i.2).trans (max_le_max_left _ (card_le_card i.2.le))
 
 中文:
 定理 card_opow_le_of_omega0_le_left
@@ -403,7 +429,15 @@ theorem card_opow_le_of_omega0_le_left
     rw [opow_add_one]; rw [card_mul]; rw [card_add_one]; rw [Cardinal.mul_eq_max_of_aleph0_le_right]; rw [max_comm]
     · grw [IH]
       rw [← max_assoc]; rw [max_self]
-      grw [← le_self_a
+      grw [← le_self_add]
+    · rw [ne_eq, card_eq_zero, opow_eq_zero]
+      rintro ⟨rfl, -⟩
+      cases omega0_pos.not_ge ha
+    · rwa [aleph0_le_card]
+  | limit b hb IH =>
+    rw [(isNormal_opow (one_lt_omega0.trans_le ha)).apply_of_isSuccLimit hb]
+    exact card_iSup_Iio_le (le_max_right ..) fun i =>
+      (IH i i.2).trans (max_le_max_left _ (card_le_card i.2.le))
 
 Depends on / 依赖: Cardinal, Cardinal.mul_eq_max_of_aleph0_le_right, add_one, aleph0_le_card, apply_of_isSuccLimit, card_add_one, card_eq_zero, card_iSup_Iio_le, card_mul, isNormal_opow, le_self_add, limitRecOn, max_assoc, max_comm, max_self, mul_eq_max_of_aleph0_le_right, ne_eq, not_ge, omega0_pos, omega0_pos.not_ge
 -/
@@ -471,7 +505,7 @@ theorem card_opow_le
     · rw [opow_natCast, ← natCast_pow, card_nat]
       exact le_max_of_le_left natCast_le_aleph0
     · exact (card_opow_le_of_omega0_le_right _ hb).trans (le_max_right _ _)
-  · exact (card_op
+  · exact (card_opow_le_of_omega0_le_left ha _).trans (le_max_right _ _)
 
 中文:
 定理 card_opow_le
@@ -483,7 +517,7 @@ theorem card_opow_le
     · rw [opow_natCast, ← natCast_pow, card_nat]
       exact le_max_of_le_left natCast_le_aleph0
     · exact (card_opow_le_of_omega0_le_right _ hb).trans (le_max_right _ _)
-  · exact (card_op
+  · exact (card_opow_le_of_omega0_le_left ha _).trans (le_max_right _ _)
 
 Depends on / 依赖: card_nat, card_opow_le_of_omega0_le_left, card_opow_le_of_omega0_le_right, eq_natCast_or_omega0_le, le_max_of_le_left, le_max_right, natCast_le_aleph0, natCast_pow, opow_natCast
 -/
@@ -609,7 +643,7 @@ theorem isPrincipal_opow_omega
     apply (card_opow_le a b).trans_lt (max_lt _ (max_lt ha hb))
     rwa [← aleph_zero, aleph_lt_aleph]
 
-@[deprecated (since := "2026-03-18")] al
+@[deprecated (since := "2026-03-18")] alias principal_opow_omega := isPrincipal_opow_omega
 
 中文:
 定理 isPrincipal_opow_omega
@@ -624,7 +658,7 @@ theorem isPrincipal_opow_omega
     apply (card_opow_le a b).trans_lt (max_lt _ (max_lt ha hb))
     rwa [← aleph_zero, aleph_lt_aleph]
 
-@[deprecated (since := "2026-03-18")] al
+@[deprecated (since := "2026-03-18")] alias principal_opow_omega := isPrincipal_opow_omega
 
 Depends on / 依赖: aleph_lt_aleph, aleph_zero, card_opow_le, eq_zero_or_pos, isPrincipal_opow_omega0, lt_omega_iff_card_lt, max_lt, omega_zero, trans_lt
 -/

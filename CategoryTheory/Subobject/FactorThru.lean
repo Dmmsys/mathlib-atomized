@@ -108,7 +108,9 @@ definition Factors
       · rintro ⟨i, w⟩
         exact ⟨i ≫ h.hom.hom.left, by rw [Category.assoc, Over.w h.hom.hom, w]⟩
       · rintro ⟨i, w⟩
-        exact ⟨i ≫ h.inv.hom.left, by rw [Category.assoc, Over.w h.
+        exact ⟨i ≫ h.inv.hom.left, by rw [Category.assoc, Over.w h.inv.hom, w]⟩)
+
+@[simp]
 
 中文:
 定义 Factors
@@ -121,7 +123,9 @@ definition Factors
       · rintro ⟨i, w⟩
         exact ⟨i ≫ h.hom.hom.left, by rw [Category.assoc, Over.w h.hom.hom, w]⟩
       · rintro ⟨i, w⟩
-        exact ⟨i ≫ h.inv.hom.left, by rw [Category.assoc, Over.w h.
+        exact ⟨i ≫ h.inv.hom.left, by rw [Category.assoc, Over.w h.inv.hom, w]⟩)
+
+@[simp]
 
 Depends on / 依赖: Category, Category.assoc, Factors, Over.w, P.Factors, Quotient, Quotient.liftOn, h.hom.hom, h.hom.hom.left, h.inv.hom, h.inv.hom.left, liftOn, propext
 -/

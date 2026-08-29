@@ -583,7 +583,10 @@ theorem derivFamily_fp
   | limit o l IH =>
     have := l.nonempty_Iio.to_subtype
     rw [derivFamily_limit _ l]; rw [H.map_iSup bddAbove_of_small]
- 
+    refine eq_of_forall_ge_iff fun c => ?_
+    rw [Ordinal.iSup_le_iff]; rw [Ordinal.iSup_le_iff]
+    refine forall_congr' fun a => ?_
+    rw [IH _ a.2]
 
 中文:
 定理 derivFamily_fp
@@ -599,7 +602,10 @@ theorem derivFamily_fp
   | limit o l IH =>
     have := l.nonempty_Iio.to_subtype
     rw [derivFamily_limit _ l]; rw [H.map_iSup bddAbove_of_small]
- 
+    refine eq_of_forall_ge_iff fun c => ?_
+    rw [Ordinal.iSup_le_iff]; rw [Ordinal.iSup_le_iff]
+    refine forall_congr' fun a => ?_
+    rw [IH _ a.2]
 
 Depends on / 依赖: H.map_iSup, Ordinal, Ordinal.iSup_le_iff, add_one, bddAbove_of_small, derivFamily_add_one, derivFamily_limit, derivFamily_zero, eq_of_forall_ge_iff, forall_congr, iSup_le_iff, l.nonempty_Iio.to_subtype, limitRecOn, map_iSup, nfpFamily_fp, nonempty_Iio, to_subtype
 -/
@@ -635,7 +641,22 @@ theorem le_iff_derivFamily
       intro h₁
       refine ⟨0, le_antisymm ?_ h₁⟩
       rw [derivFamily_zero]
- 
+      exact nfpFamily_le_fp (fun i => (H i).monotone) zero_le ha
+    | add_one o IH =>
+      intro h₁
+      rcases le_or_gt a (derivFamily f o) with h | h
+      · exact IH h
+      refine ⟨o + 1, le_antisymm ?_ h₁⟩
+      rw [derivFamily_add_one]
+      exact nfpFamily_le_fp (fun i => (H i).monotone) (succ_le_of_lt h) ha
+    | limit o l IH =>
+      intro h₁
+      rcases eq_or_lt_of_le h₁ with h | h
+      · exact ⟨_, h.symm⟩
+      rw [derivFamily_limit _ l]; rw [← not_le]; rw [Ordinal.iSup_le_iff]; rw [not_forall] at h
+      obtain ⟨o', h⟩ := h
+      exact IH o' o'.2 (le_of_not_ge h),
+    fun ⟨_, e⟩ i => e ▸ (derivFamily_fp (H i) _).le⟩
 
 中文:
 定理 le_iff_derivFamily
@@ -649,7 +670,22 @@ theorem le_iff_derivFamily
       intro h₁
       refine ⟨0, le_antisymm ?_ h₁⟩
       rw [derivFamily_zero]
- 
+      exact nfpFamily_le_fp (fun i => (H i).monotone) zero_le ha
+    | add_one o IH =>
+      intro h₁
+      rcases le_or_gt a (derivFamily f o) with h | h
+      · exact IH h
+      refine ⟨o + 1, le_antisymm ?_ h₁⟩
+      rw [derivFamily_add_one]
+      exact nfpFamily_le_fp (fun i => (H i).monotone) (succ_le_of_lt h) ha
+    | limit o l IH =>
+      intro h₁
+      rcases eq_or_lt_of_le h₁ with h | h
+      · exact ⟨_, h.symm⟩
+      rw [derivFamily_limit _ l]; rw [← not_le]; rw [Ordinal.iSup_le_iff]; rw [not_forall] at h
+      obtain ⟨o', h⟩ := h
+      exact IH o' o'.2 (le_of_not_ge h),
+    fun ⟨_, e⟩ i => e ▸ (derivFamily_fp (H i) _).le⟩
 
 Depends on / 依赖: add_one, derivFamily, derivFamily_add_one, derivFamily_zero, isNormal_derivFamily, le_antisymm, le_apply, le_or_gt, limitRecOn, monotone, nfpFamily_le_fp, strictMono, strictMono.le_apply, zero_le
 -/
@@ -1683,7 +1719,7 @@ theorem add_eq_right_iff_mul_omega0_le
     exact (isNormal_deriv _).monotone zero_le
   · have := Ordinal.add_sub_cancel_of_le h
     nth_rw 1 [← this]
-    rwa [← add_assoc, ←
+    rwa [← add_assoc, ← mul_one_add, one_add_omega0]
 
 中文:
 定理 add_eq_right_iff_mul_omega0_le
@@ -1697,7 +1733,7 @@ theorem add_eq_right_iff_mul_omega0_le
     exact (isNormal_deriv _).monotone zero_le
   · have := Ordinal.add_sub_cancel_of_le h
     nth_rw 1 [← this]
-    rwa [← add_assoc, ←
+    rwa [← add_assoc, ← mul_one_add, one_add_omega0]
 
 Depends on / 依赖: Ordinal, Ordinal.add_sub_cancel_of_le, add_assoc, add_sub_cancel_of_le, deriv_zero_right, isNormal_add_right, isNormal_deriv, mem_range_deriv, monotone, mul_one_add, nfp_add_zero, nth_rw, one_add_omega0, zero_le
 -/
@@ -1750,7 +1786,7 @@ theorem deriv_add_eq_mul_omega0_add
   · rw [bot_eq_zero, deriv_zero_right, add_zero]
     exact nfp_add_zero a
   · rw [succ_eq_add_one, deriv_add_one, h, ← add_assoc]
-    exact nfp_eq_self (add_eq_right_iff_mu
+    exact nfp_eq_self (add_eq_right_iff_mul_omega0_le.2 (le_self_add.trans (le_succ _)))
 
 中文:
 定理 deriv_add_eq_mul_omega0_add
@@ -1763,7 +1799,7 @@ theorem deriv_add_eq_mul_omega0_add
   · rw [bot_eq_zero, deriv_zero_right, add_zero]
     exact nfp_add_zero a
   · rw [succ_eq_add_one, deriv_add_one, h, ← add_assoc]
-    exact nfp_eq_self (add_eq_right_iff_mu
+    exact nfp_eq_self (add_eq_right_iff_mul_omega0_le.2 (le_self_add.trans (le_succ _)))
 
 Depends on / 依赖: IsNormal, IsNormal.ext_iff, add_assoc, add_eq_right_iff_mul_omega0_le, add_zero, bot_eq_zero, deriv_add_one, deriv_zero_right, ext_iff, funext_iff, isNormal_add_right, isNormal_deriv, le_self_add, le_self_add.trans, le_succ, nfp_add_zero, nfp_eq_self, revert, succ_eq_add_one
 -/
@@ -1848,7 +1884,7 @@ theorem nfp_mul_eq_opow_omega0
   · apply nfp_le_fp (isNormal_mul_right ha).monotone hba
     rw [← opow_one_add]; rw [one_add_omega0]
   rw [← nfp_mul_one ha]
-  exact nfp_monotone (isNormal_mul_right ha).m
+  exact nfp_monotone (isNormal_mul_right ha).monotone (one_le_iff_pos.2 hb)
 
 中文:
 定理 nfp_mul_eq_opow_omega0
@@ -1861,7 +1897,7 @@ theorem nfp_mul_eq_opow_omega0
   · apply nfp_le_fp (isNormal_mul_right ha).monotone hba
     rw [← opow_one_add]; rw [one_add_omega0]
   rw [← nfp_mul_one ha]
-  exact nfp_monotone (isNormal_mul_right ha).m
+  exact nfp_monotone (isNormal_mul_right ha).monotone (one_le_iff_pos.2 hb)
 
 Depends on / 依赖: eq_zero_or_pos, hba.not_gt, isNormal_mul_right, le_antisymm, monotone, nfp_le_fp, nfp_monotone, nfp_mul_one, not_gt, omega0_ne_zero, one_add_omega0, one_le_iff_pos, opow_one_add, zero_opow
 -/
@@ -1931,7 +1967,13 @@ theorem mul_eq_right_iff_opow_omega0_dvd
     exact eq_comm
   refine ⟨fun hab => ?_, fun h => ?_⟩
   · rw [dvd_iff_mod_eq_zero]
-    rw [← div_add_mod b (a ^ ω)]; rw [mul_add]; rw [← mul_assoc]; rw [← opow_one_add]; rw [one_add_omega0]; rw 
+    rw [← div_add_mod b (a ^ ω)]; rw [mul_add]; rw [← mul_assoc]; rw [← opow_one_add]; rw [one_add_omega0]; rw [add_left_cancel_iff] at hab
+    rcases eq_zero_or_opow_omega0_le_of_mul_eq_right hab with hab | hab
+    · exact hab
+    refine (not_lt_of_ge hab (mod_lt b (opow_ne_zero ω ?_))).elim
+    rwa [← pos_iff_ne_zero]
+  obtain ⟨c, hc⟩ := h
+  rw [hc]; rw [← mul_assoc]; rw [← opow_one_add]; rw [one_add_omega0]
 
 中文:
 定理 mul_eq_right_iff_opow_omega0_dvd
@@ -1943,7 +1985,13 @@ theorem mul_eq_right_iff_opow_omega0_dvd
     exact eq_comm
   refine ⟨fun hab => ?_, fun h => ?_⟩
   · rw [dvd_iff_mod_eq_zero]
-    rw [← div_add_mod b (a ^ ω)]; rw [mul_add]; rw [← mul_assoc]; rw [← opow_one_add]; rw [one_add_omega0]; rw 
+    rw [← div_add_mod b (a ^ ω)]; rw [mul_add]; rw [← mul_assoc]; rw [← opow_one_add]; rw [one_add_omega0]; rw [add_left_cancel_iff] at hab
+    rcases eq_zero_or_opow_omega0_le_of_mul_eq_right hab with hab | hab
+    · exact hab
+    refine (not_lt_of_ge hab (mod_lt b (opow_ne_zero ω ?_))).elim
+    rwa [← pos_iff_ne_zero]
+  obtain ⟨c, hc⟩ := h
+  rw [hc]; rw [← mul_assoc]; rw [← opow_one_add]; rw [one_add_omega0]
 
 Depends on / 依赖: add_left_cancel_iff, div_add_mod, dvd_iff_mod_eq_zero, eq_comm, eq_zero_or_opow_omega0_le_of_mul_eq_right, eq_zero_or_pos, mod_lt, mul_add, mul_assoc, not_lt_of_ge, omega0_ne_zero, one_add_omega0, opow_ne_zero, opow_one_add, pos_iff_ne_zero, zero_dvd_iff, zero_mul, zero_opow
 -/
@@ -2000,7 +2048,12 @@ theorem nfp_mul_opow_omega0_add
   · obtain ⟨d, hd⟩ :=
       mul_eq_right_iff_opow_omega0_dvd.1 (nfp_fp (isNormal_mul_right ha) (a ^ ω * b + c))
     rw [hd]
-    apply mu
+    apply mul_le_mul_right
+    have := le_nfp (a * ·) (a ^ ω * b + c)
+    rw [hd] at this
+    have := (add_lt_add_right hc (a ^ ω * b)).trans_le this
+    rw [add_zero]; rw [mul_lt_mul_iff_right₀ (opow_pos ω ha)] at this
+    rwa [succ_le_iff]
 
 中文:
 定理 nfp_mul_opow_omega0_add
@@ -2014,7 +2067,12 @@ theorem nfp_mul_opow_omega0_add
   · obtain ⟨d, hd⟩ :=
       mul_eq_right_iff_opow_omega0_dvd.1 (nfp_fp (isNormal_mul_right ha) (a ^ ω * b + c))
     rw [hd]
-    apply mu
+    apply mul_le_mul_right
+    have := le_nfp (a * ·) (a ^ ω * b + c)
+    rw [hd] at this
+    have := (add_lt_add_right hc (a ^ ω * b)).trans_le this
+    rw [add_zero]; rw [mul_lt_mul_iff_right₀ (opow_pos ω ha)] at this
+    rwa [succ_le_iff]
 
 Depends on / 依赖: add_lt_add_right, add_zero, isNormal_mul_right, le_antisymm, le_nfp, monotone, mul_assoc, mul_eq_right_iff_opow_omega0_dvd, mul_le_mul_right, mul_succ, nfp_fp, nfp_le_fp, one_add_omega0, opow_one_add, opow_pos, succ_le_iff, trans_le
 -/
@@ -2047,7 +2105,7 @@ theorem deriv_mul_eq_opow_omega0_mul
   refine ⟨?_, fun c h => ?_⟩
   · rw [bot_eq_zero, deriv_zero_right, nfp_mul_zero, mul_zero]
   · rw [deriv_succ, h]
-    exact nfp_mul_opow_omega0_add c ha zero_lt_one (one_le_iff_pos.2 (op
+    exact nfp_mul_opow_omega0_add c ha zero_lt_one (one_le_iff_pos.2 (opow_pos _ ha))
 
 中文:
 定理 deriv_mul_eq_opow_omega0_mul
@@ -2058,7 +2116,7 @@ theorem deriv_mul_eq_opow_omega0_mul
   refine ⟨?_, fun c h => ?_⟩
   · rw [bot_eq_zero, deriv_zero_right, nfp_mul_zero, mul_zero]
   · rw [deriv_succ, h]
-    exact nfp_mul_opow_omega0_add c ha zero_lt_one (one_le_iff_pos.2 (op
+    exact nfp_mul_opow_omega0_add c ha zero_lt_one (one_le_iff_pos.2 (opow_pos _ ha))
 
 Depends on / 依赖: IsNormal, IsNormal.ext_iff, bot_eq_zero, deriv_succ, deriv_zero_right, ext_iff, funext_iff, isNormal_deriv, isNormal_mul_right, mul_zero, nfp_mul_opow_omega0_add, nfp_mul_zero, one_le_iff_pos, opow_pos, revert, zero_lt_one
 -/

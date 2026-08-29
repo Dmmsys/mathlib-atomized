@@ -80,7 +80,8 @@ definition variation
   let counts' := counts.map toFloat
   let μ : Float := counts'.foldl (· + ·) 0 / toFloat counts.length
 let stddev : Float := Float.sqrt
-    ((counts
+    ((counts'.map fun i => (i - μ)^2).foldl (· + ·) 0) / toFloat counts.length
+  [min, max, toNat stddev]
 
 中文:
 定义 variation
@@ -92,7 +93,8 @@ let stddev : Float := Float.sqrt
   let counts' := counts.map toFloat
   let μ : Float := counts'.foldl (· + ·) 0 / toFloat counts.length
 let stddev : Float := Float.sqrt
-    ((counts
+    ((counts'.map fun i => (i - μ)^2).foldl (· + ·) 0) / toFloat counts.length
+  [min, max, toNat stddev]
 
 Depends on / 依赖: Float.sqrt, counts, counts.length, counts.map, counts.max, counts.min, f.toUInt64.toNat, length, n.toUInt64.toFloat, stddev, toFloat, toUInt64
 -/
@@ -378,7 +380,17 @@ definition countHeartbeatsLinter
   let mut msgs := #[]
   if [``Lean.Parser.Command.declaration, `lemma].contains stx.getKind then
     let s ← get
-    if getLinterValue linte
+    if getLinterValue linter.countHeartbeatsApprox (← getLinterOptions) then
+      elabCommand (← `(command| #count_heartbeats approximately in $(⟨stx⟩)))
+    else
+      elabCommand (← `(command| #count_heartbeats in $(⟨stx⟩)))
+    msgs := (← get).messages.unreported.toArray.filter (·.severity != .error)
+    set s
+  match stx.find? (·.isOfKind ``Parser.Command.declId) with
+    | some decl =>
+      for msg in msgs do logInfoAt decl m!"'{decl[0].getId}' {(← msg.toString).decapitalize}"
+    | none =>
+      for msg in msgs do logInfoAt stx m!"{← msg.toString}"
 
 中文:
 定义 countHeartbeatsLinter
@@ -391,7 +403,17 @@ definition countHeartbeatsLinter
   let mut msgs := #[]
   if [``Lean.Parser.Command.declaration, `lemma].contains stx.getKind then
     let s ← get
-    if getLinterValue linte
+    if getLinterValue linter.countHeartbeatsApprox (← getLinterOptions) then
+      elabCommand (← `(command| #count_heartbeats approximately in $(⟨stx⟩)))
+    else
+      elabCommand (← `(command| #count_heartbeats in $(⟨stx⟩)))
+    msgs := (← get).messages.unreported.toArray.filter (·.severity != .error)
+    set s
+  match stx.find? (·.isOfKind ``Parser.Command.declId) with
+    | some decl =>
+      for msg in msgs do logInfoAt decl m!"'{decl[0].getId}' {(← msg.toString).decapitalize}"
+    | none =>
+      for msg in msgs do logInfoAt stx m!"{← msg.toString}"
 
 Depends on / 依赖: withSetOptionIn
 -/

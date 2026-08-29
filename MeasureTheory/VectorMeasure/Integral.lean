@@ -438,7 +438,8 @@ lemma variation_transpose_le
   apply opENorm_le_bound _ (fun x => ?_)
   simp only [transpose, mapRange_apply, LinearMap.toAddMonoidHom_coe, coe_coe, flip_apply,
     Measure.smul_apply, Measure.nnreal_smul_coe_apply]
-  grw [le_opENorm, le_opENorm, enorm_measure_le_varia
+  grw [le_opENorm, le_opENorm, enorm_measure_le_variation, ← enorm_eq_nnnorm]
+  exact le_of_eq (by ring)
 
 中文:
 引理 variation_transpose_le
@@ -447,7 +448,8 @@ lemma variation_transpose_le
   apply opENorm_le_bound _ (fun x => ?_)
   simp only [transpose, mapRange_apply, LinearMap.toAddMonoidHom_coe, coe_coe, flip_apply,
     Measure.smul_apply, Measure.nnreal_smul_coe_apply]
-  grw [le_opENorm, le_opENorm, enorm_measure_le_varia
+  grw [le_opENorm, le_opENorm, enorm_measure_le_variation, ← enorm_eq_nnnorm]
+  exact le_of_eq (by ring)
 
 Depends on / 依赖: LinearMap, LinearMap.toAddMonoidHom_coe, Measure, Measure.nnreal_smul_coe_apply, Measure.smul_apply, coe_coe, enorm_eq_nnnorm, enorm_measure_le_variation, flip_apply, le_of_eq, le_opENorm, mapRange_apply, nnreal_smul_coe_apply, opENorm_le_bound, smul_apply, toAddMonoidHom_coe, transpose, variation_le_of_forall_enorm_le
 -/
@@ -513,7 +515,17 @@ lemma variation_transpose_eq_smul
   · rcases eq_or_ne C 0 with rfl | hC
     · simp [Measure.zero_le]
     suffices μ.variation <= C⁻¹ • (μ.transpose B).variation by
-  
+      grw [this, smul_smul, mul_inv_cancel₀ hC, one_smul]
+    apply variation_le_of_forall_enorm_le (fun s hs => ?_)
+    have : ‖μ s‖ₑ <= C⁻¹ • ‖(μ.transpose B) s‖ₑ := by
+      simp only [transpose, mapRange_apply, LinearMap.toAddMonoidHom_coe, coe_coe]
+      obtain ⟨x, hx⟩ : exists (x : E), x != 0 := exists_ne 0
+      have : ‖B.flip (μ s) x‖₊ <= ‖B.flip (μ s)‖₊ * ‖x‖₊ := le_opNNNorm _ _
+      simp only [flip_apply, hB] at this
+      rw [mul_right_comm]; rw [mul_le_mul_iff_left₀ (by simpa)]; rw [← le_div_iff₀' (by positivity)]; rw [div_eq_inv_mul] at this
+      change ENNReal.ofNNReal _ <= ENNReal.ofNNReal _
+      gcongr
+    grw [this, enorm_measure_le_variation, Measure.smul_apply]
 
 中文:
 引理 variation_transpose_eq_smul
@@ -526,7 +538,17 @@ lemma variation_transpose_eq_smul
   · rcases eq_or_ne C 0 with rfl | hC
     · simp [Measure.zero_le]
     suffices μ.variation <= C⁻¹ • (μ.transpose B).variation by
-  
+      grw [this, smul_smul, mul_inv_cancel₀ hC, one_smul]
+    apply variation_le_of_forall_enorm_le (fun s hs => ?_)
+    have : ‖μ s‖ₑ <= C⁻¹ • ‖(μ.transpose B) s‖ₑ := by
+      simp only [transpose, mapRange_apply, LinearMap.toAddMonoidHom_coe, coe_coe]
+      obtain ⟨x, hx⟩ : exists (x : E), x != 0 := exists_ne 0
+      have : ‖B.flip (μ s) x‖₊ <= ‖B.flip (μ s)‖₊ * ‖x‖₊ := le_opNNNorm _ _
+      simp only [flip_apply, hB] at this
+      rw [mul_right_comm]; rw [mul_le_mul_iff_left₀ (by simpa)]; rw [← le_div_iff₀' (by positivity)]; rw [div_eq_inv_mul] at this
+      change ENNReal.ofNNReal _ <= ENNReal.ofNNReal _
+      gcongr
+    grw [this, enorm_measure_le_variation, Measure.smul_apply]
 
 Depends on / 依赖: LinearMap, LinearMap.toAddMonoidHom_coe, Measure, Measure.zero_le, eq_or_ne, le_antisymm, mapRange_apply, one_smul, opNNNorm_le_bound, smul_smul, toAddMonoidHom_coe, transpose, variation, variation_le_of_forall_enorm_le, variation_transpose_le, zero_le
 -/
@@ -1600,7 +1622,7 @@ lemma Integrable.finsetSum_vectorMeasure
         Finset.sum_insert] at h ⊢
       exact h.1.add_vectorMeasure (ih h.2)
 
-omit [NormedSpace Real E] [NormedSpace Real
+omit [NormedSpace Real E] [NormedSpace Real F] in
 
 中文:
 引理 可积.finsetSum_vectorMeasure
@@ -1614,7 +1636,7 @@ omit [NormedSpace Real E] [NormedSpace Real
         Finset.sum_insert] at h ⊢
       exact h.1.add_vectorMeasure (ih h.2)
 
-omit [NormedSpace Real E] [NormedSpace Real
+omit [NormedSpace Real E] [NormedSpace Real F] in
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert, Finset.sum_insert, add_vectorMeasure, classical, forall_eq_or_imp, induction_on, insert, mem_insert, not_false_eq_true, sum_insert
 -/
@@ -1716,7 +1738,13 @@ theorem integral_smul_vectorMeasure
   have : (c • μ).variation = ‖c‖₊ • μ.variation := by
     simp [variation_smul]
   simp only [this]
-  have : DominatedFinMeasAdditive μ.variation ((c • μ).transpose B) (‖c‖ * ‖B‖) := 
+  have : DominatedFinMeasAdditive μ.variation ((c • μ).transpose B) (‖c‖ * ‖B‖) := by
+    simp only [transpose_smul, FunLike.coe_smul]
+    exact (dominatedFinMeasAdditive_cbmApplyMeasure μ B).smul c
+  rw! [← setToFun_congr_smul_measure' _ this, transpose_smul]
+  rfl
+
+@[simp]
 
 中文:
 定理 integral_smul_vectorMeasure
@@ -1728,7 +1756,13 @@ theorem integral_smul_vectorMeasure
   have : (c • μ).variation = ‖c‖₊ • μ.variation := by
     simp [variation_smul]
   simp only [this]
-  have : DominatedFinMeasAdditive μ.variation ((c • μ).transpose B) (‖c‖ * ‖B‖) := 
+  have : DominatedFinMeasAdditive μ.variation ((c • μ).transpose B) (‖c‖ * ‖B‖) := by
+    simp only [transpose_smul, FunLike.coe_smul]
+    exact (dominatedFinMeasAdditive_cbmApplyMeasure μ B).smul c
+  rw! [← setToFun_congr_smul_measure' _ this, transpose_smul]
+  rfl
+
+@[simp]
 
 Depends on / 依赖: CompleteSpace, DominatedFinMeasAdditive, FunLike, FunLike.coe_smul, coe_smul, dominatedFinMeasAdditive_cbmApplyMeasure, integral, setToFun, setToFun_congr_smul_measure, setToFun_smul_left, simp_rw, transpose, transpose_smul, variation, variation_smul
 -/
@@ -1802,7 +1836,7 @@ theorem integral_finsetSum_vectorMeasure
   | insert a s ha ih =>
     simp only [Finset.mem_insert, forall_eq_or_imp, ha, not_false_eq_true,
       Finset.sum_insert] at hf ⊢
-    rw [integral_add_vectorMeasure hf.1 (Integrable.finsetSum_vectorMeasure hf.2)]; rw [ih
+    rw [integral_add_vectorMeasure hf.1 (Integrable.finsetSum_vectorMeasure hf.2)]; rw [ih hf.2]
 
 中文:
 定理 integral_finsetSum_vectorMeasure
@@ -1814,7 +1848,7 @@ theorem integral_finsetSum_vectorMeasure
   | insert a s ha ih =>
     simp only [Finset.mem_insert, forall_eq_or_imp, ha, not_false_eq_true,
       Finset.sum_insert] at hf ⊢
-    rw [integral_add_vectorMeasure hf.1 (Integrable.finsetSum_vectorMeasure hf.2)]; rw [ih
+    rw [integral_add_vectorMeasure hf.1 (Integrable.finsetSum_vectorMeasure hf.2)]; rw [ih hf.2]
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert, Finset.sum_insert, Integrable, Integrable.finsetSum_vectorMeasure, classical, finsetSum_vectorMeasure, forall_eq_or_imp, induction_on, insert, integral_add_vectorMeasure, mem_insert, not_false_eq_true, sum_insert
 -/
@@ -2125,7 +2159,10 @@ theorem norm_integral_le_integral_norm
   · calc ‖∫ᵛ a, f a ∂[B; μ]‖
     _ <= ‖B‖ * ENNReal.toReal (∫⁻ a, ENNReal.ofReal ‖f a‖ ∂μ.variation) :=
       norm_integral_le_lintegral_norm
-    
+    _ = ‖B‖ * ∫ a, ‖f a‖ ∂μ.variation := by
+      rw [integral_eq_lintegral_of_nonneg_ae le_ae <| h.norm]
+  · rw [integral_non_aestronglyMeasurable h, norm_zero]
+    positivity
 
 中文:
 定理 norm_integral_le_integral_norm
@@ -2136,7 +2173,10 @@ theorem norm_integral_le_integral_norm
   · calc ‖∫ᵛ a, f a ∂[B; μ]‖
     _ <= ‖B‖ * ENNReal.toReal (∫⁻ a, ENNReal.ofReal ‖f a‖ ∂μ.variation) :=
       norm_integral_le_lintegral_norm
-    
+    _ = ‖B‖ * ∫ a, ‖f a‖ ∂μ.variation := by
+      rw [integral_eq_lintegral_of_nonneg_ae le_ae <| h.norm]
+  · rw [integral_non_aestronglyMeasurable h, norm_zero]
+    positivity
 
 Depends on / 依赖: AEStronglyMeasurable, ENNReal, ENNReal.ofReal, ENNReal.toReal, Eventually, Eventually.of_forall, h.norm, integral_eq_lintegral_of_nonneg_ae, integral_non_aestronglyMeasurable, le_ae, norm_integral_le_lintegral_norm, norm_nonneg, norm_zero, ofReal, of_forall, toReal, variation
 -/
@@ -2305,7 +2345,12 @@ lemma integral_toSignedMeasure
   rw [integral_eq_setToFun]; rw [MeasureTheory.integral_eq_setToFun]
   simp only [Measure.variation_toSignedMeasure]
   apply setToFun_congr_left' _ _ (fun s hs h's => ?_)
-  simp only [transpose, ContinuousLinearMap.f
+  simp only [transpose, ContinuousLinearMap.flip_flip, mapRange_apply,
+    Measure.toSignedMeasure_apply_measurable hs, LinearMap.toAddMonoidHom_coe,
+    ContinuousLinearMap.coe_coe, weightedSMul]
+  rfl
+
+@[simp]
 
 中文:
 引理 integral_toSignedMeasure
@@ -2316,7 +2361,12 @@ lemma integral_toSignedMeasure
   rw [integral_eq_setToFun]; rw [MeasureTheory.integral_eq_setToFun]
   simp only [Measure.variation_toSignedMeasure]
   apply setToFun_congr_left' _ _ (fun s hs h's => ?_)
-  simp only [transpose, ContinuousLinearMap.f
+  simp only [transpose, ContinuousLinearMap.flip_flip, mapRange_apply,
+    Measure.toSignedMeasure_apply_measurable hs, LinearMap.toAddMonoidHom_coe,
+    ContinuousLinearMap.coe_coe, weightedSMul]
+  rfl
+
+@[simp]
 -/
 @[simp] lemma integral_toSignedMeasure {μ : Measure X} [IsFiniteMeasure μ] {f : X -> G} :
     ∫ᵛ x, f x ∂<•μ.toSignedMeasure = ∫ x, f x ∂μ := by
@@ -2344,7 +2394,13 @@ theorem integral_dirac'
     simp only [transpose_dirac, variation_dirac, this]
     infer_instance
   calc
-    ∫ᵛ x, f x ∂[B; VectorMeasure.dirac a v] = ∫ᵛ _, f a 
+    ∫ᵛ x, f x ∂[B; VectorMeasure.dirac a v] = ∫ᵛ _, f a ∂[B; VectorMeasure.dirac a v] := by
+      apply integral_congr_ae
+      simp only [variation_dirac]
+      exact Measure.ae_smul_measure (ae_eq_dirac' hfm.measurable) _
+    _ = B (f a) v := by simp
+
+@[simp]
 
 中文:
 定理 integral_dirac'
@@ -2356,7 +2412,13 @@ theorem integral_dirac'
     simp only [transpose_dirac, variation_dirac, this]
     infer_instance
   calc
-    ∫ᵛ x, f x ∂[B; VectorMeasure.dirac a v] = ∫ᵛ _, f a 
+    ∫ᵛ x, f x ∂[B; VectorMeasure.dirac a v] = ∫ᵛ _, f a ∂[B; VectorMeasure.dirac a v] := by
+      apply integral_congr_ae
+      simp only [variation_dirac]
+      exact Measure.ae_smul_measure (ae_eq_dirac' hfm.measurable) _
+    _ = B (f a) v := by simp
+
+@[simp]
 
 Depends on / 依赖: B.flip, IsFiniteMeasure, Measure, Measure.ae_smul_measure, Measure.dirac, VectorMeasure, VectorMeasure.dirac, ae_eq_dirac, ae_smul_measure, borelize, hfm.measurable, infer_instance, integral_congr_ae, measurable, transpose, transpose_dirac, variation, variation_dirac
 -/
@@ -2388,7 +2450,11 @@ theorem integral_dirac
     simp only [transpose_dirac, variation_dirac, this]
     infer_instance
   calc
-    ∫ᵛ x, f x ∂[B; VectorMeasure.dirac a v] = ∫ᵛ _, f a ∂[B; VectorMe
+    ∫ᵛ x, f x ∂[B; VectorMeasure.dirac a v] = ∫ᵛ _, f a ∂[B; VectorMeasure.dirac a v] := by
+      apply integral_congr_ae
+      simp only [variation_dirac]
+      exact Measure.ae_smul_measure (ae_eq_dirac f) _
+    _ = B (f a) v := by simp
 
 中文:
 定理 integral_dirac
@@ -2399,7 +2465,11 @@ theorem integral_dirac
     simp only [transpose_dirac, variation_dirac, this]
     infer_instance
   calc
-    ∫ᵛ x, f x ∂[B; VectorMeasure.dirac a v] = ∫ᵛ _, f a ∂[B; VectorMe
+    ∫ᵛ x, f x ∂[B; VectorMeasure.dirac a v] = ∫ᵛ _, f a ∂[B; VectorMeasure.dirac a v] := by
+      apply integral_congr_ae
+      simp only [variation_dirac]
+      exact Measure.ae_smul_measure (ae_eq_dirac f) _
+    _ = B (f a) v := by simp
 
 Depends on / 依赖: B.flip, IsFiniteMeasure, Measure, Measure.ae_smul_measure, Measure.dirac, VectorMeasure, VectorMeasure.dirac, ae_eq_dirac, ae_smul_measure, infer_instance, integral_congr_ae, transpose, transpose_dirac, variation, variation_dirac
 -/
@@ -2603,7 +2673,17 @@ theorem norm_integral_le_of_norm_le_const
     apply ENNReal.toReal_mono
     · simp only [lintegral_const, ne_eq]
       finiteness
-    · a
+    · apply lintegral_mono_ae
+      filter_upwards [h] with x hx using ENNReal.ofReal_mono hx
+  _ = ‖B‖ * (C * μ.variation.real univ) := by
+    by_cases hμ : μ.variation = 0
+    · simp [hμ]
+    have : (ae μ.variation).NeBot := ae_neBot.mpr hμ
+    have hC : 0 <= C := by
+      obtain ⟨x, hx⟩ := h.exists
+      exact (norm_nonneg _).trans hx
+    simp [ENNReal.toReal_ofReal hC, Measure.real]
+  _ = C * ‖B‖ * μ.variation.real univ := by ring
 
 中文:
 定理 norm_integral_le_of_norm_le_const
@@ -2617,7 +2697,17 @@ theorem norm_integral_le_of_norm_le_const
     apply ENNReal.toReal_mono
     · simp only [lintegral_const, ne_eq]
       finiteness
-    · a
+    · apply lintegral_mono_ae
+      filter_upwards [h] with x hx using ENNReal.ofReal_mono hx
+  _ = ‖B‖ * (C * μ.variation.real univ) := by
+    by_cases hμ : μ.variation = 0
+    · simp [hμ]
+    have : (ae μ.variation).NeBot := ae_neBot.mpr hμ
+    have hC : 0 <= C := by
+      obtain ⟨x, hx⟩ := h.exists
+      exact (norm_nonneg _).trans hx
+    simp [ENNReal.toReal_ofReal hC, Measure.real]
+  _ = C * ‖B‖ * μ.variation.real univ := by ring
 
 Depends on / 依赖: countable_bInter_mem, mem_map, sInter_eq_biInter
 -/
@@ -2846,7 +2936,9 @@ theorem _root_.MeasurableEmbedding.integral_map_vectorMeasure
     · rw [integral_undef, integral_undef]
       · exact h'fm
       · rwa [hφ.integrable_map_vectorMeasure]
-  · rw [integral_non_aestronglyMeasurable
+  · rw [integral_non_aestronglyMeasurable, integral_non_aestronglyMeasurable]
+    · rwa [hφ.aestronglyMeasurable_map_iff] at hfm
+    · rwa [hφ.variation_map]
 
 中文:
 定理 _root_.可测嵌入.integral_map_vectorMeasure
@@ -2857,7 +2949,9 @@ theorem _root_.MeasurableEmbedding.integral_map_vectorMeasure
     · rw [integral_undef, integral_undef]
       · exact h'fm
       · rwa [hφ.integrable_map_vectorMeasure]
-  · rw [integral_non_aestronglyMeasurable
+  · rw [integral_non_aestronglyMeasurable, integral_non_aestronglyMeasurable]
+    · rwa [hφ.aestronglyMeasurable_map_iff] at hfm
+    · rwa [hφ.variation_map]
 
 Depends on / 依赖: AEStronglyMeasurable, Integrable, aestronglyMeasurable_map_iff, integrable_map_vectorMeasure, integral_map, integral_non_aestronglyMeasurable, integral_undef, measurable, variation, variation.map, variation_map
 -/

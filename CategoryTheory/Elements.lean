@@ -354,6 +354,10 @@ instance groupoidOfElements
         ⟩
   inv_comp _ := by
     ext
+    simp
+  comp_inv _ := by
+    ext
+    simp
 
 中文:
 实例 groupoidOfElements
@@ -368,6 +372,10 @@ instance groupoidOfElements
         ⟩
   inv_comp _ := by
     ext
+    simp
+  comp_inv _ := by
+    ext
+    simp
 
 Depends on / 依赖: F.map, F.map_comp, Groupoid, Groupoid.inv, comp_inv, f.val, inv_comp, map_comp
 -/
@@ -776,7 +784,10 @@ definition costructuredArrowYonedaEquivalence
       (fun X => Iso.op (CategoryOfElements.isoMk _ _ (Iso.refl _) (by simp; rfl))) (by
         rintro ⟨x⟩ ⟨y⟩ ⟨f : y ⟶ x⟩
         exact Quiver.Hom.unop_inj (by ext; simp))
-  counitIso := NatIso.
+  counitIso := NatIso.ofComponents (fun X => CostructuredArrow.isoMk (Iso.refl _) (by
+    dsimp
+    simpa only [Functor.map_id, Category.id_comp] using!
+      (yonedaEquiv.symm_apply_apply X.hom).symm))
 
 中文:
 定义 costructuredArrowYonedaEquivalence
@@ -788,7 +799,10 @@ definition costructuredArrowYonedaEquivalence
       (fun X => Iso.op (CategoryOfElements.isoMk _ _ (Iso.refl _) (by simp; rfl))) (by
         rintro ⟨x⟩ ⟨y⟩ ⟨f : y ⟶ x⟩
         exact Quiver.Hom.unop_inj (by ext; simp))
-  counitIso := NatIso.
+  counitIso := NatIso.ofComponents (fun X => CostructuredArrow.isoMk (Iso.refl _) (by
+    dsimp
+    simpa only [Functor.map_id, Category.id_comp] using!
+      (yonedaEquiv.symm_apply_apply X.hom).symm))
 
 Depends on / 依赖: toCostructuredArrow
 -/
@@ -909,7 +923,15 @@ definition costructuredArrowULiftYonedaEquivalence
         rw [← uliftYonedaEquiv_symm_map]; rw [map_snd]) }
   inverse :=
     { obj X := op (F.elementsMk _ (uliftYonedaEquiv.{w} X.hom))
-      map f := (homMk _ _ f.
+      map f := (homMk _ _ f.left.op (by
+        dsimp
+        rw [← CostructuredArrow.w f]; rw [uliftYonedaEquiv_naturality]; rw [Quiver.Hom.unop_op])).op }
+  unitIso := NatIso.ofComponents (fun x => Iso.op (isoMk _ _ (Iso.refl _) (by
+    dsimp
+    simpa only [Functor.map_id_apply] using
+      uliftYonedaEquiv.apply_symm_apply (unop x).snd)))
+    (fun f => Quiver.Hom.unop_inj (by aesop))
+  counitIso := NatIso.ofComponents (fun X => CostructuredArrow.isoMk (Iso.refl _))
 
 中文:
 定义 costructuredArrowULiftYonedaEquivalence
@@ -920,7 +942,15 @@ definition costructuredArrowULiftYonedaEquivalence
         rw [← uliftYonedaEquiv_symm_map]; rw [map_snd]) }
   inverse :=
     { obj X := op (F.elementsMk _ (uliftYonedaEquiv.{w} X.hom))
-      map f := (homMk _ _ f.
+      map f := (homMk _ _ f.left.op (by
+        dsimp
+        rw [← CostructuredArrow.w f]; rw [uliftYonedaEquiv_naturality]; rw [Quiver.Hom.unop_op])).op }
+  unitIso := NatIso.ofComponents (fun x => Iso.op (isoMk _ _ (Iso.refl _) (by
+    dsimp
+    simpa only [Functor.map_id_apply] using
+      uliftYonedaEquiv.apply_symm_apply (unop x).snd)))
+    (fun f => Quiver.Hom.unop_inj (by aesop))
+  counitIso := NatIso.ofComponents (fun X => CostructuredArrow.isoMk (Iso.refl _))
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.mk, CostructuredArrow.w, F.elementsMk, Functor, Functor.map_id_apply, Iso.op, Iso.refl, NatIso, NatIso.ofComponents, Quiver, Quiver.Hom.unop_op, X.hom, elementsMk, f.left.op, inverse, map_id_apply, map_snd, ofComponents
 -/
@@ -1128,7 +1158,11 @@ instance Elements.essentiallySmall
   obtain ⟨P, _, hP⟩ := ObjectProperty.EssentiallySmall.exists_small_le' (⊤ : ObjectProperty C)
   refine ⟨fun x => P x.1, ?_, fun y _ => ?_⟩
   · exact small_of_surjective.{w} (α := Σ (Z : Subtype P), F.obj Z.1)
-      (f := fun x => ⟨F.
+      (f := fun x => ⟨F.elementsMk _ x.2, x.1.2⟩)
+      (fun ⟨x, hx⟩ => ⟨⟨⟨x.1, hx⟩, x.2⟩, rfl⟩)
+  · obtain ⟨Z, hZ, ⟨e⟩⟩ := hP y.fst (by simp)
+    exact ⟨F.elementsMk Z (F.map e.hom y.snd), hZ,
+      ⟨CategoryOfElements.isoMk _ _ e rfl⟩⟩
 
 中文:
 实例 Elements.essentiallySmall
@@ -1138,7 +1172,11 @@ instance Elements.essentiallySmall
   obtain ⟨P, _, hP⟩ := ObjectProperty.EssentiallySmall.exists_small_le' (⊤ : ObjectProperty C)
   refine ⟨fun x => P x.1, ?_, fun y _ => ?_⟩
   · exact small_of_surjective.{w} (α := Σ (Z : Subtype P), F.obj Z.1)
-      (f := fun x => ⟨F.
+      (f := fun x => ⟨F.elementsMk _ x.2, x.1.2⟩)
+      (fun ⟨x, hx⟩ => ⟨⟨⟨x.1, hx⟩, x.2⟩, rfl⟩)
+  · obtain ⟨Z, hZ, ⟨e⟩⟩ := hP y.fst (by simp)
+    exact ⟨F.elementsMk Z (F.map e.hom y.snd), hZ,
+      ⟨CategoryOfElements.isoMk _ _ e rfl⟩⟩
 
 Depends on / 依赖: CategoryOfElements, CategoryOfElements.isoMk, EssentiallySmall, F.elementsMk, F.map, F.obj, ObjectProperty, ObjectProperty.EssentiallySmall.exists_small_le, Subtype, e.hom, elementsMk, essentiallySmall_iff_objectPropertyEssentiallySmall_top, exists_small_le, small_of_surjective, y.fst, y.snd
 -/

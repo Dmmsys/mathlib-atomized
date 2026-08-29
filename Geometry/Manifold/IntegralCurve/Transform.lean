@@ -50,7 +50,7 @@ lemma IsMIntegralCurveOn.comp_add
   apply HasMFDerivWithinAt.comp t (hγ (t + dt) ht) _ subset_rfl
   refine ⟨(continuous_add_const _).continuousWithinAt, ?_⟩
   simp only [mfld_simps]
-  exact (hasFDerivWithinAt_id _
+  exact (hasFDerivWithinAt_id _ _).add_const _
 
 中文:
 引理 IsM整数egralCurveOn.comp_add
@@ -61,7 +61,7 @@ lemma IsMIntegralCurveOn.comp_add
   apply HasMFDerivWithinAt.comp t (hγ (t + dt) ht) _ subset_rfl
   refine ⟨(continuous_add_const _).continuousWithinAt, ?_⟩
   simp only [mfld_simps]
-  exact (hasFDerivWithinAt_id _
+  exact (hasFDerivWithinAt_id _ _).add_const _
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_id, ContinuousLinearMap.smulRight, HasMFDerivWithinAt, HasMFDerivWithinAt.comp, add_const, comp_apply, comp_id, continuousWithinAt, continuous_add_const, hasFDerivWithinAt_id, mfld_simps, smulRight, subset_rfl
 -/
@@ -313,7 +313,10 @@ lemma IsMIntegralCurveOn.comp_mul
       (1 : Real ->L[Real] Real).smulRight (v (γ (t * a))) ∘SL (1 : Real ->L[Real] Real).smulRight a := by
     simp [ContinuousLinearMap.smulRight_comp_smulRight]
   rw [comp_apply]; rw [Pi.smul_apply]; rw [this]
-  refi
+  refine HasMFDerivWithinAt.comp t (hγ (t * a) ht)
+    ⟨(continuous_mul_const _).continuousWithinAt, ?_⟩ subset_rfl
+  simp only [mfld_simps]
+  exact HasFDerivWithinAt.mul_const' (hasFDerivWithinAt_id _ _) _
 
 中文:
 引理 IsM整数egralCurveOn.comp_mul
@@ -324,7 +327,10 @@ lemma IsMIntegralCurveOn.comp_mul
       (1 : Real ->L[Real] Real).smulRight (v (γ (t * a))) ∘SL (1 : Real ->L[Real] Real).smulRight a := by
     simp [ContinuousLinearMap.smulRight_comp_smulRight]
   rw [comp_apply]; rw [Pi.smul_apply]; rw [this]
-  refi
+  refine HasMFDerivWithinAt.comp t (hγ (t * a) ht)
+    ⟨(continuous_mul_const _).continuousWithinAt, ?_⟩ subset_rfl
+  simp only [mfld_simps]
+  exact HasFDerivWithinAt.mul_const' (hasFDerivWithinAt_id _ _) _
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.smulRight_comp_smulRight, HasFDerivWithinAt, HasFDerivWithinAt.mul_const, HasMFDerivWithinAt, HasMFDerivWithinAt.comp, Pi.smul_apply, comp_apply, continuousWithinAt, continuous_mul_const, hasFDerivWithinAt_id, mfld_simps, mul_const, smulRight, smulRight_comp_smulRight, smul_apply, subset_rfl
 -/
@@ -352,7 +358,7 @@ lemma isMIntegralCurveOn_comp_mul_ne_zero
   · ext t
     simp only [Function.comp_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one]
   · simp only [smul_smul, inv_mul_eq_div, div_self ha, one_smul]
-  · simp only [mem_ofPred_eq, mul_assoc, inv_mul_eq_div, div_
+  · simp only [mem_ofPred_eq, mul_assoc, inv_mul_eq_div, div_self ha, mul_one, ofPred_mem_eq]
 
 中文:
 引理 isM整数egralCurveOn_comp_mul_ne_zero
@@ -363,7 +369,7 @@ lemma isMIntegralCurveOn_comp_mul_ne_zero
   · ext t
     simp only [Function.comp_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one]
   · simp only [smul_smul, inv_mul_eq_div, div_self ha, one_smul]
-  · simp only [mem_ofPred_eq, mul_assoc, inv_mul_eq_div, div_
+  · simp only [mem_ofPred_eq, mul_assoc, inv_mul_eq_div, div_self ha, mul_one, ofPred_mem_eq]
 
 Depends on / 依赖: Function, Function.comp_apply, comp_apply, comp_mul, convert, div_self, inv_mul_eq_div, mem_ofPred_eq, mul_assoc, mul_one, ofPred_mem_eq, one_smul, smul_smul
 -/
@@ -388,7 +394,7 @@ lemma IsMIntegralCurveAt.comp_mul_ne_zero
   refine ⟨ε / |a|, by positivity, ?_⟩
   convert! h.comp_mul a
   ext t
-  rw [mem_ofPred_eq]; rw [Metric.mem_ball]; rw [Metric.mem_ball]; rw [Real.dist_eq]; rw [Real.dist_eq]; rw [lt_div_iff₀ (abs_pos.mpr ha)]; rw [← abs_mul]; rw [sub_mu
+  rw [mem_ofPred_eq]; rw [Metric.mem_ball]; rw [Metric.mem_ball]; rw [Real.dist_eq]; rw [Real.dist_eq]; rw [lt_div_iff₀ (abs_pos.mpr ha)]; rw [← abs_mul]; rw [sub_mul]; rw [div_mul_cancel₀ _ ha]
 
 中文:
 引理 IsM整数egralCurveAt.comp_mul_ne_zero
@@ -399,7 +405,7 @@ lemma IsMIntegralCurveAt.comp_mul_ne_zero
   refine ⟨ε / |a|, by positivity, ?_⟩
   convert! h.comp_mul a
   ext t
-  rw [mem_ofPred_eq]; rw [Metric.mem_ball]; rw [Metric.mem_ball]; rw [Real.dist_eq]; rw [Real.dist_eq]; rw [lt_div_iff₀ (abs_pos.mpr ha)]; rw [← abs_mul]; rw [sub_mu
+  rw [mem_ofPred_eq]; rw [Metric.mem_ball]; rw [Metric.mem_ball]; rw [Real.dist_eq]; rw [Real.dist_eq]; rw [lt_div_iff₀ (abs_pos.mpr ha)]; rw [← abs_mul]; rw [sub_mul]; rw [div_mul_cancel₀ _ ha]
 
 Depends on / 依赖: Metric, Metric.mem_ball, Real.dist_eq, abs_mul, abs_pos, abs_pos.mpr, comp_mul, convert, dist_eq, h.comp_mul, isMIntegralCurveAt_iff, mem_ball, mem_ofPred_eq, sub_mul
 -/
@@ -424,7 +430,7 @@ lemma isMIntegralCurveAt_comp_mul_ne_zero
   · ext t
     simp only [Function.comp_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one]
   · simp only [smul_smul, inv_mul_eq_div, div_self ha, one_smul]
-  · simp only [div_inv_eq_mul, 
+  · simp only [div_inv_eq_mul, div_mul_cancel₀ _ ha]
 
 中文:
 引理 isM整数egralCurveAt_comp_mul_ne_zero
@@ -435,7 +441,7 @@ lemma isMIntegralCurveAt_comp_mul_ne_zero
   · ext t
     simp only [Function.comp_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_one]
   · simp only [smul_smul, inv_mul_eq_div, div_self ha, one_smul]
-  · simp only [div_inv_eq_mul, 
+  · simp only [div_inv_eq_mul, div_mul_cancel₀ _ ha]
 
 Depends on / 依赖: Function, Function.comp_apply, comp_apply, comp_mul_ne_zero, convert, div_inv_eq_mul, div_self, inv_mul_eq_div, inv_ne_zero, mul_assoc, mul_one, one_smul, smul_smul
 -/

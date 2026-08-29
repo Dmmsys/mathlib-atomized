@@ -83,7 +83,28 @@ definition isPointwiseLeftKanExtensionAtExtensionUnitLeft
 .symm let equiv := CostructuredArrow.prodEquivalence L (𝟭 E) d e
   apply Limits.IsColimit.ofWhiskerEquivalence equiv
   let I : CostructuredArrow L d ⥤ (CostructuredArrow L d) × CostructuredArrow (𝟭 E) e :=
- 
+    -- this definition makes it easier to prove finality of I
+    (prod.rightUnitorEquivalence (CostructuredArrow L d)).inverse ⋙
+      (𝟭 _).prod (Functor.fromPUnit.{0} <| .mk <| 𝟙 _)
+  letI : I.Final := by
+.Final := let : Functor.fromPUnit.{0} (.mk (𝟙 e) : CostructuredArrow (𝟭 E) e)
+Functor.final_fromPUnit_of_isTerminal CostructuredArrow.mkIdTerminal (S := 𝟭 E) (Y := e)
+apply Iff.mp Functor.final_iff_final_comp
+      (F := (prod.rightUnitorEquivalence <| CostructuredArrow L d).inverse)
+      (G := (𝟭 _).prod <| Functor.fromPUnit.{0} (.mk (𝟙 e) : CostructuredArrow (𝟭 E) e))
+    infer_instance
+.toFun apply Functor.Final.isColimitWhiskerEquiv I (Limits.Cocone.whisker equiv.functor cone)
+  -- through all the equivalences above, the new cocone we consider is in fact
+  -- `tensorRight (K.obj e)|>.mapCocone <| (Functor.LeftExtension.mk H' α).coconeAt d`
+  let diag_iso :
+      (CostructuredArrow.proj L d ⋙ H) ⋙ tensorRight (K.obj e) ≅
+      I ⋙ equiv.functor ⋙ CostructuredArrow.proj (L.prod <| 𝟭 E) (d, e) ⋙ H ⊠ K :=
+    NatIso.ofComponents (fun _ => Iso.refl _)
+  apply Limits.IsColimit.equivOfNatIsoOfIso diag_iso
+    (d := Limits.Cocone.whisker I (Limits.Cocone.whisker equiv.functor cone))
+    (c := tensorRight (K.obj e) |>.mapCocone <| (Functor.LeftExtension.mk H' α).coconeAt d)
+.toFun (Limits.Cocone.ext <| .refl _)
+.some exact Limits.PreservesColimit.preserves (F := tensorRight <| K.obj e) P
 
 中文:
 定义 isPointwiseLeftKanExtensionAtExtensionUnitLeft
@@ -92,7 +113,28 @@ definition isPointwiseLeftKanExtensionAtExtensionUnitLeft
 .symm let equiv := CostructuredArrow.prodEquivalence L (𝟭 E) d e
   apply Limits.IsColimit.ofWhiskerEquivalence equiv
   let I : CostructuredArrow L d ⥤ (CostructuredArrow L d) × CostructuredArrow (𝟭 E) e :=
- 
+    -- this definition makes it easier to prove finality of I
+    (prod.rightUnitorEquivalence (CostructuredArrow L d)).inverse ⋙
+      (𝟭 _).prod (Functor.fromPUnit.{0} <| .mk <| 𝟙 _)
+  letI : I.Final := by
+.Final := let : Functor.fromPUnit.{0} (.mk (𝟙 e) : CostructuredArrow (𝟭 E) e)
+Functor.final_fromPUnit_of_isTerminal CostructuredArrow.mkIdTerminal (S := 𝟭 E) (Y := e)
+apply Iff.mp Functor.final_iff_final_comp
+      (F := (prod.rightUnitorEquivalence <| CostructuredArrow L d).inverse)
+      (G := (𝟭 _).prod <| Functor.fromPUnit.{0} (.mk (𝟙 e) : CostructuredArrow (𝟭 E) e))
+    infer_instance
+.toFun apply Functor.Final.isColimitWhiskerEquiv I (Limits.Cocone.whisker equiv.functor cone)
+  -- through all the equivalences above, the new cocone we consider is in fact
+  -- `tensorRight (K.obj e)|>.mapCocone <| (Functor.LeftExtension.mk H' α).coconeAt d`
+  let diag_iso :
+      (CostructuredArrow.proj L d ⋙ H) ⋙ tensorRight (K.obj e) ≅
+      I ⋙ equiv.functor ⋙ CostructuredArrow.proj (L.prod <| 𝟭 E) (d, e) ⋙ H ⊠ K :=
+    NatIso.ofComponents (fun _ => Iso.refl _)
+  apply Limits.IsColimit.equivOfNatIsoOfIso diag_iso
+    (d := Limits.Cocone.whisker I (Limits.Cocone.whisker equiv.functor cone))
+    (c := tensorRight (K.obj e) |>.mapCocone <| (Functor.LeftExtension.mk H' α).coconeAt d)
+.toFun (Limits.Cocone.ext <| .refl _)
+.some exact Limits.PreservesColimit.preserves (F := tensorRight <| K.obj e) P
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.prodEquivalence, Functor, Functor.LeftExtension.mk, IsColimit, LeftExtension, Limits, Limits.IsColimit.ofWhiskerEquivalence, coconeAt, extensionUnitLeft, ofWhiskerEquivalence, prodEquivalence
 -/
@@ -163,7 +205,28 @@ definition isPointwiseLeftKanExtensionAtExtensionUnitRight
 .symm let equiv := CostructuredArrow.prodEquivalence (𝟭 E) L e d
   apply Limits.IsColimit.ofWhiskerEquivalence equiv
   let I : CostructuredArrow L d ⥤ CostructuredArrow (𝟭 E) e × CostructuredArrow L d :=
-
+    -- this definition makes it easier to prove finality of I
+    (prod.leftUnitorEquivalence <| CostructuredArrow L d).inverse ⋙
+      (Functor.fromPUnit.{0} <| .mk <| 𝟙 _).prod (𝟭 _)
+  letI : I.Final := by
+.Final := let : Functor.fromPUnit.{0} (.mk (𝟙 e) : CostructuredArrow (𝟭 E) e)
+Functor.final_fromPUnit_of_isTerminal CostructuredArrow.mkIdTerminal (S := 𝟭 E) (Y := e)
+apply Iff.mp Functor.final_iff_final_comp
+      (F := (prod.leftUnitorEquivalence <| CostructuredArrow L d).inverse)
+      (G := Functor.fromPUnit.{0} (.mk (𝟙 e) : CostructuredArrow (𝟭 E) e) |>.prod <| 𝟭 _)
+    infer_instance
+.toFun apply Functor.Final.isColimitWhiskerEquiv I (Limits.Cocone.whisker equiv.functor cone)
+  -- through all the equivalences above, the new cocone we consider is in fact
+  -- `(tensorLeft <| K.obj e).mapCocone <| (Functor.LeftExtension.mk H' α).coconeAt d`
+  let diag_iso :
+      (CostructuredArrow.proj L d ⋙ H) ⋙ tensorLeft (K.obj e) ≅
+      I ⋙ equiv.functor ⋙ CostructuredArrow.proj (𝟭 E |>.prod L) (e, d) ⋙ K ⊠ H :=
+    NatIso.ofComponents (fun _ => Iso.refl _)
+  apply Limits.IsColimit.equivOfNatIsoOfIso diag_iso
+    (d := Limits.Cocone.whisker I <| Limits.Cocone.whisker equiv.functor cone)
+    (c := (tensorLeft <| K.obj e).mapCocone <| (Functor.LeftExtension.mk H' α).coconeAt d)
+.toFun (Limits.Cocone.ext <| .refl _)
+.some exact Limits.PreservesColimit.preserves (F := tensorLeft <| K.obj e) P
 
 中文:
 定义 isPointwiseLeftKanExtensionAtExtensionUnitRight
@@ -173,7 +236,28 @@ definition isPointwiseLeftKanExtensionAtExtensionUnitRight
 .symm let equiv := CostructuredArrow.prodEquivalence (𝟭 E) L e d
   apply Limits.IsColimit.ofWhiskerEquivalence equiv
   let I : CostructuredArrow L d ⥤ CostructuredArrow (𝟭 E) e × CostructuredArrow L d :=
-
+    -- this definition makes it easier to prove finality of I
+    (prod.leftUnitorEquivalence <| CostructuredArrow L d).inverse ⋙
+      (Functor.fromPUnit.{0} <| .mk <| 𝟙 _).prod (𝟭 _)
+  letI : I.Final := by
+.Final := let : Functor.fromPUnit.{0} (.mk (𝟙 e) : CostructuredArrow (𝟭 E) e)
+Functor.final_fromPUnit_of_isTerminal CostructuredArrow.mkIdTerminal (S := 𝟭 E) (Y := e)
+apply Iff.mp Functor.final_iff_final_comp
+      (F := (prod.leftUnitorEquivalence <| CostructuredArrow L d).inverse)
+      (G := Functor.fromPUnit.{0} (.mk (𝟙 e) : CostructuredArrow (𝟭 E) e) |>.prod <| 𝟭 _)
+    infer_instance
+.toFun apply Functor.Final.isColimitWhiskerEquiv I (Limits.Cocone.whisker equiv.functor cone)
+  -- through all the equivalences above, the new cocone we consider is in fact
+  -- `(tensorLeft <| K.obj e).mapCocone <| (Functor.LeftExtension.mk H' α).coconeAt d`
+  let diag_iso :
+      (CostructuredArrow.proj L d ⋙ H) ⋙ tensorLeft (K.obj e) ≅
+      I ⋙ equiv.functor ⋙ CostructuredArrow.proj (𝟭 E |>.prod L) (e, d) ⋙ K ⊠ H :=
+    NatIso.ofComponents (fun _ => Iso.refl _)
+  apply Limits.IsColimit.equivOfNatIsoOfIso diag_iso
+    (d := Limits.Cocone.whisker I <| Limits.Cocone.whisker equiv.functor cone)
+    (c := (tensorLeft <| K.obj e).mapCocone <| (Functor.LeftExtension.mk H' α).coconeAt d)
+.toFun (Limits.Cocone.ext <| .refl _)
+.some exact Limits.PreservesColimit.preserves (F := tensorLeft <| K.obj e) P
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.prodEquivalence, Functor, Functor.LeftExtension.mk, IsColimit, LeftExtension, Limits, Limits.IsColimit.ofWhiskerEquivalence, coconeAt, extensionUnitRight, ofWhiskerEquivalence, prodEquivalence
 -/

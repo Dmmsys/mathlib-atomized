@@ -257,7 +257,31 @@ instance isIso_indexCone_lift
       refine ⟨fun a b h => ?_, fun a => ?_⟩
       · refine eq_of_forall_π_app_eq a b (fun J => ?_)
         apply_fun fun f : (limitCone.{u, u} (indexFunctor hC)).pt => f.val (op J) at h
-      
+        exact h
+      · rsuffices ⟨b, hb⟩ : exists (x : C), forall (J : Finset ι), π_app C (· in J) x = a.val (op J)
+        · use b
+          apply Subtype.ext
+          apply funext
+          intro J
+          exact hb (unop J)
+        have hc : forall (J : Finset ι) s, IsClosed ((π_app C (· in J)) ⁻¹' {s}) := by
+          intro J s
+          refine IsClosed.preimage (π_app C (· in J)).continuous ?_
+          exact T1Space.t1 s
+        have H₁ : forall (Q₁ Q₂ : Finset ι), Q₁ <= Q₂ ->
+            π_app C (· in Q₁) ⁻¹' {a.val (op Q₁)} ⊇
+            π_app C (· in Q₂) ⁻¹' {a.val (op Q₂)} := by
+          intro J K h x hx
+          simp only [Set.mem_preimage] at hx ⊢
+          rw [← map_comp_π_app C h]; rw [Function.comp_apply]; rw [hx]; rw [← a.prop (homOfLE h).op]
+          rfl
+        obtain ⟨x, hx⟩ :
+            Set.Nonempty (⋂ (J : Finset ι), π_app C (· in J) ⁻¹' {a.val (op J)}) :=
+          IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
+            (fun J : Finset ι => π_app C (· in J) ⁻¹' {a.val (op J)}) (directed_of_isDirected_le H₁)
+            (fun J => (Set.singleton_nonempty _).preimage (surjective_π_app _))
+            (fun J => (hc J (a.val (op J))).isCompact) fun J => hc J (a.val (op J))
+        exact ⟨x, Set.mem_iInter.1 hx⟩)
 
 中文:
 实例 isIso_indexCone_lift
@@ -268,7 +292,31 @@ instance isIso_indexCone_lift
       refine ⟨fun a b h => ?_, fun a => ?_⟩
       · refine eq_of_forall_π_app_eq a b (fun J => ?_)
         apply_fun fun f : (limitCone.{u, u} (indexFunctor hC)).pt => f.val (op J) at h
-      
+        exact h
+      · rsuffices ⟨b, hb⟩ : exists (x : C), forall (J : Finset ι), π_app C (· in J) x = a.val (op J)
+        · use b
+          apply Subtype.ext
+          apply funext
+          intro J
+          exact hb (unop J)
+        have hc : forall (J : Finset ι) s, IsClosed ((π_app C (· in J)) ⁻¹' {s}) := by
+          intro J s
+          refine IsClosed.preimage (π_app C (· in J)).continuous ?_
+          exact T1Space.t1 s
+        have H₁ : forall (Q₁ Q₂ : Finset ι), Q₁ <= Q₂ ->
+            π_app C (· in Q₁) ⁻¹' {a.val (op Q₁)} ⊇
+            π_app C (· in Q₂) ⁻¹' {a.val (op Q₂)} := by
+          intro J K h x hx
+          simp only [Set.mem_preimage] at hx ⊢
+          rw [← map_comp_π_app C h]; rw [Function.comp_apply]; rw [hx]; rw [← a.prop (homOfLE h).op]
+          rfl
+        obtain ⟨x, hx⟩ :
+            Set.Nonempty (⋂ (J : Finset ι), π_app C (· in J) ⁻¹' {a.val (op J)}) :=
+          IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
+            (fun J : Finset ι => π_app C (· in J) ⁻¹' {a.val (op J)}) (directed_of_isDirected_le H₁)
+            (fun J => (Set.singleton_nonempty _).preimage (surjective_π_app _))
+            (fun J => (hc J (a.val (op J))).isCompact) fun J => hc J (a.val (op J))
+        exact ⟨x, Set.mem_iInter.1 hx⟩)
 
 Depends on / 依赖: CompHausLike, CompHausLike.isIso_of_bijective, CompactSpace, Finset, IsClosed, Subtype, Subtype.ext, a.val, apply_fun, f.val, indexFunctor, isCompact_iff_compactSpace, isIso_of_bijective, limitCone, rsuffices
 -/

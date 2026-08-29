@@ -1898,7 +1898,10 @@ invFun x := .ofCoeff x.coeff.mapDomain Multiplicative.toAdd
   map_mul' x y := by
     classical
     ext
-    simp [MonoidAlgebra.coeff_mul, coeff_mul, sum_mapD
+    simp [MonoidAlgebra.coeff_mul, coeff_mul, sum_mapDomain_index, add_mul, mul_add, ite_add_zero,
+      Multiplicative.ext_iff]
+
+@[simp]
 
 中文:
 定义 toMultiplicative
@@ -1911,7 +1914,10 @@ invFun x := .ofCoeff x.coeff.mapDomain Multiplicative.toAdd
   map_mul' x y := by
     classical
     ext
-    simp [MonoidAlgebra.coeff_mul, coeff_mul, sum_mapD
+    simp [MonoidAlgebra.coeff_mul, coeff_mul, sum_mapDomain_index, add_mul, mul_add, ite_add_zero,
+      Multiplicative.ext_iff]
+
+@[simp]
 
 Depends on / 依赖: mapDomain, ofCoeff, x.coeff.mapDomain
 -/
@@ -1969,7 +1975,10 @@ invFun x := .ofCoeff x.coeff.mapDomain Additive.toMul
   map_mul' x y := by
     classical
     ext
-    simp [coeff_mul, AddMonoidAlgebra.coeff_mul, sum_mapDoma
+    simp [coeff_mul, AddMonoidAlgebra.coeff_mul, sum_mapDomain_index, add_mul, mul_add,
+      ite_add_zero, Additive.ext_iff]
+
+@[simp]
 
 中文:
 定义 toAdditive
@@ -1982,7 +1991,10 @@ invFun x := .ofCoeff x.coeff.mapDomain Additive.toMul
   map_mul' x y := by
     classical
     ext
-    simp [coeff_mul, AddMonoidAlgebra.coeff_mul, sum_mapDoma
+    simp [coeff_mul, AddMonoidAlgebra.coeff_mul, sum_mapDomain_index, add_mul, mul_add,
+      ite_add_zero, Additive.ext_iff]
+
+@[simp]
 
 Depends on / 依赖: mapDomain, ofCoeff, x.coeff.mapDomain
 -/

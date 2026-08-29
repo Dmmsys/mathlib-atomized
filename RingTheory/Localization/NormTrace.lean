@@ -90,7 +90,7 @@ theorem Algebra.norm_localization
     simp [eq_iff_true_of_subsingleton]
   let b := Module.Free.chooseBasis R S
   let := Classical.decEq (Module.Free.ChooseBasisIndex R S)
-  rw [Algebra.norm_eq_matrix_det (b.localizationLocalization Rₘ M S
+  rw [Algebra.norm_eq_matrix_det (b.localizationLocalization Rₘ M Sₘ)]; rw [Algebra.norm_eq_matrix_det b]; rw [RingHom.map_det]; rw [← Algebra.map_leftMulMatrix_localization]
 
 中文:
 定理 代数.norm_localization
@@ -101,7 +101,7 @@ theorem Algebra.norm_localization
     simp [eq_iff_true_of_subsingleton]
   let b := Module.Free.chooseBasis R S
   let := Classical.decEq (Module.Free.ChooseBasisIndex R S)
-  rw [Algebra.norm_eq_matrix_det (b.localizationLocalization Rₘ M S
+  rw [Algebra.norm_eq_matrix_det (b.localizationLocalization Rₘ M Sₘ)]; rw [Algebra.norm_eq_matrix_det b]; rw [RingHom.map_det]; rw [← Algebra.map_leftMulMatrix_localization]
 
 Depends on / 依赖: Algebra, Algebra.map_leftMulMatrix_localization, Algebra.norm_eq_matrix_det, ChooseBasisIndex, Classical, Classical.decEq, Module, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, Module.subsingleton, RingHom, RingHom.map_det, Subsingleton, b.localizationLocalization, chooseBasis, eq_iff_true_of_subsingleton, localizationLocalization, map_det, map_leftMulMatrix_localization, norm_eq_matrix_det
 -/
@@ -150,7 +150,8 @@ theorem Algebra.trace_localization
     simp [eq_iff_true_of_subsingleton]
   let b := Module.Free.chooseBasis R S
   let := Classical.decEq (Module.Free.ChooseBasisIndex R S)
-  rw [Algebra.trace_eq_matrix_trace (b.localizationLocalization Rₘ 
+  rw [Algebra.trace_eq_matrix_trace (b.localizationLocalization Rₘ M Sₘ)]; rw [Algebra.trace_eq_matrix_trace b]; rw [← Algebra.map_leftMulMatrix_localization]
+  exact (AddMonoidHom.map_trace (algebraMap R Rₘ).toAddMonoidHom _).symm
 
 中文:
 定理 代数.trace_localization
@@ -161,7 +162,8 @@ theorem Algebra.trace_localization
     simp [eq_iff_true_of_subsingleton]
   let b := Module.Free.chooseBasis R S
   let := Classical.decEq (Module.Free.ChooseBasisIndex R S)
-  rw [Algebra.trace_eq_matrix_trace (b.localizationLocalization Rₘ 
+  rw [Algebra.trace_eq_matrix_trace (b.localizationLocalization Rₘ M Sₘ)]; rw [Algebra.trace_eq_matrix_trace b]; rw [← Algebra.map_leftMulMatrix_localization]
+  exact (AddMonoidHom.map_trace (algebraMap R Rₘ).toAddMonoidHom _).symm
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.map_trace, Algebra, Algebra.map_leftMulMatrix_localization, Algebra.trace_eq_matrix_trace, ChooseBasisIndex, Classical, Classical.decEq, Module, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, Module.subsingleton, Subsingleton, algebraMap, b.localizationLocalization, chooseBasis, eq_iff_true_of_subsingleton, localizationLocalization, map_leftMulMatrix_localization, map_trace
 -/
@@ -194,7 +196,7 @@ theorem Algebra.traceMatrix_localizationLocalization
   ext i j : 2
   simp_rw [RingHom.mapMatrix_apply, Matrix.map_apply, traceMatrix_apply, traceForm_apply,
     Basis.localizationLocalization_apply, ← map_mul]
-  exact Algebra.trace_localization
+  exact Algebra.trace_localization R M _
 
 中文:
 定理 代数.traceMatrix_localizationLocalization
@@ -205,7 +207,7 @@ theorem Algebra.traceMatrix_localizationLocalization
   ext i j : 2
   simp_rw [RingHom.mapMatrix_apply, Matrix.map_apply, traceMatrix_apply, traceForm_apply,
     Basis.localizationLocalization_apply, ← map_mul]
-  exact Algebra.trace_localization
+  exact Algebra.trace_localization R M _
 
 Depends on / 依赖: Algebra, Algebra.trace_localization, Basis.localizationLocalization_apply, Finite, Matrix, Matrix.map_apply, Module, Module.Finite, Module.Finite.of_basis, Module.Free, Module.Free.of_basis, RingHom, RingHom.mapMatrix_apply, localizationLocalization_apply, mapMatrix_apply, map_apply, map_mul, of_basis, simp_rw, traceForm_apply
 -/

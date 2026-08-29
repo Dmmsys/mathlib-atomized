@@ -184,7 +184,37 @@ theorem isCompactElement_iff_exists_le_sSup_of_le_sSup
     · intro hk s hsup
       -- Consider the set of finite joins of elements of the (plain) set s.
       let S : Set α := { x | exists t : Finset α, ↑t subseteq s ∧ x = t.sup id }
-      -- S is directed, nonempty, and
+      -- S is directed, nonempty, and still has sup above k.
+      have dir_US : DirectedOn (· <= ·) S := by
+        rintro x ⟨c, hc⟩ y ⟨d, hd⟩
+        use x ⊔ y
+        constructor
+        · use c union d
+          constructor
+          · simp only [hc.left, hd.left, Set.union_subset_iff, Finset.coe_union, and_self_iff]
+          · simp only [hc.right, hd.right, Finset.sup_union]
+        simp only [and_self_iff, le_sup_left, le_sup_right]
+      have sup_S : sSup s <= sSup S := by
+        apply sSup_le_sSup
+        intro x hx
+        use {x}
+        simpa only [and_true, id, Finset.coe_singleton, eq_self_iff_true,
+          Finset.sup_singleton, Set.singleton_subset_iff]
+      have Sne : S.Nonempty := by
+        suffices ⊥ in S from Set.nonempty_of_mem this
+        use ∅
+        simp
+      -- Now apply the defn of compact and finish.
+      obtain ⟨j, ⟨hjS, hjk⟩⟩ := hk S Sne dir_US (le_trans hsup sup_S)
+      obtain ⟨t, ⟨htS, htsup⟩⟩ := hjS
+      use t
+      exact ⟨htS, by rwa [← htsup]⟩
+    · intro hk s hne hdir hsup
+      obtain ⟨t, ht⟩ := hk s hsup
+      -- certainly every element of t is below something in s, since ↑t ⊆ s.
+      have t_below_s : forall x in t, exists y in s, x <= y := fun x hxt => ⟨x, ht.left hxt, le_rfl⟩
+      obtain ⟨x, ⟨hxs, hsupx⟩⟩ := Finset.sup_le_of_le_directed s hne hdir t t_below_s
+      exact ⟨x, ⟨hxs, le_trans ht.right hsupx⟩⟩
 
 中文:
 定理 isCompactElement_iff_存在_le_sSup_of_le_sSup
@@ -196,7 +226,37 @@ theorem isCompactElement_iff_exists_le_sSup_of_le_sSup
     · intro hk s hsup
       -- Consider the set of finite joins of elements of the (plain) set s.
       let S : Set α := { x | exists t : Finset α, ↑t subseteq s ∧ x = t.sup id }
-      -- S is directed, nonempty, and
+      -- S is directed, nonempty, and still has sup above k.
+      have dir_US : DirectedOn (· <= ·) S := by
+        rintro x ⟨c, hc⟩ y ⟨d, hd⟩
+        use x ⊔ y
+        constructor
+        · use c union d
+          constructor
+          · simp only [hc.left, hd.left, Set.union_subset_iff, Finset.coe_union, and_self_iff]
+          · simp only [hc.right, hd.right, Finset.sup_union]
+        simp only [and_self_iff, le_sup_left, le_sup_right]
+      have sup_S : sSup s <= sSup S := by
+        apply sSup_le_sSup
+        intro x hx
+        use {x}
+        simpa only [and_true, id, Finset.coe_singleton, eq_self_iff_true,
+          Finset.sup_singleton, Set.singleton_subset_iff]
+      have Sne : S.Nonempty := by
+        suffices ⊥ in S from Set.nonempty_of_mem this
+        use ∅
+        simp
+      -- Now apply the defn of compact and finish.
+      obtain ⟨j, ⟨hjS, hjk⟩⟩ := hk S Sne dir_US (le_trans hsup sup_S)
+      obtain ⟨t, ⟨htS, htsup⟩⟩ := hjS
+      use t
+      exact ⟨htS, by rwa [← htsup]⟩
+    · intro hk s hne hdir hsup
+      obtain ⟨t, ht⟩ := hk s hsup
+      -- certainly every element of t is below something in s, since ↑t ⊆ s.
+      have t_below_s : forall x in t, exists y in s, x <= y := fun x hxt => ⟨x, ht.left hxt, le_rfl⟩
+      obtain ⟨x, ⟨hxs, hsupx⟩⟩ := Finset.sup_le_of_le_directed s hne hdir t t_below_s
+      exact ⟨x, ⟨hxs, le_trans ht.right hsupx⟩⟩
 
 Depends on / 依赖: classical, isCompactElement_iff_le_of_directed_sSup_le
 -/
@@ -255,6 +315,19 @@ theorem isCompactElement_iff_exists_le_iSup_of_le_iSup.{u}
       have : forall x : t, exists i, s i = x := fun x => ht x.prop
       choose f hf using this
       refine ⟨Finset.univ.image f, ht'.trans ?_⟩
+      rw [Finset.sup_le_iff]
+      intro b hb
+      rw [← show s (f ⟨b]; rw [hb⟩) = id b from hf _]
+      exact Finset.le_sup (Finset.mem_image_of_mem f <| Finset.mem_univ (Subtype.mk b hb))
+    · intro H s hs
+      obtain ⟨t, ht⟩ :=
+        H s Subtype.val
+          (by
+            delta iSup
+            rwa [Subtype.range_coe])
+      refine ⟨t.image Subtype.val, by simp, ht.trans ?_⟩
+      rw [Finset.sup_le_iff]
+      exact fun x hx => @Finset.le_sup _ _ _ _ _ id _ (Finset.mem_image_of_mem Subtype.val hx)
 
 中文:
 定理 isCompactElement_iff_存在_le_iSup_of_le_iSup.{u}
@@ -268,6 +341,19 @@ theorem isCompactElement_iff_exists_le_iSup_of_le_iSup.{u}
       have : forall x : t, exists i, s i = x := fun x => ht x.prop
       choose f hf using this
       refine ⟨Finset.univ.image f, ht'.trans ?_⟩
+      rw [Finset.sup_le_iff]
+      intro b hb
+      rw [← show s (f ⟨b]; rw [hb⟩) = id b from hf _]
+      exact Finset.le_sup (Finset.mem_image_of_mem f <| Finset.mem_univ (Subtype.mk b hb))
+    · intro H s hs
+      obtain ⟨t, ht⟩ :=
+        H s Subtype.val
+          (by
+            delta iSup
+            rwa [Subtype.range_coe])
+      refine ⟨t.image Subtype.val, by simp, ht.trans ?_⟩
+      rw [Finset.sup_le_iff]
+      exact fun x hx => @Finset.le_sup _ _ _ _ _ id _ (Finset.mem_image_of_mem Subtype.val hx)
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.mem_image_of_mem, Finset.mem_univ, Finset.sup_le_iff, Finset.univ.image, Set.range, Subtype, Subtype.mk, Subtype.val, classical, isCompactElement_iff_exists_le_sSup_of_le_sSup, le_sup, mem_image_of_mem, mem_univ, sup_le_iff, x.prop
 -/
@@ -309,7 +395,15 @@ theorem IsCompactElement.exists_finset_of_le_iSup
     have h1 : DirectedOn (· <= ·) (Set.range g) := by
       rintro - ⟨s, rfl⟩ - ⟨t, rfl⟩
       exact
-        ⟨g (s union t), ⟨s union t, rfl⟩, iSup_le_iSup_of_subset Finset.s
+        ⟨g (s union t), ⟨s union t, rfl⟩, iSup_le_iSup_of_subset Finset.subset_union_left,
+          iSup_le_iSup_of_subset Finset.subset_union_right⟩
+    have h2 : k <= sSup (Set.range g) :=
+      h.trans
+        (iSup_le fun i =>
+          le_sSup_of_le ⟨{i}, rfl⟩
+            (le_iSup_of_le i (le_iSup_of_le (Finset.mem_singleton_self i) le_rfl)))
+    obtain ⟨-, ⟨s, rfl⟩, hs⟩ := hk (Set.range g) (Set.range_nonempty g) h1 h2
+    exact ⟨s, hs⟩
 
 中文:
 定理 IsCompactElement.存在_finset_of_le_iSup
@@ -321,7 +415,15 @@ theorem IsCompactElement.exists_finset_of_le_iSup
     have h1 : DirectedOn (· <= ·) (Set.range g) := by
       rintro - ⟨s, rfl⟩ - ⟨t, rfl⟩
       exact
-        ⟨g (s union t), ⟨s union t, rfl⟩, iSup_le_iSup_of_subset Finset.s
+        ⟨g (s union t), ⟨s union t, rfl⟩, iSup_le_iSup_of_subset Finset.subset_union_left,
+          iSup_le_iSup_of_subset Finset.subset_union_right⟩
+    have h2 : k <= sSup (Set.range g) :=
+      h.trans
+        (iSup_le fun i =>
+          le_sSup_of_le ⟨{i}, rfl⟩
+            (le_iSup_of_le i (le_iSup_of_le (Finset.mem_singleton_self i) le_rfl)))
+    obtain ⟨-, ⟨s, rfl⟩, hs⟩ := hk (Set.range g) (Set.range_nonempty g) h1 h2
+    exact ⟨s, hs⟩
 
 Depends on / 依赖: DirectedOn, Finset, Finset.mem_singleton_self, Finset.subset_union_left, Finset.subset_union_right, Set.range, classical, h.trans, iSup_le, iSup_le_iSup_of_subset, isCompactElement_iff_le_of_directed_sSup_le, le_iSup_of_le, le_rfl, le_sSup_of_le, mem_singleton_self, subset_union_left, subset_union_right
 -/
@@ -356,7 +458,7 @@ theorem IsCompactElement.directed_sSup_lt_of_lt
   replace sSup : sSup s = k := eq_iff_le_not_lt.mpr ⟨sSup', h⟩
   obtain ⟨x, hxs, hkx⟩ := hk s hemp hdir sSup.symm.le
   obtain hxk := hbelow x hxs
-  exact hxk.n
+  exact hxk.ne (hxk.le.antisymm hkx)
 
 中文:
 定理 IsCompactElement.directed_sSup_lt_of_lt
@@ -368,7 +470,7 @@ theorem IsCompactElement.directed_sSup_lt_of_lt
   replace sSup : sSup s = k := eq_iff_le_not_lt.mpr ⟨sSup', h⟩
   obtain ⟨x, hxs, hkx⟩ := hk s hemp hdir sSup.symm.le
   obtain hxk := hbelow x hxs
-  exact hxk.n
+  exact hxk.ne (hxk.le.antisymm hkx)
 
 Depends on / 依赖: antisymm, eq_iff_le_not_lt, eq_iff_le_not_lt.mpr, hbelow, hxk.le.antisymm, hxk.ne, isCompactElement_iff_le_of_directed_sSup_le, replace, sSup.symm.le, sSup_le
 -/
@@ -398,7 +500,9 @@ theorem isCompactElement_finsetSup
     apply Finset.sup_le_of_le_directed d hemp hdir
     rintro x hx
     obtain ⟨p, ⟨hps, rfl⟩⟩ := Finset.mem_image.mp hx
-    specialize 
+    specialize h p hps
+    specialize h d hemp hdir (le_trans (Finset.le_sup hps) hsup)
+    simpa only [exists_prop]
 
 中文:
 定理 isCompactElement_finsetSup
@@ -412,7 +516,9 @@ theorem isCompactElement_finsetSup
     apply Finset.sup_le_of_le_directed d hemp hdir
     rintro x hx
     obtain ⟨p, ⟨hps, rfl⟩⟩ := Finset.mem_image.mp hx
-    specialize 
+    specialize h p hps
+    specialize h d hemp hdir (le_trans (Finset.le_sup hps) hsup)
+    simpa only [exists_prop]
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.mem_image.mp, Finset.sup_image, Finset.sup_le_of_le_directed, Function, Function.id_comp, classical, exists_prop, id_comp, isCompactElement_iff_le_of_directed_sSup_le, le_sup, le_trans, mem_image, simp_rw, specialize, sup_image, sup_le_of_le_directed
 -/
@@ -442,7 +548,10 @@ theorem WellFoundedGT.isSupFiniteCompact
   refine ⟨t, ht₁, (sSup_le fun y hy => ?_).antisymm ?_⟩
   · classical
     rw [eq_of_le_of_not_lt (Finset.sup_mono (t.subset_insert y))
-      
+        (hm _ ⟨insert y t]; rw [by simp [Set.insert_subset_iff]; rw [hy]; rw [ht₁]⟩)]
+    simp
+  · rw [Finset.sup_id_eq_sSup]
+    exact sSup_le_sSup ht₁
 
 中文:
 定理 WellFoundedGT.isSupFiniteCompact
@@ -453,7 +562,10 @@ theorem WellFoundedGT.isSupFiniteCompact
   refine ⟨t, ht₁, (sSup_le fun y hy => ?_).antisymm ?_⟩
   · classical
     rw [eq_of_le_of_not_lt (Finset.sup_mono (t.subset_insert y))
-      
+        (hm _ ⟨insert y t]; rw [by simp [Set.insert_subset_iff]; rw [hy]; rw [ht₁]⟩)]
+    simp
+  · rw [Finset.sup_id_eq_sSup]
+    exact sSup_le_sSup ht₁
 
 Depends on / 依赖: Finset, Finset.sup_id_eq_sSup, Finset.sup_mono, Set.insert_subset_iff, antisymm, classical, eq_of_le_of_not_lt, has_min, insert, insert_subset_iff, sSup_le, sSup_le_sSup, subset_insert, subseteq, sup_id_eq_sSup, sup_mono, t.subset_insert, t.sup, wellFounded_gt, wellFounded_gt.has_min
 -/
@@ -567,7 +679,11 @@ theorem isSupFiniteCompact_iff_all_elements_compact
     rwa [← htsup]
   · obtain ⟨t, ⟨hts, htsup⟩⟩ := h (sSup s) s (by rfl)
     have : sSup s = t.sup id := by
-      suffices t.sup id <= sSup s b
+      suffices t.sup id <= sSup s by apply le_antisymm <;> assumption
+      simp only [id, Finset.sup_le_iff]
+      intro x hx
+      exact le_sSup (hts hx)
+    exact ⟨t, hts, this⟩
 
 中文:
 定理 isSupFiniteCompact_iff_all_elements_compact
@@ -579,7 +695,11 @@ theorem isSupFiniteCompact_iff_all_elements_compact
     rwa [← htsup]
   · obtain ⟨t, ⟨hts, htsup⟩⟩ := h (sSup s) s (by rfl)
     have : sSup s = t.sup id := by
-      suffices t.sup id <= sSup s b
+      suffices t.sup id <= sSup s by apply le_antisymm <;> assumption
+      simp only [id, Finset.sup_le_iff]
+      intro x hx
+      exact le_sSup (hts hx)
+    exact ⟨t, hts, this⟩
 
 Depends on / 依赖: Finset, Finset.sup_le_iff, isCompactElement_iff_exists_le_sSup_of_le_sSup, le_antisymm, le_sSup, simp_rw, sup_le_iff, t.sup
 -/
@@ -678,7 +798,7 @@ alias ⟨_, IsSupFiniteCompact.wellFoundedGT⟩ := wellFoundedGT_iff_isSupFinite
 
 alias ⟨_, IsSupClosedCompact.isSupFiniteCompact⟩ := isSupFiniteCompact_iff_isSupClosedCompact
 
-alias ⟨_, WellFoundedGT.isSupClosedCompact⟩ := isSupClosedCompact_iff_wellF
+alias ⟨_, WellFoundedGT.isSupClosedCompact⟩ := isSupClosedCompact_iff_wellFoundedGT
 
 中文:
 定理 isSupClosedCompact_iff_wellFoundedGT
@@ -688,7 +808,7 @@ alias ⟨_, IsSupFiniteCompact.wellFoundedGT⟩ := wellFoundedGT_iff_isSupFinite
 
 alias ⟨_, IsSupClosedCompact.isSupFiniteCompact⟩ := isSupFiniteCompact_iff_isSupClosedCompact
 
-alias ⟨_, WellFoundedGT.isSupClosedCompact⟩ := isSupClosedCompact_iff_wellF
+alias ⟨_, WellFoundedGT.isSupClosedCompact⟩ := isSupClosedCompact_iff_wellFoundedGT
 
 Depends on / 依赖: wellFoundedGT_characterisations
 -/
@@ -717,7 +837,15 @@ theorem WellFoundedGT.finite_of_sSupIndep
     obtain ⟨t, ht₁, ht₂⟩ := CompleteLattice.WellFoundedGT.isSupFiniteCompact α s
     replace contra : exists x : α, x in s ∧ x != ⊥ ∧ x ∉ t := by
       have : (s \ (insert ⊥ t : Finset α)).Infinite := contra.sdiff (Finset.finite_toSet _)
-      obtain ⟨x, hx₁, hx₂
+      obtain ⟨x, hx₁, hx₂⟩ := this.nonempty
+      exact ⟨x, hx₁, by simpa [not_or] using hx₂⟩
+    obtain ⟨x, hx₀, hx₁, hx₂⟩ := contra
+    replace hs : x ⊓ sSup s = ⊥ := by
+      have := hs.mono (by simp [ht₁, hx₀, -Set.union_singleton] : ↑t union {x} <= s) (by simp : x in _)
+      simpa [Disjoint, hx₂, ← t.sup_id_eq_sSup, ← ht₂] using this.eq_bot
+    apply hx₁
+    rw [← hs]; rw [eq_comm]; rw [inf_eq_left]
+    exact le_sSup hx₀
 
 中文:
 定理 WellFoundedGT.finite_of_sSupIndep
@@ -728,7 +856,15 @@ theorem WellFoundedGT.finite_of_sSupIndep
     obtain ⟨t, ht₁, ht₂⟩ := CompleteLattice.WellFoundedGT.isSupFiniteCompact α s
     replace contra : exists x : α, x in s ∧ x != ⊥ ∧ x ∉ t := by
       have : (s \ (insert ⊥ t : Finset α)).Infinite := contra.sdiff (Finset.finite_toSet _)
-      obtain ⟨x, hx₁, hx₂
+      obtain ⟨x, hx₁, hx₂⟩ := this.nonempty
+      exact ⟨x, hx₁, by simpa [not_or] using hx₂⟩
+    obtain ⟨x, hx₀, hx₁, hx₂⟩ := contra
+    replace hs : x ⊓ sSup s = ⊥ := by
+      have := hs.mono (by simp [ht₁, hx₀, -Set.union_singleton] : ↑t union {x} <= s) (by simp : x in _)
+      simpa [Disjoint, hx₂, ← t.sup_id_eq_sSup, ← ht₂] using this.eq_bot
+    apply hx₁
+    rw [← hs]; rw [eq_comm]; rw [inf_eq_left]
+    exact le_sSup hx₀
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.WellFoundedGT.isSupFiniteCompact, Finset, Finset.finite_toSet, Infinite, Set.union_singleton, WellFoundedGT, classical, contra, contra.sdiff, finite_toSet, hs.mono, insert, isSupFiniteCompact, nonempty, not_or, replace, this.nonempty, union_singleton
 -/
@@ -807,7 +943,10 @@ theorem WellFoundedLT.finite_of_sSupIndep
   let a n := ⨆ i >= n, (e i).1
   have sup_le n : (e n).1 ⊔ a (n + 1) <= a n := sup_le_iff.mpr ⟨le_iSup₂_of_le n le_rfl le_rfl,
     iSup₂_le fun i hi => le_iSup₂_of_le i (n.le_succ.trans hi) le_rfl⟩
-  hav
+  have lt n : a (n + 1) < a n := (Disjoint.right_lt_sup_of_left_ne_bot
+    ((hs (e n).2.1).mono_right <| iSup₂_le fun i hi => le_sSup ?_) (e n).2.2).trans_le (sup_le n)
+  · exact (RelEmbedding.natGT a lt).not_wellFounded wellFounded_lt
+exact ⟨(e i).2.1, fun h => n.lt_succ_self.not_ge hi.trans_eq e.2 Subtype.val_injective h⟩
 
 中文:
 定理 WellFoundedLT.finite_of_sSupIndep
@@ -818,7 +957,10 @@ theorem WellFoundedLT.finite_of_sSupIndep
   let a n := ⨆ i >= n, (e i).1
   have sup_le n : (e n).1 ⊔ a (n + 1) <= a n := sup_le_iff.mpr ⟨le_iSup₂_of_le n le_rfl le_rfl,
     iSup₂_le fun i hi => le_iSup₂_of_le i (n.le_succ.trans hi) le_rfl⟩
-  hav
+  have lt n : a (n + 1) < a n := (Disjoint.right_lt_sup_of_left_ne_bot
+    ((hs (e n).2.1).mono_right <| iSup₂_le fun i hi => le_sSup ?_) (e n).2.2).trans_le (sup_le n)
+  · exact (RelEmbedding.natGT a lt).not_wellFounded wellFounded_lt
+exact ⟨(e i).2.1, fun h => n.lt_succ_self.not_ge hi.trans_eq e.2 Subtype.val_injective h⟩
 
 Depends on / 依赖: Disjoint, Disjoint.right_lt_sup_of_left_ne_bot, Infinite, Infinite.sdiff, RelEmbedding, RelEmbedding.natGT, finite_singleton, le_rfl, le_sSup, le_succ, mono_right, n.le_succ.trans, natEmbedding, not_wellFounded, right_lt_sup_of_left_ne_bot, sup_le, sup_le_iff, sup_le_iff.mpr, to_subtype, to_subtype.natEmbedding
 -/
@@ -997,7 +1139,10 @@ theorem DirectedOn.inf_sSup_eq
         rw [CompleteLattice.isCompactElement_iff_le_of_directed_sSup_le] at hc
         rw [le_inf_iff] at hcinf
         rcases hc s hs h hcinf.2 with ⟨d, ds, cd⟩
-        exact (le_inf hcinf.1
+        exact (le_inf hcinf.1 cd).trans (le_biSup _ ds)
+      · rw [Set.not_nonempty_iff_eq_empty] at hs
+        simp [hs])
+    iSup_inf_le_inf_sSup
 
 中文:
 定理 DirectedOn.inf_sSup_eq
@@ -1011,7 +1156,10 @@ theorem DirectedOn.inf_sSup_eq
         rw [CompleteLattice.isCompactElement_iff_le_of_directed_sSup_le] at hc
         rw [le_inf_iff] at hcinf
         rcases hc s hs h hcinf.2 with ⟨d, ds, cd⟩
-        exact (le_inf hcinf.1
+        exact (le_inf hcinf.1 cd).trans (le_biSup _ ds)
+      · rw [Set.not_nonempty_iff_eq_empty] at hs
+        simp [hs])
+    iSup_inf_le_inf_sSup
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.isCompactElement_iff_le_of_directed_sSup_le, Nonempty, Set.not_nonempty_iff_eq_empty, iSup_inf_le_inf_sSup, isCompactElement_iff_le_of_directed_sSup_le, le_antisymm, le_biSup, le_iff_compact_le_imp, le_inf, le_inf_iff, not_nonempty_iff_eq_empty, s.Nonempty
 -/
@@ -1175,7 +1323,9 @@ theorem inf_sSup_eq_iSup_inf_sup_finset
       rw [le_inf_iff] at hcinf
       rcases hc s hcinf.2 with ⟨t, ht1, ht2⟩
       refine (le_inf hcinf.1 ht2).trans ?_
-      exact le_iSup₂ (f :
+      exact le_iSup₂ (f := fun (t' : Finset α) (ht' : ↑t' subseteq s) => a ⊓ t'.sup id) t ht1)
+    (iSup_le fun t =>
+      iSup_le fun h => inf_le_inf_left _ ((Finset.sup_id_eq_sSup t).symm ▸ sSup_le_sSup h))
 
 中文:
 定理 inf_sSup_eq_iSup_inf_sup_finset
@@ -1187,7 +1337,9 @@ theorem inf_sSup_eq_iSup_inf_sup_finset
       rw [le_inf_iff] at hcinf
       rcases hc s hcinf.2 with ⟨t, ht1, ht2⟩
       refine (le_inf hcinf.1 ht2).trans ?_
-      exact le_iSup₂ (f :
+      exact le_iSup₂ (f := fun (t' : Finset α) (ht' : ↑t' subseteq s) => a ⊓ t'.sup id) t ht1)
+    (iSup_le fun t =>
+      iSup_le fun h => inf_le_inf_left _ ((Finset.sup_id_eq_sSup t).symm ▸ sSup_le_sSup h))
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.isCompactElement_iff_exists_le_sSup_of_le_sSup, Finset, Finset.sup_id_eq_sSup, iSup_le, inf_le_inf_left, isCompactElement_iff_exists_le_sSup_of_le_sSup, le_antisymm, le_iff_compact_le_imp, le_inf, le_inf_iff, sSup_le_sSup, subseteq, sup_id_eq_sSup
 -/
@@ -1218,7 +1370,10 @@ theorem sSupIndep_iff_finite
     intro ht
     classical
       have h' := (h (insert a t) ?_ (t.mem_insert_self a)).eq_bot
-      · rwa [Finset.coe
+      · rwa [Finset.coe_insert, Set.insert_sdiff_self_of_notMem] at h'
+        exact fun con => ((Set.mem_sdiff a).1 (ht con)).2 (Set.mem_singleton a)
+      · rw [Finset.coe_insert, Set.insert_subset_iff]
+        exact ⟨ha, Set.Subset.trans ht sdiff_subset⟩⟩
 
 中文:
 定理 sSupIndep_iff_finite
@@ -1230,7 +1385,10 @@ theorem sSupIndep_iff_finite
     intro ht
     classical
       have h' := (h (insert a t) ?_ (t.mem_insert_self a)).eq_bot
-      · rwa [Finset.coe
+      · rwa [Finset.coe_insert, Set.insert_sdiff_self_of_notMem] at h'
+        exact fun con => ((Set.mem_sdiff a).1 (ht con)).2 (Set.mem_singleton a)
+      · rw [Finset.coe_insert, Set.insert_subset_iff]
+        exact ⟨ha, Set.Subset.trans ht sdiff_subset⟩⟩
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.sup_id_eq_sSup, Set.Subset.trans, Set.insert_sdiff_self_of_notMem, Set.insert_subset_iff, Set.mem_sdiff, Set.mem_singleton, Subset, classical, coe_insert, disjoint_iff, eq_bot, hs.mono, iSup_eq_bot, inf_sSup_eq_iSup_inf_sup_finset, insert, insert_sdiff_self_of_notMem, insert_subset_iff, mem_insert_self
 -/
@@ -1262,7 +1420,28 @@ lemma iSupIndep_iff_supIndep
     by_contra! hf
     simp_all only [Set.InjOn, ne_eq, Set.mem_ofPred_eq, not_forall]
     obtain ⟨x₁, hx₁, x₂, hx₂, hfeq, hneq⟩ := hf
-    specialize h ({x₁, x₂} : 
+    specialize h ({x₁, x₂} : Finset ι)
+    rw [Finset.supIndep_pair hneq]; rw [disjoint_iff]; rw [hfeq]; rw [inf_idem (f x₂)] at h
+    contradiction
+  simp_rw [disjoint_iff, inf_sSup_eq_iSup_inf_sup_finset, iSup_eq_bot, ← disjoint_iff]
+  intro s hs
+  rw [← Finset.sup_erase_bot]
+  set t := s.erase ⊥
+  replace hf : InjOn f (f ⁻¹' t) := fun i hi j _ hij => by
+    refine hf ?_ ?_ hij <;> aesop (add norm simp [t])
+  have : (Finset.erase (insert i (t.preimage _ hf)) i).image f = t := by
+    ext a
+    simp only [Finset.mem_preimage, Finset.mem_erase, ne_eq,
+      Finset.erase_insert_eq_erase, Finset.mem_image, t]
+    refine ⟨by aesop, fun ⟨ha, has⟩ => ?_⟩
+    obtain ⟨j, hj, rfl⟩ := hs has
+    exact ⟨j, ⟨hj, ha, has⟩, rfl⟩
+  rw [← this]; rw [Finset.sup_image]
+  specialize h (insert i (t.preimage _ hf))
+  rw [Finset.supIndep_iff_disjoint_erase] at h
+  exact h i (Finset.mem_insert_self i _)
+
+@[deprecated iSupIndep_iff_supIndep (since := "2026-02-18")]
 
 中文:
 引理 iSupIndep_iff_supIndep
@@ -1274,7 +1453,28 @@ lemma iSupIndep_iff_supIndep
     by_contra! hf
     simp_all only [Set.InjOn, ne_eq, Set.mem_ofPred_eq, not_forall]
     obtain ⟨x₁, hx₁, x₂, hx₂, hfeq, hneq⟩ := hf
-    specialize h ({x₁, x₂} : 
+    specialize h ({x₁, x₂} : Finset ι)
+    rw [Finset.supIndep_pair hneq]; rw [disjoint_iff]; rw [hfeq]; rw [inf_idem (f x₂)] at h
+    contradiction
+  simp_rw [disjoint_iff, inf_sSup_eq_iSup_inf_sup_finset, iSup_eq_bot, ← disjoint_iff]
+  intro s hs
+  rw [← Finset.sup_erase_bot]
+  set t := s.erase ⊥
+  replace hf : InjOn f (f ⁻¹' t) := fun i hi j _ hij => by
+    refine hf ?_ ?_ hij <;> aesop (add norm simp [t])
+  have : (Finset.erase (insert i (t.preimage _ hf)) i).image f = t := by
+    ext a
+    simp only [Finset.mem_preimage, Finset.mem_erase, ne_eq,
+      Finset.erase_insert_eq_erase, Finset.mem_image, t]
+    refine ⟨by aesop, fun ⟨ha, has⟩ => ?_⟩
+    obtain ⟨j, hj, rfl⟩ := hs has
+    exact ⟨j, ⟨hj, ha, has⟩, rfl⟩
+  rw [← this]; rw [Finset.sup_image]
+  specialize h (insert i (t.preimage _ hf))
+  rw [Finset.supIndep_iff_disjoint_erase] at h
+  exact h i (Finset.mem_insert_self i _)
+
+@[deprecated iSupIndep_iff_supIndep (since := "2026-02-18")]
 
 Depends on / 依赖: Finset, Finset.s, Finset.supIndep_pair, Set.InjOn, Set.mem_ofPred_eq, classical, disjoint_iff, h.supIndep, iSupIndep_def, iSup_eq_bot, inf_idem, inf_sSup_eq_iSup_inf_sup_finset, mem_ofPred_eq, ne_eq, not_forall, simp_rw, specialize, supIndep, supIndep_pair
 -/
@@ -1322,7 +1522,18 @@ lemma iSupIndep_iff_supIndep_of_injOn
   rw [← Finset.sup_erase_bot]
   set t := s.erase ⊥
   replace hf : InjOn f (f ⁻¹' t) := fun i hi j _ hij => by
-  
+    refine hf ?_ ?_ hij <;> aesop (add norm simp [t])
+  have : (Finset.erase (insert i (t.preimage _ hf)) i).image f = t := by
+    ext a
+    simp only [Finset.mem_preimage, Finset.mem_erase, ne_eq,
+      Finset.erase_insert_eq_erase, Finset.mem_image, t]
+    refine ⟨by aesop, fun ⟨ha, has⟩ => ?_⟩
+    obtain ⟨j, hj, rfl⟩ := hs has
+    exact ⟨j, ⟨hj, ha, has⟩, rfl⟩
+  rw [← this]; rw [Finset.sup_image]
+  specialize h (insert i (t.preimage _ hf))
+  rw [Finset.supIndep_iff_disjoint_erase] at h
+  exact h i (Finset.mem_insert_self i _)
 
 中文:
 引理 iSupIndep_iff_supIndep_of_injOn
@@ -1335,7 +1546,18 @@ lemma iSupIndep_iff_supIndep_of_injOn
   rw [← Finset.sup_erase_bot]
   set t := s.erase ⊥
   replace hf : InjOn f (f ⁻¹' t) := fun i hi j _ hij => by
-  
+    refine hf ?_ ?_ hij <;> aesop (add norm simp [t])
+  have : (Finset.erase (insert i (t.preimage _ hf)) i).image f = t := by
+    ext a
+    simp only [Finset.mem_preimage, Finset.mem_erase, ne_eq,
+      Finset.erase_insert_eq_erase, Finset.mem_image, t]
+    refine ⟨by aesop, fun ⟨ha, has⟩ => ?_⟩
+    obtain ⟨j, hj, rfl⟩ := hs has
+    exact ⟨j, ⟨hj, ha, has⟩, rfl⟩
+  rw [← this]; rw [Finset.sup_image]
+  specialize h (insert i (t.preimage _ hf))
+  rw [Finset.supIndep_iff_disjoint_erase] at h
+  exact h i (Finset.mem_insert_self i _)
 
 Depends on / 依赖: Finset, Finset.erase, Finset.erase_insert_eq_erase, Finset.mem_erase, Finset.mem_preimage, Finset.sup_erase_bot, classical, disjoint_iff, erase_insert_eq_erase, h.supIndep, iSupIndep_def, iSup_eq_bot, inf_sSup_eq_iSup_inf_sup_finset, insert, mem_erase, mem_preimage, ne_eq, preimage, replace, s.erase
 -/
@@ -1375,7 +1597,10 @@ theorem sSupIndep_iUnion_of_directed
     obtain ⟨I, fi, hI⟩ := Set.finite_subset_iUnion t.finite_toSet ht
     obtain ⟨i, hi⟩ := hs.finset_le fi.toFinset
     exact (h i).mono
-        (Set.Subset.trans hI <| Set.iUnion₂_subset fun j hj => hi j (fi.mem_toFinset.2 h
+        (Set.Subset.trans hI <| Set.iUnion₂_subset fun j hj => hi j (fi.mem_toFinset.2 hj))
+  · rintro a ⟨_, ⟨i, _⟩, _⟩
+    exfalso
+    exact hη ⟨i⟩
 
 中文:
 定理 sSupIndep_iUnion_of_directed
@@ -1387,7 +1612,10 @@ theorem sSupIndep_iUnion_of_directed
     obtain ⟨I, fi, hI⟩ := Set.finite_subset_iUnion t.finite_toSet ht
     obtain ⟨i, hi⟩ := hs.finset_le fi.toFinset
     exact (h i).mono
-        (Set.Subset.trans hI <| Set.iUnion₂_subset fun j hj => hi j (fi.mem_toFinset.2 h
+        (Set.Subset.trans hI <| Set.iUnion₂_subset fun j hj => hi j (fi.mem_toFinset.2 hj))
+  · rintro a ⟨_, ⟨i, _⟩, _⟩
+    exfalso
+    exact hη ⟨i⟩
 
 Depends on / 依赖: Nonempty, Set.Subset.trans, Set.finite_subset_iUnion, Set.iUnion, Subset, fi.mem_toFinset, fi.toFinset, finite_subset_iUnion, finite_toSet, finset_le, hs.finset_le, mem_toFinset, sSupIndep_iff_finite, t.finite_toSet, toFinset
 -/
@@ -1441,6 +1669,10 @@ lemma disjoint_biSup_of_finite_disjoint_biSup
   intro u hu
   obtain ⟨t, ht, ht', htu⟩ : existsᵉ (t subseteq s) (hu : t.Finite), f '' t = u :=
 Set.Finite.exists_subset_finite_image_eq u.finite_toSet by rwa [Set.image_eq_range f s]
+  replace htu : u.sup id = ⨆ i in t, f i := by
+    simp only [Finset.sup_eq_iSup, id_eq, ← Finset.mem_coe, ← htu, iSup_image]
+  rw [inf_comm]; rw [← disjoint_iff]; rw [htu]
+  exact hs t ht ht'
 
 中文:
 引理 disjoint_biSup_of_finite_disjoint_biSup
@@ -1451,6 +1683,10 @@ Set.Finite.exists_subset_finite_image_eq u.finite_toSet by rwa [Set.image_eq_ran
   intro u hu
   obtain ⟨t, ht, ht', htu⟩ : existsᵉ (t subseteq s) (hu : t.Finite), f '' t = u :=
 Set.Finite.exists_subset_finite_image_eq u.finite_toSet by rwa [Set.image_eq_range f s]
+  replace htu : u.sup id = ⨆ i in t, f i := by
+    simp only [Finset.sup_eq_iSup, id_eq, ← Finset.mem_coe, ← htu, iSup_image]
+  rw [inf_comm]; rw [← disjoint_iff]; rw [htu]
+  exact hs t ht ht'
 
 Depends on / 依赖: Finite, Finset, Finset.mem_coe, Finset.sup_eq_iSup, Set.Finite.exists_subset_finite_image_eq, Set.image_eq_range, disjoint_iff, exists_subset_finite_image_eq, finite_toSet, iSup_eq_bot, iSup_image, iSup_subtype, id_eq, image_eq_range, inf_comm, inf_sSup_eq_iSup_inf_sup_finset, mem_coe, replace, sSup_range, simp_rw
 -/
@@ -1535,7 +1771,16 @@ theorem Iic_coatomic_of_compact_element
   right
   have ⟨a, ba, h⟩ := zorn_le_nonempty₀ (Set.Iio k) ?_ b (lt_of_le_of_ne hbk H)
   · refine ⟨⟨a, le_of_lt h.prop⟩, ⟨ne_of_lt h.prop, fun c hck => by_contradiction fun c₀ => ?_⟩, ba⟩
- 
+    cases h.eq_of_le (y := c.1) (lt_of_le_of_ne c.2 fun con => c₀ (Subtype.ext con)) hck.le
+    exact lt_irrefl _ hck
+  · intro S SC cC I _
+    by_cases hS : S.Nonempty
+    · refine ⟨sSup S, IsCompactElement.directed_sSup_lt_of_lt h hS cC.directedOn SC, ?_⟩
+      intro; apply le_sSup
+    exact
+      ⟨b, lt_of_le_of_ne hbk H, by
+        simp only [Set.not_nonempty_iff_eq_empty.mp hS, Set.mem_empty_iff_false, forall_const,
+          forall_prop_of_false, not_false_iff]⟩
 
 中文:
 定理 Iic_coatomic_of_compact_element
@@ -1548,7 +1793,16 @@ theorem Iic_coatomic_of_compact_element
   right
   have ⟨a, ba, h⟩ := zorn_le_nonempty₀ (Set.Iio k) ?_ b (lt_of_le_of_ne hbk H)
   · refine ⟨⟨a, le_of_lt h.prop⟩, ⟨ne_of_lt h.prop, fun c hck => by_contradiction fun c₀ => ?_⟩, ba⟩
- 
+    cases h.eq_of_le (y := c.1) (lt_of_le_of_ne c.2 fun con => c₀ (Subtype.ext con)) hck.le
+    exact lt_irrefl _ hck
+  · intro S SC cC I _
+    by_cases hS : S.Nonempty
+    · refine ⟨sSup S, IsCompactElement.directed_sSup_lt_of_lt h hS cC.directedOn SC, ?_⟩
+      intro; apply le_sSup
+    exact
+      ⟨b, lt_of_le_of_ne hbk H, by
+        simp only [Set.not_nonempty_iff_eq_empty.mp hS, Set.mem_empty_iff_false, forall_const,
+          forall_prop_of_false, not_false_iff]⟩
 
 Depends on / 依赖: IsCompactElement, IsCompactElement.directed_sSup_lt_of_lt, Nonempty, S.Nonempty, Set.Iic.coe_top, Set.Iio, Subtype, Subtype.ext, by_contradiction, coe_top, directed_sSup_lt_of_lt, eq_of_le, eq_or_ne, h.eq_of_le, h.prop, hck.le, le_of_lt, lt_irrefl, lt_of_le_of_ne, ne_of_lt
 -/
@@ -1612,7 +1866,14 @@ theorem iSupIndep.iInf
     by_cases hs : 1 < s.card; swap
     · by_cases hcard0 : s.card = 0 <;> grind [Finset.card_eq_zero, Finset.card_eq_one]
     · obtain ⟨k₁, k₂, _, _, h⟩ := Finset.one_lt_card_iff.mp hs
-      obta
+      obtain ⟨i, hi⟩ : exists i : ι, k₁ i != k₂ i := Function.ne_iff.mp h
+      classical
+      rw [← Finset.image_biUnion_filter_eq s (· i)]
+      refine Finset.SupIndep.biUnion ?_ (by grind)
+      apply ((h_indep i).supIndep' _).mono
+      simp_rw [Finset.sup_le_iff, Finset.mem_filter, and_imp]
+      rintro _ _ _ _ rfl
+      exact iInf_le _ _
 
 中文:
 定理 iSupIndep.iInf
@@ -1625,7 +1886,14 @@ theorem iSupIndep.iInf
     by_cases hs : 1 < s.card; swap
     · by_cases hcard0 : s.card = 0 <;> grind [Finset.card_eq_zero, Finset.card_eq_one]
     · obtain ⟨k₁, k₂, _, _, h⟩ := Finset.one_lt_card_iff.mp hs
-      obta
+      obtain ⟨i, hi⟩ : exists i : ι, k₁ i != k₂ i := Function.ne_iff.mp h
+      classical
+      rw [← Finset.image_biUnion_filter_eq s (· i)]
+      refine Finset.SupIndep.biUnion ?_ (by grind)
+      apply ((h_indep i).supIndep' _).mono
+      simp_rw [Finset.sup_le_iff, Finset.mem_filter, and_imp]
+      rintro _ _ _ _ rfl
+      exact iInf_le _ _
 
 Depends on / 依赖: Finset, Finset.SupIndep.biUnion, Finset.card_eq_one, Finset.card_eq_zero, Finset.image_biUnion_filter_eq, Finset.one_lt_card_iff.mp, Finset.strongInduction, Finset.sup_le_i, Function, Function.ne_iff.mp, SupIndep, biUnion, card_eq_one, card_eq_zero, classical, h_indep, hcard0, iSupIndep_iff_supIndep, image_biUnion_filter_eq, ne_iff
 -/
@@ -1701,7 +1969,49 @@ theorem exists_sSupIndep_disjoint_sSup_atoms
     (S := {s : Set α | sSupIndep s ∧ Disjoint b (sSup s) ∧ forall a in s, IsAtom a ∧ a <= c})
     fun c hc1 hc2 =>
       ⟨⋃₀ c,
-        ⟨iSupIndep_s
+        ⟨iSupIndep_sUnion_of_directed hc2.directedOn fun s hs => (hc1 hs).1, ?_,
+          fun a ⟨s, sc, as⟩ => (hc1 sc).2.2 a as⟩,
+        fun _ => Set.subset_sUnion_of_mem⟩
+  swap
+  · rw [sSup_sUnion, ← sSup_image, DirectedOn.disjoint_sSup_right]
+    · rintro _ ⟨s, hs, rfl⟩
+      exact (hc1 hs).2.1
+    · rw [directedOn_image]
+      exact hc2.directedOn.mono @fun s t => sSup_le_sSup
+  simp_rw [maximal_subset_iff] at zorn
+  obtain ⟨s, ⟨s_ind, b_inf_Sup_s, s_atoms⟩, s_max⟩ := zorn
+  refine ⟨s, s_ind, b_inf_Sup_s, le_antisymm ?_ ?_, fun a ha => (s_atoms a ha).1⟩
+  · simp_all
+  rw [← h]; rw [sSup_le_iff]
+  intro a ha
+  rw [← inf_eq_left]
+  refine (ha.2.le_iff.mp inf_le_left).resolve_left fun con => ha.2.1 ?_
+  rw [← con]; rw [eq_comm]; rw [inf_eq_left]
+  refine (le_sSup ?_).trans le_sup_right
+  rw [← disjoint_iff] at con
+  have a_dis_Sup_s : Disjoint a (sSup s) := con.mono_right le_sup_right
+  rw [s_max ⟨fun x hx => ?_]; rw [?_]; rw [fun x hx => ?_⟩ Set.subset_union_left]
+  · exact Set.mem_union_right _ (Set.mem_singleton _)
+  · rw [sSup_union, sSup_singleton]
+    exact b_inf_Sup_s.disjoint_sup_right_of_disjoint_sup_left con.symm
+  · rw [Set.mem_union, Set.mem_singleton_iff] at hx
+    obtain rfl | xa := eq_or_ne x a
+    · simp only [Set.mem_singleton, Set.insert_sdiff_of_mem, Set.union_singleton]
+      exact con.mono_right ((sSup_le_sSup Set.sdiff_subset).trans le_sup_right)
+    · have h : (s union {a}) \ {x} = s \ {x} union {a} := by
+        simp only [Set.union_singleton]
+        rw [Set.insert_sdiff_of_notMem]
+        rw [Set.mem_singleton_iff]
+        exact Ne.symm xa
+      rw [h]; rw [sSup_union]; rw [sSup_singleton]
+      apply
+        (s_ind (hx.resolve_right xa)).disjoint_sup_right_of_disjoint_sup_left
+          (a_dis_Sup_s.mono_right _).symm
+      rw [← sSup_insert]; rw [Set.insert_sdiff_singleton]; rw [Set.insert_eq_of_mem (hx.resolve_right xa)]
+  · rw [Set.mem_union, Set.mem_singleton_iff] at hx
+    obtain hx | rfl := hx
+    · exact s_atoms x hx
+    · exact ha.symm
 
 中文:
 定理 存在_sSupIndep_disjoint_sSup_atoms
@@ -1713,7 +2023,49 @@ theorem exists_sSupIndep_disjoint_sSup_atoms
     (S := {s : Set α | sSupIndep s ∧ Disjoint b (sSup s) ∧ forall a in s, IsAtom a ∧ a <= c})
     fun c hc1 hc2 =>
       ⟨⋃₀ c,
-        ⟨iSupIndep_s
+        ⟨iSupIndep_sUnion_of_directed hc2.directedOn fun s hs => (hc1 hs).1, ?_,
+          fun a ⟨s, sc, as⟩ => (hc1 sc).2.2 a as⟩,
+        fun _ => Set.subset_sUnion_of_mem⟩
+  swap
+  · rw [sSup_sUnion, ← sSup_image, DirectedOn.disjoint_sSup_right]
+    · rintro _ ⟨s, hs, rfl⟩
+      exact (hc1 hs).2.1
+    · rw [directedOn_image]
+      exact hc2.directedOn.mono @fun s t => sSup_le_sSup
+  simp_rw [maximal_subset_iff] at zorn
+  obtain ⟨s, ⟨s_ind, b_inf_Sup_s, s_atoms⟩, s_max⟩ := zorn
+  refine ⟨s, s_ind, b_inf_Sup_s, le_antisymm ?_ ?_, fun a ha => (s_atoms a ha).1⟩
+  · simp_all
+  rw [← h]; rw [sSup_le_iff]
+  intro a ha
+  rw [← inf_eq_left]
+  refine (ha.2.le_iff.mp inf_le_left).resolve_left fun con => ha.2.1 ?_
+  rw [← con]; rw [eq_comm]; rw [inf_eq_left]
+  refine (le_sSup ?_).trans le_sup_right
+  rw [← disjoint_iff] at con
+  have a_dis_Sup_s : Disjoint a (sSup s) := con.mono_right le_sup_right
+  rw [s_max ⟨fun x hx => ?_]; rw [?_]; rw [fun x hx => ?_⟩ Set.subset_union_left]
+  · exact Set.mem_union_right _ (Set.mem_singleton _)
+  · rw [sSup_union, sSup_singleton]
+    exact b_inf_Sup_s.disjoint_sup_right_of_disjoint_sup_left con.symm
+  · rw [Set.mem_union, Set.mem_singleton_iff] at hx
+    obtain rfl | xa := eq_or_ne x a
+    · simp only [Set.mem_singleton, Set.insert_sdiff_of_mem, Set.union_singleton]
+      exact con.mono_right ((sSup_le_sSup Set.sdiff_subset).trans le_sup_right)
+    · have h : (s union {a}) \ {x} = s \ {x} union {a} := by
+        simp only [Set.union_singleton]
+        rw [Set.insert_sdiff_of_notMem]
+        rw [Set.mem_singleton_iff]
+        exact Ne.symm xa
+      rw [h]; rw [sSup_union]; rw [sSup_singleton]
+      apply
+        (s_ind (hx.resolve_right xa)).disjoint_sup_right_of_disjoint_sup_left
+          (a_dis_Sup_s.mono_right _).symm
+      rw [← sSup_insert]; rw [Set.insert_sdiff_singleton]; rw [Set.insert_eq_of_mem (hx.resolve_right xa)]
+  · rw [Set.mem_union, Set.mem_singleton_iff] at hx
+    obtain hx | rfl := hx
+    · exact s_atoms x hx
+    · exact ha.symm
 -/
 theorem exists_sSupIndep_disjoint_sSup_atoms (b c : α) (hbc : b <= c)
     (h : sSup {a <= c | IsAtom a} = c) :

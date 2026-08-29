@@ -147,7 +147,19 @@ definition pullbackConeIsLimit
               ⟨⟨S.fst x, S.snd x⟩, by simpa using! ConcreteCategory.congr_hom S.condition x⟩
             continuous_toFun := by fun_prop }
       refine ⟨?_, ?_, ?_⟩
-      · delt
+      · delta pullbackCone
+        ext a
+        dsimp
+      · delta pullbackCone
+        ext a
+        dsimp
+      · intro m h₁ h₂
+        ext x
+        -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be `ext x`.
+        apply Subtype.ext
+        apply Prod.ext
+        · simpa using! ConcreteCategory.congr_hom h₁ x
+        · simpa using! ConcreteCategory.congr_hom h₂ x)
 
 中文:
 定义 pullbackConeIsLimit
@@ -161,7 +173,19 @@ definition pullbackConeIsLimit
               ⟨⟨S.fst x, S.snd x⟩, by simpa using! ConcreteCategory.congr_hom S.condition x⟩
             continuous_toFun := by fun_prop }
       refine ⟨?_, ?_, ?_⟩
-      · delt
+      · delta pullbackCone
+        ext a
+        dsimp
+      · delta pullbackCone
+        ext a
+        dsimp
+      · intro m h₁ h₂
+        ext x
+        -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): used to be `ext x`.
+        apply Subtype.ext
+        apply Prod.ext
+        · simpa using! ConcreteCategory.congr_hom h₁ x
+        · simpa using! ConcreteCategory.congr_hom h₂ x)
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, PullbackCone, PullbackCone.isLimitAux, S.condition, S.fst, S.snd, condition, congr_hom, continuous_toFun, fun_prop, isLimitAux, pullbackCone
 -/
@@ -407,7 +431,9 @@ theorem range_pullback_to_prod
     use (pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, h⟩
     apply Concrete.limit_ext
     rintro ⟨⟨⟩⟩ <;>
-      rw [← Concr
+      rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [limit.lift_π] <;>
+      -- This used to be `simp` before https://github.com/leanprover/lean4/pull/2644
+      cat_disch
 
 中文:
 定理 range_pullback_to_prod
@@ -422,7 +448,9 @@ theorem range_pullback_to_prod
     use (pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, h⟩
     apply Concrete.limit_ext
     rintro ⟨⟨⟩⟩ <;>
-      rw [← Concr
+      rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]; rw [limit.lift_π] <;>
+      -- This used to be `simp` before https://github.com/leanprover/lean4/pull/2644
+      cat_disch
 
 Depends on / 依赖: Concrete, Concrete.limit_ext, ConcreteCategory, ConcreteCategory.comp_apply, Set.mem_ofPred_eq, comp_apply, condition, limit.lift_, limit_ext, mem_ofPred_eq, pullback, pullback.condition, pullbackIsoProdSubtype
 -/
@@ -457,7 +485,13 @@ definition pullbackHomeoPreimage
     apply hg.injective
     convert! x.prop
     exact Exists.choose_spec (p := fun y => g y = f (↑x : X × Y).1) _
-  continuous_toFun := by fun_pr
+  continuous_toFun := by fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+refine continuous_subtype_val.prodMk hg.isInducing.continuous_iff.mpr ?_
+    convert! hf.comp continuous_subtype_val
+    ext x
+    exact Exists.choose_spec x.2
 
 中文:
 定义 pullbackHomeoPreimage
@@ -469,7 +503,13 @@ definition pullbackHomeoPreimage
     apply hg.injective
     convert! x.prop
     exact Exists.choose_spec (p := fun y => g y = f (↑x : X × Y).1) _
-  continuous_toFun := by fun_pr
+  continuous_toFun := by fun_prop
+  continuous_invFun := by
+    apply Continuous.subtype_mk
+refine continuous_subtype_val.prodMk hg.isInducing.continuous_iff.mpr ?_
+    convert! hf.comp continuous_subtype_val
+    ext x
+    exact Exists.choose_spec x.2
 -/
 def pullbackHomeoPreimage
     {X Y Z : Type*} [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z]
@@ -544,7 +584,18 @@ theorem range_pullback_map
     simp only [Set.mem_inter_iff, Set.mem_preimage, Set.mem_range]
     rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]
     simp only [limit.lift_π, PullbackCone.mk_π_app]
-    exact ⟨exists_apply_eq_apply _ _, exists_apply_eq_apply _ _
+    exact ⟨exists_apply_eq_apply _ _, exists_apply_eq_apply _ _⟩
+  rintro ⟨⟨x₁, hx₁⟩, ⟨x₂, hx₂⟩⟩
+  have : f₁ x₁ = f₂ x₂ := by
+    apply (TopCat.mono_iff_injective _).mp H₃
+    rw [← ConcreteCategory.comp_apply]; rw [eq₁]; rw [← ConcreteCategory.comp_apply]; rw [eq₂]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply]; rw [hx₁]; rw [hx₂]; rw [← ConcreteCategory.comp_apply]; rw [pullback.condition]; rw [ConcreteCategory.comp_apply]
+  use (pullbackIsoProdSubtype f₁ f₂).inv ⟨⟨x₁, x₂⟩, this⟩
+  apply Concrete.limit_ext
+  rintro (_ | _ | _) <;>
+  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]
+  · simp [hx₁, ← limit.w _ WalkingCospan.Hom.inl]
+  · simp [hx₁]
+  · simp [hx₂]
 
 中文:
 定理 range_pullback_map
@@ -556,7 +607,18 @@ theorem range_pullback_map
     simp only [Set.mem_inter_iff, Set.mem_preimage, Set.mem_range]
     rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]
     simp only [limit.lift_π, PullbackCone.mk_π_app]
-    exact ⟨exists_apply_eq_apply _ _, exists_apply_eq_apply _ _
+    exact ⟨exists_apply_eq_apply _ _, exists_apply_eq_apply _ _⟩
+  rintro ⟨⟨x₁, hx₁⟩, ⟨x₂, hx₂⟩⟩
+  have : f₁ x₁ = f₂ x₂ := by
+    apply (TopCat.mono_iff_injective _).mp H₃
+    rw [← ConcreteCategory.comp_apply]; rw [eq₁]; rw [← ConcreteCategory.comp_apply]; rw [eq₂]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply]; rw [hx₁]; rw [hx₂]; rw [← ConcreteCategory.comp_apply]; rw [pullback.condition]; rw [ConcreteCategory.comp_apply]
+  use (pullbackIsoProdSubtype f₁ f₂).inv ⟨⟨x₁, x₂⟩, this⟩
+  apply Concrete.limit_ext
+  rintro (_ | _ | _) <;>
+  rw [← ConcreteCategory.comp_apply]; rw [← ConcreteCategory.comp_apply]
+  · simp [hx₁, ← limit.w _ WalkingCospan.Hom.inl]
+  · simp [hx₁]
+  · simp [hx₂]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_app, ConcreteCategory.comp_apply, PullbackCone, PullbackCone.mk_, Set.mem_inter_iff, Set.mem_preimage, Set.mem_range, TopCat, TopCat.mono_iff_injective, comp_app, comp_apply, exists_apply_eq_apply, limit.lift_, mem_inter_iff, mem_preimage, mem_range, mono_iff_injective
 -/
@@ -682,7 +744,9 @@ theorem pullback_map_isEmbedding
       ?_
   suffices
     IsEmbedding (prod.lift (pullback.fst f₁ f₂) (pullback.snd f₁ f₂) ≫ Limits.prod.map i₁ i₂) by
-    s
+    simpa [← coe_comp] using this
+  rw [coe_comp]
+  exact (isEmbedding_prodMap H₁ H₂).comp (isEmbedding_pullback_to_prod _ _)
 
 中文:
 定理 pullback_map_isEmbedding
@@ -694,7 +758,9 @@ theorem pullback_map_isEmbedding
       ?_
   suffices
     IsEmbedding (prod.lift (pullback.fst f₁ f₂) (pullback.snd f₁ f₂) ≫ Limits.prod.map i₁ i₂) by
-    s
+    simpa [← coe_comp] using this
+  rw [coe_comp]
+  exact (isEmbedding_prodMap H₁ H₂).comp (isEmbedding_pullback_to_prod _ _)
 
 Depends on / 依赖: Continuous, ContinuousMap, ContinuousMap.continuous_toFun, IsEmbedding, Limits, Limits.prod.map, coe_comp, continuous_toFun, isEmbedding_prodMap, isEmbedding_pullback_to_prod, of_comp, prod.lift, pullback, pullback.fst, pullback.snd
 -/
@@ -726,7 +792,8 @@ theorem pullback_map_isOpenEmbedding
     apply IsOpen.inter <;> apply Continuous.isOpen_preimage
     · apply ContinuousMap.continuous_toFun
     · exact H₁.isOpen_range
-    · apply ContinuousMap.cont
+    · apply ContinuousMap.continuous_toFun
+    · exact H₂.isOpen_range
 
 中文:
 定理 pullback_map_isOpenEmbedding
@@ -739,7 +806,8 @@ theorem pullback_map_isOpenEmbedding
     apply IsOpen.inter <;> apply Continuous.isOpen_preimage
     · apply ContinuousMap.continuous_toFun
     · exact H₁.isOpen_range
-    · apply ContinuousMap.cont
+    · apply ContinuousMap.continuous_toFun
+    · exact H₂.isOpen_range
 
 Depends on / 依赖: Continuous, Continuous.isOpen_preimage, ContinuousMap, ContinuousMap.continuous_toFun, IsOpen, IsOpen.inter, continuous_toFun, isEmbedding, isOpen_preimage, isOpen_range, pullback_map_isEmbedding, range_pullback_map
 -/
@@ -963,7 +1031,7 @@ theorem fst_iso_of_right_embedding_range_subset
           ⟨x, by
             rw [pullback_fst_range]
             exact ⟨_, (H (Set.mem_range_self x)).choose_spec.symm⟩⟩ }
-  convert! (isoOfH
+  convert! (isoOfHomeo esto).isIso_hom
 
 中文:
 定理 fst_iso_of_right_embedding_range_subset
@@ -976,7 +1044,7 @@ theorem fst_iso_of_right_embedding_range_subset
           ⟨x, by
             rw [pullback_fst_range]
             exact ⟨_, (H (Set.mem_range_self x)).choose_spec.symm⟩⟩ }
-  convert! (isoOfH
+  convert! (isoOfHomeo esto).isIso_hom
 
 Depends on / 依赖: Set.mem_range_self, Subtype, Subtype.val, TopCat, choose_spec, choose_spec.symm, convert, fst_isEmbedding_of_right, invFun, isIso_hom, isoOfHomeo, mem_range_self, pullback, pullback_fst_range, toHomeomorph, toHomeomorph.trans
 -/
@@ -1006,7 +1074,7 @@ theorem snd_iso_of_left_embedding_range_subset
           ⟨x, by
             rw [pullback_snd_range]
             exact ⟨_, (H (Set.mem_range_self x)).choose_spec⟩⟩ }
-  convert! (isoOfHomeo e
+  convert! (isoOfHomeo esto).isIso_hom
 
 中文:
 定理 snd_iso_of_left_embedding_range_subset
@@ -1019,7 +1087,7 @@ theorem snd_iso_of_left_embedding_range_subset
           ⟨x, by
             rw [pullback_snd_range]
             exact ⟨_, (H (Set.mem_range_self x)).choose_spec⟩⟩ }
-  convert! (isoOfHomeo e
+  convert! (isoOfHomeo esto).isIso_hom
 
 Depends on / 依赖: Set.mem_range_self, Subtype, Subtype.val, TopCat, choose_spec, convert, invFun, isIso_hom, isoOfHomeo, mem_range_self, pullback, pullback_snd_range, snd_isEmbedding_of_left, toHomeomorph, toHomeomorph.trans
 -/
@@ -1048,7 +1116,12 @@ theorem pullback_snd_image_fst_preimage
       ⟨(pullback.fst f g) y, hy, CategoryTheory.congr_fun pullback.condition y⟩
   · rintro ⟨y, hy, eq⟩
   -- next 5 lines were
-  -- `exact ⟨(TopCat.pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, eq⟩, by simpa, by simp⟩` before https://github.com/le
+  -- `exact ⟨(TopCat.pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, eq⟩, by simpa, by simp⟩` before https://github.com/leanprover-community/mathlib4/pull/13170
+    refine ⟨(TopCat.pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, eq⟩, ?_, ?_⟩
+    · simp only [coe_of, Set.mem_preimage]
+      convert! hy
+      rw [pullbackIsoProdSubtype_inv_fst_apply]
+    · rw [pullbackIsoProdSubtype_inv_snd_apply]
 
 中文:
 定理 pullback_snd_image_fst_preimage
@@ -1061,7 +1134,12 @@ theorem pullback_snd_image_fst_preimage
       ⟨(pullback.fst f g) y, hy, CategoryTheory.congr_fun pullback.condition y⟩
   · rintro ⟨y, hy, eq⟩
   -- next 5 lines were
-  -- `exact ⟨(TopCat.pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, eq⟩, by simpa, by simp⟩` before https://github.com/le
+  -- `exact ⟨(TopCat.pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, eq⟩, by simpa, by simp⟩` before https://github.com/leanprover-community/mathlib4/pull/13170
+    refine ⟨(TopCat.pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, eq⟩, ?_, ?_⟩
+    · simp only [coe_of, Set.mem_preimage]
+      convert! hy
+      rw [pullbackIsoProdSubtype_inv_fst_apply]
+    · rw [pullbackIsoProdSubtype_inv_snd_apply]
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.congr_fun, condition, congr_fun, pullback, pullback.condition, pullback.fst
 -/
@@ -1098,7 +1176,12 @@ theorem pullback_fst_image_snd_preimage
   · rintro ⟨y, hy, eq⟩
     -- next 5 lines were
     -- `exact ⟨(TopCat.pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, eq.symm⟩, by simpa, by simp⟩`
-    
+    -- before https://github.com/leanprover-community/mathlib4/pull/13170
+    refine ⟨(TopCat.pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, eq.symm⟩, ?_, ?_⟩
+    · simp only [coe_of, Set.mem_preimage]
+      convert! hy
+      rw [pullbackIsoProdSubtype_inv_snd_apply]
+    · rw [pullbackIsoProdSubtype_inv_fst_apply]
 
 中文:
 定理 pullback_fst_image_snd_preimage
@@ -1113,7 +1196,12 @@ theorem pullback_fst_image_snd_preimage
   · rintro ⟨y, hy, eq⟩
     -- next 5 lines were
     -- `exact ⟨(TopCat.pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, eq.symm⟩, by simpa, by simp⟩`
-    
+    -- before https://github.com/leanprover-community/mathlib4/pull/13170
+    refine ⟨(TopCat.pullbackIsoProdSubtype f g).inv ⟨⟨_, _⟩, eq.symm⟩, ?_, ?_⟩
+    · simp only [coe_of, Set.mem_preimage]
+      convert! hy
+      rw [pullbackIsoProdSubtype_inv_snd_apply]
+    · rw [pullbackIsoProdSubtype_inv_fst_apply]
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.congr_fun, condition, congr_fun, pullback, pullback.condition, pullback.snd
 -/

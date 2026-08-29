@@ -263,7 +263,13 @@ lemma isKilling_of_equiv
   refine ⟨fun hx' => ?_, fun hx y _ => hx ▸ LinearMap.map_zero₂ (killingForm R L') y⟩
   suffices e.symm x' in LinearMap.ker (killingForm R L) by
     rw [IsKilling.ker_killingForm_eq_bot] at this
-    simpa [map_
+    simpa [map_zero] using (e : L ≃ₗ[R] L').congr_arg this
+  ext y
+  replace hx' : forall y', killingForm R L' x' y' = 0 := by simpa using hx'
+  specialize hx' (e y)
+  rwa [← e.apply_symm_apply x', killingForm_of_equiv_apply] at hx'
+
+alias _root_.LieEquiv.isKilling := LieAlgebra.isKilling_of_equiv
 
 中文:
 引理 isKilling_of_equiv
@@ -276,7 +282,13 @@ lemma isKilling_of_equiv
   refine ⟨fun hx' => ?_, fun hx y _ => hx ▸ LinearMap.map_zero₂ (killingForm R L') y⟩
   suffices e.symm x' in LinearMap.ker (killingForm R L) by
     rw [IsKilling.ker_killingForm_eq_bot] at this
-    simpa [map_
+    simpa [map_zero] using (e : L ≃ₗ[R] L').congr_arg this
+  ext y
+  replace hx' : forall y', killingForm R L' x' y' = 0 := by simpa using hx'
+  specialize hx' (e y)
+  rwa [← e.apply_symm_apply x', killingForm_of_equiv_apply] at hx'
+
+alias _root_.LieEquiv.isKilling := LieAlgebra.isKilling_of_equiv
 
 Depends on / 依赖: IsKilling, IsKilling.ker_killingForm_eq_bot, LieIdeal, LieIdeal.mem_killingCompl, LieModule, LieModule.traceForm_comm, LinearMap, LinearMap.ker, LinearMap.map_zero, apply_symm_apply, congr_arg, e.apply_symm_apply, e.symm, ker_killingForm_eq_bot, killingForm, killingForm_of_equiv_apply, map_zero, mem_killingCompl, replace, simp_rw
 -/
@@ -312,7 +324,17 @@ lemma LieIdeal.isCompl_killingCompl
     rwa [← LieSubmodule.isCompl_toSubmodule, I.toSubmodule_killingCompl,
       LinearMap.BilinForm.isCompl_orthogonal_iff_disjoint (LieModule.traceForm_isSymm K L L).isRefl,
       ← I.toSubmodule_killingCompl, LieSubmodule.disjoint_toSubmodule]
-  suffices I
+  suffices IsLieAbelian (I ⊓ I.killingCompl : LieIdeal K L) by
+    rw [disjoint_iff]
+    exact IsKilling.ideal_eq_bot_of_isLieAbelian _
+  suffices forall (x y z : L) (hx : x in killingCompl K L I) (hy : y in I),
+      LieModule.traceForm K L L ⁅x, y⁆ z = 0 by
+    rw [LieSubmodule.lie_abelian_iff_lie_self_eq_bot]; rw [LieSubmodule.lie_eq_bot_iff]
+    rintro x ⟨-, hx⟩ y ⟨hy, -⟩
+    exact (IsKilling.killingForm_nondegenerate K L).1 _ fun z => this x y z hx hy
+  intro x y z hx hy
+  rw [LieModule.traceForm_apply_lie_apply K L L x y z]; rw [LieModule.traceForm_comm K L L]
+exact I.mem_killingCompl.mp hx _ lie_mem_left K L I y z hy
 
 中文:
 引理 LieIdeal.isCompl_killingCompl
@@ -322,7 +344,17 @@ lemma LieIdeal.isCompl_killingCompl
     rwa [← LieSubmodule.isCompl_toSubmodule, I.toSubmodule_killingCompl,
       LinearMap.BilinForm.isCompl_orthogonal_iff_disjoint (LieModule.traceForm_isSymm K L L).isRefl,
       ← I.toSubmodule_killingCompl, LieSubmodule.disjoint_toSubmodule]
-  suffices I
+  suffices IsLieAbelian (I ⊓ I.killingCompl : LieIdeal K L) by
+    rw [disjoint_iff]
+    exact IsKilling.ideal_eq_bot_of_isLieAbelian _
+  suffices forall (x y z : L) (hx : x in killingCompl K L I) (hy : y in I),
+      LieModule.traceForm K L L ⁅x, y⁆ z = 0 by
+    rw [LieSubmodule.lie_abelian_iff_lie_self_eq_bot]; rw [LieSubmodule.lie_eq_bot_iff]
+    rintro x ⟨-, hx⟩ y ⟨hy, -⟩
+    exact (IsKilling.killingForm_nondegenerate K L).1 _ fun z => this x y z hx hy
+  intro x y z hx hy
+  rw [LieModule.traceForm_apply_lie_apply K L L x y z]; rw [LieModule.traceForm_comm K L L]
+exact I.mem_killingCompl.mp hx _ lie_mem_left K L I y z hy
 
 Depends on / 依赖: BilinForm, Disjoint, I.killingCompl, I.toSubmodule_killingCompl, IsKilling, IsKilling.ideal_eq_bot_of_isLieAbelian, IsLieAbelian, LieIdeal, LieModule, LieModule.traceForm, LieModule.traceForm_isSymm, LieSubmodule, LieSubmodule.disjoint_toSubmodule, LieSubmodule.isCompl_toSubmodule, LinearMap, LinearMap.BilinForm.isCompl_orthogonal_iff_disjoint, disjoint_iff, disjoint_toSubmodule, ideal_eq_bot_of_isLieAbelian, isCompl_orthogonal_iff_disjoint
 -/

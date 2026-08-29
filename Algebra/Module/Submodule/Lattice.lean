@@ -762,7 +762,12 @@ instance completeLattice
   inf := (· ⊓ ·)
   le_inf _ _ _ := Set.subset_inter
   inf_le_left _ _ := Set.inter_subset_left
+  inf_le_right _ _ := Set.inter_subset_right
+  sSup S := sInf {sm | forall s in S, s <= sm}
+  isLUB_sSup _ := isGLB_upperBounds.mp Submodule.isGLB_sInf
+  isGLB_sInf _ := Submodule.isGLB_sInf
 
+@[simp]
 
 中文:
 实例 completeLattice
@@ -774,7 +779,12 @@ instance completeLattice
   inf := (· ⊓ ·)
   le_inf _ _ _ := Set.subset_inter
   inf_le_left _ _ := Set.inter_subset_left
+  inf_le_right _ _ := Set.inter_subset_right
+  sSup S := sInf {sm | forall s in S, s <= sm}
+  isLUB_sSup _ := isGLB_upperBounds.mp Submodule.isGLB_sInf
+  isGLB_sInf _ := Submodule.isGLB_sInf
 
+@[simp]
 -/
 instance completeLattice : CompleteLattice (Submodule R M) where
   sup a b := sInf { x | a <= x ∧ b <= x }
@@ -1219,7 +1229,18 @@ theorem toAddSubmonoid_sSup
       smul_mem' := fun t {m} h => by
         simp_rw [AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup, sSup_eq_iSup'] at h ⊢
         induction h using AddSubmonoid.iSup_induction' with
-        | mem p x hx 
+        | mem p x hx =>
+          obtain ⟨-, ⟨p : Submodule R M, hp : p in s, rfl⟩⟩ := p
+          suffices p.toAddSubmonoid <= ⨆ q : toAddSubmonoid '' s, (q : AddSubmonoid M) by
+            exact this (smul_mem p t hx)
+          apply le_sSup
+          rw [Subtype.range_coe_subtype]
+          exact ⟨p, hp, rfl⟩
+        | zero => simpa only [smul_zero] using zero_mem _
+        | add _ _ _ _ mx my => revert mx my; simp_rw [smul_add]; exact add_mem }
+  refine le_antisymm (?_ : sSup s <= p) ?_
+· exact sSup_le fun q hq => le_sSup Set.mem_image_of_mem toAddSubmonoid hq
+  · exact sSup_le fun _ ⟨q, hq, hq'⟩ => hq'.symm ▸ le_sSup hq
 
 中文:
 定理 toAddSubmonoid_sSup
@@ -1230,7 +1251,18 @@ theorem toAddSubmonoid_sSup
       smul_mem' := fun t {m} h => by
         simp_rw [AddSubsemigroup.mem_carrier, AddSubmonoid.mem_toSubsemigroup, sSup_eq_iSup'] at h ⊢
         induction h using AddSubmonoid.iSup_induction' with
-        | mem p x hx 
+        | mem p x hx =>
+          obtain ⟨-, ⟨p : Submodule R M, hp : p in s, rfl⟩⟩ := p
+          suffices p.toAddSubmonoid <= ⨆ q : toAddSubmonoid '' s, (q : AddSubmonoid M) by
+            exact this (smul_mem p t hx)
+          apply le_sSup
+          rw [Subtype.range_coe_subtype]
+          exact ⟨p, hp, rfl⟩
+        | zero => simpa only [smul_zero] using zero_mem _
+        | add _ _ _ _ mx my => revert mx my; simp_rw [smul_add]; exact add_mem }
+  refine le_antisymm (?_ : sSup s <= p) ?_
+· exact sSup_le fun q hq => le_sSup Set.mem_image_of_mem toAddSubmonoid hq
+  · exact sSup_le fun _ ⟨q, hq, hq'⟩ => hq'.symm ▸ le_sSup hq
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.iSup_induction, AddSubmonoid.mem_toSubsemigroup, AddSubsemigroup, AddSubsemigroup.mem_carrier, Submodule, Subtype, Subtype.range_coe_subtype, iSup_induction, le_sSup, mem_carrier, mem_toSubsemigroup, p.toAddSubmonoid, range_coe_subtype, sSup_eq_iSup, simp_rw, smul_mem, toAddSubmonoid
 -/

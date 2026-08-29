@@ -156,7 +156,8 @@ definition orderIsoTriple
       simp only [Finset.mem_insert, Finset.mem_singleton] at hx
       obtain rfl | rfl | rfl := hx
       · exact ⟨0, rfl⟩
-      · exact ⟨1, rf
+      · exact ⟨1, rfl⟩
+      · exact ⟨2, rfl⟩)
 
 中文:
 定义 orderIsoTriple
@@ -166,7 +167,8 @@ definition orderIsoTriple
       simp only [Finset.mem_insert, Finset.mem_singleton] at hx
       obtain rfl | rfl | rfl := hx
       · exact ⟨0, rfl⟩
-      · exact ⟨1, rf
+      · exact ⟨1, rfl⟩
+      · exact ⟨2, rfl⟩)
 
 Depends on / 依赖: Finset, Finset.mem_insert, Finset.mem_singleton, StrictMono, StrictMono.orderIsoOfSurjective, StrictMono.vecCons, mem_insert, mem_singleton, orderIsoOfSurjective, strictMono_vecEmpty, strictMono_vecEmpty.vecCons, vecCons
 -/

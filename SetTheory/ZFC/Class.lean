@@ -1608,7 +1608,7 @@ definition coeEquiv
 invFun := fun ⟨s, _⟩ => mk PSet.mk (Shrink s) fun x => ((equivShrink.{u, u + 1} s).symm x).1.out
   left_inv := private Function.rightInverse_of_injective_of_leftInverse (by intro _ _; simp)
 fun s => Subtype.coe_injective coe_equiv_aux s.2
-right_inv s := private Subtype.coe_injective
+right_inv s := private Subtype.coe_injective coe_equiv_aux s.2
 
 中文:
 定义 coeEquiv
@@ -1617,7 +1617,7 @@ right_inv s := private Subtype.coe_injective
 invFun := fun ⟨s, _⟩ => mk PSet.mk (Shrink s) fun x => ((equivShrink.{u, u + 1} s).symm x).1.out
   left_inv := private Function.rightInverse_of_injective_of_leftInverse (by intro _ _; simp)
 fun s => Subtype.coe_injective coe_equiv_aux s.2
-right_inv s := private Subtype.coe_injective
+right_inv s := private Subtype.coe_injective coe_equiv_aux s.2
 
 Depends on / 依赖: small_coe, x.small_coe
 -/

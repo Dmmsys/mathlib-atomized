@@ -39,7 +39,16 @@ definition restrictScalarsObj
   -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(X := ...)` and `(Y := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
   map := fun {X Y} f => ModuleCat.ofHom
-      (X 
+      (X := (ModuleCat.restrictScalars (α.app X).hom).obj (M'.obj X))
+      (Y := (ModuleCat.restrictScalars (R.map f).hom).obj
+        ((ModuleCat.restrictScalars (α.app Y).hom).obj (M'.obj Y)))
+    { toFun := M'.map f
+      map_add' := map_add _
+      map_smul' := fun r x => (M'.map_smul f (α.app _ r) x).trans (by
+        have eq := RingHom.congr_fun (congrArg RingCat.Hom.hom <| α.naturality f) r
+        dsimp at eq
+        rw [← eq]
+        rfl) }
 
 中文:
 定义 restrictScalarsObj
@@ -48,7 +57,16 @@ definition restrictScalarsObj
   -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(X := ...)` and `(Y := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
   map := fun {X Y} f => ModuleCat.ofHom
-      (X 
+      (X := (ModuleCat.restrictScalars (α.app X).hom).obj (M'.obj X))
+      (Y := (ModuleCat.restrictScalars (R.map f).hom).obj
+        ((ModuleCat.restrictScalars (α.app Y).hom).obj (M'.obj Y)))
+    { toFun := M'.map f
+      map_add' := map_add _
+      map_smul' := fun r x => (M'.map_smul f (α.app _ r) x).trans (by
+        have eq := RingHom.congr_fun (congrArg RingCat.Hom.hom <| α.naturality f) r
+        dsimp at eq
+        rw [← eq]
+        rfl) }
 
 Depends on / 依赖: ModuleCat, ModuleCat.restrictScalars, restrictScalars
 -/

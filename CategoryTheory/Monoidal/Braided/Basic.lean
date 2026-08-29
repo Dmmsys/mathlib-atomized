@@ -565,7 +565,26 @@ definition BraidedCategory.ofFaithful
     apply F.map_injective
     refine (cancel_epi (μ F ?_ ?_)).1 ?_
     rw [Functor.map_comp]; rw [← μ_natural_left_assoc]; rw [w]; rw [Functor.map_comp]; rw [reassoc_of% w]; rw [braiding_naturality_left_assoc]; rw [μ_natural_right]
-  braiding_naturality_
+  braiding_naturality_right := by
+    intros
+    apply F.map_injective
+    refine (cancel_epi (μ F ?_ ?_)).1 ?_
+    rw [Functor.map_comp]; rw [← μ_natural_right_assoc]; rw [w]; rw [Functor.map_comp]; rw [reassoc_of% w]; rw [braiding_naturality_right_assoc]; rw [μ_natural_left]
+  hexagon_forward := by
+    intros
+    apply F.map_injective
+    refine (cancel_epi (μ F _ _)).1 ?_
+    refine (cancel_epi (μ F _ _ ▷ _)).1 ?_
+    rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [←
+      μ_natural_left_assoc]; rw [← comp_whiskerRight_assoc]; rw [w]; rw [comp_whiskerRight_assoc]; rw [Functor.LaxMonoidal.associativity_assoc]; rw [Functor.LaxMonoidal.associativity_assoc]; rw [← μ_natural_right]; rw [←
+      whiskerLeft_comp_assoc]; rw [w]; rw [whiskerLeft_comp_assoc]; rw [reassoc_of% w]; rw [braiding_naturality_right_assoc]; rw [Functor.LaxMonoidal.associativity]; rw [hexagon_forward_assoc]
+  hexagon_reverse := by
+    intros
+    apply F.map_injective
+    refine (cancel_epi (μ F _ _)).1 ?_
+    refine (cancel_epi (_ ◁ μ F _ _)).1 ?_
+    rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [←
+      μ_natural_right_assoc]; rw [← whiskerLeft_comp_assoc]; rw [w]; rw [whiskerLeft_comp_assoc]; rw [Functor.LaxMonoidal.associativity_inv_assoc]; rw [Functor.LaxMonoidal.associativity_inv_assoc]; rw [← μ_natural_left]; rw [← comp_whiskerRight_assoc]; rw [w]; rw [comp_whiskerRight_assoc]; rw [reassoc_of% w]; rw [braiding_naturality_left_assoc]; rw [Functor.LaxMonoidal.associativity_inv]; rw [hexagon_reverse_assoc]
 
 中文:
 定义 辫范畴.ofFaithful
@@ -576,7 +595,26 @@ definition BraidedCategory.ofFaithful
     apply F.map_injective
     refine (cancel_epi (μ F ?_ ?_)).1 ?_
     rw [Functor.map_comp]; rw [← μ_natural_left_assoc]; rw [w]; rw [Functor.map_comp]; rw [reassoc_of% w]; rw [braiding_naturality_left_assoc]; rw [μ_natural_right]
-  braiding_naturality_
+  braiding_naturality_right := by
+    intros
+    apply F.map_injective
+    refine (cancel_epi (μ F ?_ ?_)).1 ?_
+    rw [Functor.map_comp]; rw [← μ_natural_right_assoc]; rw [w]; rw [Functor.map_comp]; rw [reassoc_of% w]; rw [braiding_naturality_right_assoc]; rw [μ_natural_left]
+  hexagon_forward := by
+    intros
+    apply F.map_injective
+    refine (cancel_epi (μ F _ _)).1 ?_
+    refine (cancel_epi (μ F _ _ ▷ _)).1 ?_
+    rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [←
+      μ_natural_left_assoc]; rw [← comp_whiskerRight_assoc]; rw [w]; rw [comp_whiskerRight_assoc]; rw [Functor.LaxMonoidal.associativity_assoc]; rw [Functor.LaxMonoidal.associativity_assoc]; rw [← μ_natural_right]; rw [←
+      whiskerLeft_comp_assoc]; rw [w]; rw [whiskerLeft_comp_assoc]; rw [reassoc_of% w]; rw [braiding_naturality_right_assoc]; rw [Functor.LaxMonoidal.associativity]; rw [hexagon_forward_assoc]
+  hexagon_reverse := by
+    intros
+    apply F.map_injective
+    refine (cancel_epi (μ F _ _)).1 ?_
+    refine (cancel_epi (_ ◁ μ F _ _)).1 ?_
+    rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [←
+      μ_natural_right_assoc]; rw [← whiskerLeft_comp_assoc]; rw [w]; rw [whiskerLeft_comp_assoc]; rw [Functor.LaxMonoidal.associativity_inv_assoc]; rw [Functor.LaxMonoidal.associativity_inv_assoc]; rw [← μ_natural_left]; rw [← comp_whiskerRight_assoc]; rw [w]; rw [comp_whiskerRight_assoc]; rw [reassoc_of% w]; rw [braiding_naturality_left_assoc]; rw [Functor.LaxMonoidal.associativity_inv]; rw [hexagon_reverse_assoc]
 
 Depends on / 依赖: BraidedCategory, F.map_injective, Functor, Functor.map_comp, braiding, braiding_naturality_left, braiding_naturality_left_assoc, braiding_naturality_right, cancel_epi, cat_disch, intros, map_comp, map_injective, reassoc_of
 -/
@@ -685,7 +723,17 @@ theorem braiding_leftUnitor_aux₂
       ((β_ X (𝟙_ C)).hom ▷ 𝟙_ C) ≫ (α_ _ _ _).hom ≫ (α_ _ _ _).inv ≫ ((fun_ X).hom ▷ 𝟙_ C) := by
       simp
     _ = ((β_ X (𝟙_ C)).hom ▷ 𝟙_ C) ≫ (α_ _ _ _).hom ≫ (_ ◁ (β_ X _).hom) ≫
-          (_ ◁ (β_ X _).inv) ≫ (α_ _ _ _).inv ≫ ((fun_ 
+          (_ ◁ (β_ X _).inv) ≫ (α_ _ _ _).inv ≫ ((fun_ X).hom ▷ 𝟙_ C) := by simp
+    _ = (α_ _ _ _).hom ≫ (β_ _ _).hom ≫ (α_ _ _ _).hom ≫ (_ ◁ (β_ X _).inv) ≫ (α_ _ _ _).inv ≫
+          ((fun_ X).hom ▷ 𝟙_ C) := by simp
+    _ = (α_ _ _ _).hom ≫ (β_ _ _).hom ≫ ((fun_ _).hom ▷ X) ≫ (β_ X _).inv := by
+      rw [braiding_leftUnitor_aux₁]
+    _ = (α_ _ _ _).hom ≫ (_ ◁ (fun_ _).hom) ≫ (β_ _ _).hom ≫ (β_ X _).inv := by
+      (slice_lhs 2 3 => rw [← braiding_naturality_right]); simp only [assoc]
+    _ = (α_ _ _ _).hom ≫ (_ ◁ (fun_ _).hom) := by rw [Iso.hom_inv_id, comp_id]
+    _ = (ρ_ X).hom ▷ 𝟙_ C := by rw [triangle]
+
+@[reassoc]
 
 中文:
 定理 braiding_leftUnitor_aux₂
@@ -695,7 +743,17 @@ theorem braiding_leftUnitor_aux₂
       ((β_ X (𝟙_ C)).hom ▷ 𝟙_ C) ≫ (α_ _ _ _).hom ≫ (α_ _ _ _).inv ≫ ((fun_ X).hom ▷ 𝟙_ C) := by
       simp
     _ = ((β_ X (𝟙_ C)).hom ▷ 𝟙_ C) ≫ (α_ _ _ _).hom ≫ (_ ◁ (β_ X _).hom) ≫
-          (_ ◁ (β_ X _).inv) ≫ (α_ _ _ _).inv ≫ ((fun_ 
+          (_ ◁ (β_ X _).inv) ≫ (α_ _ _ _).inv ≫ ((fun_ X).hom ▷ 𝟙_ C) := by simp
+    _ = (α_ _ _ _).hom ≫ (β_ _ _).hom ≫ (α_ _ _ _).hom ≫ (_ ◁ (β_ X _).inv) ≫ (α_ _ _ _).inv ≫
+          ((fun_ X).hom ▷ 𝟙_ C) := by simp
+    _ = (α_ _ _ _).hom ≫ (β_ _ _).hom ≫ ((fun_ _).hom ▷ X) ≫ (β_ X _).inv := by
+      rw [braiding_leftUnitor_aux₁]
+    _ = (α_ _ _ _).hom ≫ (_ ◁ (fun_ _).hom) ≫ (β_ _ _).hom ≫ (β_ X _).inv := by
+      (slice_lhs 2 3 => rw [← braiding_naturality_right]); simp only [assoc]
+    _ = (α_ _ _ _).hom ≫ (_ ◁ (fun_ _).hom) := by rw [Iso.hom_inv_id, comp_id]
+    _ = (ρ_ X).hom ▷ 𝟙_ C := by rw [triangle]
+
+@[reassoc]
 
 Depends on / 依赖: fun_
 -/
@@ -771,7 +829,18 @@ theorem braiding_rightUnitor_aux₂
       (𝟙_ C ◁ (β_ (𝟙_ C) X).hom) ≫ (α_ _ _ _).inv ≫ (α_ _ _ _).hom ≫ (𝟙_ C ◁ (ρ_ X).hom) := by
       simp
     _ = (𝟙_ C ◁ (β_ (𝟙_ C) X).hom) ≫ (α_ _ _ _).inv ≫ ((β_ _ X).hom ▷ _) ≫
-          ((β_ _ X).inv ▷ _) ≫ (α_ _ _ _).hom ≫ (𝟙_ C ◁ (ρ_
+          ((β_ _ X).inv ▷ _) ≫ (α_ _ _ _).hom ≫ (𝟙_ C ◁ (ρ_ X).hom) := by
+      simp
+    _ = (α_ _ _ _).inv ≫ (β_ _ _).hom ≫ (α_ _ _ _).inv ≫ ((β_ _ X).inv ▷ _) ≫ (α_ _ _ _).hom ≫
+          (𝟙_ C ◁ (ρ_ X).hom) := by
+      (slice_lhs 1 3 => rw [← hexagon_reverse]); simp only [assoc]
+    _ = (α_ _ _ _).inv ≫ (β_ _ _).hom ≫ (X ◁ (ρ_ _).hom) ≫ (β_ _ X).inv := by simp
+    _ = (α_ _ _ _).inv ≫ ((ρ_ _).hom ▷ _) ≫ (β_ _ X).hom ≫ (β_ _ _).inv := by
+      (slice_lhs 2 3 => rw [← braiding_naturality_left]); simp only [assoc]
+    _ = (α_ _ _ _).inv ≫ ((ρ_ _).hom ▷ _) := by rw [Iso.hom_inv_id, comp_id]
+    _ = 𝟙_ C ◁ (fun_ X).hom := by rw [triangle_assoc_comp_right]
+
+@[reassoc]
 
 中文:
 定理 braiding_rightUnitor_aux₂
@@ -781,7 +850,18 @@ theorem braiding_rightUnitor_aux₂
       (𝟙_ C ◁ (β_ (𝟙_ C) X).hom) ≫ (α_ _ _ _).inv ≫ (α_ _ _ _).hom ≫ (𝟙_ C ◁ (ρ_ X).hom) := by
       simp
     _ = (𝟙_ C ◁ (β_ (𝟙_ C) X).hom) ≫ (α_ _ _ _).inv ≫ ((β_ _ X).hom ▷ _) ≫
-          ((β_ _ X).inv ▷ _) ≫ (α_ _ _ _).hom ≫ (𝟙_ C ◁ (ρ_
+          ((β_ _ X).inv ▷ _) ≫ (α_ _ _ _).hom ≫ (𝟙_ C ◁ (ρ_ X).hom) := by
+      simp
+    _ = (α_ _ _ _).inv ≫ (β_ _ _).hom ≫ (α_ _ _ _).inv ≫ ((β_ _ X).inv ▷ _) ≫ (α_ _ _ _).hom ≫
+          (𝟙_ C ◁ (ρ_ X).hom) := by
+      (slice_lhs 1 3 => rw [← hexagon_reverse]); simp only [assoc]
+    _ = (α_ _ _ _).inv ≫ (β_ _ _).hom ≫ (X ◁ (ρ_ _).hom) ≫ (β_ _ X).inv := by simp
+    _ = (α_ _ _ _).inv ≫ ((ρ_ _).hom ▷ _) ≫ (β_ _ X).hom ≫ (β_ _ _).inv := by
+      (slice_lhs 2 3 => rw [← braiding_naturality_left]); simp only [assoc]
+    _ = (α_ _ _ _).inv ≫ ((ρ_ _).hom ▷ _) := by rw [Iso.hom_inv_id, comp_id]
+    _ = 𝟙_ C ◁ (fun_ X).hom := by rw [triangle_assoc_comp_right]
+
+@[reassoc]
 
 Depends on / 依赖: hexagon_reverse, slice_lhs
 -/
@@ -1833,7 +1913,13 @@ theorem tensorμ_natural
   slice_lhs 2 3 =>
     rw [tensorHom_comp_tensorHom]; rw [comp_id f₁]; rw [← id_comp f₁]; rw [associator_inv_naturality]; rw [← tensorHom_comp_tensorHom]
   slice_lhs 3 4 =>
-    rw [tens
+    rw [tensorHom_comp_tensorHom]; rw [tensorHom_comp_tensorHom]; rw [comp_id f₁]; rw [← id_comp f₁]; rw [comp_id g₂]; rw [← id_comp g₂]; rw [braiding_naturality]; rw [← tensorHom_comp_tensorHom]; rw [← tensorHom_comp_tensorHom]
+  slice_lhs 4 5 =>
+    rw [tensorHom_comp_tensorHom]; rw [comp_id f₁]; rw [← id_comp f₁]; rw [associator_naturality]; rw [← tensorHom_comp_tensorHom]
+  slice_lhs 5 6 => rw [associator_inv_naturality]
+  simp only [assoc]
+
+@[reassoc]
 
 中文:
 定理 tensorμ_natural
@@ -1845,7 +1931,13 @@ theorem tensorμ_natural
   slice_lhs 2 3 =>
     rw [tensorHom_comp_tensorHom]; rw [comp_id f₁]; rw [← id_comp f₁]; rw [associator_inv_naturality]; rw [← tensorHom_comp_tensorHom]
   slice_lhs 3 4 =>
-    rw [tens
+    rw [tensorHom_comp_tensorHom]; rw [tensorHom_comp_tensorHom]; rw [comp_id f₁]; rw [← id_comp f₁]; rw [comp_id g₂]; rw [← id_comp g₂]; rw [braiding_naturality]; rw [← tensorHom_comp_tensorHom]; rw [← tensorHom_comp_tensorHom]
+  slice_lhs 4 5 =>
+    rw [tensorHom_comp_tensorHom]; rw [comp_id f₁]; rw [← id_comp f₁]; rw [associator_naturality]; rw [← tensorHom_comp_tensorHom]
+  slice_lhs 5 6 => rw [associator_inv_naturality]
+  simp only [assoc]
+
+@[reassoc]
 
 Depends on / 依赖: associator_inv_naturality, associator_naturality, braiding_naturality, comp_id, id_comp, id_tensorHom, simp_rw, slice_lhs, tensorHom_comp_tensorHom, tensorHom_id
 -/
@@ -1935,7 +2027,11 @@ theorem tensor_left_unitality
     simp
   slice_rhs 1 3 => rw [this]
   clear this
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, ← comp_wh
+  slice_rhs 1 2 => rw [← whiskerLeft_comp, ← comp_whiskerRight,
+    leftUnitor_inv_braiding]
+  simp [tensorHom_def]
+
+@[reassoc]
 
 中文:
 定理 tensor_left_unitality
@@ -1949,7 +2045,11 @@ theorem tensor_left_unitality
     simp
   slice_rhs 1 3 => rw [this]
   clear this
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, ← comp_wh
+  slice_rhs 1 2 => rw [← whiskerLeft_comp, ← comp_whiskerRight,
+    leftUnitor_inv_braiding]
+  simp [tensorHom_def]
+
+@[reassoc]
 
 Depends on / 依赖: comp_whiskerRight, fun_, leftUnitor_inv_braiding, otimes, slice_rhs, tensorHom_def, whiskerLeft_comp
 -/
@@ -1985,7 +2085,11 @@ theorem tensor_right_unitality
     monoidal
   slice_rhs 1 3 => rw [this]
   clear this
-  slice_rhs 2 3 => rw [← w
+  slice_rhs 2 3 => rw [← whiskerLeft_comp, ← comp_whiskerRight,
+    rightUnitor_inv_braiding]
+  simp [tensorHom_def]
+
+@[reassoc]
 
 中文:
 定理 tensor_right_unitality
@@ -1999,7 +2103,11 @@ theorem tensor_right_unitality
     monoidal
   slice_rhs 1 3 => rw [this]
   clear this
-  slice_rhs 2 3 => rw [← w
+  slice_rhs 2 3 => rw [← whiskerLeft_comp, ← comp_whiskerRight,
+    rightUnitor_inv_braiding]
+  simp [tensorHom_def]
+
+@[reassoc]
 
 Depends on / 依赖: comp_whiskerRight, fun_, monoidal, otimes, rightUnitor_inv_braiding, slice_rhs, tensorHom_def, whiskerLeft_comp
 -/
@@ -2032,7 +2140,8 @@ theorem tensor_associativity
   calc
     _ = 𝟙 _ otimes≫
       X₁ ◁ ((β_ X₂ Y₁).hom ▷ (Y₂ otimes Z₁) ≫ (Y₁ otimes X₂) ◁ (β_ Y₂ Z₁).hom) ▷ Z₂ otimes≫
-        X₁ ◁ Y₁ ◁ (β_ X₂ Z₁).hom ▷ Y₂ ▷ Z₂ otimes≫ 𝟙 
+        X₁ ◁ Y₁ ◁ (β_ X₂ Z₁).hom ▷ Y₂ ▷ Z₂ otimes≫ 𝟙 _ := by monoidal
+    _ = _ := by rw [← whisker_exchange]; monoidal
 
 中文:
 定理 tensor_associativity
@@ -2043,7 +2152,8 @@ theorem tensor_associativity
   calc
     _ = 𝟙 _ otimes≫
       X₁ ◁ ((β_ X₂ Y₁).hom ▷ (Y₂ otimes Z₁) ≫ (Y₁ otimes X₂) ◁ (β_ Y₂ Z₁).hom) ▷ Z₂ otimes≫
-        X₁ ◁ Y₁ ◁ (β_ X₂ Z₁).hom ▷ Y₂ ▷ Z₂ otimes≫ 𝟙 
+        X₁ ◁ Y₁ ◁ (β_ X₂ Z₁).hom ▷ Y₂ ▷ Z₂ otimes≫ 𝟙 _ := by monoidal
+    _ = _ := by rw [← whisker_exchange]; monoidal
 
 Depends on / 依赖: braiding_tensor_left_hom, braiding_tensor_right_hom, monoidal, otimes, prodMonoidal_tensorObj, tensor_obj, whisker_exchange
 -/
@@ -2073,7 +2183,10 @@ instance tensorMonoidal
           { hom := tensorμ X.1 X.2 Y.1 Y.2
             inv := tensorδ X.1 X.2 Y.1 Y.2 }
         μIso_hom_natural_left := fun f Z => tensorμ_natural_left f.1 f.2 Z.1 Z.2
-        μIso_hom_natural_right := fun
+        μIso_hom_natural_right := fun Z f => tensorμ_natural_right Z.1 Z.2 f.1 f.2
+        associativity := fun X Y Z => tensor_associativity X.1 X.2 Y.1 Y.2 Z.1 Z.2
+        left_unitality := fun ⟨X₁, X₂⟩ => tensor_left_unitality X₁ X₂
+        right_unitality := fun ⟨X₁, X₂⟩ => tensor_right_unitality X₁ X₂ }
 
 中文:
 实例 tensorMonoidal
@@ -2084,7 +2197,10 @@ instance tensorMonoidal
           { hom := tensorμ X.1 X.2 Y.1 Y.2
             inv := tensorδ X.1 X.2 Y.1 Y.2 }
         μIso_hom_natural_left := fun f Z => tensorμ_natural_left f.1 f.2 Z.1 Z.2
-        μIso_hom_natural_right := fun
+        μIso_hom_natural_right := fun Z f => tensorμ_natural_right Z.1 Z.2 f.1 f.2
+        associativity := fun X Y Z => tensor_associativity X.1 X.2 Y.1 Y.2 Z.1 Z.2
+        left_unitality := fun ⟨X₁, X₂⟩ => tensor_left_unitality X₁ X₂
+        right_unitality := fun ⟨X₁, X₂⟩ => tensor_right_unitality X₁ X₂ }
 
 Depends on / 依赖: CoreMonoidal, Functor, Functor.CoreMonoidal.toMonoidal, associativity, fun_, left_unitality, right_unitality, tensor_associativity, tensor_left_unitality, tensor_right_unitality, toMonoidal
 -/
@@ -2228,6 +2344,7 @@ theorem rightUnitor_monoidal
   rw [← braiding_rightUnitor]
   monoidal
 
+@[reassoc]
 
 中文:
 定理 rightUnitor_monoidal
@@ -2243,6 +2360,7 @@ theorem rightUnitor_monoidal
   rw [← braiding_rightUnitor]
   monoidal
 
+@[reassoc]
 
 Depends on / 依赖: braiding_rightUnitor, fun_, monoidal, otimes
 -/
@@ -2273,7 +2391,9 @@ theorem associator_monoidal
       X₁ ◁ ((X₂ otimes Y₁) ◁ (β_ X₃ Y₂).hom ≫
         (β_ X₂ Y₁).hom ▷ (Y₂ otimes X₃)) ▷ Y₃ otimes≫ 𝟙 _ := by
           rw [braiding_tensor_right_hom]; monoidal
-    _ = _ := by rw [whisker_exchange, braid
+    _ = _ := by rw [whisker_exchange, braiding_tensor_left_hom]; monoidal
+
+@[reassoc]
 
 中文:
 定理 associator_monoidal
@@ -2285,7 +2405,9 @@ theorem associator_monoidal
       X₁ ◁ ((X₂ otimes Y₁) ◁ (β_ X₃ Y₂).hom ≫
         (β_ X₂ Y₁).hom ▷ (Y₂ otimes X₃)) ▷ Y₃ otimes≫ 𝟙 _ := by
           rw [braiding_tensor_right_hom]; monoidal
-    _ = _ := by rw [whisker_exchange, braid
+    _ = _ := by rw [whisker_exchange, braiding_tensor_left_hom]; monoidal
+
+@[reassoc]
 
 Depends on / 依赖: braiding_tensor_left_hom, braiding_tensor_right_hom, monoidal, otimes, whisker_exchange
 -/
@@ -2312,7 +2434,9 @@ lemma tensorμ_comp_μ_tensorHom_μ_comp_μ
   proof: by
   rw [tensorHom_def]
   simp only [tensorμ, Category.assoc]
-  rw [whiskerLeft_μ_comp_μ]; rw [associator_inv_naturality_left_assoc]; rw [← pentagon_inv_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [Category.assoc]; rw [μ_whiskerRight_comp_μ]; rw [whiskerLeft_hom_inv_as
+  rw [whiskerLeft_μ_comp_μ]; rw [associator_inv_naturality_left_assoc]; rw [← pentagon_inv_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [Category.assoc]; rw [μ_whiskerRight_comp_μ]; rw [whiskerLeft_hom_inv_assoc]; rw [Iso.inv_hom_id_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [μ_natural_left_assoc]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [← MonoidalCategory.whiskerLeft_comp]; rw [← Functor.LaxBraided.braided]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [μ_natural_right]; rw [whiskerLeft_μ_comp_μ_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [pentagon_inv_assoc]; rw [μ_natural_left_assoc]; rw [μ_natural_left_assoc]; rw [Iso.hom_inv_id_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [μ_whiskerRight_comp_μ_assoc]; rw [Iso.inv_hom_id_assoc]; rw [← tensorHom_def_assoc]
+  simp only [← Functor.map_comp, whisker_assoc, Category.assoc, pentagon_inv_inv_hom_hom_inv,
+    pentagon_inv_hom_hom_hom_inv_assoc]
 
 中文:
 引理 tensorμ_comp_μ_tensorHom_μ_comp_μ
@@ -2320,7 +2444,9 @@ lemma tensorμ_comp_μ_tensorHom_μ_comp_μ
   证明: by
   rw [tensorHom_def]
   simp only [tensorμ, Category.assoc]
-  rw [whiskerLeft_μ_comp_μ]; rw [associator_inv_naturality_left_assoc]; rw [← pentagon_inv_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [Category.assoc]; rw [μ_whiskerRight_comp_μ]; rw [whiskerLeft_hom_inv_as
+  rw [whiskerLeft_μ_comp_μ]; rw [associator_inv_naturality_left_assoc]; rw [← pentagon_inv_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [Category.assoc]; rw [μ_whiskerRight_comp_μ]; rw [whiskerLeft_hom_inv_assoc]; rw [Iso.inv_hom_id_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [μ_natural_left_assoc]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [← MonoidalCategory.whiskerLeft_comp]; rw [← Functor.LaxBraided.braided]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [μ_natural_right]; rw [whiskerLeft_μ_comp_μ_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [pentagon_inv_assoc]; rw [μ_natural_left_assoc]; rw [μ_natural_left_assoc]; rw [Iso.hom_inv_id_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [μ_whiskerRight_comp_μ_assoc]; rw [Iso.inv_hom_id_assoc]; rw [← tensorHom_def_assoc]
+  simp only [← Functor.map_comp, whisker_assoc, Category.assoc, pentagon_inv_inv_hom_hom_inv,
+    pentagon_inv_hom_hom_hom_inv_assoc]
 
 Depends on / 依赖: Category, Category.assoc, Iso.inv_hom_id_assoc, associator_inv_naturality_left_assoc, associator_inv_naturality_middle_assoc, comp_whiskerRight_assoc, inv_hom_id_assoc, pentagon_inv_assoc, tensorHom_def, whiskerLeft_hom_inv_assoc
 -/

@@ -1021,7 +1021,7 @@ lemma le_eRk_iff
     obtain ⟨I, hIJ, rfl⟩ := exists_subset_encard_eq h
     exact ⟨_, hIJ.trans hJ.subset, hJ.indep.subset hIJ, rfl⟩
   rw [← hIc]; rw [← hI.eRk_eq_encard]
-  exact M.eRk_mon
+  exact M.eRk_mono hIX
 
 中文:
 引理 le_eRk_iff
@@ -1033,7 +1033,7 @@ lemma le_eRk_iff
     obtain ⟨I, hIJ, rfl⟩ := exists_subset_encard_eq h
     exact ⟨_, hIJ.trans hJ.subset, hJ.indep.subset hIJ, rfl⟩
   rw [← hIc]; rw [← hI.eRk_eq_encard]
-  exact M.eRk_mon
+  exact M.eRk_mono hIX
 
 Depends on / 依赖: M.eRk_mono, M.exists_isBasis, eRk_eq_encard, eRk_mono, encard_eq_eRk, exists_isBasis, exists_subset_encard_eq, hI.eRk_eq_encard, hIJ.trans, hJ.encard_eq_eRk, hJ.indep.subset, hJ.subset, subset
 -/
@@ -1132,7 +1132,7 @@ lemma eRk_eq_zero_iff'
   refine ⟨fun h => by simpa [h] using! hI, fun h => eq_empty_iff_forall_notMem.2 fun e heI => ?_⟩
   exact (hI.indep.isNonloop_of_mem heI).not_isLoop (h (hI.subset heI))
 
-@[si
+@[simp]
 
 中文:
 引理 eRk_eq_zero_iff'
@@ -1143,7 +1143,7 @@ lemma eRk_eq_zero_iff'
   refine ⟨fun h => by simpa [h] using! hI, fun h => eq_empty_iff_forall_notMem.2 fun e heI => ?_⟩
   exact (hI.indep.isNonloop_of_mem heI).not_isLoop (h (hI.subset heI))
 
-@[si
+@[simp]
 
 Depends on / 依赖: M.exists_isBasis, eRk_inter_ground, encard_eq_eRk, encard_eq_zero, eq_empty_iff_forall_notMem, exists_isBasis, hI.encard_eq_eRk, hI.indep.isNonloop_of_mem, hI.subset, isNonloop_of_mem, not_isLoop, subset
 -/
@@ -1215,7 +1215,10 @@ lemma eRk_inter_add_eRk_union_le
     hIi.indep.subset_isBasis'_of_subset (hIi.subset.trans inter_subset_left)
   obtain ⟨IY, hIY, hIY'⟩ :=
     hIi.indep.subset_isBasis'_of_subset (hIi.subset.trans inter_subset_right)
-  rw [← hIX.eRk_eq_eRk_union]; rw 
+  rw [← hIX.eRk_eq_eRk_union]; rw [union_comm]; rw [← hIY.eRk_eq_eRk_union]; rw [← hIi.encard_eq_eRk]; rw [← hIX.encard_eq_eRk]; rw [← hIY.encard_eq_eRk]; rw [union_comm]; rw [← encard_union_add_encard_inter]; rw [add_comm]
+  exact add_le_add (eRk_le_encard _ _) (encard_mono (subset_inter hIX' hIY'))
+
+alias eRk_submod := eRk_inter_add_eRk_union_le
 
 中文:
 引理 eRk_inter_add_eRk_union_le
@@ -1226,7 +1229,10 @@ lemma eRk_inter_add_eRk_union_le
     hIi.indep.subset_isBasis'_of_subset (hIi.subset.trans inter_subset_left)
   obtain ⟨IY, hIY, hIY'⟩ :=
     hIi.indep.subset_isBasis'_of_subset (hIi.subset.trans inter_subset_right)
-  rw [← hIX.eRk_eq_eRk_union]; rw 
+  rw [← hIX.eRk_eq_eRk_union]; rw [union_comm]; rw [← hIY.eRk_eq_eRk_union]; rw [← hIi.encard_eq_eRk]; rw [← hIX.encard_eq_eRk]; rw [← hIY.encard_eq_eRk]; rw [union_comm]; rw [← encard_union_add_encard_inter]; rw [add_comm]
+  exact add_le_add (eRk_le_encard _ _) (encard_mono (subset_inter hIX' hIY'))
+
+alias eRk_submod := eRk_inter_add_eRk_union_le
 
 Depends on / 依赖: M.exists_isBasis, _of_subset, add_comm, add_le_add, eRk_eq_eRk_union, eRk_le_e, encard_eq_eRk, encard_union_add_encard_inter, exists_isBasis, hIX.eRk_eq_eRk_union, hIX.encard_eq_eRk, hIY.eRk_eq_eRk_union, hIY.encard_eq_eRk, hIi.encard_eq_eRk, hIi.indep.subset_isBasis, hIi.subset.trans, inter_subset_left, inter_subset_right, subset, subset_isBasis
 -/
@@ -1717,7 +1723,9 @@ lemma IsRkFinite.isBasis_of_subset_closure_of_subset_of_encard_le
   have hIJ := hJ.subset.trans inter_subset_left
   rw [← closure_inter_ground] at hXI
 replace hXI := hXI.trans M.closure_subset_closure_of_subset_closure hJ.subset_closure
-  have hJX := hJ.indep.isBasis_of_subset_of_subset_closure (hIJ.trans hIX) 
+  have hJX := hJ.indep.isBasis_of_subset_of_subset_closure (hIJ.trans hIX) hXI
+  rw [← hJX.encard_eq_eRk] at hI
+  rwa [← Finite.eq_of_subset_of_encard_le (hX.finite_of_isBasis hJX) hIJ hI]
 
 中文:
 引理 IsRkFinite.isBasis_of_subset_closure_of_subset_of_encard_le
@@ -1727,7 +1735,9 @@ replace hXI := hXI.trans M.closure_subset_closure_of_subset_closure hJ.subset_cl
   have hIJ := hJ.subset.trans inter_subset_left
   rw [← closure_inter_ground] at hXI
 replace hXI := hXI.trans M.closure_subset_closure_of_subset_closure hJ.subset_closure
-  have hJX := hJ.indep.isBasis_of_subset_of_subset_closure (hIJ.trans hIX) 
+  have hJX := hJ.indep.isBasis_of_subset_of_subset_closure (hIJ.trans hIX) hXI
+  rw [← hJX.encard_eq_eRk] at hI
+  rwa [← Finite.eq_of_subset_of_encard_le (hX.finite_of_isBasis hJX) hIJ hI]
 
 Depends on / 依赖: Finite, Finite.eq_of_subset_of_encard_le, M.closure_subset_closure_of_subset_closure, M.exists_isBasis, closure_inter_ground, closure_subset_closure_of_subset_closure, encard_eq_eRk, eq_of_subset_of_encard_le, exists_isBasis, finite_of_isBasis, hIJ.trans, hJ.indep.isBasis_of_subset_of_subset_closure, hJ.subset.trans, hJ.subset_closure, hJX.encard_eq_eRk, hX.finite_of_isBasis, hXI.trans, inter_subset_left, isBasis_of_subset_of_subset_closure, replace
 -/
@@ -1751,7 +1761,8 @@ lemma IsRkFinite.closure_eq_closure_of_subset_of_eRk_ge_eRk
   obtain ⟨I, hI⟩ := M.exists_isBasis' X
   obtain ⟨J, hJ, hIJ⟩ := hI.indep.subset_isBasis'_of_subset (hI.subset.trans hXY)
   rw [hI.eRk_eq_encard]; rw [hJ.eRk_eq_encard] at hr
-  rw [← closure_inter_ground]; rw [← M.closure_inter_ground Y]; rw [← hI.isBasis_inter_ground.closure_eq_closure]; rw [← h
+  rw [← closure_inter_ground]; rw [← M.closure_inter_ground Y]; rw [← hI.isBasis_inter_ground.closure_eq_closure]; rw [← hJ.isBasis_inter_ground.closure_eq_closure]; rw [Finite.eq_of_subset_of_encard_le
+      (hI.indep.finite_of_subset_isRkFinite hI.subset hX) hIJ hr]
 
 中文:
 引理 IsRkFinite.closure_eq_closure_of_subset_of_eRk_ge_eRk
@@ -1760,7 +1771,8 @@ lemma IsRkFinite.closure_eq_closure_of_subset_of_eRk_ge_eRk
   obtain ⟨I, hI⟩ := M.exists_isBasis' X
   obtain ⟨J, hJ, hIJ⟩ := hI.indep.subset_isBasis'_of_subset (hI.subset.trans hXY)
   rw [hI.eRk_eq_encard]; rw [hJ.eRk_eq_encard] at hr
-  rw [← closure_inter_ground]; rw [← M.closure_inter_ground Y]; rw [← hI.isBasis_inter_ground.closure_eq_closure]; rw [← h
+  rw [← closure_inter_ground]; rw [← M.closure_inter_ground Y]; rw [← hI.isBasis_inter_ground.closure_eq_closure]; rw [← hJ.isBasis_inter_ground.closure_eq_closure]; rw [Finite.eq_of_subset_of_encard_le
+      (hI.indep.finite_of_subset_isRkFinite hI.subset hX) hIJ hr]
 
 Depends on / 依赖: Finite, Finite.eq_of_subset_of_encard_le, M.closure_inter_ground, M.exists_isBasis, _of_subset, closure_eq_closure, closure_inter_ground, eRk_eq_encard, eq_of_subset_of_encard_le, exists_isBasis, finite_of_subset_isRkFinite, hI.eRk_eq_encard, hI.indep.finite_of_subset_isRkFinite, hI.indep.subset_isBasis, hI.isBasis_inter_ground.closure_eq_closure, hI.subset, hI.subset.trans, hJ.eRk_eq_encard, hJ.isBasis_inter_ground.closure_eq_closure, isBasis_inter_ground
 -/
@@ -1805,7 +1817,7 @@ lemma eRk_insert_eq_add_one
   proof: by
   obtain ⟨I, hI⟩ := M.exists_isBasis' X
   rw [← hI.closure_eq_closure]; rw [mem_sdiff]; rw [hI.indep.mem_closure_iff']; rw [not_and] at he
-  rw [← eRk_closure_eq]; rw [← closure_insert_congr_right hI.closure_eq_closure]; rw [hI.eRk_eq_encard]; rw [eRk_closure_eq]; rw [Indep.eRk_eq_encard (by taut
+  rw [← eRk_closure_eq]; rw [← closure_insert_congr_right hI.closure_eq_closure]; rw [hI.eRk_eq_encard]; rw [eRk_closure_eq]; rw [Indep.eRk_eq_encard (by tauto)]; rw [encard_insert_of_notMem (by tauto)]
 
 中文:
 引理 eRk_insert_eq_add_one
@@ -1814,7 +1826,7 @@ lemma eRk_insert_eq_add_one
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis' X
   rw [← hI.closure_eq_closure]; rw [mem_sdiff]; rw [hI.indep.mem_closure_iff']; rw [not_and] at he
-  rw [← eRk_closure_eq]; rw [← closure_insert_congr_right hI.closure_eq_closure]; rw [hI.eRk_eq_encard]; rw [eRk_closure_eq]; rw [Indep.eRk_eq_encard (by taut
+  rw [← eRk_closure_eq]; rw [← closure_insert_congr_right hI.closure_eq_closure]; rw [hI.eRk_eq_encard]; rw [eRk_closure_eq]; rw [Indep.eRk_eq_encard (by tauto)]; rw [encard_insert_of_notMem (by tauto)]
 
 Depends on / 依赖: Indep.eRk_eq_encard, M.exists_isBasis, closure_eq_closure, closure_insert_congr_right, eRk_closure_eq, eRk_eq_encard, encard_insert_of_notMem, exists_isBasis, hI.closure_eq_closure, hI.eRk_eq_encard, hI.indep.mem_closure_iff, mem_closure_iff, mem_sdiff, not_and
 -/
@@ -2390,7 +2402,8 @@ lemma eRk_eq_one_iff
     rintro ⟨e, rfl⟩
     exact ⟨e, singleton_subset_iff.1 hI.subset, indep_singleton.1 hI.indep, hI.subset_closure⟩
   rw [← he.eRk_eq]
-  exact ((M.eRk_mono hXe).trans (
+  exact ((M.eRk_mono hXe).trans (M.eRk_closure_eq _).le).antisymm
+    (M.eRk_mono (singleton_subset_iff.2 heX))
 
 中文:
 引理 eRk_eq_one_iff
@@ -2402,7 +2415,8 @@ lemma eRk_eq_one_iff
     rintro ⟨e, rfl⟩
     exact ⟨e, singleton_subset_iff.1 hI.subset, indep_singleton.1 hI.indep, hI.subset_closure⟩
   rw [← he.eRk_eq]
-  exact ((M.eRk_mono hXe).trans (
+  exact ((M.eRk_mono hXe).trans (M.eRk_closure_eq _).le).antisymm
+    (M.eRk_mono (singleton_subset_iff.2 heX))
 
 Depends on / 依赖: IsNonloop, M.IsNonloop, M.closure, M.eRk, M.eRk_closure_eq, M.eRk_mono, M.exists_isBasis, aesop_mat, antisymm, closure, eRk_closure_eq, eRk_eq, eRk_eq_encard, eRk_mono, encard_eq_one, exists_isBasis, hI.eRk_eq_encard, hI.indep, hI.subset, hI.subset_closure
 -/
@@ -2429,7 +2443,11 @@ lemma eRk_le_one_iff
     rw [hI.eRk_eq_encard]; rw [encard_le_one_iff_eq] at h
     obtain (rfl | ⟨e, rfl⟩) := h
     · obtain ⟨e, he⟩ := M.ground_nonempty
-      exact ⟨e, he, hI.subset_closure.trans ((M.closure_subset_closure (empty_
+      exact ⟨e, he, hI.subset_closure.trans ((M.closure_subset_closure (empty_subset _)))⟩
+    exact ⟨e, hI.indep.subset_ground rfl, hI.subset_closure⟩
+  refine (M.eRk_mono he).trans ?_
+  rw [eRk_closure_eq]; rw [← encard_singleton e]
+  exact M.eRk_le_encard {e}
 
 中文:
 引理 eRk_le_one_iff
@@ -2440,7 +2458,11 @@ lemma eRk_le_one_iff
     rw [hI.eRk_eq_encard]; rw [encard_le_one_iff_eq] at h
     obtain (rfl | ⟨e, rfl⟩) := h
     · obtain ⟨e, he⟩ := M.ground_nonempty
-      exact ⟨e, he, hI.subset_closure.trans ((M.closure_subset_closure (empty_
+      exact ⟨e, he, hI.subset_closure.trans ((M.closure_subset_closure (empty_subset _)))⟩
+    exact ⟨e, hI.indep.subset_ground rfl, hI.subset_closure⟩
+  refine (M.eRk_mono he).trans ?_
+  rw [eRk_closure_eq]; rw [← encard_singleton e]
+  exact M.eRk_le_encard {e}
 
 Depends on / 依赖: M.closure, M.closure_subset_closure, M.eRk, M.eRk_mono, M.exists_isBasis, M.ground_nonempty, aesop_mat, closure, closure_subset_closure, eRk_closure_eq, eRk_eq_encard, eRk_mono, empty_subset, encard_le_one_iff_eq, encard_singleton, exists_isBasis, ground_nonempty, hI.eRk_eq_encard, hI.indep.subset_ground, hI.subset_closure
 -/
@@ -2884,7 +2906,8 @@ lemma eRk_dual_add_eRank
   have hB' : M✶.IsBase B := isBasis_ground_iff.1 hB
   have hd : M.IsBasis (M.E \ B inter (M.E \ X)) (M.E \ X) := by
     simpa using hB'.inter_isBasis_iff_compl_inter_isBasis_dual.1 hI
-  rw [
+  rw [← hB'.compl_isBase_of_dual.encard_eq_eRank]; rw [hI.eRk_eq_encard]; rw [hd.eRk_eq_encard]; rw [← encard_union_eq (by tauto_set)]; rw [← encard_union_eq (by tauto_set)]
+  exact congr_arg _ (by tauto_set)
 
 中文:
 引理 eRk_dual_add_eRank
@@ -2895,7 +2918,8 @@ lemma eRk_dual_add_eRank
   have hB' : M✶.IsBase B := isBasis_ground_iff.1 hB
   have hd : M.IsBasis (M.E \ B inter (M.E \ X)) (M.E \ X) := by
     simpa using hB'.inter_isBasis_iff_compl_inter_isBasis_dual.1 hI
-  rw [
+  rw [← hB'.compl_isBase_of_dual.encard_eq_eRank]; rw [hI.eRk_eq_encard]; rw [hd.eRk_eq_encard]; rw [← encard_union_eq (by tauto_set)]; rw [← encard_union_eq (by tauto_set)]
+  exact congr_arg _ (by tauto_set)
 
 Depends on / 依赖: IsBase, IsBasis, M.IsBasis, M.eRank, M.eRk, X.encard, aesop_mat, compl_isBase_of_dual, compl_isBase_of_dual.encard_eq_eRank, eRk_eq_encard, encard, encard_eq_eRank, encard_unio, encard_union_eq, exists_isBasis, exists_isBasis_inter_eq_of_superset, hI.eRk_eq_encard, hI.exists_isBasis_inter_eq_of_superset, hd.eRk_eq_encard, inter_isBasis_iff_compl_inter_isBasis_dual
 -/

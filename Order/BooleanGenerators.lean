@@ -107,7 +107,29 @@ lemma atomistic
   have aux : forall b : α, IsCompactElement b -> b <= sSup S -> exists T subseteq S, b = sSup T := by
     intro b hb hbS
     obtain ⟨s, hs₁, hs₂⟩ := (isCompactElement_iff_exists_le_sSup_of_le_sSup α b).1 hb S hbS
-    obtain ⟨t, ht, rf
+    obtain ⟨t, ht, rfl⟩ := hS.finitelyAtomistic s b hs₁ hb hs₂
+    refine ⟨t, ?_, Finset.sup_id_eq_sSup t⟩
+    refine Set.Subset.trans ?_ hs₁
+    simpa only [Finset.coe_subset] using ht
+  choose T hT₁ hT₂ using aux
+  use sSup {T c h₁ h₂ | (c in C) (h₁ : IsCompactElement c) (h₂ : c <= sSup S)}
+  constructor
+  · apply _root_.sSup_le
+    rintro _ ⟨c, -, h₁, h₂, rfl⟩
+    apply hT₁
+  · apply le_antisymm
+    · apply _root_.sSup_le
+      intro c hc
+      rw [hT₂ c (hC _ hc) ((le_sSup hc).trans ha)]
+      apply sSup_le_sSup
+      apply _root_.le_sSup
+      use c, hc, hC _ hc, (le_sSup hc).trans ha
+    · simp only [Set.sSup_eq_sUnion, sSup_le_iff, Set.mem_sUnion, Set.mem_ofPred_eq,
+        forall_exists_index, and_imp]
+      rintro a T b hbC hb hbS rfl haT
+      apply (le_sSup haT).trans
+      rw [← hT₂]
+      exact le_sSup hbC
 
 中文:
 引理 atomistic
@@ -118,7 +140,29 @@ lemma atomistic
   have aux : forall b : α, IsCompactElement b -> b <= sSup S -> exists T subseteq S, b = sSup T := by
     intro b hb hbS
     obtain ⟨s, hs₁, hs₂⟩ := (isCompactElement_iff_exists_le_sSup_of_le_sSup α b).1 hb S hbS
-    obtain ⟨t, ht, rf
+    obtain ⟨t, ht, rfl⟩ := hS.finitelyAtomistic s b hs₁ hb hs₂
+    refine ⟨t, ?_, Finset.sup_id_eq_sSup t⟩
+    refine Set.Subset.trans ?_ hs₁
+    simpa only [Finset.coe_subset] using ht
+  choose T hT₁ hT₂ using aux
+  use sSup {T c h₁ h₂ | (c in C) (h₁ : IsCompactElement c) (h₂ : c <= sSup S)}
+  constructor
+  · apply _root_.sSup_le
+    rintro _ ⟨c, -, h₁, h₂, rfl⟩
+    apply hT₁
+  · apply le_antisymm
+    · apply _root_.sSup_le
+      intro c hc
+      rw [hT₂ c (hC _ hc) ((le_sSup hc).trans ha)]
+      apply sSup_le_sSup
+      apply _root_.le_sSup
+      use c, hc, hC _ hc, (le_sSup hc).trans ha
+    · simp only [Set.sSup_eq_sUnion, sSup_le_iff, Set.mem_sUnion, Set.mem_ofPred_eq,
+        forall_exists_index, and_imp]
+      rintro a T b hbC hb hbS rfl haT
+      apply (le_sSup haT).trans
+      rw [← hT₂]
+      exact le_sSup hbC
 
 Depends on / 依赖: Finset, Finset.coe_subset, Finset.sup_id_eq_sSup, IsCompactElement, IsCompactlyGenerated, IsCompactlyGenerated.exists_sSup_eq, Set.Subset.trans, Subset, coe_subset, exists_sSup_eq, finitelyAtomistic, hS.finitelyAtomistic, isCompactElement_iff_exists_le_sSup_of_le_sSup, subseteq, sup_id_eq_sSup
 -/
@@ -192,7 +236,7 @@ lemma mem_of_isAtom_of_le_sSup_atoms
   suffices sSup T = a from this ▸ hT haT
   have : a <= sSup T := le_sSup haT
   rwa [ha.le_iff_eq, eq_comm] at this
-  exact (hS.isAtom a (hT haT)
+  exact (hS.isAtom a (hT haT)).1
 
 中文:
 引理 mem_of_isAtom_of_le_sSup_atoms
@@ -205,7 +249,7 @@ lemma mem_of_isAtom_of_le_sSup_atoms
   suffices sSup T = a from this ▸ hT haT
   have : a <= sSup T := le_sSup haT
   rwa [ha.le_iff_eq, eq_comm] at this
-  exact (hS.isAtom a (hT haT)
+  exact (hS.isAtom a (hT haT)).1
 
 Depends on / 依赖: T.eq_empty_or_nonempty, atomistic, eq_comm, eq_empty_or_nonempty, hS.atomistic, hS.isAtom, ha.le_iff_eq, isAtom, le_iff_eq, le_sSup, sSup_empty
 -/
@@ -235,7 +279,14 @@ lemma sSup_inter
   rw [hX']
   apply _root_.sSup_le
   intro I hI
-  apply _root_.le_sSu
+  apply _root_.le_sSup
+  constructor
+  · apply (hS.mono hT₁).mem_of_isAtom_of_le_sSup_atoms _ _ _
+    · exact (hS.mono hX).isAtom I hI
+    · exact (_root_.le_sSup hI).trans (hX'.ge.trans inf_le_left)
+  · apply (hS.mono hT₂).mem_of_isAtom_of_le_sSup_atoms _ _ _
+    · exact (hS.mono hX).isAtom I hI
+    · exact (_root_.le_sSup hI).trans (hX'.ge.trans inf_le_right)
 
 中文:
 引理 sSup_inter
@@ -249,7 +300,14 @@ lemma sSup_inter
   rw [hX']
   apply _root_.sSup_le
   intro I hI
-  apply _root_.le_sSu
+  apply _root_.le_sSup
+  constructor
+  · apply (hS.mono hT₁).mem_of_isAtom_of_le_sSup_atoms _ _ _
+    · exact (hS.mono hX).isAtom I hI
+    · exact (_root_.le_sSup hI).trans (hX'.ge.trans inf_le_left)
+  · apply (hS.mono hT₂).mem_of_isAtom_of_le_sSup_atoms _ _ _
+    · exact (hS.mono hX).isAtom I hI
+    · exact (_root_.le_sSup hI).trans (hX'.ge.trans inf_le_right)
 
 Depends on / 依赖: Set.inter_subset_left, Set.inter_subset_right, _root_, _root_.le_sSup, _root_.sSup_le, atomistic, ge.trans, hS.atomistic, hS.mono, inf_le_left, inf_le_left.trans, inter_subset_left, inter_subset_right, isAtom, le_antisymm, le_inf, le_sSup, mem_of_isAtom_of_le_sSup_atoms, sSup_le, sSup_le_sSup
 -/
@@ -285,7 +343,14 @@ definition distribLatticeOfSSupEqTop
     obtain ⟨Tb, hTb, rfl⟩ := hS.atomistic b (h ▸ le_top)
     obtain ⟨Tc, hTc, rfl⟩ := hS.atomistic c (h ▸ le_top)
     apply le_of_eq
-    rw [← sSup_union]; rw [← sSup_union]; rw [← hS.sSup_inter hTb hTc]; rw [← hS.sSup_inter]; rw [← sSup_un
+    rw [← sSup_union]; rw [← sSup_union]; rw [← hS.sSup_inter hTb hTc]; rw [← hS.sSup_inter]; rw [← sSup_union]
+    on_goal 1 => congr 1; ext
+    all_goals
+      simp only [Set.union_subset_iff, Set.mem_inter_iff, Set.mem_union]
+      tauto
+
+@[deprecated (since := "2026-07-18")]
+alias distribLattice_of_sSup_eq_top := distribLatticeOfSSupEqTop
 
 中文:
 定义 distribLatticeOfSSupEqTop
@@ -295,7 +360,14 @@ definition distribLatticeOfSSupEqTop
     obtain ⟨Tb, hTb, rfl⟩ := hS.atomistic b (h ▸ le_top)
     obtain ⟨Tc, hTc, rfl⟩ := hS.atomistic c (h ▸ le_top)
     apply le_of_eq
-    rw [← sSup_union]; rw [← sSup_union]; rw [← hS.sSup_inter hTb hTc]; rw [← hS.sSup_inter]; rw [← sSup_un
+    rw [← sSup_union]; rw [← sSup_union]; rw [← hS.sSup_inter hTb hTc]; rw [← hS.sSup_inter]; rw [← sSup_union]
+    on_goal 1 => congr 1; ext
+    all_goals
+      simp only [Set.union_subset_iff, Set.mem_inter_iff, Set.mem_union]
+      tauto
+
+@[deprecated (since := "2026-07-18")]
+alias distribLattice_of_sSup_eq_top := distribLatticeOfSSupEqTop
 
 Depends on / 依赖: Set.mem_inter_iff, Set.mem_union, Set.union_subset_iff, all_goals, atomistic, hS.atomistic, hS.sSup_inter, le_of_eq, le_top, mem_inter_iff, mem_union, on_goal, sSup_inter, sSup_union, union_subset_iff
 -/

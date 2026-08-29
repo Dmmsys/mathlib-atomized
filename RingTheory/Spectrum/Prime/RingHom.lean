@@ -238,7 +238,9 @@ definition comapEquiv
     rw [← comap_comp_apply]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.symm_comp]
     rfl
   right_inv x := by
-    rw [← comap_comp_apply]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.toRi
+    rw [← comap_comp_apply]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.comp_symm]
+    rfl
+  map_rel_iff' {I J} := Ideal.comap_le_comap_iff_of_surjective _ e.symm.surjective ..
 
 中文:
 定义 comapEquiv
@@ -249,7 +251,9 @@ definition comapEquiv
     rw [← comap_comp_apply]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.symm_comp]
     rfl
   right_inv x := by
-    rw [← comap_comp_apply]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.toRi
+    rw [← comap_comp_apply]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.toRingHom_eq_coe]; rw [RingEquiv.comp_symm]
+    rfl
+  map_rel_iff' {I J} := Ideal.comap_le_comap_iff_of_surjective _ e.symm.surjective ..
 
 Depends on / 依赖: e.symm.toRingHom, toRingHom
 -/
@@ -338,7 +342,8 @@ theorem sigmaToPi_injective
   · congr; ext x
     simpa using congr_arg (Function.update (0 : forall i, R i) i x in ·.asIdeal) eq
   · refine (p.1.ne_top_iff_one.mp p.2.ne_top ?_).elim
-    have : Function.update (1 : forall i, R i) j 0 in (sigmaToPi R ⟨j, q
+    have : Function.update (1 : forall i, R i) j 0 in (sigmaToPi R ⟨j, q⟩).asIdeal := by simp
+    simpa [← eq, Function.update_of_ne ne]
 
 中文:
 定理 sigmaToPi_injective
@@ -349,7 +354,8 @@ theorem sigmaToPi_injective
   · congr; ext x
     simpa using congr_arg (Function.update (0 : forall i, R i) i x in ·.asIdeal) eq
   · refine (p.1.ne_top_iff_one.mp p.2.ne_top ?_).elim
-    have : Function.update (1 : forall i, R i) j 0 in (sigmaToPi R ⟨j, q
+    have : Function.update (1 : forall i, R i) j 0 in (sigmaToPi R ⟨j, q⟩).asIdeal := by simp
+    simpa [← eq, Function.update_of_ne ne]
 
 Depends on / 依赖: Function, Function.update, Function.update_of_ne, asIdeal, classical, congr_arg, eq_or_ne, ne_top, ne_top_iff_one, ne_top_iff_one.mp, sigmaToPi, update, update_of_ne
 -/
@@ -376,7 +382,20 @@ theorem exists_maximal_notMem_range_sigmaToPi_of_infinite
     smul_mem' := by
       rintro r _ ⟨x, rfl⟩
       refine ⟨.mk x.support fun i => r i * x i, funext fun i => show dite _ _ _ = _ from ?_⟩
-      simp_rw
+      simp_rw +instances [DFinsupp.coeFnAddMonoidHom]
+      refine dite_eq_left_iff.mpr fun h => ?_
+      rw [DFinsupp.notMem_support_iff.mp h]; rw [mul_zero] }
+have ⟨I, max, le⟩ := J.exists_le_maximal (Ideal.ne_top_iff_one _).mpr by
+    -- take a maximal ideal I containing J
+    rintro ⟨x, hx⟩
+    have ⟨i, hi⟩ := x.support.exists_notMem
+    simpa [DFinsupp.coeFnAddMonoidHom, DFinsupp.notMem_support_iff.mp hi] using congr_fun hx i
+  refine ⟨I, max, fun ⟨⟨i, p⟩, eq⟩ => ?_⟩
+  -- then I is not in the range of `sigmaToPi`
+  have : ⇑(DFinsupp.single i 1) ∉ (sigmaToPi R ⟨i, p⟩).asIdeal := by
+    simpa using p.1.ne_top_iff_one.mp p.2.ne_top
+  rw [eq] at this
+  exact this (le ⟨.single i 1, rfl⟩)
 
 中文:
 定理 存在_maximal_notMem_range_sigmaToPi_of_infinite
@@ -387,7 +406,20 @@ theorem exists_maximal_notMem_range_sigmaToPi_of_infinite
     smul_mem' := by
       rintro r _ ⟨x, rfl⟩
       refine ⟨.mk x.support fun i => r i * x i, funext fun i => show dite _ _ _ = _ from ?_⟩
-      simp_rw
+      simp_rw +instances [DFinsupp.coeFnAddMonoidHom]
+      refine dite_eq_left_iff.mpr fun h => ?_
+      rw [DFinsupp.notMem_support_iff.mp h]; rw [mul_zero] }
+have ⟨I, max, le⟩ := J.exists_le_maximal (Ideal.ne_top_iff_one _).mpr by
+    -- take a maximal ideal I containing J
+    rintro ⟨x, hx⟩
+    have ⟨i, hi⟩ := x.support.exists_notMem
+    simpa [DFinsupp.coeFnAddMonoidHom, DFinsupp.notMem_support_iff.mp hi] using congr_fun hx i
+  refine ⟨I, max, fun ⟨⟨i, p⟩, eq⟩ => ?_⟩
+  -- then I is not in the range of `sigmaToPi`
+  have : ⇑(DFinsupp.single i 1) ∉ (sigmaToPi R ⟨i, p⟩).asIdeal := by
+    simpa using p.1.ne_top_iff_one.mp p.2.ne_top
+  rw [eq] at this
+  exact this (le ⟨.single i 1, rfl⟩)
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mrange, DFinsupp, DFinsupp.coeFnAddMonoidHom, DFinsupp.notMem_support_iff.mp, Ideal.ne_top_iff_one, J.exists_le_maximal, classical, coeFnAddMonoidHom, dite_eq_left_iff, dite_eq_left_iff.mpr, exists_le_maximal, instances, mrange, mul_zero, ne_top_iff_one, notMem_support_iff, simp_rw, smul_mem, support
 -/
@@ -451,7 +483,18 @@ lemma exists_comap_evalRingHom_eq
     rw [Finset.prod_apply]; rw [Pi.zero_apply]; rw [Finset.prod_eq_zero (Finset.mem_univ j)]
     simp [e]
   obtain ⟨i, hi⟩ : exists i, e i in p.asIdeal := by
-    simpa [←
+    simpa [← H, Ideal.IsPrime.prod_mem_iff] using p.asIdeal.zero_mem
+  let h₁ : Function.Surjective (Pi.evalRingHom R i) := RingHomSurjective.is_surjective
+  have h₂ : RingHom.ker (Pi.evalRingHom R i) <= p.asIdeal := by
+    intro x hx
+    convert! p.asIdeal.mul_mem_left x hi
+    ext j
+    by_cases hj : i = j
+    · subst hj; simpa [e]
+    · simp [e, Function.update_of_ne (.symm hj)]
+  have : (p.asIdeal.map (Pi.evalRingHom R i)).comap (Pi.evalRingHom R i) = p.asIdeal := by
+    rwa [Ideal.comap_map_of_surjective _ h₁, sup_eq_left]
+  exact ⟨i, ⟨_, Ideal.map_isPrime_of_surjective h₁ h₂⟩, PrimeSpectrum.ext this⟩
 
 中文:
 引理 存在_comap_evalRingHom_eq
@@ -464,7 +507,18 @@ lemma exists_comap_evalRingHom_eq
     rw [Finset.prod_apply]; rw [Pi.zero_apply]; rw [Finset.prod_eq_zero (Finset.mem_univ j)]
     simp [e]
   obtain ⟨i, hi⟩ : exists i, e i in p.asIdeal := by
-    simpa [←
+    simpa [← H, Ideal.IsPrime.prod_mem_iff] using p.asIdeal.zero_mem
+  let h₁ : Function.Surjective (Pi.evalRingHom R i) := RingHomSurjective.is_surjective
+  have h₂ : RingHom.ker (Pi.evalRingHom R i) <= p.asIdeal := by
+    intro x hx
+    convert! p.asIdeal.mul_mem_left x hi
+    ext j
+    by_cases hj : i = j
+    · subst hj; simpa [e]
+    · simp [e, Function.update_of_ne (.symm hj)]
+  have : (p.asIdeal.map (Pi.evalRingHom R i)).comap (Pi.evalRingHom R i) = p.asIdeal := by
+    rwa [Ideal.comap_map_of_surjective _ h₁, sup_eq_left]
+  exact ⟨i, ⟨_, Ideal.map_isPrime_of_surjective h₁ h₂⟩, PrimeSpectrum.ext this⟩
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.prod_apply, Finset.prod_eq_zero, Function, Function.Surjective, Function.update, Ideal.IsPrime.prod_mem_iff, IsPrime, Pi.evalRingHom, Pi.zero_apply, RingHom, RingHom.ker, RingHomSurjective, RingHomSurjective.is_surjective, Surjective, asIdeal, classical, convert, evalRingHom
 -/
@@ -583,7 +637,16 @@ theorem image_comap_zeroLocus_eq_zeroLocus_comap
   · rintro ⟨p, hp, rfl⟩ a ha
     exact hp ha
   · have hp : ker f <= p.asIdeal := (Ideal.comap_mono bot_le).trans h_I_p
-    refine ⟨⟨p.asIdeal.map f, Ideal.map_isPrime_of_surject
+    refine ⟨⟨p.asIdeal.map f, Ideal.map_isPrime_of_surjective hf hp⟩, fun x hx => ?_, ?_⟩
+    · obtain ⟨x', rfl⟩ := hf x
+      exact Ideal.mem_map_of_mem f (h_I_p hx)
+    · ext x
+      rw [comap_asIdeal]; rw [Ideal.mem_comap]; rw [Ideal.mem_map_iff_of_surjective f hf]
+      refine ⟨?_, fun hx => ⟨x, hx, rfl⟩⟩
+      rintro ⟨x', hx', heq⟩
+      rw [← sub_sub_cancel x' x]
+      refine p.asIdeal.sub_mem hx' (hp ?_)
+      rwa [mem_ker, map_sub, sub_eq_zero]
 
 中文:
 定理 image_comap_zeroLocus_eq_zeroLocus_comap
@@ -594,7 +657,16 @@ theorem image_comap_zeroLocus_eq_zeroLocus_comap
   · rintro ⟨p, hp, rfl⟩ a ha
     exact hp ha
   · have hp : ker f <= p.asIdeal := (Ideal.comap_mono bot_le).trans h_I_p
-    refine ⟨⟨p.asIdeal.map f, Ideal.map_isPrime_of_surject
+    refine ⟨⟨p.asIdeal.map f, Ideal.map_isPrime_of_surjective hf hp⟩, fun x hx => ?_, ?_⟩
+    · obtain ⟨x', rfl⟩ := hf x
+      exact Ideal.mem_map_of_mem f (h_I_p hx)
+    · ext x
+      rw [comap_asIdeal]; rw [Ideal.mem_comap]; rw [Ideal.mem_map_iff_of_surjective f hf]
+      refine ⟨?_, fun hx => ⟨x, hx, rfl⟩⟩
+      rintro ⟨x', hx', heq⟩
+      rw [← sub_sub_cancel x' x]
+      refine p.asIdeal.sub_mem hx' (hp ?_)
+      rwa [mem_ker, map_sub, sub_eq_zero]
 
 Depends on / 依赖: Ideal.comap_mono, Ideal.map_isPrime_of_surjective, Ideal.mem_comap, Ideal.mem_map_iff_of_surjective, Ideal.mem_map_of_mem, Set.ext_iff, Set.mem_image, SetLike, SetLike.coe_subset_coe, asIdeal, bot_le, coe_subset_coe, comap_asIdeal, comap_mono, ext_iff, h_I_p, map_isPrime_of_surjective, mem_comap, mem_image, mem_map_iff_of_surjective
 -/
@@ -660,7 +732,11 @@ definition Ideal.primeSpectrumOrderIsoZeroLocusOfSurj
     exact p.map_comap_of_surjective f hf
   right_inv := by
     intro ⟨⟨p, _⟩, hp⟩
- 
+    simp only [Subtype.mk.injEq, PrimeSpectrum.ext_iff, comap_asIdeal]
+exact (p.comap_map_of_surjective f hf).trans sup_eq_left.mpr (hI.trans_le hp)
+  map_rel_iff' {a b} := by
+    change a.asIdeal.comap _ <= b.asIdeal.comap _ ↔ a <= b
+    rw [← Ideal.map_le_iff_le_comap]; rw [Ideal.map_comap_of_surjective f hf]; rw [PrimeSpectrum.asIdeal_le_asIdeal]
 
 中文:
 定义 理想.primeSpectrumOrderIsoZeroLocusOfSurj
@@ -673,7 +749,11 @@ definition Ideal.primeSpectrumOrderIsoZeroLocusOfSurj
     exact p.map_comap_of_surjective f hf
   right_inv := by
     intro ⟨⟨p, _⟩, hp⟩
- 
+    simp only [Subtype.mk.injEq, PrimeSpectrum.ext_iff, comap_asIdeal]
+exact (p.comap_map_of_surjective f hf).trans sup_eq_left.mpr (hI.trans_le hp)
+  map_rel_iff' {a b} := by
+    change a.asIdeal.comap _ <= b.asIdeal.comap _ ↔ a <= b
+    rw [← Ideal.map_le_iff_le_comap]; rw [Ideal.map_comap_of_surjective f hf]; rw [PrimeSpectrum.asIdeal_le_asIdeal]
 -/
 noncomputable def Ideal.primeSpectrumOrderIsoZeroLocusOfSurj (hf : Surjective f) {I : Ideal R}
     (hI : RingHom.ker f = I) : PrimeSpectrum S ≃o (PrimeSpectrum.zeroLocus (R := R) I) where
@@ -752,7 +832,13 @@ lemma PrimeSpectrum.nontrivial_iff_mem_rangeComap
   · obtain ⟨m, hm⟩ := Ideal.exists_maximal (k otimes[R] S)
     use PrimeSpectrum.comap (Algebra.TensorProduct.includeRight).toRingHom ⟨m, hm.isPrime⟩
     ext : 1
-    rw [← PrimeSpectrum.comap_comp_apply]; rw [← Algebra.TensorPr
+    rw [← PrimeSpectrum.comap_comp_apply]; rw [← Algebra.TensorProduct.includeLeftRingHom_comp_algebraMap]; rw [comap_comp_apply]
+    simp [Ideal.eq_bot_of_prime, k, ← RingHom.ker_eq_comap_bot]
+  · obtain ⟨q, rfl⟩ := h
+    let f : k otimes[R] S ->ₐ[R] q.asIdeal.ResidueField :=
+      Algebra.TensorProduct.lift (Ideal.ResidueField.mapₐ _ _ (Algebra.ofId _ _) rfl)
+        (IsScalarTower.toAlgHom _ _ _) (fun _ _ => Commute.all ..)
+    exact RingHom.domain_nontrivial f.toRingHom
 
 中文:
 引理 素谱.nontrivial_iff_mem_rangeComap
@@ -763,7 +849,13 @@ lemma PrimeSpectrum.nontrivial_iff_mem_rangeComap
   · obtain ⟨m, hm⟩ := Ideal.exists_maximal (k otimes[R] S)
     use PrimeSpectrum.comap (Algebra.TensorProduct.includeRight).toRingHom ⟨m, hm.isPrime⟩
     ext : 1
-    rw [← PrimeSpectrum.comap_comp_apply]; rw [← Algebra.TensorPr
+    rw [← PrimeSpectrum.comap_comp_apply]; rw [← Algebra.TensorProduct.includeLeftRingHom_comp_algebraMap]; rw [comap_comp_apply]
+    simp [Ideal.eq_bot_of_prime, k, ← RingHom.ker_eq_comap_bot]
+  · obtain ⟨q, rfl⟩ := h
+    let f : k otimes[R] S ->ₐ[R] q.asIdeal.ResidueField :=
+      Algebra.TensorProduct.lift (Ideal.ResidueField.mapₐ _ _ (Algebra.ofId _ _) rfl)
+        (IsScalarTower.toAlgHom _ _ _) (fun _ _ => Commute.all ..)
+    exact RingHom.domain_nontrivial f.toRingHom
 
 Depends on / 依赖: Algebra, Algebra.TensorP, Algebra.TensorProduct.includeLeftRingHom_comp_algebraMap, Algebra.TensorProduct.includeRight, Ideal.eq_bot_of_prime, Ideal.exists_maximal, PrimeSpectrum, PrimeSpectrum.comap, PrimeSpectrum.comap_comp_apply, ResidueField, RingHom, RingHom.ker_eq_comap_bot, TensorP, TensorProduct, asIdeal, comap_comp_apply, eq_bot_of_prime, exists_maximal, hm.isPrime, includeLeftRingHom_comp_algebraMap
 -/

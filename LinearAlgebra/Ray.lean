@@ -379,7 +379,9 @@ theorem trans
   rcases eq_or_ne y 0 with (rfl | hy)
   · exact (hy rfl).elim (fun h => (hx h).elim) fun h => (hz h).elim
   rcases hxy.exists_pos hx hy with ⟨r₁, r₂, hr₁, hr₂, h₁⟩
-  rcases hyz.e
+  rcases hyz.exists_pos hy hz with ⟨r₃, r₄, hr₃, hr₄, h₂⟩
+  refine Or.inr (Or.inr <| ⟨r₃ * r₁, r₂ * r₄, mul_pos hr₃ hr₁, mul_pos hr₂ hr₄, ?_⟩)
+  rw [mul_smul]; rw [mul_smul]; rw [h₁]; rw [← h₂]; rw [smul_comm]
 
 中文:
 定理 trans
@@ -390,7 +392,9 @@ theorem trans
   rcases eq_or_ne y 0 with (rfl | hy)
   · exact (hy rfl).elim (fun h => (hx h).elim) fun h => (hz h).elim
   rcases hxy.exists_pos hx hy with ⟨r₁, r₂, hr₁, hr₂, h₁⟩
-  rcases hyz.e
+  rcases hyz.exists_pos hy hz with ⟨r₃, r₄, hr₃, hr₄, h₂⟩
+  refine Or.inr (Or.inr <| ⟨r₃ * r₁, r₂ * r₄, mul_pos hr₃ hr₁, mul_pos hr₂ hr₄, ?_⟩)
+  rw [mul_smul]; rw [mul_smul]; rw [h₁]; rw [← h₂]; rw [smul_comm]
 
 Depends on / 依赖: Or.inr, eq_or_ne, exists_pos, hxy.exists_pos, hyz.exists_pos, mul_pos, mul_smul, smul_comm, zero_left, zero_right
 -/
@@ -686,7 +690,9 @@ theorem add_left
   rcases eq_or_ne z 0 with (rfl | hz₀); · apply zero_right
   rcases hx.exists_pos hx₀ hz₀ with ⟨rx, rz₁, hrx, hrz₁, Hx⟩
   rcases hy.exists_pos hy₀ hz₀ with ⟨ry, rz₂, hry, hrz₂, Hy⟩
-  
+  refine Or.inr (Or.inr ⟨rx * ry, ry * rz₁ + rx * rz₂, mul_pos hrx hry, ?_, ?_⟩)
+  · positivity
+  · convert! congr(ry • $Hx + rx • $Hy) using 1 <;> module
 
 中文:
 定理 add_left
@@ -698,7 +704,9 @@ theorem add_left
   rcases eq_or_ne z 0 with (rfl | hz₀); · apply zero_right
   rcases hx.exists_pos hx₀ hz₀ with ⟨rx, rz₁, hrx, hrz₁, Hx⟩
   rcases hy.exists_pos hy₀ hz₀ with ⟨ry, rz₂, hry, hrz₂, Hy⟩
-  
+  refine Or.inr (Or.inr ⟨rx * ry, ry * rz₁ + rx * rz₂, mul_pos hrx hry, ?_, ?_⟩)
+  · positivity
+  · convert! congr(ry • $Hx + rx • $Hy) using 1 <;> module
 
 Depends on / 依赖: Or.inr, add_zero, convert, eq_or_ne, exists_pos, hx.exists_pos, hy.exists_pos, module, mul_pos, zero_add, zero_right
 -/
@@ -1628,7 +1636,9 @@ theorem sameRay_smul_smul_of_mul_nonneg
   rcases eq_or_ne c₂ 0 with hc₂ | hc₂
   · rw [hc₂, zero_smul]; exact SameRay.zero_right _
   have hpos : 0 < c₁ * c₂ := h.lt_of_ne (mul_ne_zero hc₁ hc₂).symm
-  rcases mul_pos_iff.mp hpos with ⟨h₁, h₂⟩ | ⟨h₁, h
+  rcases mul_pos_iff.mp hpos with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+  · exact Or.inr (Or.inr ⟨c₂, c₁, h₂, h₁, by module⟩)
+  · exact Or.inr (Or.inr ⟨-c₂, -c₁, neg_pos.2 h₂, neg_pos.2 h₁, by module⟩)
 
 中文:
 定理 sameRay_smul_smul_of_mul_nonneg
@@ -1639,7 +1649,9 @@ theorem sameRay_smul_smul_of_mul_nonneg
   rcases eq_or_ne c₂ 0 with hc₂ | hc₂
   · rw [hc₂, zero_smul]; exact SameRay.zero_right _
   have hpos : 0 < c₁ * c₂ := h.lt_of_ne (mul_ne_zero hc₁ hc₂).symm
-  rcases mul_pos_iff.mp hpos with ⟨h₁, h₂⟩ | ⟨h₁, h
+  rcases mul_pos_iff.mp hpos with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+  · exact Or.inr (Or.inr ⟨c₂, c₁, h₂, h₁, by module⟩)
+  · exact Or.inr (Or.inr ⟨-c₂, -c₁, neg_pos.2 h₂, neg_pos.2 h₁, by module⟩)
 
 Depends on / 依赖: Or.inr, SameRay, SameRay.zero_left, SameRay.zero_right, eq_or_ne, h.lt_of_ne, lt_of_ne, module, mul_ne_zero, mul_pos_iff, mul_pos_iff.mp, neg_pos, zero_left, zero_right, zero_smul
 -/
@@ -1907,7 +1919,41 @@ theorem sameRay_or_sameRay_neg_iff_not_linearIndependent
   by_cases hy : y = 0; · simpa [hy] using fun h : LinearIndependent R ![x, 0] => h.ne_zero 1 rfl
   simp_rw [Fintype.not_linearIndependent_iff]
   refine ⟨fun h => ?_, fun h => ?_⟩
-  · rcases h with ((h
+  · rcases h with ((hx0 | hy0 | ⟨r₁, r₂, hr₁, _, h⟩) | (hx0 | hy0 | ⟨r₁, r₂, hr₁, _, h⟩))
+    · exact False.elim (hx hx0)
+    · exact False.elim (hy hy0)
+    · refine ⟨![r₁, -r₂], ?_⟩
+      rw [Fin.sum_univ_two]; rw [Fin.exists_fin_two]
+      simp [h, hr₁.ne.symm]
+    · exact False.elim (hx hx0)
+    · exact False.elim (hy (neg_eq_zero.1 hy0))
+    · refine ⟨![r₁, r₂], ?_⟩
+      rw [Fin.sum_univ_two]; rw [Fin.exists_fin_two]
+      simp [h, hr₁.ne.symm]
+  · rcases h with ⟨m, hm, hmne⟩
+    rw [Fin.sum_univ_two]; rw [add_eq_zero_iff_eq_neg] at hm
+    dsimp only [Matrix.cons_val] at hm
+    rcases lt_trichotomy (m 0) 0 with (hm0 | hm0 | hm0) <;>
+      rcases lt_trichotomy (m 1) 0 with (hm1 | hm1 | hm1)
+    · refine
+        Or.inr (Or.inr (Or.inr ⟨-m 0, -m 1, Left.neg_pos_iff.2 hm0, Left.neg_pos_iff.2 hm1, ?_⟩))
+      linear_combination (norm := module) -hm
+    · exfalso
+      simp [hm1, hx, hm0.ne] at hm
+    · refine Or.inl (Or.inr (Or.inr ⟨-m 0, m 1, Left.neg_pos_iff.2 hm0, hm1, ?_⟩))
+      linear_combination (norm := module) -hm
+    · exfalso
+      simp [hm0, hy, hm1.ne] at hm
+    · rw [Fin.exists_fin_two] at hmne
+      exact False.elim (not_and_or.2 hmne ⟨hm0, hm1⟩)
+    · exfalso
+      simp [hm0, hy, hm1.ne.symm] at hm
+    · refine Or.inl (Or.inr (Or.inr ⟨m 0, -m 1, hm0, Left.neg_pos_iff.2 hm1, ?_⟩))
+      rwa [neg_smul]
+    · exfalso
+      simp [hm1, hx, hm0.ne.symm] at hm
+    · refine Or.inr (Or.inr (Or.inr ⟨m 0, m 1, hm0, hm1, ?_⟩))
+      rwa [smul_neg]
 
 中文:
 定理 sameRay_or_sameRay_neg_iff_not_linearIndependent
@@ -1917,7 +1963,41 @@ theorem sameRay_or_sameRay_neg_iff_not_linearIndependent
   by_cases hy : y = 0; · simpa [hy] using fun h : LinearIndependent R ![x, 0] => h.ne_zero 1 rfl
   simp_rw [Fintype.not_linearIndependent_iff]
   refine ⟨fun h => ?_, fun h => ?_⟩
-  · rcases h with ((h
+  · rcases h with ((hx0 | hy0 | ⟨r₁, r₂, hr₁, _, h⟩) | (hx0 | hy0 | ⟨r₁, r₂, hr₁, _, h⟩))
+    · exact False.elim (hx hx0)
+    · exact False.elim (hy hy0)
+    · refine ⟨![r₁, -r₂], ?_⟩
+      rw [Fin.sum_univ_two]; rw [Fin.exists_fin_two]
+      simp [h, hr₁.ne.symm]
+    · exact False.elim (hx hx0)
+    · exact False.elim (hy (neg_eq_zero.1 hy0))
+    · refine ⟨![r₁, r₂], ?_⟩
+      rw [Fin.sum_univ_two]; rw [Fin.exists_fin_two]
+      simp [h, hr₁.ne.symm]
+  · rcases h with ⟨m, hm, hmne⟩
+    rw [Fin.sum_univ_two]; rw [add_eq_zero_iff_eq_neg] at hm
+    dsimp only [Matrix.cons_val] at hm
+    rcases lt_trichotomy (m 0) 0 with (hm0 | hm0 | hm0) <;>
+      rcases lt_trichotomy (m 1) 0 with (hm1 | hm1 | hm1)
+    · refine
+        Or.inr (Or.inr (Or.inr ⟨-m 0, -m 1, Left.neg_pos_iff.2 hm0, Left.neg_pos_iff.2 hm1, ?_⟩))
+      linear_combination (norm := module) -hm
+    · exfalso
+      simp [hm1, hx, hm0.ne] at hm
+    · refine Or.inl (Or.inr (Or.inr ⟨-m 0, m 1, Left.neg_pos_iff.2 hm0, hm1, ?_⟩))
+      linear_combination (norm := module) -hm
+    · exfalso
+      simp [hm0, hy, hm1.ne] at hm
+    · rw [Fin.exists_fin_two] at hmne
+      exact False.elim (not_and_or.2 hmne ⟨hm0, hm1⟩)
+    · exfalso
+      simp [hm0, hy, hm1.ne.symm] at hm
+    · refine Or.inl (Or.inr (Or.inr ⟨m 0, -m 1, hm0, Left.neg_pos_iff.2 hm1, ?_⟩))
+      rwa [neg_smul]
+    · exfalso
+      simp [hm1, hx, hm0.ne.symm] at hm
+    · refine Or.inr (Or.inr (Or.inr ⟨m 0, m 1, hm0, hm1, ?_⟩))
+      rwa [smul_neg]
 
 Depends on / 依赖: False.elim, Fin.exists_fin_two, Fin.sum_univ_two, Fintype, Fintype.not_linearIndependent_iff, LinearIndependent, exists_fin_two, h.ne_zero, ne_zero, not_linearIndependent_iff, simp_rw, sum_univ_two
 -/
@@ -2103,7 +2183,9 @@ theorem exists_eq_smul_add
   · have h₁₂ : 0 < r₁ + r₂ := add_pos h₁ h₂
     refine
       ⟨r₂ / (r₁ + r₂), r₁ / (r₁ + r₂), div_nonneg h₂.le h₁₂.le, div_nonneg h₁.le h₁₂.le, ?_, ?_, ?_⟩
-    · rw [← add_div, add_comm, div_self h₁₂.ne'
+    · rw [← add_div, add_comm, div_self h₁₂.ne']
+    · rw [div_eq_inv_mul, mul_smul, smul_add, ← H, ← add_smul, add_comm r₂, inv_smul_smul₀ h₁₂.ne']
+    · rw [div_eq_inv_mul, mul_smul, smul_add, H, ← add_smul, add_comm r₂, inv_smul_smul₀ h₁₂.ne']
 
 中文:
 定理 存在_eq_smul_add
@@ -2117,7 +2199,9 @@ theorem exists_eq_smul_add
   · have h₁₂ : 0 < r₁ + r₂ := add_pos h₁ h₂
     refine
       ⟨r₂ / (r₁ + r₂), r₁ / (r₁ + r₂), div_nonneg h₂.le h₁₂.le, div_nonneg h₁.le h₁₂.le, ?_, ?_, ?_⟩
-    · rw [← add_div, add_comm, div_self h₁₂.ne'
+    · rw [← add_div, add_comm, div_self h₁₂.ne']
+    · rw [div_eq_inv_mul, mul_smul, smul_add, ← H, ← add_smul, add_comm r₂, inv_smul_smul₀ h₁₂.ne']
+    · rw [div_eq_inv_mul, mul_smul, smul_add, H, ← add_smul, add_comm r₂, inv_smul_smul₀ h₁₂.ne']
 
 Depends on / 依赖: add_comm, add_div, add_pos, add_smul, div_eq_inv_mul, div_nonneg, div_self, mul_smul, smul_add
 -/

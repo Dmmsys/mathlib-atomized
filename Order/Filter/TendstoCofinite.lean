@@ -375,7 +375,15 @@ theorem Finsupp.mapDomain_tendstoCofinite
   refine (tendstoCofinite_iff_finite_preimage_singleton _).mpr fun x => ?_
   let s := Finset.sup x.support (fun t => (TendstoCofinite.finite_preimage_singleton f t).toFinset)
   let e : s ↪ α := Function.Embedding.subtype (fun u => u in s)
-  refine Set.Finite.subset (Set.Finite.image (
+  refine Set.Finite.subset (Set.Finite.image (embDomain e) <| finite_of_degree_le (degree x)) ?_
+  simp only [Set.subset_def, Set.mem_preimage, Set.mem_singleton_iff, Set.mem_image,
+    Set.mem_ofPred_eq]
+  refine fun y hy => ⟨y.comapDomain e e.injective.injOn, ?_, embDomain_comapDomain ?_⟩
+  · rw [← hy, degree_mapDomain]
+    exact degree_comapDomain_le_of_canonicallyOrderedAdd ..
+  · suffices y.support subseteq s by simpa [e]
+    simpa [← hy, mapDomain, sum, Finset.subset_iff, single_apply, s] using
+      fun i hi => ⟨i, by simp [hi]⟩
 
 中文:
 定理 有限支撑.mapDomain_tendstoCofinite
@@ -385,7 +393,15 @@ theorem Finsupp.mapDomain_tendstoCofinite
   refine (tendstoCofinite_iff_finite_preimage_singleton _).mpr fun x => ?_
   let s := Finset.sup x.support (fun t => (TendstoCofinite.finite_preimage_singleton f t).toFinset)
   let e : s ↪ α := Function.Embedding.subtype (fun u => u in s)
-  refine Set.Finite.subset (Set.Finite.image (
+  refine Set.Finite.subset (Set.Finite.image (embDomain e) <| finite_of_degree_le (degree x)) ?_
+  simp only [Set.subset_def, Set.mem_preimage, Set.mem_singleton_iff, Set.mem_image,
+    Set.mem_ofPred_eq]
+  refine fun y hy => ⟨y.comapDomain e e.injective.injOn, ?_, embDomain_comapDomain ?_⟩
+  · rw [← hy, degree_mapDomain]
+    exact degree_comapDomain_le_of_canonicallyOrderedAdd ..
+  · suffices y.support subseteq s by simpa [e]
+    simpa [← hy, mapDomain, sum, Finset.subset_iff, single_apply, s] using
+      fun i hi => ⟨i, by simp [hi]⟩
 
 Depends on / 依赖: Embedding, Finite, Finset, Finset.sup, Function, Function.Embedding.subtype, Set.Finite.image, Set.Finite.subset, Set.mem_image, Set.mem_ofPred_eq, Set.mem_preimage, Set.mem_singleton_iff, Set.subset_def, TendstoCofinite, TendstoCofinite.finite_preimage_singleton, classical, comapDomain, degree, e.injectiv, embDomain
 -/

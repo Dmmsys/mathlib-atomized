@@ -34,7 +34,12 @@ lemma span_nonneg_inter_closedBall
   · suffices (r * ‖x‖⁻¹ : Complex)⁻¹ • ((r * ‖x‖⁻¹ : Complex) • x) = x by
       rw [← this]
       refine smul_mem _ _ (subset_span <| Set.mem_inter ?_ ?_)
-      ·
+      · norm_cast
+        exact smul_nonneg (by positivity) hx
+      · simp [mul_smul, norm_smul, abs_of_pos hr, inv_mul_cancel₀ hx_pos.ne']
+    apply inv_smul_smul₀
+    norm_cast
+    positivity
 
 中文:
 引理 span_nonneg_inter_closedBall
@@ -47,7 +52,12 @@ lemma span_nonneg_inter_closedBall
   · suffices (r * ‖x‖⁻¹ : Complex)⁻¹ • ((r * ‖x‖⁻¹ : Complex) • x) = x by
       rw [← this]
       refine smul_mem _ _ (subset_span <| Set.mem_inter ?_ ?_)
-      ·
+      · norm_cast
+        exact smul_nonneg (by positivity) hx
+      · simp [mul_smul, norm_smul, abs_of_pos hr, inv_mul_cancel₀ hx_pos.ne']
+    apply inv_smul_smul₀
+    norm_cast
+    positivity
 
 Depends on / 依赖: Set.mem_inter, abs_of_pos, eq_top_iff, eq_zero_or_norm_pos, hx_pos, hx_pos.ne, mem_inter, mul_smul, norm_smul, smul_mem, smul_nonneg, span_le, span_nonneg, subset_span, zero_mem
 -/
@@ -148,7 +158,13 @@ lemma exists_sum_four_nonneg
       · simp
         cfc_tac
 .trans realPart.norm_le a · exact CStarAlgebra.norm_posPart_le _
-.trans imagin
+.trans imaginaryPart.norm_le a · exact CStarAlgebra.norm_posPart_le _
+.trans realPart.norm_le a · exact CStarAlgebra.norm_negPart_le _
+.trans imaginaryPart.norm_le a · exact CStarAlgebra.norm_negPart_le _
+  · nth_rw 1 [← CStarAlgebra.linear_combination_nonneg a]
+    simp only [Fin.sum_univ_four, Fin.coe_ofNat_eq_mod, Matrix.cons_val, Nat.reduceMod, I_sq,
+      I_pow_three]
+    module
 
 中文:
 引理 存在_sum_four_nonneg
@@ -164,7 +180,13 @@ lemma exists_sum_four_nonneg
       · simp
         cfc_tac
 .trans realPart.norm_le a · exact CStarAlgebra.norm_posPart_le _
-.trans imagin
+.trans imaginaryPart.norm_le a · exact CStarAlgebra.norm_posPart_le _
+.trans realPart.norm_le a · exact CStarAlgebra.norm_negPart_le _
+.trans imaginaryPart.norm_le a · exact CStarAlgebra.norm_negPart_le _
+  · nth_rw 1 [← CStarAlgebra.linear_combination_nonneg a]
+    simp only [Fin.sum_univ_four, Fin.coe_ofNat_eq_mod, Matrix.cons_val, Nat.reduceMod, I_sq,
+      I_pow_three]
+    module
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.linear_combinatio, CStarAlgebra.norm_negPart_le, CStarAlgebra.norm_posPart_le, all_goals, and_assoc, cfc_tac, fin_cases, forall_and, imaginaryPart, imaginaryPart.norm_le, linear_combinatio, norm_le, norm_negPart_le, norm_posPart_le, nth_rw, realPart, realPart.norm_le
 -/

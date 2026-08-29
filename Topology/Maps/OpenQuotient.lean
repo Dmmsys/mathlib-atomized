@@ -336,7 +336,17 @@ lemma coinduced_eq_induced_of_isOpenQuotientMap_of_isInducing
   · rintro ⟨V, hV, e⟩
     refine ⟨V, hq.continuous.1 _ (hq.isOpenMap _ hV), ?_⟩
     ext x
-    obtain ⟨x, rfl⟩ := hp 
+    obtain ⟨x, rfl⟩ := hp x
+    constructor
+    · rintro ⟨y, hy, e'⟩
+      obtain ⟨y, rfl⟩ := H ⟨_, ⟨x, rfl⟩, (e'.trans (congr_fun h x)).symm⟩
+      rw [← hg ((congr_fun h y).trans e')]
+      exact e.le hy
+    · intro H
+      exact ⟨f x, e.ge H, congr_fun h.symm x⟩
+  · rintro ⟨V, hV, rfl⟩
+    refine ⟨_, hV, ?_⟩
+    simp_rw [← Set.preimage_comp, h]
 
 中文:
 引理 coinduced_eq_induced_of_isOpenQuotientMap_of_isInducing
@@ -350,7 +360,17 @@ lemma coinduced_eq_induced_of_isOpenQuotientMap_of_isInducing
   · rintro ⟨V, hV, e⟩
     refine ⟨V, hq.continuous.1 _ (hq.isOpenMap _ hV), ?_⟩
     ext x
-    obtain ⟨x, rfl⟩ := hp 
+    obtain ⟨x, rfl⟩ := hp x
+    constructor
+    · rintro ⟨y, hy, e'⟩
+      obtain ⟨y, rfl⟩ := H ⟨_, ⟨x, rfl⟩, (e'.trans (congr_fun h x)).symm⟩
+      rw [← hg ((congr_fun h y).trans e')]
+      exact e.le hy
+    · intro H
+      exact ⟨f x, e.ge H, congr_fun h.symm x⟩
+  · rintro ⟨V, hV, rfl⟩
+    refine ⟨_, hV, ?_⟩
+    simp_rw [← Set.preimage_comp, h]
 
 Depends on / 依赖: IsOpen, Set.image_surjective.mpr, congr_fun, continuous, e.ge, e.le, h.symm, hf.isOpen_iff, hq.continuous, hq.isOpenMap, hq.isQuotientMap.isOpen_preimage, hq.surjective, image_surjective, isOpenMap, isOpen_iff, isOpen_preimage, isQuotientMap, simp_rw, surjective
 -/

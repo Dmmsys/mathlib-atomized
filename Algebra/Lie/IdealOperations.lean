@@ -210,7 +210,18 @@ theorem lieIdeal_oper_eq_linear_span
     have aux : forall (y : L), forall m' in Submodule.span R s, ⁅y, m'⁆ in Submodule.span R s := by
       intro y m' hm'
       refine Submodule.span_induction (R := R) (M := M) (s := s)
-        (p := fun m' _ => ⁅y, m'⁆ in 
+        (p := fun m' _ => ⁅y, m'⁆ in Submodule.span R s) ?_ ?_ ?_ ?_ hm'
+      · rintro m'' ⟨x, n, hm''⟩; rw [← hm'', leibniz_lie]
+        refine Submodule.add_mem _ ?_ ?_ <;> apply Submodule.subset_span
+        · use ⟨⁅y, ↑x⁆, I.lie_mem x.property⟩, n
+        · use x, ⟨⁅y, ↑n⁆, N.lie_mem n.property⟩
+      · simp
+      · intro m₁ m₂ _ _ hm₁ hm₂; rw [lie_add]; exact Submodule.add_mem _ hm₁ hm₂
+      · intro t m'' _ hm''; rw [lie_smul]; exact Submodule.smul_mem _ t hm''
+    change _ <= ({ Submodule.span R s with lie_mem := fun hm' => aux _ _ hm' } : LieSubmodule R L M)
+    rw [lieIdeal_oper_eq_span]; rw [lieSpan_le]
+    exact Submodule.subset_span
+  · rw [lieIdeal_oper_eq_span]; apply submodule_span_le_lieSpan
 
 中文:
 定理 lieIdeal_oper_eq_linear_span
@@ -221,7 +232,18 @@ theorem lieIdeal_oper_eq_linear_span
     have aux : forall (y : L), forall m' in Submodule.span R s, ⁅y, m'⁆ in Submodule.span R s := by
       intro y m' hm'
       refine Submodule.span_induction (R := R) (M := M) (s := s)
-        (p := fun m' _ => ⁅y, m'⁆ in 
+        (p := fun m' _ => ⁅y, m'⁆ in Submodule.span R s) ?_ ?_ ?_ ?_ hm'
+      · rintro m'' ⟨x, n, hm''⟩; rw [← hm'', leibniz_lie]
+        refine Submodule.add_mem _ ?_ ?_ <;> apply Submodule.subset_span
+        · use ⟨⁅y, ↑x⁆, I.lie_mem x.property⟩, n
+        · use x, ⟨⁅y, ↑n⁆, N.lie_mem n.property⟩
+      · simp
+      · intro m₁ m₂ _ _ hm₁ hm₂; rw [lie_add]; exact Submodule.add_mem _ hm₁ hm₂
+      · intro t m'' _ hm''; rw [lie_smul]; exact Submodule.smul_mem _ t hm''
+    change _ <= ({ Submodule.span R s with lie_mem := fun hm' => aux _ _ hm' } : LieSubmodule R L M)
+    rw [lieIdeal_oper_eq_span]; rw [lieSpan_le]
+    exact Submodule.subset_span
+  · rw [lieIdeal_oper_eq_span]; apply submodule_span_le_lieSpan
 
 Depends on / 依赖: I.lie_mem, N.lie_mem, Submodule, Submodule.add_mem, Submodule.span, Submodule.span_induction, Submodule.subset_span, add_mem, le_antisymm, leibniz_lie, lie_mem, n.pro, property, span_induction, subset_span, x.property
 -/
@@ -623,7 +645,15 @@ theorem lie_sup
     apply mono_lie_right <;> [exact le_sup_left; exact le_sup_right]
   suffices ⁅I, N ⊔ N'⁆ <= ⁅I, N⁆ ⊔ ⁅I, N'⁆ by exact le_antisymm this h
   rw [lieIdeal_oper_eq_span]; rw [lieSpan_le]
-  rintro m ⟨x, ⟨n, hn⟩, h
+  rintro m ⟨x, ⟨n, hn⟩, h⟩
+  simp only [SetLike.mem_coe]
+  rw [LieSubmodule.mem_sup] at hn ⊢
+  rcases hn with ⟨n₁, hn₁, n₂, hn₂, hn'⟩
+  use ⁅(x : L), (⟨n₁, hn₁⟩ : N)⁆; constructor; · apply lie_coe_mem_lie
+  use ⁅(x : L), (⟨n₂, hn₂⟩ : N')⁆; constructor; · apply lie_coe_mem_lie
+  simp [← h, ← hn']
+
+@[simp]
 
 中文:
 定理 lie_sup
@@ -634,7 +664,15 @@ theorem lie_sup
     apply mono_lie_right <;> [exact le_sup_left; exact le_sup_right]
   suffices ⁅I, N ⊔ N'⁆ <= ⁅I, N⁆ ⊔ ⁅I, N'⁆ by exact le_antisymm this h
   rw [lieIdeal_oper_eq_span]; rw [lieSpan_le]
-  rintro m ⟨x, ⟨n, hn⟩, h
+  rintro m ⟨x, ⟨n, hn⟩, h⟩
+  simp only [SetLike.mem_coe]
+  rw [LieSubmodule.mem_sup] at hn ⊢
+  rcases hn with ⟨n₁, hn₁, n₂, hn₂, hn'⟩
+  use ⁅(x : L), (⟨n₁, hn₁⟩ : N)⁆; constructor; · apply lie_coe_mem_lie
+  use ⁅(x : L), (⟨n₂, hn₂⟩ : N')⁆; constructor; · apply lie_coe_mem_lie
+  simp [← h, ← hn']
+
+@[simp]
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.mem_sup, SetLike, SetLike.mem_coe, le_antisymm, le_sup_left, le_sup_right, lieIdeal_oper_eq_span, lieSpan_le, lie_coe_mem_lie, mem_coe, mem_sup, mono_lie_right, sup_le_iff
 -/
@@ -666,7 +704,12 @@ theorem sup_lie
   suffices ⁅I ⊔ J, N⁆ <= ⁅I, N⁆ ⊔ ⁅J, N⁆ by exact le_antisymm this h
   rw [lieIdeal_oper_eq_span]; rw [lieSpan_le]
   rintro m ⟨⟨x, hx⟩, n, h⟩
-  s
+  simp only [SetLike.mem_coe]
+  rw [LieSubmodule.mem_sup] at hx ⊢
+  rcases hx with ⟨x₁, hx₁, x₂, hx₂, hx'⟩
+  use ⁅((⟨x₁, hx₁⟩ : I) : L), (n : N)⁆; constructor; · apply lie_coe_mem_lie
+  use ⁅((⟨x₂, hx₂⟩ : J) : L), (n : N)⁆; constructor; · apply lie_coe_mem_lie
+  simp [← h, ← hx']
 
 中文:
 定理 sup_lie
@@ -678,7 +721,12 @@ theorem sup_lie
   suffices ⁅I ⊔ J, N⁆ <= ⁅I, N⁆ ⊔ ⁅J, N⁆ by exact le_antisymm this h
   rw [lieIdeal_oper_eq_span]; rw [lieSpan_le]
   rintro m ⟨⟨x, hx⟩, n, h⟩
-  s
+  simp only [SetLike.mem_coe]
+  rw [LieSubmodule.mem_sup] at hx ⊢
+  rcases hx with ⟨x₁, hx₁, x₂, hx₂, hx'⟩
+  use ⁅((⟨x₁, hx₁⟩ : I) : L), (n : N)⁆; constructor; · apply lie_coe_mem_lie
+  use ⁅((⟨x₂, hx₂⟩ : J) : L), (n : N)⁆; constructor; · apply lie_coe_mem_lie
+  simp [← h, ← hx']
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.mem_sup, SetLike, SetLike.mem_coe, le_antisymm, le_sup_left, le_sup_right, lieIdeal_oper_eq_span, lieSpan_le, lie_coe_mem_lie, mem_coe, mem_sup, mono_lie_left, sup_le_iff
 -/
@@ -823,7 +871,9 @@ theorem map_bracket_le
   rw [← hx]
   let fy₁ : ↥(map f I₁) := ⟨f y₁, mem_map hy₁⟩
   let fy₂ : ↥(map f I₂) := ⟨f y₂, mem_map hy₂⟩
-  change _ in comap f ⁅map f I₁, map f
+  change _ in comap f ⁅map f I₁, map f I₂⁆
+  simp only [mem_comap, LieHom.map_lie]
+  exact LieSubmodule.lie_coe_mem_lie fy₁ fy₂
 
 中文:
 定理 map_bracket_le
@@ -836,7 +886,9 @@ theorem map_bracket_le
   rw [← hx]
   let fy₁ : ↥(map f I₁) := ⟨f y₁, mem_map hy₁⟩
   let fy₂ : ↥(map f I₂) := ⟨f y₂, mem_map hy₂⟩
-  change _ in comap f ⁅map f I₁, map f
+  change _ in comap f ⁅map f I₁, map f I₂⁆
+  simp only [mem_comap, LieHom.map_lie]
+  exact LieSubmodule.lie_coe_mem_lie fy₁ fy₂
 
 Depends on / 依赖: LieHom, LieHom.map_lie, LieSubmodule, LieSubmodule.lieIdeal_oper_eq_span, LieSubmodule.lieSpan_le, LieSubmodule.lie_coe_mem_lie, lieIdeal_oper_eq_span, lieSpan_le, lie_coe_mem_lie, map_le_iff_le_comap, map_lie, mem_comap, mem_map
 -/
@@ -860,7 +912,11 @@ theorem map_bracket_eq
   proof: by
   suffices ⁅map f I₁, map f I₂⁆ <= map f ⁅I₁, I₂⁆ by exact le_antisymm (map_bracket_le f) this
   rw [← LieSubmodule.toSubmodule_le_toSubmodule]; rw [coe_map_of_surjective h]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LinearMap.map_span]
-  
+  apply Submodule.span_mono
+  rintro x ⟨⟨z₁, h₁⟩, ⟨z₂, h₂⟩, rfl⟩
+  obtain ⟨y₁, rfl⟩ := mem_map_of_surjective h h₁
+  obtain ⟨y₂, rfl⟩ := mem_map_of_surjective h h₂
+  exact ⟨⁅(y₁ : L), (y₂ : L)⁆, ⟨y₁, y₂, rfl⟩, by apply f.map_lie⟩
 
 中文:
 定理 map_bracket_eq
@@ -868,7 +924,11 @@ theorem map_bracket_eq
   证明: by
   suffices ⁅map f I₁, map f I₂⁆ <= map f ⁅I₁, I₂⁆ by exact le_antisymm (map_bracket_le f) this
   rw [← LieSubmodule.toSubmodule_le_toSubmodule]; rw [coe_map_of_surjective h]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LinearMap.map_span]
-  
+  apply Submodule.span_mono
+  rintro x ⟨⟨z₁, h₁⟩, ⟨z₂, h₂⟩, rfl⟩
+  obtain ⟨y₁, rfl⟩ := mem_map_of_surjective h h₁
+  obtain ⟨y₂, rfl⟩ := mem_map_of_surjective h h₂
+  exact ⟨⁅(y₁ : L), (y₂ : L)⁆, ⟨y₁, y₂, rfl⟩, by apply f.map_lie⟩
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.toSubmodule_le_toSubmodule, LinearMap, LinearMap.map_span, Submodule, Submodule.span_mono, coe_map_of_surjective, le_antisymm, lieIdeal_oper_eq_linear_span, map_bracket_le, map_span, mem_map_of_surjective, span_mono, toSubmodule_le_toSubmodule
 -/
@@ -947,7 +1007,10 @@ theorem comap_bracket_eq
   rw [← LieSubmodule.toSubmodule_inj]; rw [comap_toSubmodule]; rw [LieSubmodule.sup_toSubmodule]; rw [f.ker_toSubmodule]; rw [← Submodule.comap_map_eq]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LinearMap.map_span]
   congr
   ext
-  simp_all
+  simp_all only [Subtype.exists, LieSubmodule.mem_inf, LieHom.mem_idealRange_iff, exists_prop,
+    Set.mem_ofPred_eq, LieHom.coe_toLinearMap, mem_comap,
+    exists_exists_and_exists_and_eq_and, LieHom.map_lie]
+  grind
 
 中文:
 定理 comap_bracket_eq
@@ -956,7 +1019,10 @@ theorem comap_bracket_eq
   rw [← LieSubmodule.toSubmodule_inj]; rw [comap_toSubmodule]; rw [LieSubmodule.sup_toSubmodule]; rw [f.ker_toSubmodule]; rw [← Submodule.comap_map_eq]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LinearMap.map_span]
   congr
   ext
-  simp_all
+  simp_all only [Subtype.exists, LieSubmodule.mem_inf, LieHom.mem_idealRange_iff, exists_prop,
+    Set.mem_ofPred_eq, LieHom.coe_toLinearMap, mem_comap,
+    exists_exists_and_exists_and_eq_and, LieHom.map_lie]
+  grind
 
 Depends on / 依赖: LieHom, LieHom.coe_toLinearMap, LieHom.map_lie, LieHom.mem_idealRange_iff, LieSubmodule, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.mem_inf, LieSubmodule.sup_toSubmodule, LieSubmodule.toSubmodule_inj, LinearMap, LinearMap.map_span, Set.mem_ofPred_eq, Submodule, Submodule.comap_map_eq, Subtype, Subtype.exists, coe_toLinearMap, comap_map_eq, comap_toSubmodule, exists_exists_and_exists_and_eq_and
 -/

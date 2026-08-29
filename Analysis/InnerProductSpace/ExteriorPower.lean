@@ -176,7 +176,10 @@ lemma innerProductForm_ιMulti_family_of_orthonormal
     simp [gram_eq_one_iff_orthonormal.mpr (hv.comp _ (RelEmbedding.injective _))]
   · rw [innerProductForm_ιMulti_ιMulti]
     obtain ⟨x, hxt, hxs⟩ := (Set.powersetCard.exists_mem_notMem_iff_ne t s).mp (.symm h)
-    simp only [Set.mem_rang
+    simp only [Set.mem_range, not_exists,
+      ← Set.powersetCard.mem_range_ofFinEmbEquiv_symm_iff_mem] at hxs hxt
+    obtain ⟨i, rfl⟩ := hxt
+    exact det_eq_zero_of_row_eq_zero i (fun j => hv.inner_eq_zero (hxs j))
 
 中文:
 引理 innerProductForm_ιMulti_family_of_orthonormal
@@ -188,7 +191,10 @@ lemma innerProductForm_ιMulti_family_of_orthonormal
     simp [gram_eq_one_iff_orthonormal.mpr (hv.comp _ (RelEmbedding.injective _))]
   · rw [innerProductForm_ιMulti_ιMulti]
     obtain ⟨x, hxt, hxs⟩ := (Set.powersetCard.exists_mem_notMem_iff_ne t s).mp (.symm h)
-    simp only [Set.mem_rang
+    simp only [Set.mem_range, not_exists,
+      ← Set.powersetCard.mem_range_ofFinEmbEquiv_symm_iff_mem] at hxs hxt
+    obtain ⟨i, rfl⟩ := hxt
+    exact det_eq_zero_of_row_eq_zero i (fun j => hv.inner_eq_zero (hxs j))
 -/
 private lemma innerProductForm_ιMulti_family_of_orthonormal {ι : Type*} [LinearOrder ι] {v : ι -> E}
     (hv : Orthonormal Real v) (s t : Set.powersetCard ι n) :
@@ -267,7 +273,9 @@ instance [FiniteDimensional
     rw [innerProductForm_self x (stdOrthonormalBasis Real E)]
     exact Finset.sum_nonneg (fun _ _ => sq_nonneg _)
   definite x h := by
-    rw [innerProductForm_self
+    rw [innerProductForm_self x (stdOrthonormalBasis Real E)]; rw [Finset.sum_eq_zero_iff_of_nonneg (fun _ _ => sq_nonneg _)] at h
+    apply Module.Basis.ext_elem ((stdOrthonormalBasis Real E).toBasis.exteriorPower n)
+    simpa using h
 
 中文:
 实例 [有限维
@@ -280,7 +288,9 @@ instance [FiniteDimensional
     rw [innerProductForm_self x (stdOrthonormalBasis Real E)]
     exact Finset.sum_nonneg (fun _ _ => sq_nonneg _)
   definite x h := by
-    rw [innerProductForm_self
+    rw [innerProductForm_self x (stdOrthonormalBasis Real E)]; rw [Finset.sum_eq_zero_iff_of_nonneg (fun _ _ => sq_nonneg _)] at h
+    apply Module.Basis.ext_elem ((stdOrthonormalBasis Real E).toBasis.exteriorPower n)
+    simpa using h
 -/
 @[no_expose] instance [FiniteDimensional Real E] : InnerProductSpace.Core Real (⋀[Real]^n E) where
   inner x y := innerProductForm x y

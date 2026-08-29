@@ -42,7 +42,25 @@ theorem of_mem_extremePoints_measure_univ_eq
     have : IsFiniteMeasure μ := by
       constructor
       rwa [h.1.2, lt_top_iff_ne_top]
-    set S := {ν | M
+    set S := {ν | MeasurePreserving f ν ν ∧ ν univ = c}
+    have {s : Set X} (hsm : MeasurableSet s) (hfs : f ⁻¹' s = s) (hμs : μ s != 0) :
+        c • μ[|s] in S := by
+      refine ⟨.smul_measure (.smul_measure ?_ _) c, ?_⟩
+      · convert! hf.restrict_preimage hsm
+        exact hfs.symm
+      · rw [Measure.smul_apply, (cond_isProbabilityMeasure hμs).1, smul_eq_mul, mul_one]
+    intro s hsm hfs
+    by_contra H
+    obtain ⟨hs, hs'⟩ : μ s != 0 ∧ μ sᶜ != 0 := by
+      simpa [eventuallyConst_set, ae_iff, and_comm] using! H
+    have hcond : c • μ[|s] = μ := by
+      apply h.2 (this hsm hfs hs) (this hsm.compl (by rw [preimage_compl, hfs]) hs')
+      refine ⟨μ s / c, μ sᶜ / c, ENNReal.div_pos hs hc, ENNReal.div_pos hs' hc, ?_, ?_⟩
+      · rw [← ENNReal.add_div, measure_add_measure_compl hsm, h.1.2, ENNReal.div_self hc₀ hc]
+      · simp [ProbabilityTheory.cond, smul_smul, ← mul_assoc, ENNReal.div_mul_cancel,
+          ENNReal.mul_inv_cancel, *]
+    rw [← hcond] at hs'
+    simp [ProbabilityTheory.cond_apply, hsm] at hs'
 
 中文:
 定理 of_mem_extremePoints_measure_univ_eq
@@ -56,7 +74,25 @@ theorem of_mem_extremePoints_measure_univ_eq
     have : IsFiniteMeasure μ := by
       constructor
       rwa [h.1.2, lt_top_iff_ne_top]
-    set S := {ν | M
+    set S := {ν | MeasurePreserving f ν ν ∧ ν univ = c}
+    have {s : Set X} (hsm : MeasurableSet s) (hfs : f ⁻¹' s = s) (hμs : μ s != 0) :
+        c • μ[|s] in S := by
+      refine ⟨.smul_measure (.smul_measure ?_ _) c, ?_⟩
+      · convert! hf.restrict_preimage hsm
+        exact hfs.symm
+      · rw [Measure.smul_apply, (cond_isProbabilityMeasure hμs).1, smul_eq_mul, mul_one]
+    intro s hsm hfs
+    by_contra H
+    obtain ⟨hs, hs'⟩ : μ s != 0 ∧ μ sᶜ != 0 := by
+      simpa [eventuallyConst_set, ae_iff, and_comm] using! H
+    have hcond : c • μ[|s] = μ := by
+      apply h.2 (this hsm hfs hs) (this hsm.compl (by rw [preimage_compl, hfs]) hs')
+      refine ⟨μ s / c, μ sᶜ / c, ENNReal.div_pos hs hc, ENNReal.div_pos hs' hc, ?_, ?_⟩
+      · rw [← ENNReal.add_div, measure_add_measure_compl hsm, h.1.2, ENNReal.div_self hc₀ hc]
+      · simp [ProbabilityTheory.cond, smul_smul, ← mul_assoc, ENNReal.div_mul_cancel,
+          ENNReal.mul_inv_cancel, *]
+    rw [← hcond] at hs'
+    simp [ProbabilityTheory.cond_apply, hsm] at hs'
 
 Depends on / 依赖: IsFiniteMeasure, MeasurableSet, MeasurePreserving, convert, eq_or_ne, hf.measurable, hf.restrict_preimage, lt_top_iff_ne_top, measurable, measure_univ_eq_zero, restrict_preimage, smul_measure, zero_measure
 -/
@@ -125,7 +161,8 @@ theorem eq_smul_of_absolutelyContinuous
   ext s hs
   calc
 ν s = ∫⁻ a in s, ν.rnDeriv μ a ∂μ := .symm setLIntegral_rnDeriv hνμ _
-_ = ∫⁻ _ in s, c ∂μ := lintegral_congr_ae hc.filter
+_ = ∫⁻ _ in s, c ∂μ := lintegral_congr_ae hc.filter_mono ae_mono restrict_le_self
+    _ = (c • μ) s := by simp
 
 中文:
 定理 eq_smul_of_absolutelyContinuous
@@ -137,7 +174,8 @@ _ = ∫⁻ _ in s, c ∂μ := lintegral_congr_ae hc.filter
   ext s hs
   calc
 ν s = ∫⁻ a in s, ν.rnDeriv μ a ∂μ := .symm setLIntegral_rnDeriv hνμ _
-_ = ∫⁻ _ in s, c ∂μ := lintegral_congr_ae hc.filter
+_ = ∫⁻ _ in s, c ∂μ := lintegral_congr_ae hc.filter_mono ae_mono restrict_le_self
+    _ = (c • μ) s := by simp
 
 Depends on / 依赖: ae_mono, filter_mono, hc.filter_mono, lintegral_congr_ae, measurable_rnDeriv, nullMeasurable, restrict_le_self, rnDeriv, rnDeriv_comp_aeEq, setLIntegral_rnDeriv, toMeasurePreserving
 -/
@@ -214,7 +252,7 @@ theorem mem_extremePoints_measure_univ_eq
   rintro ν₁ ⟨hfν₁, hν₁μ⟩ ν₂ ⟨hfν₂, hν₂μ⟩ ⟨a, b, ha, hb, hab, rfl⟩
   have : IsFiniteMeasure ν₁ := ⟨by rw [hν₁μ]; apply measure_lt_top⟩
   apply hμ.eq_of_absolutelyContinuous_measure_univ_eq hfν₁ (.add_right _ _) hν₁μ
-  a
+  apply absolutelyContinuous_smul ha.ne'
 
 中文:
 定理 mem_extremePoints_measure_univ_eq
@@ -225,7 +263,7 @@ theorem mem_extremePoints_measure_univ_eq
   rintro ν₁ ⟨hfν₁, hν₁μ⟩ ν₂ ⟨hfν₂, hν₂μ⟩ ⟨a, b, ha, hb, hab, rfl⟩
   have : IsFiniteMeasure ν₁ := ⟨by rw [hν₁μ]; apply measure_lt_top⟩
   apply hμ.eq_of_absolutelyContinuous_measure_univ_eq hfν₁ (.add_right _ _) hν₁μ
-  a
+  apply absolutelyContinuous_smul ha.ne'
 
 Depends on / 依赖: IsFiniteMeasure, absolutelyContinuous_smul, add_right, eq_of_absolutelyContinuous_measure_univ_eq, ha.ne, measure_lt_top, mem_extremePoints_iff_left, toMeasurePreserving
 -/

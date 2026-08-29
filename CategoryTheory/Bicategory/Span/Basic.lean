@@ -259,7 +259,8 @@ definition comp
       (.flip <| .of_hasPullback S₁.r S₂.l) S₂.wl) S₁.wl
   wr :=
     IsStableUnderComposition.comp_mem
-    _
+    _ _ (IsStableUnderBaseChangeAlong.of_isPullback
+      (.of_hasPullback S₁.r S₂.l) S₁.wr) S₂.wr
 
 中文:
 定义 comp
@@ -273,7 +274,8 @@ definition comp
       (.flip <| .of_hasPullback S₁.r S₂.l) S₂.wl) S₁.wl
   wr :=
     IsStableUnderComposition.comp_mem
-    _
+    _ _ (IsStableUnderBaseChangeAlong.of_isPullback
+      (.of_hasPullback S₁.r S₂.l) S₁.wr) S₂.wr
 
 Depends on / 依赖: pullback
 -/

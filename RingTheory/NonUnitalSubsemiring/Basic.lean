@@ -770,6 +770,8 @@ instance :
     le_top := fun _ _ _ => trivial
     inf := (· ⊓ ·)
     inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right
+    le_inf := fun _ _ _ h₁ h₂ _ hx => ⟨h₁ hx, h₂ hx⟩ }
 
 中文:
 实例 :
@@ -782,6 +784,8 @@ instance :
     le_top := fun _ _ _ => trivial
     inf := (· ⊓ ·)
     inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right
+    le_inf := fun _ _ _ h₁ h₂ _ hx => ⟨h₁ hx, h₂ hx⟩ }
 
 Depends on / 依赖: And.left, And.right, IsGLB.of_image, NonUnitalSubsemiring, SetLike, SetLike.coe_subset_coe, bot_le, coe_subset_coe, completeLatticeOfInf, inf_le_left, inf_le_right, isGLB_biInf, le_inf, le_top, mem_bot, mem_bot.mp, of_image, zero_mem
 -/
@@ -1726,7 +1730,7 @@ theorem closure_addSubmonoid_closure
   rintro - ⟨J, rfl⟩
   refine (AddSubmonoid.mem_closure.mp (mem_closure_iff.mp hx)) H.toAddSubmonoid fun y hy => ?_
   refine (Subsemigroup.mem_closure.mp hy) H.toSubsemigroup fun z hz => ?_
- 
+  exact (AddSubmonoid.mem_closure.mp hz) H.toAddSubmonoid fun w hw => J hw
 
 中文:
 定理 closure_addSubmonoid_closure
@@ -1738,7 +1742,7 @@ theorem closure_addSubmonoid_closure
   rintro - ⟨J, rfl⟩
   refine (AddSubmonoid.mem_closure.mp (mem_closure_iff.mp hx)) H.toAddSubmonoid fun y hy => ?_
   refine (Subsemigroup.mem_closure.mp hy) H.toSubsemigroup fun z hz => ?_
- 
+  exact (AddSubmonoid.mem_closure.mp hz) H.toAddSubmonoid fun w hw => J hw
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_closure.mp, AddSubmonoid.subset_closure, H.toAddSubmonoid, H.toSubsemigroup, Subsemigroup, Subsemigroup.mem_closure.mp, closure_mono, mem_closure, mem_closure_iff, mem_closure_iff.mp, subset_closure, toAddSubmonoid, toSubsemigroup
 -/
@@ -1767,7 +1771,7 @@ theorem closure_induction
       mul_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, mul _ _ _ _ hpx hpy⟩
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       zero_mem' := ⟨_, zero⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, 
+.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx closure_le (t := K)
 
 中文:
 定理 closure_induction
@@ -1777,7 +1781,7 @@ theorem closure_induction
       mul_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, mul _ _ _ _ hpx hpy⟩
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       zero_mem' := ⟨_, zero⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, 
+.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx closure_le (t := K)
 
 Depends on / 依赖: NonUnitalSubsemiring, add_mem, carrier, closure_le, mul_mem, subset_closure, zero_mem
 -/
@@ -1808,7 +1812,9 @@ theorem closure_induction₂
     | zero => exact zero_left _ _
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
     | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
- 
+  | zero => exact zero_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
 
 中文:
 定理 closure_induction₂
@@ -1820,7 +1826,9 @@ theorem closure_induction₂
     | zero => exact zero_left _ _
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
     | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
- 
+  | zero => exact zero_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
 
 Depends on / 依赖: add_left, add_right, closure_induction, mem_mem, mul_left, mul_right, zero_left, zero_right
 -/
@@ -2408,7 +2416,8 @@ theorem mem_iSup_of_directed
     NonUnitalSubsemiring.mk' (⋃ i, (S i : Set R))
       (⨆ i, (S i).toSubsemigroup) (Subsemigroup.coe_iSup_of_directed hS)
       (⨆ i, (S i).toAddSubmonoid) (AddSubmonoid.coe_iSup_of_directed hS)
-  suffices ⨆ i, S i 
+  suffices ⨆ i, S i <= U by simpa [U] using @this x
+  exact iSup_le fun i x hx => Set.mem_iUnion.2 ⟨i, hx⟩
 
 中文:
 定理 mem_iSup_of_directed
@@ -2419,7 +2428,8 @@ theorem mem_iSup_of_directed
     NonUnitalSubsemiring.mk' (⋃ i, (S i : Set R))
       (⨆ i, (S i).toSubsemigroup) (Subsemigroup.coe_iSup_of_directed hS)
       (⨆ i, (S i).toAddSubmonoid) (AddSubmonoid.coe_iSup_of_directed hS)
-  suffices ⨆ i, S i 
+  suffices ⨆ i, S i <= U by simpa [U] using @this x
+  exact iSup_le fun i x hx => Set.mem_iUnion.2 ⟨i, hx⟩
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.coe_iSup_of_directed, NonUnitalSubsemiring, NonUnitalSubsemiring.mk, Set.mem_iUnion, Subsemigroup, Subsemigroup.coe_iSup_of_directed, coe_iSup_of_directed, iSup_le, le_iSup, mem_iUnion, toAddSubmonoid, toSubsemigroup
 -/

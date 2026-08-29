@@ -728,7 +728,7 @@ definition isoMk
     (by rw [← cancel_mono e₂.hom, assoc, assoc, e₂.inv_hom_id, comp_id,
           ← comm₁₂, e₁.inv_hom_id_assoc])
     (by rw [← cancel_mono e₃.hom, assoc, assoc, e₃.inv_hom_id, comp_id,
-          ← comm₂₃, e₂.inv_hom_id_ass
+          ← comm₂₃, e₂.inv_hom_id_assoc])
 
 中文:
 定义 isoMk
@@ -738,7 +738,7 @@ definition isoMk
     (by rw [← cancel_mono e₂.hom, assoc, assoc, e₂.inv_hom_id, comp_id,
           ← comm₁₂, e₁.inv_hom_id_assoc])
     (by rw [← cancel_mono e₃.hom, assoc, assoc, e₃.inv_hom_id, comp_id,
-          ← comm₂₃, e₂.inv_hom_id_ass
+          ← comm₂₃, e₂.inv_hom_id_assoc])
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_iff_exact_up_to_refinements, _exact.exact_up_to_refinements, cancel_mono, cat_disch, comp_id, condition, exact_iff_exact_up_to_refinements, exact_up_to_refinements, hom_ext, inv_hom_id, inv_hom_id_assoc, pullback, pullback.condition, pullback.fst, pullback.hom_ext, reassoc_of, zero_comp
 -/

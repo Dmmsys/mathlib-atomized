@@ -188,7 +188,7 @@ lemma IsCaratheodory.biUnion_of_finite
   | empty => simp
   | insert i t hi IH =>
     simp only [Finset.mem_coe, Finset.mem_insert, iUnion_iUnion_eq_or_left] at h ⊢
-    exact m.isCaratheodory_union (h _ <| Or.inl rfl) (IH fun _ hj => h _ <| Or.inr hj
+    exact m.isCaratheodory_union (h _ <| Or.inl rfl) (IH fun _ hj => h _ <| Or.inr hj)
 
 中文:
 引理 IsCaratheodory.biUnion_of_finite
@@ -200,7 +200,7 @@ lemma IsCaratheodory.biUnion_of_finite
   | empty => simp
   | insert i t hi IH =>
     simp only [Finset.mem_coe, Finset.mem_insert, iUnion_iUnion_eq_or_left] at h ⊢
-    exact m.isCaratheodory_union (h _ <| Or.inl rfl) (IH fun _ hj => h _ <| Or.inr hj
+    exact m.isCaratheodory_union (h _ <| Or.inl rfl) (IH fun _ hj => h _ <| Or.inr hj)
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_coe, Finset.mem_insert, Or.inl, Or.inr, classical, iUnion_iUnion_eq_or_left, induction_on, insert, isCaratheodory_union, m.isCaratheodory_union, mem_coe, mem_insert
 -/
@@ -382,7 +382,11 @@ theorem isCaratheodory_iUnion_of_disjoint
     convert! measure_iUnion_le (μ := m) fun i => t inter s i using 1
     · simp [inter_iUnion]
     · simp [ENNReal.tsum_eq_iSup_nat, isCaratheodory_sum m h hd]
-  grw [hp, ENNRe
+  grw [hp, ENNReal.iSup_add]
+  refine iSup_le fun n => ?_
+  rw [isCaratheodory_iUnion_lt _ (fun i _ => h i) t (n := n)]
+  gcongr with i
+  exact iUnion_subset fun _ => .rfl
 
 中文:
 定理 isCaratheodory_iUnion_of_disjoint
@@ -394,7 +398,11 @@ theorem isCaratheodory_iUnion_of_disjoint
     convert! measure_iUnion_le (μ := m) fun i => t inter s i using 1
     · simp [inter_iUnion]
     · simp [ENNReal.tsum_eq_iSup_nat, isCaratheodory_sum m h hd]
-  grw [hp, ENNRe
+  grw [hp, ENNReal.iSup_add]
+  refine iSup_le fun n => ?_
+  rw [isCaratheodory_iUnion_lt _ (fun i _ => h i) t (n := n)]
+  gcongr with i
+  exact iUnion_subset fun _ => .rfl
 
 Depends on / 依赖: ENNReal, ENNReal.iSup_add, ENNReal.tsum_eq_iSup_nat, convert, iSup_add, iSup_le, iUnion_subset, inter_iUnion, isCaratheodory_iUnion_lt, isCaratheodory_iff_le, isCaratheodory_sum, measure_iUnion_le, tsum_eq_iSup_nat
 -/
@@ -604,7 +612,11 @@ theorem ofFunction_caratheodory
         ((iInf_le_of_le fun i => f i \ s) <| iInf_le _ ?_))
       ?_
   · rw [← iUnion_inter]
-    exact inter
+    exact inter_subset_inter_left _ hf
+  · rw [← iUnion_sdiff]
+    exact sdiff_subset_sdiff_left hf
+  · rw [← ENNReal.tsum_add]
+    exact ENNReal.tsum_le_tsum fun i => hs _
 
 中文:
 定理 ofFunction_caratheodory
@@ -618,7 +630,11 @@ theorem ofFunction_caratheodory
         ((iInf_le_of_le fun i => f i \ s) <| iInf_le _ ?_))
       ?_
   · rw [← iUnion_inter]
-    exact inter
+    exact inter_subset_inter_left _ hf
+  · rw [← iUnion_sdiff]
+    exact sdiff_subset_sdiff_left hf
+  · rw [← ENNReal.tsum_add]
+    exact ENNReal.tsum_le_tsum fun i => hs _
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_add, ENNReal.tsum_le_tsum, add_le_add, iInf_le, iInf_le_of_le, iUnion_inter, iUnion_sdiff, inter_subset_inter_left, isCaratheodory_iff_le, le_iInf, le_trans, sdiff_subset_sdiff_left, tsum_add, tsum_le_tsum
 -/

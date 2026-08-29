@@ -838,7 +838,15 @@ theorem cons_eq_cons
     · have : a in b ::ₘ bs := eq ▸ mem_cons_self _ _
       have : a in bs := by simpa [h]
       rcases exists_cons_of_mem this with ⟨cs, hcs⟩
-      simp only [h, hcs, false_a
+      simp only [h, hcs, false_and, ne_eq, not_false_eq_true, cons_inj_right, exists_eq_right',
+        true_and, false_or]
+      have : a ::ₘ as = b ::ₘ a ::ₘ cs := by simp [eq, hcs]
+      have : a ::ₘ as = a ::ₘ b ::ₘ cs := by rwa [cons_swap]
+      simpa using this
+  · intro h
+    rcases h with (⟨eq₁, eq₂⟩ | ⟨_, cs, eq₁, eq₂⟩)
+    · simp [*]
+    · simp [*, cons_swap a b]
 
 中文:
 定理 cons_eq_cons
@@ -853,7 +861,15 @@ theorem cons_eq_cons
     · have : a in b ::ₘ bs := eq ▸ mem_cons_self _ _
       have : a in bs := by simpa [h]
       rcases exists_cons_of_mem this with ⟨cs, hcs⟩
-      simp only [h, hcs, false_a
+      simp only [h, hcs, false_and, ne_eq, not_false_eq_true, cons_inj_right, exists_eq_right',
+        true_and, false_or]
+      have : a ::ₘ as = b ::ₘ a ::ₘ cs := by simp [eq, hcs]
+      have : a ::ₘ as = a ::ₘ b ::ₘ cs := by rwa [cons_swap]
+      simpa using this
+  · intro h
+    rcases h with (⟨eq₁, eq₂⟩ | ⟨_, cs, eq₁, eq₂⟩)
+    · simp [*]
+    · simp [*, cons_swap a b]
 
 Depends on / 依赖: Classical, Classical.decEq, DecidableEq, cons_inj_right, cons_swap, exists_cons_of_mem, exists_eq_right, false_and, false_or, mem_cons_self, ne_eq, not_false_eq_true, true_and
 -/
@@ -1552,7 +1568,9 @@ refine ⟨?_, fun h => le_trans h le_cons_self _ _⟩
   refine leInductionOn h ?_
   introv s m₁ m₂
   rcases append_of_mem m₂ with ⟨r₁, r₂, rfl⟩
- 
+  exact
+    perm_middle.subperm_left.2
+      ((subperm_cons _).2 <| ((sublist_or_mem_of_sublist s).resolve_right m₁).subperm)
 
 中文:
 定理 le_cons_of_notMem
@@ -1567,7 +1585,9 @@ refine ⟨?_, fun h => le_trans h le_cons_self _ _⟩
   refine leInductionOn h ?_
   introv s m₁ m₂
   rcases append_of_mem m₂ with ⟨r₁, r₂, rfl⟩
- 
+  exact
+    perm_middle.subperm_left.2
+      ((subperm_cons _).2 <| ((sublist_or_mem_of_sublist s).resolve_right m₁).subperm)
 
 Depends on / 依赖: append_of_mem, cons_le_cons_iff, introv, leInductionOn, le_cons_self, le_trans, mem_cons_self, perm_middle, perm_middle.subperm_left, resolve_right, revert, sublist_or_mem_of_sublist, subperm, subperm_cons, subperm_left
 -/
@@ -2411,7 +2431,9 @@ theorem rel_cons_left
     | @cons a' b as' bs ha'b h ih =>
       rcases cons_eq_cons.1 hm with (⟨rfl, rfl⟩ | ⟨_h, cs, eq₁, eq₂⟩)
       · exact ⟨b, bs, ha'b, h, rfl⟩
-      · rcases ih eq₂.symm with ⟨
+      · rcases ih eq₂.symm with ⟨b', bs', h₁, h₂, eq⟩
+        exact ⟨b', b ::ₘ bs', h₁, eq₁.symm ▸ Rel.cons ha'b h₂, eq.symm ▸ cons_swap _ _ _⟩
+  · exact fun ⟨b, bs', hab, h, Eq⟩ => Eq.symm ▸ Rel.cons hab h
 
 中文:
 定理 rel_cons_left
@@ -2425,7 +2447,9 @@ theorem rel_cons_left
     | @cons a' b as' bs ha'b h ih =>
       rcases cons_eq_cons.1 hm with (⟨rfl, rfl⟩ | ⟨_h, cs, eq₁, eq₂⟩)
       · exact ⟨b, bs, ha'b, h, rfl⟩
-      · rcases ih eq₂.symm with ⟨
+      · rcases ih eq₂.symm with ⟨b', bs', h₁, h₂, eq⟩
+        exact ⟨b', b ::ₘ bs', h₁, eq₁.symm ▸ Rel.cons ha'b h₂, eq.symm ▸ cons_swap _ _ _⟩
+  · exact fun ⟨b, bs', hab, h, Eq⟩ => Eq.symm ▸ Rel.cons hab h
 
 Depends on / 依赖: Eq.symm, Rel.cons, cons_eq_cons, cons_swap, eq.symm, generalize, generalizing
 -/
@@ -2542,7 +2566,12 @@ theorem rel_of_forall
   · intro a t ih m h hc
     rw [card_cons] at hc
     obtain ⟨b, hb⟩ := card_pos_iff_exists_mem.1 (show 0 < card m from hc.symm ▸ Nat.succ_pos _)
-    obtain ⟨m', rf
+    obtain ⟨m', rfl⟩ := exists_cons_of_mem hb
+    refine rel_cons_right.mpr ⟨b, m', h _ _ hb (mem_cons_self _ _), ih ?_ ?_, rfl⟩
+    · exact fun _ _ ha hb => h _ _ (mem_cons_of_mem ha) (mem_cons_of_mem hb)
+    · simpa using hc
+
+protected nonrec
 
 中文:
 定理 rel_of_对任意
@@ -2555,7 +2584,12 @@ theorem rel_of_forall
   · intro a t ih m h hc
     rw [card_cons] at hc
     obtain ⟨b, hb⟩ := card_pos_iff_exists_mem.1 (show 0 < card m from hc.symm ▸ Nat.succ_pos _)
-    obtain ⟨m', rf
+    obtain ⟨m', rfl⟩ := exists_cons_of_mem hb
+    refine rel_cons_right.mpr ⟨b, m', h _ _ hb (mem_cons_self _ _), ih ?_ ?_, rfl⟩
+    · exact fun _ _ ha hb => h _ _ (mem_cons_of_mem ha) (mem_cons_of_mem hb)
+    · simpa using hc
+
+protected nonrec
 
 Depends on / 依赖: Nat.succ_pos, card_cons, card_eq_zero, card_pos_iff_exists_mem, card_zero, exists_cons_of_mem, hc.symm, induction_on, m2.induction_on, mem_cons_of_mem, mem_cons_self, rel_cons_right, rel_cons_right.mpr, rel_zero_right, revert, succ_pos
 -/
@@ -2586,7 +2620,7 @@ theorem Rel.trans
   | cons x t ih =>
     obtain ⟨a, as, ha1, ha2, rfl⟩ := rel_cons_right.mp r1
     obtain ⟨b, bs, hb1, hb2, rfl⟩ := rel_cons_left.mp r2
-    exact Multiset.Rel.c
+    exact Multiset.Rel.cons (_root_.trans ha1 hb1) (ih ha2 hb2)
 
 中文:
 定理 关系.trans
@@ -2597,7 +2631,7 @@ theorem Rel.trans
   | cons x t ih =>
     obtain ⟨a, as, ha1, ha2, rfl⟩ := rel_cons_right.mp r1
     obtain ⟨b, bs, hb1, hb2, rfl⟩ := rel_cons_left.mp r2
-    exact Multiset.Rel.c
+    exact Multiset.Rel.cons (_root_.trans ha1 hb1) (ih ha2 hb2)
 
 Depends on / 依赖: Multiset, Multiset.Rel.cons, Multiset.induction_on, _root_, _root_.trans, generalizing, induction_on, rel_cons_left, rel_cons_left.mp, rel_cons_right, rel_cons_right.mp, rel_zero_left, rel_zero_left.mp, rel_zero_right, rel_zero_right.mp
 -/

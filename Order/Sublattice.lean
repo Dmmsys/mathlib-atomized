@@ -1055,7 +1055,7 @@ instance instCompleteLattice
   inf_le_left := fun _L _M _a => And.left
   inf_le_right := fun _L _M _a => And.right
   __ := completeLatticeOfInf (Sublattice α)
-      fun _
+      fun _s => IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf
 
 中文:
 实例 instCompleteLattice
@@ -1069,7 +1069,7 @@ instance instCompleteLattice
   inf_le_left := fun _L _M _a => And.left
   inf_le_right := fun _L _M _a => And.right
   __ := completeLatticeOfInf (Sublattice α)
-      fun _
+      fun _s => IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf
 -/
 instance instCompleteLattice : CompleteLattice (Sublattice α) where
   bot := ⊥

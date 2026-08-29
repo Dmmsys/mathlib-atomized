@@ -976,7 +976,14 @@ definition symInsertEquiv
 left_inv m := Subtype.ext m.1.fill_filterNe a
   right_inv := fun ⟨i, m, hm⟩ => by
     refine Function.Injective.sigma_map (β₂ := ?_) (f₂ := ?_)
-        (Function.in
+        (Function.injective_id) (fun i => ?_) ?_
+    · exact fun i => Sym α (n - i)
+    swap
+    · exact Subtype.coe_injective
+    refine Eq.trans ?_ (Sym.filter_ne_fill a _ ?_)
+    exacts [rfl, h ∘ mem_sym_iff.1 hm a]
+
+@[to_additive]
 
 中文:
 定义 symInsertEquiv
@@ -986,7 +993,14 @@ left_inv m := Subtype.ext m.1.fill_filterNe a
 left_inv m := Subtype.ext m.1.fill_filterNe a
   right_inv := fun ⟨i, m, hm⟩ => by
     refine Function.Injective.sigma_map (β₂ := ?_) (f₂ := ?_)
-        (Function.in
+        (Function.injective_id) (fun i => ?_) ?_
+    · exact fun i => Sym α (n - i)
+    swap
+    · exact Subtype.coe_injective
+    refine Eq.trans ?_ (Sym.filter_ne_fill a _ ?_)
+    exacts [rfl, h ∘ mem_sym_iff.1 hm a]
+
+@[to_additive]
 
 Depends on / 依赖: M.corec, M.dest, appendFun, convert, erase_insert, filterNe, sym_filterNe_mem
 -/

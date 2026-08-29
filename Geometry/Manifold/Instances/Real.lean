@@ -487,7 +487,12 @@ theorem interior_euclideanQuadrant
   let f i : PiLp p (fun _ : Fin n => Real) -> Real := fun x => x i
   have h : { y : PiLp p (fun _ : Fin n => Real) | forall i : Fin n, a <= y i } = ⋂ i, (f i) ⁻¹' Ici a := by
     ext; simp; rfl
-  have h' : { y : PiLp p (fun _ : Fin n => Real) | forall i : Fin n, a < y i } = ⋂ i, (f i) ⁻¹' Ioi a :
+  have h' : { y : PiLp p (fun _ : Fin n => Real) | forall i : Fin n, a < y i } = ⋂ i, (f i) ⁻¹' Ioi a := by
+    ext; simp; rfl
+  rw [h]; rw [h']; rw [interior_iInter_of_finite]
+  apply iInter_congr fun i => ?_
+  rw [← (PiLp.isOpenMap_apply p _ i).preimage_interior_eq_interior_preimage]; rw [interior_Ici]
+  fun_prop
 
 中文:
 定理 interior_euclideanQuadrant
@@ -496,7 +501,12 @@ theorem interior_euclideanQuadrant
   let f i : PiLp p (fun _ : Fin n => Real) -> Real := fun x => x i
   have h : { y : PiLp p (fun _ : Fin n => Real) | forall i : Fin n, a <= y i } = ⋂ i, (f i) ⁻¹' Ici a := by
     ext; simp; rfl
-  have h' : { y : PiLp p (fun _ : Fin n => Real) | forall i : Fin n, a < y i } = ⋂ i, (f i) ⁻¹' Ioi a :
+  have h' : { y : PiLp p (fun _ : Fin n => Real) | forall i : Fin n, a < y i } = ⋂ i, (f i) ⁻¹' Ioi a := by
+    ext; simp; rfl
+  rw [h]; rw [h']; rw [interior_iInter_of_finite]
+  apply iInter_congr fun i => ?_
+  rw [← (PiLp.isOpenMap_apply p _ i).preimage_interior_eq_interior_preimage]; rw [interior_Ici]
+  fun_prop
 
 Depends on / 依赖: PiLp.isOpenMap_apply, fun_prop, iInter_congr, interior_Ici, interior_iInter_of_finite, isOpenMap_apply, preimage_interior_eq_interior_preimage
 -/
@@ -528,7 +538,24 @@ definition modelWithCornersEuclideanHalfSpace
   map_source' x _ := x.property
   map_target' _ _ := mem_univ _
   left_inv' := fun ⟨xval, xprop⟩ _ => by
-    rw [Subtype.mk_eq_mk]; rw [← WithLp.equiv_symm_apply]; rw [Equiv.symm_appl
+    rw [Subtype.mk_eq_mk]; rw [← WithLp.equiv_symm_apply]; rw [Equiv.symm_apply_eq]; rw [update_eq_iff]
+    exact ⟨max_eq_left xprop, fun i _ => rfl⟩
+  right_inv' _ hx := by
+    rw [Subtype.coe_mk]; rw [← WithLp.equiv_symm_apply]; rw [Equiv.symm_apply_eq]; rw [update_eq_iff]
+    exact ⟨max_eq_left hx, fun _ _ => rfl⟩
+  source_eq := rfl
+  convex_range' := by
+    simp only [instIsRCLikeNormedField, ↓reduceDIte]
+    apply Convex.convex_isRCLikeNormedField
+    rw [range_euclideanHalfSpace n]
+    exact EuclideanHalfSpace.convex (n := n)
+  nonempty_interior' := by
+    rw [range_euclideanHalfSpace]; rw [interior_halfSpace]
+    exact ⟨toLp 2 fun i => 1, by simp⟩
+  continuous_toFun := continuous_subtype_val
+  continuous_invFun := by
+    exact ((PiLp.continuous_toLp 2 _).comp <| (PiLp.continuous_ofLp 2 _).update 0 <|
+      (PiLp.continuous_apply 2 _ 0).max continuous_const).subtype_mk _
 
 中文:
 定义 modelWithCornersEuclideanHalfSpace
@@ -540,7 +567,24 @@ definition modelWithCornersEuclideanHalfSpace
   map_source' x _ := x.property
   map_target' _ _ := mem_univ _
   left_inv' := fun ⟨xval, xprop⟩ _ => by
-    rw [Subtype.mk_eq_mk]; rw [← WithLp.equiv_symm_apply]; rw [Equiv.symm_appl
+    rw [Subtype.mk_eq_mk]; rw [← WithLp.equiv_symm_apply]; rw [Equiv.symm_apply_eq]; rw [update_eq_iff]
+    exact ⟨max_eq_left xprop, fun i _ => rfl⟩
+  right_inv' _ hx := by
+    rw [Subtype.coe_mk]; rw [← WithLp.equiv_symm_apply]; rw [Equiv.symm_apply_eq]; rw [update_eq_iff]
+    exact ⟨max_eq_left hx, fun _ _ => rfl⟩
+  source_eq := rfl
+  convex_range' := by
+    simp only [instIsRCLikeNormedField, ↓reduceDIte]
+    apply Convex.convex_isRCLikeNormedField
+    rw [range_euclideanHalfSpace n]
+    exact EuclideanHalfSpace.convex (n := n)
+  nonempty_interior' := by
+    rw [range_euclideanHalfSpace]; rw [interior_halfSpace]
+    exact ⟨toLp 2 fun i => 1, by simp⟩
+  continuous_toFun := continuous_subtype_val
+  continuous_invFun := by
+    exact ((PiLp.continuous_toLp 2 _).comp <| (PiLp.continuous_ofLp 2 _).update 0 <|
+      (PiLp.continuous_apply 2 _ 0).max continuous_const).subtype_mk _
 
 Depends on / 依赖: Subtype, Subtype.val
 -/
@@ -586,7 +630,19 @@ definition modelWithCornersEuclideanQuadrant
   map_source' x _ := x.property
   map_target' _ _ := mem_univ _
   left_inv' x _ := by ext i; simp only [x.2 i, sup_of_le_left]
-  right_inv' x hx :
+  right_inv' x hx := by ext1 i; simp only [hx i, sup_of_le_left]
+  source_eq := rfl
+  convex_range' := by
+    simp only [instIsRCLikeNormedField, ↓reduceDIte]
+    apply Convex.convex_isRCLikeNormedField
+    rw [range_euclideanQuadrant]
+    exact EuclideanQuadrant.convex
+  nonempty_interior' := by
+    rw [range_euclideanQuadrant]; rw [interior_euclideanQuadrant]
+    exact ⟨toLp 2 fun i => 1, by simp⟩
+  continuous_toFun := continuous_subtype_val
+  continuous_invFun := Continuous.subtype_mk ((PiLp.continuous_toLp 2 _).comp <|
+    (continuous_pi fun i => ((PiLp.continuous_apply 2 _ i).max continuous_const))) _
 
 中文:
 定义 modelWithCornersEuclideanQuadrant
@@ -599,7 +655,19 @@ definition modelWithCornersEuclideanQuadrant
   map_source' x _ := x.property
   map_target' _ _ := mem_univ _
   left_inv' x _ := by ext i; simp only [x.2 i, sup_of_le_left]
-  right_inv' x hx :
+  right_inv' x hx := by ext1 i; simp only [hx i, sup_of_le_left]
+  source_eq := rfl
+  convex_range' := by
+    simp only [instIsRCLikeNormedField, ↓reduceDIte]
+    apply Convex.convex_isRCLikeNormedField
+    rw [range_euclideanQuadrant]
+    exact EuclideanQuadrant.convex
+  nonempty_interior' := by
+    rw [range_euclideanQuadrant]; rw [interior_euclideanQuadrant]
+    exact ⟨toLp 2 fun i => 1, by simp⟩
+  continuous_toFun := continuous_subtype_val
+  continuous_invFun := Continuous.subtype_mk ((PiLp.continuous_toLp 2 _).comp <|
+    (continuous_pi fun i => ((PiLp.continuous_apply 2 _ i).max continuous_const))) _
 
 Depends on / 依赖: Subtype, Subtype.val
 -/
@@ -785,7 +853,30 @@ definition IccLeftChart
   invFun z := ⟨min (z.val 0 + x) y, by simp [z.prop, h.out.le]⟩
   map_source' := by simp
   map_target' := by
-    simp only [mi
+    simp only [min_lt_iff, mem_ofPred_eq]; intro z hz; left
+    linarith
+  left_inv' := by
+    rintro ⟨z, hz⟩ h'z
+    simp only [mem_ofPred_eq, mem_Icc] at hz h'z
+    simp only [Fin.isValue, sub_add_cancel, hz, inf_of_le_left]
+  right_inv' := by
+    rintro ⟨z, hz⟩ h'z
+    rw [Subtype.mk_eq_mk]
+    ext i
+    dsimp at hz h'z
+    have A : x + z 0 <= y := by linarith
+    rw [Subsingleton.elim i 0]
+    simp only [Fin.isValue, add_comm, A, inf_of_le_left, add_sub_cancel_left]
+  open_source :=
+    haveI : IsOpen { z : Real | z < y } := isOpen_Iio
+    this.preimage continuous_subtype_val
+  open_target := by
+    have : IsOpen { z : Real | z < y - x } := isOpen_Iio
+    have : IsOpen { z : EuclideanSpace Real (Fin 1) | z 0 < y - x } :=
+      this.preimage (@PiLp.continuous_apply 2 (Fin 1) (fun _ => Real) _ 0)
+    exact this.preimage continuous_subtype_val
+  continuousOn_toFun := by fun_prop
+  continuousOn_invFun := by fun_prop
 
 中文:
 定义 IccLeftChart
@@ -796,7 +887,30 @@ definition IccLeftChart
   invFun z := ⟨min (z.val 0 + x) y, by simp [z.prop, h.out.le]⟩
   map_source' := by simp
   map_target' := by
-    simp only [mi
+    simp only [min_lt_iff, mem_ofPred_eq]; intro z hz; left
+    linarith
+  left_inv' := by
+    rintro ⟨z, hz⟩ h'z
+    simp only [mem_ofPred_eq, mem_Icc] at hz h'z
+    simp only [Fin.isValue, sub_add_cancel, hz, inf_of_le_left]
+  right_inv' := by
+    rintro ⟨z, hz⟩ h'z
+    rw [Subtype.mk_eq_mk]
+    ext i
+    dsimp at hz h'z
+    have A : x + z 0 <= y := by linarith
+    rw [Subsingleton.elim i 0]
+    simp only [Fin.isValue, add_comm, A, inf_of_le_left, add_sub_cancel_left]
+  open_source :=
+    haveI : IsOpen { z : Real | z < y } := isOpen_Iio
+    this.preimage continuous_subtype_val
+  open_target := by
+    have : IsOpen { z : Real | z < y - x } := isOpen_Iio
+    have : IsOpen { z : EuclideanSpace Real (Fin 1) | z 0 < y - x } :=
+      this.preimage (@PiLp.continuous_apply 2 (Fin 1) (fun _ => Real) _ 0)
+    exact this.preimage continuous_subtype_val
+  continuousOn_toFun := by fun_prop
+  continuousOn_invFun := by fun_prop
 
 Depends on / 依赖: z.val
 -/
@@ -1000,7 +1114,31 @@ definition IccRightChart
     ⟨max (y - z.val 0) x, by simp [z.prop, h.out.le, sub_eq_add_neg]⟩
   map_source' := by simp
   map_target' := by
-    simp only 
+    simp only [lt_max_iff, mem_ofPred_eq]; intro z hz; left
+    linarith
+  left_inv' := by
+    rintro ⟨z, hz⟩ h'z
+    simp only [mem_ofPred_eq, mem_Icc] at hz h'z
+    simp only [Fin.isValue, sub_eq_add_neg, neg_add_rev, neg_neg,
+      add_neg_cancel_comm_assoc, hz, sup_of_le_left]
+  right_inv' := by
+    rintro ⟨z, hz⟩ h'z
+    rw [Subtype.mk_eq_mk]
+    ext i
+    dsimp at hz h'z
+    have A : x <= y - z 0 := by linarith
+    rw [Subsingleton.elim i 0]
+    simp only [Fin.isValue, A, sup_of_le_left, sub_sub_cancel]
+  open_source :=
+    haveI : IsOpen { z : Real | x < z } := isOpen_Ioi
+    this.preimage continuous_subtype_val
+  open_target := by
+    have : IsOpen { z : Real | z < y - x } := isOpen_Iio
+    have : IsOpen { z : EuclideanSpace Real (Fin 1) | z 0 < y - x } :=
+      this.preimage (@PiLp.continuous_apply 2 (Fin 1) (fun _ => Real) _ 0)
+    exact this.preimage continuous_subtype_val
+  continuousOn_toFun := by fun_prop
+  continuousOn_invFun := by fun_prop
 
 中文:
 定义 IccRightChart
@@ -1012,7 +1150,31 @@ definition IccRightChart
     ⟨max (y - z.val 0) x, by simp [z.prop, h.out.le, sub_eq_add_neg]⟩
   map_source' := by simp
   map_target' := by
-    simp only 
+    simp only [lt_max_iff, mem_ofPred_eq]; intro z hz; left
+    linarith
+  left_inv' := by
+    rintro ⟨z, hz⟩ h'z
+    simp only [mem_ofPred_eq, mem_Icc] at hz h'z
+    simp only [Fin.isValue, sub_eq_add_neg, neg_add_rev, neg_neg,
+      add_neg_cancel_comm_assoc, hz, sup_of_le_left]
+  right_inv' := by
+    rintro ⟨z, hz⟩ h'z
+    rw [Subtype.mk_eq_mk]
+    ext i
+    dsimp at hz h'z
+    have A : x <= y - z 0 := by linarith
+    rw [Subsingleton.elim i 0]
+    simp only [Fin.isValue, A, sup_of_le_left, sub_sub_cancel]
+  open_source :=
+    haveI : IsOpen { z : Real | x < z } := isOpen_Ioi
+    this.preimage continuous_subtype_val
+  open_target := by
+    have : IsOpen { z : Real | z < y - x } := isOpen_Iio
+    have : IsOpen { z : EuclideanSpace Real (Fin 1) | z 0 < y - x } :=
+      this.preimage (@PiLp.continuous_apply 2 (Fin 1) (fun _ => Real) _ 0)
+    exact this.preimage continuous_subtype_val
+  continuousOn_toFun := by fun_prop
+  continuousOn_invFun := by fun_prop
 
 Depends on / 依赖: z.val
 -/
@@ -1169,7 +1331,10 @@ instance instIccChartedSpace
       exact h'
     · simp only [h', if_false]
       apply lt_of_lt_of_le h.out
-      simpa only [not_lt]
+      simpa only [not_lt] using h'
+  chart_mem_atlas z := by by_cases h' : (z : Real) < y <;> simp [h']
+
+@[simp]
 
 中文:
 实例 instIccChartedSpace
@@ -1182,7 +1347,10 @@ instance instIccChartedSpace
       exact h'
     · simp only [h', if_false]
       apply lt_of_lt_of_le h.out
-      simpa only [not_lt]
+      simpa only [not_lt] using h'
+  chart_mem_atlas z := by by_cases h' : (z : Real) < y <;> simp [h']
+
+@[simp]
 
 Depends on / 依赖: IccLeftChart, IccRightChart
 -/
@@ -1342,7 +1510,11 @@ lemma boundary_Icc
     apply iff_of_true Icc_isBoundaryPoint_bot (mem_insert ⊥ {⊤})
   · have : p = ⊤ := SetCoe.ext hp
     rw [this]
-    apply iff_of_true Icc_isBoundaryPoint_top (mem_inser
+    apply iff_of_true Icc_isBoundaryPoint_top (mem_insert_of_mem ⊥ rfl)
+  · apply iff_of_false
+    · simpa [← mem_compl_iff, ModelWithCorners.compl_boundary] using!
+        Icc_isInteriorPoint_interior hp
+    · rintro (rfl | rfl) <;> simp at hp
 
 中文:
 引理 boundary_Icc
@@ -1355,7 +1527,11 @@ lemma boundary_Icc
     apply iff_of_true Icc_isBoundaryPoint_bot (mem_insert ⊥ {⊤})
   · have : p = ⊤ := SetCoe.ext hp
     rw [this]
-    apply iff_of_true Icc_isBoundaryPoint_top (mem_inser
+    apply iff_of_true Icc_isBoundaryPoint_top (mem_insert_of_mem ⊥ rfl)
+  · apply iff_of_false
+    · simpa [← mem_compl_iff, ModelWithCorners.compl_boundary] using!
+        Icc_isInteriorPoint_interior hp
+    · rintro (rfl | rfl) <;> simp at hp
 
 Depends on / 依赖: Icc_isBoundaryPoint_bot, Icc_isBoundaryPoint_top, Icc_isInteriorPoint_interior, ModelWithCorners, ModelWithCorners.compl_boundary, Set.eq_endpoints_or_mem_Ioo_of_mem_Icc, SetCoe, SetCoe.ext, compl_boundary, eq_endpoints_or_mem_Ioo_of_mem_Icc, iff_of_false, iff_of_true, mem_compl_iff, mem_insert, mem_insert_of_mem
 -/
@@ -1411,7 +1587,35 @@ PiLp.contDiff_toLp.comp PiLp.contDiff_ofLp.neg.add contDiff_const
   apply isManifold_of_contDiffOn
   intro e e' he he'
   simp only [atlas] at he he'
- 
+  /- We need to check that any composition of two charts gives a `C^∞` function. Each chart can be
+  either the left chart or the right chart, leaving 4 possibilities that we handle successively. -/
+  rcases he with (rfl | rfl) <;> rcases he' with (rfl | rfl)
+  · -- `e = left chart`, `e' = left chart`
+    exact (mem_groupoid_of_pregroupoid.mpr (symm_trans_mem_contDiffGroupoid _)).1
+  · -- `e = left chart`, `e' = right chart`
+    apply M.contDiffOn.congr
+    rintro _ ⟨⟨hz₁, hz₂⟩, ⟨⟨z, hz₀⟩, rfl⟩⟩
+    simp only [modelWithCornersEuclideanHalfSpace, IccLeftChart, IccRightChart, update_self,
+      max_eq_left, hz₀, lt_sub_iff_add_lt, mfld_simps] at hz₁ hz₂
+    rw [min_eq_left hz₁.le]; rw [lt_add_iff_pos_left] at hz₂
+    ext i
+    rw [Subsingleton.elim i 0]
+    simp only [modelWithCornersEuclideanHalfSpace, IccLeftChart, IccRightChart, *,
+      max_eq_left, min_eq_left hz₁.le, update_self, mfld_simps]
+    abel
+  · -- `e = right chart`, `e' = left chart`
+    apply M.contDiffOn.congr
+    rintro _ ⟨⟨hz₁, hz₂⟩, ⟨z, hz₀⟩, rfl⟩
+    simp only [modelWithCornersEuclideanHalfSpace, IccLeftChart, IccRightChart, max_lt_iff,
+      update_self, max_eq_left hz₀, mfld_simps] at hz₁ hz₂
+    rw [lt_sub_comm] at hz₁
+    ext i
+    rw [Subsingleton.elim i 0]
+    simp only [modelWithCornersEuclideanHalfSpace, IccLeftChart, IccRightChart,
+      update_self, max_eq_left, hz₀, hz₁.le, mfld_simps]
+    abel
+  · -- `e = right chart`, `e' = right chart`
+    exact (mem_groupoid_of_pregroupoid.mpr (symm_trans_mem_contDiffGroupoid _)).1
 
 中文:
 实例 instIsManifoldIcc
@@ -1423,7 +1627,35 @@ PiLp.contDiff_toLp.comp PiLp.contDiff_ofLp.neg.add contDiff_const
   apply isManifold_of_contDiffOn
   intro e e' he he'
   simp only [atlas] at he he'
- 
+  /- We need to check that any composition of two charts gives a `C^∞` function. Each chart can be
+  either the left chart or the right chart, leaving 4 possibilities that we handle successively. -/
+  rcases he with (rfl | rfl) <;> rcases he' with (rfl | rfl)
+  · -- `e = left chart`, `e' = left chart`
+    exact (mem_groupoid_of_pregroupoid.mpr (symm_trans_mem_contDiffGroupoid _)).1
+  · -- `e = left chart`, `e' = right chart`
+    apply M.contDiffOn.congr
+    rintro _ ⟨⟨hz₁, hz₂⟩, ⟨⟨z, hz₀⟩, rfl⟩⟩
+    simp only [modelWithCornersEuclideanHalfSpace, IccLeftChart, IccRightChart, update_self,
+      max_eq_left, hz₀, lt_sub_iff_add_lt, mfld_simps] at hz₁ hz₂
+    rw [min_eq_left hz₁.le]; rw [lt_add_iff_pos_left] at hz₂
+    ext i
+    rw [Subsingleton.elim i 0]
+    simp only [modelWithCornersEuclideanHalfSpace, IccLeftChart, IccRightChart, *,
+      max_eq_left, min_eq_left hz₁.le, update_self, mfld_simps]
+    abel
+  · -- `e = right chart`, `e' = left chart`
+    apply M.contDiffOn.congr
+    rintro _ ⟨⟨hz₁, hz₂⟩, ⟨z, hz₀⟩, rfl⟩
+    simp only [modelWithCornersEuclideanHalfSpace, IccLeftChart, IccRightChart, max_lt_iff,
+      update_self, max_eq_left hz₀, mfld_simps] at hz₁ hz₂
+    rw [lt_sub_comm] at hz₁
+    ext i
+    rw [Subsingleton.elim i 0]
+    simp only [modelWithCornersEuclideanHalfSpace, IccLeftChart, IccRightChart,
+      update_self, max_eq_left, hz₀, hz₁.le, mfld_simps]
+    abel
+  · -- `e = right chart`, `e' = right chart`
+    exact (mem_groupoid_of_pregroupoid.mpr (symm_trans_mem_contDiffGroupoid _)).1
 
 Depends on / 依赖: ContDiff, EuclideanSpace, PiLp.contDiff_ofLp.neg.add, PiLp.contDiff_toLp.comp, contDiff_const, contDiff_ofLp, contDiff_toLp, isManifold_of_contDiffOn
 -/

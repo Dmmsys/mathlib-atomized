@@ -65,7 +65,11 @@ theorem mulN_coeff
   | zero => simp only [Nat.cast_zero, mul_zero, zero_coeff, wittMulN, Pi.zero_apply, map_zero]
   | succ n ih =>
     rw [wittMulN]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [mul_add]; rw [mul_one]; rw [aeval_bind₁]; rw [add_coeff]
-    apply eval₂Hom_congr (RingHom
+    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+    ext1 ⟨b, i⟩
+    fin_cases b
+    · simp [Function.uncurry, Matrix.cons_val_zero, ih]
+    · simp [Function.uncurry, Matrix.cons_val_one, aeval_X]
 
 中文:
 定理 mulN_coeff
@@ -75,7 +79,11 @@ theorem mulN_coeff
   | zero => simp only [Nat.cast_zero, mul_zero, zero_coeff, wittMulN, Pi.zero_apply, map_zero]
   | succ n ih =>
     rw [wittMulN]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [mul_add]; rw [mul_one]; rw [aeval_bind₁]; rw [add_coeff]
-    apply eval₂Hom_congr (RingHom
+    apply eval₂Hom_congr (RingHom.ext_int _ _) _ rfl
+    ext1 ⟨b, i⟩
+    fin_cases b
+    · simp [Function.uncurry, Matrix.cons_val_zero, ih]
+    · simp [Function.uncurry, Matrix.cons_val_one, aeval_X]
 
 Depends on / 依赖: Function, Function.uncurry, Matrix, Matrix.cons_val_one, Matrix.cons_val_zero, Nat.cast_add, Nat.cast_one, Nat.cast_zero, Pi.zero_apply, RingHom, RingHom.ext_int, add_coeff, aeval_X, cast_add, cast_one, cast_zero, cons_val_one, cons_val_zero, ext_int, fin_cases
 -/
@@ -132,7 +140,9 @@ theorem bind₁_wittMulN_wittPolynomial
   | succ n ih =>
     rw [wittMulN]; rw [← bind₁_bind₁]; rw [wittAdd]; rw [wittStructureInt_prop]
     simp only [map_add, Nat.cast_succ, bind₁_X_right]
-    rw [add_mul]; rw [one_mul]; rw [bind₁_rename]; rw [bind₁_r
+    rw [add_mul]; rw [one_mul]; rw [bind₁_rename]; rw [bind₁_rename]
+    simp only [ih, Function.uncurry, Function.comp_def, bind₁_X_left, AlgHom.id_apply,
+      Matrix.cons_val_zero, Matrix.cons_val_one]
 
 中文:
 定理 bind₁_wittMulN_wittPolynomial
@@ -143,7 +153,9 @@ theorem bind₁_wittMulN_wittPolynomial
   | succ n ih =>
     rw [wittMulN]; rw [← bind₁_bind₁]; rw [wittAdd]; rw [wittStructureInt_prop]
     simp only [map_add, Nat.cast_succ, bind₁_X_right]
-    rw [add_mul]; rw [one_mul]; rw [bind₁_rename]; rw [bind₁_r
+    rw [add_mul]; rw [one_mul]; rw [bind₁_rename]; rw [bind₁_rename]
+    simp only [ih, Function.uncurry, Function.comp_def, bind₁_X_left, AlgHom.id_apply,
+      Matrix.cons_val_zero, Matrix.cons_val_one]
 
 Depends on / 依赖: AlgHom, AlgHom.id_apply, Function, Function.comp_def, Function.uncurry, Matrix, Matrix.cons_val_one, Matrix.cons_val_zero, Nat.cast_succ, add_mul, cast_succ, comp_def, cons_val_one, cons_val_zero, id_apply, map_add, one_mul, uncurry, wittAdd, wittMulN
 -/

@@ -381,7 +381,12 @@ theorem induction_on
       inv_mem' := inv _ }
   let f : HNNExtension G A B φ ->* S :=
     lift (HNNExtension.of.codRestrict S of)
-      ⟨HNNExtension.t, t⟩ (by intro a; ext;
+      ⟨HNNExtension.t, t⟩ (by intro a; ext; simp [equiv_eq_conj, mul_assoc])
+  have hf : S.subtype.comp f = MonoidHom.id _ :=
+    hom_ext (by ext; simp [f]) (by simp [f])
+  change motive (MonoidHom.id _ x)
+  rw [← hf]
+  exact (f x).2
 
 中文:
 定理 induction_on
@@ -394,7 +399,12 @@ theorem induction_on
       inv_mem' := inv _ }
   let f : HNNExtension G A B φ ->* S :=
     lift (HNNExtension.of.codRestrict S of)
-      ⟨HNNExtension.t, t⟩ (by intro a; ext;
+      ⟨HNNExtension.t, t⟩ (by intro a; ext; simp [equiv_eq_conj, mul_assoc])
+  have hf : S.subtype.comp f = MonoidHom.id _ :=
+    hom_ext (by ext; simp [f]) (by simp [f])
+  change motive (MonoidHom.id _ x)
+  rw [← hf]
+  exact (f x).2
 
 Depends on / 依赖: HNNExtension, HNNExtension.of.codRestrict, HNNExtension.t, MonoidHom, MonoidHom.id, S.subtype.comp, Set.ofPred, Subgroup, carrier, codRestrict, equiv_eq_conj, hom_ext, inv_mem, motive, mul_assoc, mul_mem, ofPred, one_mem, subtype
 -/
@@ -936,7 +946,8 @@ definition cons
       · exact w.mem_set _ _ h'
     chain := by
       refine List.isChain_cons.2 ⟨?_, w.chain⟩
-      ri
+      rintro ⟨u', g'⟩ hu' hw1
+      exact h2 _ (by simp_all) hw1 }
 
 中文:
 定义 cons
@@ -951,7 +962,8 @@ definition cons
       · exact w.mem_set _ _ h'
     chain := by
       refine List.isChain_cons.2 ⟨?_, w.chain⟩
-      ri
+      rintro ⟨u', g'⟩ hu' hw1
+      exact h2 _ (by simp_all) hw1 }
 
 Depends on / 依赖: List.isChain_cons, List.mem_cons, Prod.mk.injEq, isChain_cons, mem_cons, mem_set, toList, w.chain, w.head, w.mem_set, w.toList
 -/
@@ -988,7 +1000,12 @@ definition consRecOn
       { head := a.2
         toList := l
         mem_set := fun _ _ h => mem_set _ _ (List.mem_cons_of_mem _ h),
-        chain := (List.isChain_cons.1 chain
+        chain := (List.isChain_cons.1 chain).2 }
+      (mem_set a.1 a.2 List.mem_cons_self)
+      (by simpa using (List.isChain_cons.1 chain).1)
+      (ih _ _ _)
+
+@[simp]
 
 中文:
 定义 consRecOn
@@ -1002,7 +1019,12 @@ definition consRecOn
       { head := a.2
         toList := l
         mem_set := fun _ _ h => mem_set _ _ (List.mem_cons_of_mem _ h),
-        chain := (List.isChain_cons.1 chain
+        chain := (List.isChain_cons.1 chain).2 }
+      (mem_set a.1 a.2 List.mem_cons_self)
+      (by simpa using (List.isChain_cons.1 chain).1)
+      (ih _ _ _)
+
+@[simp]
 
 Depends on / 依赖: List.isChain_cons, List.mem_cons_of_mem, List.mem_cons_self, generalizing, isChain_cons, mem_cons_of_mem, mem_cons_self, mem_set, ofGroup, toList
 -/
@@ -1225,7 +1247,17 @@ definition unitsSMul
       (by simp)
       (by
         simp only [g', group_smul_toList, Option.mem_def, Option.map_eq_some_iff, Prod.exists,
-          ex
+          exists_and_right, exists_eq_right, group_smul_head, inv_mul_cancel_right,
+          forall_exists_index, unitsSMulGroup]
+        simp only [Cancels, Option.map_eq_some_iff, Prod.exists, exists_and_right, exists_eq_right,
+          not_and, not_exists] at h
+        intro u' x hx hmem
+        have : w.head in toSubgroup A B u := by
+          have := (d.compl u).rightCosetEquivalence_equiv_snd w.head
+          rw [RightCosetEquivalence]; rw [rightCoset_eq_iff]; rw [mul_mem_cancel_left hmem] at this
+          simp_all
+        have := h this x
+        simp_all [Int.units_ne_iff_eq_neg])
 
 中文:
 定义 unitsSMul
@@ -1238,7 +1270,17 @@ definition unitsSMul
       (by simp)
       (by
         simp only [g', group_smul_toList, Option.mem_def, Option.map_eq_some_iff, Prod.exists,
-          ex
+          exists_and_right, exists_eq_right, group_smul_head, inv_mul_cancel_right,
+          forall_exists_index, unitsSMulGroup]
+        simp only [Cancels, Option.map_eq_some_iff, Prod.exists, exists_and_right, exists_eq_right,
+          not_and, not_exists] at h
+        intro u' x hx hmem
+        have : w.head in toSubgroup A B u := by
+          have := (d.compl u).rightCosetEquivalence_equiv_snd w.head
+          rw [RightCosetEquivalence]; rw [rightCoset_eq_iff]; rw [mul_mem_cancel_left hmem] at this
+          simp_all
+        have := h this x
+        simp_all [Int.units_ne_iff_eq_neg])
 
 Depends on / 依赖: Cancels, Classical, Classical.dec, Option.map_eq_some_iff, Option.mem_def, Prod.exists, exists_and_right, exists_eq_right, forall_exists_index, group_smul_head, group_smul_toList, inv_mul_cancel_right, map_eq_some_iff, mem_def, not_and, not_exists, unitsSMulGroup, unitsSMulWithCancel, w.head
 -/
@@ -1313,7 +1355,13 @@ theorem unitsSMul_cancels_iff
     | cons g u' w h1 h2 _ =>
       intro hc
       apply not_cancels_of_cons_hyp _ _ h2
-      simp only [Cancel
+      simp only [Cancels, cons_head, cons_toList, List.head?_cons,
+        Option.map_some, Option.some.injEq] at h
+      cases h.2
+      simpa [Cancels, unitsSMulWithCancel,
+        Subgroup.mul_mem_cancel_left] using hc
+  · simp only [unitsSMul, dif_neg h]
+    simpa [Cancels] using h
 
 中文:
 定理 unitsSMul_cancels_iff
@@ -1326,7 +1374,13 @@ theorem unitsSMul_cancels_iff
     | cons g u' w h1 h2 _ =>
       intro hc
       apply not_cancels_of_cons_hyp _ _ h2
-      simp only [Cancel
+      simp only [Cancels, cons_head, cons_toList, List.head?_cons,
+        Option.map_some, Option.some.injEq] at h
+      cases h.2
+      simpa [Cancels, unitsSMulWithCancel,
+        Subgroup.mul_mem_cancel_left] using hc
+  · simp only [unitsSMul, dif_neg h]
+    simpa [Cancels] using h
 
 Depends on / 依赖: Cancels, List.head, Option.map_some, Option.some.injEq, Subgroup, Subgroup.mul_mem_cancel_left, _cons, consRecOn, cons_head, cons_toList, dif_neg, dite_true, iff_false, map_some, mul_mem_cancel_left, not_cancels_of_cons_hyp, not_true_eq_false, ofGroup, unitsSMul, unitsSMulWithCancel
 -/
@@ -1360,7 +1414,23 @@ theorem unitsSMul_neg
     have hncan : ¬ Cancels u w := (unitsSMul_cancels_iff _ _ _).1 hcan
     unfold unitsSMul
     simp only [dif_neg hncan]
-    simp [unitsSMulWithCancel, unitsSMulGroup, (d.compl u).equiv_snd_eq_inv
+    simp [unitsSMulWithCancel, unitsSMulGroup, (d.compl u).equiv_snd_eq_inv_mul,
+      -SetLike.coe_sort_coe]
+  · have hcan2 : Cancels u w := not_not.1 (mt (unitsSMul_cancels_iff _ _ _).2 hcan)
+    unfold unitsSMul at hcan ⊢
+    simp only [dif_pos hcan2] at hcan ⊢
+    cases w using consRecOn with
+    | ofGroup => simp [Cancels] at hcan2
+    | cons g u' w h1 h2 ih =>
+      clear ih
+      simp only [unitsSMulGroup, SetLike.coe_sort_coe, unitsSMulWithCancel, consRecOn_cons,
+        group_smul_head,
+        mul_inv_rev]
+      cases hcan2.2
+      have : ((d.compl (-u)).equiv w.head).1 = 1 :=
+        (d.compl (-u)).equiv_fst_eq_one_of_mem_of_one_mem _ h1
+      simpa [NormalWord.ext_iff, (d.compl (-u)).equiv_mul_left, Units.ext_iff,
+        (d.compl (-u)).equiv_snd_eq_inv_mul]
 
 中文:
 定理 unitsSMul_neg
@@ -1372,7 +1442,23 @@ theorem unitsSMul_neg
     have hncan : ¬ Cancels u w := (unitsSMul_cancels_iff _ _ _).1 hcan
     unfold unitsSMul
     simp only [dif_neg hncan]
-    simp [unitsSMulWithCancel, unitsSMulGroup, (d.compl u).equiv_snd_eq_inv
+    simp [unitsSMulWithCancel, unitsSMulGroup, (d.compl u).equiv_snd_eq_inv_mul,
+      -SetLike.coe_sort_coe]
+  · have hcan2 : Cancels u w := not_not.1 (mt (unitsSMul_cancels_iff _ _ _).2 hcan)
+    unfold unitsSMul at hcan ⊢
+    simp only [dif_pos hcan2] at hcan ⊢
+    cases w using consRecOn with
+    | ofGroup => simp [Cancels] at hcan2
+    | cons g u' w h1 h2 ih =>
+      clear ih
+      simp only [unitsSMulGroup, SetLike.coe_sort_coe, unitsSMulWithCancel, consRecOn_cons,
+        group_smul_head,
+        mul_inv_rev]
+      cases hcan2.2
+      have : ((d.compl (-u)).equiv w.head).1 = 1 :=
+        (d.compl (-u)).equiv_fst_eq_one_of_mem_of_one_mem _ h1
+      simpa [NormalWord.ext_iff, (d.compl (-u)).equiv_mul_left, Units.ext_iff,
+        (d.compl (-u)).equiv_snd_eq_inv_mul]
 
 Depends on / 依赖: Cancels, SetLike, SetLike.coe_sort_coe, backward, backward.isDefEq.respectTransparency, coe_sort_coe, consRecOn, d.compl, dif_neg, dif_pos, equiv_snd_eq_inv_mul, isDefEq, not_not, ofGroup, respectTransparency, set_option, split_ifs, unitsSMul, unitsSMulGroup, unitsSMulWithCancel
 -/
@@ -1444,7 +1530,25 @@ theorem unitsSMul_one_group_smul
     simp [Cancels, Subgroup.mul_mem_cancel_left]
   by_cases hcan : Cancels 1 w
   · simp only [unitsSMulWithCancel, toSubgroup_one, id_eq, toSubgroup_neg_one, toSubgroupEquiv_one,
-      group_smul_head, mul_inv_rev, dif_pos (t
+      group_smul_head, mul_inv_rev, dif_pos (this.2 hcan), dif_pos hcan]
+    cases w using consRecOn
+    · simp [Cancels] at hcan
+    · simp only [smul_cons, consRecOn_cons]
+      rw [← mul_smul]; rw [← Subgroup.coe_mul]; rw [← map_mul φ]
+      rfl
+  · rw [dif_neg (mt this.1 hcan), dif_neg hcan]
+    -- Before https://github.com/leanprover/lean4/pull/2644, all this was just
+    -- `simp [← mul_smul, mul_assoc, unitsSMulGroup]`
+    simp +instances only [toSubgroup_neg_one, unitsSMulGroup, toSubgroup_one, toSubgroupEquiv_one,
+      SetLike.coe_sort_coe, group_smul_head, mul_inv_rev, ← mul_smul, mul_assoc, inv_mul_cancel,
+      mul_one, smul_cons]
+    -- This used to be the end of the proof before https://github.com/leanprover/lean4/pull/2644
+    congr 1
+    · conv_lhs => erw [IsComplement.equiv_mul_left]
+      simp_rw [toSubgroup_one]
+      simp only [SetLike.coe_sort_coe, map_mul, Subgroup.coe_mul]
+    conv_lhs => erw [IsComplement.equiv_mul_left]
+    rfl
 
 中文:
 定理 unitsSMul_one_group_smul
@@ -1455,7 +1559,25 @@ theorem unitsSMul_one_group_smul
     simp [Cancels, Subgroup.mul_mem_cancel_left]
   by_cases hcan : Cancels 1 w
   · simp only [unitsSMulWithCancel, toSubgroup_one, id_eq, toSubgroup_neg_one, toSubgroupEquiv_one,
-      group_smul_head, mul_inv_rev, dif_pos (t
+      group_smul_head, mul_inv_rev, dif_pos (this.2 hcan), dif_pos hcan]
+    cases w using consRecOn
+    · simp [Cancels] at hcan
+    · simp only [smul_cons, consRecOn_cons]
+      rw [← mul_smul]; rw [← Subgroup.coe_mul]; rw [← map_mul φ]
+      rfl
+  · rw [dif_neg (mt this.1 hcan), dif_neg hcan]
+    -- Before https://github.com/leanprover/lean4/pull/2644, all this was just
+    -- `simp [← mul_smul, mul_assoc, unitsSMulGroup]`
+    simp +instances only [toSubgroup_neg_one, unitsSMulGroup, toSubgroup_one, toSubgroupEquiv_one,
+      SetLike.coe_sort_coe, group_smul_head, mul_inv_rev, ← mul_smul, mul_assoc, inv_mul_cancel,
+      mul_one, smul_cons]
+    -- This used to be the end of the proof before https://github.com/leanprover/lean4/pull/2644
+    congr 1
+    · conv_lhs => erw [IsComplement.equiv_mul_left]
+      simp_rw [toSubgroup_one]
+      simp only [SetLike.coe_sort_coe, map_mul, Subgroup.coe_mul]
+    conv_lhs => erw [IsComplement.equiv_mul_left]
+    rfl
 
 Depends on / 依赖: Cancels, Subgroup, Subgroup.coe_mul, Subgroup.mul_mem_cancel_left, coe_mul, consRecOn, consRecOn_cons, dif_neg, dif_pos, group_smul_head, id_eq, map_mul, mul_inv_rev, mul_mem_cancel_left, mul_smul, smul_cons, toSubgroupEquiv_one, toSubgroup_neg_one, toSubgroup_one, unitsSMul
 -/
@@ -1654,7 +1776,28 @@ theorem prod_unitsSMul
     · cases hcan.2
       simp only [unitsSMulWithCancel, id_eq, consRecOn_cons, prod_group_smul, prod_cons, zpow_neg]
       rcases Int.units_eq_one_or u with (rfl | rfl)
-      · simp [equiv_eq_conj, mu
+      · simp [equiv_eq_conj, mul_assoc]
+      · -- Before https://github.com/leanprover/lean4/pull/2644, this proof was just
+        -- simp [equiv_symm_eq_conj, mul_assoc].
+        simp only [toSubgroup_neg_one, toSubgroupEquiv_neg_one, Units.val_neg, Units.val_one,
+          Int.reduceNeg, zpow_neg, zpow_one, inv_inv]
+        erw [equiv_symm_eq_conj, mul_assoc, mul_assoc]
+  · simp only [unitsSMulGroup, SetLike.coe_sort_coe, prod_cons, prod_group_smul, map_mul, map_inv]
+    rcases Int.units_eq_one_or u with (rfl | rfl)
+    · -- Before https://github.com/leanprover/lean4/pull/2644, this proof was just
+      -- simp [equiv_eq_conj, mul_assoc, (d.compl _).equiv_snd_eq_inv_mul].
+      simp only [toSubgroup_neg_one, toSubgroup_one, toSubgroupEquiv_one, equiv_eq_conj, mul_assoc,
+        Units.val_one, zpow_one, inv_mul_cancel_left, mul_right_inj]
+      erw [(d.compl 1).equiv_snd_eq_inv_mul]
+      simp [mul_assoc]
+    · -- Before https://github.com/leanprover/lean4/pull/2644, this proof was just
+      -- simp [equiv_symm_eq_conj, mul_assoc, (d.compl _).equiv_snd_eq_inv_mul]
+      simp only [toSubgroup_neg_one, toSubgroupEquiv_neg_one, Units.val_neg, Units.val_one,
+        Int.reduceNeg, zpow_neg, zpow_one, mul_assoc]
+      erw [equiv_symm_eq_conj, (d.compl (-1)).equiv_snd_eq_inv_mul]
+      simp [mul_assoc]
+
+@[simp]
 
 中文:
 定理 prod_unitsSMul
@@ -1667,7 +1810,28 @@ theorem prod_unitsSMul
     · cases hcan.2
       simp only [unitsSMulWithCancel, id_eq, consRecOn_cons, prod_group_smul, prod_cons, zpow_neg]
       rcases Int.units_eq_one_or u with (rfl | rfl)
-      · simp [equiv_eq_conj, mu
+      · simp [equiv_eq_conj, mul_assoc]
+      · -- Before https://github.com/leanprover/lean4/pull/2644, this proof was just
+        -- simp [equiv_symm_eq_conj, mul_assoc].
+        simp only [toSubgroup_neg_one, toSubgroupEquiv_neg_one, Units.val_neg, Units.val_one,
+          Int.reduceNeg, zpow_neg, zpow_one, inv_inv]
+        erw [equiv_symm_eq_conj, mul_assoc, mul_assoc]
+  · simp only [unitsSMulGroup, SetLike.coe_sort_coe, prod_cons, prod_group_smul, map_mul, map_inv]
+    rcases Int.units_eq_one_or u with (rfl | rfl)
+    · -- Before https://github.com/leanprover/lean4/pull/2644, this proof was just
+      -- simp [equiv_eq_conj, mul_assoc, (d.compl _).equiv_snd_eq_inv_mul].
+      simp only [toSubgroup_neg_one, toSubgroup_one, toSubgroupEquiv_one, equiv_eq_conj, mul_assoc,
+        Units.val_one, zpow_one, inv_mul_cancel_left, mul_right_inj]
+      erw [(d.compl 1).equiv_snd_eq_inv_mul]
+      simp [mul_assoc]
+    · -- Before https://github.com/leanprover/lean4/pull/2644, this proof was just
+      -- simp [equiv_symm_eq_conj, mul_assoc, (d.compl _).equiv_snd_eq_inv_mul]
+      simp only [toSubgroup_neg_one, toSubgroupEquiv_neg_one, Units.val_neg, Units.val_one,
+        Int.reduceNeg, zpow_neg, zpow_one, mul_assoc]
+      erw [equiv_symm_eq_conj, (d.compl (-1)).equiv_snd_eq_inv_mul]
+      simp [mul_assoc]
+
+@[simp]
 
 Depends on / 依赖: Before, Cancels, Int.units_eq_one_or, consRecOn, consRecOn_cons, equiv_eq_conj, github, github.com, id_eq, leanprover, mul_assoc, prod_cons, prod_group_smul, split_ifs, unitsSMul, unitsSMulWithCancel, units_eq_one_or, zpow_neg
 -/
@@ -1782,7 +1946,14 @@ theorem prod_smul_empty
   | ofGroup => simp [ofGroup, ReducedWord.prod, of_smul_eq_smul, group_smul_def]
   | cons g u w h1 h2 ih =>
     rw [prod_cons]; rw [← mul_assoc]; rw [mul_smul]; rw [ih]; rw [mul_smul]; rw [t_pow_smul_eq_unitsSMul]; rw [of_smul_eq_smul]; rw [unitsSMul]
-    rw [di
+    rw [dif_neg (not_cancels_of_cons_hyp u w h2)]
+    -- Before https://github.com/leanprover/lean4/pull/2644, this was just
+    -- simp [unitsSMulGroup, (d.compl _).equiv_fst_eq_one_of_mem_of_one_mem (one_mem _) h1,
+    -- -SetLike.coe_sort_coe]
+    -- ext <;> simp [-SetLike.coe_sort_coe]
+    simp only [unitsSMulGroup, (d.compl _).equiv_fst_eq_one_of_mem_of_one_mem (one_mem _) h1,
+      (d.compl _).equiv_snd_eq_inv_mul, inv_one, one_mul, mul_inv_cancel, one_smul, smul_cons]
+    ext <;> simp
 
 中文:
 定理 prod_smul_empty
@@ -1792,7 +1963,14 @@ theorem prod_smul_empty
   | ofGroup => simp [ofGroup, ReducedWord.prod, of_smul_eq_smul, group_smul_def]
   | cons g u w h1 h2 ih =>
     rw [prod_cons]; rw [← mul_assoc]; rw [mul_smul]; rw [ih]; rw [mul_smul]; rw [t_pow_smul_eq_unitsSMul]; rw [of_smul_eq_smul]; rw [unitsSMul]
-    rw [di
+    rw [dif_neg (not_cancels_of_cons_hyp u w h2)]
+    -- Before https://github.com/leanprover/lean4/pull/2644, this was just
+    -- simp [unitsSMulGroup, (d.compl _).equiv_fst_eq_one_of_mem_of_one_mem (one_mem _) h1,
+    -- -SetLike.coe_sort_coe]
+    -- ext <;> simp [-SetLike.coe_sort_coe]
+    simp only [unitsSMulGroup, (d.compl _).equiv_fst_eq_one_of_mem_of_one_mem (one_mem _) h1,
+      (d.compl _).equiv_snd_eq_inv_mul, inv_one, one_mul, mul_inv_cancel, one_smul, smul_cons]
+    ext <;> simp
 
 Depends on / 依赖: ReducedWord, ReducedWord.prod, consRecOn, dif_neg, group_smul_def, mul_assoc, mul_smul, not_cancels_of_cons_hyp, ofGroup, of_smul_eq_smul, prod_cons, t_pow_smul_eq_unitsSMul, unitsSMul
 -/
@@ -1929,7 +2107,43 @@ theorem exists_normalWord_prod_eq
       forall u in w.toList.head?.map Prod.fst,
       w'.head in toSubgroup A B (-u) by
     by_cases hw1 : w.head = 1
-    · simp only
+    · simp only [hw1, inv_mem_iff, mul_one]
+      exact this w hw1
+    · rcases this ⟨1, w.toList, w.chain⟩ rfl with ⟨w', hw'⟩
+      exact ⟨w.head • w', by
+        simpa [ReducedWord.prod, mul_assoc] using hw'⟩
+  intro w hw1
+  rcases w with ⟨g, l, chain⟩
+  dsimp at hw1; subst hw1
+  induction l with
+  | nil =>
+    exact
+      ⟨{ head := 1
+         toList := []
+         mem_set := by simp
+         chain := List.isChain_nil }, by simp⟩
+  | cons a l ih =>
+    rcases ih (List.isChain_cons.1 chain).2 with ⟨w', hw'1, hw'2, hw'3⟩
+    clear ih
+    refine ⟨(t^(a.1 : Int) * of a.2 : HNNExtension G A B φ) • w', ?_, ?_⟩
+    · rw [prod_smul, hw'1]
+      simp [ReducedWord.prod]
+    · have : ¬ Cancels a.1 (a.2 • w') := by
+        simp only [Cancels, group_smul_head, group_smul_toList, Option.map_eq_some_iff,
+          Prod.exists, exists_and_right, exists_eq_right, not_and, not_exists]
+        intro hS x hx
+        have hx' := congr_arg (Option.map Prod.fst) hx
+        rw [← List.head?_map]; rw [hw'2]; rw [List.head?_map]; rw [Option.map_some] at hx'
+        have : w'.head in toSubgroup A B a.fst := by
+          simpa using hw'3 _ hx'
+        rw [mul_mem_cancel_right this] at hS
+        have : a.fst = -a.fst := by
+          have hl : l != [] := by rintro rfl; simp_all
+          have : a.fst = (l.head hl).fst := (List.isChain_cons.1 chain).1 (l.head hl)
+            (List.head?_eq_some_head _) hS
+          rwa [List.head?_eq_some_head hl, Option.map_some, ← this, Option.some_inj] at hx'
+        simp at this
+      simp [mul_smul, of_smul_eq_smul, t_pow_smul_eq_unitsSMul, unitsSMul, dif_neg this, ← hw'2]
 
 中文:
 定理 存在_normalWord_prod_eq
@@ -1940,7 +2154,43 @@ theorem exists_normalWord_prod_eq
       forall u in w.toList.head?.map Prod.fst,
       w'.head in toSubgroup A B (-u) by
     by_cases hw1 : w.head = 1
-    · simp only
+    · simp only [hw1, inv_mem_iff, mul_one]
+      exact this w hw1
+    · rcases this ⟨1, w.toList, w.chain⟩ rfl with ⟨w', hw'⟩
+      exact ⟨w.head • w', by
+        simpa [ReducedWord.prod, mul_assoc] using hw'⟩
+  intro w hw1
+  rcases w with ⟨g, l, chain⟩
+  dsimp at hw1; subst hw1
+  induction l with
+  | nil =>
+    exact
+      ⟨{ head := 1
+         toList := []
+         mem_set := by simp
+         chain := List.isChain_nil }, by simp⟩
+  | cons a l ih =>
+    rcases ih (List.isChain_cons.1 chain).2 with ⟨w', hw'1, hw'2, hw'3⟩
+    clear ih
+    refine ⟨(t^(a.1 : Int) * of a.2 : HNNExtension G A B φ) • w', ?_, ?_⟩
+    · rw [prod_smul, hw'1]
+      simp [ReducedWord.prod]
+    · have : ¬ Cancels a.1 (a.2 • w') := by
+        simp only [Cancels, group_smul_head, group_smul_toList, Option.map_eq_some_iff,
+          Prod.exists, exists_and_right, exists_eq_right, not_and, not_exists]
+        intro hS x hx
+        have hx' := congr_arg (Option.map Prod.fst) hx
+        rw [← List.head?_map]; rw [hw'2]; rw [List.head?_map]; rw [Option.map_some] at hx'
+        have : w'.head in toSubgroup A B a.fst := by
+          simpa using hw'3 _ hx'
+        rw [mul_mem_cancel_right this] at hS
+        have : a.fst = -a.fst := by
+          have hl : l != [] := by rintro rfl; simp_all
+          have : a.fst = (l.head hl).fst := (List.isChain_cons.1 chain).1 (l.head hl)
+            (List.head?_eq_some_head _) hS
+          rwa [List.head?_eq_some_head hl, Option.map_some, ← this, Option.some_inj] at hx'
+        simp at this
+      simp [mul_smul, of_smul_eq_smul, t_pow_smul_eq_unitsSMul, unitsSMul, dif_neg this, ← hw'2]
 
 Depends on / 依赖: NormalWord, Prod.fst, ReducedWord, ReducedWord.prod, inv_mem_iff, mul_assoc, mul_one, toList, toList.map, toSubgroup, w.chain, w.head, w.prod, w.toList, w.toList.head, w.toList.map
 -/
@@ -2006,7 +2256,12 @@ theorem map_fst_eq_and_of_prod_eq
   rcases exists_normalWord_prod_eq φ d w₂ with ⟨w₂', hw₂'1, hw₂'2, hw₂'3⟩
   have : w₁' = w₂' :=
     NormalWord.prod_injective φ d (by dsimp only; rw [hw₁'1, hw₂'1, hprod])
-  
+  subst this
+  refine ⟨by rw [← hw₁'2, hw₂'2], ?_⟩
+  simp only [← leftCoset_eq_iff] at *
+  intro u hu
+  rw [← hw₁'3 _ hu]; rw [← hw₂'3 _]
+  rwa [← List.head?_map, ← hw₂'2, hw₁'2, List.head?_map]
 
 中文:
 定理 map_fst_eq_and_of_prod_eq
@@ -2017,7 +2272,12 @@ theorem map_fst_eq_and_of_prod_eq
   rcases exists_normalWord_prod_eq φ d w₂ with ⟨w₂', hw₂'1, hw₂'2, hw₂'3⟩
   have : w₁' = w₂' :=
     NormalWord.prod_injective φ d (by dsimp only; rw [hw₁'1, hw₂'1, hprod])
-  
+  subst this
+  refine ⟨by rw [← hw₁'2, hw₂'2], ?_⟩
+  simp only [← leftCoset_eq_iff] at *
+  intro u hu
+  rw [← hw₁'3 _ hu]; rw [← hw₂'3 _]
+  rwa [← List.head?_map, ← hw₂'2, hw₁'2, List.head?_map]
 
 Depends on / 依赖: List.head, NormalWord, NormalWord.prod_injective, TransversalPair, TransversalPair.nonempty, _map, exists_normalWord_prod_eq, leftCoset_eq_iff, nonempty, prod_injective
 -/

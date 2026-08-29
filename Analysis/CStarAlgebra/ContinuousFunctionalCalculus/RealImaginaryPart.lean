@@ -232,7 +232,10 @@ lemma cfcₙ_comp_re
   have : ContinuousOn (fun x => (f x.re) : Complex -> Complex) ((re · : Complex -> Complex) '' quasispectrum Complex a) := by
     rw [quasispectrum_realPart' a] at hf
 refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
-    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.
+    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsTo_image ..
+  conv_rhs =>
+    rw [cfcₙ_real_eq_complex]; rw [← cfcₙ_re_id a]; rw [← cfcₙ_comp' ..]
+    simp
 
 中文:
 引理 cfcₙ_comp_re
@@ -241,7 +244,10 @@ refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
   have : ContinuousOn (fun x => (f x.re) : Complex -> Complex) ((re · : Complex -> Complex) '' quasispectrum Complex a) := by
     rw [quasispectrum_realPart' a] at hf
 refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
-    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.
+    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsTo_image ..
+  conv_rhs =>
+    rw [cfcₙ_real_eq_complex]; rw [← cfcₙ_re_id a]; rw [← cfcₙ_comp' ..]
+    simp
 
 Depends on / 依赖: ContinuousOn, Function, Function.comp_def, IsStarNormal, Set.mapsTo_image, Set.mapsTo_image_iff, cfc_cont_tac, cfc_tac, cfc_zero_tac, comp_continuousOn, comp_def, continuous_ofReal, continuous_ofReal.comp_continuousOn, conv_rhs, fun_prop, hf.comp, mapsTo_image, mapsTo_image_iff, quasispectrum, quasispectrum_realPart
 -/
@@ -267,7 +273,10 @@ lemma cfcₙ_comp_im
   have : ContinuousOn (fun x => (f x.re) : Complex -> Complex) ((im · : Complex -> Complex) '' quasispectrum Complex a) := by
     rw [quasispectrum_imaginaryPart' a] at hf
 refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
-    simpa [Set.mapsTo_image_iff, Function.comp_def] using
+    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsTo_image ..
+  conv_rhs =>
+    rw [cfcₙ_real_eq_complex]; rw [← cfcₙ_im_id a]; rw [← cfcₙ_comp' ..]
+    simp
 
 中文:
 引理 cfcₙ_comp_im
@@ -276,7 +285,10 @@ refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
   have : ContinuousOn (fun x => (f x.re) : Complex -> Complex) ((im · : Complex -> Complex) '' quasispectrum Complex a) := by
     rw [quasispectrum_imaginaryPart' a] at hf
 refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
-    simpa [Set.mapsTo_image_iff, Function.comp_def] using
+    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsTo_image ..
+  conv_rhs =>
+    rw [cfcₙ_real_eq_complex]; rw [← cfcₙ_im_id a]; rw [← cfcₙ_comp' ..]
+    simp
 
 Depends on / 依赖: ContinuousOn, Function, Function.comp_def, IsStarNormal, Set.mapsTo_image, Set.mapsTo_image_iff, cfc_cont_tac, cfc_tac, cfc_zero_tac, comp_continuousOn, comp_def, continuous_ofReal, continuous_ofReal.comp_continuousOn, conv_rhs, fun_prop, hf.comp, mapsTo_image, mapsTo_image_iff, quasispectrum, quasispectrum_imaginaryPart
 -/
@@ -508,7 +520,10 @@ lemma cfc_comp_re
   have : ContinuousOn (fun x => (f x.re) : Complex -> Complex) ((re · : Complex -> Complex) '' spectrum Complex a) := by
     rw [spectrum_realPart' a] at hf
 refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
-    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsTo_ima
+    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsTo_image ..
+  conv_rhs =>
+    rw [cfc_real_eq_complex]; rw [← cfc_re_id a]; rw [← cfc_comp' ..]
+    simp
 
 中文:
 引理 cfc_comp_re
@@ -517,7 +532,10 @@ refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
   have : ContinuousOn (fun x => (f x.re) : Complex -> Complex) ((re · : Complex -> Complex) '' spectrum Complex a) := by
     rw [spectrum_realPart' a] at hf
 refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
-    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsTo_ima
+    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsTo_image ..
+  conv_rhs =>
+    rw [cfc_real_eq_complex]; rw [← cfc_re_id a]; rw [← cfc_comp' ..]
+    simp
 
 Depends on / 依赖: ContinuousOn, Function, Function.comp_def, IsStarNormal, Set.mapsTo_image, Set.mapsTo_image_iff, cfc_comp, cfc_re_id, cfc_real_eq_complex, cfc_tac, comp_continuousOn, comp_def, continuous_ofReal, continuous_ofReal.comp_continuousOn, conv_rhs, fun_prop, hf.comp, mapsTo_image, mapsTo_image_iff, spectrum
 -/
@@ -543,7 +561,10 @@ lemma cfc_comp_im
   have : ContinuousOn (fun x => (f x.re) : Complex -> Complex) ((im · : Complex -> Complex) '' spectrum Complex a) := by
     rw [spectrum_imaginaryPart' a] at hf
 refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
-    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsT
+    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsTo_image ..
+  conv_rhs =>
+    rw [cfc_real_eq_complex]; rw [← cfc_im_id a]; rw [← cfc_comp' ..]
+    simp
 
 中文:
 引理 cfc_comp_im
@@ -552,7 +573,10 @@ refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
   have : ContinuousOn (fun x => (f x.re) : Complex -> Complex) ((im · : Complex -> Complex) '' spectrum Complex a) := by
     rw [spectrum_imaginaryPart' a] at hf
 refine continuous_ofReal.comp_continuousOn hf.comp (by fun_prop) ?_
-    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsT
+    simpa [Set.mapsTo_image_iff, Function.comp_def] using Set.mapsTo_image ..
+  conv_rhs =>
+    rw [cfc_real_eq_complex]; rw [← cfc_im_id a]; rw [← cfc_comp' ..]
+    simp
 
 Depends on / 依赖: ContinuousOn, Function, Function.comp_def, Set.mapsTo_image, Set.mapsTo_image_iff, cfc_comp, cfc_im_id, cfc_real_eq_complex, cfc_tac, comp_continuousOn, comp_def, continuous_ofReal, continuous_ofReal.comp_continuousOn, conv_rhs, fun_prop, hf.comp, mapsTo_image, mapsTo_image_iff, spectrum, spectrum_imaginaryPart
 -/

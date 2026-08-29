@@ -40,7 +40,9 @@ lemma isEquivalent_descFactorial
     simp_rw [descFactorial_succ, cast_mul, _root_.pow_succ']
     refine IsEquivalent.mul ?_ h
     have hz : forallᶠ (x : Nat) in atTop, (x : Real) != 0 :=
-      eventually_atTop.mpr ⟨1, fun n hn => ne_of_gt (mod_cast hn)
+      eventually_atTop.mpr ⟨1, fun n hn => ne_of_gt (mod_cast hn)⟩
+    rw [isEquivalent_iff_tendsto_one hz]; rw [← tendsto_add_atTop_iff_nat k]
+    simpa using tendsto_natCast_div_add_atTop (k : Real)
 
 中文:
 引理 isEquivalent_descFactorial
@@ -52,7 +54,9 @@ lemma isEquivalent_descFactorial
     simp_rw [descFactorial_succ, cast_mul, _root_.pow_succ']
     refine IsEquivalent.mul ?_ h
     have hz : forallᶠ (x : Nat) in atTop, (x : Real) != 0 :=
-      eventually_atTop.mpr ⟨1, fun n hn => ne_of_gt (mod_cast hn)
+      eventually_atTop.mpr ⟨1, fun n hn => ne_of_gt (mod_cast hn)⟩
+    rw [isEquivalent_iff_tendsto_one hz]; rw [← tendsto_add_atTop_iff_nat k]
+    simpa using tendsto_natCast_div_add_atTop (k : Real)
 
 Depends on / 依赖: IsEquivalent, IsEquivalent.mul, IsEquivalent.refl, _root_, _root_.pow_succ, cast_mul, descFactorial_succ, eventually_atTop, eventually_atTop.mpr, isEquivalent_iff_tendsto_one, mod_cast, ne_of_gt, pow_succ, simp_rw, tendsto_add_atTop_iff_nat, tendsto_natCast_div_add_atTop
 -/

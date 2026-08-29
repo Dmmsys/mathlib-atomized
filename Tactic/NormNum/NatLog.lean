@@ -128,7 +128,13 @@ definition proveNatLog
   | b, n =>
     if n < b then
       have hh : Q(Nat.blt $en $eb = true) := (q(Eq.refl true) : Expr)
-      ⟨q(nat_li
+      ⟨q(nat_lit 0), q(nat_log_helper0 $eb $en $hh)⟩
+    else
+      let k := Nat.log b n
+      have ek : Q(Nat) := mkRawNatLit k
+      have hl : Q(Nat.ble ($eb ^ $ek) $en = true) := (q(Eq.refl true) : Expr)
+      have hh : Q(Nat.blt $en ($eb ^ ($ek + 1)) = true) := (q(Eq.refl true) : Expr)
+      ⟨ek, q(nat_log_helper $eb $en $ek $hl $hh)⟩
 
 中文:
 定义 prove自然数Log
@@ -139,7 +145,13 @@ definition proveNatLog
   | b, n =>
     if n < b then
       have hh : Q(Nat.blt $en $eb = true) := (q(Eq.refl true) : Expr)
-      ⟨q(nat_li
+      ⟨q(nat_lit 0), q(nat_log_helper0 $eb $en $hh)⟩
+    else
+      let k := Nat.log b n
+      have ek : Q(Nat) := mkRawNatLit k
+      have hl : Q(Nat.ble ($eb ^ $ek) $en = true) := (q(Eq.refl true) : Expr)
+      have hh : Q(Nat.blt $en ($eb ^ ($ek + 1)) = true) := (q(Eq.refl true) : Expr)
+      ⟨ek, q(nat_log_helper $eb $en $ek $hl $hh)⟩
 
 Depends on / 依赖: Eq.refl, Nat.ble, Nat.blt, Nat.log, eb.natLit, en.natLit, mkRawNatLit, natLit, nat_lit, nat_log_helper0, nat_log_one, nat_log_zero
 -/
@@ -174,7 +186,8 @@ definition evalNatLog
   let ⟨eb, pb⟩ ← deriveNat b sNat
   let ⟨en, pn⟩ ← deriveNat n sNat
   let ⟨ek, pf⟩ := proveNatLog eb en
-  let pf' : Q(IsNat (Nat.log $b $n) $ek) := q(isNat_log $pb
+  let pf' : Q(IsNat (Nat.log $b $n) $ek) := q(isNat_log $pb $pn $pf)
+  return .isNat sNat ek pf'
 
 中文:
 定义 eval自然数Log
@@ -185,7 +198,8 @@ definition evalNatLog
   let ⟨eb, pb⟩ ← deriveNat b sNat
   let ⟨en, pn⟩ ← deriveNat n sNat
   let ⟨ek, pf⟩ := proveNatLog eb en
-  let pf' : Q(IsNat (Nat.log $b $n) $ek) := q(isNat_log $pb
+  let pf' : Q(IsNat (Nat.log $b $n) $ek) := q(isNat_log $pb $pn $pf)
+  return .isNat sNat ek pf'
 -/
 def evalNatLog : NormNumExt where eval {u α} e := do
   let mkApp2 _ (b : Q(Nat)) (n : Q(Nat)) ← Meta.whnfR e | failure
@@ -290,7 +304,19 @@ definition proveNatClog
     ⟨q(nat_lit 0), q(nat_clog_zero_left $eb $en $h)⟩
   else if _ : n <= 1 then
     have h : Q(Nat.ble $en 1 = true) := reflBoolTrue
-    ⟨q(nat_lit 0), q(nat_clog_zero_right $eb $en $h)
+    ⟨q(nat_lit 0), q(nat_clog_zero_right $eb $en $h)⟩
+  else
+    match h : Nat.clog b n with
+| 0 => False.elim
+      Nat.ne_of_gt (Nat.clog_pos (by lia) (by lia)) h
+    | k + 1 =>
+      have ek : Q(Nat) := mkRawNatLit k
+      have ek1 : Q(Nat) := mkRawNatLit (k + 1)
+have _ : ek1 =Q ek + 1 := ⟨⟩
+      have hb : Q(Nat.blt 1 $eb = true) := reflBoolTrue
+      have hl : Q(Nat.blt ($eb ^ $ek) $en = true) := reflBoolTrue
+      have hh : Q(Nat.ble $en ($eb ^ ($ek + 1)) = true) := reflBoolTrue
+      ⟨ek1, q(nat_clog_helper $hb $hl $hh)⟩
 
 中文:
 定义 prove自然数Clog
@@ -302,7 +328,19 @@ definition proveNatClog
     ⟨q(nat_lit 0), q(nat_clog_zero_left $eb $en $h)⟩
   else if _ : n <= 1 then
     have h : Q(Nat.ble $en 1 = true) := reflBoolTrue
-    ⟨q(nat_lit 0), q(nat_clog_zero_right $eb $en $h)
+    ⟨q(nat_lit 0), q(nat_clog_zero_right $eb $en $h)⟩
+  else
+    match h : Nat.clog b n with
+| 0 => False.elim
+      Nat.ne_of_gt (Nat.clog_pos (by lia) (by lia)) h
+    | k + 1 =>
+      have ek : Q(Nat) := mkRawNatLit k
+      have ek1 : Q(Nat) := mkRawNatLit (k + 1)
+have _ : ek1 =Q ek + 1 := ⟨⟩
+      have hb : Q(Nat.blt 1 $eb = true) := reflBoolTrue
+      have hl : Q(Nat.blt ($eb ^ $ek) $en = true) := reflBoolTrue
+      have hh : Q(Nat.ble $en ($eb ^ ($ek + 1)) = true) := reflBoolTrue
+      ⟨ek1, q(nat_clog_helper $hb $hl $hh)⟩
 
 Depends on / 依赖: False.elim, Nat.ble, Nat.clog, Nat.clog_pos, Nat.ne_of_gt, clog_pos, eb.natLit, en.natLit, mkRawNatLit, natLit, nat_clog_zero_left, nat_clog_zero_right, nat_lit, ne_of_gt, reflBoolTrue
 -/
@@ -344,7 +382,8 @@ definition evalNatClog
   let ⟨eb, pb⟩ ← deriveNat b sNat
   let ⟨en, pn⟩ ← deriveNat n sNat
   let ⟨ek, pf⟩ := proveNatClog eb en
-  let pf' : Q(IsNat (Nat.clog $b $n) $ek) := q(isNat_clog 
+  let pf' : Q(IsNat (Nat.clog $b $n) $ek) := q(isNat_clog $pb $pn $pf)
+  return .isNat sNat ek pf'
 
 中文:
 定义 eval自然数Clog
@@ -355,7 +394,8 @@ definition evalNatClog
   let ⟨eb, pb⟩ ← deriveNat b sNat
   let ⟨en, pn⟩ ← deriveNat n sNat
   let ⟨ek, pf⟩ := proveNatClog eb en
-  let pf' : Q(IsNat (Nat.clog $b $n) $ek) := q(isNat_clog 
+  let pf' : Q(IsNat (Nat.clog $b $n) $ek) := q(isNat_clog $pb $pn $pf)
+  return .isNat sNat ek pf'
 -/
 def evalNatClog : NormNumExt where eval {u α} e := do
   let mkApp2 _ (b : Q(Nat)) (n : Q(Nat)) ← Meta.whnfR e | failure

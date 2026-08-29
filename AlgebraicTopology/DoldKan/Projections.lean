@@ -294,7 +294,15 @@ theorem comp_P_eq_self
     simp only [P_succ, comp_add, HomologicalComplex.comp_f, HomologicalComplex.add_f_apply,
       comp_id, ← assoc, hq v.of_succ, add_eq_left]
     by_cases! hqn : n < q
-    · exact v.of_succ.comp_Hσ_eq_zero h
+    · exact v.of_succ.comp_Hσ_eq_zero hqn
+    · obtain ⟨a, ha⟩ := Nat.le.dest hqn
+      have hnaq : n = a + q := by lia
+      simp only [v.of_succ.comp_Hσ_eq hnaq, neg_eq_zero, ← assoc]
+      have eq := v ⟨a, by lia⟩ (by
+        simp only [hnaq, add_assoc]
+        rfl)
+      simp only [Fin.succ_mk] at eq
+      simp only [eq, zero_comp]
 
 中文:
 定理 comp_P_eq_self
@@ -308,7 +316,15 @@ theorem comp_P_eq_self
     simp only [P_succ, comp_add, HomologicalComplex.comp_f, HomologicalComplex.add_f_apply,
       comp_id, ← assoc, hq v.of_succ, add_eq_left]
     by_cases! hqn : n < q
-    · exact v.of_succ.comp_Hσ_eq_zero h
+    · exact v.of_succ.comp_Hσ_eq_zero hqn
+    · obtain ⟨a, ha⟩ := Nat.le.dest hqn
+      have hnaq : n = a + q := by lia
+      simp only [v.of_succ.comp_Hσ_eq hnaq, neg_eq_zero, ← assoc]
+      have eq := v ⟨a, by lia⟩ (by
+        simp only [hnaq, add_assoc]
+        rfl)
+      simp only [Fin.succ_mk] at eq
+      simp only [eq, zero_comp]
 
 Depends on / 依赖: Fin.succ_mk, HomologicalComplex, HomologicalComplex.add_f_apply, HomologicalComplex.comp_f, Nat.le.dest, P_succ, P_zero, add_assoc, add_eq_left, add_f_apply, comp_add, comp_f, comp_id, neg_eq_zero, of_succ, succ_mk, v.of_succ, v.of_succ.comp_H
 -/
@@ -505,7 +521,9 @@ definition natTransP
       simp only [P_zero, id_comp, comp_id]
     | succ q hq =>
       simp only [P_succ, add_comp, comp_add, assoc, comp_id, hq, reassoc_of% hq]
-      -- `erw` is needed to see through `natTransHσ q
+      -- `erw` is needed to see through `natTransHσ q).app = Hσ q`
+      erw [(natTransHσ q).naturality f]
+      rfl
 
 中文:
 定义 natTransP
@@ -518,7 +536,9 @@ definition natTransP
       simp only [P_zero, id_comp, comp_id]
     | succ q hq =>
       simp only [P_succ, add_comp, comp_add, assoc, comp_id, hq, reassoc_of% hq]
-      -- `erw` is needed to see through `natTransHσ q
+      -- `erw` is needed to see through `natTransHσ q).app = Hσ q`
+      erw [(natTransHσ q).naturality f]
+      rfl
 -/
 def natTransP (q : Nat) : alternatingFaceMapComplex C ⟶ alternatingFaceMapComplex C where
   app _ := P q

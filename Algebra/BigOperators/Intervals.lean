@@ -500,6 +500,12 @@ theorem prod_Ico_reflect
   · rw [← Nat.Ico_image_const_sub_eq_Ico (this _ hkm)]
     refine (prod_image ?_).symm
     simp only [mem_Ico, Set.InjOn, mem_coe]
+    rintro i ⟨_, im⟩ j ⟨_, jm⟩ Hij
+    rw [← tsub_tsub_cancel_of_le (this _ im)]; rw [Hij]; rw [tsub_tsub_cancel_of_le (this _ jm)]
+  · have : n + 1 - k <= n + 1 - m := by
+      rw [tsub_le_tsub_iff_left h]
+      exact hkm
+    simp only [hkm, Ico_eq_empty_of_le, prod_empty, Ico_eq_empty_of_le this]
 
 中文:
 定理 prod_Ico_reflect
@@ -512,6 +518,12 @@ theorem prod_Ico_reflect
   · rw [← Nat.Ico_image_const_sub_eq_Ico (this _ hkm)]
     refine (prod_image ?_).symm
     simp only [mem_Ico, Set.InjOn, mem_coe]
+    rintro i ⟨_, im⟩ j ⟨_, jm⟩ Hij
+    rw [← tsub_tsub_cancel_of_le (this _ im)]; rw [Hij]; rw [tsub_tsub_cancel_of_le (this _ jm)]
+  · have : n + 1 - k <= n + 1 - m := by
+      rw [tsub_le_tsub_iff_left h]
+      exact hkm
+    simp only [hkm, Ico_eq_empty_of_le, prod_empty, Ico_eq_empty_of_le this]
 
 Depends on / 依赖: Ico_, Ico_image_const_sub_eq_Ico, Nat.Ico_image_const_sub_eq_Ico, Nat.lt_iff_add_one_le, Set.InjOn, add_le_add_iff_right, le_trans, lt_iff_add_one_le, lt_or_ge, mem_Ico, mem_coe, prod_image, tsub_le_tsub_iff_left, tsub_tsub_cancel_of_le
 -/
@@ -637,7 +649,8 @@ theorem sum_range_id_mul_two
       rw [sum_range_reflect (fun i => i) n]; rw [mul_two]
     _ = ∑ i in range n, (i + (n - 1 - i)) := sum_add_distrib.symm
     _ = ∑ _ in range n, (n - 1) :=
-sum_congr rfl fun _ hi => add_tsub_cancel_of_le Na
+sum_congr rfl fun _ hi => add_tsub_cancel_of_le Nat.le_sub_one_of_lt mem_range.1 hi
+    _ = n * (n - 1) := by rw [sum_const, card_range, Nat.nsmul_eq_mul]
 
 中文:
 定理 sum_range_id_mul_two
@@ -648,7 +661,8 @@ sum_congr rfl fun _ hi => add_tsub_cancel_of_le Na
       rw [sum_range_reflect (fun i => i) n]; rw [mul_two]
     _ = ∑ i in range n, (i + (n - 1 - i)) := sum_add_distrib.symm
     _ = ∑ _ in range n, (n - 1) :=
-sum_congr rfl fun _ hi => add_tsub_cancel_of_le Na
+sum_congr rfl fun _ hi => add_tsub_cancel_of_le Nat.le_sub_one_of_lt mem_range.1 hi
+    _ = n * (n - 1) := by rw [sum_const, card_range, Nat.nsmul_eq_mul]
 
 Depends on / 依赖: Nat.le_sub_one_of_lt, Nat.nsmul_eq_mul, add_tsub_cancel_of_le, card_range, le_sub_one_of_lt, mem_range, mul_two, nsmul_eq_mul, sum_add_distrib, sum_add_distrib.symm, sum_congr, sum_const, sum_range_reflect
 -/
@@ -697,7 +711,8 @@ lemma prod_range_diag_flip
   refine prod_nbij' (fun a => ⟨a.2, a.1 - a.2⟩) (fun a => ⟨a.1 + a.2, a.1⟩) ?_ ?_ ?_ ?_ ?_ <;>
     simp +contextual only [mem_sigma, mem_range, lt_tsub_iff_left,
       Nat.lt_succ_iff, le_add_iff_nonneg_right, Nat.zero_le, and_true, and_imp, implies_true,
-    
+      Sigma.forall, add_tsub_cancel_of_le, add_tsub_cancel_left]
+  exact fun a b han hba => lt_of_le_of_lt hba han
 
 中文:
 引理 prod_range_diag_flip
@@ -707,7 +722,8 @@ lemma prod_range_diag_flip
   refine prod_nbij' (fun a => ⟨a.2, a.1 - a.2⟩) (fun a => ⟨a.1 + a.2, a.1⟩) ?_ ?_ ?_ ?_ ?_ <;>
     simp +contextual only [mem_sigma, mem_range, lt_tsub_iff_left,
       Nat.lt_succ_iff, le_add_iff_nonneg_right, Nat.zero_le, and_true, and_imp, implies_true,
-    
+      Sigma.forall, add_tsub_cancel_of_le, add_tsub_cancel_left]
+  exact fun a b han hba => lt_of_le_of_lt hba han
 
 Depends on / 依赖: Nat.lt_succ_iff, Nat.zero_le, Sigma.forall, add_tsub_cancel_left, add_tsub_cancel_of_le, and_imp, and_true, contextual, implies_true, le_add_iff_nonneg_right, lt_of_le_of_lt, lt_succ_iff, lt_tsub_iff_left, mem_range, mem_sigma, prod_nbij, prod_sigma, zero_le
 -/

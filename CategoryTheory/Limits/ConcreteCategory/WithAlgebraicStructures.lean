@@ -88,7 +88,11 @@ lemma colimit_no_zero_smul_divisor
   obtain ⟨j', i, h⟩ := Concrete.colimit_rep_eq_zero (hx := hx)
   obtain ⟨j'', H⟩ := H
   simpa [elementwise_of% (colimit.w F), map_zero] using congr(colimit.ι F _
- (H (IsFiltered.sup {j,
+ (H (IsFiltered.sup {j, j', j''} { ⟨j, j', by simp, by simp, i⟩ })
+      (IsFiltered.toSup _ _ <| by simp)
+      (F.map (IsFiltered.toSup _ _ <| by simp) x)
+      (by rw [← IsFiltered.toSup_commutes (f := i) (mY := by simp) (mf := by simp), F.map_comp,
+        ModuleCat.comp_apply, ← map_smul, ← map_smul, h, map_zero])))
 
 中文:
 引理 colimit_no_zero_smul_divisor
@@ -99,7 +103,11 @@ lemma colimit_no_zero_smul_divisor
   obtain ⟨j', i, h⟩ := Concrete.colimit_rep_eq_zero (hx := hx)
   obtain ⟨j'', H⟩ := H
   simpa [elementwise_of% (colimit.w F), map_zero] using congr(colimit.ι F _
- (H (IsFiltered.sup {j,
+ (H (IsFiltered.sup {j, j', j''} { ⟨j, j', by simp, by simp, i⟩ })
+      (IsFiltered.toSup _ _ <| by simp)
+      (F.map (IsFiltered.toSup _ _ <| by simp) x)
+      (by rw [← IsFiltered.toSup_commutes (f := i) (mY := by simp) (mf := by simp), F.map_comp,
+        ModuleCat.comp_apply, ← map_smul, ← map_smul, h, map_zero])))
 
 Depends on / 依赖: Concrete, Concrete.colimit_exists_rep, Concrete.colimit_rep_eq_zero, F.map, F.map_comp, IsFiltered, IsFiltered.sup, IsFiltered.toSup, IsFiltered.toSup_commutes, classical, colimit, colimit.w, colimit_exists_rep, colimit_rep_eq_zero, elementwise_of, map_comp, map_smul, map_zero, toSup_commutes
 -/

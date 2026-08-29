@@ -162,7 +162,23 @@ theorem isCartanSubalgebra_iff_isUcsLimit
     obtain ⟨k, hk⟩ := H.toLieSubmodule.isNilpotent_iff_exists_self_le_ucs.mp h₁
     replace hk : H.toLieSubmodule = LieSubmodule.ucs k ⊥ :=
       le_antisymm hk
-        (LieSubmodule.ucs_le_of_normalizer_eq_self H.
+        (LieSubmodule.ucs_le_of_normalizer_eq_self H.normalizer_eq_self_of_isCartanSubalgebra k)
+    refine ⟨k, fun l hl => ?_⟩
+    rw [← Nat.sub_add_cancel hl]; rw [LieSubmodule.ucs_add]; rw [← hk]; rw [LieSubalgebra.ucs_eq_self_of_isCartanSubalgebra]
+  · rintro ⟨k, hk⟩
+    exact
+      { nilpotent := by
+          dsimp only [LieRing.IsNilpotent]
+          -- The instance for the second `H` in the goal is `lieRingSelfModule`
+          -- but `rw` expects it to be `H.toLieSubmodule.instLieRingModuleSubtypeMem`,
+          -- and these are not reducibly defeq.
+          erw [H.toLieSubmodule.isNilpotent_iff_exists_lcs_eq_bot]
+          use k
+          rw [_root_.eq_bot_iff]; rw [LieSubmodule.lcs_le_iff]; rw [hk k (le_refl k)]
+        self_normalizing := by
+          have hk' := hk (k + 1) k.le_succ
+          rw [LieSubmodule.ucs_succ]; rw [hk k (le_refl k)] at hk'
+          rw [← LieSubalgebra.toSubmodule_inj]; rw [← LieSubalgebra.coe_normalizer_eq_normalizer]; rw [hk']; rw [LieSubalgebra.coe_toLieSubmodule] }
 
 中文:
 定理 isCartanSubalgebra_iff_isUcsLimit
@@ -174,7 +190,23 @@ theorem isCartanSubalgebra_iff_isUcsLimit
     obtain ⟨k, hk⟩ := H.toLieSubmodule.isNilpotent_iff_exists_self_le_ucs.mp h₁
     replace hk : H.toLieSubmodule = LieSubmodule.ucs k ⊥ :=
       le_antisymm hk
-        (LieSubmodule.ucs_le_of_normalizer_eq_self H.
+        (LieSubmodule.ucs_le_of_normalizer_eq_self H.normalizer_eq_self_of_isCartanSubalgebra k)
+    refine ⟨k, fun l hl => ?_⟩
+    rw [← Nat.sub_add_cancel hl]; rw [LieSubmodule.ucs_add]; rw [← hk]; rw [LieSubalgebra.ucs_eq_self_of_isCartanSubalgebra]
+  · rintro ⟨k, hk⟩
+    exact
+      { nilpotent := by
+          dsimp only [LieRing.IsNilpotent]
+          -- The instance for the second `H` in the goal is `lieRingSelfModule`
+          -- but `rw` expects it to be `H.toLieSubmodule.instLieRingModuleSubtypeMem`,
+          -- and these are not reducibly defeq.
+          erw [H.toLieSubmodule.isNilpotent_iff_exists_lcs_eq_bot]
+          use k
+          rw [_root_.eq_bot_iff]; rw [LieSubmodule.lcs_le_iff]; rw [hk k (le_refl k)]
+        self_normalizing := by
+          have hk' := hk (k + 1) k.le_succ
+          rw [LieSubmodule.ucs_succ]; rw [hk k (le_refl k)] at hk'
+          rw [← LieSubalgebra.toSubmodule_inj]; rw [← LieSubalgebra.coe_normalizer_eq_normalizer]; rw [hk']; rw [LieSubalgebra.coe_toLieSubmodule] }
 
 Depends on / 依赖: H.normalizer_eq_self_of_isCartanSubalgebra, H.toLieSubmodule, H.toLieSubmodule.isNilpotent_iff_exists_self_le_ucs.mp, IsNilpotent, LieRing, LieRing.IsNilpotent, LieSubalgebra, LieSubalgebra.ucs_eq_self_of_isCartanSubalgebra, LieSubmodule, LieSubmodule.ucs, LieSubmodule.ucs_add, LieSubmodule.ucs_le_of_normalizer_eq_self, Nat.sub_add_cancel, infer_instance, isNilpotent_iff_exists_self_le_ucs, le_antisymm, nilpotent, normalizer_eq_self_of_isCartanSubalgebra, replace, sub_add_cancel
 -/

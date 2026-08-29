@@ -90,7 +90,16 @@ definition mkUnit
     | zero => simp [WittVector.mul_coeff_zero, inverseCoeff, hA]
     | succ n => ?_
     let H_coeff := A.coeff (n + 1) * ↑(a⁻¹ ^ p ^ (n + 1)) +
-      nthRemainder p n (truncateFun (n + 1) A) fun i : Fin 
+      nthRemainder p n (truncateFun (n + 1) A) fun i : Fin (n + 1) => inverseCoeff a A i
+    have H := Units.mul_inv (a ^ p ^ (n + 1))
+    linear_combination (norm := skip) -H_coeff * H
+    have ha : (a : k) ^ p ^ (n + 1) = ↑(a ^ p ^ (n + 1)) := by norm_cast
+    have ha_inv : (↑a⁻¹ : k) ^ p ^ (n + 1) = ↑(a ^ p ^ (n + 1))⁻¹ := by norm_cast
+    simp only [nthRemainder_spec, inverseCoeff, succNthValUnits, hA,
+      one_coeff_eq_of_pos, Nat.succ_pos', ha_inv, ha, inv_pow]
+    ring!)
+
+@[simp]
 
 中文:
 定义 mkUnit
@@ -101,7 +110,16 @@ definition mkUnit
     | zero => simp [WittVector.mul_coeff_zero, inverseCoeff, hA]
     | succ n => ?_
     let H_coeff := A.coeff (n + 1) * ↑(a⁻¹ ^ p ^ (n + 1)) +
-      nthRemainder p n (truncateFun (n + 1) A) fun i : Fin 
+      nthRemainder p n (truncateFun (n + 1) A) fun i : Fin (n + 1) => inverseCoeff a A i
+    have H := Units.mul_inv (a ^ p ^ (n + 1))
+    linear_combination (norm := skip) -H_coeff * H
+    have ha : (a : k) ^ p ^ (n + 1) = ↑(a ^ p ^ (n + 1)) := by norm_cast
+    have ha_inv : (↑a⁻¹ : k) ^ p ^ (n + 1) = ↑(a ^ p ^ (n + 1))⁻¹ := by norm_cast
+    simp only [nthRemainder_spec, inverseCoeff, succNthValUnits, hA,
+      one_coeff_eq_of_pos, Nat.succ_pos', ha_inv, ha, inv_pow]
+    ring!)
+
+@[simp]
 
 Depends on / 依赖: A.coeff, H_coeff, Units.mkOfMulEqOne, Units.mul_inv, WittVector, WittVector.mk, WittVector.mul_coeff_zero, ha_inv, inverseCoeff, linear_combination, mkOfMulEqOne, mul_coeff_zero, mul_inv, nthRemainder, truncateFun
 -/
@@ -189,7 +207,16 @@ theorem irreducible
       (constantCoeff : WittVector p k ->+* _).isUnit_map hp
   refine ⟨hp, fun a b hab => ?_⟩
   obtain ⟨ha0, hb0⟩ : a != 0 ∧ b != 0 := by
-    rw [← mul_ne_zero_iff]; intro h; 
+    rw [← mul_ne_zero_iff]; intro h; rw [h] at hab; exact p_nonzero p k hab
+  obtain ⟨m, a, ha, rfl⟩ := verschiebung_nonzero ha0
+  obtain ⟨n, b, hb, rfl⟩ := verschiebung_nonzero hb0
+  cases m; · exact Or.inl (isUnit_of_coeff_zero_ne_zero a ha)
+  rcases n with - | n; · exact Or.inr (isUnit_of_coeff_zero_ne_zero b hb)
+  rw [iterate_verschiebung_mul] at hab
+  apply_fun fun x => coeff x 1 at hab
+  simp only [coeff_p_one, Nat.add_succ, add_comm _ n, Function.iterate_succ', Function.comp_apply,
+    verschiebung_coeff_add_one, verschiebung_coeff_zero] at hab
+  exact (one_ne_zero hab).elim
 
 中文:
 定理 irreducible
@@ -201,7 +228,16 @@ theorem irreducible
       (constantCoeff : WittVector p k ->+* _).isUnit_map hp
   refine ⟨hp, fun a b hab => ?_⟩
   obtain ⟨ha0, hb0⟩ : a != 0 ∧ b != 0 := by
-    rw [← mul_ne_zero_iff]; intro h; 
+    rw [← mul_ne_zero_iff]; intro h; rw [h] at hab; exact p_nonzero p k hab
+  obtain ⟨m, a, ha, rfl⟩ := verschiebung_nonzero ha0
+  obtain ⟨n, b, hb, rfl⟩ := verschiebung_nonzero hb0
+  cases m; · exact Or.inl (isUnit_of_coeff_zero_ne_zero a ha)
+  rcases n with - | n; · exact Or.inr (isUnit_of_coeff_zero_ne_zero b hb)
+  rw [iterate_verschiebung_mul] at hab
+  apply_fun fun x => coeff x 1 at hab
+  simp only [coeff_p_one, Nat.add_succ, add_comm _ n, Function.iterate_succ', Function.comp_apply,
+    verschiebung_coeff_add_one, verschiebung_coeff_zero] at hab
+  exact (one_ne_zero hab).elim
 
 Depends on / 依赖: IsUnit, Or.inl, WittVector, coeff_p_zero, constantCoeff, constantCoeff_apply, isUnit_map, isUnit_of_coeff_zero_ne_zero, mul_ne_zero_iff, not_isUnit_zero, p_nonzero, verschiebung_nonzero
 -/
@@ -240,7 +276,15 @@ theorem exists_eq_pow_p_mul
   obtain ⟨b, rfl⟩ := (frobenius_bijective p k).surjective.iterate m c
   rw [WittVector.iterate_frobenius_coeff] at hc
   have := congr_fun (WittVector.verschiebung_frobenius_comm.comp_iterate m) b
-  simp only [Function.comp_apply] at t
+  simp only [Function.comp_apply] at this
+  rw [← this] at hcm
+  refine ⟨m, b, ?_, ?_⟩
+  · contrapose hc
+    simp [hc, zero_pow <| pow_ne_zero _ hp.out.ne_zero]
+  · simp_rw [← mul_left_iterate (p : 𝕎 k) m]
+    convert! hcm using 2
+    ext1 x
+    rw [mul_comm]; rw [← WittVector.verschiebung_frobenius x]; rfl
 
 中文:
 定理 存在_eq_pow_p_mul
@@ -250,7 +294,15 @@ theorem exists_eq_pow_p_mul
   obtain ⟨b, rfl⟩ := (frobenius_bijective p k).surjective.iterate m c
   rw [WittVector.iterate_frobenius_coeff] at hc
   have := congr_fun (WittVector.verschiebung_frobenius_comm.comp_iterate m) b
-  simp only [Function.comp_apply] at t
+  simp only [Function.comp_apply] at this
+  rw [← this] at hcm
+  refine ⟨m, b, ?_, ?_⟩
+  · contrapose hc
+    simp [hc, zero_pow <| pow_ne_zero _ hp.out.ne_zero]
+  · simp_rw [← mul_left_iterate (p : 𝕎 k) m]
+    convert! hcm using 2
+    ext1 x
+    rw [mul_comm]; rw [← WittVector.verschiebung_frobenius x]; rfl
 
 Depends on / 依赖: Function, Function.comp_apply, WittVector, WittVector.iterate_frobenius_coeff, WittVector.verschiebung_frobenius_comm.comp_iterate, WittVector.verschiebung_nonzero, comp_apply, comp_iterate, congr_fun, contrapose, convert, frobenius_bijective, hp.out.ne_zero, iterate, iterate_frobenius_coeff, mul_comm, mul_left_iterate, ne_zero, pow_ne_zero, simp_rw
 -/

@@ -82,7 +82,7 @@ instance _root_.TensorProduct.instBialgebra
   have hcomul := congr(DFunLike.coe $(comul_eq_algHom_toLinearMap R S A B))
   refine Bialgebra.mk' S (A otimes[R] B) ?_ (fun {x y} => ?_) ?_ (fun {x y} => ?_) <;>
   simp_all only [AlgHom.toLinearMap_apply] <;>
-  simp on
+  simp only [map_one, map_mul]
 
 中文:
 实例 _root_.张量积.instBialgebra
@@ -92,7 +92,7 @@ instance _root_.TensorProduct.instBialgebra
   have hcomul := congr(DFunLike.coe $(comul_eq_algHom_toLinearMap R S A B))
   refine Bialgebra.mk' S (A otimes[R] B) ?_ (fun {x y} => ?_) ?_ (fun {x y} => ?_) <;>
   simp_all only [AlgHom.toLinearMap_apply] <;>
-  simp on
+  simp only [map_one, map_mul]
 
 Depends on / 依赖: AlgHom, AlgHom.toLinearMap_apply, Bialgebra, Bialgebra.mk, DFunLike, DFunLike.coe, comul_eq_algHom_toLinearMap, counit_eq_algHom_toLinearMap, hcomul, hcounit, map_mul, map_one, otimes, toLinearMap_apply
 -/

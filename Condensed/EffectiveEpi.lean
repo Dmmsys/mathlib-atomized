@@ -34,7 +34,7 @@ instance :
 ULift.ext _ _ pullback.condition _ _⟩
     rw [CompHaus.epi_iff_surjective] at hf
     obtain ⟨x, hx⟩ := hf (g.down.hom y)
-    exact ⟨⟨⟨x, y⟩, 
+    exact ⟨⟨⟨x, y⟩, hx⟩, rfl⟩
 
 中文:
 实例 :
@@ -46,7 +46,7 @@ ULift.ext _ _ pullback.condition _ _⟩
 ULift.ext _ _ pullback.condition _ _⟩
     rw [CompHaus.epi_iff_surjective] at hf
     obtain ⟨x, hx⟩ := hf (g.down.hom y)
-    exact ⟨⟨⟨x, y⟩, 
+    exact ⟨⟨⟨x, y⟩, hx⟩, rfl⟩
 
 Depends on / 依赖: CompHaus, CompHaus.epi_iff_surjective, CondensedSet, CondensedSet.epi_iff_locallySurjective_on_compHaus, ULift.ext, condition, epi_iff_locallySurjective_on_compHaus, epi_iff_surjective, g.down, g.down.hom, pullback, pullback.condition, pullback.fst, pullback.snd
 -/

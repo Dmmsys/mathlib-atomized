@@ -279,7 +279,7 @@ instance :
   match a, b with
   | ⊤, _ => exact tendsto_nhds_top_mono' continuousAt_fst fun p => le_add_right le_rfl
   | (a : Nat), ⊤ => exact tendsto_nhds_top_mono' continuousAt_snd fun p => le_add_left le_rfl
-  | (a : Nat), (b : Nat) => simp [Cont
+  | (a : Nat), (b : Nat) => simp [ContinuousAt, nhds_prod_eq]
 
 中文:
 实例 :
@@ -289,7 +289,7 @@ instance :
   match a, b with
   | ⊤, _ => exact tendsto_nhds_top_mono' continuousAt_fst fun p => le_add_right le_rfl
   | (a : Nat), ⊤ => exact tendsto_nhds_top_mono' continuousAt_snd fun p => le_add_left le_rfl
-  | (a : Nat), (b : Nat) => simp [Cont
+  | (a : Nat), (b : Nat) => simp [ContinuousAt, nhds_prod_eq]
 
 Depends on / 依赖: ContinuousAt, continuousAt_fst, continuousAt_snd, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, le_add_left, le_add_right, le_rfl, nhds_prod_eq, tendsto_nhds_top_mono
 -/
@@ -311,7 +311,15 @@ instance :
       · simp [ContinuousAt, nhds_prod_eq]
       · simp only [ContinuousAt, Function.uncurry, mul_top ha.ne']
         refine tendsto_nhds_top_mono continuousAt_snd ?_
-        filter_upwards [co
+        filter_upwards [continuousAt_fst (lt_mem_nhds ha)] with (x, y) (hx : 0 < x)
+        exact le_mul_of_one_le_left' (Order.one_le_iff_pos.2 hx)
+continuous_iff_continuousAt.2 Prod.forall.2 fun
+      | (a : Nat∞), ⊤ => key a
+      | ⊤, (b : Nat∞) =>
+((key b).comp_of_eq (continuous_swap.tendsto (⊤, b)) rfl).congr
+          .of_forall fun _ => mul_comm ..
+      | (a : Nat), (b : Nat) => by
+        simp [ContinuousAt, nhds_prod_eq, tendsto_pure_nhds]
 
 中文:
 实例 :
@@ -321,7 +329,15 @@ instance :
       · simp [ContinuousAt, nhds_prod_eq]
       · simp only [ContinuousAt, Function.uncurry, mul_top ha.ne']
         refine tendsto_nhds_top_mono continuousAt_snd ?_
-        filter_upwards [co
+        filter_upwards [continuousAt_fst (lt_mem_nhds ha)] with (x, y) (hx : 0 < x)
+        exact le_mul_of_one_le_left' (Order.one_le_iff_pos.2 hx)
+continuous_iff_continuousAt.2 Prod.forall.2 fun
+      | (a : Nat∞), ⊤ => key a
+      | ⊤, (b : Nat∞) =>
+((key b).comp_of_eq (continuous_swap.tendsto (⊤, b)) rfl).congr
+          .of_forall fun _ => mul_comm ..
+      | (a : Nat), (b : Nat) => by
+        simp [ContinuousAt, nhds_prod_eq, tendsto_pure_nhds]
 
 Depends on / 依赖: ContinuousAt, Function, Function.uncurry, Order.one_le_iff_pos, Prod.forall, comp_of_eq, contin, continuousAt_fst, continuousAt_snd, continuous_iff_continuousAt, eq_zero_or_pos, filter_upwards, ha.ne, le_mul_of_one_le_left, lt_mem_nhds, mul_top, nhds_prod_eq, one_le_iff_pos, tendsto_nhds_top_mono, uncurry
 -/
@@ -373,7 +389,11 @@ theorem continuousAt_sub
   | (a : Nat), ⊤, _ =>
     suffices forallᶠ b in 𝓝 ⊤, (a - b : Nat∞) = 0 by
       simpa [ContinuousAt, nhds_prod_eq, tsub_eq_zero_of_le]
-    filter_upwards [le_mem_nhds (WithTop.coe_lt_top a)] with b using tsub_
+    filter_upwards [le_mem_nhds (WithTop.coe_lt_top a)] with b using tsub_eq_zero_of_le
+  | ⊤, (b : Nat), _ =>
+    suffices forall n : Nat, forallᶠ a : Nat∞ in 𝓝 ⊤, b + n < a by
+      simpa [ContinuousAt, nhds_prod_eq, (· ∘ ·), lt_tsub_iff_left, tendsto_nhds_top_iff_natCast_lt]
+exact fun n => lt_mem_nhds WithTop.coe_lt_top (b + n)
 
 中文:
 定理 continuousAt_sub
@@ -384,7 +404,11 @@ theorem continuousAt_sub
   | (a : Nat), ⊤, _ =>
     suffices forallᶠ b in 𝓝 ⊤, (a - b : Nat∞) = 0 by
       simpa [ContinuousAt, nhds_prod_eq, tsub_eq_zero_of_le]
-    filter_upwards [le_mem_nhds (WithTop.coe_lt_top a)] with b using tsub_
+    filter_upwards [le_mem_nhds (WithTop.coe_lt_top a)] with b using tsub_eq_zero_of_le
+  | ⊤, (b : Nat), _ =>
+    suffices forall n : Nat, forallᶠ a : Nat∞ in 𝓝 ⊤, b + n < a by
+      simpa [ContinuousAt, nhds_prod_eq, (· ∘ ·), lt_tsub_iff_left, tendsto_nhds_top_iff_natCast_lt]
+exact fun n => lt_mem_nhds WithTop.coe_lt_top (b + n)
 -/
 protected theorem continuousAt_sub {a b : Nat∞} (h : a != ⊤ ∨ b != ⊤) :
     ContinuousAt (· - ·).uncurry (a, b) := by

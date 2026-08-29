@@ -633,7 +633,9 @@ instance :
       refine ⟨⟨?_, ?_⟩, ?_⟩ <;> rintro f hf
       · exact iInf₂_le_of_le f hf inf_le_left
       · exact iInf₂_le_of_le f hf inf_le_right
-· exact ⟨inf_le_of_left_le iInf₂
+· exact ⟨inf_le_of_left_le iInf₂_le f hf, inf_le_of_right_le iInf₂_le f hf⟩
+    idempotent' x := iInf₂_mono fun f hf => (f.monotone <| iInf₂_le f hf).trans_eq (f.idempotent _)
+    le_apply' x := by simp [le_apply] }
 
 中文:
 实例 :
@@ -644,7 +646,9 @@ instance :
       refine ⟨⟨?_, ?_⟩, ?_⟩ <;> rintro f hf
       · exact iInf₂_le_of_le f hf inf_le_left
       · exact iInf₂_le_of_le f hf inf_le_right
-· exact ⟨inf_le_of_left_le iInf₂
+· exact ⟨inf_le_of_left_le iInf₂_le f hf, inf_le_of_right_le iInf₂_le f hf⟩
+    idempotent' x := iInf₂_mono fun f hf => (f.monotone <| iInf₂_le f hf).trans_eq (f.idempotent _)
+    le_apply' x := by simp [le_apply] }
 
 Depends on / 依赖: InfHomClass, InfHomClass.map_inf, f.idempotent, f.monotone, idempotent, inf_le_left, inf_le_of_left_le, inf_le_of_right_le, inf_le_right, le_antisymm_iff, le_apply, le_iInf_iff, le_inf_iff, map_inf, monotone, trans_eq
 -/
@@ -816,7 +820,23 @@ instance :
         ⨅ z >= ⨅ w >= x, m w ⇨ n w, m z ⇨ n z
 _ <= m (m y ⇨ n y) ⇨ n (m y ⇨ n y) := iInf₂_le (m y ⇨ n y) iInf₂_le y hy
         _ = m y ⇨ n y := by
-          rw [map_himp_apply]; rw [himp_himp]; rw [← map_inf]; rw [
+          rw [map_himp_apply]; rw [himp_himp]; rw [← map_inf]; rw [inf_of_le_right (le_trans n.le_apply le_himp)]
+    map_inf' x y := by
+      simp only [and_assoc, le_antisymm_iff, le_inf_iff, le_iInf_iff]
+refine ⟨fun z hxz => iInf₂_le _ inf_le_of_left_le hxz,
+fun z hyz => iInf₂_le _ inf_le_of_right_le hyz, ?_⟩
+      have : Nonempty X := ⟨x⟩
+      simp only [iInf_inf, le_iInf_iff, le_himp_iff, iInf_le_iff, le_inf_iff, forall_and,
+        forall_const, and_imp]
+      intro k hxyk l hlx hly hlk
+      calc
+        l = (l ⊓ m (x ⊔ k)) ⊓ (l ⊓ m (y ⊔ k)) := by
+          rw [← inf_inf_distrib_left]; rw [← map_inf]; rw [← sup_inf_right]; rw [sup_eq_right.2 hxyk]; rw [inf_eq_left.2 hlk]
+        _ <= n (x ⊔ k) ⊓ n (y ⊔ k) := by
+          gcongr; exacts [hlx (x ⊔ k) le_sup_left, hly (y ⊔ k) le_sup_left]
+        _ = n k := by rw [← map_inf, ← sup_inf_right, sup_eq_right.2 hxyk]
+    le_apply' := by
+simpa using fun _ _ h => inf_le_of_left_le h.trans n.le_apply }
 
 中文:
 实例 :
@@ -827,7 +847,23 @@ _ <= m (m y ⇨ n y) ⇨ n (m y ⇨ n y) := iInf₂_le (m y ⇨ n y) iInf₂_le 
         ⨅ z >= ⨅ w >= x, m w ⇨ n w, m z ⇨ n z
 _ <= m (m y ⇨ n y) ⇨ n (m y ⇨ n y) := iInf₂_le (m y ⇨ n y) iInf₂_le y hy
         _ = m y ⇨ n y := by
-          rw [map_himp_apply]; rw [himp_himp]; rw [← map_inf]; rw [
+          rw [map_himp_apply]; rw [himp_himp]; rw [← map_inf]; rw [inf_of_le_right (le_trans n.le_apply le_himp)]
+    map_inf' x y := by
+      simp only [and_assoc, le_antisymm_iff, le_inf_iff, le_iInf_iff]
+refine ⟨fun z hxz => iInf₂_le _ inf_le_of_left_le hxz,
+fun z hyz => iInf₂_le _ inf_le_of_right_le hyz, ?_⟩
+      have : Nonempty X := ⟨x⟩
+      simp only [iInf_inf, le_iInf_iff, le_himp_iff, iInf_le_iff, le_inf_iff, forall_and,
+        forall_const, and_imp]
+      intro k hxyk l hlx hly hlk
+      calc
+        l = (l ⊓ m (x ⊔ k)) ⊓ (l ⊓ m (y ⊔ k)) := by
+          rw [← inf_inf_distrib_left]; rw [← map_inf]; rw [← sup_inf_right]; rw [sup_eq_right.2 hxyk]; rw [inf_eq_left.2 hlk]
+        _ <= n (x ⊔ k) ⊓ n (y ⊔ k) := by
+          gcongr; exacts [hlx (x ⊔ k) le_sup_left, hly (y ⊔ k) le_sup_left]
+        _ = n k := by rw [← map_inf, ← sup_inf_right, sup_eq_right.2 hxyk]
+    le_apply' := by
+simpa using fun _ _ h => inf_le_of_left_le h.trans n.le_apply }
 
 Depends on / 依赖: and_assoc, himp_himp, idempotent, inf_le_of_left_le, inf_le_of_right_le, inf_of_le_right, le_antisymm_iff, le_apply, le_himp, le_iInf_iff, le_inf_iff, le_trans, map_himp_apply, map_inf, n.le_apply
 -/
@@ -1000,7 +1036,8 @@ instance :
     simp_rw [← Subtype.coe_le_coe, iSup_subtype', iSup, sSup, n.giAux.gc.u_inf]
     rw [rangeFactorization_coe]; rw [← mem_range.1 a.prop]; rw [← map_inf]
     apply n.monotone
-    simp_rw [inf_sSup_eq, sSup_image, iSup_range, iSup_image, iSup_subty
+    simp_rw [inf_sSup_eq, sSup_image, iSup_range, iSup_image, iSup_subtype', n.giAux.gc.u_inf,
+      le_rfl] }
 
 中文:
 实例 :
@@ -1010,7 +1047,8 @@ instance :
     simp_rw [← Subtype.coe_le_coe, iSup_subtype', iSup, sSup, n.giAux.gc.u_inf]
     rw [rangeFactorization_coe]; rw [← mem_range.1 a.prop]; rw [← map_inf]
     apply n.monotone
-    simp_rw [inf_sSup_eq, sSup_image, iSup_range, iSup_image, iSup_subty
+    simp_rw [inf_sSup_eq, sSup_image, iSup_range, iSup_image, iSup_subtype', n.giAux.gc.u_inf,
+      le_rfl] }
 
 Depends on / 依赖: ofMinimalAxioms
 -/

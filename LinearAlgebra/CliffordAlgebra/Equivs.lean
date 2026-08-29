@@ -725,7 +725,10 @@ definition quaternionBasis
   j_mul_j := by
     rw [ι_sq_scalar]; rw [Q_apply]; rw [← Algebra.algebraMap_eq_smul_one]
     simp
-  i_mul_j 
+  i_mul_j := rfl
+  j_mul_i := by
+    rw [zero_smul]; rw [zero_sub]; rw [eq_neg_iff_add_eq_zero]; rw [ι_mul_ι_add_swap]; rw [QuadraticMap.polar]
+    simp
 
 中文:
 定义 quaternionBasis
@@ -739,7 +742,10 @@ definition quaternionBasis
   j_mul_j := by
     rw [ι_sq_scalar]; rw [Q_apply]; rw [← Algebra.algebraMap_eq_smul_one]
     simp
-  i_mul_j 
+  i_mul_j := rfl
+  j_mul_i := by
+    rw [zero_smul]; rw [zero_sub]; rw [eq_neg_iff_add_eq_zero]; rw [ι_mul_ι_add_swap]; rw [QuadraticMap.polar]
+    simp
 -/
 def quaternionBasis : QuaternionAlgebra.Basis (CliffordAlgebra (Q c₁ c₂)) c₁ 0 c₂ where
   i := ι (Q c₁ c₂) (1, 0)

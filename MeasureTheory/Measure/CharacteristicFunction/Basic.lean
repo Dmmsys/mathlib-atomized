@@ -204,7 +204,13 @@ theorem ext_of_integral_char_eq
   obtain ⟨w, hw⟩ := hg
   rw [hw]
   have hsum (P : Measure V) [IsFiniteMeasure P] :
-      ∫ v, w.coeff.sum (fun a z => z
+      ∫ v, w.coeff.sum (fun a z => z * e (L v a)) ∂P =
+        w.coeff.sum (fun a z => ∫ v, z * e (L v a) ∂P) :=
+    integral_finsetSum _ fun a ha => ((char he hL a).integrable P).const_mul _
+  rw [hsum P]; rw [hsum P']
+  apply Finset.sum_congr rfl fun i _ => ?_
+  simp only [MeasureTheory.integral_const_mul, mul_eq_mul_left_iff]
+  exact Or.inl (h i)
 
 中文:
 定理 ext_of_integral_char_eq
@@ -217,7 +223,13 @@ theorem ext_of_integral_char_eq
   obtain ⟨w, hw⟩ := hg
   rw [hw]
   have hsum (P : Measure V) [IsFiniteMeasure P] :
-      ∫ v, w.coeff.sum (fun a z => z
+      ∫ v, w.coeff.sum (fun a z => z * e (L v a)) ∂P =
+        w.coeff.sum (fun a z => ∫ v, z * e (L v a) ∂P) :=
+    integral_finsetSum _ fun a ha => ((char he hL a).integrable P).const_mul _
+  rw [hsum P]; rw [hsum P']
+  apply Finset.sum_congr rfl fun i _ => ?_
+  simp only [MeasureTheory.integral_const_mul, mul_eq_mul_left_iff]
+  exact Or.inl (h i)
 
 Depends on / 依赖: Finset, Finset.sum_congr, IsFiniteMeasure, Measure, const_mul, ext_of_forall_mem_subalgebra_integral_eq_of_pseudoEMetric_complete_countable, integrable, integral_finsetSum, mem_charPoly, separatesPoints_charPoly, sum_congr, w.coeff.sum
 -/
@@ -446,7 +458,7 @@ lemma charFun_eq_fourierIntegral'
     fourierChar_apply', Pi.ofNat_apply, Circle.smul_def, Circle.coe_exp, ofReal_mul, ofReal_ofNat,
     ofReal_inv, smul_eq_mul, mul_one]
   congr with x
-  rw [← 
+  rw [← mul_assoc]; rw [mul_inv_cancel₀ (by simp [pi_ne_zero]), one_mul]
 
 中文:
 引理 charFun_eq_fourier整数egral'
@@ -457,7 +469,7 @@ lemma charFun_eq_fourierIntegral'
     fourierChar_apply', Pi.ofNat_apply, Circle.smul_def, Circle.coe_exp, ofReal_mul, ofReal_ofNat,
     ofReal_inv, smul_eq_mul, mul_one]
   congr with x
-  rw [← 
+  rw [← mul_assoc]; rw [mul_inv_cancel₀ (by simp [pi_ne_zero]), one_mul]
 
 Depends on / 依赖: Circle, Circle.coe_exp, Circle.smul_def, Pi.ofNat_apply, VectorFourier, VectorFourier.fourierIntegral, charFun_apply, coe_exp, fourierChar_apply, fourierIntegral, inner_neg_right, inner_smul_right, mul_assoc, mul_one, neg_neg, neg_smul, ofNat_apply, ofReal_inv, ofReal_mul, ofReal_ofNat
 -/

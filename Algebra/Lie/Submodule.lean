@@ -1332,7 +1332,9 @@ instance :
       lie_mem := fun {x m} h => by
         simp only [Submodule.mem_carrier, mem_iInter, Submodule.coe_sInf, mem_ofPred_eq,
           forall_apply_eq_imp_iff₂, forall_exists_index, and_imp] at h ⊢
-        intro N hN; apply N.lie_mem 
+        intro N hN; apply N.lie_mem (h N hN) }⟩
+
+@[simp]
 
 中文:
 实例 :
@@ -1342,7 +1344,9 @@ instance :
       lie_mem := fun {x m} h => by
         simp only [Submodule.mem_carrier, mem_iInter, Submodule.coe_sInf, mem_ofPred_eq,
           forall_apply_eq_imp_iff₂, forall_exists_index, and_imp] at h ⊢
-        intro N hN; apply N.lie_mem 
+        intro N hN; apply N.lie_mem (h N hN) }⟩
+
+@[simp]
 
 Depends on / 依赖: N.lie_mem, Submodule, Submodule.coe_sInf, Submodule.mem_carrier, and_imp, coe_sInf, forall_exists_index, lie_mem, mem_carrier, mem_iInter, mem_ofPred_eq, toSubmodule
 -/
@@ -1561,7 +1565,8 @@ instance :
         rintro x m (hm : m in (N : Submodule R M) ⊔ (N' : Submodule R M))
         change ⁅x, m⁆ in (N : Submodule R M) ⊔ (N' : Submodule R M)
         rw [Submodule.mem_sup] at hm ⊢
-        obtain ⟨y, hy, z, hz, rfl⟩ := h
+        obtain ⟨y, hy, z, hz, rfl⟩ := hm
+        exact ⟨⁅x, y⁆, N.lie_mem hy, ⁅x, z⁆, N'.lie_mem hz, (lie_add _ _ _).symm⟩ }
 
 中文:
 实例 :
@@ -1571,7 +1576,8 @@ instance :
         rintro x m (hm : m in (N : Submodule R M) ⊔ (N' : Submodule R M))
         change ⁅x, m⁆ in (N : Submodule R M) ⊔ (N' : Submodule R M)
         rw [Submodule.mem_sup] at hm ⊢
-        obtain ⟨y, hy, z, hz, rfl⟩ := h
+        obtain ⟨y, hy, z, hz, rfl⟩ := hm
+        exact ⟨⁅x, y⁆, N.lie_mem hy, ⁅x, z⁆, N'.lie_mem hz, (lie_add _ _ _).symm⟩ }
 
 Depends on / 依赖: N.lie_mem, Submodule, Submodule.mem_sup, lie_add, lie_mem, mem_sup, toSubmodule
 -/
@@ -1597,7 +1603,20 @@ instance :
         change ⁅x, m⁆ in sSup {(p : Submodule R M) | p in S}
         obtain ⟨s, hs, hsm⟩ := Submodule.mem_sSup_iff_exists_finset.mp hm
         clear hm
-        i
+        induction s using Finset.induction_on generalizing m with
+        | empty =>
+          replace hsm : m = 0 := by simpa using hsm
+          simp [hsm]
+        | insert q t hqt ih =>
+          rw [Finset.iSup_insert] at hsm
+          obtain ⟨m', hm', u, hu, rfl⟩ := Submodule.mem_sup.mp hsm
+          rw [lie_add]
+          refine add_mem ?_ (ih (Subset.trans (by simp) hs) hu)
+          obtain ⟨p, hp, rfl⟩ : exists p in S, ↑p = q := hs (Finset.mem_insert_self q t)
+          suffices p <= sSup {(p : Submodule R M) | p in S} by exact this (p.lie_mem hm')
+          exact le_sSup ⟨p, hp, rfl⟩ }
+
+@[norm_cast, simp]
 
 中文:
 实例 :
@@ -1608,7 +1627,20 @@ instance :
         change ⁅x, m⁆ in sSup {(p : Submodule R M) | p in S}
         obtain ⟨s, hs, hsm⟩ := Submodule.mem_sSup_iff_exists_finset.mp hm
         clear hm
-        i
+        induction s using Finset.induction_on generalizing m with
+        | empty =>
+          replace hsm : m = 0 := by simpa using hsm
+          simp [hsm]
+        | insert q t hqt ih =>
+          rw [Finset.iSup_insert] at hsm
+          obtain ⟨m', hm', u, hu, rfl⟩ := Submodule.mem_sup.mp hsm
+          rw [lie_add]
+          refine add_mem ?_ (ih (Subset.trans (by simp) hs) hu)
+          obtain ⟨p, hp, rfl⟩ : exists p in S, ↑p = q := hs (Finset.mem_insert_self q t)
+          suffices p <= sSup {(p : Submodule R M) | p in S} by exact this (p.lie_mem hm')
+          exact le_sSup ⟨p, hp, rfl⟩ }
+
+@[norm_cast, simp]
 
 Depends on / 依赖: Finset, Finset.iSup_insert, Finset.induction_on, Submodule, Submodule.mem_sSup_iff_exists_finset.mp, Submodule.mem_sup.mp, generalizing, iSup_insert, induction_on, insert, lie_add, lie_mem, mem_sSup_iff_exists_finset, mem_sup, replace, toSubmodule
 -/
@@ -1808,7 +1840,7 @@ theorem iSup_induction'
   · exact ⟨_, mem _ _ hx⟩
   · exact ⟨_, zero⟩
   · rintro ⟨_, Cx⟩ ⟨_, Cy⟩
-    exact ⟨_, a
+    exact ⟨_, add _ _ _ _ Cx Cy⟩
 
 中文:
 定理 iSup_induction'
@@ -1820,7 +1852,7 @@ theorem iSup_induction'
   · exact ⟨_, mem _ _ hx⟩
   · exact ⟨_, zero⟩
   · rintro ⟨_, Cx⟩ ⟨_, Cy⟩
-    exact ⟨_, a
+    exact ⟨_, add _ _ _ _ Cx Cy⟩
 
 Depends on / 依赖: Exists, Exists.elim, iSup_induction, motive
 -/
@@ -2882,7 +2914,7 @@ theorem lieSpan_induction
       zero_mem' := ⟨_, zero⟩
       smul_mem' := fun r => fun ⟨_, hpx⟩ => ⟨_, smul r _ _ hpx⟩
       lie_mem := fun ⟨_, hpy⟩ => ⟨_, lie _ _ _ hpy⟩ }
-.elim f
+.elim fun _ => id .mpr (fun y hy => ⟨subset_lieSpan hy, mem y hy⟩) hx exact lieSpan_le (N := p)
 
 中文:
 定理 lieSpan_induction
@@ -2894,7 +2926,7 @@ theorem lieSpan_induction
       zero_mem' := ⟨_, zero⟩
       smul_mem' := fun r => fun ⟨_, hpx⟩ => ⟨_, smul r _ _ hpx⟩
       lie_mem := fun ⟨_, hpy⟩ => ⟨_, lie _ _ _ hpy⟩ }
-.elim f
+.elim fun _ => id .mpr (fun y hy => ⟨subset_lieSpan hy, mem y hy⟩) hx exact lieSpan_le (N := p)
 
 Depends on / 依赖: LieSubmodule, add_mem, carrier, lieSpan_le, lie_mem, smul_mem, subset_lieSpan, zero_mem
 -/
@@ -2924,7 +2956,12 @@ lemma isCompactElement_lieSpan_singleton
   intro s hne hdir hsup
   replace hsup : m in (↑(sSup s) : Set M) := (SetLike.le_def.mp hsup) (subset_lieSpan rfl)
   suffices (↑(sSup s) : Set M) = ⋃ N in s, ↑N by simp_all
-  replace hne : Nonempty s := Set.nonempty_coe_sort.mpr h
+  replace hne : Nonempty s := Set.nonempty_coe_sort.mpr hne
+  have := Submodule.coe_iSup_of_directed _ hdir.directed_val
+  simp_rw [← iSup_toSubmodule, Set.iUnion_coe_set, coe_toSubmodule] at this
+  rw [← this]; rw [SetLike.coe_set_eq]; rw [sSup_eq_iSup]; rw [iSup_subtype]
+
+@[simp]
 
 中文:
 引理 isCompactElement_lieSpan_singleton
@@ -2934,7 +2971,12 @@ lemma isCompactElement_lieSpan_singleton
   intro s hne hdir hsup
   replace hsup : m in (↑(sSup s) : Set M) := (SetLike.le_def.mp hsup) (subset_lieSpan rfl)
   suffices (↑(sSup s) : Set M) = ⋃ N in s, ↑N by simp_all
-  replace hne : Nonempty s := Set.nonempty_coe_sort.mpr h
+  replace hne : Nonempty s := Set.nonempty_coe_sort.mpr hne
+  have := Submodule.coe_iSup_of_directed _ hdir.directed_val
+  simp_rw [← iSup_toSubmodule, Set.iUnion_coe_set, coe_toSubmodule] at this
+  rw [← this]; rw [SetLike.coe_set_eq]; rw [sSup_eq_iSup]; rw [iSup_subtype]
+
+@[simp]
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.isCompactElement_iff_le_of_directed_sSup_le, Nonempty, Set.iUnion_coe_set, Set.nonempty_coe_sort.mpr, SetLike, SetLike.coe_set_eq, SetLike.le_def.mp, Submodule, Submodule.coe_iSup_of_directed, coe_iSup_of_directed, coe_set_eq, coe_toSubmodule, directed_val, hdir.directed_val, iSup_subtype, iSup_toSubmodule, iUnion_coe_set, isCompactElement_iff_le_of_directed_sSup_le, le_def
 -/
@@ -2961,7 +3003,7 @@ lemma sSup_image_lieSpan_singleton
   simp_rw [← toSubmodule_le_toSubmodule, sSup_toSubmodule, Set.mem_image, SetLike.mem_coe]
   refine fun m hm => Submodule.mem_sSup.mpr fun N' hN' => ?_
   replace hN' : forall m in N, lieSpan R L {m} <= N' := by simpa using hN'
-  exact hN' _ hm (subset_
+  exact hN' _ hm (subset_lieSpan rfl)
 
 中文:
 引理 sSup_image_lieSpan_singleton
@@ -2971,7 +3013,7 @@ lemma sSup_image_lieSpan_singleton
   simp_rw [← toSubmodule_le_toSubmodule, sSup_toSubmodule, Set.mem_image, SetLike.mem_coe]
   refine fun m hm => Submodule.mem_sSup.mpr fun N' hN' => ?_
   replace hN' : forall m in N, lieSpan R L {m} <= N' := by simpa using hN'
-  exact hN' _ hm (subset_
+  exact hN' _ hm (subset_lieSpan rfl)
 
 Depends on / 依赖: Set.mem_image, SetLike, SetLike.mem_coe, Submodule, Submodule.mem_sSup.mpr, le_antisymm, lieSpan, mem_coe, mem_image, mem_sSup, replace, sSup_le, sSup_toSubmodule, simp_rw, subset_lieSpan, toSubmodule_le_toSubmodule
 -/
@@ -3548,14 +3590,16 @@ definition equivMapOfInjective
   signature: (hf : Function.Injective f)
   body: { Submodule.equivMapOfInjective (f : M ->ₗ[R] M') hf N with
     -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specify `invFun` explicitly this way, otherwise we'd get a type mismatch
-    invFun := by exact DFunLike.coe (Submodule.equivMapOfInjective (f : M ->ₗ[R] M') hf 
+    invFun := by exact DFunLike.coe (Submodule.equivMapOfInjective (f : M ->ₗ[R] M') hf N).symm
+    map_lie' := by rintro x ⟨m, hm : m in N⟩; ext; exact f.map_lie x m }
 
 中文:
 定义 equivMapOfInjective
   签名: (hf : 函数.单射 f)
   定义体: { Submodule.equivMapOfInjective (f : M ->ₗ[R] M') hf N with
     -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specify `invFun` explicitly this way, otherwise we'd get a type mismatch
-    invFun := by exact DFunLike.coe (Submodule.equivMapOfInjective (f : M ->ₗ[R] M') hf 
+    invFun := by exact DFunLike.coe (Submodule.equivMapOfInjective (f : M ->ₗ[R] M') hf N).symm
+    map_lie' := by rintro x ⟨m, hm : m in N⟩; ext; exact f.map_lie x m }
 
 Depends on / 依赖: LinearMap, LinearMap.map_smul_of_tower, LocalizedModule, LocalizedModule.induction_on, LocalizedModule.mk_add_mk, Module, Module.End.algebraMap_isUnit_inv_apply_eq_iff, Submodule, Submodule.equivMapOfInjective, Submonoid, Submonoid.coe_mul, Submonoid.smul_def, algebraMap_isUnit_inv_apply_eq_iff, all_goals, coe_mul, equivMapOfInjective, fromLocalizedModule, map_add, map_smul, map_smul_of_tower
 -/

@@ -43,7 +43,29 @@ lemma Module.Finite.exists_free_surjective
   obtain ⟨s, hs⟩ : (⊤ : Submodule R S).FG := Module.finite_def.mp inferInstance
   suffices h : exists (S' : Type u) (_ : CommRing S') (_ : Algebra R S') (_ : Module.Finite R S')
       (_ : Module.Free R S') (_ : Algebra.FinitePresentation R S')
-      (f : S' ->ₐ[R] S), (s : Set S) sub
+      (f : S' ->ₐ[R] S), (s : Set S) subseteq AlgHom.range f by
+    obtain ⟨S', _, _, _, _, _, f, hsf⟩ := h
+    have hf : Function.Surjective f := by
+      have := (Submodule.span_le (p := LinearMap.range f.toLinearMap)).mpr hsf
+      rwa [hs, top_le_iff, LinearMap.range_eq_top] at this
+    use S', ‹_›, ‹_›, ‹_›, ‹_›, ‹_›, f
+  clear hs
+  induction s using Finset.induction with
+  | empty =>
+    exact ⟨R, _, _, inferInstance, inferInstance, inferInstance, Algebra.ofId R S, by simp⟩
+  | insert a s has IH =>
+    obtain ⟨S', _, _, _, _, _, f, hsf⟩ := IH
+    have ha := Algebra.IsIntegral.isIntegral (R := R) a
+    have := ((minpoly.monic ha).map (algebraMap R S')).finite_adjoinRoot
+    have := ((minpoly.monic ha).map (algebraMap R S')).free_adjoinRoot
+    algebraize [f.toRingHom]
+    refine ⟨AdjoinRoot ((minpoly R a).map (algebraMap R S')), inferInstance, inferInstance,
+      .trans S' _, .trans (S := S'), .trans _ S' _,
+      (AdjoinRoot.liftAlgHom _ (Algebra.ofId _ _) a
+        (by simp [← Polynomial.aeval_def])).restrictScalars R, ?_⟩
+    simp only [Finset.coe_insert, AlgHom.coe_range, AlgHom.coe_restrictScalars',
+      Set.insert_subset_iff, Set.mem_range]
+    exact ⟨⟨.root _, by simp⟩, hsf.trans fun y ⟨x, hx⟩ => ⟨.of _ x, by simpa⟩⟩
 
 中文:
 引理 模.有限.存在_free_surjective
@@ -53,7 +75,29 @@ lemma Module.Finite.exists_free_surjective
   obtain ⟨s, hs⟩ : (⊤ : Submodule R S).FG := Module.finite_def.mp inferInstance
   suffices h : exists (S' : Type u) (_ : CommRing S') (_ : Algebra R S') (_ : Module.Finite R S')
       (_ : Module.Free R S') (_ : Algebra.FinitePresentation R S')
-      (f : S' ->ₐ[R] S), (s : Set S) sub
+      (f : S' ->ₐ[R] S), (s : Set S) subseteq AlgHom.range f by
+    obtain ⟨S', _, _, _, _, _, f, hsf⟩ := h
+    have hf : Function.Surjective f := by
+      have := (Submodule.span_le (p := LinearMap.range f.toLinearMap)).mpr hsf
+      rwa [hs, top_le_iff, LinearMap.range_eq_top] at this
+    use S', ‹_›, ‹_›, ‹_›, ‹_›, ‹_›, f
+  clear hs
+  induction s using Finset.induction with
+  | empty =>
+    exact ⟨R, _, _, inferInstance, inferInstance, inferInstance, Algebra.ofId R S, by simp⟩
+  | insert a s has IH =>
+    obtain ⟨S', _, _, _, _, _, f, hsf⟩ := IH
+    have ha := Algebra.IsIntegral.isIntegral (R := R) a
+    have := ((minpoly.monic ha).map (algebraMap R S')).finite_adjoinRoot
+    have := ((minpoly.monic ha).map (algebraMap R S')).free_adjoinRoot
+    algebraize [f.toRingHom]
+    refine ⟨AdjoinRoot ((minpoly R a).map (algebraMap R S')), inferInstance, inferInstance,
+      .trans S' _, .trans (S := S'), .trans _ S' _,
+      (AdjoinRoot.liftAlgHom _ (Algebra.ofId _ _) a
+        (by simp [← Polynomial.aeval_def])).restrictScalars R, ?_⟩
+    simp only [Finset.coe_insert, AlgHom.coe_range, AlgHom.coe_restrictScalars',
+      Set.insert_subset_iff, Set.mem_range]
+    exact ⟨⟨.root _, by simp⟩, hsf.trans fun y ⟨x, hx⟩ => ⟨.of _ x, by simpa⟩⟩
 
 Depends on / 依赖: AlgHom, AlgHom.range, Algebra, Algebra.FinitePresentation, CommRing, Finite, FinitePresentation, Function, Function.Surjective, LinearMap, LinearMap.range, LinearMap.range_eq_top, Module, Module.Finite, Module.Free, Module.finite_def.mp, Submodule, Submodule.span_le, Surjective, classical
 -/
@@ -131,7 +175,10 @@ lemma Module.FinitePresentation.of_finite_of_finitePresentation
   have : IsScalarTower R R' S := .of_algebraMap_eq' f.comp_algebraMap.symm
   have : Module.FinitePresentation R R' :=
     Module.finitePresentation_of_projective R R'
-  have : Module.Fin
+  have : Module.FinitePresentation R' S :=
+    Module.finitePresentation_of_surjective (Algebra.linearMap R' S) hf
+      (Algebra.FinitePresentation.ker_fG_of_surjective f hf)
+  exact .trans R S R'
 
 中文:
 引理 模.有限呈现.of_finite_of_finitePresentation
@@ -141,7 +188,10 @@ lemma Module.FinitePresentation.of_finite_of_finitePresentation
   have : IsScalarTower R R' S := .of_algebraMap_eq' f.comp_algebraMap.symm
   have : Module.FinitePresentation R R' :=
     Module.finitePresentation_of_projective R R'
-  have : Module.Fin
+  have : Module.FinitePresentation R' S :=
+    Module.finitePresentation_of_surjective (Algebra.linearMap R' S) hf
+      (Algebra.FinitePresentation.ker_fG_of_surjective f hf)
+  exact .trans R S R'
 
 Depends on / 依赖: Algebra, Algebra.FinitePresentation.ker_fG_of_surjective, Algebra.linearMap, Finite, FinitePresentation, IsScalarTower, Module, Module.Finite.exists_free_surjective, Module.FinitePresentation, Module.finitePresentation_of_projective, Module.finitePresentation_of_surjective, comp_algebraMap, exists_free_surjective, f.comp_algebraMap.symm, f.toRingHom.toAlgebra, finitePresentation_of_projective, finitePresentation_of_surjective, ker_fG_of_surjective, linearMap, of_algebraMap_eq
 -/

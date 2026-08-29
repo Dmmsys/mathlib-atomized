@@ -145,7 +145,8 @@ theorem tensorial_derivMetricTensorAux₁
   add hσ hσ' := by
     ext X₀
     simp [mvfderiv_fun_add (hσ.inner_bundle hτ) (hσ'.inner_bundle hτ),
-      cov.isCovariantDerivativeOn.add hσ h
+      cov.isCovariantDerivativeOn.add hσ hσ', inner_add_left]
+    abel
 
 中文:
 定理 tensorial_derivMetricTensorAux₁
@@ -158,7 +159,8 @@ theorem tensorial_derivMetricTensorAux₁
   add hσ hσ' := by
     ext X₀
     simp [mvfderiv_fun_add (hσ.inner_bundle hτ) (hσ'.inner_bundle hτ),
-      cov.isCovariantDerivativeOn.add hσ h
+      cov.isCovariantDerivativeOn.add hσ hσ', inner_add_left]
+    abel
 
 Depends on / 依赖: cov.isCovariantDerivativeOn.add, cov.isCovariantDerivativeOn.leibniz, inner_add_left, inner_bundle, inner_smul_left, isCovariantDerivativeOn, leibniz, mvfderiv_fun_add, mvfderiv_fun_mul
 -/
@@ -189,7 +191,8 @@ theorem tensorial_derivMetricTensorAux₂
   add hτ hτ' := by
     ext X₀
     simp [mvfderiv_fun_add (hσ.inner_bundle hτ) (hσ.inner_bundle hτ'),
-      cov.isCovariantDerivativeOn.add hτ
+      cov.isCovariantDerivativeOn.add hτ hτ', inner_add_right]
+    abel
 
 中文:
 定理 tensorial_derivMetricTensorAux₂
@@ -202,7 +205,8 @@ theorem tensorial_derivMetricTensorAux₂
   add hτ hτ' := by
     ext X₀
     simp [mvfderiv_fun_add (hσ.inner_bundle hτ) (hσ.inner_bundle hτ'),
-      cov.isCovariantDerivativeOn.add hτ
+      cov.isCovariantDerivativeOn.add hτ hτ', inner_add_right]
+    abel
 
 Depends on / 依赖: cov.isCovariantDerivativeOn.add, cov.isCovariantDerivativeOn.leibniz, inner_add_right, inner_bundle, inner_smul_right, isCovariantDerivativeOn, leibniz, mvfderiv_fun_add, mvfderiv_fun_mul
 -/

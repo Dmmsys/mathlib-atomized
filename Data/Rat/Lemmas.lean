@@ -36,7 +36,7 @@ theorem num_dvd
 refine Int.natAbs_dvd.1 Int.dvd_natAbs.1 Int.natCast_dvd_natCast.2
     c.dvd_of_dvd_mul_right ?_
   have := congr_arg Int.natAbs e
-  simp only [Int.natAbs_mul, Int.natAbs_natCast] at this;
+  simp only [Int.natAbs_mul, Int.natAbs_natCast] at this; simp [this]
 
 中文:
 定理 num_dvd
@@ -48,7 +48,7 @@ refine Int.natAbs_dvd.1 Int.dvd_natAbs.1 Int.natCast_dvd_natCast.2
 refine Int.natAbs_dvd.1 Int.dvd_natAbs.1 Int.natCast_dvd_natCast.2
     c.dvd_of_dvd_mul_right ?_
   have := congr_arg Int.natAbs e
-  simp only [Int.natAbs_mul, Int.natAbs_natCast] at this;
+  simp only [Int.natAbs_mul, Int.natAbs_natCast] at this; simp [this]
 
 Depends on / 依赖: Int.dvd_natAbs, Int.natAbs, Int.natAbs_dvd, Int.natAbs_mul, Int.natAbs_natCast, Int.natCast_dvd_natCast, Rat.mk_eq_divInt, c.dvd_of_dvd_mul_right, congr_arg, divInt_eq_divInt_iff, dvd_natAbs, dvd_of_dvd_mul_right, mk_eq_divInt, mod_cast, natAbs, natAbs_dvd, natAbs_mul, natAbs_natCast, natCast_dvd_natCast
 -/
@@ -72,7 +72,7 @@ theorem den_dvd
   rcases e : a /. b with ⟨n, d, h, c⟩
   rw [mk_eq_divInt]; rw [divInt_eq_divInt_iff b0 (ne_of_gt (Int.natCast_pos.2 (Nat.pos_of_ne_zero h)))] at e
 refine Int.dvd_natAbs.1 Int.natCast_dvd_natCast.2 c.symm.dvd_of_dvd_mul_left ?_
-  rw [← Int.natAbs_mul]; rw [← Int.
+  rw [← Int.natAbs_mul]; rw [← Int.natCast_dvd_natCast]; rw [Int.dvd_natAbs]; rw [← e]; simp
 
 中文:
 定理 den_dvd
@@ -83,7 +83,7 @@ refine Int.dvd_natAbs.1 Int.natCast_dvd_natCast.2 c.symm.dvd_of_dvd_mul_left ?_
   rcases e : a /. b with ⟨n, d, h, c⟩
   rw [mk_eq_divInt]; rw [divInt_eq_divInt_iff b0 (ne_of_gt (Int.natCast_pos.2 (Nat.pos_of_ne_zero h)))] at e
 refine Int.dvd_natAbs.1 Int.natCast_dvd_natCast.2 c.symm.dvd_of_dvd_mul_left ?_
-  rw [← Int.natAbs_mul]; rw [← Int.
+  rw [← Int.natAbs_mul]; rw [← Int.natCast_dvd_natCast]; rw [Int.dvd_natAbs]; rw [← e]; simp
 
 Depends on / 依赖: Int.dvd_natAbs, Int.natAbs_mul, Int.natCast_dvd_natCast, Int.natCast_pos, Nat.pos_of_ne_zero, c.symm.dvd_of_dvd_mul_left, divInt_eq_divInt_iff, dvd_natAbs, dvd_of_dvd_mul_left, mk_eq_divInt, natAbs_mul, natCast_dvd_natCast, natCast_pos, ne_of_gt, pos_of_ne_zero
 -/
@@ -110,7 +110,11 @@ theorem num_den_mk
   have hqdn : q.num ∣ n := by
     rw [qdf]
     exact Rat.num_dvd _ hd
-  refine ⟨n / q.
+  refine ⟨n / q.num, ?_, ?_⟩
+  · rw [Int.ediv_mul_cancel hqdn]
+  · refine Int.eq_mul_div_of_mul_eq_mul_of_dvd_left ?_ hqdn this
+    rw [qdf]
+    exact Rat.num_ne_zero.2 ((divInt_ne_zero hd).mpr hn)
 
 中文:
 定理 num_den_mk
@@ -125,7 +129,11 @@ theorem num_den_mk
   have hqdn : q.num ∣ n := by
     rw [qdf]
     exact Rat.num_dvd _ hd
-  refine ⟨n / q.
+  refine ⟨n / q.num, ?_, ?_⟩
+  · rw [Int.ediv_mul_cancel hqdn]
+  · refine Int.eq_mul_div_of_mul_eq_mul_of_dvd_left ?_ hqdn this
+    rw [qdf]
+    exact Rat.num_ne_zero.2 ((divInt_ne_zero hd).mpr hn)
 
 Depends on / 依赖: Int.ediv_mul_cancel, Int.eq_mul_div_of_mul_eq_mul_of_dvd_left, Int.natCast_ne_zero.mpr, Rat.den_nz, Rat.num_dvd, Rat.num_ne_zero, den_nz, divInt_eq_divInt_iff, divInt_ne_zero, ediv_mul_cancel, eq_mul_div_of_mul_eq_mul_of_dvd_left, eq_or_ne, natCast_ne_zero, num_divInt_den, num_dvd, num_ne_zero, q.den, q.num
 -/
@@ -158,7 +166,10 @@ theorem add_den_dvd_lcm
     (Nat.gcd_pos_of_pos_right _ (by simp [Nat.pos_iff_ne_zero])), ← Nat.gcd_mul_lcm,
     mul_dvd_mul_iff_right (Nat.lcm_ne_zero (by simp) (by simp)), Nat.dvd_gcd_iff]
   refine ⟨?_, dvd_mul_right _ _⟩
-  rw [← In
+  rw [← Int.natCast_dvd_natCast]; rw [Int.dvd_natAbs]
+  apply Int.dvd_add
+    <;> apply dvd_mul_of_dvd_right <;> rw [Int.natCast_dvd_natCast]
+    <;> [exact Nat.gcd_dvd_right _ _; exact Nat.gcd_dvd_left _ _]
 
 中文:
 定理 add_den_dvd_lcm
@@ -169,7 +180,10 @@ theorem add_den_dvd_lcm
     (Nat.gcd_pos_of_pos_right _ (by simp [Nat.pos_iff_ne_zero])), ← Nat.gcd_mul_lcm,
     mul_dvd_mul_iff_right (Nat.lcm_ne_zero (by simp) (by simp)), Nat.dvd_gcd_iff]
   refine ⟨?_, dvd_mul_right _ _⟩
-  rw [← In
+  rw [← Int.natCast_dvd_natCast]; rw [Int.dvd_natAbs]
+  apply Int.dvd_add
+    <;> apply dvd_mul_of_dvd_right <;> rw [Int.natCast_dvd_natCast]
+    <;> [exact Nat.gcd_dvd_right _ _; exact Nat.gcd_dvd_left _ _]
 
 Depends on / 依赖: Int.dvd_add, Int.dvd_natAbs, Int.natCast_dvd_natCast, Nat.div_dvd_iff_dvd_mul, Nat.dvd_gcd_iff, Nat.gcd_dvd_left, Nat.gcd_dvd_right, Nat.gcd_mul_lcm, Nat.gcd_pos_of_pos_right, Nat.lcm_ne_zero, Nat.pos_iff_ne_zero, add_def, div_dvd_iff_dvd_mul, dvd_add, dvd_gcd_iff, dvd_mul_of_dvd_right, dvd_mul_right, dvd_natAbs, gcd_dvd_left, gcd_dvd_right
 -/
@@ -742,7 +756,7 @@ theorem isSquare_iff
     refine ⟨nr / dr, ?_⟩
     rw [div_mul_div_comm]; rw [← Int.cast_mul]; rw [← Nat.cast_mul]; rw [← hnr]; rw [← hdr]; rw [num_div_den]
 
-@[n
+@[norm_cast, simp]
 
 中文:
 定理 isSquare_iff
@@ -757,7 +771,7 @@ theorem isSquare_iff
     refine ⟨nr / dr, ?_⟩
     rw [div_mul_div_comm]; rw [← Int.cast_mul]; rw [← Nat.cast_mul]; rw [← hnr]; rw [← hdr]; rw [num_div_den]
 
-@[n
+@[norm_cast, simp]
 
 Depends on / 依赖: Int.cast_mul, IsSquare, IsSquare.mul_self, Nat.cast_mul, Rat.mul_self_num, and_self, cast_mul, div_mul_div_comm, mul_self, mul_self_den, mul_self_num, num_div_den
 -/
@@ -900,7 +914,13 @@ theorem mul_num_den'
   have hs : (q.den * r.den : Int) != 0 := Int.natCast_ne_zero_iff_pos.mpr (Nat.mul_pos q.pos r.pos)
   obtain ⟨c, ⟨c_mul_num, c_mul_den⟩⟩ :=
     exists_eq_mul_div_num_and_eq_mul_div_den (q.num * r.num) hs
-  rw [c_mul_num]; rw [mul_assoc]; rw [mul_c
+  rw [c_mul_num]; rw [mul_assoc]; rw [mul_comm]
+  nth_rw 1 [c_mul_den]
+  rw [Int.mul_assoc]; rw [Int.mul_assoc]; rw [mul_eq_mul_left_iff]; rw [or_iff_not_imp_right]
+  intro
+  have h : _ = s := divInt_mul_divInt q.num r.num
+  rw [num_divInt_den]; rw [num_divInt_den] at h
+  rw [h]; rw [mul_comm]; rw [← Rat.eq_iff_mul_eq_mul]; rw [← divInt_eq_div]
 
 中文:
 定理 mul_num_den'
@@ -910,7 +930,13 @@ theorem mul_num_den'
   have hs : (q.den * r.den : Int) != 0 := Int.natCast_ne_zero_iff_pos.mpr (Nat.mul_pos q.pos r.pos)
   obtain ⟨c, ⟨c_mul_num, c_mul_den⟩⟩ :=
     exists_eq_mul_div_num_and_eq_mul_div_den (q.num * r.num) hs
-  rw [c_mul_num]; rw [mul_assoc]; rw [mul_c
+  rw [c_mul_num]; rw [mul_assoc]; rw [mul_comm]
+  nth_rw 1 [c_mul_den]
+  rw [Int.mul_assoc]; rw [Int.mul_assoc]; rw [mul_eq_mul_left_iff]; rw [or_iff_not_imp_right]
+  intro
+  have h : _ = s := divInt_mul_divInt q.num r.num
+  rw [num_divInt_den]; rw [num_divInt_den] at h
+  rw [h]; rw [mul_comm]; rw [← Rat.eq_iff_mul_eq_mul]; rw [← divInt_eq_div]
 
 Depends on / 依赖: Int.mul_assoc, Int.natCast_ne_zero_iff_pos.mpr, Nat.mul_pos, c_mul_den, c_mul_num, divInt_mul_divInt, exists_eq_mul_div_num_and_eq_mul_div_den, mul_assoc, mul_comm, mul_eq_mul_left_iff, mul_pos, natCast_ne_zero_iff_pos, nth_rw, num_divInt_den, or_iff_not_imp_right, q.den, q.num, q.pos, r.den, r.num
 -/
@@ -939,7 +965,18 @@ theorem add_num_den'
   have hs : (q.den * r.den : Int) != 0 := Int.natCast_ne_zero_iff_pos.mpr (Nat.mul_pos q.pos r.pos)
   obtain ⟨c, ⟨c_mul_num, c_mul_den⟩⟩ :=
     exists_eq_mul_div_num_and_eq_mul_div_den (q.num * r.den + r.num * q.den) hs
-  rw 
+  rw [c_mul_num]; rw [mul_assoc]; rw [mul_comm]
+  nth_rw 1 [c_mul_den]
+  repeat rw [Int.mul_assoc]
+  apply mul_eq_mul_left_iff.2
+  rw [or_iff_not_imp_right]
+  intro
+  have h : _ = s := divInt_add_divInt q.num r.num (mod_cast q.den_ne_zero) (mod_cast r.den_ne_zero)
+  rw [num_divInt_den]; rw [num_divInt_den] at h
+  rw [h]
+  rw [mul_comm]
+  apply Rat.eq_iff_mul_eq_mul.mp
+  rw [← divInt_eq_div]
 
 中文:
 定理 add_num_den'
@@ -949,7 +986,18 @@ theorem add_num_den'
   have hs : (q.den * r.den : Int) != 0 := Int.natCast_ne_zero_iff_pos.mpr (Nat.mul_pos q.pos r.pos)
   obtain ⟨c, ⟨c_mul_num, c_mul_den⟩⟩ :=
     exists_eq_mul_div_num_and_eq_mul_div_den (q.num * r.den + r.num * q.den) hs
-  rw 
+  rw [c_mul_num]; rw [mul_assoc]; rw [mul_comm]
+  nth_rw 1 [c_mul_den]
+  repeat rw [Int.mul_assoc]
+  apply mul_eq_mul_left_iff.2
+  rw [or_iff_not_imp_right]
+  intro
+  have h : _ = s := divInt_add_divInt q.num r.num (mod_cast q.den_ne_zero) (mod_cast r.den_ne_zero)
+  rw [num_divInt_den]; rw [num_divInt_den] at h
+  rw [h]
+  rw [mul_comm]
+  apply Rat.eq_iff_mul_eq_mul.mp
+  rw [← divInt_eq_div]
 
 Depends on / 依赖: Int.mul_assoc, Int.natCast_ne_zero_iff_pos.mpr, Nat.mul_pos, c_mul_den, c_mul_num, divInt, divInt_add_divInt, exists_eq_mul_div_num_and_eq_mul_div_den, mod_cast, mul_assoc, mul_comm, mul_eq_mul_left_iff, mul_pos, natCast_ne_zero_iff_pos, nth_rw, or_iff_not_imp_right, q.de, q.den, q.num, q.pos
 -/

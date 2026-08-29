@@ -106,7 +106,15 @@ theorem toTensorAlgebra_gMul
     LinearMap.compl₂_apply]; rw [← LinearMap.comp_apply]
   refine LinearMap.congr_fun (LinearMap.congr_fun ?_ a) b
   clear! a b
-  e
+  ext (a b)
+  simp only [LinearMap.compMultilinearMap_apply, LinearMap.compr₂_apply, ← gMul_def,
+    TensorProduct.mk_apply, LinearEquiv.coe_coe, tprod_mul_tprod, toTensorAlgebra_tprod,
+    TensorAlgebra.tprod_apply, LinearMap.comp_apply, LinearMap.compl₂_apply]
+  refine Eq.trans ?_ List.prod_append
+  congr
+  rw [List.ofFn_comp' _ (TensorAlgebra.ι R)]; rw [List.ofFn_comp' _ (TensorAlgebra.ι R)]; rw [List.ofFn_comp' _ (TensorAlgebra.ι R)]; rw [← List.map_append]; rw [List.ofFn_fin_append]
+
+@[simp]
 
 中文:
 定理 toTensorAlgebra_gMul
@@ -117,7 +125,15 @@ theorem toTensorAlgebra_gMul
     LinearMap.compl₂_apply]; rw [← LinearMap.comp_apply]
   refine LinearMap.congr_fun (LinearMap.congr_fun ?_ a) b
   clear! a b
-  e
+  ext (a b)
+  simp only [LinearMap.compMultilinearMap_apply, LinearMap.compr₂_apply, ← gMul_def,
+    TensorProduct.mk_apply, LinearEquiv.coe_coe, tprod_mul_tprod, toTensorAlgebra_tprod,
+    TensorAlgebra.tprod_apply, LinearMap.comp_apply, LinearMap.compl₂_apply]
+  refine Eq.trans ?_ List.prod_append
+  congr
+  rw [List.ofFn_comp' _ (TensorAlgebra.ι R)]; rw [List.ofFn_comp' _ (TensorAlgebra.ι R)]; rw [List.ofFn_comp' _ (TensorAlgebra.ι R)]; rw [← List.map_append]; rw [List.ofFn_fin_append]
+
+@[simp]
 -/
 theorem toTensorAlgebra_gMul {i j} (a : (⨂[R]^i) M) (b : (⨂[R]^j) M) :
     TensorPower.toTensorAlgebra (@GradedMonoid.GMul.mul _ (fun n => ⨂[R]^n M) _ _ _ _ a b) =
@@ -371,7 +387,12 @@ theorem _root_.TensorPower.list_prod_gradedMonoid_mk_single
   · intro n x₀ x ih
     rw [List.finRange_succ]; rw [List.map_cons]; rw [List.prod_cons]; rw [List.map_map]
     simp_rw [Function.comp_def, Fin.cons_zero, Fin.cons_succ]
-    rw [ih]; rw
+    rw [ih]; rw [GradedMonoid.mk_mul_mk]; rw [TensorPower.tprod_mul_tprod]
+    refine TensorPower.gradedMonoid_eq_of_cast (add_comm _ _) ?_
+    dsimp only [GradedMonoid.mk]
+    rw [TensorPower.cast_tprod]
+    simp_rw [Fin.append_left_eq_cons, Function.comp_def]
+    congr 1 with i
 
 中文:
 定理 _root_.TensorPower.list_prod_gradedMonoid_mk_single
@@ -383,7 +404,12 @@ theorem _root_.TensorPower.list_prod_gradedMonoid_mk_single
   · intro n x₀ x ih
     rw [List.finRange_succ]; rw [List.map_cons]; rw [List.prod_cons]; rw [List.map_map]
     simp_rw [Function.comp_def, Fin.cons_zero, Fin.cons_succ]
-    rw [ih]; rw
+    rw [ih]; rw [GradedMonoid.mk_mul_mk]; rw [TensorPower.tprod_mul_tprod]
+    refine TensorPower.gradedMonoid_eq_of_cast (add_comm _ _) ?_
+    dsimp only [GradedMonoid.mk]
+    rw [TensorPower.cast_tprod]
+    simp_rw [Fin.append_left_eq_cons, Function.comp_def]
+    congr 1 with i
 
 Depends on / 依赖: Fin.append_left_eq_cons, Fin.consInduction, Fin.cons_succ, Fin.cons_zero, Function, Function.c, Function.comp_def, GradedMonoid, GradedMonoid.mk, GradedMonoid.mk_mul_mk, List.finRange_succ, List.finRange_zero, List.map_cons, List.map_map, List.map_nil, List.prod_cons, List.prod_nil, TensorPower, TensorPower.cast_tprod, TensorPower.gradedMonoid_eq_of_cast
 -/

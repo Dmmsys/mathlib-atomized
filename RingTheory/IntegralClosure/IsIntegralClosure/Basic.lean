@@ -107,7 +107,7 @@ theorem IsIntegral.inv_mem_adjoin
   have : FiniteDimensional R (R[x]) := .of_fg int.fg_adjoin_singleton
   obtain ⟨⟨y, hy⟩, h1⟩ := FiniteDimensional.exists_mul_eq_one R
     (K := R[x]) (x := ⟨x, subset_adjoin rfl⟩) (mt Subtype.ext_iff.mp h0)
-  rwa [← 
+  rwa [← mul_left_cancel₀ h0 ((Subtype.ext_iff.mp h1).trans (mul_inv_cancel₀ h0).symm)]
 
 中文:
 定理 是整.inv_mem_adjoin
@@ -119,7 +119,7 @@ theorem IsIntegral.inv_mem_adjoin
   have : FiniteDimensional R (R[x]) := .of_fg int.fg_adjoin_singleton
   obtain ⟨⟨y, hy⟩, h1⟩ := FiniteDimensional.exists_mul_eq_one R
     (K := R[x]) (x := ⟨x, subset_adjoin rfl⟩) (mt Subtype.ext_iff.mp h0)
-  rwa [← 
+  rwa [← mul_left_cancel₀ h0 ((Subtype.ext_iff.mp h1).trans (mul_inv_cancel₀ h0).symm)]
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.exists_mul_eq_one, Subalgebra, Subalgebra.zero_mem, Subtype, Subtype.ext_iff.mp, eq_or_ne, exists_mul_eq_one, ext_iff, fg_adjoin_singleton, int.fg_adjoin_singleton, inv_zero, of_fg, subset_adjoin, zero_mem
 -/
@@ -1028,7 +1028,16 @@ theorem RingHom.isIntegralElem_leadingCoeff_mul
       rw [h'']; rw [natDegree_zero] at h'
       exact Nat.not_succ_le_zero 0 h'
     use monic_integralNormalization this
-    rw [integralNormalization_eval₂_leadingCoeff_mul h' f x]; rw [h]; rw [mu
+    rw [integralNormalization_eval₂_leadingCoeff_mul h' f x]; rw [h]; rw [mul_zero]
+  · by_cases hp : p.map f = 0
+    · apply_fun fun q => coeff q p.natDegree at hp
+      rw [coeff_map]; rw [coeff_zero]; rw [coeff_natDegree] at hp
+      rw [hp]; rw [zero_mul]
+      exact f.isIntegralElem_zero
+    · rw [Nat.one_le_iff_ne_zero, Classical.not_not] at h'
+      rw [eq_C_of_natDegree_eq_zero h']; rw [eval₂_C] at h
+      suffices p.map f = 0 by exact (hp this).elim
+      rw [eq_C_of_natDegree_eq_zero h']; rw [map_C]; rw [h]; rw [C_eq_zero]
 
 中文:
 定理 环态射.is整数egralElem_leadingCoeff_mul
@@ -1040,7 +1049,16 @@ theorem RingHom.isIntegralElem_leadingCoeff_mul
       rw [h'']; rw [natDegree_zero] at h'
       exact Nat.not_succ_le_zero 0 h'
     use monic_integralNormalization this
-    rw [integralNormalization_eval₂_leadingCoeff_mul h' f x]; rw [h]; rw [mu
+    rw [integralNormalization_eval₂_leadingCoeff_mul h' f x]; rw [h]; rw [mul_zero]
+  · by_cases hp : p.map f = 0
+    · apply_fun fun q => coeff q p.natDegree at hp
+      rw [coeff_map]; rw [coeff_zero]; rw [coeff_natDegree] at hp
+      rw [hp]; rw [zero_mul]
+      exact f.isIntegralElem_zero
+    · rw [Nat.one_le_iff_ne_zero, Classical.not_not] at h'
+      rw [eq_C_of_natDegree_eq_zero h']; rw [eval₂_C] at h
+      suffices p.map f = 0 by exact (hp this).elim
+      rw [eq_C_of_natDegree_eq_zero h']; rw [map_C]; rw [h]; rw [C_eq_zero]
 
 Depends on / 依赖: Nat.not_succ_le_zero, Nat.one_le_iff_ne_zero, apply_fun, coeff_map, coeff_natDegree, coeff_zero, f.isIntegralElem_zero, integralNormalization, isIntegralElem_zero, monic_integralNormalization, mul_zero, natDegree, natDegree_zero, not_succ_le_zero, one_le_iff_ne_zero, p.map, p.natDegree, zero_mul
 -/
@@ -1137,7 +1155,12 @@ lemma Polynomial.Monic.quotient_isIntegral
     · intro _
       obtain ⟨g', hg⟩ := Ideal.Quotient.mkₐ_surjective S I g
       have : g = (Polynomial.aeval ((Ideal.Quotient.mkₐ S I) X)) g' := by
-  
+        nth_rw 1 [← hg, aeval_eq_sum_range' (lt_add_one _),
+          as_sum_range_C_mul_X_pow g', map_sum]
+        simp only [Polynomial.C_mul', ← map_pow, map_smul]
+      exact this ▸ (aeval_mem_adjoin_singleton S ((Ideal.Quotient.mk I) Polynomial.X))
+  exact fun a => (eq_top ▸ adjoin_le_integralClosure <| mon.quotient_isIntegralElem h)
+    Algebra.mem_top
 
 中文:
 引理 多项式.Monic.quotient_is整数egral
@@ -1150,7 +1173,12 @@ lemma Polynomial.Monic.quotient_isIntegral
     · intro _
       obtain ⟨g', hg⟩ := Ideal.Quotient.mkₐ_surjective S I g
       have : g = (Polynomial.aeval ((Ideal.Quotient.mkₐ S I) X)) g' := by
-  
+        nth_rw 1 [← hg, aeval_eq_sum_range' (lt_add_one _),
+          as_sum_range_C_mul_X_pow g', map_sum]
+        simp only [Polynomial.C_mul', ← map_pow, map_smul]
+      exact this ▸ (aeval_mem_adjoin_singleton S ((Ideal.Quotient.mk I) Polynomial.X))
+  exact fun a => (eq_top ▸ adjoin_le_integralClosure <| mon.quotient_isIntegralElem h)
+    Algebra.mem_top
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.mem_top, C_mul, Ideal.Quotient.mk, Polynomial, Polynomial.C_mul, Polynomial.X, Polynomial.aeval, Quotient, adjoin, aeval_eq_sum_range, aeval_mem_adjoin_singleton, as_sum_range_C_mul_X_pow, eq_top, implies_true, lt_add_one, map_pow, map_smul, map_sum
 -/
@@ -1501,7 +1529,9 @@ definition lift
   map_zero' := by simp only [map_zero, mk'_zero]
   map_add' x y := by simp_rw [← mk'_add, map_add]
   map_mul' x y := by simp_rw [← mk'_mul, map_mul]
-  commute
+  commutes' x := by simp_rw [← IsScalarTower.algebraMap_apply, mk'_algebraMap]
+
+@[simp]
 
 中文:
 定义 lift
@@ -1512,7 +1542,9 @@ definition lift
   map_zero' := by simp only [map_zero, mk'_zero]
   map_add' x y := by simp_rw [← mk'_add, map_add]
   map_mul' x y := by simp_rw [← mk'_mul, map_mul]
-  commute
+  commutes' x := by simp_rw [← IsScalarTower.algebraMap_apply, mk'_algebraMap]
+
+@[simp]
 
 Depends on / 依赖: IsIntegral, IsIntegral.algebraMap, algebraMap
 -/
@@ -1640,7 +1672,19 @@ theorem isIntegral_trans
 have : Module.Finite R S := ⟨(Subalgebra.toSubmodule S).fg_top.mpr
     fg_adjoin_of_finite p.coeffs.finite_toSet fun a _ => Algebra.IsIntegral.isIntegral a⟩
   let p' : S[X] := p.toSubring S.toSubring subset_adjoin
-  have hSx 
+  have hSx : IsIntegral S x := ⟨p', (p.monic_toSubring _ _).mpr pmonic, by
+    rw [IsScalarTower.algebraMap_eq S A B]; rw [← eval₂_map]
+    convert! hp; apply p.map_toSubring S.toSubring⟩
+  let Sx := Subalgebra.toSubmodule (S[x])
+  let MSx : Module S Sx := SMulMemClass.toModule _ -- the next line times out without this
+  have : Module.Finite S Sx := .of_fg hSx.fg_adjoin_singleton
+  refine .of_mem_of_fg ((S[x]).restrictScalars R) ?_ _
+    ((Subalgebra.mem_restrictScalars R).mpr <| subset_adjoin rfl)
+  rw [← Module.Finite.iff_fg]
+  let : SMul S Sx := { MSx with } -- need this even though MSx is there
+  have : IsScalarTower R S Sx :=
+    Submodule.isScalarTower Sx -- Lean looks for `Module A Sx` without this
+  exact Module.Finite.trans S Sx
 
 中文:
 定理 is整数egral_trans
@@ -1651,7 +1695,19 @@ have : Module.Finite R S := ⟨(Subalgebra.toSubmodule S).fg_top.mpr
 have : Module.Finite R S := ⟨(Subalgebra.toSubmodule S).fg_top.mpr
     fg_adjoin_of_finite p.coeffs.finite_toSet fun a _ => Algebra.IsIntegral.isIntegral a⟩
   let p' : S[X] := p.toSubring S.toSubring subset_adjoin
-  have hSx 
+  have hSx : IsIntegral S x := ⟨p', (p.monic_toSubring _ _).mpr pmonic, by
+    rw [IsScalarTower.algebraMap_eq S A B]; rw [← eval₂_map]
+    convert! hp; apply p.map_toSubring S.toSubring⟩
+  let Sx := Subalgebra.toSubmodule (S[x])
+  let MSx : Module S Sx := SMulMemClass.toModule _ -- the next line times out without this
+  have : Module.Finite S Sx := .of_fg hSx.fg_adjoin_singleton
+  refine .of_mem_of_fg ((S[x]).restrictScalars R) ?_ _
+    ((Subalgebra.mem_restrictScalars R).mpr <| subset_adjoin rfl)
+  rw [← Module.Finite.iff_fg]
+  let : SMul S Sx := { MSx with } -- need this even though MSx is there
+  have : IsScalarTower R S Sx :=
+    Submodule.isScalarTower Sx -- Lean looks for `Module A Sx` without this
+  exact Module.Finite.trans S Sx
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, Finite, IsIntegral, IsScalarTower, IsScalarTower.algebraMap_eq, Module, Module.Finite, S.toSubring, Subalgebra, Subalgebra.toSubmodule, adjoin, algebraMap_eq, coeffs, convert, fg_adjoin_of_finite, fg_top, fg_top.mpr, finite_toSet, isIntegral
 -/
@@ -1702,7 +1758,7 @@ theorem RingHom.IsIntegral.trans
   have : Algebra.IsIntegral R S := ⟨hf⟩
   have : Algebra.IsIntegral S T := ⟨hg⟩
   have : Algebra.IsIntegral R T := Algebra.IsIntegral.trans S
-  Algebr
+  Algebra.IsIntegral.isIntegral
 
 中文:
 定理 环态射.是整.trans
@@ -1711,7 +1767,7 @@ theorem RingHom.IsIntegral.trans
   have : Algebra.IsIntegral R S := ⟨hf⟩
   have : Algebra.IsIntegral S T := ⟨hg⟩
   have : Algebra.IsIntegral R T := Algebra.IsIntegral.trans S
-  Algebr
+  Algebra.IsIntegral.isIntegral
 -/
 protected theorem RingHom.IsIntegral.trans
     (hf : f.IsIntegral) (hg : g.IsIntegral) : (g.comp f).IsIntegral :=
@@ -1780,7 +1836,8 @@ theorem IsIntegral.tower_bot
 nonrec theorem RingHom.IsIntegral.tower_bot (hg : Function.Injective g)
     (hfg : (g.comp f).IsIntegral) : f.IsIntegral :=
   letI := f.toAlgebra; letI := g.toAlgebra; letI := (g.comp f).toAlgebra
-  haveI : IsScalarTower R S T := IsScala
+  haveI : IsScalarTower R S T := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  fun x => IsIntegral.tower_bot hg (hfg (g x))
 
 中文:
 定理 是整.tower_bot
@@ -1790,7 +1847,8 @@ nonrec theorem RingHom.IsIntegral.tower_bot (hg : Function.Injective g)
 nonrec theorem RingHom.IsIntegral.tower_bot (hg : Function.Injective g)
     (hfg : (g.comp f).IsIntegral) : f.IsIntegral :=
   letI := f.toAlgebra; letI := g.toAlgebra; letI := (g.comp f).toAlgebra
-  haveI : IsScalarTower R S T := IsScala
+  haveI : IsScalarTower R S T := IsScalarTower.of_algebraMap_eq fun _ => rfl
+  fun x => IsIntegral.tower_bot hg (hfg (g x))
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, isIntegral_algHom_iff, toAlgHom
 -/
@@ -1993,7 +2051,8 @@ theorem isIntegral_quotientMap_iff
   have : (Ideal.quotientMap I f le_rfl).comp g = (Ideal.Quotient.mk I).comp f :=
     Ideal.quotientMap_comp_mk le_rfl
   refine ⟨fun h => ?_, fun h => RingHom.IsIntegral.tower_top g _ (this ▸ h)⟩
-  refine this ▸ Ring
+  refine this ▸ RingHom.IsIntegral.trans g (Ideal.quotientMap I f le_rfl) ?_ h
+  exact g.isIntegral_of_surjective Ideal.Quotient.mk_surjective
 
 中文:
 定理 is整数egral_quotientMap_iff
@@ -2004,7 +2063,8 @@ theorem isIntegral_quotientMap_iff
   have : (Ideal.quotientMap I f le_rfl).comp g = (Ideal.Quotient.mk I).comp f :=
     Ideal.quotientMap_comp_mk le_rfl
   refine ⟨fun h => ?_, fun h => RingHom.IsIntegral.tower_top g _ (this ▸ h)⟩
-  refine this ▸ Ring
+  refine this ▸ RingHom.IsIntegral.trans g (Ideal.quotientMap I f le_rfl) ?_ h
+  exact g.isIntegral_of_surjective Ideal.Quotient.mk_surjective
 
 Depends on / 依赖: I.comap, Ideal.Quotient.mk, Quotient
 -/
@@ -2050,7 +2110,12 @@ theorem RingHom.IsIntegral.isLocalHom
     -- Let `p : R[X]` be monic with root `(f a)⁻¹`,
     obtain ⟨p, p_monic, hp⟩ := hf (ha.unit⁻¹ : _)
     -- and `q` be `p` with coefficients reversed (so `q(a) = q'(a) * a + 1`).
-    -- We have `q(a) = 0`
+    -- We have `q(a) = 0`, so `-q'(a)` is the inverse of `a`.
+    refine .of_mul_eq_one (-p.reverse.divX.eval a) ?_
+    nth_rewrite 1 [mul_neg, ← eval_X (x := a), ← eval_mul, ← p_monic, ← coeff_zero_reverse,
+      ← add_eq_zero_iff_neg_eq, ← eval_C (a := p.reverse.coeff 0), ← eval_add, X_mul_divX_add,
+      ← (injective_iff_map_eq_zero' _).mp inj, ← eval₂_hom]
+    rwa [← eval₂_reverse_eq_zero_iff] at hp
 
 中文:
 定理 环态射.是整.isLocalHom
@@ -2060,7 +2125,12 @@ theorem RingHom.IsIntegral.isLocalHom
     -- Let `p : R[X]` be monic with root `(f a)⁻¹`,
     obtain ⟨p, p_monic, hp⟩ := hf (ha.unit⁻¹ : _)
     -- and `q` be `p` with coefficients reversed (so `q(a) = q'(a) * a + 1`).
-    -- We have `q(a) = 0`
+    -- We have `q(a) = 0`, so `-q'(a)` is the inverse of `a`.
+    refine .of_mul_eq_one (-p.reverse.divX.eval a) ?_
+    nth_rewrite 1 [mul_neg, ← eval_X (x := a), ← eval_mul, ← p_monic, ← coeff_zero_reverse,
+      ← add_eq_zero_iff_neg_eq, ← eval_C (a := p.reverse.coeff 0), ← eval_add, X_mul_divX_add,
+      ← (injective_iff_map_eq_zero' _).mp inj, ← eval₂_hom]
+    rwa [← eval₂_reverse_eq_zero_iff] at hp
 -/
 theorem RingHom.IsIntegral.isLocalHom {f : R ->+* S} (hf : f.IsIntegral)
     (inj : Function.Injective f) : IsLocalHom f where

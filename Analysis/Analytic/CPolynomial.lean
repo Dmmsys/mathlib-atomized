@@ -545,7 +545,7 @@ theorem hasFiniteFPowerSeriesOnBall_uncurry_of_multilinear
   · intro y _
     rw [Finset.sum_eq_single_of_mem _ (Finset.self_mem_range_succ _)]; rw [zero_add]
     · rw [toFormalMultilinearSeriesOfMultilinear, dif_pos rfl]; rfl
-    ·
+    · intro m _ ne; rw [toFormalMultilinearSeriesOfMultilinear, dif_neg ne.symm]; rfl
 
 中文:
 定理 hasFiniteFPowerSeriesOnBall_uncurry_of_multilinear
@@ -557,7 +557,7 @@ theorem hasFiniteFPowerSeriesOnBall_uncurry_of_multilinear
   · intro y _
     rw [Finset.sum_eq_single_of_mem _ (Finset.self_mem_range_succ _)]; rw [zero_add]
     · rw [toFormalMultilinearSeriesOfMultilinear, dif_pos rfl]; rfl
-    ·
+    · intro m _ ne; rw [toFormalMultilinearSeriesOfMultilinear, dif_neg ne.symm]; rfl
 -/
 protected theorem hasFiniteFPowerSeriesOnBall_uncurry_of_multilinear :
     HasFiniteFPowerSeriesOnBall (fun (p : G × (Π i, Em i)) => f p.1 p.2)

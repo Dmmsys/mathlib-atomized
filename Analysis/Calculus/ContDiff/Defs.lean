@@ -138,7 +138,7 @@ definition ContDiffWithinAt
   | ω => exists u in 𝓝[insert x s] x, exists p : E -> FormalMultilinearSeries 𝕜 E F,
       HasFTaylorSeriesUpToOn ω f p u ∧ forall i, AnalyticOn 𝕜 (fun x => p x i) u
   | (n : Nat∞) => forall m : Nat, m <= n -> exists u in 𝓝[insert x s] x,
-      exists p : E -> FormalMultilinearSeries 𝕜 
+      exists p : E -> FormalMultilinearSeries 𝕜 E F, HasFTaylorSeriesUpToOn m f p u
 
 中文:
 定义 ContDiffWithinAt
@@ -147,7 +147,7 @@ definition ContDiffWithinAt
   | ω => exists u in 𝓝[insert x s] x, exists p : E -> FormalMultilinearSeries 𝕜 E F,
       HasFTaylorSeriesUpToOn ω f p u ∧ forall i, AnalyticOn 𝕜 (fun x => p x i) u
   | (n : Nat∞) => forall m : Nat, m <= n -> exists u in 𝓝[insert x s] x,
-      exists p : E -> FormalMultilinearSeries 𝕜 
+      exists p : E -> FormalMultilinearSeries 𝕜 E F, HasFTaylorSeriesUpToOn m f p u
 
 Depends on / 依赖: AnalyticOn, FormalMultilinearSeries, HasFTaylorSeriesUpToOn, insert
 -/
@@ -476,7 +476,9 @@ theorem ContDiffWithinAt.congr_of_eventuallyEq
       fun i => (H' i).mono (sep_subset _ _)⟩
   | (n : Nat∞) =>
     intro m hm
-    let ⟨u
+    let ⟨u, hu, p, H⟩ := h m hm
+    exact ⟨{ x in u | f₁ x = f x }, Filter.inter_mem hu (mem_nhdsWithin_insert.2 ⟨hx, h₁⟩), p,
+      (H.mono (sep_subset _ _)).congr fun _ => And.right⟩
 
 中文:
 定理 ContDiffWithinAt.congr_of_eventuallyEq
@@ -490,7 +492,9 @@ theorem ContDiffWithinAt.congr_of_eventuallyEq
       fun i => (H' i).mono (sep_subset _ _)⟩
   | (n : Nat∞) =>
     intro m hm
-    let ⟨u
+    let ⟨u, hu, p, H⟩ := h m hm
+    exact ⟨{ x in u | f₁ x = f x }, Filter.inter_mem hu (mem_nhdsWithin_insert.2 ⟨hx, h₁⟩), p,
+      (H.mono (sep_subset _ _)).congr fun _ => And.right⟩
 
 Depends on / 依赖: And.right, Filter, Filter.inter_mem, H.mono, inter_mem, mem_nhdsWithin_insert, sep_subset
 -/
@@ -938,7 +942,7 @@ theorem contDiffWithinAt_insert
   apply h.mono_of_mem_nhdsWithin
   simp [nhdsWithin_insert_of_ne hx, self_mem_nhdsWithin]
 
-alias ⟨ContDiffWithinAt.of_insert, ContDiffWithinAt.insert'⟩ := contD
+alias ⟨ContDiffWithinAt.of_insert, ContDiffWithinAt.insert'⟩ := contDiffWithinAt_insert
 
 中文:
 定理 contDiffWithinAt_insert
@@ -950,7 +954,7 @@ alias ⟨ContDiffWithinAt.of_insert, ContDiffWithinAt.insert'⟩ := contD
   apply h.mono_of_mem_nhdsWithin
   simp [nhdsWithin_insert_of_ne hx, self_mem_nhdsWithin]
 
-alias ⟨ContDiffWithinAt.of_insert, ContDiffWithinAt.insert'⟩ := contD
+alias ⟨ContDiffWithinAt.of_insert, ContDiffWithinAt.insert'⟩ := contDiffWithinAt_insert
 
 Depends on / 依赖: contDiffWithinAt_insert_self, eq_or_ne, h.mono, h.mono_of_mem_nhdsWithin, mono_of_mem_nhdsWithin, nhdsWithin_insert_of_ne, self_mem_nhdsWithin, subset_insert
 -/
@@ -1023,7 +1027,7 @@ theorem ContDiffWithinAt.differentiableWithinAt'
   rcases mem_nhdsWithin.1 hu with ⟨t, t_open, xt, tu⟩
   rw [inter_comm] at tu
 exact (differentiableWithinAt_inter (IsOpen.mem_nhds t_open xt)).1
-    ((H.mono tu).differentiableOn one_ne_zero
+    ((H.mono tu).differentiableOn one_ne_zero) x ⟨mem_insert x s, xt⟩
 
 中文:
 定理 ContDiffWithinAt.differentiableWithinAt'
@@ -1034,7 +1038,7 @@ exact (differentiableWithinAt_inter (IsOpen.mem_nhds t_open xt)).1
   rcases mem_nhdsWithin.1 hu with ⟨t, t_open, xt, tu⟩
   rw [inter_comm] at tu
 exact (differentiableWithinAt_inter (IsOpen.mem_nhds t_open xt)).1
-    ((H.mono tu).differentiableOn one_ne_zero
+    ((H.mono tu).differentiableOn one_ne_zero) x ⟨mem_insert x s, xt⟩
 
 Depends on / 依赖: ENat.one_le_iff_ne_zero_withTop.mpr, H.mono, IsOpen, IsOpen.mem_nhds, contDiffWithinAt_nat, differentiableOn, differentiableWithinAt_inter, h.of_le, inter_comm, mem_insert, mem_nhds, mem_nhdsWithin, of_le, one_le_iff_ne_zero_withTop, one_ne_zero, t_open
 -/
@@ -1079,7 +1083,62 @@ theorem contDiffWithinAt_succ_iff_hasFDerivWithinAt
     rcases (contDiffWithinAt_iff_of_ne_infty h'n).1 h with ⟨u, hu, p, Hp, H'p⟩
     refine ⟨u, hu, ?_, fun y => (continuousMultilinearCurryFin1 𝕜 E F) (p y 1),
         fun y hy => Hp.hasFDerivWithinAt (by simp) hy, ?_⟩
-    · ri
+    · rintro rfl
+      exact Hp.analyticOn (H'p rfl 0)
+    apply (contDiffWithinAt_iff_of_ne_infty hn).2
+    refine ⟨u, ?_, fun y : E => (p y).shift, ?_⟩
+    · convert! @self_mem_nhdsWithin _ _ x u
+      have : x in insert x s := by simp
+      exact insert_eq_of_mem (mem_of_mem_nhdsWithin this hu)
+    · rw [hasFTaylorSeriesUpToOn_succ_iff_right] at Hp
+      refine ⟨Hp.2.2, ?_⟩
+      rintro rfl i
+      change AnalyticOn 𝕜
+        (fun x => (continuousMultilinearCurryRightEquiv' 𝕜 i E F) (p x (i + 1))) u
+      apply (LinearIsometryEquiv.analyticOnNhd _ _).comp_analyticOn
+        ?_ (Set.mapsTo_univ _ _)
+      exact H'p rfl _
+  · rintro ⟨u, hu, hf, f', f'_eq_deriv, Hf'⟩
+    rw [contDiffWithinAt_iff_of_ne_infty h'n]
+    rcases (contDiffWithinAt_iff_of_ne_infty hn).1 Hf' with ⟨v, hv, p', Hp', p'_an⟩
+    refine ⟨v inter u, ?_, fun x => (p' x).unshift (f x), ?_, ?_⟩
+    · apply Filter.inter_mem _ hu
+      apply nhdsWithin_le_of_mem hu
+      exact nhdsWithin_mono _ (subset_insert x u) hv
+    · rw [hasFTaylorSeriesUpToOn_succ_iff_right]
+      refine ⟨fun y _ => rfl, fun y hy => ?_, ?_⟩
+      · change
+          HasFDerivWithinAt (fun z => (continuousMultilinearCurryFin0 𝕜 E F).symm (f z))
+            (FormalMultilinearSeries.unshift (p' y) (f y) 1).curryLeft (v inter u) y
+        rw [← Function.comp_def _ f]; rw [LinearIsometryEquiv.comp_hasFDerivWithinAt_iff']
+        convert! (f'_eq_deriv y hy.2).mono inter_subset_right
+        rw [← Hp'.zero_eq y hy.1]
+        ext z
+        change ((p' y 0) (init (@cons 0 (fun _ => E) z 0))) (@cons 0 (fun _ => E) z 0 (last 0)) =
+          ((p' y 0) 0) z
+        congr
+        norm_num [eq_iff_true_of_subsingleton]
+      · convert! (Hp'.mono inter_subset_left).congr fun x hx => Hp'.zero_eq x hx.1 using 1
+        · ext x y
+          change p' x 0 (init (@snoc 0 (fun _ : Fin 1 => E) 0 y)) y = p' x 0 0 y
+          rw [init_snoc]
+        · ext x k v y
+          change p' x k (init (@snoc k (fun _ : Fin k.succ => E) v y))
+            (@snoc k (fun _ : Fin k.succ => E) v y (last k)) = p' x k v y
+          rw [snoc_last]; rw [init_snoc]
+    · intro h i
+      simp only [WithTop.add_eq_top, WithTop.one_ne_top, or_false] at h
+      match i with
+      | 0 =>
+        simp only [FormalMultilinearSeries.unshift]
+        apply AnalyticOnNhd.comp_analyticOn _ ((hf h).mono inter_subset_right)
+          (Set.mapsTo_univ _ _)
+        exact LinearIsometryEquiv.analyticOnNhd _ _
+      | i + 1 =>
+        simp only [FormalMultilinearSeries.unshift, Nat.succ_eq_add_one]
+        apply AnalyticOnNhd.comp_analyticOn _ ((p'_an h i).mono inter_subset_left)
+          (Set.mapsTo_univ _ _)
+        exact LinearIsometryEquiv.analyticOnNhd _ _
 
 中文:
 定理 contDiffWithinAt_succ_iff_hasFDerivWithinAt
@@ -1091,7 +1150,62 @@ theorem contDiffWithinAt_succ_iff_hasFDerivWithinAt
     rcases (contDiffWithinAt_iff_of_ne_infty h'n).1 h with ⟨u, hu, p, Hp, H'p⟩
     refine ⟨u, hu, ?_, fun y => (continuousMultilinearCurryFin1 𝕜 E F) (p y 1),
         fun y hy => Hp.hasFDerivWithinAt (by simp) hy, ?_⟩
-    · ri
+    · rintro rfl
+      exact Hp.analyticOn (H'p rfl 0)
+    apply (contDiffWithinAt_iff_of_ne_infty hn).2
+    refine ⟨u, ?_, fun y : E => (p y).shift, ?_⟩
+    · convert! @self_mem_nhdsWithin _ _ x u
+      have : x in insert x s := by simp
+      exact insert_eq_of_mem (mem_of_mem_nhdsWithin this hu)
+    · rw [hasFTaylorSeriesUpToOn_succ_iff_right] at Hp
+      refine ⟨Hp.2.2, ?_⟩
+      rintro rfl i
+      change AnalyticOn 𝕜
+        (fun x => (continuousMultilinearCurryRightEquiv' 𝕜 i E F) (p x (i + 1))) u
+      apply (LinearIsometryEquiv.analyticOnNhd _ _).comp_analyticOn
+        ?_ (Set.mapsTo_univ _ _)
+      exact H'p rfl _
+  · rintro ⟨u, hu, hf, f', f'_eq_deriv, Hf'⟩
+    rw [contDiffWithinAt_iff_of_ne_infty h'n]
+    rcases (contDiffWithinAt_iff_of_ne_infty hn).1 Hf' with ⟨v, hv, p', Hp', p'_an⟩
+    refine ⟨v inter u, ?_, fun x => (p' x).unshift (f x), ?_, ?_⟩
+    · apply Filter.inter_mem _ hu
+      apply nhdsWithin_le_of_mem hu
+      exact nhdsWithin_mono _ (subset_insert x u) hv
+    · rw [hasFTaylorSeriesUpToOn_succ_iff_right]
+      refine ⟨fun y _ => rfl, fun y hy => ?_, ?_⟩
+      · change
+          HasFDerivWithinAt (fun z => (continuousMultilinearCurryFin0 𝕜 E F).symm (f z))
+            (FormalMultilinearSeries.unshift (p' y) (f y) 1).curryLeft (v inter u) y
+        rw [← Function.comp_def _ f]; rw [LinearIsometryEquiv.comp_hasFDerivWithinAt_iff']
+        convert! (f'_eq_deriv y hy.2).mono inter_subset_right
+        rw [← Hp'.zero_eq y hy.1]
+        ext z
+        change ((p' y 0) (init (@cons 0 (fun _ => E) z 0))) (@cons 0 (fun _ => E) z 0 (last 0)) =
+          ((p' y 0) 0) z
+        congr
+        norm_num [eq_iff_true_of_subsingleton]
+      · convert! (Hp'.mono inter_subset_left).congr fun x hx => Hp'.zero_eq x hx.1 using 1
+        · ext x y
+          change p' x 0 (init (@snoc 0 (fun _ : Fin 1 => E) 0 y)) y = p' x 0 0 y
+          rw [init_snoc]
+        · ext x k v y
+          change p' x k (init (@snoc k (fun _ : Fin k.succ => E) v y))
+            (@snoc k (fun _ : Fin k.succ => E) v y (last k)) = p' x k v y
+          rw [snoc_last]; rw [init_snoc]
+    · intro h i
+      simp only [WithTop.add_eq_top, WithTop.one_ne_top, or_false] at h
+      match i with
+      | 0 =>
+        simp only [FormalMultilinearSeries.unshift]
+        apply AnalyticOnNhd.comp_analyticOn _ ((hf h).mono inter_subset_right)
+          (Set.mapsTo_univ _ _)
+        exact LinearIsometryEquiv.analyticOnNhd _ _
+      | i + 1 =>
+        simp only [FormalMultilinearSeries.unshift, Nat.succ_eq_add_one]
+        apply AnalyticOnNhd.comp_analyticOn _ ((p'_an h i).mono inter_subset_left)
+          (Set.mapsTo_univ _ _)
+        exact LinearIsometryEquiv.analyticOnNhd _ _
 
 Depends on / 依赖: Hp.analyticOn, Hp.hasFDerivWithinAt, analyticOn, contDiffWithinAt_iff_of_ne_infty, continuousMultilinearCurryFin1, convert, hasFDerivWithinAt, insert, insert_eq_of_m, self_mem_nhdsWithin
 -/
@@ -1173,7 +1287,18 @@ theorem contDiffWithinAt_succ_iff_hasFDerivWithinAt'
   · obtain ⟨u, hu, f_an, f', huf', hf'⟩ := (contDiffWithinAt_succ_iff_hasFDerivWithinAt hn).mp hf
     obtain ⟨w, hw, hxw, hwu⟩ := mem_nhdsWithin.mp hu
     rw [inter_comm] at hwu
-    refine ⟨insert x s inter w, inter_mem_nhdsWithin _ (hw.mem_nhds hxw), inter_subset_left
+    refine ⟨insert x s inter w, inter_mem_nhdsWithin _ (hw.mem_nhds hxw), inter_subset_left, ?_, f',
+      fun y hy => ?_, ?_⟩
+    · intro h
+      apply (f_an h).mono hwu
+    · refine ((huf' y <| hwu hy).mono hwu).mono_of_mem_nhdsWithin ?_
+      grw [← subset_insert]
+      exact inter_mem_nhdsWithin _ (hw.mem_nhds hy.2)
+    · exact hf'.mono_of_mem_nhdsWithin (nhdsWithin_mono _ (subset_insert _ _) hu)
+  · rw [← contDiffWithinAt_insert, contDiffWithinAt_succ_iff_hasFDerivWithinAt hn,
+      insert_eq_of_mem (mem_insert _ _)]
+    rintro ⟨u, hu, hus, f_an, f', huf', hf'⟩
+    exact ⟨u, hu, f_an, f', fun y hy => (huf' y hy).insert'.mono hus, hf'.insert.mono hus⟩
 
 中文:
 定理 contDiffWithinAt_succ_iff_hasFDerivWithinAt'
@@ -1183,7 +1308,18 @@ theorem contDiffWithinAt_succ_iff_hasFDerivWithinAt'
   · obtain ⟨u, hu, f_an, f', huf', hf'⟩ := (contDiffWithinAt_succ_iff_hasFDerivWithinAt hn).mp hf
     obtain ⟨w, hw, hxw, hwu⟩ := mem_nhdsWithin.mp hu
     rw [inter_comm] at hwu
-    refine ⟨insert x s inter w, inter_mem_nhdsWithin _ (hw.mem_nhds hxw), inter_subset_left
+    refine ⟨insert x s inter w, inter_mem_nhdsWithin _ (hw.mem_nhds hxw), inter_subset_left, ?_, f',
+      fun y hy => ?_, ?_⟩
+    · intro h
+      apply (f_an h).mono hwu
+    · refine ((huf' y <| hwu hy).mono hwu).mono_of_mem_nhdsWithin ?_
+      grw [← subset_insert]
+      exact inter_mem_nhdsWithin _ (hw.mem_nhds hy.2)
+    · exact hf'.mono_of_mem_nhdsWithin (nhdsWithin_mono _ (subset_insert _ _) hu)
+  · rw [← contDiffWithinAt_insert, contDiffWithinAt_succ_iff_hasFDerivWithinAt hn,
+      insert_eq_of_mem (mem_insert _ _)]
+    rintro ⟨u, hu, hus, f_an, f', huf', hf'⟩
+    exact ⟨u, hu, f_an, f', fun y hy => (huf' y hy).insert'.mono hus, hf'.insert.mono hus⟩
 
 Depends on / 依赖: contDiffWithinAt_succ_iff_hasFDerivWithinAt, f_an, hw.mem_nhds, insert, inter_comm, inter_mem_nhdsWithin, inter_subset_left, mem_nhds, mem_nhdsWithin, mem_nhdsWithin.mp, mono_, mono_of_mem_nhdsWithin, subset_insert
 -/
@@ -1329,7 +1465,16 @@ theorem ContDiffWithinAt.contDiffOn'
     refine ⟨u, huo, hxu, ?_⟩
     suffices ContDiffOn 𝕜 ω f (insert x s inter u) from this.of_le le_top
     intro y hy
-    refine ⟨insert x s in
+    refine ⟨insert x s inter u, ?_, p, hp.mono hut, fun i => (h'p i).mono hut⟩
+    simp only [insert_eq_of_mem, hy, self_mem_nhdsWithin]
+  · match m with
+    | ω => simp [hn] at hm
+    | ∞ => exact (hn (h' rfl)).elim
+    | (m : Nat) =>
+      rcases contDiffWithinAt_nat.1 (h.of_le hm) with ⟨t, ht, p, hp⟩
+      rcases mem_nhdsWithin.1 ht with ⟨u, huo, hxu, hut⟩
+      rw [inter_comm] at hut
+      exact ⟨u, huo, hxu, (hp.mono hut).contDiffOn⟩
 
 中文:
 定理 ContDiffWithinAt.contDiffOn'
@@ -1342,7 +1487,16 @@ theorem ContDiffWithinAt.contDiffOn'
     refine ⟨u, huo, hxu, ?_⟩
     suffices ContDiffOn 𝕜 ω f (insert x s inter u) from this.of_le le_top
     intro y hy
-    refine ⟨insert x s in
+    refine ⟨insert x s inter u, ?_, p, hp.mono hut, fun i => (h'p i).mono hut⟩
+    simp only [insert_eq_of_mem, hy, self_mem_nhdsWithin]
+  · match m with
+    | ω => simp [hn] at hm
+    | ∞ => exact (hn (h' rfl)).elim
+    | (m : Nat) =>
+      rcases contDiffWithinAt_nat.1 (h.of_le hm) with ⟨t, ht, p, hp⟩
+      rcases mem_nhdsWithin.1 ht with ⟨u, huo, hxu, hut⟩
+      rw [inter_comm] at hut
+      exact ⟨u, huo, hxu, (hp.mono hut).contDiffOn⟩
 
 Depends on / 依赖: ContDiffOn, contDiffWithinAt_nat, eq_or_ne, h.of, hp.mono, insert, insert_eq_of_mem, inter_comm, le_top, mem_nhdsWithin, of_le, self_mem_nhdsWithin, this.of_le
 -/
@@ -1424,7 +1578,7 @@ theorem contDiffWithinAt_iff_contDiffOn_nhds
     exact ⟨u, hu, h'u.2⟩
   · rcases h with ⟨u, u_mem, hu⟩
     have : x in u := mem_of_mem_nhdsWithin (mem_insert x s) u_mem
-    exact (hu x this).mono_of_mem_nhdsWithin (nhdsWithin_mono _ (subset_i
+    exact (hu x this).mono_of_mem_nhdsWithin (nhdsWithin_mono _ (subset_insert x s) u_mem)
 
 中文:
 定理 contDiffWithinAt_iff_contDiffOn_nhds
@@ -1435,7 +1589,7 @@ theorem contDiffWithinAt_iff_contDiffOn_nhds
     exact ⟨u, hu, h'u.2⟩
   · rcases h with ⟨u, u_mem, hu⟩
     have : x in u := mem_of_mem_nhdsWithin (mem_insert x s) u_mem
-    exact (hu x this).mono_of_mem_nhdsWithin (nhdsWithin_mono _ (subset_i
+    exact (hu x this).mono_of_mem_nhdsWithin (nhdsWithin_mono _ (subset_insert x s) u_mem)
 
 Depends on / 依赖: contDiffOn, h.contDiffOn, le_rfl, mem_insert, mem_of_mem_nhdsWithin, mono_of_mem_nhdsWithin, nhdsWithin_mono, subset_insert, u_mem
 -/
@@ -1459,7 +1613,7 @@ theorem ContDiffWithinAt.eventually
   have : forallᶠ y : E in 𝓝[insert x s] x, u in 𝓝[insert x s] y ∧ y in u :=
     (eventually_eventually_nhdsWithin.2 hu).and hu
   refine this.mono fun y hy => (hd y hy.2).mono_of_mem_nhdsWithin ?_
-  exact nhdsWithin_mono y (subset_ins
+  exact nhdsWithin_mono y (subset_insert _ _) hy.1
 
 中文:
 定理 ContDiffWithinAt.eventually
@@ -1469,7 +1623,7 @@ theorem ContDiffWithinAt.eventually
   have : forallᶠ y : E in 𝓝[insert x s] x, u in 𝓝[insert x s] y ∧ y in u :=
     (eventually_eventually_nhdsWithin.2 hu).and hu
   refine this.mono fun y hy => (hd y hy.2).mono_of_mem_nhdsWithin ?_
-  exact nhdsWithin_mono y (subset_ins
+  exact nhdsWithin_mono y (subset_insert _ _) hy.1
 -/
 protected theorem ContDiffWithinAt.eventually (h : ContDiffWithinAt 𝕜 n f s x) (hn : n != ∞) :
     forallᶠ y in 𝓝[insert x s] x, ContDiffWithinAt 𝕜 n f s y := by
@@ -1781,7 +1935,15 @@ theorem contDiffOn_succ_iff_hasFDerivWithinAt
       ⟨u, hu, f_an, f', hf', Hf'⟩
     rcases Hf'.contDiffOn le_rfl (by simp [hn]) with ⟨v, vu, v'u, hv⟩
     rw [insert_eq_of_mem hx] at hu ⊢
-    have xu : x in u := mem_of_mem_nhdsWithin hx 
+    have xu : x in u := mem_of_mem_nhdsWithin hx hu
+    rw [insert_eq_of_mem xu] at vu v'u
+    exact ⟨v, nhdsWithin_le_of_mem hu vu, fun h => (f_an h).mono v'u, f',
+      fun y hy => (hf' y (v'u hy)).mono v'u, hv⟩
+  · intro h x hx
+    rw [contDiffWithinAt_succ_iff_hasFDerivWithinAt hn]
+    rcases h x hx with ⟨u, u_nhbd, f_an, f', hu, hf'⟩
+    have : x in u := mem_of_mem_nhdsWithin (mem_insert _ _) u_nhbd
+    exact ⟨u, u_nhbd, f_an, f', hu, hf' x this⟩
 
 中文:
 定理 contDiffOn_succ_iff_hasFDerivWithinAt
@@ -1793,7 +1955,15 @@ theorem contDiffOn_succ_iff_hasFDerivWithinAt
       ⟨u, hu, f_an, f', hf', Hf'⟩
     rcases Hf'.contDiffOn le_rfl (by simp [hn]) with ⟨v, vu, v'u, hv⟩
     rw [insert_eq_of_mem hx] at hu ⊢
-    have xu : x in u := mem_of_mem_nhdsWithin hx 
+    have xu : x in u := mem_of_mem_nhdsWithin hx hu
+    rw [insert_eq_of_mem xu] at vu v'u
+    exact ⟨v, nhdsWithin_le_of_mem hu vu, fun h => (f_an h).mono v'u, f',
+      fun y hy => (hf' y (v'u hy)).mono v'u, hv⟩
+  · intro h x hx
+    rw [contDiffWithinAt_succ_iff_hasFDerivWithinAt hn]
+    rcases h x hx with ⟨u, u_nhbd, f_an, f', hu, hf'⟩
+    have : x in u := mem_of_mem_nhdsWithin (mem_insert _ _) u_nhbd
+    exact ⟨u, u_nhbd, f_an, f', hu, hf' x this⟩
 
 Depends on / 依赖: contDiffOn, contDiffWithinAt_succ_iff_hasFDerivWithinAt, f_an, insert_eq_of_mem, le_rfl, mem_of_mem_nhdsWithin, nhdsWithin_le_of_mem
 -/
@@ -1833,7 +2003,7 @@ theorem contDiffOn_zero
   rw [this]
   refine ⟨insert x s, self_mem_nhdsWithin, ftaylorSeriesWithin 𝕜 f s, ?_⟩
   rw [hasFTaylorSeriesUpToOn_zero_iff]
-  exact ⟨by rwa [insert_eq_of_mem hx], fun x _
+  exact ⟨by rwa [insert_eq_of_mem hx], fun x _ => by simp [ftaylorSeriesWithin]⟩
 
 中文:
 定理 contDiffOn_zero
@@ -1844,7 +2014,7 @@ theorem contDiffOn_zero
   rw [this]
   refine ⟨insert x s, self_mem_nhdsWithin, ftaylorSeriesWithin 𝕜 f s, ?_⟩
   rw [hasFTaylorSeriesUpToOn_zero_iff]
-  exact ⟨by rwa [insert_eq_of_mem hx], fun x _
+  exact ⟨by rwa [insert_eq_of_mem hx], fun x _ => by simp [ftaylorSeriesWithin]⟩
 
 Depends on / 依赖: H.continuousOn, bot_le, continuousOn, ftaylorSeriesWithin, hasFTaylorSeriesUpToOn_zero_iff, insert, insert_eq_of_mem, le_antisymm, mod_cast, self_mem_nhdsWithin
 -/
@@ -1872,7 +2042,8 @@ theorem contDiffWithinAt_zero
       exact hp.1.mono inter_subset_right
   · rintro ⟨u, H, hu⟩
     rw [← contDiffWithinAt_inter' H]
-    have h' :
+    have h' : x in s inter u := ⟨hx, mem_of_mem_nhdsWithin hx H⟩
+    exact (contDiffOn_zero.mpr hu).contDiffWithinAt h'
 
 中文:
 定理 contDiffWithinAt_zero
@@ -1887,7 +2058,8 @@ theorem contDiffWithinAt_zero
       exact hp.1.mono inter_subset_right
   · rintro ⟨u, H, hu⟩
     rw [← contDiffWithinAt_inter' H]
-    have h' :
+    have h' : x in s inter u := ⟨hx, mem_of_mem_nhdsWithin hx H⟩
+    exact (contDiffOn_zero.mpr hu).contDiffWithinAt h'
 
 Depends on / 依赖: Nat.cast_zero, cast_zero, contDiffOn_zero, contDiffOn_zero.mpr, contDiffWithinAt, contDiffWithinAt_inter, hasFTaylorSeriesUpToOn_zero_iff, inter_subset_right, le_rfl, mem_of_mem_nhdsWithin
 -/
@@ -1918,7 +2090,38 @@ theorem ContDiffOn.ftaylorSeriesWithin
   · intro m hm x hx
     have : (m + 1 : Nat) <= n := ENat.add_one_natCast_le_withTop_of_lt hm
     rcases (h x hx).of_le this _ le_rfl with ⟨u, hu, p, Hp⟩
- 
+    rw [insert_eq_of_mem hx] at hu
+    rcases mem_nhdsWithin.1 hu with ⟨o, o_open, xo, ho⟩
+    rw [inter_comm] at ho
+    have : p x m.succ = ftaylorSeriesWithin 𝕜 f s x m.succ := by
+      change p x m.succ = iteratedFDerivWithin 𝕜 m.succ f s x
+      rw [← iteratedFDerivWithin_inter_open o_open xo]
+      exact (Hp.mono ho).eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl (hs.inter o_open) ⟨hx, xo⟩
+    rw [← this]; rw [← hasFDerivWithinAt_inter (IsOpen.mem_nhds o_open xo)]
+    have A : forall y in s inter o, p y m = ftaylorSeriesWithin 𝕜 f s y m := by
+      rintro y ⟨hy, yo⟩
+      change p y m = iteratedFDerivWithin 𝕜 m f s y
+      rw [← iteratedFDerivWithin_inter_open o_open yo]
+      exact
+        (Hp.mono ho).eq_iteratedFDerivWithin_of_uniqueDiffOn (mod_cast Nat.le_succ m)
+          (hs.inter o_open) ⟨hy, yo⟩
+    exact
+      ((Hp.mono ho).fderivWithin m (mod_cast lt_add_one m) x ⟨hx, xo⟩).congr
+        (fun y hy => (A y hy).symm) (A x ⟨hx, xo⟩).symm
+  · intro m hm
+    apply continuousOn_of_locally_continuousOn
+    intro x hx
+    rcases (h x hx).of_le hm _ le_rfl with ⟨u, hu, p, Hp⟩
+    rcases mem_nhdsWithin.1 hu with ⟨o, o_open, xo, ho⟩
+    rw [insert_eq_of_mem hx] at ho
+    rw [inter_comm] at ho
+    refine ⟨o, o_open, xo, ?_⟩
+    have A : forall y in s inter o, p y m = ftaylorSeriesWithin 𝕜 f s y m := by
+      rintro y ⟨hy, yo⟩
+      change p y m = iteratedFDerivWithin 𝕜 m f s y
+      rw [← iteratedFDerivWithin_inter_open o_open yo]
+      exact (Hp.mono ho).eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl (hs.inter o_open) ⟨hy, yo⟩
+    exact ((Hp.mono ho).cont m le_rfl).congr fun y hy => (A y hy).symm
 
 中文:
 定理 ContDiffOn.ftaylorSeriesWithin
@@ -1930,7 +2133,38 @@ theorem ContDiffOn.ftaylorSeriesWithin
   · intro m hm x hx
     have : (m + 1 : Nat) <= n := ENat.add_one_natCast_le_withTop_of_lt hm
     rcases (h x hx).of_le this _ le_rfl with ⟨u, hu, p, Hp⟩
- 
+    rw [insert_eq_of_mem hx] at hu
+    rcases mem_nhdsWithin.1 hu with ⟨o, o_open, xo, ho⟩
+    rw [inter_comm] at ho
+    have : p x m.succ = ftaylorSeriesWithin 𝕜 f s x m.succ := by
+      change p x m.succ = iteratedFDerivWithin 𝕜 m.succ f s x
+      rw [← iteratedFDerivWithin_inter_open o_open xo]
+      exact (Hp.mono ho).eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl (hs.inter o_open) ⟨hx, xo⟩
+    rw [← this]; rw [← hasFDerivWithinAt_inter (IsOpen.mem_nhds o_open xo)]
+    have A : forall y in s inter o, p y m = ftaylorSeriesWithin 𝕜 f s y m := by
+      rintro y ⟨hy, yo⟩
+      change p y m = iteratedFDerivWithin 𝕜 m f s y
+      rw [← iteratedFDerivWithin_inter_open o_open yo]
+      exact
+        (Hp.mono ho).eq_iteratedFDerivWithin_of_uniqueDiffOn (mod_cast Nat.le_succ m)
+          (hs.inter o_open) ⟨hy, yo⟩
+    exact
+      ((Hp.mono ho).fderivWithin m (mod_cast lt_add_one m) x ⟨hx, xo⟩).congr
+        (fun y hy => (A y hy).symm) (A x ⟨hx, xo⟩).symm
+  · intro m hm
+    apply continuousOn_of_locally_continuousOn
+    intro x hx
+    rcases (h x hx).of_le hm _ le_rfl with ⟨u, hu, p, Hp⟩
+    rcases mem_nhdsWithin.1 hu with ⟨o, o_open, xo, ho⟩
+    rw [insert_eq_of_mem hx] at ho
+    rw [inter_comm] at ho
+    refine ⟨o, o_open, xo, ?_⟩
+    have A : forall y in s inter o, p y m = ftaylorSeriesWithin 𝕜 f s y m := by
+      rintro y ⟨hy, yo⟩
+      change p y m = iteratedFDerivWithin 𝕜 m f s y
+      rw [← iteratedFDerivWithin_inter_open o_open yo]
+      exact (Hp.mono ho).eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl (hs.inter o_open) ⟨hy, yo⟩
+    exact ((Hp.mono ho).cont m le_rfl).congr fun y hy => (A y hy).symm
 -/
 protected theorem ContDiffOn.ftaylorSeriesWithin
     (h : ContDiffOn 𝕜 n f s) (hs : UniqueDiffOn 𝕜 s) :
@@ -2008,7 +2242,8 @@ theorem ContDiffWithinAt.eventually_hasFTaylorSeriesUpToOn
 exact inter_mem_nhdsWithin _ hUo.mem_nhds haU
   refine this.mono fun t ht => .mono ?_ ht
   rw [insert_eq_of_mem ha] at hfU
-  refine
+  refine (hfU.ftaylorSeriesWithin (hs.inter hUo)).congr_series fun k hk x hx => ?_
+  exact iteratedFDerivWithin_inter_open hUo hx.2
 
 中文:
 定理 ContDiffWithinAt.eventually_hasFTaylorSeriesUpToOn
@@ -2020,7 +2255,8 @@ exact inter_mem_nhdsWithin _ hUo.mem_nhds haU
 exact inter_mem_nhdsWithin _ hUo.mem_nhds haU
   refine this.mono fun t ht => .mono ?_ ht
   rw [insert_eq_of_mem ha] at hfU
-  refine
+  refine (hfU.ftaylorSeriesWithin (hs.inter hUo)).congr_series fun k hk x hx => ?_
+  exact iteratedFDerivWithin_inter_open hUo hx.2
 
 Depends on / 依赖: congr_series, contDiffOn, eventually_smallSets_subset, ftaylorSeriesWithin, h.contDiffOn, hUo.mem_nhds, hfU.ftaylorSeriesWithin, hs.inter, insert_eq_of_mem, inter_mem_nhdsWithin, iteratedFDerivWithin_inter_open, mem_nhds, smallSets, subseteq, this.mono
 -/
@@ -2143,7 +2379,9 @@ theorem contDiffOn_of_continuousOn_differentiableOn
     simp only [ftaylorSeriesWithin, ContinuousMultilinearMap.curry0_apply,
       iteratedFDerivWithin_zero_apply]
   · intro k hk y hy
-    convert! (Hdiff k (lt
+    convert! (Hdiff k (lt_of_lt_of_le (mod_cast hk) (mod_cast hm)) y hy).hasFDerivWithinAt
+  · intro k hk
+    exact Hcont k (le_trans (mod_cast hk) (mod_cast hm))
 
 中文:
 定理 contDiffOn_of_continuousOn_differentiableOn
@@ -2157,7 +2395,9 @@ theorem contDiffOn_of_continuousOn_differentiableOn
     simp only [ftaylorSeriesWithin, ContinuousMultilinearMap.curry0_apply,
       iteratedFDerivWithin_zero_apply]
   · intro k hk y hy
-    convert! (Hdiff k (lt
+    convert! (Hdiff k (lt_of_lt_of_le (mod_cast hk) (mod_cast hm)) y hy).hasFDerivWithinAt
+  · intro k hk
+    exact Hcont k (le_trans (mod_cast hk) (mod_cast hm))
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.curry0_apply, convert, curry0_apply, ftaylorSeriesWithin, hasFDerivWithinAt, insert_eq_of_mem, iteratedFDerivWithin_zero_apply, le_trans, lt_of_lt_of_le, mod_cast, self_mem_nhdsWithin
 -/
@@ -2214,7 +2454,14 @@ theorem contDiffOn_of_analyticOn_iteratedFDerivWithin
     constructor
     · intro y _
       simp only [ftaylorSeriesWithin, ContinuousMultilinearMap.curry0_apply,
-        iterate
+        iteratedFDerivWithin_zero_apply]
+    · intro k _ y hy
+      exact ((h k).differentiableOn y hy).hasFDerivWithinAt
+    · intro k _
+      exact (h k).continuousOn
+  · intro i
+    rw [insert_eq_of_mem hx]
+    exact h i
 
 中文:
 定理 contDiffOn_of_analyticOn_iteratedFDerivWithin
@@ -2226,7 +2473,14 @@ theorem contDiffOn_of_analyticOn_iteratedFDerivWithin
     constructor
     · intro y _
       simp only [ftaylorSeriesWithin, ContinuousMultilinearMap.curry0_apply,
-        iterate
+        iteratedFDerivWithin_zero_apply]
+    · intro k _ y hy
+      exact ((h k).differentiableOn y hy).hasFDerivWithinAt
+    · intro k _
+      exact (h k).continuousOn
+  · intro i
+    rw [insert_eq_of_mem hx]
+    exact h i
 
 Depends on / 依赖: ContDiffOn, ContinuousMultilinearMap, ContinuousMultilinearMap.curry0_apply, continuousOn, curry0_apply, differentiableOn, ftaylorSeriesWithin, hasFDerivWithinAt, insert, insert_eq_of_mem, iteratedFDerivWithin_zero_apply, le_top, of_le, self_mem_nhdsWithin, this.of_le
 -/
@@ -2330,7 +2584,16 @@ theorem ContDiffWithinAt.differentiableWithinAt_iteratedFDerivWithin
     with ⟨u, uo, xu, hu⟩
   set t := insert x s inter u
   have A : t =ᶠ[𝓝[!=] x] s := by
-    simp only [set_eventuallyEq_iff_inf_principal, ← nhdsWithi
+    simp only [set_eventuallyEq_iff_inf_principal, ← nhdsWithin_inter']
+    rw [← inter_assoc]; rw [nhdsWithin_inter_of_mem']; rw [← sdiff_eq_compl_inter]; rw [insert_sdiff_of_mem]; rw [sdiff_eq_compl_inter]
+    exacts [rfl, mem_nhdsWithin_of_mem_nhds (uo.mem_nhds xu)]
+  have B : iteratedFDerivWithin 𝕜 m f s =ᶠ[𝓝 x] iteratedFDerivWithin 𝕜 m f t :=
+    iteratedFDerivWithin_eventually_congr_set' _ A.symm _
+  have C : DifferentiableWithinAt 𝕜 (iteratedFDerivWithin 𝕜 m f t) t x :=
+    hu.differentiableOn_iteratedFDerivWithin (Nat.cast_lt.2 m.lt_succ_self) (hs.inter uo) x
+      ⟨mem_insert _ _, xu⟩
+  rw [differentiableWithinAt_congr_set' _ A] at C
+  exact C.congr_of_eventuallyEq (B.filter_mono inf_le_left) B.self_of_nhds
 
 中文:
 定理 ContDiffWithinAt.differentiableWithinAt_iteratedFDerivWithin
@@ -2341,7 +2604,16 @@ theorem ContDiffWithinAt.differentiableWithinAt_iteratedFDerivWithin
     with ⟨u, uo, xu, hu⟩
   set t := insert x s inter u
   have A : t =ᶠ[𝓝[!=] x] s := by
-    simp only [set_eventuallyEq_iff_inf_principal, ← nhdsWithi
+    simp only [set_eventuallyEq_iff_inf_principal, ← nhdsWithin_inter']
+    rw [← inter_assoc]; rw [nhdsWithin_inter_of_mem']; rw [← sdiff_eq_compl_inter]; rw [insert_sdiff_of_mem]; rw [sdiff_eq_compl_inter]
+    exacts [rfl, mem_nhdsWithin_of_mem_nhds (uo.mem_nhds xu)]
+  have B : iteratedFDerivWithin 𝕜 m f s =ᶠ[𝓝 x] iteratedFDerivWithin 𝕜 m f t :=
+    iteratedFDerivWithin_eventually_congr_set' _ A.symm _
+  have C : DifferentiableWithinAt 𝕜 (iteratedFDerivWithin 𝕜 m f t) t x :=
+    hu.differentiableOn_iteratedFDerivWithin (Nat.cast_lt.2 m.lt_succ_self) (hs.inter uo) x
+      ⟨mem_insert _ _, xu⟩
+  rw [differentiableWithinAt_congr_set' _ A] at C
+  exact C.congr_of_eventuallyEq (B.filter_mono inf_le_left) B.self_of_nhds
 
 Depends on / 依赖: ENat.add_one_natCast_le_withTop_of_lt, Ne.symm, add_one_natCast_le_withTop_of_lt, contDiffOn, exacts, h.contDiffOn, insert, insert_sdiff_of_mem, inter_assoc, iterate, mem_nhds, mem_nhdsWithin_of_mem_nhds, ne_of_beq_false, nhdsWithin_inter, nhdsWithin_inter_of_mem, sdiff_eq_compl_inter, set_eventuallyEq_iff_inf_principal, uo.mem_nhds
 -/
@@ -2429,7 +2701,12 @@ theorem contDiffOn_succ_of_fderivWithin
     intro m x hx
     apply ContDiffWithinAt.of_le _ (show (m : Nat∞ω) <= m + 1 from le_self_add)
     rw [contDiffWithinAt_succ_iff_hasFDerivWithinAt (by simp)]; rw [insert_eq_of_mem hx]
-    exact ⟨s, self_mem_nhds
+    exact ⟨s, self_mem_nhdsWithin, (by simp), fderivWithin 𝕜 f s,
+      fun y hy => (hf y hy).hasFDerivWithinAt, (h x hx).of_le (mod_cast le_top)⟩
+  · intro x hx
+    rw [contDiffWithinAt_succ_iff_hasFDerivWithinAt hn]; rw [insert_eq_of_mem hx]
+    exact ⟨s, self_mem_nhdsWithin, h', fderivWithin 𝕜 f s,
+      fun y hy => (hf y hy).hasFDerivWithinAt, h x hx⟩
 
 中文:
 定理 contDiffOn_succ_of_fderivWithin
@@ -2440,7 +2717,12 @@ theorem contDiffOn_succ_of_fderivWithin
     intro m x hx
     apply ContDiffWithinAt.of_le _ (show (m : Nat∞ω) <= m + 1 from le_self_add)
     rw [contDiffWithinAt_succ_iff_hasFDerivWithinAt (by simp)]; rw [insert_eq_of_mem hx]
-    exact ⟨s, self_mem_nhds
+    exact ⟨s, self_mem_nhdsWithin, (by simp), fderivWithin 𝕜 f s,
+      fun y hy => (hf y hy).hasFDerivWithinAt, (h x hx).of_le (mod_cast le_top)⟩
+  · intro x hx
+    rw [contDiffWithinAt_succ_iff_hasFDerivWithinAt hn]; rw [insert_eq_of_mem hx]
+    exact ⟨s, self_mem_nhdsWithin, h', fderivWithin 𝕜 f s,
+      fun y hy => (hf y hy).hasFDerivWithinAt, h x hx⟩
 
 Depends on / 依赖: ContDiffWithinAt, ContDiffWithinAt.of_le, ENat.coe_top_add_one, coe_top_add_one, contDiffOn_infty, contDiffWithinAt_succ_iff_hasFDerivWithinAt, eq_or_ne, fderivWithin, hasFDerivWithinAt, insert_eq_of_mem, le_self_add, le_top, mod_cast, of_le, self_, self_mem_nhdsWithin
 -/
@@ -2495,7 +2777,23 @@ theorem contDiffOn_succ_iff_fderivWithin
   · rintro rfl
     exact H.analyticOn
   have A (m : Nat) (hm : m <= n) : ContDiffWithinAt 𝕜 m (fun y => fderivWithin 𝕜 f s y) s x := by
-    rcases (contDiff
+    rcases (contDiffWithinAt_succ_iff_hasFDerivWithinAt (n := m) (ne_of_beq_false rfl)).1
+      (H.of_le (by gcongr) x hx) with ⟨u, hu, -, f', hff', hf'⟩
+    rcases mem_nhdsWithin.1 hu with ⟨o, o_open, xo, ho⟩
+    rw [inter_comm]; rw [insert_eq_of_mem hx] at ho
+    have := hf'.mono ho
+    rw [contDiffWithinAt_inter' (mem_nhdsWithin_of_mem_nhds (IsOpen.mem_nhds o_open xo))] at this
+    apply this.congr_of_eventuallyEq_of_mem _ hx
+    have : o inter s in 𝓝[s] x := mem_nhdsWithin.2 ⟨o, o_open, xo, Subset.refl _⟩
+    rw [inter_comm] at this
+    refine Filter.eventuallyEq_of_mem this fun y hy => ?_
+    have A : fderivWithin 𝕜 f (s inter o) y = f' y :=
+      ((hff' y (ho hy)).mono ho).fderivWithin (hs.inter o_open y hy)
+    rwa [fderivWithin_inter (o_open.mem_nhds hy.2)] at A
+  match n with
+  | ω => exact (H.analyticOn.fderivWithin hs).contDiffOn hs (n := ω) x hx
+  | ∞ => exact contDiffWithinAt_infty.2 (fun m => A m (mod_cast le_top))
+  | (n : Nat) => exact A n le_rfl
 
 中文:
 定理 contDiffOn_succ_iff_fderivWithin
@@ -2506,7 +2804,23 @@ theorem contDiffOn_succ_iff_fderivWithin
   · rintro rfl
     exact H.analyticOn
   have A (m : Nat) (hm : m <= n) : ContDiffWithinAt 𝕜 m (fun y => fderivWithin 𝕜 f s y) s x := by
-    rcases (contDiff
+    rcases (contDiffWithinAt_succ_iff_hasFDerivWithinAt (n := m) (ne_of_beq_false rfl)).1
+      (H.of_le (by gcongr) x hx) with ⟨u, hu, -, f', hff', hf'⟩
+    rcases mem_nhdsWithin.1 hu with ⟨o, o_open, xo, ho⟩
+    rw [inter_comm]; rw [insert_eq_of_mem hx] at ho
+    have := hf'.mono ho
+    rw [contDiffWithinAt_inter' (mem_nhdsWithin_of_mem_nhds (IsOpen.mem_nhds o_open xo))] at this
+    apply this.congr_of_eventuallyEq_of_mem _ hx
+    have : o inter s in 𝓝[s] x := mem_nhdsWithin.2 ⟨o, o_open, xo, Subset.refl _⟩
+    rw [inter_comm] at this
+    refine Filter.eventuallyEq_of_mem this fun y hy => ?_
+    have A : fderivWithin 𝕜 f (s inter o) y = f' y :=
+      ((hff' y (ho hy)).mono ho).fderivWithin (hs.inter o_open y hy)
+    rwa [fderivWithin_inter (o_open.mem_nhds hy.2)] at A
+  match n with
+  | ω => exact (H.analyticOn.fderivWithin hs).contDiffOn hs (n := ω) x hx
+  | ∞ => exact contDiffWithinAt_infty.2 (fun m => A m (mod_cast le_top))
+  | (n : Nat) => exact A n le_rfl
 
 Depends on / 依赖: ContDiffWithinAt, H.analyticOn, H.differentiableOn, H.of_le, analyticOn, contDiffOn_succ_of_fderivWithin, contDiffWithinAt_succ_iff_hasFDerivWithinAt, differentiableOn, fderivWithin, insert_eq_of_me, inter_comm, mem_nhdsWithin, ne_of_beq_false, o_open, of_le
 -/
@@ -2549,7 +2863,7 @@ theorem contDiffOn_succ_iff_hasFDerivWithinAt_of_uniqueDiffOn
     fun x hx => (h.1 x hx).hasFDerivWithinAt⟩, fun ⟨f_an, h⟩ => ?_⟩
   rcases h with ⟨f', h1, h2⟩
   refine ⟨fun x hx => (h2 x hx).differentiableWithinAt, f_an, fun x hx => ?_⟩
-  exact (h1 x hx).congr_o
+  exact (h1 x hx).congr_of_mem (fun y hy => (h2 y hy).fderivWithin (hs y hy)) hx
 
 中文:
 定理 contDiffOn_succ_iff_hasFDerivWithinAt_of_uniqueDiffOn
@@ -2560,7 +2874,7 @@ theorem contDiffOn_succ_iff_hasFDerivWithinAt_of_uniqueDiffOn
     fun x hx => (h.1 x hx).hasFDerivWithinAt⟩, fun ⟨f_an, h⟩ => ?_⟩
   rcases h with ⟨f', h1, h2⟩
   refine ⟨fun x hx => (h2 x hx).differentiableWithinAt, f_an, fun x hx => ?_⟩
-  exact (h1 x hx).congr_o
+  exact (h1 x hx).congr_of_mem (fun y hy => (h2 y hy).fderivWithin (hs y hy)) hx
 
 Depends on / 依赖: congr_of_mem, contDiffOn_succ_iff_fderivWithin, differentiableWithinAt, f_an, fderivWithin, hasFDerivWithinAt
 -/
@@ -3150,7 +3464,14 @@ theorem contDiffAt_succ_iff_hasFDerivAt
   constructor
   · rintro ⟨u, H, -, f', h_fderiv, h_cont_diff⟩
     rcases mem_nhds_iff.mp H with ⟨t, htu, ht, hxt⟩
-    refine ⟨f', ⟨t, ?_⟩, h_cont_di
+    refine ⟨f', ⟨t, ?_⟩, h_cont_diff.contDiffAt H⟩
+    refine ⟨mem_nhds_iff.mpr ⟨t, Subset.rfl, ht, hxt⟩, ?_⟩
+    intro y hyt
+    refine (h_fderiv y (htu hyt)).hasFDerivAt ?_
+    exact mem_nhds_iff.mpr ⟨t, htu, ht, hyt⟩
+  · rintro ⟨f', ⟨u, H, h_fderiv⟩, h_cont_diff⟩
+    refine ⟨u, H, by simp, f', fun x hxu => ?_, h_cont_diff.contDiffWithinAt⟩
+    exact (h_fderiv x hxu).hasFDerivWithinAt
 
 中文:
 定理 contDiffAt_succ_iff_hasFDerivAt
@@ -3161,7 +3482,14 @@ theorem contDiffAt_succ_iff_hasFDerivAt
   constructor
   · rintro ⟨u, H, -, f', h_fderiv, h_cont_diff⟩
     rcases mem_nhds_iff.mp H with ⟨t, htu, ht, hxt⟩
-    refine ⟨f', ⟨t, ?_⟩, h_cont_di
+    refine ⟨f', ⟨t, ?_⟩, h_cont_diff.contDiffAt H⟩
+    refine ⟨mem_nhds_iff.mpr ⟨t, Subset.rfl, ht, hxt⟩, ?_⟩
+    intro y hyt
+    refine (h_fderiv y (htu hyt)).hasFDerivAt ?_
+    exact mem_nhds_iff.mpr ⟨t, htu, ht, hyt⟩
+  · rintro ⟨f', ⟨u, H, h_fderiv⟩, h_cont_diff⟩
+    refine ⟨u, H, by simp, f', fun x hxu => ?_, h_cont_diff.contDiffWithinAt⟩
+    exact (h_fderiv x hxu).hasFDerivWithinAt
 
 Depends on / 依赖: Subset, Subset.rfl, contDiffAt, contDiffWithinAt_succ_iff_hasFDerivWithinAt, contDiffWithinAt_univ, h_cont_diff, h_cont_diff.contDiffAt, h_fderiv, hasFDerivAt, insert_eq_of_mem, mem_nhds_iff, mem_nhds_iff.mp, mem_nhds_iff.mpr, mem_univ, nhdsWithin_univ
 -/
@@ -3212,7 +3540,11 @@ theorem iteratedFDerivWithin_eq_iteratedFDeriv
   rcases h.contDiffOn' le_rfl (by simp) with ⟨u, u_open, xu, hu⟩
   rw [← iteratedFDerivWithin_inter_open u_open xu]; rw [← iteratedFDerivWithin_inter_open u_open xu (s := univ)]
   apply iteratedFDerivWithin_subset
-  · exact inter_subset_inter_left _ (subset_univ
+  · exact inter_subset_inter_left _ (subset_univ _)
+  · exact hs.inter u_open
+  · apply uniqueDiffOn_univ.inter u_open
+  · simpa using hu
+  · exact ⟨hx, xu⟩
 
 中文:
 定理 iteratedFDerivWithin_eq_iteratedFDeriv
@@ -3222,7 +3554,11 @@ theorem iteratedFDerivWithin_eq_iteratedFDeriv
   rcases h.contDiffOn' le_rfl (by simp) with ⟨u, u_open, xu, hu⟩
   rw [← iteratedFDerivWithin_inter_open u_open xu]; rw [← iteratedFDerivWithin_inter_open u_open xu (s := univ)]
   apply iteratedFDerivWithin_subset
-  · exact inter_subset_inter_left _ (subset_univ
+  · exact inter_subset_inter_left _ (subset_univ _)
+  · exact hs.inter u_open
+  · apply uniqueDiffOn_univ.inter u_open
+  · simpa using hu
+  · exact ⟨hx, xu⟩
 
 Depends on / 依赖: contDiffOn, h.contDiffOn, hs.inter, inter_subset_inter_left, iteratedFDerivWithin_inter_open, iteratedFDerivWithin_subset, iteratedFDerivWithin_univ, le_rfl, subset_univ, u_open, uniqueDiffOn_univ, uniqueDiffOn_univ.inter
 -/
@@ -3327,7 +3663,19 @@ theorem contDiffOn_univ
       rw [← hasFTaylorSeriesUpToOn_univ_iff]
       refine ⟨H.ftaylorSeriesWithin uniqueDiffOn_univ, fun i => ?_⟩
       rw [← analyticOn_univ]
-      exact H.analyticOn.iteratedFDerivWithin uniqueDiffOn_uni
+      exact H.analyticOn.iteratedFDerivWithin uniqueDiffOn_univ _
+    · rintro ⟨p, hp, h'p⟩ x _
+      exact ⟨univ, Filter.univ_sets _, p, (hp.hasFTaylorSeriesUpToOn univ).of_le le_top,
+        fun i => (h'p i).analyticOn⟩
+  | (n : Nat∞) =>
+    constructor
+    · intro H
+      use ftaylorSeriesWithin 𝕜 f univ
+      rw [← hasFTaylorSeriesUpToOn_univ_iff]
+      exact H.ftaylorSeriesWithin uniqueDiffOn_univ
+    · rintro ⟨p, hp⟩ x _ m hm
+      exact ⟨univ, Filter.univ_sets _, p,
+        (hp.hasFTaylorSeriesUpToOn univ).of_le (mod_cast hm)⟩
 
 中文:
 定理 contDiffOn_univ
@@ -3341,7 +3689,19 @@ theorem contDiffOn_univ
       rw [← hasFTaylorSeriesUpToOn_univ_iff]
       refine ⟨H.ftaylorSeriesWithin uniqueDiffOn_univ, fun i => ?_⟩
       rw [← analyticOn_univ]
-      exact H.analyticOn.iteratedFDerivWithin uniqueDiffOn_uni
+      exact H.analyticOn.iteratedFDerivWithin uniqueDiffOn_univ _
+    · rintro ⟨p, hp, h'p⟩ x _
+      exact ⟨univ, Filter.univ_sets _, p, (hp.hasFTaylorSeriesUpToOn univ).of_le le_top,
+        fun i => (h'p i).analyticOn⟩
+  | (n : Nat∞) =>
+    constructor
+    · intro H
+      use ftaylorSeriesWithin 𝕜 f univ
+      rw [← hasFTaylorSeriesUpToOn_univ_iff]
+      exact H.ftaylorSeriesWithin uniqueDiffOn_univ
+    · rintro ⟨p, hp⟩ x _ m hm
+      exact ⟨univ, Filter.univ_sets _, p,
+        (hp.hasFTaylorSeriesUpToOn univ).of_le (mod_cast hm)⟩
 
 Depends on / 依赖: Filter, Filter.univ_sets, H.analyticOn.iteratedFDerivWithin, H.ftaylorSeriesWithin, analyticOn, analyticOn_univ, ftaylorSeriesWithin, hasFTaylorSeriesUpToOn, hasFTaylorSeriesUpToOn_, hasFTaylorSeriesUpToOn_univ_iff, hp.hasFTaylorSeriesUpToOn, iteratedFDerivWithin, le_top, of_le, uniqueDiffOn_univ, univ_sets
 -/

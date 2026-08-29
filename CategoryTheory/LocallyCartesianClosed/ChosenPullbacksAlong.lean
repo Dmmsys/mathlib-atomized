@@ -612,7 +612,9 @@ theorem hom_ext
   let φ₂' : U ⟶ (pullback g).obj (Over.mk f) := Over.homMk φ₂ (by simpa using! h₂.symm)
   have : φ₁' = φ₂' := by
     apply (adj.homEquiv U _).symm.injective
-    a
+    apply (Over.forget X).map_injective
+    simpa using! h₁
+  exact congr_arg CommaMorphism.left this
 
 中文:
 定理 hom_ext
@@ -624,7 +626,9 @@ theorem hom_ext
   let φ₂' : U ⟶ (pullback g).obj (Over.mk f) := Over.homMk φ₂ (by simpa using! h₂.symm)
   have : φ₁' = φ₂' := by
     apply (adj.homEquiv U _).symm.injective
-    a
+    apply (Over.forget X).map_injective
+    simpa using! h₁
+  exact congr_arg CommaMorphism.left this
 
 Depends on / 依赖: CommaMorphism, CommaMorphism.left, Over.forget, Over.homMk, Over.mk, adj.homEquiv, congr_arg, forget, homEquiv, injective, mapPullbackAdj, map_injective, pullback, symm.injective
 -/
@@ -677,7 +681,7 @@ theorem lift_fst
   let a' : (Over.map g).obj (Over.mk b) ⟶ Over.mk f := Over.homMk a h
   have : (Over.map g).map (adj.homEquiv (.mk b) (.mk f) (Over.homMk a)) ≫ fst' f g = a' := by
     simp only [← Adjunction.homEquiv_counit, Equiv.symm_apply_apply, adj, a']
-  exact congr_arg CommaMo
+  exact congr_arg CommaMorphism.left this
 
 中文:
 定理 lift_fst
@@ -687,7 +691,7 @@ theorem lift_fst
   let a' : (Over.map g).obj (Over.mk b) ⟶ Over.mk f := Over.homMk a h
   have : (Over.map g).map (adj.homEquiv (.mk b) (.mk f) (Over.homMk a)) ≫ fst' f g = a' := by
     simp only [← Adjunction.homEquiv_counit, Equiv.symm_apply_apply, adj, a']
-  exact congr_arg CommaMo
+  exact congr_arg CommaMorphism.left this
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_counit, CommaMorphism, CommaMorphism.left, Equiv.symm_apply_apply, Over.homMk, Over.map, Over.mk, adj.homEquiv, congr_arg, homEquiv, homEquiv_counit, mapPullbackAdj, symm_apply_apply
 -/

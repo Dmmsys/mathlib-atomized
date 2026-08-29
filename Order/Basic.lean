@@ -272,7 +272,15 @@ lemma lt_self_iff_false
 @[to_dual trans'] alias LE.le.trans := le_trans
 @[to_dual trans'] alias LT.lt.trans := lt_trans
 @[to_dual trans_lt'] alias LE.le.trans_lt := lt_of_le_of_lt
-@[to_dual trans_le'
+@[to_dual trans_le'] alias LT.lt.trans_le := lt_of_lt_of_le
+
+@[to_dual self] alias LE.le.lt_of_not_ge := lt_of_le_not_ge
+@[to_dual self] alias LT.lt.le := le_of_lt
+@[to_dual self] alias LT.lt.asymm := lt_asymm
+@[to_dual self] alias LT.lt.not_gt := lt_asymm
+
+@[to_dual ne'] alias LT.lt.ne := ne_of_lt
+@[to_dual ge] alias Eq.le := le_of_eq
 
 中文:
 引理 lt_self_iff_false
@@ -285,7 +293,15 @@ lemma lt_self_iff_false
 @[to_dual trans'] alias LE.le.trans := le_trans
 @[to_dual trans'] alias LT.lt.trans := lt_trans
 @[to_dual trans_lt'] alias LE.le.trans_lt := lt_of_le_of_lt
-@[to_dual trans_le'
+@[to_dual trans_le'] alias LT.lt.trans_le := lt_of_lt_of_le
+
+@[to_dual self] alias LE.le.lt_of_not_ge := lt_of_le_not_ge
+@[to_dual self] alias LT.lt.le := le_of_lt
+@[to_dual self] alias LT.lt.asymm := lt_asymm
+@[to_dual self] alias LT.lt.not_gt := lt_asymm
+
+@[to_dual ne'] alias LT.lt.ne := ne_of_lt
+@[to_dual ge] alias Eq.le := le_of_eq
 
 Depends on / 依赖: False.elim, lt_irrefl
 -/
@@ -828,6 +844,8 @@ theorem eq_or_lt_of_le
 @[to_dual lt_or_eq'] alias LE.le.lt_or_eq := lt_or_eq_of_le
 @[to_dual eq_or_lt'] alias LE.le.eq_or_lt := eq_or_lt_of_le
 
+@[to_dual eq_of_le_of_not_lt']
+
 中文:
 定理 eq_or_lt_of_le
   条件: (h : a <= b)
@@ -838,6 +856,8 @@ theorem eq_or_lt_of_le
 @[to_dual eq_or_lt_dec'] alias LE.le.eq_or_lt_dec := Decidable.eq_or_lt_of_le
 @[to_dual lt_or_eq'] alias LE.le.lt_or_eq := lt_or_eq_of_le
 @[to_dual eq_or_lt'] alias LE.le.eq_or_lt := eq_or_lt_of_le
+
+@[to_dual eq_of_le_of_not_lt']
 
 Depends on / 依赖: lt_or_eq_of_le
 -/
@@ -1783,6 +1803,28 @@ lemma LinearOrder.toPartialOrder_injective
       toDecidableLE := A_decidableLE, toDecidableEq := A_decidableEq, toDecidableLT := A_decidableLT
       min := A_min, max := A_max, min_def := A_min_def, max_def := A_max_def,
       compare := A_compare, compare_eq_compareOfLessAndEq := A_compare_canonical, .. },
+    { le := B_le, lt := B_lt,
+      toDecidableLE := B_decidableLE, toDecidableEq := B_decidableEq, toDecidableLT := B_decidableLT
+      min := B_min, max := B_max, min_def := B_min_def, max_def := B_max_def,
+      compare := B_compare, compare_eq_compareOfLessAndEq := B_compare_canonical, .. } => by
+    rintro ⟨⟩
+    obtain rfl : A_decidableLE = B_decidableLE := Subsingleton.elim _ _
+    obtain rfl : A_decidableEq = B_decidableEq := Subsingleton.elim _ _
+    obtain rfl : A_decidableLT = B_decidableLT := Subsingleton.elim _ _
+    have : A_min = B_min := by
+      funext a b
+      exact (A_min_def _ _).trans (B_min_def _ _).symm
+    cases this
+    have : A_max = B_max := by
+      funext a b
+      exact (A_max_def _ _).trans (B_max_def _ _).symm
+    cases this
+    have : A_compare = B_compare := by
+      funext a b
+      exact (A_compare_canonical _ _).trans (B_compare_canonical _ _).symm
+    congr
+
+@[to_dual self]
 
 中文:
 引理 线性序.toPartialOrder_injective
@@ -1792,6 +1834,28 @@ lemma LinearOrder.toPartialOrder_injective
       toDecidableLE := A_decidableLE, toDecidableEq := A_decidableEq, toDecidableLT := A_decidableLT
       min := A_min, max := A_max, min_def := A_min_def, max_def := A_max_def,
       compare := A_compare, compare_eq_compareOfLessAndEq := A_compare_canonical, .. },
+    { le := B_le, lt := B_lt,
+      toDecidableLE := B_decidableLE, toDecidableEq := B_decidableEq, toDecidableLT := B_decidableLT
+      min := B_min, max := B_max, min_def := B_min_def, max_def := B_max_def,
+      compare := B_compare, compare_eq_compareOfLessAndEq := B_compare_canonical, .. } => by
+    rintro ⟨⟩
+    obtain rfl : A_decidableLE = B_decidableLE := Subsingleton.elim _ _
+    obtain rfl : A_decidableEq = B_decidableEq := Subsingleton.elim _ _
+    obtain rfl : A_decidableLT = B_decidableLT := Subsingleton.elim _ _
+    have : A_min = B_min := by
+      funext a b
+      exact (A_min_def _ _).trans (B_min_def _ _).symm
+    cases this
+    have : A_max = B_max := by
+      funext a b
+      exact (A_max_def _ _).trans (B_max_def _ _).symm
+    cases this
+    have : A_compare = B_compare := by
+      funext a b
+      exact (A_compare_canonical _ _).trans (B_compare_canonical _ _).symm
+    congr
+
+@[to_dual self]
 
 Depends on / 依赖: A_compare, A_compare_canonical, A_decidableEq, A_decidableLE, A_decidableLT, A_le, A_lt, A_max, A_max_def, A_min, A_min_def, B_compare, B_decidableEq, B_decidableLE, B_decidableLT, B_le, B_lt, B_max, B_max_def, B_min
 -/
@@ -2719,7 +2783,9 @@ abbreviation Function.Injective.linearOrder
   le_total _ _ := by simp only [← le, le_total]
   min_def _ _ := by simp_rw [← hf.eq_iff, ← le, apply_ite f, ← min_def, min]
   max_def _ _ := by simp_rw [← hf.eq_iff, ← le, apply_ite f, ← max_def, max]
-  com
+  compare_eq_compareOfLessAndEq _ _ := by
+    simp_rw [← compare, LinearOrder.compare_eq_compareOfLessAndEq, compareOfLessAndEq, ← lt,
+      hf.eq_iff]
 
 中文:
 缩写 函数.单射.linearOrder
@@ -2731,7 +2797,9 @@ abbreviation Function.Injective.linearOrder
   le_total _ _ := by simp only [← le, le_total]
   min_def _ _ := by simp_rw [← hf.eq_iff, ← le, apply_ite f, ← min_def, min]
   max_def _ _ := by simp_rw [← hf.eq_iff, ← le, apply_ite f, ← max_def, max]
-  com
+  compare_eq_compareOfLessAndEq _ _ := by
+    simp_rw [← compare, LinearOrder.compare_eq_compareOfLessAndEq, compareOfLessAndEq, ← lt,
+      hf.eq_iff]
 
 Depends on / 依赖: hf.partialOrder, isProbabilityMeasure_trajFun, partialOrder
 -/
@@ -2866,7 +2934,9 @@ abbreviation LinearOrder.lift
   letI _instLT : LT α := ⟨fun a b => f a < f b⟩
   letI _instOrdα : Ord α := ⟨fun a b => compare (f a) (f b)⟩
   letI _decidableLE := fun x y => (inferInstance : Decidable (f x <= f y))
-  letI _decidableLT := fun x y => (inferInstance : Decidable (f x < f
+  letI _decidableLT := fun x y => (inferInstance : Decidable (f x < f y))
+  letI _decidableEq := fun x y => decidable_of_iff (f x = f y) inj.eq_iff
+  inj.linearOrder _ .rfl .rfl hinf hsup (fun _ _ => rfl)
 
 中文:
 缩写 线性序.lift
@@ -2875,7 +2945,9 @@ abbreviation LinearOrder.lift
   letI _instLT : LT α := ⟨fun a b => f a < f b⟩
   letI _instOrdα : Ord α := ⟨fun a b => compare (f a) (f b)⟩
   letI _decidableLE := fun x y => (inferInstance : Decidable (f x <= f y))
-  letI _decidableLT := fun x y => (inferInstance : Decidable (f x < f
+  letI _decidableLT := fun x y => (inferInstance : Decidable (f x < f y))
+  letI _decidableEq := fun x y => decidable_of_iff (f x = f y) inj.eq_iff
+  inj.linearOrder _ .rfl .rfl hinf hsup (fun _ _ => rfl)
 
 Depends on / 依赖: Decidable, _decidableEq, _decidableLE, _decidableLT, _instLE, _instLT, compare, decidable_of_iff, eq_iff, inj.eq_iff, inj.linearOrder, linearOrder
 -/
@@ -2934,7 +3006,8 @@ abbreviation LinearOrder.liftWithOrd
   letI _instLE : LT α := ⟨fun a b => f a < f b⟩
   letI _decidableLE := fun x y => (inferInstance : Decidable (f x <= f y))
   letI _decidableLT := fun x y => (inferInstance : Decidable (f x < f y))
-  letI _decidableEq := fun x y => decidable_of_iff (f x 
+  letI _decidableEq := fun x y => decidable_of_iff (f x = f y) inj.eq_iff
+  inj.linearOrder _ .rfl .rfl hinf hsup (fun _ _ => (compare_f _ _).symm)
 
 中文:
 缩写 线性序.liftWithOrd
@@ -2943,7 +3016,8 @@ abbreviation LinearOrder.liftWithOrd
   letI _instLE : LT α := ⟨fun a b => f a < f b⟩
   letI _decidableLE := fun x y => (inferInstance : Decidable (f x <= f y))
   letI _decidableLT := fun x y => (inferInstance : Decidable (f x < f y))
-  letI _decidableEq := fun x y => decidable_of_iff (f x 
+  letI _decidableEq := fun x y => decidable_of_iff (f x = f y) inj.eq_iff
+  inj.linearOrder _ .rfl .rfl hinf hsup (fun _ _ => (compare_f _ _).symm)
 
 Depends on / 依赖: Decidable, _decidableEq, _decidableLE, _decidableLT, _instLE, compare_f, decidable_of_iff, eq_iff, inj.eq_iff, inj.linearOrder, linearOrder
 -/
@@ -3506,7 +3580,9 @@ theorem lt_iff
     · exact Or.inl ⟨LE.le.lt_of_not_ge h.1.1 h₁, h.1.2⟩
   · rintro (⟨h₁, h₂⟩ | ⟨h₁, h₂⟩)
     · exact ⟨⟨h₁.le, h₂⟩, fun h => h₁.not_ge h.1⟩
-    · exact ⟨⟨h₁, h₂.le⟩, 
+    · exact ⟨⟨h₁, h₂.le⟩, fun h => h₂.not_ge h.2⟩
+
+@[simp, to_dual self]
 
 中文:
 定理 lt_iff
@@ -3518,7 +3594,9 @@ theorem lt_iff
     · exact Or.inl ⟨LE.le.lt_of_not_ge h.1.1 h₁, h.1.2⟩
   · rintro (⟨h₁, h₂⟩ | ⟨h₁, h₂⟩)
     · exact ⟨⟨h₁.le, h₂⟩, fun h => h₁.not_ge h.1⟩
-    · exact ⟨⟨h₁, h₂.le⟩, 
+    · exact ⟨⟨h₁, h₂.le⟩, fun h => h₂.not_ge h.2⟩
+
+@[simp, to_dual self]
 
 Depends on / 依赖: LE.le.lt_of_not_ge, Or.inl, Or.inr, lt_of_not_ge, not_ge
 -/
@@ -3812,7 +3890,7 @@ instance [forall
       exact
         ⟨Function.update a i c,
           ⟨le_update_iff.2 ⟨ha.le, fun _ _ => le_rfl⟩, i, by rwa [update_self]⟩,
-          update_le_iff.2 ⟨hb.le, fun _ _ => hab
+          update_le_iff.2 ⟨hb.le, fun _ _ => hab _⟩, i, by rwa [update_self]⟩⟩
 
 中文:
 实例 [对任意
@@ -3825,7 +3903,7 @@ instance [forall
       exact
         ⟨Function.update a i c,
           ⟨le_update_iff.2 ⟨ha.le, fun _ _ => le_rfl⟩, i, by rwa [update_self]⟩,
-          update_le_iff.2 ⟨hb.le, fun _ _ => hab
+          update_le_iff.2 ⟨hb.le, fun _ _ => hab _⟩, i, by rwa [update_self]⟩⟩
 
 Depends on / 依赖: Function, Function.update, Pi.lt_def, classical, exists_between, ha.le, hb.le, le_rfl, le_update_iff, lt_def, simp_rw, update, update_le_iff, update_self
 -/

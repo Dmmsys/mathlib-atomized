@@ -52,7 +52,12 @@ theorem MemLp.finStronglyMeasurable_of_stronglyMeasurable
   let fs := SimpleFunc.approxOn f hf_meas.measurable (Set.range f union {0}) 0 (by simp)
   refine ⟨fs, ?_, ?_⟩
   · have h_fs_Lp : forall n, MemLp (fs n) p μ :=
-      SimpleFunc
+      SimpleFunc.memLp_approxOn_range hf_meas.measurable hf
+    exact fun n => (fs n).measure_support_lt_top_of_memLp (h_fs_Lp n) hp_ne_zero hp_ne_top
+  · intro x
+    apply SimpleFunc.tendsto_approxOn
+    apply subset_closure
+    simp
 
 中文:
 定理 MemLp.finStronglyMeasurable_of_stronglyMeasurable
@@ -64,7 +69,12 @@ theorem MemLp.finStronglyMeasurable_of_stronglyMeasurable
   let fs := SimpleFunc.approxOn f hf_meas.measurable (Set.range f union {0}) 0 (by simp)
   refine ⟨fs, ?_, ?_⟩
   · have h_fs_Lp : forall n, MemLp (fs n) p μ :=
-      SimpleFunc
+      SimpleFunc.memLp_approxOn_range hf_meas.measurable hf
+    exact fun n => (fs n).measure_support_lt_top_of_memLp (h_fs_Lp n) hp_ne_zero hp_ne_top
+  · intro x
+    apply SimpleFunc.tendsto_approxOn
+    apply subset_closure
+    simp
 
 Depends on / 依赖: SeparableSpace, Set.range, SimpleFunc, SimpleFunc.approxOn, SimpleFunc.memLp_approxOn_range, SimpleFunc.tendsto_approxOn, approxOn, borelize, h_fs_Lp, hf_meas, hf_meas.measurable, hf_meas.separableSpace_range_union_singleton, hp_ne_top, hp_ne_zero, measurable, measure_support_lt_top_of_memLp, memLp_approxOn_range, separableSpace_range_union_singleton, subset_closure, tendsto_approxOn
 -/

@@ -228,7 +228,10 @@ definition Nonneg.unitsHomeomorphPos
   continuous_invFun := by
     rw [Units.continuous_iff]
     refine ⟨by fun_prop, ?_⟩
-    suffices Continuous fun (x : { r : R 
+    suffices Continuous fun (x : { r : R // 0 < r }) => (x⁻¹ : R) by
+      simpa [Topology.IsEmbedding.subtypeVal.continuous_iff, Function.comp_def]
+    rw [continuous_iff_continuousAt]
+    exact fun x => ContinuousAt.inv₀ (by fun_prop) x.2.ne'
 
 中文:
 定义 Nonneg.unitsHomeomorphPos
@@ -240,7 +243,10 @@ definition Nonneg.unitsHomeomorphPos
   continuous_invFun := by
     rw [Units.continuous_iff]
     refine ⟨by fun_prop, ?_⟩
-    suffices Continuous fun (x : { r : R 
+    suffices Continuous fun (x : { r : R // 0 < r }) => (x⁻¹ : R) by
+      simpa [Topology.IsEmbedding.subtypeVal.continuous_iff, Function.comp_def]
+    rw [continuous_iff_continuousAt]
+    exact fun x => ContinuousAt.inv₀ (by fun_prop) x.2.ne'
 
 Depends on / 依赖: Nonneg, Nonneg.unitsEquivPos, unitsEquivPos
 -/

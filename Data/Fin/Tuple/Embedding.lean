@@ -311,7 +311,20 @@ definition twoEmbeddingEquiv
     toFun i := if i = 0 then a else b
     inj' i j hij := by
       by_cases hi : i = 0
-      · by_cases hj : j = 
+      · by_cases hj : j = 0
+        · simp [hi, hj]
+        · simp only [if_pos hi, eq_one_of_ne_zero j hj,
+          if_neg (Ne.symm Fin.zero_ne_one)] at hij
+          apply (h hij).elim
+      · rw [eq_one_of_ne_zero i hi] at hij ⊢
+        by_cases hj : j = 0
+        · simp [hj] at hij; exact False.elim (h hij.symm)
+        · rw [eq_one_of_ne_zero j hj] }
+  left_inv e := by
+    ext i
+    by_cases hi : i = 0
+    · simp [hi]
+    · simp [Fin.eq_one_of_ne_zero i hi]
 
 中文:
 定义 twoEmbeddingEquiv
@@ -323,7 +336,20 @@ definition twoEmbeddingEquiv
     toFun i := if i = 0 then a else b
     inj' i j hij := by
       by_cases hi : i = 0
-      · by_cases hj : j = 
+      · by_cases hj : j = 0
+        · simp [hi, hj]
+        · simp only [if_pos hi, eq_one_of_ne_zero j hj,
+          if_neg (Ne.symm Fin.zero_ne_one)] at hij
+          apply (h hij).elim
+      · rw [eq_one_of_ne_zero i hi] at hij ⊢
+        by_cases hj : j = 0
+        · simp [hj] at hij; exact False.elim (h hij.symm)
+        · rw [eq_one_of_ne_zero j hj] }
+  left_inv e := by
+    ext i
+    by_cases hi : i = 0
+    · simp [hi]
+    · simp [Fin.eq_one_of_ne_zero i hi]
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, False.elim, Fin.isValue, Fin.zero_ne_one, Ne.symm, apply_eq_iff_eq, eq_one_of_ne_zero, hij.sym, if_neg, if_pos, invFun, isValue, mem_ofPred_eq, ne_eq, not_false_eq_true, succ_ne_self, zero_eq_one_iff, zero_ne_one
 -/

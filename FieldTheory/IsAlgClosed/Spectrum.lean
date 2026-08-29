@@ -65,7 +65,7 @@ theorem exists_mem_of_not_isUnit_aeval_prod
   simp only [not_forall, exists_prop, aeval_C, Multiset.mem_toList, List.mem_map, aeval_X,
     exists_exists_and_eq_and, Multiset.mem_map, map_sub] at h
   rcases h with ⟨r, r_mem, r_nu⟩
-  exact ⟨r, by rwa 
+  exact ⟨r, by rwa [mem_iff, ← IsUnit.sub_iff], (mem_roots'.1 r_mem).2⟩
 
 中文:
 定理 存在_mem_of_not_isUnit_aeval_prod
@@ -76,7 +76,7 @@ theorem exists_mem_of_not_isUnit_aeval_prod
   simp only [not_forall, exists_prop, aeval_C, Multiset.mem_toList, List.mem_map, aeval_X,
     exists_exists_and_eq_and, Multiset.mem_map, map_sub] at h
   rcases h with ⟨r, r_mem, r_nu⟩
-  exact ⟨r, by rwa 
+  exact ⟨r, by rwa [mem_iff, ← IsUnit.sub_iff], (mem_roots'.1 r_mem).2⟩
 
 Depends on / 依赖: IsUnit, IsUnit.sub_iff, List.mem_map, List.prod_isUnit, Multiset, Multiset.mem_map, Multiset.mem_toList, Multiset.prod_toList, aeval_C, aeval_X, exists_exists_and_eq_and, exists_prop, map_list_prod, map_sub, mem_iff, mem_map, mem_roots, mem_toList, not_forall, prod_isUnit
 -/
@@ -115,7 +115,11 @@ theorem subset_polynomial_aeval
   have hroot : IsRoot q k := by simp only [q, eval_C, eval_sub, sub_self, IsRoot.def]
   rw [← mul_div_eq_iff_isRoot]; rw [← neg_mul_neg]; rw [neg_sub] at hroot
   have aeval_q_eq : ↑ₐ (eval k p) - aeval a p = aeval a q := by
-    simp only [q, aev
+    simp only [q, aeval_C, map_sub]
+  rw [mem_iff]; rw [aeval_q_eq]; rw [← hroot]; rw [aeval_mul]
+  have hcomm := (Commute.all (C k - X) (-(q / (X - C k)))).map (aeval a : 𝕜[X] ->ₐ[𝕜] A)
+  apply mt fun h => (hcomm.isUnit_mul_iff.mp h).1
+  simpa only [aeval_X, aeval_C, map_sub] using! hk
 
 中文:
 定理 subset_polynomial_aeval
@@ -127,7 +131,11 @@ theorem subset_polynomial_aeval
   have hroot : IsRoot q k := by simp only [q, eval_C, eval_sub, sub_self, IsRoot.def]
   rw [← mul_div_eq_iff_isRoot]; rw [← neg_mul_neg]; rw [neg_sub] at hroot
   have aeval_q_eq : ↑ₐ (eval k p) - aeval a p = aeval a q := by
-    simp only [q, aev
+    simp only [q, aeval_C, map_sub]
+  rw [mem_iff]; rw [aeval_q_eq]; rw [← hroot]; rw [aeval_mul]
+  have hcomm := (Commute.all (C k - X) (-(q / (X - C k)))).map (aeval a : 𝕜[X] ->ₐ[𝕜] A)
+  apply mt fun h => (hcomm.isUnit_mul_iff.mp h).1
+  simpa only [aeval_X, aeval_C, map_sub] using! hk
 
 Depends on / 依赖: Commute, Commute.all, IsRoot, IsRoot.def, aeval_C, aeval_mul, aeval_q_eq, eval_C, eval_sub, hcomm.isUnit_mul_iff.mp, isUnit_mul_iff, map_sub, mem_iff, mul_div_eq_iff_isRoot, neg_mul_neg, neg_sub, sub_self
 -/
@@ -154,7 +162,18 @@ theorem map_polynomial_aeval_of_degree_pos
   refine Set.eq_of_subset_of_subset (fun k hk => ?_) (subset_polynomial_aeval a p)
   -- write `C k - p` product of linear factors and a constant; show `C k - p ≠ 0`.
   have hprod := (IsAlgClosed.splits (C k - p)).eq_prod_roots
-
+have h_ne : C k - p != 0 := ne_zero_of_degree_gt by
+    rwa [degree_sub_eq_right_of_degree_lt (lt_of_le_of_lt degree_C_le hdeg)]
+  have lead_ne := leadingCoeff_ne_zero.mpr h_ne
+  have lead_unit := (Units.map ↑ₐ.toMonoidHom (Units.mk0 _ lead_ne)).isUnit
+  /- leading coefficient is a unit so product of linear factors is not a unit;
+    apply `exists_mem_of_not_is_unit_aeval_prod`. -/
+  have p_a_eq : aeval a (C k - p) = ↑ₐ k - aeval a p := by
+    simp only [aeval_C, map_sub]
+  rw [mem_iff]; rw [← p_a_eq]; rw [hprod]; rw [aeval_mul]; rw [((Commute.all _ _).map (aeval a : 𝕜[X] ->ₐ[𝕜] A)).isUnit_mul_iff, aeval_C] at hk
+  replace hk := exists_mem_of_not_isUnit_aeval_prod (not_and.mp hk lead_unit)
+  rcases hk with ⟨r, r_mem, r_ev⟩
+  exact ⟨r, r_mem, symm (by simpa [eval_sub, eval_C, sub_eq_zero] using r_ev)⟩
 
 中文:
 定理 map_polynomial_aeval_of_degree_pos
@@ -164,7 +183,18 @@ theorem map_polynomial_aeval_of_degree_pos
   refine Set.eq_of_subset_of_subset (fun k hk => ?_) (subset_polynomial_aeval a p)
   -- write `C k - p` product of linear factors and a constant; show `C k - p ≠ 0`.
   have hprod := (IsAlgClosed.splits (C k - p)).eq_prod_roots
-
+have h_ne : C k - p != 0 := ne_zero_of_degree_gt by
+    rwa [degree_sub_eq_right_of_degree_lt (lt_of_le_of_lt degree_C_le hdeg)]
+  have lead_ne := leadingCoeff_ne_zero.mpr h_ne
+  have lead_unit := (Units.map ↑ₐ.toMonoidHom (Units.mk0 _ lead_ne)).isUnit
+  /- leading coefficient is a unit so product of linear factors is not a unit;
+    apply `exists_mem_of_not_is_unit_aeval_prod`. -/
+  have p_a_eq : aeval a (C k - p) = ↑ₐ k - aeval a p := by
+    simp only [aeval_C, map_sub]
+  rw [mem_iff]; rw [← p_a_eq]; rw [hprod]; rw [aeval_mul]; rw [((Commute.all _ _).map (aeval a : 𝕜[X] ->ₐ[𝕜] A)).isUnit_mul_iff, aeval_C] at hk
+  replace hk := exists_mem_of_not_isUnit_aeval_prod (not_and.mp hk lead_unit)
+  rcases hk with ⟨r, r_mem, r_ev⟩
+  exact ⟨r, r_mem, symm (by simpa [eval_sub, eval_C, sub_eq_zero] using r_ev)⟩
 -/
 theorem map_polynomial_aeval_of_degree_pos [IsAlgClosed 𝕜] (a : A) (p : 𝕜[X])
     (hdeg : 0 < degree p) : σ (aeval a p) = (eval · p) '' σ a := by
@@ -315,7 +345,8 @@ theorem nonempty_of_isAlgClosed_of_finiteDimensional
   obtain ⟨p, ⟨h_mon, h_eval_p⟩⟩ := isIntegral_of_noetherian (IsNoetherian.iff_fg.2 I) a
   have nu : ¬IsUnit (aeval a p) := by rw [← aeval_def] at h_eval_p; rw [h_eval_p]; simp
   rw [(IsAlgClosed.splits p).eq_prod_roots_of_monic h_mon] at nu
-  obtain ⟨k, hk, _⟩ := exists_mem_of_not_isUnit_aeval_pr
+  obtain ⟨k, hk, _⟩ := exists_mem_of_not_isUnit_aeval_prod nu
+  exact ⟨k, hk⟩
 
 中文:
 定理 nonempty_of_isAlgClosed_of_finiteDimensional
@@ -324,7 +355,8 @@ theorem nonempty_of_isAlgClosed_of_finiteDimensional
   obtain ⟨p, ⟨h_mon, h_eval_p⟩⟩ := isIntegral_of_noetherian (IsNoetherian.iff_fg.2 I) a
   have nu : ¬IsUnit (aeval a p) := by rw [← aeval_def] at h_eval_p; rw [h_eval_p]; simp
   rw [(IsAlgClosed.splits p).eq_prod_roots_of_monic h_mon] at nu
-  obtain ⟨k, hk, _⟩ := exists_mem_of_not_isUnit_aeval_pr
+  obtain ⟨k, hk, _⟩ := exists_mem_of_not_isUnit_aeval_prod nu
+  exact ⟨k, hk⟩
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.splits, IsNoetherian, IsNoetherian.iff_fg, IsUnit, aeval_def, eq_prod_roots_of_monic, exists_mem_of_not_isUnit_aeval_prod, h_eval_p, h_mon, iff_fg, isIntegral_of_noetherian, splits
 -/

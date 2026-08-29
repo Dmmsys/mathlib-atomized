@@ -82,7 +82,7 @@ theorem family_of_elements_compatible
   intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ e
   refine Subtype.ext ?_ -- Porting note: `ext1` does not work here
   change F.map g₁.op (F.map f₁.op s) = F.map g₂.op (F.map f₂.op s)
-  rw [← comp_apply]; rw [← Functor.map_comp]; rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← op_comp]; rw [e
+  rw [← comp_apply]; rw [← Functor.map_comp]; rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← op_comp]; rw [e]
 
 中文:
 定理 family_of_elements_compatible
@@ -91,7 +91,7 @@ theorem family_of_elements_compatible
   intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ e
   refine Subtype.ext ?_ -- Porting note: `ext1` does not work here
   change F.map g₁.op (F.map f₁.op s) = F.map g₂.op (F.map f₂.op s)
-  rw [← comp_apply]; rw [← Functor.map_comp]; rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← op_comp]; rw [e
+  rw [← comp_apply]; rw [← Functor.map_comp]; rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← op_comp]; rw [e]
 
 Depends on / 依赖: F.map, Functor, Functor.map_comp, Porting, Subtype, Subtype.ext, comp_apply, map_comp, op_comp
 -/

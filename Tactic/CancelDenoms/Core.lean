@@ -307,7 +307,31 @@ definition findCancelFactor
     let lcm := v1.lcm v2
     (lcm, .node lcm t1 t2)
   | (``HMul.hMul, #[_, _, _, _, e1, e2]) =>
-    let (v1, t1
+    let (v1, t1) := findCancelFactor e1
+    let (v2, t2) := findCancelFactor e2
+    let pd := v1 * v2
+    (pd, .node pd t1 t2)
+  | (``HDiv.hDiv, #[_, _, _, _, e1, e2]) =>
+    -- If e2 is a rational, then it's a natural number due to the simp lemmas in `deriveThms`.
+    match e2.nat? with
+    | some q =>
+      let (v1, t1) := findCancelFactor e1
+      let n := v1 * q
+      (n, .node n t1 <| .node q .nil .nil)
+    | none => (1, .node 1 .nil .nil)
+  | (``Neg.neg, #[_, _, e]) => findCancelFactor e
+  | (``HPow.hPow, #[_, Nat, _, _, e1, e2]) =>
+    match e2.nat? with
+    | some k =>
+      let (v1, t1) := findCancelFactor e1
+      let n := v1 ^ k
+      (n, .node n t1 <| .node k .nil .nil)
+    | none => (1, .node 1 .nil .nil)
+  | (``Inv.inv, #[_, _, e]) =>
+    match e.nat? with
+    | some q => (q, .node q .nil <| .node q .nil .nil)
+    | none => (1, .node 1 .nil .nil)
+  | _ => (1, .node 1 .nil .nil)
 
 中文:
 定义 findCancelFactor
@@ -319,7 +343,31 @@ definition findCancelFactor
     let lcm := v1.lcm v2
     (lcm, .node lcm t1 t2)
   | (``HMul.hMul, #[_, _, _, _, e1, e2]) =>
-    let (v1, t1
+    let (v1, t1) := findCancelFactor e1
+    let (v2, t2) := findCancelFactor e2
+    let pd := v1 * v2
+    (pd, .node pd t1 t2)
+  | (``HDiv.hDiv, #[_, _, _, _, e1, e2]) =>
+    -- If e2 is a rational, then it's a natural number due to the simp lemmas in `deriveThms`.
+    match e2.nat? with
+    | some q =>
+      let (v1, t1) := findCancelFactor e1
+      let n := v1 * q
+      (n, .node n t1 <| .node q .nil .nil)
+    | none => (1, .node 1 .nil .nil)
+  | (``Neg.neg, #[_, _, e]) => findCancelFactor e
+  | (``HPow.hPow, #[_, Nat, _, _, e1, e2]) =>
+    match e2.nat? with
+    | some k =>
+      let (v1, t1) := findCancelFactor e1
+      let n := v1 ^ k
+      (n, .node n t1 <| .node k .nil .nil)
+    | none => (1, .node 1 .nil .nil)
+  | (``Inv.inv, #[_, _, e]) =>
+    match e.nat? with
+    | some q => (q, .node q .nil <| .node q .nil .nil)
+    | none => (1, .node 1 .nil .nil)
+  | _ => (1, .node 1 .nil .nil)
 -/
 partial def findCancelFactor (e : Expr) : Nat × BinaryTree Nat :=
   match e.getAppFnArgs with
@@ -418,7 +466,46 @@ definition mkProdPrf
   | .node _ lhs rhs, ~q($e1 + $e2) => do
     let ⟨v1, hv1⟩ ← mkProdPrf α sα v v' lhs e1
     let ⟨v2, hv2⟩ ← mkProdPrf α sα v v' rhs e2
-    return ⟨q($v1 + $v2), q(CancelDenoms.add_s
+    return ⟨q($v1 + $v2), q(CancelDenoms.add_subst $hv1 $hv2)⟩
+  | .node _ lhs rhs, ~q($e1 - $e2) => do
+    let ⟨v1, hv1⟩ ← mkProdPrf α sα v v' lhs e1
+    let ⟨v2, hv2⟩ ← mkProdPrf α sα v v' rhs e2
+    return ⟨q($v1 - $v2), q(CancelDenoms.sub_subst $hv1 $hv2)⟩
+  | .node _ lhs@(.node ln _ _) rhs, ~q($e1 * $e2) => do
+    trace[CancelDenoms] "recursing into mul"
+    have ln' := (← mkOfNat α amwo <| mkRawNatLit ln).1
+    have vln' := (← mkOfNat α amwo <| mkRawNatLit (v/ln)).1
+    let ⟨v1, hv1⟩ ← mkProdPrf α sα ln ln' lhs e1
+    let ⟨v2, hv2⟩ ← mkProdPrf α sα (v / ln) vln' rhs e2
+    let npf ← synthesizeUsingNormNum q($ln' * $vln' = $v')
+    return ⟨q($v1 * $v2), q(CancelDenoms.mul_subst $hv1 $hv2 $npf)⟩
+  | .node _ lhs (.node rn _ _), ~q($e1 / $e2) => do
+    -- Invariant: e2 is equal to the natural number rn
+    have rn' := (← mkOfNat α amwo <| mkRawNatLit rn).1
+    have vrn' := (← mkOfNat α amwo <| mkRawNatLit <| v / rn).1
+    let ⟨v1, hv1⟩ ← mkProdPrf α sα (v / rn) vrn' lhs e1
+    let npf ← synthesizeUsingNormNum q($rn' / $e2 = 1)
+    let npf2 ← synthesizeUsingNormNum q($vrn' * $rn' = $v')
+    return ⟨q($v1), q(CancelDenoms.div_subst $hv1 $npf $npf2)⟩
+  | t, ~q(-$e) => do
+    let ⟨v, hv⟩ ← mkProdPrf α sα v v' t e
+    return ⟨q(-$v), q(CancelDenoms.neg_subst $hv)⟩
+  | .node _ lhs@(.node k1 _ _) (.node k2 .nil .nil), ~q($e1 ^ $e2) => do
+    have k1' := (← mkOfNat α amwo <| mkRawNatLit k1).1
+    let ⟨v1, hv1⟩ ← mkProdPrf α sα k1 k1' lhs e1
+    have l : Nat := v / (k1 ^ k2)
+    have l' := (← mkOfNat α amwo <| mkRawNatLit l).1
+    let npf ← synthesizeUsingNormNum q($l' * $k1' ^ $e2 = $v')
+    return ⟨q($l' * $v1 ^ $e2), q(CancelDenoms.pow_subst $hv1 $npf)⟩
+  | .node _ .nil (.node rn _ _), ~q($ei ⁻¹) => do
+    have rn' := (← mkOfNat α amwo <| mkRawNatLit rn).1
+    have vrn' := (← mkOfNat α amwo <| mkRawNatLit <| v / rn).1
+have _ : rn' =Q ei := ⟨⟩
+    let npf ← synthesizeUsingNormNum q($rn' != 0)
+    let npf2 ← synthesizeUsingNormNum q($vrn' * $rn' = $v')
+    return ⟨q($vrn'), q(CancelDenoms.inv_subst $npf $npf2)⟩
+  | _, _ => do
+    return ⟨q($v' * $e), q(rfl)⟩
 
 中文:
 定义 mkProdPrf
@@ -430,7 +517,46 @@ definition mkProdPrf
   | .node _ lhs rhs, ~q($e1 + $e2) => do
     let ⟨v1, hv1⟩ ← mkProdPrf α sα v v' lhs e1
     let ⟨v2, hv2⟩ ← mkProdPrf α sα v v' rhs e2
-    return ⟨q($v1 + $v2), q(CancelDenoms.add_s
+    return ⟨q($v1 + $v2), q(CancelDenoms.add_subst $hv1 $hv2)⟩
+  | .node _ lhs rhs, ~q($e1 - $e2) => do
+    let ⟨v1, hv1⟩ ← mkProdPrf α sα v v' lhs e1
+    let ⟨v2, hv2⟩ ← mkProdPrf α sα v v' rhs e2
+    return ⟨q($v1 - $v2), q(CancelDenoms.sub_subst $hv1 $hv2)⟩
+  | .node _ lhs@(.node ln _ _) rhs, ~q($e1 * $e2) => do
+    trace[CancelDenoms] "recursing into mul"
+    have ln' := (← mkOfNat α amwo <| mkRawNatLit ln).1
+    have vln' := (← mkOfNat α amwo <| mkRawNatLit (v/ln)).1
+    let ⟨v1, hv1⟩ ← mkProdPrf α sα ln ln' lhs e1
+    let ⟨v2, hv2⟩ ← mkProdPrf α sα (v / ln) vln' rhs e2
+    let npf ← synthesizeUsingNormNum q($ln' * $vln' = $v')
+    return ⟨q($v1 * $v2), q(CancelDenoms.mul_subst $hv1 $hv2 $npf)⟩
+  | .node _ lhs (.node rn _ _), ~q($e1 / $e2) => do
+    -- Invariant: e2 is equal to the natural number rn
+    have rn' := (← mkOfNat α amwo <| mkRawNatLit rn).1
+    have vrn' := (← mkOfNat α amwo <| mkRawNatLit <| v / rn).1
+    let ⟨v1, hv1⟩ ← mkProdPrf α sα (v / rn) vrn' lhs e1
+    let npf ← synthesizeUsingNormNum q($rn' / $e2 = 1)
+    let npf2 ← synthesizeUsingNormNum q($vrn' * $rn' = $v')
+    return ⟨q($v1), q(CancelDenoms.div_subst $hv1 $npf $npf2)⟩
+  | t, ~q(-$e) => do
+    let ⟨v, hv⟩ ← mkProdPrf α sα v v' t e
+    return ⟨q(-$v), q(CancelDenoms.neg_subst $hv)⟩
+  | .node _ lhs@(.node k1 _ _) (.node k2 .nil .nil), ~q($e1 ^ $e2) => do
+    have k1' := (← mkOfNat α amwo <| mkRawNatLit k1).1
+    let ⟨v1, hv1⟩ ← mkProdPrf α sα k1 k1' lhs e1
+    have l : Nat := v / (k1 ^ k2)
+    have l' := (← mkOfNat α amwo <| mkRawNatLit l).1
+    let npf ← synthesizeUsingNormNum q($l' * $k1' ^ $e2 = $v')
+    return ⟨q($l' * $v1 ^ $e2), q(CancelDenoms.pow_subst $hv1 $npf)⟩
+  | .node _ .nil (.node rn _ _), ~q($ei ⁻¹) => do
+    have rn' := (← mkOfNat α amwo <| mkRawNatLit rn).1
+    have vrn' := (← mkOfNat α amwo <| mkRawNatLit <| v / rn).1
+have _ : rn' =Q ei := ⟨⟩
+    let npf ← synthesizeUsingNormNum q($rn' != 0)
+    let npf2 ← synthesizeUsingNormNum q($vrn' * $rn' = $v')
+    return ⟨q($vrn'), q(CancelDenoms.inv_subst $npf $npf2)⟩
+  | _, _ => do
+    return ⟨q($v' * $e), q(rfl)⟩
 -/
 partial def mkProdPrf {u : Level} (α : Q(Type u)) (sα : Q(Field $α)) (v : Nat) (v' : Q($α))
     (t : BinaryTree Nat) (e : Q($α)) : MetaM (CancelResult q(inferInstance) e v') := do
@@ -543,7 +669,22 @@ definition derive
   let eSimp ← simpOnlyNames (config := Simp.neutralConfig) deriveThms e
   trace[CancelDenoms] "e simplified = {eSimp.expr}"
   let eSimpNormNum ← Mathlib.Meta.NormNum.deriveSimp (← Simp.mkContext) false eSimp.expr
-  trace[CancelDenoms] "e norm_num'd = {eSimpNormNum.
+  trace[CancelDenoms] "e norm_num'd = {eSimpNormNum.expr}"
+  let (n, t) := findCancelFactor eSimpNormNum.expr
+  let ⟨u, tp, e⟩ ← inferTypeQ' eSimpNormNum.expr
+  let stp : Q(Field $tp) ← synthInstanceQ q(Field $tp)
+  try
+    have n' := (← mkOfNat tp q(inferInstance) <| mkRawNatLit <| n).1
+    let r ← mkProdPrf tp stp n n' t e
+    trace[CancelDenoms] "pf : {← inferType r.pf}"
+    let pf' ←
+      match eSimp.proof?, eSimpNormNum.proof? with
+      | some pfSimp, some pfSimp' => mkAppM ``derive_trans₂ #[pfSimp, pfSimp', r.pf]
+      | some pfSimp, none | none, some pfSimp => mkAppM ``derive_trans #[pfSimp, r.pf]
+      | none, none => pure r.pf
+    return (n, pf')
+  catch E => do
+    throwError "CancelDenoms.derive failed to normalize {e}.\n{E.toMessageData}"
 
 中文:
 定义 derive
@@ -553,7 +694,22 @@ definition derive
   let eSimp ← simpOnlyNames (config := Simp.neutralConfig) deriveThms e
   trace[CancelDenoms] "e simplified = {eSimp.expr}"
   let eSimpNormNum ← Mathlib.Meta.NormNum.deriveSimp (← Simp.mkContext) false eSimp.expr
-  trace[CancelDenoms] "e norm_num'd = {eSimpNormNum.
+  trace[CancelDenoms] "e norm_num'd = {eSimpNormNum.expr}"
+  let (n, t) := findCancelFactor eSimpNormNum.expr
+  let ⟨u, tp, e⟩ ← inferTypeQ' eSimpNormNum.expr
+  let stp : Q(Field $tp) ← synthInstanceQ q(Field $tp)
+  try
+    have n' := (← mkOfNat tp q(inferInstance) <| mkRawNatLit <| n).1
+    let r ← mkProdPrf tp stp n n' t e
+    trace[CancelDenoms] "pf : {← inferType r.pf}"
+    let pf' ←
+      match eSimp.proof?, eSimpNormNum.proof? with
+      | some pfSimp, some pfSimp' => mkAppM ``derive_trans₂ #[pfSimp, pfSimp', r.pf]
+      | some pfSimp, none | none, some pfSimp => mkAppM ``derive_trans #[pfSimp, r.pf]
+      | none, none => pure r.pf
+    return (n, pf')
+  catch E => do
+    throwError "CancelDenoms.derive failed to normalize {e}.\n{E.toMessageData}"
 -/
 def derive (e : Expr) : MetaM (Nat × Expr) := do
   trace[CancelDenoms] "e = {e}"
@@ -588,7 +744,13 @@ definition findCompLemma
   | (``LT.lt, #[_, _, a, b]) => return (a, b, ``cancel_factors_lt, true)
   | (``LE.le, #[_, _, a, b]) => return (a, b, ``cancel_factors_le, true)
   | (``Eq, #[_, a, b]) => return (a, b, ``cancel_factors_eq, false)
-  -- `a ≠ b` reduces to `¬ a = b` under `whnf
+  -- `a ≠ b` reduces to `¬ a = b` under `whnf`
+  | (``Not, #[p]) => match (← whnfR p).getAppFnArgs with
+    | (``Eq, #[_, a, b]) => return (a, b, ``cancel_factors_ne, false)
+    | _ => return none
+  | (``GE.ge, #[_, _, a, b]) => return (b, a, ``cancel_factors_le, true)
+  | (``GT.gt, #[_, _, a, b]) => return (b, a, ``cancel_factors_lt, true)
+  | _ => return none
 
 中文:
 定义 findCompLemma
@@ -598,7 +760,13 @@ definition findCompLemma
   | (``LT.lt, #[_, _, a, b]) => return (a, b, ``cancel_factors_lt, true)
   | (``LE.le, #[_, _, a, b]) => return (a, b, ``cancel_factors_le, true)
   | (``Eq, #[_, a, b]) => return (a, b, ``cancel_factors_eq, false)
-  -- `a ≠ b` reduces to `¬ a = b` under `whnf
+  -- `a ≠ b` reduces to `¬ a = b` under `whnf`
+  | (``Not, #[p]) => match (← whnfR p).getAppFnArgs with
+    | (``Eq, #[_, a, b]) => return (a, b, ``cancel_factors_ne, false)
+    | _ => return none
+  | (``GE.ge, #[_, _, a, b]) => return (b, a, ``cancel_factors_le, true)
+  | (``GT.gt, #[_, _, a, b]) => return (b, a, ``cancel_factors_lt, true)
+  | _ => return none
 -/
 def findCompLemma (e : Expr) : MetaM (Option (Expr × Expr × Name × Bool)) := do
   match (← whnfR e).getAppFnArgs with
@@ -626,7 +794,29 @@ definition cancelDenominatorsInType
   let amwo ← synthInstanceQ q(AddMonoidWithOne $α)
   let (ar, rhs_p) ← derive rhs
   let gcd := al.gcd ar
-  have al := (← mkOfNat α amwo <| mkRawN
+  have al := (← mkOfNat α amwo <| mkRawNatLit al).1
+  have ar := (← mkOfNat α amwo <| mkRawNatLit ar).1
+  have gcd := (← mkOfNat α amwo <| mkRawNatLit gcd).1
+  let (al_cond, ar_cond, gcd_cond) ← if ord then do
+      let _ ← synthInstanceQ q(Field $α)
+      let _ ← synthInstanceQ q(LinearOrder $α)
+      let _ ← synthInstanceQ q(IsStrictOrderedRing $α)
+      let al_pos : Q(Prop) := q(0 < $al)
+      let ar_pos : Q(Prop) := q(0 < $ar)
+      let gcd_pos : Q(Prop) := q(0 < $gcd)
+      pure (al_pos, ar_pos, gcd_pos)
+    else do
+      let _ ← synthInstanceQ q(Field $α)
+      let al_ne : Q(Prop) := q($al != 0)
+      let ar_ne : Q(Prop) := q($ar != 0)
+      let gcd_ne : Q(Prop) := q($gcd != 0)
+      pure (al_ne, ar_ne, gcd_ne)
+  let al_cond ← synthesizeUsingNormNum al_cond
+  let ar_cond ← synthesizeUsingNormNum ar_cond
+  let gcd_cond ← synthesizeUsingNormNum gcd_cond
+  let pf ← mkAppM lem #[lhs_p, rhs_p, al_cond, ar_cond, gcd_cond]
+  let pf_tp ← inferType pf
+  return ((← findCompLemma pf_tp).elim default (Prod.fst ∘ Prod.snd), pf)
 
 中文:
 定义 cancelDenominatorsInType
@@ -638,7 +828,29 @@ definition cancelDenominatorsInType
   let amwo ← synthInstanceQ q(AddMonoidWithOne $α)
   let (ar, rhs_p) ← derive rhs
   let gcd := al.gcd ar
-  have al := (← mkOfNat α amwo <| mkRawN
+  have al := (← mkOfNat α amwo <| mkRawNatLit al).1
+  have ar := (← mkOfNat α amwo <| mkRawNatLit ar).1
+  have gcd := (← mkOfNat α amwo <| mkRawNatLit gcd).1
+  let (al_cond, ar_cond, gcd_cond) ← if ord then do
+      let _ ← synthInstanceQ q(Field $α)
+      let _ ← synthInstanceQ q(LinearOrder $α)
+      let _ ← synthInstanceQ q(IsStrictOrderedRing $α)
+      let al_pos : Q(Prop) := q(0 < $al)
+      let ar_pos : Q(Prop) := q(0 < $ar)
+      let gcd_pos : Q(Prop) := q(0 < $gcd)
+      pure (al_pos, ar_pos, gcd_pos)
+    else do
+      let _ ← synthInstanceQ q(Field $α)
+      let al_ne : Q(Prop) := q($al != 0)
+      let ar_ne : Q(Prop) := q($ar != 0)
+      let gcd_ne : Q(Prop) := q($gcd != 0)
+      pure (al_ne, ar_ne, gcd_ne)
+  let al_cond ← synthesizeUsingNormNum al_cond
+  let ar_cond ← synthesizeUsingNormNum ar_cond
+  let gcd_cond ← synthesizeUsingNormNum gcd_cond
+  let pf ← mkAppM lem #[lhs_p, rhs_p, al_cond, ar_cond, gcd_cond]
+  let pf_tp ← inferType pf
+  return ((← findCompLemma pf_tp).elim default (Prod.fst ∘ Prod.snd), pf)
 -/
 def cancelDenominatorsInType (h : Expr) : MetaM (Expr × Expr) := do
   let some (lhs, rhs, lem, ord) ← findCompLemma h | throwError m!"cannot kill factors"

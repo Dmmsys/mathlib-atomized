@@ -45,7 +45,14 @@ theorem card_roots_toFinset_le_card_roots_derivative_sdiff_roots_succ
     simp
   have hp : p != 0 := ne_of_apply_ne derivative (by rwa [derivative_zero])
   refine Finset.card_le_sdiff_of_interleaved fun x hx y hy hxy hxy' => ?_
-  rw [Multiset.mem_toFinset]; rw [mem_roots hp] a
+  rw [Multiset.mem_toFinset]; rw [mem_roots hp] at hx hy
+  obtain ⟨z, hz1, hz2⟩ := exists_deriv_eq_zero hxy p.continuousOn (hx.trans hy.symm)
+  refine ⟨z, ?_, hz1⟩
+  rwa [Multiset.mem_toFinset, mem_roots hp', IsRoot, ← p.deriv]
+
+@[deprecated (since := "2026-06-03")]
+alias card_roots_toFinset_le_card_roots_derivative_diff_roots_succ :=
+  card_roots_toFinset_le_card_roots_derivative_sdiff_roots_succ
 
 中文:
 定理 card_roots_toFinset_le_card_roots_derivative_sdiff_roots_succ
@@ -56,7 +63,14 @@ theorem card_roots_toFinset_le_card_roots_derivative_sdiff_roots_succ
     simp
   have hp : p != 0 := ne_of_apply_ne derivative (by rwa [derivative_zero])
   refine Finset.card_le_sdiff_of_interleaved fun x hx y hy hxy hxy' => ?_
-  rw [Multiset.mem_toFinset]; rw [mem_roots hp] a
+  rw [Multiset.mem_toFinset]; rw [mem_roots hp] at hx hy
+  obtain ⟨z, hz1, hz2⟩ := exists_deriv_eq_zero hxy p.continuousOn (hx.trans hy.symm)
+  refine ⟨z, ?_, hz1⟩
+  rwa [Multiset.mem_toFinset, mem_roots hp', IsRoot, ← p.deriv]
+
+@[deprecated (since := "2026-06-03")]
+alias card_roots_toFinset_le_card_roots_derivative_diff_roots_succ :=
+  card_roots_toFinset_le_card_roots_derivative_sdiff_roots_succ
 
 Depends on / 依赖: Finset, Finset.card_le_sdiff_of_interleaved, IsRoot, Multiset, Multiset.mem_toFinset, card_le_sdiff_of_interleaved, continuousOn, derivative, derivative_zero, eq_C_of_derivative_eq_zero, eq_or_ne, exists_deriv_eq_zero, hx.trans, hy.symm, mem_roots, mem_toFinset, ne_of_apply_ne, p.continuousOn, p.deriv
 -/
@@ -109,7 +123,26 @@ theorem card_roots_le_derivative
       (Multiset.toFinset_sum_count_eq _).symm
     _ = ∑ x in p.roots.toFinset, (p.roots.count x - 1 + 1) :=
       (Eq.symm <| Finset.sum_congr rfl fun _ hx => tsub_add_cancel_of_le <|
-Nat.succ_le_iff.2 Multiset.count_pos.2 
+Nat.succ_le_iff.2 Multiset.count_pos.2 Multiset.mem_toFinset.1 hx)
+    _ = (∑ x in p.roots.toFinset, (p.rootMultiplicity x - 1)) + p.roots.toFinset.card := by
+      simp only [Finset.sum_add_distrib, Finset.card_eq_sum_ones, count_roots]
+    _ <= (∑ x in p.roots.toFinset, p.derivative.rootMultiplicity x) +
+          ((p.derivative.roots.toFinset \ p.roots.toFinset).card + 1) :=
+      (add_le_add
+        (Finset.sum_le_sum fun _ _ => rootMultiplicity_sub_one_le_derivative_rootMultiplicity _ _)
+        p.card_roots_toFinset_le_card_roots_derivative_sdiff_roots_succ)
+    _ <= (∑ x in p.roots.toFinset, p.derivative.roots.count x) +
+          ((∑ x in p.derivative.roots.toFinset \ p.roots.toFinset,
+            p.derivative.roots.count x) + 1) := by
+      simp only [← count_roots, Finset.card_eq_sum_ones]
+      gcongr with x hx
+      rw [Nat.succ_le_iff]; rw [Multiset.count_pos]; rw [← Multiset.mem_toFinset]
+      exact (Finset.mem_sdiff.1 hx).1
+    _ = Multiset.card (derivative p).roots + 1 := by
+      rw [← add_assoc]; rw [← Finset.sum_union Finset.disjoint_sdiff]; rw [Finset.union_sdiff_self_eq_union]; rw [←
+        Multiset.toFinset_sum_count_eq]; rw [← Finset.sum_subset Finset.subset_union_right]
+      intro x _ hx₂
+      simpa only [Multiset.mem_toFinset, Multiset.count_eq_zero] using hx₂
 
 中文:
 定理 card_roots_le_derivative
@@ -119,7 +152,26 @@ Nat.succ_le_iff.2 Multiset.count_pos.2
       (Multiset.toFinset_sum_count_eq _).symm
     _ = ∑ x in p.roots.toFinset, (p.roots.count x - 1 + 1) :=
       (Eq.symm <| Finset.sum_congr rfl fun _ hx => tsub_add_cancel_of_le <|
-Nat.succ_le_iff.2 Multiset.count_pos.2 
+Nat.succ_le_iff.2 Multiset.count_pos.2 Multiset.mem_toFinset.1 hx)
+    _ = (∑ x in p.roots.toFinset, (p.rootMultiplicity x - 1)) + p.roots.toFinset.card := by
+      simp only [Finset.sum_add_distrib, Finset.card_eq_sum_ones, count_roots]
+    _ <= (∑ x in p.roots.toFinset, p.derivative.rootMultiplicity x) +
+          ((p.derivative.roots.toFinset \ p.roots.toFinset).card + 1) :=
+      (add_le_add
+        (Finset.sum_le_sum fun _ _ => rootMultiplicity_sub_one_le_derivative_rootMultiplicity _ _)
+        p.card_roots_toFinset_le_card_roots_derivative_sdiff_roots_succ)
+    _ <= (∑ x in p.roots.toFinset, p.derivative.roots.count x) +
+          ((∑ x in p.derivative.roots.toFinset \ p.roots.toFinset,
+            p.derivative.roots.count x) + 1) := by
+      simp only [← count_roots, Finset.card_eq_sum_ones]
+      gcongr with x hx
+      rw [Nat.succ_le_iff]; rw [Multiset.count_pos]; rw [← Multiset.mem_toFinset]
+      exact (Finset.mem_sdiff.1 hx).1
+    _ = Multiset.card (derivative p).roots + 1 := by
+      rw [← add_assoc]; rw [← Finset.sum_union Finset.disjoint_sdiff]; rw [Finset.union_sdiff_self_eq_union]; rw [←
+        Multiset.toFinset_sum_count_eq]; rw [← Finset.sum_subset Finset.subset_union_right]
+      intro x _ hx₂
+      simpa only [Multiset.mem_toFinset, Multiset.count_eq_zero] using hx₂
 
 Depends on / 依赖: Eq.symm, Finset, Finset.card_eq_sum_ones, Finset.sum_add_distrib, Finset.sum_congr, Multiset, Multiset.card, Multiset.count_pos, Multiset.mem_toFinset, Multiset.toFinset_sum_count_eq, Nat.succ_le_iff, card_eq_sum_ones, count_pos, count_roots, mem_toFinset, p.rootMultiplicity, p.roots, p.roots.count, p.roots.toFinset, p.roots.toFinset.card
 -/

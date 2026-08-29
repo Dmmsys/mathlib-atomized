@@ -296,7 +296,31 @@ instance :
   le_sup_right _ _ _ := le_sup_right
   sup_le _ _ _ h₁ h₂ X := sup_le (h₁ X) (h₂ X)
   inf F G :=
-
+    { obj X := F.obj X ⊓ G.obj X
+      map f := le_inf (inf_le_left.trans (F.map f)) (inf_le_right.trans (G.map f)) }
+  inf_le_left _ _ _ := inf_le_left
+  inf_le_right _ _ _ := inf_le_right
+  le_inf _ _ _ h₁ h₂ X := le_inf (h₁ X) (h₂ X)
+  sSup s :=
+    { obj X := ⨆ N in s, N.obj X
+      map f := iSup₂_le fun N hN => (N.map f).trans
+        (Submodule.comap_mono (le_iSup₂_of_le N hN le_rfl)) }
+  isLUB_sSup _ :=
+    ⟨fun N hN _ => le_iSup₂_of_le N hN le_rfl, fun _ hb X => iSup₂_le fun _ hN => hb hN X⟩
+  sInf s :=
+    { obj X := ⨅ N in s, N.obj X
+      map f := by
+        simp_rw [Submodule.comap_iInf, le_iInf₂_iff]
+        intro N hN
+        refine iInf₂_le_of_le _ hN (N.map _) }
+  isGLB_sInf _ :=
+    ⟨fun N hN _ => iInf₂_le N hN, fun _ hb X => le_iInf₂ fun _ hN => hb hN X⟩
+  bot.obj := ⊥
+  bot.map _ := bot_le
+  bot_le _ _ := bot_le
+  top.obj := ⊤
+  top.map _ := le_top
+  le_top _ _ := le_top
 
 中文:
 实例 :
@@ -308,7 +332,31 @@ instance :
   le_sup_right _ _ _ := le_sup_right
   sup_le _ _ _ h₁ h₂ X := sup_le (h₁ X) (h₂ X)
   inf F G :=
-
+    { obj X := F.obj X ⊓ G.obj X
+      map f := le_inf (inf_le_left.trans (F.map f)) (inf_le_right.trans (G.map f)) }
+  inf_le_left _ _ _ := inf_le_left
+  inf_le_right _ _ _ := inf_le_right
+  le_inf _ _ _ h₁ h₂ X := le_inf (h₁ X) (h₂ X)
+  sSup s :=
+    { obj X := ⨆ N in s, N.obj X
+      map f := iSup₂_le fun N hN => (N.map f).trans
+        (Submodule.comap_mono (le_iSup₂_of_le N hN le_rfl)) }
+  isLUB_sSup _ :=
+    ⟨fun N hN _ => le_iSup₂_of_le N hN le_rfl, fun _ hb X => iSup₂_le fun _ hN => hb hN X⟩
+  sInf s :=
+    { obj X := ⨅ N in s, N.obj X
+      map f := by
+        simp_rw [Submodule.comap_iInf, le_iInf₂_iff]
+        intro N hN
+        refine iInf₂_le_of_le _ hN (N.map _) }
+  isGLB_sInf _ :=
+    ⟨fun N hN _ => iInf₂_le N hN, fun _ hb X => le_iInf₂ fun _ hN => hb hN X⟩
+  bot.obj := ⊥
+  bot.map _ := bot_le
+  bot_le _ _ := bot_le
+  top.obj := ⊤
+  top.map _ := le_top
+  le_top _ _ := le_top
 
 Depends on / 依赖: F.map, F.obj, G.map, G.obj, Submodule, Submodule.comap_mono, comap_mono, inf_le_left, inf_le_left.trans, inf_le_right, inf_le_right.trans, le_inf, le_sup_left, le_sup_right, sup_le
 -/

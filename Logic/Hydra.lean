@@ -75,7 +75,9 @@ theorem cutExpand_le_invImage_lex
     simpa only [count_add, count_singleton, if_neg h.2, add_zero, count_eq_zero.2 (hr b h.1)]
       using he
   · apply_fun count a at he
-    s
+    simp only [count_add, count_singleton_self, count_eq_zero.2 (hr _ (irrefl_of r a)),
+      add_zero] at he
+    exact he ▸ Nat.lt_succ_self _
 
 中文:
 定理 cutExpand_le_invImage_lex
@@ -88,7 +90,9 @@ theorem cutExpand_le_invImage_lex
     simpa only [count_add, count_singleton, if_neg h.2, add_zero, count_eq_zero.2 (hr b h.1)]
       using he
   · apply_fun count a at he
-    s
+    simp only [count_add, count_singleton_self, count_eq_zero.2 (hr _ (irrefl_of r a)),
+      add_zero] at he
+    exact he ▸ Nat.lt_succ_self _
 
 Depends on / 依赖: Nat.lt_succ_self, add_zero, apply_fun, count_add, count_eq_zero, count_singleton, count_singleton_self, if_neg, irrefl_of, lt_succ_self, replace, simp_rw, toFinsupp_apply
 -/
@@ -238,7 +242,7 @@ theorem cutExpand_iff
     obtain h | h := mem_add.1 ha
     exacts [⟨ht, h, erase_add_left_pos t h⟩, (@irrefl α r _ a (ht a h)).elim]
   · rintro ⟨ht, h, rfl⟩
-    exact ⟨ht, mem_add.2 (Or.inl h), (erase_add_le
+    exact ⟨ht, mem_add.2 (Or.inl h), (erase_add_left_pos t h).symm⟩
 
 中文:
 定理 cutExpand_iff
@@ -250,7 +254,7 @@ theorem cutExpand_iff
     obtain h | h := mem_add.1 ha
     exacts [⟨ht, h, erase_add_left_pos t h⟩, (@irrefl α r _ a (ht a h)).elim]
   · rintro ⟨ht, h, rfl⟩
-    exact ⟨ht, mem_add.2 (Or.inl h), (erase_add_le
+    exact ⟨ht, mem_add.2 (Or.inl h), (erase_add_left_pos t h).symm⟩
 
 Depends on / 依赖: CutExpand, Or.inl, add_singleton_eq_iff, erase_add_left_pos, exacts, irrefl, mem_add, simp_rw
 -/
@@ -326,7 +330,10 @@ theorem cutExpand_fibration
   obtain h | h := ha
   · refine ⟨(s₁.erase a + t, s₂), GameAdd.fst ⟨t, a, hr, ?_⟩, ?_⟩
     · rw [add_comm, ← add_assoc, singleton_add, cons_erase h]
- 
+    · rw [add_assoc s₁, erase_add_left_pos _ h, add_right_comm, add_assoc]
+  · refine ⟨(s₁, (s₂ + t).erase a), GameAdd.snd ⟨t, a, hr, ?_⟩, ?_⟩
+    · rw [add_comm, singleton_add, cons_erase h]
+    · rw [add_assoc, erase_add_right_pos _ h]
 
 中文:
 定理 cutExpand_fibration
@@ -339,7 +346,10 @@ theorem cutExpand_fibration
   obtain h | h := ha
   · refine ⟨(s₁.erase a + t, s₂), GameAdd.fst ⟨t, a, hr, ?_⟩, ?_⟩
     · rw [add_comm, ← add_assoc, singleton_add, cons_erase h]
- 
+    · rw [add_assoc s₁, erase_add_left_pos _ h, add_right_comm, add_assoc]
+  · refine ⟨(s₁, (s₂ + t).erase a), GameAdd.snd ⟨t, a, hr, ?_⟩, ?_⟩
+    · rw [add_comm, singleton_add, cons_erase h]
+    · rw [add_assoc, erase_add_right_pos _ h]
 
 Depends on / 依赖: GameAdd, GameAdd.fst, GameAdd.snd, add_assoc, add_comm, add_right_comm, add_singleton_eq_iff, classical, cons_erase, erase_add_left_pos, erase_add_right_po, mem_add, singleton_add
 -/

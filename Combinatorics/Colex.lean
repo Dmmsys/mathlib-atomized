@@ -108,7 +108,10 @@ lemma trans_aux
   have ⟨c, hct, hcs, hbc⟩ := hst hb.1 hb.2.1
   by_cases hcu : c in u
   · exact ⟨c, hcu, hcs, hb.2.2.trans hbc⟩
-  ha
+  have ⟨d, hdu, hdt, hcd⟩ := htu hct hcu
+have had : a <= d := hb.2.2.trans hbc.trans hcd
+  refine ⟨d, hdu, fun hds => not_lt_iff_le_imp_ge.2 (hbmax hds hdt had) ?_, had⟩
+exact hbc.trans_lt hcd.lt_of_ne ne_of_mem_of_not_mem hct hdt
 
 中文:
 引理 trans_aux
@@ -121,7 +124,10 @@ lemma trans_aux
   have ⟨c, hct, hcs, hbc⟩ := hst hb.1 hb.2.1
   by_cases hcu : c in u
   · exact ⟨c, hcu, hcs, hb.2.2.trans hbc⟩
-  ha
+  have ⟨d, hdu, hdt, hcd⟩ := htu hct hcu
+have had : a <= d := hb.2.2.trans hbc.trans hcd
+  refine ⟨d, hdu, fun hds => not_lt_iff_le_imp_ge.2 (hbmax hds hdt had) ?_, had⟩
+exact hbc.trans_lt hcd.lt_of_ne ne_of_mem_of_not_mem hct hdt
 -/
 private lemma trans_aux (hst : toColex s <= toColex t) (htu : toColex t <= toColex u)
     (has : a in s) (hat : a ∉ t) : exists b, b in u ∧ b ∉ s ∧ a <= b := by
@@ -181,7 +187,10 @@ instance instPartialOrder
     by_cases hat : a in ofColex t
     · have ⟨b, hbu, hbt, hab⟩ := htu hat hau
       by_cases hbs : b in ofColex s
-      · have ⟨c, hcu, hcs, hbc⟩ := trans_aux h
+      · have ⟨c, hcu, hcs, hbc⟩ := trans_aux hst htu hbs hbt
+        exact ⟨c, hcu, hcs, hab.trans hbc⟩
+      · exact ⟨b, hbu, hbs, hab⟩
+    · exact trans_aux hst htu has hat
 
 中文:
 实例 instPartialOrder
@@ -192,7 +201,10 @@ instance instPartialOrder
     by_cases hat : a in ofColex t
     · have ⟨b, hbu, hbt, hab⟩ := htu hat hau
       by_cases hbs : b in ofColex s
-      · have ⟨c, hcu, hcs, hbc⟩ := trans_aux h
+      · have ⟨c, hcu, hcs, hbc⟩ := trans_aux hst htu hbs hbt
+        exact ⟨c, hcu, hcs, hab.trans hbc⟩
+      · exact ⟨b, hbu, hbs, hab⟩
+    · exact trans_aux hst htu has hat
 -/
 instance instPartialOrder : PartialOrder (Colex (Finset α)) where
   le_refl _ _ ha ha' := (ha' ha).elim
@@ -483,7 +495,8 @@ lemma toColex_lt_singleton
   rw [lt_iff_le_and_ne]; rw [toColex_le_singleton]; rw [ne_eq]; rw [toColex_inj]
   refine ⟨fun h b hb => (h.1 _ hb).1.lt_of_ne ?_,
     fun h => ⟨fun b hb => ⟨(h _ hb).le, fun ha => (lt_irrefl _ <| h _ ha).elim⟩, ?_⟩⟩ <;> rintro rfl
-· refine h.2 eq_singleton_iff_unique_mem.2 ⟨hb, fun c hc => (h.1 
+· refine h.2 eq_singleton_iff_unique_mem.2 ⟨hb, fun c hc => (h.1 _ hc).2 hb⟩
+  · simp at h
 
 中文:
 引理 toColex_lt_singleton
@@ -492,7 +505,8 @@ lemma toColex_lt_singleton
   rw [lt_iff_le_and_ne]; rw [toColex_le_singleton]; rw [ne_eq]; rw [toColex_inj]
   refine ⟨fun h b hb => (h.1 _ hb).1.lt_of_ne ?_,
     fun h => ⟨fun b hb => ⟨(h _ hb).le, fun ha => (lt_irrefl _ <| h _ ha).elim⟩, ?_⟩⟩ <;> rintro rfl
-· refine h.2 eq_singleton_iff_unique_mem.2 ⟨hb, fun c hc => (h.1 
+· refine h.2 eq_singleton_iff_unique_mem.2 ⟨hb, fun c hc => (h.1 _ hc).2 hb⟩
+  · simp at h
 
 Depends on / 依赖: eq_singleton_iff_unique_mem, lt_iff_le_and_ne, lt_irrefl, lt_of_ne, ne_eq, toColex_inj, toColex_le_singleton
 -/
@@ -867,7 +881,9 @@ instance instLinearOrder
       (symmDiff_nonempty.2 <| ofColex.injective.ne_iff.2 hts)
     simp_rw [mem_symmDiff] at ha hamax
     exact ha.imp (fun ha b hbs hbt => ⟨a, ha.1, ha.2, hamax _ <| Or.inr ⟨hbs, hbt⟩⟩)
-      (fun ha 
+      (fun ha b hbt hbs => ⟨a, ha.1, ha.2, hamax _ <| Or.inl ⟨hbt, hbs⟩⟩)
+  toDecidableLE := instDecidableLE
+  toDecidableLT := instDecidableLT
 
 中文:
 实例 instLinearOrder
@@ -879,7 +895,9 @@ instance instLinearOrder
       (symmDiff_nonempty.2 <| ofColex.injective.ne_iff.2 hts)
     simp_rw [mem_symmDiff] at ha hamax
     exact ha.imp (fun ha b hbs hbt => ⟨a, ha.1, ha.2, hamax _ <| Or.inr ⟨hbs, hbt⟩⟩)
-      (fun ha 
+      (fun ha b hbt hbs => ⟨a, ha.1, ha.2, hamax _ <| Or.inl ⟨hbt, hbs⟩⟩)
+  toDecidableLE := instDecidableLE
+  toDecidableLT := instDecidableLT
 
 Depends on / 依赖: Or.inl, Or.inr, eq_or_ne, exists_max_image, ha.imp, injective, instDecidableLE, instDecidableLT, mem_symmDiff, ne_iff, ofColex, ofColex.injective.ne_iff, simp_rw, symmDiff_nonempty, toDecidableLE, toDecidableLT
 -/
@@ -970,7 +988,11 @@ lemma toColex_le_toColex_iff_max'_mem
     have hms : m in s := by
 simpa [m, mem_symmDiff, hmt] using max'_mem _ symmDiff_nonempty.2 hst
     have ⟨b, hbt, hbs, hmb⟩ := h hms hmt
-exact lt_irrefl _ (max'_lt_iff _ _).1 
+exact lt_irrefl _ (max'_lt_iff _ _).1 (hmb.lt_of_ne <| ne_of_mem_of_not_mem hms hbs) _
+mem_symmDiff.2 Or.inr ⟨hbt, hbs⟩
+  · have hst : s != t := ne_of_mem_of_not_mem' has hat
+refine ⟨_, h hst, ?_, le_max' _ _ mem_symmDiff.2 Or.inl ⟨has, hat⟩⟩
+simpa [mem_symmDiff, h hst] using max'_mem _ symmDiff_nonempty.2 hst
 
 中文:
 引理 toColex_le_toColex_iff_max'_mem
@@ -981,7 +1003,11 @@ exact lt_irrefl _ (max'_lt_iff _ _).1
     have hms : m in s := by
 simpa [m, mem_symmDiff, hmt] using max'_mem _ symmDiff_nonempty.2 hst
     have ⟨b, hbt, hbs, hmb⟩ := h hms hmt
-exact lt_irrefl _ (max'_lt_iff _ _).1 
+exact lt_irrefl _ (max'_lt_iff _ _).1 (hmb.lt_of_ne <| ne_of_mem_of_not_mem hms hbs) _
+mem_symmDiff.2 Or.inr ⟨hbt, hbs⟩
+  · have hst : s != t := ne_of_mem_of_not_mem' has hat
+refine ⟨_, h hst, ?_, le_max' _ _ mem_symmDiff.2 Or.inl ⟨has, hat⟩⟩
+simpa [mem_symmDiff, h hst] using max'_mem _ symmDiff_nonempty.2 hst
 
 Depends on / 依赖: Or.inl, Or.inr, _lt_iff, _mem, hmb.lt_of_ne, le_max, lt_irrefl, lt_of_ne, mem_sy, mem_symmDiff, ne_of_mem_of_not_mem, symmDiff_nonempty
 -/
@@ -1072,7 +1098,17 @@ lemma lt_iff_exists_filter_lt
   refine ⟨fun h => ?_, ?_⟩
   · let u := {w in t \ s | forall a in s, a ∉ t -> a < w}
     have mem_u {w : α} : w in u ↔ w in t ∧ w ∉ s ∧ forall a in s, a ∉ t -> a < w := by simp [u, and_assoc]
-    have hu : u.Nonempty := h.imp
+    have hu : u.Nonempty := h.imp fun _ => mem_u.2
+    let m := max' _ hu
+have ⟨hmt, hms, hm⟩ : m in t ∧ m ∉ s ∧ forall a in s, a ∉ t -> a < m := mem_u.1 max'_mem _ _
+    refine ⟨m, hmt, hms, fun a hma => ⟨fun has => not_imp_comm.1 (hm _ has) hma.asymm, fun hat => ?_⟩⟩
+    by_contra has
+    have hau : a in u := mem_u.2 ⟨hat, has, fun b hbs hbt => (hm _ hbs hbt).trans hma⟩
+exact hma.not_ge le_max' _ _ hau
+  · rintro ⟨w, hwt, hws, hw⟩
+    refine ⟨w, hwt, hws, fun a has hat => ?_⟩
+    by_contra! hwa
+exact hat (hw <| hwa.lt_of_ne <| ne_of_mem_of_not_mem hwt hat).1 has
 
 中文:
 引理 lt_iff_存在_filter_lt
@@ -1081,7 +1117,17 @@ lemma lt_iff_exists_filter_lt
   refine ⟨fun h => ?_, ?_⟩
   · let u := {w in t \ s | forall a in s, a ∉ t -> a < w}
     have mem_u {w : α} : w in u ↔ w in t ∧ w ∉ s ∧ forall a in s, a ∉ t -> a < w := by simp [u, and_assoc]
-    have hu : u.Nonempty := h.imp
+    have hu : u.Nonempty := h.imp fun _ => mem_u.2
+    let m := max' _ hu
+have ⟨hmt, hms, hm⟩ : m in t ∧ m ∉ s ∧ forall a in s, a ∉ t -> a < m := mem_u.1 max'_mem _ _
+    refine ⟨m, hmt, hms, fun a hma => ⟨fun has => not_imp_comm.1 (hm _ has) hma.asymm, fun hat => ?_⟩⟩
+    by_contra has
+    have hau : a in u := mem_u.2 ⟨hat, has, fun b hbs hbt => (hm _ hbs hbt).trans hma⟩
+exact hma.not_ge le_max' _ _ hau
+  · rintro ⟨w, hwt, hws, hw⟩
+    refine ⟨w, hwt, hws, fun a has hat => ?_⟩
+    by_contra! hwa
+exact hat (hw <| hwa.lt_of_ne <| ne_of_mem_of_not_mem hwt hat).1 has
 
 Depends on / 依赖: Nonempty, _mem, and_assoc, filter_inj, h.imp, hma.asymm, lt_iff_exists_forall_lt, mem_sdiff, mem_u, not_imp_comm, u.Nonempty
 -/
@@ -1116,7 +1162,41 @@ lemma erase_le_erase_min'
   obtain rfl | h' := eq_or_ne s t
   -- If `s = t`, then `s \ {a} ≤ s \ {m}` because `m ≤ a`
 · exact (erase_le_erase ha <| min'_mem _ _).2 min'_le _ _ ha
-  -- If `s ≠ t`, call `w` the colex witness. Case on whether `w < a` or
+  -- If `s ≠ t`, call `w` the colex witness. Case on whether `w < a` or `a < w`
+replace hst := hst.lt_of_ne toColex_inj.not.2 h'
+  simp only [lt_iff_exists_filter_lt, mem_sdiff, filter_inj, and_assoc] at hst
+  obtain ⟨w, hwt, hws, hw⟩ := hst
+  obtain hwa | haw := (ne_of_mem_of_not_mem ha hws).symm.lt_or_gt
+  -- If `w < a`, then `a` is the colex witness for `s \ {a} < t \ {m}`
+  · have hma : m < a := (min'_le _ _ hwt).trans_lt hwa
+    refine (lt_iff_exists_forall_lt.2 ⟨a, mem_erase.2 ⟨hma.ne', (hw hwa).1 ha⟩,
+      notMem_erase _ _, fun b hbs hbt => ?_⟩).le
+    change b ∉ t.erase m at hbt
+    rw [mem_erase]; rw [not_and_or]; rw [not_ne_iff] at hbt
+    obtain rfl | hbt := hbt
+    · assumption
+    · by_contra! hab
+exact hbt (hw <| hwa.trans_le hab).1 mem_of_mem_erase hbs
+  -- If `a < w`, case on whether `m < w` or `m = w`
+  obtain rfl | hmw : m = w ∨ m < w := (min'_le _ _ hwt).eq_or_lt
+  -- If `m = w`, then `s \ {a} = t \ {m}`
+  · have : erase t m subseteq erase s a := by
+      rintro b hb
+      rw [mem_erase] at hb ⊢
+      exact ⟨(haw.trans_le <| min'_le _ _ hb.2).ne',
+        (hw <| hb.1.lt_of_le' <| min'_le _ _ hb.2).2 hb.2⟩
+    rw [eq_of_subset_of_card_le this]
+    rw [card_erase_of_mem ha]; rw [card_erase_of_mem (min'_mem _ _)]
+    exact tsub_le_tsub_right hcard _
+  -- If `m < w`, then `w` works as the colex witness for `s \ {a} < t \ {m}`
+  · refine (lt_iff_exists_forall_lt.2 ⟨w, mem_erase.2 ⟨hmw.ne', hwt⟩, mt mem_of_mem_erase hws,
+      fun b hbs hbt => ?_⟩).le
+    change b ∉ t.erase m at hbt
+    rw [mem_erase]; rw [not_and_or]; rw [not_ne_iff] at hbt
+    obtain rfl | hbt := hbt
+    · assumption
+    · by_contra! hwb
+exact hbt (hw <| hwb.lt_of_ne <| ne_of_mem_of_not_mem hwt hbt).1 mem_of_mem_erase hbs
 
 中文:
 引理 erase_le_erase_min'
@@ -1128,7 +1208,41 @@ lemma erase_le_erase_min'
   obtain rfl | h' := eq_or_ne s t
   -- If `s = t`, then `s \ {a} ≤ s \ {m}` because `m ≤ a`
 · exact (erase_le_erase ha <| min'_mem _ _).2 min'_le _ _ ha
-  -- If `s ≠ t`, call `w` the colex witness. Case on whether `w < a` or
+  -- If `s ≠ t`, call `w` the colex witness. Case on whether `w < a` or `a < w`
+replace hst := hst.lt_of_ne toColex_inj.not.2 h'
+  simp only [lt_iff_exists_filter_lt, mem_sdiff, filter_inj, and_assoc] at hst
+  obtain ⟨w, hwt, hws, hw⟩ := hst
+  obtain hwa | haw := (ne_of_mem_of_not_mem ha hws).symm.lt_or_gt
+  -- If `w < a`, then `a` is the colex witness for `s \ {a} < t \ {m}`
+  · have hma : m < a := (min'_le _ _ hwt).trans_lt hwa
+    refine (lt_iff_exists_forall_lt.2 ⟨a, mem_erase.2 ⟨hma.ne', (hw hwa).1 ha⟩,
+      notMem_erase _ _, fun b hbs hbt => ?_⟩).le
+    change b ∉ t.erase m at hbt
+    rw [mem_erase]; rw [not_and_or]; rw [not_ne_iff] at hbt
+    obtain rfl | hbt := hbt
+    · assumption
+    · by_contra! hab
+exact hbt (hw <| hwa.trans_le hab).1 mem_of_mem_erase hbs
+  -- If `a < w`, case on whether `m < w` or `m = w`
+  obtain rfl | hmw : m = w ∨ m < w := (min'_le _ _ hwt).eq_or_lt
+  -- If `m = w`, then `s \ {a} = t \ {m}`
+  · have : erase t m subseteq erase s a := by
+      rintro b hb
+      rw [mem_erase] at hb ⊢
+      exact ⟨(haw.trans_le <| min'_le _ _ hb.2).ne',
+        (hw <| hb.1.lt_of_le' <| min'_le _ _ hb.2).2 hb.2⟩
+    rw [eq_of_subset_of_card_le this]
+    rw [card_erase_of_mem ha]; rw [card_erase_of_mem (min'_mem _ _)]
+    exact tsub_le_tsub_right hcard _
+  -- If `m < w`, then `w` works as the colex witness for `s \ {a} < t \ {m}`
+  · refine (lt_iff_exists_forall_lt.2 ⟨w, mem_erase.2 ⟨hmw.ne', hwt⟩, mt mem_of_mem_erase hws,
+      fun b hbs hbt => ?_⟩).le
+    change b ∉ t.erase m at hbt
+    rw [mem_erase]; rw [not_and_or]; rw [not_ne_iff] at hbt
+    obtain rfl | hbt := hbt
+    · assumption
+    · by_contra! hwb
+exact hbt (hw <| hwb.lt_of_ne <| ne_of_mem_of_not_mem hwt hbt).1 mem_of_mem_erase hbs
 
 Depends on / 依赖: generalize_proofs
 -/
@@ -1344,7 +1458,8 @@ lemma IsInitSeg.total
   obtain hst | hst | hts := trichotomous_of (α := Colex (Finset α)) (· < ·) (toColex s) (toColex t)
 · exact hs.2 h₂.2 ht.1 ⟨hst, h₁.1 hs.1⟩
   · simp only [toColex_inj] at hst
-exact ht.2 h
+exact ht.2 hst ▸ hs.1
+· exact ht.2 h₁.2 hs.1 ⟨hts, h₂.1 ht.1⟩
 
 中文:
 引理 IsInitSeg.total
@@ -1358,7 +1473,8 @@ exact ht.2 h
   obtain hst | hst | hts := trichotomous_of (α := Colex (Finset α)) (· < ·) (toColex s) (toColex t)
 · exact hs.2 h₂.2 ht.1 ⟨hst, h₁.1 hs.1⟩
   · simp only [toColex_inj] at hst
-exact ht.2 h
+exact ht.2 hst ▸ hs.1
+· exact ht.2 h₁.2 hs.1 ⟨hts, h₂.1 ht.1⟩
 
 Depends on / 依赖: Finset, mem_sdiff, sdiff_eq_empty_iff_subset, simp_rw, toColex, toColex_inj, trichotomous_of
 -/
@@ -1488,7 +1604,9 @@ lemma IsInitSeg.exists_initSeg
   · rw [h𝒜.1 p, h𝒜.1 hs]
     exact ⟨rfl, le_sup' _ p⟩
   rintro ⟨cards, le⟩
-  obtain p | p := le.eq_or_l
+  obtain p | p := le.eq_or_lt
+  · rwa [toColex_inj.1 p]
+  · exact h𝒜.2 hs ⟨p, cards ▸ h𝒜.1 hs⟩
 
 中文:
 引理 IsInitSeg.存在_initSeg
@@ -1503,7 +1621,9 @@ lemma IsInitSeg.exists_initSeg
   · rw [h𝒜.1 p, h𝒜.1 hs]
     exact ⟨rfl, le_sup' _ p⟩
   rintro ⟨cards, le⟩
-  obtain p | p := le.eq_or_l
+  obtain p | p := le.eq_or_lt
+  · rwa [toColex_inj.1 p]
+  · exact h𝒜.2 hs ⟨p, cards ▸ h𝒜.1 hs⟩
 
 Depends on / 依赖: LinearOrder, LinearOrder.supClosed, _mem, eq_or_lt, le.eq_or_lt, le_sup, mem_initSeg, ofColex, supClosed, toColex, toColex_inj
 -/

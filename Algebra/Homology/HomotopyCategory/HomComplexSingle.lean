@@ -922,7 +922,9 @@ lemma fromSingleMk_mem_coboundaries_iff
     obtain ⟨g, hg⟩ := Cochain.fromSingleMk_surjective α q'' (by lia)
     refine ⟨g, ?_⟩
     rw [← hg]; rw [fromSingleMk_coe]; rw [Cochain.δ_fromSingleMk _ _ _ _ h] at hα
-    exact (Cochain.fromSingleEquiv h).symm.inj
+    exact (Cochain.fromSingleEquiv h).symm.injective hα
+  · rintro ⟨g, rfl⟩
+    exact ⟨Cochain.fromSingleMk g (by lia), Cochain.δ_fromSingleMk _ _ _ _ h⟩
 
 中文:
 引理 fromSingleMk_mem_coboundaries_iff
@@ -934,7 +936,9 @@ lemma fromSingleMk_mem_coboundaries_iff
     obtain ⟨g, hg⟩ := Cochain.fromSingleMk_surjective α q'' (by lia)
     refine ⟨g, ?_⟩
     rw [← hg]; rw [fromSingleMk_coe]; rw [Cochain.δ_fromSingleMk _ _ _ _ h] at hα
-    exact (Cochain.fromSingleEquiv h).symm.inj
+    exact (Cochain.fromSingleEquiv h).symm.injective hα
+  · rintro ⟨g, rfl⟩
+    exact ⟨Cochain.fromSingleMk g (by lia), Cochain.δ_fromSingleMk _ _ _ _ h⟩
 
 Depends on / 依赖: Cochain, Cochain.fromSingleEquiv, Cochain.fromSingleMk, Cochain.fromSingleMk_surjective, fromSingleEquiv, fromSingleMk, fromSingleMk_coe, fromSingleMk_surjective, injective, mem_coboundaries_iff, symm.injective
 -/
@@ -1045,7 +1049,9 @@ lemma toSingleMk_surjective
   have hα := ((n + 1).negOnePow • α).δ_eq_zero (n + 1)
   rw [coe_units_smul]; rw [δ_units_smul]; rw [← hf]; rw [Cochain.δ_toSingleMk _ _ _ p' (by lia)]; rw [smul_smul]; rw [Int.units_mul_self]; rw [one_smul] at hα
   refine ⟨f, ?_, ?_⟩
-  · 
+  · simpa [← cancel_mono (HomologicalComplex.singleObjXSelf (.up Int) q X).inv] using!
+    Cochain.congr_v hα p' q (by lia)
+  · ext : 1; assumption
 
 中文:
 引理 toSingleMk_surjective
@@ -1055,7 +1061,9 @@ lemma toSingleMk_surjective
   have hα := ((n + 1).negOnePow • α).δ_eq_zero (n + 1)
   rw [coe_units_smul]; rw [δ_units_smul]; rw [← hf]; rw [Cochain.δ_toSingleMk _ _ _ p' (by lia)]; rw [smul_smul]; rw [Int.units_mul_self]; rw [one_smul] at hα
   refine ⟨f, ?_, ?_⟩
-  · 
+  · simpa [← cancel_mono (HomologicalComplex.singleObjXSelf (.up Int) q X).inv] using!
+    Cochain.congr_v hα p' q (by lia)
+  · ext : 1; assumption
 
 Depends on / 依赖: Cochain, Cochain.congr_v, Cochain.toSingleMk_surjective, HomologicalComplex, HomologicalComplex.singleObjXSelf, Int.units_mul_self, cancel_mono, coe_units_smul, congr_v, negOnePow, one_smul, singleObjXSelf, smul_smul, toSingleMk_surjective, units_mul_self
 -/
@@ -1177,7 +1185,10 @@ lemma toSingleMk_mem_coboundaries_iff
     obtain ⟨g, hg⟩ := Cochain.toSingleMk_surjective α p'' (by lia)
     refine ⟨n.negOnePow • g, ?_⟩
     rw [← hg]; rw [toSingleMk_coe]; rw [Cochain.δ_toSingleMk _ _ _ _ h] at hα
-    exact (Cochain.toSingleEquiv h).sy
+    exact (Cochain.toSingleEquiv h).symm.injective (by simpa)
+  · rintro ⟨g, rfl⟩
+    exact ⟨n.negOnePow • Cochain.toSingleMk g (by lia),
+      by simp [Cochain.δ_toSingleMk _ _ _ _ h, smul_smul]⟩
 
 中文:
 引理 toSingleMk_mem_coboundaries_iff
@@ -1189,7 +1200,10 @@ lemma toSingleMk_mem_coboundaries_iff
     obtain ⟨g, hg⟩ := Cochain.toSingleMk_surjective α p'' (by lia)
     refine ⟨n.negOnePow • g, ?_⟩
     rw [← hg]; rw [toSingleMk_coe]; rw [Cochain.δ_toSingleMk _ _ _ _ h] at hα
-    exact (Cochain.toSingleEquiv h).sy
+    exact (Cochain.toSingleEquiv h).symm.injective (by simpa)
+  · rintro ⟨g, rfl⟩
+    exact ⟨n.negOnePow • Cochain.toSingleMk g (by lia),
+      by simp [Cochain.δ_toSingleMk _ _ _ _ h, smul_smul]⟩
 
 Depends on / 依赖: Cochain, Cochain.toSingleEquiv, Cochain.toSingleMk, Cochain.toSingleMk_surjective, injective, mem_coboundaries_iff, n.negOnePow, negOnePow, smul_smul, symm.injective, toSingleEquiv, toSingleMk, toSingleMk_coe, toSingleMk_surjective
 -/

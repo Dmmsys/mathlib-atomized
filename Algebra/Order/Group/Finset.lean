@@ -59,7 +59,11 @@ lemma toFinset_eq_singleton_iff
     by_cases hx : x = a
     · simp_rw [hx, ite_true, mul_one, count_eq_card]
       intro y hy
-      rw [← me
+      rw [← mem_toFinset]; rw [H]; rw [Finset.mem_singleton] at hy
+      exact hy.symm
+have hx' : x ∉ s := fun h' => hx by rwa [← mem_toFinset, H, Finset.mem_singleton] at h'
+    simp_rw [count_eq_zero_of_notMem hx', hx, ite_false, Nat.mul_zero]
+  simpa only [toFinset_nsmul _ _ H.1, toFinset_singleton] using congr($(H.2).toFinset)
 
 中文:
 引理 toFinset_eq_singleton_iff
@@ -72,7 +76,11 @@ lemma toFinset_eq_singleton_iff
     by_cases hx : x = a
     · simp_rw [hx, ite_true, mul_one, count_eq_card]
       intro y hy
-      rw [← me
+      rw [← mem_toFinset]; rw [H]; rw [Finset.mem_singleton] at hy
+      exact hy.symm
+have hx' : x ∉ s := fun h' => hx by rwa [← mem_toFinset, H, Finset.mem_singleton] at h'
+    simp_rw [count_eq_zero_of_notMem hx', hx, ite_false, Nat.mul_zero]
+  simpa only [toFinset_nsmul _ _ H.1, toFinset_singleton] using congr($(H.2).toFinset)
 
 Depends on / 依赖: Finset, Finset.empty_ne_singleton, Finset.mem_singleton, Nat.mul_zero, card_eq_zero, count_eq_card, count_eq_zero_of_notMem, count_nsmul, count_singleton, empty_ne_singleton, hy.symm, ite_false, ite_true, mem_singleton, mem_toFinset, mul_one, mul_zero, simp_rw, toFinset_zero
 -/

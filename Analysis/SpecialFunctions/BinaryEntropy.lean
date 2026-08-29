@@ -277,6 +277,11 @@ lemma binEntropy_neg_of_neg
       rw [← log_neg_eq_log]
       exact log_lt_log (Left.neg_pos_iff.mpr hp) (by linarith)
     nlinarith [log_pos_of_lt_neg_one hp']
+  · have : -p * log p <= 0 := by
+      wlog h : -1 < p
+      · simp only [show p = -1 by linarith, log_neg_eq_log, log_one, le_refl, mul_zero]
+      · nlinarith [log_neg_of_lt_zero hp h]
+    nlinarith [(log_pos (by linarith) : 0 < log (1 - p))]
 
 中文:
 引理 binEntropy_neg_of_neg
@@ -290,6 +295,11 @@ lemma binEntropy_neg_of_neg
       rw [← log_neg_eq_log]
       exact log_lt_log (Left.neg_pos_iff.mpr hp) (by linarith)
     nlinarith [log_pos_of_lt_neg_one hp']
+  · have : -p * log p <= 0 := by
+      wlog h : -1 < p
+      · simp only [show p = -1 by linarith, log_neg_eq_log, log_one, le_refl, mul_zero]
+      · nlinarith [log_neg_of_lt_zero hp h]
+    nlinarith [(log_pos (by linarith) : 0 < log (1 - p))]
 
 Depends on / 依赖: Left.neg_pos_iff.mpr, binEntropy, le_refl, log_inv, log_lt_log, log_neg_eq_log, log_neg_of_lt_zero, log_one, log_pos, log_pos_of_lt_neg_one, mul_zero, neg_pos_iff
 -/
@@ -433,7 +443,13 @@ lemma binEntropy_lt_log_two
     rw [← binEntropy_one_sub]
     exact this hp.ne hp
   obtain hp₀ | hp₀ := le_or_gt p 0
-· exact (binEntropy_nonpos_of_nonpos hp₀)
+· exact (binEntropy_nonpos_of_nonpos hp₀).trans_lt log_pos by simp
+have hp₁ : 0 < 1 - p := sub_pos.2 hp.trans by norm_num
+  calc
+  _ < log (p * p⁻¹ + (1 - p) * (1 - p)⁻¹) :=
+    strictConcaveOn_log_Ioi.2 (inv_pos.2 hp₀) (inv_pos.2 hp₁)
+      (by simpa [eq_sub_iff_add_eq, ← two_mul, mul_comm, mul_eq_one_iff_eq_inv₀]) hp₀ hp₁ (by simp)
+  _ = log 2 := by rw [mul_inv_cancel₀, mul_inv_cancel₀, one_add_one_eq_two] <;> positivity
 
 中文:
 引理 binEntropy_lt_log_two
@@ -448,7 +464,13 @@ lemma binEntropy_lt_log_two
     rw [← binEntropy_one_sub]
     exact this hp.ne hp
   obtain hp₀ | hp₀ := le_or_gt p 0
-· exact (binEntropy_nonpos_of_nonpos hp₀)
+· exact (binEntropy_nonpos_of_nonpos hp₀).trans_lt log_pos by simp
+have hp₁ : 0 < 1 - p := sub_pos.2 hp.trans by norm_num
+  calc
+  _ < log (p * p⁻¹ + (1 - p) * (1 - p)⁻¹) :=
+    strictConcaveOn_log_Ioi.2 (inv_pos.2 hp₀) (inv_pos.2 hp₁)
+      (by simpa [eq_sub_iff_add_eq, ← two_mul, mul_comm, mul_eq_one_iff_eq_inv₀]) hp₀ hp₁ (by simp)
+  _ = log 2 := by rw [mul_inv_cancel₀, mul_inv_cancel₀, one_add_one_eq_two] <;> positivity
 
 Depends on / 依赖: binEntropy_nonpos_of_nonpos, binEntropy_one_sub, eq_sub_iff_add_eq, hp.ne, hp.trans, inv_pos, le_or_gt, log_pos, splitNe, strictConcaveOn_log_Ioi, sub_lt_comm, sub_pos, trans_lt, two_mul
 -/
@@ -573,7 +595,9 @@ lemma differentiableAt_binEntropy_iff_ne_zero_one
   · rw [DifferentiableAt.fun_add_iff_left] at h
     · simp [log_inv, mul_neg, ← neg_mul, ← negMulLog_def, differentiableAt_negMulLog_iff] at h
     · fun_prop (disch := simp)
-  
+  · rw [DifferentiableAt.fun_add_iff_right, differentiableAt_iff_comp_const_sub (b := 1)] at h
+    · simp [log_inv, mul_neg, ← neg_mul, ← negMulLog_def, differentiableAt_negMulLog_iff] at h
+    · fun_prop (disch := simp)
 
 中文:
 引理 differentiableAt_binEntropy_iff_ne_zero_one
@@ -583,7 +607,9 @@ lemma differentiableAt_binEntropy_iff_ne_zero_one
   · rw [DifferentiableAt.fun_add_iff_left] at h
     · simp [log_inv, mul_neg, ← neg_mul, ← negMulLog_def, differentiableAt_negMulLog_iff] at h
     · fun_prop (disch := simp)
-  
+  · rw [DifferentiableAt.fun_add_iff_right, differentiableAt_iff_comp_const_sub (b := 1)] at h
+    · simp [log_inv, mul_neg, ← neg_mul, ← negMulLog_def, differentiableAt_negMulLog_iff] at h
+    · fun_prop (disch := simp)
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.fun_add_iff_left, DifferentiableAt.fun_add_iff_right, binEntropy, differentiableAt_binEntropy, differentiableAt_iff_comp_const_sub, differentiableAt_negMulLog_iff, fun_add_iff_left, fun_add_iff_right, fun_prop, log_inv, mul_neg, negMulLog_def, neg_mul
 -/
@@ -612,7 +638,10 @@ lemma deriv_binEntropy
     rw [binEntropy_eq_negMulLog_add_negMulLog_one_sub']; rw [deriv_fun_add]; rw [deriv_comp_const_sub]; rw [deriv_negMulLog hp₀]; rw [deriv_negMulLog hp₁]
     · ring
     all_goals fun_prop
-  --
+  -- pathological case where `deriv = 0` since `binEntropy` is not differentiable there
+  · rw [deriv_zero_of_not_differentiableAt (differentiableAt_binEntropy_iff_ne_zero_one.not.2 hp)]
+    push +distrib Not at hp
+    obtain rfl | rfl := hp <;> simp
 
 中文:
 引理 deriv_binEntropy
@@ -625,7 +654,10 @@ lemma deriv_binEntropy
     rw [binEntropy_eq_negMulLog_add_negMulLog_one_sub']; rw [deriv_fun_add]; rw [deriv_comp_const_sub]; rw [deriv_negMulLog hp₀]; rw [deriv_negMulLog hp₁]
     · ring
     all_goals fun_prop
-  --
+  -- pathological case where `deriv = 0` since `binEntropy` is not differentiable there
+  · rw [deriv_zero_of_not_differentiableAt (differentiableAt_binEntropy_iff_ne_zero_one.not.2 hp)]
+    push +distrib Not at hp
+    obtain rfl | rfl := hp <;> simp
 
 Depends on / 依赖: all_goals, binEntropy_eq_negMulLog_add_negMulLog_one_sub, deriv_comp_const_sub, deriv_fun_add, deriv_negMulLog, fun_prop, ne_comm, sub_ne_zero
 -/
@@ -963,7 +995,15 @@ lemma tendsto_log_one_sub_sub_log_nhdsLT_one_atBot
   · have : Tendsto log (𝓝[>] 0) atBot := Real.tendsto_log_nhdsGT_zero
     apply Tendsto.comp (f := (1 - ·)) (g := log) this
     have contF : Continuous ((1 : Real) - ·) := continuous_sub_left 1
-    have : MapsTo ((1 : Real) -
+    have : MapsTo ((1 : Real) - ·) (Iio 1) (Ioi 0) := by
+      intro p hx
+      simp_all only [mem_Iio, mem_Ioi, sub_pos]
+    convert! ContinuousWithinAt.tendsto_nhdsWithin (x := (1 : Real)) contF.continuousWithinAt this
+    exact Eq.symm (sub_eq_zero_of_eq rfl)
+  · have h₁ : (1 : Real) - (2 : Real)⁻¹ < 1 := by norm_num
+    filter_upwards [Ico_mem_nhdsLT h₁] with p hx
+    gcongr
+    exact hx.1
 
 中文:
 引理 tendsto_log_one_sub_sub_log_nhdsLT_one_atBot
@@ -972,7 +1012,15 @@ lemma tendsto_log_one_sub_sub_log_nhdsLT_one_atBot
   · have : Tendsto log (𝓝[>] 0) atBot := Real.tendsto_log_nhdsGT_zero
     apply Tendsto.comp (f := (1 - ·)) (g := log) this
     have contF : Continuous ((1 : Real) - ·) := continuous_sub_left 1
-    have : MapsTo ((1 : Real) -
+    have : MapsTo ((1 : Real) - ·) (Iio 1) (Ioi 0) := by
+      intro p hx
+      simp_all only [mem_Iio, mem_Ioi, sub_pos]
+    convert! ContinuousWithinAt.tendsto_nhdsWithin (x := (1 : Real)) contF.continuousWithinAt this
+    exact Eq.symm (sub_eq_zero_of_eq rfl)
+  · have h₁ : (1 : Real) - (2 : Real)⁻¹ < 1 := by norm_num
+    filter_upwards [Ico_mem_nhdsLT h₁] with p hx
+    gcongr
+    exact hx.1
 -/
 private lemma tendsto_log_one_sub_sub_log_nhdsLT_one_atBot :
     Tendsto (fun p => log (1 - p) - log p) (𝓝[<] 1) atBot := by
@@ -1003,7 +1051,16 @@ lemma not_continuousAt_deriv_qaryEntropy_one
       ring
     rw [this]
     apply tendsto_atBot_add_const_left
-    exact te
+    exact tendsto_log_one_sub_sub_log_nhdsLT_one_atBot
+  apply not_continuousAt_of_tendsto (Filter.Tendsto.congr' _ tendstoBot) nhdsWithin_le_nhds
+  · simp only [disjoint_nhds_atBot_iff, not_isBot, not_false_eq_true]
+  filter_upwards [Ioo_mem_nhdsLT (show 1 - 2⁻¹ < (1 : Real) by norm_num)]
+  intros
+  apply (deriv_qaryEntropy _ _).symm
+  · simp_all only [mem_Ioo, ne_eq]
+    linarith [show (1 : Real) = 2⁻¹ + 2⁻¹ by norm_num]
+  · simp_all only [mem_Ioo, ne_eq]
+    linarith [two_inv_lt_one (α := Real)]
 
 中文:
 引理 not_continuousAt_deriv_qaryEntropy_one
@@ -1015,7 +1072,16 @@ lemma not_continuousAt_deriv_qaryEntropy_one
       ring
     rw [this]
     apply tendsto_atBot_add_const_left
-    exact te
+    exact tendsto_log_one_sub_sub_log_nhdsLT_one_atBot
+  apply not_continuousAt_of_tendsto (Filter.Tendsto.congr' _ tendstoBot) nhdsWithin_le_nhds
+  · simp only [disjoint_nhds_atBot_iff, not_isBot, not_false_eq_true]
+  filter_upwards [Ioo_mem_nhdsLT (show 1 - 2⁻¹ < (1 : Real) by norm_num)]
+  intros
+  apply (deriv_qaryEntropy _ _).symm
+  · simp_all only [mem_Ioo, ne_eq]
+    linarith [show (1 : Real) = 2⁻¹ + 2⁻¹ by norm_num]
+  · simp_all only [mem_Ioo, ne_eq]
+    linarith [two_inv_lt_one (α := Real)]
 
 Depends on / 依赖: Filter, Filter.Tendsto.congr, Ioo_mem_nhdsLT, Tendsto, disjoint_nhds_atBot_iff, filter_upwards, nhdsWithin_le_nhds, not_continuousAt_of_tendsto, not_false_eq_true, not_isBot, tendstoBot, tendsto_atBot_add_const_left, tendsto_log_one_sub_sub_log_nhdsLT_one_atBot
 -/
@@ -1049,7 +1115,16 @@ lemma not_continuousAt_deriv_qaryEntropy_zero
     have : (fun p => log (q - 1) + log (1 - p) - log p)
         = (fun p => log (q - 1) + (log (1 - p) - log p)) := by ext; ring
     rw [this]
-    exact tendsto_atTop_add_const_left _ _ tendsto_log_one_s
+    exact tendsto_atTop_add_const_left _ _ tendsto_log_one_sub_sub_log_nhdsGT_atAtop
+  apply not_continuousAt_of_tendsto (Filter.Tendsto.congr' _ tendstoTop) nhdsWithin_le_nhds
+  · simp only [disjoint_nhds_atTop_iff, not_isTop, not_false_eq_true]
+  filter_upwards [Ioo_mem_nhdsGT (show (0 : Real) < 2⁻¹ by norm_num)]
+  intros
+  apply (deriv_qaryEntropy _ _).symm
+  · simp_all only [mem_Ioo, ne_eq]
+    linarith
+  · simp_all only [mem_Ioo, ne_eq]
+    linarith [two_inv_lt_one (α := Real)]
 
 中文:
 引理 not_continuousAt_deriv_qaryEntropy_zero
@@ -1058,7 +1133,16 @@ lemma not_continuousAt_deriv_qaryEntropy_zero
     have : (fun p => log (q - 1) + log (1 - p) - log p)
         = (fun p => log (q - 1) + (log (1 - p) - log p)) := by ext; ring
     rw [this]
-    exact tendsto_atTop_add_const_left _ _ tendsto_log_one_s
+    exact tendsto_atTop_add_const_left _ _ tendsto_log_one_sub_sub_log_nhdsGT_atAtop
+  apply not_continuousAt_of_tendsto (Filter.Tendsto.congr' _ tendstoTop) nhdsWithin_le_nhds
+  · simp only [disjoint_nhds_atTop_iff, not_isTop, not_false_eq_true]
+  filter_upwards [Ioo_mem_nhdsGT (show (0 : Real) < 2⁻¹ by norm_num)]
+  intros
+  apply (deriv_qaryEntropy _ _).symm
+  · simp_all only [mem_Ioo, ne_eq]
+    linarith
+  · simp_all only [mem_Ioo, ne_eq]
+    linarith [two_inv_lt_one (α := Real)]
 
 Depends on / 依赖: Filter, Filter.Tendsto.congr, Ioo_mem_nhdsGT, Tendsto, disjoint_nhds_atTop_iff, filter_upwards, nhdsWithin_le_nhds, not_continuousAt_of_tendsto, not_false_eq_true, not_isTop, tendstoTop, tendsto_atTop_add_const_left, tendsto_log_one_sub_sub_log_nhdsGT_atAtop
 -/
@@ -1089,7 +1173,29 @@ lemma deriv2_qaryEntropy
   by_cases is_x_where_nondiff : p != 0 ∧ p != 1 -- normal case
   · obtain ⟨xne0, xne1⟩ := is_x_where_nondiff
     suffices forallᶠ y in (𝓝 p),
-        deriv (fun p => (qaryEntropy q) p) y = log (q - 1
+        deriv (fun p => (qaryEntropy q) p) y = log (q - 1) + log (1 - y) - log y by
+      refine (Filter.EventuallyEq.deriv_eq this).trans ?_
+      rw [deriv_fun_sub ?_ (differentiableAt_log xne0)]
+      · rw [deriv.log differentiableAt_fun_id xne0]
+        simp only [deriv_id'', one_div]
+        · have {q : Real} (p : Real) : DifferentiableAt Real (fun p => q - p) p := by fun_prop
+          simp [field, sub_ne_zero_of_ne xne1.symm, this]
+          ring
+      · apply DifferentiableAt.add
+        · simp only [differentiableAt_const]
+        exact DifferentiableAt.log (by fun_prop) (sub_ne_zero.mpr xne1.symm)
+    filter_upwards [eventually_ne_nhds xne0, eventually_ne_nhds xne1]
+      with y xne0 h2 using deriv_qaryEntropy xne0 h2
+  -- Pathological case where we use junk value (because function not differentiable)
+  · have : p = 0 ∨ p = 1 := Decidable.or_iff_not_not_and_not.mpr is_x_where_nondiff
+    rw [deriv_zero_of_not_differentiableAt]
+    · simp_all only [ne_eq, not_and, Decidable.not_not]
+      cases this <;>
+        simp_all only [mul_zero, one_ne_zero, zero_ne_one, sub_zero, mul_one, div_zero, sub_self]
+    · intro h
+      have contAt := h.continuousAt
+      cases this <;>
+        simp_all [not_continuousAt_deriv_qaryEntropy_zero, not_continuousAt_deriv_qaryEntropy_one]
 
 中文:
 引理 deriv2_qaryEntropy
@@ -1098,7 +1204,29 @@ lemma deriv2_qaryEntropy
   by_cases is_x_where_nondiff : p != 0 ∧ p != 1 -- normal case
   · obtain ⟨xne0, xne1⟩ := is_x_where_nondiff
     suffices forallᶠ y in (𝓝 p),
-        deriv (fun p => (qaryEntropy q) p) y = log (q - 1
+        deriv (fun p => (qaryEntropy q) p) y = log (q - 1) + log (1 - y) - log y by
+      refine (Filter.EventuallyEq.deriv_eq this).trans ?_
+      rw [deriv_fun_sub ?_ (differentiableAt_log xne0)]
+      · rw [deriv.log differentiableAt_fun_id xne0]
+        simp only [deriv_id'', one_div]
+        · have {q : Real} (p : Real) : DifferentiableAt Real (fun p => q - p) p := by fun_prop
+          simp [field, sub_ne_zero_of_ne xne1.symm, this]
+          ring
+      · apply DifferentiableAt.add
+        · simp only [differentiableAt_const]
+        exact DifferentiableAt.log (by fun_prop) (sub_ne_zero.mpr xne1.symm)
+    filter_upwards [eventually_ne_nhds xne0, eventually_ne_nhds xne1]
+      with y xne0 h2 using deriv_qaryEntropy xne0 h2
+  -- Pathological case where we use junk value (because function not differentiable)
+  · have : p = 0 ∨ p = 1 := Decidable.or_iff_not_not_and_not.mpr is_x_where_nondiff
+    rw [deriv_zero_of_not_differentiableAt]
+    · simp_all only [ne_eq, not_and, Decidable.not_not]
+      cases this <;>
+        simp_all only [mul_zero, one_ne_zero, zero_ne_one, sub_zero, mul_one, div_zero, sub_self]
+    · intro h
+      have contAt := h.continuousAt
+      cases this <;>
+        simp_all [not_continuousAt_deriv_qaryEntropy_zero, not_continuousAt_deriv_qaryEntropy_one]
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.deriv_eq, Function, Function.comp_apply, Function.id_comp, Function.iterate_succ, Function.iterate_zero, comp_apply, deriv.log, deriv_eq, deriv_fun_sub, deriv_id, differentiableAt_fun_id, differentiableAt_log, id_comp, is_x_where_nondiff, iterate_succ, iterate_zero, normal
 -/
@@ -1165,7 +1293,24 @@ lemma qaryEntropy_strictMonoOn
   · intro p hp
     have : 2 <= (q : Real) := Nat.ofNat_le_cast.mpr qLe2
     have zero_le_qinv : 0 < (q : Real)⁻¹ := by positivity
-    h
+    have : 0 < 1 - p := by
+      simp only [sub_pos]
+      have p_lt_1_minus_qinv : p < 1 - (q : Real)⁻¹ := by
+        simp_all only [inv_pos, interior_Icc, mem_Ioo, one_div]
+      linarith
+    simp only [one_div, interior_Icc, mem_Ioo] at hp
+    rw [deriv_qaryEntropy (by linarith)]
+    · simp only [sub_pos, gt_iff_lt]
+      rw [← log_mul (by linarith) (by linarith)]
+      apply Real.strictMonoOn_log (mem_Ioi.mpr hp.1)
+      · simp_all only [mem_Ioi, mul_pos_iff_of_pos_left, show 0 < (q : Real) - 1 by linarith]
+      · have qpos : 0 < (q : Real) := by positivity
+        have : q * p < q - 1 := by
+          convert! mul_lt_mul_of_pos_left hp.2 qpos using 1
+          simp only [mul_sub, mul_one, isUnit_iff_ne_zero, ne_eq, ne_of_gt qpos, not_false_eq_true,
+            IsUnit.mul_inv_cancel]
+        linarith
+    exact (ne_of_gt (lt_add_neg_iff_lt.mp this : p < 1)).symm
 
 中文:
 引理 qaryEntropy_strictMonoOn
@@ -1177,7 +1322,24 @@ lemma qaryEntropy_strictMonoOn
   · intro p hp
     have : 2 <= (q : Real) := Nat.ofNat_le_cast.mpr qLe2
     have zero_le_qinv : 0 < (q : Real)⁻¹ := by positivity
-    h
+    have : 0 < 1 - p := by
+      simp only [sub_pos]
+      have p_lt_1_minus_qinv : p < 1 - (q : Real)⁻¹ := by
+        simp_all only [inv_pos, interior_Icc, mem_Ioo, one_div]
+      linarith
+    simp only [one_div, interior_Icc, mem_Ioo] at hp
+    rw [deriv_qaryEntropy (by linarith)]
+    · simp only [sub_pos, gt_iff_lt]
+      rw [← log_mul (by linarith) (by linarith)]
+      apply Real.strictMonoOn_log (mem_Ioi.mpr hp.1)
+      · simp_all only [mem_Ioi, mul_pos_iff_of_pos_left, show 0 < (q : Real) - 1 by linarith]
+      · have qpos : 0 < (q : Real) := by positivity
+        have : q * p < q - 1 := by
+          convert! mul_lt_mul_of_pos_left hp.2 qpos using 1
+          simp only [mul_sub, mul_one, isUnit_iff_ne_zero, ne_eq, ne_of_gt qpos, not_false_eq_true,
+            IsUnit.mul_inv_cancel]
+        linarith
+    exact (ne_of_gt (lt_add_neg_iff_lt.mp this : p < 1)).symm
 
 Depends on / 依赖: Nat.ofNat_le_cast.mpr, continuousOn, convex_Icc, deriv_qa, interior_Icc, inv_pos, mem_Ioo, ofNat_le_cast, one_div, p_lt_1_minus_qinv, qaryEntropy_continuous, qaryEntropy_continuous.continuousOn, strictMonoOn_of_deriv_pos, sub_pos, zero_le_qinv
 -/
@@ -1220,7 +1382,25 @@ lemma qaryEntropy_strictAntiOn
   · exact qaryEntropy_continuous.continuousOn
   · intro p hp
     have : 2 <= (q : Real) := Nat.ofNat_le_cast.mpr qLe2
-    have qinv_lt_1 : (q : Real)⁻¹ < 1 := inv_lt_one_of_one_lt₀ 
+    have qinv_lt_1 : (q : Real)⁻¹ < 1 := inv_lt_one_of_one_lt₀ (by linarith)
+    have zero_lt_1_sub_p : 0 < 1 - p := by simp_all only [sub_pos, interior_Icc, mem_Ioo]
+    simp only [one_div, interior_Icc, mem_Ioo] at hp
+    rw [deriv_qaryEntropy (by linarith)]
+    · simp only [sub_neg, gt_iff_lt]
+      rw [← log_mul (by linarith) (by linarith)]
+      apply Real.strictMonoOn_log (mem_Ioi.mpr (show 0 < (↑q - 1) * (1 - p) by nlinarith))
+      · simp_all only [mem_Ioi]
+        linarith
+      · have qpos : 0 < (q : Real) := by positivity
+        ring_nf
+        have : (q : Real) - 1 < p * q := by
+          have h1 := mul_lt_mul_of_pos_right hp.1 qpos
+          have h2 : (1 - (q : Real)⁻¹) * ↑q = q - 1 := by calc (1 - (q : Real)⁻¹) * ↑q
+            _ = q - (q : Real)⁻¹ * (q : Real) := by ring
+            _ = q - 1 := by simp [qpos.ne']
+          rwa [h2] at h1
+        nlinarith
+    exact (ne_of_gt (lt_add_neg_iff_lt.mp zero_lt_1_sub_p : p < 1)).symm
 
 中文:
 引理 qaryEntropy_strictAntiOn
@@ -1231,7 +1411,25 @@ lemma qaryEntropy_strictAntiOn
   · exact qaryEntropy_continuous.continuousOn
   · intro p hp
     have : 2 <= (q : Real) := Nat.ofNat_le_cast.mpr qLe2
-    have qinv_lt_1 : (q : Real)⁻¹ < 1 := inv_lt_one_of_one_lt₀ 
+    have qinv_lt_1 : (q : Real)⁻¹ < 1 := inv_lt_one_of_one_lt₀ (by linarith)
+    have zero_lt_1_sub_p : 0 < 1 - p := by simp_all only [sub_pos, interior_Icc, mem_Ioo]
+    simp only [one_div, interior_Icc, mem_Ioo] at hp
+    rw [deriv_qaryEntropy (by linarith)]
+    · simp only [sub_neg, gt_iff_lt]
+      rw [← log_mul (by linarith) (by linarith)]
+      apply Real.strictMonoOn_log (mem_Ioi.mpr (show 0 < (↑q - 1) * (1 - p) by nlinarith))
+      · simp_all only [mem_Ioi]
+        linarith
+      · have qpos : 0 < (q : Real) := by positivity
+        ring_nf
+        have : (q : Real) - 1 < p * q := by
+          have h1 := mul_lt_mul_of_pos_right hp.1 qpos
+          have h2 : (1 - (q : Real)⁻¹) * ↑q = q - 1 := by calc (1 - (q : Real)⁻¹) * ↑q
+            _ = q - (q : Real)⁻¹ * (q : Real) := by ring
+            _ = q - 1 := by simp [qpos.ne']
+          rwa [h2] at h1
+        nlinarith
+    exact (ne_of_gt (lt_add_neg_iff_lt.mp zero_lt_1_sub_p : p < 1)).symm
 
 Depends on / 依赖: Nat.ofNat_le_cast.mpr, continuousOn, convex_Icc, deriv_qaryEntropy, gt_iff_l, interior_Icc, mem_Ioo, ofNat_le_cast, one_div, qaryEntropy_continuous, qaryEntropy_continuous.continuousOn, qinv_lt_1, strictAntiOn_of_deriv_neg, sub_neg, sub_pos, zero_lt_1_sub_p
 -/
@@ -1325,7 +1523,7 @@ lemma strictConcaveOn_qaryEntropy
   · simp_all only [interior_Icc, mem_Ioo]
     apply div_neg_of_neg_of_pos
     · norm_num [show 0 < log 2 by positivity]
-    · simp_all only [mul_pos_iff_of_pos_left, s
+    · simp_all only [mul_pos_iff_of_pos_left, sub_pos]
 
 中文:
 引理 strictConcaveOn_qaryEntropy
@@ -1337,7 +1535,7 @@ lemma strictConcaveOn_qaryEntropy
   · simp_all only [interior_Icc, mem_Ioo]
     apply div_neg_of_neg_of_pos
     · norm_num [show 0 < log 2 by positivity]
-    · simp_all only [mul_pos_iff_of_pos_left, s
+    · simp_all only [mul_pos_iff_of_pos_left, sub_pos]
 
 Depends on / 依赖: continuousOn, convex_Icc, deriv2_qaryEntropy, div_neg_of_neg_of_pos, interior_Icc, mem_Ioo, mul_pos_iff_of_pos_left, qaryEntropy_continuous, qaryEntropy_continuous.continuousOn, strictConcaveOn_of_deriv2_neg, sub_pos
 -/

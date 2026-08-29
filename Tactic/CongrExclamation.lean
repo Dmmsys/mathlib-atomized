@@ -301,7 +301,12 @@ definition applyCongrThm?
     let mvarId ← mvarId.assert (← mkFreshUserName `h_congr_thm) congrThmType congrThmProof
     let (fvarId, mvarId) ← mvarId.intro1P
 let mvarIds ← withTransparency config.transparency
-      mvarId.apply (mkFVar fvarId) { synthAssi
+      mvarId.apply (mkFVar fvarId) { synthAssignedInstances := false }
+    mvarIds.mapM fun mvarId => mvarId.tryClear fvarId
+  catch e =>
+    withTraceNode `congr! (fun _ => pure m!"failed to apply congr lemma") do
+      trace[congr!] "{e.toMessageData}"
+    throw e
 
 中文:
 定义 applyCongrThm?
@@ -311,7 +316,12 @@ let mvarIds ← withTransparency config.transparency
     let mvarId ← mvarId.assert (← mkFreshUserName `h_congr_thm) congrThmType congrThmProof
     let (fvarId, mvarId) ← mvarId.intro1P
 let mvarIds ← withTransparency config.transparency
-      mvarId.apply (mkFVar fvarId) { synthAssi
+      mvarId.apply (mkFVar fvarId) { synthAssignedInstances := false }
+    mvarIds.mapM fun mvarId => mvarId.tryClear fvarId
+  catch e =>
+    withTraceNode `congr! (fun _ => pure m!"failed to apply congr lemma") do
+      trace[congr!] "{e.toMessageData}"
+    throw e
 -/
 private def applyCongrThm?
     (config : Congr!.Config) (mvarId : MVarId) (congrThmType congrThmProof : Expr) :
@@ -341,7 +351,19 @@ definition Congr!.plausiblyEqualTypes
     if (← isProp ty1) && (← isProp ty2) then
       return true
     -- Types from different type universes are not plausibly equal.
-    -- This is redundant, but it saves carrying out the remaining check
+    -- This is redundant, but it saves carrying out the remaining checks.
+unless ← withNewMCtxDepth isDefEq (← inferType ty1) (← inferType ty2) do
+      return false
+    -- Now put the types into whnf, check they have the same head, and then recurse on arguments
+    let ty1 ← whnfD ty1
+    let ty2 ← whnfD ty2
+unless ← withNewMCtxDepth isDefEq ty1.getAppFn ty2.getAppFn do
+      return false
+    for arg1 in ty1.getAppArgs, arg2 in ty2.getAppArgs do
+      if (← isType arg1) && (← isType arg2) then
+        unless ← plausiblyEqualTypes arg1 arg2 maxDepth do
+          return false
+    return true
 
 中文:
 定义 余ngr!.plausiblyEqualTypes
@@ -353,7 +375,19 @@ definition Congr!.plausiblyEqualTypes
     if (← isProp ty1) && (← isProp ty2) then
       return true
     -- Types from different type universes are not plausibly equal.
-    -- This is redundant, but it saves carrying out the remaining check
+    -- This is redundant, but it saves carrying out the remaining checks.
+unless ← withNewMCtxDepth isDefEq (← inferType ty1) (← inferType ty2) do
+      return false
+    -- Now put the types into whnf, check they have the same head, and then recurse on arguments
+    let ty1 ← whnfD ty1
+    let ty2 ← whnfD ty2
+unless ← withNewMCtxDepth isDefEq ty1.getAppFn ty2.getAppFn do
+      return false
+    for arg1 in ty1.getAppArgs, arg2 in ty2.getAppArgs do
+      if (← isType arg1) && (← isType arg2) then
+        unless ← plausiblyEqualTypes arg1 arg2 maxDepth do
+          return false
+    return true
 -/
 def Congr!.plausiblyEqualTypes (ty1 ty2 : Expr) (maxDepth : Nat := 5) : MetaM Bool :=
   match maxDepth with
@@ -405,7 +439,19 @@ definition Lean.MVarId.smartHCongr?
       let some (_, lhs, _, rhs) := (← withReducible mvarId.getType').heq? | return none
       if let some mvars ← loop mvarId 0 lhs rhs [] [] then
         return mvars
-      -- The "cor
+      -- The "correct" behavior failed. However, it's often useful
+      -- to apply congruence lemmas while unfolding definitions, which is what the
+      -- basic `congr` tactic does due to limitations in how congruence lemmas are generated.
+      -- We simulate this behavior here by generating congruence lemmas for the LHS and RHS and
+      -- then applying them.
+      trace[congr!] "Default smartHCongr? failed, trying LHS/RHS method"
+      let (fst, snd) := if config.preferLHS then (lhs, rhs) else (rhs, lhs)
+      if let some mvars ← forSide mvarId fst then
+        return mvars
+      else if let some mvars ← forSide mvarId snd then
+        return mvars
+      else
+        return none
 
 中文:
 定义 Lean.MVarId.smartHCongr?
@@ -417,7 +463,19 @@ definition Lean.MVarId.smartHCongr?
       let some (_, lhs, _, rhs) := (← withReducible mvarId.getType').heq? | return none
       if let some mvars ← loop mvarId 0 lhs rhs [] [] then
         return mvars
-      -- The "cor
+      -- The "correct" behavior failed. However, it's often useful
+      -- to apply congruence lemmas while unfolding definitions, which is what the
+      -- basic `congr` tactic does due to limitations in how congruence lemmas are generated.
+      -- We simulate this behavior here by generating congruence lemmas for the LHS and RHS and
+      -- then applying them.
+      trace[congr!] "Default smartHCongr? failed, trying LHS/RHS method"
+      let (fst, snd) := if config.preferLHS then (lhs, rhs) else (rhs, lhs)
+      if let some mvars ← forSide mvarId fst then
+        return mvars
+      else if let some mvars ← forSide mvarId snd then
+        return mvars
+      else
+        return none
 
 Depends on / 依赖: checkNotAssigned, commitWhenSome, eqOfHEq, getType, mvarId, mvarId.checkNotAssigned, mvarId.eqOfHEq, mvarId.getType, mvarId.withContext, return, withContext, withReducible
 -/
@@ -534,7 +592,10 @@ definition Lean.MVarId.congrSimp?
     let (fst, snd) := if config.preferLHS then (lhs, rhs) else (rhs, lhs)
     if let some mvars ← forSide mvarId fst then
       return mvars
-    else if let
+    else if let some mvars ← forSide mvarId snd then
+      return mvars
+    else
+      return none
 
 中文:
 定义 Lean.MVarId.congrSimp?
@@ -545,7 +606,10 @@ definition Lean.MVarId.congrSimp?
     let (fst, snd) := if config.preferLHS then (lhs, rhs) else (rhs, lhs)
     if let some mvars ← forSide mvarId fst then
       return mvars
-    else if let
+    else if let some mvars ← forSide mvarId snd then
+      return mvars
+    else
+      return none
 
 Depends on / 依赖: checkNotAssigned, config, config.preferLHS, congrSimp, forSide, getType, mvarId, mvarId.checkNotAssigned, mvarId.getType, mvarId.withContext, preferLHS, return, withContext, withReducible
 -/
@@ -594,7 +658,10 @@ definition Lean.MVarId.userCongr?
     let (fst, snd) := if config.preferLHS then (lhs, rhs) else (rhs, lhs)
     if let some mvars ← forSide fst then
       return mvars
-    else if let some
+    else if let some mvars ← forSide snd then
+      return mvars
+    else
+      return none
 
 中文:
 定义 Lean.MVarId.userCongr?
@@ -605,7 +672,10 @@ definition Lean.MVarId.userCongr?
     let (fst, snd) := if config.preferLHS then (lhs, rhs) else (rhs, lhs)
     if let some mvars ← forSide fst then
       return mvars
-    else if let some
+    else if let some mvars ← forSide snd then
+      return mvars
+    else
+      return none
 
 Depends on / 依赖: checkNotAssigned, config, config.preferLHS, eqOrIff, forSide, getType, mvarId, mvarId.checkNotAssigned, mvarId.getType, mvarId.withContext, preferLHS, return, userCongr, withContext, withReducible
 -/
@@ -774,7 +844,16 @@ definition Lean.MVarId.subsingletonHelim?
     let some (α, lhs, β, rhs) := (← withReducible mvarId.getType').heq? | failure
     withSubsingletonAsFast fun elim => do
       let eqmvar ← mkFreshExprSyntheticOpaqueMVar (← mkEq α β) (← mvarId.getTag)
-      -- First 
+      -- First try synthesizing using the left-hand side for the Subsingleton instance
+      if let some pf ← observing? (mkAppM ``FastSubsingleton.helim #[eqmvar, lhs, rhs]) then
+mvarId.assign elim pf
+        return [eqmvar.mvarId!]
+      let eqsymm ← mkAppM ``Eq.symm #[eqmvar]
+      -- Second try synthesizing using the right-hand side for the Subsingleton instance
+      if let some pf ← observing? (mkAppM ``FastSubsingleton.helim #[eqsymm, rhs, lhs]) then
+mvarId.assign elim (← mkAppM ``HEq.symm #[pf])
+        return [eqmvar.mvarId!]
+      failure
 
 中文:
 定义 Lean.MVarId.subsingletonHelim?
@@ -784,7 +863,16 @@ definition Lean.MVarId.subsingletonHelim?
     let some (α, lhs, β, rhs) := (← withReducible mvarId.getType').heq? | failure
     withSubsingletonAsFast fun elim => do
       let eqmvar ← mkFreshExprSyntheticOpaqueMVar (← mkEq α β) (← mvarId.getTag)
-      -- First 
+      -- First try synthesizing using the left-hand side for the Subsingleton instance
+      if let some pf ← observing? (mkAppM ``FastSubsingleton.helim #[eqmvar, lhs, rhs]) then
+mvarId.assign elim pf
+        return [eqmvar.mvarId!]
+      let eqsymm ← mkAppM ``Eq.symm #[eqmvar]
+      -- Second try synthesizing using the right-hand side for the Subsingleton instance
+      if let some pf ← observing? (mkAppM ``FastSubsingleton.helim #[eqsymm, rhs, lhs]) then
+mvarId.assign elim (← mkAppM ``HEq.symm #[pf])
+        return [eqmvar.mvarId!]
+      failure
 
 Depends on / 依赖: checkNotAssigned, eqmvar, failure, getTag, getType, mkFreshExprSyntheticOpaqueMVar, mvarId, mvarId.checkNotAssigned, mvarId.getTag, mvarId.getType, mvarId.withContext, observing, subsingletonHelim, withContext, withReducible, withSubsingletonAsFast
 -/
@@ -835,7 +923,9 @@ definition Lean.MVarId.congrPasses!
    ("Subsingleton.helim", fun _ => subsingletonHelim?),
    ("BEq instances", when (·.beqEq) fun _ => beqInst?),
    ("obvious funext", fun _ => obviousFunext?),
-   ("obvious hfun
+   ("obvious hfunext", fun _ => obviousHfunext?),
+   ("congr_implies", fun _ => congrImplies?'),
+   ("congr_pi", fun _ => congrPi?)]
 
 中文:
 定义 Lean.MVarId.congrPasses!
@@ -846,7 +936,9 @@ definition Lean.MVarId.congrPasses!
    ("Subsingleton.helim", fun _ => subsingletonHelim?),
    ("BEq instances", when (·.beqEq) fun _ => beqInst?),
    ("obvious funext", fun _ => obviousFunext?),
-   ("obvious hfun
+   ("obvious hfunext", fun _ => obviousHfunext?),
+   ("congr_implies", fun _ => congrImplies?'),
+   ("congr_pi", fun _ => congrPi?)]
 
 Depends on / 依赖: Subsingleton, Subsingleton.helim, beqInst, congrImplies, congrPi, congrSimp, congr_implies, congr_pi, hcongr, hfunext, instances, obvious, obviousFunext, obviousHfunext, smartHCongr, subsingletonHelim, useCongrSimp, userCongr
 -/
@@ -1070,7 +1162,14 @@ definition Lean.MVarId.preCongr!
     if ← mvarId.assumptionCore then return none
   let mvarId ← mvarId.iffOfEq
   if tryClose then
-    -- Now try definitional equali
+    -- Now try definitional equality. No need to try `mvarId.hrefl` since we already did `heqOfEq`.
+    -- We allow synthetic opaque metavariables to be assigned to fill in `x = _` goals that might
+    -- appear (for example, due to using `convert` with placeholders).
+    try withAssignableSyntheticOpaque mvarId.refl; return none catch _ => pure ()
+    -- Now we go for (heterogeneous) equality via subsingleton considerations
+    if ← Lean.Meta.fastSubsingletonElim mvarId then return none
+    if ← mvarId.proofIrrelHeq then return none
+  return some mvarId
 
 中文:
 定义 Lean.MVarId.preCongr!
@@ -1083,7 +1182,14 @@ definition Lean.MVarId.preCongr!
     if ← mvarId.assumptionCore then return none
   let mvarId ← mvarId.iffOfEq
   if tryClose then
-    -- Now try definitional equali
+    -- Now try definitional equality. No need to try `mvarId.hrefl` since we already did `heqOfEq`.
+    -- We allow synthetic opaque metavariables to be assigned to fill in `x = _` goals that might
+    -- appear (for example, due to using `convert` with placeholders).
+    try withAssignableSyntheticOpaque mvarId.refl; return none catch _ => pure ()
+    -- Now we go for (heterogeneous) equality via subsingleton considerations
+    if ← Lean.Meta.fastSubsingletonElim mvarId then return none
+    if ← mvarId.proofIrrelHeq then return none
+  return some mvarId
 -/
 def Lean.MVarId.preCongr! (mvarId : MVarId) (tryClose : Bool) : MetaM (Option MVarId) := do
   -- Next, turn `HEq` and `Iff` into `Eq`
@@ -1116,7 +1222,18 @@ definition Lean.MVarId.congrCore!
   let mvarId ← mvarId.liftReflToEq
   for (passName, pass) in congrPasses! do
     try
-      if let some
+      if let some mvarIds ← pass config mvarId then
+        trace[congr!] "pass succeeded: {passName}"
+        return mvarIds
+    catch e =>
+      throwTacticEx `congr! mvarId
+        m!"internal error in congruence pass {passName}, {e.toMessageData}"
+    if ← mvarId.isAssigned then
+      throwTacticEx `congr! mvarId
+        s!"congruence pass {passName} assigned metavariable but failed"
+  restoreState s
+  trace[congr!] "no passes succeeded"
+  return none
 
 中文:
 定义 Lean.MVarId.congrCore!
@@ -1129,7 +1246,18 @@ definition Lean.MVarId.congrCore!
   let mvarId ← mvarId.liftReflToEq
   for (passName, pass) in congrPasses! do
     try
-      if let some
+      if let some mvarIds ← pass config mvarId then
+        trace[congr!] "pass succeeded: {passName}"
+        return mvarIds
+    catch e =>
+      throwTacticEx `congr! mvarId
+        m!"internal error in congruence pass {passName}, {e.toMessageData}"
+    if ← mvarId.isAssigned then
+      throwTacticEx `congr! mvarId
+        s!"congruence pass {passName} assigned metavariable but failed"
+  restoreState s
+  trace[congr!] "no passes succeeded"
+  return none
 -/
 def Lean.MVarId.congrCore! (config : Congr!.Config) (mvarId : MVarId) :
     MetaM (Option (List MVarId)) := do
@@ -1164,7 +1292,14 @@ definition Lean.MVarId.postCongr!
   -- Convert `p = q` to `p ↔ q`, which is likely the more useful form:
   let mvarId ← mvarId.propext
   if config.closePost then
-    -- `preCongr` sees `p = q`, but now we've put it back in
+    -- `preCongr` sees `p = q`, but now we've put it back into `p ↔ q` form.
+    if ← mvarId.assumptionCore then return none
+  if config.etaExpand then
+    if let some (_, lhs, rhs) := (← withReducible mvarId.getType').eq? then
+      let lhs' ← Meta.etaExpand lhs
+      let rhs' ← Meta.etaExpand rhs
+      return ← mvarId.change (← mkEq lhs' rhs')
+  return mvarId
 
 中文:
 定义 Lean.MVarId.postCongr!
@@ -1174,7 +1309,14 @@ definition Lean.MVarId.postCongr!
   -- Convert `p = q` to `p ↔ q`, which is likely the more useful form:
   let mvarId ← mvarId.propext
   if config.closePost then
-    -- `preCongr` sees `p = q`, but now we've put it back in
+    -- `preCongr` sees `p = q`, but now we've put it back into `p ↔ q` form.
+    if ← mvarId.assumptionCore then return none
+  if config.etaExpand then
+    if let some (_, lhs, rhs) := (← withReducible mvarId.getType').eq? then
+      let lhs' ← Meta.etaExpand lhs
+      let rhs' ← Meta.etaExpand rhs
+      return ← mvarId.change (← mkEq lhs' rhs')
+  return mvarId
 
 Depends on / 依赖: closePost, config, config.closePost, config.postTransparency, mvarId, mvarId.preCongr, postTransparency, preCongr, return, withTransparency
 -/
@@ -1205,7 +1347,7 @@ let ty ← withReducible mvarId.getType'
   let defaultDepth := min 1000000 (8 * (1 + ty.approxDepth.toNat))
   let depth := depth?.getD defaultDepth
 .run {goals := #[], patterns := patterns} let (_, s) ← go depth depth mvarId
- 
+  return s.goals.toList
 
 中文:
 定义 Lean.MVarId.congrN!
@@ -1216,7 +1358,7 @@ let ty ← withReducible mvarId.getType'
   let defaultDepth := min 1000000 (8 * (1 + ty.approxDepth.toNat))
   let depth := depth?.getD defaultDepth
 .run {goals := #[], patterns := patterns} let (_, s) ← go depth depth mvarId
- 
+  return s.goals.toList
 
 Depends on / 依赖: Config, config
 -/

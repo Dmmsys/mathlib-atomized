@@ -152,7 +152,7 @@ instance [Fact
     simp only [← coeFn_nonneg] at hf ⊢
 .exists_seq_tendsto_ae obtain ⟨φ, -, hφ⟩ := tendstoInMeasure_of_tendsto_Lp h_tendsto
     filter_upwards [countable_iInter_mem.mpr hf, hφ] with x hx hφx
-
+    exact ge_of_tendsto' hφx fun _ => Set.mem_iInter.mp hx _
 
 中文:
 实例 [Fact
@@ -162,7 +162,7 @@ instance [Fact
     simp only [← coeFn_nonneg] at hf ⊢
 .exists_seq_tendsto_ae obtain ⟨φ, -, hφ⟩ := tendstoInMeasure_of_tendsto_Lp h_tendsto
     filter_upwards [countable_iInter_mem.mpr hf, hφ] with x hx hφx
-
+    exact ge_of_tendsto' hφx fun _ => Set.mem_iInter.mp hx _
 
 Depends on / 依赖: IsSeqClosed, IsSeqClosed.isClosed, isClosed, isClosed_le_of_isClosed_nonneg
 -/
@@ -352,7 +352,7 @@ instance instHasSolidNorm
       refine eLpNorm_mono_ae ?_
       filter_upwards [hfg, Lp.coeFn_abs f, Lp.coeFn_abs g] with x hx hxf hxg
       rw [hxf]; rw [hxg] at hx
-    
+      exact HasSolidNorm.solid hx }
 
 中文:
 实例 instHasSolidNorm
@@ -363,7 +363,7 @@ instance instHasSolidNorm
       refine eLpNorm_mono_ae ?_
       filter_upwards [hfg, Lp.coeFn_abs f, Lp.coeFn_abs g] with x hx hxf hxg
       rw [hxf]; rw [hxg] at hx
-    
+      exact HasSolidNorm.solid hx }
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_le_toReal, HasSolidNorm, HasSolidNorm.solid, Lp.coeFn_abs, Lp.eLpNorm_ne_top, Lp.norm_def, coeFn_abs, coeFn_le, eLpNorm_mono_ae, eLpNorm_ne_top, filter_upwards, norm_def, simp_rw, toReal_le_toReal
 -/

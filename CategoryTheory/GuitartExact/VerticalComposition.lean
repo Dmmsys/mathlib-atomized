@@ -73,7 +73,10 @@ lemma whiskerVertical
       w.structuredArrowDownwards X₂ ⋙ (StructuredArrow.mapIso (β.app X₂)).functor :=
     NatIso.ofComponents (fun f => StructuredArrow.isoMk (α.symm.app f.right) (by
       dsimp
-    
+      simp only [NatTrans.naturality_assoc, assoc, ← B.map_comp,
+        Iso.hom_inv_id_app, B.map_id, comp_id]))
+  rw [Functor.initial_natIso_iff e]
+  infer_instance
 
 中文:
 引理 whiskerVertical
@@ -85,7 +88,10 @@ lemma whiskerVertical
       w.structuredArrowDownwards X₂ ⋙ (StructuredArrow.mapIso (β.app X₂)).functor :=
     NatIso.ofComponents (fun f => StructuredArrow.isoMk (α.symm.app f.right) (by
       dsimp
-    
+      simp only [NatTrans.naturality_assoc, assoc, ← B.map_comp,
+        Iso.hom_inv_id_app, B.map_id, comp_id]))
+  rw [Functor.initial_natIso_iff e]
+  infer_instance
 
 Depends on / 依赖: B.map_comp, B.map_id, Functor, Functor.initial_natIso_iff, Iso.hom_inv_id_app, NatIso, NatIso.ofComponents, NatTrans, NatTrans.naturality_assoc, StructuredArrow, StructuredArrow.isoMk, StructuredArrow.mapIso, comp_id, f.right, functor, guitartExact_iff_initial, hom_inv_id_app, infer_instance, initial_natIso_iff, mapIso
 -/
@@ -119,7 +125,9 @@ lemma whiskerVertical_iff
       simp only [Functor.comp_obj, whiskerVertical_app, assoc, Iso.hom_inv_id_app_assoc,
         ← B.map_comp, Iso.hom_inv_id_app, B.map_id, comp_id]
     rw [this]
-    exact whi
+    exact whiskerVertical (w.whiskerVertical α.hom β.inv) α.symm β.symm
+  · intro h
+    exact whiskerVertical w α β
 
 中文:
 引理 whiskerVertical_iff
@@ -132,7 +140,9 @@ lemma whiskerVertical_iff
       simp only [Functor.comp_obj, whiskerVertical_app, assoc, Iso.hom_inv_id_app_assoc,
         ← B.map_comp, Iso.hom_inv_id_app, B.map_id, comp_id]
     rw [this]
-    exact whi
+    exact whiskerVertical (w.whiskerVertical α.hom β.inv) α.symm β.symm
+  · intro h
+    exact whiskerVertical w α β
 
 Depends on / 依赖: B.map_comp, B.map_id, Functor, Functor.comp_obj, Iso.hom_inv_id_app, Iso.hom_inv_id_app_assoc, comp_id, comp_obj, hom_inv_id_app, hom_inv_id_app_assoc, map_comp, map_id, w.whiskerVertical, whiskerVertical, whiskerVertical_app
 -/
@@ -290,7 +300,7 @@ lemma of_vComp
   intro Y₂
   rw [structuredArrowDownwards_initial_iff_of_iso _ (R₁.objObjPreimageIso Y₂).symm]
   have := Functor.initial_of_natIso (structuredArrowDownwardsComp w w' (R₁.objPreimage Y₂)).symm
-  exact Functor.initial_of_initial_comp (w.structuredArrowDownwards (R₁.o
+  exact Functor.initial_of_initial_comp (w.structuredArrowDownwards (R₁.objPreimage Y₂)) _
 
 中文:
 引理 of_vComp
@@ -300,7 +310,7 @@ lemma of_vComp
   intro Y₂
   rw [structuredArrowDownwards_initial_iff_of_iso _ (R₁.objObjPreimageIso Y₂).symm]
   have := Functor.initial_of_natIso (structuredArrowDownwardsComp w w' (R₁.objPreimage Y₂)).symm
-  exact Functor.initial_of_initial_comp (w.structuredArrowDownwards (R₁.o
+  exact Functor.initial_of_initial_comp (w.structuredArrowDownwards (R₁.objPreimage Y₂)) _
 
 Depends on / 依赖: Functor, Functor.initial_of_initial_comp, Functor.initial_of_natIso, guitartExact_iff_initial, initial_of_initial_comp, initial_of_natIso, objObjPreimageIso, objPreimage, structuredArrowDownwards, structuredArrowDownwardsComp, structuredArrowDownwards_initial_iff_of_iso, w.structuredArrowDownwards
 -/
@@ -389,7 +399,27 @@ lemma vComp_iff_of_equivalences
     let : CatCommSq H₂ eL.functor eR.functor H₃ := ⟨w'⟩
     have hw' : CatCommSq.iso H₂ eL.functor eR.functor H₃ = w' := rfl
     let : CatCommSq H₃ eL.inverse eR.inverse H₂ := CatCommSq.vInvEquiv _ _ _ _ inferInstance
-    let w'' := CatCommSq.iso H₃ eL.inverse eR.inve
+    let w'' := CatCommSq.iso H₃ eL.inverse eR.inverse H₂
+    let α : (L₁ ⋙ eL.functor) ⋙ eL.inverse ≅ L₁ :=
+      Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft L₁ eL.unitIso.symm ≪≫ L₁.rightUnitor
+    let β : (R₁ ⋙ eR.functor) ⋙ eR.inverse ≅ R₁ :=
+      Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft R₁ eR.unitIso.symm ≪≫ R₁.rightUnitor
+    have : w = (w ≫ᵥ w'.hom).vComp' w''.hom α β := by
+      ext X₁
+      simp? [w'', α, β] says
+        simp only [Functor.comp_obj, vComp'_app, Iso.trans_inv, Functor.isoWhiskerLeft_inv,
+          Iso.symm_inv, assoc, NatTrans.comp_app, Functor.id_obj, Functor.rightUnitor_inv_app,
+          Functor.whiskerLeft_app, Functor.associator_inv_app, comp_id, id_comp, vComp_app,
+          Functor.map_comp, Equivalence.inv_fun_map, CatCommSq.vInv_iso_hom_app, Iso.trans_hom,
+          Functor.isoWhiskerLeft_hom, Iso.symm_hom, Functor.associator_hom_app,
+          Functor.rightUnitor_hom_app, Iso.hom_inv_id_app_assoc, w'', α, β]
+      simp only [hw', ← eR.inverse.map_comp_assoc]
+      rw [Equivalence.counitInv_app_functor]; rw [← Functor.comp_map]; rw [← NatTrans.naturality_assoc]
+      simp [← H₂.map_comp]
+    rw [this]
+    infer_instance
+  · intro
+    exact vComp w w'.hom
 
 中文:
 引理 vComp_iff_of_equivalences
@@ -400,7 +430,27 @@ lemma vComp_iff_of_equivalences
     let : CatCommSq H₂ eL.functor eR.functor H₃ := ⟨w'⟩
     have hw' : CatCommSq.iso H₂ eL.functor eR.functor H₃ = w' := rfl
     let : CatCommSq H₃ eL.inverse eR.inverse H₂ := CatCommSq.vInvEquiv _ _ _ _ inferInstance
-    let w'' := CatCommSq.iso H₃ eL.inverse eR.inve
+    let w'' := CatCommSq.iso H₃ eL.inverse eR.inverse H₂
+    let α : (L₁ ⋙ eL.functor) ⋙ eL.inverse ≅ L₁ :=
+      Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft L₁ eL.unitIso.symm ≪≫ L₁.rightUnitor
+    let β : (R₁ ⋙ eR.functor) ⋙ eR.inverse ≅ R₁ :=
+      Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft R₁ eR.unitIso.symm ≪≫ R₁.rightUnitor
+    have : w = (w ≫ᵥ w'.hom).vComp' w''.hom α β := by
+      ext X₁
+      simp? [w'', α, β] says
+        simp only [Functor.comp_obj, vComp'_app, Iso.trans_inv, Functor.isoWhiskerLeft_inv,
+          Iso.symm_inv, assoc, NatTrans.comp_app, Functor.id_obj, Functor.rightUnitor_inv_app,
+          Functor.whiskerLeft_app, Functor.associator_inv_app, comp_id, id_comp, vComp_app,
+          Functor.map_comp, Equivalence.inv_fun_map, CatCommSq.vInv_iso_hom_app, Iso.trans_hom,
+          Functor.isoWhiskerLeft_hom, Iso.symm_hom, Functor.associator_hom_app,
+          Functor.rightUnitor_hom_app, Iso.hom_inv_id_app_assoc, w'', α, β]
+      simp only [hw', ← eR.inverse.map_comp_assoc]
+      rw [Equivalence.counitInv_app_functor]; rw [← Functor.comp_map]; rw [← NatTrans.naturality_assoc]
+      simp [← H₂.map_comp]
+    rw [this]
+    infer_instance
+  · intro
+    exact vComp w w'.hom
 
 Depends on / 依赖: CatCommSq, CatCommSq.iso, CatCommSq.vInvEquiv, Functor, Functor.associator, Functor.isoWhiskerLeft, associator, eL.functor, eL.inverse, eL.unitIso.symm, eR.functor, eR.inverse, functor, inverse, isoWhiskerLeft, rightUnitor, unitIso, vInvEquiv
 -/

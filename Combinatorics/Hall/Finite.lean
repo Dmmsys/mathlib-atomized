@@ -63,7 +63,18 @@ theorem hall_cond_of_erase
   rw [image_nonempty]; rw [Finset.card_image_of_injective s' Subtype.coe_injective] at ha
   by_cases! he : s'.Nonempty
   · have ha' : #s' < #(s'.biUnion fun x => t x) := by
-      convert! ha he fun h => by simpa [← h] using mem_u
+      convert! ha he fun h => by simpa [← h] using mem_univ x using 2
+      ext x
+      simp only [mem_image, mem_biUnion, SetCoe.exists, exists_and_right,
+        exists_eq_right]
+    rw [← erase_biUnion]
+    by_cases hb : a in s'.biUnion fun x => t x
+    · rw [card_erase_of_mem hb]
+      exact Nat.le_sub_one_of_lt ha'
+    · rw [erase_eq_of_notMem hb]
+      exact Nat.le_of_lt ha'
+  · subst s'
+    simp
 
 中文:
 定理 hall_cond_of_erase
@@ -74,7 +85,18 @@ theorem hall_cond_of_erase
   rw [image_nonempty]; rw [Finset.card_image_of_injective s' Subtype.coe_injective] at ha
   by_cases! he : s'.Nonempty
   · have ha' : #s' < #(s'.biUnion fun x => t x) := by
-      convert! ha he fun h => by simpa [← h] using mem_u
+      convert! ha he fun h => by simpa [← h] using mem_univ x using 2
+      ext x
+      simp only [mem_image, mem_biUnion, SetCoe.exists, exists_and_right,
+        exists_eq_right]
+    rw [← erase_biUnion]
+    by_cases hb : a in s'.biUnion fun x => t x
+    · rw [card_erase_of_mem hb]
+      exact Nat.le_sub_one_of_lt ha'
+    · rw [erase_eq_of_notMem hb]
+      exact Nat.le_of_lt ha'
+  · subst s'
+    simp
 
 Depends on / 依赖: Classical, Classical.decEq, Finset, Finset.card_image_of_injective, Nat.le_sub_on, Nonempty, SetCoe, SetCoe.exists, Subtype, Subtype.coe_injective, biUnion, card_erase_of_mem, card_image_of_injective, coe_injective, convert, erase_biUnion, exists_and_right, exists_eq_right, image_nonempty, le_sub_on
 -/
@@ -115,7 +137,32 @@ theorem hall_hard_inductive_step_A
     rw [← Finset.card_pos]
     calc
       0 < 1 := Nat.one_pos
-      _
+      _ <= #(.biUnion {x} t) := ht {x}
+      _ = (t x).card := by rw [Finset.singleton_biUnion]
+  choose y hy using tx_ne
+  -- Restrict to everything except `x` and `y`.
+  let ι' := { x' : ι | x' != x }
+  let t' : ι' -> Finset α := fun x' => (t x').erase y
+  have card_ι' : Fintype.card ι' = n :=
+    calc
+      Fintype.card ι' = Fintype.card ι - 1 := Set.card_ne_eq _
+      _ = n := by rw [hn, Nat.add_succ_sub_one, add_zero]
+  rcases ih t' card_ι'.le (hall_cond_of_erase y ha) with ⟨f', hfinj, hfr⟩
+  -- Extend the resulting function.
+  refine ⟨fun z => if h : z = x then y else f' ⟨z, h⟩, ?_, ?_⟩
+  · rintro z₁ z₂
+    have key : forall {x}, y != f' x := by
+      intro x h
+      simpa [t', ← h] using hfr x
+    by_cases h₁ : z₁ = x <;> by_cases h₂ : z₂ = x <;>
+      simp [h₁, h₂, hfinj.eq_iff, key, key.symm]
+  · intro z
+    simp only
+    split_ifs with hz
+    · rwa [hz]
+    · specialize hfr ⟨z, hz⟩
+      rw [mem_erase] at hfr
+      exact hfr.2
 
 中文:
 定理 hall_hard_inductive_step_A
@@ -129,7 +176,32 @@ theorem hall_hard_inductive_step_A
     rw [← Finset.card_pos]
     calc
       0 < 1 := Nat.one_pos
-      _
+      _ <= #(.biUnion {x} t) := ht {x}
+      _ = (t x).card := by rw [Finset.singleton_biUnion]
+  choose y hy using tx_ne
+  -- Restrict to everything except `x` and `y`.
+  let ι' := { x' : ι | x' != x }
+  let t' : ι' -> Finset α := fun x' => (t x').erase y
+  have card_ι' : Fintype.card ι' = n :=
+    calc
+      Fintype.card ι' = Fintype.card ι - 1 := Set.card_ne_eq _
+      _ = n := by rw [hn, Nat.add_succ_sub_one, add_zero]
+  rcases ih t' card_ι'.le (hall_cond_of_erase y ha) with ⟨f', hfinj, hfr⟩
+  -- Extend the resulting function.
+  refine ⟨fun z => if h : z = x then y else f' ⟨z, h⟩, ?_, ?_⟩
+  · rintro z₁ z₂
+    have key : forall {x}, y != f' x := by
+      intro x h
+      simpa [t', ← h] using hfr x
+    by_cases h₁ : z₁ = x <;> by_cases h₂ : z₂ = x <;>
+      simp [h₁, h₂, hfinj.eq_iff, key, key.symm]
+  · intro z
+    simp only
+    split_ifs with hz
+    · rwa [hz]
+    · specialize hfr ⟨z, hz⟩
+      rw [mem_erase] at hfr
+      exact hfr.2
 
 Depends on / 依赖: Classical, Classical.decEq, Fintype, Fintype.card_pos_iff.mp, Nat.succ_pos, Nonempty, card_pos_iff, hn.symm, succ_pos
 -/
@@ -228,7 +300,19 @@ theorem hall_cond_of_compl
     intro x hx hc _
     exact absurd hx hc
   have : #s' = #(s union s'.image fun z => z.1) - #s := by
-   
+    simp [disj, card_image_of_injective _ Subtype.coe_injective, Nat.add_sub_cancel_left]
+  rw [this]; rw [hus]
+  refine (Nat.sub_le_sub_right (ht _) _).trans ?_
+  rw [← card_sdiff_of_subset]
+  · gcongr
+    intro t
+    simp only [mem_biUnion, mem_sdiff, not_exists, mem_image, and_imp, mem_union,
+      exists_imp]
+    rintro x (hx | ⟨x', hx', rfl⟩) rat hs
+· exact False.elim (hs x) And.intro hx rat
+    · use x', hx', rat, hs
+  · apply biUnion_subset_biUnion_of_subset_left
+    apply subset_union_left
 
 中文:
 定理 hall_cond_of_compl
@@ -241,7 +325,19 @@ theorem hall_cond_of_compl
     intro x hx hc _
     exact absurd hx hc
   have : #s' = #(s union s'.image fun z => z.1) - #s := by
-   
+    simp [disj, card_image_of_injective _ Subtype.coe_injective, Nat.add_sub_cancel_left]
+  rw [this]; rw [hus]
+  refine (Nat.sub_le_sub_right (ht _) _).trans ?_
+  rw [← card_sdiff_of_subset]
+  · gcongr
+    intro t
+    simp only [mem_biUnion, mem_sdiff, not_exists, mem_image, and_imp, mem_union,
+      exists_imp]
+    rintro x (hx | ⟨x', hx', rfl⟩) rat hs
+· exact False.elim (hs x) And.intro hx rat
+    · use x', hx', rat, hs
+  · apply biUnion_subset_biUnion_of_subset_left
+    apply subset_union_left
 
 Depends on / 依赖: Classical, Classical.decEq, Disjoint, Nat.add_sub_cancel_left, Nat.sub_le_sub_right, SetCoe, SetCoe.exists, Subtype, Subtype.coe_injective, absurd, add_sub_cancel_left, card_image_of_injective, card_sdiff_of_subset, coe_injective, disjoint_left, exists_and_right, exists_eq_right, mem_, mem_biUnion, mem_image
 -/
@@ -285,7 +381,31 @@ theorem hall_hard_inductive_step_B
       Fintype.card s = #s := Fintype.card_coe _
       _ < Fintype.card ι := (card_lt_iff_ne_univ _).mpr hns
       _ = n.succ := hn
-  let t' 
+  let t' : s -> Finset α := fun x' => t x'
+  rcases ih t' card_ι'_le (hall_cond_of_restrict ht) with ⟨f', hf', hsf'⟩
+  -- Restrict to `sᶜ` in the domain and `(s.biUnion t)ᶜ` in the codomain.
+  set ι'' := (s : Set ι)ᶜ
+  let t'' : ι'' -> Finset α := fun a'' => t a'' \ s.biUnion t
+  have card_ι''_le : Fintype.card ι'' <= n := by
+    simp_rw [ι'', ← Nat.lt_succ_iff, ← hn, ← Finset.coe_compl, coe_sort_coe]
+    rwa [Fintype.card_coe, card_compl_lt_iff_nonempty]
+  rcases ih t'' card_ι''_le (hall_cond_of_compl hus ht) with ⟨f'', hf'', hsf''⟩
+  -- Put them together
+  have f''_notMem_biUnion : forall (x'') (hx'' : x'' ∉ s), f'' ⟨x'', hx''⟩ ∉ s.biUnion t := by
+    intro x'' hx''
+    have h := hsf'' ⟨x'', hx''⟩
+    rw [mem_sdiff] at h
+    exact h.2
+  have im_disj :
+      forall (x' x'' : ι) (hx' : x' in s) (hx'' : x'' ∉ s), f' ⟨x', hx'⟩ != f'' ⟨x'', hx''⟩ := by
+    grind
+  refine ⟨fun x => if h : x in s then f' ⟨x, h⟩ else f'' ⟨x, h⟩, ?_, ?_⟩
+  · refine hf'.dite _ hf'' (@fun x x' => im_disj x x' _ _)
+  · intro x
+    simp only
+    split_ifs with h
+    · exact hsf' ⟨x, h⟩
+    · exact sdiff_subset (hsf'' ⟨x, h⟩)
 
 中文:
 定理 hall_hard_inductive_step_B
@@ -300,7 +420,31 @@ theorem hall_hard_inductive_step_B
       Fintype.card s = #s := Fintype.card_coe _
       _ < Fintype.card ι := (card_lt_iff_ne_univ _).mpr hns
       _ = n.succ := hn
-  let t' 
+  let t' : s -> Finset α := fun x' => t x'
+  rcases ih t' card_ι'_le (hall_cond_of_restrict ht) with ⟨f', hf', hsf'⟩
+  -- Restrict to `sᶜ` in the domain and `(s.biUnion t)ᶜ` in the codomain.
+  set ι'' := (s : Set ι)ᶜ
+  let t'' : ι'' -> Finset α := fun a'' => t a'' \ s.biUnion t
+  have card_ι''_le : Fintype.card ι'' <= n := by
+    simp_rw [ι'', ← Nat.lt_succ_iff, ← hn, ← Finset.coe_compl, coe_sort_coe]
+    rwa [Fintype.card_coe, card_compl_lt_iff_nonempty]
+  rcases ih t'' card_ι''_le (hall_cond_of_compl hus ht) with ⟨f'', hf'', hsf''⟩
+  -- Put them together
+  have f''_notMem_biUnion : forall (x'') (hx'' : x'' ∉ s), f'' ⟨x'', hx''⟩ ∉ s.biUnion t := by
+    intro x'' hx''
+    have h := hsf'' ⟨x'', hx''⟩
+    rw [mem_sdiff] at h
+    exact h.2
+  have im_disj :
+      forall (x' x'' : ι) (hx' : x' in s) (hx'' : x'' ∉ s), f' ⟨x', hx'⟩ != f'' ⟨x'', hx''⟩ := by
+    grind
+  refine ⟨fun x => if h : x in s then f' ⟨x, h⟩ else f'' ⟨x, h⟩, ?_, ?_⟩
+  · refine hf'.dite _ hf'' (@fun x x' => im_disj x x' _ _)
+  · intro x
+    simp only
+    split_ifs with h
+    · exact hsf' ⟨x, h⟩
+    · exact sdiff_subset (hsf'' ⟨x, h⟩)
 
 Depends on / 依赖: Classical, Classical.decEq
 -/
@@ -365,7 +509,16 @@ theorem hall_hard_inductive
   rcases n with (_ | n)
   · rw [Fintype.card_eq_zero_iff] at hn
     exact ⟨isEmptyElim, isEmptyElim, isEmptyElim⟩
-  · have ih' : forall (ι' : Type u) [Fintype ι'
+  · have ih' : forall (ι' : Type u) [Fintype ι'] (t' : ι' -> Finset α), Fintype.card ι' <= n ->
+        (forall s' : Finset ι', #s' <= #(s'.biUnion t')) ->
+        exists f : ι' -> α, Function.Injective f ∧ forall x, f x in t' x := by
+      intro ι' _ _ hι' ht'
+      exact ih _ (Nat.lt_succ_of_le hι') ht' _ rfl
+    by_cases! h : forall s : Finset ι, s.Nonempty -> s != univ -> #s < #(s.biUnion t)
+    · refine hall_hard_inductive_step_A hn ht (@fun ι' => ih' ι') h
+    · rcases h with ⟨s, sne, snu, sle⟩
+      exact hall_hard_inductive_step_B hn ht (@fun ι' => ih' ι')
+        s sne snu (Nat.le_antisymm (ht _) sle)
 
 中文:
 定理 hall_hard_inductive
@@ -377,7 +530,16 @@ theorem hall_hard_inductive
   rcases n with (_ | n)
   · rw [Fintype.card_eq_zero_iff] at hn
     exact ⟨isEmptyElim, isEmptyElim, isEmptyElim⟩
-  · have ih' : forall (ι' : Type u) [Fintype ι'
+  · have ih' : forall (ι' : Type u) [Fintype ι'] (t' : ι' -> Finset α), Fintype.card ι' <= n ->
+        (forall s' : Finset ι', #s' <= #(s'.biUnion t')) ->
+        exists f : ι' -> α, Function.Injective f ∧ forall x, f x in t' x := by
+      intro ι' _ _ hι' ht'
+      exact ih _ (Nat.lt_succ_of_le hι') ht' _ rfl
+    by_cases! h : forall s : Finset ι, s.Nonempty -> s != univ -> #s < #(s.biUnion t)
+    · refine hall_hard_inductive_step_A hn ht (@fun ι' => ih' ι') h
+    · rcases h with ⟨s, sne, snu, sle⟩
+      exact hall_hard_inductive_step_B hn ht (@fun ι' => ih' ι')
+        s sne snu (Nat.le_antisymm (ht _) sle)
 
 Depends on / 依赖: Finset, Fintype, Fintype.card, Fintype.card_eq_zero_iff, Function, Function.Injective, Injective, Nat.lt_succ, Nat.strongRecOn, biUnion, card_eq_zero_iff, generalize, generalizing, isEmptyElim, lt_succ, nonempty_fintype, strongRecOn
 -/

@@ -92,7 +92,7 @@ theorem unique
 .not_gt apply degree_le_of_ne_zero A x hnz (by simp [hp])
   apply degree_sub_lt_left _ (minpoly.ne_zero hx)
   · rw [(monic hx).leadingCoeff, pmonic.leadingCoeff]
-  · exact le_antisymm (min A x pmonic hp)
+  · exact le_antisymm (min A x pmonic hp) (pmin (minpoly A x) (monic hx) (aeval A x))
 
 中文:
 定理 unique
@@ -104,7 +104,7 @@ theorem unique
 .not_gt apply degree_le_of_ne_zero A x hnz (by simp [hp])
   apply degree_sub_lt_left _ (minpoly.ne_zero hx)
   · rw [(monic hx).leadingCoeff, pmonic.leadingCoeff]
-  · exact le_antisymm (min A x pmonic hp)
+  · exact le_antisymm (min A x pmonic hp) (pmin (minpoly A x) (monic hx) (aeval A x))
 
 Depends on / 依赖: IsIntegral, degree_le_of_ne_zero, degree_sub_lt_left, eq_of_sub_eq_zero, le_antisymm, leadingCoeff, minpoly, minpoly.ne_zero, ne_zero, not_gt, pmonic, pmonic.leadingCoeff
 -/
@@ -153,7 +153,7 @@ theorem dvd
   by_contra hnz
   apply degree_le_of_ne_zero A x hnz
 .not_gt ((aeval_modByMonic_eq_self_of_root (aeval _ _)).trans hp)
-  exact degr
+  exact degree_modByMonic_lt _ (monic hx)
 
 中文:
 定理 dvd
@@ -167,7 +167,7 @@ theorem dvd
   by_contra hnz
   apply degree_le_of_ne_zero A x hnz
 .not_gt ((aeval_modByMonic_eq_self_of_root (aeval _ _)).trans hp)
-  exact degr
+  exact degree_modByMonic_lt _ (monic hx)
 
 Depends on / 依赖: IsAlgebraic, IsAlgebraic.isIntegral, IsIntegral, aeval_modByMonic_eq_self_of_root, degree_le_of_ne_zero, degree_modByMonic_lt, dvd_zero, isIntegral, modByMonic_eq_zero_iff_dvd, not_gt
 -/
@@ -316,7 +316,9 @@ theorem map_algebraMap
     ((algebraMap F E).injective.monic_map_iff.mp <| minpoly.monic ha)
     (minpoly.dvd E a (by simp)) ?_
   obtain ⟨g, hg, hgdeg, hgmon⟩ := lifts_and_natDegree_eq_and_monic h (minpoly.monic ha.tower_top)
-  rw [natDegree_map];
+  rw [natDegree_map]; rw [← hgdeg]
+  refine natDegree_le_of_dvd (minpoly.dvd F a ?_) hgmon.ne_zero
+  rw [← aeval_map_algebraMap A]; rw [IsScalarTower.algebraMap_eq F E A]; rw [← coe_mapRingHom]; rw [← mapRingHom_comp]; rw [RingHom.comp_apply]; rw [coe_mapRingHom]; rw [coe_mapRingHom]; rw [hg]; rw [aeval_map_algebraMap]; rw [minpoly.aeval]
 
 中文:
 定理 map_algebraMap
@@ -326,7 +328,9 @@ theorem map_algebraMap
     ((algebraMap F E).injective.monic_map_iff.mp <| minpoly.monic ha)
     (minpoly.dvd E a (by simp)) ?_
   obtain ⟨g, hg, hgdeg, hgmon⟩ := lifts_and_natDegree_eq_and_monic h (minpoly.monic ha.tower_top)
-  rw [natDegree_map];
+  rw [natDegree_map]; rw [← hgdeg]
+  refine natDegree_le_of_dvd (minpoly.dvd F a ?_) hgmon.ne_zero
+  rw [← aeval_map_algebraMap A]; rw [IsScalarTower.algebraMap_eq F E A]; rw [← coe_mapRingHom]; rw [← mapRingHom_comp]; rw [RingHom.comp_apply]; rw [coe_mapRingHom]; rw [coe_mapRingHom]; rw [hg]; rw [aeval_map_algebraMap]; rw [minpoly.aeval]
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_eq, RingHom, RingHom.comp_app, aeval_map_algebraMap, algebraMap, algebraMap_eq, coe_mapRingHom, comp_app, eq_of_monic_of_dvd_of_natDegree_le, ha.tower_top, hgmon.ne_zero, injective, injective.monic_map_iff.mp, lifts_and_natDegree_eq_and_monic, mapRingHom_comp, minpoly, minpoly.dvd, minpoly.monic, monic_map_iff
 -/
@@ -450,7 +454,8 @@ theorem eq_of_irreducible
   apply eq_of_irreducible_of_monic
   · exact Associated.irreducible ⟨⟨C p.leadingCoeff⁻¹, C p.leadingCoeff,
       by rwa [← C_mul, inv_mul_cancel₀, C_1], by rwa [← C_mul, mul_inv_cancel₀, C_1]⟩, rfl⟩ hp1
-  · rw [aeval_mul, hp2, 
+  · rw [aeval_mul, hp2, zero_mul]
+  · rwa [Polynomial.Monic, leadingCoeff_mul, leadingCoeff_C, mul_inv_cancel₀]
 
 中文:
 定理 eq_of_irreducible
@@ -460,7 +465,8 @@ theorem eq_of_irreducible
   apply eq_of_irreducible_of_monic
   · exact Associated.irreducible ⟨⟨C p.leadingCoeff⁻¹, C p.leadingCoeff,
       by rwa [← C_mul, inv_mul_cancel₀, C_1], by rwa [← C_mul, mul_inv_cancel₀, C_1]⟩, rfl⟩ hp1
-  · rw [aeval_mul, hp2, 
+  · rw [aeval_mul, hp2, zero_mul]
+  · rwa [Polynomial.Monic, leadingCoeff_mul, leadingCoeff_C, mul_inv_cancel₀]
 
 Depends on / 依赖: Associated, Associated.irreducible, C_mul, Polynomial, Polynomial.Monic, aeval_mul, eq_of_irreducible_of_monic, hp1.ne_zero, irreducible, leadingCoeff, leadingCoeff_C, leadingCoeff_mul, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, ne_zero, p.leadingCoeff, zero_mul
 -/
@@ -538,7 +544,14 @@ theorem add_algebraMap
   · refine (minpoly.unique _ _ ((minpoly.monic hx).comp_X_sub_C _) ?_ fun q qmo hq => ?_).symm
     · simp [aeval_comp]
     · have : (Polynomial.aeval x) (q.comp (X + C a)) = 0 := by simpa [aeval_comp] using hq
-      have H := minpoly.min A x (qmo.comp_X_add_C _) thi
+      have H := minpoly.min A x (qmo.comp_X_add_C _) this
+      rw [degree_eq_natDegree qmo.ne_zero]; rw [degree_eq_natDegree ((minpoly.monic hx).comp_X_sub_C _).ne_zero]; rw [natDegree_comp]; rw [natDegree_X_sub_C]; rw [mul_one]
+      rwa [degree_eq_natDegree (minpoly.ne_zero hx),
+        degree_eq_natDegree (qmo.comp_X_add_C _).ne_zero, natDegree_comp,
+        natDegree_X_add_C, mul_one] at H
+  · rw [minpoly.eq_zero hx, minpoly.eq_zero, zero_comp]
+    refine fun h => hx ?_
+    simpa only [add_sub_cancel_right] using IsIntegral.sub h (isIntegral_algebraMap (x := a))
 
 中文:
 定理 add_algebraMap
@@ -548,7 +561,14 @@ theorem add_algebraMap
   · refine (minpoly.unique _ _ ((minpoly.monic hx).comp_X_sub_C _) ?_ fun q qmo hq => ?_).symm
     · simp [aeval_comp]
     · have : (Polynomial.aeval x) (q.comp (X + C a)) = 0 := by simpa [aeval_comp] using hq
-      have H := minpoly.min A x (qmo.comp_X_add_C _) thi
+      have H := minpoly.min A x (qmo.comp_X_add_C _) this
+      rw [degree_eq_natDegree qmo.ne_zero]; rw [degree_eq_natDegree ((minpoly.monic hx).comp_X_sub_C _).ne_zero]; rw [natDegree_comp]; rw [natDegree_X_sub_C]; rw [mul_one]
+      rwa [degree_eq_natDegree (minpoly.ne_zero hx),
+        degree_eq_natDegree (qmo.comp_X_add_C _).ne_zero, natDegree_comp,
+        natDegree_X_add_C, mul_one] at H
+  · rw [minpoly.eq_zero hx, minpoly.eq_zero, zero_comp]
+    refine fun h => hx ?_
+    simpa only [add_sub_cancel_right] using IsIntegral.sub h (isIntegral_algebraMap (x := a))
 
 Depends on / 依赖: IsIntegral, Polynomial, Polynomial.aeval, aeval_comp, comp_X_add_C, comp_X_sub_C, degree_eq_natDegree, minpoly, minpoly.min, minpoly.monic, minpoly.ne_zero, minpoly.unique, mul_one, natDegree_X_sub_C, natDegree_comp, ne_zero, q.comp, qmo.comp_X_add_C, qmo.ne_zero, unique
 -/
@@ -601,7 +621,11 @@ theorem neg
     · simp [aeval_comp]
     · have : (Polynomial.aeval x) ((-1) ^ q.natDegree * q.comp (-X)) = 0 := by
         simpa [aeval_comp] using hq
-  
+      have H := minpoly.min A x qmo.neg_one_pow_natDegree_mul_comp_neg_X this
+      simp_all
+  · rw [minpoly.eq_zero hx, minpoly.eq_zero, zero_comp]
+    · simp only [natDegree_zero, pow_zero, mul_zero]
+    · exact IsIntegral.neg_iff.not.mpr hx
 
 中文:
 定理 neg
@@ -613,7 +637,11 @@ theorem neg
     · simp [aeval_comp]
     · have : (Polynomial.aeval x) ((-1) ^ q.natDegree * q.comp (-X)) = 0 := by
         simpa [aeval_comp] using hq
-  
+      have H := minpoly.min A x qmo.neg_one_pow_natDegree_mul_comp_neg_X this
+      simp_all
+  · rw [minpoly.eq_zero hx, minpoly.eq_zero, zero_comp]
+    · simp only [natDegree_zero, pow_zero, mul_zero]
+    · exact IsIntegral.neg_iff.not.mpr hx
 
 Depends on / 依赖: IsIntegral, IsIntegral.neg_iff.not.mpr, Polynomial, Polynomial.aeval, aeval_comp, eq_zero, minpoly, minpoly.eq_zero, minpoly.min, minpoly.monic, minpoly.unique, mul_zero, natDegree, natDegree_zero, neg_iff, neg_one_pow_natDegree_mul_comp_neg_X, pow_zero, q.comp, q.natDegree, qmo.neg_one_pow_natDegree_mul_comp_neg_X
 -/
@@ -919,7 +947,7 @@ theorem root
     (associated_of_dvd_dvd ((irreducible_X_sub_C y).dvd_symm (irreducible hx) (dvd_iff_isRoot.2 h))
       (dvd_iff_isRoot.2 h))
   have := aeval A x
-  rwa [key, map_sub, aeval_X, aeval_C, sub_eq_zero, eq_c
+  rwa [key, map_sub, aeval_X, aeval_C, sub_eq_zero, eq_comm] at this
 
 中文:
 定理 root
@@ -929,7 +957,7 @@ theorem root
     (associated_of_dvd_dvd ((irreducible_X_sub_C y).dvd_symm (irreducible hx) (dvd_iff_isRoot.2 h))
       (dvd_iff_isRoot.2 h))
   have := aeval A x
-  rwa [key, map_sub, aeval_X, aeval_C, sub_eq_zero, eq_c
+  rwa [key, map_sub, aeval_X, aeval_C, sub_eq_zero, eq_comm] at this
 
 Depends on / 依赖: aeval_C, aeval_X, associated_of_dvd_dvd, dvd_iff_isRoot, dvd_symm, eq_comm, eq_of_monic_of_associated, irreducible, irreducible_X_sub_C, map_sub, minpoly, monic_X_sub_C, sub_eq_zero
 -/
@@ -1028,7 +1056,13 @@ lemma minpoly_algEquiv_toLinearMap
   · intro q hq hs
     rw [degree_eq_natDegree hq.ne_zero]; rw [degree_X_pow_sub_C hσ.orderOf_pos]; rw [Nat.cast_le]; rw [← not_lt]
     intro H
-    rw [ae
+    rw [aeval_eq_sum_range' H]; rw [← Fin.sum_univ_eq_sum_range] at hs
+    simp_rw [← AlgEquiv.pow_toLinearMap] at hs
+    apply hq.ne_zero
+    simpa using Fintype.linearIndependent_iff.mp
+      (((linearIndependent_algHom_toLinearMap' K L L).comp _ AlgEquiv.coe_toAlgHom_injective).comp _
+        (Subtype.val_injective.comp ((finEquivPowers hσ).injective)))
+      (q.coeff ∘ (↑)) hs ⟨_, H⟩
 
 中文:
 引理 minpoly_algEquiv_toLinearMap
@@ -1039,7 +1073,13 @@ lemma minpoly_algEquiv_toLinearMap
   · intro q hq hs
     rw [degree_eq_natDegree hq.ne_zero]; rw [degree_X_pow_sub_C hσ.orderOf_pos]; rw [Nat.cast_le]; rw [← not_lt]
     intro H
-    rw [ae
+    rw [aeval_eq_sum_range' H]; rw [← Fin.sum_univ_eq_sum_range] at hs
+    simp_rw [← AlgEquiv.pow_toLinearMap] at hs
+    apply hq.ne_zero
+    simpa using Fintype.linearIndependent_iff.mp
+      (((linearIndependent_algHom_toLinearMap' K L L).comp _ AlgEquiv.coe_toAlgHom_injective).comp _
+        (Subtype.val_injective.comp ((finEquivPowers hσ).injective)))
+      (q.coeff ∘ (↑)) hs ⟨_, H⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.pow_toLinearMap, Fin.sum_univ_eq_sum_range, Fintype, Fintype.linearIndependent_iff.mp, Nat.cast_le, aeval_eq_sum_range, cast_le, degree_X_pow_sub_C, degree_eq_natDegree, hq.ne_zero, linearIndependent_algHom_toLinearMap, linearIndependent_iff, minpoly, minpoly.unique, monic_X_pow_sub_C, ne_zero, not_lt, orderOf_pos, orderOf_pos.ne.symm
 -/
@@ -1069,7 +1109,10 @@ lemma minpoly_algHom_toLinearMap
     rw [← MonoidHom.coe_coe]; rw [orderOf_injective]; rw [← orderOf_units]; rw [IsOfFinOrder.val_unit]
     exact (AlgEquiv.algHomUnitsEquiv K L).injective
   rw [this]; rw [← minpoly_algEquiv_toLinearMap]
-  · apply congr_ar
+  · apply congr_arg
+    ext
+    simp
+  · rwa [← orderOf_pos_iff, ← this, orderOf_pos_iff]
 
 中文:
 引理 minpoly_algHom_toLinearMap
@@ -1079,7 +1122,10 @@ lemma minpoly_algHom_toLinearMap
     rw [← MonoidHom.coe_coe]; rw [orderOf_injective]; rw [← orderOf_units]; rw [IsOfFinOrder.val_unit]
     exact (AlgEquiv.algHomUnitsEquiv K L).injective
   rw [this]; rw [← minpoly_algEquiv_toLinearMap]
-  · apply congr_ar
+  · apply congr_arg
+    ext
+    simp
+  · rwa [← orderOf_pos_iff, ← this, orderOf_pos_iff]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.algHomUnitsEquiv, IsOfFinOrder, IsOfFinOrder.val_unit, MonoidHom, MonoidHom.coe_coe, algHomUnitsEquiv, coe_coe, congr_arg, injective, minpoly_algEquiv_toLinearMap, orderOf, orderOf_injective, orderOf_pos_iff, orderOf_units, val_unit
 -/

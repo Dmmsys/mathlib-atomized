@@ -94,7 +94,16 @@ lemma Smooth.of_smooth_tensorProduct_of_faithfullyFlat
   rw [formallySmooth_iff]
   constructor
   · let _ : Algebra T (S otimes[R] T) := TensorProduct.rightAlgebra
-    let e : S oti
+    let e : S otimes[R] T ≃ₐ[T] T otimes[R] S :=
+.ofRingEquiv (f := TensorProduct.comm R S T) by simp [RingHom.algebraMap_toAlgebra]
+    have : FormallySmooth T (S otimes[R] T) := .of_equiv e.symm
+    let e' : (S otimes[R] T) otimes[S] Ω[S⁄R] ≃ₗ[S otimes[R] T] Ω[S otimes[R] T⁄T] :=
+      KaehlerDifferential.tensorKaehlerEquiv R T S (S otimes[R] T)
+    have : Module.Flat (S otimes[R] T) ((S otimes[R] T) otimes[S] Ω[S⁄R]) := .of_linearEquiv e'
+    have : Module.Flat S Ω[S⁄R] := Module.Flat.of_flat_tensorProduct _ _ (S otimes[R] T)
+    exact Module.Flat.projective_of_finitePresentation
+  · have : Subsingleton (T otimes[R] H1Cotangent R S) := (tensorH1CotangentOfFlat R S T).subsingleton
+    exact Module.FaithfullyFlat.lTensor_reflects_triviality R T (H1Cotangent R S)
 
 中文:
 引理 光滑.of_smooth_tensorProduct_of_faithfullyFlat
@@ -105,7 +114,16 @@ lemma Smooth.of_smooth_tensorProduct_of_faithfullyFlat
   rw [formallySmooth_iff]
   constructor
   · let _ : Algebra T (S otimes[R] T) := TensorProduct.rightAlgebra
-    let e : S oti
+    let e : S otimes[R] T ≃ₐ[T] T otimes[R] S :=
+.ofRingEquiv (f := TensorProduct.comm R S T) by simp [RingHom.algebraMap_toAlgebra]
+    have : FormallySmooth T (S otimes[R] T) := .of_equiv e.symm
+    let e' : (S otimes[R] T) otimes[S] Ω[S⁄R] ≃ₗ[S otimes[R] T] Ω[S otimes[R] T⁄T] :=
+      KaehlerDifferential.tensorKaehlerEquiv R T S (S otimes[R] T)
+    have : Module.Flat (S otimes[R] T) ((S otimes[R] T) otimes[S] Ω[S⁄R]) := .of_linearEquiv e'
+    have : Module.Flat S Ω[S⁄R] := Module.Flat.of_flat_tensorProduct _ _ (S otimes[R] T)
+    exact Module.Flat.projective_of_finitePresentation
+  · have : Subsingleton (T otimes[R] H1Cotangent R S) := (tensorH1CotangentOfFlat R S T).subsingleton
+    exact Module.FaithfullyFlat.lTensor_reflects_triviality R T (H1Cotangent R S)
 
 Depends on / 依赖: Algebra, Algebra.FinitePresentation, FinitePresentation, FormallySmooth, RingHom, RingHom.algebraMap_toAlgebra, TensorProduct, TensorProduct.comm, TensorProduct.rightAlgebra, algebraMap_toAlgebra, e.symm, formallySmooth_iff, ofRingEquiv, of_equiv, of_finitePresentation_tensorProduct_of_faithfullyFlat, otimes, rightAlgebra
 -/

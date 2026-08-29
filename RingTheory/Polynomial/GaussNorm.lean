@@ -223,7 +223,11 @@ lemma aux_bdd
 apply Set.Finite.union _ Set.finite_singleton 0
     apply Set.Finite.image f
     rw [Set.top_eq_univ]; rw [Set.finite_univ_iff]; rw [← @Finset.coe_sort_coe]
-    exact Finite.of_fintype
+    exact Finite.of_fintype p.support
+refine Set.Finite.bddAbove Set.Finite.subset h_fin fun _ => ?_
+  simp only [Set.top_eq_univ, Set.image_univ, Set.union_singleton, Set.mem_insert_iff,
+    Set.mem_range, Subtype.exists, mem_support_iff]
+  grind
 
 中文:
 引理 aux_bdd
@@ -234,7 +238,11 @@ apply Set.Finite.union _ Set.finite_singleton 0
 apply Set.Finite.union _ Set.finite_singleton 0
     apply Set.Finite.image f
     rw [Set.top_eq_univ]; rw [Set.finite_univ_iff]; rw [← @Finset.coe_sort_coe]
-    exact Finite.of_fintype
+    exact Finite.of_fintype p.support
+refine Set.Finite.bddAbove Set.Finite.subset h_fin fun _ => ?_
+  simp only [Set.top_eq_univ, Set.image_univ, Set.union_singleton, Set.mem_insert_iff,
+    Set.mem_range, Subtype.exists, mem_support_iff]
+  grind
 -/
 private lemma aux_bdd : BddAbove {x | exists i, v (p.coeff i) * c ^ i = x} := by
   let f : p.support -> Real := fun i => v (p.coeff i) * c ^ i.val
@@ -268,7 +276,12 @@ theorem gaussNorm_coe_powerSeries
     · apply ciSup_le
       intro n
       by_cases h : n in p.support
-      · exact Finset.le_sup' (fun j => v
+      · exact Finset.le_sup' (fun j => v (p.coeff j) * c ^ j) h
+      · simp_all [sup'_nonneg_of_ne_zero v (support_nonempty.mpr hp) hc]
+    · obtain ⟨i, hi⟩ := exists_eq_gaussNorm v c p
+      simp only [gaussNorm, support_nonempty.mpr hp, ↓reduceDIte] at hi
+      rw [hi]
+      exact le_ciSup (aux_bdd v p) i
 
 中文:
 定理 gaussNorm_coe_powerSeries
@@ -282,7 +295,12 @@ theorem gaussNorm_coe_powerSeries
     · apply ciSup_le
       intro n
       by_cases h : n in p.support
-      · exact Finset.le_sup' (fun j => v
+      · exact Finset.le_sup' (fun j => v (p.coeff j) * c ^ j) h
+      · simp_all [sup'_nonneg_of_ne_zero v (support_nonempty.mpr hp) hc]
+    · obtain ⟨i, hi⟩ := exists_eq_gaussNorm v c p
+      simp only [gaussNorm, support_nonempty.mpr hp, ↓reduceDIte] at hi
+      rw [hi]
+      exact le_ciSup (aux_bdd v p) i
 
 Depends on / 依赖: Finset, Finset.le_sup, PowerSeries, PowerSeries.gaussNorm_eq, _nonneg_of_ne_zero, aux_bdd, ciSup_le, coeff_coe, exists_eq_gaussNorm, gaussNorm, gaussNorm_eq, le_antisymm, le_ciSup, le_sup, ne_eq, not_false_eq_true, p.coeff, p.support, reduceDIte, support
 -/
@@ -412,7 +430,7 @@ lemma gaussNorm_zero_right
   · simp_all [gaussNorm]
   · apply le_antisymm
     · aesop (add norm (by simp [gaussNorm, Finset.sup'_le_iff]))
-    · grind [p.le_gaussNorm v (l
+    · grind [p.le_gaussNorm v (le_refl 0) 0]
 
 中文:
 引理 gaussNorm_zero_right
@@ -424,7 +442,7 @@ lemma gaussNorm_zero_right
   · simp_all [gaussNorm]
   · apply le_antisymm
     · aesop (add norm (by simp [gaussNorm, Finset.sup'_le_iff]))
-    · grind [p.le_gaussNorm v (l
+    · grind [p.le_gaussNorm v (le_refl 0) 0]
 
 Depends on / 依赖: Finset, Finset.sup, _le_iff, eq_or_ne, gaussNorm, hcoeff0, le_antisymm, le_gaussNorm, le_refl, p.coeff, p.le_gaussNorm
 -/
@@ -450,7 +468,8 @@ lemma exists_min_eq_gaussNorm
     exact ⟨i, Set.mem_ofPred.mpr hi⟩
   refine ⟨Nat.find h_nonempty, Nat.find_spec h_nonempty, ?_⟩
   intro j hj_lt
-  simp only [Nat.lt_find_iff, Set.mem_ofPred_eq] at hj
+  simp only [Nat.lt_find_iff, Set.mem_ofPred_eq] at hj_lt
+  exact lt_of_le_of_ne (le_gaussNorm v _ hc j) fun a => hj_lt j (Nat.le_refl j) a.symm
 
 中文:
 引理 存在_min_eq_gaussNorm
@@ -461,7 +480,8 @@ lemma exists_min_eq_gaussNorm
     exact ⟨i, Set.mem_ofPred.mpr hi⟩
   refine ⟨Nat.find h_nonempty, Nat.find_spec h_nonempty, ?_⟩
   intro j hj_lt
-  simp only [Nat.lt_find_iff, Set.mem_ofPred_eq] at hj
+  simp only [Nat.lt_find_iff, Set.mem_ofPred_eq] at hj_lt
+  exact lt_of_le_of_ne (le_gaussNorm v _ hc j) fun a => hj_lt j (Nat.le_refl j) a.symm
 
 Depends on / 依赖: Nat.find, Nat.find_spec, Nat.le_refl, Nat.lt_find_iff, Nonempty, Set.mem_ofPred.mpr, Set.mem_ofPred_eq, a.symm, exists_eq_gaussNorm, find_spec, gaussNorm, h_nonempty, hj_lt, le_gaussNorm, le_refl, lt_find_iff, lt_of_le_of_ne, mem_ofPred, mem_ofPred_eq, p.coeff
 -/
@@ -492,6 +512,18 @@ theorem isNonarchimedean_gaussNorm
   · simp [hpq, hc, gaussNorm_nonneg]
   simp only [gaussNorm, support_nonempty, ne_eq, hpq, not_false_eq_true, ↓reduceDIte,
     Finset.sup'_le_iff]
+  intro i _
+  calc
+  v ((p + q).coeff i) * c ^ i
+    <= max (v (p.coeff i)) (v (q.coeff i)) * c ^ i := by
+    rw [coeff_add]
+    gcongr
+    exact hna (p.coeff i) (q.coeff i)
+  _ = max (v (p.coeff i) * c ^ i) (v (q.coeff i) * c ^ i) := by
+    rw [max_mul_of_nonneg _ _ (pow_nonneg hc _)]
+  _ <= max (gaussNorm v c p) (gaussNorm v c q) := by
+    apply max_le_max <;>
+    exact le_gaussNorm v _ hc i
 
 中文:
 定理 isNonarchimedean_gaussNorm
@@ -506,6 +538,18 @@ theorem isNonarchimedean_gaussNorm
   · simp [hpq, hc, gaussNorm_nonneg]
   simp only [gaussNorm, support_nonempty, ne_eq, hpq, not_false_eq_true, ↓reduceDIte,
     Finset.sup'_le_iff]
+  intro i _
+  calc
+  v ((p + q).coeff i) * c ^ i
+    <= max (v (p.coeff i)) (v (q.coeff i)) * c ^ i := by
+    rw [coeff_add]
+    gcongr
+    exact hna (p.coeff i) (q.coeff i)
+  _ = max (v (p.coeff i) * c ^ i) (v (q.coeff i) * c ^ i) := by
+    rw [max_mul_of_nonneg _ _ (pow_nonneg hc _)]
+  _ <= max (gaussNorm v c p) (gaussNorm v c q) := by
+    apply max_le_max <;>
+    exact le_gaussNorm v _ hc i
 
 Depends on / 依赖: Finset, Finset.sup, _le_iff, coeff_add, eq_or_ne, gaussNorm, gaussNorm_nonneg, ne_eq, not_false_eq_true, p.coeff, q.coeff, reduceDIte, support_nonempty
 -/
@@ -545,7 +589,23 @@ theorem gaussNorm_mul_le
   · simp [hpq, hc, gaussNorm_nonneg, mul_nonneg]
 have h_supp_p : p.support.Nonempty := support_nonempty.mpr left_ne_zero_of_mul hpq
 have h_supp_q : q.support.Nonempty := support_nonempty.mpr right_ne_zero_of_mul hpq
-  simp only [gaussNorm, support_nonemp
+  simp only [gaussNorm, support_nonempty, ne_eq, hpq, not_false_eq_true, ↓reduceDIte, h_supp_p,
+    h_supp_q, sup'_le_iff, coeff_mul, Nat.sum_antidiagonal_eq_sum_range_succ_mk]
+  intro i _
+  obtain ⟨j, _, _⟩ := IsNonarchimedean.finset_image_add_of_nonempty hna _ nonempty_range_add_one
+  calc
+  v (∑ j in range (i + 1), p.coeff j * q.coeff (i - j)) * c ^ i
+  _ <= v (p.coeff j * q.coeff (i - j)) * c ^ i := by gcongr
+  _ = (v (p.coeff j) * c ^ j) * (v (q.coeff (i - j)) * c ^ (i - j)) := by
+      have : c ^ j * c ^ (i - j) = c ^ i := by simp_all [← pow_add]
+      grind
+  _ <= (p.support.sup' _ fun i => v (p.coeff i) * c ^ i)
+    * q.support.sup' _ fun i => v (q.coeff i) * c ^ i := by
+      have hp_le := p.le_gaussNorm v hc j
+      have hq_le := q.le_gaussNorm v hc (i - j)
+      have := p.gaussNorm_nonneg v hc
+      simp_all only [gaussNorm, ↓reduceDIte]
+      gcongr
 
 中文:
 定理 gaussNorm_mul_le
@@ -555,7 +615,23 @@ have h_supp_q : q.support.Nonempty := support_nonempty.mpr right_ne_zero_of_mul 
   · simp [hpq, hc, gaussNorm_nonneg, mul_nonneg]
 have h_supp_p : p.support.Nonempty := support_nonempty.mpr left_ne_zero_of_mul hpq
 have h_supp_q : q.support.Nonempty := support_nonempty.mpr right_ne_zero_of_mul hpq
-  simp only [gaussNorm, support_nonemp
+  simp only [gaussNorm, support_nonempty, ne_eq, hpq, not_false_eq_true, ↓reduceDIte, h_supp_p,
+    h_supp_q, sup'_le_iff, coeff_mul, Nat.sum_antidiagonal_eq_sum_range_succ_mk]
+  intro i _
+  obtain ⟨j, _, _⟩ := IsNonarchimedean.finset_image_add_of_nonempty hna _ nonempty_range_add_one
+  calc
+  v (∑ j in range (i + 1), p.coeff j * q.coeff (i - j)) * c ^ i
+  _ <= v (p.coeff j * q.coeff (i - j)) * c ^ i := by gcongr
+  _ = (v (p.coeff j) * c ^ j) * (v (q.coeff (i - j)) * c ^ (i - j)) := by
+      have : c ^ j * c ^ (i - j) = c ^ i := by simp_all [← pow_add]
+      grind
+  _ <= (p.support.sup' _ fun i => v (p.coeff i) * c ^ i)
+    * q.support.sup' _ fun i => v (q.coeff i) * c ^ i := by
+      have hp_le := p.le_gaussNorm v hc j
+      have hq_le := q.le_gaussNorm v hc (i - j)
+      have := p.gaussNorm_nonneg v hc
+      simp_all only [gaussNorm, ↓reduceDIte]
+      gcongr
 
 Depends on / 依赖: IsNonarchimedean, IsNonarchimedean.finset_image_add_of_none, Nat.sum_antidiagonal_eq_sum_range_succ_mk, Nonempty, _le_iff, coeff_mul, eq_or_ne, finset_image_add_of_none, gaussNorm, gaussNorm_nonneg, h_supp_p, h_supp_q, left_ne_zero_of_mul, mul_nonneg, ne_eq, not_false_eq_true, p.support.Nonempty, q.support.Nonempty, reduceDIte, right_ne_zero_of_mul
 -/
@@ -601,7 +677,46 @@ theorem mul_gaussNorm_le_gaussNorm_mul
   obtain ⟨j, hj_q, hlt_q⟩ := q.exists_min_eq_gaussNorm v hc0
   -- i and j are the minimal indices where the gauss norms are attained
   wlog hvpq : v (p.coeff i) != 0 ∧ v (q.coeff j) != 0
-  · grind [mul
+  · grind [mul_mul_mul_comm, gaussNorm_nonneg]
+  have := hvpq.1
+  have := hvpq.2
+apply le_of_eq_of_le _ (p * q).le_gaussNorm v hc0 (i + j)
+  -- gaussNorm v c p * gaussNorm v c q is actually equal to v ((p * q).coeff (i + j)) * c ^ (i + j)
+  rw [hi_p]; rw [hj_q]; rw [coeff_mul]; rw [Nat.sum_antidiagonal_eq_sum_range_succ_mk]; rw [IsNonarchimedean.apply_sum_eq_of_lt hna (k := i) (by simp) (by simp)]
+  /- IsNonarchimedean.apply_sum_eq_of_lt makes the goal almost trivial so we are left to prove
+  the hmax hypothesis -/
+  · grind
+  intro x hx hneq
+apply lt_of_mul_lt_mul_right _ pow_nonneg hc0 (i + j)
+  have : x + (i + j - x) = i + j := by simp_all
+  convert_to! v (p.coeff x) * c ^ x * (v (q.coeff (i + j - x)) * c ^ (i + j - x)) <
+    v (p.coeff i) * c ^ i * (v (q.coeff j) * c ^ j)
+  · grind
+  · grind
+  -- we need to distinguish two cases depending on whether x < i or x > i
+  rcases lt_or_gt_of_ne hneq
+  · calc
+    v (p.coeff x) * c ^ x * (v (q.coeff (i + j - x)) * c ^ (i + j - x))
+    _ <= v (p.coeff x) * c ^ x * gaussNorm v c q := by
+        gcongr
+        exact q.le_gaussNorm v hc0 (i + j - x)
+    _ = v (p.coeff x) * c ^ x * (v (q.coeff j) * c ^ j) := by
+        rw [hj_q]
+    _ < v (p.coeff i) * c ^ i * (v (q.coeff j) * c ^ j) := by
+        gcongr 1
+        grind
+  · calc
+    v (p.coeff x) * c ^ x * (v (q.coeff (i + j - x)) * c ^ (i + j - x))
+    _ <= gaussNorm v c p * (v (q.coeff (i + j - x)) * c ^ (i + j - x)) := by
+        gcongr
+        exact p.le_gaussNorm v hc0 x
+    _ = v (p.coeff i) * c ^ i * (v (q.coeff (i + j - x)) * c ^ (i + j - x)) := by
+        rw [hi_p]
+    _ < v (p.coeff i) * c ^ i * (v (q.coeff j) * c ^ j) := by
+        gcongr 1
+        grind
+
+include hna hc in
 
 中文:
 定理 mul_gaussNorm_le_gaussNorm_mul
@@ -612,7 +727,46 @@ theorem mul_gaussNorm_le_gaussNorm_mul
   obtain ⟨j, hj_q, hlt_q⟩ := q.exists_min_eq_gaussNorm v hc0
   -- i and j are the minimal indices where the gauss norms are attained
   wlog hvpq : v (p.coeff i) != 0 ∧ v (q.coeff j) != 0
-  · grind [mul
+  · grind [mul_mul_mul_comm, gaussNorm_nonneg]
+  have := hvpq.1
+  have := hvpq.2
+apply le_of_eq_of_le _ (p * q).le_gaussNorm v hc0 (i + j)
+  -- gaussNorm v c p * gaussNorm v c q is actually equal to v ((p * q).coeff (i + j)) * c ^ (i + j)
+  rw [hi_p]; rw [hj_q]; rw [coeff_mul]; rw [Nat.sum_antidiagonal_eq_sum_range_succ_mk]; rw [IsNonarchimedean.apply_sum_eq_of_lt hna (k := i) (by simp) (by simp)]
+  /- IsNonarchimedean.apply_sum_eq_of_lt makes the goal almost trivial so we are left to prove
+  the hmax hypothesis -/
+  · grind
+  intro x hx hneq
+apply lt_of_mul_lt_mul_right _ pow_nonneg hc0 (i + j)
+  have : x + (i + j - x) = i + j := by simp_all
+  convert_to! v (p.coeff x) * c ^ x * (v (q.coeff (i + j - x)) * c ^ (i + j - x)) <
+    v (p.coeff i) * c ^ i * (v (q.coeff j) * c ^ j)
+  · grind
+  · grind
+  -- we need to distinguish two cases depending on whether x < i or x > i
+  rcases lt_or_gt_of_ne hneq
+  · calc
+    v (p.coeff x) * c ^ x * (v (q.coeff (i + j - x)) * c ^ (i + j - x))
+    _ <= v (p.coeff x) * c ^ x * gaussNorm v c q := by
+        gcongr
+        exact q.le_gaussNorm v hc0 (i + j - x)
+    _ = v (p.coeff x) * c ^ x * (v (q.coeff j) * c ^ j) := by
+        rw [hj_q]
+    _ < v (p.coeff i) * c ^ i * (v (q.coeff j) * c ^ j) := by
+        gcongr 1
+        grind
+  · calc
+    v (p.coeff x) * c ^ x * (v (q.coeff (i + j - x)) * c ^ (i + j - x))
+    _ <= gaussNorm v c p * (v (q.coeff (i + j - x)) * c ^ (i + j - x)) := by
+        gcongr
+        exact p.le_gaussNorm v hc0 x
+    _ = v (p.coeff i) * c ^ i * (v (q.coeff (i + j - x)) * c ^ (i + j - x)) := by
+        rw [hi_p]
+    _ < v (p.coeff i) * c ^ i * (v (q.coeff j) * c ^ j) := by
+        gcongr 1
+        grind
+
+include hna hc in
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.module, coeAddMonoidHom, coe_injective, module
 -/

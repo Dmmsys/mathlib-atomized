@@ -235,7 +235,19 @@ theorem WellQuasiOrdered.pi
     { refl a i := refl (a i)
       trans a b c hab hbc i := _root_.trans (hab i) (hbc i) }
   suffices forall (s : Finset ι) (f : Nat -> forall i, α i),
-    exists g : Nat ↪o 
+    exists g : Nat ↪o Nat, forall ⦃a b : Nat⦄, a <= b -> forall i, i in s -> r i ((f ∘ g) a i) ((f ∘ g) b i) by
+    rw [wellQuasiOrdered_iff_exists_monotone_subseq]
+    intro f
+    simpa only [Finset.mem_univ, true_imp_iff] using! this Finset.univ f
+  refine Finset.cons_induction ?_ ?_
+  · intro f
+    exists RelEmbedding.refl (· <= ·)
+    simp only [IsEmpty.forall_iff, imp_true_iff, Finset.notMem_empty]
+  · intro i s hi ih f
+    obtain ⟨g, hg⟩ := (hr i).exists_monotone_subseq (f · i)
+    obtain ⟨g', hg'⟩ := ih (f ∘ g)
+    refine ⟨g'.trans g, fun a b hab => (Finset.forall_mem_cons _ _).2 ?_⟩
+    exact ⟨hg _ _ (OrderHomClass.mono g' hab), hg' hab⟩
 
 中文:
 定理 WellQuasiOrdered.pi
@@ -246,7 +258,19 @@ theorem WellQuasiOrdered.pi
     { refl a i := refl (a i)
       trans a b c hab hbc i := _root_.trans (hab i) (hbc i) }
   suffices forall (s : Finset ι) (f : Nat -> forall i, α i),
-    exists g : Nat ↪o 
+    exists g : Nat ↪o Nat, forall ⦃a b : Nat⦄, a <= b -> forall i, i in s -> r i ((f ∘ g) a i) ((f ∘ g) b i) by
+    rw [wellQuasiOrdered_iff_exists_monotone_subseq]
+    intro f
+    simpa only [Finset.mem_univ, true_imp_iff] using! this Finset.univ f
+  refine Finset.cons_induction ?_ ?_
+  · intro f
+    exists RelEmbedding.refl (· <= ·)
+    simp only [IsEmpty.forall_iff, imp_true_iff, Finset.notMem_empty]
+  · intro i s hi ih f
+    obtain ⟨g, hg⟩ := (hr i).exists_monotone_subseq (f · i)
+    obtain ⟨g', hg'⟩ := ih (f ∘ g)
+    refine ⟨g'.trans g, fun a b hab => (Finset.forall_mem_cons _ _).2 ?_⟩
+    exact ⟨hg _ _ (OrderHomClass.mono g' hab), hg' hab⟩
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.univ, Fintype, Fintype.ofFinite, IsPreorder, _root_, _root_.trans, mem_univ, ofFinite, true_imp_iff, wellQuasiOrdered_iff_exists_monotone_subseq
 -/
@@ -489,7 +513,16 @@ theorem wellQuasiOrderedLE_iff
   · exfalso
     apply RelEmbedding.not_wellFounded _ hwf.wf
     exact (RelEmbedding.ofMonotone _ h1).swap
-  ·
+  · contrapose! hc
+    refine ⟨Set.range (f ∘ g), ?_, ?_⟩
+    · rintro _ ⟨m, rfl⟩ _ ⟨n, rfl⟩ _ hf
+      obtain h | rfl | h := lt_trichotomy m n
+      · exact hc _ _ (g.strictMono h) hf
+      · contradiction
+      · exact h2 _ _ h (lt_of_le_not_ge hf (hc _ _ (g.strictMono h)))
+    · refine Set.infinite_range_of_injective fun m n (hf : f (g m) = f (g n)) => ?_
+      obtain h | rfl | h := lt_trichotomy m n <;>
+        (first | rfl | cases (hf ▸ hc _ _ (g.strictMono h)) le_rfl)
 
 中文:
 定理 wellQuasiOrderedLE_iff
@@ -500,7 +533,16 @@ theorem wellQuasiOrderedLE_iff
   · exfalso
     apply RelEmbedding.not_wellFounded _ hwf.wf
     exact (RelEmbedding.ofMonotone _ h1).swap
-  ·
+  · contrapose! hc
+    refine ⟨Set.range (f ∘ g), ?_, ?_⟩
+    · rintro _ ⟨m, rfl⟩ _ ⟨n, rfl⟩ _ hf
+      obtain h | rfl | h := lt_trichotomy m n
+      · exact hc _ _ (g.strictMono h) hf
+      · contradiction
+      · exact h2 _ _ h (lt_of_le_not_ge hf (hc _ _ (g.strictMono h)))
+    · refine Set.infinite_range_of_injective fun m n (hf : f (g m) = f (g n)) => ?_
+      obtain h | rfl | h := lt_trichotomy m n <;>
+        (first | rfl | cases (hf ▸ hc _ _ (g.strictMono h)) le_rfl)
 
 Depends on / 依赖: RelEmbedding, RelEmbedding.not_wellFounded, RelEmbedding.ofMonotone, Set.range, contrapose, exists_increasing_or_nonincreasing_subseq, finite_of_isAntichain, g.strictMono, h.finite_of_isAntichain, h.to_wellFoundedLT, hwf.wf, lt_of_le_not_ge, lt_trichotomy, not_wellFounded, ofMonotone, strictMono, to_wellFoundedLT
 -/

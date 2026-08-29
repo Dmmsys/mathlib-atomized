@@ -31,7 +31,9 @@ theorem continuousWithinAt_update_same
     { rw [← continuousWithinAt_sdiff_self, ContinuousWithinAt, update_self] }
     _ ↔ Tendsto f (𝓝[s \ {x}] x) (𝓝 y) :=
 tendsto_congr' eventually_nhdsWithin_iff.2 Eventually.of_forall
-        fun _ hz 
+        fun _ hz => update_of_ne hz.2 ..
+
+@[simp]
 
 中文:
 定理 continuousWithinAt_update_same
@@ -41,7 +43,9 @@ tendsto_congr' eventually_nhdsWithin_iff.2 Eventually.of_forall
     { rw [← continuousWithinAt_sdiff_self, ContinuousWithinAt, update_self] }
     _ ↔ Tendsto f (𝓝[s \ {x}] x) (𝓝 y) :=
 tendsto_congr' eventually_nhdsWithin_iff.2 Eventually.of_forall
-        fun _ hz 
+        fun _ hz => update_of_ne hz.2 ..
+
+@[simp]
 
 Depends on / 依赖: ContinuousWithinAt, Eventually, Eventually.of_forall, Tendsto, continuousWithinAt_sdiff_self, eventually_nhdsWithin_iff, of_forall, tendsto_congr, update, update_of_ne, update_self
 -/
@@ -89,7 +93,17 @@ theorem ContinuousOn.if'
   · rw [← inter_univ s, ← union_compl_self { a | p a }, inter_union_distrib_left] at hx ⊢
     rcases hx with hx | hx
     · apply ContinuousWithinAt.union
-      · exact (hf x 
+      · exact (hf x hx).congr (fun y hy => if_pos hy.2) (if_pos hx.2)
+      · have : x ∉ closure { a | p a }ᶜ := fun h => hx' ⟨subset_closure hx.2, by
+          rwa [closure_compl] at h⟩
+        exact continuousWithinAt_of_notMem_closure fun h =>
+          this (closure_inter_subset_inter_closure _ _ h).2
+    · apply ContinuousWithinAt.union
+      · have : x ∉ closure { a | p a } := fun h =>
+          hx' ⟨h, fun h' : x in interior { a | p a } => hx.2 (interior_subset h')⟩
+        exact continuousWithinAt_of_notMem_closure fun h =>
+          this (closure_inter_subset_inter_closure _ _ h).2
+      · exact (hg x hx).congr (fun y hy => if_neg hy.2) (if_neg hx.2)
 
 中文:
 定理 ContinuousOn.if'
@@ -101,7 +115,17 @@ theorem ContinuousOn.if'
   · rw [← inter_univ s, ← union_compl_self { a | p a }, inter_union_distrib_left] at hx ⊢
     rcases hx with hx | hx
     · apply ContinuousWithinAt.union
-      · exact (hf x 
+      · exact (hf x hx).congr (fun y hy => if_pos hy.2) (if_pos hx.2)
+      · have : x ∉ closure { a | p a }ᶜ := fun h => hx' ⟨subset_closure hx.2, by
+          rwa [closure_compl] at h⟩
+        exact continuousWithinAt_of_notMem_closure fun h =>
+          this (closure_inter_subset_inter_closure _ _ h).2
+    · apply ContinuousWithinAt.union
+      · have : x ∉ closure { a | p a } := fun h =>
+          hx' ⟨h, fun h' : x in interior { a | p a } => hx.2 (interior_subset h')⟩
+        exact continuousWithinAt_of_notMem_closure fun h =>
+          this (closure_inter_subset_inter_closure _ _ h).2
+      · exact (hg x hx).congr (fun y hy => if_neg hy.2) (if_neg hx.2)
 
 Depends on / 依赖: ContinuousWithinAt, ContinuousWithinAt.union, closure, closure_compl, closure_inter, continuousWithinAt_of_notMem_closure, frontier, if_pos, inter_union_distrib_left, inter_univ, piecewise_nhdsWithin, subset_closure, union_compl_self
 -/
@@ -167,7 +191,12 @@ theorem ContinuousOn.if
     exact hf a ⟨ha.1, ha.2.1⟩
   · rintro a ha
     simp only [hp a ha, ite_self]
-    apply tendsto_nhdsWithin_mono_left (inter_subset_inte
+    apply tendsto_nhdsWithin_mono_left (inter_subset_inter_right s subset_closure)
+    rcases ha with ⟨has, ⟨_, ha⟩⟩
+    rw [← mem_compl_iff]; rw [← closure_compl] at ha
+    apply hg a ⟨has, ha⟩
+  · exact hf.mono (inter_subset_inter_right s subset_closure)
+  · exact hg.mono (inter_subset_inter_right s subset_closure)
 
 中文:
 定理 ContinuousOn.if
@@ -180,7 +209,12 @@ theorem ContinuousOn.if
     exact hf a ⟨ha.1, ha.2.1⟩
   · rintro a ha
     simp only [hp a ha, ite_self]
-    apply tendsto_nhdsWithin_mono_left (inter_subset_inte
+    apply tendsto_nhdsWithin_mono_left (inter_subset_inter_right s subset_closure)
+    rcases ha with ⟨has, ⟨_, ha⟩⟩
+    rw [← mem_compl_iff]; rw [← closure_compl] at ha
+    apply hg a ⟨has, ha⟩
+  · exact hf.mono (inter_subset_inter_right s subset_closure)
+  · exact hg.mono (inter_subset_inter_right s subset_closure)
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.if, closure_compl, hf.mono, hg.mono, inter_subset_inter_righ, inter_subset_inter_right, ite_self, mem_compl_iff, subset_closure, tendsto_nhdsWithin_mono_left
 -/

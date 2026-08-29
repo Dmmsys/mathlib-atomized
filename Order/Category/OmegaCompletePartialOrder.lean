@@ -194,7 +194,10 @@ definition isProduct
       fun x => funext fun j => (s.π.app ⟨j⟩).continuous x⟩
   uniq s m w := by
     ext t; funext j -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): Originally `ext t j`
-    change m t j = (s.π.app 
+    change m t j = (s.π.app ⟨j⟩) t
+    rw [← w ⟨j⟩]
+    rfl
+  fac _ _ := rfl
 
 中文:
 定义 isProduct
@@ -203,7 +206,10 @@ definition isProduct
       fun x => funext fun j => (s.π.app ⟨j⟩).continuous x⟩
   uniq s m w := by
     ext t; funext j -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): Originally `ext t j`
-    change m t j = (s.π.app 
+    change m t j = (s.π.app ⟨j⟩) t
+    rw [← w ⟨j⟩]
+    rfl
+  fac _ _ := rfl
 
 Depends on / 依赖: Originally, Porting, community, continuous, github, github.com, issues, leanprover, mathlib4, monotone
 -/
@@ -308,7 +314,8 @@ definition isEqualizer
         monotone' := fun _ _ h => s.ι.monotone h
         map_ωSup' := fun x => Subtype.ext (s.ι.continuous x)
       }, by ext; rfl, fun hm => by
-      ext x : 2; apply Subtype.ext ?_ -- Porting
+      ext x : 2; apply Subtype.ext ?_ -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): Originally `ext`
+      apply ContinuousHom.congr_fun hm⟩
 
 中文:
 定义 isEqualizer
@@ -318,7 +325,8 @@ definition isEqualizer
         monotone' := fun _ _ h => s.ι.monotone h
         map_ωSup' := fun x => Subtype.ext (s.ι.continuous x)
       }, by ext; rfl, fun hm => by
-      ext x : 2; apply Subtype.ext ?_ -- Porting
+      ext x : 2; apply Subtype.ext ?_ -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): Originally `ext`
+      apply ContinuousHom.congr_fun hm⟩
 
 Depends on / 依赖: ContinuousHom, ContinuousHom.congr_fun, Fork.IsLimit.mk, IsLimit, Originally, Porting, Subtype, Subtype.ext, community, condition, congr_fun, continuous, github, github.com, issues, leanprover, mathlib4, monotone, s.condition
 -/

@@ -49,7 +49,11 @@ theorem absNorm_div_norm_eq_absNorm_div_norm
   · replace h := congr_arg (I.den • ·) h
     have h' := congr_arg (a • ·) (den_mul_self_eq_num I)
     rw [smul_comm] at h
-    rw [h]; rw [Submonoid.smul_def]; rw [Submonoid.smul_def]; rw [← Submodule.ideal_span_singleton_smul]; rw [← Submodule.ideal_span_singleton_smul]; rw 
+    rw [h]; rw [Submonoid.smul_def]; rw [Submonoid.smul_def]; rw [← Submodule.ideal_span_singleton_smul]; rw [← Submodule.ideal_span_singleton_smul]; rw [← Submodule.map_smul'']; rw [← Submodule.map_smul'']; rw [(LinearMap.map_injective ?_).eq_iff]; rw [smul_eq_mul]; rw [smul_eq_mul] at h'
+    · simp_rw [← Nat.cast_natAbs, ← Nat.cast_mul, ← Ideal.absNorm_span_singleton]
+      rw [← map_mul]; rw [← map_mul]; rw [mul_comm]; rw [← h']; rw [mul_comm]
+    · exact LinearMap.ker_eq_bot.mpr (IsFractionRing.injective R K)
+  all_goals simp [Algebra.norm_eq_zero_iff]
 
 中文:
 定理 absNorm_div_norm_eq_absNorm_div_norm
@@ -59,7 +63,11 @@ theorem absNorm_div_norm_eq_absNorm_div_norm
   · replace h := congr_arg (I.den • ·) h
     have h' := congr_arg (a • ·) (den_mul_self_eq_num I)
     rw [smul_comm] at h
-    rw [h]; rw [Submonoid.smul_def]; rw [Submonoid.smul_def]; rw [← Submodule.ideal_span_singleton_smul]; rw [← Submodule.ideal_span_singleton_smul]; rw 
+    rw [h]; rw [Submonoid.smul_def]; rw [Submonoid.smul_def]; rw [← Submodule.ideal_span_singleton_smul]; rw [← Submodule.ideal_span_singleton_smul]; rw [← Submodule.map_smul'']; rw [← Submodule.map_smul'']; rw [(LinearMap.map_injective ?_).eq_iff]; rw [smul_eq_mul]; rw [smul_eq_mul] at h'
+    · simp_rw [← Nat.cast_natAbs, ← Nat.cast_mul, ← Ideal.absNorm_span_singleton]
+      rw [← map_mul]; rw [← map_mul]; rw [mul_comm]; rw [← h']; rw [mul_comm]
+    · exact LinearMap.ker_eq_bot.mpr (IsFractionRing.injective R K)
+  all_goals simp [Algebra.norm_eq_zero_iff]
 
 Depends on / 依赖: I.den, Ideal.absNorm_span_singleton, LinearMap, LinearMap.map_injective, Nat.cast_mul, Nat.cast_natAbs, Submodule, Submodule.ideal_span_singleton_smul, Submodule.map_smul, Submonoid, Submonoid.smul_def, absNorm_span_singleton, cast_mul, cast_natAbs, congr_arg, den_mul_self_eq_num, div_eq_div_iff, eq_iff, ideal_span_singleton_smul, map_injective
 -/
@@ -88,7 +96,17 @@ definition absNorm
     rw [num_zero_eq]; rw [Submodule.zero_eq_bot]; rw [Ideal.absNorm_bot]; rw [Nat.cast_zero]; rw [zero_div]
     exact IsFractionRing.injective R K
   map_one' := by
-    rw [absNorm_div_norm_eq_absNorm_div_norm 1 ⊤ (by simp
+    rw [absNorm_div_norm_eq_absNorm_div_norm 1 ⊤ (by simp [Submodule.one_eq_range]),
+      Ideal.absNorm_top, Nat.cast_one, OneMemClass.coe_one, map_one, abs_one,
+      Int.cast_one,
+      one_div_one]
+  map_mul' I J := by
+    rw [absNorm_div_norm_eq_absNorm_div_norm (I.den * J.den) (I.num * J.num) (by
+        have : Algebra.linearMap R K = (IsScalarTower.toAlgHom R R K).toLinearMap := rfl
+        rw [coe_mul]; rw [this]; rw [Submodule.map_mul]; rw [← this]; rw [← den_mul_self_eq_num]; rw [← den_mul_self_eq_num]
+        exact Submodule.mul_smul_mul_eq_smul_mul_smul _ _ _ _),
+      Submonoid.coe_mul, map_mul, map_mul, Nat.cast_mul, div_mul_div_comm,
+      Int.cast_abs, Int.cast_abs, Int.cast_abs, ← abs_mul, Int.cast_mul]
 
 中文:
 定义 absNorm
@@ -98,7 +116,17 @@ definition absNorm
     rw [num_zero_eq]; rw [Submodule.zero_eq_bot]; rw [Ideal.absNorm_bot]; rw [Nat.cast_zero]; rw [zero_div]
     exact IsFractionRing.injective R K
   map_one' := by
-    rw [absNorm_div_norm_eq_absNorm_div_norm 1 ⊤ (by simp
+    rw [absNorm_div_norm_eq_absNorm_div_norm 1 ⊤ (by simp [Submodule.one_eq_range]),
+      Ideal.absNorm_top, Nat.cast_one, OneMemClass.coe_one, map_one, abs_one,
+      Int.cast_one,
+      one_div_one]
+  map_mul' I J := by
+    rw [absNorm_div_norm_eq_absNorm_div_norm (I.den * J.den) (I.num * J.num) (by
+        have : Algebra.linearMap R K = (IsScalarTower.toAlgHom R R K).toLinearMap := rfl
+        rw [coe_mul]; rw [this]; rw [Submodule.map_mul]; rw [← this]; rw [← den_mul_self_eq_num]; rw [← den_mul_self_eq_num]
+        exact Submodule.mul_smul_mul_eq_smul_mul_smul _ _ _ _),
+      Submonoid.coe_mul, map_mul, map_mul, Nat.cast_mul, div_mul_div_comm,
+      Int.cast_abs, Int.cast_abs, Int.cast_abs, ← abs_mul, Int.cast_mul]
 
 Depends on / 依赖: Algebra, Algebra.norm, I.den, I.num, Ideal.absNorm, absNorm
 -/
@@ -280,7 +308,17 @@ theorem abs_det_basis_change
   let b₀ : Basis ι Rat K := b.localizationLocalization Rat Int⁰ K
   let bI.num : Basis ι Int I.num := bI.map
       ((equivNum (nonZeroDivisors.coe_ne_zero _)).restrictScalars Int)
-  rw [absNorm_eq]; rw [← Ideal.natAbs_det_basis_change b I.num bI.num]; rw [N
+  rw [absNorm_eq]; rw [← Ideal.natAbs_det_basis_change b I.num bI.num]; rw [Nat.cast_natAbs]; rw [Int.cast_abs]; rw [Int.cast_abs]; rw [Basis.det_apply]; rw [Basis.det_apply]
+  change _ = |algebraMap Int Rat _| / _
+  rw [RingHom.map_det]; rw [show RingHom.mapMatrix (algebraMap Int Rat) (b.toMatrix ((↑) ∘ bI.num)) =
+      b₀.toMatrix ((algebraMap R K (den I : R)) • ((↑) ∘ bI)) by
+    ext : 2
+    simp_rw [bI.num]; rw [RingHom.mapMatrix_apply]; rw [Matrix.map_apply]; rw [Basis.toMatrix_apply]; rw [← Basis.localizationLocalization_repr_algebraMap Rat Int⁰ K]; rw [Function.comp_apply]; rw [Basis.map_apply]; rw [LinearEquiv.restrictScalars_apply]; rw [equivNum_apply]; rw [Submonoid.smul_def]; rw [Algebra.smul_def]
+    rfl]
+  rw [Basis.toMatrix_smul]; rw [Matrix.det_mul]; rw [abs_mul]; rw [← Algebra.norm_eq_matrix_det]; rw [Algebra.norm_localization Int Int⁰]; rw [show (Algebra.norm Int (den I : R) : Rat) =
+    algebraMap Int Rat (Algebra.norm Int (den I : R)) by rfl]; rw [mul_div_assoc]; rw [mul_div_cancel₀ _ (by
+    rw [ne_eq]; rw [abs_eq_zero]; rw [IsFractionRing.to_map_eq_zero_iff]; rw [Algebra.norm_eq_zero_iff_of_basis b]
+    exact nonZeroDivisors.coe_ne_zero _)]
 
 中文:
 定理 abs_det_basis_change
@@ -290,7 +328,17 @@ theorem abs_det_basis_change
   let b₀ : Basis ι Rat K := b.localizationLocalization Rat Int⁰ K
   let bI.num : Basis ι Int I.num := bI.map
       ((equivNum (nonZeroDivisors.coe_ne_zero _)).restrictScalars Int)
-  rw [absNorm_eq]; rw [← Ideal.natAbs_det_basis_change b I.num bI.num]; rw [N
+  rw [absNorm_eq]; rw [← Ideal.natAbs_det_basis_change b I.num bI.num]; rw [Nat.cast_natAbs]; rw [Int.cast_abs]; rw [Int.cast_abs]; rw [Basis.det_apply]; rw [Basis.det_apply]
+  change _ = |algebraMap Int Rat _| / _
+  rw [RingHom.map_det]; rw [show RingHom.mapMatrix (algebraMap Int Rat) (b.toMatrix ((↑) ∘ bI.num)) =
+      b₀.toMatrix ((algebraMap R K (den I : R)) • ((↑) ∘ bI)) by
+    ext : 2
+    simp_rw [bI.num]; rw [RingHom.mapMatrix_apply]; rw [Matrix.map_apply]; rw [Basis.toMatrix_apply]; rw [← Basis.localizationLocalization_repr_algebraMap Rat Int⁰ K]; rw [Function.comp_apply]; rw [Basis.map_apply]; rw [LinearEquiv.restrictScalars_apply]; rw [equivNum_apply]; rw [Submonoid.smul_def]; rw [Algebra.smul_def]
+    rfl]
+  rw [Basis.toMatrix_smul]; rw [Matrix.det_mul]; rw [abs_mul]; rw [← Algebra.norm_eq_matrix_det]; rw [Algebra.norm_localization Int Int⁰]; rw [show (Algebra.norm Int (den I : R) : Rat) =
+    algebraMap Int Rat (Algebra.norm Int (den I : R)) by rfl]; rw [mul_div_assoc]; rw [mul_div_cancel₀ _ (by
+    rw [ne_eq]; rw [abs_eq_zero]; rw [IsFractionRing.to_map_eq_zero_iff]; rw [Algebra.norm_eq_zero_iff_of_basis b]
+    exact nonZeroDivisors.coe_ne_zero _)]
 
 Depends on / 依赖: Basis.det_apply, I.num, Ideal.natAbs_det_basis_change, Int.cast_abs, IsFractionRing, IsFractionRing.nontrivial, Nat.cast_natAbs, RingHom, RingHom.mapMatrix, RingHom.map_det, absNorm_eq, algebraMap, b.localizationLocalization, b.toMat, bI.map, bI.num, cast_abs, cast_natAbs, coe_ne_zero, det_apply
 -/
@@ -328,7 +376,14 @@ theorem absNorm_span_singleton
   rw [absNorm_eq' d (Ideal.span {r})]
   · rw [Ideal.absNorm_span_singleton]
     simp_rw [Nat.cast_natAbs, Int.cast_abs, show ((Algebra.norm Int _) : Rat) = algebraMap Int Rat
-    
+      (Algebra.norm Int _) by rfl, ← Algebra.norm_localization Int Int⁰ (Sₘ := K) _]
+    rw [hr]; rw [Algebra.smul_def]; rw [map_mul]; rw [abs_mul]; rw [mul_div_assoc]; rw [mul_div_cancel₀ _ (by
+      rw [ne_eq]; rw [abs_eq_zero]; rw [Algebra.norm_eq_zero_iff]; rw [IsFractionRing.to_map_eq_zero_iff]
+      exact nonZeroDivisors.coe_ne_zero _)]
+  · ext
+    simp_rw [Submodule.mem_smul_pointwise_iff_exists, mem_coe, mem_spanSingleton, Submodule.mem_map,
+      Algebra.linearMap_apply, Submonoid.smul_def, Ideal.mem_span_singleton', exists_exists_eq_and,
+      map_mul, hr, ← Algebra.smul_def, smul_comm (d : R)]
 
 中文:
 定理 absNorm_span_singleton
@@ -339,7 +394,14 @@ theorem absNorm_span_singleton
   rw [absNorm_eq' d (Ideal.span {r})]
   · rw [Ideal.absNorm_span_singleton]
     simp_rw [Nat.cast_natAbs, Int.cast_abs, show ((Algebra.norm Int _) : Rat) = algebraMap Int Rat
-    
+      (Algebra.norm Int _) by rfl, ← Algebra.norm_localization Int Int⁰ (Sₘ := K) _]
+    rw [hr]; rw [Algebra.smul_def]; rw [map_mul]; rw [abs_mul]; rw [mul_div_assoc]; rw [mul_div_cancel₀ _ (by
+      rw [ne_eq]; rw [abs_eq_zero]; rw [Algebra.norm_eq_zero_iff]; rw [IsFractionRing.to_map_eq_zero_iff]
+      exact nonZeroDivisors.coe_ne_zero _)]
+  · ext
+    simp_rw [Submodule.mem_smul_pointwise_iff_exists, mem_coe, mem_spanSingleton, Submodule.mem_map,
+      Algebra.linearMap_apply, Submonoid.smul_def, Ideal.mem_span_singleton', exists_exists_eq_and,
+      map_mul, hr, ← Algebra.smul_def, smul_comm (d : R)]
 
 Depends on / 依赖: Algebra, Algebra.norm, Algebra.norm_localization, Algebra.smul_def, Ideal.absNorm_span_singleton, Ideal.span, Int.cast_abs, IsDomain, IsFractionRing, IsFractionRing.isDomain, IsLocalization, IsLocalization.exists_integer_multiple, Nat.cast_natAbs, absNorm_eq, absNorm_span_singleton, abs_eq_zero, abs_mul, algebraMap, cast_abs, cast_natAbs
 -/

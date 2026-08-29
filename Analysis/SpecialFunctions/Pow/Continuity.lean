@@ -587,7 +587,12 @@ theorem continuousAt_rpow_of_ne
     rw [continuousAt_congr (rpow_eq_nhds_of_neg hp)]
     refine ContinuousAt.mul ?_ (by fun_prop)
     · refine continuous_exp.continuousAt.comp (ContinuousAt.mul ?_ continuous_snd.continuousAt)
-      exact (continuousAt_log hp.ne).comp co
+      exact (continuousAt_log hp.ne).comp continuous_fst.continuousAt
+  | inr hp =>
+    rw [continuousAt_congr (rpow_eq_nhds_of_pos hp)]
+    refine continuous_exp.continuousAt.comp (ContinuousAt.mul ?_ continuous_snd.continuousAt)
+    refine (continuousAt_log ?_).comp continuous_fst.continuousAt
+    exact hp.ne'
 
 中文:
 定理 continuousAt_rpow_of_ne
@@ -599,7 +604,12 @@ theorem continuousAt_rpow_of_ne
     rw [continuousAt_congr (rpow_eq_nhds_of_neg hp)]
     refine ContinuousAt.mul ?_ (by fun_prop)
     · refine continuous_exp.continuousAt.comp (ContinuousAt.mul ?_ continuous_snd.continuousAt)
-      exact (continuousAt_log hp.ne).comp co
+      exact (continuousAt_log hp.ne).comp continuous_fst.continuousAt
+  | inr hp =>
+    rw [continuousAt_congr (rpow_eq_nhds_of_pos hp)]
+    refine continuous_exp.continuousAt.comp (ContinuousAt.mul ?_ continuous_snd.continuousAt)
+    refine (continuousAt_log ?_).comp continuous_fst.continuousAt
+    exact hp.ne'
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.mul, continuousAt, continuousAt_congr, continuousAt_log, continuous_exp, continuous_exp.continuousAt.comp, continuous_fs, continuous_fst, continuous_fst.continuousAt, continuous_snd, continuous_snd.continuousAt, fun_prop, hp.ne, ne_iff_lt_or_gt, rpow_eq_nhds_of_neg, rpow_eq_nhds_of_pos
 -/
@@ -631,7 +641,14 @@ theorem continuousAt_rpow_of_pos
   · exact continuousAt_rpow_of_ne (x, y) hx
   have A : Tendsto (fun p : Real × Real => exp (log p.1 * p.2)) (𝓝[!=] 0 ×ˢ 𝓝 y) (𝓝 0) :=
     tendsto_exp_atBot.comp
-      ((tendsto_log_nhdsNE_zero.comp tendsto_fst).atBot_mul_po
+      ((tendsto_log_nhdsNE_zero.comp tendsto_fst).atBot_mul_pos hp tendsto_snd)
+  have B : Tendsto (fun p : Real × Real => p.1 ^ p.2) (𝓝[!=] 0 ×ˢ 𝓝 y) (𝓝 0) :=
+    squeeze_zero_norm (fun p => abs_rpow_le_exp_log_mul p.1 p.2) A
+  have C : Tendsto (fun p : Real × Real => p.1 ^ p.2) (𝓝[{0}] 0 ×ˢ 𝓝 y) (pure 0) := by
+    rw [nhdsWithin_singleton]; rw [tendsto_pure]; rw [pure_prod]; rw [eventually_map]
+    exact (lt_mem_nhds hp).mono fun y hy => zero_rpow hy.ne'
+  simpa only [← sup_prod, ← nhdsWithin_union, compl_union_self, nhdsWithin_univ, nhds_prod_eq,
+    ContinuousAt, zero_rpow hp.ne'] using B.sup (C.mono_right (pure_le_nhds _))
 
 中文:
 定理 continuousAt_rpow_of_pos
@@ -643,7 +660,14 @@ theorem continuousAt_rpow_of_pos
   · exact continuousAt_rpow_of_ne (x, y) hx
   have A : Tendsto (fun p : Real × Real => exp (log p.1 * p.2)) (𝓝[!=] 0 ×ˢ 𝓝 y) (𝓝 0) :=
     tendsto_exp_atBot.comp
-      ((tendsto_log_nhdsNE_zero.comp tendsto_fst).atBot_mul_po
+      ((tendsto_log_nhdsNE_zero.comp tendsto_fst).atBot_mul_pos hp tendsto_snd)
+  have B : Tendsto (fun p : Real × Real => p.1 ^ p.2) (𝓝[!=] 0 ×ˢ 𝓝 y) (𝓝 0) :=
+    squeeze_zero_norm (fun p => abs_rpow_le_exp_log_mul p.1 p.2) A
+  have C : Tendsto (fun p : Real × Real => p.1 ^ p.2) (𝓝[{0}] 0 ×ˢ 𝓝 y) (pure 0) := by
+    rw [nhdsWithin_singleton]; rw [tendsto_pure]; rw [pure_prod]; rw [eventually_map]
+    exact (lt_mem_nhds hp).mono fun y hy => zero_rpow hy.ne'
+  simpa only [← sup_prod, ← nhdsWithin_union, compl_union_self, nhdsWithin_univ, nhds_prod_eq,
+    ContinuousAt, zero_rpow hp.ne'] using B.sup (C.mono_right (pure_le_nhds _))
 
 Depends on / 依赖: Tendsto, abs_rpow_le_exp_log_mul, atBot_mul_pos, continuousAt_rpow_of_ne, ne_or_eq, squeeze_zero_norm, tendsto_exp_atBot, tendsto_exp_atBot.comp, tendsto_fst, tendsto_log_nhdsNE_zero, tendsto_log_nhdsNE_zero.comp, tendsto_snd
 -/
@@ -877,7 +901,9 @@ nonrec theorem ContinuousWithinAt.rpow_const (hf : ContinuousWithinAt f s x) (h 
     ContinuousWithinAt (fun x => f x ^ p) s x :=
   hf.rpow_const h
 
-nonrec theorem ContinuousAt.rpow_const (hf : C
+nonrec theorem ContinuousAt.rpow_const (hf : ContinuousAt f x) (h : f x != 0 ∨ 0 <= p) :
+    ContinuousAt (fun x => f x ^ p) x :=
+  hf.rpow_const h
 
 中文:
 定理 连续.rpow
@@ -888,7 +914,9 @@ nonrec theorem ContinuousWithinAt.rpow_const (hf : ContinuousWithinAt f s x) (h 
     ContinuousWithinAt (fun x => f x ^ p) s x :=
   hf.rpow_const h
 
-nonrec theorem ContinuousAt.rpow_const (hf : C
+nonrec theorem ContinuousAt.rpow_const (hf : ContinuousAt f x) (h : f x != 0 ∨ 0 <= p) :
+    ContinuousAt (fun x => f x ^ p) x :=
+  hf.rpow_const h
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt, hf.continuousAt.rpow, hg.continuousAt
 -/
@@ -966,7 +994,21 @@ theorem continuousAt_cpow_zero_of_re_pos
   rw [ContinuousAt]; rw [zero_cpow hz₀]; rw [tendsto_zero_iff_norm_tendsto_zero]
   refine squeeze_zero (fun _ => norm_nonneg _) (fun _ => norm_cpow_le _ _) ?_
   simp only [div_eq_mul_inv, ← Real.exp_neg]
-  refine Tendsto.zero_mul_isBoundedUnder_le ?
+  refine Tendsto.zero_mul_isBoundedUnder_le ?_ ?_
+  · convert!
+    (continuous_fst.norm.tendsto ((0 : Complex), z)).rpow ((continuous_re.comp continuous_snd).tendsto _)
+      _ <;>
+      simp [hz, Real.zero_rpow hz.ne']
+  · simp only [Function.comp_def, Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
+    rcases exists_gt |im z| with ⟨C, hC⟩
+    refine ⟨Real.exp (π * C), eventually_map.2 ?_⟩
+    refine
+      (((continuous_im.comp continuous_snd).abs.tendsto (_, z)).eventually (gt_mem_nhds hC)).mono
+fun z hz => Real.exp_le_exp.2 (neg_le_abs _).trans ?_
+    rw [_root_.abs_mul]
+    exact
+      mul_le_mul (abs_le.2 ⟨(neg_pi_lt_arg _).le, arg_le_pi _⟩) hz.le (_root_.abs_nonneg _)
+        Real.pi_pos.le
 
 中文:
 定理 continuousAt_cpow_zero_of_re_pos
@@ -976,7 +1018,21 @@ theorem continuousAt_cpow_zero_of_re_pos
   rw [ContinuousAt]; rw [zero_cpow hz₀]; rw [tendsto_zero_iff_norm_tendsto_zero]
   refine squeeze_zero (fun _ => norm_nonneg _) (fun _ => norm_cpow_le _ _) ?_
   simp only [div_eq_mul_inv, ← Real.exp_neg]
-  refine Tendsto.zero_mul_isBoundedUnder_le ?
+  refine Tendsto.zero_mul_isBoundedUnder_le ?_ ?_
+  · convert!
+    (continuous_fst.norm.tendsto ((0 : Complex), z)).rpow ((continuous_re.comp continuous_snd).tendsto _)
+      _ <;>
+      simp [hz, Real.zero_rpow hz.ne']
+  · simp only [Function.comp_def, Real.norm_eq_abs, abs_of_pos (Real.exp_pos _)]
+    rcases exists_gt |im z| with ⟨C, hC⟩
+    refine ⟨Real.exp (π * C), eventually_map.2 ?_⟩
+    refine
+      (((continuous_im.comp continuous_snd).abs.tendsto (_, z)).eventually (gt_mem_nhds hC)).mono
+fun z hz => Real.exp_le_exp.2 (neg_le_abs _).trans ?_
+    rw [_root_.abs_mul]
+    exact
+      mul_le_mul (abs_le.2 ⟨(neg_pi_lt_arg _).le, arg_le_pi _⟩) hz.le (_root_.abs_nonneg _)
+        Real.pi_pos.le
 
 Depends on / 依赖: ContinuousAt, Function, Function.comp_def, Real.exp_neg, Real.norm_eq_abs, Real.zero_rpow, Tendsto, Tendsto.zero_mul_isBoundedUnder_le, comp_def, continuous_fst, continuous_fst.norm.tendsto, continuous_re, continuous_re.comp, continuous_snd, convert, div_eq_mul_inv, exp_neg, hz.ne, ne_of_apply_ne, norm_cpow_le
 -/
@@ -1067,7 +1123,22 @@ theorem continuousAt_ofReal_cpow
     have : ContinuousAt (fun p => ⟨↑p.1, p.2⟩ : Real × Complex -> Complex × Complex) (x, y) := by fun_prop
     refine (continuousAt_cpow (Or.inl ?_)).comp this
     rwa [ofReal_re]
-  · -- x = 0 : reduce to continuous
+  · -- x = 0 : reduce to continuousAt_cpow_zero_of_re_pos
+    have A : ContinuousAt (fun p => p.1 ^ p.2 : Complex × Complex -> Complex) ⟨↑(0 : Real), y⟩ := by
+      rw [ofReal_zero]
+      apply continuousAt_cpow_zero_of_re_pos
+      tauto
+    have B : ContinuousAt (fun p => ⟨↑p.1, p.2⟩ : Real × Complex -> Complex × Complex) ⟨0, y⟩ := by fun_prop
+    exact A.comp_of_eq B rfl
+  · -- x < 0 : difficult case
+    suffices ContinuousAt (fun p => (-(p.1 : Complex)) ^ p.2 * exp (π * I * p.2) : Real × Complex -> Complex) (x, y) by
+      refine this.congr (eventually_of_mem (prod_mem_nhds (Iio_mem_nhds hx) univ_mem) ?_)
+      exact fun p hp => (ofReal_cpow_of_nonpos (le_of_lt hp.1) p.2).symm
+    have A : ContinuousAt (fun p => ⟨-↑p.1, p.2⟩ : Real × Complex -> Complex × Complex) (x, y) := by fun_prop
+    apply ContinuousAt.mul
+    · refine (continuousAt_cpow (Or.inl ?_)).comp A
+      rwa [neg_re, ofReal_re, neg_pos]
+    · fun_prop
 
 中文:
 定理 continuousAt_of实数_cpow
@@ -1078,7 +1149,22 @@ theorem continuousAt_ofReal_cpow
     have : ContinuousAt (fun p => ⟨↑p.1, p.2⟩ : Real × Complex -> Complex × Complex) (x, y) := by fun_prop
     refine (continuousAt_cpow (Or.inl ?_)).comp this
     rwa [ofReal_re]
-  · -- x = 0 : reduce to continuous
+  · -- x = 0 : reduce to continuousAt_cpow_zero_of_re_pos
+    have A : ContinuousAt (fun p => p.1 ^ p.2 : Complex × Complex -> Complex) ⟨↑(0 : Real), y⟩ := by
+      rw [ofReal_zero]
+      apply continuousAt_cpow_zero_of_re_pos
+      tauto
+    have B : ContinuousAt (fun p => ⟨↑p.1, p.2⟩ : Real × Complex -> Complex × Complex) ⟨0, y⟩ := by fun_prop
+    exact A.comp_of_eq B rfl
+  · -- x < 0 : difficult case
+    suffices ContinuousAt (fun p => (-(p.1 : Complex)) ^ p.2 * exp (π * I * p.2) : Real × Complex -> Complex) (x, y) by
+      refine this.congr (eventually_of_mem (prod_mem_nhds (Iio_mem_nhds hx) univ_mem) ?_)
+      exact fun p hp => (ofReal_cpow_of_nonpos (le_of_lt hp.1) p.2).symm
+    have A : ContinuousAt (fun p => ⟨-↑p.1, p.2⟩ : Real × Complex -> Complex × Complex) (x, y) := by fun_prop
+    apply ContinuousAt.mul
+    · refine (continuousAt_cpow (Or.inl ?_)).comp A
+      rwa [neg_re, ofReal_re, neg_pos]
+    · fun_prop
 
 Depends on / 依赖: ContinuousAt, Or.inl, continuousAt_cpow, continuousAt_cpow_zero_of_re_pos, fun_prop, lt_trichotomy, ofReal_re, ofReal_zero
 -/
@@ -1167,7 +1253,10 @@ theorem continuousAt_rpow
     simp only [coe_rpow, val_eq_coe, Function.comp_apply, coe_toNNReal', left_eq_sup]
     positivity
   rw [this]
-  refine continuo
+  refine continuous_real_toNNReal.continuousAt.comp (ContinuousAt.comp ?_ ?_)
+  · apply Real.continuousAt_rpow
+    simpa using h
+  · fun_prop
 
 中文:
 定理 continuousAt_rpow
@@ -1180,7 +1269,10 @@ theorem continuousAt_rpow
     simp only [coe_rpow, val_eq_coe, Function.comp_apply, coe_toNNReal', left_eq_sup]
     positivity
   rw [this]
-  refine continuo
+  refine continuous_real_toNNReal.continuousAt.comp (ContinuousAt.comp ?_ ?_)
+  · apply Real.continuousAt_rpow
+    simpa using h
+  · fun_prop
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.comp, Function, Function.comp_apply, Real.continuousAt_rpow, Real.toNNReal, coe_rpow, coe_toNNReal, comp_apply, continuousAt, continuousAt_rpow, continuous_real_toNNReal, continuous_real_toNNReal.continuousAt.comp, fun_prop, left_eq_sup, toNNReal, val_eq_coe
 -/
@@ -1210,7 +1302,7 @@ theorem eventually_pow_one_div_le
   refine eventually_atTop.2 ⟨m + 1, fun n hn => ?_⟩
   simp only [one_div]
   simpa only [NNReal.rpow_inv_le_iff (Nat.cast_pos.2 <| m.succ_pos.trans_le hn),
-    NNReal.rpow_natCast] using
+    NNReal.rpow_natCast] using hm.le.trans (pow_right_mono₀ hy.le (m.le_succ.trans hn))
 
 中文:
 定理 eventually_pow_one_div_le
@@ -1221,7 +1313,7 @@ theorem eventually_pow_one_div_le
   refine eventually_atTop.2 ⟨m + 1, fun n hn => ?_⟩
   simp only [one_div]
   simpa only [NNReal.rpow_inv_le_iff (Nat.cast_pos.2 <| m.succ_pos.trans_le hn),
-    NNReal.rpow_natCast] using
+    NNReal.rpow_natCast] using hm.le.trans (pow_right_mono₀ hy.le (m.le_succ.trans hn))
 
 Depends on / 依赖: NNReal, NNReal.rpow_inv_le_iff, NNReal.rpow_natCast, Nat.cast_pos, add_one_pow_unbounded_of_pos, cast_pos, eventually_atTop, hm.le.trans, hy.le, le_succ, m.le_succ.trans, m.succ_pos.trans_le, one_div, rpow_inv_le_iff, rpow_natCast, succ_pos, trans_le, tsub_add_cancel_of_le, tsub_pos_of_lt
 -/
@@ -1379,7 +1471,7 @@ theorem eventually_pow_one_div_le
   · lift y to Real>=0 using h
     have := NNReal.eventually_pow_one_div_le x (mod_cast hy : 1 < y)
     refine this.congr (Eventually.of_forall fun n => ?_)
-    rw [← coe_rpow_of_nonneg x (by 
+    rw [← coe_rpow_of_nonneg x (by positivity : 0 <= (1 / n : Real))]; rw [coe_le_coe]
 
 中文:
 定理 eventually_pow_one_div_le
@@ -1391,7 +1483,7 @@ theorem eventually_pow_one_div_le
   · lift y to Real>=0 using h
     have := NNReal.eventually_pow_one_div_le x (mod_cast hy : 1 < y)
     refine this.congr (Eventually.of_forall fun n => ?_)
-    rw [← coe_rpow_of_nonneg x (by 
+    rw [← coe_rpow_of_nonneg x (by positivity : 0 <= (1 / n : Real))]; rw [coe_le_coe]
 
 Depends on / 依赖: Eventually, Eventually.of_forall, NNReal, NNReal.eventually_pow_one_div_le, coe_le_coe, coe_rpow_of_nonneg, eventually_pow_one_div_le, h.symm, le_top, mod_cast, of_forall, this.congr
 -/
@@ -1420,7 +1512,9 @@ theorem continuousAt_rpow_const_of_pos
   rw [continuousAt_coe_iff]
   convert! continuous_coe.continuousAt.comp (NNReal.continuousAt_rpow_const (Or.inr h.le)) using 1
   ext1 x
-  simp [← coe_rpow_of_nonneg
+  simp [← coe_rpow_of_nonneg _ h.le]
+
+@[continuity, fun_prop]
 
 中文:
 定理 continuousAt_rpow_const_of_pos
@@ -1434,7 +1528,9 @@ theorem continuousAt_rpow_const_of_pos
   rw [continuousAt_coe_iff]
   convert! continuous_coe.continuousAt.comp (NNReal.continuousAt_rpow_const (Or.inr h.le)) using 1
   ext1 x
-  simp [← coe_rpow_of_nonneg
+  simp [← coe_rpow_of_nonneg _ h.le]
+
+@[continuity, fun_prop]
 -/
 private theorem continuousAt_rpow_const_of_pos {x : Real>=0∞} {y : Real} (h : 0 < y) :
     ContinuousAt (fun a : Real>=0∞ => a ^ y) x := by
@@ -1463,7 +1559,9 @@ theorem continuous_rpow_const
   · simp only [rpow_zero]
     exact continuousAt_const
   · obtain ⟨z, hz⟩ : exists z, y = -z := ⟨-y, (neg_neg _).symm⟩
-    have z_pos : 0 < z := 
+    have z_pos : 0 < z := by simpa [hz] using hy
+    simp_rw [hz, rpow_neg]
+    exact continuous_inv.continuousAt.comp (continuousAt_rpow_const_of_pos z_pos)
 
 中文:
 定理 continuous_rpow_const
@@ -1476,7 +1574,9 @@ theorem continuous_rpow_const
   · simp only [rpow_zero]
     exact continuousAt_const
   · obtain ⟨z, hz⟩ : exists z, y = -z := ⟨-y, (neg_neg _).symm⟩
-    have z_pos : 0 < z := 
+    have z_pos : 0 < z := by simpa [hz] using hy
+    simp_rw [hz, rpow_neg]
+    exact continuous_inv.continuousAt.comp (continuousAt_rpow_const_of_pos z_pos)
 
 Depends on / 依赖: continuousAt, continuousAt_const, continuousAt_rpow_const_of_pos, continuous_iff_continuousAt, continuous_inv, continuous_inv.continuousAt.comp, lt_trichotomy, neg_neg, rpow_neg, rpow_zero, simp_rw, z_pos
 -/

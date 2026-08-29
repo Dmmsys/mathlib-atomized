@@ -46,7 +46,8 @@ lemma isoModSerre_kernel_eq_inverseImage_isomorphisms
   constructor
   · exact KernelFork.IsLimit.isZero_of_mono
       (KernelFork.mapIsLimit _ (kernelIsKernel f) G)
-  · exact CokernelCofork.IsColimit.isZe
+  · exact CokernelCofork.IsColimit.isZero_of_epi
+      (CokernelCofork.mapIsColimit _ (cokernelIsCokernel f) G)
 
 中文:
 引理 isoModSerre_kernel_eq_inverseImage_isomorphisms
@@ -57,7 +58,8 @@ lemma isoModSerre_kernel_eq_inverseImage_isomorphisms
   constructor
   · exact KernelFork.IsLimit.isZero_of_mono
       (KernelFork.mapIsLimit _ (kernelIsKernel f) G)
-  · exact CokernelCofork.IsColimit.isZe
+  · exact CokernelCofork.IsColimit.isZero_of_epi
+      (CokernelCofork.mapIsColimit _ (cokernelIsCokernel f) G)
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.isZero_of_epi, CokernelCofork.mapIsColimit, G.kernel.isoModSerre_isInvertedBy_iff, IsColimit, IsLimit, KernelFork, KernelFork.IsLimit.isZero_of_mono, KernelFork.mapIsLimit, cokernelIsCokernel, inverseImage_iff, isZero_of_epi, isZero_of_mono, isoModSerre_isInvertedBy_iff, isomorphisms, isomorphisms.iff, kernel, kernelIsKernel, mapIsColimit, mapIsLimit
 -/

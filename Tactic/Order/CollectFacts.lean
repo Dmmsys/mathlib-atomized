@@ -81,7 +81,10 @@ instance :
   | .nle lhs rhs _ => s!"¬ #{lhs} <= #{rhs}"
   | .lt lhs rhs _ => s!"#{lhs} < #{rhs}"
   | .nlt lhs rhs _ => s!"¬ #{lhs} < #{rhs}"
-  | .isTop idx => s!"#{idx} := 
+  | .isTop idx => s!"#{idx} := ⊤"
+  | .isBot idx => s!"#{idx} := ⊥"
+  | .isInf lhs rhs res => s!"#{res} := #{lhs} ⊓ #{rhs}"
+  | .isSup lhs rhs res => s!"#{res} := #{lhs} ⊔ #{rhs}"
 
 中文:
 实例 :
@@ -93,7 +96,10 @@ instance :
   | .nle lhs rhs _ => s!"¬ #{lhs} <= #{rhs}"
   | .lt lhs rhs _ => s!"#{lhs} < #{rhs}"
   | .nlt lhs rhs _ => s!"¬ #{lhs} < #{rhs}"
-  | .isTop idx => s!"#{idx} := 
+  | .isTop idx => s!"#{idx} := ⊤"
+  | .isBot idx => s!"#{idx} := ⊥"
+  | .isInf lhs rhs res => s!"#{res} := #{lhs} ⊓ #{rhs}"
+  | .isSup lhs rhs res => s!"#{res} := #{lhs} ⊔ #{rhs}"
 -/
 instance : ToString AtomicFact where
   toString fa := match fa with
@@ -201,7 +207,16 @@ definition addAtom
       addFact type (.isTop idx)
     | ~q((@OrderBot.toBot _ $instLE $instBot).bot) =>
       addFact type (.isBot idx)
-    |
+    | ~q((@SemilatticeSup.toMax _ $inst).max $a $b) =>
+      let aIdx ← addAtom type a
+      let bIdx ← addAtom type b
+      addFact type (.isSup aIdx bIdx idx)
+    | ~q((@SemilatticeInf.toMin _ $inst).min $a $b) =>
+      let aIdx ← addAtom type a
+      let bIdx ← addAtom type b
+      addFact type (.isInf aIdx bIdx idx)
+    | _ => pure ()
+    return idx
 
 中文:
 定义 addAtom
@@ -215,7 +230,16 @@ definition addAtom
       addFact type (.isTop idx)
     | ~q((@OrderBot.toBot _ $instLE $instBot).bot) =>
       addFact type (.isBot idx)
-    |
+    | ~q((@SemilatticeSup.toMax _ $inst).max $a $b) =>
+      let aIdx ← addAtom type a
+      let bIdx ← addAtom type b
+      addFact type (.isSup aIdx bIdx idx)
+    | ~q((@SemilatticeInf.toMin _ $inst).min $a $b) =>
+      let aIdx ← addAtom type a
+      let bIdx ← addAtom type b
+      addFact type (.isInf aIdx bIdx idx)
+    | _ => pure ()
+    return idx
 -/
 partial def addAtom {u : Level} (type : Q(Type u)) (x : Q($type)) : CollectFactsM Nat := do
   match ← AtomM.containsThenAddQ x with

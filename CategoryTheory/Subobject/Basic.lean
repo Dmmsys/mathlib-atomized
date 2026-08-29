@@ -1698,7 +1698,8 @@ definition lowerEquivalence
   counitIso := by
     apply eqToIso
     convert! ThinSkeleton.map_iso_eq e.counitIso
- 
+    · exact (ThinSkeleton.map_comp_eq _ _).symm
+    · exact ThinSkeleton.map_id_eq.symm
 
 中文:
 定义 lowerEquivalence
@@ -1713,7 +1714,8 @@ definition lowerEquivalence
   counitIso := by
     apply eqToIso
     convert! ThinSkeleton.map_iso_eq e.counitIso
- 
+    · exact (ThinSkeleton.map_comp_eq _ _).symm
+    · exact ThinSkeleton.map_id_eq.symm
 
 Depends on / 依赖: e.functor, functor
 -/
@@ -1960,7 +1962,8 @@ lemma isPullback_aux
   rw [pullback_obj]
   exists (underlyingIso (pullback.snd (mk i).arrow f)).hom ≫ pullback.fst (mk i).arrow f
   exact IsPullback.of_iso (IsPullback.of_hasPullback (mk i).arrow f)
-        (underlyingIso (pullback.snd (mk i).arrow f)).symm (Iso.refl _) (I
+        (underlyingIso (pullback.snd (mk i).arrow f)).symm (Iso.refl _) (Iso.refl _) (Iso.refl _)
+        (by simp) (by simp) (by simp) (by simp)
 
 中文:
 引理 isPullback_aux
@@ -1970,7 +1973,8 @@ lemma isPullback_aux
   rw [pullback_obj]
   exists (underlyingIso (pullback.snd (mk i).arrow f)).hom ≫ pullback.fst (mk i).arrow f
   exact IsPullback.of_iso (IsPullback.of_hasPullback (mk i).arrow f)
-        (underlyingIso (pullback.snd (mk i).arrow f)).symm (Iso.refl _) (I
+        (underlyingIso (pullback.snd (mk i).arrow f)).symm (Iso.refl _) (Iso.refl _) (Iso.refl _)
+        (by simp) (by simp) (by simp) (by simp)
 
 Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, IsPullback.of_iso, Iso.refl, mk_surjective, of_hasPullback, of_iso, pullback, pullback.fst, pullback.snd, pullback_obj, underlyingIso
 -/
@@ -2176,7 +2180,12 @@ definition mapIsoToOrderIso
     constructor
     · intro h
       apply_fun (map e.inv).obj at h
-      · simpa only [← map_c
+      · simpa only [← map_comp, e.hom_inv_id, map_id] using h
+      · apply Functor.monotone
+    · intro h
+      apply_fun (map e.hom).obj at h
+      · exact h
+      · apply Functor.monotone
 
 中文:
 定义 mapIsoToOrderIso
@@ -2190,7 +2199,12 @@ definition mapIsoToOrderIso
     constructor
     · intro h
       apply_fun (map e.inv).obj at h
-      · simpa only [← map_c
+      · simpa only [← map_comp, e.hom_inv_id, map_id] using h
+      · apply Functor.monotone
+    · intro h
+      apply_fun (map e.hom).obj at h
+      · exact h
+      · apply Functor.monotone
 
 Depends on / 依赖: e.hom
 -/
@@ -2273,7 +2287,14 @@ theorem map_pullback
   apply ThinSkeleton.equiv_of_both_ways
   · refine MonoOver.homMk (pullback.lift (pullback.fst _ _) _ ?_) (pullback.lift_snd _ _ _)
     simp [← comm, pullback.condition_assoc]
-  · refine MonoOver.homMk (pullback.lift (pullback.fst 
+  · refine MonoOver.homMk (pullback.lift (pullback.fst _ _)
+      (PullbackCone.IsLimit.lift t (pullback.fst _ _ ≫ a.arrow) (pullback.snd _ _) _)
+      (PullbackCone.IsLimit.lift_fst _ _ _ ?_).symm) ?_
+    · rw [← pullback.condition, assoc]
+      rfl
+    · dsimp
+      rw [pullback.lift_snd_assoc]
+      apply PullbackCone.IsLimit.lift_snd
 
 中文:
 定理 map_pullback
@@ -2286,7 +2307,14 @@ theorem map_pullback
   apply ThinSkeleton.equiv_of_both_ways
   · refine MonoOver.homMk (pullback.lift (pullback.fst _ _) _ ?_) (pullback.lift_snd _ _ _)
     simp [← comm, pullback.condition_assoc]
-  · refine MonoOver.homMk (pullback.lift (pullback.fst 
+  · refine MonoOver.homMk (pullback.lift (pullback.fst _ _)
+      (PullbackCone.IsLimit.lift t (pullback.fst _ _ ≫ a.arrow) (pullback.snd _ _) _)
+      (PullbackCone.IsLimit.lift_fst _ _ _ ?_).symm) ?_
+    · rw [← pullback.condition, assoc]
+      rfl
+    · dsimp
+      rw [pullback.lift_snd_assoc]
+      apply PullbackCone.IsLimit.lift_snd
 
 Depends on / 依赖: IsLimit, MonoOver, MonoOver.homMk, PullbackCone, PullbackCone.IsLimit.lift, PullbackCone.IsLimit.lift_fst, Quotient, Quotient.ind, Quotient.sound, ThinSkeleton, ThinSkeleton.equiv_of_both_ways, a.arrow, condition, condition_assoc, equiv_of_both_ways, lift_fst, lift_snd, lift_snd_assoc, pullback, pullback.condition
 -/

@@ -186,7 +186,8 @@ definition toSeq
     have := Computation.mem_of_get_eq _ e
     simp only [get?] at this h
     obtain ⟨a', h'⟩ := head_some_of_head_tail_some this
-    have := mem_unique h' (@Computation.mem_of_get_eq _ _ _ _ 
+    have := mem_unique h' (@Computation.mem_of_get_eq _ _ _ _ h)
+    contradiction⟩
 
 中文:
 定义 toSeq
@@ -198,7 +199,8 @@ definition toSeq
     have := Computation.mem_of_get_eq _ e
     simp only [get?] at this h
     obtain ⟨a', h'⟩ := head_some_of_head_tail_some this
-    have := mem_unique h' (@Computation.mem_of_get_eq _ _ _ _ 
+    have := mem_unique h' (@Computation.mem_of_get_eq _ _ _ _ h)
+    contradiction⟩
 
 Depends on / 依赖: Computation, Computation.get, Computation.mem_of_get_eq, head_some_of_head_tail_some, mem_of_get_eq, mem_unique
 -/

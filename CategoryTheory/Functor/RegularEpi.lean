@@ -39,7 +39,16 @@ instance [forall
 .pt W := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
 .fst left := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
 .snd right := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-.condition w := PullbackCone.combin
+.condition w := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
+    isColimit := evaluationJointlyReflectsColimits _ fun k => by
+      have := IsRegularEpiCategory.regularEpiOfEpi (f.app k)
+      refine .equivOfNatIsoOfIso ?_ _ _ ?_ (isColimitCoforkOfEffectiveEpi (f.app k)
+        (pullback.cone (f.app k) (f.app k))
+        (pullback.isLimit (f.app k) (f.app k)))
+      · refine NatIso.ofComponents (by rintro (_ | _); exacts [Iso.refl _, Iso.refl _]) ?_
+        rintro _ _ (_ | _)
+        all_goals cat_disch
+· exact Cocone.ext (Iso.refl _) by rintro (_ | _ | _); all_goals cat_disch }⟩⟩
 
 中文:
 实例 [对任意
@@ -48,7 +57,16 @@ instance [forall
 .pt W := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
 .fst left := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
 .snd right := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-.condition w := PullbackCone.combin
+.condition w := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
+    isColimit := evaluationJointlyReflectsColimits _ fun k => by
+      have := IsRegularEpiCategory.regularEpiOfEpi (f.app k)
+      refine .equivOfNatIsoOfIso ?_ _ _ ?_ (isColimitCoforkOfEffectiveEpi (f.app k)
+        (pullback.cone (f.app k) (f.app k))
+        (pullback.isLimit (f.app k) (f.app k)))
+      · refine NatIso.ofComponents (by rintro (_ | _); exacts [Iso.refl _, Iso.refl _]) ?_
+        rintro _ _ (_ | _)
+        all_goals cat_disch
+· exact Cocone.ext (Iso.refl _) by rintro (_ | _ | _); all_goals cat_disch }⟩⟩
 -/
 instance [forall {F G : D} (f : F ⟶ G) [Epi f], HasPullback f f] [HasPushouts D]
     [IsRegularEpiCategory D] :

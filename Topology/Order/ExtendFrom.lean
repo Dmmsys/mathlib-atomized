@@ -36,7 +36,8 @@ theorem continuousOn_Icc_extendFrom_Ioo
   · intro x x_in
     rcases eq_endpoints_or_mem_Ioo_of_mem_Icc x_in with (rfl | rfl | h)
 · exact ⟨la, ha.mono_left nhdsWithin_mono _ Ioo_subset_Ioi_self⟩
-· exact ⟨lb, hb.mono_left nhdsWithin_mono _ Ioo
+· exact ⟨lb, hb.mono_left nhdsWithin_mono _ Ioo_subset_Iio_self⟩
+    · exact ⟨f x, hf x h⟩
 
 中文:
 定理 continuousOn_Icc_extendFrom_Ioo
@@ -48,7 +49,8 @@ theorem continuousOn_Icc_extendFrom_Ioo
   · intro x x_in
     rcases eq_endpoints_or_mem_Ioo_of_mem_Icc x_in with (rfl | rfl | h)
 · exact ⟨la, ha.mono_left nhdsWithin_mono _ Ioo_subset_Ioi_self⟩
-· exact ⟨lb, hb.mono_left nhdsWithin_mono _ Ioo
+· exact ⟨lb, hb.mono_left nhdsWithin_mono _ Ioo_subset_Iio_self⟩
+    · exact ⟨f x, hf x h⟩
 
 Depends on / 依赖: Ioo_subset_Iio_self, Ioo_subset_Ioi_self, closure_Ioo, continuousOn_extendFrom, eq_endpoints_or_mem_Ioo_of_mem_Icc, ha.mono_left, hb.mono_left, mono_left, nhdsWithin_mono, x_in
 -/
@@ -77,7 +79,9 @@ theorem continuousOn_uIcc_extendFrom_uIoo
   · simp only [hab', uIoo_of_lt, nhdsWithin_Ioo_eq_nhdsGT, nhdsWithin_Ioo_eq_nhdsLT,
       uIcc_of_lt] at ha hb hf ⊢
     exact continuousOn_Icc_extendFrom_Ioo hf ha hb
-  · simp only [hba', uIoo_of_gt, nhdsWithin_Ioo_eq_nh
+  · simp only [hba', uIoo_of_gt, nhdsWithin_Ioo_eq_nhdsGT, nhdsWithin_Ioo_eq_nhdsLT,
+      uIcc_of_gt] at ha hb hf ⊢
+    exact continuousOn_Icc_extendFrom_Ioo hf hb ha
 
 中文:
 定理 continuousOn_uIcc_extendFrom_uIoo
@@ -88,7 +92,9 @@ theorem continuousOn_uIcc_extendFrom_uIoo
   · simp only [hab', uIoo_of_lt, nhdsWithin_Ioo_eq_nhdsGT, nhdsWithin_Ioo_eq_nhdsLT,
       uIcc_of_lt] at ha hb hf ⊢
     exact continuousOn_Icc_extendFrom_Ioo hf ha hb
-  · simp only [hba', uIoo_of_gt, nhdsWithin_Ioo_eq_nh
+  · simp only [hba', uIoo_of_gt, nhdsWithin_Ioo_eq_nhdsGT, nhdsWithin_Ioo_eq_nhdsLT,
+      uIcc_of_gt] at ha hb hf ⊢
+    exact continuousOn_Icc_extendFrom_Ioo hf hb ha
 
 Depends on / 依赖: continuousOn_Icc_extendFrom_Ioo, hab.lt_or_gt, lt_or_gt, nhdsWithin_Ioo_eq_nhdsGT, nhdsWithin_Ioo_eq_nhdsLT, uIcc_of_gt, uIcc_of_lt, uIoo_of_gt, uIoo_of_lt
 -/

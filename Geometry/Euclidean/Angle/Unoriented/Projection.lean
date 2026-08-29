@@ -36,7 +36,8 @@ lemma angle_self_orthogonalProjection
   have : Nonempty s := ⟨p', h⟩
   rw [angle]; rw [← InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two]
   exact Submodule.inner_left_of_mem_orthogonal (K := s.direction)
-    (AffineSubspace.vsub_mem_direction h (orthogonalProjection_
+    (AffineSubspace.vsub_mem_direction h (orthogonalProjection_mem _))
+    (vsub_orthogonalProjection_mem_direction_orthogonal _ _)
 
 中文:
 引理 angle_self_orthogonalProjection
@@ -46,7 +47,8 @@ lemma angle_self_orthogonalProjection
   have : Nonempty s := ⟨p', h⟩
   rw [angle]; rw [← InnerProductGeometry.inner_eq_zero_iff_angle_eq_pi_div_two]
   exact Submodule.inner_left_of_mem_orthogonal (K := s.direction)
-    (AffineSubspace.vsub_mem_direction h (orthogonalProjection_
+    (AffineSubspace.vsub_mem_direction h (orthogonalProjection_mem _))
+    (vsub_orthogonalProjection_mem_direction_orthogonal _ _)
 -/
 @[simp] lemma angle_self_orthogonalProjection (p : P) {p' : P} {s : AffineSubspace Real P}
     [s.direction.HasOrthogonalProjection] (h : p' in s) :

@@ -40,7 +40,35 @@ lemma Truncated.morphismProperty_eq_top
   generalize h : a + b = c
   induction c generalizing a b with
   | zero =>
-    obtain rfl : a = 0 := by
+    obtain rfl : a = 0 := by lia
+    obtain rfl : b = 0 := by lia
+    obtain rfl : f = 𝟙 _ := by
+      ext i : 3
+      apply Subsingleton.elim (α := Fin 1)
+    apply MorphismProperty.id_mem
+  | succ c hc =>
+    by_cases h₁ : Function.Surjective f.hom.toOrderHom; swap
+    · obtain _ | b := b
+      · exact (h₁ (fun _ => ⟨0, Subsingleton.elim (α := Fin 1) _ _⟩)).elim
+      · obtain ⟨i, g', hf'⟩ := eq_comp_δ_of_not_surjective _ h₁
+        replace hf' : f = Hom.tr g' ≫ Hom.tr (SimplexCategory.δ i) :=
+          InducedCategory.hom_ext hf'
+        rw [hf']
+        exact W.comp_mem _ _ (hc _ _ _ _ _ (by lia))
+          (δ_mem _ (by lia) _)
+    by_cases h₂ : Function.Injective f.hom.toOrderHom; swap
+    · obtain _ | a := a
+      · exact (h₂ (Function.injective_of_subsingleton (α := Fin 1) _)).elim
+      · obtain ⟨i, g', hf'⟩ := eq_σ_comp_of_not_injective _ h₂
+        replace hf' : f = Hom.tr (SimplexCategory.σ i) ≫ Hom.tr g' :=
+          InducedCategory.hom_ext hf'
+        rw [hf']
+        exact W.comp_mem _ _ (σ_mem _ (by lia) _) (hc _ _ _ _ _ (by lia))
+    rw [← epi_iff_surjective] at h₁
+    rw [← mono_iff_injective] at h₂
+    obtain rfl : a = b := le_antisymm (len_le_of_mono f.hom) (len_le_of_epi f.hom)
+    obtain rfl : f = 𝟙 _ := ObjectProperty.hom_ext _ (SimplexCategory.eq_id_of_epi _)
+    apply W.id_mem
 
 中文:
 引理 Truncated.morphismProperty_eq_top
@@ -53,7 +81,35 @@ lemma Truncated.morphismProperty_eq_top
   generalize h : a + b = c
   induction c generalizing a b with
   | zero =>
-    obtain rfl : a = 0 := by
+    obtain rfl : a = 0 := by lia
+    obtain rfl : b = 0 := by lia
+    obtain rfl : f = 𝟙 _ := by
+      ext i : 3
+      apply Subsingleton.elim (α := Fin 1)
+    apply MorphismProperty.id_mem
+  | succ c hc =>
+    by_cases h₁ : Function.Surjective f.hom.toOrderHom; swap
+    · obtain _ | b := b
+      · exact (h₁ (fun _ => ⟨0, Subsingleton.elim (α := Fin 1) _ _⟩)).elim
+      · obtain ⟨i, g', hf'⟩ := eq_comp_δ_of_not_surjective _ h₁
+        replace hf' : f = Hom.tr g' ≫ Hom.tr (SimplexCategory.δ i) :=
+          InducedCategory.hom_ext hf'
+        rw [hf']
+        exact W.comp_mem _ _ (hc _ _ _ _ _ (by lia))
+          (δ_mem _ (by lia) _)
+    by_cases h₂ : Function.Injective f.hom.toOrderHom; swap
+    · obtain _ | a := a
+      · exact (h₂ (Function.injective_of_subsingleton (α := Fin 1) _)).elim
+      · obtain ⟨i, g', hf'⟩ := eq_σ_comp_of_not_injective _ h₂
+        replace hf' : f = Hom.tr (SimplexCategory.σ i) ≫ Hom.tr g' :=
+          InducedCategory.hom_ext hf'
+        rw [hf']
+        exact W.comp_mem _ _ (σ_mem _ (by lia) _) (hc _ _ _ _ _ (by lia))
+    rw [← epi_iff_surjective] at h₁
+    rw [← mono_iff_injective] at h₂
+    obtain rfl : a = b := le_antisymm (len_le_of_mono f.hom) (len_le_of_epi f.hom)
+    obtain rfl : f = 𝟙 _ := ObjectProperty.hom_ext _ (SimplexCategory.eq_id_of_epi _)
+    apply W.id_mem
 
 Depends on / 依赖: Function, Function.Surjective, MorphismProperty, MorphismProperty.id_mem, MorphismProperty.top_apply, SimplexCategory, SimplexCategory.rec, Subsingleton, Subsingleton.elim, Surjective, f.hom.toOrderHom, generalize, generalizing, id_mem, iff_true, toOrderHom, top_apply
 -/
@@ -114,7 +170,8 @@ lemma morphismProperty_eq_top
   ext a b f
   simp only [MorphismProperty.top_apply, iff_true]
   change W.inverseImage (Truncated.inclusion (max a.len b.len))
-    (Trunc
+    (Truncated.Hom.tr f (ha := by simp) (hb := by simp))
+  simp only [hW, MorphismProperty.top_apply]
 
 中文:
 引理 morphismProperty_eq_top
@@ -125,7 +182,8 @@ lemma morphismProperty_eq_top
   ext a b f
   simp only [MorphismProperty.top_apply, iff_true]
   change W.inverseImage (Truncated.inclusion (max a.len b.len))
-    (Trunc
+    (Truncated.Hom.tr f (ha := by simp) (hb := by simp))
+  simp only [hW, MorphismProperty.top_apply]
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.top_apply, Truncated, Truncated.Hom.tr, Truncated.inclusion, Truncated.morphismProperty_eq_top, W.inverseImage, a.len, b.len, iff_true, inclusion, inverseImage, morphismProperty_eq_top, top_apply
 -/

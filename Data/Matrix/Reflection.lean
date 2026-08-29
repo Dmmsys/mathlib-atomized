@@ -280,7 +280,7 @@ example [AddCommMonoid α] [Mul α] (a₁₁ a₁₂ a₂₁ a₂₂ b₁₁ b�
     !![a₁₁, a₁₂; a₂₁, a₂₂] * !![b₁₁, b₁₂; b₂₁, b₂₂] =
       !![a₁₁ * b₁₁ + a₁₂ * b₂₁, a₁₁ * b₁₂ + a₁₂ * b₂₂;
         a₂₁ * b₁₁ + a₂₂ * b₂₁, a₂₁ * b₁₂ + a₂₂ * b₂₂] :=
-  (mulᵣ_eq _ _).sy
+  (mulᵣ_eq _ _).symm
 
 中文:
 定理 mulᵣ_eq
@@ -293,7 +293,7 @@ example [AddCommMonoid α] [Mul α] (a₁₁ a₁₂ a₂₁ a₂₂ b₁₁ b�
     !![a₁₁, a₁₂; a₂₁, a₂₂] * !![b₁₁, b₁₂; b₂₁, b₂₂] =
       !![a₁₁ * b₁₁ + a₁₂ * b₂₁, a₁₁ * b₁₂ + a₁₂ * b₂₂;
         a₂₁ * b₁₁ + a₂₂ * b₂₁, a₂₁ * b₁₂ + a₂₂ * b₂₂] :=
-  (mulᵣ_eq _ _).sy
+  (mulᵣ_eq _ _).symm
 
 Depends on / 依赖: Matrix, Matrix.transpose, transpose
 -/
@@ -461,7 +461,12 @@ theorem etaExpand_eq
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
   It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization w
+  canonicalizer; a minimization would help. The original proof was: `grind` -/
+  simp_rw [etaExpand, FinVec.etaExpand_eq, Matrix.of]
+  rfl
+
+example (A : Matrix (Fin 2) (Fin 2) α) : A = !![A 0 0, A 0 1; A 1 0, A 1 1] :=
+  (etaExpand_eq _).symm
 
 中文:
 定理 etaExpand_eq
@@ -471,7 +476,12 @@ theorem etaExpand_eq
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
   It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization w
+  canonicalizer; a minimization would help. The original proof was: `grind` -/
+  simp_rw [etaExpand, FinVec.etaExpand_eq, Matrix.of]
+  rfl
+
+example (A : Matrix (Fin 2) (Fin 2) α) : A = !![A 0 0, A 0 1; A 1 0, A 1 1] :=
+  (etaExpand_eq _).symm
 
 Depends on / 依赖: Before, FinVec, FinVec.etaExpand_eq, Mathlib, Matrix, Matrix.of, adaptation_note, canonicalizer, closed, directed, etaExpand, etaExpand_eq, github, github.com, leanprover, minimization, normalizer, original, problem, replacing
 -/

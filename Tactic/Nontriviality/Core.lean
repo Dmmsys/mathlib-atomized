@@ -52,7 +52,17 @@ definition nontrivialityByElim
     let g₁ ← mkFreshExprMVarQ q(Subsingleton $α -> $p)
     let (_, g₁') ← g₁.mvarId!.intro1
     g₁'.withContext try
-      -- FIXME: restore after https://github.com/leanprover/lean4/issues/2054 is
+      -- FIXME: restore after https://github.com/leanprover/lean4/issues/2054 is fixed
+      -- g₁'.inferInstance <|> do
+(do g₁'.assign (← synthInstance (← g₁'.getType))) > do
+        let simpArgs := simpArgs.push (Unhygienic.run `(Parser.Tactic.simpLemma| nontriviality))
+        let stx := open TSyntax.Compat in Unhygienic.run `(tactic| simp [$simpArgs,*])
+        let ([], _) ← runTactic g₁' stx | failure
+    catch _ => throwError
+      "Could not prove goal assuming `{q(Subsingleton $α)}`\n{MessageData.ofGoal g₁'}"
+    let g₂ : Q(Nontrivial $α -> $p) ← mkFreshExprMVarQ q(Nontrivial $α -> $p)
+    g.assign q(subsingleton_or_nontrivial_elim $g₁ $g₂)
+    pure g₂.mvarId!
 
 中文:
 定义 nontrivialityByElim
@@ -64,7 +74,17 @@ definition nontrivialityByElim
     let g₁ ← mkFreshExprMVarQ q(Subsingleton $α -> $p)
     let (_, g₁') ← g₁.mvarId!.intro1
     g₁'.withContext try
-      -- FIXME: restore after https://github.com/leanprover/lean4/issues/2054 is
+      -- FIXME: restore after https://github.com/leanprover/lean4/issues/2054 is fixed
+      -- g₁'.inferInstance <|> do
+(do g₁'.assign (← synthInstance (← g₁'.getType))) > do
+        let simpArgs := simpArgs.push (Unhygienic.run `(Parser.Tactic.simpLemma| nontriviality))
+        let stx := open TSyntax.Compat in Unhygienic.run `(tactic| simp [$simpArgs,*])
+        let ([], _) ← runTactic g₁' stx | failure
+    catch _ => throwError
+      "Could not prove goal assuming `{q(Subsingleton $α)}`\n{MessageData.ofGoal g₁'}"
+    let g₂ : Q(Nontrivial $α -> $p) ← mkFreshExprMVarQ q(Nontrivial $α -> $p)
+    g.assign q(subsingleton_or_nontrivial_elim $g₁ $g₂)
+    pure g₂.mvarId!
 -/
 def nontrivialityByElim {u : Level} (α : Q(Type u)) (g : MVarId) (simpArgs : Array Syntax) :
     MetaM MVarId := do
@@ -169,7 +189,20 @@ definition elabNontriviality
       let mut tgt ← withReducible g.getType'
       if let some tgt' := tgt.not? then tgt ← withReducible (whnf tgt')
       if let some (α, _) := tgt.eq? then return α
-  
+      if let some (α, _) := tgt.app4? ``LE.le then return α
+      if let some (α, _) := tgt.app4? ``LT.lt then return α
+      throwError "The goal is not an (in)equality, so you'll need to specify the desired \
+        `Nontrivial α` instance by invoking `nontriviality α`.")
+    let .sort u ← whnf (← inferType α) | unreachable!
+    let some v := u.dec | throwError "not a type{indentExpr α}"
+    let α : Q(Type v) := α
+    let tac := do
+      let ty := q(Nontrivial $α)
+      let m ← mkFreshExprMVar (some ty)
+      nontrivialityByAssumption m.mvarId!
+      g.assert `inst ty m
+let g ← liftM tac > nontrivialityByElim α g stx[2][1].getSepArgs
+    replaceMainGoal [(← g.intro1).2]
 
 中文:
 定义 elabNontriviality
@@ -182,7 +215,20 @@ definition elabNontriviality
       let mut tgt ← withReducible g.getType'
       if let some tgt' := tgt.not? then tgt ← withReducible (whnf tgt')
       if let some (α, _) := tgt.eq? then return α
-  
+      if let some (α, _) := tgt.app4? ``LE.le then return α
+      if let some (α, _) := tgt.app4? ``LT.lt then return α
+      throwError "The goal is not an (in)equality, so you'll need to specify the desired \
+        `Nontrivial α` instance by invoking `nontriviality α`.")
+    let .sort u ← whnf (← inferType α) | unreachable!
+    let some v := u.dec | throwError "not a type{indentExpr α}"
+    let α : Q(Type v) := α
+    let tac := do
+      let ty := q(Nontrivial $α)
+      let m ← mkFreshExprMVar (some ty)
+      nontrivialityByAssumption m.mvarId!
+      g.assert `inst ty m
+let g ← liftM tac > nontrivialityByElim α g stx[2][1].getSepArgs
+    replaceMainGoal [(← g.intro1).2]
 -/
 @[tactic nontriviality] def elabNontriviality : Tactic := fun stx => do
     let g ← getMainGoal

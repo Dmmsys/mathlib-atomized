@@ -460,7 +460,12 @@ lemma bitwise_eq_binaryRec
   | bit xb x hxb ih =>
     rw [← bit_ne_zero_iff] at hxb
     simp_rw [binaryRec_of_ne_zero _ _ hxb, bodd_bit, div2_bit, eq_rec_constant]
-    induction y usin
+    induction y using binaryRec' with
+    | zero => simp only [bitwise_zero_right, binaryRec_zero, Bool.cond_eq_ite]
+    | bit yb y hyb =>
+      rw [← bit_ne_zero_iff] at hyb
+      simp_rw [binaryRec_of_ne_zero _ _ hyb, bitwise_of_ne_zero hxb hyb, bodd_bit, div2_bit,
+        bit_div_two, eq_rec_constant, ih]
 
 中文:
 引理 bitwise_eq_binaryRec
@@ -472,7 +477,12 @@ lemma bitwise_eq_binaryRec
   | bit xb x hxb ih =>
     rw [← bit_ne_zero_iff] at hxb
     simp_rw [binaryRec_of_ne_zero _ _ hxb, bodd_bit, div2_bit, eq_rec_constant]
-    induction y usin
+    induction y using binaryRec' with
+    | zero => simp only [bitwise_zero_right, binaryRec_zero, Bool.cond_eq_ite]
+    | bit yb y hyb =>
+      rw [← bit_ne_zero_iff] at hyb
+      simp_rw [binaryRec_of_ne_zero _ _ hyb, bitwise_of_ne_zero hxb hyb, bodd_bit, div2_bit,
+        bit_div_two, eq_rec_constant, ih]
 
 Depends on / 依赖: Bool.cond_eq_ite, binaryRec, binaryRec_of_ne_zero, binaryRec_zero, bit_ne_zero_iff, bitwise_of_ne_zero, bitwise_zero_left, bitwise_zero_right, bodd_bit, cond_eq_ite, div2_bit, eq_rec_constant, generalizing, simp_rw
 -/
@@ -558,7 +568,8 @@ theorem testBit_eq_inth
     cases List.headI (bits n) <;> rfl
   | succ i ih =>
     conv_lhs => rw [← bit_bodd_div2 n]
-    rw [testBit_bit_succ]; rw
+    rw [testBit_bit_succ]; rw [ih n.div2]; rw [div2_bits_eq_tail]
+    cases n.bits <;> simp
 
 中文:
 定理 testBit_eq_inth
@@ -572,7 +583,8 @@ theorem testBit_eq_inth
     cases List.headI (bits n) <;> rfl
   | succ i ih =>
     conv_lhs => rw [← bit_bodd_div2 n]
-    rw [testBit_bit_succ]; rw
+    rw [testBit_bit_succ]; rw [ih n.div2]; rw [div2_bits_eq_tail]
+    cases n.bits <;> simp
 
 Depends on / 依赖: List.getI_zero_eq_headI, List.headI, bit_bodd_div2, bodd_eq_bits_head, conv_lhs, div2_bits_eq_tail, generalizing, getI_zero_eq_headI, mod_two_of_bodd, n.bits, n.div2, one_and_eq_mod_two, shiftRight_zero, testBit, testBit_bit_succ
 -/
@@ -601,7 +613,12 @@ theorem exists_most_significant_bit
         revert h
         cases b <;> simp]
     refine ⟨0, ⟨by rw [testBit_bit_zero], fun j hj => ?_⟩⟩
-    obtain ⟨j', rfl⟩ := exists_eq_succ_of_
+    obtain ⟨j', rfl⟩ := exists_eq_succ_of_ne_zero (ne_of_gt hj)
+    rw [testBit_bit_succ]; rw [zero_testBit]
+  · obtain ⟨k, ⟨hk, hk'⟩⟩ := hn h'
+    refine ⟨k + 1, ⟨by rw [testBit_bit_succ, hk], fun j hj => ?_⟩⟩
+    obtain ⟨j', rfl⟩ := exists_eq_succ_of_ne_zero (show j != 0 by intro x; subst x; simp at hj)
+    exact (testBit_bit_succ _ _ _).trans (hk' _ (lt_of_succ_lt_succ hj))
 
 中文:
 定理 存在_most_significant_bit
@@ -614,7 +631,12 @@ theorem exists_most_significant_bit
         revert h
         cases b <;> simp]
     refine ⟨0, ⟨by rw [testBit_bit_zero], fun j hj => ?_⟩⟩
-    obtain ⟨j', rfl⟩ := exists_eq_succ_of_
+    obtain ⟨j', rfl⟩ := exists_eq_succ_of_ne_zero (ne_of_gt hj)
+    rw [testBit_bit_succ]; rw [zero_testBit]
+  · obtain ⟨k, ⟨hk, hk'⟩⟩ := hn h'
+    refine ⟨k + 1, ⟨by rw [testBit_bit_succ, hk], fun j hj => ?_⟩⟩
+    obtain ⟨j', rfl⟩ := exists_eq_succ_of_ne_zero (show j != 0 by intro x; subst x; simp at hj)
+    exact (testBit_bit_succ _ _ _).trans (hk' _ (lt_of_succ_lt_succ hj))
 
 Depends on / 依赖: False.elim, Nat.binaryRec, binaryRec, exists_eq_succ_of_ne_zero, ne_of_gt, revert, testBit_bit_succ, testBit_bit_zero, zero_testBit
 -/
@@ -649,7 +671,20 @@ theorem lt_of_testBit
   | bit b n hn' =>
     induction m using Nat.binaryRec generalizing i with
     | zero => exact False.elim (Bool.false_ne_true ((zero_testBit i).symm.trans hm))
-    | bit 
+    | bit b' m hm' =>
+      by_cases hi : i = 0
+      · subst hi
+        simp only [testBit_bit_zero] at hn hm
+        have : n = m :=
+          eq_of_testBit_eq fun i => by convert! hnm (i + 1) (Nat.zero_lt_succ _) using 1
+          <;> rw [testBit_bit_succ]
+        rw [hn]; rw [hm]; rw [this]; rw [bit_false]; rw [bit_true]
+        exact Nat.lt_succ_self _
+      · obtain ⟨i', rfl⟩ := exists_eq_succ_of_ne_zero hi
+        simp only [testBit_bit_succ] at hn hm
+        have := hn' _ hn hm fun j hj => by
+          convert! hnm j.succ (succ_lt_succ hj) using 1 <;> rw [testBit_bit_succ]
+        exact bit_lt_bit b b' this
 
 中文:
 定理 lt_of_testBit
@@ -663,7 +698,20 @@ theorem lt_of_testBit
   | bit b n hn' =>
     induction m using Nat.binaryRec generalizing i with
     | zero => exact False.elim (Bool.false_ne_true ((zero_testBit i).symm.trans hm))
-    | bit 
+    | bit b' m hm' =>
+      by_cases hi : i = 0
+      · subst hi
+        simp only [testBit_bit_zero] at hn hm
+        have : n = m :=
+          eq_of_testBit_eq fun i => by convert! hnm (i + 1) (Nat.zero_lt_succ _) using 1
+          <;> rw [testBit_bit_succ]
+        rw [hn]; rw [hm]; rw [this]; rw [bit_false]; rw [bit_true]
+        exact Nat.lt_succ_self _
+      · obtain ⟨i', rfl⟩ := exists_eq_succ_of_ne_zero hi
+        simp only [testBit_bit_succ] at hn hm
+        have := hn' _ hn hm fun j hj => by
+          convert! hnm j.succ (succ_lt_succ hj) using 1 <;> rw [testBit_bit_succ]
+        exact bit_lt_bit b b' this
 
 Depends on / 依赖: Bool.false_ne_true, False.elim, Nat.binaryRec, Nat.pos_iff_ne_zero, Nat.zero_lt_succ, binaryRec, convert, eq_of_testBit_eq, false_ne_true, generalizing, pos_iff_ne_zero, symm.trans, testBit_bit_succ, testBit_bit_zero, zero_lt_succ, zero_testBit
 -/
@@ -920,7 +968,27 @@ theorem xor_trichotomy
     rw [Nat.xor_comm c]; rw [Nat.xor_xor_cancel_right]
   have hbc : b ^^^ c = a ^^^ v := by
     rw [← Nat.xor_assoc]; rw [Nat.xor_xor_cancel_left]
-  have
+  have hca : c ^^^ a = b ^^^ v := by
+    rw [hv]; rw [Nat.xor_assoc]; rw [Nat.xor_comm a]; rw [← Nat.xor_assoc]; rw [Nat.xor_xor_cancel_left]
+  -- If `i` is the position of the most significant bit of `v`, then at least one of `a`, `b`, `c`
+  -- has a one bit at position `i`.
+  obtain ⟨i, ⟨hi, hi'⟩⟩ := exists_most_significant_bit h
+  have : testBit a i ∨ testBit b i ∨ testBit c i := by
+    contrapose! hi
+    simp_rw [Bool.eq_false_eq_not_eq_true] at hi ⊢
+    rw [testBit_xor]; rw [testBit_xor]; rw [hi.1]; rw [hi.2.1]; rw [hi.2.2]
+    rfl
+  -- If, say, `a` has a one bit at position `i`, then `a xor v` has a zero bit at position `i`, but
+  -- the same bits as `a` in positions greater than `j`, so `a xor v < a`.
+  obtain h | h | h := this
+  on_goal 1 => left; rw [hbc]
+  on_goal 2 => right; left; rw [hca]
+  on_goal 3 => right; right; rw [hab]
+  all_goals
+    refine lt_of_testBit i ?_ h fun j hj => ?_
+    · rw [testBit_xor, h, hi]
+      rfl
+    · simp only [testBit_xor, hi' _ hj, Bool.bne_false]
 
 中文:
 定理 xor_trichotomy
@@ -932,7 +1000,27 @@ theorem xor_trichotomy
     rw [Nat.xor_comm c]; rw [Nat.xor_xor_cancel_right]
   have hbc : b ^^^ c = a ^^^ v := by
     rw [← Nat.xor_assoc]; rw [Nat.xor_xor_cancel_left]
-  have
+  have hca : c ^^^ a = b ^^^ v := by
+    rw [hv]; rw [Nat.xor_assoc]; rw [Nat.xor_comm a]; rw [← Nat.xor_assoc]; rw [Nat.xor_xor_cancel_left]
+  -- If `i` is the position of the most significant bit of `v`, then at least one of `a`, `b`, `c`
+  -- has a one bit at position `i`.
+  obtain ⟨i, ⟨hi, hi'⟩⟩ := exists_most_significant_bit h
+  have : testBit a i ∨ testBit b i ∨ testBit c i := by
+    contrapose! hi
+    simp_rw [Bool.eq_false_eq_not_eq_true] at hi ⊢
+    rw [testBit_xor]; rw [testBit_xor]; rw [hi.1]; rw [hi.2.1]; rw [hi.2.2]
+    rfl
+  -- If, say, `a` has a one bit at position `i`, then `a xor v` has a zero bit at position `i`, but
+  -- the same bits as `a` in positions greater than `j`, so `a xor v < a`.
+  obtain h | h | h := this
+  on_goal 1 => left; rw [hbc]
+  on_goal 2 => right; left; rw [hca]
+  on_goal 3 => right; right; rw [hab]
+  all_goals
+    refine lt_of_testBit i ?_ h fun j hj => ?_
+    · rw [testBit_xor, h, hi]
+      rfl
+    · simp only [testBit_xor, hi' _ hj, Bool.bne_false]
 -/
 theorem xor_trichotomy {a b c : Nat} (h : a ^^^ b ^^^ c != 0) :
     b ^^^ c < a ∨ c ^^^ a < b ∨ a ^^^ b < c := by
@@ -1010,6 +1098,8 @@ theorem xor_mod_two_eq
     simp only [h, xor_mod_two_eq_one]
     lia
 
+@[simp]
+
 中文:
 定理 xor_mod_two_eq
   条件: {m n : 自然数}
@@ -1022,6 +1112,8 @@ theorem xor_mod_two_eq
   · simp only [mod_two_ne_zero] at h
     simp only [h, xor_mod_two_eq_one]
     lia
+
+@[simp]
 
 Depends on / 依赖: Bool.decide_iff_dist, Bool.not_eq_false, beq_iff_eq, decide_eq_decide, decide_iff_dist, decide_not, mod_two_eq_zero_iff_testBit_zero, mod_two_ne_zero, not_eq_false, testBit_zero, xor_mod_two_eq_one
 -/
@@ -1156,7 +1248,18 @@ theorem xor_range
     rw [List.range_succ]; rw [List.foldl_append]; rw [ih]; rw [← Fin.ofNat_add]; rw [List.foldl_cons]; rw [List.foldl_nil]
     match h : Fin.ofNat 4 n with
     | 0 =>
-      r
+      rw [Fin.zero_add]; rw [← xor_one_of_even <| even_iff.mpr ?_]; rw [xor_xor_cancel_left]
+      rw [← @mod_mod_of_dvd _ 4 _ <| by simp]; rw [← Fin.val_ofNat 4]; rw [h]
+      rfl
+    | 1 =>
+      rw [Nat.xor_comm]
+refine xor_one_of_even even_iff.mpr ?_
+      rw [add_mod]; rw [← @mod_mod_of_dvd _ 4 n <| by simp]; rw [← Fin.val_ofNat 4]; rw [h]
+      rfl
+    | 2 =>
+      apply Nat.xor_self
+    | 3 =>
+      apply zero_xor
 
 中文:
 定理 xor_range
@@ -1170,7 +1273,18 @@ theorem xor_range
     rw [List.range_succ]; rw [List.foldl_append]; rw [ih]; rw [← Fin.ofNat_add]; rw [List.foldl_cons]; rw [List.foldl_nil]
     match h : Fin.ofNat 4 n with
     | 0 =>
-      r
+      rw [Fin.zero_add]; rw [← xor_one_of_even <| even_iff.mpr ?_]; rw [xor_xor_cancel_left]
+      rw [← @mod_mod_of_dvd _ 4 _ <| by simp]; rw [← Fin.val_ofNat 4]; rw [h]
+      rfl
+    | 1 =>
+      rw [Nat.xor_comm]
+refine xor_one_of_even even_iff.mpr ?_
+      rw [add_mod]; rw [← @mod_mod_of_dvd _ 4 n <| by simp]; rw [← Fin.val_ofNat 4]; rw [h]
+      rfl
+    | 2 =>
+      apply Nat.xor_self
+    | 3 =>
+      apply zero_xor
 
 Depends on / 依赖: Fin.ofNat, Fin.ofNat_add, Fin.val_ofNat, Fin.zero_add, List.foldl_append, List.foldl_cons, List.foldl_nil, List.range_succ, Nat.xor_comm, even_iff, even_iff.mpr, foldl_append, foldl_cons, foldl_nil, mod_mod_of_dvd, nth_rw, ofNat_add, range_succ, val_ofNat, xor_comm
 -/

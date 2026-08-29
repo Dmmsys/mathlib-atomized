@@ -276,7 +276,16 @@ definition indResHomEquiv
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
   invFun f := Rep.ofHom ⟨Representation.Coinvariants.lift _
-    (TensorProduct
+    (TensorProduct.lift <| (Finsupp.lift _ _ _ fun h => B.ρ h⁻¹ ∘ₗ f.hom.toLinearMap) ∘ₗ
+      (MonoidAlgebra.coeffLinearEquiv k).toLinearMap)
+    fun g => by
+      ext h x
+      simp only [LinearMap.coe_comp, Function.comp_apply, MonoidAlgebra.lsingle_apply]
+      simp [ofMulAction_single, mul_inv_rev, hom_comm_apply f g], fun g => by ext; simp⟩
+  left_inv f := by
+    ext h a
+    simpa using (hom_comm_apply f h⁻¹ (IndV.mk φ A.ρ 1 a)).symm
+  right_inv _ := by ext; simp
 
 中文:
 定义 indResHomEquiv
@@ -288,7 +297,16 @@ definition indResHomEquiv
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
   invFun f := Rep.ofHom ⟨Representation.Coinvariants.lift _
-    (TensorProduct
+    (TensorProduct.lift <| (Finsupp.lift _ _ _ fun h => B.ρ h⁻¹ ∘ₗ f.hom.toLinearMap) ∘ₗ
+      (MonoidAlgebra.coeffLinearEquiv k).toLinearMap)
+    fun g => by
+      ext h x
+      simp only [LinearMap.coe_comp, Function.comp_apply, MonoidAlgebra.lsingle_apply]
+      simp [ofMulAction_single, mul_inv_rev, hom_comm_apply f g], fun g => by ext; simp⟩
+  left_inv f := by
+    ext h a
+    simpa using (hom_comm_apply f h⁻¹ (IndV.mk φ A.ρ 1 a)).symm
+  right_inv _ := by ext; simp
 
 Depends on / 依赖: Coinvariants, Coinvariants.mk_inv_tmul, Finsupp, Finsupp.lift, Function, Function.comp_apply, IndV.mk, LinearMap, LinearMap.coe_comp, MonoidAlgebra, MonoidAlgebra.coeffLinearEquiv, MonoidAlgebra.lsingle_apply, Rep.ofHom, Representation, Representation.Coinvariants.lift, TensorProduct, TensorProduct.lift, coe_comp, coeffLinearEquiv, comp_apply
 -/
@@ -404,7 +422,12 @@ definition coinvariantsTensorIndHom
     (TensorProduct.lift <| (Finsupp.lift _ _ _ <| fun g =>
       (coinvariantsTensorMk A (res φ B)).compl₂ (B.ρ g)) ∘ₗ
       (MonoidAlgebra.coeffLinearEquiv k).toLinearMap)
-      fun g => by ext; simpa [coinvariantsTensor
+      fun g => by ext; simpa [coinvariantsTensorMk, Coinvariants.mk_eq_iff]
+        using! Coinvariants.sub_mem_ker _ _) fun _ => by
+    simp only [MonoidalCategory.curriedTensor_obj_obj, tensor_V, tensor_ρ, res_obj_ρ,
+      Functor.postcompose₂_obj_obj_obj_obj, coinvariantsFunctor_obj_carrier,
+      tprod_apply, ind_apply]
+    ext; simp
 
 中文:
 定义 coinvariantsTensorIndHom
@@ -413,7 +436,12 @@ definition coinvariantsTensorIndHom
     (TensorProduct.lift <| (Finsupp.lift _ _ _ <| fun g =>
       (coinvariantsTensorMk A (res φ B)).compl₂ (B.ρ g)) ∘ₗ
       (MonoidAlgebra.coeffLinearEquiv k).toLinearMap)
-      fun g => by ext; simpa [coinvariantsTensor
+      fun g => by ext; simpa [coinvariantsTensorMk, Coinvariants.mk_eq_iff]
+        using! Coinvariants.sub_mem_ker _ _) fun _ => by
+    simp only [MonoidalCategory.curriedTensor_obj_obj, tensor_V, tensor_ρ, res_obj_ρ,
+      Functor.postcompose₂_obj_obj_obj_obj, coinvariantsFunctor_obj_carrier,
+      tprod_apply, ind_apply]
+    ext; simp
 
 Depends on / 依赖: Coinvariants, Coinvariants.lift, Coinvariants.mk_eq_iff, Coinvariants.sub_mem_ker, Finsupp, Finsupp.lift, Functor, Functor.postcompose, ModuleCat, ModuleCat.ofHom, MonoidAlgebra, MonoidAlgebra.coeffLinearEquiv, MonoidalCategory, MonoidalCategory.curriedTensor_obj_obj, TensorProduct, TensorProduct.lift, coeffLinearEquiv, coinvariantsFunctor_obj_c, coinvariantsTensorMk, curriedTensor_obj_obj
 -/
@@ -469,7 +497,9 @@ definition coinvariantsTensorIndInv
     simp only [MonoidalCategory.curriedTensor_obj_obj, tensor_V, tensor_ρ, tprod_apply,
       MonoidHom.coe_comp, Function.comp_apply]
     ext x y
-    simpa [Coinv
+    simpa [Coinvariants.mk_eq_iff, coinvariantsTensorMk] using
+Coinvariants.mem_ker_of_eq (φ s) (IndV.mk φ A.ρ (1 : H) x otimesₜ[k] y) _ by
+      simp [← Coinvariants.mk_inv_tmul]
 
 中文:
 定义 coinvariantsTensorIndInv
@@ -479,7 +509,9 @@ definition coinvariantsTensorIndInv
     simp only [MonoidalCategory.curriedTensor_obj_obj, tensor_V, tensor_ρ, tprod_apply,
       MonoidHom.coe_comp, Function.comp_apply]
     ext x y
-    simpa [Coinv
+    simpa [Coinvariants.mk_eq_iff, coinvariantsTensorMk] using
+Coinvariants.mem_ker_of_eq (φ s) (IndV.mk φ A.ρ (1 : H) x otimesₜ[k] y) _ by
+      simp [← Coinvariants.mk_inv_tmul]
 
 Depends on / 依赖: Coinvariants, Coinvariants.lift, Coinvariants.mem_ker_of_eq, Coinvariants.mk_eq_iff, Coinvariants.mk_inv_tmul, Function, Function.comp_apply, IndV.mk, ModuleCat, ModuleCat.ofHom, MonoidHom, MonoidHom.coe_comp, MonoidalCategory, MonoidalCategory.curriedTensor_obj_obj, TensorProduct, TensorProduct.lift, coe_comp, coinvariantsTensorMk, comp_apply, curriedTensor_obj_obj
 -/
@@ -540,7 +572,9 @@ definition coinvariantsTensorIndIso
     simpa [coinvariantsTensorIndInv, coinvariantsTensorMk,
       coinvariantsTensorIndHom, Coinvariants.mk_eq_iff] using
 Coinvariants.mem_ker_of_eq h (IndV.mk φ _ h a otimesₜ[k] b) _ by simp
-  inv
+  inv_hom_id := by
+    ext
+    simp [coinvariantsTensorIndInv, coinvariantsTensorMk, coinvariantsTensorIndHom]
 
 中文:
 定义 coinvariantsTensorIndIso
@@ -552,7 +586,9 @@ Coinvariants.mem_ker_of_eq h (IndV.mk φ _ h a otimesₜ[k] b) _ by simp
     simpa [coinvariantsTensorIndInv, coinvariantsTensorMk,
       coinvariantsTensorIndHom, Coinvariants.mk_eq_iff] using
 Coinvariants.mem_ker_of_eq h (IndV.mk φ _ h a otimesₜ[k] b) _ by simp
-  inv
+  inv_hom_id := by
+    ext
+    simp [coinvariantsTensorIndInv, coinvariantsTensorMk, coinvariantsTensorIndHom]
 
 Depends on / 依赖: coinvariantsTensorIndHom
 -/

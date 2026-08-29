@@ -192,6 +192,19 @@ let r' b₁ b₂ := exists a₁ a₂ : q.P.M α, r a₁ a₂ ∧ b₁ = g < > a�
       use r'; constructor
       · show IsPrecongr r'
         rintro b₁ b₂ ⟨a₁, a₂, ra₁a₂, b₁eq, b₂eq⟩
+        let u : Quot r -> Quot r' :=
+          Quot.lift (fun x : q.P.M α => Quot.mk r' (g <$$> x))
+            (by
+              intro a₁ a₂ ra₁a₂
+              apply Quot.sound
+              exact ⟨a₁, a₂, ra₁a₂, rfl, rfl⟩)
+        have hu : (Quot.mk r' ∘ fun x : q.P.M α => g <$$> x) = u ∘ Quot.mk r := by
+          ext x
+          rfl
+        rw [b₁eq]; rw [b₂eq]; rw [M.dest_map]; rw [M.dest_map]; rw [← q.P.comp_map]; rw [← q.P.comp_map]
+        rw [← appendFun_comp]; rw [id_comp]; rw [hu]; rw [← comp_id g]; rw [appendFun_comp]
+        rw [q.P.comp_map]; rw [q.P.comp_map]; rw [abs_map]; rw [pr ra₁a₂]; rw [← abs_map]
+      show r' (g <$$> aa₁) (g <$$> aa₂); exact ⟨aa₁, aa₂, ra₁a₂, rfl, rfl⟩)
 
 中文:
 定义 Cofix.map
@@ -203,6 +216,19 @@ let r' b₁ b₂ := exists a₁ a₂ : q.P.M α, r a₁ a₂ ∧ b₁ = g < > a�
       use r'; constructor
       · show IsPrecongr r'
         rintro b₁ b₂ ⟨a₁, a₂, ra₁a₂, b₁eq, b₂eq⟩
+        let u : Quot r -> Quot r' :=
+          Quot.lift (fun x : q.P.M α => Quot.mk r' (g <$$> x))
+            (by
+              intro a₁ a₂ ra₁a₂
+              apply Quot.sound
+              exact ⟨a₁, a₂, ra₁a₂, rfl, rfl⟩)
+        have hu : (Quot.mk r' ∘ fun x : q.P.M α => g <$$> x) = u ∘ Quot.mk r := by
+          ext x
+          rfl
+        rw [b₁eq]; rw [b₂eq]; rw [M.dest_map]; rw [M.dest_map]; rw [← q.P.comp_map]; rw [← q.P.comp_map]
+        rw [← appendFun_comp]; rw [id_comp]; rw [hu]; rw [← comp_id g]; rw [appendFun_comp]
+        rw [q.P.comp_map]; rw [q.P.comp_map]; rw [abs_map]; rw [pr ra₁a₂]; rw [← abs_map]
+      show r' (g <$$> aa₁) (g <$$> aa₂); exact ⟨aa₁, aa₂, ra₁a₂, rfl, rfl⟩)
 
 Depends on / 依赖: IsPrecongr, Mcongr, Quot.lift, Quot.mk, Quot.sound, q.P.M
 -/
@@ -279,7 +305,7 @@ definition Cofix.dest
       rw [← Quot.factor_mk_eq _ _ this]
       conv =>
         lhs
-        rw [appendFun_com
+        rw [appendFun_comp_id]; rw [comp_map]; rw [← abs_map]; rw [pr rxy]; rw [abs_map]; rw [← comp_map]; rw [← appendFun_comp_id])
 
 中文:
 定义 Cofix.dest
@@ -293,7 +319,7 @@ definition Cofix.dest
       rw [← Quot.factor_mk_eq _ _ this]
       conv =>
         lhs
-        rw [appendFun_com
+        rw [appendFun_comp_id]; rw [comp_map]; rw [← abs_map]; rw [pr rxy]; rw [abs_map]; rw [← comp_map]; rw [← appendFun_comp_id])
 
 Depends on / 依赖: M.dest, Mcongr, Quot.factor_mk_eq, Quot.lift, Quot.mk, abs_map, appendFun, appendFun_comp_id, comp_map, factor_mk_eq
 -/
@@ -488,7 +514,34 @@ theorem Cofix.bisim_aux
   let r' := fun x y => r (Quot.mk _ x) (Quot.mk _ y)
   have hr' : r' = fun x y => r (Quot.mk _ x) (Quot.mk _ y) := rfl
   have : IsPrecongr r' := by
-    intro a 
+    intro a b r'ab
+    have h₀ :
+appendFun id (Quot.mk r ∘ Quot.mk Mcongr) < > MvQPF.abs (M.dest q.P a) =
+appendFun id (Quot.mk r ∘ Quot.mk Mcongr) < > MvQPF.abs (M.dest q.P b) := by
+      rw [appendFun_comp_id]; rw [comp_map]; rw [comp_map]; exact h _ _ r'ab
+    have h₁ : forall u v : q.P.M α, Mcongr u v -> Quot.mk r' u = Quot.mk r' v := by
+      intro u v cuv
+      apply Quot.sound
+      dsimp [r', hr']
+      rw [Quot.sound cuv]
+      apply h'
+    let f : Quot r -> Quot r' :=
+      Quot.lift (Quot.lift (Quot.mk r') h₁)
+        (by
+          intro c
+          apply Quot.inductionOn
+            (motive := fun c =>
+              forall b, r c b -> Quot.lift (Quot.mk r') h₁ c = Quot.lift (Quot.mk r') h₁ b) c
+          clear c
+          intro c d
+          apply Quot.inductionOn
+            (motive := fun d => r (Quot.mk Mcongr c) d ->
+              Quot.lift (Quot.mk r') h₁ (Quot.mk Mcongr c) = Quot.lift (Quot.mk r') h₁ d) d
+          clear d
+          intro d rcd; apply Quot.sound; apply rcd)
+    have : f ∘ Quot.mk r ∘ Quot.mk Mcongr = Quot.mk r' := rfl
+    rw [← this]; rw [appendFun_comp_id]; rw [q.P.comp_map]; rw [q.P.comp_map]; rw [abs_map]; rw [abs_map]; rw [abs_map]; rw [abs_map]; rw [h₀]
+  exact ⟨r', this, rxy⟩
 
 中文:
 定理 Cofix.bisim_aux
@@ -503,7 +556,34 @@ theorem Cofix.bisim_aux
   let r' := fun x y => r (Quot.mk _ x) (Quot.mk _ y)
   have hr' : r' = fun x y => r (Quot.mk _ x) (Quot.mk _ y) := rfl
   have : IsPrecongr r' := by
-    intro a 
+    intro a b r'ab
+    have h₀ :
+appendFun id (Quot.mk r ∘ Quot.mk Mcongr) < > MvQPF.abs (M.dest q.P a) =
+appendFun id (Quot.mk r ∘ Quot.mk Mcongr) < > MvQPF.abs (M.dest q.P b) := by
+      rw [appendFun_comp_id]; rw [comp_map]; rw [comp_map]; exact h _ _ r'ab
+    have h₁ : forall u v : q.P.M α, Mcongr u v -> Quot.mk r' u = Quot.mk r' v := by
+      intro u v cuv
+      apply Quot.sound
+      dsimp [r', hr']
+      rw [Quot.sound cuv]
+      apply h'
+    let f : Quot r -> Quot r' :=
+      Quot.lift (Quot.lift (Quot.mk r') h₁)
+        (by
+          intro c
+          apply Quot.inductionOn
+            (motive := fun c =>
+              forall b, r c b -> Quot.lift (Quot.mk r') h₁ c = Quot.lift (Quot.mk r') h₁ b) c
+          clear c
+          intro c d
+          apply Quot.inductionOn
+            (motive := fun d => r (Quot.mk Mcongr c) d ->
+              Quot.lift (Quot.mk r') h₁ (Quot.mk Mcongr c) = Quot.lift (Quot.mk r') h₁ d) d
+          clear d
+          intro d rcd; apply Quot.sound; apply rcd)
+    have : f ∘ Quot.mk r ∘ Quot.mk Mcongr = Quot.mk r' := rfl
+    rw [← this]; rw [appendFun_comp_id]; rw [q.P.comp_map]; rw [q.P.comp_map]; rw [abs_map]; rw [abs_map]; rw [abs_map]; rw [abs_map]; rw [h₀]
+  exact ⟨r', this, rxy⟩
 -/
 private theorem Cofix.bisim_aux {α : TypeVec n} (r : Cofix F α -> Cofix F α -> Prop) (h' : forall x, r x x)
     (h : forall x y, r x y ->
@@ -567,7 +647,11 @@ theorem Cofix.bisim_rel
     | inr r'xy =>
       have : forall x y, r x y -> r' x y := fun x y h => Or.inr h
       rw [← Quot.factor_mk_eq _ _ this]
-  
+      dsimp [r']
+      rw [appendFun_comp_id]
+      rw [@comp_map _ _ q _ _ _ (appendFun id (Quot.mk r))]; rw [@comp_map _ _ q _ _ _ (appendFun id (Quot.mk r))]
+      rw [h _ _ r'xy]
+  right; exact rxy
 
 中文:
 定理 Cofix.bisim_rel
@@ -586,7 +670,11 @@ theorem Cofix.bisim_rel
     | inr r'xy =>
       have : forall x y, r x y -> r' x y := fun x y h => Or.inr h
       rw [← Quot.factor_mk_eq _ _ this]
-  
+      dsimp [r']
+      rw [appendFun_comp_id]
+      rw [@comp_map _ _ q _ _ _ (appendFun id (Quot.mk r))]; rw [@comp_map _ _ q _ _ _ (appendFun id (Quot.mk r))]
+      rw [h _ _ r'xy]
+  right; exact rxy
 
 Depends on / 依赖: Cofix.bisim_aux, Or.inr, Quot.factor_mk_eq, Quot.mk, appendFun, appendFun_comp_id, bisim_aux, comp_map, factor_mk_eq
 -/
@@ -626,7 +714,14 @@ theorem Cofix.bisim
   rcases (liftR_iff (fun a b => RelLast α r b) (dest x) (dest y)).mp (h x y rxy)
     with ⟨a, f₀, f₁, dxeq, dyeq, h'⟩
   rw [dxeq]; rw [dyeq]; rw [← abs_map]; rw [← abs_map]; rw [MvPFunctor.map_eq]; rw [MvPFunctor.map_eq]
-  rw [← split_dropFun_lastFun f₀]; r
+  rw [← split_dropFun_lastFun f₀]; rw [← split_dropFun_lastFun f₁]
+  rw [appendFun_comp_splitFun]; rw [appendFun_comp_splitFun]
+  rw [id_comp]; rw [id_comp]
+  congr 2 with (i j); rcases i with - | i
+  · apply Quot.sound
+    apply h' _ j
+  · change f₀ _ j = f₁ _ j
+    apply h' _ j
 
 中文:
 定理 Cofix.bisim
@@ -637,7 +732,14 @@ theorem Cofix.bisim
   rcases (liftR_iff (fun a b => RelLast α r b) (dest x) (dest y)).mp (h x y rxy)
     with ⟨a, f₀, f₁, dxeq, dyeq, h'⟩
   rw [dxeq]; rw [dyeq]; rw [← abs_map]; rw [← abs_map]; rw [MvPFunctor.map_eq]; rw [MvPFunctor.map_eq]
-  rw [← split_dropFun_lastFun f₀]; r
+  rw [← split_dropFun_lastFun f₀]; rw [← split_dropFun_lastFun f₁]
+  rw [appendFun_comp_splitFun]; rw [appendFun_comp_splitFun]
+  rw [id_comp]; rw [id_comp]
+  congr 2 with (i j); rcases i with - | i
+  · apply Quot.sound
+    apply h' _ j
+  · change f₀ _ j = f₁ _ j
+    apply h' _ j
 
 Depends on / 依赖: Cofix.bisim_rel, MvPFunctor, MvPFunctor.map_eq, Quot.sound, RelLast, abs_map, appendFun_comp_splitFun, bisim_rel, id_comp, liftR_iff, map_eq, split_dropFun_lastFun
 -/
@@ -691,7 +793,13 @@ theorem Cofix.bisim'
       rcases h x' Qx' with ⟨a, f', f₀, f₁, ux'eq, vx'eq, h'⟩
       rw [liftR_iff]
       refine
-        ⟨a, q.P.appendContents f' f₀, q.P.appendContents f' f₁, xe
+        ⟨a, q.P.appendContents f' f₀, q.P.appendContents f' f₁, xeq.symm ▸ ux'eq,
+          yeq.symm ▸ vx'eq, ?_⟩
+      intro i; cases i
+      · apply h'
+      · intro j
+        apply Eq.refl)
+    _ _ ⟨x, Qx, rfl, rfl⟩
 
 中文:
 定理 Cofix.bisim'
@@ -703,7 +811,13 @@ theorem Cofix.bisim'
       rcases h x' Qx' with ⟨a, f', f₀, f₁, ux'eq, vx'eq, h'⟩
       rw [liftR_iff]
       refine
-        ⟨a, q.P.appendContents f' f₀, q.P.appendContents f' f₁, xe
+        ⟨a, q.P.appendContents f' f₀, q.P.appendContents f' f₁, xeq.symm ▸ ux'eq,
+          yeq.symm ▸ vx'eq, ?_⟩
+      intro i; cases i
+      · apply h'
+      · intro j
+        apply Eq.refl)
+    _ _ ⟨x, Qx, rfl, rfl⟩
 -/
 theorem Cofix.bisim' {α : TypeVec n} {β : Type*} (Q : β -> Prop) (u v : β -> Cofix F α)
     (h : forall x, Q x -> exists a f' f₀ f₁,
@@ -743,7 +857,12 @@ theorem Cofix.mk_dest
     rw [Cofix.mk]
     rw [Cofix.dest_corec]
   rw [← comp_map]; rw [← appendFun_comp]; rw [id_comp]
-  rw [← comp_map]; rw [← appendFun_comp]; rw [id_com
+  rw [← comp_map]; rw [← appendFun_comp]; rw [id_comp]; rw [← Cofix.mk]
+  congr 1
+  apply congrArg
+  funext x
+  apply Quot.sound
+  rfl
 
 中文:
 定理 Cofix.mk_dest
@@ -760,7 +879,12 @@ theorem Cofix.mk_dest
     rw [Cofix.mk]
     rw [Cofix.dest_corec]
   rw [← comp_map]; rw [← appendFun_comp]; rw [id_comp]
-  rw [← comp_map]; rw [← appendFun_comp]; rw [id_com
+  rw [← comp_map]; rw [← appendFun_comp]; rw [id_comp]; rw [← Cofix.mk]
+  congr 1
+  apply congrArg
+  funext x
+  apply Quot.sound
+  rfl
 
 Depends on / 依赖: Cofix.bisim_rel, Cofix.dest, Cofix.dest_corec, Cofix.mk, Quot.sound, appendFun_comp, bisim_rel, comp_map, dest_corec, id_comp
 -/
@@ -865,7 +989,7 @@ theorem liftR_map
 exists h < > x
   rw [MvFunctor.map_map]; rw [comp_assoc]; rw [hh]; rw [← comp_assoc]; rw [fst_prod_mk]; rw [comp_assoc]; rw [fst_diag]
   rw [MvFunctor.map_map]; rw [comp_assoc]; rw [hh]; rw [← comp_assoc]; rw [snd_prod_mk]; rw [comp_assoc]; rw [snd_diag]
-  dsimp [LiftR']; constru
+  dsimp [LiftR']; constructor <;> rfl
 
 中文:
 定理 liftR_map
@@ -875,7 +999,7 @@ exists h < > x
 exists h < > x
   rw [MvFunctor.map_map]; rw [comp_assoc]; rw [hh]; rw [← comp_assoc]; rw [fst_prod_mk]; rw [comp_assoc]; rw [fst_diag]
   rw [MvFunctor.map_map]; rw [comp_assoc]; rw [hh]; rw [← comp_assoc]; rw [snd_prod_mk]; rw [comp_assoc]; rw [snd_diag]
-  dsimp [LiftR']; constru
+  dsimp [LiftR']; constructor <;> rfl
 
 Depends on / 依赖: LiftR_def, MvFunctor, MvFunctor.map_map, comp_assoc, fst_diag, fst_prod_mk, map_map, snd_diag, snd_prod_mk
 -/
@@ -902,7 +1026,26 @@ theorem liftR_map_last
   let c :
     (Subtype_ α.repeatEq ::: { x // uncurry R x }) ⟹
       ((fun i : Fin2 n => { x // ofRepeat (α.RelLast' R i.fs x) }) ::: Subtype (uncurry R)) :=
-    ofSubtype _ ::: i
+    ofSubtype _ ::: id
+  have hh :
+    subtypeVal _ ⊚ toSubtype _ ⊚ fromAppend1DropLast ⊚ c ⊚ b =
+      ((id ::: f) otimes' (id ::: g)) ⊚ prod.diag := by
+    dsimp [b]
+    apply eq_of_drop_last_eq
+    · dsimp
+      simp only [prod_map_id, TypeVec.id_comp]
+      erw [toSubtype_of_subtype_assoc, TypeVec.id_comp]
+      clear liftR_map_last q lawful F x R f g hh h b c
+      ext (i x) : 2
+      induction i with
+      | fz => rfl
+      | fs _ ih =>
+        apply ih
+    simp only [lastFun_from_append1_drop_last, lastFun_toSubtype, lastFun_appendFun,
+      lastFun_subtypeVal, Function.id_comp, lastFun_comp, lastFun_prod]
+    ext1
+    rfl
+  liftR_map _ _ _ _ (toSubtype _ ⊚ fromAppend1DropLast ⊚ c ⊚ b) hh
 
 中文:
 定理 liftR_map_last
@@ -912,7 +1055,26 @@ theorem liftR_map_last
   let c :
     (Subtype_ α.repeatEq ::: { x // uncurry R x }) ⟹
       ((fun i : Fin2 n => { x // ofRepeat (α.RelLast' R i.fs x) }) ::: Subtype (uncurry R)) :=
-    ofSubtype _ ::: i
+    ofSubtype _ ::: id
+  have hh :
+    subtypeVal _ ⊚ toSubtype _ ⊚ fromAppend1DropLast ⊚ c ⊚ b =
+      ((id ::: f) otimes' (id ::: g)) ⊚ prod.diag := by
+    dsimp [b]
+    apply eq_of_drop_last_eq
+    · dsimp
+      simp only [prod_map_id, TypeVec.id_comp]
+      erw [toSubtype_of_subtype_assoc, TypeVec.id_comp]
+      clear liftR_map_last q lawful F x R f g hh h b c
+      ext (i x) : 2
+      induction i with
+      | fz => rfl
+      | fs _ ih =>
+        apply ih
+    simp only [lastFun_from_append1_drop_last, lastFun_toSubtype, lastFun_appendFun,
+      lastFun_subtypeVal, Function.id_comp, lastFun_comp, lastFun_prod]
+    ext1
+    rfl
+  liftR_map _ _ _ _ (toSubtype _ ⊚ fromAppend1DropLast ⊚ c ⊚ b) hh
 
 Depends on / 依赖: RelLast, Subtype, Subtype_, TypeVec, TypeVec.id_comp, diagSub, eq_of_drop_last_eq, fromAppend1DropLast, i.fs, id_comp, ofRepeat, ofSubtype, otimes, prod.diag, prod_map_id, repeatEq, subtypeVal, toSubtyp, toSubtype, uncurry
 -/
@@ -991,7 +1153,11 @@ theorem Cofix.abs_repr
   dsimp [Cofix.dest, Cofix.abs]
   induction y using Quot.ind
   simp only [Cofix.repr, M.dest_corec, abs_map, MvQPF.abs_repr, Function.comp]
-  conv => congr; rfl; rw [Cofix.dest
+  conv => congr; rfl; rw [Cofix.dest]
+  rw [MvFunctor.map_map]; rw [MvFunctor.map_map]; rw [← appendFun_comp_id]; rw [← appendFun_comp_id]
+  apply liftR_map_last
+  intros
+  rfl
 
 中文:
 定理 Cofix.abs_repr
@@ -1006,7 +1172,11 @@ theorem Cofix.abs_repr
   dsimp [Cofix.dest, Cofix.abs]
   induction y using Quot.ind
   simp only [Cofix.repr, M.dest_corec, abs_map, MvQPF.abs_repr, Function.comp]
-  conv => congr; rfl; rw [Cofix.dest
+  conv => congr; rfl; rw [Cofix.dest]
+  rw [MvFunctor.map_map]; rw [MvFunctor.map_map]; rw [← appendFun_comp_id]; rw [← appendFun_comp_id]
+  apply liftR_map_last
+  intros
+  rfl
 
 Depends on / 依赖: Cofix.abs, Cofix.bisim, Cofix.dest, Cofix.repr, Function, Function.comp, M.dest_corec, MvFunctor, MvFunctor.map_map, MvQPF.abs_repr, Quot.ind, abs_map, abs_repr, appendFun_comp_id, dest_corec, intros, liftR_map_last, map_map
 -/
@@ -1140,7 +1310,13 @@ theorem Cofix.dest_corec'
     rw [Ha]; rw [Hb]; rw [Cofix.dest_corec]
     dsimp [Function.comp_def]
     repeat rw [MvFunctor.map_map, ← appendFun_comp_id]
-    apply liftR_
+    apply liftR_map_last'
+    dsimp [Function.comp_def]
+    intros
+    exact ⟨_, rfl, rfl⟩
+  · congr 1 with y
+    erw [appendFun_id_id]
+    simp [MvFunctor.id_map, Sum.elim]
 
 中文:
 定理 Cofix.dest_corec'
@@ -1152,7 +1328,13 @@ theorem Cofix.dest_corec'
     rw [Ha]; rw [Hb]; rw [Cofix.dest_corec]
     dsimp [Function.comp_def]
     repeat rw [MvFunctor.map_map, ← appendFun_comp_id]
-    apply liftR_
+    apply liftR_map_last'
+    dsimp [Function.comp_def]
+    intros
+    exact ⟨_, rfl, rfl⟩
+  · congr 1 with y
+    erw [appendFun_id_id]
+    simp [MvFunctor.id_map, Sum.elim]
 
 Depends on / 依赖: Cofix.corec, Cofix.dest_corec, Function, Function.comp_def, MvFunctor, MvFunctor.id_map, MvFunctor.map_map, Sum.elim, appendFun_comp_id, appendFun_id_id, comp_def, corec_roll, dest_corec, id_map, intros, liftR_map_last, map_map, mv_bisim, repeat
 -/

@@ -138,7 +138,18 @@ theorem geom_mean_le_arith_mean_weighted
     rw [prod_eq_zero his]
     · exact sum_nonneg fun j hj => mul_nonneg (hw j hj) (hz j hj)
     · rw [hzi]
-  
+      exact zero_rpow hwi
+  -- If all numbers `z i` with non-zero weight are positive, then we apply Jensen's inequality
+  -- for `exp` and numbers `log (z i)` with weights `w i`.
+· have := convexOn_exp.map_sum_le hw hw' fun i _ => Set.mem_univ log (z i)
+    simp only [exp_sum, smul_eq_mul, mul_comm (w _) (log _)] at this
+    convert! this using 1 <;> [apply prod_congr rfl; apply sum_congr rfl] <;> intro i hi
+    · rcases eq_or_lt_of_le (hz i hi) with hz | hz
+      · simp [A i hi hz.symm]
+      · exact rpow_def_of_pos hz _
+    · rcases eq_or_lt_of_le (hz i hi) with hz | hz
+      · simp [A i hi hz.symm]
+      · rw [exp_log hz]
 
 中文:
 定理 geom_mean_le_arith_mean_weighted
@@ -150,7 +161,18 @@ theorem geom_mean_le_arith_mean_weighted
     rw [prod_eq_zero his]
     · exact sum_nonneg fun j hj => mul_nonneg (hw j hj) (hz j hj)
     · rw [hzi]
-  
+      exact zero_rpow hwi
+  -- If all numbers `z i` with non-zero weight are positive, then we apply Jensen's inequality
+  -- for `exp` and numbers `log (z i)` with weights `w i`.
+· have := convexOn_exp.map_sum_le hw hw' fun i _ => Set.mem_univ log (z i)
+    simp only [exp_sum, smul_eq_mul, mul_comm (w _) (log _)] at this
+    convert! this using 1 <;> [apply prod_congr rfl; apply sum_congr rfl] <;> intro i hi
+    · rcases eq_or_lt_of_le (hz i hi) with hz | hz
+      · simp [A i hi hz.symm]
+      · exact rpow_def_of_pos hz _
+    · rcases eq_or_lt_of_le (hz i hi) with hz | hz
+      · simp [A i hi hz.symm]
+      · rw [exp_log hz]
 -/
 theorem geom_mean_le_arith_mean_weighted (w z : ι -> Real) (hw : forall i in s, 0 <= w i)
     (hw' : ∑ i in s, w i = 1) (hz : forall i in s, 0 <= z i) :
@@ -185,7 +207,10 @@ theorem geom_mean_le_arith_mean
   · rw [← finsetProd_rpow _ _ (fun i hi => rpow_nonneg (hz _ hi) _) _]
     refine Finset.prod_congr rfl (fun _ ih => ?_)
     rw [div_eq_mul_inv]; rw [rpow_mul (hz _ ih)]
-  · simp_rw [div_eq_mul_inv, mul_assoc
+  · simp_rw [div_eq_mul_inv, mul_assoc, mul_comm, ← mul_assoc, ← Finset.sum_mul, mul_comm]
+  · exact fun _ hi => div_nonneg (hw _ hi) (le_of_lt hw')
+  · simp_rw [div_eq_mul_inv, ← Finset.sum_mul]
+    exact mul_inv_cancel₀ (by linarith)
 
 中文:
 定理 geom_mean_le_arith_mean
@@ -195,7 +220,10 @@ theorem geom_mean_le_arith_mean
   · rw [← finsetProd_rpow _ _ (fun i hi => rpow_nonneg (hz _ hi) _) _]
     refine Finset.prod_congr rfl (fun _ ih => ?_)
     rw [div_eq_mul_inv]; rw [rpow_mul (hz _ ih)]
-  · simp_rw [div_eq_mul_inv, mul_assoc
+  · simp_rw [div_eq_mul_inv, mul_assoc, mul_comm, ← mul_assoc, ← Finset.sum_mul, mul_comm]
+  · exact fun _ hi => div_nonneg (hw _ hi) (le_of_lt hw')
+  · simp_rw [div_eq_mul_inv, ← Finset.sum_mul]
+    exact mul_inv_cancel₀ (by linarith)
 
 Depends on / 依赖: Finset, Finset.prod_congr, Finset.sum_mul, convert, div_eq_mul_inv, div_nonneg, finsetProd_rpow, geom_mean_le_arith_mean_weighted, le_of_lt, mul_assoc, mul_comm, prod_congr, rpow_mul, rpow_nonneg, simp_rw, sum_mul
 -/
@@ -225,7 +253,12 @@ theorem geom_mean_weighted_of_constant
       · rw [hx i hi h₀]
     _ = x := by
       rw [← rpow_sum_of_nonneg _ hw]; rw [hw']; rw [rpow_one]
-      have : (∑ i i
+      have : (∑ i in s, w i) != 0 := by
+        rw [hw']
+        exact one_ne_zero
+      obtain ⟨i, his, hi⟩ := exists_ne_zero_of_sum_ne_zero this
+      rw [← hx i his hi]
+      exact hz i his
 
 中文:
 定理 geom_mean_weighted_of_constant
@@ -238,7 +271,12 @@ theorem geom_mean_weighted_of_constant
       · rw [hx i hi h₀]
     _ = x := by
       rw [← rpow_sum_of_nonneg _ hw]; rw [hw']; rw [rpow_one]
-      have : (∑ i i
+      have : (∑ i in s, w i) != 0 := by
+        rw [hw']
+        exact one_ne_zero
+      obtain ⟨i, his, hi⟩ := exists_ne_zero_of_sum_ne_zero this
+      rw [← hx i his hi]
+      exact hz i his
 
 Depends on / 依赖: eq_or_ne, exists_ne_zero_of_sum_ne_zero, one_ne_zero, prod_congr, rpow_one, rpow_sum_of_nonneg, rpow_zero
 -/
@@ -334,7 +372,33 @@ theorem geom_mean_eq_arith_mean_weighted_iff_of_pos'
         rw [← h]
         intro j hj
         apply eq_zero_of_ne_zero_of_mul_left_eq_zero (ne_of_lt (hw j hj)).symm
-        apply (sum_eq_zero_iff_of_n
+        apply (sum_eq_zero_iff_of_nonneg ?_).mp h.symm j hj
+        exact fun i hi => (mul_nonneg_iff_of_pos_left (hw i hi)).mpr (hz i hi)
+      · intro h
+        convert! h i his
+        exact hzi.symm
+    · rw [hzi]
+      exact zero_rpow hwi
+  · have hz' := fun i h => lt_of_le_of_ne (hz i h) (fun a => (ne_of_gt (hw i h)) (A i h a.symm))
+have := strictConvexOn_exp.map_sum_eq_iff hw hw' fun i _ => Set.mem_univ log (z i)
+    simp only [exp_sum, smul_eq_mul, mul_comm (w _) (log _)] at this
+    convert! this using 1
+    · apply Eq.congr <;>
+      [apply prod_congr rfl; apply sum_congr rfl] <;>
+      intro i hi <;>
+      simp only [exp_mul, exp_log (hz' i hi)]
+    · constructor <;> intro h j hj
+      · rw [← arith_mean_weighted_of_constant s w _ (log (z j)) hw' fun i _ => congrFun rfl]
+        apply sum_congr rfl
+        intro x hx
+        simp only [mul_comm, h j hj, h x hx]
+      · rw [← arith_mean_weighted_of_constant s w _ (z j) hw' fun i _ => congrFun rfl]
+        apply sum_congr rfl
+        intro x hx
+        simp only [log_injOn_pos (hz' j hj) (hz' x hx), h j hj, h x hx]
+
+@[deprecated (since := "2026-06-07")]
+alias geom_mean_eq_arith_mean_weighted_iff' := geom_mean_eq_arith_mean_weighted_iff_of_pos'
 
 中文:
 定理 geom_mean_eq_arith_mean_weighted_iff_of_pos'
@@ -348,7 +412,33 @@ theorem geom_mean_eq_arith_mean_weighted_iff_of_pos'
         rw [← h]
         intro j hj
         apply eq_zero_of_ne_zero_of_mul_left_eq_zero (ne_of_lt (hw j hj)).symm
-        apply (sum_eq_zero_iff_of_n
+        apply (sum_eq_zero_iff_of_nonneg ?_).mp h.symm j hj
+        exact fun i hi => (mul_nonneg_iff_of_pos_left (hw i hi)).mpr (hz i hi)
+      · intro h
+        convert! h i his
+        exact hzi.symm
+    · rw [hzi]
+      exact zero_rpow hwi
+  · have hz' := fun i h => lt_of_le_of_ne (hz i h) (fun a => (ne_of_gt (hw i h)) (A i h a.symm))
+have := strictConvexOn_exp.map_sum_eq_iff hw hw' fun i _ => Set.mem_univ log (z i)
+    simp only [exp_sum, smul_eq_mul, mul_comm (w _) (log _)] at this
+    convert! this using 1
+    · apply Eq.congr <;>
+      [apply prod_congr rfl; apply sum_congr rfl] <;>
+      intro i hi <;>
+      simp only [exp_mul, exp_log (hz' i hi)]
+    · constructor <;> intro h j hj
+      · rw [← arith_mean_weighted_of_constant s w _ (log (z j)) hw' fun i _ => congrFun rfl]
+        apply sum_congr rfl
+        intro x hx
+        simp only [mul_comm, h j hj, h x hx]
+      · rw [← arith_mean_weighted_of_constant s w _ (z j) hw' fun i _ => congrFun rfl]
+        apply sum_congr rfl
+        intro x hx
+        simp only [log_injOn_pos (hz' j hj) (hz' x hx), h j hj, h x hx]
+
+@[deprecated (since := "2026-06-07")]
+alias geom_mean_eq_arith_mean_weighted_iff' := geom_mean_eq_arith_mean_weighted_iff_of_pos'
 
 Depends on / 依赖: convert, eq_zero_of_ne_zero_of_mul_left_eq_zero, h.symm, hzi.symm, lt_of_le_of_ne, mul_nonneg_iff_of_pos_left, ne_of_gt, ne_of_lt, prod_eq_zero, sum_eq_zero_iff_of_nonneg, zero_rpow
 -/
@@ -402,7 +492,11 @@ theorem geom_mean_eq_arith_mean_weighted_iff_of_nonneg'
       ∏ i in s with w i != 0, z i ^ w i = ∑ i in s with w i != 0, w i * z i ↔
         forall j in {x in s | w x != 0}, z j = ∑ i in s with w i != 0, w i * z i :=
     geom_mean_eq_arith_mean_weighted_iff_of_pos' _ w z (by grind)
-      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_me
+      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_mem_filter · ·)
+  grind [prod_filter_of_ne, sum_filter_of_ne, rpow_zero]
+
+@[deprecated (since := "2026-06-07")]
+alias geom_mean_eq_arith_mean_weighted_iff := geom_mean_eq_arith_mean_weighted_iff_of_nonneg'
 
 中文:
 定理 geom_mean_eq_arith_mean_weighted_iff_of_nonneg'
@@ -412,7 +506,11 @@ theorem geom_mean_eq_arith_mean_weighted_iff_of_nonneg'
       ∏ i in s with w i != 0, z i ^ w i = ∑ i in s with w i != 0, w i * z i ↔
         forall j in {x in s | w x != 0}, z j = ∑ i in s with w i != 0, w i * z i :=
     geom_mean_eq_arith_mean_weighted_iff_of_pos' _ w z (by grind)
-      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_me
+      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_mem_filter · ·)
+  grind [prod_filter_of_ne, sum_filter_of_ne, rpow_zero]
+
+@[deprecated (since := "2026-06-07")]
+alias geom_mean_eq_arith_mean_weighted_iff := geom_mean_eq_arith_mean_weighted_iff_of_nonneg'
 
 Depends on / 依赖: geom_mean_eq_arith_mean_weighted_iff_of_pos, mem_of_mem_filter, prod_filter_of_ne, rpow_zero, sum_filter_ne_zero, sum_filter_of_ne
 -/
@@ -439,7 +537,7 @@ theorem geom_mean_eq_arith_mean_weighted_iff_of_pos
   refine ⟨by grind [geom_mean_eq_arith_mean_weighted_iff_of_pos' s w z hw hw' hz], fun h => ?_⟩
   have ⟨k, hk⟩ : s.Nonempty := by grind [s.eq_empty_or_nonempty]
   suffices ∏ i in s, z k ^ w i = ∑ i in s, w i * z k by convert this using 3 <;> grind
-  rw [← rpow_sum_of_nonneg (hz k hk) (hw · · |>.l
+  rw [← rpow_sum_of_nonneg (hz k hk) (hw · · |>.le)]; rw [← sum_mul]; rw [hw']; rw [rpow_one]; rw [one_mul]
 
 中文:
 定理 geom_mean_eq_arith_mean_weighted_iff_of_pos
@@ -448,7 +546,7 @@ theorem geom_mean_eq_arith_mean_weighted_iff_of_pos
   refine ⟨by grind [geom_mean_eq_arith_mean_weighted_iff_of_pos' s w z hw hw' hz], fun h => ?_⟩
   have ⟨k, hk⟩ : s.Nonempty := by grind [s.eq_empty_or_nonempty]
   suffices ∏ i in s, z k ^ w i = ∑ i in s, w i * z k by convert this using 3 <;> grind
-  rw [← rpow_sum_of_nonneg (hz k hk) (hw · · |>.l
+  rw [← rpow_sum_of_nonneg (hz k hk) (hw · · |>.le)]; rw [← sum_mul]; rw [hw']; rw [rpow_one]; rw [one_mul]
 
 Depends on / 依赖: Nonempty, convert, eq_empty_or_nonempty, geom_mean_eq_arith_mean_weighted_iff_of_pos, one_mul, rpow_one, rpow_sum_of_nonneg, s.Nonempty, s.eq_empty_or_nonempty, sum_mul
 -/
@@ -471,7 +569,8 @@ theorem geom_mean_eq_arith_mean_weighted_iff_of_nonneg
       ∏ i in s with w i != 0, z i ^ w i = ∑ i in s with w i != 0, w i * z i ↔
         forall j in {x in s | w x != 0}, forall k in {x in s | w x != 0}, z j = z k :=
     geom_mean_eq_arith_mean_weighted_iff_of_pos _ w z (by grind)
-      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_
+      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_mem_filter · ·)
+  grind [prod_filter_of_ne, sum_filter_of_ne, rpow_zero]
 
 中文:
 定理 geom_mean_eq_arith_mean_weighted_iff_of_nonneg
@@ -481,7 +580,8 @@ theorem geom_mean_eq_arith_mean_weighted_iff_of_nonneg
       ∏ i in s with w i != 0, z i ^ w i = ∑ i in s with w i != 0, w i * z i ↔
         forall j in {x in s | w x != 0}, forall k in {x in s | w x != 0}, z j = z k :=
     geom_mean_eq_arith_mean_weighted_iff_of_pos _ w z (by grind)
-      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_
+      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_mem_filter · ·)
+  grind [prod_filter_of_ne, sum_filter_of_ne, rpow_zero]
 
 Depends on / 依赖: geom_mean_eq_arith_mean_weighted_iff_of_pos, mem_of_mem_filter, prod_filter_of_ne, rpow_zero, sum_filter_ne_zero, sum_filter_of_ne
 -/
@@ -534,7 +634,8 @@ theorem geom_mean_lt_arith_mean_weighted_iff_of_nonneg'
       ∏ i in s with w i != 0, z i ^ w i < ∑ i in s with w i != 0, w i * z i ↔
         exists j in {x in s | w x != 0}, z j != ∑ i in s with w i != 0, w i * z i :=
     geom_mean_lt_arith_mean_weighted_iff_of_pos' _ w z (by grind)
-      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_m
+      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_mem_filter · ·)
+  grind [prod_filter_of_ne, sum_filter_of_ne, rpow_zero]
 
 中文:
 定理 geom_mean_lt_arith_mean_weighted_iff_of_nonneg'
@@ -544,7 +645,8 @@ theorem geom_mean_lt_arith_mean_weighted_iff_of_nonneg'
       ∏ i in s with w i != 0, z i ^ w i < ∑ i in s with w i != 0, w i * z i ↔
         exists j in {x in s | w x != 0}, z j != ∑ i in s with w i != 0, w i * z i :=
     geom_mean_lt_arith_mean_weighted_iff_of_pos' _ w z (by grind)
-      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_m
+      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_mem_filter · ·)
+  grind [prod_filter_of_ne, sum_filter_of_ne, rpow_zero]
 
 Depends on / 依赖: geom_mean_lt_arith_mean_weighted_iff_of_pos, mem_of_mem_filter, prod_filter_of_ne, rpow_zero, sum_filter_ne_zero, sum_filter_of_ne
 -/
@@ -572,7 +674,13 @@ theorem geom_mean_lt_arith_mean_weighted_iff_of_pos
     · exact (lt_self_iff_false _).mp h
     · intro j hjs
       rw [← arith_mean_weighted_of_constant s w (fun _ => z j) (z j) hw' fun _ _ => congrFun rfl]
-      ap
+      apply sum_congr rfl (fun x a => congrArg (HMul.hMul (w x)) (h_contra j hjs x a))
+  · rintro ⟨j, hjs, k, hks, hzjk⟩
+    have := geom_mean_le_arith_mean_weighted s w z (fun i a => le_of_lt (hw i a)) hw' hz
+    by_contra! h
+    apply le_antisymm this at h
+    apply (geom_mean_eq_arith_mean_weighted_iff_of_pos' s w z hw hw' hz).mp at h
+    simp only [h j hjs, h k hks, ne_eq, not_true_eq_false] at hzjk
 
 中文:
 定理 geom_mean_lt_arith_mean_weighted_iff_of_pos
@@ -585,7 +693,13 @@ theorem geom_mean_lt_arith_mean_weighted_iff_of_pos
     · exact (lt_self_iff_false _).mp h
     · intro j hjs
       rw [← arith_mean_weighted_of_constant s w (fun _ => z j) (z j) hw' fun _ _ => congrFun rfl]
-      ap
+      apply sum_congr rfl (fun x a => congrArg (HMul.hMul (w x)) (h_contra j hjs x a))
+  · rintro ⟨j, hjs, k, hks, hzjk⟩
+    have := geom_mean_le_arith_mean_weighted s w z (fun i a => le_of_lt (hw i a)) hw' hz
+    by_contra! h
+    apply le_antisymm this at h
+    apply (geom_mean_eq_arith_mean_weighted_iff_of_pos' s w z hw hw' hz).mp at h
+    simp only [h j hjs, h k hks, ne_eq, not_true_eq_false] at hzjk
 
 Depends on / 依赖: HMul.hMul, arith_mean_weighted_of_constant, geom_mean_eq_arith_mean_weighted_iff_of_pos, geom_mean_le_arith_mean_weighted, h_contra, le_antisymm, le_of_lt, lt_self_iff_false, sum_congr
 -/
@@ -618,7 +732,8 @@ theorem geom_mean_lt_arith_mean_weighted_iff_of_nonneg
       ∏ i in s with w i != 0, z i ^ w i < ∑ i in s with w i != 0, w i * z i ↔
         exists j in {x in s | w x != 0}, exists k in {x in s | w x != 0}, z j != z k :=
     geom_mean_lt_arith_mean_weighted_iff_of_pos _ w z (by grind)
-      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of
+      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_mem_filter · ·)
+  grind [prod_filter_of_ne, sum_filter_of_ne, rpow_zero]
 
 中文:
 定理 geom_mean_lt_arith_mean_weighted_iff_of_nonneg
@@ -628,7 +743,8 @@ theorem geom_mean_lt_arith_mean_weighted_iff_of_nonneg
       ∏ i in s with w i != 0, z i ^ w i < ∑ i in s with w i != 0, w i * z i ↔
         exists j in {x in s | w x != 0}, exists k in {x in s | w x != 0}, z j != z k :=
     geom_mean_lt_arith_mean_weighted_iff_of_pos _ w z (by grind)
-      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of
+      (sum_filter_ne_zero _ |>.trans hw') (hz _ <| mem_of_mem_filter · ·)
+  grind [prod_filter_of_ne, sum_filter_of_ne, rpow_zero]
 
 Depends on / 依赖: geom_mean_lt_arith_mean_weighted_iff_of_pos, mem_of_mem_filter, prod_filter_of_ne, rpow_zero, sum_filter_ne_zero, sum_filter_of_ne
 -/
@@ -967,7 +1083,17 @@ theorem harm_mean_le_geom_mean_weighted
     geom_mean_le_arith_mean_weighted s w (1 / z) (fun i hi => le_of_lt (hw i hi)) hw'
     (fun i hi => one_div_nonneg.2 (le_of_lt (hz i hi)))
   have p_pos : 0 < ∏ i in s, (z i)⁻¹ ^ w i :=
-    prod_pos fun i hi => rpow_pos_of_pos (
+    prod_pos fun i hi => rpow_pos_of_pos (inv_pos.2 (hz i hi)) _
+  have s_pos : 0 < ∑ i in s, w i * (z i)⁻¹ :=
+    sum_pos (fun i hi => mul_pos (hw i hi) (inv_pos.2 (hz i hi))) hs
+  simp only [Pi.div_apply, Pi.one_apply, one_div, ← inv_le_inv₀ s_pos p_pos] at this
+  apply le_trans this
+  have p_pos₂ : 0 < (∏ i in s, (z i) ^ w i)⁻¹ :=
+    inv_pos.2 (prod_pos fun i hi => rpow_pos_of_pos ((hz i hi)) _)
+  rw [← inv_inv (∏ i in s]; rw [z i ^ w i)]; rw [inv_le_inv₀ p_pos p_pos₂]; rw [← Finset.prod_inv_distrib]
+  gcongr
+  · exact fun i hi => by positivity [hz i hi]
+  · rw [Real.inv_rpow]; apply fun i hi => le_of_lt (hz i hi); assumption
 
 中文:
 定理 harm_mean_le_geom_mean_weighted
@@ -977,7 +1103,17 @@ theorem harm_mean_le_geom_mean_weighted
     geom_mean_le_arith_mean_weighted s w (1 / z) (fun i hi => le_of_lt (hw i hi)) hw'
     (fun i hi => one_div_nonneg.2 (le_of_lt (hz i hi)))
   have p_pos : 0 < ∏ i in s, (z i)⁻¹ ^ w i :=
-    prod_pos fun i hi => rpow_pos_of_pos (
+    prod_pos fun i hi => rpow_pos_of_pos (inv_pos.2 (hz i hi)) _
+  have s_pos : 0 < ∑ i in s, w i * (z i)⁻¹ :=
+    sum_pos (fun i hi => mul_pos (hw i hi) (inv_pos.2 (hz i hi))) hs
+  simp only [Pi.div_apply, Pi.one_apply, one_div, ← inv_le_inv₀ s_pos p_pos] at this
+  apply le_trans this
+  have p_pos₂ : 0 < (∏ i in s, (z i) ^ w i)⁻¹ :=
+    inv_pos.2 (prod_pos fun i hi => rpow_pos_of_pos ((hz i hi)) _)
+  rw [← inv_inv (∏ i in s]; rw [z i ^ w i)]; rw [inv_le_inv₀ p_pos p_pos₂]; rw [← Finset.prod_inv_distrib]
+  gcongr
+  · exact fun i hi => by positivity [hz i hi]
+  · rw [Real.inv_rpow]; apply fun i hi => le_of_lt (hz i hi); assumption
 
 Depends on / 依赖: Pi.div_apply, Pi.one_apply, div_apply, geom_mean_le_arith_mean_weighted, inv_pos, le_of_lt, mul_pos, one_apply, one_div, one_div_nonneg, p_pos, prod_pos, rpow_pos_of_pos, s_pos, sum_pos
 -/
@@ -1013,6 +1149,12 @@ theorem harm_mean_le_geom_mean
     nth_rw 1 [div_eq_mul_inv, (show n = (n⁻¹)⁻¹ by simp), ← mul_inv, Finset.mul_sum _ _ n⁻¹]
     simp_rw [inv_mul_eq_div n ((w _) / (z _)), div_right_comm _ _ n]
     convert! this
+    rw [← Real.finsetProd_rpow s _ (fun i hi => by positivity [hz i hi])]
+    refine Finset.prod_congr rfl (fun i hi => ?_)
+    rw [← Real.rpow_mul (le_of_lt <| hz i hi) (w _) n⁻¹]; rw [div_eq_mul_inv (w _) n]
+  · exact fun i hi => div_pos (hw i hi) hw'
+  · simp_rw [div_eq_mul_inv (w _) (∑ i in s, w i), ← Finset.sum_mul _ _ (∑ i in s, w i)⁻¹]
+    exact mul_inv_cancel₀ hw'.ne'
 
 中文:
 定理 harm_mean_le_geom_mean
@@ -1023,6 +1165,12 @@ theorem harm_mean_le_geom_mean
     nth_rw 1 [div_eq_mul_inv, (show n = (n⁻¹)⁻¹ by simp), ← mul_inv, Finset.mul_sum _ _ n⁻¹]
     simp_rw [inv_mul_eq_div n ((w _) / (z _)), div_right_comm _ _ n]
     convert! this
+    rw [← Real.finsetProd_rpow s _ (fun i hi => by positivity [hz i hi])]
+    refine Finset.prod_congr rfl (fun i hi => ?_)
+    rw [← Real.rpow_mul (le_of_lt <| hz i hi) (w _) n⁻¹]; rw [div_eq_mul_inv (w _) n]
+  · exact fun i hi => div_pos (hw i hi) hw'
+  · simp_rw [div_eq_mul_inv (w _) (∑ i in s, w i), ← Finset.sum_mul _ _ (∑ i in s, w i)⁻¹]
+    exact mul_inv_cancel₀ hw'.ne'
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.prod_congr, Real.finsetProd_rpow, Real.rpow_mul, convert, div_eq_mul_inv, div_right_comm, finsetProd_rpow, harm_mean_le_geom_mean_weighted, inv_mul_eq_div, le_of_lt, mul_inv, mul_sum, nth_rw, prod_congr, rpow_mul, simp_rw
 -/
@@ -1238,7 +1386,10 @@ theorem young_inequality
     repeat rw [div_eq_mul_inv]
     rcases h with h | h <;> rw [h] <;> simp [hpq.pos, hpq.symm.pos]
   -- if `a ≠ ⊤` and `b ≠ ⊤`, use the `NNReal` version: `NNReal.young_inequality_real`
-  rw [← coe_toNNReal h.left]; rw [← coe_t
+  rw [← coe_toNNReal h.left]; rw [← coe_toNNReal h.right]; rw [← coe_mul]; rw [← coe_rpow_of_nonneg _ hpq.nonneg]; rw [← coe_rpow_of_nonneg _ hpq.symm.nonneg]; rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [←
+    @coe_div (Real.toNNReal p) _ (by simp [hpq.pos]), ←
+    @coe_div (Real.toNNReal q) _ (by simp [hpq.symm.pos]), ← coe_add, coe_le_coe]
+  exact NNReal.young_inequality_real a.toNNReal b.toNNReal hpq
 
 中文:
 定理 young_inequality
@@ -1249,7 +1400,10 @@ theorem young_inequality
     repeat rw [div_eq_mul_inv]
     rcases h with h | h <;> rw [h] <;> simp [hpq.pos, hpq.symm.pos]
   -- if `a ≠ ⊤` and `b ≠ ⊤`, use the `NNReal` version: `NNReal.young_inequality_real`
-  rw [← coe_toNNReal h.left]; rw [← coe_t
+  rw [← coe_toNNReal h.left]; rw [← coe_toNNReal h.right]; rw [← coe_mul]; rw [← coe_rpow_of_nonneg _ hpq.nonneg]; rw [← coe_rpow_of_nonneg _ hpq.symm.nonneg]; rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [←
+    @coe_div (Real.toNNReal p) _ (by simp [hpq.pos]), ←
+    @coe_div (Real.toNNReal q) _ (by simp [hpq.symm.pos]), ← coe_add, coe_le_coe]
+  exact NNReal.young_inequality_real a.toNNReal b.toNNReal hpq
 
 Depends on / 依赖: div_eq_mul_inv, hpq.pos, hpq.symm.pos, le_of_eq, le_top, le_trans, repeat
 -/
@@ -1276,7 +1430,8 @@ theorem young_inequality_eq_iff
   · rcases h0 with rfl | rfl <;> simp [hpq.pos, hpq.symm.pos, eq_comm]
   by_cases! h : a = ⊤ ∨ b = ⊤
   · rcases h with rfl | rfl <;> simp [hpq.pos, hpq.symm.pos, h0, div_eq_mul_inv]
-  rw [← coe_toNNReal h.left]; rw [← coe_toNNReal h.right]; rw [← coe_mul]; rw [← coe
+  rw [← coe_toNNReal h.left]; rw [← coe_toNNReal h.right]; rw [← coe_mul]; rw [← coe_rpow_of_nonneg _ hpq.nonneg]; rw [← coe_rpow_of_nonneg _ hpq.symm.nonneg]; rw [← ofNNReal_toNNReal]; rw [← ofNNReal_toNNReal]; rw [← coe_div (by simp [hpq.pos]), ← coe_div (by simp [hpq.symm.pos]), ← coe_add, coe_inj, coe_inj]
+  simp [young_inequality_real_eq_iff a.toNNReal b.toNNReal hpq]
 
 中文:
 定理 young_inequality_eq_iff
@@ -1286,7 +1441,8 @@ theorem young_inequality_eq_iff
   · rcases h0 with rfl | rfl <;> simp [hpq.pos, hpq.symm.pos, eq_comm]
   by_cases! h : a = ⊤ ∨ b = ⊤
   · rcases h with rfl | rfl <;> simp [hpq.pos, hpq.symm.pos, h0, div_eq_mul_inv]
-  rw [← coe_toNNReal h.left]; rw [← coe_toNNReal h.right]; rw [← coe_mul]; rw [← coe
+  rw [← coe_toNNReal h.left]; rw [← coe_toNNReal h.right]; rw [← coe_mul]; rw [← coe_rpow_of_nonneg _ hpq.nonneg]; rw [← coe_rpow_of_nonneg _ hpq.symm.nonneg]; rw [← ofNNReal_toNNReal]; rw [← ofNNReal_toNNReal]; rw [← coe_div (by simp [hpq.pos]), ← coe_div (by simp [hpq.symm.pos]), ← coe_add, coe_inj, coe_inj]
+  simp [young_inequality_real_eq_iff a.toNNReal b.toNNReal hpq]
 
 Depends on / 依赖: coe_add, coe_div, coe_mul, coe_rpow_of_nonneg, coe_toNNReal, div_eq_mul_inv, eq_comm, h.left, h.right, hpq.nonneg, hpq.pos, hpq.symm.nonneg, hpq.symm.pos, nonneg, ofNNReal_toNNReal
 -/
@@ -1322,7 +1478,11 @@ theorem inner_le_Lp_mul_Lp_of_norm_le_one
   have hq : 0 < q.toNNReal := zero_lt_one.trans hpq.toNNReal.symm.lt
   calc
     ∑ i in s, f i * g i <= ∑ i in s, (f i ^ p / Real.toNNReal p + g i ^ q / Real.toNNReal q) :=
-      Finset.sum_le_sum fun i _ => young_inequality_real (f i
+      Finset.sum_le_sum fun i _ => young_inequality_real (f i) (g i) hpq
+    _ = (∑ i in s, f i ^ p) / Real.toNNReal p + (∑ i in s, g i ^ q) / Real.toNNReal q := by
+      rw [sum_add_distrib]; rw [sum_div]; rw [sum_div]
+    _ <= 1 / Real.toNNReal p + 1 / Real.toNNReal q := by gcongr
+    _ = 1 := by simp_rw [one_div, hpq.toNNReal.inv_add_inv_eq_one]
 
 中文:
 定理 inner_le_Lp_mul_Lp_of_norm_le_one
@@ -1332,7 +1492,11 @@ theorem inner_le_Lp_mul_Lp_of_norm_le_one
   have hq : 0 < q.toNNReal := zero_lt_one.trans hpq.toNNReal.symm.lt
   calc
     ∑ i in s, f i * g i <= ∑ i in s, (f i ^ p / Real.toNNReal p + g i ^ q / Real.toNNReal q) :=
-      Finset.sum_le_sum fun i _ => young_inequality_real (f i
+      Finset.sum_le_sum fun i _ => young_inequality_real (f i) (g i) hpq
+    _ = (∑ i in s, f i ^ p) / Real.toNNReal p + (∑ i in s, g i ^ q) / Real.toNNReal q := by
+      rw [sum_add_distrib]; rw [sum_div]; rw [sum_div]
+    _ <= 1 / Real.toNNReal p + 1 / Real.toNNReal q := by gcongr
+    _ = 1 := by simp_rw [one_div, hpq.toNNReal.inv_add_inv_eq_one]
 -/
 private theorem inner_le_Lp_mul_Lp_of_norm_le_one (f g : ι -> Real>=0) {p q : Real}
     (hpq : p.HolderConjugate q) (hf : ∑ i in s, f i ^ p <= 1) (hg : ∑ i in s, g i ^ q <= 1) :
@@ -1396,7 +1560,20 @@ theorem inner_le_Lp_mul_Lq
       ∑ i in s, f i * g i = ∑ i in s, g i * f i := by
         congr with i
         rw [mul_comm]
-      _ <= (∑ i in s, g
+      _ <= (∑ i in s, g i ^ q) ^ (1 / q) * (∑ i in s, f i ^ p) ^ (1 / p) :=
+        (inner_le_Lp_mul_Lp_of_norm_eq_zero s g f hpq.symm hg)
+      _ = (∑ i in s, f i ^ p) ^ (1 / p) * (∑ i in s, g i ^ q) ^ (1 / q) := mul_comm _ _
+  let f' i := f i / (∑ i in s, f i ^ p) ^ (1 / p)
+  let g' i := g i / (∑ i in s, g i ^ q) ^ (1 / q)
+  suffices (∑ i in s, f' i * g' i) <= 1 by
+    simp_rw [f', g', div_mul_div_comm, ← sum_div] at this
+    rwa [div_le_iff₀, one_mul] at this
+    positivity
+  refine inner_le_Lp_mul_Lp_of_norm_le_one s f' g' hpq (le_of_eq ?_) (le_of_eq ?_)
+  · simp_rw [f', div_rpow, ← sum_div, ← rpow_mul, one_div, inv_mul_cancel₀ hpq.ne_zero, rpow_one,
+      div_self hf.ne']
+  · simp_rw [g', div_rpow, ← sum_div, ← rpow_mul, one_div, inv_mul_cancel₀ hpq.symm.ne_zero,
+      rpow_one, div_self hg.ne']
 
 中文:
 定理 inner_le_Lp_mul_Lq
@@ -1409,7 +1586,20 @@ theorem inner_le_Lp_mul_Lq
       ∑ i in s, f i * g i = ∑ i in s, g i * f i := by
         congr with i
         rw [mul_comm]
-      _ <= (∑ i in s, g
+      _ <= (∑ i in s, g i ^ q) ^ (1 / q) * (∑ i in s, f i ^ p) ^ (1 / p) :=
+        (inner_le_Lp_mul_Lp_of_norm_eq_zero s g f hpq.symm hg)
+      _ = (∑ i in s, f i ^ p) ^ (1 / p) * (∑ i in s, g i ^ q) ^ (1 / q) := mul_comm _ _
+  let f' i := f i / (∑ i in s, f i ^ p) ^ (1 / p)
+  let g' i := g i / (∑ i in s, g i ^ q) ^ (1 / q)
+  suffices (∑ i in s, f' i * g' i) <= 1 by
+    simp_rw [f', g', div_mul_div_comm, ← sum_div] at this
+    rwa [div_le_iff₀, one_mul] at this
+    positivity
+  refine inner_le_Lp_mul_Lp_of_norm_le_one s f' g' hpq (le_of_eq ?_) (le_of_eq ?_)
+  · simp_rw [f', div_rpow, ← sum_div, ← rpow_mul, one_div, inv_mul_cancel₀ hpq.ne_zero, rpow_one,
+      div_self hf.ne']
+  · simp_rw [g', div_rpow, ← sum_div, ← rpow_mul, one_div, inv_mul_cancel₀ hpq.symm.ne_zero,
+      rpow_one, div_self hg.ne']
 
 Depends on / 依赖: eq_zero_or_pos, hpq.symm, inner_le_Lp_mul_Lp_of_norm_eq_zero, mul_comm
 -/
@@ -1511,7 +1701,14 @@ lemma inner_le_weight_mul_Lp
     _ = ∑ i in s, w i ^ (1 - p⁻¹) * (w i ^ p⁻¹ * f i) := ?_
     _ <= (∑ i in s, (w i ^ (1 - p⁻¹)) ^ (1 - p⁻¹)⁻¹) ^ (1 / (1 - p⁻¹)⁻¹) *
           (∑ i in s, (w i ^ p⁻¹ * f i) ^ p) ^ (1 / p) :=
-        inner_le_Lp_mul_Lq _ _ _ (.symm <| Real.holderCo
+        inner_le_Lp_mul_Lq _ _ _ (.symm <| Real.holderConjugate_iff.mpr ⟨hp, by simp⟩)
+    _ = _ := ?_
+  · congr with i
+    rw [← mul_assoc]; rw [← rpow_of_add_eq _ one_ne_zero]; rw [rpow_one]
+    simp
+  · have hp₀ : p != 0 := by positivity
+    have hp₁ : 1 - p⁻¹ != 0 := by simp [sub_eq_zero, hp.ne']
+    simp [mul_rpow, div_inv_eq_mul, one_mul, one_div, hp₀, hp₁]
 
 中文:
 引理 inner_le_weight_mul_Lp
@@ -1523,7 +1720,14 @@ lemma inner_le_weight_mul_Lp
     _ = ∑ i in s, w i ^ (1 - p⁻¹) * (w i ^ p⁻¹ * f i) := ?_
     _ <= (∑ i in s, (w i ^ (1 - p⁻¹)) ^ (1 - p⁻¹)⁻¹) ^ (1 / (1 - p⁻¹)⁻¹) *
           (∑ i in s, (w i ^ p⁻¹ * f i) ^ p) ^ (1 / p) :=
-        inner_le_Lp_mul_Lq _ _ _ (.symm <| Real.holderCo
+        inner_le_Lp_mul_Lq _ _ _ (.symm <| Real.holderConjugate_iff.mpr ⟨hp, by simp⟩)
+    _ = _ := ?_
+  · congr with i
+    rw [← mul_assoc]; rw [← rpow_of_add_eq _ one_ne_zero]; rw [rpow_one]
+    simp
+  · have hp₀ : p != 0 := by positivity
+    have hp₁ : 1 - p⁻¹ != 0 := by simp [sub_eq_zero, hp.ne']
+    simp [mul_rpow, div_inv_eq_mul, one_mul, one_div, hp₀, hp₁]
 
 Depends on / 依赖: Real.holderConjugate_iff.mpr, eq_or_lt, holderConjugate_iff, hp.eq_or_lt, hp.ne, inner_le_Lp_mul_Lq, mul_assoc, one_ne_zero, rpow_of_add_eq, rpow_one, sub_eq_zero
 -/
@@ -1557,7 +1761,15 @@ theorem summable_and_Lr_rpow_le_Lp_mul_Lq_tsum
     obtain ⟨hp, hq, hr⟩ := hpqr.all_pos
     refine le_trans (Lr_rpow_le_Lp_mul_Lq s f g hpqr) (mul_le_mul ?_ ?_ bot_le bot_le)
     · gcongr
-      exact hf.su
+      exact hf.sum_le_tsum _ (fun _ _ => zero_le)
+    · gcongr
+      exact hg.sum_le_tsum _ (fun _ _ => zero_le)
+  have bdd : BddAbove (Set.range fun s => ∑ i in s, (f i * g i) ^ r) := by
+    refine ⟨(∑' i, f i ^ p) ^ (r / p) * (∑' i, g i ^ q) ^ (r / q), ?_⟩
+    rintro a ⟨s, rfl⟩
+    exact H₁ s
+  have H₂ : Summable _ := (hasSum_of_isLUB _ (isLUB_ciSup bdd)).summable
+  exact ⟨H₂, H₂.tsum_le_of_sum_le H₁⟩
 
 中文:
 定理 summable_and_Lr_rpow_le_Lp_mul_Lq_tsum
@@ -1569,7 +1781,15 @@ theorem summable_and_Lr_rpow_le_Lp_mul_Lq_tsum
     obtain ⟨hp, hq, hr⟩ := hpqr.all_pos
     refine le_trans (Lr_rpow_le_Lp_mul_Lq s f g hpqr) (mul_le_mul ?_ ?_ bot_le bot_le)
     · gcongr
-      exact hf.su
+      exact hf.sum_le_tsum _ (fun _ _ => zero_le)
+    · gcongr
+      exact hg.sum_le_tsum _ (fun _ _ => zero_le)
+  have bdd : BddAbove (Set.range fun s => ∑ i in s, (f i * g i) ^ r) := by
+    refine ⟨(∑' i, f i ^ p) ^ (r / p) * (∑' i, g i ^ q) ^ (r / q), ?_⟩
+    rintro a ⟨s, rfl⟩
+    exact H₁ s
+  have H₂ : Summable _ := (hasSum_of_isLUB _ (isLUB_ciSup bdd)).summable
+  exact ⟨H₂, H₂.tsum_le_of_sum_le H₁⟩
 
 Depends on / 依赖: BddAbove, Finset, Lr_rpow_le_Lp_mul_Lq, Set.range, all_pos, bot_le, hf.sum_le_tsum, hg.sum_le_tsum, hpqr.all_pos, le_trans, mul_le_mul, sum_le_tsum, zero_le
 -/
@@ -1749,7 +1969,10 @@ theorem inner_le_Lp_mul_Lq_hasSum
   obtain ⟨H₁, H₂⟩ := summable_and_inner_le_Lp_mul_Lq_tsum hpq hf.summable hg.summable
   have hA : A = (∑' i : ι, f i ^ p) ^ (1 / p) := by rw [hf.tsum_eq, rpow_inv_rpow_self hpq.ne_zero]
   have hB : B = (∑' i : ι, g i ^ q) ^ (1 / q) := by
-    rw [hg.tsum_eq]; rw [rpow_inv_rpow_self hpq.symm.ne_zer
+    rw [hg.tsum_eq]; rw [rpow_inv_rpow_self hpq.symm.ne_zero]
+  refine ⟨∑' i, f i * g i, ?_, ?_⟩
+  · simpa [hA, hB] using H₂
+  · simpa only [rpow_self_rpow_inv hpq.ne_zero] using H₁.hasSum
 
 中文:
 定理 inner_le_Lp_mul_Lq_hasSum
@@ -1758,7 +1981,10 @@ theorem inner_le_Lp_mul_Lq_hasSum
   obtain ⟨H₁, H₂⟩ := summable_and_inner_le_Lp_mul_Lq_tsum hpq hf.summable hg.summable
   have hA : A = (∑' i : ι, f i ^ p) ^ (1 / p) := by rw [hf.tsum_eq, rpow_inv_rpow_self hpq.ne_zero]
   have hB : B = (∑' i : ι, g i ^ q) ^ (1 / q) := by
-    rw [hg.tsum_eq]; rw [rpow_inv_rpow_self hpq.symm.ne_zer
+    rw [hg.tsum_eq]; rw [rpow_inv_rpow_self hpq.symm.ne_zero]
+  refine ⟨∑' i, f i * g i, ?_, ?_⟩
+  · simpa [hA, hB] using H₂
+  · simpa only [rpow_self_rpow_inv hpq.ne_zero] using H₁.hasSum
 
 Depends on / 依赖: hasSum, hf.summable, hf.tsum_eq, hg.summable, hg.tsum_eq, hpq.ne_zero, hpq.symm.ne_zero, ne_zero, rpow_inv_rpow_self, rpow_self_rpow_inv, summable, summable_and_inner_le_Lp_mul_Lq_tsum, tsum_eq
 -/
@@ -1788,7 +2014,9 @@ theorem rpow_sum_le_const_mul_sum_rpow
   have hq : 1 / q * p = p - 1 := by
     rw [← hpq.div_conj_eq_sub_one]
     ring
-  simpa only [NNR
+  simpa only [NNReal.mul_rpow, ← NNReal.rpow_mul, hp₁, hq, one_mul, one_rpow, rpow_one,
+    Pi.one_apply, sum_const, Nat.smul_one_eq_cast] using
+    NNReal.rpow_le_rpow (inner_le_Lp_mul_Lq s 1 f hpq.symm) hpq.nonneg
 
 中文:
 定理 rpow_sum_le_const_mul_sum_rpow
@@ -1802,7 +2030,9 @@ theorem rpow_sum_le_const_mul_sum_rpow
   have hq : 1 / q * p = p - 1 := by
     rw [← hpq.div_conj_eq_sub_one]
     ring
-  simpa only [NNR
+  simpa only [NNReal.mul_rpow, ← NNReal.rpow_mul, hp₁, hq, one_mul, one_rpow, rpow_one,
+    Pi.one_apply, sum_const, Nat.smul_one_eq_cast] using
+    NNReal.rpow_le_rpow (inner_le_Lp_mul_Lq s 1 f hpq.symm) hpq.nonneg
 
 Depends on / 依赖: HolderConjugate, NNReal, NNReal.mul_rpow, NNReal.rpow_le_rpow, NNReal.rpow_mul, Nat.smul_one_eq_cast, Pi.one_apply, conjExponent, div_conj_eq_sub_one, eq_or_lt_of_le, hpq.div_conj_eq_sub_one, hpq.ne_zero, hpq.nonneg, hpq.symm, inner_le_Lp_mul_Lq, mul_rpow, ne_zero, nonneg, one_apply, one_div_mul_cancel
 -/
@@ -1832,7 +2062,18 @@ theorem isGreatest_Lp
     obtain hf | hf := eq_zero_or_pos (∑ i in s, f i ^ p)
     · simp [hf, hpq.ne_zero, hpq.symm.ne_zero]
     · have A : p + q - q != 0 := by simp [hpq.ne_zero]
-      have B : forall y : Real>=0, y * y ^ p / y = y ^ p := b
+      have B : forall y : Real>=0, y * y ^ p / y = y ^ p := by
+        refine fun y => mul_div_cancel_left_of_imp fun h => ?_
+        simp [h, hpq.ne_zero]
+      simp only [Set.mem_ofPred_eq, div_rpow, ← sum_div, ← rpow_mul,
+        div_mul_cancel₀ _ hpq.symm.ne_zero, rpow_one, div_le_iff₀ hf, one_mul, hpq.mul_eq_add, ←
+        rpow_sub' A, add_sub_cancel_right, le_refl, true_and, ← mul_div_assoc, B]
+      rw [div_eq_iff]; rw [← rpow_add hf.ne']; rw [one_div]; rw [one_div]; rw [hpq.inv_add_inv_eq_one]; rw [rpow_one]
+      simpa [hpq.symm.ne_zero] using hf.ne'
+  · rintro _ ⟨g, hg, rfl⟩
+    apply le_trans (inner_le_Lp_mul_Lq s f g hpq)
+    simpa only [mul_one] using
+      mul_le_mul_right (NNReal.rpow_le_one hg (le_of_lt hpq.symm.one_div_pos)) _
 
 中文:
 定理 isGreatest_Lp
@@ -1843,7 +2084,18 @@ theorem isGreatest_Lp
     obtain hf | hf := eq_zero_or_pos (∑ i in s, f i ^ p)
     · simp [hf, hpq.ne_zero, hpq.symm.ne_zero]
     · have A : p + q - q != 0 := by simp [hpq.ne_zero]
-      have B : forall y : Real>=0, y * y ^ p / y = y ^ p := b
+      have B : forall y : Real>=0, y * y ^ p / y = y ^ p := by
+        refine fun y => mul_div_cancel_left_of_imp fun h => ?_
+        simp [h, hpq.ne_zero]
+      simp only [Set.mem_ofPred_eq, div_rpow, ← sum_div, ← rpow_mul,
+        div_mul_cancel₀ _ hpq.symm.ne_zero, rpow_one, div_le_iff₀ hf, one_mul, hpq.mul_eq_add, ←
+        rpow_sub' A, add_sub_cancel_right, le_refl, true_and, ← mul_div_assoc, B]
+      rw [div_eq_iff]; rw [← rpow_add hf.ne']; rw [one_div]; rw [one_div]; rw [hpq.inv_add_inv_eq_one]; rw [rpow_one]
+      simpa [hpq.symm.ne_zero] using hf.ne'
+  · rintro _ ⟨g, hg, rfl⟩
+    apply le_trans (inner_le_Lp_mul_Lq s f g hpq)
+    simpa only [mul_one] using
+      mul_le_mul_right (NNReal.rpow_le_one hg (le_of_lt hpq.symm.one_div_pos)) _
 
 Depends on / 依赖: Set.mem_ofPred_eq, div_rpow, eq_zero_or_pos, hpq.mul_e, hpq.ne_zero, hpq.symm.ne_zero, mem_ofPred_eq, mul_div_cancel_left_of_imp, mul_e, ne_zero, one_mul, rpow_mul, rpow_one, sum_div
 -/
@@ -1881,7 +2133,9 @@ theorem Lp_add_le
   have hpq := Real.HolderConjugate.conjExponent hp
   have := isGreatest_Lp s (f + g) hpq
   simp only [Pi.add_apply, add_mul, sum_add_distrib] at this
-  r
+  rcases this.1 with ⟨φ, hφ, H⟩
+  rw [← H]
+  exact add_le_add ((isGreatest_Lp s f hpq).2 ⟨φ, hφ, rfl⟩) ((isGreatest_Lp s g hpq).2 ⟨φ, hφ, rfl⟩)
 
 中文:
 定理 Lp_add_le
@@ -1893,7 +2147,9 @@ theorem Lp_add_le
   have hpq := Real.HolderConjugate.conjExponent hp
   have := isGreatest_Lp s (f + g) hpq
   simp only [Pi.add_apply, add_mul, sum_add_distrib] at this
-  r
+  rcases this.1 with ⟨φ, hφ, H⟩
+  rw [← H]
+  exact add_le_add ((isGreatest_Lp s f hpq).2 ⟨φ, hφ, rfl⟩) ((isGreatest_Lp s g hpq).2 ⟨φ, hφ, rfl⟩)
 -/
 theorem Lp_add_le (f g : ι -> Real>=0) {p : Real} (hp : 1 <= p) :
     (∑ i in s, (f i + g i) ^ p) ^ (1 / p) <=
@@ -1921,7 +2177,18 @@ theorem Lp_add_le_tsum
         ((∑' i, f i ^ p) ^ (1 / p) + (∑' i, g i ^ p) ^ (1 / p)) ^ p := by
     intro s
     rw [one_div]; rw [← NNReal.rpow_inv_le_iff pos]; rw [← one_div]
-    refine le_trans (
+    refine le_trans (Lp_add_le s f g hp) ?_
+    gcongr <;>
+      refine Summable.sum_le_tsum _ (fun _ _ => zero_le) ?_
+    exacts [hf, hg]
+  have bdd : BddAbove (Set.range fun s => ∑ i in s, (f i + g i) ^ p) := by
+    refine ⟨((∑' i, f i ^ p) ^ (1 / p) + (∑' i, g i ^ p) ^ (1 / p)) ^ p, ?_⟩
+    rintro a ⟨s, rfl⟩
+    exact H₁ s
+  have H₂ : Summable _ := (hasSum_of_isLUB _ (isLUB_ciSup bdd)).summable
+  refine ⟨H₂, ?_⟩
+  rw [one_div]; rw [NNReal.rpow_inv_le_iff pos]; rw [← one_div]
+  exact H₂.tsum_le_of_sum_le H₁
 
 中文:
 定理 Lp_add_le_tsum
@@ -1933,7 +2200,18 @@ theorem Lp_add_le_tsum
         ((∑' i, f i ^ p) ^ (1 / p) + (∑' i, g i ^ p) ^ (1 / p)) ^ p := by
     intro s
     rw [one_div]; rw [← NNReal.rpow_inv_le_iff pos]; rw [← one_div]
-    refine le_trans (
+    refine le_trans (Lp_add_le s f g hp) ?_
+    gcongr <;>
+      refine Summable.sum_le_tsum _ (fun _ _ => zero_le) ?_
+    exacts [hf, hg]
+  have bdd : BddAbove (Set.range fun s => ∑ i in s, (f i + g i) ^ p) := by
+    refine ⟨((∑' i, f i ^ p) ^ (1 / p) + (∑' i, g i ^ p) ^ (1 / p)) ^ p, ?_⟩
+    rintro a ⟨s, rfl⟩
+    exact H₁ s
+  have H₂ : Summable _ := (hasSum_of_isLUB _ (isLUB_ciSup bdd)).summable
+  refine ⟨H₂, ?_⟩
+  rw [one_div]; rw [NNReal.rpow_inv_le_iff pos]; rw [← one_div]
+  exact H₂.tsum_le_of_sum_le H₁
 
 Depends on / 依赖: BddAbove, Finset, Lp_add_le, NNReal, NNReal.rpow_inv_le_iff, Set.range, Summable, Summable.sum_le_tsum, exacts, le_trans, lt_of_lt_of_le, one_div, rpow_inv_le_iff, sum_le_tsum, zero_le, zero_lt_one
 -/
@@ -2010,7 +2288,10 @@ theorem Lp_add_le_hasSum
   have hp' : p != 0 := (lt_of_lt_of_le zero_lt_one hp).ne'
   obtain ⟨H₁, H₂⟩ := Lp_add_le_tsum hp hf.summable hg.summable
   have hA : A = (∑' i : ι, f i ^ p) ^ (1 / p) := by rw [hf.tsum_eq, rpow_inv_rpow_self hp']
-  have hB : B = (∑' i : ι, g i ^ p) ^ (1 / p) := by rw [hg.tsum_eq, rpow_inv_rpow_s
+  have hB : B = (∑' i : ι, g i ^ p) ^ (1 / p) := by rw [hg.tsum_eq, rpow_inv_rpow_self hp']
+  refine ⟨(∑' i, (f i + g i) ^ p) ^ (1 / p), ?_, ?_⟩
+  · simpa [hA, hB] using H₂
+  · simpa only [rpow_self_rpow_inv hp'] using H₁.hasSum
 
 中文:
 定理 Lp_add_le_hasSum
@@ -2019,7 +2300,10 @@ theorem Lp_add_le_hasSum
   have hp' : p != 0 := (lt_of_lt_of_le zero_lt_one hp).ne'
   obtain ⟨H₁, H₂⟩ := Lp_add_le_tsum hp hf.summable hg.summable
   have hA : A = (∑' i : ι, f i ^ p) ^ (1 / p) := by rw [hf.tsum_eq, rpow_inv_rpow_self hp']
-  have hB : B = (∑' i : ι, g i ^ p) ^ (1 / p) := by rw [hg.tsum_eq, rpow_inv_rpow_s
+  have hB : B = (∑' i : ι, g i ^ p) ^ (1 / p) := by rw [hg.tsum_eq, rpow_inv_rpow_self hp']
+  refine ⟨(∑' i, (f i + g i) ^ p) ^ (1 / p), ?_, ?_⟩
+  · simpa [hA, hB] using H₂
+  · simpa only [rpow_self_rpow_inv hp'] using H₁.hasSum
 
 Depends on / 依赖: Lp_add_le_tsum, hasSum, hf.summable, hf.tsum_eq, hg.summable, hg.tsum_eq, lt_of_lt_of_le, rpow_inv_rpow_self, rpow_self_rpow_inv, summable, tsum_eq, zero_lt_one
 -/
@@ -2134,7 +2418,8 @@ theorem Lp_add_le
     (NNReal.Lp_add_le s (fun i => .mk _ (abs_nonneg (f i))) (fun i => .mk _ (abs_nonneg (g i))) hp)
   push_cast at this
   refine le_trans (rpow_le_rpow ?_ (sum_le_sum fun i _ => ?_) ?_) this <;>
-    simp [sum_nonneg, rpow_nonneg, abs_nonneg, le_trans zero_le_one hp, 
+    simp [sum_nonneg, rpow_nonneg, abs_nonneg, le_trans zero_le_one hp, abs_add_le,
+      rpow_le_rpow]
 
 中文:
 定理 Lp_add_le
@@ -2144,7 +2429,8 @@ theorem Lp_add_le
     (NNReal.Lp_add_le s (fun i => .mk _ (abs_nonneg (f i))) (fun i => .mk _ (abs_nonneg (g i))) hp)
   push_cast at this
   refine le_trans (rpow_le_rpow ?_ (sum_le_sum fun i _ => ?_) ?_) this <;>
-    simp [sum_nonneg, rpow_nonneg, abs_nonneg, le_trans zero_le_one hp, 
+    simp [sum_nonneg, rpow_nonneg, abs_nonneg, le_trans zero_le_one hp, abs_add_le,
+      rpow_le_rpow]
 
 Depends on / 依赖: Lp_add_le, NNReal, NNReal.Lp_add_le, NNReal.coe_le_coe, abs_add_le, abs_nonneg, coe_le_coe, le_trans, rpow_le_rpow, rpow_nonneg, sum_le_sum, sum_nonneg, zero_le_one
 -/
@@ -2262,7 +2548,8 @@ lemma compact_inner_le_weight_mul_Lp_of_nonneg
   · gcongr
     exact inner_le_weight_mul_Lp_of_nonneg s hp _ _ hw hf
   any_goals simp
-  · exact sum_nonneg fun i _ => by have := hw i; have := hf i; posit
+  · exact sum_nonneg fun i _ => by have := hw i; have := hf i; positivity
+  · exact sum_nonneg fun i _ => by have := hw i; positivity
 
 中文:
 引理 compact_inner_le_weight_mul_Lp_of_nonneg
@@ -2273,7 +2560,8 @@ lemma compact_inner_le_weight_mul_Lp_of_nonneg
   · gcongr
     exact inner_le_weight_mul_Lp_of_nonneg s hp _ _ hw hf
   any_goals simp
-  · exact sum_nonneg fun i _ => by have := hw i; have := hf i; posit
+  · exact sum_nonneg fun i _ => by have := hw i; have := hf i; positivity
+  · exact sum_nonneg fun i _ => by have := hw i; positivity
 
 Depends on / 依赖: any_goals, div_mul_div_comm, div_rpow, expect_eq_sum_div_card, inner_le_weight_mul_Lp_of_nonneg, rpow_add, rpow_one, simp_rw, sub_add_cancel, sum_nonneg
 -/
@@ -2421,7 +2709,11 @@ theorem Lr_le_Lp_mul_Lq_tsum_of_nonneg
   have hg' : 0 <= ∑' i, g i ^ q := tsum_nonneg fun i => rpow_nonneg (hg i) q
   have hr := hpqr.pos'
   convert
-    rpow_le_rpow_iff (tsum_nonneg fu
+    rpow_le_rpow_iff (tsum_nonneg fun i => by positivity [hf i, hg i]) (by positivity)
+.mpr (inv_eq_one_div r ▸ inv_pos.mpr hr)
+      Lr_rpow_le_Lp_mul_Lq_tsum_of_nonneg hpqr hf hg hf_sum hg_sum
+  rw [mul_rpow (rpow_nonneg hf' _) (rpow_nonneg hg' _)]; rw [← Real.rpow_mul hg']; rw [← Real.rpow_mul hf']
+  field_simp
 
 中文:
 定理 Lr_le_Lp_mul_Lq_tsum_of_nonneg
@@ -2432,7 +2724,11 @@ theorem Lr_le_Lp_mul_Lq_tsum_of_nonneg
   have hg' : 0 <= ∑' i, g i ^ q := tsum_nonneg fun i => rpow_nonneg (hg i) q
   have hr := hpqr.pos'
   convert
-    rpow_le_rpow_iff (tsum_nonneg fu
+    rpow_le_rpow_iff (tsum_nonneg fun i => by positivity [hf i, hg i]) (by positivity)
+.mpr (inv_eq_one_div r ▸ inv_pos.mpr hr)
+      Lr_rpow_le_Lp_mul_Lq_tsum_of_nonneg hpqr hf hg hf_sum hg_sum
+  rw [mul_rpow (rpow_nonneg hf' _) (rpow_nonneg hg' _)]; rw [← Real.rpow_mul hg']; rw [← Real.rpow_mul hf']
+  field_simp
 -/
 theorem Lr_le_Lp_mul_Lq_tsum_of_nonneg (hpqr : p.HolderTriple q r) (hf : forall i, 0 <= f i)
     (hg : forall i, 0 <= g i) (hf_sum : Summable fun i => f i ^ p) (hg_sum : Summable fun i => g i ^ q) :
@@ -2491,7 +2787,9 @@ theorem inner_le_Lp_mul_Lq_hasSum_of_nonneg
   -- After https://github.com/leanprover/lean4/pull/2734, `norm_cast` needs help with beta reduction.
   beta_reduce at *
   norm_cast at hf_sum hg_sum
-  obtain ⟨C, hC, H⟩ :
+  obtain ⟨C, hC, H⟩ := NNReal.inner_le_Lp_mul_Lq_hasSum hpq hf_sum hg_sum
+  refine ⟨C, C.prop, hC, ?_⟩
+  norm_cast
 
 中文:
 定理 inner_le_Lp_mul_Lq_hasSum_of_nonneg
@@ -2504,7 +2802,9 @@ theorem inner_le_Lp_mul_Lq_hasSum_of_nonneg
   -- After https://github.com/leanprover/lean4/pull/2734, `norm_cast` needs help with beta reduction.
   beta_reduce at *
   norm_cast at hf_sum hg_sum
-  obtain ⟨C, hC, H⟩ :
+  obtain ⟨C, hC, H⟩ := NNReal.inner_le_Lp_mul_Lq_hasSum hpq hf_sum hg_sum
+  refine ⟨C, C.prop, hC, ?_⟩
+  norm_cast
 -/
 theorem inner_le_Lp_mul_Lq_hasSum_of_nonneg (hpq : p.HolderConjugate q) {A B : Real} (hA : 0 <= A)
     (hB : 0 <= B) (hf : forall i, 0 <= f i) (hg : forall i, 0 <= g i)
@@ -2664,7 +2964,12 @@ theorem Lp_add_le_hasSum_of_nonneg
   -- After https://github.com/leanprover/lean4/pull/2734, `norm_cast` needs help with beta reduction.
   beta_reduce at hfA hgB
   norm_cast at hfA hgB
-  obtain ⟨C, hC₁, hC₂
+  obtain ⟨C, hC₁, hC₂⟩ := NNReal.Lp_add_le_hasSum hp hfA hgB
+  use C
+  -- After https://github.com/leanprover/lean4/pull/2734, `norm_cast` needs help with beta reduction.
+  beta_reduce
+  norm_cast
+  exact ⟨zero_le, hC₁, hC₂⟩
 
 中文:
 定理 Lp_add_le_hasSum_of_nonneg
@@ -2677,7 +2982,12 @@ theorem Lp_add_le_hasSum_of_nonneg
   -- After https://github.com/leanprover/lean4/pull/2734, `norm_cast` needs help with beta reduction.
   beta_reduce at hfA hgB
   norm_cast at hfA hgB
-  obtain ⟨C, hC₁, hC₂
+  obtain ⟨C, hC₁, hC₂⟩ := NNReal.Lp_add_le_hasSum hp hfA hgB
+  use C
+  -- After https://github.com/leanprover/lean4/pull/2734, `norm_cast` needs help with beta reduction.
+  beta_reduce
+  norm_cast
+  exact ⟨zero_le, hC₁, hC₂⟩
 -/
 theorem Lp_add_le_hasSum_of_nonneg (hp : 1 <= p) (hf : forall i, 0 <= f i) (hg : forall i, 0 <= g i) {A B : Real}
     (hA : 0 <= A) (hB : 0 <= B) (hfA : HasSum (fun i => f i ^ p) (A ^ p))
@@ -2716,6 +3026,19 @@ theorem inner_le_Lp_mul_Lq
   · replace H : (forall i in s, f i = 0) ∨ forall i in s, g i = 0 := by
       simpa [ENNReal.rpow_eq_zero_iff, hpq.pos, hpq.symm.pos, asymm hpq.pos, asymm hpq.symm.pos,
         sum_eq_zero_iff_of_nonneg] using H
+    have : forall i in s, f i * g i = 0 := fun i hi => by rcases H with H | H <;> simp [H i hi]
+    simp [sum_eq_zero this]
+  by_cases H' : (∑ i in s, f i ^ p) ^ (1 / p) = ⊤ ∨ (∑ i in s, g i ^ q) ^ (1 / q) = ⊤
+  · rcases H' with H' | H' <;> simp [H', -one_div, -sum_eq_zero_iff, -rpow_eq_zero_iff, H]
+  replace H' : (forall i in s, f i != ⊤) ∧ forall i in s, g i != ⊤ := by
+    simpa [ENNReal.rpow_eq_top_iff, asymm hpq.pos, asymm hpq.symm.pos, hpq.pos, hpq.symm.pos,
+      ENNReal.sum_eq_top, not_or] using H'
+  have := ENNReal.coe_le_coe.2 (@NNReal.inner_le_Lp_mul_Lq _ s (fun i => ENNReal.toNNReal (f i))
+    (fun i => ENNReal.toNNReal (g i)) _ _ hpq)
+  simp [ENNReal.coe_rpow_of_nonneg, hpq.pos.le, hpq.symm.pos.le] at this
+  convert! this using 1 <;> [skip; congr 2] <;> [skip; skip; simp; skip; simp] <;>
+    · refine Finset.sum_congr rfl fun i hi => ?_
+      simp [H'.1 i hi, H'.2 i hi, -WithZero.coe_mul]
 
 中文:
 定理 inner_le_Lp_mul_Lq
@@ -2725,6 +3048,19 @@ theorem inner_le_Lp_mul_Lq
   · replace H : (forall i in s, f i = 0) ∨ forall i in s, g i = 0 := by
       simpa [ENNReal.rpow_eq_zero_iff, hpq.pos, hpq.symm.pos, asymm hpq.pos, asymm hpq.symm.pos,
         sum_eq_zero_iff_of_nonneg] using H
+    have : forall i in s, f i * g i = 0 := fun i hi => by rcases H with H | H <;> simp [H i hi]
+    simp [sum_eq_zero this]
+  by_cases H' : (∑ i in s, f i ^ p) ^ (1 / p) = ⊤ ∨ (∑ i in s, g i ^ q) ^ (1 / q) = ⊤
+  · rcases H' with H' | H' <;> simp [H', -one_div, -sum_eq_zero_iff, -rpow_eq_zero_iff, H]
+  replace H' : (forall i in s, f i != ⊤) ∧ forall i in s, g i != ⊤ := by
+    simpa [ENNReal.rpow_eq_top_iff, asymm hpq.pos, asymm hpq.symm.pos, hpq.pos, hpq.symm.pos,
+      ENNReal.sum_eq_top, not_or] using H'
+  have := ENNReal.coe_le_coe.2 (@NNReal.inner_le_Lp_mul_Lq _ s (fun i => ENNReal.toNNReal (f i))
+    (fun i => ENNReal.toNNReal (g i)) _ _ hpq)
+  simp [ENNReal.coe_rpow_of_nonneg, hpq.pos.le, hpq.symm.pos.le] at this
+  convert! this using 1 <;> [skip; congr 2] <;> [skip; skip; simp; skip; simp] <;>
+    · refine Finset.sum_congr rfl fun i hi => ?_
+      simp [H'.1 i hi, H'.2 i hi, -WithZero.coe_mul]
 
 Depends on / 依赖: ENNReal, ENNReal.rpow_eq_zero_iff, hpq.pos, hpq.symm.pos, replace, rpow_eq_zero_iff, sum_eq_zero, sum_eq_zero_iff_of_nonneg
 -/
@@ -2761,7 +3097,27 @@ lemma inner_le_weight_mul_Lp_of_nonneg
   have hp₁ : p⁻¹ < 1 := inv_lt_one_of_one_lt₀ hp
   by_cases! H : (∑ i in s, w i) ^ (1 - p⁻¹) = 0 ∨ (∑ i in s, w i * f i ^ p) ^ p⁻¹ = 0
   · replace H : (forall i in s, w i = 0) ∨ forall i in s, w i = 0 ∨ f i = 0 := by
-  
+      simpa [hp₀, hp₁, hp₀.not_gt, hp₁.not_gt, sum_eq_zero_iff_of_nonneg] using H
+    have (i) (hi : i in s) : w i * f i = 0 := by rcases H with H | H <;> simp [H i hi]
+    simp [sum_eq_zero this]
+  by_cases H' : (∑ i in s, w i) ^ (1 - p⁻¹) = ⊤ ∨ (∑ i in s, w i * f i ^ p) ^ p⁻¹ = ⊤
+  · rcases H' with H' | H' <;> simp [H', -one_div, -sum_eq_zero_iff, -rpow_eq_zero_iff, H]
+  replace H' : (forall i in s, w i != ⊤) ∧ forall i in s, w i * f i ^ p != ⊤ := by
+    simpa [rpow_eq_top_iff, hp₀, hp₁, hp₀.not_gt, hp₁.not_gt, sum_eq_top, not_or] using H'
+have := coe_le_coe.2 NNReal.inner_le_weight_mul_Lp s hp.le (fun i => ENNReal.toNNReal (w i))
+    fun i => ENNReal.toNNReal (f i)
+  rw [coe_mul] at this
+  simp_rw [coe_rpow_of_nonneg _ <| inv_nonneg.2 hp₀.le, ofNNReal_finsetSum, ← ENNReal.toNNReal_rpow,
+    ← ENNReal.toNNReal_mul, sum_congr rfl fun i hi => coe_toNNReal (H'.2 i hi)] at this
+  simp only [toNNReal_mul, coe_mul, sub_nonneg, hp₁.le, coe_rpow_of_nonneg, ofNNReal_finsetSum]
+    at this
+  convert! this using 2 with i hi
+  · obtain hw | hw := eq_or_ne (w i) 0
+    · simp [hw]
+    rw [coe_toNNReal (H'.1 _ hi)]; rw [coe_toNNReal]
+    simpa [mul_eq_top, hw, hp₀, hp₀.not_gt, H'.1 _ hi] using H'.2 _ hi
+  · convert! rfl with i hi
+    exact coe_toNNReal (H'.1 _ hi)
 
 中文:
 引理 inner_le_weight_mul_Lp_of_nonneg
@@ -2773,7 +3129,27 @@ lemma inner_le_weight_mul_Lp_of_nonneg
   have hp₁ : p⁻¹ < 1 := inv_lt_one_of_one_lt₀ hp
   by_cases! H : (∑ i in s, w i) ^ (1 - p⁻¹) = 0 ∨ (∑ i in s, w i * f i ^ p) ^ p⁻¹ = 0
   · replace H : (forall i in s, w i = 0) ∨ forall i in s, w i = 0 ∨ f i = 0 := by
-  
+      simpa [hp₀, hp₁, hp₀.not_gt, hp₁.not_gt, sum_eq_zero_iff_of_nonneg] using H
+    have (i) (hi : i in s) : w i * f i = 0 := by rcases H with H | H <;> simp [H i hi]
+    simp [sum_eq_zero this]
+  by_cases H' : (∑ i in s, w i) ^ (1 - p⁻¹) = ⊤ ∨ (∑ i in s, w i * f i ^ p) ^ p⁻¹ = ⊤
+  · rcases H' with H' | H' <;> simp [H', -one_div, -sum_eq_zero_iff, -rpow_eq_zero_iff, H]
+  replace H' : (forall i in s, w i != ⊤) ∧ forall i in s, w i * f i ^ p != ⊤ := by
+    simpa [rpow_eq_top_iff, hp₀, hp₁, hp₀.not_gt, hp₁.not_gt, sum_eq_top, not_or] using H'
+have := coe_le_coe.2 NNReal.inner_le_weight_mul_Lp s hp.le (fun i => ENNReal.toNNReal (w i))
+    fun i => ENNReal.toNNReal (f i)
+  rw [coe_mul] at this
+  simp_rw [coe_rpow_of_nonneg _ <| inv_nonneg.2 hp₀.le, ofNNReal_finsetSum, ← ENNReal.toNNReal_rpow,
+    ← ENNReal.toNNReal_mul, sum_congr rfl fun i hi => coe_toNNReal (H'.2 i hi)] at this
+  simp only [toNNReal_mul, coe_mul, sub_nonneg, hp₁.le, coe_rpow_of_nonneg, ofNNReal_finsetSum]
+    at this
+  convert! this using 2 with i hi
+  · obtain hw | hw := eq_or_ne (w i) 0
+    · simp [hw]
+    rw [coe_toNNReal (H'.1 _ hi)]; rw [coe_toNNReal]
+    simpa [mul_eq_top, hw, hp₀, hp₀.not_gt, H'.1 _ hi] using H'.2 _ hi
+  · convert! rfl with i hi
+    exact coe_toNNReal (H'.1 _ hi)
 
 Depends on / 依赖: eq_or_lt, hp.eq_or_lt, not_gt, replace, sum_eq_zero, sum_eq_zero_iff_of_nonneg
 -/
@@ -2822,7 +3198,9 @@ theorem rpow_sum_le_const_mul_sum_rpow
   have hq : 1 / q * p = p - 1 := by
     rw [← hpq.div_conj_eq_sub_one]
     ring
-  simpa only [ENN
+  simpa only [ENNReal.mul_rpow_of_nonneg _ _ hpq.nonneg, ← ENNReal.rpow_mul, hp₁, hq, coe_one,
+    one_mul, one_rpow, rpow_one, Pi.one_apply, sum_const, Nat.smul_one_eq_cast] using
+    ENNReal.rpow_le_rpow (inner_le_Lp_mul_Lq s 1 f hpq.symm) hpq.nonneg
 
 中文:
 定理 rpow_sum_le_const_mul_sum_rpow
@@ -2836,7 +3214,9 @@ theorem rpow_sum_le_const_mul_sum_rpow
   have hq : 1 / q * p = p - 1 := by
     rw [← hpq.div_conj_eq_sub_one]
     ring
-  simpa only [ENN
+  simpa only [ENNReal.mul_rpow_of_nonneg _ _ hpq.nonneg, ← ENNReal.rpow_mul, hp₁, hq, coe_one,
+    one_mul, one_rpow, rpow_one, Pi.one_apply, sum_const, Nat.smul_one_eq_cast] using
+    ENNReal.rpow_le_rpow (inner_le_Lp_mul_Lq s 1 f hpq.symm) hpq.nonneg
 
 Depends on / 依赖: ENNReal, ENNReal.mul_rpow_of_nonneg, ENNReal.rpow_le_rpow, ENNReal.rpow_mul, HolderConjugate, Nat.smul_one_eq_cast, Pi.one_apply, coe_one, conjExponent, div_conj_eq_sub_one, eq_or_lt_of_le, hpq.div_conj_eq_sub_one, hpq.n, hpq.ne_zero, hpq.nonneg, hpq.symm, inner_le_Lp_mul_Lq, mul_rpow_of_nonneg, ne_zero, nonneg
 -/
@@ -2865,7 +3245,13 @@ theorem Lp_add_le
   · rcases H' with H' | H' <;> simp [H', -one_div]
   have pos : 0 < p := lt_of_lt_of_le zero_lt_one hp
   replace H' : (forall i in s, f i != ⊤) ∧ forall i in s, g i != ⊤ := by
-    simpa [ENNReal.rpow_eq_top_iff,
+    simpa [ENNReal.rpow_eq_top_iff, asymm pos, pos, ENNReal.sum_eq_top, not_or] using H'
+  have :=
+    ENNReal.coe_le_coe.2
+      (@NNReal.Lp_add_le _ s (fun i => ENNReal.toNNReal (f i)) (fun i => ENNReal.toNNReal (g i)) _
+        hp)
+  push_cast [ENNReal.coe_rpow_of_nonneg, le_of_lt pos, le_of_lt (one_div_pos.2 pos)] at this
+  simp_all
 
 中文:
 定理 Lp_add_le
@@ -2875,7 +3261,13 @@ theorem Lp_add_le
   · rcases H' with H' | H' <;> simp [H', -one_div]
   have pos : 0 < p := lt_of_lt_of_le zero_lt_one hp
   replace H' : (forall i in s, f i != ⊤) ∧ forall i in s, g i != ⊤ := by
-    simpa [ENNReal.rpow_eq_top_iff,
+    simpa [ENNReal.rpow_eq_top_iff, asymm pos, pos, ENNReal.sum_eq_top, not_or] using H'
+  have :=
+    ENNReal.coe_le_coe.2
+      (@NNReal.Lp_add_le _ s (fun i => ENNReal.toNNReal (f i)) (fun i => ENNReal.toNNReal (g i)) _
+        hp)
+  push_cast [ENNReal.coe_rpow_of_nonneg, le_of_lt pos, le_of_lt (one_div_pos.2 pos)] at this
+  simp_all
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, ENNReal.coe_rpow_of_n, ENNReal.rpow_eq_top_iff, ENNReal.sum_eq_top, ENNReal.toNNReal, Lp_add_le, NNReal, NNReal.Lp_add_le, coe_le_coe, coe_rpow_of_n, lt_of_lt_of_le, not_or, one_div, replace, rpow_eq_top_iff, sum_eq_top, toNNReal, zero_lt_one
 -/

@@ -45,7 +45,7 @@ theorem sup_orthogonal_inf_of_hasOrthogonalProjection
   constructor
   · rintro ⟨y, hy, z, hz, rfl⟩
     exact K₂.add_mem (h hy) hz.2
-  · exact fun hx => ⟨v, v.prop, x - v, ⟨hvm, K₂.sub_mem hx (h v.prop)⟩, add
+  · exact fun hx => ⟨v, v.prop, x - v, ⟨hvm, K₂.sub_mem hx (h v.prop)⟩, add_sub_cancel _ _⟩
 
 中文:
 定理 sup_orthogonal_inf_of_hasOrthogonalProjection
@@ -58,7 +58,7 @@ theorem sup_orthogonal_inf_of_hasOrthogonalProjection
   constructor
   · rintro ⟨y, hy, z, hz, rfl⟩
     exact K₂.add_mem (h hy) hz.2
-  · exact fun hx => ⟨v, v.prop, x - v, ⟨hvm, K₂.sub_mem hx (h v.prop)⟩, add
+  · exact fun hx => ⟨v, v.prop, x - v, ⟨hvm, K₂.sub_mem hx (h v.prop)⟩, add_sub_cancel _ _⟩
 
 Depends on / 依赖: Submodule, Submodule.mem_sup, add_mem, add_sub_cancel, mem_sup, orthogonalProjectionOnto, sub_mem, sub_starProjection_mem_orthogonal, v.prop
 -/
@@ -119,7 +119,8 @@ theorem orthogonal_orthogonal
       simpa [inner_add_right, hyz] using hv z hz
     simp [hy, hz']
   · intro hv w hw
-    rw [inne
+    rw [inner_eq_zero_symm]
+    exact hw v hv
 
 中文:
 定理 orthogonal_orthogonal
@@ -135,7 +136,8 @@ theorem orthogonal_orthogonal
       simpa [inner_add_right, hyz] using hv z hz
     simp [hy, hz']
   · intro hv w hw
-    rw [inne
+    rw [inner_eq_zero_symm]
+    exact hw v hv
 
 Depends on / 依赖: K.exists_add_mem_mem_orthogonal, exists_add_mem_mem_orthogonal, inner_add_right, inner_eq_zero_symm
 -/
@@ -343,7 +345,21 @@ theorem starProjection_tendsto_closure_iSup
   let y := (⨆ i, U i).topologicalClosure.starProjection x
   have proj_x : forall i, (U i).orthogonalProjectionOnto x = (U i).orthogonalProjectionOnto y := fun i =>
     (orthogonalProjectionOnto_starProjection_of_le
-        ((le_iSup 
+        ((le_iSup U i).trans (iSup U).le_topologicalClosure) _).symm
+  suffices forall ε > 0, exists I, forall i >= I, ‖(U i).starProjection y - y‖ < ε by
+    simpa only [starProjection_apply, proj_x, NormedAddCommGroup.tendsto_atTop] using! this
+  intro ε hε
+  obtain ⟨a, ha, hay⟩ : exists a in ⨆ i, U i, dist y a < ε := by
+    have y_mem : y in (⨆ i, U i).topologicalClosure := Submodule.coe_mem _
+    rw [← SetLike.mem_coe]; rw [Submodule.topologicalClosure_coe]; rw [Metric.mem_closure_iff] at y_mem
+    exact y_mem ε hε
+  rw [dist_eq_norm] at hay
+  obtain ⟨I, hI⟩ : exists I, a in U I := by rwa [Submodule.mem_iSup_of_directed _ hU.directed_le] at ha
+  refine ⟨I, fun i (hi : I <= i) => ?_⟩
+  rw [norm_sub_rev]; rw [starProjection_minimal]
+  refine lt_of_le_of_lt ?_ hay
+  change _ <= ‖y - (⟨a, hU hi hI⟩ : U i)‖
+  exact ciInf_le ⟨0, Set.forall_mem_range.mpr fun _ => norm_nonneg _⟩ _
 
 中文:
 定理 starProjection_tendsto_closure_iSup
@@ -354,7 +370,21 @@ theorem starProjection_tendsto_closure_iSup
   let y := (⨆ i, U i).topologicalClosure.starProjection x
   have proj_x : forall i, (U i).orthogonalProjectionOnto x = (U i).orthogonalProjectionOnto y := fun i =>
     (orthogonalProjectionOnto_starProjection_of_le
-        ((le_iSup 
+        ((le_iSup U i).trans (iSup U).le_topologicalClosure) _).symm
+  suffices forall ε > 0, exists I, forall i >= I, ‖(U i).starProjection y - y‖ < ε by
+    simpa only [starProjection_apply, proj_x, NormedAddCommGroup.tendsto_atTop] using! this
+  intro ε hε
+  obtain ⟨a, ha, hay⟩ : exists a in ⨆ i, U i, dist y a < ε := by
+    have y_mem : y in (⨆ i, U i).topologicalClosure := Submodule.coe_mem _
+    rw [← SetLike.mem_coe]; rw [Submodule.topologicalClosure_coe]; rw [Metric.mem_closure_iff] at y_mem
+    exact y_mem ε hε
+  rw [dist_eq_norm] at hay
+  obtain ⟨I, hI⟩ : exists I, a in U I := by rwa [Submodule.mem_iSup_of_directed _ hU.directed_le] at ha
+  refine ⟨I, fun i (hi : I <= i) => ?_⟩
+  rw [norm_sub_rev]; rw [starProjection_minimal]
+  refine lt_of_le_of_lt ?_ hay
+  change _ <= ‖y - (⟨a, hU hi hI⟩ : U i)‖
+  exact ciInf_le ⟨0, Set.forall_mem_range.mpr fun _ => norm_nonneg _⟩ _
 
 Depends on / 依赖: NormedAddCommGroup, NormedAddCommGroup.tendsto_atTop, atTop_neBot_iff, atTop_neBot_iff.mp, le_iSup, le_topologicalClosure, of_neBot_imp, orthogonalProjectionOnto, orthogonalProjectionOnto_starProjection_of_le, proj_x, starProjection, starProjection_apply, tendsto_atTop, topologicalClosure, topologicalClosure.starProjection
 -/

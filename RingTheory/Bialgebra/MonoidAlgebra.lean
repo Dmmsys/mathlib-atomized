@@ -111,7 +111,12 @@ instance instBialgebra
       TensorProduct.map_tmul, lsingle_apply]
   mul_compr₂_comul := by
     ext a b c d
-    simp o
+    simp only [Function.comp_apply, LinearMap.coe_comp, LinearMap.compr₂_apply,
+      LinearMap.mul_apply', single_mul_single, comul_single, Bialgebra.comul_mul,
+      ← (Coalgebra.Repr.arbitrary R b).eq, ← (Coalgebra.Repr.arbitrary R d).eq, Finset.sum_mul_sum,
+      Algebra.TensorProduct.tmul_mul_tmul, map_sum, TensorProduct.map_tmul, lsingle_apply,
+      LinearMap.compl₁₂_apply, LinearMap.coe_sum, Finset.sum_apply,
+      Finset.sum_comm (s := (Coalgebra.Repr.arbitrary R b).index)]
 
 中文:
 实例 instBialgebra
@@ -123,7 +128,12 @@ instance instBialgebra
       TensorProduct.map_tmul, lsingle_apply]
   mul_compr₂_comul := by
     ext a b c d
-    simp o
+    simp only [Function.comp_apply, LinearMap.coe_comp, LinearMap.compr₂_apply,
+      LinearMap.mul_apply', single_mul_single, comul_single, Bialgebra.comul_mul,
+      ← (Coalgebra.Repr.arbitrary R b).eq, ← (Coalgebra.Repr.arbitrary R d).eq, Finset.sum_mul_sum,
+      Algebra.TensorProduct.tmul_mul_tmul, map_sum, TensorProduct.map_tmul, lsingle_apply,
+      LinearMap.compl₁₂_apply, LinearMap.coe_sum, Finset.sum_apply,
+      Finset.sum_comm (s := (Coalgebra.Repr.arbitrary R b).index)]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.one_def, Bialgebra, Bialgebra.comul_mul, Bialgebra.comul_one, Bialgebra.counit_one, Coalgebra, Coalgebra.Repr.arbitrary, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.compr, LinearMap.mul_apply, TensorProduct, TensorProduct.map_tmul, arbitrary, coe_comp, comp_apply, comul_mul
 -/
@@ -683,7 +693,9 @@ linearIndepOn_isGroupLikeElem.mono by simp [Set.subset_def, hx]
     have : x.coeff.sum single ∉ span R (.range (single · 1)) := by
       simpa using this.notMem_span_of_insert h
 refine this sum_mem fun g hg => ?_
- 
+    rw [← mul_one (x.coeff g)]; rw [← smul_eq_mul]; rw [← smul_single]
+exact smul_mem _ _ subset_span Set.mem_range_self _
+  mpr := by rintro ⟨g, rfl⟩; exact isGroupLikeElem_single_one _
 
 中文:
 引理 isGroupLikeElem_iff_mem_range_single_one
@@ -695,7 +707,9 @@ linearIndepOn_isGroupLikeElem.mono by simp [Set.subset_def, hx]
     have : x.coeff.sum single ∉ span R (.range (single · 1)) := by
       simpa using this.notMem_span_of_insert h
 refine this sum_mem fun g hg => ?_
- 
+    rw [← mul_one (x.coeff g)]; rw [← smul_eq_mul]; rw [← smul_single]
+exact smul_mem _ _ subset_span Set.mem_range_self _
+  mpr := by rintro ⟨g, rfl⟩; exact isGroupLikeElem_single_one _
 
 Depends on / 依赖: LinearIndepOn, Set.mem_range_self, Set.subset_def, insert, isGroupLikeElem_single_one, linearIndepOn_isGroupLikeElem, linearIndepOn_isGroupLikeElem.mono, mem_range_self, mul_one, notMem_span_of_insert, single, smul_eq_mul, smul_mem, smul_single, subset_def, subset_span, sum_mem, this.notMem_span_of_insert, x.coeff, x.coeff.sum
 -/
@@ -797,7 +811,10 @@ map_one' := single_left_injective (R := R) one_ne_zero by simp [← one_def]
   map_mul' g₁ g₂ := by
     refine single_left_injective (R := R) one_ne_zero ?_
     simp only [single_mapDomainOfBialgHomFun_one]
-    rw [← mul_one (1 : R)]; rw [← single_mul_single]; rw [← single_mul
+    rw [← mul_one (1 : R)]; rw [← single_mul_single]; rw [← single_mul_single]; rw [map_mul]
+    simp
+
+@[to_additive (dont_translate := R) (attr := simp)]
 
 中文:
 定义 mapDomainOfBialgHom
@@ -807,7 +824,10 @@ map_one' := single_left_injective (R := R) one_ne_zero by simp [← one_def]
   map_mul' g₁ g₂ := by
     refine single_left_injective (R := R) one_ne_zero ?_
     simp only [single_mapDomainOfBialgHomFun_one]
-    rw [← mul_one (1 : R)]; rw [← single_mul_single]; rw [← single_mul
+    rw [← mul_one (1 : R)]; rw [← single_mul_single]; rw [← single_mul_single]; rw [map_mul]
+    simp
+
+@[to_additive (dont_translate := R) (attr := simp)]
 
 Depends on / 依赖: mapDomainOfBialgHomFun
 -/

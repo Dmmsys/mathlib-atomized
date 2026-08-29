@@ -388,7 +388,11 @@ theorem isSolvable_of_ker_le_range
   induction m with
   | zero =>
     exact f.range_eq_map ▸ ((derivedSeries G n).map_eq_bot_iff.mp
-      (le_bot_iff.mp ((map_derivedSeries_le_derivedSeries g n).trans 
+      (le_bot_iff.mp ((map_derivedSeries_le_derivedSeries g n).trans hn.le))).trans hfg
+  | succ m hm => exact commutator_le_map_commutator hm hm
+
+@[deprecated (since := "2026-07-16")]
+alias _root_.solvable_of_ker_le_range := isSolvable_of_ker_le_range
 
 中文:
 定理 isSolvable_of_ker_le_range
@@ -401,7 +405,11 @@ theorem isSolvable_of_ker_le_range
   induction m with
   | zero =>
     exact f.range_eq_map ▸ ((derivedSeries G n).map_eq_bot_iff.mp
-      (le_bot_iff.mp ((map_derivedSeries_le_derivedSeries g n).trans 
+      (le_bot_iff.mp ((map_derivedSeries_le_derivedSeries g n).trans hn.le))).trans hfg
+  | succ m hm => exact commutator_le_map_commutator hm hm
+
+@[deprecated (since := "2026-07-16")]
+alias _root_.solvable_of_ker_le_range := isSolvable_of_ker_le_range
 
 Depends on / 依赖: Subgroup, Subgroup.map_bot, commutator_le_map_commutator, derivedSeries, f.range_eq_map, hn.le, le_bot_iff, le_bot_iff.mp, map_bot, map_derivedSeries_le_derivedSeries, map_eq_bot_iff, map_eq_bot_iff.mp, range_eq_map
 -/
@@ -529,7 +537,8 @@ theorem IsSolvable.commutator_lt_top_of_nontrivial
   | succ n h => rwa [derivedSeries_succ, h]
 
 @[deprecated (since := "2026-07-16")]
-alias _root_.IsSolvable.commutator_lt_top_of_nontrivi
+alias _root_.IsSolvable.commutator_lt_top_of_nontrivial :=
+  Group.IsSolvable.commutator_lt_top_of_nontrivial
 
 中文:
 定理 是可解.commutator_lt_top_of_nontrivial
@@ -544,7 +553,8 @@ alias _root_.IsSolvable.commutator_lt_top_of_nontrivi
   | succ n h => rwa [derivedSeries_succ, h]
 
 @[deprecated (since := "2026-07-16")]
-alias _root_.IsSolvable.commutator_lt_top_of_nontrivi
+alias _root_.IsSolvable.commutator_lt_top_of_nontrivial :=
+  Group.IsSolvable.commutator_lt_top_of_nontrivial
 
 Depends on / 依赖: contrapose, derivedSeries_succ, derivedSeries_zero, lt_top_iff_ne_top, ne_of_eq_of_ne, top_ne_bot
 -/
@@ -574,7 +584,7 @@ theorem IsSolvable.commutator_lt_of_ne_bot
   exact commutator_lt_top_of_nontrivial H
 
 @[deprecated (since := "2026-07-16")]
-alias _root_.IsSolvable.commutator_lt_of_ne_bot := Group.IsSolvable.c
+alias _root_.IsSolvable.commutator_lt_of_ne_bot := Group.IsSolvable.commutator_lt_of_ne_bot
 
 中文:
 定理 是可解.commutator_lt_of_ne_bot
@@ -585,7 +595,7 @@ alias _root_.IsSolvable.commutator_lt_of_ne_bot := Group.IsSolvable.c
   exact commutator_lt_top_of_nontrivial H
 
 @[deprecated (since := "2026-07-16")]
-alias _root_.IsSolvable.commutator_lt_of_ne_bot := Group.IsSolvable.c
+alias _root_.IsSolvable.commutator_lt_of_ne_bot := Group.IsSolvable.commutator_lt_of_ne_bot
 
 Depends on / 依赖: H.range_subtype, MonoidHom, MonoidHom.range_eq_map, commutator_lt_top_of_nontrivial, map_commutator, map_subtype_lt_map_subtype, nontrivial_iff_ne_bot, range_eq_map, range_subtype
 -/
@@ -609,7 +619,20 @@ theorem isSolvable_iff_commutator_lt
   suffices h : IsSolvable (⊤ : Subgroup G) from
     isSolvable_of_surjective (MonoidHom.range_eq_top.mp (range_subtype ⊤))
   induction (⊤ : Subgroup G) using WellFoundedLT.induction with | ind H hH
-  rcases eq_or_ne H ⊥ with rf
+  rcases eq_or_ne H ⊥ with rfl | h'
+  · infer_instance
+  · obtain ⟨n, hn⟩ := hH ⁅H, H⁆ (h H h')
+    use n + 1
+    rw [← map_subtype_inj]; rw [Subgroup.map_bot] at hn ⊢
+    rw [← hn]
+    clear hn
+    induction n with
+    | zero =>
+      rw [derivedSeries_succ]; rw [derivedSeries_zero]; rw [derivedSeries_zero]; rw [map_commutator]; rw [← MonoidHom.range_eq_map]; rw [← MonoidHom.range_eq_map]; rw [range_subtype]; rw [range_subtype]
+    | succ n ih => rw [derivedSeries_succ, map_commutator, ih, derivedSeries_succ, map_commutator]
+
+@[deprecated (since := "2026-07-16")]
+alias _root_.isSolvable_iff_commutator_lt := Group.isSolvable_iff_commutator_lt
 
 中文:
 定理 isSolvable_iff_commutator_lt
@@ -619,7 +642,20 @@ theorem isSolvable_iff_commutator_lt
   suffices h : IsSolvable (⊤ : Subgroup G) from
     isSolvable_of_surjective (MonoidHom.range_eq_top.mp (range_subtype ⊤))
   induction (⊤ : Subgroup G) using WellFoundedLT.induction with | ind H hH
-  rcases eq_or_ne H ⊥ with rf
+  rcases eq_or_ne H ⊥ with rfl | h'
+  · infer_instance
+  · obtain ⟨n, hn⟩ := hH ⁅H, H⁆ (h H h')
+    use n + 1
+    rw [← map_subtype_inj]; rw [Subgroup.map_bot] at hn ⊢
+    rw [← hn]
+    clear hn
+    induction n with
+    | zero =>
+      rw [derivedSeries_succ]; rw [derivedSeries_zero]; rw [derivedSeries_zero]; rw [map_commutator]; rw [← MonoidHom.range_eq_map]; rw [← MonoidHom.range_eq_map]; rw [range_subtype]; rw [range_subtype]
+    | succ n ih => rw [derivedSeries_succ, map_commutator, ih, derivedSeries_succ, map_commutator]
+
+@[deprecated (since := "2026-07-16")]
+alias _root_.isSolvable_iff_commutator_lt := Group.isSolvable_iff_commutator_lt
 
 Depends on / 依赖: IsSolvable, IsSolvable.commutator_lt_of_ne_bot, MonoidHom, MonoidHom.range_eq_top.mp, Subgroup, Subgroup.map_bot, WellFoundedLT, WellFoundedLT.induction, commutator_lt_of_ne_bot, derivedSer, derivedSeries_succ, eq_or_ne, infer_instance, isSolvable_of_surjective, map_bot, map_subtype_inj, range_eq_top, range_subtype
 -/
@@ -706,7 +742,8 @@ theorem IsSimpleGroup.comm_iff_isSolvable
           exact mem_top _
     · rw [IsSimpleGroup.derivedSeries_succ] at hn
       intro a b
-      rw [← mul_inv_eq_one]; rw [mul_inv_rev]; rw [← mu
+      rw [← mul_inv_eq_one]; rw [mul_inv_rev]; rw [← mul_assoc]; rw [← mem_bot]; rw [← hn]; rw [commutator_eq_closure]
+      exact subset_closure ⟨a, b, rfl⟩⟩
 
 中文:
 定理 是单群.comm_iff_isSolvable
@@ -719,7 +756,8 @@ theorem IsSimpleGroup.comm_iff_isSolvable
           exact mem_top _
     · rw [IsSimpleGroup.derivedSeries_succ] at hn
       intro a b
-      rw [← mul_inv_eq_one]; rw [mul_inv_rev]; rw [← mu
+      rw [← mul_inv_eq_one]; rw [mul_inv_rev]; rw [← mul_assoc]; rw [← mem_bot]; rw [← hn]; rw [commutator_eq_closure]
+      exact subset_closure ⟨a, b, rfl⟩⟩
 
 Depends on / 依赖: Group.isSolvable_of_comm, IsSimpleGroup, IsSimpleGroup.derivedSeries_succ, commutator_eq_closure, derivedSeries_succ, isSolvable_of_comm, mem_bot, mem_top, mul_assoc, mul_inv_eq_one, mul_inv_rev, subset_closure
 -/
@@ -783,7 +821,16 @@ theorem Equiv.Perm.not_isSolvable_fin_5
   let x : Equiv.Perm (Fin 5) := ⟨![1, 2, 0, 3, 4], ![2, 0, 1, 3, 4], by decide, by decide⟩
   let y : Equiv.Perm (Fin 5) := ⟨![3, 4, 2, 0, 1], ![3, 4, 2, 0, 1], by decide, by decide⟩
   let z : Equiv.Perm (Fin 5) := ⟨![0, 3, 2, 1, 4], ![0, 3, 2, 1, 4], by decide, by decide⟩
-  have key : x = z * ⁅x,
+  have key : x = z * ⁅x, y * x * y⁻¹⁆ * z⁻¹ := by unfold x y z; decide
+  refine not_isSolvable_of_mem_derivedSeries (show x != 1 by decide) fun n => ?_
+  induction n with
+  | zero => exact mem_top x
+  | succ n ih =>
+    rw [key]; rw [(derivedSeries_normal _ _).mem_comm_iff]; rw [inv_mul_cancel_left]
+    exact commutator_mem_commutator ih ((derivedSeries_normal _ _).conj_mem _ ih _)
+
+@[deprecated (since := "2026-07-16")]
+alias Equiv.Perm.fin_5_not_solvable := Equiv.Perm.not_isSolvable_fin_5
 
 中文:
 定理 等价.置换.not_isSolvable_fin_5
@@ -792,7 +839,16 @@ theorem Equiv.Perm.not_isSolvable_fin_5
   let x : Equiv.Perm (Fin 5) := ⟨![1, 2, 0, 3, 4], ![2, 0, 1, 3, 4], by decide, by decide⟩
   let y : Equiv.Perm (Fin 5) := ⟨![3, 4, 2, 0, 1], ![3, 4, 2, 0, 1], by decide, by decide⟩
   let z : Equiv.Perm (Fin 5) := ⟨![0, 3, 2, 1, 4], ![0, 3, 2, 1, 4], by decide, by decide⟩
-  have key : x = z * ⁅x,
+  have key : x = z * ⁅x, y * x * y⁻¹⁆ * z⁻¹ := by unfold x y z; decide
+  refine not_isSolvable_of_mem_derivedSeries (show x != 1 by decide) fun n => ?_
+  induction n with
+  | zero => exact mem_top x
+  | succ n ih =>
+    rw [key]; rw [(derivedSeries_normal _ _).mem_comm_iff]; rw [inv_mul_cancel_left]
+    exact commutator_mem_commutator ih ((derivedSeries_normal _ _).conj_mem _ ih _)
+
+@[deprecated (since := "2026-07-16")]
+alias Equiv.Perm.fin_5_not_solvable := Equiv.Perm.not_isSolvable_fin_5
 
 Depends on / 依赖: Equiv.Perm, derivedSe, mem_top, not_isSolvable_of_mem_derivedSeries
 -/
@@ -825,7 +881,8 @@ theorem Equiv.Perm.not_isSolvable
     Equiv.Perm.not_isSolvable_fin_5 (Group.isSolvable_of_isSolvable_injective
       (Equiv.Perm.viaEmbeddingHom_injective (Nonempty.some key)))
 
-@[de
+@[deprecated (since := "2026-07-16")]
+alias Equiv.Perm.not_solvable := Equiv.Perm.not_isSolvable
 
 中文:
 定理 等价.置换.not_isSolvable
@@ -838,7 +895,8 @@ theorem Equiv.Perm.not_isSolvable
     Equiv.Perm.not_isSolvable_fin_5 (Group.isSolvable_of_isSolvable_injective
       (Equiv.Perm.viaEmbeddingHom_injective (Nonempty.some key)))
 
-@[de
+@[deprecated (since := "2026-07-16")]
+alias Equiv.Perm.not_solvable := Equiv.Perm.not_isSolvable
 
 Depends on / 依赖: Cardinal, Cardinal.lift_id, Cardinal.lift_mk_le, Cardinal.lift_natCast, Cardinal.mk_fin, Equiv.Perm.not_isSolvable_fin_5, Equiv.Perm.viaEmbeddingHom_injective, Group.isSolvable_of_isSolvable_injective, Nonempty, Nonempty.some, isSolvable_of_isSolvable_injective, lift_id, lift_mk_le, lift_natCast, mk_fin, not_isSolvable_fin_5, viaEmbeddingHom_injective
 -/

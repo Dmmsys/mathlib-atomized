@@ -693,7 +693,12 @@ theorem sSup_toSubfield
   rw [h]; rw [sSup_image]; rw [← Subfield.closure_sUnion]; rw [sSup_def]; rw [adjoin_toSubfield]
   congr 1
   rw [Set.union_eq_right]
-  rintro _
+  rintro _ ⟨x, rfl⟩
+  obtain ⟨y, hy⟩ := hS
+  simp only [Set.mem_sUnion, Set.mem_image, exists_exists_and_eq_and, SetLike.mem_coe]
+  exact ⟨y, hy, algebraMap_mem y x⟩
+
+@[simp, norm_cast]
 
 中文:
 定理 sSup_toSubfield
@@ -706,7 +711,12 @@ theorem sSup_toSubfield
   rw [h]; rw [sSup_image]; rw [← Subfield.closure_sUnion]; rw [sSup_def]; rw [adjoin_toSubfield]
   congr 1
   rw [Set.union_eq_right]
-  rintro _
+  rintro _ ⟨x, rfl⟩
+  obtain ⟨y, hy⟩ := hS
+  simp only [Set.mem_sUnion, Set.mem_image, exists_exists_and_eq_and, SetLike.mem_coe]
+  exact ⟨y, hy, algebraMap_mem y x⟩
+
+@[simp, norm_cast]
 
 Depends on / 依赖: Set.image_image, Set.mem_image, Set.mem_sUnion, Set.union_eq_right, SetLike, SetLike.coe, SetLike.mem_coe, Subfield, Subfield.closure, Subfield.closure_sUnion, adjoin_toSubfield, algebraMap_mem, closure, closure_eq, closure_sUnion, exists_exists_and_eq_and, image_image, mem_coe, mem_image, mem_sUnion
 -/
@@ -1630,7 +1640,10 @@ theorem adjoin_adjoin_left
   apply subset_antisymm <;> rw [adjoin_subset_adjoin_iff] <;> constructor
   · rintro _ ⟨⟨x, hx⟩, rfl⟩; exact adjoin.mono _ _ _ Set.subset_union_left hx
   · exact subset_adjoin_of_subset_right _ _ Set.subset_union_right
-  · exact
+  · exact Set.range_subset_iff.mpr fun f => Subfield.subset_closure (.inl ⟨f, rfl⟩)
+  · exact Set.union_subset
+      (fun x hx => Subfield.subset_closure <| .inl ⟨⟨x, Subfield.subset_closure (.inr hx)⟩, rfl⟩)
+      (fun x hx => Subfield.subset_closure <| .inr hx)
 
 中文:
 定理 adjoin_adjoin_left
@@ -1641,7 +1654,10 @@ theorem adjoin_adjoin_left
   apply subset_antisymm <;> rw [adjoin_subset_adjoin_iff] <;> constructor
   · rintro _ ⟨⟨x, hx⟩, rfl⟩; exact adjoin.mono _ _ _ Set.subset_union_left hx
   · exact subset_adjoin_of_subset_right _ _ Set.subset_union_right
-  · exact
+  · exact Set.range_subset_iff.mpr fun f => Subfield.subset_closure (.inl ⟨f, rfl⟩)
+  · exact Set.union_subset
+      (fun x hx => Subfield.subset_closure <| .inl ⟨⟨x, Subfield.subset_closure (.inr hx)⟩, rfl⟩)
+      (fun x hx => Subfield.subset_closure <| .inr hx)
 
 Depends on / 依赖: Set.range_subset_iff.mpr, Set.subset_union_left, Set.subset_union_right, Set.union_subset, SetLike, SetLike.ext, Subfiel, Subfield, Subfield.subset_closure, _iff, adjoin, adjoin.mono, adjoin_subset_adjoin_iff, range_subset_iff, subset_adjoin_of_subset_right, subset_antisymm, subset_closure, subset_union_left, subset_union_right, union_subset
 -/
@@ -2110,7 +2126,8 @@ theorem adjoin_algHom_ext
   proof: AlgHom.ext fun ⟨x, hx⟩ => adjoin_induction _ h (fun _ => φ₂.commutes _ ▸ φ₁.commutes _)
     (fun _ _ _ _ h₁ h₂ => by convert! congr_arg₂ (· + ·) h₁ h₂ <;> rw [← map_add] <;> rfl)
     (fun _ _ => eq_on_inv₀ _ _)
-    (fun _ _ _ _ h₁ h₂ => by convert! congr_arg₂ (· * ·) h₁ h₂ <;> rw [← map_mul] <;> rfl
+    (fun _ _ _ _ h₁ h₂ => by convert! congr_arg₂ (· * ·) h₁ h₂ <;> rw [← map_mul] <;> rfl)
+    hx
 
 中文:
 定理 adjoin_algHom_ext
@@ -2119,7 +2136,8 @@ theorem adjoin_algHom_ext
   证明: AlgHom.ext fun ⟨x, hx⟩ => adjoin_induction _ h (fun _ => φ₂.commutes _ ▸ φ₁.commutes _)
     (fun _ _ _ _ h₁ h₂ => by convert! congr_arg₂ (· + ·) h₁ h₂ <;> rw [← map_add] <;> rfl)
     (fun _ _ => eq_on_inv₀ _ _)
-    (fun _ _ _ _ h₁ h₂ => by convert! congr_arg₂ (· * ·) h₁ h₂ <;> rw [← map_mul] <;> rfl
+    (fun _ _ _ _ h₁ h₂ => by convert! congr_arg₂ (· * ·) h₁ h₂ <;> rw [← map_mul] <;> rfl)
+    hx
 
 Depends on / 依赖: AlgHom, AlgHom.ext, adjoin_induction, commutes, convert, map_add, map_mul
 -/

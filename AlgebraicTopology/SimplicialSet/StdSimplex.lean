@@ -1373,7 +1373,10 @@ lemma face_eq_ofSimplex
       { toFun i := ⟨x i, hx i⟩
         monotone' := (objEquiv x).toOrderHom.monotone }
     refine ⟨Quiver.Hom.op
-      (SimplexCategory.Hom.mk 
+      (SimplexCategory.Hom.mk ((e.symm.toOrderEmbedding.toOrderHom.comp φ))), ?_⟩
+    ext j : 1
+    simpa only [Subtype.ext_iff] using! e.apply_symm_apply ⟨_, hx j⟩
+  · simp
 
 中文:
 引理 face_eq_ofSimplex
@@ -1387,7 +1390,10 @@ lemma face_eq_ofSimplex
       { toFun i := ⟨x i, hx i⟩
         monotone' := (objEquiv x).toOrderHom.monotone }
     refine ⟨Quiver.Hom.op
-      (SimplexCategory.Hom.mk 
+      (SimplexCategory.Hom.mk ((e.symm.toOrderEmbedding.toOrderHom.comp φ))), ?_⟩
+    ext j : 1
+    simpa only [Subtype.ext_iff] using! e.apply_symm_apply ⟨_, hx j⟩
+  · simp
 -/
 lemma face_eq_ofSimplex {n : Nat} (S : Finset (Fin (n + 1))) (m : Nat) (e : Fin (m + 1) ≃o S) :
     face.{u} S =
@@ -1418,7 +1424,19 @@ definition faceRepresentableBy
           (e.toOrderEmbedding.toOrderHom.comp f.toOrderHom)), fun _ => by aesop⟩
       invFun := fun ⟨x, hx⟩ => SimplexCategory.Hom.mk
         { toFun i := e.symm ⟨(objEquiv x).toOrderHom i, hx (by simp)⟩
-          monotone' i₁ i₂ h := e.symm
+          monotone' i₁ i₂ h := e.symm.monotone (by
+            simp only [Subtype.mk_le_mk]
+            exact OrderHom.monotone _ h) }
+      left_inv f := by
+        ext i : 3
+        apply e.symm_apply_apply
+      right_inv := fun ⟨x, hx⟩ => by
+        induction j using SimplexCategory.rec with | _ j
+        dsimp
+        ext i : 2
+        exact congr_arg Subtype.val
+          (e.apply_symm_apply ⟨(objEquiv x).toOrderHom i, _⟩) }
+  homEquiv_comp f g := by aesop
 
 中文:
 定义 faceRepresentableBy
@@ -1427,7 +1445,19 @@ definition faceRepresentableBy
           (e.toOrderEmbedding.toOrderHom.comp f.toOrderHom)), fun _ => by aesop⟩
       invFun := fun ⟨x, hx⟩ => SimplexCategory.Hom.mk
         { toFun i := e.symm ⟨(objEquiv x).toOrderHom i, hx (by simp)⟩
-          monotone' i₁ i₂ h := e.symm
+          monotone' i₁ i₂ h := e.symm.monotone (by
+            simp only [Subtype.mk_le_mk]
+            exact OrderHom.monotone _ h) }
+      left_inv f := by
+        ext i : 3
+        apply e.symm_apply_apply
+      right_inv := fun ⟨x, hx⟩ => by
+        induction j using SimplexCategory.rec with | _ j
+        dsimp
+        ext i : 2
+        exact congr_arg Subtype.val
+          (e.apply_symm_apply ⟨(objEquiv x).toOrderHom i, _⟩) }
+  homEquiv_comp f g := by aesop
 
 Depends on / 依赖: OrderHom, OrderHom.Subtype.val, OrderHom.monotone, SimplexCategory, SimplexCategory.Hom.mk, SimplexCategory.rec, Subtype, Subtype.mk_le_mk, congr_, e.symm, e.symm.monotone, e.symm_apply_apply, e.toOrderEmbedding.toOrderHom.comp, f.toOrderHom, invFun, left_inv, mk_le_mk, monotone, objEquiv, right_inv
 -/
@@ -1539,7 +1569,7 @@ definition isoNerve
           (ULift.orderIso.toOrderEmbedding.toOrderHom.comp f.toOrderHom)
       left_inv _ := by aesop }))
 
-@[s
+@[simp]
 
 中文:
 定义 isoNerve
@@ -1551,7 +1581,7 @@ definition isoNerve
           (ULift.orderIso.toOrderEmbedding.toOrderHom.comp f.toOrderHom)
       left_inv _ := by aesop }))
 
-@[s
+@[simp]
 
 Depends on / 依赖: Equiv.toIso, NatIso, NatIso.ofComponents, SimplexCategory, SimplexCategory.Hom.mk, ULift.orderIso.symm.monotone.comp, ULift.orderIso.toOrderEmbedding.toOrderHom.comp, f.toOrderHom, f.toOrderHom.monotone, functor, invFun, left_inv, monotone, objEquiv, objEquiv.trans, ofComponents, orderIso, toOrderEmbedding, toOrderHom
 -/
@@ -1829,7 +1859,16 @@ definition finOrderIsoPairCompl
       (fun k => ⟨j.succAbove ((i.castPred (Fin.ne_last_of_lt h)).succAbove k), ?_⟩)
         ⟨fun _ _ hk => ?_, fun ⟨l, hl⟩ => ?_⟩
     · grind [compl_insert, mem_compl, Fin.succAbove, Fin.castPred]
-    · exact ((Fin.succAboveOrderEmb (i.castPred (Fin.ne_last_of_lt h)))
+    · exact ((Fin.succAboveOrderEmb (i.castPred (Fin.ne_last_of_lt h))).trans
+        (Fin.succAboveOrderEmb j)).injective (by rwa [Subtype.ext_iff] at hk)
+    · obtain ⟨m, rfl⟩ : l in Set.range j.succAbove := by
+        grind [Fin.range_succAbove, mem_compl, Fin.succAbove]
+      obtain ⟨k, hk⟩ : m in Set.range (i.castPred (Fin.ne_last_of_lt h)).succAbove := by
+        grind [Fin.range_succAbove, compl_insert, Fin.succAbove, Fin.castPred]
+      exact ⟨k, by simp [hk]⟩
+  map_rel_iff' :=
+    ((Fin.succAboveOrderEmb (i.castPred (Fin.ne_last_of_lt h))).trans
+      (Fin.succAboveOrderEmb j)).map_rel_iff
 
 中文:
 定义 finOrderIsoPairCompl
@@ -1839,7 +1878,16 @@ definition finOrderIsoPairCompl
       (fun k => ⟨j.succAbove ((i.castPred (Fin.ne_last_of_lt h)).succAbove k), ?_⟩)
         ⟨fun _ _ hk => ?_, fun ⟨l, hl⟩ => ?_⟩
     · grind [compl_insert, mem_compl, Fin.succAbove, Fin.castPred]
-    · exact ((Fin.succAboveOrderEmb (i.castPred (Fin.ne_last_of_lt h)))
+    · exact ((Fin.succAboveOrderEmb (i.castPred (Fin.ne_last_of_lt h))).trans
+        (Fin.succAboveOrderEmb j)).injective (by rwa [Subtype.ext_iff] at hk)
+    · obtain ⟨m, rfl⟩ : l in Set.range j.succAbove := by
+        grind [Fin.range_succAbove, mem_compl, Fin.succAbove]
+      obtain ⟨k, hk⟩ : m in Set.range (i.castPred (Fin.ne_last_of_lt h)).succAbove := by
+        grind [Fin.range_succAbove, compl_insert, Fin.succAbove, Fin.castPred]
+      exact ⟨k, by simp [hk]⟩
+  map_rel_iff' :=
+    ((Fin.succAboveOrderEmb (i.castPred (Fin.ne_last_of_lt h))).trans
+      (Fin.succAboveOrderEmb j)).map_rel_iff
 
 Depends on / 依赖: Equiv.ofBijective, Fin.castPred, Fin.ne_last_of_lt, Fin.range_succAbove, Fin.succAbove, Fin.succAboveOrderEmb, Set.range, Subtype, Subtype.ext_iff, castPre, castPred, compl_insert, ext_iff, i.castPre, i.castPred, injective, j.succAbove, mem_compl, ne_last_of_lt, ofBijective
 -/
@@ -2130,7 +2178,20 @@ lemma bijective_image_objEquiv_toOrderHom_univ
     obtain ⟨f₂, rfl⟩ := objEquiv.symm.surjective x₂
     simp only [mem_nonDegenerate_iff_mono, Equiv.apply_symm_apply,
       SimplexCategory.mono_iff_injective, SimplexCategory.len_mk] at h₁ h₂
-    s
+    simp only [Set.mem_ofPred_eq, SimplexCategory.len_mk, Equiv.apply_symm_apply,
+      Subtype.mk.injEq, EmbeddingLike.apply_eq_iff_eq] at h₃ ⊢
+    apply SimplexCategory.Hom.ext
+    rw [← OrderHom.range_eq_iff h₁ h₂]
+    ext x
+    simpa using congr_fun (congrArg Membership.mem h₃) x
+  · intro ⟨S, hS⟩
+    dsimp at hS
+    let e := monoEquivOfFin S (k := m + 1) (by simpa using hS)
+    refine ⟨⟨objMk ((OrderHom.Subtype.val _).comp e.toOrderEmbedding.toOrderHom), ?_⟩, ?_⟩
+    · rw [mem_nonDegenerate_iff_mono, SimplexCategory.mono_iff_injective]
+      intro a b h
+      grind [e.injective, dsimp% h]
+    · simp [e, ← Finset.image_image, Finset.image_univ_of_surjective e.surjective]
 
 中文:
 引理 bijective_image_objEquiv_toOrderHom_univ
@@ -2142,7 +2203,20 @@ lemma bijective_image_objEquiv_toOrderHom_univ
     obtain ⟨f₂, rfl⟩ := objEquiv.symm.surjective x₂
     simp only [mem_nonDegenerate_iff_mono, Equiv.apply_symm_apply,
       SimplexCategory.mono_iff_injective, SimplexCategory.len_mk] at h₁ h₂
-    s
+    simp only [Set.mem_ofPred_eq, SimplexCategory.len_mk, Equiv.apply_symm_apply,
+      Subtype.mk.injEq, EmbeddingLike.apply_eq_iff_eq] at h₃ ⊢
+    apply SimplexCategory.Hom.ext
+    rw [← OrderHom.range_eq_iff h₁ h₂]
+    ext x
+    simpa using congr_fun (congrArg Membership.mem h₃) x
+  · intro ⟨S, hS⟩
+    dsimp at hS
+    let e := monoEquivOfFin S (k := m + 1) (by simpa using hS)
+    refine ⟨⟨objMk ((OrderHom.Subtype.val _).comp e.toOrderEmbedding.toOrderHom), ?_⟩, ?_⟩
+    · rw [mem_nonDegenerate_iff_mono, SimplexCategory.mono_iff_injective]
+      intro a b h
+      grind [e.injective, dsimp% h]
+    · simp [e, ← Finset.image_image, Finset.image_univ_of_surjective e.surjective]
 -/
 private lemma bijective_image_objEquiv_toOrderHom_univ (m : Nat) :
     Function.Bijective (fun (⟨x, hx⟩ : (Δ[n] : SSet.{u}).nonDegenerate m) =>
@@ -2225,7 +2299,23 @@ definition orderIsoOfNonDegenerate
       rw [SimplexCategory.mono_iff_injective] at this
       exact fun _ _ h => this (by simpa using h)
     · rintro ⟨j, hj⟩
-      rw [nonDegen
+      rw [nonDegenerateEquiv'_iff] at hj
+      aesop)
+  map_rel_iff' := by
+    have := (mem_nonDegenerate_iff_mono x.val).1 x.property
+    rw [SimplexCategory.mono_iff_injective] at this
+    intro a b
+    dsimp
+    simp only [Subtype.mk_le_mk]
+    constructor
+    · rw [← not_lt, ← not_lt]
+      intro h h'
+      apply h
+      obtain h'' | h'' := (monotone_apply x.val h'.le).lt_or_eq
+      · assumption
+      · simp only [this h'', lt_self_iff_false] at h'
+    · intro h
+      exact monotone_apply _ h
 
 中文:
 定义 orderIsoOfNonDegenerate
@@ -2235,7 +2325,23 @@ definition orderIsoOfNonDegenerate
       rw [SimplexCategory.mono_iff_injective] at this
       exact fun _ _ h => this (by simpa using h)
     · rintro ⟨j, hj⟩
-      rw [nonDegen
+      rw [nonDegenerateEquiv'_iff] at hj
+      aesop)
+  map_rel_iff' := by
+    have := (mem_nonDegenerate_iff_mono x.val).1 x.property
+    rw [SimplexCategory.mono_iff_injective] at this
+    intro a b
+    dsimp
+    simp only [Subtype.mk_le_mk]
+    constructor
+    · rw [← not_lt, ← not_lt]
+      intro h h'
+      apply h
+      obtain h'' | h'' := (monotone_apply x.val h'.le).lt_or_eq
+      · assumption
+      · simp only [this h'', lt_self_iff_false] at h'
+    · intro h
+      exact monotone_apply _ h
 -/
 @[no_expose] noncomputable def orderIsoOfNonDegenerate
     {n d : Nat} (x : (Δ[n] : SSet.{u}).nonDegenerate d) :
@@ -2367,7 +2473,7 @@ lemma hasDimensionLT_face
     infer_instance
   · rw [← hasDimensionLT_iff_of_iso
       (isoOfRepresentableBy (faceRepresentableBy S m (monoEquivOfFin S (by simpa))))]
-    exact hasDimensionLT_of_le
+    exact hasDimensionLT_of_le _ (m + 1) _
 
 中文:
 引理 hasDimensionLT_face
@@ -2380,7 +2486,7 @@ lemma hasDimensionLT_face
     infer_instance
   · rw [← hasDimensionLT_iff_of_iso
       (isoOfRepresentableBy (faceRepresentableBy S m (monoEquivOfFin S (by simpa))))]
-    exact hasDimensionLT_of_le
+    exact hasDimensionLT_of_le _ (m + 1) _
 
 Depends on / 依赖: Finset, Finset.card_eq_zero, S.card, card_eq_zero, faceRepresentableBy, face_empty, generalize, hasDimensionLT_iff_of_iso, hasDimensionLT_of_le, infer_instance, isoOfRepresentableBy, monoEquivOfFin
 -/
@@ -2462,7 +2568,7 @@ lemma nonDegenerate_top_dim
     have : Mono f := by simpa using (mem_nonDegenerate_iff_mono _).mp h
     simpa only [EmbeddingLike.apply_eq_iff_eq] using SimplexCategory.eq_id_of_mono f
   · rintro rfl
-    
+    apply objEquiv_symm_id_mem_nonDegenerate
 
 中文:
 引理 nonDegenerate_top_dim
@@ -2475,7 +2581,7 @@ lemma nonDegenerate_top_dim
     have : Mono f := by simpa using (mem_nonDegenerate_iff_mono _).mp h
     simpa only [EmbeddingLike.apply_eq_iff_eq] using SimplexCategory.eq_id_of_mono f
   · rintro rfl
-    
+    apply objEquiv_symm_id_mem_nonDegenerate
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, Set.mem_singleton_iff, SimplexCategory, SimplexCategory.eq_id_of_mono, apply_eq_iff_eq, eq_id_of_mono, mem_nonDegenerate_iff_mono, mem_singleton_iff, objEquiv, objEquiv.symm.surjective, objEquiv_symm_id_mem_nonDegenerate, surjective
 -/

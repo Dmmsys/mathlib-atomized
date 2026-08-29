@@ -460,7 +460,14 @@ theorem isLittleO_of_lt_radius
   -- rw [(TFAE_exists_lt_isLittleO_pow (fun n => ‖p n‖ * (r : ℝ) ^ n) 1).out 1 4]
   simp only [radius, lt_iSup_iff] at h
   rcases h with ⟨t, C, hC, rt⟩
-  rw [ENNReal.coe_lt_coe]
+  rw [ENNReal.coe_lt_coe]; rw [← NNReal.coe_lt_coe] at rt
+  have : 0 < (t : Real) := r.coe_nonneg.trans_lt rt
+  rw [← div_lt_one this] at rt
+  refine ⟨_, rt, C, Or.inr zero_lt_one, fun n => ?_⟩
+  calc
+    |‖p n‖ * (r : Real) ^ n| = ‖p n‖ * (t : Real) ^ n * (r / t : Real) ^ n := by
+      simp [field, abs_mul, div_pow]
+    _ <= C * (r / t : Real) ^ n := by gcongr; apply hC
 
 中文:
 定理 isLittleO_of_lt_radius
@@ -472,7 +479,14 @@ theorem isLittleO_of_lt_radius
   -- rw [(TFAE_exists_lt_isLittleO_pow (fun n => ‖p n‖ * (r : ℝ) ^ n) 1).out 1 4]
   simp only [radius, lt_iSup_iff] at h
   rcases h with ⟨t, C, hC, rt⟩
-  rw [ENNReal.coe_lt_coe]
+  rw [ENNReal.coe_lt_coe]; rw [← NNReal.coe_lt_coe] at rt
+  have : 0 < (t : Real) := r.coe_nonneg.trans_lt rt
+  rw [← div_lt_one this] at rt
+  refine ⟨_, rt, C, Or.inr zero_lt_one, fun n => ?_⟩
+  calc
+    |‖p n‖ * (r : Real) ^ n| = ‖p n‖ * (t : Real) ^ n * (r / t : Real) ^ n := by
+      simp [field, abs_mul, div_pow]
+    _ <= C * (r / t : Real) ^ n := by gcongr; apply hC
 
 Depends on / 依赖: TFAE_exists_lt_isLittleO_pow
 -/
@@ -557,7 +571,12 @@ theorem lt_radius_of_isBigO
   rw [← pos_iff_ne_zero]; rw [← NNReal.coe_pos] at h₀
   lift a to Real>=0 using ha.1.le
   have : (r : Real) < r / a := by
-    simpa only [div_one] using (div
+    simpa only [div_one] using (div_lt_div_iff_of_pos_left h₀ zero_lt_one ha.1).2 ha.2
+  norm_cast at this
+  rw [← ENNReal.coe_lt_coe] at this
+  refine this.trans_le (p.le_radius_of_bound C fun n => ?_)
+  rw [NNReal.coe_div]; rw [div_pow]; rw [← mul_div_assoc]; rw [div_le_iff₀ (pow_pos ha.1 n)]
+  exact (le_abs_self _).trans (hp n)
 
 中文:
 定理 lt_radius_of_isBigO
@@ -568,7 +587,12 @@ theorem lt_radius_of_isBigO
   rw [← pos_iff_ne_zero]; rw [← NNReal.coe_pos] at h₀
   lift a to Real>=0 using ha.1.le
   have : (r : Real) < r / a := by
-    simpa only [div_one] using (div
+    simpa only [div_one] using (div_lt_div_iff_of_pos_left h₀ zero_lt_one ha.1).2 ha.2
+  norm_cast at this
+  rw [← ENNReal.coe_lt_coe] at this
+  refine this.trans_le (p.le_radius_of_bound C fun n => ?_)
+  rw [NNReal.coe_div]; rw [div_pow]; rw [← mul_div_assoc]; rw [div_le_iff₀ (pow_pos ha.1 n)]
+  exact (le_abs_self _).trans (hp n)
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_coe, NNReal, NNReal.coe_div, NNReal.coe_pos, TFAE_exists_lt_isLittleO_pow, coe_div, coe_lt_coe, coe_pos, div_lt_div_iff_of_pos_left, div_one, div_pow, le_radius_of_bound, mul_div_ass, p.le_radius_of_bound, pos_iff_ne_zero, this.mp, this.trans_le, trans_le, zero_lt_one
 -/
@@ -841,7 +865,11 @@ theorem radius_eq_top_iff_summable_norm
     obtain ⟨a, ha : a in Ioo (0 : Real) 1, C, - : 0 < C, hp⟩ := p.norm_mul_pow_le_mul_pow_of_lt_radius
       (show (r : Real>=0∞) < p.radius from h.symm ▸ ENNReal.coe_lt_top)
     refine .of_norm_bounded
-      (g := fun n => (C : Real) * a ^ n) ((summable_geometric_of_l
+      (g := fun n => (C : Real) * a ^ n) ((summable_geometric_of_lt_one ha.1.le ha.2).mul_left _)
+      fun n => ?_
+    specialize hp n
+    rwa [Real.norm_of_nonneg (by positivity)]
+  · exact p.radius_eq_top_of_summable_norm
 
 中文:
 定理 radius_eq_top_iff_summable_norm
@@ -852,7 +880,11 @@ theorem radius_eq_top_iff_summable_norm
     obtain ⟨a, ha : a in Ioo (0 : Real) 1, C, - : 0 < C, hp⟩ := p.norm_mul_pow_le_mul_pow_of_lt_radius
       (show (r : Real>=0∞) < p.radius from h.symm ▸ ENNReal.coe_lt_top)
     refine .of_norm_bounded
-      (g := fun n => (C : Real) * a ^ n) ((summable_geometric_of_l
+      (g := fun n => (C : Real) * a ^ n) ((summable_geometric_of_lt_one ha.1.le ha.2).mul_left _)
+      fun n => ?_
+    specialize hp n
+    rwa [Real.norm_of_nonneg (by positivity)]
+  · exact p.radius_eq_top_of_summable_norm
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_top, Real.norm_of_nonneg, coe_lt_top, h.symm, mul_left, norm_mul_pow_le_mul_pow_of_lt_radius, norm_of_nonneg, of_norm_bounded, p.norm_mul_pow_le_mul_pow_of_lt_radius, p.radius, p.radius_eq_top_of_summable_norm, radius, radius_eq_top_of_summable_norm, specialize, summable_geometric_of_lt_one
 -/
@@ -880,7 +912,8 @@ theorem le_mul_pow_of_radius_pos
   have rpos : 0 < (r : Real) := by simp [ENNReal.coe_pos.1 r0]
   rcases norm_le_div_pow_of_pos_of_lt_radius p rpos rlt with ⟨C, Cpos, hCp⟩
   refine ⟨C, r⁻¹, Cpos, by simp only [inv_pos, rpos], fun n => ?_⟩
-  rw [inv_pow]; rw [← div_
+  rw [inv_pow]; rw [← div_eq_mul_inv]
+  exact hCp n
 
 中文:
 定理 le_mul_pow_of_radius_pos
@@ -890,7 +923,8 @@ theorem le_mul_pow_of_radius_pos
   have rpos : 0 < (r : Real) := by simp [ENNReal.coe_pos.1 r0]
   rcases norm_le_div_pow_of_pos_of_lt_radius p rpos rlt with ⟨C, Cpos, hCp⟩
   refine ⟨C, r⁻¹, Cpos, by simp only [inv_pos, rpos], fun n => ?_⟩
-  rw [inv_pow]; rw [← div_
+  rw [inv_pow]; rw [← div_eq_mul_inv]
+  exact hCp n
 
 Depends on / 依赖: ENNReal, ENNReal.coe_pos, ENNReal.lt_iff_exists_nnreal_btwn, coe_pos, div_eq_mul_inv, inv_pos, inv_pow, lt_iff_exists_nnreal_btwn, norm_le_div_pow_of_pos_of_lt_radius
 -/
@@ -953,7 +987,11 @@ theorem min_radius_le_radius_add
   rw [lt_min_iff] at hr
   have := ((p.isLittleO_one_of_lt_radius hr.1).add (q.isLittleO_one_of_lt_radius hr.2)).isBigO
   refine (p + q).le_radius_of_isBigO ((isBigO_of_le _ fun n => ?_).trans this)
-  rw [← add_mul]; rw [norm_mul]; rw [norm_mu
+  rw [← add_mul]; rw [norm_mul]; rw [norm_mul]; rw [norm_norm]
+  gcongr
+  exact (norm_add_le _ _).trans (le_abs_self _)
+
+@[simp]
 
 中文:
 定理 min_radius_le_radius_add
@@ -963,7 +1001,11 @@ theorem min_radius_le_radius_add
   rw [lt_min_iff] at hr
   have := ((p.isLittleO_one_of_lt_radius hr.1).add (q.isLittleO_one_of_lt_radius hr.2)).isBigO
   refine (p + q).le_radius_of_isBigO ((isBigO_of_le _ fun n => ?_).trans this)
-  rw [← add_mul]; rw [norm_mul]; rw [norm_mu
+  rw [← add_mul]; rw [norm_mul]; rw [norm_mul]; rw [norm_norm]
+  gcongr
+  exact (norm_add_le _ _).trans (le_abs_self _)
+
+@[simp]
 
 Depends on / 依赖: ENNReal, ENNReal.le_of_forall_nnreal_lt, add_mul, isBigO, isBigO_of_le, isLittleO_one_of_lt_radius, le_abs_self, le_of_forall_nnreal_lt, le_radius_of_isBigO, lt_min_iff, norm_add_le, norm_mul, norm_norm, p.isLittleO_one_of_lt_radius, q.isLittleO_one_of_lt_radius
 -/
@@ -1145,7 +1187,18 @@ theorem div_le_radius_compContinuousLinearMap
   rw [ENNReal.div_le_iff (by simpa using h_zero) (by simp)]
   refine le_of_forall_nnreal_lt fun r hr => ?_
   rw [← ENNReal.div_le_iff (by simpa using h_zero) (by simp)]; rw [enorm_eq_nnnorm]; rw [← coe_div h_zero.ne']
-  obtain ⟨C, hC_pos
+  obtain ⟨C, hC_pos, hC⟩ := p.norm_mul_pow_le_of_lt_radius hr
+  refine le_radius_of_bound _ C fun n => ?_
+  calc
+    ‖p.compContinuousLinearMap u n‖ * ↑(r / ‖u‖₊) ^ n <= ‖p n‖ * ‖u‖ ^ n * ↑(r / ‖u‖₊) ^ n := by
+      gcongr
+      exact nnnorm_compContinuousLinearMap_le p u n
+    _ = ‖p n‖ * r ^ n := by
+      simp only [NNReal.coe_div, coe_nnnorm, div_pow, mul_assoc]
+      rw [mul_div_cancel₀]
+      rw [← NNReal.coe_pos] at h_zero
+      positivity
+    _ <= C := hC n
 
 中文:
 定理 div_le_radius_compContinuousLinearMap
@@ -1156,7 +1209,18 @@ theorem div_le_radius_compContinuousLinearMap
   rw [ENNReal.div_le_iff (by simpa using h_zero) (by simp)]
   refine le_of_forall_nnreal_lt fun r hr => ?_
   rw [← ENNReal.div_le_iff (by simpa using h_zero) (by simp)]; rw [enorm_eq_nnnorm]; rw [← coe_div h_zero.ne']
-  obtain ⟨C, hC_pos
+  obtain ⟨C, hC_pos, hC⟩ := p.norm_mul_pow_le_of_lt_radius hr
+  refine le_radius_of_bound _ C fun n => ?_
+  calc
+    ‖p.compContinuousLinearMap u n‖ * ↑(r / ‖u‖₊) ^ n <= ‖p n‖ * ‖u‖ ^ n * ↑(r / ‖u‖₊) ^ n := by
+      gcongr
+      exact nnnorm_compContinuousLinearMap_le p u n
+    _ = ‖p n‖ * r ^ n := by
+      simp only [NNReal.coe_div, coe_nnnorm, div_pow, mul_assoc]
+      rw [mul_div_cancel₀]
+      rw [← NNReal.coe_pos] at h_zero
+      positivity
+    _ <= C := hC n
 
 Depends on / 依赖: ENNReal, ENNReal.div_le_iff, coe_div, compContinuousLinearMap, div_le_iff, enorm_eq_nnnorm, eq_zero_or_nnnorm_pos, hC_pos, h_zero, h_zero.ne, le_of_forall_nnreal_lt, le_radius_of_bound, nnnorm_compConti, norm_mul_pow_le_of_lt_radius, p.compContinuousLinearMap, p.norm_mul_pow_le_of_lt_radius
 -/
@@ -1221,7 +1285,9 @@ theorem radius_compContinuousLinearMap_le
     u.symm.toContinuousLinearMap
   simp only [compContinuousLinearMap_comp, ContinuousLinearEquiv.coe_comp_coe_symm,
     compContinuousLinearMap_id] at this
-  rwa [ENNReal.div_le_iff' (by simpa [DF
+  rwa [ENNReal.div_le_iff' (by simpa [DFunLike.ext_iff] using exists_ne 0) (by simp)] at this
+
+@[simp]
 
 中文:
 定理 radius_compContinuousLinearMap_le
@@ -1231,7 +1297,9 @@ theorem radius_compContinuousLinearMap_le
     u.symm.toContinuousLinearMap
   simp only [compContinuousLinearMap_comp, ContinuousLinearEquiv.coe_comp_coe_symm,
     compContinuousLinearMap_id] at this
-  rwa [ENNReal.div_le_iff' (by simpa [DF
+  rwa [ENNReal.div_le_iff' (by simpa [DFunLike.ext_iff] using exists_ne 0) (by simp)] at this
+
+@[simp]
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.coe_comp_coe_symm, DFunLike, DFunLike.ext_iff, ENNReal, ENNReal.div_le_iff, coe_comp_coe_symm, compContinuousLinearMap, compContinuousLinearMap_comp, compContinuousLinearMap_id, div_le_iff, div_le_radius_compContinuousLinearMap, exists_ne, ext_iff, p.compContinuousLinearMap, toContinuousLinearMap, u.symm.toContinuousLinearMap, u.toContinuousLinearMap
 -/
@@ -1257,7 +1325,8 @@ refine le_antisymm ?_ le_radius_compContinuousLinearMap _ _
   have _ : Nontrivial F := u.symm.toEquiv.nontrivial
   convert! radius_compContinuousLinearMap_le p u.toContinuousLinearEquiv
   have : u.toContinuousLinearEquiv.symm.toContinuousLinearMap =
-    u.symm.toLinearIsometry.toContinuousLinearM
+    u.symm.toLinearIsometry.toContinuousLinearMap := rfl
+  simp [this]
 
 中文:
 定理 radius_compContinuousLinearMap_linearIsometryEquiv_eq
@@ -1267,7 +1336,8 @@ refine le_antisymm ?_ le_radius_compContinuousLinearMap _ _
   have _ : Nontrivial F := u.symm.toEquiv.nontrivial
   convert! radius_compContinuousLinearMap_le p u.toContinuousLinearEquiv
   have : u.toContinuousLinearEquiv.symm.toContinuousLinearMap =
-    u.symm.toLinearIsometry.toContinuousLinearM
+    u.symm.toLinearIsometry.toContinuousLinearMap := rfl
+  simp [this]
 
 Depends on / 依赖: Nontrivial, convert, le_antisymm, le_radius_compContinuousLinearMap, nontrivial, radius_compContinuousLinearMap_le, toContinuousLinearEquiv, toContinuousLinearMap, toEquiv, toLinearIsometry, u.symm.toEquiv.nontrivial, u.symm.toLinearIsometry.toContinuousLinearMap, u.toContinuousLinearEquiv, u.toContinuousLinearEquiv.symm.toContinuousLinearMap
 -/
@@ -1359,7 +1429,30 @@ theorem radius_shift
     intro h
     simp only [le_refl, le_sup_iff, exists_prop, and_true]
     intro n
-    rc
+    rcases n with - | m
+    · simp
+    right
+    rw [pow_succ]; rw [← mul_assoc]
+    gcongr; apply h
+  · apply iSup_mono'
+    intro C
+    use ‖p 1‖ ⊔ C / r
+    apply iSup_mono'
+    intro h
+    simp only [le_refl, le_sup_iff, exists_prop, and_true]
+    intro n
+    cases eq_zero_or_pos r with
+    | inl hr =>
+      rw [hr]
+      cases n <;> simp
+    | inr hr =>
+      right
+      rw [← NNReal.coe_pos] at hr
+      specialize h (n + 1)
+      rw [le_div_iff₀ hr]
+      rwa [pow_succ, ← mul_assoc] at h
+
+@[simp]
 
 中文:
 定理 radius_shift
@@ -1377,7 +1470,30 @@ theorem radius_shift
     intro h
     simp only [le_refl, le_sup_iff, exists_prop, and_true]
     intro n
-    rc
+    rcases n with - | m
+    · simp
+    right
+    rw [pow_succ]; rw [← mul_assoc]
+    gcongr; apply h
+  · apply iSup_mono'
+    intro C
+    use ‖p 1‖ ⊔ C / r
+    apply iSup_mono'
+    intro h
+    simp only [le_refl, le_sup_iff, exists_prop, and_true]
+    intro n
+    cases eq_zero_or_pos r with
+    | inl hr =>
+      rw [hr]
+      cases n <;> simp
+    | inr hr =>
+      right
+      rw [← NNReal.coe_pos] at hr
+      specialize h (n + 1)
+      rw [le_div_iff₀ hr]
+      rwa [pow_succ, ← mul_assoc] at h
+
+@[simp]
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.curryRight_norm, Nat.succ_eq_add_one, and_true, curryRight_norm, eq_of_le_of_ge, eq_zero_or_pos, exists_prop, iSup_mono, le_refl, le_sup_iff, mul_assoc, pow_succ, radius, succ_eq_add_one
 -/
@@ -1466,7 +1582,8 @@ theorem radius_le_radius_continuousLinearMap_comp
   apply le_radius_of_isBigO
   apply (IsBigO.trans_isLittleO _ (p.isLittleO_one_of_lt_radius hr)).isBigO
   refine IsBigO.mul (@IsBigOWith.isBigO _ _ _ _ _ ‖f‖ _ _ _ ?_) (isBigO_refl _ _)
-  refine IsBigOWith.of_bound (Eventually.of_forall fun n
+  refine IsBigOWith.of_bound (Eventually.of_forall fun n => ?_)
+  simpa only [norm_norm] using! f.norm_compContinuousMultilinearMap_le (p n)
 
 中文:
 定理 radius_le_radius_continuousLinearMap_comp
@@ -1476,7 +1593,8 @@ theorem radius_le_radius_continuousLinearMap_comp
   apply le_radius_of_isBigO
   apply (IsBigO.trans_isLittleO _ (p.isLittleO_one_of_lt_radius hr)).isBigO
   refine IsBigO.mul (@IsBigOWith.isBigO _ _ _ _ _ ‖f‖ _ _ _ ?_) (isBigO_refl _ _)
-  refine IsBigOWith.of_bound (Eventually.of_forall fun n
+  refine IsBigOWith.of_bound (Eventually.of_forall fun n => ?_)
+  simpa only [norm_norm] using! f.norm_compContinuousMultilinearMap_le (p n)
 
 Depends on / 依赖: ENNReal, ENNReal.le_of_forall_nnreal_lt, Eventually, Eventually.of_forall, IsBigO, IsBigO.mul, IsBigO.trans_isLittleO, IsBigOWith, IsBigOWith.isBigO, IsBigOWith.of_bound, f.norm_compContinuousMultilinearMap_le, isBigO, isBigO_refl, isLittleO_one_of_lt_radius, le_of_forall_nnreal_lt, le_radius_of_isBigO, norm_compContinuousMultilinearMap_le, norm_norm, of_bound, of_forall
 -/

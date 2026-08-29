@@ -1644,7 +1644,7 @@ theorem det_nonsing_inv
     rw [Ring.inverse_invertible]; rw [← invOf_eq_nonsing_inv]; rw [det_invOf]
   cases isEmpty_or_nonempty n
   · rw [det_isEmpty, det_isEmpty, Ring.inverse_one]
-  · rw [Ring.inverse_non_unit _ h, non
+  · rw [Ring.inverse_non_unit _ h, nonsing_inv_apply_not_isUnit _ h, det_zero]
 
 中文:
 定理 det_nonsing_inv
@@ -1656,7 +1656,7 @@ theorem det_nonsing_inv
     rw [Ring.inverse_invertible]; rw [← invOf_eq_nonsing_inv]; rw [det_invOf]
   cases isEmpty_or_nonempty n
   · rw [det_isEmpty, det_isEmpty, Ring.inverse_one]
-  · rw [Ring.inverse_non_unit _ h, non
+  · rw [Ring.inverse_non_unit _ h, nonsing_inv_apply_not_isUnit _ h, det_zero]
 
 Depends on / 依赖: A.det, IsUnit, Ring.inverse_invertible, Ring.inverse_non_unit, Ring.inverse_one, det_invOf, det_isEmpty, det_zero, h.nonempty_invertible, invOf_eq_nonsing_inv, inverse_invertible, inverse_non_unit, inverse_one, invertibleOfDetInvertible, isEmpty_or_nonempty, nonempty_invertible, nonsing_inv_apply_not_isUnit
 -/
@@ -2002,7 +2002,8 @@ theorem inv_zero
   · rw [eq_comm, Fintype.card_eq_zero_iff] at hc
     subsingleton
   · have hn : Nonempty n := Fintype.card_pos_iff.mp hc
-    refine nonsing_inv_apply_n
+    refine nonsing_inv_apply_not_isUnit _ ?_
+    simp [det]
 
 中文:
 定理 inv_zero
@@ -2014,7 +2015,8 @@ theorem inv_zero
   · rw [eq_comm, Fintype.card_eq_zero_iff] at hc
     subsingleton
   · have hn : Nonempty n := Fintype.card_pos_iff.mp hc
-    refine nonsing_inv_apply_n
+    refine nonsing_inv_apply_not_isUnit _ ?_
+    simp [det]
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.card_eq_zero_iff, Fintype.card_pos_iff.mp, Nonempty, card_eq_zero_iff, card_pos_iff, eq_comm, eq_iff_true_of_subsingleton, eq_or_lt, nonsing_inv_apply_not_isUnit, subsingleton, subsingleton_or_nontrivial, zero_le, zero_le.eq_or_lt
 -/
@@ -2173,7 +2175,15 @@ definition invertibleOfDiagonalInvertible
       let : Invertible (diagonal v).det := detInvertibleOfInvertible _
       rw [invOf_eq]; rw [diag_smul]; rw [adjugate_diagonal]; rw [diag_diagonal]
       dsimp
-      rw [mul_assoc]; rw [prod_erase_mul _ _ (Finset.mem_univ _)]; rw [← 
+      rw [mul_assoc]; rw [prod_erase_mul _ _ (Finset.mem_univ _)]; rw [← det_diagonal]
+      exact mul_invOf_self _
+  mul_invOf_self :=
+    funext fun i => by
+      let : Invertible (diagonal v).det := detInvertibleOfInvertible _
+      rw [invOf_eq]; rw [diag_smul]; rw [adjugate_diagonal]; rw [diag_diagonal]
+      dsimp
+      rw [mul_left_comm]; rw [mul_prod_erase _ _ (Finset.mem_univ _)]; rw [← det_diagonal]
+      exact mul_invOf_self _
 
 中文:
 定义 invertibleOfDiagonalInvertible
@@ -2184,7 +2194,15 @@ definition invertibleOfDiagonalInvertible
       let : Invertible (diagonal v).det := detInvertibleOfInvertible _
       rw [invOf_eq]; rw [diag_smul]; rw [adjugate_diagonal]; rw [diag_diagonal]
       dsimp
-      rw [mul_assoc]; rw [prod_erase_mul _ _ (Finset.mem_univ _)]; rw [← 
+      rw [mul_assoc]; rw [prod_erase_mul _ _ (Finset.mem_univ _)]; rw [← det_diagonal]
+      exact mul_invOf_self _
+  mul_invOf_self :=
+    funext fun i => by
+      let : Invertible (diagonal v).det := detInvertibleOfInvertible _
+      rw [invOf_eq]; rw [diag_smul]; rw [adjugate_diagonal]; rw [diag_diagonal]
+      dsimp
+      rw [mul_left_comm]; rw [mul_prod_erase _ _ (Finset.mem_univ _)]; rw [← det_diagonal]
+      exact mul_invOf_self _
 
 Depends on / 依赖: diagonal
 -/
@@ -2277,7 +2295,7 @@ theorem inv_diagonal
     cases h.nonempty_invertible
     rw [Ring.inverse_invertible]; rw [Ring.inverse_invertible]; rw [invOf_diagonal_eq]
   · have := isUnit_diagonal.not.mpr h
-    rw [Ring.
+    rw [Ring.inverse_non_unit _ h]; rw [Pi.zero_def]; rw [diagonal_zero]; rw [Ring.inverse_non_unit _ this]
 
 中文:
 定理 inv_diagonal
@@ -2291,7 +2309,7 @@ theorem inv_diagonal
     cases h.nonempty_invertible
     rw [Ring.inverse_invertible]; rw [Ring.inverse_invertible]; rw [invOf_diagonal_eq]
   · have := isUnit_diagonal.not.mpr h
-    rw [Ring.
+    rw [Ring.inverse_non_unit _ h]; rw [Pi.zero_def]; rw [diagonal_zero]; rw [Ring.inverse_non_unit _ this]
 
 Depends on / 依赖: IsUnit, Pi.zero_def, Ring.inverse_invertible, Ring.inverse_non_unit, diagonal_zero, h.nonempty_invertible, invOf_diagonal_eq, inverse_invertible, inverse_non_unit, isUnit_diagonal, isUnit_diagonal.mpr, isUnit_diagonal.not.mpr, nonempty_invertible, nonsing_inv_eq_ringInverse, this.nonempty_invertible, zero_def
 -/
@@ -2757,7 +2775,8 @@ theorem inv_submatrix_equiv
     let := submatrixEquivInvertible A e₁ e₂
     rw [← invOf_eq_nonsing_inv]; rw [← invOf_eq_nonsing_inv]; rw [invOf_submatrix_equiv_eq A]
   · have := (isUnit_submatrix_equiv e₁ e₂).not.mpr h
-    simp_rw [nonsing_inv_eq_ringInverse, Ring.inve
+    simp_rw [nonsing_inv_eq_ringInverse, Ring.inverse_non_unit _ h, Ring.inverse_non_unit _ this,
+      submatrix_zero, Pi.zero_apply]
 
 中文:
 定理 inv_submatrix_equiv
@@ -2768,7 +2787,8 @@ theorem inv_submatrix_equiv
     let := submatrixEquivInvertible A e₁ e₂
     rw [← invOf_eq_nonsing_inv]; rw [← invOf_eq_nonsing_inv]; rw [invOf_submatrix_equiv_eq A]
   · have := (isUnit_submatrix_equiv e₁ e₂).not.mpr h
-    simp_rw [nonsing_inv_eq_ringInverse, Ring.inve
+    simp_rw [nonsing_inv_eq_ringInverse, Ring.inverse_non_unit _ h, Ring.inverse_non_unit _ this,
+      submatrix_zero, Pi.zero_apply]
 
 Depends on / 依赖: IsUnit, Pi.zero_apply, Ring.inverse_non_unit, h.nonempty_invertible, invOf_eq_nonsing_inv, invOf_submatrix_equiv_eq, inverse_non_unit, isUnit_submatrix_equiv, nonempty_invertible, nonsing_inv_eq_ringInverse, not.mpr, simp_rw, submatrixEquivInvertible, submatrix_zero, zero_apply
 -/
@@ -2820,7 +2840,19 @@ theorem inv_kronecker
     have hAB : ¬IsUnit (A otimesₖ B).det := by
       refine mt (fun hAB => ?_) hA
       rw [det_kronecker] at hAB
-      exact (isUnit_pow_iff 
+      exact (isUnit_pow_iff Fintype.card_ne_zero).mp (isUnit_of_mul_isUnit_left hAB)
+    rw [nonsing_inv_apply_not_isUnit _ hA]; rw [zero_kronecker]; rw [nonsing_inv_apply_not_isUnit _ hAB]
+  by_cases hB : IsUnit B.det; swap
+  · cases isEmpty_or_nonempty m
+    · subsingleton
+    have hAB : ¬IsUnit (A otimesₖ B).det := by
+      refine mt (fun hAB => ?_) hB
+      rw [det_kronecker] at hAB
+      exact (isUnit_pow_iff Fintype.card_ne_zero).mp (isUnit_of_mul_isUnit_right hAB)
+    rw [nonsing_inv_apply_not_isUnit _ hB]; rw [kronecker_zero]; rw [nonsing_inv_apply_not_isUnit _ hAB]
+  -- otherwise follows trivially from `mul_kronecker_mul`
+  · apply inv_eq_right_inv
+    rw [← mul_kronecker_mul]; rw [← one_kronecker_one]; rw [mul_nonsing_inv _ hA]; rw [mul_nonsing_inv _ hB]
 
 中文:
 定理 inv_kronecker
@@ -2834,7 +2866,19 @@ theorem inv_kronecker
     have hAB : ¬IsUnit (A otimesₖ B).det := by
       refine mt (fun hAB => ?_) hA
       rw [det_kronecker] at hAB
-      exact (isUnit_pow_iff 
+      exact (isUnit_pow_iff Fintype.card_ne_zero).mp (isUnit_of_mul_isUnit_left hAB)
+    rw [nonsing_inv_apply_not_isUnit _ hA]; rw [zero_kronecker]; rw [nonsing_inv_apply_not_isUnit _ hAB]
+  by_cases hB : IsUnit B.det; swap
+  · cases isEmpty_or_nonempty m
+    · subsingleton
+    have hAB : ¬IsUnit (A otimesₖ B).det := by
+      refine mt (fun hAB => ?_) hB
+      rw [det_kronecker] at hAB
+      exact (isUnit_pow_iff Fintype.card_ne_zero).mp (isUnit_of_mul_isUnit_right hAB)
+    rw [nonsing_inv_apply_not_isUnit _ hB]; rw [kronecker_zero]; rw [nonsing_inv_apply_not_isUnit _ hAB]
+  -- otherwise follows trivially from `mul_kronecker_mul`
+  · apply inv_eq_right_inv
+    rw [← mul_kronecker_mul]; rw [← one_kronecker_one]; rw [mul_nonsing_inv _ hA]; rw [mul_nonsing_inv _ hB]
 -/
 theorem inv_kronecker [Fintype m] [DecidableEq m]
     (A : Matrix m m α) (B : Matrix n n α) : (A otimesₖ B)⁻¹ = A⁻¹ otimesₖ B⁻¹ := by

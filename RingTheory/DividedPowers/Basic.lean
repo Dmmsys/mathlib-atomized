@@ -138,7 +138,36 @@ definition dividedPowersBot
     simp only [and_self, ite_true]
   dpow_one ha := by
     simp [mem_bot.mp ha]
-  dpow_mem {n
+  dpow_mem {n a} hn _ := by
+    simp only [mem_bot, ite_eq_right_iff, and_imp]
+    exact fun _ a => False.elim (hn a)
+  dpow_add ha hb := by
+    rw [mem_bot.mp ha]; rw [mem_bot.mp hb]; rw [add_zero]
+    simp only [true_and, mul_ite, mul_one, mul_zero]
+    split_ifs with h
+    · simp [h]
+    · symm
+      apply sum_eq_zero
+      grind [mem_antidiagonal]
+  dpow_mul {n} _ _ hx := by
+    rw [mem_bot.mp hx]
+    simp only [mul_zero, true_and, mul_ite, mul_one]
+    by_cases hn : n = 0
+    · rw [if_pos hn, hn, if_pos rfl, _root_.pow_zero]
+    · simp only [if_neg hn]
+  mul_dpow {m n x} hx := by
+    rw [mem_bot.mp hx]
+    simp only [true_and, mul_ite, mul_one, mul_zero, add_eq_zero]
+    by_cases hn : n = 0
+    · simp only [hn, ite_true, and_true, add_zero, choose_self, cast_one]
+    · rw [if_neg hn, if_neg]
+      exact not_and_of_not_right (m = 0) hn
+  dpow_comp m {n a} hn ha := by
+    rw [mem_bot.mp ha]
+    simp only [true_and, ite_eq_right_iff, _root_.mul_eq_zero, mul_ite, mul_one, mul_zero]
+    by_cases hm : m = 0
+    · simp [hm, uniformBell_zero_left, hn]
+    · simp only [hm, and_false, ite_false, false_or, if_neg hn]
 
 中文:
 定义 dividedPowersBot
@@ -153,7 +182,36 @@ definition dividedPowersBot
     simp only [and_self, ite_true]
   dpow_one ha := by
     simp [mem_bot.mp ha]
-  dpow_mem {n
+  dpow_mem {n a} hn _ := by
+    simp only [mem_bot, ite_eq_right_iff, and_imp]
+    exact fun _ a => False.elim (hn a)
+  dpow_add ha hb := by
+    rw [mem_bot.mp ha]; rw [mem_bot.mp hb]; rw [add_zero]
+    simp only [true_and, mul_ite, mul_one, mul_zero]
+    split_ifs with h
+    · simp [h]
+    · symm
+      apply sum_eq_zero
+      grind [mem_antidiagonal]
+  dpow_mul {n} _ _ hx := by
+    rw [mem_bot.mp hx]
+    simp only [mul_zero, true_and, mul_ite, mul_one]
+    by_cases hn : n = 0
+    · rw [if_pos hn, hn, if_pos rfl, _root_.pow_zero]
+    · simp only [if_neg hn]
+  mul_dpow {m n x} hx := by
+    rw [mem_bot.mp hx]
+    simp only [true_and, mul_ite, mul_one, mul_zero, add_eq_zero]
+    by_cases hn : n = 0
+    · simp only [hn, ite_true, and_true, add_zero, choose_self, cast_one]
+    · rw [if_neg hn, if_neg]
+      exact not_and_of_not_right (m = 0) hn
+  dpow_comp m {n a} hn ha := by
+    rw [mem_bot.mp ha]
+    simp only [true_and, ite_eq_right_iff, _root_.mul_eq_zero, mul_ite, mul_one, mul_zero]
+    by_cases hm : m = 0
+    · simp [hm, uniformBell_zero_left, hn]
+    · simp only [hm, and_false, ite_false, false_or, if_neg hn]
 
 Depends on / 依赖: Classical, scoped
 -/
@@ -482,7 +540,7 @@ theorem factorial_mul_dpow_eq_pow
   | succ n ih =>
     rw [factorial_succ]; rw [mul_comm (n + 1)]
     nth_rewrite 1 [← (n + 1).choose_one_right]
-    rw [← choose_symm_add]; rw [cast_mul]; rw [mul_assoc]; rw [← hI.mul_dpow ha]; rw [← m
+    rw [← choose_symm_add]; rw [cast_mul]; rw [mul_assoc]; rw [← hI.mul_dpow ha]; rw [← mul_assoc]; rw [ih]; rw [hI.dpow_one ha]; rw [pow_succ]; rw [mul_comm]
 
 中文:
 定理 factorial_mul_dpow_eq_pow
@@ -493,7 +551,7 @@ theorem factorial_mul_dpow_eq_pow
   | succ n ih =>
     rw [factorial_succ]; rw [mul_comm (n + 1)]
     nth_rewrite 1 [← (n + 1).choose_one_right]
-    rw [← choose_symm_add]; rw [cast_mul]; rw [mul_assoc]; rw [← hI.mul_dpow ha]; rw [← m
+    rw [← choose_symm_add]; rw [cast_mul]; rw [mul_assoc]; rw [← hI.mul_dpow ha]; rw [← mul_assoc]; rw [ih]; rw [hI.dpow_one ha]; rw [pow_succ]; rw [mul_comm]
 
 Depends on / 依赖: cast_mul, cast_one, choose_one_right, choose_symm_add, dpow_one, dpow_zero, factorial_succ, factorial_zero, hI.dpow_one, hI.dpow_zero, hI.mul_dpow, mul_assoc, mul_comm, mul_dpow, nth_rewrite, one_mul, pow_succ, pow_zero
 -/
@@ -570,7 +628,10 @@ theorem coincide_on_smul
     rw [smul_eq_mul]; rw [hJ.dpow_mul hb]; rw [mul_comm a b]; rw [hI.dpow_mul ha]; rw [← hJ.factorial_mul_dpow_eq_pow hb]; rw [← hI.factorial_mul_dpow_eq_pow ha]
     ring
   | add x hx y hy hx' hy' =>
-    r
+    rw [hI.dpow_add (mul_le_left hx) (mul_le_left hy)]; rw [hJ.dpow_add (mul_le_right hx) (mul_le_right hy)]
+    apply sum_congr rfl
+    intro k _
+    rw [hx']; rw [hy']
 
 中文:
 定理 coincide_on_smul
@@ -581,7 +642,10 @@ theorem coincide_on_smul
     rw [smul_eq_mul]; rw [hJ.dpow_mul hb]; rw [mul_comm a b]; rw [hI.dpow_mul ha]; rw [← hJ.factorial_mul_dpow_eq_pow hb]; rw [← hI.factorial_mul_dpow_eq_pow ha]
     ring
   | add x hx y hy hx' hy' =>
-    r
+    rw [hI.dpow_add (mul_le_left hx) (mul_le_left hy)]; rw [hJ.dpow_add (mul_le_right hx) (mul_le_right hy)]
+    apply sum_congr rfl
+    intro k _
+    rw [hx']; rw [hy']
 
 Depends on / 依赖: Submodule, Submodule.smul_induction_on, dpow_add, dpow_mul, factorial_mul_dpow_eq_pow, generalizing, hI.dpow_add, hI.dpow_mul, hI.factorial_mul_dpow_eq_pow, hJ.dpow_add, hJ.dpow_mul, hJ.factorial_mul_dpow_eq_pow, mul_comm, mul_le_left, mul_le_right, smul_eq_mul, smul_induction_on, sum_congr
 -/
@@ -610,7 +674,9 @@ theorem prod_dpow
     simp only [prod_empty, multinomial_empty, cast_one, sum_empty, one_mul]
     rw [hI.dpow_zero ha]
   | insert _ _ hi hrec =>
-    rw [prod_insert hi]; rw [hrec]; rw [← mul_assoc]; rw [mul_comm (hI.dpow (n _) a)]; rw [mul_assoc]; 
+    rw [prod_insert hi]; rw [hrec]; rw [← mul_assoc]; rw [mul_comm (hI.dpow (n _) a)]; rw [mul_assoc]; rw [hI.mul_dpow ha]; rw [← sum_insert hi]; rw [← mul_assoc]
+    apply congr_arg₂ _ _ rfl
+    rw [multinomial_insert hi]; rw [mul_comm]; rw [cast_mul]; rw [sum_insert hi]
 
 中文:
 定理 prod_dpow
@@ -622,7 +688,9 @@ theorem prod_dpow
     simp only [prod_empty, multinomial_empty, cast_one, sum_empty, one_mul]
     rw [hI.dpow_zero ha]
   | insert _ _ hi hrec =>
-    rw [prod_insert hi]; rw [hrec]; rw [← mul_assoc]; rw [mul_comm (hI.dpow (n _) a)]; rw [mul_assoc]; 
+    rw [prod_insert hi]; rw [hrec]; rw [← mul_assoc]; rw [mul_comm (hI.dpow (n _) a)]; rw [mul_assoc]; rw [hI.mul_dpow ha]; rw [← sum_insert hi]; rw [← mul_assoc]
+    apply congr_arg₂ _ _ rfl
+    rw [multinomial_insert hi]; rw [mul_comm]; rw [cast_mul]; rw [sum_insert hi]
 
 Depends on / 依赖: Finset, Finset.induction, cast_mul, cast_one, classical, dpow_zero, hI.dpow, hI.dpow_zero, hI.mul_dpow, insert, mul_assoc, mul_comm, mul_dpow, multinomial_empty, multinomial_insert, one_mul, prod_empty, prod_insert, sum_empty, sum_insert
 -/
@@ -654,7 +722,42 @@ theorem dpow_sum'
     by_cases hn : n = 0
     · rw [hn]
       rw [dpow_zero I.zero_mem]
-      simp only [sym_
+      simp only [sym_zero, card_singleton, cast_one]
+    · rw [dpow_eval_zero hn, eq_comm, ← cast_zero]
+      apply congr_arg
+      rw [card_eq_zero]; rw [sym_eq_empty]
+      exact ⟨hn, rfl⟩
+  | insert a s ha ih =>
+    -- This should be golfable using `Finset.symInsertEquiv`
+    have hx' : forall i, i in s -> x i in I := fun i hi => hx i (mem_insert_of_mem hi)
+    simp_rw [sum_insert ha,
+      dpow_add (hx a (mem_insert_self a s)) (I.sum_mem fun i => hx' i),
+      sum_range, ih hx', mul_sum, sum_sigma', eq_comm]
+    apply sum_bij'
+      (fun m _ => m.filterNe a)
+      (fun m _ => m.2.fill a m.1)
+      (fun m hm => mem_sigma.2 ⟨mem_univ _, _⟩)
+      (fun m hm => by
+        simp only [succ_eq_add_one, mem_sym_iff, mem_insert, Sym.mem_fill_iff]
+        simp only [mem_sigma, mem_univ, mem_sym_iff, true_and] at hm
+        intro b
+        apply Or.imp (fun h => h.2) (fun h => hm b h))
+      (fun m _ => m.fill_filterNe a)
+    · intro m hm
+      simp only [mem_sigma, mem_univ, mem_sym_iff, true_and] at hm
+      exact Sym.filter_ne_fill a m fun a_1 => ha (hm a a_1)
+    · intro m hm
+      simp only [mem_sym_iff, mem_insert] at hm
+      rw [prod_insert ha]
+      apply congr_arg₂ _ rfl
+      apply prod_congr rfl
+      intro i hi
+      apply congr_arg₂ _ _ rfl
+      conv_lhs => rw [← m.fill_filterNe a]
+      exact Sym.count_coe_fill_of_ne (ne_of_mem_of_not_mem hi ha)
+    · intro m hm
+      convert! sym_filterNe_mem a hm
+      rw [erase_insert ha]
 
 中文:
 定理 dpow_sum'
@@ -667,7 +770,42 @@ theorem dpow_sum'
     by_cases hn : n = 0
     · rw [hn]
       rw [dpow_zero I.zero_mem]
-      simp only [sym_
+      simp only [sym_zero, card_singleton, cast_one]
+    · rw [dpow_eval_zero hn, eq_comm, ← cast_zero]
+      apply congr_arg
+      rw [card_eq_zero]; rw [sym_eq_empty]
+      exact ⟨hn, rfl⟩
+  | insert a s ha ih =>
+    -- This should be golfable using `Finset.symInsertEquiv`
+    have hx' : forall i, i in s -> x i in I := fun i hi => hx i (mem_insert_of_mem hi)
+    simp_rw [sum_insert ha,
+      dpow_add (hx a (mem_insert_self a s)) (I.sum_mem fun i => hx' i),
+      sum_range, ih hx', mul_sum, sum_sigma', eq_comm]
+    apply sum_bij'
+      (fun m _ => m.filterNe a)
+      (fun m _ => m.2.fill a m.1)
+      (fun m hm => mem_sigma.2 ⟨mem_univ _, _⟩)
+      (fun m hm => by
+        simp only [succ_eq_add_one, mem_sym_iff, mem_insert, Sym.mem_fill_iff]
+        simp only [mem_sigma, mem_univ, mem_sym_iff, true_and] at hm
+        intro b
+        apply Or.imp (fun h => h.2) (fun h => hm b h))
+      (fun m _ => m.fill_filterNe a)
+    · intro m hm
+      simp only [mem_sigma, mem_univ, mem_sym_iff, true_and] at hm
+      exact Sym.filter_ne_fill a m fun a_1 => ha (hm a a_1)
+    · intro m hm
+      simp only [mem_sym_iff, mem_insert] at hm
+      rw [prod_insert ha]
+      apply congr_arg₂ _ rfl
+      apply prod_congr rfl
+      intro i hi
+      apply congr_arg₂ _ _ rfl
+      conv_lhs => rw [← m.fill_filterNe a]
+      exact Sym.count_coe_fill_of_ne (ne_of_mem_of_not_mem hi ha)
+    · intro m hm
+      convert! sym_filterNe_mem a hm
+      rw [erase_insert ha]
 
 Depends on / 依赖: Finset, Finset.induction, I.zero_mem, card_eq_zero, card_singleton, cast_one, cast_zero, config, config.maxArgs.getD, congr_arg, dpow_add, dpow_eval_zero, dpow_zero, eq_comm, generalizing, insert, maxArgs, mul_one, nsmul_eq_mul, numArgs
 -/
@@ -820,7 +958,17 @@ theorem dpow_prod
     by_cases h : s.Nonempty
     · rw [dpow_mul]
       · simp only [Finset.card_insert_of_notMem has, add_tsub_cancel_right, nsmul_eq_mul,
-          Nat.cast_pow,
+          Nat.cast_pow, Finset.prod_insert has,
+          hrec h (fun i hi => hs' i (mem_insert_of_mem hi)), ← mul_assoc]
+        apply congr_arg₂ _ _ rfl
+        have : #s = #s - 1 + 1 := by grind
+        nth_rewrite 2 [this]
+        rw [mul_comm]; rw [pow_succ]; rw [mul_assoc]; rw [hI.factorial_mul_dpow_eq_pow]
+        exact hs' a (mem_insert_self a s)
+      · obtain ⟨j, hj⟩ := h
+        rw [Finset.prod_eq_prod_sdiff_singleton_mul hj]
+        exact I.mul_mem_left _ (hs' j (mem_insert_of_mem hj))
+    · simp [not_nonempty_iff_eq_empty.mp h]
 
 中文:
 定理 dpow_prod
@@ -834,7 +982,17 @@ theorem dpow_prod
     by_cases h : s.Nonempty
     · rw [dpow_mul]
       · simp only [Finset.card_insert_of_notMem has, add_tsub_cancel_right, nsmul_eq_mul,
-          Nat.cast_pow,
+          Nat.cast_pow, Finset.prod_insert has,
+          hrec h (fun i hi => hs' i (mem_insert_of_mem hi)), ← mul_assoc]
+        apply congr_arg₂ _ _ rfl
+        have : #s = #s - 1 + 1 := by grind
+        nth_rewrite 2 [this]
+        rw [mul_comm]; rw [pow_succ]; rw [mul_assoc]; rw [hI.factorial_mul_dpow_eq_pow]
+        exact hs' a (mem_insert_self a s)
+      · obtain ⟨j, hj⟩ := h
+        rw [Finset.prod_eq_prod_sdiff_singleton_mul hj]
+        exact I.mul_mem_left _ (hs' j (mem_insert_of_mem hj))
+    · simp [not_nonempty_iff_eq_empty.mp h]
 
 Depends on / 依赖: Finset, Finset.card_insert_of_notMem, Finset.induction, Finset.prod_insert, Nat.cast_pow, Nonempty, add_tsub_cancel_right, card_insert_of_notMem, cast_pow, classical, dpow_mul, factorial_mul, hI.factorial_mul, insert, mem_insert_of_mem, mul_assoc, mul_comm, nsmul_eq_mul, nth_rewrite, pow_succ
 -/
@@ -883,7 +1041,33 @@ definition ofRingEquiv
     rw [EmbeddingLike.map_eq_one_iff]; rw [hI.dpow_zero]
     rwa [symm_apply_mem_of_equiv_iff, h]
   dpow_one hx := by
-    rw [dpow_one
+    rw [dpow_one]; rw [RingEquiv.apply_symm_apply]
+    rwa [I.symm_apply_mem_of_equiv_iff, h]
+  dpow_mem hn hx := by
+    rw [← h]; rw [I.apply_mem_of_equiv_iff]
+    apply hI.dpow_mem hn
+    rwa [I.symm_apply_mem_of_equiv_iff, h]
+  dpow_add hx hy := by
+    simp only [map_add]
+    rw [hI.dpow_add (symm_apply_mem_of_equiv_iff.mpr (h ▸ hx))
+        (symm_apply_mem_of_equiv_iff.mpr (h ▸ hy))]
+    simp only [map_sum, map_mul]
+  dpow_mul hx := by
+    simp only [map_mul]
+    rw [hI.dpow_mul (symm_apply_mem_of_equiv_iff.mpr (h ▸ hx))]
+    rw [map_mul]; rw [map_pow]
+    simp only [RingEquiv.apply_symm_apply]
+  mul_dpow hx := by
+    rw [← map_mul]; rw [hI.mul_dpow]; rw [map_mul]
+    · simp only [map_natCast]
+    · rwa [symm_apply_mem_of_equiv_iff, h]
+  dpow_comp hn hx := by
+    simp only [RingEquiv.symm_apply_apply]
+    rw [hI.dpow_comp hn]
+    · simp only [map_mul, map_natCast]
+    · rwa [symm_apply_mem_of_equiv_iff, h]
+
+@[simp]
 
 中文:
 定义 ofRingEquiv
@@ -896,7 +1080,33 @@ definition ofRingEquiv
     rw [EmbeddingLike.map_eq_one_iff]; rw [hI.dpow_zero]
     rwa [symm_apply_mem_of_equiv_iff, h]
   dpow_one hx := by
-    rw [dpow_one
+    rw [dpow_one]; rw [RingEquiv.apply_symm_apply]
+    rwa [I.symm_apply_mem_of_equiv_iff, h]
+  dpow_mem hn hx := by
+    rw [← h]; rw [I.apply_mem_of_equiv_iff]
+    apply hI.dpow_mem hn
+    rwa [I.symm_apply_mem_of_equiv_iff, h]
+  dpow_add hx hy := by
+    simp only [map_add]
+    rw [hI.dpow_add (symm_apply_mem_of_equiv_iff.mpr (h ▸ hx))
+        (symm_apply_mem_of_equiv_iff.mpr (h ▸ hy))]
+    simp only [map_sum, map_mul]
+  dpow_mul hx := by
+    simp only [map_mul]
+    rw [hI.dpow_mul (symm_apply_mem_of_equiv_iff.mpr (h ▸ hx))]
+    rw [map_mul]; rw [map_pow]
+    simp only [RingEquiv.apply_symm_apply]
+  mul_dpow hx := by
+    rw [← map_mul]; rw [hI.mul_dpow]; rw [map_mul]
+    · simp only [map_natCast]
+    · rwa [symm_apply_mem_of_equiv_iff, h]
+  dpow_comp hn hx := by
+    simp only [RingEquiv.symm_apply_apply]
+    rw [hI.dpow_comp hn]
+    · simp only [map_mul, map_natCast]
+    · rwa [symm_apply_mem_of_equiv_iff, h]
+
+@[simp]
 
 Depends on / 依赖: e.symm, hI.dpow
 -/

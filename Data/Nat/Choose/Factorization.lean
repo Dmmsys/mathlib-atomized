@@ -44,7 +44,12 @@ theorem factorization_factorial
   proof: by
         rw [factorial_succ]; rw [factorization_mul (zero_ne_add_one n).symm n.factorial_ne_zero]; rw [coe_add]; rw [Pi.add_apply]
       _ = #{i in Ico 1 b | p ^ i ∣ n + 1} + ∑ i in Ico 1 b, n / p ^ i := by
-        rw [factorization_factorial hp ((log_mono_right <| le_succ _).trans_lt hb)]; rw [ad
+        rw [factorization_factorial hp ((log_mono_right <| le_succ _).trans_lt hb)]; rw [add_left_inj]
+        apply factorization_eq_card_pow_dvd_of_lt hp (zero_lt_succ n)
+          (lt_pow_of_log_lt hp.one_lt hb)
+      _ = ∑ i in Ico 1 b, (n / p ^ i + if p ^ i ∣ n + 1 then 1 else 0) := by
+        simp [Nat.add_comm, sum_add_distrib, sum_boole]
+      _ = ∑ i in Ico 1 b, (n + 1) / p ^ i := Finset.sum_congr rfl fun _ _ => Nat.succ_div.symm
 
 中文:
 定理 factorization_factorial
@@ -52,7 +57,12 @@ theorem factorization_factorial
   证明: by
         rw [factorial_succ]; rw [factorization_mul (zero_ne_add_one n).symm n.factorial_ne_zero]; rw [coe_add]; rw [Pi.add_apply]
       _ = #{i in Ico 1 b | p ^ i ∣ n + 1} + ∑ i in Ico 1 b, n / p ^ i := by
-        rw [factorization_factorial hp ((log_mono_right <| le_succ _).trans_lt hb)]; rw [ad
+        rw [factorization_factorial hp ((log_mono_right <| le_succ _).trans_lt hb)]; rw [add_left_inj]
+        apply factorization_eq_card_pow_dvd_of_lt hp (zero_lt_succ n)
+          (lt_pow_of_log_lt hp.one_lt hb)
+      _ = ∑ i in Ico 1 b, (n / p ^ i + if p ^ i ∣ n + 1 then 1 else 0) := by
+        simp [Nat.add_comm, sum_add_distrib, sum_boole]
+      _ = ∑ i in Ico 1 b, (n + 1) / p ^ i := Finset.sum_congr rfl fun _ _ => Nat.succ_div.symm
 
 Depends on / 依赖: Nat.add_comm, Pi.add_apply, add_apply, add_comm, add_left_inj, coe_add, factorial_ne_zero, factorial_succ, factorization_eq_card_pow_dvd_of_lt, factorization_factorial, factorization_mul, hp.one_lt, le_succ, log_mono_right, lt_pow_of_log_lt, n.factorial_ne_zero, one_lt, sum_add_distrib, sum_bool, trans_lt
 -/
@@ -110,7 +120,11 @@ theorem factorization_factorial_mul_succ
   have h2 : p * n + 1 <= p * (n + 1) := by linarith
   have h3 : p * n + 1 <= p * (n + 1) + 1 := by lia
   have h4 m (hm : m in Ico (p * n + 1) (p * (n + 1))) : m.factorization p = 0 := by
-    apply factorization_eq_z
+    apply factorization_eq_zero_of_not_dvd
+    exact not_dvd_of_lt_of_lt_mul_succ (mem_Ico.mp hm).left (mem_Ico.mp hm).right
+  rw [← prod_Ico_id_eq_factorial]; rw [factorization_prod_apply (fun _ hx => ne_zero_of_lt
+    (mem_Ico.mp hx).left)]; rw [← sum_Ico_consecutive _ h1 h3]; rw [add_assoc]; rw [sum_Ico_succ_top h2]; rw [← prod_Ico_id_eq_factorial]; rw [factorization_prod_apply (fun _ hx => ne_zero_of_lt
+    (mem_Ico.mp hx).left)]; rw [factorization_mul (ne_zero_of_lt h0) (zero_ne_add_one n).symm]; rw [coe_add]; rw [Pi.add_apply]; rw [hp.factorization_self]; rw [sum_congr rfl h4]; rw [sum_const_zero]; rw [zero_add]; rw [add_comm 1]
 
 中文:
 定理 factorization_factorial_mul_succ
@@ -121,7 +135,11 @@ theorem factorization_factorial_mul_succ
   have h2 : p * n + 1 <= p * (n + 1) := by linarith
   have h3 : p * n + 1 <= p * (n + 1) + 1 := by lia
   have h4 m (hm : m in Ico (p * n + 1) (p * (n + 1))) : m.factorization p = 0 := by
-    apply factorization_eq_z
+    apply factorization_eq_zero_of_not_dvd
+    exact not_dvd_of_lt_of_lt_mul_succ (mem_Ico.mp hm).left (mem_Ico.mp hm).right
+  rw [← prod_Ico_id_eq_factorial]; rw [factorization_prod_apply (fun _ hx => ne_zero_of_lt
+    (mem_Ico.mp hx).left)]; rw [← sum_Ico_consecutive _ h1 h3]; rw [add_assoc]; rw [sum_Ico_succ_top h2]; rw [← prod_Ico_id_eq_factorial]; rw [factorization_prod_apply (fun _ hx => ne_zero_of_lt
+    (mem_Ico.mp hx).left)]; rw [factorization_mul (ne_zero_of_lt h0) (zero_ne_add_one n).symm]; rw [coe_add]; rw [Pi.add_apply]; rw [hp.factorization_self]; rw [sum_congr rfl h4]; rw [sum_const_zero]; rw [zero_add]; rw [add_comm 1]
 
 Depends on / 依赖: Nat.le_add_left, factorization, factorization_eq_zero_of_not_dvd, factorization_prod_apply, hp.two_le, le_add_left, m.factorization, mem_Ico, mem_Ico.mp, ne_zero_of_lt, not_dvd_of_lt_of_lt_mul_succ, prod_Ico_id_eq_factorial, two_le
 -/
@@ -209,7 +227,8 @@ lemma multiplicity_choose_aux
       simp only [add_tsub_cancel_of_le hkn]
     _ = ∑ i in Finset.Ico 1 b,
           (k / p ^ i + (n - k) / p ^ i + if p ^ i <= k % p ^ i + (n - k) % p ^ i then 1 else 0) := by
-      simp only [Nat.add_div
+      simp only [Nat.add_div (pow_pos hp.pos _)]
+    _ = _ := by simp [sum_add_distrib, sum_boole]
 
 中文:
 引理 multiplicity_choose_aux
@@ -219,7 +238,8 @@ lemma multiplicity_choose_aux
       simp only [add_tsub_cancel_of_le hkn]
     _ = ∑ i in Finset.Ico 1 b,
           (k / p ^ i + (n - k) / p ^ i + if p ^ i <= k % p ^ i + (n - k) % p ^ i then 1 else 0) := by
-      simp only [Nat.add_div
+      simp only [Nat.add_div (pow_pos hp.pos _)]
+    _ = _ := by simp [sum_add_distrib, sum_boole]
 
 Depends on / 依赖: Finset, Finset.Ico, Nat.add_div, add_div, add_tsub_cancel_of_le, hp.pos, pow_pos, sum_add_distrib, sum_boole
 -/
@@ -245,7 +265,12 @@ theorem factorization_choose'
   have h₁ : (choose (n + k) k).factorization p + (k ! * n !).factorization p
     = #{i in Ico 1 b | p ^ i <= k % p ^ i + n % p ^ i} + (k ! * n !).factorization p := by
     have h2 := (add_tsub_cancel_right n k) ▸ choose_mul_factorial_mul_factorial (le_add_left k n)
-    rw [← Pi.add_apply]; rw [← 
+    rw [← Pi.add_apply]; rw [← coe_add]; rw [← factorization_mul (ne_of_gt <| choose_pos (le_add_left k n))
+      (by positivity)]; rw [← mul_assoc]; rw [h2]; rw [factorization_factorial hp hnb]; rw [factorization_mul (factorial_ne_zero k) (factorial_ne_zero n)]; rw [coe_add]; rw [Pi.add_apply]; rw [factorization_factorial hp ((log_mono_right (le_add_left k n)).trans_lt
+      hnb)]; rw [factorization_factorial hp ((log_mono_right (le_add_left n k)).trans_lt
+      (add_comm n k ▸ hnb))]; rw [multiplicity_choose_aux hp (le_add_left k n)]
+    simp only [add_tsub_cancel_right, add_comm]
+  exact Nat.add_right_cancel h₁
 
 中文:
 定理 factorization_choose'
@@ -254,7 +279,12 @@ theorem factorization_choose'
   have h₁ : (choose (n + k) k).factorization p + (k ! * n !).factorization p
     = #{i in Ico 1 b | p ^ i <= k % p ^ i + n % p ^ i} + (k ! * n !).factorization p := by
     have h2 := (add_tsub_cancel_right n k) ▸ choose_mul_factorial_mul_factorial (le_add_left k n)
-    rw [← Pi.add_apply]; rw [← 
+    rw [← Pi.add_apply]; rw [← coe_add]; rw [← factorization_mul (ne_of_gt <| choose_pos (le_add_left k n))
+      (by positivity)]; rw [← mul_assoc]; rw [h2]; rw [factorization_factorial hp hnb]; rw [factorization_mul (factorial_ne_zero k) (factorial_ne_zero n)]; rw [coe_add]; rw [Pi.add_apply]; rw [factorization_factorial hp ((log_mono_right (le_add_left k n)).trans_lt
+      hnb)]; rw [factorization_factorial hp ((log_mono_right (le_add_left n k)).trans_lt
+      (add_comm n k ▸ hnb))]; rw [multiplicity_choose_aux hp (le_add_left k n)]
+    simp only [add_tsub_cancel_right, add_comm]
+  exact Nat.add_right_cancel h₁
 
 Depends on / 依赖: Pi.add_apply, add_apply, add_tsub_cancel_right, choose_mul_factorial_mul_factorial, choose_pos, coe_add, factorial_, factorial_ne_zero, factorization, factorization_factorial, factorization_mul, le_add_left, mul_assoc, ne_of_gt
 -/
@@ -349,7 +379,13 @@ theorem factorization_choose_prime_pow_add_factorization
   · have hdisj : Disjoint {i in Ico 1 n.succ | p ^ i <= k % p ^ i + (p ^ n - k) % p ^ i}
         {i in Ico 1 n.succ | p ^ i ∣ k} := by
       simp +contextual [Finset.disjoint_right, dvd_iff_mod_eq_zero, Nat.mod_lt _ (pow_pos hp.pos _)]
-    rw [factorization_choose hp hkn (lt_s
+    rw [factorization_choose hp hkn (lt_succ_self _)]; rw [factorization_eq_card_pow_dvd_of_lt hp
+      hk0.bot_lt (lt_of_le_of_lt hkn <| Nat.pow_lt_pow_succ hp.one_lt)]; rw [log_pow hp.one_lt]; rw [← card_union_of_disjoint hdisj]; rw [filter_union_right]
+    have filter_le_Ico := (Ico 1 n.succ).card_filter_le
+      fun x => p ^ x <= k % p ^ x + (p ^ n - k) % p ^ x ∨ p ^ x ∣ k
+    rwa [card_Ico 1 n.succ] at filter_le_Ico
+  · nth_rewrite 1 [← factorization_pow_self (n := n) hp]
+    exact factorization_le_factorization_choose_add hkn hk0
 
 中文:
 定理 factorization_choose_prime_pow_add_factorization
@@ -359,7 +395,13 @@ theorem factorization_choose_prime_pow_add_factorization
   · have hdisj : Disjoint {i in Ico 1 n.succ | p ^ i <= k % p ^ i + (p ^ n - k) % p ^ i}
         {i in Ico 1 n.succ | p ^ i ∣ k} := by
       simp +contextual [Finset.disjoint_right, dvd_iff_mod_eq_zero, Nat.mod_lt _ (pow_pos hp.pos _)]
-    rw [factorization_choose hp hkn (lt_s
+    rw [factorization_choose hp hkn (lt_succ_self _)]; rw [factorization_eq_card_pow_dvd_of_lt hp
+      hk0.bot_lt (lt_of_le_of_lt hkn <| Nat.pow_lt_pow_succ hp.one_lt)]; rw [log_pow hp.one_lt]; rw [← card_union_of_disjoint hdisj]; rw [filter_union_right]
+    have filter_le_Ico := (Ico 1 n.succ).card_filter_le
+      fun x => p ^ x <= k % p ^ x + (p ^ n - k) % p ^ x ∨ p ^ x ∣ k
+    rwa [card_Ico 1 n.succ] at filter_le_Ico
+  · nth_rewrite 1 [← factorization_pow_self (n := n) hp]
+    exact factorization_le_factorization_choose_add hkn hk0
 
 Depends on / 依赖: Disjoint, Finset, Finset.disjoint_right, Nat.mod_lt, Nat.pow_lt_pow_succ, bot_lt, card_union_of_disjoint, contextual, disjoint_right, dvd_iff_mod_eq_zero, factorization_choose, factorization_eq_card_pow_dvd_of_lt, filter_l, filter_union_right, hk0.bot_lt, hp.one_lt, hp.pos, le_antisymm, log_pow, lt_of_le_of_lt
 -/
@@ -421,7 +463,8 @@ theorem factorization_choose_le_log
   have hkn : k <= n := by
     refine le_of_not_gt fun hnk => h ?_
     simp [choose_eq_zero_of_lt hnk]
-  rw [factorization_choose hp hkn (Nat.lt_add_on
+  rw [factorization_choose hp hkn (Nat.lt_add_one _)]
+  exact (card_filter_le ..).trans_eq (Nat.card_Ico _ _)
 
 中文:
 定理 factorization_choose_le_log
@@ -433,7 +476,8 @@ theorem factorization_choose_le_log
   have hkn : k <= n := by
     refine le_of_not_gt fun hnk => h ?_
     simp [choose_eq_zero_of_lt hnk]
-  rw [factorization_choose hp hkn (Nat.lt_add_on
+  rw [factorization_choose hp hkn (Nat.lt_add_one _)]
+  exact (card_filter_le ..).trans_eq (Nat.card_Ico _ _)
 
 Depends on / 依赖: Nat.card_Ico, Nat.lt_add_one, Not.imp_symm, card_Ico, card_filter_le, choose_eq_zero_of_lt, factorization, factorization_choose, factorization_eq_zero_of_not_prime, imp_symm, le_of_not_gt, lt_add_one, p.Prime, trans_eq
 -/
@@ -508,7 +552,25 @@ theorem factorization_choose_of_lt_three_mul
   · simp [choose_eq_zero_of_lt hnk]
   simp only [factorization_choose hp hkn (Nat.lt_add_one _), card_eq_zero, filter_eq_empty_iff,
     mem_Ico, not_le, and_imp]
-  i
+  intro i hi₁ hi
+  rcases eq_or_lt_of_le hi₁ with (rfl | hi)
+  · rw [pow_one, ← add_lt_add_iff_left (2 * p), ← succ_mul, two_mul, add_add_add_comm]
+    exact
+      lt_of_le_of_lt
+        (add_le_add
+          (add_le_add_left (le_mul_of_one_le_right' ((one_le_div_iff hp.pos).mpr hk)) (k % p))
+          (add_le_add_left (le_mul_of_one_le_right' ((one_le_div_iff hp.pos).mpr hk'))
+            ((n - k) % p)))
+        (by rwa [div_add_mod, div_add_mod, add_tsub_cancel_of_le hkn])
+  · replace hn : n < p ^ i := by
+      have : 3 <= p := lt_of_le_of_ne hp.two_le hp'.symm
+      calc
+        n < 3 * p := hn
+        _ <= p * p := by gcongr
+        _ = p ^ 2 := (sq p).symm
+        _ <= p ^ i := pow_right_mono₀ hp.one_lt.le hi
+    rwa [mod_eq_of_lt (lt_of_le_of_lt hkn hn), mod_eq_of_lt (lt_of_le_of_lt tsub_le_self hn),
+      add_tsub_cancel_of_le hkn]
 
 中文:
 定理 factorization_choose_of_lt_three_mul
@@ -520,7 +582,25 @@ theorem factorization_choose_of_lt_three_mul
   · simp [choose_eq_zero_of_lt hnk]
   simp only [factorization_choose hp hkn (Nat.lt_add_one _), card_eq_zero, filter_eq_empty_iff,
     mem_Ico, not_le, and_imp]
-  i
+  intro i hi₁ hi
+  rcases eq_or_lt_of_le hi₁ with (rfl | hi)
+  · rw [pow_one, ← add_lt_add_iff_left (2 * p), ← succ_mul, two_mul, add_add_add_comm]
+    exact
+      lt_of_le_of_lt
+        (add_le_add
+          (add_le_add_left (le_mul_of_one_le_right' ((one_le_div_iff hp.pos).mpr hk)) (k % p))
+          (add_le_add_left (le_mul_of_one_le_right' ((one_le_div_iff hp.pos).mpr hk'))
+            ((n - k) % p)))
+        (by rwa [div_add_mod, div_add_mod, add_tsub_cancel_of_le hkn])
+  · replace hn : n < p ^ i := by
+      have : 3 <= p := lt_of_le_of_ne hp.two_le hp'.symm
+      calc
+        n < 3 * p := hn
+        _ <= p * p := by gcongr
+        _ = p ^ 2 := (sq p).symm
+        _ <= p ^ i := pow_right_mono₀ hp.one_lt.le hi
+    rwa [mod_eq_of_lt (lt_of_le_of_lt hkn hn), mod_eq_of_lt (lt_of_le_of_lt tsub_le_self hn),
+      add_tsub_cancel_of_le hkn]
 
 Depends on / 依赖: Nat.lt_add_one, add_add_add_comm, add_le_add, add_le_add_left, add_lt_add_iff_left, and_imp, card_eq_zero, choose_eq_zero_of_lt, eq_or_lt_of_le, factorization_choose, factorization_eq_zero_of_not_prime, filter_eq_empty_iff, le_mul_of_one_le_right, lt_add_one, lt_of_le_of_lt, lt_or_ge, mem_Ico, not_le, p.Prime, pow_one
 -/
@@ -686,7 +766,7 @@ theorem prod_pow_factorization_choose
     contrapose! hp
     rw [Finsupp.mem_support_iff]; rw [Classical.not_not]; rw [factorization_choose_eq_zero_of_lt hp]
   · intro p _ h2
-    
+    simp [Classical.not_not.1 (mt Finsupp.mem_support_iff.2 h2)]
 
 中文:
 定理 prod_pow_factorization_choose
@@ -700,7 +780,7 @@ theorem prod_pow_factorization_choose
     contrapose! hp
     rw [Finsupp.mem_support_iff]; rw [Classical.not_not]; rw [factorization_choose_eq_zero_of_lt hp]
   · intro p _ h2
-    
+    simp [Classical.not_not.1 (mt Finsupp.mem_support_iff.2 h2)]
 
 Depends on / 依赖: Classical, Classical.not_not, Finset, Finset.mem_range, Finset.prod_subset, Finsupp, Finsupp.mem_support_iff, choose_ne_zero, contrapose, conv_rhs, eq_comm, factorization_choose_eq_zero_of_lt, mem_range, mem_support_iff, not_not, prod_factorization_pow_eq_self, prod_subset
 -/

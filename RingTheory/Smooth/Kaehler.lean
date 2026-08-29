@@ -69,7 +69,22 @@ definition derivationOfSectionOfKerSqZero
   map_smul' x y := by
     ext
     simp only [Algebra.smul_def, map_mul, AlgHom.commutes,
-      RingHom.id_apply, Sub
+      RingHom.id_apply, Submodule.coe_smul_of_tower]
+    ring
+  map_one_eq_zero' := by simp only [LinearMap.coe_mk, AddHom.coe_mk, map_one, sub_self,
+    Submodule.mk_eq_zero]
+  leibniz' a b := by
+    have : (a - g (f a)) * (b - g (f b)) = 0 := by
+      rw [← Ideal.mem_bot]; rw [← hf']; rw [pow_two]
+      apply Ideal.mul_mem_mul
+      · simpa [RingHom.mem_ker, sub_eq_zero] using AlgHom.congr_fun hg.symm (f a)
+      · simpa [RingHom.mem_ker, sub_eq_zero] using AlgHom.congr_fun hg.symm (f b)
+    ext
+    rw [← sub_eq_zero]
+    conv_rhs => rw [← neg_zero, ← this]
+    simp only [LinearMap.coe_mk, AddHom.coe_mk, map_mul, SetLike.mk_smul_mk, smul_eq_mul, mul_sub,
+      AddMemClass.mk_add_mk, sub_mul, neg_sub]
+    ring
 
 中文:
 定义 derivationOfSectionOfKerSqZero
@@ -80,7 +95,22 @@ definition derivationOfSectionOfKerSqZero
   map_smul' x y := by
     ext
     simp only [Algebra.smul_def, map_mul, AlgHom.commutes,
-      RingHom.id_apply, Sub
+      RingHom.id_apply, Submodule.coe_smul_of_tower]
+    ring
+  map_one_eq_zero' := by simp only [LinearMap.coe_mk, AddHom.coe_mk, map_one, sub_self,
+    Submodule.mk_eq_zero]
+  leibniz' a b := by
+    have : (a - g (f a)) * (b - g (f b)) = 0 := by
+      rw [← Ideal.mem_bot]; rw [← hf']; rw [pow_two]
+      apply Ideal.mul_mem_mul
+      · simpa [RingHom.mem_ker, sub_eq_zero] using AlgHom.congr_fun hg.symm (f a)
+      · simpa [RingHom.mem_ker, sub_eq_zero] using AlgHom.congr_fun hg.symm (f b)
+    ext
+    rw [← sub_eq_zero]
+    conv_rhs => rw [← neg_zero, ← this]
+    simp only [LinearMap.coe_mk, AddHom.coe_mk, map_mul, SetLike.mk_smul_mk, smul_eq_mul, mul_sub,
+      AddMemClass.mk_add_mk, sub_mul, neg_sub]
+    ring
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, AddMemClass, AddMemClass.mk_add_mk, AlgHom, AlgHom.commutes, AlgHom.congr_fun, Algebra, Algebra.smul_def, Ideal.mem_b, LinearMap, LinearMap.coe_mk, RingHom, RingHom.id_apply, RingHom.mem_ker, Submodule, Submodule.coe_smul_of_tower, Submodule.mk_eq_zero, Subtype, Subtype.mk.injEq
 -/
@@ -126,7 +156,9 @@ lemma isScalarTower_of_section_of_ker_sqZero
   change g (p • s) * m = p * (g s * m)
   simp only [Algebra.smul_def, map_mul, mul_assoc, mul_left_comm _ (g s)]
   congr 1
-  rw [← sub_eq_zero]; rw [← Ideal.
+  rw [← sub_eq_zero]; rw [← Ideal.mem_bot]; rw [← hf']; rw [pow_two]; rw [← sub_mul]
+  refine Ideal.mul_mem_mul ?_ m.2
+  simpa [RingHom.mem_ker, sub_eq_zero] using AlgHom.congr_fun hg (algebraMap P S p)
 
 中文:
 引理 isScalarTower_of_section_of_ker_sqZero
@@ -138,7 +170,9 @@ lemma isScalarTower_of_section_of_ker_sqZero
   change g (p • s) * m = p * (g s * m)
   simp only [Algebra.smul_def, map_mul, mul_assoc, mul_left_comm _ (g s)]
   congr 1
-  rw [← sub_eq_zero]; rw [← Ideal.
+  rw [← sub_eq_zero]; rw [← Ideal.mem_bot]; rw [← hf']; rw [pow_two]; rw [← sub_mul]
+  refine Ideal.mul_mem_mul ?_ m.2
+  simpa [RingHom.mem_ker, sub_eq_zero] using AlgHom.congr_fun hg (algebraMap P S p)
 
 Depends on / 依赖: AlgHom, AlgHom.congr_fun, Algebra, Algebra.smul_def, Ideal.mem_bot, Ideal.mul_mem_mul, IsScalarTower, RingHom, RingHom.ker, RingHom.mem_ker, algebraMap, congr_fun, g.toRingHom.toAlgebra, map_mul, mem_bot, mem_ker, mul_assoc, mul_left_comm, mul_mem_mul, pow_two
 -/
@@ -204,7 +238,10 @@ lemma retractionOfSectionOfKerSqZero_tmul_D
   have := isScalarTower_of_section_of_ker_sqZero g hf' hg
   simp only [retractionOfSectionOfKerSqZero, LinearMap.coe_restrictScalars,
     LinearMap.liftBaseChange_tmul, SetLike.val_smul_of_tower]
-  -- The issue is a mismatch between `RingHom.ker (algebraMap P S)` an
+  -- The issue is a mismatch between `RingHom.ker (algebraMap P S)` and
+  -- `RingHom.ker (IsScalarTower.toAlgHom R P S)`, but `rw` and `simp` can't rewrite it away...
+  erw [Derivation.liftKaehlerDifferential_comp_D]
+  exact mul_sub (g s) t (g (algebraMap P S t))
 
 中文:
 引理 retractionOfSectionOfKerSqZero_tmul_D
@@ -214,7 +251,10 @@ lemma retractionOfSectionOfKerSqZero_tmul_D
   have := isScalarTower_of_section_of_ker_sqZero g hf' hg
   simp only [retractionOfSectionOfKerSqZero, LinearMap.coe_restrictScalars,
     LinearMap.liftBaseChange_tmul, SetLike.val_smul_of_tower]
-  -- The issue is a mismatch between `RingHom.ker (algebraMap P S)` an
+  -- The issue is a mismatch between `RingHom.ker (algebraMap P S)` and
+  -- `RingHom.ker (IsScalarTower.toAlgHom R P S)`, but `rw` and `simp` can't rewrite it away...
+  erw [Derivation.liftKaehlerDifferential_comp_D]
+  exact mul_sub (g s) t (g (algebraMap P S t))
 
 Depends on / 依赖: LinearMap, LinearMap.coe_restrictScalars, LinearMap.liftBaseChange_tmul, SetLike, SetLike.val_smul_of_tower, coe_restrictScalars, g.toRingHom.toAlgebra, isScalarTower_of_section_of_ker_sqZero, liftBaseChange_tmul, retractionOfSectionOfKerSqZero, toAlgebra, toRingHom, val_smul_of_tower
 -/
@@ -306,7 +346,17 @@ definition sectionOfRetractionKerToTensorAux
   map_mul' a b := by
     have (x y : _) : (l x).1 * (l y).1 = 0 := by
       rw [← Ideal.mem_bot]; rw [← hf']; rw [pow_two]; exact Ideal.mul_mem_mul (l x).2 (l y).2
-    simp onl
+    simp only [sectionOfRetractionKerToTensorAux_prop l hl (σ (a * b)) (σ a * σ b) (by simp [hσ]),
+      Derivation.leibniz, tmul_add, tmul_smul, map_add, map_smul, Submodule.coe_add,
+      SetLike.val_smul, smul_eq_mul, mul_sub, sub_mul, this, sub_zero]
+    ring
+  map_add' a b := by
+    simp only [sectionOfRetractionKerToTensorAux_prop l hl (σ (a + b)) (σ a + σ b) (by simp [hσ]),
+      map_add, tmul_add, Submodule.coe_add, add_sub_add_comm]
+  map_zero' := by simp [sectionOfRetractionKerToTensorAux_prop l hl (σ 0) 0 (by simp [hσ])]
+  commutes' r := by
+    simp [sectionOfRetractionKerToTensorAux_prop l hl
+      (σ (algebraMap R S r)) (algebraMap R P r) (by simp [hσ, ← IsScalarTower.algebraMap_apply])]
 
 中文:
 定义 sectionOfRetractionKerToTensorAux
@@ -316,7 +366,17 @@ definition sectionOfRetractionKerToTensorAux
   map_mul' a b := by
     have (x y : _) : (l x).1 * (l y).1 = 0 := by
       rw [← Ideal.mem_bot]; rw [← hf']; rw [pow_two]; exact Ideal.mul_mem_mul (l x).2 (l y).2
-    simp onl
+    simp only [sectionOfRetractionKerToTensorAux_prop l hl (σ (a * b)) (σ a * σ b) (by simp [hσ]),
+      Derivation.leibniz, tmul_add, tmul_smul, map_add, map_smul, Submodule.coe_add,
+      SetLike.val_smul, smul_eq_mul, mul_sub, sub_mul, this, sub_zero]
+    ring
+  map_add' a b := by
+    simp only [sectionOfRetractionKerToTensorAux_prop l hl (σ (a + b)) (σ a + σ b) (by simp [hσ]),
+      map_add, tmul_add, Submodule.coe_add, add_sub_add_comm]
+  map_zero' := by simp [sectionOfRetractionKerToTensorAux_prop l hl (σ 0) 0 (by simp [hσ])]
+  commutes' r := by
+    simp [sectionOfRetractionKerToTensorAux_prop l hl
+      (σ (algebraMap R S r)) (algebraMap R P r) (by simp [hσ, ← IsScalarTower.algebraMap_apply])]
 -/
 def sectionOfRetractionKerToTensorAux : S ->ₐ[R] P where
   toFun x := σ x - l (1 otimesₜ .D _ _ (σ x))
@@ -468,7 +528,15 @@ definition retractionKerToTensorEquivSection
     ext s p
     obtain ⟨s, rfl⟩ := hf s
     have (x y : _) : (l.1 x).1 * (l.1 y).1 = 0 := by
-      rw [← Ideal.mem_bot]; rw [← hf']; rw [pow_
+      rw [← Ideal.mem_bot]; rw [← hf']; rw [pow_two]; exact Ideal.mul_mem_mul (l.1 x).2 (l.1 y).2
+    simp only [AlgebraTensorModule.curry_apply,
+      Derivation.coe_comp, LinearMap.coe_comp, LinearMap.coe_restrictScalars, Derivation.coeFn_coe,
+      Function.comp_apply, curry_apply, retractionOfSectionOfKerSqZero_tmul_D,
+      sectionOfRetractionKerToTensor_algebraMap, ← mul_sub, sub_sub_cancel]
+    rw [sub_mul]
+    simp only [this, Algebra.algebraMap_eq_smul_one, ← smul_tmul', LinearMapClass.map_smul,
+      SetLike.val_smul, smul_eq_mul, sub_zero]
+  right_inv g := by ext s; obtain ⟨s, rfl⟩ := hf s; simp
 
 中文:
 定义 retractionKerToTensorEquivSection
@@ -479,7 +547,15 @@ definition retractionKerToTensorEquivSection
     ext s p
     obtain ⟨s, rfl⟩ := hf s
     have (x y : _) : (l.1 x).1 * (l.1 y).1 = 0 := by
-      rw [← Ideal.mem_bot]; rw [← hf']; rw [pow_
+      rw [← Ideal.mem_bot]; rw [← hf']; rw [pow_two]; exact Ideal.mul_mem_mul (l.1 x).2 (l.1 y).2
+    simp only [AlgebraTensorModule.curry_apply,
+      Derivation.coe_comp, LinearMap.coe_comp, LinearMap.coe_restrictScalars, Derivation.coeFn_coe,
+      Function.comp_apply, curry_apply, retractionOfSectionOfKerSqZero_tmul_D,
+      sectionOfRetractionKerToTensor_algebraMap, ← mul_sub, sub_sub_cancel]
+    rw [sub_mul]
+    simp only [this, Algebra.algebraMap_eq_smul_one, ← smul_tmul', LinearMapClass.map_smul,
+      SetLike.val_smul, smul_eq_mul, sub_zero]
+  right_inv g := by ext s; obtain ⟨s, rfl⟩ := hf s; simp
 
 Depends on / 依赖: toAlgHom_comp_sectionOfRetractionKerToTensor
 -/
@@ -520,7 +596,24 @@ definition derivationQuotKerSq
   refine ⟨this ?_, ?_, ?_⟩
   · rintro x hx
     simp only [Submodule.restrictScalars_mem, pow_two] at hx
-    simp only [LinearMap.mem
+    simp only [LinearMap.mem_ker, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
+      Derivation.coeFn_coe, Function.comp_apply, mk_apply]
+    refine Submodule.smul_induction_on hx ?_ ?_
+    · intro x hx y hy
+      simp only [smul_eq_mul, Derivation.leibniz, tmul_add, ← smul_tmul, Algebra.smul_def,
+        mul_one, RingHom.mem_ker.mp hx, RingHom.mem_ker.mp hy, zero_tmul, zero_add]
+    · intro x y hx hy; simp only [map_add, hx, hy, tmul_add, zero_add]
+  · change (1 : S) otimesₜ[P] KaehlerDifferential.D R P 1 = 0; simp
+  · intro a b
+    obtain ⟨a, rfl⟩ := Submodule.Quotient.mk_surjective _ a
+    obtain ⟨b, rfl⟩ := Submodule.Quotient.mk_surjective _ b
+    change (1 : S) otimesₜ[P] KaehlerDifferential.D R P (a * b) =
+      Ideal.Quotient.mk _ a • ((1 : S) otimesₜ[P] KaehlerDifferential.D R P b) +
+      Ideal.Quotient.mk _ b • ((1 : S) otimesₜ[P] KaehlerDifferential.D R P a)
+    simp only [← Ideal.Quotient.algebraMap_eq, IsScalarTower.algebraMap_smul,
+      Derivation.leibniz, tmul_add, tmul_smul]
+
+@[simp]
 
 中文:
 定义 derivationQuotKerSq
@@ -531,7 +624,24 @@ definition derivationQuotKerSq
   refine ⟨this ?_, ?_, ?_⟩
   · rintro x hx
     simp only [Submodule.restrictScalars_mem, pow_two] at hx
-    simp only [LinearMap.mem
+    simp only [LinearMap.mem_ker, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
+      Derivation.coeFn_coe, Function.comp_apply, mk_apply]
+    refine Submodule.smul_induction_on hx ?_ ?_
+    · intro x hx y hy
+      simp only [smul_eq_mul, Derivation.leibniz, tmul_add, ← smul_tmul, Algebra.smul_def,
+        mul_one, RingHom.mem_ker.mp hx, RingHom.mem_ker.mp hy, zero_tmul, zero_add]
+    · intro x y hx hy; simp only [map_add, hx, hy, tmul_add, zero_add]
+  · change (1 : S) otimesₜ[P] KaehlerDifferential.D R P 1 = 0; simp
+  · intro a b
+    obtain ⟨a, rfl⟩ := Submodule.Quotient.mk_surjective _ a
+    obtain ⟨b, rfl⟩ := Submodule.Quotient.mk_surjective _ b
+    change (1 : S) otimesₜ[P] KaehlerDifferential.D R P (a * b) =
+      Ideal.Quotient.mk _ a • ((1 : S) otimesₜ[P] KaehlerDifferential.D R P b) +
+      Ideal.Quotient.mk _ b • ((1 : S) otimesₜ[P] KaehlerDifferential.D R P a)
+    simp only [← Ideal.Quotient.algebraMap_eq, IsScalarTower.algebraMap_smul,
+      Derivation.leibniz, tmul_add, tmul_smul]
+
+@[simp]
 
 Depends on / 依赖: Derivation, Derivation.coeFn_coe, Derivation.leibniz, Function, Function.comp_apply, KaehlerDifferential, KaehlerDifferential.D, LinearMap, LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearMap.mem_ker, RingHom, RingHom.ker, Submodule, Submodule.liftQ, Submodule.restrictScalars_mem, Submodule.smul_induction_on, algebraMap, coeFn_coe, coe_comp
 -/
@@ -591,7 +701,21 @@ definition tensorKaehlerQuotKerSqEquiv
   body: letI f₁ := (derivationQuotKerSq R P S).liftKaehlerDifferential
   letI f₂ := AlgebraTensorModule.lift ((LinearMap.ringLmapEquivSelf S S _).symm f₁)
   letI f₃ := KaehlerDifferential.map R R P (P ⧸ (RingHom.ker (algebraMap P S) ^ 2))
-  letI f₄ := ((mk (P ⧸ RingHom.ker (algebraMap P S) ^ 2) S _ 1).restr
+  letI f₄ := ((mk (P ⧸ RingHom.ker (algebraMap P S) ^ 2) S _ 1).restrictScalars P).comp f₃
+  letI f₅ := AlgebraTensorModule.lift ((LinearMap.ringLmapEquivSelf S S _).symm f₄)
+  { __ := f₂
+    invFun := f₅
+    left_inv := by
+      suffices f₅.comp f₂ = LinearMap.id from LinearMap.congr_fun this
+      ext a
+      obtain ⟨a, rfl⟩ := Ideal.Quotient.mk_surjective a
+      simp [f₁, f₂, f₃, f₄, f₅]
+    right_inv := by
+      suffices f₂.comp f₅ = LinearMap.id from LinearMap.congr_fun this
+      ext a
+      simp [f₁, f₂, f₃, f₄, f₅] }
+
+@[simp]
 
 中文:
 定义 tensorKaehlerQuotKerSqEquiv
@@ -599,7 +723,21 @@ definition tensorKaehlerQuotKerSqEquiv
   定义体: letI f₁ := (derivationQuotKerSq R P S).liftKaehlerDifferential
   letI f₂ := AlgebraTensorModule.lift ((LinearMap.ringLmapEquivSelf S S _).symm f₁)
   letI f₃ := KaehlerDifferential.map R R P (P ⧸ (RingHom.ker (algebraMap P S) ^ 2))
-  letI f₄ := ((mk (P ⧸ RingHom.ker (algebraMap P S) ^ 2) S _ 1).restr
+  letI f₄ := ((mk (P ⧸ RingHom.ker (algebraMap P S) ^ 2) S _ 1).restrictScalars P).comp f₃
+  letI f₅ := AlgebraTensorModule.lift ((LinearMap.ringLmapEquivSelf S S _).symm f₄)
+  { __ := f₂
+    invFun := f₅
+    left_inv := by
+      suffices f₅.comp f₂ = LinearMap.id from LinearMap.congr_fun this
+      ext a
+      obtain ⟨a, rfl⟩ := Ideal.Quotient.mk_surjective a
+      simp [f₁, f₂, f₃, f₄, f₅]
+    right_inv := by
+      suffices f₂.comp f₅ = LinearMap.id from LinearMap.congr_fun this
+      ext a
+      simp [f₁, f₂, f₃, f₄, f₅] }
+
+@[simp]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.lift, KaehlerDifferential, KaehlerDifferential.map, LinearMap, LinearMap.congr_fun, LinearMap.id, LinearMap.ringLmapEquivSelf, RingHom, RingHom.ker, algebraMap, congr_fun, derivationQuotKerSq, invFun, left_inv, liftKaehlerDifferential, restrictScalars, ringLmapEquivSelf
 -/
@@ -698,7 +836,47 @@ definition retractionKerCotangentToTensorEquivSection
   let P' := P ⧸ (RingHom.ker (algebraMap P S) ^ 2)
   have h₁ : Surjective (algebraMap P' S) := Function.Surjective.of_comp (g := algebraMap P P') hf
   have h₂ : RingHom.ker (algebraMap P' S) ^ 2 = ⊥ := by
-    rw [RingHom.algebraMap_toAlgebra]; rw [AlgHom.ker_kerSquareLift]; rw [Ideal.cotangentIde
+    rw [RingHom.algebraMap_toAlgebra]; rw [AlgHom.ker_kerSquareLift]; rw [Ideal.cotangentIdeal_square]
+  let e₁ : (RingHom.ker (algebraMap P S)).Cotangent ≃ₗ[P] (RingHom.ker (algebraMap P' S)) :=
+    (Ideal.cotangentEquivIdeal _).trans ((LinearEquiv.ofEq _ _
+      (IsScalarTower.toAlgHom R P S).ker_kerSquareLift.symm).restrictScalars P)
+  let e₂ : S otimes[P'] Ω[P'⁄R] ≃ₗ[P] S otimes[P] Ω[P⁄R] :=
+    (tensorKaehlerQuotKerSqEquiv R P S).restrictScalars P
+  have H : kerCotangentToTensor R P S =
+      e₂.toLinearMap ∘ₗ (kerToTensor R P' S).restrictScalars P ∘ₗ e₁.toLinearMap := by
+    ext x
+    obtain ⟨x, rfl⟩ := Ideal.toCotangent_surjective _ x
+    exact (tensorKaehlerQuotKerSqEquiv_tmul_D 1 x.1).symm
+  refine Equiv.trans ?_ (retractionKerToTensorEquivSection (R := R) h₂ h₁)
+  refine ⟨fun ⟨l, hl⟩ => ⟨⟨e₁.toLinearMap ∘ₗ l ∘ₗ e₂.toLinearMap, ?_⟩, ?_⟩,
+    fun ⟨l, hl⟩ => ⟨e₁.symm.toLinearMap ∘ₗ l.restrictScalars P ∘ₗ e₂.symm.toLinearMap, ?_⟩, ?_, ?_⟩
+  · rintro x y
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    simp only [P', ← Ideal.Quotient.algebraMap_eq, IsScalarTower.algebraMap_smul]
+    exact (e₁.toLinearMap ∘ₗ l ∘ₗ e₂.toLinearMap).map_smul x y
+  · ext1 x
+    rw [H] at hl
+    obtain ⟨x, rfl⟩ := e₁.surjective x
+    exact DFunLike.congr_arg e₁ (LinearMap.congr_fun hl x)
+  · ext x
+    rw [H]
+    apply e₁.injective
+    simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, LinearMap.coe_restrictScalars,
+      Function.comp_apply, LinearEquiv.symm_apply_apply, LinearMap.id_coe, id_eq,
+      LinearEquiv.apply_symm_apply]
+    exact LinearMap.congr_fun hl (e₁ x)
+  · intro f
+    ext x
+    simp only [AlgebraTensorModule.curry_apply, Derivation.coe_comp, LinearMap.coe_comp,
+      LinearMap.coe_restrictScalars, Derivation.coeFn_coe, Function.comp_apply, curry_apply,
+      LinearEquiv.coe_coe, LinearMap.coe_mk, AddHom.coe_coe,
+      LinearEquiv.apply_symm_apply, LinearEquiv.symm_apply_apply]
+  · intro f
+    ext x
+    simp only [AlgebraTensorModule.curry_apply, Derivation.coe_comp, LinearMap.coe_comp,
+      LinearMap.coe_restrictScalars, Derivation.coeFn_coe, Function.comp_apply, curry_apply,
+      LinearMap.coe_mk, AddHom.coe_coe, LinearEquiv.coe_coe,
+      LinearEquiv.symm_apply_apply, LinearEquiv.apply_symm_apply]
 
 中文:
 定义 retractionKerCotangentToTensorEquivSection
@@ -707,7 +885,47 @@ definition retractionKerCotangentToTensorEquivSection
   let P' := P ⧸ (RingHom.ker (algebraMap P S) ^ 2)
   have h₁ : Surjective (algebraMap P' S) := Function.Surjective.of_comp (g := algebraMap P P') hf
   have h₂ : RingHom.ker (algebraMap P' S) ^ 2 = ⊥ := by
-    rw [RingHom.algebraMap_toAlgebra]; rw [AlgHom.ker_kerSquareLift]; rw [Ideal.cotangentIde
+    rw [RingHom.algebraMap_toAlgebra]; rw [AlgHom.ker_kerSquareLift]; rw [Ideal.cotangentIdeal_square]
+  let e₁ : (RingHom.ker (algebraMap P S)).Cotangent ≃ₗ[P] (RingHom.ker (algebraMap P' S)) :=
+    (Ideal.cotangentEquivIdeal _).trans ((LinearEquiv.ofEq _ _
+      (IsScalarTower.toAlgHom R P S).ker_kerSquareLift.symm).restrictScalars P)
+  let e₂ : S otimes[P'] Ω[P'⁄R] ≃ₗ[P] S otimes[P] Ω[P⁄R] :=
+    (tensorKaehlerQuotKerSqEquiv R P S).restrictScalars P
+  have H : kerCotangentToTensor R P S =
+      e₂.toLinearMap ∘ₗ (kerToTensor R P' S).restrictScalars P ∘ₗ e₁.toLinearMap := by
+    ext x
+    obtain ⟨x, rfl⟩ := Ideal.toCotangent_surjective _ x
+    exact (tensorKaehlerQuotKerSqEquiv_tmul_D 1 x.1).symm
+  refine Equiv.trans ?_ (retractionKerToTensorEquivSection (R := R) h₂ h₁)
+  refine ⟨fun ⟨l, hl⟩ => ⟨⟨e₁.toLinearMap ∘ₗ l ∘ₗ e₂.toLinearMap, ?_⟩, ?_⟩,
+    fun ⟨l, hl⟩ => ⟨e₁.symm.toLinearMap ∘ₗ l.restrictScalars P ∘ₗ e₂.symm.toLinearMap, ?_⟩, ?_, ?_⟩
+  · rintro x y
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    simp only [P', ← Ideal.Quotient.algebraMap_eq, IsScalarTower.algebraMap_smul]
+    exact (e₁.toLinearMap ∘ₗ l ∘ₗ e₂.toLinearMap).map_smul x y
+  · ext1 x
+    rw [H] at hl
+    obtain ⟨x, rfl⟩ := e₁.surjective x
+    exact DFunLike.congr_arg e₁ (LinearMap.congr_fun hl x)
+  · ext x
+    rw [H]
+    apply e₁.injective
+    simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, LinearMap.coe_restrictScalars,
+      Function.comp_apply, LinearEquiv.symm_apply_apply, LinearMap.id_coe, id_eq,
+      LinearEquiv.apply_symm_apply]
+    exact LinearMap.congr_fun hl (e₁ x)
+  · intro f
+    ext x
+    simp only [AlgebraTensorModule.curry_apply, Derivation.coe_comp, LinearMap.coe_comp,
+      LinearMap.coe_restrictScalars, Derivation.coeFn_coe, Function.comp_apply, curry_apply,
+      LinearEquiv.coe_coe, LinearMap.coe_mk, AddHom.coe_coe,
+      LinearEquiv.apply_symm_apply, LinearEquiv.symm_apply_apply]
+  · intro f
+    ext x
+    simp only [AlgebraTensorModule.curry_apply, Derivation.coe_comp, LinearMap.coe_comp,
+      LinearMap.coe_restrictScalars, Derivation.coeFn_coe, Function.comp_apply, curry_apply,
+      LinearMap.coe_mk, AddHom.coe_coe, LinearEquiv.coe_coe,
+      LinearEquiv.symm_apply_apply, LinearEquiv.apply_symm_apply]
 
 Depends on / 依赖: AlgHom, AlgHom.ker_kerSquareLift, Cotangent, Function, Function.Surjective.of_comp, Ideal.cotangentEquivIdeal, Ideal.cotangentIdeal_square, IsScalarTower, IsScalarTower.toAlgHom, LinearEquiv, LinearEquiv.ofEq, RingHom, RingHom.algebraMap_toAlgebra, RingHom.ker, Surjective, algebraMap, algebraMap_toAlgebra, cotangentEquivIdeal, cotangentIdeal_square, ker_kerSquareLift
 -/
@@ -773,7 +991,12 @@ lemma CotangentSpace.map_toInfinitesimal_bijective
       (tensorKaehlerQuotKerSqEquiv _ _ _).symm.toLinearMap by
     rw [this]; exact (tensorKaehlerQuotKerSqEquiv _ _ _).symm.bijective
   let : Algebra P.Ring P.infinitesimal.Ring := inferInstanceAs (Algebra P.Ring (P.Ring ⧸ _))
-  have : IsScalarTow
+  have : IsScalarTower P.Ring P.infinitesimal.Ring S := .of_algebraMap_eq' rfl
+  apply LinearMap.restrictScalars_injective P.Ring
+  ext x a
+  dsimp
+  simp only [map_tmul, algebraMap_self, RingHom.id_apply, Hom.toAlgHom_apply]
+  exact (tensorKaehlerQuotKerSqEquiv_symm_tmul_D _ _).symm
 
 中文:
 引理 CotangentSpace.map_toInfinitesimal_bijective
@@ -783,7 +1006,12 @@ lemma CotangentSpace.map_toInfinitesimal_bijective
       (tensorKaehlerQuotKerSqEquiv _ _ _).symm.toLinearMap by
     rw [this]; exact (tensorKaehlerQuotKerSqEquiv _ _ _).symm.bijective
   let : Algebra P.Ring P.infinitesimal.Ring := inferInstanceAs (Algebra P.Ring (P.Ring ⧸ _))
-  have : IsScalarTow
+  have : IsScalarTower P.Ring P.infinitesimal.Ring S := .of_algebraMap_eq' rfl
+  apply LinearMap.restrictScalars_injective P.Ring
+  ext x a
+  dsimp
+  simp only [map_tmul, algebraMap_self, RingHom.id_apply, Hom.toAlgHom_apply]
+  exact (tensorKaehlerQuotKerSqEquiv_symm_tmul_D _ _).symm
 
 Depends on / 依赖: Algebra, CotangentSpace, CotangentSpace.map, Hom.toAlgHom_apply, IsScalarTower, LinearMap, LinearMap.restrictScalars_injective, P.Ring, P.infinitesimal.Ring, P.toInfinitesimal, RingHom, RingHom.id_apply, algebraMap_self, bijective, id_apply, infinitesimal, map_tmul, of_algebraMap_eq, restrictScalars_injective, symm.bijective
 -/
@@ -815,7 +1043,17 @@ lemma Cotangent.map_toInfinitesimal_bijective
     have hx : x.1 in P.ker ^ 2 := by
       apply_fun Cotangent.val at hx
       simp only [map_mk, Hom.toAlgHom_apply, val_mk, val_zero, Ideal.toCotangent_eq_zero,
-        Extension.ker
+        Extension.ker_infinitesimal] at hx
+      rw [Ideal.cotangentIdeal_square] at hx
+      simpa only [toInfinitesimal, Ideal.mem_bot, infinitesimal,
+        Ideal.Quotient.eq_zero_iff_mem] using hx
+    ext
+    simpa [Ideal.toCotangent_eq_zero]
+  · intro x
+    obtain ⟨⟨x, hx⟩, rfl⟩ := Cotangent.mk_surjective x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    rw [ker_infinitesimal]; rw [Ideal.mk_mem_cotangentIdeal] at hx
+    exact ⟨.mk ⟨x, hx⟩, rfl⟩
 
 中文:
 引理 余切.map_toInfinitesimal_bijective
@@ -828,7 +1066,17 @@ lemma Cotangent.map_toInfinitesimal_bijective
     have hx : x.1 in P.ker ^ 2 := by
       apply_fun Cotangent.val at hx
       simp only [map_mk, Hom.toAlgHom_apply, val_mk, val_zero, Ideal.toCotangent_eq_zero,
-        Extension.ker
+        Extension.ker_infinitesimal] at hx
+      rw [Ideal.cotangentIdeal_square] at hx
+      simpa only [toInfinitesimal, Ideal.mem_bot, infinitesimal,
+        Ideal.Quotient.eq_zero_iff_mem] using hx
+    ext
+    simpa [Ideal.toCotangent_eq_zero]
+  · intro x
+    obtain ⟨⟨x, hx⟩, rfl⟩ := Cotangent.mk_surjective x
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    rw [ker_infinitesimal]; rw [Ideal.mk_mem_cotangentIdeal] at hx
+    exact ⟨.mk ⟨x, hx⟩, rfl⟩
 
 Depends on / 依赖: Cotangent, Cotangent.mk_surjective, Cotangent.val, Extension, Extension.ker_infinitesimal, Hom.toAlgHom_apply, Ideal.Quotient.eq_zero_iff_mem, Ideal.cotangentIdeal_square, Ideal.mem_bot, Ideal.toCotangent_eq_zero, P.ker, Quotient, apply_fun, cotangentIdeal_square, eq_zero_iff_mem, infinitesimal, injective_iff_map_eq_zero, ker_infinitesimal, map_mk, mem_bot
 -/
@@ -868,7 +1116,7 @@ lemma H1Cotangent.map_toInfinitesimal_bijective
     obtain ⟨x, rfl⟩ := (Cotangent.map_toInfinitesimal_bijective P).2 x
     refine ⟨⟨x, ?_⟩, rfl⟩
     simpa [← CotangentSpace.map_cotangentComplex,
-      map_e
+      map_eq_zero_iff _ (CotangentSpace.map_toInfinitesimal_bijective P).injective] using hx
 
 中文:
 引理 H1Cotangent.map_toInfinitesimal_bijective
@@ -882,7 +1130,7 @@ lemma H1Cotangent.map_toInfinitesimal_bijective
     obtain ⟨x, rfl⟩ := (Cotangent.map_toInfinitesimal_bijective P).2 x
     refine ⟨⟨x, ?_⟩, rfl⟩
     simpa [← CotangentSpace.map_cotangentComplex,
-      map_e
+      map_eq_zero_iff _ (CotangentSpace.map_toInfinitesimal_bijective P).injective] using hx
 
 Depends on / 依赖: Cotangent, Cotangent.map_toInfinitesimal_bijective, CotangentSpace, CotangentSpace.map_cotangentComplex, CotangentSpace.map_toInfinitesimal_bijective, Subtype, Subtype.val, congr_arg, injective, map_cotangentComplex, map_eq_zero_iff, map_toInfinitesimal_bijective
 -/

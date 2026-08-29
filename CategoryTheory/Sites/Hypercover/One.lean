@@ -530,7 +530,23 @@ definition isLimitMultiforkEquivIsLimitFork
   letI c' : Fan (E.multicospanIndex F).left := Fan.mk _ fun i => F.map (c.inj i).op
   letI hc' : IsLimit c' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₀ => _) (Cofan.IsColimit.op hc)
   letI d' : Fan (E.multicospanIndex F).right := Fan.mk _ fun i => F.map (d.inj i).op
-  letI hd' : IsLimit d' := i
+  letI hd' : IsLimit d' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₁' => _) (Cofan.IsColimit.op hd)
+  refine (IsLimit.ofConeEquiv <|
+    (E.multicospanIndex F).multiforkEquivPiForkOfIsLimit hc' hd').symm.trans ?_
+  refine Fork.isLimitEquivOfIsos _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_
+  · refine Fan.IsLimit.hom_ext hd' _ _ fun i => ?_
+    simp only [multicospanShape_L, multicospanIndex_right, multicospanShape_R, Iso.refl_hom,
+      Y'_apply, id_comp, comp_id]
+    rw [MulticospanIndex.fstPiMapOfIsLimit_proj]
+    simp [c', d', ← F.map_comp, ← op_comp]
+  · refine Fan.IsLimit.hom_ext hd' _ _ fun i => ?_
+    simp only [multicospanShape_L, multicospanIndex_right, multicospanShape_R, Iso.refl_hom,
+      Y'_apply, id_comp, comp_id]
+    rw [MulticospanIndex.sndPiMapOfIsLimit_proj]
+    simp [c', d', ← F.map_comp, ← op_comp]
+  · refine Fan.IsLimit.hom_ext hc' _ _ fun i => ?_
+    simp
+    simp [c']
 
 中文:
 定义 isLimitMultiforkEquivIsLimitFork
@@ -538,7 +554,23 @@ definition isLimitMultiforkEquivIsLimitFork
   letI c' : Fan (E.multicospanIndex F).left := Fan.mk _ fun i => F.map (c.inj i).op
   letI hc' : IsLimit c' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₀ => _) (Cofan.IsColimit.op hc)
   letI d' : Fan (E.multicospanIndex F).right := Fan.mk _ fun i => F.map (d.inj i).op
-  letI hd' : IsLimit d' := i
+  letI hd' : IsLimit d' := isLimitFanMkObjOfIsLimit _ _ (fun i : E.I₁' => _) (Cofan.IsColimit.op hd)
+  refine (IsLimit.ofConeEquiv <|
+    (E.multicospanIndex F).multiforkEquivPiForkOfIsLimit hc' hd').symm.trans ?_
+  refine Fork.isLimitEquivOfIsos _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_
+  · refine Fan.IsLimit.hom_ext hd' _ _ fun i => ?_
+    simp only [multicospanShape_L, multicospanIndex_right, multicospanShape_R, Iso.refl_hom,
+      Y'_apply, id_comp, comp_id]
+    rw [MulticospanIndex.fstPiMapOfIsLimit_proj]
+    simp [c', d', ← F.map_comp, ← op_comp]
+  · refine Fan.IsLimit.hom_ext hd' _ _ fun i => ?_
+    simp only [multicospanShape_L, multicospanIndex_right, multicospanShape_R, Iso.refl_hom,
+      Y'_apply, id_comp, comp_id]
+    rw [MulticospanIndex.sndPiMapOfIsLimit_proj]
+    simp [c', d', ← F.map_comp, ← op_comp]
+  · refine Fan.IsLimit.hom_ext hc' _ _ fun i => ?_
+    simp
+    simp [c']
 
 Depends on / 依赖: Cofan.IsColimit.op, E.multicospanIndex, F.map, Fan.mk, Fork.isLimitEquivOfIs, IsColimit, IsLimit, IsLimit.ofConeEquiv, c.inj, d.inj, isLimitEquivOfIs, isLimitFanMkObjOfIsLimit, multicospanIndex, multiforkEquivPiForkOfIsLimit, ofConeEquiv, symm.trans
 -/
@@ -680,7 +712,9 @@ definition isLimitSigmaOfIsColimitEquiv
       (E.sigmaOfIsColimit hc hd).multicospanShape _ _).symm) |>.trans
       (E.isLimitMultiforkEquivIsLimitFork hc hd F).symm
   · exact .refl _
-  · ex
+  · exact fun _ => .refl _
+  · exact fun _ => .refl _
+  all_goals cat_disch
 
 中文:
 定义 isLimitSigmaOfIsColimitEquiv
@@ -691,7 +725,9 @@ definition isLimitSigmaOfIsColimitEquiv
       (E.sigmaOfIsColimit hc hd).multicospanShape _ _).symm) |>.trans
       (E.isLimitMultiforkEquivIsLimitFork hc hd F).symm
   · exact .refl _
-  · ex
+  · exact fun _ => .refl _
+  · exact fun _ => .refl _
+  all_goals cat_disch
 
 Depends on / 依赖: E.isLimitMultiforkEquivIsLimitFork, E.sigmaOfIsColimit, IsLimit, IsLimit.ofConeEquiv, MulticospanIndex, MulticospanIndex.multiforkOfParallelHomsEquivFork, Multifork, Multifork.isLimitEquivOfIsos, all_goals, cat_disch, isLimitEquivOfIsos, isLimitMultiforkEquivIsLimitFork, multicospanShape, multiforkOfParallelHomsEquivFork, ofConeEquiv, sigmaOfIsColimit
 -/
@@ -824,7 +860,8 @@ definition inter
   I₁ i j := E.I₁ i.1 j.1 × F.I₁ i.2 j.2
   Y i j k := pullback (E.p₁ k.1 ≫ E.f _) (F.p₁ k.2 ≫ F.f _)
   p₁ i j k := pullback.map _ _ _ _ (E.p₁ _) (F.p₁ _) (𝟙 S) (by simp) (by simp)
-  p₂ i j k := pullback.map _ _ _ _ (E.p₂ _) (F.p₂ _) (𝟙 S) (by simp [E.
+  p₂ i j k := pullback.map _ _ _ _ (E.p₂ _) (F.p₂ _) (𝟙 S) (by simp [E.w]) (by simp [F.w])
+  w := by simp [E.w]
 
 中文:
 定义 inter
@@ -833,7 +870,8 @@ definition inter
   I₁ i j := E.I₁ i.1 j.1 × F.I₁ i.2 j.2
   Y i j k := pullback (E.p₁ k.1 ≫ E.f _) (F.p₁ k.2 ≫ F.f _)
   p₁ i j k := pullback.map _ _ _ _ (E.p₁ _) (F.p₁ _) (𝟙 S) (by simp) (by simp)
-  p₂ i j k := pullback.map _ _ _ _ (E.p₂ _) (F.p₂ _) (𝟙 S) (by simp [E.
+  p₂ i j k := pullback.map _ _ _ _ (E.p₂ _) (F.p₂ _) (𝟙 S) (by simp [E.w]) (by simp [F.w])
+  w := by simp [E.w]
 
 Depends on / 依赖: E.toPreZeroHypercover.inter, F.toPreZeroHypercover, toPreZeroHypercover
 -/
@@ -864,7 +902,29 @@ lemma sieve₁_inter
     pullback.lift p₁ p₂ w
   refine ⟨fun ⟨k, a, h₁, h₂⟩ => ?_, fun ⟨Z, a, b, ⟨k, e, h₁, h₂⟩, ⟨l, u, u₁, u₂⟩, hab⟩ => ?_⟩
   · refine ⟨pullback p ((E.inter F).toPullback k), pullback.lift f a ?_,
-        pullback.fst _ _, ?_, ?_
+        pullback.fst _ _, ?_, ?_, ?_⟩
+    · apply pullback.hom_ext
+      · apply pullback.hom_ext <;> simp [p, h₁, toPullback]
+      · apply pullback.hom_ext <;> simp [p, h₂, toPullback]
+    · refine ⟨k.1, pullback.snd _ _ ≫ pullback.fst _ _, ?_, ?_⟩
+      · have : p₁ ≫ pullback.fst (E.f i.1) (F.f i.2) = p ≫ pullback.fst _ _ ≫ pullback.fst _ _ := by
+          simp [p]
+        simp [this, pullback.condition_assoc, toPullback]
+      · have : p₂ ≫ pullback.fst (E.f j.1) (F.f j.2) = p ≫ pullback.snd _ _ ≫ pullback.fst _ _ := by
+          simp [p]
+        simp [this, pullback.condition_assoc, toPullback]
+    · exact ⟨k.2, a ≫ pullback.snd _ _, by simp [reassoc_of% h₁], by simp [reassoc_of% h₂]⟩
+    · simp
+  · subst hab
+    refine ⟨(k, l), pullback.lift (a ≫ e) u ?_, ?_, ?_⟩
+    · simp only [Category.assoc] at u₁
+      simp [← reassoc_of% h₁, w, ← reassoc_of% u₁, ← pullback.condition]
+    · apply pullback.hom_ext
+      · simp [h₁]
+      · simpa using u₁
+    · apply pullback.hom_ext
+      · simp [h₂]
+      · simpa using u₂
 
 中文:
 引理 sieve₁_inter
@@ -875,7 +935,29 @@ lemma sieve₁_inter
     pullback.lift p₁ p₂ w
   refine ⟨fun ⟨k, a, h₁, h₂⟩ => ?_, fun ⟨Z, a, b, ⟨k, e, h₁, h₂⟩, ⟨l, u, u₁, u₂⟩, hab⟩ => ?_⟩
   · refine ⟨pullback p ((E.inter F).toPullback k), pullback.lift f a ?_,
-        pullback.fst _ _, ?_, ?_
+        pullback.fst _ _, ?_, ?_, ?_⟩
+    · apply pullback.hom_ext
+      · apply pullback.hom_ext <;> simp [p, h₁, toPullback]
+      · apply pullback.hom_ext <;> simp [p, h₂, toPullback]
+    · refine ⟨k.1, pullback.snd _ _ ≫ pullback.fst _ _, ?_, ?_⟩
+      · have : p₁ ≫ pullback.fst (E.f i.1) (F.f i.2) = p ≫ pullback.fst _ _ ≫ pullback.fst _ _ := by
+          simp [p]
+        simp [this, pullback.condition_assoc, toPullback]
+      · have : p₂ ≫ pullback.fst (E.f j.1) (F.f j.2) = p ≫ pullback.snd _ _ ≫ pullback.fst _ _ := by
+          simp [p]
+        simp [this, pullback.condition_assoc, toPullback]
+    · exact ⟨k.2, a ≫ pullback.snd _ _, by simp [reassoc_of% h₁], by simp [reassoc_of% h₂]⟩
+    · simp
+  · subst hab
+    refine ⟨(k, l), pullback.lift (a ≫ e) u ?_, ?_, ?_⟩
+    · simp only [Category.assoc] at u₁
+      simp [← reassoc_of% h₁, w, ← reassoc_of% u₁, ← pullback.condition]
+    · apply pullback.hom_ext
+      · simp [h₁]
+      · simpa using u₁
+    · apply pullback.hom_ext
+      · simp [h₂]
+      · simpa using u₂
 
 Depends on / 依赖: E.inter, hom_ext, pullbac, pullback, pullback.fst, pullback.hom_ext, pullback.lift, pullback.snd, toPullback
 -/
@@ -1093,7 +1175,10 @@ definition Hom.mapMultiforkOfIsLimit
     simp only [multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
       multicospanIndex_fst, assoc, multicospanShape_snd, multicospanIndex_snd]
     have heq := d.condition (f.s₁' k)
-    
+    simp only [Hom.s₁', multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
+      multicospanIndex_fst, multicospanShape_snd, multicospanIndex_snd] at heq
+    rw [← Functor.map_comp]; rw [← op_comp]; rw [← Hom.w₁₁]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← Hom.w₁₂]
+    rw [op_comp]; rw [Functor.map_comp]; rw [reassoc_of% heq]; rw [op_comp]; rw [Functor.map_comp]
 
 中文:
 定义 态射.mapMultiforkOfIsLimit
@@ -1103,7 +1188,10 @@ definition Hom.mapMultiforkOfIsLimit
     simp only [multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
       multicospanIndex_fst, assoc, multicospanShape_snd, multicospanIndex_snd]
     have heq := d.condition (f.s₁' k)
-    
+    simp only [Hom.s₁', multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
+      multicospanIndex_fst, multicospanShape_snd, multicospanIndex_snd] at heq
+    rw [← Functor.map_comp]; rw [← op_comp]; rw [← Hom.w₁₁]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← Hom.w₁₂]
+    rw [op_comp]; rw [Functor.map_comp]; rw [reassoc_of% heq]; rw [op_comp]; rw [Functor.map_comp]
 
 Depends on / 依赖: Functor, Functor.map_comp, Hom.s, Hom.w, IsLimit, Multifork, Multifork.IsLimit.lift, P.map, condition, d.condition, map_comp, multicospanIndex_fst, multicospanIndex_left, multicospanIndex_right, multicospanIndex_snd, multicospanShape_fst, multicospanShape_snd, op_comp
 -/
@@ -1572,6 +1660,10 @@ lemma Hom.ext'
     ext i j k
     simpa using hs₁ i j k
   simp_all only [eqToHom_refl, Category.comp_id, implies_true, congrIndexOneOfEqIso_refl,
+    Iso.refl_inv, mk.injEq, heq_eq_eq, true_and]
+  ext i j k
+  rw [hh₁ i j k]
+  exact Category.comp_id _
 
 中文:
 引理 态射.ext'
@@ -1584,6 +1676,10 @@ lemma Hom.ext'
     ext i j k
     simpa using hs₁ i j k
   simp_all only [eqToHom_refl, Category.comp_id, implies_true, congrIndexOneOfEqIso_refl,
+    Iso.refl_inv, mk.injEq, heq_eq_eq, true_and]
+  ext i j k
+  rw [hh₁ i j k]
+  exact Category.comp_id _
 -/
 lemma Hom.ext' {E F : PreOneHypercover S} {f g : E.Hom F}
     (hs₀ : f.s₀ = g.s₀) (hh₀ : forall i, f.h₀ i = g.h₀ i ≫ eqToHom (by simp [hs₀]))
@@ -1724,7 +1820,40 @@ definition isoMk
   inv.toHom := (PreZeroHypercover.isoMk s₀ h₀ w₀).inv
   inv.s₁ {i j} k := s₁.symm (F.congrIndexOneOfEq (by simp) (by simp) k)
   inv.h₁ {i j} k :=
-    (F.congrIndexOneOfEqIso (s₀.apply_symm_apply i).symm (s₀.apply_symm
+    (F.congrIndexOneOfEqIso (s₀.apply_symm_apply i).symm (s₀.apply_symm_apply j).symm k).inv ≫
+      eqToHom (by simp) ≫ (h₁ _).inv
+  inv.w₁₁ {i j} k := by
+    obtain ⟨i, rfl⟩ := s₀.surjective i
+    obtain ⟨j, rfl⟩ := s₀.surjective j
+    obtain ⟨k, rfl⟩ := s₁.surjective k
+    rw [← cancel_epi (h₁ k).hom]; rw [reassoc_of% w₁₁ k]
+    simp only [PreZeroHypercover.isoMk_inv_s₀, Category.assoc, PreZeroHypercover.isoMk_inv_h₀,
+      Equiv.symm_apply_apply, eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id,
+      Category.comp_id]
+    rw [PreOneHypercover.isoMk_aux_assoc]; rw [← eqToHom_naturality]; rw [eqToHom_refl]; rw [Category.comp_id]; rw [congrIndexOneOfEqIso_inv_p₁]
+    apply PreOneHypercover.congrIndexOneOfEq_equiv
+  inv.w₁₂ {i j} k := by
+    obtain ⟨i, rfl⟩ := s₀.surjective i
+    obtain ⟨j, rfl⟩ := s₀.surjective j
+    obtain ⟨k, rfl⟩ := s₁.surjective k
+    rw [← cancel_epi (h₁ k).hom]; rw [reassoc_of% w₁₂ k]
+    simp only [PreZeroHypercover.isoMk_inv_s₀, Category.assoc, PreZeroHypercover.isoMk_inv_h₀,
+      Equiv.symm_apply_apply, eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id,
+      Category.comp_id]
+    rw [PreOneHypercover.isoMk_aux_assoc]; rw [← eqToHom_naturality]; rw [eqToHom_refl]; rw [Category.comp_id]; rw [congrIndexOneOfEqIso_inv_p₂]
+    apply PreOneHypercover.congrIndexOneOfEq_equiv
+  inv_hom_id := by
+    refine PreOneHypercover.Hom.ext' (by ext; simp) (by intro i; simp)
+      (by simp) fun i j k => ?_
+    dsimp
+    simp only [Category.assoc, Iso.inv_hom_id, Category.comp_id]
+    -- If this step is replaced by `simp only [Category.id_comp]` it takes 5 seconds
+    exact (Category.id_comp _).symm
+  hom_inv_id := by
+    refine PreOneHypercover.Hom.ext' (by ext; simp) (by intro i; simp)
+      (fun i j k => (E.congrIndexOneOfEq_equiv s₀ s₁ _).symm) ?_
+    intro i j k
+    simpa using E.isoMk_aux s₀ s₁ h₁ k
 
 中文:
 定义 isoMk
@@ -1735,7 +1864,40 @@ definition isoMk
   inv.toHom := (PreZeroHypercover.isoMk s₀ h₀ w₀).inv
   inv.s₁ {i j} k := s₁.symm (F.congrIndexOneOfEq (by simp) (by simp) k)
   inv.h₁ {i j} k :=
-    (F.congrIndexOneOfEqIso (s₀.apply_symm_apply i).symm (s₀.apply_symm
+    (F.congrIndexOneOfEqIso (s₀.apply_symm_apply i).symm (s₀.apply_symm_apply j).symm k).inv ≫
+      eqToHom (by simp) ≫ (h₁ _).inv
+  inv.w₁₁ {i j} k := by
+    obtain ⟨i, rfl⟩ := s₀.surjective i
+    obtain ⟨j, rfl⟩ := s₀.surjective j
+    obtain ⟨k, rfl⟩ := s₁.surjective k
+    rw [← cancel_epi (h₁ k).hom]; rw [reassoc_of% w₁₁ k]
+    simp only [PreZeroHypercover.isoMk_inv_s₀, Category.assoc, PreZeroHypercover.isoMk_inv_h₀,
+      Equiv.symm_apply_apply, eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id,
+      Category.comp_id]
+    rw [PreOneHypercover.isoMk_aux_assoc]; rw [← eqToHom_naturality]; rw [eqToHom_refl]; rw [Category.comp_id]; rw [congrIndexOneOfEqIso_inv_p₁]
+    apply PreOneHypercover.congrIndexOneOfEq_equiv
+  inv.w₁₂ {i j} k := by
+    obtain ⟨i, rfl⟩ := s₀.surjective i
+    obtain ⟨j, rfl⟩ := s₀.surjective j
+    obtain ⟨k, rfl⟩ := s₁.surjective k
+    rw [← cancel_epi (h₁ k).hom]; rw [reassoc_of% w₁₂ k]
+    simp only [PreZeroHypercover.isoMk_inv_s₀, Category.assoc, PreZeroHypercover.isoMk_inv_h₀,
+      Equiv.symm_apply_apply, eqToHom_iso_hom_naturality_assoc, Iso.hom_inv_id,
+      Category.comp_id]
+    rw [PreOneHypercover.isoMk_aux_assoc]; rw [← eqToHom_naturality]; rw [eqToHom_refl]; rw [Category.comp_id]; rw [congrIndexOneOfEqIso_inv_p₂]
+    apply PreOneHypercover.congrIndexOneOfEq_equiv
+  inv_hom_id := by
+    refine PreOneHypercover.Hom.ext' (by ext; simp) (by intro i; simp)
+      (by simp) fun i j k => ?_
+    dsimp
+    simp only [Category.assoc, Iso.inv_hom_id, Category.comp_id]
+    -- If this step is replaced by `simp only [Category.id_comp]` it takes 5 seconds
+    exact (Category.id_comp _).symm
+  hom_inv_id := by
+    refine PreOneHypercover.Hom.ext' (by ext; simp) (by intro i; simp)
+      (fun i j k => (E.congrIndexOneOfEq_equiv s₀ s₁ _).symm) ?_
+    intro i j k
+    simpa using E.isoMk_aux s₀ s₁ h₁ k
 
 Depends on / 依赖: F.congrIndexOneOfEq, F.congrIndexOneOfEqIso, PreZeroHypercover, PreZeroHypercover.isoMk, apply_sy, cat_disch, congrIndexOneOfEq, congrIndexOneOfEqIso, hom.h, hom.s, hom.toHom, inv.h, inv.s, inv.toHom
 -/
@@ -2079,7 +2241,14 @@ definition equivalenceMulticospanOfIso
     eqToIso (WalkingMulticospan.functor_ext (by simp)
       (fun _ => by dsimp; congr; apply PreOneHypercover.I₁'.ext <;> simp)
       (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _
+      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
+  counitIso :=
+    eqToIso (WalkingMulticospan.functor_ext (by simp)
+      (fun _ => by dsimp; congr 1; apply PreOneHypercover.I₁'.ext <;> simp)
+      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
+      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
+  functor_unitIso_comp c := by
+    cases c <;> rw [eqToIso.hom, eqToHom_app, eqToHom_map] <;> simp
 
 中文:
 定义 equivalenceMulticospanOfIso
@@ -2090,7 +2259,14 @@ definition equivalenceMulticospanOfIso
     eqToIso (WalkingMulticospan.functor_ext (by simp)
       (fun _ => by dsimp; congr; apply PreOneHypercover.I₁'.ext <;> simp)
       (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
-      (fun _
+      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
+  counitIso :=
+    eqToIso (WalkingMulticospan.functor_ext (by simp)
+      (fun _ => by dsimp; congr 1; apply PreOneHypercover.I₁'.ext <;> simp)
+      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp)
+      (fun _ => by dsimp; rw [eqToHom_naturality]; apply PreOneHypercover.I₁'.ext <;> simp))
+  functor_unitIso_comp c := by
+    cases c <;> rw [eqToIso.hom, eqToHom_app, eqToHom_map] <;> simp
 
 Depends on / 依赖: f.hom.mapMulticospan, mapMulticospan
 -/
@@ -2130,7 +2306,13 @@ definition isLimitEquivOfIso
     · intro i
       exact G.mapIso (asIso (f.hom.h₀ i)).symm.op
     · intro i
-   
+      exact G.mapIso (asIso (f.hom.h₁ i.2)).symm.op
+    · simp [← Functor.map_comp_assoc, ← Functor.map_comp, ← op_comp, f.hom.w₁₁]
+    · simp [← Functor.map_comp_assoc, ← Functor.map_comp, ← op_comp, f.hom.w₁₂]
+  · refine Cone.ext (Iso.refl _) fun i => ?_
+    induction i with
+    | left _ => simp [← Functor.map_comp, ← op_comp]
+    | right _ => simp [← Functor.map_comp, ← op_comp, f.hom.w₁₁_assoc]
 
 中文:
 定义 isLimitEquivOfIso
@@ -2143,7 +2325,13 @@ definition isLimitEquivOfIso
     · intro i
       exact G.mapIso (asIso (f.hom.h₀ i)).symm.op
     · intro i
-   
+      exact G.mapIso (asIso (f.hom.h₁ i.2)).symm.op
+    · simp [← Functor.map_comp_assoc, ← Functor.map_comp, ← op_comp, f.hom.w₁₁]
+    · simp [← Functor.map_comp_assoc, ← Functor.map_comp, ← op_comp, f.hom.w₁₂]
+  · refine Cone.ext (Iso.refl _) fun i => ?_
+    induction i with
+    | left _ => simp [← Functor.map_comp, ← op_comp]
+    | right _ => simp [← Functor.map_comp, ← op_comp, f.hom.w₁₁_assoc]
 
 Depends on / 依赖: Cone.ext, Equiv.trans, Functor, Functor.map_comp, Functor.map_comp_assoc, G.mapIso, IsLimit, IsLimit.equivOfNatIsoOfIso, IsLimit.whiskerEquivalenceEquiv, Iso.refl, PreOneHypercover, PreOneHypercover.equivalenceMulticospanOfIso, WalkingMulticospan, WalkingMulticospan.functorExt, equivOfNatIsoOfIso, equivalenceMulticospanOfIso, f.hom.h, f.hom.w, functorExt, mapIso
 -/
@@ -2253,7 +2441,9 @@ h₁ k := pullback.lift (f.h₁ k) (g.h₁ k) by
     · simpa using f.w₁₁ k
     · simpa using g.w₁₁ k
   w₁₂ k := by
-    a
+    apply pullback.hom_ext
+    · simpa using f.w₁₂ k
+    · simpa using g.w₁₂ k
 
 中文:
 定义 interLift
@@ -2269,7 +2459,9 @@ h₁ k := pullback.lift (f.h₁ k) (g.h₁ k) by
     · simpa using f.w₁₁ k
     · simpa using g.w₁₁ k
   w₁₂ k := by
-    a
+    apply pullback.hom_ext
+    · simpa using f.w₁₂ k
+    · simpa using g.w₁₂ k
 
 Depends on / 依赖: PreZeroHypercover, PreZeroHypercover.interLift, f.toHom, g.toHom, interLift
 -/
@@ -2406,7 +2598,7 @@ definition multiforkLift
     dsimp
     simp only [assoc, ← Functor.map_comp, ← op_comp, fac₁, fac₂]
     simp only [op_comp, Functor.map_comp]
-    simpa using! c.conditi
+    simpa using! c.condition ⟨⟨i₁, i₂⟩, j⟩ =≫ F.obj.map h.op)
 
 中文:
 定义 multiforkLift
@@ -2417,7 +2609,7 @@ definition multiforkLift
     dsimp
     simp only [assoc, ← Functor.map_comp, ← op_comp, fac₁, fac₂]
     simp only [op_comp, Functor.map_comp]
-    simpa using! c.conditi
+    simpa using! c.condition ⟨⟨i₁, i₂⟩, j⟩ =≫ F.obj.map h.op)
 
 Depends on / 依赖: E.mem, F.obj.map, F.property.amalgamateOfArrows, F.property.hom_ext, Functor, Functor.map_comp, amalgamateOfArrows, c.condition, condition, h.op, hom_ext, map_comp, op_comp, property
 -/
@@ -2578,7 +2770,7 @@ definition inter
     rw [PreOneHypercover.sieve₁_inter h]
     refine J.bind_covering (E.mem₁ _ _ _ _ (by simpa using! h)) fun _ _ _ => ?_
     exact J.pullback_stable _
-      (F.me
+      (F.mem₁ _ _ _ _ (by simpa [Category.assoc, ← pullback.condition]))
 
 中文:
 定义 inter
@@ -2589,7 +2781,7 @@ definition inter
     rw [PreOneHypercover.sieve₁_inter h]
     refine J.bind_covering (E.mem₁ _ _ _ _ (by simpa using! h)) fun _ _ _ => ?_
     exact J.pullback_stable _
-      (F.me
+      (F.mem₁ _ _ _ _ (by simpa [Category.assoc, ← pullback.condition]))
 
 Depends on / 依赖: E.toPreOneHypercover.inter, F.toPreOneHypercover, toPreOneHypercover
 -/

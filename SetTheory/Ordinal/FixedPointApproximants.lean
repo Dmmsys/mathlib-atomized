@@ -61,7 +61,8 @@ have h := lift_mk_le_lift_mk_of_injective injOn_iff_injective.1 h_inj
   have mk_initialSeg_subtype :
       #(Iio (ord <| succ #α)) = lift.{u + 1} (succ #α) := by
     simpa only [coe_ofPred, card_typein, card_ord] using mk_Iio_ordinal (ord <| succ #α)
-  rw [mk_initialSeg_subtype]; rw
+  rw [mk_initialSeg_subtype]; rw [lift_lift]; rw [lift_le] at h
+  exact not_le_of_gt (Order.lt_succ #α) h
 
 中文:
 定理 not_injective_limitation_set
@@ -72,7 +73,8 @@ have h := lift_mk_le_lift_mk_of_injective injOn_iff_injective.1 h_inj
   have mk_initialSeg_subtype :
       #(Iio (ord <| succ #α)) = lift.{u + 1} (succ #α) := by
     simpa only [coe_ofPred, card_typein, card_ord] using mk_Iio_ordinal (ord <| succ #α)
-  rw [mk_initialSeg_subtype]; rw
+  rw [mk_initialSeg_subtype]; rw [lift_lift]; rw [lift_le] at h
+  exact not_le_of_gt (Order.lt_succ #α) h
 
 Depends on / 依赖: Order.lt_succ, card_ord, card_typein, coe_ofPred, h_inj, injOn_iff_injective, lift_le, lift_lift, lift_mk_le_lift_mk_of_injective, lt_succ, mk_Iio_ordinal, mk_initialSeg_subtype, not_le_of_gt
 -/
@@ -266,7 +268,7 @@ theorem lfpApprox_of_isSuccLimit
   constructor
   · refine le_iSup_of_le ⟨0, ha.bot_lt⟩ (by simp [lfpApprox_zero])
   · exact fun b => iSup_mono' fun hab => ⟨⟨b + 1, ha.succ_lt hab⟩, (by
-    simpa using apply_lfpA
+    simpa using apply_lfpApprox_le_lfpApprox_of_lt f (lt_add_one b))⟩
 
 中文:
 定理 lfpApprox_of_isSuccLimit
@@ -277,7 +279,7 @@ theorem lfpApprox_of_isSuccLimit
   constructor
   · refine le_iSup_of_le ⟨0, ha.bot_lt⟩ (by simp [lfpApprox_zero])
   · exact fun b => iSup_mono' fun hab => ⟨⟨b + 1, ha.succ_lt hab⟩, (by
-    simpa using apply_lfpA
+    simpa using apply_lfpApprox_le_lfpApprox_of_lt f (lt_add_one b))⟩
 
 Depends on / 依赖: antisymm, apply_lfpApprox_le_lfpApprox_of_lt, bot_lt, ha.bot_lt, ha.succ_lt, iSup_le, iSup_le_iff, iSup_mono, le_iSup_of_le, lfpApprox, lfpApprox_mono_right, lfpApprox_zero, lt_add_one, succ_lt, sup_le_iff
 -/
@@ -364,6 +366,7 @@ theorem lfpApprox_eq_of_mem_fixedPoints
   intro i hi
   by_cases! hi' : i < a
   · exact apply_lfpApprox_le_lfpApprox_of_lt f hi'
+  · simp [IH i hi hi', hf]
 
 中文:
 定理 lfpApprox_eq_of_mem_fixedPoints
@@ -378,6 +381,7 @@ theorem lfpApprox_eq_of_mem_fixedPoints
   intro i hi
   by_cases! hi' : i < a
   · exact apply_lfpApprox_le_lfpApprox_of_lt f hi'
+  · simp [IH i hi hi', hf]
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.induction, antisymm, apply_lfpApprox_le_lfpApprox_of_lt, le_lfpApprox, lfpApprox, lfpApprox_mono_right, mem_fixedPoints_iff, sup_le
 -/
@@ -407,7 +411,7 @@ theorem lfpApprox_eq_all_of_fixedPoint
   · have : lfpApprox f x 0 in fixedPoints f := by
       rwa [mem_fixedPoints_iff, lfpApprox_zero]
     simpa [lfpApprox_zero] using
-      lfpApprox_eq_of_mem_fixedPoints f z
+      lfpApprox_eq_of_mem_fixedPoints f zero_le this
 
 中文:
 定理 lfpApprox_eq_all_of_fixedPoint
@@ -419,7 +423,7 @@ theorem lfpApprox_eq_all_of_fixedPoint
   · have : lfpApprox f x 0 in fixedPoints f := by
       rwa [mem_fixedPoints_iff, lfpApprox_zero]
     simpa [lfpApprox_zero] using
-      lfpApprox_eq_of_mem_fixedPoints f z
+      lfpApprox_eq_of_mem_fixedPoints f zero_le this
 
 Depends on / 依赖: fixedPoints, lfpApprox, lfpApprox_add_one, lfpApprox_eq_of_mem_fixedPoints, lfpApprox_zero, mem_fixedPoints_iff, specialize, zero_add, zero_le
 -/
@@ -479,7 +483,14 @@ theorem lfpApprox_eq_of_fixedPoint_or_zero
     · have hpos : (0 : Ordinal) < o :=
         zero_lt_one.trans_le (one_le_iff_ne_zero.mpr ho)
       have hmem : lfpApprox f x 0 in fixedPoints f :=
-        lfpApprox_mem_fixedPoints_of_eq f hx hpo
+        lfpApprox_mem_fixedPoints_of_eq f hx hpos (le_refl _)
+          ((lfpApprox_zero f).trans h.symm)
+      have hfx : f x = x :=
+        (mem_fixedPoints_iff.mp (by simpa [lfpApprox_zero] using hmem))
+      exact Or.inl hfx
+  · rcases h with (hf | rfl)
+    · exact (lfpApprox_eq_all_of_fixedPoint f hx).mpr hf o
+    · exact lfpApprox_zero f
 
 中文:
 定理 lfpApprox_eq_of_fixedPoint_or_zero
@@ -491,7 +502,14 @@ theorem lfpApprox_eq_of_fixedPoint_or_zero
     · have hpos : (0 : Ordinal) < o :=
         zero_lt_one.trans_le (one_le_iff_ne_zero.mpr ho)
       have hmem : lfpApprox f x 0 in fixedPoints f :=
-        lfpApprox_mem_fixedPoints_of_eq f hx hpo
+        lfpApprox_mem_fixedPoints_of_eq f hx hpos (le_refl _)
+          ((lfpApprox_zero f).trans h.symm)
+      have hfx : f x = x :=
+        (mem_fixedPoints_iff.mp (by simpa [lfpApprox_zero] using hmem))
+      exact Or.inl hfx
+  · rcases h with (hf | rfl)
+    · exact (lfpApprox_eq_all_of_fixedPoint f hx).mpr hf o
+    · exact lfpApprox_zero f
 
 Depends on / 依赖: Or.inl, Or.inr, Ordinal, eq_or_ne, fixedPoints, h.symm, le_refl, lfpApprox, lfpApprox_eq_all_of_fixedPoint, lfpApprox_mem_fixedPoints_of_eq, lfpApprox_zero, mem_fixedPoints_iff, mem_fixedPoints_iff.mp, one_le_iff_ne_zero, one_le_iff_ne_zero.mpr, trans_le, zero_lt_one, zero_lt_one.trans_le
 -/
@@ -526,7 +544,8 @@ have h_ninj := not_injective_limitation_set lfpApprox f x
   use a.val; apply And.intro a.prop
   use b.val; apply And.intro b.prop
   apply And.intro
-  · intro h_eq; rw [Subtype.coe_inj] a
+  · intro h_eq; rw [Subtype.coe_inj] at h_eq; exact h_nab h_eq
+  · exact h_fab
 
 中文:
 定理 存在_lfpApprox_eq_lfpApprox
@@ -538,7 +557,8 @@ have h_ninj := not_injective_limitation_set lfpApprox f x
   use a.val; apply And.intro a.prop
   use b.val; apply And.intro b.prop
   apply And.intro
-  · intro h_eq; rw [Subtype.coe_inj] a
+  · intro h_eq; rw [Subtype.coe_inj] at h_eq; exact h_nab h_eq
+  · exact h_fab
 
 Depends on / 依赖: And.intro, Function, Function.not_injective_iff, Set.injOn_iff_injective, Subtype, Subtype.coe_inj, a.prop, a.val, b.prop, b.val, coe_inj, h_eq, h_fab, h_nab, h_ninj, injOn_iff_injective, lfpApprox, not_injective_iff, not_injective_limitation_set
 -/
@@ -628,7 +648,10 @@ theorem lfpApprox_ord_eq_lfp
     let ⟨y, h_y⟩ := h_lfp; rw [h_y]
     exact lfpApprox_le_of_mem_fixedPoints f y.2 bot_le (ord <| succ #α)
   · have h_fix : exists y : fixedPoints f, lfpApprox f ⊥ (ord <| succ #α) = y := by
-      sim
+      simpa only [Subtype.exists, mem_fixedPoints, exists_prop, exists_eq_right'] using
+        lfpApprox_ord_mem_fixedPoint f bot_le
+    let ⟨x, h_x⟩ := h_fix; rw [h_x]
+    exact lfp_le_fixed f x.prop
 
 中文:
 定理 lfpApprox_ord_eq_lfp
@@ -639,7 +662,10 @@ theorem lfpApprox_ord_eq_lfp
     let ⟨y, h_y⟩ := h_lfp; rw [h_y]
     exact lfpApprox_le_of_mem_fixedPoints f y.2 bot_le (ord <| succ #α)
   · have h_fix : exists y : fixedPoints f, lfpApprox f ⊥ (ord <| succ #α) = y := by
-      sim
+      simpa only [Subtype.exists, mem_fixedPoints, exists_prop, exists_eq_right'] using
+        lfpApprox_ord_mem_fixedPoint f bot_le
+    let ⟨x, h_x⟩ := h_fix; rw [h_x]
+    exact lfp_le_fixed f x.prop
 
 Depends on / 依赖: Subtype, Subtype.exists, bot_le, exists_eq_right, exists_prop, f.lfp, fixedPoints, h_fix, h_lfp, le_antisymm, lfpApprox, lfpApprox_le_of_mem_fixedPoints, lfpApprox_ord_mem_fixedPoint, lfp_le_fixed, mem_fixedPoints, x.prop
 -/
@@ -723,7 +749,7 @@ theorem nextFixed_eq_iSup_lfpApprox
   rw [iSup_lfpApprox_eq_of_mem_fixedPoints f hfix]
   apply le_antisymm
   · exact f.nextFixed_le hx (y := ⟨lfpApprox f x o, hfix⟩) (le_lfpApprox f)
-  · exact lfpApprox_le_of_mem_fixedPo
+  · exact lfpApprox_le_of_mem_fixedPoints f (f.nextFixed x hx).2 (f.le_nextFixed hx) o
 
 中文:
 定理 nextFixed_eq_iSup_lfpApprox
@@ -735,7 +761,7 @@ theorem nextFixed_eq_iSup_lfpApprox
   rw [iSup_lfpApprox_eq_of_mem_fixedPoints f hfix]
   apply le_antisymm
   · exact f.nextFixed_le hx (y := ⟨lfpApprox f x o, hfix⟩) (le_lfpApprox f)
-  · exact lfpApprox_le_of_mem_fixedPo
+  · exact lfpApprox_le_of_mem_fixedPoints f (f.nextFixed x hx).2 (f.le_nextFixed hx) o
 
 Depends on / 依赖: f.le_nextFixed, f.nextFixed, f.nextFixed_le, fixedPoints, iSup_lfpApprox_eq_of_mem_fixedPoints, le_antisymm, le_lfpApprox, le_nextFixed, lfpApprox, lfpApprox_le_of_mem_fixedPoints, lfpApprox_ord_mem_fixedPoint, nextFixed, nextFixed_le
 -/

@@ -388,7 +388,12 @@ definition subterminalsEquivMonoOverTerminal
         ⟨X.obj.left, fun Z f g => by
           rw [← cancel_mono X.arrow]
           subsingleton⟩
-      map := fun f => ObjectPropert
+      map := fun f => ObjectProperty.homMk f.hom.1 }
+  unitIso := NatIso.ofComponents (fun X => Iso.refl X) (by subsingleton)
+  counitIso := NatIso.ofComponents (fun X => MonoOver.isoMk (Iso.refl _)) (by subsingleton)
+  functor_unitIso_comp := by subsingleton
+
+@[simp]
 
 中文:
 定义 subterminalsEquivMonoOverTerminal
@@ -400,7 +405,12 @@ definition subterminalsEquivMonoOverTerminal
         ⟨X.obj.left, fun Z f g => by
           rw [← cancel_mono X.arrow]
           subsingleton⟩
-      map := fun f => ObjectPropert
+      map := fun f => ObjectProperty.homMk f.hom.1 }
+  unitIso := NatIso.ofComponents (fun X => Iso.refl X) (by subsingleton)
+  counitIso := NatIso.ofComponents (fun X => MonoOver.isoMk (Iso.refl _)) (by subsingleton)
+  functor_unitIso_comp := by subsingleton
+
+@[simp]
 
 Depends on / 依赖: Iso.refl, MonoOver, MonoOver.homMk, MonoOver.isoMk, NatIso, NatIso.ofComponents, ObjectProperty, ObjectProperty.homMk, Over.mk, X.arrow, X.obj.left, cancel_mono, counitIso, f.hom, functor_unitIso_comp, inverse, mono_terminal_from, ofComponents, subsingleton, terminal
 -/

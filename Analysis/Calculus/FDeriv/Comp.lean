@@ -55,7 +55,16 @@ theorem HasFDerivAtFilter.comp
 refine .of_isLittleOTVS calc
     (fun p => (g ∘ f) p.1 - (g ∘ f) p.2 - (g' ∘L f') (p.1 - p.2))
       = fun p => (g (f p.1) - g (f p.2) - g' (f p.1 - f p.2)) +
-          g' (f p.1 - f p.2 - f' (p.1 - p.2)) :=
+          g' (f p.1 - f p.2 - f' (p.1 - p.2)) := by
+      ext; simp
+    _ =o[𝕜; L] (fun p => p.1 - p.2) := .add ?Hg ?Hf
+  case Hg => calc (fun p => g (f p.1) - g (f p.2) - g' (f p.1 - f p.2))
+    _ =o[𝕜; L] (fun p => f p.1 - f p.2) :=
+      hg.isLittleOTVS.comp_tendsto hL
+    _ =O[𝕜; L] (fun p => p.1 - p.2) := hf.isBigOTVS_sub
+  case Hf => calc (fun p => g' (f p.1 - f p.2 - f' (p.1 - p.2)))
+    _ =O[𝕜; L] (fun p => f p.1 - f p.2 - f' (p.1 - p.2)) := g'.isBigOTVS_comp
+    _ =o[𝕜; L] (fun p => p.1 - p.2) := hf.isLittleOTVS
 
 中文:
 定理 有FDerivAtFilter.comp
@@ -65,7 +74,16 @@ refine .of_isLittleOTVS calc
 refine .of_isLittleOTVS calc
     (fun p => (g ∘ f) p.1 - (g ∘ f) p.2 - (g' ∘L f') (p.1 - p.2))
       = fun p => (g (f p.1) - g (f p.2) - g' (f p.1 - f p.2)) +
-          g' (f p.1 - f p.2 - f' (p.1 - p.2)) :=
+          g' (f p.1 - f p.2 - f' (p.1 - p.2)) := by
+      ext; simp
+    _ =o[𝕜; L] (fun p => p.1 - p.2) := .add ?Hg ?Hf
+  case Hg => calc (fun p => g (f p.1) - g (f p.2) - g' (f p.1 - f p.2))
+    _ =o[𝕜; L] (fun p => f p.1 - f p.2) :=
+      hg.isLittleOTVS.comp_tendsto hL
+    _ =O[𝕜; L] (fun p => p.1 - p.2) := hf.isBigOTVS_sub
+  case Hf => calc (fun p => g' (f p.1 - f p.2 - f' (p.1 - p.2)))
+    _ =O[𝕜; L] (fun p => f p.1 - f p.2 - f' (p.1 - p.2)) := g'.isBigOTVS_comp
+    _ =o[𝕜; L] (fun p => p.1 - p.2) := hf.isLittleOTVS
 -/
 theorem HasFDerivAtFilter.comp {g : F -> G} {g' : F ->L[𝕜] G} {L' : Filter (F × F)}
     (hg : HasFDerivAtFilter g g' L') (hf : HasFDerivAtFilter f f' L)

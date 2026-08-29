@@ -438,7 +438,16 @@ lemma memLp_tilted_mul
   by_cases hp : p = 0
   · simpa [hp] using hX.aestronglyMeasurable.mono_ac (tilted_absolutelyContinuous _ _)
   refine ⟨hX.aestronglyMeasurable.mono_ac (tilted_absolutelyContinuous _ _), ?_⟩
-  rw [eLpNorm_lt_top_iff_l
+  rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top]
+  rotate_left
+  · simp [hp]
+  · simp
+  simp_rw [ENNReal.coe_toReal, ← ofReal_norm, norm_eq_abs,
+    ENNReal.ofReal_rpow_of_nonneg (x := |X _|) (p := p) (abs_nonneg (X _)) p.2]
+  refine Integrable.lintegral_lt_top ?_
+  simp_rw [integrable_tilted_iff (interior_subset (s := integrableExpSet X μ) ht),
+    smul_eq_mul, mul_comm]
+  exact integrable_rpow_abs_mul_exp_of_mem_interior_integrableExpSet ht p.2
 
 中文:
 引理 memLp_tilted_mul
@@ -448,7 +457,16 @@ lemma memLp_tilted_mul
   by_cases hp : p = 0
   · simpa [hp] using hX.aestronglyMeasurable.mono_ac (tilted_absolutelyContinuous _ _)
   refine ⟨hX.aestronglyMeasurable.mono_ac (tilted_absolutelyContinuous _ _), ?_⟩
-  rw [eLpNorm_lt_top_iff_l
+  rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top]
+  rotate_left
+  · simp [hp]
+  · simp
+  simp_rw [ENNReal.coe_toReal, ← ofReal_norm, norm_eq_abs,
+    ENNReal.ofReal_rpow_of_nonneg (x := |X _|) (p := p) (abs_nonneg (X _)) p.2]
+  refine Integrable.lintegral_lt_top ?_
+  simp_rw [integrable_tilted_iff (interior_subset (s := integrableExpSet X μ) ht),
+    smul_eq_mul, mul_comm]
+  exact integrable_rpow_abs_mul_exp_of_mem_interior_integrableExpSet ht p.2
 
 Depends on / 依赖: AEMeasurable, ENNReal, ENNReal.coe_toReal, ENNReal.ofReal_rpow_of_nonneg, Integrable, abs_nonneg, aemeasurable_of_mem_interior_integrableExpSet, aestronglyMeasurable, coe_toReal, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top, hX.aestronglyMeasurable.mono_ac, mono_ac, norm_eq_abs, ofReal_norm, ofReal_rpow_of_nonneg, rotate_left, simp_rw, tilted_absolutelyContinuous
 -/

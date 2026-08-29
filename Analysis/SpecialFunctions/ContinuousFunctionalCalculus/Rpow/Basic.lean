@@ -474,7 +474,7 @@ lemma nnrpow_nnrpow
     ext
     simp [Real.rpow_mul]
   case neg =>
-    simp [nnrpow_def, cfcₙ_apply
+    simp [nnrpow_def, cfcₙ_apply_of_not_predicate a ha]
 
 中文:
 引理 nnrpow_nnrpow
@@ -491,7 +491,7 @@ lemma nnrpow_nnrpow
     ext
     simp [Real.rpow_mul]
   case neg =>
-    simp [nnrpow_def, cfcₙ_apply
+    simp [nnrpow_def, cfcₙ_apply_of_not_predicate a ha]
 
 Depends on / 依赖: Real.rpow_mul, all_goals, eq_zero_or_pos, nnrpow_def, rpow_mul
 -/
@@ -1174,7 +1174,13 @@ theorem _root_.CStarAlgebra.nonneg_TFAE
   tfae_have 1 ↔ 7 := eq_comm.eq ▸ (CFC.posPart_eq_self a).symm
 .mpr h⟩, tfae_have 1 ↔ 8 := ⟨fun h => ⟨h.isSelfAdjoint, negPart_eq_zero_iff a
 .mp h.2⟩ fun h => negPart_eq_zero_iff a
-.symm tfae_have 1 -> 2 := fun h => sqrt_mul
+.symm tfae_have 1 -> 2 := fun h => sqrt_mul_sqrt_self a
+  tfae_have 2 -> 3 := fun h => ⟨sqrt a, sqrt_nonneg a, h⟩
+  tfae_have 3 -> 4 := fun ⟨b, hb⟩ => ⟨b, hb.1.isSelfAdjoint, hb.2⟩
+  tfae_have 4 -> 5 := fun ⟨b, hb⟩ => ⟨b, hb.1.symm ▸ hb.2⟩
+.symm ▸ hb⟩ tfae_have 5 -> 6 := fun ⟨b, hb⟩ => ⟨star b, star_star b
+  tfae_have 6 -> 1 := fun ⟨b, hb⟩ => hb ▸ mul_star_self_nonneg _
+  tfae_finish
 
 中文:
 定理 _root_.CStar代数.nonneg_TFAE
@@ -1184,7 +1190,13 @@ theorem _root_.CStarAlgebra.nonneg_TFAE
   tfae_have 1 ↔ 7 := eq_comm.eq ▸ (CFC.posPart_eq_self a).symm
 .mpr h⟩, tfae_have 1 ↔ 8 := ⟨fun h => ⟨h.isSelfAdjoint, negPart_eq_zero_iff a
 .mp h.2⟩ fun h => negPart_eq_zero_iff a
-.symm tfae_have 1 -> 2 := fun h => sqrt_mul
+.symm tfae_have 1 -> 2 := fun h => sqrt_mul_sqrt_self a
+  tfae_have 2 -> 3 := fun h => ⟨sqrt a, sqrt_nonneg a, h⟩
+  tfae_have 3 -> 4 := fun ⟨b, hb⟩ => ⟨b, hb.1.isSelfAdjoint, hb.2⟩
+  tfae_have 4 -> 5 := fun ⟨b, hb⟩ => ⟨b, hb.1.symm ▸ hb.2⟩
+.symm ▸ hb⟩ tfae_have 5 -> 6 := fun ⟨b, hb⟩ => ⟨star b, star_star b
+  tfae_have 6 -> 1 := fun ⟨b, hb⟩ => hb ▸ mul_star_self_nonneg _
+  tfae_finish
 
 Depends on / 依赖: CFC.posPart_eq_self, eq_comm, eq_comm.eq, h.isSelfAdjoint, isSelfAdjoint, negPart_eq_zero_iff, nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts, posPart_eq_self, sqrt_mul_sqrt_self, sqrt_nonneg, tfae_have
 -/
@@ -1906,7 +1918,10 @@ lemma rpow_neg
   suffices h₁ : ContinuousOn (fun z => z ^ x) (Inv.inv '' (spectrum Real>=0 (a : A))) by
     rw [← cfc_inv_id (R := Real>=0) a]; rw [rpow_def]; rw [rpow_def]; rw [← cfc_comp' (fun z => z ^ x) (Inv.inv : Real>=0 -> Real>=0) (a : A) h₁]
     refine cfc_congr fun _ _ => ?_
-    simp [NNReal.rpow_neg, 
+    simp [NNReal.rpow_neg, NNReal.inv_rpow]
+  refine NNReal.continuousOn_rpow_const (.inl ?_)
+  rintro ⟨z, hz, hz'⟩
+exact spectrum.zero_notMem Real>=0 a.isUnit inv_eq_zero.mp hz' ▸ hz
 
 中文:
 引理 rpow_neg
@@ -1915,7 +1930,10 @@ lemma rpow_neg
   suffices h₁ : ContinuousOn (fun z => z ^ x) (Inv.inv '' (spectrum Real>=0 (a : A))) by
     rw [← cfc_inv_id (R := Real>=0) a]; rw [rpow_def]; rw [rpow_def]; rw [← cfc_comp' (fun z => z ^ x) (Inv.inv : Real>=0 -> Real>=0) (a : A) h₁]
     refine cfc_congr fun _ _ => ?_
-    simp [NNReal.rpow_neg, 
+    simp [NNReal.rpow_neg, NNReal.inv_rpow]
+  refine NNReal.continuousOn_rpow_const (.inl ?_)
+  rintro ⟨z, hz, hz'⟩
+exact spectrum.zero_notMem Real>=0 a.isUnit inv_eq_zero.mp hz' ▸ hz
 
 Depends on / 依赖: ContinuousOn, Inv.inv, NNReal, NNReal.continuousOn_rpow_const, NNReal.inv_rpow, NNReal.rpow_neg, a.isUnit, cfc_comp, cfc_congr, cfc_inv_id, cfc_tac, continuousOn_rpow_const, inv_eq_zero, inv_eq_zero.mp, inv_rpow, isUnit, rpow_def, rpow_neg, spectrum, spectrum.zero_notMem
 -/
@@ -2041,7 +2059,10 @@ lemma isUnit_rpow_iff
     refine spectrum.isUnit_of_zero_notMem Real>=0 ?_
     intro h0
     specialize h 0 h0
-    simp 
+    simp only [ne_eq, NNReal.rpow_eq_zero_iff, true_and, Decidable.not_not] at h
+    exact hy h
+  · rw [cfc_apply_of_not_continuousOn a hf] at h
+exact False.elim not_isUnit_zero h
 
 中文:
 引理 isUnit_rpow_iff
@@ -2055,7 +2076,10 @@ lemma isUnit_rpow_iff
     refine spectrum.isUnit_of_zero_notMem Real>=0 ?_
     intro h0
     specialize h 0 h0
-    simp 
+    simp only [ne_eq, NNReal.rpow_eq_zero_iff, true_and, Decidable.not_not] at h
+    exact hy h
+  · rw [cfc_apply_of_not_continuousOn a hf] at h
+exact False.elim not_isUnit_zero h
 
 Depends on / 依赖: ContinuousOn, Decidable, Decidable.not_not, False.elim, IsUnit, NNReal, NNReal.rpow_eq_zero_iff, cfcRpow, cfc_apply_of_not_continuousOn, cfc_tac, h.cfcRpow, isUnit_cfc_iff, isUnit_of_zero_notMem, ne_eq, nontriviality, not_isUnit_zero, not_not, rpow_def, rpow_eq_zero_iff, specialize
 -/
@@ -2527,7 +2551,8 @@ lemma sqrt_rpow_nnreal
     | inl hx => simp [hx, rpow_zero _ htriv]
     | inr h₁ =>
       have h₂ : (x : Real) / 2 = NNReal.toReal (x / 2) := by simp
-      have h₃ : 0 <
+      have h₃ : 0 < x / 2 := by positivity
+      rw [← nnrpow_eq_rpow h₁]; rw [h₂]; rw [← nnrpow_eq_rpow h₃]; rw [sqrt_nnrpow (A := A)]
 
 中文:
 引理 sqrt_rpow_nnreal
@@ -2541,7 +2566,8 @@ lemma sqrt_rpow_nnreal
     | inl hx => simp [hx, rpow_zero _ htriv]
     | inr h₁ =>
       have h₂ : (x : Real) / 2 = NNReal.toReal (x / 2) := by simp
-      have h₃ : 0 <
+      have h₃ : 0 < x / 2 := by positivity
+      rw [← nnrpow_eq_rpow h₁]; rw [h₂]; rw [← nnrpow_eq_rpow h₃]; rw [sqrt_nnrpow (A := A)]
 
 Depends on / 依赖: NNReal, NNReal.toReal, cfc_apply_of_not_predicate, eq_zero_or_pos, nnrpow_eq_rpow, rpow_def, rpow_zero, sqrt_eq_cfc, sqrt_nnrpow, toReal
 -/
@@ -2571,7 +2597,7 @@ lemma rpow_sqrt_nnreal
     have h₁ : 0 <= (x : Real) := NNReal.zero_le_coe
     rw [sqrt_eq_rpow]; rw [rpow_rpow_of_exponent_nonneg _ _ _ (by simp) h₁]; rw [one_div_mul_eq_div]
 
-@[
+@[grind =]
 
 中文:
 引理 rpow_sqrt_nnreal
@@ -2585,7 +2611,7 @@ lemma rpow_sqrt_nnreal
     have h₁ : 0 <= (x : Real) := NNReal.zero_le_coe
     rw [sqrt_eq_rpow]; rw [rpow_rpow_of_exponent_nonneg _ _ _ (by simp) h₁]; rw [one_div_mul_eq_div]
 
-@[
+@[grind =]
 
 Depends on / 依赖: NNReal, NNReal.zero_le_coe, cfc_tac, one_div_mul_eq_div, rpow_rpow_of_exponent_nonneg, rpow_zero, sqrt_eq_rpow, sqrt_nonneg, zero_le_coe
 -/
@@ -2911,7 +2937,7 @@ lemma _root_.isStrictlyPositive_ringInverse_iff
   rw [← Ring.inverse_inverse ha]
   exact h.ringInverse
 
-omit [IsSemitopo
+omit [IsSemitopologicalRing A] [T2Space A] in
 
 中文:
 引理 _root_.isStrictlyPositive_ringInverse_iff
@@ -2926,7 +2952,7 @@ omit [IsSemitopo
   rw [← Ring.inverse_inverse ha]
   exact h.ringInverse
 
-omit [IsSemitopo
+omit [IsSemitopologicalRing A] [T2Space A] in
 
 Depends on / 依赖: IsStrictlyPositive, IsStrictlyPositive.iff_of_unital, IsStrictlyPositive.ringInverse, IsUnit, Ring.inverse_inverse, Ring.inverse_non_unit, h.ringInverse, iff_of_unital, inverse_inverse, inverse_non_unit, nontriviality, not_isUnit_zero, ringInverse
 -/
@@ -2980,7 +3006,13 @@ lemma sqrt_ringInverse
         inverse_eq_rpow_neg_one, rpow_rpow _ _ _ (by grind)]
     grind only
   · have ha' : ¬IsUnit (sqrt a) := by rwa [CFC.isUnit_sqrt_iff_isStrictlyPositive]
-    obtain (H | H) : ¬0 <= a ∨ ¬IsUn
+    obtain (H | H) : ¬0 <= a ∨ ¬IsUnit a := by grind
+    · rw [sqrt_of_not_nonneg H, inverse_zero]
+      by_cases hunit : IsUnit a
+      · have h₂ : ¬0 <= inverse a := by grind [CFC.ringInverse_nonneg_iff_nonneg_of_isUnit]
+        rw [sqrt_of_not_nonneg h₂]
+      · simp [inverse_non_unit _ hunit]
+    · simp [inverse_non_unit _ ha', inverse_non_unit _ H]
 
 中文:
 引理 sqrt_ringInverse
@@ -2992,7 +3024,13 @@ lemma sqrt_ringInverse
         inverse_eq_rpow_neg_one, rpow_rpow _ _ _ (by grind)]
     grind only
   · have ha' : ¬IsUnit (sqrt a) := by rwa [CFC.isUnit_sqrt_iff_isStrictlyPositive]
-    obtain (H | H) : ¬0 <= a ∨ ¬IsUn
+    obtain (H | H) : ¬0 <= a ∨ ¬IsUnit a := by grind
+    · rw [sqrt_of_not_nonneg H, inverse_zero]
+      by_cases hunit : IsUnit a
+      · have h₂ : ¬0 <= inverse a := by grind [CFC.ringInverse_nonneg_iff_nonneg_of_isUnit]
+        rw [sqrt_of_not_nonneg h₂]
+      · simp [inverse_non_unit _ hunit]
+    · simp [inverse_non_unit _ ha', inverse_non_unit _ H]
 
 Depends on / 依赖: CFC.isUnit_sqrt_iff_isStrictlyPositive, CFC.ringInverse_nonneg_iff_nonneg_of_isUnit, IsStrictlyPositive, IsUnit, inverse, inverse_eq_rpow_neg_one, inverse_non_unit, inverse_rpow, inverse_zero, isUnit_sqrt_iff_isStrictlyPositive, ringInverse_nonneg_iff_nonneg_of_isUnit, rpow_rpow, sqrt_eq_rpow, sqrt_of_not_nonneg
 -/
@@ -3021,7 +3059,14 @@ theorem _root_.CStarAlgebra.isStrictlyPositive_TFAE
   tfae_have 1 ↔ 9 := ⟨fun h => ⟨h.isSelfAdjoint,
 .mp h⟩, StarOrderedRing.isStrictlyPositive_iff_spectrum_pos a
     fun h => (StarOrderedRing.isStrictlyPositive_iff_spectrum_pos a).mpr h.2⟩
-.symm⟩ tfae_have 1 -> 2 := fun h => ⟨h.sqrt, sqrt_mul_
+.symm⟩ tfae_have 1 -> 2 := fun h => ⟨h.sqrt, sqrt_mul_sqrt_self a
+  tfae_have 2 -> 3 := fun h => ⟨h.1.isUnit, h.2⟩
+  tfae_have 3 -> 4 := fun h => ⟨sqrt a, h.1.isStrictlyPositive (sqrt_nonneg _), h.2⟩
+  tfae_have 4 -> 5 := fun ⟨b, hb, hab⟩ => ⟨b, hb.isUnit, hb.isSelfAdjoint, hab⟩
+  tfae_have 5 -> 6 := fun ⟨b, hb, hbsa, hab⟩ => ⟨b, hb, hbsa.symm ▸ hab⟩
+.symm ▸ hab⟩ tfae_have 6 -> 7 := fun ⟨b, hb, hab⟩ => ⟨star b, hb.star, star_star b
+  tfae_have 7 -> 8 := fun ⟨b, hb, hab⟩ => ⟨hab ▸ mul_star_self_nonneg _, hab ▸ hb.mul hb.star⟩
+  tfae_finish
 
 中文:
 定理 _root_.CStar代数.isStrictlyPositive_TFAE
@@ -3031,7 +3076,14 @@ theorem _root_.CStarAlgebra.isStrictlyPositive_TFAE
   tfae_have 1 ↔ 9 := ⟨fun h => ⟨h.isSelfAdjoint,
 .mp h⟩, StarOrderedRing.isStrictlyPositive_iff_spectrum_pos a
     fun h => (StarOrderedRing.isStrictlyPositive_iff_spectrum_pos a).mpr h.2⟩
-.symm⟩ tfae_have 1 -> 2 := fun h => ⟨h.sqrt, sqrt_mul_
+.symm⟩ tfae_have 1 -> 2 := fun h => ⟨h.sqrt, sqrt_mul_sqrt_self a
+  tfae_have 2 -> 3 := fun h => ⟨h.1.isUnit, h.2⟩
+  tfae_have 3 -> 4 := fun h => ⟨sqrt a, h.1.isStrictlyPositive (sqrt_nonneg _), h.2⟩
+  tfae_have 4 -> 5 := fun ⟨b, hb, hab⟩ => ⟨b, hb.isUnit, hb.isSelfAdjoint, hab⟩
+  tfae_have 5 -> 6 := fun ⟨b, hb, hbsa, hab⟩ => ⟨b, hb, hbsa.symm ▸ hab⟩
+.symm ▸ hab⟩ tfae_have 6 -> 7 := fun ⟨b, hb, hab⟩ => ⟨star b, hb.star, star_star b
+  tfae_have 7 -> 8 := fun ⟨b, hb, hab⟩ => ⟨hab ▸ mul_star_self_nonneg _, hab ▸ hb.mul hb.star⟩
+  tfae_finish
 
 Depends on / 依赖: IsStrictlyPositive, IsStrictlyPositive.iff_of_unital, StarOrderedRing, StarOrderedRing.isStrictlyPositive_iff_spectrum_pos, h.isSelfAdjoint, h.sqrt, hb.isSelfAd, hb.isUnit, iff_of_unital, isSelfAd, isSelfAdjoint, isStrictlyPositive, isStrictlyPositive_iff_spectrum_pos, isUnit, sqrt_mul_sqrt_self, sqrt_nonneg, tfae_have
 -/

@@ -73,7 +73,16 @@ theorem card_pow_eq_one_eq_orderOf_aux
       _ <=
           @Fintype.card (({b : α | b ^ orderOf a = 1} : Finset _) : Set α)
             (Fintype.ofFinset _ fun _ => Iff.rfl) :=
-        (@Fintype.card_le_of_injecti
+        (@Fintype.card_le_of_injective (zpowers a)
+          (({b : α | b ^ orderOf a = 1} : Finset _) : Set α) (id _) (id _)
+          (fun b =>
+            ⟨b.1,
+              mem_filter.2
+                ⟨mem_univ _, by
+                  let ⟨i, hi⟩ := b.2
+                  rw [← hi]; rw [← zpow_natCast]; rw [← zpow_mul]; rw [mul_comm]; rw [zpow_mul]; rw [zpow_natCast]; rw [pow_orderOf_eq_one]; rw [one_zpow]⟩⟩)
+          fun _ _ h => Subtype.ext (Subtype.mk.inj h))
+      _ = #{b : α | b ^ orderOf a = 1} := Fintype.card_ofFinset _ _)
 
 中文:
 定理 card_pow_eq_one_eq_orderOf_aux
@@ -85,7 +94,16 @@ theorem card_pow_eq_one_eq_orderOf_aux
       _ <=
           @Fintype.card (({b : α | b ^ orderOf a = 1} : Finset _) : Set α)
             (Fintype.ofFinset _ fun _ => Iff.rfl) :=
-        (@Fintype.card_le_of_injecti
+        (@Fintype.card_le_of_injective (zpowers a)
+          (({b : α | b ^ orderOf a = 1} : Finset _) : Set α) (id _) (id _)
+          (fun b =>
+            ⟨b.1,
+              mem_filter.2
+                ⟨mem_univ _, by
+                  let ⟨i, hi⟩ := b.2
+                  rw [← hi]; rw [← zpow_natCast]; rw [← zpow_mul]; rw [mul_comm]; rw [zpow_mul]; rw [zpow_natCast]; rw [pow_orderOf_eq_one]; rw [one_zpow]⟩⟩)
+          fun _ _ h => Subtype.ext (Subtype.mk.inj h))
+      _ = #{b : α | b ^ orderOf a = 1} := Fintype.card_ofFinset _ _)
 -/
 private theorem card_pow_eq_one_eq_orderOf_aux (a : α) : #{b : α | b ^ orderOf a = 1} = orderOf a :=
   le_antisymm (hn _ (orderOf_pos a))
@@ -121,7 +139,19 @@ theorem card_orderOf_eq_totient_aux₁
   rcases Finset.card_pos.1 hpos with ⟨a, ha'⟩
   have ha : orderOf a = d := (mem_filter.1 ha').2
   have h1 :
-    (∑ m in d.properDiviso
+    (∑ m in d.properDivisors, #{a : α | orderOf a = m}) =
+      ∑ m in d.properDivisors, φ m := by
+    refine Finset.sum_congr rfl fun m hm => ?_
+    simp only [mem_properDivisors] at hm
+    refine IH m hm.2 (hm.1.trans hd) (Finset.card_pos.2 ⟨a ^ (d / m), ?_⟩)
+    rw [mem_filter_univ]; rw [orderOf_pow a]; rw [ha]; rw [Nat.gcd_eq_right (div_dvd_of_dvd hm.1)]; rw [Nat.div_div_self hm.1 hd0]
+  have h2 :
+    (∑ m in d.divisors, #{a : α | orderOf a = m}) =
+      ∑ m in d.divisors, φ m := by
+    rw [sum_card_orderOf_eq_card_pow_eq_one hd0]; rw [sum_totient]; rw [← ha]; rw [card_pow_eq_one_eq_orderOf_aux hn a]
+  simpa [← cons_self_properDivisors hd0, ← h1] using h2
+
+@[to_additive]
 
 中文:
 定理 card_orderOf_eq_totient_aux₁
@@ -133,7 +163,19 @@ theorem card_orderOf_eq_totient_aux₁
   rcases Finset.card_pos.1 hpos with ⟨a, ha'⟩
   have ha : orderOf a = d := (mem_filter.1 ha').2
   have h1 :
-    (∑ m in d.properDiviso
+    (∑ m in d.properDivisors, #{a : α | orderOf a = m}) =
+      ∑ m in d.properDivisors, φ m := by
+    refine Finset.sum_congr rfl fun m hm => ?_
+    simp only [mem_properDivisors] at hm
+    refine IH m hm.2 (hm.1.trans hd) (Finset.card_pos.2 ⟨a ^ (d / m), ?_⟩)
+    rw [mem_filter_univ]; rw [orderOf_pow a]; rw [ha]; rw [Nat.gcd_eq_right (div_dvd_of_dvd hm.1)]; rw [Nat.div_div_self hm.1 hd0]
+  have h2 :
+    (∑ m in d.divisors, #{a : α | orderOf a = m}) =
+      ∑ m in d.divisors, φ m := by
+    rw [sum_card_orderOf_eq_card_pow_eq_one hd0]; rw [sum_totient]; rw [← ha]; rw [card_pow_eq_one_eq_orderOf_aux hn a]
+  simpa [← cons_self_properDivisors hd0, ← h1] using h2
+
+@[to_additive]
 -/
 private theorem card_orderOf_eq_totient_aux₁ {d : Nat} (hd : d ∣ Fintype.card α)
     (hpos : 0 < #{a : α | orderOf a = d}) : #{a : α | orderOf a = d} = φ d := by
@@ -169,7 +211,33 @@ theorem card_orderOf_eq_totient_aux₂
   by_contra h0
   -- Must qualify `Finset.card_eq_zero` because of https://github.com/leanprover/lean4/issues/2849
   simp_rw [not_lt, Nat.le_zero, Finset.card_eq_zero] at h0
-  appl
+  apply lt_irrefl c
+  calc
+    c = ∑ m in c.divisors, #{a : α | orderOf a = m} := by
+      simp only [sum_card_orderOf_eq_card_pow_eq_one hc0.ne']
+      apply congr_arg card
+      simp [c]
+    _ = ∑ m in c.divisors.erase d, #{a : α | orderOf a = m} := by
+      rw [eq_comm]
+      refine sum_subset (erase_subset _ _) fun m hm₁ hm₂ => ?_
+      have : m = d := by
+        contrapose! hm₂
+        exact mem_erase_of_ne_of_mem hm₂ hm₁
+      simp [this, h0]
+    _ <= ∑ m in c.divisors.erase d, φ m := by
+      gcongr with m hm
+      have hmc : m ∣ c := by
+        simp only [mem_erase, mem_divisors] at hm
+        tauto
+      obtain h1 | h1 := (#{a : α | orderOf a = m}).eq_zero_or_pos
+      · simp [h1]
+      · simp [card_orderOf_eq_totient_aux₁ hn hmc h1]
+    _ < ∑ m in c.divisors, φ m :=
+      sum_erase_lt_of_pos (mem_divisors.2 ⟨hd, hc0.ne'⟩) (totient_pos.2 (pos_of_dvd_of_pos hd hc0))
+    _ = c := sum_totient _
+
+@[to_additive isAddCyclic_of_card_nsmul_eq_zero_le, stacks 09HX "This theorem is stronger than \
+09HX. It removes the abelian condition, and requires only `<=` instead of `=`."]
 
 中文:
 定理 card_orderOf_eq_totient_aux₂
@@ -181,7 +249,33 @@ theorem card_orderOf_eq_totient_aux₂
   by_contra h0
   -- Must qualify `Finset.card_eq_zero` because of https://github.com/leanprover/lean4/issues/2849
   simp_rw [not_lt, Nat.le_zero, Finset.card_eq_zero] at h0
-  appl
+  apply lt_irrefl c
+  calc
+    c = ∑ m in c.divisors, #{a : α | orderOf a = m} := by
+      simp only [sum_card_orderOf_eq_card_pow_eq_one hc0.ne']
+      apply congr_arg card
+      simp [c]
+    _ = ∑ m in c.divisors.erase d, #{a : α | orderOf a = m} := by
+      rw [eq_comm]
+      refine sum_subset (erase_subset _ _) fun m hm₁ hm₂ => ?_
+      have : m = d := by
+        contrapose! hm₂
+        exact mem_erase_of_ne_of_mem hm₂ hm₁
+      simp [this, h0]
+    _ <= ∑ m in c.divisors.erase d, φ m := by
+      gcongr with m hm
+      have hmc : m ∣ c := by
+        simp only [mem_erase, mem_divisors] at hm
+        tauto
+      obtain h1 | h1 := (#{a : α | orderOf a = m}).eq_zero_or_pos
+      · simp [h1]
+      · simp [card_orderOf_eq_totient_aux₁ hn hmc h1]
+    _ < ∑ m in c.divisors, φ m :=
+      sum_erase_lt_of_pos (mem_divisors.2 ⟨hd, hc0.ne'⟩) (totient_pos.2 (pos_of_dvd_of_pos hd hc0))
+    _ = c := sum_totient _
+
+@[to_additive isAddCyclic_of_card_nsmul_eq_zero_le, stacks 09HX "This theorem is stronger than \
+09HX. It removes the abelian condition, and requires only `<=` instead of `=`."]
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.card_pos_iff, card_pos_iff
 -/
@@ -335,7 +429,20 @@ theorem MonoidHom.isMulCommutative_of_isCyclic_of_ker_le_center
   let ⟨m, hm⟩ := hx ⟨f a, a, rfl⟩
   let ⟨n, hn⟩ := hx ⟨f b, b, rfl⟩
   have hm : x ^ m = f a := by simpa [Subtype.ext_iff] using hm
-  have hn : x ^ 
+  have hn : x ^ n = f b := by simpa [Subtype.ext_iff] using hn
+  have ha : y ^ (-m) * a in center G :=
+    hf (by rw [f.mem_ker, f.map_mul, f.map_zpow, hxy, zpow_neg x m, hm, inv_mul_cancel])
+  have hb : y ^ (-n) * b in center G :=
+    hf (by rw [f.mem_ker, f.map_mul, f.map_zpow, hxy, zpow_neg x n, hn, inv_mul_cancel])
+  calc
+    a * b = y ^ m * (y ^ (-m) * a * y ^ n) * (y ^ (-n) * b) := by simp [mul_assoc]
+    _ = y ^ m * (y ^ n * (y ^ (-m) * a)) * (y ^ (-n) * b) := by rw [mem_center_iff.1 ha]
+    _ = y ^ m * y ^ n * y ^ (-m) * (a * (y ^ (-n) * b)) := by simp [mul_assoc]
+    _ = y ^ m * y ^ n * y ^ (-m) * (y ^ (-n) * b * a) := by rw [mem_center_iff.1 hb]
+    _ = b * a := by group
+
+@[to_additive (attr := deprecated MonoidHom.isMulCommutative_of_isCyclic_of_ker_le_center
+  (since := "2026-05-26"))]
 
 中文:
 定理 幺半群态射.isMulCommutative_of_isCyclic_of_ker_le_center
@@ -347,7 +454,20 @@ theorem MonoidHom.isMulCommutative_of_isCyclic_of_ker_le_center
   let ⟨m, hm⟩ := hx ⟨f a, a, rfl⟩
   let ⟨n, hn⟩ := hx ⟨f b, b, rfl⟩
   have hm : x ^ m = f a := by simpa [Subtype.ext_iff] using hm
-  have hn : x ^ 
+  have hn : x ^ n = f b := by simpa [Subtype.ext_iff] using hn
+  have ha : y ^ (-m) * a in center G :=
+    hf (by rw [f.mem_ker, f.map_mul, f.map_zpow, hxy, zpow_neg x m, hm, inv_mul_cancel])
+  have hb : y ^ (-n) * b in center G :=
+    hf (by rw [f.mem_ker, f.map_mul, f.map_zpow, hxy, zpow_neg x n, hn, inv_mul_cancel])
+  calc
+    a * b = y ^ m * (y ^ (-m) * a * y ^ n) * (y ^ (-n) * b) := by simp [mul_assoc]
+    _ = y ^ m * (y ^ n * (y ^ (-m) * a)) * (y ^ (-n) * b) := by rw [mem_center_iff.1 ha]
+    _ = y ^ m * y ^ n * y ^ (-m) * (a * (y ^ (-n) * b)) := by simp [mul_assoc]
+    _ = y ^ m * y ^ n * y ^ (-m) * (y ^ (-n) * b * a) := by rw [mem_center_iff.1 hb]
+    _ = b * a := by group
+
+@[to_additive (attr := deprecated MonoidHom.isMulCommutative_of_isCyclic_of_ker_le_center
+  (since := "2026-05-26"))]
 
 Depends on / 依赖: IsCyclic, IsCyclic.exists_generator, Subtype, Subtype.ext_iff, center, exists_generator, ext_iff, f.map_mul, f.map_zpow, f.mem_ker, f.range, inv_mul_cancel, map_mul, map_zpow, mem_ker, zpow_neg, zpowers
 -/
@@ -467,7 +587,19 @@ theorem prime_card
   obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := α)
   replace hα : Nat.card α != 1 := by contrapose! hα; exact (Nat.card_eq_one_iff_unique.mp hα).1
   rw [← orderOf_eq_card_of_forall_mem_zpowers hg] at hα ⊢
-  have h (n : Nat) : orderOf g ∣ 
+  have h (n : Nat) : orderOf g ∣ n ∨ n.Coprime (orderOf g) := by
+    refine (IsSimpleOrder.eq_bot_or_eq_top (Subgroup.zpowers (g ^ n))).imp ?_ fun h => ?_
+    · simp [orderOf_dvd_iff_pow_eq_one]
+    · simp only [Nat.coprime_iff_gcd_eq_one]
+      have hgn : g in Subgroup.zpowers (g ^ n) := by simp_all only [ne_eq, orderOf_eq_one_iff,
+        Subgroup.mem_top]
+      exact mem_zpowers_pow_iff.mp hgn
+  apply Nat.prime_of_coprime
+  · refine Nat.one_lt_iff_ne_zero_and_ne_one.mpr ⟨?_, hα⟩
+    contrapose! h
+    exact ⟨37, by simp [h]⟩
+  · intro n hn hn0
+    exact ((h n).resolve_left (Nat.not_dvd_of_pos_of_lt (Nat.pos_iff_ne_zero.mpr hn0) hn)).symm
 
 中文:
 定理 prime_card
@@ -477,7 +609,19 @@ theorem prime_card
   obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := α)
   replace hα : Nat.card α != 1 := by contrapose! hα; exact (Nat.card_eq_one_iff_unique.mp hα).1
   rw [← orderOf_eq_card_of_forall_mem_zpowers hg] at hα ⊢
-  have h (n : Nat) : orderOf g ∣ 
+  have h (n : Nat) : orderOf g ∣ n ∨ n.Coprime (orderOf g) := by
+    refine (IsSimpleOrder.eq_bot_or_eq_top (Subgroup.zpowers (g ^ n))).imp ?_ fun h => ?_
+    · simp [orderOf_dvd_iff_pow_eq_one]
+    · simp only [Nat.coprime_iff_gcd_eq_one]
+      have hgn : g in Subgroup.zpowers (g ^ n) := by simp_all only [ne_eq, orderOf_eq_one_iff,
+        Subgroup.mem_top]
+      exact mem_zpowers_pow_iff.mp hgn
+  apply Nat.prime_of_coprime
+  · refine Nat.one_lt_iff_ne_zero_and_ne_one.mpr ⟨?_, hα⟩
+    contrapose! h
+    exact ⟨37, by simp [h]⟩
+  · intro n hn hn0
+    exact ((h n).resolve_left (Nat.not_dvd_of_pos_of_lt (Nat.pos_iff_ne_zero.mpr hn0) hn)).symm
 
 Depends on / 依赖: Coprime, IsCyclic, IsCyclic.exists_generator, IsSimpleGroup, IsSimpleGroup.toNontrivial, IsSimpleOrder, IsSimpleOrder.eq_bot_or_eq_top, Nat.card, Nat.card_eq_one_iff_unique.mp, Nat.coprime_iff_gcd_eq_one, Nontrivial, Subgroup, Subgroup.zpowers, card_eq_one_iff_unique, contrapose, coprime_iff_gcd_eq_one, eq_bot_or_eq_top, exists_generator, n.Coprime, orderOf
 -/
@@ -643,7 +787,11 @@ lemma LinearOrderedAddCommGroup.isAddCyclic_iff_nonempty_equiv_int
     aesop
   wlog hg' : 0 < g
   · exact this (g := -g) (by simpa using! neg_surjective.comp hs) (by grind) (by grind)
-  have hi 
+  have hi : (fun n : Int => n • g).Injective := injective_zsmul_iff_not_isOfFinAddOrder.mpr
+ not_isOfFinAddOrder_of_isAddTorsionFree h_ne
+  exact ⟨.symm { Equiv.ofBijective _ ⟨hi, hs⟩ with
+    map_add' := add_zsmul g
+    map_le_map_iff' := zsmul_le_zsmul_iff_left hg' }⟩
 
 中文:
 引理 LinearOrderedAddCommGroup.isAddCyclic_iff_nonempty_equiv_int
@@ -657,7 +805,11 @@ lemma LinearOrderedAddCommGroup.isAddCyclic_iff_nonempty_equiv_int
     aesop
   wlog hg' : 0 < g
   · exact this (g := -g) (by simpa using! neg_surjective.comp hs) (by grind) (by grind)
-  have hi 
+  have hi : (fun n : Int => n • g).Injective := injective_zsmul_iff_not_isOfFinAddOrder.mpr
+ not_isOfFinAddOrder_of_isAddTorsionFree h_ne
+  exact ⟨.symm { Equiv.ofBijective _ ⟨hi, hs⟩ with
+    map_add' := add_zsmul g
+    map_le_map_iff' := zsmul_le_zsmul_iff_left hg' }⟩
 
 Depends on / 依赖: Equiv.ofBijective, Injective, Unique, Unique.mk, add_zsmul, e.isAddCyclic.mpr, exists_ne, h_ne, injective_zsmul_iff_not_isOfFinAddOrder, injective_zsmul_iff_not_isOfFinAddOrder.mpr, isAddCyclic, map_add, map_le_map_iff, neg_surjective, neg_surjective.comp, not_isOfFinAddOrder_of_isAddTorsionFree, ofBijective, subsingleton_iff_isEmpty
 -/
@@ -857,7 +1009,23 @@ lemma not_isCyclic_iff_exponent_eq_prime
   have : Finite α := Nat.finite_of_card_ne_zero (hα ▸ pow_ne_zero 2 hp.ne_zero)
   have : Nontrivial α := Finite.one_lt_card_iff_nontrivial.mp
     (hα ▸ one_lt_pow₀ hp.one_lt two_ne_zero)
-  /- in the forward direction, we apply `exponent_eq_pri
+  /- in the forward direction, we apply `exponent_eq_prime_iff`, and the reverse direction follows
+  immediately because if `α` has exponent `p`, it has no element of order `p ^ 2`. -/
+  refine ⟨fun h_cyc => (Monoid.exponent_eq_prime_iff hp).mpr fun g hg => ?_, fun h_exp h_cyc => by
+obtain (rfl | rfl) := eq_zero_or_one_of_sq_eq_self hα ▸ h_exp ▸ (h_cyc.exponent_eq_card).symm
+    · exact Nat.not_prime_zero hp
+    · exact Nat.not_prime_one hp⟩
+  /- we must show every non-identity element has order `p`. By Lagrange's theorem, the only possible
+  orders of `g` are `1`, `p`, or `p ^ 2`. It can't be the former because `g ≠ 1`, and it can't
+  the latter because the group isn't cyclic. -/
+  have := (Nat.mem_divisors (m := p ^ 2)).mpr ⟨hα ▸ orderOf_dvd_natCard (x := g), by aesop⟩
+  have : exists a < 3, p ^ a = orderOf g := by
+    simpa [Nat.divisors_prime_pow hp 2] using this
+  obtain ⟨a, ha, ha'⟩ := by simpa using this
+  interval_cases a
+· exact False.elim hg orderOf_eq_one_iff.mp by simp_all
+  · simp_all
+· exact False.elim h_cyc isCyclic_of_orderOf_eq_card g by lia
 
 中文:
 引理 not_isCyclic_iff_exponent_eq_prime
@@ -867,7 +1035,23 @@ lemma not_isCyclic_iff_exponent_eq_prime
   have : Finite α := Nat.finite_of_card_ne_zero (hα ▸ pow_ne_zero 2 hp.ne_zero)
   have : Nontrivial α := Finite.one_lt_card_iff_nontrivial.mp
     (hα ▸ one_lt_pow₀ hp.one_lt two_ne_zero)
-  /- in the forward direction, we apply `exponent_eq_pri
+  /- in the forward direction, we apply `exponent_eq_prime_iff`, and the reverse direction follows
+  immediately because if `α` has exponent `p`, it has no element of order `p ^ 2`. -/
+  refine ⟨fun h_cyc => (Monoid.exponent_eq_prime_iff hp).mpr fun g hg => ?_, fun h_exp h_cyc => by
+obtain (rfl | rfl) := eq_zero_or_one_of_sq_eq_self hα ▸ h_exp ▸ (h_cyc.exponent_eq_card).symm
+    · exact Nat.not_prime_zero hp
+    · exact Nat.not_prime_one hp⟩
+  /- we must show every non-identity element has order `p`. By Lagrange's theorem, the only possible
+  orders of `g` are `1`, `p`, or `p ^ 2`. It can't be the former because `g ≠ 1`, and it can't
+  the latter because the group isn't cyclic. -/
+  have := (Nat.mem_divisors (m := p ^ 2)).mpr ⟨hα ▸ orderOf_dvd_natCard (x := g), by aesop⟩
+  have : exists a < 3, p ^ a = orderOf g := by
+    simpa [Nat.divisors_prime_pow hp 2] using this
+  obtain ⟨a, ha, ha'⟩ := by simpa using this
+  interval_cases a
+· exact False.elim hg orderOf_eq_one_iff.mp by simp_all
+  · simp_all
+· exact False.elim h_cyc isCyclic_of_orderOf_eq_card g by lia
 -/
 lemma not_isCyclic_iff_exponent_eq_prime [Group α] {p : Nat} (hp : p.Prime)
     (hα : Nat.card α = p ^ 2) : ¬ IsCyclic α ↔ Monoid.exponent α = p := by
@@ -957,7 +1141,9 @@ definition zmodAddEquivOfGenerator
   body: have kereq : zmultiples (n : Int) = ((zmultiplesHom G) g).ker := by
     rw [zmultiplesHom_ker_eq]; rw [← Nat.card_zmultiples]; rw [← hn]; rw [Nat.card_congr (Equiv.subtypeUnivEquiv hg)]
 (Int.quotientZMultiplesNatEquivZMod n).symm.trans
-    QuotientAddGroup.liftEquiv _ (φ := zmultiplesHom G g) hg ker
+    QuotientAddGroup.liftEquiv _ (φ := zmultiplesHom G g) hg kereq
+
+@[simp]
 
 中文:
 定义 zmodAddEquivOfGenerator
@@ -965,7 +1151,9 @@ definition zmodAddEquivOfGenerator
   定义体: have kereq : zmultiples (n : Int) = ((zmultiplesHom G) g).ker := by
     rw [zmultiplesHom_ker_eq]; rw [← Nat.card_zmultiples]; rw [← hn]; rw [Nat.card_congr (Equiv.subtypeUnivEquiv hg)]
 (Int.quotientZMultiplesNatEquivZMod n).symm.trans
-    QuotientAddGroup.liftEquiv _ (φ := zmultiplesHom G g) hg ker
+    QuotientAddGroup.liftEquiv _ (φ := zmultiplesHom G g) hg kereq
+
+@[simp]
 
 Depends on / 依赖: Equiv.subtypeUnivEquiv, Int.quotientZMultiplesNatEquivZMod, Nat.card_congr, Nat.card_zmultiples, QuotientAddGroup, QuotientAddGroup.liftEquiv, card_congr, card_zmultiples, liftEquiv, quotientZMultiplesNatEquivZMod, subtypeUnivEquiv, symm.trans, zmultiples, zmultiplesHom, zmultiplesHom_ker_eq
 -/
@@ -1835,7 +2023,11 @@ map_one' := orderOf_dvd_iff_zpow_eq_one.mp
 Classical.choose_spec mem_zpowers_iff.mp hg 1
   map_mul' x y := by
     simp only [← zpow_add, zpow_eq_zpow_iff_modEq]
-    apply Int
+    apply Int.ModEq.of_dvd (Int.natCast_dvd_natCast.mpr hg')
+    rw [← zpow_eq_zpow_iff_modEq]; rw [zpow_add]
+    simp only [fun x => Classical.choose_spec <| mem_zpowers_iff.mp <| hg x]
+
+@[to_additive (attr := simp)]
 
 中文:
 定义 monoidHomOfForallMemZpowers
@@ -1846,7 +2038,11 @@ map_one' := orderOf_dvd_iff_zpow_eq_one.mp
 Classical.choose_spec mem_zpowers_iff.mp hg 1
   map_mul' x y := by
     simp only [← zpow_add, zpow_eq_zpow_iff_modEq]
-    apply Int
+    apply Int.ModEq.of_dvd (Int.natCast_dvd_natCast.mpr hg')
+    rw [← zpow_eq_zpow_iff_modEq]; rw [zpow_add]
+    simp only [fun x => Classical.choose_spec <| mem_zpowers_iff.mp <| hg x]
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Classical, Classical.choose, mem_zpowers_iff, mem_zpowers_iff.mp
 -/
@@ -2080,7 +2276,15 @@ theorem Group.isCyclic_of_coprime_card_range_card_ker
     rw [← f.range.eq_bot_iff_card]; rw [f.range_eq_bot_iff]; rw [← f.ker_eq_top_iff] at h
     rwa [← Subgroup.topEquiv.isCyclic, ← h]
   cases (finite_or_infinite f.range).symm
-  · rw [Nat.car
+  · rw [Nat.card_eq_zero_of_infinite (α := f.range), Nat.coprime_zero_right] at h
+    rwa [(f.ofInjective (f.ker_eq_bot_iff.mp (f.ker.eq_bot_of_card_eq h))).isCyclic]
+  have := f.finite_iff_finite_ker_range.mpr ⟨‹_›, ‹_›⟩
+  rw [IsCyclic.iff_exponent_eq_card]
+  apply dvd_antisymm Group.exponent_dvd_nat_card
+  rw [← f.ker.card_mul_index]; rw [Subgroup.index_ker]
+  apply h.mul_dvd_of_dvd_of_dvd <;> rw [← IsCyclic.exponent_eq_card]
+  · exact Monoid.exponent_dvd_of_monoidHom _ f.ker.subtype_injective
+  · exact MonoidHom.exponent_dvd f.rangeRestrict_surjective
 
 中文:
 定理 群.isCyclic_of_coprime_card_range_card_ker
@@ -2091,7 +2295,15 @@ theorem Group.isCyclic_of_coprime_card_range_card_ker
     rw [← f.range.eq_bot_iff_card]; rw [f.range_eq_bot_iff]; rw [← f.ker_eq_top_iff] at h
     rwa [← Subgroup.topEquiv.isCyclic, ← h]
   cases (finite_or_infinite f.range).symm
-  · rw [Nat.car
+  · rw [Nat.card_eq_zero_of_infinite (α := f.range), Nat.coprime_zero_right] at h
+    rwa [(f.ofInjective (f.ker_eq_bot_iff.mp (f.ker.eq_bot_of_card_eq h))).isCyclic]
+  have := f.finite_iff_finite_ker_range.mpr ⟨‹_›, ‹_›⟩
+  rw [IsCyclic.iff_exponent_eq_card]
+  apply dvd_antisymm Group.exponent_dvd_nat_card
+  rw [← f.ker.card_mul_index]; rw [Subgroup.index_ker]
+  apply h.mul_dvd_of_dvd_of_dvd <;> rw [← IsCyclic.exponent_eq_card]
+  · exact Monoid.exponent_dvd_of_monoidHom _ f.ker.subtype_injective
+  · exact MonoidHom.exponent_dvd f.rangeRestrict_surjective
 -/
 @[to_additive] theorem Group.isCyclic_of_coprime_card_range_card_ker {M N : Type*}
     [CommGroup M] [Group N] (f : M ->* N) (h : (Nat.card f.ker).Coprime (Nat.card f.range))
@@ -2184,7 +2396,7 @@ theorem coprime_card_of_isCyclic_prod
   have hN := isCyclic_right_of_prod M N
   let _ := cyc.commGroup; let _ := hM.commGroup; let _ := hN.commGroup
   rw [IsCyclic.iff_exponent_eq_card]; rw [Monoid.exponent_prod]; rw [Nat.card_prod]; rw [lcm_eq_nat_lcm] at *
-  simpa only [hM, hN, Nat.lcm_eq_mul_
+  simpa only [hM, hN, Nat.lcm_eq_mul_iff, Nat.card_pos.ne', false_or] using cyc
 
 中文:
 定理 coprime_card_of_isCyclic_prod
@@ -2193,7 +2405,7 @@ theorem coprime_card_of_isCyclic_prod
   have hN := isCyclic_right_of_prod M N
   let _ := cyc.commGroup; let _ := hM.commGroup; let _ := hN.commGroup
   rw [IsCyclic.iff_exponent_eq_card]; rw [Monoid.exponent_prod]; rw [Nat.card_prod]; rw [lcm_eq_nat_lcm] at *
-  simpa only [hM, hN, Nat.lcm_eq_mul_
+  simpa only [hM, hN, Nat.lcm_eq_mul_iff, Nat.card_pos.ne', false_or] using cyc
 -/
 @[to_additive coprime_card_of_isAddCyclic_prod] theorem coprime_card_of_isCyclic_prod
     [Finite M] [Finite N] : (Nat.card M).Coprime (Nat.card N) := by
@@ -2216,7 +2428,16 @@ theorem not_isAddCyclic_prod_of_infinite_nontrivial
     isAddCyclic_right_of_prod M N)).isAddCyclic]; rw [Nat.card_eq_zero_of_infinite] at hMN
   cases (finite_or_infinite N).symm
   · rw [Nat.card_eq_zero_of_infinite] at hMN
-    let f := 
+    let f := (ZMod.castHom (dvd_zero _) (ZMod 2)).toAddMonoidHom
+    have hf := ZMod.castHom_surjective (dvd_zero 2)
+    have := isAddCyclic_of_surjective (f.prodMap f) (Prod.map_surjective.mpr ⟨hf, hf⟩)
+    simpa using coprime_card_of_isAddCyclic_prod (ZMod 2) (ZMod 2)
+  let ZN := ZMod (Nat.card N)
+  have := isAddCyclic_of_surjective ((ZMod.castHom (dvd_zero _) ZN).toAddMonoidHom.prodMap (.id ZN))
+    (Prod.map_surjective.mpr ⟨ZMod.castHom_surjective (dvd_zero _), Function.surjective_id⟩)
+  exact Finite.one_lt_card (α := N).ne' (by simpa [ZN] using coprime_card_of_isAddCyclic_prod ZN ZN)
+
+@[to_additive existing not_isAddCyclic_prod_of_infinite_nontrivial]
 
 中文:
 定理 not_isAddCyclic_prod_of_infinite_nontrivial
@@ -2226,7 +2447,16 @@ theorem not_isAddCyclic_prod_of_infinite_nontrivial
     isAddCyclic_right_of_prod M N)).isAddCyclic]; rw [Nat.card_eq_zero_of_infinite] at hMN
   cases (finite_or_infinite N).symm
   · rw [Nat.card_eq_zero_of_infinite] at hMN
-    let f := 
+    let f := (ZMod.castHom (dvd_zero _) (ZMod 2)).toAddMonoidHom
+    have hf := ZMod.castHom_surjective (dvd_zero 2)
+    have := isAddCyclic_of_surjective (f.prodMap f) (Prod.map_surjective.mpr ⟨hf, hf⟩)
+    simpa using coprime_card_of_isAddCyclic_prod (ZMod 2) (ZMod 2)
+  let ZN := ZMod (Nat.card N)
+  have := isAddCyclic_of_surjective ((ZMod.castHom (dvd_zero _) ZN).toAddMonoidHom.prodMap (.id ZN))
+    (Prod.map_surjective.mpr ⟨ZMod.castHom_surjective (dvd_zero _), Function.surjective_id⟩)
+  exact Finite.one_lt_card (α := N).ne' (by simpa [ZN] using coprime_card_of_isAddCyclic_prod ZN ZN)
+
+@[to_additive existing not_isAddCyclic_prod_of_infinite_nontrivial]
 
 Depends on / 依赖: Nat.card_eq_zero_of_infinite, Prod.map_surjective.mpr, ZMod.castHom, ZMod.castHom_surjective, card_eq_zero_of_infinite, castHom, castHom_surjective, coprime_card_of_isA, dvd_zero, f.prodMap, finite_or_infinite, isAddCyclic, isAddCyclic_left_of_prod, isAddCyclic_of_surjective, isAddCyclic_right_of_prod, map_surjective, prodCongr, prodMap, toAddMonoidHom, zmodAddCyclicAddEquiv
 -/
@@ -2286,7 +2516,18 @@ theorem Group.isCyclic_prod_iff
     · cases subsingleton_or_nontrivial N; · simp
       exact (not_isCyclic_prod_of_infinite_nontrivial M N h).elim
     cases (finite_or_infinite N).symm
-   
+    · cases subsingleton_or_nontrivial M; · simp
+      rw [(MulEquiv.prodComm ..).isCyclic] at h
+      exact (not_isCyclic_prod_of_infinite_nontrivial N M h).elim
+    apply coprime_card_of_isCyclic_prod
+  · let f := MonoidHom.snd M N
+    let e : f.ker ≃* M := by
+      rw [MonoidHom.ker_snd]
+      exact ((Subgroup.prodEquiv ..).trans .prodUnique).trans Subgroup.topEquiv
+    let _ := hM.commGroup; let _ := hN.commGroup
+    rw [← e.isCyclic] at hM
+    rw [← Nat.card_congr e.toEquiv] at h
+    exact isCyclic_of_coprime_card_ker f h Prod.snd_surjective
 
 中文:
 定理 群.isCyclic_prod_iff
@@ -2297,7 +2538,18 @@ theorem Group.isCyclic_prod_iff
     · cases subsingleton_or_nontrivial N; · simp
       exact (not_isCyclic_prod_of_infinite_nontrivial M N h).elim
     cases (finite_or_infinite N).symm
-   
+    · cases subsingleton_or_nontrivial M; · simp
+      rw [(MulEquiv.prodComm ..).isCyclic] at h
+      exact (not_isCyclic_prod_of_infinite_nontrivial N M h).elim
+    apply coprime_card_of_isCyclic_prod
+  · let f := MonoidHom.snd M N
+    let e : f.ker ≃* M := by
+      rw [MonoidHom.ker_snd]
+      exact ((Subgroup.prodEquiv ..).trans .prodUnique).trans Subgroup.topEquiv
+    let _ := hM.commGroup; let _ := hN.commGroup
+    rw [← e.isCyclic] at hM
+    rw [← Nat.card_congr e.toEquiv] at h
+    exact isCyclic_of_coprime_card_ker f h Prod.snd_surjective
 
 Depends on / 依赖: MonoidHom, MonoidHom.snd, MulEquiv, MulEquiv.prodComm, coprime_card_of_isCyclic_prod, finite_or_infinite, isCyclic, isCyclic_left_of_prod, isCyclic_right_of_prod, not_isCyclic_prod_of_infinite_nontrivial, prodComm, subsingleton_or_nontrivial
 -/

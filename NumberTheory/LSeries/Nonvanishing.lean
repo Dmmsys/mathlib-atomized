@@ -150,7 +150,13 @@ lemma zetaMul_prime_pow_nonneg
     Nat.sum_divisors_prime_pow hp, pow_eq_zero_iff', hp.ne_zero, ne_eq, false_and, ↓reduceIte,
     Nat.cast_pow, map_pow]
   rcases MulChar.isQuadratic_iff_sq_eq_one.mpr hχ p with h | h | h
-  · refine Finset.sum_nonneg fun i _
+  · refine Finset.sum_nonneg fun i _ => ?_
+    simp only [h, le_refl, pow_nonneg]
+  · refine Finset.sum_nonneg fun i _ => ?_
+    simp only [h, one_pow, zero_le_one]
+  · simp only [h, neg_one_geom_sum]
+    split_ifs
+    exacts [le_rfl, zero_le_one]
 
 中文:
 引理 zetaMul_prime_pow_nonneg
@@ -160,7 +166,13 @@ lemma zetaMul_prime_pow_nonneg
     Nat.sum_divisors_prime_pow hp, pow_eq_zero_iff', hp.ne_zero, ne_eq, false_and, ↓reduceIte,
     Nat.cast_pow, map_pow]
   rcases MulChar.isQuadratic_iff_sq_eq_one.mpr hχ p with h | h | h
-  · refine Finset.sum_nonneg fun i _
+  · refine Finset.sum_nonneg fun i _ => ?_
+    simp only [h, le_refl, pow_nonneg]
+  · refine Finset.sum_nonneg fun i _ => ?_
+    simp only [h, one_pow, zero_le_one]
+  · simp only [h, neg_one_geom_sum]
+    split_ifs
+    exacts [le_rfl, zero_le_one]
 
 Depends on / 依赖: Finset, Finset.sum_nonneg, MulChar, MulChar.isQuadratic_iff_sq_eq_one.mpr, Nat.cast_pow, Nat.sum_divisors_prime_pow, cast_pow, coe_mk, coe_zeta_mul_apply, exacts, false_and, hp.ne_zero, isQuadratic_iff_sq_eq_one, le_refl, le_rfl, map_pow, ne_eq, ne_zero, neg_one_geom_sum, one_pow
 -/
@@ -312,7 +324,12 @@ lemma F_eq_LSeries
   · have hs' : s != 1 := fun h => by simp only [h, one_re, lt_self_iff_false] at hs
     simp only [ne_eq, hs', not_false_eq_true, Function.update_of_ne, B.χ.LFunction_eq_LSeries hs]
     congr 1
-    · simp_rw [← LSeries_zeta_eq_riem
+    · simp_rw [← LSeries_zeta_eq_riemannZeta hs, ← natCoe_apply]
+    · exact LSeries_congr B.χ.apply_eq_toArithmeticFunction_apply s
+  -- summability side goals from `LSeries_convolution'`
+  · exact LSeriesSummable_zeta_iff.mpr hs
+· exact (LSeriesSummable_congr _ fun h => (B.χ.apply_eq_toArithmeticFunction_apply h).symm).mpr
+      ZMod.LSeriesSummable_of_one_lt_re B.χ hs
 
 中文:
 引理 F_eq_LSeries
@@ -322,7 +339,12 @@ lemma F_eq_LSeries
   · have hs' : s != 1 := fun h => by simp only [h, one_re, lt_self_iff_false] at hs
     simp only [ne_eq, hs', not_false_eq_true, Function.update_of_ne, B.χ.LFunction_eq_LSeries hs]
     congr 1
-    · simp_rw [← LSeries_zeta_eq_riem
+    · simp_rw [← LSeries_zeta_eq_riemannZeta hs, ← natCoe_apply]
+    · exact LSeries_congr B.χ.apply_eq_toArithmeticFunction_apply s
+  -- summability side goals from `LSeries_convolution'`
+  · exact LSeriesSummable_zeta_iff.mpr hs
+· exact (LSeriesSummable_congr _ fun h => (B.χ.apply_eq_toArithmeticFunction_apply h).symm).mpr
+      ZMod.LSeriesSummable_of_one_lt_re B.χ hs
 -/
 private lemma F_eq_LSeries (B : BadChar N) {s : Complex} (hs : 1 < s.re) :
     B.F s = LSeries B.χ.zetaMul s := by
@@ -351,7 +373,21 @@ lemma F_differentiable
   -- now need to deal with `s = 1`
   refine (analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt ?_ ?_).differentiableAt
   · filter_upwards [self_mem_nhdsWithin] with t ht
-    exact B.F_differentiable
+    exact B.F_differentiableAt_of_ne ht
+  -- now reduced to showing *continuity* at s = 1
+  let G := Function.update (fun s => (s - 1) * riemannZeta s) 1 1
+  let H := Function.update (fun s => (B.χ.LFunction s - B.χ.LFunction 1) / (s - 1)) 1
+    (deriv B.χ.LFunction 1)
+  have : B.F = G * H := by
+    ext1 t
+    rcases eq_or_ne t 1 with rfl | ht
+    · simp only [F, G, H, Pi.mul_apply, one_mul, Function.update_self]
+    · simp only [F, G, H, Function.update_of_ne ht, mul_comm _ (riemannZeta _), B.hχ, sub_zero,
+      Pi.mul_apply, mul_assoc, mul_div_cancel₀ _ (sub_ne_zero.mpr ht)]
+  rw [this]
+  apply ContinuousAt.mul
+  · simpa only [G, continuousAt_update_same] using riemannZeta_residue_one
+  · exact (B.χ.differentiableAt_LFunction 1 (.inr B.χ_ne)).hasDerivAt.continuousAt_div
 
 中文:
 引理 F_differentiable
@@ -364,7 +400,21 @@ lemma F_differentiable
   -- now need to deal with `s = 1`
   refine (analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt ?_ ?_).differentiableAt
   · filter_upwards [self_mem_nhdsWithin] with t ht
-    exact B.F_differentiable
+    exact B.F_differentiableAt_of_ne ht
+  -- now reduced to showing *continuity* at s = 1
+  let G := Function.update (fun s => (s - 1) * riemannZeta s) 1 1
+  let H := Function.update (fun s => (B.χ.LFunction s - B.χ.LFunction 1) / (s - 1)) 1
+    (deriv B.χ.LFunction 1)
+  have : B.F = G * H := by
+    ext1 t
+    rcases eq_or_ne t 1 with rfl | ht
+    · simp only [F, G, H, Pi.mul_apply, one_mul, Function.update_self]
+    · simp only [F, G, H, Function.update_of_ne ht, mul_comm _ (riemannZeta _), B.hχ, sub_zero,
+      Pi.mul_apply, mul_assoc, mul_div_cancel₀ _ (sub_ne_zero.mpr ht)]
+  rw [this]
+  apply ContinuousAt.mul
+  · simpa only [G, continuousAt_update_same] using riemannZeta_residue_one
+  · exact (B.χ.differentiableAt_LFunction 1 (.inr B.χ_ne)).hasDerivAt.continuousAt_div
 -/
 private lemma F_differentiable (B : BadChar N) : Differentiable Complex B.F := by
   intro s
@@ -429,7 +479,10 @@ theorem LFunction_apply_one_ne_zero_of_quadratic
   let B : BadChar N := { χ := χ, χ_sq := hχ, hχ := hL, χ_ne := χ_ne }
   refine B.F_neg_two.not_gt ?_
   refine ArithmeticFunction.LSeries_positive_of_differentiable_of_eqOn (zetaMul_nonneg hχ)
-    (χ.isMultiplicative_zet
+    (χ.isMultiplicative_zetaMul.map_one ▸ zero_lt_one) B.F_differentiable ?_
+    (fun _ => B.F_eq_LSeries) _
+  exact LSeries.abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable
+    fun _ a => χ.LSeriesSummable_zetaMul a
 
 中文:
 定理 LFunction_apply_one_ne_zero_of_quadratic
@@ -440,7 +493,10 @@ theorem LFunction_apply_one_ne_zero_of_quadratic
   let B : BadChar N := { χ := χ, χ_sq := hχ, hχ := hL, χ_ne := χ_ne }
   refine B.F_neg_two.not_gt ?_
   refine ArithmeticFunction.LSeries_positive_of_differentiable_of_eqOn (zetaMul_nonneg hχ)
-    (χ.isMultiplicative_zet
+    (χ.isMultiplicative_zetaMul.map_one ▸ zero_lt_one) B.F_differentiable ?_
+    (fun _ => B.F_eq_LSeries) _
+  exact LSeries.abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable
+    fun _ a => χ.LSeriesSummable_zetaMul a
 -/
 private theorem LFunction_apply_one_ne_zero_of_quadratic {χ : DirichletCharacter Complex N}
     (hχ : χ ^ 2 = 1) (χ_ne : χ != 1) :
@@ -474,7 +530,19 @@ lemma re_log_comb_nonneg'
     simp only [Complex.norm_of_nonneg ha₀, ha₁]
   have hac₁ : ‖a * z‖ < 1 := by rwa [norm_mul, hz, mul_one]
   have hac₂ : ‖a * z ^ 2‖ < 1 := by rwa [norm_mul, norm_pow, hz, one_pow, mul_one]
-  rw [← ((hasSum_re <| hasSum_taylorSeries_neg_log hac₀).mul_left 
+  rw [← ((hasSum_re <| hasSum_taylorSeries_neg_log hac₀).mul_left 3).add
+.add ((hasSum_re <| hasSum_taylorSeries_neg_log hac₁).mul_left 4)
+.tsum_eq] (hasSum_re <| hasSum_taylorSeries_neg_log hac₂)
+  refine tsum_nonneg fun n => ?_
+  simp only [← ofReal_pow, div_natCast_re, ofReal_re, mul_pow, mul_re, ofReal_im, zero_mul,
+    sub_zero]
+  rcases n.eq_zero_or_pos with rfl | hn
+  · simp
+  · simp only [← mul_div_assoc, ← add_div]
+    refine div_nonneg ?_ n.cast_nonneg
+    rw [← pow_mul]; rw [pow_mul']; rw [sq]; rw [mul_re]; rw [← sq]; rw [← sq]; rw [← sq_norm_sub_sq_re]; rw [norm_pow]; rw [hz]
+    convert! (show 0 <= 2 * a ^ n * ((z ^ n).re + 1) ^ 2 by positivity) using 1
+    ring
 
 中文:
 引理 re_log_comb_nonneg'
@@ -484,7 +552,19 @@ lemma re_log_comb_nonneg'
     simp only [Complex.norm_of_nonneg ha₀, ha₁]
   have hac₁ : ‖a * z‖ < 1 := by rwa [norm_mul, hz, mul_one]
   have hac₂ : ‖a * z ^ 2‖ < 1 := by rwa [norm_mul, norm_pow, hz, one_pow, mul_one]
-  rw [← ((hasSum_re <| hasSum_taylorSeries_neg_log hac₀).mul_left 
+  rw [← ((hasSum_re <| hasSum_taylorSeries_neg_log hac₀).mul_left 3).add
+.add ((hasSum_re <| hasSum_taylorSeries_neg_log hac₁).mul_left 4)
+.tsum_eq] (hasSum_re <| hasSum_taylorSeries_neg_log hac₂)
+  refine tsum_nonneg fun n => ?_
+  simp only [← ofReal_pow, div_natCast_re, ofReal_re, mul_pow, mul_re, ofReal_im, zero_mul,
+    sub_zero]
+  rcases n.eq_zero_or_pos with rfl | hn
+  · simp
+  · simp only [← mul_div_assoc, ← add_div]
+    refine div_nonneg ?_ n.cast_nonneg
+    rw [← pow_mul]; rw [pow_mul']; rw [sq]; rw [mul_re]; rw [← sq]; rw [← sq]; rw [← sq_norm_sub_sq_re]; rw [norm_pow]; rw [hz]
+    convert! (show 0 <= 2 * a ^ n * ((z ^ n).re + 1) ^ 2 by positivity) using 1
+    ring
 -/
 private lemma re_log_comb_nonneg' {a : Real} (ha₀ : 0 <= a) (ha₁ : a < 1) {z : Complex} (hz : ‖z‖ = 1) :
       0 <= 3 * (-log (1 - a)).re + 4 * (-log (1 - a * z)).re + (-log (1 - a * z ^ 2)).re := by
@@ -519,7 +599,19 @@ lemma re_log_comb_nonneg
       rw [Real.rpow_neg (Nat.cast_nonneg n)]; rw [inv_lt_one_iff₀]
 exact .inr Real.one_lt_rpow (mod_cast one_lt_two.trans_le hn) zero_lt_one.trans hx
     have hz : ‖χ n * (n : Complex) ^ (-(I * y))‖ = 1 := by
-      rw 
+      rw [norm_mul]; rw [← hn'.unit_spec]; rw [DirichletCharacter.unit_norm_eq_one χ hn'.unit]; rw [← ofReal_natCast]; rw [norm_cpow_eq_rpow_re_of_pos (mod_cast by lia)]
+      simp only [neg_re, mul_re, I_re, ofReal_re, zero_mul, I_im, ofReal_im, mul_zero, sub_self,
+        neg_zero, Real.rpow_zero, one_mul]
+    rw [MulChar.one_apply hn']; rw [one_mul]
+    convert! re_log_comb_nonneg' (by positivity) hn hz using 6
+    · simp only [ofReal_cpow n.cast_nonneg (-x), ofReal_natCast, ofReal_neg]
+    · congr 2
+      rw [neg_add]; rw [cpow_add _ _ <| mod_cast by lia]; rw [← ofReal_neg]; rw [ofReal_cpow n.cast_nonneg (-x)]; rw [ofReal_natCast]; rw [mul_left_comm]
+    · rw [neg_add, cpow_add _ _ <| mod_cast by lia, ← ofReal_neg, ofReal_cpow n.cast_nonneg (-x),
+        ofReal_natCast, show -(2 * I * y) = (2 : Nat) * -(I * y) by ring, cpow_nat_mul, mul_pow,
+        mul_left_comm]
+  · simp only [MulChar.map_nonunit _ hn', zero_mul, sub_zero, log_one, neg_zero, zero_re, mul_zero,
+      neg_add_rev, add_zero, pow_two, le_refl]
 
 中文:
 引理 re_log_comb_nonneg
@@ -530,7 +622,19 @@ exact .inr Real.one_lt_rpow (mod_cast one_lt_two.trans_le hn) zero_lt_one.trans 
       rw [Real.rpow_neg (Nat.cast_nonneg n)]; rw [inv_lt_one_iff₀]
 exact .inr Real.one_lt_rpow (mod_cast one_lt_two.trans_le hn) zero_lt_one.trans hx
     have hz : ‖χ n * (n : Complex) ^ (-(I * y))‖ = 1 := by
-      rw 
+      rw [norm_mul]; rw [← hn'.unit_spec]; rw [DirichletCharacter.unit_norm_eq_one χ hn'.unit]; rw [← ofReal_natCast]; rw [norm_cpow_eq_rpow_re_of_pos (mod_cast by lia)]
+      simp only [neg_re, mul_re, I_re, ofReal_re, zero_mul, I_im, ofReal_im, mul_zero, sub_self,
+        neg_zero, Real.rpow_zero, one_mul]
+    rw [MulChar.one_apply hn']; rw [one_mul]
+    convert! re_log_comb_nonneg' (by positivity) hn hz using 6
+    · simp only [ofReal_cpow n.cast_nonneg (-x), ofReal_natCast, ofReal_neg]
+    · congr 2
+      rw [neg_add]; rw [cpow_add _ _ <| mod_cast by lia]; rw [← ofReal_neg]; rw [ofReal_cpow n.cast_nonneg (-x)]; rw [ofReal_natCast]; rw [mul_left_comm]
+    · rw [neg_add, cpow_add _ _ <| mod_cast by lia, ← ofReal_neg, ofReal_cpow n.cast_nonneg (-x),
+        ofReal_natCast, show -(2 * I * y) = (2 : Nat) * -(I * y) by ring, cpow_nat_mul, mul_pow,
+        mul_left_comm]
+  · simp only [MulChar.map_nonunit _ hn', zero_mul, sub_zero, log_one, neg_zero, zero_re, mul_zero,
+      neg_add_rev, add_zero, pow_two, le_refl]
 -/
 private lemma re_log_comb_nonneg {n : Nat} (hn : 2 <= n) {x : Real} (hx : 1 < x) (y : Real) :
     0 <= 3 * (-log (1 - (1 : DirichletCharacter Complex N) n * n ^ (-x : Complex))).re +
@@ -565,7 +669,9 @@ lemma summable_neg_log_one_sub_mul_prime_cpow
   have (p : Nat.Primes) : ‖χ p * (p : Complex) ^ (-s)‖ <= (p : Real) ^ (-s).re := by
     simpa only [norm_mul, norm_natCast_cpow_of_re_ne_zero _ <| re_neg_ne_zero_of_one_lt_re hs]
       using mul_le_of_le_one_left (by positivity) (χ.norm_le_one _)
-  refine (Nat.Primes.summable_rpow.mpr ?_).of_non
+  refine (Nat.Primes.summable_rpow.mpr ?_).of_nonneg_of_le (fun _ => norm_nonneg _) this
+.of_norm.clog_one_sub.neg
+  simp only [neg_re, neg_lt_neg_iff, hs]
 
 中文:
 引理 summable_neg_log_one_sub_mul_prime_cpow
@@ -574,7 +680,9 @@ lemma summable_neg_log_one_sub_mul_prime_cpow
   have (p : Nat.Primes) : ‖χ p * (p : Complex) ^ (-s)‖ <= (p : Real) ^ (-s).re := by
     simpa only [norm_mul, norm_natCast_cpow_of_re_ne_zero _ <| re_neg_ne_zero_of_one_lt_re hs]
       using mul_le_of_le_one_left (by positivity) (χ.norm_le_one _)
-  refine (Nat.Primes.summable_rpow.mpr ?_).of_non
+  refine (Nat.Primes.summable_rpow.mpr ?_).of_nonneg_of_le (fun _ => norm_nonneg _) this
+.of_norm.clog_one_sub.neg
+  simp only [neg_re, neg_lt_neg_iff, hs]
 
 Depends on / 依赖: Nat.Primes, Nat.Primes.summable_rpow.mpr, Primes, clog_one_sub, mul_le_of_le_one_left, neg_lt_neg_iff, neg_re, norm_le_one, norm_mul, norm_natCast_cpow_of_re_ne_zero, norm_nonneg, of_nonneg_of_le, of_norm, of_norm.clog_one_sub.neg, re_neg_ne_zero_of_one_lt_re, summable_rpow
 -/
@@ -622,7 +730,15 @@ lemma norm_LSeries_product_ge_one
   have H₁ := summable_neg_log_one_sub_mul_prime_cpow χ h₁
   have H₂ := summable_neg_log_one_sub_mul_prime_cpow (χ ^ 2) h₂
   have hsum₀ := (hasSum_re H₀.hasSum).summable.mul_left 3
-  ha
+  have hsum₁ := (hasSum_re H₁.hasSum).summable.mul_left 4
+  have hsum₂ := (hasSum_re H₂.hasSum).summable
+  rw [← LSeries_eulerProduct_exp_log _ h₀]; rw [← LSeries_eulerProduct_exp_log χ h₁]; rw [← LSeries_eulerProduct_exp_log _ h₂]
+  simp only [← exp_nat_mul, Nat.cast_ofNat, ← exp_add, norm_exp, add_re, mul_re,
+    re_ofNat, im_ofNat, zero_mul, sub_zero, Real.one_le_exp_iff]
+  rw [re_tsum H₀]; rw [re_tsum H₁]; rw [re_tsum H₂]; rw [← tsum_mul_left]; rw [← tsum_mul_left]; rw [← hsum₀.tsum_add hsum₁]; rw [← (hsum₀.add hsum₁).tsum_add hsum₂]
+  simpa only [neg_add_rev, neg_re, mul_neg, χ.pow_apply' two_ne_zero, ge_iff_le, add_re, one_re,
+    ofReal_re, ofReal_add, ofReal_one] using
+      tsum_nonneg fun (p : Nat.Primes) => χ.re_log_comb_nonneg p.prop.two_le h₀ y
 
 中文:
 引理 norm_LSeries_product_ge_one
@@ -633,7 +749,15 @@ lemma norm_LSeries_product_ge_one
   have H₁ := summable_neg_log_one_sub_mul_prime_cpow χ h₁
   have H₂ := summable_neg_log_one_sub_mul_prime_cpow (χ ^ 2) h₂
   have hsum₀ := (hasSum_re H₀.hasSum).summable.mul_left 3
-  ha
+  have hsum₁ := (hasSum_re H₁.hasSum).summable.mul_left 4
+  have hsum₂ := (hasSum_re H₂.hasSum).summable
+  rw [← LSeries_eulerProduct_exp_log _ h₀]; rw [← LSeries_eulerProduct_exp_log χ h₁]; rw [← LSeries_eulerProduct_exp_log _ h₂]
+  simp only [← exp_nat_mul, Nat.cast_ofNat, ← exp_add, norm_exp, add_re, mul_re,
+    re_ofNat, im_ofNat, zero_mul, sub_zero, Real.one_le_exp_iff]
+  rw [re_tsum H₀]; rw [re_tsum H₁]; rw [re_tsum H₂]; rw [← tsum_mul_left]; rw [← tsum_mul_left]; rw [← hsum₀.tsum_add hsum₁]; rw [← (hsum₀.add hsum₁).tsum_add hsum₂]
+  simpa only [neg_add_rev, neg_re, mul_neg, χ.pow_apply' two_ne_zero, ge_iff_le, add_re, one_re,
+    ofReal_re, ofReal_add, ofReal_one] using
+      tsum_nonneg fun (p : Nat.Primes) => χ.re_log_comb_nonneg p.prop.two_le h₀ y
 
 Depends on / 依赖: LSeries_eulerProduct_ex, LSeries_eulerProduct_exp_log, hasSum, hasSum_re, mul_left, one_lt_re_one_add, summable, summable.mul_left, summable_neg_log_one_sub_mul_prime_cpow
 -/
@@ -694,7 +818,14 @@ lemma LFunctionTrivChar_isBigO_near_one_horizontal
   have : (fun w : Complex => LFunctionTrivChar N (1 + w)) =O[𝓝[!=] 0] (1 / ·) := by
     have H : Tendsto (fun w => w * LFunctionTrivChar N (1 + w)) (𝓝[!=] 0)
         (𝓝 <| ∏ p in N.primeFactors, (1 - (p : Complex)⁻¹)) := by
-      convert! (LFunctionTrivChar_residue_one (N := N)).comp (f := fun w 
+      convert! (LFunctionTrivChar_residue_one (N := N)).comp (f := fun w => 1 + w) ?_ using 1
+      · simp only [Function.comp_def, add_sub_cancel_left]
+      · simpa only [tendsto_iff_comap, Homeomorph.coe_addLeft, add_zero, map_le_iff_le_comap] using
+          ((Homeomorph.addLeft (1 : Complex)).map_punctured_nhds_eq 0).le
+exact (isBigO_mul_iff_isBigO_div eventually_mem_nhdsWithin).mp H.isBigO_one Complex
+exact (isBigO_comp_ofReal_nhds_ne this).mono nhdsGT_le_nhdsNE 0
+
+omit [NeZero N] in
 
 中文:
 引理 LFunctionTrivChar_isBigO_near_one_horizontal
@@ -702,7 +833,14 @@ lemma LFunctionTrivChar_isBigO_near_one_horizontal
   have : (fun w : Complex => LFunctionTrivChar N (1 + w)) =O[𝓝[!=] 0] (1 / ·) := by
     have H : Tendsto (fun w => w * LFunctionTrivChar N (1 + w)) (𝓝[!=] 0)
         (𝓝 <| ∏ p in N.primeFactors, (1 - (p : Complex)⁻¹)) := by
-      convert! (LFunctionTrivChar_residue_one (N := N)).comp (f := fun w 
+      convert! (LFunctionTrivChar_residue_one (N := N)).comp (f := fun w => 1 + w) ?_ using 1
+      · simp only [Function.comp_def, add_sub_cancel_left]
+      · simpa only [tendsto_iff_comap, Homeomorph.coe_addLeft, add_zero, map_le_iff_le_comap] using
+          ((Homeomorph.addLeft (1 : Complex)).map_punctured_nhds_eq 0).le
+exact (isBigO_mul_iff_isBigO_div eventually_mem_nhdsWithin).mp H.isBigO_one Complex
+exact (isBigO_comp_ofReal_nhds_ne this).mono nhdsGT_le_nhdsNE 0
+
+omit [NeZero N] in
 
 Depends on / 依赖: Function, Function.comp_def, Homeomorph, Homeomorph.addLeft, Homeomorph.coe_addLeft, LFunctionTrivChar, LFunctionTrivChar_residue_one, N.primeFactors, Tendsto, addLeft, add_sub_cancel_left, add_zero, coe_addLeft, comp_def, convert, map_le_iff_le_comap, map_punctured_nh, primeFactors, tendsto_iff_comap
 -/
@@ -752,7 +890,7 @@ lemma LFunction_isBigO_horizontal
   simp_rw [add_comm (1 : Complex), add_assoc]
   have := (χ.differentiableAt_LFunction _ <| one_add_I_mul_ne_one_or χ hy).continuousAt
   rw [← zero_add (1 + _)] at this
-.tendsto.isBigO_one Complex exact this.comp (f := fun x : Real => x + (1 + I * y)) (x 
+.tendsto.isBigO_one Complex exact this.comp (f := fun x : Real => x + (1 + I * y)) (x := 0) (by fun_prop)
 
 中文:
 引理 LFunction_isBigO_horizontal
@@ -762,7 +900,7 @@ lemma LFunction_isBigO_horizontal
   simp_rw [add_comm (1 : Complex), add_assoc]
   have := (χ.differentiableAt_LFunction _ <| one_add_I_mul_ne_one_or χ hy).continuousAt
   rw [← zero_add (1 + _)] at this
-.tendsto.isBigO_one Complex exact this.comp (f := fun x : Real => x + (1 + I * y)) (x 
+.tendsto.isBigO_one Complex exact this.comp (f := fun x : Real => x + (1 + I * y)) (x := 0) (by fun_prop)
 
 Depends on / 依赖: IsBigO, IsBigO.mono, add_assoc, add_comm, continuousAt, differentiableAt_LFunction, fun_prop, isBigO_one, nhdsWithin_le_nhds, one_add_I_mul_ne_one_or, simp_rw, tendsto, tendsto.isBigO_one, this.comp, zero_add
 -/
@@ -786,7 +924,7 @@ lemma LFunction_isBigO_horizontal_of_eq_zero
   rw [← zero_add (1 + _)] at this
   simpa only [zero_add, h, sub_zero]
     using (Complex.isBigO_comp_ofReal_nhds
-      (this.comp_add_const 0 _).differentiableAt.is
+      (this.comp_add_const 0 _).differentiableAt.isBigO_sub) |>.mono nhdsWithin_le_nhds
 
 中文:
 引理 LFunction_isBigO_horizontal_of_eq_zero
@@ -797,7 +935,7 @@ lemma LFunction_isBigO_horizontal_of_eq_zero
   rw [← zero_add (1 + _)] at this
   simpa only [zero_add, h, sub_zero]
     using (Complex.isBigO_comp_ofReal_nhds
-      (this.comp_add_const 0 _).differentiableAt.is
+      (this.comp_add_const 0 _).differentiableAt.isBigO_sub) |>.mono nhdsWithin_le_nhds
 -/
 private lemma LFunction_isBigO_horizontal_of_eq_zero {y : Real} (hy : y != 0 ∨ χ != 1)
     (h : LFunction χ (1 + I * y) = 0) :
@@ -823,7 +961,27 @@ lemma LFunction_ne_zero_of_not_quadratic_or_ne_one
     simp only [H, one_pow, ne_eq, not_true_eq_false] at h
   have hz₂ : 2 * t != 0 ∨ χ ^ 2 != 1 :=
 h.symm.imp_left mul_ne_zero two_ne_zero
-  have help (x : Real) : ((1 / x) ^ 3 * x ^ 4 * 1 : Complex) = x := b
+  have help (x : Real) : ((1 / x) ^ 3 * x ^ 4 * 1 : Complex) = x := by
+    rcases eq_or_ne x 0 with rfl | h
+    · rw [ofReal_zero, zero_pow (by lia), mul_zero, mul_one]
+    · rw [one_div, inv_pow, pow_succ _ 3, ← mul_assoc,
+inv_mul_cancel₀ pow_ne_zero 3 (ofReal_ne_zero.mpr h), one_mul, mul_one]
+  -- put together the various `IsBigO` statements and `norm_LFunction_product_ge_one`
+  -- to derive a contradiction
+  have H₀ : (fun _ : Real => (1 : Real)) =O[𝓝[>] 0]
+      fun x => LFunctionTrivChar N (1 + x) ^ 3 * LFunction χ (1 + x + I * t) ^ 4 *
+                   LFunction (χ ^ 2) (1 + x + 2 * I * t) :=
+IsBigO.of_bound' eventually_nhdsWithin_of_forall
+      fun _ hx => (norm_one (α := Real)).symm ▸ (χ.norm_LFunction_product_ge_one hx t).le
+.mul have H := (LFunctionTrivChar_isBigO_near_one_horizontal (N := N)).pow 3
+.mul (χ.LFunction_isBigO_horizontal_of_eq_zero hz₁ Hz).pow 4
+    LFunction_isBigO_horizontal _ hz₂
+  simp only [ofReal_mul, ofReal_ofNat, mul_left_comm I, ← mul_assoc, help] at H
+  -- go via absolute value to translate into a statement over `ℝ`
+  replace H := (H₀.trans H).norm_right
+  simp only [norm_real] at H
+exact isLittleO_irrefl (.of_forall (fun _ => one_ne_zero))
+H.of_norm_right.trans_isLittleO isLittleO_id_one.mono nhdsWithin_le_nhds
 
 中文:
 引理 LFunction_ne_zero_of_not_quadratic_or_ne_one
@@ -835,7 +993,27 @@ h.symm.imp_left mul_ne_zero two_ne_zero
     simp only [H, one_pow, ne_eq, not_true_eq_false] at h
   have hz₂ : 2 * t != 0 ∨ χ ^ 2 != 1 :=
 h.symm.imp_left mul_ne_zero two_ne_zero
-  have help (x : Real) : ((1 / x) ^ 3 * x ^ 4 * 1 : Complex) = x := b
+  have help (x : Real) : ((1 / x) ^ 3 * x ^ 4 * 1 : Complex) = x := by
+    rcases eq_or_ne x 0 with rfl | h
+    · rw [ofReal_zero, zero_pow (by lia), mul_zero, mul_one]
+    · rw [one_div, inv_pow, pow_succ _ 3, ← mul_assoc,
+inv_mul_cancel₀ pow_ne_zero 3 (ofReal_ne_zero.mpr h), one_mul, mul_one]
+  -- put together the various `IsBigO` statements and `norm_LFunction_product_ge_one`
+  -- to derive a contradiction
+  have H₀ : (fun _ : Real => (1 : Real)) =O[𝓝[>] 0]
+      fun x => LFunctionTrivChar N (1 + x) ^ 3 * LFunction χ (1 + x + I * t) ^ 4 *
+                   LFunction (χ ^ 2) (1 + x + 2 * I * t) :=
+IsBigO.of_bound' eventually_nhdsWithin_of_forall
+      fun _ hx => (norm_one (α := Real)).symm ▸ (χ.norm_LFunction_product_ge_one hx t).le
+.mul have H := (LFunctionTrivChar_isBigO_near_one_horizontal (N := N)).pow 3
+.mul (χ.LFunction_isBigO_horizontal_of_eq_zero hz₁ Hz).pow 4
+    LFunction_isBigO_horizontal _ hz₂
+  simp only [ofReal_mul, ofReal_ofNat, mul_left_comm I, ← mul_assoc, help] at H
+  -- go via absolute value to translate into a statement over `ℝ`
+  replace H := (H₀.trans H).norm_right
+  simp only [norm_real] at H
+exact isLittleO_irrefl (.of_forall (fun _ => one_ne_zero))
+H.of_norm_right.trans_isLittleO isLittleO_id_one.mono nhdsWithin_le_nhds
 -/
 private lemma LFunction_ne_zero_of_not_quadratic_or_ne_one {t : Real} (h : χ ^ 2 != 1 ∨ t != 0) :
     LFunction χ (1 + I * t) != 0 := by
@@ -878,7 +1056,10 @@ theorem LFunction_ne_zero_of_re_eq_one
 · exact h.2 ▸ LFunction_apply_one_ne_zero_of_quadratic h.1 hχs.neg_resolve_right h.2
   · have hs' : s = 1 + I * s.im := by
       conv_lhs => rw [← re_add_im s, hs, ofReal_one, mul_comm]
-    rw [not_and_or]; rw [← ne_eq]; rw [← ne_eq]; rw [hs']; rw [add_ne_left] at
+    rw [not_and_or]; rw [← ne_eq]; rw [← ne_eq]; rw [hs']; rw [add_ne_left] at h
+    replace h : χ ^ 2 != 1 ∨ s.im != 0 :=
+      h.imp_right (fun H => by exact_mod_cast right_ne_zero_of_mul H)
+    exact hs'.symm ▸ χ.LFunction_ne_zero_of_not_quadratic_or_ne_one h
 
 中文:
 定理 LFunction_ne_zero_of_re_eq_one
@@ -888,7 +1069,10 @@ theorem LFunction_ne_zero_of_re_eq_one
 · exact h.2 ▸ LFunction_apply_one_ne_zero_of_quadratic h.1 hχs.neg_resolve_right h.2
   · have hs' : s = 1 + I * s.im := by
       conv_lhs => rw [← re_add_im s, hs, ofReal_one, mul_comm]
-    rw [not_and_or]; rw [← ne_eq]; rw [← ne_eq]; rw [hs']; rw [add_ne_left] at
+    rw [not_and_or]; rw [← ne_eq]; rw [← ne_eq]; rw [hs']; rw [add_ne_left] at h
+    replace h : χ ^ 2 != 1 ∨ s.im != 0 :=
+      h.imp_right (fun H => by exact_mod_cast right_ne_zero_of_mul H)
+    exact hs'.symm ▸ χ.LFunction_ne_zero_of_not_quadratic_or_ne_one h
 
 Depends on / 依赖: LFunction_apply_one_ne_zero_of_quadratic, LFunction_ne_zero_of_not_quadratic_or_ne_one, add_ne_left, conv_lhs, h.imp_right, imp_right, mul_comm, ne_eq, neg_resolve_right, not_and_or, ofReal_one, re_add_im, replace, right_ne_zero_of_mul, s.im, s.neg_resolve_right
 -/

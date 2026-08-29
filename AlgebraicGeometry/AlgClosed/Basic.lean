@@ -39,7 +39,13 @@ definition residueFieldIsoBase
       rw [isClosed_singleton_iff_isClosedImmersion] at hx
       rw [isFinite_iff_locallyOfFiniteType_of_jacobsonSpace]
       infer_instance
-    rw [ConcreteCategory.isIso_iff_bi
+    rw [ConcreteCategory.isIso_iff_bijective]
+    refine IsAlgClosed.ringHom_bijective_of_isIntegral _ ?_
+    rw [← IsIntegralHom.SpecMap_iff]; rw [Spec.map_preimage]
+    infer_instance
+  (asIso (Spec.preimage (X.fromSpecResidueField x ≫ f))).symm
+
+@[simp, reassoc]
 
 中文:
 定义 residueFieldIsoBase
@@ -49,7 +55,13 @@ definition residueFieldIsoBase
       rw [isClosed_singleton_iff_isClosedImmersion] at hx
       rw [isFinite_iff_locallyOfFiniteType_of_jacobsonSpace]
       infer_instance
-    rw [ConcreteCategory.isIso_iff_bi
+    rw [ConcreteCategory.isIso_iff_bijective]
+    refine IsAlgClosed.ringHom_bijective_of_isIntegral _ ?_
+    rw [← IsIntegralHom.SpecMap_iff]; rw [Spec.map_preimage]
+    infer_instance
+  (asIso (Spec.preimage (X.fromSpecResidueField x ≫ f))).symm
+
+@[simp, reassoc]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.isIso_iff_bijective, IsAlgClosed, IsAlgClosed.ringHom_bijective_of_isIntegral, IsFinite, IsIntegralHom, IsIntegralHom.SpecMap_iff, Spec.map_preimage, Spec.preimage, SpecMap_iff, X.fromSpecResidueField, fromSpecResidueField, infer_instance, isClosed_singleton_iff_isClosedImmersion, isFinite_iff_locallyOfFiniteType_of_jacobsonSpace, isIso_iff_bijective, map_preimage, preimage, ringHom_bijective_of_isIntegral
 -/
@@ -171,7 +183,19 @@ definition pointEquivClosedPoint
     have := p.1.isClosedEmbedding.isClosed_range
     rwa [Set.range_eq_singleton] at this
     exact fun x => congr(p.1 $(Subsingleton.elim _ _))⟩
-  invFun x := ⟨pointOfClosedPoint f x.1 x.2, pointOfClosedPoint_c
+  invFun x := ⟨pointOfClosedPoint f x.1 x.2, pointOfClosedPoint_comp f x.1 x.2⟩
+  left_inv p := by
+    ext
+    refine ((Scheme.SpecToEquivOfField _ _).symm_apply_eq (x := ⟨_, _⟩)).mpr ?_
+    rw [Scheme.SpecToEquivOfField_eq_iff]
+    dsimp [Scheme.SpecToEquivOfField]
+    simp only [Category.id_comp, exists_const]
+    generalize_proofs _ h
+    refine (Category.comp_id _).symm.trans (((residueFieldIsoBase f _ h).eq_inv_comp).mp ?_)
+    rw [← Spec.map_injective.eq_iff]
+    simp only [Spec.map_id, Spec.map_comp, SpecMap_residueFieldIsoBase_inv]
+    rw [reassoc_of% Scheme.descResidueField_stalkClosedPointTo_fromSpecResidueField]; rw [p.2]
+  right_inv x := by simp
 
 中文:
 定义 pointEquivClosedPoint
@@ -181,7 +205,19 @@ definition pointEquivClosedPoint
     have := p.1.isClosedEmbedding.isClosed_range
     rwa [Set.range_eq_singleton] at this
     exact fun x => congr(p.1 $(Subsingleton.elim _ _))⟩
-  invFun x := ⟨pointOfClosedPoint f x.1 x.2, pointOfClosedPoint_c
+  invFun x := ⟨pointOfClosedPoint f x.1 x.2, pointOfClosedPoint_comp f x.1 x.2⟩
+  left_inv p := by
+    ext
+    refine ((Scheme.SpecToEquivOfField _ _).symm_apply_eq (x := ⟨_, _⟩)).mpr ?_
+    rw [Scheme.SpecToEquivOfField_eq_iff]
+    dsimp [Scheme.SpecToEquivOfField]
+    simp only [Category.id_comp, exists_const]
+    generalize_proofs _ h
+    refine (Category.comp_id _).symm.trans (((residueFieldIsoBase f _ h).eq_inv_comp).mp ?_)
+    rw [← Spec.map_injective.eq_iff]
+    simp only [Spec.map_id, Spec.map_comp, SpecMap_residueFieldIsoBase_inv]
+    rw [reassoc_of% Scheme.descResidueField_stalkClosedPointTo_fromSpecResidueField]; rw [p.2]
+  right_inv x := by simp
 
 Depends on / 依赖: Category, Category.id_comp, IsLocalRing, IsLocalRing.closedPoint, Scheme, Scheme.SpecToEquivOfField, Scheme.SpecToEquivOfField_eq_iff, Set.range_eq_singleton, SpecToEquivOfField, SpecToEquivOfField_eq_iff, Subsingleton, Subsingleton.elim, closedPoint, id_comp, invFun, isClosedEmbedding, isClosedEmbedding.isClosed_range, isClosedImmersion_of_comp_eq_id, isClosed_range, left_inv
 -/
@@ -240,7 +276,10 @@ lemma ext_of_apply_eq
   · rwa [dense_iff_closure_eq, JacobsonSpace.closure_inter_closedPoints_eq_closure hS,
       ← dense_iff_closure_eq]
   · intro x ⟨hxS, hx⟩
-    rw 
+    rw [← cancel_epi (Spec.map (residueFieldIsoBase (f ≫ i) x hx).hom)]
+    refine ext_of_apply_closedPoint_eq i ?_ ?_ (by simpa using H x hxS hx) <;>
+      simp only [Category.assoc, ← SpecMap_residueFieldIsoBase_inv (f ≫ i) x hx, ← Spec.map_comp,
+        Iso.inv_hom_id, Spec.map_id, ← H']
 
 中文:
 引理 ext_of_apply_eq
@@ -251,7 +290,10 @@ lemma ext_of_apply_eq
   · rwa [dense_iff_closure_eq, JacobsonSpace.closure_inter_closedPoints_eq_closure hS,
       ← dense_iff_closure_eq]
   · intro x ⟨hxS, hx⟩
-    rw 
+    rw [← cancel_epi (Spec.map (residueFieldIsoBase (f ≫ i) x hx).hom)]
+    refine ext_of_apply_closedPoint_eq i ?_ ?_ (by simpa using H x hxS hx) <;>
+      simp only [Category.assoc, ← SpecMap_residueFieldIsoBase_inv (f ≫ i) x hx, ← Spec.map_comp,
+        Iso.inv_hom_id, Spec.map_id, ← H']
 
 Depends on / 依赖: Category, Category.assoc, JacobsonSpace, JacobsonSpace.closure_inter_closedPoints_eq_closure, LocallyOfFiniteType, LocallyOfFiniteType.jacobsonSpace, Spec.map, SpecMap_residueFieldIsoBase_inv, cancel_epi, closedPoints, closure_inter_closedPoints_eq_closure, dense_iff_closure_eq, ext_of_apply_closedPoint_eq, ext_of_fromSpecResidueField_eq, jacobsonSpace, residueFieldIsoBase
 -/

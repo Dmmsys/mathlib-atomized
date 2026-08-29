@@ -60,7 +60,8 @@ definition commandRangesLinter
   let ranges :=
     if let some rg := stx.getRange? then #[rg.start, rg.stop] else #[]
   let ranges : Array String.Pos.Raw :=
-    if let some rg := stx.getRange
+    if let some rg := stx.getRangeWithTrailing? then ranges.push rg.stop else ranges
+  logInfo m!"{ranges}"
 
 中文:
 定义 commandRangesLinter
@@ -73,7 +74,8 @@ definition commandRangesLinter
   let ranges :=
     if let some rg := stx.getRange? then #[rg.start, rg.stop] else #[]
   let ranges : Array String.Pos.Raw :=
-    if let some rg := stx.getRange
+    if let some rg := stx.getRangeWithTrailing? then ranges.push rg.stop else ranges
+  logInfo m!"{ranges}"
 -/
 def commandRangesLinter : Linter where run stx := do
   unless Linter.getLinterValue linter.commandRanges (← getLinterOptions) do

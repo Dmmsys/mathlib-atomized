@@ -137,7 +137,32 @@ instance :
   -- It will suffice to consider some g : I ⟶ R such that p ≫ g = 0 and show that g = 0.
   NormalMonoCategory.epi_of_zero_cancel
   _ fun R (g : I ⟶ R) (hpg : p ≫ g = 0) => by
-  -- Since C is abelian, u :
+  -- Since C is abelian, u := ker g ≫ i is the kernel of some morphism h.
+  let u := kernel.ι g ≫ i
+  have hu := normalMonoOfMono u
+  let h := hu.g
+  -- By hypothesis, p factors through the kernel of g via some t.
+  obtain ⟨t, ht⟩ := kernel.lift' g p hpg
+  have fh : f ≫ h = 0 :=
+    calc
+      f ≫ h = (p ≫ i) ≫ h := (Abelian.image.fac f).symm ▸ rfl
+      _ = ((t ≫ kernel.ι g) ≫ i) ≫ h := ht ▸ rfl
+      _ = t ≫ u ≫ h := by simp only [u, Category.assoc]
+      _ = t ≫ 0 := hu.w ▸ rfl
+      _ = 0 := HasZeroMorphisms.comp_zero _ _
+  -- h factors through the cokernel of f via some l.
+  obtain ⟨l, hl⟩ := cokernel.desc' f h fh
+  have hih : i ≫ h = 0 :=
+    calc
+      i ≫ h = i ≫ cokernel.π f ≫ l := hl ▸ rfl
+      _ = 0 ≫ l := by rw [← Category.assoc, kernel.condition]
+      _ = 0 := zero_comp
+  -- i factors through u = ker h via some s.
+  obtain ⟨s, hs⟩ := NormalMono.lift' u i hih
+  have hs' : (s ≫ kernel.ι g) ≫ i = 𝟙 I ≫ i := by rw [Category.assoc, hs, Category.id_comp]
+  have : Epi (kernel.ι g) := epi_of_epi_fac ((cancel_mono _).1 hs')
+  -- ker g is an epimorphism, but ker g ≫ g = 0 = ker g ≫ 0, so g = 0 as required.
+  exact zero_of_epi_comp _ (kernel.condition g)
 
 中文:
 实例 :
@@ -148,7 +173,32 @@ instance :
   -- It will suffice to consider some g : I ⟶ R such that p ≫ g = 0 and show that g = 0.
   NormalMonoCategory.epi_of_zero_cancel
   _ fun R (g : I ⟶ R) (hpg : p ≫ g = 0) => by
-  -- Since C is abelian, u :
+  -- Since C is abelian, u := ker g ≫ i is the kernel of some morphism h.
+  let u := kernel.ι g ≫ i
+  have hu := normalMonoOfMono u
+  let h := hu.g
+  -- By hypothesis, p factors through the kernel of g via some t.
+  obtain ⟨t, ht⟩ := kernel.lift' g p hpg
+  have fh : f ≫ h = 0 :=
+    calc
+      f ≫ h = (p ≫ i) ≫ h := (Abelian.image.fac f).symm ▸ rfl
+      _ = ((t ≫ kernel.ι g) ≫ i) ≫ h := ht ▸ rfl
+      _ = t ≫ u ≫ h := by simp only [u, Category.assoc]
+      _ = t ≫ 0 := hu.w ▸ rfl
+      _ = 0 := HasZeroMorphisms.comp_zero _ _
+  -- h factors through the cokernel of f via some l.
+  obtain ⟨l, hl⟩ := cokernel.desc' f h fh
+  have hih : i ≫ h = 0 :=
+    calc
+      i ≫ h = i ≫ cokernel.π f ≫ l := hl ▸ rfl
+      _ = 0 ≫ l := by rw [← Category.assoc, kernel.condition]
+      _ = 0 := zero_comp
+  -- i factors through u = ker h via some s.
+  obtain ⟨s, hs⟩ := NormalMono.lift' u i hih
+  have hs' : (s ≫ kernel.ι g) ≫ i = 𝟙 I ≫ i := by rw [Category.assoc, hs, Category.id_comp]
+  have : Epi (kernel.ι g) := epi_of_epi_fac ((cancel_mono _).1 hs')
+  -- ker g is an epimorphism, but ker g ≫ g = 0 = ker g ≫ 0, so g = 0 as required.
+  exact zero_of_epi_comp _ (kernel.condition g)
 
 Depends on / 依赖: Abelian, Abelian.factorThruImage, Abelian.image, cokernel, factorThruImage, kernel
 -/
@@ -216,7 +266,30 @@ instance :
   NormalEpiCategory.mono_of_cancel_zero _ fun R (g : R ⟶ I) (hgi : g ≫ i = 0) => by
     -- Since C is abelian, u := p ≫ coker g is the cokernel of some morphism h.
     let u := p ≫ cokernel.π g
-    h
+    have hu := normalEpiOfEpi u
+    let h := hu.g
+    -- By hypothesis, i factors through the cokernel of g via some t.
+    obtain ⟨t, ht⟩ := cokernel.desc' g i hgi
+    have hf : h ≫ f = 0 :=
+      calc
+        h ≫ f = h ≫ p ≫ i := (Abelian.coimage.fac f).symm ▸ rfl
+        _ = h ≫ p ≫ cokernel.π g ≫ t := ht ▸ rfl
+        _ = h ≫ u ≫ t := by simp only [u, Category.assoc]
+        _ = 0 ≫ t := by rw [← Category.assoc, hu.w]
+        _ = 0 := zero_comp
+    -- h factors through the kernel of f via some l.
+    obtain ⟨l, hl⟩ := kernel.lift' f h hf
+    have hhp : h ≫ p = 0 :=
+      calc
+        h ≫ p = (l ≫ kernel.ι f) ≫ p := hl ▸ rfl
+        _ = l ≫ 0 := by rw [Category.assoc, cokernel.condition]
+        _ = 0 := comp_zero
+    -- p factors through u = coker h via some s.
+    obtain ⟨s, hs⟩ := NormalEpi.desc' u p hhp
+    have hs' : p ≫ cokernel.π g ≫ s = p ≫ 𝟙 I := by rw [← Category.assoc, hs, Category.comp_id]
+    have : Mono (cokernel.π g) := mono_of_mono_fac ((cancel_epi _).1 hs')
+    -- coker g is a monomorphism, but g ≫ coker g = 0 = 0 ≫ coker g, so g = 0 as required.
+    exact zero_of_comp_mono _ (cokernel.condition g)
 
 中文:
 实例 :
@@ -227,7 +300,30 @@ instance :
   NormalEpiCategory.mono_of_cancel_zero _ fun R (g : R ⟶ I) (hgi : g ≫ i = 0) => by
     -- Since C is abelian, u := p ≫ coker g is the cokernel of some morphism h.
     let u := p ≫ cokernel.π g
-    h
+    have hu := normalEpiOfEpi u
+    let h := hu.g
+    -- By hypothesis, i factors through the cokernel of g via some t.
+    obtain ⟨t, ht⟩ := cokernel.desc' g i hgi
+    have hf : h ≫ f = 0 :=
+      calc
+        h ≫ f = h ≫ p ≫ i := (Abelian.coimage.fac f).symm ▸ rfl
+        _ = h ≫ p ≫ cokernel.π g ≫ t := ht ▸ rfl
+        _ = h ≫ u ≫ t := by simp only [u, Category.assoc]
+        _ = 0 ≫ t := by rw [← Category.assoc, hu.w]
+        _ = 0 := zero_comp
+    -- h factors through the kernel of f via some l.
+    obtain ⟨l, hl⟩ := kernel.lift' f h hf
+    have hhp : h ≫ p = 0 :=
+      calc
+        h ≫ p = (l ≫ kernel.ι f) ≫ p := hl ▸ rfl
+        _ = l ≫ 0 := by rw [Category.assoc, cokernel.condition]
+        _ = 0 := comp_zero
+    -- p factors through u = coker h via some s.
+    obtain ⟨s, hs⟩ := NormalEpi.desc' u p hhp
+    have hs' : p ≫ cokernel.π g ≫ s = p ≫ 𝟙 I := by rw [← Category.assoc, hs, Category.comp_id]
+    have : Mono (cokernel.π g) := mono_of_mono_fac ((cancel_epi _).1 hs')
+    -- coker g is a monomorphism, but g ≫ coker g = 0 = 0 ≫ coker g, so g = 0 as required.
+    exact zero_of_comp_mono _ (cokernel.condition g)
 
 Depends on / 依赖: Abelian, Abelian.coimage, Abelian.factorThruCoimage, NormalEpiCategory, NormalEpiCategory.mono_of_cancel_zero, coimage, cokernel, factorThruCoimage, kernel, mono_of_cancel_zero
 -/
@@ -398,7 +494,15 @@ instance mono_r
   apply NormalEpiCategory.mono_of_cancel_zero
   intro Z x hx
   have hxx : (x ≫ prod.lift (𝟙 A) (0 : A ⟶ A)) ≫ cokernel.π (diag A) = 0 := by
-    rw [Category.assoc]; rw 
+    rw [Category.assoc]; rw [hx]
+  obtain ⟨y, hy⟩ := KernelFork.IsLimit.lift' hl _ hxx
+  rw [KernelFork.ι_ofι] at hy
+  have hyy : y = 0 := by
+    erw [← Category.comp_id y, ← Limits.prod.lift_snd (𝟙 A) (𝟙 A), ← Category.assoc, hy,
+      Category.assoc, prod.lift_snd, HasZeroMorphisms.comp_zero]
+  have : Mono (prod.lift (𝟙 A) (0 : A ⟶ A)) := mono_of_mono_fac (prod.lift_fst _ _)
+  apply (cancel_mono (prod.lift (𝟙 A) (0 : A ⟶ A))).1
+  rw [← hy]; rw [hyy]; rw [zero_comp]; rw [zero_comp]
 
 中文:
 实例 mono_r
@@ -409,7 +513,15 @@ instance mono_r
   apply NormalEpiCategory.mono_of_cancel_zero
   intro Z x hx
   have hxx : (x ≫ prod.lift (𝟙 A) (0 : A ⟶ A)) ≫ cokernel.π (diag A) = 0 := by
-    rw [Category.assoc]; rw 
+    rw [Category.assoc]; rw [hx]
+  obtain ⟨y, hy⟩ := KernelFork.IsLimit.lift' hl _ hxx
+  rw [KernelFork.ι_ofι] at hy
+  have hyy : y = 0 := by
+    erw [← Category.comp_id y, ← Limits.prod.lift_snd (𝟙 A) (𝟙 A), ← Category.assoc, hy,
+      Category.assoc, prod.lift_snd, HasZeroMorphisms.comp_zero]
+  have : Mono (prod.lift (𝟙 A) (0 : A ⟶ A)) := mono_of_mono_fac (prod.lift_fst _ _)
+  apply (cancel_mono (prod.lift (𝟙 A) (0 : A ⟶ A))).1
+  rw [← hy]; rw [hyy]; rw [zero_comp]; rw [zero_comp]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, IsLimit, KernelFork, KernelFork.IsLimit.lift, KernelFork.of, Limits, Limits.prod.lift_snd, NormalEpiCategory, NormalEpiCategory.mono_of_cancel_zero, cokernel, cokernel.condition, colimit, colimit.isColimit, comp_id, condition, isColimit, lift_snd, monoIsKernelOfCokernel
 -/
@@ -443,7 +555,24 @@ instance epi_r
     refine Fork.IsLimit.mk _ (fun s => Fork.ι s ≫ Limits.prod.fst) ?_ ?_
     · intro s
       apply Limits.prod.hom_ext <;> simp
-    · in
+    · intro s m h
+      have : Mono (prod.lift (𝟙 A) (0 : A ⟶ A)) := mono_of_mono_fac (prod.lift_fst _ _)
+      apply (cancel_mono (prod.lift (𝟙 A) (0 : A ⟶ A))).1
+      convert! h
+      apply Limits.prod.hom_ext <;> simp
+  let hp2 : IsColimit (CokernelCofork.ofπ (Limits.prod.snd : A ⨯ A ⟶ A) hlp) :=
+    epiIsCokernelOfKernel _ hp1
+  apply NormalMonoCategory.epi_of_zero_cancel
+  intro Z z hz
+  have h : prod.lift (𝟙 A) (0 : A ⟶ A) ≫ cokernel.π (diag A) ≫ z = 0 := by rw [← Category.assoc, hz]
+  obtain ⟨t, ht⟩ := CokernelCofork.IsColimit.desc' hp2 _ h
+  rw [CokernelCofork.π_ofπ] at ht
+  have htt : t = 0 := by
+    rw [← Category.id_comp t]
+    change 𝟙 A ≫ t = 0
+    rw [← Limits.prod.lift_snd (𝟙 A) (𝟙 A)]; rw [Category.assoc]; rw [ht]; rw [← Category.assoc]; rw [cokernel.condition]; rw [zero_comp]
+  apply (cancel_epi (cokernel.π (diag A))).1
+  rw [← ht]; rw [htt]; rw [comp_zero]; rw [comp_zero]
 
 中文:
 实例 epi_r
@@ -454,7 +583,24 @@ instance epi_r
     refine Fork.IsLimit.mk _ (fun s => Fork.ι s ≫ Limits.prod.fst) ?_ ?_
     · intro s
       apply Limits.prod.hom_ext <;> simp
-    · in
+    · intro s m h
+      have : Mono (prod.lift (𝟙 A) (0 : A ⟶ A)) := mono_of_mono_fac (prod.lift_fst _ _)
+      apply (cancel_mono (prod.lift (𝟙 A) (0 : A ⟶ A))).1
+      convert! h
+      apply Limits.prod.hom_ext <;> simp
+  let hp2 : IsColimit (CokernelCofork.ofπ (Limits.prod.snd : A ⨯ A ⟶ A) hlp) :=
+    epiIsCokernelOfKernel _ hp1
+  apply NormalMonoCategory.epi_of_zero_cancel
+  intro Z z hz
+  have h : prod.lift (𝟙 A) (0 : A ⟶ A) ≫ cokernel.π (diag A) ≫ z = 0 := by rw [← Category.assoc, hz]
+  obtain ⟨t, ht⟩ := CokernelCofork.IsColimit.desc' hp2 _ h
+  rw [CokernelCofork.π_ofπ] at ht
+  have htt : t = 0 := by
+    rw [← Category.id_comp t]
+    change 𝟙 A ≫ t = 0
+    rw [← Limits.prod.lift_snd (𝟙 A) (𝟙 A)]; rw [Category.assoc]; rw [ht]; rw [← Category.assoc]; rw [cokernel.condition]; rw [zero_comp]
+  apply (cancel_epi (cokernel.π (diag A))).1
+  rw [← ht]; rw [htt]; rw [comp_zero]; rw [comp_zero]
 
 Depends on / 依赖: CokernelCof, Fork.IsLimit.mk, IsColimit, IsLimit, KernelFork, KernelFork.of, Limits, Limits.prod.fst, Limits.prod.hom_ext, Limits.prod.snd, cancel_mono, convert, hom_ext, lift_fst, lift_snd, mono_of_mono_fac, prod.lift, prod.lift_fst, prod.lift_snd
 -/
@@ -619,7 +765,9 @@ theorem σ_comp
   suffices hfg : f = g by rw [← hg, Cofork.π_ofπ, hfg]
   calc
     f = f ≫ prod.lift (𝟙 Y) 0 ≫ σ := by rw [lift_σ, Category.comp_id]
-    _ = 
+    _ = prod.lift (𝟙 X) 0 ≫ Limits.prod.map f f ≫ σ := by rw [lift_map_assoc]
+    _ = prod.lift (𝟙 X) 0 ≫ σ ≫ g := by rw [← hg, CokernelCofork.π_ofπ]
+    _ = g := by rw [← Category.assoc, lift_σ, Category.id_comp]
 
 中文:
 定理 σ_comp
@@ -632,7 +780,9 @@ theorem σ_comp
   suffices hfg : f = g by rw [← hg, Cofork.π_ofπ, hfg]
   calc
     f = f ≫ prod.lift (𝟙 Y) 0 ≫ σ := by rw [lift_σ, Category.comp_id]
-    _ = 
+    _ = prod.lift (𝟙 X) 0 ≫ Limits.prod.map f f ≫ σ := by rw [lift_map_assoc]
+    _ = prod.lift (𝟙 X) 0 ≫ σ ≫ g := by rw [← hg, CokernelCofork.π_ofπ]
+    _ = g := by rw [← Category.assoc, lift_σ, Category.id_comp]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, Cofork, CokernelCofork, CokernelCofork.IsColimit.desc, IsColimit, Limits, Limits.prod.map, comp_id, comp_zero, diag_map_assoc, id_comp, lift_map_assoc, prod.diag_map_assoc, prod.lift
 -/

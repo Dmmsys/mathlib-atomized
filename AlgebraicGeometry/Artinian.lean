@@ -113,14 +113,18 @@ lemma IsLocallyArtinian.of_topologicalKrullDim_le_zero
   proof: by
     have _ : IsNoetherianRing Γ(X, U) := IsLocallyNoetherian.component_noetherian U
     rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ring.KrullDimLE]; rw [Order.krullDimLE_iff]; rw [← ringKrullDim]; rw [Nat.cast_zero]; rw [← PrimeSpectrum.topologicalKrullDim_eq_ringKrullDim Γ(X]; rw [U)]
-    chan
+    change topologicalKrullDim (Spec Γ(X, U)) <= 0
+    rw [← IsHomeomorph.topologicalKrullDim_eq _ U.2.isoSpec.hom.homeomorph.isHomeomorph]
+    exact (topologicalKrullDim_subspace_le X U).trans h
 
 中文:
 引理 是LocallyArtinian.of_topologicalKrullDim_le_zero
   证明: by
     have _ : IsNoetherianRing Γ(X, U) := IsLocallyNoetherian.component_noetherian U
     rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ring.KrullDimLE]; rw [Order.krullDimLE_iff]; rw [← ringKrullDim]; rw [Nat.cast_zero]; rw [← PrimeSpectrum.topologicalKrullDim_eq_ringKrullDim Γ(X]; rw [U)]
-    chan
+    change topologicalKrullDim (Spec Γ(X, U)) <= 0
+    rw [← IsHomeomorph.topologicalKrullDim_eq _ U.2.isoSpec.hom.homeomorph.isHomeomorph]
+    exact (topologicalKrullDim_subspace_le X U).trans h
 
 Depends on / 依赖: IsHomeomorph, IsHomeomorph.topologicalKrullDim_eq, IsLocallyNoetherian, IsLocallyNoetherian.component_noetherian, IsNoetherianRing, IsOpenImmersion, KrullDimLE, MorphismProperty, MorphismProperty.of_isPullback, Nat.cast_zero, Order.krullDimLE_iff, PrimeSpectrum, PrimeSpectrum.topologicalKrullDim_eq_ringKrullDim, Ring.KrullDimLE, UniversallyOpen, cast_zero, component_noetherian, hf.flip, homeomorph, isArtinianRing_iff_krullDimLE_zero
 -/
@@ -298,7 +302,8 @@ theorem isLocallyArtinian_iff_openCover
   refine IsLocallyArtinian.iff_isLocallyNoetherian_and_discreteTopology.mpr ⟨?_, ?_⟩
   · exact (isLocallyNoetherian_iff_openCover 𝒰).mpr inferInstance
   · refine discreteTopology_iff_isOpen_singleton.mpr fun x => ?_
-    obtain ⟨i, x, rfl⟩ := 𝒰.exists
+    obtain ⟨i, x, rfl⟩ := 𝒰.exists_eq x
+    simpa using (𝒰.f i).isOpenEmbedding.isOpenMap _ (isOpen_discrete {x})
 
 中文:
 定理 isLocallyArtinian_iff_openCover
@@ -308,7 +313,8 @@ theorem isLocallyArtinian_iff_openCover
   refine IsLocallyArtinian.iff_isLocallyNoetherian_and_discreteTopology.mpr ⟨?_, ?_⟩
   · exact (isLocallyNoetherian_iff_openCover 𝒰).mpr inferInstance
   · refine discreteTopology_iff_isOpen_singleton.mpr fun x => ?_
-    obtain ⟨i, x, rfl⟩ := 𝒰.exists
+    obtain ⟨i, x, rfl⟩ := 𝒰.exists_eq x
+    simpa using (𝒰.f i).isOpenEmbedding.isOpenMap _ (isOpen_discrete {x})
 
 Depends on / 依赖: IsLocallyArtinian, IsLocallyArtinian.iff_isLocallyNoetherian_and_discreteTopology.mpr, discreteTopology_iff_isOpen_singleton, discreteTopology_iff_isOpen_singleton.mpr, exists_eq, iff_isLocallyNoetherian_and_discreteTopology, isLocallyNoetherian_iff_openCover, isOpenEmbedding, isOpenEmbedding.isOpenMap, isOpenMap, isOpen_discrete
 -/

@@ -429,7 +429,8 @@ theorem hittingBtwn_of_le
     conv => intro; rw [Set.mem_Icc, Set.Icc_self, and_imp, and_imp]
     intro i hi₁ hi₂ hi
     rw [Set.inter_eq_left.2]; rw [csInf_singleton]
-    exact Set.singleton_subse
+    exact Set.singleton_subset_iff.2 (le_antisymm hi₂ hi₁ ▸ hi)
+  · exact hittingBtwn_of_lt h
 
 中文:
 定理 hittingBtwn_of_le
@@ -442,7 +443,8 @@ theorem hittingBtwn_of_le
     conv => intro; rw [Set.mem_Icc, Set.Icc_self, and_imp, and_imp]
     intro i hi₁ hi₂ hi
     rw [Set.inter_eq_left.2]; rw [csInf_singleton]
-    exact Set.singleton_subse
+    exact Set.singleton_subset_iff.2 (le_antisymm hi₂ hi₁ ▸ hi)
+  · exact hittingBtwn_of_lt h
 
 Depends on / 依赖: Icc_self, Set.Icc_self, Set.inter_eq_left, Set.mem_Icc, Set.singleton_subset_iff, and_imp, classical, csInf_singleton, forall_exists_index, hittingBtwn, hittingBtwn_of_lt, inter_eq_left, ite_eq_right_iff, le_antisymm, le_iff_eq_or_lt, mem_Icc, singleton_subset_iff
 -/
@@ -777,7 +779,11 @@ theorem hittingBtwn_le_iff_of_exists
   · have h'' : exists k in Set.Icc n (min m i), u k ω in s := by
       obtain ⟨k₁, hk₁_mem, hk₁_s⟩ := h_exists
       obtain ⟨k₂, hk₂_mem, hk₂_s⟩ := h'
-      re
+      refine ⟨min k₁ k₂, ⟨le_min hk₁_mem.1 hk₂_mem.1, min_le_min hk₁_mem.2 hk₂_mem.2⟩, ?_⟩
+      exact min_rec' (fun j => u j ω in s) hk₁_s hk₂_s
+    obtain ⟨k, hk₁, hk₂⟩ := h''
+    refine le_trans ?_ (hk₁.2.trans (min_le_right _ _))
+    exact hittingBtwn_le_of_mem hk₁.1 (hk₁.2.trans (min_le_left _ _)) hk₂
 
 中文:
 定理 hittingBtwn_le_iff_of_存在
@@ -789,7 +795,11 @@ theorem hittingBtwn_le_iff_of_exists
   · have h'' : exists k in Set.Icc n (min m i), u k ω in s := by
       obtain ⟨k₁, hk₁_mem, hk₁_s⟩ := h_exists
       obtain ⟨k₂, hk₂_mem, hk₂_s⟩ := h'
-      re
+      refine ⟨min k₁ k₂, ⟨le_min hk₁_mem.1 hk₂_mem.1, min_le_min hk₁_mem.2 hk₂_mem.2⟩, ?_⟩
+      exact min_rec' (fun j => u j ω in s) hk₁_s hk₂_s
+    obtain ⟨k, hk₁, hk₂⟩ := h''
+    refine le_trans ?_ (hk₁.2.trans (min_le_right _ _))
+    exact hittingBtwn_le_of_mem hk₁.1 (hk₁.2.trans (min_le_left _ _)) hk₂
 
 Depends on / 依赖: Set.Icc, h_exists, hittingBtwn, hittingBtwn_, hittingBtwn_mem_set, le_hittingBtwn_of_exists, le_min, le_trans, min_le_min, min_le_right, min_rec
 -/
@@ -819,7 +829,11 @@ lemma hittingAfter_le_iff
   · have h_top : hittingAfter u s n ω != ⊤ := fun h => by simp [h] at h'
     have h_le := le_hittingAfter (u := u) (s := s) (n := n) ω
     refine ⟨(hittingAfter u s n ω).untopA, ?_, hittingAfter_mem_set_of_ne_top h_top⟩
-    lift (hittingAfter u s n ω) to ι using h_top w
+    lift (hittingAfter u s n ω) to ι using h_top with i'
+    norm_cast at h' h_le
+  · obtain ⟨j, hj₁, hj₂⟩ := h'
+    refine le_trans ?_ (mod_cast hj₁.2 : (j : WithTop ι) <= i)
+    exact hittingAfter_le_of_mem hj₁.1 hj₂
 
 中文:
 引理 hittingAfter_le_iff
@@ -829,7 +843,11 @@ lemma hittingAfter_le_iff
   · have h_top : hittingAfter u s n ω != ⊤ := fun h => by simp [h] at h'
     have h_le := le_hittingAfter (u := u) (s := s) (n := n) ω
     refine ⟨(hittingAfter u s n ω).untopA, ?_, hittingAfter_mem_set_of_ne_top h_top⟩
-    lift (hittingAfter u s n ω) to ι using h_top w
+    lift (hittingAfter u s n ω) to ι using h_top with i'
+    norm_cast at h' h_le
+  · obtain ⟨j, hj₁, hj₂⟩ := h'
+    refine le_trans ?_ (mod_cast hj₁.2 : (j : WithTop ι) <= i)
+    exact hittingAfter_le_of_mem hj₁.1 hj₂
 
 Depends on / 依赖: WithTop, h_le, h_top, hittingAfter, hittingAfter_le_of_mem, hittingAfter_mem_set_of_ne_top, le_hittingAfter, le_trans, mod_cast, untopA
 -/
@@ -857,7 +875,7 @@ theorem hittingBtwn_le_iff_of_lt
   · simp_rw [hittingBtwn, if_neg h_exists]
     push Not at h_exists
     simp only [not_le.mpr hi, Set.mem_Icc, false_iff, not_exists, not_and, and_imp]
-    exact fun k hkn hki => h_exists k ⟨h
+    exact fun k hkn hki => h_exists k ⟨hkn, hki.trans hi.le⟩
 
 中文:
 定理 hittingBtwn_le_iff_of_lt
@@ -868,7 +886,7 @@ theorem hittingBtwn_le_iff_of_lt
   · simp_rw [hittingBtwn, if_neg h_exists]
     push Not at h_exists
     simp only [not_le.mpr hi, Set.mem_Icc, false_iff, not_exists, not_and, and_imp]
-    exact fun k hkn hki => h_exists k ⟨h
+    exact fun k hkn hki => h_exists k ⟨hkn, hki.trans hi.le⟩
 
 Depends on / 依赖: Set.Icc, Set.mem_Icc, and_imp, false_iff, h_exists, hi.le, hittingBtwn, hittingBtwn_le_iff_of_exists, hki.trans, if_neg, mem_Icc, not_and, not_exists, not_le, not_le.mpr, simp_rw
 -/
@@ -894,7 +912,17 @@ theorem hittingBtwn_lt_iff
       simp_rw [hittingBtwn, if_neg h, ← not_le] at h'
       exact h' hi
     have hni : n < i := (le_hittingBtwn_of_exists h).trans_lt h'
-    have h_le := le_hittingBtwn (u := u) (s := s) (hni.le.tr
+    have h_le := le_hittingBtwn (u := u) (s := s) (hni.le.trans hi) ω
+    rw [hittingBtwn]; rw [if_pos h]; rw [csInf_lt_iff] at h'
+    rotate_left
+    · exact ⟨n, by simp [mem_lowerBounds]; grind⟩
+    · exact h
+    simp only [Set.mem_inter_iff, Set.mem_Icc, Set.mem_ofPred_eq] at h'
+    obtain ⟨j, ⟨⟨hnj, hjm⟩, hj_mem⟩, hji⟩ := h'
+    exact ⟨j, ⟨hnj, hji⟩, hj_mem⟩
+  · obtain ⟨k, hk₁, hk₂⟩ := h'
+    refine lt_of_le_of_lt ?_ hk₁.2
+    exact hittingBtwn_le_of_mem hk₁.1 (hk₁.2.le.trans hi) hk₂
 
 中文:
 定理 hittingBtwn_lt_iff
@@ -906,7 +934,17 @@ theorem hittingBtwn_lt_iff
       simp_rw [hittingBtwn, if_neg h, ← not_le] at h'
       exact h' hi
     have hni : n < i := (le_hittingBtwn_of_exists h).trans_lt h'
-    have h_le := le_hittingBtwn (u := u) (s := s) (hni.le.tr
+    have h_le := le_hittingBtwn (u := u) (s := s) (hni.le.trans hi) ω
+    rw [hittingBtwn]; rw [if_pos h]; rw [csInf_lt_iff] at h'
+    rotate_left
+    · exact ⟨n, by simp [mem_lowerBounds]; grind⟩
+    · exact h
+    simp only [Set.mem_inter_iff, Set.mem_Icc, Set.mem_ofPred_eq] at h'
+    obtain ⟨j, ⟨⟨hnj, hjm⟩, hj_mem⟩, hji⟩ := h'
+    exact ⟨j, ⟨hnj, hji⟩, hj_mem⟩
+  · obtain ⟨k, hk₁, hk₂⟩ := h'
+    refine lt_of_le_of_lt ?_ hk₁.2
+    exact hittingBtwn_le_of_mem hk₁.1 (hk₁.2.le.trans hi) hk₂
 
 Depends on / 依赖: Set.Icc, Set.mem_Icc, Set.mem_inter_iff, Set.mem_ofPred_eq, csInf_lt_iff, h_le, hittingBtwn, hni.le.trans, if_neg, if_pos, le_hittingBtwn, le_hittingBtwn_of_exists, mem_Icc, mem_inter_iff, mem_lowerBounds, mem_ofPred_eq, not_le, rotate_left, simp_rw, trans_lt
 -/
@@ -942,7 +980,19 @@ lemma hittingAfter_lt_iff
       rw [ne_eq]; rw [hittingAfter_eq_top_iff] at h_top
       push Not at h_top
       exact h_top
-    have h_le := le_hittingAfter (u := u) (
+    have h_le := le_hittingAfter (u := u) (s := s) (n := n) ω
+    rw [hittingAfter]; rw [if_pos h_exists] at h'
+    norm_cast at h'
+    rw [csInf_lt_iff] at h'
+    rotate_left
+    · exact ⟨n, by simp [mem_lowerBounds]; grind⟩
+    · exact h_exists
+    simp only [Set.mem_ofPred_eq] at h'
+    obtain ⟨j, hj₁, hj₂⟩ := h'
+    exact ⟨j, ⟨hj₁.1, hj₂⟩, hj₁.2⟩
+  · obtain ⟨j, hj₁, hj₂⟩ := h'
+    refine lt_of_le_of_lt ?_ (mod_cast hj₁.2 : (j : WithTop ι) < i)
+    exact hittingAfter_le_of_mem hj₁.1 hj₂
 
 中文:
 引理 hittingAfter_lt_iff
@@ -953,7 +1003,19 @@ lemma hittingAfter_lt_iff
       rw [ne_eq]; rw [hittingAfter_eq_top_iff] at h_top
       push Not at h_top
       exact h_top
-    have h_le := le_hittingAfter (u := u) (
+    have h_le := le_hittingAfter (u := u) (s := s) (n := n) ω
+    rw [hittingAfter]; rw [if_pos h_exists] at h'
+    norm_cast at h'
+    rw [csInf_lt_iff] at h'
+    rotate_left
+    · exact ⟨n, by simp [mem_lowerBounds]; grind⟩
+    · exact h_exists
+    simp only [Set.mem_ofPred_eq] at h'
+    obtain ⟨j, hj₁, hj₂⟩ := h'
+    exact ⟨j, ⟨hj₁.1, hj₂⟩, hj₁.2⟩
+  · obtain ⟨j, hj₁, hj₂⟩ := h'
+    refine lt_of_le_of_lt ?_ (mod_cast hj₁.2 : (j : WithTop ι) < i)
+    exact hittingAfter_le_of_mem hj₁.1 hj₂
 
 Depends on / 依赖: Set.mem_ofPred_eq, csInf_lt_iff, h_exists, h_le, h_top, hittingAfter, hittingAfter_eq_top_iff, if_pos, le_hittingAfter, mem_lowerBounds, mem_ofPred_eq, ne_eq, rotate_left
 -/
@@ -992,7 +1054,10 @@ theorem hittingBtwn_eq_hittingBtwn_of_exists
   · refine le_antisymm ?_ (by gcongr; exacts [bddBelow_Icc.inter_of_left, ⟨j, hj₁, hj₂⟩])
     refine le_csInf ⟨j, Set.Icc_subset_Icc_right h hj₁, hj₂⟩ fun i hi => ?_
     by_cases hi' : i <= m₁
-    · exact csInf_le bdd
+    · exact csInf_le bddBelow_Icc.inter_of_left ⟨⟨hi.1.1, hi'⟩, hi.2⟩
+    · change j in {i | u i ω in s} at hj₂
+      exact ((csInf_le bddBelow_Icc.inter_of_left ⟨hj₁, hj₂⟩).trans hj₁.2).trans (le_of_not_ge hi')
+  exact ⟨j, ⟨hj₁.1, hj₁.2.trans h⟩, hj₂⟩
 
 中文:
 定理 hittingBtwn_eq_hittingBtwn_of_存在
@@ -1004,7 +1069,10 @@ theorem hittingBtwn_eq_hittingBtwn_of_exists
   · refine le_antisymm ?_ (by gcongr; exacts [bddBelow_Icc.inter_of_left, ⟨j, hj₁, hj₂⟩])
     refine le_csInf ⟨j, Set.Icc_subset_Icc_right h hj₁, hj₂⟩ fun i hi => ?_
     by_cases hi' : i <= m₁
-    · exact csInf_le bdd
+    · exact csInf_le bddBelow_Icc.inter_of_left ⟨⟨hi.1.1, hi'⟩, hi.2⟩
+    · change j in {i | u i ω in s} at hj₂
+      exact ((csInf_le bddBelow_Icc.inter_of_left ⟨hj₁, hj₂⟩).trans hj₁.2).trans (le_of_not_ge hi')
+  exact ⟨j, ⟨hj₁.1, hj₁.2.trans h⟩, hj₂⟩
 
 Depends on / 依赖: Icc_subset_Icc_right, Set.Icc_subset_Icc_right, bddBelow_Icc, bddBelow_Icc.inter_of_left, csInf_le, exacts, hittingBtwn, if_pos, inter_of_left, le_antisymm, le_csInf, le_of_not_ge
 -/
@@ -1038,7 +1106,7 @@ lemma hittingBtwn_anti
     exact csInf_le_of_le ⟨n, by simp [mem_lowerBounds]; grind⟩ ht ht.1.2
   · obtain ⟨t, ht⟩ := hE
     exact absurd ⟨t, ht.1, hEF ht.2⟩ hF
- 
+  · simp
 
 中文:
 引理 hittingBtwn_anti
@@ -1054,7 +1122,7 @@ lemma hittingBtwn_anti
     exact csInf_le_of_le ⟨n, by simp [mem_lowerBounds]; grind⟩ ht ht.1.2
   · obtain ⟨t, ht⟩ := hE
     exact absurd ⟨t, ht.1, hEF ht.2⟩ hF
- 
+  · simp
 
 Depends on / 依赖: absurd, csInf_le_of_le, hittingBtwn_def, mem_lowerBounds, split_ifs
 -/
@@ -1170,7 +1238,8 @@ theorem hittingBtwn_mono_right
     · obtain ⟨j, hj₁, hj₂⟩ := h'
       refine le_csInf ⟨j, hj₁, hj₂⟩ ?_
       by_contra! ⟨i, hi₁, hi₂⟩
-      exac
+      exact h ⟨i, ⟨hi₁.1.1, hi₂.le⟩, hi₁.2⟩
+    · exact hm
 
 中文:
 定理 hittingBtwn_mono_right
@@ -1184,7 +1253,8 @@ theorem hittingBtwn_mono_right
     · obtain ⟨j, hj₁, hj₂⟩ := h'
       refine le_csInf ⟨j, hj₁, hj₂⟩ ?_
       by_contra! ⟨i, hi₁, hi₂⟩
-      exac
+      exact h ⟨i, ⟨hi₁.1.1, hi₂.le⟩, hi₁.2⟩
+    · exact hm
 
 Depends on / 依赖: Set.Icc, hittingBtwn, hittingBtwn_eq_hittingBtwn_of_exists, if_neg, le_csInf, simp_rw, split_ifs
 -/
@@ -1216,7 +1286,8 @@ lemma hittingBtwn_mono_left
   · obtain ⟨t, ht⟩ := h_n
     exact csInf_le_of_le ⟨n, by simp [mem_lowerBounds]; grind⟩ ht ht.1.2
   · have ⟨t, ht⟩ := h_n'
-    exact absurd ⟨t, ⟨hnn'.trans h
+    exact absurd ⟨t, ⟨hnn'.trans ht.1.1, ht.1.2⟩, ht.2⟩ h_n
+  · simp
 
 中文:
 引理 hittingBtwn_mono_left
@@ -1230,7 +1301,8 @@ lemma hittingBtwn_mono_left
   · obtain ⟨t, ht⟩ := h_n
     exact csInf_le_of_le ⟨n, by simp [mem_lowerBounds]; grind⟩ ht ht.1.2
   · have ⟨t, ht⟩ := h_n'
-    exact absurd ⟨t, ⟨hnn'.trans h
+    exact absurd ⟨t, ⟨hnn'.trans ht.1.1, ht.1.2⟩, ht.2⟩ h_n
+  · simp
 
 Depends on / 依赖: absurd, csInf_le_of_le, exacts, hittingBtwn, mem_lowerBounds, split_ifs
 -/
@@ -1364,7 +1436,12 @@ theorem Adapted.isStoppingTime_hittingBtwn
   · have h_le : forall ω, hittingBtwn u s n n' ω <= i := fun x => (hittingBtwn_le x).trans hi
     simp [h_le]
   · have h_set_eq_Union : {ω | hittingBtwn u s n n' ω <= i} = ⋃ j in Set.Icc n i, u j ⁻¹' s := by
-      ext; simp [hittingBtwn_le_iff_of_lt _
+      ext; simp [hittingBtwn_le_iff_of_lt _ hi]
+    simpa [h_set_eq_Union] using MeasurableSet.iUnion fun j =>
+      MeasurableSet.iUnion fun hj => f.mono hj.2 _ ((hu j) hs)
+
+@[deprecated (since := "2026-01-25")]
+alias hittingBtwn_isStoppingTime := Adapted.isStoppingTime_hittingBtwn
 
 中文:
 定理 Adapted.isStoppingTime_hittingBtwn
@@ -1375,7 +1452,12 @@ theorem Adapted.isStoppingTime_hittingBtwn
   · have h_le : forall ω, hittingBtwn u s n n' ω <= i := fun x => (hittingBtwn_le x).trans hi
     simp [h_le]
   · have h_set_eq_Union : {ω | hittingBtwn u s n n' ω <= i} = ⋃ j in Set.Icc n i, u j ⁻¹' s := by
-      ext; simp [hittingBtwn_le_iff_of_lt _
+      ext; simp [hittingBtwn_le_iff_of_lt _ hi]
+    simpa [h_set_eq_Union] using MeasurableSet.iUnion fun j =>
+      MeasurableSet.iUnion fun hj => f.mono hj.2 _ ((hu j) hs)
+
+@[deprecated (since := "2026-01-25")]
+alias hittingBtwn_isStoppingTime := Adapted.isStoppingTime_hittingBtwn
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iUnion, Set.Icc, f.mono, h_le, h_set_eq_Union, hittingBtwn, hittingBtwn_le, hittingBtwn_le_iff_of_lt, iUnion, le_or_gt
 -/
@@ -1408,7 +1490,8 @@ theorem Adapted.isStoppingTime_hittingAfter
   simpa [h_set_eq_Union] using MeasurableSet.iUnion fun j =>
     MeasurableSet.iUnion fun hj => f.mono hj.2 _ ((hu j) hs)
 
-@[deprecated (since := "2026-01-25
+@[deprecated (since := "2026-01-25")]
+alias hittingAfter_isStoppingTime := Adapted.isStoppingTime_hittingAfter
 
 中文:
 定理 Adapted.isStoppingTime_hittingAfter
@@ -1420,7 +1503,8 @@ theorem Adapted.isStoppingTime_hittingAfter
   simpa [h_set_eq_Union] using MeasurableSet.iUnion fun j =>
     MeasurableSet.iUnion fun hj => f.mono hj.2 _ ((hu j) hs)
 
-@[deprecated (since := "2026-01-25
+@[deprecated (since := "2026-01-25")]
+alias hittingAfter_isStoppingTime := Adapted.isStoppingTime_hittingAfter
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iUnion, Set.Icc, f.mono, h_set_eq_Union, hittingAfter, hittingAfter_le_iff, iUnion
 -/
@@ -1483,7 +1567,29 @@ theorem Adapted.isStoppingTime_hittingBtwn_isStoppingTime
     (⋃ i <= n, {x | τ x = i} inter {x | hittingBtwn u s i N x <= n}) union
       ⋃ i > n, {x | τ x = i} inter {x | hittingBtwn u s i N x <= n} := by
     ext x
-    simp only [Set.mem_ofPred_eq, gt_iff_lt, Set.mem_union, Set.mem_iU
+    simp only [Set.mem_ofPred_eq, gt_iff_lt, Set.mem_union, Set.mem_iUnion, Set.mem_inter_iff,
+      exists_and_left, exists_prop]
+    specialize hτbdd x
+    have h_top : τ x != ⊤ := fun h => by simp [h] at hτbdd
+    lift τ x to ι using h_top with t
+    simp [← or_and_right, le_or_gt]
+  have h₂ : ⋃ i > n, {x | τ x = i} inter {x | hittingBtwn u s i N x <= n} = ∅ := by
+    ext x
+    simp only [gt_iff_lt, Set.mem_iUnion, Set.mem_inter_iff, Set.mem_ofPred_eq, exists_prop,
+      Set.mem_empty_iff_false, iff_false, not_exists, not_and, not_le]
+refine fun m hm hτ => hm.trans_le le_hittingBtwn ?_ x
+    specialize hτbdd x
+    have h_top : τ x != ⊤ := fun h => by simp [h] at hτbdd
+    lift τ x to ι using h_top with t
+    rw [hτ] at hτbdd
+    exact mod_cast hτbdd
+  simp only [WithTop.coe_le_coe, h₁, h₂, Set.union_empty]
+  refine MeasurableSet.iUnion fun i => MeasurableSet.iUnion fun hi =>
+    (f.mono hi _ (hτ.measurableSet_eq i)).inter ?_
+  simpa using hf.isStoppingTime_hittingBtwn hs n
+
+@[deprecated (since := "2026-01-25")]
+alias isStoppingTime_hittingBtwn_isStoppingTime := Adapted.isStoppingTime_hittingBtwn_isStoppingTime
 
 中文:
 定理 Adapted.isStoppingTime_hittingBtwn_isStoppingTime
@@ -1494,7 +1600,29 @@ theorem Adapted.isStoppingTime_hittingBtwn_isStoppingTime
     (⋃ i <= n, {x | τ x = i} inter {x | hittingBtwn u s i N x <= n}) union
       ⋃ i > n, {x | τ x = i} inter {x | hittingBtwn u s i N x <= n} := by
     ext x
-    simp only [Set.mem_ofPred_eq, gt_iff_lt, Set.mem_union, Set.mem_iU
+    simp only [Set.mem_ofPred_eq, gt_iff_lt, Set.mem_union, Set.mem_iUnion, Set.mem_inter_iff,
+      exists_and_left, exists_prop]
+    specialize hτbdd x
+    have h_top : τ x != ⊤ := fun h => by simp [h] at hτbdd
+    lift τ x to ι using h_top with t
+    simp [← or_and_right, le_or_gt]
+  have h₂ : ⋃ i > n, {x | τ x = i} inter {x | hittingBtwn u s i N x <= n} = ∅ := by
+    ext x
+    simp only [gt_iff_lt, Set.mem_iUnion, Set.mem_inter_iff, Set.mem_ofPred_eq, exists_prop,
+      Set.mem_empty_iff_false, iff_false, not_exists, not_and, not_le]
+refine fun m hm hτ => hm.trans_le le_hittingBtwn ?_ x
+    specialize hτbdd x
+    have h_top : τ x != ⊤ := fun h => by simp [h] at hτbdd
+    lift τ x to ι using h_top with t
+    rw [hτ] at hτbdd
+    exact mod_cast hτbdd
+  simp only [WithTop.coe_le_coe, h₁, h₂, Set.union_empty]
+  refine MeasurableSet.iUnion fun i => MeasurableSet.iUnion fun hi =>
+    (f.mono hi _ (hτ.measurableSet_eq i)).inter ?_
+  simpa using hf.isStoppingTime_hittingBtwn hs n
+
+@[deprecated (since := "2026-01-25")]
+alias isStoppingTime_hittingBtwn_isStoppingTime := Adapted.isStoppingTime_hittingBtwn_isStoppingTime
 
 Depends on / 依赖: Set.mem_iUnion, Set.mem_inter_iff, Set.mem_ofPred_eq, Set.mem_union, exists_and_left, exists_prop, ext_fourfold, gt_iff_lt, h_top, hittingBtwn, le_or_gt, mem_iUnion, mem_inter_iff, mem_ofPred_eq, mem_union, or_and_right, specialize, untopA
 -/

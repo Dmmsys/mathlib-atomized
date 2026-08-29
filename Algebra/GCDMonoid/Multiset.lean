@@ -235,7 +235,7 @@ theorem normalize_lcm
 nonrec theorem lcm_eq_zero_iff [Nontrivial α] (s : Multiset α) : s.lcm = 0 ↔ 0 in s := by
   induction s using Multiset.induction_on with
   | empty => simp only [lcm_zero, one_ne_zero, notMem_zero]
-  | cons a s ihs => simp only [mem_cons
+  | cons a s ihs => simp only [mem_cons, lcm_cons, lcm_eq_zero_iff, ihs, @eq_comm _ a]
 
 中文:
 定理 normalize_lcm
@@ -247,7 +247,7 @@ nonrec theorem lcm_eq_zero_iff [Nontrivial α] (s : Multiset α) : s.lcm = 0 ↔
 nonrec theorem lcm_eq_zero_iff [Nontrivial α] (s : Multiset α) : s.lcm = 0 ↔ 0 in s := by
   induction s using Multiset.induction_on with
   | empty => simp only [lcm_zero, one_ne_zero, notMem_zero]
-  | cons a s ihs => simp only [mem_cons
+  | cons a s ihs => simp only [mem_cons, lcm_cons, lcm_eq_zero_iff, ihs, @eq_comm _ a]
 
 Depends on / 依赖: Multiset, Multiset.induction_on, induction_on
 -/
@@ -295,7 +295,9 @@ theorem lcm_dedup
     simp only [h, dedup_cons_of_mem, IH, lcm_cons]
     unfold lcm
     rw [← cons_erase h]; rw [fold_cons_left]; rw [← lcm_assoc]; rw [lcm_same]
-    apply lcm_eq_of_associated_left (associated_normalize _
+    apply lcm_eq_of_associated_left (associated_normalize _)
+
+@[simp]
 
 中文:
 定理 lcm_dedup
@@ -306,7 +308,9 @@ theorem lcm_dedup
     simp only [h, dedup_cons_of_mem, IH, lcm_cons]
     unfold lcm
     rw [← cons_erase h]; rw [fold_cons_left]; rw [← lcm_assoc]; rw [lcm_same]
-    apply lcm_eq_of_associated_left (associated_normalize _
+    apply lcm_eq_of_associated_left (associated_normalize _)
+
+@[simp]
 
 Depends on / 依赖: Multiset, Multiset.induction_on, associated_normalize, cons_erase, dedup_cons_of_mem, fold_cons_left, induction_on, lcm_assoc, lcm_cons, lcm_eq_of_associated_left, lcm_same
 -/
@@ -922,7 +926,13 @@ theorem extract_gcd
     by_cases! h : forall x in s, x = (0 : α)
     · use replicate (card s) 1
       rw [map_replicate]; rw [eq_replicate]; rw [mul_one]; rw [s.gcd_eq_zero_iff.2 h]; rw [← nsmul_singleton]; rw [← gcd_dedup]; rw [dedup_nsmul (card_pos.2 hs).ne']; rw [dedup_singleton]; rw [gcd_singleton]
- 
+      exact ⟨⟨rfl, h⟩, normalize_one⟩
+    · choose f hf using @gcd_dvd _ _ _ s
+      refine ⟨s.pmap @f fun _ => id, ?_, extract_gcd' s _ h ?_⟩ <;>
+      · rw [map_pmap]
+        conv_lhs => rw [← s.map_id, ← s.pmap_eq_map _ _ fun _ => id]
+        congr with (x hx)
+        rw [id]; rw [← hf hx]
 
 中文:
 定理 extract_gcd
@@ -932,7 +942,13 @@ theorem extract_gcd
     by_cases! h : forall x in s, x = (0 : α)
     · use replicate (card s) 1
       rw [map_replicate]; rw [eq_replicate]; rw [mul_one]; rw [s.gcd_eq_zero_iff.2 h]; rw [← nsmul_singleton]; rw [← gcd_dedup]; rw [dedup_nsmul (card_pos.2 hs).ne']; rw [dedup_singleton]; rw [gcd_singleton]
- 
+      exact ⟨⟨rfl, h⟩, normalize_one⟩
+    · choose f hf using @gcd_dvd _ _ _ s
+      refine ⟨s.pmap @f fun _ => id, ?_, extract_gcd' s _ h ?_⟩ <;>
+      · rw [map_pmap]
+        conv_lhs => rw [← s.map_id, ← s.pmap_eq_map _ _ fun _ => id]
+        congr with (x hx)
+        rw [id]; rw [← hf hx]
 
 Depends on / 依赖: card_pos, classical, conv_lhs, dedup_nsmul, dedup_singleton, eq_replicate, extract_gcd, gcd_dedup, gcd_dvd, gcd_eq_zero_iff, gcd_singleton, map_id, map_pmap, map_replicate, mul_one, normalize_one, nsmul_singleton, pmap_eq_map, replicate, s.gcd_eq_zero_iff
 -/

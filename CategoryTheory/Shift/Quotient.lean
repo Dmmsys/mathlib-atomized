@@ -141,7 +141,7 @@ definition iso
   body: natIsoLift r ((Functor.associator _ _ _).symm ≪≫
     Functor.isoWhiskerRight ((functor r).commShiftIso a).symm _ ≪≫
     Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ (lift.isLift r F hF) ≪≫ F.commShiftIso a ≪≫
-    Functor.isoWhiskerRight (lift.isLift r F hF).symm _ ≪≫ Functor.associator _ _ _
+    Functor.isoWhiskerRight (lift.isLift r F hF).symm _ ≪≫ Functor.associator _ _ _)
 
 中文:
 定义 iso
@@ -149,7 +149,7 @@ definition iso
   定义体: natIsoLift r ((Functor.associator _ _ _).symm ≪≫
     Functor.isoWhiskerRight ((functor r).commShiftIso a).symm _ ≪≫
     Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ (lift.isLift r F hF) ≪≫ F.commShiftIso a ≪≫
-    Functor.isoWhiskerRight (lift.isLift r F hF).symm _ ≪≫ Functor.associator _ _ _
+    Functor.isoWhiskerRight (lift.isLift r F hF).symm _ ≪≫ Functor.associator _ _ _)
 
 Depends on / 依赖: F.commShiftIso, Functor, Functor.associator, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, associator, commShiftIso, functor, isLift, isoWhiskerLeft, isoWhiskerRight, lift.isLift, natIsoLift
 -/
@@ -233,7 +233,23 @@ instance liftCommShift
     apply natTrans_ext
     ext X
     dsimp
-    rw [LiftCommShift.iso_hom_app]; rw [(functor r).commShiftIso_zero]; rw [Functor.CommShift.isoZero_hom_app]; rw [Functor.CommShift.isoZero_inv_app]; rw [Functor.map_comp]; rw [assoc]; rw [F.comm
+    rw [LiftCommShift.iso_hom_app]; rw [(functor r).commShiftIso_zero]; rw [Functor.CommShift.isoZero_hom_app]; rw [Functor.CommShift.isoZero_inv_app]; rw [Functor.map_comp]; rw [assoc]; rw [F.commShiftIso_zero]; rw [Functor.CommShift.isoZero_hom_app]; rw [lift_map_functor_map]; rw [← F.map_comp_assoc]; rw [Iso.inv_hom_id_app]
+    dsimp [lift_obj_functor_obj]
+    rw [F.map_id]; rw [id_comp]
+  commShiftIso_add a b := by
+    ext1
+    apply natTrans_ext
+    ext X
+    dsimp
+    rw [LiftCommShift.iso_hom_app]; rw [(functor r).commShiftIso_add]; rw [F.commShiftIso_add]; rw [Functor.CommShift.isoAdd_hom_app]; rw [Functor.CommShift.isoAdd_hom_app]; rw [Functor.CommShift.isoAdd_inv_app]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [LiftCommShift.iso_hom_app]; rw [lift_map_functor_map]
+    congr 1
+    rw [← cancel_epi ((shiftFunctor (Quotient r) b ⋙ lift r F hF).map
+      (NatTrans.app (Functor.commShiftIso (functor r) a).hom X))]
+    simp only [← Functor.comp_map, ← Functor.comp_obj]
+    rw [(LiftCommShift.iso F r hF b).hom.naturality_assoc (((functor r).commShiftIso a).hom.app X)]
+    simp only [Functor.comp_obj, LiftCommShift.iso_hom_app, Iso.hom_inv_id_app,
+      Functor.comp_map, assoc, ← Functor.map_comp_assoc, Iso.inv_hom_id_app,
+      Functor.map_id, id_comp, lift_obj_functor_obj]
 
 中文:
 实例 liftCommShift
@@ -244,7 +260,23 @@ instance liftCommShift
     apply natTrans_ext
     ext X
     dsimp
-    rw [LiftCommShift.iso_hom_app]; rw [(functor r).commShiftIso_zero]; rw [Functor.CommShift.isoZero_hom_app]; rw [Functor.CommShift.isoZero_inv_app]; rw [Functor.map_comp]; rw [assoc]; rw [F.comm
+    rw [LiftCommShift.iso_hom_app]; rw [(functor r).commShiftIso_zero]; rw [Functor.CommShift.isoZero_hom_app]; rw [Functor.CommShift.isoZero_inv_app]; rw [Functor.map_comp]; rw [assoc]; rw [F.commShiftIso_zero]; rw [Functor.CommShift.isoZero_hom_app]; rw [lift_map_functor_map]; rw [← F.map_comp_assoc]; rw [Iso.inv_hom_id_app]
+    dsimp [lift_obj_functor_obj]
+    rw [F.map_id]; rw [id_comp]
+  commShiftIso_add a b := by
+    ext1
+    apply natTrans_ext
+    ext X
+    dsimp
+    rw [LiftCommShift.iso_hom_app]; rw [(functor r).commShiftIso_add]; rw [F.commShiftIso_add]; rw [Functor.CommShift.isoAdd_hom_app]; rw [Functor.CommShift.isoAdd_hom_app]; rw [Functor.CommShift.isoAdd_inv_app]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [LiftCommShift.iso_hom_app]; rw [lift_map_functor_map]
+    congr 1
+    rw [← cancel_epi ((shiftFunctor (Quotient r) b ⋙ lift r F hF).map
+      (NatTrans.app (Functor.commShiftIso (functor r) a).hom X))]
+    simp only [← Functor.comp_map, ← Functor.comp_obj]
+    rw [(LiftCommShift.iso F r hF b).hom.naturality_assoc (((functor r).commShiftIso a).hom.app X)]
+    simp only [Functor.comp_obj, LiftCommShift.iso_hom_app, Iso.hom_inv_id_app,
+      Functor.comp_map, assoc, ← Functor.map_comp_assoc, Iso.inv_hom_id_app,
+      Functor.map_id, id_comp, lift_obj_functor_obj]
 
 Depends on / 依赖: LiftCommShift, LiftCommShift.iso
 -/

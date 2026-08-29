@@ -630,7 +630,9 @@ lemma Ring.krullDimLE_one_iff_of_isPrime_bot
   let : OrderBot (PrimeSpectrum R) := { bot := ⟨⊥, ‹_›⟩, bot_le I := bot_le (a := I.1) }
   simp_rw [Ring.KrullDimLE, Order.krullDimLE_iff, Nat.cast_one,
     Order.krullDim_le_one_iff_forall_isMax, (PrimeSpectrum.equivSubtype R).forall_congr_left,
-    Subtype.forall, PrimeSpectrum.isMax_iff, foral
+    Subtype.forall, PrimeSpectrum.isMax_iff, forall_comm (α := _ != ⊥),
+    ne_eq, PrimeSpectrum.ext_iff]
+  rfl
 
 中文:
 引理 环.krullDimLE_one_iff_of_isPrime_bot
@@ -639,7 +641,9 @@ lemma Ring.krullDimLE_one_iff_of_isPrime_bot
   let : OrderBot (PrimeSpectrum R) := { bot := ⟨⊥, ‹_›⟩, bot_le I := bot_le (a := I.1) }
   simp_rw [Ring.KrullDimLE, Order.krullDimLE_iff, Nat.cast_one,
     Order.krullDim_le_one_iff_forall_isMax, (PrimeSpectrum.equivSubtype R).forall_congr_left,
-    Subtype.forall, PrimeSpectrum.isMax_iff, foral
+    Subtype.forall, PrimeSpectrum.isMax_iff, forall_comm (α := _ != ⊥),
+    ne_eq, PrimeSpectrum.ext_iff]
+  rfl
 
 Depends on / 依赖: KrullDimLE, Nat.cast_one, Order.krullDimLE_iff, Order.krullDim_le_one_iff_forall_isMax, OrderBot, PrimeSpectrum, PrimeSpectrum.equivSubtype, PrimeSpectrum.ext_iff, PrimeSpectrum.isMax_iff, Ring.KrullDimLE, Subtype, Subtype.forall, bot_le, cast_one, equivSubtype, ext_iff, forall_comm, forall_congr_left, isMax_iff, krullDimLE_iff
 -/

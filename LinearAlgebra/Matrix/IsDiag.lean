@@ -566,7 +566,7 @@ theorem isDiag_fromBlocks_iff
     · exact h Sum.inr_ne_inl
     · exact h (Sum.inr_injective.ne hij)
   · rintro ⟨ha, hb, hc, hd⟩
-    convert! Is
+    convert! IsDiag.fromBlocks ha hd
 
 中文:
 定理 isDiag_fromBlocks_iff
@@ -580,7 +580,7 @@ theorem isDiag_fromBlocks_iff
     · exact h Sum.inr_ne_inl
     · exact h (Sum.inr_injective.ne hij)
   · rintro ⟨ha, hb, hc, hd⟩
-    convert! Is
+    convert! IsDiag.fromBlocks ha hd
 
 Depends on / 依赖: IsDiag, IsDiag.fromBlocks, Sum.inl_injective.ne, Sum.inl_ne_inr, Sum.inr_injective.ne, Sum.inr_ne_inl, convert, fromBlocks, inl_injective, inl_ne_inr, inr_injective, inr_ne_inl
 -/

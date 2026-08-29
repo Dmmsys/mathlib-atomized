@@ -484,7 +484,41 @@ theorem bernoulliFun_mul
   induction k with
   | zero =>
     intro x
-    simp only 
+    simp only [f, bernoulliFun_zero, pow_zero, one_div, Finset.sum_const, Finset.card_range,
+      nsmul_eq_mul, mul_one, sub_eq_zero]
+    rw [inv_mul_cancel₀ (Nat.cast_ne_zero.mpr m0)]
+  | succ k h =>
+    have d (x) : HasDerivAt (f (k + 1)) (m * (k + 1) * f k x) x := by
+      simp only [f, mul_sub, Finset.mul_sum, pow_succ, mul_div_cancel_right₀ _ m0',
+        ← mul_assoc, mul_comm _ (_ / _), div_mul_cancel₀ _ m0']
+      apply HasDerivAt.sub
+      · rw [mul_assoc, mul_comm (m : Real) _, ← Nat.cast_add_one]
+        exact (hasDerivAt_bernoulliFun _ _).comp _ (hasDerivAt_const_mul ..)
+      · refine HasDerivAt.fun_sum fun i _ => ?_
+        simp only [mul_assoc, ← Nat.cast_add_one]
+        apply HasDerivAt.const_mul
+        rw [← mul_one (_ * _)]
+        exact (hasDerivAt_bernoulliFun _ _).comp _ ((hasDerivAt_id' _).add_const _)
+    simp only [h, mul_zero] at d
+    have fc (x) : f (k + 1) x = f (k + 1) 0 :=
+      is_const_of_deriv_eq_zero (fun _ => (d _).differentiableAt) (fun _ => (d _).deriv) x 0
+    generalize f (k + 1) 0 = c at fc
+    have i : ∫ x in (0 : Real)..m⁻¹, f (k + 1) x = 0 := by
+      simp only [f]
+      rw [intervalIntegral.integral_sub]; rw [intervalIntegral.integral_comp_mul_left _ m0']; rw [mul_zero]; rw [mul_inv_cancel₀ m0']; rw [integral_bernoulliFun_eq_zero (by lia)]; rw [smul_zero]; rw [sub_eq_zero]; rw [intervalIntegral.integral_const_mul]; rw [eq_comm (a := 0)]; rw [mul_eq_zero]
+      · right
+        rw [intervalIntegral.integral_finsetSum]
+        · simp only [intervalIntegral.integral_comp_add_right, zero_add, ← one_div, ← add_div,
+            add_comm (1 : Real), ← Nat.cast_add_one]
+          rw [intervalIntegral.sum_integral_adjacent_intervals]
+          · simp [div_self m0', integral_bernoulliFun_eq_zero]
+          · intros; exact Continuous.intervalIntegrable (by fun_prop) _ _
+        · intros; exact Continuous.intervalIntegrable (by fun_prop) _ _
+      · exact Continuous.intervalIntegrable (by fun_prop) _ _
+      · exact Continuous.intervalIntegrable (by fun_prop) _ _
+    simp only [fc, intervalIntegral.integral_const, sub_zero, smul_eq_mul, mul_eq_zero, inv_eq_zero,
+      Nat.cast_eq_zero, m0, false_or] at i
+    simpa only [i] using fc
 
 中文:
 定理 bernoulliFun_mul
@@ -499,7 +533,41 @@ theorem bernoulliFun_mul
   induction k with
   | zero =>
     intro x
-    simp only 
+    simp only [f, bernoulliFun_zero, pow_zero, one_div, Finset.sum_const, Finset.card_range,
+      nsmul_eq_mul, mul_one, sub_eq_zero]
+    rw [inv_mul_cancel₀ (Nat.cast_ne_zero.mpr m0)]
+  | succ k h =>
+    have d (x) : HasDerivAt (f (k + 1)) (m * (k + 1) * f k x) x := by
+      simp only [f, mul_sub, Finset.mul_sum, pow_succ, mul_div_cancel_right₀ _ m0',
+        ← mul_assoc, mul_comm _ (_ / _), div_mul_cancel₀ _ m0']
+      apply HasDerivAt.sub
+      · rw [mul_assoc, mul_comm (m : Real) _, ← Nat.cast_add_one]
+        exact (hasDerivAt_bernoulliFun _ _).comp _ (hasDerivAt_const_mul ..)
+      · refine HasDerivAt.fun_sum fun i _ => ?_
+        simp only [mul_assoc, ← Nat.cast_add_one]
+        apply HasDerivAt.const_mul
+        rw [← mul_one (_ * _)]
+        exact (hasDerivAt_bernoulliFun _ _).comp _ ((hasDerivAt_id' _).add_const _)
+    simp only [h, mul_zero] at d
+    have fc (x) : f (k + 1) x = f (k + 1) 0 :=
+      is_const_of_deriv_eq_zero (fun _ => (d _).differentiableAt) (fun _ => (d _).deriv) x 0
+    generalize f (k + 1) 0 = c at fc
+    have i : ∫ x in (0 : Real)..m⁻¹, f (k + 1) x = 0 := by
+      simp only [f]
+      rw [intervalIntegral.integral_sub]; rw [intervalIntegral.integral_comp_mul_left _ m0']; rw [mul_zero]; rw [mul_inv_cancel₀ m0']; rw [integral_bernoulliFun_eq_zero (by lia)]; rw [smul_zero]; rw [sub_eq_zero]; rw [intervalIntegral.integral_const_mul]; rw [eq_comm (a := 0)]; rw [mul_eq_zero]
+      · right
+        rw [intervalIntegral.integral_finsetSum]
+        · simp only [intervalIntegral.integral_comp_add_right, zero_add, ← one_div, ← add_div,
+            add_comm (1 : Real), ← Nat.cast_add_one]
+          rw [intervalIntegral.sum_integral_adjacent_intervals]
+          · simp [div_self m0', integral_bernoulliFun_eq_zero]
+          · intros; exact Continuous.intervalIntegrable (by fun_prop) _ _
+        · intros; exact Continuous.intervalIntegrable (by fun_prop) _ _
+      · exact Continuous.intervalIntegrable (by fun_prop) _ _
+      · exact Continuous.intervalIntegrable (by fun_prop) _ _
+    simp only [fc, intervalIntegral.integral_const, sub_zero, smul_eq_mul, mul_eq_zero, inv_eq_zero,
+      Nat.cast_eq_zero, m0, false_or] at i
+    simpa only [i] using fc
 
 Depends on / 依赖: Finset, Finset.card_range, Finset.range, Finset.sum_const, HasDerivAt, Nat.cast_ne_zero.mpr, bernoulliFun, bernoulliFun_zero, card_range, cast_ne_zero, mul_one, nsmul_eq_mul, one_div, pow_zero, sub_eq_zero, sum_const
 -/
@@ -596,7 +664,9 @@ theorem bernoulliFun_eval_half
   · have m := bernoulliFun_mul k two_ne_zero 2⁻¹
     simp_rw [Nat.cast_ofNat, mul_inv_cancel₀ (two_ne_zero' Real), Finset.sum_range_succ,
       Finset.sum_range_zero, Nat.cast_zero, Nat.cast_one, ← one_div, add_halves,
-      bernoulliFun_eval_one, if_neg k1, be
+      bernoulliFun_eval_one, if_neg k1, bernoulliFun_eval_zero, zero_div, add_zero, zero_add] at m
+    rw [← inv_mul_eq_iff_eq_mul₀ (by positivity)]; rw [← sub_eq_iff_eq_add]; rw [← sub_one_mul]; rw [inv_div] at m
+    rw [m]; rw [one_div]
 
 中文:
 定理 bernoulliFun_eval_half
@@ -608,7 +678,9 @@ theorem bernoulliFun_eval_half
   · have m := bernoulliFun_mul k two_ne_zero 2⁻¹
     simp_rw [Nat.cast_ofNat, mul_inv_cancel₀ (two_ne_zero' Real), Finset.sum_range_succ,
       Finset.sum_range_zero, Nat.cast_zero, Nat.cast_one, ← one_div, add_halves,
-      bernoulliFun_eval_one, if_neg k1, be
+      bernoulliFun_eval_one, if_neg k1, bernoulliFun_eval_zero, zero_div, add_zero, zero_add] at m
+    rw [← inv_mul_eq_iff_eq_mul₀ (by positivity)]; rw [← sub_eq_iff_eq_add]; rw [← sub_one_mul]; rw [inv_div] at m
+    rw [m]; rw [one_div]
 
 Depends on / 依赖: Finset, Finset.sum_range_succ, Finset.sum_range_zero, Nat.cast_ofNat, Nat.cast_one, Nat.cast_zero, add_halves, add_zero, bernoulliFun_eval_one, bernoulliFun_eval_zero, bernoulliFun_mul, cast_ofNat, cast_one, cast_zero, if_neg, inv_div, one_div, simp_rw, sub_eq_iff_eq_add, sub_one_mul
 -/
@@ -660,7 +732,11 @@ theorem bernoulliFourierCoeff_recurrence
       ((continuous_ofReal.comp <|
 continuous_const.mul Polynomial.continuous _).intervalIntegrable
         _ _)]
-  simp_rw [ofReal_one, ofReal_zero, sub_ze
+  simp_rw [ofReal_one, ofReal_zero, sub_zero, one_mul]
+  rw [QuotientAddGroup.mk_zero]; rw [fourier_eval_zero]; rw [one_mul]; rw [← ofReal_sub]; rw [bernoulliFun_eval_one]; rw [add_sub_cancel_left]
+  congr 2
+  · split_ifs <;> simp only [ofReal_one, ofReal_zero]
+  · simp_rw [ofReal_mul, ofReal_natCast, fourierCoeffOn.const_mul]
 
 中文:
 定理 bernoulliFourierCoeff_recurrence
@@ -672,7 +748,11 @@ continuous_const.mul Polynomial.continuous _).intervalIntegrable
       ((continuous_ofReal.comp <|
 continuous_const.mul Polynomial.continuous _).intervalIntegrable
         _ _)]
-  simp_rw [ofReal_one, ofReal_zero, sub_ze
+  simp_rw [ofReal_one, ofReal_zero, sub_zero, one_mul]
+  rw [QuotientAddGroup.mk_zero]; rw [fourier_eval_zero]; rw [one_mul]; rw [← ofReal_sub]; rw [bernoulliFun_eval_one]; rw [add_sub_cancel_left]
+  congr 2
+  · split_ifs <;> simp only [ofReal_one, ofReal_zero]
+  · simp_rw [ofReal_mul, ofReal_natCast, fourierCoeffOn.const_mul]
 
 Depends on / 依赖: Polynomial, Polynomial.continuous, QuotientAddGroup, QuotientAddGroup.mk_zero, add_sub_cancel_left, bernoulliFourierCoeff, bernoulliFun_eval_one, continuous, continuous_const, continuous_const.mul, continuous_ofReal, continuous_ofReal.comp, fourierCoeffOn_of_hasDerivAt, fourier_eval_zero, hasDerivAt_bernoulliFun, intervalIntegrable, mk_zero, ofReal_comp, ofReal_one, ofReal_sub
 -/
@@ -753,7 +833,12 @@ theorem bernoulliFourierCoeff_eq
       div_zero]
   refine Nat.le_induction ?_ (fun k hk h'k => ?_) k (Nat.one_le_iff_ne_zero.mpr hk)
   · rw [bernoulliFourierCoeff_recurrence 1 hn]
-    simp only [Nat.cast_one, tsub_s
+    simp only [Nat.cast_one, tsub_self, neg_mul, one_mul, if_true,
+      Nat.factorial_one, pow_one]
+    rw [bernoulli_zero_fourier_coeff hn]; rw [sub_zero]; rw [mul_one]; rw [div_neg]; rw [neg_div]
+  · rw [bernoulliFourierCoeff_recurrence (k + 1) hn, if_neg (by grind), Nat.add_sub_cancel k 1, h'k,
+      Nat.factorial_succ, zero_sub, Nat.cast_mul, pow_add]
+    ring
 
 中文:
 定理 bernoulliFourierCoeff_eq
@@ -764,7 +849,12 @@ theorem bernoulliFourierCoeff_eq
       div_zero]
   refine Nat.le_induction ?_ (fun k hk h'k => ?_) k (Nat.one_le_iff_ne_zero.mpr hk)
   · rw [bernoulliFourierCoeff_recurrence 1 hn]
-    simp only [Nat.cast_one, tsub_s
+    simp only [Nat.cast_one, tsub_self, neg_mul, one_mul, if_true,
+      Nat.factorial_one, pow_one]
+    rw [bernoulli_zero_fourier_coeff hn]; rw [sub_zero]; rw [mul_one]; rw [div_neg]; rw [neg_div]
+  · rw [bernoulliFourierCoeff_recurrence (k + 1) hn, if_neg (by grind), Nat.add_sub_cancel k 1, h'k,
+      Nat.factorial_succ, zero_sub, Nat.cast_mul, pow_add]
+    ring
 
 Depends on / 依赖: Int.cast_zero, Nat.cast_one, Nat.factorial_one, Nat.le_induction, Nat.one_le_iff_ne_zero.mpr, bernoulliFourierCoeff_recurrence, bernoulliFourierCoeff_zero, bernoulli_zero_fourier_coeff, cast_one, cast_zero, div_neg, div_zero, eq_or_ne, factorial_one, if_neg, if_true, le_induction, mul_one, mul_zero, neg_div
 -/
@@ -877,7 +967,11 @@ theorem summable_bernoulli_fourier
     intro n; rw [mul_one_div, div_div, ← mul_pow]
   simp_rw [this]
 refine Summable.mul_left _ .of_norm ?_
-  have : (fun x : Int => ‖1 / (x : Complex) ^ k‖) = fun x : Int 
+  have : (fun x : Int => ‖1 / (x : Complex) ^ k‖) = fun x : Int => |1 / (x : Real) ^ k| := by
+    ext1 x
+    simp only [one_div, norm_inv, norm_pow, norm_intCast, pow_abs, abs_inv]
+  simp_rw [this]
+  rwa [summable_abs_iff, Real.summable_one_div_int_pow]
 
 中文:
 定理 summable_bernoulli_fourier
@@ -888,7 +982,11 @@ refine Summable.mul_left _ .of_norm ?_
     intro n; rw [mul_one_div, div_div, ← mul_pow]
   simp_rw [this]
 refine Summable.mul_left _ .of_norm ?_
-  have : (fun x : Int => ‖1 / (x : Complex) ^ k‖) = fun x : Int 
+  have : (fun x : Int => ‖1 / (x : Complex) ^ k‖) = fun x : Int => |1 / (x : Real) ^ k| := by
+    ext1 x
+    simp only [one_div, norm_inv, norm_pow, norm_intCast, pow_abs, abs_inv]
+  simp_rw [this]
+  rwa [summable_abs_iff, Real.summable_one_div_int_pow]
 
 Depends on / 依赖: Real.summable_one_div_int_pow, Summable, Summable.mul_left, abs_inv, div_div, mul_left, mul_one_div, mul_pow, norm_intCast, norm_inv, norm_pow, of_norm, one_div, pow_abs, simp_rw, summable_abs_iff, summable_one_div_int_pow
 -/
@@ -916,7 +1014,30 @@ theorem hasSum_one_div_pow_mul_fourier_mul_bernoulliFun
   suffices forall {y : Real}, y in Ico (0 : Real) 1 ->
       HasSum (fun (n : Int) => 1 / (n : Complex) ^ k * fourier n y)
         (-(2 * (π : Complex) * I) ^ k / k ! * bernoulliFun k y) by
-    rw [← Ico_insert_right (zero_le_one' Real)]; 
+    rw [← Ico_insert_right (zero_le_one' Real)]; rw [mem_insert_iff]; rw [or_comm] at hx
+    rcases hx with (hx | rfl)
+    · exact this hx
+    · convert! this (left_mem_Ico.mpr zero_lt_one) using 1
+      · rw [AddCircle.coe_period, QuotientAddGroup.mk_zero]
+      · rw [bernoulliFun_endpoints_eq_of_ne_one (by lia : k != 1)]
+  intro y hy
+  let B : C(𝕌, Complex) :=
+    ContinuousMap.mk ((↑) ∘ periodizedBernoulli k)
+      (continuous_ofReal.comp (periodizedBernoulli.continuous (by lia)))
+  have step1 : forall n : Int, fourierCoeff B n = -k ! / (2 * π * I * n) ^ k := by
+    rw [ContinuousMap.coe_mk]; exact fourierCoeff_bernoulli_eq (by lia : k != 0)
+  have step2 :=
+    has_pointwise_sum_fourier_series_of_summable
+      ((summable_bernoulli_fourier hk).congr fun n => (step1 n).symm) y
+  simp_rw [step1] at step2
+  convert! step2.mul_left (-(2 * ↑π * I) ^ k / (k ! : Complex)) using 2 with n
+  · rw [smul_eq_mul, ← mul_assoc, mul_div, mul_neg, div_mul_cancel₀, neg_neg, mul_pow _ (n : Complex),
+      ← div_div, div_self]
+    · rw [Ne, pow_eq_zero_iff', not_and_or]
+      exact Or.inl two_pi_I_ne_zero
+    · exact Nat.cast_ne_zero.mpr (Nat.factorial_ne_zero _)
+  · rw [ContinuousMap.coe_mk, Function.comp_apply, ofReal_inj, periodizedBernoulli,
+      AddCircle.liftIco_coe_apply (show y in Ico 0 (0 + 1) by rwa [zero_add])]
 
 中文:
 定理 hasSum_one_div_pow_mul_fourier_mul_bernoulliFun
@@ -926,7 +1047,30 @@ theorem hasSum_one_div_pow_mul_fourier_mul_bernoulliFun
   suffices forall {y : Real}, y in Ico (0 : Real) 1 ->
       HasSum (fun (n : Int) => 1 / (n : Complex) ^ k * fourier n y)
         (-(2 * (π : Complex) * I) ^ k / k ! * bernoulliFun k y) by
-    rw [← Ico_insert_right (zero_le_one' Real)]; 
+    rw [← Ico_insert_right (zero_le_one' Real)]; rw [mem_insert_iff]; rw [or_comm] at hx
+    rcases hx with (hx | rfl)
+    · exact this hx
+    · convert! this (left_mem_Ico.mpr zero_lt_one) using 1
+      · rw [AddCircle.coe_period, QuotientAddGroup.mk_zero]
+      · rw [bernoulliFun_endpoints_eq_of_ne_one (by lia : k != 1)]
+  intro y hy
+  let B : C(𝕌, Complex) :=
+    ContinuousMap.mk ((↑) ∘ periodizedBernoulli k)
+      (continuous_ofReal.comp (periodizedBernoulli.continuous (by lia)))
+  have step1 : forall n : Int, fourierCoeff B n = -k ! / (2 * π * I * n) ^ k := by
+    rw [ContinuousMap.coe_mk]; exact fourierCoeff_bernoulli_eq (by lia : k != 0)
+  have step2 :=
+    has_pointwise_sum_fourier_series_of_summable
+      ((summable_bernoulli_fourier hk).congr fun n => (step1 n).symm) y
+  simp_rw [step1] at step2
+  convert! step2.mul_left (-(2 * ↑π * I) ^ k / (k ! : Complex)) using 2 with n
+  · rw [smul_eq_mul, ← mul_assoc, mul_div, mul_neg, div_mul_cancel₀, neg_neg, mul_pow _ (n : Complex),
+      ← div_div, div_self]
+    · rw [Ne, pow_eq_zero_iff', not_and_or]
+      exact Or.inl two_pi_I_ne_zero
+    · exact Nat.cast_ne_zero.mpr (Nat.factorial_ne_zero _)
+  · rw [ContinuousMap.coe_mk, Function.comp_apply, ofReal_inj, periodizedBernoulli,
+      AddCircle.liftIco_coe_apply (show y in Ico 0 (0 + 1) by rwa [zero_add])]
 -/
 theorem hasSum_one_div_pow_mul_fourier_mul_bernoulliFun {k : Nat} (hk : 2 <= k) {x : Real}
     (hx : x in Icc (0 : Real) 1) :
@@ -980,7 +1124,9 @@ theorem hasSum_one_div_nat_pow_mul_fourier
     congr 2
     rw [div_mul_eq_mul_div₀]; rw [one_mul]
     congr 1
-    rw [eq_div_iff
+    rw [eq_div_iff]; rw [← mul_pow]; rw [← neg_eq_neg_one_mul]; rw [neg_neg]; rw [one_pow]
+    apply pow_ne_zero; rw [neg_ne_zero]; exact one_ne_zero
+  · rw [Int.cast_zero, zero_pow (by positivity : k != 0), div_zero, zero_mul, add_zero]
 
 中文:
 定理 hasSum_one_div_nat_pow_mul_fourier
@@ -993,7 +1139,9 @@ theorem hasSum_one_div_nat_pow_mul_fourier
     congr 2
     rw [div_mul_eq_mul_div₀]; rw [one_mul]
     congr 1
-    rw [eq_div_iff
+    rw [eq_div_iff]; rw [← mul_pow]; rw [← neg_eq_neg_one_mul]; rw [neg_neg]; rw [one_pow]
+    apply pow_ne_zero; rw [neg_ne_zero]; exact one_ne_zero
+  · rw [Int.cast_zero, zero_pow (by positivity : k != 0), div_zero, zero_mul, add_zero]
 
 Depends on / 依赖: Int.cast_neg, Int.cast_zero, add_zero, cast_neg, cast_zero, conv_rhs, convert, div_div, div_zero, eq_div_iff, hasSum_one_div_pow_mul_fourier_mul_bernoulliFun, mul_add, mul_assoc, mul_pow, nat_add_neg, neg_eq_neg_one_mul, neg_ne_zero, neg_neg, one_mul, one_ne_zero
 -/
@@ -1024,6 +1172,30 @@ theorem hasSum_one_div_nat_pow_mul_cos
     HasSum (fun n : Nat => 1 / (n : Complex) ^ (2 * k) * (fourier n (x : 𝕌) + fourier (-n) (x : 𝕌)))
       ((-1 : Complex) ^ (k + 1) * (2 * (π : Complex)) ^ (2 * k) / (2 * k)! * bernoulliFun (2 * k) x) := by
     convert! hasSum_one_div_nat_pow_mul_fourier (by lia : 2 <= 2 * k) hx using 3
+    · rw [pow_mul (-1 : Complex), neg_one_sq, one_pow, one_mul]
+    · rw [pow_add, pow_one]
+      conv_rhs =>
+        rw [mul_pow]
+        congr
+        congr
+        · skip
+        · rw [pow_mul, I_sq]
+      ring
+  have ofReal_two : ((2 : Real) : Complex) = 2 := by norm_cast
+  convert! ((hasSum_iff _ _).mp (this.div_const 2)).1 with n
+  · convert! (ofReal_re _).symm
+    rw [ofReal_mul]; rw [← mul_div]; congr
+    · rw [ofReal_div, ofReal_one, ofReal_pow]; rfl
+    · rw [ofReal_cos, ofReal_mul, fourier_coe_apply, fourier_coe_apply, cos, ofReal_one, div_one,
+        div_one, ofReal_mul, ofReal_mul, ofReal_two, Int.cast_neg, Int.cast_natCast,
+        ofReal_natCast]
+      congr 3
+      · ring
+      · ring
+  · convert! (ofReal_re _).symm
+    rw [ofReal_mul]; rw [ofReal_div]; rw [ofReal_div]; rw [ofReal_mul]; rw [ofReal_pow]; rw [ofReal_pow]; rw [ofReal_neg]; rw [ofReal_natCast]; rw [ofReal_mul]; rw [ofReal_two]; rw [ofReal_one]
+    rw [bernoulliFun]
+    ring
 
 中文:
 定理 hasSum_one_div_nat_pow_mul_cos
@@ -1033,6 +1205,30 @@ theorem hasSum_one_div_nat_pow_mul_cos
     HasSum (fun n : Nat => 1 / (n : Complex) ^ (2 * k) * (fourier n (x : 𝕌) + fourier (-n) (x : 𝕌)))
       ((-1 : Complex) ^ (k + 1) * (2 * (π : Complex)) ^ (2 * k) / (2 * k)! * bernoulliFun (2 * k) x) := by
     convert! hasSum_one_div_nat_pow_mul_fourier (by lia : 2 <= 2 * k) hx using 3
+    · rw [pow_mul (-1 : Complex), neg_one_sq, one_pow, one_mul]
+    · rw [pow_add, pow_one]
+      conv_rhs =>
+        rw [mul_pow]
+        congr
+        congr
+        · skip
+        · rw [pow_mul, I_sq]
+      ring
+  have ofReal_two : ((2 : Real) : Complex) = 2 := by norm_cast
+  convert! ((hasSum_iff _ _).mp (this.div_const 2)).1 with n
+  · convert! (ofReal_re _).symm
+    rw [ofReal_mul]; rw [← mul_div]; congr
+    · rw [ofReal_div, ofReal_one, ofReal_pow]; rfl
+    · rw [ofReal_cos, ofReal_mul, fourier_coe_apply, fourier_coe_apply, cos, ofReal_one, div_one,
+        div_one, ofReal_mul, ofReal_mul, ofReal_two, Int.cast_neg, Int.cast_natCast,
+        ofReal_natCast]
+      congr 3
+      · ring
+      · ring
+  · convert! (ofReal_re _).symm
+    rw [ofReal_mul]; rw [ofReal_div]; rw [ofReal_div]; rw [ofReal_mul]; rw [ofReal_pow]; rw [ofReal_pow]; rw [ofReal_neg]; rw [ofReal_natCast]; rw [ofReal_mul]; rw [ofReal_two]; rw [ofReal_one]
+    rw [bernoulliFun]
+    ring
 
 Depends on / 依赖: HasSum, I_sq, bernoulliFun, conv_rhs, convert, fourier, hasSum_one_div_nat_pow_mul_fourier, mul_pow, neg_one_sq, ofReal_two, one_mul, one_pow, pow_add, pow_mul, pow_one
 -/
@@ -1080,7 +1276,36 @@ theorem hasSum_one_div_nat_pow_mul_sin
     HasSum (fun n : Nat => 1 / (n : Complex) ^ (2 * k + 1) * (fourier n (x : 𝕌) - fourier (-n) (x : 𝕌)))
       ((-1 : Complex) ^ (k + 1) * I * (2 * π : Complex) ^ (2 * k + 1) / (2 * k + 1)! *
         bernoulliFun (2 * k + 1) x) := by
-    convert! hasSum_one_div_nat_pow_mul_fourier (by li
+    convert! hasSum_one_div_nat_pow_mul_fourier (by lia : 2 <= 2 * k + 1) hx using 1
+    · ext1 n
+      rw [pow_add (-1 : Complex)]; rw [pow_mul (-1 : Complex)]; rw [neg_one_sq]; rw [one_pow]; rw [one_mul]; rw [pow_one]; rw [←
+        neg_eq_neg_one_mul]; rw [← sub_eq_add_neg]
+    · congr
+      rw [pow_add]; rw [pow_one]
+      conv_rhs =>
+        rw [mul_pow]
+        congr
+        congr
+        · skip
+        · rw [pow_add, pow_one, pow_mul, I_sq]
+      ring
+  have ofReal_two : ((2 : Real) : Complex) = 2 := by norm_cast
+  convert! ((hasSum_iff _ _).mp (this.div_const (2 * I))).1
+  · convert! (ofReal_re _).symm
+    rw [ofReal_mul]; rw [← mul_div]; congr
+    · rw [ofReal_div, ofReal_one, ofReal_pow]; rfl
+    · rw [ofReal_sin, ofReal_mul, fourier_coe_apply, fourier_coe_apply, sin, ofReal_one, div_one,
+        div_one, ofReal_mul, ofReal_mul, ofReal_two, Int.cast_neg, Int.cast_natCast,
+        ofReal_natCast, ← div_div, div_I, div_mul_eq_mul_div₀, ← neg_div, ← neg_mul, neg_sub]
+      congr 4
+      · ring
+      · ring
+  · convert! (ofReal_re _).symm
+    rw [ofReal_mul]; rw [ofReal_div]; rw [ofReal_div]; rw [ofReal_mul]; rw [ofReal_pow]; rw [ofReal_pow]; rw [ofReal_neg]; rw [ofReal_natCast]; rw [ofReal_mul]; rw [ofReal_two]; rw [ofReal_one]; rw [← div_div]; rw [div_I]; rw [div_mul_eq_mul_div₀]
+    have : forall α β γ δ : Complex, α * I * β / γ * δ * I = I ^ 2 * α * β / γ * δ := by intros; ring
+    rw [this]; rw [I_sq]
+    rw [bernoulliFun]
+    ring
 
 中文:
 定理 hasSum_one_div_nat_pow_mul_sin
@@ -1090,7 +1315,36 @@ theorem hasSum_one_div_nat_pow_mul_sin
     HasSum (fun n : Nat => 1 / (n : Complex) ^ (2 * k + 1) * (fourier n (x : 𝕌) - fourier (-n) (x : 𝕌)))
       ((-1 : Complex) ^ (k + 1) * I * (2 * π : Complex) ^ (2 * k + 1) / (2 * k + 1)! *
         bernoulliFun (2 * k + 1) x) := by
-    convert! hasSum_one_div_nat_pow_mul_fourier (by li
+    convert! hasSum_one_div_nat_pow_mul_fourier (by lia : 2 <= 2 * k + 1) hx using 1
+    · ext1 n
+      rw [pow_add (-1 : Complex)]; rw [pow_mul (-1 : Complex)]; rw [neg_one_sq]; rw [one_pow]; rw [one_mul]; rw [pow_one]; rw [←
+        neg_eq_neg_one_mul]; rw [← sub_eq_add_neg]
+    · congr
+      rw [pow_add]; rw [pow_one]
+      conv_rhs =>
+        rw [mul_pow]
+        congr
+        congr
+        · skip
+        · rw [pow_add, pow_one, pow_mul, I_sq]
+      ring
+  have ofReal_two : ((2 : Real) : Complex) = 2 := by norm_cast
+  convert! ((hasSum_iff _ _).mp (this.div_const (2 * I))).1
+  · convert! (ofReal_re _).symm
+    rw [ofReal_mul]; rw [← mul_div]; congr
+    · rw [ofReal_div, ofReal_one, ofReal_pow]; rfl
+    · rw [ofReal_sin, ofReal_mul, fourier_coe_apply, fourier_coe_apply, sin, ofReal_one, div_one,
+        div_one, ofReal_mul, ofReal_mul, ofReal_two, Int.cast_neg, Int.cast_natCast,
+        ofReal_natCast, ← div_div, div_I, div_mul_eq_mul_div₀, ← neg_div, ← neg_mul, neg_sub]
+      congr 4
+      · ring
+      · ring
+  · convert! (ofReal_re _).symm
+    rw [ofReal_mul]; rw [ofReal_div]; rw [ofReal_div]; rw [ofReal_mul]; rw [ofReal_pow]; rw [ofReal_pow]; rw [ofReal_neg]; rw [ofReal_natCast]; rw [ofReal_mul]; rw [ofReal_two]; rw [ofReal_one]; rw [← div_div]; rw [div_I]; rw [div_mul_eq_mul_div₀]
+    have : forall α β γ δ : Complex, α * I * β / γ * δ * I = I ^ 2 * α * β / γ * δ := by intros; ring
+    rw [this]; rw [I_sq]
+    rw [bernoulliFun]
+    ring
 
 Depends on / 依赖: HasSum, bernoulliFun, convert, fourier, hasSum_one_div_nat_pow_mul_fourier, neg_eq_neg_one_mul, neg_one_sq, one_mul, one_pow, pow_ad, pow_add, pow_mul, pow_one, sub_eq_add_neg
 -/
@@ -1144,7 +1398,15 @@ theorem hasSum_zeta_nat
   · ext1 n; rw [mul_zero, Real.cos_zero, mul_one]
   rw [Polynomial.eval_zero_map]; rw [Polynomial.bernoulli_eval_zero]; rw [eq_ratCast]
   have : (2 : Real) ^ (2 * k - 1) = (2 : Real) ^ (2 * k) / 2 := by
-    rw [eq
+    rw [eq_div_iff (two_ne_zero' Real)]
+    conv_lhs =>
+      congr
+      · skip
+      · rw [← pow_one (2 : Real)]
+    rw [← pow_add]; rw [Nat.sub_add_cancel]
+    lia
+  rw [this]; rw [mul_pow]
+  ring
 
 中文:
 定理 hasSum_zeta_nat
@@ -1154,7 +1416,15 @@ theorem hasSum_zeta_nat
   · ext1 n; rw [mul_zero, Real.cos_zero, mul_one]
   rw [Polynomial.eval_zero_map]; rw [Polynomial.bernoulli_eval_zero]; rw [eq_ratCast]
   have : (2 : Real) ^ (2 * k - 1) = (2 : Real) ^ (2 * k) / 2 := by
-    rw [eq
+    rw [eq_div_iff (two_ne_zero' Real)]
+    conv_lhs =>
+      congr
+      · skip
+      · rw [← pow_one (2 : Real)]
+    rw [← pow_add]; rw [Nat.sub_add_cancel]
+    lia
+  rw [this]; rw [mul_pow]
+  ring
 
 Depends on / 依赖: Nat.sub_add_cancel, Polynomial, Polynomial.bernoulli_eval_zero, Polynomial.eval_zero_map, Real.cos_zero, bernoulli_eval_zero, conv_lhs, convert, cos_zero, eq_div_iff, eq_ratCast, eval_zero_map, hasSum_one_div_nat_pow_mul_cos, left_mem_Icc, left_mem_Icc.mpr, mul_one, mul_pow, mul_zero, pow_add, pow_one
 -/
@@ -1249,7 +1519,11 @@ apply (congr_arg₂ HasSum ?_ ?_).to_iff.mp
   · ext1 n
     ring_nf
   · have : (1 / 4 : Real) = (algebraMap Rat Real) (1 / 4 : Rat) := by simp
-    rw [this]; rw [mul_pow]; rw [Polynomial.eval_map]; rw [Polynomial.eval₂_a
+    rw [this]; rw [mul_pow]; rw [Polynomial.eval_map]; rw [Polynomial.eval₂_at_apply]; rw [(by decide : 2 * 1 + 1 = 3)]; rw [Polynomial.bernoulli_three_eval_one_quarter]
+    simp [Nat.factorial]; ring
+  · rw [mem_Icc]; constructor
+    · linarith
+    · linarith
 
 中文:
 定理 hasSum_L_function_mod_four_eval_three
@@ -1259,7 +1533,11 @@ apply (congr_arg₂ HasSum ?_ ?_).to_iff.mp
   · ext1 n
     ring_nf
   · have : (1 / 4 : Real) = (algebraMap Rat Real) (1 / 4 : Rat) := by simp
-    rw [this]; rw [mul_pow]; rw [Polynomial.eval_map]; rw [Polynomial.eval₂_a
+    rw [this]; rw [mul_pow]; rw [Polynomial.eval_map]; rw [Polynomial.eval₂_at_apply]; rw [(by decide : 2 * 1 + 1 = 3)]; rw [Polynomial.bernoulli_three_eval_one_quarter]
+    simp [Nat.factorial]; ring
+  · rw [mem_Icc]; constructor
+    · linarith
+    · linarith
 
 Depends on / 依赖: HasSum, Nat.factorial, Polynomial, Polynomial.bernoulli_three_eval_one_quarter, Polynomial.eval, Polynomial.eval_map, algebraMap, bernoulli_three_eval_one_quarter, eval_map, factorial, hasSum_one_div_nat_pow_mul_sin, mem_Icc, mul_pow, one_ne_zero, ring_nf, to_iff, to_iff.mp
 -/

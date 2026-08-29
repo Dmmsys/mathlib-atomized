@@ -177,7 +177,8 @@ lemma support_eq_univ_iff
   refine ⟨fun h s hs => ?_, fun h b => .filter_mono h ?_⟩
   · obtain ⟨t, ht⟩ := mem_atTop_sets.mp hs
     have := (Filter.biInter_finset_mem t).mpr fun b hb => h b
-    exact Filter.mem_of_superset this fun r hr => ht r (by simpa using! 
+    exact Filter.mem_of_superset this fun r hr => ht r (by simpa using! hr)
+  · filter_upwards [eventually_ge_atTop {b}] using by simp
 
 中文:
 引理 support_eq_univ_iff
@@ -187,7 +188,8 @@ lemma support_eq_univ_iff
   refine ⟨fun h s hs => ?_, fun h b => .filter_mono h ?_⟩
   · obtain ⟨t, ht⟩ := mem_atTop_sets.mp hs
     have := (Filter.biInter_finset_mem t).mpr fun b hb => h b
-    exact Filter.mem_of_superset this fun r hr => ht r (by simpa using! 
+    exact Filter.mem_of_superset this fun r hr => ht r (by simpa using! hr)
+  · filter_upwards [eventually_ge_atTop {b}] using by simp
 
 Depends on / 依赖: Filter, Filter.biInter_finset_mem, Filter.mem_of_superset, Set.eq_univ_iff_forall, Set.mem_ofPred, biInter_finset_mem, eq_univ_iff_forall, eventually_ge_atTop, filter_mono, filter_upwards, mem_atTop_sets, mem_atTop_sets.mp, mem_ofPred, mem_of_superset, support
 -/
@@ -511,7 +513,7 @@ lemma comap_unconditional
   constructor <;> rintro ⟨t, ht⟩
   · refine ⟨t.preimage f (by simp), fun x hx => ?_⟩
     simpa [Finset.union_eq_right.mpr hx] using ht (t union x.map f) t.subset_union_left
-  · exac
+  · exact ⟨_, fun b hb => ht _ (Finset.map_subset_iff_subset_preimage.mp hb)⟩
 
 中文:
 引理 comap_unconditional
@@ -524,7 +526,7 @@ lemma comap_unconditional
   constructor <;> rintro ⟨t, ht⟩
   · refine ⟨t.preimage f (by simp), fun x hx => ?_⟩
     simpa [Finset.union_eq_right.mpr hx] using ht (t union x.map f) t.subset_union_left
-  · exac
+  · exact ⟨_, fun b hb => ht _ (Finset.map_subset_iff_subset_preimage.mp hb)⟩
 -/
 @[simp] lemma comap_unconditional {β} (f : γ ↪ β) :
     (unconditional β).comap f = unconditional γ := by
@@ -548,7 +550,14 @@ lemma eq_unconditional_of_finite
   have hAtTop : (atTop : Filter (Finset β)) = pure Finset.univ := by
     rw [(isTop_iff_eq_top.mpr rfl).atTop_eq (a := Finset.univ)]; rw [← Finset.top_eq_univ]; rw [Ici_top]; rw [principal_singleton]
   have hL := L.le_atTop
-have hL' : ∅ ∉ L.filter := empty_mem_iff_bot
+have hL' : ∅ ∉ L.filter := empty_mem_iff_bot.not.mpr NeBot.ne_bot.ne'
+  cases L with | mk F =>
+  simp only [unconditional, hAtTop] at *
+  congr 1
+  refine eq_of_le_of_ge hL (pure_le_iff.mpr ?_)
+  contrapose! hL'
+  obtain ⟨s, hs, hs'⟩ := hL'
+  simpa [inter_singleton_eq_empty.mpr hs'] using inter_mem hs (le_pure_iff.mp hL)
 
 中文:
 引理 eq_unconditional_of_finite
@@ -558,7 +567,14 @@ have hL' : ∅ ∉ L.filter := empty_mem_iff_bot
   have hAtTop : (atTop : Filter (Finset β)) = pure Finset.univ := by
     rw [(isTop_iff_eq_top.mpr rfl).atTop_eq (a := Finset.univ)]; rw [← Finset.top_eq_univ]; rw [Ici_top]; rw [principal_singleton]
   have hL := L.le_atTop
-have hL' : ∅ ∉ L.filter := empty_mem_iff_bot
+have hL' : ∅ ∉ L.filter := empty_mem_iff_bot.not.mpr NeBot.ne_bot.ne'
+  cases L with | mk F =>
+  simp only [unconditional, hAtTop] at *
+  congr 1
+  refine eq_of_le_of_ge hL (pure_le_iff.mpr ?_)
+  contrapose! hL'
+  obtain ⟨s, hs, hs'⟩ := hL'
+  simpa [inter_singleton_eq_empty.mpr hs'] using inter_mem hs (le_pure_iff.mp hL)
 
 Depends on / 依赖: Filter, Finset, Finset.top_eq_univ, Finset.univ, Fintype, Fintype.ofFinite, Ici_top, L.filter, L.le_atTop, NeBot.ne_bot.ne, atTop_eq, contrapose, empty_mem_iff_bot, empty_mem_iff_bot.not.mpr, eq_of_le_of_ge, filter, hAtTop, inter_singleton_eq, isTop_iff_eq_top, isTop_iff_eq_top.mpr
 -/
@@ -720,7 +736,8 @@ lemma conditional_filter_eq_map_range
       rw [← Tendsto] <;>
       simp only [tendsto_atTop', mem_map, mem_atTop_sets, mem_preimage] <;>
       rintro s ⟨a, ha⟩
- 
+  · exact ⟨a + 1, fun b hb => ha (b + 1) (by lia)⟩
+  · exact ⟨a + 1, fun b hb => by convert! ha (b - 1) (by lia); lia⟩
 
 中文:
 引理 conditional_filter_eq_map_range
@@ -732,7 +749,8 @@ lemma conditional_filter_eq_map_range
       rw [← Tendsto] <;>
       simp only [tendsto_atTop', mem_map, mem_atTop_sets, mem_preimage] <;>
       rintro s ⟨a, ha⟩
- 
+  · exact ⟨a + 1, fun b hb => ha (b + 1) (by lia)⟩
+  · exact ⟨a + 1, fun b hb => by convert! ha (b - 1) (by lia); lia⟩
 
 Depends on / 依赖: Finset, Finset.Iic, Finset.range, Nat.lt_succ_iff, Tendsto, conditional_filter_eq_map_Iic, convert, le_antisymm, lt_succ_iff, mem_atTop_sets, mem_map, mem_preimage, tendsto_atTop
 -/

@@ -310,7 +310,8 @@ lemma dim_lt_of_lt
     obtain ⟨d', ⟨y, hy⟩, rfl⟩ := y.mk_surjective
     obtain rfl : d = d' := h'
     obtain rfl := SimplexCategory.eq_id_of_mono f
-    obt
+    obtain rfl : y = x := by simpa using hf
+    simp at h
 
 中文:
 引理 dim_lt_of_lt
@@ -324,7 +325,8 @@ lemma dim_lt_of_lt
     obtain ⟨d', ⟨y, hy⟩, rfl⟩ := y.mk_surjective
     obtain rfl : d = d' := h'
     obtain rfl := SimplexCategory.eq_id_of_mono f
-    obt
+    obtain rfl : y = x := by simpa using hf
+    simp at h
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.eq_id_of_mono, dim_le_of_le, eq_id_of_mono, h.le, le_iff_exists_mono, lt_or_eq, mk_surjective, x.mk_surjective, y.mk_surjective
 -/
@@ -354,7 +356,7 @@ instance :
     rw [le_iff_exists_mono] at h
     obtain ⟨f, hf, h⟩ := h
     obtain rfl := SimplexCategory.eq_id_of_mono f
-    aeso
+    aesop
 
 中文:
 实例 :
@@ -366,7 +368,7 @@ instance :
     rw [le_iff_exists_mono] at h
     obtain ⟨f, hf, h⟩ := h
     obtain rfl := SimplexCategory.eq_id_of_mono f
-    aeso
+    aesop
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.eq_id_of_mono, dim_le_of_le, eq_id_of_mono, le_antisymm, le_iff_exists_mono, mk_surjective
 -/
@@ -584,7 +586,12 @@ definition opEquiv
     (by simpa [← opObjEquiv_mem_nonDegenerate_iff] using y.nonDegenerate)
   map_rel_iff' {x y} := by
     dsimp
-    simp only [le_iff, Subcomplex.ofS
+    simp only [le_iff, Subcomplex.ofSimplex_le_iff, Subcomplex.mem_ofSimplex_obj_iff]
+    constructor
+    · rintro ⟨f, hf⟩
+      exact ⟨SimplexCategory.rev.map f, by simp [op_map, dsimp% hf]⟩
+    · rintro ⟨f, hf⟩
+      exact ⟨SimplexCategory.rev.map f, by simp [op_map, ← hf]⟩
 
 中文:
 定义 opEquiv
@@ -595,7 +602,12 @@ definition opEquiv
     (by simpa [← opObjEquiv_mem_nonDegenerate_iff] using y.nonDegenerate)
   map_rel_iff' {x y} := by
     dsimp
-    simp only [le_iff, Subcomplex.ofS
+    simp only [le_iff, Subcomplex.ofSimplex_le_iff, Subcomplex.mem_ofSimplex_obj_iff]
+    constructor
+    · rintro ⟨f, hf⟩
+      exact ⟨SimplexCategory.rev.map f, by simp [op_map, dsimp% hf]⟩
+    · rintro ⟨f, hf⟩
+      exact ⟨SimplexCategory.rev.map f, by simp [op_map, ← hf]⟩
 
 Depends on / 依赖: N.mk, opObjEquiv, simplex, x.simplex
 -/
@@ -629,7 +641,14 @@ definition orderIsoOfIso
   invFun y := N.mk (e.inv.app _ y.simplex)
     ((nonDegenerate_iff_of_isIso e.inv y.simplex).mpr y.nonDegenerate)
   left_inv x := by simp [N.ext_iff, S.ext_iff']
-  right_inv _ := by simp [N.ext_iff, S
+  right_inv _ := by simp [N.ext_iff, S.ext_iff']
+  map_rel_iff' {x y} := by
+    dsimp
+    simp only [le_iff, Subcomplex.ofSimplex_le_iff, Subcomplex.mem_ofSimplex_obj_iff]
+    refine exists_congr (fun f => ?_)
+    dsimp at f ⊢
+    rw [← NatTrans.naturality_apply e.hom f.op]
+    exact (e.app _).toEquiv.apply_eq_iff_eq
 
 中文:
 定义 orderIsoOfIso
@@ -639,7 +658,14 @@ definition orderIsoOfIso
   invFun y := N.mk (e.inv.app _ y.simplex)
     ((nonDegenerate_iff_of_isIso e.inv y.simplex).mpr y.nonDegenerate)
   left_inv x := by simp [N.ext_iff, S.ext_iff']
-  right_inv _ := by simp [N.ext_iff, S
+  right_inv _ := by simp [N.ext_iff, S.ext_iff']
+  map_rel_iff' {x y} := by
+    dsimp
+    simp only [le_iff, Subcomplex.ofSimplex_le_iff, Subcomplex.mem_ofSimplex_obj_iff]
+    refine exists_congr (fun f => ?_)
+    dsimp at f ⊢
+    rw [← NatTrans.naturality_apply e.hom f.op]
+    exact (e.app _).toEquiv.apply_eq_iff_eq
 
 Depends on / 依赖: N.mk, e.hom.app, simplex, x.simplex
 -/
@@ -799,7 +825,15 @@ lemma existsUnique_n
     refine ⟨N.mk _ y.prop, le_antisymm ?_ ?_⟩
     · simp only [Subcomplex.ofSimplex_le_iff]
       have := isSplitEpi_of_epi f
-      have : Function.Injective (X
+      have : Function.Injective (X.map f.op) := by
+        rw [← mono_iff_injective]
+        infer_instance
+      refine ⟨(section_ f).op, this ?_⟩
+      dsimp
+      rw [← comp_apply]; rw [← Functor.map_comp]; rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← op_comp]; rw [Category.assoc]; rw [IsSplitEpi.id]; rw [Category.comp_id]
+    · simp only [Subcomplex.ofSimplex_le_iff]
+      exact ⟨f.op, rfl⟩)
+    (fun y₁ y₂ h₁ h₂ => N.subcomplex_injective (by rw [h₁, h₂]))
 
 中文:
 引理 存在Unique_n
@@ -811,7 +845,15 @@ lemma existsUnique_n
     refine ⟨N.mk _ y.prop, le_antisymm ?_ ?_⟩
     · simp only [Subcomplex.ofSimplex_le_iff]
       have := isSplitEpi_of_epi f
-      have : Function.Injective (X
+      have : Function.Injective (X.map f.op) := by
+        rw [← mono_iff_injective]
+        infer_instance
+      refine ⟨(section_ f).op, this ?_⟩
+      dsimp
+      rw [← comp_apply]; rw [← Functor.map_comp]; rw [← comp_apply]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← op_comp]; rw [Category.assoc]; rw [IsSplitEpi.id]; rw [Category.comp_id]
+    · simp only [Subcomplex.ofSimplex_le_iff]
+      exact ⟨f.op, rfl⟩)
+    (fun y₁ y₂ h₁ h₂ => N.subcomplex_injective (by rw [h₁, h₂]))
 
 Depends on / 依赖: Catego, Function, Function.Injective, Functor, Functor.map_comp, Injective, N.mk, Subcomplex, Subcomplex.ofSimplex_le_iff, X.exists_nonDegenerate, X.map, comp_apply, existsUnique_of_exists_of_unique, exists_nonDegenerate, f.op, infer_instance, isSplitEpi_of_epi, le_antisymm, map_comp, mk_surjective
 -/
@@ -907,7 +949,8 @@ lemma existsUnique_toNπ
     rw [toN_eq_iff] at hy
     rw [← N.subcomplex_injective_iff]; rw [hy]
     exact subcomplex_eq_of_epi _ _ f rfl
-  refine existsUnique_of_exists_of_unique ⟨f, in
+  refine existsUnique_of_exists_of_unique ⟨f, inferInstance, rfl⟩
+    (fun f₁ f₂ ⟨_, hf₁⟩ ⟨_, hf₂⟩ => unique_nonDegenerate_map _ _ _ _ hf₁.symm _ _ hf₂.symm)
 
 中文:
 引理 存在Unique_toNπ
@@ -919,7 +962,8 @@ lemma existsUnique_toNπ
     rw [toN_eq_iff] at hy
     rw [← N.subcomplex_injective_iff]; rw [hy]
     exact subcomplex_eq_of_epi _ _ f rfl
-  refine existsUnique_of_exists_of_unique ⟨f, in
+  refine existsUnique_of_exists_of_unique ⟨f, inferInstance, rfl⟩
+    (fun f₁ f₂ ⟨_, hf₁⟩ ⟨_, hf₂⟩ => unique_nonDegenerate_map _ _ _ _ hf₁.symm _ _ hf₂.symm)
 
 Depends on / 依赖: N.mk, N.subcomplex_injective_iff, X.exists_nonDegenerate, existsUnique_of_exists_of_unique, exists_nonDegenerate, mk_surjective, subcomplex_eq_of_epi, subcomplex_injective_iff, toN_eq_iff, unique_nonDegenerate_map, x.mk_surjective
 -/

@@ -490,7 +490,7 @@ theorem mul_generator_self_inv
   rw [spanSingleton_mul_spanSingleton]; rw [mul_inv_cancel₀]; rw [spanSingleton_one]
   intro generator_I_eq_zero
   apply h
-  rw [eq_spanSingleton_of_principal I]; rw [generator_I_eq_zero]; rw [
+  rw [eq_spanSingleton_of_principal I]; rw [generator_I_eq_zero]; rw [spanSingleton_zero]
 
 中文:
 定理 mul_generator_self_inv
@@ -501,7 +501,7 @@ theorem mul_generator_self_inv
   rw [spanSingleton_mul_spanSingleton]; rw [mul_inv_cancel₀]; rw [spanSingleton_one]
   intro generator_I_eq_zero
   apply h
-  rw [eq_spanSingleton_of_principal I]; rw [generator_I_eq_zero]; rw [
+  rw [eq_spanSingleton_of_principal I]; rw [generator_I_eq_zero]; rw [spanSingleton_zero]
 -/
 theorem mul_generator_self_inv {R₁ : Type*} [CommRing R₁] [Algebra R₁ K] [IsLocalization R₁⁰ K]
     (I : FractionalIdeal R₁⁰ K) [Submodule.IsPrincipal (I : Submodule R₁ K)] (h : I != 0) :
@@ -550,7 +550,9 @@ theorem invertible_iff_generator_nonzero
     apply invertible_of_principal
     rw [eq_spanSingleton_of_principal I]
     intro hI
-    have := mem_spanSingleton_self R₁⁰ (generator (I
+    have := mem_spanSingleton_self R₁⁰ (generator (I : Submodule R₁ K))
+    rw [hI]; rw [mem_zero_iff] at this
+    contradiction
 
 中文:
 定理 invertible_iff_generator_nonzero
@@ -564,7 +566,9 @@ theorem invertible_iff_generator_nonzero
     apply invertible_of_principal
     rw [eq_spanSingleton_of_principal I]
     intro hI
-    have := mem_spanSingleton_self R₁⁰ (generator (I
+    have := mem_spanSingleton_self R₁⁰ (generator (I : Submodule R₁ K))
+    rw [hI]; rw [mem_zero_iff] at this
+    contradiction
 
 Depends on / 依赖: Submodule, eq_spanSingleton_of_principal, generator, invertible_of_principal, mem_spanSingleton_self, mem_zero_iff, ne_zero_of_mul_eq_one, spanSingleton_zero
 -/
@@ -630,7 +634,8 @@ lemma den_mem_inv
   rw [← Algebra.smul_def (I.den : R₁) i]; rw [← mem_coe]; rw [coe_one]
   suffices Submodule.map (Algebra.linearMap R₁ K) I.num <= 1 from
 this (den_mul_self_eq_num I).symm ▸ smul_mem_pointwise_smul i I.den I.coeToSubmodule hi
-apply le_trans map_mono (show I.num <
+apply le_trans map_mono (show I.num <= 1 by simp only [Ideal.one_eq_top, le_top])
+  rw [Ideal.one_eq_top]; rw [Submodule.map_top]; rw [one_eq_range]
 
 中文:
 引理 den_mem_inv
@@ -641,7 +646,8 @@ apply le_trans map_mono (show I.num <
   rw [← Algebra.smul_def (I.den : R₁) i]; rw [← mem_coe]; rw [coe_one]
   suffices Submodule.map (Algebra.linearMap R₁ K) I.num <= 1 from
 this (den_mul_self_eq_num I).symm ▸ smul_mem_pointwise_smul i I.den I.coeToSubmodule hi
-apply le_trans map_mono (show I.num <
+apply le_trans map_mono (show I.num <= 1 by simp only [Ideal.one_eq_top, le_top])
+  rw [Ideal.one_eq_top]; rw [Submodule.map_top]; rw [one_eq_range]
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Algebra.smul_def, I.coeToSubmodule, I.den, I.num, Ideal.one_eq_top, Submodule, Submodule.map, Submodule.map_top, coeToSubmodule, coe_one, den_mul_self_eq_num, le_top, le_trans, linearMap, map_mono, map_top, mem_coe, mem_inv_iff
 -/

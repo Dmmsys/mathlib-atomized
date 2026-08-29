@@ -108,7 +108,13 @@ theorem cauchySeq_finset_of_norm_bounded_eventually
   refine ⟨s union h.toFinset, fun t ht => ?_⟩
   have : forall i in t, ‖f i‖ <= g i := by
     intro i hi
-    simp only [disjoint_left, mem_union, not_or, h.mem_toFi
+    simp only [disjoint_left, mem_union, not_or, h.mem_toFinset, Set.mem_compl_iff,
+      Classical.not_not] at ht
+    exact (ht hi).2
+  calc
+    ‖∑ i in t, f i‖ <= ∑ i in t, g i := norm_sum_le_of_le _ this
+    _ <= ‖∑ i in t, g i‖ := le_abs_self _
+    _ < ε := hs _ (ht.mono_right le_sup_left)
 
 中文:
 定理 cauchySeq_finset_of_norm_bounded_eventually
@@ -120,7 +126,13 @@ theorem cauchySeq_finset_of_norm_bounded_eventually
   refine ⟨s union h.toFinset, fun t ht => ?_⟩
   have : forall i in t, ‖f i‖ <= g i := by
     intro i hi
-    simp only [disjoint_left, mem_union, not_or, h.mem_toFi
+    simp only [disjoint_left, mem_union, not_or, h.mem_toFinset, Set.mem_compl_iff,
+      Classical.not_not] at ht
+    exact (ht hi).2
+  calc
+    ‖∑ i in t, f i‖ <= ∑ i in t, g i := norm_sum_le_of_le _ this
+    _ <= ‖∑ i in t, g i‖ := le_abs_self _
+    _ < ε := hs _ (ht.mono_right le_sup_left)
 
 Depends on / 依赖: Classical, Classical.not_not, Set.mem_compl_iff, cauchySeq_finset_iff_vanishing_norm, classical, disjoint_left, h.mem_toFinset, h.toFinset, ht.mono_right, le_abs_self, le_sup_left, mem_compl_iff, mem_toFinset, mem_union, mono_right, norm_sum_le_of_le, not_not, not_or, summable_iff_vanishing_norm, toFinset
 -/
@@ -172,7 +184,9 @@ theorem cauchySeq_range_of_norm_bounded
   rw [dist_eq_norm]; rw [← sum_Ico_eq_sub _ hn] at hg ⊢
   calc
     ‖∑ k in Ico N n, f k‖ <= ∑ k in _, ‖f k‖ := norm_sum_le _ _
-    _ <= ∑ k in _, g k := sum_le_s
+    _ <= ∑ k in _, g k := sum_le_sum fun x _ => hf x
+    _ <= ‖∑ k in _, g k‖ := le_abs_self _
+    _ < ε := hg
 
 中文:
 定理 cauchySeq_range_of_norm_bounded
@@ -184,7 +198,9 @@ theorem cauchySeq_range_of_norm_bounded
   rw [dist_eq_norm]; rw [← sum_Ico_eq_sub _ hn] at hg ⊢
   calc
     ‖∑ k in Ico N n, f k‖ <= ∑ k in _, ‖f k‖ := norm_sum_le _ _
-    _ <= ∑ k in _, g k := sum_le_s
+    _ <= ∑ k in _, g k := sum_le_sum fun x _ => hf x
+    _ <= ‖∑ k in _, g k‖ := le_abs_self _
+    _ < ε := hg
 
 Depends on / 依赖: Metric, Metric.cauchySeq_iff, cauchySeq_iff, dist_eq_norm, le_abs_self, norm_sum_le, specialize, sum_Ico_eq_sub, sum_le_sum
 -/

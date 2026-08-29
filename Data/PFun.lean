@@ -722,7 +722,7 @@ instance lawfulMonad
   (bind_pure_comp := fun _ _ => funext fun _ => Part.bind_some_eq_map _ _)
   (id_map := fun f => by funext a; dsimp [Functor.map, PFun.map]; cases f a; rfl)
   (pure_bind := fun x f => funext fun _ => Part.bind_some _ (f x))
-  (bind_assoc := fun f g k => funext fun a => (f a).bind_ass
+  (bind_assoc := fun f g k => funext fun a => (f a).bind_assoc (fun b => g b a) fun b => k b a)
 
 中文:
 实例 lawfulMonad
@@ -731,7 +731,7 @@ instance lawfulMonad
   (bind_pure_comp := fun _ _ => funext fun _ => Part.bind_some_eq_map _ _)
   (id_map := fun f => by funext a; dsimp [Functor.map, PFun.map]; cases f a; rfl)
   (pure_bind := fun x f => funext fun _ => Part.bind_some _ (f x))
-  (bind_assoc := fun f g k => funext fun a => (f a).bind_ass
+  (bind_assoc := fun f g k => funext fun a => (f a).bind_assoc (fun b => g b a) fun b => k b a)
 
 Depends on / 依赖: LawfulMonad, LawfulMonad.mk
 -/
@@ -857,7 +857,27 @@ theorem mem_fix_iff
     obtain ⟨h₂, h₃⟩ := h₂
     split at h₃
     next e => simp only [Part.mem_some_iff] at h₃; subst b; exact Or.inl ⟨h₂, e⟩
-    next e => exact Or.inr ⟨_, ⟨_, e⟩, Part
+    next e => exact Or.inr ⟨_, ⟨_, e⟩, Part.mem_assert _ h₃⟩,
+   fun h => by
+    simp only [fix, Part.mem_assert_iff]
+    rcases h with (⟨h₁, h₂⟩ | ⟨a', h, h₃⟩)
+    · refine ⟨⟨_, fun y h' => ?_⟩, ?_⟩
+      · injection Part.mem_unique ⟨h₁, h₂⟩ h'
+      · rw [WellFounded.fixF_eq]
+        -- Porting note: used to be simp [h₁, h₂]
+        apply Part.mem_assert h₁
+        split
+        next e =>
+          injection h₂.symm.trans e with h; simp [h]
+        next e =>
+          injection h₂.symm.trans e
+    · simp only [fix, Part.mem_assert_iff] at h₃
+      obtain ⟨h₃, h₄⟩ := h₃
+      refine ⟨⟨_, fun y h' => ?_⟩, ?_⟩
+      · injection Part.mem_unique h h' with e
+        exact e ▸ h₃
+      · obtain ⟨h₁, h₂⟩ := h
+        grind [WellFounded.fixF_eq]⟩
 
 中文:
 定理 mem_fix_iff
@@ -869,7 +889,27 @@ theorem mem_fix_iff
     obtain ⟨h₂, h₃⟩ := h₂
     split at h₃
     next e => simp only [Part.mem_some_iff] at h₃; subst b; exact Or.inl ⟨h₂, e⟩
-    next e => exact Or.inr ⟨_, ⟨_, e⟩, Part
+    next e => exact Or.inr ⟨_, ⟨_, e⟩, Part.mem_assert _ h₃⟩,
+   fun h => by
+    simp only [fix, Part.mem_assert_iff]
+    rcases h with (⟨h₁, h₂⟩ | ⟨a', h, h₃⟩)
+    · refine ⟨⟨_, fun y h' => ?_⟩, ?_⟩
+      · injection Part.mem_unique ⟨h₁, h₂⟩ h'
+      · rw [WellFounded.fixF_eq]
+        -- Porting note: used to be simp [h₁, h₂]
+        apply Part.mem_assert h₁
+        split
+        next e =>
+          injection h₂.symm.trans e with h; simp [h]
+        next e =>
+          injection h₂.symm.trans e
+    · simp only [fix, Part.mem_assert_iff] at h₃
+      obtain ⟨h₃, h₄⟩ := h₃
+      refine ⟨⟨_, fun y h' => ?_⟩, ?_⟩
+      · injection Part.mem_unique h h' with e
+        exact e ▸ h₃
+      · obtain ⟨h₁, h₂⟩ := h
+        grind [WellFounded.fixF_eq]⟩
 
 Depends on / 依赖: Or.inl, Or.inr, Part.mem_assert, Part.mem_assert_iff, Part.mem_some_iff, Part.mem_unique, WellFounded, WellFounded.fixF_eq, fixF_eq, injection, mem_assert, mem_assert_iff, mem_some_iff, mem_unique
 -/
@@ -1109,7 +1149,8 @@ theorem fixInduction'_stop
   -- Porting note: the explicit motive required because `simp` does not apply `Part.get_eq_of_mem`
   refine Eq.rec (motive := fun x e =>
       Sum.casesOn x ?_ ?_ (Eq.trans (Part.get_eq_of_mem fa (dom_of_mem_fix h)) e) = hbase a fa) ?_
-    (Part.get
+    (Part.get_eq_of_mem fa (dom_of_mem_fix h)).symm
+  simp
 
 中文:
 定理 fixInduction'_stop
@@ -1120,7 +1161,8 @@ theorem fixInduction'_stop
   -- Porting note: the explicit motive required because `simp` does not apply `Part.get_eq_of_mem`
   refine Eq.rec (motive := fun x e =>
       Sum.casesOn x ?_ ?_ (Eq.trans (Part.get_eq_of_mem fa (dom_of_mem_fix h)) e) = hbase a fa) ?_
-    (Part.get
+    (Part.get_eq_of_mem fa (dom_of_mem_fix h)).symm
+  simp
 -/
 theorem fixInduction'_stop {C : α -> Sort*} {f : α ->. β oplus α} {b : β} {a : α} (h : b in f.fix a)
     (fa : Sum.inl b in f a) (hbase : forall a_final : α, Sum.inl b in f a_final -> C a_final)
@@ -1146,7 +1188,9 @@ theorem fixInduction'_fwd
   -- Porting note: the explicit motive required because `simp` does not apply `Part.get_eq_of_mem`
   refine Eq.rec (motive := fun x e =>
       Sum.casesOn (motive := fun y => (f a).get (dom_of_mem_fix h) = y -> C a) x ?_ ?_
-      (Eq.trans (Part.get
+      (Eq.trans (Part.get_eq_of_mem fa (dom_of_mem_fix h)) e) = _) ?_
+    (Part.get_eq_of_mem fa (dom_of_mem_fix h)).symm
+  simp
 
 中文:
 定理 fixInduction'_fwd
@@ -1157,7 +1201,9 @@ theorem fixInduction'_fwd
   -- Porting note: the explicit motive required because `simp` does not apply `Part.get_eq_of_mem`
   refine Eq.rec (motive := fun x e =>
       Sum.casesOn (motive := fun y => (f a).get (dom_of_mem_fix h) = y -> C a) x ?_ ?_
-      (Eq.trans (Part.get
+      (Eq.trans (Part.get_eq_of_mem fa (dom_of_mem_fix h)) e) = _) ?_
+    (Part.get_eq_of_mem fa (dom_of_mem_fix h)).symm
+  simp
 -/
 theorem fixInduction'_fwd {C : α -> Sort*} {f : α ->. β oplus α} {b : β} {a a' : α} (h : b in f.fix a)
     (h' : b in f.fix a') (fa : Sum.inr a' in f a)
@@ -1749,7 +1795,7 @@ theorem preimage_asSubtype
   exact
     Iff.intro (fun h => ⟨_, h, Part.get_mem _⟩) fun ⟨y, ys, fxy⟩ =>
       have : f.fn x.val x.property in f x.val := Part.get_mem _
-      Part.mem_unique fxy th
+      Part.mem_unique fxy this ▸ ys
 
 中文:
 定理 preimage_asSubtype
@@ -1761,7 +1807,7 @@ theorem preimage_asSubtype
   exact
     Iff.intro (fun h => ⟨_, h, Part.get_mem _⟩) fun ⟨y, ys, fxy⟩ =>
       have : f.fn x.val x.property in f x.val := Part.get_mem _
-      Part.mem_unique fxy th
+      Part.mem_unique fxy this ▸ ys
 
 Depends on / 依赖: Iff.intro, PFun.asSubtype, PFun.mem_preimage, Part.get_mem, Part.mem_unique, Set.mem_preimage, asSubtype, f.fn, get_mem, mem_preimage, mem_unique, property, x.property, x.val
 -/

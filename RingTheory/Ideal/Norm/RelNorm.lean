@@ -181,7 +181,7 @@ theorem spanNorm_singleton
           exact map_dvd _ (mem_span_singleton.mp hx')))
     ((span_singleton_le_iff_mem _).mpr (intNorm_mem_spanNorm _ (mem_span_singleton_self _)))
 
-@[simp
+@[simp]
 
 中文:
 定理 spanNorm_singleton
@@ -194,7 +194,7 @@ theorem spanNorm_singleton
           exact map_dvd _ (mem_span_singleton.mp hx')))
     ((span_singleton_le_iff_mem _).mpr (intNorm_mem_spanNorm _ (mem_span_singleton_self _)))
 
-@[simp
+@[simp]
 
 Depends on / 依赖: Set.mem_image, intNorm_mem_spanNorm, le_antisymm, map_dvd, mem_image, mem_span_singleton, mem_span_singleton.mp, mem_span_singleton.mpr, mem_span_singleton_self, span_le, span_le.mpr, span_singleton_le_iff_mem
 -/
@@ -294,7 +294,41 @@ theorem spanIntNorm_localization
   let L := FractionRing S
   let g : Sₘ ->+* L := IsLocalization.map _ (M := Algebra.algebraMapSubmonoid S M) (T := S⁰)
       (RingHom.id S) (Submonoid.map_le_of_le_comap _ <| hM.trans
-      (nonZeroD
+      (nonZeroDivisors_le_comap_nonZeroDivisors_of_injective _
+        (FaithfulSMul.algebraMap_injective _ _)))
+  algebraize [f, g, (algebraMap K L).comp f]
+  have : IsScalarTower R Rₘ K := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  let _ := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization M Rₘ K
+  have : IsScalarTower S Sₘ L := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  have : IsScalarTower Rₘ Sₘ L := by
+    apply IsScalarTower.of_algebraMap_eq'
+    apply IsLocalization.ringHom_ext M
+    rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.algebraMap_toAlgebra (R := Sₘ)]; rw [RingHom.comp_assoc]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq R S Sₘ]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← RingHom.comp_assoc]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
+  let _ := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization
+    (Algebra.algebraMapSubmonoid S M) Sₘ L
+  rw [map_spanIntNorm]
+  refine span_eq_span (Set.image_subset_iff.mpr ?_) (Set.image_subset_iff.mpr ?_)
+  · intro a' ha'
+    simp only [Set.mem_preimage, submodule_span_eq, ← map_spanIntNorm, SetLike.mem_coe,
+      IsLocalization.mem_map_algebraMap_iff (Algebra.algebraMapSubmonoid S M) Sₘ,
+      IsLocalization.mem_map_algebraMap_iff M Rₘ, Prod.exists] at ha' ⊢
+    obtain ⟨⟨a, ha⟩, ⟨_, ⟨s, hs, rfl⟩⟩, has⟩ := ha'
+    refine ⟨⟨Algebra.intNorm R S a, intNorm_mem_spanNorm _ ha⟩,
+      ⟨s ^ Module.finrank K L, pow_mem hs _⟩, ?_⟩
+    simp only [map_pow] at has ⊢
+    apply_fun algebraMap _ L at has
+    apply_fun Algebra.norm K at has
+    simp only [map_mul] at has
+    rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R K L]; rw [Algebra.norm_algebraMap] at has
+    apply IsFractionRing.injective Rₘ K
+    simp only [map_mul, map_pow]
+    rwa [Algebra.algebraMap_intNorm (L := L), ← IsScalarTower.algebraMap_apply,
+      ← IsScalarTower.algebraMap_apply, Algebra.algebraMap_intNorm (L := L)]
+  · intro a ha
+    rw [Set.mem_preimage]; rw [Function.comp_apply]; rw [Algebra.intNorm_eq_of_isLocalization M (Bₘ := Sₘ)]
+    exact subset_span (Set.mem_image_of_mem _ (mem_map_of_mem _ ha))
 
 中文:
 定理 span整数Norm_localization
@@ -305,7 +339,41 @@ theorem spanIntNorm_localization
   let L := FractionRing S
   let g : Sₘ ->+* L := IsLocalization.map _ (M := Algebra.algebraMapSubmonoid S M) (T := S⁰)
       (RingHom.id S) (Submonoid.map_le_of_le_comap _ <| hM.trans
-      (nonZeroD
+      (nonZeroDivisors_le_comap_nonZeroDivisors_of_injective _
+        (FaithfulSMul.algebraMap_injective _ _)))
+  algebraize [f, g, (algebraMap K L).comp f]
+  have : IsScalarTower R Rₘ K := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  let _ := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization M Rₘ K
+  have : IsScalarTower S Sₘ L := IsScalarTower.of_algebraMap_eq'
+    (by rw [RingHom.algebraMap_toAlgebra, IsLocalization.map_comp, RingHomCompTriple.comp_eq])
+  have : IsScalarTower Rₘ Sₘ L := by
+    apply IsScalarTower.of_algebraMap_eq'
+    apply IsLocalization.ringHom_ext M
+    rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.algebraMap_toAlgebra (R := Sₘ)]; rw [RingHom.comp_assoc]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq R S Sₘ]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← RingHom.comp_assoc]; rw [IsLocalization.map_comp]; rw [RingHom.comp_id]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
+  let _ := IsFractionRing.isFractionRing_of_isDomain_of_isLocalization
+    (Algebra.algebraMapSubmonoid S M) Sₘ L
+  rw [map_spanIntNorm]
+  refine span_eq_span (Set.image_subset_iff.mpr ?_) (Set.image_subset_iff.mpr ?_)
+  · intro a' ha'
+    simp only [Set.mem_preimage, submodule_span_eq, ← map_spanIntNorm, SetLike.mem_coe,
+      IsLocalization.mem_map_algebraMap_iff (Algebra.algebraMapSubmonoid S M) Sₘ,
+      IsLocalization.mem_map_algebraMap_iff M Rₘ, Prod.exists] at ha' ⊢
+    obtain ⟨⟨a, ha⟩, ⟨_, ⟨s, hs, rfl⟩⟩, has⟩ := ha'
+    refine ⟨⟨Algebra.intNorm R S a, intNorm_mem_spanNorm _ ha⟩,
+      ⟨s ^ Module.finrank K L, pow_mem hs _⟩, ?_⟩
+    simp only [map_pow] at has ⊢
+    apply_fun algebraMap _ L at has
+    apply_fun Algebra.norm K at has
+    simp only [map_mul] at has
+    rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]; rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply R K L]; rw [Algebra.norm_algebraMap] at has
+    apply IsFractionRing.injective Rₘ K
+    simp only [map_mul, map_pow]
+    rwa [Algebra.algebraMap_intNorm (L := L), ← IsScalarTower.algebraMap_apply,
+      ← IsScalarTower.algebraMap_apply, Algebra.algebraMap_intNorm (L := L)]
+  · intro a ha
+    rw [Set.mem_preimage]; rw [Function.comp_apply]; rw [Algebra.intNorm_eq_of_isLocalization M (Bₘ := Sₘ)]
+    exact subset_span (Set.mem_image_of_mem _ (mem_map_of_mem _ ha))
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, FaithfulSMul, FaithfulSMul.algebraMap_injective, FractionRing, IsLocalization, IsLocalization.map, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.algebraM, RingHom.id, Submonoid, Submonoid.map_le_of_le_comap, algebraM, algebraMap, algebraMapSubmonoid, algebraMap_injective, algebraize, hM.trans
 -/
@@ -406,7 +474,9 @@ theorem spanNorm_mul_of_bot_or_top
     exact bot_le
   rw [hI]; rw [Ideal.top_mul]
   rcases eq_bot_or_top (spanNorm R J) with hJ | hJ
-  · rw [hJ, spanNorm_eq_bot_i
+  · rw [hJ, spanNorm_eq_bot_iff.mp hJ, mul_bot, spanNorm_bot]
+  rw [hJ]
+  exact le_top
 
 中文:
 定理 spanNorm_mul_of_bot_or_top
@@ -418,7 +488,9 @@ theorem spanNorm_mul_of_bot_or_top
     exact bot_le
   rw [hI]; rw [Ideal.top_mul]
   rcases eq_bot_or_top (spanNorm R J) with hJ | hJ
-  · rw [hJ, spanNorm_eq_bot_i
+  · rw [hJ, spanNorm_eq_bot_iff.mp hJ, mul_bot, spanNorm_bot]
+  rw [hJ]
+  exact le_top
 
 Depends on / 依赖: Ideal.top_mul, bot_le, bot_mul, eq_bot_or_top, le_antisymm, le_top, mul_bot, spanNorm, spanNorm_bot, spanNorm_eq_bot_iff, spanNorm_eq_bot_iff.mp, spanNorm_mul_spanNorm_le, top_mul
 -/
@@ -449,7 +521,8 @@ theorem spanNorm_le_comap
       obtain ⟨x, hx, rfl⟩ := h
 exact mem_comap.mpr mem_of_dvd _ (Algebra.dvd_algebraMap_intNorm_self _ _ x) hx
   | zero => simp
-  | add _ _ 
+  | add _ _ _ _ hx hy => exact Submodule.add_mem _ hx hy
+  | smul _ _ _ hx => exact Submodule.smul_mem _ _ hx
 
 中文:
 定理 spanNorm_le_comap
@@ -463,7 +536,8 @@ exact mem_comap.mpr mem_of_dvd _ (Algebra.dvd_algebraMap_intNorm_self _ _ x) hx
       obtain ⟨x, hx, rfl⟩ := h
 exact mem_comap.mpr mem_of_dvd _ (Algebra.dvd_algebraMap_intNorm_self _ _ x) hx
   | zero => simp
-  | add _ _ 
+  | add _ _ _ _ hx hy => exact Submodule.add_mem _ hx hy
+  | smul _ _ _ hx => exact Submodule.smul_mem _ _ hx
 
 Depends on / 依赖: Algebra, Algebra.dvd_algebraMap_intNorm_self, Ideal.map, Ideal.span_le, Submodule, Submodule.add_mem, Submodule.smul_mem, Submodule.span_induction, Submodule.span_le, add_mem, dvd_algebraMap_intNorm_self, mem_comap, mem_comap.mpr, mem_of_dvd, smul_mem, spanNorm, span_induction, span_le
 -/
@@ -496,7 +570,12 @@ theorem spanNorm_mul
   · subst hP0
     rw [spanNorm_mul_of_bot_or_top]
     intro I
-    exa
+    exact or_iff_not_imp_right.mpr fun hI => (hP.eq_of_le hI bot_le).symm
+  have : NeZero P := ⟨hP0⟩
+  let P' := Algebra.algebraMapSubmonoid S P.primeCompl
+  simp only [Ideal.map_mul, ← spanIntNorm_localization (R := R) (Sₘ := Localization P')
+    _ _ P.primeCompl_le_nonZeroDivisors]
+  rw [← (I.map _).span_singleton_generator]; rw [← (J.map _).span_singleton_generator]; rw [span_singleton_mul_span_singleton]; rw [spanNorm_singleton]; rw [spanNorm_singleton]; rw [spanNorm_singleton]; rw [span_singleton_mul_span_singleton]; rw [map_mul]
 
 中文:
 定理 spanNorm_mul
@@ -511,7 +590,12 @@ theorem spanNorm_mul
   · subst hP0
     rw [spanNorm_mul_of_bot_or_top]
     intro I
-    exa
+    exact or_iff_not_imp_right.mpr fun hI => (hP.eq_of_le hI bot_le).symm
+  have : NeZero P := ⟨hP0⟩
+  let P' := Algebra.algebraMapSubmonoid S P.primeCompl
+  simp only [Ideal.map_mul, ← spanIntNorm_localization (R := R) (Sₘ := Localization P')
+    _ _ P.primeCompl_le_nonZeroDivisors]
+  rw [← (I.map _).span_singleton_generator]; rw [← (J.map _).span_singleton_generator]; rw [span_singleton_mul_span_singleton]; rw [spanNorm_singleton]; rw [spanNorm_singleton]; rw [spanNorm_singleton]; rw [span_singleton_mul_span_singleton]; rw [map_mul]
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, Ideal.map_mul, Localization, NeZero, P.primeCompl, Subsingleton, Subsingleton.elim, algebraMapSubmonoid, bot_le, eq_of_le, eq_of_localization_maximal, hP.eq_of_le, map_mul, nontriviality, or_iff_not_imp_right, or_iff_not_imp_right.mpr, primeCompl, spanIntNorm_localization, spanNorm_mul_of_bot_or_top
 -/
@@ -614,7 +698,13 @@ theorem spanNorm_spanNorm
     rw [spanNorm_spanNorm_of_bot_or_top]
     exact fun I => or_iff_not_imp_right.mpr fun hI => (hP.eq_of_le hI bot_le).symm
   let Rₚ := Localization.AtPrime P
-  let Tₚ := Localization (algebraMapSubmonoid T P.pr
+  let Tₚ := Localization (algebraMapSubmonoid T P.primeCompl)
+  let Sₚ := Localization (algebraMapSubmonoid S P.primeCompl)
+  have : NeZero P := ⟨hP⟩
+  have h : algebraMapSubmonoid T P.primeCompl <= T⁰ :=
+      algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _ (primeCompl_le_nonZeroDivisors P)
+  rw [← spanIntNorm_localization R (spanNorm T I) _ (primeCompl_le_nonZeroDivisors P) Tₚ]; rw [← spanIntNorm_localization T (Rₘ := Tₚ) I _ h Sₚ]; rw [← spanIntNorm_localization R (Rₘ := Rₚ) I _
+    (primeCompl_le_nonZeroDivisors P) Sₚ]; rw [← (I.map _).span_singleton_generator]; rw [spanNorm_singleton]; rw [spanNorm_singleton]; rw [intNorm_intNorm]; rw [spanNorm_singleton]
 
 中文:
 定理 spanNorm_spanNorm
@@ -626,7 +716,13 @@ theorem spanNorm_spanNorm
     rw [spanNorm_spanNorm_of_bot_or_top]
     exact fun I => or_iff_not_imp_right.mpr fun hI => (hP.eq_of_le hI bot_le).symm
   let Rₚ := Localization.AtPrime P
-  let Tₚ := Localization (algebraMapSubmonoid T P.pr
+  let Tₚ := Localization (algebraMapSubmonoid T P.primeCompl)
+  let Sₚ := Localization (algebraMapSubmonoid S P.primeCompl)
+  have : NeZero P := ⟨hP⟩
+  have h : algebraMapSubmonoid T P.primeCompl <= T⁰ :=
+      algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul _ (primeCompl_le_nonZeroDivisors P)
+  rw [← spanIntNorm_localization R (spanNorm T I) _ (primeCompl_le_nonZeroDivisors P) Tₚ]; rw [← spanIntNorm_localization T (Rₘ := Tₚ) I _ h Sₚ]; rw [← spanIntNorm_localization R (Rₘ := Rₚ) I _
+    (primeCompl_le_nonZeroDivisors P) Sₚ]; rw [← (I.map _).span_singleton_generator]; rw [spanNorm_singleton]; rw [spanNorm_singleton]; rw [intNorm_intNorm]; rw [spanNorm_singleton]
 
 Depends on / 依赖: AtPrime, Localization, Localization.AtPrime, NeZero, P.primeCompl, algebraMapSubmonoid, algebraMapSubmonoid_le_nonZeroDivisors_of_faithfulSMul, bot_le, eq_of_le, eq_of_localization_maximal, hP.eq_of_le, or_iff_not_imp_right, or_iff_not_imp_right.mpr, primeCompl, primeCompl_le, spanNorm_spanNorm_of_bot_or_top
 -/
@@ -1040,7 +1136,10 @@ theorem relNorm_algebraMap
   let P' := Algebra.algebraMapSubmonoid S P.primeCompl
   let Rₚ := Localization.AtPrime P
   let K := FractionRing R
-  rw [← spanIntNorm_localization R _ _ P.primeCompl_le_nonZeroDivisors (Localization P')]; rw [Ideal.map_p
+  rw [← spanIntNorm_localization R _ _ P.primeCompl_le_nonZeroDivisors (Localization P')]; rw [Ideal.map_pow]; rw [I.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq R Rₚ]; rw [← I.map_map]; rw [← (I.map _).span_singleton_generator]; rw [Ideal.map_span]; rw [Set.image_singleton]; rw [spanNorm_singleton]; rw [Ideal.span_singleton_pow]
+  congr 2
+  apply IsFractionRing.injective Rₚ K
+  rw [Algebra.algebraMap_intNorm (L := FractionRing S)]; rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply Rₚ K]; rw [Algebra.norm_algebraMap]; rw [map_pow]; rw [IsFractionRing.finrank_eq R (FractionRing R) S (FractionRing S)]
 
 中文:
 定理 relNorm_algebraMap
@@ -1051,7 +1150,10 @@ theorem relNorm_algebraMap
   let P' := Algebra.algebraMapSubmonoid S P.primeCompl
   let Rₚ := Localization.AtPrime P
   let K := FractionRing R
-  rw [← spanIntNorm_localization R _ _ P.primeCompl_le_nonZeroDivisors (Localization P')]; rw [Ideal.map_p
+  rw [← spanIntNorm_localization R _ _ P.primeCompl_le_nonZeroDivisors (Localization P')]; rw [Ideal.map_pow]; rw [I.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq R Rₚ]; rw [← I.map_map]; rw [← (I.map _).span_singleton_generator]; rw [Ideal.map_span]; rw [Set.image_singleton]; rw [spanNorm_singleton]; rw [Ideal.span_singleton_pow]
+  congr 2
+  apply IsFractionRing.injective Rₚ K
+  rw [Algebra.algebraMap_intNorm (L := FractionRing S)]; rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_apply Rₚ K]; rw [Algebra.norm_algebraMap]; rw [map_pow]; rw [IsFractionRing.finrank_eq R (FractionRing R) S (FractionRing S)]
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid, AtPrime, FractionRing, I.map, I.map_map, Ideal.map_pow, Ideal.map_span, IsScalarTower, IsScalarTower.algebraMap_eq, Localization, Localization.AtPrime, P.primeCompl, P.primeCompl_le_nonZeroDivisors, Set.image_singleton, algebraMapSubmonoid, algebraMap_eq, eq_of_localization_maximal, image_singleton, map_map
 -/
@@ -1108,7 +1210,10 @@ theorem exists_relNorm_eq_pow_of_isPrime
     have : P.LiesOver ⊥ := hp ▸ hPp
     rw [hp]; rw [eq_bot_of_liesOver_bot R P]; rw [relNorm_bot]; rw [bot_pow (one_ne_zero)]
   have h : relNorm R (map (algebraMap R S) p) <= relNorm R P :=
-relNorm_mono _ map_le_iff_le_comap.mpr le_of_eq (liesOver_iff _ _
+relNorm_mono _ map_le_iff_le_comap.mpr le_of_eq (liesOver_iff _ _).mp hPp
+  rw [relNorm_algebraMap S]; rw [← dvd_iff_le]; rw [dvd_prime_pow (prime_of_isPrime hp inferInstance)] at h
+  obtain ⟨s, _, hs⟩ := h
+  exact ⟨s, by rwa [associated_iff_eq] at hs⟩
 
 中文:
 定理 存在_relNorm_eq_pow_of_isPrime
@@ -1120,7 +1225,10 @@ relNorm_mono _ map_le_iff_le_comap.mpr le_of_eq (liesOver_iff _ _
     have : P.LiesOver ⊥ := hp ▸ hPp
     rw [hp]; rw [eq_bot_of_liesOver_bot R P]; rw [relNorm_bot]; rw [bot_pow (one_ne_zero)]
   have h : relNorm R (map (algebraMap R S) p) <= relNorm R P :=
-relNorm_mono _ map_le_iff_le_comap.mpr le_of_eq (liesOver_iff _ _
+relNorm_mono _ map_le_iff_le_comap.mpr le_of_eq (liesOver_iff _ _).mp hPp
+  rw [relNorm_algebraMap S]; rw [← dvd_iff_le]; rw [dvd_prime_pow (prime_of_isPrime hp inferInstance)] at h
+  obtain ⟨s, _, hs⟩ := h
+  exact ⟨s, by rwa [associated_iff_eq] at hs⟩
 
 Depends on / 依赖: LiesOver, P.LiesOver, algebraMap, associated_iff_eq, bot_pow, dvd_iff_le, dvd_prime_pow, eq_bot_of_liesOver_bot, le_of_eq, liesOver_iff, map_le_iff_le_comap, map_le_iff_le_comap.mpr, one_ne_zero, prime_of_isPrime, relNorm, relNorm_algebraMap, relNorm_bot, relNorm_mono
 -/
@@ -1147,7 +1255,34 @@ theorem relNorm_eq_pow_of_isPrime_isGalois
   let := IsIntegralClosure.MulSemiringAction R (FractionRing R) (FractionRing S) S
   have := IsGaloisGroup.of_isFractionRing G R S (FractionRing R) (FractionRing S)
   by_cases hp : p = ⊥
-  · 
+  · have h : P.inertiaDeg R != 0 := (inertiaDeg_pos P R).ne'
+    have hP : P = ⊥ := by
+      rw [hp] at hPp
+      exact eq_bot_of_liesOver_bot R P
+    rw [hp]; rw [hP]; rw [relNorm_bot]; rw [bot_pow]
+    rwa [hP] at h
+  obtain ⟨s, hs⟩ := exists_relNorm_eq_pow_of_isPrime P p
+  suffices s = P.inertiaDeg R by rwa [this] at hs
+  have h₀ : forall Q in (p.primesOver S).toFinset,
+      relNorm R Q ^ Q.ramificationIdx R = p ^ ((p.ramificationIdxIn S) * s) := by
+    intro Q hQ
+    rw [Set.mem_toFinset] at hQ
+    have : Q.IsPrime := hQ.1
+    have : Q.LiesOver p := hQ.2
+    rw [← ramificationIdxIn_eq_ramificationIdx p Q G]
+    obtain ⟨σ, rfl⟩ := Ideal.exists_smul_eq_of_isGaloisGroup p P Q G
+    rw [relNorm_smul]; rw [hs]; rw [← pow_mul]; rw [mul_comm]
+  have h := (congr_arg (relNorm R ·) <|
+    map_algebraMap_eq_finsetProd_pow hp).symm.trans <| relNorm_algebraMap S p
+  simp +contextual only [map_prod, map_pow, h₀, Finset.prod_const, ← pow_mul] at h
+  rwa [← IsGaloisGroup.card_eq_finrank' G R S,
+    ← Ideal.ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn p S G, mul_comm,
+    ← Set.ncard_eq_toFinset_card',
+    ((IsLeftCancelMulZero.mul_left_cancel_of_ne_zero hp).pow_injective _).eq_iff,
+    mul_right_inj' (IsDedekindDomain.primesOver_ncard_ne_zero p S),
+    mul_right_inj' (ramificationIdxIn_ne_zero G), inertiaDegIn_eq_inertiaDeg p P G] at h
+  rw [one_eq_top]
+  exact IsMaximal.ne_top inferInstance
 
 中文:
 定理 relNorm_eq_pow_of_isPrime_isGalois
@@ -1158,7 +1293,34 @@ theorem relNorm_eq_pow_of_isPrime_isGalois
   let := IsIntegralClosure.MulSemiringAction R (FractionRing R) (FractionRing S) S
   have := IsGaloisGroup.of_isFractionRing G R S (FractionRing R) (FractionRing S)
   by_cases hp : p = ⊥
-  · 
+  · have h : P.inertiaDeg R != 0 := (inertiaDeg_pos P R).ne'
+    have hP : P = ⊥ := by
+      rw [hp] at hPp
+      exact eq_bot_of_liesOver_bot R P
+    rw [hp]; rw [hP]; rw [relNorm_bot]; rw [bot_pow]
+    rwa [hP] at h
+  obtain ⟨s, hs⟩ := exists_relNorm_eq_pow_of_isPrime P p
+  suffices s = P.inertiaDeg R by rwa [this] at hs
+  have h₀ : forall Q in (p.primesOver S).toFinset,
+      relNorm R Q ^ Q.ramificationIdx R = p ^ ((p.ramificationIdxIn S) * s) := by
+    intro Q hQ
+    rw [Set.mem_toFinset] at hQ
+    have : Q.IsPrime := hQ.1
+    have : Q.LiesOver p := hQ.2
+    rw [← ramificationIdxIn_eq_ramificationIdx p Q G]
+    obtain ⟨σ, rfl⟩ := Ideal.exists_smul_eq_of_isGaloisGroup p P Q G
+    rw [relNorm_smul]; rw [hs]; rw [← pow_mul]; rw [mul_comm]
+  have h := (congr_arg (relNorm R ·) <|
+    map_algebraMap_eq_finsetProd_pow hp).symm.trans <| relNorm_algebraMap S p
+  simp +contextual only [map_prod, map_pow, h₀, Finset.prod_const, ← pow_mul] at h
+  rwa [← IsGaloisGroup.card_eq_finrank' G R S,
+    ← Ideal.ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn p S G, mul_comm,
+    ← Set.ncard_eq_toFinset_card',
+    ((IsLeftCancelMulZero.mul_left_cancel_of_ne_zero hp).pow_injective _).eq_iff,
+    mul_right_inj' (IsDedekindDomain.primesOver_ncard_ne_zero p S),
+    mul_right_inj' (ramificationIdxIn_ne_zero G), inertiaDegIn_eq_inertiaDeg p P G] at h
+  rw [one_eq_top]
+  exact IsMaximal.ne_top inferInstance
 
 Depends on / 依赖: FractionRing, IsGaloisGroup, IsGaloisGroup.of_isFractionRing, IsIntegralClosure, IsIntegralClosure.MulSemiringAction, IsMaximal, IsMaximal.of_liesOver_isMaximal, MulSemiringAction, P.IsMaximal, P.inertiaDeg, bot_pow, eq_bot_of_liesOver_bot, inertiaDeg, inertiaDeg_pos, of_isFractionRing, of_liesOver_isMaximal, relNorm_bot
 -/
@@ -1210,7 +1372,10 @@ theorem relNorm_eq_pow_of_isMaximal
     exists_maximal_ideal_liesOver_of_isIntegral P
   have : Q.LiesOver p := LiesOver.trans Q P p
   have h := relNorm_eq_pow_of_isPrime_isGalois Q p
-  have : IsGalois (FractionRing S) (Fract
+  have : IsGalois (FractionRing S) (FractionRing T) :=
+    IsGalois.tower_top_of_isGalois (FractionRing R) (FractionRing S) (FractionRing T)
+  rwa [← relNorm_relNorm R S, relNorm_eq_pow_of_isPrime_isGalois Q P, map_pow,
+    inertiaDeg_tower (R := R) P Q, pow_mul, pow_left_inj (inertiaDeg_pos Q S).ne'] at h
 
 中文:
 定理 relNorm_eq_pow_of_isMaximal
@@ -1221,7 +1386,10 @@ theorem relNorm_eq_pow_of_isMaximal
     exists_maximal_ideal_liesOver_of_isIntegral P
   have : Q.LiesOver p := LiesOver.trans Q P p
   have h := relNorm_eq_pow_of_isPrime_isGalois Q p
-  have : IsGalois (FractionRing S) (Fract
+  have : IsGalois (FractionRing S) (FractionRing T) :=
+    IsGalois.tower_top_of_isGalois (FractionRing R) (FractionRing S) (FractionRing T)
+  rwa [← relNorm_relNorm R S, relNorm_eq_pow_of_isPrime_isGalois Q P, map_pow,
+    inertiaDeg_tower (R := R) P Q, pow_mul, pow_left_inj (inertiaDeg_pos Q S).ne'] at h
 
 Depends on / 依赖: FractionRing, IsGalois, IsGalois.tower_top_of_isGalois, IsMaximal, LiesOver, LiesOver.trans, NormalClosure, Q.IsMaximal, Q.LiesOver, Ring.NormalClosure, exists_maximal_ideal_liesOver_of_isIntegral, inertiaDeg_tower, map_pow, pow_mul, relNorm_eq_pow_of_isPrime_isGalois, relNorm_relNorm, tower_top_of_isGalois
 -/
@@ -1257,7 +1425,16 @@ theorem absNorm_relNorm
   rw [← prod_normalizedFactors_eq_self hI]
   refine Multiset.prod_induction (fun I => absNorm (relNorm R I) = absNorm I) _ ?_ ?_ ?_
   · intro _ _ hx hy
-    rw [map_mul]; rw [map_mul]; rw [map_mul]; rw [
+    rw [map_mul]; rw [map_mul]; rw [map_mul]; rw [hx]; rw [hy]
+  · simp
+  · intro Q hQ
+    have hQ' : Q != ⊥ := ne_zero_of_mem_normalizedFactors hQ
+    rw [Ideal.mem_normalizedFactors_iff hI] at hQ
+    have : Q.IsMaximal := Ring.DimensionLEOne.maximalOfPrime hQ' hQ.1
+    let P := under R Q
+    let p := absNorm (under Int P)
+    have : Q.LiesOver (span {(p : Int)}) := LiesOver.trans Q P _
+    rw [relNorm_eq_pow_of_isMaximal Q P]; rw [map_pow]; rw [← pow_inertiaDeg p]; rw [← pow_inertiaDeg p]; rw [← pow_mul]; rw [← inertiaDeg_tower]
 
 中文:
 定理 absNorm_relNorm
@@ -1269,7 +1446,16 @@ theorem absNorm_relNorm
   rw [← prod_normalizedFactors_eq_self hI]
   refine Multiset.prod_induction (fun I => absNorm (relNorm R I) = absNorm I) _ ?_ ?_ ?_
   · intro _ _ hx hy
-    rw [map_mul]; rw [map_mul]; rw [map_mul]; rw [
+    rw [map_mul]; rw [map_mul]; rw [map_mul]; rw [hx]; rw [hy]
+  · simp
+  · intro Q hQ
+    have hQ' : Q != ⊥ := ne_zero_of_mem_normalizedFactors hQ
+    rw [Ideal.mem_normalizedFactors_iff hI] at hQ
+    have : Q.IsMaximal := Ring.DimensionLEOne.maximalOfPrime hQ' hQ.1
+    let P := under R Q
+    let p := absNorm (under Int P)
+    have : Q.LiesOver (span {(p : Int)}) := LiesOver.trans Q P _
+    rw [relNorm_eq_pow_of_isMaximal Q P]; rw [map_pow]; rw [← pow_inertiaDeg p]; rw [← pow_inertiaDeg p]; rw [← pow_mul]; rw [← inertiaDeg_tower]
 
 Depends on / 依赖: DimensionLEOne, Finite, Ideal.mem_normalizedFactors_iff, IsMaximal, Module, Module.Finite, Module.Finite.left, Multiset, Multiset.prod_induction, Q.IsMaximal, Ring.DimensionLEOne.maximalOfPrime, absNorm, map_mul, maximalOfPrime, mem_normalizedFactors_iff, ne_zero_of_mem_normalizedFactors, prod_induction, prod_normalizedFactors_eq_self, relNorm
 -/

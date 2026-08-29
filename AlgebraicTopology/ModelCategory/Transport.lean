@@ -46,7 +46,27 @@ definition ModelCategory.transport
     simp [trivialCofibrations, h₁, h₃]
   have h₂' : trivialFibrations C = (trivialFibrations D).inverseImage e.functor := by
     simp [trivialFibrations, h₂, h₃]
-  have {X Y : C} (f : X ⟶ Y) [hf : Cofibratio
+  have {X Y : C} (f : X ⟶ Y) [hf : Cofibration f] : Cofibration (e.functor.map f) := by
+    simpa [cofibration_iff, h₁] using hf
+  have {X Y : C} (f : X ⟶ Y) [hf : Fibration f] : Fibration (e.functor.map f) := by
+    simpa [fibration_iff, h₂] using hf
+  have {X Y : C} (f : X ⟶ Y) [hf : WeakEquivalence f] : WeakEquivalence (e.functor.map f) := by
+    simpa [weakEquivalence_iff, h₃] using hf
+  exact {
+    cm1a := ⟨fun _ _ _ => Adjunction.hasLimitsOfShape_of_equivalence e.functor⟩
+    cm1b := ⟨fun _ _ _ => Adjunction.hasColimitsOfShape_of_equivalence e.functor⟩
+    cm2 := by rw [h₃]; infer_instance
+    cm3a := by rw [h₃]; infer_instance
+    cm3b := by rw [h₂]; infer_instance
+    cm3c := by rw [h₁]; infer_instance
+    cm4a _ _ _ _ _ := by
+      rw [← e.functor.hasLiftingProperty_iff_of_isEquivalence]
+      infer_instance
+    cm4b _ _ _ _ _ := by
+      rw [← e.functor.hasLiftingProperty_iff_of_isEquivalence]
+      infer_instance
+    cm5a := by rw [h₁', h₂]; infer_instance
+    cm5b := by rw [h₁, h₂']; infer_instance }
 
 中文:
 定义 模型范畴.transport
@@ -55,7 +75,27 @@ definition ModelCategory.transport
     simp [trivialCofibrations, h₁, h₃]
   have h₂' : trivialFibrations C = (trivialFibrations D).inverseImage e.functor := by
     simp [trivialFibrations, h₂, h₃]
-  have {X Y : C} (f : X ⟶ Y) [hf : Cofibratio
+  have {X Y : C} (f : X ⟶ Y) [hf : Cofibration f] : Cofibration (e.functor.map f) := by
+    simpa [cofibration_iff, h₁] using hf
+  have {X Y : C} (f : X ⟶ Y) [hf : Fibration f] : Fibration (e.functor.map f) := by
+    simpa [fibration_iff, h₂] using hf
+  have {X Y : C} (f : X ⟶ Y) [hf : WeakEquivalence f] : WeakEquivalence (e.functor.map f) := by
+    simpa [weakEquivalence_iff, h₃] using hf
+  exact {
+    cm1a := ⟨fun _ _ _ => Adjunction.hasLimitsOfShape_of_equivalence e.functor⟩
+    cm1b := ⟨fun _ _ _ => Adjunction.hasColimitsOfShape_of_equivalence e.functor⟩
+    cm2 := by rw [h₃]; infer_instance
+    cm3a := by rw [h₃]; infer_instance
+    cm3b := by rw [h₂]; infer_instance
+    cm3c := by rw [h₁]; infer_instance
+    cm4a _ _ _ _ _ := by
+      rw [← e.functor.hasLiftingProperty_iff_of_isEquivalence]
+      infer_instance
+    cm4b _ _ _ _ _ := by
+      rw [← e.functor.hasLiftingProperty_iff_of_isEquivalence]
+      infer_instance
+    cm5a := by rw [h₁', h₂]; infer_instance
+    cm5b := by rw [h₁, h₂']; infer_instance }
 
 Depends on / 依赖: Cofibration, Fibration, cofibration_iff, e.functor, e.functor.map, fibration_iff, functor, inverseImage, trivialCofibrations, trivialFibrations
 -/

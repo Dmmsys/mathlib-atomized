@@ -677,7 +677,7 @@ definition isoOfSheafedSpaceIso
   inv_hom_id := by
     ext : 1
     dsimp
-    rw [← InducedCategory.comp_hom]; rw [f.inv_hom_id]; rw [
+    rw [← InducedCategory.comp_hom]; rw [f.inv_hom_id]; rw [SheafedSpace.id_hom]
 
 中文:
 定义 isoOfSheafedSpaceIso
@@ -691,7 +691,7 @@ definition isoOfSheafedSpaceIso
   inv_hom_id := by
     ext : 1
     dsimp
-    rw [← InducedCategory.comp_hom]; rw [f.inv_hom_id]; rw [
+    rw [← InducedCategory.comp_hom]; rw [f.inv_hom_id]; rw [SheafedSpace.id_hom]
 
 Depends on / 依赖: f.hom, homOfSheafedSpaceHomOfIsIso
 -/
@@ -1580,7 +1580,10 @@ theorem preimage_basicOpen
     rw [← stalkMap_germ_apply]
     exact (f.stalkMap _).hom.isUnit_map hx
   · rintro ⟨hxU, hx⟩
-    simp only [Opens.map_coe, Set.mem_preimage, SetLike.mem_coe, t
+    simp only [Opens.map_coe, Set.mem_preimage, SetLike.mem_coe, toRingedSpace] at hx ⊢
+    rw [RingedSpace.mem_basicOpen _ s (f.base x) hxU]
+    rw [← stalkMap_germ_apply] at hx
+    exact (isUnit_map_iff (f.stalkMap x).hom _).mp hx
 
 中文:
 定理 preimage_basicOpen
@@ -1594,7 +1597,10 @@ theorem preimage_basicOpen
     rw [← stalkMap_germ_apply]
     exact (f.stalkMap _).hom.isUnit_map hx
   · rintro ⟨hxU, hx⟩
-    simp only [Opens.map_coe, Set.mem_preimage, SetLike.mem_coe, t
+    simp only [Opens.map_coe, Set.mem_preimage, SetLike.mem_coe, toRingedSpace] at hx ⊢
+    rw [RingedSpace.mem_basicOpen _ s (f.base x) hxU]
+    rw [← stalkMap_germ_apply] at hx
+    exact (isUnit_map_iff (f.stalkMap x).hom _).mp hx
 
 Depends on / 依赖: Opens.map_coe, RingedSpace, RingedSpace.mem_basicOpen, Set.mem_preimage, SetLike, SetLike.mem_coe, X.toRingedSpace.mem_basicOpen, f.base, f.stalkMap, hom.isUnit_map, isUnit_map, isUnit_map_iff, map_coe, mem_basicOpen, mem_coe, mem_preimage, stalkMap, stalkMap_germ_apply, toRingedSpace
 -/

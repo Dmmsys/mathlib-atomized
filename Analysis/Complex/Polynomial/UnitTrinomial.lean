@@ -36,7 +36,17 @@ theorem irreducible_of_coprime'
     rw [leadingCoeff_mul] at hp
     replace hp := isUnit_of_mul_isUnit_left hp
     rw [not_lt]; rw [Nat.le_zero] at this
-    rwa [eq_C_of_natDe
+    rwa [eq_C_of_natDegree_eq_zero this, isUnit_C, ← this]
+  intro hq''
+  rw [natDegree_pos_iff_degree_pos] at hq''
+  rw [← degree_map_eq_of_injective (algebraMap Int Complex).injective_int] at hq''
+  obtain ⟨z, hz⟩ := Complex.exists_root hq''
+  rw [IsRoot]; rw [eval_map_algebraMap] at hz
+  refine h z ⟨?_, ?_⟩
+  · obtain ⟨g', hg'⟩ := hq
+    rw [hg']; rw [aeval_mul]; rw [hz]; rw [zero_mul]
+  · obtain ⟨g', hg'⟩ := hq'
+    rw [hg']; rw [aeval_mul]; rw [hz]; rw [zero_mul]
 
 中文:
 定理 irreducible_of_coprime'
@@ -49,7 +59,17 @@ theorem irreducible_of_coprime'
     rw [leadingCoeff_mul] at hp
     replace hp := isUnit_of_mul_isUnit_left hp
     rw [not_lt]; rw [Nat.le_zero] at this
-    rwa [eq_C_of_natDe
+    rwa [eq_C_of_natDegree_eq_zero this, isUnit_C, ← this]
+  intro hq''
+  rw [natDegree_pos_iff_degree_pos] at hq''
+  rw [← degree_map_eq_of_injective (algebraMap Int Complex).injective_int] at hq''
+  obtain ⟨z, hz⟩ := Complex.exists_root hq''
+  rw [IsRoot]; rw [eval_map_algebraMap] at hz
+  refine h z ⟨?_, ?_⟩
+  · obtain ⟨g', hg'⟩ := hq
+    rw [hg']; rw [aeval_mul]; rw [hz]; rw [zero_mul]
+  · obtain ⟨g', hg'⟩ := hq'
+    rw [hg']; rw [aeval_mul]; rw [hz]; rw [zero_mul]
 
 Depends on / 依赖: Complex.exists_root, IsRoot, Nat.le_zero, algebraMap, degree_map_eq_of_injective, eq_C_of_natDegree_eq_zero, exists_root, hp.irreducible_of_coprime, hp.leadingCoeff_isUnit, injective_int, irreducible_of_coprime, isUnit_C, isUnit_of_mul_isUnit_left, le_zero, leadingCoeff_isUnit, leadingCoeff_mul, natDegree, natDegree_pos_iff_degree_pos, not_lt, q.natDegree
 -/

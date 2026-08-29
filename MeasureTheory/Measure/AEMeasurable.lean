@@ -285,7 +285,35 @@ theorem sum_measure
     rw [measure_toMeasurable]
     exact (h i).ae_eq_mk
   have hsm : MeasurableSet (⋂ i, s i) :=
-    MeasurableSet.iInter
+    MeasurableSet.iInter fun i => measurableSet_toMeasurable _ _
+  have hs : forall i x, x ∉ s i -> f x = (h i).mk f x := by
+    intro i x hx
+    contrapose! hx
+    exact subset_toMeasurable _ _ hx
+  set g : α -> β := (⋂ i, s i).piecewise (const α default) f
+  refine ⟨g, measurable_of_restrict_of_restrict_compl hsm ?_ ?_, ae_sum_iff.mpr fun i => ?_⟩
+  · rw [domRestrict_piecewise]
+    simp only [s]
+    exact measurable_const
+  · rw [domRestrict_piecewise_compl, compl_iInter]
+    intro t ht
+    refine ⟨⋃ i, (h i).mk f ⁻¹' t inter (s i)ᶜ, MeasurableSet.iUnion fun i =>
+      (measurable_mk _ ht).inter (measurableSet_toMeasurable _ _).compl, ?_⟩
+    ext ⟨x, hx⟩
+    simp only [mem_preimage, mem_iUnion, Set.domRestrict, mem_inter_iff,
+      mem_compl_iff] at hx ⊢
+    constructor
+    · rintro ⟨i, hxt, hxs⟩
+      rwa [hs _ _ hxs]
+    · rcases hx with ⟨i, hi⟩
+      rw [hs _ _ hi]
+      exact fun h => ⟨i, h, hi⟩
+  · refine measure_mono_null (fun x (hx : f x != g x) => ?_) (hsμ i)
+    contrapose hx
+    refine (piecewise_eq_of_notMem _ _ _ ?_).symm
+    exact fun h => hx (mem_iInter.1 h i)
+
+@[simp]
 
 中文:
 定理 sum_measure
@@ -300,7 +328,35 @@ theorem sum_measure
     rw [measure_toMeasurable]
     exact (h i).ae_eq_mk
   have hsm : MeasurableSet (⋂ i, s i) :=
-    MeasurableSet.iInter
+    MeasurableSet.iInter fun i => measurableSet_toMeasurable _ _
+  have hs : forall i x, x ∉ s i -> f x = (h i).mk f x := by
+    intro i x hx
+    contrapose! hx
+    exact subset_toMeasurable _ _ hx
+  set g : α -> β := (⋂ i, s i).piecewise (const α default) f
+  refine ⟨g, measurable_of_restrict_of_restrict_compl hsm ?_ ?_, ae_sum_iff.mpr fun i => ?_⟩
+  · rw [domRestrict_piecewise]
+    simp only [s]
+    exact measurable_const
+  · rw [domRestrict_piecewise_compl, compl_iInter]
+    intro t ht
+    refine ⟨⋃ i, (h i).mk f ⁻¹' t inter (s i)ᶜ, MeasurableSet.iUnion fun i =>
+      (measurable_mk _ ht).inter (measurableSet_toMeasurable _ _).compl, ?_⟩
+    ext ⟨x, hx⟩
+    simp only [mem_preimage, mem_iUnion, Set.domRestrict, mem_inter_iff,
+      mem_compl_iff] at hx ⊢
+    constructor
+    · rintro ⟨i, hxt, hxs⟩
+      rwa [hs _ _ hxs]
+    · rcases hx with ⟨i, hi⟩
+      rw [hs _ _ hi]
+      exact fun h => ⟨i, h, hi⟩
+  · refine measure_mono_null (fun x (hx : f x != g x) => ?_) (hsμ i)
+    contrapose hx
+    refine (piecewise_eq_of_notMem _ _ _ ?_).symm
+    exact fun h => hx (mem_iInter.1 h i)
+
+@[simp]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iInter, ae_eq_mk, classical, contrapose, iInter, inhabit, measurableSet_toMeasurable, measure_toMeasurable, nontriviality, piecewise, subset_toMeasurable, toMeasurable
 -/
@@ -750,7 +806,22 @@ theorem exists_ae_eq_range_subset
   refine ⟨g, ?_, ?_, ?_⟩
   · exact Measurable.piecewise (measurableSet_toMeasurable _ _) measurable_const H.measurable_mk
   · rintro _ ⟨x, rfl⟩
-    by_cases
+    by_cases hx : x in s
+    · simpa [g, hx] using h₀.some_mem
+    · simp only [g, hx, piecewise_eq_of_notMem, not_false_iff]
+      contrapose hx
+      apply subset_toMeasurable
+      simp +contextual only [hx, mem_compl_iff, mem_ofPred_eq, not_and,
+        not_false_iff, imp_true_iff]
+  · have A : μ (toMeasurable μ { x | f x = H.mk f x ∧ f x in t }ᶜ) = 0 := by
+      rw [measure_toMeasurable]; rw [← compl_mem_ae_iff]; rw [compl_compl]
+      exact H.ae_eq_mk.and ht
+    filter_upwards [compl_mem_ae_iff.2 A] with x hx
+    rw [mem_compl_iff] at hx
+    simp only [s, g, hx, piecewise_eq_of_notMem, not_false_iff]
+    contrapose! hx
+    apply subset_toMeasurable
+    simp only [hx, mem_compl_iff, mem_ofPred_eq, false_and, not_false_iff]
 
 中文:
 定理 存在_ae_eq_range_subset
@@ -762,7 +833,22 @@ theorem exists_ae_eq_range_subset
   refine ⟨g, ?_, ?_, ?_⟩
   · exact Measurable.piecewise (measurableSet_toMeasurable _ _) measurable_const H.measurable_mk
   · rintro _ ⟨x, rfl⟩
-    by_cases
+    by_cases hx : x in s
+    · simpa [g, hx] using h₀.some_mem
+    · simp only [g, hx, piecewise_eq_of_notMem, not_false_iff]
+      contrapose hx
+      apply subset_toMeasurable
+      simp +contextual only [hx, mem_compl_iff, mem_ofPred_eq, not_and,
+        not_false_iff, imp_true_iff]
+  · have A : μ (toMeasurable μ { x | f x = H.mk f x ∧ f x in t }ᶜ) = 0 := by
+      rw [measure_toMeasurable]; rw [← compl_mem_ae_iff]; rw [compl_compl]
+      exact H.ae_eq_mk.and ht
+    filter_upwards [compl_mem_ae_iff.2 A] with x hx
+    rw [mem_compl_iff] at hx
+    simp only [s, g, hx, piecewise_eq_of_notMem, not_false_iff]
+    contrapose! hx
+    apply subset_toMeasurable
+    simp only [hx, mem_compl_iff, mem_ofPred_eq, false_and, not_false_iff]
 
 Depends on / 依赖: H.measurable_mk, H.mk, Measurable, Measurable.piecewise, classical, contextual, contrapose, measurableSet_toMeasurable, measurable_const, measurable_mk, mem_compl_iff, mem_ofPred_eq, not_, not_and, not_false_iff, piecewise, piecewise_eq_of_notMem, some_mem, subset_toMeasurable, toMeasurable
 -/
@@ -826,7 +912,8 @@ theorem subtype_mk
   obtain ⟨g, g_meas, hg, fg⟩ : exists g : α -> β, Measurable g ∧ range g subseteq s ∧ f =ᵐ[μ] g :=
     h.exists_ae_eq_range_subset (Eventually.of_forall hfs) ⟨_, hfs default⟩
   refine ⟨codRestrict g s fun x => hg (mem_range_self _), Measurable.subtype_mk g_meas, ?_⟩
- 
+  filter_upwards [fg] with x hx
+  simpa [Subtype.ext_iff]
 
 中文:
 定理 subtype_mk
@@ -836,7 +923,8 @@ theorem subtype_mk
   obtain ⟨g, g_meas, hg, fg⟩ : exists g : α -> β, Measurable g ∧ range g subseteq s ∧ f =ᵐ[μ] g :=
     h.exists_ae_eq_range_subset (Eventually.of_forall hfs) ⟨_, hfs default⟩
   refine ⟨codRestrict g s fun x => hg (mem_range_self _), Measurable.subtype_mk g_meas, ?_⟩
- 
+  filter_upwards [fg] with x hx
+  simpa [Subtype.ext_iff]
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Measurable, Measurable.subtype_mk, Subtype, Subtype.ext_iff, codRestrict, exists_ae_eq_range_subset, ext_iff, filter_upwards, g_meas, h.exists_ae_eq_range_subset, inhabit, mem_range_self, nontriviality, of_forall, subseteq, subtype_mk
 -/
@@ -1153,7 +1241,12 @@ theorem aemeasurable_Ioi_of_forall_Ioc
   have Ioi_eq_iUnion : Ioi x = ⋃ n : Nat, Ioc x (u n) := by
     rw [iUnion_Ioc_eq_Ioi_self_iff.mpr _]
     exact fun y _ => (hu_tendsto.eventually (eventually_ge_atTop y)).exists
-  rw [Ioi_eq_iUnion]; rw [
+  rw [Ioi_eq_iUnion]; rw [aemeasurable_iUnion_iff]
+  intro n
+  rcases lt_or_ge x (u n) with h | h
+  · exact g_meas (u n) h
+  · rw [Ioc_eq_empty (not_lt.mpr h), Measure.restrict_empty]
+    exact aemeasurable_zero_measure
 
 中文:
 定理 aemeasurable_Ioi_of_对任意_Ioc
@@ -1164,7 +1257,12 @@ theorem aemeasurable_Ioi_of_forall_Ioc
   have Ioi_eq_iUnion : Ioi x = ⋃ n : Nat, Ioc x (u n) := by
     rw [iUnion_Ioc_eq_Ioi_self_iff.mpr _]
     exact fun y _ => (hu_tendsto.eventually (eventually_ge_atTop y)).exists
-  rw [Ioi_eq_iUnion]; rw [
+  rw [Ioi_eq_iUnion]; rw [aemeasurable_iUnion_iff]
+  intro n
+  rcases lt_or_ge x (u n) with h | h
+  · exact g_meas (u n) h
+  · rw [Ioc_eq_empty (not_lt.mpr h), Measure.restrict_empty]
+    exact aemeasurable_zero_measure
 
 Depends on / 依赖: Filter, Ioc_eq_empty, Ioi_eq_iUnion, Measure, Measure.restrict_empty, Nonempty, aemeasurable_iUnion_iff, aemeasurable_zero_measure, eventually, eventually_ge_atTop, exists_seq_tendsto, g_meas, hu_tendsto, hu_tendsto.eventually, iUnion_Ioc_eq_Ioi_self_iff, iUnion_Ioc_eq_Ioi_self_iff.mpr, lt_or_ge, not_lt, not_lt.mpr, restrict_empty
 -/
@@ -1201,7 +1299,10 @@ theorem aemeasurable_indicator_iff
   · intro h
     refine ⟨indicator s (h.mk f), h.measurable_mk.indicator hs, ?_⟩
     have A : s.indicator f =ᵐ[μ.restrict s] s.indicator (AEMeasurable.mk f h) :=
-      (indicator_ae_eq
+      (indicator_ae_eq_restrict hs).trans (h.ae_eq_mk.trans <| (indicator_ae_eq_restrict hs).symm)
+    have B : s.indicator f =ᵐ[μ.restrict sᶜ] s.indicator (AEMeasurable.mk f h) :=
+      (indicator_ae_eq_restrict_compl hs).trans (indicator_ae_eq_restrict_compl hs).symm
+    exact ae_of_ae_restrict_of_ae_restrict_compl _ A B
 
 中文:
 定理 aemeasurable_indicator_iff
@@ -1213,7 +1314,10 @@ theorem aemeasurable_indicator_iff
   · intro h
     refine ⟨indicator s (h.mk f), h.measurable_mk.indicator hs, ?_⟩
     have A : s.indicator f =ᵐ[μ.restrict s] s.indicator (AEMeasurable.mk f h) :=
-      (indicator_ae_eq
+      (indicator_ae_eq_restrict hs).trans (h.ae_eq_mk.trans <| (indicator_ae_eq_restrict hs).symm)
+    have B : s.indicator f =ᵐ[μ.restrict sᶜ] s.indicator (AEMeasurable.mk f h) :=
+      (indicator_ae_eq_restrict_compl hs).trans (indicator_ae_eq_restrict_compl hs).symm
+    exact ae_of_ae_restrict_of_ae_restrict_compl _ A B
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.mk, Measure, Measure.restrict_le_self, ae_eq_mk, h.ae_eq_mk.trans, h.measurable_mk.indicator, h.mk, h.mono_measure, indicator, indicator_ae_eq_restrict, indicator_ae_eq_restrict_c, indicator_ae_eq_restrict_compl, measurable_mk, mono_measure, restrict, restrict_le_self, s.indicator
 -/
@@ -1347,7 +1451,13 @@ theorem MeasureTheory.Measure.restrict_map_of_aemeasurable
       apply Measure.map_congr hf.ae_eq_mk
     _ = (μ.restrict <| hf.mk f ⁻¹' s).map (hf.mk f) := Measure.restrict_map hf.measurable_mk hs
     _ = (μ.restrict <| hf.mk f ⁻¹' s).map f :=
-      (Measure.map_congr (ae_restr
+      (Measure.map_congr (ae_restrict_of_ae hf.ae_eq_mk.symm))
+    _ = (μ.restrict <| f ⁻¹' s).map f := by
+      apply congr_arg
+      ext1 t ht
+      simp only [ht, Measure.restrict_apply]
+      apply measure_congr
+      apply (EventuallyEq.refl _ _).inter (hf.ae_eq_mk.symm.preimage s)
 
 中文:
 定理 测度论.测度.restrict_map_of_aemeasurable
@@ -1358,7 +1468,13 @@ theorem MeasureTheory.Measure.restrict_map_of_aemeasurable
       apply Measure.map_congr hf.ae_eq_mk
     _ = (μ.restrict <| hf.mk f ⁻¹' s).map (hf.mk f) := Measure.restrict_map hf.measurable_mk hs
     _ = (μ.restrict <| hf.mk f ⁻¹' s).map f :=
-      (Measure.map_congr (ae_restr
+      (Measure.map_congr (ae_restrict_of_ae hf.ae_eq_mk.symm))
+    _ = (μ.restrict <| f ⁻¹' s).map f := by
+      apply congr_arg
+      ext1 t ht
+      simp only [ht, Measure.restrict_apply]
+      apply measure_congr
+      apply (EventuallyEq.refl _ _).inter (hf.ae_eq_mk.symm.preimage s)
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.refl, Measure, Measure.map_congr, Measure.restrict_apply, Measure.restrict_map, NoBotOrder, NoMinOrder, Preorder, ae_eq_mk, ae_restrict_of_ae, congr_arg, hf.ae_eq_mk, hf.ae_eq_mk.symm, hf.ae_eq_mk.symm.preimage, hf.measurable_mk, hf.mk, map_congr, measurable_mk, measure_congr
 -/
@@ -1410,7 +1526,21 @@ lemma MeasureTheory.NullMeasurable.aemeasurable
   choose! T hTf hTm hTeq using fun s hs => (h <| .basic s hs).exists_measurable_subset_ae_eq
   choose! U hUf hUm hUeq using fun s hs => (h <| .basic s hs).exists_measurable_superset_ae_eq
   set v := ⋃ s in S, U s \ T s
-  ha
+  have hvm : MeasurableSet v := .biUnion hSc fun s hs => (hUm s hs).diff (hTm s hs)
+have hvμ : μ v = 0 := (measure_biUnion_null_iff hSc).2 fun s hs => ae_le_set.1
+    ((hUeq s hs).trans (hTeq s hs).symm).le
+  refine ⟨v.piecewise (fun _ => default) f, ?_, measure_mono_null (fun x =>
+    not_imp_comm.2 fun hxv => (piecewise_eq_of_notMem _ _ _ hxv).symm) hvμ⟩
+  refine measurable_of_restrict_of_restrict_compl hvm ?_ ?_
+  · rw [domRestrict_piecewise]
+    apply measurable_const
+  · rw [domRestrict_piecewise_compl, domRestrict_eq]
+    refine measurable_generateFrom fun s hs => .of_subtype_image ?_
+    rw [preimage_comp]; rw [Subtype.image_preimage_coe]
+    convert! (hTm s hs).diff hvm using 1
+    rw [inter_comm]
+    refine Set.ext fun x => and_congr_left fun hxv => ⟨fun hx => ?_, fun hx => hTf s hs hx⟩
+exact by_contra fun hx' => hxv mem_biUnion hs ⟨hUf s hs hx, hx'⟩
 
 中文:
 引理 测度论.NullMeasurable.aemeasurable
@@ -1422,7 +1552,21 @@ lemma MeasureTheory.NullMeasurable.aemeasurable
   choose! T hTf hTm hTeq using fun s hs => (h <| .basic s hs).exists_measurable_subset_ae_eq
   choose! U hUf hUm hUeq using fun s hs => (h <| .basic s hs).exists_measurable_superset_ae_eq
   set v := ⋃ s in S, U s \ T s
-  ha
+  have hvm : MeasurableSet v := .biUnion hSc fun s hs => (hUm s hs).diff (hTm s hs)
+have hvμ : μ v = 0 := (measure_biUnion_null_iff hSc).2 fun s hs => ae_le_set.1
+    ((hUeq s hs).trans (hTeq s hs).symm).le
+  refine ⟨v.piecewise (fun _ => default) f, ?_, measure_mono_null (fun x =>
+    not_imp_comm.2 fun hxv => (piecewise_eq_of_notMem _ _ _ hxv).symm) hvμ⟩
+  refine measurable_of_restrict_of_restrict_compl hvm ?_ ?_
+  · rw [domRestrict_piecewise]
+    apply measurable_const
+  · rw [domRestrict_piecewise_compl, domRestrict_eq]
+    refine measurable_generateFrom fun s hs => .of_subtype_image ?_
+    rw [preimage_comp]; rw [Subtype.image_preimage_coe]
+    convert! (hTm s hs).diff hvm using 1
+    rw [inter_comm]
+    refine Set.ext fun x => and_congr_left fun hxv => ⟨fun hx => ?_, fun hx => hTf s hs hx⟩
+exact by_contra fun hx' => hxv mem_biUnion hs ⟨hUf s hs hx, hx'⟩
 
 Depends on / 依赖: MeasurableSet, ae_le_set, biUnion, classical, exists_measurable_subset_ae_eq, exists_measurable_superset_ae_eq, inhabit, measure_biUnion_null_iff, nontriviality, v.piece
 -/
@@ -1463,7 +1607,11 @@ lemma MeasureTheory.NullMeasurable.aemeasurable_of_aerange
   · rw [← μ.ae_completion] at hft
     obtain ⟨f', hf'm, hf't, hff'⟩ :
         exists f' : α -> β, NullMeasurable f' μ ∧ range f' subseteq t ∧ f =ᵐ[μ] f' :=
-      h.measu
+      h.measurable'.aemeasurable.exists_ae_eq_range_subset hft hne
+    rw [range_subset_iff] at hf't
+    lift f' to α -> t using hf't
+    replace hf'm : NullMeasurable f' μ := hf'm.measurable'.subtype_mk
+    exact (measurable_subtype_coe.comp_aemeasurable hf'm.aemeasurable).congr hff'.symm
 
 中文:
 引理 测度论.NullMeasurable.aemeasurable_of_aerange
@@ -1475,7 +1623,11 @@ lemma MeasureTheory.NullMeasurable.aemeasurable_of_aerange
   · rw [← μ.ae_completion] at hft
     obtain ⟨f', hf'm, hf't, hff'⟩ :
         exists f' : α -> β, NullMeasurable f' μ ∧ range f' subseteq t ∧ f =ᵐ[μ] f' :=
-      h.measu
+      h.measurable'.aemeasurable.exists_ae_eq_range_subset hft hne
+    rw [range_subset_iff] at hf't
+    lift f' to α -> t using hf't
+    replace hf'm : NullMeasurable f' μ := hf'm.measurable'.subtype_mk
+    exact (measurable_subtype_coe.comp_aemeasurable hf'm.aemeasurable).congr hff'.symm
 
 Depends on / 依赖: Classical, Classical.arbitrary, NullMeasurable, ae_completion, aemeasurable, aemeasurable.exists_ae_eq_range_subset, aemeasurable_zero_measure, arbitrary, classical, comp_aemeasurable, eq_empty_or_nonempty, exists_ae_eq_range_subset, exists_lt, h.measurable, m.measurable, measurable, measurable_subtype_coe, measurable_subtype_coe.comp_aemeasurable, range_subset_iff, replace
 -/

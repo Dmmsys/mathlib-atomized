@@ -46,7 +46,11 @@ lemma strictConcaveOn_rpow
   let f := NNReal.orderIsoRpow (1 / p) hp₀'
   have h₁ : StrictConvexOn Real>=0 univ f := by
     refine ⟨convex_univ, fun x _ y _ hxy a b ha hb hab => ?_⟩
-    exact (strictConvexOn_rpow 
+    exact (strictConvexOn_rpow hp₁').2 x.2 y.2 (by simp [hxy]) ha hb (by simp; norm_cast)
+  have h₂ : forall x, f.symm x = x ^ p := by simp [f, NNReal.orderIsoRpow_symm_eq]
+  refine ⟨convex_univ, fun x mx y my hxy a b ha hb hab => ?_⟩
+  simp only [← h₂]
+  exact (f.strictConcaveOn_symm h₁).2 mx my hxy ha hb hab
 
 中文:
 引理 strictConcaveOn_rpow
@@ -57,7 +61,11 @@ lemma strictConcaveOn_rpow
   let f := NNReal.orderIsoRpow (1 / p) hp₀'
   have h₁ : StrictConvexOn Real>=0 univ f := by
     refine ⟨convex_univ, fun x _ y _ hxy a b ha hb hab => ?_⟩
-    exact (strictConvexOn_rpow 
+    exact (strictConvexOn_rpow hp₁').2 x.2 y.2 (by simp [hxy]) ha hb (by simp; norm_cast)
+  have h₂ : forall x, f.symm x = x ^ p := by simp [f, NNReal.orderIsoRpow_symm_eq]
+  refine ⟨convex_univ, fun x mx y my hxy a b ha hb hab => ?_⟩
+  simp only [← h₂]
+  exact (f.strictConcaveOn_symm h₁).2 mx my hxy ha hb hab
 
 Depends on / 依赖: NNReal, NNReal.orderIsoRpow, NNReal.orderIsoRpow_symm_eq, StrictConvexOn, convex_univ, div_pos, f.symm, one_lt_div, orderIsoRpow, orderIsoRpow_symm_eq, strictConvexOn_rpow, zero_lt_one
 -/
@@ -155,7 +163,9 @@ lemma strictConcaveOn_rpow
   let a' : Real>=0 := .mk a ha.le
   let b' : Real>=0 := .mk b hb.le
   have hxy' : x' != y' := Subtype.coe_ne_coe.1 hxy
-  have hab' : a' + b' = 1 := by ext; simp [a', b', ha
+  have hab' : a' + b' = 1 := by ext; simp [a', b', hab]
+  exact_mod_cast (NNReal.strictConcaveOn_rpow hp₀ hp₁).2 (Set.mem_univ x') (Set.mem_univ y')
+    hxy' (mod_cast ha) (mod_cast hb) hab'
 
 中文:
 引理 strictConcaveOn_rpow
@@ -167,7 +177,9 @@ lemma strictConcaveOn_rpow
   let a' : Real>=0 := .mk a ha.le
   let b' : Real>=0 := .mk b hb.le
   have hxy' : x' != y' := Subtype.coe_ne_coe.1 hxy
-  have hab' : a' + b' = 1 := by ext; simp [a', b', ha
+  have hab' : a' + b' = 1 := by ext; simp [a', b', hab]
+  exact_mod_cast (NNReal.strictConcaveOn_rpow hp₀ hp₁).2 (Set.mem_univ x') (Set.mem_univ y')
+    hxy' (mod_cast ha) (mod_cast hb) hab'
 
 Depends on / 依赖: NNReal, NNReal.strictConcaveOn_rpow, Set.mem_univ, Subtype, Subtype.coe_ne_coe, coe_ne_coe, convex_Ici, ha.le, hb.le, mem_univ, mod_cast, strictConcaveOn_rpow
 -/

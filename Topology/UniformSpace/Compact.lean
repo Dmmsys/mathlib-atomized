@@ -39,7 +39,13 @@ theorem lebesgue_number_lemma
   have : forall x in K, exists i, exists V in 𝓤 α, ball x (V ○ V) subseteq U i := fun x hx => by
     obtain ⟨i, hi⟩ := mem_iUnion.1 (hcover hx)
     rw [← (hopen i).mem_nhds_iff]; rw [nhds_eq_comap_uniformity]; rw [← lift'_comp_uniformity] at hi
-    exact ⟨i, (((basis_sets _).lift' <| monotone_id.
+    exact ⟨i, (((basis_sets _).lift' <| monotone_id.relComp monotone_id).comap _).mem_iff.1 hi⟩
+  choose ind W hW hWU using this
+  rcases hK.elim_nhds_subcover' (fun x hx => ball x (W x hx)) (fun x hx => ball_mem_nhds _ (hW x hx))
+    with ⟨t, ht⟩
+  refine ⟨⋂ x in t, W x x.2, (biInter_finset_mem _).2 fun x _ => hW x x.2, fun x hx => ?_⟩
+  rcases mem_iUnion₂.1 (ht hx) with ⟨y, hyt, hxy⟩
+  exact ⟨ind y y.2, fun z hz => hWU _ _ ⟨x, hxy, mem_iInter₂.1 hz _ hyt⟩⟩
 
 中文:
 定理 lebesgue_number_lemma
@@ -48,7 +54,13 @@ theorem lebesgue_number_lemma
   have : forall x in K, exists i, exists V in 𝓤 α, ball x (V ○ V) subseteq U i := fun x hx => by
     obtain ⟨i, hi⟩ := mem_iUnion.1 (hcover hx)
     rw [← (hopen i).mem_nhds_iff]; rw [nhds_eq_comap_uniformity]; rw [← lift'_comp_uniformity] at hi
-    exact ⟨i, (((basis_sets _).lift' <| monotone_id.
+    exact ⟨i, (((basis_sets _).lift' <| monotone_id.relComp monotone_id).comap _).mem_iff.1 hi⟩
+  choose ind W hW hWU using this
+  rcases hK.elim_nhds_subcover' (fun x hx => ball x (W x hx)) (fun x hx => ball_mem_nhds _ (hW x hx))
+    with ⟨t, ht⟩
+  refine ⟨⋂ x in t, W x x.2, (biInter_finset_mem _).2 fun x _ => hW x x.2, fun x hx => ?_⟩
+  rcases mem_iUnion₂.1 (ht hx) with ⟨y, hyt, hxy⟩
+  exact ⟨ind y y.2, fun z hz => hWU _ _ ⟨x, hxy, mem_iInter₂.1 hz _ hyt⟩⟩
 
 Depends on / 依赖: _comp_uniformity, ball_mem_nhds, basis_sets, elim_nhds_subcover, hK.elim_nhds_subcover, hcover, mem_iUnion, mem_iff, mem_nhds_iff, monotone_id, monotone_id.relComp, nhds_eq_comap_uniformity, relComp, subseteq
 -/
@@ -325,7 +337,11 @@ theorem IsCompact.nhdsSet_basis_uniformity
       have HKU : K subseteq ⋃ _ : Unit, interior U := by
         simpa only [iUnion_const, subset_interior_iff_mem_nhdsSet] using H
       obtain ⟨i, hpi, hi⟩ : exists i, p i ∧ ⋃ x in K, ball x (V i) subseteq interior U := by
-        simpa using hbasis.lebesgue_number
+        simpa using hbasis.lebesgue_number_lemma hK (fun _ => isOpen_interior) HKU
+      exact ⟨i, hpi, hi.trans interior_subset⟩
+    · rintro ⟨i, hpi, hi⟩
+      refine mem_of_superset (bUnion_mem_nhdsSet fun x _ => ?_) hi
+exact ball_mem_nhds _ hbasis.mem_of_mem hpi
 
 中文:
 定理 是紧集.nhdsSet_basis_uniformity
@@ -336,7 +352,11 @@ theorem IsCompact.nhdsSet_basis_uniformity
       have HKU : K subseteq ⋃ _ : Unit, interior U := by
         simpa only [iUnion_const, subset_interior_iff_mem_nhdsSet] using H
       obtain ⟨i, hpi, hi⟩ : exists i, p i ∧ ⋃ x in K, ball x (V i) subseteq interior U := by
-        simpa using hbasis.lebesgue_number
+        simpa using hbasis.lebesgue_number_lemma hK (fun _ => isOpen_interior) HKU
+      exact ⟨i, hpi, hi.trans interior_subset⟩
+    · rintro ⟨i, hpi, hi⟩
+      refine mem_of_superset (bUnion_mem_nhdsSet fun x _ => ?_) hi
+exact ball_mem_nhds _ hbasis.mem_of_mem hpi
 
 Depends on / 依赖: bUnion_mem_nhdsSet, ball_mem_nhds, hbasis, hbasis.lebesgue_number_lemma, hbasis.mem_of_mem, hi.trans, iUnion_const, interior, interior_subset, isOpen_interior, lebesgue_number_lemma, mem_of_mem, mem_of_superset, subset_interior_iff_mem_nhdsSet, subseteq
 -/
@@ -367,7 +387,11 @@ theorem Disjoint.exists_uniform_thickening
   rw [(hA.nhdsSet_basis_uniformity (Filter.basis_sets _)).mem_iff] at this
   rcases this with ⟨U, hU, hUAB⟩
   rcases comp_symm_mem_uniformity_sets hU with ⟨V, hV, hVsymm, hVU⟩
-  refine ⟨V, hV, Set.disjoint_left.mpr fun x => ?
+  refine ⟨V, hV, Set.disjoint_left.mpr fun x => ?_⟩
+  simp only [mem_iUnion₂]
+  rintro ⟨a, ha, hxa⟩ ⟨b, hb, hxb⟩
+  rw [mem_ball_symmetry] at hxa hxb
+  exact hUAB (mem_iUnion₂_of_mem ha <| hVU <| mem_comp_of_mem_ball hxa hxb) hb
 
 中文:
 定理 Disjoint.存在_uniform_thickening
@@ -377,7 +401,11 @@ theorem Disjoint.exists_uniform_thickening
   rw [(hA.nhdsSet_basis_uniformity (Filter.basis_sets _)).mem_iff] at this
   rcases this with ⟨U, hU, hUAB⟩
   rcases comp_symm_mem_uniformity_sets hU with ⟨V, hV, hVsymm, hVU⟩
-  refine ⟨V, hV, Set.disjoint_left.mpr fun x => ?
+  refine ⟨V, hV, Set.disjoint_left.mpr fun x => ?_⟩
+  simp only [mem_iUnion₂]
+  rintro ⟨a, ha, hxa⟩ ⟨b, hb, hxb⟩
+  rw [mem_ball_symmetry] at hxa hxb
+  exact hUAB (mem_iUnion₂_of_mem ha <| hVU <| mem_comp_of_mem_ball hxa hxb) hb
 
 Depends on / 依赖: Filter, Filter.basis_sets, Set.disjoint_left.mpr, basis_sets, comp_symm_mem_uniformity_sets, disjoint_left, h.le_compl_right, hA.nhdsSet_basis_uniformity, hB.isOpen_compl.mem_nhdsSet.mpr, hVsymm, isOpen_compl, le_compl_right, mem_ball_symmetry, mem_comp_of_mem_ball, mem_iff, mem_nhdsSet, nhdsSet_basis_uniformity
 -/
@@ -464,7 +492,9 @@ theorem nhdsSet_diagonal_eq_uniformity
       (fun p : (α × α) × α × α => ((p.1.1, p.2.1), p.1.2, p.2.2)) ⁻¹' U ×ˢ U := by
     rw [uniformity_prod_eq_comap_prod]
     exact (𝓤 α).basis_sets.prod_self.comap _
-  refine (isCom
+  refine (isCompact_diagonal.nhdsSet_basis_uniformity this).ge_iff.2 fun U hU => ?_
+  exact mem_of_superset hU fun ⟨x, y⟩ hxy => mem_iUnion₂.2
+    ⟨(x, x), rfl, refl_mem_uniformity hU, hxy⟩
 
 中文:
 定理 nhdsSet_diagonal_eq_uniformity
@@ -477,7 +507,9 @@ theorem nhdsSet_diagonal_eq_uniformity
       (fun p : (α × α) × α × α => ((p.1.1, p.2.1), p.1.2, p.2.2)) ⁻¹' U ×ˢ U := by
     rw [uniformity_prod_eq_comap_prod]
     exact (𝓤 α).basis_sets.prod_self.comap _
-  refine (isCom
+  refine (isCompact_diagonal.nhdsSet_basis_uniformity this).ge_iff.2 fun U hU => ?_
+  exact mem_of_superset hU fun ⟨x, y⟩ hxy => mem_iUnion₂.2
+    ⟨(x, x), rfl, refl_mem_uniformity hU, hxy⟩
 
 Depends on / 依赖: HasBasis, antisymm, basis_sets, basis_sets.prod_self.comap, ge_iff, isCompact_diagonal, isCompact_diagonal.nhdsSet_basis_uniformity, mem_of_superset, nhdsSet_basis_uniformity, nhdsSet_diagonal_le_uniformity, nhdsSet_diagonal_le_uniformity.antisymm, prod_self, refl_mem_uniformity, uniformity_prod_eq_comap_prod
 -/

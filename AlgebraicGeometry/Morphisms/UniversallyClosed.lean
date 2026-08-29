@@ -345,7 +345,39 @@ lemma compactSpace_of_universallyClosed
   let T : Scheme := Spec (.of <| MvPolynomial 𝒰.I₀ K)
   let q : T ⟶ Spec (.of K) := Spec.map (CommRingCat.ofHom MvPolynomial.C)
   let Ti (i : 𝒰.I₀) : T.Opens := basicOpen (MvPolynomial.X i)
-  let
+  let fT : pullback f q ⟶ T := pullback.snd f q
+  let p : pullback f q ⟶ X := pullback.fst f q
+  let Z : Set (pullback f q :) := (⨆ i, fT ⁻¹ᵁ (Ti i) ⊓ p ⁻¹ᵁ (U i) : (pullback f q).Opens)ᶜ
+  have hZ : IsClosed Z := by
+    simp only [Z, isClosed_compl_iff, Opens.coe_iSup, Opens.coe_inf, Opens.map_coe]
+    exact isOpen_iUnion fun i => (fT.continuous.1 _ (Ti i).2).inter (p.continuous.1 _ (U i).2)
+  let Zc : T.Opens := ⟨(fT '' Z)ᶜ, (fT.isClosedMap _ hZ).isOpen_compl⟩
+  let ψ : MvPolynomial 𝒰.I₀ K ->ₐ[K] K := MvPolynomial.aeval (fun _ => 1)
+  let t : T := Spec.map (CommRingCat.ofHom ψ.toRingHom) default
+  have ht (i : 𝒰.I₀) : t in Ti i := show ψ (.X i) != 0 by simp [ψ]
+  have htZc : t in Zc := by
+    intro ⟨z, hz, hzt⟩
+    suffices exists i, fT z in Ti i ∧ p z in U i from hz (by simpa)
+    exact ⟨𝒰.idx (p z), hzt ▸ ht _, by simpa [U] using 𝒰.covers (p z)⟩
+  obtain ⟨U', ⟨g, rfl⟩, htU', hU'le⟩ := Opens.isBasis_iff_nbhd.mp isBasis_basic_opens htZc
+  let σ : Finset 𝒰.I₀ := MvPolynomial.vars g
+  let φ : MvPolynomial 𝒰.I₀ K ->+* MvPolynomial 𝒰.I₀ K :=
+    (MvPolynomial.aeval fun i : 𝒰.I₀ => if i in σ then MvPolynomial.X i else 0).toRingHom
+  let t' : T := Spec.map (CommRingCat.ofHom φ) t
+  have ht'g : t' in PrimeSpectrum.basicOpen g :=
+    show φ g ∉ t.asIdeal from (show φ g = g from aeval_ite_mem_eq_self g subset_rfl).symm ▸ htU'
+  have h : t' ∉ fT '' Z := hU'le ht'g
+  suffices ⋃ i in σ, (U i).1 = Set.univ from
+    ⟨this ▸ Finset.isCompact_biUnion _ fun i _ => isCompact_range (𝒰.f i).continuous⟩
+  rw [Set.iUnion₂_eq_univ_iff]
+  contrapose! h
+  obtain ⟨x, hx⟩ := h
+  obtain ⟨z, rfl, hzr⟩ := exists_preimage_pullback x t' (Subsingleton.elim (f x) (q t'))
+  suffices forall i, t in (Ti i).comap ⟨_, continuous_comap φ⟩ -> p z ∉ U i from
+    ⟨z, by simpa [Z, p, fT, hzr], hzr⟩
+  intro i hi₁ hi₂
+  rw [comap_basicOpen]; rw [show φ (.X i) = 0 by simpa [φ] using (hx i · hi₂), basicOpen_zero] at hi₁
+  cases hi₁
 
 中文:
 引理 compactSpace_of_universallyClosed
@@ -356,7 +388,39 @@ lemma compactSpace_of_universallyClosed
   let T : Scheme := Spec (.of <| MvPolynomial 𝒰.I₀ K)
   let q : T ⟶ Spec (.of K) := Spec.map (CommRingCat.ofHom MvPolynomial.C)
   let Ti (i : 𝒰.I₀) : T.Opens := basicOpen (MvPolynomial.X i)
-  let
+  let fT : pullback f q ⟶ T := pullback.snd f q
+  let p : pullback f q ⟶ X := pullback.fst f q
+  let Z : Set (pullback f q :) := (⨆ i, fT ⁻¹ᵁ (Ti i) ⊓ p ⁻¹ᵁ (U i) : (pullback f q).Opens)ᶜ
+  have hZ : IsClosed Z := by
+    simp only [Z, isClosed_compl_iff, Opens.coe_iSup, Opens.coe_inf, Opens.map_coe]
+    exact isOpen_iUnion fun i => (fT.continuous.1 _ (Ti i).2).inter (p.continuous.1 _ (U i).2)
+  let Zc : T.Opens := ⟨(fT '' Z)ᶜ, (fT.isClosedMap _ hZ).isOpen_compl⟩
+  let ψ : MvPolynomial 𝒰.I₀ K ->ₐ[K] K := MvPolynomial.aeval (fun _ => 1)
+  let t : T := Spec.map (CommRingCat.ofHom ψ.toRingHom) default
+  have ht (i : 𝒰.I₀) : t in Ti i := show ψ (.X i) != 0 by simp [ψ]
+  have htZc : t in Zc := by
+    intro ⟨z, hz, hzt⟩
+    suffices exists i, fT z in Ti i ∧ p z in U i from hz (by simpa)
+    exact ⟨𝒰.idx (p z), hzt ▸ ht _, by simpa [U] using 𝒰.covers (p z)⟩
+  obtain ⟨U', ⟨g, rfl⟩, htU', hU'le⟩ := Opens.isBasis_iff_nbhd.mp isBasis_basic_opens htZc
+  let σ : Finset 𝒰.I₀ := MvPolynomial.vars g
+  let φ : MvPolynomial 𝒰.I₀ K ->+* MvPolynomial 𝒰.I₀ K :=
+    (MvPolynomial.aeval fun i : 𝒰.I₀ => if i in σ then MvPolynomial.X i else 0).toRingHom
+  let t' : T := Spec.map (CommRingCat.ofHom φ) t
+  have ht'g : t' in PrimeSpectrum.basicOpen g :=
+    show φ g ∉ t.asIdeal from (show φ g = g from aeval_ite_mem_eq_self g subset_rfl).symm ▸ htU'
+  have h : t' ∉ fT '' Z := hU'le ht'g
+  suffices ⋃ i in σ, (U i).1 = Set.univ from
+    ⟨this ▸ Finset.isCompact_biUnion _ fun i _ => isCompact_range (𝒰.f i).continuous⟩
+  rw [Set.iUnion₂_eq_univ_iff]
+  contrapose! h
+  obtain ⟨x, hx⟩ := h
+  obtain ⟨z, rfl, hzr⟩ := exists_preimage_pullback x t' (Subsingleton.elim (f x) (q t'))
+  suffices forall i, t in (Ti i).comap ⟨_, continuous_comap φ⟩ -> p z ∉ U i from
+    ⟨z, by simpa [Z, p, fT, hzr], hzr⟩
+  intro i hi₁ hi₂
+  rw [comap_basicOpen]; rw [show φ (.X i) = 0 by simpa [φ] using (hx i · hi₂), basicOpen_zero] at hi₁
+  cases hi₁
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, IsClosed, MvPolynomial, MvPolynomial.C, MvPolynomial.X, OpenCover, Scheme, Spec.map, T.Opens, X.OpenCover, X.Opens, X.affineCover, affineCover, basicOpen, classical, opensRange, pullback, pullback.fst, pullback.snd
 -/
@@ -416,7 +480,7 @@ lemma Scheme.Hom.isProperMap
   refine ⟨f.continuous, f.isClosedMap, fun y => ?_⟩
   have := compactSpace_of_universallyClosed (pullback.snd f (Y.fromSpecResidueField y))
   rw [← Scheme.range_fromSpecResidueField]; rw [← Scheme.Pullback.range_fst]
-  exact isCompact_range (S
+  exact isCompact_range (Scheme.Hom.continuous _)
 
 中文:
 引理 概形.态射.isProperMap
@@ -427,7 +491,7 @@ lemma Scheme.Hom.isProperMap
   refine ⟨f.continuous, f.isClosedMap, fun y => ?_⟩
   have := compactSpace_of_universallyClosed (pullback.snd f (Y.fromSpecResidueField y))
   rw [← Scheme.range_fromSpecResidueField]; rw [← Scheme.Pullback.range_fst]
-  exact isCompact_range (S
+  exact isCompact_range (Scheme.Hom.continuous _)
 
 Depends on / 依赖: Pullback, Scheme, Scheme.Hom.continuous, Scheme.Pullback.range_fst, Scheme.range_fromSpecResidueField, Y.fromSpecResidueField, compactSpace_of_universallyClosed, continuous, f.continuous, f.isClosedMap, fromSpecResidueField, isClosedMap, isCompact_range, isProperMap_iff_isClosedMap_and_compact_fibers, pullback, pullback.snd, range_fromSpecResidueField, range_fst
 -/
@@ -452,7 +516,8 @@ lemma universallyClosed_eq_universallySpecializing
   apply le_antisymm
   · rw [← universally_eq_iff (P := @UniversallyClosed).mpr inferInstance]
     exact universally_mono fun X Y f H => ⟨f.isClosedMap.specializingMap, inferInstance⟩
-  · rw [universallyClos
+  · rw [universallyClosed_eq]
+    exact universally_mono fun X Y f ⟨h₁, h₂⟩ => (isClosedMap_iff_specializingMap _).mpr h₁
 
 中文:
 引理 universallyClosed_eq_universallySpecializing
@@ -461,7 +526,8 @@ lemma universallyClosed_eq_universallySpecializing
   apply le_antisymm
   · rw [← universally_eq_iff (P := @UniversallyClosed).mpr inferInstance]
     exact universally_mono fun X Y f H => ⟨f.isClosedMap.specializingMap, inferInstance⟩
-  · rw [universallyClos
+  · rw [universallyClosed_eq]
+    exact universally_mono fun X Y f ⟨h₁, h₂⟩ => (isClosedMap_iff_specializingMap _).mpr h₁
 
 Depends on / 依赖: QuasiCompact, UniversallyClosed, f.isClosedMap.specializingMap, isClosedMap, isClosedMap_iff_specializingMap, le_antisymm, specializingMap, universallyClosed_eq, universally_eq_iff, universally_inf, universally_mono
 -/

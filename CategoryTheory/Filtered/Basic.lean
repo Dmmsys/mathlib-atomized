@@ -331,7 +331,7 @@ theorem of_right_adjoint
         h.homEquiv _ _ (leftToMax _ _), h.homEquiv _ _ (rightToMax _ _), ⟨⟩⟩
     cocone_maps := fun X Y f g =>
       ⟨R.obj (coeq (L.map f) (L.map g)), h.homEquiv _ _ (coeqHom _ _), by
-        rw [← h.homEquiv_naturality_left]; rw [
+        rw [← h.homEquiv_naturality_left]; rw [← h.homEquiv_naturality_left]; rw [coeq_condition]⟩ }
 
 中文:
 定理 of_right_adjoint
@@ -342,7 +342,7 @@ theorem of_right_adjoint
         h.homEquiv _ _ (leftToMax _ _), h.homEquiv _ _ (rightToMax _ _), ⟨⟩⟩
     cocone_maps := fun X Y f g =>
       ⟨R.obj (coeq (L.map f) (L.map g)), h.homEquiv _ _ (coeqHom _ _), by
-        rw [← h.homEquiv_naturality_left]; rw [
+        rw [← h.homEquiv_naturality_left]; rw [← h.homEquiv_naturality_left]; rw [coeq_condition]⟩ }
 
 Depends on / 依赖: L.map, L.obj, R.obj, cocone_maps, cocone_objs, coeqHom, coeq_condition, h.homEquiv, h.homEquiv_naturality_left, homEquiv, homEquiv_naturality_left, leftToMax, rightToMax
 -/
@@ -422,7 +422,7 @@ theorem sup_objs_exists
     rintro Y mY
     obtain rfl | h := eq_or_ne Y X
     · exact ⟨leftToMax _ _⟩
-    · exact ⟨(w' (Finset.mem_of
+    · exact ⟨(w' (Finset.mem_of_mem_insert_of_ne mY h)).some ≫ rightToMax _ _⟩
 
 中文:
 定理 sup_objs_存在
@@ -438,7 +438,7 @@ theorem sup_objs_exists
     rintro Y mY
     obtain rfl | h := eq_or_ne Y X
     · exact ⟨leftToMax _ _⟩
-    · exact ⟨(w' (Finset.mem_of
+    · exact ⟨(w' (Finset.mem_of_mem_insert_of_ne mY h)).some ≫ rightToMax _ _⟩
 
 Depends on / 依赖: Classical, Classical.choice, Finset, Finset.induction, Finset.mem_of_mem_insert_of_ne, IsFiltered, IsFiltered.nonempty, choice, classical, eq_or_ne, insert, leftToMax, mem_of_mem_insert_of_ne, nonempty, rightToMax
 -/
@@ -470,7 +470,17 @@ theorem sup_exists
   | insert h' H' nmf h'' =>
     obtain ⟨X, Y, mX, mY, f⟩ := h'
     obtain ⟨S', T', w'⟩ := h''
-    refine ⟨coeq (f ≫ T' mY) (T' mX)
+    refine ⟨coeq (f ≫ T' mY) (T' mX), fun mZ => T' mZ ≫ coeqHom (f ≫ T' mY) (T' mX), ?_⟩
+    intro X' Y' mX' mY' f' mf'
+    rw [← Category.assoc]
+    by_cases h : X = X' ∧ Y = Y'
+    · rcases h with ⟨rfl, rfl⟩
+      grind [coeq_condition]
+    · rw [@w' _ _ mX' mY' f' _]
+      apply Finset.mem_of_mem_insert_of_ne mf'
+      contrapose h
+      obtain ⟨rfl, h⟩ := h
+      trivial
 
 中文:
 定理 sup_存在
@@ -483,7 +493,17 @@ theorem sup_exists
   | insert h' H' nmf h'' =>
     obtain ⟨X, Y, mX, mY, f⟩ := h'
     obtain ⟨S', T', w'⟩ := h''
-    refine ⟨coeq (f ≫ T' mY) (T' mX)
+    refine ⟨coeq (f ≫ T' mY) (T' mX), fun mZ => T' mZ ≫ coeqHom (f ≫ T' mY) (T' mX), ?_⟩
+    intro X' Y' mX' mY' f' mf'
+    rw [← Category.assoc]
+    by_cases h : X = X' ∧ Y = Y'
+    · rcases h with ⟨rfl, rfl⟩
+      grind [coeq_condition]
+    · rw [@w' _ _ mX' mY' f' _]
+      apply Finset.mem_of_mem_insert_of_ne mf'
+      contrapose h
+      obtain ⟨rfl, h⟩ := h
+      trivial
 
 Depends on / 依赖: Category, Category.assoc, Finset, Finset.induction, Finset.mem_of, classical, coeqHom, coeq_condition, insert, mem_of, sup_objs_exists
 -/
@@ -584,7 +604,15 @@ theorem cocone_nonempty
   let H : Finset (Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) :=
     Finset.univ.biUnion fun X : J => Finset.univ.biUnion fun Y : J =>
       Finset.univ.image fun f : X ⟶ Y => ⟨F.obj X, F.obj Y, by simp [O], by simp [O], F.map f⟩
-  obtain ⟨Z, f, w
+  obtain ⟨Z, f, w⟩ := sup_exists O H
+  refine ⟨⟨Z, ⟨fun X => f (by simp [O]), ?_⟩⟩⟩
+  intro j j' g
+  dsimp
+  simp only [Category.comp_id]
+  apply w
+  simp only [O, H, Finset.mem_biUnion, Finset.mem_univ, Finset.mem_image, PSigma.mk.injEq,
+    true_and, exists_and_left]
+  exact ⟨j, rfl, j', g, by simp⟩
 
 中文:
 定理 cocone_nonempty
@@ -596,7 +624,15 @@ theorem cocone_nonempty
   let H : Finset (Σ' (X Y : C) (_ : X in O) (_ : Y in O), X ⟶ Y) :=
     Finset.univ.biUnion fun X : J => Finset.univ.biUnion fun Y : J =>
       Finset.univ.image fun f : X ⟶ Y => ⟨F.obj X, F.obj Y, by simp [O], by simp [O], F.map f⟩
-  obtain ⟨Z, f, w
+  obtain ⟨Z, f, w⟩ := sup_exists O H
+  refine ⟨⟨Z, ⟨fun X => f (by simp [O]), ?_⟩⟩⟩
+  intro j j' g
+  dsimp
+  simp only [Category.comp_id]
+  apply w
+  simp only [O, H, Finset.mem_biUnion, Finset.mem_univ, Finset.mem_image, PSigma.mk.injEq,
+    true_and, exists_and_left]
+  exact ⟨j, rfl, j', g, by simp⟩
 
 Depends on / 依赖: Category, Category.comp_id, F.map, F.obj, Finset, Finset.mem_biUnion, Finset.mem_image, Finset.mem_univ, Finset.univ.biUnion, Finset.univ.image, PSigma, PSigma.mk.injEq, biUnion, classical, comp_id, mem_biUnion, mem_image, mem_univ, sup_exists, true_and
 -/
@@ -745,7 +781,14 @@ theorem of_cocone_nonempty
     refine ⟨?_, ?_⟩
     · intro X Y
       obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ pair X Y)
-      exact ⟨c.pt, c.ι.app ⟨⟨WalkingPair.left⟩⟩, c.ι.app ⟨⟨WalkingPair.right
+      exact ⟨c.pt, c.ι.app ⟨⟨WalkingPair.left⟩⟩, c.ι.app ⟨⟨WalkingPair.right⟩⟩, trivial⟩
+    · intro X Y f g
+      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ parallelPair f g)
+      refine ⟨c.pt, c.ι.app ⟨WalkingParallelPair.one⟩, ?_⟩
+      have h₁ := c.ι.naturality ⟨WalkingParallelPairHom.left⟩
+      have h₂ := c.ι.naturality ⟨WalkingParallelPairHom.right⟩
+      simp_all
+  apply IsFiltered.mk
 
 中文:
 定理 of_cocone_nonempty
@@ -758,7 +801,14 @@ theorem of_cocone_nonempty
     refine ⟨?_, ?_⟩
     · intro X Y
       obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ pair X Y)
-      exact ⟨c.pt, c.ι.app ⟨⟨WalkingPair.left⟩⟩, c.ι.app ⟨⟨WalkingPair.right
+      exact ⟨c.pt, c.ι.app ⟨⟨WalkingPair.left⟩⟩, c.ι.app ⟨⟨WalkingPair.right⟩⟩, trivial⟩
+    · intro X Y f g
+      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ parallelPair f g)
+      refine ⟨c.pt, c.ι.app ⟨WalkingParallelPair.one⟩, ?_⟩
+      have h₁ := c.ι.naturality ⟨WalkingParallelPairHom.left⟩
+      have h₂ := c.ι.naturality ⟨WalkingParallelPairHom.right⟩
+      simp_all
+  apply IsFiltered.mk
 
 Depends on / 依赖: Functor, Functor.empty, IsFilteredOrEmpty, Nonempty, ULift.downFunctor, ULiftHom, ULiftHom.down, WalkingPair, WalkingPair.left, WalkingPair.right, WalkingParallelPair, WalkingParallelPair.one, WalkingParallelPairHom, WalkingParallelPairHom.left, c.pt, downFunctor, naturali, naturality, parallelPair
 -/
@@ -1109,7 +1159,10 @@ theorem crown
     exact ⟨s, α, β, e.forall_congr_right.mp H⟩
   | h_empty => exact ⟨max k₁ k₂, leftToMax k₁ k₂, rightToMax k₁ k₂, by simp⟩
   | @h_option ι _ IH =>
-    ob
+    obtain ⟨s₁, α₁, β₁, H₁⟩ := IH (j ·) (f ·) (g ·)
+    obtain ⟨s₂, α₂, β₂, H₂⟩ := span (f .none) (g .none)
+    obtain ⟨t, α, β, h₁, h₂⟩ := bowtie α₁ α₂ β₁ β₂
+    exact ⟨t, α₁ ≫ α, β₁ ≫ α, Option.rec (by grind) (by grind)⟩
 
 中文:
 定理 crown
@@ -1120,7 +1173,10 @@ theorem crown
     exact ⟨s, α, β, e.forall_congr_right.mp H⟩
   | h_empty => exact ⟨max k₁ k₂, leftToMax k₁ k₂, rightToMax k₁ k₂, by simp⟩
   | @h_option ι _ IH =>
-    ob
+    obtain ⟨s₁, α₁, β₁, H₁⟩ := IH (j ·) (f ·) (g ·)
+    obtain ⟨s₂, α₂, β₂, H₂⟩ := span (f .none) (g .none)
+    obtain ⟨t, α, β, h₁, h₂⟩ := bowtie α₁ α₂ β₁ β₂
+    exact ⟨t, α₁ ≫ α, β₁ ≫ α, Option.rec (by grind) (by grind)⟩
 
 Depends on / 依赖: Finite, Finite.induction_empty_option, Option.rec, bowtie, e.forall_congr_right.mp, forall_congr_right, h_empty, h_option, induction_empty_option, leftToMax, of_equiv, rightToMax
 -/
@@ -1241,7 +1297,7 @@ lemma wideSpan
   cases nonempty_fintype I
   obtain ⟨k, fk, hk⟩ := sup_exists (insert i (Finset.univ.image j))
     (Finset.univ.image fun x => ⟨i, j x, by simp, by simp, f x⟩)
-  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _)
+  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
 
 中文:
 引理 wideSpan
@@ -1252,7 +1308,7 @@ lemma wideSpan
   cases nonempty_fintype I
   obtain ⟨k, fk, hk⟩ := sup_exists (insert i (Finset.univ.image j))
     (Finset.univ.image fun x => ⟨i, j x, by simp, by simp, f x⟩)
-  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _)
+  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
 
 Depends on / 依赖: Finset, Finset.mem_image_of_mem, Finset.mem_univ, Finset.univ.image, IsConnected, IsConnected.of_constant_of_preserves_morphisms, IsFiltered, classical, exacts, insert, mem_image_of_mem, mem_univ, nonempty, nonempty_fintype, of_constant_of_preserves_morphisms, sup_exists
 -/
@@ -1606,7 +1662,7 @@ theorem of_left_adjoint
         (h.homEquiv _ Y).symm (minToRight _ _), ⟨⟩⟩
     cone_maps := fun X Y f g =>
       ⟨L.obj (eq (R.map f) (R.map g)), (h.homEquiv _ _).symm (eqHom _ _), by
-        rw [← h.homEquiv_naturalit
+        rw [← h.homEquiv_naturality_right_symm]; rw [← h.homEquiv_naturality_right_symm]; rw [eq_condition]⟩ }
 
 中文:
 定理 of_left_adjoint
@@ -1617,7 +1673,7 @@ theorem of_left_adjoint
         (h.homEquiv _ Y).symm (minToRight _ _), ⟨⟩⟩
     cone_maps := fun X Y f g =>
       ⟨L.obj (eq (R.map f) (R.map g)), (h.homEquiv _ _).symm (eqHom _ _), by
-        rw [← h.homEquiv_naturalit
+        rw [← h.homEquiv_naturality_right_symm]; rw [← h.homEquiv_naturality_right_symm]; rw [eq_condition]⟩ }
 
 Depends on / 依赖: L.obj, R.map, R.obj, cone_maps, cone_objs, eq_condition, h.homEquiv, h.homEquiv_naturality_right_symm, homEquiv, homEquiv_naturality_right_symm, minToLeft, minToRight
 -/
@@ -1697,7 +1753,7 @@ theorem inf_objs_exists
     rintro Y mY
     obtain rfl | h := eq_or_ne Y X
     · exact ⟨minToLeft _ _⟩
-    · exact ⟨minToRight _ _ ≫
+    · exact ⟨minToRight _ _ ≫ (w' (Finset.mem_of_mem_insert_of_ne mY h)).some⟩
 
 中文:
 定理 inf_objs_存在
@@ -1713,7 +1769,7 @@ theorem inf_objs_exists
     rintro Y mY
     obtain rfl | h := eq_or_ne Y X
     · exact ⟨minToLeft _ _⟩
-    · exact ⟨minToRight _ _ ≫
+    · exact ⟨minToRight _ _ ≫ (w' (Finset.mem_of_mem_insert_of_ne mY h)).some⟩
 
 Depends on / 依赖: Classical, Classical.choice, Finset, Finset.induction, Finset.mem_of_mem_insert_of_ne, IsCofiltered, IsCofiltered.nonempty, choice, classical, eq_or_ne, insert, mem_of_mem_insert_of_ne, minToLeft, minToRight, nonempty
 -/
@@ -1745,7 +1801,17 @@ theorem inf_exists
   | insert h' H' nmf h'' =>
     obtain ⟨X, Y, mX, mY, f⟩ := h'
     obtain ⟨S', T', w'⟩ := h''
-    refine ⟨eq (T' mX ≫ f) (T' mY), 
+    refine ⟨eq (T' mX ≫ f) (T' mY), fun mZ => eqHom (T' mX ≫ f) (T' mY) ≫ T' mZ, ?_⟩
+    intro X' Y' mX' mY' f' mf'
+    rw [Category.assoc]
+    by_cases h : X = X' ∧ Y = Y'
+    · rcases h with ⟨rfl, rfl⟩
+      grind [eq_condition]
+    · rw [@w' _ _ mX' mY' f' _]
+      apply Finset.mem_of_mem_insert_of_ne mf'
+      contrapose h
+      obtain ⟨rfl, h⟩ := h
+      trivial
 
 中文:
 定理 inf_存在
@@ -1758,7 +1824,17 @@ theorem inf_exists
   | insert h' H' nmf h'' =>
     obtain ⟨X, Y, mX, mY, f⟩ := h'
     obtain ⟨S', T', w'⟩ := h''
-    refine ⟨eq (T' mX ≫ f) (T' mY), 
+    refine ⟨eq (T' mX ≫ f) (T' mY), fun mZ => eqHom (T' mX ≫ f) (T' mY) ≫ T' mZ, ?_⟩
+    intro X' Y' mX' mY' f' mf'
+    rw [Category.assoc]
+    by_cases h : X = X' ∧ Y = Y'
+    · rcases h with ⟨rfl, rfl⟩
+      grind [eq_condition]
+    · rw [@w' _ _ mX' mY' f' _]
+      apply Finset.mem_of_mem_insert_of_ne mf'
+      contrapose h
+      obtain ⟨rfl, h⟩ := h
+      trivial
 
 Depends on / 依赖: Category, Category.assoc, Finset, Finset.induction, Finset.mem_of_mem_ins, classical, eq_condition, inf_objs_exists, insert, mem_of_mem_ins
 -/
@@ -1860,7 +1936,16 @@ theorem cone_nonempty
     Finset.univ.biUnion fun X : J =>
       Finset.univ.biUnion fun Y : J =>
         Finset.univ.image fun f : X ⟶ Y => ⟨F.obj X, F.obj Y, by simp [O], by simp [O], F.map f⟩
-  obtain 
+  obtain ⟨Z, f, w⟩ := inf_exists O H
+  refine ⟨⟨Z, ⟨fun X => f (by simp [O]), ?_⟩⟩⟩
+  intro j j' g
+  dsimp
+  simp only [Category.id_comp]
+  symm
+  apply w
+  simp only [O, H, Finset.mem_biUnion, Finset.mem_univ, Finset.mem_image,
+    PSigma.mk.injEq, true_and, exists_and_left]
+  exact ⟨j, rfl, j', g, by simp⟩
 
 中文:
 定理 cone_nonempty
@@ -1873,7 +1958,16 @@ theorem cone_nonempty
     Finset.univ.biUnion fun X : J =>
       Finset.univ.biUnion fun Y : J =>
         Finset.univ.image fun f : X ⟶ Y => ⟨F.obj X, F.obj Y, by simp [O], by simp [O], F.map f⟩
-  obtain 
+  obtain ⟨Z, f, w⟩ := inf_exists O H
+  refine ⟨⟨Z, ⟨fun X => f (by simp [O]), ?_⟩⟩⟩
+  intro j j' g
+  dsimp
+  simp only [Category.id_comp]
+  symm
+  apply w
+  simp only [O, H, Finset.mem_biUnion, Finset.mem_univ, Finset.mem_image,
+    PSigma.mk.injEq, true_and, exists_and_left]
+  exact ⟨j, rfl, j', g, by simp⟩
 
 Depends on / 依赖: Category, Category.id_comp, F.map, F.obj, Finset, Finset.mem_biUnion, Finset.mem_image, Finset.mem_univ, Finset.univ.biUnion, Finset.univ.image, PSigma, PSigma.mk.injEq, biUnion, classical, id_comp, inf_exists, mem_biUnion, mem_image, mem_univ
 -/
@@ -2020,7 +2114,7 @@ lemma wideCospan
   cases nonempty_fintype I
   obtain ⟨k, fk, hk⟩ := IsCofiltered.inf_exists (insert i (Finset.univ.image j))
     (Finset.univ.image fun x => ⟨j x, i, by simp, by simp, f x⟩)
-  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Fin
+  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
 
 中文:
 引理 wideCospan
@@ -2031,7 +2125,7 @@ lemma wideCospan
   cases nonempty_fintype I
   obtain ⟨k, fk, hk⟩ := IsCofiltered.inf_exists (insert i (Finset.univ.image j))
     (Finset.univ.image fun x => ⟨j x, i, by simp, by simp, f x⟩)
-  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Fin
+  exact ⟨k, _, _, fun x => hk _ _ (Finset.mem_image_of_mem _ (Finset.mem_univ _))⟩
 
 Depends on / 依赖: Finset, Finset.mem_image_of_mem, Finset.mem_univ, Finset.univ.image, IsCofiltered, IsCofiltered.inf_exists, classical, inf_exists, insert, mem_image_of_mem, mem_univ, nonempty, nonempty_fintype
 -/
@@ -2067,7 +2161,14 @@ theorem of_cone_nonempty
     refine ⟨?_, ?_⟩
     · intro X Y
       obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ pair X Y)
-      exact ⟨c.pt, c.π.app ⟨⟨WalkingPair.left⟩⟩, c.π.app ⟨⟨WalkingPair.rig
+      exact ⟨c.pt, c.π.app ⟨⟨WalkingPair.left⟩⟩, c.π.app ⟨⟨WalkingPair.right⟩⟩, trivial⟩
+    · intro X Y f g
+      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ parallelPair f g)
+      refine ⟨c.pt, c.π.app ⟨WalkingParallelPair.zero⟩, ?_⟩
+      have h₁ := c.π.naturality ⟨WalkingParallelPairHom.left⟩
+      have h₂ := c.π.naturality ⟨WalkingParallelPairHom.right⟩
+      simp_all
+  apply IsCofiltered.mk
 
 中文:
 定理 of_cone_nonempty
@@ -2080,7 +2181,14 @@ theorem of_cone_nonempty
     refine ⟨?_, ?_⟩
     · intro X Y
       obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ pair X Y)
-      exact ⟨c.pt, c.π.app ⟨⟨WalkingPair.left⟩⟩, c.π.app ⟨⟨WalkingPair.rig
+      exact ⟨c.pt, c.π.app ⟨⟨WalkingPair.left⟩⟩, c.π.app ⟨⟨WalkingPair.right⟩⟩, trivial⟩
+    · intro X Y f g
+      obtain ⟨c⟩ := h (ULiftHom.down ⋙ ULift.downFunctor ⋙ parallelPair f g)
+      refine ⟨c.pt, c.π.app ⟨WalkingParallelPair.zero⟩, ?_⟩
+      have h₁ := c.π.naturality ⟨WalkingParallelPairHom.left⟩
+      have h₂ := c.π.naturality ⟨WalkingParallelPairHom.right⟩
+      simp_all
+  apply IsCofiltered.mk
 
 Depends on / 依赖: Functor, Functor.empty, IsCofilteredOrEmpty, Nonempty, ULift.downFunctor, ULiftHom, ULiftHom.down, WalkingPair, WalkingPair.left, WalkingPair.right, WalkingParallelPair, WalkingParallelPair.zero, WalkingParallelPairHom, WalkingParallelPairHom.left, c.pt, downFunctor, naturality, parallelPair
 -/
@@ -2182,7 +2290,9 @@ instance isCofilteredOrEmpty_op_of_isFilteredOrEmpty
       (IsFiltered.rightToMax _ _).op, trivial⟩
   cone_maps X Y f g :=
     ⟨op (IsFiltered.coeq f.unop g.unop), (IsFiltered.coeqHom _ _).op, by
-      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw
+      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
+      congr 1
+      exact IsFiltered.coeq_condition f.unop g.unop⟩
 
 中文:
 实例 isCofilteredOrEmpty_op_of_isFilteredOrEmpty
@@ -2191,7 +2301,9 @@ instance isCofilteredOrEmpty_op_of_isFilteredOrEmpty
       (IsFiltered.rightToMax _ _).op, trivial⟩
   cone_maps X Y f g :=
     ⟨op (IsFiltered.coeq f.unop g.unop), (IsFiltered.coeqHom _ _).op, by
-      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw
+      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
+      congr 1
+      exact IsFiltered.coeq_condition f.unop g.unop⟩
 
 Depends on / 依赖: IsFiltered, IsFiltered.coeq, IsFiltered.coeqHom, IsFiltered.coeq_condition, IsFiltered.leftToMax, IsFiltered.max, IsFiltered.rightToMax, X.unop, Y.unop, coeqHom, coeq_condition, cone_maps, f.unop, f.unop.op, g.unop, g.unop.op, leftToMax, op_comp, rightToMax
 -/
@@ -2234,7 +2346,9 @@ instance isFilteredOrEmpty_op_of_isCofilteredOrEmpty
       (IsCofiltered.minToRight X.unop Y.unop).op, trivial⟩
   cocone_maps X Y f g :=
     ⟨op (IsCofiltered.eq f.unop g.unop), (IsCofiltered.eqHom f.unop g.unop).op, by
-      rw [show f = f.unop.op by simp]; rw [show g = 
+      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
+      congr 1
+      exact IsCofiltered.eq_condition f.unop g.unop⟩
 
 中文:
 实例 isFilteredOrEmpty_op_of_isCofilteredOrEmpty
@@ -2243,7 +2357,9 @@ instance isFilteredOrEmpty_op_of_isCofilteredOrEmpty
       (IsCofiltered.minToRight X.unop Y.unop).op, trivial⟩
   cocone_maps X Y f g :=
     ⟨op (IsCofiltered.eq f.unop g.unop), (IsCofiltered.eqHom f.unop g.unop).op, by
-      rw [show f = f.unop.op by simp]; rw [show g = 
+      rw [show f = f.unop.op by simp]; rw [show g = g.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
+      congr 1
+      exact IsCofiltered.eq_condition f.unop g.unop⟩
 
 Depends on / 依赖: IsCofiltered, IsCofiltered.eq, IsCofiltered.eqHom, IsCofiltered.eq_condition, IsCofiltered.min, IsCofiltered.minToLeft, IsCofiltered.minToRight, X.unop, Y.unop, cocone_maps, eq_condition, f.unop, f.unop.op, g.unop, g.unop.op, minToLeft, minToRight, op_comp
 -/

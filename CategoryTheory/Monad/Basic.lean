@@ -572,7 +572,8 @@ definition MonadIso.mk
       app_μ := fun X => by
         rw [← NatIso.cancel_natIso_hom_right f]
         simp only [NatTrans.naturality, Iso.inv_hom_id_app, assoc, comp_id, f_μ,
-       
+          NatTrans.naturality_assoc, Iso.inv_hom_id_app_assoc, ← Functor.map_comp_assoc]
+        simp }
 
 中文:
 定义 MonadIso.mk
@@ -586,7 +587,8 @@ definition MonadIso.mk
       app_μ := fun X => by
         rw [← NatIso.cancel_natIso_hom_right f]
         simp only [NatTrans.naturality, Iso.inv_hom_id_app, assoc, comp_id, f_μ,
-       
+          NatTrans.naturality_assoc, Iso.inv_hom_id_app_assoc, ← Functor.map_comp_assoc]
+        simp }
 
 Depends on / 依赖: Functor, Functor.map_comp_assoc, Iso.inv_hom_id_app, Iso.inv_hom_id_app_assoc, M.map, N.obj, NatIso, NatIso.cancel_natIso_hom_right, NatTrans, NatTrans.naturality, NatTrans.naturality_assoc, cancel_natIso_hom_right, cat_disch, comp_id, f.hom, f.hom.app, f.inv, inv_hom_id_app, inv_hom_id_app_assoc, map_comp_assoc
 -/
@@ -624,7 +626,9 @@ definition ComonadIso.mk
       app_ε := fun X => by simp [← f_ε]
       app_δ := fun X => by
         rw [← NatIso.cancel_natIso_hom_left f]
-        simp only [reassoc_of% (f_δ X), Iso.hom_inv_id_app_assoc, NatTrans.naturality_ass
+        simp only [reassoc_of% (f_δ X), Iso.hom_inv_id_app_assoc, NatTrans.naturality_assoc]
+        rw [← Functor.map_comp]; rw [Iso.hom_inv_id_app]; rw [Functor.map_id]
+        apply (comp_id _).symm }
 
 中文:
 定义 ComonadIso.mk
@@ -637,7 +641,9 @@ definition ComonadIso.mk
       app_ε := fun X => by simp [← f_ε]
       app_δ := fun X => by
         rw [← NatIso.cancel_natIso_hom_left f]
-        simp only [reassoc_of% (f_δ X), Iso.hom_inv_id_app_assoc, NatTrans.naturality_ass
+        simp only [reassoc_of% (f_δ X), Iso.hom_inv_id_app_assoc, NatTrans.naturality_assoc]
+        rw [← Functor.map_comp]; rw [Iso.hom_inv_id_app]; rw [Functor.map_id]
+        apply (comp_id _).symm }
 
 Depends on / 依赖: Functor, Functor.map_comp, Functor.map_id, Iso.hom_inv_id_app, Iso.hom_inv_id_app_assoc, M.obj, N.map, NatIso, NatIso.cancel_natIso_hom_left, NatTrans, NatTrans.naturality_assoc, cancel_natIso_hom_left, cat_disch, comp_id, f.hom, f.hom.app, f.inv, hom_inv_id_app, hom_inv_id_app_assoc, map_comp
 -/
@@ -973,7 +979,22 @@ definition transport
     slice_lhs 1 2 => rw [← T.η.naturality (i.inv.app X), ]
     simp
   right_unit X := by
-    simp 
+    simp only [NatTrans.comp_app, Functor.map_comp, comp_obj, NatTrans.hcomp_app,
+      Category.assoc, NatTrans.naturality_assoc]
+    slice_lhs 2 4 =>
+      simp only [← T.map_comp]
+    simp
+  assoc X := by
+    simp only [comp_obj, NatTrans.comp_app, NatTrans.hcomp_app, Category.assoc, Functor.map_comp,
+      NatTrans.naturality_assoc, hom_inv_id_app_assoc, NatIso.cancel_natIso_inv_left]
+    slice_lhs 4 5 => rw [← T.map_comp]
+    simp only [hom_inv_id_app, Functor.map_id, id_comp]
+    slice_lhs 1 2 => rw [← T.map_comp]
+    simp only [Functor.map_comp, Category.assoc]
+    congr 1
+    simp only [← Category.assoc, NatIso.cancel_natIso_hom_right]
+    rw [← T.μ.naturality]
+    simp [T.assoc X]
 
 中文:
 定义 transport
@@ -987,7 +1008,22 @@ definition transport
     slice_lhs 1 2 => rw [← T.η.naturality (i.inv.app X), ]
     simp
   right_unit X := by
-    simp 
+    simp only [NatTrans.comp_app, Functor.map_comp, comp_obj, NatTrans.hcomp_app,
+      Category.assoc, NatTrans.naturality_assoc]
+    slice_lhs 2 4 =>
+      simp only [← T.map_comp]
+    simp
+  assoc X := by
+    simp only [comp_obj, NatTrans.comp_app, NatTrans.hcomp_app, Category.assoc, Functor.map_comp,
+      NatTrans.naturality_assoc, hom_inv_id_app_assoc, NatIso.cancel_natIso_inv_left]
+    slice_lhs 4 5 => rw [← T.map_comp]
+    simp only [hom_inv_id_app, Functor.map_id, id_comp]
+    slice_lhs 1 2 => rw [← T.map_comp]
+    simp only [Functor.map_comp, Category.assoc]
+    congr 1
+    simp only [← Category.assoc, NatIso.cancel_natIso_hom_right]
+    rw [← T.μ.naturality]
+    simp [T.assoc X]
 -/
 def transport {F : C ⥤ C} (T : Monad C) (i : (T : C ⥤ C) ≅ F) : Monad C where
   toFunctor := F
@@ -1033,7 +1069,18 @@ definition transport
     simp only [comp_obj, NatTrans.comp_app, NatTrans.hcomp_app, Functor.map_comp, assoc]
     slice_lhs 4 5 => rw [← F.map_comp]
     simp only [hom_inv_id_app, Functor.map_id, id_comp, ← i.hom.naturality]
-    slice_lhs 2
+    slice_lhs 2 3 => rw [T.right_counit]
+    simp
+  coassoc X := by
+    simp only [comp_obj, NatTrans.comp_app, NatTrans.hcomp_app, Functor.map_comp, assoc,
+      NatTrans.naturality_assoc, Functor.comp_map, hom_inv_id_app_assoc,
+      NatIso.cancel_natIso_inv_left]
+    slice_lhs 3 4 => rw [← F.map_comp]
+    simp only [hom_inv_id_app, Functor.map_id, id_comp, assoc]
+    rw [← i.hom.naturality_assoc]; rw [← T.coassoc_assoc]
+    simp only [NatTrans.naturality_assoc]
+    congr 3
+    simp only [← Functor.map_comp, i.hom.naturality]
 
 中文:
 定义 transport
@@ -1045,7 +1092,18 @@ definition transport
     simp only [comp_obj, NatTrans.comp_app, NatTrans.hcomp_app, Functor.map_comp, assoc]
     slice_lhs 4 5 => rw [← F.map_comp]
     simp only [hom_inv_id_app, Functor.map_id, id_comp, ← i.hom.naturality]
-    slice_lhs 2
+    slice_lhs 2 3 => rw [T.right_counit]
+    simp
+  coassoc X := by
+    simp only [comp_obj, NatTrans.comp_app, NatTrans.hcomp_app, Functor.map_comp, assoc,
+      NatTrans.naturality_assoc, Functor.comp_map, hom_inv_id_app_assoc,
+      NatIso.cancel_natIso_inv_left]
+    slice_lhs 3 4 => rw [← F.map_comp]
+    simp only [hom_inv_id_app, Functor.map_id, id_comp, assoc]
+    rw [← i.hom.naturality_assoc]; rw [← T.coassoc_assoc]
+    simp only [NatTrans.naturality_assoc]
+    congr 3
+    simp only [← Functor.map_comp, i.hom.naturality]
 -/
 def transport {F : C ⥤ C} (T : Comonad C) (i : (T : C ⥤ C) ≅ F) : Comonad C where
   toFunctor := F

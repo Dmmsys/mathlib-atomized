@@ -96,7 +96,10 @@ theorem rightZigzag_idempotent_of_left_triangle
       bicategory
     _ = 𝟙 _ otimes≫ g ◁ (η ▷ 𝟙 a ≫ (f ≫ g) ◁ η) otimes≫ (ε ▷ (g ≫ f) ≫ 𝟙 b ◁ ε) ▷ g otimes≫ 𝟙 _ := by
       rw [← whisker_exchange]; bicategory
-    _ = g ◁ η otimes≫ g ◁ le
+    _ = g ◁ η otimes≫ g ◁ leftZigzag η ε ▷ g otimes≫ ε ▷ g := by
+      rw [← whisker_exchange]; rw [← whisker_exchange]; rw [leftZigzag]; bicategory
+    _ = g ◁ η otimes≫ ε ▷ g := by
+      rw [h]; bicategory
 
 中文:
 定理 rightZigzag_idempotent_of_left_triangle
@@ -107,7 +110,10 @@ theorem rightZigzag_idempotent_of_left_triangle
       bicategory
     _ = 𝟙 _ otimes≫ g ◁ (η ▷ 𝟙 a ≫ (f ≫ g) ◁ η) otimes≫ (ε ▷ (g ≫ f) ≫ 𝟙 b ◁ ε) ▷ g otimes≫ 𝟙 _ := by
       rw [← whisker_exchange]; bicategory
-    _ = g ◁ η otimes≫ g ◁ le
+    _ = g ◁ η otimes≫ g ◁ leftZigzag η ε ▷ g otimes≫ ε ▷ g := by
+      rw [← whisker_exchange]; rw [← whisker_exchange]; rw [leftZigzag]; bicategory
+    _ = g ◁ η otimes≫ ε ▷ g := by
+      rw [h]; bicategory
 
 Depends on / 依赖: bicategory, leftZigzag, otimes, rightZigzag, whisker_exchange
 -/
@@ -265,7 +271,11 @@ theorem comp_left_triangle_aux
               (f₁ ≫ f₂) ◁ adj₂.counit otimes≫ 𝟙 _ := by
       dsimp only [compUnit, compCounit]; bicategory
     _ = 𝟙 _ otimes≫
-          (leftZigzag 
+          (leftZigzag adj₁.unit adj₁.counit) ▷ f₂ otimes≫
+            f₁ ◁ (leftZigzag adj₂.unit adj₂.counit) otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; bicategory
+    _ = _ := by
+      simp_rw [left_triangle]; bicategory
 
 中文:
 定理 comp_left_triangle_aux
@@ -278,7 +288,11 @@ theorem comp_left_triangle_aux
               (f₁ ≫ f₂) ◁ adj₂.counit otimes≫ 𝟙 _ := by
       dsimp only [compUnit, compCounit]; bicategory
     _ = 𝟙 _ otimes≫
-          (leftZigzag 
+          (leftZigzag adj₁.unit adj₁.counit) ▷ f₂ otimes≫
+            f₁ ◁ (leftZigzag adj₂.unit adj₂.counit) otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; bicategory
+    _ = _ := by
+      simp_rw [left_triangle]; bicategory
 
 Depends on / 依赖: bicategory, compCounit, compUnit, counit, leftZigzag, left_triangle, otimes, simp_rw, whisker_exchange
 -/
@@ -311,7 +325,11 @@ theorem comp_right_triangle_aux
               adj₂.counit ▷ (g₂ ≫ g₁) otimes≫ 𝟙 _ := by
       dsimp only [compUnit, compCounit]; bicategory
     _ = 𝟙 _ otimes≫
-          g₂ ◁ (rightZ
+          g₂ ◁ (rightZigzag adj₁.unit adj₁.counit) otimes≫
+            (rightZigzag adj₂.unit adj₂.counit) ▷ g₁ otimes≫ 𝟙 _ := by
+      rw [whisker_exchange]; bicategory
+    _ = _ := by
+      simp_rw [right_triangle]; bicategory
 
 中文:
 定理 comp_right_triangle_aux
@@ -324,7 +342,11 @@ theorem comp_right_triangle_aux
               adj₂.counit ▷ (g₂ ≫ g₁) otimes≫ 𝟙 _ := by
       dsimp only [compUnit, compCounit]; bicategory
     _ = 𝟙 _ otimes≫
-          g₂ ◁ (rightZ
+          g₂ ◁ (rightZigzag adj₁.unit adj₁.counit) otimes≫
+            (rightZigzag adj₂.unit adj₂.counit) ▷ g₁ otimes≫ 𝟙 _ := by
+      rw [whisker_exchange]; bicategory
+    _ = _ := by
+      simp_rw [right_triangle]; bicategory
 
 Depends on / 依赖: bicategory, compCounit, compUnit, counit, otimes, rightZigzag, right_triangle, simp_rw, whisker_exchange
 -/
@@ -653,7 +675,14 @@ theorem adjointifyCounit_left_triangle
     _ = 𝟙 _ otimes≫ (η.hom ▷ (f ≫ 𝟙 b) ≫ (f ≫ g) ◁ f ◁ ε.inv) otimes≫
           f ◁ g ◁ η.inv ▷ f otimes≫ f ◁ ε.hom := by
       bicategory
-    _ = 𝟙 _ otimes≫ f ◁ ε.inv otimes≫ (η.hom ▷ (f ≫ g) ≫ (f ≫ g) ◁ η.inv) ▷ f otimes≫ 
+    _ = 𝟙 _ otimes≫ f ◁ ε.inv otimes≫ (η.hom ▷ (f ≫ g) ≫ (f ≫ g) ◁ η.inv) ▷ f otimes≫ f ◁ ε.hom := by
+      rw [← whisker_exchange η.hom (f ◁ ε.inv)]; bicategory
+    _ = 𝟙 _ otimes≫ f ◁ ε.inv otimes≫ (η.inv ≫ η.hom) ▷ f otimes≫ f ◁ ε.hom := by
+      rw [← whisker_exchange η.hom η.inv]; bicategory
+    _ = 𝟙 _ otimes≫ f ◁ (ε.inv ≫ ε.hom) := by
+      rw [Iso.inv_hom_id]; bicategory
+    _ = _ := by
+      rw [Iso.inv_hom_id]; bicategory
 
 中文:
 定理 adjointifyCounit_left_triangle
@@ -665,7 +694,14 @@ theorem adjointifyCounit_left_triangle
     _ = 𝟙 _ otimes≫ (η.hom ▷ (f ≫ 𝟙 b) ≫ (f ≫ g) ◁ f ◁ ε.inv) otimes≫
           f ◁ g ◁ η.inv ▷ f otimes≫ f ◁ ε.hom := by
       bicategory
-    _ = 𝟙 _ otimes≫ f ◁ ε.inv otimes≫ (η.hom ▷ (f ≫ g) ≫ (f ≫ g) ◁ η.inv) ▷ f otimes≫ 
+    _ = 𝟙 _ otimes≫ f ◁ ε.inv otimes≫ (η.hom ▷ (f ≫ g) ≫ (f ≫ g) ◁ η.inv) ▷ f otimes≫ f ◁ ε.hom := by
+      rw [← whisker_exchange η.hom (f ◁ ε.inv)]; bicategory
+    _ = 𝟙 _ otimes≫ f ◁ ε.inv otimes≫ (η.inv ≫ η.hom) ▷ f otimes≫ f ◁ ε.hom := by
+      rw [← whisker_exchange η.hom η.inv]; bicategory
+    _ = 𝟙 _ otimes≫ f ◁ (ε.inv ≫ ε.hom) := by
+      rw [Iso.inv_hom_id]; bicategory
+    _ = _ := by
+      rw [Iso.inv_hom_id]; bicategory
 
 Depends on / 依赖: Iso.ext, adjointifyCounit, bicategoricalIsoComp, bicategory, otimes, whisker_exchange
 -/

@@ -41,7 +41,11 @@ definition toModifiers
     else
       Visibility.regular
     isProtected := isProtected env nm
-    computeKind := if (env.find? <| nm.mkStr "_cstage1").
+    computeKind := if (env.find? <| nm.mkStr "_cstage1").isSome then .regular else .noncomputable
+    recKind := RecKind.default -- nonrec only matters for name resolution, so is irrelevant (?)
+    isUnsafe := d.isUnsafe
+    attrs := #[] }
+  return mods
 
 中文:
 定义 toModifiers
@@ -57,7 +61,11 @@ definition toModifiers
     else
       Visibility.regular
     isProtected := isProtected env nm
-    computeKind := if (env.find? <| nm.mkStr "_cstage1").
+    computeKind := if (env.find? <| nm.mkStr "_cstage1").isSome then .regular else .noncomputable
+    recKind := RecKind.default -- nonrec only matters for name resolution, so is irrelevant (?)
+    isUnsafe := d.isUnsafe
+    attrs := #[] }
+  return mods
 -/
 def toModifiers (nm : Name) (newDoc : Option (TSyntax `Lean.Parser.Command.docComment) := none) :
     CoreM Modifiers := do
@@ -93,7 +101,10 @@ definition toPreDefinition
     levelParams := d.levelParams
     modifiers := mods
     declName := newNm
-    type :
+    type := newType
+    value := newValue
+    termination := .none }
+  return predef
 
 中文:
 定义 toPreDefinition
@@ -108,7 +119,10 @@ definition toPreDefinition
     levelParams := d.levelParams
     modifiers := mods
     declName := newNm
-    type :
+    type := newType
+    value := newValue
+    termination := .none }
+  return predef
 -/
 def toPreDefinition (nm newNm : Name) (newType newValue : Expr)
     (newDoc : Option (TSyntax `Lean.Parser.Command.docComment) := none) :
@@ -158,7 +172,7 @@ definition MVarId.rintroWithPats
   let (pats, remaining) := patterns.splitAt n
   let pats := pats.toArray
   let pats := (n - pats.size).repeat (·.push (Unhygienic.run `(rintroPat| _))) pats
-  return (←
+  return (← RCases.rintro pats none g |>.run', remaining)
 
 中文:
 定义 MVarId.rintroWithPats
@@ -170,7 +184,7 @@ definition MVarId.rintroWithPats
   let (pats, remaining) := patterns.splitAt n
   let pats := pats.toArray
   let pats := (n - pats.size).repeat (·.push (Unhygienic.run `(rintroPat| _))) pats
-  return (←
+  return (← RCases.rintro pats none g |>.run', remaining)
 
 Depends on / 依赖: BoundedGENhdsClass, MVarId, OrderBot, OrderBot.to_BoundedGENhdsClass, TSyntax, rintroPat, to_BoundedGENhdsClass
 -/
@@ -201,7 +215,16 @@ definition MVarId.introsWithBinderIdents
   let mut ids := ids
   let mut names := #[]
   for _ in [0:n] do
-    names := name
+    names := names.push (ids.headD (Unhygienic.run `(binderIdent| _)))
+    ids := ids.tail
+let (xs, g) ← g.introN n names.toList.map fun stx =>
+    match stx.raw with
+    | `(binderIdent| $n:ident) => n.getId
+    | _ => `_
+  g.withContext do
+    for n in names, fvar in xs do
+      (Expr.fvar fvar).addLocalVarInfoForBinderIdent n
+  return (ids, xs, g)
 
 中文:
 定义 MVarId.introsWithBinderIdents
@@ -215,7 +238,16 @@ definition MVarId.introsWithBinderIdents
   let mut ids := ids
   let mut names := #[]
   for _ in [0:n] do
-    names := name
+    names := names.push (ids.headD (Unhygienic.run `(binderIdent| _)))
+    ids := ids.tail
+let (xs, g) ← g.introN n names.toList.map fun stx =>
+    match stx.raw with
+    | `(binderIdent| $n:ident) => n.getId
+    | _ => `_
+  g.withContext do
+    for n in names, fvar in xs do
+      (Expr.fvar fvar).addLocalVarInfoForBinderIdent n
+  return (ids, xs, g)
 
 Depends on / 依赖: BoundedLENhdsClass, BoundedLENhdsClass.of_closedIciTopology, LinearOrder, of_closedIciTopology
 -/
@@ -355,7 +387,7 @@ definition getFVarIdAt
     elabTermForApply id (mayPostpone := false)
   match e with
   | Expr.fvar fvarId => return fvarId
-  | _ => throwError "unexpected term '{e}'; expected single reference to variabl
+  | _ => throwError "unexpected term '{e}'; expected single reference to variable"
 
 中文:
 定义 getFVarIdAt
@@ -366,7 +398,7 @@ definition getFVarIdAt
     elabTermForApply id (mayPostpone := false)
   match e with
   | Expr.fvar fvarId => return fvarId
-  | _ => throwError "unexpected term '{e}'; expected single reference to variabl
+  | _ => throwError "unexpected term '{e}'; expected single reference to variable"
 
 Depends on / 依赖: withRef
 -/
@@ -437,7 +469,10 @@ definition allGoals
       catch ex =>
         if (← read).recover then
           logException ex
- 
+          mvarIdsNew := mvarIdsNew.push mvarId
+        else
+          throw ex
+  setGoals mvarIdsNew.toList
 
 中文:
 定义 allGoals
@@ -454,7 +489,10 @@ definition allGoals
       catch ex =>
         if (← read).recover then
           logException ex
- 
+          mvarIdsNew := mvarIdsNew.push mvarId
+        else
+          throw ex
+  setGoals mvarIdsNew.toList
 -/
 def allGoals (tac : TacticM Unit) : TacticM Unit := do
   let mvarIds ← getGoals

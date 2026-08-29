@@ -123,7 +123,8 @@ guard root || parent != e-- recursion guard
 if ← withReducible isDefEq r.expr e then return .done { expr := r.expr }
         pure (.done r)
 catch _ => pure .continue
-   
+    let post := Simp.postDefault #[]
+(·.1) < > Simp.main parent nctx.ctx (methods := { pre, post, wellBehavedDischarge })
 
 中文:
 定义 onSubexpressions
@@ -137,7 +138,8 @@ guard root || parent != e-- recursion guard
 if ← withReducible isDefEq r.expr e then return .done { expr := r.expr }
         pure (.done r)
 catch _ => pure .continue
-   
+    let post := Simp.postDefault #[]
+(·.1) < > Simp.main parent nctx.ctx (methods := { pre, post, wellBehavedDischarge })
 -/
 def onSubexpressions (eval : Expr -> AtomM Simp.Result) (parent : Expr)
     (wellBehavedDischarge : Bool) (root := true) :
@@ -166,7 +168,11 @@ definition RecurseM.run
     (congrTheorems := ← getSimpCongrTheorems)
   let nctx := { ctx, simp }
   let rec
-    /-- The recursiv
+    /-- The recursive context. -/
+    rctx := { red := cfg.red, evalAtom },
+    /-- The atom evaluator calls `AtomM.onSubexpressions` recursively. -/
+    evalAtom e := onSubexpressions eval e wellBehavedDischarge false nctx rctx s
+withConfig ({ · with zetaDelta := cfg.zetaDelta }) x nctx rctx s
 
 中文:
 定义 RecurseM.run
@@ -177,7 +183,11 @@ definition RecurseM.run
     (congrTheorems := ← getSimpCongrTheorems)
   let nctx := { ctx, simp }
   let rec
-    /-- The recursiv
+    /-- The recursive context. -/
+    rctx := { red := cfg.red, evalAtom },
+    /-- The atom evaluator calls `AtomM.onSubexpressions` recursively. -/
+    evalAtom e := onSubexpressions eval e wellBehavedDischarge false nctx rctx s
+withConfig ({ · with zetaDelta := cfg.zetaDelta }) x nctx rctx s
 -/
 partial def RecurseM.run
     {α : Type} (s : IO.Ref State) (cfg : Recurse.Config) (wellBehavedDischarge : Bool)

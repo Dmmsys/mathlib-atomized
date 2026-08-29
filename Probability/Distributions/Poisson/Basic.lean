@@ -229,7 +229,7 @@ lemma hasSum_integral_poissonMeasure
   rw [this]
   apply hasSum_integral_sum_dirac (by simp)
   convert! integrable_poissonMeasure_iff.1 hf
-  rw [ENNRea
+  rw [ENNReal.toReal_ofReal (by positivity)]
 
 中文:
 引理 hasSum_integral_poissonMeasure
@@ -241,7 +241,7 @@ lemma hasSum_integral_poissonMeasure
   rw [this]
   apply hasSum_integral_sum_dirac (by simp)
   convert! integrable_poissonMeasure_iff.1 hf
-  rw [ENNRea
+  rw [ENNReal.toReal_ofReal (by positivity)]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.toReal_ofReal, convert, hasSum_integral_sum_dirac, integrable_poissonMeasure_iff, ofReal, toReal, toReal_ofReal
 -/
@@ -371,7 +371,16 @@ lemma charFun_map_cast_poissonMeasure
   calc ∑' a, (rexp (-r) * r ^ a / a ! : Real) * cexp ((a * t : Real) * I)
   _ = ∑' a, (rexp (-r)) * ((r * cexp (t * I)) ^ a / a !) := by
       congr with a
-      push_ca
+      push_cast
+      rw [mul_pow]; rw [← Complex.exp_nat_mul]
+      ring_nf
+  _ = (rexp (-r)) * ∑' a, ((r * cexp (t * I)) ^ a / a !) := tsum_mul_left
+  _ = (rexp (-r)) * cexp (r * cexp (t * I)) := by
+      rw [(NormedSpace.expSeries_div_hasSum_exp (r * cexp (t * I))).tsum_eq]; rw [exp_eq_exp_Complex]
+  _ = cexp (r * (cexp (t * I) - 1)) := by
+      rw [ofReal_exp]; rw [← Complex.exp_add]
+      push_cast
+      ring_nf
 
 中文:
 引理 charFun_map_cast_poissonMeasure
@@ -382,7 +391,16 @@ lemma charFun_map_cast_poissonMeasure
   calc ∑' a, (rexp (-r) * r ^ a / a ! : Real) * cexp ((a * t : Real) * I)
   _ = ∑' a, (rexp (-r)) * ((r * cexp (t * I)) ^ a / a !) := by
       congr with a
-      push_ca
+      push_cast
+      rw [mul_pow]; rw [← Complex.exp_nat_mul]
+      ring_nf
+  _ = (rexp (-r)) * ∑' a, ((r * cexp (t * I)) ^ a / a !) := tsum_mul_left
+  _ = (rexp (-r)) * cexp (r * cexp (t * I)) := by
+      rw [(NormedSpace.expSeries_div_hasSum_exp (r * cexp (t * I))).tsum_eq]; rw [exp_eq_exp_Complex]
+  _ = cexp (r * (cexp (t * I) - 1)) := by
+      rw [ofReal_exp]; rw [← Complex.exp_add]
+      push_cast
+      ring_nf
 
 Depends on / 依赖: Complex.exp_nat_mul, NormedSpace, NormedSpace.expSeries_div_hasSum_exp, Real.inner_apply, charFun_apply, expSeries_div_hasSum_exp, exp_nat_mul, fun_prop, inner_apply, integral_map, integral_poissonMeasure, mul_pow, of_discrete, ring_nf, simp_rw, tsum_mul_left
 -/

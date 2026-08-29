@@ -297,7 +297,12 @@ theorem coe_stream_nth_rat_eq
     cases stream_q_nth_eq : IntFractPair.stream q n with
     | none => simp [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq]
     | some ifp_n =>
-
+      obtain ⟨b, fr⟩ := ifp_n
+      rcases Decidable.em (fr = 0) with fr_zero | fr_ne_zero
+      · simp [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq, fr_zero]
+      · have : (fr : K)⁻¹ = ((fr⁻¹ : Rat) : K) := by norm_cast
+        have coe_of_fr := coe_of_rat_eq this
+        simpa [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq, fr_ne_zero]
 
 中文:
 定理 coe_stream_nth_rat_eq
@@ -311,7 +316,12 @@ theorem coe_stream_nth_rat_eq
     cases stream_q_nth_eq : IntFractPair.stream q n with
     | none => simp [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq]
     | some ifp_n =>
-
+      obtain ⟨b, fr⟩ := ifp_n
+      rcases Decidable.em (fr = 0) with fr_zero | fr_ne_zero
+      · simp [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq, fr_zero]
+      · have : (fr : K)⁻¹ = ((fr⁻¹ : Rat) : K) := by norm_cast
+        have coe_of_fr := coe_of_rat_eq this
+        simpa [IntFractPair.stream, IH.symm, v_eq_q, stream_q_nth_eq, fr_ne_zero]
 
 Depends on / 依赖: Decidable, Decidable.em, IH.symm, IntFractPair, IntFractPair.stream, Option.map_some, coe_of_fr, coe_of_rat_eq, fr_ne_zero, fr_zero, ifp_n, map_some, stream, stream_q_nth_eq, v_eq_q
 -/
@@ -538,7 +548,12 @@ theorem stream_succ_nth_fr_num_lt_nth_fr_num_rat
       IntFractPair.stream q n = some ifp_n' ∧
         ifp_n'.fr != 0 ∧ IntFractPair.of ifp_n'.fr⁻¹ = ifp_succ_n :=
     succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq
-  have : ifp_n = ifp_
+  have : ifp_n = ifp_n' := by injection Eq.trans stream_nth_eq.symm stream_nth_eq'
+  cases this
+  rw [← IntFractPair.of_eq_ifp_succ_n]
+  obtain ⟨zero_le_ifp_n_fract, _⟩ := nth_stream_fr_nonneg_lt_one stream_nth_eq
+have : 0 < ifp_n.fr := lt_of_le_of_ne zero_le_ifp_n_fract ifp_n_fract_ne_zero.symm
+  exact of_inv_fr_num_lt_num_of_pos this
 
 中文:
 定理 stream_succ_nth_fr_num_lt_nth_fr_num_rat
@@ -549,7 +564,12 @@ theorem stream_succ_nth_fr_num_lt_nth_fr_num_rat
       IntFractPair.stream q n = some ifp_n' ∧
         ifp_n'.fr != 0 ∧ IntFractPair.of ifp_n'.fr⁻¹ = ifp_succ_n :=
     succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq
-  have : ifp_n = ifp_
+  have : ifp_n = ifp_n' := by injection Eq.trans stream_nth_eq.symm stream_nth_eq'
+  cases this
+  rw [← IntFractPair.of_eq_ifp_succ_n]
+  obtain ⟨zero_le_ifp_n_fract, _⟩ := nth_stream_fr_nonneg_lt_one stream_nth_eq
+have : 0 < ifp_n.fr := lt_of_le_of_ne zero_le_ifp_n_fract ifp_n_fract_ne_zero.symm
+  exact of_inv_fr_num_lt_num_of_pos this
 
 Depends on / 依赖: Eq.trans, IntFractPair, IntFractPair.of, IntFractPair.of_eq_ifp_succ_n, IntFractPair.stream, ifp_n, ifp_n.fr, ifp_n_fract_ne_zero, ifp_succ_n, injection, lt_of_le_of_ne, nth_stream_fr_nonneg_lt_one, of_eq_ifp_succ_n, stream, stream_nth_eq, stream_nth_eq.symm, stream_succ_nth_eq, succ_nth_stream_eq_some_iff, succ_nth_stream_eq_some_iff.mp, zero_le_ifp_n_fract
 -/
@@ -583,7 +603,12 @@ theorem stream_nth_fr_num_le_fr_num_sub_n_rat
   | succ n IH =>
     intro ifp_succ_n stream_succ_nth_eq
     suffices ifp_succ_n.fr.num + 1 <= (IntFractPair.of q).fr.num - n by
-      rw [I
+      rw [Int.natCast_succ]; rw [sub_add_eq_sub_sub]
+      solve_by_elim [le_sub_right_of_add_le]
+    rcases succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq with ⟨ifp_n, stream_nth_eq, -⟩
+    have : ifp_succ_n.fr.num < ifp_n.fr.num :=
+      stream_succ_nth_fr_num_lt_nth_fr_num_rat stream_nth_eq stream_succ_nth_eq
+    exact le_trans this (IH stream_nth_eq)
 
 中文:
 定理 stream_nth_fr_num_le_fr_num_sub_n_rat
@@ -596,7 +621,12 @@ theorem stream_nth_fr_num_le_fr_num_sub_n_rat
   | succ n IH =>
     intro ifp_succ_n stream_succ_nth_eq
     suffices ifp_succ_n.fr.num + 1 <= (IntFractPair.of q).fr.num - n by
-      rw [I
+      rw [Int.natCast_succ]; rw [sub_add_eq_sub_sub]
+      solve_by_elim [le_sub_right_of_add_le]
+    rcases succ_nth_stream_eq_some_iff.mp stream_succ_nth_eq with ⟨ifp_n, stream_nth_eq, -⟩
+    have : ifp_succ_n.fr.num < ifp_n.fr.num :=
+      stream_succ_nth_fr_num_lt_nth_fr_num_rat stream_nth_eq stream_succ_nth_eq
+    exact le_trans this (IH stream_nth_eq)
 
 Depends on / 依赖: Int.natCast_succ, IntFractPair, IntFractPair.of, fr.num, ifp_n, ifp_n.fr.num, ifp_succ_n, ifp_succ_n.fr.num, ifp_zero, injection, le_sub_right_of_add_le, natCast_succ, solve_by_elim, stream_nth_eq, stream_succ_nth_eq, stream_succ_nth_fr_n, stream_zero_eq, sub_add_eq_sub_sub, succ_nth_stream_eq_some_iff, succ_nth_stream_eq_some_iff.mp
 -/
@@ -631,7 +661,15 @@ theorem exists_nth_stream_eq_none_of_rat
   · use n, stream_nth_eq
   · -- arrive at a contradiction since the numerator decreased num + 1 times but every fractional
     -- value is nonnegative.
-    have 
+    have ifp_fr_num_le_q_fr_num_sub_n : ifp.fr.num <= fract_q_num - n :=
+      stream_nth_fr_num_le_fr_num_sub_n_rat stream_nth_eq
+    have : fract_q_num - n = -1 := by
+      have : 0 <= fract_q_num := Rat.num_nonneg.mpr (Int.fract_nonneg q)
+      simp only [n, Nat.cast_add, Int.natAbs_of_nonneg this, Nat.cast_one,
+        sub_add_eq_sub_sub_swap, sub_right_comm, sub_self, zero_sub]
+    have : 0 <= ifp.fr := (nth_stream_fr_nonneg_lt_one stream_nth_eq).left
+    have : 0 <= ifp.fr.num := Rat.num_nonneg.mpr this
+    lia
 
 中文:
 定理 存在_nth_stream_eq_none_of_rat
@@ -643,7 +681,15 @@ theorem exists_nth_stream_eq_none_of_rat
   · use n, stream_nth_eq
   · -- arrive at a contradiction since the numerator decreased num + 1 times but every fractional
     -- value is nonnegative.
-    have 
+    have ifp_fr_num_le_q_fr_num_sub_n : ifp.fr.num <= fract_q_num - n :=
+      stream_nth_fr_num_le_fr_num_sub_n_rat stream_nth_eq
+    have : fract_q_num - n = -1 := by
+      have : 0 <= fract_q_num := Rat.num_nonneg.mpr (Int.fract_nonneg q)
+      simp only [n, Nat.cast_add, Int.natAbs_of_nonneg this, Nat.cast_one,
+        sub_add_eq_sub_sub_swap, sub_right_comm, sub_self, zero_sub]
+    have : 0 <= ifp.fr := (nth_stream_fr_nonneg_lt_one stream_nth_eq).left
+    have : 0 <= ifp.fr.num := Rat.num_nonneg.mpr this
+    lia
 
 Depends on / 依赖: Int.fract, IntFractPair, IntFractPair.stream, arrive, decreased, fract_q_num, fract_q_num.natAbs, fractional, natAbs, numerator, stream, stream_nth_eq
 -/

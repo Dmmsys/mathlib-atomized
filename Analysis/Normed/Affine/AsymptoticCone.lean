@@ -31,7 +31,11 @@ theorem AffineSpace.asymptoticNhds_le_cobounded
   proof: by
   have ⟨p⟩ : Nonempty P := inferInstance
   rw [← tendsto_id']; rw [← Metric.tendsto_dist_right_atTop_iff p]; rw [asymptoticNhds_eq_smul_vadd v p]; rw [vadd_pure]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [map_map]; rw [tendsto_map'_iff]
-  change Tendsto (fun x : Real × V => dist (x.1 • x.2 +
+  change Tendsto (fun x : Real × V => dist (x.1 • x.2 +ᵥ p) p) (atTop ×ˢ 𝓝 v) atTop
+  simp_rw [dist_vadd_left, norm_smul]
+  exact Tendsto.atTop_mul_pos (norm_pos_iff.mpr hv)
+    (tendsto_norm_atTop_atTop.comp tendsto_id.fst)
+    tendsto_snd.norm
 
 中文:
 定理 仿射空间.asymptoticNhds_le_cobounded
@@ -39,7 +43,11 @@ theorem AffineSpace.asymptoticNhds_le_cobounded
   证明: by
   have ⟨p⟩ : Nonempty P := inferInstance
   rw [← tendsto_id']; rw [← Metric.tendsto_dist_right_atTop_iff p]; rw [asymptoticNhds_eq_smul_vadd v p]; rw [vadd_pure]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [map_map]; rw [tendsto_map'_iff]
-  change Tendsto (fun x : Real × V => dist (x.1 • x.2 +
+  change Tendsto (fun x : Real × V => dist (x.1 • x.2 +ᵥ p) p) (atTop ×ˢ 𝓝 v) atTop
+  simp_rw [dist_vadd_left, norm_smul]
+  exact Tendsto.atTop_mul_pos (norm_pos_iff.mpr hv)
+    (tendsto_norm_atTop_atTop.comp tendsto_id.fst)
+    tendsto_snd.norm
 
 Depends on / 依赖: Metric, Metric.tendsto_dist_right_atTop_iff, Nonempty, Tendsto, Tendsto.atTop_mul_pos, _iff, asymptoticNhds_eq_smul_vadd, atTop_mul_pos, dist_vadd_left, map_map, norm_pos_iff, norm_pos_iff.mpr, norm_smul, simp_rw, tendsto_dist_right_atTop_iff, tendsto_id, tendsto_id.fst, tendsto_map, tendsto_norm_atTop_atTop, tendsto_norm_atTop_atTop.comp
 -/
@@ -94,7 +102,17 @@ refine le_antisymm ?_ iSup₂_le fun _ h => asymptoticNhds_le_cobounded
   have ⟨p⟩ : Nonempty P := inferInstance
   simp_rw [mem_iSup, asymptoticNhds_eq_smul_vadd _ p, vadd_pure] at hs
   choose! t ht u hu smul_subset_s using hs
-  have ⟨cover, h₁
+  have ⟨cover, h₁, h₂⟩ := (isCompact_sphere 0 1).elim_nhds_subcover u hu
+  rw [← Metric.comap_dist_left_atTop p]
+  refine ⟨Set.Ioi 0 inter ⋂ x in cover, t x, inter_mem (Ioi_mem_atTop 0)
+    (cover.iInter_mem_sets.mpr fun x hx => ht x (h₁ x hx)), fun x hx => ?_⟩
+  rw [Set.mem_preimage]; rw [dist_eq_norm_vsub'] at hx
+  let x' := ‖x -ᵥ p‖⁻¹ • (x -ᵥ p)
+  have x'_mem : x' in Metric.sphere 0 1 := by
+    rw [mem_sphere_zero_iff_norm]; rw [norm_smul]; rw [norm_inv]; rw [norm_norm]; rw [inv_mul_cancel₀ hx.1.ne']
+  have ⟨y, y_mem, hy⟩ := Set.mem_iUnion₂.mp (h₂ x'_mem)
+  rw [← vsub_vadd x p]; rw [← show ‖x -ᵥ p‖ • x' = x -ᵥ p from smul_inv_smul₀ hx.1.ne' (x -ᵥ p)]
+exact smul_subset_s y (h₁ y y_mem) Set.smul_mem_smul (Set.biInter_subset_of_mem y_mem hx.2) hy
 
 中文:
 定理 仿射空间.cobounded_eq_iSup_sphere_asymptoticNhds
@@ -105,7 +123,17 @@ refine le_antisymm ?_ iSup₂_le fun _ h => asymptoticNhds_le_cobounded
   have ⟨p⟩ : Nonempty P := inferInstance
   simp_rw [mem_iSup, asymptoticNhds_eq_smul_vadd _ p, vadd_pure] at hs
   choose! t ht u hu smul_subset_s using hs
-  have ⟨cover, h₁
+  have ⟨cover, h₁, h₂⟩ := (isCompact_sphere 0 1).elim_nhds_subcover u hu
+  rw [← Metric.comap_dist_left_atTop p]
+  refine ⟨Set.Ioi 0 inter ⋂ x in cover, t x, inter_mem (Ioi_mem_atTop 0)
+    (cover.iInter_mem_sets.mpr fun x hx => ht x (h₁ x hx)), fun x hx => ?_⟩
+  rw [Set.mem_preimage]; rw [dist_eq_norm_vsub'] at hx
+  let x' := ‖x -ᵥ p‖⁻¹ • (x -ᵥ p)
+  have x'_mem : x' in Metric.sphere 0 1 := by
+    rw [mem_sphere_zero_iff_norm]; rw [norm_smul]; rw [norm_inv]; rw [norm_norm]; rw [inv_mul_cancel₀ hx.1.ne']
+  have ⟨y, y_mem, hy⟩ := Set.mem_iUnion₂.mp (h₂ x'_mem)
+  rw [← vsub_vadd x p]; rw [← show ‖x -ᵥ p‖ • x' = x -ᵥ p from smul_inv_smul₀ hx.1.ne' (x -ᵥ p)]
+exact smul_subset_s y (h₁ y y_mem) Set.smul_mem_smul (Set.biInter_subset_of_mem y_mem hx.2) hy
 
 Depends on / 依赖: Ioi_mem_atTop, Metric, Metric.comap_dist_left_atTop, Metric.ne_of_mem_sphere, Nonempty, Set.Ioi, asymptoticNhds_eq_smul_vadd, asymptoticNhds_le_cobounded, comap_dist_left_atTop, cover.iInter_mem_sets.mpr, elim_nhds_subcover, iInter_mem_sets, inter_mem, isCompact_sphere, le_antisymm, mem_iSup, ne_of_mem_sphere, one_ne_zero, simp_rw, smul_subset_s
 -/

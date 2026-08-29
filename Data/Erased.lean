@@ -468,7 +468,9 @@ instance instLawfulMonad
     bind_assoc := by intros; ext; simp
     bind_pure_comp := by intros; ext; simp
     bind_map := by intros; ext; simp [Seq.seq]
-    seqLeft_eq := by intros; ext; simp [Seq
+    seqLeft_eq := by intros; ext; simp [Seq.seq, SeqLeft.seqLeft]
+    seqRight_eq := by intros; ext; simp [Seq.seq, SeqRight.seqRight]
+    pure_seq := by intros; ext; simp [Seq.seq] }
 
 中文:
 实例 instLawfulMonad
@@ -479,7 +481,9 @@ instance instLawfulMonad
     bind_assoc := by intros; ext; simp
     bind_pure_comp := by intros; ext; simp
     bind_map := by intros; ext; simp [Seq.seq]
-    seqLeft_eq := by intros; ext; simp [Seq
+    seqLeft_eq := by intros; ext; simp [Seq.seq, SeqLeft.seqLeft]
+    seqRight_eq := by intros; ext; simp [Seq.seq, SeqRight.seqRight]
+    pure_seq := by intros; ext; simp [Seq.seq] }
 -/
 protected instance instLawfulMonad : LawfulMonad Erased :=
   { id_map := by intros; ext; simp

@@ -185,7 +185,12 @@ instance :
     | ι x => induction a using SymmetricAlgebra.induction with
       | algebraMap r => exact Algebra.commute_algebraMap_left _ _
       | ι y =>
-have := Rin
+have := RingCon.le_ringConGen (r := SymRel R M) _ _ SymRel.mul_comm y x
+        simpa [commute_iff_eq, ι, ← RingCon.coe_mul]
+      | mul a b ha hb => exact ha.mul_left hb
+      | add a b ha hb => exact ha.add_left hb
+    | mul b c hb hc => exact hb.mul_right hc
+    | add b c hb hc => exact hb.add_right hc
 
 中文:
 实例 :
@@ -197,7 +202,12 @@ have := Rin
     | ι x => induction a using SymmetricAlgebra.induction with
       | algebraMap r => exact Algebra.commute_algebraMap_left _ _
       | ι y =>
-have := Rin
+have := RingCon.le_ringConGen (r := SymRel R M) _ _ SymRel.mul_comm y x
+        simpa [commute_iff_eq, ι, ← RingCon.coe_mul]
+      | mul a b ha hb => exact ha.mul_left hb
+      | add a b ha hb => exact ha.add_left hb
+    | mul b c hb hc => exact hb.mul_right hc
+    | add b c hb hc => exact hb.add_right hc
 
 Depends on / 依赖: Algebra, Algebra.commute_algebraMap_left, Algebra.commute_algebraMap_right, Commute, RingCon, RingCon.coe_mul, RingCon.le_ringConGen, SymRel, SymRel.mul_comm, SymmetricAlgebra, SymmetricAlgebra.induction, add_left, algebraMap, coe_mul, commute_algebraMap_left, commute_algebraMap_right, commute_iff_eq, ha.add_left, ha.mul_left, hb.mul_right
 -/
@@ -861,7 +871,7 @@ theorem induction
   | algebraMap r => simpa using algebraMap r
   | ι y => simpa using ι y
   | mul _ _ hx hy => simpa using mul _ _ hx hy
-  | add _ _ hx hy =
+  | add _ _ hx hy => simpa using add _ _ hx hy
 
 中文:
 定理 induction
@@ -874,7 +884,7 @@ theorem induction
   | algebraMap r => simpa using algebraMap r
   | ι y => simpa using ι y
   | mul _ _ hx hy => simpa using mul _ _ hx hy
-  | add _ _ hx hy =
+  | add _ _ hx hy => simpa using add _ _ hx hy
 
 Depends on / 依赖: SymmetricAlgebra, SymmetricAlgebra.induction, SymmetricAlgebra.lift, algebraMap, generalize, h.equiv.invFun, h.equiv.right_inv, invFun, motive, right_inv
 -/

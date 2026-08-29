@@ -665,7 +665,9 @@ theorem lift_iInf
     · inhabit ι
       exact iInf₂_le_of_le default univ (iInf_le _ univ_mem)
     · rw [hg]
-      exact le_inf (iInf₂_le_of_le _
+      exact le_inf (iInf₂_le_of_le _ _ <| iInf_le _ hs) ht
+  simp only [mem_lift_sets (Monotone.of_map_inf hg), exists_imp, and_imp]
+  exact fun t ht hs => H t ht hs
 
 中文:
 定理 lift_iInf
@@ -678,7 +680,9 @@ theorem lift_iInf
     · inhabit ι
       exact iInf₂_le_of_le default univ (iInf_le _ univ_mem)
     · rw [hg]
-      exact le_inf (iInf₂_le_of_le _
+      exact le_inf (iInf₂_le_of_le _ _ <| iInf_le _ hs) ht
+  simp only [mem_lift_sets (Monotone.of_map_inf hg), exists_imp, and_imp]
+  exact fun t ht hs => H t ht hs
 
 Depends on / 依赖: Monotone, Monotone.of_map_inf, and_imp, antisymm, exists_imp, iInf_le, iInf_sets_induct, inhabit, le_inf, lift_iInf_le, lift_iInf_le.antisymm, mem_lift_sets, of_map_inf, univ_mem
 -/

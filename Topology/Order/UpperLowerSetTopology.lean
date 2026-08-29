@@ -1248,7 +1248,8 @@ lemma monotone_iff_continuous
     rw [← mem_Iic]; rw [← closure_singleton] at hab ⊢
     apply Continuous.closure_preimage_subset hf {f b}
     apply mem_of_mem_of_subset hab
-    ap
+    apply closure_mono
+    rw [singleton_subset_iff]; rw [mem_preimage]; rw [mem_singleton_iff]
 
 中文:
 引理 monotone_iff_continuous
@@ -1262,7 +1263,8 @@ lemma monotone_iff_continuous
     rw [← mem_Iic]; rw [← closure_singleton] at hab ⊢
     apply Continuous.closure_preimage_subset hf {f b}
     apply mem_of_mem_of_subset hab
-    ap
+    apply closure_mono
+    rw [singleton_subset_iff]; rw [mem_preimage]; rw [mem_singleton_iff]
 -/
 protected lemma monotone_iff_continuous [TopologicalSpace α] [TopologicalSpace β]
     [Topology.IsUpperSet α] [Topology.IsUpperSet β] {f : α -> β} : Monotone f ↔ Continuous f := by

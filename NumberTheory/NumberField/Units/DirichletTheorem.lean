@@ -228,6 +228,10 @@ theorem logEmbedding_eq_zero_iff
         rw [neg_mul]; rw [neg_eq_zero]; rw [← hw] at this
         exact mult_log_place_eq_zero.mp this
       rw [← sum_logEmbedding_component]; rw [sum_eq_zero]
+      exact fun w _ => congrFun h w
+    · exact mult_log_place_eq_zero.mp (congrFun h ⟨w, hw⟩)
+  · ext w
+    rw [logEmbedding_component]; rw [h w.val]; rw [Real.log_one]; rw [mul_zero]; rw [Pi.zero_apply]
 
 中文:
 定理 logEmbedding_eq_zero_iff
@@ -240,6 +244,10 @@ theorem logEmbedding_eq_zero_iff
         rw [neg_mul]; rw [neg_eq_zero]; rw [← hw] at this
         exact mult_log_place_eq_zero.mp this
       rw [← sum_logEmbedding_component]; rw [sum_eq_zero]
+      exact fun w _ => congrFun h w
+    · exact mult_log_place_eq_zero.mp (congrFun h ⟨w, hw⟩)
+  · ext w
+    rw [logEmbedding_component]; rw [h w.val]; rw [Real.log_one]; rw [mul_zero]; rw [Pi.zero_apply]
 
 Depends on / 依赖: Pi.zero_apply, Real.log, Real.log_one, logEmbedding_component, log_one, mem_torsion, mul_zero, mult_log_place_eq_zero, mult_log_place_eq_zero.mp, neg_eq_zero, neg_mul, sum_eq_zero, sum_logEmbedding_component, w.val, zero_apply
 -/
@@ -347,7 +355,22 @@ theorem log_le_of_logEmbedding_le
     all_goals { rw [mult]; split_ifs <;> norm_num }
   by_cases hw : w = w₀
   · have hyp := congr_arg (‖·‖) (sum_logEmbedding_component x).symm
-    replace hy
+    replace hyp := (le_of_eq hyp).trans (norm_sum_le _ _)
+    simp_rw [norm_mul, norm_neg, Real.norm_eq_abs, Nat.abs_cast] at hyp
+    refine (le_trans ?_ hyp).trans ?_
+    · rw [← hw]
+      exact tool _ (abs_nonneg _)
+    · refine (sum_le_card_nsmul univ _ _
+        (fun w _ => logEmbedding_component_le hr h w)).trans ?_
+      rw [nsmul_eq_mul]
+      refine mul_le_mul ?_ le_rfl hr (Fintype.card (InfinitePlace K)).cast_nonneg
+      simp
+  · have hyp := logEmbedding_component_le hr h ⟨w, hw⟩
+    rw [logEmbedding_component]; rw [abs_mul]; rw [Nat.abs_cast] at hyp
+    refine (le_trans ?_ hyp).trans ?_
+    · exact tool _ (abs_nonneg _)
+    · nth_rw 1 [← one_mul r]
+      exact mul_le_mul (Nat.one_le_cast.mpr Fintype.card_pos) (le_of_eq rfl) hr (Nat.cast_nonneg _)
 
 中文:
 定理 log_le_of_logEmbedding_le
@@ -359,7 +382,22 @@ theorem log_le_of_logEmbedding_le
     all_goals { rw [mult]; split_ifs <;> norm_num }
   by_cases hw : w = w₀
   · have hyp := congr_arg (‖·‖) (sum_logEmbedding_component x).symm
-    replace hy
+    replace hyp := (le_of_eq hyp).trans (norm_sum_le _ _)
+    simp_rw [norm_mul, norm_neg, Real.norm_eq_abs, Nat.abs_cast] at hyp
+    refine (le_trans ?_ hyp).trans ?_
+    · rw [← hw]
+      exact tool _ (abs_nonneg _)
+    · refine (sum_le_card_nsmul univ _ _
+        (fun w _ => logEmbedding_component_le hr h w)).trans ?_
+      rw [nsmul_eq_mul]
+      refine mul_le_mul ?_ le_rfl hr (Fintype.card (InfinitePlace K)).cast_nonneg
+      simp
+  · have hyp := logEmbedding_component_le hr h ⟨w, hw⟩
+    rw [logEmbedding_component]; rw [abs_mul]; rw [Nat.abs_cast] at hyp
+    refine (le_trans ?_ hyp).trans ?_
+    · exact tool _ (abs_nonneg _)
+    · nth_rw 1 [← one_mul r]
+      exact mul_le_mul (Nat.one_le_cast.mpr Fintype.card_pos) (le_of_eq rfl) hr (Nat.cast_nonneg _)
 
 Depends on / 依赖: Nat.abs_cast, Real.norm_eq_abs, abs_cast, abs_nonneg, all_goals, congr_arg, le_of_eq, le_rfl, le_trans, mul_le_mul, norm_eq_abs, norm_mul, norm_neg, norm_sum_le, nth_rw, one_mul, replace, simp_rw, split_ifs, sum_le_card_nsmul
 -/
@@ -424,7 +462,17 @@ theorem unitLattice_inter_ball_finite
     exact Set.inter_empty _
   · suffices {x : (𝓞 K)ˣ | IsIntegral Int (x : K) ∧
         forall (φ : K ->+* Complex), ‖φ x‖ <= Real.exp ((Fintype.card (InfinitePlace K)) * r)}.Finite by
-      
+      refine (Set.Finite.image (logEmbedding K) this).subset ?_
+      rintro _ ⟨⟨x, ⟨_, rfl⟩⟩, hx⟩
+      refine ⟨x, ⟨x.val.prop, (le_iff_le _ _).mp (fun w => (Real.log_le_iff_le_exp ?_).mp ?_)⟩, rfl⟩
+      · exact pos_iff.mpr (coe_ne_zero x)
+      · rw [mem_closedBall_zero_iff] at hx
+        exact (le_abs_self _).trans (log_le_of_logEmbedding_le hr hx w)
+    refine Set.Finite.of_finite_image ?_ (coe_injective K).injOn
+    refine (Embeddings.finite_of_norm_le K Complex
+        (Real.exp ((Fintype.card (InfinitePlace K)) * r))).subset ?_
+    rintro _ ⟨x, ⟨⟨h_int, h_le⟩, rfl⟩⟩
+    exact ⟨h_int, h_le⟩
 
 中文:
 定理 unitLattice_inter_ball_finite
@@ -436,7 +484,17 @@ theorem unitLattice_inter_ball_finite
     exact Set.inter_empty _
   · suffices {x : (𝓞 K)ˣ | IsIntegral Int (x : K) ∧
         forall (φ : K ->+* Complex), ‖φ x‖ <= Real.exp ((Fintype.card (InfinitePlace K)) * r)}.Finite by
-      
+      refine (Set.Finite.image (logEmbedding K) this).subset ?_
+      rintro _ ⟨⟨x, ⟨_, rfl⟩⟩, hx⟩
+      refine ⟨x, ⟨x.val.prop, (le_iff_le _ _).mp (fun w => (Real.log_le_iff_le_exp ?_).mp ?_)⟩, rfl⟩
+      · exact pos_iff.mpr (coe_ne_zero x)
+      · rw [mem_closedBall_zero_iff] at hx
+        exact (le_abs_self _).trans (log_le_of_logEmbedding_le hr hx w)
+    refine Set.Finite.of_finite_image ?_ (coe_injective K).injOn
+    refine (Embeddings.finite_of_norm_le K Complex
+        (Real.exp ((Fintype.card (InfinitePlace K)) * r))).subset ?_
+    rintro _ ⟨x, ⟨⟨h_int, h_le⟩, rfl⟩⟩
+    exact ⟨h_int, h_le⟩
 
 Depends on / 依赖: Finite, Fintype, Fintype.card, InfinitePlace, IsIntegral, Metric, Metric.closedBall_eq_empty.mpr, Real.exp, Real.log_le_iff_le_exp, Set.Finite.image, Set.finite_empty, Set.inter_empty, closedBall_eq_empty, coe_ne_zero, convert, finite_empty, inter_empty, le_iff_le, logEmbedding, log_le_iff_le_exp
 -/
@@ -494,7 +552,22 @@ theorem seq_next
     fun w => ⟨(w x) / 2, div_nonneg (AbsoluteValue.nonneg _ _) (by simp)⟩
   suffices forall w, w != w₁ -> f w != 0 by
     obtain ⟨g, h_geqf, h_gprod⟩ := adjust_f K B this
-    obtain ⟨y, h_ynz, h_yle⟩ := ex
+    obtain ⟨y, h_ynz, h_yle⟩ := exists_ne_zero_mem_ringOfIntegers_lt K (f := g)
+      (by rw [convexBodyLT_volume]; convert! hB; exact congr_arg ((↑) : NNReal -> ENNReal) h_gprod)
+    refine ⟨y, h_ynz, fun w hw => (h_geqf w hw ▸ h_yle w).trans ?_, ?_⟩
+    · rw [← Rat.cast_le (K := Real), Rat.cast_natCast]
+      calc
+        _ = ∏ w : InfinitePlace K, w (algebraMap _ K y) ^ mult w :=
+          (prod_eq_abs_norm (algebraMap _ K y)).symm
+        _ <= ∏ w : InfinitePlace K, (g w : Real) ^ mult w := by gcongr with w; exact (h_yle w).le
+        _ <= (B : Real) := by
+          simp_rw [← NNReal.coe_pow, ← NNReal.coe_prod]
+          exact le_of_eq (congr_arg toReal h_gprod)
+    · refine div_lt_self ?_ (by simp)
+      exact pos_iff.mpr hx'
+  intro _ _
+  rw [ne_eq]; rw [Nonneg.mk_eq_zero]; rw [div_eq_zero_iff]; rw [map_eq_zero]; rw [not_or]
+  exact ⟨hx', by simp⟩
 
 中文:
 定理 seq_next
@@ -505,7 +578,22 @@ theorem seq_next
     fun w => ⟨(w x) / 2, div_nonneg (AbsoluteValue.nonneg _ _) (by simp)⟩
   suffices forall w, w != w₁ -> f w != 0 by
     obtain ⟨g, h_geqf, h_gprod⟩ := adjust_f K B this
-    obtain ⟨y, h_ynz, h_yle⟩ := ex
+    obtain ⟨y, h_ynz, h_yle⟩ := exists_ne_zero_mem_ringOfIntegers_lt K (f := g)
+      (by rw [convexBodyLT_volume]; convert! hB; exact congr_arg ((↑) : NNReal -> ENNReal) h_gprod)
+    refine ⟨y, h_ynz, fun w hw => (h_geqf w hw ▸ h_yle w).trans ?_, ?_⟩
+    · rw [← Rat.cast_le (K := Real), Rat.cast_natCast]
+      calc
+        _ = ∏ w : InfinitePlace K, w (algebraMap _ K y) ^ mult w :=
+          (prod_eq_abs_norm (algebraMap _ K y)).symm
+        _ <= ∏ w : InfinitePlace K, (g w : Real) ^ mult w := by gcongr with w; exact (h_yle w).le
+        _ <= (B : Real) := by
+          simp_rw [← NNReal.coe_pow, ← NNReal.coe_prod]
+          exact le_of_eq (congr_arg toReal h_gprod)
+    · refine div_lt_self ?_ (by simp)
+      exact pos_iff.mpr hx'
+  intro _ _
+  rw [ne_eq]; rw [Nonneg.mk_eq_zero]; rw [div_eq_zero_iff]; rw [map_eq_zero]; rw [not_or]
+  exact ⟨hx', by simp⟩
 
 Depends on / 依赖: AbsoluteValue, AbsoluteValue.nonneg, ENNReal, InfinitePlace, NNReal, RingOfIntegers, RingOfIntegers.coe_ne_zero_iff.mpr, adjust_f, coe_ne_zero_iff, congr_arg, convert, convexBodyLT_volume, div_nonneg, exists_ne_zero_mem_ringOfIntegers_lt, h_geqf, h_gprod, h_yle, h_ynz, nonneg
 -/
@@ -588,7 +676,8 @@ theorem seq_decreasing
           rw [hr]
           exact (seq_next K w₁ hB (seq K w₁ hB m).prop).choose_spec.2.1 w hw
       | inr hr =>
-          r
+          refine lt_trans ?_ (m_ih hr)
+          exact (seq_next K w₁ hB (seq K w₁ hB m).prop).choose_spec.2.1 w hw
 
 中文:
 定理 seq_decreasing
@@ -604,7 +693,8 @@ theorem seq_decreasing
           rw [hr]
           exact (seq_next K w₁ hB (seq K w₁ hB m).prop).choose_spec.2.1 w hw
       | inr hr =>
-          r
+          refine lt_trans ?_ (m_ih hr)
+          exact (seq_next K w₁ hB (seq K w₁ hB m).prop).choose_spec.2.1 w hw
 
 Depends on / 依赖: Nat.le_of_lt_succ, Nat.not_succ_le_zero, choose_spec, eq_or_lt_of_le, le_of_lt_succ, lt_trans, m_ih, not_succ_le_zero, seq_next
 -/
@@ -637,7 +727,8 @@ theorem seq_norm_le
         simp only [Nat.lt_one_iff.mp hB, CharP.cast_eq_zero, mul_zero, zero_le]
       simp only [ne_eq, seq, map_one, Int.natAbs_one, this]
   | succ n =>
-      rw [← Nat.cast_le (α := Rat)]; rw [Nat.cast_natAbs]; rw [Int.
+      rw [← Nat.cast_le (α := Rat)]; rw [Nat.cast_natAbs]; rw [Int.cast_abs]; rw [Algebra.coe_norm_int]
+      exact (seq_next K w₁ hB (seq K w₁ hB n).prop).choose_spec.2.2
 
 中文:
 定理 seq_norm_le
@@ -650,7 +741,8 @@ theorem seq_norm_le
         simp only [Nat.lt_one_iff.mp hB, CharP.cast_eq_zero, mul_zero, zero_le]
       simp only [ne_eq, seq, map_one, Int.natAbs_one, this]
   | succ n =>
-      rw [← Nat.cast_le (α := Rat)]; rw [Nat.cast_natAbs]; rw [Int.
+      rw [← Nat.cast_le (α := Rat)]; rw [Nat.cast_natAbs]; rw [Int.cast_abs]; rw [Algebra.coe_norm_int]
+      exact (seq_next K w₁ hB (seq K w₁ hB n).prop).choose_spec.2.2
 
 Depends on / 依赖: Algebra, Algebra.coe_norm_int, CharP.cast_eq_zero, Int.cast_abs, Int.natAbs_one, Nat.cast_le, Nat.cast_natAbs, Nat.lt_one_iff.mp, cast_abs, cast_eq_zero, cast_le, cast_natAbs, choose_spec, coe_norm_int, contrapose, lt_one_iff, map_one, mul_zero, natAbs_one, ne_eq
 -/
@@ -677,7 +769,22 @@ theorem exists_unit
     conv => congr; ext; rw [mul_comm]
     exact ENNReal.exists_nat_mul_gt (ENNReal.coe_ne_zero.mpr (convexBodyLTFactor_ne_zero K))
       (ne_of_lt (minkowskiBound_lt_top K 1))
-  rsuffices ⟨n, m, hnm, h⟩ : exi
+  rsuffices ⟨n, m, hnm, h⟩ : exists n m, n < m ∧
+      (Ideal.span ({ (seq K w₁ hB n : 𝓞 K) }) = Ideal.span ({ (seq K w₁ hB m : 𝓞 K) }))
+  · have hu := Ideal.span_singleton_eq_span_singleton.mp h
+    refine ⟨hu.choose, fun w hw => Real.log_neg (pos_at_place hu.choose w) ?_⟩
+    calc
+      _ = w (algebraMap (𝓞 K) K (seq K w₁ hB m) * (algebraMap (𝓞 K) K (seq K w₁ hB n))⁻¹) := by
+        rw [← congr_arg (algebraMap (𝓞 K) K) hu.choose_spec]; rw [mul_comm]; rw [map_mul (algebraMap _ _)]; rw [← mul_assoc]; rw [inv_mul_cancel₀ (seq_ne_zero K w₁ hB n)]; rw [one_mul]
+      _ = w (algebraMap (𝓞 K) K (seq K w₁ hB m)) * w (algebraMap (𝓞 K) K (seq K w₁ hB n))⁻¹ :=
+        map_mul _ _ _
+      _ < 1 := by
+        rw [map_inv₀]; rw [mul_inv_lt_iff₀' (pos_iff.mpr (seq_ne_zero K w₁ hB n))]; rw [mul_one]
+        exact seq_decreasing K w₁ hB hnm w hw
+  refine Set.Finite.exists_lt_map_eq_of_forall_mem (t := {I : Ideal (𝓞 K) | Ideal.absNorm I <= B})
+    (fun n => ?_) (Ideal.finite_setOfPred_absNorm_le B)
+  rw [Set.mem_ofPred_eq]; rw [Ideal.absNorm_span_singleton]
+  exact seq_norm_le K w₁ hB n
 
 中文:
 定理 存在_unit
@@ -687,7 +794,22 @@ theorem exists_unit
     conv => congr; ext; rw [mul_comm]
     exact ENNReal.exists_nat_mul_gt (ENNReal.coe_ne_zero.mpr (convexBodyLTFactor_ne_zero K))
       (ne_of_lt (minkowskiBound_lt_top K 1))
-  rsuffices ⟨n, m, hnm, h⟩ : exi
+  rsuffices ⟨n, m, hnm, h⟩ : exists n m, n < m ∧
+      (Ideal.span ({ (seq K w₁ hB n : 𝓞 K) }) = Ideal.span ({ (seq K w₁ hB m : 𝓞 K) }))
+  · have hu := Ideal.span_singleton_eq_span_singleton.mp h
+    refine ⟨hu.choose, fun w hw => Real.log_neg (pos_at_place hu.choose w) ?_⟩
+    calc
+      _ = w (algebraMap (𝓞 K) K (seq K w₁ hB m) * (algebraMap (𝓞 K) K (seq K w₁ hB n))⁻¹) := by
+        rw [← congr_arg (algebraMap (𝓞 K) K) hu.choose_spec]; rw [mul_comm]; rw [map_mul (algebraMap _ _)]; rw [← mul_assoc]; rw [inv_mul_cancel₀ (seq_ne_zero K w₁ hB n)]; rw [one_mul]
+      _ = w (algebraMap (𝓞 K) K (seq K w₁ hB m)) * w (algebraMap (𝓞 K) K (seq K w₁ hB n))⁻¹ :=
+        map_mul _ _ _
+      _ < 1 := by
+        rw [map_inv₀]; rw [mul_inv_lt_iff₀' (pos_iff.mpr (seq_ne_zero K w₁ hB n))]; rw [mul_one]
+        exact seq_decreasing K w₁ hB hnm w hw
+  refine Set.Finite.exists_lt_map_eq_of_forall_mem (t := {I : Ideal (𝓞 K) | Ideal.absNorm I <= B})
+    (fun n => ?_) (Ideal.finite_setOfPred_absNorm_le B)
+  rw [Set.mem_ofPred_eq]; rw [Ideal.absNorm_span_singleton]
+  exact seq_norm_le K w₁ hB n
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_zero.mpr, ENNReal.exists_nat_mul_gt, Ideal.span, Ideal.span_singleton_eq_span_singleton.mp, Real.log_neg, coe_ne_zero, convexBodyLTFactor, convexBodyLTFactor_ne_zero, exists_nat_mul_gt, hu.c, hu.choose, log_neg, minkowskiBound, minkowskiBound_lt_top, mul_comm, ne_of_lt, pos_at_place, rsuffices, span_singleton_eq_span_singleton
 -/
@@ -727,7 +849,26 @@ theorem unitLattice_span_eq_top
   let B := Pi.basisFun Real {w : InfinitePlace K // w != w₀}
   -- The image by log_embedding of the family of units constructed above
   let v := fun w : { w : InfinitePlace K // w != w₀ } =>
-    logEmbedding K (Additive.ofMul (exi
+    logEmbedding K (Additive.ofMul (exists_unit K w).choose)
+  -- To prove the result, it is enough to prove that the family `v` is linearly independent
+  suffices B.det v != 0 by
+    rw [← isUnit_iff_ne_zero]; rw [← Basis.is_basis_iff_det] at this
+    rw [← this.2]
+    refine Submodule.span_monotone fun _ ⟨w, hw⟩ => ⟨(exists_unit K w).choose, trivial, hw⟩
+  rw [Basis.det_apply]
+  -- We use a specific lemma to prove that this determinant is nonzero
+  refine det_ne_zero_of_sum_col_lt_diag (fun w => ?_)
+  simp_rw [Real.norm_eq_abs, B, Basis.coePiBasisFun.toMatrix_eq_transpose, Matrix.transpose_apply]
+  rw [← sub_pos]; rw [sum_congr rfl (fun x hx => abs_of_neg ?_)]; rw [sum_neg_distrib]; rw [sub_neg_eq_add]; rw [sum_erase_eq_sub (mem_univ _)]; rw [← add_comm_sub]
+  · refine add_pos_of_nonneg_of_pos ?_ ?_
+    · rw [sub_nonneg]
+      exact le_abs_self _
+    · rw [sum_logEmbedding_component (exists_unit K w).choose]
+      refine mul_pos_of_neg_of_neg ?_ ((exists_unit K w).choose_spec _ w.prop.symm)
+      rw [mult]; split_ifs <;> norm_num
+  · refine mul_neg_of_pos_of_neg ?_ ((exists_unit K w).choose_spec x ?_)
+    · rw [mult]; split_ifs <;> norm_num
+    · exact Subtype.ext_iff.not.mp (ne_of_mem_erase hx)
 
 中文:
 定理 unitLattice_span_eq_top
@@ -738,7 +879,26 @@ theorem unitLattice_span_eq_top
   let B := Pi.basisFun Real {w : InfinitePlace K // w != w₀}
   -- The image by log_embedding of the family of units constructed above
   let v := fun w : { w : InfinitePlace K // w != w₀ } =>
-    logEmbedding K (Additive.ofMul (exi
+    logEmbedding K (Additive.ofMul (exists_unit K w).choose)
+  -- To prove the result, it is enough to prove that the family `v` is linearly independent
+  suffices B.det v != 0 by
+    rw [← isUnit_iff_ne_zero]; rw [← Basis.is_basis_iff_det] at this
+    rw [← this.2]
+    refine Submodule.span_monotone fun _ ⟨w, hw⟩ => ⟨(exists_unit K w).choose, trivial, hw⟩
+  rw [Basis.det_apply]
+  -- We use a specific lemma to prove that this determinant is nonzero
+  refine det_ne_zero_of_sum_col_lt_diag (fun w => ?_)
+  simp_rw [Real.norm_eq_abs, B, Basis.coePiBasisFun.toMatrix_eq_transpose, Matrix.transpose_apply]
+  rw [← sub_pos]; rw [sum_congr rfl (fun x hx => abs_of_neg ?_)]; rw [sum_neg_distrib]; rw [sub_neg_eq_add]; rw [sum_erase_eq_sub (mem_univ _)]; rw [← add_comm_sub]
+  · refine add_pos_of_nonneg_of_pos ?_ ?_
+    · rw [sub_nonneg]
+      exact le_abs_self _
+    · rw [sum_logEmbedding_component (exists_unit K w).choose]
+      refine mul_pos_of_neg_of_neg ?_ ((exists_unit K w).choose_spec _ w.prop.symm)
+      rw [mult]; split_ifs <;> norm_num
+  · refine mul_neg_of_pos_of_neg ?_ ((exists_unit K w).choose_spec x ?_)
+    · rw [mult]; split_ifs <;> norm_num
+    · exact Subtype.ext_iff.not.mp (ne_of_mem_erase hx)
 
 Depends on / 依赖: classical, le_antisymm, le_top
 -/
@@ -810,7 +970,11 @@ instance instDiscrete_unitLattice
   refine isOpen_singleton_of_finite_mem_nhds 0 (s := Metric.closedBall 0 1) ?_ ?_
   · exact Metric.closedBall_mem_nhds _ (by simp)
   · refine Set.Finite.of_finite_image ?_ (Set.injOn_of_injective Subtype.val_injective)
-    convert!
+    convert! unitLattice_inter_ball_finite K 1
+    ext x
+    refine ⟨?_, fun ⟨hx1, hx2⟩ => ⟨⟨x, hx1⟩, hx2, rfl⟩⟩
+    rintro ⟨x, hx, rfl⟩
+    exact ⟨Subtype.mem x, hx⟩
 
 中文:
 实例 instDiscrete_unitLattice
@@ -821,7 +985,11 @@ instance instDiscrete_unitLattice
   refine isOpen_singleton_of_finite_mem_nhds 0 (s := Metric.closedBall 0 1) ?_ ?_
   · exact Metric.closedBall_mem_nhds _ (by simp)
   · refine Set.Finite.of_finite_image ?_ (Set.injOn_of_injective Subtype.val_injective)
-    convert!
+    convert! unitLattice_inter_ball_finite K 1
+    ext x
+    refine ⟨?_, fun ⟨hx1, hx2⟩ => ⟨⟨x, hx1⟩, hx2, rfl⟩⟩
+    rintro ⟨x, hx, rfl⟩
+    exact ⟨Subtype.mem x, hx⟩
 
 Depends on / 依赖: Finite, Metric, Metric.closedBall, Metric.closedBall_mem_nhds, Set.Finite.of_finite_image, Set.injOn_of_injective, Subtype, Subtype.mem, Subtype.val_injective, classical, closedBall, closedBall_mem_nhds, convert, discreteTopology_of_isOpen_singleton_zero, injOn_of_injective, isOpen_singleton_of_finite_mem_nhds, of_finite_image, unitLattice_inter_ball_finite, val_injective
 -/
@@ -917,7 +1085,9 @@ definition logEmbeddingQuot
     (QuotientGroup.kerLift (AddMonoidHom.toMultiplicativeRight (logEmbedding K))).comp
       (QuotientGroup.quotientMulEquivOfEq (by
         ext
-        rw [MonoidHom.mem_ker]; rw [AddMonoidHom.toMultiplicativeRight_apply_apply]; rw [ofAdd_eq_one]; rw [← logEmbedding_eq_zero
+        rw [MonoidHom.mem_ker]; rw [AddMonoidHom.toMultiplicativeRight_apply_apply]; rw [ofAdd_eq_one]; rw [← logEmbedding_eq_zero_iff])).toMonoidHom
+
+@[simp]
 
 中文:
 定义 logEmbeddingQuot
@@ -926,7 +1096,9 @@ definition logEmbeddingQuot
     (QuotientGroup.kerLift (AddMonoidHom.toMultiplicativeRight (logEmbedding K))).comp
       (QuotientGroup.quotientMulEquivOfEq (by
         ext
-        rw [MonoidHom.mem_ker]; rw [AddMonoidHom.toMultiplicativeRight_apply_apply]; rw [ofAdd_eq_one]; rw [← logEmbedding_eq_zero
+        rw [MonoidHom.mem_ker]; rw [AddMonoidHom.toMultiplicativeRight_apply_apply]; rw [ofAdd_eq_one]; rw [← logEmbedding_eq_zero_iff])).toMonoidHom
+
+@[simp]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.toMultiplicativeRight, AddMonoidHom.toMultiplicativeRight_apply_apply, MonoidHom, MonoidHom.mem_ker, MonoidHom.toAdditiveLeft, QuotientGroup, QuotientGroup.kerLift, QuotientGroup.quotientMulEquivOfEq, kerLift, logEmbedding, logEmbedding_eq_zero_iff, mem_ker, ofAdd_eq_one, quotientMulEquivOfEq, toAdditiveLeft, toMonoidHom, toMultiplicativeRight, toMultiplicativeRight_apply_apply
 -/
@@ -998,7 +1170,10 @@ definition logEmbeddingEquiv
     (Quotient.ind fun _ => logEmbeddingQuot_apply K _ ▸
       Submodule.mem_map_of_mem trivial)).toIntLinearMap
     ⟨fun _ _ => by
-      rw [AddMonoidHom.coe_toIntLinearMap]; rw [AddMonoidHom.codRestrict_apply]; rw [AddMonoidH
+      rw [AddMonoidHom.coe_toIntLinearMap]; rw [AddMonoidHom.codRestrict_apply]; rw [AddMonoidHom.codRestrict_apply]; rw [Subtype.mk.injEq]
+      apply logEmbeddingQuot_injective K, fun ⟨a, ⟨b, _, ha⟩⟩ => ⟨⟦b⟧, by simpa using! ha⟩⟩
+
+@[simp]
 
 中文:
 定义 logEmbeddingEquiv
@@ -1007,7 +1182,10 @@ definition logEmbeddingEquiv
     (Quotient.ind fun _ => logEmbeddingQuot_apply K _ ▸
       Submodule.mem_map_of_mem trivial)).toIntLinearMap
     ⟨fun _ _ => by
-      rw [AddMonoidHom.coe_toIntLinearMap]; rw [AddMonoidHom.codRestrict_apply]; rw [AddMonoidH
+      rw [AddMonoidHom.coe_toIntLinearMap]; rw [AddMonoidHom.codRestrict_apply]; rw [AddMonoidHom.codRestrict_apply]; rw [Subtype.mk.injEq]
+      apply logEmbeddingQuot_injective K, fun ⟨a, ⟨b, _, ha⟩⟩ => ⟨⟦b⟧, by simpa using! ha⟩⟩
+
+@[simp]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.codRestrict_apply, AddMonoidHom.coe_toIntLinearMap, LinearEquiv, LinearEquiv.ofBijective, Quotient, Quotient.ind, Submodule, Submodule.mem_map_of_mem, Subtype, Subtype.mk.injEq, codRestrict, codRestrict_apply, coe_toIntLinearMap, logEmbeddingQuot, logEmbeddingQuot_apply, logEmbeddingQuot_injective, mem_map_of_mem, ofBijective, toIntLinearMap
 -/
@@ -1093,7 +1271,12 @@ instance :
     (MonoidHom.toAdditive (QuotientGroup.mk' (torsion K))).toIntLinearMap ?_ ?_
   · rw [Submodule.map_top, LinearMap.range_eq_top.mpr
       (by exact QuotientGroup.mk'_surjective (torsion K)), ← Module.finite_def]
-    infer_in
+    infer_instance
+  · rw [inf_of_le_right le_top, AddMonoidHom.coe_toIntLinearMap_ker, MonoidHom.coe_toAdditive_ker,
+      QuotientGroup.ker_mk', Submodule.fg_iff_addSubgroup_fg,
+      AddSubgroup.toIntSubmodule_toAddSubgroup, ← AddGroup.fg_iff_addSubgroup_fg]
+    have : Finite (Subgroup.toAddSubgroup (torsion K)) := (inferInstance : Finite (torsion K))
+    exact AddGroup.fg_of_finite
 
 中文:
 实例 :
@@ -1104,7 +1287,12 @@ instance :
     (MonoidHom.toAdditive (QuotientGroup.mk' (torsion K))).toIntLinearMap ?_ ?_
   · rw [Submodule.map_top, LinearMap.range_eq_top.mpr
       (by exact QuotientGroup.mk'_surjective (torsion K)), ← Module.finite_def]
-    infer_in
+    infer_instance
+  · rw [inf_of_le_right le_top, AddMonoidHom.coe_toIntLinearMap_ker, MonoidHom.coe_toAdditive_ker,
+      QuotientGroup.ker_mk', Submodule.fg_iff_addSubgroup_fg,
+      AddSubgroup.toIntSubmodule_toAddSubgroup, ← AddGroup.fg_iff_addSubgroup_fg]
+    have : Finite (Subgroup.toAddSubgroup (torsion K)) := (inferInstance : Finite (torsion K))
+    exact AddGroup.fg_of_finite
 
 Depends on / 依赖: AddGroup, AddGroup.fg_iff_, AddMonoidHom, AddMonoidHom.coe_toIntLinearMap_ker, AddSubgroup, AddSubgroup.toIntSubmodule_toAddSubgroup, LinearMap, LinearMap.range_eq_top.mpr, Module, Module.finite_def, MonoidHom, MonoidHom.coe_toAdditive_ker, MonoidHom.toAdditive, QuotientGroup, QuotientGroup.ker_mk, QuotientGroup.mk, Submodule, Submodule.fg_iff_addSubgroup_fg, Submodule.fg_of_fg_map_of_fg_inf_ker, Submodule.map_top
 -/
@@ -1302,7 +1490,9 @@ theorem fun_eq_repr
   calc
     Additive.ofMul ↑x
     _ = ∑ i, (f i) • Additive.ofMul ↑(fundSystem K i) := by
-          rw [h]; rw [QuotientGroup.mk_mul]; rw [(QuotientGroup.eq_one_iff _).m
+          rw [h]; rw [QuotientGroup.mk_mul]; rw [(QuotientGroup.eq_one_iff _).mpr hζ]; rw [one_mul]; rw [QuotientGroup.mk_prod]; rw [ofMul_prod]; rfl
+    _ = ∑ i, (f i) • (basisModTorsion K i) := by
+          simp_rw [fundSystem, QuotientGroup.out_eq', ofMul_toMul]
 
 中文:
 定理 fun_eq_repr
@@ -1313,7 +1503,9 @@ theorem fun_eq_repr
   calc
     Additive.ofMul ↑x
     _ = ∑ i, (f i) • Additive.ofMul ↑(fundSystem K i) := by
-          rw [h]; rw [QuotientGroup.mk_mul]; rw [(QuotientGroup.eq_one_iff _).m
+          rw [h]; rw [QuotientGroup.mk_mul]; rw [(QuotientGroup.eq_one_iff _).mpr hζ]; rw [one_mul]; rw [QuotientGroup.mk_prod]; rw [ofMul_prod]; rfl
+    _ = ∑ i, (f i) • (basisModTorsion K i) := by
+          simp_rw [fundSystem, QuotientGroup.out_eq', ofMul_toMul]
 
 Depends on / 依赖: Additive, Additive.ofMul, QuotientGroup, QuotientGroup.eq_one_iff, QuotientGroup.mk_mul, QuotientGroup.mk_prod, QuotientGroup.out_eq, basisModTorsion, eq_one_iff, fundSystem, mk_mul, mk_prod, ofMul_prod, ofMul_toMul, one_mul, out_eq, repr_sum_self, simp_rw
 -/
@@ -1339,7 +1531,16 @@ theorem exist_unique_eq_mul_prod
   proof: by
   let ζ := x * (∏ i, (fundSystem K i) ^ ((basisModTorsion K).repr (Additive.ofMul ↑x) i))⁻¹
   have h_tors : ζ in torsion K := by
-    rw [← QuotientGroup.eq_one_iff]; rw [QuotientGroup.mk_mul]; rw [QuotientGroup.mk_inv]; rw [← ofMul_eq_zero]; rw [ofMul_mul]; rw [ofMul_inv]; rw [QuotientGroup.mk_pr
+    rw [← QuotientGroup.eq_one_iff]; rw [QuotientGroup.mk_mul]; rw [QuotientGroup.mk_inv]; rw [← ofMul_eq_zero]; rw [ofMul_mul]; rw [ofMul_inv]; rw [QuotientGroup.mk_prod]; rw [ofMul_prod]
+    simp_rw [QuotientGroup.mk_zpow, ofMul_zpow, fundSystem, QuotientGroup.out_eq']
+    rw [add_eq_zero_iff_eq_neg]; rw [neg_neg]
+    exact ((basisModTorsion K).sum_repr (Additive.ofMul ↑x)).symm
+  refine ⟨⟨⟨ζ, h_tors⟩, ((basisModTorsion K).repr (Additive.ofMul ↑x) : Fin (rank K) -> Int)⟩, ?_, ?_⟩
+  · simp only [ζ, _root_.inv_mul_cancel_right]
+  · rintro ⟨⟨ζ', h_tors'⟩, η⟩ hf
+    simp only [ζ, ← fun_eq_repr K h_tors' hf, Prod.mk.injEq, Subtype.mk.injEq, and_true]
+    nth_rewrite 1 [hf]
+    rw [_root_.mul_inv_cancel_right]
 
 中文:
 定理 exist_unique_eq_mul_prod
@@ -1348,7 +1549,16 @@ theorem exist_unique_eq_mul_prod
   证明: by
   let ζ := x * (∏ i, (fundSystem K i) ^ ((basisModTorsion K).repr (Additive.ofMul ↑x) i))⁻¹
   have h_tors : ζ in torsion K := by
-    rw [← QuotientGroup.eq_one_iff]; rw [QuotientGroup.mk_mul]; rw [QuotientGroup.mk_inv]; rw [← ofMul_eq_zero]; rw [ofMul_mul]; rw [ofMul_inv]; rw [QuotientGroup.mk_pr
+    rw [← QuotientGroup.eq_one_iff]; rw [QuotientGroup.mk_mul]; rw [QuotientGroup.mk_inv]; rw [← ofMul_eq_zero]; rw [ofMul_mul]; rw [ofMul_inv]; rw [QuotientGroup.mk_prod]; rw [ofMul_prod]
+    simp_rw [QuotientGroup.mk_zpow, ofMul_zpow, fundSystem, QuotientGroup.out_eq']
+    rw [add_eq_zero_iff_eq_neg]; rw [neg_neg]
+    exact ((basisModTorsion K).sum_repr (Additive.ofMul ↑x)).symm
+  refine ⟨⟨⟨ζ, h_tors⟩, ((basisModTorsion K).repr (Additive.ofMul ↑x) : Fin (rank K) -> Int)⟩, ?_, ?_⟩
+  · simp only [ζ, _root_.inv_mul_cancel_right]
+  · rintro ⟨⟨ζ', h_tors'⟩, η⟩ hf
+    simp only [ζ, ← fun_eq_repr K h_tors' hf, Prod.mk.injEq, Subtype.mk.injEq, and_true]
+    nth_rewrite 1 [hf]
+    rw [_root_.mul_inv_cancel_right]
 
 Depends on / 依赖: Additive, Additive.ofMul, QuotientGroup, QuotientGroup.eq_one_iff, QuotientGroup.mk_inv, QuotientGroup.mk_mul, QuotientGroup.mk_prod, QuotientGroup.mk_zpow, QuotientGroup.out_eq, add_eq_zero_iff_eq_neg, basisModTorsion, eq_one_iff, fundSystem, h_tors, mk_inv, mk_mul, mk_prod, mk_zpow, neg_neg, ofMul_eq_zero
 -/

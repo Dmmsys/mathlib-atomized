@@ -194,7 +194,25 @@ definition addRewriteEntry
   let .const head _ := cinfo.type.getForallBody.getAppFn | return []
   unless head == ``Eq || head == ``Iff do return []
   setMCtx {} -- recall that the metavariable context is not guaranteed to be empty at the start
-
+  let (_, _, eqn) ← forallMetaTelescope cinfo.type
+  let some (lhs, rhs) := eqOrIff? eqn | return []
+  let badMatch e :=
+    e.getAppFn.isMVar ||
+    -- this extra check excludes general equality lemmas that apply at any equality
+    -- these are almost never useful, and there are very many of them.
+    e.eq?.any fun (α, l, r) =>
+      α.getAppFn.isMVar && l.getAppFn.isMVar && r.getAppFn.isMVar && l != r
+  if badMatch lhs then
+    if badMatch rhs then
+      return []
+    else
+      return [({ name, symm := true }, ← initializeLazyEntryWithEta rhs)]
+  else
+    let result := ({ name, symm := false }, ← initializeLazyEntryWithEta lhs)
+    if badMatch rhs || isMVarSwap lhs rhs then
+      return [result]
+    else
+      return [result, ({ name, symm := true }, ← initializeLazyEntryWithEta rhs)]
 
 中文:
 定义 addRewriteEntry
@@ -204,7 +222,25 @@ definition addRewriteEntry
   let .const head _ := cinfo.type.getForallBody.getAppFn | return []
   unless head == ``Eq || head == ``Iff do return []
   setMCtx {} -- recall that the metavariable context is not guaranteed to be empty at the start
-
+  let (_, _, eqn) ← forallMetaTelescope cinfo.type
+  let some (lhs, rhs) := eqOrIff? eqn | return []
+  let badMatch e :=
+    e.getAppFn.isMVar ||
+    -- this extra check excludes general equality lemmas that apply at any equality
+    -- these are almost never useful, and there are very many of them.
+    e.eq?.any fun (α, l, r) =>
+      α.getAppFn.isMVar && l.getAppFn.isMVar && r.getAppFn.isMVar && l != r
+  if badMatch lhs then
+    if badMatch rhs then
+      return []
+    else
+      return [({ name, symm := true }, ← initializeLazyEntryWithEta rhs)]
+  else
+    let result := ({ name, symm := false }, ← initializeLazyEntryWithEta lhs)
+    if badMatch rhs || isMVarSwap lhs rhs then
+      return [result]
+    else
+      return [result, ({ name, symm := true }, ← initializeLazyEntryWithEta rhs)]
 -/
 def addRewriteEntry (name : Name) (cinfo : ConstantInfo) :
     MetaM (List (RewriteLemma × List (Key × LazyEntry))) := do
@@ -244,7 +280,7 @@ definition addLocalRewriteEntry
   let (_, _, eqn) ← forallMetaTelescopeReducing decl.type
   let some (lhs, rhs) := eqOrIff? (← whnf eqn) | return []
   let result := ((decl.fvarId, false), ← initializeLazyEntryWithEta lhs)
-  return [resu
+  return [result, ((decl.fvarId, true), ← initializeLazyEntryWithEta rhs)]
 
 中文:
 定义 addLocalRewriteEntry
@@ -254,7 +290,7 @@ definition addLocalRewriteEntry
   let (_, _, eqn) ← forallMetaTelescopeReducing decl.type
   let some (lhs, rhs) := eqOrIff? (← whnf eqn) | return []
   let result := ((decl.fvarId, false), ← initializeLazyEntryWithEta lhs)
-  return [resu
+  return [result, ((decl.fvarId, true), ← initializeLazyEntryWithEta rhs)]
 -/
 def addLocalRewriteEntry (decl : LocalDecl) :
     MetaM (List ((FVarId × Bool) × List (Key × LazyEntry))) := do
@@ -328,6 +364,12 @@ definition getImportCandidates
     Too many means the tasks are too long.
     Too few means less cache can be reused and more time is spent on combining different results.
 
+    With 5000 constants per task, we set the `HashMap` capacity to 256,
+    which is the largest capacity it gets to reach.
+    -/
+    (constantsPerTask := 5000) (capacityPerTask := 256) e
+  return matchResult.flatten
+
 中文:
 定义 getImportCandidates
   签名: (e : Expr)
@@ -337,6 +379,12 @@ definition getImportCandidates
     5000 constants seems to be approximately the right number of tasks
     Too many means the tasks are too long.
     Too few means less cache can be reused and more time is spent on combining different results.
+
+    With 5000 constants per task, we set the `HashMap` capacity to 256,
+    which is the largest capacity it gets to reach.
+    -/
+    (constantsPerTask := 5000) (capacityPerTask := 256) e
+  return matchResult.flatten
 -/
 def getImportCandidates (e : Expr) : MetaM (Array (Array RewriteLemma)) := do
   let matchResult ← findImportMatches importedRewriteLemmasExt addRewriteEntry
@@ -427,7 +475,25 @@ definition checkRewrite
   let (mvars, binderInfos, eqn) ← forallMetaTelescopeReducing (← inferType thm)
   let some (lhs, rhs) := eqOrIff? (← whnf eqn) |
     throwError "Expected equation, not {indentExpr eqn}"
-  l
+  let (lhs, rhs) := if symm then (rhs, lhs) else (lhs, rhs)
+  let unifies ← withTraceNodeBefore `rw?? (fun _ =>return m! "unifying {e} =?= {lhs}")
+    (withReducible (isDefEq lhs e))
+  unless unifies do return none
+  -- just like in `kabstract`, we compare the `HeadIndex` and number of arguments
+  let lhs ← instantiateMVars lhs
+  if lhs.toHeadIndex != e.toHeadIndex || lhs.headNumArgs != e.headNumArgs then
+    return none
+  synthAppInstances `rw?? default mvars binderInfos false false
+  let mut extraGoals := #[]
+  for mvar in mvars, bi in binderInfos do
+    unless ← mvar.mvarId!.isAssigned do
+      extraGoals := extraGoals.push (mvar.mvarId!, bi)
+
+  let replacement ← instantiateMVars rhs
+  let stringLength := (← ppExpr replacement).pretty.length
+  let makesNewMVars := (replacement.findMVar? fun mvarId => mvars.any (·.mvarId! == mvarId)).isSome
+  let proof ← instantiateMVars (mkAppN thm mvars)
+  return some { symm, proof, replacement, stringLength, extraGoals, makesNewMVars }
 
 中文:
 定义 checkRewrite
@@ -438,7 +504,25 @@ definition checkRewrite
   let (mvars, binderInfos, eqn) ← forallMetaTelescopeReducing (← inferType thm)
   let some (lhs, rhs) := eqOrIff? (← whnf eqn) |
     throwError "Expected equation, not {indentExpr eqn}"
-  l
+  let (lhs, rhs) := if symm then (rhs, lhs) else (lhs, rhs)
+  let unifies ← withTraceNodeBefore `rw?? (fun _ =>return m! "unifying {e} =?= {lhs}")
+    (withReducible (isDefEq lhs e))
+  unless unifies do return none
+  -- just like in `kabstract`, we compare the `HeadIndex` and number of arguments
+  let lhs ← instantiateMVars lhs
+  if lhs.toHeadIndex != e.toHeadIndex || lhs.headNumArgs != e.headNumArgs then
+    return none
+  synthAppInstances `rw?? default mvars binderInfos false false
+  let mut extraGoals := #[]
+  for mvar in mvars, bi in binderInfos do
+    unless ← mvar.mvarId!.isAssigned do
+      extraGoals := extraGoals.push (mvar.mvarId!, bi)
+
+  let replacement ← instantiateMVars rhs
+  let stringLength := (← ppExpr replacement).pretty.length
+  let makesNewMVars := (replacement.findMVar? fun mvarId => mvars.any (·.mvarId! == mvarId)).isSome
+  let proof ← instantiateMVars (mkAppN thm mvars)
+  return some { symm, proof, replacement, stringLength, extraGoals, makesNewMVars }
 -/
 def checkRewrite (thm e : Expr) (symm : Bool) : MetaM (Option Rewrite) := do
   withTraceNodeBefore `rw?? (fun _ => return m!
@@ -483,7 +567,12 @@ Option.map (·, rw.name) < > checkRewrite thm e rw.symm
       fun _ =>
         return none
 let lt (a b : (Rewrite × Name)) := Ordering.isLT
-(compare a.1.extraGoals.size b.1.
+(compare a.1.extraGoals.size b.1.extraGoals.size).then
+(compare a.1.symm b.1.symm).then
+(compare a.2.toString.length b.2.toString.length).then
+(compare a.1.stringLength b.1.stringLength).then
+    (Name.cmp a.2 b.2)
+  return rewrites.qsort lt
 
 中文:
 定义 checkAndSortRewriteLemmas
@@ -496,7 +585,12 @@ Option.map (·, rw.name) < > checkRewrite thm e rw.symm
       fun _ =>
         return none
 let lt (a b : (Rewrite × Name)) := Ordering.isLT
-(compare a.1.extraGoals.size b.1.
+(compare a.1.extraGoals.size b.1.extraGoals.size).then
+(compare a.1.symm b.1.symm).then
+(compare a.2.toString.length b.2.toString.length).then
+(compare a.1.stringLength b.1.stringLength).then
+    (Name.cmp a.2 b.2)
+  return rewrites.qsort lt
 -/
 def checkAndSortRewriteLemmas (e : Expr) (rewrites : Array RewriteLemma) :
     MetaM (Array (Rewrite × Name)) := do
@@ -564,7 +658,8 @@ definition getHypotheses
     if !decl.isImplementationDetail && except.all (· != decl.fvarId) then
       for (val, entries) in ← addLocalRewriteEntry decl do
         for (key, entry) in entries do
-          tree := tree.push key 
+          tree := tree.push key (entry, val)
+  return tree.toRefinedDiscrTree
 
 中文:
 定义 getHypotheses
@@ -575,7 +670,8 @@ definition getHypotheses
     if !decl.isImplementationDetail && except.all (· != decl.fvarId) then
       for (val, entries) in ← addLocalRewriteEntry decl do
         for (key, entry) in entries do
-          tree := tree.push key 
+          tree := tree.push key (entry, val)
+  return tree.toRefinedDiscrTree
 
 Depends on / 依赖: FVarId, PreDiscrTree, addLocalRewriteEntry, decl.fvarId, decl.isImplementationDetail, entries, except, except.all, fvarId, getLCtx, isImplementationDetail, return, toRefinedDiscrTree, tree.push, tree.toRefinedDiscrTree, withReducible
 -/
@@ -602,7 +698,7 @@ candidates.mapM Array.filterMapM fun (fvarId, symm) =>
     tryCatchRuntimeEx do
 Option.map (·, fvarId) < > checkRewrite (.fvar fvarId) e symm
     fun _ =>
-  
+      return none
 
 中文:
 定义 getHypothesisRewrites
@@ -614,7 +710,7 @@ candidates.mapM Array.filterMapM fun (fvarId, symm) =>
     tryCatchRuntimeEx do
 Option.map (·, fvarId) < > checkRewrite (.fvar fvarId) e symm
     fun _ =>
-  
+      return none
 -/
 def getHypothesisRewrites (e : Expr) (except : Option FVarId) :
     MetaM (Array (Array (Rewrite × FVarId))) := do
@@ -642,7 +738,10 @@ definition getBinderInfos
     unless fnType.isForall do
       fnType ← whnfD (fnType.instantiateRevRange j i args)
       j := i
-    let .forallE _ _ b bi := fnType | throwError m! "expected function type
+    let .forallE _ _ b bi := fnType | throwError m! "expected function type {indentExpr fnType}"
+    fnType := b
+    result := result.push bi
+  return result
 
 中文:
 定义 getBinderInfos
@@ -655,7 +754,10 @@ definition getBinderInfos
     unless fnType.isForall do
       fnType ← whnfD (fnType.instantiateRevRange j i args)
       j := i
-    let .forallE _ _ b bi := fnType | throwError m! "expected function type
+    let .forallE _ _ b bi := fnType | throwError m! "expected function type {indentExpr fnType}"
+    fnType := b
+    result := result.push bi
+  return result
 -/
 def getBinderInfos (fn : Expr) (args : Array Expr) : MetaM (Array BinderInfo) := do
   let mut fnType ← inferType fn
@@ -686,7 +788,9 @@ definition isExplicitEq
   let bis ← getBinderInfos t.getAppFn tArgs
   t.getAppNumArgs.allM fun i _ =>
     if bis[i]!.isExplicit then
-      i
+      isExplicitEq tArgs[i]! sArgs[i]!
+    else
+      isDefEq tArgs[i]! sArgs[i]!
 
 中文:
 定义 isExplicitEq
@@ -701,7 +805,9 @@ definition isExplicitEq
   let bis ← getBinderInfos t.getAppFn tArgs
   t.getAppNumArgs.allM fun i _ =>
     if bis[i]!.isExplicit then
-      i
+      isExplicitEq tArgs[i]! sArgs[i]!
+    else
+      isDefEq tArgs[i]! sArgs[i]!
 -/
 partial def isExplicitEq (t s : Expr) : MetaM Bool := do
   if t == s then
@@ -733,7 +839,14 @@ definition filterRewrites
     if makesNewMVars rw then continue
     -- exclude a reflexive rewrite
     if ← isExplicitEq (replacement rw) e then
-      trace[rw??] "discarded refle
+      trace[rw??] "discarded reflexive rewrite {replacement rw}"
+      continue
+    -- exclude two identical looking rewrites
+    if ← filtered.anyM (isExplicitEq (replacement rw) <| replacement ·) then
+      trace[rw??] "discarded duplicate rewrite {replacement rw}"
+      continue
+    filtered := filtered.push rw
+  return filtered
 
 中文:
 定义 filterRewrites
@@ -745,7 +858,14 @@ definition filterRewrites
     if makesNewMVars rw then continue
     -- exclude a reflexive rewrite
     if ← isExplicitEq (replacement rw) e then
-      trace[rw??] "discarded refle
+      trace[rw??] "discarded reflexive rewrite {replacement rw}"
+      continue
+    -- exclude two identical looking rewrites
+    if ← filtered.anyM (isExplicitEq (replacement rw) <| replacement ·) then
+      trace[rw??] "discarded duplicate rewrite {replacement rw}"
+      continue
+    filtered := filtered.push rw
+  return filtered
 
 Depends on / 依赖: filtered, rewrites, withNewMCtxDepth
 -/
@@ -782,7 +902,7 @@ definition mkRewrite
   let rule ← if symm then `(Parser.Tactic.rwRule| ← $e) else `(Parser.Tactic.rwRule| $e:term)
   match occ with
   | some n => `(tactic| nth_rw $(Syntax.mkNatLit n):num [$rule] $(loc)?)
-  | none => `(tactic| rw [$rul
+  | none => `(tactic| rw [$rule] $(loc)?)
 
 中文:
 定义 mkRewrite
@@ -792,7 +912,7 @@ definition mkRewrite
   let rule ← if symm then `(Parser.Tactic.rwRule| ← $e) else `(Parser.Tactic.rwRule| $e:term)
   match occ with
   | some n => `(tactic| nth_rw $(Syntax.mkNatLit n):num [$rule] $(loc)?)
-  | none => `(tactic| rw [$rul
+  | none => `(tactic| rw [$rule] $(loc)?)
 -/
 def mkRewrite (occ : Option Nat) (symm : Bool) (e : Term) (loc : Option Name) :
     CoreM (TSyntax `tactic) := do
@@ -918,7 +1038,19 @@ definition Rewrite.toInterface
   let mut extraGoals := #[]
   for (mvarId, bi) in rw.extraGoals do
     if bi.isExplicit then
-      let extraGoal ← ppExprTagged (← instantiateMVa
+      let extraGoal ← ppExprTagged (← instantiateMVars (← mvarId.getType))
+      extraGoals := extraGoals.push extraGoal
+  match name with
+  | .inl name =>
+    let prettyLemma := match ← ppExprTagged (← mkConstWithLevelParams name) with
+      | .tag tag _ => .tag tag (.text s!"{name}")
+      | code => code
+    let lemmaType := (← getConstInfo name).type
+    return { rw with tactic, replacementString, extraGoals, prettyLemma, lemmaType }
+  | .inr fvarId =>
+    let prettyLemma ← ppExprTagged (.fvar fvarId)
+    let lemmaType ← fvarId.getType
+    return { rw with tactic, replacementString, extraGoals, prettyLemma, lemmaType }
 
 中文:
 定义 Rewrite.to整数erface
@@ -930,7 +1062,19 @@ definition Rewrite.toInterface
   let mut extraGoals := #[]
   for (mvarId, bi) in rw.extraGoals do
     if bi.isExplicit then
-      let extraGoal ← ppExprTagged (← instantiateMVa
+      let extraGoal ← ppExprTagged (← instantiateMVars (← mvarId.getType))
+      extraGoals := extraGoals.push extraGoal
+  match name with
+  | .inl name =>
+    let prettyLemma := match ← ppExprTagged (← mkConstWithLevelParams name) with
+      | .tag tag _ => .tag tag (.text s!"{name}")
+      | code => code
+    let lemmaType := (← getConstInfo name).type
+    return { rw with tactic, replacementString, extraGoals, prettyLemma, lemmaType }
+  | .inr fvarId =>
+    let prettyLemma ← ppExprTagged (.fvar fvarId)
+    let lemmaType ← fvarId.getType
+    return { rw with tactic, replacementString, extraGoals, prettyLemma, lemmaType }
 -/
 def Rewrite.toInterface (rw : Rewrite) (name : Name oplus FVarId) (occ : Option Nat)
     (loc : Option Name) (range : Lsp.Range) : MetaM RewriteInterface := do
@@ -993,7 +1137,18 @@ definition getRewriteInterfaces
   for rewrites in ← getHypothesisRewrites e except do
     let rewrites ← rewrites.mapM fun (rw, fvarId) => rw.toInterface (.inr fvarId) occ loc range
     all := all.push (rewrites, .hypothesis)
-    filtr := filtr.push (← filterRewrites e rewrites (·.rep
+    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .hypothesis)
+
+  for rewrites in ← getModuleRewrites e do
+    let rewrites ← rewrites.mapM fun (rw, name) => rw.toInterface (.inl name) occ loc range
+    all := all.push (rewrites, .fromFile)
+    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .fromFile)
+
+  for rewrites in ← getImportRewrites e do
+    let rewrites ← rewrites.mapM fun (rw, name) => rw.toInterface (.inl name) occ loc range
+    all := all.push (rewrites, .fromCache)
+    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .fromCache)
+  return (filtr, all)
 
 中文:
 定义 getRewrite整数erfaces
@@ -1004,7 +1159,18 @@ definition getRewriteInterfaces
   for rewrites in ← getHypothesisRewrites e except do
     let rewrites ← rewrites.mapM fun (rw, fvarId) => rw.toInterface (.inr fvarId) occ loc range
     all := all.push (rewrites, .hypothesis)
-    filtr := filtr.push (← filterRewrites e rewrites (·.rep
+    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .hypothesis)
+
+  for rewrites in ← getModuleRewrites e do
+    let rewrites ← rewrites.mapM fun (rw, name) => rw.toInterface (.inl name) occ loc range
+    all := all.push (rewrites, .fromFile)
+    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .fromFile)
+
+  for rewrites in ← getImportRewrites e do
+    let rewrites ← rewrites.mapM fun (rw, name) => rw.toInterface (.inl name) occ loc range
+    all := all.push (rewrites, .fromCache)
+    filtr := filtr.push (← filterRewrites e rewrites (·.replacement) (·.makesNewMVars), .fromCache)
+  return (filtr, all)
 
 Depends on / 依赖: SpectralMapClass, SpectralMapClass.toContinuousMapClass, TopologicalSpace, toContinuousMapClass
 -/
@@ -1132,7 +1298,31 @@ definition rpc
     return .text "rw??: Please shift-click an expression."
   if loc.loc matches .hypValue .. then
     return .text "rw??: cannot rewrite in the value of a let variable."
-  let some goal := props.goals[0
+  let some goal := props.goals[0]? | return .text "rw??: there is no goal to solve!"
+  if loc.mvarId != goal.mvarId then
+    return .text "rw??: the selected expression should be in the main goal."
+  goal.ctx.val.runMetaM {} do
+    let md ← goal.mvarId.getDecl
+.sanitizeNames.run' {options := (← getOptions)} let lctx := md.lctx
+    Meta.withLCtx lctx md.localInstances do
+
+      let rootExpr ← loc.rootExpr
+let some (subExpr, occ) ← withReducible viewKAbstractSubExpr rootExpr loc.pos |
+        return .text "rw??: expressions with bound variables are not yet supported"
+      unless ← kabstractIsTypeCorrect rootExpr subExpr loc.pos do
+return .text "rw??: the selected expression cannot be rewritten, \
+          because the motive is not type correct. \
+          This usually occurs when trying to rewrite a term that appears as a dependent argument."
+      let location ← loc.fvarId?.mapM FVarId.getUserName
+
+      let (filtered, all) ← getRewriteInterfaces subExpr occ location loc.fvarId? props.replaceRange
+      let filtered ← renderRewrites subExpr filtered props.replaceRange doc false
+      let all ← renderRewrites subExpr all props.replaceRange doc true
+      return <FilterDetails
+        summary={.text "Rewrite suggestions:"}
+        all={all}
+        filtered={filtered}
+        initiallyFiltered={true} />
 
 中文:
 定义 rpc
@@ -1143,7 +1333,31 @@ definition rpc
     return .text "rw??: Please shift-click an expression."
   if loc.loc matches .hypValue .. then
     return .text "rw??: cannot rewrite in the value of a let variable."
-  let some goal := props.goals[0
+  let some goal := props.goals[0]? | return .text "rw??: there is no goal to solve!"
+  if loc.mvarId != goal.mvarId then
+    return .text "rw??: the selected expression should be in the main goal."
+  goal.ctx.val.runMetaM {} do
+    let md ← goal.mvarId.getDecl
+.sanitizeNames.run' {options := (← getOptions)} let lctx := md.lctx
+    Meta.withLCtx lctx md.localInstances do
+
+      let rootExpr ← loc.rootExpr
+let some (subExpr, occ) ← withReducible viewKAbstractSubExpr rootExpr loc.pos |
+        return .text "rw??: expressions with bound variables are not yet supported"
+      unless ← kabstractIsTypeCorrect rootExpr subExpr loc.pos do
+return .text "rw??: the selected expression cannot be rewritten, \
+          because the motive is not type correct. \
+          This usually occurs when trying to rewrite a term that appears as a dependent argument."
+      let location ← loc.fvarId?.mapM FVarId.getUserName
+
+      let (filtered, all) ← getRewriteInterfaces subExpr occ location loc.fvarId? props.replaceRange
+      let filtered ← renderRewrites subExpr filtered props.replaceRange doc false
+      let all ← renderRewrites subExpr all props.replaceRange doc true
+      return <FilterDetails
+        summary={.text "Rewrite suggestions:"}
+        all={all}
+        filtered={filtered}
+        initiallyFiltered={true} />
 
 Depends on / 依赖: Please, RequestM, RequestM.asTask, RequestM.readDoc, asTask, cannot, expression, getDecl, goal.ctx.val.runMetaM, goal.mvarId, goal.mvarId.getDecl, hypValue, loc.loc, loc.mvarId, matches, mvarId, props.goals, props.selectedLocations.back, readDoc, return
 -/
@@ -1266,7 +1480,7 @@ definition SectionToMessageData
   let rewrites : MessageData := .group (.joinSep rewrites "\n")
   let some (rw, name) := sec.1[0]? | return none
   let head ← pattern (← getConstInfo name).type rw.symm (addMessageContext m! "{·}")
-return some "Pattern " +
+return some "Pattern " ++ head ++ "\n" ++ rewrites
 
 中文:
 定义 SectionToMessageData
@@ -1276,7 +1490,7 @@ return some "Pattern " +
   let rewrites : MessageData := .group (.joinSep rewrites "\n")
   let some (rw, name) := sec.1[0]? | return none
   let head ← pattern (← getConstInfo name).type rw.symm (addMessageContext m! "{·}")
-return some "Pattern " +
+return some "Pattern " ++ head ++ "\n" ++ rewrites
 -/
 def SectionToMessageData (sec : Array (Rewrite × Name) × Bool) : MetaM (Option MessageData) := do
   let rewrites ← sec.1.toList.mapM fun (rw, name) => rw.toMessageData name
@@ -1306,7 +1520,21 @@ withoutModifyingEnv Command.runTermElabM fun _ => do
   let filter := stx[1].isNone
   let mut rewrites := #[]
   for rws in ← getModuleRewrites e do
-    le
+    let rws ← if filter then
+      filterRewrites e rws (·.1.replacement) (·.1.makesNewMVars)
+      else pure rws
+    rewrites := rewrites.push (rws, true)
+  for rws in ← getImportRewrites e do
+    let rws ← if filter then
+      filterRewrites e rws (·.1.replacement) (·.1.makesNewMVars)
+      else pure rws
+    rewrites := rewrites.push (rws, false)
+
+let sections ← liftMetaM rewrites.filterMapM SectionToMessageData
+  if sections.isEmpty then
+    logInfo m! "No rewrites found for {e}"
+  else
+    logInfo (.joinSep sections.toList "\n\n")
 
 中文:
 定义 elabrw??Command
@@ -1320,7 +1548,21 @@ withoutModifyingEnv Command.runTermElabM fun _ => do
   let filter := stx[1].isNone
   let mut rewrites := #[]
   for rws in ← getModuleRewrites e do
-    le
+    let rws ← if filter then
+      filterRewrites e rws (·.1.replacement) (·.1.makesNewMVars)
+      else pure rws
+    rewrites := rewrites.push (rws, true)
+  for rws in ← getImportRewrites e do
+    let rws ← if filter then
+      filterRewrites e rws (·.1.replacement) (·.1.makesNewMVars)
+      else pure rws
+    rewrites := rewrites.push (rws, false)
+
+let sections ← liftMetaM rewrites.filterMapM SectionToMessageData
+  if sections.isEmpty then
+    logInfo m! "No rewrites found for {e}"
+  else
+    logInfo (.joinSep sections.toList "\n\n")
 -/
 def elabrw??Command : Command.CommandElab := fun stx =>
 withoutModifyingEnv Command.runTermElabM fun _ => do

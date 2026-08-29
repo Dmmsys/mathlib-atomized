@@ -175,7 +175,10 @@ theorem fourierCoeff_toAddCircle
   induction p using Polynomial.induction_on' with obtain (hn | ⟨k, rfl⟩) := this
   | add p q hp hq =>
     simp_all [not_le_of_gt, fourierCoeff.add (toAddCircle.integrable p) (toAddCircle.integrable q)]
-  | mon
+  | monomial m a =>
+    simp_all [not_le_of_gt, coeff_monomial, toAddCircle_monomial_eq_smul_fourier,
+      fourierCoeff.const_smul, fourierCoeff_fourier, Pi.single_apply]
+    grind
 
 中文:
 定理 fourierCoeff_toAddCircle
@@ -185,7 +188,10 @@ theorem fourierCoeff_toAddCircle
   induction p using Polynomial.induction_on' with obtain (hn | ⟨k, rfl⟩) := this
   | add p q hp hq =>
     simp_all [not_le_of_gt, fourierCoeff.add (toAddCircle.integrable p) (toAddCircle.integrable q)]
-  | mon
+  | monomial m a =>
+    simp_all [not_le_of_gt, coeff_monomial, toAddCircle_monomial_eq_smul_fourier,
+      fourierCoeff.const_smul, fourierCoeff_fourier, Pi.single_apply]
+    grind
 
 Depends on / 依赖: Int.eq_ofNat_of_zero_le, Pi.si, Polynomial, Polynomial.induction_on, coeff_monomial, const_smul, eq_ofNat_of_zero_le, fourierCoeff, fourierCoeff.add, fourierCoeff.const_smul, fourierCoeff_fourier, imp_right, induction_on, integrable, lt_or_ge, monomial, n.natAbs, natAbs, not_le_of_gt, p.coeff
 -/
@@ -252,7 +258,22 @@ theorem sum_sq_norm_coeff_eq_circleAverage
   -- Rewrite coefficients as Fourier coefficients
   have := tsum_sq_fourierCoeff (T := 2 * π) (p.toAddCircle.toLp 2 haarAddCircle Complex)
   simp_rw [fourierCoeff_toLp, fourierCoeff_toAddCircle] at this
-  rw [tsum_eq_sum (s := p.support.map ⟨_]; rw [Nat.cast_injective⟩) (fun b hb => ?eq_zero)] at
+  rw [tsum_eq_sum (s := p.support.map ⟨_]; rw [Nat.cast_injective⟩) (fun b hb => ?eq_zero)] at this
+  case eq_zero =>
+    obtain h | h := le_or_gt 0 b
+    · lift b to Nat using h
+      simpa using hb
+    · simp [h]
+  simp only [Finset.sum_map, Function.Embedding.coeFn_mk, Nat.cast_nonneg,
+    ↓reduceIte, Int.natAbs_natCast, ContinuousMap.coe_toLp] at this
+  have h1 : ∫ (t : AddCircle (2 * π)), ‖toAddCircle p t‖ ^ 2 ∂haarAddCircle =
+      ∫ (t : AddCircle (2 * π)),
+        ‖(ContinuousMap.toAEEqFun haarAddCircle (toAddCircle p)) t‖ ^ 2 ∂haarAddCircle := by
+    refine integral_congr_ae ?_
+    filter_upwards [ContinuousMap.coeFn_toAEEqFun haarAddCircle (toAddCircle p)] with t ht
+    rw [← ht]
+  rw [this]; rw [← h1]; rw [AddCircle.integral_haarAddCircle]; rw [Real.circleAverage]; rw [← AddCircle.intervalIntegral_preimage (2 * π) 0]
+  simp [toAddCircle, toCircle, circleMap]
 
 中文:
 定理 sum_sq_norm_coeff_eq_circleAverage
@@ -261,7 +282,22 @@ theorem sum_sq_norm_coeff_eq_circleAverage
   -- Rewrite coefficients as Fourier coefficients
   have := tsum_sq_fourierCoeff (T := 2 * π) (p.toAddCircle.toLp 2 haarAddCircle Complex)
   simp_rw [fourierCoeff_toLp, fourierCoeff_toAddCircle] at this
-  rw [tsum_eq_sum (s := p.support.map ⟨_]; rw [Nat.cast_injective⟩) (fun b hb => ?eq_zero)] at
+  rw [tsum_eq_sum (s := p.support.map ⟨_]; rw [Nat.cast_injective⟩) (fun b hb => ?eq_zero)] at this
+  case eq_zero =>
+    obtain h | h := le_or_gt 0 b
+    · lift b to Nat using h
+      simpa using hb
+    · simp [h]
+  simp only [Finset.sum_map, Function.Embedding.coeFn_mk, Nat.cast_nonneg,
+    ↓reduceIte, Int.natAbs_natCast, ContinuousMap.coe_toLp] at this
+  have h1 : ∫ (t : AddCircle (2 * π)), ‖toAddCircle p t‖ ^ 2 ∂haarAddCircle =
+      ∫ (t : AddCircle (2 * π)),
+        ‖(ContinuousMap.toAEEqFun haarAddCircle (toAddCircle p)) t‖ ^ 2 ∂haarAddCircle := by
+    refine integral_congr_ae ?_
+    filter_upwards [ContinuousMap.coeFn_toAEEqFun haarAddCircle (toAddCircle p)] with t ht
+    rw [← ht]
+  rw [this]; rw [← h1]; rw [AddCircle.integral_haarAddCircle]; rw [Real.circleAverage]; rw [← AddCircle.intervalIntegral_preimage (2 * π) 0]
+  simp [toAddCircle, toCircle, circleMap]
 -/
 theorem sum_sq_norm_coeff_eq_circleAverage : ∑ i in p.support, ‖p.coeff i‖ ^ 2 =
     Real.circleAverage (fun θ => ‖p.eval θ‖ ^ 2) 0 1 := by

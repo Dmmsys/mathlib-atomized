@@ -83,7 +83,8 @@ lemma finite_of_hasDimensionLT
       (f := fun ⟨i, x⟩ => N.mk _ x.property) (fun x => ?_)
     by_cases hj : x.dim < d
     · exact ⟨⟨⟨_, hj⟩, ⟨_, x.nonDegenerate⟩⟩, rfl⟩
-    · have := x.nonDegen
+    · have := x.nonDegenerate
+      simp [X.nonDegenerate_eq_empty_of_hasDimensionLT d x.dim (by simpa using hj)] at this
 
 中文:
 引理 finite_of_hasDimensionLT
@@ -94,7 +95,8 @@ lemma finite_of_hasDimensionLT
       (f := fun ⟨i, x⟩ => N.mk _ x.property) (fun x => ?_)
     by_cases hj : x.dim < d
     · exact ⟨⟨⟨_, hj⟩, ⟨_, x.nonDegenerate⟩⟩, rfl⟩
-    · have := x.nonDegen
+    · have := x.nonDegenerate
+      simp [X.nonDegenerate_eq_empty_of_hasDimensionLT d x.dim (by simpa using hj)] at this
 
 Depends on / 依赖: Finite, Finite.of_surjective, N.mk, X.nonDegenerate, X.nonDegenerate_eq_empty_of_hasDimensionLT, nonDegenerate, nonDegenerate_eq_empty_of_hasDimensionLT, of_surjective, property, x.dim, x.nonDegenerate, x.property
 -/
@@ -123,7 +125,18 @@ lemma hasDimensionLT_of_finite
   obtain ⟨d, hd⟩ : exists (d : Nat), forall (s : Nat) (_ : s in Finset.image φ ⊤), s < d := by
     by_cases h : (Finset.image φ ⊤).Nonempty
     · obtain ⟨d, hd⟩ := Finset.max_of_nonempty h
-      exact ⟨d + 1, fun _ _ => b
+      exact ⟨d + 1, fun _ _ => by grind [WithBot.coe_le_coe, -> Finset.le_max]⟩
+    · rw [Finset.not_nonempty_iff_eq_empty] at h
+      simp only [h]
+      exact ⟨0, by simp⟩
+  refine ⟨d, ⟨fun n hn => ?_⟩⟩
+  ext x
+  simp only [mem_degenerate_iff_notMem_nonDegenerate, Set.top_eq_univ,
+    Set.mem_univ, iff_true]
+  intro hx
+  have := hd (φ (N.mk _ hx)) (by simp)
+  dsimp [φ] at this
+  lia
 
 中文:
 引理 hasDimensionLT_of_finite
@@ -134,7 +147,18 @@ lemma hasDimensionLT_of_finite
   obtain ⟨d, hd⟩ : exists (d : Nat), forall (s : Nat) (_ : s in Finset.image φ ⊤), s < d := by
     by_cases h : (Finset.image φ ⊤).Nonempty
     · obtain ⟨d, hd⟩ := Finset.max_of_nonempty h
-      exact ⟨d + 1, fun _ _ => b
+      exact ⟨d + 1, fun _ _ => by grind [WithBot.coe_le_coe, -> Finset.le_max]⟩
+    · rw [Finset.not_nonempty_iff_eq_empty] at h
+      simp only [h]
+      exact ⟨0, by simp⟩
+  refine ⟨d, ⟨fun n hn => ?_⟩⟩
+  ext x
+  simp only [mem_degenerate_iff_notMem_nonDegenerate, Set.top_eq_univ,
+    Set.mem_univ, iff_true]
+  intro hx
+  have := hd (φ (N.mk _ hx)) (by simp)
+  dsimp [φ] at this
+  lia
 
 Depends on / 依赖: Finset, Finset.image, Finset.le_max, Finset.max_of_nonempty, Finset.not_nonempty_iff_eq_empty, Fintype, Fintype.ofFinite, Nonempty, Set.top, WithBot, WithBot.coe_le_coe, coe_le_coe, le_max, max_of_nonempty, mem_degenerate_iff_notMem_nonDegenerate, not_nonempty_iff_eq_empty, ofFinite, x.dim
 -/
@@ -171,7 +195,9 @@ instance [X.Finite]
     X.nonDegenerate m.1) -> X _⦋n⦌ := fun ⟨m, f, x⟩ => X.map f.op x.1
   have hφ : Function.Surjective φ := fun x => by
     obtain ⟨m, f, hf, y, rfl⟩ := X.exists_nonDegenerate x
- 
+    have := SimplexCategory.le_of_epi f
+    exact ⟨⟨⟨m, by lia⟩, f, y⟩, rfl⟩
+  exact Finite.of_surjective _ hφ
 
 中文:
 实例 [X.有限]
@@ -183,7 +209,9 @@ instance [X.Finite]
     X.nonDegenerate m.1) -> X _⦋n⦌ := fun ⟨m, f, x⟩ => X.map f.op x.1
   have hφ : Function.Surjective φ := fun x => by
     obtain ⟨m, f, hf, y, rfl⟩ := X.exists_nonDegenerate x
- 
+    have := SimplexCategory.le_of_epi f
+    exact ⟨⟨⟨m, by lia⟩, f, y⟩, rfl⟩
+  exact Finite.of_surjective _ hφ
 
 Depends on / 依赖: Finite, Finite.of_surjective, Function, Function.Surjective, SimplexCategory, SimplexCategory.le_of_epi, SimplexCategory.rec, Surjective, X.exists_nonDegenerate, X.map, X.nonDegenerate, exists_nonDegenerate, f.op, le_of_epi, nonDegenerate, of_surjective
 -/
@@ -281,7 +309,7 @@ lemma finite_of_epi
     rw [NatTrans.epi_iff_epi_app] at hf
     simp only [epi_iff_surjective] at hf
     exact Finite.of_surjective _ (hf _)
-  infer_
+  infer_instance
 
 中文:
 引理 finite_of_epi
@@ -295,7 +323,7 @@ lemma finite_of_epi
     rw [NatTrans.epi_iff_epi_app] at hf
     simp only [epi_iff_surjective] at hf
     exact Finite.of_surjective _ (hf _)
-  infer_
+  infer_instance
 
 Depends on / 依赖: Finite, Finite.of_surjective, NatTrans, NatTrans.epi_iff_epi_app, X.hasDimensionLT_of_finite, epi_iff_epi_app, epi_iff_surjective, finite_of_hasDimensionLT, hasDimensionLT_of_epi, hasDimensionLT_of_finite, infer_instance, of_surjective
 -/
@@ -397,7 +425,13 @@ lemma finite_iSup_iff
   refine ⟨fun h i => finite_of_mono (Subcomplex.homOfLE (le_iSup A i)), fun h => ⟨?_⟩⟩
   refine Finite.of_surjective (f := fun (⟨i, s⟩ : Σ (i : ι), (A i).toSSet.N) =>
     N.mk ((Subcomplex.homOfLE (le_iSup A i)).app _ s.simplex)
-      (by simpa only [nonDegenerate_iff_of_mono] using s.nonDegenera
+      (by simpa only [nonDegenerate_iff_of_mono] using s.nonDegenerate)) ?_
+  intro s
+  obtain ⟨d, ⟨⟨s, h₁⟩, h₂⟩, rfl⟩ := s.mk_surjective
+  simp only [Subfunctor.iSup_obj, Set.mem_iUnion] at h₁
+  obtain ⟨i, hi⟩ := h₁
+  rw [Subcomplex.mem_nonDegenerate_iff] at h₂
+  exact ⟨⟨i, N.mk ⟨s, hi⟩ (by rwa [Subcomplex.mem_nonDegenerate_iff])⟩, rfl⟩
 
 中文:
 引理 finite_iSup_iff
@@ -406,7 +440,13 @@ lemma finite_iSup_iff
   refine ⟨fun h i => finite_of_mono (Subcomplex.homOfLE (le_iSup A i)), fun h => ⟨?_⟩⟩
   refine Finite.of_surjective (f := fun (⟨i, s⟩ : Σ (i : ι), (A i).toSSet.N) =>
     N.mk ((Subcomplex.homOfLE (le_iSup A i)).app _ s.simplex)
-      (by simpa only [nonDegenerate_iff_of_mono] using s.nonDegenera
+      (by simpa only [nonDegenerate_iff_of_mono] using s.nonDegenerate)) ?_
+  intro s
+  obtain ⟨d, ⟨⟨s, h₁⟩, h₂⟩, rfl⟩ := s.mk_surjective
+  simp only [Subfunctor.iSup_obj, Set.mem_iUnion] at h₁
+  obtain ⟨i, hi⟩ := h₁
+  rw [Subcomplex.mem_nonDegenerate_iff] at h₂
+  exact ⟨⟨i, N.mk ⟨s, hi⟩ (by rwa [Subcomplex.mem_nonDegenerate_iff])⟩, rfl⟩
 
 Depends on / 依赖: Finite, Finite.of_surjective, N.mk, Set.mem_iUnion, Subcomplex, Subcomplex.homOfLE, Subcomplex.mem_nonDegenerate_iff, Subfunctor, Subfunctor.iSup_obj, finite_of_mono, homOfLE, iSup_obj, le_iSup, mem_iUnion, mem_nonDegenerate_iff, mk_surjective, nonDegenerate, nonDegenerate_iff_of_mono, of_surjective, s.mk_surjective
 -/

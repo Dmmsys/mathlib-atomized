@@ -285,7 +285,17 @@ definition changeOriginIndexEquiv
         Finset.card_map _⟩⟩
   left_inv := by
     rintro ⟨k, l, ⟨s : Finset (Fin <| k + l), hs : s.card = l⟩⟩
-    dsimp only [Subt
+    dsimp only [Subtype.coe_mk]
+    -- Lean can't automatically generalize `k' = k + l - s.card`, `l' = s.card`, so we explicitly
+    -- formulate the generalized goal
+    suffices forall k' l', k' = k -> l' = l -> forall (hkl : k + l = k' + l') (hs'),
+        (⟨k', l', ⟨s.map (finCongr hkl).toEmbedding, hs'⟩⟩ :
+          Σ k l : Nat, { s : Finset (Fin (k + l)) // s.card = l }) = ⟨k, l, ⟨s, hs⟩⟩ by
+      apply this <;> simp only [hs, add_tsub_cancel_right]
+    simp
+  right_inv := by
+    rintro ⟨n, s⟩
+    simp [tsub_add_cancel_of_le (card_finset_fin_le s), finCongr_eq_equivCast]
 
 中文:
 定义 changeOriginIndexEquiv
@@ -298,7 +308,17 @@ definition changeOriginIndexEquiv
         Finset.card_map _⟩⟩
   left_inv := by
     rintro ⟨k, l, ⟨s : Finset (Fin <| k + l), hs : s.card = l⟩⟩
-    dsimp only [Subt
+    dsimp only [Subtype.coe_mk]
+    -- Lean can't automatically generalize `k' = k + l - s.card`, `l' = s.card`, so we explicitly
+    -- formulate the generalized goal
+    suffices forall k' l', k' = k -> l' = l -> forall (hkl : k + l = k' + l') (hs'),
+        (⟨k', l', ⟨s.map (finCongr hkl).toEmbedding, hs'⟩⟩ :
+          Σ k l : Nat, { s : Finset (Fin (k + l)) // s.card = l }) = ⟨k, l, ⟨s, hs⟩⟩ by
+      apply this <;> simp only [hs, add_tsub_cancel_right]
+    simp
+  right_inv := by
+    rintro ⟨n, s⟩
+    simp [tsub_add_cancel_of_le (card_finset_fin_le s), finCongr_eq_equivCast]
 -/
 def changeOriginIndexEquiv :
     (Σ k l : Nat, { s : Finset (Fin (k + l)) // s.card = l }) ≃ Σ n : Nat, Finset (Fin n) where
@@ -332,7 +352,10 @@ lemma changeOriginSeriesTerm_changeOriginIndexEquiv_symm
     p.changeOriginSeriesTerm s.1 s.2.1 s.2.2 s.2.2.2 (fun _ => x) (fun _ => y) =
     p n (t.piecewise (fun _ => x) fun _ => y) := by
   have : forall (m) (hm : n = m), p n (t.piecewise (fun _ => x) fun _ => y) =
-      p m ((t.map (finCongr hm).toEmbedding).piecewise
+      p m ((t.map (finCongr hm).toEmbedding).piecewise (fun _ => x) fun _ => y) := by
+    rintro m rfl
+    simp +unfoldPartialApp [Finset.piecewise]
+  simp_rw [changeOriginSeriesTerm_apply, eq_comm]; apply this
 
 中文:
 引理 changeOriginSeriesTerm_changeOriginIndexEquiv_symm
@@ -341,7 +364,10 @@ lemma changeOriginSeriesTerm_changeOriginIndexEquiv_symm
     p.changeOriginSeriesTerm s.1 s.2.1 s.2.2 s.2.2.2 (fun _ => x) (fun _ => y) =
     p n (t.piecewise (fun _ => x) fun _ => y) := by
   have : forall (m) (hm : n = m), p n (t.piecewise (fun _ => x) fun _ => y) =
-      p m ((t.map (finCongr hm).toEmbedding).piecewise
+      p m ((t.map (finCongr hm).toEmbedding).piecewise (fun _ => x) fun _ => y) := by
+    rintro m rfl
+    simp +unfoldPartialApp [Finset.piecewise]
+  simp_rw [changeOriginSeriesTerm_apply, eq_comm]; apply this
 
 Depends on / 依赖: changeOriginIndexEquiv, changeOriginIndexEquiv.symm
 -/
@@ -369,7 +395,17 @@ theorem changeOriginSeries_summable_aux₁
     changeOriginIndexEquiv_symm_apply_snd_fst]
   have : forall n : Nat,
       HasSum (fun s : Finset (Fin n) => ‖p (n - s.card + s.card)‖₊ * r ^ s.card * r' ^ (n - s.card))
-  
+        (‖p n‖₊ * (r + r') ^ n) := by
+    intro n
+    -- TODO: why `simp only [tsub_add_cancel_of_le (card_finset_fin_le _)]` fails?
+    convert_to HasSum (fun s : Finset (Fin n) => ‖p n‖₊ * (r ^ s.card * r' ^ (n - s.card))) _
+    · ext1 s
+      rw [tsub_add_cancel_of_le (card_finset_fin_le _)]; rw [mul_assoc]
+    rw [← Fin.sum_pow_mul_eq_add_pow]
+    exact (hasSum_fintype _).mul_left _
+  refine NNReal.summable_sigma.2 ⟨fun n => (this n).summable, ?_⟩
+  simp only [(this _).tsum_eq]
+  exact p.summable_nnnorm_mul_pow hr
 
 中文:
 定理 changeOriginSeries_summable_aux₁
@@ -380,7 +416,17 @@ theorem changeOriginSeries_summable_aux₁
     changeOriginIndexEquiv_symm_apply_snd_fst]
   have : forall n : Nat,
       HasSum (fun s : Finset (Fin n) => ‖p (n - s.card + s.card)‖₊ * r ^ s.card * r' ^ (n - s.card))
-  
+        (‖p n‖₊ * (r + r') ^ n) := by
+    intro n
+    -- TODO: why `simp only [tsub_add_cancel_of_le (card_finset_fin_le _)]` fails?
+    convert_to HasSum (fun s : Finset (Fin n) => ‖p n‖₊ * (r ^ s.card * r' ^ (n - s.card))) _
+    · ext1 s
+      rw [tsub_add_cancel_of_le (card_finset_fin_le _)]; rw [mul_assoc]
+    rw [← Fin.sum_pow_mul_eq_add_pow]
+    exact (hasSum_fintype _).mul_left _
+  refine NNReal.summable_sigma.2 ⟨fun n => (this n).summable, ?_⟩
+  simp only [(this _).tsum_eq]
+  exact p.summable_nnnorm_mul_pow hr
 
 Depends on / 依赖: Finset, Function, Function.comp_def, HasSum, changeOriginIndexEquiv, changeOriginIndexEquiv.symm.summable_iff, changeOriginIndexEquiv_symm_apply_fst, changeOriginIndexEquiv_symm_apply_snd_fst, comp_def, s.card, summable_iff
 -/
@@ -532,7 +578,12 @@ theorem changeOrigin_radius
   apply le_radius_of_summable_nnnorm
   have (k : Nat) :
       ‖p.changeOrigin x k‖₊ * r ^ k <=
-        (∑' s 
+        (∑' s : Σ l : Nat, { s : Finset (Fin (k + l)) // s.card = l }, ‖p (k + s.1)‖₊ * ‖x‖₊ ^ s.1) *
+          r ^ k := by
+    gcongr; exact p.nnnorm_changeOrigin_le k hr'
+  refine NNReal.summable_of_le this ?_
+  simpa only [← NNReal.tsum_mul_right] using
+    (NNReal.summable_sigma.1 (p.changeOriginSeries_summable_aux₁ hr)).2
 
 中文:
 定理 changeOrigin_radius
@@ -544,7 +595,12 @@ theorem changeOrigin_radius
   apply le_radius_of_summable_nnnorm
   have (k : Nat) :
       ‖p.changeOrigin x k‖₊ * r ^ k <=
-        (∑' s 
+        (∑' s : Σ l : Nat, { s : Finset (Fin (k + l)) // s.card = l }, ‖p (k + s.1)‖₊ * ‖x‖₊ ^ s.1) *
+          r ^ k := by
+    gcongr; exact p.nnnorm_changeOrigin_le k hr'
+  refine NNReal.summable_of_le this ?_
+  simpa only [← NNReal.tsum_mul_right] using
+    (NNReal.summable_sigma.1 (p.changeOriginSeries_summable_aux₁ hr)).2
 
 Depends on / 依赖: ENNReal, ENNReal.le_of_forall_pos_nnreal_lt, Finset, NNReal, NNReal.summable_of_le, NNReal.tsum_mul_right, add_comm, changeOrigin, le_add_right, le_of_forall_pos_nnreal_lt, le_radius_of_summable_nnnorm, le_rfl, lt_tsub_iff_right, nnnorm_changeOrigin_le, p.changeOrigin, p.nnnorm_changeOrigin_le, p.radius, radius, s.card, summable_of_le
 -/
@@ -682,7 +738,37 @@ theorem changeOrigin_eval
     mem_eball_zero_iff.2 ((le_add_right le_rfl).trans_lt h)
   have y_mem_ball : y in Metric.eball (0 : E) (p.changeOrigin x).radius := by
     refine mem_eball_zero_iff.2 (lt_of_lt_of_le ?_ p.changeOrigin_radius)
-    rwa [lt_tsub_iff_right,
+    rwa [lt_tsub_iff_right, add_comm]
+  have x_add_y_mem_ball : x + y in Metric.eball (0 : E) p.radius := by
+    refine mem_eball_zero_iff.2 (lt_of_le_of_lt ?_ h)
+    exact mod_cast nnnorm_add_le x y
+  set f : (Σ k l : Nat, { s : Finset (Fin (k + l)) // s.card = l }) -> F := fun s =>
+    p.changeOriginSeriesTerm s.1 s.2.1 s.2.2 s.2.2.2 (fun _ => x) fun _ => y
+  have hsf : Summable f := by
+    refine .of_nnnorm_bounded (p.changeOriginSeries_summable_aux₁ h) ?_
+    rintro ⟨k, l, s, hs⟩
+    dsimp only [Subtype.coe_mk]
+    exact p.nnnorm_changeOriginSeriesTerm_apply_le _ _ _ _ _ _
+  have hf : HasSum f ((p.changeOrigin x).sum y) := by
+    refine HasSum.sigma_of_hasSum ((p.changeOrigin x).summable y_mem_ball).hasSum (fun k => ?_) hsf
+    · dsimp +instances only [f]
+      refine ContinuousMultilinearMap.hasSum_eval ?_ _
+      have := (p.hasFPowerSeriesOnBall_changeOrigin k h.pos).hasSum x_mem_ball
+      rw [zero_add] at this
+      refine HasSum.sigma_of_hasSum this (fun l => ?_) ?_
+      · simp only [changeOriginSeries, sum_apply]
+        apply hasSum_fintype
+      · refine .of_nnnorm_bounded
+          (p.changeOriginSeries_summable_aux₂ (mem_eball_zero_iff.1 x_mem_ball) k)
+            fun s => ?_
+        refine (ContinuousMultilinearMap.le_opNNNorm _ _).trans_eq ?_
+        simp
+  refine hf.unique (changeOriginIndexEquiv.symm.hasSum_iff.1 ?_)
+  refine HasSum.sigma_of_hasSum
+    (p.hasSum x_add_y_mem_ball) (fun n => ?_) (changeOriginIndexEquiv.symm.summable_iff.2 hsf)
+  rw [← Pi.add_def]; rw [(p n).map_add_univ (fun _ => x) fun _ => y]
+  simp_rw [← changeOriginSeriesTerm_changeOriginIndexEquiv_symm]
+  exact hasSum_fintype (fun c => f (changeOriginIndexEquiv.symm ⟨n, c⟩))
 
 中文:
 定理 changeOrigin_eval
@@ -692,7 +778,37 @@ theorem changeOrigin_eval
     mem_eball_zero_iff.2 ((le_add_right le_rfl).trans_lt h)
   have y_mem_ball : y in Metric.eball (0 : E) (p.changeOrigin x).radius := by
     refine mem_eball_zero_iff.2 (lt_of_lt_of_le ?_ p.changeOrigin_radius)
-    rwa [lt_tsub_iff_right,
+    rwa [lt_tsub_iff_right, add_comm]
+  have x_add_y_mem_ball : x + y in Metric.eball (0 : E) p.radius := by
+    refine mem_eball_zero_iff.2 (lt_of_le_of_lt ?_ h)
+    exact mod_cast nnnorm_add_le x y
+  set f : (Σ k l : Nat, { s : Finset (Fin (k + l)) // s.card = l }) -> F := fun s =>
+    p.changeOriginSeriesTerm s.1 s.2.1 s.2.2 s.2.2.2 (fun _ => x) fun _ => y
+  have hsf : Summable f := by
+    refine .of_nnnorm_bounded (p.changeOriginSeries_summable_aux₁ h) ?_
+    rintro ⟨k, l, s, hs⟩
+    dsimp only [Subtype.coe_mk]
+    exact p.nnnorm_changeOriginSeriesTerm_apply_le _ _ _ _ _ _
+  have hf : HasSum f ((p.changeOrigin x).sum y) := by
+    refine HasSum.sigma_of_hasSum ((p.changeOrigin x).summable y_mem_ball).hasSum (fun k => ?_) hsf
+    · dsimp +instances only [f]
+      refine ContinuousMultilinearMap.hasSum_eval ?_ _
+      have := (p.hasFPowerSeriesOnBall_changeOrigin k h.pos).hasSum x_mem_ball
+      rw [zero_add] at this
+      refine HasSum.sigma_of_hasSum this (fun l => ?_) ?_
+      · simp only [changeOriginSeries, sum_apply]
+        apply hasSum_fintype
+      · refine .of_nnnorm_bounded
+          (p.changeOriginSeries_summable_aux₂ (mem_eball_zero_iff.1 x_mem_ball) k)
+            fun s => ?_
+        refine (ContinuousMultilinearMap.le_opNNNorm _ _).trans_eq ?_
+        simp
+  refine hf.unique (changeOriginIndexEquiv.symm.hasSum_iff.1 ?_)
+  refine HasSum.sigma_of_hasSum
+    (p.hasSum x_add_y_mem_ball) (fun n => ?_) (changeOriginIndexEquiv.symm.summable_iff.2 hsf)
+  rw [← Pi.add_def]; rw [(p n).map_add_univ (fun _ => x) fun _ => y]
+  simp_rw [← changeOriginSeriesTerm_changeOriginIndexEquiv_symm]
+  exact hasSum_fintype (fun c => f (changeOriginIndexEquiv.symm ⟨n, c⟩))
 
 Depends on / 依赖: Finset, Metric, Metric.eball, add_comm, changeOrigin, changeOrigin_radius, le_add_right, le_rfl, lt_of_le_of_lt, lt_of_lt_of_le, lt_tsub_iff_right, mem_eball_zero_iff, mod_cast, nnnorm_add_le, p.changeOrigin, p.changeOrigin_radius, p.radius, radius, trans_lt, x_add_y_mem_ball
 -/
@@ -774,7 +890,18 @@ theorem HasFPowerSeriesWithinOnBall.changeOrigin
   hasSum {z} h'z hz := by
     have : f (x + y + z) =
         FormalMultilinearSeries.sum (FormalMultilinearSeries.changeOrigin p y) z := by
-      rw [mem_eball_zero_iff]; rw [lt_tsub_iff_right]
+      rw [mem_eball_zero_iff]; rw [lt_tsub_iff_right]; rw [add_comm] at hz
+      rw [p.changeOrigin_eval (hz.trans_le hf.r_le)]; rw [add_assoc]; rw [hf.sum]
+      · have : insert (x + y) s subseteq insert (x + y) (insert x s) := by
+          apply insert_subset_insert (subset_insert _ _)
+        rw [insert_eq_of_mem hy] at this
+        apply this
+        simpa [add_assoc] using h'z
+      exact mem_eball_zero_iff.2 (lt_of_le_of_lt (enorm_add_le _ _) hz)
+    rw [this]
+    apply (p.changeOrigin y).hasSum
+    refine Metric.eball_subset_eball (le_trans ?_ p.changeOrigin_radius) hz
+    exact tsub_le_tsub hf.r_le le_rfl
 
 中文:
 定理 有FPowerSeriesWithinOnBall.changeOrigin
@@ -786,7 +913,18 @@ theorem HasFPowerSeriesWithinOnBall.changeOrigin
   hasSum {z} h'z hz := by
     have : f (x + y + z) =
         FormalMultilinearSeries.sum (FormalMultilinearSeries.changeOrigin p y) z := by
-      rw [mem_eball_zero_iff]; rw [lt_tsub_iff_right]
+      rw [mem_eball_zero_iff]; rw [lt_tsub_iff_right]; rw [add_comm] at hz
+      rw [p.changeOrigin_eval (hz.trans_le hf.r_le)]; rw [add_assoc]; rw [hf.sum]
+      · have : insert (x + y) s subseteq insert (x + y) (insert x s) := by
+          apply insert_subset_insert (subset_insert _ _)
+        rw [insert_eq_of_mem hy] at this
+        apply this
+        simpa [add_assoc] using h'z
+      exact mem_eball_zero_iff.2 (lt_of_le_of_lt (enorm_add_le _ _) hz)
+    rw [this]
+    apply (p.changeOrigin y).hasSum
+    refine Metric.eball_subset_eball (le_trans ?_ p.changeOrigin_radius) hz
+    exact tsub_le_tsub hf.r_le le_rfl
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.changeOrigin, FormalMultilinearSeries.sum, add_assoc, add_comm, changeOrigin, changeOrigin_eval, changeOrigin_radius, hasSum, hf.r_le, hf.sum, hz.trans_le, insert, insert_eq_of, insert_subset_insert, le_rfl, le_trans, lt_tsub_iff_right, mem_eball_zero_iff, p.changeOrigin_eval
 -/

@@ -98,7 +98,7 @@ instance :
   tensorUnit := of (sq (R := R))
   associator X Y Z := ofIso (tensorAssoc X.form Y.form Z.form)
   leftUnitor X := ofIso (tensorLId X.form)
-  
+  rightUnitor X := ofIso (tensorRId X.form)
 
 中文:
 实例 :
@@ -110,7 +110,7 @@ instance :
   tensorUnit := of (sq (R := R))
   associator X Y Z := ofIso (tensorAssoc X.form Y.form Z.form)
   leftUnitor X := ofIso (tensorLId X.form)
-  
+  rightUnitor X := ofIso (tensorRId X.form)
 
 Depends on / 依赖: instMonoidalCategory, instMonoidalCategory.tensorObj, tensorObj
 -/
@@ -340,7 +340,24 @@ instance instMonoidalCategory
       εIso := Iso.refl _
       leftUnitor_eq := fun X => by
         simp only [forget₂_obj, forget₂_map, Iso.refl_symm, Iso.trans_assoc, Iso.trans_hom,
-          Iso.refl_hom, MonoidalCategory.ten
+          Iso.refl_hom, MonoidalCategory.tensorIso_hom, MonoidalCategory.tensorHom_id]
+        dsimp only [toModuleCat_tensor, ModuleCat.of_coe]
+        erw [MonoidalCategory.id_whiskerRight]
+        simp
+        rfl
+      rightUnitor_eq := fun X => by
+        simp only [forget₂_obj, forget₂_map, Iso.refl_symm, Iso.trans_assoc, Iso.trans_hom,
+          Iso.refl_hom, MonoidalCategory.tensorIso_hom, MonoidalCategory.id_tensorHom]
+        dsimp only [toModuleCat_tensor, ModuleCat.of_coe]
+        erw [MonoidalCategory.whiskerLeft_id]
+        simp
+        rfl
+      associator_eq := fun X Y Z => by
+        dsimp only [forget₂_obj, forget₂_map_associator_hom]
+        simp only [Iso.refl_symm, Iso.trans_hom,
+          MonoidalCategory.tensorIso_hom, Iso.refl_hom, MonoidalCategory.id_tensorHom_id]
+        dsimp only [toModuleCat_tensor, ModuleCat.of_coe]
+        rw [Category.id_comp]; rw [Category.id_comp]; rw [Category.comp_id]; rw [MonoidalCategory.id_tensorHom_id]; rw [Category.id_comp] }
 
 中文:
 实例 instMonoidalCategory
@@ -351,7 +368,24 @@ instance instMonoidalCategory
       εIso := Iso.refl _
       leftUnitor_eq := fun X => by
         simp only [forget₂_obj, forget₂_map, Iso.refl_symm, Iso.trans_assoc, Iso.trans_hom,
-          Iso.refl_hom, MonoidalCategory.ten
+          Iso.refl_hom, MonoidalCategory.tensorIso_hom, MonoidalCategory.tensorHom_id]
+        dsimp only [toModuleCat_tensor, ModuleCat.of_coe]
+        erw [MonoidalCategory.id_whiskerRight]
+        simp
+        rfl
+      rightUnitor_eq := fun X => by
+        simp only [forget₂_obj, forget₂_map, Iso.refl_symm, Iso.trans_assoc, Iso.trans_hom,
+          Iso.refl_hom, MonoidalCategory.tensorIso_hom, MonoidalCategory.id_tensorHom]
+        dsimp only [toModuleCat_tensor, ModuleCat.of_coe]
+        erw [MonoidalCategory.whiskerLeft_id]
+        simp
+        rfl
+      associator_eq := fun X Y Z => by
+        dsimp only [forget₂_obj, forget₂_map_associator_hom]
+        simp only [Iso.refl_symm, Iso.trans_hom,
+          MonoidalCategory.tensorIso_hom, Iso.refl_hom, MonoidalCategory.id_tensorHom_id]
+        dsimp only [toModuleCat_tensor, ModuleCat.of_coe]
+        rw [Category.id_comp]; rw [Category.id_comp]; rw [Category.comp_id]; rw [MonoidalCategory.id_tensorHom_id]; rw [Category.id_comp] }
 
 Depends on / 依赖: Iso.refl, Iso.refl_hom, Iso.refl_symm, Iso.trans_assoc, Iso.trans_hom, ModuleCat, ModuleCat.of_coe, Monoidal, Monoidal.induced, MonoidalCategory, MonoidalCategory.id_whiskerRight, MonoidalCategory.tensorHom_id, MonoidalCategory.tensorIso_hom, QuadraticModuleCat, id_whiskerRight, induced, leftUnitor_eq, of_coe, refl_hom, refl_symm
 -/

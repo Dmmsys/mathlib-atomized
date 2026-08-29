@@ -736,7 +736,11 @@ theorem norm_eq_norm'
   apply UniformSpace.Completion.extension_unique (f := @norm (PadicAlgCl p) _) (g := Valued.v.norm)
   · exact uniformContinuous_norm
   · let S := (Valued.toNormedField Complex_[p] NNReal).toNormedCommRing.toNormedRing.toSeminormedRing
-    let := S.toNonUnitalSeminormedRing.toSeminormedAddCommGrou
+    let := S.toNonUnitalSeminormedRing.toSeminormedAddCommGroup.toSeminormedAddGroup
+    exact @uniformContinuous_norm Complex_[p] this
+  · intro x
+    simp only [Valued.v.norm_def, RankOne.hom_eq_embedding]
+    rw [embedding_restrict (PadicComplex.valued p).v x]; rw [valuation_extends]; rw [← PadicAlgCl.valuation_coe]
 
 中文:
 定理 norm_eq_norm'
@@ -745,7 +749,11 @@ theorem norm_eq_norm'
   apply UniformSpace.Completion.extension_unique (f := @norm (PadicAlgCl p) _) (g := Valued.v.norm)
   · exact uniformContinuous_norm
   · let S := (Valued.toNormedField Complex_[p] NNReal).toNormedCommRing.toNormedRing.toSeminormedRing
-    let := S.toNonUnitalSeminormedRing.toSeminormedAddCommGrou
+    let := S.toNonUnitalSeminormedRing.toSeminormedAddCommGroup.toSeminormedAddGroup
+    exact @uniformContinuous_norm Complex_[p] this
+  · intro x
+    simp only [Valued.v.norm_def, RankOne.hom_eq_embedding]
+    rw [embedding_restrict (PadicComplex.valued p).v x]; rw [valuation_extends]; rw [← PadicAlgCl.valuation_coe]
 
 Depends on / 依赖: Completion, Complex_, NNReal, PadicAlgCl, PadicComplex, PadicComplex.valued, RankOne, RankOne.hom_eq_embedding, S.toNonUnitalSeminormedRing.toSeminormedAddCommGroup.toSeminormedAddGroup, UniformSpace, UniformSpace.Completion.extension_unique, Valued, Valued.toNormedField, Valued.v.norm, Valued.v.norm_def, embedding_restrict, extension_unique, hom_eq_embedding, norm_def, toNonUnitalSeminormedRing
 -/

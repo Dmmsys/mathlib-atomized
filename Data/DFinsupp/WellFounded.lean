@@ -74,7 +74,27 @@ theorem lex_fibration
   · refine ⟨⟨{ j | r j i -> j in p }, piecewise x₁ x { j | r j i }, x₂⟩,
       .fst ⟨i, fun j hj => ?_, ?_⟩, ?_⟩ <;> simp only [piecewise_apply, Set.mem_ofPred_eq]
     · simp only [if_pos hj]
-    · s
+    · split_ifs with hi
+      · rwa [hr i hi, if_pos hp] at hs
+      · assumption
+    · ext1 j
+      simp only [piecewise_apply, Set.mem_ofPred_eq]
+      split_ifs with h₁ h₂ <;> try rfl
+      · rw [hr j h₂, if_pos (h₁ h₂)]
+      · rw [Classical.not_imp] at h₁
+        rw [hr j h₁.1]; rw [if_neg h₁.2]
+  · refine ⟨⟨{ j | r j i ∧ j in p }, x₁, piecewise x₂ x { j | r j i }⟩,
+      .snd ⟨i, fun j hj => ?_, ?_⟩, ?_⟩ <;> simp only [piecewise_apply, Set.mem_ofPred_eq]
+    · exact if_pos hj
+    · split_ifs with hi
+      · rwa [hr i hi, if_neg hp] at hs
+      · assumption
+    · ext1 j
+      simp only [piecewise_apply, Set.mem_ofPred_eq]
+      split_ifs with h₁ h₂ <;> try rfl
+      · rw [hr j h₁.1, if_pos h₁.2]
+      · rw [hr j h₂, if_neg]
+        simpa [h₂] using h₁
 
 中文:
 定理 lex_fibration
@@ -86,7 +106,27 @@ theorem lex_fibration
   · refine ⟨⟨{ j | r j i -> j in p }, piecewise x₁ x { j | r j i }, x₂⟩,
       .fst ⟨i, fun j hj => ?_, ?_⟩, ?_⟩ <;> simp only [piecewise_apply, Set.mem_ofPred_eq]
     · simp only [if_pos hj]
-    · s
+    · split_ifs with hi
+      · rwa [hr i hi, if_pos hp] at hs
+      · assumption
+    · ext1 j
+      simp only [piecewise_apply, Set.mem_ofPred_eq]
+      split_ifs with h₁ h₂ <;> try rfl
+      · rw [hr j h₂, if_pos (h₁ h₂)]
+      · rw [Classical.not_imp] at h₁
+        rw [hr j h₁.1]; rw [if_neg h₁.2]
+  · refine ⟨⟨{ j | r j i ∧ j in p }, x₁, piecewise x₂ x { j | r j i }⟩,
+      .snd ⟨i, fun j hj => ?_, ?_⟩, ?_⟩ <;> simp only [piecewise_apply, Set.mem_ofPred_eq]
+    · exact if_pos hj
+    · split_ifs with hi
+      · rwa [hr i hi, if_neg hp] at hs
+      · assumption
+    · ext1 j
+      simp only [piecewise_apply, Set.mem_ofPred_eq]
+      split_ifs with h₁ h₂ <;> try rfl
+      · rw [hr j h₁.1, if_pos h₁.2]
+      · rw [hr j h₂, if_neg]
+        simpa [h₂] using h₁
 
 Depends on / 依赖: Classical, Classical.not_imp, Set.mem_ofPred_eq, if_pos, mem_ofPred_eq, not_imp, piecewise, piecewise_apply, simp_rw, split_ifs
 -/
@@ -192,7 +232,10 @@ theorem Lex.acc_of_single
       rw [support_eq_empty.1 ht]
       exact fun _ => Lex.acc_zero hbot
     | insert b t hb ih =>
-      refine fun x ht h => Lex.acc_of_single_erase b (h b <| t.mem_in
+      refine fun x ht h => Lex.acc_of_single_erase b (h b <| t.mem_insert_self b) ?_
+      refine ih _ (by rw [support_erase, ht, Finset.erase_insert hb]) fun a ha => ?_
+      rw [erase_ne (ha.ne_of_notMem hb)]
+      exact h a (Finset.mem_insert_of_mem ha)
 
 中文:
 定理 Lex.acc_of_single
@@ -206,7 +249,10 @@ theorem Lex.acc_of_single
       rw [support_eq_empty.1 ht]
       exact fun _ => Lex.acc_zero hbot
     | insert b t hb ih =>
-      refine fun x ht h => Lex.acc_of_single_erase b (h b <| t.mem_in
+      refine fun x ht h => Lex.acc_of_single_erase b (h b <| t.mem_insert_self b) ?_
+      refine ih _ (by rw [support_erase, ht, Finset.erase_insert hb]) fun a ha => ?_
+      rw [erase_ne (ha.ne_of_notMem hb)]
+      exact h a (Finset.mem_insert_of_mem ha)
 
 Depends on / 依赖: Finset, Finset.erase_insert, Finset.induction, Finset.mem_insert_of_mem, Lex.acc_of_single_erase, Lex.acc_zero, acc_of_single_erase, acc_zero, classical, erase_insert, erase_ne, generalize, ha.ne_of_notMem, insert, mem_insert_of_mem, mem_insert_self, ne_of_notMem, revert, support, support_eq_empty
 -/
@@ -242,7 +288,15 @@ theorem Lex.acc_single
   split_ifs at hs with hik
   swap
   · exact (hbot hs).elim
-  subst
+  subst hik
+  classical
+    refine Lex.acc_of_single hbot x fun j hj => ?_
+    obtain rfl | hij := eq_or_ne j i
+    · exact ha _ hs
+    by_cases h : r j i
+    · rw [hr j h, single_eq_of_ne hij, single_zero]
+      exact Lex.acc_zero hbot
+    · exact ih _ ⟨h, hij⟩ _
 
 中文:
 定理 Lex.acc_single
@@ -257,7 +311,15 @@ theorem Lex.acc_single
   split_ifs at hs with hik
   swap
   · exact (hbot hs).elim
-  subst
+  subst hik
+  classical
+    refine Lex.acc_of_single hbot x fun j hj => ?_
+    obtain rfl | hij := eq_or_ne j i
+    · exact ha _ hs
+    by_cases h : r j i
+    · rw [hr j h, single_eq_of_ne hij, single_zero]
+      exact Lex.acc_zero hbot
+    · exact ih _ ⟨h, hij⟩ _
 
 Depends on / 依赖: Acc.intro, DFinsupp, DFinsupp.Lex, Lex.acc_of_single, Lex.acc_zero, WellFounded, WellFounded.induction, acc_of_single, acc_zero, classical, eq_or_ne, single, single_apply, single_eq_of_ne, single_zero, split_ifs
 -/
@@ -407,7 +469,7 @@ theorem Pi.Lex.wellFounded
   let : forall i, Zero (α i) := fun i => ⟨(hs i).min ⊤ ⟨x i, trivial⟩⟩
   have := Fintype.ofFinite ι
   refine InvImage.wf equivFunOnFintype.symm (Lex.wellFounded' (fun i a => ?_) hs ?_)
-  exacts [(hs i).not_lt_min ⊤ 
+  exacts [(hs i).not_lt_min ⊤ trivial, Finite.wellFounded_of_trans_of_irrefl (Function.swap r)]
 
 中文:
 定理 依赖函数类型.Lex.wellFounded
@@ -418,7 +480,7 @@ theorem Pi.Lex.wellFounded
   let : forall i, Zero (α i) := fun i => ⟨(hs i).min ⊤ ⟨x i, trivial⟩⟩
   have := Fintype.ofFinite ι
   refine InvImage.wf equivFunOnFintype.symm (Lex.wellFounded' (fun i a => ?_) hs ?_)
-  exacts [(hs i).not_lt_min ⊤ 
+  exacts [(hs i).not_lt_min ⊤ trivial, Finite.wellFounded_of_trans_of_irrefl (Function.swap r)]
 
 Depends on / 依赖: Finite, Finite.wellFounded_of_trans_of_irrefl, Fintype, Fintype.ofFinite, Function, Function.swap, InvImage, InvImage.wf, Lex.wellFounded, convert, emptyWf, emptyWf.wf, equivFunOnFintype, equivFunOnFintype.symm, exacts, isEmpty_or_nonempty, not_lt_min, ofFinite, wellFounded, wellFounded_of_trans_of_irrefl
 -/
@@ -561,7 +623,15 @@ theorem DFinsupp.wellFoundedLT
     set e : (i : ι) -> α i -> β i := fun i => toAntisymmetrization (· <= ·)
     let _ : forall i, Zero (β i) := fun i => ⟨e i 0⟩
     have : WellFounded (DFinsupp.Lex (Function.swap <| @WellOrderingRel ι)
-        (fun _ => (· < ·) : (i : ι) 
+        (fun _ => (· < ·) : (i : ι) -> β i -> β i -> Prop)) := by
+      refine Lex.wellFounded' ?_ (fun i => IsWellFounded.wf) ?_
+      · rintro i ⟨a⟩
+        apply hbot
+      · simp +unfoldPartialApp only [Function.swap]
+        exact IsWellFounded.wf
+refine Subrelation.wf (fun h => ?_) InvImage.wf (mapRange e fun _ => rfl) this
+    obtain ⟨i, he, hl⟩ := lex_lt_of_lt_of_preorder (Function.swap WellOrderingRel) h
+    exact ⟨i, fun j hj => Quot.sound (he j hj), hl⟩⟩
 
 中文:
 定理 直和有限支撑.wellFoundedLT
@@ -571,7 +641,15 @@ theorem DFinsupp.wellFoundedLT
     set e : (i : ι) -> α i -> β i := fun i => toAntisymmetrization (· <= ·)
     let _ : forall i, Zero (β i) := fun i => ⟨e i 0⟩
     have : WellFounded (DFinsupp.Lex (Function.swap <| @WellOrderingRel ι)
-        (fun _ => (· < ·) : (i : ι) 
+        (fun _ => (· < ·) : (i : ι) -> β i -> β i -> Prop)) := by
+      refine Lex.wellFounded' ?_ (fun i => IsWellFounded.wf) ?_
+      · rintro i ⟨a⟩
+        apply hbot
+      · simp +unfoldPartialApp only [Function.swap]
+        exact IsWellFounded.wf
+refine Subrelation.wf (fun h => ?_) InvImage.wf (mapRange e fun _ => rfl) this
+    obtain ⟨i, he, hl⟩ := lex_lt_of_lt_of_preorder (Function.swap WellOrderingRel) h
+    exact ⟨i, fun j hj => Quot.sound (he j hj), hl⟩⟩
 -/
 protected theorem DFinsupp.wellFoundedLT [forall i, Zero (α i)] [forall i, Preorder (α i)]
     [forall i, WellFoundedLT (α i)] (hbot : forall ⦃i⦄ ⦃a : α i⦄, ¬a < 0) : WellFoundedLT (Π₀ i, α i) :=
@@ -620,7 +698,7 @@ instance Pi.wellFoundedLT
     let : forall i, Zero (α i) := fun i => ⟨(hw i).wf.min ⊤ ⟨x i, trivial⟩⟩
     have := Fintype.ofFinite ι
     refine InvImage.wf equivFunOnFintype.symm (DFinsupp.wellFoundedLT fun i a => ?_).wf
-    exact (hw i
+    exact (hw i).wf.not_lt_min ⊤ trivial⟩
 
 中文:
 实例 依赖函数类型.wellFoundedLT
@@ -631,7 +709,7 @@ instance Pi.wellFoundedLT
     let : forall i, Zero (α i) := fun i => ⟨(hw i).wf.min ⊤ ⟨x i, trivial⟩⟩
     have := Fintype.ofFinite ι
     refine InvImage.wf equivFunOnFintype.symm (DFinsupp.wellFoundedLT fun i a => ?_).wf
-    exact (hw i
+    exact (hw i).wf.not_lt_min ⊤ trivial⟩
 
 Depends on / 依赖: DFinsupp, DFinsupp.wellFoundedLT, Fintype, Fintype.ofFinite, InvImage, InvImage.wf, convert, emptyWf, emptyWf.wf, equivFunOnFintype, equivFunOnFintype.symm, isEmpty_or_nonempty, not_lt_min, ofFinite, wellFoundedLT, wf.min, wf.not_lt_min
 -/

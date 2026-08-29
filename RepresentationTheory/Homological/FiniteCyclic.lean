@@ -63,7 +63,9 @@ lemma coinvariantsKer_eq_range
     rcases mem_powers_iff_mem_zpowers.2 (hg γ) with ⟨i, rfl⟩
     induction i with | zero => exact ⟨0, by simp⟩ | succ n _ =>
     use (Fin.partialSum (fun (j : Fin (n + 1)) => ρ (g ^ (j : Nat)) α) (Fin.last _))
-    simpa u
+    simpa using ρ.apply_sub_id_partialSum_eq _ _ _
+  · rintro x ⟨y, rfl⟩
+    simpa using Coinvariants.sub_mem_ker g y
 
 中文:
 引理 coinvariantsKer_eq_range
@@ -74,7 +76,9 @@ lemma coinvariantsKer_eq_range
     rcases mem_powers_iff_mem_zpowers.2 (hg γ) with ⟨i, rfl⟩
     induction i with | zero => exact ⟨0, by simp⟩ | succ n _ =>
     use (Fin.partialSum (fun (j : Fin (n + 1)) => ρ (g ^ (j : Nat)) α) (Fin.last _))
-    simpa u
+    simpa using ρ.apply_sub_id_partialSum_eq _ _ _
+  · rintro x ⟨y, rfl⟩
+    simpa using Coinvariants.sub_mem_ker g y
 
 Depends on / 依赖: Coinvariants, Coinvariants.sub_mem_ker, Fin.last, Fin.partialSum, Submodule, Submodule.span_le, apply_sub_id_partialSum_eq, le_antisymm, mem_powers_iff_mem_zpowers, partialSum, span_le, sub_mem_ker
 -/
@@ -121,7 +125,14 @@ lemma coinvariantsKer_leftRegular_eq_ker
   · rintro x ⟨⟨g, y⟩, rfl⟩
     simpa [linearCombination, sub_eq_zero, sum_fintype]
       using Finset.sum_bijective _ (Group.mulLeft_bijective g⁻¹) (by simp) (by lia)
-  · have : x = x.coeff.sum (fun g r => .
+  · have : x = x.coeff.sum (fun g r => .single g r - .single 1 r) := by
+      ext g
+      by_cases hg : g = 1
+      · simp_all [linearCombination, sum_apply', MonoidAlgebra.coeff_finsuppSum]
+      · simp_all [sum_apply', MonoidAlgebra.coeff_finsuppSum]
+    rw [this]
+    exact Submodule.finsuppSum_mem _ _ _ _ fun g _ =>
+      Coinvariants.mem_ker_of_eq g (.single 1 (x.coeff g)) _ (by simp)
 
 中文:
 引理 coinvariantsKer_leftRegular_eq_ker
@@ -131,7 +142,14 @@ lemma coinvariantsKer_leftRegular_eq_ker
   · rintro x ⟨⟨g, y⟩, rfl⟩
     simpa [linearCombination, sub_eq_zero, sum_fintype]
       using Finset.sum_bijective _ (Group.mulLeft_bijective g⁻¹) (by simp) (by lia)
-  · have : x = x.coeff.sum (fun g r => .
+  · have : x = x.coeff.sum (fun g r => .single g r - .single 1 r) := by
+      ext g
+      by_cases hg : g = 1
+      · simp_all [linearCombination, sum_apply', MonoidAlgebra.coeff_finsuppSum]
+      · simp_all [sum_apply', MonoidAlgebra.coeff_finsuppSum]
+    rw [this]
+    exact Submodule.finsuppSum_mem _ _ _ _ fun g _ =>
+      Coinvariants.mem_ker_of_eq g (.single 1 (x.coeff g)) _ (by simp)
 
 Depends on / 依赖: Finset, Finset.sum_bijective, Fintype, Fintype.ofFinite, Group.mulLeft_bijective, MonoidAlgebra, MonoidAlgebra.coeff_finsuppSum, Submodule, Submodule.fin, Submodule.span_le, coeff_finsuppSum, le_antisymm, linearCombination, mulLeft_bijective, ofFinite, single, span_le, sub_eq_zero, sum_apply, sum_bijective
 -/
@@ -176,7 +194,7 @@ lemma range_norm_eq_ker_applyAsHom_sub
       (by simpa [sub_hom, sub_eq_zero] using! hx) γ
     simp [norm, Representation.norm, this]⟩
 
-omit [Fin
+omit [Fintype G] in variable [Finite G] in
 
 中文:
 引理 range_norm_eq_ker_applyAsHom_sub
@@ -188,7 +206,7 @@ omit [Fin
       (by simpa [sub_hom, sub_eq_zero] using! hx) γ
     simp [norm, Representation.norm, this]⟩
 
-omit [Fin
+omit [Fintype G] in variable [Finite G] in
 
 Depends on / 依赖: Representation, Representation.norm, applyAsHom_apply, coeff_of_leftRegular_of_generator, le_antisymm, single, sub_eq_zero, sub_hom, x.coeff
 -/
@@ -278,7 +296,11 @@ definition chainComplexFunctor
     f i := f
     comm' := by
       rintro i j ⟨rfl⟩
-      by_cases hj : 
+      by_cases hj : Even (j + 1)
+      · simp [if_pos hj, norm_comm]
+      · simp [if_neg hj, applyAsHom_comm] }
+  map_id _ := rfl
+  map_comp _ _ := rfl
 
 中文:
 定义 chainComplexFunctor
@@ -290,7 +312,11 @@ definition chainComplexFunctor
     f i := f
     comm' := by
       rintro i j ⟨rfl⟩
-      by_cases hj : 
+      by_cases hj : Even (j + 1)
+      · simp [if_pos hj, norm_comm]
+      · simp [if_neg hj, applyAsHom_comm] }
+  map_id _ := rfl
+  map_comp _ _ := rfl
 
 Depends on / 依赖: A.norm, HomologicalComplex, HomologicalComplex.alternatingConst, alternatingConst, applyAsHom
 -/
@@ -364,7 +390,7 @@ abbreviation moduleCatChainComplex
   body: HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom
     A.norm.hom.toLinearMap) (ψ := ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
     (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
-    fun _ _ => ComplexShape.down_nat_odd_
+    fun _ _ => ComplexShape.down_nat_odd_add
 
 中文:
 缩写 moduleCatChainComplex
@@ -372,7 +398,7 @@ abbreviation moduleCatChainComplex
   定义体: HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom
     A.norm.hom.toLinearMap) (ψ := ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
     (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
-    fun _ _ => ComplexShape.down_nat_odd_
+    fun _ _ => ComplexShape.down_nat_odd_add
 
 Depends on / 依赖: A.norm.hom.toLinearMap, ComplexShape, ComplexShape.down_nat_odd_add, HomologicalComplex, HomologicalComplex.alternatingConst, ModuleCat, ModuleCat.of, ModuleCat.ofHom, alternatingConst, applyAsHom, down_nat_odd_add, hom.toLinearMap, sub_hom, toLinearMap
 -/
@@ -391,7 +417,7 @@ abbreviation moduleCatCochainComplex
   body: HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom (applyAsHom A g -
     𝟙 A).hom.toLinearMap) (ψ := ModuleCat.ofHom A.norm.hom.toLinearMap)
     (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
-    fun _ _ => ComplexShape.up_nat_odd_ad
+    fun _ _ => ComplexShape.up_nat_odd_add
 
 中文:
 缩写 moduleCatCochainComplex
@@ -399,7 +425,7 @@ abbreviation moduleCatCochainComplex
   定义体: HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom (applyAsHom A g -
     𝟙 A).hom.toLinearMap) (ψ := ModuleCat.ofHom A.norm.hom.toLinearMap)
     (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
-    fun _ _ => ComplexShape.up_nat_odd_ad
+    fun _ _ => ComplexShape.up_nat_odd_add
 
 Depends on / 依赖: A.norm.hom.toLinearMap, ComplexShape, ComplexShape.up_nat_odd_add, HomologicalComplex, HomologicalComplex.alternatingConst, ModuleCat, ModuleCat.of, ModuleCat.ofHom, alternatingConst, applyAsHom, hom.toLinearMap, sub_hom, toLinearMap, up_nat_odd_add
 -/
@@ -461,7 +487,24 @@ lemma resolution_quasiIso
       rw [ChainComplex.quasiIsoAt₀_iff]; rw [ShortComplex.quasiIso_iff_of_zeros' _ rfl rfl rfl]
       constructor
       · apply (forget₂ _ (ModuleCat k)).reflects_exact_of_faithful
-        simpa [ShortComplex.moduleCat_exact_iff_ra
+        simpa [ShortComplex.moduleCat_exact_iff_range_eq_ker,
+          HomologicalComplex.alternatingConst, ChainComplex.toSingle₀Equiv] using!
+          leftRegular.range_applyAsHom_sub_eq_ker_linearCombination k g hg
+      · rw [Rep.epi_iff_surjective]
+        intro x
+        use .single 1 x
+        simp [ChainComplex.toSingle₀Equiv]
+    | succ m _ =>
+      rw [quasiIsoAt_iff_exactAt' (hL := ChainComplex.exactAt_succ_single_obj ..)]; rw [HomologicalComplex.exactAt_iff' _ (m + 2) (m + 1) m (by simp) (by simp)]
+      apply (forget₂ _ (ModuleCat k)).reflects_exact_of_faithful
+      rw [ShortComplex.moduleCat_exact_iff_range_eq_ker]
+      by_cases hm : Odd (m + 1)
+      · simpa [if_pos (Nat.even_add_one.2 (Nat.not_even_iff_odd.2 hm)),
+          if_neg (Nat.not_even_iff_odd.2 hm)]
+          using! leftRegular.range_norm_eq_ker_applyAsHom_sub k g hg
+      · simpa [ShortComplex.moduleCat_exact_iff_range_eq_ker, if_pos (Nat.not_odd_iff_even.1 hm),
+          if_neg (Nat.not_even_iff_odd.2 <| Nat.odd_add_one.2 hm)]
+        using! leftRegular.range_applyAsHom_sub_eq_ker_norm k g hg
 
 中文:
 引理 resolution_quasiIso
@@ -473,7 +516,24 @@ lemma resolution_quasiIso
       rw [ChainComplex.quasiIsoAt₀_iff]; rw [ShortComplex.quasiIso_iff_of_zeros' _ rfl rfl rfl]
       constructor
       · apply (forget₂ _ (ModuleCat k)).reflects_exact_of_faithful
-        simpa [ShortComplex.moduleCat_exact_iff_ra
+        simpa [ShortComplex.moduleCat_exact_iff_range_eq_ker,
+          HomologicalComplex.alternatingConst, ChainComplex.toSingle₀Equiv] using!
+          leftRegular.range_applyAsHom_sub_eq_ker_linearCombination k g hg
+      · rw [Rep.epi_iff_surjective]
+        intro x
+        use .single 1 x
+        simp [ChainComplex.toSingle₀Equiv]
+    | succ m _ =>
+      rw [quasiIsoAt_iff_exactAt' (hL := ChainComplex.exactAt_succ_single_obj ..)]; rw [HomologicalComplex.exactAt_iff' _ (m + 2) (m + 1) m (by simp) (by simp)]
+      apply (forget₂ _ (ModuleCat k)).reflects_exact_of_faithful
+      rw [ShortComplex.moduleCat_exact_iff_range_eq_ker]
+      by_cases hm : Odd (m + 1)
+      · simpa [if_pos (Nat.even_add_one.2 (Nat.not_even_iff_odd.2 hm)),
+          if_neg (Nat.not_even_iff_odd.2 hm)]
+          using! leftRegular.range_norm_eq_ker_applyAsHom_sub k g hg
+      · simpa [ShortComplex.moduleCat_exact_iff_range_eq_ker, if_pos (Nat.not_odd_iff_even.1 hm),
+          if_neg (Nat.not_even_iff_odd.2 <| Nat.odd_add_one.2 hm)]
+        using! leftRegular.range_applyAsHom_sub_eq_ker_norm k g hg
 
 Depends on / 依赖: ChainComplex, ChainComplex.quasiIsoAt, ChainComplex.toSingle, HomologicalComplex, HomologicalComplex.alternatingConst, ModuleCat, Rep.epi_iff_surjective, ShortComplex, ShortComplex.moduleCat_exact_iff_range_eq_ker, ShortComplex.quasiIso_iff_of_zeros, alternatingConst, epi_iff_surjective, leftRegular, leftRegular.range_applyAsHom_sub_eq_ker_linearCombination, moduleCat_exact_iff_range_eq_ker, quasiIso_iff_of_zeros, range_applyAsHom_sub_eq_ker_linearCombination, reflects_exact_of_faithful, resolution, single
 -/

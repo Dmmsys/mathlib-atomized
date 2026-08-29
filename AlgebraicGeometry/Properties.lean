@@ -71,7 +71,10 @@ instance :
   · rintro ⟨_, i, rfl⟩; exact (X.affineCover.f i).isOpenEmbedding.isOpen_range
   · rintro ⟨_, i, rfl⟩
     exact @IsOpenEmbedding.quasiSober _ _ _ _ _
-      (X.affineCover.f i).isOpenEmbe
+      (X.affineCover.f i).isOpenEmbedding.isEmbedding.toHomeomorph.symm.isOpenEmbedding
+        PrimeSpectrum.quasiSober
+  · rw [Set.top_eq_univ, Set.sUnion_range, Set.eq_univ_iff_forall]
+    intro x; exact ⟨_, ⟨_, rfl⟩, X.affineCover.covers x⟩
 
 中文:
 实例 :
@@ -82,7 +85,10 @@ instance :
   · rintro ⟨_, i, rfl⟩; exact (X.affineCover.f i).isOpenEmbedding.isOpen_range
   · rintro ⟨_, i, rfl⟩
     exact @IsOpenEmbedding.quasiSober _ _ _ _ _
-      (X.affineCover.f i).isOpenEmbe
+      (X.affineCover.f i).isOpenEmbedding.isEmbedding.toHomeomorph.symm.isOpenEmbedding
+        PrimeSpectrum.quasiSober
+  · rw [Set.top_eq_univ, Set.sUnion_range, Set.eq_univ_iff_forall]
+    intro x; exact ⟨_, ⟨_, rfl⟩, X.affineCover.covers x⟩
 
 Depends on / 依赖: IsOpenEmbedding, IsOpenEmbedding.quasiSober, PrimeSpectrum, PrimeSpectrum.quasiSober, Set.eq_univ_iff_forall, Set.range, Set.sUnion_range, Set.top_eq_univ, X.affineCover.covers, X.affineCover.f, affineCover, allowSynthFailures, covers, eq_univ_iff_forall, isEmbedding, isOpenEmbedding, isOpenEmbedding.isEmbedding.toHomeomorph.symm.isOpenEmbedding, isOpenEmbedding.isOpen_range, isOpen_range, quasiSober
 -/
@@ -214,7 +220,10 @@ instance isReduced_stalk_of_isReduced
   obtain ⟨U, hxU, s, (rfl : (X.presheaf.germ U x hxU) s = g)⟩ := X.presheaf.exists_germ_eq g
   rw [← map_pow]; rw [← map_zero (X.presheaf.germ _ x hxU).hom] at e
   obtain ⟨V, hxV, iU, iV, (e' : (X.presheaf.map iU.op) (s ^ n) = (X.presheaf.map iV.op) 0)⟩ :=
-    X.pr
+    X.presheaf.germ_eq x hxU hxU _ 0 e
+  rw [map_pow]; rw [map_zero] at e'
+  replace e' := (IsNilpotent.mk _ _ e').eq_zero (R := Γ(X, V))
+  rw [← X.presheaf.germ_res iU x hxV]; rw [CommRingCat.comp_apply]; rw [e']; rw [map_zero]
 
 中文:
 实例 isReduced_stalk_of_isReduced
@@ -225,7 +234,10 @@ instance isReduced_stalk_of_isReduced
   obtain ⟨U, hxU, s, (rfl : (X.presheaf.germ U x hxU) s = g)⟩ := X.presheaf.exists_germ_eq g
   rw [← map_pow]; rw [← map_zero (X.presheaf.germ _ x hxU).hom] at e
   obtain ⟨V, hxV, iU, iV, (e' : (X.presheaf.map iU.op) (s ^ n) = (X.presheaf.map iV.op) 0)⟩ :=
-    X.pr
+    X.presheaf.germ_eq x hxU hxU _ 0 e
+  rw [map_pow]; rw [map_zero] at e'
+  replace e' := (IsNilpotent.mk _ _ e').eq_zero (R := Γ(X, V))
+  rw [← X.presheaf.germ_res iU x hxV]; rw [CommRingCat.comp_apply]; rw [e']; rw [map_zero]
 
 Depends on / 依赖: CommRingCat, CommRingCat.comp_apply, IsNilpotent, IsNilpotent.mk, X.presheaf.exists_germ_eq, X.presheaf.germ, X.presheaf.germ_eq, X.presheaf.germ_res, X.presheaf.map, comp_apply, eq_zero, exists_germ_eq, germ_eq, germ_res, iU.op, iV.op, map_pow, map_zero, presheaf, replace
 -/
@@ -431,7 +443,9 @@ theorem reduce_to_affine_global
   let U' : Opens _ := ⟨_, (X.affineBasisCover.f j).isOpenEmbedding.isOpen_range⟩
   let i' : U' ⟶ U := homOfLE i
   refine ⟨U', hx, i', ?_⟩
-  obtain ⟨_
+  obtain ⟨_, _, rfl, rfl, h₂'⟩ := h₂ _ _ (X.affineBasisCover.f j)
+  apply h₂'
+  apply h₃
 
 中文:
 定理 reduce_to_affine_global
@@ -444,7 +458,9 @@ theorem reduce_to_affine_global
   let U' : Opens _ := ⟨_, (X.affineBasisCover.f j).isOpenEmbedding.isOpen_range⟩
   let i' : U' ⟶ U := homOfLE i
   refine ⟨U', hx, i', ?_⟩
-  obtain ⟨_
+  obtain ⟨_, _, rfl, rfl, h₂'⟩ := h₂ _ _ (X.affineBasisCover.f j)
+  apply h₂'
+  apply h₃
 
 Depends on / 依赖: SetLike, SetLike.mem_coe, U.isOpen, X.affineBasisCover.f, X.affineBasisCover_is_basis.exists_subset_of_mem_open, affineBasisCover, affineBasisCover_is_basis, exists_subset_of_mem_open, homOfLE, isOpen, isOpenEmbedding, isOpenEmbedding.isOpen_range, isOpen_range, mem_coe, x.prop
 -/
@@ -516,7 +532,29 @@ theorem eq_zero_of_basicOpen_eq_bot
   induction U using reduce_to_affine_global generalizing hX with
   | h₁ X U H =>
     obtain ⟨V, hx, i, H⟩ := H ⟨x, hx⟩
-    specialize H (X.preshe
+    specialize H (X.presheaf.map i.op s)
+    rw [Scheme.basicOpen_res]; rw [hs] at H
+    specialize H (inf_bot_eq _) x hx
+    rw [← X.sheaf.presheaf.germ_res_apply i x hx s]
+    exact H
+  | h₂ X Y f =>
+    refine ⟨f ⁻¹ᵁ f.opensRange, f.opensRange, by simp, rfl, ?_⟩
+    rintro H hX s hs _ ⟨x, rfl⟩
+    have := isReduced_of_isOpenImmersion f
+    specialize H (f.app _ s) _ x ⟨x, rfl⟩
+    · rw [← Scheme.preimage_basicOpen, hs]; ext1; simp [Opens.map]
+    · have H : (X.presheaf.germ _ x _).hom _ = 0 := H
+      rw [← Scheme.Hom.germ_stalkMap_apply f ⟨_]; rw [_⟩ x] at H
+apply_fun inv f.stalkMap x at H
+      rw [← CommRingCat.comp_apply]; rw [CategoryTheory.IsIso.hom_inv_id]; rw [map_zero] at H
+      exact H
+  | h₃ R =>
+    rw [basicOpen_eq_of_affine']; rw [PrimeSpectrum.basicOpen_eq_bot_iff] at hs
+    replace hs := (hs.map (Scheme.ΓSpecIso R).inv.hom).eq_zero
+    rw [← CommRingCat.comp_apply]; rw [Iso.hom_inv_id]; rw [CommRingCat.id_apply] at hs
+    rw [hs]; rw [map_zero]
+
+@[simp]
 
 中文:
 定理 eq_zero_of_basicOpen_eq_bot
@@ -529,7 +567,29 @@ theorem eq_zero_of_basicOpen_eq_bot
   induction U using reduce_to_affine_global generalizing hX with
   | h₁ X U H =>
     obtain ⟨V, hx, i, H⟩ := H ⟨x, hx⟩
-    specialize H (X.preshe
+    specialize H (X.presheaf.map i.op s)
+    rw [Scheme.basicOpen_res]; rw [hs] at H
+    specialize H (inf_bot_eq _) x hx
+    rw [← X.sheaf.presheaf.germ_res_apply i x hx s]
+    exact H
+  | h₂ X Y f =>
+    refine ⟨f ⁻¹ᵁ f.opensRange, f.opensRange, by simp, rfl, ?_⟩
+    rintro H hX s hs _ ⟨x, rfl⟩
+    have := isReduced_of_isOpenImmersion f
+    specialize H (f.app _ s) _ x ⟨x, rfl⟩
+    · rw [← Scheme.preimage_basicOpen, hs]; ext1; simp [Opens.map]
+    · have H : (X.presheaf.germ _ x _).hom _ = 0 := H
+      rw [← Scheme.Hom.germ_stalkMap_apply f ⟨_]; rw [_⟩ x] at H
+apply_fun inv f.stalkMap x at H
+      rw [← CommRingCat.comp_apply]; rw [CategoryTheory.IsIso.hom_inv_id]; rw [map_zero] at H
+      exact H
+  | h₃ R =>
+    rw [basicOpen_eq_of_affine']; rw [PrimeSpectrum.basicOpen_eq_bot_iff] at hs
+    replace hs := (hs.map (Scheme.ΓSpecIso R).inv.hom).eq_zero
+    rw [← CommRingCat.comp_apply]; rw [Iso.hom_inv_id]; rw [CommRingCat.id_apply] at hs
+    rw [hs]; rw [map_zero]
+
+@[simp]
 
 Depends on / 依赖: Presheaf, Scheme, Scheme.basicOpen_res, TopCat, TopCat.Presheaf.section_ext, X.presheaf.map, X.sheaf, X.sheaf.presheaf.germ, X.sheaf.presheaf.germ_res_apply, basicOpen_res, f.opensRange, generalizing, germ_res_apply, i.op, inf_bot_eq, map_zero, opensRange, presheaf, reduce_to_affine_global, section_ext
 -/
@@ -603,7 +663,16 @@ lemma isField_stalk_of_closure_mem_irreducibleComponents
   · obtain ⟨i, x, rfl⟩ := X.affineCover.exists_eq x
     have inst : IsReduced (X.affineCover.X i) := isReduced_of_isOpenImmersion (X.affineCover.f i)
     refine (asIso <| (X.affineCover.f i).stalkMap x).commRingCatIsoToRingEquiv.isField
-      (this _ x ?_ ⟨_, rfl⟩
+      (this _ x ?_ ⟨_, rfl⟩)
+    rw [(X.affineCover.f i).isOpenEmbedding.closure_eq_preimage_closure_image]; rw [Set.image_singleton]
+    exact preimage_mem_irreducibleComponents hx (X.affineCover.f i).isOpenEmbedding
+      ⟨X.affineCover.f i x, subset_closure rfl, _, rfl⟩
+  obtain ⟨R, rfl⟩ := hX
+  replace hx : x.asIdeal in minimalPrimes R := by
+    rwa [← PrimeSpectrum.vanishingIdeal_singleton, PrimeSpectrum.vanishingIdeal_mem_minimalPrimes]
+  rw [← PrimeSpectrum.subsingleton_iff_isField_of_isReduced]
+  exact IsLocalization.subsingleton_primeSpectrum_of_mem_minimalPrimes _ hx
+    ((Spec.structureSheaf R).presheaf.stalk x)
 
 中文:
 引理 isField_stalk_of_closure_mem_irreducibleComponents
@@ -612,7 +681,16 @@ lemma isField_stalk_of_closure_mem_irreducibleComponents
   · obtain ⟨i, x, rfl⟩ := X.affineCover.exists_eq x
     have inst : IsReduced (X.affineCover.X i) := isReduced_of_isOpenImmersion (X.affineCover.f i)
     refine (asIso <| (X.affineCover.f i).stalkMap x).commRingCatIsoToRingEquiv.isField
-      (this _ x ?_ ⟨_, rfl⟩
+      (this _ x ?_ ⟨_, rfl⟩)
+    rw [(X.affineCover.f i).isOpenEmbedding.closure_eq_preimage_closure_image]; rw [Set.image_singleton]
+    exact preimage_mem_irreducibleComponents hx (X.affineCover.f i).isOpenEmbedding
+      ⟨X.affineCover.f i x, subset_closure rfl, _, rfl⟩
+  obtain ⟨R, rfl⟩ := hX
+  replace hx : x.asIdeal in minimalPrimes R := by
+    rwa [← PrimeSpectrum.vanishingIdeal_singleton, PrimeSpectrum.vanishingIdeal_mem_minimalPrimes]
+  rw [← PrimeSpectrum.subsingleton_iff_isField_of_isReduced]
+  exact IsLocalization.subsingleton_primeSpectrum_of_mem_minimalPrimes _ hx
+    ((Spec.structureSheaf R).presheaf.stalk x)
 
 Depends on / 依赖: IsReduced, Set.image_singleton, X.affineCover.X, X.affineCover.exists_eq, X.affineCover.f, affineCover, closure_eq_preimage_closure_image, commRingCatIsoToRingEquiv, commRingCatIsoToRingEquiv.isField, exists_eq, image_singleton, isField, isOpenEmbedding, isOpenEmbedding.closure_eq_preimage_closure_image, isReduced_of_isOpenImmersion, preimage_mem_irreducibleComponents, stalkMap, subset_closur
 -/
@@ -720,7 +798,22 @@ instance irreducibleSpace_of_isIntegral
         toNonempty := inferInstance }
   simp_rw [isPreirreducible_iff_isClosed_union_isClosed, not_forall, not_or] at H
   rcases H with ⟨S, T, hS, hT, h₁, h₂, h₃⟩
-  rw [Set.not_univ_subset] at h₂ 
+  rw [Set.not_univ_subset] at h₂ h₃
+  have : Nonempty (⟨Sᶜ, hS.1⟩ : X.Opens) := ⟨⟨_, h₂.choose_spec⟩⟩
+  have : Nonempty (⟨Tᶜ, hT.1⟩ : X.Opens) := ⟨⟨_, h₃.choose_spec⟩⟩
+  have : Nonempty (⟨Sᶜ, hS.1⟩ ⊔ ⟨Tᶜ, hT.1⟩ : X.Opens) := ⟨⟨_, Or.inl h₂.choose_spec⟩⟩
+  let e : Γ(X, _) ≅ CommRingCat.of _ :=
+    (X.sheaf.isProductOfDisjoint ⟨_, hS.1⟩ ⟨_, hT.1⟩ ?_).conePointUniqueUpToIso
+      (CommRingCat.prodFanIsLimit _ _)
+  · have : IsDomain (Γ(X, ⟨Sᶜ, hS.1⟩) × Γ(X, ⟨Tᶜ, hT.1⟩)) :=
+      e.symm.commRingCatIsoToRingEquiv.toMulEquiv.isDomain _
+    exact false_of_nontrivial_of_product_domain Γ(X, ⟨Sᶜ, hS.1⟩) Γ(X, ⟨Tᶜ, hT.1⟩)
+  · ext x
+    constructor
+    · rintro ⟨hS, hT⟩
+      rcases h₁ (show x in ⊤ by trivial) with h | h
+      exacts [hS h, hT h]
+    · simp
 
 中文:
 实例 irreducibleSpace_of_is整数egral
@@ -732,7 +825,22 @@ instance irreducibleSpace_of_isIntegral
         toNonempty := inferInstance }
   simp_rw [isPreirreducible_iff_isClosed_union_isClosed, not_forall, not_or] at H
   rcases H with ⟨S, T, hS, hT, h₁, h₂, h₃⟩
-  rw [Set.not_univ_subset] at h₂ 
+  rw [Set.not_univ_subset] at h₂ h₃
+  have : Nonempty (⟨Sᶜ, hS.1⟩ : X.Opens) := ⟨⟨_, h₂.choose_spec⟩⟩
+  have : Nonempty (⟨Tᶜ, hT.1⟩ : X.Opens) := ⟨⟨_, h₃.choose_spec⟩⟩
+  have : Nonempty (⟨Sᶜ, hS.1⟩ ⊔ ⟨Tᶜ, hT.1⟩ : X.Opens) := ⟨⟨_, Or.inl h₂.choose_spec⟩⟩
+  let e : Γ(X, _) ≅ CommRingCat.of _ :=
+    (X.sheaf.isProductOfDisjoint ⟨_, hS.1⟩ ⟨_, hT.1⟩ ?_).conePointUniqueUpToIso
+      (CommRingCat.prodFanIsLimit _ _)
+  · have : IsDomain (Γ(X, ⟨Sᶜ, hS.1⟩) × Γ(X, ⟨Tᶜ, hT.1⟩)) :=
+      e.symm.commRingCatIsoToRingEquiv.toMulEquiv.isDomain _
+    exact false_of_nontrivial_of_product_domain Γ(X, ⟨Sᶜ, hS.1⟩) Γ(X, ⟨Tᶜ, hT.1⟩)
+  · ext x
+    constructor
+    · rintro ⟨hS, hT⟩
+      rcases h₁ (show x in ⊤ by trivial) with h | h
+      exacts [hS h, hT h]
+    · simp
 
 Depends on / 依赖: IsPreirreducible, Nonempty, Or.inl, Set.not_univ_subset, X.Opens, choose_spec, isPreirreducible_iff_isClosed_union_isClosed, not_forall, not_or, not_univ_subset, replace, simp_rw, toNonempty, toPreirreducibleSpace
 -/
@@ -773,7 +881,16 @@ theorem isIntegral_of_irreducibleSpace_of_isReduced
   have : NoZeroDivisors
       (X.toLocallyRingedSpace.toSheafedSpace.toPresheafedSpace.presheaf.obj (op U)) := by
     refine ⟨fun {a b} e => ?_⟩
-    simp_rw [← basicOpen
+    simp_rw [← basicOpen_eq_bot_iff, ← Opens.not_nonempty_iff_eq_bot]
+    by_contra! h
+    obtain ⟨x, ⟨hxU, hx₁⟩, _, hx₂⟩ :=
+      nonempty_preirreducible_inter (X.basicOpen a).2 (X.basicOpen b).2 h.1 h.2
+    replace e := congr_arg (X.presheaf.germ U x hxU) e
+    rw [map_mul]; rw [map_zero] at e
+    refine zero_ne_one' (X.presheaf.stalk x) (isUnit_zero_iff.1 ?_)
+    convert! hx₁.mul hx₂
+    exact e.symm
+  exact NoZeroDivisors.to_isDomain _
 
 中文:
 定理 is整数egral_of_irreducibleSpace_of_isReduced
@@ -785,7 +902,16 @@ theorem isIntegral_of_irreducibleSpace_of_isReduced
   have : NoZeroDivisors
       (X.toLocallyRingedSpace.toSheafedSpace.toPresheafedSpace.presheaf.obj (op U)) := by
     refine ⟨fun {a b} e => ?_⟩
-    simp_rw [← basicOpen
+    simp_rw [← basicOpen_eq_bot_iff, ← Opens.not_nonempty_iff_eq_bot]
+    by_contra! h
+    obtain ⟨x, ⟨hxU, hx₁⟩, _, hx₂⟩ :=
+      nonempty_preirreducible_inter (X.basicOpen a).2 (X.basicOpen b).2 h.1 h.2
+    replace e := congr_arg (X.presheaf.germ U x hxU) e
+    rw [map_mul]; rw [map_zero] at e
+    refine zero_ne_one' (X.presheaf.stalk x) (isUnit_zero_iff.1 ?_)
+    convert! hx₁.mul hx₂
+    exact e.symm
+  exact NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.component_nontrivial, NoZeroDivisors, Opens.not_nonempty_iff_eq_bot, X.basicOpen, X.presheaf.germ, X.toLocallyRingedSpace, X.toLocallyRingedSpace.toSheafedSpace.toPresheafedSpace.presheaf.obj, basicOpen, basicOpen_eq_bot_iff, component_nontrivial, congr_arg, infer_instance, nonempty_preirreducible_inter, not_nonempty_iff_eq_bot, presheaf, replace, simp_rw, toLocallyRingedSpace, toPresheafedSpace
 -/
@@ -842,7 +968,7 @@ theorem isIntegral_of_isOpenImmersion
     apply +allowSynthFailures IsIntegral.component_integral
     exact ⟨⟨_, _, hU.some.prop, rfl⟩⟩
   exact (asIso <| f.app (f ''ᵁ U) :
-    Γ(Y, f ''ᵁ U) ≅ _).symm.commRingCatIsoToRingE
+    Γ(Y, f ''ᵁ U) ≅ _).symm.commRingCatIsoToRingEquiv.toMulEquiv.isDomain _
 
 中文:
 定理 is整数egral_of_isOpenImmersion
@@ -855,7 +981,7 @@ theorem isIntegral_of_isOpenImmersion
     apply +allowSynthFailures IsIntegral.component_integral
     exact ⟨⟨_, _, hU.some.prop, rfl⟩⟩
   exact (asIso <| f.app (f ''ᵁ U) :
-    Γ(Y, f ''ᵁ U) ≅ _).symm.commRingCatIsoToRingE
+    Γ(Y, f ''ᵁ U) ≅ _).symm.commRingCatIsoToRingEquiv.toMulEquiv.isDomain _
 
 Depends on / 依赖: IsDomain, IsIntegral, IsIntegral.component_integral, allowSynthFailures, commRingCatIsoToRingEquiv, component_integral, f.app, f.preimage_image_eq, hU.some.prop, infer_instance, isDomain, preimage_image_eq, symm.commRingCatIsoToRingEquiv.toMulEquiv.isDomain, toMulEquiv
 -/
@@ -956,7 +1082,9 @@ theorem map_injective_of_isIntegral
   contrapose!
   simp_rw [Ne, ← Opens.not_nonempty_iff_eq_bot, Classical.not_not]
   apply nonempty_preirreducible_inter U.isOpen (RingedSpace.basicOpen _ _).isOpen
-  si
+  simpa using H
+
+noncomputable
 
 中文:
 定理 map_injective_of_is整数egral
@@ -970,7 +1098,9 @@ theorem map_injective_of_isIntegral
   contrapose!
   simp_rw [Ne, ← Opens.not_nonempty_iff_eq_bot, Classical.not_not]
   apply nonempty_preirreducible_inter U.isOpen (RingedSpace.basicOpen _ _).isOpen
-  si
+  simpa using H
+
+noncomputable
 
 Depends on / 依赖: Classical, Classical.not_not, Opens.not_nonempty_iff_eq_bot, RingedSpace, RingedSpace.basicOpen, Scheme, Scheme.basicOpen_res, U.isOpen, basicOpen, basicOpen_eq_bot_iff, basicOpen_res, contrapose, injective_iff_map_eq_zero, isOpen, nonempty_preirreducible_inter, not_nonempty_iff_eq_bot, not_not, revert, simp_rw
 -/
@@ -1066,7 +1196,15 @@ lemma ringKrullDim_stalk_eq_coheight
       (show x in ⊤ from trivial)
     obtain ⟨y, rfl⟩ := Set.mem_range.mp hsub.1
     rw [coheight_eq_of_isOpenImmersion]; rw [← this _ ⟨R]; rw [rfl⟩]
-    exact Order.krullDim_eq_of_orderI
+    exact Order.krullDim_eq_of_orderIso
+      (PrimeSpectrum.comapEquiv (asIso (Scheme.Hom.stalkMap f y)).commRingCatIsoToRingEquiv)
+  obtain ⟨R, rfl⟩ := h
+  let k : Algebra ↑R ↑((Spec R).presheaf.stalk x) := StructureSheaf.stalkAlgebra (↑R) x
+  have : IsLocalization.AtPrime (↑((Spec R).presheaf.stalk x)) x.asIdeal :=
+    StructureSheaf.IsLocalization.to_stalk R x
+  rw [IsLocalization.AtPrime.ringKrullDim_eq_height x.asIdeal ((Spec R).presheaf.stalk x)]
+  apply WithBot.coe_eq_coe.mpr
+  exact idealHeight_eq_coheight R x
 
 中文:
 引理 ringKrullDim_stalk_eq_coheight
@@ -1077,7 +1215,15 @@ lemma ringKrullDim_stalk_eq_coheight
       (show x in ⊤ from trivial)
     obtain ⟨y, rfl⟩ := Set.mem_range.mp hsub.1
     rw [coheight_eq_of_isOpenImmersion]; rw [← this _ ⟨R]; rw [rfl⟩]
-    exact Order.krullDim_eq_of_orderI
+    exact Order.krullDim_eq_of_orderIso
+      (PrimeSpectrum.comapEquiv (asIso (Scheme.Hom.stalkMap f y)).commRingCatIsoToRingEquiv)
+  obtain ⟨R, rfl⟩ := h
+  let k : Algebra ↑R ↑((Spec R).presheaf.stalk x) := StructureSheaf.stalkAlgebra (↑R) x
+  have : IsLocalization.AtPrime (↑((Spec R).presheaf.stalk x)) x.asIdeal :=
+    StructureSheaf.IsLocalization.to_stalk R x
+  rw [IsLocalization.AtPrime.ringKrullDim_eq_height x.asIdeal ((Spec R).presheaf.stalk x)]
+  apply WithBot.coe_eq_coe.mpr
+  exact idealHeight_eq_coheight R x
 
 Depends on / 依赖: Algebra, IsLocalization, IsLocalization.AtP, Order.krullDim_eq_of_orderIso, PrimeSpectrum, PrimeSpectrum.comapEquiv, Scheme, Scheme.Hom.stalkMap, Scheme.exists_affine_mem_range_and_range_subset, Set.mem_range.mp, StructureSheaf, StructureSheaf.stalkAlgebra, coheight_eq_of_isOpenImmersion, comapEquiv, commRingCatIsoToRingEquiv, exists_affine_mem_range_and_range_subset, krullDim_eq_of_orderIso, mem_range, presheaf, presheaf.stalk
 -/

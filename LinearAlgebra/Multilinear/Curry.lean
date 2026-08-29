@@ -607,7 +607,9 @@ definition currySum
   map_update_add' u i x y :=
     ext fun _ => by let := Classical.decEq ι'; simp
   map_update_smul' u i c x :=
-    ext fun _ => by let := Classical.de
+    ext fun _ => by let := Classical.decEq ι'; simp
+
+@[simp low]
 
 中文:
 定义 currySum
@@ -618,7 +620,9 @@ definition currySum
   map_update_add' u i x y :=
     ext fun _ => by let := Classical.decEq ι'; simp
   map_update_smul' u i c x :=
-    ext fun _ => by let := Classical.de
+    ext fun _ => by let := Classical.decEq ι'; simp
+
+@[simp low]
 
 Depends on / 依赖: Classical, Classical.decEq, Sum.rec, map_update_add, map_update_smul
 -/

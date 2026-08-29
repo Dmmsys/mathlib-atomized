@@ -475,7 +475,12 @@ whiskerRight η h := op2 h.unop ◁ unop2 η
   associator f g h := (associator h.unop g.unop f.unop).op2_unop.symm
   leftUnitor f := (rightUnitor f.unop).op2_unop
   rightUnitor f := (leftUnitor f.unop).op2_unop
-whisker_exchange η θ := congrArg op
+whisker_exchange η θ := congrArg op2 (whisker_exchange _ _).symm
+whisker_assoc f g g' η i := congrArg op2 by simp
+pentagon f g h i := congrArg op2 by simp
+triangle f g := congrArg op2 by simp
+
+@[simp]
 
 中文:
 实例 bicategory
@@ -486,7 +491,12 @@ whiskerRight η h := op2 h.unop ◁ unop2 η
   associator f g h := (associator h.unop g.unop f.unop).op2_unop.symm
   leftUnitor f := (rightUnitor f.unop).op2_unop
   rightUnitor f := (leftUnitor f.unop).op2_unop
-whisker_exchange η θ := congrArg op
+whisker_exchange η θ := congrArg op2 (whisker_exchange _ _).symm
+whisker_assoc f g g' η i := congrArg op2 by simp
+pentagon f g h i := congrArg op2 by simp
+triangle f g := congrArg op2 by simp
+
+@[simp]
 
 Depends on / 依赖: FintypeCat, FintypeCat.incl_obj, comp_obj, homCategory, incl_obj, infer_instance
 -/

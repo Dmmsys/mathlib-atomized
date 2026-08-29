@@ -46,7 +46,9 @@ definition select
     pure new_goal
   | (m + 1), (n + 1) => do
     let [new_goal] ← goal.nthConstructor `right 1 (some 2)
-      | throwError "expected onl
+      | throwError "expected only one new goal"
+    select m n new_goal
+  | _, _ => failure
 
 中文:
 定义 select
@@ -59,7 +61,9 @@ definition select
     pure new_goal
   | (m + 1), (n + 1) => do
     let [new_goal] ← goal.nthConstructor `right 1 (some 2)
-      | throwError "expected onl
+      | throwError "expected only one new goal"
+    select m n new_goal
+  | _, _ => failure
 -/
 private def select (m n : Nat) (goal : MVarId) : MetaM MVarId :=
   match m,n with
@@ -86,7 +90,7 @@ definition compactRelation
       let i := fun e => e.replaceFVar b a
       let (bs, as_ps', subst) :=
         compactRelation (bs.map i) ((ps₁ ++ ps₂).map (fun ⟨a, p⟩ => (a, i p)))
-      (none :: bs, as_
+      (none :: bs, as_ps', i ∘ subst)
 
 中文:
 定义 compactRelation
@@ -97,7 +101,7 @@ definition compactRelation
       let i := fun e => e.replaceFVar b a
       let (bs, as_ps', subst) :=
         compactRelation (bs.map i) ((ps₁ ++ ps₂).map (fun ⟨a, p⟩ => (a, i p)))
-      (none :: bs, as_
+      (none :: bs, as_ps', i ∘ subst)
 -/
 partial def compactRelation :
     List Expr -> List (Expr × Expr) -> List (Option Expr) × List (Expr × Expr) × (Expr -> Expr)
@@ -149,6 +153,7 @@ definition mkExistsList
         then pure (mkApp2 (.const `Exists [l]) t
           (updateLambdaBinderInfoD! <| ← mkLambdaFVars #[arg] i))
 else pure mkApp2 (mkConst `And) t i)
+    inner
 
 中文:
 定义 mkExistsList
@@ -161,6 +166,7 @@ else pure mkApp2 (mkConst `And) t i)
         then pure (mkApp2 (.const `Exists [l]) t
           (updateLambdaBinderInfoD! <| ← mkLambdaFVars #[arg] i))
 else pure mkApp2 (mkConst `And) t i)
+    inner
 
 Depends on / 依赖: Exists, Level.zero, arg.occurs, args.foldrM, foldrM, inferType, mkApp2, mkConst, mkLambdaFVars, occurs, sortLevel, updateLambdaBinderInfoD
 -/
@@ -295,7 +301,31 @@ definition constrToProp
   let type' ← Meta.forallBoundedTelescope type (params.length) fun fvars ty => do
 pure ty.replaceFVars fvars params.toArray
   Meta.forallTelescope type' fun fvars ty => do
-    let idxs_inst := ty.getAppArgs.toList.drop params.lengt
+    let idxs_inst := ty.getAppArgs.toList.drop params.length
+    let (bs, eqs, subst) := compactRelation fvars.toList (idxs.zip idxs_inst)
+    let eqs ← eqs.mapM (fun ⟨idx, inst⟩ => do
+      let ty ← idx.fvarId!.getType
+      let instTy ← inferType inst
+      let u := (← inferType ty).sortLevel!
+      if ← isDefEq ty instTy
+      then pure (mkApp3 (.const `Eq [u]) ty idx inst)
+      else pure (mkApp4 (.const `HEq [u]) ty idx instTy inst))
+    let (n, r) ← match bs.filterMap id, eqs with
+    | [], [] => do
+      pure (some 0, (mkConst `True))
+    | bs', [] => do
+      let t : Expr ← bs'.getLast!.fvarId!.getType
+      let l := (← inferType t).sortLevel!
+      if l == Level.zero then do
+        let r ← mkExistsList (List.init bs') t
+        pure (none, subst r)
+      else do
+        let r ← mkExistsList bs' (mkConst `True)
+        pure (some 0, subst r)
+    | bs', _ => do
+      let r ← mkExistsList bs' (mkAndList eqs)
+      pure (some eqs.length, subst r)
+    pure (⟨bs.map Option.isSome, n⟩, r)
 
 中文:
 定义 constrToProp
@@ -305,7 +335,31 @@ pure ty.replaceFVars fvars params.toArray
   let type' ← Meta.forallBoundedTelescope type (params.length) fun fvars ty => do
 pure ty.replaceFVars fvars params.toArray
   Meta.forallTelescope type' fun fvars ty => do
-    let idxs_inst := ty.getAppArgs.toList.drop params.lengt
+    let idxs_inst := ty.getAppArgs.toList.drop params.length
+    let (bs, eqs, subst) := compactRelation fvars.toList (idxs.zip idxs_inst)
+    let eqs ← eqs.mapM (fun ⟨idx, inst⟩ => do
+      let ty ← idx.fvarId!.getType
+      let instTy ← inferType inst
+      let u := (← inferType ty).sortLevel!
+      if ← isDefEq ty instTy
+      then pure (mkApp3 (.const `Eq [u]) ty idx inst)
+      else pure (mkApp4 (.const `HEq [u]) ty idx instTy inst))
+    let (n, r) ← match bs.filterMap id, eqs with
+    | [], [] => do
+      pure (some 0, (mkConst `True))
+    | bs', [] => do
+      let t : Expr ← bs'.getLast!.fvarId!.getType
+      let l := (← inferType t).sortLevel!
+      if l == Level.zero then do
+        let r ← mkExistsList (List.init bs') t
+        pure (none, subst r)
+      else do
+        let r ← mkExistsList bs' (mkConst `True)
+        pure (some 0, subst r)
+    | bs', _ => do
+      let r ← mkExistsList bs' (mkAndList eqs)
+      pure (some eqs.length, subst r)
+    pure (⟨bs.map Option.isSome, n⟩, r)
 -/
 def constrToProp (univs : List Level) (params : List Expr) (idxs : List Expr) (c : Name) :
     MetaM (Shape × Expr) := do
@@ -353,7 +407,12 @@ let (subgoals',_) ← Term.TermElabM.run Tactic.run mvar do
   pure ()
 | n + 1 => do
 let (subgoals,_) ← Term.TermElabM.run Tactic.run mvar do
-    Tactic.evalTactic (← `(tact
+    Tactic.evalTactic (← `(tactic| refine ⟨?_,?_⟩))
+  let [sg1, sg2] := subgoals | throwError "expected two subgoals"
+let (subgoals',_) ← Term.TermElabM.run Tactic.run sg1 do
+    Tactic.evalTactic (← `(tactic| constructor))
+  let [] := subgoals' | throwError "expected no subgoals"
+  splitThenConstructor sg2 n
 
 中文:
 定义 splitThenConstructor
@@ -366,7 +425,12 @@ let (subgoals',_) ← Term.TermElabM.run Tactic.run mvar do
   pure ()
 | n + 1 => do
 let (subgoals,_) ← Term.TermElabM.run Tactic.run mvar do
-    Tactic.evalTactic (← `(tact
+    Tactic.evalTactic (← `(tactic| refine ⟨?_,?_⟩))
+  let [sg1, sg2] := subgoals | throwError "expected two subgoals"
+let (subgoals',_) ← Term.TermElabM.run Tactic.run sg1 do
+    Tactic.evalTactic (← `(tactic| constructor))
+  let [] := subgoals' | throwError "expected no subgoals"
+  splitThenConstructor sg2 n
 
 Depends on / 依赖: Tactic, Tactic.evalTactic, Tactic.run, Term.TermElabM.run, TermElabM, evalTactic, expected, subgoals, tactic, throwError
 -/
@@ -398,7 +462,16 @@ definition toCases
   let _ ← (shape.zip subgoals.toList).zipIdx.mapM fun ⟨⟨⟨shape, t⟩, subgoal⟩, p⟩ => do
     let vars := subgoal.fields
     let si := (shape.zip vars.toList).filterMap (fun ⟨c,v⟩ => if c then some v else none)
-    let mvar'' ← select p (
+    let mvar'' ← select p (subgoals.size - 1) subgoal.mvarId
+    match t with
+    | none => do
+      let v := vars[shape.length - 1]!
+      let mv ← mvar''.existsi (List.init si)
+      mv.assign v
+    | some n => do
+      let mv ← mvar''.existsi si
+      splitThenConstructor mv (n - 1)
+  pure ()
 
 中文:
 定义 toCases
@@ -409,7 +482,16 @@ definition toCases
   let _ ← (shape.zip subgoals.toList).zipIdx.mapM fun ⟨⟨⟨shape, t⟩, subgoal⟩, p⟩ => do
     let vars := subgoal.fields
     let si := (shape.zip vars.toList).filterMap (fun ⟨c,v⟩ => if c then some v else none)
-    let mvar'' ← select p (
+    let mvar'' ← select p (subgoals.size - 1) subgoal.mvarId
+    match t with
+    | none => do
+      let v := vars[shape.length - 1]!
+      let mv ← mvar''.existsi (List.init si)
+      mv.assign v
+    | some n => do
+      let mv ← mvar''.existsi si
+      splitThenConstructor mv (n - 1)
+  pure ()
 
 Depends on / 依赖: List.init, assign, existsi, fields, filterMap, intro1, length, mv.assign, mvar.intro1, mvarId, select, shape.length, shape.zip, splitThenConstructor, subgoal, subgoal.fields, subgoal.mvarId, subgoals, subgoals.size, subgoals.toList
 -/
@@ -443,7 +525,8 @@ definition nCasesSum
   let #[sg1, sg2] ← mvar.cases h | throwError "expected two case subgoals"
   let #[Expr.fvar fvar1] ← pure sg1.fields | throwError "expected fvar"
   let #[Expr.fvar fvar2] ← pure sg2.fields | throwError "expected fvar"
-  let rest ← nCasesSum n' sg2
+  let rest ← nCasesSum n' sg2.mvarId fvar2
+  pure ((fvar1, sg1.mvarId)::rest)
 
 中文:
 定义 nCasesSum
@@ -454,7 +537,8 @@ definition nCasesSum
   let #[sg1, sg2] ← mvar.cases h | throwError "expected two case subgoals"
   let #[Expr.fvar fvar1] ← pure sg1.fields | throwError "expected fvar"
   let #[Expr.fvar fvar2] ← pure sg2.fields | throwError "expected fvar"
-  let rest ← nCasesSum n' sg2
+  let rest ← nCasesSum n' sg2.mvarId fvar2
+  pure ((fvar1, sg1.mvarId)::rest)
 
 Depends on / 依赖: Expr.fvar, expected, fields, mvar.cases, mvarId, nCasesSum, sg1.fields, sg1.mvarId, sg2.fields, sg2.mvarId, subgoals, throwError
 -/
@@ -535,7 +619,37 @@ definition toInductive
       let subgoals ← nCasesSum n mvar h
       let _ ← (cs.zip (subgoals.zip s)).mapM fun ⟨constr_name, ⟨h, mv⟩, bs, e⟩ => do
         let n := (bs.filter id).length
-        let (mvar', _fvars) ← matc
+        let (mvar', _fvars) ← match e with
+        | none => nCasesProd (n-1) mv h
+        | some 0 => do let ⟨mvar', fvars⟩ ← nCasesProd n mv h
+                          let mvar'' ← mvar'.tryClear fvars.getLast!
+                          pure ⟨mvar'', fvars⟩
+        | some (e + 1) => do
+           let (mv', fvars) ← nCasesProd n mv h
+           let lastfv := fvars.getLast!
+           let (mv2, fvars') ← nCasesProd e mv' lastfv
+
+           /- `fvars'.foldlM subst mv2` fails when we have dependent equalities (`HEq`).
+           `subst` will change the dependent hypotheses, so that the `uniq` local names
+           are wrong afterwards. Instead we revert them and pull them out one-by-one. -/
+           let (_, mv3) ← mv2.revert fvars'.toArray
+           let mv4 ← fvars'.foldlM (fun mv _ => do let ⟨fv, mv'⟩ ← mv.intro1; subst mv' fv) mv3
+           pure (mv4, fvars)
+        mvar'.withContext do
+          let fvarIds := (← getLCtx).getFVarIds.toList
+          let gs := fvarIds.take gs.length
+          let hs := (fvarIds.reverse.take n).reverse
+          let m := gs.map some ++ listBoolMerge bs hs
+          let args ← m.mapM fun a =>
+            match a with
+            | some v => pure (mkFVar v)
+            | none => mkFreshExprMVar none
+          let c ← mkConstWithFreshMVarLevels constr_name
+          let e := mkAppN c args.toArray
+          let t ← inferType e
+          let mt ← mvar'.getType
+          let _ ← isDefEq t mt -- infer values for those mvars we just made
+          mvar'.assign e
 
 中文:
 定义 toInductive
@@ -548,7 +662,37 @@ definition toInductive
       let subgoals ← nCasesSum n mvar h
       let _ ← (cs.zip (subgoals.zip s)).mapM fun ⟨constr_name, ⟨h, mv⟩, bs, e⟩ => do
         let n := (bs.filter id).length
-        let (mvar', _fvars) ← matc
+        let (mvar', _fvars) ← match e with
+        | none => nCasesProd (n-1) mv h
+        | some 0 => do let ⟨mvar', fvars⟩ ← nCasesProd n mv h
+                          let mvar'' ← mvar'.tryClear fvars.getLast!
+                          pure ⟨mvar'', fvars⟩
+        | some (e + 1) => do
+           let (mv', fvars) ← nCasesProd n mv h
+           let lastfv := fvars.getLast!
+           let (mv2, fvars') ← nCasesProd e mv' lastfv
+
+           /- `fvars'.foldlM subst mv2` fails when we have dependent equalities (`HEq`).
+           `subst` will change the dependent hypotheses, so that the `uniq` local names
+           are wrong afterwards. Instead we revert them and pull them out one-by-one. -/
+           let (_, mv3) ← mv2.revert fvars'.toArray
+           let mv4 ← fvars'.foldlM (fun mv _ => do let ⟨fv, mv'⟩ ← mv.intro1; subst mv' fv) mv3
+           pure (mv4, fvars)
+        mvar'.withContext do
+          let fvarIds := (← getLCtx).getFVarIds.toList
+          let gs := fvarIds.take gs.length
+          let hs := (fvarIds.reverse.take n).reverse
+          let m := gs.map some ++ listBoolMerge bs hs
+          let args ← m.mapM fun a =>
+            match a with
+            | some v => pure (mkFVar v)
+            | none => mkFreshExprMVar none
+          let c ← mkConstWithFreshMVarLevels constr_name
+          let e := mkAppN c args.toArray
+          let t ← inferType e
+          let mt ← mvar'.getType
+          let _ ← isDefEq t mt -- infer values for those mvars we just made
+          mvar'.assign e
 -/
 def toInductive (mvar : MVarId) (cs : List Name)
     (gs : List Expr) (s : List Shape) (h : FVarId) :
@@ -607,7 +751,35 @@ definition mkIffOfInductivePropImpl
 
   let univNames := inductVal.levelParams
   let univs := univNames.map mkLevelParam
-  /
+  /- we use these names for our universe parameters, maybe we should construct a copy of them
+  using `uniq_name` -/
+
+  let (thmTy, shape) ← Meta.forallTelescope type fun fvars ty => do
+    if !ty.isProp then throwError "mk_iff only applies to prop-valued declarations"
+    let lhs := mkAppN (mkConst ind univs) fvars
+    let fvars' := fvars.toList
+    let shape_rhss ← constrs.mapM (constrToProp univs (fvars'.take params) (fvars'.drop params))
+    let (shape, rhss) := shape_rhss.unzip
+    pure (← mkForallFVars fvars (mkApp2 (mkConst `Iff) lhs (mkOrList rhss)), shape)
+
+  let mvar ← mkFreshExprMVar (some thmTy)
+  let mvarId := mvar.mvarId!
+  let (fvars, mvarId') ← mvarId.intros
+  let [mp, mpr] ← mvarId'.apply (mkConst `Iff.intro) | throwError "failed to split goal"
+
+  toCases mp shape
+
+  let ⟨mprFvar, mpr'⟩ ← mpr.intro1
+  toInductive mpr' constrs ((fvars.toList.take params).map .fvar) shape mprFvar
+
+addDecl .thmDecl {
+    name := rel
+    levelParams := univNames
+    type := thmTy
+    value := ← instantiateMVars mvar
+  }
+  addDeclarationRangesFromSyntax rel (← getRef) relStx
+.run' Term.addTermInfo' relStx (← mkConstWithLevelParams rel) (isBinder := true)
 
 中文:
 定义 mkIffOfInductivePropImpl
@@ -621,7 +793,35 @@ definition mkIffOfInductivePropImpl
 
   let univNames := inductVal.levelParams
   let univs := univNames.map mkLevelParam
-  /
+  /- we use these names for our universe parameters, maybe we should construct a copy of them
+  using `uniq_name` -/
+
+  let (thmTy, shape) ← Meta.forallTelescope type fun fvars ty => do
+    if !ty.isProp then throwError "mk_iff only applies to prop-valued declarations"
+    let lhs := mkAppN (mkConst ind univs) fvars
+    let fvars' := fvars.toList
+    let shape_rhss ← constrs.mapM (constrToProp univs (fvars'.take params) (fvars'.drop params))
+    let (shape, rhss) := shape_rhss.unzip
+    pure (← mkForallFVars fvars (mkApp2 (mkConst `Iff) lhs (mkOrList rhss)), shape)
+
+  let mvar ← mkFreshExprMVar (some thmTy)
+  let mvarId := mvar.mvarId!
+  let (fvars, mvarId') ← mvarId.intros
+  let [mp, mpr] ← mvarId'.apply (mkConst `Iff.intro) | throwError "failed to split goal"
+
+  toCases mp shape
+
+  let ⟨mprFvar, mpr'⟩ ← mpr.intro1
+  toInductive mpr' constrs ((fvars.toList.take params).map .fvar) shape mprFvar
+
+addDecl .thmDecl {
+    name := rel
+    levelParams := univNames
+    type := thmTy
+    value := ← instantiateMVars mvar
+  }
+  addDeclarationRangesFromSyntax rel (← getRef) relStx
+.run' Term.addTermInfo' relStx (← mkConstWithLevelParams rel) (isBinder := true)
 -/
 def mkIffOfInductivePropImpl (ind : Name) (rel : Name) (relStx : Syntax) : MetaM Unit := do
   let .inductInfo inductVal ← getConstInfo ind |

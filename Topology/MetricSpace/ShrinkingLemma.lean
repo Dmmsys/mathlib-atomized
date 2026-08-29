@@ -161,7 +161,10 @@ theorem exists_locallyFinite_subset_iUnion_ball_radius_lt
     nhds_basis_uniformity (uniformity_basis_dist_lt (hR x hx))
   rcases refinement_of_locallyCompact_sigmaCompact_of_nhds_basis_set hs this with
     ⟨ι, c, r', hr', hsub', hfin⟩
-  rcases exis
+  rcases exists_subset_iUnion_ball_radius_pos_lt (fun i => (hr' i).2.1) hs
+      (fun x _ => hfin.point_finite x) hsub' with
+    ⟨r, hsub, hlt⟩
+  exact ⟨ι, c, r, r', fun i => ⟨(hr' i).1, (hlt i).1, (hlt i).2, (hr' i).2.2⟩, hfin, hsub⟩
 
 中文:
 定理 存在_locallyFinite_subset_iUnion_ball_radius_lt
@@ -171,7 +174,10 @@ theorem exists_locallyFinite_subset_iUnion_ball_radius_lt
     nhds_basis_uniformity (uniformity_basis_dist_lt (hR x hx))
   rcases refinement_of_locallyCompact_sigmaCompact_of_nhds_basis_set hs this with
     ⟨ι, c, r', hr', hsub', hfin⟩
-  rcases exis
+  rcases exists_subset_iUnion_ball_radius_pos_lt (fun i => (hr' i).2.1) hs
+      (fun x _ => hfin.point_finite x) hsub' with
+    ⟨r, hsub, hlt⟩
+  exact ⟨ι, c, r, r', fun i => ⟨(hr' i).1, (hlt i).1, (hlt i).2, (hr' i).2.2⟩, hfin, hsub⟩
 
 Depends on / 依赖: HasBasis, exists_subset_iUnion_ball_radius_pos_lt, hfin.point_finite, nhds_basis_uniformity, point_finite, refinement_of_locallyCompact_sigmaCompact_of_nhds_basis_set, uniformity_basis_dist_lt
 -/

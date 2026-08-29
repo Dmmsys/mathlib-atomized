@@ -119,7 +119,21 @@ definition unitIsoAux
     commGrpTypeEquivalenceCommGrp.inverse.obj (AddCommGrpCat.toCommGrp.obj (F.obj X)) ≅
       (F ⋙ forget AddCommGrpCat).mapCommGrp.obj (Preadditive.commGrpEquivalence.functor.obj X) := by
   letI : (F ⋙ forget AddCommGrpCat).Braided := .ofChosenFiniteProducts _
-  letI : F.M
+  letI : F.Monoidal := .ofChosenFiniteProducts _
+  refine CommGrp.mkIso Multiplicative.toAdd.toIso (by
+    rw [Functor.obj.η_def X (F := F ⋙ forget AddCommGrpCat)]
+    cat_disch) ?_
+  dsimp [-Functor.comp_map, -ConcreteCategory.forget_map_eq_ofHom]
+  have : F.Additive := Functor.additive_of_preserves_binary_products _
+  simp only [Category.id_comp]
+  rw [Functor.obj.μ_def X (F := F ⋙ forget AddCommGrpCat)]; rw [Preadditive.mul_def X]; rw [Functor.comp_map]; rw [F.map_add]; rw [Functor.Monoidal.μ_comp F (forget AddCommGrpCat) X X]; rw [Category.assoc]; rw [← Functor.map_comp]; rw [Preadditive.comp_add]; rw [Functor.Monoidal.μ_fst]; rw [Functor.Monoidal.μ_snd]
+  ext
+  -- `simp [types_tensorObj_def]` says
+  simp only [types_tensorObj_def, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply,
+    Equiv.toIso_hom_hom_apply, Functor.comp_obj, hom_add, tensor_apply, TypeCat.hom_ofHom,
+    TypeCat.Fun.coe_mk, AddMonoidHom.add_apply]
+  rw [dsimp% [types_tensorObj_def]; rw [types_tensorUnit_def] μ_forget_apply]
+  rfl
 
 中文:
 定义 unitIsoAux
@@ -128,7 +142,21 @@ definition unitIsoAux
     commGrpTypeEquivalenceCommGrp.inverse.obj (AddCommGrpCat.toCommGrp.obj (F.obj X)) ≅
       (F ⋙ forget AddCommGrpCat).mapCommGrp.obj (Preadditive.commGrpEquivalence.functor.obj X) := by
   letI : (F ⋙ forget AddCommGrpCat).Braided := .ofChosenFiniteProducts _
-  letI : F.M
+  letI : F.Monoidal := .ofChosenFiniteProducts _
+  refine CommGrp.mkIso Multiplicative.toAdd.toIso (by
+    rw [Functor.obj.η_def X (F := F ⋙ forget AddCommGrpCat)]
+    cat_disch) ?_
+  dsimp [-Functor.comp_map, -ConcreteCategory.forget_map_eq_ofHom]
+  have : F.Additive := Functor.additive_of_preserves_binary_products _
+  simp only [Category.id_comp]
+  rw [Functor.obj.μ_def X (F := F ⋙ forget AddCommGrpCat)]; rw [Preadditive.mul_def X]; rw [Functor.comp_map]; rw [F.map_add]; rw [Functor.Monoidal.μ_comp F (forget AddCommGrpCat) X X]; rw [Category.assoc]; rw [← Functor.map_comp]; rw [Preadditive.comp_add]; rw [Functor.Monoidal.μ_fst]; rw [Functor.Monoidal.μ_snd]
+  ext
+  -- `simp [types_tensorObj_def]` says
+  simp only [types_tensorObj_def, TypeCat.Fun.toFun_apply, CategoryTheory.comp_apply,
+    Equiv.toIso_hom_hom_apply, Functor.comp_obj, hom_add, tensor_apply, TypeCat.hom_ofHom,
+    TypeCat.Fun.coe_mk, AddMonoidHom.add_apply]
+  rw [dsimp% [types_tensorObj_def]; rw [types_tensorUnit_def] μ_forget_apply]
+  rfl
 
 Depends on / 依赖: ofChosenFiniteProducts
 -/
@@ -163,7 +191,8 @@ definition unitIso
     commGroupAddCommGroupEquivalence.counitIso.app _ ≪≫
       (CommGrpCat.toAddCommGrp.mapIso (commGrpTypeEquivalenceCommGrp.counitIso.app
         (AddCommGrpCat.toCommGrp.obj (F.obj.obj X)))).symm ≪≫
-      CommGrpCat
+      CommGrpCat.toAddCommGrp.mapIso
+        (CommGrpTypeEquivalenceCommGrp.functor.mapIso (unitIsoAux F.obj X)))))
 
 中文:
 定义 unitIso
@@ -172,7 +201,8 @@ definition unitIso
     commGroupAddCommGroupEquivalence.counitIso.app _ ≪≫
       (CommGrpCat.toAddCommGrp.mapIso (commGrpTypeEquivalenceCommGrp.counitIso.app
         (AddCommGrpCat.toCommGrp.obj (F.obj.obj X)))).symm ≪≫
-      CommGrpCat
+      CommGrpCat.toAddCommGrp.mapIso
+        (CommGrpTypeEquivalenceCommGrp.functor.mapIso (unitIsoAux F.obj X)))))
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.toCommGrp.obj, BoolAlg, BoolAlg.str, CommGrpCat, CommGrpCat.toAddCommGrp.mapIso, CommGrpTypeEquivalenceCommGrp, CommGrpTypeEquivalenceCommGrp.functor.mapIso, F.obj, F.obj.obj, InducedCategory, InducedCategory.isoMk, NatIso, NatIso.ofComponents, commGroupAddCommGroupEquivalence, commGroupAddCommGroupEquivalence.counitIso.app, commGrpTypeEquivalenceCommGrp, commGrpTypeEquivalenceCommGrp.counitIso.app, counitIso, functor
 -/

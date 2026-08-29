@@ -158,7 +158,49 @@ definition prefixedEquiv
       fst.left_inv x := by simp
       fst.right_inv n := by simp
       snd.toFun x := ⟨f.1 x - #s, by
-   
+        have := (mem_prefixed.1 f.2 x).not.1 (Finset.mem_compl.1 x.2)
+        simp at this ⊢
+        omega⟩
+      snd.invFun n :=
+⟨f.1.symm ⟨n + #s, Nat.add_lt_of_lt_sub by simpa using n.2⟩, by
+          rw [s.mem_compl]; rw [mem_prefixed.1 f.2]; simp⟩
+      snd.left_inv := by
+        rintro ⟨x, hx⟩
+        rw [s.mem_compl]; rw [mem_prefixed.1 f.2]; rw [not_lt] at hx
+        simp [Nat.sub_add_cancel hx]
+      snd.right_inv := by rintro ⟨n, hn⟩; simp }
+  invFun := fun (g, g') =>
+    { val.toFun x :=
+        if hx : x in s then
+.castLE (Fintype.card_subtype_le _) g ⟨x, hx⟩
+        else
+.cast (by simp [card_le_univ]) .addNat #s g' ⟨x, by simpa⟩
+      val.invFun n :=
+        if hn : n < #s then
+          g.symm ⟨n, by simpa using hn⟩
+        else
+          g'.symm ⟨n - #s, by simp; omega⟩
+      val.left_inv x := by
+        by_cases hx : x in s
+        · have : g ⟨x, hx⟩ < #s := by simpa using (g ⟨x, hx⟩).2
+          simp [hx, this]
+        · simp [hx]
+      val.right_inv n := by
+        obtain hns | hsn := lt_or_ge n.1 #s
+        · simp [hns]
+        · simp [hsn.not_gt, hsn, mem_compl.1 <| Subtype.prop _]
+      property := mem_prefixed.2 fun x => by
+        constructor
+        · intro hx
+          simpa [hx, -Fin.is_lt] using (g _).is_lt
+        · by_cases hx : x in s <;> simp [hx] }
+  left_inv f := by
+    ext x
+    by_cases hx : x in s
+    · simp [hx]
+    · rw [mem_prefixed.1 f.2, not_lt] at hx
+      simp [hx]
+  right_inv g := by simp +contextual [Prod.ext_iff, DFunLike.ext_iff]
 
 中文:
 定义 prefixedEquiv
@@ -170,7 +212,49 @@ definition prefixedEquiv
       fst.left_inv x := by simp
       fst.right_inv n := by simp
       snd.toFun x := ⟨f.1 x - #s, by
-   
+        have := (mem_prefixed.1 f.2 x).not.1 (Finset.mem_compl.1 x.2)
+        simp at this ⊢
+        omega⟩
+      snd.invFun n :=
+⟨f.1.symm ⟨n + #s, Nat.add_lt_of_lt_sub by simpa using n.2⟩, by
+          rw [s.mem_compl]; rw [mem_prefixed.1 f.2]; simp⟩
+      snd.left_inv := by
+        rintro ⟨x, hx⟩
+        rw [s.mem_compl]; rw [mem_prefixed.1 f.2]; rw [not_lt] at hx
+        simp [Nat.sub_add_cancel hx]
+      snd.right_inv := by rintro ⟨n, hn⟩; simp }
+  invFun := fun (g, g') =>
+    { val.toFun x :=
+        if hx : x in s then
+.castLE (Fintype.card_subtype_le _) g ⟨x, hx⟩
+        else
+.cast (by simp [card_le_univ]) .addNat #s g' ⟨x, by simpa⟩
+      val.invFun n :=
+        if hn : n < #s then
+          g.symm ⟨n, by simpa using hn⟩
+        else
+          g'.symm ⟨n - #s, by simp; omega⟩
+      val.left_inv x := by
+        by_cases hx : x in s
+        · have : g ⟨x, hx⟩ < #s := by simpa using (g ⟨x, hx⟩).2
+          simp [hx, this]
+        · simp [hx]
+      val.right_inv n := by
+        obtain hns | hsn := lt_or_ge n.1 #s
+        · simp [hns]
+        · simp [hsn.not_gt, hsn, mem_compl.1 <| Subtype.prop _]
+      property := mem_prefixed.2 fun x => by
+        constructor
+        · intro hx
+          simpa [hx, -Fin.is_lt] using (g _).is_lt
+        · by_cases hx : x in s <;> simp [hx] }
+  left_inv f := by
+    ext x
+    by_cases hx : x in s
+    · simp [hx]
+    · rw [mem_prefixed.1 f.2, not_lt] at hx
+      simp [hx]
+  right_inv g := by simp +contextual [Prod.ext_iff, DFunLike.ext_iff]
 
 Depends on / 依赖: Finset, Finset.mem_compl, Nat.add_lt_of_lt_sub, Sigma.mk, add_lt_of_lt_sub, card_le_univ, flatMap, fst.invFun, fst.left_inv, fst.right_inv, fst.toFun, invFun, left_inv, mem_compl, mem_prefixed, ofList, right_inv, s.card_le_univ, s.mem_compl, snd.invFun
 -/

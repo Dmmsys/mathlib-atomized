@@ -181,7 +181,8 @@ instance yoneda_preservesLimit
     exact ⟨(hc.lift (Limits.coneOfSectionCompYoneda F X ⟨s, hs⟩)).unop,
       fun j => Quiver.Hom.op_inj (hc.fac (Limits.coneOfSectionCompYoneda F X ⟨s, hs⟩) j),
       fun m hm => Quiver.Hom.op_inj
-        (hc.uniq (Limits.coneOfSectionCompYoneda F X ⟨s, 
+        (hc.uniq (Limits.coneOfSectionCompYoneda F X ⟨s, hs⟩) _
+          (fun j => Quiver.Hom.unop_inj (hm j)))⟩
 
 中文:
 实例 yoneda_preservesLimit
@@ -192,7 +193,8 @@ instance yoneda_preservesLimit
     exact ⟨(hc.lift (Limits.coneOfSectionCompYoneda F X ⟨s, hs⟩)).unop,
       fun j => Quiver.Hom.op_inj (hc.fac (Limits.coneOfSectionCompYoneda F X ⟨s, hs⟩) j),
       fun m hm => Quiver.Hom.op_inj
-        (hc.uniq (Limits.coneOfSectionCompYoneda F X ⟨s, 
+        (hc.uniq (Limits.coneOfSectionCompYoneda F X ⟨s, hs⟩) _
+          (fun j => Quiver.Hom.unop_inj (hm j)))⟩
 
 Depends on / 依赖: Limits, Limits.coneOfSectionCompYoneda, Quiver, Quiver.Hom.op_inj, Quiver.Hom.unop_inj, Types.isLimit_iff, coneOfSectionCompYoneda, hc.fac, hc.lift, hc.uniq, isCardinalFiltered_of_hasTerminal, isLimit_iff, op_inj, unop_inj
 -/
@@ -233,7 +235,11 @@ definition yonedaJointlyReflectsLimits
   fac s j := Quiver.Hom.unop_inj (by
     simpa using congr_hom ((hc s.pt.unop).fac ((yoneda.obj s.pt.unop).mapCone s) j) (𝟙 (unop s.pt)))
   uniq s m hm := Quiver.Hom.unop_inj (by
-    apply (Types.isLimitEquivSections (hc s.pt.unop)).i
+    apply (Types.isLimitEquivSections (hc s.pt.unop)).injective
+    ext j
+    have eq := congr_hom ((hc s.pt.unop).fac ((yoneda.obj s.pt.unop).mapCone s) j) (𝟙 (unop s.pt))
+    dsimp [Types.isLimitEquivSections, Types.sectionOfCone]
+    simp_all [← hm])
 
 中文:
 定义 yonedaJointlyReflectsLimits
@@ -242,7 +248,11 @@ definition yonedaJointlyReflectsLimits
   fac s j := Quiver.Hom.unop_inj (by
     simpa using congr_hom ((hc s.pt.unop).fac ((yoneda.obj s.pt.unop).mapCone s) j) (𝟙 (unop s.pt)))
   uniq s m hm := Quiver.Hom.unop_inj (by
-    apply (Types.isLimitEquivSections (hc s.pt.unop)).i
+    apply (Types.isLimitEquivSections (hc s.pt.unop)).injective
+    ext j
+    have eq := congr_hom ((hc s.pt.unop).fac ((yoneda.obj s.pt.unop).mapCone s) j) (𝟙 (unop s.pt))
+    dsimp [Types.isLimitEquivSections, Types.sectionOfCone]
+    simp_all [← hm])
 
 Depends on / 依赖: mapCone, s.pt.unop, yoneda, yoneda.obj
 -/
@@ -376,7 +386,9 @@ definition coyonedaJointlyReflectsLimits
   uniq s m hm := by
     apply (Types.isLimitEquivSections (hc (op s.pt))).injective
     ext j
-    dsimp [Types.isLimitEquivSec
+    dsimp [Types.isLimitEquivSections, Types.sectionOfCone]
+    have eq := congr_hom ((hc (op s.pt)).fac ((coyoneda.obj (op s.pt)).mapCone s) j) (𝟙 s.pt)
+    cat_disch
 
 中文:
 定义 coyonedaJointlyReflectsLimits
@@ -387,7 +399,9 @@ definition coyonedaJointlyReflectsLimits
   uniq s m hm := by
     apply (Types.isLimitEquivSections (hc (op s.pt))).injective
     ext j
-    dsimp [Types.isLimitEquivSec
+    dsimp [Types.isLimitEquivSections, Types.sectionOfCone]
+    have eq := congr_hom ((hc (op s.pt)).fac ((coyoneda.obj (op s.pt)).mapCone s) j) (𝟙 s.pt)
+    cat_disch
 
 Depends on / 依赖: coyoneda, coyoneda.obj, mapCone, s.pt
 -/

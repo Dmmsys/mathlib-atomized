@@ -322,7 +322,9 @@ theorem isSheaf_pretopology
       apply giGenerate.gc.monotone_u
       rwa [generate_le_iff]
     apply isSheafFor_subsieve P gRS _
-  
+    intro Y f
+    rw [← pullbackArrows_comm]; rw [← isSheafFor_iff_generate]
+    exact PK (pullbackArrows f R) (K.pullbacks f R hR)
 
 中文:
 定理 isSheaf_pretopology
@@ -337,7 +339,9 @@ theorem isSheaf_pretopology
       apply giGenerate.gc.monotone_u
       rwa [generate_le_iff]
     apply isSheafFor_subsieve P gRS _
-  
+    intro Y f
+    rw [← pullbackArrows_comm]; rw [← isSheafFor_iff_generate]
+    exact PK (pullbackArrows f R) (K.pullbacks f R hR)
 
 Depends on / 依赖: K.pullbacks, Sieve.generate, generate, generate_le_iff, giGenerate, giGenerate.gc.monotone_u, isSheafFor_iff_generate, isSheafFor_subsieve, le_generate, monotone_u, pullbackArrows, pullbackArrows_comm, pullbacks
 -/
@@ -520,7 +524,14 @@ theorem yonedaFamily_fromCocone_compatible
   simp only [yoneda_obj_obj, Opposite.unop_op, yoneda_obj_map, Quiver.Hom.unop_op]
   dsimp [yonedaFamilyOfElements_fromCocone]
   have hgf₁ : S.arrows (g₁ ≫ f₁) := by exact Sieve.downward_closed S hf₁ g₁
-  have hgf₂ : S.arrows (g₂
+  have hgf₂ : S.arrows (g₂ ≫ f₂) := by exact Sieve.downward_closed S hf₂ g₂
+  let F : (Over.mk (g₁ ≫ f₁) : Over X) ⟶ (Over.mk (g₂ ≫ f₂) : Over X) := Over.homMk (𝟙 Z)
+  let F₁ : (Over.mk (g₁ ≫ f₁) : Over X) ⟶ (Over.mk f₁ : Over X) := Over.homMk g₁
+  let F₂ : (Over.mk (g₂ ≫ f₂) : Over X) ⟶ (Over.mk f₂ : Over X) := Over.homMk g₂
+  have hF := @Hs ⟨Over.mk (g₁ ≫ f₁), hgf₁⟩ ⟨Over.mk (g₂ ≫ f₂), hgf₂⟩ (ObjectProperty.homMk F)
+  have hF₁ := @Hs ⟨Over.mk (g₁ ≫ f₁), hgf₁⟩ ⟨Over.mk f₁, hf₁⟩ (ObjectProperty.homMk F₁)
+  have hF₂ := @Hs ⟨Over.mk (g₂ ≫ f₂), hgf₂⟩ ⟨Over.mk f₂, hf₂⟩ (ObjectProperty.homMk F₂)
+  cat_disch
 
 中文:
 定理 yonedaFamily_fromCocone_compatible
@@ -531,7 +542,14 @@ theorem yonedaFamily_fromCocone_compatible
   simp only [yoneda_obj_obj, Opposite.unop_op, yoneda_obj_map, Quiver.Hom.unop_op]
   dsimp [yonedaFamilyOfElements_fromCocone]
   have hgf₁ : S.arrows (g₁ ≫ f₁) := by exact Sieve.downward_closed S hf₁ g₁
-  have hgf₂ : S.arrows (g₂
+  have hgf₂ : S.arrows (g₂ ≫ f₂) := by exact Sieve.downward_closed S hf₂ g₂
+  let F : (Over.mk (g₁ ≫ f₁) : Over X) ⟶ (Over.mk (g₂ ≫ f₂) : Over X) := Over.homMk (𝟙 Z)
+  let F₁ : (Over.mk (g₁ ≫ f₁) : Over X) ⟶ (Over.mk f₁ : Over X) := Over.homMk g₁
+  let F₂ : (Over.mk (g₂ ≫ f₂) : Over X) ⟶ (Over.mk f₂ : Over X) := Over.homMk g₂
+  have hF := @Hs ⟨Over.mk (g₁ ≫ f₁), hgf₁⟩ ⟨Over.mk (g₂ ≫ f₂), hgf₂⟩ (ObjectProperty.homMk F)
+  have hF₁ := @Hs ⟨Over.mk (g₁ ≫ f₁), hgf₁⟩ ⟨Over.mk f₁, hf₁⟩ (ObjectProperty.homMk F₁)
+  have hF₂ := @Hs ⟨Over.mk (g₂ ≫ f₂), hgf₂⟩ ⟨Over.mk f₂, hf₂⟩ (ObjectProperty.homMk F₂)
+  cat_disch
 
 Depends on / 依赖: Opposite, Opposite.unop_op, Over.homM, Over.homMk, Over.mk, Quiver, Quiver.Hom.unop_op, S.arrows, Sieve.downward_closed, arrows, downward_closed, naturality, unop_op, yonedaFamilyOfElements_fromCocone, yoneda_obj_map, yoneda_obj_obj
 -/
@@ -566,7 +584,23 @@ theorem forallYonedaIsSheaf_iff_colimit
 .choose (yonedaFamily_fromCocone_compatible S s)
       fac := by
         intro s f
-        replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows 
+        replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
+          (yonedaFamily_fromCocone_compatible S s)
+        have ht := H.choose_spec.1 f.obj.hom f.property
+        cat_disch
+      uniq := by
+        intro s Fs HFs
+        replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
+          (yonedaFamily_fromCocone_compatible S s)
+        apply H.choose_spec.2 Fs
+        exact fun _ f hf => HFs ⟨Over.mk f, hf⟩ }
+  · intro H W x hx
+    replace H := Classical.choice H
+    let s := compatibleYonedaFamily_toCocone S.arrows W x hx
+    use H.desc s
+    constructor
+    · exact fun _ f hf => (H.fac s) ⟨Over.mk f, hf⟩
+    · exact fun g hg => H.uniq s g (fun ⟨⟨f, _, hom⟩, hf⟩ => hg hom hf)
 
 中文:
 定理 对任意YonedaIsSheaf_iff_colimit
@@ -580,7 +614,23 @@ theorem forallYonedaIsSheaf_iff_colimit
 .choose (yonedaFamily_fromCocone_compatible S s)
       fac := by
         intro s f
-        replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows 
+        replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
+          (yonedaFamily_fromCocone_compatible S s)
+        have ht := H.choose_spec.1 f.obj.hom f.property
+        cat_disch
+      uniq := by
+        intro s Fs HFs
+        replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows s)
+          (yonedaFamily_fromCocone_compatible S s)
+        apply H.choose_spec.2 Fs
+        exact fun _ f hf => HFs ⟨Over.mk f, hf⟩ }
+  · intro H W x hx
+    replace H := Classical.choice H
+    let s := compatibleYonedaFamily_toCocone S.arrows W x hx
+    use H.desc s
+    constructor
+    · exact fun _ f hf => (H.fac s) ⟨Over.mk f, hf⟩
+    · exact fun g hg => H.uniq s g (fun ⟨⟨f, _, hom⟩, hf⟩ => hg hom hf)
 
 Depends on / 依赖: H.choose_spec, Nonempty, Nonempty.intro, S.arrows, arrows, cat_disch, choose_spec, f.obj.hom, f.property, property, replace, s.pt, yonedaFamilyOfElements_fromCocone, yonedaFamily_fromCocone_compatible
 -/

@@ -560,7 +560,7 @@ lemma map'_surjective_iff
     use a
     simp [ha]
 
-alias ⟨_, map'_surjective⟩ := map'_surjective_i
+alias ⟨_, map'_surjective⟩ := map'_surjective_iff
 
 中文:
 引理 map'_surjective_iff
@@ -577,7 +577,7 @@ alias ⟨_, map'_surjective⟩ := map'_surjective_i
     use a
     simp [ha]
 
-alias ⟨_, map'_surjective⟩ := map'_surjective_i
+alias ⟨_, map'_surjective⟩ := map'_surjective_iff
 -/
 lemma map'_surjective_iff {f : α ->* β} : Surjective (map' f) ↔ Surjective f := by
   simp only [Surjective, «forall»]
@@ -851,7 +851,7 @@ instance instDivInvMonoid
     | n, some _ => congr_arg some (DivInvMonoid.zpow_succ' _ _)
   zpow_neg'
     | n, none => rfl
-    | n, some _ => congr_arg some (D
+    | n, some _ => congr_arg some (DivInvMonoid.zpow_neg' _ _)
 
 中文:
 实例 instDivInvMonoid
@@ -865,7 +865,7 @@ instance instDivInvMonoid
     | n, some _ => congr_arg some (DivInvMonoid.zpow_succ' _ _)
   zpow_neg'
     | n, none => rfl
-    | n, some _ => congr_arg some (D
+    | n, some _ => congr_arg some (DivInvMonoid.zpow_neg' _ _)
 -/
 instance instDivInvMonoid [DivInvMonoid α] : DivInvMonoid (WithZero α) where
   div_eq_mul_inv
@@ -1120,7 +1120,10 @@ definition _root_.MulEquiv.withZero
   invFun e := ⟨⟨
     fun x => unzero (x := e x) (by simp [ne_eq, ← e.eq_symm_apply]),
     fun x => unzero (x := e.symm x) (by simp [e.symm_apply_eq]),
-    by intro; simp, by i
+    by intro; simp, by intro; simp⟩,
+    by intro; simp [← coe_inj]⟩
+  left_inv _ := by ext; simp
+  right_inv _ := by ext x; cases x <;> simp
 
 中文:
 定义 _root_.乘法等价.withZero
@@ -1130,7 +1133,10 @@ definition _root_.MulEquiv.withZero
   invFun e := ⟨⟨
     fun x => unzero (x := e x) (by simp [ne_eq, ← e.eq_symm_apply]),
     fun x => unzero (x := e.symm x) (by simp [e.symm_apply_eq]),
-    by intro; simp, by i
+    by intro; simp, by intro; simp⟩,
+    by intro; simp [← coe_inj]⟩
+  left_inv _ := by ext; simp
+  right_inv _ := by ext x; cases x <;> simp
 
 Depends on / 依赖: e.symm
 -/

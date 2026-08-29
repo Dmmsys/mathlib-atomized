@@ -30,7 +30,23 @@ theorem AnalyticOn.hasFPowerSeriesOnSubball
     r <= p.radius -> HasFPowerSeriesOnBall f p x r := by
   rw [Metric.isOpen_eball.analyticOn_iff_analyticOnNhd] at h
   intro hr
-  set p := FormalMultilinearSeries.ofScalars 𝕜 (fun n => iteratedDeriv n f x / n.factoria
+  set p := FormalMultilinearSeries.ofScalars 𝕜 (fun n => iteratedDeriv n f x / n.factorial)
+  let g (t : 𝕜) := p.sum (t - x)
+  have hg : HasFPowerSeriesOnBall g p x p.radius := by
+    simpa using (p.hasFPowerSeriesOnBall (by order)).comp_sub x
+  have hg' : AnalyticOnNhd 𝕜 g (Metric.eball x p.radius) := by
+    simpa using p.analyticOnNhd.comp_sub x
+  replace hg' : AnalyticOnNhd 𝕜 g (Metric.eball x r) := hg'.mono (Metric.eball_subset_eball hr)
+  apply h.eqOn_of_preconnected_of_eventuallyEq at hg'
+  apply (hg.mono hr_pos hr).congr
+  symm
+  apply hg' (Metric.isConnected_eball hr_pos).isPreconnected (show x in Metric.eball x r by simpa) ?_
+  have hf : AnalyticAt 𝕜 f x := h _ (by simp [hr_pos])
+  apply AnalyticAt.hasFPowerSeriesAt at hf
+  unfold Filter.EventuallyEq Filter.Eventually
+  rw [EMetric.mem_nhds_iff]
+  obtain ⟨ε, hf⟩ := hf
+  exact ⟨ε, hf.r_pos, hf.unique (hg.mono hf.r_pos hf.r_le)⟩
 
 中文:
 定理 AnalyticOn.hasFPowerSeriesOnSubball
@@ -38,7 +54,23 @@ theorem AnalyticOn.hasFPowerSeriesOnSubball
     r <= p.radius -> HasFPowerSeriesOnBall f p x r := by
   rw [Metric.isOpen_eball.analyticOn_iff_analyticOnNhd] at h
   intro hr
-  set p := FormalMultilinearSeries.ofScalars 𝕜 (fun n => iteratedDeriv n f x / n.factoria
+  set p := FormalMultilinearSeries.ofScalars 𝕜 (fun n => iteratedDeriv n f x / n.factorial)
+  let g (t : 𝕜) := p.sum (t - x)
+  have hg : HasFPowerSeriesOnBall g p x p.radius := by
+    simpa using (p.hasFPowerSeriesOnBall (by order)).comp_sub x
+  have hg' : AnalyticOnNhd 𝕜 g (Metric.eball x p.radius) := by
+    simpa using p.analyticOnNhd.comp_sub x
+  replace hg' : AnalyticOnNhd 𝕜 g (Metric.eball x r) := hg'.mono (Metric.eball_subset_eball hr)
+  apply h.eqOn_of_preconnected_of_eventuallyEq at hg'
+  apply (hg.mono hr_pos hr).congr
+  symm
+  apply hg' (Metric.isConnected_eball hr_pos).isPreconnected (show x in Metric.eball x r by simpa) ?_
+  have hf : AnalyticAt 𝕜 f x := h _ (by simp [hr_pos])
+  apply AnalyticAt.hasFPowerSeriesAt at hf
+  unfold Filter.EventuallyEq Filter.Eventually
+  rw [EMetric.mem_nhds_iff]
+  obtain ⟨ε, hf⟩ := hf
+  exact ⟨ε, hf.r_pos, hf.unique (hg.mono hf.r_pos hf.r_le)⟩
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.ofScalars, factorial, iteratedDeriv, n.factorial, ofScalars
 -/

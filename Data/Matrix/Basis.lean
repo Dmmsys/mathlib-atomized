@@ -391,7 +391,8 @@ theorem submatrix_single_equiv
     exact f.symm_apply_eq.not.1 hi
   obtain hj | rfl := ne_or_eq (g.symm j) j'
   · rw [single_apply_of_col_ne _ _ hj, single_apply_of_col_ne]
-    exact g.symm_apply_eq.not.1 
+    exact g.symm_apply_eq.not.1 hj
+  simp
 
 中文:
 定理 submatrix_single_equiv
@@ -403,7 +404,8 @@ theorem submatrix_single_equiv
     exact f.symm_apply_eq.not.1 hi
   obtain hj | rfl := ne_or_eq (g.symm j) j'
   · rw [single_apply_of_col_ne _ _ hj, single_apply_of_col_ne]
-    exact g.symm_apply_eq.not.1 
+    exact g.symm_apply_eq.not.1 hj
+  simp
 
 Depends on / 依赖: f.symm, f.symm_apply_eq.not, g.symm, g.symm_apply_eq.not, ne_or_eq, single_apply_of_col_ne, single_apply_of_row_ne, symm_apply_eq
 -/
@@ -1361,7 +1363,11 @@ theorem mem_range_scalar_of_commute_single
   · rw [diagonal_apply_eq]
     obtain rfl | hij := Decidable.eq_or_ne i j
     · rfl
-  
+    · exact diag_eq_of_commute_single (hM hij)
+  · rw [diagonal_apply_ne _ hkl]
+    obtain rfl | hij := Decidable.eq_or_ne i j
+    · rw [col_eq_zero_of_commute_single (hM hkl.symm) hkl]
+    · rw [row_eq_zero_of_commute_single (hM hij) hkl.symm]
 
 中文:
 定理 mem_range_scalar_of_commute_single
@@ -1376,7 +1382,11 @@ theorem mem_range_scalar_of_commute_single
   · rw [diagonal_apply_eq]
     obtain rfl | hij := Decidable.eq_or_ne i j
     · rfl
-  
+    · exact diag_eq_of_commute_single (hM hij)
+  · rw [diagonal_apply_ne _ hkl]
+    obtain rfl | hij := Decidable.eq_or_ne i j
+    · rw [col_eq_zero_of_commute_single (hM hkl.symm) hkl]
+    · rw [row_eq_zero_of_commute_single (hM hij) hkl.symm]
 
 Depends on / 依赖: Decidable, Decidable.eq_or_ne, Matrix, Matrix.ext, Nonempty, Subsingleton, Subsingleton.elim, col_eq_zero_of_commute_single, diag_eq_of_commute_single, diagonal_apply_eq, diagonal_apply_ne, eq_or_ne, hkl.sym, hkl.symm, isEmpty_or_nonempty, row_eq_zero_of_commute_single, scalar_apply
 -/
@@ -1464,7 +1474,8 @@ theorem center_eq_scalar_image
   simp_rw [Set.mem_image, Semigroup.mem_center_iff]
 .symm⟩ refine ⟨fun hx => ?_, fun ⟨x, hx, eq⟩ y => eq ▸ scalar_commute x (hx · |>.symm) y
   refine (isEmpty_or_nonempty n).elim (fun _ => ⟨0, by simp [nontriviality]⟩) fun ⟨i⟩ => ?_
-  obtain ⟨x, rfl⟩ := mem_range_scalar_iff_commu
+  obtain ⟨x, rfl⟩ := mem_range_scalar_iff_commute_single'.mpr fun _ _ => hx _
+  exact ⟨x, by simpa using fun r => congr($(hx (single i i r)) i i)⟩
 
 中文:
 定理 center_eq_scalar_image
@@ -1472,7 +1483,8 @@ theorem center_eq_scalar_image
   simp_rw [Set.mem_image, Semigroup.mem_center_iff]
 .symm⟩ refine ⟨fun hx => ?_, fun ⟨x, hx, eq⟩ y => eq ▸ scalar_commute x (hx · |>.symm) y
   refine (isEmpty_or_nonempty n).elim (fun _ => ⟨0, by simp [nontriviality]⟩) fun ⟨i⟩ => ?_
-  obtain ⟨x, rfl⟩ := mem_range_scalar_iff_commu
+  obtain ⟨x, rfl⟩ := mem_range_scalar_iff_commute_single'.mpr fun _ _ => hx _
+  exact ⟨x, by simpa using fun r => congr($(hx (single i i r)) i i)⟩
 
 Depends on / 依赖: Semigroup, Semigroup.mem_center_iff, Set.ext, Set.mem_image, isEmpty_or_nonempty, mem_center_iff, mem_image, mem_range_scalar_iff_commute_single, nontriviality, scalar_commute, simp_rw, single
 -/

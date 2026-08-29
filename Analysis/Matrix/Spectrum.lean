@@ -414,7 +414,12 @@ theorem conjStarAlgAut_star_eigenvectorUnitary
 apply Matrix.toEuclideanLin.injective (EuclideanSpace.basisFun n 𝕜).toBasis.ext fun i => ?_
   simp only [conjStarAlgAut_star_apply, toLpLin_apply, OrthonormalBasis.coe_toBasis,
     EuclideanSpace.basisFun_apply, PiLp.ofLp_single, ← mulVec_mulVec,
-    eigenvectorUnitary_mulVec, ← mulVec_mulVec, mu
+    eigenvectorUnitary_mulVec, ← mulVec_mulVec, mulVec_eigenvectorBasis,
+    Matrix.diagonal_mulVec_single, mulVec_smul, star_eigenvectorUnitary_mulVec,
+    RCLike.real_smul_eq_coe_smul (K := 𝕜), WithLp.toLp_smul, PiLp.toLp_single,
+    Function.comp_apply, mul_one]
+  apply PiLp.ext fun j => ?_
+  simp only [PiLp.smul_apply, PiLp.single_apply, smul_eq_mul, mul_ite, mul_one, mul_zero]
 
 中文:
 定理 conjStarAlgAut_star_eigenvectorUnitary
@@ -422,7 +427,12 @@ apply Matrix.toEuclideanLin.injective (EuclideanSpace.basisFun n 𝕜).toBasis.e
 apply Matrix.toEuclideanLin.injective (EuclideanSpace.basisFun n 𝕜).toBasis.ext fun i => ?_
   simp only [conjStarAlgAut_star_apply, toLpLin_apply, OrthonormalBasis.coe_toBasis,
     EuclideanSpace.basisFun_apply, PiLp.ofLp_single, ← mulVec_mulVec,
-    eigenvectorUnitary_mulVec, ← mulVec_mulVec, mu
+    eigenvectorUnitary_mulVec, ← mulVec_mulVec, mulVec_eigenvectorBasis,
+    Matrix.diagonal_mulVec_single, mulVec_smul, star_eigenvectorUnitary_mulVec,
+    RCLike.real_smul_eq_coe_smul (K := 𝕜), WithLp.toLp_smul, PiLp.toLp_single,
+    Function.comp_apply, mul_one]
+  apply PiLp.ext fun j => ?_
+  simp only [PiLp.smul_apply, PiLp.single_apply, smul_eq_mul, mul_ite, mul_one, mul_zero]
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.basisFun, EuclideanSpace.basisFun_apply, Function, Function.comp_apply, Matrix, Matrix.diagonal_mulVec_single, Matrix.toEuclideanLin.injective, OrthonormalBasis, OrthonormalBasis.coe_toBasis, PiLp.ofLp_single, PiLp.toLp_single, RCLike, RCLike.real_smul_eq_coe_smul, WithLp, WithLp.toLp_smul, basisFun, basisFun_apply, coe_toBasis, comp_apply
 -/
@@ -577,7 +587,7 @@ lemma sort_roots_charpoly_eq_eigenvalues₀
     Function.comp_def, RCLike.ofReal_re, Multiset.coe_sort]
   apply List.mergeSort_of_pairwise
   simp_rw [decide_eq_true_eq, ← List.sortedGE_iff_pairwise]
-  exact (eigenvalues₀_antitone hA).sortedGE_o
+  exact (eigenvalues₀_antitone hA).sortedGE_ofFn
 
 中文:
 引理 sort_roots_charpoly_eq_eigenvalues₀
@@ -586,7 +596,7 @@ lemma sort_roots_charpoly_eq_eigenvalues₀
     Function.comp_def, RCLike.ofReal_re, Multiset.coe_sort]
   apply List.mergeSort_of_pairwise
   simp_rw [decide_eq_true_eq, ← List.sortedGE_iff_pairwise]
-  exact (eigenvalues₀_antitone hA).sortedGE_o
+  exact (eigenvalues₀_antitone hA).sortedGE_ofFn
 
 Depends on / 依赖: Fin.univ_val_map, Function, Function.comp_def, List.map_ofFn, List.mergeSort_of_pairwise, List.sortedGE_iff_pairwise, Multiset, Multiset.coe_sort, Multiset.map_coe, RCLike, RCLike.ofReal_re, coe_sort, comp_def, decide_eq_true_eq, hA.roots_charpoly_eq_eigenvalues, map_coe, map_ofFn, mergeSort_of_pairwise, ofReal_re, simp_rw
 -/
@@ -791,7 +801,8 @@ lemma exists_eigenvector_of_ne_zero
     rwa [h_ne, Pi.comp_zero, RCLike.ofReal_zero, (by rfl : Function.const n (0 : 𝕜) = fun _ => 0),
       diagonal_zero, map_zero] at this
   obtain ⟨i, hi⟩ := Function.ne_iff.mp this
-exact ⟨_, _, hi,
+exact ⟨_, _, hi, (ofLp_eq_zero 2).ne.2 hA.eigenvectorBasis.orthonormal.ne_zero i,
+    hA.mulVec_eigenvectorBasis i⟩
 
 中文:
 引理 存在_eigenvector_of_ne_zero
@@ -804,7 +815,8 @@ exact ⟨_, _, hi,
     rwa [h_ne, Pi.comp_zero, RCLike.ofReal_zero, (by rfl : Function.const n (0 : 𝕜) = fun _ => 0),
       diagonal_zero, map_zero] at this
   obtain ⟨i, hi⟩ := Function.ne_iff.mp this
-exact ⟨_, _, hi,
+exact ⟨_, _, hi, (ofLp_eq_zero 2).ne.2 hA.eigenvectorBasis.orthonormal.ne_zero i,
+    hA.mulVec_eigenvectorBasis i⟩
 
 Depends on / 依赖: Function, Function.const, Function.ne_iff.mp, Pi.comp_zero, RCLike, RCLike.ofReal_zero, classical, comp_zero, contrapose, diagonal_zero, eigenvalues, eigenvectorBasis, hA.eigenvalues, hA.eigenvectorBasis.orthonormal.ne_zero, hA.mulVec_eigenvectorBasis, hA.spectral_theorem, h_ne, map_zero, mulVec_eigenvectorBasis, ne_iff
 -/

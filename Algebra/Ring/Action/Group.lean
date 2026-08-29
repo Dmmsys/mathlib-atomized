@@ -39,7 +39,8 @@ definition MulSemiringAction.toRingEquiv
 @[deprecated (since := "2026-06-19")] alias MulSemiringAction.toRingEquiv_apply :=
 MulSemiringAction.toRingEquiv_apply_apply
 
-@[deprecated (since := "2026
+@[deprecated (since := "2026-06-19")] alias MulSemiringAction.toRingEquiv_symm_apply :=
+MulSemiringAction.toRingEquiv_apply_symm_apply
 
 中文:
 定义 MulSemiring作用.toRingEquiv
@@ -51,7 +52,8 @@ MulSemiringAction.toRingEquiv_apply_apply
 @[deprecated (since := "2026-06-19")] alias MulSemiringAction.toRingEquiv_apply :=
 MulSemiringAction.toRingEquiv_apply_apply
 
-@[deprecated (since := "2026
+@[deprecated (since := "2026-06-19")] alias MulSemiringAction.toRingEquiv_symm_apply :=
+MulSemiringAction.toRingEquiv_apply_symm_apply
 
 Depends on / 依赖: DistribMulAction, DistribMulAction.toAddEquiv, MulSemiringAction, MulSemiringAction.toRingHom, toAddEquiv, toRingHom
 -/

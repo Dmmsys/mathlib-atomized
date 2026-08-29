@@ -653,7 +653,8 @@ instance :
       | of m ih =>
         change of _⁻¹ * of _ = 1
         rw [← of.map_mul]; rw [inv_mul_cancel]; rw [of.map_one]
-      | mul x y ihx
+      | mul x y ihx ihy =>
+        rw [map_mul]; rw [MulOpposite.unop_mul]; rw [mul_assoc]; rw [← mul_assoc _ x y]; rw [ihx]; rw [one_mul]; rw [ihy] }
 
 中文:
 实例 :
@@ -666,7 +667,8 @@ instance :
       | of m ih =>
         change of _⁻¹ * of _ = 1
         rw [← of.map_mul]; rw [inv_mul_cancel]; rw [of.map_one]
-      | mul x y ihx
+      | mul x y ihx ihy =>
+        rw [map_mul]; rw [MulOpposite.unop_mul]; rw [mul_assoc]; rw [← mul_assoc _ x y]; rw [ihx]; rw [one_mul]; rw [ihy] }
 
 Depends on / 依赖: CoprodI, CoprodI.induction_on, MulOpposite, MulOpposite.unop_mul, MulOpposite.unop_one, induction_on, inv_def, inv_mul_cancel, map_mul, map_one, mul_assoc, of.map_mul, of.map_one, one_mul, unop_mul, unop_one
 -/
@@ -1074,7 +1076,15 @@ theorem rcons_inj
     rw [he] at h
     exact h rfl
   · exfalso
-    simp only [rcons, dif_pos hm', dif
+    simp only [rcons, dif_pos hm', dif_neg hm] at he
+    rw [← he] at h'
+    exact h' rfl
+  · have : m = m' ∧ w.toList = w'.toList := by
+      simpa [cons, rcons, dif_neg hm, dif_neg hm', eq_self_iff_true, Subtype.mk_eq_mk,
+        heq_iff_eq, ← Subtype.ext_iff] using he
+    rcases this with ⟨rfl, h⟩
+    congr
+    exact Word.ext h
 
 中文:
 定理 rcons_inj
@@ -1090,7 +1100,15 @@ theorem rcons_inj
     rw [he] at h
     exact h rfl
   · exfalso
-    simp only [rcons, dif_pos hm', dif
+    simp only [rcons, dif_pos hm', dif_neg hm] at he
+    rw [← he] at h'
+    exact h' rfl
+  · have : m = m' ∧ w.toList = w'.toList := by
+      simpa [cons, rcons, dif_neg hm, dif_neg hm', eq_self_iff_true, Subtype.mk_eq_mk,
+        heq_iff_eq, ← Subtype.ext_iff] using he
+    rcases this with ⟨rfl, h⟩
+    congr
+    exact Word.ext h
 
 Depends on / 依赖: Subtype, Subtype.ext_iff, Subtype.mk_eq_mk, dif_neg, dif_pos, eq_self_iff_true, ext_iff, heq_iff_eq, mk_eq_mk, toList, w.toList
 -/
@@ -1158,7 +1176,12 @@ definition consRecOn
     refine cons m.1 m.2 ⟨w, fun _ hl => h1 _ (List.mem_cons_of_mem _ hl), h2.tail⟩ ?_ ?_ (ih _ _)
     · rw [List.isChain_cons] at h2
       simp only [fstIdx, ne_eq, Option.map_eq_some_iff,
-        Sigma.exist
+        Sigma.exists, exists_and_right, exists_eq_right, not_exists]
+      intro m' hm'
+      exact h2.1 _ hm' rfl
+    · exact h1 _ List.mem_cons_self
+
+@[simp]
 
 中文:
 定义 consRecOn
@@ -1171,7 +1194,12 @@ definition consRecOn
     refine cons m.1 m.2 ⟨w, fun _ hl => h1 _ (List.mem_cons_of_mem _ hl), h2.tail⟩ ?_ ?_ (ih _ _)
     · rw [List.isChain_cons] at h2
       simp only [fstIdx, ne_eq, Option.map_eq_some_iff,
-        Sigma.exist
+        Sigma.exists, exists_and_right, exists_eq_right, not_exists]
+      intro m' hm'
+      exact h2.1 _ hm' rfl
+    · exact h1 _ List.mem_cons_self
+
+@[simp]
 
 Depends on / 依赖: List.isChain_cons, List.mem_cons_of_mem, List.mem_cons_self, Option.map_eq_some_iff, Sigma.exists, exists_and_right, exists_eq_right, fstIdx, h2.tail, isChain_cons, map_eq_some_iff, mem_cons_of_mem, mem_cons_self, ne_eq, not_exists
 -/
@@ -1251,7 +1279,7 @@ definition equivPairAux
             tail := w
             fstIdx_ne := ij ▸ h1 }
           property := by subst ij; simp [rcons, h2] }
-      else ⟨⟨1, cons m w h1
+      else ⟨⟨1, cons m w h1 h2, by simp [cons, fstIdx, Ne.symm ij]⟩, by simp [rcons]⟩
 
 中文:
 定义 equivPairAux
@@ -1264,7 +1292,7 @@ definition equivPairAux
             tail := w
             fstIdx_ne := ij ▸ h1 }
           property := by subst ij; simp [rcons, h2] }
-      else ⟨⟨1, cons m w h1
+      else ⟨⟨1, cons m w h1 h2, by simp [cons, fstIdx, Ne.symm ij]⟩, by simp [rcons]⟩
 -/
 private def equivPairAux (i) (w : Word M) : { p : Pair M i // rcons p = w } :=
 consRecOn w ⟨⟨1, .empty, by simp [fstIdx, empty]⟩, by simp [rcons]⟩
@@ -1359,7 +1387,8 @@ theorem mem_equivPair_tail_iff
     · subst k
       by_cases hij : j = i <;> simp_all
     · by_cases hik : i = k
-      · subst i; si
+      · subst i; simp_all [@eq_comm _ m g, @eq_comm _ k j, or_comm]
+      · simp [hik, Ne.symm hik]
 
 中文:
 定理 mem_equivPair_tail_iff
@@ -1374,7 +1403,8 @@ theorem mem_equivPair_tail_iff
     · subst k
       by_cases hij : j = i <;> simp_all
     · by_cases hik : i = k
-      · subst i; si
+      · subst i; simp_all [@eq_comm _ m g, @eq_comm _ k j, or_comm]
+      · simp [hik, Ne.symm hik]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Ne.symm, coe_fn_mk, consRecOn, consRecOn_cons, eq_comm, equivPair, equivPairAux, ne_eq, or_comm, split_ifs
 -/
@@ -1636,7 +1666,29 @@ theorem mem_smul_iff
   · subst i
     simp only [not_true, ne_eq, false_and, exists_prop, true_and, false_or]
     by_cases hw : ⟨j, m₁⟩ in w.toList.tail
-    · simp [hw, show m₁ != 1 from w.ne_
+    · simp [hw, show m₁ != 1 from w.ne_one _ (List.mem_of_mem_tail hw)]
+    · simp only [hw, false_or, Option.mem_def, and_congr_right_iff]
+      intro hm1
+      split_ifs with h
+      · rcases h with ⟨hnil, rfl⟩
+        simp only [List.head?_eq_some_head hnil, Option.some.injEq]
+        constructor
+        · rintro rfl
+          exact Or.inl ⟨_, rfl, rfl⟩
+        · rintro (⟨_, h, rfl⟩ | hm')
+          · simp only [Sigma.ext_iff, heq_eq_eq, true_and] at h
+            subst h
+            rfl
+          · simp only [fstIdx, Option.map_eq_some_iff, Sigma.exists,
+              exists_and_right, exists_eq_right, not_exists] at hm'
+            exact (hm'.1 (w.toList.head hnil).2 (by rw [List.head?_eq_some_head])).elim
+      · revert h
+        rw [fstIdx]
+        cases w.toList
+        · simp
+        · simp +contextual [Sigma.ext_iff]
+  · rcases w with ⟨_ | _, _, _⟩ <;>
+    simp [or_comm, hij, Ne.symm hij, eq_comm]
 
 中文:
 定理 mem_smul_iff
@@ -1647,7 +1699,29 @@ theorem mem_smul_iff
   · subst i
     simp only [not_true, ne_eq, false_and, exists_prop, true_and, false_or]
     by_cases hw : ⟨j, m₁⟩ in w.toList.tail
-    · simp [hw, show m₁ != 1 from w.ne_
+    · simp [hw, show m₁ != 1 from w.ne_one _ (List.mem_of_mem_tail hw)]
+    · simp only [hw, false_or, Option.mem_def, and_congr_right_iff]
+      intro hm1
+      split_ifs with h
+      · rcases h with ⟨hnil, rfl⟩
+        simp only [List.head?_eq_some_head hnil, Option.some.injEq]
+        constructor
+        · rintro rfl
+          exact Or.inl ⟨_, rfl, rfl⟩
+        · rintro (⟨_, h, rfl⟩ | hm')
+          · simp only [Sigma.ext_iff, heq_eq_eq, true_and] at h
+            subst h
+            rfl
+          · simp only [fstIdx, Option.map_eq_some_iff, Sigma.exists,
+              exists_and_right, exists_eq_right, not_exists] at hm'
+            exact (hm'.1 (w.toList.head hnil).2 (by rw [List.head?_eq_some_head])).elim
+      · revert h
+        rw [fstIdx]
+        cases w.toList
+        · simp
+        · simp +contextual [Sigma.ext_iff]
+  · rcases w with ⟨_ | _, _, _⟩ <;>
+    simp [or_comm, hij, Ne.symm hij, eq_comm]
 
 Depends on / 依赖: List.head, List.mem_of_mem_tail, Option.mem_def, Option.some.injEq, _eq_some_head, and_congr_right_iff, constr, equivPair_head, exists_prop, false_and, false_or, mem_def, mem_equivPair_tail_iff, mem_of_mem_tail, mem_rcons_iff, ne_eq, ne_one, not_true, of_smul_def, or_assoc
 -/
@@ -1861,7 +1935,7 @@ theorem prod_smul
     rw [of_smul_def]; rw [prod_rcons]; rw [of.map_mul]; rw [mul_assoc]; rw [← prod_rcons]; rw [← equivPair_symm]; rw [Equiv.symm_apply_apply]
   | mul x y hx hy =>
     intro w
-
+    rw [mul_smul]; rw [hx]; rw [hy]; rw [mul_assoc]
 
 中文:
 定理 prod_smul
@@ -1877,7 +1951,7 @@ theorem prod_smul
     rw [of_smul_def]; rw [prod_rcons]; rw [of.map_mul]; rw [mul_assoc]; rw [← prod_rcons]; rw [← equivPair_symm]; rw [Equiv.symm_apply_apply]
   | mul x y hx hy =>
     intro w
-
+    rw [mul_smul]; rw [hx]; rw [hy]; rw [mul_assoc]
 
 Depends on / 依赖: CoprodI, CoprodI.induction_on, Equiv.symm_apply_apply, equivPair_symm, induction_on, intros, map_mul, mul_assoc, mul_smul, of.map_mul, of_smul_def, one_mul, one_smul, prod_rcons, symm_apply_apply
 -/
@@ -2160,7 +2234,13 @@ definition toWord
   chain_ne := by
     induction w
     · exact List.isChain_singleton _
-    · refine List.IsChain.append (by as
+    · refine List.IsChain.append (by assumption) (by assumption) ?_
+      intro x hx y hy
+      rw [toList_getLast?]; rw [Option.mem_some_iff] at hx
+      rw [toList_head?]; rw [Option.mem_some_iff] at hy
+      subst hx
+      subst hy
+      assumption
 
 中文:
 定义 toWord
@@ -2175,7 +2255,13 @@ definition toWord
   chain_ne := by
     induction w
     · exact List.isChain_singleton _
-    · refine List.IsChain.append (by as
+    · refine List.IsChain.append (by assumption) (by assumption) ?_
+      intro x hx y hy
+      rw [toList_getLast?]; rw [Option.mem_some_iff] at hx
+      rw [toList_head?]; rw [Option.mem_some_iff] at hy
+      subst hx
+      subst hy
+      assumption
 
 Depends on / 依赖: toList, w.toList
 -/
@@ -2216,7 +2302,15 @@ theorem of_word
   | nil => contradiction
   | cons x l hi =>
     rw [List.forall_mem_cons] at hnot1
-    
+    rcases l with - | ⟨y, l⟩
+    · refine ⟨x.1, x.1, singleton x.2 hnot1.1, ?_⟩
+      simp [toWord]
+    · rw [List.isChain_cons_cons] at hchain
+      specialize hi hnot1.2 hchain.2 (by rintro ⟨rfl⟩)
+      obtain ⟨i, j, w', hw' : w'.toList = y::l⟩ := hi
+      obtain rfl : y = ⟨i, w'.head⟩ := by simpa [hw'] using w'.toList_head?
+      refine ⟨x.1, j, append (singleton x.2 hnot1.1) hchain.1 w', ?_⟩
+      simpa [toWord] using hw'
 
 中文:
 定理 of_word
@@ -2233,7 +2327,15 @@ theorem of_word
   | nil => contradiction
   | cons x l hi =>
     rw [List.forall_mem_cons] at hnot1
-    
+    rcases l with - | ⟨y, l⟩
+    · refine ⟨x.1, x.1, singleton x.2 hnot1.1, ?_⟩
+      simp [toWord]
+    · rw [List.isChain_cons_cons] at hchain
+      specialize hi hnot1.2 hchain.2 (by rintro ⟨rfl⟩)
+      obtain ⟨i, j, w', hw' : w'.toList = y::l⟩ := hi
+      obtain rfl : y = ⟨i, w'.head⟩ := by simpa [hw'] using w'.toList_head?
+      refine ⟨x.1, j, append (singleton x.2 hnot1.1) hchain.1 w', ?_⟩
+      simpa [toWord] using hw'
 
 Depends on / 依赖: List.forall_mem_cons, List.isChain_cons_cons, NeWord, forall_mem_cons, hchain, isChain_cons_cons, singleton, specialize, toList, toWord, toWord.toList, w.toList
 -/
@@ -2681,7 +2783,10 @@ theorem lift_word_ping_pong
     calc
       lift f (NeWord.append w₁ hne w₂).prod • X k = lift f w₁.prod • lift f w₂.prod • X k := by
         simp [mul_smul]
-      _ subseteq lift f w₁.prod • X
+      _ subseteq lift f w₁.prod • X _ := smul_set_subset_smul_set_iff.mpr (hIw₂ hk)
+      _ subseteq X i := hIw₁ hne
+
+include hXnonempty hXdisj
 
 中文:
 定理 lift_word_ping_pong
@@ -2693,7 +2798,10 @@ theorem lift_word_ping_pong
     calc
       lift f (NeWord.append w₁ hne w₂).prod • X k = lift f w₁.prod • lift f w₂.prod • X k := by
         simp [mul_smul]
-      _ subseteq lift f w₁.prod • X
+      _ subseteq lift f w₁.prod • X _ := smul_set_subset_smul_set_iff.mpr (hIw₂ hk)
+      _ subseteq X i := hIw₁ hne
+
+include hXnonempty hXdisj
 
 Depends on / 依赖: NeWord, NeWord.append, append, generalizing, hne_one, mul_smul, singleton, smul_set_subset_smul_set_iff, smul_set_subset_smul_set_iff.mpr, subseteq
 -/
@@ -2779,7 +2887,14 @@ theorem lift_word_prod_nontrivial_of_head_card
     exact div_ne_one_of_ne hnh
   let w' : NeWord H i i :=
     NeWord.append (NeWord.mulHead w h hnot1) hheadtail.symm
-      (NeWord.singleton h⁻¹ (inv_ne_one
+      (NeWord.singleton h⁻¹ (inv_ne_one.mpr hn1))
+  have hw' : lift f w'.prod != 1 :=
+    lift_word_prod_nontrivial_of_head_eq_last f X hXnonempty hXdisj hpp w'
+  intro heq1
+  apply hw'
+  simp [w', heq1]
+
+include hcard in
 
 中文:
 定理 lift_word_prod_nontrivial_of_head_card
@@ -2791,7 +2906,14 @@ theorem lift_word_prod_nontrivial_of_head_card
     exact div_ne_one_of_ne hnh
   let w' : NeWord H i i :=
     NeWord.append (NeWord.mulHead w h hnot1) hheadtail.symm
-      (NeWord.singleton h⁻¹ (inv_ne_one
+      (NeWord.singleton h⁻¹ (inv_ne_one.mpr hn1))
+  have hw' : lift f w'.prod != 1 :=
+    lift_word_prod_nontrivial_of_head_eq_last f X hXnonempty hXdisj hpp w'
+  intro heq1
+  apply hw'
+  simp [w', heq1]
+
+include hcard in
 
 Depends on / 依赖: Cardinal, Cardinal.exists_ne_ne_of_three_le, NeWord, NeWord.append, NeWord.mulHead, NeWord.singleton, append, div_inv_eq_mul, div_ne_one_of_ne, exists_ne_ne_of_three_le, hXdisj, hXnonempty, hheadtail, hheadtail.symm, inv_ne_one, inv_ne_one.mpr, lift_word_prod_nontrivial_of_head_eq_last, mulHead, singleton, w.head
 -/
@@ -2825,7 +2947,22 @@ theorem lift_word_prod_nontrivial_of_not_empty
     by_cases hh : i = k <;> by_cases hl : j = k
     · subst hh
       subst hl
-   
+      exact lift_word_prod_nontrivial_of_head_eq_last f X hXnonempty hXdisj hpp w
+    · subst hh
+      change j != i at hl
+      exact lift_word_prod_nontrivial_of_head_card f X hXnonempty hXdisj hpp w hcard hl.symm
+    · subst hl
+      change i != j at hh
+      have : lift f w.inv.prod != 1 :=
+        lift_word_prod_nontrivial_of_head_card f X hXnonempty hXdisj hpp w.inv hcard hh.symm
+      intro heq
+      apply this
+      simpa using heq
+    · change i != k at hh
+      change j != k at hl
+      exact lift_word_prod_nontrivial_of_other_i f X hXnonempty hXdisj hpp w hh.symm hl.symm
+
+include hcard in
 
 中文:
 定理 lift_word_prod_nontrivial_of_not_empty
@@ -2838,7 +2975,22 @@ theorem lift_word_prod_nontrivial_of_not_empty
     by_cases hh : i = k <;> by_cases hl : j = k
     · subst hh
       subst hl
-   
+      exact lift_word_prod_nontrivial_of_head_eq_last f X hXnonempty hXdisj hpp w
+    · subst hh
+      change j != i at hl
+      exact lift_word_prod_nontrivial_of_head_card f X hXnonempty hXdisj hpp w hcard hl.symm
+    · subst hl
+      change i != j at hh
+      have : lift f w.inv.prod != 1 :=
+        lift_word_prod_nontrivial_of_head_card f X hXnonempty hXdisj hpp w.inv hcard hh.symm
+      intro heq
+      apply this
+      simpa using heq
+    · change i != k at hh
+      change j != k at hl
+      exact lift_word_prod_nontrivial_of_other_i f X hXnonempty hXdisj hpp w hh.symm hl.symm
+
+include hcard in
 
 Depends on / 依赖: Cardinal, Cardinal.exists_ne_ne_of_three_le, exists_ne_ne_of_three_le, hXdisj, hXnonempty, hl.symm, lift_word_prod_nontrivial_of_head_card, lift_word_prod_nontrivial_of_head_eq_last, lift_word_prod_nontrivial_of_other_i
 -/
@@ -3046,7 +3198,81 @@ theorem _root_.FreeGroup.injective_lift_of_ping_pong
     simp
   rw [this]; rw [MonoidHom.coe_comp]
   clear this
-  refine Functi
+  refine Function.Injective.comp ?_ (MulEquiv.injective freeGroupEquivCoprodI)
+  -- Step two: Invoke the ping-pong lemma for free products
+  change Function.Injective (lift fun i : ι => FreeGroup.lift fun _ => a i)
+  -- Prepare to instantiate lift_injective_of_ping_pong
+  let H : ι -> Type _ := fun _i => FreeGroup Unit
+  let f : forall i, H i ->* G := fun i => FreeGroup.lift fun _ => a i
+  let X' : ι -> Set α := fun i => X i union Y i
+  apply lift_injective_of_ping_pong f _ X'
+  · show forall i, (X' i).Nonempty
+    exact fun i => Set.Nonempty.inl (hXnonempty i)
+  · show Pairwise (Disjoint on X')
+    intro i j hij
+    simp only [X']
+    apply Disjoint.union_left <;> apply Disjoint.union_right
+    · exact hXdisj hij
+    · exact hXYdisj i j
+    · exact (hXYdisj j i).symm
+    · exact hYdisj hij
+  · change Pairwise fun i j => forall h : H i, h != 1 -> f i h • X' j subseteq X' i
+    rintro i j hij
+    -- use free_group unit ≃ ℤ
+    refine FreeGroup.freeGroupUnitEquivInt.forall_congr_left.mpr ?_
+    intro n hne1
+    change FreeGroup.lift (fun _ => a i) (FreeGroup.of () ^ n) • X' j subseteq X' i
+    simp only [map_zpow, FreeGroup.lift_apply_of]
+    change a i ^ n • X' j subseteq X' i
+    have hnne0 : n != 0 := by
+      rintro rfl
+      apply hne1
+      simp [H, FreeGroup.freeGroupUnitEquivInt]
+    clear hne1
+    simp only [X']
+    -- Positive and negative powers separately
+    rcases (lt_or_gt_of_ne hnne0).symm with hlt | hgt
+    · have h1n : 1 <= n := hlt
+      calc
+        a i ^ n • X' j subseteq a i ^ n • (Y i)ᶜ :=
+          smul_set_mono ((hXYdisj j i).union_left <| hYdisj hij.symm).subset_compl_right
+        _ subseteq X i := by
+          clear hnne0 hlt
+          induction n, h1n using Int.leInduction with
+          | base => rw [zpow_one]; exact hX i
+          | succ n _hle hi =>
+            calc
+              a i ^ (n + 1) • (Y i)ᶜ = (a i ^ n * a i) • (Y i)ᶜ := by rw [zpow_add, zpow_one]
+              _ = a i ^ n • a i • (Y i)ᶜ := mul_smul _ _ _
+_ subseteq a i ^ n • X i := smul_set_mono hX i
+              _ subseteq a i ^ n • (Y i)ᶜ := smul_set_mono (hXYdisj i i).subset_compl_right
+              _ subseteq X i := hi
+        _ subseteq X' i := Set.subset_union_left
+    · have h1n : n <= -1 := by
+        apply Int.le_of_lt_add_one
+        simpa using hgt
+      calc
+        a i ^ n • X' j subseteq a i ^ n • (X i)ᶜ :=
+          smul_set_mono ((hXdisj hij.symm).union_left (hXYdisj i j).symm).subset_compl_right
+        _ subseteq Y i := by
+          clear hnne0 hgt
+          induction n, h1n using Int.leInductionDown with
+          | base => rw [zpow_neg, zpow_one]; exact hY i
+          | pred n hle hi =>
+            calc
+              a i ^ (n - 1) • (X i)ᶜ = (a i ^ n * (a i)⁻¹) • (X i)ᶜ := by rw [zpow_sub, zpow_one]
+              _ = a i ^ n • (a i)⁻¹ • (X i)ᶜ := mul_smul _ _ _
+_ subseteq a i ^ n • Y i := smul_set_mono hY i
+              _ subseteq a i ^ n • (X i)ᶜ := smul_set_mono (hXYdisj i i).symm.subset_compl_right
+              _ subseteq Y i := hi
+        _ subseteq X' i := Set.subset_union_right
+  show _ ∨ exists i, 3 <= #(H i)
+  inhabit ι
+  right
+  use Inhabited.default
+  simp only [H]
+  rw [FreeGroup.freeGroupUnitEquivInt.cardinal_eq]; rw [Cardinal.mk_denumerable]
+  exact natCast_le_aleph0
 
 中文:
 定理 _root_.自由群.injective_lift_of_ping_pong
@@ -3060,7 +3286,81 @@ theorem _root_.FreeGroup.injective_lift_of_ping_pong
     simp
   rw [this]; rw [MonoidHom.coe_comp]
   clear this
-  refine Functi
+  refine Function.Injective.comp ?_ (MulEquiv.injective freeGroupEquivCoprodI)
+  -- Step two: Invoke the ping-pong lemma for free products
+  change Function.Injective (lift fun i : ι => FreeGroup.lift fun _ => a i)
+  -- Prepare to instantiate lift_injective_of_ping_pong
+  let H : ι -> Type _ := fun _i => FreeGroup Unit
+  let f : forall i, H i ->* G := fun i => FreeGroup.lift fun _ => a i
+  let X' : ι -> Set α := fun i => X i union Y i
+  apply lift_injective_of_ping_pong f _ X'
+  · show forall i, (X' i).Nonempty
+    exact fun i => Set.Nonempty.inl (hXnonempty i)
+  · show Pairwise (Disjoint on X')
+    intro i j hij
+    simp only [X']
+    apply Disjoint.union_left <;> apply Disjoint.union_right
+    · exact hXdisj hij
+    · exact hXYdisj i j
+    · exact (hXYdisj j i).symm
+    · exact hYdisj hij
+  · change Pairwise fun i j => forall h : H i, h != 1 -> f i h • X' j subseteq X' i
+    rintro i j hij
+    -- use free_group unit ≃ ℤ
+    refine FreeGroup.freeGroupUnitEquivInt.forall_congr_left.mpr ?_
+    intro n hne1
+    change FreeGroup.lift (fun _ => a i) (FreeGroup.of () ^ n) • X' j subseteq X' i
+    simp only [map_zpow, FreeGroup.lift_apply_of]
+    change a i ^ n • X' j subseteq X' i
+    have hnne0 : n != 0 := by
+      rintro rfl
+      apply hne1
+      simp [H, FreeGroup.freeGroupUnitEquivInt]
+    clear hne1
+    simp only [X']
+    -- Positive and negative powers separately
+    rcases (lt_or_gt_of_ne hnne0).symm with hlt | hgt
+    · have h1n : 1 <= n := hlt
+      calc
+        a i ^ n • X' j subseteq a i ^ n • (Y i)ᶜ :=
+          smul_set_mono ((hXYdisj j i).union_left <| hYdisj hij.symm).subset_compl_right
+        _ subseteq X i := by
+          clear hnne0 hlt
+          induction n, h1n using Int.leInduction with
+          | base => rw [zpow_one]; exact hX i
+          | succ n _hle hi =>
+            calc
+              a i ^ (n + 1) • (Y i)ᶜ = (a i ^ n * a i) • (Y i)ᶜ := by rw [zpow_add, zpow_one]
+              _ = a i ^ n • a i • (Y i)ᶜ := mul_smul _ _ _
+_ subseteq a i ^ n • X i := smul_set_mono hX i
+              _ subseteq a i ^ n • (Y i)ᶜ := smul_set_mono (hXYdisj i i).subset_compl_right
+              _ subseteq X i := hi
+        _ subseteq X' i := Set.subset_union_left
+    · have h1n : n <= -1 := by
+        apply Int.le_of_lt_add_one
+        simpa using hgt
+      calc
+        a i ^ n • X' j subseteq a i ^ n • (X i)ᶜ :=
+          smul_set_mono ((hXdisj hij.symm).union_left (hXYdisj i j).symm).subset_compl_right
+        _ subseteq Y i := by
+          clear hnne0 hgt
+          induction n, h1n using Int.leInductionDown with
+          | base => rw [zpow_neg, zpow_one]; exact hY i
+          | pred n hle hi =>
+            calc
+              a i ^ (n - 1) • (X i)ᶜ = (a i ^ n * (a i)⁻¹) • (X i)ᶜ := by rw [zpow_sub, zpow_one]
+              _ = a i ^ n • (a i)⁻¹ • (X i)ᶜ := mul_smul _ _ _
+_ subseteq a i ^ n • Y i := smul_set_mono hY i
+              _ subseteq a i ^ n • (X i)ᶜ := smul_set_mono (hXYdisj i i).symm.subset_compl_right
+              _ subseteq Y i := hi
+        _ subseteq X' i := Set.subset_union_right
+  show _ ∨ exists i, 3 <= #(H i)
+  inhabit ι
+  right
+  use Inhabited.default
+  simp only [H]
+  rw [FreeGroup.freeGroupUnitEquivInt.cardinal_eq]; rw [Cardinal.mk_denumerable]
+  exact natCast_le_aleph0
 -/
 theorem _root_.FreeGroup.injective_lift_of_ping_pong : Function.Injective (FreeGroup.lift a) := by
   -- Step one: express the free group lift via the free product lift

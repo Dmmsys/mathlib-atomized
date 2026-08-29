@@ -201,7 +201,11 @@ lemma of_iso
     ⟨(IsLimit.postcomposeInvEquiv
         (cospanExt e₂ e₃ e₄ commf.symm commg.symm) _).1
           (IsLimit.ofIsoLimit h.isLimit (by
-            refine P
+            refine PullbackCone.ext e₁ ?_ ?_
+            · change fst = e₁.hom ≫ fst' ≫ e₂.inv
+              rw [← reassoc_of% commfst]; rw [e₂.hom_inv_id]; rw [Category.comp_id]
+            · change snd = e₁.hom ≫ snd' ≫ e₃.inv
+              rw [← reassoc_of% commsnd]; rw [e₃.hom_inv_id]; rw [Category.comp_id]))⟩
 
 中文:
 引理 of_iso
@@ -212,7 +216,11 @@ lemma of_iso
     ⟨(IsLimit.postcomposeInvEquiv
         (cospanExt e₂ e₃ e₄ commf.symm commg.symm) _).1
           (IsLimit.ofIsoLimit h.isLimit (by
-            refine P
+            refine PullbackCone.ext e₁ ?_ ?_
+            · change fst = e₁.hom ≫ fst' ≫ e₂.inv
+              rw [← reassoc_of% commfst]; rw [e₂.hom_inv_id]; rw [Category.comp_id]
+            · change snd = e₁.hom ≫ snd' ≫ e₃.inv
+              rw [← reassoc_of% commsnd]; rw [e₃.hom_inv_id]; rw [Category.comp_id]))⟩
 
 Depends on / 依赖: Category, Category.comp_id, IsLimit, IsLimit.ofIsoLimit, IsLimit.postcomposeInvEquiv, PullbackCone, PullbackCone.ext, cancel_epi, commf.symm, commfst, commg.symm, commsnd, comp_id, cospanExt, h.isLimit, h.w_assoc, hom_inv_id, isLimit, ofIsoLimit, postcomposeInvEquiv
 -/
@@ -246,7 +254,8 @@ lemma of_iso'
   apply h.of_iso e₁.symm e₂.symm e₃.symm e₄.symm
   · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commfst, Iso.inv_hom_id_assoc]
   · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commsnd, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.ass
+  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commf, Iso.inv_hom_id_assoc]
+  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commg, Iso.inv_hom_id_assoc]
 
 中文:
 引理 of_iso'
@@ -255,7 +264,8 @@ lemma of_iso'
   apply h.of_iso e₁.symm e₂.symm e₃.symm e₄.symm
   · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commfst, Iso.inv_hom_id_assoc]
   · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commsnd, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.ass
+  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commf, Iso.inv_hom_id_assoc]
+  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commg, Iso.inv_hom_id_assoc]
 
 Depends on / 依赖: Category, Category.assoc, Iso.comp_inv_eq, Iso.inv_hom_id_assoc, Iso.symm_hom, commfst, commsnd, comp_inv_eq, h.of_iso, inv_hom_id_assoc, of_iso, symm_hom
 -/
@@ -810,7 +820,7 @@ lemma mk'
       (fun s => (l s).choose_spec.2)
       (fun s m h₁ h₂ => hom_ext
         (h₁.trans (l s).choose_spec.1.symm)
-
+        (h₂.trans (l s).choose_spec.2.symm))⟩
 
 中文:
 引理 mk'
@@ -824,7 +834,7 @@ lemma mk'
       (fun s => (l s).choose_spec.2)
       (fun s m h₁ h₂ => hom_ext
         (h₁.trans (l s).choose_spec.1.symm)
-
+        (h₂.trans (l s).choose_spec.2.symm))⟩
 -/
 lemma mk' {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z}
     (w : fst ≫ f = snd ≫ g)
@@ -1029,7 +1039,7 @@ lemma of_iso
     ⟨(IsColimit.precomposeHomEquiv
         (spanExt e₁ e₂ e₃ commf.symm commg.symm) _).1
           (IsColimit.ofIsoColimit h.isColimit
-            (Push
+            (PushoutCocone.ext e₄ comminl comminr))⟩
 
 中文:
 引理 of_iso
@@ -1040,7 +1050,7 @@ lemma of_iso
     ⟨(IsColimit.precomposeHomEquiv
         (spanExt e₁ e₂ e₃ commf.symm commg.symm) _).1
           (IsColimit.ofIsoColimit h.isColimit
-            (Push
+            (PushoutCocone.ext e₄ comminl comminr))⟩
 
 Depends on / 依赖: IsColimit, IsColimit.ofIsoColimit, IsColimit.precomposeHomEquiv, PushoutCocone, PushoutCocone.ext, cancel_epi, commf.symm, commg.symm, comminl, comminr, h.isColimit, h.w_assoc, isColimit, ofIsoColimit, precomposeHomEquiv, reassoc_of, spanExt, w_assoc
 -/
@@ -1070,7 +1080,8 @@ lemma of_iso'
   apply h.of_iso e₁.symm e₂.symm e₃.symm e₄.symm
   · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commf, Iso.inv_hom_id_assoc]
   · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commg, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, 
+  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← comminl, Iso.inv_hom_id_assoc]
+  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← comminr, Iso.inv_hom_id_assoc]
 
 中文:
 引理 of_iso'
@@ -1079,7 +1090,8 @@ lemma of_iso'
   apply h.of_iso e₁.symm e₂.symm e₃.symm e₄.symm
   · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commf, Iso.inv_hom_id_assoc]
   · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commg, Iso.inv_hom_id_assoc]
-  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, 
+  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← comminl, Iso.inv_hom_id_assoc]
+  · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← comminr, Iso.inv_hom_id_assoc]
 
 Depends on / 依赖: Category, Category.assoc, Iso.comp_inv_eq, Iso.inv_hom_id_assoc, Iso.symm_hom, comminl, comminr, comp_inv_eq, h.of_iso, inv_hom_id_assoc, of_iso, symm_hom
 -/
@@ -1596,7 +1608,7 @@ lemma of_coprod_inl_with_id
       dsimp at m h₁ h₂ ⊢
       ext
       · simpa using h₂
-      · simp [← h
+      · simp [← h₁])⟩
 
 中文:
 引理 of_coprod_inl_with_id
@@ -1612,7 +1624,7 @@ lemma of_coprod_inl_with_id
       dsimp at m h₁ h₂ ⊢
       ext
       · simpa using h₂
-      · simp [← h
+      · simp [← h₁])⟩
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.condition, PushoutCocone.isColimitAux, condition, coprod, coprod.desc, coprod.inr, isColimit, isColimitAux, s.inl, s.inr
 -/
@@ -1675,7 +1687,8 @@ lemma mk'
       (fun s => (l s).choose_spec.1)
       (fun s => (l s).choose_spec.2)
       (fun s m h₁ h₂ => hom_ext
-        (h₁.trans (l s).choose_spec.1.
+        (h₁.trans (l s).choose_spec.1.symm)
+        (h₂.trans (l s).choose_spec.2.symm))⟩
 
 中文:
 引理 mk'
@@ -1688,7 +1701,8 @@ lemma mk'
       (fun s => (l s).choose_spec.1)
       (fun s => (l s).choose_spec.2)
       (fun s m h₁ h₂ => hom_ext
-        (h₁.trans (l s).choose_spec.1.
+        (h₁.trans (l s).choose_spec.1.symm)
+        (h₂.trans (l s).choose_spec.2.symm))⟩
 -/
 lemma mk' {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P}
     (w : f ≫ inl = g ≫ inr)
@@ -1851,7 +1865,7 @@ theorem Functor.map_isPushout
 
 alias IsPullback.map := Functor.map_isPullback
 
-alias IsPushout.map := Fun
+alias IsPushout.map := Functor.map_isPushout
 
 中文:
 定理 函子.map_isPushout
@@ -1867,7 +1881,7 @@ alias IsPushout.map := Fun
 
 alias IsPullback.map := Functor.map_isPullback
 
-alias IsPushout.map := Fun
+alias IsPushout.map := Functor.map_isPushout
 
 Depends on / 依赖: F.map_commSq, IsColimit, IsColimit.equivOfNatIsoOfIso, IsPushout, IsPushout.of_isColimit, WalkingSpan, WalkingSpan.ext, equivOfNatIsoOfIso, isColimit, isColimitOfPreserves, map_commSq, of_isColimit, s.isColimit, s.toCommSq, spanCompIso, toCommSq
 -/
@@ -2325,7 +2339,7 @@ lemma isPullback_iff_isLimit_binaryFan_of_isThin
       (by subsingleton) (by subsingleton) (by subsingleton)⟩
   · exact ⟨⟨by subsingleton⟩,
       ⟨PullbackCone.IsLimit.mk _ (fun s => BinaryFan.IsLimit.lift h.some s.fst s.snd)
-      (b
+      (by subsingleton) (by subsingleton) (by subsingleton)⟩⟩
 
 中文:
 引理 isPullback_iff_isLimit_binaryFan_of_isThin
@@ -2336,7 +2350,7 @@ lemma isPullback_iff_isLimit_binaryFan_of_isThin
       (by subsingleton) (by subsingleton) (by subsingleton)⟩
   · exact ⟨⟨by subsingleton⟩,
       ⟨PullbackCone.IsLimit.mk _ (fun s => BinaryFan.IsLimit.lift h.some s.fst s.snd)
-      (b
+      (by subsingleton) (by subsingleton) (by subsingleton)⟩⟩
 
 Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.lift, BinaryFan.IsLimit.mk, IsLimit, PullbackCone, PullbackCone.IsLimit.mk, h.lift, h.some, s.fst, s.snd, subsingleton
 -/
@@ -2361,7 +2375,8 @@ lemma isPushout_iff_isColimit_binaryCofan_of_isThin
   · exact ⟨BinaryCofan.IsColimit.mk _ (fun u v => h.desc u v (by subsingleton))
       (by subsingleton) (by subsingleton) (by subsingleton)⟩
   · exact ⟨⟨by subsingleton⟩,
-      ⟨PushoutCocone.IsColimit.mk _ (fun s => BinaryCofan.IsColimit.desc h.some s.inl s.in
+      ⟨PushoutCocone.IsColimit.mk _ (fun s => BinaryCofan.IsColimit.desc h.some s.inl s.inr)
+      (by subsingleton) (by subsingleton) (by subsingleton)⟩⟩
 
 中文:
 引理 isPushout_iff_isColimit_binaryCofan_of_isThin
@@ -2371,7 +2386,8 @@ lemma isPushout_iff_isColimit_binaryCofan_of_isThin
   · exact ⟨BinaryCofan.IsColimit.mk _ (fun u v => h.desc u v (by subsingleton))
       (by subsingleton) (by subsingleton) (by subsingleton)⟩
   · exact ⟨⟨by subsingleton⟩,
-      ⟨PushoutCocone.IsColimit.mk _ (fun s => BinaryCofan.IsColimit.desc h.some s.inl s.in
+      ⟨PushoutCocone.IsColimit.mk _ (fun s => BinaryCofan.IsColimit.desc h.some s.inl s.inr)
+      (by subsingleton) (by subsingleton) (by subsingleton)⟩⟩
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.desc, BinaryCofan.IsColimit.mk, IsColimit, PushoutCocone, PushoutCocone.IsColimit.mk, h.desc, h.some, s.inl, s.inr, subsingleton
 -/

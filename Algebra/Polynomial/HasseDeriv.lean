@@ -106,7 +106,13 @@ theorem hasseDeriv_coeff
   · #adaptation_note
     /-- Prior to nightly-2025-08-14, this was working as
     `grind [coeff_monomial, Nat.choose_eq_zero_of_lt, Nat.cast_zero, zero_mul]` -/
-    intro i _hi h
+    intro i _hi hink
+    rw [coeff_monomial]
+    by_cases hik : i < k
+    · simp only [Nat.choose_eq_zero_of_lt hik, ite_self, Nat.cast_zero, zero_mul]
+    · grind
+  · intro h
+    simp only [notMem_support_iff.mp h, monomial_zero_right, mul_zero, coeff_zero]
 
 中文:
 定理 hasseDeriv_coeff
@@ -117,7 +123,13 @@ theorem hasseDeriv_coeff
   · #adaptation_note
     /-- Prior to nightly-2025-08-14, this was working as
     `grind [coeff_monomial, Nat.choose_eq_zero_of_lt, Nat.cast_zero, zero_mul]` -/
-    intro i _hi h
+    intro i _hi hink
+    rw [coeff_monomial]
+    by_cases hik : i < k
+    · simp only [Nat.choose_eq_zero_of_lt hik, ite_self, Nat.cast_zero, zero_mul]
+    · grind
+  · intro h
+    simp only [notMem_support_iff.mp h, monomial_zero_right, mul_zero, coeff_zero]
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, adaptation_note, coeff_monomial, coeff_sum, hasseDeriv_apply, sum_def, sum_eq_single
 -/
@@ -272,7 +284,7 @@ theorem hasseDeriv_monomial
     by_cases! hkn : k <= n
     · rw [← tsub_eq_iff_eq_add_of_le hkn] at hnik
       rw [if_neg hnik]
-    · rw [Nat.choose_eq_zero_of_lt hkn, Nat.cast_zero, zero_mul, ite_self
+    · rw [Nat.choose_eq_zero_of_lt hkn, Nat.cast_zero, zero_mul, ite_self]
 
 中文:
 定理 hasseDeriv_monomial
@@ -286,7 +298,7 @@ theorem hasseDeriv_monomial
     by_cases! hkn : k <= n
     · rw [← tsub_eq_iff_eq_add_of_le hkn] at hnik
       rw [if_neg hnik]
-    · rw [Nat.choose_eq_zero_of_lt hkn, Nat.cast_zero, zero_mul, ite_self
+    · rw [Nat.choose_eq_zero_of_lt hkn, Nat.cast_zero, zero_mul, ite_self]
 
 Depends on / 依赖: Nat.cast_zero, Nat.choose_eq_zero_of_lt, cast_zero, choose_eq_zero_of_lt, coeff_monomial, hasseDeriv_coeff, if_neg, ite_self, mul_zero, tsub_eq_iff_eq_add_of_le, zero_mul
 -/
@@ -382,7 +394,19 @@ theorem factorial_smul_hasseDeriv
   ext f n : 2
   rw [iterate_succ_apply']; rw [← ih]
   simp only [LinearMap.smul_apply, coeff_smul, LinearMap.map_smul_of_tower, coeff_derivative,
-    hasseDeriv_coeff,
+    hasseDeriv_coeff, ← @choose_symm_add _ k]
+  simp only [nsmul_eq_mul, factorial_succ, mul_assoc, succ_eq_add_one, ← add_assoc,
+    add_right_comm n 1 k, ← cast_succ]
+  rw [← (cast_commute (n + 1) (f.coeff (n + k + 1))).eq]
+  simp only [← mul_assoc]
+  norm_cast
+  congr 2
+  rw [mul_comm (k + 1) _]; rw [mul_assoc]; rw [mul_assoc]
+  congr 1
+  have : n + k + 1 = n + (k + 1) := by apply add_assoc
+  rw [← choose_symm_of_eq_add this]; rw [choose_succ_right_eq]; rw [mul_comm]
+  congr
+  rw [add_assoc]; rw [add_tsub_cancel_left]
 
 中文:
 定理 factorial_smul_hasseDeriv
@@ -394,7 +418,19 @@ theorem factorial_smul_hasseDeriv
   ext f n : 2
   rw [iterate_succ_apply']; rw [← ih]
   simp only [LinearMap.smul_apply, coeff_smul, LinearMap.map_smul_of_tower, coeff_derivative,
-    hasseDeriv_coeff,
+    hasseDeriv_coeff, ← @choose_symm_add _ k]
+  simp only [nsmul_eq_mul, factorial_succ, mul_assoc, succ_eq_add_one, ← add_assoc,
+    add_right_comm n 1 k, ← cast_succ]
+  rw [← (cast_commute (n + 1) (f.coeff (n + k + 1))).eq]
+  simp only [← mul_assoc]
+  norm_cast
+  congr 2
+  rw [mul_comm (k + 1) _]; rw [mul_assoc]; rw [mul_assoc]
+  congr 1
+  have : n + k + 1 = n + (k + 1) := by apply add_assoc
+  rw [← choose_symm_of_eq_add this]; rw [choose_succ_right_eq]; rw [mul_comm]
+  congr
+  rw [add_assoc]; rw [add_tsub_cancel_left]
 
 Depends on / 依赖: LinearMap, LinearMap.id_coe, LinearMap.map_smul_of_tower, LinearMap.smul_apply, add_assoc, add_right_comm, cast_commute, cast_succ, choose_symm_add, coeff_derivative, coeff_smul, f.coeff, factorial_succ, factorial_zero, hasseDeriv_coeff, hasseDeriv_zero, id_coe, iterate_succ_apply, iterate_zero, map_smul_of_tower
 -/
@@ -434,7 +470,21 @@ theorem hasseDeriv_comp
   rw_mod_cast [nsmul_eq_mul]
   rw [← Nat.cast_mul]
   congr 2
-  by_cases! hikl
+  by_cases! hikl : i < k + l
+  · rw [choose_eq_zero_of_lt hikl, mul_zero]
+    by_cases! hil : i < l
+    · rw [choose_eq_zero_of_lt hil, mul_zero]
+    · rw [← tsub_lt_iff_right hil] at hikl
+      rw [choose_eq_zero_of_lt hikl]; rw [zero_mul]
+  apply @cast_injective Rat
+  have h1 : l <= i := le_of_add_le_right hikl
+  have h2 : k <= i - l := le_tsub_of_add_le_right hikl
+  have h3 : k <= k + l := le_self_add
+  push_cast
+  rw [cast_choose Rat h1]; rw [cast_choose Rat h2]; rw [cast_choose Rat h3]; rw [cast_choose Rat hikl]
+  rw [show i - (k + l) = i - l - k by rw [add_comm]; apply tsub_add_eq_tsub_tsub]
+  simp only [add_tsub_cancel_left]
+  field
 
 中文:
 定理 hasseDeriv_comp
@@ -447,7 +497,21 @@ theorem hasseDeriv_comp
   rw_mod_cast [nsmul_eq_mul]
   rw [← Nat.cast_mul]
   congr 2
-  by_cases! hikl
+  by_cases! hikl : i < k + l
+  · rw [choose_eq_zero_of_lt hikl, mul_zero]
+    by_cases! hil : i < l
+    · rw [choose_eq_zero_of_lt hil, mul_zero]
+    · rw [← tsub_lt_iff_right hil] at hikl
+      rw [choose_eq_zero_of_lt hikl]; rw [zero_mul]
+  apply @cast_injective Rat
+  have h1 : l <= i := le_of_add_le_right hikl
+  have h2 : k <= i - l := le_tsub_of_add_le_right hikl
+  have h3 : k <= k + l := le_self_add
+  push_cast
+  rw [cast_choose Rat h1]; rw [cast_choose Rat h2]; rw [cast_choose Rat h3]; rw [cast_choose Rat hikl]
+  rw [show i - (k + l) = i - l - k by rw [add_comm]; apply tsub_add_eq_tsub_tsub]
+  simp only [add_tsub_cancel_left]
+  field
 
 Depends on / 依赖: LinearMap, LinearMap.coe_comp, LinearMap.smul_apply, Nat.cast_mul, add_comm, cast_inj, cast_mul, choose_eq_zero_of_lt, coe_comp, comp_apply, hasseDeriv_apply, monomial_eq_zero_iff, mul_one, mul_zero, nsmul_eq_mul, rw_mod_cast, smul_apply, smul_monomial, sum_monomial_index, tsub_add_eq_tsub_tsub
 -/
@@ -489,7 +553,11 @@ theorem natDegree_hasseDeriv_le
     simp_rw [Function.comp, natDegree_monomial]
     rw [Finset.fold_ite]; rw [Finset.fold_const]
     · simp only [ite_self, max_eq_right, zero_le, Finset.fold_max_le, true_and, and_imp,
-        tsub_le_
+        tsub_le_iff_right, mem_support_iff, Ne, Finset.mem_filter]
+      intro x hx hx'
+      have hxp : x <= p.natDegree := le_natDegree_of_ne_zero hx
+      grind
+    · simp
 
 中文:
 定理 natDegree_hasseDeriv_le
@@ -501,7 +569,11 @@ theorem natDegree_hasseDeriv_le
     simp_rw [Function.comp, natDegree_monomial]
     rw [Finset.fold_ite]; rw [Finset.fold_const]
     · simp only [ite_self, max_eq_right, zero_le, Finset.fold_max_le, true_and, and_imp,
-        tsub_le_
+        tsub_le_iff_right, mem_support_iff, Ne, Finset.mem_filter]
+      intro x hx hx'
+      have hxp : x <= p.natDegree := le_natDegree_of_ne_zero hx
+      grind
+    · simp
 
 Depends on / 依赖: Finset, Finset.fold_const, Finset.fold_ite, Finset.fold_max_le, Finset.mem_filter, Function, Function.comp, and_imp, classical, fold_const, fold_ite, fold_max_le, hasseDeriv_apply, ite_self, le_natDegree_of_ne_zero, max_eq_right, mem_filter, mem_support_iff, natDegree, natDegree_monomial
 -/
@@ -594,7 +666,28 @@ theorem hasseDeriv_mul
   congr 2
   clear f g
   ext m r n s : 4
-  simp only
+  simp only [Φ, D, finsetSum_apply, coe_mulLeft, coe_comp, flip_apply, Function.comp_apply,
+             hasseDeriv_monomial, LinearMap.toAddMonoidHom_coe, compHom_apply_apply,
+             coe_mul, monomial_mul_monomial]
+  have aux :
+    forall x : Nat × Nat,
+      x in antidiagonal k ->
+        monomial (m - x.1 + (n - x.2)) (↑(m.choose x.1) * r * (↑(n.choose x.2) * s)) =
+          monomial (m + n - k) (↑(m.choose x.1) * ↑(n.choose x.2) * (r * s)) := by
+    intro x hx
+    rw [mem_antidiagonal] at hx
+    subst hx
+    by_cases! hm : m < x.1
+    · simp only [Nat.choose_eq_zero_of_lt hm, Nat.cast_zero, zero_mul,
+                 monomial_zero_right]
+    by_cases! hn : n < x.2
+    · simp only [Nat.choose_eq_zero_of_lt hn, Nat.cast_zero, zero_mul,
+                 mul_zero, monomial_zero_right]
+    rw [tsub_add_eq_add_tsub hm]; rw [← add_tsub_assoc_of_le hn]; rw [← tsub_add_eq_tsub_tsub]; rw [add_comm x.2 x.1]; rw [mul_assoc]; rw [← mul_assoc r]; rw [← (Nat.cast_commute _ r).eq]; rw [mul_assoc]; rw [mul_assoc]
+  rw [Finset.sum_congr rfl aux]
+  rw [← map_sum]; rw [← Finset.sum_mul]
+  congr
+  rw_mod_cast [← Nat.add_choose_eq]
 
 中文:
 定理 hasseDeriv_mul
@@ -609,7 +702,28 @@ theorem hasseDeriv_mul
   congr 2
   clear f g
   ext m r n s : 4
-  simp only
+  simp only [Φ, D, finsetSum_apply, coe_mulLeft, coe_comp, flip_apply, Function.comp_apply,
+             hasseDeriv_monomial, LinearMap.toAddMonoidHom_coe, compHom_apply_apply,
+             coe_mul, monomial_mul_monomial]
+  have aux :
+    forall x : Nat × Nat,
+      x in antidiagonal k ->
+        monomial (m - x.1 + (n - x.2)) (↑(m.choose x.1) * r * (↑(n.choose x.2) * s)) =
+          monomial (m + n - k) (↑(m.choose x.1) * ↑(n.choose x.2) * (r * s)) := by
+    intro x hx
+    rw [mem_antidiagonal] at hx
+    subst hx
+    by_cases! hm : m < x.1
+    · simp only [Nat.choose_eq_zero_of_lt hm, Nat.cast_zero, zero_mul,
+                 monomial_zero_right]
+    by_cases! hn : n < x.2
+    · simp only [Nat.choose_eq_zero_of_lt hn, Nat.cast_zero, zero_mul,
+                 mul_zero, monomial_zero_right]
+    rw [tsub_add_eq_add_tsub hm]; rw [← add_tsub_assoc_of_le hn]; rw [← tsub_add_eq_tsub_tsub]; rw [add_comm x.2 x.1]; rw [mul_assoc]; rw [← mul_assoc r]; rw [← (Nat.cast_commute _ r).eq]; rw [mul_assoc]; rw [mul_assoc]
+  rw [Finset.sum_congr rfl aux]
+  rw [← map_sum]; rw [← Finset.sum_mul]
+  congr
+  rw_mod_cast [← Nat.add_choose_eq]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mul, Function, Function.comp_apply, LinearMap, LinearMap.toAddMonoidHom_coe, antidiagonal, coe_comp, coe_mul, coe_mulLeft, compHom, compHom.comp, compHom_apply_apply, comp_apply, finsetSum_apply, flip_apply, hasseDeriv, hasseDeriv_monomial, monomial_mul_monomial, toAddMonoidHom
 -/

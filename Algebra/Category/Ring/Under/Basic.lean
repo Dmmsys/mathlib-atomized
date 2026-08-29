@@ -486,7 +486,11 @@ definition tensorProdIsoPushout
     · rw [← cancel_mono (tensorProdObjIsoPushoutObj S B).inv.right]
       ext x
       simp [mkUnder_right]
-    ·
+    · rw [← cancel_mono (tensorProdObjIsoPushoutObj S B).inv.right]
+      ext (x : S)
+      simp [mkUnder_right]
+
+@[simp]
 
 中文:
 定义 tensorProdIsoPushout
@@ -500,7 +504,11 @@ definition tensorProdIsoPushout
     · rw [← cancel_mono (tensorProdObjIsoPushoutObj S B).inv.right]
       ext x
       simp [mkUnder_right]
-    ·
+    · rw [← cancel_mono (tensorProdObjIsoPushoutObj S B).inv.right]
+      ext (x : S)
+      simp [mkUnder_right]
+
+@[simp]
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, cancel_epi, cancel_mono, hom_ext, inv.right, mkUnder_right, ofComponents, pushout, pushout.hom_ext, tensorProdObjIsoPushoutObj
 -/

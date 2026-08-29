@@ -67,7 +67,9 @@ definition AffineMap.restrict
   · refine φ.linear.restrict (?_ : E.direction <= F.direction.comap φ.linear)
     rw [← Submodule.map_le_iff_le_comap]; rw [← AffineSubspace.map_direction]
     exact AffineSubspace.direction_le hEF
- 
+  · intro p v
+    simp only [Subtype.ext_iff, AffineSubspace.coe_vadd]
+    apply AffineMap.map_vadd
 
 中文:
 定义 仿射映射.restrict
@@ -78,7 +80,9 @@ definition AffineMap.restrict
   · refine φ.linear.restrict (?_ : E.direction <= F.direction.comap φ.linear)
     rw [← Submodule.map_le_iff_le_comap]; rw [← AffineSubspace.map_direction]
     exact AffineSubspace.direction_le hEF
- 
+  · intro p v
+    simp only [Subtype.ext_iff, AffineSubspace.coe_vadd]
+    apply AffineMap.map_vadd
 
 Depends on / 依赖: AffineMap, AffineMap.map_vadd, AffineSubspace, AffineSubspace.coe_vadd, AffineSubspace.direction_le, AffineSubspace.map_direction, AffineSubspace.mem_map.mpr, E.direction, F.direction.comap, Submodule, Submodule.map_le_iff_le_comap, Subtype, Subtype.ext_iff, coe_vadd, direction, direction_le, ext_iff, linear, linear.restrict, map_direction
 -/

@@ -436,7 +436,8 @@ theorem degrees_eq_zero_iff_support_subset_zero
     simp only [mem_degrees] at h
     grind
   rcases mem_degrees.mp hi with ⟨s, hs1, hs2⟩
-  have := Finsupp.support_eq_empty.mpr (h s <| me
+  have := Finsupp.support_eq_empty.mpr (h s <| mem_support_iff.mpr hs1) ▸ hs2
+  grind
 
 中文:
 定理 degrees_eq_zero_iff_support_subset_zero
@@ -448,7 +449,8 @@ theorem degrees_eq_zero_iff_support_subset_zero
     simp only [mem_degrees] at h
     grind
   rcases mem_degrees.mp hi with ⟨s, hs1, hs2⟩
-  have := Finsupp.support_eq_empty.mpr (h s <| me
+  have := Finsupp.support_eq_empty.mpr (h s <| mem_support_iff.mpr hs1) ▸ hs2
+  grind
 
 Depends on / 依赖: Finset, Finset.subset_singleton_iff, Finsupp, Finsupp.support_eq_empty, Finsupp.support_eq_empty.mpr, Multiset, Multiset.eq_zero_iff_forall_notMem, eq_zero_iff_forall_notMem, mem_degrees, mem_degrees.mp, mem_support_iff, mem_support_iff.mpr, subset_singleton_iff, support_eq_empty
 -/
@@ -479,7 +481,13 @@ theorem le_degrees_add_left
   · rw [toMultiset_zero]; apply Multiset.zero_le
   · refine Finset.le_sup_of_le (b := d) ?_ le_rfl
     rw [mem_support_iff]; rw [coeff_add]
-    suffices q.coeff d = 0 by rwa [this
+    suffices q.coeff d = 0 by rwa [this, add_zero, coeff, ← Finsupp.mem_support_iff]
+    rw [Ne]; rw [← Finsupp.support_eq_empty]; rw [← Ne]; rw [← Finset.nonempty_iff_ne_empty] at h0
+    obtain ⟨j, hj⟩ := h0
+    contrapose! h
+    rw [mem_support_iff] at hd
+    refine ⟨j, ?_, j, ?_, rfl⟩
+    all_goals rw [mem_degrees]; refine ⟨d, ?_, hj⟩; assumption
 
 中文:
 定理 le_degrees_add_left
@@ -494,7 +502,13 @@ theorem le_degrees_add_left
   · rw [toMultiset_zero]; apply Multiset.zero_le
   · refine Finset.le_sup_of_le (b := d) ?_ le_rfl
     rw [mem_support_iff]; rw [coeff_add]
-    suffices q.coeff d = 0 by rwa [this
+    suffices q.coeff d = 0 by rwa [this, add_zero, coeff, ← Finsupp.mem_support_iff]
+    rw [Ne]; rw [← Finsupp.support_eq_empty]; rw [← Ne]; rw [← Finset.nonempty_iff_ne_empty] at h0
+    obtain ⟨j, hj⟩ := h0
+    contrapose! h
+    rw [mem_support_iff] at hd
+    refine ⟨j, ?_, j, ?_, rfl⟩
+    all_goals rw [mem_degrees]; refine ⟨d, ?_, hj⟩; assumption
 
 Depends on / 依赖: Finset, Finset.le_sup_of_le, Finset.nonempty_iff_ne_empty, Finset.sup_le, Finsupp, Finsupp.mem_support_iff, Finsupp.support_eq_empty, Multiset, Multiset.disjoint_iff_ne, Multiset.zero_le, add_zero, classical, coeff_add, contrapose, disjoint_iff_ne, eq_or_ne, le_rfl, le_sup_of_le, mem_support_iff, nonempty_iff_ne_empty
 -/
@@ -594,7 +608,10 @@ theorem degrees_rename
   rw [sum_apply]; rw [Finsupp.sum] at hi
   contrapose! hi
   rw [Finset.sum_eq_zero]
-  intro j 
+  intro j hj
+  simp only [mem_degrees] at hi
+  specialize hi j ⟨x, hx, hj⟩
+  rw [Finsupp.single_apply]; rw [if_neg hi]
 
 中文:
 定理 degrees_rename
@@ -609,7 +626,10 @@ theorem degrees_rename
   rw [sum_apply]; rw [Finsupp.sum] at hi
   contrapose! hi
   rw [Finset.sum_eq_zero]
-  intro j 
+  intro j hj
+  simp only [mem_degrees] at hi
+  specialize hi j ⟨x, hx, hj⟩
+  rw [Finsupp.single_apply]; rw [if_neg hi]
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, Finsupp, Finsupp.mapDomain, Finsupp.mem_support_iff, Finsupp.single_apply, Finsupp.sum, Multiset, Multiset.mem_map, classical, coeff_rename_ne_zero, contrapose, if_neg, mapDomain, mem_degrees, mem_map, mem_support_iff, single_apply, specialize, sum_apply
 -/
@@ -1319,7 +1339,12 @@ theorem degreeOf_mul_X_eq_degreeOf_add_one_iff
   apply Nat.le_antisymm (degreeOf_mul_X_self j f)
   have : (f.support.sup fun m => m j) + 1 = (f.support.sup fun m => (m j + 1)) :=
     Finset.apply_sup_eq_sup_comp_of_nonempty @Nat.succ_le_succ (support_nonempty.mpr h)
-  simp only 
+  simp only [degreeOf_eq_sup, support_mul_X, this]
+  apply Finset.sup_le
+  intro x hx
+  simp only [Finset.sup_map, bot_eq_zero', add_pos_iff, zero_lt_one, or_true, Finset.le_sup_iff]
+  use x
+  simpa using mem_support_iff.mp hx
 
 中文:
 定理 degreeOf_mul_X_eq_degreeOf_add_one_iff
@@ -1329,7 +1354,12 @@ theorem degreeOf_mul_X_eq_degreeOf_add_one_iff
   apply Nat.le_antisymm (degreeOf_mul_X_self j f)
   have : (f.support.sup fun m => m j) + 1 = (f.support.sup fun m => (m j + 1)) :=
     Finset.apply_sup_eq_sup_comp_of_nonempty @Nat.succ_le_succ (support_nonempty.mpr h)
-  simp only 
+  simp only [degreeOf_eq_sup, support_mul_X, this]
+  apply Finset.sup_le
+  intro x hx
+  simp only [Finset.sup_map, bot_eq_zero', add_pos_iff, zero_lt_one, or_true, Finset.le_sup_iff]
+  use x
+  simpa using mem_support_iff.mp hx
 
 Depends on / 依赖: Finset, Finset.apply_sup_eq_sup_comp_of_nonempty, Finset.le_sup_iff, Finset.sup_le, Finset.sup_map, Nat.le_antisymm, Nat.succ_le_succ, add_pos_iff, apply_sup_eq_sup_comp_of_nonempty, bot_eq_zero, degreeOf_eq_sup, degreeOf_mul_X_self, f.support.sup, le_antisymm, le_sup_iff, mem_support_iff, mem_support_iff.mp, or_true, succ_le_succ, sup_le
 -/
@@ -1360,7 +1390,7 @@ theorem degreeOf_mul_X_self_pow_eq_add_of_ne_zero
       rcases ne_zero_iff.mp h with ⟨s, hs⟩
       refine ne_zero_iff.mpr ⟨s + Finsupp.single i k, ?_⟩
       rwa [X_pow_eq_monomial, coeff_mul_monomial, mul_one]
-    rw [pow_add]; rw [
+    rw [pow_add]; rw [pow_one]; rw [← mul_assoc]; rw [(degreeOf_mul_X_eq_degreeOf_add_one_iff i _).mpr this]; rw [hk]; rw [add_assoc]
 
 中文:
 定理 degreeOf_mul_X_self_pow_eq_add_of_ne_zero
@@ -1373,7 +1403,7 @@ theorem degreeOf_mul_X_self_pow_eq_add_of_ne_zero
       rcases ne_zero_iff.mp h with ⟨s, hs⟩
       refine ne_zero_iff.mpr ⟨s + Finsupp.single i k, ?_⟩
       rwa [X_pow_eq_monomial, coeff_mul_monomial, mul_one]
-    rw [pow_add]; rw [
+    rw [pow_add]; rw [pow_one]; rw [← mul_assoc]; rw [(degreeOf_mul_X_eq_degreeOf_add_one_iff i _).mpr this]; rw [hk]; rw [add_assoc]
 
 Depends on / 依赖: Finsupp, Finsupp.single, X_pow_eq_monomial, add_assoc, add_zero, coeff_mul_monomial, degreeOf_mul_X_eq_degreeOf_add_one_iff, mul_assoc, mul_one, ne_zero_iff, ne_zero_iff.mp, ne_zero_iff.mpr, pow_add, pow_one, pow_zero, single
 -/
@@ -1429,7 +1459,14 @@ theorem degreeOf_add_eq_of_degreeOf_lt
   apply (Finset.le_sup_iff <| Nat.zero_lt_of_lt h).mpr
   have : p.support.Nonempty := by aesop
   have ⟨s, hs1, hs2⟩ := Finset.exists_mem_eq_sup _ this (fun s => s i)
-  rw [← degreeOf_eq
+  rw [← degreeOf_eq_sup i p] at hs2
+  refine ⟨s, ?_, by rw [hs2]⟩
+  have : s ∉ q.support := by
+    contrapose! h
+    rw [hs2]
+    exact le_degreeOf_of_mem_support i h
+  simp only [mem_support_iff, ne_eq, coeff_add, not_not] at hs1 ⊢ this
+  rwa [this, add_zero]
 
 中文:
 定理 degreeOf_add_eq_of_degreeOf_lt
@@ -1442,7 +1479,14 @@ theorem degreeOf_add_eq_of_degreeOf_lt
   apply (Finset.le_sup_iff <| Nat.zero_lt_of_lt h).mpr
   have : p.support.Nonempty := by aesop
   have ⟨s, hs1, hs2⟩ := Finset.exists_mem_eq_sup _ this (fun s => s i)
-  rw [← degreeOf_eq
+  rw [← degreeOf_eq_sup i p] at hs2
+  refine ⟨s, ?_, by rw [hs2]⟩
+  have : s ∉ q.support := by
+    contrapose! h
+    rw [hs2]
+    exact le_degreeOf_of_mem_support i h
+  simp only [mem_support_iff, ne_eq, coeff_add, not_not] at hs1 ⊢ this
+  rwa [this, add_zero]
 
 Depends on / 依赖: Finset, Finset.exists_mem_eq_sup, Finset.le_sup_iff, Nat.zero_lt_of_lt, Nonempty, add_ze, coeff_add, contrapose, degreeOf_add_le, degreeOf_eq_sup, exists_mem_eq_sup, le_antisymm, le_degreeOf_of_mem_support, le_sup_iff, max_eq_left_of_lt, mem_support_iff, ne_eq, not_not, nth_rw, p.support.Nonempty
 -/
@@ -1829,7 +1873,15 @@ theorem totalDegree_add_eq_left_of_totalDegree_lt
     obtain ⟨b, hb₁, hb₂⟩ :=
       p.support.exists_mem_eq_sup (by simpa) fun m : σ ->₀ Nat => Multiset.card (toMultiset m)
     have hb : b ∉ q.support := by
- 
+      contrapose! h
+      rw [totalDegree_eq p]; rw [hb₂]; rw [totalDegree_eq]
+      apply Finset.le_sup h
+    have hbb : b in (p + q).support := by
+      apply support_sdiff_support_subset_support_add
+      rw [Finset.mem_sdiff]
+      exact ⟨hb₁, hb⟩
+    rw [totalDegree_eq]; rw [hb₂]; rw [totalDegree_eq]
+    exact Finset.le_sup (f := fun m => Multiset.card (Finsupp.toMultiset m)) hbb
 
 中文:
 定理 totalDegree_add_eq_left_of_totalDegree_lt
@@ -1844,7 +1896,15 @@ theorem totalDegree_add_eq_left_of_totalDegree_lt
     obtain ⟨b, hb₁, hb₂⟩ :=
       p.support.exists_mem_eq_sup (by simpa) fun m : σ ->₀ Nat => Multiset.card (toMultiset m)
     have hb : b ∉ q.support := by
- 
+      contrapose! h
+      rw [totalDegree_eq p]; rw [hb₂]; rw [totalDegree_eq]
+      apply Finset.le_sup h
+    have hbb : b in (p + q).support := by
+      apply support_sdiff_support_subset_support_add
+      rw [Finset.mem_sdiff]
+      exact ⟨hb₁, hb⟩
+    rw [totalDegree_eq]; rw [hb₂]; rw [totalDegree_eq]
+    exact Finset.le_sup (f := fun m => Multiset.card (Finsupp.toMultiset m)) hbb
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.mem_sdiff, Multiset, Multiset.card, classical, contrapose, exists_mem_eq_sup, le_antisymm, le_sup, max_eq_left_of_lt, mem_sdiff, p.support.exists_mem_eq_sup, q.support, support, support_sdiff_support_subset_support_add, toMultiset, totalDegree_add, totalDegree_eq
 -/
@@ -2110,7 +2170,7 @@ theorem totalDegree_finsetSum
     rw [Finset.sum_cons]; rw [Finset.sup_cons]
     exact (MvPolynomial.totalDegree_add _ _).trans (max_le_max le_rfl hind)
 
-@[deprecated (since := "2026-04-08")] alias totalDegree_finset_sum := tota
+@[deprecated (since := "2026-04-08")] alias totalDegree_finset_sum := totalDegree_finsetSum
 
 中文:
 定理 totalDegree_finsetSum
@@ -2122,7 +2182,7 @@ theorem totalDegree_finsetSum
     rw [Finset.sum_cons]; rw [Finset.sup_cons]
     exact (MvPolynomial.totalDegree_add _ _).trans (max_le_max le_rfl hind)
 
-@[deprecated (since := "2026-04-08")] alias totalDegree_finset_sum := tota
+@[deprecated (since := "2026-04-08")] alias totalDegree_finset_sum := totalDegree_finsetSum
 
 Depends on / 依赖: Finset, Finset.cons_induction, Finset.sum_cons, Finset.sup_cons, MvPolynomial, MvPolynomial.totalDegree_add, cons_induction, le_rfl, max_le_max, sum_cons, sup_cons, totalDegree_add, zero_le
 -/
@@ -2197,7 +2257,7 @@ theorem exists_degree_lt
       rw [Finsupp.sum_fintype]
       intros
       rfl
-
+    _ <= f.totalDegree := le_totalDegree hd
 
 中文:
 定理 存在_degree_lt
@@ -2212,7 +2272,7 @@ theorem exists_degree_lt
       rw [Finsupp.sum_fintype]
       intros
       rfl
-
+    _ <= f.totalDegree := le_totalDegree hd
 
 Depends on / 依赖: Finset, Finset.card_univ, Finset.sum_const, Finset.sum_le_sum, Finsupp, Finsupp.sum_fintype, Fintype, Fintype.card, Nat.nsmul_eq_mul, card_univ, contrapose, d.sum, f.totalDegree, intros, le_totalDegree, mul_comm, nsmul_eq_mul, sum_const, sum_fintype, sum_le_sum
 -/
@@ -2277,7 +2337,7 @@ theorem totalDegree_eq_zero_iff_eq_C
     apply coeff_eq_zero_of_totalDegree_lt; rw [h]
     exact Finset.sum_pos (fun i hi => Nat.pos_of_ne_zero <| Finsupp.mem_support_iff.mp hi)
       (Finsupp.support_nonempty_iff.mpr <| Ne.symm hm)
-  · rw [h
+  · rw [h, totalDegree_C]
 
 中文:
 定理 totalDegree_eq_zero_iff_eq_C
@@ -2288,7 +2348,7 @@ theorem totalDegree_eq_zero_iff_eq_C
     apply coeff_eq_zero_of_totalDegree_lt; rw [h]
     exact Finset.sum_pos (fun i hi => Nat.pos_of_ne_zero <| Finsupp.mem_support_iff.mp hi)
       (Finsupp.support_nonempty_iff.mpr <| Ne.symm hm)
-  · rw [h
+  · rw [h, totalDegree_C]
 
 Depends on / 依赖: Finset, Finset.sum_pos, Finsupp, Finsupp.mem_support_iff.mp, Finsupp.support_nonempty_iff.mpr, Nat.pos_of_ne_zero, Ne.symm, classical, coeff_C, coeff_eq_zero_of_totalDegree_lt, mem_support_iff, pos_of_ne_zero, split_ifs, sum_pos, support_nonempty_iff, totalDegree_C
 -/
@@ -2430,7 +2490,12 @@ lemma degreesLE_add
     fun x hx y hy => degrees_mul_le.trans (add_le_add hx hy)⟩
   replace hi : i.toMultiset <= s + t := (Finset.le_sup hi).trans hx
   let a := (i.toMultiset - t).toFinsupp
-  let b := (
+  let b := (i.toMultiset ⊓ t).toFinsupp
+  have : a + b = i := Multiset.toFinsupp.symm.injective (by simp [a, b, Multiset.sub_add_inter])
+  have ha : a.toMultiset <= s := by simpa [a, add_comm (a := t)] using hi
+  have hb : b.toMultiset <= t := by simp [b, Multiset.inter_le_right]
+  rw [show monomial i (x.coeff i) = monomial a (x.coeff i) * monomial b 1 by simp [this]]
+  exact Submodule.mul_mem_mul ((degrees_monomial _ _).trans ha) ((degrees_monomial _ _).trans hb)
 
 中文:
 引理 degreesLE_add
@@ -2442,7 +2507,12 @@ lemma degreesLE_add
     fun x hx y hy => degrees_mul_le.trans (add_le_add hx hy)⟩
   replace hi : i.toMultiset <= s + t := (Finset.le_sup hi).trans hx
   let a := (i.toMultiset - t).toFinsupp
-  let b := (
+  let b := (i.toMultiset ⊓ t).toFinsupp
+  have : a + b = i := Multiset.toFinsupp.symm.injective (by simp [a, b, Multiset.sub_add_inter])
+  have ha : a.toMultiset <= s := by simpa [a, add_comm (a := t)] using hi
+  have hb : b.toMultiset <= t := by simp [b, Multiset.inter_le_right]
+  rw [show monomial i (x.coeff i) = monomial a (x.coeff i) * monomial b 1 by simp [this]]
+  exact Submodule.mul_mem_mul ((degrees_monomial _ _).trans ha) ((degrees_monomial _ _).trans hb)
 
 Depends on / 依赖: Finset, Finset.le_sup, Multiset, Multiset.sub_add_inter, Multiset.toFinsupp.symm.injective, Submodule, Submodule.mul_le, a.toMultiset, add_comm, add_le_add, as_sum, b.toMultise, classical, degrees_mul_le, degrees_mul_le.trans, i.toMultiset, injective, le_antisymm_iff, le_sup, mul_le
 -/

@@ -306,7 +306,12 @@ lemma gammaSet_div_gcd_to_gammaSet10_bijection
       (congr_fun hv2 i)
   · intro x hx
     use r • x
-    simp onl
+    simp only [nsmul_eq_mul, divIntMap, Int.cast_natCast]
+    constructor
+    · rw [mem_gammaSet_one, Int.isCoprime_iff_gcd_eq_one] at hx
+      exact ⟨Subsingleton.eq_zero _, by simp [Int.gcd_mul_left, hx]⟩
+    · ext i
+      simp_all [NeZero.ne r]
 
 中文:
 引理 gammaSet_div_gcd_to_gammaSet10_bijection
@@ -322,7 +327,12 @@ lemma gammaSet_div_gcd_to_gammaSet10_bijection
       (congr_fun hv2 i)
   · intro x hx
     use r • x
-    simp onl
+    simp only [nsmul_eq_mul, divIntMap, Int.cast_natCast]
+    constructor
+    · rw [mem_gammaSet_one, Int.isCoprime_iff_gcd_eq_one] at hx
+      exact ⟨Subsingleton.eq_zero _, by simp [Int.gcd_mul_left, hx]⟩
+    · ext i
+      simp_all [NeZero.ne r]
 
 Depends on / 依赖: Int.cast_natCast, Int.ediv_left_inj, Int.gcd_mul_left, Int.isCoprime_iff_gcd_eq_one, NeZero, NeZero.ne, Subsingleton, Subsingleton.eq_zero, cast_natCast, congr_fun, divIntMap, ediv_left_inj, eq_zero, finGcdMap_div, gammaSet_div_gcd, gcd_mul_left, isCoprime_iff_gcd_eq_one, mem_gammaSet_one, nsmul_eq_mul
 -/
@@ -560,7 +570,11 @@ definition gammaSetEquiv
       have := vecMul_SL2_mem_gammaSet v.2 γ⁻¹
       rw [vecMul_vecMul]; rw [← SpecialLinearGroup.coe_mul] at this
       simpa only [SpecialLinearGroup.map_apply_coe, RingHom.mapMatrix_apply, Int.coe_castRingHom,
-        map_i
+        map_inv, mul_inv_cancel, SpecialLinearGroup.coe_one, vecMul_one]⟩
+  left_inv v := by simp_rw [vecMul_vecMul, ← SpecialLinearGroup.coe_mul, mul_inv_cancel,
+    SpecialLinearGroup.coe_one, vecMul_one]
+  right_inv v := by simp_rw [vecMul_vecMul, ← SpecialLinearGroup.coe_mul, inv_mul_cancel,
+    SpecialLinearGroup.coe_one, vecMul_one]
 
 中文:
 定义 gammaSetEquiv
@@ -570,7 +584,11 @@ definition gammaSetEquiv
       have := vecMul_SL2_mem_gammaSet v.2 γ⁻¹
       rw [vecMul_vecMul]; rw [← SpecialLinearGroup.coe_mul] at this
       simpa only [SpecialLinearGroup.map_apply_coe, RingHom.mapMatrix_apply, Int.coe_castRingHom,
-        map_i
+        map_inv, mul_inv_cancel, SpecialLinearGroup.coe_one, vecMul_one]⟩
+  left_inv v := by simp_rw [vecMul_vecMul, ← SpecialLinearGroup.coe_mul, mul_inv_cancel,
+    SpecialLinearGroup.coe_one, vecMul_one]
+  right_inv v := by simp_rw [vecMul_vecMul, ← SpecialLinearGroup.coe_mul, inv_mul_cancel,
+    SpecialLinearGroup.coe_one, vecMul_one]
 
 Depends on / 依赖: vecMul_SL2_mem_gammaSet
 -/
@@ -615,7 +633,11 @@ theorem eisSummand_SL2_apply
   simp only [eisSummand, vecMul, vec2_dotProduct, denom, UpperHalfPlane.specialLinearGroup_apply]
   have h (a b c d u v : Complex) (hc : c * z + d != 0) : (u * ((a * z + b) / (c * z + d)) + v) ^ (-k) =
       (c * z + d) ^ k * ((u * a + v * c) * z + (u * b + v * d)) ^ (-k) := by
-    replace hc : z
+    replace hc : z * c + d != 0 := by convert! hc using 1; ring
+    field_simp
+    simp [div_zpow]
+    ring_nf
+  simpa using h (hc := denom_ne_zero A z) ..
 
 中文:
 定理 eisSummand_SL2_apply
@@ -624,7 +646,11 @@ theorem eisSummand_SL2_apply
   simp only [eisSummand, vecMul, vec2_dotProduct, denom, UpperHalfPlane.specialLinearGroup_apply]
   have h (a b c d u v : Complex) (hc : c * z + d != 0) : (u * ((a * z + b) / (c * z + d)) + v) ^ (-k) =
       (c * z + d) ^ k * ((u * a + v * c) * z + (u * b + v * d)) ^ (-k) := by
-    replace hc : z
+    replace hc : z * c + d != 0 := by convert! hc using 1; ring
+    field_simp
+    simp [div_zpow]
+    ring_nf
+  simpa using h (hc := denom_ne_zero A z) ..
 
 Depends on / 依赖: UpperHalfPlane, UpperHalfPlane.specialLinearGroup_apply, convert, denom_ne_zero, div_zpow, eisSummand, replace, ring_nf, specialLinearGroup_apply, vec2_dotProduct, vecMul
 -/

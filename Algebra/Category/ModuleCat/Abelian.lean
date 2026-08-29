@@ -43,7 +43,17 @@ w := hom_ext LinearMap.range_mkQ_comp _
     /- The following [invalid Lean code](https://github.com/leanprover-community/lean/issues/341)
         might help you understand what's going on here:
         ```
-       
+        calc
+        M ≃ₗ[R] f.ker.quotient : (Submodule.quotEquivOfEqBot _ (ker_eq_bot_of_mono _)).symm
+        ... ≃ₗ[R] f.range : LinearMap.quotKerEquivRange f
+        ... ≃ₗ[R] r.range.mkQ.ker : LinearEquiv.ofEq _ _ (Submodule.ker_mkQ _).symm
+        ```
+      -/
+        IsKernel.isoKernel _ _ (kernelIsLimit _)
+          (LinearEquiv.toModuleIso
+            ((Submodule.quotEquivOfEqBot _ (ker_eq_bot_of_mono _)).symm ≪≫ₗ
+              (LinearMap.quotKerEquivRange f.hom ≪≫ₗ
+              LinearEquiv.ofEq _ _ (Submodule.ker_mkQ _).symm))) <| by ext; rfl
 
 中文:
 定义 normalMono
@@ -55,7 +65,17 @@ w := hom_ext LinearMap.range_mkQ_comp _
     /- The following [invalid Lean code](https://github.com/leanprover-community/lean/issues/341)
         might help you understand what's going on here:
         ```
-       
+        calc
+        M ≃ₗ[R] f.ker.quotient : (Submodule.quotEquivOfEqBot _ (ker_eq_bot_of_mono _)).symm
+        ... ≃ₗ[R] f.range : LinearMap.quotKerEquivRange f
+        ... ≃ₗ[R] r.range.mkQ.ker : LinearEquiv.ofEq _ _ (Submodule.ker_mkQ _).symm
+        ```
+      -/
+        IsKernel.isoKernel _ _ (kernelIsLimit _)
+          (LinearEquiv.toModuleIso
+            ((Submodule.quotEquivOfEqBot _ (ker_eq_bot_of_mono _)).symm ≪≫ₗ
+              (LinearMap.quotKerEquivRange f.hom ≪≫ₗ
+              LinearEquiv.ofEq _ _ (Submodule.ker_mkQ _).symm))) <| by ext; rfl
 
 Depends on / 依赖: LinearMap, LinearMap.range, f.hom
 -/
@@ -94,7 +114,16 @@ w := hom_ext LinearMap.comp_ker_subtype _
     /- The following invalid Lean code might help you understand what's going on here:
         ```
         calc f.ker.subtype.range.quotient
-            ≃ₗ[R] f.ker.quotient
+            ≃ₗ[R] f.ker.quotient : Submodule.quotEquivOfEq _ _ (Submodule.range_subtype _)
+        ... ≃ₗ[R] f.range : LinearMap.quotKerEquivRange f
+        ... ≃ₗ[R] N : LinearEquiv.ofTop _ (range_eq_top_of_epi _)
+        ```
+      -/
+        IsCokernel.cokernelIso _ _ (cokernelIsColimit _)
+          (LinearEquiv.toModuleIso
+            (Submodule.quotEquivOfEq _ _ (Submodule.range_subtype _) ≪≫ₗ
+                LinearMap.quotKerEquivRange f.hom ≪≫ₗ
+              LinearEquiv.ofTop _ (range_eq_top_of_epi _))) <| by ext; rfl
 
 中文:
 定义 normalEpi
@@ -106,7 +135,16 @@ w := hom_ext LinearMap.comp_ker_subtype _
     /- The following invalid Lean code might help you understand what's going on here:
         ```
         calc f.ker.subtype.range.quotient
-            ≃ₗ[R] f.ker.quotient
+            ≃ₗ[R] f.ker.quotient : Submodule.quotEquivOfEq _ _ (Submodule.range_subtype _)
+        ... ≃ₗ[R] f.range : LinearMap.quotKerEquivRange f
+        ... ≃ₗ[R] N : LinearEquiv.ofTop _ (range_eq_top_of_epi _)
+        ```
+      -/
+        IsCokernel.cokernelIso _ _ (cokernelIsColimit _)
+          (LinearEquiv.toModuleIso
+            (Submodule.quotEquivOfEq _ _ (Submodule.range_subtype _) ≪≫ₗ
+                LinearMap.quotKerEquivRange f.hom ≪≫ₗ
+              LinearEquiv.ofTop _ (range_eq_top_of_epi _))) <| by ext; rfl
 
 Depends on / 依赖: LinearMap, LinearMap.ker, f.hom
 -/

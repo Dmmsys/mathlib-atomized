@@ -448,7 +448,8 @@ theorem innerContent_exists_compact
   have h₂ := ENNReal.sub_lt_self hU h.ne_bot h'ε
   conv at h₂ => rhs; rw [innerContent]
   simp only [lt_iSup_iff] at h₂
-  rcases h₂ with ⟨U, h1U, h2U⟩; refine ⟨U, 
+  rcases h₂ with ⟨U, h1U, h2U⟩; refine ⟨U, h1U, ?_⟩
+  rw [← tsub_le_iff_right]; exact le_of_lt h2U
 
 中文:
 定理 innerContent_存在_compact
@@ -460,7 +461,8 @@ theorem innerContent_exists_compact
   have h₂ := ENNReal.sub_lt_self hU h.ne_bot h'ε
   conv at h₂ => rhs; rw [innerContent]
   simp only [lt_iSup_iff] at h₂
-  rcases h₂ with ⟨U, h1U, h2U⟩; refine ⟨U, 
+  rcases h₂ with ⟨U, h1U, h2U⟩; refine ⟨U, h1U, ?_⟩
+  rw [← tsub_le_iff_right]; exact le_of_lt h2U
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_zero, ENNReal.sub_lt_self, coe_ne_zero, empty_subset, h.ne_bot, innerContent, le_add_left, le_of_lt, le_or_gt, lt_iSup_iff, ne_bot, sub_lt_self, tsub_le_iff_right
 -/
@@ -487,7 +489,22 @@ theorem innerContent_iSup_nat
     refine Finset.induction_on t ?_ ?_
     · simp only [μ.empty, nonpos_iff_eq_zero, Finset.sum_empty, Finset.sup_empty]
     · intro n s hn ih
-      grw [Finset.sup_insert, Finse
+      grw [Finset.sup_insert, Finset.sum_insert hn, μ.sup_le, ih]
+  refine iSup₂_le fun K hK => ?_
+  obtain ⟨t, ht⟩ :=
+    K.isCompact.elim_finite_subcover _ (fun i => (U i).isOpen) (by rwa [← Opens.coe_iSup])
+  rcases K.isCompact.finite_compact_cover t (SetLike.coe ∘ U) (fun i _ => (U i).isOpen) ht with
+    ⟨K', h1K', h2K', h3K'⟩
+  let L : Nat -> Compacts G := fun n => ⟨K' n, h1K' n⟩
+  convert! le_trans (h3 t L) _
+  · ext1
+    rw [Compacts.coe_finset_sup]; rw [Finset.sup_eq_iSup]
+    exact h3K'
+  refine le_trans (Finset.sum_le_sum ?_) (ENNReal.sum_le_tsum t)
+  intro i _
+  refine le_trans ?_ (le_iSup _ (L i))
+  refine le_trans ?_ (le_iSup _ (h2K' i))
+  rfl
 
 中文:
 定理 innerContent_iSup_nat
@@ -498,7 +515,22 @@ theorem innerContent_iSup_nat
     refine Finset.induction_on t ?_ ?_
     · simp only [μ.empty, nonpos_iff_eq_zero, Finset.sum_empty, Finset.sup_empty]
     · intro n s hn ih
-      grw [Finset.sup_insert, Finse
+      grw [Finset.sup_insert, Finset.sum_insert hn, μ.sup_le, ih]
+  refine iSup₂_le fun K hK => ?_
+  obtain ⟨t, ht⟩ :=
+    K.isCompact.elim_finite_subcover _ (fun i => (U i).isOpen) (by rwa [← Opens.coe_iSup])
+  rcases K.isCompact.finite_compact_cover t (SetLike.coe ∘ U) (fun i _ => (U i).isOpen) ht with
+    ⟨K', h1K', h2K', h3K'⟩
+  let L : Nat -> Compacts G := fun n => ⟨K' n, h1K' n⟩
+  convert! le_trans (h3 t L) _
+  · ext1
+    rw [Compacts.coe_finset_sup]; rw [Finset.sup_eq_iSup]
+    exact h3K'
+  refine le_trans (Finset.sum_le_sum ?_) (ENNReal.sum_le_tsum t)
+  intro i _
+  refine le_trans ?_ (le_iSup _ (L i))
+  refine le_trans ?_ (le_iSup _ (h2K' i))
+  rfl
 
 Depends on / 依赖: Compacts, Finset, Finset.induction_on, Finset.sum_empty, Finset.sum_insert, Finset.sup_empty, Finset.sup_insert, K.isCompact.elim_finite_subcover, K.isCompact.finite_compact_cover, Opens.coe_iSup, SetLike, SetLike.coe, coe_iSup, elim_finite_subcover, finite_compact_cover, induction_on, isCompact, isOpen, nonpos_iff_eq_zero, sum_empty
 -/
@@ -627,7 +659,12 @@ theorem innerContent_pos_of_is_mul_left_invariant
   rcases compact_covered_by_mul_left_translates K.2 this with ⟨s, hs⟩
   suffices μ K <= s.card * μ.innerContent U by
     exact (ENNReal.mul_pos_iff.mp <| hK.bot_lt.trans_le this).2
-  have : (K : Set G) subseteq ↑(⨆ g in s, 
+  have : (K : Set G) subseteq ↑(⨆ g in s, Opens.comap (Homeomorph.mulLeft g : C(G, G)) U) := by
+    simpa only [Opens.iSup_def, Opens.coe_comap, Subtype.coe_mk]
+  refine (μ.le_innerContent _ _ this).trans ?_
+  refine
+    (rel_iSup_sum μ.innerContent μ.innerContent_bot (· <= ·) μ.innerContent_iSup_nat _ _).trans ?_
+  simp only [μ.is_mul_left_invariant_innerContent h3, Finset.sum_const, nsmul_eq_mul, le_refl]
 
 中文:
 定理 innerContent_pos_of_is_mul_left_invariant
@@ -637,7 +674,12 @@ theorem innerContent_pos_of_is_mul_left_invariant
   rcases compact_covered_by_mul_left_translates K.2 this with ⟨s, hs⟩
   suffices μ K <= s.card * μ.innerContent U by
     exact (ENNReal.mul_pos_iff.mp <| hK.bot_lt.trans_le this).2
-  have : (K : Set G) subseteq ↑(⨆ g in s, 
+  have : (K : Set G) subseteq ↑(⨆ g in s, Opens.comap (Homeomorph.mulLeft g : C(G, G)) U) := by
+    simpa only [Opens.iSup_def, Opens.coe_comap, Subtype.coe_mk]
+  refine (μ.le_innerContent _ _ this).trans ?_
+  refine
+    (rel_iSup_sum μ.innerContent μ.innerContent_bot (· <= ·) μ.innerContent_iSup_nat _ _).trans ?_
+  simp only [μ.is_mul_left_invariant_innerContent h3, Finset.sum_const, nsmul_eq_mul, le_refl]
 
 Depends on / 依赖: ENNReal, ENNReal.mul_pos_iff.mp, Homeomorph, Homeomorph.mulLeft, Nonempty, Opens.coe_comap, Opens.comap, Opens.iSup_def, Subtype, Subtype.coe_mk, U.isOpen.interior_eq, bot_lt, coe_comap, coe_mk, compact_covered_by_mul_left_translates, hK.bot_lt.trans_le, iSup_def, innerContent, innerContent_b, interior
 -/
@@ -1057,7 +1099,36 @@ theorem borel_le_caratheodory
   rw [μ.outerMeasure_of_isOpen ((U' : Set G) inter U) (U'.isOpen.inter hU)]
   simp only [innerContent, iSup_subtype']
   rw [Opens.coe_mk]
-  have : Nonemp
+  have : Nonempty { L : Compacts G // (L : Set G) subseteq U' inter U } := ⟨⟨⊥, empty_subset _⟩⟩
+  rw [ENNReal.iSup_add]
+  refine iSup_le ?_
+  rintro ⟨L, hL⟩
+  let L' : Compacts G := ⟨closure L, L.isCompact.closure⟩
+  dsimp
+  grw [show μ L <= μ L' from μ.mono _ _ subset_closure]
+  simp only [subset_inter_iff] at hL
+  have hL'U : (L' : Set G) subseteq U := IsCompact.closure_subset_of_isOpen L.2 hU hL.2
+  have hL'U' : (L' : Set G) subseteq (U' : Set G) := IsCompact.closure_subset_of_isOpen L.2 U'.2 hL.1
+  have : ↑U' \ U subseteq U' \ L' := sdiff_subset_sdiff_right hL'U
+  grw [this]
+  rw [μ.outerMeasure_of_isOpen (↑U' \ L') (IsOpen.sdiff U'.2 isClosed_closure)]
+  simp only [innerContent, iSup_subtype']
+  rw [Opens.coe_mk]
+  have : Nonempty { M : Compacts G // (M : Set G) subseteq ↑U' \ closure L } := ⟨⟨⊥, empty_subset _⟩⟩
+  rw [ENNReal.add_iSup]
+  refine iSup_le ?_
+  rintro ⟨M, hM⟩
+  let M' : Compacts G := ⟨closure M, M.isCompact.closure⟩
+  dsimp
+  grw [show μ M <= μ M' from μ.mono _ _ subset_closure]
+  have hM' : (M' : Set G) subseteq U' \ L' :=
+    IsCompact.closure_subset_of_isOpen M.2 (IsOpen.sdiff U'.2 isClosed_closure) hM
+  have : (↑(L' ⊔ M') : Set G) subseteq U' := by
+    simp only [Compacts.coe_sup, union_subset_iff, hL'U', true_and]
+    exact hM'.trans sdiff_subset
+  rw [μ.outerMeasure_of_isOpen (↑U') U'.2]
+  refine le_trans (ge_of_eq ?_) (μ.le_innerContent _ _ this)
+  exact μ.sup_disjoint L' M' (subset_sdiff.1 hM').2.symm isClosed_closure isClosed_closure
 
 中文:
 定理 borel_le_caratheodory
@@ -1071,7 +1142,36 @@ theorem borel_le_caratheodory
   rw [μ.outerMeasure_of_isOpen ((U' : Set G) inter U) (U'.isOpen.inter hU)]
   simp only [innerContent, iSup_subtype']
   rw [Opens.coe_mk]
-  have : Nonemp
+  have : Nonempty { L : Compacts G // (L : Set G) subseteq U' inter U } := ⟨⟨⊥, empty_subset _⟩⟩
+  rw [ENNReal.iSup_add]
+  refine iSup_le ?_
+  rintro ⟨L, hL⟩
+  let L' : Compacts G := ⟨closure L, L.isCompact.closure⟩
+  dsimp
+  grw [show μ L <= μ L' from μ.mono _ _ subset_closure]
+  simp only [subset_inter_iff] at hL
+  have hL'U : (L' : Set G) subseteq U := IsCompact.closure_subset_of_isOpen L.2 hU hL.2
+  have hL'U' : (L' : Set G) subseteq (U' : Set G) := IsCompact.closure_subset_of_isOpen L.2 U'.2 hL.1
+  have : ↑U' \ U subseteq U' \ L' := sdiff_subset_sdiff_right hL'U
+  grw [this]
+  rw [μ.outerMeasure_of_isOpen (↑U' \ L') (IsOpen.sdiff U'.2 isClosed_closure)]
+  simp only [innerContent, iSup_subtype']
+  rw [Opens.coe_mk]
+  have : Nonempty { M : Compacts G // (M : Set G) subseteq ↑U' \ closure L } := ⟨⟨⊥, empty_subset _⟩⟩
+  rw [ENNReal.add_iSup]
+  refine iSup_le ?_
+  rintro ⟨M, hM⟩
+  let M' : Compacts G := ⟨closure M, M.isCompact.closure⟩
+  dsimp
+  grw [show μ M <= μ M' from μ.mono _ _ subset_closure]
+  have hM' : (M' : Set G) subseteq U' \ L' :=
+    IsCompact.closure_subset_of_isOpen M.2 (IsOpen.sdiff U'.2 isClosed_closure) hM
+  have : (↑(L' ⊔ M') : Set G) subseteq U' := by
+    simp only [Compacts.coe_sup, union_subset_iff, hL'U', true_and]
+    exact hM'.trans sdiff_subset
+  rw [μ.outerMeasure_of_isOpen (↑U') U'.2]
+  refine le_trans (ge_of_eq ?_) (μ.le_innerContent _ _ this)
+  exact μ.sup_disjoint L' M' (subset_sdiff.1 hM').2.symm isClosed_closure isClosed_closure
 
 Depends on / 依赖: BorelSpace, BorelSpace.measurable_eq, Compacts, ENNReal, ENNReal.iSup_add, L.isCompact.closure, MeasurableSpace, MeasurableSpace.generateFrom_le, Nonempty, Opens.coe_mk, closure, coe_mk, empty_subset, generateFrom_le, iSup_add, iSup_le, iSup_subtype, innerContent, isCompact, isOpen
 -/
@@ -1199,7 +1299,11 @@ instance regular
     rw [measure_apply _ isClosed_closure.measurableSet]
     exact μ.outerMeasure_lt_top_of_isCompact hK.closure
   refine ⟨fun U hU r hr => ?_⟩
-  rw [measure_apply _ hU
+  rw [measure_apply _ hU.measurableSet]; rw [μ.outerMeasure_of_isOpen U hU] at hr
+  simp only [innerContent, lt_iSup_iff] at hr
+  rcases hr with ⟨K, hKU, hr⟩
+  refine ⟨K, hKU, K.2, hr.trans_le ?_⟩
+  exact (μ.le_outerMeasure_compacts K).trans (le_toMeasure_apply _ _ _)
 
 中文:
 实例 regular
@@ -1211,7 +1315,11 @@ instance regular
     rw [measure_apply _ isClosed_closure.measurableSet]
     exact μ.outerMeasure_lt_top_of_isCompact hK.closure
   refine ⟨fun U hU r hr => ?_⟩
-  rw [measure_apply _ hU
+  rw [measure_apply _ hU.measurableSet]; rw [μ.outerMeasure_of_isOpen U hU] at hr
+  simp only [innerContent, lt_iSup_iff] at hr
+  rcases hr with ⟨K, hKU, hr⟩
+  refine ⟨K, hKU, K.2, hr.trans_le ?_⟩
+  exact (μ.le_outerMeasure_compacts K).trans (le_toMeasure_apply _ _ _)
 
 Depends on / 依赖: IsFiniteMeasureOnCompacts, closure, hK.closure, hU.measurableSet, hr.trans_le, innerContent, isClosed_closure, isClosed_closure.measurableSet, le_outerMeasure_compacts, le_toMeasur, lt_iSup_iff, measurableSet, measure, measure_apply, measure_mono, outerMeasure_lt_top_of_isCompact, outerMeasure_of_isOpen, subset_closure, trans_le, trans_lt
 -/
@@ -1263,7 +1371,9 @@ theorem contentRegular_exists_compact
   have lower_bound_iInf : μ K + ε <=
       ⨅ (K' : TopologicalSpace.Compacts G) (_ : (K : Set G) subseteq interior (K' : Set G)), μ K' :=
     le_iInf fun K' => le_iInf fun K'_hyp => le_of_lt (hc K' K'_hyp)
-  rw [← H] at lower_bound_iI
+  rw [← H] at lower_bound_iInf
+  exact (lt_self_iff_false (μ K)).mp (lt_of_le_of_lt' lower_bound_iInf
+    (ENNReal.lt_add_right (ne_top_of_lt (μ.lt_top K)) (ENNReal.coe_ne_zero.mpr hε)))
 
 中文:
 定理 contentRegular_存在_compact
@@ -1274,7 +1384,9 @@ theorem contentRegular_exists_compact
   have lower_bound_iInf : μ K + ε <=
       ⨅ (K' : TopologicalSpace.Compacts G) (_ : (K : Set G) subseteq interior (K' : Set G)), μ K' :=
     le_iInf fun K' => le_iInf fun K'_hyp => le_of_lt (hc K' K'_hyp)
-  rw [← H] at lower_bound_iI
+  rw [← H] at lower_bound_iInf
+  exact (lt_self_iff_false (μ K)).mp (lt_of_le_of_lt' lower_bound_iInf
+    (ENNReal.lt_add_right (ne_top_of_lt (μ.lt_top K)) (ENNReal.coe_ne_zero.mpr hε)))
 
 Depends on / 依赖: Compacts, ENNReal, ENNReal.coe_ne_zero.mpr, ENNReal.lt_add_right, TopologicalSpace, TopologicalSpace.Compacts, _hyp, coe_ne_zero, interior, le_iInf, le_of_lt, lower_bound_iInf, lt_add_right, lt_of_le_of_lt, lt_self_iff_false, lt_top, ne_top_of_lt, not_and, not_exists, not_le
 -/
@@ -1306,7 +1418,15 @@ theorem measure_eq_content_of_regular
     calc
       μ.measure ↑K <= μ.measure (interior ↑K') := measure_mono K'_hyp.1
       _ <= μ K' := by
-        rw [μ.measure_a
+        rw [μ.measure_apply (IsOpen.measurableSet isOpen_interior)]
+        exact μ.outerMeasure_interior_compacts K'
+      _ <= μ K + ε := K'_hyp.right
+  · calc
+    μ K <= μ ⟨closure K, K.2.closure⟩ := μ.mono _ _ subset_closure
+    _ <= μ.measure (closure K) := by
+      rw [μ.measure_apply (isClosed_closure.measurableSet)]
+      exact μ.le_outerMeasure_compacts _
+    _ = μ.measure K := K.2.measure_closure _
 
 中文:
 定理 measure_eq_content_of_regular
@@ -1319,7 +1439,15 @@ theorem measure_eq_content_of_regular
     calc
       μ.measure ↑K <= μ.measure (interior ↑K') := measure_mono K'_hyp.1
       _ <= μ K' := by
-        rw [μ.measure_a
+        rw [μ.measure_apply (IsOpen.measurableSet isOpen_interior)]
+        exact μ.outerMeasure_interior_compacts K'
+      _ <= μ K + ε := K'_hyp.right
+  · calc
+    μ K <= μ ⟨closure K, K.2.closure⟩ := μ.mono _ _ subset_closure
+    _ <= μ.measure (closure K) := by
+      rw [μ.measure_apply (isClosed_closure.measurableSet)]
+      exact μ.le_outerMeasure_compacts _
+    _ = μ.measure K := K.2.measure_closure _
 
 Depends on / 依赖: ENNReal, ENNReal.le_of_forall_pos_le_add, IsOpen, IsOpen.measurableSet, _hyp, _hyp.right, closure, contentRegular_exists_compact, interior, isOpen_interior, le_antisymm, le_of_forall_pos_le_add, measurableSet, measure, measure_app, measure_apply, measure_mono, ne_bot_of_gt, outerMeasure_interior_compacts, subset_closure
 -/

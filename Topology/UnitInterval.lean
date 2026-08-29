@@ -1328,7 +1328,10 @@ lemma _root_.Set.abs_projIcc_sub_projIcc
   · rw [abs_sub_comm, abs_sub_comm c]; exact this (le_of_not_ge hdc)
   rw [abs_eq_self.2 (sub_nonneg.2 hdc)]; rw [abs_eq_self.2 (sub_nonneg.2 <| mod_cast monotone_projIcc h hdc)]
   rw [← sub_nonneg] at hdc
-  refine (max_sub_max_le_max _ _ _ _).trans (max_le (b
+  refine (max_sub_max_le_max _ _ _ _).trans (max_le (by rwa [sub_self]) ?_)
+  refine ((le_abs_self _).trans <| abs_min_sub_min_le_max _ _ _ _).trans (max_le ?_ ?_)
+  · rwa [sub_self, abs_zero]
+  · exact (abs_eq_self.mpr hdc).le
 
 中文:
 引理 _root_.集合.abs_projIcc_sub_projIcc
@@ -1338,7 +1341,10 @@ lemma _root_.Set.abs_projIcc_sub_projIcc
   · rw [abs_sub_comm, abs_sub_comm c]; exact this (le_of_not_ge hdc)
   rw [abs_eq_self.2 (sub_nonneg.2 hdc)]; rw [abs_eq_self.2 (sub_nonneg.2 <| mod_cast monotone_projIcc h hdc)]
   rw [← sub_nonneg] at hdc
-  refine (max_sub_max_le_max _ _ _ _).trans (max_le (b
+  refine (max_sub_max_le_max _ _ _ _).trans (max_le (by rwa [sub_self]) ?_)
+  refine ((le_abs_self _).trans <| abs_min_sub_min_le_max _ _ _ _).trans (max_le ?_ ?_)
+  · rwa [sub_self, abs_zero]
+  · exact (abs_eq_self.mpr hdc).le
 
 Depends on / 依赖: abs_eq_self, abs_eq_self.mpr, abs_min_sub_min_le_max, abs_sub_comm, abs_zero, generalizing, le_abs_self, le_of_not_ge, max_le, max_sub_max_le_max, mod_cast, monotone_projIcc, sub_nonneg, sub_self
 -/
@@ -1454,7 +1460,10 @@ lemma abs_sub_addNSMul_le
 (|t - addNSMul h δ n| : α) = t - addNSMul h δ n := abs_eq_self.2 sub_nonneg.2 ht.1
     _ <= projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n := by apply sub_le_sub_right; exact ht.2
     _ <= (|projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n| : α) := le_abs_self _
-    _ <= |a + (n + 1) • δ - (a
+    _ <= |a + (n + 1) • δ - (a + n • δ)| := abs_projIcc_sub_projIcc h
+    _ <= δ := by
+          rw [add_sub_add_comm]; rw [sub_self]; rw [zero_add]; rw [succ_nsmul']; rw [add_sub_cancel_right]
+          exact (abs_eq_self.mpr hδ).le
 
 中文:
 引理 abs_sub_addNSMul_le
@@ -1463,7 +1472,10 @@ lemma abs_sub_addNSMul_le
 (|t - addNSMul h δ n| : α) = t - addNSMul h δ n := abs_eq_self.2 sub_nonneg.2 ht.1
     _ <= projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n := by apply sub_le_sub_right; exact ht.2
     _ <= (|projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n| : α) := le_abs_self _
-    _ <= |a + (n + 1) • δ - (a
+    _ <= |a + (n + 1) • δ - (a + n • δ)| := abs_projIcc_sub_projIcc h
+    _ <= δ := by
+          rw [add_sub_add_comm]; rw [sub_self]; rw [zero_add]; rw [succ_nsmul']; rw [add_sub_cancel_right]
+          exact (abs_eq_self.mpr hδ).le
 
 Depends on / 依赖: abs_eq_self, abs_eq_self.mpr, abs_projIcc_sub_projIcc, addNSMul, add_sub_add_comm, add_sub_cancel_right, le_abs_self, projIcc, sub_le_sub_right, sub_nonneg, sub_self, succ_nsmul, zero_add
 -/
@@ -1859,7 +1871,12 @@ theorem convexComb_assoc
       simp
   · by_cases ht : (t : Real) = 1
     · simp [ht]
-    · have : (1 - s * t 
+    · have : (1 - s * t : Real) != 0 := by
+        intro h
+        have : 1 <= (t : Real) := by nlinarith [s.2.2, t.2.1]
+        grind
+      field_simp
+      ring_nf
 
 中文:
 定理 convexComb_assoc
@@ -1875,7 +1892,12 @@ theorem convexComb_assoc
       simp
   · by_cases ht : (t : Real) = 1
     · simp [ht]
-    · have : (1 - s * t 
+    · have : (1 - s * t : Real) != 0 := by
+        intro h
+        have : 1 <= (t : Real) := by nlinarith [s.2.2, t.2.1]
+        grind
+      field_simp
+      ring_nf
 
 Depends on / 依赖: Subtype, Subtype.mk.injEq, coe_mul, convexComb, ring_nf
 -/
@@ -2090,7 +2112,7 @@ lemma exists_monotone_Icc_subset_open_cover_Icc
   refine ⟨addNSMul h (δ/2), addNSMul_zero h,
     monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n => ?_⟩
   obtain ⟨i, hsub⟩ := ball_subset (addNSMul h (δ / 2) n) trivial
-
+  exact ⟨i, fun t ht => hsub ((abs_sub_addNSMul_le h hδ.le n ht).trans_lt <| half_lt_self δ_pos)⟩
 
 中文:
 引理 存在_monotone_Icc_subset_open_cover_Icc
@@ -2101,7 +2123,7 @@ lemma exists_monotone_Icc_subset_open_cover_Icc
   refine ⟨addNSMul h (δ/2), addNSMul_zero h,
     monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n => ?_⟩
   obtain ⟨i, hsub⟩ := ball_subset (addNSMul h (δ / 2) n) trivial
-
+  exact ⟨i, fun t ht => hsub ((abs_sub_addNSMul_le h hδ.le n ht).trans_lt <| half_lt_self δ_pos)⟩
 
 Depends on / 依赖: abs_sub_addNSMul_le, addNSMul, addNSMul_eq_right, addNSMul_zero, ball_subset, half_lt_self, half_pos, isCompact_univ, lebesgue_number_lemma_of_metric, monotone_addNSMul, trans_lt
 -/
@@ -2152,7 +2174,10 @@ lemma exists_monotone_Icc_subset_open_cover_unitInterval_prod_self
   simp_rw [Subtype.ext_iff]
   have h : (0 : Real) <= 1 := zero_le_one
   refine ⟨addNSMul h (δ/2), addNSMul_zero h,
-    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n m 
+    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n m => ?_⟩
+  obtain ⟨i, hsub⟩ := ball_subset (addNSMul h (δ / 2) n, addNSMul h (δ / 2) m) trivial
+  exact ⟨i, fun t ht => hsub (Metric.mem_ball.mpr <| (max_le (abs_sub_addNSMul_le h hδ.le n ht.1) <|
+    abs_sub_addNSMul_le h hδ.le m ht.2).trans_lt <| half_lt_self δ_pos)⟩
 
 中文:
 引理 存在_monotone_Icc_subset_open_cover_unit整数erval_prod_self
@@ -2163,7 +2188,10 @@ lemma exists_monotone_Icc_subset_open_cover_unitInterval_prod_self
   simp_rw [Subtype.ext_iff]
   have h : (0 : Real) <= 1 := zero_le_one
   refine ⟨addNSMul h (δ/2), addNSMul_zero h,
-    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n m 
+    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n m => ?_⟩
+  obtain ⟨i, hsub⟩ := ball_subset (addNSMul h (δ / 2) n, addNSMul h (δ / 2) m) trivial
+  exact ⟨i, fun t ht => hsub (Metric.mem_ball.mpr <| (max_le (abs_sub_addNSMul_le h hδ.le n ht.1) <|
+    abs_sub_addNSMul_le h hδ.le m ht.2).trans_lt <| half_lt_self δ_pos)⟩
 
 Depends on / 依赖: Metric, Metric.mem_ball.mpr, Subtype, Subtype.ext_iff, abs_sub_addNSMul_le, addNSMul, addNSMul_eq_right, addNSMul_zero, ball_subset, ext_iff, half_pos, isCompact_univ, lebesgue_number_lemma_of_metric, max_le, mem_ball, monotone_addNSMul, simp_rw, zero_le_one
 -/

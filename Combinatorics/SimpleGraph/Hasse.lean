@@ -439,7 +439,9 @@ definition IsPath.pathGraphIsoToSubgraph
   left_inv := by grind [pathGraphHomToSubgraph, RelHom.coeFn_mk, hw.support_nodup]
   right_inv := by grind [pathGraphHomToSubgraph, RelHom.coeFn_mk]
   map_rel_iff' := by
-    refine ⟨fun hadj => ?_, w.pa
+    refine ⟨fun hadj => ?_, w.pathGraphHomToSubgraph.map_rel'⟩
+    grind [w.toSubgraph_adj_iff.mp hadj, pathGraph_adj, getVert_eq_getD_support,
+      pathGraphHomToSubgraph, RelHom.coeFn_mk, hw.support_nodup.getElem_inj_iff]
 
 中文:
 定义 是道路.pathGraphIsoToSubgraph
@@ -449,7 +451,9 @@ definition IsPath.pathGraphIsoToSubgraph
   left_inv := by grind [pathGraphHomToSubgraph, RelHom.coeFn_mk, hw.support_nodup]
   right_inv := by grind [pathGraphHomToSubgraph, RelHom.coeFn_mk]
   map_rel_iff' := by
-    refine ⟨fun hadj => ?_, w.pa
+    refine ⟨fun hadj => ?_, w.pathGraphHomToSubgraph.map_rel'⟩
+    grind [w.toSubgraph_adj_iff.mp hadj, pathGraph_adj, getVert_eq_getD_support,
+      pathGraphHomToSubgraph, RelHom.coeFn_mk, hw.support_nodup.getElem_inj_iff]
 
 Depends on / 依赖: pathGraphHomToSubgraph, w.pathGraphHomToSubgraph
 -/

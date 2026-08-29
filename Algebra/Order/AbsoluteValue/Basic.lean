@@ -1070,7 +1070,15 @@ definition trivial
     simp [hx, hy]
   nonneg' x := by rcases eq_or_ne x 0 with hx | hx <;> simp [hx]
   eq_zero' x := by rcases eq_or_ne x 0 with hx | hx <;> simp [hx]
-  add_le'
+  add_le' x y := by
+    rcases eq_or_ne x 0 with rfl | hx
+    · simp
+    rcases eq_or_ne y 0 with rfl | hy
+    · simp
+    simp only [hx, ↓reduceIte, hy, one_add_one_eq_two]
+    rcases eq_or_ne (x + y) 0 with hxy | hxy <;> simp [hxy, one_le_two]
+
+@[simp]
 
 中文:
 定义 trivial
@@ -1084,7 +1092,15 @@ definition trivial
     simp [hx, hy]
   nonneg' x := by rcases eq_or_ne x 0 with hx | hx <;> simp [hx]
   eq_zero' x := by rcases eq_or_ne x 0 with hx | hx <;> simp [hx]
-  add_le'
+  add_le' x y := by
+    rcases eq_or_ne x 0 with rfl | hx
+    · simp
+    rcases eq_or_ne y 0 with rfl | hy
+    · simp
+    simp only [hx, ↓reduceIte, hy, one_add_one_eq_two]
+    rcases eq_or_ne (x + y) 0 with hxy | hxy <;> simp [hxy, one_le_two]
+
+@[simp]
 -/
 def trivial : AbsoluteValue R S where
   toFun x := if x = 0 then 0 else 1

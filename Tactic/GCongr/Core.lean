@@ -423,7 +423,8 @@ definition getCongrAppFnArgs
     if b.hasLooseBVars then
       some (`_Forall, #[.lam n d b bi])
     else
-      
+      some (`_Implies, #[d, b])
+  | e => e.withApp fun f args => f.constName?.map (·, args)
 
 中文:
 定义 getCongrAppFnArgs
@@ -435,7 +436,8 @@ definition getCongrAppFnArgs
     if b.hasLooseBVars then
       some (`_Forall, #[.lam n d b bi])
     else
-      
+      some (`_Implies, #[d, b])
+  | e => e.withApp fun f args => f.constName?.map (·, args)
 
 Depends on / 依赖: cleanupAnnotations, e.cleanupAnnotations, forallE
 -/
@@ -527,7 +529,79 @@ definition makeGCongrLemma
     @[gcongr] attribute only applies to lemmas proving f x₁ ... xₙ ∼ f x₁' ... xₙ'.\n \
     {m} in {target}"
   -- verify that conclusion of the lemma is of the form `f x₁ ... xₙ ∼ f x₁' ... xₙ'`
-  let some (relName, lhs, rhs) := getRel (
+  let some (relName, lhs, rhs) := getRel (← whnf target) | fail "No relation found"
+  let lhs := lhs.headBeta; let rhs := rhs.headBeta -- this is required for `Monotone fun x => ⋯`
+  let some (lhsHead, lhsArgs) := getCongrAppFnArgs lhs | fail "LHS is not suitable for congruence"
+  let some (rhsHead, rhsArgs) := getCongrAppFnArgs rhs | fail "RHS is not suitable for congruence"
+  if strict then
+    if lhsHead == rhsHead then
+      fail "LHS and RHS have the same head function."
+  else
+    if lhsHead != rhsHead then
+      fail "LHS and RHS do not have the same head function."
+  if lhsArgs.size != rhsArgs.size then
+    fail "LHS and RHS do not have the same number of arguments."
+  let mut pairs := #[]
+  -- iterate through each pair of corresponding (LHS/RHS) inputs to the head function `head` in
+  -- the conclusion of the lemma
+  for lhs in lhsArgs, rhs in rhsArgs do
+    -- we call such a pair a "varying argument" pair if the LHS/RHS inputs are not defeq
+    -- (and not proofs)
+if ← isDefEq lhs rhs (isProof lhs <&&> isProof rhs) then continue
+    let lhs := lhs.eta; let rhs := rhs.eta
+    -- verify that the "varying argument" pairs are free variables (after eta-reduction)
+    unless lhs.isFVar && rhs.isFVar do
+      if strict then continue -- When comparing `a ≤ b` with `a < b`, the instances are different.
+      fail "Not all varying arguments are free variables"
+    -- Instance implicit arguments should be synthesized, rather than solved by congruence
+    if (← lhs.fvarId!.getBinderInfo).isInstImplicit &&
+      (← rhs.fvarId!.getBinderInfo).isInstImplicit then
+      continue
+    -- add such a pair to the `pairs` array
+    pairs := pairs.push (lhs, rhs)
+  let numVarying := pairs.size
+  if numVarying = 0 then
+    fail "LHS and RHS are the same"
+  let mut mainSubgoals := #[]
+  -- iterate over antecedents `hyp` to the lemma
+  for hyp in hyps, i in 0...* do
+    -- Checks if `∀ xs, lhs ~ rhs` is a valid "main goal".
+    let isMainGoal? (lhs rhs : Expr) (xs : Array Expr) : Option (GCongrHyp × Expr × Expr) :=
+      lhs.withApp fun lhs lhsArgs => rhs.withApp fun rhs rhsArgs => do
+      /- The relation needs to be of the form `lhs y₁ ... yₙ ~ rhs y₁ ... yₙ`,
+      where `yᵢ` are free variables from `xs`,
+      and `(lhs, rhs)` is a varying argument pair from the conclusion to the lemma
+      We relax these conditions for lemmas that are not used by `grw`. -/
+guard !forGrw || lhsArgs.all xs.contains && lhsArgs == rhsArgs
+      let lhsIdx ← hyps.idxOf? lhs
+      let rhsIdx ← hyps.idxOf? rhs
+      let (pair, isContra) ← pairs.findSome? fun pair =>
+        if (lhs, rhs) == pair then some (pair, false) else
+        if (rhs, lhs) == pair then some (pair, true) else none
+      let hypsPos := xs.toList.map lhsArgs.idxOf?
+      some ({ lhsIdx, rhsIdx, hypIdx := i, hypsPos, isContra }, pair)
+    -- Checks if `hyp` is a valid "main goal".
+    let go := forallTelescopeReducing (← inferType hyp) fun xs hypTy => do
+      if let some (_, lhs₁, rhs₁) := getRel (← whnf hypTy) then
+        return isMainGoal? lhs₁ rhs₁ xs
+      else if let some lastFVar := xs.back? then
+        return isMainGoal? (← inferType lastFVar) hypTy xs.pop
+      return none
+    if let some (mainSubgoal, pair) ← go then
+      mainSubgoals := mainSubgoals.push mainSubgoal
+      -- Erase the varying argument pair, to make sure each pair corresponds to just one hypothesis.
+      pairs := pairs.erase pair
+  if h : forGrw ∧ pairs.size != 0 then
+    let (lhs, rhs) := pairs[0]
+    throwError "`{lhs}` appears on the LHS and `{rhs}` on the RHS, \
+      but there is no corresponding hypothesis `{lhs} ~ {rhs}` or `{rhs} ~ {lhs}`.\n\n\
+      This means that the `@[gcongr]` lemma cannot be used in the `grw` tactic. \
+      Please use `@[gcongr only]` instead."
+  -- store all the information from this parse of the lemma's structure in a `GCongrLemma`
+  let mut keys := [{ relName, head := rhsHead, arity := lhsArgs.size }]
+  if strict then
+    keys := { relName, head := lhsHead, arity := lhsArgs.size } :: keys
+  return { keys, declName, mainSubgoals, numHyps := hyps.size, prio, numVarying, forGrw }
 
 中文:
 定义 makeGCongrLemma
@@ -537,7 +611,79 @@ definition makeGCongrLemma
     @[gcongr] attribute only applies to lemmas proving f x₁ ... xₙ ∼ f x₁' ... xₙ'.\n \
     {m} in {target}"
   -- verify that conclusion of the lemma is of the form `f x₁ ... xₙ ∼ f x₁' ... xₙ'`
-  let some (relName, lhs, rhs) := getRel (
+  let some (relName, lhs, rhs) := getRel (← whnf target) | fail "No relation found"
+  let lhs := lhs.headBeta; let rhs := rhs.headBeta -- this is required for `Monotone fun x => ⋯`
+  let some (lhsHead, lhsArgs) := getCongrAppFnArgs lhs | fail "LHS is not suitable for congruence"
+  let some (rhsHead, rhsArgs) := getCongrAppFnArgs rhs | fail "RHS is not suitable for congruence"
+  if strict then
+    if lhsHead == rhsHead then
+      fail "LHS and RHS have the same head function."
+  else
+    if lhsHead != rhsHead then
+      fail "LHS and RHS do not have the same head function."
+  if lhsArgs.size != rhsArgs.size then
+    fail "LHS and RHS do not have the same number of arguments."
+  let mut pairs := #[]
+  -- iterate through each pair of corresponding (LHS/RHS) inputs to the head function `head` in
+  -- the conclusion of the lemma
+  for lhs in lhsArgs, rhs in rhsArgs do
+    -- we call such a pair a "varying argument" pair if the LHS/RHS inputs are not defeq
+    -- (and not proofs)
+if ← isDefEq lhs rhs (isProof lhs <&&> isProof rhs) then continue
+    let lhs := lhs.eta; let rhs := rhs.eta
+    -- verify that the "varying argument" pairs are free variables (after eta-reduction)
+    unless lhs.isFVar && rhs.isFVar do
+      if strict then continue -- When comparing `a ≤ b` with `a < b`, the instances are different.
+      fail "Not all varying arguments are free variables"
+    -- Instance implicit arguments should be synthesized, rather than solved by congruence
+    if (← lhs.fvarId!.getBinderInfo).isInstImplicit &&
+      (← rhs.fvarId!.getBinderInfo).isInstImplicit then
+      continue
+    -- add such a pair to the `pairs` array
+    pairs := pairs.push (lhs, rhs)
+  let numVarying := pairs.size
+  if numVarying = 0 then
+    fail "LHS and RHS are the same"
+  let mut mainSubgoals := #[]
+  -- iterate over antecedents `hyp` to the lemma
+  for hyp in hyps, i in 0...* do
+    -- Checks if `∀ xs, lhs ~ rhs` is a valid "main goal".
+    let isMainGoal? (lhs rhs : Expr) (xs : Array Expr) : Option (GCongrHyp × Expr × Expr) :=
+      lhs.withApp fun lhs lhsArgs => rhs.withApp fun rhs rhsArgs => do
+      /- The relation needs to be of the form `lhs y₁ ... yₙ ~ rhs y₁ ... yₙ`,
+      where `yᵢ` are free variables from `xs`,
+      and `(lhs, rhs)` is a varying argument pair from the conclusion to the lemma
+      We relax these conditions for lemmas that are not used by `grw`. -/
+guard !forGrw || lhsArgs.all xs.contains && lhsArgs == rhsArgs
+      let lhsIdx ← hyps.idxOf? lhs
+      let rhsIdx ← hyps.idxOf? rhs
+      let (pair, isContra) ← pairs.findSome? fun pair =>
+        if (lhs, rhs) == pair then some (pair, false) else
+        if (rhs, lhs) == pair then some (pair, true) else none
+      let hypsPos := xs.toList.map lhsArgs.idxOf?
+      some ({ lhsIdx, rhsIdx, hypIdx := i, hypsPos, isContra }, pair)
+    -- Checks if `hyp` is a valid "main goal".
+    let go := forallTelescopeReducing (← inferType hyp) fun xs hypTy => do
+      if let some (_, lhs₁, rhs₁) := getRel (← whnf hypTy) then
+        return isMainGoal? lhs₁ rhs₁ xs
+      else if let some lastFVar := xs.back? then
+        return isMainGoal? (← inferType lastFVar) hypTy xs.pop
+      return none
+    if let some (mainSubgoal, pair) ← go then
+      mainSubgoals := mainSubgoals.push mainSubgoal
+      -- Erase the varying argument pair, to make sure each pair corresponds to just one hypothesis.
+      pairs := pairs.erase pair
+  if h : forGrw ∧ pairs.size != 0 then
+    let (lhs, rhs) := pairs[0]
+    throwError "`{lhs}` appears on the LHS and `{rhs}` on the RHS, \
+      but there is no corresponding hypothesis `{lhs} ~ {rhs}` or `{rhs} ~ {lhs}`.\n\n\
+      This means that the `@[gcongr]` lemma cannot be used in the `grw` tactic. \
+      Please use `@[gcongr only]` instead."
+  -- store all the information from this parse of the lemma's structure in a `GCongrLemma`
+  let mut keys := [{ relName, head := rhsHead, arity := lhsArgs.size }]
+  if strict then
+    keys := { relName, head := lhsHead, arity := lhsArgs.size } :: keys
+  return { keys, declName, mainSubgoals, numHyps := hyps.size, prio, numVarying, forGrw }
 -/
 def makeGCongrLemma (hyps : Array Expr) (target : Expr) (declName : Name) (prio : Nat)
     (strict forGrw : Bool) : MetaM GCongrLemma := do
@@ -663,7 +809,28 @@ definition addGCongrLemma
   let type := cinfo.type
   forallTelescope type fun xs type => do
   -- Special case the unfolding of `Monotone`-like conclusions.
-  if type.getApp
+  if type.getAppFn.constName? matches
+      `Monotone | `Antitone | `StrictMono | `StrictAnti |
+      `MonotoneOn | `AntitoneOn | `StrictMonoOn | `StrictAntiOn then
+    forallTelescope (← withDefault <| unfoldDefinition type) fun xs' type => do
+      gcongrExt.add (← makeGCongrLemma (xs ++ xs') type declName prio strict forGrw) kind
+    return
+  -- If the conclusion is a free variable, it is a lemma like `imp_imp_imp` or `forall_imp`,
+  -- so we revert the last two variables.
+  if type.getAppFn.isFVar then
+    let type ← mkForallFVars xs[(xs.size-2)...xs.size] type
+    gcongrExt.add (← makeGCongrLemma xs.pop.pop type declName prio strict forGrw) kind
+    return
+  try
+    -- Add a `gcongr` lemma in the "normal" way.
+    gcongrExt.add (← makeGCongrLemma xs type declName prio strict forGrw) kind
+  catch e => try
+    match_expr type with
+    | Iff lhs rhs => addIffGCongrLemma prio strict forGrw cinfo xs lhs rhs
+    | _ => addImpGCongrLemma prio strict forGrw cinfo xs type
+  catch _ =>
+    -- If none of the methods work, we throw the error thrown by the "normal" attempt.
+    throw e
 
 中文:
 定义 addGCongrLemma
@@ -676,7 +843,28 @@ definition addGCongrLemma
   let type := cinfo.type
   forallTelescope type fun xs type => do
   -- Special case the unfolding of `Monotone`-like conclusions.
-  if type.getApp
+  if type.getAppFn.constName? matches
+      `Monotone | `Antitone | `StrictMono | `StrictAnti |
+      `MonotoneOn | `AntitoneOn | `StrictMonoOn | `StrictAntiOn then
+    forallTelescope (← withDefault <| unfoldDefinition type) fun xs' type => do
+      gcongrExt.add (← makeGCongrLemma (xs ++ xs') type declName prio strict forGrw) kind
+    return
+  -- If the conclusion is a free variable, it is a lemma like `imp_imp_imp` or `forall_imp`,
+  -- so we revert the last two variables.
+  if type.getAppFn.isFVar then
+    let type ← mkForallFVars xs[(xs.size-2)...xs.size] type
+    gcongrExt.add (← makeGCongrLemma xs.pop.pop type declName prio strict forGrw) kind
+    return
+  try
+    -- Add a `gcongr` lemma in the "normal" way.
+    gcongrExt.add (← makeGCongrLemma xs type declName prio strict forGrw) kind
+  catch e => try
+    match_expr type with
+    | Iff lhs rhs => addIffGCongrLemma prio strict forGrw cinfo xs lhs rhs
+    | _ => addImpGCongrLemma prio strict forGrw cinfo xs type
+  catch _ =>
+    -- If none of the methods work, we throw the error thrown by the "normal" attempt.
+    throw e
 
 Depends on / 依赖: cinfo.type, declName, forGrw, forallTelescope, getAttrParamOptPrio, getConstInfo, isNone, strict, withReducible
 -/
@@ -923,7 +1111,18 @@ definition _root_.Lean.MVarId.gcongrForward
   for h in hs do
     try
       tacs.firstM fun (n, tac) =>
-        withTraceNode `Meta.gcongr
+        withTraceNode `Meta.gcongr (return m!"{·.emoji} trying {n} on {h} : {← inferType h}") do
+          tac.eval h g
+      return true
+    catch _ => setMCtx mctx
+    try
+      let h ← h.applySymm
+      tacs.firstM fun (n, tac) =>
+        withTraceNode `Meta.gcongr (return m!"{·.emoji} trying {n} on {h} : {← inferType h}") do
+          tac.eval h g
+      return true
+    catch _ => setMCtx mctx
+  return false
 
 中文:
 定义 _root_.Lean.MVarId.gcongrForward
@@ -936,7 +1135,18 @@ definition _root_.Lean.MVarId.gcongrForward
   for h in hs do
     try
       tacs.firstM fun (n, tac) =>
-        withTraceNode `Meta.gcongr
+        withTraceNode `Meta.gcongr (return m!"{·.emoji} trying {n} on {h} : {← inferType h}") do
+          tac.eval h g
+      return true
+    catch _ => setMCtx mctx
+    try
+      let h ← h.applySymm
+      tacs.firstM fun (n, tac) =>
+        withTraceNode `Meta.gcongr (return m!"{·.emoji} trying {n} on {h} : {← inferType h}") do
+          tac.eval h g
+      return true
+    catch _ => setMCtx mctx
+  return false
 
 Depends on / 依赖: withReducible
 -/
@@ -1331,7 +1541,36 @@ definition applyGCongrLemma
   -- Use `withDefault` so that we can unfold `Monotone`.
 let (mvars, bis, type) ← withDefault forallMetaTelescopeReducing type lem.numHyps
 guard ← approxDefEq isDefEq (← g.getType) (← preprocess type)
-  g.assign (m
+  g.assign (mkAppN const mvars)
+  let mut sideGoals := #[]
+  for mvar in mvars, i in 0...* do
+    let mvarId := mvar.mvarId!
+    if ← mvarId.isAssigned then continue
+    -- Filter out metavariables from the main subgoals
+    if lem.mainSubgoals.any (fun h => h.lhsIdx == i || h.rhsIdx == i || h.hypIdx == i) then continue
+    -- Synthesize instance implicit arguments.
+    -- We allow synthesis to get stuck, because in the case of `grw`
+    -- there may be unassigned metavariables in the type.
+    if bis[i]!.isInstImplicit then
+      match ← trySynthInstance (← mvarId.getType) with
+      | .some inst => mvarId.assign inst; continue
+      | .none => failure
+      | .undef => sideGoals := sideGoals.push mvarId
+    else
+      sideGoals := sideGoals.push mvarId
+  let mainGoals ← lem.mainSubgoals.flatMapM fun h => do
+    let mvarId := mvars[h.hypIdx]!.mvarId!
+    if (← get).patterns.isEmpty then
+      -- If the user did not provide binders (using `gcongr with ...`),
+      -- instead use binder names appearing in the LHS/RHS of the target relation.
+      let lhsNames := lambdaBinderNames (← instantiateMVars mvars[h.lhsIdx]!)
+      let rhsNames := lambdaBinderNames (← instantiateMVars mvars[h.rhsIdx]!)
+      let lambdaNames := if lhsNames.size >= rhsNames.size then lhsNames else rhsNames
+      let names := h.hypsPos.map (·.elim `_ (lambdaNames.getD · `_))
+      return #[((← mvarId.introN h.hypsPos.length names).2, h.isContra)]
+    else
+      return (← introN mvarId h.hypsPos.length).toArray.map (·, h.isContra)
+  return (mainGoals, sideGoals)
 
 中文:
 定义 applyGCongrLemma
@@ -1342,7 +1581,36 @@ guard ← approxDefEq isDefEq (← g.getType) (← preprocess type)
   -- Use `withDefault` so that we can unfold `Monotone`.
 let (mvars, bis, type) ← withDefault forallMetaTelescopeReducing type lem.numHyps
 guard ← approxDefEq isDefEq (← g.getType) (← preprocess type)
-  g.assign (m
+  g.assign (mkAppN const mvars)
+  let mut sideGoals := #[]
+  for mvar in mvars, i in 0...* do
+    let mvarId := mvar.mvarId!
+    if ← mvarId.isAssigned then continue
+    -- Filter out metavariables from the main subgoals
+    if lem.mainSubgoals.any (fun h => h.lhsIdx == i || h.rhsIdx == i || h.hypIdx == i) then continue
+    -- Synthesize instance implicit arguments.
+    -- We allow synthesis to get stuck, because in the case of `grw`
+    -- there may be unassigned metavariables in the type.
+    if bis[i]!.isInstImplicit then
+      match ← trySynthInstance (← mvarId.getType) with
+      | .some inst => mvarId.assign inst; continue
+      | .none => failure
+      | .undef => sideGoals := sideGoals.push mvarId
+    else
+      sideGoals := sideGoals.push mvarId
+  let mainGoals ← lem.mainSubgoals.flatMapM fun h => do
+    let mvarId := mvars[h.hypIdx]!.mvarId!
+    if (← get).patterns.isEmpty then
+      -- If the user did not provide binders (using `gcongr with ...`),
+      -- instead use binder names appearing in the LHS/RHS of the target relation.
+      let lhsNames := lambdaBinderNames (← instantiateMVars mvars[h.lhsIdx]!)
+      let rhsNames := lambdaBinderNames (← instantiateMVars mvars[h.rhsIdx]!)
+      let lambdaNames := if lhsNames.size >= rhsNames.size then lhsNames else rhsNames
+      let names := h.hypsPos.map (·.elim `_ (lambdaNames.getD · `_))
+      return #[((← mvarId.introN h.hypsPos.length names).2, h.isContra)]
+    else
+      return (← introN mvarId h.hypsPos.length).toArray.map (·, h.isContra)
+  return (mainGoals, sideGoals)
 -/
 def applyGCongrLemma (g : MVarId) (lem : GCongr.GCongrLemma) :
     GCongrM (Array (MVarId × Bool) × Array MVarId) := do
@@ -1407,7 +1675,77 @@ definition _root_.Lean.MVarId.gcongr
   if mdataLhs?.isNone then
     -- A. If there is no pattern annotation, try to resolve the goal by reflexivity, or
     -- by the provided tactic `mainGoalDischarger`, and continue on if this fails.
-    try
+    try withReducible g.applyRflOrId; return true
+    catch _ =>
+      if ← dischargeMain g then
+        return true
+  -- If we have reached the depth limit, return the unsolved goal
+  let depth + 1 := depth | pushNewGoal g; return false -- we know that there is no mdata to remove
+  -- Check that the goal is of the form `rel (lhsHead _ ... _) (rhsHead _ ... _)`
+  let rel ← withReducible g.getType'
+  let some (relName, lhs, rhs) := getRel rel | throwTacticEx `gcongr g m!"{rel} is not a relation"
+  -- If there is a pattern annotation
+  if let some mdataLhs := mdataLhs? then
+    let mdataExpr := if mdataLhs then lhs else rhs
+    -- if the annotation is at the head of the annotated expression,
+    -- then try to resolve the goal by the provided tactic `mainGoalDischarger`;
+    -- if this fails, stop and report the existing goal.
+    if hasHoleAnnotation mdataExpr then
+      if ← dischargeMain g then
+        return true
+      -- clear the mdata from the goal
+pushNewGoal ← g.replaceTargetDefEq (updateRel rel mdataExpr.mdataExpr! mdataLhs)
+      return false
+    -- If there are no annotations at all, we close the goal with `rfl`. Otherwise,
+    -- we report that the provided pattern doesn't apply.
+    unless containsHoleAnnotation mdataExpr do
+      try withDefault g.applyRflOrId; return true
+      catch _ => throwTacticEx `gcongr g m!"\
+        subgoal {← withReducible g.getType'} is not allowed by the provided pattern \
+        and is not closed by `rfl`"
+    -- If there are more annotations, then continue on.
+
+  let lhs ← if relName == `_Implies then whnfR lhs else pure lhs
+  let rhs ← if relName == `_Implies then whnfR rhs else pure rhs
+  let some (lhsHead, lhsArgs) := getCongrAppFnArgs lhs |
+    if mdataLhs?.isNone then pushNewGoal g; return false
+    throwTacticEx `gcongr g m!"the head of {lhs} is not a constant"
+  let some (rhsHead, rhsArgs) := getCongrAppFnArgs rhs |
+    if mdataLhs?.isNone then pushNewGoal g; return false
+    throwTacticEx `gcongr g m!"the head of {rhs} is not a constant"
+  unless lhsArgs.size == rhsArgs.size do
+    if mdataLhs?.isNone then pushNewGoal g; return false
+    throwTacticEx `gcongr g m!"{lhs} and {rhs} have a different number of arguments"
+  let mctx ← getMCtx
+  -- Look up the `@[gcongr]` lemmas whose conclusion has the same relation and head function as
+  -- the goal
+  let mut lemmas ← findGCongrLemmas? relName lhsHead rhsHead lhsArgs.size
+  if relName == `_Implies then
+    lemmas := lemmas ++ relImpRelLemma lhsArgs.size
+  for lem in lemmas do
+    let (mainGoals, sideGoals) ← try
+withReducible applyGCongrLemma g lem
+    catch _ =>
+      setMCtx mctx
+      continue
+    sideGoals.forM dischargeSide
+    for (mvarId, isContra) in mainGoals do
+      let mdataLhs?' := mdataLhs?.map (· != isContra)
+      -- Recurse on the subgoal.
+discard mvarId.gcongr mdataLhs?' depth
+    return true
+  -- A. If there is no template, and there was no `@[gcongr]` lemma which matched the goal,
+  -- report this goal back.
+  if mdataLhs?.isNone then
+    pushNewGoal g; return false
+  -- B. If there is a template, and there was no `@[gcongr]` lemma which matched the template,
+  -- fail.
+  if lemmas.isEmpty then
+    throwTacticEx `gcongr g m!"there is no `@[gcongr]` lemma \
+      for relation '{relName}' and constant '{lhsHead}'."
+  else
+    throwTacticEx `gcongr g m!"none of the `@[gcongr]` lemmas were applicable to the goal {rel}.\
+      \n attempted lemmas: {lemmas.map (·.declName)}"
 
 中文:
 定义 _root_.Lean.MVarId.gcongr
@@ -1416,7 +1754,77 @@ definition _root_.Lean.MVarId.gcongr
   if mdataLhs?.isNone then
     -- A. If there is no pattern annotation, try to resolve the goal by reflexivity, or
     -- by the provided tactic `mainGoalDischarger`, and continue on if this fails.
-    try
+    try withReducible g.applyRflOrId; return true
+    catch _ =>
+      if ← dischargeMain g then
+        return true
+  -- If we have reached the depth limit, return the unsolved goal
+  let depth + 1 := depth | pushNewGoal g; return false -- we know that there is no mdata to remove
+  -- Check that the goal is of the form `rel (lhsHead _ ... _) (rhsHead _ ... _)`
+  let rel ← withReducible g.getType'
+  let some (relName, lhs, rhs) := getRel rel | throwTacticEx `gcongr g m!"{rel} is not a relation"
+  -- If there is a pattern annotation
+  if let some mdataLhs := mdataLhs? then
+    let mdataExpr := if mdataLhs then lhs else rhs
+    -- if the annotation is at the head of the annotated expression,
+    -- then try to resolve the goal by the provided tactic `mainGoalDischarger`;
+    -- if this fails, stop and report the existing goal.
+    if hasHoleAnnotation mdataExpr then
+      if ← dischargeMain g then
+        return true
+      -- clear the mdata from the goal
+pushNewGoal ← g.replaceTargetDefEq (updateRel rel mdataExpr.mdataExpr! mdataLhs)
+      return false
+    -- If there are no annotations at all, we close the goal with `rfl`. Otherwise,
+    -- we report that the provided pattern doesn't apply.
+    unless containsHoleAnnotation mdataExpr do
+      try withDefault g.applyRflOrId; return true
+      catch _ => throwTacticEx `gcongr g m!"\
+        subgoal {← withReducible g.getType'} is not allowed by the provided pattern \
+        and is not closed by `rfl`"
+    -- If there are more annotations, then continue on.
+
+  let lhs ← if relName == `_Implies then whnfR lhs else pure lhs
+  let rhs ← if relName == `_Implies then whnfR rhs else pure rhs
+  let some (lhsHead, lhsArgs) := getCongrAppFnArgs lhs |
+    if mdataLhs?.isNone then pushNewGoal g; return false
+    throwTacticEx `gcongr g m!"the head of {lhs} is not a constant"
+  let some (rhsHead, rhsArgs) := getCongrAppFnArgs rhs |
+    if mdataLhs?.isNone then pushNewGoal g; return false
+    throwTacticEx `gcongr g m!"the head of {rhs} is not a constant"
+  unless lhsArgs.size == rhsArgs.size do
+    if mdataLhs?.isNone then pushNewGoal g; return false
+    throwTacticEx `gcongr g m!"{lhs} and {rhs} have a different number of arguments"
+  let mctx ← getMCtx
+  -- Look up the `@[gcongr]` lemmas whose conclusion has the same relation and head function as
+  -- the goal
+  let mut lemmas ← findGCongrLemmas? relName lhsHead rhsHead lhsArgs.size
+  if relName == `_Implies then
+    lemmas := lemmas ++ relImpRelLemma lhsArgs.size
+  for lem in lemmas do
+    let (mainGoals, sideGoals) ← try
+withReducible applyGCongrLemma g lem
+    catch _ =>
+      setMCtx mctx
+      continue
+    sideGoals.forM dischargeSide
+    for (mvarId, isContra) in mainGoals do
+      let mdataLhs?' := mdataLhs?.map (· != isContra)
+      -- Recurse on the subgoal.
+discard mvarId.gcongr mdataLhs?' depth
+    return true
+  -- A. If there is no template, and there was no `@[gcongr]` lemma which matched the goal,
+  -- report this goal back.
+  if mdataLhs?.isNone then
+    pushNewGoal g; return false
+  -- B. If there is a template, and there was no `@[gcongr]` lemma which matched the template,
+  -- fail.
+  if lemmas.isEmpty then
+    throwTacticEx `gcongr g m!"there is no `@[gcongr]` lemma \
+      for relation '{relName}' and constant '{lhsHead}'."
+  else
+    throwTacticEx `gcongr g m!"none of the `@[gcongr]` lemmas were applicable to the goal {rel}.\
+      \n attempted lemmas: {lemmas.map (·.declName)}"
 
 Depends on / 依赖: CompletelyNormalSpace, OrderTopology, OrderTopology.completelyNormalSpace, completelyNormalSpace
 -/

@@ -362,7 +362,20 @@ lemma mulExact_iff_of_surjective_of_bijective_of_injective
     constructor
     · intro hx₂
       obtain ⟨x₁, rfl⟩ := (h x₂).1 (h₃ (by simpa only [map_one, comm₂₃] using hx₂))
-   
+      exact ⟨τ₁ x₁, by simp only [comm₁₂]⟩
+    · rintro ⟨y₁, hy₁⟩
+      obtain ⟨x₁, rfl⟩ := h₁ y₁
+      rw [comm₂₃]; rw [(h x₂).2 _]; rw [map_one]
+      exact ⟨x₁, h₂.1 (by simpa only [comm₁₂] using hy₁)⟩
+  · intro h x₂
+    constructor
+    · intro hx₂
+      obtain ⟨y₁, hy₁⟩ := (h (τ₂ x₂)).1 (by simp only [comm₂₃, hx₂, map_one])
+      obtain ⟨x₁, rfl⟩ := h₁ y₁
+      exact ⟨x₁, h₂.1 (by simpa only [comm₁₂] using hy₁)⟩
+    · rintro ⟨x₁, rfl⟩
+      apply h₃
+      simp only [← comm₁₂, ← comm₂₃, h.apply_apply_eq_one (τ₁ x₁), map_one]
 
 中文:
 引理 mulExact_iff_of_surjective_of_bijective_of_injective
@@ -376,7 +389,20 @@ lemma mulExact_iff_of_surjective_of_bijective_of_injective
     constructor
     · intro hx₂
       obtain ⟨x₁, rfl⟩ := (h x₂).1 (h₃ (by simpa only [map_one, comm₂₃] using hx₂))
-   
+      exact ⟨τ₁ x₁, by simp only [comm₁₂]⟩
+    · rintro ⟨y₁, hy₁⟩
+      obtain ⟨x₁, rfl⟩ := h₁ y₁
+      rw [comm₂₃]; rw [(h x₂).2 _]; rw [map_one]
+      exact ⟨x₁, h₂.1 (by simpa only [comm₁₂] using hy₁)⟩
+  · intro h x₂
+    constructor
+    · intro hx₂
+      obtain ⟨y₁, hy₁⟩ := (h (τ₂ x₂)).1 (by simp only [comm₂₃, hx₂, map_one])
+      obtain ⟨x₁, rfl⟩ := h₁ y₁
+      exact ⟨x₁, h₂.1 (by simpa only [comm₁₂] using hy₁)⟩
+    · rintro ⟨x₁, rfl⟩
+      apply h₃
+      simp only [← comm₁₂, ← comm₂₃, h.apply_apply_eq_one (τ₁ x₁), map_one]
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, map_one, replace
 -/
@@ -1038,7 +1064,29 @@ definition Exact.splitSurjectiveEquiv
     left_inv := ?_
     right_inv := ?_ }
   · have h₁ : forall x, g (l.1 x) = x := LinearMap.congr_fun l.2
-    have h₂ : forall x, g (f x) =
+    have h₂ : forall x, g (f x) = 0 := congr_fun h.comp_eq_zero
+    constructor
+    · intro x y e
+      simp only [add_apply, coe_comp, comp_apply, fst_apply, snd_apply] at e
+      suffices x.2 = y.2 from Prod.ext (hf (by rwa [this, add_left_inj] at e)) this
+      simpa [h₁, h₂] using DFunLike.congr_arg g e
+    · intro x
+      obtain ⟨y, hy⟩ := (h (x - l.1 (g x))).mp (by simp [h₁, g.map_sub])
+      exact ⟨⟨y, g x⟩, by simp [hy]⟩
+  · have h₁ : forall x, g (l.1 x) = x := LinearMap.congr_fun l.2
+    have h₂ : forall x, g (f x) = 0 := congr_fun h.comp_eq_zero
+    constructor
+    · ext; simp
+    · rw [LinearEquiv.eq_comp_toLinearMap_symm]
+      ext <;> simp [h₁, h₂]
+  · rw [← LinearMap.comp_assoc, (LinearEquiv.eq_comp_toLinearMap_symm _ _).mp e.2.2]; rfl
+  · intro; ext; simp
+  · rintro ⟨e, rfl, rfl⟩
+    ext1
+    apply LinearEquiv.symm_bijective.injective
+    ext
+    apply e.injective
+    ext <;> simp
 
 中文:
 定义 正合.splitSurjectiveEquiv
@@ -1050,7 +1098,29 @@ definition Exact.splitSurjectiveEquiv
     left_inv := ?_
     right_inv := ?_ }
   · have h₁ : forall x, g (l.1 x) = x := LinearMap.congr_fun l.2
-    have h₂ : forall x, g (f x) =
+    have h₂ : forall x, g (f x) = 0 := congr_fun h.comp_eq_zero
+    constructor
+    · intro x y e
+      simp only [add_apply, coe_comp, comp_apply, fst_apply, snd_apply] at e
+      suffices x.2 = y.2 from Prod.ext (hf (by rwa [this, add_left_inj] at e)) this
+      simpa [h₁, h₂] using DFunLike.congr_arg g e
+    · intro x
+      obtain ⟨y, hy⟩ := (h (x - l.1 (g x))).mp (by simp [h₁, g.map_sub])
+      exact ⟨⟨y, g x⟩, by simp [hy]⟩
+  · have h₁ : forall x, g (l.1 x) = x := LinearMap.congr_fun l.2
+    have h₂ : forall x, g (f x) = 0 := congr_fun h.comp_eq_zero
+    constructor
+    · ext; simp
+    · rw [LinearEquiv.eq_comp_toLinearMap_symm]
+      ext <;> simp [h₁, h₂]
+  · rw [← LinearMap.comp_assoc, (LinearEquiv.eq_comp_toLinearMap_symm _ _).mp e.2.2]; rfl
+  · intro; ext; simp
+  · rintro ⟨e, rfl, rfl⟩
+    ext1
+    apply LinearEquiv.symm_bijective.injective
+    ext
+    apply e.injective
+    ext <;> simp
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, LinearMap, LinearMap.congr_fun, Prod.ext, add_apply, add_left_inj, coe_comp, comp_apply, comp_eq_zero, congr_fun, fst_apply, h.comp_eq_zero, invFun, left_inv, ofBijective, right_inv, snd_apply
 -/
@@ -1104,7 +1174,24 @@ definition Exact.splitInjectiveEquiv
     right_inv := ?_ }
   · have h₁ : forall x, l.1 (f x) = x := LinearMap.congr_fun l.2
     have h₂ : forall x, g (f x) = 0 := congr_fun h.comp_eq_zero
-  
+    constructor
+    · intro x y e
+      simp only [LinearMap.prod_apply, Function.prod_apply, Prod.mk.injEq] at e
+      obtain ⟨z, hz⟩ := (h (x - y)).mp (by simpa [sub_eq_zero] using e.2)
+      rw [← sub_eq_zero]; rw [← hz]; rw [← h₁ z]; rw [hz]; rw [map_sub]; rw [e.1]; rw [sub_self]; rw [map_zero]
+    · rintro ⟨x, y⟩
+      obtain ⟨y, rfl⟩ := hg y
+      refine ⟨f x + y - f (l.1 y), by ext <;> simp [h₁, h₂]⟩
+  · have h₁ : forall x, l.1 (f x) = x := LinearMap.congr_fun l.2
+    have h₂ : forall x, g (f x) = 0 := congr_fun h.comp_eq_zero
+    constructor
+    · rw [LinearEquiv.eq_toLinearMap_symm_comp]
+      ext <;> simp [h₁, h₂]
+    · ext; simp
+  · rw [LinearMap.comp_assoc, (LinearEquiv.eq_toLinearMap_symm_comp _ _).mp e.2.1]; rfl
+  · intro; ext; simp
+  · rintro ⟨e, rfl, rfl⟩
+    ext x <;> simp
 
 中文:
 定义 正合.splitInjectiveEquiv
@@ -1116,7 +1203,24 @@ definition Exact.splitInjectiveEquiv
     right_inv := ?_ }
   · have h₁ : forall x, l.1 (f x) = x := LinearMap.congr_fun l.2
     have h₂ : forall x, g (f x) = 0 := congr_fun h.comp_eq_zero
-  
+    constructor
+    · intro x y e
+      simp only [LinearMap.prod_apply, Function.prod_apply, Prod.mk.injEq] at e
+      obtain ⟨z, hz⟩ := (h (x - y)).mp (by simpa [sub_eq_zero] using e.2)
+      rw [← sub_eq_zero]; rw [← hz]; rw [← h₁ z]; rw [hz]; rw [map_sub]; rw [e.1]; rw [sub_self]; rw [map_zero]
+    · rintro ⟨x, y⟩
+      obtain ⟨y, rfl⟩ := hg y
+      refine ⟨f x + y - f (l.1 y), by ext <;> simp [h₁, h₂]⟩
+  · have h₁ : forall x, l.1 (f x) = x := LinearMap.congr_fun l.2
+    have h₂ : forall x, g (f x) = 0 := congr_fun h.comp_eq_zero
+    constructor
+    · rw [LinearEquiv.eq_toLinearMap_symm_comp]
+      ext <;> simp [h₁, h₂]
+    · ext; simp
+  · rw [LinearMap.comp_assoc, (LinearEquiv.eq_toLinearMap_symm_comp _ _).mp e.2.1]; rfl
+  · intro; ext; simp
+  · rintro ⟨e, rfl, rfl⟩
+    ext x <;> simp
 
 Depends on / 依赖: Function, Function.prod_apply, LinearEquiv, LinearEquiv.ofBijective, LinearMap, LinearMap.congr_fun, LinearMap.prod_apply, Prod.mk.injEq, comp_eq_zero, congr_fun, h.comp_eq_zero, invFun, left_inv, ofBijective, prod_apply, right_inv, sub_eq_zero
 -/
@@ -1166,7 +1270,12 @@ theorem Exact.split_tfae'
   tfae_have 3 -> 1
   | ⟨e, e₁, e₂⟩ => by
     have : Function.Injective f := e₁ ▸ e.symm.injective.comp LinearMap.inl_injective
-    exact
+    exact ⟨this, ⟨_, ((h.splitSurjectiveEquiv this).symm ⟨e, e₁, e₂⟩).2⟩⟩
+  tfae_have 3 -> 2
+  | ⟨e, e₁, e₂⟩ => by
+    have : Function.Surjective g := e₂ ▸ Prod.snd_surjective.comp e.surjective
+    exact ⟨this, ⟨_, ((h.splitInjectiveEquiv this).symm ⟨e, e₁, e₂⟩).2⟩⟩
+  tfae_finish
 
 中文:
 定理 正合.split_tfae'
@@ -1179,7 +1288,12 @@ theorem Exact.split_tfae'
   tfae_have 3 -> 1
   | ⟨e, e₁, e₂⟩ => by
     have : Function.Injective f := e₁ ▸ e.symm.injective.comp LinearMap.inl_injective
-    exact
+    exact ⟨this, ⟨_, ((h.splitSurjectiveEquiv this).symm ⟨e, e₁, e₂⟩).2⟩⟩
+  tfae_have 3 -> 2
+  | ⟨e, e₁, e₂⟩ => by
+    have : Function.Surjective g := e₂ ▸ Prod.snd_surjective.comp e.surjective
+    exact ⟨this, ⟨_, ((h.splitInjectiveEquiv this).symm ⟨e, e₁, e₂⟩).2⟩⟩
+  tfae_finish
 
 Depends on / 依赖: Function, Function.Injective, Function.Surjective, Injective, LinearMap, LinearMap.inl_injective, Prod.snd_surjective.comp, Surjective, e.surjective, e.symm.injective.comp, h.splitInjectiveEquiv, h.splitSurjectiveEquiv, injective, inl_injective, snd_surjective, splitInjectiveEquiv, splitSurjectiveEquiv, surjective, tfae_have
 -/
@@ -1319,14 +1433,14 @@ lemma Exact.exact_mapQ_iff
   proof: by
   rw [exact_iff]; rw [← (comap_injective_of_surjective (mkQ_surjective _)).eq_iff]
   dsimp only [mapQ]
-  rw [← ker_comp]; rw [range_liftQ]; rw [liftQ_mkQ]; rw [ker_comp]; rw [range_comp]; rw [comap_map_eq]; rw [ker_mkQ]; rw [ker_mkQ]; rw [← hfg.linearMap_ker_eq]; rw [sup_comm]; rw [← (sup_le hqr 
+  rw [← ker_comp]; rw [range_liftQ]; rw [liftQ_mkQ]; rw [ker_comp]; rw [range_comp]; rw [comap_map_eq]; rw [ker_mkQ]; rw [ker_mkQ]; rw [← hfg.linearMap_ker_eq]; rw [sup_comm]; rw [← (sup_le hqr (ker_le_comap g)).ge_iff_eq']; rw [← comap_map_eq]; rw [← map_le_iff_le_comap]; rw [map_comap_eq]
 
 中文:
 引理 正合.exact_mapQ_iff
   证明: by
   rw [exact_iff]; rw [← (comap_injective_of_surjective (mkQ_surjective _)).eq_iff]
   dsimp only [mapQ]
-  rw [← ker_comp]; rw [range_liftQ]; rw [liftQ_mkQ]; rw [ker_comp]; rw [range_comp]; rw [comap_map_eq]; rw [ker_mkQ]; rw [ker_mkQ]; rw [← hfg.linearMap_ker_eq]; rw [sup_comm]; rw [← (sup_le hqr 
+  rw [← ker_comp]; rw [range_liftQ]; rw [liftQ_mkQ]; rw [ker_comp]; rw [range_comp]; rw [comap_map_eq]; rw [ker_mkQ]; rw [ker_mkQ]; rw [← hfg.linearMap_ker_eq]; rw [sup_comm]; rw [← (sup_le hqr (ker_le_comap g)).ge_iff_eq']; rw [← comap_map_eq]; rw [← map_le_iff_le_comap]; rw [map_comap_eq]
 
 Depends on / 依赖: comap_injective_of_surjective, comap_map_eq, eq_iff, exact_iff, ge_iff_eq, hfg.linearMap_ker_eq, ker_comp, ker_le_comap, ker_mkQ, liftQ_mkQ, linearMap_ker_eq, map_comap_eq, map_le_iff_le_comap, mkQ_surjective, range_comp, range_liftQ, sup_comm, sup_le
 -/

@@ -44,7 +44,9 @@ instance baseChange
   mul_mem i j := by
     suffices h : ((𝒜 i).baseChange S).map₂ (Algebra.lmul S (S otimes[R] A)) ((𝒜 j).baseChange S) <=
       (𝒜 (i + j)).baseChange S from fun xi xj => (h <| apply_mem_map₂ _ · ·)
-    simp_rw [baseChange_eq_span, map₂_span_span, span_le,
+    simp_rw [baseChange_eq_span, map₂_span_span, span_le, Set.image2_subset_iff]
+    rintro - ⟨x, hx, rfl⟩ - ⟨y, hy, rfl⟩
+simpa using subset_span Set.mem_image_of_mem _ mul_mem_graded hx hy
 
 中文:
 实例 baseChange
@@ -53,7 +55,9 @@ instance baseChange
   mul_mem i j := by
     suffices h : ((𝒜 i).baseChange S).map₂ (Algebra.lmul S (S otimes[R] A)) ((𝒜 j).baseChange S) <=
       (𝒜 (i + j)).baseChange S from fun xi xj => (h <| apply_mem_map₂ _ · ·)
-    simp_rw [baseChange_eq_span, map₂_span_span, span_le,
+    simp_rw [baseChange_eq_span, map₂_span_span, span_le, Set.image2_subset_iff]
+    rintro - ⟨x, hx, rfl⟩ - ⟨y, hy, rfl⟩
+simpa using subset_span Set.mem_image_of_mem _ mul_mem_graded hx hy
 
 Depends on / 依赖: one_mem_graded, tmul_mem_baseChange_of_mem
 -/
@@ -266,7 +270,10 @@ definition liftEquiv
         | add => simp_all [add_mem]
 | tmul r x => simpa using smul_mem _ _ by exact f.map_mem x.2 }
   invFun f :=
-    { AlgHom.liftEquiv
+    { AlgHom.liftEquiv R S A B |>.symm f with
+map_mem hx := f.map_mem tmul_mem_baseChange_of_mem _ hx }
+left_inv f := coe_toAlgHom_injective by simp
+right_inv f := coe_toAlgHom_injective by simp
 
 中文:
 定义 liftEquiv
@@ -279,7 +286,10 @@ definition liftEquiv
         | add => simp_all [add_mem]
 | tmul r x => simpa using smul_mem _ _ by exact f.map_mem x.2 }
   invFun f :=
-    { AlgHom.liftEquiv
+    { AlgHom.liftEquiv R S A B |>.symm f with
+map_mem hx := f.map_mem tmul_mem_baseChange_of_mem _ hx }
+left_inv f := coe_toAlgHom_injective by simp
+right_inv f := coe_toAlgHom_injective by simp
 
 Depends on / 依赖: AlgHom, AlgHom.liftEquiv, add_mem, coe_toAlgHom_injective, f.map_mem, invFun, left_inv, liftEquiv, map_mem, right_inv, smul_mem, tmul_mem_baseChange_of_mem, toBaseChange_surjective
 -/

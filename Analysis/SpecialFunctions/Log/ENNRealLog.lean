@@ -601,7 +601,16 @@ theorem log_mul_add
     · rw [mul_zero, log_zero, EReal.add_bot]
     · simp
     · rw [log_pos_real' y_real, ENNReal.top_mul', EReal.top_add_coe, log_eq_top_iff]
-      simp only 
+      simp only [ite_eq_right_iff, zero_ne_top, imp_false]
+      exact (ENNReal.toReal_pos_iff.1 y_real).1.ne'
+  · rw [log_pos_real' x_real]
+    rcases ENNReal.trichotomy y with (rfl | rfl | y_real)
+    · simp
+    · simp [(ENNReal.toReal_pos_iff.1 x_real).1.ne']
+    · rw_mod_cast [log_pos_real', log_pos_real' y_real, ENNReal.toReal_mul]
+      · exact Real.log_mul x_real.ne' y_real.ne'
+      rw [toReal_mul]
+      positivity
 
 中文:
 定理 log_mul_add
@@ -615,7 +624,16 @@ theorem log_mul_add
     · rw [mul_zero, log_zero, EReal.add_bot]
     · simp
     · rw [log_pos_real' y_real, ENNReal.top_mul', EReal.top_add_coe, log_eq_top_iff]
-      simp only 
+      simp only [ite_eq_right_iff, zero_ne_top, imp_false]
+      exact (ENNReal.toReal_pos_iff.1 y_real).1.ne'
+  · rw [log_pos_real' x_real]
+    rcases ENNReal.trichotomy y with (rfl | rfl | y_real)
+    · simp
+    · simp [(ENNReal.toReal_pos_iff.1 x_real).1.ne']
+    · rw_mod_cast [log_pos_real', log_pos_real' y_real, ENNReal.toReal_mul]
+      · exact Real.log_mul x_real.ne' y_real.ne'
+      rw [toReal_mul]
+      positivity
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_pos_iff, ENNReal.top_mul, ENNReal.trichotomy, EReal.add_bot, EReal.top_add_coe, add_bot, imp_false, ite_eq_right_iff, log_eq_top_iff, log_pos_real, log_top, log_zero, mul_zero, toReal_pos_iff, top_add_coe, top_mul, trichotomy, x_real, y_real
 -/
@@ -650,7 +668,23 @@ theorem log_rpow
   · rcases ENNReal.trichotomy x with (rfl | rfl | x_real)
     · simp only [ENNReal.zero_rpow_def y, not_lt_of_gt y_neg, y_neg.ne, if_false, log_top,
         log_zero, EReal.coe_mul_bot_of_neg y_neg]
-    · rw [ENNReal.top_rpow_of_neg y_neg, log
+    · rw [ENNReal.top_rpow_of_neg y_neg, log_zero, log_top, EReal.coe_mul_top_of_neg y_neg]
+    · have x_ne_zero := (ENNReal.toReal_pos_iff.1 x_real).1.ne'
+      have x_ne_top := (ENNReal.toReal_pos_iff.1 x_real).2.ne
+      simp only [log, rpow_eq_zero_iff, x_ne_zero, false_and, x_ne_top, or_self, ↓reduceIte,
+        rpow_eq_top_iff]
+      norm_cast
+      exact ENNReal.toReal_rpow x y ▸ Real.log_rpow x_real y
+  · simp
+  · rcases ENNReal.trichotomy x with (rfl | rfl | x_real)
+    · rw [ENNReal.zero_rpow_of_pos y_pos, log_zero, EReal.mul_bot_of_pos]; norm_cast
+    · rw [ENNReal.top_rpow_of_pos y_pos, log_top, EReal.mul_top_of_pos]; norm_cast
+    · have x_ne_zero := (ENNReal.toReal_pos_iff.1 x_real).1.ne'
+      have x_ne_top := (ENNReal.toReal_pos_iff.1 x_real).2.ne
+      simp only [log, rpow_eq_zero_iff, x_ne_zero, false_and, x_ne_top, or_self, ↓reduceIte,
+        rpow_eq_top_iff]
+      norm_cast
+      exact ENNReal.toReal_rpow x y ▸ Real.log_rpow x_real y
 
 中文:
 定理 log_rpow
@@ -661,7 +695,23 @@ theorem log_rpow
   · rcases ENNReal.trichotomy x with (rfl | rfl | x_real)
     · simp only [ENNReal.zero_rpow_def y, not_lt_of_gt y_neg, y_neg.ne, if_false, log_top,
         log_zero, EReal.coe_mul_bot_of_neg y_neg]
-    · rw [ENNReal.top_rpow_of_neg y_neg, log
+    · rw [ENNReal.top_rpow_of_neg y_neg, log_zero, log_top, EReal.coe_mul_top_of_neg y_neg]
+    · have x_ne_zero := (ENNReal.toReal_pos_iff.1 x_real).1.ne'
+      have x_ne_top := (ENNReal.toReal_pos_iff.1 x_real).2.ne
+      simp only [log, rpow_eq_zero_iff, x_ne_zero, false_and, x_ne_top, or_self, ↓reduceIte,
+        rpow_eq_top_iff]
+      norm_cast
+      exact ENNReal.toReal_rpow x y ▸ Real.log_rpow x_real y
+  · simp
+  · rcases ENNReal.trichotomy x with (rfl | rfl | x_real)
+    · rw [ENNReal.zero_rpow_of_pos y_pos, log_zero, EReal.mul_bot_of_pos]; norm_cast
+    · rw [ENNReal.top_rpow_of_pos y_pos, log_top, EReal.mul_top_of_pos]; norm_cast
+    · have x_ne_zero := (ENNReal.toReal_pos_iff.1 x_real).1.ne'
+      have x_ne_top := (ENNReal.toReal_pos_iff.1 x_real).2.ne
+      simp only [log, rpow_eq_zero_iff, x_ne_zero, false_and, x_ne_top, or_self, ↓reduceIte,
+        rpow_eq_top_iff]
+      norm_cast
+      exact ENNReal.toReal_rpow x y ▸ Real.log_rpow x_real y
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_pos_iff, ENNReal.top_rpow_of_neg, ENNReal.trichotomy, ENNReal.zero_rpow_def, EReal.coe_mul_bot_of_neg, EReal.coe_mul_top_of_neg, coe_mul_bot_of_neg, coe_mul_top_of_neg, false_and, if_false, log_top, log_zero, lt_trichotomy, not_lt_of_gt, rpow_eq_zero_iff, toReal_pos_iff, top_rpow_of_neg, trichotomy, x_ne_top
 -/

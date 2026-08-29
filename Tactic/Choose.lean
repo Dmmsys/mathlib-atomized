@@ -150,7 +150,9 @@ definition parseChooseArg
   | `(chooseBinder| ($id:binderIdent : $ty:term)) =>
     return { parseBinderIdent id with expectedType? := some ty }
   | `(chooseBinder| ($_id:binderIdent $bp:binderPred)) =>
-    throwErrorAt bp "binder predicate
+    throwErrorAt bp "binder predicates like '< n' are not supported by choose; \
+      use a type annotation like '(h : x < n)' instead"
+  | _ => return ⟨stx, `_, none⟩
 
 中文:
 定义 parseChooseArg
@@ -161,7 +163,9 @@ definition parseChooseArg
   | `(chooseBinder| ($id:binderIdent : $ty:term)) =>
     return { parseBinderIdent id with expectedType? := some ty }
   | `(chooseBinder| ($_id:binderIdent $bp:binderPred)) =>
-    throwErrorAt bp "binder predicate
+    throwErrorAt bp "binder predicates like '< n' are not supported by choose; \
+      use a type annotation like '(h : x < n)' instead"
+  | _ => return ⟨stx, `_, none⟩
 -/
 def parseChooseArg (stx : TSyntax ``chooseBinder) : MetaM ChooseArg := do
   match stx with
@@ -195,7 +199,59 @@ definition choose1
     let t ← inferType h
     forallTelescopeReducing t fun ctx t => do
       (← withTransparency .all (whnf t)).withApp fun
-      
+      | .const ``Exists [u], #[α, p] => do
+        let data ← mkFreshNameFrom data ((← p.getBinderName).getD `h)
+        let ((neFail : ElimStatus), (nonemp : Option Expr)) ← if nondep then
+          let ne := (Expr.const ``Nonempty [u]).app α
+          let m ← mkFreshExprMVar ne
+          let mut g' := m.mvarId!
+          for e in ctx do
+            if (← isProof e) then continue
+            let ty ← whnf (← inferType e)
+            let nety := (Expr.const ``Nonempty [u]).app ty
+            let neval := mkApp2 (Expr.const ``Nonempty.intro [u]) ty e
+            g' ← g'.assert .anonymous nety neval
+          (_, g') ← g'.intros
+          g'.withContext do
+            match ← synthInstance? (← g'.getType) with
+            | some e => do
+              g'.assign e
+              let m ← instantiateMVars m
+              pure (.success, some m)
+            | none => pure (.failure [ne], none)
+        else pure (.failure [], none)
+        let ctx' ← if nonemp.isSome then ctx.filterM (not <$> isProof ·) else pure ctx
+        let dataTy ← mkForallFVars ctx' α
+        let mut dataVal := mkApp3 (.const ``Classical.choose [u]) α p (mkAppN h ctx)
+        let mut specVal := mkApp3 (.const ``Classical.choose_spec [u]) α p (mkAppN h ctx)
+        if let some nonemp := nonemp then
+          (dataVal, specVal) ← mkSometimes u α nonemp p ctx.toList (dataVal, specVal)
+        dataVal ← mkLambdaFVars ctx' dataVal
+        specVal ← mkLambdaFVars ctx specVal
+        let (fvar, g) ← withLocalDeclD .anonymous dataTy fun d => do
+          let specTy ← mkForallFVars ctx (p.app (mkAppN d ctx')).headBeta
+g.withContext withLocalDeclD data dataTy fun d' => do
+            let mvarTy ← mkArrow (specTy.replaceFVar d d') (← g.getType)
+            let newMVar ← mkFreshExprSyntheticOpaqueMVar mvarTy (← g.getTag)
+g.assign mkApp2 (← mkLambdaFVars #[d'] newMVar) dataVal specVal
+            pure (d', newMVar.mvarId!)
+        let g ← match h with
+        | .fvar v => g.clear v
+        | _ => pure g
+        return (neFail, fvar, g)
+      | .const ``And _, #[p, q] => do
+        let data ← mkFreshNameFrom data `h
+let e1 ← mkLambdaFVars ctx mkApp3 (.const ``And.left []) p q (mkAppN h ctx)
+let e2 ← mkLambdaFVars ctx mkApp3 (.const ``And.right []) p q (mkAppN h ctx)
+        let t1 ← inferType e1
+        let t2 ← inferType e2
+        let (fvar, g) ← (← (← g.assert .anonymous t2 e2).assert data t1 e1).intro1P
+        let g ← match h with
+        | .fvar v => g.clear v
+        | _ => pure g
+        return (.success, .fvar fvar, g)
+      -- TODO: support Σ, ×, or even any inductive type with 1 constructor ?
+      | _, _ => throwError "expected a term of the shape `forall xs, exists a, p xs a` or `forall xs, p xs ∧ q xs`"
 
 中文:
 定义 choose1
@@ -211,7 +267,59 @@ definition choose1
     let t ← inferType h
     forallTelescopeReducing t fun ctx t => do
       (← withTransparency .all (whnf t)).withApp fun
-      
+      | .const ``Exists [u], #[α, p] => do
+        let data ← mkFreshNameFrom data ((← p.getBinderName).getD `h)
+        let ((neFail : ElimStatus), (nonemp : Option Expr)) ← if nondep then
+          let ne := (Expr.const ``Nonempty [u]).app α
+          let m ← mkFreshExprMVar ne
+          let mut g' := m.mvarId!
+          for e in ctx do
+            if (← isProof e) then continue
+            let ty ← whnf (← inferType e)
+            let nety := (Expr.const ``Nonempty [u]).app ty
+            let neval := mkApp2 (Expr.const ``Nonempty.intro [u]) ty e
+            g' ← g'.assert .anonymous nety neval
+          (_, g') ← g'.intros
+          g'.withContext do
+            match ← synthInstance? (← g'.getType) with
+            | some e => do
+              g'.assign e
+              let m ← instantiateMVars m
+              pure (.success, some m)
+            | none => pure (.failure [ne], none)
+        else pure (.failure [], none)
+        let ctx' ← if nonemp.isSome then ctx.filterM (not <$> isProof ·) else pure ctx
+        let dataTy ← mkForallFVars ctx' α
+        let mut dataVal := mkApp3 (.const ``Classical.choose [u]) α p (mkAppN h ctx)
+        let mut specVal := mkApp3 (.const ``Classical.choose_spec [u]) α p (mkAppN h ctx)
+        if let some nonemp := nonemp then
+          (dataVal, specVal) ← mkSometimes u α nonemp p ctx.toList (dataVal, specVal)
+        dataVal ← mkLambdaFVars ctx' dataVal
+        specVal ← mkLambdaFVars ctx specVal
+        let (fvar, g) ← withLocalDeclD .anonymous dataTy fun d => do
+          let specTy ← mkForallFVars ctx (p.app (mkAppN d ctx')).headBeta
+g.withContext withLocalDeclD data dataTy fun d' => do
+            let mvarTy ← mkArrow (specTy.replaceFVar d d') (← g.getType)
+            let newMVar ← mkFreshExprSyntheticOpaqueMVar mvarTy (← g.getTag)
+g.assign mkApp2 (← mkLambdaFVars #[d'] newMVar) dataVal specVal
+            pure (d', newMVar.mvarId!)
+        let g ← match h with
+        | .fvar v => g.clear v
+        | _ => pure g
+        return (neFail, fvar, g)
+      | .const ``And _, #[p, q] => do
+        let data ← mkFreshNameFrom data `h
+let e1 ← mkLambdaFVars ctx mkApp3 (.const ``And.left []) p q (mkAppN h ctx)
+let e2 ← mkLambdaFVars ctx mkApp3 (.const ``And.right []) p q (mkAppN h ctx)
+        let t1 ← inferType e1
+        let t2 ← inferType e2
+        let (fvar, g) ← (← (← g.assert .anonymous t2 e2).assert data t1 e1).intro1P
+        let g ← match h with
+        | .fvar v => g.clear v
+        | _ => pure g
+        return (.success, .fvar fvar, g)
+      -- TODO: support Σ, ×, or even any inductive type with 1 constructor ?
+      | _, _ => throwError "expected a term of the shape `forall xs, exists a, p xs a` or `forall xs, p xs ∧ q xs`"
 -/
 def choose1 (g : MVarId) (nondep : Bool) (h : Option Expr) (data : Name) :
     MetaM (ElimStatus × Expr × MVarId) := do
@@ -292,7 +400,14 @@ definition choose1WithInfo
     -- Check type annotation if provided, and use the user-specified type
     if let some expectedTypeStx := arg.expectedType? then
       let actualType ← inferType fvar
-      le
+      let expectedType ← Term.elabType expectedTypeStx
+      unless ← isDefEq actualType expectedType do
+        throwErrorAt arg.ref m!"type mismatch for '{arg.name}'\n\
+          {← mkHasTypeButIsExpectedMsg actualType expectedType}"
+      -- Change the local declaration to use the user-specified type
+      return ← g.changeLocalDecl fvar.fvarId! expectedType
+    return g
+  pure (status, g)
 
 中文:
 定义 choose1WithInfo
@@ -304,7 +419,14 @@ definition choose1WithInfo
     -- Check type annotation if provided, and use the user-specified type
     if let some expectedTypeStx := arg.expectedType? then
       let actualType ← inferType fvar
-      le
+      let expectedType ← Term.elabType expectedTypeStx
+      unless ← isDefEq actualType expectedType do
+        throwErrorAt arg.ref m!"type mismatch for '{arg.name}'\n\
+          {← mkHasTypeButIsExpectedMsg actualType expectedType}"
+      -- Change the local declaration to use the user-specified type
+      return ← g.changeLocalDecl fvar.fvarId! expectedType
+    return g
+  pure (status, g)
 -/
 def choose1WithInfo (g : MVarId) (nondep : Bool) (h : Option Expr) (arg : ChooseArg) :
     TermElabM (ElimStatus × MVarId) := do
@@ -336,7 +458,20 @@ definition elabChoose
     | _, _ => do
       let (fvar, g) ← if arg.name == `_ then g.intro1 else g.intro arg.name
       g.withContext do
-        Term.addLocalVar
+        Term.addLocalVarInfo arg.ref (.fvar fvar)
+        -- Check type annotation if provided, and use the user-specified type
+        if let some expectedTypeStx := arg.expectedType? then
+          let actualType ← inferType (.fvar fvar)
+          let expectedType ← Term.elabType expectedTypeStx
+          unless ← isDefEq actualType expectedType do
+            throwErrorAt arg.ref m!"type mismatch for '{arg.name}'\n\
+              {← mkHasTypeButIsExpectedMsg actualType expectedType}"
+          -- Change the local declaration to use the user-specified type
+          return ← g.changeLocalDecl fvar expectedType
+        return g
+  | arg::args, status, g => do
+    let (status', g) ← choose1WithInfo g nondep h arg
+    elabChoose nondep none args (status.merge status') g
 
 中文:
 定义 elabChoose
@@ -348,7 +483,20 @@ definition elabChoose
     | _, _ => do
       let (fvar, g) ← if arg.name == `_ then g.intro1 else g.intro arg.name
       g.withContext do
-        Term.addLocalVar
+        Term.addLocalVarInfo arg.ref (.fvar fvar)
+        -- Check type annotation if provided, and use the user-specified type
+        if let some expectedTypeStx := arg.expectedType? then
+          let actualType ← inferType (.fvar fvar)
+          let expectedType ← Term.elabType expectedTypeStx
+          unless ← isDefEq actualType expectedType do
+            throwErrorAt arg.ref m!"type mismatch for '{arg.name}'\n\
+              {← mkHasTypeButIsExpectedMsg actualType expectedType}"
+          -- Change the local declaration to use the user-specified type
+          return ← g.changeLocalDecl fvar expectedType
+        return g
+  | arg::args, status, g => do
+    let (status', g) ← choose1WithInfo g nondep h arg
+    elabChoose nondep none args (status.merge status') g
 
 Depends on / 依赖: failed, instances, nonempty, synthesize
 -/

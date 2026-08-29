@@ -55,7 +55,8 @@ definition modSwap
     Or.casesOn h (fun h => Or.inl h.symm) fun h => Or.inr (by rw [h, swap_mul_self_mul]),
     fun {σ τ υ} hστ hτυ => by
     rcases hστ with hστ | hστ <;> rcases hτυ with hτυ | hτυ <;>
-      (try rw [hστ, hτυ, swap_mul_sel
+      (try rw [hστ, hτυ, swap_mul_self_mul]) <;>
+      simp [hστ, hτυ]⟩
 
 中文:
 定义 modSwap
@@ -64,7 +65,8 @@ definition modSwap
     Or.casesOn h (fun h => Or.inl h.symm) fun h => Or.inr (by rw [h, swap_mul_self_mul]),
     fun {σ τ υ} hστ hτυ => by
     rcases hστ with hστ | hστ <;> rcases hτυ with hτυ | hτυ <;>
-      (try rw [hστ, hτυ, swap_mul_sel
+      (try rw [hστ, hτυ, swap_mul_self_mul]) <;>
+      simp [hστ, hτυ]⟩
 
 Depends on / 依赖: Or.casesOn, Or.inl, Or.inr, casesOn, h.symm, swap_mul_self_mul
 -/
@@ -90,7 +92,8 @@ definition swapFactorsAux
           have : f y != y ∧ y != x := ne_and_ne_of_swap_mul_apply_ne_self hy
           List.mem_of_ne_of_mem this.2 (h this.1)
       ⟨swap x (f x)::m.1, by
-        rw [List.prod_cons]; rw [m.2.1]; rw [← mul_assoc]; rw [mul_def (swap x (f x))]; rw [sw
+        rw [List.prod_cons]; rw [m.2.1]; rw [← mul_assoc]; rw [mul_def (swap x (f x))]; rw [swap_swap]; rw [← one_def]; rw [one_mul],
+        fun {_} hg => ((List.mem_cons).1 hg).elim (fun h => ⟨x, f x, hfx, h⟩) (m.2.2 _)⟩
 
 中文:
 定义 swapFactorsAux
@@ -99,7 +102,8 @@ definition swapFactorsAux
           have : f y != y ∧ y != x := ne_and_ne_of_swap_mul_apply_ne_self hy
           List.mem_of_ne_of_mem this.2 (h this.1)
       ⟨swap x (f x)::m.1, by
-        rw [List.prod_cons]; rw [m.2.1]; rw [← mul_assoc]; rw [mul_def (swap x (f x))]; rw [sw
+        rw [List.prod_cons]; rw [m.2.1]; rw [← mul_assoc]; rw [mul_def (swap x (f x))]; rw [swap_swap]; rw [← one_def]; rw [one_mul],
+        fun {_} hg => ((List.mem_cons).1 hg).elim (fun h => ⟨x, f x, hfx, h⟩) (m.2.2 _)⟩
 
 Depends on / 依赖: List.mem_cons, List.mem_of_ne_of_mem, List.prod_cons, mem_cons, mem_of_ne_of_mem, mul_assoc, mul_def, ne_and_ne_of_swap_mul_apply_ne_self, one_def, one_mul, prod_cons, swapFactorsAux, swap_swap
 -/
@@ -184,7 +188,7 @@ theorem swap_induction_on
   | cons g l ih =>
     rcases hl.2 g (by simp) with ⟨x, y, hxy⟩
     rw [← hl.1]; rw [List.prod_cons]; rw [hxy.2]
-    exact swap_mul
+    exact swap_mul _ _ _ hxy.1 (ih _ ⟨rfl, fun v hv => hl.2 _ (List.mem_cons_of_mem _ hv)⟩)
 
 中文:
 定理 swap_induction_on
@@ -198,7 +202,7 @@ theorem swap_induction_on
   | cons g l ih =>
     rcases hl.2 g (by simp) with ⟨x, y, hxy⟩
     rw [← hl.1]; rw [List.prod_cons]; rw [hxy.2]
-    exact swap_mul
+    exact swap_mul _ _ _ hxy.1 (ih _ ⟨rfl, fun v hv => hl.2 _ (List.mem_cons_of_mem _ hv)⟩)
 
 Depends on / 依赖: List.mem_cons_of_mem, List.prod_cons, List.prod_nil, generalizing, hl.left.symm, mem_cons_of_mem, nonempty_fintype, prod_cons, prod_nil, swap_mul, truncSwapFactors
 -/
@@ -283,7 +287,12 @@ theorem mclosure_swap_castSucc_succ
   induction j using Fin.induction with
   | zero => cases lt
   | succ j ih =>
-    have mem :
+    have mem : swap j.castSucc j.succ in Submonoid.closure
+      (Set.range fun (i : Fin n) => swap i.castSucc i.succ) := Submonoid.subset_closure ⟨_, rfl⟩
+    obtain rfl | lts := (Fin.le_castSucc_iff.mpr lt).eq_or_lt
+    · exact mem
+    rw [swap_comm]; rw [← swap_mul_swap_mul_swap (y := Fin.castSucc j) lts.ne lt.ne]
+    exact mul_mem (mul_mem mem <| ih lts.ne lts) mem
 
 中文:
 定理 mclosure_swap_castSucc_succ
@@ -297,7 +306,12 @@ theorem mclosure_swap_castSucc_succ
   induction j using Fin.induction with
   | zero => cases lt
   | succ j ih =>
-    have mem :
+    have mem : swap j.castSucc j.succ in Submonoid.closure
+      (Set.range fun (i : Fin n) => swap i.castSucc i.succ) := Submonoid.subset_closure ⟨_, rfl⟩
+    obtain rfl | lts := (Fin.le_castSucc_iff.mpr lt).eq_or_lt
+    · exact mem
+    rw [swap_comm]; rw [← swap_mul_swap_mul_swap (y := Fin.castSucc j) lts.ne lt.ne]
+    exact mul_mem (mul_mem mem <| ih lts.ne lts) mem
 
 Depends on / 依赖: Fin.induction, Fin.le_castSucc_iff.mpr, Set.range, Submonoid, Submonoid.closure, Submonoid.closure_le, Submonoid.subset_closure, castSucc, closure, closure_le, eq_or_lt, generalizing, i.castSucc, i.succ, j.castSucc, j.succ, le_castSucc_iff, lt_or_gt, mclosure_isSwap, ne.lt_or_gt.resolve_left
 -/
@@ -355,7 +369,11 @@ theorem isConj_swap
         y != z -> w != z -> swap w y * swap x z * swap w x * (swap w y * swap x z)⁻¹ = swap y z :=
       fun {y z} hyz hwz => by
       rw [mul_inv_rev]; rw [swap_inv]; rw [swap_inv]; rw [mul_assoc (swap w y)]; rw [mul_assoc (swap w y)]; rw [←
-      
+        mul_assoc _ (swap x z)]; rw [swap_mul_swap_mul_swap hwx hwz]; rw [← mul_assoc]; rw [swap_mul_swap_mul_swap hwz.symm hyz.symm]
+    if hwz : w = z then
+      have hwy : w != y := by rw [hwz]; exact hyz.symm
+      ⟨swap w z * swap x y, by rw [swap_comm y z, h hyz.symm hwy]⟩
+    else ⟨swap w y * swap x z, h hyz hwz⟩)
 
 中文:
 定理 isConj_swap
@@ -367,7 +385,11 @@ theorem isConj_swap
         y != z -> w != z -> swap w y * swap x z * swap w x * (swap w y * swap x z)⁻¹ = swap y z :=
       fun {y z} hyz hwz => by
       rw [mul_inv_rev]; rw [swap_inv]; rw [swap_inv]; rw [mul_assoc (swap w y)]; rw [mul_assoc (swap w y)]; rw [←
-      
+        mul_assoc _ (swap x z)]; rw [swap_mul_swap_mul_swap hwx hwz]; rw [← mul_assoc]; rw [swap_mul_swap_mul_swap hwz.symm hyz.symm]
+    if hwz : w = z then
+      have hwy : w != y := by rw [hwz]; exact hyz.symm
+      ⟨swap w z * swap x y, by rw [swap_comm y z, h hyz.symm hwy]⟩
+    else ⟨swap w y * swap x z, h hyz hwz⟩)
 
 Depends on / 依赖: hwz.symm, hyz.symm, isConj_iff, mul_assoc, mul_inv_rev, swap_comm, swap_inv, swap_mul_swap_mul_swap
 -/
@@ -508,7 +530,7 @@ theorem signBijAux_injOn
   split_ifs at h <;>
   simp_all only [not_lt, Sigma.mk.inj_iff, (Equiv.injective f).eq_iff, heq_eq_eq]
   · exact absurd this (not_le.mpr ha)
-  · exact abs
+  · exact absurd this (not_le.mpr ha)
 
 中文:
 定理 signBijAux_injOn
@@ -521,7 +543,7 @@ theorem signBijAux_injOn
   split_ifs at h <;>
   simp_all only [not_lt, Sigma.mk.inj_iff, (Equiv.injective f).eq_iff, heq_eq_eq]
   · exact absurd this (not_le.mpr ha)
-  · exact abs
+  · exact absurd this (not_le.mpr ha)
 
 Depends on / 依赖: Equiv.injective, Finset, Finset.mem_coe, Sigma.mk.inj_iff, absurd, eq_iff, hb.le.not_gt, heq_eq_eq, inj_iff, injective, mem_coe, mem_finPairsLT, not_gt, not_le, not_le.mpr, not_lt, signBijAux, split_ifs
 -/
@@ -550,7 +572,8 @@ theorem signBijAux_surj
       ⟨⟨f.symm a₂, f.symm a₁⟩,
 mem_finPairsLT.2
           (le_of_not_gt hxa).lt_of_ne fun h => by
-            simp [mem_
+            simp [mem_finPairsLT, f⁻¹.injective h] at ha, by
+              simp [signBijAux, if_neg (mem_finPairsLT.1 ha).le.not_gt]⟩
 
 中文:
 定理 signBijAux_surj
@@ -563,7 +586,8 @@ mem_finPairsLT.2
       ⟨⟨f.symm a₂, f.symm a₁⟩,
 mem_finPairsLT.2
           (le_of_not_gt hxa).lt_of_ne fun h => by
-            simp [mem_
+            simp [mem_finPairsLT, f⁻¹.injective h] at ha, by
+              simp [signBijAux, if_neg (mem_finPairsLT.1 ha).le.not_gt]⟩
 
 Depends on / 依赖: f.symm, if_neg, if_pos, injective, le.not_gt, le_of_not_gt, lt_of_ne, mem_finPairsLT, not_gt, signBijAux
 -/
@@ -666,6 +690,8 @@ theorem signAux_mul
   rw [mem_finPairsLT] at hab
   by_cases hg : g b < g a
   · simp [*]
+  obtain hf | hf := (f.injective.ne <| g.injective.ne hab.ne).lt_or_gt <;>
+    simp_all [le_of_lt, not_le_of_gt, not_lt_of_ge]
 
 中文:
 定理 signAux_mul
@@ -682,6 +708,8 @@ theorem signAux_mul
   rw [mem_finPairsLT] at hab
   by_cases hg : g b < g a
   · simp [*]
+  obtain hf | hf := (f.injective.ne <| g.injective.ne hab.ne).lt_or_gt <;>
+    simp_all [le_of_lt, not_le_of_gt, not_lt_of_ge]
 
 Depends on / 依赖: _tmul, f.injective.ne, g.injective.ne, hab.ne, injective, le_of_lt, lt_or_gt, mem_finPairsLT, mul_apply, not_le_of_gt, not_lt_of_ge, prod_mul_distrib, prod_nbij, rTensorOne, signAux, signAux_inv, signBijAux, signBijAux_injOn, signBijAux_mem, signBijAux_surj
 -/
@@ -711,7 +739,22 @@ theorem signAux_swap_zero_one'
     refine Eq.symm (prod_subset (fun ⟨x₁, x₂⟩ => by
       simp +contextual [mem_finPairsLT]) fun a ha₁ ha₂ => ?_)
     rcases a with ⟨a₁, a₂⟩
-    replace ha₁ : a₂ < a₁
+    replace ha₁ : a₂ < a₁ := mem_finPairsLT.1 ha₁
+    dsimp only
+    rcases a₁.zero_le.eq_or_lt with (rfl | H)
+    · exact absurd a₂.zero_le ha₁.not_ge
+    rcases a₂.zero_le.eq_or_lt with (rfl | H')
+    · simp only [and_true, heq_iff_eq, mem_singleton, Sigma.mk.inj_iff] at ha₂
+      have : 1 < a₁ := lt_of_le_of_ne' (Nat.succ_le_of_lt ha₁) ha₂
+      have h01 : Equiv.swap (0 : Fin (n + 2)) 1 0 = 1 := by simp
+      rw [swap_apply_of_ne_of_ne (ne_of_gt H) ha₂]; rw [h01]; rw [if_neg this.not_ge]
+    · have le : 1 <= a₂ := Nat.succ_le_of_lt H'
+      have lt : 1 < a₁ := le.trans_lt ha₁
+      have h01 : Equiv.swap (0 : Fin (n + 2)) 1 1 = 0 := by simp only [swap_apply_right]
+      rcases le.eq_or_lt with (rfl | lt')
+      · rw [swap_apply_of_ne_of_ne H.ne' lt.ne', h01, if_neg H.not_ge]
+      · rw [swap_apply_of_ne_of_ne (ne_of_gt H) (ne_of_gt lt),
+          swap_apply_of_ne_of_ne (ne_of_gt H') (ne_of_gt lt'), if_neg ha₁.not_ge]
 
 中文:
 定理 signAux_swap_zero_one'
@@ -722,7 +765,22 @@ theorem signAux_swap_zero_one'
     refine Eq.symm (prod_subset (fun ⟨x₁, x₂⟩ => by
       simp +contextual [mem_finPairsLT]) fun a ha₁ ha₂ => ?_)
     rcases a with ⟨a₁, a₂⟩
-    replace ha₁ : a₂ < a₁
+    replace ha₁ : a₂ < a₁ := mem_finPairsLT.1 ha₁
+    dsimp only
+    rcases a₁.zero_le.eq_or_lt with (rfl | H)
+    · exact absurd a₂.zero_le ha₁.not_ge
+    rcases a₂.zero_le.eq_or_lt with (rfl | H')
+    · simp only [and_true, heq_iff_eq, mem_singleton, Sigma.mk.inj_iff] at ha₂
+      have : 1 < a₁ := lt_of_le_of_ne' (Nat.succ_le_of_lt ha₁) ha₂
+      have h01 : Equiv.swap (0 : Fin (n + 2)) 1 0 = 1 := by simp
+      rw [swap_apply_of_ne_of_ne (ne_of_gt H) ha₂]; rw [h01]; rw [if_neg this.not_ge]
+    · have le : 1 <= a₂ := Nat.succ_le_of_lt H'
+      have lt : 1 < a₁ := le.trans_lt ha₁
+      have h01 : Equiv.swap (0 : Fin (n + 2)) 1 1 = 0 := by simp only [swap_apply_right]
+      rcases le.eq_or_lt with (rfl | lt')
+      · rw [swap_apply_of_ne_of_ne H.ne' lt.ne', h01, if_neg H.not_ge]
+      · rw [swap_apply_of_ne_of_ne (ne_of_gt H) (ne_of_gt lt),
+          swap_apply_of_ne_of_ne (ne_of_gt H') (ne_of_gt lt'), if_neg ha₁.not_ge]
 -/
 private theorem signAux_swap_zero_one' (n : Nat) : signAux (swap (0 : Fin (n + 2)) 1) = -1 :=
   show _ = ∏ x in {(⟨1, 0⟩ : Σ _ : Fin (n + 2), Fin (n + 2))},
@@ -838,7 +896,21 @@ theorem signAux_eq_signAux2
     by_cases hfx : x = f x
     · rw [if_pos hfx]
       exact
-  
+        signAux_eq_signAux2 l f _ fun y (hy : f y != y) =>
+          List.mem_of_ne_of_mem (fun h : y = x => by simp [h, hfx.symm] at hy) (h y hy)
+    · have hy : forall y : α, (swap x (f x) * f) y != y -> y in l := fun y hy =>
+        have : f y != y ∧ y != x := ne_and_ne_of_swap_mul_apply_ne_self hy
+        List.mem_of_ne_of_mem this.2 (h _ this.1)
+      have : (e.symm.trans (swap x (f x) * f)).trans e =
+          swap (e x) (e (f x)) * (e.symm.trans f).trans e := by
+        ext
+        rw [← Equiv.symm_trans_swap_trans]; rw [mul_def]; rw [Equiv.symm_trans_swap_trans]; rw [mul_def]
+        repeat (rw [trans_apply])
+        simp [swap, swapCore]
+        split_ifs <;> rfl
+      have hefx : e x != e (f x) := mt e.injective.eq_iff.1 hfx
+      rw [if_neg hfx]; rw [← signAux_eq_signAux2 _ _ e hy]; rw [this]; rw [signAux_mul]; rw [signAux_swap hefx]
+      simp only [neg_neg, one_mul, neg_mul]
 
 中文:
 定理 signAux_eq_signAux2
@@ -850,7 +922,21 @@ theorem signAux_eq_signAux2
     by_cases hfx : x = f x
     · rw [if_pos hfx]
       exact
-  
+        signAux_eq_signAux2 l f _ fun y (hy : f y != y) =>
+          List.mem_of_ne_of_mem (fun h : y = x => by simp [h, hfx.symm] at hy) (h y hy)
+    · have hy : forall y : α, (swap x (f x) * f) y != y -> y in l := fun y hy =>
+        have : f y != y ∧ y != x := ne_and_ne_of_swap_mul_apply_ne_self hy
+        List.mem_of_ne_of_mem this.2 (h _ this.1)
+      have : (e.symm.trans (swap x (f x) * f)).trans e =
+          swap (e x) (e (f x)) * (e.symm.trans f).trans e := by
+        ext
+        rw [← Equiv.symm_trans_swap_trans]; rw [mul_def]; rw [Equiv.symm_trans_swap_trans]; rw [mul_def]
+        repeat (rw [trans_apply])
+        simp [swap, swapCore]
+        split_ifs <;> rfl
+      have hefx : e x != e (f x) := mt e.injective.eq_iff.1 hfx
+      rw [if_neg hfx]; rw [← signAux_eq_signAux2 _ _ e hy]; rw [this]; rw [signAux_mul]; rw [signAux_swap hefx]
+      simp only [neg_neg, one_mul, neg_mul]
 
 Depends on / 依赖: Classical, Classical.not_not, Equiv.ext, List.not_mem_nil, not_mem_nil, not_not
 -/
@@ -890,7 +976,7 @@ definition signAux3
   body: Quotient.hrecOn s (fun l _ => signAux2 l f) fun l₁ l₂ h => by
     rcases Finite.exists_equiv_fin α with ⟨n, ⟨e⟩⟩
     refine Function.hfunext (forall_congr fun _ => propext h.mem_iff) fun h₁ h₂ _ => ?_
-    rw [← signAux_eq_signAux2 _ _ e fun _ _ => h₁ _]; rw [← signAux_eq_signAux2 _ _ e fun _ _ => h₂
+    rw [← signAux_eq_signAux2 _ _ e fun _ _ => h₁ _]; rw [← signAux_eq_signAux2 _ _ e fun _ _ => h₂ _]
 
 中文:
 定义 signAux3
@@ -898,7 +984,7 @@ definition signAux3
   定义体: Quotient.hrecOn s (fun l _ => signAux2 l f) fun l₁ l₂ h => by
     rcases Finite.exists_equiv_fin α with ⟨n, ⟨e⟩⟩
     refine Function.hfunext (forall_congr fun _ => propext h.mem_iff) fun h₁ h₂ _ => ?_
-    rw [← signAux_eq_signAux2 _ _ e fun _ _ => h₁ _]; rw [← signAux_eq_signAux2 _ _ e fun _ _ => h₂
+    rw [← signAux_eq_signAux2 _ _ e fun _ _ => h₁ _]; rw [← signAux_eq_signAux2 _ _ e fun _ _ => h₂ _]
 
 Depends on / 依赖: Finite, Finite.exists_equiv_fin, Function, Function.hfunext, Quotient, Quotient.hrecOn, exists_equiv_fin, forall_congr, h.mem_iff, hfunext, hrecOn, mem_iff, propext, signAux2, signAux_eq_signAux2
 -/
@@ -920,7 +1006,15 @@ theorem signAux3_mul_and_swap
   change
     signAux2 l (f * g) = signAux2 l f * signAux2 l g ∧
     Pairwise fun x y => signAux2 l (swap x y) = -1
-  have hfg : (e.symm.trans (f * g)).trans e = (e.symm.trans f).trans e * (e.s
+  have hfg : (e.symm.trans (f * g)).trans e = (e.symm.trans f).trans e * (e.symm.trans g).trans e :=
+    Equiv.ext fun h => by simp [mul_apply]
+  constructor
+  · rw [← signAux_eq_signAux2 _ _ e fun _ _ => hs _, ←
+      signAux_eq_signAux2 _ _ e fun _ _ => hs _, ← signAux_eq_signAux2 _ _ e fun _ _ => hs _,
+      hfg, signAux_mul]
+  · intro x y hxy
+    rw [← e.injective.ne_iff] at hxy
+    rw [← signAux_eq_signAux2 _ _ e fun _ _ => hs _]; rw [symm_trans_swap_trans]; rw [signAux_swap hxy]
 
 中文:
 定理 signAux3_mul_and_swap
@@ -931,7 +1025,15 @@ theorem signAux3_mul_and_swap
   change
     signAux2 l (f * g) = signAux2 l f * signAux2 l g ∧
     Pairwise fun x y => signAux2 l (swap x y) = -1
-  have hfg : (e.symm.trans (f * g)).trans e = (e.symm.trans f).trans e * (e.s
+  have hfg : (e.symm.trans (f * g)).trans e = (e.symm.trans f).trans e * (e.symm.trans g).trans e :=
+    Equiv.ext fun h => by simp [mul_apply]
+  constructor
+  · rw [← signAux_eq_signAux2 _ _ e fun _ _ => hs _, ←
+      signAux_eq_signAux2 _ _ e fun _ _ => hs _, ← signAux_eq_signAux2 _ _ e fun _ _ => hs _,
+      hfg, signAux_mul]
+  · intro x y hxy
+    rw [← e.injective.ne_iff] at hxy
+    rw [← signAux_eq_signAux2 _ _ e fun _ _ => hs _]; rw [symm_trans_swap_trans]; rw [signAux_swap hxy]
 
 Depends on / 依赖: Equiv.ext, Finite, Finite.exists_equiv_fin, Pairwise, Quotient, Quotient.inductionOn, e.symm.trans, exists_equiv_fin, inductionOn, mul_apply, signAux2, signAux_eq_signAux2
 -/
@@ -1372,7 +1474,22 @@ theorem eq_sign_of_surjective_hom
       by_contradiction fun h => by
         have : forall f, IsSwap f -> s f = 1 := fun f ⟨a, b, hab, hab'⟩ => by
           rw [← isConj_iff_eq]; rw [← Or.resolve_right (Int.units_eq_one_or _) h]; rw [hab']
-      
+          exact s.map_isConj (isConj_swap hab hxy)
+        let ⟨g, hg⟩ := hs (-1)
+        let ⟨l, hl⟩ := (truncSwapFactors g).out
+        have : forall a in l.map s, a = (1 : Intˣ) := fun a ha =>
+          let ⟨g, hg⟩ := List.mem_map.1 ha
+          hg.2 ▸ this _ (hl.2 _ hg.1)
+        have : s l.prod = 1 := by
+          rw [← l.prod_hom s]; rw [List.eq_replicate_length.2 this]; rw [List.prod_replicate]; rw [one_pow]
+        rw [hl.1]; rw [hg] at this
+        exact absurd this (by simp_all)
+  MonoidHom.ext fun f => by
+    let ⟨l, hl₁, hl₂⟩ := (truncSwapFactors f).out
+    have hsl : forall a in l.map s, a = (-1 : Intˣ) := fun a ha =>
+      let ⟨g, hg⟩ := List.mem_map.1 ha
+      hg.2 ▸ this (hl₂ _ hg.1)
+    rw [← hl₁]; rw [← l.prod_hom s]; rw [List.eq_replicate_length.2 hsl]; rw [List.length_map]; rw [List.prod_replicate]; rw [sign_prod_list_swap hl₂]
 
 中文:
 定理 eq_sign_of_surjective_hom
@@ -1383,7 +1500,22 @@ theorem eq_sign_of_surjective_hom
       by_contradiction fun h => by
         have : forall f, IsSwap f -> s f = 1 := fun f ⟨a, b, hab, hab'⟩ => by
           rw [← isConj_iff_eq]; rw [← Or.resolve_right (Int.units_eq_one_or _) h]; rw [hab']
-      
+          exact s.map_isConj (isConj_swap hab hxy)
+        let ⟨g, hg⟩ := hs (-1)
+        let ⟨l, hl⟩ := (truncSwapFactors g).out
+        have : forall a in l.map s, a = (1 : Intˣ) := fun a ha =>
+          let ⟨g, hg⟩ := List.mem_map.1 ha
+          hg.2 ▸ this _ (hl.2 _ hg.1)
+        have : s l.prod = 1 := by
+          rw [← l.prod_hom s]; rw [List.eq_replicate_length.2 this]; rw [List.prod_replicate]; rw [one_pow]
+        rw [hl.1]; rw [hg] at this
+        exact absurd this (by simp_all)
+  MonoidHom.ext fun f => by
+    let ⟨l, hl₁, hl₂⟩ := (truncSwapFactors f).out
+    have hsl : forall a in l.map s, a = (-1 : Intˣ) := fun a ha =>
+      let ⟨g, hg⟩ := List.mem_map.1 ha
+      hg.2 ▸ this (hl₂ _ hg.1)
+    rw [← hl₁]; rw [← l.prod_hom s]; rw [List.eq_replicate_length.2 hsl]; rw [List.length_map]; rw [List.prod_replicate]; rw [sign_prod_list_swap hl₂]
 
 Depends on / 依赖: Int.units_eq_one_or, IsSwap, List.mem_map, Or.resolve_right, by_contradiction, isConj_iff_eq, isConj_swap, l.map, map_isConj, mem_map, resolve_right, s.map_isConj, truncSwapFactors, units_eq_one_or
 -/
@@ -1422,7 +1554,12 @@ theorem sign_subtypePerm
     let ⟨g, hg⟩ := List.mem_map.1 hg'
     hg.2 ▸ (l.2.2 _ hg.1).of_subtype_isSwap
   have hl'₂ : (l.1.map ofSubtype).prod = f := by
-    rw [l.1.prod_hom ofSubtype]; rw [l.2.
+    rw [l.1.prod_hom ofSubtype]; rw [l.2.1]; rw [ofSubtype_subtypePerm _ h₂]
+  conv =>
+    congr
+    rw [← l.2.1]
+  simp_rw [← hl'₂]
+  rw [sign_prod_list_swap l.2.2]; rw [sign_prod_list_swap hl']; rw [List.length_map]
 
 中文:
 定理 sign_subtypePerm
@@ -1433,7 +1570,12 @@ theorem sign_subtypePerm
     let ⟨g, hg⟩ := List.mem_map.1 hg'
     hg.2 ▸ (l.2.2 _ hg.1).of_subtype_isSwap
   have hl'₂ : (l.1.map ofSubtype).prod = f := by
-    rw [l.1.prod_hom ofSubtype]; rw [l.2.
+    rw [l.1.prod_hom ofSubtype]; rw [l.2.1]; rw [ofSubtype_subtypePerm _ h₂]
+  conv =>
+    congr
+    rw [← l.2.1]
+  simp_rw [← hl'₂]
+  rw [sign_prod_list_swap l.2.2]; rw [sign_prod_list_swap hl']; rw [List.length_map]
 
 Depends on / 依赖: IsSwap, List.length_map, List.mem_map, length_map, mem_map, ofSubtype, ofSubtype_subtypePerm, of_subtype_isSwap, prod_hom, sign_prod_list_swap, simp_rw, subtypePerm, truncSwapFactors
 -/
@@ -1488,7 +1630,16 @@ theorem sign_bij
       sign_eq_sign_of_equiv _ _
         (Equiv.ofBijective
           (fun x : { x // f x != x } =>
-         
+            (⟨i x.1 x.2, by
+                have : f (f x) != f x := mt (fun h => f.injective h) x.2
+                rw [← h _ x.2 this]
+                exact mt (hi _ _ this x.2) x.2⟩ :
+              { y // g y != y }))
+          ⟨fun ⟨_, _⟩ ⟨_, _⟩ h => Subtype.ext (hi _ _ _ _ (Subtype.mk.inj h)), fun ⟨y, hy⟩ =>
+            let ⟨x, hfx, hx⟩ := hg y hy
+            ⟨⟨x, hfx⟩, Subtype.ext hx⟩⟩)
+        fun ⟨x, _⟩ => Subtype.ext (h x _ _)
+    _ = sign g := sign_subtypePerm _ _ fun _ => id
 
 中文:
 定理 sign_bij
@@ -1500,7 +1651,16 @@ theorem sign_bij
       sign_eq_sign_of_equiv _ _
         (Equiv.ofBijective
           (fun x : { x // f x != x } =>
-         
+            (⟨i x.1 x.2, by
+                have : f (f x) != f x := mt (fun h => f.injective h) x.2
+                rw [← h _ x.2 this]
+                exact mt (hi _ _ this x.2) x.2⟩ :
+              { y // g y != y }))
+          ⟨fun ⟨_, _⟩ ⟨_, _⟩ h => Subtype.ext (hi _ _ _ _ (Subtype.mk.inj h)), fun ⟨y, hy⟩ =>
+            let ⟨x, hfx, hx⟩ := hg y hy
+            ⟨⟨x, hfx⟩, Subtype.ext hx⟩⟩)
+        fun ⟨x, _⟩ => Subtype.ext (h x _ _)
+    _ = sign g := sign_subtypePerm _ _ fun _ => id
 
 Depends on / 依赖: Equiv.ofBijective, Subtype, Subtype.ext, Subtype.mk.inj, f.injective, injective, ofBijective, sign_eq_sign_of_equiv, sign_subtypePerm, subtypePerm
 -/
@@ -1536,7 +1696,26 @@ theorem prod_prodExtendRight
   -- We'll use induction on the list of elements,
   -- but we have to keep track of whether we already passed `a` in the list.
   suffices a in l ∧ (l.map fun a => prodExtendRight a (σ a)).prod (a, b) = (a, σ a b) ∨
-      a ∉ l ∧ (l.map fun a => prodExtendRight a (σ a)).prod (a, b
+      a ∉ l ∧ (l.map fun a => prodExtendRight a (σ a)).prod (a, b) = (a, b) by
+    obtain ⟨_, prod_eq⟩ := Or.resolve_right this (not_and.mpr fun h _ => h (mem_l a))
+    rw [prod_eq]; rw [prodCongrRight_apply]
+  clear mem_l
+  induction l with
+  | nil =>
+    refine Or.inr ⟨List.not_mem_nil, ?_⟩
+    rw [List.map_nil]; rw [List.prod_nil]; rw [one_apply]
+  | cons a' l ih =>
+    rw [List.map_cons]; rw [List.prod_cons]; rw [mul_apply]
+    rcases ih (List.nodup_cons.mp hl).2 with (⟨mem_l, prod_eq⟩ | ⟨notMem_l, prod_eq⟩) <;>
+      rw [prod_eq]
+    · refine Or.inl ⟨List.mem_cons_of_mem _ mem_l, ?_⟩
+      rw [prodExtendRight_apply_ne _ fun h : a = a' => (List.nodup_cons.mp hl).1 (h ▸ mem_l)]
+    by_cases ha' : a = a'
+    · rw [← ha'] at *
+      refine Or.inl ⟨l.mem_cons_self, ?_⟩
+      rw [prodExtendRight_apply_eq]
+    · refine Or.inr ⟨fun h => not_or_intro ha' notMem_l ((List.mem_cons).mp h), ?_⟩
+      rw [prodExtendRight_apply_ne _ ha']
 
 中文:
 定理 prod_prodExtendRight
@@ -1546,7 +1725,26 @@ theorem prod_prodExtendRight
   -- We'll use induction on the list of elements,
   -- but we have to keep track of whether we already passed `a` in the list.
   suffices a in l ∧ (l.map fun a => prodExtendRight a (σ a)).prod (a, b) = (a, σ a b) ∨
-      a ∉ l ∧ (l.map fun a => prodExtendRight a (σ a)).prod (a, b
+      a ∉ l ∧ (l.map fun a => prodExtendRight a (σ a)).prod (a, b) = (a, b) by
+    obtain ⟨_, prod_eq⟩ := Or.resolve_right this (not_and.mpr fun h _ => h (mem_l a))
+    rw [prod_eq]; rw [prodCongrRight_apply]
+  clear mem_l
+  induction l with
+  | nil =>
+    refine Or.inr ⟨List.not_mem_nil, ?_⟩
+    rw [List.map_nil]; rw [List.prod_nil]; rw [one_apply]
+  | cons a' l ih =>
+    rw [List.map_cons]; rw [List.prod_cons]; rw [mul_apply]
+    rcases ih (List.nodup_cons.mp hl).2 with (⟨mem_l, prod_eq⟩ | ⟨notMem_l, prod_eq⟩) <;>
+      rw [prod_eq]
+    · refine Or.inl ⟨List.mem_cons_of_mem _ mem_l, ?_⟩
+      rw [prodExtendRight_apply_ne _ fun h : a = a' => (List.nodup_cons.mp hl).1 (h ▸ mem_l)]
+    by_cases ha' : a = a'
+    · rw [← ha'] at *
+      refine Or.inl ⟨l.mem_cons_self, ?_⟩
+      rw [prodExtendRight_apply_eq]
+    · refine Or.inr ⟨fun h => not_or_intro ha' notMem_l ((List.mem_cons).mp h), ?_⟩
+      rw [prodExtendRight_apply_ne _ ha']
 -/
 theorem prod_prodExtendRight {α : Type*} [DecidableEq α] (σ : α -> Perm β) {l : List α}
     (hl : l.Nodup) (mem_l : forall a, a in l) :
@@ -1626,7 +1824,8 @@ theorem sign_prodCongrRight
     apply eq_top_iff.mpr
     intro b _
     exact List.mem_toFinset.mpr (mem_l b)
-  rw [← prod_prodExtendRight σ hl mem_l]; rw [map_list_prod sign]; rw [List.map_map]; rw [← l_to_finset]; rw [L
+  rw [← prod_prodExtendRight σ hl mem_l]; rw [map_list_prod sign]; rw [List.map_map]; rw [← l_to_finset]; rw [List.prod_toFinset _ hl]
+  simp_rw [← fun a => sign_prodExtendRight a (σ a), Function.comp_def]
 
 中文:
 定理 sign_prodCongrRight
@@ -1638,7 +1837,8 @@ theorem sign_prodCongrRight
     apply eq_top_iff.mpr
     intro b _
     exact List.mem_toFinset.mpr (mem_l b)
-  rw [← prod_prodExtendRight σ hl mem_l]; rw [map_list_prod sign]; rw [List.map_map]; rw [← l_to_finset]; rw [L
+  rw [← prod_prodExtendRight σ hl mem_l]; rw [map_list_prod sign]; rw [List.map_map]; rw [← l_to_finset]; rw [List.prod_toFinset _ hl]
+  simp_rw [← fun a => sign_prodExtendRight a (σ a), Function.comp_def]
 
 Depends on / 依赖: Finite, Finite.exists_univ_list, Finset, Finset.univ, Function, Function.comp_def, List.map_map, List.mem_toFinset.mpr, List.prod_toFinset, comp_def, eq_top_iff, eq_top_iff.mpr, exists_univ_list, l.toFinset, l_to_finset, map_list_prod, map_map, mem_l, mem_toFinset, prod_prodExtendRight
 -/
@@ -1759,7 +1959,13 @@ theorem sign_sumCongr
   · induction σa using swap_induction_on with
     | one => simp
     | swap_mul σa' a₁ a₂ ha ih =>
-      rw [← o
+      rw [← one_mul (1 : Perm β)]; rw [← sumCongr_mul]; rw [sign_mul]; rw [sign_mul]; rw [ih]; rw [sumCongr_swap_one]; rw [sign_swap ha]; rw [sign_swap (Sum.inl_injective.ne_iff.mpr ha)]
+  · induction σb using swap_induction_on with
+    | one => simp
+    | swap_mul σb' b₁ b₂ hb ih =>
+      rw [← one_mul (1 : Perm α)]; rw [← sumCongr_mul]; rw [sign_mul]; rw [sign_mul]; rw [ih]; rw [sumCongr_one_swap]; rw [sign_swap hb]; rw [sign_swap (Sum.inr_injective.ne_iff.mpr hb)]
+
+@[simp]
 
 中文:
 定理 sign_sumCongr
@@ -1772,7 +1978,13 @@ theorem sign_sumCongr
   · induction σa using swap_induction_on with
     | one => simp
     | swap_mul σa' a₁ a₂ ha ih =>
-      rw [← o
+      rw [← one_mul (1 : Perm β)]; rw [← sumCongr_mul]; rw [sign_mul]; rw [sign_mul]; rw [ih]; rw [sumCongr_swap_one]; rw [sign_swap ha]; rw [sign_swap (Sum.inl_injective.ne_iff.mpr ha)]
+  · induction σb using swap_induction_on with
+    | one => simp
+    | swap_mul σb' b₁ b₂ hb ih =>
+      rw [← one_mul (1 : Perm α)]; rw [← sumCongr_mul]; rw [sign_mul]; rw [sign_mul]; rw [ih]; rw [sumCongr_one_swap]; rw [sign_swap hb]; rw [sign_swap (Sum.inr_injective.ne_iff.mpr hb)]
+
+@[simp]
 
 Depends on / 依赖: Sum.inl_injective.ne_iff.mpr, inl_injective, mul_one, ne_iff, one_mul, sign_mul, sign_swap, sumCongr, sumCongr_mul, sumCongr_swap_one, swap_induction_on, swap_mul
 -/

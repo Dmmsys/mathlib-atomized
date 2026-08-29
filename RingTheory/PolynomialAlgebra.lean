@@ -209,7 +209,11 @@ theorem toFunLinear_mul_tmul_mul
     ext k
     simp_rw [coeff_sum, coeff_monomial, sum_def, Finset.sum_ite_eq', mem_support_iff, Ne]
     conv_rhs => rw [coeff_mul]
-    simp_rw [finsetSum_coeff, coeff_monomial, Finset.sum_ite_eq', mem_support_iff, Ne, 
+    simp_rw [finsetSum_coeff, coeff_monomial, Finset.sum_ite_eq', mem_support_iff, Ne, mul_ite,
+      mul_zero, ite_mul, zero_mul]
+    simp_rw [← ite_zero_mul (¬coeff p₁ _ = 0) (a₁ * (algebraMap R A) (coeff p₁ _))]
+    simp_rw [← mul_ite_zero (¬coeff p₂ _ = 0) _ (_ * _)]
+    simp_rw [toFunLinear_mul_tmul_mul_aux_1, toFunLinear_mul_tmul_mul_aux_2]
 
 中文:
 定理 toFunLinear_mul_tmul_mul
@@ -220,7 +224,11 @@ theorem toFunLinear_mul_tmul_mul
     ext k
     simp_rw [coeff_sum, coeff_monomial, sum_def, Finset.sum_ite_eq', mem_support_iff, Ne]
     conv_rhs => rw [coeff_mul]
-    simp_rw [finsetSum_coeff, coeff_monomial, Finset.sum_ite_eq', mem_support_iff, Ne, 
+    simp_rw [finsetSum_coeff, coeff_monomial, Finset.sum_ite_eq', mem_support_iff, Ne, mul_ite,
+      mul_zero, ite_mul, zero_mul]
+    simp_rw [← ite_zero_mul (¬coeff p₁ _ = 0) (a₁ * (algebraMap R A) (coeff p₁ _))]
+    simp_rw [← mul_ite_zero (¬coeff p₂ _ = 0) _ (_ * _)]
+    simp_rw [toFunLinear_mul_tmul_mul_aux_1, toFunLinear_mul_tmul_mul_aux_2]
 
 Depends on / 依赖: Finset, Finset.sum_ite_eq, algebraMap, classical, coeff_monomial, coeff_mul, coeff_sum, conv_rhs, finsetSum_coeff, ite_mul, ite_zero_mul, mem_support_iff, mul_ite, mul_ite_zero, mul_zero, simp_rw, sum_def, sum_ite_eq, toFunBilinear_apply_eq_sum, toFunLinea
 -/
@@ -389,7 +397,13 @@ theorem left_inv
     dsimp only [invFun]
     rw [toFunAlgHom_apply_tmul]; rw [eval₂_sum]
     simp_rw [eval₂_monomial, AlgHom.coe_toRingHom, Algebra.TensorProduct.tmul_pow, one_pow,
-      Algebra.TensorProduct.includeLeft_apply, Algebra
+      Algebra.TensorProduct.includeLeft_apply, Algebra.TensorProduct.tmul_mul_tmul, mul_one,
+      one_mul, ← Algebra.commutes, ← Algebra.smul_def, smul_tmul, sum_def, ← tmul_sum]
+    conv_rhs => rw [← sum_C_mul_X_pow_eq p]
+    simp only [Algebra.smul_def]
+    rfl
+  · intro p q hp hq
+    simp only [map_add, invFun_add, hp, hq]
 
 中文:
 定理 left_inv
@@ -402,7 +416,13 @@ theorem left_inv
     dsimp only [invFun]
     rw [toFunAlgHom_apply_tmul]; rw [eval₂_sum]
     simp_rw [eval₂_monomial, AlgHom.coe_toRingHom, Algebra.TensorProduct.tmul_pow, one_pow,
-      Algebra.TensorProduct.includeLeft_apply, Algebra
+      Algebra.TensorProduct.includeLeft_apply, Algebra.TensorProduct.tmul_mul_tmul, mul_one,
+      one_mul, ← Algebra.commutes, ← Algebra.smul_def, smul_tmul, sum_def, ← tmul_sum]
+    conv_rhs => rw [← sum_C_mul_X_pow_eq p]
+    simp only [Algebra.smul_def]
+    rfl
+  · intro p q hp hq
+    simp only [map_add, invFun_add, hp, hq]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, Algebra, Algebra.TensorProduct.includeLeft_apply, Algebra.TensorProduct.tmul_mul_tmul, Algebra.TensorProduct.tmul_pow, Algebra.commutes, Algebra.smul_def, TensorProduct, TensorProduct.induction_on, coe_toRingHom, commutes, conv_rhs, includeLeft_apply, induction_on, invFun, mul_one, one_mul, one_pow, simp_rw
 -/
@@ -433,7 +453,8 @@ theorem right_inv
   · intro p q hp hq
     simp only [invFun_add, map_add, hp, hq]
   · intro n a
-    rw [invFun_monomial]; rw [Algebra.TensorProduct.tmul_pow]; rw [one_pow]; rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_one]; rw [one_mul]; rw [toFunAlgHom_apply_tmul]; r
+    rw [invFun_monomial]; rw [Algebra.TensorProduct.tmul_pow]; rw [one_pow]; rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_one]; rw [one_mul]; rw [toFunAlgHom_apply_tmul]; rw [X_pow_eq_monomial]; rw [sum_monomial_index] <;>
+      simp
 
 中文:
 定理 right_inv
@@ -444,7 +465,8 @@ theorem right_inv
   · intro p q hp hq
     simp only [invFun_add, map_add, hp, hq]
   · intro n a
-    rw [invFun_monomial]; rw [Algebra.TensorProduct.tmul_pow]; rw [one_pow]; rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_one]; rw [one_mul]; rw [toFunAlgHom_apply_tmul]; r
+    rw [invFun_monomial]; rw [Algebra.TensorProduct.tmul_pow]; rw [one_pow]; rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_one]; rw [one_mul]; rw [toFunAlgHom_apply_tmul]; rw [X_pow_eq_monomial]; rw [sum_monomial_index] <;>
+      simp
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.tmul_mul_tmul, Algebra.TensorProduct.tmul_pow, Polynomial, Polynomial.induction_on, TensorProduct, X_pow_eq_monomial, induction_on, invFun_add, invFun_monomial, map_add, mul_one, one_mul, one_pow, sum_monomial_index, tmul_mul_tmul, tmul_pow, toFunAlgHom_apply_tmul
 -/

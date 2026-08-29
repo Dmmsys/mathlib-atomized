@@ -339,7 +339,9 @@ definition lanBaseChange
     refine (Adjunction.homEquiv_naturality_left_symm ..).symm.trans
       (Eq.trans ?_ (Adjunction.homEquiv_naturality_right_symm ..))
     congr 1
-    ext
+    ext X
+    have := R.lanUnit.naturality_app (T.obj X) τ
+    simp [reassoc_of% this]
 
 中文:
 定义 lanBaseChange
@@ -351,7 +353,9 @@ definition lanBaseChange
     refine (Adjunction.homEquiv_naturality_left_symm ..).symm.trans
       (Eq.trans ?_ (Adjunction.homEquiv_naturality_right_symm ..))
     congr 1
-    ext
+    ext X
+    have := R.lanUnit.naturality_app (T.obj X) τ
+    simp [reassoc_of% this]
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_left_symm, Adjunction.homEquiv_naturality_right_symm, Eq.trans, L.lanAdjunction, LeftExtension, LeftExtension.mk, R.lanUnit.app, R.lanUnit.naturality_app, T.obj, compTwoSquare, homEquiv, homEquiv_naturality_left_symm, homEquiv_naturality_right_symm, lanAdjunction, lanUnit, naturality, naturality_app, reassoc_of, symm.trans
 -/

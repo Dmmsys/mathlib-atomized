@@ -905,6 +905,7 @@ theorem iSup_sum
   all_goals
     apply csSup_le_csSup' bddAbove_of_small
     rintro i ⟨a, rfl⟩
+    apply mem_range_self
 
 中文:
 定理 iSup_sum
@@ -917,6 +918,7 @@ theorem iSup_sum
   all_goals
     apply csSup_le_csSup' bddAbove_of_small
     rintro i ⟨a, rfl⟩
+    apply mem_range_self
 
 Depends on / 依赖: Ordinal, Ordinal.iSup_le, Ordinal.le_iSup, Sum.inl, Sum.inr, all_goals, antisymm, bddAbove_of_small, csSup_le_csSup, iSup_le, le_iSup, le_max_of_le_left, le_max_of_le_right, max_le, mem_range_self
 -/
@@ -1268,7 +1270,8 @@ theorem iSup_add_one
     apply (le_ciSup hf' j).trans'
     rw [add_one_le_iff]
     exact hf hj
-  · rw [ciSup_of_not_bddAbove hf', ciSup
+  · rw [ciSup_of_not_bddAbove hf', ciSup_of_not_bddAbove]
+    rwa [← bddAbove_range_add_one_iff] at hf'
 
 中文:
 定理 iSup_add_one
@@ -1282,7 +1285,8 @@ theorem iSup_add_one
     apply (le_ciSup hf' j).trans'
     rw [add_one_le_iff]
     exact hf hj
-  · rw [ciSup_of_not_bddAbove hf', ciSup
+  · rw [ciSup_of_not_bddAbove hf', ciSup_of_not_bddAbove]
+    rwa [← bddAbove_range_add_one_iff] at hf'
 
 Depends on / 依赖: BddAbove, add_one_le_iff, antisymm, bddAbove_range_add_one_iff, ciSup_le_iff, ciSup_of_not_bddAbove, exists_gt, iSup_le_iSup_add_one, le_ciSup
 -/
@@ -2242,7 +2246,7 @@ theorem succ_iSup_le_lsub_iff
   rw [succ_le_iff]; rw [← hf]
   exact lt_lsub _ _
 
-@[deprecated "lsub is deprecate
+@[deprecated "lsub is deprecated" (since := "2026-03-27")]
 
 中文:
 定理 succ_iSup_le_lsub_iff
@@ -2256,7 +2260,7 @@ theorem succ_iSup_le_lsub_iff
   rw [succ_le_iff]; rw [← hf]
   exact lt_lsub _ _
 
-@[deprecated "lsub is deprecate
+@[deprecated "lsub is deprecated" (since := "2026-03-27")]
 
 Depends on / 依赖: Ordinal, Ordinal.le_iSup, antisymm, forall_congr, iSup_le_lsub, le_iSup, lsub_le, lt_iff_ne, lt_iff_ne.symm, lt_lsub, succ_le_iff
 -/
@@ -2307,7 +2311,15 @@ theorem iSup_eq_lsub_iff
     exact fun a => succ_lt_iSup_of_ne_iSup fun i => (lsub_le_iff.1 (le_of_eq h.symm) i).ne
   by_contra! hle
   have heq := (succ_iSup_eq_lsub_iff f).2 ⟨i, le_antisymm (Ordinal.le_iSup _ _) hle⟩
-  have
+  have :=
+    hf _
+      (by
+        rw [← heq]
+        exact lt_succ (iSup f))
+  rw [heq] at this
+  exact this.false
+
+@[deprecated "lsub is deprecated" (since := "2026-03-27")]
 
 中文:
 定理 iSup_eq_lsub_iff
@@ -2318,7 +2330,15 @@ theorem iSup_eq_lsub_iff
     exact fun a => succ_lt_iSup_of_ne_iSup fun i => (lsub_le_iff.1 (le_of_eq h.symm) i).ne
   by_contra! hle
   have heq := (succ_iSup_eq_lsub_iff f).2 ⟨i, le_antisymm (Ordinal.le_iSup _ _) hle⟩
-  have
+  have :=
+    hf _
+      (by
+        rw [← heq]
+        exact lt_succ (iSup f))
+  rw [heq] at this
+  exact this.false
+
+@[deprecated "lsub is deprecated" (since := "2026-03-27")]
 
 Depends on / 依赖: Ordinal, Ordinal.le_iSup, h.symm, iSup_le_lsub, le_antisymm, le_iSup, le_of_eq, lsub_le, lsub_le_iff, lt_succ, succ_iSup_eq_lsub_iff, succ_lt_iSup_of_ne_iSup, this.false
 -/
@@ -3152,7 +3172,7 @@ theorem bsup_succ_le_blsub
   rw [succ_le_iff]; rw [← hf]
   exact lt_blsub _ _ _
 
-@[deprecated "blsub is deprecated" (since := "2026-03-23")
+@[deprecated "blsub is deprecated" (since := "2026-03-23")]
 
 中文:
 定理 bsup_succ_le_blsub
@@ -3167,7 +3187,7 @@ theorem bsup_succ_le_blsub
   rw [succ_le_iff]; rw [← hf]
   exact lt_blsub _ _ _
 
-@[deprecated "blsub is deprecated" (since := "2026-03-23")
+@[deprecated "blsub is deprecated" (since := "2026-03-23")]
 
 Depends on / 依赖: blsub_le, bsup_le_blsub, le_antisymm, lt_blsub, lt_bsup_of_ne_bsup, ne_of_lt, succ_le_iff
 -/
@@ -4063,7 +4083,9 @@ lemma mul_sSup
   · exact (isNormal_mul_right ho).map_sSup hs bdd
   · rw [csSup_of_not_bddAbove bdd, csSup_empty, csSup_of_not_bddAbove]
     · simp
-    exact fu
+    exact fun ⟨u, hu⟩ => bdd ⟨u, fun x hx => (x.le_mul_right ho).trans (hu ⟨x, hx, rfl⟩)⟩
+
+@[simp]
 
 中文:
 引理 mul_sSup
@@ -4078,7 +4100,9 @@ lemma mul_sSup
   · exact (isNormal_mul_right ho).map_sSup hs bdd
   · rw [csSup_of_not_bddAbove bdd, csSup_empty, csSup_of_not_bddAbove]
     · simp
-    exact fu
+    exact fun ⟨u, hu⟩ => bdd ⟨u, fun x hx => (x.le_mul_right ho).trans (hu ⟨x, hx, rfl⟩)⟩
+
+@[simp]
 
 Depends on / 依赖: BddAbove, csSup_empty, csSup_of_not_bddAbove, eq_empty_or_nonempty, eq_zero_or_pos, hs.image_const, image_const, isNormal_mul_right, le_mul_right, map_sSup, s.eq_empty_or_nonempty, x.le_mul_right
 -/

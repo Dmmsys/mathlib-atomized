@@ -422,7 +422,7 @@ definition forget₂HomLinearEquiv
   map_smul' _ _ := rfl
   invFun f := Rep.ofHom ⟨((forget₂ (FGModuleCat R) (ModuleCat R)).map f.hom).hom, fun g => by
     ext x
-    ex
+    exact ConcreteCategory.congr_hom ((forget (FGModuleCat R)).congr_map (f.comm g)) x⟩
 
 中文:
 定义 forget₂HomLinearEquiv
@@ -435,7 +435,7 @@ definition forget₂HomLinearEquiv
   map_smul' _ _ := rfl
   invFun f := Rep.ofHom ⟨((forget₂ (FGModuleCat R) (ModuleCat R)).map f.hom).hom, fun g => by
     ext x
-    ex
+    exact ConcreteCategory.congr_hom ((forget (FGModuleCat R)).congr_map (f.comm g)) x⟩
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, FGModuleCat, FGModuleCat.obj_carrier, InducedCategory, InducedCategory.homMk, ModuleCat, ModuleCat.ofHom, Rep.ofHom, congr_hom, congr_map, f.comm, f.hom, f.hom.toLinearMap, forget, invFun, map_add, map_smul, obj_carrier, toLinearMap
 -/

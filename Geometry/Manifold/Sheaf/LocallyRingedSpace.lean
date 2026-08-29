@@ -64,7 +64,54 @@ theorem smoothSheafCommRing.isUnit_stalk_iff
     simpa [h'] using congr_arg (smoothSheafCommRing.eval IM 𝓘(𝕜) M 𝕜 x) hf
   · let S := (smoothSheafCommRing IM 𝓘(𝕜) M 𝕜).presheaf
     -- Suppose that `f`, in the stalk at `x`, is nonzero at `x`
-   
+    rintro (hf : _ != 0)
+    -- Represent `f` as the germ of some function (also called `f`) on an open neighbourhood `U` of
+    -- `x`, which is nonzero at `x`
+    obtain ⟨U : Opens M, hxU, f : C^∞⟮IM, U; 𝓘(𝕜), 𝕜⟯, rfl⟩ := S.exists_germ_eq f
+    have hf' : f ⟨x, hxU⟩ != 0 := by
+      convert! hf
+      exact (smoothSheafCommRing.eval_germ U x hxU f).symm
+    -- In fact, by continuity, `f` is nonzero on a neighbourhood `V` of `x`
+    have H : forallᶠ (z : U) in 𝓝 ⟨x, hxU⟩, f z != 0 := f.2.continuous.continuousAt.eventually_ne hf'
+    rw [eventually_nhds_iff] at H
+    obtain ⟨V₀, hV₀f, hV₀, hxV₀⟩ := H
+    let V : Opens M := ⟨Subtype.val '' V₀, U.2.isOpenMap_subtype_val V₀ hV₀⟩
+    have hUV : V <= U := Subtype.coe_image_subset (U : Set M) V₀
+    have hV : V₀ = Set.range (Set.inclusion hUV) := by
+      convert! (Set.range_inclusion hUV).symm
+      ext y
+      change _ ↔ y in Subtype.val ⁻¹' Subtype.val '' V₀
+      rw [Set.preimage_image_eq _ Subtype.coe_injective]
+    clear_value V
+    subst hV
+    have hxV : x in (V : Set M) := by
+      obtain ⟨x₀, hxx₀⟩ := hxV₀
+      convert! x₀.2
+      exact congr_arg Subtype.val hxx₀.symm
+    have hVf : forall y : V, f (Set.inclusion hUV y) != 0 :=
+      fun y => hV₀f (Set.inclusion hUV y) (Set.mem_range_self y)
+    -- Let `g` be the pointwise inverse of `f` on `V`, which is smooth since `f` is nonzero there
+    let g : C^∞⟮IM, V; 𝓘(𝕜), 𝕜⟯ := ⟨(f ∘ Set.inclusion hUV)⁻¹, ?_⟩
+    -- The germ of `g` is inverse to the germ of `f`, so `f` is a unit
+    · refine ⟨⟨S.germ _ x (hxV) (ContMDiffMap.restrictRingHom IM 𝓘(𝕜) 𝕜 hUV f), S.germ _ x hxV g,
+        ?_, ?_⟩, S.germ_res_apply hUV.hom x hxV f⟩
+      · rw [← map_mul]
+        -- Qualified the name to avoid Lean not finding a `OneHomClass` https://github.com/leanprover-community/mathlib4/pull/8386
+        convert! RingHom.map_one _
+        apply Subtype.ext
+        ext y
+        apply mul_inv_cancel₀
+        exact hVf y
+      · rw [← map_mul]
+        -- Qualified the name to avoid Lean not finding a `OneHomClass` https://github.com/leanprover-community/mathlib4/pull/8386
+        convert! RingHom.map_one _
+        apply Subtype.ext
+        ext y
+        apply inv_mul_cancel₀
+        exact hVf y
+    · intro y
+      exact (((contDiffAt_inv _ (hVf y)).contMDiffAt).comp y
+        (f.contMDiff.comp (contMDiff_inclusion hUV)).contMDiffAt :)
 
 中文:
 定理 smoothSheafCommRing.isUnit_stalk_iff
@@ -75,7 +122,54 @@ theorem smoothSheafCommRing.isUnit_stalk_iff
     simpa [h'] using congr_arg (smoothSheafCommRing.eval IM 𝓘(𝕜) M 𝕜 x) hf
   · let S := (smoothSheafCommRing IM 𝓘(𝕜) M 𝕜).presheaf
     -- Suppose that `f`, in the stalk at `x`, is nonzero at `x`
-   
+    rintro (hf : _ != 0)
+    -- Represent `f` as the germ of some function (also called `f`) on an open neighbourhood `U` of
+    -- `x`, which is nonzero at `x`
+    obtain ⟨U : Opens M, hxU, f : C^∞⟮IM, U; 𝓘(𝕜), 𝕜⟯, rfl⟩ := S.exists_germ_eq f
+    have hf' : f ⟨x, hxU⟩ != 0 := by
+      convert! hf
+      exact (smoothSheafCommRing.eval_germ U x hxU f).symm
+    -- In fact, by continuity, `f` is nonzero on a neighbourhood `V` of `x`
+    have H : forallᶠ (z : U) in 𝓝 ⟨x, hxU⟩, f z != 0 := f.2.continuous.continuousAt.eventually_ne hf'
+    rw [eventually_nhds_iff] at H
+    obtain ⟨V₀, hV₀f, hV₀, hxV₀⟩ := H
+    let V : Opens M := ⟨Subtype.val '' V₀, U.2.isOpenMap_subtype_val V₀ hV₀⟩
+    have hUV : V <= U := Subtype.coe_image_subset (U : Set M) V₀
+    have hV : V₀ = Set.range (Set.inclusion hUV) := by
+      convert! (Set.range_inclusion hUV).symm
+      ext y
+      change _ ↔ y in Subtype.val ⁻¹' Subtype.val '' V₀
+      rw [Set.preimage_image_eq _ Subtype.coe_injective]
+    clear_value V
+    subst hV
+    have hxV : x in (V : Set M) := by
+      obtain ⟨x₀, hxx₀⟩ := hxV₀
+      convert! x₀.2
+      exact congr_arg Subtype.val hxx₀.symm
+    have hVf : forall y : V, f (Set.inclusion hUV y) != 0 :=
+      fun y => hV₀f (Set.inclusion hUV y) (Set.mem_range_self y)
+    -- Let `g` be the pointwise inverse of `f` on `V`, which is smooth since `f` is nonzero there
+    let g : C^∞⟮IM, V; 𝓘(𝕜), 𝕜⟯ := ⟨(f ∘ Set.inclusion hUV)⁻¹, ?_⟩
+    -- The germ of `g` is inverse to the germ of `f`, so `f` is a unit
+    · refine ⟨⟨S.germ _ x (hxV) (ContMDiffMap.restrictRingHom IM 𝓘(𝕜) 𝕜 hUV f), S.germ _ x hxV g,
+        ?_, ?_⟩, S.germ_res_apply hUV.hom x hxV f⟩
+      · rw [← map_mul]
+        -- Qualified the name to avoid Lean not finding a `OneHomClass` https://github.com/leanprover-community/mathlib4/pull/8386
+        convert! RingHom.map_one _
+        apply Subtype.ext
+        ext y
+        apply mul_inv_cancel₀
+        exact hVf y
+      · rw [← map_mul]
+        -- Qualified the name to avoid Lean not finding a `OneHomClass` https://github.com/leanprover-community/mathlib4/pull/8386
+        convert! RingHom.map_one _
+        apply Subtype.ext
+        ext y
+        apply inv_mul_cancel₀
+        exact hVf y
+    · intro y
+      exact (((contDiffAt_inv _ (hVf y)).contMDiffAt).comp y
+        (f.contMDiff.comp (contMDiff_inclusion hUV)).contMDiffAt :)
 
 Depends on / 依赖: congr_arg, presheaf, smoothSheafCommRing, smoothSheafCommRing.eval
 -/
@@ -441,7 +535,11 @@ definition ChartedSpace.restrictLocallyRingedSpaceIso
     (LocallyRingedSpace.ofRestrict _ _) (by rfl)
   inv := LocallyRingedSpace.IsOpenImmersion.lift
     ((locallyRingedSpace IM M).ofRestrict U.isOpenEmbedding)
-    (locallyRingedSpaceMap _ contMDiff_subtype_va
+    (locallyRingedSpaceMap _ contMDiff_subtype_val) (by rfl)
+  hom_inv_id := by
+    simp [← cancel_mono ((locallyRingedSpace IM M).ofRestrict U.isOpenEmbedding)]
+  inv_hom_id := by
+    simp [← cancel_mono (locallyRingedSpaceMap _ contMDiff_subtype_val)]
 
 中文:
 定义 Charted空间.restrictLocallyRingedSpaceIso
@@ -451,7 +549,11 @@ definition ChartedSpace.restrictLocallyRingedSpaceIso
     (LocallyRingedSpace.ofRestrict _ _) (by rfl)
   inv := LocallyRingedSpace.IsOpenImmersion.lift
     ((locallyRingedSpace IM M).ofRestrict U.isOpenEmbedding)
-    (locallyRingedSpaceMap _ contMDiff_subtype_va
+    (locallyRingedSpaceMap _ contMDiff_subtype_val) (by rfl)
+  hom_inv_id := by
+    simp [← cancel_mono ((locallyRingedSpace IM M).ofRestrict U.isOpenEmbedding)]
+  inv_hom_id := by
+    simp [← cancel_mono (locallyRingedSpaceMap _ contMDiff_subtype_val)]
 
 Depends on / 依赖: IsOpenImmersion, LocallyRingedSpace, LocallyRingedSpace.IsOpenImmersion.lift
 -/

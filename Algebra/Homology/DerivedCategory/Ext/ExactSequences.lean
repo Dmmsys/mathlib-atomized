@@ -104,7 +104,9 @@ lemma covariant_sequence_exact₂'
   have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₂ _
     (hS.singleTriangle_distinguished) n
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.ho
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  all_goals ext x; apply hom_comp_singleFunctor_map_shift (C := C)
 
 中文:
 引理 covariant_sequence_exact₂'
@@ -114,7 +116,9 @@ lemma covariant_sequence_exact₂'
   have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₂ _
     (hS.singleTriangle_distinguished) n
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.ho
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  all_goals ext x; apply hom_comp_singleFunctor_map_shift (C := C)
 
 Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, all_goals, hS.singleTriangle_distinguished, homAddEquiv, hom_comp_singleFunctor_map_shift, of_ladder_addEquiv_of_exact, preadditiveCoyoneda, preadditiveCoyoneda.obj, singleFunctor, singleTriangle_distinguished, standard
 -/
@@ -148,7 +152,11 @@ lemma covariant_sequence_exact₃'
   have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₃ _
     (hS.singleTriangle_distinguished) n₀ n₁ (by lia)
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' 
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  · ext x; apply hom_comp_singleFunctor_map_shift (C := C)
+  · ext x
+    exact preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply hS x h
 
 中文:
 引理 covariant_sequence_exact₃'
@@ -157,7 +165,11 @@ lemma covariant_sequence_exact₃'
   have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₃ _
     (hS.singleTriangle_distinguished) n₀ n₁ (by lia)
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' 
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  · ext x; apply hom_comp_singleFunctor_map_shift (C := C)
+  · ext x
+    exact preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply hS x h
 
 Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, hS.singleTriangle_distinguished, homAddEquiv, hom_comp_singleFunctor_map_shift, of_ladder_addEquiv_of_exact, preadditiveCoyoneda, preadditiveCoyoneda.obj, singleFunctor, singleTriangle_distinguished, standard
 -/
@@ -189,7 +201,11 @@ lemma covariant_sequence_exact₁'
   have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₁ _
     (hS.singleTriangle_distinguished) n₀ n₁ (by lia)
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' 
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  · ext x
+    exact preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply hS x h
+  · ext x; apply hom_comp_singleFunctor_map_shift (C := C)
 
 中文:
 引理 covariant_sequence_exact₁'
@@ -198,7 +214,11 @@ lemma covariant_sequence_exact₁'
   have := (preadditiveCoyoneda.obj (op ((singleFunctor C 0).obj X))).homologySequence_exact₁ _
     (hS.singleTriangle_distinguished) n₀ n₁ (by lia)
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' 
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  · ext x
+    exact preadditiveCoyoneda_homologySequenceδ_singleTriangle_apply hS x h
+  · ext x; apply hom_comp_singleFunctor_map_shift (C := C)
 
 Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, hS.singleTriangle_distinguished, homAddEquiv, hom_comp_singleFunctor_map_shift, of_ladder_addEquiv_of_exact, preadditiveCoyoneda, preadditiveCoyoneda.obj, singleFunctor, singleTriangle_distinguished, standard
 -/
@@ -232,7 +252,7 @@ definition covariantSequence
     (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n₀)))
     (AddCommGrpCat.ofHom (hS.extClass.postcomp X h))
     (AddCommGrpCat.ofHom ((mk₀ S.f).postcomp X (add_zero n₁)))
-    (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n
+    (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n₁)))
 
 中文:
 定义 covariantSequence
@@ -241,7 +261,7 @@ definition covariantSequence
     (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n₀)))
     (AddCommGrpCat.ofHom (hS.extClass.postcomp X h))
     (AddCommGrpCat.ofHom ((mk₀ S.f).postcomp X (add_zero n₁)))
-    (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n
+    (AddCommGrpCat.ofHom ((mk₀ S.g).postcomp X (add_zero n₁)))
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ofHom, add_zero, extClass, hS.extClass.postcomp, postcomp
 -/
@@ -260,14 +280,14 @@ lemma covariantSequence_exact
   proof: exact_of_δ₀ (covariant_sequence_exact₂' X hS n₀).exact_toComposableArrows
     (exact_of_δ₀ (covariant_sequence_exact₃' X hS n₀ n₁ h).exact_toComposableArrows
       (exact_of_δ₀ (covariant_sequence_exact₁' X hS n₀ n₁ h).exact_toComposableArrows
-        (covariant_sequence_exact₂' X hS n₁).exact_toCom
+        (covariant_sequence_exact₂' X hS n₁).exact_toComposableArrows))
 
 中文:
 引理 covariantSequence_exact
   证明: exact_of_δ₀ (covariant_sequence_exact₂' X hS n₀).exact_toComposableArrows
     (exact_of_δ₀ (covariant_sequence_exact₃' X hS n₀ n₁ h).exact_toComposableArrows
       (exact_of_δ₀ (covariant_sequence_exact₁' X hS n₀ n₁ h).exact_toComposableArrows
-        (covariant_sequence_exact₂' X hS n₁).exact_toCom
+        (covariant_sequence_exact₂' X hS n₁).exact_toComposableArrows))
 
 Depends on / 依赖: exact_toComposableArrows
 -/
@@ -487,7 +507,9 @@ lemma contravariant_sequence_exact₂'
   have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₂ _
     (op_distinguished _ hS.singleTriangle_distinguished) n
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  all_goals ext; apply singleFunctor_map_comp_hom (C := C)
 
 中文:
 引理 contravariant_sequence_exact₂'
@@ -497,7 +519,9 @@ lemma contravariant_sequence_exact₂'
   have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₂ _
     (op_distinguished _ hS.singleTriangle_distinguished) n
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEquiv_of_exact' (
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  all_goals ext; apply singleFunctor_map_comp_hom (C := C)
 
 Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, all_goals, hS.singleTriangle_distinguished, homAddEquiv, of_ladder_addEquiv_of_exact, op_distinguished, preadditiveYoneda, preadditiveYoneda.obj, singleFunctor, singleFunctor_map_comp_hom, singleTriangle_distinguished, standard
 -/
@@ -530,7 +554,10 @@ lemma contravariant_sequence_exact₁'
   have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₃ _
     (op_distinguished _ hS.singleTriangle_distinguished) n₀ n₁ (by lia)
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEqui
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  · ext; apply singleFunctor_map_comp_hom (C := C)
+  · ext; dsimp; apply preadditiveYoneda_homologySequenceδ_singleTriangle_apply
 
 中文:
 引理 contravariant_sequence_exact₁'
@@ -539,7 +566,10 @@ lemma contravariant_sequence_exact₁'
   have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₃ _
     (op_distinguished _ hS.singleTriangle_distinguished) n₀ n₁ (by lia)
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEqui
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  · ext; apply singleFunctor_map_comp_hom (C := C)
+  · ext; dsimp; apply preadditiveYoneda_homologySequenceδ_singleTriangle_apply
 
 Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, hS.singleTriangle_distinguished, homAddEquiv, of_ladder_addEquiv_of_exact, op_distinguished, preadditiveYoneda, preadditiveYoneda.obj, singleFunctor, singleFunctor_map_comp_hom, singleTriangle_distinguished, standard
 -/
@@ -569,7 +599,10 @@ lemma contravariant_sequence_exact₃'
   have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₁ _
     (op_distinguished _ hS.singleTriangle_distinguished) n₀ n₁ (by lia)
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEqui
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  · ext; dsimp; apply preadditiveYoneda_homologySequenceδ_singleTriangle_apply
+  · ext; apply singleFunctor_map_comp_hom (C := C)
 
 中文:
 引理 contravariant_sequence_exact₃'
@@ -578,7 +611,10 @@ lemma contravariant_sequence_exact₃'
   have := (preadditiveYoneda.obj ((singleFunctor C 0).obj Y)).homologySequence_exact₁ _
     (op_distinguished _ hS.singleTriangle_distinguished) n₀ n₁ (by lia)
   rw [ShortComplex.ab_exact_iff_function_exact] at this ⊢
-  apply Function.Exact.of_ladder_addEqui
+  apply Function.Exact.of_ladder_addEquiv_of_exact' (e₁ := Ext.homAddEquiv)
+    (e₂ := Ext.homAddEquiv) (e₃ := Ext.homAddEquiv) (H := this)
+  · ext; dsimp; apply preadditiveYoneda_homologySequenceδ_singleTriangle_apply
+  · ext; apply singleFunctor_map_comp_hom (C := C)
 
 Depends on / 依赖: Ext.homAddEquiv, Function, Function.Exact.of_ladder_addEquiv_of_exact, HasDerivedCategory, HasDerivedCategory.standard, ShortComplex, ShortComplex.ab_exact_iff_function_exact, ab_exact_iff_function_exact, hS.singleTriangle_distinguished, homAddEquiv, of_ladder_addEquiv_of_exact, op_distinguished, preadditiveYoneda, preadditiveYoneda.obj, singleFunctor, singleFunctor_map_comp_hom, singleTriangle_distinguished, standard
 -/
@@ -637,14 +673,14 @@ lemma contravariantSequence_exact
   proof: exact_of_δ₀ (contravariant_sequence_exact₂' hS Y n₀).exact_toComposableArrows
     (exact_of_δ₀ (contravariant_sequence_exact₁' hS Y n₀ n₁ h).exact_toComposableArrows
       (exact_of_δ₀ (contravariant_sequence_exact₃' hS Y n₀ n₁ h).exact_toComposableArrows
-        (contravariant_sequence_exact₂' hS Y
+        (contravariant_sequence_exact₂' hS Y n₁).exact_toComposableArrows))
 
 中文:
 引理 contravariantSequence_exact
   证明: exact_of_δ₀ (contravariant_sequence_exact₂' hS Y n₀).exact_toComposableArrows
     (exact_of_δ₀ (contravariant_sequence_exact₁' hS Y n₀ n₁ h).exact_toComposableArrows
       (exact_of_δ₀ (contravariant_sequence_exact₃' hS Y n₀ n₁ h).exact_toComposableArrows
-        (contravariant_sequence_exact₂' hS Y
+        (contravariant_sequence_exact₂' hS Y n₁).exact_toComposableArrows))
 
 Depends on / 依赖: exact_toComposableArrows
 -/

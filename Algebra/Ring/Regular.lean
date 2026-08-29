@@ -77,7 +77,7 @@ theorem IsRegular.of_ne_zero'
     isRightRegular_of_non_zero_divisor k fun _ h =>
       (NoZeroDivisors.eq_zero_or_eq_zero_of_mul_eq_zero h).resolve_right hk⟩
 
-@[deprecated (since := "2026-01-21")] alias is
+@[deprecated (since := "2026-01-21")] alias isRegular_of_ne_zero' := IsRegular.of_ne_zero'
 
 中文:
 定理 是正则.of_ne_zero'
@@ -87,7 +87,7 @@ theorem IsRegular.of_ne_zero'
     isRightRegular_of_non_zero_divisor k fun _ h =>
       (NoZeroDivisors.eq_zero_or_eq_zero_of_mul_eq_zero h).resolve_right hk⟩
 
-@[deprecated (since := "2026-01-21")] alias is
+@[deprecated (since := "2026-01-21")] alias isRegular_of_ne_zero' := IsRegular.of_ne_zero'
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.eq_zero_or_eq_zero_of_mul_eq_zero, eq_zero_or_eq_zero_of_mul_eq_zero, isLeftRegular_of_non_zero_divisor, isRightRegular_of_non_zero_divisor, resolve_left, resolve_right
 -/
@@ -160,7 +160,8 @@ theorem iff_eq_of_mul_left_eq_one
   refine (isDedekindFiniteMonoid_iff _).trans ⟨fun h x y z hxy hxz => ?_, fun h x y eq => ?_⟩
   · simpa [← mul_assoc, h hxz] using congr_arg (z * ·) hxy
 have := h _ _ (1 - y * x + y) eq by
-    rw [mul_add]; rw [mul_sub]; rw [← mul_assoc]; rw [eq]; rw [mul_one]; rw [one_mul]; rw [sub_self]; rw [ze
+    rw [mul_add]; rw [mul_sub]; rw [← mul_assoc]; rw [eq]; rw [mul_one]; rw [one_mul]; rw [sub_self]; rw [zero_add]
+  rwa [right_eq_add, sub_eq_zero, eq_comm] at this
 
 中文:
 定理 iff_eq_of_mul_left_eq_one
@@ -168,7 +169,8 @@ have := h _ _ (1 - y * x + y) eq by
   refine (isDedekindFiniteMonoid_iff _).trans ⟨fun h x y z hxy hxz => ?_, fun h x y eq => ?_⟩
   · simpa [← mul_assoc, h hxz] using congr_arg (z * ·) hxy
 have := h _ _ (1 - y * x + y) eq by
-    rw [mul_add]; rw [mul_sub]; rw [← mul_assoc]; rw [eq]; rw [mul_one]; rw [one_mul]; rw [sub_self]; rw [ze
+    rw [mul_add]; rw [mul_sub]; rw [← mul_assoc]; rw [eq]; rw [mul_one]; rw [one_mul]; rw [sub_self]; rw [zero_add]
+  rwa [right_eq_add, sub_eq_zero, eq_comm] at this
 
 Depends on / 依赖: congr_arg, eq_comm, isDedekindFiniteMonoid_iff, mul_add, mul_assoc, mul_one, mul_sub, one_mul, right_eq_add, sub_eq_zero, sub_self, zero_add
 -/
@@ -189,7 +191,8 @@ theorem iff_eq_of_mul_right_eq_one
   refine (isDedekindFiniteMonoid_iff _).trans ⟨fun h x y z hxz hyz => ?_, fun h x y eq => ?_⟩
   · simpa [mul_assoc, h hyz] using congr_arg (· * y) hxz
 have := h _ (1 - y * x + x) _ eq by
-    rw [add_mul]; rw [sub_mul]; rw [mul_assoc]; rw [eq]; rw [one_mul]; rw [mul_one]; rw [sub_self]; rw [zero_a
+    rw [add_mul]; rw [sub_mul]; rw [mul_assoc]; rw [eq]; rw [one_mul]; rw [mul_one]; rw [sub_self]; rw [zero_add]
+  rwa [right_eq_add, sub_eq_zero, eq_comm] at this
 
 中文:
 定理 iff_eq_of_mul_right_eq_one
@@ -197,7 +200,8 @@ have := h _ (1 - y * x + x) _ eq by
   refine (isDedekindFiniteMonoid_iff _).trans ⟨fun h x y z hxz hyz => ?_, fun h x y eq => ?_⟩
   · simpa [mul_assoc, h hyz] using congr_arg (· * y) hxz
 have := h _ (1 - y * x + x) _ eq by
-    rw [add_mul]; rw [sub_mul]; rw [mul_assoc]; rw [eq]; rw [one_mul]; rw [mul_one]; rw [sub_self]; rw [zero_a
+    rw [add_mul]; rw [sub_mul]; rw [mul_assoc]; rw [eq]; rw [one_mul]; rw [mul_one]; rw [sub_self]; rw [zero_add]
+  rwa [right_eq_add, sub_eq_zero, eq_comm] at this
 
 Depends on / 依赖: add_mul, congr_arg, eq_comm, isDedekindFiniteMonoid_iff, mul_assoc, mul_one, one_mul, right_eq_add, sub_eq_zero, sub_mul, sub_self, zero_add
 -/

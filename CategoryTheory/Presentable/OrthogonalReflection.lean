@@ -82,7 +82,15 @@ lemma MorphismProperty.isClosedUnderColimitsOfShape_isLocal
     refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
     · obtain ⟨j₁, g₁, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g₁
       obtain ⟨j₂, g₂, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g₂
-      dsimp at h
+      dsimp at h ⊢
+      obtain ⟨j₃, u, v, huv⟩ :=
+        IsCardinalPresentable.exists_eq_of_isColimit κ p.isColimit (f ≫ g₁) (f ≫ g₂)
+          (by simpa)
+      simp only [Category.assoc] at huv
+      rw [← p.w u]; rw [← p.w v]; rw [reassoc_of% ((p.prop_diag_obj j₃ _ hf).1 huv)]
+    · obtain ⟨j, g, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g
+      obtain ⟨g, rfl⟩ := (p.prop_diag_obj j _ hf).2 g
+      exact ⟨g ≫ p.ι.app j, by simp⟩
 
 中文:
 引理 MorphismProperty.isClosedUnderColimitsOfShape_isLocal
@@ -91,7 +99,15 @@ lemma MorphismProperty.isClosedUnderColimitsOfShape_isLocal
     refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
     · obtain ⟨j₁, g₁, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g₁
       obtain ⟨j₂, g₂, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g₂
-      dsimp at h
+      dsimp at h ⊢
+      obtain ⟨j₃, u, v, huv⟩ :=
+        IsCardinalPresentable.exists_eq_of_isColimit κ p.isColimit (f ≫ g₁) (f ≫ g₂)
+          (by simpa)
+      simp only [Category.assoc] at huv
+      rw [← p.w u]; rw [← p.w v]; rw [reassoc_of% ((p.prop_diag_obj j₃ _ hf).1 huv)]
+    · obtain ⟨j, g, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ p.isColimit g
+      obtain ⟨g, rfl⟩ := (p.prop_diag_obj j _ hf).2 g
+      exact ⟨g ≫ p.ι.app j, by simp⟩
 
 Depends on / 依赖: Category, Category.assoc, IsCardinalPresentable, IsCardinalPresentable.exists_eq_of_isColimit, IsCardinalPresentable.exists_hom_of_isColimit, exists_eq_of_isColimit, exists_hom_of_isColimit, isColimit, p.isColimit, p.prop_diag_obj, prop_diag_obj, reassoc_of
 -/
@@ -699,7 +715,9 @@ lemma isLocal_isLocal_toSucc
     · apply (hT d.1.1.hom d.1.2).1
       simp only [← D₁.ι_comp_t_assoc, pushout.condition_assoc, h]
     · exact h
-  · choose f hf using fun (d : D₁ W Z) => (hT d.1.1.hom d.1.2
+  · choose f hf using fun (d : D₁ W Z) => (hT d.1.1.hom d.1.2).2 (d.2 ≫ g)
+    exact ⟨Multicoequalizer.desc _ _ (fun ⟨⟩ => pushout.desc (Sigma.desc f) g)
+      (fun d => (hT d.1.1.hom d.1.2).1 (by simp [reassoc_of% d.2.2])), by simp⟩
 
 中文:
 引理 isLocal_isLocal_toSucc
@@ -712,7 +730,9 @@ lemma isLocal_isLocal_toSucc
     · apply (hT d.1.1.hom d.1.2).1
       simp only [← D₁.ι_comp_t_assoc, pushout.condition_assoc, h]
     · exact h
-  · choose f hf using fun (d : D₁ W Z) => (hT d.1.1.hom d.1.2
+  · choose f hf using fun (d : D₁ W Z) => (hT d.1.1.hom d.1.2).2 (d.2 ≫ g)
+    exact ⟨Multicoequalizer.desc _ _ (fun ⟨⟩ => pushout.desc (Sigma.desc f) g)
+      (fun d => (hT d.1.1.hom d.1.2).1 (by simp [reassoc_of% d.2.2])), by simp⟩
 
 Depends on / 依赖: Category, Category.assoc, Multicoequalizer, Multicoequalizer.desc, Sigma.desc, condition_assoc, pushout, pushout.condition_assoc, pushout.desc, reassoc_of
 -/
@@ -744,7 +764,20 @@ lemma isIso_toSucc_iff
         D₂.condition f hf (g₁ := g₁ ≫ toStep W Z) (g₂ := g₂ ≫ toStep W Z)
           (by simp [reassoc_of% h])
     · have hZ := IsIso.hom_inv_id (toSucc W Z)
-   
+      simp only [Category.assoc] at hZ
+      exact ⟨D₁.ιRight f hf g ≫ pushout.inl _ _ ≫ fromStep W Z ≫ inv (toSucc W Z),
+        by simp [← D₁.ιLeft_comp_t_assoc, pushout.condition_assoc, hZ]⟩
+  · obtain ⟨f, hf⟩ := (isLocal_isLocal_toSucc W Z _ hZ).2 (𝟙 _)
+    dsimp at hf
+    refine ⟨f, hf, ?_⟩
+    ext ⟨⟩
+    dsimp
+    ext d
+    · simp only [Category.assoc] at hf
+      simp only [Category.comp_id, ← Category.assoc]
+      refine D₂.condition _ d.1.2 ?_
+      rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← D₁.ι_comp_t_assoc]; rw [pushout.condition_assoc]; rw [reassoc_of% hf]; rw [← D₁.ι_comp_t_assoc]; rw [pushout.condition]
+    · simp [reassoc_of% hf]
 
 中文:
 引理 isIso_toSucc_iff
@@ -755,7 +788,20 @@ lemma isIso_toSucc_iff
         D₂.condition f hf (g₁ := g₁ ≫ toStep W Z) (g₂ := g₂ ≫ toStep W Z)
           (by simp [reassoc_of% h])
     · have hZ := IsIso.hom_inv_id (toSucc W Z)
-   
+      simp only [Category.assoc] at hZ
+      exact ⟨D₁.ιRight f hf g ≫ pushout.inl _ _ ≫ fromStep W Z ≫ inv (toSucc W Z),
+        by simp [← D₁.ιLeft_comp_t_assoc, pushout.condition_assoc, hZ]⟩
+  · obtain ⟨f, hf⟩ := (isLocal_isLocal_toSucc W Z _ hZ).2 (𝟙 _)
+    dsimp at hf
+    refine ⟨f, hf, ?_⟩
+    ext ⟨⟩
+    dsimp
+    ext d
+    · simp only [Category.assoc] at hf
+      simp only [Category.comp_id, ← Category.assoc]
+      refine D₂.condition _ d.1.2 ?_
+      rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← D₁.ι_comp_t_assoc]; rw [pushout.condition_assoc]; rw [reassoc_of% hf]; rw [← D₁.ι_comp_t_assoc]; rw [pushout.condition]
+    · simp [reassoc_of% hf]
 
 Depends on / 依赖: Category, Category.assoc, IsIso.hom_inv_id, cancel_mono, condition, condition_assoc, fromStep, hom_inv_id, isLocal_isLocal_toSucc, pushout, pushout.condition_assoc, pushout.inl, reassoc_of, toStep, toSucc
 -/
@@ -1044,7 +1090,24 @@ lemma isLocal_reflectionObj
   refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
   · obtain ⟨j, g₁, g₂, rfl, rfl⟩ :
       exists (j : κ.ord.ToType) (g₁' g₂' : Y ⟶ H.F.obj j), g₁' ≫ H.incl.app j = g₁ ∧
-        g₂' ≫ H.incl.app j = g₂ :=
+        g₂' ≫ H.incl.app j = g₂ := by
+      obtain ⟨j₁, g₁, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g₁
+      obtain ⟨j₂, g₂, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g₂
+      exact ⟨max j₁ j₂, g₁ ≫ H.F.map (homOfLE (le_max_left _ _)),
+        g₂ ≫ H.F.map (homOfLE (le_max_right _ _)), by simp⟩
+    dsimp at h
+    obtain ⟨k, u, hk⟩ := IsCardinalPresentable.exists_eq_of_isColimit' κ H.isColimit
+      (f ≫ g₁) (f ≫ g₂) (by simpa)
+    have hg := iteration_map_succ_injectivity f hf
+      (g₁ ≫ H.F.map u) (g₂ ≫ H.F.map u) (by simpa using hk)
+    simp only [homOfLE_leOfHom, Category.assoc] at hg
+    have := H.incl.naturality (u ≫ homOfLE (Order.le_succ k))
+    simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id] at this
+    simp only [← this, Functor.map_comp, Category.assoc]
+    rw [reassoc_of% hg]
+  · obtain ⟨j, g, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g
+    obtain ⟨g', hg'⟩ := iteration_map_succ_surjectivity f hf g
+    exact ⟨g' ≫ H.incl.app (Order.succ j), by simp [reassoc_of% hg']⟩
 
 中文:
 引理 isLocal_reflectionObj
@@ -1055,7 +1118,24 @@ lemma isLocal_reflectionObj
   refine ⟨fun g₁ g₂ h => ?_, fun g => ?_⟩
   · obtain ⟨j, g₁, g₂, rfl, rfl⟩ :
       exists (j : κ.ord.ToType) (g₁' g₂' : Y ⟶ H.F.obj j), g₁' ≫ H.incl.app j = g₁ ∧
-        g₂' ≫ H.incl.app j = g₂ :=
+        g₂' ≫ H.incl.app j = g₂ := by
+      obtain ⟨j₁, g₁, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g₁
+      obtain ⟨j₂, g₂, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g₂
+      exact ⟨max j₁ j₂, g₁ ≫ H.F.map (homOfLE (le_max_left _ _)),
+        g₂ ≫ H.F.map (homOfLE (le_max_right _ _)), by simp⟩
+    dsimp at h
+    obtain ⟨k, u, hk⟩ := IsCardinalPresentable.exists_eq_of_isColimit' κ H.isColimit
+      (f ≫ g₁) (f ≫ g₂) (by simpa)
+    have hg := iteration_map_succ_injectivity f hf
+      (g₁ ≫ H.F.map u) (g₂ ≫ H.F.map u) (by simpa using hk)
+    simp only [homOfLE_leOfHom, Category.assoc] at hg
+    have := H.incl.naturality (u ≫ homOfLE (Order.le_succ k))
+    simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id] at this
+    simp only [← this, Functor.map_comp, Category.assoc]
+    rw [reassoc_of% hg]
+  · obtain ⟨j, g, rfl⟩ := IsCardinalPresentable.exists_hom_of_isColimit κ H.isColimit g
+    obtain ⟨g', hg'⟩ := iteration_map_succ_surjectivity f hf g
+    exact ⟨g' ≫ H.incl.app (Order.succ j), by simp [reassoc_of% hg']⟩
 
 Depends on / 依赖: H.F.map, H.F.obj, H.incl.app, H.isColimit, IsCardinalPresentable, IsCardinalPresentable.exists_hom_of_isColimit, ToType, exists_hom_of_isColimit, homOfLE, isColimit, le_ma, ord.ToType, transfiniteCompositionOfShapeReflection
 -/

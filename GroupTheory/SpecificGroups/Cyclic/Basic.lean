@@ -240,7 +240,7 @@ instance IsCyclic.isMulCommutative
 @[deprecated (since := "2026-04-09")]
 alias IsAddCyclic.commutative := IsAddCyclic.isAddCommutative
 @[to_additive existing, deprecated (since := "2026-04-09")]
-alias IsCy
+alias IsCyclic.commutative := IsCyclic.isMulCommutative
 
 中文:
 实例 是循环.isMulCommutative
@@ -253,7 +253,7 @@ alias IsCy
 @[deprecated (since := "2026-04-09")]
 alias IsAddCyclic.commutative := IsAddCyclic.isAddCommutative
 @[to_additive existing, deprecated (since := "2026-04-09")]
-alias IsCy
+alias IsCyclic.commutative := IsCyclic.isMulCommutative
 
 Depends on / 依赖: IsCyclic, IsCyclic.exists_generator, exists_generator, zpow_mul_comm
 -/
@@ -837,7 +837,9 @@ theorem exists_pow_ne_one_of_isCyclic
   contrapose! k_lt_card_G
   convert! orderOf_le_of_pow_eq_one k_pos.bot_lt k_lt_card_G
   rw [← Nat.card_zpowers]; rw [eq_comm]; rw [card_eq_iff_eq_top]; rw [eq_top_iff]
-  exact f
+  exact fun x _ => ha x
+
+@[to_additive]
 
 中文:
 定理 存在_pow_ne_one_of_isCyclic
@@ -849,7 +851,9 @@ theorem exists_pow_ne_one_of_isCyclic
   contrapose! k_lt_card_G
   convert! orderOf_le_of_pow_eq_one k_pos.bot_lt k_lt_card_G
   rw [← Nat.card_zpowers]; rw [eq_comm]; rw [card_eq_iff_eq_top]; rw [eq_top_iff]
-  exact f
+  exact fun x _ => ha x
+
+@[to_additive]
 
 Depends on / 依赖: Finite, G_cyclic, Nat.card_zpowers, Nat.finite_of_card_ne_zero, Nat.ne_zero_of_lt, bot_lt, card_eq_iff_eq_top, card_zpowers, contrapose, convert, eq_comm, eq_top_iff, finite_of_card_ne_zero, k_lt_card_G, k_pos, k_pos.bot_lt, ne_zero_of_lt, orderOf_le_of_pow_eq_one
 -/
@@ -927,7 +931,46 @@ instance Subgroup.isCyclic
     have hk : g ^ k = x := hk
     have hex : exists n : Nat, 0 < n ∧ g ^ n in H :=
       ⟨k.natAbs,
-Nat.pos_of_n
+Nat.pos_of_ne_zero fun h => hx₂ by
+          rw [← hk]; rw [Int.natAbs_eq_zero.mp h]; rw [zpow_zero], by
+            rcases k with k | k
+            · rw [Int.ofNat_eq_natCast, Int.natAbs_natCast k, ← zpow_natCast,
+                ← Int.ofNat_eq_natCast, hk]
+              exact hx₁
+            · rw [Int.natAbs_negSucc, ← Subgroup.inv_mem_iff H]; simp_all⟩
+    ⟨⟨⟨g ^ Nat.find hex, (Nat.find_spec hex).2⟩, fun ⟨x, hx⟩ =>
+        let ⟨k, hk⟩ := hg x
+        have hk : g ^ k = x := hk
+        have hk₂ : g ^ ((Nat.find hex : Int) * (k / Nat.find hex : Int)) in H := by
+          rw [zpow_mul]
+          apply H.zpow_mem
+          exact mod_cast (Nat.find_spec hex).2
+        have hk₃ : g ^ (k % Nat.find hex : Int) in H :=
+(Subgroup.mul_mem_cancel_right H hk₂).1 by
+            rw [← zpow_add]; rw [Int.emod_add_mul_ediv]; rw [hk]; exact hx
+        have hk₄ : k % Nat.find hex = (k % Nat.find hex).natAbs := by
+          rw [Int.natAbs_of_nonneg
+              (Int.emod_nonneg _ (Int.natCast_ne_zero_iff_pos.2 (Nat.find_spec hex).1))]
+        have hk₅ : g ^ (k % Nat.find hex).natAbs in H := by rwa [← zpow_natCast, ← hk₄]
+        have hk₆ : (k % (Nat.find hex : Int)).natAbs = 0 :=
+          by_contradiction fun h =>
+            Nat.find_min hex
+              (Int.ofNat_lt.1 <| by
+                rw [← hk₄]; exact Int.emod_lt_of_pos _ (Int.natCast_pos.2 (Nat.find_spec hex).1))
+              ⟨Nat.pos_of_ne_zero h, hk₅⟩
+        ⟨k / (Nat.find hex : Int),
+          Subtype.ext_iff.2
+            (by
+              suffices g ^ ((Nat.find hex : Int) * (k / Nat.find hex : Int)) = x by simpa [zpow_mul]
+              rw [Int.mul_ediv_cancel'
+                  (Int.dvd_of_emod_eq_zero (Int.natAbs_eq_zero.mp hk₆))]; rw [hk])⟩⟩⟩
+  else by
+    have : H = (⊥ : Subgroup α) :=
+      Subgroup.ext fun x =>
+        ⟨fun h => by simp at *; tauto, fun h => by rw [Subgroup.mem_bot.1 h]; exact H.one_mem⟩
+    subst this; infer_instance
+
+@[to_additive]
 
 中文:
 实例 子群.isCyclic
@@ -940,7 +983,46 @@ Nat.pos_of_n
     have hk : g ^ k = x := hk
     have hex : exists n : Nat, 0 < n ∧ g ^ n in H :=
       ⟨k.natAbs,
-Nat.pos_of_n
+Nat.pos_of_ne_zero fun h => hx₂ by
+          rw [← hk]; rw [Int.natAbs_eq_zero.mp h]; rw [zpow_zero], by
+            rcases k with k | k
+            · rw [Int.ofNat_eq_natCast, Int.natAbs_natCast k, ← zpow_natCast,
+                ← Int.ofNat_eq_natCast, hk]
+              exact hx₁
+            · rw [Int.natAbs_negSucc, ← Subgroup.inv_mem_iff H]; simp_all⟩
+    ⟨⟨⟨g ^ Nat.find hex, (Nat.find_spec hex).2⟩, fun ⟨x, hx⟩ =>
+        let ⟨k, hk⟩ := hg x
+        have hk : g ^ k = x := hk
+        have hk₂ : g ^ ((Nat.find hex : Int) * (k / Nat.find hex : Int)) in H := by
+          rw [zpow_mul]
+          apply H.zpow_mem
+          exact mod_cast (Nat.find_spec hex).2
+        have hk₃ : g ^ (k % Nat.find hex : Int) in H :=
+(Subgroup.mul_mem_cancel_right H hk₂).1 by
+            rw [← zpow_add]; rw [Int.emod_add_mul_ediv]; rw [hk]; exact hx
+        have hk₄ : k % Nat.find hex = (k % Nat.find hex).natAbs := by
+          rw [Int.natAbs_of_nonneg
+              (Int.emod_nonneg _ (Int.natCast_ne_zero_iff_pos.2 (Nat.find_spec hex).1))]
+        have hk₅ : g ^ (k % Nat.find hex).natAbs in H := by rwa [← zpow_natCast, ← hk₄]
+        have hk₆ : (k % (Nat.find hex : Int)).natAbs = 0 :=
+          by_contradiction fun h =>
+            Nat.find_min hex
+              (Int.ofNat_lt.1 <| by
+                rw [← hk₄]; exact Int.emod_lt_of_pos _ (Int.natCast_pos.2 (Nat.find_spec hex).1))
+              ⟨Nat.pos_of_ne_zero h, hk₅⟩
+        ⟨k / (Nat.find hex : Int),
+          Subtype.ext_iff.2
+            (by
+              suffices g ^ ((Nat.find hex : Int) * (k / Nat.find hex : Int)) = x by simpa [zpow_mul]
+              rw [Int.mul_ediv_cancel'
+                  (Int.dvd_of_emod_eq_zero (Int.natAbs_eq_zero.mp hk₆))]; rw [hk])⟩⟩⟩
+  else by
+    have : H = (⊥ : Subgroup α) :=
+      Subgroup.ext fun x =>
+        ⟨fun h => by simp at *; tauto, fun h => by rw [Subgroup.mem_bot.1 h]; exact H.one_mem⟩
+    subst this; infer_instance
+
+@[to_additive]
 
 Depends on / 依赖: Classical, Classical.propDecidable, Int.natAbs_eq_zero.mp, Int.natAbs_natCast, Int.natAbs_ne, Int.ofNat_eq_natCast, IsCyclic, IsCyclic.exists_generator, Nat.pos_of_ne_zero, exists_generator, k.natAbs, natAbs, natAbs_eq_zero, natAbs_natCast, natAbs_ne, ofNat_eq_natCast, pos_of_ne_zero, propDecidable, zpow_natCast, zpow_zero
 -/
@@ -1055,7 +1137,8 @@ obtain ⟨k, rfl⟩ := mem_zpowers_iff.mp h (mem_zpowers x)
     obtain ⟨n, rfl | rfl⟩ := Int.eq_nat_or_neg k
     · exact ⟨n, by rw [zpow_natCast]⟩
     · exact ⟨n, by simp⟩
-  · rintro ⟨k, rfl
+  · rintro ⟨k, rfl⟩
+exact zpowers_le_of_mem npow_mem_zpowers g k
 
 中文:
 定理 子群.le_zpowers_iff
@@ -1067,7 +1150,8 @@ obtain ⟨k, rfl⟩ := mem_zpowers_iff.mp h (mem_zpowers x)
     obtain ⟨n, rfl | rfl⟩ := Int.eq_nat_or_neg k
     · exact ⟨n, by rw [zpow_natCast]⟩
     · exact ⟨n, by simp⟩
-  · rintro ⟨k, rfl
+  · rintro ⟨k, rfl⟩
+exact zpowers_le_of_mem npow_mem_zpowers g k
 
 Depends on / 依赖: H.isCyclic_iff_exists_zpowers_eq_top, Int.eq_nat_or_neg, eq_nat_or_neg, isCyclic_iff_exists_zpowers_eq_top, isCyclic_of_le, mem_zpowers, mem_zpowers_iff, mem_zpowers_iff.mp, npow_mem_zpowers, zpow_natCast, zpowers_le_of_mem
 -/
@@ -1101,7 +1185,24 @@ theorem IsCyclic.card_pow_eq_one_le
       gcongr
       intro x hx
 let ⟨m, hm⟩ := show x in Submonoid.powers g from mem_powers_iff_mem_zpowers.2 hg x
-      re
+      refine Set.mem_toFinset.2 ⟨(m / (Fintype.card α / Nat.gcd n (Fintype.card α)) : Nat), ?_⟩
+      dsimp only at ⊢ hm
+      rw [zpow_natCast]; rw [← pow_mul]; rw [Nat.mul_div_cancel_left']; rw [hm]
+      refine Nat.dvd_of_mul_dvd_mul_right (gcd_pos_of_pos_left (Fintype.card α) hn0) ?_
+      conv_lhs =>
+        rw [Nat.div_mul_cancel (Nat.gcd_dvd_right _ _)]; rw [← Nat.card_eq_fintype_card]; rw [← orderOf_eq_card_of_forall_mem_zpowers hg]
+exact orderOf_dvd_of_pow_eq_one by simpa [pow_mul, hm] using (mem_filter.1 hx).2
+    _ <= n := by
+      let ⟨m, hm⟩ := Nat.gcd_dvd_right n (Fintype.card α)
+      have hm0 : 0 < m :=
+        Nat.pos_of_ne_zero fun hm0 => by
+          rw [hm0]; rw [mul_zero]; rw [Fintype.card_eq_zero_iff] at hm
+          exact hm.elim' 1
+      simp only [Set.toFinset_card, SetLike.coe_sort_coe]
+      rw [Fintype.card_zpowers]; rw [orderOf_pow g]; rw [orderOf_eq_card_of_forall_mem_zpowers hg]; rw [Nat.card_eq_fintype_card]
+      nth_rw 2 [hm]; nth_rw 3 [hm]
+      rw [Nat.mul_div_cancel_left _ (gcd_pos_of_pos_left _ hn0)]; rw [gcd_mul_left_left]; rw [hm]; rw [Nat.mul_div_cancel _ hm0]
+      exact le_of_dvd hn0 (Nat.gcd_dvd_left _ _)
 
 中文:
 定理 是循环.card_pow_eq_one_le
@@ -1113,7 +1214,24 @@ let ⟨m, hm⟩ := show x in Submonoid.powers g from mem_powers_iff_mem_zpowers.
       gcongr
       intro x hx
 let ⟨m, hm⟩ := show x in Submonoid.powers g from mem_powers_iff_mem_zpowers.2 hg x
-      re
+      refine Set.mem_toFinset.2 ⟨(m / (Fintype.card α / Nat.gcd n (Fintype.card α)) : Nat), ?_⟩
+      dsimp only at ⊢ hm
+      rw [zpow_natCast]; rw [← pow_mul]; rw [Nat.mul_div_cancel_left']; rw [hm]
+      refine Nat.dvd_of_mul_dvd_mul_right (gcd_pos_of_pos_left (Fintype.card α) hn0) ?_
+      conv_lhs =>
+        rw [Nat.div_mul_cancel (Nat.gcd_dvd_right _ _)]; rw [← Nat.card_eq_fintype_card]; rw [← orderOf_eq_card_of_forall_mem_zpowers hg]
+exact orderOf_dvd_of_pow_eq_one by simpa [pow_mul, hm] using (mem_filter.1 hx).2
+    _ <= n := by
+      let ⟨m, hm⟩ := Nat.gcd_dvd_right n (Fintype.card α)
+      have hm0 : 0 < m :=
+        Nat.pos_of_ne_zero fun hm0 => by
+          rw [hm0]; rw [mul_zero]; rw [Fintype.card_eq_zero_iff] at hm
+          exact hm.elim' 1
+      simp only [Set.toFinset_card, SetLike.coe_sort_coe]
+      rw [Fintype.card_zpowers]; rw [orderOf_pow g]; rw [orderOf_eq_card_of_forall_mem_zpowers hg]; rw [Nat.card_eq_fintype_card]
+      nth_rw 2 [hm]; nth_rw 3 [hm]
+      rw [Nat.mul_div_cancel_left _ (gcd_pos_of_pos_left _ hn0)]; rw [gcd_mul_left_left]; rw [hm]; rw [Nat.mul_div_cancel _ hm0]
+      exact le_of_dvd hn0 (Nat.gcd_dvd_left _ _)
 
 Depends on / 依赖: Fintype, Fintype.card, IsCyclic, IsCyclic.exists_generator, Nat.dvd_of_mul_dvd_mul_right, Nat.gcd, Nat.mul_div_cancel_left, Set.mem_toFinset, Submonoid, Submonoid.powers, dvd_of_mul_dvd_mul_right, exists_generator, gcd_pos_of_pos, mem_powers_iff_mem_zpowers, mem_toFinset, mul_div_cancel_left, pow_mul, powers, toFinset, zpow_natCast
 -/
@@ -1218,7 +1336,10 @@ definition MulDistribMulAction.toMonoidHomZModOfIsCyclic
   body: (MulDistribMulAction.toMonoidHom G m).map_cyclic.choose
   map_one' := by
     obtain ⟨g, hg⟩ := IsCyclic.exists_ofOrder_eq_natCard (α := G)
-    rw [← Int.cast_one]; rw [ZMod.intCast_eq_intCast_iff]; rw [← hn]; rw [← hg]; rw [← zpow_eq_zpow_iff_modEq]; rw [zpow_one]; rw [← (MulDistribMulAction.toMonoi
+    rw [← Int.cast_one]; rw [ZMod.intCast_eq_intCast_iff]; rw [← hn]; rw [← hg]; rw [← zpow_eq_zpow_iff_modEq]; rw [zpow_one]; rw [← (MulDistribMulAction.toMonoidHom G 1).map_cyclic.choose_spec]; rw [MulDistribMulAction.toMonoidHom_apply]; rw [one_smul]
+  map_mul' m n := by
+    obtain ⟨g, hg⟩ := IsCyclic.exists_ofOrder_eq_natCard (α := G)
+    rw [← Int.cast_mul]; rw [ZMod.intCast_eq_intCast_iff]; rw [← hn]; rw [← hg]; rw [← zpow_eq_zpow_iff_modEq]; rw [zpow_mul']; rw [← (MulDistribMulAction.toMonoidHom G m).map_cyclic.choose_spec]; rw [← (MulDistribMulAction.toMonoidHom G n).map_cyclic.choose_spec]; rw [← (MulDistribMulAction.toMonoidHom G (m * n)).map_cyclic.choose_spec]; rw [MulDistribMulAction.toMonoidHom_apply]; rw [MulDistribMulAction.toMonoidHom_apply]; rw [MulDistribMulAction.toMonoidHom_apply]; rw [mul_smul]
 
 中文:
 定义 MulDistribMul作用.toMonoidHomZModOfIsCyclic
@@ -1226,7 +1347,10 @@ definition MulDistribMulAction.toMonoidHomZModOfIsCyclic
   定义体: (MulDistribMulAction.toMonoidHom G m).map_cyclic.choose
   map_one' := by
     obtain ⟨g, hg⟩ := IsCyclic.exists_ofOrder_eq_natCard (α := G)
-    rw [← Int.cast_one]; rw [ZMod.intCast_eq_intCast_iff]; rw [← hn]; rw [← hg]; rw [← zpow_eq_zpow_iff_modEq]; rw [zpow_one]; rw [← (MulDistribMulAction.toMonoi
+    rw [← Int.cast_one]; rw [ZMod.intCast_eq_intCast_iff]; rw [← hn]; rw [← hg]; rw [← zpow_eq_zpow_iff_modEq]; rw [zpow_one]; rw [← (MulDistribMulAction.toMonoidHom G 1).map_cyclic.choose_spec]; rw [MulDistribMulAction.toMonoidHom_apply]; rw [one_smul]
+  map_mul' m n := by
+    obtain ⟨g, hg⟩ := IsCyclic.exists_ofOrder_eq_natCard (α := G)
+    rw [← Int.cast_mul]; rw [ZMod.intCast_eq_intCast_iff]; rw [← hn]; rw [← hg]; rw [← zpow_eq_zpow_iff_modEq]; rw [zpow_mul']; rw [← (MulDistribMulAction.toMonoidHom G m).map_cyclic.choose_spec]; rw [← (MulDistribMulAction.toMonoidHom G n).map_cyclic.choose_spec]; rw [← (MulDistribMulAction.toMonoidHom G (m * n)).map_cyclic.choose_spec]; rw [MulDistribMulAction.toMonoidHom_apply]; rw [MulDistribMulAction.toMonoidHom_apply]; rw [MulDistribMulAction.toMonoidHom_apply]; rw [mul_smul]
 
 Depends on / 依赖: Inhabited, MulDistribMulAction, MulDistribMulAction.toMonoidHom, map_cyclic, map_cyclic.choose, toMonoidHom
 -/
@@ -1284,7 +1408,9 @@ theorem IsCyclic.unique_zpow_zmod
   refine ⟨n, (?_ : a ^ n = _), fun y (hy : a ^ n = _) => ?_⟩
   · rw [← zpow_natCast, zpow_eq_zpow_iff_modEq, orderOf_eq_card_of_forall_mem_zpowers ha,
       Int.modEq_comm, Int.modEq_iff_add_fac, Nat.card_eq_fintype_card, ← ZMod.intCast_eq_iff]
-  · rw [← zpow_natCast, zp
+  · rw [← zpow_natCast, zpow_eq_zpow_iff_modEq, orderOf_eq_card_of_forall_mem_zpowers ha,
+      Nat.card_eq_fintype_card, ← ZMod.intCast_eq_intCast_iff] at hy
+    simp [hy]
 
 中文:
 定理 是循环.unique_zpow_zmod
@@ -1294,7 +1420,9 @@ theorem IsCyclic.unique_zpow_zmod
   refine ⟨n, (?_ : a ^ n = _), fun y (hy : a ^ n = _) => ?_⟩
   · rw [← zpow_natCast, zpow_eq_zpow_iff_modEq, orderOf_eq_card_of_forall_mem_zpowers ha,
       Int.modEq_comm, Int.modEq_iff_add_fac, Nat.card_eq_fintype_card, ← ZMod.intCast_eq_iff]
-  · rw [← zpow_natCast, zp
+  · rw [← zpow_natCast, zpow_eq_zpow_iff_modEq, orderOf_eq_card_of_forall_mem_zpowers ha,
+      Nat.card_eq_fintype_card, ← ZMod.intCast_eq_intCast_iff] at hy
+    simp [hy]
 
 Depends on / 依赖: Int.modEq_comm, Int.modEq_iff_add_fac, Nat.card_eq_fintype_card, ZMod.intCast_eq_iff, ZMod.intCast_eq_intCast_iff, card_eq_fintype_card, intCast_eq_iff, intCast_eq_intCast_iff, modEq_comm, modEq_iff_add_fac, orderOf_eq_card_of_forall_mem_zpowers, zpow_eq_zpow_iff_modEq, zpow_natCast
 -/

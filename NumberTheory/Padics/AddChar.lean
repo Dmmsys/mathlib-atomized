@@ -85,7 +85,19 @@ definition addChar_of_value_at_one
     rw [← Nat.cast_zero]; rw [mahlerSeries_apply_nat hr le_rfl]; rw [zero_add]; rw [Finset.sum_range_one]; rw [Nat.choose_self]; rw [pow_zero]; rw [one_smul]
   map_add_eq_mul' a b := by
     let F : C(Int_[p], R) := mahlerSeries (r ^ ·)
-    change F (a + 
+    change F (a + b) = F a * F b
+    -- It is fiddly to show directly that `F (a + b) = F a * F b` for general `a, b`,
+    -- so we prove it for `a, b ∈ ℕ` directly, and then deduce it for all `a, b` by continuity.
+    have hF (n : Nat) : F n = (r + 1) ^ n := by
+      rw [mahlerSeries_apply_nat hr le_rfl]; rw [(Commute.one_right _).add_pow]
+      refine Finset.sum_congr rfl fun i hi => ?_
+      rw [one_pow]; rw [mul_one]; rw [nsmul_eq_mul]; rw [Nat.cast_comm]
+    refine congr_fun ((denseRange_natCast.prodMap denseRange_natCast).equalizer
+      ((map_continuous F).comp continuous_add)
+      (continuous_mul.comp (map_continuous <| F.prodMap F)) (funext fun ⟨m, n⟩ => ?_)) (a, b)
+    simp [← Nat.cast_add, hF, ContinuousMap.prodMap_apply, pow_add]
+
+@[fun_prop]
 
 中文:
 定义 addChar_of_value_at_one
@@ -95,7 +107,19 @@ definition addChar_of_value_at_one
     rw [← Nat.cast_zero]; rw [mahlerSeries_apply_nat hr le_rfl]; rw [zero_add]; rw [Finset.sum_range_one]; rw [Nat.choose_self]; rw [pow_zero]; rw [one_smul]
   map_add_eq_mul' a b := by
     let F : C(Int_[p], R) := mahlerSeries (r ^ ·)
-    change F (a + 
+    change F (a + b) = F a * F b
+    -- It is fiddly to show directly that `F (a + b) = F a * F b` for general `a, b`,
+    -- so we prove it for `a, b ∈ ℕ` directly, and then deduce it for all `a, b` by continuity.
+    have hF (n : Nat) : F n = (r + 1) ^ n := by
+      rw [mahlerSeries_apply_nat hr le_rfl]; rw [(Commute.one_right _).add_pow]
+      refine Finset.sum_congr rfl fun i hi => ?_
+      rw [one_pow]; rw [mul_one]; rw [nsmul_eq_mul]; rw [Nat.cast_comm]
+    refine congr_fun ((denseRange_natCast.prodMap denseRange_natCast).equalizer
+      ((map_continuous F).comp continuous_add)
+      (continuous_mul.comp (map_continuous <| F.prodMap F)) (funext fun ⟨m, n⟩ => ?_)) (a, b)
+    simp [← Nat.cast_add, hF, ContinuousMap.prodMap_apply, pow_add]
+
+@[fun_prop]
 
 Depends on / 依赖: mahlerSeries
 -/

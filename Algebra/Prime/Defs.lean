@@ -544,7 +544,8 @@ theorem Prime.irreducible
     exact (hp.dvd_or_dvd dvd_rfl).symm.imp
       (isUnit_of_dvd_one <| (mul_dvd_mul_iff_right <| right_ne_zero_of_mul hp.ne_zero).mp <|
         dvd_mul_of_dvd_right · _)
-      (isUnit_of_dvd_one <| (mul_dvd_mul_iff_left <| left_ne_zero_of_mul hp.ne_zero).
+      (isUnit_of_dvd_one <| (mul_dvd_mul_iff_left <| left_ne_zero_of_mul hp.ne_zero).mp <|
+        dvd_mul_of_dvd_left · _)⟩
 
 中文:
 定理 素.irreducible
@@ -555,7 +556,8 @@ theorem Prime.irreducible
     exact (hp.dvd_or_dvd dvd_rfl).symm.imp
       (isUnit_of_dvd_one <| (mul_dvd_mul_iff_right <| right_ne_zero_of_mul hp.ne_zero).mp <|
         dvd_mul_of_dvd_right · _)
-      (isUnit_of_dvd_one <| (mul_dvd_mul_iff_left <| left_ne_zero_of_mul hp.ne_zero).
+      (isUnit_of_dvd_one <| (mul_dvd_mul_iff_left <| left_ne_zero_of_mul hp.ne_zero).mp <|
+        dvd_mul_of_dvd_left · _)⟩
 -/
 protected theorem Prime.irreducible (hp : Prime p) : Irreducible p :=
   ⟨hp.not_isUnit, fun a b => by

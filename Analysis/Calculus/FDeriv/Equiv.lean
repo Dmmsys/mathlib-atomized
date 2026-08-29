@@ -230,7 +230,7 @@ theorem comp_differentiableWithinAt_iff
   refine ⟨fun H => ?_, fun H => iso.differentiable.differentiableAt.comp_differentiableWithinAt x H⟩
   have : DifferentiableWithinAt 𝕜 (iso.symm ∘ iso ∘ f) s x :=
     iso.symm.differentiable.differentiableAt.comp_differentiableWithinAt x H
-  rwa [← Function.comp_assoc iso.symm iso f, iso.symm_com
+  rwa [← Function.comp_assoc iso.symm iso f, iso.symm_comp_self] at this
 
 中文:
 定理 comp_differentiableWithinAt_iff
@@ -239,7 +239,7 @@ theorem comp_differentiableWithinAt_iff
   refine ⟨fun H => ?_, fun H => iso.differentiable.differentiableAt.comp_differentiableWithinAt x H⟩
   have : DifferentiableWithinAt 𝕜 (iso.symm ∘ iso ∘ f) s x :=
     iso.symm.differentiable.differentiableAt.comp_differentiableWithinAt x H
-  rwa [← Function.comp_assoc iso.symm iso f, iso.symm_com
+  rwa [← Function.comp_assoc iso.symm iso f, iso.symm_comp_self] at this
 
 Depends on / 依赖: DifferentiableWithinAt, Function, Function.comp_assoc, comp_assoc, comp_differentiableWithinAt, differentiable, differentiableAt, iso.differentiable.differentiableAt.comp_differentiableWithinAt, iso.symm, iso.symm.differentiable.differentiableAt.comp_differentiableWithinAt, iso.symm_comp_self, symm_comp_self
 -/
@@ -448,7 +448,7 @@ theorem comp_fderivWithin
   by_cases h : DifferentiableWithinAt 𝕜 f s x
   · rw [fderiv_comp_fderivWithin x iso.differentiableAt h hxs, iso.fderiv]
   · have : ¬DifferentiableWithinAt 𝕜 (iso ∘ f) s x := mt iso.comp_differentiableWithinAt_iff.1 h
-    rw [fderivWithin_zero_of_not_differentiableWithinAt h]; rw [fderivWithin_ze
+    rw [fderivWithin_zero_of_not_differentiableWithinAt h]; rw [fderivWithin_zero_of_not_differentiableWithinAt this]; rw [ContinuousLinearMap.comp_zero]
 
 中文:
 定理 comp_fderivWithin
@@ -457,7 +457,7 @@ theorem comp_fderivWithin
   by_cases h : DifferentiableWithinAt 𝕜 f s x
   · rw [fderiv_comp_fderivWithin x iso.differentiableAt h hxs, iso.fderiv]
   · have : ¬DifferentiableWithinAt 𝕜 (iso ∘ f) s x := mt iso.comp_differentiableWithinAt_iff.1 h
-    rw [fderivWithin_zero_of_not_differentiableWithinAt h]; rw [fderivWithin_ze
+    rw [fderivWithin_zero_of_not_differentiableWithinAt h]; rw [fderivWithin_zero_of_not_differentiableWithinAt this]; rw [ContinuousLinearMap.comp_zero]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_zero, DifferentiableWithinAt, comp_differentiableWithinAt_iff, comp_zero, differentiableAt, fderiv, fderivWithin_zero_of_not_differentiableWithinAt, fderiv_comp_fderivWithin, iso.comp_differentiableWithinAt_iff, iso.differentiableAt, iso.fderiv
 -/
@@ -580,7 +580,8 @@ theorem comp_right_differentiableWithinAt_iff
     rw [← iso.symm_apply_apply x] at H
     apply H.comp (iso x) iso.symm.differentiableWithinAt
     intro y hy
-    simpa only [mem_pr
+    simpa only [mem_preimage, apply_symm_apply] using hy
+  rwa [Function.comp_assoc, iso.self_comp_symm] at this
 
 中文:
 定理 comp_right_differentiableWithinAt_iff
@@ -591,7 +592,8 @@ theorem comp_right_differentiableWithinAt_iff
     rw [← iso.symm_apply_apply x] at H
     apply H.comp (iso x) iso.symm.differentiableWithinAt
     intro y hy
-    simpa only [mem_pr
+    simpa only [mem_preimage, apply_symm_apply] using hy
+  rwa [Function.comp_assoc, iso.self_comp_symm] at this
 
 Depends on / 依赖: DifferentiableWithinAt, Function, Function.comp_assoc, H.comp, apply_symm_apply, comp_assoc, differentiableWithinAt, iso.differentiableWithinAt, iso.self_comp_symm, iso.symm, iso.symm.differentiableWithinAt, iso.symm_apply_apply, mapsTo_preimage, mem_preimage, self_comp_symm, symm_apply_apply
 -/
@@ -692,7 +694,12 @@ theorem comp_right_hasFDerivWithinAt_iff
   have A : f = (f ∘ iso) ∘ iso.symm := by
     rw [Function.comp_assoc]; rw [iso.self_comp_symm]
     rfl
-  have B : f' = (f'.comp (iso : E ->L[𝕜] F)).comp (iso.symm : F ->L[𝕜]
+  have B : f' = (f'.comp (iso : E ->L[𝕜] F)).comp (iso.symm : F ->L[𝕜] E) := by
+    rw [ContinuousLinearMap.comp_assoc]; rw [iso.coe_comp_coe_symm]; rw [ContinuousLinearMap.comp_id]
+  rw [A]; rw [B]
+  apply H.comp (iso x) iso.symm.hasFDerivWithinAt
+  intro y hy
+  simpa only [mem_preimage, apply_symm_apply] using hy
 
 中文:
 定理 comp_right_hasFDerivWithinAt_iff
@@ -703,7 +710,12 @@ theorem comp_right_hasFDerivWithinAt_iff
   have A : f = (f ∘ iso) ∘ iso.symm := by
     rw [Function.comp_assoc]; rw [iso.self_comp_symm]
     rfl
-  have B : f' = (f'.comp (iso : E ->L[𝕜] F)).comp (iso.symm : F ->L[𝕜]
+  have B : f' = (f'.comp (iso : E ->L[𝕜] F)).comp (iso.symm : F ->L[𝕜] E) := by
+    rw [ContinuousLinearMap.comp_assoc]; rw [iso.coe_comp_coe_symm]; rw [ContinuousLinearMap.comp_id]
+  rw [A]; rw [B]
+  apply H.comp (iso x) iso.symm.hasFDerivWithinAt
+  intro y hy
+  simpa only [mem_preimage, apply_symm_apply] using hy
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_assoc, ContinuousLinearMap.comp_id, Function, Function.comp_assoc, H.comp, apply_sy, coe_comp_coe_symm, comp_assoc, comp_id, hasFDerivWithinAt, iso.coe_comp_coe_symm, iso.hasFDerivWithinAt, iso.self_comp_symm, iso.symm, iso.symm.hasFDerivWithinAt, iso.symm_apply_apply, mapsTo_preimage, mem_preimage, self_comp_symm
 -/
@@ -798,7 +810,7 @@ theorem comp_right_fderivWithin
   · have : ¬DifferentiableWithinAt 𝕜 (f ∘ iso) (iso ⁻¹' s) x := by
       intro h'
       exact h (iso.comp_right_differentiableWithinAt_iff.1 h')
-    rw [fder
+    rw [fderivWithin_zero_of_not_differentiableWithinAt h]; rw [fderivWithin_zero_of_not_differentiableWithinAt this]; rw [ContinuousLinearMap.zero_comp]
 
 中文:
 定理 comp_right_fderivWithin
@@ -809,7 +821,7 @@ theorem comp_right_fderivWithin
   · have : ¬DifferentiableWithinAt 𝕜 (f ∘ iso) (iso ⁻¹' s) x := by
       intro h'
       exact h (iso.comp_right_differentiableWithinAt_iff.1 h')
-    rw [fder
+    rw [fderivWithin_zero_of_not_differentiableWithinAt h]; rw [fderivWithin_zero_of_not_differentiableWithinAt this]; rw [ContinuousLinearMap.zero_comp]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.zero_comp, DifferentiableWithinAt, comp_right_differentiableWithinAt_iff, comp_right_hasFDerivWithinAt_iff, fderivWithin, fderivWithin_zero_of_not_differentiableWithinAt, h.hasFDerivWithinAt, hasFDerivWithinAt, iso.comp_right_differentiableWithinAt_iff, iso.comp_right_hasFDerivWithinAt_iff, zero_comp
 -/
@@ -1281,7 +1293,12 @@ theorem HasFDerivWithinAt.tendsto_nhdsWithin_nhdsNE
     exact ⟨C, fun x => by simpa using hC.le_mul_dist 0 x⟩
   have A : (fun z => z - x) =O[𝓝[s] x] fun z => f' (z - x) :=
 isBigO_iff.mpr hf'.imp fun C hC => Eventually.of_forall fun z => hC (z - x)
-  have : (fun z
+  have : (fun z => f z - f x) ~[𝓝[s] x] fun z => f' (z - x) := h.isLittleO.trans_isBigO A
+  have : forallᶠ (x_1 : E) in 𝓝[s] x, x_1 in ({x}ᶜ : Set E) -> f x_1 in ({f x}ᶜ : Set F) := by
+    simpa [sub_eq_zero, not_imp_not] using (A.trans this.isBigO_symm).eq_zero_imp
+  apply le_inf ((map_mono (nhdsWithin_mono x sdiff_subset)).trans h.continuousWithinAt)
+  rwa [le_principal_iff, ← eventually_mem_set, eventually_map, sdiff_eq, nhdsWithin_inter',
+    eventually_inf_principal]
 
 中文:
 定理 HasFDerivWithinAt.tendsto_nhdsWithin_nhdsNE
@@ -1292,7 +1309,12 @@ isBigO_iff.mpr hf'.imp fun C hC => Eventually.of_forall fun z => hC (z - x)
     exact ⟨C, fun x => by simpa using hC.le_mul_dist 0 x⟩
   have A : (fun z => z - x) =O[𝓝[s] x] fun z => f' (z - x) :=
 isBigO_iff.mpr hf'.imp fun C hC => Eventually.of_forall fun z => hC (z - x)
-  have : (fun z
+  have : (fun z => f z - f x) ~[𝓝[s] x] fun z => f' (z - x) := h.isLittleO.trans_isBigO A
+  have : forallᶠ (x_1 : E) in 𝓝[s] x, x_1 in ({x}ᶜ : Set E) -> f x_1 in ({f x}ᶜ : Set F) := by
+    simpa [sub_eq_zero, not_imp_not] using (A.trans this.isBigO_symm).eq_zero_imp
+  apply le_inf ((map_mono (nhdsWithin_mono x sdiff_subset)).trans h.continuousWithinAt)
+  rwa [le_principal_iff, ← eventually_mem_set, eventually_map, sdiff_eq, nhdsWithin_inter',
+    eventually_inf_principal]
 
 Depends on / 依赖: A.tran, Eventually, Eventually.of_forall, h.isLittleO.trans_isBigO, hC.le_mul_dist, isBigO_iff, isBigO_iff.mpr, isLittleO, le_mul_dist, not_imp_not, of_forall, replace, sub_eq_zero, trans_isBigO
 -/
@@ -1524,7 +1546,9 @@ theorem HasFDerivWithinAt.mapsTo_tangent_cone
   apply mem_tangentConeAt_of_seq l c (fun n => f (x + d n) - f x)
   · rw [tendsto_sub_nhds_zero_iff]
 refine h.continuousWithinAt.tendsto.comp tendsto_nhdsWithin_iff.mpr ⟨?_, hds⟩
-    simpa using tendsto_
+    simpa using tendsto_const_nhds.add hd₀
+  · exact hds.mono fun n hn => ⟨x + d n, hn, by simp⟩
+  · exact h.lim hd₀ hds hcd
 
 中文:
 定理 HasFDerivWithinAt.mapsTo_tangent_cone
@@ -1535,7 +1559,9 @@ refine h.continuousWithinAt.tendsto.comp tendsto_nhdsWithin_iff.mpr ⟨?_, hds�
   apply mem_tangentConeAt_of_seq l c (fun n => f (x + d n) - f x)
   · rw [tendsto_sub_nhds_zero_iff]
 refine h.continuousWithinAt.tendsto.comp tendsto_nhdsWithin_iff.mpr ⟨?_, hds⟩
-    simpa using tendsto_
+    simpa using tendsto_const_nhds.add hd₀
+  · exact hds.mono fun n hn => ⟨x + d n, hn, by simp⟩
+  · exact h.lim hd₀ hds hcd
 
 Depends on / 依赖: continuousWithinAt, exists_fun_of_mem_tangentConeAt, h.continuousWithinAt.tendsto.comp, h.lim, hds.mono, mem_tangentConeAt_of_seq, tendsto, tendsto_const_nhds, tendsto_const_nhds.add, tendsto_nhdsWithin_iff, tendsto_nhdsWithin_iff.mpr, tendsto_sub_nhds_zero_iff
 -/
@@ -1562,7 +1588,7 @@ theorem HasFDerivWithinAt.uniqueDiffWithinAt
     Submodule.span 𝕜 (tangentConeAt 𝕜 s x) <=
       (Submodule.span 𝕜 (tangentConeAt 𝕜 (f '' s) (f x))).comap f'.toLinearMap
   rw [Submodule.span_le]
-  exact h.mapsTo_tangent_cone.mono Subset
+  exact h.mapsTo_tangent_cone.mono Subset.rfl Submodule.subset_span
 
 中文:
 定理 HasFDerivWithinAt.uniqueDiffWithinAt
@@ -1573,7 +1599,7 @@ theorem HasFDerivWithinAt.uniqueDiffWithinAt
     Submodule.span 𝕜 (tangentConeAt 𝕜 s x) <=
       (Submodule.span 𝕜 (tangentConeAt 𝕜 (f '' s) (f x))).comap f'.toLinearMap
   rw [Submodule.span_le]
-  exact h.mapsTo_tangent_cone.mono Subset
+  exact h.mapsTo_tangent_cone.mono Subset.rfl Submodule.subset_span
 
 Depends on / 依赖: Submodule, Submodule.span, Submodule.span_le, Submodule.subset_span, Subset, Subset.rfl, continuous, continuousWithinAt, dense_of_mapsTo, h.continuousWithinAt.mem_closure_image, h.mapsTo_tangent_cone.mono, mapsTo_tangent_cone, mem_closure_image, span_le, subset_span, tangentConeAt, toLinearMap
 -/
@@ -1754,7 +1780,8 @@ theorem hasFDerivWithinAt_comp_smul_smul_iff
   · lift c to 𝕜ˣ using IsUnit.mk0 c hc
     have A : f'.comp ((ContinuousLinearEquiv.smulLeft c : E ≃L[𝕜] E) : E ->L[𝕜] E) = c • f' := by
       ext; simp
-    rw 
+    rw [← Units.smul_def c x]; rw [← ContinuousLinearEquiv.smulLeft_apply_apply (R₁ := 𝕜)]; rw [← ContinuousLinearEquiv.comp_right_hasFDerivWithinAt_iff]; rw [A]
+    simp [Function.comp_def, ← Units.smul_def, ← preimage_smul_inv, preimage_preimage]
 
 中文:
 定理 hasFDerivWithinAt_comp_smul_smul_iff
@@ -1765,7 +1792,8 @@ theorem hasFDerivWithinAt_comp_smul_smul_iff
   · lift c to 𝕜ˣ using IsUnit.mk0 c hc
     have A : f'.comp ((ContinuousLinearEquiv.smulLeft c : E ≃L[𝕜] E) : E ->L[𝕜] E) = c • f' := by
       ext; simp
-    rw 
+    rw [← Units.smul_def c x]; rw [← ContinuousLinearEquiv.smulLeft_apply_apply (R₁ := 𝕜)]; rw [← ContinuousLinearEquiv.comp_right_hasFDerivWithinAt_iff]; rw [A]
+    simp [Function.comp_def, ← Units.smul_def, ← preimage_smul_inv, preimage_preimage]
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.comp_right_hasFDerivWithinAt_iff, ContinuousLinearEquiv.smulLeft, ContinuousLinearEquiv.smulLeft_apply_apply, Function, Function.comp_def, HasFDerivWithinAt, HasFDerivWithinAt.of_subsingleton, IsUnit, IsUnit.mk0, Units.smul_def, comp_def, comp_right_hasFDerivWithinAt_iff, eq_or_ne, hasFDerivWithinAt_const, of_subsingleton, preimage_smul_inv, smulLeft, smulLeft_apply_apply, smul_def
 -/

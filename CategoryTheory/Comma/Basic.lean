@@ -620,7 +620,9 @@ definition map
       right := F₂.map φ.right
       w := by
         dsimp
-        rw [assoc]; rw [assoc]; rw [← Functor.comp_map]; rw [α.naturality_assoc]; rw 
+        rw [assoc]; rw [assoc]; rw [← Functor.comp_map]; rw [α.naturality_assoc]; rw [← Functor.comp_map]; rw [← β.naturality]
+        dsimp
+        rw [← F.map_comp_assoc]; rw [← F.map_comp_assoc]; rw [φ.w] }
 
 中文:
 定义 map
@@ -633,7 +635,9 @@ definition map
       right := F₂.map φ.right
       w := by
         dsimp
-        rw [assoc]; rw [assoc]; rw [← Functor.comp_map]; rw [α.naturality_assoc]; rw 
+        rw [assoc]; rw [assoc]; rw [← Functor.comp_map]; rw [α.naturality_assoc]; rw [← Functor.comp_map]; rw [← β.naturality]
+        dsimp
+        rw [← F.map_comp_assoc]; rw [← F.map_comp_assoc]; rw [φ.w] }
 
 Depends on / 依赖: F.map, F.map_comp_assoc, Functor, Functor.comp_map, X.hom, X.left, X.right, comp_map, map_comp_assoc, naturality, naturality_assoc
 -/
@@ -720,7 +724,13 @@ instance full_map
       w := F.map_injective (by
         rw [← cancel_mono (β.app _)]; rw [← cancel_epi (α.app _)]; rw [F.map_comp]; rw [F.map_comp]; rw [assoc]; rw [assoc]
         calc
-        _ = (F₁ ⋙ L').map (F₁.preimage φ.left) ≫ α.app Y.left ≫ F.ma
+        _ = (F₁ ⋙ L').map (F₁.preimage φ.left) ≫ α.app Y.left ≫ F.map Y.hom ≫ β.app Y.right := by
+          rw [← Functor.comp_map]; rw [← α.naturality_assoc]
+        _ = α.app X.left ≫ F.map X.hom ≫ β.app X.right ≫ (F₂ ⋙ R').map (F₂.preimage φ.right) := by
+          simp only [Functor.comp_map, Functor.map_preimage, ← map_obj_hom α β Y, φ.w,
+            map_obj_hom α β X, assoc]
+        _ = _ := by rw [← Functor.comp_map, β.naturality] )},
+      by cat_disch⟩
 
 中文:
 实例 full_map
@@ -730,7 +740,13 @@ instance full_map
       w := F.map_injective (by
         rw [← cancel_mono (β.app _)]; rw [← cancel_epi (α.app _)]; rw [F.map_comp]; rw [F.map_comp]; rw [assoc]; rw [assoc]
         calc
-        _ = (F₁ ⋙ L').map (F₁.preimage φ.left) ≫ α.app Y.left ≫ F.ma
+        _ = (F₁ ⋙ L').map (F₁.preimage φ.left) ≫ α.app Y.left ≫ F.map Y.hom ≫ β.app Y.right := by
+          rw [← Functor.comp_map]; rw [← α.naturality_assoc]
+        _ = α.app X.left ≫ F.map X.hom ≫ β.app X.right ≫ (F₂ ⋙ R').map (F₂.preimage φ.right) := by
+          simp only [Functor.comp_map, Functor.map_preimage, ← map_obj_hom α β Y, φ.w,
+            map_obj_hom α β X, assoc]
+        _ = _ := by rw [← Functor.comp_map, β.naturality] )},
+      by cat_disch⟩
 
 Depends on / 依赖: F.map, F.map_comp, F.map_injective, Functor, Functor.comp_map, Functor.map_preimage, X.hom, X.left, X.right, Y.hom, Y.left, Y.right, cancel_epi, cancel_mono, comp_map, map_comp, map_injective, map_obj_hom, map_preimage, naturality_assoc
 -/
@@ -761,7 +777,13 @@ instance essSurj_map
       right := F₂.objPreimage X.right
       hom := F.preimage ((inv α).app _ ≫ L'.map (F₁.objObjPreimageIso X.left).hom ≫
         X.hom ≫ R'.map (F₂.objObjPreimageIso X.right).inv ≫ (inv β).app _) },
-          ⟨isoMk (F₁.objObjPreimageIso X.left) (F₂.objObjPreimageIso
+          ⟨isoMk (F₁.objObjPreimageIso X.left) (F₂.objObjPreimageIso X.right) (by
+            dsimp
+            simp only [NatIso.isIso_inv_app, Functor.comp_obj, Functor.map_preimage, assoc,
+              IsIso.inv_hom_id, comp_id, IsIso.hom_inv_id_assoc]
+            rw [← R'.map_comp]; rw [Iso.inv_hom_id]; rw [R'.map_id]; rw [comp_id])⟩⟩
+
+@[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 22 23, 26 27)]
 
 中文:
 实例 essSurj_map
@@ -770,7 +792,13 @@ instance essSurj_map
       right := F₂.objPreimage X.right
       hom := F.preimage ((inv α).app _ ≫ L'.map (F₁.objObjPreimageIso X.left).hom ≫
         X.hom ≫ R'.map (F₂.objObjPreimageIso X.right).inv ≫ (inv β).app _) },
-          ⟨isoMk (F₁.objObjPreimageIso X.left) (F₂.objObjPreimageIso
+          ⟨isoMk (F₁.objObjPreimageIso X.left) (F₂.objObjPreimageIso X.right) (by
+            dsimp
+            simp only [NatIso.isIso_inv_app, Functor.comp_obj, Functor.map_preimage, assoc,
+              IsIso.inv_hom_id, comp_id, IsIso.hom_inv_id_assoc]
+            rw [← R'.map_comp]; rw [Iso.inv_hom_id]; rw [R'.map_id]; rw [comp_id])⟩⟩
+
+@[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 22 23, 26 27)]
 
 Depends on / 依赖: F.preimage, Functor, Functor.comp_obj, Functor.map_preimage, IsIso.hom_inv_id_assoc, IsIso.inv_hom_id, Iso.inv_hom_id, NatIso, NatIso.isIso_inv_app, X.hom, X.left, X.right, comp_id, comp_obj, hom_inv_id_assoc, inv_hom_id, isIso_inv_app, map_comp, map_id, map_preimage
 -/

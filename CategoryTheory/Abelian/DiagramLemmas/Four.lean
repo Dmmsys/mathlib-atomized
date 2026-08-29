@@ -75,7 +75,15 @@ theorem mono_of_epi_of_mono_of_mono'
   have h₂ : f₂ ≫ R₁.map' 2 3 = 0 := by
     rw [← cancel_mono (app' φ 3 _)]; rw [assoc]; rw [NatTrans.naturality]; rw [reassoc_of% h₁]; rw [zero_comp]; rw [zero_comp]
   obtain ⟨A₁, π₁, _, f₁, hf₁⟩ := (hR₁'.exact 0).exact_up_to_refinements f₂ h₂
-  dsimp a
+  dsimp at hf₁
+  have h₃ : (f₁ ≫ app' φ 1) ≫ R₂.map' 1 2 = 0 := by
+    rw [assoc]; rw [← NatTrans.naturality]; rw [← reassoc_of% hf₁]; rw [h₁]; rw [comp_zero]
+  obtain ⟨A₂, π₂, _, g₀, hg₀⟩ := (hR₂.exact 0).exact_up_to_refinements _ h₃
+  obtain ⟨A₃, π₃, _, f₀, hf₀⟩ := surjective_up_to_refinements_of_epi (app' φ 0 _) g₀
+  have h₄ : f₀ ≫ R₁.map' 0 1 = π₃ ≫ π₂ ≫ f₁ := by
+    rw [← cancel_mono (app' φ 1 _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [NatTrans.naturality]; rw [← reassoc_of% hf₀]; rw [hg₀]
+    rfl
+  rw [← cancel_epi π₁]; rw [comp_zero]; rw [hf₁]; rw [← cancel_epi π₂]; rw [← cancel_epi π₃]; rw [comp_zero]; rw [comp_zero]; rw [← reassoc_of% h₄]; rw [← R₁.map'_comp 0 1 2]; rw [hR₁]; rw [comp_zero]
 
 中文:
 定理 mono_of_epi_of_mono_of_mono'
@@ -86,7 +94,15 @@ theorem mono_of_epi_of_mono_of_mono'
   have h₂ : f₂ ≫ R₁.map' 2 3 = 0 := by
     rw [← cancel_mono (app' φ 3 _)]; rw [assoc]; rw [NatTrans.naturality]; rw [reassoc_of% h₁]; rw [zero_comp]; rw [zero_comp]
   obtain ⟨A₁, π₁, _, f₁, hf₁⟩ := (hR₁'.exact 0).exact_up_to_refinements f₂ h₂
-  dsimp a
+  dsimp at hf₁
+  have h₃ : (f₁ ≫ app' φ 1) ≫ R₂.map' 1 2 = 0 := by
+    rw [assoc]; rw [← NatTrans.naturality]; rw [← reassoc_of% hf₁]; rw [h₁]; rw [comp_zero]
+  obtain ⟨A₂, π₂, _, g₀, hg₀⟩ := (hR₂.exact 0).exact_up_to_refinements _ h₃
+  obtain ⟨A₃, π₃, _, f₀, hf₀⟩ := surjective_up_to_refinements_of_epi (app' φ 0 _) g₀
+  have h₄ : f₀ ≫ R₁.map' 0 1 = π₃ ≫ π₂ ≫ f₁ := by
+    rw [← cancel_mono (app' φ 1 _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [NatTrans.naturality]; rw [← reassoc_of% hf₀]; rw [hg₀]
+    rfl
+  rw [← cancel_epi π₁]; rw [comp_zero]; rw [hf₁]; rw [← cancel_epi π₂]; rw [← cancel_epi π₃]; rw [comp_zero]; rw [comp_zero]; rw [← reassoc_of% h₄]; rw [← R₁.map'_comp 0 1 2]; rw [hR₁]; rw [comp_zero]
 
 Depends on / 依赖: NatTrans, NatTrans.naturality, cancel_mono, comp_zero, exact_up_to_refinements, mono_of_cancel_zero, naturality, reassoc_of, zero_comp
 -/
@@ -149,7 +165,20 @@ theorem epi_of_epi_of_epi_of_mono'
   obtain ⟨A₁, π₁, _, f₂, h₁⟩ :=
     surjective_up_to_refinements_of_epi (app' φ 2 _) (g₁ ≫ R₂.map' 1 2)
   have h₂ : f₂ ≫ R₁.map' 2 3 = 0 := by
-    rw [← cancel_mono (app' φ 3 _)]; rw [assoc]; rw [zero_comp]; rw [NatTrans.naturality]; rw [← 
+    rw [← cancel_mono (app' φ 3 _)]; rw [assoc]; rw [zero_comp]; rw [NatTrans.naturality]; rw [← reassoc_of% h₁]; rw [← R₂.map'_comp 1 2 3]; rw [hR₂']; rw [comp_zero]; rw [comp_zero]
+  obtain ⟨A₂, π₂, _, f₁, h₃⟩ := (hR₁.exact 0).exact_up_to_refinements _ h₂
+  dsimp at f₁ h₃
+  have h₄ : (π₂ ≫ π₁ ≫ g₁ - f₁ ≫ app' φ 1 _) ≫ R₂.map' 1 2 = 0 := by
+    rw [sub_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← NatTrans.naturality]; rw [← reassoc_of% h₃]; rw [h₁]; rw [sub_self]
+  obtain ⟨A₃, π₃, _, g₀, h₅⟩ := (hR₂.exact 0).exact_up_to_refinements _ h₄
+  dsimp at g₀ h₅
+  rw [comp_sub] at h₅
+  obtain ⟨A₄, π₄, _, f₀, h₆⟩ := surjective_up_to_refinements_of_epi (app' φ 0 _) g₀
+  refine ⟨A₄, π₄ ≫ π₃ ≫ π₂ ≫ π₁, inferInstance,
+    π₄ ≫ π₃ ≫ f₁ + f₀ ≫ (by exact R₁.map' 0 1), ?_⟩
+  rw [assoc]; rw [assoc]; rw [assoc]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [NatTrans.naturality]; rw [← reassoc_of% h₆]; rw [← h₅]; rw [comp_sub]
+  dsimp
+  rw [add_sub_cancel]
 
 中文:
 定理 epi_of_epi_of_epi_of_mono'
@@ -159,7 +188,20 @@ theorem epi_of_epi_of_epi_of_mono'
   obtain ⟨A₁, π₁, _, f₂, h₁⟩ :=
     surjective_up_to_refinements_of_epi (app' φ 2 _) (g₁ ≫ R₂.map' 1 2)
   have h₂ : f₂ ≫ R₁.map' 2 3 = 0 := by
-    rw [← cancel_mono (app' φ 3 _)]; rw [assoc]; rw [zero_comp]; rw [NatTrans.naturality]; rw [← 
+    rw [← cancel_mono (app' φ 3 _)]; rw [assoc]; rw [zero_comp]; rw [NatTrans.naturality]; rw [← reassoc_of% h₁]; rw [← R₂.map'_comp 1 2 3]; rw [hR₂']; rw [comp_zero]; rw [comp_zero]
+  obtain ⟨A₂, π₂, _, f₁, h₃⟩ := (hR₁.exact 0).exact_up_to_refinements _ h₂
+  dsimp at f₁ h₃
+  have h₄ : (π₂ ≫ π₁ ≫ g₁ - f₁ ≫ app' φ 1 _) ≫ R₂.map' 1 2 = 0 := by
+    rw [sub_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [← NatTrans.naturality]; rw [← reassoc_of% h₃]; rw [h₁]; rw [sub_self]
+  obtain ⟨A₃, π₃, _, g₀, h₅⟩ := (hR₂.exact 0).exact_up_to_refinements _ h₄
+  dsimp at g₀ h₅
+  rw [comp_sub] at h₅
+  obtain ⟨A₄, π₄, _, f₀, h₆⟩ := surjective_up_to_refinements_of_epi (app' φ 0 _) g₀
+  refine ⟨A₄, π₄ ≫ π₃ ≫ π₂ ≫ π₁, inferInstance,
+    π₄ ≫ π₃ ≫ f₁ + f₀ ≫ (by exact R₁.map' 0 1), ?_⟩
+  rw [assoc]; rw [assoc]; rw [assoc]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [NatTrans.naturality]; rw [← reassoc_of% h₆]; rw [← h₅]; rw [comp_sub]
+  dsimp
+  rw [add_sub_cancel]
 
 Depends on / 依赖: NatTrans, NatTrans.naturality, _comp, cancel_mono, comp_zero, epi_iff_surjective_up_to_refinements, exact_up_to_refinements, naturality, reassoc_of, surjective_up_to_refinements_of_epi, zero_comp
 -/
@@ -234,7 +276,9 @@ theorem isIso_of_epi_of_isIso_of_isIso_of_mono
     apply mono_of_epi_of_mono_of_mono (δlastFunctor.map φ) (R₁.exact_iff_δlast.1 hR₁).1
       (R₂.exact_iff_δlast.1 hR₂).1 <;> dsimp <;> infer_instance
   have : Epi (app' φ 2) := by
-    apply epi_of_epi_of_epi_of_mono (δ₀Functor.map φ) (R₁.exa
+    apply epi_of_epi_of_epi_of_mono (δ₀Functor.map φ) (R₁.exact_iff_δ₀.1 hR₁).2
+      (R₂.exact_iff_δ₀.1 hR₂).2 <;> dsimp <;> infer_instance
+  apply isIso_of_mono_of_epi
 
 中文:
 定理 isIso_of_epi_of_isIso_of_isIso_of_mono
@@ -245,7 +289,9 @@ theorem isIso_of_epi_of_isIso_of_isIso_of_mono
     apply mono_of_epi_of_mono_of_mono (δlastFunctor.map φ) (R₁.exact_iff_δlast.1 hR₁).1
       (R₂.exact_iff_δlast.1 hR₂).1 <;> dsimp <;> infer_instance
   have : Epi (app' φ 2) := by
-    apply epi_of_epi_of_epi_of_mono (δ₀Functor.map φ) (R₁.exa
+    apply epi_of_epi_of_epi_of_mono (δ₀Functor.map φ) (R₁.exact_iff_δ₀.1 hR₁).2
+      (R₂.exact_iff_δ₀.1 hR₂).2 <;> dsimp <;> infer_instance
+  apply isIso_of_mono_of_epi
 
 Depends on / 依赖: Functor.map, epi_of_epi_of_epi_of_mono, infer_instance, isIso_of_mono_of_epi, lastFunctor.map, mono_of_epi_of_mono_of_mono
 -/
@@ -416,7 +462,12 @@ theorem mono_of_epi_of_epi_mono'
     mk₃ (R₂.map' 0 1) (R₂.map' 1 2) (0 : _ ⟶ R₁.obj' 0) := homMk₃ (app' φ 0) (app' φ 1)
       (app' φ 2) (𝟙 _) (naturality' φ 0 1) (naturality' φ 1 2) (by simp)
   refine mono_of_epi_of_mono_of_mono' ψ ?_ (exact₂_mk _ (by simp) ?_)
-  
+    (hR₂.exact 0).exact_toComposableArrows h₀ h₁ (by dsimp [ψ]; infer_instance)
+  · dsimp
+    rw [← Functor.map_comp]
+    exact hR₁
+  · rw [ShortComplex.exact_iff_epi _ (by simp)]
+    exact hR₁'
 
 中文:
 定理 mono_of_epi_of_epi_mono'
@@ -426,7 +477,12 @@ theorem mono_of_epi_of_epi_mono'
     mk₃ (R₂.map' 0 1) (R₂.map' 1 2) (0 : _ ⟶ R₁.obj' 0) := homMk₃ (app' φ 0) (app' φ 1)
       (app' φ 2) (𝟙 _) (naturality' φ 0 1) (naturality' φ 1 2) (by simp)
   refine mono_of_epi_of_mono_of_mono' ψ ?_ (exact₂_mk _ (by simp) ?_)
-  
+    (hR₂.exact 0).exact_toComposableArrows h₀ h₁ (by dsimp [ψ]; infer_instance)
+  · dsimp
+    rw [← Functor.map_comp]
+    exact hR₁
+  · rw [ShortComplex.exact_iff_epi _ (by simp)]
+    exact hR₁'
 
 Depends on / 依赖: Functor, Functor.map_comp, ShortComplex, ShortComplex.exact_iff_epi, exact_iff_epi, exact_toComposableArrows, infer_instance, map_comp, mono_of_epi_of_mono_of_mono, naturality
 -/
@@ -479,7 +535,13 @@ theorem epi_of_mono_of_epi_of_mono'
   let ψ : mk₃ (0 : R₁.obj' 0 ⟶ _) (R₁.map' 0 1) (R₁.map' 1 2) ⟶
     mk₃ (0 : R₁.obj' 0 ⟶ _) (R₂.map' 0 1) (R₂.map' 1 2) := homMk₃ (𝟙 _) (app' φ 0) (app' φ 1)
       (app' φ 2) (by simp) (naturality' φ 0 1) (naturality' φ 1 2)
-  refine epi_of_epi_of_epi_of_mono' ψ (hR₁.exact 0).exact_toComposableAr
+  refine epi_of_epi_of_epi_of_mono' ψ (hR₁.exact 0).exact_toComposableArrows
+    (exact₂_mk _ (by simp) ?_) ?_ (by dsimp [ψ]; infer_instance) h₀ h₁
+  · rw [ShortComplex.exact_iff_mono _ (by simp)]
+    exact hR₂'
+  · dsimp
+    rw [← Functor.map_comp]
+    exact hR₂
 
 中文:
 定理 epi_of_mono_of_epi_of_mono'
@@ -488,7 +550,13 @@ theorem epi_of_mono_of_epi_of_mono'
   let ψ : mk₃ (0 : R₁.obj' 0 ⟶ _) (R₁.map' 0 1) (R₁.map' 1 2) ⟶
     mk₃ (0 : R₁.obj' 0 ⟶ _) (R₂.map' 0 1) (R₂.map' 1 2) := homMk₃ (𝟙 _) (app' φ 0) (app' φ 1)
       (app' φ 2) (by simp) (naturality' φ 0 1) (naturality' φ 1 2)
-  refine epi_of_epi_of_epi_of_mono' ψ (hR₁.exact 0).exact_toComposableAr
+  refine epi_of_epi_of_epi_of_mono' ψ (hR₁.exact 0).exact_toComposableArrows
+    (exact₂_mk _ (by simp) ?_) ?_ (by dsimp [ψ]; infer_instance) h₀ h₁
+  · rw [ShortComplex.exact_iff_mono _ (by simp)]
+    exact hR₂'
+  · dsimp
+    rw [← Functor.map_comp]
+    exact hR₂
 
 Depends on / 依赖: Functor, Functor.map_comp, ShortComplex, ShortComplex.exact_iff_mono, epi_of_epi_of_epi_of_mono, exact_iff_mono, exact_toComposableArrows, infer_instance, map_comp, naturality
 -/
@@ -541,7 +609,10 @@ theorem mono_of_mono_of_mono_of_mono
     mk₃ (0 : R₁.obj' 0 ⟶ _) (R₂.map' 0 1) (R₂.map' 1 2) := homMk₃ (𝟙 _) (app' φ 0) (app' φ 1)
       (app' φ 2) (by simp) (naturality' φ 0 1) (naturality' φ 1 2)
   refine mono_of_epi_of_mono_of_mono' ψ (by simp)
-    (hR₁.exact 0).exac
+    (hR₁.exact 0).exact_toComposableArrows
+    (exact₂_mk _ (by simp) ?_) (by dsimp [ψ]; infer_instance) h₀ h₁
+  rw [ShortComplex.exact_iff_mono _ (by simp)]
+  exact hR₂'
 
 中文:
 定理 mono_of_mono_of_mono_of_mono
@@ -551,7 +622,10 @@ theorem mono_of_mono_of_mono_of_mono
     mk₃ (0 : R₁.obj' 0 ⟶ _) (R₂.map' 0 1) (R₂.map' 1 2) := homMk₃ (𝟙 _) (app' φ 0) (app' φ 1)
       (app' φ 2) (by simp) (naturality' φ 0 1) (naturality' φ 1 2)
   refine mono_of_epi_of_mono_of_mono' ψ (by simp)
-    (hR₁.exact 0).exac
+    (hR₁.exact 0).exact_toComposableArrows
+    (exact₂_mk _ (by simp) ?_) (by dsimp [ψ]; infer_instance) h₀ h₁
+  rw [ShortComplex.exact_iff_mono _ (by simp)]
+  exact hR₂'
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_iff_mono, exact_iff_mono, exact_toComposableArrows, infer_instance, mono_of_epi_of_mono_of_mono, naturality
 -/
@@ -581,7 +655,10 @@ theorem epi_of_epi_of_epi_of_epi
     mk₃ (R₂.map' 0 1) (R₂.map' 1 2) (0 : _ ⟶ R₁.obj' 0) := homMk₃ (app' φ 0) (app' φ 1)
       (app' φ 2) (𝟙 _) (naturality' φ 0 1) (naturality' φ 1 2) (by simp)
   refine epi_of_epi_of_epi_of_mono' ψ (exact₂_mk _ (by simp) ?_)
-    (hR
+    (hR₂.exact 0).exact_toComposableArrows (by simp)
+    h₀ h₁ (by dsimp [ψ]; infer_instance)
+  rw [ShortComplex.exact_iff_epi _ (by simp)]
+  exact hR₁'
 
 中文:
 定理 epi_of_epi_of_epi_of_epi
@@ -591,7 +668,10 @@ theorem epi_of_epi_of_epi_of_epi
     mk₃ (R₂.map' 0 1) (R₂.map' 1 2) (0 : _ ⟶ R₁.obj' 0) := homMk₃ (app' φ 0) (app' φ 1)
       (app' φ 2) (𝟙 _) (naturality' φ 0 1) (naturality' φ 1 2) (by simp)
   refine epi_of_epi_of_epi_of_mono' ψ (exact₂_mk _ (by simp) ?_)
-    (hR
+    (hR₂.exact 0).exact_toComposableArrows (by simp)
+    h₀ h₁ (by dsimp [ψ]; infer_instance)
+  rw [ShortComplex.exact_iff_epi _ (by simp)]
+  exact hR₁'
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_iff_epi, epi_of_epi_of_epi_of_mono, exact_iff_epi, exact_toComposableArrows, infer_instance, naturality
 -/
@@ -621,7 +701,19 @@ lemma isIso_of_epi_of_isIso
       mk₄ (R₂.map' 0 1) (R₂.map' 1 2) (0 : _ ⟶ (0 : C)) (0 : _ ⟶ (0 : C)) :=
     homMk₄ (app' φ 0) (app' φ 1) (app' φ 2) 0 0 (naturality' φ 0 1)
       (naturality' φ 1 2) (by simp) (by simp)
-  refine isIso_of_epi_of_i
+  refine isIso_of_epi_of_isIso_of_isIso_of_mono ?_ ?_ ψ h₀ h₁ inferInstance inferInstance
+  · refine exact_of_δ₀ (hR₁.exact 0).exact_toComposableArrows (exact_of_δ₀ ?_ ?_)
+    · refine exact₂_mk _ (by simp) ?_
+      rwa [ShortComplex.exact_iff_epi _ (by simp)]
+    · refine exact₂_mk _ (by simp) ?_
+      rw [ShortComplex.exact_iff_epi _ (by simp)]
+      infer_instance
+  · refine exact_of_δ₀ (hR₂.exact 0).exact_toComposableArrows (exact_of_δ₀ ?_ ?_)
+    · refine exact₂_mk _ (by simp) ?_
+      rwa [ShortComplex.exact_iff_epi _ (by simp)]
+    · refine exact₂_mk _ (by simp) ?_
+      rw [ShortComplex.exact_iff_epi _ (by simp)]
+      infer_instance
 
 中文:
 引理 isIso_of_epi_of_isIso
@@ -631,7 +723,19 @@ lemma isIso_of_epi_of_isIso
       mk₄ (R₂.map' 0 1) (R₂.map' 1 2) (0 : _ ⟶ (0 : C)) (0 : _ ⟶ (0 : C)) :=
     homMk₄ (app' φ 0) (app' φ 1) (app' φ 2) 0 0 (naturality' φ 0 1)
       (naturality' φ 1 2) (by simp) (by simp)
-  refine isIso_of_epi_of_i
+  refine isIso_of_epi_of_isIso_of_isIso_of_mono ?_ ?_ ψ h₀ h₁ inferInstance inferInstance
+  · refine exact_of_δ₀ (hR₁.exact 0).exact_toComposableArrows (exact_of_δ₀ ?_ ?_)
+    · refine exact₂_mk _ (by simp) ?_
+      rwa [ShortComplex.exact_iff_epi _ (by simp)]
+    · refine exact₂_mk _ (by simp) ?_
+      rw [ShortComplex.exact_iff_epi _ (by simp)]
+      infer_instance
+  · refine exact_of_δ₀ (hR₂.exact 0).exact_toComposableArrows (exact_of_δ₀ ?_ ?_)
+    · refine exact₂_mk _ (by simp) ?_
+      rwa [ShortComplex.exact_iff_epi _ (by simp)]
+    · refine exact₂_mk _ (by simp) ?_
+      rw [ShortComplex.exact_iff_epi _ (by simp)]
+      infer_instance
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_iff_epi, exact_iff_epi, exact_toComposableArrows, isIso_of_epi_of_isIso_of_isIso_of_mono, naturality
 -/
@@ -668,7 +772,18 @@ lemma isIso_of_isIso_of_mono
       mk₄ (0 : (0 : C) ⟶ (0 : C)) (0 : _ ⟶ _) (R₂.map' 0 1) (R₂.map' 1 2) :=
     homMk₄ 0 0 (app' φ 0) (app' φ 1) (app' φ 2) (by simp) (by simp) (naturality' φ 0 1)
       (naturality' φ 1 2)
-  refine isIso_of_epi_of_i
+  refine isIso_of_epi_of_isIso_of_isIso_of_mono ?_ ?_ ψ inferInstance inferInstance h₁ h₂
+  · refine exact_of_δ₀ (exact₂_mk _ (by simp) ?_) (exact_of_δ₀ ?_ (exact₂_mk _ _ (hR₁.exact 0)))
+    · rw [ShortComplex.exact_iff_mono _ (by simp)]
+      infer_instance
+    · refine exact₂_mk _ (by simp) ?_
+      rwa [ShortComplex.exact_iff_mono _ (by simp)]
+  · refine exact_of_δ₀ ?_ (exact_of_δ₀ ?_ (exact₂_mk _ _ (hR₂.exact 0)))
+    · refine exact₂_mk _ (by simp) ?_
+      rw [ShortComplex.exact_iff_mono _ (by simp)]
+      infer_instance
+    · refine exact₂_mk _ (by simp) ?_
+      rwa [ShortComplex.exact_iff_mono _ (by simp)]
 
 中文:
 引理 isIso_of_isIso_of_mono
@@ -678,7 +793,18 @@ lemma isIso_of_isIso_of_mono
       mk₄ (0 : (0 : C) ⟶ (0 : C)) (0 : _ ⟶ _) (R₂.map' 0 1) (R₂.map' 1 2) :=
     homMk₄ 0 0 (app' φ 0) (app' φ 1) (app' φ 2) (by simp) (by simp) (naturality' φ 0 1)
       (naturality' φ 1 2)
-  refine isIso_of_epi_of_i
+  refine isIso_of_epi_of_isIso_of_isIso_of_mono ?_ ?_ ψ inferInstance inferInstance h₁ h₂
+  · refine exact_of_δ₀ (exact₂_mk _ (by simp) ?_) (exact_of_δ₀ ?_ (exact₂_mk _ _ (hR₁.exact 0)))
+    · rw [ShortComplex.exact_iff_mono _ (by simp)]
+      infer_instance
+    · refine exact₂_mk _ (by simp) ?_
+      rwa [ShortComplex.exact_iff_mono _ (by simp)]
+  · refine exact_of_δ₀ ?_ (exact_of_δ₀ ?_ (exact₂_mk _ _ (hR₂.exact 0)))
+    · refine exact₂_mk _ (by simp) ?_
+      rw [ShortComplex.exact_iff_mono _ (by simp)]
+      infer_instance
+    · refine exact₂_mk _ (by simp) ?_
+      rwa [ShortComplex.exact_iff_mono _ (by simp)]
 
 Depends on / 依赖: ShortComplex, ShortComplex.exact_iff_mono, exact_iff_mono, infer_instance, isIso_of_epi_of_isIso_of_isIso_of_mono, naturality
 -/

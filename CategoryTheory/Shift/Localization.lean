@@ -330,7 +330,8 @@ definition iso
         isoWhiskerRight (L.commShiftIso a).symm F' ≪≫
         Functor.associator _ _ _ ≪≫
         isoWhiskerLeft _ (Lifting.iso L W F F') ≪≫
-        F.commShiftIso a 
+        F.commShiftIso a ≪≫
+        isoWhiskerRight (Lifting.iso L W F F').symm _ ≪≫ Functor.associator _ _ _)
 
 中文:
 定义 iso
@@ -341,7 +342,8 @@ definition iso
         isoWhiskerRight (L.commShiftIso a).symm F' ≪≫
         Functor.associator _ _ _ ≪≫
         isoWhiskerLeft _ (Lifting.iso L W F F') ≪≫
-        F.commShiftIso a 
+        F.commShiftIso a ≪≫
+        isoWhiskerRight (Lifting.iso L W F F').symm _ ≪≫ Functor.associator _ _ _)
 
 Depends on / 依赖: F.commShiftIso, Functor, Functor.associator, L.commShiftIso, Lifting, Lifting.iso, Localization, Localization.liftNatIso, associator, commShiftIso, isoWhiskerLeft, isoWhiskerRight, liftNatIso, shiftFunctor
 -/
@@ -431,7 +433,32 @@ definition commShiftOfLocalization
     dsimp
     simp only [commShiftOfLocalization.iso_hom_app, comp_obj, commShiftIso_zero,
       CommShift.isoZero_inv_app, map_comp, CommShift.isoZero_hom_app, Category.assoc,
-      ← NatT
+      ← NatTrans.naturality_assoc, ← NatTrans.naturality]
+    dsimp
+    simp only [← Functor.map_comp_assoc, ← Functor.map_comp,
+      Iso.inv_hom_id_app, id_obj, map_id, Category.id_comp, Iso.hom_inv_id_app_assoc]
+  commShiftIso_add a b := by
+    ext1
+    apply natTrans_ext L W
+    intro X
+    dsimp
+    simp only [commShiftOfLocalization.iso_hom_app, comp_obj, commShiftIso_add,
+      CommShift.isoAdd_inv_app, map_comp, CommShift.isoAdd_hom_app, Category.assoc]
+    congr 1
+    rw [← cancel_epi (F'.map ((shiftFunctor D b).map ((L.commShiftIso a).hom.app X)))]; rw [← F'.map_comp_assoc]; rw [← map_comp]; rw [Iso.hom_inv_id_app]; rw [map_id]; rw [map_id]; rw [Category.id_comp]
+    conv_lhs =>
+      erw [← NatTrans.naturality_assoc]
+      dsimp
+      rw [← Functor.map_comp_assoc]; rw [← map_comp_assoc]; rw [Category.assoc]; rw [← map_comp]; rw [Iso.inv_hom_id_app]
+      dsimp
+      rw [map_id]; rw [Category.comp_id]; rw [← NatTrans.naturality]
+      dsimp
+    conv_rhs =>
+      erw [← NatTrans.naturality_assoc]
+      dsimp
+      rw [← Functor.map_comp_assoc]; rw [← map_comp]; rw [Iso.hom_inv_id_app]
+      dsimp
+      rw [map_id]; rw [map_id]; rw [Category.id_comp]; rw [commShiftOfLocalization.iso_hom_app]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← map_comp_assoc]; rw [Iso.inv_hom_id_app]; rw [map_id]; rw [Category.id_comp]
 
 中文:
 定义 commShiftOfLocalization
@@ -444,7 +471,32 @@ definition commShiftOfLocalization
     dsimp
     simp only [commShiftOfLocalization.iso_hom_app, comp_obj, commShiftIso_zero,
       CommShift.isoZero_inv_app, map_comp, CommShift.isoZero_hom_app, Category.assoc,
-      ← NatT
+      ← NatTrans.naturality_assoc, ← NatTrans.naturality]
+    dsimp
+    simp only [← Functor.map_comp_assoc, ← Functor.map_comp,
+      Iso.inv_hom_id_app, id_obj, map_id, Category.id_comp, Iso.hom_inv_id_app_assoc]
+  commShiftIso_add a b := by
+    ext1
+    apply natTrans_ext L W
+    intro X
+    dsimp
+    simp only [commShiftOfLocalization.iso_hom_app, comp_obj, commShiftIso_add,
+      CommShift.isoAdd_inv_app, map_comp, CommShift.isoAdd_hom_app, Category.assoc]
+    congr 1
+    rw [← cancel_epi (F'.map ((shiftFunctor D b).map ((L.commShiftIso a).hom.app X)))]; rw [← F'.map_comp_assoc]; rw [← map_comp]; rw [Iso.hom_inv_id_app]; rw [map_id]; rw [map_id]; rw [Category.id_comp]
+    conv_lhs =>
+      erw [← NatTrans.naturality_assoc]
+      dsimp
+      rw [← Functor.map_comp_assoc]; rw [← map_comp_assoc]; rw [Category.assoc]; rw [← map_comp]; rw [Iso.inv_hom_id_app]
+      dsimp
+      rw [map_id]; rw [Category.comp_id]; rw [← NatTrans.naturality]
+      dsimp
+    conv_rhs =>
+      erw [← NatTrans.naturality_assoc]
+      dsimp
+      rw [← Functor.map_comp_assoc]; rw [← map_comp]; rw [Iso.hom_inv_id_app]
+      dsimp
+      rw [map_id]; rw [map_id]; rw [Category.id_comp]; rw [commShiftOfLocalization.iso_hom_app]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← map_comp_assoc]; rw [Iso.inv_hom_id_app]; rw [map_id]; rw [Category.id_comp]
 
 Depends on / 依赖: commShiftOfLocalization, commShiftOfLocalization.iso
 -/
@@ -497,7 +549,7 @@ lemma commShiftOfLocalization_iso_hom_app
       F'.map ((L.commShiftIso a).inv.app X) ≫ (Lifting.iso L W F F').hom.app (X⟦a⟧) ≫
         (F.commShiftIso a).hom.app X ≫
           (shiftFunctor E a).map ((Lifting.iso L W F F').inv.app X) := by
-  apply commSh
+  apply commShiftOfLocalization.iso_hom_app
 
 中文:
 引理 commShiftOfLocalization_iso_hom_app
@@ -507,7 +559,7 @@ lemma commShiftOfLocalization_iso_hom_app
       F'.map ((L.commShiftIso a).inv.app X) ≫ (Lifting.iso L W F F').hom.app (X⟦a⟧) ≫
         (F.commShiftIso a).hom.app X ≫
           (shiftFunctor E a).map ((Lifting.iso L W F F').inv.app X) := by
-  apply commSh
+  apply commShiftOfLocalization.iso_hom_app
 
 Depends on / 依赖: Functor, Functor.commShiftOfLocalization, commShiftOfLocalization
 -/
@@ -530,7 +582,7 @@ lemma commShiftOfLocalization_iso_inv_app
       (shiftFunctor E a).map ((Lifting.iso L W F F').hom.app X) ≫
       (F.commShiftIso a).inv.app X ≫ (Lifting.iso L W F F').inv.app (X⟦a⟧) ≫
       F'.map ((L.commShiftIso a).hom.app X) := by
-  apply commShiftOfL
+  apply commShiftOfLocalization.iso_inv_app
 
 中文:
 引理 commShiftOfLocalization_iso_inv_app
@@ -540,7 +592,7 @@ lemma commShiftOfLocalization_iso_inv_app
       (shiftFunctor E a).map ((Lifting.iso L W F F').hom.app X) ≫
       (F.commShiftIso a).inv.app X ≫ (Lifting.iso L W F F').inv.app (X⟦a⟧) ≫
       F'.map ((L.commShiftIso a).hom.app X) := by
-  apply commShiftOfL
+  apply commShiftOfLocalization.iso_inv_app
 
 Depends on / 依赖: Functor, Functor.commShiftOfLocalization, commShiftOfLocalization
 -/
@@ -569,7 +621,10 @@ instance NatTrans.commShift_iso_hom_of_localization
   ext X
   simp only [comp_app, Functor.whiskerRight_app, Functor.whiskerLeft_app,
     Functor.commShiftIso_comp_hom_app,
-  
+    Functor.commShiftOfLocalization_iso_hom_app,
+    Category.assoc, ← Functor.map_comp, ← Functor.map_comp_assoc,
+    Iso.hom_inv_id_app, Functor.map_id, Iso.inv_hom_id_app,
+    Category.comp_id, Category.id_comp, Functor.comp_obj]
 
 中文:
 实例 自然变换.commShift_iso_hom_of_localization
@@ -582,7 +637,10 @@ instance NatTrans.commShift_iso_hom_of_localization
   ext X
   simp only [comp_app, Functor.whiskerRight_app, Functor.whiskerLeft_app,
     Functor.commShiftIso_comp_hom_app,
-  
+    Functor.commShiftOfLocalization_iso_hom_app,
+    Category.assoc, ← Functor.map_comp, ← Functor.map_comp_assoc,
+    Iso.hom_inv_id_app, Functor.map_id, Iso.inv_hom_id_app,
+    Category.comp_id, Category.id_comp, Functor.comp_obj]
 
 Depends on / 依赖: Functor, Functor.commShiftOfLocalization, commShiftOfLocalization
 -/
@@ -661,6 +719,7 @@ lemma commShift_iso_hom_app
         L₂.map ((Φ.functor.commShiftIso m).hom.app X) ≫
         (L₂.commShiftIso m).hom.app _ ≫ (e.hom.app X)⟦m⟧' := by
   simp [Functor.commShiftOfLocalization_iso_hom_app,
+    Functor.commShiftIso_comp_hom_app]
 
 中文:
 引理 commShift_iso_hom_app
@@ -671,6 +730,7 @@ lemma commShift_iso_hom_app
         L₂.map ((Φ.functor.commShiftIso m).hom.app X) ≫
         (L₂.commShiftIso m).hom.app _ ≫ (e.hom.app X)⟦m⟧' := by
   simp [Functor.commShiftOfLocalization_iso_hom_app,
+    Functor.commShiftIso_comp_hom_app]
 
 Depends on / 依赖: commShift
 -/
@@ -696,7 +756,8 @@ lemma commShift_iso_inv_app
       (e.inv.app X)⟦m⟧' ≫ (L₂.commShiftIso m).inv.app _ ≫
         L₂.map ((Φ.functor.commShiftIso m).inv.app X) ≫ e.hom.app _ ≫
           G.map ((L₁.commShiftIso m).hom.app X) := by
-  simp [Functor.commShiftOfLocalization_iso_inv_ap
+  simp [Functor.commShiftOfLocalization_iso_inv_app,
+    Functor.commShiftIso_comp_inv_app]
 
 中文:
 引理 commShift_iso_inv_app
@@ -706,7 +767,8 @@ lemma commShift_iso_inv_app
       (e.inv.app X)⟦m⟧' ≫ (L₂.commShiftIso m).inv.app _ ≫
         L₂.map ((Φ.functor.commShiftIso m).inv.app X) ≫ e.hom.app _ ≫
           G.map ((L₁.commShiftIso m).hom.app X) := by
-  simp [Functor.commShiftOfLocalization_iso_inv_ap
+  simp [Functor.commShiftOfLocalization_iso_inv_app,
+    Functor.commShiftIso_comp_inv_app]
 
 Depends on / 依赖: commShift
 -/

@@ -125,7 +125,48 @@ instance :
                   g₁ fst
   pullback f f------->pullback e k₁----------> X
         | | |
-    
+      g₂| |snd |e
+        v fst v k₁ v
+  pullback k₂ e------>pullback m m---------->coeq
+        | |
+     snd| |m
+        v e ≫ m = f v
+        X------------------------------------->Y
+  ```
+  Where `m`, `e`, `k₁`, `k₂`, `g₁`, `g₂` are defined below, `fst` and `snd` denote the projections
+  in the pullbacks indicated as the source of those morphisms, and `coeq` is the coequalizer of the
+  two projections in from the kernel pair of `f`.
+  -/
+  let m := (coequalizer.desc f pullback.condition)
+  let e := coequalizer.π (pullback.fst f f) (pullback.snd f f)
+  let k₁ := pullback.fst m m
+  let k₂ := pullback.snd m m
+  let d : pullback f f ⟶ (pullback m m) :=
+    pullback.lift (pullback.fst f f ≫ e) (pullback.snd f f ≫ e) (by simp [m, e, pullback.condition])
+  let g₁ : pullback f f ⟶ (pullback e k₁) := pullback.lift (pullback.fst f f) d (by simp [d, k₁])
+  let g₂ : pullback f f ⟶ (pullback k₂ e) := pullback.lift d (pullback.snd f f) (by simp [d, k₂])
+  /-
+  Since the big square, the bottom square, and the top right square above are pullback squares,
+  the top left square is also a pullback square.
+  -/
+  have h : IsPullback g₁ g₂ (pullback.snd e k₁) (pullback.fst k₂ e) := by
+    refine .of_right ?_ (by simp [g₁, g₂]) (.of_hasPullback e k₁)
+    refine .of_bot ?_ ?_ (.paste_horiz (.of_hasPullback k₂ e) (.of_hasPullback m m))
+    · simpa [g₁, g₂, e, m, pullback.lift_fst, pullback.lift_snd] using .of_hasPullback f f
+    · simp [g₁, g₂, k₁, d]
+  /-
+  Since `g₁` is the base change of a regular epi (the map `fst` in the middle row of the diagram
+  above, which itself is a regular epi because it is a base change of the regular epi `e`),
+  it is a regular epi.
+  -/
+  have : IsRegularEpi g₁ := by
+    apply Regular.regularEpiIsStableUnderBaseChange.of_isPullback h.flip
+    dsimp [MorphismProperty.regularEpi]
+    infer_instance
+  -- We precompose with the epimorphism `g₁ ≫ pullback.snd e k₁`, and finish
+  rw [← cancel_epi (g₁ ≫ pullback.snd e k₁)]
+  convert! coequalizer.condition (pullback.fst f f) (pullback.snd f f) using 1
+  all_goals cat_disch
 
 中文:
 实例 :
@@ -138,7 +179,48 @@ instance :
                   g₁ fst
   pullback f f------->pullback e k₁----------> X
         | | |
-    
+      g₂| |snd |e
+        v fst v k₁ v
+  pullback k₂ e------>pullback m m---------->coeq
+        | |
+     snd| |m
+        v e ≫ m = f v
+        X------------------------------------->Y
+  ```
+  Where `m`, `e`, `k₁`, `k₂`, `g₁`, `g₂` are defined below, `fst` and `snd` denote the projections
+  in the pullbacks indicated as the source of those morphisms, and `coeq` is the coequalizer of the
+  two projections in from the kernel pair of `f`.
+  -/
+  let m := (coequalizer.desc f pullback.condition)
+  let e := coequalizer.π (pullback.fst f f) (pullback.snd f f)
+  let k₁ := pullback.fst m m
+  let k₂ := pullback.snd m m
+  let d : pullback f f ⟶ (pullback m m) :=
+    pullback.lift (pullback.fst f f ≫ e) (pullback.snd f f ≫ e) (by simp [m, e, pullback.condition])
+  let g₁ : pullback f f ⟶ (pullback e k₁) := pullback.lift (pullback.fst f f) d (by simp [d, k₁])
+  let g₂ : pullback f f ⟶ (pullback k₂ e) := pullback.lift d (pullback.snd f f) (by simp [d, k₂])
+  /-
+  Since the big square, the bottom square, and the top right square above are pullback squares,
+  the top left square is also a pullback square.
+  -/
+  have h : IsPullback g₁ g₂ (pullback.snd e k₁) (pullback.fst k₂ e) := by
+    refine .of_right ?_ (by simp [g₁, g₂]) (.of_hasPullback e k₁)
+    refine .of_bot ?_ ?_ (.paste_horiz (.of_hasPullback k₂ e) (.of_hasPullback m m))
+    · simpa [g₁, g₂, e, m, pullback.lift_fst, pullback.lift_snd] using .of_hasPullback f f
+    · simp [g₁, g₂, k₁, d]
+  /-
+  Since `g₁` is the base change of a regular epi (the map `fst` in the middle row of the diagram
+  above, which itself is a regular epi because it is a base change of the regular epi `e`),
+  it is a regular epi.
+  -/
+  have : IsRegularEpi g₁ := by
+    apply Regular.regularEpiIsStableUnderBaseChange.of_isPullback h.flip
+    dsimp [MorphismProperty.regularEpi]
+    infer_instance
+  -- We precompose with the epimorphism `g₁ ≫ pullback.snd e k₁`, and finish
+  rw [← cancel_epi (g₁ ≫ pullback.snd e k₁)]
+  convert! coequalizer.condition (pullback.fst f f) (pullback.snd f f) using 1
+  all_goals cat_disch
 -/
 instance : Mono (coequalizer.desc f pullback.condition) := by
   -- It suffices to show that the two projections from the kernel pair are equal:
@@ -349,7 +431,7 @@ lemma frobeniusMorphism_isPullback
     (p := by simp [frobeniusMorphism])
   simpa [frobeniusMorphism, IsPullback.lift_fst, ← imageFactorisation_F_m,
     (isPullback f B').paste_horiz_iff] using
-    (inf_isPullback A' ((Subobject.pullback f).obj B')).
+    (inf_isPullback A' ((Subobject.pullback f).obj B')).flip
 
 中文:
 引理 frobeniusMorphism_isPullback
@@ -358,7 +440,7 @@ lemma frobeniusMorphism_isPullback
     (p := by simp [frobeniusMorphism])
   simpa [frobeniusMorphism, IsPullback.lift_fst, ← imageFactorisation_F_m,
     (isPullback f B').paste_horiz_iff] using
-    (inf_isPullback A' ((Subobject.pullback f).obj B')).
+    (inf_isPullback A' ((Subobject.pullback f).obj B')).flip
 
 Depends on / 依赖: IsPullback, IsPullback.lift_fst, IsPullback.of_right, Subobject, Subobject.pullback, frobeniusMorphism, imageFactorisation_F_m, inf_isPullback, isPullback, lift_fst, of_right, paste_horiz_iff, pullback
 -/

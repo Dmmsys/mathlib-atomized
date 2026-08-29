@@ -313,7 +313,7 @@ lemma isCoboundedUnder_le_toReal
   · rintro ⟨b, hb⟩
     exact ⟨b.toNNReal, by simp, fun x _ => by simpa [*] using hb _⟩
   · rintro ⟨b, hb₀, hb⟩
-    exact ⟨b, fun x hx => hb _ (hx.exists.choose_spec.trans' (by
+    exact ⟨b, fun x hx => hb _ (hx.exists.choose_spec.trans' (by simp)) hx⟩
 
 中文:
 引理 isCoboundedUnder_le_to实数
@@ -325,7 +325,7 @@ lemma isCoboundedUnder_le_toReal
   · rintro ⟨b, hb⟩
     exact ⟨b.toNNReal, by simp, fun x _ => by simpa [*] using hb _⟩
   · rintro ⟨b, hb₀, hb⟩
-    exact ⟨b, fun x hx => hb _ (hx.exists.choose_spec.trans' (by
+    exact ⟨b, fun x hx => hb _ (hx.exists.choose_spec.trans' (by simp)) hx⟩
 -/
 @[simp, norm_cast] lemma isCoboundedUnder_le_toReal [f.NeBot] :
     IsCoboundedUnder (· <= ·) f (fun i => (u i : Real)) ↔ IsCoboundedUnder (· <= ·) f u := by
@@ -351,7 +351,10 @@ lemma isCoboundedUnder_ge_toReal
   · rintro ⟨b, hb₀, hb⟩
     refine ⟨b, fun x hx => ?_⟩
     obtain hx₀ | hx₀ := le_total x 0
-    · exact hx₀.t
+    · exact hx₀.trans hb₀
+    · exact hb _ hx₀ hx
+
+@[simp]
 
 中文:
 引理 isCoboundedUnder_ge_to实数
@@ -364,7 +367,10 @@ lemma isCoboundedUnder_ge_toReal
   · rintro ⟨b, hb₀, hb⟩
     refine ⟨b, fun x hx => ?_⟩
     obtain hx₀ | hx₀ := le_total x 0
-    · exact hx₀.t
+    · exact hx₀.trans hb₀
+    · exact hb _ hx₀ hx
+
+@[simp]
 -/
 @[simp, norm_cast] lemma isCoboundedUnder_ge_toReal :
     IsCoboundedUnder (· >= ·) f (fun i => (u i : Real)) ↔ IsCoboundedUnder (· >= ·) f u := by
@@ -497,7 +503,12 @@ lemma toReal_liminf
   · simp [*]
   refine eq_of_forall_le_iff fun c => ?_
   rw [← Real.toNNReal_le_iff_le_coe]; rw [le_liminf_iff (by simpa) ⟨0]; rw [by simp⟩]; rw [le_liminf_iff]
-  simp only [← coe_lt_coe, Real.coe_toNNReal', lt_sup_iff, or_imp, isEmpty_Prop, not_
+  simp only [← coe_lt_coe, Real.coe_toNNReal', lt_sup_iff, or_imp, isEmpty_Prop, not_lt,
+    zero_le_coe, IsEmpty.forall_iff, and_true, NNReal.forall, coe_mk, forall_comm (α := _ <= _)]
+  refine forall₂_congr fun r hr => ?_
+  simpa using (le_or_gt 0 r).imp_right fun hr => .of_forall fun i => hr.trans_le (by simp)
+
+@[simp, norm_cast]
 
 中文:
 引理 to实数_liminf
@@ -507,7 +518,12 @@ lemma toReal_liminf
   · simp [*]
   refine eq_of_forall_le_iff fun c => ?_
   rw [← Real.toNNReal_le_iff_le_coe]; rw [le_liminf_iff (by simpa) ⟨0]; rw [by simp⟩]; rw [le_liminf_iff]
-  simp only [← coe_lt_coe, Real.coe_toNNReal', lt_sup_iff, or_imp, isEmpty_Prop, not_
+  simp only [← coe_lt_coe, Real.coe_toNNReal', lt_sup_iff, or_imp, isEmpty_Prop, not_lt,
+    zero_le_coe, IsEmpty.forall_iff, and_true, NNReal.forall, coe_mk, forall_comm (α := _ <= _)]
+  refine forall₂_congr fun r hr => ?_
+  simpa using (le_or_gt 0 r).imp_right fun hr => .of_forall fun i => hr.trans_le (by simp)
+
+@[simp, norm_cast]
 
 Depends on / 依赖: IsCoboundedUnder, IsEmpty, IsEmpty.forall_iff, NNReal, NNReal.forall, Real.coe_toNNReal, Real.toNNReal_le_iff_le_coe, and_true, coe_lt_coe, coe_mk, coe_toNNReal, eq_of_forall_le_iff, f.IsCoboundedUnder, forall_comm, forall_iff, hr.trans_l, imp_right, isEmpty_Prop, le_liminf_iff, le_or_gt
 -/
@@ -535,7 +551,11 @@ lemma toReal_limsup
   · simp [*]
   have : f.IsCoboundedUnder (· <= ·) u := by isBoundedDefault
   refine eq_of_forall_le_iff fun c => ?_
-  rw [← Real.toNNReal_le_iff_le_coe]; rw [le_limsup_iff (by simpa) (b
+  rw [← Real.toNNReal_le_iff_le_coe]; rw [le_limsup_iff (by simpa) (by simpa)]; rw [le_limsup_iff ‹_›]
+  simp only [← coe_lt_coe, Real.coe_toNNReal', lt_sup_iff, or_imp, isEmpty_Prop, not_lt,
+    zero_le_coe, IsEmpty.forall_iff, and_true, NNReal.forall, coe_mk, forall_comm (α := _ <= _)]
+  refine forall₂_congr fun r hr => ?_
+  simpa using (le_or_gt 0 r).imp_right fun hr => .of_forall fun i => hr.trans_le (by simp)
 
 中文:
 引理 to实数_limsup
@@ -547,7 +567,11 @@ lemma toReal_limsup
   · simp [*]
   have : f.IsCoboundedUnder (· <= ·) u := by isBoundedDefault
   refine eq_of_forall_le_iff fun c => ?_
-  rw [← Real.toNNReal_le_iff_le_coe]; rw [le_limsup_iff (by simpa) (b
+  rw [← Real.toNNReal_le_iff_le_coe]; rw [le_limsup_iff (by simpa) (by simpa)]; rw [le_limsup_iff ‹_›]
+  simp only [← coe_lt_coe, Real.coe_toNNReal', lt_sup_iff, or_imp, isEmpty_Prop, not_lt,
+    zero_le_coe, IsEmpty.forall_iff, and_true, NNReal.forall, coe_mk, forall_comm (α := _ <= _)]
+  refine forall₂_congr fun r hr => ?_
+  simpa using (le_or_gt 0 r).imp_right fun hr => .of_forall fun i => hr.trans_le (by simp)
 
 Depends on / 依赖: IsBoundedUnder, IsCoboundedUnder, IsEmpty, IsEmpty.forall_iff, NNReal, NNReal.forall, Real.coe_toNNReal, Real.toNNReal_le_iff_le_coe, and_true, coe_lt_coe, coe_mk, coe_toNNReal, eq_of_forall_le_iff, eq_or_neBot, f.IsBoundedUnder, f.IsCoboundedUnder, f.eq_or_neBot, forall_comm, forall_iff, isBoundedDefault
 -/
@@ -780,7 +804,13 @@ theorem limsup_const_mul
     simp only [limsup_congr hu, limsup_congr hau, Pi.zero_def, ← ENNReal.bot_eq_zero,
       limsup_const_bot]
     simp
-  · have hu
+  · have hu_mul : existsᶠ x : α in f, ⊤ <= ite (u x = 0) (0 : Real>=0∞) ⊤ := by
+      rw [EventuallyEq]; rw [not_eventually] at hu
+      exact hu.mono fun x hx => by simpa
+    have h_top_le : (f.limsup fun x : α => ite (u x = 0) (0 : Real>=0∞) ⊤) = ⊤ :=
+      eq_top_iff.mpr (le_limsup_of_frequently_le hu_mul)
+    have hfu : f.limsup u != 0 := mt limsup_eq_bot.1 hu
+    simp [ha_top, top_mul', h_top_le, hfu]
 
 中文:
 定理 limsup_const_mul
@@ -793,7 +823,13 @@ theorem limsup_const_mul
     simp only [limsup_congr hu, limsup_congr hau, Pi.zero_def, ← ENNReal.bot_eq_zero,
       limsup_const_bot]
     simp
-  · have hu
+  · have hu_mul : existsᶠ x : α in f, ⊤ <= ite (u x = 0) (0 : Real>=0∞) ⊤ := by
+      rw [EventuallyEq]; rw [not_eventually] at hu
+      exact hu.mono fun x hx => by simpa
+    have h_top_le : (f.limsup fun x : α => ite (u x = 0) (0 : Real>=0∞) ⊤) = ⊤ :=
+      eq_top_iff.mpr (le_limsup_of_frequently_le hu_mul)
+    have hfu : f.limsup u != 0 := mt limsup_eq_bot.1 hu
+    simp [ha_top, top_mul', h_top_le, hfu]
 
 Depends on / 依赖: ENNReal, ENNReal.bot_eq_zero, EventuallyEq, Pi.zero_def, bot_eq_zero, f.limsup, h_top_le, ha_top, hu.mono, hu_mul, limsup, limsup_congr, limsup_const_bot, limsup_const_mul_of_ne_top, not_eventually, zero_def
 -/
@@ -933,7 +969,12 @@ lemma ofReal_limsup
     · simp
     filter_upwards [h x (by simpa using hx)] with a ha
     obtain ha₀ | ha₀ := le_total (u a) 0
-    · simpa [ofReal_of_nonp
+    · simpa [ofReal_of_nonpos, *] using hx.bot_lt
+    · simp [ofReal_lt_coe_iff, *]
+  · rintro h x hx
+    have : 0 < x := hx.trans_le' (by simp)
+    filter_upwards [h (.ofReal x) (by simpa [this] using hx)] with a ha
+    exact (toReal_lt_of_lt_ofReal ha).trans_le' (by simp [toReal_ofReal'])
 
 中文:
 引理 of实数_limsup
@@ -947,7 +988,12 @@ lemma ofReal_limsup
     · simp
     filter_upwards [h x (by simpa using hx)] with a ha
     obtain ha₀ | ha₀ := le_total (u a) 0
-    · simpa [ofReal_of_nonp
+    · simpa [ofReal_of_nonpos, *] using hx.bot_lt
+    · simp [ofReal_lt_coe_iff, *]
+  · rintro h x hx
+    have : 0 < x := hx.trans_le' (by simp)
+    filter_upwards [h (.ofReal x) (by simpa [this] using hx)] with a ha
+    exact (toReal_lt_of_lt_ofReal ha).trans_le' (by simp [toReal_ofReal'])
 
 Depends on / 依赖: ENNReal, ENNReal.eq_of_forall_le_nnreal_iff, ENNReal.ofReal, IsBoundedUnder, bot_lt, eq_of_forall_le_nnreal_iff, filter_upwards, hx.bot_lt, isBoundedDefault, le_total, limsup, limsup_le_iff, ofReal, ofReal_le_coe, ofReal_lt_coe_iff, ofReal_of_nonpos
 -/
@@ -982,7 +1028,10 @@ IsCoboundedUnder.of_frequently_ge .of_forall fun _ => by positivity
   have h₂ : IsBoundedUnder (· <= ·) f (fun a => (u a).toReal) := by
     refine isBoundedUnder_of_eventually_le (a := C) ?_
     filter_upwards [hf] with a ha
-    e
+    exact ENNReal.toReal_le_coe_of_le_coe ha
+  refine (ENNReal.ofReal_limsup h₁ h₂).trans (limsup_congr ?_)
+  filter_upwards [hf] with x hx
+  exact ENNReal.ofReal_toReal (ne_top_of_le_ne_top (by simp : C != ∞) hx)
 
 中文:
 引理 of实数_limsup_to实数
@@ -993,7 +1042,10 @@ IsCoboundedUnder.of_frequently_ge .of_forall fun _ => by positivity
   have h₂ : IsBoundedUnder (· <= ·) f (fun a => (u a).toReal) := by
     refine isBoundedUnder_of_eventually_le (a := C) ?_
     filter_upwards [hf] with a ha
-    e
+    exact ENNReal.toReal_le_coe_of_le_coe ha
+  refine (ENNReal.ofReal_limsup h₁ h₂).trans (limsup_congr ?_)
+  filter_upwards [hf] with x hx
+  exact ENNReal.ofReal_toReal (ne_top_of_le_ne_top (by simp : C != ∞) hx)
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_limsup, ENNReal.ofReal_toReal, ENNReal.toReal_le_coe_of_le_coe, IsBoundedUnder, IsCoboundedUnder, IsCoboundedUnder.of_frequently_ge, filter_upwards, isBoundedUnder_of_eventually_le, limsup_congr, ne_top_of_le_ne_top, ofReal_limsup, ofReal_toReal, of_forall, of_frequently_ge, toReal, toReal_le_coe_of_le_coe
 -/
@@ -1022,7 +1074,24 @@ lemma toReal_limsup
   refine eq_of_forall_ge_iff fun r => ?_
   obtain hr | hr := lt_or_ge r 0
   · exact iff_of_false (hr.trans_le toReal_nonneg).not_ge
-   
+      (hr.trans_le <| le_limsup_of_frequently_le (by simpa)).not_ge
+  rw [← le_ofReal_iff_toReal_le _ hr]; rw [limsup_le_iff]; rw [limsup_le_iff]
+  constructor
+  · rintro h x hx
+    have : 0 < x := hx.trans_le' hr
+    filter_upwards [h (.ofReal x) (by simpa [this] using hx)] with i hi
+    exact toReal_lt_of_lt_ofReal hi
+  · rintro h (_ | x) hx
+    · simpa [lt_top_iff_ne_top]
+    filter_upwards [h₁, h x (by simpa [ofReal_lt_coe_iff hr] using hx)] with i hi
+    simp [← lt_ofReal_iff_toReal_lt hi]
+  obtain ⟨x, hx⟩ := h₂
+  rw [eventually_map] at hx
+  have hx₀ : 0 <= x := by obtain ⟨i, hi⟩ := hx.exists; exact toReal_nonneg.trans hi
+  simp only [limsup, limsSup, eventually_map, ne_eq, sInf_eq_top, Set.mem_ofPred_eq, not_forall]
+  refine ⟨.ofReal x, ?_, by simp⟩
+  filter_upwards [h₁, hx] with i hi
+  simp [le_ofReal_iff_toReal_le, *]
 
 中文:
 引理 to实数_limsup
@@ -1034,7 +1103,24 @@ lemma toReal_limsup
   refine eq_of_forall_ge_iff fun r => ?_
   obtain hr | hr := lt_or_ge r 0
   · exact iff_of_false (hr.trans_le toReal_nonneg).not_ge
-   
+      (hr.trans_le <| le_limsup_of_frequently_le (by simpa)).not_ge
+  rw [← le_ofReal_iff_toReal_le _ hr]; rw [limsup_le_iff]; rw [limsup_le_iff]
+  constructor
+  · rintro h x hx
+    have : 0 < x := hx.trans_le' hr
+    filter_upwards [h (.ofReal x) (by simpa [this] using hx)] with i hi
+    exact toReal_lt_of_lt_ofReal hi
+  · rintro h (_ | x) hx
+    · simpa [lt_top_iff_ne_top]
+    filter_upwards [h₁, h x (by simpa [ofReal_lt_coe_iff hr] using hx)] with i hi
+    simp [← lt_ofReal_iff_toReal_lt hi]
+  obtain ⟨x, hx⟩ := h₂
+  rw [eventually_map] at hx
+  have hx₀ : 0 <= x := by obtain ⟨i, hi⟩ := hx.exists; exact toReal_nonneg.trans hi
+  simp only [limsup, limsSup, eventually_map, ne_eq, sInf_eq_top, Set.mem_ofPred_eq, not_forall]
+  refine ⟨.ofReal x, ?_, by simp⟩
+  filter_upwards [h₁, hx] with i hi
+  simp [le_ofReal_iff_toReal_le, *]
 
 Depends on / 依赖: IsCoboundedUnder, eq_of_forall_ge_iff, eq_or_neBot, f.eq_or_neBot, hr.trans_le, iff_of_false, isBoundedDefault, le_limsup_of_frequently_le, le_ofReal_iff_toReal_le, limsSup, limsup, limsup_le_i, limsup_le_iff, lt_or_ge, not_ge, of_frequently_ge, toReal, toReal_nonneg, trans_le
 -/

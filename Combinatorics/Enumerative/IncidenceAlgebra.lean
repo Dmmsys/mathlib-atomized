@@ -728,7 +728,8 @@ instance instNonUnitalNonAssocSemiring
   mul_zero := fun f => by ext; exact sum_eq_zero fun x _ => mul_zero _
   left_distrib := fun f g h => by
     ext; exact Eq.trans (sum_congr rfl fun x _ => left_distrib _ _ _) sum_add_distrib
-  right_distrib := f
+  right_distrib := fun f g h => by
+    ext; exact Eq.trans (sum_congr rfl fun x _ => right_distrib _ _ _) sum_add_distrib
 
 中文:
 实例 instNonUnitalNonAssocSemiring
@@ -738,7 +739,8 @@ instance instNonUnitalNonAssocSemiring
   mul_zero := fun f => by ext; exact sum_eq_zero fun x _ => mul_zero _
   left_distrib := fun f g h => by
     ext; exact Eq.trans (sum_congr rfl fun x _ => left_distrib _ _ _) sum_add_distrib
-  right_distrib := f
+  right_distrib := fun f g h => by
+    ext; exact Eq.trans (sum_congr rfl fun x _ => right_distrib _ _ _) sum_add_distrib
 
 Depends on / 依赖: instAddCommMonoid
 -/
@@ -923,7 +925,8 @@ instance [Preorder
   mul_smul := smul_assoc
   smul_add f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ => smul_add _ _ _) sum_add_distrib
   add_smul f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ => add_smul _ _ _) sum_add_distrib
-  zero_smul f := by ext; exact sum_e
+  zero_smul f := by ext; exact sum_eq_zero fun x _ => zero_smul _ _
+  smul_zero f := by ext; exact sum_eq_zero fun x _ => smul_zero _
 
 中文:
 实例 [预序
@@ -932,7 +935,8 @@ instance [Preorder
   mul_smul := smul_assoc
   smul_add f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ => smul_add _ _ _) sum_add_distrib
   add_smul f g h := by ext; exact Eq.trans (sum_congr rfl fun x _ => add_smul _ _ _) sum_add_distrib
-  zero_smul f := by ext; exact sum_e
+  zero_smul f := by ext; exact sum_eq_zero fun x _ => zero_smul _ _
+  smul_zero f := by ext; exact sum_eq_zero fun x _ => smul_zero _
 
 Depends on / 依赖: Eq.trans, add_smul, ite_smul, mul_smul, smul_add, smul_assoc, smul_zero, sum_add_distrib, sum_congr, sum_eq_zero, zero_smul
 -/
@@ -1001,7 +1005,17 @@ instance algebraRight
     map_mul' c d := by
         ext a b
         obtain rfl | h := eq_or_ne a b
-        · simp only [one_apply, smul_eq_mul, mul_apply, const
+        · simp only [one_apply, smul_eq_mul, mul_apply, constSMul_apply, map_mul,
+            eq_comm, Icc_self]
+          simp
+        · simp only [one_apply, mul_one, smul_eq_mul, mul_apply, zero_mul,
+            constSMul_apply, ← ite_and, ite_mul, mul_ite, map_mul, mul_zero, if_neg h]
+          refine (sum_eq_zero fun x _ => ?_).symm
+exact if_neg fun hx => h hx.2.trans hx.1
+    map_zero' := by rw [map_zero, zero_smul]
+    map_add' c d := by rw [map_add, add_smul] }
+  commutes' c f := by classical ext a b hab; simp [if_pos hab, constSMul_apply, mul_comm]
+  smul_def' c f := by classical ext a b hab; simp [if_pos hab, constSMul_apply, Algebra.smul_def]
 
 中文:
 实例 algebraRight
@@ -1012,7 +1026,17 @@ instance algebraRight
     map_mul' c d := by
         ext a b
         obtain rfl | h := eq_or_ne a b
-        · simp only [one_apply, smul_eq_mul, mul_apply, const
+        · simp only [one_apply, smul_eq_mul, mul_apply, constSMul_apply, map_mul,
+            eq_comm, Icc_self]
+          simp
+        · simp only [one_apply, mul_one, smul_eq_mul, mul_apply, zero_mul,
+            constSMul_apply, ← ite_and, ite_mul, mul_ite, map_mul, mul_zero, if_neg h]
+          refine (sum_eq_zero fun x _ => ?_).symm
+exact if_neg fun hx => h hx.2.trans hx.1
+    map_zero' := by rw [map_zero, zero_smul]
+    map_add' c d := by rw [map_add, add_smul] }
+  commutes' c f := by classical ext a b hab; simp [if_pos hab, constSMul_apply, mul_comm]
+  smul_def' c f := by classical ext a b hab; simp [if_pos hab, constSMul_apply, Algebra.smul_def]
 
 Depends on / 依赖: Icc_self, IncidenceAlgebra, algebraMap, constSMul_apply, eq_comm, eq_or_ne, if_ne, if_neg, ite_and, ite_mul, map_mul, map_one, mul_apply, mul_boole, mul_ite, mul_one, mul_zero, one_apply, smul_eq_mul, sum_eq_zero
 -/
@@ -1729,7 +1753,20 @@ lemma mu_toDual
     { toFun := fun a b => mu 𝕜 (ofDual b) (ofDual a)
       eq_zero_of_not_le' := fun a b hab => apply_eq_zero_of_not_le (by exact hab) _ }
   suffices mu 𝕜 = mud by simp_rw [this, mud, coe_mk, ofDual_toDual]
-  suffic
+  suffices mud * zeta 𝕜 = 1 by
+    rw [← mu_mul_zeta] at this
+    apply_fun (· * mu 𝕜) at this
+    symm
+    simpa [mul_assoc, zeta_mul_mu] using this
+  clear a b
+  ext a b
+  simp only [mul_boole, one_apply, mul_apply, zeta_apply]
+  calc
+    ∑ x in Icc a b, (if x <= b then mud a x else 0) = ∑ x in Icc a b, mud a x := by
+      congr! with x hx; exact if_pos (mem_Icc.1 hx).2
+    _ = ∑ x in Icc (ofDual b) (ofDual a), mu 𝕜 x (ofDual a) := by simp [Icc_orderDual_def, mud]
+    _ = if ofDual b = ofDual a then 1 else 0 := sum_Icc_mu_left ..
+    _ = if a = b then 1 else 0 := by simp [eq_comm]
 
 中文:
 引理 mu_toDual
@@ -1741,7 +1778,20 @@ lemma mu_toDual
     { toFun := fun a b => mu 𝕜 (ofDual b) (ofDual a)
       eq_zero_of_not_le' := fun a b hab => apply_eq_zero_of_not_le (by exact hab) _ }
   suffices mu 𝕜 = mud by simp_rw [this, mud, coe_mk, ofDual_toDual]
-  suffic
+  suffices mud * zeta 𝕜 = 1 by
+    rw [← mu_mul_zeta] at this
+    apply_fun (· * mu 𝕜) at this
+    symm
+    simpa [mul_assoc, zeta_mul_mu] using this
+  clear a b
+  ext a b
+  simp only [mul_boole, one_apply, mul_apply, zeta_apply]
+  calc
+    ∑ x in Icc a b, (if x <= b then mud a x else 0) = ∑ x in Icc a b, mud a x := by
+      congr! with x hx; exact if_pos (mem_Icc.1 hx).2
+    _ = ∑ x in Icc (ofDual b) (ofDual a), mu 𝕜 x (ofDual a) := by simp [Icc_orderDual_def, mud]
+    _ = if ofDual b = ofDual a then 1 else 0 := sum_Icc_mu_left ..
+    _ = if a = b then 1 else 0 := by simp [eq_comm]
 
 Depends on / 依赖: Classical, Classical.decRel, DecidableLE, IncidenceAlgebra, apply_eq_zero_of_not_le, apply_fun, coe_mk, decRel, eq_zero_of_not_le, mu_mul_zeta, mul_apply, mul_assoc, mul_boole, ofDual, ofDual_toDual, one_apply, simp_rw, zeta_apply, zeta_mul_mu
 -/
@@ -1829,7 +1879,24 @@ lemma moebius_inversion_top
     _ = ∑ y in Ici x, mu 𝕜 x y * ∑ z in Ici y, zeta 𝕜 y z * f z := by
       congr with y
       rw [sum_congr rfl fun z hz => ?_]
-      rw [zeta
+      rw [zeta_apply]; rw [if_pos (mem_Ici.mp ‹_›)]; rw [one_mul]
+    _ = ∑ y in Ici x, ∑ z in Ici y, mu 𝕜 x y * zeta 𝕜 y z * f z := by simp [mul_sum]
+    _ = ∑ z in Ici x, ∑ y in Icc x z, mu 𝕜 x y * zeta 𝕜 y z * f z := by
+      rw [sum_sigma' (Ici x) fun y => Ici y]
+      rw [sum_sigma' (Ici x) fun z => Icc x z]
+      simp only [mul_boole, zero_mul, ite_mul, zeta_apply]
+      apply sum_nbij' (fun ⟨a, b⟩ => ⟨b, a⟩) (fun ⟨a, b⟩ => ⟨b, a⟩) <;>
+        aesop (add simp mul_assoc) (add unsafe le_trans)
+    _ = ∑ z in Ici x, (mu 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) x z * f z := by
+      simp_rw [mul_apply, sum_mul]
+    _ = ∑ y in Ici x, ∑ z in Ici y, (1 : IncidenceAlgebra 𝕜 α) x z * f z := by
+      simp only [mu_mul_zeta 𝕜, one_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_Ici, le_refl,
+        ↓reduceIte, ← add_sum_Ioi_eq_sum_Ici, left_eq_add]
+      exact sum_eq_zero fun y hy => if_neg (mem_Ioi.mp hy).not_ge
+    _ = f x := by
+      simp only [one_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_Ici,
+        ← add_sum_Ioi_eq_sum_Ici, le_refl, ↓reduceIte, add_eq_left]
+      exact sum_eq_zero fun y hy => if_neg (mem_Ioi.mp hy).not_ge
 
 中文:
 引理 moebius_inversion_top
@@ -1842,7 +1909,24 @@ lemma moebius_inversion_top
     _ = ∑ y in Ici x, mu 𝕜 x y * ∑ z in Ici y, zeta 𝕜 y z * f z := by
       congr with y
       rw [sum_congr rfl fun z hz => ?_]
-      rw [zeta
+      rw [zeta_apply]; rw [if_pos (mem_Ici.mp ‹_›)]; rw [one_mul]
+    _ = ∑ y in Ici x, ∑ z in Ici y, mu 𝕜 x y * zeta 𝕜 y z * f z := by simp [mul_sum]
+    _ = ∑ z in Ici x, ∑ y in Icc x z, mu 𝕜 x y * zeta 𝕜 y z * f z := by
+      rw [sum_sigma' (Ici x) fun y => Ici y]
+      rw [sum_sigma' (Ici x) fun z => Icc x z]
+      simp only [mul_boole, zero_mul, ite_mul, zeta_apply]
+      apply sum_nbij' (fun ⟨a, b⟩ => ⟨b, a⟩) (fun ⟨a, b⟩ => ⟨b, a⟩) <;>
+        aesop (add simp mul_assoc) (add unsafe le_trans)
+    _ = ∑ z in Ici x, (mu 𝕜 * zeta 𝕜 : IncidenceAlgebra 𝕜 α) x z * f z := by
+      simp_rw [mul_apply, sum_mul]
+    _ = ∑ y in Ici x, ∑ z in Ici y, (1 : IncidenceAlgebra 𝕜 α) x z * f z := by
+      simp only [mu_mul_zeta 𝕜, one_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_Ici, le_refl,
+        ↓reduceIte, ← add_sum_Ioi_eq_sum_Ici, left_eq_add]
+      exact sum_eq_zero fun y hy => if_neg (mem_Ioi.mp hy).not_ge
+    _ = f x := by
+      simp only [one_apply, ite_mul, one_mul, zero_mul, sum_ite_eq, mem_Ici,
+        ← add_sum_Ioi_eq_sum_Ici, le_refl, ↓reduceIte, add_eq_left]
+      exact sum_eq_zero fun y hy => if_neg (mem_Ioi.mp hy).not_ge
 
 Depends on / 依赖: Classical, Classical.decRel, DecidableLE, decRel, if_pos, mem_Ici, mem_Ici.mp, mul_sum, one_mul, simp_rw, sum_congr, sum_sigma, zeta_apply
 -/

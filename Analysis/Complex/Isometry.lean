@@ -163,7 +163,8 @@ theorem rotation_ne_conjLIE
   have h1 : rotation a 1 = conj 1 := LinearIsometryEquiv.congr_fun h 1
   have hI : rotation a I = conj I := LinearIsometryEquiv.congr_fun h I
   rw [rotation_apply]; rw [map_one]; rw [mul_one] at h1
-  rw [rotation_apply]; rw [conj_I]; rw [← neg_one_mul]; rw [mul_left_inj' I_ne_zero]; rw 
+  rw [rotation_apply]; rw [conj_I]; rw [← neg_one_mul]; rw [mul_left_inj' I_ne_zero]; rw [h1]; rw [eq_neg_self_iff] at hI
+  exact one_ne_zero hI
 
 中文:
 定理 rotation_ne_conjLIE
@@ -174,7 +175,8 @@ theorem rotation_ne_conjLIE
   have h1 : rotation a 1 = conj 1 := LinearIsometryEquiv.congr_fun h 1
   have hI : rotation a I = conj I := LinearIsometryEquiv.congr_fun h I
   rw [rotation_apply]; rw [map_one]; rw [mul_one] at h1
-  rw [rotation_apply]; rw [conj_I]; rw [← neg_one_mul]; rw [mul_left_inj' I_ne_zero]; rw 
+  rw [rotation_apply]; rw [conj_I]; rw [← neg_one_mul]; rw [mul_left_inj' I_ne_zero]; rw [h1]; rw [eq_neg_self_iff] at hI
+  exact one_ne_zero hI
 
 Depends on / 依赖: I_ne_zero, LinearIsometryEquiv, LinearIsometryEquiv.congr_fun, congr_fun, conj_I, eq_neg_self_iff, map_one, mul_left_inj, mul_one, neg_one_mul, one_ne_zero, rotation, rotation_apply
 -/
@@ -365,7 +367,14 @@ theorem linear_isometry_complex_aux
     constructor
     · rw [← I_re]
       exact @LinearIsometry.re_apply_eq_re f.toLinearIsometry h I
-    · apply @LinearIsometry.im_apply_eq_im_or_neg_of_re_apply_eq_re f.toLinearIso
+    · apply @LinearIsometry.im_apply_eq_im_or_neg_of_re_apply_eq_re f.toLinearIsometry
+      intro z
+      rw [@LinearIsometry.re_apply_eq_re f.toLinearIsometry h]
+  refine h0.imp (fun h' : f I = I => ?_) fun h' : f I = -I => ?_ <;>
+    · apply LinearIsometryEquiv.toLinearEquiv_injective
+      apply Complex.basisOneI.ext'
+      intro i
+      fin_cases i <;> simp [h, h']
 
 中文:
 定理 linear_isometry_complex_aux
@@ -376,7 +385,14 @@ theorem linear_isometry_complex_aux
     constructor
     · rw [← I_re]
       exact @LinearIsometry.re_apply_eq_re f.toLinearIsometry h I
-    · apply @LinearIsometry.im_apply_eq_im_or_neg_of_re_apply_eq_re f.toLinearIso
+    · apply @LinearIsometry.im_apply_eq_im_or_neg_of_re_apply_eq_re f.toLinearIsometry
+      intro z
+      rw [@LinearIsometry.re_apply_eq_re f.toLinearIsometry h]
+  refine h0.imp (fun h' : f I = I => ?_) fun h' : f I = -I => ?_ <;>
+    · apply LinearIsometryEquiv.toLinearEquiv_injective
+      apply Complex.basisOneI.ext'
+      intro i
+      fin_cases i <;> simp [h, h']
 
 Depends on / 依赖: Complex.basisOneI.ext, Complex.ext_iff, I_re, LinearIsometry, LinearIsometry.im_apply_eq_im_or_neg_of_re_apply_eq_re, LinearIsometry.re_apply_eq_re, LinearIsometryEquiv, LinearIsometryEquiv.toLinearEquiv_injective, and_or_left, basisOneI, ext_iff, f.toLinearIsometry, h0.imp, im_apply_eq_im_or_neg_of_re_apply_eq_re, neg_im, neg_re, neg_zero, re_apply_eq_re, toLinearEquiv_injective, toLinearIsometry
 -/
@@ -409,7 +425,7 @@ theorem linear_isometry_complex
   have : (f.trans (rotation a).symm) 1 = 1 := by simpa [a] using rotation_apply a⁻¹ (f 1)
   refine (linear_isometry_complex_aux this).imp (fun h₁ => ?_) fun h₂ => ?_
   · simpa using eq_mul_of_inv_mul_eq h₁
-  · exact eq_
+  · exact eq_mul_of_inv_mul_eq h₂
 
 中文:
 定理 linear_isometry_complex
@@ -420,7 +436,7 @@ theorem linear_isometry_complex
   have : (f.trans (rotation a).symm) 1 = 1 := by simpa [a] using rotation_apply a⁻¹ (f 1)
   refine (linear_isometry_complex_aux this).imp (fun h₁ => ?_) fun h₂ => ?_
   · simpa using eq_mul_of_inv_mul_eq h₁
-  · exact eq_
+  · exact eq_mul_of_inv_mul_eq h₂
 
 Depends on / 依赖: Circle, Submonoid, Submonoid.unitSphere, eq_mul_of_inv_mul_eq, f.norm_map, f.trans, linear_isometry_complex_aux, norm_map, rotation, rotation_apply, unitSphere
 -/
@@ -444,7 +460,8 @@ theorem toMatrix_rotation
   simp only [LinearMap.toMatrix_apply, coe_basisOneI, LinearEquiv.coe_coe,
     LinearIsometryEquiv.coe_toLinearEquiv, rotation_apply, coe_basisOneI_repr, mul_re, mul_im,
     Matrix.val_planeConformalMatrix, Matrix.of_apply, Matrix.cons_val', Matrix.empty_val',
-    Matrix.cons_val_fin_on
+    Matrix.cons_val_fin_one]
+  fin_cases i <;> fin_cases j <;> simp
 
 中文:
 定理 toMatrix_rotation
@@ -454,7 +471,8 @@ theorem toMatrix_rotation
   simp only [LinearMap.toMatrix_apply, coe_basisOneI, LinearEquiv.coe_coe,
     LinearIsometryEquiv.coe_toLinearEquiv, rotation_apply, coe_basisOneI_repr, mul_re, mul_im,
     Matrix.val_planeConformalMatrix, Matrix.of_apply, Matrix.cons_val', Matrix.empty_val',
-    Matrix.cons_val_fin_on
+    Matrix.cons_val_fin_one]
+  fin_cases i <;> fin_cases j <;> simp
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, LinearIsometryEquiv, LinearIsometryEquiv.coe_toLinearEquiv, LinearMap, LinearMap.toMatrix_apply, Matrix, Matrix.cons_val, Matrix.cons_val_fin_one, Matrix.empty_val, Matrix.of_apply, Matrix.val_planeConformalMatrix, coe_basisOneI, coe_basisOneI_repr, coe_coe, coe_toLinearEquiv, cons_val, cons_val_fin_one, empty_val, fin_cases
 -/

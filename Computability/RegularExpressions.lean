@@ -667,7 +667,7 @@ theorem char_rmatch_iff
     · rw [rmatch, rmatch, deriv, cons.injEq]
       split
       · simp_rw [deriv_one, zero_rmatch, reduceCtorEq, and_false]
-      · simp_
+      · simp_rw [deriv_zero, zero_rmatch, reduceCtorEq, and_false]
 
 中文:
 定理 char_rmatch_iff
@@ -682,7 +682,7 @@ theorem char_rmatch_iff
     · rw [rmatch, rmatch, deriv, cons.injEq]
       split
       · simp_rw [deriv_one, zero_rmatch, reduceCtorEq, and_false]
-      · simp_
+      · simp_rw [deriv_zero, zero_rmatch, reduceCtorEq, and_false]
 
 Depends on / 依赖: List.singleton_inj, and_false, cons.injEq, deriv_one, deriv_zero, of_decide_eq_true, reduceCtorEq, rmatch, simp_rw, singleton_inj, zero_rmatch
 -/
@@ -746,7 +746,39 @@ theorem mul_rmatch_iff
       rw [rmatch]; rw [rmatch]
       rwa [Bool.and_eq_true_iff] at h
     · rintro ⟨t, u, h₁, h₂⟩
-      obtain ⟨rfl, rfl⟩ := List.append_eq_nil_iff.
+      obtain ⟨rfl, rfl⟩ := List.append_eq_nil_iff.1 h₁.symm
+      repeat rw [rmatch] at h₂
+      simp [h₂]
+  | cons a x ih =>
+    rw [rmatch]; simp only [deriv]
+    split_ifs with hepsilon
+    · rw [add_rmatch_iff, ih]
+      constructor
+      · rintro (⟨t, u, _⟩ | h)
+        · exact ⟨a :: t, u, by tauto⟩
+        · exact ⟨[], a :: x, rfl, hepsilon, h⟩
+      · rintro ⟨t, u, h, hP, hQ⟩
+        rcases t with - | ⟨b, t⟩
+        · right
+          rw [List.nil_append] at h
+          rw [← h] at hQ
+          exact hQ
+        · left
+          rw [List.cons_append]; rw [List.cons_eq_cons] at h
+          refine ⟨t, u, h.2, ?_, hQ⟩
+          rw [rmatch] at hP
+          convert! hP
+          exact h.1
+    · rw [ih]
+      constructor <;> rintro ⟨t, u, h, hP, hQ⟩
+      · exact ⟨a :: t, u, by tauto⟩
+      · rcases t with - | ⟨b, t⟩
+        · contradiction
+        · rw [List.cons_append, List.cons_eq_cons] at h
+          refine ⟨t, u, h.2, ?_, hQ⟩
+          rw [rmatch] at hP
+          convert! hP
+          exact h.1
 
 中文:
 定理 mul_rmatch_iff
@@ -761,7 +793,39 @@ theorem mul_rmatch_iff
       rw [rmatch]; rw [rmatch]
       rwa [Bool.and_eq_true_iff] at h
     · rintro ⟨t, u, h₁, h₂⟩
-      obtain ⟨rfl, rfl⟩ := List.append_eq_nil_iff.
+      obtain ⟨rfl, rfl⟩ := List.append_eq_nil_iff.1 h₁.symm
+      repeat rw [rmatch] at h₂
+      simp [h₂]
+  | cons a x ih =>
+    rw [rmatch]; simp only [deriv]
+    split_ifs with hepsilon
+    · rw [add_rmatch_iff, ih]
+      constructor
+      · rintro (⟨t, u, _⟩ | h)
+        · exact ⟨a :: t, u, by tauto⟩
+        · exact ⟨[], a :: x, rfl, hepsilon, h⟩
+      · rintro ⟨t, u, h, hP, hQ⟩
+        rcases t with - | ⟨b, t⟩
+        · right
+          rw [List.nil_append] at h
+          rw [← h] at hQ
+          exact hQ
+        · left
+          rw [List.cons_append]; rw [List.cons_eq_cons] at h
+          refine ⟨t, u, h.2, ?_, hQ⟩
+          rw [rmatch] at hP
+          convert! hP
+          exact h.1
+    · rw [ih]
+      constructor <;> rintro ⟨t, u, h, hP, hQ⟩
+      · exact ⟨a :: t, u, by tauto⟩
+      · rcases t with - | ⟨b, t⟩
+        · contradiction
+        · rw [List.cons_append, List.cons_eq_cons] at h
+          refine ⟨t, u, h.2, ?_, hQ⟩
+          rw [rmatch] at hP
+          convert! hP
+          exact h.1
 
 Depends on / 依赖: Bool.and_eq_true_iff, List.append_eq_nil_iff, add_rmatch_iff, and_eq_true_iff, append_eq_nil_iff, generalizing, hepsilon, matchEpsilon, repeat, rmatch, split_ifs
 -/
@@ -825,7 +889,39 @@ theorem star_rmatch_iff
         use []; dsimp; tauto
       · rw [rmatch, deriv, mul_rmatch_iff]
         rintro ⟨t, u, hs, ht, hu⟩
-        hav
+        have hwf : u.length < (List.cons a x).length := by
+          rw [hs]; rw [List.length_cons]; rw [List.length_append]
+          lia
+        rw [IH _ hwf] at hu
+        rcases hu with ⟨S', hsum, helem⟩
+        use (a :: t) :: S'
+        constructor
+        · simp [hs, hsum]
+        · intro t' ht'
+          cases ht' with
+          | head ht' =>
+            simp only [ne_eq, not_false_iff, true_and, rmatch, reduceCtorEq]
+            exact ht
+          | tail _ ht' => exact helem t' ht'
+    · rintro ⟨S, hsum, helem⟩
+      rcases x with - | ⟨a, x⟩
+      · rfl
+      · rw [rmatch, deriv, mul_rmatch_iff]
+        rcases S with - | ⟨t', U⟩
+        · exact ⟨[], [], by tauto⟩
+        · obtain - | ⟨b, t⟩ := t'
+          · simp only [forall_eq_or_imp, List.mem_cons] at helem
+            simp only [not_true, Ne, false_and] at helem
+          simp only [List.flatten_cons, List.cons_append, List.cons_eq_cons] at hsum
+          refine ⟨t, U.flatten, hsum.2, ?_, ?_⟩
+          · specialize helem (b :: t) (by simp)
+            rw [rmatch] at helem
+            convert! helem.2
+            exact hsum.1
+          · grind
+  termination_by t => (P, t.length)
+
+@[simp]
 
 中文:
 定理 star_rmatch_iff
@@ -839,7 +935,39 @@ theorem star_rmatch_iff
         use []; dsimp; tauto
       · rw [rmatch, deriv, mul_rmatch_iff]
         rintro ⟨t, u, hs, ht, hu⟩
-        hav
+        have hwf : u.length < (List.cons a x).length := by
+          rw [hs]; rw [List.length_cons]; rw [List.length_append]
+          lia
+        rw [IH _ hwf] at hu
+        rcases hu with ⟨S', hsum, helem⟩
+        use (a :: t) :: S'
+        constructor
+        · simp [hs, hsum]
+        · intro t' ht'
+          cases ht' with
+          | head ht' =>
+            simp only [ne_eq, not_false_iff, true_and, rmatch, reduceCtorEq]
+            exact ht
+          | tail _ ht' => exact helem t' ht'
+    · rintro ⟨S, hsum, helem⟩
+      rcases x with - | ⟨a, x⟩
+      · rfl
+      · rw [rmatch, deriv, mul_rmatch_iff]
+        rcases S with - | ⟨t', U⟩
+        · exact ⟨[], [], by tauto⟩
+        · obtain - | ⟨b, t⟩ := t'
+          · simp only [forall_eq_or_imp, List.mem_cons] at helem
+            simp only [not_true, Ne, false_and] at helem
+          simp only [List.flatten_cons, List.cons_append, List.cons_eq_cons] at hsum
+          refine ⟨t, U.flatten, hsum.2, ?_, ?_⟩
+          · specialize helem (b :: t) (by simp)
+            rw [rmatch] at helem
+            convert! helem.2
+            exact hsum.1
+          · grind
+  termination_by t => (P, t.length)
+
+@[simp]
 
 Depends on / 依赖: List.cons, List.length, List.length_append, List.length_cons, length, length_append, length_cons, mul_rmatch_iff, rmatch, star_rmatch_iff, u.length
 -/
@@ -905,7 +1033,13 @@ theorem rmatch_iff_matches'
     rw [char_rmatch_iff]
     rfl
   | plus _ _ ih₁ ih₂ =>
-    rw [plus_def]; rw [add_rmatch_iff
+    rw [plus_def]; rw [add_rmatch_iff]; rw [ih₁]; rw [ih₂]
+    rfl
+  | comp P Q ih₁ ih₂ =>
+    simp only [comp_def, mul_rmatch_iff, matches'_mul, Language.mem_mul, *]
+    tauto
+  | star _ ih =>
+    simp only [star_rmatch_iff, matches'_star, ih, Language.mem_kstar_iff_exists_nonempty, and_comm]
 
 中文:
 定理 rmatch_iff_matches'
@@ -921,7 +1055,13 @@ theorem rmatch_iff_matches'
     rw [char_rmatch_iff]
     rfl
   | plus _ _ ih₁ ih₂ =>
-    rw [plus_def]; rw [add_rmatch_iff
+    rw [plus_def]; rw [add_rmatch_iff]; rw [ih₁]; rw [ih₂]
+    rfl
+  | comp P Q ih₁ ih₂ =>
+    simp only [comp_def, mul_rmatch_iff, matches'_mul, Language.mem_mul, *]
+    tauto
+  | star _ ih =>
+    simp only [star_rmatch_iff, matches'_star, ih, Language.mem_kstar_iff_exists_nonempty, and_comm]
 
 Depends on / 依赖: Language, Language.mem_kstar_iff_exists_nonempty, Language.mem_mul, Language.mem_one, _epsilon, _mul, _star, add_rmatch_iff, and_co, char_rmatch_iff, comp_def, epsilon, generalizing, matches, mem_kstar_iff_exists_nonempty, mem_mul, mem_one, mul_rmatch_iff, one_def, one_rmatch_iff
 -/

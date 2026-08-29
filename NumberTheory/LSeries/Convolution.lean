@@ -254,7 +254,7 @@ lemma term_convolution
   rw [term_of_ne_zero hn]; rw [convolution_def]; rw [Finset.sum_div]
   refine Finset.sum_congr rfl fun p hp => ?_
   have ⟨hp₁, hp₂⟩ := ne_zero_of_mem_divisorsAntidiagonal hp
-  rw [term_of_ne_zero hp₁]; rw [term_of_ne_zero hp₂]; rw [mul
+  rw [term_of_ne_zero hp₁]; rw [term_of_ne_zero hp₂]; rw [mul_comm_div]; rw [div_div]; rw [← mul_div_assoc]; rw [← natCast_mul_natCast_cpow]; rw [← cast_mul]; rw [mul_comm p.2]; rw [(mem_divisorsAntidiagonal.mp hp).1]
 
 中文:
 引理 term_convolution
@@ -266,7 +266,7 @@ lemma term_convolution
   rw [term_of_ne_zero hn]; rw [convolution_def]; rw [Finset.sum_div]
   refine Finset.sum_congr rfl fun p hp => ?_
   have ⟨hp₁, hp₂⟩ := ne_zero_of_mem_divisorsAntidiagonal hp
-  rw [term_of_ne_zero hp₁]; rw [term_of_ne_zero hp₂]; rw [mul
+  rw [term_of_ne_zero hp₁]; rw [term_of_ne_zero hp₂]; rw [mul_comm_div]; rw [div_div]; rw [← mul_div_assoc]; rw [← natCast_mul_natCast_cpow]; rw [← cast_mul]; rw [mul_comm p.2]; rw [(mem_divisorsAntidiagonal.mp hp).1]
 
 Depends on / 依赖: eq_or_ne
 -/
@@ -293,7 +293,17 @@ lemma term_convolution'
   · -- show that both sides vanish when `n = 0`; this is the hardest part of the proof!
     refine (term_zero ..).trans ?_
     -- the right-hand sum is over the union below, but in each term, one factor is always zero
-    have hS : (fun p => p.1 * p.2) 
+    have hS : (fun p => p.1 * p.2) ⁻¹' {0} = {0} ×ˢ univ union univ ×ˢ {0} := by
+      ext
+      simp
+    have : forall p : (fun p : Nat × Nat => p.1 * p.2) ⁻¹' {0}, term f s p.val.1 * term g s p.val.2 = 0 := by
+      rintro ⟨⟨_, _⟩, hp⟩
+      rcases hS ▸ hp with ⟨rfl, -⟩ | ⟨-, rfl⟩ <;> simp
+    simp [this]
+  -- now `n ≠ 0`
+  rw [show (fun p : Nat × Nat => p.1 * p.2) ⁻¹' {n} = n.divisorsAntidiagonal by ext; simp [hn],
+    Finset.tsum_subtype' n.divisorsAntidiagonal fun p => term f s p.1 * term g s p.2,
+    term_convolution f g s n]
 
 中文:
 引理 term_convolution'
@@ -304,7 +314,17 @@ lemma term_convolution'
   · -- show that both sides vanish when `n = 0`; this is the hardest part of the proof!
     refine (term_zero ..).trans ?_
     -- the right-hand sum is over the union below, but in each term, one factor is always zero
-    have hS : (fun p => p.1 * p.2) 
+    have hS : (fun p => p.1 * p.2) ⁻¹' {0} = {0} ×ˢ univ union univ ×ˢ {0} := by
+      ext
+      simp
+    have : forall p : (fun p : Nat × Nat => p.1 * p.2) ⁻¹' {0}, term f s p.val.1 * term g s p.val.2 = 0 := by
+      rintro ⟨⟨_, _⟩, hp⟩
+      rcases hS ▸ hp with ⟨rfl, -⟩ | ⟨-, rfl⟩ <;> simp
+    simp [this]
+  -- now `n ≠ 0`
+  rw [show (fun p : Nat × Nat => p.1 * p.2) ⁻¹' {n} = n.divisorsAntidiagonal by ext; simp [hn],
+    Finset.tsum_subtype' n.divisorsAntidiagonal fun p => term f s p.1 * term g s p.2,
+    term_convolution f g s n]
 
 Depends on / 依赖: eq_or_ne, hardest, term_zero, vanish
 -/

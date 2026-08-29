@@ -31,7 +31,24 @@ theorem aemeasurable_withDensity_iff
     have A : MeasurableSet { x : α | f x != 0 } := (hf (measurableSet_singleton 0)).compl
     refine ⟨fun x => (f x : Real) • g' x, hf.coe_nnreal_real.smul g'meas, ?_⟩
     apply @ae_of_ae_restrict_of_ae_restrict_compl _ _ _ { x | f x != 0 }
-    · rw [Eve
+    · rw [EventuallyEq, ae_withDensity_iff hf.coe_nnreal_ennreal] at hg'
+      rw [ae_restrict_iff' A]
+      filter_upwards [hg']
+      intro a ha h'a
+      have : (f a : Real>=0∞) != 0 := by simpa only [Ne, ENNReal.coe_eq_zero] using h'a
+      rw [ha this]
+    · filter_upwards [ae_restrict_mem A.compl]
+      intro x hx
+      simp only [Classical.not_not, mem_ofPred_eq, mem_compl_iff] at hx
+      simp [hx]
+  · rintro ⟨g', g'meas, hg'⟩
+    refine ⟨fun x => (f x : Real)⁻¹ • g' x, hf.coe_nnreal_real.inv.smul g'meas, ?_⟩
+    rw [EventuallyEq]; rw [ae_withDensity_iff hf.coe_nnreal_ennreal]
+    filter_upwards [hg']
+    intro x hx h'x
+    rw [← hx]; rw [smul_smul]; rw [inv_mul_cancel₀]; rw [one_smul]
+    simp only [Ne, ENNReal.coe_eq_zero] at h'x
+    simpa only [NNReal.coe_eq_zero, Ne] using h'x
 
 中文:
 定理 aemeasurable_withDensity_iff
@@ -42,7 +59,24 @@ theorem aemeasurable_withDensity_iff
     have A : MeasurableSet { x : α | f x != 0 } := (hf (measurableSet_singleton 0)).compl
     refine ⟨fun x => (f x : Real) • g' x, hf.coe_nnreal_real.smul g'meas, ?_⟩
     apply @ae_of_ae_restrict_of_ae_restrict_compl _ _ _ { x | f x != 0 }
-    · rw [Eve
+    · rw [EventuallyEq, ae_withDensity_iff hf.coe_nnreal_ennreal] at hg'
+      rw [ae_restrict_iff' A]
+      filter_upwards [hg']
+      intro a ha h'a
+      have : (f a : Real>=0∞) != 0 := by simpa only [Ne, ENNReal.coe_eq_zero] using h'a
+      rw [ha this]
+    · filter_upwards [ae_restrict_mem A.compl]
+      intro x hx
+      simp only [Classical.not_not, mem_ofPred_eq, mem_compl_iff] at hx
+      simp [hx]
+  · rintro ⟨g', g'meas, hg'⟩
+    refine ⟨fun x => (f x : Real)⁻¹ • g' x, hf.coe_nnreal_real.inv.smul g'meas, ?_⟩
+    rw [EventuallyEq]; rw [ae_withDensity_iff hf.coe_nnreal_ennreal]
+    filter_upwards [hg']
+    intro x hx h'x
+    rw [← hx]; rw [smul_smul]; rw [inv_mul_cancel₀]; rw [one_smul]
+    simp only [Ne, ENNReal.coe_eq_zero] at h'x
+    simpa only [NNReal.coe_eq_zero, Ne] using h'x
 
 Depends on / 依赖: ENNReal, ENNReal.coe_eq_zero, EventuallyEq, MeasurableSet, ae_of_ae_restrict_of_ae_restrict_compl, ae_restrict_iff, ae_withDensity_iff, coe_eq_zero, coe_nnreal_ennreal, coe_nnreal_real, filter_upwards, hf.coe_nnreal_ennreal, hf.coe_nnreal_real.smul, measurableSet_singleton
 -/

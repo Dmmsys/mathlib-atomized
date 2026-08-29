@@ -515,7 +515,9 @@ definition lift
   left_inv π := by
     ext i aᵢ
     simp [ι, ← ι_apply]
-  
+  right_inv maps := by
+    ext i a
+    simp [ι, ← ι_apply]
 
 中文:
 定义 lift
@@ -530,7 +532,9 @@ definition lift
   left_inv π := by
     ext i aᵢ
     simp [ι, ← ι_apply]
-  
+  right_inv maps := by
+    ext i a
+    simp [ι, ← ι_apply]
 -/
 @[simps] def lift : ({i : I} -> A i ->ₐ[R] B) ≃ (FreeProduct R A ->ₐ[R] B) where
   toFun maps :=

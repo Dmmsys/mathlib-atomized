@@ -268,7 +268,10 @@ theorem memberSubfamily_union_nonMemberSubfamily
     · exact ⟨_, h.1, erase_eq_of_notMem h.2⟩
   · rintro ⟨s, hs, rfl⟩
     by_cases ha : a in s
-    · exact Or.inl ⟨by rwa [insert_erase ha
+    · exact Or.inl ⟨by rwa [insert_erase ha], notMem_erase _ _⟩
+    · exact Or.inr ⟨by rwa [erase_eq_of_notMem ha], notMem_erase _ _⟩
+
+@[simp]
 
 中文:
 定理 memberSubfamily_union_nonMemberSubfamily
@@ -282,7 +285,10 @@ theorem memberSubfamily_union_nonMemberSubfamily
     · exact ⟨_, h.1, erase_eq_of_notMem h.2⟩
   · rintro ⟨s, hs, rfl⟩
     by_cases ha : a in s
-    · exact Or.inl ⟨by rwa [insert_erase ha
+    · exact Or.inl ⟨by rwa [insert_erase ha], notMem_erase _ _⟩
+    · exact Or.inr ⟨by rwa [erase_eq_of_notMem ha], notMem_erase _ _⟩
+
+@[simp]
 
 Depends on / 依赖: Or.inl, Or.inr, erase_eq_of_notMem, erase_insert, insert_erase, mem_image, mem_memberSubfamily, mem_nonMemberSubfamily, mem_union, notMem_erase
 -/
@@ -532,7 +538,13 @@ lemma memberFamily_induction_on
   | empty =>
     simp_rw [subset_empty] at hu
     rw [← subset_singleton_iff']; rw [subset_singleton_iff] at hu
-    obtain rfl | rfl :=
+    obtain rfl | rfl := hu <;> assumption
+  | insert a u _ ih =>
+    refine subfamily a (ih _ ?_) (ih _ ?_)
+    · simp only [mem_nonMemberSubfamily, and_imp]
+exact fun s hs has => (subset_insert_iff_of_notMem has).1 hu _ hs
+    · simp only [mem_memberSubfamily, and_imp]
+exact fun s hs ha => (insert_subset_insert_iff ha).1 hu _ hs
 
 中文:
 引理 memberFamily_induction_on
@@ -545,7 +557,13 @@ lemma memberFamily_induction_on
   | empty =>
     simp_rw [subset_empty] at hu
     rw [← subset_singleton_iff']; rw [subset_singleton_iff] at hu
-    obtain rfl | rfl :=
+    obtain rfl | rfl := hu <;> assumption
+  | insert a u _ ih =>
+    refine subfamily a (ih _ ?_) (ih _ ?_)
+    · simp only [mem_nonMemberSubfamily, and_imp]
+exact fun s hs has => (subset_insert_iff_of_notMem has).1 hu _ hs
+    · simp only [mem_memberSubfamily, and_imp]
+exact fun s hs ha => (insert_subset_insert_iff ha).1 hu _ hs
 
 Depends on / 依赖: Finset, Finset.induction, and_imp, clear_value, generalizing, insert, le_sup, mem_memberSubfamil, mem_nonMemberSubfamily, simp_rw, subfamily, subset_empty, subset_insert_iff_of_notMem, subset_singleton_iff, subseteq
 -/
@@ -663,7 +681,7 @@ theorem mem_compression
       (and_congr_left fun hs =>
 ⟨?_, fun h => ⟨_, h, erase_insert insert_ne_self.1 ne_of_mem_of_not_mem h hs⟩⟩)
   rintro ⟨t, ht, rfl⟩
-  rwa [insert_erase (erase_ne_self.1 (ne_of_mem_of
+  rwa [insert_erase (erase_ne_self.1 (ne_of_mem_of_not_mem ht hs).symm)]
 
 中文:
 定理 mem_compression
@@ -675,7 +693,7 @@ theorem mem_compression
       (and_congr_left fun hs =>
 ⟨?_, fun h => ⟨_, h, erase_insert insert_ne_self.1 ne_of_mem_of_not_mem h hs⟩⟩)
   rintro ⟨t, ht, rfl⟩
-  rwa [insert_erase (erase_ne_self.1 (ne_of_mem_of
+  rwa [insert_erase (erase_ne_self.1 (ne_of_mem_of_not_mem ht hs).symm)]
 
 Depends on / 依赖: and_comm, and_congr_left, compression, erase_insert, erase_ne_self, insert_erase, insert_ne_self, mem_disjUnion, mem_filter, mem_image, ne_of_mem_of_not_mem, or_congr_right, simp_rw
 -/
@@ -822,7 +840,10 @@ theorem card_compression
   proof: by
   rw [compression]; rw [card_disjUnion]; rw [filter_image]; rw [card_image_of_injOn ((erase_injOn' _).mono fun s hs => _)]; rw [← card_union_of_disjoint]
   · conv_rhs => rw [← filter_union_filter_not_eq (fun s => (erase s a in 𝒜)) 𝒜]
-  · exact disjoint_filter_filter_not 𝒜 𝒜 (fun s => (erase s a i
+  · exact disjoint_filter_filter_not 𝒜 𝒜 (fun s => (erase s a in 𝒜))
+  intro s hs
+  rw [mem_coe]; rw [mem_filter] at hs
+  exact not_imp_comm.1 erase_eq_of_notMem (ne_of_mem_of_not_mem hs.1 hs.2).symm
 
 中文:
 定理 card_compression
@@ -831,7 +852,10 @@ theorem card_compression
   证明: by
   rw [compression]; rw [card_disjUnion]; rw [filter_image]; rw [card_image_of_injOn ((erase_injOn' _).mono fun s hs => _)]; rw [← card_union_of_disjoint]
   · conv_rhs => rw [← filter_union_filter_not_eq (fun s => (erase s a in 𝒜)) 𝒜]
-  · exact disjoint_filter_filter_not 𝒜 𝒜 (fun s => (erase s a i
+  · exact disjoint_filter_filter_not 𝒜 𝒜 (fun s => (erase s a in 𝒜))
+  intro s hs
+  rw [mem_coe]; rw [mem_filter] at hs
+  exact not_imp_comm.1 erase_eq_of_notMem (ne_of_mem_of_not_mem hs.1 hs.2).symm
 
 Depends on / 依赖: card_disjUnion, card_image_of_injOn, card_union_of_disjoint, compression, conv_rhs, disjoint_filter_filter_not, erase_eq_of_notMem, erase_injOn, filter_image, filter_union_filter_not_eq, mem_coe, mem_filter, ne_of_mem_of_not_mem, not_imp_comm
 -/

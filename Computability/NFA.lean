@@ -898,7 +898,13 @@ theorem mem_evalFrom_iff_nonempty_path
       have h : exists s' in M.step s a, t in M.evalFrom {s'} x := by
         rw [evalFrom_cons]; rw [mem_evalFrom_iff_exists]; rw [stepSet_singleton] at h; exact h
       let ⟨s', h₁, h₂⟩ := h
-
+      let ⟨p'⟩ := mem_evalFrom_iff_nonempty_path.1 h₂
+      ⟨Path.cons s' _ _ _ _ h₁ p'⟩
+  mpr p := match p with
+    | ⟨Path.nil s⟩ => by simp
+    | ⟨Path.cons s' s t a x h₁ h₂⟩ => by
+      rw [evalFrom_cons]; rw [stepSet_singleton]; rw [mem_evalFrom_iff_exists]
+      exact ⟨s', h₁, mem_evalFrom_iff_nonempty_path.2 ⟨h₂⟩⟩
 
 中文:
 定理 mem_evalFrom_iff_nonempty_path
@@ -911,7 +917,13 @@ theorem mem_evalFrom_iff_nonempty_path
       have h : exists s' in M.step s a, t in M.evalFrom {s'} x := by
         rw [evalFrom_cons]; rw [mem_evalFrom_iff_exists]; rw [stepSet_singleton] at h; exact h
       let ⟨s', h₁, h₂⟩ := h
-
+      let ⟨p'⟩ := mem_evalFrom_iff_nonempty_path.1 h₂
+      ⟨Path.cons s' _ _ _ _ h₁ p'⟩
+  mpr p := match p with
+    | ⟨Path.nil s⟩ => by simp
+    | ⟨Path.cons s' s t a x h₁ h₂⟩ => by
+      rw [evalFrom_cons]; rw [stepSet_singleton]; rw [mem_evalFrom_iff_exists]
+      exact ⟨s', h₁, mem_evalFrom_iff_nonempty_path.2 ⟨h₂⟩⟩
 -/
 theorem mem_evalFrom_iff_nonempty_path {s t : σ} {x : List α} :
     t in M.evalFrom {s} x ↔ Nonempty (M.Path s t x) where

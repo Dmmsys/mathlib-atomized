@@ -48,7 +48,15 @@ definition createCalc
   return #[{
     eager
     lazy? := some do
-      let
+      let tacPos := doc.meta.text.utf8PosToLspPos info.stx.getPos?.get!
+      let endPos := doc.meta.text.utf8PosToLspPos info.stx.getTailPos?.get!
+      let goal := info.goalsBefore[0]!
+let goalFmt ← ctx.runMetaM {} goal.withContext do Meta.ppExpr (← goal.getType)
+      return { eager with
+edit? := some .ofTextEdit doc.versionedIdentifier
+          { range := ⟨tacPos, endPos⟩, newText := s!"calc {goalFmt} := by sorry" }
+      }
+  }]
 
 中文:
 定义 createCalc
@@ -64,7 +72,15 @@ definition createCalc
   return #[{
     eager
     lazy? := some do
-      let
+      let tacPos := doc.meta.text.utf8PosToLspPos info.stx.getPos?.get!
+      let endPos := doc.meta.text.utf8PosToLspPos info.stx.getTailPos?.get!
+      let goal := info.goalsBefore[0]!
+let goalFmt ← ctx.runMetaM {} goal.withContext do Meta.ppExpr (← goal.getType)
+      return { eager with
+edit? := some .ofTextEdit doc.versionedIdentifier
+          { range := ⟨tacPos, endPos⟩, newText := s!"calc {goalFmt} := by sorry" }
+      }
+  }]
 
 Depends on / 依赖: _params, _snap, _stack
 -/
@@ -134,7 +150,50 @@ definition suggestSteps
   let relApp := mkApp2 rel
     (← mkFreshExprMVar none)
     (← mkFreshExprMVar none)
-  let some relStr :=
+  let some relStr := ((← Meta.ppExpr relApp) |> toString |>.splitOn)[1]?
+    | throwError "could not find relation symbol in {relApp}"
+  let isSelectedLeft := subexprPos.any (fun L => #[0, 1].isPrefixOf L.toArray)
+  let isSelectedRight := subexprPos.any (fun L => #[1].isPrefixOf L.toArray)
+
+  let mut goalType := goalType
+  for pos in subexprPos do
+    goalType ← insertMetaVar goalType pos
+  let some (_, newLhs, newRhs) ← Lean.Elab.Term.getCalcRelation? goalType |
+      throwError "invalid 'calc' step, relation expected{indentExpr goalType}"
+
+  let lhsStr := (toString <| ← Meta.ppExpr lhs).renameMetaVar
+  let newLhsStr := (toString <| ← Meta.ppExpr newLhs).renameMetaVar
+  let rhsStr := (toString <| ← Meta.ppExpr rhs).renameMetaVar
+  let newRhsStr := (toString <| ← Meta.ppExpr newRhs).renameMetaVar
+
+  let spc := String.replicate params.indent ' '
+  let insertedCode := match isSelectedLeft, isSelectedRight with
+  | true, true =>
+    if params.isFirst then
+      s!"{lhsStr} {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {newRhsStr} := by sorry\n\
+         {spc}_ {relStr} {rhsStr} := by sorry"
+    else
+      s!"_ {relStr} {newLhsStr} := by sorry\n{spc}\
+         _ {relStr} {newRhsStr} := by sorry\n{spc}\
+         _ {relStr} {rhsStr} := by sorry"
+  | false, true =>
+    if params.isFirst then
+      s!"{lhsStr} {relStr} {newRhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
+    else
+      s!"_ {relStr} {newRhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
+  | true, false =>
+    if params.isFirst then
+      s!"{lhsStr} {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
+    else
+      s!"_ {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
+  | false, false => "This should not happen"
+
+  let stepInfo := match isSelectedLeft, isSelectedRight with
+  | true, true => "Create two new steps"
+  | true, false | false, true => "Create a new step"
+  | false, false => "This should not happen"
+.offset let pos : String.Pos.Raw := insertedCode.find (fun c => c == '?')
+  return (stepInfo, insertedCode, some (pos, ⟨pos.byteIdx + 2⟩) )
 
 中文:
 定义 suggestSteps
@@ -146,7 +205,50 @@ definition suggestSteps
   let relApp := mkApp2 rel
     (← mkFreshExprMVar none)
     (← mkFreshExprMVar none)
-  let some relStr :=
+  let some relStr := ((← Meta.ppExpr relApp) |> toString |>.splitOn)[1]?
+    | throwError "could not find relation symbol in {relApp}"
+  let isSelectedLeft := subexprPos.any (fun L => #[0, 1].isPrefixOf L.toArray)
+  let isSelectedRight := subexprPos.any (fun L => #[1].isPrefixOf L.toArray)
+
+  let mut goalType := goalType
+  for pos in subexprPos do
+    goalType ← insertMetaVar goalType pos
+  let some (_, newLhs, newRhs) ← Lean.Elab.Term.getCalcRelation? goalType |
+      throwError "invalid 'calc' step, relation expected{indentExpr goalType}"
+
+  let lhsStr := (toString <| ← Meta.ppExpr lhs).renameMetaVar
+  let newLhsStr := (toString <| ← Meta.ppExpr newLhs).renameMetaVar
+  let rhsStr := (toString <| ← Meta.ppExpr rhs).renameMetaVar
+  let newRhsStr := (toString <| ← Meta.ppExpr newRhs).renameMetaVar
+
+  let spc := String.replicate params.indent ' '
+  let insertedCode := match isSelectedLeft, isSelectedRight with
+  | true, true =>
+    if params.isFirst then
+      s!"{lhsStr} {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {newRhsStr} := by sorry\n\
+         {spc}_ {relStr} {rhsStr} := by sorry"
+    else
+      s!"_ {relStr} {newLhsStr} := by sorry\n{spc}\
+         _ {relStr} {newRhsStr} := by sorry\n{spc}\
+         _ {relStr} {rhsStr} := by sorry"
+  | false, true =>
+    if params.isFirst then
+      s!"{lhsStr} {relStr} {newRhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
+    else
+      s!"_ {relStr} {newRhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
+  | true, false =>
+    if params.isFirst then
+      s!"{lhsStr} {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
+    else
+      s!"_ {relStr} {newLhsStr} := by sorry\n{spc}_ {relStr} {rhsStr} := by sorry"
+  | false, false => "This should not happen"
+
+  let stepInfo := match isSelectedLeft, isSelectedRight with
+  | true, true => "Create two new steps"
+  | true, false | false, true => "Create a new step"
+  | false, false => "This should not happen"
+.offset let pos : String.Pos.Raw := insertedCode.find (fun c => c == '?')
+  return (stepInfo, insertedCode, some (pos, ⟨pos.byteIdx + 2⟩) )
 -/
 def suggestSteps (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr) (params : CalcParams) :
     MetaM (String × String × Option (String.Pos.Raw × String.Pos.Raw)) := do

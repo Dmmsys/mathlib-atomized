@@ -606,7 +606,9 @@ theorem card_edgeFinset_induce_compl_singleton
     ← G.induce_deleteIncidenceSet_of_notMem h_notMem, ← Set.toFinset_card]
   apply card_edgeFinset_induce_of_support_subset
   trans G.support \ {x}
-  · exact support_de
+  · exact support_deleteIncidenceSet_subset G x
+  · rw [Set.compl_eq_univ_sdiff]
+    exact Set.sdiff_subset_sdiff_left (Set.subset_univ G.support)
 
 中文:
 定理 card_edgeFinset_induce_compl_singleton
@@ -617,7 +619,9 @@ theorem card_edgeFinset_induce_compl_singleton
     ← G.induce_deleteIncidenceSet_of_notMem h_notMem, ← Set.toFinset_card]
   apply card_edgeFinset_induce_of_support_subset
   trans G.support \ {x}
-  · exact support_de
+  · exact support_deleteIncidenceSet_subset G x
+  · rw [Set.compl_eq_univ_sdiff]
+    exact Set.sdiff_subset_sdiff_left (Set.subset_univ G.support)
 
 Depends on / 依赖: G.induce_deleteIncidenceSet_of_notMem, G.support, Set.compl_eq_univ_sdiff, Set.mem_singleton, Set.notMem_compl_iff.mpr, Set.sdiff_subset_sdiff_left, Set.subset_univ, Set.toFinset_card, card_edgeFinset_induce_of_support_subset, compl_eq_univ_sdiff, edgeFinset, h_notMem, induce_deleteIncidenceSet_of_notMem, mem_singleton, notMem_compl_iff, sdiff_subset_sdiff_left, simp_rw, subset_univ, support, support_deleteIncidenceSet_subset
 -/
@@ -794,7 +798,11 @@ theorem deleteFar_iff
     simp only [deleteEdges_sdiff_eq_of_le hHG, edgeFinset_mono hHG, card_sdiff_of_subset,
       card_le_card, coe_sdiff, coe_edgeFinset, Nat.cast_sub] at this
     exact this hH
-  · 
+  · classical
+    simpa [card_sdiff_of_subset hs, edgeFinset_deleteEdges, -Set.toFinset_card, Nat.cast_sub,
+      card_le_card hs] using h (G.deleteEdges_le s) hG
+
+alias ⟨DeleteFar.le_card_sub_card, _⟩ := deleteFar_iff
 
 中文:
 定理 deleteFar_iff
@@ -806,7 +814,11 @@ theorem deleteFar_iff
     simp only [deleteEdges_sdiff_eq_of_le hHG, edgeFinset_mono hHG, card_sdiff_of_subset,
       card_le_card, coe_sdiff, coe_edgeFinset, Nat.cast_sub] at this
     exact this hH
-  · 
+  · classical
+    simpa [card_sdiff_of_subset hs, edgeFinset_deleteEdges, -Set.toFinset_card, Nat.cast_sub,
+      card_le_card hs] using h (G.deleteEdges_le s) hG
+
+alias ⟨DeleteFar.le_card_sub_card, _⟩ := deleteFar_iff
 
 Depends on / 依赖: G.deleteEdges_le, H.edgeFinset, Nat.cast_sub, Set.toFinset_card, card_le_card, card_sdiff_of_subset, cast_sub, classical, coe_edgeFinset, coe_sdiff, deleteEdges_le, deleteEdges_sdiff_eq_of_le, edgeFinset, edgeFinset_deleteEdges, edgeFinset_mono, sdiff_subset, toFinset_card
 -/

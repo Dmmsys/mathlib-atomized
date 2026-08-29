@@ -1392,7 +1392,9 @@ instance [SMul
   sub_eq_add_neg _ _ := ext fun _ => sub_eq_add_neg _ _
   zsmul_zero' f := ext fun x => SubNegMonoid.zsmul_zero' _
   zsmul_neg' _ _ := ext fun x => SubNegMonoid.zsmul_neg' _ _
-  zsmul_succ' _ _ :
+  zsmul_succ' _ _ := ext fun x => SubNegMonoid.zsmul_succ' _ _
+
+@[simp, norm_cast]
 
 中文:
 实例 [标量乘法
@@ -1403,7 +1405,9 @@ instance [SMul
   sub_eq_add_neg _ _ := ext fun _ => sub_eq_add_neg _ _
   zsmul_zero' f := ext fun x => SubNegMonoid.zsmul_zero' _
   zsmul_neg' _ _ := ext fun x => SubNegMonoid.zsmul_neg' _ _
-  zsmul_succ' _ _ :
+  zsmul_succ' _ _ := ext fun x => SubNegMonoid.zsmul_succ' _ _
+
+@[simp, norm_cast]
 
 Depends on / 依赖: smul_sub
 -/

@@ -219,7 +219,10 @@ instance :
     top := ⊤
     le_top := fun _ x _ => mem_top x
     inf := (· ⊓ ·)
-    sInf := InfSe
+    sInf := InfSet.sInf
+    le_inf := fun _ _ _ ha hb _ hx => ⟨ha hx, hb hx⟩
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 中文:
 实例 :
@@ -233,7 +236,10 @@ instance :
     top := ⊤
     le_top := fun _ x _ => mem_top x
     inf := (· ⊓ ·)
-    sInf := InfSe
+    sInf := InfSet.sInf
+    le_inf := fun _ _ _ ha hb _ hx => ⟨ha hx, hb hx⟩
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 Depends on / 依赖: And.left, And.right, InfSet, InfSet.sInf, S.one_mem, SetLike, SetLike.coe_subset_coe, Submonoid, bot_le, coe_subset_coe, completeLatticeOfInf, inf_le_left, inf_le_right, isGLB_biInf, le_inf, le_top, mem_bot, mem_top, of_image, one_mem
 -/
@@ -498,7 +504,7 @@ theorem closure_induction₂
     | one => exact one_left _ (subset_closure hz)
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
   | one => exact one_right x hx
-  | mul _ _ _ _ h
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ hx h₁ h₂
 
 中文:
 定理 closure_induction₂
@@ -510,7 +516,7 @@ theorem closure_induction₂
     | one => exact one_left _ (subset_closure hz)
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
   | one => exact one_right x hx
-  | mul _ _ _ _ h
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ hx h₁ h₂
 
 Depends on / 依赖: closure_induction, mul_left, mul_right, one_left, one_right, subset_closure
 -/
@@ -596,7 +602,10 @@ lemma closure_eq_one_union
     | mul x hx y hy hx hy =>
       push _ in _ at hx hy
       obtain ⟨(rfl | hx), (rfl | hy)⟩ := And.intro hx hy
-      all_goals
+      all_goals simp_all [mul_mem]
+  · rintro x (hx | hx)
+    · exact (show x = 1 by simpa using hx) ▸ one_mem (closure s)
+    · exact Subsemigroup.closure_le.mpr subset_closure hx
 
 中文:
 引理 closure_eq_one_union
@@ -610,7 +619,10 @@ lemma closure_eq_one_union
     | mul x hx y hy hx hy =>
       push _ in _ at hx hy
       obtain ⟨(rfl | hx), (rfl | hy)⟩ := And.intro hx hy
-      all_goals
+      all_goals simp_all [mul_mem]
+  · rintro x (hx | hx)
+    · exact (show x = 1 by simpa using hx) ▸ one_mem (closure s)
+    · exact Subsemigroup.closure_le.mpr subset_closure hx
 
 Depends on / 依赖: And.intro, Or.inl, Or.inr, Subsemigroup, Subsemigroup.closure_le.mpr, Subsemigroup.subset_closure, all_goals, closure, closure_induction, closure_le, le_antisymm, mul_mem, one_mem, subset_closure
 -/

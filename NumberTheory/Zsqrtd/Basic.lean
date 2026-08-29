@@ -530,7 +530,10 @@ instance addCommGroup
     neg_add_cancel := ?_
     add_comm := ?_ } <;>
   intros <;>
-  ex
+  ext <;>
+  simp [add_comm, add_left_comm]
+
+@[simp]
 
 中文:
 实例 addCommGroup
@@ -546,7 +549,10 @@ instance addCommGroup
     neg_add_cancel := ?_
     add_comm := ?_ } <;>
   intros <;>
-  ex
+  ext <;>
+  simp [add_comm, add_left_comm]
+
+@[simp]
 
 Depends on / 依赖: Neg.neg, add_assoc, add_comm, add_left_comm, add_zero, intros, neg_add_cancel, nsmulRec, zero_add, zsmulRec
 -/
@@ -651,7 +657,8 @@ instance commRing
     mul_comm := ?_ } <;>
   intros <;>
   ext <;>
-  si
+  simp <;>
+  ring
 
 中文:
 实例 commRing
@@ -671,7 +678,8 @@ instance commRing
     mul_comm := ?_ } <;>
   intros <;>
   ext <;>
-  si
+  simp <;>
+  ring
 
 Depends on / 依赖: Zsqrtd, Zsqrtd.addGroupWithOne, addGroupWithOne, add_comm, intros, left_distrib, mul_assoc, mul_comm, mul_one, mul_zero, npowRec, one_mul, right_distrib, zero_mul
 -/
@@ -1552,7 +1560,11 @@ theorem isCoprime_of_dvd_isCoprime
   · rintro z hz - hzdvdu hzdvdv
     apply hz
     obtain ⟨ha, hb⟩ : z ∣ a.re ∧ z ∣ a.im := by
-      rw [←
+      rw [← intCast_dvd]
+      apply dvd_trans _ hdvd
+      rw [intCast_dvd]
+      exact ⟨hzdvdu, hzdvdv⟩
+    exact hcoprime.isUnit_of_dvd' ha hb
 
 中文:
 定理 isCoprime_of_dvd_isCoprime
@@ -1566,7 +1578,11 @@ theorem isCoprime_of_dvd_isCoprime
   · rintro z hz - hzdvdu hzdvdv
     apply hz
     obtain ⟨ha, hb⟩ : z ∣ a.re ∧ z ∣ a.im := by
-      rw [←
+      rw [← intCast_dvd]
+      apply dvd_trans _ hdvd
+      rw [intCast_dvd]
+      exact ⟨hzdvdu, hzdvdv⟩
+    exact hcoprime.isUnit_of_dvd' ha hb
 
 Depends on / 依赖: Zsqrtd, Zsqrtd.ext, a.im, a.re, dvd_trans, hcoprime, hcoprime.isUnit_of_dvd, hzdvdu, hzdvdv, im_zero, intCast_dvd, isCoprime_of_dvd, isUnit_of_dvd, not_isCoprime_zero_zero, re_zero, zero_dvd_iff
 -/
@@ -1789,7 +1805,8 @@ theorem sqLe_mul
           (sub_nonneg_of_le (Int.ofNat_le_ofNat_of_le zw))
       refine Int.le_of_ofNat_le_ofNat (le_of_sub_nonneg ?_)
       convert! this using 1
-      simp only 
+      simp only [one_mul, Int.natCast_add, Int.natCast_mul]
+      ring
 
 中文:
 定理 sqLe_mul
@@ -1802,7 +1819,8 @@ theorem sqLe_mul
           (sub_nonneg_of_le (Int.ofNat_le_ofNat_of_le zw))
       refine Int.le_of_ofNat_le_ofNat (le_of_sub_nonneg ?_)
       convert! this using 1
-      simp only 
+      simp only [one_mul, Int.natCast_add, Int.natCast_mul]
+      ring
 
 Depends on / 依赖: Int.le_of_ofNat_le_ofNat, Int.mul_nonneg, Int.natCast_add, Int.natCast_mul, Int.ofNat_le_ofNat_of_le, convert, le_of_ofNat_le_ofNat, le_of_sub_nonneg, mul_nonneg, natCast_add, natCast_mul, ofNat_le_ofNat_of_le, one_mul, sub_nonneg_of_le
 -/
@@ -2253,7 +2271,13 @@ isUnit_iff_dvd_one.2
               norm_eq_mul_conj, eq_comm] at h⟩)
         fun hx =>
           ⟨-star x, by
-            r
+            rwa [← Int.natCast_inj, Int.ofNat_natAbs_of_nonpos hx, ← @Int.cast_inj (Int√d) _ _,
+              Int.cast_neg, norm_eq_mul_conj, neg_mul_eq_mul_neg, eq_comm] at h⟩,
+    fun h => by
+    let ⟨y, hy⟩ := isUnit_iff_dvd_one.1 h
+    have := congr_arg (Int.natAbs ∘ norm) hy
+    rw [Function.comp_apply]; rw [Function.comp_apply]; rw [norm_mul]; rw [Int.natAbs_mul]; rw [norm_one]; rw [Int.natAbs_one]; rw [eq_comm]; rw [mul_eq_one] at this
+    exact this.1⟩
 
 中文:
 定理 norm_eq_one_iff
@@ -2268,7 +2292,13 @@ isUnit_iff_dvd_one.2
               norm_eq_mul_conj, eq_comm] at h⟩)
         fun hx =>
           ⟨-star x, by
-            r
+            rwa [← Int.natCast_inj, Int.ofNat_natAbs_of_nonpos hx, ← @Int.cast_inj (Int√d) _ _,
+              Int.cast_neg, norm_eq_mul_conj, neg_mul_eq_mul_neg, eq_comm] at h⟩,
+    fun h => by
+    let ⟨y, hy⟩ := isUnit_iff_dvd_one.1 h
+    have := congr_arg (Int.natAbs ∘ norm) hy
+    rw [Function.comp_apply]; rw [Function.comp_apply]; rw [norm_mul]; rw [Int.natAbs_mul]; rw [norm_one]; rw [Int.natAbs_one]; rw [eq_comm]; rw [mul_eq_one] at this
+    exact this.1⟩
 
 Depends on / 依赖: Function, Function.comp_apply, Int.cast_inj, Int.cast_neg, Int.natAbs, Int.natAbs_of_nonneg, Int.natCast_inj, Int.ofNat_natAbs_of_nonpos, casesOn, cast_inj, cast_neg, comp_apply, congr_arg, eq_comm, isUnit_iff_dvd_one, le_total, natAbs, natAbs_of_nonneg, natCast_inj, neg_mul_eq_mul_neg
 -/
@@ -2348,7 +2378,12 @@ theorem norm_eq_zero_iff
     have left := mul_self_nonneg z.re
     have right := neg_nonneg.mpr (mul_nonpos_of_nonpos_of_nonneg hd.le (mul_self_nonneg z.im))
     obtain ⟨ha, hb⟩ := (add_eq_zero_iff_of_nonneg left right).mp h
-    ext <;>
+    ext <;> apply eq_zero_of_mul_self_eq_zero
+    · exact ha
+    · rw [neg_eq_zero, mul_eq_zero] at hb
+      exact hb.resolve_left hd.ne
+  · rintro rfl
+    exact norm_zero
 
 中文:
 定理 norm_eq_zero_iff
@@ -2361,7 +2396,12 @@ theorem norm_eq_zero_iff
     have left := mul_self_nonneg z.re
     have right := neg_nonneg.mpr (mul_nonpos_of_nonpos_of_nonneg hd.le (mul_self_nonneg z.im))
     obtain ⟨ha, hb⟩ := (add_eq_zero_iff_of_nonneg left right).mp h
-    ext <;>
+    ext <;> apply eq_zero_of_mul_self_eq_zero
+    · exact ha
+    · rw [neg_eq_zero, mul_eq_zero] at hb
+      exact hb.resolve_left hd.ne
+  · rintro rfl
+    exact norm_zero
 
 Depends on / 依赖: add_eq_zero_iff_of_nonneg, eq_zero_of_mul_self_eq_zero, hb.resolve_left, hd.le, hd.ne, mul_assoc, mul_eq_zero, mul_nonpos_of_nonpos_of_nonneg, mul_self_nonneg, neg_eq_zero, neg_nonneg, neg_nonneg.mpr, norm_def, norm_zero, resolve_left, sub_eq_add_neg, z.im, z.re
 -/
@@ -2538,7 +2578,19 @@ theorem nonneg_add_lem
       (fun m n i => SqLe y d m 1 -> SqLe n 1 w d -> Nonneg ⟨i, Int.subNatNat w y⟩)
       (fun j k =>
         Int.subNatNat_elim w y
-          (fun m n i => SqLe n d (k + j) 1 -> SqLe k 1 m d -> Nonneg ⟨Int.ofNat 
+          (fun m n i => SqLe n d (k + j) 1 -> SqLe k 1 m d -> Nonneg ⟨Int.ofNat j, i⟩)
+          (fun _ _ _ _ => trivial) fun m n xy zw => sqLe_cancel zw xy)
+      (fun j k =>
+        Int.subNatNat_elim w y
+          (fun m n i => SqLe n d k 1 -> SqLe (k + j + 1) 1 m d -> Nonneg ⟨-[j+1], i⟩)
+          (fun m n xy zw => sqLe_cancel xy zw) fun m n xy zw =>
+          let t := Nat.le_trans zw (sqLe_of_le (Nat.le_add_right n (m + 1)) le_rfl xy)
+          have : k + j + 1 <= k :=
+            Nat.mul_self_le_mul_self_iff.1 (by simpa [one_mul] using t)
+          absurd this (not_le_of_gt <| Nat.succ_le_succ <| Nat.le_add_right _ _))
+      (nonnegg_pos_neg.1 xy) (nonnegg_neg_pos.1 zw)
+  rw [add_def]; rw [neg_add_eq_sub]
+  rwa [Int.subNatNat_eq_coe, Int.subNatNat_eq_coe] at this
 
 中文:
 定理 nonneg_add_lem
@@ -2549,7 +2601,19 @@ theorem nonneg_add_lem
       (fun m n i => SqLe y d m 1 -> SqLe n 1 w d -> Nonneg ⟨i, Int.subNatNat w y⟩)
       (fun j k =>
         Int.subNatNat_elim w y
-          (fun m n i => SqLe n d (k + j) 1 -> SqLe k 1 m d -> Nonneg ⟨Int.ofNat 
+          (fun m n i => SqLe n d (k + j) 1 -> SqLe k 1 m d -> Nonneg ⟨Int.ofNat j, i⟩)
+          (fun _ _ _ _ => trivial) fun m n xy zw => sqLe_cancel zw xy)
+      (fun j k =>
+        Int.subNatNat_elim w y
+          (fun m n i => SqLe n d k 1 -> SqLe (k + j + 1) 1 m d -> Nonneg ⟨-[j+1], i⟩)
+          (fun m n xy zw => sqLe_cancel xy zw) fun m n xy zw =>
+          let t := Nat.le_trans zw (sqLe_of_le (Nat.le_add_right n (m + 1)) le_rfl xy)
+          have : k + j + 1 <= k :=
+            Nat.mul_self_le_mul_self_iff.1 (by simpa [one_mul] using t)
+          absurd this (not_le_of_gt <| Nat.succ_le_succ <| Nat.le_add_right _ _))
+      (nonnegg_pos_neg.1 xy) (nonnegg_neg_pos.1 zw)
+  rw [add_def]; rw [neg_add_eq_sub]
+  rwa [Int.subNatNat_eq_coe, Int.subNatNat_eq_coe] at this
 
 Depends on / 依赖: Int.ofNat, Int.subNatNat, Int.subNatNat_elim, Nonneg, sqLe_cancel, subNatNat, subNatNat_elim
 -/
@@ -2587,7 +2651,32 @@ theorem Nonneg.add
   · trivial
   · refine nonnegg_cases_right fun i h => sqLe_of_le ?_ ?_ (nonnegg_pos_neg.1 hb)
     · dsimp only at h
-      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro y (by si
+      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro y (by simp [add_comm, *])))
+    · apply Nat.le_add_left
+  · refine nonnegg_cases_left fun i h => sqLe_of_le ?_ ?_ (nonnegg_neg_pos.1 hb)
+    · dsimp only at h
+      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro x (by simp [add_comm, *])))
+    · apply Nat.le_add_left
+  · refine nonnegg_cases_right fun i h => sqLe_of_le ?_ ?_ (nonnegg_pos_neg.1 ha)
+    · dsimp only at h
+      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro w (by simp [*])))
+    · apply Nat.le_add_right
+  · have : Nonneg ⟨_, _⟩ :=
+      nonnegg_pos_neg.2 (sqLe_add (nonnegg_pos_neg.1 ha) (nonnegg_pos_neg.1 hb))
+    rw [Nat.cast_add]; rw [Nat.cast_add]; rw [neg_add] at this
+    rwa [add_def]
+  · exact nonneg_add_lem ha hb
+  · refine nonnegg_cases_left fun i h => sqLe_of_le ?_ ?_ (nonnegg_neg_pos.1 ha)
+    · dsimp only at h
+      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro _ h))
+    · apply Nat.le_add_right
+  · dsimp
+    rw [add_comm]; rw [add_comm (y : Int)]
+    exact nonneg_add_lem hb ha
+  · have : Nonneg ⟨_, _⟩ :=
+      nonnegg_neg_pos.2 (sqLe_add (nonnegg_neg_pos.1 ha) (nonnegg_neg_pos.1 hb))
+    rw [Nat.cast_add]; rw [Nat.cast_add]; rw [neg_add] at this
+    rwa [add_def]
 
 中文:
 定理 Nonneg.add
@@ -2599,7 +2688,32 @@ theorem Nonneg.add
   · trivial
   · refine nonnegg_cases_right fun i h => sqLe_of_le ?_ ?_ (nonnegg_pos_neg.1 hb)
     · dsimp only at h
-      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro y (by si
+      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro y (by simp [add_comm, *])))
+    · apply Nat.le_add_left
+  · refine nonnegg_cases_left fun i h => sqLe_of_le ?_ ?_ (nonnegg_neg_pos.1 hb)
+    · dsimp only at h
+      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro x (by simp [add_comm, *])))
+    · apply Nat.le_add_left
+  · refine nonnegg_cases_right fun i h => sqLe_of_le ?_ ?_ (nonnegg_pos_neg.1 ha)
+    · dsimp only at h
+      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro w (by simp [*])))
+    · apply Nat.le_add_right
+  · have : Nonneg ⟨_, _⟩ :=
+      nonnegg_pos_neg.2 (sqLe_add (nonnegg_pos_neg.1 ha) (nonnegg_pos_neg.1 hb))
+    rw [Nat.cast_add]; rw [Nat.cast_add]; rw [neg_add] at this
+    rwa [add_def]
+  · exact nonneg_add_lem ha hb
+  · refine nonnegg_cases_left fun i h => sqLe_of_le ?_ ?_ (nonnegg_neg_pos.1 ha)
+    · dsimp only at h
+      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro _ h))
+    · apply Nat.le_add_right
+  · dsimp
+    rw [add_comm]; rw [add_comm (y : Int)]
+    exact nonneg_add_lem hb ha
+  · have : Nonneg ⟨_, _⟩ :=
+      nonnegg_neg_pos.2 (sqLe_add (nonnegg_neg_pos.1 ha) (nonnegg_neg_pos.1 hb))
+    rw [Nat.cast_add]; rw [Nat.cast_add]; rw [neg_add] at this
+    rwa [add_def]
 -/
 theorem Nonneg.add {a b : Int√d} (ha : Nonneg a) (hb : Nonneg b) : Nonneg (a + b) := by
   rcases nonneg_cases ha with ⟨x, y, rfl | rfl | rfl⟩ <;>
@@ -2736,7 +2850,7 @@ instance preorder
     have ht : b <= a ∨ a <= b := by
       have t := (a - b).nonneg_total
       rwa [neg_sub] at t
-    exact (and_iff_right_of_imp ht.resolve
+    exact (and_iff_right_of_imp ht.resolve_left).symm
 
 中文:
 实例 preorder
@@ -2747,7 +2861,7 @@ instance preorder
     have ht : b <= a ∨ a <= b := by
       have t := (a - b).nonneg_total
       rwa [neg_sub] at t
-    exact (and_iff_right_of_imp ht.resolve
+    exact (and_iff_right_of_imp ht.resolve_left).symm
 
 Depends on / 依赖: Nonneg, sub_self
 -/
@@ -2774,7 +2888,19 @@ theorem le_arch
     match -a with
     | ⟨Int.ofNat x, Int.ofNat y⟩ => ⟨0, 0, by trivial⟩
     | ⟨Int.ofNat x, -[y+1]⟩ => ⟨0, y + 1, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
-    | ⟨-[x+1], Int.ofNat y⟩ => ⟨x + 1, 0, by simp
+    | ⟨-[x+1], Int.ofNat y⟩ => ⟨x + 1, 0, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
+    | ⟨-[x+1], -[y+1]⟩ => ⟨x + 1, y + 1, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
+  refine ⟨x + d * y, h.trans ?_⟩
+  change Nonneg ⟨↑x + d * y - ↑x, 0 - ↑y⟩
+  rcases y with - | y
+  · simp only [Nat.cast_zero, mul_zero, add_zero, sub_self]
+    trivial
+  have h : forall y, SqLe y d (d * y) 1 := fun y => by
+    simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_right (y * y) (Nat.le_mul_self d)
+  rw [show (x : Int) + d * Nat.succ y - x = d * Nat.succ y by simp]
+  exact h (y + 1)
+
+@[deprecated _root_.add_le_add_left (since := "2026-02-19")]
 
 中文:
 定理 le_arch
@@ -2785,7 +2911,19 @@ theorem le_arch
     match -a with
     | ⟨Int.ofNat x, Int.ofNat y⟩ => ⟨0, 0, by trivial⟩
     | ⟨Int.ofNat x, -[y+1]⟩ => ⟨0, y + 1, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
-    | ⟨-[x+1], Int.ofNat y⟩ => ⟨x + 1, 0, by simp
+    | ⟨-[x+1], Int.ofNat y⟩ => ⟨x + 1, 0, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
+    | ⟨-[x+1], -[y+1]⟩ => ⟨x + 1, y + 1, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
+  refine ⟨x + d * y, h.trans ?_⟩
+  change Nonneg ⟨↑x + d * y - ↑x, 0 - ↑y⟩
+  rcases y with - | y
+  · simp only [Nat.cast_zero, mul_zero, add_zero, sub_self]
+    trivial
+  have h : forall y, SqLe y d (d * y) 1 := fun y => by
+    simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_right (y * y) (Nat.le_mul_self d)
+  rw [show (x : Int) + d * Nat.succ y - x = d * Nat.succ y by simp]
+  exact h (y + 1)
+
+@[deprecated _root_.add_le_add_left (since := "2026-02-19")]
 
 Depends on / 依赖: Int.negSucc_eq, Int.ofNat, Nonneg, Nonnegg, add_assoc, h.trans, negSucc_eq
 -/
@@ -2841,7 +2979,8 @@ theorem nonneg_smul
     | _, ⟨x, y, Or.inl rfl⟩, _ => by rw [smul_val]; trivial
 | _, ⟨x, y, Or.inr Or.inl rfl⟩, ha => by
       rw [smul_val]; simpa using! nonnegg_pos_neg.2 (sqLe_smul n <| nonnegg_pos_neg.1 ha)
-| _, ⟨x, y, Or.inr Or.inr rfl⟩, 
+| _, ⟨x, y, Or.inr Or.inr rfl⟩, ha => by
+      rw [smul_val]; simpa using! nonnegg_neg_pos.2 (sqLe_smul n <| nonnegg_neg_pos.1 ha)
 
 中文:
 定理 nonneg_smul
@@ -2854,7 +2993,8 @@ theorem nonneg_smul
     | _, ⟨x, y, Or.inl rfl⟩, _ => by rw [smul_val]; trivial
 | _, ⟨x, y, Or.inr Or.inl rfl⟩, ha => by
       rw [smul_val]; simpa using! nonnegg_pos_neg.2 (sqLe_smul n <| nonnegg_pos_neg.1 ha)
-| _, ⟨x, y, Or.inr Or.inr rfl⟩, 
+| _, ⟨x, y, Or.inr Or.inr rfl⟩, ha => by
+      rw [smul_val]; simpa using! nonnegg_neg_pos.2 (sqLe_smul n <| nonnegg_neg_pos.1 ha)
 
 Depends on / 依赖: Int.cast_natCast, Or.inl, Or.inr, cast_natCast, nonneg_cases, nonnegg_neg_pos, nonnegg_pos_neg, smul_val, sqLe_smul
 -/
@@ -2881,7 +3021,10 @@ theorem nonneg_muld
     simp only [muld_val, mul_neg]
     apply nonnegg_neg_pos.2
     simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_left d (nonnegg_pos_neg.1 ha)
-| _, ⟨x, y, Or.inr Or.inr rfl⟩
+| _, ⟨x, y, Or.inr Or.inr rfl⟩, ha => by
+    simp only [muld_val]
+    apply nonnegg_pos_neg.2
+    simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_left d (nonnegg_neg_pos.1 ha)
 
 中文:
 定理 nonneg_muld
@@ -2893,7 +3036,10 @@ theorem nonneg_muld
     simp only [muld_val, mul_neg]
     apply nonnegg_neg_pos.2
     simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_left d (nonnegg_pos_neg.1 ha)
-| _, ⟨x, y, Or.inr Or.inr rfl⟩
+| _, ⟨x, y, Or.inr Or.inr rfl⟩, ha => by
+    simp only [muld_val]
+    apply nonnegg_pos_neg.2
+    simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_left d (nonnegg_neg_pos.1 ha)
 
 Depends on / 依赖: Nat.mul_le_mul_left, Or.inl, Or.inr, mul_comm, mul_le_mul_left, mul_left_comm, mul_neg, muld_val, nonneg_cases, nonnegg_neg_pos, nonnegg_pos_neg
 -/
@@ -2951,7 +3097,33 @@ theorem nonneg_mul
   | _, _, ⟨_, _, Or.inl rfl⟩, ⟨_, _, Or.inl rfl⟩, _, _ => trivial
 | _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, _, hb => nonneg_mul_lem hb
 | _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, _, hb => nonneg_mul_lem hb
-| _, _, ⟨x, 
+| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
+    rw [mul_comm]; exact nonneg_mul_lem ha
+| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
+    rw [mul_comm]; exact nonneg_mul_lem ha
+| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, ha, hb => by
+    rw [calc
+          (⟨-x]; rw [y⟩ * ⟨-z]; rw [w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
+          _ = ⟨x * z + d * y * w]; rw [-(x * w + y * z)⟩ := by simp [add_comm]]
+    exact nonnegg_pos_neg.2 (sqLe_mul.left (nonnegg_neg_pos.1 ha) (nonnegg_neg_pos.1 hb))
+| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, ha, hb => by
+    rw [calc
+          (⟨-x]; rw [y⟩ * ⟨z]; rw [-w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
+          _ = ⟨-(x * z + d * y * w)]; rw [x * w + y * z⟩ := by simp [add_comm]]
+    exact nonnegg_neg_pos.2 (sqLe_mul.right.left (nonnegg_neg_pos.1 ha) (nonnegg_pos_neg.1 hb))
+| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, ha, hb => by
+    rw [calc
+          (⟨x]; rw [-y⟩ * ⟨-z]; rw [w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
+          _ = ⟨-(x * z + d * y * w)]; rw [x * w + y * z⟩ := by simp [add_comm]]
+    exact
+        nonnegg_neg_pos.2 (sqLe_mul.right.right.left (nonnegg_pos_neg.1 ha) (nonnegg_neg_pos.1 hb))
+| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, ha, hb => by
+    rw [calc
+          (⟨x]; rw [-y⟩ * ⟨z]; rw [-w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
+          _ = ⟨x * z + d * y * w]; rw [-(x * w + y * z)⟩ := by simp [add_comm]]
+    exact
+        nonnegg_pos_neg.2
+          (sqLe_mul.right.right.right (nonnegg_pos_neg.1 ha) (nonnegg_pos_neg.1 hb))
 
 中文:
 定理 nonneg_mul
@@ -2961,7 +3133,33 @@ theorem nonneg_mul
   | _, _, ⟨_, _, Or.inl rfl⟩, ⟨_, _, Or.inl rfl⟩, _, _ => trivial
 | _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, _, hb => nonneg_mul_lem hb
 | _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, _, hb => nonneg_mul_lem hb
-| _, _, ⟨x, 
+| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
+    rw [mul_comm]; exact nonneg_mul_lem ha
+| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
+    rw [mul_comm]; exact nonneg_mul_lem ha
+| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, ha, hb => by
+    rw [calc
+          (⟨-x]; rw [y⟩ * ⟨-z]; rw [w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
+          _ = ⟨x * z + d * y * w]; rw [-(x * w + y * z)⟩ := by simp [add_comm]]
+    exact nonnegg_pos_neg.2 (sqLe_mul.left (nonnegg_neg_pos.1 ha) (nonnegg_neg_pos.1 hb))
+| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, ha, hb => by
+    rw [calc
+          (⟨-x]; rw [y⟩ * ⟨z]; rw [-w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
+          _ = ⟨-(x * z + d * y * w)]; rw [x * w + y * z⟩ := by simp [add_comm]]
+    exact nonnegg_neg_pos.2 (sqLe_mul.right.left (nonnegg_neg_pos.1 ha) (nonnegg_pos_neg.1 hb))
+| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, ha, hb => by
+    rw [calc
+          (⟨x]; rw [-y⟩ * ⟨-z]; rw [w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
+          _ = ⟨-(x * z + d * y * w)]; rw [x * w + y * z⟩ := by simp [add_comm]]
+    exact
+        nonnegg_neg_pos.2 (sqLe_mul.right.right.left (nonnegg_pos_neg.1 ha) (nonnegg_neg_pos.1 hb))
+| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, ha, hb => by
+    rw [calc
+          (⟨x]; rw [-y⟩ * ⟨z]; rw [-w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
+          _ = ⟨x * z + d * y * w]; rw [-(x * w + y * z)⟩ := by simp [add_comm]]
+    exact
+        nonnegg_pos_neg.2
+          (sqLe_mul.right.right.right (nonnegg_pos_neg.1 ha) (nonnegg_pos_neg.1 hb))
 
 Depends on / 依赖: Or.inl, Or.inr, mul_comm, nonneg_cases, nonneg_mul_lem
 -/
@@ -3092,7 +3290,16 @@ theorem divides_sq_eq_zero
 False.elim by
       let ⟨m, n, co, (hx : x = m * g), (hy : y = n * g)⟩ := Nat.exists_coprime _ _
       rw [hx]; rw [hy] at h
-      have : m * m = d * (n * n)
+      have : m * m = d * (n * n) := by
+        refine mul_left_cancel₀ (mul_pos gpos gpos).ne' ?_
+        simpa [mul_comm, mul_left_comm, mul_assoc] using h
+      have co2 :=
+        let co1 := co.mul_right co
+        co1.mul_left co1
+      exact
+        Nonsquare.ns d m
+          (Nat.dvd_antisymm (by rw [this]; apply dvd_mul_right) <|
+co2.dvd_of_dvd_mul_right by simp [this])
 
 中文:
 定理 divides_sq_eq_zero
@@ -3104,7 +3311,16 @@ False.elim by
 False.elim by
       let ⟨m, n, co, (hx : x = m * g), (hy : y = n * g)⟩ := Nat.exists_coprime _ _
       rw [hx]; rw [hy] at h
-      have : m * m = d * (n * n)
+      have : m * m = d * (n * n) := by
+        refine mul_left_cancel₀ (mul_pos gpos gpos).ne' ?_
+        simpa [mul_comm, mul_left_comm, mul_assoc] using h
+      have co2 :=
+        let co1 := co.mul_right co
+        co1.mul_left co1
+      exact
+        Nonsquare.ns d m
+          (Nat.dvd_antisymm (by rw [this]; apply dvd_mul_right) <|
+co2.dvd_of_dvd_mul_right by simp [this])
 
 Depends on / 依赖: False.elim, Nat.dvd_antisymm, Nat.eq_zero_of_gcd_eq_zero_left, Nat.eq_zero_of_gcd_eq_zero_right, Nat.exists_coprime, Nonsquare, Nonsquare.ns, Or.elim, co.mul_right, co1.mul_left, dvd_antisymm, eq_zero_of_gcd_eq_zero_left, eq_zero_of_gcd_eq_zero_right, eq_zero_or_pos, exists_coprime, g.eq_zero_or_pos, mul_assoc, mul_comm, mul_left, mul_left_comm
 -/
@@ -3197,7 +3413,7 @@ theorem nonneg_antisymm
     rw [one_mul] at t
     exact absurd t (not_divides_sq _ _)
 
-@[deprecated _root_.le_antisymm (since := "2026-02
+@[deprecated _root_.le_antisymm (since := "2026-02-19")]
 
 中文:
 定理 nonneg_antisymm
@@ -3210,7 +3426,7 @@ theorem nonneg_antisymm
     rw [one_mul] at t
     exact absurd t (not_divides_sq _ _)
 
-@[deprecated _root_.le_antisymm (since := "2026-02
+@[deprecated _root_.le_antisymm (since := "2026-02-19")]
 
 Depends on / 依赖: le_antisymm
 -/
@@ -3301,7 +3517,24 @@ theorem eq_zero_or_eq_zero_of_mul_eq_zero
       | _, _, ⟨rfl, rfl⟩ => rfl
     exact
       if z0 : z = 0 then
-        if w0 : w = 0 th
+        if w0 : w = 0 then
+          Or.inr
+            (match z, w, z0, w0 with
+            | _, _, rfl, rfl => rfl)
+        else
+Or.inl
+fin
+mul_right_cancel₀ w0
+                calc
+                  x * x * w = -y * (x * z) := by simp [h2, mul_assoc, mul_left_comm]
+                  _ = d * y * y * w := by simp [h1, mul_assoc, mul_left_comm]
+      else
+Or.inl
+fin
+mul_right_cancel₀ z0
+              calc
+                x * x * z = d * -y * (x * w) := by simp [h1, mul_assoc, mul_left_comm]
+                _ = d * y * y * z := by simp [h2, mul_assoc, mul_left_comm]
 
 中文:
 定理 eq_zero_or_eq_zero_of_mul_eq_zero
@@ -3313,7 +3546,24 @@ theorem eq_zero_or_eq_zero_of_mul_eq_zero
       | _, _, ⟨rfl, rfl⟩ => rfl
     exact
       if z0 : z = 0 then
-        if w0 : w = 0 th
+        if w0 : w = 0 then
+          Or.inr
+            (match z, w, z0, w0 with
+            | _, _, rfl, rfl => rfl)
+        else
+Or.inl
+fin
+mul_right_cancel₀ w0
+                calc
+                  x * x * w = -y * (x * z) := by simp [h2, mul_assoc, mul_left_comm]
+                  _ = d * y * y * w := by simp [h1, mul_assoc, mul_left_comm]
+      else
+Or.inl
+fin
+mul_right_cancel₀ z0
+              calc
+                x * x * z = d * -y * (x * w) := by simp [h1, mul_assoc, mul_left_comm]
+                _ = d * y * y * z := by simp [h2, mul_assoc, mul_left_comm]
 -/
 protected theorem eq_zero_or_eq_zero_of_mul_eq_zero : forall {a b : Int√d}, a * b = 0 -> a = 0 ∨ b = 0
   | ⟨x, y⟩, ⟨z, w⟩, h => by
@@ -3532,7 +3782,13 @@ theorem norm_eq_zero
   · obtain ⟨d', rfl⟩ := Int.eq_ofNat_of_zero_le h
 have : Nonsquare d' := ⟨fun n h => h_nonsquare n mod_cast h⟩
     exact divides_sq_eq_zero_z ha
-  · 
+  · suffices a.re * a.re = 0 by
+      rw [eq_zero_of_mul_self_eq_zero this] at ha ⊢
+      simpa only [true_and, or_self_right, re_zero, im_zero, eq_self_iff_true, zero_eq_mul,
+        mul_zero, mul_eq_zero, h.ne, false_or, or_self_iff] using ha
+    apply _root_.le_antisymm _ (mul_self_nonneg _)
+    rw [ha]; rw [mul_assoc]
+    exact mul_nonpos_of_nonpos_of_nonneg h.le (mul_self_nonneg _)
 
 中文:
 定理 norm_eq_zero
@@ -3546,7 +3802,13 @@ have : Nonsquare d' := ⟨fun n h => h_nonsquare n mod_cast h⟩
   · obtain ⟨d', rfl⟩ := Int.eq_ofNat_of_zero_le h
 have : Nonsquare d' := ⟨fun n h => h_nonsquare n mod_cast h⟩
     exact divides_sq_eq_zero_z ha
-  · 
+  · suffices a.re * a.re = 0 by
+      rw [eq_zero_of_mul_self_eq_zero this] at ha ⊢
+      simpa only [true_and, or_self_right, re_zero, im_zero, eq_self_iff_true, zero_eq_mul,
+        mul_zero, mul_eq_zero, h.ne, false_or, or_self_iff] using ha
+    apply _root_.le_antisymm _ (mul_self_nonneg _)
+    rw [ha]; rw [mul_assoc]
+    exact mul_nonpos_of_nonpos_of_nonneg h.le (mul_self_nonneg _)
 
 Depends on / 依赖: Int.eq_ofNat_of_zero_le, Nonsquare, Zsqrtd, Zsqrtd.ext_iff.mpr, a.re, divides_sq_eq_zero_z, eq_ofNat_of_zero_le, eq_self_iff_true, eq_zero_of_mul_self_eq_zero, ext_iff, false_or, h.ne, h_nonsquare, im_zero, mod_cast, mul_eq_zero, mul_zero, norm_zero, or_self_iff, or_self_right
 -/
@@ -3614,7 +3876,15 @@ definition lift
       map_mul' := fun a b => by
         have :
           (a.re + a.im * r : R) * (b.re + b.im * r) =
-            
+            a.re * b.re + (a.re * b.im + a.im * b.re) * r + a.im * b.im * (r * r) := by
+          ring
+        simp only [re_mul, Int.cast_add, Int.cast_mul, im_mul, this, r.prop]
+        ring }
+  invFun f := ⟨f sqrtd, by rw [← f.map_mul, dmuld, map_intCast]⟩
+  left_inv r := by simp
+  right_inv f := by
+    ext
+    simp
 
 中文:
 定义 lift
@@ -3628,7 +3898,15 @@ definition lift
       map_mul' := fun a b => by
         have :
           (a.re + a.im * r : R) * (b.re + b.im * r) =
-            
+            a.re * b.re + (a.re * b.im + a.im * b.re) * r + a.im * b.im * (r * r) := by
+          ring
+        simp only [re_mul, Int.cast_add, Int.cast_mul, im_mul, this, r.prop]
+        ring }
+  invFun f := ⟨f sqrtd, by rw [← f.map_mul, dmuld, map_intCast]⟩
+  left_inv r := by simp
+  right_inv f := by
+    ext
+    simp
 
 Depends on / 依赖: Int.cast_add, Int.cast_mul, a.im, a.re, b.im, b.re, cast_add, cast_mul, f.map_mul, im_add, im_mul, invFun, left_inv, map_add, map_intCast, map_mul, map_one, map_zero, r.prop, re_add
 -/
@@ -3664,7 +3942,8 @@ theorem lift_injective
     suffices lift r a.norm = 0 by
       simp only [re_intCast, add_zero, lift_apply_apply, im_intCast, Int.cast_zero,
         zero_mul] at this
-      rwa [← Int.cast_zer
+      rwa [← Int.cast_zero, h_inj.eq_iff, norm_eq_zero hd] at this
+    rw [norm_eq_mul_conj]; rw [map_mul]; rw [ha]; rw [zero_mul]
 
 中文:
 定理 lift_injective
@@ -3674,7 +3953,8 @@ theorem lift_injective
     suffices lift r a.norm = 0 by
       simp only [re_intCast, add_zero, lift_apply_apply, im_intCast, Int.cast_zero,
         zero_mul] at this
-      rwa [← Int.cast_zer
+      rwa [← Int.cast_zero, h_inj.eq_iff, norm_eq_zero hd] at this
+    rw [norm_eq_mul_conj]; rw [map_mul]; rw [ha]; rw [zero_mul]
 
 Depends on / 依赖: Function, Function.Injective, Injective, Int.cast_injective, Int.cast_zero, a.norm, add_zero, cast_injective, cast_zero, eq_iff, h_inj, h_inj.eq_iff, im_intCast, injective_iff_map_eq_zero, lift_apply_apply, map_mul, norm_eq_mul_conj, norm_eq_zero, re_intCast, zero_mul
 -/

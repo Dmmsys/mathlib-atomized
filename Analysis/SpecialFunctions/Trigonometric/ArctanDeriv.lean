@@ -76,7 +76,7 @@ theorem tendsto_abs_tan_of_cos_eq_zero
   simp only [← Real.norm_eq_abs, ← Complex.norm_real, Complex.ofReal_tan]
   refine (Complex.tendsto_norm_tan_of_cos_eq_zero hx).comp ?_
   refine Tendsto.inf Complex.continuous_ofReal.continuousAt ?_
-  exact tendsto_principal_principal.2 fun y => mt Com
+  exact tendsto_principal_principal.2 fun y => mt Complex.ofReal_inj.1
 
 中文:
 定理 tendsto_abs_tan_of_cos_eq_zero
@@ -86,7 +86,7 @@ theorem tendsto_abs_tan_of_cos_eq_zero
   simp only [← Real.norm_eq_abs, ← Complex.norm_real, Complex.ofReal_tan]
   refine (Complex.tendsto_norm_tan_of_cos_eq_zero hx).comp ?_
   refine Tendsto.inf Complex.continuous_ofReal.continuousAt ?_
-  exact tendsto_principal_principal.2 fun y => mt Com
+  exact tendsto_principal_principal.2 fun y => mt Complex.ofReal_inj.1
 
 Depends on / 依赖: Complex.continuous_ofReal.continuousAt, Complex.cos, Complex.norm_real, Complex.ofReal_inj, Complex.ofReal_tan, Complex.tendsto_norm_tan_of_cos_eq_zero, Real.norm_eq_abs, Tendsto, Tendsto.inf, continuousAt, continuous_ofReal, mod_cast, norm_eq_abs, norm_real, ofReal_inj, ofReal_tan, tendsto_norm_tan_of_cos_eq_zero, tendsto_principal_principal
 -/

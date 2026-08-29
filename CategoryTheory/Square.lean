@@ -290,7 +290,12 @@ definition isoMk
       τ₄ := e₄.inv
       comm₁₂ := by simp only [← cancel_mono e₂.hom, assoc, Iso.inv_hom_id,
                       comp_id, comm₁₂, Iso.inv_hom_id_assoc]
-     
+      comm₁₃ := by simp only [← cancel_mono e₃.hom, assoc, Iso.inv_hom_id,
+                      comp_id, comm₁₃, Iso.inv_hom_id_assoc]
+      comm₂₄ := by simp only [← cancel_mono e₄.hom, assoc, Iso.inv_hom_id,
+                      comp_id, comm₂₄, Iso.inv_hom_id_assoc]
+      comm₃₄ := by simp only [← cancel_mono e₄.hom, assoc, Iso.inv_hom_id,
+                      comp_id, comm₃₄, Iso.inv_hom_id_assoc] }
 
 中文:
 定义 isoMk
@@ -306,7 +311,12 @@ definition isoMk
       τ₄ := e₄.inv
       comm₁₂ := by simp only [← cancel_mono e₂.hom, assoc, Iso.inv_hom_id,
                       comp_id, comm₁₂, Iso.inv_hom_id_assoc]
-     
+      comm₁₃ := by simp only [← cancel_mono e₃.hom, assoc, Iso.inv_hom_id,
+                      comp_id, comm₁₃, Iso.inv_hom_id_assoc]
+      comm₂₄ := by simp only [← cancel_mono e₄.hom, assoc, Iso.inv_hom_id,
+                      comp_id, comm₂₄, Iso.inv_hom_id_assoc]
+      comm₃₄ := by simp only [← cancel_mono e₄.hom, assoc, Iso.inv_hom_id,
+                      comp_id, comm₃₄, Iso.inv_hom_id_assoc] }
 
 Depends on / 依赖: Iso.in, Iso.inv_hom_id, Iso.inv_hom_id_assoc, cancel_mono, comp_id, inv_hom_id, inv_hom_id_assoc
 -/
@@ -594,7 +604,7 @@ definition fromArrowArrowFunctor'
       comm₁₂ := φ.left.w.symm
       comm₁₃ := Arrow.leftFunc.congr_map φ.w.symm
       comm₂₄ := Arrow.rightFunc.congr_map φ.w.symm
-      comm₃₄ := φ.right.w.symm
+      comm₃₄ := φ.right.w.symm }
 
 中文:
 定义 fromArrowArrowFunctor'
@@ -608,7 +618,7 @@ definition fromArrowArrowFunctor'
       comm₁₂ := φ.left.w.symm
       comm₁₃ := Arrow.leftFunc.congr_map φ.w.symm
       comm₂₄ := Arrow.rightFunc.congr_map φ.w.symm
-      comm₃₄ := φ.right.w.symm
+      comm₃₄ := φ.right.w.symm }
 
 Depends on / 依赖: f.hom.w.symm
 -/
@@ -829,7 +839,7 @@ definition opFunctor
       comm₁₂ := Quiver.Hom.unop_inj (by simp)
       comm₁₃ := Quiver.Hom.unop_inj (by simp)
       comm₂₄ := Quiver.Hom.unop_inj (by simp)
-      comm₃₄ := Quiver.Hom.unop_inj (by 
+      comm₃₄ := Quiver.Hom.unop_inj (by simp) }
 
 中文:
 定义 opFunctor
@@ -843,7 +853,7 @@ definition opFunctor
       comm₁₂ := Quiver.Hom.unop_inj (by simp)
       comm₁₃ := Quiver.Hom.unop_inj (by simp)
       comm₂₄ := Quiver.Hom.unop_inj (by simp)
-      comm₃₄ := Quiver.Hom.unop_inj (by 
+      comm₃₄ := Quiver.Hom.unop_inj (by simp) }
 
 Depends on / 依赖: sq.unop.op
 -/
@@ -875,7 +885,7 @@ definition unopFunctor
       comm₁₂ := Quiver.Hom.op_inj (by simp)
       comm₁₃ := Quiver.Hom.op_inj (by simp)
       comm₂₄ := Quiver.Hom.op_inj (by simp)
-      comm₃₄ := Quiver.Hom.op_inj (b
+      comm₃₄ := Quiver.Hom.op_inj (by simp) }
 
 中文:
 定义 unopFunctor
@@ -889,7 +899,7 @@ definition unopFunctor
       comm₁₂ := Quiver.Hom.op_inj (by simp)
       comm₁₃ := Quiver.Hom.op_inj (by simp)
       comm₂₄ := Quiver.Hom.op_inj (by simp)
-      comm₃₄ := Quiver.Hom.op_inj (b
+      comm₃₄ := Quiver.Hom.op_inj (by simp) }
 
 Depends on / 依赖: sq.unop.unop
 -/
@@ -987,7 +997,8 @@ definition mapSquare
       τ₄ := F.map φ.τ₄
       comm₁₂ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₁₂
       comm₁₃ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₁₃
-      comm₂₄ := by simpa only [Fun
+      comm₂₄ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₂₄
+      comm₃₄ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₃₄ }
 
 中文:
 定义 mapSquare
@@ -1000,7 +1011,8 @@ definition mapSquare
       τ₄ := F.map φ.τ₄
       comm₁₂ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₁₂
       comm₁₃ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₁₃
-      comm₂₄ := by simpa only [Fun
+      comm₂₄ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₂₄
+      comm₃₄ := by simpa only [Functor.map_comp] using! F.congr_map φ.comm₃₄ }
 
 Depends on / 依赖: sq.map
 -/

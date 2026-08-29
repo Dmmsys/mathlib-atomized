@@ -505,7 +505,18 @@ theorem isConj_of
   rcases Int.units_eq_one_or (Perm.sign π) with h | h
   · rw [isConj_iff]
     refine ⟨⟨π, mem_alternatingGroup.mp h⟩, Subtype.val_injective ?_⟩
-    simpa only [Subtype.
+    simpa only [Subtype.val, Subgroup.coe_mul, coe_inv, coe_mk] using! hπ
+  · have h2 : 2 <= σ.supportᶜ.card := by
+      rw [Finset.card_compl]; rw [le_tsub_iff_left σ.support.card_le_univ]
+      exact hσ
+    obtain ⟨a, ha, b, hb, ab⟩ := Finset.one_lt_card.1 h2
+    refine isConj_iff.2 ⟨⟨π * swap a b, ?_⟩, Subtype.val_injective ?_⟩
+    · rw [mem_alternatingGroup, map_mul, h, sign_swap ab, Int.units_mul_self]
+    · simp only [← hπ, Subgroup.coe_mul]
+      have hd : Disjoint (swap a b) σ := by
+        rw [disjoint_iff_disjoint_support]; rw [support_swap ab]; rw [Finset.disjoint_insert_left]; rw [Finset.disjoint_singleton_left]
+        exact ⟨Finset.mem_compl.1 ha, Finset.mem_compl.1 hb⟩
+      simp [mul_assoc, hd.commute.eq]
 
 中文:
 定理 isConj_of
@@ -518,7 +529,18 @@ theorem isConj_of
   rcases Int.units_eq_one_or (Perm.sign π) with h | h
   · rw [isConj_iff]
     refine ⟨⟨π, mem_alternatingGroup.mp h⟩, Subtype.val_injective ?_⟩
-    simpa only [Subtype.
+    simpa only [Subtype.val, Subgroup.coe_mul, coe_inv, coe_mk] using! hπ
+  · have h2 : 2 <= σ.supportᶜ.card := by
+      rw [Finset.card_compl]; rw [le_tsub_iff_left σ.support.card_le_univ]
+      exact hσ
+    obtain ⟨a, ha, b, hb, ab⟩ := Finset.one_lt_card.1 h2
+    refine isConj_iff.2 ⟨⟨π * swap a b, ?_⟩, Subtype.val_injective ?_⟩
+    · rw [mem_alternatingGroup, map_mul, h, sign_swap ab, Int.units_mul_self]
+    · simp only [← hπ, Subgroup.coe_mul]
+      have hd : Disjoint (swap a b) σ := by
+        rw [disjoint_iff_disjoint_support]; rw [support_swap ab]; rw [Finset.disjoint_insert_left]; rw [Finset.disjoint_singleton_left]
+        exact ⟨Finset.mem_compl.1 ha, Finset.mem_compl.1 hb⟩
+      simp [mul_assoc, hd.commute.eq]
 
 Depends on / 依赖: Finset, Finset.card_compl, Finset.one_lt_card, Int.units_eq_one_or, Perm.sign, Subgroup, Subgroup.coe_mul, Subtype, Subtype.coe_mk, Subtype.val, Subtype.val_injective, card_compl, card_le_univ, coe_inv, coe_mk, coe_mul, isConj_iff, le_tsub_iff_left, mem_alternatingGroup, mem_alternatingGroup.mp
 -/
@@ -588,7 +610,20 @@ theorem closure_three_cycles_eq_alternating
   suffices hind :
     forall (n : Nat) (l : List (Perm α)) (_ : forall g, g in l -> IsSwap g) (_ : l.length = 2 * n),
       l.prod in closure { σ : Perm α | IsThreeCycle σ } by
-    obtain ⟨l, rfl, hl⟩ := trunc
+    obtain ⟨l, rfl, hl⟩ := truncSwapFactors σ
+    obtain ⟨n, hn⟩ := (prod_list_swap_mem_alternatingGroup_iff_even_length hl).1 hσ
+    rw [← two_mul] at hn
+    exact hind n l hl hn
+  intro n
+  induction n with intro l hl hn
+  | zero => simp [List.length_eq_zero_iff.1 hn, one_mem]
+  | succ n ih =>
+    rw [Nat.mul_succ] at hn
+    obtain ⟨a, l, rfl⟩ := l.exists_of_length_succ hn
+    rw [List.length_cons]; rw [Nat.succ_inj] at hn
+    obtain ⟨b, l, rfl⟩ := l.exists_of_length_succ hn
+    rw [List.prod_cons]; rw [List.prod_cons]; rw [← mul_assoc]
+    apply mul_mem <;> grind [IsSwap.mul_mem_closure_three_cycles]
 
 中文:
 定理 closure_three_cycles_eq_alternating
@@ -597,7 +632,20 @@ theorem closure_three_cycles_eq_alternating
   suffices hind :
     forall (n : Nat) (l : List (Perm α)) (_ : forall g, g in l -> IsSwap g) (_ : l.length = 2 * n),
       l.prod in closure { σ : Perm α | IsThreeCycle σ } by
-    obtain ⟨l, rfl, hl⟩ := trunc
+    obtain ⟨l, rfl, hl⟩ := truncSwapFactors σ
+    obtain ⟨n, hn⟩ := (prod_list_swap_mem_alternatingGroup_iff_even_length hl).1 hσ
+    rw [← two_mul] at hn
+    exact hind n l hl hn
+  intro n
+  induction n with intro l hl hn
+  | zero => simp [List.length_eq_zero_iff.1 hn, one_mem]
+  | succ n ih =>
+    rw [Nat.mul_succ] at hn
+    obtain ⟨a, l, rfl⟩ := l.exists_of_length_succ hn
+    rw [List.length_cons]; rw [Nat.succ_inj] at hn
+    obtain ⟨b, l, rfl⟩ := l.exists_of_length_succ hn
+    rw [List.prod_cons]; rw [List.prod_cons]; rw [← mul_assoc]
+    apply mul_mem <;> grind [IsSwap.mul_mem_closure_three_cycles]
 
 Depends on / 依赖: IsSwap, IsThreeCycle, IsThreeCycle.mem_alternatingGroup, List.length_eq_zero_iff, closure, closure_eq_of_le, l.length, l.prod, length, length_eq_zero_iff, mem_alternatingGroup, prod_list_swap_mem_alternatingGroup_iff_even_length, truncSwapFactors, two_mul
 -/
@@ -681,7 +729,21 @@ theorem closure_cycleType_eq_two_two_eq_alternatingGroup
     simp [mem_alternatingGroup, sign_of_cycleType, hg, ← Units.val_inj]
   · rw [← Equiv.Perm.closure_three_cycles_eq_alternating, Subgroup.closure_le]
     intro g hg3
-    obtain ⟨a, ha⟩ := hg3.
+    obtain ⟨a, ha⟩ := hg3.isCycle.nonempty_support
+    have h_support := hg3.support_eq_iff_mem_support.mpr ha
+    have h_nodup := hg3.nodup_iff_mem_support.mpr ha
+    have : 1 < g.supportᶜ.card := by grind [Finset.card_compl, Nat.card_eq_fintype_card]
+    obtain ⟨b, c, hb, hc, hbc⟩ := Finset.one_lt_card_iff.mp this
+    have H : g = (swap a (g a) * (swap b c)) * (swap b c * (swap (g a) (g (g a)))) := by
+      simp [mul_assoc, ← hg3.eq_swap_mul_swap_iff_mem_support.mpr ha]
+    rw [H]
+    apply mul_mem <;>
+    · apply Subgroup.subset_closure
+      exact cycleType_swap_mul_swap_of_nodup (by grind [Finset.mem_compl])
+
+@[deprecated (since := "2026-03-10")]
+alias closure_cycleType_eq_2_2_eq_alternatingGroup :=
+  closure_cycleType_eq_two_two_eq_alternatingGroup
 
 中文:
 定理 closure_cycleType_eq_two_two_eq_alternatingGroup
@@ -694,7 +756,21 @@ theorem closure_cycleType_eq_two_two_eq_alternatingGroup
     simp [mem_alternatingGroup, sign_of_cycleType, hg, ← Units.val_inj]
   · rw [← Equiv.Perm.closure_three_cycles_eq_alternating, Subgroup.closure_le]
     intro g hg3
-    obtain ⟨a, ha⟩ := hg3.
+    obtain ⟨a, ha⟩ := hg3.isCycle.nonempty_support
+    have h_support := hg3.support_eq_iff_mem_support.mpr ha
+    have h_nodup := hg3.nodup_iff_mem_support.mpr ha
+    have : 1 < g.supportᶜ.card := by grind [Finset.card_compl, Nat.card_eq_fintype_card]
+    obtain ⟨b, c, hb, hc, hbc⟩ := Finset.one_lt_card_iff.mp this
+    have H : g = (swap a (g a) * (swap b c)) * (swap b c * (swap (g a) (g (g a)))) := by
+      simp [mul_assoc, ← hg3.eq_swap_mul_swap_iff_mem_support.mpr ha]
+    rw [H]
+    apply mul_mem <;>
+    · apply Subgroup.subset_closure
+      exact cycleType_swap_mul_swap_of_nodup (by grind [Finset.mem_compl])
+
+@[deprecated (since := "2026-03-10")]
+alias closure_cycleType_eq_2_2_eq_alternatingGroup :=
+  closure_cycleType_eq_two_two_eq_alternatingGroup
 
 Depends on / 依赖: Equiv.Perm.closure_three_cycles_eq_alternating, Finset, Finset.card_compl, Nat.card_eq_fintype_card, Set.mem_ofPred_eq, Subgroup, Subgroup.closure_le, Units.val_inj, card_compl, card_eq_fintype_card, closure_le, closure_three_cycles_eq_alternating, g.support, h_nodup, h_support, hg3.isCycle.nonempty_support, hg3.nodup_iff_mem_support.mpr, hg3.support_eq_iff_mem_support.mpr, isCycle, le_antisymm
 -/
@@ -794,7 +870,12 @@ theorem isThreeCycle_sq_of_three_mem_cycleType_five
   suffices hg' : orderOf g' ∣ 2 by
     rw [← pow_two]; rw [orderOf_dvd_iff_pow_eq_one.1 hg']; rw [one_mul]
     exact (card_support_eq_three_iff.1 h3).isThreeCycle_sq
-  rw [←
+  rw [← lcm_cycleType]; rw [Multiset.lcm_dvd]
+  intro n hn
+  rw [le_antisymm (two_le_of_mem_cycleType hn) (le_trans (le_card_support_of_mem_cycleType hn) _)]
+  apply le_of_add_le_add_left
+  rw [← hd.card_support_mul]; rw [h3]
+  exact (c * g').support.card_le_univ
 
 中文:
 定理 isThreeCycle_sq_of_three_mem_cycleType_five
@@ -806,7 +887,12 @@ theorem isThreeCycle_sq_of_three_mem_cycleType_five
   suffices hg' : orderOf g' ∣ 2 by
     rw [← pow_two]; rw [orderOf_dvd_iff_pow_eq_one.1 hg']; rw [one_mul]
     exact (card_support_eq_three_iff.1 h3).isThreeCycle_sq
-  rw [←
+  rw [← lcm_cycleType]; rw [Multiset.lcm_dvd]
+  intro n hn
+  rw [le_antisymm (two_le_of_mem_cycleType hn) (le_trans (le_card_support_of_mem_cycleType hn) _)]
+  apply le_of_add_le_add_left
+  rw [← hd.card_support_mul]; rw [h3]
+  exact (c * g').support.card_le_univ
 
 Depends on / 依赖: Multiset, Multiset.lcm_dvd, card_support_eq_three_iff, card_support_mul, commute, hd.card_support_mul, hd.commute.eq, isThreeCycle_sq, lcm_cycleType, lcm_dvd, le_antisymm, le_card_support_of_mem_cycleType, le_of_add_le_add_left, le_trans, mem_cycleType_iff, mul_assoc, one_mul, orderOf, orderOf_dvd_iff_pow_eq_one, pow_two
 -/
@@ -843,7 +929,7 @@ theorem eq_bot_of_card_le_two
   suffices hα' : Nat.card α = 2 by
     rw [Subgroup.eq_bot_iff_card]; rw [← Nat.mul_right_inj (a := 2) (by simp)]; rw [two_mul_nat_card_alternatingGroup]; rw [mul_one]; rw [Nat.card_perm]; rw [hα']; rw [Nat.factorial_two]
   refine h2.antisymm ?_
-  simpa [Nat.card_eq_fintype_card
+  simpa [Nat.card_eq_fintype_card] using! Fintype.one_lt_card
 
 中文:
 定理 eq_bot_of_card_le_two
@@ -854,7 +940,7 @@ theorem eq_bot_of_card_le_two
   suffices hα' : Nat.card α = 2 by
     rw [Subgroup.eq_bot_iff_card]; rw [← Nat.mul_right_inj (a := 2) (by simp)]; rw [two_mul_nat_card_alternatingGroup]; rw [mul_one]; rw [Nat.card_perm]; rw [hα']; rw [Nat.factorial_two]
   refine h2.antisymm ?_
-  simpa [Nat.card_eq_fintype_card
+  simpa [Nat.card_eq_fintype_card] using! Fintype.one_lt_card
 
 Depends on / 依赖: Fintype, Fintype.one_lt_card, Nat.card, Nat.card_eq_fintype_card, Nat.card_perm, Nat.factorial_two, Nat.mul_right_inj, Subgroup, Subgroup.eq_bot_iff_card, antisymm, card_eq_fintype_card, card_perm, eq_bot_iff_card, factorial_two, h2.antisymm, mul_one, mul_right_inj, nontriviality, one_lt_card, two_mul_nat_card_alternatingGroup
 -/
@@ -878,7 +964,8 @@ theorem nontrivial_of_three_le_card
     refine lt_of_lt_of_le (by decide) h3
   rw [← Fintype.one_lt_card_iff_nontrivial]; rw [← Nat.card_eq_fintype_card]
   refine lt_of_mul_lt_mul_left ?_ (le_of_lt Nat.prime_two.pos)
-  rw [two
+  rw [two_mul_nat_card_alternatingGroup]; rw [Nat.card_perm]; rw [← Nat.succ_le_iff]
+  exact le_trans h3 (Nat.card α).self_le_factorial
 
 中文:
 定理 nontrivial_of_three_le_card
@@ -890,7 +977,8 @@ theorem nontrivial_of_three_le_card
     refine lt_of_lt_of_le (by decide) h3
   rw [← Fintype.one_lt_card_iff_nontrivial]; rw [← Nat.card_eq_fintype_card]
   refine lt_of_mul_lt_mul_left ?_ (le_of_lt Nat.prime_two.pos)
-  rw [two
+  rw [two_mul_nat_card_alternatingGroup]; rw [Nat.card_perm]; rw [← Nat.succ_le_iff]
+  exact le_trans h3 (Nat.card α).self_le_factorial
 
 Depends on / 依赖: Fintype, Fintype.one_lt_card_iff_nontrivial, Nat.card, Nat.card_eq_fintype_card, Nat.card_perm, Nat.prime_two.pos, Nat.succ_le_iff, Nontrivial, card_eq_fintype_card, card_perm, le_of_lt, le_trans, lt_of_lt_of_le, lt_of_mul_lt_mul_left, one_lt_card_iff_nontrivial, prime_two, self_le_factorial, succ_le_iff, two_mul_nat_card_alternatingGroup
 -/
@@ -923,7 +1011,19 @@ theorem isConj_swap_mul_swap_of_cycleType_two
   rw [← sum_cycleType]; rw [h2]; rw [Multiset.sum_replicate]; rw [smul_eq_mul] at h
   have h : Multiset.card g.cycleType <= 3 :=
     le_of_mul_le_mul_right (le_trans h (by norm_num only [card_fin])) (by simp)
-  rw [mem_a
+  rw [mem_alternatingGroup]; rw [sign_of_cycleType]; rw [h2]; rw [Multiset.sum_replicate]; rw [Multiset.card_replicate]; rw [smul_eq_mul]; rw [pow_add]; rw [pow_mul]; rw [Int.units_pow_two]; rw [one_mul]; rw [neg_one_pow_eq_one_iff_even] at ha
+  swap; · decide
+  rw [isConj_iff_cycleType_eq]; rw [h2]
+  interval_cases h_1 : Multiset.card g.cycleType
+  · exact (h1 (card_cycleType_eq_zero.1 h_1)).elim
+  · simp at ha
+  · have h04 : (0 : Fin 5) != 4 := by decide
+    have h13 : (1 : Fin 5) != 3 := by decide
+    rw [Disjoint.cycleType_mul]; rw [(isCycle_swap h04).cycleType]; rw [(isCycle_swap h13).cycleType]; rw [card_support_swap h04]; rw [card_support_swap h13]
+    · simp
+    · rw [disjoint_iff_disjoint_support, support_swap h04, support_swap h13]
+      decide
+  · contradiction
 
 中文:
 定理 isConj_swap_mul_swap_of_cycleType_two
@@ -934,7 +1034,19 @@ theorem isConj_swap_mul_swap_of_cycleType_two
   rw [← sum_cycleType]; rw [h2]; rw [Multiset.sum_replicate]; rw [smul_eq_mul] at h
   have h : Multiset.card g.cycleType <= 3 :=
     le_of_mul_le_mul_right (le_trans h (by norm_num only [card_fin])) (by simp)
-  rw [mem_a
+  rw [mem_alternatingGroup]; rw [sign_of_cycleType]; rw [h2]; rw [Multiset.sum_replicate]; rw [Multiset.card_replicate]; rw [smul_eq_mul]; rw [pow_add]; rw [pow_mul]; rw [Int.units_pow_two]; rw [one_mul]; rw [neg_one_pow_eq_one_iff_even] at ha
+  swap; · decide
+  rw [isConj_iff_cycleType_eq]; rw [h2]
+  interval_cases h_1 : Multiset.card g.cycleType
+  · exact (h1 (card_cycleType_eq_zero.1 h_1)).elim
+  · simp at ha
+  · have h04 : (0 : Fin 5) != 4 := by decide
+    have h13 : (1 : Fin 5) != 3 := by decide
+    rw [Disjoint.cycleType_mul]; rw [(isCycle_swap h04).cycleType]; rw [(isCycle_swap h13).cycleType]; rw [card_support_swap h04]; rw [card_support_swap h13]
+    · simp
+    · rw [disjoint_iff_disjoint_support, support_swap h04, support_swap h13]
+      decide
+  · contradiction
 
 Depends on / 依赖: Int.units_pow_two, Multiset, Multiset.card, Multiset.card_replicate, Multiset.eq_replicate_card, Multiset.sum_replicate, card_fin, card_le_univ, card_replicate, cycleType, eq_replicate_card, g.cycleType, g.support.card_le_univ, le_of_mul_le_mul_right, le_trans, mem_alternatingGroup, neg_one_pow_eq_o, one_mul, pow_add, pow_mul
 -/
@@ -974,7 +1086,31 @@ theorem center_eq_bot
     Finset.eq_empty_iff_forall_notMem]
   intro a ha
   have hab : g a != a := by rw [← mem_support]; exact ha
-  have : 2 <= (({a, g a} : Finset α)ᶜ).card 
+  have : 2 <= (({a, g a} : Finset α)ᶜ).card := by
+    rw [← Nat.add_le_add_iff_left]; rw [Finset.card_add_card_compl]
+    rw [← Nat.card_eq_fintype_card]
+    rw [Finset.card_pair hab.symm]
+    exact hα4
+  rw [← Nat.lt_iff_add_one_le]; rw [Finset.one_lt_card_iff] at this
+  obtain ⟨c, d, hc, hd, hcd⟩ := this
+  simp only [Finset.compl_insert, Finset.mem_erase, ← ne_eq, Finset.mem_compl,
+    Finset.mem_singleton] at hc hd
+  let k := swap (g a) d * swap (g a) c
+  have hka : k • a = a := by
+    simp only [Perm.smul_def, coe_mul, Function.comp_apply, k]
+    rw [swap_apply_of_ne_of_ne (x := a) hab.symm hc.1.symm]
+    rw [swap_apply_of_ne_of_ne hab.symm hd.1.symm]
+  have hkga : k • (g a) = c := by
+    simp only [Perm.smul_def, coe_mul, Function.comp_apply, swap_apply_left, k]
+    rw [swap_apply_of_ne_of_ne hc.2 hcd]
+  suffices k • (⟨g, hg⟩ : alternatingGroup α) • a != c by
+    apply this; simp [← hkga]
+  suffices k • (⟨g, hg⟩ : alternatingGroup α) • a = (⟨g, hg⟩ : alternatingGroup α) • k • a by
+    rw [this]; rw [hka]; exact hc.right.symm
+  rw [Subgroup.mem_center_iff] at hg'
+  suffices k in alternatingGroup α by
+    simp only [← Subgroup.mk_smul k this, ← mul_smul, hg']
+  simp [k, hc.2.symm, hd.2.symm]
 
 中文:
 定理 center_eq_bot
@@ -987,7 +1123,31 @@ theorem center_eq_bot
     Finset.eq_empty_iff_forall_notMem]
   intro a ha
   have hab : g a != a := by rw [← mem_support]; exact ha
-  have : 2 <= (({a, g a} : Finset α)ᶜ).card 
+  have : 2 <= (({a, g a} : Finset α)ᶜ).card := by
+    rw [← Nat.add_le_add_iff_left]; rw [Finset.card_add_card_compl]
+    rw [← Nat.card_eq_fintype_card]
+    rw [Finset.card_pair hab.symm]
+    exact hα4
+  rw [← Nat.lt_iff_add_one_le]; rw [Finset.one_lt_card_iff] at this
+  obtain ⟨c, d, hc, hd, hcd⟩ := this
+  simp only [Finset.compl_insert, Finset.mem_erase, ← ne_eq, Finset.mem_compl,
+    Finset.mem_singleton] at hc hd
+  let k := swap (g a) d * swap (g a) c
+  have hka : k • a = a := by
+    simp only [Perm.smul_def, coe_mul, Function.comp_apply, k]
+    rw [swap_apply_of_ne_of_ne (x := a) hab.symm hc.1.symm]
+    rw [swap_apply_of_ne_of_ne hab.symm hd.1.symm]
+  have hkga : k • (g a) = c := by
+    simp only [Perm.smul_def, coe_mul, Function.comp_apply, swap_apply_left, k]
+    rw [swap_apply_of_ne_of_ne hc.2 hcd]
+  suffices k • (⟨g, hg⟩ : alternatingGroup α) • a != c by
+    apply this; simp [← hkga]
+  suffices k • (⟨g, hg⟩ : alternatingGroup α) • a = (⟨g, hg⟩ : alternatingGroup α) • k • a by
+    rw [this]; rw [hka]; exact hc.right.symm
+  rw [Subgroup.mem_center_iff] at hg'
+  suffices k in alternatingGroup α by
+    simp only [← Subgroup.mk_smul k this, ← mul_smul, hg']
+  simp [k, hc.2.symm, hd.2.symm]
 
 Depends on / 依赖: Finset, Finset.card_add_card_compl, Finset.card_pair, Finset.eq_empty_iff_forall_notMem, Finset.one_lt_card_iff, Nat.add_le_add_iff_left, Nat.card_eq_fintype_card, Nat.lt_iff_add_one_le, Subgroup, Subgroup.coe_one, Subgroup.mem_bot, Subtype, Subtype.coe_inj, add_le_add_iff_left, card_add_card_compl, card_eq_fintype_card, card_pair, coe_inj, coe_one, eq_bot_iff
 -/
@@ -1039,7 +1199,7 @@ theorem isMulCommutative_iff_card_le_three
     rw [← not_nontrivial_iff_subsingleton] at this
     apply this
     exact nontrivial_of_three_le_card h.le
-  simpa [center_eq_top_iff.mpr H, 
+  simpa [center_eq_top_iff.mpr H, eq_comm, subsingleton_iff_bot_eq_top] using center_eq_bot h
 
 中文:
 定理 isMulCommutative_iff_card_le_three
@@ -1051,7 +1211,7 @@ theorem isMulCommutative_iff_card_le_three
     rw [← not_nontrivial_iff_subsingleton] at this
     apply this
     exact nontrivial_of_three_le_card h.le
-  simpa [center_eq_top_iff.mpr H, 
+  simpa [center_eq_top_iff.mpr H, eq_comm, subsingleton_iff_bot_eq_top] using center_eq_bot h
 
 Depends on / 依赖: Subsingleton, alternatingGroup, center_eq_bot, center_eq_top_iff, center_eq_top_iff.mpr, eq_comm, h.le, isCyclic_of_card_le_three, isMulCommutative, nontrivial_of_three_le_card, not_lt, not_nontrivial_iff_subsingleton, subsingleton_iff_bot_eq_top
 -/
@@ -1322,7 +1482,12 @@ theorem eq_alternatingGroup_of_index_eq_two
     suffices G = ⊤ by rw [this, Subgroup.index_top] at hG; cases hG
     rwa [eq_top_iff, ← closure_isSwap, G.closure_le]
   ext g
-  refine swap_induction_on g (iff_of_true G.one_mem 
+  refine swap_induction_on g (iff_of_true G.one_mem <| map_one _) fun g x y hxy ih => ?_
+  rw [mul_mem_iff_of_index_two hG]; rw [mul_mem_iff_of_index_two alternatingGroup.index_eq_two]; rw [ih]
+  refine iff_congr (iff_of_false ?_ (by cases (sign_swap hxy).symm.trans ·)) Iff.rfl
+  contrapose habG
+  rw [← (isConj_iff.mp <| isConj_swap hxy hab).choose_spec]
+  exact (normal_of_index_eq_two hG).conj_mem _ habG _
 
 中文:
 定理 eq_alternatingGroup_of_index_eq_two
@@ -1334,7 +1499,12 @@ theorem eq_alternatingGroup_of_index_eq_two
     suffices G = ⊤ by rw [this, Subgroup.index_top] at hG; cases hG
     rwa [eq_top_iff, ← closure_isSwap, G.closure_le]
   ext g
-  refine swap_induction_on g (iff_of_true G.one_mem 
+  refine swap_induction_on g (iff_of_true G.one_mem <| map_one _) fun g x y hxy ih => ?_
+  rw [mul_mem_iff_of_index_two hG]; rw [mul_mem_iff_of_index_two alternatingGroup.index_eq_two]; rw [ih]
+  refine iff_congr (iff_of_false ?_ (by cases (sign_swap hxy).symm.trans ·)) Iff.rfl
+  contrapose habG
+  rw [← (isConj_iff.mp <| isConj_swap hxy hab).choose_spec]
+  exact (normal_of_index_eq_two hG).conj_mem _ habG _
 
 Depends on / 依赖: G.closure_le, G.one_mem, Iff.r, IsSwap, Subgroup, Subgroup.index_top, alternatingGroup, alternatingGroup.index_eq_two, closure_isSwap, closure_le, eq_top_iff, g.IsSwap, iff_congr, iff_of_false, iff_of_true, index_eq_two, index_top, map_one, mul_mem_iff_of_index_two, nontriviality
 -/

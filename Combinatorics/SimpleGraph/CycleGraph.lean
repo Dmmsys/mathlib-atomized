@@ -675,7 +675,27 @@ lemma cycleGraph_isContained_iff
     rw [this] at h
 refine ⟨h.toHom ⟨0, by lia⟩, Walk.map h.toHom cycleGraph.cycle (n - 3), ?_, ?_⟩
     · exact (isCycle_map_iff_of_injective h.injective).mpr cycleGraph.isCycle_cycle
-    · simp [cycleGraph.length_cycle, ← t
+    · simp [cycleGraph.length_cycle, ← this]
+  · obtain ⟨a, p, hp₁, hp₂⟩ := h'
+    refine ⟨⟨⟨fun n => p.support[n.succ]'(?_), ?_⟩, ?_⟩⟩
+    · grind [hp₁.three_le_length, length_tail_add_one, not_nil_iff_lt_length]
+    · intro ⟨x, hx⟩ ⟨y, hy⟩ hab
+      have hne : x != y := fun _ => by simp_all
+      wlog hle : x > y
+.symm · exact this hn a p hp₁ hp₂ y hy x hx hab.symm hne.symm (by lia)
+      rcases cycleGraph_adj'.mp hab with hab | hab
+      · simp_rw [show x = y + 1 by grind [Fin.sub_val_of_le]]
+.symm exact p.isChain_adj_support.getElem _ _
+      · rw [Fin.coe_sub_iff_lt.mpr hle] at hab
+        simp_rw [show x = n - 1 by lia, show y = 0 by lia, Fin.succ_mk, show n - 1 + 1 = n by lia]
+        simp [← hp₂, p.adj_snd hp₁.not_nil]
+    · have hlen : p.tail.support.length = n := by
+        grind [length_tail_add_one, not_nil_iff_lt_length]
+      have (m : Fin n) : p.support[m.succ]'(by grind) = p.tail.support[m] := by
+        simp [p.support_tail_of_not_nil hp₁.not_nil]
+      simp_rw [this]
+have := IsPath.mk' (support_tail_of_not_nil _ hp₁.not_nil) ▸ hp₁.support_nodup
+      exact hlen ▸ (isPath_iff_injective_get_support _ |>.mp this)
 
 中文:
 引理 cycleGraph_isContained_iff
@@ -686,7 +706,27 @@ refine ⟨h.toHom ⟨0, by lia⟩, Walk.map h.toHom cycleGraph.cycle (n - 3), ?_
     rw [this] at h
 refine ⟨h.toHom ⟨0, by lia⟩, Walk.map h.toHom cycleGraph.cycle (n - 3), ?_, ?_⟩
     · exact (isCycle_map_iff_of_injective h.injective).mpr cycleGraph.isCycle_cycle
-    · simp [cycleGraph.length_cycle, ← t
+    · simp [cycleGraph.length_cycle, ← this]
+  · obtain ⟨a, p, hp₁, hp₂⟩ := h'
+    refine ⟨⟨⟨fun n => p.support[n.succ]'(?_), ?_⟩, ?_⟩⟩
+    · grind [hp₁.three_le_length, length_tail_add_one, not_nil_iff_lt_length]
+    · intro ⟨x, hx⟩ ⟨y, hy⟩ hab
+      have hne : x != y := fun _ => by simp_all
+      wlog hle : x > y
+.symm · exact this hn a p hp₁ hp₂ y hy x hx hab.symm hne.symm (by lia)
+      rcases cycleGraph_adj'.mp hab with hab | hab
+      · simp_rw [show x = y + 1 by grind [Fin.sub_val_of_le]]
+.symm exact p.isChain_adj_support.getElem _ _
+      · rw [Fin.coe_sub_iff_lt.mpr hle] at hab
+        simp_rw [show x = n - 1 by lia, show y = 0 by lia, Fin.succ_mk, show n - 1 + 1 = n by lia]
+        simp [← hp₂, p.adj_snd hp₁.not_nil]
+    · have hlen : p.tail.support.length = n := by
+        grind [length_tail_add_one, not_nil_iff_lt_length]
+      have (m : Fin n) : p.support[m.succ]'(by grind) = p.tail.support[m] := by
+        simp [p.support_tail_of_not_nil hp₁.not_nil]
+      simp_rw [this]
+have := IsPath.mk' (support_tail_of_not_nil _ hp₁.not_nil) ▸ hp₁.support_nodup
+      exact hlen ▸ (isPath_iff_injective_get_support _ |>.mp this)
 
 Depends on / 依赖: Walk.map, cycleGraph, cycleGraph.cycle, cycleGraph.isCycle_cycle, cycleGraph.length_cycle, h.injective, h.toHom, injective, isCycle_cycle, isCycle_map_iff_of_injective, length_cycle, length_tail_add_one, n.succ, not_nil_iff_lt_length, p.support, support, three_le_length
 -/

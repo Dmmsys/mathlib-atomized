@@ -43,7 +43,38 @@ lemma StrictConvex.centerMass_mem_interior
     intro h₀ i' j' hi' hj' hi'j' hi'0 hj'0 hmem
     have zi : z i in s := hmem _ (mem_insert_self _ _)
 have hs₀ : forall j in t, 0 <= w j := fun j hj => h₀ j mem_insert_of_mem hj
-    by_cases hsum_t : 
+    by_cases hsum_t : ∑ j in t, w j = 0
+    · have ws : forall j in t, w j = 0 := (sum_eq_zero_iff_of_nonneg hs₀).1 hsum_t
+      have h : i' in t ∨ j' in t := by grind
+      exfalso
+      rcases h with h | h
+      · exact hi'0 (ws _ h)
+      · exact hj'0 (ws _ h)
+    rw [Finset.centerMass_insert _ _ _ hi hsum_t]
+    by_cases hi : w i = 0
+    · simp only [hi, zero_add, zero_div, zero_smul, ne_eq, hsum_t, not_false_eq_true, div_self,
+        one_smul]
+      grind
+    by_cases hzi : z i = t.centerMass w z
+    · have hwi : w i + ∑ j in t, w j != 0 := by
+        refine LT.lt.ne' ?_
+        have hwi : 0 < w i := by grind
+        grw [← hwi, ← sum_nonneg hs₀, add_zero]
+      simp only [hzi, ← add_smul, ← add_div, ne_eq, hwi, not_false_eq_true, div_self, one_smul]
+      by_cases! hijt : exists i'' j'', i'' in t ∧ j'' in t ∧ z i'' != z j'' ∧ w i'' != 0 ∧ w j'' != 0
+      · grind
+      · exfalso
+        obtain ⟨i'', hi'', hwi''⟩ : exists i'' in t, w i'' != 0 := by grind
+        have hijt' : forall j'', j'' in t -> w j'' != 0 -> z j'' = Function.const _ (z i'') j'' := by
+          grind
+        have hi : i = i' ∨ i = j' := by grind
+        have hzi'' : t.centerMass w z = z i'' := by
+          rw [t.centerMass_congr_fun hijt']; rw [t.centerMass_const hsum_t]
+        grind
+    · exact strictConvex_iff_div.1 hs zi
+        (hs.convex.centerMass_mem hs₀ (lt_of_le_of_ne (sum_nonneg hs₀) (Ne.symm hsum_t))
+          (fun j hj => hmem j (mem_insert_of_mem hj))) hzi (by grind)
+        ((sum_nonneg hs₀).lt_of_ne' hsum_t)
 
 中文:
 引理 严格凸.centerMass_mem_interior
@@ -56,7 +87,38 @@ have hs₀ : forall j in t, 0 <= w j := fun j hj => h₀ j mem_insert_of_mem hj
     intro h₀ i' j' hi' hj' hi'j' hi'0 hj'0 hmem
     have zi : z i in s := hmem _ (mem_insert_self _ _)
 have hs₀ : forall j in t, 0 <= w j := fun j hj => h₀ j mem_insert_of_mem hj
-    by_cases hsum_t : 
+    by_cases hsum_t : ∑ j in t, w j = 0
+    · have ws : forall j in t, w j = 0 := (sum_eq_zero_iff_of_nonneg hs₀).1 hsum_t
+      have h : i' in t ∨ j' in t := by grind
+      exfalso
+      rcases h with h | h
+      · exact hi'0 (ws _ h)
+      · exact hj'0 (ws _ h)
+    rw [Finset.centerMass_insert _ _ _ hi hsum_t]
+    by_cases hi : w i = 0
+    · simp only [hi, zero_add, zero_div, zero_smul, ne_eq, hsum_t, not_false_eq_true, div_self,
+        one_smul]
+      grind
+    by_cases hzi : z i = t.centerMass w z
+    · have hwi : w i + ∑ j in t, w j != 0 := by
+        refine LT.lt.ne' ?_
+        have hwi : 0 < w i := by grind
+        grw [← hwi, ← sum_nonneg hs₀, add_zero]
+      simp only [hzi, ← add_smul, ← add_div, ne_eq, hwi, not_false_eq_true, div_self, one_smul]
+      by_cases! hijt : exists i'' j'', i'' in t ∧ j'' in t ∧ z i'' != z j'' ∧ w i'' != 0 ∧ w j'' != 0
+      · grind
+      · exfalso
+        obtain ⟨i'', hi'', hwi''⟩ : exists i'' in t, w i'' != 0 := by grind
+        have hijt' : forall j'', j'' in t -> w j'' != 0 -> z j'' = Function.const _ (z i'') j'' := by
+          grind
+        have hi : i = i' ∨ i = j' := by grind
+        have hzi'' : t.centerMass w z = z i'' := by
+          rw [t.centerMass_congr_fun hijt']; rw [t.centerMass_const hsum_t]
+        grind
+    · exact strictConvex_iff_div.1 hs zi
+        (hs.convex.centerMass_mem hs₀ (lt_of_le_of_ne (sum_nonneg hs₀) (Ne.symm hsum_t))
+          (fun j hj => hmem j (mem_insert_of_mem hj))) hzi (by grind)
+        ((sum_nonneg hs₀).lt_of_ne' hsum_t)
 
 Depends on / 依赖: Finset, Finset.c, Finset.induction, classical, hsum_t, insert, mem_insert_of_mem, mem_insert_self, sum_eq_zero_iff_of_nonneg
 -/
@@ -274,7 +336,16 @@ lemma dist_lt_of_mem_closedInterior_of_strictConvexSpace
     by_contra! hij
     apply hp' i
     rw [← Finset.univ.affineCombination_piSingle Real s.points (Finset.mem_univ i)]
-    cong
+    congr 1
+    ext j
+    obtain rfl | hj := eq_or_ne i j
+    · simp only [Pi.single_eq_same]
+      rw [← hw]; rw [eq_comm]
+      exact sum_eq_single i (fun k _ hk => hij k hk.symm) (by simp)
+    · rw [Pi.single_eq_of_ne' hj]
+      exact hij j hj
+  exact dist_affineCombination_lt_of_strictConvexSpace (fun k _ => (hw01 k).1) hw
+    (Finset.mem_univ i) (Finset.mem_univ j) (s.independent.injective.ne hij) hi hj (fun k _ => hr k)
 
 中文:
 引理 dist_lt_of_mem_closed整数erior_of_strictConvexSpace
@@ -288,7 +359,16 @@ lemma dist_lt_of_mem_closedInterior_of_strictConvexSpace
     by_contra! hij
     apply hp' i
     rw [← Finset.univ.affineCombination_piSingle Real s.points (Finset.mem_univ i)]
-    cong
+    congr 1
+    ext j
+    obtain rfl | hj := eq_or_ne i j
+    · simp only [Pi.single_eq_same]
+      rw [← hw]; rw [eq_comm]
+      exact sum_eq_single i (fun k _ hk => hij k hk.symm) (by simp)
+    · rw [Pi.single_eq_of_ne' hj]
+      exact hij j hj
+  exact dist_affineCombination_lt_of_strictConvexSpace (fun k _ => (hw01 k).1) hw
+    (Finset.mem_univ i) (Finset.mem_univ j) (s.independent.injective.ne hij) hi hj (fun k _ => hr k)
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.univ.affineCombination_piSingle, Pi.single_eq_of_ne, Pi.single_eq_same, affineCombination_piSingle, dist_affineCombinat, eq_comm, eq_or_ne, hk.symm, mem_univ, points, s.points, single_eq_of_ne, single_eq_same, sum_eq_single
 -/

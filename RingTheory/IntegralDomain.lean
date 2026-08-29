@@ -172,7 +172,7 @@ theorem Finset.exists_eq_pow_of_mul_eq_pow_of_coprime
       exists_eq_pow_of_mul_eq_pow_of_coprime
         (IsCoprime.prod_right fun j hj => h i hi j (erase_subset i s hj) fun hij => ?_) hprod
     rw [hij] at hj
-    exact (s.notMem_erase _)
+    exact (s.notMem_erase _) hj
 
 中文:
 定理 有限集.存在_eq_pow_of_mul_eq_pow_of_coprime
@@ -185,7 +185,7 @@ theorem Finset.exists_eq_pow_of_mul_eq_pow_of_coprime
       exists_eq_pow_of_mul_eq_pow_of_coprime
         (IsCoprime.prod_right fun j hj => h i hi j (erase_subset i s hj) fun hij => ?_) hprod
     rw [hij] at hj
-    exact (s.notMem_erase _)
+    exact (s.notMem_erase _) hj
 
 Depends on / 依赖: IsCoprime, IsCoprime.prod_right, classical, erase_subset, exists_eq_pow_of_mul_eq_pow_of_coprime, insert_erase, notMem_erase, prod_insert, prod_right, s.notMem_erase
 -/
@@ -489,7 +489,38 @@ theorem sum_hom_units_eq_zero
       contrapose hf
       ext g
       obtain ⟨n, hn⟩ := hx ⟨f.toHomUnits g, g, rfl⟩
-      simpa [hf, Subtype.ext_iff, Units.ext_iff
+      simpa [hf, Subtype.ext_iff, Units.ext_iff] using hn.symm
+    let c := #{g | f.toHomUnits g = 1}
+    calc
+      ∑ g : G, f g = ∑ u in univ.image f.toHomUnits, #{g | f.toHomUnits g = u} • (u : R) :=
+        sum_comp ((↑) : Rˣ -> R) f.toHomUnits
+      _ = ∑ u in univ.image f.toHomUnits, c • (u : R) :=
+        (sum_congr rfl fun u hu => congr_arg₂ _ ?_ rfl)
+      -- remaining goal 1, proven below
+      _ = ∑ b : MonoidHom.range f.toHomUnits, c • (b.1 : R) :=
+        (Finset.sum_subtype _ (by simp) _)
+      _ = c • ∑ b : MonoidHom.range f.toHomUnits, (b.1 : R) := smul_sum.symm
+      _ = c • 0 := congr_arg₂ _ rfl ?_
+      -- remaining goal 2, proven below
+      _ = 0 := smul_zero _
+    · -- remaining goal 1
+      apply MonoidHom.card_fiber_eq_of_mem_range f.toHomUnits
+      · simpa only [mem_image, mem_univ, true_and, Set.mem_range] using hu
+      · exact ⟨1, f.toHomUnits.map_one⟩
+    -- remaining goal 2
+    calc
+      (∑ b : MonoidHom.range f.toHomUnits, (b.1 : R))
+        = ∑ n in range (orderOf x), (x.1 : R) ^ n :=
+Eq.symm
+          sum_nbij (x ^ ·) (by simp)
+            (by simpa using pow_injOn_Iio_orderOf)
+            (fun b _ => let ⟨n, hn⟩ := hx b
+              ⟨n % orderOf x, mem_range.2 (Nat.mod_lt _ (orderOf_pos _)), by simp [hn]⟩)
+            (by simp)
+      _ = 0 := ?_
+    rw [← mul_left_inj' hx1]; rw [zero_mul]; rw [geom_sum_mul]
+    norm_cast
+    simp [pow_orderOf_eq_one]
 
 中文:
 定理 sum_hom_units_eq_zero
@@ -503,7 +534,38 @@ theorem sum_hom_units_eq_zero
       contrapose hf
       ext g
       obtain ⟨n, hn⟩ := hx ⟨f.toHomUnits g, g, rfl⟩
-      simpa [hf, Subtype.ext_iff, Units.ext_iff
+      simpa [hf, Subtype.ext_iff, Units.ext_iff] using hn.symm
+    let c := #{g | f.toHomUnits g = 1}
+    calc
+      ∑ g : G, f g = ∑ u in univ.image f.toHomUnits, #{g | f.toHomUnits g = u} • (u : R) :=
+        sum_comp ((↑) : Rˣ -> R) f.toHomUnits
+      _ = ∑ u in univ.image f.toHomUnits, c • (u : R) :=
+        (sum_congr rfl fun u hu => congr_arg₂ _ ?_ rfl)
+      -- remaining goal 1, proven below
+      _ = ∑ b : MonoidHom.range f.toHomUnits, c • (b.1 : R) :=
+        (Finset.sum_subtype _ (by simp) _)
+      _ = c • ∑ b : MonoidHom.range f.toHomUnits, (b.1 : R) := smul_sum.symm
+      _ = c • 0 := congr_arg₂ _ rfl ?_
+      -- remaining goal 2, proven below
+      _ = 0 := smul_zero _
+    · -- remaining goal 1
+      apply MonoidHom.card_fiber_eq_of_mem_range f.toHomUnits
+      · simpa only [mem_image, mem_univ, true_and, Set.mem_range] using hu
+      · exact ⟨1, f.toHomUnits.map_one⟩
+    -- remaining goal 2
+    calc
+      (∑ b : MonoidHom.range f.toHomUnits, (b.1 : R))
+        = ∑ n in range (orderOf x), (x.1 : R) ^ n :=
+Eq.symm
+          sum_nbij (x ^ ·) (by simp)
+            (by simpa using pow_injOn_Iio_orderOf)
+            (fun b _ => let ⟨n, hn⟩ := hx b
+              ⟨n % orderOf x, mem_range.2 (Nat.mod_lt _ (orderOf_pos _)), by simp [hn]⟩)
+            (by simp)
+      _ = 0 := ?_
+    rw [← mul_left_inj' hx1]; rw [zero_mul]; rw [geom_sum_mul]
+    norm_cast
+    simp [pow_orderOf_eq_one]
 
 Depends on / 依赖: IsCyclic, IsCyclic.exists_monoid_generator, MonoidHom, MonoidHom.range, Subtype, Subtype.ext_iff, Units.ext_iff, classical, contrapose, exists_monoid_generator, ext_iff, f.toHomUnits, hn.symm, sub_ne_zero, sum_comp, sum_cong, toHomUnits, univ.image
 -/

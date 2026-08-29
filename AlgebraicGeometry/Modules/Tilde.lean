@@ -96,7 +96,27 @@ definition SpecModulesToSheafFullyFaithful
     apply TopCat.Presheaf.IsSheaf.section_ext (modulesSpecToSheaf.obj N).2
     intro x hxU
     obtain ⟨a, ⟨_, ⟨r, rfl⟩, rfl⟩, hxr, hrU : basicOpen _ <= _⟩ :=
-      PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxU U.
+      PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxU U.unop.2
+    refine ⟨_, hrU, hxr, ?_⟩
+    refine Eq.trans ?_ (N.val.map_smul (homOfLE hrU).op t _).symm
+    change N.1.map (homOfLE hrU).op (f.1.app _ _) = _ • N.1.map (homOfLE hrU).op (f.1.app _ _)
+    have (x : _) :
+        f.1.app _ (M.1.map (homOfLE hrU).op _) = N.1.map (homOfLE hrU).op (f.1.app _ x) :=
+      congr($(f.1.naturality (homOfLE hrU).op).hom x)
+    rw [← this]; rw [← this]; rw [M.val.map_smul]
+    generalize (Spec R).ringCatSheaf.obj.map (homOfLE hrU).op t = t
+    let := Module.compHom (R := Γ(Spec R, basicOpen r)) Γ(M, basicOpen r)
+      (algebraMap R Γ(Spec R, basicOpen r))
+    have : IsScalarTower R Γ(Spec R, basicOpen r) Γ(M, basicOpen r) :=
+      .of_algebraMap_smul fun _ _ => rfl
+    let := Module.compHom Γ(N, basicOpen r) (algebraMap R Γ(Spec R, basicOpen r))
+    have : IsScalarTower R Γ(Spec R, basicOpen r) Γ(N, basicOpen r) :=
+      .of_algebraMap_smul fun _ _ => rfl
+    exact (IsLocalization.linearMap_compatibleSMul (.powers (M := R) r)
+      Γ(Spec R, basicOpen r) Γ(M, basicOpen r) Γ(N, basicOpen r)).map_smul
+      (f.hom.app _).hom _ _⟩, fun i => by ext x; exact congr($(f.1.naturality i).hom x)⟩
+  map_preimage f := rfl
+  preimage_map f := rfl
 
 中文:
 定义 SpecModulesToSheafFullyFaithful
@@ -106,7 +126,27 @@ definition SpecModulesToSheafFullyFaithful
     apply TopCat.Presheaf.IsSheaf.section_ext (modulesSpecToSheaf.obj N).2
     intro x hxU
     obtain ⟨a, ⟨_, ⟨r, rfl⟩, rfl⟩, hxr, hrU : basicOpen _ <= _⟩ :=
-      PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxU U.
+      PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxU U.unop.2
+    refine ⟨_, hrU, hxr, ?_⟩
+    refine Eq.trans ?_ (N.val.map_smul (homOfLE hrU).op t _).symm
+    change N.1.map (homOfLE hrU).op (f.1.app _ _) = _ • N.1.map (homOfLE hrU).op (f.1.app _ _)
+    have (x : _) :
+        f.1.app _ (M.1.map (homOfLE hrU).op _) = N.1.map (homOfLE hrU).op (f.1.app _ x) :=
+      congr($(f.1.naturality (homOfLE hrU).op).hom x)
+    rw [← this]; rw [← this]; rw [M.val.map_smul]
+    generalize (Spec R).ringCatSheaf.obj.map (homOfLE hrU).op t = t
+    let := Module.compHom (R := Γ(Spec R, basicOpen r)) Γ(M, basicOpen r)
+      (algebraMap R Γ(Spec R, basicOpen r))
+    have : IsScalarTower R Γ(Spec R, basicOpen r) Γ(M, basicOpen r) :=
+      .of_algebraMap_smul fun _ _ => rfl
+    let := Module.compHom Γ(N, basicOpen r) (algebraMap R Γ(Spec R, basicOpen r))
+    have : IsScalarTower R Γ(Spec R, basicOpen r) Γ(N, basicOpen r) :=
+      .of_algebraMap_smul fun _ _ => rfl
+    exact (IsLocalization.linearMap_compatibleSMul (.powers (M := R) r)
+      Γ(Spec R, basicOpen r) Γ(M, basicOpen r) Γ(N, basicOpen r)).map_smul
+      (f.hom.app _).hom _ _⟩, fun i => by ext x; exact congr($(f.1.naturality i).hom x)⟩
+  map_preimage f := rfl
+  preimage_map f := rfl
 
 Depends on / 依赖: FullyFaithful
 -/
@@ -267,7 +307,7 @@ lemma isUnit_algebraMap_end_of_le_basicOpen
         (((Spec R).presheaf.map (homOfLE hf).op) <| algebraMap R _ f) :=
     rfl
   rw [this]; rw [← Module.End.isUnit_iff]
-  exact ((IsLocalizatio
+  exact ((IsLocalization.Away.algebraMap_isUnit _).map _).map _
 
 中文:
 引理 isUnit_algebraMap_end_of_le_basicOpen
@@ -279,7 +319,7 @@ lemma isUnit_algebraMap_end_of_le_basicOpen
         (((Spec R).presheaf.map (homOfLE hf).op) <| algebraMap R _ f) :=
     rfl
   rw [this]; rw [← Module.End.isUnit_iff]
-  exact ((IsLocalizatio
+  exact ((IsLocalization.Away.algebraMap_isUnit _).map _).map _
 
 Depends on / 依赖: IsLocalization, IsLocalization.Away.algebraMap_isUnit, Module, Module.End, Module.End.isUnit_iff, algebraMap, algebraMap_isUnit, homOfLE, isUnit_iff, presheaf, presheaf.map
 -/
@@ -336,7 +376,10 @@ lemma restrictAppIso_smul_Spec
   simp_rw [smul_restrictAppIso_hom_apply, ← ConcreteCategory.comp_apply, Category.assoc]
   have :
       f ≫ (ΓSpecIso S).inv ≫ (Spec S).presheaf.map U.leTop.op ≫ (Hom.appIso (Spec.map f) U).inv =
-        (ΓSpecIso R).inv ≫ (Spec R).presheaf.map (Spec.map f
+        (ΓSpecIso R).inv ≫ (Spec R).presheaf.map (Spec.map f ''ᵁ U).leTop.op := by
+    simp [Iso.cancel_iso_inv_left, Hom.app_eq_appLE]
+    rfl
+  rw [this]
 
 中文:
 引理 restrictAppIso_smul_Spec
@@ -346,7 +389,10 @@ lemma restrictAppIso_smul_Spec
   simp_rw [smul_restrictAppIso_hom_apply, ← ConcreteCategory.comp_apply, Category.assoc]
   have :
       f ≫ (ΓSpecIso S).inv ≫ (Spec S).presheaf.map U.leTop.op ≫ (Hom.appIso (Spec.map f) U).inv =
-        (ΓSpecIso R).inv ≫ (Spec R).presheaf.map (Spec.map f
+        (ΓSpecIso R).inv ≫ (Spec R).presheaf.map (Spec.map f ''ᵁ U).leTop.op := by
+    simp [Iso.cancel_iso_inv_left, Hom.app_eq_appLE]
+    rfl
+  rw [this]
 
 Depends on / 依赖: Category, Category.assoc, ConcreteCategory, ConcreteCategory.comp_apply, Hom.appIso, Hom.app_eq_appLE, Iso.cancel_iso_inv_left, Spec.map, U.leTop.op, appIso, app_eq_appLE, cancel_iso_inv_left, comp_apply, leTop.op, presheaf, presheaf.map, simp_rw, smul_Spec_def, smul_restrictAppIso_hom_apply
 -/
@@ -410,7 +456,7 @@ definition modulesSpecToSheafIso
     (X₁ := (modulesSpecToSheaf.obj (tilde M)).presheaf.obj _)
     { __ := AddEquiv.refl _,
       map_smul' r m := IsScalarTower.algebraMap_smul (M := ((structureSheafInType R M).obj.obj U))
-        ((structureSheafInType R R).obj.obj U) r m }) fu
+        ((structureSheafInType R R).obj.obj U) r m }) fun _ => rfl
 
 中文:
 定义 modulesSpecToSheafIso
@@ -419,7 +465,7 @@ definition modulesSpecToSheafIso
     (X₁ := (modulesSpecToSheaf.obj (tilde M)).presheaf.obj _)
     { __ := AddEquiv.refl _,
       map_smul' r m := IsScalarTower.algebraMap_smul (M := ((structureSheafInType R M).obj.obj U))
-        ((structureSheafInType R R).obj.obj U) r m }) fu
+        ((structureSheafInType R R).obj.obj U) r m }) fun _ => rfl
 
 Depends on / 依赖: AddEquiv, AddEquiv.refl, IsScalarTower, IsScalarTower.algebraMap_smul, LinearEquiv, LinearEquiv.toModuleIso, NatIso, NatIso.ofComponents, algebraMap_smul, map_smul, modulesSpecToSheaf, modulesSpecToSheaf.obj, obj.obj, ofComponents, presheaf, presheaf.obj, structureSheafInType, toModuleIso
 -/
@@ -562,7 +608,7 @@ lemma map_comp
     fun y => DFunLike.congr_fun (IsLocalizedModule.map_comp' y.1.asIdeal.primeCompl
       (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl M)
       (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl N)
-      (LocalizedModule.mkLinearMap y.1.asIdeal.primeC
+      (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl P) _ _) _)
 
 中文:
 引理 map_comp
@@ -573,7 +619,7 @@ lemma map_comp
     fun y => DFunLike.congr_fun (IsLocalizedModule.map_comp' y.1.asIdeal.primeCompl
       (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl M)
       (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl N)
-      (LocalizedModule.mkLinearMap y.1.asIdeal.primeC
+      (LocalizedModule.mkLinearMap y.1.asIdeal.primeCompl P) _ _) _)
 -/
 protected lemma map_comp {M N P : ModuleCat R} (f : M ⟶ N) (g : N ⟶ P) :
     tilde.map (f ≫ g) = tilde.map f ≫ tilde.map g := by
@@ -704,7 +750,31 @@ definition Scheme.Modules.fromTildeΓ
     { app (f : Rᵒᵖ) := by
         refine (ModuleCat.ofHom (IsLocalizedModule.lift (.powers (M := R) f.unop)
           (tilde.toOpen _ (PrimeSpectrum.basicOpen f.unop)).hom
-          ((modulesSpecTo
+          ((modulesSpecToSheaf.obj M).obj.map (homOfLE le_top).op).hom ?_):)
+        rw [Subtype.forall]
+        change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+        simp only [inducedFunctor_obj, Submonoid.powers_le, Submonoid.mem_comap]
+        exact M.isUnit_algebraMap_end_of_le_basicOpen f.unop le_rfl
+      naturality {f g : Rᵒᵖ} i := by
+        let N := (modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤)
+        ext1
+        apply IsLocalizedModule.ext (.powers (M := R) f.unop)
+          (tilde.toOpen _ (PrimeSpectrum.basicOpen (R := R) f.unop)).hom
+        · rw [Subtype.forall]
+          change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+          simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
+          obtain ⟨n, a, e⟩ : exists n, f.unop ∣ g.unop ^ n := by
+            simpa only [Ideal.mem_radical_iff, Ideal.mem_span_singleton] using
+              (basicOpen_le_basicOpen_iff _ _).mp (i.1.hom.le)
+          refine ((Commute.isUnit_mul_iff (b := algebraMap R _ a) (.map (.all _ _) _)).mp ?_).1
+          rw [← map_mul]; rw [← e]; rw [map_pow]
+          exact (M.isUnit_algebraMap_end_of_le_basicOpen g.unop le_rfl).pow n
+        · dsimp [← ModuleCat.hom_comp]
+          rw [tilde.toOpen_res_assoc]
+          ext x
+          dsimp
+          simp only [IsLocalizedModule.lift_apply, ← ModuleCat.comp_apply, ← Functor.map_comp]
+          rfl }⟩
 
 中文:
 定义 概形.Modules.fromTildeΓ
@@ -714,7 +784,31 @@ definition Scheme.Modules.fromTildeΓ
     { app (f : Rᵒᵖ) := by
         refine (ModuleCat.ofHom (IsLocalizedModule.lift (.powers (M := R) f.unop)
           (tilde.toOpen _ (PrimeSpectrum.basicOpen f.unop)).hom
-          ((modulesSpecTo
+          ((modulesSpecToSheaf.obj M).obj.map (homOfLE le_top).op).hom ?_):)
+        rw [Subtype.forall]
+        change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+        simp only [inducedFunctor_obj, Submonoid.powers_le, Submonoid.mem_comap]
+        exact M.isUnit_algebraMap_end_of_le_basicOpen f.unop le_rfl
+      naturality {f g : Rᵒᵖ} i := by
+        let N := (modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤)
+        ext1
+        apply IsLocalizedModule.ext (.powers (M := R) f.unop)
+          (tilde.toOpen _ (PrimeSpectrum.basicOpen (R := R) f.unop)).hom
+        · rw [Subtype.forall]
+          change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+          simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
+          obtain ⟨n, a, e⟩ : exists n, f.unop ∣ g.unop ^ n := by
+            simpa only [Ideal.mem_radical_iff, Ideal.mem_span_singleton] using
+              (basicOpen_le_basicOpen_iff _ _).mp (i.1.hom.le)
+          refine ((Commute.isUnit_mul_iff (b := algebraMap R _ a) (.map (.all _ _) _)).mp ?_).1
+          rw [← map_mul]; rw [← e]; rw [map_pow]
+          exact (M.isUnit_algebraMap_end_of_le_basicOpen g.unop le_rfl).pow n
+        · dsimp [← ModuleCat.hom_comp]
+          rw [tilde.toOpen_res_assoc]
+          ext x
+          dsimp
+          simp only [IsLocalizedModule.lift_apply, ← ModuleCat.comp_apply, ← Functor.map_comp]
+          rfl }⟩
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.lift, IsUnit, IsUnit.submonoid, M.isUnit_algebraMap_end_of_, ModuleCat, ModuleCat.ofHom, PrimeSpectrum, PrimeSpectrum.basicOpen, SpecModulesToSheafFullyFaithful, SpecModulesToSheafFullyFaithful.preimage, Submonoid, Submonoid.mem_comap, Submonoid.powers, Submonoid.powers_le, Subtype, Subtype.forall, TopCat, TopCat.Sheaf.restrictHomEquivHom, basicOpen
 -/
@@ -765,7 +859,12 @@ lemma Scheme.Modules.toOpen_fromTildeΓ_app
       NatTrans.naturality, ← Category.assoc, this, ← Functor.map_comp, ← op_comp, homOfLE_comp]
     simp
   subst hU
-  simp only [fromTildeΓ, ind
+  simp only [fromTildeΓ, inducedFunctor_obj, homOfLE_leOfHom, Functor.FullyFaithful.map_preimage,
+    TopCat.Sheaf.extend_hom_app]
+  ext x
+  refine (IsLocalizedModule.lift_apply (.powers (M := R) 1)
+    (tilde.toOpen _ (PrimeSpectrum.basicOpen (R := R) 1)).hom
+    ((modulesSpecToSheaf.obj M).obj.map (homOfLE le_top).op).hom (by simp) x)
 
 中文:
 引理 概形.Modules.toOpen_fromTildeΓ_app
@@ -776,7 +875,12 @@ lemma Scheme.Modules.toOpen_fromTildeΓ_app
       NatTrans.naturality, ← Category.assoc, this, ← Functor.map_comp, ← op_comp, homOfLE_comp]
     simp
   subst hU
-  simp only [fromTildeΓ, ind
+  simp only [fromTildeΓ, inducedFunctor_obj, homOfLE_leOfHom, Functor.FullyFaithful.map_preimage,
+    TopCat.Sheaf.extend_hom_app]
+  ext x
+  refine (IsLocalizedModule.lift_apply (.powers (M := R) 1)
+    (tilde.toOpen _ (PrimeSpectrum.basicOpen (R := R) 1)).hom
+    ((modulesSpecToSheaf.obj M).obj.map (homOfLE le_top).op).hom (by simp) x)
 
 Depends on / 依赖: Category, Category.assoc, FullyFaithful, Functor, Functor.FullyFaithful.map_preimage, Functor.map_comp, IsLocalizedModule, IsLocalizedModule.lift_apply, NatTrans, NatTrans.naturality, PrimeSpectrum, PrimeSpectrum.basicOpen, TopCat, TopCat.Sheaf.extend_hom_app, basicOpen, extend_hom_app, generalizing, homOfLE, homOfLE_comp, homOfLE_leOfHom
 -/
@@ -810,7 +914,20 @@ definition Scheme.Modules.fromTildeΓNatTrans
     apply CategoryTheory.Sheaf.hom_ext
     apply (TopCat.Sheaf.restrictHomEquivHom _ _ PrimeSpectrum.isBasis_basic_opens).symm.injective
     ext r : 3
-    apply IsLocalizedModule.ext (.powers (M := R) r.uno
+    apply IsLocalizedModule.ext (.powers (M := R) r.unop)
+      (tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤))
+        (PrimeSpectrum.basicOpen (R := R) r.unop)).hom
+    · rw [Subtype.forall]
+      change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+      simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
+      exact N.isUnit_algebraMap_end_of_le_basicOpen r.unop le_rfl
+    dsimp [TopCat.Sheaf.restrictHomEquivHom, Functor.IsCoverDense.restrictHomEquivHom,
+      moduleSpecΓFunctor, Sheaf.forget]
+    simp only [← ModuleCat.hom_comp, Functor.map_comp]
+    congr 1
+    erw [tilde.toOpen_map_app_assoc, toOpen_fromTildeΓ_app N (PrimeSpectrum.basicOpen r.unop),
+      toOpen_fromTildeΓ_app_assoc M (PrimeSpectrum.basicOpen r.unop),
+      ← (modulesSpecToSheaf.map f).hom.naturality]
 
 中文:
 定义 概形.Modules.fromTildeΓ自然数Trans
@@ -821,7 +938,20 @@ definition Scheme.Modules.fromTildeΓNatTrans
     apply CategoryTheory.Sheaf.hom_ext
     apply (TopCat.Sheaf.restrictHomEquivHom _ _ PrimeSpectrum.isBasis_basic_opens).symm.injective
     ext r : 3
-    apply IsLocalizedModule.ext (.powers (M := R) r.uno
+    apply IsLocalizedModule.ext (.powers (M := R) r.unop)
+      (tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (.op ⊤))
+        (PrimeSpectrum.basicOpen (R := R) r.unop)).hom
+    · rw [Subtype.forall]
+      change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+      simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
+      exact N.isUnit_algebraMap_end_of_le_basicOpen r.unop le_rfl
+    dsimp [TopCat.Sheaf.restrictHomEquivHom, Functor.IsCoverDense.restrictHomEquivHom,
+      moduleSpecΓFunctor, Sheaf.forget]
+    simp only [← ModuleCat.hom_comp, Functor.map_comp]
+    congr 1
+    erw [tilde.toOpen_map_app_assoc, toOpen_fromTildeΓ_app N (PrimeSpectrum.basicOpen r.unop),
+      toOpen_fromTildeΓ_app_assoc M (PrimeSpectrum.basicOpen r.unop),
+      ← (modulesSpecToSheaf.map f).hom.naturality]
 
 Depends on / 依赖: functor, tilde.functor
 -/
@@ -882,7 +1012,25 @@ definition tilde.adjunction
     apply CategoryTheory.Sheaf.hom_ext
     apply (TopCat.Sheaf.restrictHomEquivHom _ _ PrimeSpectrum.isBasis_basic_opens).symm.injective
     ext r : 3
-    appl
+    apply IsLocalizedModule.ext (.powers (M := R) r.unop)
+      (toOpen _ (PrimeSpectrum.basicOpen (R := R) r.unop)).hom
+    · rw [Subtype.forall]
+      change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+      simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
+      exact Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen r.unop le_rfl
+    dsimp [toTildeΓNatIso, isoTop,
+      TopCat.Sheaf.restrictHomEquivHom, Functor.IsCoverDense.restrictHomEquivHom,
+      fromTildeΓNatTrans, moduleSpecΓFunctor, Sheaf.forget, sheafToPresheaf]
+    simp only [← ModuleCat.hom_comp, Functor.map_comp]
+    congr 1
+    rw [ObjectProperty.FullSubcategory.comp_hom]
+    dsimp
+    rw [toOpen_map_app_assoc]; rw [toOpen_fromTildeΓ_app]
+    rfl
+  right_triangle_components M := by
+    dsimp [toTildeΓNatIso, fromTildeΓNatTrans, tilde.isoTop, moduleSpecΓFunctor, Sheaf.forget]
+    rw [toOpen_fromTildeΓ_app]
+    exact (modulesSpecToSheaf.obj M).obj.map_id _
 
 中文:
 定义 tilde.adjunction
@@ -894,7 +1042,25 @@ definition tilde.adjunction
     apply CategoryTheory.Sheaf.hom_ext
     apply (TopCat.Sheaf.restrictHomEquivHom _ _ PrimeSpectrum.isBasis_basic_opens).symm.injective
     ext r : 3
-    appl
+    apply IsLocalizedModule.ext (.powers (M := R) r.unop)
+      (toOpen _ (PrimeSpectrum.basicOpen (R := R) r.unop)).hom
+    · rw [Subtype.forall]
+      change Submonoid.powers _ <= (IsUnit.submonoid _).comap _
+      simp only [Submonoid.powers_le, Submonoid.mem_comap, IsUnit.mem_submonoid_iff]
+      exact Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen r.unop le_rfl
+    dsimp [toTildeΓNatIso, isoTop,
+      TopCat.Sheaf.restrictHomEquivHom, Functor.IsCoverDense.restrictHomEquivHom,
+      fromTildeΓNatTrans, moduleSpecΓFunctor, Sheaf.forget, sheafToPresheaf]
+    simp only [← ModuleCat.hom_comp, Functor.map_comp]
+    congr 1
+    rw [ObjectProperty.FullSubcategory.comp_hom]
+    dsimp
+    rw [toOpen_map_app_assoc]; rw [toOpen_fromTildeΓ_app]
+    rfl
+  right_triangle_components M := by
+    dsimp [toTildeΓNatIso, fromTildeΓNatTrans, tilde.isoTop, moduleSpecΓFunctor, Sheaf.forget]
+    rw [toOpen_fromTildeΓ_app]
+    exact (modulesSpecToSheaf.obj M).obj.map_id _
 
 Depends on / 依赖: NatIso.hom
 -/
@@ -1177,7 +1343,10 @@ definition tildeFinsupp
   body: letI H : IsColimit (tilde.functor R).mapCocone (ModuleCat.finsuppCocone R R ι) :=
     isColimitOfPreserves (tilde.functor R) (ModuleCat.finsuppCoconeIsColimit R R ι)
   letI iso : (Discrete.functor fun (_ : ι) => ModuleCat.of R R) ⋙ tilde.functor R ≅
-         Discrete.functor fun _ => SheafOfModules.
+         Discrete.functor fun _ => SheafOfModules.unit.{u} _ :=
+      Discrete.natIso (fun _ => tildeSelf)
+  IsColimit.coconePointUniqueUpToIso
+    ((IsColimit.precomposeHomEquiv iso.symm _).symm H) (coproductIsCoproduct _)
 
 中文:
 定义 tildeFinsupp
@@ -1185,7 +1354,10 @@ definition tildeFinsupp
   定义体: letI H : IsColimit (tilde.functor R).mapCocone (ModuleCat.finsuppCocone R R ι) :=
     isColimitOfPreserves (tilde.functor R) (ModuleCat.finsuppCoconeIsColimit R R ι)
   letI iso : (Discrete.functor fun (_ : ι) => ModuleCat.of R R) ⋙ tilde.functor R ≅
-         Discrete.functor fun _ => SheafOfModules.
+         Discrete.functor fun _ => SheafOfModules.unit.{u} _ :=
+      Discrete.natIso (fun _ => tildeSelf)
+  IsColimit.coconePointUniqueUpToIso
+    ((IsColimit.precomposeHomEquiv iso.symm _).symm H) (coproductIsCoproduct _)
 
 Depends on / 依赖: Discrete, Discrete.functor, Discrete.natIso, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.precomposeHomEquiv, ModuleCat, ModuleCat.finsuppCocone, ModuleCat.finsuppCoconeIsColimit, ModuleCat.of, SheafOfModules, SheafOfModules.unit, coconePointUniqueUpToIso, coproductIsCoproduct, finsuppCocone, finsuppCoconeIsColimit, functor, isColimitOfPreserves, iso.symm, mapCocone
 -/
@@ -1216,7 +1388,18 @@ definition presentationTilde
       (ModuleCat.ofHom (Finsupp.linearCombination (α := t) R (↑)))
       (ModuleCat.ofHom (Finsupp.linearCombination (α := s) (M := M) R (↑))) :=
     (LinearMap.exact_iff.mpr (by simp [Finsupp.range_linearCombination, ht]))
-  refine SheafOfModules.presentationOfIsCoker
+  refine SheafOfModules.presentationOfIsCokernelFree.{u}
+      ((tildeFinsupp t).inv ≫ tilde.map (ModuleCat.ofHom (Finsupp.linearCombination R (↑))) ≫
+        (tildeFinsupp s).hom) ((tildeFinsupp s).inv ≫
+          tilde.map (ModuleCat.ofHom (Finsupp.linearCombination R (↑)))) (by
+    simp only [Category.assoc, Iso.hom_inv_id_assoc, Preadditive.IsIso.comp_left_eq_zero]
+    rw [← tilde.map_comp]; rw [← ModuleCat.ofHom_comp]
+    convert! tilde.map_zero
+    exact congr(ModuleCat.ofHom $(H₁.linearMap_comp_eq_zero))) ?_
+  letI h₁ := ModuleCat.isColimitCokernelCofork _ _ H₁
+    (by simp [← LinearMap.range_eq_top, Finsupp.range_linearCombination, hs])
+  refine IsCokernel.ofIso _ (CokernelCofork.mapIsColimit _ h₁ (tilde.functor R)) _ (tildeFinsupp t)
+    (tildeFinsupp s) (.refl _) (by simp) (by simp)
 
 中文:
 定义 presentationTilde
@@ -1226,7 +1409,18 @@ definition presentationTilde
       (ModuleCat.ofHom (Finsupp.linearCombination (α := t) R (↑)))
       (ModuleCat.ofHom (Finsupp.linearCombination (α := s) (M := M) R (↑))) :=
     (LinearMap.exact_iff.mpr (by simp [Finsupp.range_linearCombination, ht]))
-  refine SheafOfModules.presentationOfIsCoker
+  refine SheafOfModules.presentationOfIsCokernelFree.{u}
+      ((tildeFinsupp t).inv ≫ tilde.map (ModuleCat.ofHom (Finsupp.linearCombination R (↑))) ≫
+        (tildeFinsupp s).hom) ((tildeFinsupp s).inv ≫
+          tilde.map (ModuleCat.ofHom (Finsupp.linearCombination R (↑)))) (by
+    simp only [Category.assoc, Iso.hom_inv_id_assoc, Preadditive.IsIso.comp_left_eq_zero]
+    rw [← tilde.map_comp]; rw [← ModuleCat.ofHom_comp]
+    convert! tilde.map_zero
+    exact congr(ModuleCat.ofHom $(H₁.linearMap_comp_eq_zero))) ?_
+  letI h₁ := ModuleCat.isColimitCokernelCofork _ _ H₁
+    (by simp [← LinearMap.range_eq_top, Finsupp.range_linearCombination, hs])
+  refine IsCokernel.ofIso _ (CokernelCofork.mapIsColimit _ h₁ (tilde.functor R)) _ (tildeFinsupp t)
+    (tildeFinsupp s) (.refl _) (by simp) (by simp)
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Finsupp.range_linearCombination, Function, Function.Exact, LinearMap, LinearMap.exact_iff.mpr, ModuleCat, ModuleCat.ofHom, SheafOfModules, SheafOfModules.presentationOfIsCokernelFree, exact_iff, linearCombination, presentationOfIsCokernelFree, range_linearCombination, tilde.map, tildeFinsupp
 -/
@@ -1299,7 +1493,11 @@ lemma isIso_fromTildeΓ_of_presentation
 let g := (tilde.functor _).preimage (tildeFinsupp _).hom ≫ P.relations.π ≫ kernel.ι _ ≫
     (tildeFinsupp _).inv
   let iso : cokernel ((tilde.functor R).map g) ≅ cokernel (P.relations.π ≫ kernel.ι _) := by
-    refine cokernel.mapIso _ _ (tildeFinsupp _) (tildeFinsupp _
+    refine cokernel.mapIso _ _ (tildeFinsupp _) (tildeFinsupp _) ?_
+    simp only [g, (tilde.functor R).map_preimage]
+    simp
+  exact ⟨cokernel g, ⟨PreservesCokernel.iso (tilde.functor R) g ≪≫ iso ≪≫
+    IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) P.isColimit⟩⟩
 
 中文:
 引理 isIso_fromTildeΓ_of_presentation
@@ -1309,7 +1507,11 @@ let g := (tilde.functor _).preimage (tildeFinsupp _).hom ≫ P.relations.π ≫ 
 let g := (tilde.functor _).preimage (tildeFinsupp _).hom ≫ P.relations.π ≫ kernel.ι _ ≫
     (tildeFinsupp _).inv
   let iso : cokernel ((tilde.functor R).map g) ≅ cokernel (P.relations.π ≫ kernel.ι _) := by
-    refine cokernel.mapIso _ _ (tildeFinsupp _) (tildeFinsupp _
+    refine cokernel.mapIso _ _ (tildeFinsupp _) (tildeFinsupp _) ?_
+    simp only [g, (tilde.functor R).map_preimage]
+    simp
+  exact ⟨cokernel g, ⟨PreservesCokernel.iso (tilde.functor R) g ≪≫ iso ≪≫
+    IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) P.isColimit⟩⟩
 
 Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, P.isColimit, P.relations, PreservesCokernel, PreservesCokernel.iso, coconePointUniqueUpToIso, cokernel, cokernel.mapIso, colimit, colimit.isColimit, functor, isColimit, kernel, mapIso, map_preimage, preimage, relations, tilde.functor, tildeFinsupp
 -/
@@ -1359,7 +1561,8 @@ theorem isLocalizing_of_iso
   proof: by
   intro f
   rw [← IsLocalizedModule.comp_iff_of_bijective_left _ _ <|
-    ConcreteCategory.bijective_of_isIso (φ.inv.hom.app (op (basicOpen f)))]; rw [← ModuleCat.hom_comp]; rw [φ.inv.hom.naturality (basicOpen f).leTop.op]; rw [ModuleCat.hom_comp]; rw [IsLocalizedModule.comp_iff_of_bijective_righ
+    ConcreteCategory.bijective_of_isIso (φ.inv.hom.app (op (basicOpen f)))]; rw [← ModuleCat.hom_comp]; rw [φ.inv.hom.naturality (basicOpen f).leTop.op]; rw [ModuleCat.hom_comp]; rw [IsLocalizedModule.comp_iff_of_bijective_right _ _ ConcreteCategory.bijective_of_isIso _]
+  exact hM f
 
 中文:
 定理 isLocalizing_of_iso
@@ -1367,7 +1570,8 @@ theorem isLocalizing_of_iso
   证明: by
   intro f
   rw [← IsLocalizedModule.comp_iff_of_bijective_left _ _ <|
-    ConcreteCategory.bijective_of_isIso (φ.inv.hom.app (op (basicOpen f)))]; rw [← ModuleCat.hom_comp]; rw [φ.inv.hom.naturality (basicOpen f).leTop.op]; rw [ModuleCat.hom_comp]; rw [IsLocalizedModule.comp_iff_of_bijective_righ
+    ConcreteCategory.bijective_of_isIso (φ.inv.hom.app (op (basicOpen f)))]; rw [← ModuleCat.hom_comp]; rw [φ.inv.hom.naturality (basicOpen f).leTop.op]; rw [ModuleCat.hom_comp]; rw [IsLocalizedModule.comp_iff_of_bijective_right _ _ ConcreteCategory.bijective_of_isIso _]
+  exact hM f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.bijective_of_isIso, IsLocalizedModule, IsLocalizedModule.comp_iff_of_bijective_left, IsLocalizedModule.comp_iff_of_bijective_right, ModuleCat, ModuleCat.hom_comp, basicOpen, bijective_of_isIso, comp_iff_of_bijective_left, comp_iff_of_bijective_right, hom_comp, inv.hom.app, inv.hom.naturality, leTop.op, naturality
 -/
@@ -1441,7 +1645,10 @@ theorem isLocalizing_tilde
   -- `Spec R` and `PrimeSpectrum R`.
   have heq : tilde.toOpen M ⊤ ≫ (modulesSpecToSheaf.obj (tilde M)).obj.map (basicOpen f).leTop.op =
       tilde.toOpen M (basicOpen f) :=
-    tilde.toOpen_res _ _ _ 
+    tilde.toOpen_res _ _ _ _
+  rw [← IsLocalizedModule.comp_iff_of_bijective_right _ _ <|
+    ConcreteCategory.bijective_of_isIso (tilde.toOpen M ⊤)]; rw [← ModuleCat.hom_comp]; rw [heq]
+  infer_instance
 
 中文:
 定理 isLocalizing_tilde
@@ -1452,7 +1659,10 @@ theorem isLocalizing_tilde
   -- `Spec R` and `PrimeSpectrum R`.
   have heq : tilde.toOpen M ⊤ ≫ (modulesSpecToSheaf.obj (tilde M)).obj.map (basicOpen f).leTop.op =
       tilde.toOpen M (basicOpen f) :=
-    tilde.toOpen_res _ _ _ 
+    tilde.toOpen_res _ _ _ _
+  rw [← IsLocalizedModule.comp_iff_of_bijective_right _ _ <|
+    ConcreteCategory.bijective_of_isIso (tilde.toOpen M ⊤)]; rw [← ModuleCat.hom_comp]; rw [heq]
+  infer_instance
 -/
 theorem isLocalizing_tilde (M : ModuleCat R) :
     IsLocalizing (modulesSpecToSheaf.obj (tilde M)) := by
@@ -1478,7 +1688,8 @@ theorem isIso_fromTildeΓ_iff_isLocalizing
     exact isLocalizing_tilde _
   · rw [← isIso_iff_of_reflects_iso _ modulesSpecToSheaf]
     refine isLocalizing_of_isIso_app_top ?_ (isLocalizing_tilde _) h
-    rw [← isIso_com
+    rw [← isIso_comp_left_iff (tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (op ⊤)) ⊤)]; rw [Scheme.Modules.toOpen_fromTildeΓ_app]
+    simpa using IsIso.id _
 
 中文:
 定理 isIso_fromTildeΓ_iff_isLocalizing
@@ -1489,7 +1700,8 @@ theorem isIso_fromTildeΓ_iff_isLocalizing
     exact isLocalizing_tilde _
   · rw [← isIso_iff_of_reflects_iso _ modulesSpecToSheaf]
     refine isLocalizing_of_isIso_app_top ?_ (isLocalizing_tilde _) h
-    rw [← isIso_com
+    rw [← isIso_comp_left_iff (tilde.toOpen ((modulesSpecToSheaf.obj M).presheaf.obj (op ⊤)) ⊤)]; rw [Scheme.Modules.toOpen_fromTildeΓ_app]
+    simpa using IsIso.id _
 
 Depends on / 依赖: IsIso.id, M.fromTilde, Modules, Scheme, Scheme.Modules.toOpen_fromTilde, infer_instance, isIso_comp_left_iff, isIso_iff_of_reflects_iso, isLocalizing_iff_of_iso, isLocalizing_of_isIso_app_top, isLocalizing_tilde, mapIso, modulesSpecToSheaf, modulesSpecToSheaf.mapIso, modulesSpecToSheaf.obj, presheaf, presheaf.obj, tilde.toOpen, toOpen
 -/
@@ -1513,7 +1725,8 @@ definition pushforwardCompModulesSpecToSheafIso
     Functor.isoWhiskerRight (SheafOfModules.pushforwardCompForgetToSheafModuleCat _ _ _
     (initialOpOfTerminal isTerminalTop)) _ ≪≫ Functor.associator _ _ _ ≪≫
     (Functor.isoWhiskerLeft _ (Functor.associator _ _ _)) ≪≫
-    Functor.isoWhiskerLeft _ (Scheme.Modul
+    Functor.isoWhiskerLeft _ (Scheme.Modules.sheafComposePushforwardComp φ) ≪≫
+    (Functor.associator _ _ _).symm
 
 中文:
 定义 pushforwardCompModulesSpecToSheafIso
@@ -1522,7 +1735,8 @@ definition pushforwardCompModulesSpecToSheafIso
     Functor.isoWhiskerRight (SheafOfModules.pushforwardCompForgetToSheafModuleCat _ _ _
     (initialOpOfTerminal isTerminalTop)) _ ≪≫ Functor.associator _ _ _ ≪≫
     (Functor.isoWhiskerLeft _ (Functor.associator _ _ _)) ≪≫
-    Functor.isoWhiskerLeft _ (Scheme.Modul
+    Functor.isoWhiskerLeft _ (Scheme.Modules.sheafComposePushforwardComp φ) ≪≫
+    (Functor.associator _ _ _).symm
 
 Depends on / 依赖: Functor, Functor.associator, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, Modules, Scheme, Scheme.Modules.sheafComposePushforwardComp, SheafOfModules, SheafOfModules.pushforwardCompForgetToSheafModuleCat, associator, initialOpOfTerminal, isTerminalTop, isoWhiskerLeft, isoWhiskerRight, pushforwardCompForgetToSheafModuleCat, sheafComposePushforwardComp
 -/
@@ -1549,7 +1763,7 @@ theorem isLocalizing_pushforward_of_isLocalizing
   have : CommRing ((Spec S).ringCatSheaf.obj.obj ((Opens.map (Spec.map φ).base).op.obj (op ⊤))) :=
     inferInstanceAs (CommRing Γ(Spec S, ⊤))
   algebraize [φ.hom]
-  exact fun f => IsLocalized
+  exact fun f => IsLocalizedModule.restrictScalars_powers f _ (h := h (φ f))
 
 中文:
 定理 isLocalizing_pushforward_of_isLocalizing
@@ -1559,7 +1773,7 @@ theorem isLocalizing_pushforward_of_isLocalizing
   have : CommRing ((Spec S).ringCatSheaf.obj.obj ((Opens.map (Spec.map φ).base).op.obj (op ⊤))) :=
     inferInstanceAs (CommRing Γ(Spec S, ⊤))
   algebraize [φ.hom]
-  exact fun f => IsLocalized
+  exact fun f => IsLocalizedModule.restrictScalars_powers f _ (h := h (φ f))
 
 Depends on / 依赖: CommRing, Functor, Functor.comp_obj, IsLocalizedModule, IsLocalizedModule.restrictScalars_powers, Opens.map, Spec.map, algebraize, comp_obj, isLocalizing_iff_of_iso, op.obj, pushforwardCompModulesSpecToSheafIso, restrictScalars_powers, ringCatSheaf, ringCatSheaf.obj.obj
 -/
@@ -1609,7 +1823,13 @@ instance Scheme.Modules.isQuasicoherent_restrictFunctor
   let α : X.presheaf ⟶ f.opensFunctor.op ⋙ Y.presheaf := { app U := (f.appIso U.unop).inv }
   have hα : IsIso α := NatIso.isIso_of_isIso_app _
   let φ : X.ringCatSheaf ⟶ (f.opensFunctor.sheafPushforwardContinuous _ _ _).obj Y.ringCatSheaf :=
-    ⟨Functor.whiskerRight α (forget₂ CommRingCat RingCa
+    ⟨Functor.whiskerRight α (forget₂ CommRingCat RingCat)⟩
+  have : IsIso φ := by
+    rw [← isIso_iff_of_reflects_iso _ (ObjectProperty.ι _)]
+    dsimp [φ]
+    infer_instance
+  exact SheafOfModules.isQuasicoherent_pushforward_of_isLeftAdjoint.{u}
+    f.opensFunctor φ (Scheme.Modules.restrictUnitIso _)
 
 中文:
 实例 概形.Modules.isQuasicoherent_restrictFunctor
@@ -1618,7 +1838,13 @@ instance Scheme.Modules.isQuasicoherent_restrictFunctor
   let α : X.presheaf ⟶ f.opensFunctor.op ⋙ Y.presheaf := { app U := (f.appIso U.unop).inv }
   have hα : IsIso α := NatIso.isIso_of_isIso_app _
   let φ : X.ringCatSheaf ⟶ (f.opensFunctor.sheafPushforwardContinuous _ _ _).obj Y.ringCatSheaf :=
-    ⟨Functor.whiskerRight α (forget₂ CommRingCat RingCa
+    ⟨Functor.whiskerRight α (forget₂ CommRingCat RingCat)⟩
+  have : IsIso φ := by
+    rw [← isIso_iff_of_reflects_iso _ (ObjectProperty.ι _)]
+    dsimp [φ]
+    infer_instance
+  exact SheafOfModules.isQuasicoherent_pushforward_of_isLeftAdjoint.{u}
+    f.opensFunctor φ (Scheme.Modules.restrictUnitIso _)
 
 Depends on / 依赖: CommRingCat, Functor, Functor.whiskerRight, Modules, NatIso, NatIso.isIso_of_isIso_app, ObjectProperty, RingCat, Scheme, Scheme.Modules.r, SheafOfModules, SheafOfModules.isQuasicoherent_pushforward_of_isLeftAdjoint, U.unop, X.presheaf, X.ringCatSheaf, Y.presheaf, Y.ringCatSheaf, appIso, f.appIso, f.opensFunctor
 -/
@@ -1674,7 +1900,21 @@ lemma Scheme.Modules.exists_isOpenCover_presentation
   obtain ⟨⟨I, W, cov, pres⟩⟩ := SheafOfModules.IsQuasicoherent.nonempty_quasicoherentData (M := M)
   choose κ hsub heq using fun i => Opens.isBasis_iff_cover.mp X.isBasis_affineOpens (W i)
   refine ⟨Σ (i : I), κ i, fun j => j.2, fun i => ?_, ?_, ?_⟩
-  · let u := X.homOfLE (U := i.2) (V := W i.1) 
+  · let u := X.homOfLE (U := i.2) (V := W i.1) (by simp [heq, le_sSup])
+    have : PreservesColimitsOfSize.{u, u} (restrictFunctor u) := inferInstance
+    let F := (overEquiv (W i.1)).functor ⋙ restrictFunctor u
+    let iso : SheafOfModules.overFunctor X.ringCatSheaf _ ⋙ F ≅ restrictFunctor
+      (Scheme.Opens.ι i.2.1) := (Functor.associator _ _ _).symm ≪≫
+        Functor.isoWhiskerRight (Scheme.Modules.overFunctorEquiv _) _ ≪≫
+        (restrictFunctorComp _ _).symm ≪≫ (restrictFunctorCongr (by simp [u]))
+exact SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom
+      (pres i.1).map F (Scheme.Modules.restrictUnitIso _).symm
+  · rw [Opens.coversTop_iff, IsOpenCover] at cov
+    rw [IsOpenCover]; rw [iSup_sigma]; rw [← cov]
+    refine iSup_congr fun i => ?_
+    rw [heq i]; rw [sSup_eq_iSup']
+  · intro j
+    exact hsub _ j.2.2
 
 中文:
 引理 概形.Modules.存在_isOpenCover_presentation
@@ -1683,7 +1923,21 @@ lemma Scheme.Modules.exists_isOpenCover_presentation
   obtain ⟨⟨I, W, cov, pres⟩⟩ := SheafOfModules.IsQuasicoherent.nonempty_quasicoherentData (M := M)
   choose κ hsub heq using fun i => Opens.isBasis_iff_cover.mp X.isBasis_affineOpens (W i)
   refine ⟨Σ (i : I), κ i, fun j => j.2, fun i => ?_, ?_, ?_⟩
-  · let u := X.homOfLE (U := i.2) (V := W i.1) 
+  · let u := X.homOfLE (U := i.2) (V := W i.1) (by simp [heq, le_sSup])
+    have : PreservesColimitsOfSize.{u, u} (restrictFunctor u) := inferInstance
+    let F := (overEquiv (W i.1)).functor ⋙ restrictFunctor u
+    let iso : SheafOfModules.overFunctor X.ringCatSheaf _ ⋙ F ≅ restrictFunctor
+      (Scheme.Opens.ι i.2.1) := (Functor.associator _ _ _).symm ≪≫
+        Functor.isoWhiskerRight (Scheme.Modules.overFunctorEquiv _) _ ≪≫
+        (restrictFunctorComp _ _).symm ≪≫ (restrictFunctorCongr (by simp [u]))
+exact SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom
+      (pres i.1).map F (Scheme.Modules.restrictUnitIso _).symm
+  · rw [Opens.coversTop_iff, IsOpenCover] at cov
+    rw [IsOpenCover]; rw [iSup_sigma]; rw [← cov]
+    refine iSup_congr fun i => ?_
+    rw [heq i]; rw [sSup_eq_iSup']
+  · intro j
+    exact hsub _ j.2.2
 
 Depends on / 依赖: IsQuasicoherent, Opens.isBasis_iff_cover.mp, PreservesColimitsOfSize, SheafOfModules, SheafOfModules.IsQuasicoherent.nonempty_quasicoherentData, SheafOfModules.overFunctor, X.homOfLE, X.isBasis_affineOpens, X.ringCatSheaf, functor, homOfLE, isBasis_affineOpens, isBasis_iff_cover, le_sSup, nonempty_quasicoherentData, overEquiv, overFunctor, restrictFunctor, ringCatSheaf
 -/
@@ -1786,7 +2040,11 @@ lemma Aux.of_le
     simp [← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp, ht]
   uniqueness f hfg t ht := by
     obtain ⟨n, t', ht'⟩ := hV.existence g hg t
-obtain ⟨m, hm⟩ := hV.uniqueness _ (le_trans hfg 
+obtain ⟨m, hm⟩ := hV.uniqueness _ (le_trans hfg hg) t' by
+      rw [← homOfLE_comp hfg hg]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [ht']; rw [M.map_smul_Spec]; rw [ht]
+      simp
+    refine ⟨m, ((M.isSMulRegular_of_le_basicOpen le_rfl).pow n).right_eq_zero_of_smul ?_⟩
+    simp [smul_comm, ← ht', ← M.map_smul_Spec, hm]
 
 中文:
 引理 Aux.of_le
@@ -1797,7 +2055,11 @@ obtain ⟨m, hm⟩ := hV.uniqueness _ (le_trans hfg
     simp [← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp, ht]
   uniqueness f hfg t ht := by
     obtain ⟨n, t', ht'⟩ := hV.existence g hg t
-obtain ⟨m, hm⟩ := hV.uniqueness _ (le_trans hfg 
+obtain ⟨m, hm⟩ := hV.uniqueness _ (le_trans hfg hg) t' by
+      rw [← homOfLE_comp hfg hg]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [ht']; rw [M.map_smul_Spec]; rw [ht]
+      simp
+    refine ⟨m, ((M.isSMulRegular_of_le_basicOpen le_rfl).pow n).right_eq_zero_of_smul ?_⟩
+    simp [smul_comm, ← ht', ← M.map_smul_Spec, hm]
 -/
 private lemma Aux.of_le {M : (Spec R).Modules} {V : (Spec R).Opens} (g : R) (hg : basicOpen g <= V)
     (hV : Aux M V) :
@@ -1826,7 +2088,107 @@ lemma Aux.of_eq_iSup_basicOpen
     .of_le _ (basicOpen_mul_le_left _ _) (h₁ i)
   have hgle (i : ι) : basicOpen (g i) <= V := by rw [hg]; exact le_iSup_of_le _ le_rfl
   have hug (i : ι) (m : Nat) :
-      IsUnit (algebraMap R (Module.End R Γ(M, basicOpen (g i))) (g i ^ m)) :
+      IsUnit (algebraMap R (Module.End R Γ(M, basicOpen (g i))) (g i ^ m)) := by
+    rw [map_pow]
+    exact (Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen (g i) le_rfl).pow m
+  -- We show existence and uniqueness separately.
+  refine ⟨fun f hf s => ?_, fun f hf t hs => ?_⟩
+  · have hfgi (i : ι) : basicOpen (f * g i) <= basicOpen (g i) := basicOpen_mul_le_right f (g i)
+    let s' (i : ι) : Γ(M, basicOpen (f * g i)) :=
+      M.presheaf.map (homOfLE <| basicOpen_mul_le_left f (g i)).op s
+    /- By `h₁`, up to a factor of `f ^ N`, the restrictions of `s` to `D(f) ∩ D(gᵢ)` lift
+    to sections `tᵢ` over `D(gᵢ)`. -/
+    obtain ⟨N, t, ht⟩ : exists (N : Nat) (t : forall i, Γ(M, basicOpen (g i))),
+        forall i, f ^ N • s' i = M.presheaf.map (homOfLE (basicOpen_mul_le_right f (g i))).op (t i) := by
+      have (i : ι) : exists (n : Nat) (t : Γ(M, basicOpen (g i))),
+          f ^ n • s' i = M.presheaf.map (homOfLE (hfgi i)).op t := by
+        obtain ⟨n, t', ht'⟩ := (h₁ i).existence (f * g i) (hfgi i) (s' i)
+        rw [mul_pow]; rw [mul_smul]; rw [smul_comm] at ht'
+        obtain ⟨ψ, hψ⟩ := IsUnit.exists_right_inv (hug i n)
+        use n, ψ t'
+        apply (M.isSMulRegular_of_le_basicOpen (basicOpen_mul_le_right f (g i))).pow n
+        dsimp
+        rw [← ht']; rw [← Scheme.Modules.map_smul_Spec]
+        congr 1
+        exact congr($hψ t').symm
+      choose n t' ht' using this
+      have (i : ι) : n i <= ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
+      have hN (i : ι) : ⨆ i, n i = ((⨆ i, n i) - n i) + n i := by grind
+      refine ⟨⨆ i, n i, fun i => f ^ ((⨆ i, n i) - n i) • t' i, fun i => ?_⟩
+      conv_lhs => rw [hN i]
+      rw [pow_add]; rw [mul_smul]; rw [ht']; rw [M.map_smul_Spec]
+    /- By `h₂`, up to a factor of `f ^ K`, the restrictions of `tᵢ` and `tⱼ` to
+    to `D(gᵢ) ∩ D(gⱼ)` agree. -/
+    obtain ⟨K, hK⟩ : exists (K : Nat), forall (i j : ι),
+        M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (f ^ K • t i) =
+          M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (f ^ K • t j) := by
+      have (i j : ι) : exists (m : Nat),
+          M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (f ^ m • t i) =
+            M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (f ^ m • t j) := by
+        have := (h₂ i j).uniqueness (f * (g i * g j)) (basicOpen_mul_le_right _ _)
+          (M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (t i) -
+            M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (t j)) ?_
+        · obtain ⟨m, hm⟩ := this
+          use m
+          apply (M.isSMulRegular_of_le_basicOpen le_rfl).pow m
+          simpa [M.map_smul_Spec _ (f ^ m), ← mul_smul, ← mul_smul, ← mul_pow, ← mul_comm f,
+            smul_sub, sub_eq_zero] using hm
+        · have hfgigi : basicOpen (f * (g i * g j)) <= basicOpen (f * g i) := by
+            rw [← mul_assoc]
+            exact basicOpen_mul_le_left _ _
+          have hfgigj : basicOpen (f * (g i * g j)) <= basicOpen (f * g j) := by
+            rw [mul_comm (g i) (g j)]; rw [← mul_assoc]
+            exact basicOpen_mul_le_left _ _
+          rw [map_sub]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [homOfLE_comp]; rw [← homOfLE_comp hfgigi (hfgi i)]; rw [← homOfLE_comp hfgigj (hfgi j)]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [← ht i]; rw [M.map_smul_Spec]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [← ht j]; rw [M.map_smul_Spec]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]
+          simp
+      choose m hm using this
+      let K := ⨆ i, ⨆ j, m i j
+      refine ⟨K, fun i j => ?_⟩
+      have : m i j <= K :=
+        le_ciSup_of_le (Finite.bddAbove_range _) i (le_ciSup (Finite.bddAbove_range _) _)
+      have : K = (K - m i j) + m i j := by lia
+      rw [this]; rw [pow_add]; rw [mul_smul]; rw [mul_smul]; rw [M.map_smul_Spec]; rw [M.map_smul_Spec _ (f ^ (K - m i j))]; rw [hm i j]
+    -- So up to a factor of `f ^ (N + K)`, the `tᵢ` glue.
+    refine ⟨N + K, ?_⟩
+    have := TopCat.Sheaf.existsUnique_gluing' ⟨_, M.isSheaf⟩ (fun i => basicOpen (g i)) V
+      (fun i => homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl)) (by simp [hg])
+      (fun i => f ^ K • t i) ?_
+    · obtain ⟨a, ha, -⟩ := this
+      use a
+      refine TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i => basicOpen (f * g i)) _
+          (fun i => homOfLE (basicOpen_mul_le_left f (g i))) ?_ _ _ ?_
+      · rw [left_eq_inf.mpr hf, hg, inf_iSup_eq]
+        simp_rw [basicOpen_mul]
+        exact le_rfl
+      · intro i
+        rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [← homOfLE_comp (basicOpen_mul_le_right _ _) (hgle i)]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [M.map_smul_Spec]; rw [ha]; rw [M.map_smul_Spec]; rw [pow_add]; rw [mul_smul]; rw [smul_comm]; rw [ht i]
+    · intro i j
+      have : Function.Injective (M.presheaf.map (eqToHom <| (basicOpen_mul (g i) (g j))).op) :=
+        ConcreteCategory.injective_of_mono_of_preservesPullback _
+      apply this
+      dsimp [Opens.infLELeft, Opens.infLERight]
+      simp_rw [← M.presheaf.map_comp_apply, ← op_comp, eqToHom_comp_homOfLE]
+      exact hK i j
+  · have (i : ι) : exists (n : Nat), M.presheaf.map (homOfLE (hgle i)).op (f ^ n • t) = 0 := by
+      have := (h₁ i).uniqueness (f * g i) (basicOpen_mul_le_right f (g i))
+        (M.presheaf.map (homOfLE (hgle i)).op t) ?_
+      · obtain ⟨n, hn⟩ := this
+        use n
+        rw [mul_pow]; rw [mul_comm]; rw [mul_smul]; rw [← Scheme.Modules.map_smul_Spec] at hn
+        exact ((M.isSMulRegular_of_le_basicOpen le_rfl).pow n).right_eq_zero_of_smul hn
+      · rw [← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp,
+          ← homOfLE_comp ((basicOpen_mul_le_left f (g i))) hf, op_comp, M.presheaf.map_comp_apply]
+        simp [hs]
+    choose n hn using this
+    use ⨆ i, n i
+    apply TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i => basicOpen (g i)) _
+      (fun i => homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl))
+    · simp [hg]
+    · intro i
+      have : n i <= ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
+      have : ⨆ i, n i = ((⨆ i, n i) - n i) + n i := by lia
+      rw [this]; rw [pow_add]; rw [mul_smul]; rw [Scheme.Modules.map_smul_Spec]; rw [hn i]
+      simp
 
 中文:
 引理 Aux.of_eq_iSup_basicOpen
@@ -1836,7 +2198,107 @@ lemma Aux.of_eq_iSup_basicOpen
     .of_le _ (basicOpen_mul_le_left _ _) (h₁ i)
   have hgle (i : ι) : basicOpen (g i) <= V := by rw [hg]; exact le_iSup_of_le _ le_rfl
   have hug (i : ι) (m : Nat) :
-      IsUnit (algebraMap R (Module.End R Γ(M, basicOpen (g i))) (g i ^ m)) :
+      IsUnit (algebraMap R (Module.End R Γ(M, basicOpen (g i))) (g i ^ m)) := by
+    rw [map_pow]
+    exact (Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen (g i) le_rfl).pow m
+  -- We show existence and uniqueness separately.
+  refine ⟨fun f hf s => ?_, fun f hf t hs => ?_⟩
+  · have hfgi (i : ι) : basicOpen (f * g i) <= basicOpen (g i) := basicOpen_mul_le_right f (g i)
+    let s' (i : ι) : Γ(M, basicOpen (f * g i)) :=
+      M.presheaf.map (homOfLE <| basicOpen_mul_le_left f (g i)).op s
+    /- By `h₁`, up to a factor of `f ^ N`, the restrictions of `s` to `D(f) ∩ D(gᵢ)` lift
+    to sections `tᵢ` over `D(gᵢ)`. -/
+    obtain ⟨N, t, ht⟩ : exists (N : Nat) (t : forall i, Γ(M, basicOpen (g i))),
+        forall i, f ^ N • s' i = M.presheaf.map (homOfLE (basicOpen_mul_le_right f (g i))).op (t i) := by
+      have (i : ι) : exists (n : Nat) (t : Γ(M, basicOpen (g i))),
+          f ^ n • s' i = M.presheaf.map (homOfLE (hfgi i)).op t := by
+        obtain ⟨n, t', ht'⟩ := (h₁ i).existence (f * g i) (hfgi i) (s' i)
+        rw [mul_pow]; rw [mul_smul]; rw [smul_comm] at ht'
+        obtain ⟨ψ, hψ⟩ := IsUnit.exists_right_inv (hug i n)
+        use n, ψ t'
+        apply (M.isSMulRegular_of_le_basicOpen (basicOpen_mul_le_right f (g i))).pow n
+        dsimp
+        rw [← ht']; rw [← Scheme.Modules.map_smul_Spec]
+        congr 1
+        exact congr($hψ t').symm
+      choose n t' ht' using this
+      have (i : ι) : n i <= ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
+      have hN (i : ι) : ⨆ i, n i = ((⨆ i, n i) - n i) + n i := by grind
+      refine ⟨⨆ i, n i, fun i => f ^ ((⨆ i, n i) - n i) • t' i, fun i => ?_⟩
+      conv_lhs => rw [hN i]
+      rw [pow_add]; rw [mul_smul]; rw [ht']; rw [M.map_smul_Spec]
+    /- By `h₂`, up to a factor of `f ^ K`, the restrictions of `tᵢ` and `tⱼ` to
+    to `D(gᵢ) ∩ D(gⱼ)` agree. -/
+    obtain ⟨K, hK⟩ : exists (K : Nat), forall (i j : ι),
+        M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (f ^ K • t i) =
+          M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (f ^ K • t j) := by
+      have (i j : ι) : exists (m : Nat),
+          M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (f ^ m • t i) =
+            M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (f ^ m • t j) := by
+        have := (h₂ i j).uniqueness (f * (g i * g j)) (basicOpen_mul_le_right _ _)
+          (M.presheaf.map (homOfLE (basicOpen_mul_le_left (g i) (g j))).op (t i) -
+            M.presheaf.map (homOfLE (basicOpen_mul_le_right (g i) (g j))).op (t j)) ?_
+        · obtain ⟨m, hm⟩ := this
+          use m
+          apply (M.isSMulRegular_of_le_basicOpen le_rfl).pow m
+          simpa [M.map_smul_Spec _ (f ^ m), ← mul_smul, ← mul_smul, ← mul_pow, ← mul_comm f,
+            smul_sub, sub_eq_zero] using hm
+        · have hfgigi : basicOpen (f * (g i * g j)) <= basicOpen (f * g i) := by
+            rw [← mul_assoc]
+            exact basicOpen_mul_le_left _ _
+          have hfgigj : basicOpen (f * (g i * g j)) <= basicOpen (f * g j) := by
+            rw [mul_comm (g i) (g j)]; rw [← mul_assoc]
+            exact basicOpen_mul_le_left _ _
+          rw [map_sub]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [homOfLE_comp]; rw [← homOfLE_comp hfgigi (hfgi i)]; rw [← homOfLE_comp hfgigj (hfgi j)]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [← ht i]; rw [M.map_smul_Spec]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [← ht j]; rw [M.map_smul_Spec]; rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]
+          simp
+      choose m hm using this
+      let K := ⨆ i, ⨆ j, m i j
+      refine ⟨K, fun i j => ?_⟩
+      have : m i j <= K :=
+        le_ciSup_of_le (Finite.bddAbove_range _) i (le_ciSup (Finite.bddAbove_range _) _)
+      have : K = (K - m i j) + m i j := by lia
+      rw [this]; rw [pow_add]; rw [mul_smul]; rw [mul_smul]; rw [M.map_smul_Spec]; rw [M.map_smul_Spec _ (f ^ (K - m i j))]; rw [hm i j]
+    -- So up to a factor of `f ^ (N + K)`, the `tᵢ` glue.
+    refine ⟨N + K, ?_⟩
+    have := TopCat.Sheaf.existsUnique_gluing' ⟨_, M.isSheaf⟩ (fun i => basicOpen (g i)) V
+      (fun i => homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl)) (by simp [hg])
+      (fun i => f ^ K • t i) ?_
+    · obtain ⟨a, ha, -⟩ := this
+      use a
+      refine TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i => basicOpen (f * g i)) _
+          (fun i => homOfLE (basicOpen_mul_le_left f (g i))) ?_ _ _ ?_
+      · rw [left_eq_inf.mpr hf, hg, inf_iSup_eq]
+        simp_rw [basicOpen_mul]
+        exact le_rfl
+      · intro i
+        rw [← M.presheaf.map_comp_apply]; rw [← op_comp]; rw [homOfLE_comp]; rw [← homOfLE_comp (basicOpen_mul_le_right _ _) (hgle i)]; rw [op_comp]; rw [M.presheaf.map_comp_apply]; rw [M.map_smul_Spec]; rw [ha]; rw [M.map_smul_Spec]; rw [pow_add]; rw [mul_smul]; rw [smul_comm]; rw [ht i]
+    · intro i j
+      have : Function.Injective (M.presheaf.map (eqToHom <| (basicOpen_mul (g i) (g j))).op) :=
+        ConcreteCategory.injective_of_mono_of_preservesPullback _
+      apply this
+      dsimp [Opens.infLELeft, Opens.infLERight]
+      simp_rw [← M.presheaf.map_comp_apply, ← op_comp, eqToHom_comp_homOfLE]
+      exact hK i j
+  · have (i : ι) : exists (n : Nat), M.presheaf.map (homOfLE (hgle i)).op (f ^ n • t) = 0 := by
+      have := (h₁ i).uniqueness (f * g i) (basicOpen_mul_le_right f (g i))
+        (M.presheaf.map (homOfLE (hgle i)).op t) ?_
+      · obtain ⟨n, hn⟩ := this
+        use n
+        rw [mul_pow]; rw [mul_comm]; rw [mul_smul]; rw [← Scheme.Modules.map_smul_Spec] at hn
+        exact ((M.isSMulRegular_of_le_basicOpen le_rfl).pow n).right_eq_zero_of_smul hn
+      · rw [← M.presheaf.map_comp_apply, ← op_comp, homOfLE_comp,
+          ← homOfLE_comp ((basicOpen_mul_le_left f (g i))) hf, op_comp, M.presheaf.map_comp_apply]
+        simp [hs]
+    choose n hn using this
+    use ⨆ i, n i
+    apply TopCat.Sheaf.eq_of_locally_eq' ⟨_, M.isSheaf⟩ (fun i => basicOpen (g i)) _
+      (fun i => homOfLE (by rw [hg]; exact le_iSup_of_le _ le_rfl))
+    · simp [hg]
+    · intro i
+      have : n i <= ⨆ i, n i := le_ciSup (Finite.bddAbove_range _) _
+      have : ⨆ i, n i = ((⨆ i, n i) - n i) + n i := by lia
+      rw [this]; rw [pow_add]; rw [mul_smul]; rw [Scheme.Modules.map_smul_Spec]; rw [hn i]
+      simp
 -/
 private lemma Aux.of_eq_iSup_basicOpen {M : (Spec R).Modules} (V : (Spec R).Opens)
     {ι : Type*} [Finite ι] (g : ι -> R) (hg : V = ⨆ i, basicOpen (g i))
@@ -1959,7 +2421,17 @@ lemma isLocalizing_iff_aux
   refine ⟨fun h => ?_, fun h f => IsLocalizedModule.Away.mk_of_addCommGroup ?_ ?_ ?_⟩
   · have hf (f : R) : IsLocalizedModule.Away f (φ f) := h f
     refine ⟨fun f hle s => ?_, fun f hle s hs => ?_⟩
-    · obtain ⟨n
+    · obtain ⟨n, y, hy⟩ := (hf f).surj _ _ s
+      use n, y, hy.symm
+    · obtain ⟨⟨_, n, rfl⟩, hn⟩ := (IsLocalizedModule.eq_zero_iff (.powers f) (φ f)).mp hs
+      use n, hn
+  · exact Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen f le_rfl
+  · intro x
+    obtain ⟨n, t, ht⟩ := h.existence _ _ x
+    use n, t, ht.symm
+  · intro x hx
+    obtain ⟨n, hn⟩ := h.uniqueness _ _ _ hx
+    use n, hn
 
 中文:
 引理 isLocalizing_iff_aux
@@ -1969,7 +2441,17 @@ lemma isLocalizing_iff_aux
   refine ⟨fun h => ?_, fun h f => IsLocalizedModule.Away.mk_of_addCommGroup ?_ ?_ ?_⟩
   · have hf (f : R) : IsLocalizedModule.Away f (φ f) := h f
     refine ⟨fun f hle s => ?_, fun f hle s hs => ?_⟩
-    · obtain ⟨n
+    · obtain ⟨n, y, hy⟩ := (hf f).surj _ _ s
+      use n, y, hy.symm
+    · obtain ⟨⟨_, n, rfl⟩, hn⟩ := (IsLocalizedModule.eq_zero_iff (.powers f) (φ f)).mp hs
+      use n, hn
+  · exact Scheme.Modules.isUnit_algebraMap_end_of_le_basicOpen f le_rfl
+  · intro x
+    obtain ⟨n, t, ht⟩ := h.existence _ _ x
+    use n, t, ht.symm
+  · intro x hx
+    obtain ⟨n, hn⟩ := h.uniqueness _ _ _ hx
+    use n, hn
 -/
 private lemma isLocalizing_iff_aux (M : (Spec R).Modules) :
     IsLocalizing (modulesSpecToSheaf.obj M) ↔ Aux M ⊤ := by
@@ -2003,7 +2485,33 @@ CommRingCat.ofHom algebraMap R _
   set ψ : Spec (.of <| Localization.Away g) ⟶ Spec (.of R) := Spec.map a
   set M' : (Spec (.of <| Localization.Away g)).Modules := M.restrict ψ
   have heq (f : R) (hf : basicOpen f <= basicOpen g) :
-      basic
+      basicOpen f = ψ ''ᵁ basicOpen (a f) := by
+    rw [← SpecMap_preimage_basicOpen]; rw [Scheme.Hom.image_preimage_eq_opensRange_inf]
+    simp [a, ψ, hf]
+  let iso : Γ(M.restrict ψ, ⊤) ≅ Γ(M, basicOpen g) :=
+    M.restrictAppIso _ _ ≪≫ M.presheaf.mapIso (eqToIso <| by simp [ψ, a]).op
+  let e (f : R) (hf : basicOpen f <= basicOpen g) : Γ(M', basicOpen (a f)) ≅ Γ(M, basicOpen f) :=
+    M.restrictAppIso ψ (basicOpen (a f)) ≪≫ M.presheaf.mapIso (eqToIso <| heq f hf).op
+  refine ⟨fun f hf s => ?_, fun f hf t ht => ?_⟩
+  · obtain ⟨n, t, ht⟩ := h.existence (a f) le_top ((e _ hf).inv s)
+    use n, iso.hom t
+    have := congr((e _ hf).hom $ht)
+    dsimp [M'] at this
+    rw [← ConcreteCategory.comp_apply] at this
+    simp only [homOfLE_leOfHom, Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, eqToIso.hom,
+      eqToHom_op, Iso.trans_inv, Functor.mapIso_inv, Iso.op_inv, eqToIso.inv, e, iso] at this ⊢
+    simp only [homOfLE_leOfHom, Scheme.Modules.map_restrictAppIso_hom_assoc, AddCommGrpCat.hom_comp,
+      AddMonoidHom.coe_comp, Function.comp_apply, ← map_pow, ψ] at this
+    rw [Scheme.Modules.restrictAppIso_smul_Spec] at this
+    simpa [← Functor.map_comp_apply, eqToHom_comp_homOfLE_op, homOfLE_op_comp_eqToHom] using this
+· obtain ⟨n, hn⟩ := h.uniqueness (a f) le_top (iso.inv t) by
+      simpa [M', iso, ← M.presheaf.map_comp_apply, homOfLE_op_comp_eqToHom, e] using
+        congr((e _ hf).inv $ht)
+    use n
+    have := congr(iso.hom $hn)
+    dsimp [iso, ψ] at this
+    rw [eqToHom_op]; rw [map_zero]; rw [← map_pow]; rw [Scheme.Modules.restrictAppIso_smul_Spec]; rw [M.map_smul_Spec]; rw [Iso.inv_hom_id_apply] at this
+    simpa using this
 
 中文:
 引理 aux_basicOpen_of_aux_restrict
@@ -2014,7 +2522,33 @@ CommRingCat.ofHom algebraMap R _
   set ψ : Spec (.of <| Localization.Away g) ⟶ Spec (.of R) := Spec.map a
   set M' : (Spec (.of <| Localization.Away g)).Modules := M.restrict ψ
   have heq (f : R) (hf : basicOpen f <= basicOpen g) :
-      basic
+      basicOpen f = ψ ''ᵁ basicOpen (a f) := by
+    rw [← SpecMap_preimage_basicOpen]; rw [Scheme.Hom.image_preimage_eq_opensRange_inf]
+    simp [a, ψ, hf]
+  let iso : Γ(M.restrict ψ, ⊤) ≅ Γ(M, basicOpen g) :=
+    M.restrictAppIso _ _ ≪≫ M.presheaf.mapIso (eqToIso <| by simp [ψ, a]).op
+  let e (f : R) (hf : basicOpen f <= basicOpen g) : Γ(M', basicOpen (a f)) ≅ Γ(M, basicOpen f) :=
+    M.restrictAppIso ψ (basicOpen (a f)) ≪≫ M.presheaf.mapIso (eqToIso <| heq f hf).op
+  refine ⟨fun f hf s => ?_, fun f hf t ht => ?_⟩
+  · obtain ⟨n, t, ht⟩ := h.existence (a f) le_top ((e _ hf).inv s)
+    use n, iso.hom t
+    have := congr((e _ hf).hom $ht)
+    dsimp [M'] at this
+    rw [← ConcreteCategory.comp_apply] at this
+    simp only [homOfLE_leOfHom, Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, eqToIso.hom,
+      eqToHom_op, Iso.trans_inv, Functor.mapIso_inv, Iso.op_inv, eqToIso.inv, e, iso] at this ⊢
+    simp only [homOfLE_leOfHom, Scheme.Modules.map_restrictAppIso_hom_assoc, AddCommGrpCat.hom_comp,
+      AddMonoidHom.coe_comp, Function.comp_apply, ← map_pow, ψ] at this
+    rw [Scheme.Modules.restrictAppIso_smul_Spec] at this
+    simpa [← Functor.map_comp_apply, eqToHom_comp_homOfLE_op, homOfLE_op_comp_eqToHom] using this
+· obtain ⟨n, hn⟩ := h.uniqueness (a f) le_top (iso.inv t) by
+      simpa [M', iso, ← M.presheaf.map_comp_apply, homOfLE_op_comp_eqToHom, e] using
+        congr((e _ hf).inv $ht)
+    use n
+    have := congr(iso.hom $hn)
+    dsimp [iso, ψ] at this
+    rw [eqToHom_op]; rw [map_zero]; rw [← map_pow]; rw [Scheme.Modules.restrictAppIso_smul_Spec]; rw [M.map_smul_Spec]; rw [Iso.inv_hom_id_apply] at this
+    simpa using this
 -/
 private lemma aux_basicOpen_of_aux_restrict (M : (Spec R).Modules) (g : R)
     (h : Aux (M.restrict <|
@@ -2069,7 +2603,23 @@ instance Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent
   obtain ⟨ι, U, pres, hU, hU'⟩ := M.exists_isOpenCover_presentation
   obtain ⟨s, hs⟩ := hU.exists_finite_of_compactSpace
   choose κ hκ a ha using fun i : s =>
-    PrimeSpectrum.isBasis_basic_opens.exists_iSup_eq_of_isCompact (U i
+    PrimeSpectrum.isBasis_basic_opens.exists_iSup_eq_of_isCompact (U i) (hU' i).isCompact
+  refine Aux.of_eq_iSup_basicOpen _ (fun i : Sigma κ => a _ i.2) ?_ ?_
+  · rw [IsOpenCover] at hs
+    rw [eq_comm]; rw [iSup_sigma]; rw [← hs]
+    exact iSup_congr fun i => (ha i).symm
+  · intro i
+    let t := (Spec R).homOfLE (U := PrimeSpectrum.basicOpen (a _ i.2)) (V := U i.1)
+      (by rw [ha]; exact le_iSup_of_le _ le_rfl)
+    let iso : restrictFunctor (U i.1).ι ⋙ restrictFunctor ((basicOpenIsoSpecAway _).inv ≫ t) ≅
+        restrictFunctor (Spec.map (CommRingCat.ofHom <| algebraMap _ _)) :=
+      (restrictFunctorComp _ _).symm ≪≫
+        restrictFunctorCongr (by simp [t, basicOpenIsoSpecAway])
+let pres := SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom
+      presentationRestrict ((basicOpenIsoSpecAway _).inv ≫ t) (pres i.1)
+    have : IsIso _ := isIso_fromTildeΓ_of_presentation (M.restrict _) pres
+    rw [isIso_fromTildeΓ_iff_isLocalizing]; rw [isLocalizing_iff_aux] at this
+    exact aux_basicOpen_of_aux_restrict _ _ this
 
 中文:
 实例 概形.Modules.isIso_fromTildeΓ_of_isQuasicoherent
@@ -2079,7 +2629,23 @@ instance Scheme.Modules.isIso_fromTildeΓ_of_isQuasicoherent
   obtain ⟨ι, U, pres, hU, hU'⟩ := M.exists_isOpenCover_presentation
   obtain ⟨s, hs⟩ := hU.exists_finite_of_compactSpace
   choose κ hκ a ha using fun i : s =>
-    PrimeSpectrum.isBasis_basic_opens.exists_iSup_eq_of_isCompact (U i
+    PrimeSpectrum.isBasis_basic_opens.exists_iSup_eq_of_isCompact (U i) (hU' i).isCompact
+  refine Aux.of_eq_iSup_basicOpen _ (fun i : Sigma κ => a _ i.2) ?_ ?_
+  · rw [IsOpenCover] at hs
+    rw [eq_comm]; rw [iSup_sigma]; rw [← hs]
+    exact iSup_congr fun i => (ha i).symm
+  · intro i
+    let t := (Spec R).homOfLE (U := PrimeSpectrum.basicOpen (a _ i.2)) (V := U i.1)
+      (by rw [ha]; exact le_iSup_of_le _ le_rfl)
+    let iso : restrictFunctor (U i.1).ι ⋙ restrictFunctor ((basicOpenIsoSpecAway _).inv ≫ t) ≅
+        restrictFunctor (Spec.map (CommRingCat.ofHom <| algebraMap _ _)) :=
+      (restrictFunctorComp _ _).symm ≪≫
+        restrictFunctorCongr (by simp [t, basicOpenIsoSpecAway])
+let pres := SheafOfModules.Presentation.ofIsIso.{u, u, u} (iso.app M).hom
+      presentationRestrict ((basicOpenIsoSpecAway _).inv ≫ t) (pres i.1)
+    have : IsIso _ := isIso_fromTildeΓ_of_presentation (M.restrict _) pres
+    rw [isIso_fromTildeΓ_iff_isLocalizing]; rw [isLocalizing_iff_aux] at this
+    exact aux_basicOpen_of_aux_restrict _ _ this
 
 Depends on / 依赖: Aux.of_eq_iSup_basicOpen, IsOpenCover, M.exists_isOpenCover_presentation, PrimeSpectrum, PrimeSpectrum.isBasis_basic_opens.exists_iSup_eq_of_isCompact, eq_comm, exists_finite_of_compactSpace, exists_iSup_eq_of_isCompact, exists_isOpenCover_presentation, hU.exists_finite_of_compactSpace, iSup_congr, iSup_sigma, isBasis_basic_opens, isCompact, isLocalizing_iff_aux, of_eq_iSup_basicOpen
 -/
@@ -2190,7 +2756,13 @@ definition tildeEquiv
   inverse := ObjectProperty.ι _ ⋙ moduleSpecΓFunctor (R := R)
   unitIso := tilde.toTildeΓNatIso
   counitIso :=
-    haveI (M : (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).FullS
+    haveI (M : (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).FullSubcategory) :
+      IsIso (Scheme.Modules.fromTildeΓ M.obj) := inferInstance
+    NatIso.ofComponents
+      (fun M => ObjectProperty.isoMk _ (asIso <| Scheme.Modules.fromTildeΓ M.obj))
+      fun f => ObjectProperty.hom_ext _ (tilde.adjunction (R := R).counit.naturality f.hom)
+  functor_unitIso_comp M :=
+    ObjectProperty.hom_ext _ (tilde.adjunction (R := R).left_triangle_components M)
 
 中文:
 定义 tildeEquiv
@@ -2201,7 +2773,13 @@ definition tildeEquiv
   inverse := ObjectProperty.ι _ ⋙ moduleSpecΓFunctor (R := R)
   unitIso := tilde.toTildeΓNatIso
   counitIso :=
-    haveI (M : (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).FullS
+    haveI (M : (SheafOfModules.isQuasicoherent (Spec R).ringCatSheaf).FullSubcategory) :
+      IsIso (Scheme.Modules.fromTildeΓ M.obj) := inferInstance
+    NatIso.ofComponents
+      (fun M => ObjectProperty.isoMk _ (asIso <| Scheme.Modules.fromTildeΓ M.obj))
+      fun f => ObjectProperty.hom_ext _ (tilde.adjunction (R := R).counit.naturality f.hom)
+  functor_unitIso_comp M :=
+    ObjectProperty.hom_ext _ (tilde.adjunction (R := R).left_triangle_components M)
 
 Depends on / 依赖: FullSubcategory, M.obj, Modules, NatIso, NatIso.ofComponents, ObjectProperty, ObjectProperty.hom_ext, ObjectProperty.isoMk, ObjectProperty.lift, Scheme, Scheme.Modules.fromTilde, SheafOfModules, SheafOfModules.isQuasicoherent, adjunctio, counitIso, functor, hom_ext, infer_instance, inverse, isQuasicoherent
 -/

@@ -140,7 +140,18 @@ theorem ramificationIdx_pos
   apply ENat.toNat_pos
   · rw [← pos_iff_ne_zero, Module.length_pos_iff, Submodule.Quotient.nontrivial_iff,
       IsScalarTower.algebraMap_eq R S, ← map_map, ← lt_top_iff_ne_top]
-    grw [map_mono map_comap_le, Loc
+    grw [map_mono map_comap_le, Localization.AtPrime.map_eq_maximalIdeal]
+    exact (IsLocalRing.maximalIdeal.isMaximal _).lt_top
+  · let r := PrimeSpectrum.primesOverOrderIsoFiber R S p (primesOver.mk p q)
+    have : q = r.1.comap Algebra.TensorProduct.includeRight := by
+      rw [← PrimeSpectrum.coe_primesOverOrderIsoFiber_symm_apply]; rw [OrderIso.symm_apply_apply]
+    let := Localization.AtPrime.algebraOfLiesOver p (r.1.comap Algebra.TensorProduct.includeRight)
+    have : IsArtinianRing (Sq ⧸ map (algebraMap R Sq) p) := by
+      convert (Fiber.localizationAlgEquivQuotient p r.1).toRingEquiv.isArtinianRing
+    rwa [Module.length_eq_of_surjective (R := Sq ⧸ p.map (algebraMap R Sq)) Quotient.mk_surjective,
+      Module.length_ne_top_iff, ← isArtinianRing_iff_isFiniteLength]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_pos := ramificationIdx_pos
 
 中文:
 定理 ramificationIdx_pos
@@ -153,7 +164,18 @@ theorem ramificationIdx_pos
   apply ENat.toNat_pos
   · rw [← pos_iff_ne_zero, Module.length_pos_iff, Submodule.Quotient.nontrivial_iff,
       IsScalarTower.algebraMap_eq R S, ← map_map, ← lt_top_iff_ne_top]
-    grw [map_mono map_comap_le, Loc
+    grw [map_mono map_comap_le, Localization.AtPrime.map_eq_maximalIdeal]
+    exact (IsLocalRing.maximalIdeal.isMaximal _).lt_top
+  · let r := PrimeSpectrum.primesOverOrderIsoFiber R S p (primesOver.mk p q)
+    have : q = r.1.comap Algebra.TensorProduct.includeRight := by
+      rw [← PrimeSpectrum.coe_primesOverOrderIsoFiber_symm_apply]; rw [OrderIso.symm_apply_apply]
+    let := Localization.AtPrime.algebraOfLiesOver p (r.1.comap Algebra.TensorProduct.includeRight)
+    have : IsArtinianRing (Sq ⧸ map (algebraMap R Sq) p) := by
+      convert (Fiber.localizationAlgEquivQuotient p r.1).toRingEquiv.isArtinianRing
+    rwa [Module.length_eq_of_surjective (R := Sq ⧸ p.map (algebraMap R Sq)) Quotient.mk_surjective,
+      Module.length_ne_top_iff, ← isArtinianRing_iff_isFiniteLength]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_pos := ramificationIdx_pos
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRigh, AtPrime, ENat.toNat_pos, IsLocalRing, IsLocalRing.maximalIdeal.isMaximal, IsScalarTower, IsScalarTower.algebraMap_eq, Localization, Localization.AtPrime, Localization.AtPrime.map_eq_maximalIdeal, Module, Module.length_pos_iff, PrimeSpectrum, PrimeSpectrum.primesOverOrderIsoFiber, Quotient, Submodule, Submodule.Quotient.nontrivial_iff, TensorProduct, algebraMap_eq
 -/
@@ -189,7 +211,10 @@ theorem ramificationIdx_eq_one
   let Sq := Localization.AtPrime q
   let : Algebra Rp Sq := Localization.AtPrime.algebraOfLiesOver p q
   have : Algebra.EssFiniteType Rp Sq := Algebra.EssFiniteType.of_comp R Rp Sq
-  rw [ramificationIdx_def]; rw [ENat.toNat_eq_iff_eq_natCast
+  rw [ramificationIdx_def]; rw [ENat.toNat_eq_iff_eq_natCast]; rw [Nat.cast_one]; rw [Module.length_eq_one_iff]; rw [isSimpleModule_iff_isCoatom]; rw [← Ideal.isMaximal_def]; rw [IsLocalRing.isMaximal_iff]; rw [IsScalarTower.algebraMap_eq R Rp Sq]; rw [← map_map]; rw [Localization.AtPrime.map_eq_maximalIdeal]
+  exact Algebra.FormallyUnramified.map_maximalIdeal
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_eq_one := ramificationIdx_eq_one
 
 中文:
 定理 ramificationIdx_eq_one
@@ -200,7 +225,10 @@ theorem ramificationIdx_eq_one
   let Sq := Localization.AtPrime q
   let : Algebra Rp Sq := Localization.AtPrime.algebraOfLiesOver p q
   have : Algebra.EssFiniteType Rp Sq := Algebra.EssFiniteType.of_comp R Rp Sq
-  rw [ramificationIdx_def]; rw [ENat.toNat_eq_iff_eq_natCast
+  rw [ramificationIdx_def]; rw [ENat.toNat_eq_iff_eq_natCast]; rw [Nat.cast_one]; rw [Module.length_eq_one_iff]; rw [isSimpleModule_iff_isCoatom]; rw [← Ideal.isMaximal_def]; rw [IsLocalRing.isMaximal_iff]; rw [IsScalarTower.algebraMap_eq R Rp Sq]; rw [← map_map]; rw [Localization.AtPrime.map_eq_maximalIdeal]
+  exact Algebra.FormallyUnramified.map_maximalIdeal
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_eq_one := ramificationIdx_eq_one
 
 Depends on / 依赖: Algebra, Algebra.EssFiniteType, Algebra.EssFiniteType.of_comp, AtPrime, ENat.toNat_eq_iff_eq_natCast, EssFiniteType, Ideal.isMaximal_def, IsLocalRing, IsLocalRing.isMaximal_iff, IsScalarTower, IsScalarTower.algebraMap_eq, Localization, Localization.AtPrime, Localization.AtPrime.algebraOfLiesOver, Module, Module.length_eq_one_iff, Nat.cast_one, algebraMap_eq, algebraOfLiesOver, cast_one
 -/
@@ -227,7 +255,16 @@ theorem ramificationIdx_eq_one_iff
   refine ⟨fun h => ?_, fun _ => ramificationIdx_eq_one q R⟩
   rw [ramificationIdx_def]; rw [ENat.toNat_eq_iff_eq_natCast]; rw [Nat.cast_one]; rw [Module.length_eq_one_iff]; rw [isSimpleModule_iff_isCoatom]; rw [← Ideal.isMaximal_def]; rw [IsLocalRing.isMaximal_iff] at h
   let p := q.under R
-  let
+  let Rp := Localization.AtPrime p
+  let Sq := Localization.AtPrime q
+  let := Localization.AtPrime.algebraOfLiesOver p q
+  have := Algebra.EssFiniteType.of_comp R Rp Sq
+  suffices Algebra.FormallyUnramified Rp Sq from Algebra.FormallyUnramified.comp R Rp Sq
+  rw [Algebra.FormallyUnramified.iff_map_maximalIdeal_eq]; rw [← Localization.AtPrime.map_eq_maximalIdeal]; rw [map_map]; rw [← IsScalarTower.algebraMap_eq]
+  exact ⟨Algebra.IsAlgebraic.isSeparable_of_perfectField, h⟩
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_eq_one_iff :=
+  ramificationIdx_eq_one_iff
 
 中文:
 定理 ramificationIdx_eq_one_iff
@@ -236,7 +273,16 @@ theorem ramificationIdx_eq_one_iff
   refine ⟨fun h => ?_, fun _ => ramificationIdx_eq_one q R⟩
   rw [ramificationIdx_def]; rw [ENat.toNat_eq_iff_eq_natCast]; rw [Nat.cast_one]; rw [Module.length_eq_one_iff]; rw [isSimpleModule_iff_isCoatom]; rw [← Ideal.isMaximal_def]; rw [IsLocalRing.isMaximal_iff] at h
   let p := q.under R
-  let
+  let Rp := Localization.AtPrime p
+  let Sq := Localization.AtPrime q
+  let := Localization.AtPrime.algebraOfLiesOver p q
+  have := Algebra.EssFiniteType.of_comp R Rp Sq
+  suffices Algebra.FormallyUnramified Rp Sq from Algebra.FormallyUnramified.comp R Rp Sq
+  rw [Algebra.FormallyUnramified.iff_map_maximalIdeal_eq]; rw [← Localization.AtPrime.map_eq_maximalIdeal]; rw [map_map]; rw [← IsScalarTower.algebraMap_eq]
+  exact ⟨Algebra.IsAlgebraic.isSeparable_of_perfectField, h⟩
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_eq_one_iff :=
+  ramificationIdx_eq_one_iff
 
 Depends on / 依赖: Algebra, Algebra.EssFiniteType.of_comp, Algebra.FormallyUnramified, AtPrime, ENat.toNat_eq_iff_eq_natCast, EssFiniteType, FormallyUnramified, Ideal.isMaximal_def, IsLocalRing, IsLocalRing.isMaximal_iff, Localization, Localization.AtPrime, Localization.AtPrime.algebraOfLiesOver, Module, Module.length_eq_one_iff, Nat.cast_one, algebraOfLiesOver, cast_one, isMaximal_def, isMaximal_iff
 -/
@@ -310,7 +356,14 @@ theorem ramificationIdx'_eq_ramificationIdx'
     contrapose! hqI
     rw [sup_of_le_left hqI]
     exact hq.ne_top
-  rw [← Is
+  rw [← IsDedekindDomain.ramificationIdx'_eq_normalizedFactors_count hpS hq hq'] at h
+  apply_fun (map (algebraMap S (Localization.AtPrime q))) at h
+  rw [map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [Ideal.map_mul]; rw [Ideal.map_pow]; rw [map_eq_top_of_not_le (Localization.AtPrime q) hqI]; rw [mul_top]; rw [AtPrime.map_eq_maximalIdeal] at h
+  have hSq := isDiscreteValuationRing_of_dedekind_domain S hq' (Localization.AtPrime q)
+  rw [ramificationIdx_eq p q]; rw [h]; rw [hSq.length_quotient_pow_maximalIdeal]; rw [ENat.toNat_natCast]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_eq_ramificationIdx'' :=
+  ramificationIdx'_eq_ramificationIdx'
 
 中文:
 定理 ramificationIdx'_eq_ramificationIdx'
@@ -323,7 +376,14 @@ theorem ramificationIdx'_eq_ramificationIdx'
     contrapose! hqI
     rw [sup_of_le_left hqI]
     exact hq.ne_top
-  rw [← Is
+  rw [← IsDedekindDomain.ramificationIdx'_eq_normalizedFactors_count hpS hq hq'] at h
+  apply_fun (map (algebraMap S (Localization.AtPrime q))) at h
+  rw [map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [Ideal.map_mul]; rw [Ideal.map_pow]; rw [map_eq_top_of_not_le (Localization.AtPrime q) hqI]; rw [mul_top]; rw [AtPrime.map_eq_maximalIdeal] at h
+  have hSq := isDiscreteValuationRing_of_dedekind_domain S hq' (Localization.AtPrime q)
+  rw [ramificationIdx_eq p q]; rw [h]; rw [hSq.length_quotient_pow_maximalIdeal]; rw [ENat.toNat_natCast]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx_eq_ramificationIdx'' :=
+  ramificationIdx'_eq_ramificationIdx'
 -/
 theorem ramificationIdx'_eq_ramificationIdx' [IsDedekindDomain S]
     [q.LiesOver p] [hq : q.IsPrime] (hpS : p.map (algebraMap R S) != ⊥) :
@@ -392,7 +452,7 @@ theorem ramificationIdx_eq_factors_count
     contrapose! hq
     exact isPrime_of_prime (prime_of_factor q hq)
   have hq0 : q != ⊥ := ne_bot_of_le_ne_bot hp0 (map_le_of_le_comap (q.over_def p).le)
-  rw [← ramificationIdx'_eq_ra
+  rw [← ramificationIdx'_eq_ramificationIdx' p q hp0]; rw [ramificationIdx'_eq_factors_count hp0 ‹_› hq0]
 
 中文:
 定理 ramificationIdx_eq_factors_count
@@ -403,7 +463,7 @@ theorem ramificationIdx_eq_factors_count
     contrapose! hq
     exact isPrime_of_prime (prime_of_factor q hq)
   have hq0 : q != ⊥ := ne_bot_of_le_ne_bot hp0 (map_le_of_le_comap (q.over_def p).le)
-  rw [← ramificationIdx'_eq_ra
+  rw [← ramificationIdx'_eq_ramificationIdx' p q hp0]; rw [ramificationIdx'_eq_factors_count hp0 ‹_› hq0]
 
 Depends on / 依赖: IsPrime, Multiset, Multiset.count_eq_zero, _eq_factors_count, _eq_ramificationIdx, contrapose, count_eq_zero, eq_comm, isPrime_of_prime, map_le_of_le_comap, ne_bot_of_le_ne_bot, over_def, prime_of_factor, q.IsPrime, q.over_def, ramificationIdx, ramificationIdx_of_not_isPrime
 -/
@@ -450,7 +510,7 @@ theorem ramificationIdx_eq_multiplicity
   proof: by
   have hq : q != ⊥ := ne_bot_of_le_ne_bot hp (map_le_of_le_comap (q.over_def p).le)
   rw [ramificationIdx_eq_normalizedFactors_count p q hp]; rw [multiplicity_eq_of_emultiplicity_eq_some (emultiplicity_eq_count_normalizedFactors
-      (prime_of_isPrime hq inferInstance).irreducible hp)]; rw [norm
+      (prime_of_isPrime hq inferInstance).irreducible hp)]; rw [normalize_eq]
 
 中文:
 定理 ramificationIdx_eq_multiplicity
@@ -458,7 +518,7 @@ theorem ramificationIdx_eq_multiplicity
   证明: by
   have hq : q != ⊥ := ne_bot_of_le_ne_bot hp (map_le_of_le_comap (q.over_def p).le)
   rw [ramificationIdx_eq_normalizedFactors_count p q hp]; rw [multiplicity_eq_of_emultiplicity_eq_some (emultiplicity_eq_count_normalizedFactors
-      (prime_of_isPrime hq inferInstance).irreducible hp)]; rw [norm
+      (prime_of_isPrime hq inferInstance).irreducible hp)]; rw [normalize_eq]
 
 Depends on / 依赖: emultiplicity_eq_count_normalizedFactors, irreducible, map_le_of_le_comap, multiplicity_eq_of_emultiplicity_eq_some, ne_bot_of_le_ne_bot, normalize_eq, over_def, prime_of_isPrime, q.over_def, ramificationIdx_eq_normalizedFactors_count
 -/
@@ -482,7 +542,10 @@ theorem ramificationIdx_tower'
   let f := (Ideal.quotientEquivAlgOfEq (Localization.AtPrime r)
     (by rw [map_map, ← IsScalarTower.algebraMap_eq])).trans
       (Algebra.TensorProduct.quotIdealMapEquivTensorQuot (Localization.AtPrime r)
-        ((r.under R).
+        ((r.under R).map (algebraMap R (Localization.AtPrime q))))
+  rw [ramificationIdx_def]; rw [ramificationIdx_eq (r.under R)]; rw [ramificationIdx_eq q]; rw [f.toLinearEquiv.length_eq]; rw [IsLocalRing.length_baseChange]; rw [ENat.toNat_mul]; rw [← Localization.AtPrime.map_eq_maximalIdeal]; rw [map_map]; rw [← IsScalarTower.algebraMap_eq]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_tower' := ramificationIdx_tower'
 
 中文:
 定理 ramificationIdx_tower'
@@ -492,7 +555,10 @@ theorem ramificationIdx_tower'
   let f := (Ideal.quotientEquivAlgOfEq (Localization.AtPrime r)
     (by rw [map_map, ← IsScalarTower.algebraMap_eq])).trans
       (Algebra.TensorProduct.quotIdealMapEquivTensorQuot (Localization.AtPrime r)
-        ((r.under R).
+        ((r.under R).map (algebraMap R (Localization.AtPrime q))))
+  rw [ramificationIdx_def]; rw [ramificationIdx_eq (r.under R)]; rw [ramificationIdx_eq q]; rw [f.toLinearEquiv.length_eq]; rw [IsLocalRing.length_baseChange]; rw [ENat.toNat_mul]; rw [← Localization.AtPrime.map_eq_maximalIdeal]; rw [map_map]; rw [← IsScalarTower.algebraMap_eq]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_tower' := ramificationIdx_tower'
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.quotIdealMapEquivTensorQuot, AtPrime, ENat.toNat_mul, Ideal.quotientEquivAlgOfEq, IsLocalRing, IsLocalRing.length_baseChange, IsScalarTower, IsScalarTower.algebraMap_eq, LiesOver, LiesOver.tower_bot, Localization, Localization.AtPrime, TensorProduct, algebraMap, algebraMap_eq, f.toLinearEquiv.length_eq, length_baseChange, length_eq, map_map
 -/
@@ -523,7 +589,7 @@ theorem ramificationIdx_tower
     apply ramificationIdx_tower'
   · rw [ramificationIdx_of_not_isPrime r R hr, ramificationIdx_of_not_isPrime r S hr, mul_zero]
 
-@[deprecated (since := "2026-07-01")] a
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_tower := ramificationIdx_tower
 
 中文:
 定理 ramificationIdx_tower
@@ -535,7 +601,7 @@ theorem ramificationIdx_tower
     apply ramificationIdx_tower'
   · rw [ramificationIdx_of_not_isPrime r R hr, ramificationIdx_of_not_isPrime r S hr, mul_zero]
 
-@[deprecated (since := "2026-07-01")] a
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_tower := ramificationIdx_tower
 
 Depends on / 依赖: AtPrime, IsPrime, Localization, Localization.AtPrime.algebraOfLiesOver, algebraOfLiesOver, isPrime_of_liesOver, mul_zero, q.IsPrime, r.IsPrime, ramificationIdx_of_not_isPrime, ramificationIdx_tower
 -/
@@ -679,7 +745,18 @@ theorem ramificationIdx_smul
     let f₀ := MulSemiringAction.toAlgAut G R S g
     have hg : g • q = q.map f₀ := q.pointwise_smul_def
     let Sq := Localization.AtPrime q
-    let Sq' := Loca
+    let Sq' := Localization.AtPrime (q.map f₀)
+    let f : Sq ≃ₐ[R] Sq' :=
+      Localization.localAlgEquiv q (q.map f₀) f₀ (comap_map_of_bijective f₀ f₀.bijective).symm
+    let : Algebra Sq Sq' := f.toRingHom.toAlgebra
+    have : IsScalarTower R Sq Sq' := IsScalarTower.of_algHom f.toAlgHom
+    let e : (Sq ⧸ p.map (algebraMap R Sq)) ≃ₐ[Sq] Sq' ⧸ p.map (algebraMap R Sq') :=
+      Ideal.quotientEquivAlg _ _ (AlgEquiv.ofBijective (Algebra.ofId Sq Sq') f.bijective)
+        (by rw [IsScalarTower.algebraMap_eq R Sq Sq', Ideal.map_map,
+          ← AlgEquiv.toAlgHom_toRingHom, AlgEquiv.toAlgHom_ofBijective, Algebra.toRingHom_ofId])
+    rw [hg]; rw [ramificationIdx_eq p q]; rw [ramificationIdx_eq p (q.map f₀)]; rw [e.toLinearEquiv.length_eq]; rw [Module.length_eq_of_surjective f.surjective]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_smul := ramificationIdx_smul
 
 中文:
 定理 ramificationIdx_smul
@@ -691,7 +768,18 @@ theorem ramificationIdx_smul
     let f₀ := MulSemiringAction.toAlgAut G R S g
     have hg : g • q = q.map f₀ := q.pointwise_smul_def
     let Sq := Localization.AtPrime q
-    let Sq' := Loca
+    let Sq' := Localization.AtPrime (q.map f₀)
+    let f : Sq ≃ₐ[R] Sq' :=
+      Localization.localAlgEquiv q (q.map f₀) f₀ (comap_map_of_bijective f₀ f₀.bijective).symm
+    let : Algebra Sq Sq' := f.toRingHom.toAlgebra
+    have : IsScalarTower R Sq Sq' := IsScalarTower.of_algHom f.toAlgHom
+    let e : (Sq ⧸ p.map (algebraMap R Sq)) ≃ₐ[Sq] Sq' ⧸ p.map (algebraMap R Sq') :=
+      Ideal.quotientEquivAlg _ _ (AlgEquiv.ofBijective (Algebra.ofId Sq Sq') f.bijective)
+        (by rw [IsScalarTower.algebraMap_eq R Sq Sq', Ideal.map_map,
+          ← AlgEquiv.toAlgHom_toRingHom, AlgEquiv.toAlgHom_ofBijective, Algebra.toRingHom_ofId])
+    rw [hg]; rw [ramificationIdx_eq p q]; rw [ramificationIdx_eq p (q.map f₀)]; rw [e.toLinearEquiv.length_eq]; rw [Module.length_eq_of_surjective f.surjective]
+
+@[deprecated (since := "2026-07-01")] alias ramificationIdx'_smul := ramificationIdx_smul
 
 Depends on / 依赖: Algebra, AtPrime, IsPrime, IsScalarTower, Localization, Localization.AtPrime, Localization.localAlgEquiv, MulSemiringAction, MulSemiringAction.toAlgAut, bijective, comap_map_of_bijective, f.toRingHom.toAlgebra, localAlgEquiv, pointwise_smul_def, q.IsPrime, q.map, q.pointwise_smul_def, q.under, ramificationIdx_of_not_isPrime, toAlgAut
 -/

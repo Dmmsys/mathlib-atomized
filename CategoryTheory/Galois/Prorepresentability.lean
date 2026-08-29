@@ -376,7 +376,13 @@ instance :
     obtain ⟨Z, f, z, hgal, hfz⟩ := exists_hom_from_galois_of_fiber F (A ⨯ B)
  (fiberBinaryProductEquiv F A B).symm (a, b)
     refine ⟨⟨Z, z, hgal⟩, ⟨f ≫ prod.fst, ?_⟩, ⟨f ≫ prod.snd, ?_⟩, trivial⟩
-    · simp only [F.map_comp, hfz, FintypeCat.comp_apply, fiberBinaryProdu
+    · simp only [F.map_comp, hfz, FintypeCat.comp_apply, fiberBinaryProductEquiv_symm_fst_apply]
+    · simp only [F.map_comp, hfz, FintypeCat.comp_apply, fiberBinaryProductEquiv_symm_snd_apply]
+  cone_maps := fun ⟨A, a, _⟩ ⟨B, b, _⟩ ⟨f, hf⟩ ⟨g, hg⟩ => by
+    obtain ⟨Z, h, z, hgal, hhz⟩ := exists_hom_from_galois_of_fiber F A a
+    refine ⟨⟨Z, z, hgal⟩, ⟨h, hhz⟩, hom_ext ?_⟩
+    apply evaluation_injective_of_isConnected F Z B z
+    simp [hhz, hf, hg]
 
 中文:
 实例 :
@@ -385,7 +391,13 @@ instance :
     obtain ⟨Z, f, z, hgal, hfz⟩ := exists_hom_from_galois_of_fiber F (A ⨯ B)
  (fiberBinaryProductEquiv F A B).symm (a, b)
     refine ⟨⟨Z, z, hgal⟩, ⟨f ≫ prod.fst, ?_⟩, ⟨f ≫ prod.snd, ?_⟩, trivial⟩
-    · simp only [F.map_comp, hfz, FintypeCat.comp_apply, fiberBinaryProdu
+    · simp only [F.map_comp, hfz, FintypeCat.comp_apply, fiberBinaryProductEquiv_symm_fst_apply]
+    · simp only [F.map_comp, hfz, FintypeCat.comp_apply, fiberBinaryProductEquiv_symm_snd_apply]
+  cone_maps := fun ⟨A, a, _⟩ ⟨B, b, _⟩ ⟨f, hf⟩ ⟨g, hg⟩ => by
+    obtain ⟨Z, h, z, hgal, hhz⟩ := exists_hom_from_galois_of_fiber F A a
+    refine ⟨⟨Z, z, hgal⟩, ⟨h, hhz⟩, hom_ext ?_⟩
+    apply evaluation_injective_of_isConnected F Z B z
+    simp [hhz, hf, hg]
 
 Depends on / 依赖: F.map_comp, FintypeCat, FintypeCat.comp_apply, comp_apply, cone_maps, exists_hom_from_galois_of_fiber, fiberBinaryProductEquiv, fiberBinaryProductEquiv_symm_fst_apply, fiberBinaryProductEquiv_symm_snd_apply, map_comp, prod.fst, prod.snd
 -/
@@ -415,7 +427,16 @@ definition isColimit
   · intro (x : F.obj X)
     obtain ⟨Y, i, y, h1, _, _⟩ := fiber_in_connected_component F X x
     obtain ⟨Z, f, z, hgal, hfz⟩ := exists_hom_from_galois_of_fiber F Y y
-    refine ⟨⟨Z, z, 
+    refine ⟨⟨Z, z, hgal⟩, f ≫ i, ?_⟩
+    simp [← hfz, ← h1]
+  · intro ⟨A, a, _⟩ ⟨B, b, _⟩ (u : (A : C) ⟶ X) (v : (B : C) ⟶ X) (h : F.map u a = F.map v b)
+    obtain ⟨⟨Z, z, _⟩, ⟨f, hf⟩, ⟨g, hg⟩, _⟩ :=
+      IsFilteredOrEmpty.cocone_objs (C := (PointedGaloisObject F)ᵒᵖ)
+        ⟨{ obj := A, pt := a}⟩ ⟨{obj := B, pt := b}⟩
+    refine ⟨⟨{ obj := Z, pt := z }⟩, ⟨f, hf⟩, ⟨g, hg⟩, ?_⟩
+    apply evaluation_injective_of_isConnected F Z X z
+    change F.map (f ≫ u) z = F.map (g ≫ v) z
+    rw [map_comp]; rw [FintypeCat.comp_apply]; rw [hf]; rw [map_comp]; rw [FintypeCat.comp_apply]; rw [hg]; rw [h]
 
 中文:
 定义 isColimit
@@ -426,7 +447,16 @@ definition isColimit
   · intro (x : F.obj X)
     obtain ⟨Y, i, y, h1, _, _⟩ := fiber_in_connected_component F X x
     obtain ⟨Z, f, z, hgal, hfz⟩ := exists_hom_from_galois_of_fiber F Y y
-    refine ⟨⟨Z, z, 
+    refine ⟨⟨Z, z, hgal⟩, f ≫ i, ?_⟩
+    simp [← hfz, ← h1]
+  · intro ⟨A, a, _⟩ ⟨B, b, _⟩ (u : (A : C) ⟶ X) (v : (B : C) ⟶ X) (h : F.map u a = F.map v b)
+    obtain ⟨⟨Z, z, _⟩, ⟨f, hf⟩, ⟨g, hg⟩, _⟩ :=
+      IsFilteredOrEmpty.cocone_objs (C := (PointedGaloisObject F)ᵒᵖ)
+        ⟨{ obj := A, pt := a}⟩ ⟨{obj := B, pt := b}⟩
+    refine ⟨⟨{ obj := Z, pt := z }⟩, ⟨f, hf⟩, ⟨g, hg⟩, ?_⟩
+    apply evaluation_injective_of_isConnected F Z X z
+    change F.map (f ≫ u) z = F.map (g ≫ v) z
+    rw [map_comp]; rw [FintypeCat.comp_apply]; rw [hf]; rw [map_comp]; rw [FintypeCat.comp_apply]; rw [hg]; rw [h]
 
 Depends on / 依赖: F.map, F.obj, FilteredColimit, IsFilteredOrEmpty, IsFilteredOrEmpty.cocone_objs, PointedGa, Types.FilteredColimit.isColimitOf, cocone_objs, evaluationJointlyReflectsColimits, exists_hom_from_galois_of_fiber, fiber_in_connected_component, isColimitOf
 -/
@@ -707,7 +737,15 @@ definition endEquivSectionsFibers
     (FullyFaithful.whiskeringRight (FullyFaithful.ofFullyFaithful FintypeCat.incl) C).homEquiv
   let i2 : End F' ≅ (colimit ((incl F).op ⋙ coyoneda) ⟶ F') :=
     (yoneda.obj (F ⋙ FintypeCat.incl)).mapIso (colimit.isoColimitCocone ⟨cocone F, isColimit F⟩).op
-  let i3 : (col
+  let i3 : (colimit ((incl F).op ⋙ coyoneda) ⟶ F') ≅
+      limit ((incl F ⋙ F') ⋙ uliftFunctor.{u₁}) :=
+    colimitCoyonedaHomIsoLimit' (incl F) F'
+  let i4 : limit (incl F ⋙ F' ⋙ uliftFunctor.{u₁}) ≃
+      ((incl F ⋙ F') ⋙ uliftFunctor.{u₁}).sections :=
+    Types.limitEquivSections (incl F ⋙ (F ⋙ FintypeCat.incl) ⋙ uliftFunctor.{u₁, u₂})
+  let i5 : ((incl F ⋙ F') ⋙ uliftFunctor.{u₁}).sections ≃ (incl F ⋙ F').sections :=
+    (Types.sectionsEquiv (incl F ⋙ F')).symm
+i1.trans i2.toEquiv.trans i3.toEquiv.trans i4.trans i5
 
 中文:
 定义 endEquivSectionsFibers
@@ -716,7 +754,15 @@ definition endEquivSectionsFibers
     (FullyFaithful.whiskeringRight (FullyFaithful.ofFullyFaithful FintypeCat.incl) C).homEquiv
   let i2 : End F' ≅ (colimit ((incl F).op ⋙ coyoneda) ⟶ F') :=
     (yoneda.obj (F ⋙ FintypeCat.incl)).mapIso (colimit.isoColimitCocone ⟨cocone F, isColimit F⟩).op
-  let i3 : (col
+  let i3 : (colimit ((incl F).op ⋙ coyoneda) ⟶ F') ≅
+      limit ((incl F ⋙ F') ⋙ uliftFunctor.{u₁}) :=
+    colimitCoyonedaHomIsoLimit' (incl F) F'
+  let i4 : limit (incl F ⋙ F' ⋙ uliftFunctor.{u₁}) ≃
+      ((incl F ⋙ F') ⋙ uliftFunctor.{u₁}).sections :=
+    Types.limitEquivSections (incl F ⋙ (F ⋙ FintypeCat.incl) ⋙ uliftFunctor.{u₁, u₂})
+  let i5 : ((incl F ⋙ F') ⋙ uliftFunctor.{u₁}).sections ≃ (incl F ⋙ F').sections :=
+    (Types.sectionsEquiv (incl F ⋙ F')).symm
+i1.trans i2.toEquiv.trans i3.toEquiv.trans i4.trans i5
 
 Depends on / 依赖: FintypeCat, FintypeCat.incl, FullyFaithful, FullyFaithful.ofFullyFaithful, FullyFaithful.whiskeringRight, cocone, colimit, colimit.isoColimitCocone, colimitCoyonedaHomIsoLimit, coyoneda, homEquiv, isColimit, isoColimitCocone, mapIso, ofFullyFaithful, uliftFunctor, whiskeringRight, yoneda, yoneda.obj
 -/
@@ -748,7 +794,10 @@ lemma endEquivSectionsFibers_π
   erw [Types.limitEquivSections_apply, colimitCoyonedaHomIsoLimit'_π_apply]
   change (((FullyFaithful.whiskeringRight (FullyFaithful.ofFullyFaithful
       FintypeCat.incl) C).homEquiv) f).app A
-    (((colimit.ι _ _) ≫ (colimit.isoColimitCocone
+    (((colimit.ι _ _) ≫ (colimit.isoColimitCocone ⟨cocone F, isColimit F⟩).hom).app
+      A _) = f.app A A.pt
+  simp
+  rfl
 
 中文:
 引理 endEquivSectionsFibers_π
@@ -758,7 +807,10 @@ lemma endEquivSectionsFibers_π
   erw [Types.limitEquivSections_apply, colimitCoyonedaHomIsoLimit'_π_apply]
   change (((FullyFaithful.whiskeringRight (FullyFaithful.ofFullyFaithful
       FintypeCat.incl) C).homEquiv) f).app A
-    (((colimit.ι _ _) ≫ (colimit.isoColimitCocone
+    (((colimit.ι _ _) ≫ (colimit.isoColimitCocone ⟨cocone F, isColimit F⟩).hom).app
+      A _) = f.app A A.pt
+  simp
+  rfl
 
 Depends on / 依赖: A.pt, FintypeCat, FintypeCat.incl, FullyFaithful, FullyFaithful.ofFullyFaithful, FullyFaithful.whiskeringRight, Types.limitEquivSections_apply, Types.sectionsEquiv, cocone, colimit, colimit.isoColimitCocone, colimitCoyonedaHomIsoLimit, endEquivSectionsFibers, f.app, homEquiv, isColimit, isoColimitCocone, limitEquivSections_apply, ofFullyFaithful, sectionsEquiv
 -/
@@ -892,7 +944,8 @@ theorem endEquivAutGalois_mul
   simp only [map_mul, endEquivAutGalois_π, Aut.Aut_mul_def, NatTrans.comp_app, Iso.trans_hom]
   simp only [map_comp, FintypeCat.comp_apply, endEquivAutGalois_π]
   change f.app A (g.app A A.pt) =
-    (f.app A ≫
+    (f.app A ≫ F.map ((AutGalois.π F A) ((endEquivAutGalois F) g)).hom) A.pt
+  rw [← f.naturality]; rw [FintypeCat.comp_apply]; rw [endEquivAutGalois_π]
 
 中文:
 定理 endEquivAutGalois_mul
@@ -902,7 +955,8 @@ theorem endEquivAutGalois_mul
   simp only [map_mul, endEquivAutGalois_π, Aut.Aut_mul_def, NatTrans.comp_app, Iso.trans_hom]
   simp only [map_comp, FintypeCat.comp_apply, endEquivAutGalois_π]
   change f.app A (g.app A A.pt) =
-    (f.app A ≫
+    (f.app A ≫ F.map ((AutGalois.π F A) ((endEquivAutGalois F) g)).hom) A.pt
+  rw [← f.naturality]; rw [FintypeCat.comp_apply]; rw [endEquivAutGalois_π]
 
 Depends on / 依赖: A.pt, Aut.Aut_mul_def, AutGalois, AutGalois.ext, Aut_mul_def, F.map, FintypeCat, FintypeCat.comp_apply, Iso.trans_hom, NatTrans, NatTrans.comp_app, comp_app, comp_apply, endEquivAutGalois, evaluation_aut_injective_of_isConnected, f.app, f.naturality, g.app, map_comp, map_mul
 -/
@@ -1009,7 +1063,9 @@ definition autMulEquivAutGalois
       MulEquiv.symm_apply_apply]
     exact Aut.ext rfl
   right_inv t := by
-    simp only [MonoidHo
+    simp only [MonoidHom.coe_comp, MonoidHom.coe_coe]
+    exact (MulEquiv.eq_symm_apply (endMulEquivAutGalois F)).mp rfl
+  map_mul' := by simp [map_mul]
 
 中文:
 定义 autMulEquivAutGalois
@@ -1021,7 +1077,9 @@ definition autMulEquivAutGalois
       MulEquiv.symm_apply_apply]
     exact Aut.ext rfl
   right_inv t := by
-    simp only [MonoidHo
+    simp only [MonoidHom.coe_comp, MonoidHom.coe_coe]
+    exact (MulEquiv.eq_symm_apply (endMulEquivAutGalois F)).mp rfl
+  map_mul' := by simp [map_mul]
 
 Depends on / 依赖: Aut.toEnd, MonoidHom, MonoidHom.comp, endMulEquivAutGalois
 -/
@@ -1141,7 +1199,12 @@ instance FiberFunctor.isPretransitive_of_isConnected'
   refine ⟨fun x y => ?_⟩
   obtain ⟨a, ha⟩ := hs x
   obtain ⟨b, hb⟩ := hs y
-  have : MulAction.IsPretransitive (Aut F) (F.obj A) := isPretra
+  have : MulAction.IsPretransitive (Aut F) (F.obj A) := isPretransitive_of_isGalois F A
+  obtain ⟨σ, (hσ : σ.hom.app A a = b)⟩ := MulAction.exists_smul_eq (Aut F) a b
+  use σ
+  rw [← ha]; rw [← hb]
+  change (F.map f ≫ σ.hom.app X) a = F.map f b
+  rw [σ.hom.naturality]; rw [FintypeCat.comp_apply]; rw [hσ]
 
 中文:
 实例 Fiber函子.isPretransitive_of_isConnected'
@@ -1152,7 +1215,12 @@ instance FiberFunctor.isPretransitive_of_isConnected'
   refine ⟨fun x y => ?_⟩
   obtain ⟨a, ha⟩ := hs x
   obtain ⟨b, hb⟩ := hs y
-  have : MulAction.IsPretransitive (Aut F) (F.obj A) := isPretra
+  have : MulAction.IsPretransitive (Aut F) (F.obj A) := isPretransitive_of_isGalois F A
+  obtain ⟨σ, (hσ : σ.hom.app A a = b)⟩ := MulAction.exists_smul_eq (Aut F) a b
+  use σ
+  rw [← ha]; rw [← hb]
+  change (F.map f ≫ σ.hom.app X) a = F.map f b
+  rw [σ.hom.naturality]; rw [FintypeCat.comp_apply]; rw [hσ]
 
 Depends on / 依赖: F.map, F.map_comp, F.map_id, G.obj, IsReflexivePair, IsReflexivePair.mk, adj.left_triangle_components, adj.right_triangle_components, adj.unit.app, left_triangle_components, map_comp, map_id, right_triangle_components
 -/
@@ -1189,7 +1257,18 @@ instance FiberFunctor.isPretransitive_of_isConnected
     let e (Y : C) : F'.obj Y ≃ F.obj Y := (F.obj Y).uSwitchEquiv
     set x' : F'.obj X := (e X).symm x with hx'
     set y' : F'.obj X := (e X).symm y with hy'
-    obtain ⟨g', 
+    obtain ⟨g', (hg' : g'.hom.app X x' = y')⟩ := MulAction.exists_smul_eq (Aut F') x' y'
+let gapp (Y : C) : F.obj Y ≅ F.obj Y := FintypeCat.equivEquivIso
+(e Y).symm.trans (FintypeCat.equivEquivIso.symm (g'.app Y)).trans (e Y)
+let g : F ≅ F := NatIso.ofComponents gapp fun {X Y} f => by
+      ext x
+      dsimp [gapp, e]
+      erw [FintypeCat.uSwitchEquiv_naturality (F.map f)]
+      rw [← Functor.comp_map]
+      erw [← NatTrans.naturality_apply, FintypeCat.uSwitchEquiv_symm_naturality (F.map f)]
+      rfl
+    refine ⟨g, show (gapp X).hom x = y from ?_⟩
+    simp [gapp, ← hx', hg', hy', Equiv.apply_symm_apply]
 
 中文:
 实例 Fiber函子.isPretransitive_of_isConnected
@@ -1200,7 +1279,18 @@ instance FiberFunctor.isPretransitive_of_isConnected
     let e (Y : C) : F'.obj Y ≃ F.obj Y := (F.obj Y).uSwitchEquiv
     set x' : F'.obj X := (e X).symm x with hx'
     set y' : F'.obj X := (e X).symm y with hy'
-    obtain ⟨g', 
+    obtain ⟨g', (hg' : g'.hom.app X x' = y')⟩ := MulAction.exists_smul_eq (Aut F') x' y'
+let gapp (Y : C) : F.obj Y ≅ F.obj Y := FintypeCat.equivEquivIso
+(e Y).symm.trans (FintypeCat.equivEquivIso.symm (g'.app Y)).trans (e Y)
+let g : F ≅ F := NatIso.ofComponents gapp fun {X Y} f => by
+      ext x
+      dsimp [gapp, e]
+      erw [FintypeCat.uSwitchEquiv_naturality (F.map f)]
+      rw [← Functor.comp_map]
+      erw [← NatTrans.naturality_apply, FintypeCat.uSwitchEquiv_symm_naturality (F.map f)]
+      rfl
+    refine ⟨g, show (gapp X).hom x = y from ?_⟩
+    simp [gapp, ← hx', hg', hy', Equiv.apply_symm_apply]
 
 Depends on / 依赖: F.obj, FiberFunctor, FiberFunctor.comp_right, FintypeCat, FintypeCat.equivEquivIso, FintypeCat.equivEquivIso.symm, FintypeCat.uSwitch, MulAction, MulAction.exists_smul_eq, comp_right, equivEquivIso, exists_smul_eq, hom.app, symm.trans, uSwitch, uSwitchEquiv
 -/

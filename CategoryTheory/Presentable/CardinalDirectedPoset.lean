@@ -116,7 +116,16 @@ lemma isCardinalFiltered_pt
   have := isFiltered_of_isCardinalFiltered J κ
   refine isCardinalFiltered_preorder _ _ (fun K f hK => ?_)
   rw [← hasCardinalLT_iff_cardinal_mk_lt] at hK
-  choose j₀ x₀ hx₀ using fun k => Types.jointly_surjective_of_i
+  choose j₀ x₀ hx₀ using fun k => Types.jointly_surjective_of_isColimit hc (f k)
+  let j := IsCardinalFiltered.max j₀ hK
+  let x₁ (k : K) : F.obj j := F.map (IsCardinalFiltered.toMax j₀ hK k) (x₀ k)
+  have hx₁ (k : K) : c.ι.app j (x₁ k) = c.ι.app (j₀ k) (x₀ k) :=
+    ConcreteCategory.congr_hom (c.w (IsCardinalFiltered.toMax j₀ hK k)) _
+  refine ⟨(cocone hc).ι.app j (IsCardinalFiltered.max x₁ hK),
+    fun k => ?_⟩
+  rw [← hx₀]; rw [← hx₁]
+  exact ((cocone hc).ι.app j).hom.monotone
+    (leOfHom (IsCardinalFiltered.toMax x₁ hK k))
 
 中文:
 引理 isCardinalFiltered_pt
@@ -126,7 +135,16 @@ lemma isCardinalFiltered_pt
   have := isFiltered_of_isCardinalFiltered J κ
   refine isCardinalFiltered_preorder _ _ (fun K f hK => ?_)
   rw [← hasCardinalLT_iff_cardinal_mk_lt] at hK
-  choose j₀ x₀ hx₀ using fun k => Types.jointly_surjective_of_i
+  choose j₀ x₀ hx₀ using fun k => Types.jointly_surjective_of_isColimit hc (f k)
+  let j := IsCardinalFiltered.max j₀ hK
+  let x₁ (k : K) : F.obj j := F.map (IsCardinalFiltered.toMax j₀ hK k) (x₀ k)
+  have hx₁ (k : K) : c.ι.app j (x₁ k) = c.ι.app (j₀ k) (x₀ k) :=
+    ConcreteCategory.congr_hom (c.w (IsCardinalFiltered.toMax j₀ hK k)) _
+  refine ⟨(cocone hc).ι.app j (IsCardinalFiltered.max x₁ hK),
+    fun k => ?_⟩
+  rw [← hx₀]; rw [← hx₁]
+  exact ((cocone hc).ι.app j).hom.monotone
+    (leOfHom (IsCardinalFiltered.toMax x₁ hK k))
 
 Depends on / 依赖: isFiltered_of_isCardinalFiltered
 -/
@@ -431,7 +449,17 @@ instance :
       ULift.{u} (PLift (IsCardinalFiltered S κ))
     let (a : α) : PartialOrder a.1 := a.2.1
     let ι (a : α) : CardinalDirectedPoset κ :=
-      { obj 
+      { obj := .of a.1
+        property := a.2.2.down.down }
+    refine ⟨.ofObj ι, inferInstance, fun J ⟨hJ, _⟩ => ?_⟩
+    obtain ⟨f⟩ : Cardinal.mk J.obj <= Cardinal.mk X := by
+      simpa [hX] using ((hasCardinalLT_iff_cardinal_mk_lt _ _).1 hJ).le
+    let e := Equiv.ofInjective _ f.injective
+    let : PartialOrder (Set.range f) := PartialOrder.lift _ e.symm.injective
+    let e' : Set.range f ≃o J.obj := { toEquiv := e.symm, map_rel_iff' := by rfl }
+    exact ⟨_, ⟨⟨Set.range f, inferInstance,
+      ⟨⟨IsCardinalFiltered.of_equivalence κ e'.symm.equivalence⟩⟩⟩⟩,
+        ⟨CardinalDirectedPoset.ι.preimageIso (PartOrdEmb.Iso.mk (by exact e'.symm))⟩⟩
 
 中文:
 实例 :
@@ -442,7 +470,17 @@ instance :
       ULift.{u} (PLift (IsCardinalFiltered S κ))
     let (a : α) : PartialOrder a.1 := a.2.1
     let ι (a : α) : CardinalDirectedPoset κ :=
-      { obj 
+      { obj := .of a.1
+        property := a.2.2.down.down }
+    refine ⟨.ofObj ι, inferInstance, fun J ⟨hJ, _⟩ => ?_⟩
+    obtain ⟨f⟩ : Cardinal.mk J.obj <= Cardinal.mk X := by
+      simpa [hX] using ((hasCardinalLT_iff_cardinal_mk_lt _ _).1 hJ).le
+    let e := Equiv.ofInjective _ f.injective
+    let : PartialOrder (Set.range f) := PartialOrder.lift _ e.symm.injective
+    let e' : Set.range f ≃o J.obj := { toEquiv := e.symm, map_rel_iff' := by rfl }
+    exact ⟨_, ⟨⟨Set.range f, inferInstance,
+      ⟨⟨IsCardinalFiltered.of_equivalence κ e'.symm.equivalence⟩⟩⟩⟩,
+        ⟨CardinalDirectedPoset.ι.preimageIso (PartOrdEmb.Iso.mk (by exact e'.symm))⟩⟩
 
 Depends on / 依赖: Cardinal, Cardinal.mk, CardinalDirectedPoset, IsCardinalFiltered, J.obj, PartialOrder, ToType, down.down, hasCardinalLT_iff_cardinal_mk_lt, ord.ToType, property
 -/
@@ -479,7 +517,40 @@ lemma isCardinalPresentable_of_hasCardinalLT_of_le
     replace hc := isColimitOfPreserves (forget _) hc
     refine Types.FilteredColimit.isColimitOf' _ _ (fun f => ?_) (fun j f g h => ?_)
     · dsimp at f
-      choose j g hg usin
+      choose j g hg using fun (x : J.obj) => Types.jointly_surjective_of_isColimit hc (f x)
+      let m := IsCardinalFiltered.max j hJ
+      let φ (x : J.obj) : (F.obj m).obj := F.map (IsCardinalFiltered.toMax j hJ x) (g x)
+      have hφ (x : J.obj) : f x = c.ι.app _ (φ x) := by
+        dsimp [φ]
+        rw [← hg]; rw [← ConcreteCategory.comp_apply]; rw [c.w]
+        rfl
+      refine ⟨m,
+        ObjectProperty.homMk (PartOrdEmb.ofHom
+          { toFun := φ
+            inj' x y h := Hom.injective f (by simpa [hφ])
+            map_rel_iff' {x y} := ?_ }), ?_⟩
+      · simp [← Hom.le_iff_le f, hφ]
+      · dsimp
+        ext x
+        trans c.ι.app (j x) (g x)
+        · exact (hg x).symm
+        · exact (ConcreteCategory.congr_hom (c.w (IsCardinalFiltered.toMax j hJ x)).symm (g x))
+    · choose k a hk using fun (x : J.obj) =>
+        (Types.FilteredColimit.isColimit_eq_iff' hc _ _).1 (ConcreteCategory.congr_hom h x)
+      dsimp at f g h k a hk ⊢
+      obtain ⟨l, b, c, hl⟩ : exists (l : A) (c : j ⟶ l) (b : forall x, k x ⟶ l),
+          forall x, a x ≫ b x = c := by
+        let φ (x : J.obj) : j ⟶ IsCardinalFiltered.max k hJ :=
+          a x ≫ IsCardinalFiltered.toMax k hJ x
+        exact ⟨IsCardinalFiltered.coeq φ hJ,
+          IsCardinalFiltered.toCoeq φ hJ,
+          fun x => IsCardinalFiltered.toMax k hJ x ≫ IsCardinalFiltered.coeqHom φ hJ,
+          fun x => by simpa [φ] using IsCardinalFiltered.coeq_condition φ hJ x⟩
+      refine ⟨l, b, ?_⟩
+      ext x
+      simpa only [← hl x, Functor.map_comp, ObjectProperty.FullSubcategory.comp_hom,
+        PartOrdEmb.hom_comp, RelEmbedding.coe_trans, Function.comp_apply]
+          using! congr_arg _ (hk x)⟩⟩⟩
 
 中文:
 引理 isCardinalPresentable_of_hasCardinalLT_of_le
@@ -490,7 +561,40 @@ lemma isCardinalPresentable_of_hasCardinalLT_of_le
     replace hc := isColimitOfPreserves (forget _) hc
     refine Types.FilteredColimit.isColimitOf' _ _ (fun f => ?_) (fun j f g h => ?_)
     · dsimp at f
-      choose j g hg usin
+      choose j g hg using fun (x : J.obj) => Types.jointly_surjective_of_isColimit hc (f x)
+      let m := IsCardinalFiltered.max j hJ
+      let φ (x : J.obj) : (F.obj m).obj := F.map (IsCardinalFiltered.toMax j hJ x) (g x)
+      have hφ (x : J.obj) : f x = c.ι.app _ (φ x) := by
+        dsimp [φ]
+        rw [← hg]; rw [← ConcreteCategory.comp_apply]; rw [c.w]
+        rfl
+      refine ⟨m,
+        ObjectProperty.homMk (PartOrdEmb.ofHom
+          { toFun := φ
+            inj' x y h := Hom.injective f (by simpa [hφ])
+            map_rel_iff' {x y} := ?_ }), ?_⟩
+      · simp [← Hom.le_iff_le f, hφ]
+      · dsimp
+        ext x
+        trans c.ι.app (j x) (g x)
+        · exact (hg x).symm
+        · exact (ConcreteCategory.congr_hom (c.w (IsCardinalFiltered.toMax j hJ x)).symm (g x))
+    · choose k a hk using fun (x : J.obj) =>
+        (Types.FilteredColimit.isColimit_eq_iff' hc _ _).1 (ConcreteCategory.congr_hom h x)
+      dsimp at f g h k a hk ⊢
+      obtain ⟨l, b, c, hl⟩ : exists (l : A) (c : j ⟶ l) (b : forall x, k x ⟶ l),
+          forall x, a x ≫ b x = c := by
+        let φ (x : J.obj) : j ⟶ IsCardinalFiltered.max k hJ :=
+          a x ≫ IsCardinalFiltered.toMax k hJ x
+        exact ⟨IsCardinalFiltered.coeq φ hJ,
+          IsCardinalFiltered.toCoeq φ hJ,
+          fun x => IsCardinalFiltered.toMax k hJ x ≫ IsCardinalFiltered.coeqHom φ hJ,
+          fun x => by simpa [φ] using IsCardinalFiltered.coeq_condition φ hJ x⟩
+      refine ⟨l, b, ?_⟩
+      ext x
+      simpa only [← hl x, Functor.map_comp, ObjectProperty.FullSubcategory.comp_hom,
+        PartOrdEmb.hom_comp, RelEmbedding.coe_trans, Function.comp_apply]
+          using! congr_arg _ (hk x)⟩⟩⟩
 
 Depends on / 依赖: F.map, F.obj, FilteredColimit, IsCardinalFiltered, IsCardinalFiltered.max, IsCardinalFiltered.of_le, IsCardinalFiltered.toMax, J.obj, Types.FilteredColimit.isColimitOf, Types.jointly_surjective_of_isColimit, forget, isColimitOf, isColimitOfPreserves, isFiltered_of_isCardinalFiltered, jointly_surjective_of_isColimit, of_le, replace
 -/
@@ -588,7 +692,10 @@ instance :
     rw [← hasCardinalLT_iff_cardinal_mk_lt] at hK
     have hκ' : Cardinal.aleph0 <= κ' := Cardinal.IsRegular.aleph0_le Fact.out
     refine ⟨⟨(⋃ (k : K), α k) union {⊤},
-      hasCardinalLT_union hκ' (hasCardinalLT_iUnion _ hK (fun k => (α k).property
+      hasCardinalLT_union hκ' (hasCardinalLT_iUnion _ hK (fun k => (α k).property.left))
+        (hasCardinalLT_of_finite _ _ hκ'), by simp⟩, fun k => ?_⟩
+    rw [Subtype.mk_le_mk]
+    exact subset_trans (Set.subset_iUnion (fun i => (α i).1) k) Set.subset_union_left)
 
 中文:
 实例 :
@@ -597,7 +704,10 @@ instance :
     rw [← hasCardinalLT_iff_cardinal_mk_lt] at hK
     have hκ' : Cardinal.aleph0 <= κ' := Cardinal.IsRegular.aleph0_le Fact.out
     refine ⟨⟨(⋃ (k : K), α k) union {⊤},
-      hasCardinalLT_union hκ' (hasCardinalLT_iUnion _ hK (fun k => (α k).property
+      hasCardinalLT_union hκ' (hasCardinalLT_iUnion _ hK (fun k => (α k).property.left))
+        (hasCardinalLT_of_finite _ _ hκ'), by simp⟩, fun k => ?_⟩
+    rw [Subtype.mk_le_mk]
+    exact subset_trans (Set.subset_iUnion (fun i => (α i).1) k) Set.subset_union_left)
 
 Depends on / 依赖: Cardinal, Cardinal.IsRegular.aleph0_le, Cardinal.aleph0, Fact.out, IsRegular, Set.subset_iUnion, Set.subset_union_left, Subtype, Subtype.mk_le_mk, aleph0, aleph0_le, hasCardinalLT_iUnion, hasCardinalLT_iff_cardinal_mk_lt, hasCardinalLT_of_finite, hasCardinalLT_union, isCardinalFiltered_preorder, mk_le_mk, property, property.left, subset_iUnion
 -/
@@ -775,7 +885,14 @@ lemma isCardinalPresentable_iff
   obtain ⟨X, f, hf⟩ :=
     IsCardinalPresentable.exists_hom_of_isColimit κ' (isColimitCoconeWithTop J κ')
       (ObjectProperty.homMk (PartOrdEmb.ofHom WithTop.coeOrderHom))
-  replace hf : OrderEmbedding.subtype
+  replace hf : OrderEmbedding.subtype (· in X.1) ∘ f = WithTop.coeOrderHom := by
+    ext x
+    exact ConcreteCategory.congr_hom hf x
+  refine X.2.1.of_injective f (Function.Injective.of_comp
+    (f := OrderEmbedding.subtype (· in X.1)) ?_)
+  dsimp at hf ⊢
+  rw [hf]
+  exact WithTop.coe_injective
 
 中文:
 引理 isCardinalPresentable_iff
@@ -785,7 +902,14 @@ lemma isCardinalPresentable_iff
   obtain ⟨X, f, hf⟩ :=
     IsCardinalPresentable.exists_hom_of_isColimit κ' (isColimitCoconeWithTop J κ')
       (ObjectProperty.homMk (PartOrdEmb.ofHom WithTop.coeOrderHom))
-  replace hf : OrderEmbedding.subtype
+  replace hf : OrderEmbedding.subtype (· in X.1) ∘ f = WithTop.coeOrderHom := by
+    ext x
+    exact ConcreteCategory.congr_hom hf x
+  refine X.2.1.of_injective f (Function.Injective.of_comp
+    (f := OrderEmbedding.subtype (· in X.1)) ?_)
+  dsimp at hf ⊢
+  rw [hf]
+  exact WithTop.coe_injective
 -/
 protected lemma isCardinalPresentable_iff (h : κ <= κ') :
     IsCardinalPresentable J κ' ↔ HasCardinalLT J.obj κ' := by
@@ -887,7 +1011,21 @@ instance :
     let m := IsCardinalFiltered.max (fun k => (t k).val) hK
     let S : Set J.obj := (⋃ (k : K), α k) union {m}
     let : OrderTop S :=
-      { top := ⟨m, by simp
+      { top := ⟨m, by simp [S]⟩
+        le_top := by
+          rintro ⟨s, hs⟩
+          simp only [Set.union_singleton, Set.mem_insert_iff, Set.mem_iUnion, S] at hs
+          obtain rfl | ⟨k, hs⟩ := hs
+          · simp
+          · simp only [Subtype.mk_le_mk]
+            exact leOfHom ((by exact terminal.from (C := (α k).val) ⟨_, hs⟩) ≫
+              IsCardinalFiltered.toMax _ hK k) }
+    refine ⟨⟨S, ?_, isTerminalTop.hasTerminal⟩, fun k => ?_⟩
+    · have hκ : Cardinal.aleph0 <= κ := Cardinal.IsRegular.aleph0_le Fact.out
+      exact hasCardinalLT_union hκ (hasCardinalLT_iUnion _ hK (fun k => (α k).2.1))
+        (hasCardinalLT_of_finite _ _ hκ)
+    · simp only [← Subtype.coe_le_coe]
+      exact subset_trans (Set.subset_iUnion_of_subset k (subset_refl _)) Set.subset_union_left )
 
 中文:
 实例 :
@@ -898,7 +1036,21 @@ instance :
     let m := IsCardinalFiltered.max (fun k => (t k).val) hK
     let S : Set J.obj := (⋃ (k : K), α k) union {m}
     let : OrderTop S :=
-      { top := ⟨m, by simp
+      { top := ⟨m, by simp [S]⟩
+        le_top := by
+          rintro ⟨s, hs⟩
+          simp only [Set.union_singleton, Set.mem_insert_iff, Set.mem_iUnion, S] at hs
+          obtain rfl | ⟨k, hs⟩ := hs
+          · simp
+          · simp only [Subtype.mk_le_mk]
+            exact leOfHom ((by exact terminal.from (C := (α k).val) ⟨_, hs⟩) ≫
+              IsCardinalFiltered.toMax _ hK k) }
+    refine ⟨⟨S, ?_, isTerminalTop.hasTerminal⟩, fun k => ?_⟩
+    · have hκ : Cardinal.aleph0 <= κ := Cardinal.IsRegular.aleph0_le Fact.out
+      exact hasCardinalLT_union hκ (hasCardinalLT_iUnion _ hK (fun k => (α k).2.1))
+        (hasCardinalLT_of_finite _ _ hκ)
+    · simp only [← Subtype.coe_le_coe]
+      exact subset_trans (Set.subset_iUnion_of_subset k (subset_refl _)) Set.subset_union_left )
 
 Depends on / 依赖: IsCardinalFiltered, IsCardinalFiltered.max, J.obj, OrderTop, Set.mem_iUnion, Set.mem_insert_iff, Set.union_singleton, Subtype, Subtype.mk_le_mk, hasCardinalLT_iff_cardinal_mk_lt, isCardinalFiltered_preorder, leOfHom, le_top, mem_iUnion, mem_insert_iff, mk_le_mk, terminal, terminal.from, union_singleton
 -/

@@ -143,7 +143,7 @@ definition abelianImageToKernelIsKernel
     (fun k hk => by simp only [← cancel_mono (kernel.ι S.g), assoc,
       abelianImageToKernel_comp_kernel_ι, kernel.lift_ι])
     (fun k hk b hb => by simp only [← cancel_mono S.abelianImageToKernel,
-  
+      ← cancel_mono (kernel.ι S.g), hb, assoc, abelianImageToKernel_comp_kernel_ι, kernel.lift_ι])
 
 中文:
 定义 abelianImageToKernelIsKernel
@@ -153,7 +153,7 @@ definition abelianImageToKernelIsKernel
     (fun k hk => by simp only [← cancel_mono (kernel.ι S.g), assoc,
       abelianImageToKernel_comp_kernel_ι, kernel.lift_ι])
     (fun k hk b hb => by simp only [← cancel_mono S.abelianImageToKernel,
-  
+      ← cancel_mono (kernel.ι S.g), hb, assoc, abelianImageToKernel_comp_kernel_ι, kernel.lift_ι])
 
 Depends on / 依赖: IsLimit, KernelFork, KernelFork.IsLimit.of, S.abelianImageToKernel, abelianImageToKernel, cancel_mono, kernel, kernel.lift, kernel.lift_
 -/
@@ -185,7 +185,30 @@ definition ofAbelian
   have wπ : f' ≫ cokernel.π (kernel.ι γ) = 0 := by
     rw [hf']
     simp only [assoc, cokernel.condition, comp_zero]
-  let e :
+  let e : Abelian.image S.f ≅ kernel γ :=
+    IsLimit.conePointUniqueUpToIso S.abelianImageToKernelIsKernel (limit.isLimit _)
+  have he : e.hom ≫ kernel.ι γ = S.abelianImageToKernel :=
+    IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingParallelPair.zero
+  have fac : f' = Abelian.factorThruImage S.f ≫ e.hom ≫ kernel.ι γ := by
+    rw [hf']; rw [he]
+    simp only [γ, f', kernel.lift_ι, abelianImageToKernel, ← cancel_mono (kernel.ι S.g),
+      assoc]
+  have hπ : IsColimit (CokernelCofork.ofπ _ wπ) :=
+    CokernelCofork.IsColimit.ofπ _ _
+    (fun x hx => cokernel.desc _ x (by
+      simpa only [← cancel_epi e.hom, ← cancel_epi (Abelian.factorThruImage S.f),
+        comp_zero, fac, assoc] using hx))
+    (fun x hx => cokernel.π_desc _ _ _)
+    (fun x hx b hb => coequalizer.hom_ext (by simp only [hb, cokernel.π_desc]))
+  exact
+    { K := kernel S.g,
+      H := Abelian.coimage (kernel.ι S.g ≫ cokernel.π S.f)
+      i := kernel.ι _,
+      π := cokernel.π _
+      wi := kernel.condition _
+      hi := kernelIsKernel _
+      wπ := wπ
+      hπ := hπ }
 
 中文:
 定义 ofAbelian
@@ -197,7 +220,30 @@ definition ofAbelian
   have wπ : f' ≫ cokernel.π (kernel.ι γ) = 0 := by
     rw [hf']
     simp only [assoc, cokernel.condition, comp_zero]
-  let e :
+  let e : Abelian.image S.f ≅ kernel γ :=
+    IsLimit.conePointUniqueUpToIso S.abelianImageToKernelIsKernel (limit.isLimit _)
+  have he : e.hom ≫ kernel.ι γ = S.abelianImageToKernel :=
+    IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingParallelPair.zero
+  have fac : f' = Abelian.factorThruImage S.f ≫ e.hom ≫ kernel.ι γ := by
+    rw [hf']; rw [he]
+    simp only [γ, f', kernel.lift_ι, abelianImageToKernel, ← cancel_mono (kernel.ι S.g),
+      assoc]
+  have hπ : IsColimit (CokernelCofork.ofπ _ wπ) :=
+    CokernelCofork.IsColimit.ofπ _ _
+    (fun x hx => cokernel.desc _ x (by
+      simpa only [← cancel_epi e.hom, ← cancel_epi (Abelian.factorThruImage S.f),
+        comp_zero, fac, assoc] using hx))
+    (fun x hx => cokernel.π_desc _ _ _)
+    (fun x hx b hb => coequalizer.hom_ext (by simp only [hb, cokernel.π_desc]))
+  exact
+    { K := kernel S.g,
+      H := Abelian.coimage (kernel.ι S.g ≫ cokernel.π S.f)
+      i := kernel.ι _,
+      π := cokernel.π _
+      wi := kernel.condition _
+      hi := kernelIsKernel _
+      wπ := wπ
+      hπ := hπ }
 
 Depends on / 依赖: Abelian, Abelian.image, IsLimit, IsLimit.conePointUniqueUpToIso, IsLimit.conePointUniqueUpToIso_hom_comp, S.abelianImageToKernel, S.abelianImageToKernelIsKernel, S.zero, abelianImageToKernel, abelianImageToKernelIsKernel, cokernel, cokernel.condition, comp_zero, condition, conePointUniqueUpToIso, conePointUniqueUpToIso_hom_comp, e.hom, isLimit, kernel, kernel.lift
 -/
@@ -324,7 +370,8 @@ definition cokernelToAbelianCoimageIsCokernel
     (fun k hk => by simp only [← cancel_epi (cokernel.π S.f),
         cokernel_π_comp_cokernelToAbelianCoimage_assoc, cokernel.π_desc])
     (fun k hk b hb => by
-      simp only [←
+      simp only [← cancel_epi S.cokernelToAbelianCoimage, ← cancel_epi (cokernel.π S.f), hb,
+        cokernel_π_comp_cokernelToAbelianCoimage_assoc, cokernel.π_desc])
 
 中文:
 定义 cokernelToAbelianCoimageIsCokernel
@@ -334,7 +381,8 @@ definition cokernelToAbelianCoimageIsCokernel
     (fun k hk => by simp only [← cancel_epi (cokernel.π S.f),
         cokernel_π_comp_cokernelToAbelianCoimage_assoc, cokernel.π_desc])
     (fun k hk b hb => by
-      simp only [←
+      simp only [← cancel_epi S.cokernelToAbelianCoimage, ← cancel_epi (cokernel.π S.f), hb,
+        cokernel_π_comp_cokernelToAbelianCoimage_assoc, cokernel.π_desc])
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.of, IsColimit, S.cokernelToAbelianCoimage, cancel_epi, cokernel, cokernel.desc, cokernelToAbelianCoimage
 -/
@@ -365,7 +413,30 @@ definition ofAbelian
   let g' := cokernel.desc S.f S.g S.zero
   have hg' : g' = cokernel.π γ ≫ cokernel.desc γ g' (by simp [γ, g']) := by rw [cokernel.π_desc]
   have wι : kernel.ι (cokernel.π γ) ≫ g' = 0 := by rw [hg', kernel.condition_assoc, zero_comp]
-  let e : cokernel γ ≅ 
+  let e : cokernel γ ≅ Abelian.coimage S.g :=
+    IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) S.cokernelToAbelianCoimageIsCokernel
+  have he : cokernel.π γ ≫ e.hom = S.cokernelToAbelianCoimage :=
+    IsColimit.comp_coconePointUniqueUpToIso_hom _ _ WalkingParallelPair.one
+  have fac : g' = cokernel.π γ ≫ e.hom ≫ Abelian.factorThruCoimage S.g := by
+    rw [hg']; rw [reassoc_of% he]
+    simp only [γ, g', cokernel.π_desc, ← cancel_epi (cokernel.π S.f),
+      cokernel_π_comp_cokernelToAbelianCoimage_assoc]
+  have hι : IsLimit (KernelFork.ofι _ wι) :=
+    KernelFork.IsLimit.ofι _ _
+      (fun x hx => kernel.lift _ x (by
+        simpa only [← cancel_mono e.hom, ← cancel_mono (Abelian.factorThruCoimage S.g), assoc,
+          zero_comp, fac] using hx))
+      (fun x hx => kernel.lift_ι _ _ _)
+      (fun x hx b hb => equalizer.hom_ext (by simp only [hb, kernel.lift_ι]))
+  exact
+    { Q := cokernel S.f,
+      H := Abelian.image (kernel.ι S.g ≫ cokernel.π S.f)
+      p := cokernel.π _
+      ι := kernel.ι _
+      wp := cokernel.condition _
+      hp := cokernelIsCokernel _
+      wι := wι
+      hι := hι }
 
 中文:
 定义 ofAbelian
@@ -375,7 +446,30 @@ definition ofAbelian
   let g' := cokernel.desc S.f S.g S.zero
   have hg' : g' = cokernel.π γ ≫ cokernel.desc γ g' (by simp [γ, g']) := by rw [cokernel.π_desc]
   have wι : kernel.ι (cokernel.π γ) ≫ g' = 0 := by rw [hg', kernel.condition_assoc, zero_comp]
-  let e : cokernel γ ≅ 
+  let e : cokernel γ ≅ Abelian.coimage S.g :=
+    IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) S.cokernelToAbelianCoimageIsCokernel
+  have he : cokernel.π γ ≫ e.hom = S.cokernelToAbelianCoimage :=
+    IsColimit.comp_coconePointUniqueUpToIso_hom _ _ WalkingParallelPair.one
+  have fac : g' = cokernel.π γ ≫ e.hom ≫ Abelian.factorThruCoimage S.g := by
+    rw [hg']; rw [reassoc_of% he]
+    simp only [γ, g', cokernel.π_desc, ← cancel_epi (cokernel.π S.f),
+      cokernel_π_comp_cokernelToAbelianCoimage_assoc]
+  have hι : IsLimit (KernelFork.ofι _ wι) :=
+    KernelFork.IsLimit.ofι _ _
+      (fun x hx => kernel.lift _ x (by
+        simpa only [← cancel_mono e.hom, ← cancel_mono (Abelian.factorThruCoimage S.g), assoc,
+          zero_comp, fac] using hx))
+      (fun x hx => kernel.lift_ι _ _ _)
+      (fun x hx b hb => equalizer.hom_ext (by simp only [hb, kernel.lift_ι]))
+  exact
+    { Q := cokernel S.f,
+      H := Abelian.image (kernel.ι S.g ≫ cokernel.π S.f)
+      p := cokernel.π _
+      ι := kernel.ι _
+      wp := cokernel.condition _
+      hp := cokernelIsCokernel _
+      wι := wι
+      hι := hι }
 
 Depends on / 依赖: Abelian, Abelian.coimage, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.comp_coconePointUniq, IsIso.hom_inv_id_assoc, IsIso.inv_hom_id_assoc, S.cokernelToAbelianCoimage, S.cokernelToAbelianCoimageIsCokernel, S.zero, _assoc, cancel_epi, coconePointUniqueUpToIso, coimage, cokernel, cokernel.desc, cokernelToAbelianCoimage, cokernelToAbelianCoimageIsCokernel, colimit, colimit.isColimit
 -/
@@ -831,7 +925,11 @@ definition leftHomologyData
   hi := IsLimit.ofIsoLimit hkf (Fork.ext (Iso.refl _) (by simp))
   wπ := by
     dsimp
-    rw [← cancel_mono (isoHomology S hkf hcc fac).hom]; rw [assoc]; rw [assoc]; rw [id_comp]; rw [π_comp_isoHomology_hom]; rw [zero_comp]; rw [f'_
+    rw [← cancel_mono (isoHomology S hkf hcc fac).hom]; rw [assoc]; rw [assoc]; rw [id_comp]; rw [π_comp_isoHomology_hom]; rw [zero_comp]; rw [f'_eq]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [toCycles_comp_homologyπ]
+  hπ := by
+    refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).2 S.homologyIsCokernel
+    · exact parallelPair.ext (Iso.refl _) (S.isoCyclesOfIsLimit hkf)
+    · exact Cofork.ext (isoHomology S hkf hcc fac) (by simp [Cofork.π])
 
 中文:
 定义 leftHomologyData
@@ -844,7 +942,11 @@ definition leftHomologyData
   hi := IsLimit.ofIsoLimit hkf (Fork.ext (Iso.refl _) (by simp))
   wπ := by
     dsimp
-    rw [← cancel_mono (isoHomology S hkf hcc fac).hom]; rw [assoc]; rw [assoc]; rw [id_comp]; rw [π_comp_isoHomology_hom]; rw [zero_comp]; rw [f'_
+    rw [← cancel_mono (isoHomology S hkf hcc fac).hom]; rw [assoc]; rw [assoc]; rw [id_comp]; rw [π_comp_isoHomology_hom]; rw [zero_comp]; rw [f'_eq]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [toCycles_comp_homologyπ]
+  hπ := by
+    refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).2 S.homologyIsCokernel
+    · exact parallelPair.ext (Iso.refl _) (S.isoCyclesOfIsLimit hkf)
+    · exact Cofork.ext (isoHomology S hkf hcc fac) (by simp [Cofork.π])
 
 Depends on / 依赖: kf.pt
 -/
@@ -885,7 +987,11 @@ definition rightHomologyData
   hp := IsColimit.ofIsoColimit hcc (Cofork.ext (Iso.refl _) (by simp))
   wι := by
     dsimp
-    rw [id_comp]; rw [g'_eq]; rw [← cancel_epi (isoHomology S hkf hcc fac).inv]; rw [comp_zero]; rw [isoHomology_hom_comp_ι_assoc]; rw [
+    rw [id_comp]; rw [g'_eq]; rw [← cancel_epi (isoHomology S hkf hcc fac).inv]; rw [comp_zero]; rw [isoHomology_hom_comp_ι_assoc]; rw [Iso.inv_hom_id_assoc]; rw [homologyι_comp_fromOpcycles]
+  hι := by
+    refine (IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_).2 S.homologyIsKernel
+    · exact parallelPair.ext (S.isoOpcyclesOfIsColimit hcc) (Iso.refl _)
+    · exact Fork.ext (isoHomology S hkf hcc fac) (by simp [Fork.ι])
 
 中文:
 定义 rightHomologyData
@@ -898,7 +1004,11 @@ definition rightHomologyData
   hp := IsColimit.ofIsoColimit hcc (Cofork.ext (Iso.refl _) (by simp))
   wι := by
     dsimp
-    rw [id_comp]; rw [g'_eq]; rw [← cancel_epi (isoHomology S hkf hcc fac).inv]; rw [comp_zero]; rw [isoHomology_hom_comp_ι_assoc]; rw [
+    rw [id_comp]; rw [g'_eq]; rw [← cancel_epi (isoHomology S hkf hcc fac).inv]; rw [comp_zero]; rw [isoHomology_hom_comp_ι_assoc]; rw [Iso.inv_hom_id_assoc]; rw [homologyι_comp_fromOpcycles]
+  hι := by
+    refine (IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_).2 S.homologyIsKernel
+    · exact parallelPair.ext (S.isoOpcyclesOfIsColimit hcc) (Iso.refl _)
+    · exact Fork.ext (isoHomology S hkf hcc fac) (by simp [Fork.ι])
 
 Depends on / 依赖: cc.pt
 -/

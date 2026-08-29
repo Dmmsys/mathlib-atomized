@@ -59,7 +59,9 @@ instance :
     simp only [mapRange_apply, add_apply, lie_add]
   leibniz_lie x y m := by
     ext
-    simp only [mapRange_apply, lie_lie, add_apply, 
+    simp only [mapRange_apply, lie_lie, add_apply, sub_add_cancel]
+
+@[simp]
 
 中文:
 实例 :
@@ -73,7 +75,9 @@ instance :
     simp only [mapRange_apply, add_apply, lie_add]
   leibniz_lie x y m := by
     ext
-    simp only [mapRange_apply, lie_lie, add_apply, 
+    simp only [mapRange_apply, lie_lie, add_apply, sub_add_cancel]
+
+@[simp]
 
 Depends on / 依赖: lie_zero, m.mapRange, mapRange
 -/
@@ -159,7 +163,11 @@ definition lieModuleOf
       · rw [← h]; simp
       · -- This used to be the end of the proof before https://github.com/leanprover/lean4/pull/2644
         -- old proof `simp [lof, lsingle, h]`
-        simp only [lof, lsingle, AddHom.to
+        simp only [lof, lsingle, AddHom.toFun_eq_coe, lie_module_bracket_apply]
+        -- The coercion in the goal is `DFunLike.coe (β := fun x ↦ Π₀ (i : ι), M i)`
+        -- but the lemma is expecting `DFunLike.coe (β := fun x ↦ ⨁ (i : ι), M i)`
+        erw [AddHom.coe_mk]
+        simp [h] }
 
 中文:
 定义 lieModuleOf
@@ -171,7 +179,11 @@ definition lieModuleOf
       · rw [← h]; simp
       · -- This used to be the end of the proof before https://github.com/leanprover/lean4/pull/2644
         -- old proof `simp [lof, lsingle, h]`
-        simp only [lof, lsingle, AddHom.to
+        simp only [lof, lsingle, AddHom.toFun_eq_coe, lie_module_bracket_apply]
+        -- The coercion in the goal is `DFunLike.coe (β := fun x ↦ Π₀ (i : ι), M i)`
+        -- but the lemma is expecting `DFunLike.coe (β := fun x ↦ ⨁ (i : ι), M i)`
+        erw [AddHom.coe_mk]
+        simp [h] }
 
 Depends on / 依赖: before, github, github.com, leanprover, map_lie
 -/
@@ -236,7 +248,15 @@ instance lieRing
     lie_add := fun x y z => by
       ext
       simp only [zipWith_apply, add_apply, lie_add]
-  
+    lie_self := fun x => by
+      ext
+      simp only [zipWith_apply, lie_self, zero_apply]
+    leibniz_lie := fun x y z => by
+      ext
+      simp only [zipWith_apply, add_apply]
+      apply leibniz_lie }
+
+@[simp]
 
 中文:
 实例 lieRing
@@ -249,7 +269,15 @@ instance lieRing
     lie_add := fun x y z => by
       ext
       simp only [zipWith_apply, add_apply, lie_add]
-  
+    lie_self := fun x => by
+      ext
+      simp only [zipWith_apply, lie_self, zero_apply]
+    leibniz_lie := fun x y z => by
+      ext
+      simp only [zipWith_apply, add_apply]
+      apply leibniz_lie }
+
+@[simp]
 
 Depends on / 依赖: AddCommGroup, add_apply, add_lie, bracket, leibniz_lie, lie_add, lie_self, lie_zero, zero_apply, zipWith, zipWith_apply
 -/
@@ -496,7 +524,30 @@ definition toLieAlgebra
     map_lie' := fun {x y} => by
       let f' i := (f i : L i ->ₗ[R] L')
       /- The goal is linear in `y`. We can use this to reduce to the case that `y` has only one
-        non-zero c
+        non-zero component. -/
+      suffices forall (i : ι) (y : L i),
+          toModule R ι L' f' ⁅x, of L i y⁆ =
+            ⁅toModule R ι L' f' x, toModule R ι L' f' (of L i y)⁆ by
+        simp only [← LieAlgebra.ad_apply R]
+        rw [← LinearMap.comp_apply]; rw [← LinearMap.comp_apply]
+        congr; clear y; ext i y; exact this i y
+      -- Similarly, we can reduce to the case that `x` has only one non-zero component.
+      suffices forall (i j) (y : L i) (x : L j),
+          toModule R ι L' f' ⁅of L j x, of L i y⁆ =
+            ⁅toModule R ι L' f' (of L j x), toModule R ι L' f' (of L i y)⁆ by
+        intro i y
+        rw [← lie_skew x]; rw [← lie_skew (toModule R ι L' f' x)]
+        simp only [map_neg, neg_inj, ← LieAlgebra.ad_apply R]
+        rw [← LinearMap.comp_apply]; rw [← LinearMap.comp_apply]
+        congr; clear x; ext j x; exact this j i x y
+      intro i j y x
+      simp only [f', coe_toModule_eq_coe_toAddMonoid, toAddMonoid_of]
+      -- And finish with trivial case analysis.
+      obtain rfl | hij := Decidable.eq_or_ne i j
+      · simp_rw [lie_of_same, toAddMonoid_of, LinearMap.toAddMonoidHom_coe, LieHom.coe_toLinearMap,
+          LieHom.map_lie]
+      · simp_rw [lie_of_of_ne _ hij.symm, map_zero, LinearMap.toAddMonoidHom_coe,
+          LieHom.coe_toLinearMap, hf hij.symm x y] }
 
 中文:
 定义 toLieAlgebra
@@ -506,7 +557,30 @@ definition toLieAlgebra
     map_lie' := fun {x y} => by
       let f' i := (f i : L i ->ₗ[R] L')
       /- The goal is linear in `y`. We can use this to reduce to the case that `y` has only one
-        non-zero c
+        non-zero component. -/
+      suffices forall (i : ι) (y : L i),
+          toModule R ι L' f' ⁅x, of L i y⁆ =
+            ⁅toModule R ι L' f' x, toModule R ι L' f' (of L i y)⁆ by
+        simp only [← LieAlgebra.ad_apply R]
+        rw [← LinearMap.comp_apply]; rw [← LinearMap.comp_apply]
+        congr; clear y; ext i y; exact this i y
+      -- Similarly, we can reduce to the case that `x` has only one non-zero component.
+      suffices forall (i j) (y : L i) (x : L j),
+          toModule R ι L' f' ⁅of L j x, of L i y⁆ =
+            ⁅toModule R ι L' f' (of L j x), toModule R ι L' f' (of L i y)⁆ by
+        intro i y
+        rw [← lie_skew x]; rw [← lie_skew (toModule R ι L' f' x)]
+        simp only [map_neg, neg_inj, ← LieAlgebra.ad_apply R]
+        rw [← LinearMap.comp_apply]; rw [← LinearMap.comp_apply]
+        congr; clear x; ext j x; exact this j i x y
+      intro i j y x
+      simp only [f', coe_toModule_eq_coe_toAddMonoid, toAddMonoid_of]
+      -- And finish with trivial case analysis.
+      obtain rfl | hij := Decidable.eq_or_ne i j
+      · simp_rw [lie_of_same, toAddMonoid_of, LinearMap.toAddMonoidHom_coe, LieHom.coe_toLinearMap,
+          LieHom.map_lie]
+      · simp_rw [lie_of_of_ne _ hij.symm, map_zero, LinearMap.toAddMonoidHom_coe,
+          LieHom.coe_toLinearMap, hf hij.symm x y] }
 
 Depends on / 依赖: map_lie, toModule
 -/

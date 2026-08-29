@@ -104,7 +104,15 @@ definition pasteHorizIsPullback
   -- Obtain the lift from lifting from both the small squares consecutively.
   obtain ⟨l₂, hl₂, hl₂'⟩ := PullbackCone.IsLimit.lift' H (s.fst ≫ g₁) s.snd
     (by rw [← s.condition, Category.assoc])
-  obtain ⟨l₁, hl₁, hl₁'⟩ := PullbackCone.IsLimit.lift' H'
+  obtain ⟨l₁, hl₁, hl₁'⟩ := PullbackCone.IsLimit.lift' H' s.fst l₂ (by rw [← hl₂, hi₂])
+  refine ⟨l₁, hl₁, by simp [reassoc_of% hl₁', hl₂'], ?_⟩
+  -- Uniqueness also follows from the universal property of both the small squares.
+  intro m hm₁ hm₂
+  apply PullbackCone.IsLimit.hom_ext H' (by simpa [hl₁] using hm₁)
+  apply PullbackCone.IsLimit.hom_ext H
+  · dsimp at hm₁
+    rw [Category.assoc]; rw [← hi₂]; rw [← t₁.condition]; rw [reassoc_of% hm₁]; rw [hl₁']; rw [hi₂]; rw [hl₂]
+  · simpa [hl₁', hl₂'] using hm₂
 
 中文:
 定义 pasteHorizIsPullback
@@ -115,7 +123,15 @@ definition pasteHorizIsPullback
   -- Obtain the lift from lifting from both the small squares consecutively.
   obtain ⟨l₂, hl₂, hl₂'⟩ := PullbackCone.IsLimit.lift' H (s.fst ≫ g₁) s.snd
     (by rw [← s.condition, Category.assoc])
-  obtain ⟨l₁, hl₁, hl₁'⟩ := PullbackCone.IsLimit.lift' H'
+  obtain ⟨l₁, hl₁, hl₁'⟩ := PullbackCone.IsLimit.lift' H' s.fst l₂ (by rw [← hl₂, hi₂])
+  refine ⟨l₁, hl₁, by simp [reassoc_of% hl₁', hl₂'], ?_⟩
+  -- Uniqueness also follows from the universal property of both the small squares.
+  intro m hm₁ hm₂
+  apply PullbackCone.IsLimit.hom_ext H' (by simpa [hl₁] using hm₁)
+  apply PullbackCone.IsLimit.hom_ext H
+  · dsimp at hm₁
+    rw [Category.assoc]; rw [← hi₂]; rw [← t₁.condition]; rw [reassoc_of% hm₁]; rw [hl₁']; rw [hi₂]; rw [hl₂]
+  · simpa [hl₁', hl₂'] using hm₂
 
 Depends on / 依赖: PullbackCone, PullbackCone.isLimitAux, isLimitAux
 -/
@@ -152,6 +168,15 @@ definition leftSquareIsPullback
   obtain ⟨l, hl, hl'⟩ := PullbackCone.IsLimit.lift' H' s.fst (s.snd ≫ f₂)
     (by rw [Category.assoc, ← t₂.condition, reassoc_of% s.condition, ← hi₂])
   refine ⟨l, hl, ?_, ?_⟩
+  -- To check that `l` is compatible with the projections, we use the universal property of `t₂`
+  · apply PullbackCone.IsLimit.hom_ext H
+    · simp [← s.condition, ← hl, ← t₁.condition, ← hi₂]
+    · simpa using hl'
+  -- Uniqueness of the lift follows from the universal property of the big square
+  · intro m hm₁ hm₂
+    apply PullbackCone.IsLimit.hom_ext H'
+    · simpa [hm₁] using hl.symm
+    · simpa [← hm₂] using hl'.symm
 
 中文:
 定义 leftSquareIsPullback
@@ -163,6 +188,15 @@ definition leftSquareIsPullback
   obtain ⟨l, hl, hl'⟩ := PullbackCone.IsLimit.lift' H' s.fst (s.snd ≫ f₂)
     (by rw [Category.assoc, ← t₂.condition, reassoc_of% s.condition, ← hi₂])
   refine ⟨l, hl, ?_, ?_⟩
+  -- To check that `l` is compatible with the projections, we use the universal property of `t₂`
+  · apply PullbackCone.IsLimit.hom_ext H
+    · simp [← s.condition, ← hl, ← t₁.condition, ← hi₂]
+    · simpa using hl'
+  -- Uniqueness of the lift follows from the universal property of the big square
+  · intro m hm₁ hm₂
+    apply PullbackCone.IsLimit.hom_ext H'
+    · simpa [hm₁] using hl.symm
+    · simpa [← hm₂] using hl'.symm
 
 Depends on / 依赖: PullbackCone, PullbackCone.isLimitAux, isLimitAux
 -/
@@ -418,7 +452,15 @@ definition pasteHorizIsPushout
   -- Obtain the induced map from descending from both the small squares consecutively.
   obtain ⟨l₁, hl₁, hl₁'⟩ := PushoutCocone.IsColimit.desc' H s.inl (f₂ ≫ s.inr)
     (by rw [s.condition, Category.assoc])
-  obtain ⟨l₂, hl₂, hl₂'⟩ := PushoutCocone.I
+  obtain ⟨l₂, hl₂, hl₂'⟩ := PushoutCocone.IsColimit.desc' H' l₁ s.inr (by rw [← hl₁', hi₂])
+  refine ⟨l₂, by simp [hl₂, hl₁], hl₂', ?_⟩
+  -- Uniqueness also follows from the universal property of both the small squares.
+  intro m hm₁ hm₂
+  apply PushoutCocone.IsColimit.hom_ext H' _ (by simpa [hl₂'] using hm₂)
+  simp only [PushoutCocone.mk_pt, PushoutCocone.mk_ι_app, Category.assoc] at hm₁ hm₂
+  apply PushoutCocone.IsColimit.hom_ext H
+  · rw [hm₁, ← hl₁, hl₂]
+  · rw [← hi₂, reassoc_of% t₂.condition, reassoc_of% t₂.condition, hm₂, hl₂']
 
 中文:
 定义 pasteHorizIsPushout
@@ -429,7 +471,15 @@ definition pasteHorizIsPushout
   -- Obtain the induced map from descending from both the small squares consecutively.
   obtain ⟨l₁, hl₁, hl₁'⟩ := PushoutCocone.IsColimit.desc' H s.inl (f₂ ≫ s.inr)
     (by rw [s.condition, Category.assoc])
-  obtain ⟨l₂, hl₂, hl₂'⟩ := PushoutCocone.I
+  obtain ⟨l₂, hl₂, hl₂'⟩ := PushoutCocone.IsColimit.desc' H' l₁ s.inr (by rw [← hl₁', hi₂])
+  refine ⟨l₂, by simp [hl₂, hl₁], hl₂', ?_⟩
+  -- Uniqueness also follows from the universal property of both the small squares.
+  intro m hm₁ hm₂
+  apply PushoutCocone.IsColimit.hom_ext H' _ (by simpa [hl₂'] using hm₂)
+  simp only [PushoutCocone.mk_pt, PushoutCocone.mk_ι_app, Category.assoc] at hm₁ hm₂
+  apply PushoutCocone.IsColimit.hom_ext H
+  · rw [hm₁, ← hl₁, hl₂]
+  · rw [← hi₂, reassoc_of% t₂.condition, reassoc_of% t₂.condition, hm₂, hl₂']
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.isColimitAux, isColimitAux
 -/
@@ -466,7 +516,16 @@ definition rightSquareIsPushout
   -- Obtain the induced morphism from the universal property of the big square
   obtain ⟨l, hl, hl'⟩ := PushoutCocone.IsColimit.desc' H' (g₁ ≫ s.inl) s.inr
     (by rw [reassoc_of% t₁.condition, ← hi₂, s.condition, Category.assoc])
-  refine ⟨l, ?_, hl'
+  refine ⟨l, ?_, hl', ?_⟩
+  -- To check that `l` is compatible with the projections, we use the universal property of `t₁`
+  · simp only [PushoutCocone.mk_pt, PushoutCocone.mk_ι_app, Category.assoc] at hl hl'
+    apply PushoutCocone.IsColimit.hom_ext H hl
+    rw [← Category.assoc]; rw [← hi₂]; rw [t₂.condition]; rw [s.condition]; rw [Category.assoc]; rw [hl']
+  -- Uniqueness of the lift follows from the universal property of the big square
+  · intro m hm₁ hm₂
+    apply PushoutCocone.IsColimit.hom_ext H'
+    · simpa [← hm₁] using hl.symm
+    · simpa [← hm₂] using hl'.symm
 
 中文:
 定义 rightSquareIsPushout
@@ -477,7 +536,16 @@ definition rightSquareIsPushout
   -- Obtain the induced morphism from the universal property of the big square
   obtain ⟨l, hl, hl'⟩ := PushoutCocone.IsColimit.desc' H' (g₁ ≫ s.inl) s.inr
     (by rw [reassoc_of% t₁.condition, ← hi₂, s.condition, Category.assoc])
-  refine ⟨l, ?_, hl'
+  refine ⟨l, ?_, hl', ?_⟩
+  -- To check that `l` is compatible with the projections, we use the universal property of `t₁`
+  · simp only [PushoutCocone.mk_pt, PushoutCocone.mk_ι_app, Category.assoc] at hl hl'
+    apply PushoutCocone.IsColimit.hom_ext H hl
+    rw [← Category.assoc]; rw [← hi₂]; rw [t₂.condition]; rw [s.condition]; rw [Category.assoc]; rw [hl']
+  -- Uniqueness of the lift follows from the universal property of the big square
+  · intro m hm₁ hm₂
+    apply PushoutCocone.IsColimit.hom_ext H'
+    · simpa [← hm₁] using hl.symm
+    · simpa [← hm₂] using hl'.symm
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.isColimitAux, isColimitAux
 -/

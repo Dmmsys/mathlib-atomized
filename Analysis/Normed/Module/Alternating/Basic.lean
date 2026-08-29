@@ -1313,7 +1313,11 @@ theorem continuous_compContinuousLinearMapCLM
 .isInducing isUniformEmbedding_toContinuousMultilinearMap.isUniformInducing _
 .mpr ?_ .continuous_iff
 change Continuous
-    (toContinuou
+    (toContinuousMultilinearMapCLM 𝕜 : (F [⋀^ι]->L[𝕜] G) ->L[𝕜] _).precomp _ ∘
+      ContinuousMultilinearMap.compContinuousLinearMapContinuousMultilinear 𝕜
+        (fun _ : ι => E) (fun _ => F) G ∘
+      (fun f _ => f)
+  fun_prop
 
 中文:
 定理 continuous_compContinuousLinearMapCLM
@@ -1325,7 +1329,11 @@ change Continuous
 .isInducing isUniformEmbedding_toContinuousMultilinearMap.isUniformInducing _
 .mpr ?_ .continuous_iff
 change Continuous
-    (toContinuou
+    (toContinuousMultilinearMapCLM 𝕜 : (F [⋀^ι]->L[𝕜] G) ->L[𝕜] _).precomp _ ∘
+      ContinuousMultilinearMap.compContinuousLinearMapContinuousMultilinear 𝕜
+        (fun _ : ι => E) (fun _ => F) G ∘
+      (fun f _ => f)
+  fun_prop
 
 Depends on / 依赖: Continuous, ContinuousMultilinearMap, ContinuousMultilinearMap.compContinuousLinearMapContinuousMultilinear, UniformConvergenceCLM, UniformConvergenceCLM.isUniformInducing_postcomp, compContinuousLinearMapContinuousMultilinear, continuous_iff, fun_prop, isInducing, isUniformEmbedding_toContinuousMultilinearMap, isUniformEmbedding_toContinuousMultilinearMap.isUniformInducing, isUniformInducing, isUniformInducing_postcomp, nonempty_fintype, precomp, toContinuousMultilinearMapCLM
 -/
@@ -1357,7 +1365,18 @@ definition fderivCompContinuousLinearMap
     trans ∑ i, f fun j => Function.update (fun _ => g) i dg j (v j)
     · simp
     · rw [← Finset.sum_add_sum_compl {a, b}, Finset.sum_pair hne, Finset.sum_eq_zero, add_zero]
-      · co
+      · convert! f.map_add_swap _ hne with i
+        rcases eq_or_ne i a with rfl | hia
+        · simp [heq, hne, hne.symm]
+        · rcases eq_or_ne i b with rfl | hib
+          · simp [Function.update_apply, heq]
+          · simp [Function.update_apply, Equiv.swap_apply_of_ne_of_ne, *]
+      · simp only [mem_compl, mem_insert, mem_singleton, not_or, and_imp]
+        intro i hia hib
+        apply f.map_eq_zero_of_eq _ _ hne
+        simp [*, Ne.symm]
+
+@[simp]
 
 中文:
 定义 fderivCompContinuousLinearMap
@@ -1367,7 +1386,18 @@ definition fderivCompContinuousLinearMap
     trans ∑ i, f fun j => Function.update (fun _ => g) i dg j (v j)
     · simp
     · rw [← Finset.sum_add_sum_compl {a, b}, Finset.sum_pair hne, Finset.sum_eq_zero, add_zero]
-      · co
+      · convert! f.map_add_swap _ hne with i
+        rcases eq_or_ne i a with rfl | hia
+        · simp [heq, hne, hne.symm]
+        · rcases eq_or_ne i b with rfl | hib
+          · simp [Function.update_apply, heq]
+          · simp [Function.update_apply, Equiv.swap_apply_of_ne_of_ne, *]
+      · simp only [mem_compl, mem_insert, mem_singleton, not_or, and_imp]
+        intro i hia hib
+        apply f.map_eq_zero_of_eq _ _ hne
+        simp [*, Ne.symm]
+
+@[simp]
 
 Depends on / 依赖: Equiv.swap_apply_of_, Finset, Finset.sum_add_sum_compl, Finset.sum_eq_zero, Finset.sum_pair, Function, Function.update, Function.update_apply, add_zero, convert, eq_or_ne, f.map_add_swap, fderivCompContinuousLinearMap, hne.symm, liftCLM, map_add_swap, sum_add_sum_compl, sum_eq_zero, sum_pair, swap_apply_of_
 -/
@@ -1471,7 +1501,23 @@ definition fderivCompContinuousLinearMapCLM
       map_smul' c f := by ext; simp [Finset.smul_sum] }
     (Fintype.card ι * ‖g‖ ^ (Fintype.card ι - 1))
     fun f => by
-      refine ContinuousLinearMap.opNorm_le
+      refine ContinuousLinearMap.opNorm_le_bound _ (by positivity) fun dg => ?_
+      refine opNorm_le_bound _ (by positivity) fun v => ?_
+      simp? [mul_assoc] says
+        simp only [LinearMap.coe_mk, AddHom.coe_mk, fderivCompContinuousLinearMap_apply, mul_assoc]
+      refine (norm_sum_le _ _).trans ?_
+      grw [← nsmul_eq_mul]
+      apply Finset.sum_le_card_nsmul
+      rintro i -
+      grw [le_opNorm]
+      simp only [Fintype.prod_eq_mul_prod_compl i, Function.update_self, mul_left_comm (‖g‖ ^ _)]
+      grw [dg.le_opNorm, mul_assoc]
+      gcongr
+      rw [← Finset.card_singleton i]; rw [← Finset.card_compl]; rw [← Finset.prod_const]; rw [← Finset.prod_mul_distrib]
+      gcongr with j hj
+      simpa [Function.update_of_ne (by simpa using hj)] using g.le_opNorm _
+
+@[simp]
 
 中文:
 定义 fderivCompContinuousLinearMapCLM
@@ -1482,7 +1528,23 @@ definition fderivCompContinuousLinearMapCLM
       map_smul' c f := by ext; simp [Finset.smul_sum] }
     (Fintype.card ι * ‖g‖ ^ (Fintype.card ι - 1))
     fun f => by
-      refine ContinuousLinearMap.opNorm_le
+      refine ContinuousLinearMap.opNorm_le_bound _ (by positivity) fun dg => ?_
+      refine opNorm_le_bound _ (by positivity) fun v => ?_
+      simp? [mul_assoc] says
+        simp only [LinearMap.coe_mk, AddHom.coe_mk, fderivCompContinuousLinearMap_apply, mul_assoc]
+      refine (norm_sum_le _ _).trans ?_
+      grw [← nsmul_eq_mul]
+      apply Finset.sum_le_card_nsmul
+      rintro i -
+      grw [le_opNorm]
+      simp only [Fintype.prod_eq_mul_prod_compl i, Function.update_self, mul_left_comm (‖g‖ ^ _)]
+      grw [dg.le_opNorm, mul_assoc]
+      gcongr
+      rw [← Finset.card_singleton i]; rw [← Finset.card_compl]; rw [← Finset.prod_const]; rw [← Finset.prod_mul_distrib]
+      gcongr with j hj
+      simpa [Function.update_of_ne (by simpa using hj)] using g.le_opNorm _
+
+@[simp]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, ContinuousLinearMap, ContinuousLinearMap.opNorm_le_bound, Finset, Finset.smul_sum, Finset.sum_add_distrib, Fintype, Fintype.card, LinearMap, LinearMap.coe_mk, LinearMap.mkContinuous, coe_mk, fderivCompContinuousLinearMap, fderivCompContinuousLinearMap_apply, map_add, map_smul, mkContinuous, mul_assoc, norm_sum_le
 -/
@@ -1549,7 +1611,7 @@ definition mkContinuousLinear
     (max C 0) fun x => by
       rw [LinearMap.coe_mk]; rw [AddHom.coe_mk]
 exact (mkContinuous_norm_le' _ _).trans_eq by
-        rw [max_mul_of_nonneg
+        rw [max_mul_of_nonneg _ _ (norm_nonneg x)]; rw [zero_mul]
 
 中文:
 定义 mkContinuousLinear
@@ -1561,7 +1623,7 @@ exact (mkContinuous_norm_le' _ _).trans_eq by
     (max C 0) fun x => by
       rw [LinearMap.coe_mk]; rw [AddHom.coe_mk]
 exact (mkContinuous_norm_le' _ _).trans_eq by
-        rw [max_mul_of_nonneg
+        rw [max_mul_of_nonneg _ _ (norm_nonneg x)]; rw [zero_mul]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, LinearMap, LinearMap.coe_mk, LinearMap.mkContinuous, coe_mk, map_add, map_smul, max_mul_of_nonneg, mkContinuous, mkContinuous_norm_le, norm_nonneg, trans_eq, zero_mul
 -/
@@ -1628,7 +1690,15 @@ definition mkContinuousAlternating
       map_update_smul' m i c x := by ext1; simp
       map_eq_zero_of_eq' v i j hv hij := by
         ext v'
-        have : f v = 0 := by simpa using f.map_eq_zero_of_eq' v i j hv hi
+        have : f v = 0 := by simpa using f.map_eq_zero_of_eq' v i j hv hij
+        simp [this] }
+    (max C 0) fun m => by
+      simp only [coe_mk, MultilinearMap.coe_mk]
+      refine ((f m).mkContinuous_norm_le' _).trans_eq ?_
+      rw [max_mul_of_nonneg]; rw [zero_mul]
+      positivity
+
+@[simp]
 
 中文:
 定义 mkContinuousAlternating
@@ -1639,7 +1709,15 @@ definition mkContinuousAlternating
       map_update_smul' m i c x := by ext1; simp
       map_eq_zero_of_eq' v i j hv hij := by
         ext v'
-        have : f v = 0 := by simpa using f.map_eq_zero_of_eq' v i j hv hi
+        have : f v = 0 := by simpa using f.map_eq_zero_of_eq' v i j hv hij
+        simp [this] }
+    (max C 0) fun m => by
+      simp only [coe_mk, MultilinearMap.coe_mk]
+      refine ((f m).mkContinuous_norm_le' _).trans_eq ?_
+      rw [max_mul_of_nonneg]; rw [zero_mul]
+      positivity
+
+@[simp]
 
 Depends on / 依赖: MultilinearMap, MultilinearMap.coe_mk, coe_mk, f.map_eq_zero_of_eq, map_eq_zero_of_eq, map_update_add, map_update_smul, max_mul_of_nonneg, mkContinuous, mkContinuous_norm_le, trans_eq, zero_mul
 -/

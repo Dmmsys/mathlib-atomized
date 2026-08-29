@@ -63,7 +63,34 @@ definition ofFunction
     empty := by
       rw [← nonpos_iff_eq_zero]
 exact (iInf_le_of_le fun _ => ∅) iInf_le_of_le (empty_subset _) by simpa
-    mono := fun {_ _} hs => iInf_mono fun _ => iInf_mono' fun hb => ⟨hs.trans hb, le_rf
+    mono := fun {_ _} hs => iInf_mono fun _ => iInf_mono' fun hb => ⟨hs.trans hb, le_rfl⟩
+    iUnion_nat := fun s _ =>
+ENNReal.le_of_forall_pos_le_add by
+        intro ε hε (hb : (∑' i, μ (s i)) < ∞)
+        rcases ENNReal.exists_pos_sum_of_countable (ENNReal.coe_pos.2 hε).ne' Nat with ⟨ε', hε', hl⟩
+        grw [← hl]
+        rw [← ENNReal.tsum_add]
+        choose f hf using
+          show forall i, exists f : Nat -> Set α, (s i subseteq ⋃ i, f i) ∧ (∑' i, m (f i)) < μ (s i) + ε' i by
+            intro i
+            have : μ (s i) < μ (s i) + ε' i :=
+              ENNReal.lt_add_right (ne_top_of_le_ne_top hb.ne <| ENNReal.le_tsum _)
+                (by simpa using (hε' i).ne')
+            rcases iInf_lt_iff.mp this with ⟨t, ht⟩
+            exists t
+            contrapose! ht
+            exact le_iInf ht
+        refine le_trans ?_ (ENNReal.tsum_le_tsum fun i => le_of_lt (hf i).2)
+        rw [← ENNReal.tsum_prod]; rw [← Nat.pairEquiv.symm.tsum_eq]
+        refine iInf_le_of_le _ (iInf_le _ ?_)
+        apply iUnion_subset
+        intro i
+        apply Subset.trans (hf i).1
+        apply iUnion_subset
+        simp only [Nat.pairEquiv_symm_apply]
+        rw [iUnion_unpair]
+        intro j
+        apply subset_iUnion₂ i }
 
 中文:
 定义 ofFunction
@@ -73,7 +100,34 @@ exact (iInf_le_of_le fun _ => ∅) iInf_le_of_le (empty_subset _) by simpa
     empty := by
       rw [← nonpos_iff_eq_zero]
 exact (iInf_le_of_le fun _ => ∅) iInf_le_of_le (empty_subset _) by simpa
-    mono := fun {_ _} hs => iInf_mono fun _ => iInf_mono' fun hb => ⟨hs.trans hb, le_rf
+    mono := fun {_ _} hs => iInf_mono fun _ => iInf_mono' fun hb => ⟨hs.trans hb, le_rfl⟩
+    iUnion_nat := fun s _ =>
+ENNReal.le_of_forall_pos_le_add by
+        intro ε hε (hb : (∑' i, μ (s i)) < ∞)
+        rcases ENNReal.exists_pos_sum_of_countable (ENNReal.coe_pos.2 hε).ne' Nat with ⟨ε', hε', hl⟩
+        grw [← hl]
+        rw [← ENNReal.tsum_add]
+        choose f hf using
+          show forall i, exists f : Nat -> Set α, (s i subseteq ⋃ i, f i) ∧ (∑' i, m (f i)) < μ (s i) + ε' i by
+            intro i
+            have : μ (s i) < μ (s i) + ε' i :=
+              ENNReal.lt_add_right (ne_top_of_le_ne_top hb.ne <| ENNReal.le_tsum _)
+                (by simpa using (hε' i).ne')
+            rcases iInf_lt_iff.mp this with ⟨t, ht⟩
+            exists t
+            contrapose! ht
+            exact le_iInf ht
+        refine le_trans ?_ (ENNReal.tsum_le_tsum fun i => le_of_lt (hf i).2)
+        rw [← ENNReal.tsum_prod]; rw [← Nat.pairEquiv.symm.tsum_eq]
+        refine iInf_le_of_le _ (iInf_le _ ?_)
+        apply iUnion_subset
+        intro i
+        apply Subset.trans (hf i).1
+        apply iUnion_subset
+        simp only [Nat.pairEquiv_symm_apply]
+        rw [iUnion_unpair]
+        intro j
+        apply subset_iUnion₂ i }
 -/
 protected def ofFunction (m : Set α -> Real>=0∞) (m_empty : m ∅ = 0) : OuterMeasure α :=
   let μ s := ⨅ (f : Nat -> Set α) (_ : s subseteq ⋃ i, f i), ∑' i, m (f i)
@@ -142,7 +196,12 @@ theorem ofFunction_eq_iInf_mem
   · simp_rw [le_iInf_iff]
     refine fun t ht_subset => iInf_le_of_le t ?_
     by_cases ht : forall i, P (t i)
-    · exact iInf_le_of_le ht (iInf_le_of_le 
+    · exact iInf_le_of_le ht (iInf_le_of_le ht_subset le_rfl)
+    · simp only [ht, not_false_eq_true, iInf_neg, top_le_iff]
+      push Not at ht
+      obtain ⟨i, hti_notMem⟩ := ht
+      have hfi_top : m (t i) = ∞ := m_top _ hti_notMem
+      exact ENNReal.tsum_eq_top_of_eq_top ⟨i, hfi_top⟩
 
 中文:
 定理 ofFunction_eq_iInf_mem
@@ -154,7 +213,12 @@ theorem ofFunction_eq_iInf_mem
   · simp_rw [le_iInf_iff]
     refine fun t ht_subset => iInf_le_of_le t ?_
     by_cases ht : forall i, P (t i)
-    · exact iInf_le_of_le ht (iInf_le_of_le 
+    · exact iInf_le_of_le ht (iInf_le_of_le ht_subset le_rfl)
+    · simp only [ht, not_false_eq_true, iInf_neg, top_le_iff]
+      push Not at ht
+      obtain ⟨i, hti_notMem⟩ := ht
+      have hfi_top : m (t i) = ∞ := m_top _ hti_notMem
+      exact ENNReal.tsum_eq_top_of_eq_top ⟨i, hfi_top⟩
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_eq_top_of_eq_top, OuterMeasure, OuterMeasure.ofFunction_apply, hfi_top, ht_subset, hti_notMem, iInf_le_of_le, iInf_neg, le_antisymm, le_iInf, le_iInf_iff, le_rfl, m_top, not_false_eq_true, ofFunction_apply, simp_rw, top_le_iff, tsum_eq_top_of_eq_top
 -/
@@ -312,7 +376,26 @@ theorem ofFunction_union_of_top_of_nonempty_inter
   rcases Classical.em (exists i, (s inter f i).Nonempty ∧ (t inter f i).Nonempty) with (⟨i, hs, ht⟩ | he)
   · calc
       μ s + μ t <= ∞ := le_top
-      _ = m (f i) := (h (f i) hs ht)
+      _ = m (f i) := (h (f i) hs ht).symm
+      _ <= ∑' i, m (f i) := ENNReal.le_tsum i
+  set I := fun s => { i : Nat | (s inter f i).Nonempty }
+  have hd : Disjoint (I s) (I t) := disjoint_iff_inf_le.mpr fun i hi => he ⟨i, hi⟩
+  have hI : forall u subseteq s union t, μ u <= ∑' i : I u, μ (f i) := fun u hu =>
+    calc
+      μ u <= μ (⋃ i : I u, f i) :=
+        μ.mono fun x hx =>
+          let ⟨i, hi⟩ := mem_iUnion.1 (hf (hu hx))
+          mem_iUnion.2 ⟨⟨i, ⟨x, hx, hi⟩⟩, hi⟩
+      _ <= ∑' i : I u, μ (f i) := measure_iUnion_le _
+  calc
+    μ s + μ t <= (∑' i : I s, μ (f i)) + ∑' i : I t, μ (f i) :=
+      add_le_add (hI _ subset_union_left) (hI _ subset_union_right)
+    _ = ∑' i : ↑(I s union I t), μ (f i) :=
+      (ENNReal.summable.tsum_union_disjoint (f := fun i => μ (f i)) hd ENNReal.summable).symm
+    _ <= ∑' i, μ (f i) :=
+      (ENNReal.summable.tsum_le_tsum_of_inj (↑) Subtype.coe_injective (fun _ _ => zero_le)
+        (fun _ => le_rfl) ENNReal.summable)
+    _ <= ∑' i, m (f i) := ENNReal.tsum_le_tsum fun i => ofFunction_le _
 
 中文:
 定理 ofFunction_union_of_top_of_nonempty_inter
@@ -323,7 +406,26 @@ theorem ofFunction_union_of_top_of_nonempty_inter
   rcases Classical.em (exists i, (s inter f i).Nonempty ∧ (t inter f i).Nonempty) with (⟨i, hs, ht⟩ | he)
   · calc
       μ s + μ t <= ∞ := le_top
-      _ = m (f i) := (h (f i) hs ht)
+      _ = m (f i) := (h (f i) hs ht).symm
+      _ <= ∑' i, m (f i) := ENNReal.le_tsum i
+  set I := fun s => { i : Nat | (s inter f i).Nonempty }
+  have hd : Disjoint (I s) (I t) := disjoint_iff_inf_le.mpr fun i hi => he ⟨i, hi⟩
+  have hI : forall u subseteq s union t, μ u <= ∑' i : I u, μ (f i) := fun u hu =>
+    calc
+      μ u <= μ (⋃ i : I u, f i) :=
+        μ.mono fun x hx =>
+          let ⟨i, hi⟩ := mem_iUnion.1 (hf (hu hx))
+          mem_iUnion.2 ⟨⟨i, ⟨x, hx, hi⟩⟩, hi⟩
+      _ <= ∑' i : I u, μ (f i) := measure_iUnion_le _
+  calc
+    μ s + μ t <= (∑' i : I s, μ (f i)) + ∑' i : I t, μ (f i) :=
+      add_le_add (hI _ subset_union_left) (hI _ subset_union_right)
+    _ = ∑' i : ↑(I s union I t), μ (f i) :=
+      (ENNReal.summable.tsum_union_disjoint (f := fun i => μ (f i)) hd ENNReal.summable).symm
+    _ <= ∑' i, μ (f i) :=
+      (ENNReal.summable.tsum_le_tsum_of_inj (↑) Subtype.coe_injective (fun _ _ => zero_le)
+        (fun _ => le_rfl) ENNReal.summable)
+    _ <= ∑' i, m (f i) := ENNReal.tsum_le_tsum fun i => ofFunction_le _
 
 Depends on / 依赖: Classical, Classical.em, Disjoint, ENNReal, ENNReal.le_tsum, Nonempty, OuterMeasure, OuterMeasure.ofFunction, disjoint_iff_inf_le, disjoint_iff_inf_le.mpr, le_antisymm, le_top, le_tsum, m_empty, measure_union_le, ofFunction, subseteq
 -/
@@ -370,7 +472,10 @@ theorem comap_ofFunction
   · rw [comap_apply, ofFunction_apply, ofFunction_apply]
     refine iInf_mono' fun t => ⟨fun k => f ⁻¹' t k, ?_⟩
     refine iInf_mono' fun ht => ?_
-    rw [Set.image_subset_iff]; rw [preima
+    rw [Set.image_subset_iff]; rw [preimage_iUnion] at ht
+    refine ⟨ht, ENNReal.tsum_le_tsum fun n => ?_⟩
+    rcases h with hl | hr
+    exacts [hl (image_preimage_subset _ _), (congr_arg m (hr.image_preimage (t n))).le]
 
 中文:
 定理 comap_ofFunction
@@ -382,7 +487,10 @@ theorem comap_ofFunction
   · rw [comap_apply, ofFunction_apply, ofFunction_apply]
     refine iInf_mono' fun t => ⟨fun k => f ⁻¹' t k, ?_⟩
     refine iInf_mono' fun ht => ?_
-    rw [Set.image_subset_iff]; rw [preima
+    rw [Set.image_subset_iff]; rw [preimage_iUnion] at ht
+    refine ⟨ht, ENNReal.tsum_le_tsum fun n => ?_⟩
+    rcases h with hl | hr
+    exacts [hl (image_preimage_subset _ _), (congr_arg m (hr.image_preimage (t n))).le]
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, Set.image_subset_iff, comap_apply, congr_arg, exacts, hr.image_preimage, iInf_mono, image_preimage, image_preimage_subset, image_subset_iff, le_antisymm, le_ofFunction, ofFunction_apply, ofFunction_le, preimage_iUnion, tsum_le_tsum
 -/
@@ -438,7 +546,9 @@ theorem map_ofFunction
   intro t ht
   refine iInf_le_of_le (fun n => (range f)ᶜ union f '' t n) (iInf_le_of_le ?_ ?_)
   · rw [← union_iUnion, ← inter_subset, ← image_preimage_eq_inter_range, ← image_iUnion]
-    ex
+    exact image_mono ht
+  · refine ENNReal.tsum_le_tsum fun n => le_of_eq ?_
+    simp [hf.preimage_image]
 
 中文:
 定理 map_ofFunction
@@ -449,7 +559,9 @@ theorem map_ofFunction
   intro t ht
   refine iInf_le_of_le (fun n => (range f)ᶜ union f '' t n) (iInf_le_of_le ?_ ?_)
   · rw [← union_iUnion, ← inter_subset, ← image_preimage_eq_inter_range, ← image_iUnion]
-    ex
+    exact image_mono ht
+  · refine ENNReal.tsum_le_tsum fun n => le_of_eq ?_
+    simp [hf.preimage_image]
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, antisymm, hf.preimage_image, iInf_le_of_le, image_iUnion, image_mono, image_preimage_eq_inter_range, inter_subset, le_iInf_iff, le_of_eq, map_apply, map_ofFunction_le, ofFunction_apply, preimage_image, tsum_le_tsum, union_iUnion
 -/
@@ -1150,7 +1262,8 @@ theorem comap_iInf
   refine ((comap_mono f).map_iInf_le s).antisymm ?_
   simp only [comap_apply, iInf_apply' _ hs, iInf_apply' _ (hs.image _), le_iInf_iff,
     Set.image_subset_iff, preimage_iUnion]
-  refine fun t ht => iInf_le_of_le _ (iInf_le_of_le ht <| ENNReal.tsum_le_tsum f
+  refine fun t ht => iInf_le_of_le _ (iInf_le_of_le ht <| ENNReal.tsum_le_tsum fun k => ?_)
+  exact iInf_mono fun i => (m i).mono (image_preimage_subset _ _)
 
 中文:
 定理 comap_iInf
@@ -1160,7 +1273,8 @@ theorem comap_iInf
   refine ((comap_mono f).map_iInf_le s).antisymm ?_
   simp only [comap_apply, iInf_apply' _ hs, iInf_apply' _ (hs.image _), le_iInf_iff,
     Set.image_subset_iff, preimage_iUnion]
-  refine fun t ht => iInf_le_of_le _ (iInf_le_of_le ht <| ENNReal.tsum_le_tsum f
+  refine fun t ht => iInf_le_of_le _ (iInf_le_of_le ht <| ENNReal.tsum_le_tsum fun k => ?_)
+  exact iInf_mono fun i => (m i).mono (image_preimage_subset _ _)
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, Set.image_subset_iff, antisymm, comap_apply, comap_mono, ext_nonempty, hs.image, iInf_apply, iInf_le_of_le, iInf_mono, image_preimage_subset, image_subset_iff, le_iInf_iff, map_iInf_le, preimage_iUnion, tsum_le_tsum
 -/
@@ -1208,7 +1322,11 @@ theorem map_iInf_comap
   simp only [map_apply, comap_apply, iInf_apply, le_iInf_iff]
   refine fun t ht => iInf_le_of_le (fun n => f '' t n union (range f)ᶜ) (iInf_le_of_le ?_ ?_)
   · rw [← iUnion_union, Set.union_comm, ← inter_subset, ← image_iUnion, ←
-      image_preimag
+      image_preimage_eq_inter_range]
+    exact image_mono ht
+  · refine ENNReal.tsum_le_tsum fun n => iInf_mono fun i => (m i).mono ?_
+    simpa only [preimage_union, preimage_compl, preimage_range, compl_univ, union_empty,
+      image_subset_iff] using subset_rfl
 
 中文:
 定理 map_iInf_comap
@@ -1218,7 +1336,11 @@ theorem map_iInf_comap
   simp only [map_apply, comap_apply, iInf_apply, le_iInf_iff]
   refine fun t ht => iInf_le_of_le (fun n => f '' t n union (range f)ᶜ) (iInf_le_of_le ?_ ?_)
   · rw [← iUnion_union, Set.union_comm, ← inter_subset, ← image_iUnion, ←
-      image_preimag
+      image_preimage_eq_inter_range]
+    exact image_mono ht
+  · refine ENNReal.tsum_le_tsum fun n => iInf_mono fun i => (m i).mono ?_
+    simpa only [preimage_union, preimage_compl, preimage_range, compl_univ, union_empty,
+      image_subset_iff] using subset_rfl
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, Set.union_comm, antisymm, comap_apply, compl_univ, iInf_apply, iInf_le_of_le, iInf_mono, iUnion_union, image_iUnion, image_mono, image_preimage_eq_inter_range, image_subset_iff, inter_subset, le_iInf_iff, map_apply, map_iInf_le, preimage_compl, preimage_range
 -/
@@ -1270,7 +1392,7 @@ theorem restrict_iInf_restrict
   proof: calc restrict s (⨅ i, restrict s (m i))
     _ = restrict (range ((↑) : s -> α)) (⨅ i, restrict s (m i)) := by rw [Subtype.range_coe]
     _ = map ((↑) : s -> α) (⨅ i, comap (↑) (m i)) := (map_iInf Subtype.coe_injective _).symm
-    _ = restrict s (⨅ i, m i) := congr_arg (map ((↑) : s -> α)) (comap_iIn
+    _ = restrict s (⨅ i, m i) := congr_arg (map ((↑) : s -> α)) (comap_iInf _ _).symm
 
 中文:
 定理 restrict_iInf_restrict
@@ -1278,7 +1400,7 @@ theorem restrict_iInf_restrict
   证明: calc restrict s (⨅ i, restrict s (m i))
     _ = restrict (range ((↑) : s -> α)) (⨅ i, restrict s (m i)) := by rw [Subtype.range_coe]
     _ = map ((↑) : s -> α) (⨅ i, comap (↑) (m i)) := (map_iInf Subtype.coe_injective _).symm
-    _ = restrict s (⨅ i, m i) := congr_arg (map ((↑) : s -> α)) (comap_iIn
+    _ = restrict s (⨅ i, m i) := congr_arg (map ((↑) : s -> α)) (comap_iInf _ _).symm
 
 Depends on / 依赖: Subtype, Subtype.coe_injective, Subtype.range_coe, coe_injective, comap_iInf, congr_arg, map_iInf, range_coe, restrict
 -/

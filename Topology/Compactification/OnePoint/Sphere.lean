@@ -54,7 +54,10 @@ have : Nonempty ι := Fintype.card_pos_iff.mp by lia
   let v : EuclideanSpace Real ι := .single (Classical.arbitrary ι) 1
   have hv : ‖v‖ = 1 := by simp [v]
   have hv₀ : v != 0 := fun contra => by simp [contra] at hv
-  have : Fact (finrank Real (EuclideanSpace Real ι) = finrank Real V 
+  have : Fact (finrank Real (EuclideanSpace Real ι) = finrank Real V + 1) := ⟨by simp [h]⟩
+  have hV : finrank Real V = finrank Real (Real ∙ v)ᗮ := (finrank_orthogonal_span_singleton hv₀).symm
+  letI e : V ≃ₜ (Real ∙ v)ᗮ := (FiniteDimensional.nonempty_continuousLinearEquiv_of_finrank_eq hV).some
+exact e.onePointCongr.trans onePointHyperplaneHomeoUnitSphere hv
 
 中文:
 定义 onePointEquivSphereOfFinrankEq
@@ -65,7 +68,10 @@ have : Nonempty ι := Fintype.card_pos_iff.mp by lia
   let v : EuclideanSpace Real ι := .single (Classical.arbitrary ι) 1
   have hv : ‖v‖ = 1 := by simp [v]
   have hv₀ : v != 0 := fun contra => by simp [contra] at hv
-  have : Fact (finrank Real (EuclideanSpace Real ι) = finrank Real V 
+  have : Fact (finrank Real (EuclideanSpace Real ι) = finrank Real V + 1) := ⟨by simp [h]⟩
+  have hV : finrank Real V = finrank Real (Real ∙ v)ᗮ := (finrank_orthogonal_span_singleton hv₀).symm
+  letI e : V ≃ₜ (Real ∙ v)ᗮ := (FiniteDimensional.nonempty_continuousLinearEquiv_of_finrank_eq hV).some
+exact e.onePointCongr.trans onePointHyperplaneHomeoUnitSphere hv
 
 Depends on / 依赖: Classical, Classical.arbitrary, EuclideanSpace, FiniteDimensional, FiniteDimensional.nonempty_continuousLinearEquiv_of_finran, Fintype, Fintype.card_pos_iff.mp, Nonempty, arbitrary, card_pos_iff, classical, contra, finrank, finrank_orthogonal_span_singleton, nonempty_continuousLinearEquiv_of_finran, single
 -/

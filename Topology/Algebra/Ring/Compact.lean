@@ -59,7 +59,13 @@ theorem finite_of_compactSpace_of_t2Space
     rw [← le_bot_iff]; rw [← Ideal.zero_eq_bot]; rw [← hn]
     gcongr
     rw [Ideal.jacobson_bot]; rw [Ring.jacobson_eq_sInf_isMaximal]; rw [le_sInf_iff]
-    exact fun 
+    exact fun I hI => Ideal.prod_le_inf.trans
+      (Finset.inf_le (b := PrimeSpectrum.mk I hI.isPrime) (by simp))
+  have := Ideal.finite_quotient_prod (R := R) PrimeSpectrum.asIdeal Finset.univ
+    (fun _ _ => IsNoetherian.noetherian _) (fun _ _ => inferInstance)
+  have := Ideal.finite_quotient_pow (IsNoetherian.noetherian (∏ p : PrimeSpectrum R, p.asIdeal)) n
+  rw [H] at this
+  exact .of_equiv _ (RingEquiv.quotientBot R).toEquiv
 
 中文:
 定理 finite_of_compactSpace_of_t2Space
@@ -70,7 +76,13 @@ theorem finite_of_compactSpace_of_t2Space
     rw [← le_bot_iff]; rw [← Ideal.zero_eq_bot]; rw [← hn]
     gcongr
     rw [Ideal.jacobson_bot]; rw [Ring.jacobson_eq_sInf_isMaximal]; rw [le_sInf_iff]
-    exact fun 
+    exact fun I hI => Ideal.prod_le_inf.trans
+      (Finset.inf_le (b := PrimeSpectrum.mk I hI.isPrime) (by simp))
+  have := Ideal.finite_quotient_prod (R := R) PrimeSpectrum.asIdeal Finset.univ
+    (fun _ _ => IsNoetherian.noetherian _) (fun _ _ => inferInstance)
+  have := Ideal.finite_quotient_pow (IsNoetherian.noetherian (∏ p : PrimeSpectrum R, p.asIdeal)) n
+  rw [H] at this
+  exact .of_equiv _ (RingEquiv.quotientBot R).toEquiv
 
 Depends on / 依赖: Finset, Finset.inf_le, Finset.univ, Ideal.finite_quotient_prod, Ideal.jacobson_bot, Ideal.prod_le_inf.trans, Ideal.zero_eq_bot, IsArtinianRing, IsArtinianRing.isNilpotent_jacobson_bot, IsNoetherian, IsNoetherian.noetherian, PrimeSpectrum, PrimeSpectrum.asIdeal, PrimeSpectrum.mk, Ring.jacobson_eq_sInf_isMaximal, asIdeal, finite_quotient_prod, hI.isPrime, inf_le, isNilpotent_jacobson_bot
 -/
@@ -261,7 +273,10 @@ lemma IsDedekindDomain.isOpen_of_ne_bot
   rw [← Ideal.finprod_heightOneSpectrum_factorization hI]; rw [finprod_eq_finsetProd_of_mulSupport_subset _
       (s := (Ideal.hasFiniteMulSupport hI).toFinset) (by simp)]
   refine @AddSubgroup.isOpen_of_isClosed_of_finiteIndex _ _ _ _ (Submodule.toAddSubgroup _)
-    ?_ (IsNoetherianRing.isClosed
+    ?_ (IsNoetherianRing.isClosed_ideal _)
+  refine @AddSubgroup.finiteIndex_of_finite_quotient _ _ _ ?_
+  refine Ideal.finite_quotient_prod _ _ (fun _ _ => IsNoetherian.noetherian _) fun _ _ => ?_
+  exact Ideal.finite_quotient_pow (IsNoetherian.noetherian _) _
 
 中文:
 引理 是Dedekind整环.isOpen_of_ne_bot
@@ -269,7 +284,10 @@ lemma IsDedekindDomain.isOpen_of_ne_bot
   rw [← Ideal.finprod_heightOneSpectrum_factorization hI]; rw [finprod_eq_finsetProd_of_mulSupport_subset _
       (s := (Ideal.hasFiniteMulSupport hI).toFinset) (by simp)]
   refine @AddSubgroup.isOpen_of_isClosed_of_finiteIndex _ _ _ _ (Submodule.toAddSubgroup _)
-    ?_ (IsNoetherianRing.isClosed
+    ?_ (IsNoetherianRing.isClosed_ideal _)
+  refine @AddSubgroup.finiteIndex_of_finite_quotient _ _ _ ?_
+  refine Ideal.finite_quotient_prod _ _ (fun _ _ => IsNoetherian.noetherian _) fun _ _ => ?_
+  exact Ideal.finite_quotient_pow (IsNoetherian.noetherian _) _
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.finiteIndex_of_finite_quotient, AddSubgroup.isOpen_of_isClosed_of_finiteIndex, Ideal.finite_quotient_pow, Ideal.finite_quotient_prod, Ideal.finprod_heightOneSpectrum_factorization, Ideal.hasFiniteMulSupport, IsNoetherian, IsNoetherian.noetherian, IsNoetherianRing, IsNoetherianRing.isClosed_ideal, Submodule, Submodule.toAddSubgroup, finiteIndex_of_finite_quotient, finite_quotient_pow, finite_quotient_prod, finprod_eq_finsetProd_of_mulSupport_subset, finprod_heightOneSpectrum_factorization, hasFiniteMulSupport, isClosed_ideal
 -/

@@ -297,7 +297,10 @@ instance ColimitType.AddGroup
 zero_add := Quotient.ind fun _ => Quotient.sound Relation.zero_add _
 add_zero := Quotient.ind fun _ => Quotient.sound Relation.add_zero _
 neg_add_cancel := Quotient.ind fun _ => Quotient.sound Relation.neg_add_cancel _
-add_assoc := Quotient.ind fun _ => Quotient.ind₂ 
+add_assoc := Quotient.ind fun _ => Quotient.ind₂ fun _ _ =>
+Quotient.sound Relation.add_assoc _ _ _
+  nsmul := nsmulRec
+  zsmul := zsmulRec
 
 中文:
 实例 ColimitType.加法群
@@ -306,7 +309,10 @@ add_assoc := Quotient.ind fun _ => Quotient.ind₂
 zero_add := Quotient.ind fun _ => Quotient.sound Relation.zero_add _
 add_zero := Quotient.ind fun _ => Quotient.sound Relation.add_zero _
 neg_add_cancel := Quotient.ind fun _ => Quotient.sound Relation.neg_add_cancel _
-add_assoc := Quotient.ind fun _ => Quotient.ind₂ 
+add_assoc := Quotient.ind fun _ => Quotient.ind₂ fun _ _ =>
+Quotient.sound Relation.add_assoc _ _ _
+  nsmul := nsmulRec
+  zsmul := zsmulRec
 
 Depends on / 依赖: Quotient, Quotient.map, Relation, Relation.neg_1, neg_1
 -/
@@ -364,7 +370,20 @@ instance :
     mul := Quot.map₂ Prequotient.mul Relation.mul_2 Relation.mul_1
 one_mul := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.one_mul _
 mul_one := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.mul_one _
-add_comm := fun x y => Quot.induction_on
+add_comm := fun x y => Quot.induction_on₂ x y fun _ _ => Quot.sound Relation.add_comm _ _
+    mul_assoc := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· * ·)]
+      exact Quot.sound (Relation.mul_assoc _ _ _)
+mul_zero := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.mul_zero _
+zero_mul := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.zero_mul _
+    left_distrib := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· + ·), (· * ·), Add.add]
+      exact Quot.sound (Relation.left_distrib _ _ _)
+    right_distrib := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· + ·), (· * ·), Add.add]
+      exact Quot.sound (Relation.right_distrib _ _ _) }
+
+@[simp]
 
 中文:
 实例 :
@@ -373,7 +392,20 @@ add_comm := fun x y => Quot.induction_on
     mul := Quot.map₂ Prequotient.mul Relation.mul_2 Relation.mul_1
 one_mul := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.one_mul _
 mul_one := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.mul_one _
-add_comm := fun x y => Quot.induction_on
+add_comm := fun x y => Quot.induction_on₂ x y fun _ _ => Quot.sound Relation.add_comm _ _
+    mul_assoc := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· * ·)]
+      exact Quot.sound (Relation.mul_assoc _ _ _)
+mul_zero := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.mul_zero _
+zero_mul := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.zero_mul _
+    left_distrib := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· + ·), (· * ·), Add.add]
+      exact Quot.sound (Relation.left_distrib _ _ _)
+    right_distrib := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· + ·), (· * ·), Add.add]
+      exact Quot.sound (Relation.right_distrib _ _ _) }
+
+@[simp]
 
 Depends on / 依赖: AddGroupWithOne, ColimitType, ColimitType.AddGroupWithOne, Prequotient, Prequotient.mul, Quot.inductionOn, Quot.induction_on, Quot.map, Quot.sound, Relation, Relation.add_comm, Relation.mul_1, Relation.mul_2, Relation.mul_assoc, Relation.mul_one, Relation.one_mul, add_comm, inductionOn, mul_1, mul_2
 -/
@@ -685,7 +717,28 @@ definition descFun
     | symm x y _ ih => exact ih.symm
     | trans x y z _ _ ih1 ih2 => exact ih1.trans ih2
     | map j j' f x => exact RingHom.congr_fun (congrArg Hom.hom <| s.ι.naturality f) x
-    | zero j => simp
+    | zero j => simp +instances
+    | one j => simp +instances
+    | neg j x => simp +instances
+    | add j x y => simp +instances
+    | mul j x y => simp +instances
+    | neg_1 x x' r ih => dsimp; rw [ih]
+    | add_1 x x' y r ih => dsimp; rw [ih]
+    | add_2 x y y' r ih => dsimp; rw [ih]
+    | mul_1 x x' y r ih => dsimp; rw [ih]
+    | mul_2 x y y' r ih => dsimp; rw [ih]
+    | zero_add x => dsimp; rw [zero_add]
+    | add_zero x => dsimp; rw [add_zero]
+    | one_mul x => dsimp; rw [one_mul]
+    | mul_one x => dsimp; rw [mul_one]
+    | neg_add_cancel x => dsimp; rw [neg_add_cancel]
+    | add_comm x y => dsimp; rw [add_comm]
+    | add_assoc x y z => dsimp; rw [add_assoc]
+    | mul_assoc x y z => dsimp; rw [mul_assoc]
+    | left_distrib x y z => dsimp; rw [mul_add]
+    | right_distrib x y z => dsimp; rw [add_mul]
+    | zero_mul x => dsimp; rw [zero_mul]
+    | mul_zero x => dsimp; rw [mul_zero]
 
 中文:
 定义 descFun
@@ -699,7 +752,28 @@ definition descFun
     | symm x y _ ih => exact ih.symm
     | trans x y z _ _ ih1 ih2 => exact ih1.trans ih2
     | map j j' f x => exact RingHom.congr_fun (congrArg Hom.hom <| s.ι.naturality f) x
-    | zero j => simp
+    | zero j => simp +instances
+    | one j => simp +instances
+    | neg j x => simp +instances
+    | add j x y => simp +instances
+    | mul j x y => simp +instances
+    | neg_1 x x' r ih => dsimp; rw [ih]
+    | add_1 x x' y r ih => dsimp; rw [ih]
+    | add_2 x y y' r ih => dsimp; rw [ih]
+    | mul_1 x x' y r ih => dsimp; rw [ih]
+    | mul_2 x y y' r ih => dsimp; rw [ih]
+    | zero_add x => dsimp; rw [zero_add]
+    | add_zero x => dsimp; rw [add_zero]
+    | one_mul x => dsimp; rw [one_mul]
+    | mul_one x => dsimp; rw [mul_one]
+    | neg_add_cancel x => dsimp; rw [neg_add_cancel]
+    | add_comm x y => dsimp; rw [add_comm]
+    | add_assoc x y z => dsimp; rw [add_assoc]
+    | mul_assoc x y z => dsimp; rw [mul_assoc]
+    | left_distrib x y z => dsimp; rw [mul_add]
+    | right_distrib x y z => dsimp; rw [add_mul]
+    | zero_mul x => dsimp; rw [zero_mul]
+    | mul_zero x => dsimp; rw [mul_zero]
 
 Depends on / 依赖: Hom.hom, Quot.lift, RingHom, RingHom.congr_fun, add_1, add_2, congr_fun, descFunLift, fapply, ih.symm, ih1.trans, instances, naturality, neg_1
 -/
@@ -793,7 +867,9 @@ uniq s m w := hom_ext RingHom.ext fun x => by
     | one => simp
     | neg x ih => simp [ih]
     | of j x =>
-      exact congr_fun (congr_arg (fun f : F.obj j ⟶ s.pt => (f : F.obj j -> s.pt)) (w j)) 
+      exact congr_fun (congr_arg (fun f : F.obj j ⟶ s.pt => (f : F.obj j -> s.pt)) (w j)) x
+    | add x y ih_x ih_y => simp [ih_x, ih_y]
+    | mul x y ih_x ih_y => simp [ih_x, ih_y]
 
 中文:
 定义 colimitIsColimit
@@ -807,7 +883,9 @@ uniq s m w := hom_ext RingHom.ext fun x => by
     | one => simp
     | neg x ih => simp [ih]
     | of j x =>
-      exact congr_fun (congr_arg (fun f : F.obj j ⟶ s.pt => (f : F.obj j -> s.pt)) (w j)) 
+      exact congr_fun (congr_arg (fun f : F.obj j ⟶ s.pt => (f : F.obj j -> s.pt)) (w j)) x
+    | add x y ih_x ih_y => simp [ih_x, ih_y]
+    | mul x y ih_x ih_y => simp [ih_x, ih_y]
 
 Depends on / 依赖: descMorphism
 -/
@@ -1152,7 +1230,10 @@ instance ColimitType.AddGroup
 zero_add := Quotient.ind fun _ => Quotient.sound Relation.zero_add _
 add_zero := Quotient.ind fun _ => Quotient.sound Relation.add_zero _
 neg_add_cancel := Quotient.ind fun _ => Quotient.sound Relation.neg_add_cancel _
-add_assoc := Quotient.ind fun _ => Quotient.ind₂ 
+add_assoc := Quotient.ind fun _ => Quotient.ind₂ fun _ _ =>
+Quotient.sound Relation.add_assoc _ _ _
+  nsmul := nsmulRec
+  zsmul := zsmulRec
 
 中文:
 实例 ColimitType.加法群
@@ -1161,7 +1242,10 @@ add_assoc := Quotient.ind fun _ => Quotient.ind₂
 zero_add := Quotient.ind fun _ => Quotient.sound Relation.zero_add _
 add_zero := Quotient.ind fun _ => Quotient.sound Relation.add_zero _
 neg_add_cancel := Quotient.ind fun _ => Quotient.sound Relation.neg_add_cancel _
-add_assoc := Quotient.ind fun _ => Quotient.ind₂ 
+add_assoc := Quotient.ind fun _ => Quotient.ind₂ fun _ _ =>
+Quotient.sound Relation.add_assoc _ _ _
+  nsmul := nsmulRec
+  zsmul := zsmulRec
 -/
 instance ColimitType.AddGroup : AddGroup (ColimitType F) where
   neg := Quotient.map neg Relation.neg_1
@@ -1215,7 +1299,21 @@ instance :
     mul := Quot.map₂ Prequotient.mul Relation.mul_2 Relation.mul_1
 one_mul := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.one_mul _
 mul_one := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.mul_one _
-add_comm := fun x y => Quot.induction_on
+add_comm := fun x y => Quot.induction_on₂ x y fun _ _ => Quot.sound Relation.add_comm _ _
+mul_comm := fun x y => Quot.induction_on₂ x y fun _ _ => Quot.sound Relation.mul_comm _ _
+    mul_assoc := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· * ·)]
+      exact Quot.sound (Relation.mul_assoc _ _ _)
+mul_zero := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.mul_zero _
+zero_mul := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.zero_mul _
+    left_distrib := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· + ·), (· * ·), Add.add]
+      exact Quot.sound (Relation.left_distrib _ _ _)
+    right_distrib := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· + ·), (· * ·), Add.add]
+      exact Quot.sound (Relation.right_distrib _ _ _) }
+
+@[simp]
 
 中文:
 实例 :
@@ -1224,7 +1322,21 @@ add_comm := fun x y => Quot.induction_on
     mul := Quot.map₂ Prequotient.mul Relation.mul_2 Relation.mul_1
 one_mul := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.one_mul _
 mul_one := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.mul_one _
-add_comm := fun x y => Quot.induction_on
+add_comm := fun x y => Quot.induction_on₂ x y fun _ _ => Quot.sound Relation.add_comm _ _
+mul_comm := fun x y => Quot.induction_on₂ x y fun _ _ => Quot.sound Relation.mul_comm _ _
+    mul_assoc := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· * ·)]
+      exact Quot.sound (Relation.mul_assoc _ _ _)
+mul_zero := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.mul_zero _
+zero_mul := fun x => Quot.inductionOn x fun _ => Quot.sound Relation.zero_mul _
+    left_distrib := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· + ·), (· * ·), Add.add]
+      exact Quot.sound (Relation.left_distrib _ _ _)
+    right_distrib := fun x y z => Quot.induction_on₃ x y z fun x y z => by
+      simp only [(· + ·), (· * ·), Add.add]
+      exact Quot.sound (Relation.right_distrib _ _ _) }
+
+@[simp]
 
 Depends on / 依赖: AddGroupWithOne, ColimitType, ColimitType.AddGroupWithOne, Prequotient, Prequotient.mul, Quot.inductionOn, Quot.induction_on, Quot.map, Quot.sound, Relation, Relation.add_comm, Relation.mul_1, Relation.mul_2, Relation.mul_comm, Relation.mul_one, Relation.one_mul, add_comm, inductionOn, mul_1, mul_2
 -/
@@ -1533,7 +1645,29 @@ definition descFun
     | symm x y _ ih => exact ih.symm
     | trans x y z _ _ ih1 ih2 => exact ih1.trans ih2
     | map j j' f x => exact RingHom.congr_fun (congrArg Hom.hom <| s.ι.naturality f) x
-    | zero j => simp
+    | zero j => simp +instances
+    | one j => simp +instances
+    | neg j x => simp +instances
+    | add j x y => simp +instances
+    | mul j x y => simp +instances
+    | neg_1 x x' r ih => dsimp; rw [ih]
+    | add_1 x x' y r ih => dsimp; rw [ih]
+    | add_2 x y y' r ih => dsimp; rw [ih]
+    | mul_1 x x' y r ih => dsimp; rw [ih]
+    | mul_2 x y y' r ih => dsimp; rw [ih]
+    | zero_add x => dsimp; rw [zero_add]
+    | add_zero x => dsimp; rw [add_zero]
+    | one_mul x => dsimp; rw [one_mul]
+    | mul_one x => dsimp; rw [mul_one]
+    | neg_add_cancel x => dsimp; rw [neg_add_cancel]
+    | add_comm x y => dsimp; rw [add_comm]
+    | mul_comm x y => dsimp; rw [mul_comm]
+    | add_assoc x y z => dsimp; rw [add_assoc]
+    | mul_assoc x y z => dsimp; rw [mul_assoc]
+    | left_distrib x y z => dsimp; rw [mul_add]
+    | right_distrib x y z => dsimp; rw [add_mul]
+    | zero_mul x => dsimp; rw [zero_mul]
+    | mul_zero x => dsimp; rw [mul_zero]
 
 中文:
 定义 descFun
@@ -1547,7 +1681,29 @@ definition descFun
     | symm x y _ ih => exact ih.symm
     | trans x y z _ _ ih1 ih2 => exact ih1.trans ih2
     | map j j' f x => exact RingHom.congr_fun (congrArg Hom.hom <| s.ι.naturality f) x
-    | zero j => simp
+    | zero j => simp +instances
+    | one j => simp +instances
+    | neg j x => simp +instances
+    | add j x y => simp +instances
+    | mul j x y => simp +instances
+    | neg_1 x x' r ih => dsimp; rw [ih]
+    | add_1 x x' y r ih => dsimp; rw [ih]
+    | add_2 x y y' r ih => dsimp; rw [ih]
+    | mul_1 x x' y r ih => dsimp; rw [ih]
+    | mul_2 x y y' r ih => dsimp; rw [ih]
+    | zero_add x => dsimp; rw [zero_add]
+    | add_zero x => dsimp; rw [add_zero]
+    | one_mul x => dsimp; rw [one_mul]
+    | mul_one x => dsimp; rw [mul_one]
+    | neg_add_cancel x => dsimp; rw [neg_add_cancel]
+    | add_comm x y => dsimp; rw [add_comm]
+    | mul_comm x y => dsimp; rw [mul_comm]
+    | add_assoc x y z => dsimp; rw [add_assoc]
+    | mul_assoc x y z => dsimp; rw [mul_assoc]
+    | left_distrib x y z => dsimp; rw [mul_add]
+    | right_distrib x y z => dsimp; rw [add_mul]
+    | zero_mul x => dsimp; rw [zero_mul]
+    | mul_zero x => dsimp; rw [mul_zero]
 
 Depends on / 依赖: Hom.hom, Quot.lift, RingHom, RingHom.congr_fun, add_1, add_2, congr_fun, descFunLift, fapply, ih.symm, ih1.trans, instances, naturality, neg_1
 -/
@@ -1642,7 +1798,9 @@ uniq := fun s m w => hom_ext RingHom.ext fun x => by
     | one => simp
     | neg x ih => simp [ih]
     | of j x =>
-      exact congr_fun (congr_arg (fun f : F.obj j ⟶ s.pt => (f : F.obj j -
+      exact congr_fun (congr_arg (fun f : F.obj j ⟶ s.pt => (f : F.obj j -> s.pt)) (w j)) x
+    | add x y ih_x ih_y => simp [ih_x, ih_y]
+    | mul x y ih_x ih_y => simp [ih_x, ih_y]
 
 中文:
 定义 colimitIsColimit
@@ -1656,7 +1814,9 @@ uniq := fun s m w => hom_ext RingHom.ext fun x => by
     | one => simp
     | neg x ih => simp [ih]
     | of j x =>
-      exact congr_fun (congr_arg (fun f : F.obj j ⟶ s.pt => (f : F.obj j -
+      exact congr_fun (congr_arg (fun f : F.obj j ⟶ s.pt => (f : F.obj j -> s.pt)) (w j)) x
+    | add x y ih_x ih_y => simp [ih_x, ih_y]
+    | mul x y ih_x ih_y => simp [ih_x, ih_y]
 
 Depends on / 依赖: descMorphism
 -/

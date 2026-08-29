@@ -41,7 +41,20 @@ theorem exists_partition_int
     rw [Algebra.smul_def]
     exact mul_pos hb' hε
   have hfloor : forall i, 0 <= floor ((A i % b : Int) / abs b • ε : Real) :=
-    fun _ => floor_nonneg.mpr (div_nonneg (cast_nonneg (emod_non
+    fun _ => floor_nonneg.mpr (div_nonneg (cast_nonneg (emod_nonneg _ hb)) hbε.le)
+  refine ⟨fun i => ⟨natAbs (floor ((A i % b : Int) / abs b • ε : Real)), ?_⟩, ?_⟩
+  · rw [← ofNat_lt, natAbs_of_nonneg (hfloor i), floor_lt, Algebra.smul_def, eq_intCast, ← div_div]
+    apply lt_of_lt_of_le _ (Nat.le_ceil _)
+    gcongr
+    rw [div_lt_one hb']; rw [cast_lt]
+    exact Int.emod_lt_abs _ hb
+  intro i₀ i₁ hi
+  have hi : (⌊↑(A i₀ % b) / abs b • ε⌋.natAbs : Int) = ⌊↑(A i₁ % b) / abs b • ε⌋.natAbs :=
+    congr_arg ((↑) : Nat -> Int) (Fin.mk_eq_mk.mp hi)
+  rw [natAbs_of_nonneg (hfloor i₀)]; rw [natAbs_of_nonneg (hfloor i₁)] at hi
+  have hi := abs_sub_lt_one_of_floor_eq_floor hi
+  rw [abs_sub_comm]; rw [← sub_div]; rw [abs_div]; rw [abs_of_nonneg hbε.le]; rw [div_lt_iff₀ hbε]; rw [one_mul] at hi
+  rwa [Int.cast_abs, Int.cast_sub]
 
 中文:
 定理 存在_partition_int
@@ -52,7 +65,20 @@ theorem exists_partition_int
     rw [Algebra.smul_def]
     exact mul_pos hb' hε
   have hfloor : forall i, 0 <= floor ((A i % b : Int) / abs b • ε : Real) :=
-    fun _ => floor_nonneg.mpr (div_nonneg (cast_nonneg (emod_non
+    fun _ => floor_nonneg.mpr (div_nonneg (cast_nonneg (emod_nonneg _ hb)) hbε.le)
+  refine ⟨fun i => ⟨natAbs (floor ((A i % b : Int) / abs b • ε : Real)), ?_⟩, ?_⟩
+  · rw [← ofNat_lt, natAbs_of_nonneg (hfloor i), floor_lt, Algebra.smul_def, eq_intCast, ← div_div]
+    apply lt_of_lt_of_le _ (Nat.le_ceil _)
+    gcongr
+    rw [div_lt_one hb']; rw [cast_lt]
+    exact Int.emod_lt_abs _ hb
+  intro i₀ i₁ hi
+  have hi : (⌊↑(A i₀ % b) / abs b • ε⌋.natAbs : Int) = ⌊↑(A i₁ % b) / abs b • ε⌋.natAbs :=
+    congr_arg ((↑) : Nat -> Int) (Fin.mk_eq_mk.mp hi)
+  rw [natAbs_of_nonneg (hfloor i₀)]; rw [natAbs_of_nonneg (hfloor i₁)] at hi
+  have hi := abs_sub_lt_one_of_floor_eq_floor hi
+  rw [abs_sub_comm]; rw [← sub_div]; rw [abs_div]; rw [abs_of_nonneg hbε.le]; rw [div_lt_iff₀ hbε]; rw [one_mul] at hi
+  rwa [Int.cast_abs, Int.cast_sub]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Int.cast_pos.mpr, abs_pos, abs_pos.mpr, cast_nonneg, cast_pos, div_div, div_nonneg, emod_nonneg, eq_intCast, floor_lt, floor_nonneg, floor_nonneg.mpr, hfloor, lt_of_lt_of_le, mul_pos, natAbs, natAbs_of_nonneg, ofNat_lt
 -/

@@ -622,7 +622,14 @@ theorem isOrdering_iff
     have : a in P.support ∨ b in P.support :=
       Ideal.IsPrime.mem_or_mem inferInstance (by simp_all [mem_support])
     simp_all [mem_support]
-  · h
+  · have : HasMemOrNegMem P := ⟨by simp [h]⟩
+    refine IsOrdering.mk' P (fun {x y} _ => ?_)
+    by_contra
+    have := h (-x) y
+    have := h (-x) (-y)
+    have := h x y
+    have := h x (-y)
+    cases (by aesop : x in P ∨ -x in P) <;> simp_all [mem_support]
 
 中文:
 定理 isOrdering_iff
@@ -633,7 +640,14 @@ theorem isOrdering_iff
     have : a in P.support ∨ b in P.support :=
       Ideal.IsPrime.mem_or_mem inferInstance (by simp_all [mem_support])
     simp_all [mem_support]
-  · h
+  · have : HasMemOrNegMem P := ⟨by simp [h]⟩
+    refine IsOrdering.mk' P (fun {x y} _ => ?_)
+    by_contra
+    have := h (-x) y
+    have := h (-x) (-y)
+    have := h x y
+    have := h x (-y)
+    cases (by aesop : x in P ∨ -x in P) <;> simp_all [mem_support]
 
 Depends on / 依赖: HasMemOrNegMem, Ideal.IsPrime.mem_or_mem, IsOrdering, IsOrdering.mk, IsPrime, P.support, mem_or_mem, mem_support, mul_mem, support
 -/

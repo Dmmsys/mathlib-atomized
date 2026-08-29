@@ -946,7 +946,8 @@ theorem relrank_mul_relrank
   let : Algebra A B := (inclusion h1).toAlgebra
   let : Algebra B C := (inclusion h2).toAlgebra
   let : Algebra A C := (inclusion h3).toAlgebra
-  have : IsScalarTower A B C := Is
+  have : IsScalarTower A B C := IsScalarTower.of_algebraMap_eq' rfl
+  exact rank_mul_rank A B C
 
 中文:
 定理 relrank_mul_relrank
@@ -957,7 +958,8 @@ theorem relrank_mul_relrank
   let : Algebra A B := (inclusion h1).toAlgebra
   let : Algebra B C := (inclusion h2).toAlgebra
   let : Algebra A C := (inclusion h3).toAlgebra
-  have : IsScalarTower A B C := Is
+  have : IsScalarTower A B C := IsScalarTower.of_algebraMap_eq' rfl
+  exact rank_mul_rank A B C
 
 Depends on / 依赖: Algebra, IsScalarTower, IsScalarTower.of_algebraMap_eq, h1.trans, inclusion, of_algebraMap_eq, rank_mul_rank, relrank_eq_rank_of_le, toAlgebra
 -/

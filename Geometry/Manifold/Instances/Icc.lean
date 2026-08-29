@@ -80,7 +80,44 @@ lemma isImmersionOfComplement_subtypeVal_Icc
   let φ : (EuclideanSpace Real (Fin 1) × Unit) ≃L[Real] Real :=
     φ₀.trans (PiLp.equivOfUnique 2 Real (fun (_ : Fin 1) => Real))
   by_cases hz : ↑z < y
-  · -- At all points but `y`, the correct codoma
+  · -- At all points but `y`, the correct codomain chart maps `a` to `a + x`.
+    apply IsImmersionAtOfComplement.mk_of_continuousAt (by fun_prop) φ
+      (chartAt (EuclideanHalfSpace 1) z) (Homeomorph.addLeft (-x)).toOpenPartialHomeomorph
+      (mem_chart_source _ z) (by simp [Homeomorph.addLeft]) (chart_mem_maximalAtlas _) ?_; swap
+    · apply OpenPartialHomeomorph.mem_maximalAtlas_of_contMDiffOn
+      · have : ContDiff Real n (fun y => -x + y) := by fun_prop
+        simpa [contMDiffOn_iff_contDiffOn, contDiffOn_univ]
+      · have : ContDiff Real n (fun y => x + y) := by fun_prop
+        simpa [contMDiffOn_iff_contDiffOn, contDiffOn_univ, Homeomorph.addLeft]
+    intro z' hz'
+    obtain ⟨⟨u, rfl⟩, hu⟩ :
+        (exists y, ⇑(𝓡∂ 1) y = z') ∧ ⇑(𝓡∂ 1).symm z' in (IccLeftChart x y).target := by
+      simpa [hz] using! hz'
+    replace hu : ofLp u.val 0 <= y - x := by
+      apply le_of_lt
+      simpa [modelWithCornersEuclideanHalfSpace_symm_apply, max_eq_left u.property] using! hu
+    simp [hz, φ, φ₀, modelWithCornersEuclideanHalfSpace_symm_apply, u.property,
+      IccLeftChart_symm_apply_of_le hu]
+  · -- At the right boundary point, the correct codomain chart is mapping `a` to `y - a`.
+    apply IsImmersionAtOfComplement.mk_of_continuousAt (by fun_prop) φ
+      (chartAt (EuclideanHalfSpace 1) z)
+      (Homeomorph.pointReflection (y / 2)).toOpenPartialHomeomorph (mem_chart_source _ z)
+      (by simp [Homeomorph.pointReflection]) (chart_mem_maximalAtlas _) ?_; swap
+    · apply OpenPartialHomeomorph.mem_maximalAtlas_of_contMDiffOn
+      · have : ContDiff Real n ((fun v => v + y / 2) ∘ fun x => y / 2 - x) := by fun_prop
+        simpa [contMDiffOn_iff_contDiffOn, contDiffOn_univ]
+      · have : ContDiff Real n ((fun v => -v + y / 2) ∘ fun p' => p' - y / 2) := by fun_prop
+        simpa [contMDiffOn_iff_contDiffOn, contDiffOn_univ]
+    intro z' hz'
+    obtain ⟨⟨u, rfl⟩, hu⟩ :
+        (exists y, ⇑(𝓡∂ 1) y = z') ∧ ⇑(𝓡∂ 1).symm z' in (IccRightChart x y).target := by
+      simpa [hz] using! hz'
+    replace hu : ofLp u.val 0 <= y - x := by
+      apply le_of_lt
+      simpa [modelWithCornersEuclideanHalfSpace_symm_apply, max_eq_left u.property] using! hu
+    simp [hz, φ, φ₀, modelWithCornersEuclideanHalfSpace_symm_apply, u.property,
+      IccRightChart_symm_apply_of_le hu, Equiv.pointReflection_apply]
+    linarith
 
 中文:
 引理 isImmersionOfComplement_subtypeVal_Icc
@@ -90,7 +127,44 @@ lemma isImmersionOfComplement_subtypeVal_Icc
   let φ : (EuclideanSpace Real (Fin 1) × Unit) ≃L[Real] Real :=
     φ₀.trans (PiLp.equivOfUnique 2 Real (fun (_ : Fin 1) => Real))
   by_cases hz : ↑z < y
-  · -- At all points but `y`, the correct codoma
+  · -- At all points but `y`, the correct codomain chart maps `a` to `a + x`.
+    apply IsImmersionAtOfComplement.mk_of_continuousAt (by fun_prop) φ
+      (chartAt (EuclideanHalfSpace 1) z) (Homeomorph.addLeft (-x)).toOpenPartialHomeomorph
+      (mem_chart_source _ z) (by simp [Homeomorph.addLeft]) (chart_mem_maximalAtlas _) ?_; swap
+    · apply OpenPartialHomeomorph.mem_maximalAtlas_of_contMDiffOn
+      · have : ContDiff Real n (fun y => -x + y) := by fun_prop
+        simpa [contMDiffOn_iff_contDiffOn, contDiffOn_univ]
+      · have : ContDiff Real n (fun y => x + y) := by fun_prop
+        simpa [contMDiffOn_iff_contDiffOn, contDiffOn_univ, Homeomorph.addLeft]
+    intro z' hz'
+    obtain ⟨⟨u, rfl⟩, hu⟩ :
+        (exists y, ⇑(𝓡∂ 1) y = z') ∧ ⇑(𝓡∂ 1).symm z' in (IccLeftChart x y).target := by
+      simpa [hz] using! hz'
+    replace hu : ofLp u.val 0 <= y - x := by
+      apply le_of_lt
+      simpa [modelWithCornersEuclideanHalfSpace_symm_apply, max_eq_left u.property] using! hu
+    simp [hz, φ, φ₀, modelWithCornersEuclideanHalfSpace_symm_apply, u.property,
+      IccLeftChart_symm_apply_of_le hu]
+  · -- At the right boundary point, the correct codomain chart is mapping `a` to `y - a`.
+    apply IsImmersionAtOfComplement.mk_of_continuousAt (by fun_prop) φ
+      (chartAt (EuclideanHalfSpace 1) z)
+      (Homeomorph.pointReflection (y / 2)).toOpenPartialHomeomorph (mem_chart_source _ z)
+      (by simp [Homeomorph.pointReflection]) (chart_mem_maximalAtlas _) ?_; swap
+    · apply OpenPartialHomeomorph.mem_maximalAtlas_of_contMDiffOn
+      · have : ContDiff Real n ((fun v => v + y / 2) ∘ fun x => y / 2 - x) := by fun_prop
+        simpa [contMDiffOn_iff_contDiffOn, contDiffOn_univ]
+      · have : ContDiff Real n ((fun v => -v + y / 2) ∘ fun p' => p' - y / 2) := by fun_prop
+        simpa [contMDiffOn_iff_contDiffOn, contDiffOn_univ]
+    intro z' hz'
+    obtain ⟨⟨u, rfl⟩, hu⟩ :
+        (exists y, ⇑(𝓡∂ 1) y = z') ∧ ⇑(𝓡∂ 1).symm z' in (IccRightChart x y).target := by
+      simpa [hz] using! hz'
+    replace hu : ofLp u.val 0 <= y - x := by
+      apply le_of_lt
+      simpa [modelWithCornersEuclideanHalfSpace_symm_apply, max_eq_left u.property] using! hu
+    simp [hz, φ, φ₀, modelWithCornersEuclideanHalfSpace_symm_apply, u.property,
+      IccRightChart_symm_apply_of_le hu, Equiv.pointReflection_apply]
+    linarith
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.prodUnique, EuclideanHalfSpace, EuclideanSpace, Homeomorph, Homeomorph.addLeft, IsImmersionAtOfComplement, IsImmersionAtOfComplement.mk_of_continuousAt, PiLp.equivOfUnique, addLeft, chartAt, codomain, correct, equivOfUnique, fun_prop, mem_chart_source, mk_of_continuousAt, points, prodUnique, toOpenPartialHomeomorph
 -/
@@ -217,7 +291,31 @@ lemma contMDiffOn_projIcc
   refine ⟨by apply ContinuousAt.continuousWithinAt; fun_prop, ?_⟩
   -- We come back to the definition: we should check that, in each chart, the map is smooth
   -- There are two charts, and we check things separately in each of them using the
-  -- explicit
+  -- explicit formulas.
+  suffices ContDiffWithinAt Real n _ (Icc x y) z by simpa
+  split_ifs with h'z
+  · have : ContDiff Real n (fun (w : Real) =>
+        (show EuclideanSpace Real (Fin 1) from toLp 2 fun (_ : Fin 1) => w - x)) := by
+      dsimp
+      apply contDiff_euclidean.2 (fun i => by fun_prop)
+    apply this.contDiffWithinAt.congr_of_eventuallyEq_of_mem _ hz
+    filter_upwards [self_mem_nhdsWithin] with w hw
+    ext i
+    suffices max x (min y w) - x = w - x by
+      simpa [modelWithCornersEuclideanHalfSpace, IccLeftChart]
+    rw [max_eq_right]; rw [min_eq_right hw.2]
+    simp [hw.1, h.out.le]
+  · have : ContDiff Real n (fun (w : Real) =>
+        (show EuclideanSpace Real (Fin 1) from toLp 2 fun (_ : Fin 1) => y - w)) := by
+      dsimp
+      apply contDiff_euclidean.2 (fun i => by fun_prop)
+    apply this.contDiffWithinAt.congr_of_eventuallyEq_of_mem _ hz
+    filter_upwards [self_mem_nhdsWithin] with w hw
+    ext i
+    suffices y - max x (min y w) = y - w by
+      simpa [modelWithCornersEuclideanHalfSpace, IccRightChart]
+    rw [max_eq_right]; rw [min_eq_right hw.2]
+    simp [hw.1, h.out.le]
 
 中文:
 引理 contMDiffOn_projIcc
@@ -228,7 +326,31 @@ lemma contMDiffOn_projIcc
   refine ⟨by apply ContinuousAt.continuousWithinAt; fun_prop, ?_⟩
   -- We come back to the definition: we should check that, in each chart, the map is smooth
   -- There are two charts, and we check things separately in each of them using the
-  -- explicit
+  -- explicit formulas.
+  suffices ContDiffWithinAt Real n _ (Icc x y) z by simpa
+  split_ifs with h'z
+  · have : ContDiff Real n (fun (w : Real) =>
+        (show EuclideanSpace Real (Fin 1) from toLp 2 fun (_ : Fin 1) => w - x)) := by
+      dsimp
+      apply contDiff_euclidean.2 (fun i => by fun_prop)
+    apply this.contDiffWithinAt.congr_of_eventuallyEq_of_mem _ hz
+    filter_upwards [self_mem_nhdsWithin] with w hw
+    ext i
+    suffices max x (min y w) - x = w - x by
+      simpa [modelWithCornersEuclideanHalfSpace, IccLeftChart]
+    rw [max_eq_right]; rw [min_eq_right hw.2]
+    simp [hw.1, h.out.le]
+  · have : ContDiff Real n (fun (w : Real) =>
+        (show EuclideanSpace Real (Fin 1) from toLp 2 fun (_ : Fin 1) => y - w)) := by
+      dsimp
+      apply contDiff_euclidean.2 (fun i => by fun_prop)
+    apply this.contDiffWithinAt.congr_of_eventuallyEq_of_mem _ hz
+    filter_upwards [self_mem_nhdsWithin] with w hw
+    ext i
+    suffices y - max x (min y w) = y - w by
+      simpa [modelWithCornersEuclideanHalfSpace, IccRightChart]
+    rw [max_eq_right]; rw [min_eq_right hw.2]
+    simp [hw.1, h.out.le]
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.continuousWithinAt, contMDiffWithinAt_iff, continuousWithinAt, fun_prop
 -/
@@ -346,7 +468,8 @@ lemma mdifferentiableWithinAt_comp_projIcc_iff
     convert! hf.comp _ A (fun z hz => z.2)
     ext z
     simp
-  · have := (contMDiffOn_projIcc (x := x) (y := y) w w.2).m
+  · have := (contMDiffOn_projIcc (x := x) (y := y) w w.2).mdifferentiableWithinAt one_ne_zero
+    exact MDifferentiableAt.comp_mdifferentiableWithinAt_of_eq (w : Real) hf this (by simp)
 
 中文:
 引理 mdifferentiableWithinAt_comp_projIcc_iff
@@ -358,7 +481,8 @@ lemma mdifferentiableWithinAt_comp_projIcc_iff
     convert! hf.comp _ A (fun z hz => z.2)
     ext z
     simp
-  · have := (contMDiffOn_projIcc (x := x) (y := y) w w.2).m
+  · have := (contMDiffOn_projIcc (x := x) (y := y) w w.2).mdifferentiableWithinAt one_ne_zero
+    exact MDifferentiableAt.comp_mdifferentiableWithinAt_of_eq (w : Real) hf this (by simp)
 
 Depends on / 依赖: MDifferentiableAt, MDifferentiableAt.comp_mdifferentiableWithinAt_of_eq, comp_mdifferentiableWithinAt_of_eq, contMDiffOn_projIcc, contMDiff_subtypeVal_Icc, convert, hf.comp, mdifferentiableAt, mdifferentiableWithinAt, mdifferentiableWithinAt_univ, one_ne_zero
 -/
@@ -416,7 +540,13 @@ lemma mfderivWithin_comp_projIcc_one
     · rwa [mdifferentiableWithinAt_comp_projIcc_iff]
   rw [mfderiv_comp_mfderivWithin (I' := 𝓡∂ 1)]; rotate_left
   · simp [hw]
-  · exact (contMDiffOn_pr
+  · exact (contMDiffOn_projIcc _ w.2).mdifferentiableWithinAt one_ne_zero
+  · exact (uniqueDiffOn_Icc h.out _ w.2).uniqueMDiffWithinAt
+  simp only [Function.comp_apply, ContinuousLinearMap.comp_apply]
+  have : w = projIcc x y h.out.le (w : Real) := by rw [projIcc_of_mem]
+  rw [projIcc_of_mem _ w.2]
+  congr 1
+  convert! mfderivWithin_projIcc_one w.2
 
 中文:
 引理 mfderivWithin_comp_projIcc_one
@@ -428,7 +558,13 @@ lemma mfderivWithin_comp_projIcc_one
     · rwa [mdifferentiableWithinAt_comp_projIcc_iff]
   rw [mfderiv_comp_mfderivWithin (I' := 𝓡∂ 1)]; rotate_left
   · simp [hw]
-  · exact (contMDiffOn_pr
+  · exact (contMDiffOn_projIcc _ w.2).mdifferentiableWithinAt one_ne_zero
+  · exact (uniqueDiffOn_Icc h.out _ w.2).uniqueMDiffWithinAt
+  simp only [Function.comp_apply, ContinuousLinearMap.comp_apply]
+  have : w = projIcc x y h.out.le (w : Real) := by rw [projIcc_of_mem]
+  rw [projIcc_of_mem _ w.2]
+  congr 1
+  convert! mfderivWithin_projIcc_one w.2
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_apply, Function, Function.comp_apply, MDiffAt, comp_apply, contMDiffOn_projIcc, h.out, h.out.le, mdifferentiableWithinAt, mdifferentiableWithinAt_comp_projIcc_iff, mfderivWithin_zero_of_not_mdifferentiableWithinAt, mfderiv_comp_mfderivWithin, mfderiv_zero_of_not_mdifferentiableAt, one_ne_zero, projIcc, rotate_left, uniqueDiffOn_Icc, uniqueMDiffWithinAt
 -/
@@ -462,7 +598,12 @@ lemma mfderiv_subtypeVal_Icc_one
     intro z hz
     simp [projIcc_of_mem h.out.le hz]
   rw [← mfderivWithin_comp_projIcc_one]; rw [A]
-  simp only [id_eq, mfde
+  simp only [id_eq, mfderivWithin_eq_fderivWithin]
+  rw [fderivWithin_id (uniqueDiffOn_Icc h.out _ z.2)]
+  rfl
+
+@[deprecated (since := "2026-07-22")]
+alias mfderiv_subtype_coe_Icc_one := mfderiv_subtypeVal_Icc_one
 
 中文:
 引理 mfderiv_subtypeVal_Icc_one
@@ -475,7 +616,12 @@ lemma mfderiv_subtypeVal_Icc_one
     intro z hz
     simp [projIcc_of_mem h.out.le hz]
   rw [← mfderivWithin_comp_projIcc_one]; rw [A]
-  simp only [id_eq, mfde
+  simp only [id_eq, mfderivWithin_eq_fderivWithin]
+  rw [fderivWithin_id (uniqueDiffOn_Icc h.out _ z.2)]
+  rfl
+
+@[deprecated (since := "2026-07-22")]
+alias mfderiv_subtype_coe_Icc_one := mfderiv_subtypeVal_Icc_one
 
 Depends on / 依赖: Subtype, Subtype.val, fderivWithin_id, h.out, h.out.le, id_eq, mfderiv, mfderivWithin_comp_projIcc_one, mfderivWithin_congr_of_mem, mfderivWithin_eq_fderivWithin, projIcc, projIcc_of_mem, uniqueDiffOn_Icc
 -/

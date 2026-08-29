@@ -517,7 +517,9 @@ definition pointedToTwoPFstForgetCompBipointedToPointedFstAdjunction
           invFun := fun f => ⟨fun o => o.elim Y.toTwoPointing.toProd.2 f.toFun, f.map_point, rfl⟩
           left_inv := fun f => by
             ext (_ | _) : 4
-            · ex
+            · exact f.hom.map_snd.symm
+            · rfl }
+      homEquiv_naturality_left_symm := fun f g => by ext (_ | _) : 4 <;> rfl }
 
 中文:
 定义 pointedToTwoPFstForgetCompBipointedToPointedFstAdjunction
@@ -528,7 +530,9 @@ definition pointedToTwoPFstForgetCompBipointedToPointedFstAdjunction
           invFun := fun f => ⟨fun o => o.elim Y.toTwoPointing.toProd.2 f.toFun, f.map_point, rfl⟩
           left_inv := fun f => by
             ext (_ | _) : 4
-            · ex
+            · exact f.hom.map_snd.symm
+            · rfl }
+      homEquiv_naturality_left_symm := fun f g => by ext (_ | _) : 4 <;> rfl }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Option.some, Y.toTwoPointing.toProd, f.hom.map_fst, f.hom.map_snd.symm, f.hom.toFun, f.map_point, f.toFun, homEquiv, homEquiv_naturality_left_symm, invFun, left_inv, map_fst, map_point, map_snd, mkOfHomEquiv, o.elim, toProd, toTwoPointing
 -/
@@ -557,7 +561,10 @@ definition pointedToTwoPSndForgetCompBipointedToPointedSndAdjunction
           invFun := fun f => ⟨fun o => o.elim Y.toTwoPointing.toProd.1 f.toFun, rfl, f.map_point⟩
           left_inv := fun f => by
             ext (_ | _) : 4
-            · ex
+            · exact f.hom.map_fst.symm
+            · rfl }
+      homEquiv_naturality_left_symm := fun f g => by
+        ext (_ | _) : 4 <;> rfl }
 
 中文:
 定义 pointedToTwoPSndForgetCompBipointedToPointedSndAdjunction
@@ -568,7 +575,10 @@ definition pointedToTwoPSndForgetCompBipointedToPointedSndAdjunction
           invFun := fun f => ⟨fun o => o.elim Y.toTwoPointing.toProd.1 f.toFun, rfl, f.map_point⟩
           left_inv := fun f => by
             ext (_ | _) : 4
-            · ex
+            · exact f.hom.map_fst.symm
+            · rfl }
+      homEquiv_naturality_left_symm := fun f g => by
+        ext (_ | _) : 4 <;> rfl }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Option.some, Y.toTwoPointing.toProd, f.hom.map_fst.symm, f.hom.map_snd, f.hom.toFun, f.map_point, f.toFun, homEquiv, homEquiv_naturality_left_symm, invFun, left_inv, map_fst, map_point, map_snd, mkOfHomEquiv, o.elim, toProd, toTwoPointing
 -/

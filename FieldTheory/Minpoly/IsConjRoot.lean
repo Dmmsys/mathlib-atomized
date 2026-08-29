@@ -913,7 +913,15 @@ theorem notMem_iff_exists_ne_and_isConjRoot
     _ ↔ 2 <= Fintype.card ((minpoly K x).rootSet L) :=
       (Polynomial.card_rootSet_eq_natDegree h sp) ▸ Iff.rfl
     _ ↔ Nontrivial ((minpoly K x).rootSet L) := Fintype.one_lt_card_iff_nontrivial
-   
+    _ ↔ exists y : ((minpoly K x).rootSet L), ↑y != x :=
+      (nontrivial_iff_exists_ne ⟨x, mem_rootSet.mpr ⟨minpoly.ne_zero h.isIntegral,
+          minpoly.aeval K x⟩⟩).trans ⟨fun ⟨y, hy⟩ => ⟨y, Subtype.coe_ne_coe.mpr hy⟩,
+          fun ⟨y, hy⟩ => ⟨y, Subtype.coe_ne_coe.mp hy⟩⟩
+    _ ↔ _ :=
+      ⟨fun ⟨⟨y, hy⟩, hne⟩ => ⟨y, ⟨hne.symm,
+          (isConjRoot_iff_mem_minpoly_rootSet h.isIntegral).mpr hy⟩⟩,
+          fun ⟨y, hne, hy⟩ => ⟨⟨y,
+          (isConjRoot_iff_mem_minpoly_rootSet h.isIntegral).mp hy⟩, hne.symm⟩⟩
 
 中文:
 定理 notMem_iff_存在_ne_and_isConjRoot
@@ -924,7 +932,15 @@ theorem notMem_iff_exists_ne_and_isConjRoot
     _ ↔ 2 <= Fintype.card ((minpoly K x).rootSet L) :=
       (Polynomial.card_rootSet_eq_natDegree h sp) ▸ Iff.rfl
     _ ↔ Nontrivial ((minpoly K x).rootSet L) := Fintype.one_lt_card_iff_nontrivial
-   
+    _ ↔ exists y : ((minpoly K x).rootSet L), ↑y != x :=
+      (nontrivial_iff_exists_ne ⟨x, mem_rootSet.mpr ⟨minpoly.ne_zero h.isIntegral,
+          minpoly.aeval K x⟩⟩).trans ⟨fun ⟨y, hy⟩ => ⟨y, Subtype.coe_ne_coe.mpr hy⟩,
+          fun ⟨y, hy⟩ => ⟨y, Subtype.coe_ne_coe.mp hy⟩⟩
+    _ ↔ _ :=
+      ⟨fun ⟨⟨y, hy⟩, hne⟩ => ⟨y, ⟨hne.symm,
+          (isConjRoot_iff_mem_minpoly_rootSet h.isIntegral).mpr hy⟩⟩,
+          fun ⟨y, hne, hy⟩ => ⟨⟨y,
+          (isConjRoot_iff_mem_minpoly_rootSet h.isIntegral).mp hy⟩, hne.symm⟩⟩
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.one_lt_card_iff_nontrivial, Iff.rfl, Nontrivial, Polynomial, Polynomial.card_rootSet_eq_natDegree, Subtype, Subtype.coe_ne_coe.mpr, card_rootSet_eq_natDegree, coe_ne_coe, h.isIntegral, isIntegral, mem_rootSet, mem_rootSet.mpr, minpoly, minpoly.aeval, minpoly.ne_zero, minpoly.two_le_natDegree_iff, natDegree
 -/

@@ -168,7 +168,8 @@ theorem inner_self
     conv_lhs => rw [← (e.toBasis.tensorProduct f.toBasis).sum_repr x]
     simp [← Finset.sum_product', Basis.tensorProduct_apply']
   conv_lhs => rw [this]
-  simp only [inner_def, 
+  simp only [inner_def, map_sum, LinearMap.sum_apply]
+  simp [OrthonormalBasis.inner_eq_ite, ← Finset.sum_product', RCLike.mul_conj]
 
 中文:
 定理 inner_self
@@ -179,7 +180,8 @@ theorem inner_self
     conv_lhs => rw [← (e.toBasis.tensorProduct f.toBasis).sum_repr x]
     simp [← Finset.sum_product', Basis.tensorProduct_apply']
   conv_lhs => rw [this]
-  simp only [inner_def, 
+  simp only [inner_def, map_sum, LinearMap.sum_apply]
+  simp [OrthonormalBasis.inner_eq_ite, ← Finset.sum_product', RCLike.mul_conj]
 -/
 private theorem inner_self {ι ι' : Type*} [Fintype ι] [Fintype ι'] (x : E otimes[𝕜] F)
     (e : OrthonormalBasis ι 𝕜 E) (f : OrthonormalBasis ι' 𝕜 F) :
@@ -205,7 +207,17 @@ theorem inner_definite
   The way we prove this is by noting that every element of a tensor product lies
   in the tensor product of some finite submodules.
   So for `x : E ⊗ F`, there exists finite submodules `E', F'` such that `x ∈ mapIncl E' F'`.
-  And so the rest then follows from the above lemmas `inner_mapIncl
+  And so the rest then follows from the above lemmas `inner_mapIncl_mapIncl` and `inner_self`.
+  -/
+  obtain ⟨E', F', iE', iF', hz⟩ := exists_finite_submodule_of_setFinite {x} (Set.finite_singleton x)
+  obtain ⟨y : E' otimes F', rfl : mapIncl E' F' y = x⟩ := Set.singleton_subset_iff.mp hz
+  obtain e := stdOrthonormalBasis 𝕜 E'
+  obtain f := stdOrthonormalBasis 𝕜 F'
+  have (i) (j) : (e.toBasis.tensorProduct f.toBasis).repr y (i, j) = 0 := by
+    rw [inner_mapIncl_mapIncl]; rw [inner_self y e f]; rw [RCLike.ofReal_eq_zero]; rw [Finset.sum_eq_zero_iff_of_nonneg fun _ _ => sq_nonneg _] at hx
+    simpa using hx (i, j)
+  have : y = 0 := by simp [(e.toBasis.tensorProduct f.toBasis).ext_elem_iff, this]
+  rw [this]; rw [map_zero]
 
 中文:
 定理 inner_definite
@@ -216,7 +228,17 @@ theorem inner_definite
   The way we prove this is by noting that every element of a tensor product lies
   in the tensor product of some finite submodules.
   So for `x : E ⊗ F`, there exists finite submodules `E', F'` such that `x ∈ mapIncl E' F'`.
-  And so the rest then follows from the above lemmas `inner_mapIncl
+  And so the rest then follows from the above lemmas `inner_mapIncl_mapIncl` and `inner_self`.
+  -/
+  obtain ⟨E', F', iE', iF', hz⟩ := exists_finite_submodule_of_setFinite {x} (Set.finite_singleton x)
+  obtain ⟨y : E' otimes F', rfl : mapIncl E' F' y = x⟩ := Set.singleton_subset_iff.mp hz
+  obtain e := stdOrthonormalBasis 𝕜 E'
+  obtain f := stdOrthonormalBasis 𝕜 F'
+  have (i) (j) : (e.toBasis.tensorProduct f.toBasis).repr y (i, j) = 0 := by
+    rw [inner_mapIncl_mapIncl]; rw [inner_self y e f]; rw [RCLike.ofReal_eq_zero]; rw [Finset.sum_eq_zero_iff_of_nonneg fun _ _ => sq_nonneg _] at hx
+    simpa using hx (i, j)
+  have : y = 0 := by simp [(e.toBasis.tensorProduct f.toBasis).ext_elem_iff, this]
+  rw [this]; rw [map_zero]
 -/
 private theorem inner_definite (x : E otimes[𝕜] F) (hx : inner 𝕜 x x = 0) : x = 0 := by
   /-
@@ -248,7 +270,12 @@ theorem protected
   `x ∈ mapIncl E' F'`.
   And so the rest then follows from the above lemmas `inner_mapIncl_mapIncl` and `inner_self`.
   -/
-  obtain ⟨E', F', iE', iF', hz⟩ := exists_finite_submodule_of_setFinit
+  obtain ⟨E', F', iE', iF', hz⟩ := exists_finite_submodule_of_setFinite {x} (Set.finite_singleton x)
+  obtain ⟨y, rfl⟩ := Set.singleton_subset_iff.mp hz
+  obtain e := stdOrthonormalBasis 𝕜 E'
+  obtain f := stdOrthonormalBasis 𝕜 F'
+  rw [inner_mapIncl_mapIncl]; rw [inner_self y e f]; rw [RCLike.ofReal_re]
+  exact Finset.sum_nonneg fun _ _ => sq_nonneg _
 
 中文:
 定理 protected
@@ -259,7 +286,12 @@ theorem protected
   `x ∈ mapIncl E' F'`.
   And so the rest then follows from the above lemmas `inner_mapIncl_mapIncl` and `inner_self`.
   -/
-  obtain ⟨E', F', iE', iF', hz⟩ := exists_finite_submodule_of_setFinit
+  obtain ⟨E', F', iE', iF', hz⟩ := exists_finite_submodule_of_setFinite {x} (Set.finite_singleton x)
+  obtain ⟨y, rfl⟩ := Set.singleton_subset_iff.mp hz
+  obtain e := stdOrthonormalBasis 𝕜 E'
+  obtain f := stdOrthonormalBasis 𝕜 F'
+  rw [inner_mapIncl_mapIncl]; rw [inner_self y e f]; rw [RCLike.ofReal_re]
+  exact Finset.sum_nonneg fun _ _ => sq_nonneg _
 -/
 private protected theorem re_inner_self_nonneg (x : E otimes[𝕜] F) :
     0 <= RCLike.re (inner 𝕜 x x) := by
@@ -288,7 +320,10 @@ instance instNormedAddCommGroup
       x.induction_on (by simp [inner]) (y.induction_on (by simp [inner]) (by simp)
         (by simp_all [inner])) (by simp_all [inner])
     add_left _ _ _ := LinearMap.map_add₂ _ _ _ _
-    smul_left _ _ _ := LinearMap.map_
+    smul_left _ _ _ := LinearMap.map_smulₛₗ₂ _ _ _ _
+    definite := TensorProduct.inner_definite
+    re_inner_nonneg := TensorProduct.re_inner_self_nonneg }
+  this.toNormedAddCommGroup
 
 中文:
 实例 instNormedAddCommGroup
@@ -298,7 +333,10 @@ instance instNormedAddCommGroup
       x.induction_on (by simp [inner]) (y.induction_on (by simp [inner]) (by simp)
         (by simp_all [inner])) (by simp_all [inner])
     add_left _ _ _ := LinearMap.map_add₂ _ _ _ _
-    smul_left _ _ _ := LinearMap.map_
+    smul_left _ _ _ := LinearMap.map_smulₛₗ₂ _ _ _ _
+    definite := TensorProduct.inner_definite
+    re_inner_nonneg := TensorProduct.re_inner_self_nonneg }
+  this.toNormedAddCommGroup
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.Core, LinearMap, LinearMap.map_add, LinearMap.map_smul, TensorProduct, TensorProduct.inner_definite, TensorProduct.re_inner_self_nonneg, add_left, conj_inner_symm, definite, induction_on, inner_definite, otimes, re_inner_nonneg, re_inner_self_nonneg, smul_left, this.toNormedAddCommGroup, toNormedAddCommGroup, x.induction_on
 -/
@@ -1705,7 +1743,9 @@ theorem inner_assoc_assoc
       a.induction_on (by simp) (fun _ _ =>
         c.induction_on (by simp) (by simp [mul_assoc])
         fun _ _ h1 h2 => by simp only [add_tmul, inner_add_right, map_add, h1, h2])
-      fun _ _ h1 h2 => by simp only [add
+      fun _ _ h1 h2 => by simp only [add_tmul, inner_add_left, map_add, h1, h2])
+    fun _ _ h1 h2 => by simp only [inner_add_right, map_add, h1, h2])
+  fun _ _ h1 h2 => by simp only [inner_add_left, map_add, h1, h2]
 
 中文:
 定理 inner_assoc_assoc
@@ -1715,7 +1755,9 @@ theorem inner_assoc_assoc
       a.induction_on (by simp) (fun _ _ =>
         c.induction_on (by simp) (by simp [mul_assoc])
         fun _ _ h1 h2 => by simp only [add_tmul, inner_add_right, map_add, h1, h2])
-      fun _ _ h1 h2 => by simp only [add
+      fun _ _ h1 h2 => by simp only [add_tmul, inner_add_left, map_add, h1, h2])
+    fun _ _ h1 h2 => by simp only [inner_add_right, map_add, h1, h2])
+  fun _ _ h1 h2 => by simp only [inner_add_left, map_add, h1, h2]
 -/
 @[simp] theorem inner_assoc_assoc (x y : E otimes[𝕜] F otimes[𝕜] G) :
     inner 𝕜 (TensorProduct.assoc 𝕜 E F G x) (TensorProduct.assoc 𝕜 E F G y) = inner 𝕜 x y :=
@@ -1861,7 +1903,25 @@ definition rTensor
     /-
     Any tensor `x` can be written as a linear combination of pure tensors, `x = ∑ e n ⊗ₜ g n`. This
     induces three Gram matrices, one based on `e`, one on `f ∘ e` and one on `g`. Up to a constant,
-    the `e`-based Gram matrix is large
+    the `e`-based Gram matrix is larger than the `f ∘ e`-based one. This implies the existence of
+    a matrix, whose form is used to show that `‖f‖ ^ 2 * ‖x‖ ^ 2 - ‖f x‖ ^ 2` is a sum of
+    nonnegative terms.
+    -/
+    obtain ⟨n, e, g, hx⟩ := exists_sum_tmul_eq x
+    obtain ⟨c, hc_supp, hc⟩ := Submodule.mem_span_set.mp
+      ((span_tmul_eq_top 𝕜 E G) ▸ Submodule.mem_top (x := x))
+    obtain ⟨m, A, hA⟩ := Matrix.posSemidef_iff_eq_sum_vecMulVec.mp
+      (Matrix.posSemidef_opNorm_smul_gram_sub_gram e f)
+    apply (sq_le_sq₀ (norm_nonneg _) (by positivity)).mp
+    simp_rw [sub_eq_iff_eq_add', ← sub_eq_iff_eq_add, ← Matrix.ext_iff, Matrix.sub_apply,
+      Matrix.smul_apply, Matrix.gram_apply, Function.comp_apply] at hA
+    simp_rw [mul_pow, hx, map_sum, LinearMap.rTensor_tmul, coe_coe,
+      ← inner_self_eq_norm_sq (𝕜 := 𝕜), inner_sum, sum_inner, inner_tmul, ← hA, sub_mul,
+      Finset.sum_sub_distrib, map_sub, ← RCLike.smul_re, Finset.smul_sum, smul_mul_assoc,
+      sub_le_self_iff, Matrix.sum_apply, mul_comm, Finset.mul_sum]
+    simp_rw +singlePass [Finset.sum_comm_cycle, Matrix.vecMulVec, Matrix.of_apply, Pi.star_apply,
+      ← mul_left_comm, ← mul_assoc, ← starRingEnd_self_apply (A _ _), ← inner_smul_left]
+    simp [mul_comm, ← inner_smul_right, ← sum_inner, ← inner_sum, Finset.sum_nonneg]
 
 中文:
 定义 rTensor
@@ -1870,7 +1930,25 @@ definition rTensor
     /-
     Any tensor `x` can be written as a linear combination of pure tensors, `x = ∑ e n ⊗ₜ g n`. This
     induces three Gram matrices, one based on `e`, one on `f ∘ e` and one on `g`. Up to a constant,
-    the `e`-based Gram matrix is large
+    the `e`-based Gram matrix is larger than the `f ∘ e`-based one. This implies the existence of
+    a matrix, whose form is used to show that `‖f‖ ^ 2 * ‖x‖ ^ 2 - ‖f x‖ ^ 2` is a sum of
+    nonnegative terms.
+    -/
+    obtain ⟨n, e, g, hx⟩ := exists_sum_tmul_eq x
+    obtain ⟨c, hc_supp, hc⟩ := Submodule.mem_span_set.mp
+      ((span_tmul_eq_top 𝕜 E G) ▸ Submodule.mem_top (x := x))
+    obtain ⟨m, A, hA⟩ := Matrix.posSemidef_iff_eq_sum_vecMulVec.mp
+      (Matrix.posSemidef_opNorm_smul_gram_sub_gram e f)
+    apply (sq_le_sq₀ (norm_nonneg _) (by positivity)).mp
+    simp_rw [sub_eq_iff_eq_add', ← sub_eq_iff_eq_add, ← Matrix.ext_iff, Matrix.sub_apply,
+      Matrix.smul_apply, Matrix.gram_apply, Function.comp_apply] at hA
+    simp_rw [mul_pow, hx, map_sum, LinearMap.rTensor_tmul, coe_coe,
+      ← inner_self_eq_norm_sq (𝕜 := 𝕜), inner_sum, sum_inner, inner_tmul, ← hA, sub_mul,
+      Finset.sum_sub_distrib, map_sub, ← RCLike.smul_re, Finset.smul_sum, smul_mul_assoc,
+      sub_le_self_iff, Matrix.sum_apply, mul_comm, Finset.mul_sum]
+    simp_rw +singlePass [Finset.sum_comm_cycle, Matrix.vecMulVec, Matrix.of_apply, Pi.star_apply,
+      ← mul_left_comm, ← mul_assoc, ← starRingEnd_self_apply (A _ _), ← inner_smul_left]
+    simp [mul_comm, ← inner_smul_right, ← sum_inner, ← inner_sum, Finset.sum_nonneg]
 
 Depends on / 依赖: f.toLinearMap.rTensor, mkContinuous, rTensor, toLinearMap
 -/

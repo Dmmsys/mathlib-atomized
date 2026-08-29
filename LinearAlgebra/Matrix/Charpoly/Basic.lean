@@ -833,7 +833,22 @@ theorem aeval_self_charpoly
   -- as an identity in `Matrix n n R[X]`.
   have h : M.charpoly • (1 : Matrix n n R[X]) = adjugate (charmatrix M) * charmatrix M :=
     (adjugate_mul _).symm
-  -- Using the algebra isomorphism `Matrix n n R[X] ≃ₐ[R] Polynomi
+  -- Using the algebra isomorphism `Matrix n n R[X] ≃ₐ[R] Polynomial (Matrix n n R)`,
+  -- we have the same identity in `Polynomial (Matrix n n R)`.
+  apply_fun matPolyEquiv at h
+  simp only [map_mul, matPolyEquiv_charmatrix] at h
+  -- Because the coefficient ring `Matrix n n R` is non-commutative,
+  -- evaluation at `M` is not multiplicative.
+  -- However, any polynomial which is a product of the form $N * (t I - M)$
+  -- is sent to zero, because the evaluation function puts the polynomial variable
+  -- to the right of any coefficients, so everything telescopes.
+  apply_fun fun p => p.eval M at h
+  rw [eval_mul_X_sub_C] at h
+  -- Now $χ_M (t) I$, when thought of as a polynomial of matrices
+  -- and evaluated at some `N` is exactly $χ_M (N)$.
+  rw [matPolyEquiv_smul_one]; rw [eval_map] at h
+  -- Thus we have $χ_M(M) = 0$, which is the desired result.
+  exact h
 
 中文:
 定理 aeval_self_charpoly
@@ -844,7 +859,22 @@ theorem aeval_self_charpoly
   -- as an identity in `Matrix n n R[X]`.
   have h : M.charpoly • (1 : Matrix n n R[X]) = adjugate (charmatrix M) * charmatrix M :=
     (adjugate_mul _).symm
-  -- Using the algebra isomorphism `Matrix n n R[X] ≃ₐ[R] Polynomi
+  -- Using the algebra isomorphism `Matrix n n R[X] ≃ₐ[R] Polynomial (Matrix n n R)`,
+  -- we have the same identity in `Polynomial (Matrix n n R)`.
+  apply_fun matPolyEquiv at h
+  simp only [map_mul, matPolyEquiv_charmatrix] at h
+  -- Because the coefficient ring `Matrix n n R` is non-commutative,
+  -- evaluation at `M` is not multiplicative.
+  -- However, any polynomial which is a product of the form $N * (t I - M)$
+  -- is sent to zero, because the evaluation function puts the polynomial variable
+  -- to the right of any coefficients, so everything telescopes.
+  apply_fun fun p => p.eval M at h
+  rw [eval_mul_X_sub_C] at h
+  -- Now $χ_M (t) I$, when thought of as a polynomial of matrices
+  -- and evaluated at some `N` is exactly $χ_M (N)$.
+  rw [matPolyEquiv_smul_one]; rw [eval_map] at h
+  -- Thus we have $χ_M(M) = 0$, which is the desired result.
+  exact h
 -/
 theorem aeval_self_charpoly (M : Matrix n n R) : aeval M M.charpoly = 0 := by
   -- We begin with the fact $χ_M(t) I = adjugate (t I - M) * (t I - M)$,
@@ -880,7 +910,22 @@ theorem charpoly_mul_comm'
   let M := fromBlocks (scalar m X) (A.map C) (B.map C) (1 : Matrix n n R[X])
   let N := fromBlocks (-1 : Matrix m m R[X]) 0 (B.map C) (-scalar n X)
   have hMN :
-      M * N = fromBlocks (-scalar m X + (A * B).map C) (-(X : R[X
+      M * N = fromBlocks (-scalar m X + (A * B).map C) (-(X : R[X]) • A.map C) 0 (-scalar n X) := by
+    simp [M, N, fromBlocks_multiply, smul_eq_mul_diagonal, -diagonal_neg]
+  have hNM : N * M = fromBlocks (-scalar m X) (-A.map C) 0 ((B * A).map C - scalar n X) := by
+    simp [M, N, fromBlocks_multiply, sub_eq_add_neg, -scalar_apply, scalar_comm, Commute.all]
+  have hdet_MN : (M * N).det = (-1 : R[X]) ^ (Fintype.card m + Fintype.card n) *
+      (X ^ Fintype.card n * (scalar m X - (A * B).map C).det) := by
+    rw [hMN]; rw [det_fromBlocks_zero₂₁]; rw [neg_add_eq_sub]; rw [← neg_sub]; rw [det_neg]
+    simp
+    ring
+  have hdet_NM : (N * M).det = (-1 : R[X]) ^ (Fintype.card m + Fintype.card n) *
+      (X ^ Fintype.card m * (scalar n X - (B * A).map C).det) := by
+    rw [hNM]; rw [det_fromBlocks_zero₂₁]; rw [← neg_sub]; rw [det_neg (_ - _)]
+    simp
+    ring
+  dsimp only [charpoly, charmatrix, RingHom.mapMatrix_apply]
+  rw [← (isUnit_neg_one.pow _).isRegular.left.eq_iff]; rw [← hdet_NM]; rw [← hdet_MN]; rw [det_mul_comm]
 
 中文:
 定理 charpoly_mul_comm'
@@ -890,7 +935,22 @@ theorem charpoly_mul_comm'
   let M := fromBlocks (scalar m X) (A.map C) (B.map C) (1 : Matrix n n R[X])
   let N := fromBlocks (-1 : Matrix m m R[X]) 0 (B.map C) (-scalar n X)
   have hMN :
-      M * N = fromBlocks (-scalar m X + (A * B).map C) (-(X : R[X
+      M * N = fromBlocks (-scalar m X + (A * B).map C) (-(X : R[X]) • A.map C) 0 (-scalar n X) := by
+    simp [M, N, fromBlocks_multiply, smul_eq_mul_diagonal, -diagonal_neg]
+  have hNM : N * M = fromBlocks (-scalar m X) (-A.map C) 0 ((B * A).map C - scalar n X) := by
+    simp [M, N, fromBlocks_multiply, sub_eq_add_neg, -scalar_apply, scalar_comm, Commute.all]
+  have hdet_MN : (M * N).det = (-1 : R[X]) ^ (Fintype.card m + Fintype.card n) *
+      (X ^ Fintype.card n * (scalar m X - (A * B).map C).det) := by
+    rw [hMN]; rw [det_fromBlocks_zero₂₁]; rw [neg_add_eq_sub]; rw [← neg_sub]; rw [det_neg]
+    simp
+    ring
+  have hdet_NM : (N * M).det = (-1 : R[X]) ^ (Fintype.card m + Fintype.card n) *
+      (X ^ Fintype.card m * (scalar n X - (B * A).map C).det) := by
+    rw [hNM]; rw [det_fromBlocks_zero₂₁]; rw [← neg_sub]; rw [det_neg (_ - _)]
+    simp
+    ring
+  dsimp only [charpoly, charmatrix, RingHom.mapMatrix_apply]
+  rw [← (isUnit_neg_one.pow _).isRegular.left.eq_iff]; rw [← hdet_NM]; rw [← hdet_MN]; rw [det_mul_comm]
 -/
 theorem charpoly_mul_comm' (A : Matrix m n R) (B : Matrix n m R) :
     X ^ Fintype.card n * (A * B).charpoly = X ^ Fintype.card m * (B * A).charpoly := by

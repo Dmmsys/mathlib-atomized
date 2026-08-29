@@ -184,7 +184,7 @@ lemma Ideal.algebraMap_residueField_eq_zero
   rw [IsScalarTower.algebraMap_apply R (Localization.AtPrime I)]; rw [IsLocalRing.ResidueField.algebraMap_eq]; rw [IsLocalRing.residue_eq_zero_iff]
   exact IsLocalization.AtPrime.to_map_mem_maximal_iff _ _ _
 
-@[simp high] -- marked `high` to override the more general `FaithfulSMul.ker_algebraMap_
+@[simp high] -- marked `high` to override the more general `FaithfulSMul.ker_algebraMap_eq_bot`
 
 中文:
 引理 理想.algebraMap_residueField_eq_zero
@@ -193,7 +193,7 @@ lemma Ideal.algebraMap_residueField_eq_zero
   rw [IsScalarTower.algebraMap_apply R (Localization.AtPrime I)]; rw [IsLocalRing.ResidueField.algebraMap_eq]; rw [IsLocalRing.residue_eq_zero_iff]
   exact IsLocalization.AtPrime.to_map_mem_maximal_iff _ _ _
 
-@[simp high] -- marked `high` to override the more general `FaithfulSMul.ker_algebraMap_
+@[simp high] -- marked `high` to override the more general `FaithfulSMul.ker_algebraMap_eq_bot`
 
 Depends on / 依赖: AtPrime, IsLocalRing, IsLocalRing.ResidueField.algebraMap_eq, IsLocalRing.residue_eq_zero_iff, IsLocalization, IsLocalization.AtPrime.to_map_mem_maximal_iff, IsScalarTower, IsScalarTower.algebraMap_apply, Localization, Localization.AtPrime, ResidueField, algebraMap_apply, algebraMap_eq, residue_eq_zero_iff, to_map_mem_maximal_iff
 -/
@@ -305,7 +305,19 @@ instance :
   surj x := by
     obtain ⟨x, rfl⟩ := IsLocalRing.residue_surjective x
     obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq I.primeCompl x
-    refine ⟨⟨Ideal.Quotient.mk _ x, ⟨I
+    refine ⟨⟨Ideal.Quotient.mk _ x, ⟨Ideal.Quotient.mk _ s, ?_⟩⟩, ?_⟩
+    · rwa [mem_nonZeroDivisors_iff_ne_zero, ne_eq, Ideal.Quotient.eq_zero_iff_mem]
+    · simp [IsScalarTower.algebraMap_eq R (Localization.AtPrime I) I.ResidueField, ← map_mul]
+  exists_of_eq {x y} e := by
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective y
+    rw [← sub_eq_zero]; rw [← map_sub]; rw [← map_sub] at e
+    simp only [IsLocalRing.ResidueField.algebraMap_eq, IsLocalRing.residue_eq_zero_iff,
+      IsScalarTower.algebraMap_apply R (Localization.AtPrime I) I.ResidueField,
+      Ideal.algebraMap_quotient_residueField_mk, IsLocalization.AtPrime.to_map_mem_maximal_iff _ I,
+      ← Ideal.Quotient.mk_eq_mk_iff_sub_mem] at e
+    use 1
+    simp [e]
 
 中文:
 实例 :
@@ -315,7 +327,19 @@ instance :
   surj x := by
     obtain ⟨x, rfl⟩ := IsLocalRing.residue_surjective x
     obtain ⟨x, ⟨s, hs⟩, rfl⟩ := IsLocalization.exists_mk'_eq I.primeCompl x
-    refine ⟨⟨Ideal.Quotient.mk _ x, ⟨I
+    refine ⟨⟨Ideal.Quotient.mk _ x, ⟨Ideal.Quotient.mk _ s, ?_⟩⟩, ?_⟩
+    · rwa [mem_nonZeroDivisors_iff_ne_zero, ne_eq, Ideal.Quotient.eq_zero_iff_mem]
+    · simp [IsScalarTower.algebraMap_eq R (Localization.AtPrime I) I.ResidueField, ← map_mul]
+  exists_of_eq {x y} e := by
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    obtain ⟨y, rfl⟩ := Ideal.Quotient.mk_surjective y
+    rw [← sub_eq_zero]; rw [← map_sub]; rw [← map_sub] at e
+    simp only [IsLocalRing.ResidueField.algebraMap_eq, IsLocalRing.residue_eq_zero_iff,
+      IsScalarTower.algebraMap_apply R (Localization.AtPrime I) I.ResidueField,
+      Ideal.algebraMap_quotient_residueField_mk, IsLocalization.AtPrime.to_map_mem_maximal_iff _ I,
+      ← Ideal.Quotient.mk_eq_mk_iff_sub_mem] at e
+    use 1
+    simp [e]
 -/
 instance : IsFractionRing (R ⧸ I) I.ResidueField where
   map_units y := isUnit_iff_ne_zero.mpr

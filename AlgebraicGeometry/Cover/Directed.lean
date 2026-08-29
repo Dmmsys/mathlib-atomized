@@ -279,7 +279,11 @@ definition intersectionOfLocallyDirected
     rw [presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ?_, fun k => ?_⟩
     · use ⟨(𝒰.exists_lift_trans_eq x).choose, (𝒰.exists_lift_trans_eq x).choose_spec.choose,
-   
+        (𝒰.exists_lift_trans_eq x).choose_spec.choose_spec.choose⟩
+      exact (𝒰.exists_lift_trans_eq x).choose_spec.choose_spec.choose_spec
+    · apply P.of_postcomp (W' := P) _ (pullback.fst _ _) (P.pullback_fst _ _ (𝒰.map_prop _))
+      rw [pullback.lift_fst]
+      exact 𝒰.property_trans _
 
 中文:
 定义 intersectionOfLocallyDirected
@@ -291,7 +295,11 @@ definition intersectionOfLocallyDirected
     rw [presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ?_, fun k => ?_⟩
     · use ⟨(𝒰.exists_lift_trans_eq x).choose, (𝒰.exists_lift_trans_eq x).choose_spec.choose,
-   
+        (𝒰.exists_lift_trans_eq x).choose_spec.choose_spec.choose⟩
+      exact (𝒰.exists_lift_trans_eq x).choose_spec.choose_spec.choose_spec
+    · apply P.of_postcomp (W' := P) _ (pullback.fst _ _) (P.pullback_fst _ _ (𝒰.map_prop _))
+      rw [pullback.lift_fst]
+      exact 𝒰.property_trans _
 -/
 def intersectionOfLocallyDirected [P.IsStableUnderBaseChange] [P.HasOfPostcompProperty P]
     (i j : 𝒰.I₀) : (pullback (𝒰.f i) (𝒰.f j)).Cover (precoverage P) where
@@ -342,7 +350,10 @@ instance :
       functorOfLocallyDirected_map, forget_map, ConcreteCategory.hom_ofHom,
       TypeCat.Fun.coe_mk] at hxij
     have : 𝒰.f i xi = 𝒰.f j xj := by
-      rw [← 𝒰.trans_map fi]; rw [← 𝒰.trans_map fj]; rw [H
+      rw [← 𝒰.trans_map fi]; rw [← 𝒰.trans_map fj]; rw [Hom.comp_base]; rw [Hom.comp_base]; rw [ConcreteCategory.comp_apply]; rw [hxij]; rw [ConcreteCategory.comp_apply]
+    obtain ⟨z, rfl, rfl⟩ := Scheme.Pullback.exists_preimage_pullback xi xj this
+    obtain ⟨l, gi, gj, y, rfl⟩ := 𝒰.exists_lift_trans_eq z
+    refine ⟨l, gi, gj, y, ?_, ?_⟩ <;> simp [← Scheme.Hom.comp_apply]
 
 中文:
 实例 :
@@ -352,7 +363,10 @@ instance :
       functorOfLocallyDirected_map, forget_map, ConcreteCategory.hom_ofHom,
       TypeCat.Fun.coe_mk] at hxij
     have : 𝒰.f i xi = 𝒰.f j xj := by
-      rw [← 𝒰.trans_map fi]; rw [← 𝒰.trans_map fj]; rw [H
+      rw [← 𝒰.trans_map fi]; rw [← 𝒰.trans_map fj]; rw [Hom.comp_base]; rw [Hom.comp_base]; rw [ConcreteCategory.comp_apply]; rw [hxij]; rw [ConcreteCategory.comp_apply]
+    obtain ⟨z, rfl, rfl⟩ := Scheme.Pullback.exists_preimage_pullback xi xj this
+    obtain ⟨l, gi, gj, y, rfl⟩ := 𝒰.exists_lift_trans_eq z
+    refine ⟨l, gi, gj, y, ?_, ?_⟩ <;> simp [← Scheme.Hom.comp_apply]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.comp_apply, ConcreteCategory.hom_ofHom, Functor, Functor.comp_map, Functor.comp_obj, Hom.comp_base, Pullback, Scheme, Scheme.Pullback.exists_preimage_pullback, TypeCat, TypeCat.Fun.coe_mk, coe_mk, comp_apply, comp_base, comp_map, comp_obj, exists_preimage_pullback, forget_map, forget_obj
 -/
@@ -448,7 +462,33 @@ instance locallyDirectedPullbackCover
   directed {i j} x := by
     dsimp at i j x ⊢
     let iso : pullback (pullback.fst f (𝒰.f i)) (pullback.fst f (𝒰.f j)) ≅
-        pullback f (
+        pullback f (pullback.fst (𝒰.f i) (𝒰.f j) ≫ 𝒰.f i) :=
+      pullbackRightPullbackFstIso _ _ _ ≪≫ pullback.congrHom pullback.condition rfl ≪≫
+        pullbackAssoc ..
+    have (k : 𝒰.I₀) (hki : k ⟶ i) (hkj : k ⟶ j) :
+        (pullback.lift
+          (pullback.map f (𝒰.f k) f (𝒰.f i) (𝟙 Y) (𝒰.trans hki) (𝟙 X) (by simp) (by simp))
+          (pullback.map f (𝒰.f k) f (𝒰.f j) (𝟙 Y) (𝒰.trans hkj) (𝟙 X) (by simp) (by simp))
+            (by simp)) =
+          pullback.map _ _ _ _ (𝟙 Y) (pullback.lift (𝒰.trans hki) (𝒰.trans hkj) (by simp)) (𝟙 X)
+            (by simp) (by simp) ≫ iso.inv := by
+      apply pullback.hom_ext <;> apply pullback.hom_ext <;> simp [iso]
+    obtain ⟨k, hki, hkj, yk, hyk⟩ := 𝒰.exists_lift_trans_eq ((iso.hom ≫ pullback.snd _ _) x)
+    refine ⟨k, hki, hkj, show x in Set.range _ from ?_⟩
+    rw [this]; rw [Scheme.Hom.comp_base]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [Pullback.range_map]
+    use iso.hom x
+    simp only [Hom.id_base, TopCat.hom_id, ContinuousMap.coe_id, Set.range_id, Set.preimage_univ,
+      Set.univ_inter, Set.mem_preimage, Set.mem_range, hom_inv_apply, and_true]
+    exact ⟨yk, hyk⟩
+  property_trans {i j} hij := by
+    let iso : pullback f (𝒰.f i) ≅ pullback (pullback.snd f (𝒰.f j)) (𝒰.trans hij) :=
+      pullback.congrHom rfl (by simp) ≪≫ (pullbackLeftPullbackSndIso _ _ _).symm
+    rw [← P.cancel_left_of_respectsIso iso.inv]
+    simp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
+      PreZeroHypercover.pullback₁_X, Iso.trans_inv, Iso.symm_inv, pullback.congrHom_inv,
+      Category.assoc, iso]
+    convert! P.pullback_fst (pullback.snd f (𝒰.f j)) _ (𝒰.property_trans hij)
+    apply pullback.hom_ext <;> simp [pullback.condition]
 
 中文:
 实例 locallyDirectedPullbackCover
@@ -460,7 +500,33 @@ instance locallyDirectedPullbackCover
   directed {i j} x := by
     dsimp at i j x ⊢
     let iso : pullback (pullback.fst f (𝒰.f i)) (pullback.fst f (𝒰.f j)) ≅
-        pullback f (
+        pullback f (pullback.fst (𝒰.f i) (𝒰.f j) ≫ 𝒰.f i) :=
+      pullbackRightPullbackFstIso _ _ _ ≪≫ pullback.congrHom pullback.condition rfl ≪≫
+        pullbackAssoc ..
+    have (k : 𝒰.I₀) (hki : k ⟶ i) (hkj : k ⟶ j) :
+        (pullback.lift
+          (pullback.map f (𝒰.f k) f (𝒰.f i) (𝟙 Y) (𝒰.trans hki) (𝟙 X) (by simp) (by simp))
+          (pullback.map f (𝒰.f k) f (𝒰.f j) (𝟙 Y) (𝒰.trans hkj) (𝟙 X) (by simp) (by simp))
+            (by simp)) =
+          pullback.map _ _ _ _ (𝟙 Y) (pullback.lift (𝒰.trans hki) (𝒰.trans hkj) (by simp)) (𝟙 X)
+            (by simp) (by simp) ≫ iso.inv := by
+      apply pullback.hom_ext <;> apply pullback.hom_ext <;> simp [iso]
+    obtain ⟨k, hki, hkj, yk, hyk⟩ := 𝒰.exists_lift_trans_eq ((iso.hom ≫ pullback.snd _ _) x)
+    refine ⟨k, hki, hkj, show x in Set.range _ from ?_⟩
+    rw [this]; rw [Scheme.Hom.comp_base]; rw [TopCat.coe_comp]; rw [Set.range_comp]; rw [Pullback.range_map]
+    use iso.hom x
+    simp only [Hom.id_base, TopCat.hom_id, ContinuousMap.coe_id, Set.range_id, Set.preimage_univ,
+      Set.univ_inter, Set.mem_preimage, Set.mem_range, hom_inv_apply, and_true]
+    exact ⟨yk, hyk⟩
+  property_trans {i j} hij := by
+    let iso : pullback f (𝒰.f i) ≅ pullback (pullback.snd f (𝒰.f j)) (𝒰.trans hij) :=
+      pullback.congrHom rfl (by simp) ≪≫ (pullbackLeftPullbackSndIso _ _ _).symm
+    rw [← P.cancel_left_of_respectsIso iso.inv]
+    simp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
+      PreZeroHypercover.pullback₁_X, Iso.trans_inv, Iso.symm_inv, pullback.congrHom_inv,
+      Category.assoc, iso]
+    convert! P.pullback_fst (pullback.snd f (𝒰.f j)) _ (𝒰.property_trans hij)
+    apply pullback.hom_ext <;> simp [pullback.condition]
 
 Depends on / 依赖: pullback, pullback.map
 -/
@@ -673,7 +739,15 @@ definition Cover.LocallyDirected.ofIsBasisOpensRange
   trans_comp hij hjk := by rw [← cancel_mono (𝒰.f _)]; simp
   directed {i j} x := by
     have : (pullback.fst (𝒰.f i) (𝒰.f j) ≫ 𝒰.f i) x in
-      (pullback.fst (𝒰.f i) (𝒰.f j) ≫ 𝒰.f i).ope
+      (pullback.fst (𝒰.f i) (𝒰.f j) ≫ 𝒰.f i).opensRange := ⟨x, rfl⟩
+    obtain ⟨k, ⟨k, rfl⟩, ⟨y, hy⟩, h⟩ := TopologicalSpace.Opens.isBasis_iff_nbhd.mp H this
+refine ⟨k, homOfLE hle.mpr le_trans h ?_, homOfLE hle.mpr le_trans h ?_, y, ?_⟩
+    · rw [Scheme.Hom.opensRange_comp]
+      exact Set.image_subset_range _ _
+    · simp_rw [pullback.condition, Scheme.Hom.opensRange_comp]
+      exact Set.image_subset_range _ _
+    · apply (pullback.fst (𝒰.f i) (𝒰.f j) ≫ 𝒰.f i).isOpenEmbedding.injective
+      rw [← Scheme.Hom.comp_apply]; rw [pullback.lift_fst_assoc]; rw [IsOpenImmersion.lift_fac]; rw [hy]
 
 中文:
 定义 Cover.LocallyDirected.ofIsBasisOpensRange
@@ -683,7 +757,15 @@ definition Cover.LocallyDirected.ofIsBasisOpensRange
   trans_comp hij hjk := by rw [← cancel_mono (𝒰.f _)]; simp
   directed {i j} x := by
     have : (pullback.fst (𝒰.f i) (𝒰.f j) ≫ 𝒰.f i) x in
-      (pullback.fst (𝒰.f i) (𝒰.f j) ≫ 𝒰.f i).ope
+      (pullback.fst (𝒰.f i) (𝒰.f j) ≫ 𝒰.f i).opensRange := ⟨x, rfl⟩
+    obtain ⟨k, ⟨k, rfl⟩, ⟨y, hy⟩, h⟩ := TopologicalSpace.Opens.isBasis_iff_nbhd.mp H this
+refine ⟨k, homOfLE hle.mpr le_trans h ?_, homOfLE hle.mpr le_trans h ?_, y, ?_⟩
+    · rw [Scheme.Hom.opensRange_comp]
+      exact Set.image_subset_range _ _
+    · simp_rw [pullback.condition, Scheme.Hom.opensRange_comp]
+      exact Set.image_subset_range _ _
+    · apply (pullback.fst (𝒰.f i) (𝒰.f j) ≫ 𝒰.f i).isOpenEmbedding.injective
+      rw [← Scheme.Hom.comp_apply]; rw [pullback.lift_fst_assoc]; rw [IsOpenImmersion.lift_fac]; rw [hy]
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.lift, hle.mp, leOfHom
 -/
@@ -781,7 +863,7 @@ definition directedAffineCover
     refine ⟨fun x => ?_, inferInstance⟩
     use ⟨(isBasis_iff_nbhd.mp X.isBasis_affineOpens (mem_top x)).choose,
       (isBasis_iff_nbhd.mp X.isBasis_affineOpens (mem_top x)).choose_spec.1⟩
-    simpa using (i
+    simpa using (isBasis_iff_nbhd.mp X.isBasis_affineOpens (mem_top x)).choose_spec.2.1
 
 中文:
 定义 directedAffineCover
@@ -794,7 +876,7 @@ definition directedAffineCover
     refine ⟨fun x => ?_, inferInstance⟩
     use ⟨(isBasis_iff_nbhd.mp X.isBasis_affineOpens (mem_top x)).choose,
       (isBasis_iff_nbhd.mp X.isBasis_affineOpens (mem_top x)).choose_spec.1⟩
-    simpa using (i
+    simpa using (isBasis_iff_nbhd.mp X.isBasis_affineOpens (mem_top x)).choose_spec.2.1
 
 Depends on / 依赖: X.affineOpens, affineOpens
 -/

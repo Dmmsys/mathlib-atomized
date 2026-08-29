@@ -154,7 +154,8 @@ theorem Associates.finite_factors
     ext v
     simp_rw [Int.natCast_eq_zero]
     exact Associates.count_ne_zero_iff_dvd hI v.irreducible
-  rw [Filter.eventuall
+  rw [Filter.eventually_cofinite]; rw [h_supp]
+  exact Ideal.finite_factors hI
 
 中文:
 定理 Associates.finite_factors
@@ -165,7 +166,8 @@ theorem Associates.finite_factors
     ext v
     simp_rw [Int.natCast_eq_zero]
     exact Associates.count_ne_zero_iff_dvd hI v.irreducible
-  rw [Filter.eventuall
+  rw [Filter.eventually_cofinite]; rw [h_supp]
+  exact Ideal.finite_factors hI
 
 Depends on / 依赖: Associates, Associates.count_ne_zero_iff_dvd, Associates.mk, Filter, Filter.eventually_cofinite, HeightOneSpectrum, Ideal.finite_factors, Int.natCast_eq_zero, asIdeal, count_ne_zero_iff_dvd, eventually_cofinite, factors, finite_factors, h_supp, irreducible, natCast_eq_zero, simp_rw, v.asIdeal, v.irreducible
 -/
@@ -196,7 +198,11 @@ theorem hasFiniteMulSupport
         ((Associates.mk v.asIdeal).count (Associates.mk I).factors : Int) != 0} := by
     intro v hv h_zero
     have hv' : v.maxPowDividing I = 1 := by
-      rw [IsDedekindDomain.HeightOneS
+      rw [IsDedekindDomain.HeightOneSpectrum.maxPowDividing]; rw [Int.natCast_eq_zero.mp h_zero]; rw [pow_zero _]
+    exact hv hv'
+  Finite.subset (Filter.eventually_cofinite.mp (Associates.finite_factors hI)) h_subset
+
+@[deprecated (since := "2026-03-03")] alias finite_mulSupport := hasFiniteMulSupport
 
 中文:
 定理 hasFiniteMulSupport
@@ -206,7 +212,11 @@ theorem hasFiniteMulSupport
         ((Associates.mk v.asIdeal).count (Associates.mk I).factors : Int) != 0} := by
     intro v hv h_zero
     have hv' : v.maxPowDividing I = 1 := by
-      rw [IsDedekindDomain.HeightOneS
+      rw [IsDedekindDomain.HeightOneSpectrum.maxPowDividing]; rw [Int.natCast_eq_zero.mp h_zero]; rw [pow_zero _]
+    exact hv hv'
+  Finite.subset (Filter.eventually_cofinite.mp (Associates.finite_factors hI)) h_subset
+
+@[deprecated (since := "2026-03-03")] alias finite_mulSupport := hasFiniteMulSupport
 
 Depends on / 依赖: Associates, Associates.finite_factors, Associates.mk, Filter, Filter.eventually_cofinite.mp, Finite, Finite.subset, HeightOneSpectrum, Int.natCast_eq_zero.mp, IsDedekindDomain, IsDedekindDomain.HeightOneSpectrum.maxPowDividing, asIdeal, eventually_cofinite, factors, finite_factors, h_subset, h_zero, maxPowDividing, natCast_eq_zero, pow_zero
 -/
@@ -309,7 +319,13 @@ theorem finprod_not_dvd
   have h_ne_zero : v.maxPowDividing I != 0 := pow_ne_zero _ v.ne_bot
   rw [← mul_finprod_cond_ne v hf]; rw [pow_add]; rw [pow_one]; rw [finprod_cond_ne _ _ hf]
   intro h_contr
-  have hv_prime : Prime v.asIdeal := Ideal.prime_of_isPrime v.ne_bot v.is
+  have hv_prime : Prime v.asIdeal := Ideal.prime_of_isPrime v.ne_bot v.isPrime
+  obtain ⟨w, hw, hvw'⟩ :=
+    Prime.exists_mem_finset_dvd hv_prime ((mul_dvd_mul_iff_left h_ne_zero).mp h_contr)
+  have hw_prime : Prime w.asIdeal := Ideal.prime_of_isPrime w.ne_bot w.isPrime
+  have hvw := Prime.dvd_of_dvd_pow hv_prime hvw'
+  rw [Prime.dvd_prime_iff_associated hv_prime hw_prime]; rw [associated_iff_eq] at hvw
+  exact (Finset.mem_erase.mp hw).1 (HeightOneSpectrum.ext hvw.symm)
 
 中文:
 定理 finprod_not_dvd
@@ -320,7 +336,13 @@ theorem finprod_not_dvd
   have h_ne_zero : v.maxPowDividing I != 0 := pow_ne_zero _ v.ne_bot
   rw [← mul_finprod_cond_ne v hf]; rw [pow_add]; rw [pow_one]; rw [finprod_cond_ne _ _ hf]
   intro h_contr
-  have hv_prime : Prime v.asIdeal := Ideal.prime_of_isPrime v.ne_bot v.is
+  have hv_prime : Prime v.asIdeal := Ideal.prime_of_isPrime v.ne_bot v.isPrime
+  obtain ⟨w, hw, hvw'⟩ :=
+    Prime.exists_mem_finset_dvd hv_prime ((mul_dvd_mul_iff_left h_ne_zero).mp h_contr)
+  have hw_prime : Prime w.asIdeal := Ideal.prime_of_isPrime w.ne_bot w.isPrime
+  have hvw := Prime.dvd_of_dvd_pow hv_prime hvw'
+  rw [Prime.dvd_prime_iff_associated hv_prime hw_prime]; rw [associated_iff_eq] at hvw
+  exact (Finset.mem_erase.mp hw).1 (HeightOneSpectrum.ext hvw.symm)
 
 Depends on / 依赖: Ideal.prime_of_isPrime, Prime.dvd_, Prime.exists_mem_finset_dvd, asIdeal, classical, dvd_, exists_mem_finset_dvd, finprod_cond_ne, h_contr, h_ne_zero, hasFiniteMulSupport, hv_prime, hw_prime, isPrime, maxPowDividing, mul_dvd_mul_iff_left, mul_finprod_cond_ne, ne_bot, pow_add, pow_ne_zero
 -/
@@ -395,7 +417,12 @@ theorem finprod_count
   have hv : Irreducible (Associates.mk v.asIdeal) := v.associates_irreducible
   have h_dvd := finprod_mem_dvd v (hasFiniteMulSupport hI)
   have h_not_dvd := Ideal.finprod_not_dvd v I hI
-  simp only [IsDedekindDomain.HeightOneSpectrum.maxPowDividing
+  simp only [IsDedekindDomain.HeightOneSpectrum.maxPowDividing] at h_dvd h_ne_zero h_not_dvd
+  rw [← Associates.mk_dvd_mk] at h_dvd h_not_dvd
+  simp only [Associates.dvd_eq_le] at h_dvd h_not_dvd
+  rw [Associates.mk_pow]; rw [Associates.prime_pow_dvd_iff_le h_ne_zero hv] at h_dvd h_not_dvd
+  rw [not_le] at h_not_dvd
+  apply Nat.eq_of_le_of_lt_succ h_dvd h_not_dvd
 
 中文:
 定理 finprod_count
@@ -406,7 +433,12 @@ theorem finprod_count
   have hv : Irreducible (Associates.mk v.asIdeal) := v.associates_irreducible
   have h_dvd := finprod_mem_dvd v (hasFiniteMulSupport hI)
   have h_not_dvd := Ideal.finprod_not_dvd v I hI
-  simp only [IsDedekindDomain.HeightOneSpectrum.maxPowDividing
+  simp only [IsDedekindDomain.HeightOneSpectrum.maxPowDividing] at h_dvd h_ne_zero h_not_dvd
+  rw [← Associates.mk_dvd_mk] at h_dvd h_not_dvd
+  simp only [Associates.dvd_eq_le] at h_dvd h_not_dvd
+  rw [Associates.mk_pow]; rw [Associates.prime_pow_dvd_iff_le h_ne_zero hv] at h_dvd h_not_dvd
+  rw [not_le] at h_not_dvd
+  apply Nat.eq_of_le_of_lt_succ h_dvd h_not_dvd
 
 Depends on / 依赖: Associates, Associates.dvd_eq_le, Associates.finprod_ne_zero, Associates.mk, Associates.mk_dvd_mk, Associates.mk_pow, Associates.prime_pow_dvd_iff_le, HeightOneSpectrum, Ideal.finprod_not_dvd, Irreducible, IsDedekindDomain, IsDedekindDomain.HeightOneSpectrum.maxPowDividing, asIdeal, associates_irreducible, dvd_eq_le, finprod_mem_dvd, finprod_ne_zero, finprod_not_dvd, h_dvd, h_ne_zero
 -/
@@ -438,7 +470,9 @@ theorem finprod_heightOneSpectrum_factorization
   intro v hv
   obtain ⟨J, hJv⟩ := Associates.exists_rep v
   rw [← hJv]; rw [Associates.irreducible_mk] at hv
-  rw 
+  rw [← hJv]
+  apply Ideal.finprod_count
+    ⟨J, Ideal.isPrime_of_prime (irreducible_iff_prime.mp hv), Irreducible.ne_zero hv⟩ I hI
 
 中文:
 定理 finprod_heightOneSpectrum_factorization
@@ -451,7 +485,9 @@ theorem finprod_heightOneSpectrum_factorization
   intro v hv
   obtain ⟨J, hJv⟩ := Associates.exists_rep v
   rw [← hJv]; rw [Associates.irreducible_mk] at hv
-  rw 
+  rw [← hJv]
+  apply Ideal.finprod_count
+    ⟨J, Ideal.isPrime_of_prime (irreducible_iff_prime.mp hv), Irreducible.ne_zero hv⟩ I hI
 
 Depends on / 依赖: Associates, Associates.eq_of_eq_counts, Associates.exists_rep, Associates.finprod_ne_zero, Associates.irreducible_mk, Associates.mk_eq_mk_iff_associated, Associates.mk_ne_zero.mpr, Ideal.finprod_count, Ideal.isPrime_of_prime, Irreducible, Irreducible.ne_zero, associated_iff_eq, eq_of_eq_counts, exists_rep, finprod_count, finprod_ne_zero, irreducible_iff_prime, irreducible_iff_prime.mp, irreducible_mk, isPrime_of_prime
 -/
@@ -482,7 +518,11 @@ theorem iInf_maxPowDividing_eq
   · ext x
     constructor
     · aesop
-    · simp only [Finite.mem_toFinset, mem_mulSupport, one_eq_top, ne_eq,
+    · simp only [Finite.mem_toFinset, mem_mulSupport, one_eq_top, ne_eq, Submodule.mem_iInf]
+      intro h i
+      by_cases i.maxPowDividing I = ⊤ <;> simp_all
+  · intro x hx y hy hxy
+    apply IsDedekindDomain.HeightOneSpectrum.isCoprime_pow_of_ne _ _ hxy
 
 中文:
 定理 iInf_maxPowDividing_eq
@@ -494,7 +534,11 @@ theorem iInf_maxPowDividing_eq
   · ext x
     constructor
     · aesop
-    · simp only [Finite.mem_toFinset, mem_mulSupport, one_eq_top, ne_eq,
+    · simp only [Finite.mem_toFinset, mem_mulSupport, one_eq_top, ne_eq, Submodule.mem_iInf]
+      intro h i
+      by_cases i.maxPowDividing I = ⊤ <;> simp_all
+  · intro x hx y hy hxy
+    apply IsDedekindDomain.HeightOneSpectrum.isCoprime_pow_of_ne _ _ hxy
 
 Depends on / 依赖: Finite, Finite.mem_toFinset, HeightOneSpectrum, Ideal.finprod_heightOneSpectrum_factorization, Ideal.hasFiniteMulSupport, Ideal.prod_eq_iInf_of_pairwise_isCoprime, IsDedekindDomain, IsDedekindDomain.HeightOneSpectrum.isCoprime_pow_of_ne, Submodule, Submodule.mem_iInf, classical, dif_pos, finprod_def, finprod_heightOneSpectrum_factorization, hasFiniteMulSupport, i.maxPowDividing, isCoprime_pow_of_ne, maxPowDividing, mem_iInf, mem_mulSupport
 -/
@@ -565,7 +609,12 @@ theorem finprod_heightOneSpectrum_factorization
   have hJ := Ideal.finprod_heightOneSpectrum_factorization_coe K hJ_ne_zero
   have ha_ne_zero : Ideal.span {a} != 0 := constant_factor_ne_zero hI haJ
   have ha := Ideal.finprod_heightOneSpectrum_factorization_coe K ha_ne_zero
-  rw [haJ]; r
+  rw [haJ]; rw [← div_spanSingleton]; rw [div_eq_mul_inv]; rw [← coeIdeal_span_singleton]; rw [← hJ]; rw [← ha]; rw [← finprod_inv_distrib]
+  simp_rw [← zpow_neg]
+  rw [← finprod_mul_distrib (by fun_prop) (by fun_prop)]
+  apply finprod_congr
+  intro v
+  rw [← zpow_add₀ ((@coeIdeal_ne_zero R _ K _ _ _ _).mpr v.ne_bot)]; rw [sub_eq_add_neg]
 
 中文:
 定理 finprod_heightOneSpectrum_factorization
@@ -575,7 +624,12 @@ theorem finprod_heightOneSpectrum_factorization
   have hJ := Ideal.finprod_heightOneSpectrum_factorization_coe K hJ_ne_zero
   have ha_ne_zero : Ideal.span {a} != 0 := constant_factor_ne_zero hI haJ
   have ha := Ideal.finprod_heightOneSpectrum_factorization_coe K ha_ne_zero
-  rw [haJ]; r
+  rw [haJ]; rw [← div_spanSingleton]; rw [div_eq_mul_inv]; rw [← coeIdeal_span_singleton]; rw [← hJ]; rw [← ha]; rw [← finprod_inv_distrib]
+  simp_rw [← zpow_neg]
+  rw [← finprod_mul_distrib (by fun_prop) (by fun_prop)]
+  apply finprod_congr
+  intro v
+  rw [← zpow_add₀ ((@coeIdeal_ne_zero R _ K _ _ _ _).mpr v.ne_bot)]; rw [sub_eq_add_neg]
 
 Depends on / 依赖: Ideal.finprod_heightOneSpectrum_factorization_coe, Ideal.span, coeIdeal_span_singleton, constant_factor_ne_zero, div_eq_mul_inv, div_spanSingleton, finprod_heightOneSpectrum_factorization_coe, finprod_inv_distrib, finprod_mul_distrib, fun_prop, hJ_ne_zero, ha_ne_zero, ideal_factor_ne_zero, simp_rw, zpow_neg
 -/
@@ -605,7 +659,14 @@ theorem finprod_heightOneSpectrum_factorization_principal_fraction
   have hd_ne_zero : (algebraMap R K) (d : R) != 0 :=
     map_ne_zero_of_mem_nonZeroDivisors _ (IsFractionRing.injective R K) d.property
   have h0 : spanSingleton R⁰ (mk' K n d) != 0 := by
-    rw [spanSingleton_ne_zero_iff]; rw [IsFractionRing.mk'_eq_div]; rw [ne_eq]; rw [div_eq_zero_iff]; rw [not
+    rw [spanSingleton_ne_zero_iff]; rw [IsFractionRing.mk'_eq_div]; rw [ne_eq]; rw [div_eq_zero_iff]; rw [not_or]
+    exact ⟨(map_ne_zero_iff (algebraMap R K) (IsFractionRing.injective R K)).mpr hn, hd_ne_zero⟩
+  have hI : spanSingleton R⁰ (mk' K n d) =
+      spanSingleton R⁰ ((algebraMap R K) d)⁻¹ * ↑(Ideal.span {n} : Ideal R) := by
+    rw [coeIdeal_span_singleton]; rw [spanSingleton_mul_spanSingleton]
+    apply congr_arg
+    rw [IsFractionRing.mk'_eq_div]; rw [div_eq_mul_inv]; rw [mul_comm]
+  exact finprod_heightOneSpectrum_factorization h0 hI
 
 中文:
 定理 finprod_heightOneSpectrum_factorization_principal_fraction
@@ -614,7 +675,14 @@ theorem finprod_heightOneSpectrum_factorization_principal_fraction
   have hd_ne_zero : (algebraMap R K) (d : R) != 0 :=
     map_ne_zero_of_mem_nonZeroDivisors _ (IsFractionRing.injective R K) d.property
   have h0 : spanSingleton R⁰ (mk' K n d) != 0 := by
-    rw [spanSingleton_ne_zero_iff]; rw [IsFractionRing.mk'_eq_div]; rw [ne_eq]; rw [div_eq_zero_iff]; rw [not
+    rw [spanSingleton_ne_zero_iff]; rw [IsFractionRing.mk'_eq_div]; rw [ne_eq]; rw [div_eq_zero_iff]; rw [not_or]
+    exact ⟨(map_ne_zero_iff (algebraMap R K) (IsFractionRing.injective R K)).mpr hn, hd_ne_zero⟩
+  have hI : spanSingleton R⁰ (mk' K n d) =
+      spanSingleton R⁰ ((algebraMap R K) d)⁻¹ * ↑(Ideal.span {n} : Ideal R) := by
+    rw [coeIdeal_span_singleton]; rw [spanSingleton_mul_spanSingleton]
+    apply congr_arg
+    rw [IsFractionRing.mk'_eq_div]; rw [div_eq_mul_inv]; rw [mul_comm]
+  exact finprod_heightOneSpectrum_factorization h0 hI
 
 Depends on / 依赖: Ideal.span, IsFractionRing, IsFractionRing.injective, IsFractionRing.mk, _eq_div, algebraMap, d.property, div_eq_zero_iff, hd_ne_zero, injective, map_ne_zero_iff, map_ne_zero_of_mem_nonZeroDivisors, ne_eq, not_or, property, spanSingleton, spanSingleton_ne_zero_iff
 -/
@@ -648,7 +716,9 @@ theorem finprod_heightOneSpectrum_factorization_principal
   have hnd : mk' K n d = k := choose_spec (choose_spec (exists_mk'_eq R⁰ k))
   have hn0 : n != 0 := by
     by_contra h
-    rw [← hnd]; rw [h]; rw [IsFractionRing.mk'_eq_div]; rw [map_zero]; rw [z
+    rw [← hnd]; rw [h]; rw [IsFractionRing.mk'_eq_div]; rw [map_zero]; rw [zero_div]; rw [spanSingleton_zero] at hk
+    exact hI hk
+  rw [finprod_heightOneSpectrum_factorization_principal_fraction hn0 d]; rw [hk]; rw [hnd]
 
 中文:
 定理 finprod_heightOneSpectrum_factorization_principal
@@ -659,7 +729,9 @@ theorem finprod_heightOneSpectrum_factorization_principal
   have hnd : mk' K n d = k := choose_spec (choose_spec (exists_mk'_eq R⁰ k))
   have hn0 : n != 0 := by
     by_contra h
-    rw [← hnd]; rw [h]; rw [IsFractionRing.mk'_eq_div]; rw [map_zero]; rw [z
+    rw [← hnd]; rw [h]; rw [IsFractionRing.mk'_eq_div]; rw [map_zero]; rw [zero_div]; rw [spanSingleton_zero] at hk
+    exact hI hk
+  rw [finprod_heightOneSpectrum_factorization_principal_fraction hn0 d]; rw [hk]; rw [hnd]
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.mk, _eq_div, choose_spec, exists_mk, finprod_heightOneSpectrum_factorization_principal_fraction, map_zero, spanSingleton_zero, zero_div
 -/
@@ -692,7 +764,7 @@ definition count
     let a := choose (exists_eq_spanSingleton_mul I)
     let J := choose (choose_spec (exists_eq_spanSingleton_mul I))
     ((Associates.mk v.asIdeal).count (Associates.mk J).factors -
-        (Associates.mk v.asIdeal).count (Associates.mk (Ideal.spa
+        (Associates.mk v.asIdeal).count (Associates.mk (Ideal.span {a})).factors : Int)
 
 中文:
 定义 count
@@ -701,7 +773,7 @@ definition count
     let a := choose (exists_eq_spanSingleton_mul I)
     let J := choose (choose_spec (exists_eq_spanSingleton_mul I))
     ((Associates.mk v.asIdeal).count (Associates.mk J).factors -
-        (Associates.mk v.asIdeal).count (Associates.mk (Ideal.spa
+        (Associates.mk v.asIdeal).count (Associates.mk (Ideal.span {a})).factors : Int)
 
 Depends on / 依赖: Associates, Associates.mk, Ideal.span, asIdeal, choose_spec, exists_eq_spanSingleton_mul, factors, v.asIdeal
 -/
@@ -766,7 +838,26 @@ theorem count_well_defined
   set J₁ := choose (choose_spec (exists_eq_spanSingleton_mul I))
   have h_a₁J₁ : I = spanSingleton R⁰ ((algebraMap R K) a₁)⁻¹ * ↑J₁ :=
     (choose_spec (choose_spec (exists_eq_spanSingleton_mul I))).2
-  have h_a₁_ne_zero : a₁ != 0 := (choose_spec
+  have h_a₁_ne_zero : a₁ != 0 := (choose_spec (choose_spec (exists_eq_spanSingleton_mul I))).1
+  have h_J₁_ne_zero : J₁ != 0 := ideal_factor_ne_zero hI h_a₁J₁
+  have h_a_ne_zero : Ideal.span {a} != 0 := constant_factor_ne_zero hI h_aJ
+  have h_J_ne_zero : J != 0 := ideal_factor_ne_zero hI h_aJ
+  have h_a₁' : spanSingleton R⁰ ((algebraMap R K) a₁) != 0 := by
+    rw [ne_eq]; rw [spanSingleton_eq_zero_iff]; rw [← (algebraMap R K).map_zero]; rw [Injective.eq_iff (IsLocalization.injective K (le_refl R⁰))]
+    exact h_a₁_ne_zero
+  have h_a' : spanSingleton R⁰ ((algebraMap R K) a) != 0 := by
+    rw [ne_eq]; rw [spanSingleton_eq_zero_iff]; rw [← (algebraMap R K).map_zero]; rw [Injective.eq_iff (IsLocalization.injective K (le_refl R⁰))]
+    rw [ne_eq]; rw [Ideal.zero_eq_bot]; rw [Ideal.span_singleton_eq_bot] at h_a_ne_zero
+    exact h_a_ne_zero
+  have hv : Irreducible (Associates.mk v.asIdeal) := by
+    exact Associates.irreducible_mk.mpr v.irreducible
+  rw [h_a₁J₁]; rw [← div_spanSingleton]; rw [← div_spanSingleton]; rw [div_eq_div_iff h_a₁' h_a']; rw [← coeIdeal_span_singleton]; rw [← coeIdeal_span_singleton]; rw [← coeIdeal_mul]; rw [← coeIdeal_mul] at h_aJ
+  rw [count]; rw [dif_neg hI]; rw [sub_eq_sub_iff_add_eq_add]; rw [← natCast_add]; rw [← natCast_add]; rw [natCast_inj]; rw [← Associates.count_mul _ _ hv]; rw [← Associates.count_mul _ _ hv]; rw [Associates.mk_mul_mk]; rw [Associates.mk_mul_mk]; rw [coeIdeal_injective h_aJ]
+  · rw [ne_eq, Associates.mk_eq_zero]; exact h_J_ne_zero
+  · rw [ne_eq, Associates.mk_eq_zero, Ideal.zero_eq_bot, Ideal.span_singleton_eq_bot]
+    exact h_a₁_ne_zero
+  · rw [ne_eq, Associates.mk_eq_zero]; exact h_J₁_ne_zero
+  · rw [ne_eq, Associates.mk_eq_zero]; exact h_a_ne_zero
 
 中文:
 定理 count_well_defined
@@ -776,7 +867,26 @@ theorem count_well_defined
   set J₁ := choose (choose_spec (exists_eq_spanSingleton_mul I))
   have h_a₁J₁ : I = spanSingleton R⁰ ((algebraMap R K) a₁)⁻¹ * ↑J₁ :=
     (choose_spec (choose_spec (exists_eq_spanSingleton_mul I))).2
-  have h_a₁_ne_zero : a₁ != 0 := (choose_spec
+  have h_a₁_ne_zero : a₁ != 0 := (choose_spec (choose_spec (exists_eq_spanSingleton_mul I))).1
+  have h_J₁_ne_zero : J₁ != 0 := ideal_factor_ne_zero hI h_a₁J₁
+  have h_a_ne_zero : Ideal.span {a} != 0 := constant_factor_ne_zero hI h_aJ
+  have h_J_ne_zero : J != 0 := ideal_factor_ne_zero hI h_aJ
+  have h_a₁' : spanSingleton R⁰ ((algebraMap R K) a₁) != 0 := by
+    rw [ne_eq]; rw [spanSingleton_eq_zero_iff]; rw [← (algebraMap R K).map_zero]; rw [Injective.eq_iff (IsLocalization.injective K (le_refl R⁰))]
+    exact h_a₁_ne_zero
+  have h_a' : spanSingleton R⁰ ((algebraMap R K) a) != 0 := by
+    rw [ne_eq]; rw [spanSingleton_eq_zero_iff]; rw [← (algebraMap R K).map_zero]; rw [Injective.eq_iff (IsLocalization.injective K (le_refl R⁰))]
+    rw [ne_eq]; rw [Ideal.zero_eq_bot]; rw [Ideal.span_singleton_eq_bot] at h_a_ne_zero
+    exact h_a_ne_zero
+  have hv : Irreducible (Associates.mk v.asIdeal) := by
+    exact Associates.irreducible_mk.mpr v.irreducible
+  rw [h_a₁J₁]; rw [← div_spanSingleton]; rw [← div_spanSingleton]; rw [div_eq_div_iff h_a₁' h_a']; rw [← coeIdeal_span_singleton]; rw [← coeIdeal_span_singleton]; rw [← coeIdeal_mul]; rw [← coeIdeal_mul] at h_aJ
+  rw [count]; rw [dif_neg hI]; rw [sub_eq_sub_iff_add_eq_add]; rw [← natCast_add]; rw [← natCast_add]; rw [natCast_inj]; rw [← Associates.count_mul _ _ hv]; rw [← Associates.count_mul _ _ hv]; rw [Associates.mk_mul_mk]; rw [Associates.mk_mul_mk]; rw [coeIdeal_injective h_aJ]
+  · rw [ne_eq, Associates.mk_eq_zero]; exact h_J_ne_zero
+  · rw [ne_eq, Associates.mk_eq_zero, Ideal.zero_eq_bot, Ideal.span_singleton_eq_bot]
+    exact h_a₁_ne_zero
+  · rw [ne_eq, Associates.mk_eq_zero]; exact h_J₁_ne_zero
+  · rw [ne_eq, Associates.mk_eq_zero]; exact h_a_ne_zero
 
 Depends on / 依赖: Ideal.span, algebraMap, choose_spec, constant_factor_ne_zero, exists_eq_spanSingleton_mul, h_J_ne_zero, h_aJ, h_a_ne_zero, ideal_factor_ne_zero, spanSingleton
 -/
@@ -819,7 +929,18 @@ theorem count_mul
   have hv : Irreducible (Associates.mk v.asIdeal) := by apply v.associates_irreducible
   obtain ⟨a, J, ha, haJ⟩ := exists_eq_spanSingleton_mul I
   have ha_ne_zero : Associates.mk (Ideal.span {a} : Ideal R) != 0 := by
-    rw [ne_eq]; rw [Associates.mk_eq_zero]; rw [Ideal.zero_eq_bot]; rw [Ideal.sp
+    rw [ne_eq]; rw [Associates.mk_eq_zero]; rw [Ideal.zero_eq_bot]; rw [Ideal.span_singleton_eq_bot]; exact ha
+  have hJ_ne_zero : Associates.mk J != 0 := Associates.mk_ne_zero.mpr (ideal_factor_ne_zero hI haJ)
+  obtain ⟨a', J', ha', haJ'⟩ := exists_eq_spanSingleton_mul I'
+  have ha'_ne_zero : Associates.mk (Ideal.span {a'} : Ideal R) != 0 := by
+    rw [ne_eq]; rw [Associates.mk_eq_zero]; rw [Ideal.zero_eq_bot]; rw [Ideal.span_singleton_eq_bot]; exact ha'
+  have hJ'_ne_zero : Associates.mk J' != 0 :=
+    Associates.mk_ne_zero.mpr (ideal_factor_ne_zero hI' haJ')
+  have h_prod : I * I' = spanSingleton R⁰ ((algebraMap R K) (a * a'))⁻¹ * ↑(J * J') := by
+    rw [haJ]; rw [haJ']; rw [mul_assoc]; rw [mul_comm (J : FractionalIdeal R⁰ K)]; rw [mul_assoc]; rw [← mul_assoc]; rw [spanSingleton_mul_spanSingleton]; rw [coeIdeal_mul]; rw [map_mul]; rw [mul_inv]; rw [mul_comm (J : FractionalIdeal R⁰ K)]
+  rw [count_well_defined K v hI haJ]; rw [count_well_defined K v hI' haJ']; rw [count_well_defined K v (mul_ne_zero hI hI') h_prod]; rw [← Associates.mk_mul_mk]; rw [Associates.count_mul hJ_ne_zero hJ'_ne_zero hv]; rw [← Ideal.span_singleton_mul_span_singleton]; rw [← Associates.mk_mul_mk]; rw [Associates.count_mul ha_ne_zero ha'_ne_zero hv]
+  push_cast
+  ring
 
 中文:
 定理 count_mul
@@ -828,7 +949,18 @@ theorem count_mul
   have hv : Irreducible (Associates.mk v.asIdeal) := by apply v.associates_irreducible
   obtain ⟨a, J, ha, haJ⟩ := exists_eq_spanSingleton_mul I
   have ha_ne_zero : Associates.mk (Ideal.span {a} : Ideal R) != 0 := by
-    rw [ne_eq]; rw [Associates.mk_eq_zero]; rw [Ideal.zero_eq_bot]; rw [Ideal.sp
+    rw [ne_eq]; rw [Associates.mk_eq_zero]; rw [Ideal.zero_eq_bot]; rw [Ideal.span_singleton_eq_bot]; exact ha
+  have hJ_ne_zero : Associates.mk J != 0 := Associates.mk_ne_zero.mpr (ideal_factor_ne_zero hI haJ)
+  obtain ⟨a', J', ha', haJ'⟩ := exists_eq_spanSingleton_mul I'
+  have ha'_ne_zero : Associates.mk (Ideal.span {a'} : Ideal R) != 0 := by
+    rw [ne_eq]; rw [Associates.mk_eq_zero]; rw [Ideal.zero_eq_bot]; rw [Ideal.span_singleton_eq_bot]; exact ha'
+  have hJ'_ne_zero : Associates.mk J' != 0 :=
+    Associates.mk_ne_zero.mpr (ideal_factor_ne_zero hI' haJ')
+  have h_prod : I * I' = spanSingleton R⁰ ((algebraMap R K) (a * a'))⁻¹ * ↑(J * J') := by
+    rw [haJ]; rw [haJ']; rw [mul_assoc]; rw [mul_comm (J : FractionalIdeal R⁰ K)]; rw [mul_assoc]; rw [← mul_assoc]; rw [spanSingleton_mul_spanSingleton]; rw [coeIdeal_mul]; rw [map_mul]; rw [mul_inv]; rw [mul_comm (J : FractionalIdeal R⁰ K)]
+  rw [count_well_defined K v hI haJ]; rw [count_well_defined K v hI' haJ']; rw [count_well_defined K v (mul_ne_zero hI hI') h_prod]; rw [← Associates.mk_mul_mk]; rw [Associates.count_mul hJ_ne_zero hJ'_ne_zero hv]; rw [← Ideal.span_singleton_mul_span_singleton]; rw [← Associates.mk_mul_mk]; rw [Associates.count_mul ha_ne_zero ha'_ne_zero hv]
+  push_cast
+  ring
 
 Depends on / 依赖: Associates, Associates.mk, Associates.mk_eq_zero, Associates.mk_ne_zero.mpr, Ideal.span, Ideal.span_singleton_eq_bot, Ideal.zero_eq_bot, Irreducible, _ne_zero, asIdeal, associates_irreducible, exists_eq_spanSingleton_mul, hJ_ne_zero, ha_ne_zero, ideal_factor_ne_zero, mk_eq_zero, mk_ne_zero, ne_eq, span_singleton_eq_bot, v.asIdeal
 -/
@@ -890,7 +1022,7 @@ theorem count_one
   have h1 : (1 : FractionalIdeal R⁰ K) =
       spanSingleton R⁰ ((algebraMap R K) 1)⁻¹ * ↑(1 : Ideal R) := by
     rw [(algebraMap R K).map_one]; rw [Ideal.one_eq_top]; rw [coeIdeal_top]; rw [mul_one]; rw [inv_one]; rw [spanSingleton_one]
-  rw [count_well_defined K v one_ne_zero h1]; rw [Ideal.spa
+  rw [count_well_defined K v one_ne_zero h1]; rw [Ideal.span_singleton_one]; rw [Ideal.one_eq_top]; rw [sub_self]
 
 中文:
 定理 count_one
@@ -899,7 +1031,7 @@ theorem count_one
   have h1 : (1 : FractionalIdeal R⁰ K) =
       spanSingleton R⁰ ((algebraMap R K) 1)⁻¹ * ↑(1 : Ideal R) := by
     rw [(algebraMap R K).map_one]; rw [Ideal.one_eq_top]; rw [coeIdeal_top]; rw [mul_one]; rw [inv_one]; rw [spanSingleton_one]
-  rw [count_well_defined K v one_ne_zero h1]; rw [Ideal.spa
+  rw [count_well_defined K v one_ne_zero h1]; rw [Ideal.span_singleton_one]; rw [Ideal.one_eq_top]; rw [sub_self]
 
 Depends on / 依赖: FractionalIdeal, Ideal.one_eq_top, Ideal.span_singleton_one, algebraMap, coeIdeal_top, count_well_defined, inv_one, map_one, mul_one, one_eq_top, one_ne_zero, spanSingleton, spanSingleton_one, span_singleton_one, sub_self
 -/
@@ -921,7 +1053,9 @@ theorem count_prod
   | empty => rw [Finset.prod_empty, Finset.sum_empty, count_one]
   | insert i s hi hrec =>
     have hS' : forall i in s, I i != 0 := fun j hj => hS j (Finset.mem_insert_of_mem hj)
-    have hS0 : ∏ i in s, I i != 0 := Finset.prod_ne_zero_iff.mp
+    have hS0 : ∏ i in s, I i != 0 := Finset.prod_ne_zero_iff.mpr hS'
+    have hi0 : I i != 0 := hS i (Finset.mem_insert_self i s)
+    rw [Finset.prod_insert hi]; rw [Finset.sum_insert hi]; rw [count_mul K v hi0 hS0]; rw [hrec hS']
 
 中文:
 定理 count_prod
@@ -932,7 +1066,9 @@ theorem count_prod
   | empty => rw [Finset.prod_empty, Finset.sum_empty, count_one]
   | insert i s hi hrec =>
     have hS' : forall i in s, I i != 0 := fun j hj => hS j (Finset.mem_insert_of_mem hj)
-    have hS0 : ∏ i in s, I i != 0 := Finset.prod_ne_zero_iff.mp
+    have hS0 : ∏ i in s, I i != 0 := Finset.prod_ne_zero_iff.mpr hS'
+    have hi0 : I i != 0 := hS i (Finset.mem_insert_self i s)
+    rw [Finset.prod_insert hi]; rw [Finset.sum_insert hi]; rw [count_mul K v hi0 hS0]; rw [hrec hS']
 
 Depends on / 依赖: Finset, Finset.induction, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.prod_empty, Finset.prod_insert, Finset.prod_ne_zero_iff.mpr, Finset.sum_empty, Finset.sum_insert, classical, count_mul, count_one, insert, mem_insert_of_mem, mem_insert_self, prod_empty, prod_insert, prod_ne_zero_iff, sum_empty, sum_insert
 -/
@@ -961,7 +1097,9 @@ theorem count_pow
     by_cases hI : I = 0
     · have h_neg : ¬(I ^ n != 0 ∧ I != 0) := by order
       rw [if_neg h_neg]; rw [hI]; rw [count_zero]; rw [mul_zero]
-    · rw [if_pos (An
+    · rw [if_pos (And.intro (pow_ne_zero n hI) hI), h, Nat.cast_add,
+        Nat.cast_one]
+      ring
 
 中文:
 定理 count_pow
@@ -974,7 +1112,9 @@ theorem count_pow
     by_cases hI : I = 0
     · have h_neg : ¬(I ^ n != 0 ∧ I != 0) := by order
       rw [if_neg h_neg]; rw [hI]; rw [count_zero]; rw [mul_zero]
-    · rw [if_pos (An
+    · rw [if_pos (And.intro (pow_ne_zero n hI) hI), h, Nat.cast_add,
+        Nat.cast_one]
+      ring
 
 Depends on / 依赖: And.intro, Nat.cast_add, Nat.cast_one, cast_add, cast_one, classical, count_mul, count_one, count_zero, h_neg, if_neg, if_pos, mul_zero, ofNat_zero, pow_ne_zero, pow_succ, pow_zero, zero_mul
 -/
@@ -1002,7 +1142,8 @@ theorem count_self
   have h_self : (v.asIdeal : FractionalIdeal R⁰ K) =
       spanSingleton R⁰ ((algebraMap R K) 1)⁻¹ * ↑v.asIdeal := by
     rw [(algebraMap R K).map_one]; rw [inv_one]; rw [spanSingleton_one]; rw [one_mul]
-  have h
+  have hv_irred : Irreducible (Associates.mk v.asIdeal) := by apply v.associates_irreducible
+  rw [count_well_defined K v hv h_self]; rw [Associates.count_self hv_irred]; rw [Ideal.span_singleton_one]; rw [← Ideal.one_eq_top]; rw [Associates.mk_one]; rw [Associates.factors_one]; rw [Associates.count_zero hv_irred]; rw [ofNat_zero]; rw [sub_zero]; rw [ofNat_one]
 
 中文:
 定理 count_self
@@ -1012,7 +1153,8 @@ theorem count_self
   have h_self : (v.asIdeal : FractionalIdeal R⁰ K) =
       spanSingleton R⁰ ((algebraMap R K) 1)⁻¹ * ↑v.asIdeal := by
     rw [(algebraMap R K).map_one]; rw [inv_one]; rw [spanSingleton_one]; rw [one_mul]
-  have h
+  have hv_irred : Irreducible (Associates.mk v.asIdeal) := by apply v.associates_irreducible
+  rw [count_well_defined K v hv h_self]; rw [Associates.count_self hv_irred]; rw [Ideal.span_singleton_one]; rw [← Ideal.one_eq_top]; rw [Associates.mk_one]; rw [Associates.factors_one]; rw [Associates.count_zero hv_irred]; rw [ofNat_zero]; rw [sub_zero]; rw [ofNat_one]
 
 Depends on / 依赖: Associates, Associates.count_self, Associates.mk, FractionalIdeal, Ideal.one_eq_top, Ideal.span_singleton_one, Irreducible, algebraMap, asIdeal, associates_irreducible, coeIdeal_ne_zero, coeIdeal_ne_zero.mpr, count_self, count_well_defined, h_self, hv_irred, inv_one, map_one, ne_bot, one_eq_top
 -/
@@ -1057,7 +1199,8 @@ theorem count_neg_zpow
     · rw [hn, neg_zero, zpow_zero, count_one, neg_zero]
     · rw [hI, zero_zpow n hn, zero_zpow (-n) (neg_ne_zero.mpr hn), count_zero, neg_zero]
   · rw [eq_neg_iff_add_eq_zero, ← count_mul K v (zpow_ne_zero _ hI) (zpow_ne_zero _ hI),
-      ← zpow_add₀
+      ← zpow_add₀ hI, neg_add_cancel, zpow_zero]
+    exact count_one K v
 
 中文:
 定理 count_neg_zpow
@@ -1068,7 +1211,8 @@ theorem count_neg_zpow
     · rw [hn, neg_zero, zpow_zero, count_one, neg_zero]
     · rw [hI, zero_zpow n hn, zero_zpow (-n) (neg_ne_zero.mpr hn), count_zero, neg_zero]
   · rw [eq_neg_iff_add_eq_zero, ← count_mul K v (zpow_ne_zero _ hI) (zpow_ne_zero _ hI),
-      ← zpow_add₀
+      ← zpow_add₀ hI, neg_add_cancel, zpow_zero]
+    exact count_one K v
 
 Depends on / 依赖: count_mul, count_one, count_zero, eq_neg_iff_add_eq_zero, neg_add_cancel, neg_ne_zero, neg_ne_zero.mpr, neg_zero, zero_zpow, zpow_ne_zero, zpow_zero
 -/
@@ -1168,7 +1312,13 @@ theorem count_maximal_coprime
       spanSingleton R⁰ ((algebraMap R K) 1)⁻¹ * ↑w.asIdeal := by
     rw [(algebraMap R K).map_one]; rw [inv_one]; rw [spanSingleton_one]; rw [one_mul]
   have hw_ne_zero : (w.asIdeal : FractionalIdeal R⁰ K) != 0 :=
-    coeIdeal_ne_zero.mpr w.ne
+    coeIdeal_ne_zero.mpr w.ne_bot
+  have hv : Irreducible (Associates.mk v.asIdeal) := by apply v.associates_irreducible
+  have hw' : Irreducible (Associates.mk w.asIdeal) := by apply w.associates_irreducible
+  rw [count_well_defined K v hw_ne_zero hw_fact]; rw [Ideal.span_singleton_one]; rw [← Ideal.one_eq_top]; rw [Associates.mk_one]; rw [Associates.factors_one]; rw [Associates.count_zero hv]; rw [ofNat_zero]; rw [sub_zero]; rw [natCast_eq_zero]; rw [← pow_one (Associates.mk w.asIdeal)]; rw [Associates.factors_prime_pow hw']; rw [Associates.count_some hv]; rw [Multiset.replicate_one]; rw [Multiset.count_eq_zero]; rw [Multiset.mem_singleton]
+  simp only [Subtype.mk.injEq]
+  rw [Associates.mk_eq_mk_iff_associated]; rw [associated_iff_eq]; rw [← HeightOneSpectrum.ext_iff]
+  exact Ne.symm hw
 
 中文:
 定理 count_maximal_coprime
@@ -1178,7 +1328,13 @@ theorem count_maximal_coprime
       spanSingleton R⁰ ((algebraMap R K) 1)⁻¹ * ↑w.asIdeal := by
     rw [(algebraMap R K).map_one]; rw [inv_one]; rw [spanSingleton_one]; rw [one_mul]
   have hw_ne_zero : (w.asIdeal : FractionalIdeal R⁰ K) != 0 :=
-    coeIdeal_ne_zero.mpr w.ne
+    coeIdeal_ne_zero.mpr w.ne_bot
+  have hv : Irreducible (Associates.mk v.asIdeal) := by apply v.associates_irreducible
+  have hw' : Irreducible (Associates.mk w.asIdeal) := by apply w.associates_irreducible
+  rw [count_well_defined K v hw_ne_zero hw_fact]; rw [Ideal.span_singleton_one]; rw [← Ideal.one_eq_top]; rw [Associates.mk_one]; rw [Associates.factors_one]; rw [Associates.count_zero hv]; rw [ofNat_zero]; rw [sub_zero]; rw [natCast_eq_zero]; rw [← pow_one (Associates.mk w.asIdeal)]; rw [Associates.factors_prime_pow hw']; rw [Associates.count_some hv]; rw [Multiset.replicate_one]; rw [Multiset.count_eq_zero]; rw [Multiset.mem_singleton]
+  simp only [Subtype.mk.injEq]
+  rw [Associates.mk_eq_mk_iff_associated]; rw [associated_iff_eq]; rw [← HeightOneSpectrum.ext_iff]
+  exact Ne.symm hw
 
 Depends on / 依赖: Associates, Associates.mk, FractionalIdeal, Irreducible, algebraMap, asIdeal, associates_irreducible, coeIdeal_ne_zero, coeIdeal_ne_zero.mpr, count_well_defined, hw_f, hw_fact, hw_ne_zero, inv_one, map_one, ne_bot, one_mul, spanSingleton, spanSingleton_one, v.asIdeal
 -/
@@ -1238,7 +1394,7 @@ theorem count_finprod_coprime
     · rw [count_mul' K v, if_pos h, hI, hI', add_zero]
     · rw [count_mul' K v, if_neg h]
   · intro w hw
-    rw [count_zpow]; rw [count_maximal_cop
+    rw [count_zpow]; rw [count_maximal_coprime K v hw]; rw [mul_zero]
 
 中文:
 定理 count_finprod_coprime
@@ -1252,7 +1408,7 @@ theorem count_finprod_coprime
     · rw [count_mul' K v, if_pos h, hI, hI', add_zero]
     · rw [count_mul' K v, if_neg h]
   · intro w hw
-    rw [count_zpow]; rw [count_maximal_cop
+    rw [count_zpow]; rw [count_maximal_coprime K v hw]; rw [mul_zero]
 
 Depends on / 依赖: add_zero, classical, count_maximal_coprime, count_mul, count_one, count_zpow, finprod_mem_induction, if_neg, if_pos, mul_zero
 -/
@@ -1313,6 +1469,7 @@ theorem count_finprod
   · rw [Finite.coe_toFinset]
     intro v hv h
     rw [mem_mulSupport]; rw [h]; rw [zpow_zero] at hv
+    exact hv (Eq.refl 1)
 
 中文:
 定理 count_finprod
@@ -1324,6 +1481,7 @@ theorem count_finprod
   · rw [Finite.coe_toFinset]
     intro v hv h
     rw [mem_mulSupport]; rw [h]; rw [zpow_zero] at hv
+    exact hv (Eq.refl 1)
 
 Depends on / 依赖: Eq.refl, Finite, Finite.coe_toFinset, Finsupp, Finsupp.mk, Finsupp.prod, coe_toFinset, convert, count_finsuppProd, finprod_eq_finsetProd_of_mulSupport_subset, h_exps, h_exps.mem_toFinset, h_exps.toFinset, mem_mulSupport, mem_toFinset, toFinset, zpow_zero
 -/
@@ -1348,7 +1506,7 @@ theorem count_coe
   proof: by
   rw [count_well_defined K (J := J) (a := 1)]; rw [Ideal.span_singleton_one]; rw [sub_eq_self]; rw [Nat.cast_eq_zero]; rw [← Ideal.one_eq_top]; rw [Associates.mk_one]; rw [Associates.factors_one]; rw [Associates.count_zero v.associates_irreducible]
   · simpa only [ne_eq, coeIdeal_eq_zero]
-  · sim
+  · simp only [map_one, inv_one, spanSingleton_one, one_mul]
 
 中文:
 定理 count_coe
@@ -1356,7 +1514,7 @@ theorem count_coe
   证明: by
   rw [count_well_defined K (J := J) (a := 1)]; rw [Ideal.span_singleton_one]; rw [sub_eq_self]; rw [Nat.cast_eq_zero]; rw [← Ideal.one_eq_top]; rw [Associates.mk_one]; rw [Associates.factors_one]; rw [Associates.count_zero v.associates_irreducible]
   · simpa only [ne_eq, coeIdeal_eq_zero]
-  · sim
+  · simp only [map_one, inv_one, spanSingleton_one, one_mul]
 
 Depends on / 依赖: Associates, Associates.count_zero, Associates.factors_one, Associates.mk_one, Ideal.one_eq_top, Ideal.span_singleton_one, Nat.cast_eq_zero, associates_irreducible, cast_eq_zero, coeIdeal_eq_zero, count_well_defined, count_zero, factors_one, inv_one, map_one, mk_one, ne_eq, one_eq_top, one_mul, spanSingleton_one
 -/
@@ -1407,7 +1565,9 @@ theorem count_mono
   have := mul_le_mul_right h J⁻¹
   rw [inv_mul_cancel₀ hJ]; rw [FractionalIdeal.le_one_iff_exists_coeIdeal] at this
   obtain ⟨J', hJ'⟩ := this
-  rw [← mul_inv_cancel_left₀ hJ I]; rw [← hJ']; rw [count_mul K
+  rw [← mul_inv_cancel_left₀ hJ I]; rw [← hJ']; rw [count_mul K v hJ]; rw [le_add_iff_nonneg_right]
+  · exact count_coe_nonneg K v J'
+  · exact hJ' ▸ mul_ne_zero (inv_ne_zero hJ) hI
 
 中文:
 定理 count_mono
@@ -1419,7 +1579,9 @@ theorem count_mono
   have := mul_le_mul_right h J⁻¹
   rw [inv_mul_cancel₀ hJ]; rw [FractionalIdeal.le_one_iff_exists_coeIdeal] at this
   obtain ⟨J', hJ'⟩ := this
-  rw [← mul_inv_cancel_left₀ hJ I]; rw [← hJ']; rw [count_mul K
+  rw [← mul_inv_cancel_left₀ hJ I]; rw [← hJ']; rw [count_mul K v hJ]; rw [le_add_iff_nonneg_right]
+  · exact count_coe_nonneg K v J'
+  · exact hJ' ▸ mul_ne_zero (inv_ne_zero hJ) hI
 
 Depends on / 依赖: FractionalIdeal, FractionalIdeal.le_one_iff_exists_coeIdeal, FractionalIdeal.le_zero_iff.mp, count_coe_nonneg, count_mul, h.trans, hJ.le, inv_ne_zero, le_add_iff_nonneg_right, le_one_iff_exists_coeIdeal, le_zero_iff, mul_le_mul_right, mul_ne_zero
 -/
@@ -1482,7 +1644,19 @@ theorem finite_factors'
   have hJ_ne_zero : J != 0 := ideal_factor_ne_zero hI haJ
   have h_subset :
     {v : HeightOneSpectrum R | ¬((Associates.mk v.asIdeal).count (Associates.mk J).factors : Int) -
-      ↑((Associates.mk v.asIdeal).count (Associ
+      ↑((Associates.mk v.asIdeal).count (Associates.mk (Ideal.span {a})).factors) = 0} subseteq
+    {v : HeightOneSpectrum R | v.asIdeal ∣ J} union
+      {v : HeightOneSpectrum R | v.asIdeal ∣ Ideal.span {a}} := by
+    intro v hv
+    have hv_irred : Irreducible v.asIdeal := v.irreducible
+    by_contra h_notMem
+    rw [mem_union]; rw [mem_ofPred_eq]; rw [mem_ofPred_eq] at h_notMem
+    push Not at h_notMem
+    rw [← Associates.count_ne_zero_iff_dvd ha_ne_zero hv_irred]; rw [not_not]; rw [← Associates.count_ne_zero_iff_dvd hJ_ne_zero hv_irred]; rw [not_not] at h_notMem
+    rw [mem_ofPred_eq]; rw [h_notMem.1]; rw [h_notMem.2]; rw [sub_self] at hv
+    exact hv (Eq.refl 0)
+  exact Finite.subset (Finite.union (Ideal.finite_factors (ideal_factor_ne_zero hI haJ))
+    (Ideal.finite_factors (constant_factor_ne_zero hI haJ))) h_subset
 
 中文:
 定理 finite_factors'
@@ -1492,7 +1666,19 @@ theorem finite_factors'
   have hJ_ne_zero : J != 0 := ideal_factor_ne_zero hI haJ
   have h_subset :
     {v : HeightOneSpectrum R | ¬((Associates.mk v.asIdeal).count (Associates.mk J).factors : Int) -
-      ↑((Associates.mk v.asIdeal).count (Associ
+      ↑((Associates.mk v.asIdeal).count (Associates.mk (Ideal.span {a})).factors) = 0} subseteq
+    {v : HeightOneSpectrum R | v.asIdeal ∣ J} union
+      {v : HeightOneSpectrum R | v.asIdeal ∣ Ideal.span {a}} := by
+    intro v hv
+    have hv_irred : Irreducible v.asIdeal := v.irreducible
+    by_contra h_notMem
+    rw [mem_union]; rw [mem_ofPred_eq]; rw [mem_ofPred_eq] at h_notMem
+    push Not at h_notMem
+    rw [← Associates.count_ne_zero_iff_dvd ha_ne_zero hv_irred]; rw [not_not]; rw [← Associates.count_ne_zero_iff_dvd hJ_ne_zero hv_irred]; rw [not_not] at h_notMem
+    rw [mem_ofPred_eq]; rw [h_notMem.1]; rw [h_notMem.2]; rw [sub_self] at hv
+    exact hv (Eq.refl 0)
+  exact Finite.subset (Finite.union (Ideal.finite_factors (ideal_factor_ne_zero hI haJ))
+    (Ideal.finite_factors (constant_factor_ne_zero hI haJ))) h_subset
 
 Depends on / 依赖: Associates, Associates.mk, HeightOneSpectrum, Ideal.span, Irreducible, asIdeal, constant_factor_ne_zero, factors, hJ_ne_zero, h_subset, ha_ne_zero, hv_irred, ideal_factor_ne_zero, subseteq, v.asIdeal, v.irre
 -/
@@ -1570,7 +1756,47 @@ lemma IsDedekindDomain.exists_sup_span_eq
   obtain ⟨hJ, hI⟩ := hI
   suffices exists a, exists K, J * K = Ideal.span {a} ∧ I + K = ⊤ by
     obtain ⟨a, K, e, e'⟩ := this
-    exact ⟨a, by rw [← e, ← Ideal.add_eq_sup, ← mul_add, e', Ideal
+    exact ⟨a, by rw [← e, ← Ideal.add_eq_sup, ← mul_add, e', Ideal.mul_top]⟩
+  let s := (I.finite_factors hI).toFinset
+  have : forall p in s, J * ∏ q in s, q.asIdeal < J * ∏ q in s \ {p}, q.asIdeal := by
+    intro p hps
+    conv_rhs => rw [← mul_one (J * _)]
+    rw [Finset.prod_eq_mul_prod_sdiff_singleton_of_mem hps]; rw [← mul_assoc]; rw [mul_right_comm _ p.asIdeal]
+    refine mul_lt_mul_of_pos_left ?_ ?_
+    · rw [Ideal.one_eq_top, lt_top_iff_ne_top]
+      exact p.2.ne_top
+    · rw [Ideal.zero_eq_bot, bot_lt_iff_ne_bot, ← Ideal.zero_eq_bot,
+        mul_ne_zero_iff, Finset.prod_ne_zero_iff]
+      exact ⟨hJ, fun x _ => x.3⟩
+  choose! a ha ha' using fun p hps => SetLike.exists_of_lt (this p hps)
+  obtain ⟨K, hK⟩ : J ∣ Ideal.span {∑ p in s, a p} := by
+    rw [Ideal.dvd_iff_le]; rw [Ideal.span_singleton_le_iff_mem]
+    exact sum_mem fun p hp => Ideal.mul_le_left (ha p hp)
+  refine ⟨_, _, hK.symm, ?_⟩
+  by_contra H
+  obtain ⟨p, hp, h⟩ := Ideal.exists_le_maximal _ H
+  let p' : HeightOneSpectrum R := ⟨p, hp.isPrime, fun e => hI (by simp_all)⟩
+  have hp's : p' in s := by simpa [p', s, Ideal.dvd_iff_le] using le_sup_left.trans h
+  have H₁ : J * K <= J * p := Ideal.mul_mono_right (le_sup_right.trans h)
+  replace H₁ := hK.trans_le H₁ (Ideal.mem_span_singleton_self _)
+  have H₂ : ∑ q in s \ {p'}, a q in J * p := by
+    refine sum_mem fun q hq => ?_
+    rw [Finset.mem_sdiff]; rw [Finset.mem_singleton] at hq
+    refine Ideal.mul_mono_right ?_ (ha q hq.1)
+    exact Ideal.prod_le_inf.trans (Finset.inf_le (b := p') (by simpa [hp's] using Ne.symm hq.2))
+  apply ha' _ hp's
+  have := IsDedekindDomain.inf_pow_eq_prod_of_prime s (fun i => i.asIdeal) (fun _ => 1)
+    (fun i _ => i.prime) (fun i _ j _ e => mt HeightOneSpectrum.ext e)
+  simp only [pow_one] at this
+  have inst : Nonempty {x // x in s} := ⟨_, hp's⟩
+  rw [← this]; rw [Finset.inf_eq_iInf]; rw [iInf_subtype']; rw [Ideal.mul_iInf]; rw [Ideal.mem_iInf]
+  rintro ⟨q, hq⟩
+  by_cases hqp : q = p'
+  · subst hqp
+    convert! sub_mem H₁ H₂
+    rw [Finset.sum_eq_add_sum_sdiff_singleton_of_mem hp's]; rw [add_sub_cancel_right]
+  · refine Ideal.mul_mono_right ?_ (ha p' hp's)
+    exact Ideal.prod_le_inf.trans (Finset.inf_le (b := q) (by simpa [hq] using hqp))
 
 中文:
 引理 是Dedekind整环.存在_sup_span_eq
@@ -1582,7 +1808,47 @@ lemma IsDedekindDomain.exists_sup_span_eq
   obtain ⟨hJ, hI⟩ := hI
   suffices exists a, exists K, J * K = Ideal.span {a} ∧ I + K = ⊤ by
     obtain ⟨a, K, e, e'⟩ := this
-    exact ⟨a, by rw [← e, ← Ideal.add_eq_sup, ← mul_add, e', Ideal
+    exact ⟨a, by rw [← e, ← Ideal.add_eq_sup, ← mul_add, e', Ideal.mul_top]⟩
+  let s := (I.finite_factors hI).toFinset
+  have : forall p in s, J * ∏ q in s, q.asIdeal < J * ∏ q in s \ {p}, q.asIdeal := by
+    intro p hps
+    conv_rhs => rw [← mul_one (J * _)]
+    rw [Finset.prod_eq_mul_prod_sdiff_singleton_of_mem hps]; rw [← mul_assoc]; rw [mul_right_comm _ p.asIdeal]
+    refine mul_lt_mul_of_pos_left ?_ ?_
+    · rw [Ideal.one_eq_top, lt_top_iff_ne_top]
+      exact p.2.ne_top
+    · rw [Ideal.zero_eq_bot, bot_lt_iff_ne_bot, ← Ideal.zero_eq_bot,
+        mul_ne_zero_iff, Finset.prod_ne_zero_iff]
+      exact ⟨hJ, fun x _ => x.3⟩
+  choose! a ha ha' using fun p hps => SetLike.exists_of_lt (this p hps)
+  obtain ⟨K, hK⟩ : J ∣ Ideal.span {∑ p in s, a p} := by
+    rw [Ideal.dvd_iff_le]; rw [Ideal.span_singleton_le_iff_mem]
+    exact sum_mem fun p hp => Ideal.mul_le_left (ha p hp)
+  refine ⟨_, _, hK.symm, ?_⟩
+  by_contra H
+  obtain ⟨p, hp, h⟩ := Ideal.exists_le_maximal _ H
+  let p' : HeightOneSpectrum R := ⟨p, hp.isPrime, fun e => hI (by simp_all)⟩
+  have hp's : p' in s := by simpa [p', s, Ideal.dvd_iff_le] using le_sup_left.trans h
+  have H₁ : J * K <= J * p := Ideal.mul_mono_right (le_sup_right.trans h)
+  replace H₁ := hK.trans_le H₁ (Ideal.mem_span_singleton_self _)
+  have H₂ : ∑ q in s \ {p'}, a q in J * p := by
+    refine sum_mem fun q hq => ?_
+    rw [Finset.mem_sdiff]; rw [Finset.mem_singleton] at hq
+    refine Ideal.mul_mono_right ?_ (ha q hq.1)
+    exact Ideal.prod_le_inf.trans (Finset.inf_le (b := p') (by simpa [hp's] using Ne.symm hq.2))
+  apply ha' _ hp's
+  have := IsDedekindDomain.inf_pow_eq_prod_of_prime s (fun i => i.asIdeal) (fun _ => 1)
+    (fun i _ => i.prime) (fun i _ j _ e => mt HeightOneSpectrum.ext e)
+  simp only [pow_one] at this
+  have inst : Nonempty {x // x in s} := ⟨_, hp's⟩
+  rw [← this]; rw [Finset.inf_eq_iInf]; rw [iInf_subtype']; rw [Ideal.mul_iInf]; rw [Ideal.mem_iInf]
+  rintro ⟨q, hq⟩
+  by_cases hqp : q = p'
+  · subst hqp
+    convert! sub_mem H₁ H₂
+    rw [Finset.sum_eq_add_sum_sdiff_singleton_of_mem hp's]; rw [add_sub_cancel_right]
+  · refine Ideal.mul_mono_right ?_ (ha p' hp's)
+    exact Ideal.prod_le_inf.trans (Finset.inf_le (b := q) (by simpa [hq] using hqp))
 
 Depends on / 依赖: Finset, Finset.prod_eq_mul_prod_sdiff_si, I.finite_factors, Ideal.add_eq_sup, Ideal.dvd_iff_le.mpr, Ideal.mul_top, Ideal.span, add_eq_sup, asIdeal, classical, conv_rhs, dvd_iff_le, finite_factors, mul_add, mul_eq_zero, mul_one, mul_top, ne_eq, not_or, prod_eq_mul_prod_sdiff_si
 -/
@@ -1675,7 +1941,24 @@ lemma IsDedekindDomain.exists_add_spanSingleton_mul_eq
     use x
     simpa [hb, ← mul_assoc, mul_add, mul_comm b (.spanSingleton _ _)] using congr(b * $e)
   subst hb'
-  have H : Ideal.span {c.den.1} * a.num <= c.num
+  have H : Ideal.span {c.den.1} * a.num <= c.num * Ideal.span {a.den.1} := by
+    rw [← FractionalIdeal.coeIdeal_le_coeIdeal K]
+    simp only [FractionalIdeal.coeIdeal_mul, FractionalIdeal.coeIdeal_span_singleton, ←
+      FractionalIdeal.den_mul_self_eq_num']
+    ring_nf
+    gcongr
+  obtain ⟨x, hx⟩ := exists_sup_span_eq H
+    (by simpa using FractionalIdeal.num_eq_zero_iff.not.mpr ha)
+  refine ⟨algebraMap R K x / algebraMap R K (a.den.1 * c.den.1), ?_⟩
+  refine mul_left_injective₀ (b := .spanSingleton _
+    (algebraMap R K (a.den.1 * c.den.1))) ?_ ?_
+  · simp [FractionalIdeal.spanSingleton_eq_zero_iff]
+  · simp only [map_mul, mul_one, add_mul, FractionalIdeal.spanSingleton_mul_spanSingleton,
+      isUnit_iff_ne_zero, ne_eq, mul_eq_zero, FaithfulSMul.algebraMap_eq_zero_iff,
+      nonZeroDivisors.coe_ne_zero, or_self, not_false_eq_true, IsUnit.div_mul_cancel]
+    rw [← FractionalIdeal.spanSingleton_mul_spanSingleton]; rw [← mul_assoc]; rw [mul_comm a]; rw [FractionalIdeal.den_mul_self_eq_num']; rw [← mul_assoc]; rw [mul_right_comm]; rw [mul_comm c]; rw [FractionalIdeal.den_mul_self_eq_num']; rw [mul_comm]
+    simp_rw [← FractionalIdeal.coeIdeal_span_singleton, ← FractionalIdeal.coeIdeal_mul,
+      ← hx, ← FractionalIdeal.coeIdeal_sup]
 
 中文:
 引理 是Dedekind整环.存在_add_spanSingleton_mul_eq
@@ -1686,7 +1969,24 @@ lemma IsDedekindDomain.exists_add_spanSingleton_mul_eq
     use x
     simpa [hb, ← mul_assoc, mul_add, mul_comm b (.spanSingleton _ _)] using congr(b * $e)
   subst hb'
-  have H : Ideal.span {c.den.1} * a.num <= c.num
+  have H : Ideal.span {c.den.1} * a.num <= c.num * Ideal.span {a.den.1} := by
+    rw [← FractionalIdeal.coeIdeal_le_coeIdeal K]
+    simp only [FractionalIdeal.coeIdeal_mul, FractionalIdeal.coeIdeal_span_singleton, ←
+      FractionalIdeal.den_mul_self_eq_num']
+    ring_nf
+    gcongr
+  obtain ⟨x, hx⟩ := exists_sup_span_eq H
+    (by simpa using FractionalIdeal.num_eq_zero_iff.not.mpr ha)
+  refine ⟨algebraMap R K x / algebraMap R K (a.den.1 * c.den.1), ?_⟩
+  refine mul_left_injective₀ (b := .spanSingleton _
+    (algebraMap R K (a.den.1 * c.den.1))) ?_ ?_
+  · simp [FractionalIdeal.spanSingleton_eq_zero_iff]
+  · simp only [map_mul, mul_one, add_mul, FractionalIdeal.spanSingleton_mul_spanSingleton,
+      isUnit_iff_ne_zero, ne_eq, mul_eq_zero, FaithfulSMul.algebraMap_eq_zero_iff,
+      nonZeroDivisors.coe_ne_zero, or_self, not_false_eq_true, IsUnit.div_mul_cancel]
+    rw [← FractionalIdeal.spanSingleton_mul_spanSingleton]; rw [← mul_assoc]; rw [mul_comm a]; rw [FractionalIdeal.den_mul_self_eq_num']; rw [← mul_assoc]; rw [mul_right_comm]; rw [mul_comm c]; rw [FractionalIdeal.den_mul_self_eq_num']; rw [mul_comm]
+    simp_rw [← FractionalIdeal.coeIdeal_span_singleton, ← FractionalIdeal.coeIdeal_mul,
+      ← hx, ← FractionalIdeal.coeIdeal_sup]
 
 Depends on / 依赖: FractionalIdeal, FractionalIdeal.coeIdeal_le_coeIdeal, FractionalIdeal.coeIdeal_mul, FractionalIdeal.coeIdeal_span_singleton, FractionalIdeal.den_mul_self_eq_num, Ideal.span, a.den, a.num, c.den, c.num, coeIdeal_le_coeIdeal, coeIdeal_mul, coeIdeal_span_singleton, den_mul_self_eq_num, mul_add, mul_assoc, mul_comm, one_ne_zero, ring_nf, spanSingleton
 -/
@@ -1886,7 +2186,47 @@ definition quotientEquiv
   haveI : J' ⊓ spanSingleton R⁰ (I'.divMod I J') * I = spanSingleton R⁰ (I'.divMod I J') * J := by
     have := FractionalIdeal.sup_mul_inf J' (spanSingleton R⁰ (I'.divMod I J') * I)
     rwa [FractionalIdeal.sup_eq_add, divMod_spec h' hJ' hI, mul_left_comm, mul_comm J' I, H,
-      mul_comm I' J, ←
+      mul_comm I' J, ← mul_assoc, (mul_left_injective₀ _).eq_iff] at this
+    rintro rfl
+    exact hJ' (by simpa using h')
+  refine .ofBijective (Submodule.mapQ _ _ (LinearMap.restrict
+    (Algebra.lsmul R _ _ (I'.divMod I J')) ?_) ?_) ⟨?_, ?_⟩
+  · intro x hx
+    refine (divMod_spec h' hJ' hI).le ?_
+    exact Submodule.mem_sup_right (mul_mem_mul (mem_spanSingleton_self _ _) hx)
+  · rw [← Submodule.comap_comp, LinearMap.subtype_comp_restrict, LinearMap.domRestrict,
+      Submodule.comap_comp]
+    refine Submodule.comap_mono ?_
+    intro x hx
+    refine (Submodule.mem_inf.mp (this.ge ?_)).1
+    simp only [Algebra.lsmul_coe, smul_eq_mul]
+    exact mul_mem_mul (mem_spanSingleton_self _ _) hx
+  · rw [← LinearMap.ker_eq_bot, Submodule.mapQ, Submodule.ker_liftQ,
+      LinearMap.ker_comp, Submodule.ker_mkQ, ← Submodule.comap_comp,
+      LinearMap.subtype_comp_restrict, ← le_bot_iff, Submodule.map_le_iff_le_comap,
+      Submodule.comap_bot, Submodule.ker_mkQ, LinearMap.domRestrict,
+      Submodule.comap_comp, ← Submodule.map_le_iff_le_comap,
+      Submodule.map_comap_eq, Submodule.range_subtype]
+    by_cases H' : I'.divMod I J' = 0
+    · obtain rfl : J' = I' := by simpa [H'] using divMod_spec h' hJ' hI
+      obtain rfl : I = J := mul_left_injective₀ hJ' (H.trans (mul_comm _ _))
+      exact inf_le_left
+    rw [← inv_mul_eq_iff_eq_mul₀ (by simpa [spanSingleton_eq_zero_iff] using H'), mul_inf₀
+      (zero_le _), inv_mul_cancel_left₀ (by simpa [spanSingleton_eq_zero_iff] using H')] at this
+    rw [← this]; rw [inf_comm]; rw [coe_inf]
+    refine inf_le_inf ?_ le_rfl
+    intro x hx
+    rw [spanSingleton_inv]
+    convert! mul_mem_mul (mem_spanSingleton_self _ _) hx
+    simp [H']
+  · have H : Submodule.map (Algebra.lsmul R R K (I'.divMod I J')) ↑I =
+        (spanSingleton R⁰ (I'.divMod I J') * I) := by
+      ext x
+      simp [Submodule.mem_span_singleton_mul]
+    rw [← LinearMap.range_eq_top]; rw [Submodule.mapQ]; rw [Submodule.range_liftQ]; rw [LinearMap.range_comp]; rw [LinearMap.restrict]; rw [LinearMap.range_codRestrict]; rw [LinearMap.range_domRestrict]; rw [← top_le_iff]; rw [H]; rw [← LinearMap.range_eq_top.mpr (Submodule.mkQ_surjective _)]; rw [← Submodule.map_top]; rw [Submodule.map_le_iff_le_comap]; rw [Submodule.comap_map_eq]; rw [Submodule.ker_mkQ]; rw [← Submodule.map_le_map_iff_of_injective I'.coeToSubmodule.injective_subtype]; rw [Submodule.map_top]; rw [Submodule.map_sup]; rw [Submodule.map_comap_eq]; rw [Submodule.map_comap_eq]; rw [Submodule.range_subtype]; rw [sup_comm]; rw [inf_eq_right.mpr]; rw [inf_eq_right.mpr]
+    · exact le_trans (divMod_spec h' hJ' hI).ge (by simp)
+    · exact le_trans (by simp) (divMod_spec h' hJ' hI).le
+    · exact h'
 
 中文:
 定义 quotientEquiv
@@ -1895,7 +2235,47 @@ definition quotientEquiv
   haveI : J' ⊓ spanSingleton R⁰ (I'.divMod I J') * I = spanSingleton R⁰ (I'.divMod I J') * J := by
     have := FractionalIdeal.sup_mul_inf J' (spanSingleton R⁰ (I'.divMod I J') * I)
     rwa [FractionalIdeal.sup_eq_add, divMod_spec h' hJ' hI, mul_left_comm, mul_comm J' I, H,
-      mul_comm I' J, ←
+      mul_comm I' J, ← mul_assoc, (mul_left_injective₀ _).eq_iff] at this
+    rintro rfl
+    exact hJ' (by simpa using h')
+  refine .ofBijective (Submodule.mapQ _ _ (LinearMap.restrict
+    (Algebra.lsmul R _ _ (I'.divMod I J')) ?_) ?_) ⟨?_, ?_⟩
+  · intro x hx
+    refine (divMod_spec h' hJ' hI).le ?_
+    exact Submodule.mem_sup_right (mul_mem_mul (mem_spanSingleton_self _ _) hx)
+  · rw [← Submodule.comap_comp, LinearMap.subtype_comp_restrict, LinearMap.domRestrict,
+      Submodule.comap_comp]
+    refine Submodule.comap_mono ?_
+    intro x hx
+    refine (Submodule.mem_inf.mp (this.ge ?_)).1
+    simp only [Algebra.lsmul_coe, smul_eq_mul]
+    exact mul_mem_mul (mem_spanSingleton_self _ _) hx
+  · rw [← LinearMap.ker_eq_bot, Submodule.mapQ, Submodule.ker_liftQ,
+      LinearMap.ker_comp, Submodule.ker_mkQ, ← Submodule.comap_comp,
+      LinearMap.subtype_comp_restrict, ← le_bot_iff, Submodule.map_le_iff_le_comap,
+      Submodule.comap_bot, Submodule.ker_mkQ, LinearMap.domRestrict,
+      Submodule.comap_comp, ← Submodule.map_le_iff_le_comap,
+      Submodule.map_comap_eq, Submodule.range_subtype]
+    by_cases H' : I'.divMod I J' = 0
+    · obtain rfl : J' = I' := by simpa [H'] using divMod_spec h' hJ' hI
+      obtain rfl : I = J := mul_left_injective₀ hJ' (H.trans (mul_comm _ _))
+      exact inf_le_left
+    rw [← inv_mul_eq_iff_eq_mul₀ (by simpa [spanSingleton_eq_zero_iff] using H'), mul_inf₀
+      (zero_le _), inv_mul_cancel_left₀ (by simpa [spanSingleton_eq_zero_iff] using H')] at this
+    rw [← this]; rw [inf_comm]; rw [coe_inf]
+    refine inf_le_inf ?_ le_rfl
+    intro x hx
+    rw [spanSingleton_inv]
+    convert! mul_mem_mul (mem_spanSingleton_self _ _) hx
+    simp [H']
+  · have H : Submodule.map (Algebra.lsmul R R K (I'.divMod I J')) ↑I =
+        (spanSingleton R⁰ (I'.divMod I J') * I) := by
+      ext x
+      simp [Submodule.mem_span_singleton_mul]
+    rw [← LinearMap.range_eq_top]; rw [Submodule.mapQ]; rw [Submodule.range_liftQ]; rw [LinearMap.range_comp]; rw [LinearMap.restrict]; rw [LinearMap.range_codRestrict]; rw [LinearMap.range_domRestrict]; rw [← top_le_iff]; rw [H]; rw [← LinearMap.range_eq_top.mpr (Submodule.mkQ_surjective _)]; rw [← Submodule.map_top]; rw [Submodule.map_le_iff_le_comap]; rw [Submodule.comap_map_eq]; rw [Submodule.ker_mkQ]; rw [← Submodule.map_le_map_iff_of_injective I'.coeToSubmodule.injective_subtype]; rw [Submodule.map_top]; rw [Submodule.map_sup]; rw [Submodule.map_comap_eq]; rw [Submodule.map_comap_eq]; rw [Submodule.range_subtype]; rw [sup_comm]; rw [inf_eq_right.mpr]; rw [inf_eq_right.mpr]
+    · exact le_trans (divMod_spec h' hJ' hI).ge (by simp)
+    · exact le_trans (by simp) (divMod_spec h' hJ' hI).le
+    · exact h'
 
 Depends on / 依赖: Algebra, Algebra.lsmul, FractionalIdeal, FractionalIdeal.sup_eq_add, FractionalIdeal.sup_mul_inf, LinearMap, LinearMap.restrict, Submodule, Submodule.mapQ, divMod, divMod_spec, eq_iff, mul_assoc, mul_comm, mul_left_comm, ofBijective, restrict, spanSingleton, sup_eq_add, sup_mul_inf
 -/
@@ -1970,7 +2350,18 @@ theorem Ideal.map_algebraMap_eq_finsetProd_pow
   rw [← finprod_heightOneSpectrum_factorization (I := p.map (algebraMap S R)) h]
   let hF : Fintype {v : HeightOneSpectrum R | v.asIdeal ∣ map (algebraMap S R) p} :=
     (finite_factors h).fintype
-  rw [finprod_eq_finsetProd_of_mul
+  rw [finprod_eq_finsetProd_of_mulSupport_subset
+    (s := {v | v.asIdeal ∣ p.map (algebraMap S R)}.toFinset)]; rw [← Finset.prod_set_coe]; rw [← Finset.prod_set_coe]
+  · let _ : Fintype {v : HeightOneSpectrum R // v.asIdeal ∣ map (algebraMap S R) p} := hF
+    refine Fintype.prod_equiv (equivPrimesOver _ hp) _ _ fun ⟨v, _⟩ => ?_
+    have : v.asIdeal.LiesOver p := by rwa [Ideal.liesOver_iff_dvd_map v.2.ne_top]
+    simp [maxPowDividing_eq_pow_multiset_count _ h, ramificationIdx_eq_factors_count p v h]
+  · intro v hv
+    simpa [maxPowDividing, Function.mem_mulSupport, IsPrime.ne_top _,
+      Associates.count_ne_zero_iff_dvd h (irreducible v)] using hv
+
+@[deprecated (since := "2026-04-08")]
+alias Ideal.map_algebraMap_eq_finset_prod_pow := Ideal.map_algebraMap_eq_finsetProd_pow
 
 中文:
 定理 理想.map_algebraMap_eq_finsetProd_pow
@@ -1980,7 +2371,18 @@ theorem Ideal.map_algebraMap_eq_finsetProd_pow
   rw [← finprod_heightOneSpectrum_factorization (I := p.map (algebraMap S R)) h]
   let hF : Fintype {v : HeightOneSpectrum R | v.asIdeal ∣ map (algebraMap S R) p} :=
     (finite_factors h).fintype
-  rw [finprod_eq_finsetProd_of_mul
+  rw [finprod_eq_finsetProd_of_mulSupport_subset
+    (s := {v | v.asIdeal ∣ p.map (algebraMap S R)}.toFinset)]; rw [← Finset.prod_set_coe]; rw [← Finset.prod_set_coe]
+  · let _ : Fintype {v : HeightOneSpectrum R // v.asIdeal ∣ map (algebraMap S R) p} := hF
+    refine Fintype.prod_equiv (equivPrimesOver _ hp) _ _ fun ⟨v, _⟩ => ?_
+    have : v.asIdeal.LiesOver p := by rwa [Ideal.liesOver_iff_dvd_map v.2.ne_top]
+    simp [maxPowDividing_eq_pow_multiset_count _ h, ramificationIdx_eq_factors_count p v h]
+  · intro v hv
+    simpa [maxPowDividing, Function.mem_mulSupport, IsPrime.ne_top _,
+      Associates.count_ne_zero_iff_dvd h (irreducible v)] using hv
+
+@[deprecated (since := "2026-04-08")]
+alias Ideal.map_algebraMap_eq_finset_prod_pow := Ideal.map_algebraMap_eq_finsetProd_pow
 
 Depends on / 依赖: Finset, Finset.prod_set_coe, Fintype, HeightOneSpectrum, algebraMap, asIdeal, finite_factors, finprod_eq_finsetProd_of_mulSupport_subset, finprod_heightOneSpectrum_factorization, fintype, map_ne_bot_of_ne_bot, p.map, prod_set_coe, toFinset, v.asIdeal
 -/
@@ -2196,7 +2598,8 @@ lemma multiplicity_sup
   proof: by
   rw [Ideal.sup_eq_prod_inf_factors hI hJ]; rw [← count_normalizedFactors_eq_multiplicity ?h]; rw [← count_normalizedFactors_eq_multiplicity hI]; rw [← count_normalizedFactors_eq_multiplicity hJ]
   case h => exact prod_inter_normalizedFactors_ne_zero I J
-  rw [normalizedFactors_prod_inter_eq_inte
+  rw [normalizedFactors_prod_inter_eq_inter]
+  exact count_inter ..
 
 中文:
 引理 multiplicity_sup
@@ -2204,7 +2607,8 @@ lemma multiplicity_sup
   证明: by
   rw [Ideal.sup_eq_prod_inf_factors hI hJ]; rw [← count_normalizedFactors_eq_multiplicity ?h]; rw [← count_normalizedFactors_eq_multiplicity hI]; rw [← count_normalizedFactors_eq_multiplicity hJ]
   case h => exact prod_inter_normalizedFactors_ne_zero I J
-  rw [normalizedFactors_prod_inter_eq_inte
+  rw [normalizedFactors_prod_inter_eq_inter]
+  exact count_inter ..
 
 Depends on / 依赖: Ideal.sup_eq_prod_inf_factors, count_inter, count_normalizedFactors_eq_multiplicity, normalizedFactors_prod_inter_eq_inter, prod_inter_normalizedFactors_ne_zero, sup_eq_prod_inf_factors
 -/
@@ -2229,7 +2633,8 @@ lemma emultiplicity_sup
   have : I ⊔ J != ⊥ := by grind
   have H {I' : Ideal R} (h : I' != ⊥) : FiniteMultiplicity p.asIdeal I' :=
     FiniteMultiplicity.of_prime_left (prime p) h
-  rw [(H this).emultiplicity_eq_multiplicity]; rw [
+  rw [(H this).emultiplicity_eq_multiplicity]; rw [(H hI).emultiplicity_eq_multiplicity]; rw [(H hJ).emultiplicity_eq_multiplicity]; rw [multiplicity_sup _ hI hJ]
+  norm_cast
 
 中文:
 引理 emultiplicity_sup
@@ -2241,7 +2646,8 @@ lemma emultiplicity_sup
   have : I ⊔ J != ⊥ := by grind
   have H {I' : Ideal R} (h : I' != ⊥) : FiniteMultiplicity p.asIdeal I' :=
     FiniteMultiplicity.of_prime_left (prime p) h
-  rw [(H this).emultiplicity_eq_multiplicity]; rw [
+  rw [(H this).emultiplicity_eq_multiplicity]; rw [(H hI).emultiplicity_eq_multiplicity]; rw [(H hJ).emultiplicity_eq_multiplicity]; rw [multiplicity_sup _ hI hJ]
+  norm_cast
 
 Depends on / 依赖: FiniteMultiplicity, FiniteMultiplicity.of_prime_left, asIdeal, emultiplicity_eq_multiplicity, eq_or_ne, multiplicity_sup, of_prime_left, p.asIdeal
 -/
@@ -2275,7 +2681,9 @@ lemma emultiplicity_iSup
     rw [← sSup_range]; rw [← sInf_range] at ih ⊢
     rw [EquivLike.range_comp I e] at ih
     rw [ih]
-exact
+exact congrArg _ EquivLike.range_comp (emultiplicity p.asIdeal <| I ·) e
+  | h_option ih =>
+    rw [iSup_option]; rw [emultiplicity_sup p ..]; rw [ih]; rw [iInf_option]
 
 中文:
 引理 emultiplicity_iSup
@@ -2290,7 +2698,9 @@ exact
     rw [← sSup_range]; rw [← sInf_range] at ih ⊢
     rw [EquivLike.range_comp I e] at ih
     rw [ih]
-exact
+exact congrArg _ EquivLike.range_comp (emultiplicity p.asIdeal <| I ·) e
+  | h_option ih =>
+    rw [iSup_option]; rw [emultiplicity_sup p ..]; rw [ih]; rw [iInf_option]
 
 Depends on / 依赖: EquivLike, EquivLike.range_comp, Finite, Finite.induction_empty_option, asIdeal, emultiplicity, emultiplicity_sup, emultiplicity_zero, h_empty, h_option, iInf_of_empty, iInf_option, iSup_of_empty, iSup_option, induction_empty_option, of_equiv, p.asIdeal, range_comp, sInf_range, sSup_range
 -/
@@ -2322,7 +2732,10 @@ FiniteMultiplicity.of_prime_left (prime p) hI i
     refine FiniteMultiplicity.of_prime_left (prime p) ?_
     contrapose! hI
     rw [← bot_eq_zero]; rw [iSup_eq_bot] at hI
-    exact ⟨Classi
+    exact ⟨Classical.ofNonempty, hI _⟩
+  have := emultiplicity_iSup p I
+  simp only [H'.emultiplicity_eq_multiplicity, (H _).emultiplicity_eq_multiplicity] at this
+  exact_mod_cast this
 
 中文:
 引理 multiplicity_iSup
@@ -2334,7 +2747,10 @@ FiniteMultiplicity.of_prime_left (prime p) hI i
     refine FiniteMultiplicity.of_prime_left (prime p) ?_
     contrapose! hI
     rw [← bot_eq_zero]; rw [iSup_eq_bot] at hI
-    exact ⟨Classi
+    exact ⟨Classical.ofNonempty, hI _⟩
+  have := emultiplicity_iSup p I
+  simp only [H'.emultiplicity_eq_multiplicity, (H _).emultiplicity_eq_multiplicity] at this
+  exact_mod_cast this
 
 Depends on / 依赖: Classical, Classical.ofNonempty, FiniteMultiplicity, FiniteMultiplicity.of_prime_left, asIdeal, bot_eq_zero, contrapose, emultiplicity_eq_multiplicity, emultiplicity_iSup, iSup_eq_bot, ofNonempty, of_prime_left, p.asIdeal
 -/

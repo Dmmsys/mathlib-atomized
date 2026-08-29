@@ -1496,7 +1496,7 @@ lemma assoc_comp_map_comm_comp_comul_comp_comul
   ext
   rfl
 
-@[coassoc_simps
+@[coassoc_simps]
 
 中文:
 引理 assoc_comp_map_comm_comp_comul_comp_comul
@@ -1508,7 +1508,7 @@ lemma assoc_comp_map_comm_comp_comul_comp_comul
   ext
   rfl
 
-@[coassoc_simps
+@[coassoc_simps]
 
 Depends on / 依赖: Coalgebra, Coalgebra.coassoc, LinearMap, LinearMap.comp_assoc, LinearMap.lTensor_def, LinearMap.rTensor_def, TensorProduct, TensorProduct.map_comp, coassoc, comp_assoc, comp_id, f.comp_id, lTensor_def, map_comp, rTensor_def, symm_comp_map_assoc
 -/

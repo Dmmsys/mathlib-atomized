@@ -481,7 +481,13 @@ theorem image_zpow_ae_eq
   obtain ⟨k, rfl | rfl⟩ := k.eq_nat_or_neg
   · replace hs : (⇑e⁻¹) ⁻¹' s =ᵐ[μ] s := by rwa [Equiv.image_eq_preimage_symm] at hs
     replace he' : (⇑e⁻¹)^[k] ⁻¹' s =ᵐ[μ] s := he'.preimage_iterate_ae_eq k hs
-    rwa [Equiv.Perm.iterate_eq_pow e⁻¹ k, inv_pow e k] 
+    rwa [Equiv.Perm.iterate_eq_pow e⁻¹ k, inv_pow e k] at he'
+  · rw [zpow_neg, zpow_natCast]
+    replace hs : e ⁻¹' s =ᵐ[μ] s := by
+      convert! he.preimage_ae_eq hs.symm
+      rw [Equiv.preimage_image]
+    replace he : (⇑e)^[k] ⁻¹' s =ᵐ[μ] s := he.preimage_iterate_ae_eq k hs
+    rwa [Equiv.Perm.iterate_eq_pow e k] at he
 
 中文:
 定理 image_zpow_ae_eq
@@ -491,7 +497,13 @@ theorem image_zpow_ae_eq
   obtain ⟨k, rfl | rfl⟩ := k.eq_nat_or_neg
   · replace hs : (⇑e⁻¹) ⁻¹' s =ᵐ[μ] s := by rwa [Equiv.image_eq_preimage_symm] at hs
     replace he' : (⇑e⁻¹)^[k] ⁻¹' s =ᵐ[μ] s := he'.preimage_iterate_ae_eq k hs
-    rwa [Equiv.Perm.iterate_eq_pow e⁻¹ k, inv_pow e k] 
+    rwa [Equiv.Perm.iterate_eq_pow e⁻¹ k, inv_pow e k] at he'
+  · rw [zpow_neg, zpow_natCast]
+    replace hs : e ⁻¹' s =ᵐ[μ] s := by
+      convert! he.preimage_ae_eq hs.symm
+      rw [Equiv.preimage_image]
+    replace he : (⇑e)^[k] ⁻¹' s =ᵐ[μ] s := he.preimage_iterate_ae_eq k hs
+    rwa [Equiv.Perm.iterate_eq_pow e k] at he
 
 Depends on / 依赖: Equiv.Perm.iterate_eq_pow, Equiv.image_eq_preimage_symm, Equiv.preimage_image, convert, eq_nat_or_neg, he.preimage_ae_eq, he.preimage_iterate_ae_eq, hs.symm, image_eq_preimage_symm, inv_pow, iterate_eq_pow, k.eq_nat_or_neg, preimage_ae_eq, preimage_image, preimage_iterate_ae_eq, replace, zpow_natCast, zpow_neg
 -/
@@ -567,7 +579,9 @@ theorem exists_preimage_eq_of_preimage_ae
   refine ⟨limsup (f^[·] ⁻¹' t) atTop, ?_, ?_, ?_⟩
   · exact .measurableSet_limsup fun n => h.measurable.iterate n htm
   · have : f ⁻¹' t =ᵐ[μ] t := (h.preimage_ae_eq ht.symm).trans (hs'.trans ht)
-    exact limsup_ae_eq_of_forall_ae_eq _ fun n => .trans (h.preimage_iter
+    exact limsup_ae_eq_of_forall_ae_eq _ fun n => .trans (h.preimage_iterate_ae_eq _ this) ht.symm
+  · simp only [Set.preimage_iterate_eq]
+    exact CompleteLatticeHom.apply_limsup_iterate (CompleteLatticeHom.setPreimage f) t
 
 中文:
 定理 存在_preimage_eq_of_preimage_ae
@@ -577,7 +591,9 @@ theorem exists_preimage_eq_of_preimage_ae
   refine ⟨limsup (f^[·] ⁻¹' t) atTop, ?_, ?_, ?_⟩
   · exact .measurableSet_limsup fun n => h.measurable.iterate n htm
   · have : f ⁻¹' t =ᵐ[μ] t := (h.preimage_ae_eq ht.symm).trans (hs'.trans ht)
-    exact limsup_ae_eq_of_forall_ae_eq _ fun n => .trans (h.preimage_iter
+    exact limsup_ae_eq_of_forall_ae_eq _ fun n => .trans (h.preimage_iterate_ae_eq _ this) ht.symm
+  · simp only [Set.preimage_iterate_eq]
+    exact CompleteLatticeHom.apply_limsup_iterate (CompleteLatticeHom.setPreimage f) t
 
 Depends on / 依赖: CompleteLatticeHom, CompleteLatticeHom.apply_limsup_iterate, CompleteLatticeHom.setPreimage, Set.preimage_iterate_eq, apply_limsup_iterate, h.measurable.iterate, h.preimage_ae_eq, h.preimage_iterate_ae_eq, ht.symm, iterate, limsup, limsup_ae_eq_of_forall_ae_eq, measurable, measurableSet_limsup, preimage_ae_eq, preimage_iterate_ae_eq, preimage_iterate_eq, setPreimage
 -/
@@ -638,7 +654,9 @@ theorem pairwise_aedisjoint_of_aedisjoint_forall_ne_one
     rw [Ne]; rw [inv_mul_eq_one]
     exact hg.symm
   have : (g₂⁻¹ • ·) ⁻¹' (g • s inter s) = g₁ • s inter g₂ • s := by
-    rw [preimage_eq_iff_eq_image (MulAction.bijective g₂⁻¹)]; rw [image_smul]; rw [smul_set_inter]; rw [smul_smu
+    rw [preimage_eq_iff_eq_image (MulAction.bijective g₂⁻¹)]; rw [image_smul]; rw [smul_set_inter]; rw [smul_smul]; rw [smul_smul]; rw [inv_mul_cancel]; rw [one_smul]
+  change μ (g₁ • s inter g₂ • s) = 0
+  exact this ▸ (h_qmp g₂⁻¹).preimage_null (h_ae_disjoint g hg)
 
 中文:
 定理 pairwise_aedisjoint_of_aedisjoint_对任意_ne_one
@@ -650,7 +668,9 @@ theorem pairwise_aedisjoint_of_aedisjoint_forall_ne_one
     rw [Ne]; rw [inv_mul_eq_one]
     exact hg.symm
   have : (g₂⁻¹ • ·) ⁻¹' (g • s inter s) = g₁ • s inter g₂ • s := by
-    rw [preimage_eq_iff_eq_image (MulAction.bijective g₂⁻¹)]; rw [image_smul]; rw [smul_set_inter]; rw [smul_smu
+    rw [preimage_eq_iff_eq_image (MulAction.bijective g₂⁻¹)]; rw [image_smul]; rw [smul_set_inter]; rw [smul_smul]; rw [smul_smul]; rw [inv_mul_cancel]; rw [one_smul]
+  change μ (g₁ • s inter g₂ • s) = 0
+  exact this ▸ (h_qmp g₂⁻¹).preimage_null (h_ae_disjoint g hg)
 
 Depends on / 依赖: MulAction, MulAction.bijective, bijective, h_ae_disjoint, h_qmp, hg.symm, image_smul, inv_mul_cancel, inv_mul_eq_one, one_smul, preimage_eq_iff_eq_image, preimage_null, replace, smul_set_inter, smul_smul
 -/

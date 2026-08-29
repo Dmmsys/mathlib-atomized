@@ -50,7 +50,12 @@ theorem Finset.prod_eq_prod_range_intervalGapsWithin
   · intro i hi j hj hij
     rw [mem_range] at hi hj
     apply F.intervalGapsWithin_injOn h a b <;> grind
-  · intro
+  · intro z hz
+    obtain ⟨i, hi₁, hi₂⟩ := F.intervalGapsWithin_surjOn h a b hz
+    exact ⟨i, by grind, hi₂⟩
+  · simp
+
+@[to_additive]
 
 中文:
 定理 有限集.prod_eq_prod_range_intervalGapsWithin
@@ -63,7 +68,12 @@ theorem Finset.prod_eq_prod_range_intervalGapsWithin
   · intro i hi j hj hij
     rw [mem_range] at hi hj
     apply F.intervalGapsWithin_injOn h a b <;> grind
-  · intro
+  · intro z hz
+    obtain ⟨i, hi₁, hi₂⟩ := F.intervalGapsWithin_surjOn h a b hz
+    exact ⟨i, by grind, hi₂⟩
+  · simp
+
+@[to_additive]
 
 Depends on / 依赖: F.intervalGapsWithin, F.intervalGapsWithin_injOn, F.intervalGapsWithin_mapsTo, F.intervalGapsWithin_surjOn, i.succ, intervalGapsWithin, intervalGapsWithin_injOn, intervalGapsWithin_mapsTo, intervalGapsWithin_surjOn, mem_range, prod_bij
 -/
@@ -92,7 +102,7 @@ theorem Finset.prod_intervalGapsWithin_mul_prod_eq_div
   rw [F.prod_eq_prod_range_intervalGapsWithin h (fun x y => g y / g x)]; rw [mul_comm]; rw [prod_range_succ]; rw [← mul_assoc]; rw [← prod_mul_distrib]; rw [prod_congr rfl (fun _ _ => div_mul_div_cancel _ _ _)]; rw [prod_range_div (fun i => g (F.intervalGapsWithin h a b i).1)]
   simp
 
-@[to_additi
+@[to_additive]
 
 中文:
 定理 有限集.prod_intervalGapsWithin_mul_prod_eq_div
@@ -100,7 +110,7 @@ theorem Finset.prod_intervalGapsWithin_mul_prod_eq_div
   rw [F.prod_eq_prod_range_intervalGapsWithin h (fun x y => g y / g x)]; rw [mul_comm]; rw [prod_range_succ]; rw [← mul_assoc]; rw [← prod_mul_distrib]; rw [prod_congr rfl (fun _ _ => div_mul_div_cancel _ _ _)]; rw [prod_range_div (fun i => g (F.intervalGapsWithin h a b i).1)]
   simp
 
-@[to_additi
+@[to_additive]
 
 Depends on / 依赖: F.intervalGapsWithin, F.prod_eq_prod_range_intervalGapsWithin, div_mul_div_cancel, intervalGapsWithin, mul_assoc, mul_comm, prod_congr, prod_eq_prod_range_intervalGapsWithin, prod_mul_distrib, prod_range_div, prod_range_succ
 -/

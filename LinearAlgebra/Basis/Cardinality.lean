@@ -38,7 +38,7 @@ lemma finite_of_span_finite_eq_top_finsupp
     .of_finite_univ (this ▸ hs.biUnion fun _ _ => by simp)
   have ⟨x, hx⟩ := exists_ne (0 : M)
   eq_univ_of_forall fun j => (top_unique (hsspan.ge.trans (span_le_supported_biUnion_support R s)) ▸
-    mem_top (x := single j x)) ((mem_support_single ..).mpr ⟨r
+    mem_top (x := single j x)) ((mem_support_single ..).mpr ⟨rfl, hx⟩)
 
 中文:
 引理 finite_of_span_finite_eq_top_finsupp
@@ -47,7 +47,7 @@ lemma finite_of_span_finite_eq_top_finsupp
     .of_finite_univ (this ▸ hs.biUnion fun _ _ => by simp)
   have ⟨x, hx⟩ := exists_ne (0 : M)
   eq_univ_of_forall fun j => (top_unique (hsspan.ge.trans (span_le_supported_biUnion_support R s)) ▸
-    mem_top (x := single j x)) ((mem_support_single ..).mpr ⟨r
+    mem_top (x := single j x)) ((mem_support_single ..).mpr ⟨rfl, hx⟩)
 
 Depends on / 依赖: biUnion, eq_univ_of_forall, exists_ne, hs.biUnion, hsspan, hsspan.ge.trans, i.support, mem_support_single, mem_top, of_finite_univ, single, span_le_supported_biUnion_support, support, top_unique
 -/
@@ -119,7 +119,35 @@ theorem union_support_maximal_linearIndependent_eq_range_basis
     Finsupp.mem_support_iff, Finset.mem_coe] at h
   -- We have some basis element `b i` which is not in the support of any of the `v k`.
   obtain ⟨i, w⟩ := h
-  have repr_eq_
+  have repr_eq_zero (l) : b.repr (linearCombination R v l) i = 0 := by
+    simp [linearCombination_apply, Finsupp.sum, w]
+  -- Using this, we'll construct a linearly independent family strictly larger than `v`,
+  -- by also using this `b i`.
+  let v' (o : Option κ) : M := o.elim (b i) v
+  have r : range v subseteq range v' := by rintro - ⟨k, rfl⟩; exact ⟨some k, rfl⟩
+  have r' : b i ∉ range v := fun ⟨k, p⟩ => by simpa [w] using congr(b.repr $p i)
+  have r'' : range v != range v' := (r' <| · ▸ ⟨none, rfl⟩)
+  -- The key step in the proof is checking that this strictly larger family is linearly independent.
+  have i' : LinearIndepOn R id (range v') := by
+    apply LinearIndependent.linearIndepOn_id
+    rw [linearIndependent_iffₛ]
+    intro l l' z
+    simp_rw [linearCombination_option, v', Option.elim] at z
+    change _ + linearCombination R v l.some = _ + linearCombination R v l'.some at z
+    -- We have some equality between linear combinations of `b i` and the `v k`,
+    -- and want to show the coefficients are equal.
+    ext (_ | a)
+    -- We'll first show the coefficient of `b i` is zero,
+    -- by expressing the `v k` in the basis `b`, and using that the `v k` have no `b i` term.
+    · simpa [repr_eq_zero] using congr(b.repr $z i)
+    -- All the other coefficients are also equal, because `v` is linear independent,
+    -- by comparing the coefficients in the basis `b`.
+have l₁ : l.some = l'.some := ind b.repr.injective ext fun j => by
+      obtain rfl | ne := eq_or_ne i j
+      · simp_rw [repr_eq_zero]
+      simpa [single_apply, ne] using congr(b.repr $z j)
+    exact DFunLike.congr_fun l₁ a
+  exact r'' (m (range v') i' r)
 
 中文:
 定理 union_support_maximal_linearIndependent_eq_range_basis
@@ -131,7 +159,35 @@ theorem union_support_maximal_linearIndependent_eq_range_basis
     Finsupp.mem_support_iff, Finset.mem_coe] at h
   -- We have some basis element `b i` which is not in the support of any of the `v k`.
   obtain ⟨i, w⟩ := h
-  have repr_eq_
+  have repr_eq_zero (l) : b.repr (linearCombination R v l) i = 0 := by
+    simp [linearCombination_apply, Finsupp.sum, w]
+  -- Using this, we'll construct a linearly independent family strictly larger than `v`,
+  -- by also using this `b i`.
+  let v' (o : Option κ) : M := o.elim (b i) v
+  have r : range v subseteq range v' := by rintro - ⟨k, rfl⟩; exact ⟨some k, rfl⟩
+  have r' : b i ∉ range v := fun ⟨k, p⟩ => by simpa [w] using congr(b.repr $p i)
+  have r'' : range v != range v' := (r' <| · ▸ ⟨none, rfl⟩)
+  -- The key step in the proof is checking that this strictly larger family is linearly independent.
+  have i' : LinearIndepOn R id (range v') := by
+    apply LinearIndependent.linearIndepOn_id
+    rw [linearIndependent_iffₛ]
+    intro l l' z
+    simp_rw [linearCombination_option, v', Option.elim] at z
+    change _ + linearCombination R v l.some = _ + linearCombination R v l'.some at z
+    -- We have some equality between linear combinations of `b i` and the `v k`,
+    -- and want to show the coefficients are equal.
+    ext (_ | a)
+    -- We'll first show the coefficient of `b i` is zero,
+    -- by expressing the `v k` in the basis `b`, and using that the `v k` have no `b i` term.
+    · simpa [repr_eq_zero] using congr(b.repr $z i)
+    -- All the other coefficients are also equal, because `v` is linear independent,
+    -- by comparing the coefficients in the basis `b`.
+have l₁ : l.some = l'.some := ind b.repr.injective ext fun j => by
+      obtain rfl | ne := eq_or_ne i j
+      · simp_rw [repr_eq_zero]
+      simpa [single_apply, ne] using congr(b.repr $z j)
+    exact DFunLike.congr_fun l₁ a
+  exact r'' (m (range v') i' r)
 -/
 theorem union_support_maximal_linearIndependent_eq_range_basis {ι : Type w} (b : Basis ι R M)
     {κ : Type w'} (v : κ -> M) (ind : LinearIndependent R v) (m : ind.Maximal) :
@@ -183,7 +239,8 @@ theorem infinite_basis_le_maximal_linearIndependent'
   have w₁ : #ι <= #(Set.range Φ) := by
     apply Cardinal.le_range_of_union_finset_eq_univ
     exact union_support_maximal_linearIndependent_eq_range_basis b v i m
-  have w₂ : Cardinal.lift.{w'} #(Set.range Φ) <= Cardinal.lift.{w} #κ := Cardinal.mk_r
+  have w₂ : Cardinal.lift.{w'} #(Set.range Φ) <= Cardinal.lift.{w} #κ := Cardinal.mk_range_le_lift
+  exact (Cardinal.lift_le.mpr w₁).trans w₂
 
 中文:
 定理 infinite_basis_le_maximal_linearIndependent'
@@ -193,7 +250,8 @@ theorem infinite_basis_le_maximal_linearIndependent'
   have w₁ : #ι <= #(Set.range Φ) := by
     apply Cardinal.le_range_of_union_finset_eq_univ
     exact union_support_maximal_linearIndependent_eq_range_basis b v i m
-  have w₂ : Cardinal.lift.{w'} #(Set.range Φ) <= Cardinal.lift.{w} #κ := Cardinal.mk_r
+  have w₂ : Cardinal.lift.{w'} #(Set.range Φ) <= Cardinal.lift.{w} #κ := Cardinal.mk_range_le_lift
+  exact (Cardinal.lift_le.mpr w₁).trans w₂
 
 Depends on / 依赖: Cardinal, Cardinal.le_range_of_union_finset_eq_univ, Cardinal.lift, Cardinal.lift_le.mpr, Cardinal.mk_range_le_lift, Set.range, b.repr, le_range_of_union_finset_eq_univ, lift_le, mk_range_le_lift, support, union_support_maximal_linearIndependent_eq_range_basis
 -/

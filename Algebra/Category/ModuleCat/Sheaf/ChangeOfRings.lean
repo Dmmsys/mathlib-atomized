@@ -90,7 +90,13 @@ definition restrictHomEquivOfIsLocallySurjective
     apply hM₂.isSeparated _ _ (Presheaf.imageSieve_mem J α r')
     rintro Y p ⟨r : R.obj _, hr⟩
     have hg : forall (z : M₁.obj X), g.app _ (M₁.map p.op z) = M₂.map p.op (g.app X z) :=
-      fun z => CategoryTheo
+      fun z => CategoryTheory.congr_fun (g.naturality p.op) z
+    change M₂.map p.op (g.app X (r' • m)) = M₂.map p.op (r' • show M₂.obj X from g.app X m)
+    dsimp at hg ⊢
+    rw [← hg]; rw [M₂.map_smul]; rw [← hg]; rw [← hr]
+    erw [← (g.app _).hom.map_smul]
+    rw [M₁.map_smul]; rw [← hr]
+    rfl)
 
 中文:
 定义 restrictHomEquivOfIsLocallySurjective
@@ -99,7 +105,13 @@ definition restrictHomEquivOfIsLocallySurjective
     apply hM₂.isSeparated _ _ (Presheaf.imageSieve_mem J α r')
     rintro Y p ⟨r : R.obj _, hr⟩
     have hg : forall (z : M₁.obj X), g.app _ (M₁.map p.op z) = M₂.map p.op (g.app X z) :=
-      fun z => CategoryTheo
+      fun z => CategoryTheory.congr_fun (g.naturality p.op) z
+    change M₂.map p.op (g.app X (r' • m)) = M₂.map p.op (r' • show M₂.obj X from g.app X m)
+    dsimp at hg ⊢
+    rw [← hg]; rw [M₂.map_smul]; rw [← hg]; rw [← hr]
+    erw [← (g.app _).hom.map_smul]
+    rw [M₁.map_smul]; rw [← hr]
+    rfl)
 
 Depends on / 依赖: restrictScalars
 -/

@@ -87,7 +87,12 @@ definition Action.imageComplement
       apply y.property
       use (X.ρ g⁻¹).hom x
       calc (X.ρ g⁻¹ ≫ f.hom) x
-          = ((Y.ρ g⁻¹ * Y.ρ g)).hom y.val := by rw [f.comm, FintypeCat.comp_appl
+          = ((Y.ρ g⁻¹ * Y.ρ g)).hom y.val := by rw [f.comm, FintypeCat.comp_apply, h]; rfl
+        _ = y.val := by
+          simp [← map_mul, inv_mul_cancel, Action.ρ_one, FintypeCat.id_hom])
+    map_one' := by aesop
+    map_mul' := by aesop
+  }
 
 中文:
 定义 作用.imageComplement
@@ -99,7 +104,12 @@ definition Action.imageComplement
       apply y.property
       use (X.ρ g⁻¹).hom x
       calc (X.ρ g⁻¹ ≫ f.hom) x
-          = ((Y.ρ g⁻¹ * Y.ρ g)).hom y.val := by rw [f.comm, FintypeCat.comp_appl
+          = ((Y.ρ g⁻¹ * Y.ρ g)).hom y.val := by rw [f.comm, FintypeCat.comp_apply, h]; rfl
+        _ = y.val := by
+          simp [← map_mul, inv_mul_cancel, Action.ρ_one, FintypeCat.id_hom])
+    map_one' := by aesop
+    map_mul' := by aesop
+  }
 
 Depends on / 依赖: FintypeCat, FintypeCat.imageComplement, f.hom, imageComplement
 -/
@@ -204,7 +214,8 @@ instance :
     haveI : Mono ((forget (Action FintypeCat G)).map i) := map_mono (forget _) i
     ⟨Action.imageComplement G i, Action.imageComplementIncl G i,
 ⟨isColimitOfReflects (Action.forget _ _ ⋙ FintypeCat.incl)
-      (isColimitMapCoconeBinaryCofan
+      (isColimitMapCoconeBinaryCofanEquiv (forget _) i _).symm
+      (Types.isCoprodOfMono ((forget _).map i))⟩⟩
 
 中文:
 实例 :
@@ -214,7 +225,8 @@ instance :
     haveI : Mono ((forget (Action FintypeCat G)).map i) := map_mono (forget _) i
     ⟨Action.imageComplement G i, Action.imageComplementIncl G i,
 ⟨isColimitOfReflects (Action.forget _ _ ⋙ FintypeCat.incl)
-      (isColimitMapCoconeBinaryCofan
+      (isColimitMapCoconeBinaryCofanEquiv (forget _) i _).symm
+      (Types.isCoprodOfMono ((forget _).map i))⟩⟩
 -/
 instance : PreGaloisCategory (Action FintypeCat G) where
   hasQuotientsByFiniteGroups _ _ _ := inferInstance
@@ -295,7 +307,20 @@ theorem Action.pretransitive_of_isConnected
     let T : Set X.V := MulAction.orbit G x
     have : Fintype T := Fintype.ofFinite T
 let : MulAction G (FintypeCat.of T) := inferInstanceAs MulAction G
-      ↑(Mu
+      ↑(MulAction.orbit G x)
+    let T' : Action FintypeCat G := Action.FintypeCat.ofMulAction G (FintypeCat.of T)
+    let i : T' ⟶ X := ⟨FintypeCat.homMk Subtype.val, fun _ => rfl⟩
+    have : Mono i := ConcreteCategory.mono_of_injective _ (Subtype.val_injective)
+    have : IsIso i := by
+      apply IsConnected.noTrivialComponent T' i
+      apply (not_initial_iff_fiber_nonempty (Action.forget _ _) T').mpr
+      exact Set.Nonempty.coe_sort (MulAction.nonempty_orbit x)
+    have hb : Function.Bijective i.hom := by
+      apply (ConcreteCategory.isIso_iff_bijective i.hom).mp
+      exact map_isIso (forget₂ _ FintypeCat) i
+    obtain ⟨⟨y', ⟨g, (hg : g • x = y')⟩⟩, (hy' : y' = y)⟩ := hb.surjective y
+    use g
+    exact hg.trans hy'
 
 中文:
 定理 作用.pretransitive_of_isConnected
@@ -306,7 +331,20 @@ let : MulAction G (FintypeCat.of T) := inferInstanceAs MulAction G
     let T : Set X.V := MulAction.orbit G x
     have : Fintype T := Fintype.ofFinite T
 let : MulAction G (FintypeCat.of T) := inferInstanceAs MulAction G
-      ↑(Mu
+      ↑(MulAction.orbit G x)
+    let T' : Action FintypeCat G := Action.FintypeCat.ofMulAction G (FintypeCat.of T)
+    let i : T' ⟶ X := ⟨FintypeCat.homMk Subtype.val, fun _ => rfl⟩
+    have : Mono i := ConcreteCategory.mono_of_injective _ (Subtype.val_injective)
+    have : IsIso i := by
+      apply IsConnected.noTrivialComponent T' i
+      apply (not_initial_iff_fiber_nonempty (Action.forget _ _) T').mpr
+      exact Set.Nonempty.coe_sort (MulAction.nonempty_orbit x)
+    have hb : Function.Bijective i.hom := by
+      apply (ConcreteCategory.isIso_iff_bijective i.hom).mp
+      exact map_isIso (forget₂ _ FintypeCat) i
+    obtain ⟨⟨y', ⟨g, (hg : g • x = y')⟩⟩, (hy' : y' = y)⟩ := hb.surjective y
+    use g
+    exact hg.trans hy'
 -/
 theorem Action.pretransitive_of_isConnected (X : Action FintypeCat G)
     [PreGaloisCategory.IsConnected X] : MulAction.IsPretransitive G X.V where
@@ -341,7 +379,18 @@ theorem Action.isConnected_of_transitive
   noTrivialComponent Y i hm hni := by
     /- We show that the induced inclusion `i.hom` of finite sets is surjective, using the
     transitivity of the `G`-action. -/
-    obtain ⟨(y : Y.V)⟩ := (not_initial_iff_fiber_nonempty (Action.forget _ _) Y).
+    obtain ⟨(y : Y.V)⟩ := (not_initial_iff_fiber_nonempty (Action.forget _ _) Y).mp hni
+    have : IsIso i.hom := by
+      refine (ConcreteCategory.isIso_iff_bijective i.hom).mpr ⟨?_, fun x' => ?_⟩
+      · have : Mono i.hom := map_mono (forget₂ _ _) i
+        exact ConcreteCategory.injective_of_mono_of_preservesPullback i.hom
+      · let x : X := i.hom y
+        obtain ⟨σ, hσ⟩ := MulAction.exists_smul_eq G x x'
+        use σ • y
+        change (Y.ρ σ ≫ i.hom) y = x'
+        rw [i.comm]; rw [FintypeCat.comp_apply]
+        exact hσ
+    apply isIso_of_reflects_iso i (Action.forget _ _)
 
 中文:
 定理 作用.isConnected_of_transitive
@@ -350,7 +399,18 @@ theorem Action.isConnected_of_transitive
   noTrivialComponent Y i hm hni := by
     /- We show that the induced inclusion `i.hom` of finite sets is surjective, using the
     transitivity of the `G`-action. -/
-    obtain ⟨(y : Y.V)⟩ := (not_initial_iff_fiber_nonempty (Action.forget _ _) Y).
+    obtain ⟨(y : Y.V)⟩ := (not_initial_iff_fiber_nonempty (Action.forget _ _) Y).mp hni
+    have : IsIso i.hom := by
+      refine (ConcreteCategory.isIso_iff_bijective i.hom).mpr ⟨?_, fun x' => ?_⟩
+      · have : Mono i.hom := map_mono (forget₂ _ _) i
+        exact ConcreteCategory.injective_of_mono_of_preservesPullback i.hom
+      · let x : X := i.hom y
+        obtain ⟨σ, hσ⟩ := MulAction.exists_smul_eq G x x'
+        use σ • y
+        change (Y.ρ σ ≫ i.hom) y = x'
+        rw [i.comm]; rw [FintypeCat.comp_apply]
+        exact hσ
+    apply isIso_of_reflects_iso i (Action.forget _ _)
 
 Depends on / 依赖: Action, Action.forget, forget, h.some, not_initial_of_inhabited
 -/
@@ -406,7 +466,10 @@ definition isoQuotientStabilizerOfIsConnected
 (Equiv.Set.univ X.V).symm.trans
 (Equiv.setCongr ((MulAction.orbit_eq_univ G x).symm)).trans
       MulAction.orbitEquivQuotientStabilizer G x
-Iso.symm Action.mkIso (Finty
+Iso.symm Action.mkIso (FintypeCat.equivEquivIso e.symm) fun σ : G => by
+    ext (a : G ⧸ MulAction.stabilizer G x)
+    obtain ⟨τ, rfl⟩ := Quotient.exists_rep a
+    exact mul_smul σ τ x
 
 中文:
 定义 isoQuotientStabilizerOfIsConnected
@@ -416,7 +479,10 @@ Iso.symm Action.mkIso (Finty
 (Equiv.Set.univ X.V).symm.trans
 (Equiv.setCongr ((MulAction.orbit_eq_univ G x).symm)).trans
       MulAction.orbitEquivQuotientStabilizer G x
-Iso.symm Action.mkIso (Finty
+Iso.symm Action.mkIso (FintypeCat.equivEquivIso e.symm) fun σ : G => by
+    ext (a : G ⧸ MulAction.stabilizer G x)
+    obtain ⟨τ, rfl⟩ := Quotient.exists_rep a
+    exact mul_smul σ τ x
 
 Depends on / 依赖: Action, Action.mkIso, Action.pretransitive_of_isConnected, Equiv.Set.univ, Equiv.setCongr, FintypeCat, FintypeCat.equivEquivIso, IsPretransitive, Iso.symm, MulAction, MulAction.IsPretransitive, MulAction.orbitEquivQuotientStabilizer, MulAction.orbit_eq_univ, MulAction.stabilizer, Quotient, Quotient.exists_rep, e.symm, equivEquivIso, exists_rep, mul_smul
 -/

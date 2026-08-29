@@ -42,7 +42,11 @@ theorem ad_mem_adjoin_of_isSemisimple
   have hc' : Commute n' s' :=
     Algebra.commute_of_mem_adjoin_singleton_of_commute hs'_adj
       (Algebra.commute_of_mem_adjoin_self hn'_adj).symm
-  obtain ⟨-, hs_eq⟩ := Module.End
+  obtain ⟨-, hs_eq⟩ := Module.End.isNilpotent_isSemisimple_unique hn'_nil hs'_ss
+    (LieAlgebra.ad_nilpotent_of_nilpotent (R := K) hn)
+    (LieAlgebra.ad_isSemisimple_of_isSemisimple hs) hc'
+    (LieAlgebra.commute_ad_of_commute hc) (h_jc.symm.trans (map_add (ad K _) n s))
+  rwa [hs_eq] at hs'_adj
 
 中文:
 定理 ad_mem_adjoin_of_isSemisimple
@@ -52,7 +56,11 @@ theorem ad_mem_adjoin_of_isSemisimple
   have hc' : Commute n' s' :=
     Algebra.commute_of_mem_adjoin_singleton_of_commute hs'_adj
       (Algebra.commute_of_mem_adjoin_self hn'_adj).symm
-  obtain ⟨-, hs_eq⟩ := Module.End
+  obtain ⟨-, hs_eq⟩ := Module.End.isNilpotent_isSemisimple_unique hn'_nil hs'_ss
+    (LieAlgebra.ad_nilpotent_of_nilpotent (R := K) hn)
+    (LieAlgebra.ad_isSemisimple_of_isSemisimple hs) hc'
+    (LieAlgebra.commute_ad_of_commute hc) (h_jc.symm.trans (map_add (ad K _) n s))
+  rwa [hs_eq] at hs'_adj
 
 Depends on / 依赖: Algebra, Algebra.commute_of_mem_adjoin_self, Algebra.commute_of_mem_adjoin_singleton_of_commute, Commute, LieAlgebra, LieAlgebra.ad_isSemisimple_of_isSemisimple, LieAlgebra.ad_nilpotent_of_nilpotent, LieAlgebra.commute_ad_of_commute, Module, Module.End.isNilpotent_isSemisimple_unique, _adj, _nil, ad_isSemisimple_of_isSemisimple, ad_nilpotent_of_nilpotent, commute_ad_of_commute, commute_of_mem_adjoin_self, commute_of_mem_adjoin_singleton_of_commute, exists_isNilpotent_isSemisimple, h_jc, h_jc.symm.trans
 -/

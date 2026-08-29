@@ -45,7 +45,30 @@ definition DividedPowers.ofInjective
   dpow_zero {x} hx := by
     simp only [dif_pos hx, ← hf.eq_iff, (Exists.choose_spec (hmem 0 hx)).2, map_one]
     rw [hJ.dpow_zero (hIJ ▸ Ideal.mem_map_of_mem f hx)]
-  dpow_one hx := 
+  dpow_one hx := by
+    simpa only [dif_pos hx, ← hf.eq_iff, (Exists.choose_spec (_ : exists a, exists _, f a = _)).2]
+      using hJ.dpow_one (hIJ ▸ Ideal.mem_map_of_mem f hx)
+  dpow_mem {n x} hn hx := by simpa only [dif_pos hx] using (Exists.choose_spec (hmem n hx)).1 hn
+  dpow_add {n x y} hx hy := by
+    have hxy : x + y in I := Ideal.add_mem _ hx hy
+    simpa only [dif_pos hxy, dif_pos hx, dif_pos hy, ← hf.eq_iff, map_sum, map_mul,
+      (Exists.choose_spec (_ : exists a, exists _, f a = _)).2, map_add]
+      using hJ.dpow_add (hIJ ▸ I.mem_map_of_mem f hx) (hIJ ▸ I.mem_map_of_mem f hy)
+  dpow_mul {n a x} hx := by
+    have hax : a * x in I := Ideal.mul_mem_left _ _ hx
+    simpa only [(Exists.choose_spec (_ : exists a, exists _, f a = _)).2, dif_pos hax, dif_pos hx,
+    ← hf.eq_iff, map_mul, map_pow] using hJ.dpow_mul (hIJ ▸ I.mem_map_of_mem f hx)
+  mul_dpow hx := by simpa only [dif_pos hx, ← hf.eq_iff, (Exists.choose_spec (hmem _ hx)).2,
+    map_mul, map_natCast] using hJ.mul_dpow (hIJ ▸ I.mem_map_of_mem f hx)
+  dpow_comp {n m x} hm hx := by
+    simp only [dif_pos hx, ← hf.eq_iff, map_mul, map_natCast]
+    -- the condition for the other `dif_pos` is a bit messy so we use `rw` to
+    -- spin it off into a separate branch
+    rw [dif_pos]
+    · simp only [(Exists.choose_spec (_ : exists a, exists _, f a = _)).2]
+      exact hJ.dpow_comp hm (hIJ ▸ I.mem_map_of_mem f hx)
+    · rw [dif_pos hx]
+      exact (Exists.choose_spec (hmem m hx)).1 hm
 
 中文:
 定义 DividedPowers.ofInjective
@@ -55,7 +78,30 @@ definition DividedPowers.ofInjective
   dpow_zero {x} hx := by
     simp only [dif_pos hx, ← hf.eq_iff, (Exists.choose_spec (hmem 0 hx)).2, map_one]
     rw [hJ.dpow_zero (hIJ ▸ Ideal.mem_map_of_mem f hx)]
-  dpow_one hx := 
+  dpow_one hx := by
+    simpa only [dif_pos hx, ← hf.eq_iff, (Exists.choose_spec (_ : exists a, exists _, f a = _)).2]
+      using hJ.dpow_one (hIJ ▸ Ideal.mem_map_of_mem f hx)
+  dpow_mem {n x} hn hx := by simpa only [dif_pos hx] using (Exists.choose_spec (hmem n hx)).1 hn
+  dpow_add {n x y} hx hy := by
+    have hxy : x + y in I := Ideal.add_mem _ hx hy
+    simpa only [dif_pos hxy, dif_pos hx, dif_pos hy, ← hf.eq_iff, map_sum, map_mul,
+      (Exists.choose_spec (_ : exists a, exists _, f a = _)).2, map_add]
+      using hJ.dpow_add (hIJ ▸ I.mem_map_of_mem f hx) (hIJ ▸ I.mem_map_of_mem f hy)
+  dpow_mul {n a x} hx := by
+    have hax : a * x in I := Ideal.mul_mem_left _ _ hx
+    simpa only [(Exists.choose_spec (_ : exists a, exists _, f a = _)).2, dif_pos hax, dif_pos hx,
+    ← hf.eq_iff, map_mul, map_pow] using hJ.dpow_mul (hIJ ▸ I.mem_map_of_mem f hx)
+  mul_dpow hx := by simpa only [dif_pos hx, ← hf.eq_iff, (Exists.choose_spec (hmem _ hx)).2,
+    map_mul, map_natCast] using hJ.mul_dpow (hIJ ▸ I.mem_map_of_mem f hx)
+  dpow_comp {n m x} hm hx := by
+    simp only [dif_pos hx, ← hf.eq_iff, map_mul, map_natCast]
+    -- the condition for the other `dif_pos` is a bit messy so we use `rw` to
+    -- spin it off into a separate branch
+    rw [dif_pos]
+    · simp only [(Exists.choose_spec (_ : exists a, exists _, f a = _)).2]
+      exact hJ.dpow_comp hm (hIJ ▸ I.mem_map_of_mem f hx)
+    · rw [dif_pos hx]
+      exact (Exists.choose_spec (hmem m hx)).1 hm
 
 Depends on / 依赖: Classical, Exists, Exists.choose, scoped
 -/
@@ -130,7 +176,23 @@ lemma dpow'_norm_le_of_ne_zero
     simp [inverse_eq_inv', coe_zero, ne_eq, hn, not_false_eq_true, zero_pow, mul_zero,
       norm_zero, inv_nonneg, cast_nonneg]
   · have hlt : (padicValNat p n.factorial : Int) < n := by
-      exact_mod_cast padicValNat_factorial_lt_of_ne_zero p
+      exact_mod_cast padicValNat_factorial_lt_of_ne_zero p hn
+    have hnorm : 0 < ‖(n ! : Rat_[p])‖ := by
+      simp only [norm_pos_iff, ne_eq, cast_eq_zero]
+      exact factorial_ne_zero n
+    rw [← zpow_neg_one]; rw [← Nat.cast_one (R := Int)]; rw [Padic.norm_le_pow_iff_norm_lt_pow_add_one]
+    simp only [inverse_eq_inv', Padic.padicNormE.mul, norm_inv, _root_.norm_pow,
+      padic_norm_e_of_padicInt, cast_one, Int.reduceNeg, neg_add_cancel, zpow_zero]
+    rw [norm_eq_zpow_neg_valuation hx0]; rw [inv_mul_lt_one₀ hnorm]; rw [Padic.norm_eq_zpow_neg_valuation
+      (cast_ne_zero.mpr n.factorial_ne_zero)]; rw [← zpow_natCast]; rw [← zpow_mul]
+    gcongr
+    · exact_mod_cast Nat.Prime.one_lt hp.elim
+    · simp only [neg_mul, Padic.valuation_natCast, neg_lt_neg_iff]
+      apply lt_of_lt_of_le hlt
+      conv_lhs => rw [← one_mul (n : Int)]
+      gcongr
+      norm_cast
+      rwa [← PadicInt.mem_span_pow_iff_le_valuation x hx0, pow_one]
 
 中文:
 引理 dpow'_norm_le_of_ne_zero
@@ -142,7 +204,23 @@ lemma dpow'_norm_le_of_ne_zero
     simp [inverse_eq_inv', coe_zero, ne_eq, hn, not_false_eq_true, zero_pow, mul_zero,
       norm_zero, inv_nonneg, cast_nonneg]
   · have hlt : (padicValNat p n.factorial : Int) < n := by
-      exact_mod_cast padicValNat_factorial_lt_of_ne_zero p
+      exact_mod_cast padicValNat_factorial_lt_of_ne_zero p hn
+    have hnorm : 0 < ‖(n ! : Rat_[p])‖ := by
+      simp only [norm_pos_iff, ne_eq, cast_eq_zero]
+      exact factorial_ne_zero n
+    rw [← zpow_neg_one]; rw [← Nat.cast_one (R := Int)]; rw [Padic.norm_le_pow_iff_norm_lt_pow_add_one]
+    simp only [inverse_eq_inv', Padic.padicNormE.mul, norm_inv, _root_.norm_pow,
+      padic_norm_e_of_padicInt, cast_one, Int.reduceNeg, neg_add_cancel, zpow_zero]
+    rw [norm_eq_zpow_neg_valuation hx0]; rw [inv_mul_lt_one₀ hnorm]; rw [Padic.norm_eq_zpow_neg_valuation
+      (cast_ne_zero.mpr n.factorial_ne_zero)]; rw [← zpow_natCast]; rw [← zpow_mul]
+    gcongr
+    · exact_mod_cast Nat.Prime.one_lt hp.elim
+    · simp only [neg_mul, Padic.valuation_natCast, neg_lt_neg_iff]
+      apply lt_of_lt_of_le hlt
+      conv_lhs => rw [← one_mul (n : Int)]
+      gcongr
+      norm_cast
+      rwa [← PadicInt.mem_span_pow_iff_le_valuation x hx0, pow_one]
 -/
 private lemma dpow'_norm_le_of_ne_zero {n : Nat} (hn : n != 0) {x : Int_[p]}
     (hx : x in Ideal.span {(p : Int_[p])}) : ‖dpow' p n x‖ <= (p : Real)⁻¹ := by
@@ -258,7 +336,12 @@ definition dividedPowers
     PadicInt.Coe.ringHom ((Set.injective_codRestrict Subtype.property).mp fun ⦃a₁ a₂⦄ a => a)
     (RatAlgebra.dividedPowers (⊤ : Ideal Rat_[p])) ?_ ?_
   · rw [Ideal.map_span, Set.image_singleton, map_natCast]
-    simp only [Ideal.s
+    simp only [Ideal.span_singleton_eq_top, isUnit_iff_ne_zero, ne_eq, cast_eq_zero]
+    exact Nat.Prime.ne_zero hp.elim
+  · intro n x hx
+    exact ⟨⟨dpow' p n x, dpow'_int p n hx⟩, fun hn => dpow'_mem p hn hx, by
+      simp [dpow', inverse_eq_inv', Coe.ringHom_apply, RatAlgebra.dpow_apply,
+        Submodule.mem_top, ↓reduceIte]⟩
 
 中文:
 定义 dividedPowers
@@ -269,7 +352,12 @@ definition dividedPowers
     PadicInt.Coe.ringHom ((Set.injective_codRestrict Subtype.property).mp fun ⦃a₁ a₂⦄ a => a)
     (RatAlgebra.dividedPowers (⊤ : Ideal Rat_[p])) ?_ ?_
   · rw [Ideal.map_span, Set.image_singleton, map_natCast]
-    simp only [Ideal.s
+    simp only [Ideal.span_singleton_eq_top, isUnit_iff_ne_zero, ne_eq, cast_eq_zero]
+    exact Nat.Prime.ne_zero hp.elim
+  · intro n x hx
+    exact ⟨⟨dpow' p n x, dpow'_int p n hx⟩, fun hn => dpow'_mem p hn hx, by
+      simp [dpow', inverse_eq_inv', Coe.ringHom_apply, RatAlgebra.dpow_apply,
+        Submodule.mem_top, ↓reduceIte]⟩
 
 Depends on / 依赖: Coe.ri, Ideal.map_span, Ideal.span, Ideal.span_singleton_eq_top, Int_, Nat.Prime.ne_zero, PadicInt, PadicInt.Coe.ringHom, RatAlgebra, RatAlgebra.dividedPowers, Rat_, Set.image_singleton, Set.injective_codRestrict, Subtype, Subtype.property, _int, _mem, cast_eq_zero, classical, dividedPowers
 -/
@@ -301,7 +389,11 @@ lemma dividedPowers_eq
   · have hinj : Injective (PadicInt.Coe.ringHom (p := p)) :=
       (Set.injective_codRestrict Subtype.property).mp fun ⦃a₁ a₂⦄ a => a
     have heq : Coe.ringHom ⟨dpow' p n x, dpow'_int p n hx⟩ =
-        inverse (n ! : Rat_[p]) * Coe.rin
+        inverse (n ! : Rat_[p]) * Coe.ringHom x ^ n := by
+      simp [dpow', inverse_eq_inv', Coe.ringHom_apply]
+    simpa only [← hinj.eq_iff, (Exists.choose_spec (_ : exists a, exists _, Coe.ringHom a = _)).2,
+      RatAlgebra.dpow_apply, Submodule.mem_top] using! heq.symm
+  · rfl
 
 中文:
 引理 dividedPowers_eq
@@ -312,7 +404,11 @@ lemma dividedPowers_eq
   · have hinj : Injective (PadicInt.Coe.ringHom (p := p)) :=
       (Set.injective_codRestrict Subtype.property).mp fun ⦃a₁ a₂⦄ a => a
     have heq : Coe.ringHom ⟨dpow' p n x, dpow'_int p n hx⟩ =
-        inverse (n ! : Rat_[p]) * Coe.rin
+        inverse (n ! : Rat_[p]) * Coe.ringHom x ^ n := by
+      simp [dpow', inverse_eq_inv', Coe.ringHom_apply]
+    simpa only [← hinj.eq_iff, (Exists.choose_spec (_ : exists a, exists _, Coe.ringHom a = _)).2,
+      RatAlgebra.dpow_apply, Submodule.mem_top] using! heq.symm
+  · rfl
 -/
 private lemma dividedPowers_eq (n : Nat) (x : Int_[p]) :
     (dividedPowers p).dpow n x = open scoped Classical in

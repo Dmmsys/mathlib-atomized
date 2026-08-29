@@ -79,6 +79,40 @@ theorem MonovaryOn.sum_smul_comp_perm_le_sum_smul
   set τ : Perm ι := σ.trans (swap a (σ a)) with hτ
   have hτs : {x | τ x != x} subseteq s := by
     intro x hx
+    simp only [τ, Ne, Set.mem_ofPred_eq, Equiv.swap_comp_apply] at hx
+    split_ifs at hx with h₁ h₂
+    · obtain rfl | hax := eq_or_ne x a
+      · contradiction
+      · exact mem_of_mem_insert_of_ne (hσ fun h => hax <| h.symm.trans h₁) hax
+    · exact (hx <| σ.injective h₂.symm).elim
+    · exact mem_of_mem_insert_of_ne (hσ hx) (ne_of_apply_ne _ h₂)
+  specialize hind (hfg.subset <| subset_insert _ _) hτs
+  simp_rw [sum_insert has]
+  grw [← hind]
+  obtain hσa | hσa := eq_or_ne a (σ a)
+  · rw [hτ, ← hσa, swap_self, trans_refl]
+  have h1s : σ.symm a in s := by
+    rw [Ne]; rw [← inv_eq_iff_eq] at hσa
+    refine mem_of_mem_insert_of_ne (hσ fun h => hσa ?_) hσa
+    rwa [apply_symm_apply, eq_comm] at h
+  simp only [← s.sum_erase_add _ h1s, add_comm]
+  rw [← add_assoc]; rw [← add_assoc]
+  simp only [hτ, swap_apply_left, Function.comp_apply, Equiv.coe_trans, apply_symm_apply]
+  refine add_le_add (smul_add_smul_le_smul_add_smul' ?_ ?_) (sum_congr rfl fun x hx => ?_).le
+  · specialize hamax (σ.symm a) h1s
+    rw [Prod.Lex.toLex_le_toLex] at hamax
+    rcases hamax with hamax | hamax
+    · exact hfg (mem_insert_of_mem h1s) (mem_insert_self _ _) hamax
+    · exact hamax.2
+  · specialize hamax (σ a) (mem_of_mem_insert_of_ne (hσ <| σ.injective.ne hσa.symm) hσa.symm)
+    rw [Prod.Lex.toLex_le_toLex] at hamax
+    rcases hamax with hamax | hamax
+    · exact hamax.le
+    · exact hamax.1.le
+  · rw [mem_erase, Ne, eq_symm_apply] at hx
+    rw [swap_apply_of_ne_of_ne hx.1 (σ.injective.ne _)]
+    rintro rfl
+    exact has hx.2
 
 中文:
 定理 MonovaryOn.sum_smul_comp_perm_le_sum_smul
@@ -91,6 +125,40 @@ theorem MonovaryOn.sum_smul_comp_perm_le_sum_smul
   set τ : Perm ι := σ.trans (swap a (σ a)) with hτ
   have hτs : {x | τ x != x} subseteq s := by
     intro x hx
+    simp only [τ, Ne, Set.mem_ofPred_eq, Equiv.swap_comp_apply] at hx
+    split_ifs at hx with h₁ h₂
+    · obtain rfl | hax := eq_or_ne x a
+      · contradiction
+      · exact mem_of_mem_insert_of_ne (hσ fun h => hax <| h.symm.trans h₁) hax
+    · exact (hx <| σ.injective h₂.symm).elim
+    · exact mem_of_mem_insert_of_ne (hσ hx) (ne_of_apply_ne _ h₂)
+  specialize hind (hfg.subset <| subset_insert _ _) hτs
+  simp_rw [sum_insert has]
+  grw [← hind]
+  obtain hσa | hσa := eq_or_ne a (σ a)
+  · rw [hτ, ← hσa, swap_self, trans_refl]
+  have h1s : σ.symm a in s := by
+    rw [Ne]; rw [← inv_eq_iff_eq] at hσa
+    refine mem_of_mem_insert_of_ne (hσ fun h => hσa ?_) hσa
+    rwa [apply_symm_apply, eq_comm] at h
+  simp only [← s.sum_erase_add _ h1s, add_comm]
+  rw [← add_assoc]; rw [← add_assoc]
+  simp only [hτ, swap_apply_left, Function.comp_apply, Equiv.coe_trans, apply_symm_apply]
+  refine add_le_add (smul_add_smul_le_smul_add_smul' ?_ ?_) (sum_congr rfl fun x hx => ?_).le
+  · specialize hamax (σ.symm a) h1s
+    rw [Prod.Lex.toLex_le_toLex] at hamax
+    rcases hamax with hamax | hamax
+    · exact hfg (mem_insert_of_mem h1s) (mem_insert_self _ _) hamax
+    · exact hamax.2
+  · specialize hamax (σ a) (mem_of_mem_insert_of_ne (hσ <| σ.injective.ne hσa.symm) hσa.symm)
+    rw [Prod.Lex.toLex_le_toLex] at hamax
+    rcases hamax with hamax | hamax
+    · exact hamax.le
+    · exact hamax.1.le
+  · rw [mem_erase, Ne, eq_symm_apply] at hx
+    rw [swap_apply_of_ne_of_ne hx.1 (σ.injective.ne _)]
+    rintro rfl
+    exact has hx.2
 
 Depends on / 依赖: Equiv.swap_comp_apply, Finset, Finset.sum_empty, Set.mem_ofPred_eq, classical, eq_or_ne, generalizing, h.symm.trans, induction_on_max_value, insert, le_rfl, mem_ofPred_eq, mem_of_mem_insert_of_ne, split_ifs, subseteq, sum_empty, swap_comp_apply
 -/
@@ -304,7 +372,20 @@ refine ⟨not_imp_not.1 fun h => ?_, fun h => (hfg.sum_smul_comp_perm_le_sum_smu
   rw [MonovaryOn] at h
   push Not at h
   obtain ⟨x, hx, y, hy, hgxy, hfxy⟩ := h
-  set τ : Perm ι 
+  set τ : Perm ι := (Equiv.swap x y).trans σ
+  have hτs : {x | τ x != x} subseteq s := by
+    refine (set_support_mul_subset σ <| swap x y).trans (Set.union_subset hσ fun z hz => ?_)
+    obtain ⟨_, rfl | rfl⟩ := swap_apply_ne_self_iff.1 hz <;> assumption
+  refine ((hfg.sum_smul_comp_perm_le_sum_smul hτs).trans_lt' ?_).ne
+  obtain rfl | hxy := eq_or_ne x y
+  · cases lt_irrefl _ hfxy
+  simp only [τ, ← s.sum_erase_add _ hx,
+    ← (s.erase x).sum_erase_add _ (mem_erase.2 ⟨hxy.symm, hy⟩),
+    add_assoc, Equiv.coe_trans, Function.comp_apply, swap_apply_right, swap_apply_left]
+  refine add_lt_add_of_le_of_lt (Finset.sum_congr rfl fun z hz => ?_).le
+    (smul_add_smul_lt_smul_add_smul hfxy hgxy)
+  simp_rw [mem_erase] at hz
+  rw [swap_apply_of_ne_of_ne hz.2.1 hz.1]
 
 中文:
 定理 MonovaryOn.sum_smul_comp_perm_eq_sum_smul_iff
@@ -316,7 +397,20 @@ refine ⟨not_imp_not.1 fun h => ?_, fun h => (hfg.sum_smul_comp_perm_le_sum_smu
   rw [MonovaryOn] at h
   push Not at h
   obtain ⟨x, hx, y, hy, hgxy, hfxy⟩ := h
-  set τ : Perm ι 
+  set τ : Perm ι := (Equiv.swap x y).trans σ
+  have hτs : {x | τ x != x} subseteq s := by
+    refine (set_support_mul_subset σ <| swap x y).trans (Set.union_subset hσ fun z hz => ?_)
+    obtain ⟨_, rfl | rfl⟩ := swap_apply_ne_self_iff.1 hz <;> assumption
+  refine ((hfg.sum_smul_comp_perm_le_sum_smul hτs).trans_lt' ?_).ne
+  obtain rfl | hxy := eq_or_ne x y
+  · cases lt_irrefl _ hfxy
+  simp only [τ, ← s.sum_erase_add _ hx,
+    ← (s.erase x).sum_erase_add _ (mem_erase.2 ⟨hxy.symm, hy⟩),
+    add_assoc, Equiv.coe_trans, Function.comp_apply, swap_apply_right, swap_apply_left]
+  refine add_lt_add_of_le_of_lt (Finset.sum_congr rfl fun z hz => ?_).le
+    (smul_add_smul_lt_smul_add_smul hfxy hgxy)
+  simp_rw [mem_erase] at hz
+  rw [swap_apply_of_ne_of_ne hz.2.1 hz.1]
 
 Depends on / 依赖: Equiv.swap, MonovaryOn, Set.union_subset, antisymm, classical, h.sum_smul_comp_perm_le_sum_smul, hfg.sum_smul_comp_perm_le_sum_smul, not_imp_not, set_support_mul_subset, set_support_symm_eq, subset, subset.trans, subseteq, sum_smul_comp_perm_le_sum_smul, swap_apply_ne_self_iff, union_subset
 -/
@@ -377,7 +471,13 @@ theorem MonovaryOn.sum_comp_perm_smul_eq_sum_smul_iff
   · apply eq_iff_eq_cancel_right.2
     rw [σ.sum_comp' s (fun i j => f i • g j) hσ]
     congr
-  · co
+  · convert! h.comp_right σ
+    · rw [comp_assoc, inv_def, symm_comp_self, comp_id]
+    · rw [σ.eq_preimage_iff_image_eq, Set.image_perm hσ]
+  · convert! h.comp_right σ.symm
+    · rw [comp_assoc, self_comp_symm, comp_id]
+    · rw [σ.symm.eq_preimage_iff_image_eq]
+      exact Set.image_perm hσinv
 
 中文:
 定理 MonovaryOn.sum_comp_perm_smul_eq_sum_smul_iff
@@ -389,7 +489,13 @@ theorem MonovaryOn.sum_comp_perm_smul_eq_sum_smul_iff
   · apply eq_iff_eq_cancel_right.2
     rw [σ.sum_comp' s (fun i j => f i • g j) hσ]
     congr
-  · co
+  · convert! h.comp_right σ
+    · rw [comp_assoc, inv_def, symm_comp_self, comp_id]
+    · rw [σ.eq_preimage_iff_image_eq, Set.image_perm hσ]
+  · convert! h.comp_right σ.symm
+    · rw [comp_assoc, self_comp_symm, comp_id]
+    · rw [σ.symm.eq_preimage_iff_image_eq]
+      exact Set.image_perm hσinv
 
 Depends on / 依赖: Iff.trans, Set.image_perm, comp_assoc, comp_id, comp_right, convert, eq_iff_eq_cancel_right, eq_pre, eq_preimage_iff_image_eq, h.comp_right, hfg.sum_smul_comp_perm_eq_sum_smul_iff, image_perm, inv_def, self_comp_symm, set_support_symm_eq, subset, subset.trans, subseteq, sum_comp, sum_smul_comp_perm_eq_sum_smul_iff
 -/

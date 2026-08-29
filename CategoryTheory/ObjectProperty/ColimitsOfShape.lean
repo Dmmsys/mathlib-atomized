@@ -847,7 +847,8 @@ lemma colimitsOfShape_eq_unop_limitsOfShape
   · exact
       { diag := h.diag.unop
         ι := NatTrans.unop h.π
-        isColimit :
+        isColimit := isColimitOfOp h.isLimit
+        prop_diag_obj _ := h.prop_diag_obj _ }
 
 中文:
 引理 colimitsOfShape_eq_unop_limitsOfShape
@@ -862,7 +863,8 @@ lemma colimitsOfShape_eq_unop_limitsOfShape
   · exact
       { diag := h.diag.unop
         ι := NatTrans.unop h.π
-        isColimit :
+        isColimit := isColimitOfOp h.isLimit
+        prop_diag_obj _ := h.prop_diag_obj _ }
 
 Depends on / 依赖: NatTrans, NatTrans.op, NatTrans.unop, h.diag.op, h.diag.unop, h.isColimit, h.isLimit, h.prop_diag_obj, isColimit, isColimitOfOp, isLimit, isLimitOfUnop, prop_diag_obj
 -/
@@ -897,7 +899,8 @@ lemma limitsOfShape_eq_unop_colimitsOfShape
   · exact
       { diag := h.diag.unop
         π := NatTrans.unop h.ι
-        isLimit :
+        isLimit := isLimitOfOp h.isColimit
+        prop_diag_obj _ := h.prop_diag_obj _ }
 
 中文:
 引理 limitsOfShape_eq_unop_colimitsOfShape
@@ -912,7 +915,8 @@ lemma limitsOfShape_eq_unop_colimitsOfShape
   · exact
       { diag := h.diag.unop
         π := NatTrans.unop h.ι
-        isLimit :
+        isLimit := isLimitOfOp h.isColimit
+        prop_diag_obj _ := h.prop_diag_obj _ }
 
 Depends on / 依赖: NatTrans, NatTrans.op, NatTrans.unop, h.diag.op, h.diag.unop, h.isColimit, h.isLimit, h.prop_diag_obj, isColimit, isColimitOfUnop, isLimit, isLimitOfOp, prop_diag_obj
 -/
@@ -1307,7 +1311,7 @@ instance [P.IsClosedUnderColimitsOfShape
       Cofork.IsColimit.mk _ (fun s => h.i ≫ s.π)
         (fun s => by simpa using! s.condition)
         (fun s m hm => by dsimp [c] at hm; simp [← hm])
-    exact P.prop_of_isColimit hc (by rintro (_ | _)
+    exact P.prop_of_isColimit hc (by rintro (_ | _) <;> exact hY)
 
 中文:
 实例 [P.是ClosedUnderColimitsOfShape
@@ -1318,7 +1322,7 @@ instance [P.IsClosedUnderColimitsOfShape
       Cofork.IsColimit.mk _ (fun s => h.i ≫ s.π)
         (fun s => by simpa using! s.condition)
         (fun s m hm => by dsimp [c] at hm; simp [← hm])
-    exact P.prop_of_isColimit hc (by rintro (_ | _)
+    exact P.prop_of_isColimit hc (by rintro (_ | _) <;> exact hY)
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.mk, Cofork.of, IsColimit, P.prop_of_isColimit, condition, prop_of_isColimit, s.condition
 -/

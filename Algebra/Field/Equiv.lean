@@ -30,7 +30,7 @@ mul_comm x y := inj by rw [map_mul, map_mul, hB.mul_comm]
   mul_inv_cancel h :=
     have ⟨a', he⟩ := hB.mul_inv_cancel ((inj.ne h).trans_eq <| map_zero f)
     let _ := hB.toSemifield
-    (IsUnit.of_mul_eq_one _ he).of_ma
+    (IsUnit.of_mul_eq_one _ he).of_map.exists_right_inv
 
 中文:
 定理 是Local态射.isField
@@ -40,7 +40,7 @@ mul_comm x y := inj by rw [map_mul, map_mul, hB.mul_comm]
   mul_inv_cancel h :=
     have ⟨a', he⟩ := hB.mul_inv_cancel ((inj.ne h).trans_eq <| map_zero f)
     let _ := hB.toSemifield
-    (IsUnit.of_mul_eq_one _ he).of_ma
+    (IsUnit.of_mul_eq_one _ he).of_map.exists_right_inv
 -/
 protected theorem IsLocalHom.isField [FunLike F A B] [MonoidWithZeroHomClass F A B] {f : F}
     [IsLocalHom f] (inj : Function.Injective f) (hB : IsField B) : IsField A where

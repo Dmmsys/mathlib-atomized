@@ -74,7 +74,8 @@ instance baseChange
   let g : B otimes[R] MvPolynomial (Fin n) R ->ₐ[B] B otimes[R] A :=
     Algebra.TensorProduct.map (AlgHom.id B B) f
   have : Function.Surjective g := baseChangeAux_surj B hf
-  use n, AlgHom.comp g (MvPolynomial.algebraTensorAlgEq
+  use n, AlgHom.comp g (MvPolynomial.algebraTensorAlgEquiv R B).symm.toAlgHom
+  simpa
 
 中文:
 实例 baseChange
@@ -85,7 +86,8 @@ instance baseChange
   let g : B otimes[R] MvPolynomial (Fin n) R ->ₐ[B] B otimes[R] A :=
     Algebra.TensorProduct.map (AlgHom.id B B) f
   have : Function.Surjective g := baseChangeAux_surj B hf
-  use n, AlgHom.comp g (MvPolynomial.algebraTensorAlgEq
+  use n, AlgHom.comp g (MvPolynomial.algebraTensorAlgEquiv R B).symm.toAlgHom
+  simpa
 
 Depends on / 依赖: AlgHom, AlgHom.comp, AlgHom.id, Algebra, Algebra.TensorProduct.map, Function, Function.Surjective, MvPolynomial, MvPolynomial.algebraTensorAlgEquiv, Surjective, TensorProduct, algebraTensorAlgEquiv, baseChangeAux_surj, iff_quotient_mvPolynomial, otimes, symm.toAlgHom, toAlgHom
 -/
@@ -113,7 +115,19 @@ instance baseChange
   let g : B otimes[R] MvPolynomial (Fin n) R ->ₐ[B] B otimes[R] A :=
     Algebra.TensorProduct.map (AlgHom.id B B) f
   have hgsurj : Function.Surjective g := Algebra.FiniteType.baseChangeAux_surj B hsurj
-  have hker_eq : RingHom.ker g = Idea
+  have hker_eq : RingHom.ker g = Ideal.map Algebra.TensorProduct.includeRight (RingHom.ker f) :=
+    Algebra.TensorProduct.lTensor_ker f hsurj
+  have hfgg : Ideal.FG (RingHom.ker g) := by
+    rw [hker_eq]
+    exact Ideal.FG.map hfg _
+  let g' : MvPolynomial (Fin n) B ->ₐ[B] B otimes[R] A :=
+    AlgHom.comp g (MvPolynomial.algebraTensorAlgEquiv R B).symm.toAlgHom
+  refine ⟨n, g', ?_, Ideal.fg_ker_comp _ _ ?_ hfgg ?_⟩
+  · simp_all [g, g']
+  · change Ideal.FG (RingHom.ker (AlgEquiv.symm (MvPolynomial.algebraTensorAlgEquiv R B)))
+    simp only [RingHom.ker_equiv]
+    exact Submodule.fg_bot
+  · simpa using EquivLike.surjective _
 
 中文:
 实例 baseChange
@@ -123,7 +137,19 @@ instance baseChange
   let g : B otimes[R] MvPolynomial (Fin n) R ->ₐ[B] B otimes[R] A :=
     Algebra.TensorProduct.map (AlgHom.id B B) f
   have hgsurj : Function.Surjective g := Algebra.FiniteType.baseChangeAux_surj B hsurj
-  have hker_eq : RingHom.ker g = Idea
+  have hker_eq : RingHom.ker g = Ideal.map Algebra.TensorProduct.includeRight (RingHom.ker f) :=
+    Algebra.TensorProduct.lTensor_ker f hsurj
+  have hfgg : Ideal.FG (RingHom.ker g) := by
+    rw [hker_eq]
+    exact Ideal.FG.map hfg _
+  let g' : MvPolynomial (Fin n) B ->ₐ[B] B otimes[R] A :=
+    AlgHom.comp g (MvPolynomial.algebraTensorAlgEquiv R B).symm.toAlgHom
+  refine ⟨n, g', ?_, Ideal.fg_ker_comp _ _ ?_ hfgg ?_⟩
+  · simp_all [g, g']
+  · change Ideal.FG (RingHom.ker (AlgEquiv.symm (MvPolynomial.algebraTensorAlgEquiv R B)))
+    simp only [RingHom.ker_equiv]
+    exact Submodule.fg_bot
+  · simpa using EquivLike.surjective _
 
 Depends on / 依赖: AlgHom, AlgHom.id, Algebra, Algebra.FiniteType.baseChangeAux_surj, Algebra.TensorProduct.includeRight, Algebra.TensorProduct.lTensor_ker, Algebra.TensorProduct.map, FinitePresentation, FiniteType, Function, Function.Surjective, Ideal.FG, Ideal.FG.map, Ideal.map, MvPolynomial, RingHom, RingHom.ker, Surjective, TensorProduct, baseChangeAux_surj
 -/

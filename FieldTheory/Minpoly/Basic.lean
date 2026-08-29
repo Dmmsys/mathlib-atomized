@@ -387,7 +387,8 @@ theorem mem_range_of_degree_eq_one
     rw [eq_zero h]; rw [degree_zero]; rw [← WithBot.coe_one] at hx
     exact ne_of_lt (show ⊥ < ↑1 from WithBot.bot_lt_coe 1) hx
   have key := minpoly.aeval A x
-  rw [eq_X_add_C_of_degree_eq_one hx]; rw [(minpoly.monic h).leadingCoeff]; rw [C_1]; rw
+  rw [eq_X_add_C_of_degree_eq_one hx]; rw [(minpoly.monic h).leadingCoeff]; rw [C_1]; rw [one_mul]; rw [aeval_add]; rw [aeval_C]; rw [aeval_X]; rw [← eq_neg_iff_add_eq_zero]; rw [← map_neg] at key
+  exact ⟨-(minpoly A x).coeff 0, key.symm⟩
 
 中文:
 定理 mem_range_of_degree_eq_one
@@ -398,7 +399,8 @@ theorem mem_range_of_degree_eq_one
     rw [eq_zero h]; rw [degree_zero]; rw [← WithBot.coe_one] at hx
     exact ne_of_lt (show ⊥ < ↑1 from WithBot.bot_lt_coe 1) hx
   have key := minpoly.aeval A x
-  rw [eq_X_add_C_of_degree_eq_one hx]; rw [(minpoly.monic h).leadingCoeff]; rw [C_1]; rw
+  rw [eq_X_add_C_of_degree_eq_one hx]; rw [(minpoly.monic h).leadingCoeff]; rw [C_1]; rw [one_mul]; rw [aeval_add]; rw [aeval_C]; rw [aeval_X]; rw [← eq_neg_iff_add_eq_zero]; rw [← map_neg] at key
+  exact ⟨-(minpoly A x).coeff 0, key.symm⟩
 
 Depends on / 依赖: IsIntegral, WithBot, WithBot.bot_lt_coe, WithBot.coe_one, aeval_C, aeval_X, aeval_add, bot_lt_coe, coe_one, degree_zero, eq_X_add_C_of_degree_eq_one, eq_neg_iff_add_eq_zero, eq_zero, key.symm, leadingCoeff, map_neg, minpoly, minpoly.aeval, minpoly.monic, ne_of_lt
 -/
@@ -456,7 +458,18 @@ theorem unique'
   · exact (h <| (aeval_modByMonic_eq_self_of_root hp).trans <| aeval A x).elim
   obtain ⟨r, hr⟩ := (modByMonic_eq_zero_iff_dvd hm).1 h
   rw [hr]
-  have hlead := congr_
+  have hlead := congr_arg leadingCoeff hr
+  rw [mul_comm]; rw [leadingCoeff_mul_monic hm]; rw [(monic hx).leadingCoeff] at hlead
+  have : natDegree r <= 0 := by
+    have hr0 : r != 0 := by
+      rintro rfl
+      exact ne_zero hx (mul_zero p ▸ hr)
+    apply_fun natDegree at hr
+    rw [hm.natDegree_mul' hr0] at hr
+    apply Nat.le_of_add_le_add_left
+    rw [add_zero]
+    exact hr.symm.trans_le (natDegree_le_natDegree <| min A x hm hp)
+  rw [eq_C_of_natDegree_le_zero this]; rw [← Nat.eq_zero_of_le_zero this]; rw [← leadingCoeff]; rw [← hlead]; rw [C_1]; rw [mul_one]
 
 中文:
 定理 unique'
@@ -469,7 +482,18 @@ theorem unique'
   · exact (h <| (aeval_modByMonic_eq_self_of_root hp).trans <| aeval A x).elim
   obtain ⟨r, hr⟩ := (modByMonic_eq_zero_iff_dvd hm).1 h
   rw [hr]
-  have hlead := congr_
+  have hlead := congr_arg leadingCoeff hr
+  rw [mul_comm]; rw [leadingCoeff_mul_monic hm]; rw [(monic hx).leadingCoeff] at hlead
+  have : natDegree r <= 0 := by
+    have hr0 : r != 0 := by
+      rintro rfl
+      exact ne_zero hx (mul_zero p ▸ hr)
+    apply_fun natDegree at hr
+    rw [hm.natDegree_mul' hr0] at hr
+    apply Nat.le_of_add_le_add_left
+    rw [add_zero]
+    exact hr.symm.trans_le (natDegree_le_natDegree <| min A x hm hp)
+  rw [eq_C_of_natDegree_le_zero this]; rw [← Nat.eq_zero_of_le_zero this]; rw [← leadingCoeff]; rw [← hlead]; rw [C_1]; rw [mul_one]
 
 Depends on / 依赖: IsIntegral, aeval_modByMonic_eq_self_of_root, apply_fun, congr_arg, degree_modByMonic_lt, leadingCoeff, leadingCoeff_mul_monic, minpoly, modByMonic_eq_zero_iff_dvd, mul_comm, mul_zero, natDegree, ne_zero, nontriviality
 -/
@@ -507,7 +531,10 @@ theorem eq_of_linearIndependent
     rw [q.as_sum_range' _ ((natDegree_lt_iff_degree_lt ne).mpr (hpn ▸ lt))] at hq
     obtain lt | le := lt_or_ge i n
     · simpa using Fintype.linearIndependent_iff.mp ind (q.coeff ·)
-        (by simpa [F
+        (by simpa [Finset.sum_range, Algebra.smul_def] using hq) ⟨i, lt⟩
+    · exact coeff_eq_zero_of_degree_lt ((hpn ▸ lt).trans_le <| WithBot.coe_le_coe.mpr le)
+
+@[nontriviality]
 
 中文:
 定理 eq_of_linearIndependent
@@ -516,7 +543,10 @@ theorem eq_of_linearIndependent
     rw [q.as_sum_range' _ ((natDegree_lt_iff_degree_lt ne).mpr (hpn ▸ lt))] at hq
     obtain lt | le := lt_or_ge i n
     · simpa using Fintype.linearIndependent_iff.mp ind (q.coeff ·)
-        (by simpa [F
+        (by simpa [Finset.sum_range, Algebra.smul_def] using hq) ⟨i, lt⟩
+    · exact coeff_eq_zero_of_degree_lt ((hpn ▸ lt).trans_le <| WithBot.coe_le_coe.mpr le)
+
+@[nontriviality]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Finset, Finset.sum_range, Fintype, Fintype.linearIndependent_iff.mp, WithBot, WithBot.coe_le_coe.mpr, as_sum_range, coe_le_coe, coeff_eq_zero_of_degree_lt, linearIndependent_iff, lt_or_ge, natDegree_lt_iff_degree_lt, or_iff_not_imp_left, or_iff_not_imp_left.mpr, q.as_sum_range, q.coeff, smul_def, sum_range
 -/
@@ -545,7 +575,7 @@ theorem subsingleton
   rcases le_or_gt (minpoly A x).degree 0 with h | h
   · rwa [(monic ⟨1, monic_one, by simp [eq_iff_true_of_subsingleton]⟩ :
            (minpoly A x).Monic).degree_le_zero_iff_eq_one] at h
-  · e
+  · exact (this.not_gt h).elim
 
 中文:
 定理 subsingleton
@@ -558,7 +588,7 @@ theorem subsingleton
   rcases le_or_gt (minpoly A x).degree 0 with h | h
   · rwa [(monic ⟨1, monic_one, by simp [eq_iff_true_of_subsingleton]⟩ :
            (minpoly A x).Monic).degree_le_zero_iff_eq_one] at h
-  · e
+  · exact (this.not_gt h).elim
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, degree, degree_le_zero_iff_eq_one, degree_one, eq_iff_true_of_subsingleton, le_or_gt, minpoly, minpoly.min, monic_one, nontriviality, not_gt, this.not_gt
 -/
@@ -780,7 +810,7 @@ theorem eq_X_sub_C_of_algebraMap_inj
   intro q hl h0
   rw [← natDegree_lt_natDegree_iff h0]; rw [natDegree_X_sub_C]; rw [Nat.lt_one_iff] at hl
   rw [eq_C_of_natDegree_eq_zero hl] at h0 ⊢
-
+  rwa [aeval_C, map_ne_zero_iff _ hf, ← C_ne_zero]
 
 中文:
 定理 eq_X_sub_C_of_algebraMap_inj
@@ -793,7 +823,7 @@ theorem eq_X_sub_C_of_algebraMap_inj
   intro q hl h0
   rw [← natDegree_lt_natDegree_iff h0]; rw [natDegree_X_sub_C]; rw [Nat.lt_one_iff] at hl
   rw [eq_C_of_natDegree_eq_zero hl] at h0 ⊢
-
+  rwa [aeval_C, map_ne_zero_iff _ hf, ← C_ne_zero]
 
 Depends on / 依赖: C_ne_zero, Nat.lt_one_iff, aeval_C, aeval_X, eq_C_of_natDegree_eq_zero, lt_one_iff, map_ne_zero_iff, map_sub, monic_X_sub_C, natDegree_X_sub_C, natDegree_lt_natDegree_iff, nontriviality, or_iff_not_imp_left, simp_rw, sub_self, unique
 -/
@@ -821,7 +851,9 @@ theorem aeval_ne_zero_of_dvdNotUnit_minpoly
   rw [he]; rw [hamonic.natDegree_mul hcm]
   -- TODO: port Nat.lt_add_of_zero_lt_left from lean3 core
   apply lt_add_of_pos_right
-  re
+  refine (lt_of_not_ge fun h => hu ?_)
+  rw [eq_C_of_natDegree_le_zero h]; rw [← Nat.eq_zero_of_le_zero h]; rw [← leadingCoeff]; rw [hcm.leadingCoeff]; rw [C_1]
+  exact isUnit_one
 
 中文:
 定理 aeval_ne_zero_of_dvdNotUnit_minpoly
@@ -833,7 +865,9 @@ theorem aeval_ne_zero_of_dvdNotUnit_minpoly
   rw [he]; rw [hamonic.natDegree_mul hcm]
   -- TODO: port Nat.lt_add_of_zero_lt_left from lean3 core
   apply lt_add_of_pos_right
-  re
+  refine (lt_of_not_ge fun h => hu ?_)
+  rw [eq_C_of_natDegree_le_zero h]; rw [← Nat.eq_zero_of_le_zero h]; rw [← leadingCoeff]; rw [hcm.leadingCoeff]; rw [C_1]
+  exact isUnit_one
 
 Depends on / 依赖: degree_lt_degree, hamonic, hamonic.natDegree_mul, hamonic.of_mul_monic_left, he.subst, natDegree_mul, not_gt, of_mul_monic_left
 -/
@@ -867,7 +901,9 @@ theorem irreducible
   have heval := congr_arg (Polynomial.aeval x) he
   rw [aeval A x]; rw [aeval_mul]; rw [mul_eq_zero] at heval
   rcases heval with heval | heval
-  · exact a
+  · exact aeval_ne_zero_of_dvdNotUnit_minpoly hx hf ⟨hf.ne_zero, g, h.2, he.symm⟩ heval
+  · refine aeval_ne_zero_of_dvdNotUnit_minpoly hx hg ⟨hg.ne_zero, f, h.1, ?_⟩ heval
+    rw [mul_comm]; rw [he]
 
 中文:
 定理 irreducible
@@ -880,7 +916,9 @@ theorem irreducible
   have heval := congr_arg (Polynomial.aeval x) he
   rw [aeval A x]; rw [aeval_mul]; rw [mul_eq_zero] at heval
   rcases heval with heval | heval
-  · exact a
+  · exact aeval_ne_zero_of_dvdNotUnit_minpoly hx hf ⟨hf.ne_zero, g, h.2, he.symm⟩ heval
+  · refine aeval_ne_zero_of_dvdNotUnit_minpoly hx hg ⟨hg.ne_zero, f, h.1, ?_⟩ heval
+    rw [mul_comm]; rw [he]
 
 Depends on / 依赖: Polynomial, Polynomial.aeval, aeval_mul, aeval_ne_zero_of_dvdNotUnit_minpoly, congr_arg, he.symm, hf.isUnit_iff, hf.ne_zero, hg.isUnit_iff, hg.ne_zero, irreducible_of_monic, isUnit_iff, mul_comm, mul_eq_zero, ne_one, ne_zero
 -/

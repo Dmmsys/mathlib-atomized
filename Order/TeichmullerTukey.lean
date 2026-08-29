@@ -64,7 +64,11 @@ theorem IsOfFiniteCharacter.exists_maximal
   refine zorn_subset_nonempty F (fun c cF cch cne =>
     ⟨sUnion c, ?_, fun s sc => subset_sUnion_of_mem sc⟩) x xF
   /- Prove that the union belongs to `F`. -/
-  refine (hF (sUnion c)).mpr fun s sc sfin => ?
+  refine (hF (sUnion c)).mpr fun s sc sfin => ?_
+  /- Use the finite character property and the fact that any finite subset of the union is also a
+  subset of some element of the chain. -/
+  obtain ⟨t, tc, st⟩ := cch.directedOn.exists_mem_subset_of_finite_of_subset_sUnion cne sfin sc
+  exact (hF t).mp (cF tc) s st sfin
 
 中文:
 定理 IsOfFiniteCharacter.存在_maximal
@@ -74,7 +78,11 @@ theorem IsOfFiniteCharacter.exists_maximal
   refine zorn_subset_nonempty F (fun c cF cch cne =>
     ⟨sUnion c, ?_, fun s sc => subset_sUnion_of_mem sc⟩) x xF
   /- Prove that the union belongs to `F`. -/
-  refine (hF (sUnion c)).mpr fun s sc sfin => ?
+  refine (hF (sUnion c)).mpr fun s sc sfin => ?_
+  /- Use the finite character property and the fact that any finite subset of the union is also a
+  subset of some element of the chain. -/
+  obtain ⟨t, tc, st⟩ := cch.directedOn.exists_mem_subset_of_finite_of_subset_sUnion cne sfin sc
+  exact (hF t).mp (cF tc) s st sfin
 -/
 theorem IsOfFiniteCharacter.exists_maximal {F} (hF : IsOfFiniteCharacter F) {x : Set α}
     (xF : x in F) : exists m, x subseteq m ∧ Maximal (· in F) m := by

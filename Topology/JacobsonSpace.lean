@@ -234,7 +234,17 @@ lemma jacobsonSpace_iff_locallyClosed
     have : Z subseteq closure Z \ Z := by
       refine subset_closure.trans ?_
       nth_rw 1 [← H isClosed_closure]
-      r
+      rw [hZ'.closure_subset_iff]; rw [Set.subset_sdiff]; rw [Set.disjoint_iff]; rw [Set.inter_assoc]; rw [Set.inter_comm _ Z]; rw [e]
+      exact ⟨Set.inter_subset_left, Set.inter_subset_right⟩
+    rw [Set.subset_sdiff]; rw [disjoint_self]; rw [Set.bot_eq_empty] at this
+    exact hZ this.2
+  · intro H Z hZ
+    refine subset_antisymm (hZ.closure_subset_iff.mpr Set.inter_subset_left) ?_
+    rw [← Set.disjoint_compl_left_iff_subset]; rw [Set.disjoint_iff_inter_eq_empty]; rw [← Set.not_nonempty_iff_eq_empty]
+    intro H'
+    have := H _ H' (isClosed_closure.isOpen_compl.isLocallyClosed.inter hZ.isLocallyClosed)
+    rw [Set.nonempty_iff_ne_empty]; rw [Set.inter_assoc]; rw [ne_eq]; rw [← Set.disjoint_iff_inter_eq_empty]; rw [Set.disjoint_compl_left_iff_subset] at this
+    exact this subset_closure
 
 中文:
 引理 jacobsonSpace_iff_locallyClosed
@@ -247,7 +257,17 @@ lemma jacobsonSpace_iff_locallyClosed
     have : Z subseteq closure Z \ Z := by
       refine subset_closure.trans ?_
       nth_rw 1 [← H isClosed_closure]
-      r
+      rw [hZ'.closure_subset_iff]; rw [Set.subset_sdiff]; rw [Set.disjoint_iff]; rw [Set.inter_assoc]; rw [Set.inter_comm _ Z]; rw [e]
+      exact ⟨Set.inter_subset_left, Set.inter_subset_right⟩
+    rw [Set.subset_sdiff]; rw [disjoint_self]; rw [Set.bot_eq_empty] at this
+    exact hZ this.2
+  · intro H Z hZ
+    refine subset_antisymm (hZ.closure_subset_iff.mpr Set.inter_subset_left) ?_
+    rw [← Set.disjoint_compl_left_iff_subset]; rw [Set.disjoint_iff_inter_eq_empty]; rw [← Set.not_nonempty_iff_eq_empty]
+    intro H'
+    have := H _ H' (isClosed_closure.isOpen_compl.isLocallyClosed.inter hZ.isLocallyClosed)
+    rw [Set.nonempty_iff_ne_empty]; rw [Set.inter_assoc]; rw [ne_eq]; rw [← Set.disjoint_iff_inter_eq_empty]; rw [Set.disjoint_compl_left_iff_subset] at this
+    exact this subset_closure
 
 Depends on / 依赖: Set.bot_e, Set.disjoint_iff, Set.inter_assoc, Set.inter_comm, Set.inter_subset_left, Set.inter_subset_right, Set.nonempty_iff_ne_empty, Set.subset_sdiff, bot_e, closure, closure_subset_iff, coborder, disjoint_iff, disjoint_self, inter_assoc, inter_comm, inter_subset_left, inter_subset_right, isClosed_closure, isLocallyClosed_iff_isOpen_coborder
 -/
@@ -304,7 +324,8 @@ theorem JacobsonSpace.closure_inter_closedPoints_eq_closure
   intro x hx
   by_contra H
   obtain ⟨y, ⟨hy₁, hy₂⟩, hy₃⟩ := nonempty_inter_closedPoints (Z := S \ closure (S inter closedPoints X))
-    ⟨x, hx, H⟩ (.inter hS isClosed_closure.isOpen_com
+    ⟨x, hx, H⟩ (.inter hS isClosed_closure.isOpen_compl.isLocallyClosed)
+  exact hy₂ (subset_closure ⟨hy₁, hy₃⟩)
 
 中文:
 定理 Jacobson空间.closure_inter_closedPoints_eq_closure
@@ -315,7 +336,8 @@ theorem JacobsonSpace.closure_inter_closedPoints_eq_closure
   intro x hx
   by_contra H
   obtain ⟨y, ⟨hy₁, hy₂⟩, hy₃⟩ := nonempty_inter_closedPoints (Z := S \ closure (S inter closedPoints X))
-    ⟨x, hx, H⟩ (.inter hS isClosed_closure.isOpen_com
+    ⟨x, hx, H⟩ (.inter hS isClosed_closure.isOpen_compl.isLocallyClosed)
+  exact hy₂ (subset_closure ⟨hy₁, hy₃⟩)
 
 Depends on / 依赖: IsClosed, IsClosed.closure_subset_iff, Set.inter_subset_left, antisymm, closedPoints, closure, closure_mono, closure_subset_iff, inter_subset_left, isClosed_closure, isClosed_closure.isOpen_compl.isLocallyClosed, isLocallyClosed, isOpen_compl, nonempty_inter_closedPoints, subset_closure
 -/
@@ -466,7 +488,12 @@ lemma JacobsonSpace.discreteTopology
     rw [← Set.univ_subset_iff]; rw [← closure_closedPoints]; rw [closure_subset_iff_isClosed]; rw [← (closedPoints X).biUnion_of_singleton]
     exact h.isClosed_biUnion fun _ => id
   have inst : Finite X := Set.finite_univ_iff.mp (this ▸ h)
-  rw [discreteT
+  rw [discreteTopology_iff_forall_isOpen]
+  intro s
+  rw [← isClosed_compl_iff]; rw [← sᶜ.biUnion_of_singleton]
+  refine sᶜ.toFinite.isClosed_biUnion fun x _ => ?_
+  rw [← mem_closedPoints_iff]; rw [this]
+  trivial
 
 中文:
 引理 Jacobson空间.discreteTopology
@@ -476,7 +503,12 @@ lemma JacobsonSpace.discreteTopology
     rw [← Set.univ_subset_iff]; rw [← closure_closedPoints]; rw [closure_subset_iff_isClosed]; rw [← (closedPoints X).biUnion_of_singleton]
     exact h.isClosed_biUnion fun _ => id
   have inst : Finite X := Set.finite_univ_iff.mp (this ▸ h)
-  rw [discreteT
+  rw [discreteTopology_iff_forall_isOpen]
+  intro s
+  rw [← isClosed_compl_iff]; rw [← sᶜ.biUnion_of_singleton]
+  refine sᶜ.toFinite.isClosed_biUnion fun x _ => ?_
+  rw [← mem_closedPoints_iff]; rw [this]
+  trivial
 
 Depends on / 依赖: Finite, Set.finite_univ_iff.mp, Set.univ, Set.univ_subset_iff, biUnion_of_singleton, closedPoints, closure_closedPoints, closure_subset_iff_isClosed, discreteTopology_iff_forall_isOpen, finite_univ_iff, h.isClosed_biUnion, isClosed_biUnion, isClosed_compl_iff, mem_closedPoints_iff, toFinite, toFinite.isClosed_biUnion, univ_subset_iff
 -/
@@ -511,7 +543,23 @@ lemma TopologicalSpace.IsOpenCover.jacobsonSpace_iff
   intro Z hZ hZ'
   rw [← hU.iUnion_inter Z]; rw [Set.nonempty_iUnion] at hZ
   obtain ⟨i, x, hx, hx'⟩ := hZ
-  obtain ⟨y, hy, hy'⟩ := (jacobsonSpace_iff_locallyClosed.mp 
+  obtain ⟨y, hy, hy'⟩ := (jacobsonSpace_iff_locallyClosed.mp (H i)) _ ⟨⟨x, hx'⟩, hx⟩
+    (hZ'.preimage continuous_subtype_val)
+  refine ⟨y, hy, hU.isClosed_iff_coe_preimage.mpr fun j => ?_⟩
+  by_cases h : (y : X) in U j
+  · convert_to IsClosed {(⟨y, h⟩ : U j)}
+    · ext; simp [← Subtype.coe_inj]
+    apply isClosed_singleton_of_isLocallyClosed_singleton
+    convert!
+      (hy'.isLocallyClosed.image IsEmbedding.subtypeVal.isInducing
+            (U i).2.isOpenEmbedding_subtypeVal.isOpen_range.isLocallyClosed).preimage
+        continuous_subtype_val
+    ext
+    simp [← Subtype.coe_inj]
+  · convert! isClosed_empty
+    rw [Set.eq_empty_iff_forall_notMem]
+    intro z (hz : z.1 = y.1)
+    exact h (hz ▸ z.2)
 
 中文:
 引理 拓扑空间.IsOpenCover.jacobsonSpace_iff
@@ -522,7 +570,23 @@ lemma TopologicalSpace.IsOpenCover.jacobsonSpace_iff
   intro Z hZ hZ'
   rw [← hU.iUnion_inter Z]; rw [Set.nonempty_iUnion] at hZ
   obtain ⟨i, x, hx, hx'⟩ := hZ
-  obtain ⟨y, hy, hy'⟩ := (jacobsonSpace_iff_locallyClosed.mp 
+  obtain ⟨y, hy, hy'⟩ := (jacobsonSpace_iff_locallyClosed.mp (H i)) _ ⟨⟨x, hx'⟩, hx⟩
+    (hZ'.preimage continuous_subtype_val)
+  refine ⟨y, hy, hU.isClosed_iff_coe_preimage.mpr fun j => ?_⟩
+  by_cases h : (y : X) in U j
+  · convert_to IsClosed {(⟨y, h⟩ : U j)}
+    · ext; simp [← Subtype.coe_inj]
+    apply isClosed_singleton_of_isLocallyClosed_singleton
+    convert!
+      (hy'.isLocallyClosed.image IsEmbedding.subtypeVal.isInducing
+            (U i).2.isOpenEmbedding_subtypeVal.isOpen_range.isLocallyClosed).preimage
+        continuous_subtype_val
+    ext
+    simp [← Subtype.coe_inj]
+  · convert! isClosed_empty
+    rw [Set.eq_empty_iff_forall_notMem]
+    intro z (hz : z.1 = y.1)
+    exact h (hz ▸ z.2)
 
 Depends on / 依赖: IsClosed, Set.nonempty_iUnion, Subtype, continuous_subtype_val, convert_to, hU.iUnion_inter, hU.isClosed_iff_coe_preimage.mpr, iUnion_inter, isClosed_iff_coe_preimage, isOpenEmbedding_subtypeVal, jacobsonSpace_iff_locallyClosed, jacobsonSpace_iff_locallyClosed.mp, nonempty_iUnion, of_isOpenEmbedding, preimage
 -/
@@ -564,7 +628,17 @@ theorem subsingleton_image_closure_of_finite_of_isPreirreducible
   have H₁ : IsIrreducible (S inter closedPoints X) := by
     rwa [← isIrreducible_iff_closure, ← JacobsonSpace.closure_inter_closedPoints_eq_closure hS,
       isIrreducible_iff_closure] at hS'
-  
+  have H₂ : f '' (S inter closedPoints X) subseteq closedPoints Y := by
+    rintro _ ⟨x, hx, rfl⟩; simpa using hf₂ _ hx.2
+  have H₃ := ((hfS.subset (Set.image_mono Set.inter_subset_left)).isDiscrete_of_subset_closedPoints
+    H₂).subsingleton_of_isPreirreducible (H₁.image _ hf₁.continuousOn).isPreirreducible
+  have H₄ : IsClosed (f '' (S inter closedPoints X)) := by
+    obtain (h | ⟨x, hx⟩) := Set.eq_empty_or_nonempty (f '' (S inter closedPoints X))
+    · simp [h]
+    · rw [H₃.eq_singleton_of_mem hx]; exact H₂ hx
+  have := image_closure_subset_closure_image (s := S inter closedPoints X) hf₁
+  rw [JacobsonSpace.closure_inter_closedPoints_eq_closure hS]; rw [H₄.closure_eq] at this
+  exact H₃.anti this
 
 中文:
 定理 subsingleton_image_closure_of_finite_of_isPreirreducible
@@ -576,7 +650,17 @@ theorem subsingleton_image_closure_of_finite_of_isPreirreducible
   have H₁ : IsIrreducible (S inter closedPoints X) := by
     rwa [← isIrreducible_iff_closure, ← JacobsonSpace.closure_inter_closedPoints_eq_closure hS,
       isIrreducible_iff_closure] at hS'
-  
+  have H₂ : f '' (S inter closedPoints X) subseteq closedPoints Y := by
+    rintro _ ⟨x, hx, rfl⟩; simpa using hf₂ _ hx.2
+  have H₃ := ((hfS.subset (Set.image_mono Set.inter_subset_left)).isDiscrete_of_subset_closedPoints
+    H₂).subsingleton_of_isPreirreducible (H₁.image _ hf₁.continuousOn).isPreirreducible
+  have H₄ : IsClosed (f '' (S inter closedPoints X)) := by
+    obtain (h | ⟨x, hx⟩) := Set.eq_empty_or_nonempty (f '' (S inter closedPoints X))
+    · simp [h]
+    · rw [H₃.eq_singleton_of_mem hx]; exact H₂ hx
+  have := image_closure_subset_closure_image (s := S inter closedPoints X) hf₁
+  rw [JacobsonSpace.closure_inter_closedPoints_eq_closure hS]; rw [H₄.closure_eq] at this
+  exact H₃.anti this
 
 Depends on / 依赖: IsIrreducible, JacobsonSpace, JacobsonSpace.closure_inter_closedPoints_eq_closure, S.eq_empty_or_nonempty, Set.image_mono, Set.inter_subset_left, closedPoints, closure_inter_closedPoints_eq_closure, eq_empty_or_nonempty, hfS.subset, image_mono, inter_subset_left, isDiscrete_of_subset_closedPoints, isIrreducible_iff_closure, replace, subset, subseteq
 -/

@@ -219,6 +219,8 @@ lemma surjective_eq_epimorphisms_iff
     intro _ _ f hf
     have : Epi f := hf
     change Function.Surjective ((forget C).map f)
+    rw [← epi_iff_surjective]
+    infer_instance
 
 中文:
 引理 surjective_eq_epimorphisms_iff
@@ -235,6 +237,8 @@ lemma surjective_eq_epimorphisms_iff
     intro _ _ f hf
     have : Epi f := hf
     change Function.Surjective ((forget C).map f)
+    rw [← epi_iff_surjective]
+    infer_instance
 
 Depends on / 依赖: Function, Function.Surjective, Surjective, epi_iff_surjective, epimorphisms, forget, infer_instance, le_antisymm, surjective_le_epimorphisms
 -/
@@ -272,7 +276,9 @@ lemma injective_eq_monomorphisms_iff
     apply le_antisymm (injective_le_monomorphisms C)
     intro _ _ f hf
     have : Mono f := hf
-    change Function.Injective ((forget C).map f
+    change Function.Injective ((forget C).map f)
+    rw [← mono_iff_injective]
+    infer_instance
 
 中文:
 引理 injective_eq_monomorphisms_iff
@@ -288,7 +294,9 @@ lemma injective_eq_monomorphisms_iff
     apply le_antisymm (injective_le_monomorphisms C)
     intro _ _ f hf
     have : Mono f := hf
-    change Function.Injective ((forget C).map f
+    change Function.Injective ((forget C).map f)
+    rw [← mono_iff_injective]
+    infer_instance
 
 Depends on / 依赖: Function, Function.Injective, Injective, forget, infer_instance, injective_le_monomorphisms, le_antisymm, mono_iff_injective, monomorphisms
 -/

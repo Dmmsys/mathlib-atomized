@@ -76,7 +76,8 @@ lemma exists_apply_ne_one_aux
     contrapose! ha
 exact (MulEquiv.map_eq_one_iff e).mp funext ha
   obtain ⟨φi, hφi⟩ := H (n i) (dvd_exponent e i) ((e a i).toAdd) hi
-  use (φi.comp
+  use (φi.comp (Pi.evalMonoidHom (fun (i : ι) => Multiplicative (ZMod (n i))) i)).comp e
+  simpa only [coe_comp, coe_coe, Function.comp_apply, Pi.evalMonoidHom_apply, ne_eq] using! hφi
 
 中文:
 引理 存在_apply_ne_one_aux
@@ -87,7 +88,8 @@ exact (MulEquiv.map_eq_one_iff e).mp funext ha
     contrapose! ha
 exact (MulEquiv.map_eq_one_iff e).mp funext ha
   obtain ⟨φi, hφi⟩ := H (n i) (dvd_exponent e i) ((e a i).toAdd) hi
-  use (φi.comp
+  use (φi.comp (Pi.evalMonoidHom (fun (i : ι) => Multiplicative (ZMod (n i))) i)).comp e
+  simpa only [coe_comp, coe_coe, Function.comp_apply, Pi.evalMonoidHom_apply, ne_eq] using! hφi
 
 Depends on / 依赖: CommGroup, CommGroup.equiv_prod_multiplicative_zmod_of_finite, Function, Function.comp_apply, MulEquiv, MulEquiv.map_eq_one_iff, Multiplicative, Pi.evalMonoidHom, Pi.evalMonoidHom_apply, coe_coe, coe_comp, comp_apply, contrapose, dvd_exponent, equiv_prod_multiplicative_zmod_of_finite, evalMonoidHom, evalMonoidHom_apply, h.some, i.comp, map_eq_one_iff
 -/
@@ -178,7 +180,13 @@ theorem monoidHom_mulEquiv_of_hasEnoughRootsOfUnity
   let e := h₂.some
   let e' := Pi.monoidHomMulEquiv (fun i => Multiplicative (ZMod (n i))) Mˣ
   have : forall i, NeZero (n i) := fun i => NeZero.of_gt (h₁ i)
-have inst i : HasEnoughRoo
+have inst i : HasEnoughRootsOfUnity M Nat.card Multiplicative ZMod (n i) := by
+    have hdvd : Nat.card (Multiplicative (ZMod (n i))) ∣ Monoid.exponent G := by
+      simpa only [Nat.card_eq_fintype_card, Fintype.card_multiplicative, ZMod.card]
+        using dvd_exponent e i
+    exact HasEnoughRootsOfUnity.of_dvd M hdvd
+  let E i := (IsCyclic.monoidHom_equiv_self (Multiplicative (ZMod (n i))) M).some
+exact ⟨e.monoidHomCongrLeft.trans e'.trans .trans (.piCongrRight E) e.symm⟩
 
 中文:
 定理 monoidHom_mulEquiv_of_hasEnoughRootsOfUnity
@@ -189,7 +197,13 @@ have inst i : HasEnoughRoo
   let e := h₂.some
   let e' := Pi.monoidHomMulEquiv (fun i => Multiplicative (ZMod (n i))) Mˣ
   have : forall i, NeZero (n i) := fun i => NeZero.of_gt (h₁ i)
-have inst i : HasEnoughRoo
+have inst i : HasEnoughRootsOfUnity M Nat.card Multiplicative ZMod (n i) := by
+    have hdvd : Nat.card (Multiplicative (ZMod (n i))) ∣ Monoid.exponent G := by
+      simpa only [Nat.card_eq_fintype_card, Fintype.card_multiplicative, ZMod.card]
+        using dvd_exponent e i
+    exact HasEnoughRootsOfUnity.of_dvd M hdvd
+  let E i := (IsCyclic.monoidHom_equiv_self (Multiplicative (ZMod (n i))) M).some
+exact ⟨e.monoidHomCongrLeft.trans e'.trans .trans (.piCongrRight E) e.symm⟩
 
 Depends on / 依赖: DecidableEq, Fintype, Fintype.card_multiplicative, HasEnoughRootsOfUnity, Monoid, Monoid.exponent, Multiplicative, Nat.card, Nat.card_eq_fintype_card, NeZero, NeZero.of_gt, Pi.monoidHomMulEquiv, ZMod.card, card_eq_fintype_card, card_multiplicative, classical, equiv_prod_multiplicative_zmod_of_finite, exponent, monoidHomMulEquiv, of_gt
 -/
@@ -238,7 +252,13 @@ theorem _root_.MonoidHom.domRestrict_surjective
 hM.of_dvd M Monoid.exponent_submonoid_dvd H.toSubmonoid
   have : HasEnoughRootsOfUnity M (Monoid.exponent (G ⧸ H)) :=
 hM.of_dvd M Group.exponent_quotient_dvd H
-  refine MonoidHom.surjective_of_card_ke
+  refine MonoidHom.surjective_of_card_ker_le_div _ (le_of_eq ?_)
+  rw [card_monoidHom_of_hasEnoughRootsOfUnity]; rw [card_monoidHom_of_hasEnoughRootsOfUnity]; rw [H.card_eq_card_quotient_mul_card_subgroup]; rw [mul_div_cancel_right₀ _ (Fintype.card_eq_nat_card ▸ Fintype.card_ne_zero)]; rw [← card_monoidHom_of_hasEnoughRootsOfUnity (G ⧸ H) M]; rw [Nat.card_congr (domRestrictHomKerEquiv Mˣ H).toEquiv]
+
+@[deprecated (since := "2026-07-19")]
+alias _root_.MonoidHom.restrict_surjective := _root_.MonoidHom.domRestrict_surjective
+
+@[simp]
 
 中文:
 定理 _root_.幺半群态射.domRestrict_surjective
@@ -249,7 +269,13 @@ hM.of_dvd M Group.exponent_quotient_dvd H
 hM.of_dvd M Monoid.exponent_submonoid_dvd H.toSubmonoid
   have : HasEnoughRootsOfUnity M (Monoid.exponent (G ⧸ H)) :=
 hM.of_dvd M Group.exponent_quotient_dvd H
-  refine MonoidHom.surjective_of_card_ke
+  refine MonoidHom.surjective_of_card_ker_le_div _ (le_of_eq ?_)
+  rw [card_monoidHom_of_hasEnoughRootsOfUnity]; rw [card_monoidHom_of_hasEnoughRootsOfUnity]; rw [H.card_eq_card_quotient_mul_card_subgroup]; rw [mul_div_cancel_right₀ _ (Fintype.card_eq_nat_card ▸ Fintype.card_ne_zero)]; rw [← card_monoidHom_of_hasEnoughRootsOfUnity (G ⧸ H) M]; rw [Nat.card_congr (domRestrictHomKerEquiv Mˣ H).toEquiv]
+
+@[deprecated (since := "2026-07-19")]
+alias _root_.MonoidHom.restrict_surjective := _root_.MonoidHom.domRestrict_surjective
+
+@[simp]
 
 Depends on / 依赖: Fintype, Fintype.card_e, Fintype.ofFinite, Group.exponent_quotient_dvd, H.card_eq_card_quotient_mul_card_subgroup, H.toSubmonoid, HasEnoughRootsOfUnity, Monoid, Monoid.exponent, Monoid.exponent_submonoid_dvd, MonoidHom, MonoidHom.surjective_of_card_ker_le_div, card_e, card_eq_card_quotient_mul_card_subgroup, card_monoidHom_of_hasEnoughRootsOfUnity, exponent, exponent_quotient_dvd, exponent_submonoid_dvd, hM.of_dvd, le_of_eq
 -/
@@ -278,7 +304,7 @@ theorem forall_monoidHom_apply_eq_one_iff
 hM.of_dvd M Group.exponent_quotient_dvd H
   refine ⟨fun h => ?_, fun hx φ hφ => hφ x hx⟩
   simp only [← QuotientGroup.eq_one_iff, ← forall_apply_eq_apply_iff _ (M := M), map_one] at h ⊢
-  exact fun φ => h (φ.comp (QuotientGroup.mk' H))
+  exact fun φ => h (φ.comp (QuotientGroup.mk' H)) fun y hy => hy φ
 
 中文:
 定理 对任意_monoidHom_apply_eq_one_iff
@@ -288,7 +314,7 @@ hM.of_dvd M Group.exponent_quotient_dvd H
 hM.of_dvd M Group.exponent_quotient_dvd H
   refine ⟨fun h => ?_, fun hx φ hφ => hφ x hx⟩
   simp only [← QuotientGroup.eq_one_iff, ← forall_apply_eq_apply_iff _ (M := M), map_one] at h ⊢
-  exact fun φ => h (φ.comp (QuotientGroup.mk' H))
+  exact fun φ => h (φ.comp (QuotientGroup.mk' H)) fun y hy => hy φ
 
 Depends on / 依赖: Group.exponent_quotient_dvd, HasEnoughRootsOfUnity, Monoid, Monoid.exponent, QuotientGroup, QuotientGroup.eq_one_iff, QuotientGroup.mk, eq_one_iff, exponent, exponent_quotient_dvd, forall_apply_eq_apply_iff, hM.of_dvd, map_one, of_dvd
 -/
@@ -311,7 +337,7 @@ theorem card_domRestrictHom_ker
 hM.of_dvd M Group.exponent_quotient_dvd H
   rw [Nat.card_congr (MonoidHom.domRestrictHomKerEquiv Mˣ H).toEquiv]; rw [card_monoidHom_of_hasEnoughRootsOfUnity]
 
-@[deprecated (since := "2026-07-19")] alias card_restrictHom_ker := card_dom
+@[deprecated (since := "2026-07-19")] alias card_restrictHom_ker := card_domRestrictHom_ker
 
 中文:
 定理 card_domRestrictHom_ker
@@ -321,7 +347,7 @@ hM.of_dvd M Group.exponent_quotient_dvd H
 hM.of_dvd M Group.exponent_quotient_dvd H
   rw [Nat.card_congr (MonoidHom.domRestrictHomKerEquiv Mˣ H).toEquiv]; rw [card_monoidHom_of_hasEnoughRootsOfUnity]
 
-@[deprecated (since := "2026-07-19")] alias card_restrictHom_ker := card_dom
+@[deprecated (since := "2026-07-19")] alias card_restrictHom_ker := card_domRestrictHom_ker
 
 Depends on / 依赖: Group.exponent_quotient_dvd, HasEnoughRootsOfUnity, Monoid, Monoid.exponent, MonoidHom, MonoidHom.domRestrictHomKerEquiv, Nat.card_congr, card_congr, card_monoidHom_of_hasEnoughRootsOfUnity, domRestrictHomKerEquiv, exponent, exponent_quotient_dvd, hM.of_dvd, of_dvd, toEquiv
 -/
@@ -353,7 +379,12 @@ definition monoidHomMonoidHomEquiv
   (MulEquiv.mk' (Equiv.ofBijective
     (fun g => MonoidHom.mk ⟨fun φ => φ g, one_apply _⟩ (by simp))
     (by
-      refine (Nat.bijective_i
+      refine (Nat.bijective_iff_injective_and_card _).mpr ⟨fun _ _ h => ?_, ?_⟩
+      · rwa [mk.injEq, OneHom.mk.injEq, funext_iff, forall_apply_eq_apply_iff] at h
+      · rw [card_monoidHom_of_hasEnoughRootsOfUnity, card_monoidHom_of_hasEnoughRootsOfUnity]))
+    (fun _ _ => by ext; simp)).symm
+
+@[simp]
 
 中文:
 定义 monoidHomMonoidHomEquiv
@@ -363,7 +394,12 @@ definition monoidHomMonoidHomEquiv
   (MulEquiv.mk' (Equiv.ofBijective
     (fun g => MonoidHom.mk ⟨fun φ => φ g, one_apply _⟩ (by simp))
     (by
-      refine (Nat.bijective_i
+      refine (Nat.bijective_iff_injective_and_card _).mpr ⟨fun _ _ h => ?_, ?_⟩
+      · rwa [mk.injEq, OneHom.mk.injEq, funext_iff, forall_apply_eq_apply_iff] at h
+      · rw [card_monoidHom_of_hasEnoughRootsOfUnity, card_monoidHom_of_hasEnoughRootsOfUnity]))
+    (fun _ _ => by ext; simp)).symm
+
+@[simp]
 
 Depends on / 依赖: Equiv.ofBijective, HasEnoughRootsOfUnity, Monoid, Monoid.exponent, Monoid.exponent_eq_of_mulEquiv, MonoidHom, MonoidHom.mk, MulEquiv, MulEquiv.mk, Nat.bijective_iff_injective_and_card, OneHom, OneHom.mk.injEq, bijective_iff_injective_and_card, card_monoidHom_of_hasEnoughRootsOfUnity, exponent, exponent_eq_of_mulEquiv, forall_apply_eq_apply_iff, funext_iff, mk.injEq, monoidHom_mulEquiv_of_hasEnoughRootsOfUnity
 -/
@@ -414,7 +450,19 @@ definition subgroupOrderIsoSubgroupMonoidHom
   map_rel_iff' {H₁} {H₂} := by
     simp_rw [Equiv.coe_fn_mk, OrderDual.toDual_le_toDual,
       SetLike.le_def, mem_ker, domRestrictHom_apply, domRestrict_eq_one_iff]
-  
+    grind [forall_monoidHom_apply_eq_one_iff M H₂]
+  left_inv H := by
+    ext x
+    rw [MulEquiv.coe_mapSubgroup]; rw [Subgroup.mem_map_equiv]; rw [MonoidHom.mem_ker]
+    simp
+  right_inv Φ := by
+    have : HasEnoughRootsOfUnity M (Monoid.exponent (G ->* Mˣ)) := by
+      rwa [Monoid.exponent_eq_of_mulEquiv (monoidHom_mulEquiv_of_hasEnoughRootsOfUnity G M).some]
+    ext φ
+    rw [OrderDual.ofDual_toDual]; rw [mem_ker]; rw [domRestrictHom_apply]; rw [domRestrict_eq_one_iff]
+    simp
+
+@[simp]
 
 中文:
 定义 subgroupOrderIsoSubgroupMonoidHom
@@ -424,7 +472,19 @@ definition subgroupOrderIsoSubgroupMonoidHom
   map_rel_iff' {H₁} {H₂} := by
     simp_rw [Equiv.coe_fn_mk, OrderDual.toDual_le_toDual,
       SetLike.le_def, mem_ker, domRestrictHom_apply, domRestrict_eq_one_iff]
-  
+    grind [forall_monoidHom_apply_eq_one_iff M H₂]
+  left_inv H := by
+    ext x
+    rw [MulEquiv.coe_mapSubgroup]; rw [Subgroup.mem_map_equiv]; rw [MonoidHom.mem_ker]
+    simp
+  right_inv Φ := by
+    have : HasEnoughRootsOfUnity M (Monoid.exponent (G ->* Mˣ)) := by
+      rwa [Monoid.exponent_eq_of_mulEquiv (monoidHom_mulEquiv_of_hasEnoughRootsOfUnity G M).some]
+    ext φ
+    rw [OrderDual.ofDual_toDual]; rw [mem_ker]; rw [domRestrictHom_apply]; rw [domRestrict_eq_one_iff]
+    simp
+
+@[simp]
 
 Depends on / 依赖: OrderDual, OrderDual.toDual, domRestrictHom, toDual
 -/

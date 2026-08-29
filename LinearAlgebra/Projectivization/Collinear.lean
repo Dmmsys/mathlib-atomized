@@ -84,7 +84,9 @@ lemma IsCollinear_iff_rank
   refine ⟨fun ⟨M, hM1, hM2, hM3⟩ => ⟨M, ?_, hM3⟩, fun ⟨M, hM1, hM2⟩ => ⟨M, ?_, ?_, hM2⟩⟩
 .1 hM2 · exact FiniteDimensional.finrank_le_iff_rank_le (K := K) (V := M.submodule) (n := 2)
   · exact Module.rank_lt_aleph0_iff.1 (hM1.trans_lt (by norm_num))
-  · exact Module.finrank_
+  · exact Module.finrank_le_of_rank_le hM1
+
+@[simp]
 
 中文:
 引理 IsCollinear_iff_rank
@@ -93,7 +95,9 @@ lemma IsCollinear_iff_rank
   refine ⟨fun ⟨M, hM1, hM2, hM3⟩ => ⟨M, ?_, hM3⟩, fun ⟨M, hM1, hM2⟩ => ⟨M, ?_, ?_, hM2⟩⟩
 .1 hM2 · exact FiniteDimensional.finrank_le_iff_rank_le (K := K) (V := M.submodule) (n := 2)
   · exact Module.rank_lt_aleph0_iff.1 (hM1.trans_lt (by norm_num))
-  · exact Module.finrank_
+  · exact Module.finrank_le_of_rank_le hM1
+
+@[simp]
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.finrank_le_iff_rank_le, IsCollinear_iff, M.submodule, Module, Module.finrank_le_of_rank_le, Module.rank_lt_aleph0_iff, finrank_le_iff_rank_le, finrank_le_of_rank_le, hM1.trans_lt, rank_lt_aleph0_iff, submodule, trans_lt
 -/
@@ -182,7 +186,7 @@ lemma isCollinear_singleton'
     exact Module.Finite.span_of_finite _ (Set.toFinite _)
   · rw [Subspace.submodule.apply_symm_apply, finrank_span_singleton hv]
     omega
-  · simp
+  · simp [Submodule.mem_span_of_mem]
 
 中文:
 引理 isCollinear_singleton'
@@ -195,7 +199,7 @@ lemma isCollinear_singleton'
     exact Module.Finite.span_of_finite _ (Set.toFinite _)
   · rw [Subspace.submodule.apply_symm_apply, finrank_span_singleton hv]
     omega
-  · simp
+  · simp [Submodule.mem_span_of_mem]
 
 Depends on / 依赖: Finite, Module, Module.Finite.span_of_finite, Set.toFinite, Submodule, Submodule.mem_span_of_mem, Submodule.span, Subspace, Subspace.submodule.apply_symm_apply, apply_symm_apply, finrank_span_singleton, mem_span_of_mem, projectivization, span_of_finite, submodule, toFinite
 -/
@@ -241,7 +245,12 @@ lemma isCollinear_pair
   induction a using Projectivization.ind with | h v hv =>
   induction b using Projectivization.ind with | h w hw =>
   rw [← ne_eq]; rw [← independent_pair_iff_ne]; rw [independent_mk_iff_LinearIndependent] at h
-  refine ⟨(Submodule.span K {v, w}).projectivization
+  refine ⟨(Submodule.span K {v, w}).projectivization, ?_, ?_, fun s hs => hs.casesOn ?_ ?_⟩
+  · rw [Subspace.submodule.apply_symm_apply]
+    exact Module.Finite.span_of_finite _ (Set.toFinite _)
+  · rw [Subspace.submodule.apply_symm_apply, ← Matrix.range_cons_cons_empty v w ![]]
+    simp [finrank_span_eq_card h]
+  all_goals rintro rfl; simp [Submodule.mem_span_of_mem]
 
 中文:
 引理 isCollinear_pair
@@ -252,7 +261,12 @@ lemma isCollinear_pair
   induction a using Projectivization.ind with | h v hv =>
   induction b using Projectivization.ind with | h w hw =>
   rw [← ne_eq]; rw [← independent_pair_iff_ne]; rw [independent_mk_iff_LinearIndependent] at h
-  refine ⟨(Submodule.span K {v, w}).projectivization
+  refine ⟨(Submodule.span K {v, w}).projectivization, ?_, ?_, fun s hs => hs.casesOn ?_ ?_⟩
+  · rw [Subspace.submodule.apply_symm_apply]
+    exact Module.Finite.span_of_finite _ (Set.toFinite _)
+  · rw [Subspace.submodule.apply_symm_apply, ← Matrix.range_cons_cons_empty v w ![]]
+    simp [finrank_span_eq_card h]
+  all_goals rintro rfl; simp [Submodule.mem_span_of_mem]
 
 Depends on / 依赖: Finite, Matrix, Matrix.range_cons_cons_empty, Module, Module.Finite.span_of_finite, Projectivization, Projectivization.ind, Set.toFinite, Submodule, Submodule.span, Subspace, Subspace.submodule.apply_symm_apply, apply_symm_apply, casesOn, hs.casesOn, independent_mk_iff_LinearIndependent, independent_pair_iff_ne, ne_eq, projectivization, range_cons_cons_empty
 -/
@@ -305,7 +319,9 @@ lemma line_unique'
     simp only [Submodule.mk_mem_projectivization_iff] at hp2 hp3
     refine hx.casesOn ?_ ?_ <;> simp_all
   have : Module.Finite K p := Module.finite_of_finrank_eq_succ hp1
-.symm refine Submodule.eq_of_le
+.symm refine Submodule.eq_of_le_of_finrank_eq h1 ?_
+  rw [hp1]; rw [← Matrix.range_cons_cons_empty _ _ ![]]
+  simp [finrank_span_eq_card huv]
 
 中文:
 引理 line_unique'
@@ -316,7 +332,9 @@ lemma line_unique'
     simp only [Submodule.mk_mem_projectivization_iff] at hp2 hp3
     refine hx.casesOn ?_ ?_ <;> simp_all
   have : Module.Finite K p := Module.finite_of_finrank_eq_succ hp1
-.symm refine Submodule.eq_of_le
+.symm refine Submodule.eq_of_le_of_finrank_eq h1 ?_
+  rw [hp1]; rw [← Matrix.range_cons_cons_empty _ _ ![]]
+  simp [finrank_span_eq_card huv]
 
 Depends on / 依赖: Finite, Matrix, Matrix.range_cons_cons_empty, Module, Module.Finite, Module.finite_of_finrank_eq_succ, Submodule, Submodule.eq_of_le_of_finrank_eq, Submodule.mk_mem_projectivization_iff, Submodule.span, Submodule.span_le, casesOn, eq_of_le_of_finrank_eq, finite_of_finrank_eq_succ, finrank_span_eq_card, hx.casesOn, mk_mem_projectivization_iff, range_cons_cons_empty, span_le
 -/

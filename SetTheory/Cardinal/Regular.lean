@@ -270,7 +270,7 @@ theorem isRegular_succ
   refine card_iSup_Iio_le ?_ fun i => ?_
   · simpa using hc'
   · rw [card_le_iff]
-    exact (isSuccLimit_ord hc₀
+    exact (isSuccLimit_ord hc₀).add_one_lt (f i).2
 
 中文:
 定理 isRegular_succ
@@ -286,7 +286,7 @@ theorem isRegular_succ
   refine card_iSup_Iio_le ?_ fun i => ?_
   · simpa using hc'
   · rw [card_le_iff]
-    exact (isSuccLimit_ord hc₀
+    exact (isSuccLimit_ord hc₀).add_one_lt (f i).2
 
 Depends on / 依赖: add_one_lt, card_iSup_Iio_le, card_le_iff, exists_isFundamentalSeq, hc.trans, hf.iSup_add_one_eq.not_lt, iSup_add_one_eq, isSuccLimit_ord, le_succ, not_lt
 -/
@@ -1079,7 +1079,15 @@ theorem derivFamily_lt_ord_lift
   | add_one b hb =>
     intro hb'
     rw [derivFamily_add_one]
-    exac
+    exact
+      nfpFamily_lt_ord_lift hω (by rwa [hc.cof_ord]) hf
+        ((isSuccLimit_ord hc.1).succ_lt (hb ((lt_succ b).trans hb')))
+  | limit b hb H =>
+    intro hb'
+    rw [derivFamily_limit f hb]
+    apply Ordinal.lift_iSup_lt_of_lt_cof
+    · rwa [← lift_cof, hc.cof_ord, mk_Iio_ordinal, lift_lift, lift_lt, ← lt_ord]
+· exact fun i => H i.1 i.2 i.2.trans hb'
 
 中文:
 定理 derivFamily_lt_ord_lift
@@ -1095,7 +1103,15 @@ theorem derivFamily_lt_ord_lift
   | add_one b hb =>
     intro hb'
     rw [derivFamily_add_one]
-    exac
+    exact
+      nfpFamily_lt_ord_lift hω (by rwa [hc.cof_ord]) hf
+        ((isSuccLimit_ord hc.1).succ_lt (hb ((lt_succ b).trans hb')))
+  | limit b hb H =>
+    intro hb'
+    rw [derivFamily_limit f hb]
+    apply Ordinal.lift_iSup_lt_of_lt_cof
+    · rwa [← lift_cof, hc.cof_ord, mk_Iio_ordinal, lift_lift, lift_lt, ← lt_ord]
+· exact fun i => H i.1 i.2 i.2.trans hb'
 
 Depends on / 依赖: Ordinal, Ordinal.lift_iSup_lt_of_lt_cof, add_one, c.ord.cof, cof_ord, derivFamily_add_one, derivFamily_limit, derivFamily_zero, hc.cof_ord, isSuccLimit_ord, lift_cof, lift_iSup_lt_of_lt_cof, limitRecOn, lt_of_le_of_ne, lt_succ, nfpFamily_lt_ord_lift, succ_lt
 -/
@@ -1832,7 +1848,9 @@ theorem IsInaccessible.preBeth_ord
   induction a using WellFoundedLT.induction with | ind a IH
   rw [preBeth]
   apply lift_iSup_lt_of_lt_cof_ord _ _
-  
+  · rwa [mk_Iio_ordinal, lift_lift, hc.isRegular.lift.cof_ord, lift_lt, ← lt_ord]
+  · rintro ⟨b, hb⟩
+exact hc.isStrongPrelimit IH _ hb (hb.trans ha)
 
 中文:
 定理 是Inaccessible.preBeth_ord
@@ -1845,7 +1863,9 @@ theorem IsInaccessible.preBeth_ord
   induction a using WellFoundedLT.induction with | ind a IH
   rw [preBeth]
   apply lift_iSup_lt_of_lt_cof_ord _ _
-  
+  · rwa [mk_Iio_ordinal, lift_lift, hc.isRegular.lift.cof_ord, lift_lt, ← lt_ord]
+  · rintro ⟨b, hb⟩
+exact hc.isStrongPrelimit IH _ hb (hb.trans ha)
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.induction, aleph0_lt, antisymm, cof_ord, hb.trans, hc.aleph0_lt.le, hc.isRegular.lift.cof_ord, hc.isStrongPrelimit, isNormal_preBeth, isNormal_preBeth.le_iff_forall_le, isRegular, isStrongPrelimit, isSuccLimit_ord, le_apply, le_apply.antisymm, le_iff_forall_le, le_of_lt, lift_iSup_lt_of_lt_cof_ord, lift_lift
 -/

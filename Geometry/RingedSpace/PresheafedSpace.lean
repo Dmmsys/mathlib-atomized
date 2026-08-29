@@ -574,7 +574,9 @@ definition isoOfComponents
     · dsimp
       exact H.inv_hom_id_apply _
     dsimp
-    simp only [Presheaf.toPushforwardOfIso_app, assoc, ← α.hom.naturality
+    simp only [Presheaf.toPushforwardOfIso_app, assoc, ← α.hom.naturality]
+    simp only [eqToHom_map, eqToHom_app, eqToHom_trans_assoc, eqToHom_refl, id_comp]
+    apply Iso.inv_hom_id_app
 
 中文:
 定义 isoOfComponents
@@ -590,7 +592,9 @@ definition isoOfComponents
     · dsimp
       exact H.inv_hom_id_apply _
     dsimp
-    simp only [Presheaf.toPushforwardOfIso_app, assoc, ← α.hom.naturality
+    simp only [Presheaf.toPushforwardOfIso_app, assoc, ← α.hom.naturality]
+    simp only [eqToHom_map, eqToHom_app, eqToHom_trans_assoc, eqToHom_refl, id_comp]
+    apply Iso.inv_hom_id_app
 
 Depends on / 依赖: H.hom, H.inv, H.inv_hom_id_apply, Iso.inv_hom_id_app, Presheaf, Presheaf.toPushforwardOfIso, Presheaf.toPushforwardOfIso_app, eqToHom_app, eqToHom_map, eqToHom_refl, eqToHom_trans_assoc, hom.naturality, hom_inv_id, id_comp, inv_hom_id, inv_hom_id_app, inv_hom_id_apply, naturality, toPushforwardOfIso, toPushforwardOfIso_app
 -/
@@ -631,7 +635,15 @@ definition sheafIsoOfIso
     ext U
     dsimp
     rw [NatTrans.id_app]
-    simp only [P
+    simp only [Presheaf.pushforwardToOfIso_app, Iso.symm_inv, mapIso_hom, forget_map,
+      Iso.symm_hom, mapIso_inv, eqToHom_map, assoc]
+    have eq₁ := congr_app H.hom_inv_id (op ((Opens.map H.hom.base).obj U))
+    have eq₂ := H.hom.c.naturality (eqToHom (congr_obj (congr_arg Opens.map
+      ((forget C).congr_map H.inv_hom_id.symm)) U)).op
+    rw [id_c]; rw [NatTrans.id_app]; rw [id_comp]; rw [eqToHom_map]; rw [comp_c_app] at eq₁
+    rw [eqToHom_op]; rw [eqToHom_map] at eq₂
+    erw [eq₂, reassoc_of% eq₁]
+    simp
 
 中文:
 定义 sheafIsoOfIso
@@ -646,7 +658,15 @@ definition sheafIsoOfIso
     ext U
     dsimp
     rw [NatTrans.id_app]
-    simp only [P
+    simp only [Presheaf.pushforwardToOfIso_app, Iso.symm_inv, mapIso_hom, forget_map,
+      Iso.symm_hom, mapIso_inv, eqToHom_map, assoc]
+    have eq₁ := congr_app H.hom_inv_id (op ((Opens.map H.hom.base).obj U))
+    have eq₂ := H.hom.c.naturality (eqToHom (congr_obj (congr_arg Opens.map
+      ((forget C).congr_map H.inv_hom_id.symm)) U)).op
+    rw [id_c]; rw [NatTrans.id_app]; rw [id_comp]; rw [eqToHom_map]; rw [comp_c_app] at eq₁
+    rw [eqToHom_op]; rw [eqToHom_map] at eq₂
+    erw [eq₂, reassoc_of% eq₁]
+    simp
 
 Depends on / 依赖: H.hom.c
 -/
@@ -810,7 +830,21 @@ instance ofRestrict_mono
     rw [cancel_mono] at this
     exact this
   · ext V
-    
+    have hV : (Opens.map (X.ofRestrict hf).base).obj (hf.functor.obj V) = V := by
+      ext1
+      exact Set.preimage_image_eq _ hf.injective
+    have :
+      IsIso (hf.isOpenMap.adjunction.counit.app (unop (op (hf.functor.obj V)))) :=
+        NatIso.isIso_app_of_isIso
+          (whiskerLeft hf.functor hf.isOpenMap.adjunction.counit) V
+    have := PresheafedSpace.congr_app eq (op (hf.functor.obj V))
+    rw [PresheafedSpace.comp_c_app]; rw [PresheafedSpace.comp_c_app]; rw [PresheafedSpace.ofRestrict_c_app]; rw [Category.assoc]; rw [cancel_epi] at this
+    have h : _ ≫ _ = _ ≫ _ ≫ _ :=
+      congr_arg (fun f => (X.restrict hf).presheaf.map (eqToHom hV).op ≫ f) this
+    simp only [g₁.c.naturality, g₂.c.naturality_assoc] at h
+    simp only [eqToHom_op, eqToHom_map, eqToHom_trans,
+      ← IsIso.comp_inv_eq, inv_eqToHom, Category.assoc] at h
+    simpa using h
 
 中文:
 实例 ofRestrict_mono
@@ -825,7 +859,21 @@ instance ofRestrict_mono
     rw [cancel_mono] at this
     exact this
   · ext V
-    
+    have hV : (Opens.map (X.ofRestrict hf).base).obj (hf.functor.obj V) = V := by
+      ext1
+      exact Set.preimage_image_eq _ hf.injective
+    have :
+      IsIso (hf.isOpenMap.adjunction.counit.app (unop (op (hf.functor.obj V)))) :=
+        NatIso.isIso_app_of_isIso
+          (whiskerLeft hf.functor hf.isOpenMap.adjunction.counit) V
+    have := PresheafedSpace.congr_app eq (op (hf.functor.obj V))
+    rw [PresheafedSpace.comp_c_app]; rw [PresheafedSpace.comp_c_app]; rw [PresheafedSpace.ofRestrict_c_app]; rw [Category.assoc]; rw [cancel_epi] at this
+    have h : _ ≫ _ = _ ≫ _ ≫ _ :=
+      congr_arg (fun f => (X.restrict hf).presheaf.map (eqToHom hV).op ≫ f) this
+    simp only [g₁.c.naturality, g₂.c.naturality_assoc] at h
+    simp only [eqToHom_op, eqToHom_map, eqToHom_trans,
+      ← IsIso.comp_inv_eq, inv_eqToHom, Category.assoc] at h
+    simpa using h
 
 Depends on / 依赖: NatIso, NatIso.isIso_app_o, Opens.map, PresheafedSpace, PresheafedSpace.Hom.base, PresheafedSpace.comp_base, PresheafedSpace.ofRestrict_base, Set.preimage_image_eq, TopCat, TopCat.mono_iff_injective, X.ofRestrict, adjunction, cancel_mono, comp_base, congr_arg, counit, functor, hf.functor.obj, hf.injective, hf.isOpenMap.adjunction.counit.app
 -/
@@ -972,7 +1020,9 @@ definition restrictTopIso
   inv_hom_id := by
     ext
     · rfl
-    · erw [comp_c, ofRestrict_top_c, toRestri
+    · erw [comp_c, ofRestrict_top_c, toRestrictTop_c, eqToHom_map, whiskerRight_id', comp_id,
+        eqToHom_trans, eqToHom_refl]
+      rfl
 
 中文:
 定义 restrictTopIso
@@ -988,7 +1038,9 @@ definition restrictTopIso
   inv_hom_id := by
     ext
     · rfl
-    · erw [comp_c, ofRestrict_top_c, toRestri
+    · erw [comp_c, ofRestrict_top_c, toRestrictTop_c, eqToHom_map, whiskerRight_id', comp_id,
+        eqToHom_trans, eqToHom_refl]
+      rfl
 
 Depends on / 依赖: X.ofRestrict, ofRestrict
 -/

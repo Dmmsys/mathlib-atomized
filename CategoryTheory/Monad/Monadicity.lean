@@ -149,7 +149,15 @@ definition comparisonLeftAdjointHomEquiv
     _ ≃ { g : A.A ⟶ G.obj B // G.map (F.map g) ≫ G.map (adj.counit.app B) = A.a ≫ g } := by
       refine (adj.homEquiv _ _).subtypeEquiv ?_
       intro f
-      rw [← (a
+      rw [← (adj.homEquiv _ _).injective.eq_iff]; rw [Adjunction.homEquiv_naturality_left]; rw [adj.homEquiv_unit]; rw [adj.homEquiv_unit]; rw [G.map_comp]
+      dsimp
+      rw [adj.right_triangle_components_assoc]; rw [← G.map_comp]; rw [F.map_comp]; rw [Category.assoc]; rw [adj.counit_naturality]; rw [adj.left_triangle_components_assoc]
+      apply eq_comm
+    _ ≃ (A ⟶ (comparison adj).obj B) :=
+      { toFun := fun g =>
+          { f := _
+            h := g.prop }
+        invFun := fun f => ⟨f.f, f.h⟩ }
 
 中文:
 定义 comparisonLeftAdjointHomEquiv
@@ -160,7 +168,15 @@ definition comparisonLeftAdjointHomEquiv
     _ ≃ { g : A.A ⟶ G.obj B // G.map (F.map g) ≫ G.map (adj.counit.app B) = A.a ≫ g } := by
       refine (adj.homEquiv _ _).subtypeEquiv ?_
       intro f
-      rw [← (a
+      rw [← (adj.homEquiv _ _).injective.eq_iff]; rw [Adjunction.homEquiv_naturality_left]; rw [adj.homEquiv_unit]; rw [adj.homEquiv_unit]; rw [G.map_comp]
+      dsimp
+      rw [adj.right_triangle_components_assoc]; rw [← G.map_comp]; rw [F.map_comp]; rw [Category.assoc]; rw [adj.counit_naturality]; rw [adj.left_triangle_components_assoc]
+      apply eq_comm
+    _ ≃ (A ⟶ (comparison adj).obj B) :=
+      { toFun := fun g =>
+          { f := _
+            h := g.prop }
+        invFun := fun f => ⟨f.f, f.h⟩ }
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_left, Cofork, Cofork.IsColimit.homIso, F.map, F.map_comp, F.obj, G.map, G.map_comp, G.obj, IsColimit, adj.counit.app, adj.homEquiv, adj.homEquiv_unit, adj.right_triangle_components_assoc, colimit, colimit.isColimit, comparisonLeftAdjointObj, counit, eq_iff
 -/
@@ -327,7 +343,8 @@ theorem comparisonAdjunction_unit_f
   apply Limits.Cofork.IsColimit.hom_ext (beckCoequalizer A)
   rw [Cofork.IsColimit.π_desc]
   dsimp only [beckCofork_π, unitCofork_π]
-  rw [comparisonAdjunction_unit_f_aux]; rw [← adj.homEquiv_naturality_left A.a]; rw [coequalizer.condition]; rw [adj.homEquiv_naturality_right]; rw [adj.homEquiv_un
+  rw [comparisonAdjunction_unit_f_aux]; rw [← adj.homEquiv_naturality_left A.a]; rw [coequalizer.condition]; rw [adj.homEquiv_naturality_right]; rw [adj.homEquiv_unit]; rw [Category.assoc]
+  apply adj.right_triangle_components_assoc
 
 中文:
 定理 comparisonAdjunction_unit_f
@@ -335,7 +352,8 @@ theorem comparisonAdjunction_unit_f
   apply Limits.Cofork.IsColimit.hom_ext (beckCoequalizer A)
   rw [Cofork.IsColimit.π_desc]
   dsimp only [beckCofork_π, unitCofork_π]
-  rw [comparisonAdjunction_unit_f_aux]; rw [← adj.homEquiv_naturality_left A.a]; rw [coequalizer.condition]; rw [adj.homEquiv_naturality_right]; rw [adj.homEquiv_un
+  rw [comparisonAdjunction_unit_f_aux]; rw [← adj.homEquiv_naturality_left A.a]; rw [coequalizer.condition]; rw [adj.homEquiv_naturality_right]; rw [adj.homEquiv_unit]; rw [Category.assoc]
+  apply adj.right_triangle_components_assoc
 
 Depends on / 依赖: Category, Category.assoc, Cofork, Cofork.IsColimit, IsColimit, Limits, Limits.Cofork.IsColimit.hom_ext, adj.homEquiv_naturality_left, adj.homEquiv_naturality_right, adj.homEquiv_unit, adj.right_triangle_components_assoc, beckCoequalizer, coequalizer, coequalizer.condition, comparisonAdjunction_unit_f_aux, condition, homEquiv_naturality_left, homEquiv_naturality_right, homEquiv_unit, hom_ext
 -/
@@ -409,7 +427,10 @@ instance
     [forall A : adj.toMonad.Algebra, HasCoequalizer (F.map A.a) (adj.counit.app (F.obj A.A))]
     (B : D) : HasColimit (parallelPair
       (F.map (G.map (NatTrans.app adj.counit B)))
-      (NatTrans.app adj.counit
+      (NatTrans.app adj.counit (F.obj (G.obj B)))) :=
+inferInstanceAs HasCoequalizer
+    (F.map ((comparison adj).obj B).a)
+    (adj.counit.app (F.obj ((comparison adj).obj B).A))
 
 中文:
 定义 counitCoequalizerOfReflectsCoequalizer
@@ -420,7 +441,10 @@ instance
     [forall A : adj.toMonad.Algebra, HasCoequalizer (F.map A.a) (adj.counit.app (F.obj A.A))]
     (B : D) : HasColimit (parallelPair
       (F.map (G.map (NatTrans.app adj.counit B)))
-      (NatTrans.app adj.counit
+      (NatTrans.app adj.counit (F.obj (G.obj B)))) :=
+inferInstanceAs HasCoequalizer
+    (F.map ((comparison adj).obj B).a)
+    (adj.counit.app (F.obj ((comparison adj).obj B).A))
 -/
 def counitCoequalizerOfReflectsCoequalizer (B : D)
     [ReflectsColimit (parallelPair (F.map (G.map (adj.counit.app B)))
@@ -673,7 +697,26 @@ definition monadicOfHasPreservesReflectsGSplitCoequalizers
       intro X
       apply @isIso_of_reflects_iso _ _ _ _ _ _ _ (Monad.forget adj.toMonad) ?_ _
       · change IsIso ((comparisonAdjunction adj).unit.app X).f
-        rw [compar
+        rw [comparisonAdjunction_unit_f]
+        change
+          IsIso
+            (IsColimit.coconePointUniqueUpToIso (beckCoequalizer X)
+                (unitColimitOfPreservesCoequalizer X)).hom
+        exact (IsColimit.coconePointUniqueUpToIso _ _).isIso_hom
+    have : forall (Y : D), IsIso ((comparisonAdjunction adj).counit.app Y) := by
+      intro Y
+      rw [comparisonAdjunction_counit_app]
+      -- Porting note: passing instances through
+      change IsIso (IsColimit.coconePointUniqueUpToIso _ ?_).hom
+      · infer_instance
+      -- Porting note: passing instances through
+      apply @counitCoequalizerOfReflectsCoequalizer _ _ _ _ _ _ _ _ ?_
+      let _ :
+        G.IsSplitPair (F.map (G.map (adj.counit.app Y)))
+          (adj.counit.app (F.obj (G.obj Y))) :=
+        MonadicityInternal.main_pair_G_split _ ((comparison adj).obj Y)
+      infer_instance
+    exact (comparisonAdjunction adj).toEquivalence.isEquivalence_inverse
 
 中文:
 定义 monadicOfHasPreservesReflectsGSplitCoequalizers
@@ -685,7 +728,26 @@ definition monadicOfHasPreservesReflectsGSplitCoequalizers
       intro X
       apply @isIso_of_reflects_iso _ _ _ _ _ _ _ (Monad.forget adj.toMonad) ?_ _
       · change IsIso ((comparisonAdjunction adj).unit.app X).f
-        rw [compar
+        rw [comparisonAdjunction_unit_f]
+        change
+          IsIso
+            (IsColimit.coconePointUniqueUpToIso (beckCoequalizer X)
+                (unitColimitOfPreservesCoequalizer X)).hom
+        exact (IsColimit.coconePointUniqueUpToIso _ _).isIso_hom
+    have : forall (Y : D), IsIso ((comparisonAdjunction adj).counit.app Y) := by
+      intro Y
+      rw [comparisonAdjunction_counit_app]
+      -- Porting note: passing instances through
+      change IsIso (IsColimit.coconePointUniqueUpToIso _ ?_).hom
+      · infer_instance
+      -- Porting note: passing instances through
+      apply @counitCoequalizerOfReflectsCoequalizer _ _ _ _ _ _ _ _ ?_
+      let _ :
+        G.IsSplitPair (F.map (G.map (adj.counit.app Y)))
+          (adj.counit.app (F.obj (G.obj Y))) :=
+        MonadicityInternal.main_pair_G_split _ ((comparison adj).obj Y)
+      infer_instance
+    exact (comparisonAdjunction adj).toEquivalence.isEquivalence_inverse
 -/
 def monadicOfHasPreservesReflectsGSplitCoequalizers [HasCoequalizerOfIsSplitPair G]
     [PreservesColimitOfIsSplitPair G] [ReflectsColimitOfIsSplitPair G] :
@@ -778,7 +840,10 @@ definition monadicOfCreatesGSplitCoequalizers
   have I {A B} (f g : A ⟶ B) [G.IsSplitPair f g] : HasColimit (parallelPair f g ⋙ G) := by
     rw [hasColimit_iff_of_iso (diagramIsoParallelPair.{v₁} _)]
 exact inferInstanceAs HasCoequalizer (G.map f) (G.map g)
-  have : HasCoequalizerOfIsSplitPair G := ⟨fun _ _ => hasColimit_of_created (parallelP
+  have : HasCoequalizerOfIsSplitPair G := ⟨fun _ _ => hasColimit_of_created (parallelPair _ _) G⟩
+  have : PreservesColimitOfIsSplitPair G := ⟨by intros; infer_instance⟩
+  have : ReflectsColimitOfIsSplitPair G := ⟨by intros; infer_instance⟩
+  exact monadicOfHasPreservesReflectsGSplitCoequalizers adj
 
 中文:
 定义 monadicOfCreatesGSplitCoequalizers
@@ -787,7 +852,10 @@ exact inferInstanceAs HasCoequalizer (G.map f) (G.map g)
   have I {A B} (f g : A ⟶ B) [G.IsSplitPair f g] : HasColimit (parallelPair f g ⋙ G) := by
     rw [hasColimit_iff_of_iso (diagramIsoParallelPair.{v₁} _)]
 exact inferInstanceAs HasCoequalizer (G.map f) (G.map g)
-  have : HasCoequalizerOfIsSplitPair G := ⟨fun _ _ => hasColimit_of_created (parallelP
+  have : HasCoequalizerOfIsSplitPair G := ⟨fun _ _ => hasColimit_of_created (parallelPair _ _) G⟩
+  have : PreservesColimitOfIsSplitPair G := ⟨by intros; infer_instance⟩
+  have : ReflectsColimitOfIsSplitPair G := ⟨by intros; infer_instance⟩
+  exact monadicOfHasPreservesReflectsGSplitCoequalizers adj
 
 Depends on / 依赖: G.IsSplitPair, G.map, HasCoequalizer, HasCoequalizerOfIsSplitPair, HasColimit, IsSplitPair, PreservesColimitOfIsSplitPair, ReflectsColimitOfIsSplitPair, diagramIsoParallelPair, hasColimit_iff_of_iso, hasColimit_of_created, infer_instance, intros, monadicOfHasPreservesReflectsGSplitCoequalizers, parallelPair
 -/
@@ -906,7 +974,19 @@ definition monadicOfHasPreservesReflexiveCoequalizersOfReflectsIsomorphisms
       apply
         @isIso_of_reflects_iso _ _ _ _ _ _ _ (Monad.forget adj.toMonad) ?_ _
       · change IsIso ((comparisonAdjunction adj).unit.app X).f
-        rw
+        rw [comparisonAdjunction_unit_f]
+        exact (IsColimit.coconePointUniqueUpToIso (beckCoequalizer X)
+          (unitColimitOfPreservesCoequalizer X)).isIso_hom
+    have : forall (Y : D), IsIso ((comparisonAdjunction adj).counit.app Y) := by
+      intro Y
+      rw [comparisonAdjunction_counit_app]
+      -- Porting note: passing instances through
+      change IsIso (IsColimit.coconePointUniqueUpToIso _ ?_).hom
+      · infer_instance
+      -- Porting note: passing instances through
+      apply @counitCoequalizerOfReflectsCoequalizer _ _ _ _ _ _ _ _ ?_
+      apply reflectsColimit_of_reflectsIsomorphisms
+    exact (comparisonAdjunction adj).toEquivalence.isEquivalence_inverse
 
 中文:
 定义 monadicOfHasPreservesReflexiveCoequalizersOfReflectsIsomorphisms
@@ -919,7 +999,19 @@ definition monadicOfHasPreservesReflexiveCoequalizersOfReflectsIsomorphisms
       apply
         @isIso_of_reflects_iso _ _ _ _ _ _ _ (Monad.forget adj.toMonad) ?_ _
       · change IsIso ((comparisonAdjunction adj).unit.app X).f
-        rw
+        rw [comparisonAdjunction_unit_f]
+        exact (IsColimit.coconePointUniqueUpToIso (beckCoequalizer X)
+          (unitColimitOfPreservesCoequalizer X)).isIso_hom
+    have : forall (Y : D), IsIso ((comparisonAdjunction adj).counit.app Y) := by
+      intro Y
+      rw [comparisonAdjunction_counit_app]
+      -- Porting note: passing instances through
+      change IsIso (IsColimit.coconePointUniqueUpToIso _ ?_).hom
+      · infer_instance
+      -- Porting note: passing instances through
+      apply @counitCoequalizerOfReflectsCoequalizer _ _ _ _ _ _ _ _ ?_
+      apply reflectsColimit_of_reflectsIsomorphisms
+    exact (comparisonAdjunction adj).toEquivalence.isEquivalence_inverse
 -/
 def monadicOfHasPreservesReflexiveCoequalizersOfReflectsIsomorphisms : MonadicRightAdjoint G where
   L := F

@@ -243,7 +243,10 @@ lemma mem_symplComp_iff
   · intro h y hy
     have hiy := h (I • y)
     simp only [← smul_assoc, smul_eq_mul, I_mul_I, neg_smul, one_smul, neg_neg] at hiy
-    si
+    simpa [inner_real_eq_re_inner] using! hiy hy
+  · intro h _ hy
+    have hiy := h _ hy
+    simpa [inner_smul_left] using! hiy
 
 中文:
 引理 mem_symplComp_iff
@@ -255,7 +258,10 @@ lemma mem_symplComp_iff
   · intro h y hy
     have hiy := h (I • y)
     simp only [← smul_assoc, smul_eq_mul, I_mul_I, neg_smul, one_smul, neg_neg] at hiy
-    si
+    simpa [inner_real_eq_re_inner] using! hiy hy
+  · intro h _ hy
+    have hiy := h _ hy
+    simpa [inner_smul_left] using! hiy
 
 Depends on / 依赖: I_mul_I, Units.smul_def, Units.val_inv_eq_inv_val, inner_real_eq_re_inner, inner_smul_left, inv_I, mem_mapEquiv_iff, mem_orthogonal, neg_neg, neg_smul, one_smul, scalarSMulCLE_symm_apply, smul_assoc, smul_def, smul_eq_mul, val_UnitI, val_inv_eq_inv_val
 -/
@@ -369,7 +375,8 @@ lemma mulI_mulI_eq
     rw [mem_mapEquiv_iff (scalarSMulCLE H UnitI)]; rw [← SetLike.forall_smul_mem_iff] at h
     simpa [← smul_assoc, Units.smul_def] using (h (-1 : Real))
   · intro h
-    rw [← SetLike.forall
+    rw [← SetLike.forall_smul_mem_iff] at h
+    simpa [← smul_assoc, Units.smul_def] using (h (-1 : Real))
 
 中文:
 引理 mulI_mulI_eq
@@ -383,7 +390,8 @@ lemma mulI_mulI_eq
     rw [mem_mapEquiv_iff (scalarSMulCLE H UnitI)]; rw [← SetLike.forall_smul_mem_iff] at h
     simpa [← smul_assoc, Units.smul_def] using (h (-1 : Real))
   · intro h
-    rw [← SetLike.forall
+    rw [← SetLike.forall_smul_mem_iff] at h
+    simpa [← smul_assoc, Units.smul_def] using (h (-1 : Real))
 
 Depends on / 依赖: SetLike, SetLike.forall_smul_mem_iff, SetLike.mem_coe, Submodule, Submodule.carrier_eq_coe, Units.smul_def, carrier_eq_coe, coe_toSubmodule, forall_smul_mem_iff, mem_coe, mem_mapEquiv_iff, scalarSMulCLE, smul_assoc, smul_def
 -/

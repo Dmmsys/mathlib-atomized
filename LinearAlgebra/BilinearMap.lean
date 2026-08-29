@@ -226,7 +226,10 @@ definition flip
     (fun _ _ m => (f m).map_smulₛₗ _ _)
     (fun n m₁ m₂ => by simp only [map_add, add_apply])
     -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `map_smulₛₗ` into `map_smulₛₗ _`.
-    -- It looks like we 
+    -- It looks like we now run out of assignable metavariables.
+    (fun c n m => by simp only [map_smulₛₗ _, smul_apply])
+
+@[simp]
 
 中文:
 定义 flip
@@ -235,7 +238,10 @@ definition flip
     (fun _ _ m => (f m).map_smulₛₗ _ _)
     (fun n m₁ m₂ => by simp only [map_add, add_apply])
     -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 changed `map_smulₛₗ` into `map_smulₛₗ _`.
-    -- It looks like we 
+    -- It looks like we now run out of assignable metavariables.
+    (fun c n m => by simp only [map_smulₛₗ _, smul_apply])
+
+@[simp]
 
 Depends on / 依赖: add_apply, map_add
 -/

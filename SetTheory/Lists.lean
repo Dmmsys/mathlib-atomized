@@ -791,7 +791,9 @@ definition inductionMut
   induction l with
   | atom => exact ⟨C0 _, ⟨⟩⟩
   | nil => exact ⟨C1 _ D0, D0⟩
-  | cons' a 
+  | cons' a l IH₁ IH =>
+    have : D (Lists'.cons' a l) := D1 ⟨_, _⟩ _ IH₁.1 IH.2
+    exact ⟨C1 _ this, this⟩
 
 中文:
 定义 inductionMut
@@ -807,7 +809,9 @@ definition inductionMut
   induction l with
   | atom => exact ⟨C0 _, ⟨⟩⟩
   | nil => exact ⟨C1 _ D0, D0⟩
-  | cons' a 
+  | cons' a l IH₁ IH =>
+    have : D (Lists'.cons' a l) := D1 ⟨_, _⟩ _ IH₁.1 IH.2
+    exact ⟨C1 _ this, this⟩
 -/
 def inductionMut (C : Lists α -> Sort*) (D : Lists' α true -> Sort*)
     (C0 : forall a, C (atom a)) (C1 : forall l, D l -> C (of' l))
@@ -965,7 +969,25 @@ theorem Equiv.trans
   apply inductionMut
   · intro a l₂ l₃ h₁ h₂
     rwa [← equiv_atom.1 h₁] at h₂
-  · intro l₁ IH l₂ l
+  · intro l₁ IH l₂ l₃ h₁ h₂
+    obtain - | l₂ := id h₁
+    · exact h₂
+    obtain - | l₃ := id h₂
+    · exact h₁
+    obtain ⟨hl₁, hr₁⟩ := Equiv.antisymm_iff.1 h₁
+    obtain ⟨hl₂, hr₂⟩ := Equiv.antisymm_iff.1 h₂
+    apply Equiv.antisymm_iff.2; constructor <;> apply Lists'.subset_def.2
+    · intro a₁ m₁
+      rcases Lists'.mem_of_subset' hl₁ m₁ with ⟨a₂, m₂, e₁₂⟩
+      rcases Lists'.mem_of_subset' hl₂ m₂ with ⟨a₃, m₃, e₂₃⟩
+      exact ⟨a₃, m₃, IH _ m₁ e₁₂ e₂₃⟩
+    · intro a₃ m₃
+      rcases Lists'.mem_of_subset' hr₂ m₃ with ⟨a₂, m₂, e₃₂⟩
+      rcases Lists'.mem_of_subset' hr₁ m₂ with ⟨a₁, m₁, e₂₁⟩
+      exact ⟨a₁, m₁, (IH _ m₁ e₂₁.symm e₃₂.symm).symm⟩
+  · rintro _ ⟨⟩
+  · intro a l IH₁ IH₂
+    simpa using ⟨IH₁, IH₂⟩
 
 中文:
 定理 等价.trans
@@ -976,7 +998,25 @@ theorem Equiv.trans
   apply inductionMut
   · intro a l₂ l₃ h₁ h₂
     rwa [← equiv_atom.1 h₁] at h₂
-  · intro l₁ IH l₂ l
+  · intro l₁ IH l₂ l₃ h₁ h₂
+    obtain - | l₂ := id h₁
+    · exact h₂
+    obtain - | l₃ := id h₂
+    · exact h₁
+    obtain ⟨hl₁, hr₁⟩ := Equiv.antisymm_iff.1 h₁
+    obtain ⟨hl₂, hr₂⟩ := Equiv.antisymm_iff.1 h₂
+    apply Equiv.antisymm_iff.2; constructor <;> apply Lists'.subset_def.2
+    · intro a₁ m₁
+      rcases Lists'.mem_of_subset' hl₁ m₁ with ⟨a₂, m₂, e₁₂⟩
+      rcases Lists'.mem_of_subset' hl₂ m₂ with ⟨a₃, m₃, e₂₃⟩
+      exact ⟨a₃, m₃, IH _ m₁ e₁₂ e₂₃⟩
+    · intro a₃ m₃
+      rcases Lists'.mem_of_subset' hr₂ m₃ with ⟨a₂, m₂, e₃₂⟩
+      rcases Lists'.mem_of_subset' hr₁ m₂ with ⟨a₁, m₁, e₂₁⟩
+      exact ⟨a₁, m₁, (IH _ m₁ e₂₁.symm e₃₂.symm).symm⟩
+  · rintro _ ⟨⟩
+  · intro a l IH₁ IH₂
+    simpa using ⟨IH₁, IH₂⟩
 -/
 theorem Equiv.trans : forall {l₁ l₂ l₃ : Lists α}, l₁ ~ l₂ -> l₂ ~ l₃ -> l₁ ~ l₃ := by
   let trans := fun l₁ : Lists α => forall ⦃l₂ l₃⦄, l₁ ~ l₂ -> l₂ ~ l₃ -> l₁ ~ l₃
@@ -1090,7 +1130,12 @@ definition Equiv.decidable
         Subset.decidable l₁ l₂
       haveI : Decidable (l₂ subseteq l₁) :=
         have : SizeOf.sizeOf l₂ + SizeOf.sizeOf l₁ <
-     
+            SizeOf.sizeOf (⟨true, l₁⟩ : Lists α) + SizeOf.sizeOf (⟨true, l₂⟩ : Lists α) := by
+          decreasing_tactic
+        Subset.decidable l₂ l₁
+      exact decidable_of_iff' _ Equiv.antisymm_iff
+  termination_by x y => sizeOf x + sizeOf y
+  @[instance_reducible]
 
 中文:
 定义 等价.decidable
@@ -1101,7 +1146,12 @@ definition Equiv.decidable
         Subset.decidable l₁ l₂
       haveI : Decidable (l₂ subseteq l₁) :=
         have : SizeOf.sizeOf l₂ + SizeOf.sizeOf l₁ <
-     
+            SizeOf.sizeOf (⟨true, l₁⟩ : Lists α) + SizeOf.sizeOf (⟨true, l₂⟩ : Lists α) := by
+          decreasing_tactic
+        Subset.decidable l₂ l₁
+      exact decidable_of_iff' _ Equiv.antisymm_iff
+  termination_by x y => sizeOf x + sizeOf y
+  @[instance_reducible]
 
 Depends on / 依赖: Decidable, Equiv.antisymm_iff, SizeOf, SizeOf.sizeOf, Subset, Subset.decidable, antisymm_iff, decidable, decidable_of_iff, decreasing_tactic, instance_reducible, sizeOf, subseteq, termination_by
 -/
@@ -1140,7 +1190,10 @@ definition Subset.decidable
         have : SizeOf.sizeOf l₁ + SizeOf.sizeOf l₂ <
             SizeOf.sizeOf (Lists'.cons' a l₁) + SizeOf.sizeOf l₂ := by
           decreasing_tactic
-        Subse
+        Subset.decidable l₁ l₂
+      exact decidable_of_iff' _ (@Lists'.cons_subset _ ⟨_, _⟩ _ _)
+  termination_by x y => sizeOf x + sizeOf y
+  @[instance_reducible]
 
 中文:
 定义 子集.decidable
@@ -1151,7 +1204,10 @@ definition Subset.decidable
         have : SizeOf.sizeOf l₁ + SizeOf.sizeOf l₂ <
             SizeOf.sizeOf (Lists'.cons' a l₁) + SizeOf.sizeOf l₂ := by
           decreasing_tactic
-        Subse
+        Subset.decidable l₁ l₂
+      exact decidable_of_iff' _ (@Lists'.cons_subset _ ⟨_, _⟩ _ _)
+  termination_by x y => sizeOf x + sizeOf y
+  @[instance_reducible]
 
 Depends on / 依赖: SizeOf, SizeOf.sizeOf, Subset, Subset.decidable, cons_subset, decidable, decidable_of_iff, decreasing_tactic, instance_reducible, mem.decidable, sizeOf, sizeof_pos, termination_by
 -/
@@ -1182,7 +1238,10 @@ definition mem.decidable
           SizeOf.sizeOf a + SizeOf.sizeOf l₂ <
             SizeOf.sizeOf a + SizeOf.sizeOf (Lists'.cons' b l₂) := by
           decreasing_tactic
-    
+        mem.decidable a l₂
+      refine decidable_of_iff' (a ~ ⟨_, b⟩ ∨ a in l₂) ?_
+      rw [← Lists'.mem_cons]; rfl
+  termination_by x y => sizeOf x + sizeOf y
 
 中文:
 定义 mem.decidable
@@ -1194,7 +1253,10 @@ definition mem.decidable
           SizeOf.sizeOf a + SizeOf.sizeOf l₂ <
             SizeOf.sizeOf a + SizeOf.sizeOf (Lists'.cons' b l₂) := by
           decreasing_tactic
-    
+        mem.decidable a l₂
+      refine decidable_of_iff' (a ~ ⟨_, b⟩ ∨ a in l₂) ?_
+      rw [← Lists'.mem_cons]; rfl
+  termination_by x y => sizeOf x + sizeOf y
 
 Depends on / 依赖: CauSeq, CauSeq.IsComplete, IsComplete, completeSpace_of_cauSeq_isComplete
 -/

@@ -43,6 +43,8 @@ theorem Prime.dvd_prod_iff
       rcases pp.dvd_or_dvd h with hd | hd
       · exact ⟨L_hd, mem_cons_self, hd⟩
       · obtain ⟨x, hx1, hx2⟩ := L_ih hd
+        exact ⟨x, mem_cons_of_mem L_hd hx1, hx2⟩
+  · exact fun ⟨a, ha1, ha2⟩ => dvd_trans ha2 (dvd_prod ha1)
 
 中文:
 定理 素.dvd_prod_iff
@@ -60,6 +62,8 @@ theorem Prime.dvd_prod_iff
       rcases pp.dvd_or_dvd h with hd | hd
       · exact ⟨L_hd, mem_cons_self, hd⟩
       · obtain ⟨x, hx1, hx2⟩ := L_ih hd
+        exact ⟨x, mem_cons_of_mem L_hd hx1, hx2⟩
+  · exact fun ⟨a, ha1, ha2⟩ => dvd_trans ha2 (dvd_prod ha1)
 
 Depends on / 依赖: L_hd, L_ih, L_tl, absurd, dvd_or_dvd, dvd_prod, dvd_trans, mem_cons_of_mem, mem_cons_self, not_dvd_one, pp.dvd_or_dvd, pp.not_dvd_one, prod_cons, prod_nil
 -/
@@ -136,7 +140,19 @@ theorem perm_of_prod_eq_prod
     absurd ha (Prime.not_dvd_one (h₃ a mem_cons_self))
   | a :: l, [], h₁, h₂, _ =>
     have ha : a ∣ 1 := prod_nil (α := M) ▸ h₁ ▸ (prod_cons (l := l)).symm ▸ dvd_mul_right _ _
-    absurd ha (Prime.not_dvd_one (h₂ a mem_con
+    absurd ha (Prime.not_dvd_one (h₂ a mem_cons_self))
+  | a :: l₁, b :: l₂, h, hl₁, hl₂ => by
+    classical
+      have hl₁' : forall p in l₁, Prime p := fun p hp => hl₁ p (mem_cons_of_mem _ hp)
+      have hl₂' : forall p in (b :: l₂).erase a, Prime p := fun p hp => hl₂ p (mem_of_mem_erase hp)
+      have ha : a in b :: l₂ :=
+        mem_list_primes_of_dvd_prod (hl₁ a mem_cons_self) hl₂
+          (h ▸ by rw [prod_cons]; exact dvd_mul_right _ _)
+      have hb : b :: l₂ ~ a :: (b :: l₂).erase a := perm_cons_erase ha
+      have hl : prod l₁ = prod ((b :: l₂).erase a) :=
+(mul_right_inj' (hl₁ a mem_cons_self).ne_zero).1 by
+          rwa [← prod_cons, ← prod_cons, ← hb.prod_eq]
+      exact Perm.trans ((perm_of_prod_eq_prod hl hl₁' hl₂').cons _) hb.symm
 
 中文:
 定理 perm_of_prod_eq_prod
@@ -144,7 +160,19 @@ theorem perm_of_prod_eq_prod
     absurd ha (Prime.not_dvd_one (h₃ a mem_cons_self))
   | a :: l, [], h₁, h₂, _ =>
     have ha : a ∣ 1 := prod_nil (α := M) ▸ h₁ ▸ (prod_cons (l := l)).symm ▸ dvd_mul_right _ _
-    absurd ha (Prime.not_dvd_one (h₂ a mem_con
+    absurd ha (Prime.not_dvd_one (h₂ a mem_cons_self))
+  | a :: l₁, b :: l₂, h, hl₁, hl₂ => by
+    classical
+      have hl₁' : forall p in l₁, Prime p := fun p hp => hl₁ p (mem_cons_of_mem _ hp)
+      have hl₂' : forall p in (b :: l₂).erase a, Prime p := fun p hp => hl₂ p (mem_of_mem_erase hp)
+      have ha : a in b :: l₂ :=
+        mem_list_primes_of_dvd_prod (hl₁ a mem_cons_self) hl₂
+          (h ▸ by rw [prod_cons]; exact dvd_mul_right _ _)
+      have hb : b :: l₂ ~ a :: (b :: l₂).erase a := perm_cons_erase ha
+      have hl : prod l₁ = prod ((b :: l₂).erase a) :=
+(mul_right_inj' (hl₁ a mem_cons_self).ne_zero).1 by
+          rwa [← prod_cons, ← prod_cons, ← hb.prod_eq]
+      exact Perm.trans ((perm_of_prod_eq_prod hl hl₁' hl₂').cons _) hb.symm
 
 Depends on / 依赖: dvd_mul_right, prod_cons, prod_nil
 -/

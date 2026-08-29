@@ -462,7 +462,8 @@ lemma exp_injOn_of_forall_sub_mem_Ioo
   rw [neg_mul] at h1
   rw [← sub_eq_zero]; rw [← cos_eq_one_iff_of_lt_of_lt h1 h2]; rw [← exp_ofReal_mul_I_re]
   replace heq : cexp _ = cexp _ := congrArg Subtype.val heq
-  rw [exp_eq_exp_iff_exp_sub_eq_one]; rw [← sub_mul]; rw [← of
+  rw [exp_eq_exp_iff_exp_sub_eq_one]; rw [← sub_mul]; rw [← ofReal_sub]; rw [Complex.ext_iff] at heq
+  exact heq.1
 
 中文:
 引理 exp_injOn_of_对任意_sub_mem_Ioo
@@ -473,7 +474,8 @@ lemma exp_injOn_of_forall_sub_mem_Ioo
   rw [neg_mul] at h1
   rw [← sub_eq_zero]; rw [← cos_eq_one_iff_of_lt_of_lt h1 h2]; rw [← exp_ofReal_mul_I_re]
   replace heq : cexp _ = cexp _ := congrArg Subtype.val heq
-  rw [exp_eq_exp_iff_exp_sub_eq_one]; rw [← sub_mul]; rw [← of
+  rw [exp_eq_exp_iff_exp_sub_eq_one]; rw [← sub_mul]; rw [← ofReal_sub]; rw [Complex.ext_iff] at heq
+  exact heq.1
 
 Depends on / 依赖: Complex.ext_iff, Subtype, Subtype.val, cos_eq_one_iff_of_lt_of_lt, exp_eq_exp_iff_exp_sub_eq_one, exp_ofReal_mul_I_re, ext_iff, neg_mul, ofReal_sub, replace, sub_eq_zero, sub_mul
 -/
@@ -712,7 +714,12 @@ theorem mem_centeredArc_div
     contrapose! h1
     simp [h1]
   have hn : 1 <= (n : Real) := by simpa [Nat.one_le_iff_ne_zero]
-  rw [mem_centeredArc ((div_le_self hs0.le hn).trans hs)]; rw [lt_div_iff₀' (one_pos.trans_le 
+  rw [mem_centeredArc ((div_le_self hs0.le hn).trans hs)]; rw [lt_div_iff₀' (one_pos.trans_le hn)]
+  rw [mem_centeredArc (div_le_self pi_nonneg hn)] at h1
+  rwa [mem_centeredArc hs, coe_pow, ← arg_coe_angle_toReal_eq_arg, arg_pow_coe_angle,
+    (Angle.nsmul_toReal_eq_mul hn0).mpr (mem_Ioc_of_Ioo ?_), abs_mul, Nat.abs_cast,
+    arg_coe_angle_toReal_eq_arg] at h2
+  rwa [neg_div, mem_Ioo, ← abs_lt, arg_coe_angle_toReal_eq_arg]
 
 中文:
 定理 mem_centeredArc_div
@@ -725,7 +732,12 @@ theorem mem_centeredArc_div
     contrapose! h1
     simp [h1]
   have hn : 1 <= (n : Real) := by simpa [Nat.one_le_iff_ne_zero]
-  rw [mem_centeredArc ((div_le_self hs0.le hn).trans hs)]; rw [lt_div_iff₀' (one_pos.trans_le 
+  rw [mem_centeredArc ((div_le_self hs0.le hn).trans hs)]; rw [lt_div_iff₀' (one_pos.trans_le hn)]
+  rw [mem_centeredArc (div_le_self pi_nonneg hn)] at h1
+  rwa [mem_centeredArc hs, coe_pow, ← arg_coe_angle_toReal_eq_arg, arg_pow_coe_angle,
+    (Angle.nsmul_toReal_eq_mul hn0).mpr (mem_Ioc_of_Ioo ?_), abs_mul, Nat.abs_cast,
+    arg_coe_angle_toReal_eq_arg] at h2
+  rwa [neg_div, mem_Ioo, ← abs_lt, arg_coe_angle_toReal_eq_arg]
 
 Depends on / 依赖: Angle.nsmul_toReal_eq_mul, Nat.abs_cast, Nat.one_le_iff_ne_zero, abs_cast, abs_mul, arg_coe_angle_toReal_eq_arg, arg_pow_coe_angle, centeredArc_eq_empty, coe_pow, contrapose, div_le_self, hs0.le, mem_Ioc_of_Ioo, mem_centeredArc, nsmul_toReal_eq_mul, one_le_iff_ne_zero, one_pos, one_pos.trans_le, pi_nonneg, trans_le
 -/
@@ -1255,7 +1267,11 @@ lemma disjoint_path_image_Ioc
       (Ioc y.val.arg (angleDiff y x + y.val.arg)) := by grind [angleDiff]
   rw [path_image_Ioc_of_ne h]; rw [path_image_Ioc_of_ne h.symm]
   refine Set.disjoint_image_image fun a ha b hb => ?_
-  refine exp_injOn_Ioc (a := min x.va
+  refine exp_injOn_Ioc (a := min x.val.arg y.val.arg) (b := min x.val.arg y.val.arg + 2 * π)
+.ne ?_ ?_ hdisj.ne_of_mem ha hb (by simp)
+  all_goals
+    rw [← Ioc_union_Ioc_angleDiff_add_arg h]
+    tauto
 
 中文:
 引理 disjoint_path_image_Ioc
@@ -1265,7 +1281,11 @@ lemma disjoint_path_image_Ioc
       (Ioc y.val.arg (angleDiff y x + y.val.arg)) := by grind [angleDiff]
   rw [path_image_Ioc_of_ne h]; rw [path_image_Ioc_of_ne h.symm]
   refine Set.disjoint_image_image fun a ha b hb => ?_
-  refine exp_injOn_Ioc (a := min x.va
+  refine exp_injOn_Ioc (a := min x.val.arg y.val.arg) (b := min x.val.arg y.val.arg + 2 * π)
+.ne ?_ ?_ hdisj.ne_of_mem ha hb (by simp)
+  all_goals
+    rw [← Ioc_union_Ioc_angleDiff_add_arg h]
+    tauto
 
 Depends on / 依赖: Disjoint, Ioc_union_Ioc_angleDiff_add_arg, Set.disjoint_image_image, all_goals, angleDiff, disjoint_image_image, exp_injOn_Ioc, h.symm, hdisj.ne_of_mem, ne_of_mem, path_image_Ioc_of_ne, x.val.arg, y.val.arg
 -/
@@ -1312,14 +1332,18 @@ lemma compl_range_path
   given: (h : x != y)
   statement: (range (path x y))ᶜ = path y x '' Ioo 0 1
   proof: by
-  rw [range_path]; rw [← Ioc_insert_left (by simp)]; rw [image_insert_eq]; rw [← path_image_Ioc_of_ne h]; rw [← union_singleton]; rw [compl_union]; rw [compl_path_image_Ioc h]; rw [← Ioo_insert_right (by simp)]; rw [image_insert_eq]; rw [(y.path x).target]; rw [exp_arg]; rw [insert_inter_of_notMe
+  rw [range_path]; rw [← Ioc_insert_left (by simp)]; rw [image_insert_eq]; rw [← path_image_Ioc_of_ne h]; rw [← union_singleton]; rw [compl_union]; rw [compl_path_image_Ioc h]; rw [← Ioo_insert_right (by simp)]; rw [image_insert_eq]; rw [(y.path x).target]; rw [exp_arg]; rw [insert_inter_of_notMem (by simp)]; rw [inter_eq_left]
+  rintro z ⟨t, ht, rfl⟩
+.trans_eq (y.path x).target exact (path_injective_of_ne h.symm).ne ht.2.ne
 
 中文:
 引理 compl_range_path
   条件: (h : x != y)
   结论: (range (path x y))ᶜ = path y x '' 开区间 0 1
   证明: by
-  rw [range_path]; rw [← Ioc_insert_left (by simp)]; rw [image_insert_eq]; rw [← path_image_Ioc_of_ne h]; rw [← union_singleton]; rw [compl_union]; rw [compl_path_image_Ioc h]; rw [← Ioo_insert_right (by simp)]; rw [image_insert_eq]; rw [(y.path x).target]; rw [exp_arg]; rw [insert_inter_of_notMe
+  rw [range_path]; rw [← Ioc_insert_left (by simp)]; rw [image_insert_eq]; rw [← path_image_Ioc_of_ne h]; rw [← union_singleton]; rw [compl_union]; rw [compl_path_image_Ioc h]; rw [← Ioo_insert_right (by simp)]; rw [image_insert_eq]; rw [(y.path x).target]; rw [exp_arg]; rw [insert_inter_of_notMem (by simp)]; rw [inter_eq_left]
+  rintro z ⟨t, ht, rfl⟩
+.trans_eq (y.path x).target exact (path_injective_of_ne h.symm).ne ht.2.ne
 
 Depends on / 依赖: Ioc_insert_left, Ioo_insert_right, compl_path_image_Ioc, compl_union, exp_arg, h.symm, image_insert_eq, insert_inter_of_notMem, inter_eq_left, path_image_Ioc_of_ne, path_injective_of_ne, range_path, target, trans_eq, union_singleton, y.path
 -/
@@ -1341,7 +1365,8 @@ lemma range_path_ssubset_univ
   · use -x, by simp [neg_ne_self]
   rw [compl_range_path hne]
   use y.path x ⟨2⁻¹, by simp only [mem_Icc, inv_nonneg, Nat.ofNat_nonneg, true_and]; linarith⟩
-  refine mem_image_of_mem _ ⟨by simp [← unitInterval.coe_pos], uni
+  refine mem_image_of_mem _ ⟨by simp [← unitInterval.coe_pos], unitInterval.coe_lt_one.mp ?_⟩
+  linarith
 
 中文:
 引理 range_path_ssubset_univ
@@ -1353,7 +1378,8 @@ lemma range_path_ssubset_univ
   · use -x, by simp [neg_ne_self]
   rw [compl_range_path hne]
   use y.path x ⟨2⁻¹, by simp only [mem_Icc, inv_nonneg, Nat.ofNat_nonneg, true_and]; linarith⟩
-  refine mem_image_of_mem _ ⟨by simp [← unitInterval.coe_pos], uni
+  refine mem_image_of_mem _ ⟨by simp [← unitInterval.coe_pos], unitInterval.coe_lt_one.mp ?_⟩
+  linarith
 
 Depends on / 依赖: Nat.ofNat_nonneg, coe_lt_one, coe_pos, compl_range_path, eq_or_ne, inv_nonneg, mem_Icc, mem_image_of_mem, neg_ne_self, ofNat_nonneg, ssubset_univ_iff_nonempty_compl, true_and, unitInterval, unitInterval.coe_lt_one.mp, unitInterval.coe_pos, y.path
 -/
@@ -1377,7 +1403,8 @@ lemma range_path_inter_range_path
   rw [← image_univ]; rw [← image_univ]; rw [unitInterval.univ_eq_Icc]; rw [← Ioc_insert_left (by simp)]; rw [← Ioo_insert_right (by simp)]
   simp_rw [image_insert_eq]
   have h : Disjoint ((x.path y) '' Ioo 0 1) ((y.path x) '' Ioo 0 1) := by
-    refine (disjoint_path_image_Ioc h).mono ?_ ?_ <;> ex
+    refine (disjoint_path_image_Ioc h).mono ?_ ?_ <;> exact image_mono Ioo_subset_Ioc_self
+  grind
 
 中文:
 引理 range_path_inter_range_path
@@ -1387,7 +1414,8 @@ lemma range_path_inter_range_path
   rw [← image_univ]; rw [← image_univ]; rw [unitInterval.univ_eq_Icc]; rw [← Ioc_insert_left (by simp)]; rw [← Ioo_insert_right (by simp)]
   simp_rw [image_insert_eq]
   have h : Disjoint ((x.path y) '' Ioo 0 1) ((y.path x) '' Ioo 0 1) := by
-    refine (disjoint_path_image_Ioc h).mono ?_ ?_ <;> ex
+    refine (disjoint_path_image_Ioc h).mono ?_ ?_ <;> exact image_mono Ioo_subset_Ioc_self
+  grind
 
 Depends on / 依赖: Disjoint, Ioc_insert_left, Ioo_insert_right, Ioo_subset_Ioc_self, disjoint_path_image_Ioc, image_insert_eq, image_mono, image_univ, simp_rw, unitInterval, unitInterval.univ_eq_Icc, univ_eq_Icc, x.path, y.path
 -/
@@ -1413,7 +1441,12 @@ lemma isPathConnected_compl_singleton
   have hne : -x != y := by
     rintro rfl
     simp [(neg_ne_self x).symm] at hxP
-  have hP₂ : x ∉ rang
+  have hP₂ : x ∉ range (path y (-x)) := by
+    rintro hP₂
+    have h : x in range _ inter _ := ⟨hxP, hP₂⟩
+    rw [range_path_inter_range_path hne] at h
+    simp [(neg_ne_self x).symm, hyx.symm] at h
+  grind
 
 中文:
 引理 isPathConnected_compl_singleton
@@ -1427,7 +1460,12 @@ lemma isPathConnected_compl_singleton
   have hne : -x != y := by
     rintro rfl
     simp [(neg_ne_self x).symm] at hxP
-  have hP₂ : x ∉ rang
+  have hP₂ : x ∉ range (path y (-x)) := by
+    rintro hP₂
+    have h : x in range _ inter _ := ⟨hxP, hP₂⟩
+    rw [range_path_inter_range_path hne] at h
+    simp [(neg_ne_self x).symm, hyx.symm] at h
+  grind
 
 Depends on / 依赖: hyx.symm, neg_ne_self, range_path_inter_range_path
 -/
@@ -1457,7 +1495,15 @@ lemma not_isPreconnected_compl_pair
   simp only [isPreconnected_iff_subset_of_disjoint_closed, not_forall, not_or, exists_and_left]
   refine ⟨range (path x y), ?_, range (path y x), (isCompact_range (path x y).continuous).isClosed,
     (isCompact_range (path y x).continuous).isClosed, ?_, ?_, ?_⟩
-  · rw [compl_subset_iff_union, uni
+  · rw [compl_subset_iff_union, union_eq_right.mpr (by simp only [pair_subset_iff,
+      (path x y).source_mem_range, (path x y).target_mem_range, and_self])]
+    exact (range_path_ssubset_univ x y).ne
+  · rw [range_path_union_range_path hxy]
+    exact subset_univ _
+  · rw [range_path_inter_range_path hxy]
+    exact compl_inter_self {x, y}
+  rw [compl_subset_iff_union]; rw [union_eq_right.mpr (by simp only [pair_subset_iff]; rw [(path y x).source_mem_range]; rw [(path y x).target_mem_range]; rw [and_self])]
+  exact (range_path_ssubset_univ y x).ne
 
 中文:
 引理 not_isPreconnected_compl_pair
@@ -1467,7 +1513,15 @@ lemma not_isPreconnected_compl_pair
   simp only [isPreconnected_iff_subset_of_disjoint_closed, not_forall, not_or, exists_and_left]
   refine ⟨range (path x y), ?_, range (path y x), (isCompact_range (path x y).continuous).isClosed,
     (isCompact_range (path y x).continuous).isClosed, ?_, ?_, ?_⟩
-  · rw [compl_subset_iff_union, uni
+  · rw [compl_subset_iff_union, union_eq_right.mpr (by simp only [pair_subset_iff,
+      (path x y).source_mem_range, (path x y).target_mem_range, and_self])]
+    exact (range_path_ssubset_univ x y).ne
+  · rw [range_path_union_range_path hxy]
+    exact subset_univ _
+  · rw [range_path_inter_range_path hxy]
+    exact compl_inter_self {x, y}
+  rw [compl_subset_iff_union]; rw [union_eq_right.mpr (by simp only [pair_subset_iff]; rw [(path y x).source_mem_range]; rw [(path y x).target_mem_range]; rw [and_self])]
+  exact (range_path_ssubset_univ y x).ne
 
 Depends on / 依赖: and_self, compl_subset_iff_union, continuous, exists_and_left, isClosed, isCompact_range, isPreconnected_iff_subset_of_disjoint_closed, not_forall, not_or, pair_subset_iff, range_path_ssubset_univ, range_path_union_range_path, source_mem_range, subset_u, target_mem_range, union_eq_right, union_eq_right.mpr
 -/
@@ -1862,7 +1916,8 @@ theorem injective_toCircle
   obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp h.symm
   rw [QuotientAddGroup.eq]; simp_rw [AddSubgroup.mem_zmultiples_iff, zsmul_eq_mul]
   use m
-  field_s
+  field_simp at hm
+  linarith
 
 中文:
 定理 injective_toCircle
@@ -1876,7 +1931,8 @@ theorem injective_toCircle
   obtain ⟨m, hm⟩ := Circle.exp_eq_exp.mp h.symm
   rw [QuotientAddGroup.eq]; simp_rw [AddSubgroup.mem_zmultiples_iff, zsmul_eq_mul]
   use m
-  field_s
+  field_simp at hm
+  linarith
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.mem_zmultiples_iff, Circle, Circle.exp_eq_exp.mp, QuotientAddGroup, QuotientAddGroup.eq, QuotientAddGroup.induction_on, exp_eq_exp, h.symm, induction_on, mem_zmultiples_iff, simp_rw, toCircle_apply_mk, zsmul_eq_mul
 -/
@@ -1905,7 +1961,7 @@ definition homeomorphCircle'
   continuous_invFun := by
     rw [continuous_iff_continuousAt]
     intro x
-    exact (continuousAt_arg_coe_angle x.coe_ne_
+    exact (continuousAt_arg_coe_angle x.coe_ne_zero).comp continuousAt_subtype_val
 
 中文:
 定义 homeomorphCircle'
@@ -1918,7 +1974,7 @@ definition homeomorphCircle'
   continuous_invFun := by
     rw [continuous_iff_continuousAt]
     intro x
-    exact (continuousAt_arg_coe_angle x.coe_ne_
+    exact (continuousAt_arg_coe_angle x.coe_ne_zero).comp continuousAt_subtype_val
 -/
 @[simps] noncomputable def homeomorphCircle' : AddCircle (2 * π) ≃ₜ Circle where
   toFun := Angle.toCircle
@@ -2067,7 +2123,11 @@ theorem Circle.hasBasis_centeredArc_div_two_pow
   simp_rw [centeredArc, abs_lt, Set.Ioo_def, ← Real.ball_zero_eq_Ioo]
   apply Filter.HasBasis.map
 refine nhds_basis_uniformity Metric.mk_uniformity_basis_of_tendsto (l := Filter.atTop)
-    (fun _ _ => by positivity) (by si
+    (fun _ _ => by positivity) (by simp) ?_
+  simp_rw [div_eq_mul_inv, pow_succ, mul_inv_rev, ← mul_assoc]
+  rw [← mul_zero (π * 2⁻¹)]
+  exact tendsto_inv_atTop_zero.comp (tendsto_pow_atTop_atTop_of_one_lt (by norm_num))
+.const_mul _
 
 中文:
 定理 Circle.hasBasis_centeredArc_div_two_pow
@@ -2076,7 +2136,11 @@ refine nhds_basis_uniformity Metric.mk_uniformity_basis_of_tendsto (l := Filter.
   simp_rw [centeredArc, abs_lt, Set.Ioo_def, ← Real.ball_zero_eq_Ioo]
   apply Filter.HasBasis.map
 refine nhds_basis_uniformity Metric.mk_uniformity_basis_of_tendsto (l := Filter.atTop)
-    (fun _ _ => by positivity) (by si
+    (fun _ _ => by positivity) (by simp) ?_
+  simp_rw [div_eq_mul_inv, pow_succ, mul_inv_rev, ← mul_assoc]
+  rw [← mul_zero (π * 2⁻¹)]
+  exact tendsto_inv_atTop_zero.comp (tendsto_pow_atTop_atTop_of_one_lt (by norm_num))
+.const_mul _
 
 Depends on / 依赖: Circle, Circle.exp_zero, Filter, Filter.HasBasis.map, Filter.atTop, HasBasis, Ioo_def, Metric, Metric.mk_uniformity_basis_of_tendsto, Real.ball_zero_eq_Ioo, Set.Ioo_def, abs_lt, ball_zero_eq_Ioo, centeredArc, const_mul, div_eq_mul_inv, exp_zero, isLocalHomeomorph_circleExp, isLocalHomeomorph_circleExp.map_nhds_eq, map_nhds_eq
 -/
@@ -2139,7 +2203,8 @@ theorem Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two
     | zero => simpa using hz1
     | succ n ih =>
         simpa [div_div, ← pow_succ'] using mem_centeredArc_div
-          (div_le_self pi_nonneg one_le_t
+          (div_le_self pi_nonneg one_le_two) (by simpa) (hz (2 ^ (n + 1)) (by positivity))
+  simpa [h] using Set.ext_iff.mp hasBasis_centeredArc_div_two_pow.ker z
 
 中文:
 定理 Circle.eq_one_of_对任意_pow_mem_centeredArc_pi_div_two
@@ -2151,7 +2216,8 @@ theorem Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two
     | zero => simpa using hz1
     | succ n ih =>
         simpa [div_div, ← pow_succ'] using mem_centeredArc_div
-          (div_le_self pi_nonneg one_le_t
+          (div_le_self pi_nonneg one_le_two) (by simpa) (hz (2 ^ (n + 1)) (by positivity))
+  simpa [h] using Set.ext_iff.mp hasBasis_centeredArc_div_two_pow.ker z
 
 Depends on / 依赖: Set.ext_iff.mp, centeredArc, div_div, div_le_self, ext_iff, hasBasis_centeredArc_div_two_pow, hasBasis_centeredArc_div_two_pow.ker, mem_centeredArc_div, one_le_two, pi_nonneg, pow_succ
 -/
@@ -2177,7 +2243,15 @@ theorem Circle.isQuotientCoveringMap_zpow
   let e := AddCircle.homeomorphCircle one_ne_zero
   refine Topology.IsQuotientMap.isQuotientCoveringMap_of_isDiscrete_ker_monoidHom
     (f := zpowGroupHom (α := Circle) n) ?_ (Set.Finite.isDiscrete <| .of_preimage ?_ e.surjective)
-  · re
+  · refine .of_comp e.continuous (continuous_zpow n) ?_
+    convert!
+e.isQuotientMap.comp
+        IsUnit.isQuotientMap_zsmul (M := Real) (QuotientAddGroup.mk' (AddSubgroup.zmultiples (1 : Real)))
+          isQuotientMap_quotient_mk' n hn
+    ext; simp [zpowGroupHom, e, homeomorphCircle_apply, toCircle_zsmul]
+  · convert! finite_torsion_of_isSMulRegular_int (1 : Real) n fun _ => by simp [NeZero.ne]
+    ext
+    simp [e, homeomorphCircle_apply, ← toCircle_zsmul, ← (injective_toCircle one_ne_zero).eq_iff]
 
 中文:
 定理 Circle.isQuotientCoveringMap_zpow
@@ -2187,7 +2261,15 @@ theorem Circle.isQuotientCoveringMap_zpow
   let e := AddCircle.homeomorphCircle one_ne_zero
   refine Topology.IsQuotientMap.isQuotientCoveringMap_of_isDiscrete_ker_monoidHom
     (f := zpowGroupHom (α := Circle) n) ?_ (Set.Finite.isDiscrete <| .of_preimage ?_ e.surjective)
-  · re
+  · refine .of_comp e.continuous (continuous_zpow n) ?_
+    convert!
+e.isQuotientMap.comp
+        IsUnit.isQuotientMap_zsmul (M := Real) (QuotientAddGroup.mk' (AddSubgroup.zmultiples (1 : Real)))
+          isQuotientMap_quotient_mk' n hn
+    ext; simp [zpowGroupHom, e, homeomorphCircle_apply, toCircle_zsmul]
+  · convert! finite_torsion_of_isSMulRegular_int (1 : Real) n fun _ => by simp [NeZero.ne]
+    ext
+    simp [e, homeomorphCircle_apply, ← toCircle_zsmul, ← (injective_toCircle one_ne_zero).eq_iff]
 
 Depends on / 依赖: AddCircle, AddCircle.homeomorphCircle, AddSubgroup, AddSubgroup.zmultiples, Circle, Finite, IsQuotientMap, IsUnit, IsUnit.isQuotientMap_zsmul, NeZero, NeZero.ne, QuotientAddGroup, QuotientAddGroup.mk, Set.Finite.isDiscrete, Topology, Topology.IsQuotientMap.isQuotientCoveringMap_of_isDiscrete_ker_monoidHom, continuous, continuous_zpow, convert, e.continuous
 -/

@@ -42,7 +42,13 @@ theorem three_pid
   rw [discr_prime 3 K]; rw [IsCyclotomicExtension.finrank (n := 3) K
     (irreducible_rat (by simp))]; rw [nrComplexPlaces_eq_totient_div_two 3]; rw [totient_prime
       Nat.prime_three]
-  simp only [Int.reduceNeg, succ_sub_succ_eq_sub, 
+  simp only [Int.reduceNeg, succ_sub_succ_eq_sub, tsub_zero, zero_lt_two, Nat.div_self, pow_one,
+    cast_ofNat, neg_mul, one_mul, abs_neg, Int.cast_abs, Int.cast_ofNat,
+    abs_of_pos (zero_lt_three' Real), factorial_two]
+  suffices (2 * (3 / 4) * (2 ^ 2 / 2)) ^ 2 < (2 * (π / 4) * (2 ^ 2 / 2)) ^ 2 from
+    lt_trans (by norm_num) this
+  gcongr
+  exact pi_gt_three
 
 中文:
 定理 three_pid
@@ -53,7 +59,13 @@ theorem three_pid
   rw [discr_prime 3 K]; rw [IsCyclotomicExtension.finrank (n := 3) K
     (irreducible_rat (by simp))]; rw [nrComplexPlaces_eq_totient_div_two 3]; rw [totient_prime
       Nat.prime_three]
-  simp only [Int.reduceNeg, succ_sub_succ_eq_sub, 
+  simp only [Int.reduceNeg, succ_sub_succ_eq_sub, tsub_zero, zero_lt_two, Nat.div_self, pow_one,
+    cast_ofNat, neg_mul, one_mul, abs_neg, Int.cast_abs, Int.cast_ofNat,
+    abs_of_pos (zero_lt_three' Real), factorial_two]
+  suffices (2 * (3 / 4) * (2 ^ 2 / 2)) ^ 2 < (2 * (π / 4) * (2 ^ 2 / 2)) ^ 2 from
+    lt_trans (by norm_num) this
+  gcongr
+  exact pi_gt_three
 
 Depends on / 依赖: Int.cast_abs, Int.cast_ofNat, Int.reduceNeg, IsCyclotomicExtension, IsCyclotomicExtension.finrank, Nat.div_self, Nat.prime_three, RingOfIntegers, RingOfIntegers.isPrincipalIdealRing_of_abs_discr_lt, abs_neg, abs_of_pos, cast_abs, cast_ofNat, discr_prime, div_self, factorial_two, finrank, irreducible_rat, isPrincipalIdealRing_of_abs_discr_lt, neg_mul
 -/
@@ -82,7 +94,13 @@ theorem five_pid
   apply RingOfIntegers.isPrincipalIdealRing_of_abs_discr_lt
   rw [discr_prime 5 K]; rw [IsCyclotomicExtension.finrank (n := 5) K
     (irreducible_rat (by simp))]; rw [nrComplexPlaces_eq_totient_div_two 5]; rw [totient_prime Nat.prime_five]
-  simp on
+  simp only [Int.reduceNeg, succ_sub_succ_eq_sub, tsub_zero, reduceDiv, even_two, Even.neg_pow,
+    one_pow, cast_ofNat, Int.reducePow, one_mul, Int.cast_abs, Int.cast_ofNat,
+    abs_of_pos (show (0 : Real) < 125 by simp), div_pow, show 4! = 24 by rfl]
+  suffices (2 * (3 ^ 2 / 4 ^ 2) * (4 ^ 4 / 24)) ^ 2 < (2 * (π ^ 2 / 4 ^ 2) * (4 ^ 4 / 24)) ^ 2 from
+    lt_trans (by norm_num) this
+  gcongr
+  exact pi_gt_three
 
 中文:
 定理 five_pid
@@ -93,7 +111,13 @@ theorem five_pid
   apply RingOfIntegers.isPrincipalIdealRing_of_abs_discr_lt
   rw [discr_prime 5 K]; rw [IsCyclotomicExtension.finrank (n := 5) K
     (irreducible_rat (by simp))]; rw [nrComplexPlaces_eq_totient_div_two 5]; rw [totient_prime Nat.prime_five]
-  simp on
+  simp only [Int.reduceNeg, succ_sub_succ_eq_sub, tsub_zero, reduceDiv, even_two, Even.neg_pow,
+    one_pow, cast_ofNat, Int.reducePow, one_mul, Int.cast_abs, Int.cast_ofNat,
+    abs_of_pos (show (0 : Real) < 125 by simp), div_pow, show 4! = 24 by rfl]
+  suffices (2 * (3 ^ 2 / 4 ^ 2) * (4 ^ 4 / 24)) ^ 2 < (2 * (π ^ 2 / 4 ^ 2) * (4 ^ 4 / 24)) ^ 2 from
+    lt_trans (by norm_num) this
+  gcongr
+  exact pi_gt_three
 
 Depends on / 依赖: Even.neg_pow, Int.cast_abs, Int.cast_ofNat, Int.reduceNeg, Int.reducePow, IsCyclotomicExtension, IsCyclotomicExtension.finrank, Nat.Prime, Nat.prime_five, RingOfIntegers, RingOfIntegers.isPrincipalIdealRing_of_abs_discr_lt, abs_of_pos, cast_abs, cast_ofNat, discr_prime, div_po, even_two, finrank, irreducible_rat, isPrincipalIdealRing_of_abs_discr_lt
 -/

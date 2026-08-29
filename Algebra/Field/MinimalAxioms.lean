@@ -38,7 +38,7 @@ abbreviation Field.ofMinimalAxioms
     nnqsmul := _
     nnqsmul_def := fun _ _ => rfl
     qsmul := _
-    qsmul_def := fun _ _
+    qsmul_def := fun _ _ => rfl }
 
 中文:
 缩写 域.ofMinimalAxioms
@@ -51,7 +51,7 @@ abbreviation Field.ofMinimalAxioms
     nnqsmul := _
     nnqsmul_def := fun _ _ => rfl
     qsmul := _
-    qsmul_def := fun _ _
+    qsmul_def := fun _ _ => rfl }
 
 Depends on / 依赖: CommRing, CommRing.ofMinimalAxioms, add_assoc, exists_pair_ne, inv_zero, left_distrib, mul_assoc, mul_comm, mul_inv_cancel, neg_add_cancel, nnqsmul, nnqsmul_def, ofMinimalAxioms, one_mul, qsmul_def, zero_add
 -/

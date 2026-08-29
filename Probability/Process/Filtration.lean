@@ -389,7 +389,14 @@ instance :
         obtain ⟨f, hf_mem, hfm'⟩ := hm'
         rw [← hfm']
         refine (f.mono hij).trans ?_
-        have hfj_mem
+        have hfj_mem : f j in (fun g : Filtration ι m => g j) '' s := ⟨f, hf_mem, rfl⟩
+        exact le_sSup hfj_mem
+      le' := fun i => by
+        refine sSup_le fun m' hm' => ?_
+        rw [Set.mem_image] at hm'
+        obtain ⟨f, _, hfm'⟩ := hm'
+        rw [← hfm']
+        exact f.le i }⟩
 
 中文:
 实例 :
@@ -402,7 +409,14 @@ instance :
         obtain ⟨f, hf_mem, hfm'⟩ := hm'
         rw [← hfm']
         refine (f.mono hij).trans ?_
-        have hfj_mem
+        have hfj_mem : f j in (fun g : Filtration ι m => g j) '' s := ⟨f, hf_mem, rfl⟩
+        exact le_sSup hfj_mem
+      le' := fun i => by
+        refine sSup_le fun m' hm' => ?_
+        rw [Set.mem_image] at hm'
+        obtain ⟨f, _, hfm'⟩ := hm'
+        rw [← hfm']
+        exact f.le i }⟩
 
 Depends on / 依赖: Filtration, Set.mem_image, f.le, f.mono, hf_mem, hfj_mem, le_sSup, mem_image, sSup_le
 -/
@@ -453,7 +467,17 @@ instance :
       mono' := fun i j hij => by
         by_cases h_nonempty : Set.Nonempty s
         swap; · simp only [h_nonempty, if_false, le_refl]
-        simp only [h_nonempty, if_true, le_sInf_iff, Set.m
+        simp only [h_nonempty, if_true, le_sInf_iff, Set.mem_image, forall_exists_index, and_imp,
+          forall_apply_eq_imp_iff₂]
+        refine fun f hf_mem => le_trans ?_ (f.mono hij)
+        have hfi_mem : f i in (fun g : Filtration ι m => g i) '' s := ⟨f, hf_mem, rfl⟩
+        exact sInf_le hfi_mem
+      le' := fun i => by
+        by_cases h_nonempty : Set.Nonempty s
+        swap; · simp only [h_nonempty, if_false, le_refl]
+        simp only [h_nonempty, if_true]
+        obtain ⟨f, hf_mem⟩ := h_nonempty
+        exact le_trans (sInf_le ⟨f, hf_mem, rfl⟩) (f.le i) }⟩
 
 中文:
 实例 :
@@ -463,7 +487,17 @@ instance :
       mono' := fun i j hij => by
         by_cases h_nonempty : Set.Nonempty s
         swap; · simp only [h_nonempty, if_false, le_refl]
-        simp only [h_nonempty, if_true, le_sInf_iff, Set.m
+        simp only [h_nonempty, if_true, le_sInf_iff, Set.mem_image, forall_exists_index, and_imp,
+          forall_apply_eq_imp_iff₂]
+        refine fun f hf_mem => le_trans ?_ (f.mono hij)
+        have hfi_mem : f i in (fun g : Filtration ι m => g i) '' s := ⟨f, hf_mem, rfl⟩
+        exact sInf_le hfi_mem
+      le' := fun i => by
+        by_cases h_nonempty : Set.Nonempty s
+        swap; · simp only [h_nonempty, if_false, le_refl]
+        simp only [h_nonempty, if_true]
+        obtain ⟨f, hf_mem⟩ := h_nonempty
+        exact le_trans (sInf_le ⟨f, hf_mem, rfl⟩) (f.le i) }⟩
 
 Depends on / 依赖: Filtration, Nonempty, Set.Nonempty, Set.mem_image, and_imp, f.mono, forall_exists_index, h_nonempty, hf_mem, hfi_mem, if_false, if_true, le_refl, le_sInf_iff, le_trans, mem_image, sInf_le
 -/
@@ -543,7 +577,16 @@ instance instCompleteLattice
   inf_le_right _ _ _ := inf_le_right
   le_inf _ _ _ h_fg h_fh i := le_inf (h_fg i) (h_fh i)
   isLUB_sSup _ :=
-   
+    .of_image (f := seq) .rfl (by simpa only [isLUB_pi, Set.image_image] using! fun _ => isLUB_sSup _)
+  isGLB_sInf _ := by
+    dsimp +instances [instInfSet]
+    split_ifs with hn
+    · refine .of_image (f := seq) .rfl ?_
+      simpa only [isGLB_pi, Set.image_image] using! fun _ => isGLB_sInf _
+    · rw [Set.not_nonempty_iff_eq_empty] at hn
+      simpa [hn] using! Filtration.le
+  le_top f i := f.le' i
+  bot_le _ _ := bot_le
 
 中文:
 实例 instCompleteLattice
@@ -557,7 +600,16 @@ instance instCompleteLattice
   inf_le_right _ _ _ := inf_le_right
   le_inf _ _ _ h_fg h_fh i := le_inf (h_fg i) (h_fh i)
   isLUB_sSup _ :=
-   
+    .of_image (f := seq) .rfl (by simpa only [isLUB_pi, Set.image_image] using! fun _ => isLUB_sSup _)
+  isGLB_sInf _ := by
+    dsimp +instances [instInfSet]
+    split_ifs with hn
+    · refine .of_image (f := seq) .rfl ?_
+      simpa only [isGLB_pi, Set.image_image] using! fun _ => isGLB_sInf _
+    · rw [Set.not_nonempty_iff_eq_empty] at hn
+      simpa [hn] using! Filtration.le
+  le_top f i := f.le' i
+  bot_le _ _ := bot_le
 -/
 noncomputable instance instCompleteLattice : CompleteLattice (Filtration ι m) where
   sup := (· ⊔ ·)
@@ -1042,7 +1094,17 @@ lemma rightCont_self
   · have hineq : (⨅ j > i, 𝓕₊ j) <= ⨅ j > i, 𝓕 j := by
       apply le_iInf₂ fun u hu => ?_
       have hiou : Set.Ioo i u in 𝓝[>] i := by
-        rw [mem_nh
+        rw [mem_nhdsWithin_iff_exists_mem_nhds_inter]
+        exact ⟨Set.Iio u, (isOpen_Iio' u).mem_nhds hu, fun _ hx => ⟨hx.2, hx.1⟩⟩
+      obtain ⟨v, hv⟩ := hne.nonempty_of_mem hiou
+      have hle₁ : (⨅ j > i, 𝓕₊ j) <= 𝓕₊ v := iInf₂_le_of_le v hv.1 le_rfl
+      have hle₂ : 𝓕₊ v <= 𝓕 u := by
+        by_cases hnv : (𝓝[>] v).NeBot
+        · simpa [rightCont_eq_of_neBot_nhdsGT] using iInf₂_le_of_le u hv.2 le_rfl
+        · simpa [rightCont_apply, hnv] using 𝓕.mono hv.2.le
+      exact hle₁.trans hle₂
+    simpa [rightCont_eq_of_neBot_nhdsGT] using hineq
+  · rw [rightCont_apply, if_neg hne]
 
 中文:
 引理 rightCont_self
@@ -1056,7 +1118,17 @@ lemma rightCont_self
   · have hineq : (⨅ j > i, 𝓕₊ j) <= ⨅ j > i, 𝓕 j := by
       apply le_iInf₂ fun u hu => ?_
       have hiou : Set.Ioo i u in 𝓝[>] i := by
-        rw [mem_nh
+        rw [mem_nhdsWithin_iff_exists_mem_nhds_inter]
+        exact ⟨Set.Iio u, (isOpen_Iio' u).mem_nhds hu, fun _ hx => ⟨hx.2, hx.1⟩⟩
+      obtain ⟨v, hv⟩ := hne.nonempty_of_mem hiou
+      have hle₁ : (⨅ j > i, 𝓕₊ j) <= 𝓕₊ v := iInf₂_le_of_le v hv.1 le_rfl
+      have hle₂ : 𝓕₊ v <= 𝓕 u := by
+        by_cases hnv : (𝓝[>] v).NeBot
+        · simpa [rightCont_eq_of_neBot_nhdsGT] using iInf₂_le_of_le u hv.2 le_rfl
+        · simpa [rightCont_apply, hnv] using 𝓕.mono hv.2.le
+      exact hle₁.trans hle₂
+    simpa [rightCont_eq_of_neBot_nhdsGT] using hineq
+  · rw [rightCont_apply, if_neg hne]
 -/
 @[simp] lemma rightCont_self (𝓕 : Filtration ι m) : 𝓕₊₊ = 𝓕₊ := by
   let := Preorder.topology ι; have : OrderTopology ι := ⟨rfl⟩
@@ -1217,7 +1289,21 @@ theorem filtrationOfSet_eq_natural
   · rintro _ ⟨j, hij, rfl⟩
     refine measurableSet_generateFrom ⟨j, measurableSet_generateFrom ⟨hij, ?_⟩⟩
     rw [comap_eq_generateFrom]
-
+    refine measurableSet_generateFrom ⟨{1}, measurableSet_singleton 1, ?_⟩
+    ext x
+    simp
+  · rintro t ⟨n, ht⟩
+    suffices MeasurableSpace.generateFrom {t | n <= i ∧
+      MeasurableSet[MeasurableSpace.comap ((s n).indicator (fun _ => 1 : Ω -> β n)) (mβ n)] t} <=
+        MeasurableSpace.generateFrom {t | exists (j : ι), j <= i ∧ s j = t} by
+      exact this _ ht
+    refine generateFrom_le ?_
+    rintro t ⟨hn, u, _, hu'⟩
+    obtain heq | heq | heq | heq := Set.indicator_const_preimage (s n) u (1 : β n)
+    on_goal 4 => rw [Set.mem_singleton_iff] at heq
+    all_goals rw [heq] at hu'; rw [← hu']
+    exacts [MeasurableSet.univ, measurableSet_generateFrom ⟨n, hn, rfl⟩,
+      MeasurableSet.compl (measurableSet_generateFrom ⟨n, hn, rfl⟩), measurableSet_empty _]
 
 中文:
 定理 filtrationOfSet_eq_natural
@@ -1229,7 +1315,21 @@ theorem filtrationOfSet_eq_natural
   · rintro _ ⟨j, hij, rfl⟩
     refine measurableSet_generateFrom ⟨j, measurableSet_generateFrom ⟨hij, ?_⟩⟩
     rw [comap_eq_generateFrom]
-
+    refine measurableSet_generateFrom ⟨{1}, measurableSet_singleton 1, ?_⟩
+    ext x
+    simp
+  · rintro t ⟨n, ht⟩
+    suffices MeasurableSpace.generateFrom {t | n <= i ∧
+      MeasurableSet[MeasurableSpace.comap ((s n).indicator (fun _ => 1 : Ω -> β n)) (mβ n)] t} <=
+        MeasurableSpace.generateFrom {t | exists (j : ι), j <= i ∧ s j = t} by
+      exact this _ ht
+    refine generateFrom_le ?_
+    rintro t ⟨hn, u, _, hu'⟩
+    obtain heq | heq | heq | heq := Set.indicator_const_preimage (s n) u (1 : β n)
+    on_goal 4 => rw [Set.mem_singleton_iff] at heq
+    all_goals rw [heq] at hu'; rw [← hu']
+    exacts [MeasurableSet.univ, measurableSet_generateFrom ⟨n, hn, rfl⟩,
+      MeasurableSet.compl (measurableSet_generateFrom ⟨n, hn, rfl⟩), measurableSet_empty _]
 
 Depends on / 依赖: MeasurableSet, MeasurableSpace, MeasurableSpace.comap, MeasurableSpace.generateFrom, comap_eq_generateFrom, exists_prop, filtrationOfSet, generateFrom, generateFrom_le, indicator, le_antisymm, measurableSet_generateFrom, measurableSet_singleton, measurableSpace_iSup_eq, mk.injEq, natural
 -/
@@ -1348,7 +1448,10 @@ theorem memLp_limitProcess_of_eLpNorm_bdd
   · refine ⟨StronglyMeasurable.aestronglyMeasurable
       ((Classical.choose_spec h).1.mono (sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _)),
       lt_of_le_of_lt (Lp.eLpNorm_lim_le_liminf_eLpNorm hfm _ (Classical.choose_spec h).2)
-        (lt_of_le_of_lt ?_ (ENNReal
+        (lt_of_le_of_lt ?_ (ENNReal.coe_lt_top : ↑R < ∞))⟩
+    simp_rw [liminf_eq, eventually_atTop]
+    exact sSup_le fun b ⟨a, ha⟩ => (ha a le_rfl).trans (hbdd _)
+  · exact MemLp.zero
 
 中文:
 定理 memLp_limitProcess_of_eLpNorm_bdd
@@ -1359,7 +1462,10 @@ theorem memLp_limitProcess_of_eLpNorm_bdd
   · refine ⟨StronglyMeasurable.aestronglyMeasurable
       ((Classical.choose_spec h).1.mono (sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _)),
       lt_of_le_of_lt (Lp.eLpNorm_lim_le_liminf_eLpNorm hfm _ (Classical.choose_spec h).2)
-        (lt_of_le_of_lt ?_ (ENNReal
+        (lt_of_le_of_lt ?_ (ENNReal.coe_lt_top : ↑R < ∞))⟩
+    simp_rw [liminf_eq, eventually_atTop]
+    exact sSup_le fun b ⟨a, ha⟩ => (ha a le_rfl).trans (hbdd _)
+  · exact MemLp.zero
 
 Depends on / 依赖: Classical, Classical.choose_spec, ENNReal, ENNReal.coe_lt_top, Lp.eLpNorm_lim_le_liminf_eLpNorm, MemLp.zero, StronglyMeasurable, StronglyMeasurable.aestronglyMeasurable, aestronglyMeasurable, choose_spec, coe_lt_top, eLpNorm_lim_le_liminf_eLpNorm, eventually_atTop, le_rfl, liminf_eq, limitProcess, lt_of_le_of_lt, sSup_le, simp_rw, split_ifs
 -/
@@ -1434,7 +1540,7 @@ lemma piLE_eq_comap_frestrictLe
   · simp_rw [piLE, ← piCongrLeft_comp_frestrictLe, ← MeasurableEquiv.coe_piCongrLeft, ← comap_comp]
 exact MeasurableSpace.comap_mono Measurable.comap_le (by fun_prop)
   · rw [← piCongrLeft_comp_restrictLe, ← MeasurableEquiv.coe_piCongrLeft, ← comap_comp]
-exact MeasurableSpace.
+exact MeasurableSpace.comap_mono Measurable.comap_le (by fun_prop)
 
 中文:
 引理 piLE_eq_comap_frestrictLe
@@ -1445,7 +1551,7 @@ exact MeasurableSpace.
   · simp_rw [piLE, ← piCongrLeft_comp_frestrictLe, ← MeasurableEquiv.coe_piCongrLeft, ← comap_comp]
 exact MeasurableSpace.comap_mono Measurable.comap_le (by fun_prop)
   · rw [← piCongrLeft_comp_restrictLe, ← MeasurableEquiv.coe_piCongrLeft, ← comap_comp]
-exact MeasurableSpace.
+exact MeasurableSpace.comap_mono Measurable.comap_le (by fun_prop)
 
 Depends on / 依赖: Measurable, Measurable.comap_le, MeasurableEquiv, MeasurableEquiv.coe_piCongrLeft, MeasurableSpace, MeasurableSpace.comap_mono, coe_piCongrLeft, comap_comp, comap_le, comap_mono, frestrictLe, fun_prop, le_antisymm, pi.comap, piCongrLeft_comp_frestrictLe, piCongrLeft_comp_restrictLe, simp_rw
 -/

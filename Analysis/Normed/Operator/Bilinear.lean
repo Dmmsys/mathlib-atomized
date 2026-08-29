@@ -233,7 +233,7 @@ definition mkContinuousOfExistsBound₂
       map_smul' := fun c x => by
         ext z
         simp } <|
-    let ⟨C, hC⟩ := h; ⟨max C 0, norm_mkContinuo
+    let ⟨C, hC⟩ := h; ⟨max C 0, norm_mkContinuous₂_aux f C hC⟩
 
 中文:
 定义 mkContinuousOfExistsBound₂
@@ -246,7 +246,7 @@ definition mkContinuousOfExistsBound₂
       map_smul' := fun c x => by
         ext z
         simp } <|
-    let ⟨C, hC⟩ := h; ⟨max C 0, norm_mkContinuo
+    let ⟨C, hC⟩ := h; ⟨max C 0, norm_mkContinuous₂_aux f C hC⟩
 
 Depends on / 依赖: LinearMap, LinearMap.mkContinuousOfExistsBound, map_add, map_smul, mkContinuousOfExistsBound
 -/
@@ -355,7 +355,7 @@ definition flip
     (LinearMap.mk₂'ₛₗ σ₂₃ σ₁₃ (fun y x => f x y) (fun x y z => (f z).map_add x y)
       (fun c y x => (f x).map_smulₛₗ c y) (fun z x y => by simp only [f.map_add, add_apply])
         (fun c y x => by simp only [f.map_smulₛₗ, smul_apply]))
-‖f‖ fun y x => (f.le_opNorm₂ x y).tra
+‖f‖ fun y x => (f.le_opNorm₂ x y).trans_eq by simp only [mul_right_comm]
 
 中文:
 定义 flip
@@ -364,7 +364,7 @@ definition flip
     (LinearMap.mk₂'ₛₗ σ₂₃ σ₁₃ (fun y x => f x y) (fun x y z => (f z).map_add x y)
       (fun c y x => (f x).map_smulₛₗ c y) (fun z x y => by simp only [f.map_add, add_apply])
         (fun c y x => by simp only [f.map_smulₛₗ, smul_apply]))
-‖f‖ fun y x => (f.le_opNorm₂ x y).tra
+‖f‖ fun y x => (f.le_opNorm₂ x y).trans_eq by simp only [mul_right_comm]
 
 Depends on / 依赖: LinearMap, LinearMap.mk, LinearMap.mkContinuous, add_apply, f.le_opNorm, f.map_add, f.map_smul, map_add, mul_right_comm, smul_apply, trans_eq
 -/
@@ -1312,6 +1312,13 @@ theorem norm_smulRight_apply
       _ = ‖c‖ * ‖f‖ * ‖x‖ := by ring
   · obtain hf | hf := (norm_nonneg f).eq_or_lt'
     · simp [hf]
+    · rw [← le_div_iff₀ hf]
+      refine opNorm_le_bound _ (by positivity) fun x => ?_
+      rw [div_mul_eq_mul_div]; rw [le_div_iff₀ hf]
+      calc
+        ‖c x‖ * ‖f‖ = ‖c x • f‖ := (norm_smul _ _).symm
+        _ = ‖smulRight c f x‖ := rfl
+        _ <= ‖smulRight c f‖ * ‖x‖ := le_opNorm _ _
 
 中文:
 定理 norm_smulRight_apply
@@ -1326,6 +1333,13 @@ theorem norm_smulRight_apply
       _ = ‖c‖ * ‖f‖ * ‖x‖ := by ring
   · obtain hf | hf := (norm_nonneg f).eq_or_lt'
     · simp [hf]
+    · rw [← le_div_iff₀ hf]
+      refine opNorm_le_bound _ (by positivity) fun x => ?_
+      rw [div_mul_eq_mul_div]; rw [le_div_iff₀ hf]
+      calc
+        ‖c x‖ * ‖f‖ = ‖c x • f‖ := (norm_smul _ _).symm
+        _ = ‖smulRight c f x‖ := rfl
+        _ <= ‖smulRight c f‖ * ‖x‖ := le_opNorm _ _
 
 Depends on / 依赖: div_mul_eq_mul_div, eq_or_lt, le_antisymm, le_opNorm, norm_nonneg, norm_smul, opNorm_le_bound, smulRight
 -/
@@ -1429,7 +1443,8 @@ definition smulRightL
         ext x
         simp [smul_smul] }
     1 fun c x => by
-      simp onl
+      simp only [coe_smulRightₗ, one_mul, norm_smulRight_apply, LinearMap.coe_mk, AddHom.coe_mk,
+        le_refl]
 
 中文:
 定义 smulRightL
@@ -1443,7 +1458,8 @@ definition smulRightL
         ext x
         simp [smul_smul] }
     1 fun c x => by
-      simp onl
+      simp only [coe_smulRightₗ, one_mul, norm_smulRight_apply, LinearMap.coe_mk, AddHom.coe_mk,
+        le_refl]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, LinearMap, LinearMap.add_apply, LinearMap.coe_mk, LinearMap.mkContinuous, add_apply, add_smul, coe_mk, le_refl, map_add, map_smul, norm_smulRight_apply, one_mul, smulRight_apply, smul_smul
 -/

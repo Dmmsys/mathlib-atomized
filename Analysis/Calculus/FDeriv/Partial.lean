@@ -34,7 +34,12 @@ theorem isLittleO_sub_sub_fderiv
   replace df' : forallᶠ χ in l, forall z in [w χ -[Real] v χ], HasFDerivWithinAt (f χ) (f' χ z) s z :=
     df'.segment_of_prod_nhdsWithin hw hv seg
   replace cf' : forallᶠ χ in l, forall z in [w χ -[Real] v χ], ‖f' χ z - φ‖ < ε := by
-    simp_rw [Metric.tendsto_n
+    simp_rw [Metric.tendsto_nhds, dist_eq_norm_sub] at cf'
+    exact (cf' ε hε).segment_of_prod_nhdsWithin hw hv seg
+  filter_upwards [seg, df', cf'] with χ seg df' cf'
+  exact Convex.norm_image_sub_le_of_norm_hasFDerivWithin_le'
+    (fun z hz => (df' z hz).mono seg) (fun z hz => (cf' z hz).le)
+    (convex_segment ..) (left_mem_segment ..) (right_mem_segment ..)
 
 中文:
 定理 isLittleO_sub_sub_fderiv
@@ -44,7 +49,12 @@ theorem isLittleO_sub_sub_fderiv
   replace df' : forallᶠ χ in l, forall z in [w χ -[Real] v χ], HasFDerivWithinAt (f χ) (f' χ z) s z :=
     df'.segment_of_prod_nhdsWithin hw hv seg
   replace cf' : forallᶠ χ in l, forall z in [w χ -[Real] v χ], ‖f' χ z - φ‖ < ε := by
-    simp_rw [Metric.tendsto_n
+    simp_rw [Metric.tendsto_nhds, dist_eq_norm_sub] at cf'
+    exact (cf' ε hε).segment_of_prod_nhdsWithin hw hv seg
+  filter_upwards [seg, df', cf'] with χ seg df' cf'
+  exact Convex.norm_image_sub_le_of_norm_hasFDerivWithin_le'
+    (fun z hz => (df' z hz).mono seg) (fun z hz => (cf' z hz).le)
+    (convex_segment ..) (left_mem_segment ..) (right_mem_segment ..)
 
 Depends on / 依赖: Set.univ, subseteq
 -/

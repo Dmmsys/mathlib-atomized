@@ -92,7 +92,9 @@ nonrec theorem IsUnit.op {M} [Monoid M] {m : M} (h : IsUnit m) : IsUnit (op m) :
 @[to_additive]
 nonrec theorem IsUnit.unop {M} [Monoid M] {m : Mᵐᵒᵖ} (h : IsUnit m) : IsUnit (unop m) :=
   let ⟨u, hu⟩ := h
-  hu ▸ ⟨unop (U
+  hu ▸ ⟨unop (Units.opEquiv u), rfl⟩
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 单位群.coe_opEquiv_symm
@@ -107,7 +109,9 @@ nonrec theorem IsUnit.op {M} [Monoid M] {m : M} (h : IsUnit m) : IsUnit (op m) :
 @[to_additive]
 nonrec theorem IsUnit.unop {M} [Monoid M] {m : Mᵐᵒᵖ} (h : IsUnit m) : IsUnit (unop m) :=
   let ⟨u, hu⟩ := h
-  hu ▸ ⟨unop (U
+  hu ▸ ⟨unop (Units.opEquiv u), rfl⟩
+
+@[to_additive (attr := simp)]
 -/
 theorem Units.coe_opEquiv_symm {M} [Monoid M] (u : Mˣᵐᵒᵖ) :
     (Units.opEquiv.symm u : Mᵐᵒᵖ) = op (u.unop : M) :=

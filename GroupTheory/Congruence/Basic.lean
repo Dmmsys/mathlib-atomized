@@ -186,7 +186,18 @@ theorem comap_conGen_equiv
   | of x y h =>
     apply ConGen.Rel.of
     rwa [fa, fb]
-  | refl x 
+  | refl x =>
+    rw [f.injective (fa.trans fb.symm)]
+    exact ConGen.Rel.refl _
+  | symm _ h => exact ConGen.Rel.symm (h fb fa)
+  | trans _ _ ih ih1 =>
+    exact Exists.casesOn (f.surjective _) fun c' hc' => ConGen.Rel.trans (ih fa hc') (ih1 hc' fb)
+  | @mul w x y z _ _ ih ih1 =>
+    rw [← f.eq_symm_apply]; rw [map_mul] at fa fb
+    rw [fa]; rw [fb]
+    exact ConGen.Rel.mul (ih (by simp) (by simp)) (ih1 (by simp) (by simp))
+
+@[to_additive]
 
 中文:
 定理 comap_conGen_equiv
@@ -202,7 +213,18 @@ theorem comap_conGen_equiv
   | of x y h =>
     apply ConGen.Rel.of
     rwa [fa, fb]
-  | refl x 
+  | refl x =>
+    rw [f.injective (fa.trans fb.symm)]
+    exact ConGen.Rel.refl _
+  | symm _ h => exact ConGen.Rel.symm (h fb fa)
+  | trans _ _ ih ih1 =>
+    exact Exists.casesOn (f.surjective _) fun c' hc' => ConGen.Rel.trans (ih fa hc') (ih1 hc' fb)
+  | @mul w x y z _ _ ih ih1 =>
+    rw [← f.eq_symm_apply]; rw [map_mul] at fa fb
+    rw [fa]; rw [fb]
+    exact ConGen.Rel.mul (ih (by simp) (by simp)) (ih1 (by simp) (by simp))
+
+@[to_additive]
 
 Depends on / 依赖: Con.comap_rel, ConGen, ConGen.Rel.of, ConGen.Rel.refl, ConGen.Rel.symm, ConGen.Rel.trans, Exists, Exists.casesOn, Function, Function.onFun, casesOn, comap_rel, f.injective, f.surjective, fa.trans, fb.symm, generalize, generalizing, injective, le_antisymm
 -/
@@ -492,7 +514,11 @@ definition quotientKerEquivRange
               MulEquiv.submonoidCongr kerLift_range_eq).comp
           (kerLift f).mrangeRestrict) <|
       ((Equiv.bijective (@MulEquiv.toEquiv (MonoidHom.mrange (kerLift f)) _ _ _ <|
-          MulEquiv.subm
+          MulEquiv.submonoidCongr kerLift_range_eq)).comp
+        ⟨fun x y h =>
+kerLift_injective f by rcases x with ⟨⟩; rcases y with ⟨⟩; injections,
+          fun ⟨w, z, hz⟩ => ⟨z, by rcases hz with ⟨⟩; rfl⟩⟩) with
+    map_mul' := map_mul _ }
 
 中文:
 定义 quotientKerEquivRange
@@ -502,7 +528,11 @@ definition quotientKerEquivRange
               MulEquiv.submonoidCongr kerLift_range_eq).comp
           (kerLift f).mrangeRestrict) <|
       ((Equiv.bijective (@MulEquiv.toEquiv (MonoidHom.mrange (kerLift f)) _ _ _ <|
-          MulEquiv.subm
+          MulEquiv.submonoidCongr kerLift_range_eq)).comp
+        ⟨fun x y h =>
+kerLift_injective f by rcases x with ⟨⟩; rcases y with ⟨⟩; injections,
+          fun ⟨w, z, hz⟩ => ⟨z, by rcases hz with ⟨⟩; rfl⟩⟩) with
+    map_mul' := map_mul _ }
 
 Depends on / 依赖: Equiv.bijective, Equiv.ofBijective, MonoidHom, MonoidHom.mrange, MulEquiv, MulEquiv.submonoidCongr, MulEquiv.toEquiv, MulEquiv.toMonoidHom, bijective, injections, kerLift, kerLift_injective, kerLift_range_eq, map_mul, mrange, mrangeRestrict, ofBijective, submonoidCongr, toEquiv, toMonoidHom
 -/

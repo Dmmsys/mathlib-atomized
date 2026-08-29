@@ -543,7 +543,7 @@ theorem _root_.SchwartzMap.memSobolev
   rw [besselPotential]; rw [Lp.toTemperedDistribution_toLp_eq]; rw [fourierMultiplierCLM_toTemperedDistributionCLM_eq (by fun_prop)]
   congr 1
   apply SchwartzMap.fourierMultiplierCLM_ofReal Complex
-  
+    (Function.hasTemperateGrowth_one_add_norm_sq_rpow E (s / 2))
 
 中文:
 定理 _root_.Schwartz映射.memSobolev
@@ -553,7 +553,7 @@ theorem _root_.SchwartzMap.memSobolev
   rw [besselPotential]; rw [Lp.toTemperedDistribution_toLp_eq]; rw [fourierMultiplierCLM_toTemperedDistributionCLM_eq (by fun_prop)]
   congr 1
   apply SchwartzMap.fourierMultiplierCLM_ofReal Complex
-  
+    (Function.hasTemperateGrowth_one_add_norm_sq_rpow E (s / 2))
 
 Depends on / 依赖: Function, Function.hasTemperateGrowth_one_add_norm_sq_rpow, Lp.toTemperedDistribution_toLp_eq, SchwartzMap, SchwartzMap.fourierMultiplierCLM, SchwartzMap.fourierMultiplierCLM_ofReal, besselPotential, fourierMultiplierCLM, fourierMultiplierCLM_ofReal, fourierMultiplierCLM_toTemperedDistributionCLM_eq, fun_prop, hasTemperateGrowth_one_add_norm_sq_rpow, toTemperedDistribution_toLp_eq
 -/
@@ -586,7 +586,9 @@ theorem memSobolev_iff_exists_smulLeftCLM_fourier
     rw [hf']; rw [Lp.fourier_toTemperedDistribution_eq f']
   · intro ⟨f', hf'⟩
     use 𝓕⁻ f'
-    rw [besselPotential]; rw [TemperedDistribution.fourierMultipl
+    rw [besselPotential]; rw [TemperedDistribution.fourierMultiplierCLM_apply]
+    apply_fun 𝓕⁻ at hf'
+    rw [hf']; rw [Lp.fourierInv_toTemperedDistribution_eq f']
 
 中文:
 定理 memSobolev_iff_存在_smulLeftCLM_fourier
@@ -600,7 +602,9 @@ theorem memSobolev_iff_exists_smulLeftCLM_fourier
     rw [hf']; rw [Lp.fourier_toTemperedDistribution_eq f']
   · intro ⟨f', hf'⟩
     use 𝓕⁻ f'
-    rw [besselPotential]; rw [TemperedDistribution.fourierMultipl
+    rw [besselPotential]; rw [TemperedDistribution.fourierMultiplierCLM_apply]
+    apply_fun 𝓕⁻ at hf'
+    rw [hf']; rw [Lp.fourierInv_toTemperedDistribution_eq f']
 
 Depends on / 依赖: Lp.fourierInv_toTemperedDistribution_eq, Lp.fourier_toTemperedDistribution_eq, TemperedDistribution, TemperedDistribution.fourierMultiplierCLM_apply, apply_fun, besselPotential, fourierInv_toTemperedDistribution_eq, fourierMultiplierCLM_apply, fourier_besselPotential_eq_smulLeftCLM_fourier_apply, fourier_toTemperedDistribution_eq
 -/
@@ -653,7 +657,33 @@ theorem MemSobolev.fourier_memL1
     · have : (fun x : E => (1 + ‖x‖ ^ 2) ^ (-s / 2)).HasTemperateGrowth := by
         fun_prop
       exact this.1.continuous.aestronglyMeasurable
-    
+    · rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top (by norm_num) (by norm_num)]
+      suffices h : ∫⁻ a : E, ENNReal.ofReal ‖(1 + ‖a‖ ^ 2) ^ (-s)‖ < ⊤ from by
+        norm_cast
+        simp_rw [ofReal_norm] at h
+        simp_rw [← enorm_pow]
+        convert h
+        rw [← Real.rpow_mul_natCast (by positivity)]
+        simp
+      apply ((integrable_rpow_neg_one_add_norm_sq hs).congr _).lintegral_lt_top
+      filter_upwards with x
+      rw [Real.norm_eq_abs]; rw [abs_eq_self.mpr (by positivity)]
+      congr
+      ring
+  have : MemLp (fun x : E => Complex.ofReal ((1 + ‖x‖ ^ 2) ^ (-s / 2) : Real)) 2 := this.ofReal
+  use this.toLp • u
+  rw [MeasureTheory.Lp.toTemperedDistribution_smul_eq]
+  · rw [← hu, smulLeftCLM_smulLeftCLM_apply (by fun_prop) (by fun_prop)]
+    convert! (smulLeftCLM_const 1 (𝓕 f)).symm using 1
+    · simp
+    · congr
+      ext x
+      rw [Pi.mul_apply]
+      norm_cast
+      rw [← Real.rpow_add (by positivity)]
+      ring_nf
+      simp
+  · fun_prop
 
 中文:
 定理 MemSobolev.fourier_memL1
@@ -665,7 +695,33 @@ theorem MemSobolev.fourier_memL1
     · have : (fun x : E => (1 + ‖x‖ ^ 2) ^ (-s / 2)).HasTemperateGrowth := by
         fun_prop
       exact this.1.continuous.aestronglyMeasurable
-    
+    · rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top (by norm_num) (by norm_num)]
+      suffices h : ∫⁻ a : E, ENNReal.ofReal ‖(1 + ‖a‖ ^ 2) ^ (-s)‖ < ⊤ from by
+        norm_cast
+        simp_rw [ofReal_norm] at h
+        simp_rw [← enorm_pow]
+        convert h
+        rw [← Real.rpow_mul_natCast (by positivity)]
+        simp
+      apply ((integrable_rpow_neg_one_add_norm_sq hs).congr _).lintegral_lt_top
+      filter_upwards with x
+      rw [Real.norm_eq_abs]; rw [abs_eq_self.mpr (by positivity)]
+      congr
+      ring
+  have : MemLp (fun x : E => Complex.ofReal ((1 + ‖x‖ ^ 2) ^ (-s / 2) : Real)) 2 := this.ofReal
+  use this.toLp • u
+  rw [MeasureTheory.Lp.toTemperedDistribution_smul_eq]
+  · rw [← hu, smulLeftCLM_smulLeftCLM_apply (by fun_prop) (by fun_prop)]
+    convert! (smulLeftCLM_const 1 (𝓕 f)).symm using 1
+    · simp
+    · congr
+      ext x
+      rw [Pi.mul_apply]
+      norm_cast
+      rw [← Real.rpow_add (by positivity)]
+      ring_nf
+      simp
+  · fun_prop
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, HasTemperateGrowth, aestronglyMeasurable, continuous, continuous.aestronglyMeasurable, convert, eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top, enorm_pow, fun_prop, memSobolev_iff_exists_smulLeftCLM_fourier, memSobolev_iff_exists_smulLeftCLM_fourier.mp, ofReal, ofReal_norm, simp_rw
 -/
@@ -720,7 +776,11 @@ theorem MemSobolev.fourierMultiplierCLM_of_bounded
   obtain ⟨C, hC⟩ := hg₂
   set g' : E ->ᵇ Complex := BoundedContinuousFunction.ofNormedAddCommGroup g hg₁.1.continuous C hC
   use (g'.memLp_top.toLp _ (μ := volume)) • f'
-  rw [MeasureTheory.Lp.toTemperedDistribution_
+  rw [MeasureTheory.Lp.toTemperedDistribution_smul_eq (by apply hg₁)]; rw [← hf]; rw [fourierMultiplierCLM_apply]; rw [fourier_fourierInv_eq]; rw [smulLeftCLM_smulLeftCLM_apply hg₁ (by fun_prop)]; rw [smulLeftCLM_smulLeftCLM_apply (by fun_prop) (by apply hg₁)]
+  congr 2
+  ext x
+  rw [mul_comm]
+  congr
 
 中文:
 定理 MemSobolev.fourierMultiplierCLM_of_bounded
@@ -731,7 +791,11 @@ theorem MemSobolev.fourierMultiplierCLM_of_bounded
   obtain ⟨C, hC⟩ := hg₂
   set g' : E ->ᵇ Complex := BoundedContinuousFunction.ofNormedAddCommGroup g hg₁.1.continuous C hC
   use (g'.memLp_top.toLp _ (μ := volume)) • f'
-  rw [MeasureTheory.Lp.toTemperedDistribution_
+  rw [MeasureTheory.Lp.toTemperedDistribution_smul_eq (by apply hg₁)]; rw [← hf]; rw [fourierMultiplierCLM_apply]; rw [fourier_fourierInv_eq]; rw [smulLeftCLM_smulLeftCLM_apply hg₁ (by fun_prop)]; rw [smulLeftCLM_smulLeftCLM_apply (by fun_prop) (by apply hg₁)]
+  congr 2
+  ext x
+  rw [mul_comm]
+  congr
 
 Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.ofNormedAddCommGroup, MeasureTheory, MeasureTheory.Lp.toTemperedDistribution_smul_eq, continuous, fourierMultiplierCLM_apply, fourier_fourierInv_eq, fun_prop, memLp_top, memLp_top.toLp, memSobolev_iff_exists_smulLeftCLM_fourier, ofNormedAddCommGroup, smulLeftCLM_smulLeftCLM_apply, toTemperedDistribution_smul_eq, volume
 -/
@@ -764,7 +828,8 @@ theorem MemSobolev.mono
   apply hf.fourierMultiplierCLM_of_bounded (by fun_prop)
   use 1
   intro x
-  rw [Complex.norm_real]; rw [Real.norm_eq_abs];
+  rw [Complex.norm_real]; rw [Real.norm_eq_abs]; rw [abs_eq_self.mpr (by positivity)]
+  exact Real.rpow_le_one_of_one_le_of_nonpos (by simp) h'
 
 中文:
 定理 MemSobolev.mono
@@ -778,7 +843,8 @@ theorem MemSobolev.mono
   apply hf.fourierMultiplierCLM_of_bounded (by fun_prop)
   use 1
   intro x
-  rw [Complex.norm_real]; rw [Real.norm_eq_abs];
+  rw [Complex.norm_real]; rw [Real.norm_eq_abs]; rw [abs_eq_self.mpr (by positivity)]
+  exact Real.rpow_le_one_of_one_le_of_nonpos (by simp) h'
 
 Depends on / 依赖: Complex.norm_real, Real.norm_eq_abs, Real.rpow_le_one_of_one_le_of_nonpos, abs_eq_self, abs_eq_self.mpr, fourierMultiplierCLM_of_bounded, fun_prop, hf.fourierMultiplierCLM_of_bounded, memSobolev_besselPotential_iff, norm_eq_abs, norm_real, rpow_le_one_of_one_le_of_nonpos
 -/
@@ -811,7 +877,24 @@ theorem MemSobolev.lineDerivOp
   use ‖m‖
   intro x
   apply le_of_sq_le_sq _ (by positivity)
-  simp only [Complex.ofReal_m
+  simp only [Complex.ofReal_mul, Complex.norm_mul, Complex.norm_real, Real.norm_eq_abs, mul_pow]
+  have h₁ : |(1 + ‖x‖ ^ 2) ^ (-1 / 2 : Real)| ^ 2 = (1 + ‖x‖ ^ 2)⁻¹ := by
+    field_simp
+    norm_cast
+    rw [Real.rpow_neg (by positivity)]; rw [sq_abs]; rw [inv_pow]
+    field_simp
+    calc
+      _ = ((1 + ‖x‖ ^ 2) ^ (1 / 2 : Real)) ^ (2 : Real) := by
+        rw [← Real.rpow_mul (by positivity)]; simp
+      _ = _ := by simp
+  have h₂ : |inner Real x m| ^ 2 <= ‖m‖ ^ 2 * (1 + ‖x‖ ^ 2) := by
+    grw [abs_real_inner_le_norm]
+    rw [mul_pow]; rw [mul_comm]
+    gcongr
+    simp
+  grw [h₁, h₂]
+  apply le_of_eq
+  field_simp
 
 中文:
 定理 MemSobolev.lineDerivOp
@@ -822,7 +905,24 @@ theorem MemSobolev.lineDerivOp
   use ‖m‖
   intro x
   apply le_of_sq_le_sq _ (by positivity)
-  simp only [Complex.ofReal_m
+  simp only [Complex.ofReal_mul, Complex.norm_mul, Complex.norm_real, Real.norm_eq_abs, mul_pow]
+  have h₁ : |(1 + ‖x‖ ^ 2) ^ (-1 / 2 : Real)| ^ 2 = (1 + ‖x‖ ^ 2)⁻¹ := by
+    field_simp
+    norm_cast
+    rw [Real.rpow_neg (by positivity)]; rw [sq_abs]; rw [inv_pow]
+    field_simp
+    calc
+      _ = ((1 + ‖x‖ ^ 2) ^ (1 / 2 : Real)) ^ (2 : Real) := by
+        rw [← Real.rpow_mul (by positivity)]; simp
+      _ = _ := by simp
+  have h₂ : |inner Real x m| ^ 2 <= ‖m‖ ^ 2 * (1 + ‖x‖ ^ 2) := by
+    grw [abs_real_inner_le_norm]
+    rw [mul_pow]; rw [mul_comm]
+    gcongr
+    simp
+  grw [h₁, h₂]
+  apply le_of_eq
+  field_simp
 
 Depends on / 依赖: Complex.norm_mul, Complex.norm_real, Complex.ofReal_mul, Real.norm_eq_abs, Real.rpow_neg, SubNegMonoid, SubNegMonoid.sub_eq_add_neg, add_comm, besselPotential_neg_one_lineDerivOp_eq, fourierMultiplierCLM_of_bounded, fun_prop, hf.fourierMultiplierCLM_of_bounded, le_of_sq_le_sq, memSobolev_besselPotential_iff, mul_pow, norm_eq_abs, norm_mul, norm_real, ofReal_mul, rpow_neg
 -/
@@ -865,7 +965,9 @@ theorem MemSobolev.laplacian
   intro x
   rw [Real.rpow_neg (by positivity)]
   norm_cast
-  simp only [norm_mul, no
+  simp only [norm_mul, norm_pow, abs_norm, norm_inv, Real.norm_eq_abs]
+  rw [abs_of_nonneg (by positivity)]; rw [mul_inv_le_iff₀ (by positivity)]
+  grind
 
 中文:
 定理 MemSobolev.laplacian
@@ -877,7 +979,9 @@ theorem MemSobolev.laplacian
   intro x
   rw [Real.rpow_neg (by positivity)]
   norm_cast
-  simp only [norm_mul, no
+  simp only [norm_mul, norm_pow, abs_norm, norm_inv, Real.norm_eq_abs]
+  rw [abs_of_nonneg (by positivity)]; rw [mul_inv_le_iff₀ (by positivity)]
+  grind
 
 Depends on / 依赖: Real.norm_eq_abs, Real.rpow_neg, SubNegMonoid, SubNegMonoid.sub_eq_add_neg, abs_norm, abs_of_nonneg, add_comm, besselPotential_neg_two_laplacian_eq, fourierMultiplierCLM_of_bounded, fun_prop, hf.fourierMultiplierCLM_of_bounded, memSobolev_besselPotential_iff, norm_eq_abs, norm_inv, norm_mul, norm_pow, rpow_neg, sub_eq_add_neg
 -/

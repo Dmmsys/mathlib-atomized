@@ -62,7 +62,9 @@ theorem circulantGraph_eq_erase_zero
       | inl h1 => exact Or.inl ⟨h1, sub_ne_zero_of_ne h⟩
       | inr h1 => exact Or.inr ⟨h1, sub_ne_zero_of_ne h.symm⟩
   · intro h1
-    cases h1 wit
+    cases h1 with
+      | inl h1 => exact Or.inl h1.left
+      | inr h1 => exact Or.inr h1.left
 
 中文:
 定理 circulantGraph_eq_erase_zero
@@ -77,7 +79,9 @@ theorem circulantGraph_eq_erase_zero
       | inl h1 => exact Or.inl ⟨h1, sub_ne_zero_of_ne h⟩
       | inr h1 => exact Or.inr ⟨h1, sub_ne_zero_of_ne h.symm⟩
   · intro h1
-    cases h1 wit
+    cases h1 with
+      | inl h1 => exact Or.inl h1.left
+      | inr h1 => exact Or.inr h1.left
 
 Depends on / 依赖: Iff.intro, Or.inl, Or.inr, and_congr_right_iff, circulantGraph, fromRel_adj, h.symm, h1.left, sub_ne_zero_of_ne
 -/

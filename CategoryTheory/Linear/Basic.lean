@@ -322,7 +322,12 @@ definition homCongr
     invFun := (leftComp k W f₁.hom).comp (rightComp k Y f₂.symm.hom)
     left_inv := fun x => by
       simp only [Iso.symm_hom, LinearMap.toFun_eq_coe, LinearMap.coe_comp, Function.comp_apply,
-        leftComp_apply, rig
+        leftComp_apply, rightComp_apply, Category.assoc, Iso.hom_inv_id, Category.comp_id,
+        Iso.hom_inv_id_assoc]
+    right_inv := fun x => by
+      simp only [Iso.symm_hom, LinearMap.coe_comp, Function.comp_apply, rightComp_apply,
+        leftComp_apply, LinearMap.toFun_eq_coe, Iso.inv_hom_id_assoc, Category.assoc,
+        Iso.inv_hom_id, Category.comp_id] }
 
 中文:
 定义 homCongr
@@ -334,7 +339,12 @@ definition homCongr
     invFun := (leftComp k W f₁.hom).comp (rightComp k Y f₂.symm.hom)
     left_inv := fun x => by
       simp only [Iso.symm_hom, LinearMap.toFun_eq_coe, LinearMap.coe_comp, Function.comp_apply,
-        leftComp_apply, rig
+        leftComp_apply, rightComp_apply, Category.assoc, Iso.hom_inv_id, Category.comp_id,
+        Iso.hom_inv_id_assoc]
+    right_inv := fun x => by
+      simp only [Iso.symm_hom, LinearMap.coe_comp, Function.comp_apply, rightComp_apply,
+        leftComp_apply, LinearMap.toFun_eq_coe, Iso.inv_hom_id_assoc, Category.assoc,
+        Iso.inv_hom_id, Category.comp_id] }
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Function, Function.comp_apply, Iso.hom_inv_id, Iso.hom_inv_id_assoc, Iso.in, Iso.symm_hom, LinearMap, LinearMap.coe_comp, LinearMap.toFun_eq_coe, coe_comp, comp_apply, comp_id, hom_inv_id, hom_inv_id_assoc, invFun, leftComp, leftComp_apply
 -/

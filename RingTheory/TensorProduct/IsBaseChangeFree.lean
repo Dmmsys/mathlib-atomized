@@ -64,7 +64,8 @@ theorem basis_apply
     LinearEquiv.symm_symm, LinearEquiv.trans_apply]
   generalize_proofs _ _ _ _ ibcRA
   have : ibcRA.equiv.symm (Finsupp.single i 1) = 1 otimesₜ (Finsupp.single i 1) := by
-    simp [LinearEquiv.symm_apply
+    simp [LinearEquiv.symm_apply_eq, IsBaseChange.equiv_tmul]
+  simp [this, IsBaseChange.equiv_tmul]
 
 中文:
 定理 basis_apply
@@ -75,7 +76,8 @@ theorem basis_apply
     LinearEquiv.symm_symm, LinearEquiv.trans_apply]
   generalize_proofs _ _ _ _ ibcRA
   have : ibcRA.equiv.symm (Finsupp.single i 1) = 1 otimesₜ (Finsupp.single i 1) := by
-    simp [LinearEquiv.symm_apply
+    simp [LinearEquiv.symm_apply_eq, IsBaseChange.equiv_tmul]
+  simp [this, IsBaseChange.equiv_tmul]
 
 Depends on / 依赖: Finsupp, Finsupp.single, IsBaseChange, IsBaseChange.equiv_tmul, LinearEquiv, LinearEquiv.baseChange, LinearEquiv.symm_apply_eq, LinearEquiv.symm_symm, LinearEquiv.trans_apply, LinearEquiv.trans_symm, Module, Module.Basis.coe_ofRepr, baseChange, coe_ofRepr, equiv_tmul, generalize_proofs, ibcRA.equiv.symm, single, symm_apply_eq, symm_symm
 -/
@@ -101,7 +103,11 @@ theorem basis_repr_comp_apply
   rw [Finsupp.sum_eq_single i]
   · rw [← IsScalarTower.algebraMap_smul S (b.repr v i) (ε (b i)),
       map_smul, ← ibc.basis_apply]
-    si
+    simp [Finsupp.single_eq_same, Algebra.algebraMap_eq_smul_one]
+  · intro i' _ h
+    rw [← IsScalarTower.algebraMap_smul S (b.repr v i') (ε (b i'))]; rw [map_smul]; rw [← ibc.basis_apply]
+    simp [Finsupp.single_eq_of_ne (Ne.symm h)]
+  · simp
 
 中文:
 定理 basis_repr_comp_apply
@@ -113,7 +119,11 @@ theorem basis_repr_comp_apply
   rw [Finsupp.sum_eq_single i]
   · rw [← IsScalarTower.algebraMap_smul S (b.repr v i) (ε (b i)),
       map_smul, ← ibc.basis_apply]
-    si
+    simp [Finsupp.single_eq_same, Algebra.algebraMap_eq_smul_one]
+  · intro i' _ h
+    rw [← IsScalarTower.algebraMap_smul S (b.repr v i') (ε (b i'))]; rw [map_smul]; rw [← ibc.basis_apply]
+    simp [Finsupp.single_eq_of_ne (Ne.symm h)]
+  · simp
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Finsupp, Finsupp.linearCombination_apply, Finsupp.single_eq_of_ne, Finsupp.single_eq_same, Finsupp.sum_apply, Finsupp.sum_eq_single, IsScalarTower, IsScalarTower.algebraMap_smul, Ne.symm, algebraMap_eq_smul_one, algebraMap_smul, b.linearCombination_repr, b.repr, basis_apply, conv_lhs, ibc.basis_apply, linearCombination_apply, linearCombination_repr
 -/
@@ -211,7 +221,16 @@ theorem of_basis
   · apply LinearEquiv.ofBijective (Finsupp.linearCombination R b ∘ₗ j)
     rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_toLinearMap]; rw [j.bijective.of_comp_iff]
     simp [Function.Bijective,
-        ← span_r
+        ← span_range_eq_top_iff_surjective_finsuppLinearCombination,
+        ← linearIndependent_iff_injective_finsuppLinearCombination,
+        Module.Basis.span_eq, b.linearIndependent]
+  · intro x
+    suffices (j (1 otimesₜ[A] x)) = x.mapRange (algebraMap A R) (by simp) by
+      simp [this, Finsupp.linearCombination_apply, Finsupp.sum_mapRange_index]
+    ext i
+    simp [j, Algebra.algebraMap_eq_smul_one]
+
+include A in
 
 中文:
 定理 of_basis
@@ -223,7 +242,16 @@ theorem of_basis
   · apply LinearEquiv.ofBijective (Finsupp.linearCombination R b ∘ₗ j)
     rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_toLinearMap]; rw [j.bijective.of_comp_iff]
     simp [Function.Bijective,
-        ← span_r
+        ← span_range_eq_top_iff_surjective_finsuppLinearCombination,
+        ← linearIndependent_iff_injective_finsuppLinearCombination,
+        Module.Basis.span_eq, b.linearIndependent]
+  · intro x
+    suffices (j (1 otimesₜ[A] x)) = x.mapRange (algebraMap A R) (by simp) by
+      simp [this, Finsupp.linearCombination_apply, Finsupp.sum_mapRange_index]
+    ext i
+    simp [j, Algebra.algebraMap_eq_smul_one]
+
+include A in
 
 Depends on / 依赖: Bijective, Finsupp, Finsupp.linearCombination, Function, Function.Bijective, LinearEquiv, LinearEquiv.coe_toLinearMap, LinearEquiv.ofBijective, LinearMap, LinearMap.coe_comp, Module, Module.Basis.span_eq, TensorProduct, TensorProduct.finsuppScalarRight, algebraMap, b.linearIndependent, bijective, classical, coe_comp, coe_toLinearMap
 -/
@@ -255,7 +283,19 @@ theorem of_fintype_basis
   let j : R otimes[A] (ι -> A) ≃ₗ[R] ι -> R := piScalarRight A R R ι
   refine of_equiv ?_ ?_
   · apply LinearEquiv.ofBijective (Fintype.linearCombination R b ∘ₗ j)
-    rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_toLinearMap]; rw [j.bijective.
+    rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_toLinearMap]; rw [j.bijective.of_comp_iff]
+    simp [Function.Bijective,
+        ← span_range_eq_top_iff_surjective_fintypeLinearCombination,
+        ← linearIndependent_iff_injective_fintypeLinearCombination,
+        Module.Basis.span_eq, b.linearIndependent]
+  · intro x
+    -- simp? [Fintype.linearCombination_apply] says:
+    simp only [LinearEquiv.ofBijective_apply, LinearMap.coe_comp, LinearEquiv.coe_coe,
+      Function.comp_apply, Fintype.linearCombination_apply]
+    congr
+    ext i
+    rw [TensorProduct.piScalarRight_apply]; rw [TensorProduct.piScalarRightHom_tmul]
+    simp
 
 中文:
 定理 of_fintype_basis
@@ -265,7 +305,19 @@ theorem of_fintype_basis
   let j : R otimes[A] (ι -> A) ≃ₗ[R] ι -> R := piScalarRight A R R ι
   refine of_equiv ?_ ?_
   · apply LinearEquiv.ofBijective (Fintype.linearCombination R b ∘ₗ j)
-    rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_toLinearMap]; rw [j.bijective.
+    rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_toLinearMap]; rw [j.bijective.of_comp_iff]
+    simp [Function.Bijective,
+        ← span_range_eq_top_iff_surjective_fintypeLinearCombination,
+        ← linearIndependent_iff_injective_fintypeLinearCombination,
+        Module.Basis.span_eq, b.linearIndependent]
+  · intro x
+    -- simp? [Fintype.linearCombination_apply] says:
+    simp only [LinearEquiv.ofBijective_apply, LinearMap.coe_comp, LinearEquiv.coe_coe,
+      Function.comp_apply, Fintype.linearCombination_apply]
+    congr
+    ext i
+    rw [TensorProduct.piScalarRight_apply]; rw [TensorProduct.piScalarRightHom_tmul]
+    simp
 
 Depends on / 依赖: Bijective, Classical, Classical.typeDecidableEq, DecidableEq, Fintype, Fintype.linearCombination, Function, Function.Bijective, LinearEquiv, LinearEquiv.coe_toLinearMap, LinearEquiv.ofBijective, LinearMap, LinearMap.coe_comp, Module, Module.Basis.span_eq, b.linearIndependent, bijective, coe_comp, coe_toLinearMap, j.bijective.of_comp_iff
 -/

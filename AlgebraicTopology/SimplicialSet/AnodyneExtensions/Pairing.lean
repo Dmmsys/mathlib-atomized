@@ -396,7 +396,7 @@ definition ofIso
   inter := by simp [← Set.preimage_inter, P.inter]
   union := by simp [← Set.preimage_union, P.union]
   p := ((Subcomplex.N.orderIsoOfIso e hA).subtypeEquiv (by simp)).trans
-    (P.p.trans ((Subcomplex.N.orderIs
+    (P.p.trans ((Subcomplex.N.orderIsoOfIso e hA).symm.subtypeEquiv (by simp)))
 
 中文:
 定义 ofIso
@@ -406,7 +406,7 @@ definition ofIso
   inter := by simp [← Set.preimage_inter, P.inter]
   union := by simp [← Set.preimage_union, P.union]
   p := ((Subcomplex.N.orderIsoOfIso e hA).subtypeEquiv (by simp)).trans
-    (P.p.trans ((Subcomplex.N.orderIs
+    (P.p.trans ((Subcomplex.N.orderIsoOfIso e hA).symm.subtypeEquiv (by simp)))
 
 Depends on / 依赖: Subcomplex, Subcomplex.N.orderIsoOfIso, orderIsoOfIso
 -/
@@ -601,7 +601,9 @@ instance [P.IsProper]
     simpa only [P.ofIso_index e hA ⟨a, hb⟩ hd] using IsInner.ne_zero ⟨a, hb⟩ hd
   ne_last := by
     rintro ⟨b, hb⟩ d hd
-    obtain ⟨a
+    obtain ⟨a, rfl⟩ := (N.orderIsoOfIso e hA).symm.surjective b
+    simp only [ofIso_II, Set.mem_preimage, OrderIso.apply_symm_apply] at hb
+    simpa only [P.ofIso_index e hA ⟨a, hb⟩ hd] using IsInner.ne_last ⟨a, hb⟩ hd
 
 中文:
 实例 [P.是真]
@@ -613,7 +615,9 @@ instance [P.IsProper]
     simpa only [P.ofIso_index e hA ⟨a, hb⟩ hd] using IsInner.ne_zero ⟨a, hb⟩ hd
   ne_last := by
     rintro ⟨b, hb⟩ d hd
-    obtain ⟨a
+    obtain ⟨a, rfl⟩ := (N.orderIsoOfIso e hA).symm.surjective b
+    simp only [ofIso_II, Set.mem_preimage, OrderIso.apply_symm_apply] at hb
+    simpa only [P.ofIso_index e hA ⟨a, hb⟩ hd] using IsInner.ne_last ⟨a, hb⟩ hd
 
 Depends on / 依赖: IsInner, IsInner.ne_last, IsInner.ne_zero, N.orderIsoOfIso, OrderIso, OrderIso.apply_symm_apply, P.ofIso_index, Set.mem_preimage, apply_symm_apply, mem_preimage, ne_last, ne_zero, ofIso_II, ofIso_index, orderIsoOfIso, surjective, symm.surjective
 -/

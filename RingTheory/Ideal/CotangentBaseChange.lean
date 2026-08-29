@@ -47,7 +47,11 @@ definition tensorCotangentHom
       ((map (algebraMap S (T otimes[R] S)) I).toCotangent.restrictScalars R ∘ₗ
         (Algebra.idealMap _ I).restrictScalars R) <| fun x y => by
     simp only [AlgHom.toRingHom_eq_coe, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
-      Function.co
+      Function.comp_apply, Algebra.idealMap_mul]
+    simp only [RingHom.algebraMap_toAlgebra, AlgHom.toRingHom_eq_coe, LinearMap.coe_restrictScalars,
+      toCotangent_eq_zero, sq, MulMemClass.coe_mul]
+    exact mul_mem_mul ((Algebra.idealMap (T otimes[R] S) I) x).property
+      ((Algebra.idealMap (T otimes[R] S) I) y).property
 
 中文:
 定义 tensorCotangentHom
@@ -57,7 +61,11 @@ definition tensorCotangentHom
       ((map (algebraMap S (T otimes[R] S)) I).toCotangent.restrictScalars R ∘ₗ
         (Algebra.idealMap _ I).restrictScalars R) <| fun x y => by
     simp only [AlgHom.toRingHom_eq_coe, LinearMap.coe_comp, LinearMap.coe_restrictScalars,
-      Function.co
+      Function.comp_apply, Algebra.idealMap_mul]
+    simp only [RingHom.algebraMap_toAlgebra, AlgHom.toRingHom_eq_coe, LinearMap.coe_restrictScalars,
+      toCotangent_eq_zero, sq, MulMemClass.coe_mul]
+    exact mul_mem_mul ((Algebra.idealMap (T otimes[R] S) I) x).property
+      ((Algebra.idealMap (T otimes[R] S) I) y).property
 
 Depends on / 依赖: AlgHom, AlgHom.toRingHom_eq_coe, Algebra, Algebra.idealMap, Algebra.idealMap_mul, Cotangent, Cotangent.lift, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearMap.liftBaseChange, MulMemClass, MulMemClass.coe_mul, RingHom, RingHom.algebraMap_toAlgebra, algebraMap, algebraMap_toAlgebra, coe_comp
 -/
@@ -110,7 +118,16 @@ lemma tensorCotangentHom_surjective
   obtain ⟨y, rfl⟩ := I.map_includeRight_eq.le hx
   obtain rfl : hx = I.map_includeRight_eq.ge ⟨y, rfl⟩ := rfl
   induction y with
-  | zero => exact ⟨
+  | zero => exact ⟨0, by simp only [map_zero]; exact (map_zero _).symm⟩
+  | add x y hx hy =>
+    obtain ⟨a, ha⟩ := hx
+    obtain ⟨b, hb⟩ := hy
+    exact ⟨a + b, by simp only [map_add, ha, hb]; rfl⟩
+  | tmul t x =>
+    use t otimesₜ I.toCotangent x
+    apply Ideal.cotangentToQuotientSquare_injective
+    simp [-AlgHom.toRingHom_eq_coe, tensorCotangentHom_tmul, Algebra.smul_def,
+      ← Ideal.Quotient.mk_algebraMap, ← map_mul]
 
 中文:
 引理 tensorCotangentHom_surjective
@@ -121,7 +138,16 @@ lemma tensorCotangentHom_surjective
   obtain ⟨y, rfl⟩ := I.map_includeRight_eq.le hx
   obtain rfl : hx = I.map_includeRight_eq.ge ⟨y, rfl⟩ := rfl
   induction y with
-  | zero => exact ⟨
+  | zero => exact ⟨0, by simp only [map_zero]; exact (map_zero _).symm⟩
+  | add x y hx hy =>
+    obtain ⟨a, ha⟩ := hx
+    obtain ⟨b, hb⟩ := hy
+    exact ⟨a + b, by simp only [map_add, ha, hb]; rfl⟩
+  | tmul t x =>
+    use t otimesₜ I.toCotangent x
+    apply Ideal.cotangentToQuotientSquare_injective
+    simp [-AlgHom.toRingHom_eq_coe, tensorCotangentHom_tmul, Algebra.smul_def,
+      ← Ideal.Quotient.mk_algebraMap, ← map_mul]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRight.toRingHom, I.map_includeRight_eq.ge, I.map_includeRight_eq.le, I.toCotangent, Ideal.toCotangent_surjective, TensorProduct, includeRight, map_add, map_includeRight_eq, map_zero, otimes, toCotangent, toCotangent_surjective, toRingHom
 -/
@@ -157,7 +183,22 @@ lemma tensorCotangentHom_injective_of_flat
   let f : (I.map a).Cotangent ->ₗ[T] T otimes[R] S ⧸ (I.map a) ^ 2 :=
     (Ideal.cotangentToQuotientSquare _).restrictScalars T
   suffices h : Function.Injective (f ∘ₗ tensorCotangentHom R T I) from .of_comp h
-  let g 
+  let g : T otimes[R] I.Cotangent ->ₗ[T] T otimes[R] (S ⧸ I ^ 2) :=
+    AlgebraTensorModule.lTensor T T I.cotangentToQuotientSquare
+  let hₐ : T otimes[R] (S ⧸ I ^ 2) ≃ₐ[T] T otimes[R] S ⧸ (I.map a) ^ 2 :=
+    (Algebra.TensorProduct.tensorQuotientEquiv _ _ _ _).trans
+      (Ideal.quotientEquivAlgOfEq T (Ideal.map_pow _ _ _))
+  have : f ∘ₗ tensorCotangentHom R T I = hₐ.toLinearMap ∘ₗ g := by
+    ext x
+    obtain ⟨x, rfl⟩ := I.toCotangent_surjective x
+    dsimp [f, g, hₐ]
+    rw [tensorCotangentHom_tmul]; rw [one_smul]; rw [Ideal.toCotangent_to_quotient_square]
+    simp
+  rw [this]; rw [LinearMap.coe_comp]
+  apply hₐ.injective.comp
+  · apply Module.Flat.lTensor_preserves_injective_linearMap (M := T)
+      (I.cotangentToQuotientSquare.restrictScalars R)
+    apply cotangentToQuotientSquare_injective
 
 中文:
 引理 tensorCotangentHom_injective_of_flat
@@ -167,7 +208,22 @@ lemma tensorCotangentHom_injective_of_flat
   let f : (I.map a).Cotangent ->ₗ[T] T otimes[R] S ⧸ (I.map a) ^ 2 :=
     (Ideal.cotangentToQuotientSquare _).restrictScalars T
   suffices h : Function.Injective (f ∘ₗ tensorCotangentHom R T I) from .of_comp h
-  let g 
+  let g : T otimes[R] I.Cotangent ->ₗ[T] T otimes[R] (S ⧸ I ^ 2) :=
+    AlgebraTensorModule.lTensor T T I.cotangentToQuotientSquare
+  let hₐ : T otimes[R] (S ⧸ I ^ 2) ≃ₐ[T] T otimes[R] S ⧸ (I.map a) ^ 2 :=
+    (Algebra.TensorProduct.tensorQuotientEquiv _ _ _ _).trans
+      (Ideal.quotientEquivAlgOfEq T (Ideal.map_pow _ _ _))
+  have : f ∘ₗ tensorCotangentHom R T I = hₐ.toLinearMap ∘ₗ g := by
+    ext x
+    obtain ⟨x, rfl⟩ := I.toCotangent_surjective x
+    dsimp [f, g, hₐ]
+    rw [tensorCotangentHom_tmul]; rw [one_smul]; rw [Ideal.toCotangent_to_quotient_square]
+    simp
+  rw [this]; rw [LinearMap.coe_comp]
+  apply hₐ.injective.comp
+  · apply Module.Flat.lTensor_preserves_injective_linearMap (M := T)
+      (I.cotangentToQuotientSquare.restrictScalars R)
+    apply cotangentToQuotientSquare_injective
 
 Depends on / 依赖: Algebra, Algebra.TensorProdu, Algebra.TensorProduct.includeRight.toRingHom, AlgebraTensorModule, AlgebraTensorModule.lTensor, Cotangent, Function, Function.Injective, I.Cotangent, I.cotangentToQuotientSquare, I.map, Ideal.cotangentToQuotientSquare, Injective, TensorProdu, TensorProduct, cotangentToQuotientSquare, includeRight, lTensor, of_comp, otimes
 -/

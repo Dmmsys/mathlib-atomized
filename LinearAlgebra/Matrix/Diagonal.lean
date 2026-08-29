@@ -179,7 +179,7 @@ theorem rank_diagonal
   have hIJ : IsCompl { i : m | w i != 0 } { i : m | w i = 0 } := isCompl_compl.symm
   have B₁ := iSup_range_single_eq_iInf_ker_proj K (fun _ : m => K) hIJ (Set.toFinite _)
   rw [LinearMap.rank]; rw [range_diagonal]; rw [B₁]; rw [← @rank_fun' K]
-.rank_eq exact iInfKerProjEquiv K (fun _ => K) hIJ.d
+.rank_eq exact iInfKerProjEquiv K (fun _ => K) hIJ.disjoint hIJ.codisjoint.top_le
 
 中文:
 定理 rank_diagonal
@@ -188,7 +188,7 @@ theorem rank_diagonal
   have hIJ : IsCompl { i : m | w i != 0 } { i : m | w i = 0 } := isCompl_compl.symm
   have B₁ := iSup_range_single_eq_iInf_ker_proj K (fun _ : m => K) hIJ (Set.toFinite _)
   rw [LinearMap.rank]; rw [range_diagonal]; rw [B₁]; rw [← @rank_fun' K]
-.rank_eq exact iInfKerProjEquiv K (fun _ => K) hIJ.d
+.rank_eq exact iInfKerProjEquiv K (fun _ => K) hIJ.disjoint hIJ.codisjoint.top_le
 
 Depends on / 依赖: IsCompl, LinearMap, LinearMap.rank, Set.toFinite, codisjoint, disjoint, hIJ.codisjoint.top_le, hIJ.disjoint, iInfKerProjEquiv, iSup_range_single_eq_iInf_ker_proj, isCompl_compl, isCompl_compl.symm, range_diagonal, rank_eq, rank_fun, toFinite, top_le
 -/

@@ -1219,7 +1219,14 @@ theorem ofEquiv_curry_def
       adj.homEquiv Y ((ihom (F.obj X)).obj (F.obj Z))
         (MonoidalClosed.curry (adj.toEquivalence.symm.toAdjunction.homEquiv (F.obj X otimes F.obj Y) Z
         ((Iso.compInverseIso (H := adj.toEquivalence)
-          (Functor.Monoidal.commTensorLeft F X
+          (Functor.Monoidal.commTensorLeft F X)).hom.app Y ≫ f))) := by
+  -- This whole proof used to be `rfl` before https://github.com/leanprover-community/mathlib4/pull/16317.
+  change ((adj.comp ((ihom.adjunction (F.obj X)).comp
+      adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft _).homEquiv _ _ _ = _
+  rw [Adjunction.homEquiv_ofNatIsoLeft_apply]
+  dsimp
+  rw [Adjunction.comp_homEquiv]; rw [Adjunction.comp_homEquiv]
+  rfl
 
 中文:
 定理 ofEquiv_curry_def
@@ -1229,7 +1236,14 @@ theorem ofEquiv_curry_def
       adj.homEquiv Y ((ihom (F.obj X)).obj (F.obj Z))
         (MonoidalClosed.curry (adj.toEquivalence.symm.toAdjunction.homEquiv (F.obj X otimes F.obj Y) Z
         ((Iso.compInverseIso (H := adj.toEquivalence)
-          (Functor.Monoidal.commTensorLeft F X
+          (Functor.Monoidal.commTensorLeft F X)).hom.app Y ≫ f))) := by
+  -- This whole proof used to be `rfl` before https://github.com/leanprover-community/mathlib4/pull/16317.
+  change ((adj.comp ((ihom.adjunction (F.obj X)).comp
+      adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft _).homEquiv _ _ _ = _
+  rw [Adjunction.homEquiv_ofNatIsoLeft_apply]
+  dsimp
+  rw [Adjunction.comp_homEquiv]; rw [Adjunction.comp_homEquiv]
+  rfl
 
 Depends on / 依赖: FullSubcategory, NatTrans, NatTrans.naturality, ObjectProperty, ObjectProperty.FullSubcategory.comp_hom, Sheaf.image, Sheaf.toImage, Sheaf.toImage_hom, Subtype, Subtype.ext, comp_hom, congr_arg, f.hom.app, hom.app, i.op, isSeparatedFor, isSeparatedFor.ext, isSheaf_iff_isSheaf_of_type, naturality, obj.map
 -/
@@ -1261,7 +1275,15 @@ theorem ofEquiv_uncurry_def
       ((Iso.compInverseIso (H := adj.toEquivalence)
           (Functor.Monoidal.commTensorLeft F X)).inv.app Y) ≫
             (adj.toEquivalence.symm.toAdjunction.homEquiv _ _).symm
-              (MonoidalClosed.uncurry ((
+              (MonoidalClosed.uncurry ((adj.homEquiv _ _).symm f)) := by
+  intro f
+  -- This whole proof used to be `rfl` before https://github.com/leanprover-community/mathlib4/pull/16317.
+  change (((adj.comp ((ihom.adjunction (F.obj X)).comp
+      adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft _).homEquiv _ _).symm _ = _
+  rw [Adjunction.homEquiv_ofNatIsoLeft_symm_apply]
+  dsimp
+  rw [Adjunction.comp_homEquiv]; rw [Adjunction.comp_homEquiv]
+  rfl
 
 中文:
 定理 ofEquiv_uncurry_def
@@ -1271,7 +1293,15 @@ theorem ofEquiv_uncurry_def
       ((Iso.compInverseIso (H := adj.toEquivalence)
           (Functor.Monoidal.commTensorLeft F X)).inv.app Y) ≫
             (adj.toEquivalence.symm.toAdjunction.homEquiv _ _).symm
-              (MonoidalClosed.uncurry ((
+              (MonoidalClosed.uncurry ((adj.homEquiv _ _).symm f)) := by
+  intro f
+  -- This whole proof used to be `rfl` before https://github.com/leanprover-community/mathlib4/pull/16317.
+  change (((adj.comp ((ihom.adjunction (F.obj X)).comp
+      adj.toEquivalence.symm.toAdjunction)).ofNatIsoLeft _).homEquiv _ _).symm _ = _
+  rw [Adjunction.homEquiv_ofNatIsoLeft_symm_apply]
+  dsimp
+  rw [Adjunction.comp_homEquiv]; rw [Adjunction.comp_homEquiv]
+  rfl
 
 Depends on / 依赖: ofEquiv
 -/
@@ -1423,14 +1453,14 @@ lemma id_comp
   given: (x y : C) [Closed x]
   proof: by
   apply uncurry_injective
-  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [id_eq]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]; rw [triangle_assoc_comp_right_
+  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [id_eq]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]; rw [triangle_assoc_comp_right_assoc]; rw [whiskerLeft_inv_hom_assoc]; rw [uncurry_id_eq_ev _ _]
 
 中文:
 引理 id_comp
   条件: (x y : C) [闭 x]
   证明: by
   apply uncurry_injective
-  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [id_eq]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]; rw [triangle_assoc_comp_right_
+  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [id_eq]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]; rw [triangle_assoc_comp_right_assoc]; rw [whiskerLeft_inv_hom_assoc]; rw [uncurry_id_eq_ev _ _]
 
 Depends on / 依赖: associator_inv_naturality_middle_assoc, compTranspose_eq, comp_eq, comp_whiskerRight_assoc, id_eq, triangle_assoc_comp_right_assoc, uncurry_curry, uncurry_eq, uncurry_id_eq_ev, uncurry_injective, uncurry_natural_left, whiskerLeft_inv_hom_assoc
 -/
@@ -1450,14 +1480,20 @@ lemma comp_id
   given: (x y : C) [Closed x] [Closed y]
   proof: by
   apply uncurry_injective
-  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [← rightUnitor_tensor_inv_assoc]; rw [whisker_exchange_assoc]; rw [← rightUnitor_inv_naturality_assoc]; rw [← u
+  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [← rightUnitor_tensor_inv_assoc]; rw [whisker_exchange_assoc]; rw [← rightUnitor_inv_naturality_assoc]; rw [← uncurry_id_eq_ev y y]
+  simp only [Functor.id_obj]
+  rw [← uncurry_natural_left]
+  simp [id_eq, uncurry_id_eq_ev]
 
 中文:
 引理 comp_id
   条件: (x y : C) [闭 x] [闭 y]
   证明: by
   apply uncurry_injective
-  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [← rightUnitor_tensor_inv_assoc]; rw [whisker_exchange_assoc]; rw [← rightUnitor_inv_naturality_assoc]; rw [← u
+  rw [uncurry_natural_left]; rw [uncurry_natural_left]; rw [comp_eq]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [← rightUnitor_tensor_inv_assoc]; rw [whisker_exchange_assoc]; rw [← rightUnitor_inv_naturality_assoc]; rw [← uncurry_id_eq_ev y y]
+  simp only [Functor.id_obj]
+  rw [← uncurry_natural_left]
+  simp [id_eq, uncurry_id_eq_ev]
 
 Depends on / 依赖: Functor, Functor.id_obj, associator_inv_naturality_right_assoc, compTranspose_eq, comp_eq, id_eq, id_obj, rightUnitor_inv_naturality_assoc, rightUnitor_tensor_inv_assoc, uncurry_curry, uncurry_id_eq_ev, uncurry_injective, uncurry_natural_left, whisker_exchange_assoc
 -/
@@ -1483,7 +1519,8 @@ lemma assoc
   simp only [uncurry_natural_left, comp_eq]
   rw [uncurry_curry]; rw [uncurry_curry]; simp only [compTranspose_eq]
   rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; dsimp
-  rw [← uncurry_eq]; rw [uncurry_curry]; rw [associator_inv_naturality_
+  rw [← uncurry_eq]; rw [uncurry_curry]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]
+  simp
 
 中文:
 引理 assoc
@@ -1493,7 +1530,8 @@ lemma assoc
   simp only [uncurry_natural_left, comp_eq]
   rw [uncurry_curry]; rw [uncurry_curry]; simp only [compTranspose_eq]
   rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; dsimp
-  rw [← uncurry_eq]; rw [uncurry_curry]; rw [associator_inv_naturality_
+  rw [← uncurry_eq]; rw [uncurry_curry]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]; rw [← uncurry_eq]; rw [uncurry_curry]
+  simp
 
 Depends on / 依赖: associator_inv_naturality_middle_assoc, associator_inv_naturality_right_assoc, compTranspose_eq, comp_eq, comp_whiskerRight_assoc, uncurry_curry, uncurry_eq, uncurry_injective, uncurry_natural_left, whisker_exchange_assoc
 -/
@@ -1719,7 +1757,7 @@ lemma curry'_whiskerRight_comp
   proof: by
   rw [← cancel_epi (fun_ _).inv]; rw [Iso.inv_hom_id_assoc]
   apply uncurry_injective
-  rw [uncurry_pre]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw 
+  rw [uncurry_pre]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [whiskerLeft_curry'_ihom_ev_app]; rw [comp_whiskerRight_assoc]; rw [triangle_assoc_comp_right_assoc]; rw [whiskerLeft_inv_hom_assoc]
 
 中文:
 引理 curry'_whiskerRight_comp
@@ -1727,7 +1765,7 @@ lemma curry'_whiskerRight_comp
   证明: by
   rw [← cancel_epi (fun_ _).inv]; rw [Iso.inv_hom_id_assoc]
   apply uncurry_injective
-  rw [uncurry_pre]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw 
+  rw [uncurry_pre]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_middle_assoc]; rw [← comp_whiskerRight_assoc]; rw [whiskerLeft_curry'_ihom_ev_app]; rw [comp_whiskerRight_assoc]; rw [triangle_assoc_comp_right_assoc]; rw [whiskerLeft_inv_hom_assoc]
 -/
 lemma curry'_whiskerRight_comp {X Y Z : C} [Closed X] [Closed Y] (f : X ⟶ Y) :
     curry' f ▷ _ ≫ comp X Y Z = (fun_ _).hom ≫ (pre f).app Z := by
@@ -1747,7 +1785,8 @@ lemma whiskerLeft_curry'_comp
   rw [← cancel_epi (ρ_ _).inv]; rw [Iso.inv_hom_id_assoc]
   apply uncurry_injective
   rw [uncurry_ihom_map]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]
-  dsi
+  dsimp
+  rw [whiskerLeft_curry'_ihom_ev_app]; rw [whiskerLeft_rightUnitor_inv]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.inv_hom_id_assoc]
 
 中文:
 引理 whiskerLeft_curry'_comp
@@ -1756,7 +1795,8 @@ lemma whiskerLeft_curry'_comp
   rw [← cancel_epi (ρ_ _).inv]; rw [Iso.inv_hom_id_assoc]
   apply uncurry_injective
   rw [uncurry_ihom_map]; rw [comp_eq]; rw [← curry_natural_left]; rw [← curry_natural_left]; rw [uncurry_curry]; rw [compTranspose_eq]; rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]
-  dsi
+  dsimp
+  rw [whiskerLeft_curry'_ihom_ev_app]; rw [whiskerLeft_rightUnitor_inv]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.inv_hom_id_assoc]
 -/
 lemma whiskerLeft_curry'_comp {X Y Z : C} [Closed X] [Closed Y] (f : Y ⟶ Z) :
     _ ◁ curry' f ≫ comp X Y Z = (ρ_ _).hom ≫ (ihom X).map f := by

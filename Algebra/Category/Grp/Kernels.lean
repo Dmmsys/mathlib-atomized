@@ -106,7 +106,7 @@ definition cokernelIsColimit
       congr_arg Hom.hom (CokernelCofork.condition s))
     (fun _ => rfl)
     (fun _ _ h => have : Epi (cokernelCocone f).π := (epi_iff_surjective _).mpr <| mk'_surjective _
-(cancel_epi (cokernelCocone f).π).mp by 
+(cancel_epi (cokernelCocone f).π).mp by simpa only [parallelPair_obj_one] using! h)
 
 中文:
 定义 cokernelIsColimit
@@ -116,7 +116,7 @@ definition cokernelIsColimit
       congr_arg Hom.hom (CokernelCofork.condition s))
     (fun _ => rfl)
     (fun _ _ h => have : Epi (cokernelCocone f).π := (epi_iff_surjective _).mpr <| mk'_surjective _
-(cancel_epi (cokernelCocone f).π).mp by 
+(cancel_epi (cokernelCocone f).π).mp by simpa only [parallelPair_obj_one] using! h)
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.mk, CokernelCofork, CokernelCofork.condition, Hom.hom, IsColimit, _surjective, cancel_epi, cokernelCocone, condition, congr_arg, epi_iff_surjective, parallelPair_obj_one, range_le_ker_iff
 -/

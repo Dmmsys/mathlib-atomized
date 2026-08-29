@@ -324,7 +324,11 @@ lemma additive_of_full_essSurj_comp
     obtain ⟨g', hg'⟩ := F.map_surjective ((F.objObjPreimageIso X).hom ≫ g ≫
       (F.objObjPreimageIso Y).inv)
     simp only [← cancel_mono (G.map (F.objObjPreimageIso Y).inv),
-      ← c
+      ← cancel_epi (G.map (F.objObjPreimageIso X).hom),
+      Preadditive.add_comp, Preadditive.comp_add, ← Functor.map_comp]
+    erw [← hf', ← hg', ← (F ⋙ G).map_add]
+    dsimp
+    rw [F.map_add]
 
 中文:
 引理 additive_of_full_essSurj_comp
@@ -335,7 +339,11 @@ lemma additive_of_full_essSurj_comp
     obtain ⟨g', hg'⟩ := F.map_surjective ((F.objObjPreimageIso X).hom ≫ g ≫
       (F.objObjPreimageIso Y).inv)
     simp only [← cancel_mono (G.map (F.objObjPreimageIso Y).inv),
-      ← c
+      ← cancel_epi (G.map (F.objObjPreimageIso X).hom),
+      Preadditive.add_comp, Preadditive.comp_add, ← Functor.map_comp]
+    erw [← hf', ← hg', ← (F ⋙ G).map_add]
+    dsimp
+    rw [F.map_add]
 
 Depends on / 依赖: F.map_add, F.map_surjective, F.objObjPreimageIso, Functor, Functor.map_comp, G.map, Preadditive, Preadditive.add_comp, Preadditive.comp_add, add_comp, cancel_epi, cancel_mono, comp_add, map_add, map_comp, map_surjective, objObjPreimageIso
 -/

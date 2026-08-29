@@ -108,7 +108,8 @@ lemma isoClosure_isLocal
       apply (hf _ hZ').1
       simp only [reassoc_of% eq]
     · intro g
-      obtain ⟨a, h⟩ := (hf _ hZ').2 (g ≫ e.h
+      obtain ⟨a, h⟩ := (hf _ hZ').2 (g ≫ e.hom)
+      exact ⟨a ≫ e.inv, by simp only [reassoc_of% h, e.hom_inv_id, comp_id]⟩
 
 中文:
 引理 isoClosure_isLocal
@@ -125,7 +126,8 @@ lemma isoClosure_isLocal
       apply (hf _ hZ').1
       simp only [reassoc_of% eq]
     · intro g
-      obtain ⟨a, h⟩ := (hf _ hZ').2 (g ≫ e.h
+      obtain ⟨a, h⟩ := (hf _ hZ').2 (g ≫ e.hom)
+      exact ⟨a ≫ e.inv, by simp only [reassoc_of% h, e.hom_inv_id, comp_id]⟩
 
 Depends on / 依赖: P.le_isoClosure, cancel_mono, comp_id, e.hom, e.hom_inv_id, e.inv, hom_inv_id, le_isoClosure, reassoc_of
 -/
@@ -395,7 +397,7 @@ lemma isoClosure_isColocal
       simp [eq]
     · intro f
       obtain ⟨a, h⟩ := (hg _ hX').2 (e.inv ≫ f)
-      exact ⟨e
+      exact ⟨e.hom ≫ a, by simp [h]⟩
 
 中文:
 引理 isoClosure_isColocal
@@ -413,7 +415,7 @@ lemma isoClosure_isColocal
       simp [eq]
     · intro f
       obtain ⟨a, h⟩ := (hg _ hX').2 (e.inv ≫ f)
-      exact ⟨e
+      exact ⟨e.hom ≫ a, by simp [h]⟩
 
 Depends on / 依赖: P.le_isoClosure, cancel_epi, e.hom, e.inv, le_isoClosure
 -/
@@ -679,7 +681,7 @@ lemma isLocal_iff_isIso_map
   have := adj.unit.naturality f
   dsimp at this
   rw [← (isLocal (· in Set.range F.obj)).postcomp_iff _ _ (isLocal_adj_unit_app adj Y)]; rw [this]; rw [(isLocal (· in Set.range F.obj)).precomp_iff _ _ (isLocal_adj_unit_app adj X)]; rw [isLocal_iff_isIso _ _ ⟨_]; rw [rfl⟩ ⟨_]; rw [rfl⟩]
-  exact ⟨f
+  exact ⟨fun _ => isIso_of_fully_faithful F (G.map f), fun _ => inferInstance⟩
 
 中文:
 引理 isLocal_iff_isIso_map
@@ -688,7 +690,7 @@ lemma isLocal_iff_isIso_map
   have := adj.unit.naturality f
   dsimp at this
   rw [← (isLocal (· in Set.range F.obj)).postcomp_iff _ _ (isLocal_adj_unit_app adj Y)]; rw [this]; rw [(isLocal (· in Set.range F.obj)).precomp_iff _ _ (isLocal_adj_unit_app adj X)]; rw [isLocal_iff_isIso _ _ ⟨_]; rw [rfl⟩ ⟨_]; rw [rfl⟩]
-  exact ⟨f
+  exact ⟨fun _ => isIso_of_fully_faithful F (G.map f), fun _ => inferInstance⟩
 
 Depends on / 依赖: F.obj, G.map, Set.range, adj.unit.naturality, isIso_of_fully_faithful, isLocal, isLocal_adj_unit_app, isLocal_iff_isIso, naturality, postcomp_iff, precomp_iff
 -/
@@ -802,7 +804,7 @@ lemma isColocal_iff_isIso_map
   have := adj.counit.naturality f
   dsimp at this
   rw [← (isColocal _).precomp_iff _ _ (isColocal_adj_counit_app adj X)]; rw [← this]; rw [(isColocal _).postcomp_iff _ _ (isColocal_adj_counit_app adj Y)]; rw [isColocal_iff_isIso _ _ ⟨_]; rw [rfl⟩ ⟨_]; rw [rfl⟩]
-  exact ⟨fun _ => isIso_of_fully_f
+  exact ⟨fun _ => isIso_of_fully_faithful G (F.map f), fun _ => inferInstance⟩
 
 中文:
 引理 isColocal_iff_isIso_map
@@ -811,7 +813,7 @@ lemma isColocal_iff_isIso_map
   have := adj.counit.naturality f
   dsimp at this
   rw [← (isColocal _).precomp_iff _ _ (isColocal_adj_counit_app adj X)]; rw [← this]; rw [(isColocal _).postcomp_iff _ _ (isColocal_adj_counit_app adj Y)]; rw [isColocal_iff_isIso _ _ ⟨_]; rw [rfl⟩ ⟨_]; rw [rfl⟩]
-  exact ⟨fun _ => isIso_of_fully_f
+  exact ⟨fun _ => isIso_of_fully_faithful G (F.map f), fun _ => inferInstance⟩
 
 Depends on / 依赖: F.map, adj.counit.naturality, counit, isColocal, isColocal_adj_counit_app, isColocal_iff_isIso, isIso_of_fully_faithful, naturality, postcomp_iff, precomp_iff
 -/

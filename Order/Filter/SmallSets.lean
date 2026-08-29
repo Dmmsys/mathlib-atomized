@@ -715,7 +715,9 @@ theorem eventually_smallSets_eventually
     _ ↔ exists s in l, forallᶠ x in l', x in s -> p x :=
       eventually_smallSets' fun _ _ hst ht => ht.mono fun _ hx hs => hx (hst hs)
     _ ↔ exists s in l, exists t in l', forall x, x in t -> x in s -> p x := by simp only [eventually_iff_exists_mem]
-    _ ↔ forallᶠ x in l ⊓ l', p x := by s
+    _ ↔ forallᶠ x in l ⊓ l', p x := by simp only [eventually_inf, and_comm, mem_inter_iff, ← and_imp]
+
+@[simp]
 
 中文:
 定理 eventually_smallSets_eventually
@@ -724,7 +726,9 @@ theorem eventually_smallSets_eventually
     _ ↔ exists s in l, forallᶠ x in l', x in s -> p x :=
       eventually_smallSets' fun _ _ hst ht => ht.mono fun _ hx hs => hx (hst hs)
     _ ↔ exists s in l, exists t in l', forall x, x in t -> x in s -> p x := by simp only [eventually_iff_exists_mem]
-    _ ↔ forallᶠ x in l ⊓ l', p x := by s
+    _ ↔ forallᶠ x in l ⊓ l', p x := by simp only [eventually_inf, and_comm, mem_inter_iff, ← and_imp]
+
+@[simp]
 
 Depends on / 依赖: and_comm, and_imp, eventually_iff_exists_mem, eventually_inf, eventually_smallSets, ht.mono, mem_inter_iff
 -/

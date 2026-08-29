@@ -47,7 +47,20 @@ lemma IndepFun.process_congr_left
   have : forallᵐ a ∂P, κ a (((fun ω i => X i ω) ⁻¹' s) inter (Y ⁻¹' t)) =
       κ a ((fun ω i => X i ω) ⁻¹' s) * κ a (Y ⁻¹' t) :=
     h1 ((fun ω i => X i ω) ⁻¹' s) (Y ⁻¹' t) ⟨s, hs, rfl⟩ ⟨t, ht, rfl⟩
-  obtain ⟨I, u, hI, rfl⟩ : exists (I : Set S) (u : Set (Π 
+  obtain ⟨I, u, hI, rfl⟩ : exists (I : Set S) (u : Set (Π i : I, 𝓧 i)),
+      I.Countable ∧ s = I.domRestrict ⁻¹' u := hs.eq_preimage_restrict_countable
+  have aux (f : (i : S) -> Ω -> 𝓧 i) : (fun ω i => f i ω) ⁻¹' I.domRestrict ⁻¹' u =
+      (fun ω (i : I) => f i ω) ⁻¹' u := rfl
+  simp_rw [aux] at *
+  have _ : Countable I := hI.to_subtype
+  have h : forallᵐ a ∂P, (fun ω (i : I) => X i ω) =ᵐ[κ a] (fun ω (i : I) => X' i ω) := by
+    filter_upwards [ae_all_iff.2 fun (i : I) => h2 i] with
+      a (ha : forall (i : I), forallᵐ ω ∂κ a, X i ω = X' i ω)
+    filter_upwards [ae_all_iff.2 ha] with ω hω using by simp [hω]
+  filter_upwards [this, h] with a ha1 ha2
+  refine .trans (measure_congr (ae_eq_set_inter (ha2.symm.preimage _) .rfl)) (ha1.trans ?_)
+  congr 1
+  exact measure_congr (ha2.preimage _)
 
 中文:
 引理 IndepFun.process_congr_left
@@ -57,7 +70,20 @@ lemma IndepFun.process_congr_left
   have : forallᵐ a ∂P, κ a (((fun ω i => X i ω) ⁻¹' s) inter (Y ⁻¹' t)) =
       κ a ((fun ω i => X i ω) ⁻¹' s) * κ a (Y ⁻¹' t) :=
     h1 ((fun ω i => X i ω) ⁻¹' s) (Y ⁻¹' t) ⟨s, hs, rfl⟩ ⟨t, ht, rfl⟩
-  obtain ⟨I, u, hI, rfl⟩ : exists (I : Set S) (u : Set (Π 
+  obtain ⟨I, u, hI, rfl⟩ : exists (I : Set S) (u : Set (Π i : I, 𝓧 i)),
+      I.Countable ∧ s = I.domRestrict ⁻¹' u := hs.eq_preimage_restrict_countable
+  have aux (f : (i : S) -> Ω -> 𝓧 i) : (fun ω i => f i ω) ⁻¹' I.domRestrict ⁻¹' u =
+      (fun ω (i : I) => f i ω) ⁻¹' u := rfl
+  simp_rw [aux] at *
+  have _ : Countable I := hI.to_subtype
+  have h : forallᵐ a ∂P, (fun ω (i : I) => X i ω) =ᵐ[κ a] (fun ω (i : I) => X' i ω) := by
+    filter_upwards [ae_all_iff.2 fun (i : I) => h2 i] with
+      a (ha : forall (i : I), forallᵐ ω ∂κ a, X i ω = X' i ω)
+    filter_upwards [ae_all_iff.2 ha] with ω hω using by simp [hω]
+  filter_upwards [this, h] with a ha1 ha2
+  refine .trans (measure_congr (ae_eq_set_inter (ha2.symm.preimage _) .rfl)) (ha1.trans ?_)
+  congr 1
+  exact measure_congr (ha2.preimage _)
 
 Depends on / 依赖: Countable, I.Countable, I.domRestrict, domRestrict, eq_preimage_restrict_countable, hs.eq_preimage_restrict_countable, simp_rw
 -/
@@ -138,7 +164,24 @@ lemma IndepFun.process_indepFun
   let πX := {s : Set Ω | exists t in squareCylinders (fun i => {s : Set (𝓧 i) | MeasurableSet s}),
       (fun ω i => X i ω) ⁻¹' t = s}
   have πX_pi : IsPiSystem πX :=
-    IsPiSystem.comap (isPiSystem_squareCylinde
+    IsPiSystem.comap (isPiSystem_squareCylinders (fun _ => isPiSystem_measurableSet) (by simp)) _
+  have πX_gen : (MeasurableSpace.pi.comap fun ω i => X i ω) = generateFrom πX := by
+    rw [generateFrom_squareCylinders.symm]; rw [MeasurableSpace.comap_generateFrom]
+    rfl
+  -- To prove independence, we prove independence of the generating π-system with the `σ`-algebra.
+  refine IndepSets.indep (measurable_pi_iff.2 hX).comap_le hY.comap_le
+    πX_pi (@isPiSystem_measurableSet Ω (.comap Y inferInstance)) πX_gen
+    (@generateFrom_measurableSet Ω (.comap Y inferInstance)).symm ?_
+  rintro - - ⟨-, ⟨I, s, hs, rfl⟩, rfl⟩ ⟨t, ht, rfl⟩
+  simp only [Set.mem_pi, Set.mem_univ, Set.mem_ofPred_eq, forall_const] at hs
+  have : (fun ω i => X i ω) ⁻¹' .pi I s =
+      (fun ω (i : I) => X i ω) ⁻¹' .pi (SetLike.coe Finset.univ) (fun i => s i)
+       := by
+    ext; simp
+have h1 : MeasurableSet .pi (SetLike.coe Finset.univ) (fun (i : I) => s i) :=
+    .pi (Finset.countable_toSet _) (fun _ _ => hs _)
+  filter_upwards [(h I).measure_inter_preimage_eq_mul _ _ h1 ht] with ω hω
+  rw [this]; rw [hω]
 
 中文:
 引理 IndepFun.process_indepFun
@@ -148,7 +191,24 @@ lemma IndepFun.process_indepFun
   let πX := {s : Set Ω | exists t in squareCylinders (fun i => {s : Set (𝓧 i) | MeasurableSet s}),
       (fun ω i => X i ω) ⁻¹' t = s}
   have πX_pi : IsPiSystem πX :=
-    IsPiSystem.comap (isPiSystem_squareCylinde
+    IsPiSystem.comap (isPiSystem_squareCylinders (fun _ => isPiSystem_measurableSet) (by simp)) _
+  have πX_gen : (MeasurableSpace.pi.comap fun ω i => X i ω) = generateFrom πX := by
+    rw [generateFrom_squareCylinders.symm]; rw [MeasurableSpace.comap_generateFrom]
+    rfl
+  -- To prove independence, we prove independence of the generating π-system with the `σ`-algebra.
+  refine IndepSets.indep (measurable_pi_iff.2 hX).comap_le hY.comap_le
+    πX_pi (@isPiSystem_measurableSet Ω (.comap Y inferInstance)) πX_gen
+    (@generateFrom_measurableSet Ω (.comap Y inferInstance)).symm ?_
+  rintro - - ⟨-, ⟨I, s, hs, rfl⟩, rfl⟩ ⟨t, ht, rfl⟩
+  simp only [Set.mem_pi, Set.mem_univ, Set.mem_ofPred_eq, forall_const] at hs
+  have : (fun ω i => X i ω) ⁻¹' .pi I s =
+      (fun ω (i : I) => X i ω) ⁻¹' .pi (SetLike.coe Finset.univ) (fun i => s i)
+       := by
+    ext; simp
+have h1 : MeasurableSet .pi (SetLike.coe Finset.univ) (fun (i : I) => s i) :=
+    .pi (Finset.countable_toSet _) (fun _ _ => hs _)
+  filter_upwards [(h I).measure_inter_preimage_eq_mul _ _ h1 ht] with ω hω
+  rw [this]; rw [hω]
 -/
 lemma IndepFun.process_indepFun {𝓧 : S -> Type*} {𝓨 : Type*}
     [forall i, MeasurableSpace (𝓧 i)] [MeasurableSpace 𝓨] {X : (i : S) -> Ω -> 𝓧 i}
@@ -189,7 +249,10 @@ lemma IndepFun.process_indepFun₀
   refine .congr' ?_ (ae_of_all _ fun _ => .rfl) (Measure.ae_ae_of_ae_comp hY.ae_eq_mk.symm)
   apply process_congr_left (X := fun i => (hX i).mk (X i))
   · refine IndepFun.process_indepFun (fun i => (hX i).measurable_mk) hY.measurable_mk
-      fun I => process_congr_left (X := fun (i : I) => X i) 
+      fun I => process_congr_left (X := fun (i : I) => X i) ?_ (fun i => ?_)
+    · exact (h I).congr' (ae_of_all _ fun _ => .rfl) (Measure.ae_ae_of_ae_comp hY.ae_eq_mk)
+    · exact Measure.ae_ae_of_ae_comp (hX i).ae_eq_mk
+  exact fun i => Measure.ae_ae_of_ae_comp (hX i).ae_eq_mk.symm
 
 中文:
 引理 IndepFun.process_indepFun₀
@@ -198,7 +261,10 @@ lemma IndepFun.process_indepFun₀
   refine .congr' ?_ (ae_of_all _ fun _ => .rfl) (Measure.ae_ae_of_ae_comp hY.ae_eq_mk.symm)
   apply process_congr_left (X := fun i => (hX i).mk (X i))
   · refine IndepFun.process_indepFun (fun i => (hX i).measurable_mk) hY.measurable_mk
-      fun I => process_congr_left (X := fun (i : I) => X i) 
+      fun I => process_congr_left (X := fun (i : I) => X i) ?_ (fun i => ?_)
+    · exact (h I).congr' (ae_of_all _ fun _ => .rfl) (Measure.ae_ae_of_ae_comp hY.ae_eq_mk)
+    · exact Measure.ae_ae_of_ae_comp (hX i).ae_eq_mk
+  exact fun i => Measure.ae_ae_of_ae_comp (hX i).ae_eq_mk.symm
 
 Depends on / 依赖: IndepFun, IndepFun.process_indepFun, Measure, Measure.ae_ae_of_ae_comp, ae_ae_of_ae_comp, ae_eq_mk, ae_eq_mk.sy, ae_of_all, hY.ae_eq_mk, hY.ae_eq_mk.symm, hY.measurable_mk, measurable_mk, process_congr_left, process_indepFun
 -/
@@ -300,7 +366,8 @@ lemma IndepFun.process_indepFun_process₀
     (fun j => Measure.ae_ae_of_ae_comp (hY j).ae_eq_mk.symm)
   refine process_indepFun_process
     (fun i => (hX i).measurable_mk) (fun j => (hY j).measurable_mk) fun I J => ?_
-  exact process_congr (h I J) (fun i 
+  exact process_congr (h I J) (fun i => Measure.ae_ae_of_ae_comp (hX i).ae_eq_mk)
+    (fun j => Measure.ae_ae_of_ae_comp (hY j).ae_eq_mk)
 
 中文:
 引理 IndepFun.process_indepFun_process₀
@@ -310,7 +377,8 @@ lemma IndepFun.process_indepFun_process₀
     (fun j => Measure.ae_ae_of_ae_comp (hY j).ae_eq_mk.symm)
   refine process_indepFun_process
     (fun i => (hX i).measurable_mk) (fun j => (hY j).measurable_mk) fun I J => ?_
-  exact process_congr (h I J) (fun i 
+  exact process_congr (h I J) (fun i => Measure.ae_ae_of_ae_comp (hX i).ae_eq_mk)
+    (fun j => Measure.ae_ae_of_ae_comp (hY j).ae_eq_mk)
 
 Depends on / 依赖: Measure, Measure.ae_ae_of_ae_comp, ae_ae_of_ae_comp, ae_eq_mk, ae_eq_mk.symm, measurable_mk, process_congr, process_indepFun_process
 -/
@@ -341,7 +409,33 @@ lemma iIndepFun.process_congr
   have h3' a : ∏ i in s, κ a (f i) = ∏ i in s, κ a ((fun i ω j => X' i j ω) i ⁻¹' g i) := by
     refine Finset.prod_congr rfl fun i hi => ?_
     rw [hg i hi]
-
+  simp_rw [h3, h3']
+  choose! I u hI hu using fun i hi => (mg i hi).eq_preimage_restrict_countable
+  have h4 (f : (i : S) -> (j : T i) -> Ω -> 𝓧 i j) : ⋂ i in s, (fun i ω j => f i j ω) i ⁻¹' g i =
+      ⋂ i in s, (fun i ω j => f i j ω) i ⁻¹' (I i).domRestrict ⁻¹' u i :=
+      (biInf_congr (fun i hi => by rw [hu i hi])).symm
+  have h4' a (f : (i : S) -> (j : T i) -> Ω -> 𝓧 i j) :
+      ∏ i in s, κ a ((fun i ω j => f i j ω) i ⁻¹' g i) =
+      ∏ i in s, κ a ((fun i ω j => f i j ω) i ⁻¹' (I i).domRestrict ⁻¹' u i) := by
+    refine Finset.prod_congr rfl fun i hi => ?_
+    rw [hu i hi]
+  have h5 := h1 s (fun i hi => ⟨g i, mg i hi, rfl⟩)
+  simp_rw [h4, h4'] at h5 ⊢
+  have h6 i (f : (j : T i) -> Ω -> 𝓧 i j) : (fun ω j => f j ω) ⁻¹' (I i).domRestrict ⁻¹' (u i) =
+      (fun ω (j : I i) => f j ω) ⁻¹' (u i) := rfl
+  simp_rw [h6] at h5 ⊢
+  have h :
+      forallᵐ a ∂P, forall i in s, (fun ω (j : I i) => X i j ω) =ᵐ[κ a] (fun ω (j : I i) => X' i j ω) := by
+    refine (ae_ball_iff s.countable_toSet).2 fun i hi => ?_
+    have := (hI i hi).to_subtype
+    filter_upwards [ae_all_iff.2 fun (j : I i) => h2 i j] with
+      a (ha : forall (j : I i), forallᵐ ω ∂κ a, X i j ω = X' i j ω)
+    filter_upwards [ae_all_iff.2 ha] with ω hω using by simp [hω]
+  filter_upwards [h5, h] with a ha1 ha2
+  refine .trans (measure_congr (ae_eq_set_biInter s.countable_toSet
+    (fun i hi => ((ha2 i hi).preimage _).symm))) (ha1.trans ?_)
+  refine Finset.prod_congr rfl fun i hi => ?_
+  rw [measure_congr ((ha2 i hi).preimage _)]
 
 中文:
 引理 iIndepFun.process_congr
@@ -353,7 +447,33 @@ lemma iIndepFun.process_congr
   have h3' a : ∏ i in s, κ a (f i) = ∏ i in s, κ a ((fun i ω j => X' i j ω) i ⁻¹' g i) := by
     refine Finset.prod_congr rfl fun i hi => ?_
     rw [hg i hi]
-
+  simp_rw [h3, h3']
+  choose! I u hI hu using fun i hi => (mg i hi).eq_preimage_restrict_countable
+  have h4 (f : (i : S) -> (j : T i) -> Ω -> 𝓧 i j) : ⋂ i in s, (fun i ω j => f i j ω) i ⁻¹' g i =
+      ⋂ i in s, (fun i ω j => f i j ω) i ⁻¹' (I i).domRestrict ⁻¹' u i :=
+      (biInf_congr (fun i hi => by rw [hu i hi])).symm
+  have h4' a (f : (i : S) -> (j : T i) -> Ω -> 𝓧 i j) :
+      ∏ i in s, κ a ((fun i ω j => f i j ω) i ⁻¹' g i) =
+      ∏ i in s, κ a ((fun i ω j => f i j ω) i ⁻¹' (I i).domRestrict ⁻¹' u i) := by
+    refine Finset.prod_congr rfl fun i hi => ?_
+    rw [hu i hi]
+  have h5 := h1 s (fun i hi => ⟨g i, mg i hi, rfl⟩)
+  simp_rw [h4, h4'] at h5 ⊢
+  have h6 i (f : (j : T i) -> Ω -> 𝓧 i j) : (fun ω j => f j ω) ⁻¹' (I i).domRestrict ⁻¹' (u i) =
+      (fun ω (j : I i) => f j ω) ⁻¹' (u i) := rfl
+  simp_rw [h6] at h5 ⊢
+  have h :
+      forallᵐ a ∂P, forall i in s, (fun ω (j : I i) => X i j ω) =ᵐ[κ a] (fun ω (j : I i) => X' i j ω) := by
+    refine (ae_ball_iff s.countable_toSet).2 fun i hi => ?_
+    have := (hI i hi).to_subtype
+    filter_upwards [ae_all_iff.2 fun (j : I i) => h2 i j] with
+      a (ha : forall (j : I i), forallᵐ ω ∂κ a, X i j ω = X' i j ω)
+    filter_upwards [ae_all_iff.2 ha] with ω hω using by simp [hω]
+  filter_upwards [h5, h] with a ha1 ha2
+  refine .trans (measure_congr (ae_eq_set_biInter s.countable_toSet
+    (fun i hi => ((ha2 i hi).preimage _).symm))) (ha1.trans ?_)
+  refine Finset.prod_congr rfl fun i hi => ?_
+  rw [measure_congr ((ha2 i hi).preimage _)]
 
 Depends on / 依赖: Finset, Finset.prod_congr, biInf_congr, eq_preimage_restrict_countable, prod_congr, simp_rw
 -/
@@ -407,7 +527,32 @@ lemma iIndepFun.iIndepFun_process
   obtain ⟨η, η_eq, hη⟩ : exists (η : Kernel α Ω), κ =ᵐ[P] η ∧ IsMarkovKernel η :=
     exists_ae_eq_isMarkovKernel (h ∅ fun _ => ∅).ae_isProbabilityMeasure hμ
   apply iIndepFun.congr (Filter.EventuallyEq.symm η_eq)
-  let π i := {s : Set Ω | exists t in sq
+  let π i := {s : Set Ω | exists t in squareCylinders (fun j => {s : Set (𝓧 i j) | MeasurableSet s}),
+    (fun ω j => X i j ω) ⁻¹' t = s}
+  have π_pi i : IsPiSystem (π i) :=
+    (isPiSystem_squareCylinders (fun _ => isPiSystem_measurableSet) (by simp)).comap _
+  have π_gen i : (MeasurableSpace.pi.comap fun ω j => X i j ω) = generateFrom (π i) := by
+    rw [generateFrom_squareCylinders.symm]; rw [MeasurableSpace.comap_generateFrom]
+    rfl
+  refine iIndepSets.iIndep _ (fun i => (measurable_pi_iff.2 (hX i)).comap_le) π π_pi π_gen
+    fun I s hs => ?_
+  simp only [squareCylinders, Set.mem_pi, Set.mem_univ, Set.mem_ofPred_eq, forall_const,
+    ↓existsAndEq, and_true, π] at hs
+  choose! J t ht hs using hs
+  simp_rw [Set.iInter₂_congr (fun i hi => (hs i hi).symm),
+    I.prod_congr rfl (fun i hi => congrArg _ (hs i hi).symm)]
+  have : (⋂ i in I, (fun ω j => X i j ω) ⁻¹' .pi (J i) (t i)) =
+      (⋂ i in (.univ : Finset I), (fun ω (j : J i) => X i j ω) ⁻¹'
+        .pi (SetLike.coe Finset.univ) (fun j => t i j)) := by
+    ext; simp
+  have h' (i : I) (hi : i in Finset.univ) :
+MeasurableSet (SetLike.coe Finset.univ).pi fun (j : J i) => t i j :=
+    .pi (Finset.countable_toSet _) (fun _ _ => ht _ i.2 _)
+  filter_upwards [(h I (fun i => J i)).measure_inter_preimage_eq_mul _ _ .univ h',
+    η_eq] with ω hω hη
+  rw [this]; rw [← hη]; rw [hω]; rw [← I.prod_coe_sort]
+  congrm ∏ _, κ ω ?_
+  ext; simp
 
 中文:
 引理 iIndepFun.iIndepFun_process
@@ -418,7 +563,32 @@ lemma iIndepFun.iIndepFun_process
   obtain ⟨η, η_eq, hη⟩ : exists (η : Kernel α Ω), κ =ᵐ[P] η ∧ IsMarkovKernel η :=
     exists_ae_eq_isMarkovKernel (h ∅ fun _ => ∅).ae_isProbabilityMeasure hμ
   apply iIndepFun.congr (Filter.EventuallyEq.symm η_eq)
-  let π i := {s : Set Ω | exists t in sq
+  let π i := {s : Set Ω | exists t in squareCylinders (fun j => {s : Set (𝓧 i j) | MeasurableSet s}),
+    (fun ω j => X i j ω) ⁻¹' t = s}
+  have π_pi i : IsPiSystem (π i) :=
+    (isPiSystem_squareCylinders (fun _ => isPiSystem_measurableSet) (by simp)).comap _
+  have π_gen i : (MeasurableSpace.pi.comap fun ω j => X i j ω) = generateFrom (π i) := by
+    rw [generateFrom_squareCylinders.symm]; rw [MeasurableSpace.comap_generateFrom]
+    rfl
+  refine iIndepSets.iIndep _ (fun i => (measurable_pi_iff.2 (hX i)).comap_le) π π_pi π_gen
+    fun I s hs => ?_
+  simp only [squareCylinders, Set.mem_pi, Set.mem_univ, Set.mem_ofPred_eq, forall_const,
+    ↓existsAndEq, and_true, π] at hs
+  choose! J t ht hs using hs
+  simp_rw [Set.iInter₂_congr (fun i hi => (hs i hi).symm),
+    I.prod_congr rfl (fun i hi => congrArg _ (hs i hi).symm)]
+  have : (⋂ i in I, (fun ω j => X i j ω) ⁻¹' .pi (J i) (t i)) =
+      (⋂ i in (.univ : Finset I), (fun ω (j : J i) => X i j ω) ⁻¹'
+        .pi (SetLike.coe Finset.univ) (fun j => t i j)) := by
+    ext; simp
+  have h' (i : I) (hi : i in Finset.univ) :
+MeasurableSet (SetLike.coe Finset.univ).pi fun (j : J i) => t i j :=
+    .pi (Finset.countable_toSet _) (fun _ _ => ht _ i.2 _)
+  filter_upwards [(h I (fun i => J i)).measure_inter_preimage_eq_mul _ _ .univ h',
+    η_eq] with ω hω hη
+  rw [this]; rw [← hη]; rw [hω]; rw [← I.prod_coe_sort]
+  congrm ∏ _, κ ω ?_
+  ext; simp
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.symm, IsMarkovKernel, IsPiSystem, Kernel, MeasurableSet, ae_isProbabilityMeasure, eq_or_ne, exists_ae_eq_isMarkovKernel, iIndepFun, iIndepFun.congr, isPiSystem_measurableSet, isPiSystem_squareCylinders, squareCylinders
 -/

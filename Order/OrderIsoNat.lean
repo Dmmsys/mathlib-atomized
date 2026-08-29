@@ -426,7 +426,8 @@ theorem exists_subseq_of_forall_mem_union
       simp only [Set.infinite_coe_iff, ← Set.infinite_union, ← Set.preimage_union,
         Set.eq_univ_of_forall fun n => Set.mem_preimage.2 (he n), Set.infinite_univ]
     cases this
-    exacts [⟨Nat.orderEmbeddingOfSet (e ⁻¹' s
+    exacts [⟨Nat.orderEmbeddingOfSet (e ⁻¹' s), Or.inl fun n => (Nat.Subtype.ofNat (e ⁻¹' s) _).2⟩,
+      ⟨Nat.orderEmbeddingOfSet (e ⁻¹' t), Or.inr fun n => (Nat.Subtype.ofNat (e ⁻¹' t) _).2⟩]
 
 中文:
 定理 存在_subseq_of_对任意_mem_union
@@ -437,7 +438,8 @@ theorem exists_subseq_of_forall_mem_union
       simp only [Set.infinite_coe_iff, ← Set.infinite_union, ← Set.preimage_union,
         Set.eq_univ_of_forall fun n => Set.mem_preimage.2 (he n), Set.infinite_univ]
     cases this
-    exacts [⟨Nat.orderEmbeddingOfSet (e ⁻¹' s
+    exacts [⟨Nat.orderEmbeddingOfSet (e ⁻¹' s), Or.inl fun n => (Nat.Subtype.ofNat (e ⁻¹' s) _).2⟩,
+      ⟨Nat.orderEmbeddingOfSet (e ⁻¹' t), Or.inr fun n => (Nat.Subtype.ofNat (e ⁻¹' t) _).2⟩]
 
 Depends on / 依赖: Infinite, Nat.Subtype.ofNat, Nat.orderEmbeddingOfSet, Or.inl, Or.inr, Set.eq_univ_of_forall, Set.infinite_coe_iff, Set.infinite_union, Set.infinite_univ, Set.mem_preimage, Set.preimage_union, Subtype, classical, eq_univ_of_forall, exacts, infinite_coe_iff, infinite_union, infinite_univ, mem_preimage, orderEmbeddingOfSet
 -/
@@ -465,7 +467,29 @@ theorem exists_increasing_or_nonincreasing_subseq'
     by_cases hbad : Infinite bad
     · refine ⟨Nat.orderEmbeddingOfSet bad, Or.intro_right _ fun m n mn => ?_⟩
       have h := @Set.mem_range_self _ _ ↑(Nat.orderEmbeddingOfSet bad) m
-      rw [Nat.orderEmbeddingOfSet_
+      rw [Nat.orderEmbeddingOfSet_range bad] at h
+      exact h _ ((OrderEmbedding.lt_iff_lt _).2 mn)
+    · rw [Set.infinite_coe_iff, Set.Infinite, not_not] at hbad
+      obtain ⟨m, hm⟩ : exists m, forall n, m <= n -> n ∉ bad := by
+        by_cases he : hbad.toFinset.Nonempty
+        · refine
+            ⟨(hbad.toFinset.max' he).succ, fun n hn nbad =>
+              Nat.not_succ_le_self _
+                (hn.trans (hbad.toFinset.le_max' n (hbad.mem_toFinset.2 nbad)))⟩
+        · exact ⟨0, fun n _ nbad => he ⟨n, hbad.mem_toFinset.2 nbad⟩⟩
+      have h : forall n : Nat, exists n' : Nat, n < n' ∧ r (f (n + m)) (f (n' + m)) := by
+        intro n
+        have h := hm _ (Nat.le_add_left m n)
+        simp only [bad, exists_prop, not_not, Set.mem_ofPred_eq, not_forall] at h
+        obtain ⟨n', hn1, hn2⟩ := h
+        refine ⟨n + n' - n - m, by lia, ?_⟩
+        convert! hn2
+        lia
+      let g' : Nat -> Nat := @Nat.rec (fun _ => Nat) m fun n gn => Nat.find (h gn)
+      exact
+        ⟨(RelEmbedding.natLT (fun n => g' n + m) fun n =>
+              Nat.add_lt_add_right (Nat.find_spec (h (g' n))).1 m).orderEmbeddingOfLTEmbedding,
+          Or.intro_left _ fun n => (Nat.find_spec (h (g' n))).2⟩
 
 中文:
 定理 存在_increasing_or_nonincreasing_subseq'
@@ -476,7 +500,29 @@ theorem exists_increasing_or_nonincreasing_subseq'
     by_cases hbad : Infinite bad
     · refine ⟨Nat.orderEmbeddingOfSet bad, Or.intro_right _ fun m n mn => ?_⟩
       have h := @Set.mem_range_self _ _ ↑(Nat.orderEmbeddingOfSet bad) m
-      rw [Nat.orderEmbeddingOfSet_
+      rw [Nat.orderEmbeddingOfSet_range bad] at h
+      exact h _ ((OrderEmbedding.lt_iff_lt _).2 mn)
+    · rw [Set.infinite_coe_iff, Set.Infinite, not_not] at hbad
+      obtain ⟨m, hm⟩ : exists m, forall n, m <= n -> n ∉ bad := by
+        by_cases he : hbad.toFinset.Nonempty
+        · refine
+            ⟨(hbad.toFinset.max' he).succ, fun n hn nbad =>
+              Nat.not_succ_le_self _
+                (hn.trans (hbad.toFinset.le_max' n (hbad.mem_toFinset.2 nbad)))⟩
+        · exact ⟨0, fun n _ nbad => he ⟨n, hbad.mem_toFinset.2 nbad⟩⟩
+      have h : forall n : Nat, exists n' : Nat, n < n' ∧ r (f (n + m)) (f (n' + m)) := by
+        intro n
+        have h := hm _ (Nat.le_add_left m n)
+        simp only [bad, exists_prop, not_not, Set.mem_ofPred_eq, not_forall] at h
+        obtain ⟨n', hn1, hn2⟩ := h
+        refine ⟨n + n' - n - m, by lia, ?_⟩
+        convert! hn2
+        lia
+      let g' : Nat -> Nat := @Nat.rec (fun _ => Nat) m fun n gn => Nat.find (h gn)
+      exact
+        ⟨(RelEmbedding.natLT (fun n => g' n + m) fun n =>
+              Nat.add_lt_add_right (Nat.find_spec (h (g' n))).1 m).orderEmbeddingOfLTEmbedding,
+          Or.intro_left _ fun n => (Nat.find_spec (h (g' n))).2⟩
 
 Depends on / 依赖: Infinite, Nat.orderEmbeddingOfSet, Nat.orderEmbeddingOfSet_range, Nonempty, Or.intro_right, OrderEmbedding, OrderEmbedding.lt_iff_lt, Set.Infinite, Set.infinite_coe_iff, Set.mem_range_self, classical, hbad.toFinset.Nonempty, infinite_coe_iff, intro_right, lt_iff_lt, mem_range_self, not_not, orderEmbeddingOfSet, orderEmbeddingOfSet_range, toFinset
 -/
@@ -526,7 +572,8 @@ theorem exists_increasing_or_nonincreasing_subseq
     | zero => apply hr
     | succ x ih =>
       apply IsTrans.trans _ _ _ _ (hr _)
- 
+      exact ih (lt_of_lt_of_le m.lt_succ_self (Nat.le_add_right _ _))
+  · exact ⟨g, Or.intro_right _ hnr⟩
 
 中文:
 定理 存在_increasing_or_nonincreasing_subseq
@@ -539,7 +586,8 @@ theorem exists_increasing_or_nonincreasing_subseq
     | zero => apply hr
     | succ x ih =>
       apply IsTrans.trans _ _ _ _ (hr _)
- 
+      exact ih (lt_of_lt_of_le m.lt_succ_self (Nat.le_add_right _ _))
+  · exact ⟨g, Or.intro_right _ hnr⟩
 
 Depends on / 依赖: IsTrans, IsTrans.trans, Nat.exists_eq_add_of_le, Nat.le_add_right, Nat.succ_le_iff, Or.intro_left, Or.intro_right, exists_eq_add_of_le, exists_increasing_or_nonincreasing_subseq, intro_left, intro_right, le_add_right, lt_of_lt_of_le, lt_succ_self, m.lt_succ_self, succ_le_iff
 -/
@@ -569,7 +617,8 @@ theorem Infinite.exists_strictMono_or_strictAnti
   rcases hg with hIncreasing | hNonincreasing
   · exact Or.inl hIncreasing
 · refine Or.inr fun m n hmn => lt_of_le_of_ne ?_ ((f.injective.comp g.injective).ne ?_)
-    · 
+    · grind
+    · grind
 
 中文:
 定理 无限.存在_strictMono_or_strictAnti
@@ -581,7 +630,8 @@ theorem Infinite.exists_strictMono_or_strictAnti
   rcases hg with hIncreasing | hNonincreasing
   · exact Or.inl hIncreasing
 · refine Or.inr fun m n hmn => lt_of_le_of_ne ?_ ((f.injective.comp g.injective).ne ?_)
-    · 
+    · grind
+    · grind
 
 Depends on / 依赖: Infinite, Infinite.natEmbedding, Or.inl, Or.inr, exists_increasing_or_nonincreasing_subseq, f.injective.comp, g.injective, hIncreasing, hNonincreasing, injective, lt_of_le_of_ne, natEmbedding
 -/
@@ -641,7 +691,8 @@ theorem wellFoundedGT_iff_monotone_chain_condition'
     exact ⟨n, fun m _ => H _ (Set.mem_range_self _)⟩
   · rw [WellFoundedGT, isWellFounded_iff, RelEmbedding.wellFounded_iff_isEmpty]
     refine ⟨fun a => ?_⟩
-    obtain ⟨n, hn⟩ := h (a.swap 
+    obtain ⟨n, hn⟩ := h (a.swap : _ ->r _).toOrderHom
+    exact hn n.succ n.lt_succ_self.le ((RelEmbedding.map_rel_iff _).2 n.lt_succ_self)
 
 中文:
 定理 wellFoundedGT_iff_monotone_chain_condition'
@@ -652,7 +703,8 @@ theorem wellFoundedGT_iff_monotone_chain_condition'
     exact ⟨n, fun m _ => H _ (Set.mem_range_self _)⟩
   · rw [WellFoundedGT, isWellFounded_iff, RelEmbedding.wellFounded_iff_isEmpty]
     refine ⟨fun a => ?_⟩
-    obtain ⟨n, hn⟩ := h (a.swap 
+    obtain ⟨n, hn⟩ := h (a.swap : _ ->r _).toOrderHom
+    exact hn n.succ n.lt_succ_self.le ((RelEmbedding.map_rel_iff _).2 n.lt_succ_self)
 
 Depends on / 依赖: RelEmbedding, RelEmbedding.map_rel_iff, RelEmbedding.wellFounded_iff_isEmpty, Set.mem_range_self, Set.range_nonempty, WellFoundedGT, a.swap, h.wf.has_min, has_min, isWellFounded_iff, lt_succ_self, map_rel_iff, mem_range_self, n.lt_succ_self, n.lt_succ_self.le, n.succ, range_nonempty, toOrderHom, wellFounded_iff_isEmpty
 -/
@@ -865,7 +917,15 @@ theorem exists_covBy_seq_of_wellFoundedLT_wellFoundedGT
   have hα := Set.nonempty_iff_univ_nonempty.mp ‹_›
   classical
   let a : Nat -> α := Nat.rec (wfl.wf.min _ hα) fun _n a => if ha : IsMax a then a else next ha
-  refine ⟨a, isMin_iff_forall_not_lt.mpr fun _ => wfl.wf.not_lt_min _ (Se
+  refine ⟨a, isMin_iff_forall_not_lt.mpr fun _ => wfl.wf.not_lt_min _ (Set.mem_univ _), ?_⟩
+  have cov n (hn : ¬ IsMax (a n)) : a n ⋖ a (n + 1) := by
+    change a n ⋖ if ha : IsMax (a n) then a n else _
+    rw [dif_neg hn]
+    exact hnext hn
+  have H : exists n, IsMax (a n) := by
+    by_contra!
+    exact (RelEmbedding.natGT a fun n => (cov n (this n)).1).not_wellFounded wfg.wf
+  exact ⟨_, wellFounded_lt.min_mem _ H, fun i h => cov _ (wellFounded_lt.not_lt_min _ · h)⟩
 
 中文:
 定理 存在_covBy_seq_of_wellFoundedLT_wellFoundedGT
@@ -875,7 +935,15 @@ theorem exists_covBy_seq_of_wellFoundedLT_wellFoundedGT
   have hα := Set.nonempty_iff_univ_nonempty.mp ‹_›
   classical
   let a : Nat -> α := Nat.rec (wfl.wf.min _ hα) fun _n a => if ha : IsMax a then a else next ha
-  refine ⟨a, isMin_iff_forall_not_lt.mpr fun _ => wfl.wf.not_lt_min _ (Se
+  refine ⟨a, isMin_iff_forall_not_lt.mpr fun _ => wfl.wf.not_lt_min _ (Set.mem_univ _), ?_⟩
+  have cov n (hn : ¬ IsMax (a n)) : a n ⋖ a (n + 1) := by
+    change a n ⋖ if ha : IsMax (a n) then a n else _
+    rw [dif_neg hn]
+    exact hnext hn
+  have H : exists n, IsMax (a n) := by
+    by_contra!
+    exact (RelEmbedding.natGT a fun n => (cov n (this n)).1).not_wellFounded wfg.wf
+  exact ⟨_, wellFounded_lt.min_mem _ H, fun i h => cov _ (wellFounded_lt.not_lt_min _ · h)⟩
 
 Depends on / 依赖: Nat.rec, Set.mem_univ, Set.nonempty_iff_univ_nonempty.mp, classical, dif_neg, exists_covBy_of_wellFoundedLT, isMin_iff_forall_not_lt, isMin_iff_forall_not_lt.mpr, mem_univ, nonempty_iff_univ_nonempty, not_lt_min, wfl.wf.min, wfl.wf.not_lt_min
 -/
@@ -908,6 +976,8 @@ theorem exists_covBy_seq_of_wellFoundedLT_wellFoundedGT_of_le
     { top := ⟨y, h, le_rfl⟩, le_top x := x.2.2, bot := ⟨x, le_rfl, h⟩, bot_le x := x.2.1 }
   obtain ⟨a, h₁, n, h₂, e⟩ := exists_covBy_seq_of_wellFoundedLT_wellFoundedGT S
   simp only [isMin_iff_eq_bot, Subtype.ext_iff, isMax_iff_eq_top] at h₁ h₂
+  exact ⟨Subtype.val ∘ a, h₁, n, h₂, fun i hi => ⟨(e i hi).1, fun c hc h => (e i hi).2
+    (c := ⟨c, (a i).2.1.trans hc.le, h.le.trans (a _).2.2⟩) hc h⟩⟩
 
 中文:
 定理 存在_covBy_seq_of_wellFoundedLT_wellFoundedGT_of_le
@@ -918,6 +988,8 @@ theorem exists_covBy_seq_of_wellFoundedLT_wellFoundedGT_of_le
     { top := ⟨y, h, le_rfl⟩, le_top x := x.2.2, bot := ⟨x, le_rfl, h⟩, bot_le x := x.2.1 }
   obtain ⟨a, h₁, n, h₂, e⟩ := exists_covBy_seq_of_wellFoundedLT_wellFoundedGT S
   simp only [isMin_iff_eq_bot, Subtype.ext_iff, isMax_iff_eq_top] at h₁ h₂
+  exact ⟨Subtype.val ∘ a, h₁, n, h₂, fun i hi => ⟨(e i hi).1, fun c hc h => (e i hi).2
+    (c := ⟨c, (a i).2.1.trans hc.le, h.le.trans (a _).2.2⟩) hc h⟩⟩
 
 Depends on / 依赖: BoundedOrder, Set.Icc, Subtype, Subtype.ext_iff, Subtype.val, bot_le, exists_covBy_seq_of_wellFoundedLT_wellFoundedGT, ext_iff, h.le.trans, hc.le, isMax_iff_eq_top, isMin_iff_eq_bot, le_rfl, le_top
 -/

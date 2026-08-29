@@ -162,7 +162,9 @@ lemma ceil_lt_mul
   · rw [← sub_pos] at hb
     calc
 ⌈a⌉₊ < a + 1 := ceil_lt_add_one hba.trans' by positivity
-      _ = a + (b - 1) * (b - 1)⁻¹ := by rw [mul_inv_c
+      _ = a + (b - 1) * (b - 1)⁻¹ := by rw [mul_inv_cancel₀]; positivity
+      _ <= a + (b - 1) * a := by gcongr
+      _ = b * a := by rw [sub_one_mul, add_sub_cancel]
 
 中文:
 引理 ceil_lt_mul
@@ -176,7 +178,9 @@ lemma ceil_lt_mul
   · rw [← sub_pos] at hb
     calc
 ⌈a⌉₊ < a + 1 := ceil_lt_add_one hba.trans' by positivity
-      _ = a + (b - 1) * (b - 1)⁻¹ := by rw [mul_inv_c
+      _ = a + (b - 1) * (b - 1)⁻¹ := by rw [mul_inv_cancel₀]; positivity
+      _ <= a + (b - 1) * a := by gcongr
+      _ = b * a := by rw [sub_one_mul, add_sub_cancel]
 
 Depends on / 依赖: add_sub_cancel, ceil_lt_add_one, hba.trans, le_total, sub_one_mul, sub_pos
 -/

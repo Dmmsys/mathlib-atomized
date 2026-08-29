@@ -485,7 +485,12 @@ theorem choose_mul_factorial_mul_factorial
         simp [factorial_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
       have h₁ : (n - k)! = (n - k) * (n - k.succ)! := by
         rw [← succ_sub_succ]; rw [succ_sub (le_of_lt_succ hk₁)]; rw [factorial_succ]
-   
+      have h₂ : choose n (succ k) * k.succ ! * ((n - k) * (n - k.succ)!) = (n - k) * n ! := by
+        rw [← choose_mul_factorial_mul_factorial (le_of_lt_succ hk₁)]
+        simp [factorial_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
+      have h₃ : k * n ! <= n * n ! := Nat.mul_le_mul_right _ (le_of_succ_le_succ hk)
+      rw [choose_succ_succ]; rw [Nat.add_mul]; rw [Nat.add_mul]; rw [succ_sub_succ]; rw [h]; rw [h₁]; rw [h₂]; rw [Nat.add_mul]; rw [Nat.mul_sub_right_distrib]; rw [factorial_succ]; rw [← Nat.add_sub_assoc h₃]; rw [Nat.add_assoc]; rw [← Nat.add_mul]; rw [Nat.add_sub_cancel_left]; rw [Nat.add_comm]
+    · rw [hk₁]; simp [Nat.mul_comm, choose, Nat.sub_self]
 
 中文:
 定理 choose_mul_factorial_mul_factorial
@@ -495,7 +500,12 @@ theorem choose_mul_factorial_mul_factorial
         simp [factorial_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
       have h₁ : (n - k)! = (n - k) * (n - k.succ)! := by
         rw [← succ_sub_succ]; rw [succ_sub (le_of_lt_succ hk₁)]; rw [factorial_succ]
-   
+      have h₂ : choose n (succ k) * k.succ ! * ((n - k) * (n - k.succ)!) = (n - k) * n ! := by
+        rw [← choose_mul_factorial_mul_factorial (le_of_lt_succ hk₁)]
+        simp [factorial_succ, Nat.mul_comm, Nat.mul_left_comm, Nat.mul_assoc]
+      have h₃ : k * n ! <= n * n ! := Nat.mul_le_mul_right _ (le_of_succ_le_succ hk)
+      rw [choose_succ_succ]; rw [Nat.add_mul]; rw [Nat.add_mul]; rw [succ_sub_succ]; rw [h]; rw [h₁]; rw [h₂]; rw [Nat.add_mul]; rw [Nat.mul_sub_right_distrib]; rw [factorial_succ]; rw [← Nat.add_sub_assoc h₃]; rw [Nat.add_assoc]; rw [← Nat.add_mul]; rw [Nat.add_sub_cancel_left]; rw [Nat.add_comm]
+    · rw [hk₁]; simp [Nat.mul_comm, choose, Nat.sub_self]
 
 Depends on / 依赖: Nat.mul_assoc, Nat.mul_comm, Nat.mul_left_comm, choose_mul_factorial_mul_factorial, factorial_succ, k.succ, le_of_lt_succ, le_of_succ_le_succ, mul_assoc, mul_comm, mul_left_comm, succ_sub, succ_sub_succ
 -/
@@ -529,7 +539,9 @@ theorem choose_mul
   apply Nat.mul_right_cancel h
   calc
     _ = n.choose s * s ! * ((n - s).choose (k - s) * (k - s)! * (n - s - (k - s))!) := by
-      grind [choose_mul_factorial_mu
+      grind [choose_mul_factorial_mul_factorial]
+    _ = n.choose s * (n - s).choose (k - s) * ((n - k)! * (k - s)! * s !) := by
+      grind
 
 中文:
 定理 choose_mul
@@ -541,7 +553,9 @@ theorem choose_mul
   apply Nat.mul_right_cancel h
   calc
     _ = n.choose s * s ! * ((n - s).choose (k - s) * (k - s)! * (n - s - (k - s))!) := by
-      grind [choose_mul_factorial_mu
+      grind [choose_mul_factorial_mul_factorial]
+    _ = n.choose s * (n - s).choose (k - s) * ((n - k)! * (k - s)! * s !) := by
+      grind
 
 Depends on / 依赖: Nat.mul_pos, Nat.mul_right_cancel, apply_rules, choose_mul_factorial_mul_factorial, factorial_pos, lt_or_ge, mul_pos, mul_right_cancel, n.choose
 -/
@@ -784,7 +798,9 @@ theorem choose_succ_right_eq
   proof: by
   have e : (n + 1) * choose n k = choose n (k + 1) * (k + 1) + choose n k * (k + 1) := by
     rw [← Nat.add_mul]; rw [Nat.add_comm (choose _ _)]; rw [← choose_succ_succ]; rw [add_one_mul_choose_eq]
-  rw [← Nat.sub_eq_of_eq_add e]; rw [Nat.mul_comm]; rw [← Nat.mul_sub_left_distrib]; rw [Nat.add_su
+  rw [← Nat.sub_eq_of_eq_add e]; rw [Nat.mul_comm]; rw [← Nat.mul_sub_left_distrib]; rw [Nat.add_sub_add_right]
+
+@[simp, grind =]
 
 中文:
 定理 choose_succ_right_eq
@@ -793,7 +809,9 @@ theorem choose_succ_right_eq
   证明: by
   have e : (n + 1) * choose n k = choose n (k + 1) * (k + 1) + choose n k * (k + 1) := by
     rw [← Nat.add_mul]; rw [Nat.add_comm (choose _ _)]; rw [← choose_succ_succ]; rw [add_one_mul_choose_eq]
-  rw [← Nat.sub_eq_of_eq_add e]; rw [Nat.mul_comm]; rw [← Nat.mul_sub_left_distrib]; rw [Nat.add_su
+  rw [← Nat.sub_eq_of_eq_add e]; rw [Nat.mul_comm]; rw [← Nat.mul_sub_left_distrib]; rw [Nat.add_sub_add_right]
+
+@[simp, grind =]
 
 Depends on / 依赖: Nat.add_comm, Nat.add_mul, Nat.add_sub_add_right, Nat.mul_comm, Nat.mul_sub_left_distrib, Nat.sub_eq_of_eq_add, add_comm, add_mul, add_one_mul_choose_eq, add_sub_add_right, choose_succ_succ, mul_comm, mul_sub_left_distrib, sub_eq_of_eq_add
 -/
@@ -832,7 +850,8 @@ theorem choose_mul_succ_eq
     obtain hk | hk := le_or_gt (k + 1) (n + 1)
     · rw [choose_succ_succ, Nat.add_mul, succ_sub_succ, ← choose_succ_right_eq, ← succ_sub_succ,
         Nat.mul_sub_left_distrib, Nat.add_sub_cancel' (Nat.mul_le_mul_left _ hk)]
-    · rw [choose_eq_zero_
+    · rw [choose_eq_zero_of_lt hk, choose_eq_zero_of_lt (n.lt_succ_self.trans hk), Nat.zero_mul,
+        Nat.zero_mul]
 
 中文:
 定理 choose_mul_succ_eq
@@ -845,7 +864,8 @@ theorem choose_mul_succ_eq
     obtain hk | hk := le_or_gt (k + 1) (n + 1)
     · rw [choose_succ_succ, Nat.add_mul, succ_sub_succ, ← choose_succ_right_eq, ← succ_sub_succ,
         Nat.mul_sub_left_distrib, Nat.add_sub_cancel' (Nat.mul_le_mul_left _ hk)]
-    · rw [choose_eq_zero_
+    · rw [choose_eq_zero_of_lt hk, choose_eq_zero_of_lt (n.lt_succ_self.trans hk), Nat.zero_mul,
+        Nat.zero_mul]
 
 Depends on / 依赖: Nat.add_mul, Nat.add_sub_cancel, Nat.mul_le_mul_left, Nat.mul_sub_left_distrib, Nat.zero_mul, add_mul, add_sub_cancel, choose_eq_zero_of_lt, choose_succ_right_eq, choose_succ_succ, le_or_gt, lt_succ_self, mul_le_mul_left, mul_sub_left_distrib, n.lt_succ_self.trans, succ_sub_succ, zero_mul
 -/
@@ -872,7 +892,16 @@ theorem choose_mul_add
   simp only [hp, add_succ_sub_one]
   calc
     (m * (p + 1) + (p + 1)).choose (p + 1) * ((m * (p + 1))! * (p + 1)!)
-      = (m *
+      = (m * (p + 1) + (p + 1)).choose (p + 1) * (m * (p + 1))! * (p + 1)! := by lia
+    _ = (m * (p + 1) + (p + 1))! := by rw [add_choose_mul_factorial_mul_factorial]
+    _ = ((m * (p + 1) + p) + 1)! := by lia
+    _ = ((m * (p + 1) + p) + 1) * (m * (p + 1) + p)! := by rw [factorial_succ]
+    _ = (m * (p + 1) + p)! * ((p + 1) * (m + 1)) := by lia
+    _ = ((m * (p + 1) + p).choose p * (m * (p + 1))! * (p)!) * ((p + 1) * (m + 1)) := by
+      rw [add_choose_mul_factorial_mul_factorial]
+    _ = (m * (p + 1) + p).choose p * (m * (p + 1))! * (((p + 1) * (p)!) * (m + 1)) := by lia
+    _ = (m * (p + 1) + p).choose p * (m * (p + 1))! * ((p + 1)! * (m + 1)) := by rw [factorial_succ]
+    _ = (m + 1) * (m * (p + 1) + p).choose p * ((m * (p + 1))! * (p + 1)!) := by lia
 
 中文:
 定理 choose_mul_add
@@ -884,7 +913,16 @@ theorem choose_mul_add
   simp only [hp, add_succ_sub_one]
   calc
     (m * (p + 1) + (p + 1)).choose (p + 1) * ((m * (p + 1))! * (p + 1)!)
-      = (m *
+      = (m * (p + 1) + (p + 1)).choose (p + 1) * (m * (p + 1))! * (p + 1)! := by lia
+    _ = (m * (p + 1) + (p + 1))! := by rw [add_choose_mul_factorial_mul_factorial]
+    _ = ((m * (p + 1) + p) + 1)! := by lia
+    _ = ((m * (p + 1) + p) + 1) * (m * (p + 1) + p)! := by rw [factorial_succ]
+    _ = (m * (p + 1) + p)! * ((p + 1) * (m + 1)) := by lia
+    _ = ((m * (p + 1) + p).choose p * (m * (p + 1))! * (p)!) * ((p + 1) * (m + 1)) := by
+      rw [add_choose_mul_factorial_mul_factorial]
+    _ = (m * (p + 1) + p).choose p * (m * (p + 1))! * (((p + 1) * (p)!) * (m + 1)) := by lia
+    _ = (m * (p + 1) + p).choose p * (m * (p + 1))! * ((p + 1)! * (m + 1)) := by rw [factorial_succ]
+    _ = (m + 1) * (m * (p + 1) + p).choose p * ((m * (p + 1))! * (p + 1)!) := by lia
 
 Depends on / 依赖: Nat.mul_left_inj, Nat.mul_ne_zero, add_choose_mul_factorial_mul_factorial, add_succ_sub_one, factorial_ne_zero, mul_left_inj, mul_ne_zero, succ_pred_eq_of_ne_zero
 -/
@@ -983,7 +1021,7 @@ theorem ascFactorial_eq_factorial_mul_choose'
     · simp only [zero_ascFactorial, Nat.zero_add, succ_sub_succ_eq_sub,
         Nat.sub_zero, choose_succ_self, Nat.mul_zero]
   rw [ascFactorial_eq_factorial_mul_choose]
-  simp only [succ_add_sub_on
+  simp only [succ_add_sub_one]
 
 中文:
 定理 ascFactorial_eq_factorial_mul_choose'
@@ -995,7 +1033,7 @@ theorem ascFactorial_eq_factorial_mul_choose'
     · simp only [zero_ascFactorial, Nat.zero_add, succ_sub_succ_eq_sub,
         Nat.sub_zero, choose_succ_self, Nat.mul_zero]
   rw [ascFactorial_eq_factorial_mul_choose]
-  simp only [succ_add_sub_on
+  simp only [succ_add_sub_one]
 
 Depends on / 依赖: Nat.mul_one, Nat.mul_zero, Nat.sub_zero, Nat.zero_add, ascFactorial_eq_factorial_mul_choose, ascFactorial_zero, choose_succ_self, choose_zero_right, factorial_zero, mul_one, mul_zero, sub_zero, succ_add_sub_one, succ_sub_succ_eq_sub, zero_add, zero_ascFactorial
 -/
@@ -1197,7 +1235,7 @@ theorem choose_le_succ_of_lt_half_left
   rw [← choose_succ_right_eq]
   apply Nat.mul_le_mul_left
   rw [← Nat.lt_iff_add_one_le]; rw [Nat.lt_sub_iff_add_lt]; rw [← Nat.mul_two]
-  exact lt_of_lt_of_le (Nat.mul_lt_mul_of_pos_right h Nat.zero_lt_two)
+  exact lt_of_lt_of_le (Nat.mul_lt_mul_of_pos_right h Nat.zero_lt_two) (n.div_mul_le_self 2)
 
 中文:
 定理 choose_le_succ_of_lt_half_left
@@ -1207,7 +1245,7 @@ theorem choose_le_succ_of_lt_half_left
   rw [← choose_succ_right_eq]
   apply Nat.mul_le_mul_left
   rw [← Nat.lt_iff_add_one_le]; rw [Nat.lt_sub_iff_add_lt]; rw [← Nat.mul_two]
-  exact lt_of_lt_of_le (Nat.mul_lt_mul_of_pos_right h Nat.zero_lt_two)
+  exact lt_of_lt_of_le (Nat.mul_lt_mul_of_pos_right h Nat.zero_lt_two) (n.div_mul_le_self 2)
 
 Depends on / 依赖: Nat.le_of_mul_le_mul_right, Nat.lt_iff_add_one_le, Nat.lt_sub_iff_add_lt, Nat.mul_le_mul_left, Nat.mul_lt_mul_of_pos_right, Nat.mul_two, Nat.sub_pos_of_lt, Nat.zero_lt_two, choose_succ_right_eq, div_le_self, div_mul_le_self, h.trans_le, le_of_mul_le_mul_right, lt_iff_add_one_le, lt_of_lt_of_le, lt_sub_iff_add_lt, mul_le_mul_left, mul_lt_mul_of_pos_right, mul_two, n.div_le_self
 -/
@@ -1617,7 +1655,7 @@ theorem multichoose_eq
   proof: Nat.add_lt_add_right (Nat.lt_succ_self _) _
     have : (n + 1) + k < (n + 1) + (k + 1) := Nat.add_lt_add_left (Nat.lt_succ_self _) _
     rw [multichoose_succ_succ]; rw [Nat.add_comm]; rw [Nat.succ_add_sub_one]; rw [← Nat.add_assoc]; rw [Nat.choose_succ_succ]
-    simp [multichoose_eq n (k + 1), multi
+    simp [multichoose_eq n (k + 1), multichoose_eq (n + 1) k]
 
 中文:
 定理 multichoose_eq
@@ -1625,7 +1663,7 @@ theorem multichoose_eq
   证明: Nat.add_lt_add_right (Nat.lt_succ_self _) _
     have : (n + 1) + k < (n + 1) + (k + 1) := Nat.add_lt_add_left (Nat.lt_succ_self _) _
     rw [multichoose_succ_succ]; rw [Nat.add_comm]; rw [Nat.succ_add_sub_one]; rw [← Nat.add_assoc]; rw [Nat.choose_succ_succ]
-    simp [multichoose_eq n (k + 1), multi
+    simp [multichoose_eq n (k + 1), multichoose_eq (n + 1) k]
 
 Depends on / 依赖: Nat.add_lt_add_right, Nat.lt_succ_self, add_lt_add_right, lt_succ_self
 -/

@@ -176,7 +176,7 @@ definition symm
   edist_eq' := by
 refine ⟨(ratio e)⁻¹, inv_ne_zero ratio_ne_zero e, e.surjective.forall₂.2 fun x y => ?_⟩
     simp_rw [Equiv.toFun_as_coe, Equiv.symm_apply_apply, coe_toEquiv, edist_eq]
-    rw [← mul_assoc]; rw [← ENNReal.coe_mul]; rw [inv_mul_cancel₀ (ratio_ne_zero e)]; rw [ENNReal.coe_one
+    rw [← mul_assoc]; rw [← ENNReal.coe_mul]; rw [inv_mul_cancel₀ (ratio_ne_zero e)]; rw [ENNReal.coe_one]; rw [one_mul]
 
 中文:
 定义 symm
@@ -185,7 +185,7 @@ refine ⟨(ratio e)⁻¹, inv_ne_zero ratio_ne_zero e, e.surjective.forall₂.2 
   edist_eq' := by
 refine ⟨(ratio e)⁻¹, inv_ne_zero ratio_ne_zero e, e.surjective.forall₂.2 fun x y => ?_⟩
     simp_rw [Equiv.toFun_as_coe, Equiv.symm_apply_apply, coe_toEquiv, edist_eq]
-    rw [← mul_assoc]; rw [← ENNReal.coe_mul]; rw [inv_mul_cancel₀ (ratio_ne_zero e)]; rw [ENNReal.coe_one
+    rw [← mul_assoc]; rw [← ENNReal.coe_mul]; rw [inv_mul_cancel₀ (ratio_ne_zero e)]; rw [ENNReal.coe_one]; rw [one_mul]
 -/
 def symm (e : X ≃ᵈ Y) : Y ≃ᵈ X where
   toEquiv := e.1.symm
@@ -545,7 +545,11 @@ theorem ratio_trans
   -- If `X` is trivial, then so is `Y`, otherwise we apply `Dilation.ratio_comp'`
   by_cases! hX : forall x y : X, edist x y = 0 ∨ edist x y = ∞
   · have hY : forall x y : Y, edist x y = 0 ∨ edist x y = ∞ := e.surjective.forall₂.2 fun x y => by
-      refine (hX x y).imp (fun h => ?_) fun h => ?_ 
+      refine (hX x y).imp (fun h => ?_) fun h => ?_ <;> simp [*, Dilation.ratio_ne_zero]
+    simp [Dilation.ratio_of_trivial, *]
+  exact (Dilation.ratio_comp' (g := e'.toDilation) (f := e.toDilation) hX).trans (mul_comm _ _)
+
+@[simp]
 
 中文:
 定理 ratio_trans
@@ -555,7 +559,11 @@ theorem ratio_trans
   -- If `X` is trivial, then so is `Y`, otherwise we apply `Dilation.ratio_comp'`
   by_cases! hX : forall x y : X, edist x y = 0 ∨ edist x y = ∞
   · have hY : forall x y : Y, edist x y = 0 ∨ edist x y = ∞ := e.surjective.forall₂.2 fun x y => by
-      refine (hX x y).imp (fun h => ?_) fun h => ?_ 
+      refine (hX x y).imp (fun h => ?_) fun h => ?_ <;> simp [*, Dilation.ratio_ne_zero]
+    simp [Dilation.ratio_of_trivial, *]
+  exact (Dilation.ratio_comp' (g := e'.toDilation) (f := e.toDilation) hX).trans (mul_comm _ _)
+
+@[simp]
 -/
 theorem ratio_trans (e : X ≃ᵈ Y) (e' : Y ≃ᵈ Z) : ratio (e.trans e') = ratio e * ratio e' := by
   -- If `X` is trivial, then so is `Y`, otherwise we apply `Dilation.ratio_comp'`

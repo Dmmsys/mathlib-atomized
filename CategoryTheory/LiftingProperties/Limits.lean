@@ -37,7 +37,7 @@ lemma IsPushout.hasLiftingProperty
     have w : (s ≫ u) ≫ g' = f ≫ (t ≫ v) := by
       rw [← Category.assoc]; rw [← h.w]; rw [Category.assoc]; rw [Category.assoc]; rw [sq.w]
     exact ⟨h.desc u (CommSq.mk w).lift (by rw [CommSq.fac_left]), h.inl_desc ..,
-      h.hom_ext (by rw [h.inl_desc_assoc, sq.w]) (by rw [h.in
+      h.hom_ext (by rw [h.inl_desc_assoc, sq.w]) (by rw [h.inr_desc_assoc, CommSq.fac_right])⟩
 
 中文:
 引理 是推出.hasLiftingProperty
@@ -46,7 +46,7 @@ lemma IsPushout.hasLiftingProperty
     have w : (s ≫ u) ≫ g' = f ≫ (t ≫ v) := by
       rw [← Category.assoc]; rw [← h.w]; rw [Category.assoc]; rw [Category.assoc]; rw [sq.w]
     exact ⟨h.desc u (CommSq.mk w).lift (by rw [CommSq.fac_left]), h.inl_desc ..,
-      h.hom_ext (by rw [h.inl_desc_assoc, sq.w]) (by rw [h.in
+      h.hom_ext (by rw [h.inl_desc_assoc, sq.w]) (by rw [h.inr_desc_assoc, CommSq.fac_right])⟩
 
 Depends on / 依赖: Category, Category.assoc, CommSq, CommSq.fac_left, CommSq.fac_right, CommSq.mk, fac_left, fac_right, h.desc, h.hom_ext, h.inl_desc, h.inl_desc_assoc, h.inr_desc_assoc, hom_ext, inl_desc, inl_desc_assoc, inr_desc_assoc, sq.w
 -/
@@ -68,7 +68,8 @@ lemma IsPullback.hasLiftingProperty
     have w : (u ≫ s) ≫ g = f' ≫ v ≫ t := by
       rw [Category.assoc]; rw [h.toCommSq.w]; rw [← Category.assoc]; rw [← Category.assoc]; rw [sq.w]
     exact ⟨h.lift (CommSq.mk w).lift v (by rw [CommSq.fac_right]),
-      h.hom_ext (by rw [Category.assoc, h.lift_fst, CommSq.fac_left]
+      h.hom_ext (by rw [Category.assoc, h.lift_fst, CommSq.fac_left])
+        (by rw [Category.assoc, h.lift_snd, sq.w]), h.lift_snd _ _ _⟩
 
 中文:
 引理 是拉回.hasLiftingProperty
@@ -77,7 +78,8 @@ lemma IsPullback.hasLiftingProperty
     have w : (u ≫ s) ≫ g = f' ≫ v ≫ t := by
       rw [Category.assoc]; rw [h.toCommSq.w]; rw [← Category.assoc]; rw [← Category.assoc]; rw [sq.w]
     exact ⟨h.lift (CommSq.mk w).lift v (by rw [CommSq.fac_right]),
-      h.hom_ext (by rw [Category.assoc, h.lift_fst, CommSq.fac_left]
+      h.hom_ext (by rw [Category.assoc, h.lift_fst, CommSq.fac_left])
+        (by rw [Category.assoc, h.lift_snd, sq.w]), h.lift_snd _ _ _⟩
 
 Depends on / 依赖: Category, Category.assoc, CommSq, CommSq.fac_left, CommSq.fac_right, CommSq.mk, fac_left, fac_right, h.hom_ext, h.lift, h.lift_fst, h.lift_snd, h.toCommSq.w, hom_ext, lift_fst, lift_snd, sq.w, toCommSq
 -/

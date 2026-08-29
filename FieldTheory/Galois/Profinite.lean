@@ -151,7 +151,12 @@ lemma map_comp
     induction L₃ with | _ L₃ => ?_
   algebraize [Subsemiring.inclusion g.unop.le, Subsemiring.inclusion f.unop.le,
     Subsemiring.inclusion (g.unop.le.trans f.unop.le)]
-  have : IsScalarTower k L₂ L₁ := IsScalarTow
+  have : IsScalarTower k L₂ L₁ := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsScalarTower k L₃ L₁ := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsScalarTower k L₃ L₂ := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsScalarTower L₃ L₂ L₁ := IsScalarTower.of_algebraMap_eq' rfl
+  ext : 1
+  apply IsScalarTower.AlgEquiv.restrictNormalHom_comp k L₃ L₂ L₁
 
 中文:
 引理 map_comp
@@ -163,7 +168,12 @@ lemma map_comp
     induction L₃ with | _ L₃ => ?_
   algebraize [Subsemiring.inclusion g.unop.le, Subsemiring.inclusion f.unop.le,
     Subsemiring.inclusion (g.unop.le.trans f.unop.le)]
-  have : IsScalarTower k L₂ L₁ := IsScalarTow
+  have : IsScalarTower k L₂ L₁ := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsScalarTower k L₃ L₁ := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsScalarTower k L₃ L₂ := IsScalarTower.of_algebraMap_eq' rfl
+  have : IsScalarTower L₃ L₂ L₁ := IsScalarTower.of_algebraMap_eq' rfl
+  ext : 1
+  apply IsScalarTower.AlgEquiv.restrictNormalHom_comp k L₃ L₂ L₁
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_, IsScalarTower.of_algebraMap_eq, Subsemiring, Subsemiring.inclusion, algebraize, f.unop.le, g.unop.le, g.unop.le.trans, inclusion, iterate, of_algebraMap_, of_algebraMap_eq
 -/
@@ -250,7 +260,14 @@ definition algEquivToLimit
     property := fun {L₁ L₂} π => by
       algebraize [Subsemiring.inclusion π.1.le]
       have : IsScalarTower k L₂.unop L₁.unop := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-      have : IsScalarTower L₂.unop L₁.unop K := IsScalarTower.of_algebraM
+      have : IsScalarTower L₂.unop L₁.unop K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
+      apply (IsScalarTower.AlgEquiv.restrictNormalHom_comp_apply L₂.unop L₁.unop σ).symm }
+  map_one' := by
+    simp only [map_one]
+    rfl
+  map_mul' x y := by
+    simp only [map_mul]
+    rfl
 
 中文:
 定义 algEquivToLimit
@@ -260,7 +277,14 @@ definition algEquivToLimit
     property := fun {L₁ L₂} π => by
       algebraize [Subsemiring.inclusion π.1.le]
       have : IsScalarTower k L₂.unop L₁.unop := IsScalarTower.of_algebraMap_eq (congrFun rfl)
-      have : IsScalarTower L₂.unop L₁.unop K := IsScalarTower.of_algebraM
+      have : IsScalarTower L₂.unop L₁.unop K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
+      apply (IsScalarTower.AlgEquiv.restrictNormalHom_comp_apply L₂.unop L₁.unop σ).symm }
+  map_one' := by
+    simp only [map_one]
+    rfl
+  map_mul' x y := by
+    simp only [map_mul]
+    rfl
 -/
 noncomputable def algEquivToLimit : Gal(K/k) ->* limit (asProfiniteGaloisGroupFunctor k K) where
   toFun σ := {
@@ -290,7 +314,17 @@ theorem restrictNormalHom_continuous
   obtain ⟨L', _, hO⟩ := hN
 have := Module.Finite.equiv AlgEquiv.toLinearEquiv IntermediateField.liftAlgEquiv L'
   apply mem_nhds_iff.mpr
-  use (IntermediateFiel
+  use (IntermediateField.lift L').fixingSubgroup
+  constructor
+  · intro x hx
+    apply hO
+    simp only [SetLike.mem_coe, IntermediateField.mem_fixingSubgroup_iff] at hx ⊢
+    intro y hy
+    have := AlgEquiv.restrictNormal_commutes x L y
+    dsimp at this
+    rw [hx y.1 ((IntermediateField.mem_lift y).mpr hy)] at this
+    exact SetLike.coe_eq_coe.mp this
+  · exact ⟨IntermediateField.fixingSubgroup_isOpen (IntermediateField.lift L'), congrFun rfl⟩
 
 中文:
 定理 restrictNormalHom_continuous
@@ -302,7 +336,17 @@ have := Module.Finite.equiv AlgEquiv.toLinearEquiv IntermediateField.liftAlgEqui
   obtain ⟨L', _, hO⟩ := hN
 have := Module.Finite.equiv AlgEquiv.toLinearEquiv IntermediateField.liftAlgEquiv L'
   apply mem_nhds_iff.mpr
-  use (IntermediateFiel
+  use (IntermediateField.lift L').fixingSubgroup
+  constructor
+  · intro x hx
+    apply hO
+    simp only [SetLike.mem_coe, IntermediateField.mem_fixingSubgroup_iff] at hx ⊢
+    intro y hy
+    have := AlgEquiv.restrictNormal_commutes x L y
+    dsimp at this
+    rw [hx y.1 ((IntermediateField.mem_lift y).mpr hy)] at this
+    exact SetLike.coe_eq_coe.mp this
+  · exact ⟨IntermediateField.fixingSubgroup_isOpen (IntermediateField.lift L'), congrFun rfl⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.restrictNormal_commutes, AlgEquiv.toLinearEquiv, Finite, IntermediateField, IntermediateField.lift, IntermediateField.liftAlgEquiv, IntermediateField.mem_fixingSubgroup_iff, Module, Module.Finite.equiv, SetLike, SetLike.mem_coe, continuousAt_def, continuousAt_def.mpr, continuous_of_continuousAt_one, fixingSubgroup, krullTopology_mem_nhds_one_iff, liftAlgEquiv, map_one, mem_coe
 -/
@@ -413,7 +457,9 @@ lemma proj_of_le
   let : Algebra L L' := RingHom.toAlgebra (Subsemiring.inclusion h)
   let : IsScalarTower k L L' := IsScalarTower.of_algebraMap_eq (congrFun rfl)
   rw [← finGaloisGroupFunctor_map_proj_eq_proj g h.hom]
-  change (algebraMap L' K (alge
+  change (algebraMap L' K (algebraMap L L' (AlgEquiv.restrictNormal (proj (mk L') g) L x))) = _
+  rw [AlgEquiv.restrictNormal_commutes (proj (mk L') g) L]
+  rfl
 
 中文:
 引理 proj_of_le
@@ -424,7 +470,9 @@ lemma proj_of_le
   let : Algebra L L' := RingHom.toAlgebra (Subsemiring.inclusion h)
   let : IsScalarTower k L L' := IsScalarTower.of_algebraMap_eq (congrFun rfl)
   rw [← finGaloisGroupFunctor_map_proj_eq_proj g h.hom]
-  change (algebraMap L' K (alge
+  change (algebraMap L' K (algebraMap L L' (AlgEquiv.restrictNormal (proj (mk L') g) L x))) = _
+  rw [AlgEquiv.restrictNormal_commutes (proj (mk L') g) L]
+  rfl
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.restrictNormal, AlgEquiv.restrictNormal_commutes, Algebra, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.toAlgebra, Subsemiring, Subsemiring.inclusion, algebraMap, finGaloisGroupFunctor_map_proj_eq_proj, h.hom, inclusion, of_algebraMap_eq, restrictNormal, restrictNormal_commutes, toAlgebra
 -/
@@ -571,7 +619,26 @@ definition limitToAlgEquiv
     let L := adjoin k {x, toAlgEquivAux g x}
     have hx : x in L.1 := subset_adjoin _ _ (Set.mem_insert x {toAlgEquivAux g x})
     have hx' : toAlgEquivAux g x in L.1 := subset_adjoin _ _ (Set.mem_insert_of_mem x rfl)
-    simp only [t
+    simp only [toAlgEquivAux_eq_proj_of_mem _ _ L hx', map_inv, AlgEquiv.aut_inv,
+      mk_toAlgEquivAux g x L hx' hx, AlgEquiv.symm_apply_apply]
+  right_inv x := by
+    let L := adjoin k {x, toAlgEquivAux g⁻¹ x}
+    have hx : x in L.1 := subset_adjoin _ _ (Set.mem_insert x {toAlgEquivAux g⁻¹ x})
+    have hx' : toAlgEquivAux g⁻¹ x in L.1 := subset_adjoin _ _ (Set.mem_insert_of_mem x rfl)
+    simp only [toAlgEquivAux_eq_proj_of_mem _ _ L hx', mk_toAlgEquivAux g⁻¹ x L hx' hx, map_inv,
+      AlgEquiv.aut_inv, AlgEquiv.apply_symm_apply]
+  map_mul' x y := by
+    have hx : x in (adjoin k {x, y}).1 := subset_adjoin _ _ (Set.mem_insert x {y})
+    have hy : y in (adjoin k {x, y}).1 := subset_adjoin _ _ (Set.mem_insert_of_mem x rfl)
+    rw [toAlgEquivAux_eq_liftNormal g x (adjoin k {x]; rw [y}) hx]; rw [toAlgEquivAux_eq_liftNormal g y (adjoin k {x]; rw [y}) hy]; rw [toAlgEquivAux_eq_liftNormal g (x * y) (adjoin k {x]; rw [y}) (mul_mem hx hy)]; rw [map_mul]
+  map_add' x y := by
+    have hx : x in (adjoin k {x, y}).1 := subset_adjoin _ _ (Set.mem_insert x {y})
+    have hy : y in (adjoin k {x, y}).1 := subset_adjoin _ _ (Set.mem_insert_of_mem x rfl)
+    simp only [toAlgEquivAux_eq_liftNormal g x (adjoin k {x, y}) hx,
+      toAlgEquivAux_eq_liftNormal g y (adjoin k {x, y}) hy,
+      toAlgEquivAux_eq_liftNormal g (x + y) (adjoin k {x, y}) (add_mem hx hy), map_add]
+  commutes' x := by
+    simp only [toAlgEquivAux_eq_liftNormal g _ ⊥ (algebraMap_mem _ x), AlgEquiv.commutes]
 
 中文:
 定义 limitToAlgEquiv
@@ -582,7 +649,26 @@ definition limitToAlgEquiv
     let L := adjoin k {x, toAlgEquivAux g x}
     have hx : x in L.1 := subset_adjoin _ _ (Set.mem_insert x {toAlgEquivAux g x})
     have hx' : toAlgEquivAux g x in L.1 := subset_adjoin _ _ (Set.mem_insert_of_mem x rfl)
-    simp only [t
+    simp only [toAlgEquivAux_eq_proj_of_mem _ _ L hx', map_inv, AlgEquiv.aut_inv,
+      mk_toAlgEquivAux g x L hx' hx, AlgEquiv.symm_apply_apply]
+  right_inv x := by
+    let L := adjoin k {x, toAlgEquivAux g⁻¹ x}
+    have hx : x in L.1 := subset_adjoin _ _ (Set.mem_insert x {toAlgEquivAux g⁻¹ x})
+    have hx' : toAlgEquivAux g⁻¹ x in L.1 := subset_adjoin _ _ (Set.mem_insert_of_mem x rfl)
+    simp only [toAlgEquivAux_eq_proj_of_mem _ _ L hx', mk_toAlgEquivAux g⁻¹ x L hx' hx, map_inv,
+      AlgEquiv.aut_inv, AlgEquiv.apply_symm_apply]
+  map_mul' x y := by
+    have hx : x in (adjoin k {x, y}).1 := subset_adjoin _ _ (Set.mem_insert x {y})
+    have hy : y in (adjoin k {x, y}).1 := subset_adjoin _ _ (Set.mem_insert_of_mem x rfl)
+    rw [toAlgEquivAux_eq_liftNormal g x (adjoin k {x]; rw [y}) hx]; rw [toAlgEquivAux_eq_liftNormal g y (adjoin k {x]; rw [y}) hy]; rw [toAlgEquivAux_eq_liftNormal g (x * y) (adjoin k {x]; rw [y}) (mul_mem hx hy)]; rw [map_mul]
+  map_add' x y := by
+    have hx : x in (adjoin k {x, y}).1 := subset_adjoin _ _ (Set.mem_insert x {y})
+    have hy : y in (adjoin k {x, y}).1 := subset_adjoin _ _ (Set.mem_insert_of_mem x rfl)
+    simp only [toAlgEquivAux_eq_liftNormal g x (adjoin k {x, y}) hx,
+      toAlgEquivAux_eq_liftNormal g y (adjoin k {x, y}) hy,
+      toAlgEquivAux_eq_liftNormal g (x + y) (adjoin k {x, y}) (add_mem hx hy), map_add]
+  commutes' x := by
+    simp only [toAlgEquivAux_eq_liftNormal g _ ⊥ (algebraMap_mem _ x), AlgEquiv.commutes]
 
 Depends on / 依赖: toAlgEquivAux
 -/
@@ -631,6 +717,11 @@ definition mulEquivToLimit
     apply Subtype.val_injective
     ext L
     change (limitToAlgEquiv g).restrictNormal _ = _
+    ext x
+    have : ((limitToAlgEquiv g).restrictNormal L.unop) x = (limitToAlgEquiv g) x.1 := by
+      exact AlgEquiv.restrictNormal_commutes (limitToAlgEquiv g) L.unop x
+    simp_rw [this]
+    exact proj_adjoin_singleton_val _ _ _ _ x.2
 
 中文:
 定义 mulEquivToLimit
@@ -644,6 +735,11 @@ definition mulEquivToLimit
     apply Subtype.val_injective
     ext L
     change (limitToAlgEquiv g).restrictNormal _ = _
+    ext x
+    have : ((limitToAlgEquiv g).restrictNormal L.unop) x = (limitToAlgEquiv g) x.1 := by
+      exact AlgEquiv.restrictNormal_commutes (limitToAlgEquiv g) L.unop x
+    simp_rw [this]
+    exact proj_adjoin_singleton_val _ _ _ _ x.2
 
 Depends on / 依赖: algEquivToLimit
 -/
@@ -704,7 +800,8 @@ lemma isOpen_mulEquivToLimit_image_fixingSubgroup
     rw [this]
     exact (isOpen_induced <| (continuous_apply (op L)).isOpen_preimage {1} trivial)
   ext x
-  obtain ⟨σ, rf
+  obtain ⟨σ, rfl⟩ := (mulEquivToLimit k K).surjective x
+  simpa using! FiniteGaloisIntermediateField.mem_fixingSubgroup_iff σ L
 
 中文:
 引理 isOpen_mulEquivToLimit_image_fixingSubgroup
@@ -715,7 +812,8 @@ lemma isOpen_mulEquivToLimit_image_fixingSubgroup
     rw [this]
     exact (isOpen_induced <| (continuous_apply (op L)).isOpen_preimage {1} trivial)
   ext x
-  obtain ⟨σ, rf
+  obtain ⟨σ, rfl⟩ := (mulEquivToLimit k K).surjective x
+  simpa using! FiniteGaloisIntermediateField.mem_fixingSubgroup_iff σ L
 
 Depends on / 依赖: FiniteGaloisIntermediateField, FiniteGaloisIntermediateField.mem_fixingSubgroup_iff, Set.preimage, Subtype, Subtype.val, asProfiniteGaloisGroupFunctor, continuous_apply, fixingSubgroup, isOpen_induced, isOpen_preimage, mem_fixingSubgroup_iff, mulEquivToLimit, preimage, surjective
 -/
@@ -742,7 +840,9 @@ lemma mulEquivToLimit_symm_continuous
     ← MulEquiv.toEquiv_eq_coe, ← (mulEquivToLimit k K).image_eq_preimage_symm]
   intro H ⟨L, le⟩
   rw [mem_nhds_iff]
-  use mulEquivToLim
+  use mulEquivToLimit k K '' L.1.fixingSubgroup
+  simp only [isOpen_mulEquivToLimit_image_fixingSubgroup L]
+  simpa [one_mem] using Set.image_subset_iff.mp (Set.image_mono le)
 
 中文:
 引理 mulEquivToLimit_symm_continuous
@@ -754,7 +854,9 @@ lemma mulEquivToLimit_symm_continuous
     ← MulEquiv.toEquiv_eq_coe, ← (mulEquivToLimit k K).image_eq_preimage_symm]
   intro H ⟨L, le⟩
   rw [mem_nhds_iff]
-  use mulEquivToLim
+  use mulEquivToLimit k K '' L.1.fixingSubgroup
+  simp only [isOpen_mulEquivToLimit_image_fixingSubgroup L]
+  simpa [one_mem] using Set.image_subset_iff.mp (Set.image_mono le)
 
 Depends on / 依赖: MulEquiv, MulEquiv.coe_toEquiv_symm, MulEquiv.toEquiv_eq_coe, Set.image_mono, Set.image_subset_iff.mp, coe_toEquiv_symm, continuousAt_def, continuousAt_def.mpr, continuous_of_continuousAt_one, fixingSubgroup, image_eq_preimage_symm, image_mono, image_subset_iff, isOpen_mulEquivToLimit_image_fixingSubgroup, krullTopology_mem_nhds_one_iff_of_isGalois, map_one, mem_nhds_iff, mulEquivToLimit, one_mem, toEquiv_eq_coe
 -/

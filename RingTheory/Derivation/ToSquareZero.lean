@@ -90,7 +90,17 @@ definition derivationToSquareZeroOfLift
   · ext; simp
   · intro x y
     let F := diffToIdealOfQuotientCompEq I f (IsScalarTower.toAlgHom R A B) (by rw [e]; ext; rfl)
-    have : (f x
+    have : (f x - algebraMap A B x) * (f y - algebraMap A B y) = 0 := by
+      rw [← Ideal.mem_bot]; rw [← hI]; rw [pow_two]
+      convert! Ideal.mul_mem_mul (F x).2 (F y).2 using 1
+    ext
+    dsimp only [Submodule.coe_add, Submodule.coe_mk, LinearMap.coe_mk,
+      diffToIdealOfQuotientCompEq_apply, Submodule.coe_smul_of_tower, IsScalarTower.coe_toAlgHom',
+      LinearMap.toFun_eq_coe]
+    simp only [map_mul, sub_mul, mul_sub, Algebra.smul_def] at this ⊢
+    rw [sub_eq_iff_eq_add]; rw [sub_eq_iff_eq_add] at this
+    simp only [this]
+    ring
 
 中文:
 定义 derivationToSquareZeroOfLift
@@ -104,7 +114,17 @@ definition derivationToSquareZeroOfLift
   · ext; simp
   · intro x y
     let F := diffToIdealOfQuotientCompEq I f (IsScalarTower.toAlgHom R A B) (by rw [e]; ext; rfl)
-    have : (f x
+    have : (f x - algebraMap A B x) * (f y - algebraMap A B y) = 0 := by
+      rw [← Ideal.mem_bot]; rw [← hI]; rw [pow_two]
+      convert! Ideal.mul_mem_mul (F x).2 (F y).2 using 1
+    ext
+    dsimp only [Submodule.coe_add, Submodule.coe_mk, LinearMap.coe_mk,
+      diffToIdealOfQuotientCompEq_apply, Submodule.coe_smul_of_tower, IsScalarTower.coe_toAlgHom',
+      LinearMap.toFun_eq_coe]
+    simp only [map_mul, sub_mul, mul_sub, Algebra.smul_def] at this ⊢
+    rw [sub_eq_iff_eq_add]; rw [sub_eq_iff_eq_add] at this
+    simp only [this]
+    ring
 
 Depends on / 依赖: Ideal.mem_bot, Ideal.mul_mem_mul, IsScalarTower, IsScalarTower.toAlgHom, LinearMap, LinearMap.coe_mk, Submodule, Submodule.coe_add, Submodule.coe_mk, algebraMap, coe_add, coe_mk, convert, diffTo, diffToIdealOfQuotientCompEq, leibniz, map_one_eq_zero, mem_bot, mul_mem_mul, pow_two
 -/
@@ -165,7 +185,18 @@ definition liftOfDerivationToSquareZero
     toFun := fun x => f x + algebraMap A B x
     map_one' := by
       rw [map_one (algebraMap _ _)]; rw [f.map_one_eq_zero]; rw [Submodule.coe_zero]; rw [zero_add]
-    map_mul' :
+    map_mul' := fun x y => by
+      have : (f x : B) * f y = 0 := by
+        rw [← Ideal.mem_bot]; rw [← hI]; rw [pow_two]
+        convert! Ideal.mul_mem_mul (f x).2 (f y).2 using 1
+      simp only [map_mul, f.leibniz, add_mul, mul_add, Submodule.coe_add,
+        Submodule.coe_smul_of_tower, Algebra.smul_def, this]
+      ring
+    commutes' := fun r => by
+      simp only [Derivation.map_algebraMap, zero_add, Submodule.coe_zero, ←
+        IsScalarTower.algebraMap_apply R A B r]
+    map_zero' := ((I.restrictScalars R).subtype.comp f.toLinearMap +
+      (IsScalarTower.toAlgHom R A B).toLinearMap).map_zero }
 
 中文:
 定义 liftOfDerivationToSquareZero
@@ -175,7 +206,18 @@ definition liftOfDerivationToSquareZero
     toFun := fun x => f x + algebraMap A B x
     map_one' := by
       rw [map_one (algebraMap _ _)]; rw [f.map_one_eq_zero]; rw [Submodule.coe_zero]; rw [zero_add]
-    map_mul' :
+    map_mul' := fun x y => by
+      have : (f x : B) * f y = 0 := by
+        rw [← Ideal.mem_bot]; rw [← hI]; rw [pow_two]
+        convert! Ideal.mul_mem_mul (f x).2 (f y).2 using 1
+      simp only [map_mul, f.leibniz, add_mul, mul_add, Submodule.coe_add,
+        Submodule.coe_smul_of_tower, Algebra.smul_def, this]
+      ring
+    commutes' := fun r => by
+      simp only [Derivation.map_algebraMap, zero_add, Submodule.coe_zero, ←
+        IsScalarTower.algebraMap_apply R A B r]
+    map_zero' := ((I.restrictScalars R).subtype.comp f.toLinearMap +
+      (IsScalarTower.toAlgHom R A B).toLinearMap).map_zero }
 
 Depends on / 依赖: I.restrictScalars, Ideal.mem_bot, Ideal.mul_mem_mul, IsScalarTower, IsScalarTower.toAlgHom, Submodule, Submodule.coe_add, Submodule.coe_zero, add_mul, algebraMap, coe_add, coe_zero, convert, f.leibniz, f.map_one_eq_zero, f.toLinearMap, leibniz, map_mul, map_one, map_one_eq_zero
 -/
@@ -262,7 +304,7 @@ definition derivationToSquareZeroEquivLift
     (derivationToSquareZeroOfLift I hI f.1 f.2 :), ?_, ?_⟩
   · ext x; exact liftOfDerivationToSquareZero_mk_apply I hI d x
   · intro d; ext x; exact add_sub_cancel_right (d x : B) (algebraMap A B x)
-  · rintro ⟨f, hf⟩; ext x; 
+  · rintro ⟨f, hf⟩; ext x; exact sub_add_cancel (f x) (algebraMap A B x)
 
 中文:
 定义 derivationToSquareZeroEquivLift
@@ -272,7 +314,7 @@ definition derivationToSquareZeroEquivLift
     (derivationToSquareZeroOfLift I hI f.1 f.2 :), ?_, ?_⟩
   · ext x; exact liftOfDerivationToSquareZero_mk_apply I hI d x
   · intro d; ext x; exact add_sub_cancel_right (d x : B) (algebraMap A B x)
-  · rintro ⟨f, hf⟩; ext x; 
+  · rintro ⟨f, hf⟩; ext x; exact sub_add_cancel (f x) (algebraMap A B x)
 
 Depends on / 依赖: add_sub_cancel_right, algebraMap, derivationToSquareZeroOfLift, liftOfDerivationToSquareZero, liftOfDerivationToSquareZero_mk_apply, sub_add_cancel
 -/

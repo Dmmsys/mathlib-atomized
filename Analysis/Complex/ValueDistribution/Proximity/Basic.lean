@@ -257,7 +257,7 @@ theorem proximity_sub_proximity_inv_eq_circleAverage
   · simp_rw [← posLog_sub_posLog_inv, Pi.sub_def]
   · apply h₁f.meromorphicOn.circleIntegrable_posLog_norm
   · simp_rw [← norm_inv]
-    apply h₁f.inv.meromorphicOn.circleIntegrable_posLog
+    apply h₁f.inv.meromorphicOn.circleIntegrable_posLog_norm
 
 中文:
 定理 proximity_sub_proximity_inv_eq_circleAverage
@@ -269,7 +269,7 @@ theorem proximity_sub_proximity_inv_eq_circleAverage
   · simp_rw [← posLog_sub_posLog_inv, Pi.sub_def]
   · apply h₁f.meromorphicOn.circleIntegrable_posLog_norm
   · simp_rw [← norm_inv]
-    apply h₁f.inv.meromorphicOn.circleIntegrable_posLog
+    apply h₁f.inv.meromorphicOn.circleIntegrable_posLog_norm
 
 Depends on / 依赖: Pi.inv_apply, Pi.sub_apply, Pi.sub_def, circleAverage_sub, circleIntegrable_posLog_norm, f.inv.meromorphicOn.circleIntegrable_posLog_norm, f.meromorphicOn.circleIntegrable_posLog_norm, inv_apply, meromorphicOn, norm_inv, posLog_sub_posLog_inv, proximity, reduceDIte, simp_rw, sub_apply, sub_def
 -/
@@ -390,7 +390,21 @@ theorem proximity_sum_top_le
   have h₂f : forall i in s, CircleIntegrable (log⁺ ‖f i ·‖) 0 r :=
     fun i hi => MeromorphicOn.circleIntegrable_posLog_norm (fun x hx => hf i hi x)
   simp only [Pi.add_apply, Finset.sum_apply]
-  calc circleAverage (log⁺ ‖∑ c in s, f c ·‖) 
+  calc circleAverage (log⁺ ‖∑ c in s, f c ·‖) 0 r
+    _ <= circleAverage (∑ c in s, log⁺ ‖f c ·‖ + log s.card) 0 r := by
+      apply circleAverage_mono
+      · apply (Meromorphic.fun_sum hf).meromorphicOn.circleIntegrable_posLog_norm
+      · fun_prop
+      · intro x hx
+        rw [add_comm]
+        apply posLog_norm_sum_le
+    _ = ∑ c in s, circleAverage (log⁺ ‖f c ·‖) 0 r + log s.card := by
+      nth_rw 2 [← circleAverage_const (log s.card) 0 r]
+      rw [← circleAverage_sum h₂f]; rw [← circleAverage_add (CircleIntegrable.sum s h₂f)
+        (circleIntegrable_const (log s.card) 0 r)]
+      congr 1
+      ext x
+      simp
 
 中文:
 定理 proximity_sum_top_le
@@ -401,7 +415,21 @@ theorem proximity_sum_top_le
   have h₂f : forall i in s, CircleIntegrable (log⁺ ‖f i ·‖) 0 r :=
     fun i hi => MeromorphicOn.circleIntegrable_posLog_norm (fun x hx => hf i hi x)
   simp only [Pi.add_apply, Finset.sum_apply]
-  calc circleAverage (log⁺ ‖∑ c in s, f c ·‖) 
+  calc circleAverage (log⁺ ‖∑ c in s, f c ·‖) 0 r
+    _ <= circleAverage (∑ c in s, log⁺ ‖f c ·‖ + log s.card) 0 r := by
+      apply circleAverage_mono
+      · apply (Meromorphic.fun_sum hf).meromorphicOn.circleIntegrable_posLog_norm
+      · fun_prop
+      · intro x hx
+        rw [add_comm]
+        apply posLog_norm_sum_le
+    _ = ∑ c in s, circleAverage (log⁺ ‖f c ·‖) 0 r + log s.card := by
+      nth_rw 2 [← circleAverage_const (log s.card) 0 r]
+      rw [← circleAverage_sum h₂f]; rw [← circleAverage_add (CircleIntegrable.sum s h₂f)
+        (circleIntegrable_const (log s.card) 0 r)]
+      congr 1
+      ext x
+      simp
 
 Depends on / 依赖: CircleIntegrable, Finset, Finset.sum_apply, Meromorphic, Meromorphic.fun_sum, MeromorphicOn, MeromorphicOn.circleIntegrable_posLog_norm, Pi.add_apply, add_apply, add_comm, circleAverage, circleAverage_mono, circleIntegrable_posLog_norm, fun_prop, fun_sum, meromorphicOn, meromorphicOn.circleIntegrable_posLog_norm, proximity_top, s.card, sum_apply
 -/
@@ -468,7 +496,18 @@ theorem proximity_mul_top_le
       intro r
       apply circleAverage_mono
       · simp_rw [← norm_mul]
-        apply MeromorphicOn.circleInteg
+        apply MeromorphicOn.circleIntegrable_posLog_norm
+        apply Meromorphic.meromorphicOn
+        fun_prop
+      · apply (MeromorphicOn.circleIntegrable_posLog_norm (fun x a => h₁f₁ x)).add
+          (MeromorphicOn.circleIntegrable_posLog_norm (fun x a => h₁f₂ x))
+      · exact fun _ _ => posLog_mul
+    _ = circleAverage (log⁺ ‖f₁ ·‖) 0 + circleAverage (log⁺ ‖f₂ ·‖) 0 := by
+      ext r
+      apply circleAverage_add
+      · exact MeromorphicOn.circleIntegrable_posLog_norm (fun x a => h₁f₁ x)
+      · exact MeromorphicOn.circleIntegrable_posLog_norm (fun x a => h₁f₂ x)
+    _ = proximity f₁ ⊤ + proximity f₂ ⊤ := by simp [proximity]
 
 中文:
 定理 proximity_mul_top_le
@@ -481,7 +520,18 @@ theorem proximity_mul_top_le
       intro r
       apply circleAverage_mono
       · simp_rw [← norm_mul]
-        apply MeromorphicOn.circleInteg
+        apply MeromorphicOn.circleIntegrable_posLog_norm
+        apply Meromorphic.meromorphicOn
+        fun_prop
+      · apply (MeromorphicOn.circleIntegrable_posLog_norm (fun x a => h₁f₁ x)).add
+          (MeromorphicOn.circleIntegrable_posLog_norm (fun x a => h₁f₂ x))
+      · exact fun _ _ => posLog_mul
+    _ = circleAverage (log⁺ ‖f₁ ·‖) 0 + circleAverage (log⁺ ‖f₂ ·‖) 0 := by
+      ext r
+      apply circleAverage_add
+      · exact MeromorphicOn.circleIntegrable_posLog_norm (fun x a => h₁f₁ x)
+      · exact MeromorphicOn.circleIntegrable_posLog_norm (fun x a => h₁f₂ x)
+    _ = proximity f₁ ⊤ + proximity f₂ ⊤ := by simp [proximity]
 
 Depends on / 依赖: Meromorphic, Meromorphic.meromorphicOn, MeromorphicOn, MeromorphicOn.circleIntegrable_posLog_norm, circleA, circleAverage, circleAverage_mono, circleIntegrable_posLog_norm, fun_prop, meromorphicOn, norm_mul, posLog_mul, proximity, simp_rw
 -/

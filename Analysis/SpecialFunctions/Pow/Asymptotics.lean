@@ -124,7 +124,22 @@ lemma tendsto_rpow_atTop_of_base_lt_one
     rw [← isLittleO_const_iff (c := (1 : Real)) one_ne_zero]; rw [(one_mul (1 : Real)).symm]
     refine IsLittleO.mul_isBigO ?exp ?cos
     case exp =>
-      rw [isLit
+      rw [isLittleO_const_iff one_ne_zero]
+refine tendsto_exp_atBot.comp (tendsto_const_mul_atBot_of_neg ?_).mpr tendsto_id
+      rw [← log_neg_eq_log]; rw [log_neg_iff (by linarith)]
+      linarith
+    case cos =>
+      rw [isBigO_iff]
+      exact ⟨1, Eventually.of_forall fun x => by simp [Real.abs_cos_le_one]⟩
+  case inr.inl => -- b = 0
+    refine Tendsto.mono_right ?_ (Iff.mpr pure_le_nhds_iff rfl)
+    rw [tendsto_pure]
+    filter_upwards [eventually_ne_atTop 0] with _ hx
+    simp [hx]
+  case inr.inr => -- b > 0
+    simp_rw [Real.rpow_def_of_pos hb]
+refine tendsto_exp_atBot.comp (tendsto_const_mul_atBot_of_neg ?_).mpr tendsto_id
+    exact (log_neg_iff hb).mpr hb₁
 
 中文:
 引理 tendsto_rpow_atTop_of_base_lt_one
@@ -136,7 +151,22 @@ lemma tendsto_rpow_atTop_of_base_lt_one
     rw [← isLittleO_const_iff (c := (1 : Real)) one_ne_zero]; rw [(one_mul (1 : Real)).symm]
     refine IsLittleO.mul_isBigO ?exp ?cos
     case exp =>
-      rw [isLit
+      rw [isLittleO_const_iff one_ne_zero]
+refine tendsto_exp_atBot.comp (tendsto_const_mul_atBot_of_neg ?_).mpr tendsto_id
+      rw [← log_neg_eq_log]; rw [log_neg_iff (by linarith)]
+      linarith
+    case cos =>
+      rw [isBigO_iff]
+      exact ⟨1, Eventually.of_forall fun x => by simp [Real.abs_cos_le_one]⟩
+  case inr.inl => -- b = 0
+    refine Tendsto.mono_right ?_ (Iff.mpr pure_le_nhds_iff rfl)
+    rw [tendsto_pure]
+    filter_upwards [eventually_ne_atTop 0] with _ hx
+    simp [hx]
+  case inr.inr => -- b > 0
+    simp_rw [Real.rpow_def_of_pos hb]
+refine tendsto_exp_atBot.comp (tendsto_const_mul_atBot_of_neg ?_).mpr tendsto_id
+    exact (log_neg_iff hb).mpr hb₁
 
 Depends on / 依赖: Eventually, Eventually.of_fo, IsLittleO, IsLittleO.mul_isBigO, Real.rpow_def_of_nonpos, hb.le, hb.ne, isBigO_iff, isLittleO_const_iff, ite_false, log_neg_eq_log, log_neg_iff, lt_trichotomy, mul_isBigO, of_fo, one_mul, one_ne_zero, rpow_def_of_nonpos, simp_rw, tendsto_const_mul_atBot_of_neg
 -/
@@ -261,7 +291,11 @@ theorem tendsto_rpow_div_mul_add
                 (tendsto_const_nhds (x := a)).mul
                   (tendsto_div_pow_mul_exp_add_atTop b c 1 hb))).comp
         tendsto_log_atTop)
-  apply 
+  apply eventuallyEq_of_mem (Ioi_mem_atTop (0 : Real))
+  intro x hx
+  simp only [Set.mem_Ioi, Function.comp_apply] at hx ⊢
+  rw [exp_log hx]; rw [← exp_log (rpow_pos_of_pos hx (a / (b * x + c)))]; rw [log_rpow hx (a / (b * x + c))]
+  field_simp
 
 中文:
 定理 tendsto_rpow_div_mul_add
@@ -275,7 +309,11 @@ theorem tendsto_rpow_div_mul_add
                 (tendsto_const_nhds (x := a)).mul
                   (tendsto_div_pow_mul_exp_add_atTop b c 1 hb))).comp
         tendsto_log_atTop)
-  apply 
+  apply eventuallyEq_of_mem (Ioi_mem_atTop (0 : Real))
+  intro x hx
+  simp only [Set.mem_Ioi, Function.comp_apply] at hx ⊢
+  rw [exp_log hx]; rw [← exp_log (rpow_pos_of_pos hx (a / (b * x + c)))]; rw [log_rpow hx (a / (b * x + c))]
+  field_simp
 
 Depends on / 依赖: Function, Function.comp_apply, Ioi_mem_atTop, Set.mem_Ioi, Tendsto, Tendsto.congr, comp_apply, eventuallyEq_of_mem, exp_log, log_rpow, mem_Ioi, mul_zero, pow_one, rpow_pos_of_pos, tendsto_const_nhds, tendsto_div_pow_mul_exp_add_atTop, tendsto_exp_nhds_zero_nhds_one, tendsto_exp_nhds_zero_nhds_one.comp, tendsto_log_atTop
 -/
@@ -417,7 +455,12 @@ theorem tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero
 
 nonrec theorem NNReal.tendsto_rpow_atTop {y : Real} (hy : 0 < y) :
     Tendsto (fun x : Real>=0 => x ^ y) atTop atTop := by
-  rw [Filter
+  rw [Filter.tendsto_atTop_atTop]
+  intro b
+  obtain ⟨c, hc⟩ := tendsto_atTop_atTop.mp (tendsto_rpow_atTop hy) b
+  use c.toNNReal
+  intro a ha
+  exact mod_cast hc a (Real.toNNReal_le_iff_le_coe.mp ha)
 
 中文:
 定理 tendsto_rpow_mul_exp_neg_mul_atTop_nhds_zero
@@ -428,7 +471,12 @@ nonrec theorem NNReal.tendsto_rpow_atTop {y : Real} (hy : 0 < y) :
 
 nonrec theorem NNReal.tendsto_rpow_atTop {y : Real} (hy : 0 < y) :
     Tendsto (fun x : Real>=0 => x ^ y) atTop atTop := by
-  rw [Filter
+  rw [Filter.tendsto_atTop_atTop]
+  intro b
+  obtain ⟨c, hc⟩ := tendsto_atTop_atTop.mp (tendsto_rpow_atTop hy) b
+  use c.toNNReal
+  intro a ha
+  exact mod_cast hc a (Real.toNNReal_le_iff_le_coe.mp ha)
 
 Depends on / 依赖: div_eq_mul_inv, exp_neg, filter_upwards, inv_div, inv_tendsto_atTop, inv_tendsto_atTop.congr, tendsto_exp_mul_div_rpow_atTop
 -/
@@ -459,7 +507,12 @@ theorem ENNReal.tendsto_rpow_at_top
     (atTop_basis_Ioi.tendsto_iff atTop_basis_Ioi).mp (NNReal.tendsto_rpow_atTop hy) x trivial
   have hc' : Set.Ioi ↑c in 𝓝 (⊤ : Real>=0∞) := Ioi_mem_nhds ENNReal.coe_lt_top
   filter_upwards [hc'] with a ha
-  by_cases ha' 
+  by_cases ha' : a = ⊤
+  · simp [ha', hy]
+  lift a to Real>=0 using ha'
+  simp only [Set.mem_Ioi, coe_lt_coe] at ha hc
+  rw [← ENNReal.coe_rpow_of_nonneg _ hy.le]
+  exact mod_cast hc a ha
 
 中文:
 定理 广义非负实数.tendsto_rpow_at_top
@@ -471,7 +524,12 @@ theorem ENNReal.tendsto_rpow_at_top
     (atTop_basis_Ioi.tendsto_iff atTop_basis_Ioi).mp (NNReal.tendsto_rpow_atTop hy) x trivial
   have hc' : Set.Ioi ↑c in 𝓝 (⊤ : Real>=0∞) := Ioi_mem_nhds ENNReal.coe_lt_top
   filter_upwards [hc'] with a ha
-  by_cases ha' 
+  by_cases ha' : a = ⊤
+  · simp [ha', hy]
+  lift a to Real>=0 using ha'
+  simp only [Set.mem_Ioi, coe_lt_coe] at ha hc
+  rw [← ENNReal.coe_rpow_of_nonneg _ hy.le]
+  exact mod_cast hc a ha
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_top, ENNReal.coe_rpow_of_nonneg, ENNReal.tendsto_nhds_top_iff_nnreal, Ioi_mem_nhds, NNReal, NNReal.tendsto_rpow_atTop, Set.Ioi, Set.mem_Ioi, atTop_basis_Ioi, atTop_basis_Ioi.tendsto_iff, coe_lt_coe, coe_lt_top, coe_rpow_of_nonneg, filter_upwards, hy.le, mem_Ioi, mod_cast, tendsto_iff, tendsto_nhds_top_iff_nnreal
 -/
@@ -552,7 +610,9 @@ theorem isBigO_cpow_rpow
         (show α -> Real from fun x => ‖f x‖ ^ (g x).re / Real.exp (arg (f x) * im (g x))) :=
       isBigO_of_le _ fun _ => (norm_cpow_le _ _).trans (le_abs_self _)
     _ =Θ[l] (show α -> Real from fun x => ‖f x‖ ^ (g x).re / (1 : Real)) :=
-      ((isTheta_refl _ _
+      ((isTheta_refl _ _).div (isTheta_exp_arg_mul_im hl))
+    _ =ᶠ[l] (show α -> Real from fun x => ‖f x‖ ^ (g x).re) := by
+      simp only [div_one, EventuallyEq.rfl]
 
 中文:
 定理 isBigO_cpow_rpow
@@ -562,7 +622,9 @@ theorem isBigO_cpow_rpow
         (show α -> Real from fun x => ‖f x‖ ^ (g x).re / Real.exp (arg (f x) * im (g x))) :=
       isBigO_of_le _ fun _ => (norm_cpow_le _ _).trans (le_abs_self _)
     _ =Θ[l] (show α -> Real from fun x => ‖f x‖ ^ (g x).re / (1 : Real)) :=
-      ((isTheta_refl _ _
+      ((isTheta_refl _ _).div (isTheta_exp_arg_mul_im hl))
+    _ =ᶠ[l] (show α -> Real from fun x => ‖f x‖ ^ (g x).re) := by
+      simp only [div_one, EventuallyEq.rfl]
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.rfl, Real.exp, div_one, isBigO_of_le, isTheta_exp_arg_mul_im, isTheta_refl, le_abs_self, mapComp, norm_cpow_le
 -/
@@ -589,7 +651,8 @@ theorem isTheta_cpow_rpow
 .of_norm_eventuallyEq hl.mono fun _ => norm_cpow_of_imp
     _ =Θ[l] fun x => ‖f x‖ ^ (g x).re / (1 : Real) :=
       (isTheta_refl _ _).div (isTheta_exp_arg_mul_im hl_im)
-    _ =ᶠ[l] (fun x =>
+    _ =ᶠ[l] (fun x => ‖f x‖ ^ (g x).re) := by
+      simp only [div_one, EventuallyEq.rfl]
 
 中文:
 定理 isTheta_cpow_rpow
@@ -600,7 +663,8 @@ theorem isTheta_cpow_rpow
 .of_norm_eventuallyEq hl.mono fun _ => norm_cpow_of_imp
     _ =Θ[l] fun x => ‖f x‖ ^ (g x).re / (1 : Real) :=
       (isTheta_refl _ _).div (isTheta_exp_arg_mul_im hl_im)
-    _ =ᶠ[l] (fun x =>
+    _ =ᶠ[l] (fun x => ‖f x‖ ^ (g x).re) := by
+      simp only [div_one, EventuallyEq.rfl]
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.rfl, Real.exp, div_one, hl.mono, hl_im, isTheta_exp_arg_mul_im, isTheta_refl, norm_cpow_of_imp, of_norm_eventuallyEq
 -/
@@ -904,7 +968,7 @@ theorem IsBigO.mul_atTop_rpow_natCast_of_isBigO_rpow
   replace ht : 1 <= (t : Real) := Nat.one_le_cast.mpr ht
   rw [← Real.rpow_add (zero_lt_one.trans_le ht)]; rw [Real.norm_of_nonneg (Real.rpow_nonneg
     (zero_le_one.trans ht) (a + b))]
-  exact Re
+  exact Real.rpow_le_rpow_of_exponent_le ht h
 
 中文:
 定理 IsBigO.mul_atTop_rpow_natCast_of_isBigO_rpow
@@ -915,7 +979,7 @@ theorem IsBigO.mul_atTop_rpow_natCast_of_isBigO_rpow
   replace ht : 1 <= (t : Real) := Nat.one_le_cast.mpr ht
   rw [← Real.rpow_add (zero_lt_one.trans_le ht)]; rw [Real.norm_of_nonneg (Real.rpow_nonneg
     (zero_le_one.trans ht) (a + b))]
-  exact Re
+  exact Real.rpow_le_rpow_of_exponent_le ht h
 
 Depends on / 依赖: Eventually, Eventually.isBigO, Nat.one_le_cast.mpr, Real.norm_of_nonneg, Real.rpow_add, Real.rpow_le_rpow_of_exponent_le, Real.rpow_nonneg, eventually_ge_atTop, filter_upwards, hf.mul, isBigO, norm_of_nonneg, one_le_cast, replace, rpow_add, rpow_le_rpow_of_exponent_le, rpow_nonneg, trans_le, zero_le_one, zero_le_one.trans
 -/
@@ -1100,7 +1164,8 @@ theorem isLittleO_exp_neg_mul_rpow_atTop
     rw [rpow_eq_zero_iff_of_nonneg ht.le] at h
     exact (ht.ne' h.1).elim
   · refine (tendsto_exp_mul_div_rpow_atTop (-b) a ha).inv_tendsto_atTop.congr' ?_
-    refine (eventually_ge_atTop 0).mono fun t ht => ?
+    refine (eventually_ge_atTop 0).mono fun t ht => ?_
+    simp [field, Real.exp_neg, rpow_neg ht]
 
 中文:
 定理 isLittleO_exp_neg_mul_rpow_atTop
@@ -1111,7 +1176,8 @@ theorem isLittleO_exp_neg_mul_rpow_atTop
     rw [rpow_eq_zero_iff_of_nonneg ht.le] at h
     exact (ht.ne' h.1).elim
   · refine (tendsto_exp_mul_div_rpow_atTop (-b) a ha).inv_tendsto_atTop.congr' ?_
-    refine (eventually_ge_atTop 0).mono fun t ht => ?
+    refine (eventually_ge_atTop 0).mono fun t ht => ?_
+    simp [field, Real.exp_neg, rpow_neg ht]
 
 Depends on / 依赖: Real.exp_neg, eventually_ge_atTop, eventually_gt_atTop, exp_neg, ht.le, ht.ne, inv_tendsto_atTop, inv_tendsto_atTop.congr, isLittleO_of_tendsto, rpow_eq_zero_iff_of_nonneg, rpow_neg, tendsto_exp_mul_div_rpow_atTop
 -/
@@ -1200,7 +1266,14 @@ have hr : 0 < r' := lt_max_iff.2 Or.inr one_pos
     (fun x => log x ^ r) =O[atTop] fun x => log x ^ r' :=
 .of_norm_eventuallyLE by
         filter_upwards [tendsto_log_atTop.eventually_ge_atTop 1] with x hx
-        rw [Real.norm_of_nonne
+        rw [Real.norm_of_nonneg (by positivity)]
+        gcongr
+        exact le_max_left _ _
+    _ =o[atTop] fun x => (x ^ (s / r')) ^ r' :=
+      ((isLittleO_log_rpow_atTop H).rpow hr <|
+(_root_.tendsto_rpow_atTop H).eventually eventually_ge_atTop 0)
+    _ =ᶠ[atTop] fun x => x ^ s :=
+      (eventually_ge_atTop 0).mono fun x hx => by simp only [← rpow_mul hx, div_mul_cancel₀ _ hr.ne']
 
 中文:
 定理 isLittleO_log_rpow_rpow_atTop
@@ -1212,7 +1285,14 @@ have hr : 0 < r' := lt_max_iff.2 Or.inr one_pos
     (fun x => log x ^ r) =O[atTop] fun x => log x ^ r' :=
 .of_norm_eventuallyLE by
         filter_upwards [tendsto_log_atTop.eventually_ge_atTop 1] with x hx
-        rw [Real.norm_of_nonne
+        rw [Real.norm_of_nonneg (by positivity)]
+        gcongr
+        exact le_max_left _ _
+    _ =o[atTop] fun x => (x ^ (s / r')) ^ r' :=
+      ((isLittleO_log_rpow_atTop H).rpow hr <|
+(_root_.tendsto_rpow_atTop H).eventually eventually_ge_atTop 0)
+    _ =ᶠ[atTop] fun x => x ^ s :=
+      (eventually_ge_atTop 0).mono fun x hx => by simp only [← rpow_mul hx, div_mul_cancel₀ _ hr.ne']
 
 Depends on / 依赖: Or.inr, Real.norm_of_nonneg, _root_, _root_.tendsto_rpow_atTop, div_pos, eventually, eventually_ge_atTop, filter_upwards, isLittleO_log_rpow_atTop, le_max_left, lt_max_iff, norm_of_nonneg, of_norm_eventuallyLE, one_pos, tendsto_log_atTop, tendsto_log_atTop.eventually_ge_atTop, tendsto_rpow_atTop
 -/
@@ -1244,7 +1324,7 @@ theorem isLittleO_abs_log_rpow_rpow_nhdsGT_zero
     (mem_of_superset (Icc_mem_nhdsGT one_pos) fun x hx => by
       simp [abs_of_nonpos, log_nonpos hx.1 hx.2])
     (eventually_mem_nhdsWithin.mono fun x hx => by
-      rw [Function.comp_apply]; rw [inv_rpo
+      rw [Function.comp_apply]; rw [inv_rpow hx.out.le]; rw [rpow_neg hx.out.le]; rw [inv_inv])
 
 中文:
 定理 isLittleO_abs_log_rpow_rpow_nhdsGT_zero
@@ -1253,7 +1333,7 @@ theorem isLittleO_abs_log_rpow_rpow_nhdsGT_zero
     (mem_of_superset (Icc_mem_nhdsGT one_pos) fun x hx => by
       simp [abs_of_nonpos, log_nonpos hx.1 hx.2])
     (eventually_mem_nhdsWithin.mono fun x hx => by
-      rw [Function.comp_apply]; rw [inv_rpo
+      rw [Function.comp_apply]; rw [inv_rpow hx.out.le]; rw [rpow_neg hx.out.le]; rw [inv_inv])
 
 Depends on / 依赖: Function, Function.comp_apply, Icc_mem_nhdsGT, abs_of_nonpos, comp_apply, comp_tendsto, eventually_mem_nhdsWithin, eventually_mem_nhdsWithin.mono, hx.out.le, inv_inv, inv_rpow, isLittleO_log_rpow_rpow_atTop, log_nonpos, mem_of_superset, neg_pos, one_pos, rpow_neg, tendsto_inv_nhdsGT_zero
 -/
@@ -1347,7 +1427,13 @@ lemma tendsto_log_mul_self_nhdsLT_zero
   have h_eq : forall x in Set.Iio 0, (-(fun x => log x * x) ∘ (fun x => |x|)) x = log x * x := by
     simp only [Set.mem_Iio, Pi.neg_apply, Function.comp_apply, log_abs]
     intro x hx
-    simp only [abs_of_
+    simp only [abs_of_nonpos hx.le, mul_neg, neg_neg]
+  refine tendsto_nhdsWithin_congr h_eq ?_
+  nth_rewrite 3 [← neg_zero]
+  refine (h.comp (tendsto_abs_nhdsNE_zero.mono_left ?_)).neg
+  refine nhdsWithin_mono 0 (fun x hx => ?_)
+  push _ in _ at hx
+  simp only [Set.mem_compl_iff, Set.mem_singleton_iff, hx.ne, not_false_eq_true]
 
 中文:
 引理 tendsto_log_mul_self_nhdsLT_zero
@@ -1358,7 +1444,13 @@ lemma tendsto_log_mul_self_nhdsLT_zero
   have h_eq : forall x in Set.Iio 0, (-(fun x => log x * x) ∘ (fun x => |x|)) x = log x * x := by
     simp only [Set.mem_Iio, Pi.neg_apply, Function.comp_apply, log_abs]
     intro x hx
-    simp only [abs_of_
+    simp only [abs_of_nonpos hx.le, mul_neg, neg_neg]
+  refine tendsto_nhdsWithin_congr h_eq ?_
+  nth_rewrite 3 [← neg_zero]
+  refine (h.comp (tendsto_abs_nhdsNE_zero.mono_left ?_)).neg
+  refine nhdsWithin_mono 0 (fun x hx => ?_)
+  push _ in _ at hx
+  simp only [Set.mem_compl_iff, Set.mem_singleton_iff, hx.ne, not_false_eq_true]
 
 Depends on / 依赖: Function, Function.comp_apply, Pi.neg_apply, Real.rpow_one, Set.Iio, Set.mem_Iio, abs_of_nonpos, comp_apply, h.comp, h_eq, hx.le, log_abs, mem_Iio, mono_left, mul_neg, neg_apply, neg_neg, neg_zero, nhdsWithin_mono, nth_rewrite
 -/

@@ -581,7 +581,9 @@ theorem measureReal_union_le
   · simp only [Measure.real, h, ENNReal.toReal_top]
     exact add_nonneg ENNReal.toReal_nonneg ENNReal.toReal_nonneg
   · have A : μ s₁ != ∞ := measure_ne_top_of_subset subset_union_left h.ne
-    have B : μ s₂ != ∞ := measure_ne_top_of_subset 
+    have B : μ s₂ != ∞ := measure_ne_top_of_subset subset_union_right h.ne
+    simp only [Measure.real, ← ENNReal.toReal_add A B]
+    exact ENNReal.toReal_mono (by simp [A, B]) (measure_union_le _ _)
 
 中文:
 定理 measure实数_union_le
@@ -592,7 +594,9 @@ theorem measureReal_union_le
   · simp only [Measure.real, h, ENNReal.toReal_top]
     exact add_nonneg ENNReal.toReal_nonneg ENNReal.toReal_nonneg
   · have A : μ s₁ != ∞ := measure_ne_top_of_subset subset_union_left h.ne
-    have B : μ s₂ != ∞ := measure_ne_top_of_subset 
+    have B : μ s₂ != ∞ := measure_ne_top_of_subset subset_union_right h.ne
+    simp only [Measure.real, ← ENNReal.toReal_add A B]
+    exact ENNReal.toReal_mono (by simp [A, B]) (measure_union_le _ _)
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_add, ENNReal.toReal_mono, ENNReal.toReal_nonneg, ENNReal.toReal_top, Measure, Measure.real, add_nonneg, eq_top_or_lt_top, h.ne, measure_ne_top_of_subset, measure_union_le, subset_union_left, subset_union_right, toReal_add, toReal_mono, toReal_nonneg, toReal_top
 -/
@@ -776,7 +780,7 @@ theorem measureReal_inter_add_sdiff₀
   · exact measure_ne_top_of_subset sdiff_subset h
 
 @[deprecated (since := "2026-06-03")]
-alias measureReal_inter_add_diff₀ := measureReal_inter_add_
+alias measureReal_inter_add_diff₀ := measureReal_inter_add_sdiff₀
 
 中文:
 定理 measure实数_inter_add_sdiff₀
@@ -788,7 +792,7 @@ alias measureReal_inter_add_diff₀ := measureReal_inter_add_
   · exact measure_ne_top_of_subset sdiff_subset h
 
 @[deprecated (since := "2026-06-03")]
-alias measureReal_inter_add_diff₀ := measureReal_inter_add_
+alias measureReal_inter_add_diff₀ := measureReal_inter_add_sdiff₀
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_add, finiteness, inter_subset_left, measureReal_def, measure_ne_top_of_subset, sdiff_subset, toReal_add
 -/
@@ -1134,7 +1138,8 @@ lemma measureReal_symmDiff_le
   · simp only [measureReal_def, measure_symmDiff_eq_top h₁ hu, ENNReal.toReal_top]
     exact add_nonneg ENNReal.toReal_nonneg ENNReal.toReal_nonneg
   · exact le_trans (measureReal_mono (symmDiff_triangle s t u)
-        (measure_union_ne_top (by finiten
+        (measure_union_ne_top (by finiteness) (by finiteness)))
+      (measureReal_union_le (s ∆ t) (t ∆ u))
 
 中文:
 引理 measure实数_symmDiff_le
@@ -1144,7 +1149,8 @@ lemma measureReal_symmDiff_le
   · simp only [measureReal_def, measure_symmDiff_eq_top h₁ hu, ENNReal.toReal_top]
     exact add_nonneg ENNReal.toReal_nonneg ENNReal.toReal_nonneg
   · exact le_trans (measureReal_mono (symmDiff_triangle s t u)
-        (measure_union_ne_top (by finiten
+        (measure_union_ne_top (by finiteness) (by finiteness)))
+      (measureReal_union_le (s ∆ t) (t ∆ u))
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, ENNReal.toReal_top, add_nonneg, eq_top_or_lt_top, finiteness, le_trans, measureReal_def, measureReal_mono, measureReal_union_le, measure_symmDiff_eq_top, measure_union_ne_top, symmDiff_triangle, toReal_nonneg, toReal_top
 -/
@@ -1411,7 +1417,7 @@ theorem le_measureReal_sdiff
     _ = μ.real (s₂ union s₁ \ s₂) := congr_arg μ.real union_sdiff_self.symm
     _ <= μ.real s₂ + μ.real (s₁ \ s₂) := measureReal_union_le _ _
 
-@[deprecated (since := "2026-06-03
+@[deprecated (since := "2026-06-03")] alias le_measureReal_diff := le_measureReal_sdiff
 
 中文:
 定理 le_measure实数_sdiff
@@ -1423,7 +1429,7 @@ theorem le_measureReal_sdiff
     _ = μ.real (s₂ union s₁ \ s₂) := congr_arg μ.real union_sdiff_self.symm
     _ <= μ.real s₂ + μ.real (s₁ \ s₂) := measureReal_union_le _ _
 
-@[deprecated (since := "2026-06-03
+@[deprecated (since := "2026-06-03")] alias le_measureReal_diff := le_measureReal_sdiff
 
 Depends on / 依赖: congr_arg, finiteness, measureReal_le_measureReal_union_right, measureReal_union_le, tsub_le_iff_left, union_sdiff_self, union_sdiff_self.symm
 -/
@@ -1766,7 +1772,7 @@ theorem exists_nonempty_inter_of_measureReal_univ_lt_sum_measureReal
   apply (ENNReal.toReal_lt_toReal (by finiteness) _).1
   · convert! H
     rw [ENNReal.toReal_sum (by finiteness)]
-  · exact (ENNReal.sum_lt_top.mpr (fun i hi
+  · exact (ENNReal.sum_lt_top.mpr (fun i hi => measure_lt_top ..)).ne
 
 中文:
 定理 存在_nonempty_inter_of_measure实数_univ_lt_sum_measure实数
@@ -1778,7 +1784,7 @@ theorem exists_nonempty_inter_of_measureReal_univ_lt_sum_measureReal
   apply (ENNReal.toReal_lt_toReal (by finiteness) _).1
   · convert! H
     rw [ENNReal.toReal_sum (by finiteness)]
-  · exact (ENNReal.sum_lt_top.mpr (fun i hi
+  · exact (ENNReal.sum_lt_top.mpr (fun i hi => measure_lt_top ..)).ne
 
 Depends on / 依赖: ENNReal, ENNReal.sum_lt_top.mpr, ENNReal.toReal_lt_toReal, ENNReal.toReal_sum, Measure, Measure.real, convert, exists_nonempty_inter_of_measure_univ_lt_sum_measure, finiteness, measure_lt_top, nullMeasurableSet, sum_lt_top, toReal_lt_toReal, toReal_sum
 -/
@@ -1804,7 +1810,7 @@ theorem nonempty_inter_of_measureReal_lt_add
   apply (ENNReal.toReal_lt_toReal hu _).1
   · rw [ENNReal.toReal_add (measure_ne_top_of_subset h's hu) (measure_ne_top_of_subset h't hu)]
     exact h
-  · exact ENNReal.add_ne_top.2 ⟨measure_ne_top_of_subset h's hu, measure_ne_top_of_subset 
+  · exact ENNReal.add_ne_top.2 ⟨measure_ne_top_of_subset h's hu, measure_ne_top_of_subset h't hu⟩
 
 中文:
 定理 nonempty_inter_of_measure实数_lt_add
@@ -1813,7 +1819,7 @@ theorem nonempty_inter_of_measureReal_lt_add
   apply (ENNReal.toReal_lt_toReal hu _).1
   · rw [ENNReal.toReal_add (measure_ne_top_of_subset h's hu) (measure_ne_top_of_subset h't hu)]
     exact h
-  · exact ENNReal.add_ne_top.2 ⟨measure_ne_top_of_subset h's hu, measure_ne_top_of_subset 
+  · exact ENNReal.add_ne_top.2 ⟨measure_ne_top_of_subset h's hu, measure_ne_top_of_subset h't hu⟩
 
 Depends on / 依赖: ENNReal, ENNReal.add_ne_top, ENNReal.toReal_add, ENNReal.toReal_lt_toReal, Nonempty, add_ne_top, finiteness, measure_ne_top_of_subset, nonempty_inter_of_measure_lt_add, toReal_add, toReal_lt_toReal
 -/

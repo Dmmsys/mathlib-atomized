@@ -1053,7 +1053,7 @@ definition trans
   source' := by simp
   target' := by norm_num
 
-@[gri
+@[grind =]
 
 中文:
 定义 trans
@@ -1067,7 +1067,7 @@ definition trans
   source' := by simp
   target' := by norm_num
 
-@[gri
+@[grind =]
 
 Depends on / 依赖: extend
 -/
@@ -1123,7 +1123,11 @@ theorem trans_symm
     norm_num [ht]
   · refine congr_arg _ (Subtype.ext ?_)
     norm_num [sub_sub_eq_add_sub, mul_sub]
-  · refine congr_arg _ (Subtyp
+  · refine congr_arg _ (Subtype.ext ?_)
+    simp only [coe_symm_eq]
+    ring
+  · exfalso
+    linarith
 
 中文:
 定理 trans_symm
@@ -1137,7 +1141,11 @@ theorem trans_symm
     norm_num [ht]
   · refine congr_arg _ (Subtype.ext ?_)
     norm_num [sub_sub_eq_add_sub, mul_sub]
-  · refine congr_arg _ (Subtyp
+  · refine congr_arg _ (Subtype.ext ?_)
+    simp only [coe_symm_eq]
+    ring
+  · exfalso
+    linarith
 
 Depends on / 依赖: Function, Function.comp_apply, Subtype, Subtype.ext, coe_symm_eq, comp_apply, congr_arg, mul_sub, split_ifs, sub_sub_eq_add_sub, symm_apply, trans_apply
 -/
@@ -1248,13 +1256,17 @@ English:
 theorem trans_range
   given: {a b c : X} (γ₁ : Path a b) (γ₂ : Path b c)
   proof: by
-  rw [← extend_range]; rw [← image_univ]; rw [← Iic_union_Ici (a := 1 / 2)]; rw [image_union]; rw [EqOn.image_eq fun t ht => extend_trans_of_le_half _ _ (mem_Iic.1 ht)]; rw [EqOn.image_eq fun t ht => extend_trans_of_half_le _ _ (mem_Ici.1 ht)]; rw [← image_image γ₁.extend]; rw [← image_image (γ₂.
+  rw [← extend_range]; rw [← image_univ]; rw [← Iic_union_Ici (a := 1 / 2)]; rw [image_union]; rw [EqOn.image_eq fun t ht => extend_trans_of_le_half _ _ (mem_Iic.1 ht)]; rw [EqOn.image_eq fun t ht => extend_trans_of_half_le _ _ (mem_Ici.1 ht)]; rw [← image_image γ₁.extend]; rw [← image_image (γ₂.extend <| · - 1)]; rw [← image_image γ₂.extend]
+  norm_num [image_mul_left_Ici, image_mul_left_Iic,
+    image_extend_of_subset, Icc_subset_Iic_self, Icc_subset_Ici_self]
 
 中文:
 定理 trans_range
   条件: {a b c : X} (γ₁ : 道路 a b) (γ₂ : 道路 b c)
   证明: by
-  rw [← extend_range]; rw [← image_univ]; rw [← Iic_union_Ici (a := 1 / 2)]; rw [image_union]; rw [EqOn.image_eq fun t ht => extend_trans_of_le_half _ _ (mem_Iic.1 ht)]; rw [EqOn.image_eq fun t ht => extend_trans_of_half_le _ _ (mem_Ici.1 ht)]; rw [← image_image γ₁.extend]; rw [← image_image (γ₂.
+  rw [← extend_range]; rw [← image_univ]; rw [← Iic_union_Ici (a := 1 / 2)]; rw [image_union]; rw [EqOn.image_eq fun t ht => extend_trans_of_le_half _ _ (mem_Iic.1 ht)]; rw [EqOn.image_eq fun t ht => extend_trans_of_half_le _ _ (mem_Ici.1 ht)]; rw [← image_image γ₁.extend]; rw [← image_image (γ₂.extend <| · - 1)]; rw [← image_image γ₂.extend]
+  norm_num [image_mul_left_Ici, image_mul_left_Iic,
+    image_extend_of_subset, Icc_subset_Iic_self, Icc_subset_Ici_self]
 
 Depends on / 依赖: EqOn.image_eq, Icc_subset_Ici_self, Icc_subset_Iic_self, Iic_union_Ici, extend, extend_range, extend_trans_of_half_le, extend_trans_of_le_half, image_eq, image_extend_of_subset, image_image, image_mul_left_Ici, image_mul_left_Iic, image_union, image_univ, mem_Ici, mem_Iic
 -/
@@ -1717,7 +1729,15 @@ theorem trans_continuous_family
   simp only [HasUncurry.uncurry, Path.trans]
   refine Continuous.if_le ?_ ?_ (continuous_subtype_val.comp continuous_snd) continuous_const ?_
   · change
+      Continuous ((fun p : ι × Real => (γ₁ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x : I -> Real))
+    exact h₁'.comp (by fun_prop)
+  · change
+      Continuous ((fun p : ι × Real => (γ₂ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x - 1 : I -> Real))
+    exact h₂'.comp (by fun_prop)
+  · rintro st hst
+    simp [hst]
 
+@[continuity, fun_prop]
 
 中文:
 定理 trans_continuous_family
@@ -1728,7 +1748,15 @@ theorem trans_continuous_family
   simp only [HasUncurry.uncurry, Path.trans]
   refine Continuous.if_le ?_ ?_ (continuous_subtype_val.comp continuous_snd) continuous_const ?_
   · change
+      Continuous ((fun p : ι × Real => (γ₁ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x : I -> Real))
+    exact h₁'.comp (by fun_prop)
+  · change
+      Continuous ((fun p : ι × Real => (γ₂ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x - 1 : I -> Real))
+    exact h₂'.comp (by fun_prop)
+  · rintro st hst
+    simp [hst]
 
+@[continuity, fun_prop]
 
 Depends on / 依赖: Continuous, Continuous.if_le, HasUncurry, HasUncurry.uncurry, Path.continuous_uncurry_extend_of_continuous_family, Path.trans, Prod.map, continuous_const, continuous_snd, continuous_subtype_val, continuous_subtype_val.comp, continuous_uncurry_extend_of_continuous_family, extend, fun_prop, if_le, uncurry
 -/
@@ -2023,7 +2051,16 @@ definition truncate
     · congr
       linarith
     · have h₄ : t₁ <= 0 := le_of_lt (by simpa using h₂)
-      simp
+      simp [γ.extend_of_le_zero h₄, γ.extend_of_le_zero h₁]
+    all_goals rfl
+  target' := by
+    simp only [min_def, max_def']
+    split_ifs with h₁ h₂ h₃
+    · simp [γ.extend_of_one_le h₂]
+    · rfl
+    · have h₄ : 1 <= t₀ := le_of_lt (by simpa using h₁)
+      simp [γ.extend_of_one_le h₄, γ.extend_of_one_le (h₄.trans h₃)]
+    · rfl
 
 中文:
 定义 truncate
@@ -2037,7 +2074,16 @@ definition truncate
     · congr
       linarith
     · have h₄ : t₁ <= 0 := le_of_lt (by simpa using h₂)
-      simp
+      simp [γ.extend_of_le_zero h₄, γ.extend_of_le_zero h₁]
+    all_goals rfl
+  target' := by
+    simp only [min_def, max_def']
+    split_ifs with h₁ h₂ h₃
+    · simp [γ.extend_of_one_le h₂]
+    · rfl
+    · have h₄ : 1 <= t₀ := le_of_lt (by simpa using h₁)
+      simp [γ.extend_of_one_le h₄, γ.extend_of_one_le (h₄.trans h₃)]
+    · rfl
 
 Depends on / 依赖: extend
 -/
@@ -2367,7 +2413,11 @@ theorem range_reparam
     intro t
     have h₁ : Continuous (Set.IccExtend (zero_le_one' Real) f) := by fun_prop
     have := intermediate_value_Icc (zero_le_one' Real) h₁.continuousOn
-    · rw [IccExtend_left, IccExtend_right, Icc.mk_
+    · rw [IccExtend_left, IccExtend_right, Icc.mk_zero, Icc.mk_one, hf₀, hf₁] at this
+      rcases this t.2 with ⟨w, hw₁, hw₂⟩
+      rw [IccExtend_of_mem _ _ hw₁] at hw₂
+      exact ⟨_, hw₂⟩
+  rw [range_comp]; rw [this]; rw [image_univ]
 
 中文:
 定理 range_reparam
@@ -2379,7 +2429,11 @@ theorem range_reparam
     intro t
     have h₁ : Continuous (Set.IccExtend (zero_le_one' Real) f) := by fun_prop
     have := intermediate_value_Icc (zero_le_one' Real) h₁.continuousOn
-    · rw [IccExtend_left, IccExtend_right, Icc.mk_
+    · rw [IccExtend_left, IccExtend_right, Icc.mk_zero, Icc.mk_one, hf₀, hf₁] at this
+      rcases this t.2 with ⟨w, hw₁, hw₂⟩
+      rw [IccExtend_of_mem _ _ hw₁] at hw₂
+      exact ⟨_, hw₂⟩
+  rw [range_comp]; rw [this]; rw [image_univ]
 
 Depends on / 依赖: Continuous, Icc.mk_one, Icc.mk_zero, IccExtend, IccExtend_left, IccExtend_of_mem, IccExtend_right, Set.IccExtend, continuousOn, fun_prop, image_univ, intermediate_value_Icc, mk_one, mk_zero, range_comp, range_eq_univ, zero_le_one
 -/

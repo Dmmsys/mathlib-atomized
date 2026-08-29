@@ -250,7 +250,7 @@ lemma bot_isAdmissible
     exact hs.image_self_subset_self ⟨y, ⟨mem_sInter.1 hy _ hs, rfl⟩⟩
   cSup_mem := by
     intro c hc s hs
-    exa
+    exact hs.cSup_mem c (subset_trans hc (sInter_subset_of_mem hs))
 
 中文:
 引理 bot_isAdmissible
@@ -266,7 +266,7 @@ lemma bot_isAdmissible
     exact hs.image_self_subset_self ⟨y, ⟨mem_sInter.1 hy _ hs, rfl⟩⟩
   cSup_mem := by
     intro c hc s hs
-    exa
+    exact hs.cSup_mem c (subset_trans hc (sInter_subset_of_mem hs))
 
 Depends on / 依赖: base_isLeast, cSup_mem, h.base_isLeast, hs.cSup_mem, hs.image_self_subset_self, ici_isAdmissible, image_self_subset_self, le_map, mem_sInter, sInter_subset_of_mem, subset_trans
 -/
@@ -363,7 +363,21 @@ lemma bot_eq_of_le_or_map_le
       · constructor
         · exact (bot_isAdmissible le_map).base_isLeast.1
         · exact Or.inl ((bot_isAdmissible le_map).base_isLeast.2 hy.mem_bot)
-      · exact fun y h => (bot_isAdmissible le_map).bas
+      · exact fun y h => (bot_isAdmissible le_map).base_isLeast.2 h.1
+    · rintro _ ⟨z, ⟨hz, (hzy | hyz)⟩, rfl⟩ <;>
+        refine ⟨map_mem_bot le_map hz, ?_⟩
+      · rcases le_iff_lt_or_eq.1 hzy with (hzy | rfl)
+        · left; exact hy.map_le_of_mem_of_lt hz hzy
+        · right; exact le_refl _
+      · right; exact le_trans hyz (le_map z)
+    · intro c hc
+      refine ⟨(bot_isAdmissible le_map).cSup_mem _ (subset_trans hc (sep_subset _ _)), ?_⟩
+      · by_cases! h : forall z in c, z <= y
+        · left; apply cSup_le c y h
+        · rcases h with ⟨z, hz, hzy⟩
+          have h' := Or.resolve_left (hc hz).2 hzy
+          right
+          apply le_trans h' (le_cSup _ _ hz)
 
 中文:
 引理 bot_eq_of_le_or_map_le
@@ -376,7 +390,21 @@ lemma bot_eq_of_le_or_map_le
       · constructor
         · exact (bot_isAdmissible le_map).base_isLeast.1
         · exact Or.inl ((bot_isAdmissible le_map).base_isLeast.2 hy.mem_bot)
-      · exact fun y h => (bot_isAdmissible le_map).bas
+      · exact fun y h => (bot_isAdmissible le_map).base_isLeast.2 h.1
+    · rintro _ ⟨z, ⟨hz, (hzy | hyz)⟩, rfl⟩ <;>
+        refine ⟨map_mem_bot le_map hz, ?_⟩
+      · rcases le_iff_lt_or_eq.1 hzy with (hzy | rfl)
+        · left; exact hy.map_le_of_mem_of_lt hz hzy
+        · right; exact le_refl _
+      · right; exact le_trans hyz (le_map z)
+    · intro c hc
+      refine ⟨(bot_isAdmissible le_map).cSup_mem _ (subset_trans hc (sep_subset _ _)), ?_⟩
+      · by_cases! h : forall z in c, z <= y
+        · left; apply cSup_le c y h
+        · rcases h with ⟨z, hz, hzy⟩
+          have h' := Or.resolve_left (hc hz).2 hzy
+          right
+          apply le_trans h' (le_cSup _ _ hz)
 
 Depends on / 依赖: IsAdmissible, IsAdmissible.mk, Or.inl, base_isLeast, bot_isAdmissible, hy.map_le_of_mem_of_lt, hy.mem_bot, le_iff_lt_or_eq, le_map, le_refl, le_trans, map_le_of_mem_of_lt, map_mem_bot, mem_bot, sep_subset, subset_bot_iff
 -/
@@ -419,7 +447,39 @@ lemma setOfPred_isExtremePt_isAdmissible
       exfalso
       exact lt_irrefl x (lt_of_le_of_lt ((bot_isAdmissible le_map).base_isLeast.2 hy) hyx)
     · exact fun y h => (bot_isAdmissible le_map).base_isLeast.2 h.1
-  ·
+  · rintro _ ⟨y, hy, rfl⟩
+    refine ⟨map_mem_bot le_map hy.mem_bot, ?_⟩
+    intro z hz hzy
+    have hz' := hz
+    rw [← bot_eq_of_le_or_map_le le_map hy] at hz'
+    rcases hz' with ⟨_, (hz' | hz')⟩
+    · rcases le_iff_lt_or_eq.1 hz' with (hz' | rfl)
+      · exact le_trans (hy.map_le_of_mem_of_lt hz hz') (le_map y)
+      · exact le_refl (f z)
+    · exfalso
+      exact lt_irrefl z (lt_of_lt_of_le hzy hz')
+  · intro c hc
+    refine ⟨(bot_isAdmissible le_map).cSup_mem _ (subset_trans hc (fun _ h => h.mem_bot)), ?_⟩
+    intro y hy hy'
+    obtain ⟨z, hz, hzy⟩ : exists z in c, ¬ (f z <= y) := by
+      by_contra! h
+      apply lt_irrefl y (lt_of_lt_of_le hy' ?_)
+      apply cSup_le
+      intro z hz
+      exact le_trans (le_map z) (h z hz)
+    have h : y <= z := by
+      rw [← bot_eq_of_le_or_map_le le_map (hc hz)] at hy
+      exact Or.resolve_right hy.2 hzy
+    obtain hyz | rfl := le_iff_lt_or_eq.1 h
+    · exact le_trans ((hc hz).map_le_of_mem_of_lt hy hyz) (le_cSup _ _ hz)
+    · have hc' := (bot_isAdmissible le_map).cSup_mem _ (subset_trans hc fun _ h => h.mem_bot)
+      rw [← bot_eq_of_le_or_map_le le_map (hc hz)] at hc'
+      apply hc'.2.resolve_left
+      intro hc'
+      exact lt_irrefl y (lt_of_lt_of_le hy' hc')
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_isExtremePt_isAdmissible := setOfPred_isExtremePt_isAdmissible
 
 中文:
 引理 setOfPred_isExtremePt_isAdmissible
@@ -432,7 +492,39 @@ lemma setOfPred_isExtremePt_isAdmissible
       exfalso
       exact lt_irrefl x (lt_of_le_of_lt ((bot_isAdmissible le_map).base_isLeast.2 hy) hyx)
     · exact fun y h => (bot_isAdmissible le_map).base_isLeast.2 h.1
-  ·
+  · rintro _ ⟨y, hy, rfl⟩
+    refine ⟨map_mem_bot le_map hy.mem_bot, ?_⟩
+    intro z hz hzy
+    have hz' := hz
+    rw [← bot_eq_of_le_or_map_le le_map hy] at hz'
+    rcases hz' with ⟨_, (hz' | hz')⟩
+    · rcases le_iff_lt_or_eq.1 hz' with (hz' | rfl)
+      · exact le_trans (hy.map_le_of_mem_of_lt hz hz') (le_map y)
+      · exact le_refl (f z)
+    · exfalso
+      exact lt_irrefl z (lt_of_lt_of_le hzy hz')
+  · intro c hc
+    refine ⟨(bot_isAdmissible le_map).cSup_mem _ (subset_trans hc (fun _ h => h.mem_bot)), ?_⟩
+    intro y hy hy'
+    obtain ⟨z, hz, hzy⟩ : exists z in c, ¬ (f z <= y) := by
+      by_contra! h
+      apply lt_irrefl y (lt_of_lt_of_le hy' ?_)
+      apply cSup_le
+      intro z hz
+      exact le_trans (le_map z) (h z hz)
+    have h : y <= z := by
+      rw [← bot_eq_of_le_or_map_le le_map (hc hz)] at hy
+      exact Or.resolve_right hy.2 hzy
+    obtain hyz | rfl := le_iff_lt_or_eq.1 h
+    · exact le_trans ((hc hz).map_le_of_mem_of_lt hy hyz) (le_cSup _ _ hz)
+    · have hc' := (bot_isAdmissible le_map).cSup_mem _ (subset_trans hc fun _ h => h.mem_bot)
+      rw [← bot_eq_of_le_or_map_le le_map (hc hz)] at hc'
+      apply hc'.2.resolve_left
+      intro hc'
+      exact lt_irrefl y (lt_of_lt_of_le hy' hc')
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_isExtremePt_isAdmissible := setOfPred_isExtremePt_isAdmissible
 
 Depends on / 依赖: IsAdmissible, IsAdmissible.mk, base_isLeast, bot_eq_of_le_or_map_le, bot_isAdmissible, hy.mem_bot, le_iff_lt_or_eq, le_map, lt_irrefl, lt_of_le_of_lt, map_mem_bot, mem_bot
 -/
@@ -592,7 +684,7 @@ theorem nonempty_fixedPoints_of_inflationary
   apply le_antisymm (le_cSup _ _ (_ : f y in bot x f)) (le_map y)
   apply (bot_isAdmissible le_map).image_self_subset_self
   use y
-  exac
+  exact ⟨(bot_isAdmissible le_map).cSup_mem _ (subset_refl _), rfl⟩
 
 中文:
 定理 nonempty_fixedPoints_of_inflationary
@@ -605,7 +697,7 @@ theorem nonempty_fixedPoints_of_inflationary
   apply le_antisymm (le_cSup _ _ (_ : f y in bot x f)) (le_map y)
   apply (bot_isAdmissible le_map).image_self_subset_self
   use y
-  exac
+  exact ⟨(bot_isAdmissible le_map).cSup_mem _ (subset_refl _), rfl⟩
 
 Depends on / 依赖: Classical, Classical.ofNonempty, NonemptyChain, NonemptyChain.mk, base_isLeast, bot_isAdmissible, bot_isChain, cSup_mem, image_self_subset_self, le_antisymm, le_cSup, le_map, ofNonempty, subset_refl
 -/
@@ -780,7 +872,9 @@ lemma ωScottContinuous.inf
     ⟨hf.monotone.inf hg.monotone, fun c => eq_of_forall_ge_iff fun a => ?_⟩
   simp only [Pi.inf_apply, hf.map_ωSup c, hg.map_ωSup c, inf_le_iff, ωSup_le_iff, Chain.coe_map,
     Function.comp, OrderHom.coe_mk, ← forall_or_left, ← forall_or_right]
-  ex
+  exact ⟨fun h _ => h _ _, fun h i j =>
+    (h (max j i)).imp (le_trans <| hf.monotone <| c.mono <| le_max_left _ _)
+      (le_trans <| hg.monotone <| c.mono <| le_max_right _ _)⟩
 
 中文:
 引理 ωScottContinuous.下确界
@@ -790,7 +884,9 @@ lemma ωScottContinuous.inf
     ⟨hf.monotone.inf hg.monotone, fun c => eq_of_forall_ge_iff fun a => ?_⟩
   simp only [Pi.inf_apply, hf.map_ωSup c, hg.map_ωSup c, inf_le_iff, ωSup_le_iff, Chain.coe_map,
     Function.comp, OrderHom.coe_mk, ← forall_or_left, ← forall_or_right]
-  ex
+  exact ⟨fun h _ => h _ _, fun h i j =>
+    (h (max j i)).imp (le_trans <| hf.monotone <| c.mono <| le_max_left _ _)
+      (le_trans <| hg.monotone <| c.mono <| le_max_right _ _)⟩
 
 Depends on / 依赖: Chain.coe_map, Function, Function.comp, OrderHom, OrderHom.coe_mk, Pi.inf_apply, ScottContinuous.of_monotone_map_, c.mono, coe_map, coe_mk, eq_of_forall_ge_iff, forall_or_left, forall_or_right, hf.map_, hf.monotone, hf.monotone.inf, hg.map_, hg.monotone, inf_apply, inf_le_iff
 -/

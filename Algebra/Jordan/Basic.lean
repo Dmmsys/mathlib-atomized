@@ -307,7 +307,9 @@ theorem two_nsmul_lie_lmul_lmul_add_eq_lie_lmul_lmul_add
   suffices 2 • ⁅L a, L (a * b)⁆ + 2 • ⁅L b, L (b * a)⁆ + ⁅L b, L (a * a)⁆ + ⁅L a, L (b * b)⁆ = 0 by
     rwa [← sub_eq_zero, ← sub_sub, sub_eq_add_neg, sub_eq_add_neg, lie_skew, lie_skew, nsmul_add]
   convert (commute_lmul_lmul_sq (a + b)).lie_eq
-  simp only [add_mul, mul_add, map_add, lie_add, ad
+  simp only [add_mul, mul_add, map_add, lie_add, add_lie, mul_comm b a,
+    (commute_lmul_lmul_sq a).lie_eq, (commute_lmul_lmul_sq b).lie_eq, zero_add, add_zero, two_smul]
+  abel
 
 中文:
 定理 two_nsmul_lie_lmul_lmul_add_eq_lie_lmul_lmul_add
@@ -316,7 +318,9 @@ theorem two_nsmul_lie_lmul_lmul_add_eq_lie_lmul_lmul_add
   suffices 2 • ⁅L a, L (a * b)⁆ + 2 • ⁅L b, L (b * a)⁆ + ⁅L b, L (a * a)⁆ + ⁅L a, L (b * b)⁆ = 0 by
     rwa [← sub_eq_zero, ← sub_sub, sub_eq_add_neg, sub_eq_add_neg, lie_skew, lie_skew, nsmul_add]
   convert (commute_lmul_lmul_sq (a + b)).lie_eq
-  simp only [add_mul, mul_add, map_add, lie_add, ad
+  simp only [add_mul, mul_add, map_add, lie_add, add_lie, mul_comm b a,
+    (commute_lmul_lmul_sq a).lie_eq, (commute_lmul_lmul_sq b).lie_eq, zero_add, add_zero, two_smul]
+  abel
 
 Depends on / 依赖: add_lie, add_mul, add_zero, commute_lmul_lmul_sq, convert, lie_add, lie_eq, lie_skew, map_add, mul_add, mul_comm, nsmul_add, sub_eq_add_neg, sub_eq_zero, sub_sub, two_smul, zero_add
 -/

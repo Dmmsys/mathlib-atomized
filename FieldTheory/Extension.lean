@@ -71,7 +71,10 @@ instance :
     refine ⟨h₁₂.trans h₂₃, fun _ => ?_⟩
     rw [← inclusion_inclusion h₁₂ h₂₃]; rw [h₂₃']; rw [h₁₂']
   le_antisymm := by
-    
+    rintro ⟨L₁, e₁⟩ ⟨L₂, e₂⟩ ⟨h₁₂, h₁₂'⟩ ⟨h₂₁, h₂₁'⟩
+    obtain rfl : L₁ = L₂ := h₁₂.antisymm h₂₁
+    congr
+    exact AlgHom.ext h₂₁'
 
 中文:
 实例 :
@@ -83,7 +86,10 @@ instance :
     refine ⟨h₁₂.trans h₂₃, fun _ => ?_⟩
     rw [← inclusion_inclusion h₁₂ h₂₃]; rw [h₂₃']; rw [h₁₂']
   le_antisymm := by
-    
+    rintro ⟨L₁, e₁⟩ ⟨L₂, e₂⟩ ⟨h₁₂, h₁₂'⟩ ⟨h₂₁, h₂₁'⟩
+    obtain rfl : L₁ = L₂ := h₁₂.antisymm h₂₁
+    congr
+    exact AlgHom.ext h₂₁'
 
 Depends on / 依赖: carrier, inclusion
 -/
@@ -315,7 +321,12 @@ definition union
   have hc := hc.insert fun _ _ _ => .inl bot_le
   have dir : Directed (· <= ·) t := hc.directedOn.directed_val.mono_comp _ fun _ _ h => h.1
   ⟨iSup t, (Subalgebra.iSupLift (toSubalgebra <| t ·) dir (·.val.emb) (fun i j h =>
-    AlgHom.ext fun x => (hc.total
+    AlgHom.ext fun x => (hc.total i.2 j.2).elim (fun hij => (hij.snd x).symm) fun hji => by
+      rw [AlgHom.comp_apply]; rw [← inclusion]
+      dsimp only [coe_type_toSubalgebra]
+      rw [← hji.snd (inclusion h x)]; rw [inclusion_inclusion]; rw [inclusion_self]; rw [AlgHom.id_apply x])
+    _ le_rfl).comp
+      (Subalgebra.equivOfEq _ _ <| toSubalgebra_iSup_of_directed dir)⟩
 
 中文:
 定义 union
@@ -324,7 +335,12 @@ definition union
   have hc := hc.insert fun _ _ _ => .inl bot_le
   have dir : Directed (· <= ·) t := hc.directedOn.directed_val.mono_comp _ fun _ _ h => h.1
   ⟨iSup t, (Subalgebra.iSupLift (toSubalgebra <| t ·) dir (·.val.emb) (fun i j h =>
-    AlgHom.ext fun x => (hc.total
+    AlgHom.ext fun x => (hc.total i.2 j.2).elim (fun hij => (hij.snd x).symm) fun hji => by
+      rw [AlgHom.comp_apply]; rw [← inclusion]
+      dsimp only [coe_type_toSubalgebra]
+      rw [← hji.snd (inclusion h x)]; rw [inclusion_inclusion]; rw [inclusion_self]; rw [AlgHom.id_apply x])
+    _ le_rfl).comp
+      (Subalgebra.equivOfEq _ _ <| toSubalgebra_iSup_of_directed dir)⟩
 
 Depends on / 依赖: AlgHom, AlgHom.comp_apply, AlgHom.ext, Directed, Subalgebra, Subalgebra.iSupLift, bot_le, carrier, coe_type_toSubalgebra, comp_apply, directedOn, directed_val, hc.directedOn.directed_val.mono_comp, hc.insert, hc.total, hij.snd, hji.snd, i.val.carrier, iSupLift, inclusion
 -/
@@ -426,7 +442,33 @@ theorem union_isExtendible
   have ⟨ω, hω⟩ : exists ω : Ω, forall π : c, exists θ >= π.1, ⟨_, ω⟩ <= θ ∧ θ.carrier = π.1.1 ⊔ adjoin F S := by
     by_contra!; choose π hπ using this
     have := finiteDimensional_adjoin (S := (S : Set E)) fun _ _ => (alg.isIntegral).1 _
-    hav
+    have ⟨π₀, hπ₀⟩ := hc.directed.finite_le π
+    have ⟨θ, hθπ, hθ⟩ := hext _ π₀.2 S
+    rw [← adjoin_le_iff] at hθ
+    let θ₀ := θ.emb.comp (inclusion hθ)
+    have := (hπ₀ θ₀).trans hθπ
+exact hπ θ₀ ⟨_, θ.emb.comp inclusion sup_le this.1 hθ⟩
+      ⟨le_sup_left, this.2⟩ ⟨le_sup_right, fun _ => rfl⟩ rfl
+  choose θ ge hθ eq using hω
+  have : IsChain (· <= ·) (Set.range θ) := by
+    simp_rw [← restrictScalars_adjoin_eq_sup, restrictScalars_adjoin] at eq
+    rintro _ ⟨π₁, rfl⟩ _ ⟨π₂, rfl⟩ -
+    wlog h : π₁ <= π₂ generalizing π₁ π₂
+    · exact (this _ _ <| (hc.total π₁.2 π₂.2).resolve_left h).symm
+    refine .inl (le_iff.mpr ⟨?_, algHom_ext_of_eq_adjoin _ (eq _) ?_⟩)
+    · rw [eq, eq]; exact adjoin.mono _ _ _ (Set.union_subset_union_left _ h.1)
+    rintro x (hx | hx)
+    · change (θ π₂).emb (inclusion (ge π₂).1 <| inclusion h.1 ⟨x, hx⟩) =
+        (θ π₁).emb (inclusion (ge π₁).1 ⟨x, hx⟩)
+      rw [(ge π₁).2]; rw [(ge π₂).2]; rw [h.2]
+    · change (θ π₂).emb (inclusion (hθ π₂).1 ⟨x, subset_adjoin _ _ hx⟩) =
+        (θ π₁).emb (inclusion (hθ π₁).1 ⟨x, subset_adjoin _ _ hx⟩)
+      rw [(hθ π₁).2]; rw [(hθ π₂).2]
+  refine ⟨union _ this, le_of_carrier_le_iSup (fun π => le_union c hc π.2)
+    (fun π => (ge π).trans <| le_union _ _ ⟨_, rfl⟩) (carrier_union _ _).le, ?_⟩
+  simp_rw [carrier_union, iSup_range', eq]
+  exact (subset_adjoin _ _).trans (SetLike.coe_subset_coe.mpr <|
+le_sup_right.trans le_iSup_of_le (Classical.arbitrary _) le_rfl)
 
 中文:
 定理 union_isExtendible
@@ -436,7 +478,33 @@ theorem union_isExtendible
   have ⟨ω, hω⟩ : exists ω : Ω, forall π : c, exists θ >= π.1, ⟨_, ω⟩ <= θ ∧ θ.carrier = π.1.1 ⊔ adjoin F S := by
     by_contra!; choose π hπ using this
     have := finiteDimensional_adjoin (S := (S : Set E)) fun _ _ => (alg.isIntegral).1 _
-    hav
+    have ⟨π₀, hπ₀⟩ := hc.directed.finite_le π
+    have ⟨θ, hθπ, hθ⟩ := hext _ π₀.2 S
+    rw [← adjoin_le_iff] at hθ
+    let θ₀ := θ.emb.comp (inclusion hθ)
+    have := (hπ₀ θ₀).trans hθπ
+exact hπ θ₀ ⟨_, θ.emb.comp inclusion sup_le this.1 hθ⟩
+      ⟨le_sup_left, this.2⟩ ⟨le_sup_right, fun _ => rfl⟩ rfl
+  choose θ ge hθ eq using hω
+  have : IsChain (· <= ·) (Set.range θ) := by
+    simp_rw [← restrictScalars_adjoin_eq_sup, restrictScalars_adjoin] at eq
+    rintro _ ⟨π₁, rfl⟩ _ ⟨π₂, rfl⟩ -
+    wlog h : π₁ <= π₂ generalizing π₁ π₂
+    · exact (this _ _ <| (hc.total π₁.2 π₂.2).resolve_left h).symm
+    refine .inl (le_iff.mpr ⟨?_, algHom_ext_of_eq_adjoin _ (eq _) ?_⟩)
+    · rw [eq, eq]; exact adjoin.mono _ _ _ (Set.union_subset_union_left _ h.1)
+    rintro x (hx | hx)
+    · change (θ π₂).emb (inclusion (ge π₂).1 <| inclusion h.1 ⟨x, hx⟩) =
+        (θ π₁).emb (inclusion (ge π₁).1 ⟨x, hx⟩)
+      rw [(ge π₁).2]; rw [(ge π₂).2]; rw [h.2]
+    · change (θ π₂).emb (inclusion (hθ π₂).1 ⟨x, subset_adjoin _ _ hx⟩) =
+        (θ π₁).emb (inclusion (hθ π₁).1 ⟨x, subset_adjoin _ _ hx⟩)
+      rw [(hθ π₁).2]; rw [(hθ π₂).2]
+  refine ⟨union _ this, le_of_carrier_le_iSup (fun π => le_union c hc π.2)
+    (fun π => (ge π).trans <| le_union _ _ ⟨_, rfl⟩) (carrier_union _ _).le, ?_⟩
+  simp_rw [carrier_union, iSup_range', eq]
+  exact (subset_adjoin _ _).trans (SetLike.coe_subset_coe.mpr <|
+le_sup_right.trans le_iSup_of_le (Classical.arbitrary _) le_rfl)
 
 Depends on / 依赖: adjoin, adjoin_le_iff, alg.isIntegral, carrier, directed, emb.comp, finiteDimensional_adjoin, finite_le, hc.directed.finite_le, inclusion, isIntegral, sup_le
 -/
@@ -488,7 +556,27 @@ theorem nonempty_algHom_of_exist_lifts_finset
   have ⟨ϕ, hϕ⟩ := zorn_le₀ {ϕ : Lifts F E K | ϕ.IsExtendible}
     fun c hext hc => (isEmpty_or_nonempty c).elim
       (fun _ => ⟨⊥, this, fun ϕ hϕ => isEmptyElim (⟨ϕ, hϕ⟩ : c)⟩)
-      fun _ => ⟨_, union_isExt
+      fun _ => ⟨_, union_isExtendible c hc hext, le_union c hc⟩
+suffices ϕ.carrier = ⊤ from ⟨ϕ.emb.comp ((equivOfEq this).trans topEquiv).symm⟩
+  by_contra!
+  obtain ⟨α, -, hα⟩ := SetLike.exists_of_lt this.lt_top
+  let _ : Algebra ϕ.carrier K := ϕ.emb.toAlgebra
+  let Λ := ϕ.carrier⟮α⟯ ->ₐ[ϕ.carrier] K
+  have := finiteDimensional_adjoin (S := {α}) fun _ _ => ((alg.tower_top ϕ.carrier).isIntegral).1 _
+  let L (σ : Λ) : Lifts F E K := ⟨ϕ.carrier⟮α⟯.restrictScalars F, σ.restrictScalars F⟩
+  have hL (σ : Λ) : ϕ < L σ := lt_iff.mpr
+    ⟨by simpa only [L, restrictScalars_adjoin_eq_sup, left_lt_sup, adjoin_simple_le_iff],
+      AlgHom.coe_ringHom_injective σ.comp_algebraMap⟩
+  have ⟨(ϕ_ext : ϕ.IsExtendible), ϕ_max⟩ := maximal_iff_forall_gt.mp hϕ
+  simp_rw [Set.mem_ofPred, IsExtendible] at ϕ_max; push Not at ϕ_max
+  choose S hS using fun σ : Λ => ϕ_max (hL σ)
+  classical
+  have ⟨θ, hθϕ, hθ⟩ := ϕ_ext ({α} union Finset.univ.biUnion S)
+  simp_rw [Finset.coe_union, Set.union_subset_iff, Finset.coe_singleton, Set.singleton_subset_iff,
+    Finset.coe_biUnion, Finset.coe_univ, Set.mem_univ, Set.iUnion_true, Set.iUnion_subset_iff] at hθ
+  have : ϕ.carrier⟮α⟯.restrictScalars F <= θ.carrier := by
+    rw [restrictScalars_adjoin_eq_sup]; rw [sup_le_iff]; rw [adjoin_simple_le_iff]; exact ⟨hθϕ.1, hθ.1⟩
+  exact hS ⟨(θ.emb.comp <| inclusion this).toRingHom, hθϕ.2⟩ θ ⟨this, fun _ => rfl⟩ (hθ.2 _)
 
 中文:
 定理 nonempty_algHom_of_exist_lifts_finset
@@ -498,7 +586,27 @@ theorem nonempty_algHom_of_exist_lifts_finset
   have ⟨ϕ, hϕ⟩ := zorn_le₀ {ϕ : Lifts F E K | ϕ.IsExtendible}
     fun c hext hc => (isEmpty_or_nonempty c).elim
       (fun _ => ⟨⊥, this, fun ϕ hϕ => isEmptyElim (⟨ϕ, hϕ⟩ : c)⟩)
-      fun _ => ⟨_, union_isExt
+      fun _ => ⟨_, union_isExtendible c hc hext, le_union c hc⟩
+suffices ϕ.carrier = ⊤ from ⟨ϕ.emb.comp ((equivOfEq this).trans topEquiv).symm⟩
+  by_contra!
+  obtain ⟨α, -, hα⟩ := SetLike.exists_of_lt this.lt_top
+  let _ : Algebra ϕ.carrier K := ϕ.emb.toAlgebra
+  let Λ := ϕ.carrier⟮α⟯ ->ₐ[ϕ.carrier] K
+  have := finiteDimensional_adjoin (S := {α}) fun _ _ => ((alg.tower_top ϕ.carrier).isIntegral).1 _
+  let L (σ : Λ) : Lifts F E K := ⟨ϕ.carrier⟮α⟯.restrictScalars F, σ.restrictScalars F⟩
+  have hL (σ : Λ) : ϕ < L σ := lt_iff.mpr
+    ⟨by simpa only [L, restrictScalars_adjoin_eq_sup, left_lt_sup, adjoin_simple_le_iff],
+      AlgHom.coe_ringHom_injective σ.comp_algebraMap⟩
+  have ⟨(ϕ_ext : ϕ.IsExtendible), ϕ_max⟩ := maximal_iff_forall_gt.mp hϕ
+  simp_rw [Set.mem_ofPred, IsExtendible] at ϕ_max; push Not at ϕ_max
+  choose S hS using fun σ : Λ => ϕ_max (hL σ)
+  classical
+  have ⟨θ, hθϕ, hθ⟩ := ϕ_ext ({α} union Finset.univ.biUnion S)
+  simp_rw [Finset.coe_union, Set.union_subset_iff, Finset.coe_singleton, Set.singleton_subset_iff,
+    Finset.coe_biUnion, Finset.coe_univ, Set.mem_univ, Set.iUnion_true, Set.iUnion_subset_iff] at hθ
+  have : ϕ.carrier⟮α⟯.restrictScalars F <= θ.carrier := by
+    rw [restrictScalars_adjoin_eq_sup]; rw [sup_le_iff]; rw [adjoin_simple_le_iff]; exact ⟨hθϕ.1, hθ.1⟩
+  exact hS ⟨(θ.emb.comp <| inclusion this).toRingHom, hθϕ.2⟩ θ ⟨this, fun _ => rfl⟩ (hθ.2 _)
 
 Depends on / 依赖: Algebra, IsExtendible, SetLike, SetLike.exists_of_lt, bot_le, carrier, emb.comp, emb.toAl, equivOfEq, exists_of_lt, isEmptyElim, isEmpty_or_nonempty, le_union, lt_top, this.lt_top, topEquiv, union_isExtendible
 -/
@@ -541,7 +649,14 @@ theorem exists_lift_of_splits'
   letI : Algebra x.carrier K := x.emb.toRingHom.toAlgebra
   let carrier := x.carrier⟮s⟯.restrictScalars F
   letI : Algebra x.carrier carrier := x.carrier⟮s⟯.toSubalgebra.algebra
-  let φ : carrier ->ₐ[x.carrier] K := ((algHomAdjoinIntegralEquiv x.carrier h1).sym
+  let φ : carrier ->ₐ[x.carrier] K := ((algHomAdjoinIntegralEquiv x.carrier h1).symm
+    ⟨rootOfSplits h2 (by rwa [degree_map]), by
+      rw [mem_aroots]; rw [and_iff_right (minpoly.ne_zero h1)]
+      exact (eval_map _ _).symm.trans (eval_rootOfSplits _ _)⟩)
+  ⟨⟨carrier, (@algHomEquivSigma F x.carrier carrier K _ _ _ _ _ _ _ _
+      (IsScalarTower.of_algebraMap_eq fun _ => rfl)).symm ⟨x.emb, φ⟩⟩,
+    ⟨fun z hz => algebraMap_mem x.carrier⟮s⟯ ⟨z, hz⟩, φ.commutes⟩,
+    mem_adjoin_simple_self x.carrier s⟩
 
 中文:
 定理 存在_lift_of_splits'
@@ -550,7 +665,14 @@ theorem exists_lift_of_splits'
   letI : Algebra x.carrier K := x.emb.toRingHom.toAlgebra
   let carrier := x.carrier⟮s⟯.restrictScalars F
   letI : Algebra x.carrier carrier := x.carrier⟮s⟯.toSubalgebra.algebra
-  let φ : carrier ->ₐ[x.carrier] K := ((algHomAdjoinIntegralEquiv x.carrier h1).sym
+  let φ : carrier ->ₐ[x.carrier] K := ((algHomAdjoinIntegralEquiv x.carrier h1).symm
+    ⟨rootOfSplits h2 (by rwa [degree_map]), by
+      rw [mem_aroots]; rw [and_iff_right (minpoly.ne_zero h1)]
+      exact (eval_map _ _).symm.trans (eval_rootOfSplits _ _)⟩)
+  ⟨⟨carrier, (@algHomEquivSigma F x.carrier carrier K _ _ _ _ _ _ _ _
+      (IsScalarTower.of_algebraMap_eq fun _ => rfl)).symm ⟨x.emb, φ⟩⟩,
+    ⟨fun z hz => algebraMap_mem x.carrier⟮s⟯ ⟨z, hz⟩, φ.commutes⟩,
+    mem_adjoin_simple_self x.carrier s⟩
 
 Depends on / 依赖: Algebra, algHomAdjoinIntegralEquiv, algHomEquivSigma, algebra, and_iff_right, carrie, carrier, degree_map, degree_pos, eval_map, eval_rootOfSplits, mem_aroots, minpoly, minpoly.degree_pos, minpoly.ne_zero, ne_zero, restrictScalars, rootOfSplits, symm.trans, toAlgebra
 -/
@@ -607,7 +729,12 @@ theorem exists_algHom_adjoin_of_splits''
   refine ⟨φ.emb.comp (inclusion <| (le_extendScalars_iff hfφ.1 <| adjoin L S).mp <|
     adjoin_le_iff.mpr fun s h => ?_), AlgHom.ext hfφ.2⟩
   let := (inclusion hfφ.1).toAlgebra
-  l
+  let : SMul L φ.carrier := Algebra.toSMul
+  have : IsScalarTower L φ.carrier E := ⟨fun x y => smul_assoc x (y : E)⟩
+  have := φ.exists_lift_of_splits' (hK s h).1.tower_top ((hK s h).1.minpoly_splits_tower_top' ?_)
+  · obtain ⟨y, h1, h2⟩ := this
+    exact (hφ h1).1 h2
+  · convert! (hK s h).2; ext; apply hfφ.2
 
 中文:
 定理 存在_algHom_adjoin_of_splits''
@@ -618,7 +745,12 @@ theorem exists_algHom_adjoin_of_splits''
   refine ⟨φ.emb.comp (inclusion <| (le_extendScalars_iff hfφ.1 <| adjoin L S).mp <|
     adjoin_le_iff.mpr fun s h => ?_), AlgHom.ext hfφ.2⟩
   let := (inclusion hfφ.1).toAlgebra
-  l
+  let : SMul L φ.carrier := Algebra.toSMul
+  have : IsScalarTower L φ.carrier E := ⟨fun x y => smul_assoc x (y : E)⟩
+  have := φ.exists_lift_of_splits' (hK s h).1.tower_top ((hK s h).1.minpoly_splits_tower_top' ?_)
+  · obtain ⟨y, h1, h2⟩ := this
+    exact (hφ h1).1 h2
+  · convert! (hK s h).2; ext; apply hfφ.2
 -/
 private theorem exists_algHom_adjoin_of_splits'' {L : IntermediateField F E}
     (f : L ->ₐ[F] K) (hK : forall s in S, IsIntegral L s ∧ ((minpoly L s).map f.toRingHom).Splits) :
@@ -650,7 +782,24 @@ theorem exists_algHom_adjoin_of_splits'
   let f' : L' ->ₐ[F] K := f.comp (AlgEquiv.ofInjectiveField _).symm.toAlgHom
   have := exists_algHom_adjoin_of_splits'' f' (S := S) fun s hs => ?_
 · obtain ⟨φ, hφ⟩ := this; refine ⟨φ.comp
-      inclusion (?_ : (adjoin L S).restrictScalars F <=
+      inclusion (?_ : (adjoin L S).restrictScalars F <= (adjoin L' S).restrictScalars F), ?_⟩
+    · simp_rw [← SetLike.coe_subset_coe, coe_restrictScalars, adjoin_subset_adjoin_iff]
+      exact ⟨subset_adjoin_of_subset_left S (F := L'.toSubfield) le_rfl, subset_adjoin _ _⟩
+    · ext x
+      let y := (AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L E)) x
+      refine Eq.trans congr($hφ y) ?_
+      simp only [AlgHom.coe_comp, Function.comp_apply, f']
+      exact congr_arg f (AlgEquiv.symm_apply_apply _ _)
+  let : Algebra L L' := (AlgEquiv.ofInjectiveField _).toRingHom.toAlgebra
+  have : IsScalarTower L L' E := IsScalarTower.of_algebraMap_eq' rfl
+  refine ⟨(hK s hs).1.tower_top, (hK s hs).1.minpoly_splits_tower_top' ?_⟩
+  convert! (hK s hs).2
+  ext
+  simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_comp, RingHom.coe_coe,
+    AlgHom.coe_comp, Function.comp_apply, f']
+  exact congr_arg f (AlgEquiv.symm_apply_apply _ _)
+
+include hK in
 
 中文:
 定理 存在_algHom_adjoin_of_splits'
@@ -659,7 +808,24 @@ theorem exists_algHom_adjoin_of_splits'
   let f' : L' ->ₐ[F] K := f.comp (AlgEquiv.ofInjectiveField _).symm.toAlgHom
   have := exists_algHom_adjoin_of_splits'' f' (S := S) fun s hs => ?_
 · obtain ⟨φ, hφ⟩ := this; refine ⟨φ.comp
-      inclusion (?_ : (adjoin L S).restrictScalars F <=
+      inclusion (?_ : (adjoin L S).restrictScalars F <= (adjoin L' S).restrictScalars F), ?_⟩
+    · simp_rw [← SetLike.coe_subset_coe, coe_restrictScalars, adjoin_subset_adjoin_iff]
+      exact ⟨subset_adjoin_of_subset_left S (F := L'.toSubfield) le_rfl, subset_adjoin _ _⟩
+    · ext x
+      let y := (AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L E)) x
+      refine Eq.trans congr($hφ y) ?_
+      simp only [AlgHom.coe_comp, Function.comp_apply, f']
+      exact congr_arg f (AlgEquiv.symm_apply_apply _ _)
+  let : Algebra L L' := (AlgEquiv.ofInjectiveField _).toRingHom.toAlgebra
+  have : IsScalarTower L L' E := IsScalarTower.of_algebraMap_eq' rfl
+  refine ⟨(hK s hs).1.tower_top, (hK s hs).1.minpoly_splits_tower_top' ?_⟩
+  convert! (hK s hs).2
+  ext
+  simp only [AlgHom.toRingHom_eq_coe, RingHom.coe_comp, RingHom.coe_coe,
+    AlgHom.coe_comp, Function.comp_apply, f']
+  exact congr_arg f (AlgEquiv.symm_apply_apply _ _)
+
+include hK in
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjectiveField, IsScalarTower, IsScalarTower.toAlgHom, SetLike, SetLike.coe_subset_coe, adjoin, adjoin_subset_adjoin_iff, coe_restrictScalars, coe_subset_coe, exists_algHom_adjoin_of_splits, f.comp, fieldRange, inclusion, le_rfl, ofInjectiveField, restrictScalars, simp_rw, subset_adjoin, subset_adjoin_of_subset_left
 -/
@@ -748,7 +914,7 @@ theorem exists_algHom_adjoin_of_splits
   refine ⟨φ.emb.comp (inclusion <| adjoin_le_iff.mpr fun s hs => ?_), ?_⟩
   · rcases φ.exists_lift_of_splits (hK s hs).1 (hK s hs).2 with ⟨y, h1, h2⟩
     exact (hφ h1).1 h2
-  · ext
+  · ext; apply hfφ.2
 
 中文:
 定理 存在_algHom_adjoin_of_splits
@@ -759,7 +925,7 @@ theorem exists_algHom_adjoin_of_splits
   refine ⟨φ.emb.comp (inclusion <| adjoin_le_iff.mpr fun s hs => ?_), ?_⟩
   · rcases φ.exists_lift_of_splits (hK s hs).1 (hK s hs).2 with ⟨y, h1, h2⟩
     exact (hφ h1).1 h2
-  · ext
+  · ext; apply hfφ.2
 
 Depends on / 依赖: Lifts.exists_upper_bound, adjoin_le_iff, adjoin_le_iff.mpr, emb.comp, exists_lift_of_splits, exists_upper_bound, inclusion, le_rfl
 -/
@@ -850,7 +1016,11 @@ theorem exists_algHom_adjoin_of_splits_of_aeval
   have ix : IsAlgebraic F _ := Algebra.IsAlgebraic.isAlgebraic (⟨x, hx⟩ : adjoin F S)
   rw [isAlgebraic_iff_isIntegral]; rw [isIntegral_iff] at ix
   obtain ⟨φ, hφ⟩ := exists_algHom_adjoin_of_splits hK ((algHomAdjoinIntegralEquiv F ix).symm
-  
+    ⟨y, mem_aroots.mpr ⟨minpoly.ne_zero ix, hy⟩⟩) (adjoin_simple_le_iff.mpr hx)
+exact ⟨φ, (DFunLike.congr_fun hφ <| AdjoinSimple.gen F x).trans
+    algHomAdjoinIntegralEquiv_symm_apply_gen F ix _⟩
+
+include hS in
 
 中文:
 定理 存在_algHom_adjoin_of_splits_of_aeval
@@ -860,7 +1030,11 @@ theorem exists_algHom_adjoin_of_splits_of_aeval
   have ix : IsAlgebraic F _ := Algebra.IsAlgebraic.isAlgebraic (⟨x, hx⟩ : adjoin F S)
   rw [isAlgebraic_iff_isIntegral]; rw [isIntegral_iff] at ix
   obtain ⟨φ, hφ⟩ := exists_algHom_adjoin_of_splits hK ((algHomAdjoinIntegralEquiv F ix).symm
-  
+    ⟨y, mem_aroots.mpr ⟨minpoly.ne_zero ix, hy⟩⟩) (adjoin_simple_le_iff.mpr hx)
+exact ⟨φ, (DFunLike.congr_fun hφ <| AdjoinSimple.gen F x).trans
+    algHomAdjoinIntegralEquiv_symm_apply_gen F ix _⟩
+
+include hS in
 
 Depends on / 依赖: AdjoinSimple, AdjoinSimple.gen, Algebra, Algebra.IsAlgebraic.isAlgebraic, DFunLike, DFunLike.congr_fun, IsAlgebraic, adjoin, adjoin_simple_le_iff, adjoin_simple_le_iff.mpr, algHomAdjoinIntegralEquiv, algHomAdjoinIntegralEquiv_symm_apply_gen, congr_fun, exists_algHom_adjoin_of_splits, isAlgebraic, isAlgebraic_adjoin, isAlgebraic_iff_isIntegral, isIntegral_iff, mem_aroots, mem_aroots.mpr
 -/
@@ -981,7 +1155,7 @@ theorem Algebra.IsAlgebraic.range_eval_eq_rootSet_minpoly_of_splits
   rw [mem_rootSet_of_ne (minpoly.ne_zero (Algebra.IsIntegral.isIntegral x))]
   refine ⟨fun ⟨ψ, hψ⟩ => ?_, fun ha => IntermediateField.exists_algHom_of_splits_of_aeval
     (fun x => ⟨Algebra.IsIntegral.isIntegral x, hA x⟩) ha⟩
-  rw [← hψ]; rw [Polynomial.aeval_algHom_apply ψ x]; rw [minpol
+  rw [← hψ]; rw [Polynomial.aeval_algHom_apply ψ x]; rw [minpoly.aeval]; rw [map_zero]
 
 中文:
 定理 代数.是代数.range_eval_eq_rootSet_minpoly_of_splits
@@ -991,7 +1165,7 @@ theorem Algebra.IsAlgebraic.range_eval_eq_rootSet_minpoly_of_splits
   rw [mem_rootSet_of_ne (minpoly.ne_zero (Algebra.IsIntegral.isIntegral x))]
   refine ⟨fun ⟨ψ, hψ⟩ => ?_, fun ha => IntermediateField.exists_algHom_of_splits_of_aeval
     (fun x => ⟨Algebra.IsIntegral.isIntegral x, hA x⟩) ha⟩
-  rw [← hψ]; rw [Polynomial.aeval_algHom_apply ψ x]; rw [minpol
+  rw [← hψ]; rw [Polynomial.aeval_algHom_apply ψ x]; rw [minpoly.aeval]; rw [map_zero]
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IntermediateField, IntermediateField.exists_algHom_of_splits_of_aeval, IsIntegral, Polynomial, Polynomial.aeval_algHom_apply, aeval_algHom_apply, exists_algHom_of_splits_of_aeval, isIntegral, map_zero, mem_rootSet_of_ne, minpoly, minpoly.aeval, minpoly.ne_zero, ne_zero
 -/

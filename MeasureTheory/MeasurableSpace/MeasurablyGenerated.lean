@@ -115,7 +115,21 @@ theorem measurableSet_generateFrom_singleton_iff
   · rintro ⟨x, rfl⟩
     by_cases hT : True in x
     · by_cases hF : False in x
-      · su
+      · suffices x = univ by grind
+        grind [univ_eq_true_false]
+      · grind
+    · by_cases hF : False in x
+      · grind
+      · suffices x subseteq ∅ by grind
+        intro p hp
+        fin_cases p <;> contradiction
+  · rintro (rfl | rfl | rfl | rfl)
+    on_goal 1 => use ∅
+    on_goal 2 => use {True}
+    on_goal 3 => use {False}
+    on_goal 4 => use Set.univ
+    all_goals
+      simp [compl_def]
 
 中文:
 定理 measurableSet_generateFrom_singleton_iff
@@ -128,7 +142,21 @@ theorem measurableSet_generateFrom_singleton_iff
   · rintro ⟨x, rfl⟩
     by_cases hT : True in x
     · by_cases hF : False in x
-      · su
+      · suffices x = univ by grind
+        grind [univ_eq_true_false]
+      · grind
+    · by_cases hF : False in x
+      · grind
+      · suffices x subseteq ∅ by grind
+        intro p hp
+        fin_cases p <;> contradiction
+  · rintro (rfl | rfl | rfl | rfl)
+    on_goal 1 => use ∅
+    on_goal 2 => use {True}
+    on_goal 3 => use {False}
+    on_goal 4 => use Set.univ
+    all_goals
+      simp [compl_def]
 
 Depends on / 依赖: MeasurableSet, MeasurableSpace, MeasurableSpace.MeasurableSet, MeasurableSpace.comap, MeasurableSpace.generateFrom_singleton, MeasurableSpace.measurableSet_top, fin_cases, generateFrom_singleton, instances, measurableSet_top, on_goal, simp_rw, subseteq, true_and, univ_eq_true_false
 -/
@@ -273,7 +301,7 @@ instance inf_isMeasurablyGenerated
   rcases IsMeasurablyGenerated.exists_measurable_subset hsf with ⟨s'f, hs'f, hmf, hs'sf⟩
   rcases IsMeasurablyGenerated.exists_measurable_subset hsg with ⟨s'g, hs'g, hmg, hs'sg⟩
   refine ⟨s'f inter s'g, inter_mem_inf hs'f hs'g, hmf.inter hmg, ?_⟩
- 
+  exact inter_subset_inter hs'sf hs'sg
 
 中文:
 实例 inf_isMeasurablyGenerated
@@ -284,7 +312,7 @@ instance inf_isMeasurablyGenerated
   rcases IsMeasurablyGenerated.exists_measurable_subset hsf with ⟨s'f, hs'f, hmf, hs'sf⟩
   rcases IsMeasurablyGenerated.exists_measurable_subset hsg with ⟨s'g, hs'g, hmg, hs'sg⟩
   refine ⟨s'f inter s'g, inter_mem_inf hs'f hs'g, hmf.inter hmg, ?_⟩
- 
+  exact inter_subset_inter hs'sf hs'sg
 
 Depends on / 依赖: IsMeasurablyGenerated, IsMeasurablyGenerated.exists_measurable_subset, exists_measurable_subset, hmf.inter, inter_mem_inf, inter_subset_inter
 -/
@@ -311,7 +339,7 @@ theorem principal_isMeasurablyGenerated_iff
   rwa [← this]
 
 alias ⟨_, _root_.MeasurableSet.principal_isMeasurablyGenerated⟩ :=
-  principal_isMeasurablyGenerated_i
+  principal_isMeasurablyGenerated_iff
 
 中文:
 定理 principal_isMeasurablyGenerated_iff
@@ -324,7 +352,7 @@ alias ⟨_, _root_.MeasurableSet.principal_isMeasurablyGenerated⟩ :=
   rwa [← this]
 
 alias ⟨_, _root_.MeasurableSet.principal_isMeasurablyGenerated⟩ :=
-  principal_isMeasurablyGenerated_i
+  principal_isMeasurablyGenerated_iff
 
 Depends on / 依赖: antisymm, hts.antisymm, mem_principal_self
 -/
@@ -351,7 +379,11 @@ instance iInf_isMeasurablyGenerated
   rcases hs with ⟨t, ht, ⟨V, hVf, rfl⟩⟩
   choose U hUf hU using fun i => IsMeasurablyGenerated.exists_measurable_subset (hVf i)
   refine ⟨⋂ i : t, U i, ?_, ?_, ?_⟩
-  · rw [← Equiv.plift.surjective.iInf_comp, 
+  · rw [← Equiv.plift.surjective.iInf_comp, mem_iInf]
+    exact ⟨t, ht, U, hUf, rfl⟩
+  · have := ht.countable.toEncodable.countable
+    exact MeasurableSet.iInter fun i => (hU i).1
+  · exact iInter_mono fun i => (hU i).2
 
 中文:
 实例 iInf_isMeasurablyGenerated
@@ -362,7 +394,11 @@ instance iInf_isMeasurablyGenerated
   rcases hs with ⟨t, ht, ⟨V, hVf, rfl⟩⟩
   choose U hUf hU using fun i => IsMeasurablyGenerated.exists_measurable_subset (hVf i)
   refine ⟨⋂ i : t, U i, ?_, ?_, ?_⟩
-  · rw [← Equiv.plift.surjective.iInf_comp, 
+  · rw [← Equiv.plift.surjective.iInf_comp, mem_iInf]
+    exact ⟨t, ht, U, hUf, rfl⟩
+  · have := ht.countable.toEncodable.countable
+    exact MeasurableSet.iInter fun i => (hU i).1
+  · exact iInter_mono fun i => (hU i).2
 
 Depends on / 依赖: Equiv.plift.surjective.iInf_comp, IsMeasurablyGenerated, IsMeasurablyGenerated.exists_measurable_subset, MeasurableSet, MeasurableSet.iInter, countable, exists_measurable_subset, ht.countable.toEncodable.countable, iInf_comp, iInter, iInter_mono, mem_iInf, surjective, toEncodable
 -/
@@ -395,7 +431,8 @@ lemma measurableSet_tendsto
   rcases (Filter.hasBasis_self.mpr hl'.exists_measurable_subset).exists_antitone_subbasis with
     ⟨v, v_meas, hv⟩
   simp only [hu.tendsto_iff hv.toHasBasis, true_imp_iff, true_and, ofPred_forall, ofPred_exists]
-  exact .iInter fun n => .iUnion fun _ 
+  exact .iInter fun n => .iUnion fun _ => .biInter (to_countable _) fun i _ =>
+    (v_meas n).2.preimage (hf i)
 
 中文:
 引理 measurableSet_tendsto
@@ -405,7 +442,8 @@ lemma measurableSet_tendsto
   rcases (Filter.hasBasis_self.mpr hl'.exists_measurable_subset).exists_antitone_subbasis with
     ⟨v, v_meas, hv⟩
   simp only [hu.tendsto_iff hv.toHasBasis, true_imp_iff, true_and, ofPred_forall, ofPred_exists]
-  exact .iInter fun n => .iUnion fun _ 
+  exact .iInter fun n => .iUnion fun _ => .biInter (to_countable _) fun i _ =>
+    (v_meas n).2.preimage (hf i)
 
 Depends on / 依赖: Filter, Filter.hasBasis_self.mpr, biInter, exists_antitone_basis, exists_antitone_subbasis, exists_measurable_subset, hasBasis_self, hu.tendsto_iff, hv.toHasBasis, iInter, iUnion, l.exists_antitone_basis, ofPred_exists, ofPred_forall, preimage, tendsto_iff, toHasBasis, to_countable, true_and, true_imp_iff
 -/

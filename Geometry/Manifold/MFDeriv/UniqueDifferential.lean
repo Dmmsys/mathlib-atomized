@@ -55,7 +55,9 @@ have := hs.inter' hf.1 (extChartAt_source_mem_nhds (I := I') (f x))
   refine (((hf.2.mono ?sub1).uniqueDiffWithinAt this hd).mono ?sub2).congr_pt ?pt
   case pt => simp only [mfld_simps]
   case sub1 => mfld_set_tac
-  cas
+  case sub2 =>
+    rintro _ ⟨y, ⟨⟨hys, hfy⟩, -⟩, rfl⟩
+    exact ⟨⟨_, hys, ((extChartAt I' (f x)).left_inv hfy).symm⟩, mem_range_self _⟩
 
 中文:
 定理 UniqueMDiffWithinAt.image_denseRange
@@ -66,7 +68,9 @@ have := hs.inter' hf.1 (extChartAt_source_mem_nhds (I := I') (f x))
   refine (((hf.2.mono ?sub1).uniqueDiffWithinAt this hd).mono ?sub2).congr_pt ?pt
   case pt => simp only [mfld_simps]
   case sub1 => mfld_set_tac
-  cas
+  case sub2 =>
+    rintro _ ⟨y, ⟨⟨hys, hfy⟩, -⟩, rfl⟩
+    exact ⟨⟨_, hys, ((extChartAt I' (f x)).left_inv hfy).symm⟩, mem_range_self _⟩
 -/
 theorem UniqueMDiffWithinAt.image_denseRange (hs : UniqueMDiffAt[s] x)
     {f : M -> M'} {f' : E ->L[𝕜] E'} (hf : HasMFDerivAt[s] f x f')
@@ -180,7 +184,8 @@ theorem UniqueMDiffOn.uniqueMDiffOn_target_inter
   -- the local chart at `x`.
   rw [← PartialEquiv.image_source_inter_eq']; rw [inter_comm]; rw [extChartAt_source]
   exact (hs.inter (chartAt H x).open_source).image_denseRange'
-    (fun y hy => hasMFDerivWi
+    (fun y hy => hasMFDerivWithinAt_extChartAt hy.2)
+    fun y hy => ((mdifferentiable_chart _).mfderiv_surjective hy.2).denseRange
 
 中文:
 定理 UniqueMDiffOn.uniqueMDiffOn_target_inter
@@ -190,7 +195,8 @@ theorem UniqueMDiffOn.uniqueMDiffOn_target_inter
   -- the local chart at `x`.
   rw [← PartialEquiv.image_source_inter_eq']; rw [inter_comm]; rw [extChartAt_source]
   exact (hs.inter (chartAt H x).open_source).image_denseRange'
-    (fun y hy => hasMFDerivWi
+    (fun y hy => hasMFDerivWithinAt_extChartAt hy.2)
+    fun y hy => ((mdifferentiable_chart _).mfderiv_surjective hy.2).denseRange
 -/
 theorem UniqueMDiffOn.uniqueMDiffOn_target_inter (hs : UniqueMDiff[s]) (x : M) :
     UniqueMDiff[(extChartAt I x).target inter (extChartAt I x).symm ⁻¹' s] := by
@@ -301,7 +307,29 @@ lemma UniqueMDiffWithinAt.bundle_preimage_aux
   suffices ((extChartAt I p.proj).symm ⁻¹' s inter range I) ×ˢ univ subseteq
       (extChartAt (I.prod 𝓘(𝕜, F)) p).symm ⁻¹' (TotalSpace.proj ⁻¹' s) inter range (I.prod 𝓘(𝕜, F)) by
     let w := (extChartAt (I.prod 𝓘(𝕜, F)) p p).2
-    have A : extChartAt (I.prod 𝓘(𝕜, F)) p p = (extChartAt I p.1 p.1
+    have A : extChartAt (I.prod 𝓘(𝕜, F)) p p = (extChartAt I p.1 p.1, w) := by
+      ext
+      · simp [FiberBundle.chartedSpace_chartAt]
+      · rfl
+    simp only [UniqueMDiffWithinAt, A] at hs ⊢
+    exact (hs.prod (uniqueDiffWithinAt_univ (x := w))).mono this
+  rcases p with ⟨x, v⟩
+  dsimp
+  rintro ⟨z, w⟩ ⟨hz, -⟩
+  simp only [mem_inter_iff, mem_preimage, Function.comp_apply,
+    mem_range] at hz
+  simp only [FiberBundle.chartedSpace_chartAt, OpenPartialHomeomorph.coe_trans_symm, mem_inter_iff,
+    mem_preimage, Function.comp_apply, mem_range]
+  constructor
+  · rw [PartialEquiv.prod_symm, PartialEquiv.refl_symm, PartialEquiv.prod_coe,
+      ModelWithCorners.toPartialEquiv_coe_symm, PartialEquiv.refl_coe,
+      OpenPartialHomeomorph.prod_symm, OpenPartialHomeomorph.refl_symm,
+      OpenPartialHomeomorph.prod_apply, OpenPartialHomeomorph.refl_apply]
+    convert! hz.1
+    apply Trivialization.proj_symm_apply'
+    exact h's hz.1
+  · rcases hz.2 with ⟨u, rfl⟩
+    exact ⟨(u, w), rfl⟩
 
 中文:
 引理 UniqueMDiffWithinAt.bundle_preimage_aux
@@ -310,7 +338,29 @@ lemma UniqueMDiffWithinAt.bundle_preimage_aux
   suffices ((extChartAt I p.proj).symm ⁻¹' s inter range I) ×ˢ univ subseteq
       (extChartAt (I.prod 𝓘(𝕜, F)) p).symm ⁻¹' (TotalSpace.proj ⁻¹' s) inter range (I.prod 𝓘(𝕜, F)) by
     let w := (extChartAt (I.prod 𝓘(𝕜, F)) p p).2
-    have A : extChartAt (I.prod 𝓘(𝕜, F)) p p = (extChartAt I p.1 p.1
+    have A : extChartAt (I.prod 𝓘(𝕜, F)) p p = (extChartAt I p.1 p.1, w) := by
+      ext
+      · simp [FiberBundle.chartedSpace_chartAt]
+      · rfl
+    simp only [UniqueMDiffWithinAt, A] at hs ⊢
+    exact (hs.prod (uniqueDiffWithinAt_univ (x := w))).mono this
+  rcases p with ⟨x, v⟩
+  dsimp
+  rintro ⟨z, w⟩ ⟨hz, -⟩
+  simp only [mem_inter_iff, mem_preimage, Function.comp_apply,
+    mem_range] at hz
+  simp only [FiberBundle.chartedSpace_chartAt, OpenPartialHomeomorph.coe_trans_symm, mem_inter_iff,
+    mem_preimage, Function.comp_apply, mem_range]
+  constructor
+  · rw [PartialEquiv.prod_symm, PartialEquiv.refl_symm, PartialEquiv.prod_coe,
+      ModelWithCorners.toPartialEquiv_coe_symm, PartialEquiv.refl_coe,
+      OpenPartialHomeomorph.prod_symm, OpenPartialHomeomorph.refl_symm,
+      OpenPartialHomeomorph.prod_apply, OpenPartialHomeomorph.refl_apply]
+    convert! hz.1
+    apply Trivialization.proj_symm_apply'
+    exact h's hz.1
+  · rcases hz.2 with ⟨u, rfl⟩
+    exact ⟨(u, w), rfl⟩
 -/
 private lemma UniqueMDiffWithinAt.bundle_preimage_aux {p : TotalSpace F Z}
     (hs : UniqueMDiffAt[s] p.proj) (h's : s subseteq (trivializationAt F Z p.proj).baseSet) :
@@ -353,7 +403,7 @@ theorem UniqueMDiffWithinAt.bundle_preimage
     this.mono (by simp)
   apply UniqueMDiffWithinAt.bundle_preimage_aux (hs.inter _) inter_subset_right
   exact (trivializationAt F Z p.proj).open_baseSet.mem_nhds
-    (FiberBundle.mem_baseSet_trivializatio
+    (FiberBundle.mem_baseSet_trivializationAt' p.proj)
 
 中文:
 定理 UniqueMDiffWithinAt.bundle_preimage
@@ -363,7 +413,7 @@ theorem UniqueMDiffWithinAt.bundle_preimage
     this.mono (by simp)
   apply UniqueMDiffWithinAt.bundle_preimage_aux (hs.inter _) inter_subset_right
   exact (trivializationAt F Z p.proj).open_baseSet.mem_nhds
-    (FiberBundle.mem_baseSet_trivializatio
+    (FiberBundle.mem_baseSet_trivializationAt' p.proj)
 
 Depends on / 依赖: FiberBundle, FiberBundle.mem_baseSet_trivializationAt, UniqueMDiffAt, UniqueMDiffWithinAt, UniqueMDiffWithinAt.bundle_preimage_aux, baseSet, bundle_preimage_aux, hs.inter, inter_subset_right, mem_baseSet_trivializationAt, mem_nhds, open_baseSet, open_baseSet.mem_nhds, p.proj, this.mono, trivializationAt
 -/

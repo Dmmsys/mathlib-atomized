@@ -226,7 +226,12 @@ theorem closure_Ioo
   · rcases hab.lt_or_gt with hab | hab
     · rw [← sdiff_subset_closure_iff, Icc_sdiff_Ioo_same hab.le]
       have hab' : (Ioo a b).Nonempty := nonempty_Ioo.2 hab
-      simp only [insert_subset_iff, singleton_subse
+      simp only [insert_subset_iff, singleton_subset_iff]
+      exact ⟨(isGLB_Ioo hab).mem_closure hab', (isLUB_Ioo hab).mem_closure hab'⟩
+    · rw [Icc_eq_empty_of_lt hab]
+      exact empty_subset _
+
+@[simp]
 
 中文:
 定理 closure_Ioo
@@ -238,7 +243,12 @@ theorem closure_Ioo
   · rcases hab.lt_or_gt with hab | hab
     · rw [← sdiff_subset_closure_iff, Icc_sdiff_Ioo_same hab.le]
       have hab' : (Ioo a b).Nonempty := nonempty_Ioo.2 hab
-      simp only [insert_subset_iff, singleton_subse
+      simp only [insert_subset_iff, singleton_subset_iff]
+      exact ⟨(isGLB_Ioo hab).mem_closure hab', (isLUB_Ioo hab).mem_closure hab'⟩
+    · rw [Icc_eq_empty_of_lt hab]
+      exact empty_subset _
+
+@[simp]
 
 Depends on / 依赖: Icc_eq_empty_of_lt, Icc_sdiff_Ioo_same, Ioo_subset_Icc_self, Nonempty, Subset, Subset.antisymm, antisymm, closure_minimal, empty_subset, hab.le, hab.lt_or_gt, insert_subset_iff, isClosed_Icc, isGLB_Ioo, isLUB_Ioo, lt_or_gt, mem_closure, nonempty_Ioo, sdiff_subset_closure_iff, singleton_subset_iff
 -/
@@ -1300,7 +1310,9 @@ theorem Dense.exists_countable_dense_subset_no_bot_top
   refine ⟨t \ ({ x | IsBot x } union { x | IsTop x }), ?_, ?_, ?_, fun x hx => ?_, fun x hx => ?_⟩
   · exact sdiff_subset.trans hts
   · exact htc.mono sdiff_subset
-  · exact htd.sdiff_finite ((subsingleton_isBot α).finite.union (su
+  · exact htd.sdiff_finite ((subsingleton_isBot α).finite.union (subsingleton_isTop α).finite)
+  · simp [hx]
+  · simp [hx]
 
 中文:
 定理 稠密.存在_countable_dense_subset_no_bot_top
@@ -1310,7 +1322,9 @@ theorem Dense.exists_countable_dense_subset_no_bot_top
   refine ⟨t \ ({ x | IsBot x } union { x | IsTop x }), ?_, ?_, ?_, fun x hx => ?_, fun x hx => ?_⟩
   · exact sdiff_subset.trans hts
   · exact htc.mono sdiff_subset
-  · exact htd.sdiff_finite ((subsingleton_isBot α).finite.union (su
+  · exact htd.sdiff_finite ((subsingleton_isBot α).finite.union (subsingleton_isTop α).finite)
+  · simp [hx]
+  · simp [hx]
 
 Depends on / 依赖: exists_countable_dense_subset, finite, finite.union, hs.exists_countable_dense_subset, htc.mono, htd.sdiff_finite, sdiff_finite, sdiff_subset, sdiff_subset.trans, subsingleton_isBot, subsingleton_isTop
 -/

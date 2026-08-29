@@ -144,7 +144,7 @@ theorem prime_of_mem_primeFactorsList
       have : (k + 2) / m < (k + 2) := factors_lemma
       have h₁ : p = m ∨ p in primeFactorsList ((k + 2) / m) :=
         List.mem_cons.1 (by rwa [primeFactorsList] at h)
-      exact Or.casesOn 
+      exact Or.casesOn h₁ (fun h₂ => h₂.symm ▸ minFac_prime (by simp)) prime_of_mem_primeFactorsList
 
 中文:
 定理 prime_of_mem_primeFactorsList
@@ -160,7 +160,7 @@ theorem prime_of_mem_primeFactorsList
       have : (k + 2) / m < (k + 2) := factors_lemma
       have h₁ : p = m ∨ p in primeFactorsList ((k + 2) / m) :=
         List.mem_cons.1 (by rwa [primeFactorsList] at h)
-      exact Or.casesOn 
+      exact Or.casesOn h₁ (fun h₂ => h₂.symm ▸ minFac_prime (by simp)) prime_of_mem_primeFactorsList
 
 Depends on / 依赖: List.mem_cons, Or.casesOn, casesOn, factors_lemma, mem_cons, minFac, minFac_prime, primeFactorsList, prime_of_mem_primeFactorsList
 -/
@@ -207,7 +207,8 @@ theorem prod_primeFactorsList
     show (primeFactorsList (k + 2)).prod = (k + 2) by
       have h₁ : (k + 2) / m != 0 := fun h => by
         have : (k + 2) = 0 * m := (Nat.div_eq_iff_eq_mul_left (minFac_pos _) (minFac_dvd _)).1 h
-        rw [zero_mul] at this; exact
+        rw [zero_mul] at this; exact (show k + 2 != 0 by simp) this
+      rw [primeFactorsList]; rw [List.prod_cons]; rw [prod_primeFactorsList h₁]; rw [Nat.mul_div_cancel' (minFac_dvd _)]
 
 中文:
 定理 prod_primeFactorsList
@@ -217,7 +218,8 @@ theorem prod_primeFactorsList
     show (primeFactorsList (k + 2)).prod = (k + 2) by
       have h₁ : (k + 2) / m != 0 := fun h => by
         have : (k + 2) = 0 * m := (Nat.div_eq_iff_eq_mul_left (minFac_pos _) (minFac_dvd _)).1 h
-        rw [zero_mul] at this; exact
+        rw [zero_mul] at this; exact (show k + 2 != 0 by simp) this
+      rw [primeFactorsList]; rw [List.prod_cons]; rw [prod_primeFactorsList h₁]; rw [Nat.mul_div_cancel' (minFac_dvd _)]
 
 Depends on / 依赖: minFac
 -/
@@ -283,7 +285,8 @@ theorem isChain_cons_primeFactorsList
       have : (k + 2) / m < (k + 2) := factors_lemma
       rw [primeFactorsList]
       refine List.IsChain.cons_cons
-        ((le_minFac.2 h).resolve_left (by simp)) (isChain_cons_primeFactorsList
+        ((le_minFac.2 h).resolve_left (by simp)) (isChain_cons_primeFactorsList ?_)
+      exact fun p pp d => minFac_le_of_dvd pp.two_le (d.trans <| div_dvd_of_dvd <| minFac_dvd _)
 
 中文:
 定理 isChain_cons_primeFactorsList
@@ -298,7 +301,8 @@ theorem isChain_cons_primeFactorsList
       have : (k + 2) / m < (k + 2) := factors_lemma
       rw [primeFactorsList]
       refine List.IsChain.cons_cons
-        ((le_minFac.2 h).resolve_left (by simp)) (isChain_cons_primeFactorsList
+        ((le_minFac.2 h).resolve_left (by simp)) (isChain_cons_primeFactorsList ?_)
+      exact fun p pp d => minFac_le_of_dvd pp.two_le (d.trans <| div_dvd_of_dvd <| minFac_dvd _)
 
 Depends on / 依赖: IsChain, List.IsChain.cons_cons, cons_cons, d.trans, div_dvd_of_dvd, factors_lemma, isChain_cons_primeFactorsList, le_minFac, minFac, minFac_dvd, minFac_le_of_dvd, pp.two_le, primeFactorsList, resolve_left, two_le
 -/
@@ -909,7 +913,7 @@ theorem dvd_of_primeFactorsList_subperm
   · exact one_dvd _
   use (b.primeFactorsList.diff a.succ.succ.primeFactorsList).prod
   nth_rw 1 [← Nat.prod_primeFactorsList ha]
-  rw [← List.prod_append]; rw [List.Perm.prod_eq Lis
+  rw [← List.prod_append]; rw [List.Perm.prod_eq List.subperm_append_diff_self_of_count_le List.subperm_ext_iff.mp h]; rw [Nat.prod_primeFactorsList hb.ne']
 
 中文:
 定理 dvd_of_primeFactorsList_subperm
@@ -922,7 +926,7 @@ theorem dvd_of_primeFactorsList_subperm
   · exact one_dvd _
   use (b.primeFactorsList.diff a.succ.succ.primeFactorsList).prod
   nth_rw 1 [← Nat.prod_primeFactorsList ha]
-  rw [← List.prod_append]; rw [List.Perm.prod_eq Lis
+  rw [← List.prod_append]; rw [List.Perm.prod_eq List.subperm_append_diff_self_of_count_le List.subperm_ext_iff.mp h]; rw [Nat.prod_primeFactorsList hb.ne']
 
 Depends on / 依赖: List.Perm.prod_eq, List.prod_append, List.subperm_append_diff_self_of_count_le, List.subperm_ext_iff.mp, Nat.prod_primeFactorsList, a.succ.succ.primeFactorsList, b.eq_zero_or_pos, b.primeFactorsList.diff, dvd_zero, eq_zero_or_pos, hb.ne, nth_rw, one_dvd, primeFactorsList, prod_append, prod_eq, prod_primeFactorsList, subperm_append_diff_self_of_count_le, subperm_ext_iff
 -/
@@ -953,7 +957,9 @@ theorem replicate_subperm_primeFactorsList_iff
       rw [← Nat.prod_primeFactorsList hb]; rw [← hu1.prod_eq]; rw [← prod_replicate]
       exact hu2.prod_dvd_prod
     · rintro ⟨c, rfl⟩
-      rw [Ne]; rw [po
+      rw [Ne]; rw [pow_succ']; rw [mul_assoc]; rw [mul_eq_zero]; rw [_root_.not_or] at hb
+      rw [pow_succ']; rw [mul_assoc]; rw [replicate_succ]; rw [(Nat.perm_primeFactorsList_mul hb.1 hb.2).subperm_left]; rw [primeFactorsList_prime ha]; rw [singleton_append]; rw [subperm_cons]; rw [ih hb.2]
+      exact dvd_mul_right _ _
 
 中文:
 定理 replicate_subperm_primeFactorsList_iff
@@ -968,7 +974,9 @@ theorem replicate_subperm_primeFactorsList_iff
       rw [← Nat.prod_primeFactorsList hb]; rw [← hu1.prod_eq]; rw [← prod_replicate]
       exact hu2.prod_dvd_prod
     · rintro ⟨c, rfl⟩
-      rw [Ne]; rw [po
+      rw [Ne]; rw [pow_succ']; rw [mul_assoc]; rw [mul_eq_zero]; rw [_root_.not_or] at hb
+      rw [pow_succ']; rw [mul_assoc]; rw [replicate_succ]; rw [(Nat.perm_primeFactorsList_mul hb.1 hb.2).subperm_left]; rw [primeFactorsList_prime ha]; rw [singleton_append]; rw [subperm_cons]; rw [ih hb.2]
+      exact dvd_mul_right _ _
 
 Depends on / 依赖: List.subperm_iff, Nat.perm_primeFactorsList_mul, Nat.prod_primeFactorsList, _root_, _root_.not_or, generalizing, hu1.prod_eq, hu2.prod_dvd_prod, mul_assoc, mul_eq_zero, not_or, perm_primeFactorsList_mul, pow_succ, primeFactorsList_prime, prod_dvd_prod, prod_eq, prod_primeFactorsList, prod_replicate, replicate_succ, singleton_append
 -/
@@ -1142,7 +1150,7 @@ theorem eq_two_pow_or_exists_odd_prime_and_dvd
     or_iff_not_imp_right.mpr fun H =>
       ⟨n.primeFactorsList.length,
         eq_prime_pow_of_unique_prime_dvd hn fun {_} hprime hdvd =>
-          hprime.eq_two_or_odd'.resolve_right fun hodd => H ⟨_,
+          hprime.eq_two_or_odd'.resolve_right fun hodd => H ⟨_, hprime, hdvd, hodd⟩⟩
 
 中文:
 定理 eq_two_pow_or_存在_odd_prime_and_dvd
@@ -1151,7 +1159,7 @@ theorem eq_two_pow_or_exists_odd_prime_and_dvd
     or_iff_not_imp_right.mpr fun H =>
       ⟨n.primeFactorsList.length,
         eq_prime_pow_of_unique_prime_dvd hn fun {_} hprime hdvd =>
-          hprime.eq_two_or_odd'.resolve_right fun hodd => H ⟨_,
+          hprime.eq_two_or_odd'.resolve_right fun hodd => H ⟨_, hprime, hdvd, hodd⟩⟩
 
 Depends on / 依赖: Or.inr, dvd_zero, eq_or_ne, eq_prime_pow_of_unique_prime_dvd, eq_two_or_odd, hn.symm, hprime, hprime.eq_two_or_odd, length, n.primeFactorsList.length, or_iff_not_imp_right, or_iff_not_imp_right.mpr, primeFactorsList, prime_three, resolve_right
 -/

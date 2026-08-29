@@ -45,7 +45,12 @@ definition mapCoeffs
     dsimp
     induction p using Polynomial.induction_on' with
     | add => simp only [add_mul, map_add, add_smul, smul_add, add_add_add_comm, *]
-    | 
+    | monomial n a =>
+      induction q using Polynomial.induction_on' with
+      | add => simp only [mul_add, map_add, add_smul, smul_add, add_add_add_comm, *]
+      | monomial m b => ext; simp [Polynomial.monomial_mul_monomial, add_comm]
+
+@[simp]
 
 中文:
 定义 mapCoeffs
@@ -57,7 +62,12 @@ definition mapCoeffs
     dsimp
     induction p using Polynomial.induction_on' with
     | add => simp only [add_mul, map_add, add_smul, smul_add, add_add_add_comm, *]
-    | 
+    | monomial n a =>
+      induction q using Polynomial.induction_on' with
+      | add => simp only [mul_add, map_add, add_smul, smul_add, add_add_add_comm, *]
+      | monomial m b => ext; simp [Polynomial.monomial_mul_monomial, add_comm]
+
+@[simp]
 
 Depends on / 依赖: PolynomialModule, PolynomialModule.map, d.toLinearMap, toLinearMap
 -/
@@ -178,7 +188,8 @@ theorem apply_aeval_eq'
   | monomial =>
     simp only [aeval_monomial, leibniz, leibniz_pow, mapCoeffs_monomial,
       PolynomialModule.map_single, PolynomialModule.eval_single, derivative_monomial, map_mul,
-      _root_
+      _root_.map_natCast, h]
+    rw [add_comm]; rw [← smul_smul]; rw [← smul_smul]; rw [Nat.cast_smul_eq_nsmul]
 
 中文:
 定理 apply_aeval_eq'
@@ -189,7 +200,8 @@ theorem apply_aeval_eq'
   | monomial =>
     simp only [aeval_monomial, leibniz, leibniz_pow, mapCoeffs_monomial,
       PolynomialModule.map_single, PolynomialModule.eval_single, derivative_monomial, map_mul,
-      _root_
+      _root_.map_natCast, h]
+    rw [add_comm]; rw [← smul_smul]; rw [← smul_smul]; rw [Nat.cast_smul_eq_nsmul]
 
 Depends on / 依赖: Nat.cast_smul_eq_nsmul, Polynomial, Polynomial.induction_on, PolynomialModule, PolynomialModule.eval_single, PolynomialModule.map_single, _root_, _root_.map_natCast, add_comm, add_smul, aeval_monomial, cast_smul_eq_nsmul, derivative_monomial, eval_single, induction_on, leibniz, leibniz_pow, mapCoeffs_monomial, map_add, map_mul
 -/
@@ -504,7 +516,14 @@ lemma algHom_deriv
   · rw [Polynomial.aeval_algHom]
     simp only [AlgHom.coe_comp, Function.comp_apply, ne_eq, map_eq_zero_iff f hf]
     apply Separable.aeval_derivative_ne_zero h (minpoly.aeval A x)
-  conv => lhs; rw [Polynomial.aev
+  conv => lhs; rw [Polynomial.aeval_algHom]
+  simp only [AlgHom.coe_comp, Function.comp_apply, ← map_mul]
+  apply add_left_cancel (a := aeval (f x) (mapCoeffs p))
+  rw [← deriv_aeval_eq]
+  simp only [aeval_algHom, AlgHom.coe_comp, Function.comp_apply, ← map_add, ← deriv_aeval_eq,
+    minpoly.aeval, map_zero, p]
+
+omit [Nontrivial R] in
 
 中文:
 引理 algHom_deriv
@@ -515,7 +534,14 @@ lemma algHom_deriv
   · rw [Polynomial.aeval_algHom]
     simp only [AlgHom.coe_comp, Function.comp_apply, ne_eq, map_eq_zero_iff f hf]
     apply Separable.aeval_derivative_ne_zero h (minpoly.aeval A x)
-  conv => lhs; rw [Polynomial.aev
+  conv => lhs; rw [Polynomial.aeval_algHom]
+  simp only [AlgHom.coe_comp, Function.comp_apply, ← map_mul]
+  apply add_left_cancel (a := aeval (f x) (mapCoeffs p))
+  rw [← deriv_aeval_eq]
+  simp only [aeval_algHom, AlgHom.coe_comp, Function.comp_apply, ← map_add, ← deriv_aeval_eq,
+    minpoly.aeval, map_zero, p]
+
+omit [Nontrivial R] in
 
 Depends on / 依赖: AlgHom, AlgHom.coe_comp, Function, Function.comp_apply, Polynomial, Polynomial.aeval_algHom, Separable, Separable.aeval_derivative_ne_zero, add_left_cancel, aeval_algHom, aeval_derivative_ne_zero, coe_comp, comp_apply, deriv_aeval_eq, derivative, mapCoeffs, map_eq_zero_iff, map_mul, minpoly, minpoly.aeval
 -/

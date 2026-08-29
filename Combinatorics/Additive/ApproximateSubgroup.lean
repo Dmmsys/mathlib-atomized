@@ -201,7 +201,10 @@ lemma card_pow_le
       (#(A ^ (n + 2)) : Real) <= #(F ^ (n + 1) * A) := by
         gcongr; exact mod_cast Set.pow_subset_pow_mul_of_sq_subset_mul hSF (by lia)
       _ <= #(F ^ (n + 1)) * #A := mod_cast Finset.card_mul_le
-      _ <= #F ^ (n + 1) * #A := by gcongr; exact mod_cast Finset.card_p
+      _ <= #F ^ (n + 1) * #A := by gcongr; exact mod_cast Finset.card_pow_le
+      _ <= K ^ (n + 1) * #A := by gcongr
+
+@[to_additive]
 
 中文:
 引理 card_pow_le
@@ -211,7 +214,10 @@ lemma card_pow_le
       (#(A ^ (n + 2)) : Real) <= #(F ^ (n + 1) * A) := by
         gcongr; exact mod_cast Set.pow_subset_pow_mul_of_sq_subset_mul hSF (by lia)
       _ <= #(F ^ (n + 1)) * #A := mod_cast Finset.card_mul_le
-      _ <= #F ^ (n + 1) * #A := by gcongr; exact mod_cast Finset.card_p
+      _ <= #F ^ (n + 1) * #A := by gcongr; exact mod_cast Finset.card_pow_le
+      _ <= K ^ (n + 1) * #A := by gcongr
+
+@[to_additive]
 
 Depends on / 依赖: hA.sq_covBySMul, sq_covBySMul
 -/
@@ -267,7 +273,10 @@ lemma image
     · calc
         (#(F.image f) : Real) <= #F := mod_cast F.card_image_le
         _ <= K := hF
-    · sim
+    · simp only [← Set.image_pow, Finset.coe_image, ← Set.image_mul, smul_eq_mul] at hAF ⊢
+      gcongr
+
+@[to_additive]
 
 中文:
 引理 像
@@ -281,7 +290,10 @@ lemma image
     · calc
         (#(F.image f) : Real) <= #F := mod_cast F.card_image_le
         _ <= K := hF
-    · sim
+    · simp only [← Set.image_pow, Finset.coe_image, ← Set.image_mul, smul_eq_mul] at hAF ⊢
+      gcongr
+
+@[to_additive]
 
 Depends on / 依赖: hA.one_mem, map_one, one_mem
 -/
@@ -339,7 +351,9 @@ lemma of_small_tripling
     replace hA := calc (#(A ^ 4 * A) : Real)
       _ = #(A ^ 5) := by rw [← pow_succ]
       _ <= K ^ 3 * #A := small_pow_of_small_tripling (by lia) hA hAsymm
-    have h
+    have hA₀ : A.Nonempty := ⟨1, hA₁⟩
+    obtain ⟨F, -, hF, hAF⟩ := ruzsa_covering_mul hA₀ hA
+    exact ⟨F, hF, by norm_cast; simpa [div_eq_mul_inv, pow_succ, mul_assoc, hAsymm] using hAF⟩
 
 中文:
 引理 of_small_tripling
@@ -350,7 +364,9 @@ lemma of_small_tripling
     replace hA := calc (#(A ^ 4 * A) : Real)
       _ = #(A ^ 5) := by rw [← pow_succ]
       _ <= K ^ 3 * #A := small_pow_of_small_tripling (by lia) hA hAsymm
-    have h
+    have hA₀ : A.Nonempty := ⟨1, hA₁⟩
+    obtain ⟨F, -, hF, hAF⟩ := ruzsa_covering_mul hA₀ hA
+    exact ⟨F, hF, by norm_cast; simpa [div_eq_mul_inv, pow_succ, mul_assoc, hAsymm] using hAF⟩
 
 Depends on / 依赖: A.Nonempty, Nonempty, Set.mul_mem_mul, coe_inv, div_eq_mul_inv, hAsymm, inv_eq_self, inv_pow, mul_assoc, mul_mem_mul, one_mul, pow_succ, replace, ruzsa_covering_mul, small_pow_of_small_tripling, sq_covBySMul
 -/
@@ -381,7 +397,21 @@ lemma pow_inter_pow_covBySMul_sq_inter_sq
   choose f hf using exists_smul_inter_smul_subset_smul_inv_mul_inter_inv_mul A B
   refine ⟨.image₂ f (F₁ ^ (m - 1)) (F₂ ^ (n - 1)), ?_, ?_⟩
   · calc
-      (#(.image₂ f (F₁ ^ (m 
+      (#(.image₂ f (F₁ ^ (m - 1)) (F₂ ^ (n - 1))) : Real)
+      _ <= #(F₁ ^ (m - 1)) * #(F₂ ^ (n - 1)) := mod_cast Finset.card_image₂_le ..
+      _ <= #F₁ ^ (m - 1) * #F₂ ^ (n - 1) := by gcongr <;> exact mod_cast Finset.card_pow_le
+      _ <= K ^ (m - 1) * L ^ (n - 1) := by gcongr
+  · calc
+      A ^ m inter B ^ n subseteq (F₁ ^ (m - 1) * A) inter (F₂ ^ (n - 1) * B) := by
+        gcongr <;> apply pow_subset_pow_mul_of_sq_subset_mul <;> norm_cast <;> lia
+      _ = ⋃ (a in F₁ ^ (m - 1)) (b in F₂ ^ (n - 1)), a • A inter b • B := by
+        simp_rw [← smul_eq_mul, ← iUnion_smul_set, iUnion₂_inter_iUnion₂]; norm_cast
+      _ subseteq ⋃ (a in F₁ ^ (m - 1)) (b in F₂ ^ (n - 1)), f a b • (A⁻¹ * A inter (B⁻¹ * B)) := by
+        gcongr; exact hf ..
+      _ = (Finset.image₂ f (F₁ ^ (m - 1)) (F₂ ^ (n - 1))) * (A ^ 2 inter B ^ 2) := by
+        simp_rw [hA.inv_eq_self, hB.inv_eq_self, ← sq]
+        rw [Finset.coe_image₂]; rw [← smul_eq_mul]; rw [← iUnion_smul_set]; rw [biUnion_image2]
+        simp_rw [Finset.mem_coe]
 
 中文:
 引理 pow_inter_pow_covBySMul_sq_inter_sq
@@ -393,7 +423,21 @@ lemma pow_inter_pow_covBySMul_sq_inter_sq
   choose f hf using exists_smul_inter_smul_subset_smul_inv_mul_inter_inv_mul A B
   refine ⟨.image₂ f (F₁ ^ (m - 1)) (F₂ ^ (n - 1)), ?_, ?_⟩
   · calc
-      (#(.image₂ f (F₁ ^ (m 
+      (#(.image₂ f (F₁ ^ (m - 1)) (F₂ ^ (n - 1))) : Real)
+      _ <= #(F₁ ^ (m - 1)) * #(F₂ ^ (n - 1)) := mod_cast Finset.card_image₂_le ..
+      _ <= #F₁ ^ (m - 1) * #F₂ ^ (n - 1) := by gcongr <;> exact mod_cast Finset.card_pow_le
+      _ <= K ^ (m - 1) * L ^ (n - 1) := by gcongr
+  · calc
+      A ^ m inter B ^ n subseteq (F₁ ^ (m - 1) * A) inter (F₂ ^ (n - 1) * B) := by
+        gcongr <;> apply pow_subset_pow_mul_of_sq_subset_mul <;> norm_cast <;> lia
+      _ = ⋃ (a in F₁ ^ (m - 1)) (b in F₂ ^ (n - 1)), a • A inter b • B := by
+        simp_rw [← smul_eq_mul, ← iUnion_smul_set, iUnion₂_inter_iUnion₂]; norm_cast
+      _ subseteq ⋃ (a in F₁ ^ (m - 1)) (b in F₂ ^ (n - 1)), f a b • (A⁻¹ * A inter (B⁻¹ * B)) := by
+        gcongr; exact hf ..
+      _ = (Finset.image₂ f (F₁ ^ (m - 1)) (F₂ ^ (n - 1))) * (A ^ 2 inter B ^ 2) := by
+        simp_rw [hA.inv_eq_self, hB.inv_eq_self, ← sq]
+        rw [Finset.coe_image₂]; rw [← smul_eq_mul]; rw [← iUnion_smul_set]; rw [biUnion_image2]
+        simp_rw [Finset.mem_coe]
 
 Depends on / 依赖: Finset, Finset.card_image, Finset.card_pow_le, card_pow_le, classical, exists_smul_inter_smul_subset_smul_inv_mul_inter_inv_mul, hA.one_le, hA.sq_covBySMul, hB.sq_covBySMul, mod_cast, one_le, sq_covBySMul
 -/
@@ -436,7 +480,9 @@ lemma pow_inter_pow
   sq_covBySMul := by
     refine (hA.pow_inter_pow_covBySMul_sq_inter_sq hB (by lia) (by lia)).subset ?_
       (by gcongr; exacts [hA.one_mem, hB.one_mem])
-    c
+    calc
+      (A ^ m inter B ^ n) ^ 2 subseteq (A ^ m) ^ 2 inter (B ^ n) ^ 2 := Set.inter_pow_subset
+      _ = A ^ (2 * m) inter B ^ (2 * n) := by simp [pow_mul']
 
 中文:
 引理 pow_inter_pow
@@ -446,7 +492,9 @@ lemma pow_inter_pow
   sq_covBySMul := by
     refine (hA.pow_inter_pow_covBySMul_sq_inter_sq hB (by lia) (by lia)).subset ?_
       (by gcongr; exacts [hA.one_mem, hB.one_mem])
-    c
+    calc
+      (A ^ m inter B ^ n) ^ 2 subseteq (A ^ m) ^ 2 inter (B ^ n) ^ 2 := Set.inter_pow_subset
+      _ = A ^ (2 * m) inter B ^ (2 * n) := by simp [pow_mul']
 
 Depends on / 依赖: Set.one_mem_pow, hA.one_mem, hB.one_mem, one_mem, one_mem_pow
 -/
@@ -482,7 +530,25 @@ lemma isApproximateSubgroup_one
           inv_mem' hx := by rwa [← hA.inv_eq_self, inv_mem_inv]
           mul_mem' hx hy := this (mul_mem_mul hx hy) }
       ⟨H, rfl⟩
-    obtain ⟨x, hx⟩ : exists x : G, A * A sub
+    obtain ⟨x, hx⟩ : exists x : G, A * A subseteq x • A := by
+      obtain ⟨K, hK, hKA⟩ := hA.sq_covBySMul
+      simp only [Nat.cast_le_one, Finset.card_le_one_iff_subset_singleton,
+        Finset.subset_singleton_iff] at hK
+      obtain ⟨x, rfl | rfl⟩ := hK
+      · simp [hA.nonempty.ne_empty] at hKA
+      · rw [Finset.coe_singleton, singleton_smul, sq] at hKA
+        use x
+    have hx' : x⁻¹ • (A * A) subseteq A := by rwa [← subset_smul_set_iff]
+    have hx_inv : x⁻¹ in A := by
+      simpa using hx' (smul_mem_smul_set (mul_mem_mul hA.one_mem hA.one_mem))
+    have hx_sq : x * x in A := by
+      rw [← hA.inv_eq_self]
+      simpa using hx' (smul_mem_smul_set (mul_mem_mul hx_inv hA.one_mem))
+    calc A * A subseteq x • A := by assumption
+      _ = x⁻¹ • (x * x) • A := by simp [smul_smul]
+      _ subseteq x⁻¹ • (A • A) := smul_set_mono (smul_set_subset_smul hx_sq)
+      _ subseteq A := hx'
+  mpr := by rintro ⟨H, rfl⟩; exact .subgroup
 
 中文:
 引理 isApproximateSubgroup_one
@@ -495,7 +561,25 @@ lemma isApproximateSubgroup_one
           inv_mem' hx := by rwa [← hA.inv_eq_self, inv_mem_inv]
           mul_mem' hx hy := this (mul_mem_mul hx hy) }
       ⟨H, rfl⟩
-    obtain ⟨x, hx⟩ : exists x : G, A * A sub
+    obtain ⟨x, hx⟩ : exists x : G, A * A subseteq x • A := by
+      obtain ⟨K, hK, hKA⟩ := hA.sq_covBySMul
+      simp only [Nat.cast_le_one, Finset.card_le_one_iff_subset_singleton,
+        Finset.subset_singleton_iff] at hK
+      obtain ⟨x, rfl | rfl⟩ := hK
+      · simp [hA.nonempty.ne_empty] at hKA
+      · rw [Finset.coe_singleton, singleton_smul, sq] at hKA
+        use x
+    have hx' : x⁻¹ • (A * A) subseteq A := by rwa [← subset_smul_set_iff]
+    have hx_inv : x⁻¹ in A := by
+      simpa using hx' (smul_mem_smul_set (mul_mem_mul hA.one_mem hA.one_mem))
+    have hx_sq : x * x in A := by
+      rw [← hA.inv_eq_self]
+      simpa using hx' (smul_mem_smul_set (mul_mem_mul hx_inv hA.one_mem))
+    calc A * A subseteq x • A := by assumption
+      _ = x⁻¹ • (x * x) • A := by simp [smul_smul]
+      _ subseteq x⁻¹ • (A • A) := smul_set_mono (smul_set_subset_smul hx_sq)
+      _ subseteq A := hx'
+  mpr := by rintro ⟨H, rfl⟩; exact .subgroup
 
 Depends on / 依赖: Finset, Finset.card_le_one_iff_subset_singleton, Finset.coe_singleton, Finset.subset_singleton_iff, Nat.cast_le_one, Subgroup, card_le_one_iff_subset_singleton, carrier, cast_le_one, coe_singleton, hA.inv_eq_self, hA.nonempty.ne_empty, hA.one_mem, hA.sq_covBySMul, inv_eq_self, inv_mem, inv_mem_inv, mul_mem, mul_mem_mul, ne_empty
 -/

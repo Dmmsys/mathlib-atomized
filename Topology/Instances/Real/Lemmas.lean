@@ -41,7 +41,9 @@ theorem Real.isTopologicalBasis_Ioo_rat
     let ⟨q, hlq, hqa⟩ := exists_rat_btwn hl
     let ⟨p, hap, hpu⟩ := exists_rat_btwn hu
     ⟨Ioo q p, by
-      simp 
+      simp only [mem_iUnion]
+exact ⟨q, p, Rat.cast_lt.1 hqa.trans hap, rfl⟩, ⟨hqa, hap⟩, fun _ ⟨hqa', ha'p⟩ =>
+      h ⟨hlq.trans hqa', ha'p.trans hpu⟩⟩
 
 中文:
 定理 实数.isTopologicalBasis_Ioo_rat
@@ -51,7 +53,9 @@ theorem Real.isTopologicalBasis_Ioo_rat
     let ⟨q, hlq, hqa⟩ := exists_rat_btwn hl
     let ⟨p, hap, hpu⟩ := exists_rat_btwn hu
     ⟨Ioo q p, by
-      simp 
+      simp only [mem_iUnion]
+exact ⟨q, p, Rat.cast_lt.1 hqa.trans hap, rfl⟩, ⟨hqa, hap⟩, fun _ ⟨hqa', ha'p⟩ =>
+      h ⟨hlq.trans hqa', ha'p.trans hpu⟩⟩
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, Rat.cast_lt, cast_lt, contextual, exists_rat_btwn, hlq.trans, hqa.trans, isOpen_Ioo, isTopologicalBasis_of_isOpen_of_nhds, mem_iUnion, mem_nhds, mem_nhds_iff_exists_Ioo_subset, mem_nhds_iff_exists_Ioo_subset.mp, p.trans
 -/
@@ -287,7 +291,14 @@ theorem closure_ordConnected_inter_rat
     Real.mem_closure_iff.mpr fun ε ε_pos => by
       have ⟨z, hz, ne⟩ := nt.exists_ne x
       refine ne.lt_or_gt.elim (fun lt => ?_) fun lt => ?_
-      · have ⟨q, h₁, h₂⟩ := exists_rat_btwn (max_lt lt (sub_
+      · have ⟨q, h₁, h₂⟩ := exists_rat_btwn (max_lt lt (sub_lt_self x ε_pos))
+        rw [max_lt_iff] at h₁
+        refine ⟨q, ⟨conn.out hz hx ⟨h₁.1.le, h₂.le⟩, q, rfl⟩, ?_⟩
+        simpa only [abs_sub_comm, abs_of_pos (sub_pos.mpr h₂), sub_lt_comm] using h₁.2
+      · have ⟨q, h₁, h₂⟩ := exists_rat_btwn (lt_min lt (lt_add_of_pos_right x ε_pos))
+        rw [lt_min_iff] at h₂
+        refine ⟨q, ⟨conn.out hx hz ⟨h₁.le, h₂.1.le⟩, q, rfl⟩, ?_⟩
+        simpa only [abs_of_pos (sub_pos.2 h₁), sub_lt_iff_lt_add'] using h₂.2
 
 中文:
 定理 closure_ordConnected_inter_rat
@@ -296,7 +307,14 @@ theorem closure_ordConnected_inter_rat
     Real.mem_closure_iff.mpr fun ε ε_pos => by
       have ⟨z, hz, ne⟩ := nt.exists_ne x
       refine ne.lt_or_gt.elim (fun lt => ?_) fun lt => ?_
-      · have ⟨q, h₁, h₂⟩ := exists_rat_btwn (max_lt lt (sub_
+      · have ⟨q, h₁, h₂⟩ := exists_rat_btwn (max_lt lt (sub_lt_self x ε_pos))
+        rw [max_lt_iff] at h₁
+        refine ⟨q, ⟨conn.out hz hx ⟨h₁.1.le, h₂.le⟩, q, rfl⟩, ?_⟩
+        simpa only [abs_sub_comm, abs_of_pos (sub_pos.mpr h₂), sub_lt_comm] using h₁.2
+      · have ⟨q, h₁, h₂⟩ := exists_rat_btwn (lt_min lt (lt_add_of_pos_right x ε_pos))
+        rw [lt_min_iff] at h₂
+        refine ⟨q, ⟨conn.out hx hz ⟨h₁.le, h₂.1.le⟩, q, rfl⟩, ?_⟩
+        simpa only [abs_of_pos (sub_pos.2 h₁), sub_lt_iff_lt_add'] using h₂.2
 
 Depends on / 依赖: Real.mem_closure_iff.mpr, abs_of_pos, abs_sub_comm, antisymm, closure_mono, closure_subset_iff, conn.out, exists_ne, exists_rat_btwn, inter_subset_left, isClosed_closure, isClosed_closure.closure_subset_iff.mpr, lt_min, lt_or_gt, max_lt, max_lt_iff, mem_closure_iff, ne.lt_or_gt.elim, nt.exists_ne, sub_lt_comm
 -/
@@ -328,7 +346,7 @@ theorem closure_of_rat_image_lt
   · exact ⟨q + 1, show (q : Real) < _ by linarith, q + 2, show (q : Real) < _ by linarith, by simp⟩
 
 @[deprecated (since := "2026-04-07")]
-alias Real.cobounded
+alias Real.cobounded_eq := IsOrderBornology.cobounded_eq
 
 中文:
 定理 closure_of_rat_image_lt
@@ -340,7 +358,7 @@ alias Real.cobounded
   · exact ⟨q + 1, show (q : Real) < _ by linarith, q + 2, show (q : Real) < _ by linarith, by simp⟩
 
 @[deprecated (since := "2026-04-07")]
-alias Real.cobounded
+alias Real.cobounded_eq := IsOrderBornology.cobounded_eq
 
 Depends on / 依赖: closure_Ioi, closure_ordConnected_inter_rat, convert, ordConnected_Ioi
 -/

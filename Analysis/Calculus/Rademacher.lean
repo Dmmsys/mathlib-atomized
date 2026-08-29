@@ -92,7 +92,16 @@ theorem ae_lineDifferentiableAt
   let L : Real ->L[Real] E := ContinuousLinearMap.smulRight (1 : Real ->L[Real] Real) v
   suffices A : forall p, forallᵐ (t : Real) ∂volume, LineDifferentiableAt Real f (p + t • v) v from
     ae_mem_of_ae_add_linearMap_mem L.toLinearMap volume μ
-      (measurableSet_lineDifferentiableAt hf.contin
+      (measurableSet_lineDifferentiableAt hf.continuous) A
+  intro p
+  have : forallᵐ (s : Real), DifferentiableAt Real (fun t => f (p + t • v)) s :=
+    (hf.comp ((LipschitzWith.const p).add L.lipschitz)).ae_differentiableAt_real
+  filter_upwards [this] with s hs
+  have h's : DifferentiableAt Real (fun t => f (p + t • v)) (s + 0) := by simpa using hs
+  have : DifferentiableAt Real (fun t => s + t) 0 := differentiableAt_id.const_add _
+  simp only [LineDifferentiableAt]
+  convert! h's.comp 0 this with _ t
+  simp only [add_assoc, Function.comp_apply, add_smul]
 
 中文:
 定理 ae_lineDifferentiableAt
@@ -100,7 +109,16 @@ theorem ae_lineDifferentiableAt
   let L : Real ->L[Real] E := ContinuousLinearMap.smulRight (1 : Real ->L[Real] Real) v
   suffices A : forall p, forallᵐ (t : Real) ∂volume, LineDifferentiableAt Real f (p + t • v) v from
     ae_mem_of_ae_add_linearMap_mem L.toLinearMap volume μ
-      (measurableSet_lineDifferentiableAt hf.contin
+      (measurableSet_lineDifferentiableAt hf.continuous) A
+  intro p
+  have : forallᵐ (s : Real), DifferentiableAt Real (fun t => f (p + t • v)) s :=
+    (hf.comp ((LipschitzWith.const p).add L.lipschitz)).ae_differentiableAt_real
+  filter_upwards [this] with s hs
+  have h's : DifferentiableAt Real (fun t => f (p + t • v)) (s + 0) := by simpa using hs
+  have : DifferentiableAt Real (fun t => s + t) 0 := differentiableAt_id.const_add _
+  simp only [LineDifferentiableAt]
+  convert! h's.comp 0 this with _ t
+  simp only [add_assoc, Function.comp_apply, add_smul]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.smulRight, DifferentiableAt, L.lipschitz, L.toLinearMap, LineDifferentiableAt, LipschitzWith, LipschitzWith.const, ae_differentiableAt_real, ae_mem_of_ae_add_linearMap_mem, continuous, filter_upwards, hf.comp, hf.continuous, lipschitz, measurableSet_lineDifferentiableAt, smulRight, toLinearMap, volume
 -/
@@ -151,7 +169,19 @@ theorem integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul
   · filter_upwards with t
     apply AEStronglyMeasurable.mul ?_ hg.aestronglyMeasurable
     apply aestronglyMeasurable_const.fun_smul
-    apply AEStronglyMeasurable.sub _ hf.continuous.measurable.aestronglyMeasu
+    apply AEStronglyMeasurable.sub _ hf.continuous.measurable.aestronglyMeasurable
+    apply AEMeasurable.aestronglyMeasurable
+    exact hf.continuous.measurable.comp_aemeasurable' (aemeasurable_id'.add_const _)
+  · filter_upwards [self_mem_nhdsWithin] with t (ht : 0 < t)
+    filter_upwards with x
+    calc ‖t⁻¹ • (f (x + t • v) - f x) * g x‖
+      = (t⁻¹ * ‖f (x + t • v) - f x‖) * ‖g x‖ := by simp [norm_mul, ht.le]
+    _ <= (t⁻¹ * (C * ‖(x + t • v) - x‖)) * ‖g x‖ := by
+      gcongr; exact LipschitzWith.norm_sub_le hf (x + t • v) x
+    _ = (C * ‖v‖) * ‖g x‖ := by simp [field, norm_smul, abs_of_nonneg ht.le]
+  · exact hg.norm.const_mul _
+  · filter_upwards [hf.ae_lineDifferentiableAt v] with x hx
+    exact hx.hasLineDerivAt.tendsto_slope_zero_right.mul tendsto_const_nhds
 
 中文:
 定理 integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul
@@ -160,7 +190,19 @@ theorem integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul
   · filter_upwards with t
     apply AEStronglyMeasurable.mul ?_ hg.aestronglyMeasurable
     apply aestronglyMeasurable_const.fun_smul
-    apply AEStronglyMeasurable.sub _ hf.continuous.measurable.aestronglyMeasu
+    apply AEStronglyMeasurable.sub _ hf.continuous.measurable.aestronglyMeasurable
+    apply AEMeasurable.aestronglyMeasurable
+    exact hf.continuous.measurable.comp_aemeasurable' (aemeasurable_id'.add_const _)
+  · filter_upwards [self_mem_nhdsWithin] with t (ht : 0 < t)
+    filter_upwards with x
+    calc ‖t⁻¹ • (f (x + t • v) - f x) * g x‖
+      = (t⁻¹ * ‖f (x + t • v) - f x‖) * ‖g x‖ := by simp [norm_mul, ht.le]
+    _ <= (t⁻¹ * (C * ‖(x + t • v) - x‖)) * ‖g x‖ := by
+      gcongr; exact LipschitzWith.norm_sub_le hf (x + t • v) x
+    _ = (C * ‖v‖) * ‖g x‖ := by simp [field, norm_smul, abs_of_nonneg ht.le]
+  · exact hg.norm.const_mul _
+  · filter_upwards [hf.ae_lineDifferentiableAt v] with x hx
+    exact hx.hasLineDerivAt.tendsto_slope_zero_right.mul tendsto_const_nhds
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.aestronglyMeasurable, AEStronglyMeasurable, AEStronglyMeasurable.mul, AEStronglyMeasurable.sub, add_const, aemeasurable_id, aestronglyMeasurable, aestronglyMeasurable_const, aestronglyMeasurable_const.fun_smul, comp_aemeasurable, continuous, filter_upwards, fun_smul, hf.continuous.measurable.aestronglyMeasurable, hf.continuous.measurable.comp_aemeasurable, hg.aestronglyMeasurable, measurable, self_mem_nhdsWithin, tendsto_integral_filter_of_dominated_convergence
 -/
@@ -198,7 +240,37 @@ theorem integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul'
       (K.indicator (fun x => (C * ‖v‖) * ‖g x‖))
   · filter_upwards with t
     apply AEStronglyMeasurable.mul ?_ hg.aestronglyMeasurable
- 
+    apply aestronglyMeasurable_const.fun_smul
+    apply AEStronglyMeasurable.sub _ hf.continuous.measurable.aestronglyMeasurable
+    apply AEMeasurable.aestronglyMeasurable
+    exact hf.continuous.measurable.comp_aemeasurable' (aemeasurable_id'.add_const _)
+  · filter_upwards [Ioc_mem_nhdsGT zero_lt_one] with t ht
+    have t_pos : 0 < t := ht.1
+    filter_upwards with x
+    by_cases hx : x in K
+    · calc ‖t⁻¹ • (f (x + t • v) - f x) * g x‖
+        = (t⁻¹ * ‖f (x + t • v) - f x‖) * ‖g x‖ := by simp [norm_mul, t_pos.le]
+      _ <= (t⁻¹ * (C * ‖(x + t • v) - x‖)) * ‖g x‖ := by
+        gcongr; exact LipschitzWith.norm_sub_le hf (x + t • v) x
+      _ = (C * ‖v‖) * ‖g x‖ := by simp [field, norm_smul, abs_of_nonneg t_pos.le]
+      _ = K.indicator (fun x => (C * ‖v‖) * ‖g x‖) x := by rw [indicator_of_mem hx]
+    · have A : f x = 0 := by
+        rw [← Function.notMem_support]
+        contrapose hx
+        exact self_subset_cthickening _ (subset_tsupport _ hx)
+      have B : f (x + t • v) = 0 := by
+        rw [← Function.notMem_support]
+        contrapose hx
+        apply mem_cthickening_of_dist_le _ _ (‖v‖) (tsupport f) (subset_tsupport _ hx)
+        simp only [dist_eq_norm, sub_add_cancel_left, norm_neg, norm_smul, Real.norm_eq_abs,
+          abs_of_nonneg t_pos.le]
+        exact mul_le_of_le_one_left (norm_nonneg v) ht.2
+      simp only [B, A, _root_.sub_self, smul_eq_mul, mul_zero, zero_mul, norm_zero]
+      exact indicator_nonneg (fun y _hy => by positivity) _
+  · rw [integrable_indicator_iff K_compact.measurableSet]
+    exact ContinuousOn.integrableOn_compact K_compact (by fun_prop)
+  · filter_upwards [hf.ae_lineDifferentiableAt v] with x hx
+    exact hx.hasLineDerivAt.tendsto_slope_zero_right.mul tendsto_const_nhds
 
 中文:
 定理 integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul'
@@ -209,7 +281,37 @@ theorem integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul'
       (K.indicator (fun x => (C * ‖v‖) * ‖g x‖))
   · filter_upwards with t
     apply AEStronglyMeasurable.mul ?_ hg.aestronglyMeasurable
- 
+    apply aestronglyMeasurable_const.fun_smul
+    apply AEStronglyMeasurable.sub _ hf.continuous.measurable.aestronglyMeasurable
+    apply AEMeasurable.aestronglyMeasurable
+    exact hf.continuous.measurable.comp_aemeasurable' (aemeasurable_id'.add_const _)
+  · filter_upwards [Ioc_mem_nhdsGT zero_lt_one] with t ht
+    have t_pos : 0 < t := ht.1
+    filter_upwards with x
+    by_cases hx : x in K
+    · calc ‖t⁻¹ • (f (x + t • v) - f x) * g x‖
+        = (t⁻¹ * ‖f (x + t • v) - f x‖) * ‖g x‖ := by simp [norm_mul, t_pos.le]
+      _ <= (t⁻¹ * (C * ‖(x + t • v) - x‖)) * ‖g x‖ := by
+        gcongr; exact LipschitzWith.norm_sub_le hf (x + t • v) x
+      _ = (C * ‖v‖) * ‖g x‖ := by simp [field, norm_smul, abs_of_nonneg t_pos.le]
+      _ = K.indicator (fun x => (C * ‖v‖) * ‖g x‖) x := by rw [indicator_of_mem hx]
+    · have A : f x = 0 := by
+        rw [← Function.notMem_support]
+        contrapose hx
+        exact self_subset_cthickening _ (subset_tsupport _ hx)
+      have B : f (x + t • v) = 0 := by
+        rw [← Function.notMem_support]
+        contrapose hx
+        apply mem_cthickening_of_dist_le _ _ (‖v‖) (tsupport f) (subset_tsupport _ hx)
+        simp only [dist_eq_norm, sub_add_cancel_left, norm_neg, norm_smul, Real.norm_eq_abs,
+          abs_of_nonneg t_pos.le]
+        exact mul_le_of_le_one_left (norm_nonneg v) ht.2
+      simp only [B, A, _root_.sub_self, smul_eq_mul, mul_zero, zero_mul, norm_zero]
+      exact indicator_nonneg (fun y _hy => by positivity) _
+  · rw [integrable_indicator_iff K_compact.measurableSet]
+    exact ContinuousOn.integrableOn_compact K_compact (by fun_prop)
+  · filter_upwards [hf.ae_lineDifferentiableAt v] with x hx
+    exact hx.hasLineDerivAt.tendsto_slope_zero_right.mul tendsto_const_nhds
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.aestronglyMeasurable, AEStronglyMeasurable, AEStronglyMeasurable.mul, AEStronglyMeasurable.sub, IsCompact, IsCompact.cthickening, K.indicator, K_compact, aemeasu, aestronglyMeasurable, aestronglyMeasurable_const, aestronglyMeasurable_const.fun_smul, comp_aemeasurable, continuous, cthickening, filter_upwards, fun_smul, hf.continuous.measurable.aestronglyMeasurable, hf.continuous.measurable.comp_aemeasurable
 -/
@@ -264,7 +366,32 @@ theorem integral_lineDeriv_mul_eq
   /- Write down the line derivative as the limit of `(f (x + t v) - f x) / t` and
   `(g (x - t v) - g x) / t`, and therefore the integrals as limits of the corresponding integrals
   thanks to the dominated convergence theorem. At fixed positive `t`, the integrals coincide
-  (with the change of va
+  (with the change of variables `y = x + t v`), so the limits also coincide. -/
+  have A : Tendsto (fun (t : Real) => ∫ x, (t⁻¹ • (f (x + t • v) - f x)) * g x ∂μ) (𝓝[>] 0)
+              (𝓝 (∫ x, lineDeriv Real f x v * g x ∂μ)) :=
+    integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul
+      hf (hg.continuous.integrable_of_hasCompactSupport h'g) v
+  have B : Tendsto (fun (t : Real) => ∫ x, (t⁻¹ • (g (x + t • (-v)) - g x)) * f x ∂μ) (𝓝[>] 0)
+              (𝓝 (∫ x, lineDeriv Real g x (-v) * f x ∂μ)) :=
+    integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul' hg h'g hf.continuous (-v)
+  suffices S1 : forall (t : Real), ∫ x, (t⁻¹ • (f (x + t • v) - f x)) * g x ∂μ =
+                            ∫ x, (t⁻¹ • (g (x + t • (-v)) - g x)) * f x ∂μ by
+    simp only [S1] at A; exact tendsto_nhds_unique A B
+  intro t
+  suffices S2 : ∫ x, (f (x + t • v) - f x) * g x ∂μ = ∫ x, f x * (g (x + t • (-v)) - g x) ∂μ by
+    simp only [smul_eq_mul, mul_assoc, integral_const_mul, S2, mul_comm (f _)]
+  have S3 : ∫ x, f (x + t • v) * g x ∂μ = ∫ x, f x * g (x + t • (-v)) ∂μ := by
+    rw [← integral_add_right_eq_self _ (t • (-v))]; simp
+  simp_rw [_root_.sub_mul, _root_.mul_sub]
+  rw [integral_sub]; rw [integral_sub]; rw [S3]
+  · apply Continuous.integrable_of_hasCompactSupport
+    · exact hf.continuous.mul (hg.continuous.comp (continuous_add_const _))
+    · exact (h'g.comp_homeomorph (Homeomorph.addRight (t • (-v)))).mul_left
+  · exact (hf.continuous.mul hg.continuous).integrable_of_hasCompactSupport h'g.mul_left
+  · apply Continuous.integrable_of_hasCompactSupport
+    · exact (hf.continuous.comp (continuous_add_const _)).mul hg.continuous
+    · exact h'g.mul_left
+  · exact (hf.continuous.mul hg.continuous).integrable_of_hasCompactSupport h'g.mul_left
 
 中文:
 定理 integral_lineDeriv_mul_eq
@@ -272,7 +399,32 @@ theorem integral_lineDeriv_mul_eq
   /- Write down the line derivative as the limit of `(f (x + t v) - f x) / t` and
   `(g (x - t v) - g x) / t`, and therefore the integrals as limits of the corresponding integrals
   thanks to the dominated convergence theorem. At fixed positive `t`, the integrals coincide
-  (with the change of va
+  (with the change of variables `y = x + t v`), so the limits also coincide. -/
+  have A : Tendsto (fun (t : Real) => ∫ x, (t⁻¹ • (f (x + t • v) - f x)) * g x ∂μ) (𝓝[>] 0)
+              (𝓝 (∫ x, lineDeriv Real f x v * g x ∂μ)) :=
+    integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul
+      hf (hg.continuous.integrable_of_hasCompactSupport h'g) v
+  have B : Tendsto (fun (t : Real) => ∫ x, (t⁻¹ • (g (x + t • (-v)) - g x)) * f x ∂μ) (𝓝[>] 0)
+              (𝓝 (∫ x, lineDeriv Real g x (-v) * f x ∂μ)) :=
+    integral_inv_smul_sub_mul_tendsto_integral_lineDeriv_mul' hg h'g hf.continuous (-v)
+  suffices S1 : forall (t : Real), ∫ x, (t⁻¹ • (f (x + t • v) - f x)) * g x ∂μ =
+                            ∫ x, (t⁻¹ • (g (x + t • (-v)) - g x)) * f x ∂μ by
+    simp only [S1] at A; exact tendsto_nhds_unique A B
+  intro t
+  suffices S2 : ∫ x, (f (x + t • v) - f x) * g x ∂μ = ∫ x, f x * (g (x + t • (-v)) - g x) ∂μ by
+    simp only [smul_eq_mul, mul_assoc, integral_const_mul, S2, mul_comm (f _)]
+  have S3 : ∫ x, f (x + t • v) * g x ∂μ = ∫ x, f x * g (x + t • (-v)) ∂μ := by
+    rw [← integral_add_right_eq_self _ (t • (-v))]; simp
+  simp_rw [_root_.sub_mul, _root_.mul_sub]
+  rw [integral_sub]; rw [integral_sub]; rw [S3]
+  · apply Continuous.integrable_of_hasCompactSupport
+    · exact hf.continuous.mul (hg.continuous.comp (continuous_add_const _))
+    · exact (h'g.comp_homeomorph (Homeomorph.addRight (t • (-v)))).mul_left
+  · exact (hf.continuous.mul hg.continuous).integrable_of_hasCompactSupport h'g.mul_left
+  · apply Continuous.integrable_of_hasCompactSupport
+    · exact (hf.continuous.comp (continuous_add_const _)).mul hg.continuous
+    · exact h'g.mul_left
+  · exact (hf.continuous.mul hg.continuous).integrable_of_hasCompactSupport h'g.mul_left
 -/
 theorem integral_lineDeriv_mul_eq
     (hf : LipschitzWith C f) (hg : LipschitzWith D g) (h'g : HasCompactSupport g) (v : E) :
@@ -316,7 +468,36 @@ theorem ae_lineDeriv_sum_eq
   /- Clever argument by Morrey: integrate against a smooth compactly supported function `g`, switch
   the derivative to `g` by integration by parts, and use the linearity of the derivative of `g` to
   conclude that the initial integrals coincide. -/
-  apply ae_eq_of_integral_contDiff_smul_eq (hf.
+  apply ae_eq_of_integral_contDiff_smul_eq (hf.locallyIntegrable_lineDeriv _)
+    (locallyIntegrable_finsetSum _ (fun i hi => (hf.locallyIntegrable_lineDeriv (v i)).smul (a i)))
+    (fun g g_smooth g_comp => ?_)
+  simp_rw [Finset.smul_sum]
+  have A : forall i in s, Integrable (fun x => g x • (a i • fun x => lineDeriv Real f x (v i)) x) μ :=
+    fun i hi => (g_smooth.continuous.integrable_of_hasCompactSupport g_comp).smul_of_top_left
+      ((hf.memLp_lineDeriv (v i)).const_smul (a i))
+  rw [integral_finsetSum _ A]
+  suffices S1 : ∫ x, lineDeriv Real f x (∑ i in s, a i • v i) * g x ∂μ
+      = ∑ i in s, a i * ∫ x, lineDeriv Real f x (v i) * g x ∂μ by
+    dsimp only [smul_eq_mul, Pi.smul_apply]
+    simp_rw [← mul_assoc, mul_comm _ (a _), mul_assoc, integral_const_mul, mul_comm (g _), S1]
+  suffices S2 : ∫ x, (∑ i in s, a i * fderiv Real g x (v i)) * f x ∂μ =
+                  ∑ i in s, a i * ∫ x, fderiv Real g x (v i) * f x ∂μ by
+    obtain ⟨D, g_lip⟩ : exists D, LipschitzWith D g :=
+      ContDiff.lipschitzWith_of_hasCompactSupport g_comp g_smooth (by simp)
+    simp_rw [integral_lineDeriv_mul_eq hf g_lip g_comp]
+    simp_rw [(g_smooth.differentiable (by simp)).differentiableAt.lineDeriv_eq_fderiv]
+    simp only [map_neg, _root_.map_sum, map_smul, smul_eq_mul, neg_mul]
+    simp only [integral_neg, mul_neg, Finset.sum_neg_distrib, neg_inj]
+    exact S2
+  suffices B : forall i in s, Integrable (fun x => a i * (fderiv Real g x (v i) * f x)) μ by
+    simp_rw [Finset.sum_mul, mul_assoc, integral_finsetSum s B, integral_const_mul]
+  intro i _hi
+  let L : StrongDual Real E -> Real := fun f => f (v i)
+  change Integrable (fun x => a i * ((L ∘ (fderiv Real g)) x * f x)) μ
+  refine (Continuous.integrable_of_hasCompactSupport ?_ ?_).const_mul _
+  · exact ((g_smooth.continuous_fderiv (by simp)).clm_apply continuous_const).mul
+      hf.continuous
+  · exact ((g_comp.fderiv Real).comp_left rfl).mul_right
 
 中文:
 定理 ae_lineDeriv_sum_eq
@@ -324,7 +505,36 @@ theorem ae_lineDeriv_sum_eq
   /- Clever argument by Morrey: integrate against a smooth compactly supported function `g`, switch
   the derivative to `g` by integration by parts, and use the linearity of the derivative of `g` to
   conclude that the initial integrals coincide. -/
-  apply ae_eq_of_integral_contDiff_smul_eq (hf.
+  apply ae_eq_of_integral_contDiff_smul_eq (hf.locallyIntegrable_lineDeriv _)
+    (locallyIntegrable_finsetSum _ (fun i hi => (hf.locallyIntegrable_lineDeriv (v i)).smul (a i)))
+    (fun g g_smooth g_comp => ?_)
+  simp_rw [Finset.smul_sum]
+  have A : forall i in s, Integrable (fun x => g x • (a i • fun x => lineDeriv Real f x (v i)) x) μ :=
+    fun i hi => (g_smooth.continuous.integrable_of_hasCompactSupport g_comp).smul_of_top_left
+      ((hf.memLp_lineDeriv (v i)).const_smul (a i))
+  rw [integral_finsetSum _ A]
+  suffices S1 : ∫ x, lineDeriv Real f x (∑ i in s, a i • v i) * g x ∂μ
+      = ∑ i in s, a i * ∫ x, lineDeriv Real f x (v i) * g x ∂μ by
+    dsimp only [smul_eq_mul, Pi.smul_apply]
+    simp_rw [← mul_assoc, mul_comm _ (a _), mul_assoc, integral_const_mul, mul_comm (g _), S1]
+  suffices S2 : ∫ x, (∑ i in s, a i * fderiv Real g x (v i)) * f x ∂μ =
+                  ∑ i in s, a i * ∫ x, fderiv Real g x (v i) * f x ∂μ by
+    obtain ⟨D, g_lip⟩ : exists D, LipschitzWith D g :=
+      ContDiff.lipschitzWith_of_hasCompactSupport g_comp g_smooth (by simp)
+    simp_rw [integral_lineDeriv_mul_eq hf g_lip g_comp]
+    simp_rw [(g_smooth.differentiable (by simp)).differentiableAt.lineDeriv_eq_fderiv]
+    simp only [map_neg, _root_.map_sum, map_smul, smul_eq_mul, neg_mul]
+    simp only [integral_neg, mul_neg, Finset.sum_neg_distrib, neg_inj]
+    exact S2
+  suffices B : forall i in s, Integrable (fun x => a i * (fderiv Real g x (v i) * f x)) μ by
+    simp_rw [Finset.sum_mul, mul_assoc, integral_finsetSum s B, integral_const_mul]
+  intro i _hi
+  let L : StrongDual Real E -> Real := fun f => f (v i)
+  change Integrable (fun x => a i * ((L ∘ (fderiv Real g)) x * f x)) μ
+  refine (Continuous.integrable_of_hasCompactSupport ?_ ?_).const_mul _
+  · exact ((g_smooth.continuous_fderiv (by simp)).clm_apply continuous_const).mul
+      hf.continuous
+  · exact ((g_comp.fderiv Real).comp_left rfl).mul_right
 -/
 theorem ae_lineDeriv_sum_eq
     (hf : LipschitzWith C f) {ι : Type*} (s : Finset ι) (a : ι -> Real) (v : ι -> E) :
@@ -374,7 +584,16 @@ theorem ae_exists_fderiv_of_countable
   have I1 : forallᵐ (x : E) ∂μ, forall v in s, lineDeriv Real f x (∑ i, (B.repr v i) • B i) =
                                   ∑ i, B.repr v i • lineDeriv Real f x (B i) :=
     (ae_ball_iff hs).2 (fun v _ => hf.ae_lineDeriv_sum_eq _ _ _)
-  have I2 : forallᵐ
+  have I2 : forallᵐ (x : E) ∂μ, forall v in s, LineDifferentiableAt Real f x v :=
+    (ae_ball_iff hs).2 (fun v _ => hf.ae_lineDifferentiableAt v)
+  filter_upwards [I1, I2] with x hx h'x
+  let L : StrongDual Real E :=
+    LinearMap.toContinuousLinearMap (B.constr Real (fun i => lineDeriv Real f x (B i)))
+  refine ⟨L, fun v hv => ?_⟩
+  have J : L v = lineDeriv Real f x v := by convert! (hx v hv).symm <;> simp [L, B.sum_repr v]
+  simpa [J] using (h'x v hv).hasLineDerivAt
+
+omit [MeasurableSpace E] in
 
 中文:
 定理 ae_存在_fderiv_of_countable
@@ -383,7 +602,16 @@ theorem ae_exists_fderiv_of_countable
   have I1 : forallᵐ (x : E) ∂μ, forall v in s, lineDeriv Real f x (∑ i, (B.repr v i) • B i) =
                                   ∑ i, B.repr v i • lineDeriv Real f x (B i) :=
     (ae_ball_iff hs).2 (fun v _ => hf.ae_lineDeriv_sum_eq _ _ _)
-  have I2 : forallᵐ
+  have I2 : forallᵐ (x : E) ∂μ, forall v in s, LineDifferentiableAt Real f x v :=
+    (ae_ball_iff hs).2 (fun v _ => hf.ae_lineDifferentiableAt v)
+  filter_upwards [I1, I2] with x hx h'x
+  let L : StrongDual Real E :=
+    LinearMap.toContinuousLinearMap (B.constr Real (fun i => lineDeriv Real f x (B i)))
+  refine ⟨L, fun v hv => ?_⟩
+  have J : L v = lineDeriv Real f x v := by convert! (hx v hv).symm <;> simp [L, B.sum_repr v]
+  simpa [J] using (h'x v hv).hasLineDerivAt
+
+omit [MeasurableSpace E] in
 
 Depends on / 依赖: B.constr, B.repr, Basis.ofVectorSpace, LineDifferentiableAt, LinearMap, LinearMap.toContinuousLinearMap, StrongDual, ae_ball_iff, ae_lineDeriv_sum_eq, ae_lineDifferentiableAt, constr, filter_upwards, hf.ae_lineDeriv_sum_eq, hf.ae_lineDifferentiableAt, lineDeriv, ofVectorSpace, toContinuousLinearMap
 -/
@@ -414,7 +642,49 @@ theorem hasFDerivAt_of_hasLineDerivAt_of_closure
   intro ε εpos
   obtain ⟨δ, δpos, hδ⟩ : exists δ, 0 < δ ∧ (C + ‖L‖ + 1) * δ = ε :=
     ⟨ε / (C + ‖L‖ + 1), by positivity, mul_div_cancel₀ ε (by positivity)⟩
-  obtain ⟨q, hqs, q_fin, hq⟩ : exists q, q subseteq s ∧ q.Finite ∧ sphere 0 1
+  obtain ⟨q, hqs, q_fin, hq⟩ : exists q, q subseteq s ∧ q.Finite ∧ sphere 0 1 subseteq ⋃ y in q, ball y δ := by
+    have : sphere 0 1 subseteq ⋃ y in s, ball y δ := by
+      apply hs.trans (fun z hz => ?_)
+      obtain ⟨y, ys, hy⟩ : exists y in s, dist z y < δ := Metric.mem_closure_iff.1 hz δ δpos
+      exact mem_biUnion ys hy
+    exact (isCompact_sphere 0 1).elim_finite_subcover_image (fun y _hy => isOpen_ball) this
+  have I : forallᶠ t in 𝓝 (0 : Real), forall v in q, ‖f (x + t • v) - f x - t • L v‖ <= δ * ‖t‖ := by
+    apply (Finite.eventually_all q_fin).2 (fun v hv => ?_)
+    apply Asymptotics.IsLittleO.def ?_ δpos
+    exact hasLineDerivAt_iff_isLittleO_nhds_zero.1 (hL v (hqs hv))
+  obtain ⟨r, r_pos, hr⟩ : exists (r : Real), 0 < r ∧ forall (t : Real), ‖t‖ < r ->
+      forall v in q, ‖f (x + t • v) - f x - t • L v‖ <= δ * ‖t‖ := by
+    rcases Metric.mem_nhds_iff.1 I with ⟨r, r_pos, hr⟩
+    exact ⟨r, r_pos, fun t ht v hv => hr (mem_ball_zero_iff.2 ht) v hv⟩
+  apply Metric.mem_nhds_iff.2 ⟨r, r_pos, fun v hv => ?_⟩
+  rcases eq_or_ne v 0 with rfl | v_ne
+  · simp
+  obtain ⟨w, ρ, w_mem, hvw, hρ⟩ : exists w ρ, w in sphere 0 1 ∧ v = ρ • w ∧ ρ = ‖v‖ := by
+    refine ⟨‖v‖⁻¹ • v, ‖v‖, by simp [norm_smul, inv_mul_cancel₀ (norm_ne_zero_iff.2 v_ne)], ?_, rfl⟩
+    simp [smul_smul, mul_inv_cancel₀ (norm_ne_zero_iff.2 v_ne)]
+  have norm_rho : ‖ρ‖ = ρ := by rw [hρ, norm_norm]
+  have rho_pos : 0 <= ρ := by simp [hρ]
+  obtain ⟨y, yq, hy⟩ : exists y in q, ‖w - y‖ < δ := by simpa [← dist_eq_norm] using hq w_mem
+  have : ‖y - w‖ < δ := by rwa [norm_sub_rev]
+  calc ‖f (x + v) - f x - L v‖
+      = ‖f (x + ρ • w) - f x - ρ • L w‖ := by simp [hvw]
+    _ = ‖(f (x + ρ • w) - f (x + ρ • y)) + (ρ • L y - ρ • L w)
+          + (f (x + ρ • y) - f x - ρ • L y)‖ := by congr; abel
+    _ <= ‖f (x + ρ • w) - f (x + ρ • y)‖ + ‖ρ • L y - ρ • L w‖
+          + ‖f (x + ρ • y) - f x - ρ • L y‖ := norm_add₃_le
+    _ <= C * ‖(x + ρ • w) - (x + ρ • y)‖ + ρ * (‖L‖ * ‖y - w‖) + δ * ρ := by
+      gcongr
+      · exact hf.norm_sub_le _ _
+      · rw [← smul_sub, norm_smul, norm_rho]
+        gcongr
+        exact L.lipschitz.norm_sub_le _ _
+      · conv_rhs => rw [← norm_rho]
+        apply hr _ _ _ yq
+        simpa [norm_rho, hρ] using hv
+    _ <= C * (ρ * δ) + ρ * (‖L‖ * δ) + δ * ρ := by
+      simp only [add_sub_add_left_eq_sub, ← smul_sub, norm_smul, norm_rho]; gcongr
+    _ = ((C + ‖L‖ + 1) * δ) * ρ := by ring
+    _ = ε * ‖v‖ := by rw [hδ, hρ]
 
 中文:
 定理 hasFDerivAt_of_hasLineDerivAt_of_closure
@@ -423,7 +693,49 @@ theorem hasFDerivAt_of_hasLineDerivAt_of_closure
   intro ε εpos
   obtain ⟨δ, δpos, hδ⟩ : exists δ, 0 < δ ∧ (C + ‖L‖ + 1) * δ = ε :=
     ⟨ε / (C + ‖L‖ + 1), by positivity, mul_div_cancel₀ ε (by positivity)⟩
-  obtain ⟨q, hqs, q_fin, hq⟩ : exists q, q subseteq s ∧ q.Finite ∧ sphere 0 1
+  obtain ⟨q, hqs, q_fin, hq⟩ : exists q, q subseteq s ∧ q.Finite ∧ sphere 0 1 subseteq ⋃ y in q, ball y δ := by
+    have : sphere 0 1 subseteq ⋃ y in s, ball y δ := by
+      apply hs.trans (fun z hz => ?_)
+      obtain ⟨y, ys, hy⟩ : exists y in s, dist z y < δ := Metric.mem_closure_iff.1 hz δ δpos
+      exact mem_biUnion ys hy
+    exact (isCompact_sphere 0 1).elim_finite_subcover_image (fun y _hy => isOpen_ball) this
+  have I : forallᶠ t in 𝓝 (0 : Real), forall v in q, ‖f (x + t • v) - f x - t • L v‖ <= δ * ‖t‖ := by
+    apply (Finite.eventually_all q_fin).2 (fun v hv => ?_)
+    apply Asymptotics.IsLittleO.def ?_ δpos
+    exact hasLineDerivAt_iff_isLittleO_nhds_zero.1 (hL v (hqs hv))
+  obtain ⟨r, r_pos, hr⟩ : exists (r : Real), 0 < r ∧ forall (t : Real), ‖t‖ < r ->
+      forall v in q, ‖f (x + t • v) - f x - t • L v‖ <= δ * ‖t‖ := by
+    rcases Metric.mem_nhds_iff.1 I with ⟨r, r_pos, hr⟩
+    exact ⟨r, r_pos, fun t ht v hv => hr (mem_ball_zero_iff.2 ht) v hv⟩
+  apply Metric.mem_nhds_iff.2 ⟨r, r_pos, fun v hv => ?_⟩
+  rcases eq_or_ne v 0 with rfl | v_ne
+  · simp
+  obtain ⟨w, ρ, w_mem, hvw, hρ⟩ : exists w ρ, w in sphere 0 1 ∧ v = ρ • w ∧ ρ = ‖v‖ := by
+    refine ⟨‖v‖⁻¹ • v, ‖v‖, by simp [norm_smul, inv_mul_cancel₀ (norm_ne_zero_iff.2 v_ne)], ?_, rfl⟩
+    simp [smul_smul, mul_inv_cancel₀ (norm_ne_zero_iff.2 v_ne)]
+  have norm_rho : ‖ρ‖ = ρ := by rw [hρ, norm_norm]
+  have rho_pos : 0 <= ρ := by simp [hρ]
+  obtain ⟨y, yq, hy⟩ : exists y in q, ‖w - y‖ < δ := by simpa [← dist_eq_norm] using hq w_mem
+  have : ‖y - w‖ < δ := by rwa [norm_sub_rev]
+  calc ‖f (x + v) - f x - L v‖
+      = ‖f (x + ρ • w) - f x - ρ • L w‖ := by simp [hvw]
+    _ = ‖(f (x + ρ • w) - f (x + ρ • y)) + (ρ • L y - ρ • L w)
+          + (f (x + ρ • y) - f x - ρ • L y)‖ := by congr; abel
+    _ <= ‖f (x + ρ • w) - f (x + ρ • y)‖ + ‖ρ • L y - ρ • L w‖
+          + ‖f (x + ρ • y) - f x - ρ • L y‖ := norm_add₃_le
+    _ <= C * ‖(x + ρ • w) - (x + ρ • y)‖ + ρ * (‖L‖ * ‖y - w‖) + δ * ρ := by
+      gcongr
+      · exact hf.norm_sub_le _ _
+      · rw [← smul_sub, norm_smul, norm_rho]
+        gcongr
+        exact L.lipschitz.norm_sub_le _ _
+      · conv_rhs => rw [← norm_rho]
+        apply hr _ _ _ yq
+        simpa [norm_rho, hρ] using hv
+    _ <= C * (ρ * δ) + ρ * (‖L‖ * δ) + δ * ρ := by
+      simp only [add_sub_add_left_eq_sub, ← smul_sub, norm_smul, norm_rho]; gcongr
+    _ = ((C + ‖L‖ + 1) * δ) * ρ := by ring
+    _ = ε * ‖v‖ := by rw [hδ, hρ]
 
 Depends on / 依赖: Finite, Metric, Metric.mem_closure_iff, hasFDerivAt_iff_isLittleO_nhds_zero, hs.trans, isLittleO_iff, mem_closure_iff, q.Finite, q_fin, sphere, subseteq
 -/
@@ -491,7 +803,7 @@ theorem ae_differentiableAt_of_real
   have hs : sphere 0 1 subseteq closure s := by rw [s_dense.closure_eq]; exact subset_univ _
   filter_upwards [hf.ae_exists_fderiv_of_countable s_count]
   rintro x ⟨L, hL⟩
- 
+  exact (hf.hasFDerivAt_of_hasLineDerivAt_of_closure hs hL).differentiableAt
 
 中文:
 定理 ae_differentiableAt_of_real
@@ -502,7 +814,7 @@ theorem ae_differentiableAt_of_real
   have hs : sphere 0 1 subseteq closure s := by rw [s_dense.closure_eq]; exact subset_univ _
   filter_upwards [hf.ae_exists_fderiv_of_countable s_count]
   rintro x ⟨L, hL⟩
- 
+  exact (hf.hasFDerivAt_of_hasLineDerivAt_of_closure hs hL).differentiableAt
 
 Depends on / 依赖: Countable, TopologicalSpace, TopologicalSpace.exists_countable_dense, ae_exists_fderiv_of_countable, closure, closure_eq, differentiableAt, exists_countable_dense, filter_upwards, hasFDerivAt_of_hasLineDerivAt_of_closure, hf.ae_exists_fderiv_of_countable, hf.hasFDerivAt_of_hasLineDerivAt_of_closure, s.Countable, s_count, s_dense, s_dense.closure_eq, sphere, subset_univ, subseteq
 -/
@@ -557,7 +869,9 @@ theorem ae_differentiableWithinAt_of_mem_pi
   have A : forall i : ι, LipschitzWith 1 (fun x : ι -> Real => x i) := fun i => LipschitzWith.eval i
   have : forall i : ι, forallᵐ x ∂μ, x in s -> DifferentiableWithinAt Real (fun x : E => f x i) s x := fun i => by
     apply ae_differentiableWithinAt_of_mem_of_real
-    exact LipschitzWith.comp_l
+    exact LipschitzWith.comp_lipschitzOnWith (A i) hf
+  filter_upwards [ae_all_iff.2 this] with x hx xs
+  exact differentiableWithinAt_pi.2 (fun i => hx i xs)
 
 中文:
 定理 ae_differentiableWithinAt_of_mem_pi
@@ -565,7 +879,9 @@ theorem ae_differentiableWithinAt_of_mem_pi
   have A : forall i : ι, LipschitzWith 1 (fun x : ι -> Real => x i) := fun i => LipschitzWith.eval i
   have : forall i : ι, forallᵐ x ∂μ, x in s -> DifferentiableWithinAt Real (fun x : E => f x i) s x := fun i => by
     apply ae_differentiableWithinAt_of_mem_of_real
-    exact LipschitzWith.comp_l
+    exact LipschitzWith.comp_lipschitzOnWith (A i) hf
+  filter_upwards [ae_all_iff.2 this] with x hx xs
+  exact differentiableWithinAt_pi.2 (fun i => hx i xs)
 
 Depends on / 依赖: DifferentiableWithinAt, LipschitzWith, LipschitzWith.comp_lipschitzOnWith, LipschitzWith.eval, ae_all_iff, ae_differentiableWithinAt_of_mem_of_real, comp_lipschitzOnWith, differentiableWithinAt_pi, filter_upwards
 -/
@@ -590,7 +906,11 @@ theorem ae_differentiableWithinAt_of_mem
   suffices H : forallᵐ x ∂μ, x in s -> DifferentiableWithinAt Real (A ∘ f) s x by
     filter_upwards [H] with x hx xs
     have : f = (A.symm ∘ A) ∘ f := by
-      simp only [ContinuousLinearEquiv.symm_comp_self, Function.id_
+      simp only [ContinuousLinearEquiv.symm_comp_self, Function.id_comp]
+    rw [this]
+    exact A.symm.differentiableAt.comp_differentiableWithinAt x (hx xs)
+  apply ae_differentiableWithinAt_of_mem_pi
+  exact A.lipschitz.comp_lipschitzOnWith hf
 
 中文:
 定理 ae_differentiableWithinAt_of_mem
@@ -600,7 +920,11 @@ theorem ae_differentiableWithinAt_of_mem
   suffices H : forallᵐ x ∂μ, x in s -> DifferentiableWithinAt Real (A ∘ f) s x by
     filter_upwards [H] with x hx xs
     have : f = (A.symm ∘ A) ∘ f := by
-      simp only [ContinuousLinearEquiv.symm_comp_self, Function.id_
+      simp only [ContinuousLinearEquiv.symm_comp_self, Function.id_comp]
+    rw [this]
+    exact A.symm.differentiableAt.comp_differentiableWithinAt x (hx xs)
+  apply ae_differentiableWithinAt_of_mem_pi
+  exact A.lipschitz.comp_lipschitzOnWith hf
 
 Depends on / 依赖: A.lipschitz.comp_lipschitzOnWith, A.symm, A.symm.differentiableAt.comp_differentiableWithinAt, Basis.ofVectorSpace, ContinuousLinearEquiv, ContinuousLinearEquiv.symm_comp_self, DifferentiableWithinAt, Function, Function.id_comp, ae_differentiableWithinAt_of_mem_pi, comp_differentiableWithinAt, comp_lipschitzOnWith, differentiableAt, equivFun, equivFun.toContinuousLinearEquiv, filter_upwards, id_comp, lipschitz, ofVectorSpace, symm_comp_self
 -/

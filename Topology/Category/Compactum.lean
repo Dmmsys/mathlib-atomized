@@ -562,7 +562,56 @@ theorem cl_cl
   let ι : fsu -> ssu := fun x => ↑x
   let C0 : ssu := { Z | exists B in F, X.str ⁻¹' B = Z }
   let AA := { G : Ultrafilter X | A in G }
-  let C1 := inse
+  let C1 := insert AA C0
+  let C2 := finiteInterClosure C1
+  -- C0 is closed under intersections.
+  have claim1 : forall (B) (_ : B in C0) (C) (_ : C in C0), B inter C in C0 := by
+    rintro B ⟨Q, hQ, rfl⟩ C ⟨R, hR, rfl⟩
+    use Q inter R
+    simp only [and_true, Set.preimage_inter]
+    exact inter_sets _ hQ hR
+  -- All sets in C0 are nonempty.
+  have claim2 : forall B in C0, Set.Nonempty B := by
+    rintro B ⟨Q, hQ, rfl⟩
+    obtain ⟨q⟩ := Filter.nonempty_of_mem hQ
+    use X.incl q
+    simpa
+  -- The intersection of AA with every set in C0 is nonempty.
+  have claim3 : forall B in C0, (AA inter B).Nonempty := by
+    rintro B ⟨Q, hQ, rfl⟩
+    have : (Q inter cl A).Nonempty := Filter.nonempty_of_mem (inter_mem hQ hF)
+    rcases this with ⟨q, hq1, P, hq2, hq3⟩
+    refine ⟨P, hq2, ?_⟩
+    rw [← hq3] at hq1
+    simpa
+  -- Suffices to show that the intersection of any finite subcollection of C1 is nonempty.
+  suffices forall T : fsu, ι T subseteq C1 -> (⋂₀ ι T).Nonempty by
+    obtain ⟨G, h1⟩ := exists_ultrafilter_of_finite_inter_nonempty _ this
+    use X.join G
+    have : G.map X.str = F := Ultrafilter.coe_le_coe.1 fun S hS => h1 (Or.inr ⟨S, hS, rfl⟩)
+    rw [join_distrib]; rw [this]
+    exact ⟨h1 (Or.inl rfl), rfl⟩
+  -- C2 is closed under finite intersections (by construction!).
+  have claim4 := finiteInterClosure_finiteInter C1
+  -- C0 is closed under finite intersections by claim1.
+  have claim5 : FiniteInter C0 := ⟨⟨_, univ_mem, Set.preimage_univ⟩, claim1⟩
+  -- Every element of C2 is nonempty.
+  have claim6 : forall P in C2, (P : Set (Ultrafilter X)).Nonempty := by
+    suffices forall P in C2, P in C0 ∨ exists Q in C0, P = AA inter Q by
+      intro P hP
+      rcases this P hP with h | h
+      · exact claim2 _ h
+      · rcases h with ⟨Q, hQ, rfl⟩
+        exact claim3 _ hQ
+    intro P hP
+    exact claim5.finiteInterClosure_insert _ hP
+  intro T hT
+  -- Suffices to show that the intersection of the T's is contained in C2.
+  suffices ⋂₀ ι T in C2 by exact claim6 _ this
+  -- Finish
+  apply claim4.finiteInter_mem T
+  intro t ht
+  exact finiteInterClosure.basic (@hT t ht)
 
 中文:
 定理 cl_cl
@@ -576,7 +625,56 @@ theorem cl_cl
   let ι : fsu -> ssu := fun x => ↑x
   let C0 : ssu := { Z | exists B in F, X.str ⁻¹' B = Z }
   let AA := { G : Ultrafilter X | A in G }
-  let C1 := inse
+  let C1 := insert AA C0
+  let C2 := finiteInterClosure C1
+  -- C0 is closed under intersections.
+  have claim1 : forall (B) (_ : B in C0) (C) (_ : C in C0), B inter C in C0 := by
+    rintro B ⟨Q, hQ, rfl⟩ C ⟨R, hR, rfl⟩
+    use Q inter R
+    simp only [and_true, Set.preimage_inter]
+    exact inter_sets _ hQ hR
+  -- All sets in C0 are nonempty.
+  have claim2 : forall B in C0, Set.Nonempty B := by
+    rintro B ⟨Q, hQ, rfl⟩
+    obtain ⟨q⟩ := Filter.nonempty_of_mem hQ
+    use X.incl q
+    simpa
+  -- The intersection of AA with every set in C0 is nonempty.
+  have claim3 : forall B in C0, (AA inter B).Nonempty := by
+    rintro B ⟨Q, hQ, rfl⟩
+    have : (Q inter cl A).Nonempty := Filter.nonempty_of_mem (inter_mem hQ hF)
+    rcases this with ⟨q, hq1, P, hq2, hq3⟩
+    refine ⟨P, hq2, ?_⟩
+    rw [← hq3] at hq1
+    simpa
+  -- Suffices to show that the intersection of any finite subcollection of C1 is nonempty.
+  suffices forall T : fsu, ι T subseteq C1 -> (⋂₀ ι T).Nonempty by
+    obtain ⟨G, h1⟩ := exists_ultrafilter_of_finite_inter_nonempty _ this
+    use X.join G
+    have : G.map X.str = F := Ultrafilter.coe_le_coe.1 fun S hS => h1 (Or.inr ⟨S, hS, rfl⟩)
+    rw [join_distrib]; rw [this]
+    exact ⟨h1 (Or.inl rfl), rfl⟩
+  -- C2 is closed under finite intersections (by construction!).
+  have claim4 := finiteInterClosure_finiteInter C1
+  -- C0 is closed under finite intersections by claim1.
+  have claim5 : FiniteInter C0 := ⟨⟨_, univ_mem, Set.preimage_univ⟩, claim1⟩
+  -- Every element of C2 is nonempty.
+  have claim6 : forall P in C2, (P : Set (Ultrafilter X)).Nonempty := by
+    suffices forall P in C2, P in C0 ∨ exists Q in C0, P = AA inter Q by
+      intro P hP
+      rcases this P hP with h | h
+      · exact claim2 _ h
+      · rcases h with ⟨Q, hQ, rfl⟩
+        exact claim3 _ hQ
+    intro P hP
+    exact claim5.finiteInterClosure_insert _ hP
+  intro T hT
+  -- Suffices to show that the intersection of the T's is contained in C2.
+  suffices ⋂₀ ι T in C2 by exact claim6 _ this
+  -- Finish
+  apply claim4.finiteInter_mem T
+  intro t ht
+  exact finiteInterClosure.basic (@hT t ht)
 -/
 private theorem cl_cl {X : Compactum} (A : Set X) : cl (cl A) subseteq cl A := by
   rintro _ ⟨F, hF, rfl⟩
@@ -683,7 +781,66 @@ theorem str_eq_of_le_nhds
   let AA := X.str ⁻¹' {x}
   let T1 := insert AA T0
   let T2 := finiteInterClosure T1
-  
+  intro cond
+  -- If F contains a closed set A, then x is contained in A.
+  have claim1 : forall A : Set X, IsClosed A -> A in F -> x in A := by
+    intro A hA h
+    by_contra H
+    rw [le_nhds_iff] at cond
+    specialize cond Aᶜ H hA.isOpen_compl
+    rw [Ultrafilter.mem_coe]; rw [Ultrafilter.compl_mem_iff_notMem] at cond
+    contradiction
+  -- If A ∈ F, then x ∈ cl A.
+  have claim2 : forall A : Set X, A in F -> x in cl A := by
+    intro A hA
+    exact claim1 (cl A) (isClosed_cl A) (mem_of_superset hA (subset_cl A))
+  -- T0 is closed under intersections.
+  have claim3 : forall (S1) (_ : S1 in T0) (S2) (_ : S2 in T0), S1 inter S2 in T0 := by
+    rintro S1 ⟨S1, hS1, rfl⟩ S2 ⟨S2, hS2, rfl⟩
+    exact ⟨S1 inter S2, inter_mem hS1 hS2, by simp [basic_inter]⟩
+  -- For every S ∈ T0, the intersection AA ∩ S is nonempty.
+  have claim4 : forall S in T0, (AA inter S).Nonempty := by
+    rintro S ⟨S, hS, rfl⟩
+    rcases claim2 _ hS with ⟨G, hG, hG2⟩
+    exact ⟨G, hG2, hG⟩
+  -- Every element of T0 is nonempty.
+  have claim5 : forall S in T0, Set.Nonempty S := by
+    rintro S ⟨S, hS, rfl⟩
+    exact ⟨F, hS⟩
+  -- Every element of T2 is nonempty.
+  have claim6 : forall S in T2, Set.Nonempty S := by
+    suffices forall S in T2, S in T0 ∨ exists Q in T0, S = AA inter Q by
+      intro S hS
+      rcases this _ hS with h | h
+      · exact claim5 S h
+      · rcases h with ⟨Q, hQ, rfl⟩
+        exact claim4 Q hQ
+    intro S hS
+    apply finiteInterClosure_insert
+    · constructor
+      · use Set.univ
+        refine ⟨Filter.univ_sets _, ?_⟩
+        ext
+        refine ⟨?_, by tauto⟩
+        · intro
+          apply Filter.univ_sets
+      · exact claim3
+    · exact hS
+  -- It suffices to show that the intersection of any finite subset of T1 is nonempty.
+  suffices forall F : fsu, ↑F subseteq T1 -> (⋂₀ ι F).Nonempty by
+    obtain ⟨G, h1⟩ := Ultrafilter.exists_ultrafilter_of_finite_inter_nonempty _ this
+    have c1 : X.join G = F := Ultrafilter.coe_le_coe.1 fun P hP => h1 (Or.inr ⟨P, hP, rfl⟩)
+    have c2 : G.map X.str = X.incl x := by
+      refine Ultrafilter.coe_le_coe.1 fun P hP => ?_
+      apply mem_of_superset (h1 (Or.inl rfl))
+      rintro x ⟨rfl⟩
+      exact hP
+    simp [← c1, c2]
+  -- Finish...
+  intro T hT
+  refine claim6 _ (finiteInter_mem (.finiteInterClosure_finiteInter _) _ ?_)
+  intro t ht
+  exact finiteInterClosure.basic (@hT t ht)
 
 中文:
 定理 str_eq_of_le_nhds
@@ -698,7 +855,66 @@ theorem str_eq_of_le_nhds
   let AA := X.str ⁻¹' {x}
   let T1 := insert AA T0
   let T2 := finiteInterClosure T1
-  
+  intro cond
+  -- If F contains a closed set A, then x is contained in A.
+  have claim1 : forall A : Set X, IsClosed A -> A in F -> x in A := by
+    intro A hA h
+    by_contra H
+    rw [le_nhds_iff] at cond
+    specialize cond Aᶜ H hA.isOpen_compl
+    rw [Ultrafilter.mem_coe]; rw [Ultrafilter.compl_mem_iff_notMem] at cond
+    contradiction
+  -- If A ∈ F, then x ∈ cl A.
+  have claim2 : forall A : Set X, A in F -> x in cl A := by
+    intro A hA
+    exact claim1 (cl A) (isClosed_cl A) (mem_of_superset hA (subset_cl A))
+  -- T0 is closed under intersections.
+  have claim3 : forall (S1) (_ : S1 in T0) (S2) (_ : S2 in T0), S1 inter S2 in T0 := by
+    rintro S1 ⟨S1, hS1, rfl⟩ S2 ⟨S2, hS2, rfl⟩
+    exact ⟨S1 inter S2, inter_mem hS1 hS2, by simp [basic_inter]⟩
+  -- For every S ∈ T0, the intersection AA ∩ S is nonempty.
+  have claim4 : forall S in T0, (AA inter S).Nonempty := by
+    rintro S ⟨S, hS, rfl⟩
+    rcases claim2 _ hS with ⟨G, hG, hG2⟩
+    exact ⟨G, hG2, hG⟩
+  -- Every element of T0 is nonempty.
+  have claim5 : forall S in T0, Set.Nonempty S := by
+    rintro S ⟨S, hS, rfl⟩
+    exact ⟨F, hS⟩
+  -- Every element of T2 is nonempty.
+  have claim6 : forall S in T2, Set.Nonempty S := by
+    suffices forall S in T2, S in T0 ∨ exists Q in T0, S = AA inter Q by
+      intro S hS
+      rcases this _ hS with h | h
+      · exact claim5 S h
+      · rcases h with ⟨Q, hQ, rfl⟩
+        exact claim4 Q hQ
+    intro S hS
+    apply finiteInterClosure_insert
+    · constructor
+      · use Set.univ
+        refine ⟨Filter.univ_sets _, ?_⟩
+        ext
+        refine ⟨?_, by tauto⟩
+        · intro
+          apply Filter.univ_sets
+      · exact claim3
+    · exact hS
+  -- It suffices to show that the intersection of any finite subset of T1 is nonempty.
+  suffices forall F : fsu, ↑F subseteq T1 -> (⋂₀ ι F).Nonempty by
+    obtain ⟨G, h1⟩ := Ultrafilter.exists_ultrafilter_of_finite_inter_nonempty _ this
+    have c1 : X.join G = F := Ultrafilter.coe_le_coe.1 fun P hP => h1 (Or.inr ⟨P, hP, rfl⟩)
+    have c2 : G.map X.str = X.incl x := by
+      refine Ultrafilter.coe_le_coe.1 fun P hP => ?_
+      apply mem_of_superset (h1 (Or.inl rfl))
+      rintro x ⟨rfl⟩
+      exact hP
+    simp [← c1, c2]
+  -- Finish...
+  intro T hT
+  refine claim6 _ (finiteInter_mem (.finiteInterClosure_finiteInter _) _ ?_)
+  intro t ht
+  exact finiteInterClosure.basic (@hT t ht)
 -/
 theorem str_eq_of_le_nhds {X : Compactum} (F : Ultrafilter X) (x : X) : ↑F <= 𝓝 x -> X.str F = x := by
   -- Notation to be used in this proof.
@@ -923,7 +1139,23 @@ definition ofTopologicalSpace
     ext FF
     change Ultrafilter (Ultrafilter X) at FF
     set x := (Ultrafilter.map Ultrafilter.lim FF).lim with c1
-    have c2 : forall (U : Set X) (F : Ultrafilter X), F.lim in U -> IsOpen U -> U in 
+    have c2 : forall (U : Set X) (F : Ultrafilter X), F.lim in U -> IsOpen U -> U in F := by
+      intro U F h1 hU
+      exact isOpen_iff_ultrafilter.mp hU _ h1 _ (Ultrafilter.le_nhds_lim _)
+    have c3 : ↑(Ultrafilter.map Ultrafilter.lim FF) <= 𝓝 x := by
+      rw [le_nhds_iff]
+      intro U hx hU
+      exact mem_coe.2 (c2 _ _ (by rwa [← c1]) hU)
+    have c4 : forall U : Set X, x in U -> IsOpen U -> { G : Ultrafilter X | U in G } in FF := by
+      intro U hx hU
+      suffices Ultrafilter.lim ⁻¹' U in FF by
+        apply mem_of_superset this
+        intro P hP
+        exact c2 U P hP hU
+      exact @c3 U (IsOpen.mem_nhds hU hx)
+    apply lim_eq
+    rw [le_nhds_iff]
+    exact c4
 
 中文:
 定义 ofTopologicalSpace
@@ -937,7 +1169,23 @@ definition ofTopologicalSpace
     ext FF
     change Ultrafilter (Ultrafilter X) at FF
     set x := (Ultrafilter.map Ultrafilter.lim FF).lim with c1
-    have c2 : forall (U : Set X) (F : Ultrafilter X), F.lim in U -> IsOpen U -> U in 
+    have c2 : forall (U : Set X) (F : Ultrafilter X), F.lim in U -> IsOpen U -> U in F := by
+      intro U F h1 hU
+      exact isOpen_iff_ultrafilter.mp hU _ h1 _ (Ultrafilter.le_nhds_lim _)
+    have c3 : ↑(Ultrafilter.map Ultrafilter.lim FF) <= 𝓝 x := by
+      rw [le_nhds_iff]
+      intro U hx hU
+      exact mem_coe.2 (c2 _ _ (by rwa [← c1]) hU)
+    have c4 : forall U : Set X, x in U -> IsOpen U -> { G : Ultrafilter X | U in G } in FF := by
+      intro U hx hU
+      suffices Ultrafilter.lim ⁻¹' U in FF by
+        apply mem_of_superset this
+        intro P hP
+        exact c2 U P hP hU
+      exact @c3 U (IsOpen.mem_nhds hU hx)
+    apply lim_eq
+    rw [le_nhds_iff]
+    exact c4
 -/
 noncomputable def ofTopologicalSpace (X : Type*) [TopologicalSpace X] [CompactSpace X]
     [T2Space X] : Compactum where
@@ -1099,7 +1347,9 @@ definition isoOfTopologicalSpace
     { toFun := id
       continuous_toFun :=
         continuous_def.2 fun _ h1 => by
-          rw [isOp
+          rw [isOpen_iff_ultrafilter']
+          intro _ h2
+          exact h1 _ h2 }
 
 中文:
 定义 isoOfTopologicalSpace
@@ -1114,7 +1364,9 @@ definition isoOfTopologicalSpace
     { toFun := id
       continuous_toFun :=
         continuous_def.2 fun _ h1 => by
-          rw [isOp
+          rw [isOpen_iff_ultrafilter']
+          intro _ h2
+          exact h1 _ h2 }
 
 Depends on / 依赖: CompHausLike, CompHausLike.ofHom
 -/
@@ -1200,7 +1452,8 @@ instance CompHaus.forgetCreatesLimits
     (((forget CompHaus).leftUnitor.symm ≪≫
     Functor.isoWhiskerRight compactumToCompHaus.asEquivalence.symm.unitIso (forget CompHaus)) ≪≫
     compactumToCompHaus.inv.associator compactumToCompHaus (forget CompHaus)) ≪≫
-  
+    Functor.isoWhiskerLeft _ compactumToCompHausCompForget
+  exact createsLimitsOfNatIso e.symm
 
 中文:
 实例 CompHaus.forgetCreatesLimits
@@ -1210,7 +1463,8 @@ instance CompHaus.forgetCreatesLimits
     (((forget CompHaus).leftUnitor.symm ≪≫
     Functor.isoWhiskerRight compactumToCompHaus.asEquivalence.symm.unitIso (forget CompHaus)) ≪≫
     compactumToCompHaus.inv.associator compactumToCompHaus (forget CompHaus)) ≪≫
-  
+    Functor.isoWhiskerLeft _ compactumToCompHausCompForget
+  exact createsLimitsOfNatIso e.symm
 
 Depends on / 依赖: CompHaus, Compactum, Compactum.forget, Functor, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, asEquivalence, associator, compactumToCompHaus, compactumToCompHaus.asEquivalence.symm.unitIso, compactumToCompHaus.inv, compactumToCompHaus.inv.associator, compactumToCompHausCompForget, createsLimitsOfNatIso, e.symm, forget, isoWhiskerLeft, isoWhiskerRight, leftUnitor, leftUnitor.symm
 -/

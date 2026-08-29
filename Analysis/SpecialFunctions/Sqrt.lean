@@ -44,7 +44,8 @@ definition sqPartialHomeomorph
   right_inv' _ h := sq_sqrt (le_of_lt h)
   open_source := isOpen_Ioi
   open_target := isOpen_Ioi
- 
+  continuousOn_toFun := (continuous_pow 2).continuousOn
+  continuousOn_invFun := continuousOn_id.sqrt
 
 中文:
 定义 sqPartialHomeomorph
@@ -59,7 +60,8 @@ definition sqPartialHomeomorph
   right_inv' _ h := sq_sqrt (le_of_lt h)
   open_source := isOpen_Ioi
   open_target := isOpen_Ioi
- 
+  continuousOn_toFun := (continuous_pow 2).continuousOn
+  continuousOn_invFun := continuousOn_id.sqrt
 -/
 noncomputable def sqPartialHomeomorph : OpenPartialHomeomorph Real Real where
   toFun x := x ^ 2
@@ -87,7 +89,12 @@ theorem deriv_sqrt_aux
     have : (√·) =ᶠ[𝓝 x] fun _ => 0 := (gt_mem_nhds hx).mono fun x hx => sqrt_eq_zero_of_nonpos hx.le
     exact
       ⟨(hasStrictDerivAt_const x (0 : Real)).congr_of_eventuallyEq this.symm, fun n =>
-       
+        contDiffAt_const.congr_of_eventuallyEq this⟩
+  · have : ↑2 * √x ^ (2 - 1) != 0 := by simp [(sqrt_pos.2 hx).ne', @two_ne_zero Real]
+    constructor
+    · simpa using! sqPartialHomeomorph.hasStrictDerivAt_symm hx this (hasStrictDerivAt_pow 2 _)
+    · exact fun n => sqPartialHomeomorph.contDiffAt_symm_deriv this hx (hasDerivAt_pow 2 (√x))
+        (contDiffAt_id.pow 2)
 
 中文:
 定理 deriv_sqrt_aux
@@ -98,7 +105,12 @@ theorem deriv_sqrt_aux
     have : (√·) =ᶠ[𝓝 x] fun _ => 0 := (gt_mem_nhds hx).mono fun x hx => sqrt_eq_zero_of_nonpos hx.le
     exact
       ⟨(hasStrictDerivAt_const x (0 : Real)).congr_of_eventuallyEq this.symm, fun n =>
-       
+        contDiffAt_const.congr_of_eventuallyEq this⟩
+  · have : ↑2 * √x ^ (2 - 1) != 0 := by simp [(sqrt_pos.2 hx).ne', @two_ne_zero Real]
+    constructor
+    · simpa using! sqPartialHomeomorph.hasStrictDerivAt_symm hx this (hasStrictDerivAt_pow 2 _)
+    · exact fun n => sqPartialHomeomorph.contDiffAt_symm_deriv this hx (hasDerivAt_pow 2 (√x))
+        (contDiffAt_id.pow 2)
 
 Depends on / 依赖: congr_of_eventuallyEq, contDiffAt_const, contDiffAt_const.congr_of_eventuallyEq, div_zero, gt_mem_nhds, hasStrictDerivAt_const, hasStrictDerivAt_p, hasStrictDerivAt_symm, hx.le, hx.lt_or_gt, lt_or_gt, mul_zero, sqPartialHomeomorph, sqPartialHomeomorph.hasStrictDerivAt_symm, sqrt_eq_zero_of_nonpos, sqrt_pos, this.symm, two_ne_zero
 -/

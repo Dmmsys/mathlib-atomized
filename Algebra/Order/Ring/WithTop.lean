@@ -229,7 +229,7 @@ lemma untopD_zero_mul
   by_cases hb : b = 0; · rw [hb, mul_zero, ← coe_zero, untopD_coe, mul_zero]
   cases a; · rw [top_mul hb, untopD_top, zero_mul]
   cases b; · rw [mul_top ha, untopD_top, mul_zero]
-  rw [← coe_mul]; rw [untopD_coe]; rw [un
+  rw [← coe_mul]; rw [untopD_coe]; rw [untopD_coe]; rw [untopD_coe]
 
 中文:
 引理 untopD_zero_mul
@@ -240,7 +240,7 @@ lemma untopD_zero_mul
   by_cases hb : b = 0; · rw [hb, mul_zero, ← coe_zero, untopD_coe, mul_zero]
   cases a; · rw [top_mul hb, untopD_top, zero_mul]
   cases b; · rw [mul_top ha, untopD_top, mul_zero]
-  rw [← coe_mul]; rw [untopD_coe]; rw [un
+  rw [← coe_mul]; rw [untopD_coe]; rw [untopD_coe]; rw [untopD_coe]
 
 Depends on / 依赖: coe_mul, coe_zero, mul_top, mul_zero, top_mul, untopD_coe, untopD_top, zero_mul
 -/
@@ -460,7 +460,16 @@ definition _root_.MonoidWithZeroHom.withTopMap
     map_mul' := fun x y => by
       have : forall z, map f z = 0 ↔ z = 0 := fun z =>
         (Option.map_injective hf).eq_iff' f.toZeroHom.withTopMap.map_zero
-      rcases Decidable.eq_or_ne x 0 with (rfl | h
+      rcases Decidable.eq_or_ne x 0 with (rfl | hx)
+      · simp
+      rcases Decidable.eq_or_ne y 0 with (rfl | hy)
+      · simp
+      cases x with | top => simp [hy, this] | coe x => ?_
+      cases y with
+      | top =>
+        have : (f x : WithTop S) != 0 := by simpa [hf.eq_iff' (map_zero f)] using hx
+        simp [mul_top hx, mul_top this]
+      | coe y => simp [← coe_mul] }
 
 中文:
 定义 _root_.带零幺半群态射.withTopMap
@@ -470,7 +479,16 @@ definition _root_.MonoidWithZeroHom.withTopMap
     map_mul' := fun x y => by
       have : forall z, map f z = 0 ↔ z = 0 := fun z =>
         (Option.map_injective hf).eq_iff' f.toZeroHom.withTopMap.map_zero
-      rcases Decidable.eq_or_ne x 0 with (rfl | h
+      rcases Decidable.eq_or_ne x 0 with (rfl | hx)
+      · simp
+      rcases Decidable.eq_or_ne y 0 with (rfl | hy)
+      · simp
+      cases x with | top => simp [hy, this] | coe x => ?_
+      cases y with
+      | top =>
+        have : (f x : WithTop S) != 0 := by simpa [hf.eq_iff' (map_zero f)] using hx
+        simp [mul_top hx, mul_top this]
+      | coe y => simp [← coe_mul] }
 -/
 protected def _root_.MonoidWithZeroHom.withTopMap {R S : Type*} [MulZeroOneClass R] [DecidableEq R]
     [Nontrivial R] [MulZeroOneClass S] [DecidableEq S] [Nontrivial S] (f : R ->*₀ S)
@@ -503,7 +521,13 @@ instance instSemigroupWithZero
     rcases eq_or_ne b 0 with (rfl | hb); · simp only [zero_mul, mul_zero]
     rcases eq_or_ne c 0 with (rfl | hc); · simp only [mul_zero]
     cases a with | top => simp [hb, hc] | coe a => ?_
-   
+    cases b with | top => simp [mul_top ha, top_mul hc] | coe b => ?_
+    cases c with
+    | top =>
+      rw [mul_top hb]; rw [mul_top ha]
+      rw [← coe_zero]; rw [ne_eq]; rw [coe_eq_coe] at ha hb
+      simp [ha, hb]
+    | coe c => simp only [← coe_mul, mul_assoc]
 
 中文:
 实例 instSemigroupWithZero
@@ -514,7 +538,13 @@ instance instSemigroupWithZero
     rcases eq_or_ne b 0 with (rfl | hb); · simp only [zero_mul, mul_zero]
     rcases eq_or_ne c 0 with (rfl | hc); · simp only [mul_zero]
     cases a with | top => simp [hb, hc] | coe a => ?_
-   
+    cases b with | top => simp [mul_top ha, top_mul hc] | coe b => ?_
+    cases c with
+    | top =>
+      rw [mul_top hb]; rw [mul_top ha]
+      rw [← coe_zero]; rw [ne_eq]; rw [coe_eq_coe] at ha hb
+      simp [ha, hb]
+    | coe c => simp only [← coe_mul, mul_assoc]
 
 Depends on / 依赖: instMulZeroClass
 -/
@@ -550,7 +580,7 @@ instance instMonoidWithZero
     | ⊤, 0 => 1
     | ⊤, _n + 1 => ⊤
   npow_zero a := by simp_rw [HPow.hPow, Pow.pow]; cases a <;> simp
-  npow_succ n a := by simp_rw [HPow.hPow, Pow.pow]; cases n <;> cases a <;> simp [pow_s
+  npow_succ n a := by simp_rw [HPow.hPow, Pow.pow]; cases n <;> cases a <;> simp [pow_succ]
 
 中文:
 实例 instMonoidWithZero
@@ -562,7 +592,7 @@ instance instMonoidWithZero
     | ⊤, 0 => 1
     | ⊤, _n + 1 => ⊤
   npow_zero a := by simp_rw [HPow.hPow, Pow.pow]; cases a <;> simp
-  npow_succ n a := by simp_rw [HPow.hPow, Pow.pow]; cases n <;> cases a <;> simp [pow_s
+  npow_succ n a := by simp_rw [HPow.hPow, Pow.pow]; cases n <;> cases a <;> simp [pow_succ]
 
 Depends on / 依赖: instMulZeroOneClass
 -/
@@ -755,7 +785,15 @@ instance instNonUnitalNonAssocSemiring
       by_cases hc : c = 0; · simp [hc]
       simp only [mul_coe_eq_bind hc]
       cases a <;> cases b <;> try rfl
-      exact congr_arg so
+      exact congr_arg some (add_mul _ _ _)
+  left_distrib c a b := by
+    cases c with
+    | top => by_cases ha : a = 0 <;> simp [ha]
+    | coe c =>
+      by_cases hc : c = 0; · simp [hc]
+      simp only [coe_mul_eq_bind hc]
+      cases a <;> cases b <;> try rfl
+      exact congr_arg some (mul_add _ _ _)
 
 中文:
 实例 instNonUnitalNonAssocSemiring
@@ -769,7 +807,15 @@ instance instNonUnitalNonAssocSemiring
       by_cases hc : c = 0; · simp [hc]
       simp only [mul_coe_eq_bind hc]
       cases a <;> cases b <;> try rfl
-      exact congr_arg so
+      exact congr_arg some (add_mul _ _ _)
+  left_distrib c a b := by
+    cases c with
+    | top => by_cases ha : a = 0 <;> simp [ha]
+    | coe c =>
+      by_cases hc : c = 0; · simp [hc]
+      simp only [coe_mul_eq_bind hc]
+      cases a <;> cases b <;> try rfl
+      exact congr_arg some (mul_add _ _ _)
 
 Depends on / 依赖: WithTop, WithTop.addCommMonoid, addCommMonoid
 -/
@@ -950,7 +996,12 @@ lemma mul_lt_mul
   · rw [top_mul (by simpa [bot_eq_zero] using hb.bot_lt.ne')]
     exact coe_lt_top _
   obtain rfl | hb₂ := eq_or_ne b₂ ⊤
-  · rw [mul_top (b
+  · rw [mul_top (by simpa [bot_eq_zero] using ha.bot_lt.ne')]
+    exact coe_lt_top _
+  lift a₂ to α using ha₂
+  lift b₂ to α using hb₂
+  norm_cast at *
+  exact CanonicallyOrderedAdd.mul_lt_mul_of_lt_of_lt ha hb
 
 中文:
 引理 mul_lt_mul
@@ -964,7 +1015,12 @@ lemma mul_lt_mul
   · rw [top_mul (by simpa [bot_eq_zero] using hb.bot_lt.ne')]
     exact coe_lt_top _
   obtain rfl | hb₂ := eq_or_ne b₂ ⊤
-  · rw [mul_top (b
+  · rw [mul_top (by simpa [bot_eq_zero] using ha.bot_lt.ne')]
+    exact coe_lt_top _
+  lift a₂ to α using ha₂
+  lift b₂ to α using hb₂
+  norm_cast at *
+  exact CanonicallyOrderedAdd.mul_lt_mul_of_lt_of_lt ha hb
 -/
 protected lemma mul_lt_mul (ha : a₁ < a₂) (hb : b₁ < b₂) : a₁ * b₁ < a₂ * b₂ := by
   have := posMulStrictMono_iff_mulPosStrictMono.1 ‹_›
@@ -1224,7 +1280,7 @@ lemma unbotD_zero_mul
   by_cases hb : b = 0; · rw [hb, mul_zero, ← coe_zero, unbotD_coe, mul_zero]
   cases a; · rw [bot_mul hb, unbotD_bot, zero_mul]
   cases b; · rw [mul_bot ha, unbotD_bot, mul_zero]
-  rw [← coe_mul]; rw [unbotD_coe]; rw [un
+  rw [← coe_mul]; rw [unbotD_coe]; rw [unbotD_coe]; rw [unbotD_coe]
 
 中文:
 引理 unbotD_zero_mul
@@ -1235,7 +1291,7 @@ lemma unbotD_zero_mul
   by_cases hb : b = 0; · rw [hb, mul_zero, ← coe_zero, unbotD_coe, mul_zero]
   cases a; · rw [bot_mul hb, unbotD_bot, zero_mul]
   cases b; · rw [mul_bot ha, unbotD_bot, mul_zero]
-  rw [← coe_mul]; rw [unbotD_coe]; rw [un
+  rw [← coe_mul]; rw [unbotD_coe]; rw [unbotD_coe]; rw [unbotD_coe]
 
 Depends on / 依赖: bot_mul, coe_mul, coe_zero, mul_bot, mul_zero, unbotD_bot, unbotD_coe, zero_mul
 -/
@@ -1439,7 +1495,8 @@ instance [MulZeroClass
     cases b
     · exact absurd h (bot_lt_coe _).not_ge
     simp only [← coe_mul, coe_le_coe] at *
-    norm_cast at 
+    norm_cast at x0
+    exact mul_le_mul_of_nonneg_left h x0
 
 中文:
 实例 [乘零类
@@ -1455,7 +1512,8 @@ instance [MulZeroClass
     cases b
     · exact absurd h (bot_lt_coe _).not_ge
     simp only [← coe_mul, coe_le_coe] at *
-    norm_cast at 
+    norm_cast at x0
+    exact mul_le_mul_of_nonneg_left h x0
 
 Depends on / 依赖: WithBot, WithBot.bot_lt_coe, absurd, bot_le, bot_lt_coe, coe_le_coe, coe_mul, eq_or_ne, mul_bot, mul_le_mul_of_nonneg_left, not_ge, simp_rw
 -/
@@ -1491,7 +1549,8 @@ instance [MulZeroClass
     cases b
     · exact absurd h (bot_lt_coe _).not_ge
     simp only [← coe_mul, coe_le_coe] at *
-    norm_cast at 
+    norm_cast at x0
+    exact mul_le_mul_of_nonneg_right h x0
 
 中文:
 实例 [乘零类
@@ -1507,7 +1566,8 @@ instance [MulZeroClass
     cases b
     · exact absurd h (bot_lt_coe _).not_ge
     simp only [← coe_mul, coe_le_coe] at *
-    norm_cast at 
+    norm_cast at x0
+    exact mul_le_mul_of_nonneg_right h x0
 
 Depends on / 依赖: WithBot, WithBot.bot_lt_coe, absurd, bot_le, bot_lt_coe, bot_mul, coe_le_coe, coe_mul, eq_or_ne, mul_le_mul_of_nonneg_right, not_ge, simp_rw
 -/
@@ -1628,7 +1688,10 @@ instance [MulZeroClass
     · rw [mul_bot x0'] at h
       exact absurd h bot_le.not_gt
     cases a
-    · exact WithBot.bot_lt_c
+    · exact WithBot.bot_lt_coe _
+    simp only [← coe_mul, coe_lt_coe] at *
+    norm_cast at x0
+    exact lt_of_mul_lt_mul_left h x0
 
 中文:
 实例 [乘零类
@@ -1645,7 +1708,10 @@ instance [MulZeroClass
     · rw [mul_bot x0'] at h
       exact absurd h bot_le.not_gt
     cases a
-    · exact WithBot.bot_lt_c
+    · exact WithBot.bot_lt_coe _
+    simp only [← coe_mul, coe_lt_coe] at *
+    norm_cast at x0
+    exact lt_of_mul_lt_mul_left h x0
 
 Depends on / 依赖: WithBot, WithBot.bot_lt_coe, absurd, bot_le, bot_le.not_gt, bot_lt_coe, coe_lt_coe, coe_mul, eq_or_ne, lt_of_mul_lt_mul_left, mul_bot, not_ge, not_gt
 -/
@@ -1685,7 +1751,10 @@ instance [MulZeroClass
     · rw [bot_mul x0'] at h
       exact absurd h bot_le.not_gt
     cases a
-    · exact WithBot.bot_lt_c
+    · exact WithBot.bot_lt_coe _
+    simp only [← coe_mul, coe_lt_coe] at *
+    norm_cast at x0
+    exact lt_of_mul_lt_mul_right h x0
 
 中文:
 实例 [乘零类
@@ -1702,7 +1771,10 @@ instance [MulZeroClass
     · rw [bot_mul x0'] at h
       exact absurd h bot_le.not_gt
     cases a
-    · exact WithBot.bot_lt_c
+    · exact WithBot.bot_lt_coe _
+    simp only [← coe_mul, coe_lt_coe] at *
+    norm_cast at x0
+    exact lt_of_mul_lt_mul_right h x0
 
 Depends on / 依赖: WithBot, WithBot.bot_lt_coe, absurd, bot_le, bot_le.not_gt, bot_lt_coe, bot_mul, coe_lt_coe, coe_mul, eq_or_ne, lt_of_mul_lt_mul_right, not_ge, not_gt
 -/
@@ -1741,7 +1813,7 @@ instance [MulZeroClass
       exact absurd h (bot_lt_coe _).not_ge
     simp only [← coe_mul, coe_le_coe] at *
     norm_cast at x0
-    exact le_of_mul_le_mul_
+    exact le_of_mul_le_mul_left h x0
 
 中文:
 实例 [乘零类
@@ -1757,7 +1829,7 @@ instance [MulZeroClass
       exact absurd h (bot_lt_coe _).not_ge
     simp only [← coe_mul, coe_le_coe] at *
     norm_cast at x0
-    exact le_of_mul_le_mul_
+    exact le_of_mul_le_mul_left h x0
 
 Depends on / 依赖: absurd, bot_le, bot_lt_coe, coe_le_coe, coe_mul, le_of_mul_le_mul_left, mul_bot, ne_bot, not_ge, x0.ne.symm, x0.ne_bot
 -/
@@ -1792,7 +1864,7 @@ instance [MulZeroClass
       exact absurd h (bot_lt_coe _).not_ge
     simp only [← coe_mul, coe_le_coe] at *
     norm_cast at x0
-    exact le_of_mul_le_mul_
+    exact le_of_mul_le_mul_right h x0
 
 中文:
 实例 [乘零类
@@ -1808,7 +1880,7 @@ instance [MulZeroClass
       exact absurd h (bot_lt_coe _).not_ge
     simp only [← coe_mul, coe_le_coe] at *
     norm_cast at x0
-    exact le_of_mul_le_mul_
+    exact le_of_mul_le_mul_right h x0
 
 Depends on / 依赖: absurd, bot_le, bot_lt_coe, bot_mul, coe_le_coe, coe_mul, le_of_mul_le_mul_right, ne_bot, not_ge, x0.ne.symm, x0.ne_bot
 -/

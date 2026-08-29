@@ -68,7 +68,32 @@ theorem natDegree_of_dvd_cyclotomic_of_irreducible_of_monic
   have hζ : IsPrimitiveRoot (root P) n := by
     have : NeZero (n : AdjoinRoot P) := by
       suffices NeZero (n : K) by
-        simpa using! NeZero.of_injective (
+        simpa using! NeZero.of_injective (algebraMap K (AdjoinRoot P)).injective
+      have := charP_of_card_eq_prime_pow hK
+      exact ⟨fun h0 => Nat.Prime.not_coprime_iff_dvd.mpr
+        ⟨p, hp.out, dvd_pow_self p (f_ne_zero hK), (CharP.cast_eq_zero_iff K p n).mp h0⟩
+          (hn.pow_left f)⟩
+    simpa [← isRoot_cyclotomic_iff] using! (isRoot_root P).dvd
+      (by simpa using! map_dvd (algebraMap K (AdjoinRoot P)) hP)
+  let pB := powerBasis hPirr.ne_zero
+  rw [← powerBasis_dim hPirr.ne_zero]; rw [← pB.finrank]; rw [← orderOf_frobeniusAlgEquivOfAlgebraic]
+  have hζ' := isOfFinOrder_iff_pow_eq_one.mpr
+      ⟨n, pos_of_ne_zero (fun h0 => by simp [h0, hp.out.ne_one] at hn),
+      hζ.pow_eq_one⟩
+  refine dvd_antisymm
+    (orderOf_dvd_iff_pow_eq_one.mpr <| AlgEquiv.coe_toAlgHom_injective <| pB.algHom_ext ?_)
+    (orderOf_dvd_iff_pow_eq_one.mpr <| Units.ext ?_)
+  · simp only [AlgEquiv.coe_toAlgHom, AlgEquiv.coe_pow, AlgEquiv.one_apply,
+      coe_frobeniusAlgEquivOfAlgebraic, pow_iterate, hK]
+    nth_rewrite 2 [← pow_one pB.gen]
+    rw [powerBasis_gen hPirr.ne_zero]; rw [hζ'.pow_eq_pow_iff_modEq]; rw [← hζ.eq_orderOf]; rw [← natCast_eq_natCast_iff]
+    simpa only [Nat.cast_pow, Nat.cast_one, coe_unitOfCoprime, Units.val_one,
+      Units.val_pow_eq_pow_val] using! Units.val_inj.mpr <| pow_orderOf_eq_one
+      (unitOfCoprime _ (hn.pow_left f))
+  · let φ := frobeniusAlgEquivOfAlgebraic K (AdjoinRoot P)
+    have : (φ ^ orderOf φ) (root P) = root P := by simp [pow_orderOf_eq_one φ]
+    simp only [AlgEquiv.coe_pow, φ, coe_frobeniusAlgEquivOfAlgebraic, pow_iterate, hK] at this
+    rw [Units.val_one]; rw [← Nat.cast_one]; rw [Units.val_pow_eq_pow_val]; rw [coe_unitOfCoprime]; rw [← Nat.cast_pow]; rw [natCast_eq_natCast_iff]; rw [hζ.eq_orderOf]; rw [← hζ'.pow_eq_pow_iff_modEq]; rw [this]; rw [pow_one]
 
 中文:
 定理 natDegree_of_dvd_cyclotomic_of_irreducible_of_monic
@@ -80,7 +105,32 @@ theorem natDegree_of_dvd_cyclotomic_of_irreducible_of_monic
   have hζ : IsPrimitiveRoot (root P) n := by
     have : NeZero (n : AdjoinRoot P) := by
       suffices NeZero (n : K) by
-        simpa using! NeZero.of_injective (
+        simpa using! NeZero.of_injective (algebraMap K (AdjoinRoot P)).injective
+      have := charP_of_card_eq_prime_pow hK
+      exact ⟨fun h0 => Nat.Prime.not_coprime_iff_dvd.mpr
+        ⟨p, hp.out, dvd_pow_self p (f_ne_zero hK), (CharP.cast_eq_zero_iff K p n).mp h0⟩
+          (hn.pow_left f)⟩
+    simpa [← isRoot_cyclotomic_iff] using! (isRoot_root P).dvd
+      (by simpa using! map_dvd (algebraMap K (AdjoinRoot P)) hP)
+  let pB := powerBasis hPirr.ne_zero
+  rw [← powerBasis_dim hPirr.ne_zero]; rw [← pB.finrank]; rw [← orderOf_frobeniusAlgEquivOfAlgebraic]
+  have hζ' := isOfFinOrder_iff_pow_eq_one.mpr
+      ⟨n, pos_of_ne_zero (fun h0 => by simp [h0, hp.out.ne_one] at hn),
+      hζ.pow_eq_one⟩
+  refine dvd_antisymm
+    (orderOf_dvd_iff_pow_eq_one.mpr <| AlgEquiv.coe_toAlgHom_injective <| pB.algHom_ext ?_)
+    (orderOf_dvd_iff_pow_eq_one.mpr <| Units.ext ?_)
+  · simp only [AlgEquiv.coe_toAlgHom, AlgEquiv.coe_pow, AlgEquiv.one_apply,
+      coe_frobeniusAlgEquivOfAlgebraic, pow_iterate, hK]
+    nth_rewrite 2 [← pow_one pB.gen]
+    rw [powerBasis_gen hPirr.ne_zero]; rw [hζ'.pow_eq_pow_iff_modEq]; rw [← hζ.eq_orderOf]; rw [← natCast_eq_natCast_iff]
+    simpa only [Nat.cast_pow, Nat.cast_one, coe_unitOfCoprime, Units.val_one,
+      Units.val_pow_eq_pow_val] using! Units.val_inj.mpr <| pow_orderOf_eq_one
+      (unitOfCoprime _ (hn.pow_left f))
+  · let φ := frobeniusAlgEquivOfAlgebraic K (AdjoinRoot P)
+    have : (φ ^ orderOf φ) (root P) = root P := by simp [pow_orderOf_eq_one φ]
+    simp only [AlgEquiv.coe_pow, φ, coe_frobeniusAlgEquivOfAlgebraic, pow_iterate, hK] at this
+    rw [Units.val_one]; rw [← Nat.cast_one]; rw [Units.val_pow_eq_pow_val]; rw [coe_unitOfCoprime]; rw [← Nat.cast_pow]; rw [natCast_eq_natCast_iff]; rw [hζ.eq_orderOf]; rw [← hζ'.pow_eq_pow_iff_modEq]; rw [this]; rw [pow_one]
 -/
 private theorem natDegree_of_dvd_cyclotomic_of_irreducible_of_monic (hP : P ∣ cyclotomic n K)
     (hPirr : Irreducible P) (hPmo : P.Monic) :
@@ -132,7 +182,10 @@ theorem natDegree_of_dvd_cyclotomic_of_irreducible
       _ = P * A := hA
       _ = P * (C P.leadingCoeff⁻¹ * C P.leadingCoeff) * A := by
         simp [← C_mul, leadingCoeff_ne_zero.mpr hPirr.ne_zero]
-      _ = _ := by ri
+      _ = _ := by ring
+  simpa [← natDegree_mul_leadingCoeff_self_inv P] using
+    natDegree_of_dvd_cyclotomic_of_irreducible_of_monic hK hn hQ
+    (irreducible_mul_leadingCoeff_inv.mpr hPirr) (monic_mul_leadingCoeff_inv hPirr.ne_zero)
 
 中文:
 定理 natDegree_of_dvd_cyclotomic_of_irreducible
@@ -145,7 +198,10 @@ theorem natDegree_of_dvd_cyclotomic_of_irreducible
       _ = P * A := hA
       _ = P * (C P.leadingCoeff⁻¹ * C P.leadingCoeff) * A := by
         simp [← C_mul, leadingCoeff_ne_zero.mpr hPirr.ne_zero]
-      _ = _ := by ri
+      _ = _ := by ring
+  simpa [← natDegree_mul_leadingCoeff_self_inv P] using
+    natDegree_of_dvd_cyclotomic_of_irreducible_of_monic hK hn hQ
+    (irreducible_mul_leadingCoeff_inv.mpr hPirr) (monic_mul_leadingCoeff_inv hPirr.ne_zero)
 
 Depends on / 依赖: C_mul, P.leadingCoeff, cyclotomic, hPirr.ne_zero, irreducible_mul_leadingCoeff_inv, irreducible_mul_leadingCoeff_inv.mpr, leadingCoeff, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, monic_mul_leadingCoeff_inv, natDegree_mul_leadingCoeff_self_inv, natDegree_of_dvd_cyclotomic_of_irreducible_of_monic, ne_zero
 -/
@@ -175,7 +231,14 @@ theorem irreducible_of_dvd_cyclotomic_of_natDegree
   have hP0 : P != 0 := ne_zero_of_dvd_ne_zero (cyclotomic_ne_zero n K) hP
 obtain ⟨Q, HQ⟩ := exists_mem_normalizedFactors hP0 not_isUnit_of_natDegree_pos _
 pos_of_ne_zero fun h => orderOf_eq_zero_iff.mp (h ▸ hPdeg.symm) isOfFinOrder_of_finite ..
-  refine (associated_of_dvd_of_natDegree
+  refine (associated_of_dvd_of_natDegree_le (dvd_of_mem_normalizedFactors HQ) hP0 ?_).irreducible
+    (irreducible_of_normalized_factor Q HQ)
+  rw [hPdeg]; rw [← natDegree_of_dvd_cyclotomic_of_irreducible hK hn ?_
+    (irreducible_of_normalized_factor Q HQ)]
+exact dvd_of_mem_normalizedFactors mem_of_le
+    ((dvd_iff_normalizedFactors_le_normalizedFactors hP0 (cyclotomic_ne_zero n K)).mp hP) HQ
+
+omit hK in
 
 中文:
 定理 irreducible_of_dvd_cyclotomic_of_natDegree
@@ -185,7 +248,14 @@ pos_of_ne_zero fun h => orderOf_eq_zero_iff.mp (h ▸ hPdeg.symm) isOfFinOrder_o
   have hP0 : P != 0 := ne_zero_of_dvd_ne_zero (cyclotomic_ne_zero n K) hP
 obtain ⟨Q, HQ⟩ := exists_mem_normalizedFactors hP0 not_isUnit_of_natDegree_pos _
 pos_of_ne_zero fun h => orderOf_eq_zero_iff.mp (h ▸ hPdeg.symm) isOfFinOrder_of_finite ..
-  refine (associated_of_dvd_of_natDegree
+  refine (associated_of_dvd_of_natDegree_le (dvd_of_mem_normalizedFactors HQ) hP0 ?_).irreducible
+    (irreducible_of_normalized_factor Q HQ)
+  rw [hPdeg]; rw [← natDegree_of_dvd_cyclotomic_of_irreducible hK hn ?_
+    (irreducible_of_normalized_factor Q HQ)]
+exact dvd_of_mem_normalizedFactors mem_of_le
+    ((dvd_iff_normalizedFactors_le_normalizedFactors hP0 (cyclotomic_ne_zero n K)).mp hP) HQ
+
+omit hK in
 
 Depends on / 依赖: associated_of_dvd_of_natDegree_le, classical, cyclotomic_ne_zero, dvd_of_mem_normalizedFactors, exists_mem_normalizedFactors, hPdeg.symm, irreducible, irreducible_of_normalized_factor, isOfFinOrder_of_finite, natDegree_of_dvd_cyclotomic_of_irreducible, ne_zero_of_dvd_ne_zero, not_isUnit_of_natDegree_pos, orderOf_eq_zero_iff, orderOf_eq_zero_iff.mp, pos_of_ne_zero
 -/
@@ -263,7 +333,30 @@ theorem normalizedFactors_cyclotomic_card
   have : forall P in normalizedFactors (cyclotomic n K),
       P.natDegree = orderOf (unitOfCoprime _ (hn.pow_left f)) := fun P hP =>
     natDegree_of_mem_normalizedFactors_cyclotomic hK hn hP
-have H := natDegree_eq_of_degree_eq degree_e
+have H := natDegree_eq_of_degree_eq degree_eq_degree_of_associated h
+  rw [natDegree_cyclotomic]; rw [natDegree_multiset_prod _ (zero_notMem_normalizedFactors _)]; rw [map_congr rfl this] at H
+  simp only [map_const', sum_replicate, smul_eq_mul] at H
+  rw [← H]; rw [mul_div_left _ (orderOf_pos _)]; rw [toFinset_card_of_nodup]
+  refine nodup_iff_count_le_one.mpr (fun P => ?_)
+  by_contra! H
+  have : NeZero (n : K) := by
+    refine ⟨fun H => ?_⟩
+    have := charP_of_card_eq_prime_pow hK
+    exact hp.out.coprime_iff_not_dvd.mp ((coprime_pow_left_iff
+      (pos_of_ne_zero <| f_ne_zero hK) _ _).mp (hn.pow_left f))
+        ((CharP.cast_eq_zero_iff K p _).mp H)
+  have hP : P in normalizedFactors (cyclotomic n K) := count_pos.mp (by lia)
+  refine (prime_of_normalized_factor _ hP).not_isUnit (squarefree_cyclotomic n K P ?_)
+  have : {P, P} <= normalizedFactors (cyclotomic n K) := by
+    refine le_iff_count.mpr (fun Q => ?_)
+    by_cases hQ : Q = P
+    · simp only [hQ, insert_eq_cons, count_cons_self, nodup_singleton, mem_singleton,
+        count_eq_one_of_mem, reduceAdd]
+      lia
+    · simp [hQ]
+  have := prod_dvd_prod_of_le this
+  simp only [insert_eq_cons, prod_cons, prod_singleton] at this
+  exact this.trans h.dvd
 
 中文:
 定理 normalizedFactors_cyclotomic_card
@@ -273,7 +366,30 @@ have H := natDegree_eq_of_degree_eq degree_e
   have : forall P in normalizedFactors (cyclotomic n K),
       P.natDegree = orderOf (unitOfCoprime _ (hn.pow_left f)) := fun P hP =>
     natDegree_of_mem_normalizedFactors_cyclotomic hK hn hP
-have H := natDegree_eq_of_degree_eq degree_e
+have H := natDegree_eq_of_degree_eq degree_eq_degree_of_associated h
+  rw [natDegree_cyclotomic]; rw [natDegree_multiset_prod _ (zero_notMem_normalizedFactors _)]; rw [map_congr rfl this] at H
+  simp only [map_const', sum_replicate, smul_eq_mul] at H
+  rw [← H]; rw [mul_div_left _ (orderOf_pos _)]; rw [toFinset_card_of_nodup]
+  refine nodup_iff_count_le_one.mpr (fun P => ?_)
+  by_contra! H
+  have : NeZero (n : K) := by
+    refine ⟨fun H => ?_⟩
+    have := charP_of_card_eq_prime_pow hK
+    exact hp.out.coprime_iff_not_dvd.mp ((coprime_pow_left_iff
+      (pos_of_ne_zero <| f_ne_zero hK) _ _).mp (hn.pow_left f))
+        ((CharP.cast_eq_zero_iff K p _).mp H)
+  have hP : P in normalizedFactors (cyclotomic n K) := count_pos.mp (by lia)
+  refine (prime_of_normalized_factor _ hP).not_isUnit (squarefree_cyclotomic n K P ?_)
+  have : {P, P} <= normalizedFactors (cyclotomic n K) := by
+    refine le_iff_count.mpr (fun Q => ?_)
+    by_cases hQ : Q = P
+    · simp only [hQ, insert_eq_cons, count_cons_self, nodup_singleton, mem_singleton,
+        count_eq_one_of_mem, reduceAdd]
+      lia
+    · simp [hQ]
+  have := prod_dvd_prod_of_le this
+  simp only [insert_eq_cons, prod_cons, prod_singleton] at this
+  exact this.trans h.dvd
 
 Depends on / 依赖: P.natDegree, cyclotomic, cyclotomic_ne_zero, degree_eq_degree_of_associated, hn.pow_left, map_congr, map_const, natDegree, natDegree_cyclotomic, natDegree_eq_of_degree_eq, natDegree_multiset_prod, natDegree_of_mem_normalizedFactors_cyclotomic, normalizedFactors, orderOf, pow_left, prod_normalizedFactors, smul_eq_mul, sum_replicate, unitOfCoprime, zero_notMem_normalizedFactors
 -/

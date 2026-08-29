@@ -631,7 +631,9 @@ theorem tsum_const_eq_top_of_ne_zero
     apply ENNReal.Tendsto.mul_const tendsto_nat_nhds_top
     simp only [true_or, top_ne_zero, Ne, not_false_iff]
   have B : forall n : Nat, (n : Real>=0∞) * c <= ∑' _ : α, c := fun n => by
-    rcases Infinite.exists_su
+    rcases Infinite.exists_subset_card_eq α n with ⟨s, hs⟩
+    simpa [hs] using @ENNReal.sum_le_tsum α (fun _ => c) s
+  simpa [hc] using le_of_tendsto' A B
 
 中文:
 定理 tsum_const_eq_top_of_ne_zero
@@ -641,7 +643,9 @@ theorem tsum_const_eq_top_of_ne_zero
     apply ENNReal.Tendsto.mul_const tendsto_nat_nhds_top
     simp only [true_or, top_ne_zero, Ne, not_false_iff]
   have B : forall n : Nat, (n : Real>=0∞) * c <= ∑' _ : α, c := fun n => by
-    rcases Infinite.exists_su
+    rcases Infinite.exists_subset_card_eq α n with ⟨s, hs⟩
+    simpa [hs] using @ENNReal.sum_le_tsum α (fun _ => c) s
+  simpa [hc] using le_of_tendsto' A B
 
 Depends on / 依赖: ENNReal, ENNReal.Tendsto.mul_const, ENNReal.sum_le_tsum, Infinite, Infinite.exists_subset_card_eq, Tendsto, exists_subset_card_eq, le_of_tendsto, mul_const, not_false_iff, sum_le_tsum, tendsto_nat_nhds_top, top_ne_zero, true_or
 -/
@@ -688,7 +692,7 @@ theorem tsum_mul_left
     have : Tendsto (fun s : Finset α => ∑ j in s, a * f j) atTop (𝓝 (a * ∑' i, f i)) := by
       simp only [← Finset.mul_sum]
       exact ENNReal.Tendsto.const_mul ENNReal.summable.hasSum (Or.inl hf)
-    exact H
+    exact HasSum.tsum_eq this
 
 中文:
 定理 tsum_mul_left
@@ -700,7 +704,7 @@ theorem tsum_mul_left
     have : Tendsto (fun s : Finset α => ∑ j in s, a * f j) atTop (𝓝 (a * ∑' i, f i)) := by
       simp only [← Finset.mul_sum]
       exact ENNReal.Tendsto.const_mul ENNReal.summable.hasSum (Or.inl hf)
-    exact H
+    exact HasSum.tsum_eq this
 -/
 protected theorem tsum_mul_left : ∑' i, a * f i = a * ∑' i, f i := by
   by_cases hf : forall i, f i = 0
@@ -878,7 +882,7 @@ theorem tendsto_cofinite_zero_of_tsum_ne_top
   have h_f_coe : f = fun n => ((f n).toNNReal : ENNReal) :=
     funext fun n => (coe_toNNReal (f_ne_top n)).symm
   rw [h_f_coe]; rw [← @coe_zero]; rw [tendsto_coe]
-  exact NNReal.tendsto_cofinite_zero_of_summable (summable_t
+  exact NNReal.tendsto_cofinite_zero_of_summable (summable_toNNReal_of_tsum_ne_top hf)
 
 中文:
 定理 tendsto_cofinite_zero_of_tsum_ne_top
@@ -888,7 +892,7 @@ theorem tendsto_cofinite_zero_of_tsum_ne_top
   have h_f_coe : f = fun n => ((f n).toNNReal : ENNReal) :=
     funext fun n => (coe_toNNReal (f_ne_top n)).symm
   rw [h_f_coe]; rw [← @coe_zero]; rw [tendsto_coe]
-  exact NNReal.tendsto_cofinite_zero_of_summable (summable_t
+  exact NNReal.tendsto_cofinite_zero_of_summable (summable_toNNReal_of_tsum_ne_top hf)
 
 Depends on / 依赖: ENNReal, ENNReal.ne_top_of_tsum_ne_top, NNReal, NNReal.tendsto_cofinite_zero_of_summable, coe_toNNReal, coe_zero, f_ne_top, h_f_coe, ne_top_of_tsum_ne_top, summable_toNNReal_of_tsum_ne_top, tendsto_coe, tendsto_cofinite_zero_of_summable, toNNReal
 -/
@@ -1224,7 +1228,7 @@ theorem finite_const_le_of_tsum_ne_top
   refine tsum_ne_top (top_unique ?_)
   calc ∞ = ∑' _ : { i | ε <= a i }, ε := (tsum_const_eq_top_of_ne_zero ε_ne_zero).symm
   _ <= ∑' i, a i := ENNReal.summable.tsum_le_tsum_of_inj (↑)
-    Subtype.val_injective (fun _ _ => zero_le) (fun i => i.2) ENNR
+    Subtype.val_injective (fun _ _ => zero_le) (fun i => i.2) ENNReal.summable
 
 中文:
 定理 finite_const_le_of_tsum_ne_top
@@ -1235,7 +1239,7 @@ theorem finite_const_le_of_tsum_ne_top
   refine tsum_ne_top (top_unique ?_)
   calc ∞ = ∑' _ : { i | ε <= a i }, ε := (tsum_const_eq_top_of_ne_zero ε_ne_zero).symm
   _ <= ∑' i, a i := ENNReal.summable.tsum_le_tsum_of_inj (↑)
-    Subtype.val_injective (fun _ _ => zero_le) (fun i => i.2) ENNR
+    Subtype.val_injective (fun _ _ => zero_le) (fun i => i.2) ENNReal.summable
 
 Depends on / 依赖: ENNReal, ENNReal.summable, ENNReal.summable.tsum_le_tsum_of_inj, Infinite, Infinite.to_subtype, Subtype, Subtype.val_injective, summable, to_subtype, top_unique, tsum_const_eq_top_of_ne_zero, tsum_le_tsum_of_inj, tsum_ne_top, val_injective, zero_le
 -/
@@ -1258,7 +1262,10 @@ theorem finset_card_const_le_le_of_tsum_le
   have hf : { i : ι | ε <= a i }.Finite :=
     finite_const_le_of_tsum_ne_top (ne_top_of_le_ne_top c_ne_top tsum_le_c) ε_ne_zero
   refine ⟨hf, (ENNReal.le_div_iff_mul_le (.inl ε_ne_zero) (.inr c_ne_top)).2 ?_⟩
-  calc #hf.toFinset * ε = ∑ _i in hf.toFinset, ε := by rw [Finset.sum_const, nsmul_eq_m
+  calc #hf.toFinset * ε = ∑ _i in hf.toFinset, ε := by rw [Finset.sum_const, nsmul_eq_mul]
+    _ <= ∑ i in hf.toFinset, a i := Finset.sum_le_sum fun i => hf.mem_toFinset.1
+    _ <= ∑' i, a i := ENNReal.sum_le_tsum _
+    _ <= c := tsum_le_c
 
 中文:
 定理 finset_card_const_le_le_of_tsum_le
@@ -1267,7 +1274,10 @@ theorem finset_card_const_le_le_of_tsum_le
   have hf : { i : ι | ε <= a i }.Finite :=
     finite_const_le_of_tsum_ne_top (ne_top_of_le_ne_top c_ne_top tsum_le_c) ε_ne_zero
   refine ⟨hf, (ENNReal.le_div_iff_mul_le (.inl ε_ne_zero) (.inr c_ne_top)).2 ?_⟩
-  calc #hf.toFinset * ε = ∑ _i in hf.toFinset, ε := by rw [Finset.sum_const, nsmul_eq_m
+  calc #hf.toFinset * ε = ∑ _i in hf.toFinset, ε := by rw [Finset.sum_const, nsmul_eq_mul]
+    _ <= ∑ i in hf.toFinset, a i := Finset.sum_le_sum fun i => hf.mem_toFinset.1
+    _ <= ∑' i, a i := ENNReal.sum_le_tsum _
+    _ <= c := tsum_le_c
 
 Depends on / 依赖: ENNReal, ENNReal.le_div_iff_mul_le, ENNReal.sum_le_tsum, Finite, Finset, Finset.sum_const, Finset.sum_le_sum, c_ne_top, finite_const_le_of_tsum_ne_top, hf.mem_toFinset, hf.toFinset, le_div_iff_mul_le, mem_toFinset, ne_top_of_le_ne_top, nsmul_eq_mul, sum_const, sum_le_sum, sum_le_tsum, toFinset, tsum_le_c
 -/
@@ -1781,7 +1791,11 @@ theorem tendsto_sum_nat_add
 
 nonrec theorem hasSum_lt {f g : α -> Real>=0} {sf sg : Real>=0} {i : α} (h : forall a : α, f a <= g a)
     (hi : f i < g i) (hf : HasSum f sf) (hg : HasSum g sg) : sf < sg := by
-  have A : forall a : α, 
+  have A : forall a : α, (f a : Real) <= g a := fun a => NNReal.coe_le_coe.2 (h a)
+  have : (sf : Real) < sg := hasSum_lt A (NNReal.coe_lt_coe.2 hi) (hasSum_coe.2 hf) (hasSum_coe.2 hg)
+  exact NNReal.coe_lt_coe.1 this
+
+@[mono]
 
 中文:
 定理 tendsto_sum_nat_add
@@ -1794,7 +1808,11 @@ nonrec theorem hasSum_lt {f g : α -> Real>=0} {sf sg : Real>=0} {i : α} (h : f
 
 nonrec theorem hasSum_lt {f g : α -> Real>=0} {sf sg : Real>=0} {i : α} (h : forall a : α, f a <= g a)
     (hi : f i < g i) (hf : HasSum f sf) (hg : HasSum g sg) : sf < sg := by
-  have A : forall a : α, 
+  have A : forall a : α, (f a : Real) <= g a := fun a => NNReal.coe_le_coe.2 (h a)
+  have : (sf : Real) < sg := hasSum_lt A (NNReal.coe_lt_coe.2 hi) (hasSum_coe.2 hf) (hasSum_coe.2 hg)
+  exact NNReal.coe_lt_coe.1 this
+
+@[mono]
 
 Depends on / 依赖: _root_, _root_.tendsto_sum_nat_add, convert, tendsto_coe, tendsto_sum_nat_add
 -/
@@ -2037,7 +2055,11 @@ theorem hasSum_lt
   · have hg' : forall x, g x != ∞ := ENNReal.ne_top_of_tsum_ne_top (hg.tsum_eq.symm ▸ hsg)
     lift f to α -> Real>=0 using fun x =>
       ne_of_lt (lt_of_le_of_lt (h x) <| lt_of_le_of_ne le_top (hg' x))
-    lift g to α -> Rea
+    lift g to α -> Real>=0 using hg'
+    lift sf to Real>=0 using hsf
+    lift sg to Real>=0 using hsg
+    simp only [coe_le_coe, coe_lt_coe] at h hi ⊢
+    exact NNReal.hasSum_lt h hi (ENNReal.hasSum_coe.1 hf) (ENNReal.hasSum_coe.1 hg)
 
 中文:
 定理 hasSum_lt
@@ -2048,7 +2070,11 @@ theorem hasSum_lt
   · have hg' : forall x, g x != ∞ := ENNReal.ne_top_of_tsum_ne_top (hg.tsum_eq.symm ▸ hsg)
     lift f to α -> Real>=0 using fun x =>
       ne_of_lt (lt_of_le_of_lt (h x) <| lt_of_le_of_ne le_top (hg' x))
-    lift g to α -> Rea
+    lift g to α -> Real>=0 using hg'
+    lift sf to Real>=0 using hsf
+    lift sg to Real>=0 using hsg
+    simp only [coe_le_coe, coe_lt_coe] at h hi ⊢
+    exact NNReal.hasSum_lt h hi (ENNReal.hasSum_coe.1 hf) (ENNReal.hasSum_coe.1 hg)
 
 Depends on / 依赖: ENNReal, ENNReal.hasSum_coe, ENNReal.ne_top_of_tsum_ne_top, NNReal, NNReal.hasSum_lt, coe_le_coe, coe_lt_coe, hasSum_coe, hasSum_lt, hg.tsum_eq.symm, hsg.symm, le_top, lt_of_le_of_lt, lt_of_le_of_ne, ne_of_lt, ne_top_of_tsum_ne_top, tsum_eq
 -/
@@ -2366,7 +2392,15 @@ theorem cauchySeq_of_edist_le_of_summable
   replace hd : CauchySeq fun n : Nat => ∑ x in Finset.range n, d x :=
     let ⟨_, H⟩ := hd
     H.tendsto_sum_nat.cauchySeq
-  -- Now we take the same `N` as in one of the def
+  -- Now we take the same `N` as in one of the definitions of a Cauchy sequence.
+  refine (Metric.cauchySeq_iff'.1 hd ε (NNReal.coe_pos.2 εpos)).imp fun N hN n hn => ?_
+  specialize hN n hn
+  -- We simplify the known inequality.
+  rw [dist_nndist]; rw [NNReal.nndist_eq]; rw [← Finset.sum_range_add_sum_Ico _ hn]; rw [add_tsub_cancel_left]; rw [NNReal.coe_lt_coe]; rw [max_lt_iff] at hN
+  rw [edist_comm]
+  -- Then use `hf` to simplify the goal to the same form.
+  refine lt_of_le_of_lt (edist_le_Ico_sum_of_edist_le hn fun _ _ => hf _) ?_
+  exact mod_cast hN.1
 
 中文:
 定理 cauchySeq_of_edist_le_of_summable
@@ -2377,7 +2411,15 @@ theorem cauchySeq_of_edist_le_of_summable
   replace hd : CauchySeq fun n : Nat => ∑ x in Finset.range n, d x :=
     let ⟨_, H⟩ := hd
     H.tendsto_sum_nat.cauchySeq
-  -- Now we take the same `N` as in one of the def
+  -- Now we take the same `N` as in one of the definitions of a Cauchy sequence.
+  refine (Metric.cauchySeq_iff'.1 hd ε (NNReal.coe_pos.2 εpos)).imp fun N hN n hn => ?_
+  specialize hN n hn
+  -- We simplify the known inequality.
+  rw [dist_nndist]; rw [NNReal.nndist_eq]; rw [← Finset.sum_range_add_sum_Ico _ hn]; rw [add_tsub_cancel_left]; rw [NNReal.coe_lt_coe]; rw [max_lt_iff] at hN
+  rw [edist_comm]
+  -- Then use `hf` to simplify the goal to the same form.
+  refine lt_of_le_of_lt (edist_le_Ico_sum_of_edist_le hn fun _ _ => hf _) ?_
+  exact mod_cast hN.1
 
 Depends on / 依赖: EMetric, EMetric.cauchySeq_iff_NNReal, cauchySeq_iff_NNReal
 -/

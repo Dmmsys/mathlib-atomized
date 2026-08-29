@@ -319,7 +319,10 @@ theorem hε
   rw [← cancel_epi Γ₂N₁.inv]; rw [Iso.inv_hom_id]
   ext X : 2
   rw [NatTrans.comp_app]; rw [Γ₂N₁_inv]; rw [compatibility_Γ₂N₁_Γ₂N₂_natTrans X]; rw [Compatibility.υ_hom_app]; rw [Preadditive.DoldKan.equivalence_unitIso]; rw [Iso.app_inv]; rw [assoc]
-  dsimp only [Functo
+  dsimp only [Functor.comp_obj, Preadditive.DoldKan.equivalence_inverse, Preadditive.DoldKan.Γ.eq_1,
+    toKaroubiEquivalence, Functor.asEquivalence_functor, Preadditive.DoldKan.N.eq_1,
+    NatTrans.id_app]
+  rw [← NatTrans.comp_app_assoc]; rw [← Γ₂N₂_inv]; rw [Iso.inv_hom_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [Γ₂N₂ToKaroubiIso_inv_app]; rw [← Γ₂.map_comp]; rw [Iso.inv_hom_id_app]; rw [Γ₂.map_id]
 
 中文:
 定理 hε
@@ -329,7 +332,10 @@ theorem hε
   rw [← cancel_epi Γ₂N₁.inv]; rw [Iso.inv_hom_id]
   ext X : 2
   rw [NatTrans.comp_app]; rw [Γ₂N₁_inv]; rw [compatibility_Γ₂N₁_Γ₂N₂_natTrans X]; rw [Compatibility.υ_hom_app]; rw [Preadditive.DoldKan.equivalence_unitIso]; rw [Iso.app_inv]; rw [assoc]
-  dsimp only [Functo
+  dsimp only [Functor.comp_obj, Preadditive.DoldKan.equivalence_inverse, Preadditive.DoldKan.Γ.eq_1,
+    toKaroubiEquivalence, Functor.asEquivalence_functor, Preadditive.DoldKan.N.eq_1,
+    NatTrans.id_app]
+  rw [← NatTrans.comp_app_assoc]; rw [← Γ₂N₂_inv]; rw [Iso.inv_hom_id]; rw [NatTrans.id_app]; rw [id_comp]; rw [Γ₂N₂ToKaroubiIso_inv_app]; rw [← Γ₂.map_comp]; rw [Iso.inv_hom_id_app]; rw [Γ₂.map_id]
 
 Depends on / 依赖: Compatibility, DoldKan, Functor, Functor.asEquivalence_functor, Functor.comp_obj, Iso.app_inv, Iso.inv_hom_id, NatTrans, NatTrans.comp_app, NatTrans.comp_app_assoc, NatTrans.id_app, Preadditive, Preadditive.DoldKan, Preadditive.DoldKan.N.eq_1, Preadditive.DoldKan.equivalence_inverse, Preadditive.DoldKan.equivalence_unitIso, app_inv, asEquivalence_functor, cancel_epi, comp_app
 -/

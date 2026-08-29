@@ -117,7 +117,8 @@ lemma iff_forall_exists
     rw [← Scheme.Hom.isoOpensRange_inv_comp]; rw [Category.assoc]; rw [P.cancel_left_of_respectsIso]
     apply hf
   · choose U hx hf using H
-    exact ⟨.mkOfCovers X (fun x => U x) (fun _ => (U _).
+    exact ⟨.mkOfCovers X (fun x => U x) (fun _ => (U _).ι) (fun x => ⟨x, ⟨x, hx x⟩, rfl⟩)
+      fun _ => inferInstance, hf⟩
 
 中文:
 引理 iff_对任意_存在
@@ -128,7 +129,8 @@ lemma iff_forall_exists
     rw [← Scheme.Hom.isoOpensRange_inv_comp]; rw [Category.assoc]; rw [P.cancel_left_of_respectsIso]
     apply hf
   · choose U hx hf using H
-    exact ⟨.mkOfCovers X (fun x => U x) (fun _ => (U _).
+    exact ⟨.mkOfCovers X (fun x => U x) (fun _ => (U _).ι) (fun x => ⟨x, ⟨x, hx x⟩, rfl⟩)
+      fun _ => inferInstance, hf⟩
 
 Depends on / 依赖: Category, Category.assoc, ComposableArrows, P.cancel_left_of_respectsIso, Scheme, Scheme.Hom.isoOpensRange_inv_comp, cancel_left_of_respectsIso, covers, isoOpensRange_inv_comp, mkOfCovers, opensRange, unop.len
 -/
@@ -226,7 +228,7 @@ instance [P.RespectsIso]
   · simpa [pullback.condition_assoc] using
       RespectsLeft.precomp (Q := @IsOpenImmersion) _ inferInstance _ (h j)
   · choose 𝒱 h𝒱 using h
-    exact ⟨(Scheme.Co
+    exact ⟨(Scheme.Cover.ulift 𝒰).bind (fun i => Scheme.Cover.ulift (𝒱 _)), fun i => h𝒱 _ _⟩
 
 中文:
 实例 [P.RespectsIso]
@@ -237,7 +239,7 @@ instance [P.RespectsIso]
   · simpa [pullback.condition_assoc] using
       RespectsLeft.precomp (Q := @IsOpenImmersion) _ inferInstance _ (h j)
   · choose 𝒱 h𝒱 using h
-    exact ⟨(Scheme.Co
+    exact ⟨(Scheme.Cover.ulift 𝒰).bind (fun i => Scheme.Cover.ulift (𝒱 _)), fun i => h𝒱 _ _⟩
 
 Depends on / 依赖: IsOpenImmersion, RespectsLeft, RespectsLeft.precomp, Scheme, Scheme.Cover.ulift, condition_assoc, mk_of_iff_of_zeroHypercover, precomp, pullback, pullback.condition_assoc
 -/

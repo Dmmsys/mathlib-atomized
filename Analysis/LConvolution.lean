@@ -233,7 +233,7 @@ theorem mlconvolution_assoc₀
     rw [← lintegral_mul_const'' _ (by fun_prop)]
   rw [lintegral_lintegral_swap]
   · simp [mul_assoc]
- 
+  simpa [mul_assoc] using by fun_prop
 
 中文:
 定理 mlconvolution_assoc₀
@@ -247,7 +247,7 @@ theorem mlconvolution_assoc₀
     rw [← lintegral_mul_const'' _ (by fun_prop)]
   rw [lintegral_lintegral_swap]
   · simp [mul_assoc]
- 
+  simpa [mul_assoc] using by fun_prop
 
 Depends on / 依赖: fun_prop, lintegral_const_mul, lintegral_lintegral_swap, lintegral_mul_const, lintegral_mul_left_eq_self, mlconvolution_def, mul_assoc
 -/

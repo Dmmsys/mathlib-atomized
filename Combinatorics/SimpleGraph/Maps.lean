@@ -152,7 +152,10 @@ theorem edgeSet_map
     rw [Embedding.sym2Map_apply]; rw [Sym2.map_mk]; rw [ha]; rw [hb]
   · intro ⟨e, hadj, he⟩
     induction e
-    rw [Embedding.sym2Map_apply]; rw [Sym2.map
+    rw [Embedding.sym2Map_apply]; rw [Sym2.map_mk]; rw [Sym2.eq_iff] at he
+    exact he.elim (fun ⟨h, h'⟩ => ⟨_, _, hadj, h, h'⟩) (fun ⟨h', h⟩ => ⟨_, _, hadj.symm, h, h'⟩)
+
+@[simp]
 
 中文:
 定理 edgeSet_map
@@ -167,7 +170,10 @@ theorem edgeSet_map
     rw [Embedding.sym2Map_apply]; rw [Sym2.map_mk]; rw [ha]; rw [hb]
   · intro ⟨e, hadj, he⟩
     induction e
-    rw [Embedding.sym2Map_apply]; rw [Sym2.map
+    rw [Embedding.sym2Map_apply]; rw [Sym2.map_mk]; rw [Sym2.eq_iff] at he
+    exact he.elim (fun ⟨h, h'⟩ => ⟨_, _, hadj, h, h'⟩) (fun ⟨h', h⟩ => ⟨_, _, hadj.symm, h, h'⟩)
+
+@[simp]
 
 Depends on / 依赖: Embedding, Embedding.sym2Map_apply, Set.mem_image, Sym2.eq_iff, Sym2.map_mk, eq_iff, hadj.symm, he.elim, map_adj, map_mk, mem_edgeSet, mem_image, sym2Map_apply
 -/
@@ -2835,7 +2841,9 @@ definition mapEdgeSet
     exact RelIso.symm_apply_apply _ _
   right_inv := by
     rintro ⟨e, h⟩
-    s
+    simp only [Hom.mapEdgeSet, RelEmbedding.toRelHom, Sym2.map_map, comp_apply, Subtype.mk.injEq]
+    convert! congr_fun Sym2.map_id e
+    exact RelIso.apply_symm_apply _ _
 
 中文:
 定义 mapEdgeSet
@@ -2849,7 +2857,9 @@ definition mapEdgeSet
     exact RelIso.symm_apply_apply _ _
   right_inv := by
     rintro ⟨e, h⟩
-    s
+    simp only [Hom.mapEdgeSet, RelEmbedding.toRelHom, Sym2.map_map, comp_apply, Subtype.mk.injEq]
+    convert! congr_fun Sym2.map_id e
+    exact RelIso.apply_symm_apply _ _
 
 Depends on / 依赖: Hom.mapEdgeSet, mapEdgeSet
 -/

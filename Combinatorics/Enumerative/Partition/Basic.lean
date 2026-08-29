@@ -401,7 +401,8 @@ theorem toFinsuppAntidiag_mem_finsuppAntidiag
   convert! ← p.parts_sum
   rw [Finset.sum_multiset_count]
   apply Finset.sum_subset hp
-  suffices forall (x : Nat), 1 <= x -> x 
+  suffices forall (x : Nat), 1 <= x -> x <= n -> x ∉ p.parts -> x ∉ p.parts ∨ x = 0 by simpa
+  grind
 
 中文:
 定理 toFinsuppAntidiag_mem_finsuppAntidiag
@@ -413,7 +414,8 @@ theorem toFinsuppAntidiag_mem_finsuppAntidiag
   convert! ← p.parts_sum
   rw [Finset.sum_multiset_count]
   apply Finset.sum_subset hp
-  suffices forall (x : Nat), 1 <= x -> x 
+  suffices forall (x : Nat), 1 <= x -> x <= n -> x ∉ p.parts -> x ∉ p.parts ∨ x = 0 by simpa
+  grind
 
 Depends on / 依赖: Finset, Finset.Icc, Finset.sum_multiset_count, Finset.sum_subset, Multiset, Multiset.count, convert, p.parts, p.parts.toFinset, p.parts_sum, parts_sum, subseteq, sum_multiset_count, sum_subset, toFinset, toFinsuppAntidiag
 -/
@@ -745,7 +747,11 @@ definition partitionWithPartEquiv
     · have hs : a + (p.1.parts.erase a).sum = n := by
         simpa [p.1.parts_sum] using congrArg Multiset.sum (Multiset.cons_erase p.2)
       lia
-  invFun q := ⟨⟨a ::ₘ q.parts, by gri
+  invFun q := ⟨⟨a ::ₘ q.parts, by grind, by simp [q.parts_sum, ha]⟩, by simp⟩
+left_inv p := Subtype.ext Partition.ext cons_erase p.property
+right_inv q := Partition.ext erase_cons_head a q.parts
+
+@[simp]
 
 中文:
 定义 partitionWithPartEquiv
@@ -757,7 +763,11 @@ definition partitionWithPartEquiv
     · have hs : a + (p.1.parts.erase a).sum = n := by
         simpa [p.1.parts_sum] using congrArg Multiset.sum (Multiset.cons_erase p.2)
       lia
-  invFun q := ⟨⟨a ::ₘ q.parts, by gri
+  invFun q := ⟨⟨a ::ₘ q.parts, by grind, by simp [q.parts_sum, ha]⟩, by simp⟩
+left_inv p := Subtype.ext Partition.ext cons_erase p.property
+right_inv q := Partition.ext erase_cons_head a q.parts
+
+@[simp]
 
 Depends on / 依赖: Multiset, Multiset.cons_erase, Multiset.sum, Partition, Partition.ext, Subtype, Subtype.ext, TopCat, TopCat.epi_iff_surjective, cons_erase, epi_iff_surjective, erase_cons_head, erase_subset, invFun, left_inv, p.property, parts.erase, parts.erase_subset, parts_pos, parts_sum
 -/

@@ -282,7 +282,7 @@ theorem image_projection_prod
       rcases hv with ⟨z, hz⟩
       refine ⟨Function.update z i y, ?_, update_self i y z⟩
       rw [@forall_update_iff ι α _ z i y fun i t => t in v i]
-      ex
+      exact ⟨y_in, fun j _ => by simpa using hz j⟩
 
 中文:
 定理 image_projection_prod
@@ -296,7 +296,7 @@ theorem image_projection_prod
       rcases hv with ⟨z, hz⟩
       refine ⟨Function.update z i y, ?_, update_self i y z⟩
       rw [@forall_update_iff ι α _ z i y fun i t => t in v i]
-      ex
+      exact ⟨y_in, fun j _ => by simpa using hz j⟩
 
 Depends on / 依赖: Function, Function.update, Subset, Subset.antisymm, antisymm, classical, forall_update_iff, iInter_subset, mem_iInter, mem_image, mem_preimage, update, update_self, y_in
 -/
@@ -737,7 +737,9 @@ theorem InjOn.image_iInter_eq
   suffices x default = x i by
     rw [this]
     apply hx
-  replace hx : forall i, x i in ⋃ j, s j 
+  replace hx : forall i, x i in ⋃ j, s j := fun i => (subset_iUnion _ _) (hx i)
+  apply h (hx _) (hx _)
+  simp only [hy]
 
 中文:
 定理 单射限制.image_i整数er_eq
@@ -751,7 +753,9 @@ theorem InjOn.image_iInter_eq
   suffices x default = x i by
     rw [this]
     apply hx
-  replace hx : forall i, x i in ⋃ j, s j 
+  replace hx : forall i, x i in ⋃ j, s j := fun i => (subset_iUnion _ _) (hx i)
+  apply h (hx _) (hx _)
+  simp only [hy]
 
 Depends on / 依赖: Subset, Subset.antisymm, antisymm, image_iInter_subset, inhabit, mem_iInter, mem_image, replace, subset_iUnion
 -/

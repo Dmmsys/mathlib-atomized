@@ -132,7 +132,10 @@ theorem AddSubmonoid.bsupr_eq_mrange_dfinsuppSumAddHom
     exact sumAddHom_single _ _ _
   · rintro x ⟨v, rfl⟩
     refine dfinsuppSumAddHom_mem _ _ _ fun i _ => ?_
-    r
+    refine AddSubmonoid.mem_iSup_of_mem i ?_
+    by_cases hp : p i
+    · simp [hp]
+    · simp [hp]
 
 中文:
 定理 加法子幺半群.bsupr_eq_mrange_dfinsuppSumAddHom
@@ -144,7 +147,10 @@ theorem AddSubmonoid.bsupr_eq_mrange_dfinsuppSumAddHom
     exact sumAddHom_single _ _ _
   · rintro x ⟨v, rfl⟩
     refine dfinsuppSumAddHom_mem _ _ _ fun i _ => ?_
-    r
+    refine AddSubmonoid.mem_iSup_of_mem i ?_
+    by_cases hp : p i
+    · simp [hp]
+    · simp [hp]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.comp_apply, AddSubmonoid, AddSubmonoid.mem_iSup_of_mem, DFinsupp, DFinsupp.single, comp_apply, dfinsuppSumAddHom_mem, filterAddMonoidHom_apply, filter_single_pos, le_antisymm, mem_iSup_of_mem, single, sumAddHom_single
 -/

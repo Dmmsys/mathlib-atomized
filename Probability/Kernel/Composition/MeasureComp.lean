@@ -454,7 +454,14 @@ lemma comp_compProd_comm
   · simp [compProd_of_not_isSFiniteKernel _ _ hκ,
       Kernel.compProd_of_not_isSFiniteKernel_left _ _ hκ, FunLike.coe_zero]
   ext s hs
-  rw [Measure.bind_apply hs η.aemeasurable]; rw [Measure.snd_apply hs]; rw [Measure.bind_apply _ (Kernel.aemeasurable _)
+  rw [Measure.bind_apply hs η.aemeasurable]; rw [Measure.snd_apply hs]; rw [Measure.bind_apply _ (Kernel.aemeasurable _)]; rw [Measure.lintegral_compProd (η.measurable_coe hs)]
+  swap; · exact measurable_snd hs
+  congr with a
+  rw [Kernel.compProd_apply]
+  · rfl
+  · exact measurable_snd hs
+
+@[simp]
 
 中文:
 引理 comp_compProd_comm
@@ -464,7 +471,14 @@ lemma comp_compProd_comm
   · simp [compProd_of_not_isSFiniteKernel _ _ hκ,
       Kernel.compProd_of_not_isSFiniteKernel_left _ _ hκ, FunLike.coe_zero]
   ext s hs
-  rw [Measure.bind_apply hs η.aemeasurable]; rw [Measure.snd_apply hs]; rw [Measure.bind_apply _ (Kernel.aemeasurable _)
+  rw [Measure.bind_apply hs η.aemeasurable]; rw [Measure.snd_apply hs]; rw [Measure.bind_apply _ (Kernel.aemeasurable _)]; rw [Measure.lintegral_compProd (η.measurable_coe hs)]
+  swap; · exact measurable_snd hs
+  congr with a
+  rw [Kernel.compProd_apply]
+  · rfl
+  · exact measurable_snd hs
+
+@[simp]
 
 Depends on / 依赖: FunLike, FunLike.coe_zero, IsSFiniteKernel, Kernel, Kernel.aemeasurable, Kernel.compProd_apply, Kernel.compProd_of_not_isSFiniteKernel_left, Measure, Measure.bind_apply, Measure.lintegral_compProd, Measure.snd_apply, aemeasurable, bind_apply, coe_zero, compProd_apply, compProd_of_not_isSFiniteKernel, compProd_of_not_isSFiniteKernel_left, lintegral_compProd, measurable_coe, measurable_snd
 -/

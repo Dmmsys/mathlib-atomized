@@ -481,7 +481,7 @@ theorem IsMultiplicative.prodPrimeFactors_one_add_of_squarefree
   · simp_rw [prodPrimeFactors_apply hn.ne_zero, add_apply, natCoe_apply]
     apply prod_congr rfl; intro p hp
     rw [zeta_apply_ne (prime_of_mem_primeFactorsList <| List.mem_toFinset.mp hp).ne_zero]; rw [cast_one]
-  rw [isMultiplicative_zeta
+  rw [isMultiplicative_zeta.natCast.prodPrimeFactors_add_of_squarefree h_mult hn]; rw [coe_zeta_mul_apply]
 
 中文:
 定理 是Multiplicative.prodPrimeFactors_one_add_of_squarefree
@@ -491,7 +491,7 @@ theorem IsMultiplicative.prodPrimeFactors_one_add_of_squarefree
   · simp_rw [prodPrimeFactors_apply hn.ne_zero, add_apply, natCoe_apply]
     apply prod_congr rfl; intro p hp
     rw [zeta_apply_ne (prime_of_mem_primeFactorsList <| List.mem_toFinset.mp hp).ne_zero]; rw [cast_one]
-  rw [isMultiplicative_zeta
+  rw [isMultiplicative_zeta.natCast.prodPrimeFactors_add_of_squarefree h_mult hn]; rw [coe_zeta_mul_apply]
 
 Depends on / 依赖: ArithmeticFunction, List.mem_toFinset.mp, add_apply, cast_one, coe_zeta_mul_apply, h_mult, hn.ne_zero, isMultiplicative_zeta, isMultiplicative_zeta.natCast.prodPrimeFactors_add_of_squarefree, mem_toFinset, natCast, natCoe_apply, ne_zero, prime_of_mem_primeFactorsList, prodPrimeFactors_add_of_squarefree, prodPrimeFactors_apply, prod_congr, simp_rw, zeta_apply_ne
 -/
@@ -516,7 +516,8 @@ theorem IsMultiplicative.prodPrimeFactors_one_sub_of_squarefree
     rw [pmul_apply]; rw [intCoe_apply]; rw [ArithmeticFunction.moebius_apply_prime
         (prime_of_mem_primeFactorsList (List.mem_toFinset.mp hp))]
     ring
-  · r
+  · rw [(isMultiplicative_moebius.intCast.pmul hf).prodPrimeFactors_one_add_of_squarefree hn]
+    simp_rw [pmul_apply, intCoe_apply]
 
 中文:
 定理 是Multiplicative.prodPrimeFactors_one_sub_of_squarefree
@@ -527,7 +528,8 @@ theorem IsMultiplicative.prodPrimeFactors_one_sub_of_squarefree
     rw [pmul_apply]; rw [intCoe_apply]; rw [ArithmeticFunction.moebius_apply_prime
         (prime_of_mem_primeFactorsList (List.mem_toFinset.mp hp))]
     ring
-  · r
+  · rw [(isMultiplicative_moebius.intCast.pmul hf).prodPrimeFactors_one_add_of_squarefree hn]
+    simp_rw [pmul_apply, intCoe_apply]
 
 Depends on / 依赖: ArithmeticFunction, ArithmeticFunction.moebius_apply_prime, ArithmeticFunction.pmul, List.mem_toFinset.mp, intCast, intCoe_apply, isMultiplicative_moebius, isMultiplicative_moebius.intCast.pmul, mem_toFinset, moebius_apply_prime, n.primeFactors, pmul_apply, primeFactors, prime_of_mem_primeFactorsList, prodPrimeFactors_one_add_of_squarefree, prod_congr, simp_rw
 -/
@@ -559,7 +561,11 @@ theorem moebius_mul_coe_zeta
   | prime_pow p n hp hn =>
     rw [coe_mul_zeta_apply]; rw [sum_divisors_prime_pow hp]; rw [sum_range_succ']
     simp [moebius_apply_prime_pow, hp.ne_one, hn.ne', hp, hn]
-  | coprime a b _
+  | coprime a b _ha _hb hab ha' hb' =>
+    rw [IsMultiplicative.map_mul_of_coprime _ hab]; rw [ha']; rw [hb']; rw [IsMultiplicative.map_mul_of_coprime isMultiplicative_one hab]
+    exact isMultiplicative_moebius.mul isMultiplicative_zeta.natCast
+
+@[simp]
 
 中文:
 定理 moebius_mul_coe_zeta
@@ -572,7 +578,11 @@ theorem moebius_mul_coe_zeta
   | prime_pow p n hp hn =>
     rw [coe_mul_zeta_apply]; rw [sum_divisors_prime_pow hp]; rw [sum_range_succ']
     simp [moebius_apply_prime_pow, hp.ne_one, hn.ne', hp, hn]
-  | coprime a b _
+  | coprime a b _ha _hb hab ha' hb' =>
+    rw [IsMultiplicative.map_mul_of_coprime _ hab]; rw [ha']; rw [hb']; rw [IsMultiplicative.map_mul_of_coprime isMultiplicative_one hab]
+    exact isMultiplicative_moebius.mul isMultiplicative_zeta.natCast
+
+@[simp]
 
 Depends on / 依赖: IsMultiplicative, IsMultiplicative.map_mul_of_coprime, coe_mul_zeta_apply, coprime, hn.ne, hp.ne_one, isMultiplicative_moebius, isMultiplicative_moebius.mul, isMultiplicative_one, isMultiplicative_zeta, isMultiplicative_zeta.natCast, map_mul_of_coprime, map_zero, moebius_apply_prime_pow, natCast, ne_one, prime_pow, recOnPosPrimePosCoprime, sum_divisors_prime_pow, sum_range_succ
 -/
@@ -765,7 +775,25 @@ theorem sum_eq_iff_sum_smul_moebius_eq
   · rw [ArithmeticFunction.ext_iff]
     apply forall_congr'
     intro n
-    cases n 
+    cases n with
+    | zero => simp
+    | succ n =>
+      rw [coe_zeta_smul_apply]
+      simp only [forall_prop_of_true, succ_pos', f', g', coe_mk, succ_ne_zero, ite_false]
+      rw [sum_congr rfl fun x hx => if_neg (pos_of_mem_divisors hx).ne']
+  trans μ • g' = f'
+  · constructor <;> intro h <;>
+      simp only [← h, ← mul_smul, moebius_mul_coe_zeta, coe_zeta_mul_moebius, one_smul]
+  · rw [ArithmeticFunction.ext_iff]
+    apply forall_congr'
+    intro n
+    cases n with
+    | zero => simp
+    | succ n =>
+      simp only [forall_prop_of_true, succ_pos', smul_apply, f', g', coe_mk, succ_ne_zero,
+        ite_false]
+      rw [sum_congr rfl fun x hx => ?_]
+      rw [if_neg (pos_of_mem_divisors (snd_mem_divisors_of_mem_antidiagonal hx)).ne']
 
 中文:
 定理 sum_eq_iff_sum_smul_moebius_eq
@@ -777,7 +805,25 @@ theorem sum_eq_iff_sum_smul_moebius_eq
   · rw [ArithmeticFunction.ext_iff]
     apply forall_congr'
     intro n
-    cases n 
+    cases n with
+    | zero => simp
+    | succ n =>
+      rw [coe_zeta_smul_apply]
+      simp only [forall_prop_of_true, succ_pos', f', g', coe_mk, succ_ne_zero, ite_false]
+      rw [sum_congr rfl fun x hx => if_neg (pos_of_mem_divisors hx).ne']
+  trans μ • g' = f'
+  · constructor <;> intro h <;>
+      simp only [← h, ← mul_smul, moebius_mul_coe_zeta, coe_zeta_mul_moebius, one_smul]
+  · rw [ArithmeticFunction.ext_iff]
+    apply forall_congr'
+    intro n
+    cases n with
+    | zero => simp
+    | succ n =>
+      simp only [forall_prop_of_true, succ_pos', smul_apply, f', g', coe_mk, succ_ne_zero,
+        ite_false]
+      rw [sum_congr rfl fun x hx => ?_]
+      rw [if_neg (pos_of_mem_divisors (snd_mem_divisors_of_mem_antidiagonal hx)).ne']
 
 Depends on / 依赖: ArithmeticFunction, ArithmeticFunction.ext_iff, coe_mk, coe_zeta_smul_apply, ext_iff, forall_congr, forall_prop_of_true, if_neg, if_pos, ite_false, pos_of_mem_divisors, succ_ne_zero, succ_pos, sum_congr
 -/
@@ -874,7 +920,16 @@ theorem prod_eq_iff_prod_pow_moebius_eq_of_nonzero
           (@prod_eq_iff_prod_pow_moebius_eq Rˣ _
             (fun n => if h : 0 < n then Units.mk0 (f n) (hf n h) else 1) fun n =>
             if h : 0 < n then Units.mk0 (g n) (hg n h) else 1))
-        (forall_congr' fun n =
+        (forall_congr' fun n => ?_) <;>
+    refine imp_congr_right fun hn => ?_
+  · rw [dif_pos hn, ← Units.val_inj, ← Units.coeHom_apply, map_prod, Units.val_mk0,
+      prod_congr rfl _]
+    intro x hx
+    rw [dif_pos (pos_of_mem_divisors hx)]; rw [Units.coeHom_apply]; rw [Units.val_mk0]
+  · rw [dif_pos hn, ← Units.val_inj, ← Units.coeHom_apply, map_prod, Units.val_mk0,
+      prod_congr rfl _]
+    intro x hx
+    rw [dif_pos (pos_of_mem_divisors (snd_mem_divisors_of_mem_antidiagonal hx))]; rw [Units.coeHom_apply]; rw [Units.val_zpow_eq_zpow_val]; rw [Units.val_mk0]
 
 中文:
 定理 prod_eq_iff_prod_pow_moebius_eq_of_nonzero
@@ -886,7 +941,16 @@ theorem prod_eq_iff_prod_pow_moebius_eq_of_nonzero
           (@prod_eq_iff_prod_pow_moebius_eq Rˣ _
             (fun n => if h : 0 < n then Units.mk0 (f n) (hf n h) else 1) fun n =>
             if h : 0 < n then Units.mk0 (g n) (hg n h) else 1))
-        (forall_congr' fun n =
+        (forall_congr' fun n => ?_) <;>
+    refine imp_congr_right fun hn => ?_
+  · rw [dif_pos hn, ← Units.val_inj, ← Units.coeHom_apply, map_prod, Units.val_mk0,
+      prod_congr rfl _]
+    intro x hx
+    rw [dif_pos (pos_of_mem_divisors hx)]; rw [Units.coeHom_apply]; rw [Units.val_mk0]
+  · rw [dif_pos hn, ← Units.val_inj, ← Units.coeHom_apply, map_prod, Units.val_mk0,
+      prod_congr rfl _]
+    intro x hx
+    rw [dif_pos (pos_of_mem_divisors (snd_mem_divisors_of_mem_antidiagonal hx))]; rw [Units.coeHom_apply]; rw [Units.val_zpow_eq_zpow_val]; rw [Units.val_mk0]
 
 Depends on / 依赖: Iff.trans, Units.coeHom_apply, Units.mk0, Units.val_inj, Units.val_mk0, coeHom_apply, dif_pos, forall_congr, imp_congr_right, map_prod, pos_of_mem_divisors, prod_congr, prod_eq_iff_prod_pow_moebius_eq, val_inj, val_mk0
 -/
@@ -925,7 +989,19 @@ theorem sum_eq_iff_sum_smul_moebius_eq_on
     suffices ∑ d in n.divisors, μ (n / d) • G d = f n by
       rw [sum_divisorsAntidiagonal' (f := fun x y => μ x • g y)]; rw [← this]; rw [sum_congr rfl]
       intro d hd
-      rw [← h d (pos_of_m
+      rw [← h d (pos_of_mem_divisors hd) <| hs d n (dvd_of_mem_divisors hd) hnP]
+    rw [← sum_divisorsAntidiagonal' (f := fun x y => μ x • G y)]
+    apply sum_eq_iff_sum_smul_moebius_eq.mp _ n hn
+    intro _ _; rfl
+  · intro h
+    let F := fun (n : Nat) => ∑ x in n.divisorsAntidiagonal, μ x.fst • g x.snd
+    intro n hn hnP
+    suffices ∑ d in n.divisors, F d = g n by
+      rw [← this]; rw [sum_congr rfl]
+      intro d hd
+      rw [← h d (pos_of_mem_divisors hd) <| hs d n (dvd_of_mem_divisors hd) hnP]
+    apply sum_eq_iff_sum_smul_moebius_eq.mpr _ n hn
+    intro _ _; rfl
 
 中文:
 定理 sum_eq_iff_sum_smul_moebius_eq_on
@@ -938,7 +1014,19 @@ theorem sum_eq_iff_sum_smul_moebius_eq_on
     suffices ∑ d in n.divisors, μ (n / d) • G d = f n by
       rw [sum_divisorsAntidiagonal' (f := fun x y => μ x • g y)]; rw [← this]; rw [sum_congr rfl]
       intro d hd
-      rw [← h d (pos_of_m
+      rw [← h d (pos_of_mem_divisors hd) <| hs d n (dvd_of_mem_divisors hd) hnP]
+    rw [← sum_divisorsAntidiagonal' (f := fun x y => μ x • G y)]
+    apply sum_eq_iff_sum_smul_moebius_eq.mp _ n hn
+    intro _ _; rfl
+  · intro h
+    let F := fun (n : Nat) => ∑ x in n.divisorsAntidiagonal, μ x.fst • g x.snd
+    intro n hn hnP
+    suffices ∑ d in n.divisors, F d = g n by
+      rw [← this]; rw [sum_congr rfl]
+      intro d hd
+      rw [← h d (pos_of_mem_divisors hd) <| hs d n (dvd_of_mem_divisors hd) hnP]
+    apply sum_eq_iff_sum_smul_moebius_eq.mpr _ n hn
+    intro _ _; rfl
 
 Depends on / 依赖: divisors, divisorsAn, dvd_of_mem_divisors, n.divisors, n.divisorsAn, pos_of_mem_divisors, sum_congr, sum_divisorsAntidiagonal, sum_eq_iff_sum_smul_moebius_eq, sum_eq_iff_sum_smul_moebius_eq.mp
 -/
@@ -978,7 +1066,7 @@ theorem sum_eq_iff_sum_smul_moebius_eq_on'
     refine forall_congr' (fun n => ⟨fun h _ => h, fun h hn => h ?_ hn⟩)
     contrapose! hs₀
     simpa [nonpos_iff_eq_zero.mp hs₀] using hn
-  simpa only [this] using sum_eq_iff_sum_smul_moebius_e
+  simpa only [this] using sum_eq_iff_sum_smul_moebius_eq_on s hs
 
 中文:
 定理 sum_eq_iff_sum_smul_moebius_eq_on'
@@ -988,7 +1076,7 @@ theorem sum_eq_iff_sum_smul_moebius_eq_on'
     refine forall_congr' (fun n => ⟨fun h _ => h, fun h hn => h ?_ hn⟩)
     contrapose! hs₀
     simpa [nonpos_iff_eq_zero.mp hs₀] using hn
-  simpa only [this] using sum_eq_iff_sum_smul_moebius_e
+  simpa only [this] using sum_eq_iff_sum_smul_moebius_eq_on s hs
 
 Depends on / 依赖: contrapose, forall_congr, nonpos_iff_eq_zero, nonpos_iff_eq_zero.mp, sum_eq_iff_sum_smul_moebius_eq_on
 -/
@@ -1073,7 +1161,16 @@ theorem prod_eq_iff_prod_pow_moebius_eq_on_of_nonzero
             (fun n => if h : 0 < n then Units.mk0 (f n) (hf n h) else 1)
             (fun n => if h : 0 < n then Units.mk0 (g n) (hg n h) else 1)
             s hs))
-        
+        (forall_congr' fun n => ?_) <;>
+    refine imp_congr_right fun hn => ?_
+  · rw [dif_pos hn, ← Units.val_inj, ← Units.coeHom_apply, map_prod, Units.val_mk0,
+      prod_congr rfl _]
+    intro x hx
+    rw [dif_pos (pos_of_mem_divisors hx)]; rw [Units.coeHom_apply]; rw [Units.val_mk0]
+  · rw [dif_pos hn, ← Units.val_inj, ← Units.coeHom_apply, map_prod, Units.val_mk0,
+      prod_congr rfl _]
+    intro x hx
+    rw [dif_pos (pos_of_mem_divisors (snd_mem_divisors_of_mem_antidiagonal hx))]; rw [Units.coeHom_apply]; rw [Units.val_zpow_eq_zpow_val]; rw [Units.val_mk0]
 
 中文:
 定理 prod_eq_iff_prod_pow_moebius_eq_on_of_nonzero
@@ -1086,7 +1183,16 @@ theorem prod_eq_iff_prod_pow_moebius_eq_on_of_nonzero
             (fun n => if h : 0 < n then Units.mk0 (f n) (hf n h) else 1)
             (fun n => if h : 0 < n then Units.mk0 (g n) (hg n h) else 1)
             s hs))
-        
+        (forall_congr' fun n => ?_) <;>
+    refine imp_congr_right fun hn => ?_
+  · rw [dif_pos hn, ← Units.val_inj, ← Units.coeHom_apply, map_prod, Units.val_mk0,
+      prod_congr rfl _]
+    intro x hx
+    rw [dif_pos (pos_of_mem_divisors hx)]; rw [Units.coeHom_apply]; rw [Units.val_mk0]
+  · rw [dif_pos hn, ← Units.val_inj, ← Units.coeHom_apply, map_prod, Units.val_mk0,
+      prod_congr rfl _]
+    intro x hx
+    rw [dif_pos (pos_of_mem_divisors (snd_mem_divisors_of_mem_antidiagonal hx))]; rw [Units.coeHom_apply]; rw [Units.val_zpow_eq_zpow_val]; rw [Units.val_mk0]
 
 Depends on / 依赖: Iff.trans, Units.coeHom_apply, Units.mk0, Units.val_inj, Units.val_mk0, coeHom_apply, dif_pos, forall_congr, imp_congr_right, map_prod, pos_of_mem_divisors, prod_congr, prod_eq_iff_prod_pow_moebius_eq_on, val_inj, val_mk0
 -/

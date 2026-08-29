@@ -596,7 +596,79 @@ definition exprToMatcher
     /-
     We should try being more accurate here.
     Prop / Type / Type _ / Sort _ is at least an OK approximation.
-    We mimic the core Sor
+    We mimic the core Sort delaborator `Lean.PrettyPrinter.Delaborator.delabSort`.
+    -/
+    let matcher ←
+      if u.isZero then
+        ``(matchExpr Expr.isProp)
+      else if e.isType0 then
+        ``(matchExpr Expr.isType0)
+      else if u.dec.isSome then
+        ``(matchExpr isType')
+      else
+        ``(matchExpr Expr.isSort)
+    return ([.other `sort], matcher)
+  | .fvar fvarId =>
+    if let some n := boundFVars[fvarId]? then
+      -- This fvar is a pattern variable.
+      return ([], ← ``(matchVar $(quote n)))
+    else if let some s := localFVars[fvarId]? then
+      -- This fvar is bound by a lambda or forall expression in the pattern itself
+      return ([], ← ``(matchExpr (· == $s)))
+    else
+      let n ← fvarId.getUserName
+      if n.hasMacroScopes then
+        -- Match by just the type; this is likely an unnamed instance for example
+        let (_, m) ← exprToMatcher boundFVars localFVars (← instantiateMVars (← inferType e))
+        return ([.other `fvar], ← ``(matchTypeOf $m))
+      else
+        -- This is an fvar from a `variable`. Match by name and type.
+        let (_, m) ← exprToMatcher boundFVars localFVars (← instantiateMVars (← inferType e))
+        return ([.other `fvar], ← ``(matchFVar $(quote n) $m))
+  | .app .. =>
+    e.withApp fun f args => do
+      let (keys, matchF) ←
+        if let .const n _ := f then
+          pure ([.app n args.size], ← ``(matchExpr (Expr.isConstOf · $(quote n))))
+        else
+          let (_, matchF) ← exprToMatcher boundFVars localFVars f
+          pure ([.app none args.size], matchF)
+      let mut fty ← inferType f
+      let mut matcher := matchF
+      for arg in args do
+        fty ← whnf fty
+        guard fty.isForall
+        let bi := fty.bindingInfo!
+        fty := fty.bindingBody!.instantiate1 arg
+        if bi.isInstImplicit then
+          -- Assumption: elaborated instances are canonical, so no need to match.
+          -- The type of the instance is already accounted for by the previous arguments
+          -- and the type of `f`.
+          matcher ← ``(matchApp $matcher pure)
+        else
+          let (_, matchArg) ← exprToMatcher boundFVars localFVars arg
+          matcher ← ``(matchApp $matcher $matchArg)
+      return (keys, matcher)
+  | .lit (.natVal n) => return ([.other `lit], ← ``(natLitMatcher $(quote n)))
+  | .forallE n t b bi =>
+    let (_, matchDom) ← exprToMatcher boundFVars localFVars t
+    withLocalDecl n bi t fun arg => withFreshMacroScope do
+      let n' ← `(n)
+      let body := b.instantiate1 arg
+      let localFVars' := localFVars.insert arg.fvarId! n'
+      let (_, matchBody) ← exprToMatcher boundFVars localFVars' body
+      return ([.other `forallE], ← ``(matchForall $matchDom (fun $n' => $matchBody)))
+  | .lam n t b bi =>
+    let (_, matchDom) ← exprToMatcher boundFVars localFVars t
+    withLocalDecl n bi t fun arg => withFreshMacroScope do
+      let n' ← `(n)
+      let body := b.instantiate1 arg
+      let localFVars' := localFVars.insert arg.fvarId! n'
+      let (_, matchBody) ← exprToMatcher boundFVars localFVars' body
+      return ([.other `lam], ← ``(matchLambda $matchDom (fun $n' => $matchBody)))
+  | _ =>
+    trace[notation3] "can't generate matcher for {e}"
+    failure
 
 中文:
 定义 exprToMatcher
@@ -609,7 +681,79 @@ definition exprToMatcher
     /-
     We should try being more accurate here.
     Prop / Type / Type _ / Sort _ is at least an OK approximation.
-    We mimic the core Sor
+    We mimic the core Sort delaborator `Lean.PrettyPrinter.Delaborator.delabSort`.
+    -/
+    let matcher ←
+      if u.isZero then
+        ``(matchExpr Expr.isProp)
+      else if e.isType0 then
+        ``(matchExpr Expr.isType0)
+      else if u.dec.isSome then
+        ``(matchExpr isType')
+      else
+        ``(matchExpr Expr.isSort)
+    return ([.other `sort], matcher)
+  | .fvar fvarId =>
+    if let some n := boundFVars[fvarId]? then
+      -- This fvar is a pattern variable.
+      return ([], ← ``(matchVar $(quote n)))
+    else if let some s := localFVars[fvarId]? then
+      -- This fvar is bound by a lambda or forall expression in the pattern itself
+      return ([], ← ``(matchExpr (· == $s)))
+    else
+      let n ← fvarId.getUserName
+      if n.hasMacroScopes then
+        -- Match by just the type; this is likely an unnamed instance for example
+        let (_, m) ← exprToMatcher boundFVars localFVars (← instantiateMVars (← inferType e))
+        return ([.other `fvar], ← ``(matchTypeOf $m))
+      else
+        -- This is an fvar from a `variable`. Match by name and type.
+        let (_, m) ← exprToMatcher boundFVars localFVars (← instantiateMVars (← inferType e))
+        return ([.other `fvar], ← ``(matchFVar $(quote n) $m))
+  | .app .. =>
+    e.withApp fun f args => do
+      let (keys, matchF) ←
+        if let .const n _ := f then
+          pure ([.app n args.size], ← ``(matchExpr (Expr.isConstOf · $(quote n))))
+        else
+          let (_, matchF) ← exprToMatcher boundFVars localFVars f
+          pure ([.app none args.size], matchF)
+      let mut fty ← inferType f
+      let mut matcher := matchF
+      for arg in args do
+        fty ← whnf fty
+        guard fty.isForall
+        let bi := fty.bindingInfo!
+        fty := fty.bindingBody!.instantiate1 arg
+        if bi.isInstImplicit then
+          -- Assumption: elaborated instances are canonical, so no need to match.
+          -- The type of the instance is already accounted for by the previous arguments
+          -- and the type of `f`.
+          matcher ← ``(matchApp $matcher pure)
+        else
+          let (_, matchArg) ← exprToMatcher boundFVars localFVars arg
+          matcher ← ``(matchApp $matcher $matchArg)
+      return (keys, matcher)
+  | .lit (.natVal n) => return ([.other `lit], ← ``(natLitMatcher $(quote n)))
+  | .forallE n t b bi =>
+    let (_, matchDom) ← exprToMatcher boundFVars localFVars t
+    withLocalDecl n bi t fun arg => withFreshMacroScope do
+      let n' ← `(n)
+      let body := b.instantiate1 arg
+      let localFVars' := localFVars.insert arg.fvarId! n'
+      let (_, matchBody) ← exprToMatcher boundFVars localFVars' body
+      return ([.other `forallE], ← ``(matchForall $matchDom (fun $n' => $matchBody)))
+  | .lam n t b bi =>
+    let (_, matchDom) ← exprToMatcher boundFVars localFVars t
+    withLocalDecl n bi t fun arg => withFreshMacroScope do
+      let n' ← `(n)
+      let body := b.instantiate1 arg
+      let localFVars' := localFVars.insert arg.fvarId! n'
+      let (_, matchBody) ← exprToMatcher boundFVars localFVars' body
+      return ([.other `lam], ← ``(matchLambda $matchDom (fun $n' => $matchBody)))
+  | _ =>
+    trace[notation3] "can't generate matcher for {e}"
+    failure
 -/
 partial def exprToMatcher (boundFVars : Std.HashMap FVarId Name)
     (localFVars : Std.HashMap FVarId Term) (e : Expr) :
@@ -710,7 +854,11 @@ definition mkExprMatcher
       catch e =>
         logException e
         trace[notation3] "Could not elaborate pattern{indentD stx}\nError: {e.toMessageData}"
-   
+        -- Convert the exception into an `OptionT` failure so that the `(prettyPrint := false)`
+        -- suggestion appears.
+        failure
+    trace[notation3] "Generating matcher for pattern {patt}"
+    exprToMatcher boundFVars {} patt
 
 中文:
 定义 mkExprMatcher
@@ -724,7 +872,11 @@ definition mkExprMatcher
       catch e =>
         logException e
         trace[notation3] "Could not elaborate pattern{indentD stx}\nError: {e.toMessageData}"
-   
+        -- Convert the exception into an `OptionT` failure so that the `(prettyPrint := false)`
+        -- suggestion appears.
+        failure
+    trace[notation3] "Generating matcher for pattern {patt}"
+    exprToMatcher boundFVars {} patt
 -/
 partial def mkExprMatcher (stx : Term) (boundNames : Array Name) :
     OptionT TermElabM (List DelabKey × Term) := do
@@ -754,7 +906,37 @@ definition matchScoped
     -- `lit` is bound to the SubExpr that the `scoped` syntax produced
     s.withVar lit do
     try
-      -- Ru
+      -- Run `smatcher` at `lit`, clearing the `scopeId` variable so that it can get a fresh value
+      let s ← smatcher {s with vars := s.vars.erase scopeId}
+      s.withVar scopeId do
+        guard (← getExpr).isLambda
+        let prop ← try Meta.isProp (← getExpr).bindingDomain! catch _ => pure false
+        let isDep := (← getExpr).bindingBody!.hasLooseBVar 0
+        let ppTypes ← getPPOption getPPPiBinderTypes -- the same option controlling ∀
+        let dom ← withBindingDomain delab
+        withBindingBodyUnusedName fun x => do
+          let x : Ident := ⟨x⟩
+          let binder ←
+            if prop && !isDep then
+              -- this underscore is used to support binder predicates, since it indicates
+              -- the variable is unused and this binder is safe to merge into another
+              `(extBinderParenthesized|(_ : $dom))
+            else if prop || ppTypes then
+              `(extBinderParenthesized|($x:ident : $dom))
+            else
+              `(extBinderParenthesized|($x:ident))
+          -- Now use the body of the lambda for `lit` for the next iteration
+          let s ← s.captureSubexpr lit
+          -- TODO merge binders as an inverse to `satisfies_binder_pred%`
+          let binders := binders.push binder
+          go binders s
+    catch _ =>
+guard !binders.isEmpty
+      if let some binders₂ := s.scopeState then
+guard binders == binders₂-- TODO: this might be a bit too strict, but it seems to work
+        return s
+      else
+        return {s with scopeState := binders}
 
 中文:
 定义 matchScoped
@@ -765,7 +947,37 @@ definition matchScoped
     -- `lit` is bound to the SubExpr that the `scoped` syntax produced
     s.withVar lit do
     try
-      -- Ru
+      -- Run `smatcher` at `lit`, clearing the `scopeId` variable so that it can get a fresh value
+      let s ← smatcher {s with vars := s.vars.erase scopeId}
+      s.withVar scopeId do
+        guard (← getExpr).isLambda
+        let prop ← try Meta.isProp (← getExpr).bindingDomain! catch _ => pure false
+        let isDep := (← getExpr).bindingBody!.hasLooseBVar 0
+        let ppTypes ← getPPOption getPPPiBinderTypes -- the same option controlling ∀
+        let dom ← withBindingDomain delab
+        withBindingBodyUnusedName fun x => do
+          let x : Ident := ⟨x⟩
+          let binder ←
+            if prop && !isDep then
+              -- this underscore is used to support binder predicates, since it indicates
+              -- the variable is unused and this binder is safe to merge into another
+              `(extBinderParenthesized|(_ : $dom))
+            else if prop || ppTypes then
+              `(extBinderParenthesized|($x:ident : $dom))
+            else
+              `(extBinderParenthesized|($x:ident))
+          -- Now use the body of the lambda for `lit` for the next iteration
+          let s ← s.captureSubexpr lit
+          -- TODO merge binders as an inverse to `satisfies_binder_pred%`
+          let binders := binders.push binder
+          go binders s
+    catch _ =>
+guard !binders.isEmpty
+      if let some binders₂ := s.scopeState then
+guard binders == binders₂-- TODO: this might be a bit too strict, but it seems to work
+        return s
+      else
+        return {s with scopeState := binders}
 -/
 partial def matchScoped (lit scopeId : Name) (smatcher : Matcher) : Matcher := go #[] where
   /-- Variant of `matchScoped` after some number of `binders` have already been captured. -/
@@ -842,7 +1054,18 @@ definition matchFoldl
     -- Clear x and y state before running smatcher so it can store new values
     let s := {s with vars := s.vars |>.erase x |>.erase y}
 let some s ← try some < > smatcher s catch _ => pure none
-      | -- We put this here rather than using a big
+      | -- We put this here rather than using a big try block to prevent backtracking.
+        -- We have `smatcher` match greedily, and then require that `sinit` *must* succeed
+        sinit s
+    -- y gives the next element of the list
+    let s := s.pushFold lit (← s.delabVar y expr)
+    -- x gives the next lit
+    let some newLit := s.vars[x]? | failure
+    -- If progress was not made, fail
+    if newLit.1.expr == expr then failure
+    -- Progress was made, so recurse
+    let s := {s with vars := s.vars.insert lit newLit}
+    matchFoldl lit x y smatcher sinit s
 
 中文:
 定义 matchFoldl
@@ -853,7 +1076,18 @@ let some s ← try some < > smatcher s catch _ => pure none
     -- Clear x and y state before running smatcher so it can store new values
     let s := {s with vars := s.vars |>.erase x |>.erase y}
 let some s ← try some < > smatcher s catch _ => pure none
-      | -- We put this here rather than using a big
+      | -- We put this here rather than using a big try block to prevent backtracking.
+        -- We have `smatcher` match greedily, and then require that `sinit` *must* succeed
+        sinit s
+    -- y gives the next element of the list
+    let s := s.pushFold lit (← s.delabVar y expr)
+    -- x gives the next lit
+    let some newLit := s.vars[x]? | failure
+    -- If progress was not made, fail
+    if newLit.1.expr == expr then failure
+    -- Progress was made, so recurse
+    let s := {s with vars := s.vars.insert lit newLit}
+    matchFoldl lit x y smatcher sinit s
 -/
 partial def matchFoldl (lit x y : Name) (smatcher : Matcher) (sinit : Matcher) :
     Matcher := fun s => do
@@ -886,7 +1120,7 @@ definition mkFoldlMatcher
 .push y .push x let boundNames' := boundNames
   let (keys, smatcher) ← mkExprMatcher scopedTerm boundNames'
   let (keys', sinit) ← mkExprMatcher init boundNames
-  return (keys ++ keys', ← ``(matchFoldl $(quote lit) $(quo
+  return (keys ++ keys', ← ``(matchFoldl $(quote lit) $(quote x) $(quote y) $smatcher $sinit))
 
 中文:
 定义 mkFoldlMatcher
@@ -896,7 +1130,7 @@ definition mkFoldlMatcher
 .push y .push x let boundNames' := boundNames
   let (keys, smatcher) ← mkExprMatcher scopedTerm boundNames'
   let (keys', sinit) ← mkExprMatcher init boundNames
-  return (keys ++ keys', ← ``(matchFoldl $(quote lit) $(quo
+  return (keys ++ keys', ← ``(matchFoldl $(quote lit) $(quote x) $(quote y) $smatcher $sinit))
 -/
 partial def mkFoldlMatcher (lit x y : Name) (scopedTerm init : Term) (boundNames : Array Name) :
     OptionT TermElabM (List DelabKey × Term) := do
@@ -917,7 +1151,8 @@ definition mkFoldrMatcher
 .push y .push x let boundNames' := boundNames
   let (keys, smatcher) ← mkExprMatcher scopedTerm boundNames'
   let (keys', sinit) ← mkExprMatcher init boundNames
-  -- N.B. by swapping `x` and `y` we can just use the foldl
+  -- N.B. by swapping `x` and `y` we can just use the foldl matcher
+  return (keys ++ keys', ← ``(matchFoldl $(quote lit) $(quote y) $(quote x) $smatcher $sinit))
 
 中文:
 定义 mkFoldrMatcher
@@ -927,7 +1162,8 @@ definition mkFoldrMatcher
 .push y .push x let boundNames' := boundNames
   let (keys, smatcher) ← mkExprMatcher scopedTerm boundNames'
   let (keys', sinit) ← mkExprMatcher init boundNames
-  -- N.B. by swapping `x` and `y` we can just use the foldl
+  -- N.B. by swapping `x` and `y` we can just use the foldl matcher
+  return (keys ++ keys', ← ``(matchFoldl $(quote lit) $(quote y) $(quote x) $smatcher $sinit))
 -/
 partial def mkFoldrMatcher (lit x y : Name) (scopedTerm init : Term) (boundNames : Array Name) :
     OptionT TermElabM (List DelabKey × Term) := do
@@ -1013,7 +1249,12 @@ definition withHeadRefIfTagAppFns
   if tagAppFns && (← getExpr).getAppFn.consumeMData.isConst then
     -- Delaborate the head to register term info and get a syntax we can use for the ref.
     -- The syntax `f` itself is thrown away.
-let f ← withNaryFn withOptionAtCurrPos `pp.tagAppFns
+let f ← withNaryFn withOptionAtCurrPos `pp.tagAppFns true delab
+    let stx ← withRef f d
+    -- Annotate to ensure that the full syntax still refers to the whole expression.
+    annotateTermInfo stx
+  else
+    d
 
 中文:
 定义 withHeadRefIfTagAppFns
@@ -1023,7 +1264,12 @@ let f ← withNaryFn withOptionAtCurrPos `pp.tagAppFns
   if tagAppFns && (← getExpr).getAppFn.consumeMData.isConst then
     -- Delaborate the head to register term info and get a syntax we can use for the ref.
     -- The syntax `f` itself is thrown away.
-let f ← withNaryFn withOptionAtCurrPos `pp.tagAppFns
+let f ← withNaryFn withOptionAtCurrPos `pp.tagAppFns true delab
+    let stx ← withRef f d
+    -- Annotate to ensure that the full syntax still refers to the whole expression.
+    annotateTermInfo stx
+  else
+    d
 -/
 def withHeadRefIfTagAppFns (d : Delab) : Delab := do
   let tagAppFns ← getPPOption getPPTagAppFns

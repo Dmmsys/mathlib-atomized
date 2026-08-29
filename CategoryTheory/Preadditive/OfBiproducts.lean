@@ -105,7 +105,11 @@ theorem isUnital_leftAdd
     intro f
     ext
     · simp
-    · simp [biprod.lift_snd, Category.assoc, comp
+    · simp [biprod.lift_snd, Category.assoc, comp_zero]
+  exact {
+    left_id := fun f => by simp [hr f, leftAdd, Category.assoc, Category.comp_id, biprod.inr_desc],
+    right_id := fun f => by simp [hl f, leftAdd, Category.assoc, Category.comp_id, biprod.inl_desc]
+  }
 
 中文:
 定理 isUnital_leftAdd
@@ -120,7 +124,11 @@ theorem isUnital_leftAdd
     intro f
     ext
     · simp
-    · simp [biprod.lift_snd, Category.assoc, comp
+    · simp [biprod.lift_snd, Category.assoc, comp_zero]
+  exact {
+    left_id := fun f => by simp [hr f, leftAdd, Category.assoc, Category.comp_id, biprod.inr_desc],
+    right_id := fun f => by simp [hl f, leftAdd, Category.assoc, Category.comp_id, biprod.inl_desc]
+  }
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, biprod, biprod.inl, biprod.inl_desc, biprod.inr, biprod.inr_desc, biprod.lift, biprod.lift_snd, comp_id, comp_zero, inl_desc, inr_desc, leftAdd, left_id, lift_snd, right_id
 -/
@@ -156,7 +164,11 @@ theorem isUnital_rightAdd
     intro f
     ext
     · simp
-    · simp only
+    · simp only [biprod.inr_desc, BinaryBicone.inr_fst_assoc, zero_comp]
+  exact {
+    left_id := fun f => by simp [h₂ f, rightAdd, biprod.lift_snd_assoc, Category.id_comp],
+    right_id := fun f => by simp [h₁ f, rightAdd, biprod.lift_fst_assoc, Category.id_comp]
+  }
 
 中文:
 定理 isUnital_rightAdd
@@ -171,7 +183,11 @@ theorem isUnital_rightAdd
     intro f
     ext
     · simp
-    · simp only
+    · simp only [biprod.inr_desc, BinaryBicone.inr_fst_assoc, zero_comp]
+  exact {
+    left_id := fun f => by simp [h₂ f, rightAdd, biprod.lift_snd_assoc, Category.id_comp],
+    right_id := fun f => by simp [h₁ f, rightAdd, biprod.lift_fst_assoc, Category.id_comp]
+  }
 
 Depends on / 依赖: BinaryBicone, BinaryBicone.inr_fst_assoc, BinaryBicone.inr_snd_assoc, Category, Category.id_co, Category.id_comp, biprod, biprod.desc, biprod.fst, biprod.inr_desc, biprod.lift_fst_assoc, biprod.lift_snd_assoc, biprod.snd, id_co, id_comp, inr_desc, inr_fst_assoc, inr_snd_assoc, left_id, lift_fst_assoc
 -/
@@ -202,7 +218,11 @@ theorem distrib
   let diag : X ⊞ X ⟶ Y ⊞ Y := biprod.lift (biprod.desc f g) (biprod.desc h k)
   have hd₁ : biprod.inl ≫ diag = biprod.lift f h := by ext <;> simp [diag]
   have hd₂ : biprod.inr ≫ diag = biprod.lift g k := by ext <;> simp [diag]
-  have h₁ : biprod.lift (f +ᵣ g) (h +ᵣ k) = biprod.lift (𝟙 X) (𝟙 X) ≫
+  have h₁ : biprod.lift (f +ᵣ g) (h +ᵣ k) = biprod.lift (𝟙 X) (𝟙 X) ≫ diag := by
+    ext <;> cat_disch
+  have h₂ : diag ≫ biprod.desc (𝟙 Y) (𝟙 Y) = biprod.desc (f +ₗ h) (g +ₗ k) := by
+    ext <;> simp [reassoc_of% hd₁, reassoc_of% hd₂]
+  rw [leftAdd]; rw [h₁]; rw [Category.assoc]; rw [h₂]; rw [rightAdd]
 
 中文:
 定理 distrib
@@ -212,7 +232,11 @@ theorem distrib
   let diag : X ⊞ X ⟶ Y ⊞ Y := biprod.lift (biprod.desc f g) (biprod.desc h k)
   have hd₁ : biprod.inl ≫ diag = biprod.lift f h := by ext <;> simp [diag]
   have hd₂ : biprod.inr ≫ diag = biprod.lift g k := by ext <;> simp [diag]
-  have h₁ : biprod.lift (f +ᵣ g) (h +ᵣ k) = biprod.lift (𝟙 X) (𝟙 X) ≫
+  have h₁ : biprod.lift (f +ᵣ g) (h +ᵣ k) = biprod.lift (𝟙 X) (𝟙 X) ≫ diag := by
+    ext <;> cat_disch
+  have h₂ : diag ≫ biprod.desc (𝟙 Y) (𝟙 Y) = biprod.desc (f +ₗ h) (g +ₗ k) := by
+    ext <;> simp [reassoc_of% hd₁, reassoc_of% hd₂]
+  rw [leftAdd]; rw [h₁]; rw [Category.assoc]; rw [h₂]; rw [rightAdd]
 
 Depends on / 依赖: Category, Category.assoc, biprod, biprod.desc, biprod.inl, biprod.inr, biprod.lift, cat_disch, leftAdd, reassoc_of
 -/
@@ -240,7 +264,8 @@ definition addCommMonoidHomOfHasBinaryBiproducts
   zero_add := (isUnital_rightAdd X Y).left_id
   add_zero := (isUnital_rightAdd X Y).right_id
   add_comm :=
-    (EckmannHilton.mul_comm (isUnital_leftAdd X Y) (isUnital_rightAdd X 
+    (EckmannHilton.mul_comm (isUnital_leftAdd X Y) (isUnital_rightAdd X Y) (distrib X Y)).comm
+  nsmul := letI : Add (X ⟶ Y) := ⟨(· +ᵣ ·)⟩; nsmulRec
 
 中文:
 定义 addCommMonoidHomOfHasBinaryBiproducts
@@ -251,7 +276,8 @@ definition addCommMonoidHomOfHasBinaryBiproducts
   zero_add := (isUnital_rightAdd X Y).left_id
   add_zero := (isUnital_rightAdd X Y).right_id
   add_comm :=
-    (EckmannHilton.mul_comm (isUnital_leftAdd X Y) (isUnital_rightAdd X 
+    (EckmannHilton.mul_comm (isUnital_leftAdd X Y) (isUnital_rightAdd X Y) (distrib X Y)).comm
+  nsmul := letI : Add (X ⟶ Y) := ⟨(· +ᵣ ·)⟩; nsmulRec
 -/
 def addCommMonoidHomOfHasBinaryBiproducts : AddCommMonoid (X ⟶ Y) where
   add := (· +ᵣ ·)

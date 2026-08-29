@@ -64,7 +64,8 @@ definition findX
     rw [hn']
     exact n'.prop
   · obtain ⟨n', hn', pn'⟩ := n.prop.1
-    simpa [hn', Subtyp
+    simpa [hn', Subtype.coe_eta] using! pn'
+  · exact n.prop.2 m hm ⟨m, rfl, pm⟩
 
 中文:
 定义 findX
@@ -77,7 +78,8 @@ definition findX
     rw [hn']
     exact n'.prop
   · obtain ⟨n', hn', pn'⟩ := n.prop.1
-    simpa [hn', Subtyp
+    simpa [hn', Subtype.coe_eta] using! pn'
+  · exact n.prop.2 m hm ⟨m, rfl, pm⟩
 -/
 protected def findX : { n // p n ∧ forall m : Nat+, m < n -> ¬p m } := by
   have : exists (n' : Nat) (n : Nat+) (_ : n' = n), p n := Exists.elim h fun n hn => ⟨n, n, rfl, hn⟩

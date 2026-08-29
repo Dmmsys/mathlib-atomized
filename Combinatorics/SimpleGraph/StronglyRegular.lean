@@ -196,7 +196,8 @@ theorem IsSRGWith.card_neighborFinset_union_eq
   rw [Nat.sub_add_cancel]; rw [← Set.toFinset_card]
   · simp [commonNeighbors, ← neighborFinset_def, Finset.card_union_add_card_inter,
       h.regular.degree_eq, two_mul]
-  · apply le_trans (card_commonNeighbors_le_degree_le
+  · apply le_trans (card_commonNeighbors_le_degree_left _ _ _)
+    simp [h.regular.degree_eq, two_mul]
 
 中文:
 定理 是SRGWith.card_neighborFinset_union_eq
@@ -206,7 +207,8 @@ theorem IsSRGWith.card_neighborFinset_union_eq
   rw [Nat.sub_add_cancel]; rw [← Set.toFinset_card]
   · simp [commonNeighbors, ← neighborFinset_def, Finset.card_union_add_card_inter,
       h.regular.degree_eq, two_mul]
-  · apply le_trans (card_commonNeighbors_le_degree_le
+  · apply le_trans (card_commonNeighbors_le_degree_left _ _ _)
+    simp [h.regular.degree_eq, two_mul]
 
 Depends on / 依赖: Finset, Finset.card_union_add_card_inter, Fintype, Fintype.card, G.commonNeighbors, Nat.add_right_cancel, Nat.sub_add_cancel, Set.toFinset_card, add_right_cancel, card_commonNeighbors_le_degree_left, card_union_add_card_inter, commonNeighbors, degree_eq, h.regular.degree_eq, le_trans, neighborFinset_def, regular, sub_add_cancel, toFinset_card, two_mul
 -/
@@ -347,7 +349,12 @@ theorem IsSRGWith.card_commonNeighbors_eq_of_adj_compl
   simp_rw [compl_neighborFinset_sdiff_inter_eq]
   have hne : v != w := ne_of_adj _ ha
   rw [compl_adj] at ha
-  rw [ca
+  rw [card_sdiff_of_subset]; rw [← insert_eq]; rw [card_insert_of_notMem]; rw [card_singleton]; rw [← Finset.compl_union]
+  · rw [card_compl, h.card_neighborFinset_union_of_not_adj hne ha.2, ← h.card]
+  · simp only [hne.symm, not_false_iff, mem_singleton]
+  · intro u
+    simp only [mem_union, mem_compl, mem_neighborFinset, mem_inter, mem_singleton]
+    rintro (rfl | rfl) <;> simpa [adj_comm] using ha.2
 
 中文:
 定理 是SRGWith.card_commonNeighbors_eq_of_adj_compl
@@ -358,7 +365,12 @@ theorem IsSRGWith.card_commonNeighbors_eq_of_adj_compl
   simp_rw [compl_neighborFinset_sdiff_inter_eq]
   have hne : v != w := ne_of_adj _ ha
   rw [compl_adj] at ha
-  rw [ca
+  rw [card_sdiff_of_subset]; rw [← insert_eq]; rw [card_insert_of_notMem]; rw [card_singleton]; rw [← Finset.compl_union]
+  · rw [card_compl, h.card_neighborFinset_union_of_not_adj hne ha.2, ← h.card]
+  · simp only [hne.symm, not_false_iff, mem_singleton]
+  · intro u
+    simp only [mem_union, mem_compl, mem_neighborFinset, mem_inter, mem_singleton]
+    rintro (rfl | rfl) <;> simpa [adj_comm] using ha.2
 
 Depends on / 依赖: Finset, Finset.compl_union, Set.toFinset_card, Set.toFinset_compl, Set.toFinset_inter, Set.toFinset_sdiff, Set.toFinset_singleton, card_compl, card_insert_of_notMem, card_neighborFinset_union_of_not_adj, card_sdiff_of_subset, card_singleton, commonNeighbors, compl_adj, compl_neighborFinset_sdiff_inter_eq, compl_union, h.card, h.card_neighborFinset_union_of_not_adj, hne.symm, insert_eq
 -/
@@ -387,7 +399,8 @@ theorem IsSRGWith.card_commonNeighbors_eq_of_not_adj_compl
     Set.toFinset_sdiff, Set.toFinset_singleton, Set.toFinset_compl, ← neighborFinset_def]
   simp only [not_and, Classical.not_not, compl_adj] at hna
   have h2' := hna hn
-  simp_rw [compl_neighborFinset_sdiff
+  simp_rw [compl_neighborFinset_sdiff_inter_eq, sdiff_compl_neighborFinset_inter_eq h2']
+  rwa [← Finset.compl_union, card_compl, h.card_neighborFinset_union_of_adj, ← h.card]
 
 中文:
 定理 是SRGWith.card_commonNeighbors_eq_of_not_adj_compl
@@ -397,7 +410,8 @@ theorem IsSRGWith.card_commonNeighbors_eq_of_not_adj_compl
     Set.toFinset_sdiff, Set.toFinset_singleton, Set.toFinset_compl, ← neighborFinset_def]
   simp only [not_and, Classical.not_not, compl_adj] at hna
   have h2' := hna hn
-  simp_rw [compl_neighborFinset_sdiff
+  simp_rw [compl_neighborFinset_sdiff_inter_eq, sdiff_compl_neighborFinset_inter_eq h2']
+  rwa [← Finset.compl_union, card_compl, h.card_neighborFinset_union_of_adj, ← h.card]
 
 Depends on / 依赖: Classical, Classical.not_not, Finset, Finset.compl_union, Set.toFinset_card, Set.toFinset_compl, Set.toFinset_inter, Set.toFinset_sdiff, Set.toFinset_singleton, card_compl, card_neighborFinset_union_of_adj, commonNeighbors, compl_adj, compl_neighborFinset_sdiff_inter_eq, compl_union, h.card, h.card_neighborFinset_union_of_adj, neighborFinset_def, neighborSet_compl, not_and
 -/
@@ -453,7 +467,23 @@ theorem IsSRGWith.param_eq
   · simp [h.compl.regular v]
   · intro w hw
     rw [mem_neighborFinset] at hw
-    si
+    simp_rw [bipartiteAbove, ← mem_neighborFinset, filter_mem_eq_inter]
+    have s : {v} subseteq G.neighborFinset w \ G.neighborFinset v := by
+      rw [singleton_subset_iff]; rw [mem_sdiff]; rw [mem_neighborFinset]
+      exact ⟨hw.symm, G.notMem_neighborFinset_self v⟩
+    rw [inter_comm]; rw [neighborFinset_compl]; rw [← inter_sdiff_assoc]; rw [← sdiff_eq_inter_compl]; rw [card_sdiff_of_subset s]; rw [card_singleton]; rw [← sdiff_inter_self_left]; rw [card_sdiff_of_subset inter_subset_left]
+    congr
+    · simp [h.regular w]
+    · simp_rw [inter_comm, neighborFinset_def, ← Set.toFinset_inter, ← h.of_adj v w hw,
+        ← Set.toFinset_card]
+      congr!
+  · intro w hw
+    simp_rw [neighborFinset_compl, mem_sdiff, mem_compl, mem_singleton, mem_neighborFinset,
+      ← Ne.eq_def] at hw
+    simp_rw [bipartiteBelow, adj_comm, ← mem_neighborFinset, filter_mem_eq_inter,
+      neighborFinset_def, ← Set.toFinset_inter, ← h.of_not_adj hw.2.symm hw.1,
+      ← Set.toFinset_card]
+    congr!
 
 中文:
 定理 是SRGWith.param_eq
@@ -466,7 +496,23 @@ theorem IsSRGWith.param_eq
   · simp [h.compl.regular v]
   · intro w hw
     rw [mem_neighborFinset] at hw
-    si
+    simp_rw [bipartiteAbove, ← mem_neighborFinset, filter_mem_eq_inter]
+    have s : {v} subseteq G.neighborFinset w \ G.neighborFinset v := by
+      rw [singleton_subset_iff]; rw [mem_sdiff]; rw [mem_neighborFinset]
+      exact ⟨hw.symm, G.notMem_neighborFinset_self v⟩
+    rw [inter_comm]; rw [neighborFinset_compl]; rw [← inter_sdiff_assoc]; rw [← sdiff_eq_inter_compl]; rw [card_sdiff_of_subset s]; rw [card_singleton]; rw [← sdiff_inter_self_left]; rw [card_sdiff_of_subset inter_subset_left]
+    congr
+    · simp [h.regular w]
+    · simp_rw [inter_comm, neighborFinset_def, ← Set.toFinset_inter, ← h.of_adj v w hw,
+        ← Set.toFinset_card]
+      congr!
+  · intro w hw
+    simp_rw [neighborFinset_compl, mem_sdiff, mem_compl, mem_singleton, mem_neighborFinset,
+      ← Ne.eq_def] at hw
+    simp_rw [bipartiteBelow, adj_comm, ← mem_neighborFinset, filter_mem_eq_inter,
+      neighborFinset_def, ← Set.toFinset_inter, ← h.of_not_adj hw.2.symm hw.1,
+      ← Set.toFinset_card]
+    congr!
 
 Depends on / 依赖: Classical, Classical.decEq, Fintype, Fintype.card_pos_iff, G.Adj, G.neighborFinset, G.not, bipartiteAbove, card_mul_eq_card_mul, card_pos_iff, convert, filter_mem_eq_inter, h.card, h.compl.regular, h.regular, hw.symm, mem_neighborFinset, mem_sdiff, neighborFinset, regular
 -/
@@ -514,7 +560,14 @@ theorem IsSRGWith.matrix_eq
   rw [@Fintype.card_congr _ _ (G.fintypeSetWalkLength v w 2) _
     (G.walkLengthTwoEquivCommonNeighbors v w)]
   obtain rfl | hn := eq_or_ne v w
-  · rw [← Set.toFinset_card
+  · rw [← Set.toFinset_card]
+    simp [commonNeighbors, ← neighborFinset_def, h.regular v]
+  · simp only [Matrix.one_apply_ne' hn.symm, ne_eq, hn]
+    by_cases ha : G.Adj v w <;>
+      simp only [ha, ite_true, ite_false, add_zero, zero_add, nsmul_eq_mul, smul_zero, mul_one,
+        not_true_eq_false, not_false_eq_true, and_false, and_self]
+    · rw [h.of_adj v w ha]
+    · rw [h.of_not_adj hn ha]
 
 中文:
 定理 是SRGWith.matrix_eq
@@ -526,7 +579,14 @@ theorem IsSRGWith.matrix_eq
   rw [@Fintype.card_congr _ _ (G.fintypeSetWalkLength v w 2) _
     (G.walkLengthTwoEquivCommonNeighbors v w)]
   obtain rfl | hn := eq_or_ne v w
-  · rw [← Set.toFinset_card
+  · rw [← Set.toFinset_card]
+    simp [commonNeighbors, ← neighborFinset_def, h.regular v]
+  · simp only [Matrix.one_apply_ne' hn.symm, ne_eq, hn]
+    by_cases ha : G.Adj v w <;>
+      simp only [ha, ite_true, ite_false, add_zero, zero_add, nsmul_eq_mul, smul_zero, mul_one,
+        not_true_eq_false, not_false_eq_true, and_false, and_self]
+    · rw [h.of_adj v w ha]
+    · rw [h.of_not_adj hn ha]
 
 Depends on / 依赖: Fintype, Fintype.card_congr, G.Adj, G.fintypeSetWalkLength, G.walkLengthTwoEquivCommonNeighbors, Matrix, Matrix.add_apply, Matrix.one_apply_ne, Matrix.smul_apply, Set.toFinset_card, add_apply, add_zero, adjMatrix_apply, adjMatrix_pow_apply_eq_card_walk, card_congr, commonNeighbors, compl_adj, eq_or_ne, fintypeSetWalkLength, h.regular
 -/

@@ -591,7 +591,9 @@ lemma sup_preimage_val_id
   let : OrderBot (Subtype P) := Subtype.orderBot Pbot
   ext
   simp only [sup_coe, id_eq]
- 
+  apply sup_preimage_self
+  refine ⟨mapsTo_preimage _ _, injOn_of_injective Subtype.val_injective, ?_⟩
+  intro x hx; simpa using ⟨hx, ht x hx⟩
 
 中文:
 引理 sup_preimage_val_id
@@ -603,7 +605,9 @@ lemma sup_preimage_val_id
   let : OrderBot (Subtype P) := Subtype.orderBot Pbot
   ext
   simp only [sup_coe, id_eq]
- 
+  apply sup_preimage_self
+  refine ⟨mapsTo_preimage _ _, injOn_of_injective Subtype.val_injective, ?_⟩
+  intro x hx; simpa using ⟨hx, ht x hx⟩
 
 Depends on / 依赖: Subtype, Subtype.semilatticeSup, semilatticeSup
 -/

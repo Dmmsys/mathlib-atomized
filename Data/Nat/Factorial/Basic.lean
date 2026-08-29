@@ -280,7 +280,11 @@ theorem factorial_lt
     intro k hk
     rw [factorial_succ]; rw [succ_mul]; rw [Nat.lt_add_left_iff_pos]
     exact Nat.mul_pos hk k.factorial_pos
-  induction h generalizing hn
+  induction h generalizing hn with
+  | refl => exact this hn
+| step hnk ih => exact lt_trans (ih hn) this lt_trans hn lt_of_succ_le hnk
+
+@[gcongr]
 
 中文:
 定理 factorial_lt
@@ -292,7 +296,11 @@ theorem factorial_lt
     intro k hk
     rw [factorial_succ]; rw [succ_mul]; rw [Nat.lt_add_left_iff_pos]
     exact Nat.mul_pos hk k.factorial_pos
-  induction h generalizing hn
+  induction h generalizing hn with
+  | refl => exact this hn
+| step hnk ih => exact lt_trans (ih hn) this lt_trans hn lt_of_succ_le hnk
+
+@[gcongr]
 
 Depends on / 依赖: Nat.lt_add_left_iff_pos, Nat.mul_pos, Nat.not_le_of_gt, factorial_le, factorial_pos, factorial_succ, generalizing, k.factorial_pos, lt_add_left_iff_pos, lt_of_succ_le, lt_trans, mul_pos, not_le, not_le.mp, not_le_of_gt, succ_mul
 -/
@@ -393,7 +401,7 @@ theorem factorial_inj
   · rfl
   rw [← one_lt_factorial]; rw [h]; rw [one_lt_factorial] at hn
   rw [← factorial_lt <| lt_of_succ_lt hn]; rw [h] at hnm
-  cases
+  cases lt_irrefl _ hnm
 
 中文:
 定理 factorial_inj
@@ -407,7 +415,7 @@ theorem factorial_inj
   · rfl
   rw [← one_lt_factorial]; rw [h]; rw [one_lt_factorial] at hn
   rw [← factorial_lt <| lt_of_succ_lt hn]; rw [h] at hnm
-  cases
+  cases lt_irrefl _ hnm
 
 Depends on / 依赖: congr_arg, factorial_lt, lt_irrefl, lt_of_succ_lt, lt_trichotomy, one_lt_factorial
 -/
@@ -573,7 +581,9 @@ theorem add_factorial_succ_le_factorial_add_succ
   · match i with
     | 0 => simp
     | 1 =>
-      rw [← Nat.add_assoc]; rw [factorial_succ (1 + n)]; rw [Nat.add_mul]; rw [Nat.one_mul]; rw [Nat.add_com
+      rw [← Nat.add_assoc]; rw [factorial_succ (1 + n)]; rw [Nat.add_mul]; rw [Nat.one_mul]; rw [Nat.add_comm 1 n]; rw [Nat.add_le_add_iff_right]
+      exact Nat.mul_pos n.succ_pos n.succ.factorial_pos
+    | succ (succ n) => contradiction
 
 中文:
 定理 add_factorial_succ_le_factorial_add_succ
@@ -587,7 +597,9 @@ theorem add_factorial_succ_le_factorial_add_succ
   · match i with
     | 0 => simp
     | 1 =>
-      rw [← Nat.add_assoc]; rw [factorial_succ (1 + n)]; rw [Nat.add_mul]; rw [Nat.one_mul]; rw [Nat.add_com
+      rw [← Nat.add_assoc]; rw [factorial_succ (1 + n)]; rw [Nat.add_mul]; rw [Nat.one_mul]; rw [Nat.add_comm 1 n]; rw [Nat.add_le_add_iff_right]
+      exact Nat.mul_pos n.succ_pos n.succ.factorial_pos
+    | succ (succ n) => contradiction
 
 Depends on / 依赖: Nat.add_assoc, Nat.add_comm, Nat.add_le_add_iff_right, Nat.add_mul, Nat.le_of_lt, Nat.mul_pos, Nat.one_mul, add_assoc, add_comm, add_factorial_succ_lt_factorial_add_succ, add_le_add_iff_right, add_mul, factorial_pos, factorial_succ, le_of_lt, le_or_gt, mul_pos, n.succ.factorial_pos, n.succ_pos, one_mul
 -/
@@ -857,7 +869,8 @@ theorem ascFactorial_mul_ascFactorial
     · simp only [Nat.add_right_comm, zero_ascFactorial, Nat.zero_add, Nat.zero_mul]
   | succ n' =>
     apply Nat.mul_left_cancel (factorial_pos n')
-    simp only [Nat.add_assoc, ← N
+    simp only [Nat.add_assoc, ← Nat.mul_assoc, factorial_mul_ascFactorial]
+    rw [Nat.add_comm 1 l]; rw [← Nat.add_assoc]; rw [factorial_mul_ascFactorial]; rw [Nat.add_assoc]
 
 中文:
 定理 ascFactorial_mul_ascFactorial
@@ -870,7 +883,8 @@ theorem ascFactorial_mul_ascFactorial
     · simp only [Nat.add_right_comm, zero_ascFactorial, Nat.zero_add, Nat.zero_mul]
   | succ n' =>
     apply Nat.mul_left_cancel (factorial_pos n')
-    simp only [Nat.add_assoc, ← N
+    simp only [Nat.add_assoc, ← Nat.mul_assoc, factorial_mul_ascFactorial]
+    rw [Nat.add_comm 1 l]; rw [← Nat.add_assoc]; rw [factorial_mul_ascFactorial]; rw [Nat.add_assoc]
 
 Depends on / 依赖: Nat.add_assoc, Nat.add_comm, Nat.add_right_comm, Nat.add_zero, Nat.mul_assoc, Nat.mul_left_cancel, Nat.one_mul, Nat.zero_add, Nat.zero_mul, add_assoc, add_comm, add_right_comm, add_zero, ascFactorial_zero, factorial_mul_ascFactorial, factorial_pos, mul_assoc, mul_left_cancel, one_mul, zero_add
 -/
@@ -1077,7 +1091,9 @@ theorem ascFactorial_le_factorial_mul_pow
     rcases n.eq_zero_or_pos with rfl | hn
     · simp [zero_ascFactorial]
     rw [ascFactorial_succ]; rw [factorial_succ]; rw [pow_succ']; rw [Nat.mul_assoc (j + 1)]; rw [Nat.mul_left_comm j !]; rw [← Nat.mul_assoc (j + 1)]
-    refine Nat.mul_le_mul ?_ (a
+    refine Nat.mul_le_mul ?_ (ascFactorial_le_factorial_mul_pow n j)
+    rw [add_one_mul]; rw [Nat.add_comm]; rw [Nat.add_le_add_iff_right]
+    exact Nat.le_mul_of_pos_right j hn
 
 中文:
 定理 ascFactorial_le_factorial_mul_pow
@@ -1089,7 +1105,9 @@ theorem ascFactorial_le_factorial_mul_pow
     rcases n.eq_zero_or_pos with rfl | hn
     · simp [zero_ascFactorial]
     rw [ascFactorial_succ]; rw [factorial_succ]; rw [pow_succ']; rw [Nat.mul_assoc (j + 1)]; rw [Nat.mul_left_comm j !]; rw [← Nat.mul_assoc (j + 1)]
-    refine Nat.mul_le_mul ?_ (a
+    refine Nat.mul_le_mul ?_ (ascFactorial_le_factorial_mul_pow n j)
+    rw [add_one_mul]; rw [Nat.add_comm]; rw [Nat.add_le_add_iff_right]
+    exact Nat.le_mul_of_pos_right j hn
 
 Depends on / 依赖: Nat.add_comm, Nat.add_le_add_iff_right, Nat.le_mul_of_pos_right, Nat.mul_assoc, Nat.mul_le_mul, Nat.mul_left_comm, add_comm, add_le_add_iff_right, add_one_mul, ascFactorial_le_factorial_mul_pow, ascFactorial_succ, eq_zero_or_pos, factorial_succ, le_mul_of_pos_right, mul_assoc, mul_le_mul, mul_left_comm, n.eq_zero_or_pos, pow_succ, zero_ascFactorial
 -/
@@ -1404,7 +1422,11 @@ theorem descFactorial_mul_descFactorial
   proof: by
   by_cases hmn : m <= n
   · apply Nat.mul_left_cancel (n - m).factorial_pos
-    rw [factorial_mul_descFactorial hmn]; rw [show n - m = (n - k) - (m - k) by lia]; rw [← Nat.mul_assoc]; rw [factorial_mul_descFactorial (show m - k <= n - k by lia)]; rw [factorial_mul_descFactorial (le_trans hkm hmn)
+    rw [factorial_mul_descFactorial hmn]; rw [show n - m = (n - k) - (m - k) by lia]; rw [← Nat.mul_assoc]; rw [factorial_mul_descFactorial (show m - k <= n - k by lia)]; rw [factorial_mul_descFactorial (le_trans hkm hmn)]
+  · rw [descFactorial_eq_zero_iff_lt.mpr (show n < m by lia)]
+    by_cases hkn : k <= n
+    · rw [descFactorial_eq_zero_iff_lt.mpr (show n - k < m - k by lia), Nat.zero_mul]
+    · rw [descFactorial_eq_zero_iff_lt.mpr (show n < k by lia), Nat.mul_zero]
 
 中文:
 定理 descFactorial_mul_descFactorial
@@ -1412,7 +1434,11 @@ theorem descFactorial_mul_descFactorial
   证明: by
   by_cases hmn : m <= n
   · apply Nat.mul_left_cancel (n - m).factorial_pos
-    rw [factorial_mul_descFactorial hmn]; rw [show n - m = (n - k) - (m - k) by lia]; rw [← Nat.mul_assoc]; rw [factorial_mul_descFactorial (show m - k <= n - k by lia)]; rw [factorial_mul_descFactorial (le_trans hkm hmn)
+    rw [factorial_mul_descFactorial hmn]; rw [show n - m = (n - k) - (m - k) by lia]; rw [← Nat.mul_assoc]; rw [factorial_mul_descFactorial (show m - k <= n - k by lia)]; rw [factorial_mul_descFactorial (le_trans hkm hmn)]
+  · rw [descFactorial_eq_zero_iff_lt.mpr (show n < m by lia)]
+    by_cases hkn : k <= n
+    · rw [descFactorial_eq_zero_iff_lt.mpr (show n - k < m - k by lia), Nat.zero_mul]
+    · rw [descFactorial_eq_zero_iff_lt.mpr (show n < k by lia), Nat.mul_zero]
 
 Depends on / 依赖: Nat.mul_assoc, Nat.mul_left_cancel, Nat.zero_mul, descFactorial_eq_zero_iff_lt, descFactorial_eq_zero_iff_lt.mpr, factorial_mul_descFactorial, factorial_pos, le_trans, mul_assoc, mul_left_cancel, zero_mul
 -/

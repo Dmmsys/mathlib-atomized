@@ -65,7 +65,13 @@ lemma isLocallyInjective_of_whisker
     rw [← fac]; rw [Sieve.pullback_comp]
     apply K.pullback_stable
     refine K.superset_covering (Sieve.functorPullback_pushforward_le H _) ?_
-    refine K.superset_covering (Sieve.functorPushforward
+    refine K.superset_covering (Sieve.functorPushforward_monotone H _ ?_)
+      (hH.cover_preserve <| equalizerSieve_mem J (whiskerLeft H.op f)
+        (F.map m.op a) (F.map m.op b) ?_)
+    · intro W q hq
+      simpa using hq
+    · simp only [comp_obj, op_obj, whiskerLeft_app, Opposite.op_unop]
+      rw [NatTrans.naturality_apply]; rw [NatTrans.naturality_apply]; rw [h]
 
 中文:
 引理 isLocallyInjective_of_whisker
@@ -76,7 +82,13 @@ lemma isLocallyInjective_of_whisker
     rw [← fac]; rw [Sieve.pullback_comp]
     apply K.pullback_stable
     refine K.superset_covering (Sieve.functorPullback_pushforward_le H _) ?_
-    refine K.superset_covering (Sieve.functorPushforward
+    refine K.superset_covering (Sieve.functorPushforward_monotone H _ ?_)
+      (hH.cover_preserve <| equalizerSieve_mem J (whiskerLeft H.op f)
+        (F.map m.op a) (F.map m.op b) ?_)
+    · intro W q hq
+      simpa using hq
+    · simp only [comp_obj, op_obj, whiskerLeft_app, Opposite.op_unop]
+      rw [NatTrans.naturality_apply]; rw [NatTrans.naturality_apply]; rw [h]
 
 Depends on / 依赖: F.map, H.is_cover_of_isCoverDense, H.op, K.pullback_stable, K.superset_covering, K.transitive, NatTrans, Opposite, Opposite.op_unop, Sieve.functorPullback_pushforward_le, Sieve.functorPushforward_monotone, Sieve.pullback_comp, X.unop, comp_obj, cover_preserve, equalizerSieve_mem, functorPullback_pushforward_le, functorPushforward_monotone, hH.cover_preserve, is_cover_of_isCoverDense
 -/
@@ -149,7 +161,11 @@ lemma isLocallySurjective_of_whisker
     rw [← fac]; rw [Sieve.pullback_comp]
     apply K.pullback_stable
 have hh := hH.cover_preserve imageSieve_mem J (whiskerLeft H.op f) (G.map m.op a)
-    refine K.superset_covering (Sieve.functorPullback_pu
+    refine K.superset_covering (Sieve.functorPullback_pushforward_le H _) ?_
+    refine K.superset_covering (Sieve.functorPushforward_monotone H _ ?_) hh
+    intro W q ⟨x, h⟩
+    simp only [Sieve.functorPullback_apply, Presieve.functorPullback_mem, Sieve.pullback_apply]
+    exact ⟨x, by simpa using! h⟩
 
 中文:
 引理 isLocallySurjective_of_whisker
@@ -160,7 +176,11 @@ have hh := hH.cover_preserve imageSieve_mem J (whiskerLeft H.op f) (G.map m.op a
     rw [← fac]; rw [Sieve.pullback_comp]
     apply K.pullback_stable
 have hh := hH.cover_preserve imageSieve_mem J (whiskerLeft H.op f) (G.map m.op a)
-    refine K.superset_covering (Sieve.functorPullback_pu
+    refine K.superset_covering (Sieve.functorPullback_pushforward_le H _) ?_
+    refine K.superset_covering (Sieve.functorPushforward_monotone H _ ?_) hh
+    intro W q ⟨x, h⟩
+    simp only [Sieve.functorPullback_apply, Presieve.functorPullback_mem, Sieve.pullback_apply]
+    exact ⟨x, by simpa using! h⟩
 
 Depends on / 依赖: G.map, H.is_cover_of_isCoverDense, H.op, K.pullback_stable, K.superset_covering, K.transitive, Presieve, Presieve.functorPullback_mem, Sieve.functorPullback_apply, Sieve.functorPullback_pushforward_le, Sieve.functorPushforward_monotone, Sieve.pullback_apply, Sieve.pullback_comp, cover_preserve, functorPullback_apply, functorPullback_mem, functorPullback_pushforward_le, functorPushforward_monotone, hH.cover_preserve, imageSieve_mem
 -/

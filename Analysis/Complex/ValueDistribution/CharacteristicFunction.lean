@@ -180,7 +180,11 @@ theorem characteristic_sum_top_le
   _ <= ((∑ a in s, proximity (f a) ⊤) r) + log s.card + (∑ a in s, (logCounting (f a) ⊤)) r := by
       gcongr
       · apply proximity_sum_top_le s f hf r
-      · ap
+      · apply logCounting_sum_top_le s f hf hr
+    _ = ((∑ a in s, proximity (f a) ⊤) r) + (∑ a in s, (logCounting (f a) ⊤)) r + log s.card := by
+      ring
+    _ = ∑ x in s, (proximity (f x) ⊤ r + logCounting (f x) ⊤ r) + log s.card := by
+      simp [Finset.sum_add_distrib]
 
 中文:
 定理 characteristic_sum_top_le
@@ -191,7 +195,11 @@ theorem characteristic_sum_top_le
   _ <= ((∑ a in s, proximity (f a) ⊤) r) + log s.card + (∑ a in s, (logCounting (f a) ⊤)) r := by
       gcongr
       · apply proximity_sum_top_le s f hf r
-      · ap
+      · apply logCounting_sum_top_le s f hf hr
+    _ = ((∑ a in s, proximity (f a) ⊤) r) + (∑ a in s, (logCounting (f a) ⊤)) r + log s.card := by
+      ring
+    _ = ∑ x in s, (proximity (f x) ⊤ r + logCounting (f x) ⊤ r) + log s.card := by
+      simp [Finset.sum_add_distrib]
 
 Depends on / 依赖: Finset, Finset.sum_apply, Pi.add_apply, add_apply, characteristic, logCounting, logCounting_sum_top_le, proximity, proximity_sum_top_le, s.card, sum_apply
 -/

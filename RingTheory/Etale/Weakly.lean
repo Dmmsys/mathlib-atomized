@@ -74,7 +74,9 @@ lemma ulift_iff
   congr!
   conv_rhs => rw [← RingHom.Flat.ulift_iff.{u₁, u₂}]
   rw [TensorProduct.lmul'_ulift]; rw [AlgHom.toRingHom_eq_coe]; rw [AlgHom.comp_toRingHom]
-  exact RingHom.Flat.comp_iff_of
+  exact RingHom.Flat.comp_iff_of_bijective_right (Equiv.bijective _)
+
+@[stacks 092N "(2)"]
 
 中文:
 引理 ulift_iff
@@ -84,7 +86,9 @@ lemma ulift_iff
   congr!
   conv_rhs => rw [← RingHom.Flat.ulift_iff.{u₁, u₂}]
   rw [TensorProduct.lmul'_ulift]; rw [AlgHom.toRingHom_eq_coe]; rw [AlgHom.comp_toRingHom]
-  exact RingHom.Flat.comp_iff_of
+  exact RingHom.Flat.comp_iff_of_bijective_right (Equiv.bijective _)
+
+@[stacks 092N "(2)"]
 
 Depends on / 依赖: AlgHom, AlgHom.comp_toRingHom, AlgHom.toRingHom_eq_coe, Equiv.bijective, Module, Module.Flat.ulift_left_iff, Module.Flat.ulift_right_iff, RingHom, RingHom.Flat.comp_iff_of_bijective_right, RingHom.Flat.ulift_iff, TensorProduct, TensorProduct.lmul, _ulift, bijective, comp_iff_of_bijective_right, comp_toRingHom, conv_rhs, toRingHom_eq_coe, ulift_iff, ulift_left_iff
 -/
@@ -132,7 +136,14 @@ lemma trans
   refine ⟨.trans _ (ULift.{max u₁ u₂ u₃} S) _, ?_⟩
   · have heq : TensorProduct.lmul' (S := ULift.{max u₁ u₂ u₃} T) (ULift R) =
         AlgHom.comp ((TensorProduct.lmul' (S := ULift.{max u₁ u₂ u₃} T)
-          (ULift.{max u₁ u₂ u₃} S)).res
+          (ULift.{max u₁ u₂ u₃} S)).restrictScalars (ULift.{max u₁ u₂ u₃} R))
+          (TensorProduct.mapOfCompatibleSMul ..) := by
+      ext <;> simp
+    rw [heq]
+    refine .comp ?_ ?_
+    · exact (flat_lmul' (ULift R) (ULift S)).mapOfCompatibleSMul
+        (ULift.{max u₁ u₂ u₃} T) (ULift.{max u₁ u₂ u₃} T)
+    · exact WeaklyEtale.flat_lmul' (ULift S) (ULift T)
 
 中文:
 引理 trans
@@ -142,7 +153,14 @@ lemma trans
   refine ⟨.trans _ (ULift.{max u₁ u₂ u₃} S) _, ?_⟩
   · have heq : TensorProduct.lmul' (S := ULift.{max u₁ u₂ u₃} T) (ULift R) =
         AlgHom.comp ((TensorProduct.lmul' (S := ULift.{max u₁ u₂ u₃} T)
-          (ULift.{max u₁ u₂ u₃} S)).res
+          (ULift.{max u₁ u₂ u₃} S)).restrictScalars (ULift.{max u₁ u₂ u₃} R))
+          (TensorProduct.mapOfCompatibleSMul ..) := by
+      ext <;> simp
+    rw [heq]
+    refine .comp ?_ ?_
+    · exact (flat_lmul' (ULift R) (ULift S)).mapOfCompatibleSMul
+        (ULift.{max u₁ u₂ u₃} T) (ULift.{max u₁ u₂ u₃} T)
+    · exact WeaklyEtale.flat_lmul' (ULift S) (ULift T)
 
 Depends on / 依赖: AlgHom, AlgHom.comp, TensorProduct, TensorProduct.lmul, TensorProduct.mapOfCompatibleSMul, flat_lmul, mapOfCompatibleSMul, restrictScalars, ulift_iff
 -/

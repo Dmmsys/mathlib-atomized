@@ -1282,7 +1282,8 @@ theorem j_of_isCharThreeJNeZeroNF_of_char_three
   proof: by
   have h := W.Δ'.ne_zero
   rw [coe_Δ']; rw [Δ_of_isCharThreeJNeZeroNF_of_char_three] at h
-  rw [j]; rw [Units.val_inv_eq_inv_val]; rw [← div_eq_inv_mul]; rw [coe_Δ']; rw [c₄_of_isCharThreeJNeZeroNF_of_char_three]; rw [Δ_of_isCharThreeJNeZeroNF_of_char_three]; rw [div_eq_div_iff h (right_ne_zero_o
+  rw [j]; rw [Units.val_inv_eq_inv_val]; rw [← div_eq_inv_mul]; rw [coe_Δ']; rw [c₄_of_isCharThreeJNeZeroNF_of_char_three]; rw [Δ_of_isCharThreeJNeZeroNF_of_char_three]; rw [div_eq_div_iff h (right_ne_zero_of_mul h)]
+  ring1
 
 中文:
 定理 j_of_isCharThreeJNeZeroNF_of_char_three
@@ -1290,7 +1291,8 @@ theorem j_of_isCharThreeJNeZeroNF_of_char_three
   证明: by
   have h := W.Δ'.ne_zero
   rw [coe_Δ']; rw [Δ_of_isCharThreeJNeZeroNF_of_char_three] at h
-  rw [j]; rw [Units.val_inv_eq_inv_val]; rw [← div_eq_inv_mul]; rw [coe_Δ']; rw [c₄_of_isCharThreeJNeZeroNF_of_char_three]; rw [Δ_of_isCharThreeJNeZeroNF_of_char_three]; rw [div_eq_div_iff h (right_ne_zero_o
+  rw [j]; rw [Units.val_inv_eq_inv_val]; rw [← div_eq_inv_mul]; rw [coe_Δ']; rw [c₄_of_isCharThreeJNeZeroNF_of_char_three]; rw [Δ_of_isCharThreeJNeZeroNF_of_char_three]; rw [div_eq_div_iff h (right_ne_zero_of_mul h)]
+  ring1
 
 Depends on / 依赖: Units.val_inv_eq_inv_val, div_eq_div_iff, div_eq_inv_mul, ne_zero, right_ne_zero_of_mul, val_inv_eq_inv_val
 -/
@@ -1522,7 +1524,10 @@ theorem toCharThreeNF_spec_of_b₂_ne_zero
   have : W'.IsCharNeTwoNF := W.toCharNeTwoNF_spec
   constructor
   · simp [variableChange_a₁]
-  · simp [vari
+  · simp [variableChange_a₃]
+  · have ha₂ : W'.a₂ != 0 := W.toShortNFOfCharThree_a₂ ▸ hb₂
+    simp [field, variableChange_a₄, -mul_eq_zero]
+    linear_combination (W'.a₄ * W'.a₂ ^ 2 + W'.a₄ ^ 2) * CharP.cast_eq_zero F 3
 
 中文:
 定理 toCharThreeNF_spec_of_b₂_ne_zero
@@ -1535,7 +1540,10 @@ theorem toCharThreeNF_spec_of_b₂_ne_zero
   have : W'.IsCharNeTwoNF := W.toCharNeTwoNF_spec
   constructor
   · simp [variableChange_a₁]
-  · simp [vari
+  · simp [variableChange_a₃]
+  · have ha₂ : W'.a₂ != 0 := W.toShortNFOfCharThree_a₂ ▸ hb₂
+    simp [field, variableChange_a₄, -mul_eq_zero]
+    linear_combination (W'.a₄ * W'.a₂ ^ 2 + W'.a₄ ^ 2) * CharP.cast_eq_zero F 3
 
 Depends on / 依赖: CharP.cast_eq_zero, Invertible, IsCharNeTwoNF, W.toCharNeTwoNF_spec, W.toShortNFOfCharThree, W.toShortNFOfCharThree_a, cast_eq_zero, linear_combination, mul_eq_zero, mul_smul, toCharNeTwoNF_spec, toCharThreeNF, toShortNFOfCharThree
 -/
@@ -2618,7 +2626,8 @@ theorem toCharTwoJNeZeroNF_spec
   · simp [toCharTwoJNeZeroNF, ha₁, variableChange_a₁]
   · simp [field, toCharTwoJNeZeroNF, variableChange_a₃, -mul_eq_zero]
     linear_combination (W.a₃ * W.a₁ ^ 3 + W.a₁ ^ 2 * W.a₄ + W.a₃ ^ 2) * CharP.cast_eq_zero F 2
-  · simp [field, toCharTwoJNeZeroNF, variableChange_a₄, -mul_eq_
+  · simp [field, toCharTwoJNeZeroNF, variableChange_a₄, -mul_eq_zero]
+    linear_combination (W.a₃ ^ 2 + W.a₁ * W.a₃ * W.a₂) * CharP.cast_eq_zero F 2
 
 中文:
 定理 toCharTwoJNeZeroNF_spec
@@ -2628,7 +2637,8 @@ theorem toCharTwoJNeZeroNF_spec
   · simp [toCharTwoJNeZeroNF, ha₁, variableChange_a₁]
   · simp [field, toCharTwoJNeZeroNF, variableChange_a₃, -mul_eq_zero]
     linear_combination (W.a₃ * W.a₁ ^ 3 + W.a₁ ^ 2 * W.a₄ + W.a₃ ^ 2) * CharP.cast_eq_zero F 2
-  · simp [field, toCharTwoJNeZeroNF, variableChange_a₄, -mul_eq_
+  · simp [field, toCharTwoJNeZeroNF, variableChange_a₄, -mul_eq_zero]
+    linear_combination (W.a₃ ^ 2 + W.a₁ * W.a₃ * W.a₂) * CharP.cast_eq_zero F 2
 
 Depends on / 依赖: CharP.cast_eq_zero, cast_eq_zero, linear_combination, mul_eq_zero, toCharTwoJNeZeroNF
 -/

@@ -52,7 +52,8 @@ definition cocycleOfDegreewiseSplit
       have r_f := fun n => (σ n).r_f
       have s_g := fun n => (σ n).s_g
       dsimp at this r_f s_g ⊢
-      rw [δ_v 1 2 (by lia) _ p (p + 2) (by
+      rw [δ_v 1 2 (by lia) _ p (p + 2) (by lia) (p + 1) (p + 1)
+        (by lia) (by lia)]; rw [Cochain.mk_v]; rw [Cochain.mk_v]; rw [show Int.negOnePow 2 = 1 by rfl]; rw [one_smul]; rw [assoc]; rw [assoc]; rw [← cancel_mono (S.f.f (p + 2))]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [zero_comp]; rw [← S.f.comm]; rw [reassoc_of% (r_f (p + 1))]; rw [sub_comp]; rw [comp_sub]; rw [comp_sub]; rw [assoc]; rw [id_comp]; rw [d_comp_d]; rw [comp_zero]; rw [zero_sub]; rw [← S.g.comm_assoc]; rw [reassoc_of% (s_g p)]; rw [r_f (p + 2)]; rw [comp_sub]; rw [comp_sub]; rw [comp_id]; rw [comp_sub]; rw [← S.g.comm_assoc]; rw [reassoc_of% (s_g (p + 1))]; rw [d_comp_d_assoc]; rw [zero_comp]; rw [sub_zero]; rw [neg_add_cancel])
 
 中文:
 定义 cocycleOfDegreewiseSplit
@@ -64,7 +65,8 @@ definition cocycleOfDegreewiseSplit
       have r_f := fun n => (σ n).r_f
       have s_g := fun n => (σ n).s_g
       dsimp at this r_f s_g ⊢
-      rw [δ_v 1 2 (by lia) _ p (p + 2) (by
+      rw [δ_v 1 2 (by lia) _ p (p + 2) (by lia) (p + 1) (p + 1)
+        (by lia) (by lia)]; rw [Cochain.mk_v]; rw [Cochain.mk_v]; rw [show Int.negOnePow 2 = 1 by rfl]; rw [one_smul]; rw [assoc]; rw [assoc]; rw [← cancel_mono (S.f.f (p + 2))]; rw [add_comp]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [zero_comp]; rw [← S.f.comm]; rw [reassoc_of% (r_f (p + 1))]; rw [sub_comp]; rw [comp_sub]; rw [comp_sub]; rw [assoc]; rw [id_comp]; rw [d_comp_d]; rw [comp_zero]; rw [zero_sub]; rw [← S.g.comm_assoc]; rw [reassoc_of% (s_g p)]; rw [r_f (p + 2)]; rw [comp_sub]; rw [comp_sub]; rw [comp_id]; rw [comp_sub]; rw [← S.g.comm_assoc]; rw [reassoc_of% (s_g (p + 1))]; rw [d_comp_d_assoc]; rw [zero_comp]; rw [sub_zero]; rw [neg_add_cancel])
 
 Depends on / 依赖: Cochain, Cochain.mk, Cochain.mk_v, Cocycle, Cocycle.mk, Int.negOnePow, S.f.f, add_comp, cancel_mono, mk_v, mono_of_mono_fac, negOnePow, one_smul
 -/
@@ -175,7 +177,32 @@ definition mappingConeHomOfDegreewiseSplitXIso
     (mappingCone.snd (homOfDegreewiseSplit S σ)).v p p (add_zero p) ≫
       (Cochain.ofHom S.f).v (p + 1) q (by lia)
   inv := S.g.f q ≫ (mappingCone.inl (homOfDegreewiseSplit S σ)).v q p (by lia) -
-    (σ q).r ≫ (S.X₁.XIsoOfEq hpq.
+    (σ q).r ≫ (S.X₁.XIsoOfEq hpq.symm).hom ≫
+      (mappingCone.inr (homOfDegreewiseSplit S σ)).f p
+  hom_inv_id := by
+    subst hpq
+    have s_g := (σ (p + 1)).s_g
+    have f_r := (σ (p + 1)).f_r
+    dsimp at s_g f_r ⊢
+    -- the following list of lemmas was obtained by doing
+    -- simp? [mappingCone.ext_from_iff _ (p + 1) _ rfl, reassoc_of% f_r, reassoc_of% s_g]
+    -- which may require increasing maximum heart beats
+    simp only [Cochain.ofHom_v, Int.reduceNeg, id_comp, comp_sub, sub_comp, assoc,
+        reassoc_of% s_g, ShortComplex.Splitting.s_r_assoc, ShortComplex.map_X₃, eval_obj,
+        ShortComplex.map_X₁, zero_comp, comp_zero, reassoc_of% f_r, zero_sub, sub_neg_eq_add,
+        mappingCone.ext_from_iff _ (p + 1) _ rfl, comp_add, mappingCone.inl_v_fst_v_assoc,
+        mappingCone.inl_v_snd_v_assoc, shiftFunctor_obj_X', sub_zero, add_zero, comp_id,
+        mappingCone.inr_f_fst_v_assoc, mappingCone.inr_f_snd_v_assoc, add_eq_right, neg_eq_zero,
+        true_and]
+    rw [← comp_f_assoc]; rw [S.zero]; rw [zero_f]; rw [zero_comp]
+  inv_hom_id := by
+    subst hpq
+    have h := (σ (p + 1)).id
+    dsimp at h ⊢
+    simp only [id_comp, Cochain.ofHom_v, comp_sub, sub_comp, assoc, mappingCone.inl_v_fst_v_assoc,
+      mappingCone.inr_f_fst_v_assoc, shiftFunctor_obj_X', zero_comp, comp_zero, sub_zero,
+      mappingCone.inl_v_snd_v_assoc, mappingCone.inr_f_snd_v_assoc, zero_sub, sub_neg_eq_add, ← h]
+    abel
 
 中文:
 定义 mappingConeHomOfDegreewiseSplitXIso
@@ -184,7 +211,32 @@ definition mappingConeHomOfDegreewiseSplitXIso
     (mappingCone.snd (homOfDegreewiseSplit S σ)).v p p (add_zero p) ≫
       (Cochain.ofHom S.f).v (p + 1) q (by lia)
   inv := S.g.f q ≫ (mappingCone.inl (homOfDegreewiseSplit S σ)).v q p (by lia) -
-    (σ q).r ≫ (S.X₁.XIsoOfEq hpq.
+    (σ q).r ≫ (S.X₁.XIsoOfEq hpq.symm).hom ≫
+      (mappingCone.inr (homOfDegreewiseSplit S σ)).f p
+  hom_inv_id := by
+    subst hpq
+    have s_g := (σ (p + 1)).s_g
+    have f_r := (σ (p + 1)).f_r
+    dsimp at s_g f_r ⊢
+    -- the following list of lemmas was obtained by doing
+    -- simp? [mappingCone.ext_from_iff _ (p + 1) _ rfl, reassoc_of% f_r, reassoc_of% s_g]
+    -- which may require increasing maximum heart beats
+    simp only [Cochain.ofHom_v, Int.reduceNeg, id_comp, comp_sub, sub_comp, assoc,
+        reassoc_of% s_g, ShortComplex.Splitting.s_r_assoc, ShortComplex.map_X₃, eval_obj,
+        ShortComplex.map_X₁, zero_comp, comp_zero, reassoc_of% f_r, zero_sub, sub_neg_eq_add,
+        mappingCone.ext_from_iff _ (p + 1) _ rfl, comp_add, mappingCone.inl_v_fst_v_assoc,
+        mappingCone.inl_v_snd_v_assoc, shiftFunctor_obj_X', sub_zero, add_zero, comp_id,
+        mappingCone.inr_f_fst_v_assoc, mappingCone.inr_f_snd_v_assoc, add_eq_right, neg_eq_zero,
+        true_and]
+    rw [← comp_f_assoc]; rw [S.zero]; rw [zero_f]; rw [zero_comp]
+  inv_hom_id := by
+    subst hpq
+    have h := (σ (p + 1)).id
+    dsimp at h ⊢
+    simp only [id_comp, Cochain.ofHom_v, comp_sub, sub_comp, assoc, mappingCone.inl_v_fst_v_assoc,
+      mappingCone.inr_f_fst_v_assoc, shiftFunctor_obj_X', zero_comp, comp_zero, sub_zero,
+      mappingCone.inl_v_snd_v_assoc, mappingCone.inr_f_snd_v_assoc, zero_sub, sub_neg_eq_add, ← h]
+    abel
 
 Depends on / 依赖: homOfDegreewiseSplit, mappingCone, mappingCone.fst
 -/
@@ -237,7 +289,17 @@ definition mappingConeHomOfDegreewiseSplitIso
     have s_g := (σ (p + 1)).s_g
     dsimp at r_f s_g ⊢
     simp only [mappingConeHomOfDegreewiseSplitXIso, mappingCone.ext_from_iff _ _ _ rfl,
-      mappingCone.i
+      mappingCone.inl_v_d_assoc _ (p + 1) _ (p + 1 + 1) (by linarith) (by lia),
+      cocycleOfDegreewiseSplit, r_f, Int.reduceNeg, Cochain.ofHom_v, sub_comp, assoc,
+      Hom.comm, comp_sub, mappingCone.inl_v_fst_v_assoc, mappingCone.inl_v_snd_v_assoc,
+      shiftFunctor_obj_X', zero_comp, sub_zero, homOfDegreewiseSplit_f,
+      mappingCone.inr_f_fst_v_assoc, comp_zero, zero_sub, mappingCone.inr_f_snd_v_assoc,
+      neg_neg, mappingCone.inr_f_d_assoc, shiftFunctor_obj_d',
+      Int.negOnePow_one, neg_comp, sub_neg_eq_add, zero_add, and_true,
+      Units.neg_smul, one_smul, comp_neg, ShortComplex.map_X₂, eval_obj, Cocycle.mk_coe,
+      Cochain.mk_v]
+    simp only [← S.g.comm_assoc, reassoc_of% s_g, comp_id]
+    abel)
 
 中文:
 定义 mappingConeHomOfDegreewiseSplitIso
@@ -248,7 +310,17 @@ definition mappingConeHomOfDegreewiseSplitIso
     have s_g := (σ (p + 1)).s_g
     dsimp at r_f s_g ⊢
     simp only [mappingConeHomOfDegreewiseSplitXIso, mappingCone.ext_from_iff _ _ _ rfl,
-      mappingCone.i
+      mappingCone.inl_v_d_assoc _ (p + 1) _ (p + 1 + 1) (by linarith) (by lia),
+      cocycleOfDegreewiseSplit, r_f, Int.reduceNeg, Cochain.ofHom_v, sub_comp, assoc,
+      Hom.comm, comp_sub, mappingCone.inl_v_fst_v_assoc, mappingCone.inl_v_snd_v_assoc,
+      shiftFunctor_obj_X', zero_comp, sub_zero, homOfDegreewiseSplit_f,
+      mappingCone.inr_f_fst_v_assoc, comp_zero, zero_sub, mappingCone.inr_f_snd_v_assoc,
+      neg_neg, mappingCone.inr_f_d_assoc, shiftFunctor_obj_d',
+      Int.negOnePow_one, neg_comp, sub_neg_eq_add, zero_add, and_true,
+      Units.neg_smul, one_smul, comp_neg, ShortComplex.map_X₂, eval_obj, Cocycle.mk_coe,
+      Cochain.mk_v]
+    simp only [← S.g.comm_assoc, reassoc_of% s_g, comp_id]
+    abel)
 
 Depends on / 依赖: Cochain, Cochain.ofHom_v, Hom.comm, Hom.isoOfComponents, Int.reduceNeg, cocycleOfDegreewiseSplit, comp_sub, ext_from_iff, inl_v_d_assoc, inl_v_fst_v_assoc, inl_v_snd_v_assoc, isoOfComponents, mappingCone, mappingCone.ext_from_iff, mappingCone.inl_v_d_assoc, mappingCone.inl_v_fst_v_assoc, mappingCone.inl_v_snd_v_assoc, mappingConeHomOfDegreewiseSplitXIso, ofHom_v, reduceNeg
 -/
@@ -353,7 +425,8 @@ definition triangleOfDegreewiseSplitRotateRotateIso
     (by dsimp; simp only [comp_id, id_comp])
     (by dsimp; simp only [neg_comp, shift_f_comp_mappingConeHomOfDegreewiseSplitIso_inv,
       neg_neg, id_comp])
-    (by dsimp; simp only [CategoryTheory.Functor.m
+    (by dsimp; simp only [CategoryTheory.Functor.map_id, comp_id,
+      mappingConeHomOfDegreewiseSplitIso_inv_comp_triangle_mor₃])
 
 中文:
 定义 triangleOfDegreewiseSplitRotateRotateIso
@@ -362,7 +435,8 @@ definition triangleOfDegreewiseSplitRotateRotateIso
     (by dsimp; simp only [comp_id, id_comp])
     (by dsimp; simp only [neg_comp, shift_f_comp_mappingConeHomOfDegreewiseSplitIso_inv,
       neg_neg, id_comp])
-    (by dsimp; simp only [CategoryTheory.Functor.m
+    (by dsimp; simp only [CategoryTheory.Functor.map_id, comp_id,
+      mappingConeHomOfDegreewiseSplitIso_inv_comp_triangle_mor₃])
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, Functor, Iso.refl, Triangle, Triangle.isoMk, comp_id, id_comp, map_id, mappingConeHomOfDegreewiseSplitIso, neg_comp, neg_neg, shift_f_comp_mappingConeHomOfDegreewiseSplitIso_inv
 -/
@@ -554,7 +628,11 @@ lemma distinguished_iff_iso_trianglehOfDegreewiseSplit
     exact ⟨_, _, ⟨(triangleRotation _).counitIso.symm.app _ ≪≫ (rotate _).mapIso e ≪≫
       CochainComplex.mappingCone.trianglehRotateIsoTrianglehOfDegreewiseSplit φ⟩⟩
   · rintro ⟨S, σ, ⟨e⟩⟩
-    rw [rotate_distingu
+    rw [rotate_distinguished_triangle]; rw [rotate_distinguished_triangle]
+    refine isomorphic_distinguished _ ?_ _
+      ((rotate _ ⋙ rotate _).mapIso e ≪≫
+        CochainComplex.trianglehOfDegreewiseSplitRotateRotateIso S σ)
+    exact ⟨_, _, _, ⟨Iso.refl _⟩⟩
 
 中文:
 引理 distinguished_iff_iso_trianglehOfDegreewiseSplit
@@ -565,7 +643,11 @@ lemma distinguished_iff_iso_trianglehOfDegreewiseSplit
     exact ⟨_, _, ⟨(triangleRotation _).counitIso.symm.app _ ≪≫ (rotate _).mapIso e ≪≫
       CochainComplex.mappingCone.trianglehRotateIsoTrianglehOfDegreewiseSplit φ⟩⟩
   · rintro ⟨S, σ, ⟨e⟩⟩
-    rw [rotate_distingu
+    rw [rotate_distinguished_triangle]; rw [rotate_distinguished_triangle]
+    refine isomorphic_distinguished _ ?_ _
+      ((rotate _ ⋙ rotate _).mapIso e ≪≫
+        CochainComplex.trianglehOfDegreewiseSplitRotateRotateIso S σ)
+    exact ⟨_, _, _, ⟨Iso.refl _⟩⟩
 
 Depends on / 依赖: CochainComplex, CochainComplex.mappingCone.trianglehRotateIsoTrianglehOfDegreewiseSplit, CochainComplex.trianglehOfDegreewiseSplitRotateRotateIso, Iso.refl, counitIso, counitIso.symm.app, inv_rot_of_distTriang, isomorphic_distinguished, mapIso, mappingCone, rotate, rotate_distinguished_triangle, triangleRotation, trianglehOfDegreewiseSplitRotateRotateIso, trianglehRotateIsoTrianglehOfDegreewiseSplit
 -/

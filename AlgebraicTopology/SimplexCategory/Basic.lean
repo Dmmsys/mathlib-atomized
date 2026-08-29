@@ -290,7 +290,9 @@ theorem eq_of_one_to_one
     | 0 => exact e0
     | 1 => exact e1
   | 1, 0 =>
-  
+    have := f.toOrderHom.monotone (by decide : (0 : Fin 2) <= 1)
+    rw [e0]; rw [e1] at this
+    exact Not.elim (by decide) this
 
 中文:
 定理 eq_of_one_to_one
@@ -310,7 +312,9 @@ theorem eq_of_one_to_one
     | 0 => exact e0
     | 1 => exact e1
   | 1, 0 =>
-  
+    have := f.toOrderHom.monotone (by decide : (0 : Fin 2) <= 1)
+    rw [e0]; rw [e1] at this
+    exact Not.elim (by decide) this
 
 Depends on / 依赖: Not.elim, e0.symm, e1.trans, f.toOrderHom, f.toOrderHom.monotone, monotone, toOrderHom
 -/
@@ -970,7 +974,14 @@ theorem δ_comp_σ_of_le
   · rw [Fin.succAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr hik),
     Fin.succ_predAbove_succ, Fin.succAbove_of_le_castSucc]
     rcases le_or_gt k (j.castSucc) with (hjk | hjk)
-    · rwa [Fin.predAbove_of_le_castSucc
+    · rwa [Fin.predAbove_of_le_castSucc _ _ hjk, Fin.castSucc_castPred]
+    · rw [Fin.le_castSucc_iff, Fin.predAbove_of_castSucc_lt _ _ hjk, Fin.succ_pred]
+      exact H.trans_lt hjk
+  · rw [Fin.succAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hik)]
+    have hjk := H.trans_lt' hik
+    rw [Fin.predAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr
+      (hjk.trans Fin.castSucc_lt_succ).le)]; rw [Fin.predAbove_of_le_castSucc _ _ hjk.le]; rw [Fin.castPred_castSucc]; rw [Fin.succAbove_of_castSucc_lt]; rw [Fin.castSucc_castPred]
+    rwa [Fin.castSucc_castPred]
 
 中文:
 定理 δ_comp_σ_of_le
@@ -982,7 +993,14 @@ theorem δ_comp_σ_of_le
   · rw [Fin.succAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr hik),
     Fin.succ_predAbove_succ, Fin.succAbove_of_le_castSucc]
     rcases le_or_gt k (j.castSucc) with (hjk | hjk)
-    · rwa [Fin.predAbove_of_le_castSucc
+    · rwa [Fin.predAbove_of_le_castSucc _ _ hjk, Fin.castSucc_castPred]
+    · rw [Fin.le_castSucc_iff, Fin.predAbove_of_castSucc_lt _ _ hjk, Fin.succ_pred]
+      exact H.trans_lt hjk
+  · rw [Fin.succAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hik)]
+    have hjk := H.trans_lt' hik
+    rw [Fin.predAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr
+      (hjk.trans Fin.castSucc_lt_succ).le)]; rw [Fin.predAbove_of_le_castSucc _ _ hjk.le]; rw [Fin.castPred_castSucc]; rw [Fin.succAbove_of_castSucc_lt]; rw [Fin.castSucc_castPred]
+    rwa [Fin.castSucc_castPred]
 
 Depends on / 依赖: Fin.castSucc_castPred, Fin.castSucc_le_castSucc_iff.mpr, Fin.castSucc_lt_castSucc_iff.mpr, Fin.le_castSucc_iff, Fin.predAbove_of_castSucc_lt, Fin.predAbove_of_le_castSucc, Fin.succAbove_of_castSucc_lt, Fin.succAbove_of_le_castSucc, Fin.succ_pred, Fin.succ_predAbove_succ, H.trans_lt, castSucc, castSucc_castPred, castSucc_le_castSucc_iff, castSucc_lt_castSucc_iff, j.castSucc, le_castSucc_iff, le_or_gt, predAbove_of_castSucc_lt, predAbove_of_le_castSucc
 -/
@@ -1152,7 +1170,21 @@ theorem δ_comp_σ_of_gt
   · rw [Fin.succAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_succ_iff.mpr hik)]
     rcases le_or_gt k (j.castSucc) with (hjk | hjk)
     · rw [Fin.predAbove_of_le_castSucc _ _
-      (Fin.castSucc_le_castSucc_iff.mpr hjk), Fin.castPred_
+      (Fin.castSucc_le_castSucc_iff.mpr hjk), Fin.castPred_castSucc,
+      Fin.predAbove_of_le_castSucc _ _ hjk, Fin.succAbove_of_castSucc_lt, Fin.castSucc_castPred]
+      rw [Fin.castSucc_castPred]
+      exact hjk.trans_lt H
+    · rw [Fin.predAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hjk),
+      Fin.predAbove_of_castSucc_lt _ _ hjk, Fin.succAbove_of_castSucc_lt,
+      Fin.castSucc_pred_eq_pred_castSucc]
+      rwa [Fin.castSucc_lt_iff_succ_le, Fin.succ_pred]
+  · rw [Fin.succAbove_of_le_castSucc _ _ (Fin.succ_le_castSucc_iff.mpr hik)]
+    have hjk := H.trans hik
+    rw [Fin.predAbove_of_castSucc_lt _ _ hjk]; rw [Fin.predAbove_of_castSucc_lt _ _
+      (Fin.castSucc_lt_succ_iff.mpr hjk.le)]; rw [Fin.pred_succ]; rw [Fin.succAbove_of_le_castSucc]; rw [Fin.succ_pred]
+    rwa [Fin.le_castSucc_pred_iff]
+
+@[reassoc]
 
 中文:
 定理 δ_comp_σ_of_gt
@@ -1164,7 +1196,21 @@ theorem δ_comp_σ_of_gt
   · rw [Fin.succAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_succ_iff.mpr hik)]
     rcases le_or_gt k (j.castSucc) with (hjk | hjk)
     · rw [Fin.predAbove_of_le_castSucc _ _
-      (Fin.castSucc_le_castSucc_iff.mpr hjk), Fin.castPred_
+      (Fin.castSucc_le_castSucc_iff.mpr hjk), Fin.castPred_castSucc,
+      Fin.predAbove_of_le_castSucc _ _ hjk, Fin.succAbove_of_castSucc_lt, Fin.castSucc_castPred]
+      rw [Fin.castSucc_castPred]
+      exact hjk.trans_lt H
+    · rw [Fin.predAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hjk),
+      Fin.predAbove_of_castSucc_lt _ _ hjk, Fin.succAbove_of_castSucc_lt,
+      Fin.castSucc_pred_eq_pred_castSucc]
+      rwa [Fin.castSucc_lt_iff_succ_le, Fin.succ_pred]
+  · rw [Fin.succAbove_of_le_castSucc _ _ (Fin.succ_le_castSucc_iff.mpr hik)]
+    have hjk := H.trans hik
+    rw [Fin.predAbove_of_castSucc_lt _ _ hjk]; rw [Fin.predAbove_of_castSucc_lt _ _
+      (Fin.castSucc_lt_succ_iff.mpr hjk.le)]; rw [Fin.pred_succ]; rw [Fin.succAbove_of_le_castSucc]; rw [Fin.succ_pred]
+    rwa [Fin.le_castSucc_pred_iff]
+
+@[reassoc]
 
 Depends on / 依赖: Fin.castPred_castSucc, Fin.castSucc_castPred, Fin.castSucc_le_castSucc_iff.mpr, Fin.castSucc_lt_castSucc_iff.mpr, Fin.castSucc_lt_succ_iff.mpr, Fin.predAbove_of_castSucc_lt, Fin.predAbove_of_le_castSucc, Fin.succAbove_of_castSucc_lt, castPred_castSucc, castSucc, castSucc_castPred, castSucc_le_castSucc_iff, castSucc_lt_castSucc_iff, castSucc_lt_succ_iff, hjk.trans_lt, j.castSucc, le_or_gt, predAbove_of_castSucc_lt, predAbove_of_le_castSucc, succAbove_of_castSucc_lt
 -/
@@ -1242,7 +1288,24 @@ theorem σ_comp_σ
       simp
     | succ k =>
       rcases le_or_gt i k with (h | h)
-      · simp_rw [Fin.predAbove_of_castSucc_lt i.castSu
+      · simp_rw [Fin.predAbove_of_castSucc_lt i.castSucc _ (Fin.castSucc_lt_castSucc_iff.mpr
+        (Fin.castSucc_lt_succ_iff.mpr h)), ← Fin.succ_castSucc, Fin.pred_succ,
+        Fin.succ_predAbove_succ]
+        rw [Fin.predAbove_of_castSucc_lt i _ (Fin.castSucc_lt_succ_iff.mpr _)]; rw [Fin.pred_succ]
+        rcases le_or_gt k j with (hkj | hkj)
+        · rwa [Fin.predAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr hkj),
+          Fin.castPred_castSucc]
+        · rw [Fin.predAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hkj),
+          Fin.le_pred_iff,
+          Fin.succ_le_castSucc_iff]
+          exact H.trans_lt hkj
+      · simp_rw [Fin.predAbove_of_le_castSucc i.castSucc _ (Fin.castSucc_le_castSucc_iff.mpr
+        (Fin.succ_le_castSucc_iff.mpr h)), Fin.castPred_castSucc, ← Fin.succ_castSucc,
+        Fin.succ_predAbove_succ]
+        rw [Fin.predAbove_of_le_castSucc _ k.castSucc
+        (Fin.castSucc_le_castSucc_iff.mpr (h.le.trans H))]; rw [Fin.castPred_castSucc]; rw [Fin.predAbove_of_le_castSucc _ k.succ
+        (Fin.succ_le_castSucc_iff.mpr (H.trans_lt' h))]; rw [Fin.predAbove_of_le_castSucc _ k.succ
+        (Fin.succ_le_castSucc_iff.mpr h)]
 
 中文:
 定理 σ_comp_σ
@@ -1258,7 +1321,24 @@ theorem σ_comp_σ
       simp
     | succ k =>
       rcases le_or_gt i k with (h | h)
-      · simp_rw [Fin.predAbove_of_castSucc_lt i.castSu
+      · simp_rw [Fin.predAbove_of_castSucc_lt i.castSucc _ (Fin.castSucc_lt_castSucc_iff.mpr
+        (Fin.castSucc_lt_succ_iff.mpr h)), ← Fin.succ_castSucc, Fin.pred_succ,
+        Fin.succ_predAbove_succ]
+        rw [Fin.predAbove_of_castSucc_lt i _ (Fin.castSucc_lt_succ_iff.mpr _)]; rw [Fin.pred_succ]
+        rcases le_or_gt k j with (hkj | hkj)
+        · rwa [Fin.predAbove_of_le_castSucc _ _ (Fin.castSucc_le_castSucc_iff.mpr hkj),
+          Fin.castPred_castSucc]
+        · rw [Fin.predAbove_of_castSucc_lt _ _ (Fin.castSucc_lt_castSucc_iff.mpr hkj),
+          Fin.le_pred_iff,
+          Fin.succ_le_castSucc_iff]
+          exact H.trans_lt hkj
+      · simp_rw [Fin.predAbove_of_le_castSucc i.castSucc _ (Fin.castSucc_le_castSucc_iff.mpr
+        (Fin.succ_le_castSucc_iff.mpr h)), Fin.castPred_castSucc, ← Fin.succ_castSucc,
+        Fin.succ_predAbove_succ]
+        rw [Fin.predAbove_of_le_castSucc _ k.castSucc
+        (Fin.castSucc_le_castSucc_iff.mpr (h.le.trans H))]; rw [Fin.castPred_castSucc]; rw [Fin.predAbove_of_le_castSucc _ k.succ
+        (Fin.succ_le_castSucc_iff.mpr (H.trans_lt' h))]; rw [Fin.predAbove_of_le_castSucc _ k.succ
+        (Fin.succ_le_castSucc_iff.mpr h)]
 
 Depends on / 依赖: Fin.cases, Fin.castSucc_lt_castSucc_iff.mpr, Fin.castSucc_lt_succ_iff.mpr, Fin.lastCases, Fin.predAbove_of_castSucc_lt, Fin.predAbove_right_last, Fin.pred_succ, Fin.succ_castSucc, Fin.succ_predAbove_succ, castSucc, castSucc_lt_castSucc_iff, castSucc_lt_succ_iff, i.castSucc, lastCases, le_or_g, le_or_gt, len_mk, predAbove_of_castSucc_lt, predAbove_right_last, pred_succ
 -/
@@ -1475,7 +1555,7 @@ lemma mkOfSucc_δ_gt
   · rfl
   · exact Nat.le_of_lt_succ h
   · rfl
-  · exact Nat.le_of_
+  · exact Nat.le_of_lt h
 
 中文:
 引理 mkOfSucc_δ_gt
@@ -1488,7 +1568,7 @@ lemma mkOfSucc_δ_gt
   · rfl
   · exact Nat.le_of_lt_succ h
   · rfl
-  · exact Nat.le_of_
+  · exact Nat.le_of_lt h
 
 Depends on / 依赖: Fin.succAboveOrderEmb_apply, Fin.succAbove_of_le_castSucc, Function, Function.comp_apply, Hom.toOrderHom_mk, Nat.le_of_lt, Nat.le_of_lt_succ, OrderEmbedding, OrderEmbedding.toOrderHom_coe, OrderHom, OrderHom.comp_coe, comp_apply, comp_coe, comp_toOrderHom, fin_cases, le_of_lt, le_of_lt_succ, len_mk, succAboveOrderEmb_apply, succAbove_of_le_castSucc
 -/
@@ -1517,7 +1597,14 @@ lemma mkOfSucc_δ_eq
     simp only [δ, len_mk, Nat.reduceAdd, mkHom, comp_toOrderHom, Hom.toOrderHom_mk,
       Fin.zero_eta, OrderHom.comp_coe, OrderEmbedding.toOrderHom_coe, Function.comp_apply,
       mkOfSucc_homToOrderHom_zero, Fin.succAboveOrderEmb_apply,
-      Fin.castSucc_succA
+      Fin.castSucc_succAbove_castSucc, Fin.succAbove_succ_self]
+    rfl
+  · simp only [δ, len_mk, Nat.reduceAdd, mkHom, comp_toOrderHom, Hom.toOrderHom_mk, Fin.mk_one,
+      OrderHom.comp_coe, OrderEmbedding.toOrderHom_coe, Function.comp_apply,
+      mkOfSucc_homToOrderHom_one, Fin.succAboveOrderEmb_apply]
+    subst h
+    rw [Fin.succAbove_castSucc_self]
+    rfl
 
 中文:
 引理 mkOfSucc_δ_eq
@@ -1529,7 +1616,14 @@ lemma mkOfSucc_δ_eq
     simp only [δ, len_mk, Nat.reduceAdd, mkHom, comp_toOrderHom, Hom.toOrderHom_mk,
       Fin.zero_eta, OrderHom.comp_coe, OrderEmbedding.toOrderHom_coe, Function.comp_apply,
       mkOfSucc_homToOrderHom_zero, Fin.succAboveOrderEmb_apply,
-      Fin.castSucc_succA
+      Fin.castSucc_succAbove_castSucc, Fin.succAbove_succ_self]
+    rfl
+  · simp only [δ, len_mk, Nat.reduceAdd, mkHom, comp_toOrderHom, Hom.toOrderHom_mk, Fin.mk_one,
+      OrderHom.comp_coe, OrderEmbedding.toOrderHom_coe, Function.comp_apply,
+      mkOfSucc_homToOrderHom_one, Fin.succAboveOrderEmb_apply]
+    subst h
+    rw [Fin.succAbove_castSucc_self]
+    rfl
 
 Depends on / 依赖: Fin.castSucc_succAbove_castSucc, Fin.mk_one, Fin.succAboveOrderEmb_apply, Fin.succAbove_succ_self, Fin.zero_eta, Function, Function.comp_apply, Hom.toOrderHom_mk, Nat.reduceAdd, OrderEmbedding, OrderEmbedding.toOrderHom_coe, OrderHom, OrderHom.comp_coe, castSucc_succAbove_castSucc, comp_apply, comp_coe, comp_toOrderHom, fin_cases, len_mk, mkOfSucc_homToOrder
 -/
@@ -1598,7 +1692,25 @@ theorem eq_of_one_to_two
     | 1 => exact e1
   | 0, 2 =>
     refine .inl ⟨1, ?_⟩
-  
+    ext i : 3
+    match i with
+    | 0 => exact e0
+    | 1 => exact e1
+  | 0, 1 =>
+    refine .inl ⟨2, ?_⟩
+    ext i : 3
+    match i with
+    | 0 => exact e0
+    | 1 => exact e1
+  | 0, 0 | 1, 1 | 2, 2 =>
+    refine .inr ⟨f.toOrderHom 0, ?_⟩
+    ext i : 3
+    match i with
+    | 0 => rfl
+    | 1 => exact e1.trans e0.symm
+  | 1, 0 | 2, 0 | 2, 1 =>
+    rw [e0]; rw [e1] at this
+    exact Not.elim (by decide) this
 
 中文:
 定理 eq_of_one_to_two
@@ -1614,7 +1726,25 @@ theorem eq_of_one_to_two
     | 1 => exact e1
   | 0, 2 =>
     refine .inl ⟨1, ?_⟩
-  
+    ext i : 3
+    match i with
+    | 0 => exact e0
+    | 1 => exact e1
+  | 0, 1 =>
+    refine .inl ⟨2, ?_⟩
+    ext i : 3
+    match i with
+    | 0 => exact e0
+    | 1 => exact e1
+  | 0, 0 | 1, 1 | 2, 2 =>
+    refine .inr ⟨f.toOrderHom 0, ?_⟩
+    ext i : 3
+    match i with
+    | 0 => rfl
+    | 1 => exact e1.trans e0.symm
+  | 1, 0 | 2, 0 | 2, 1 =>
+    rw [e0]; rw [e1] at this
+    exact Not.elim (by decide) this
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.const, f.toOrderHom, f.toOrderHom.monotone, monotone, toOrderHom
 -/
@@ -1814,7 +1944,15 @@ instance :
         let f := monoEquivOfFin X aux
         have hf := (Finset.univ.orderEmbOfFin aux).strictMono
         refine
-         
+          { hom := InducedCategory.homMk (LinOrd.ofHom ⟨f, hf.monotone⟩)
+            inv := InducedCategory.homMk (LinOrd.ofHom ⟨f.symm, ?_⟩)
+            hom_inv_id := by ext; apply f.symm_apply_apply
+            inv_hom_id := by ext; apply f.apply_symm_apply }
+        intro i j h
+        change f.symm i <= f.symm j
+        rw [← hf.le_iff_le]
+        change f (f.symm i) <= f (f.symm j)
+        simpa only [OrderIso.apply_symm_apply]⟩⟩
 
 中文:
 实例 :
@@ -1826,7 +1964,15 @@ instance :
         let f := monoEquivOfFin X aux
         have hf := (Finset.univ.orderEmbOfFin aux).strictMono
         refine
-         
+          { hom := InducedCategory.homMk (LinOrd.ofHom ⟨f, hf.monotone⟩)
+            inv := InducedCategory.homMk (LinOrd.ofHom ⟨f.symm, ?_⟩)
+            hom_inv_id := by ext; apply f.symm_apply_apply
+            inv_hom_id := by ext; apply f.apply_symm_apply }
+        intro i j h
+        change f.symm i <= f.symm j
+        rw [← hf.le_iff_le]
+        change f (f.symm i) <= f (f.symm j)
+        simpa only [OrderIso.apply_symm_apply]⟩⟩
 
 Depends on / 依赖: Finset, Finset.univ.orderEmbOfFin, Fintype, Fintype.card, Fintype.card_pos_iff.mpr, InducedCategory, InducedCategory.homMk, LinOrd, LinOrd.ofHom, Nat.succ_pred_eq_of_pos, apply_symm_apply, card_pos_iff, f.apply_symm_apply, f.symm, f.symm_apply_apply, hf.monotone, hom_inv_id, inv_hom_id, monoEquivOfFin, monotone
 -/
@@ -2211,7 +2357,17 @@ instance :
                 by_cases h' : y₁ < y₂
                 · by_contra h''
                   apply not_le.mpr h'
-                 
+                  convert! f.toOrderHom.monotone (le_of_not_ge h'')
+                  all_goals
+                    exact (ConcreteCategory.congr_hom (Iso.inv_hom_id
+                      (asIso ((forget SimplexCategory).map f))) _).symm
+                · rw [eq_of_le_of_not_lt h h'] }
+        hom_inv_id := by
+          ext x : 3
+          exact Iso.hom_inv_id_apply (asIso ((forget _).map f)) x
+        inv_hom_id := by
+          ext x : 3
+          exact Iso.inv_hom_id_apply (asIso ((forget _).map f)) x }⟩
 
 中文:
 实例 :
@@ -2225,7 +2381,17 @@ instance :
                 by_cases h' : y₁ < y₂
                 · by_contra h''
                   apply not_le.mpr h'
-                 
+                  convert! f.toOrderHom.monotone (le_of_not_ge h'')
+                  all_goals
+                    exact (ConcreteCategory.congr_hom (Iso.inv_hom_id
+                      (asIso ((forget SimplexCategory).map f))) _).symm
+                · rw [eq_of_le_of_not_lt h h'] }
+        hom_inv_id := by
+          ext x : 3
+          exact Iso.hom_inv_id_apply (asIso ((forget _).map f)) x
+        inv_hom_id := by
+          ext x : 3
+          exact Iso.inv_hom_id_apply (asIso ((forget _).map f)) x }⟩
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, Hom.mk, Iso.hom_inv_id_apply, Iso.inv_hom_id, Iso.isIso_hom, SimplexCategory, all_goals, congr_hom, convert, eq_of_le_of_not_lt, f.toOrderHom.monotone, forget, hom_inv_id, hom_inv_id_apply, inv_hom_id, isIso_hom, le_of_not_ge, monotone, not_le
 -/
@@ -2375,7 +2541,8 @@ definition orderIsoOfIso
       left_inv := fun i => by
         simpa only using! congr_arg (fun φ => (Hom.toOrderHom φ) i) e.hom_inv_id
       right_inv := fun i => by
-        simpa only using! congr_arg (fun φ => (Hom.toOrderHom φ) i) e.inv_ho
+        simpa only using! congr_arg (fun φ => (Hom.toOrderHom φ) i) e.inv_hom_id }
+    e.hom.toOrderHom.monotone e.inv.toOrderHom.monotone
 
 中文:
 定义 orderIsoOfIso
@@ -2386,7 +2553,8 @@ definition orderIsoOfIso
       left_inv := fun i => by
         simpa only using! congr_arg (fun φ => (Hom.toOrderHom φ) i) e.hom_inv_id
       right_inv := fun i => by
-        simpa only using! congr_arg (fun φ => (Hom.toOrderHom φ) i) e.inv_ho
+        simpa only using! congr_arg (fun φ => (Hom.toOrderHom φ) i) e.inv_hom_id }
+    e.hom.toOrderHom.monotone e.inv.toOrderHom.monotone
 
 Depends on / 依赖: Equiv.toOrderIso, Hom.toOrderHom, congr_arg, e.hom.toOrderHom, e.hom.toOrderHom.monotone, e.hom_inv_id, e.inv.toOrderHom, e.inv.toOrderHom.monotone, e.inv_hom_id, hom_inv_id, invFun, inv_hom_id, left_inv, monotone, right_inv, toOrderHom, toOrderIso
 -/
@@ -2411,7 +2579,9 @@ theorem iso_eq_iso_refl
   have h : (Finset.univ : Finset (Fin (x.len + 1))).card = x.len + 1 := Finset.card_fin (x.len + 1)
   have eq₁ := Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso e) i)
   have eq₂ :=
-    Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso (Iso.refl x)) i
+    Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso (Iso.refl x)) i)
+  ext : 4
+  exact DFunLike.congr_fun (eq₁.trans eq₂.symm) _
 
 中文:
 定理 iso_eq_iso_refl
@@ -2421,7 +2591,9 @@ theorem iso_eq_iso_refl
   have h : (Finset.univ : Finset (Fin (x.len + 1))).card = x.len + 1 := Finset.card_fin (x.len + 1)
   have eq₁ := Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso e) i)
   have eq₂ :=
-    Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso (Iso.refl x)) i
+    Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso (Iso.refl x)) i)
+  ext : 4
+  exact DFunLike.congr_fun (eq₁.trans eq₂.symm) _
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, Finset, Finset.card_fin, Finset.mem_univ, Finset.orderEmbOfFin_unique, Finset.univ, Iso.refl, card_fin, congr_fun, mem_univ, orderEmbOfFin_unique, orderIsoOfIso, x.len
 -/
@@ -2468,7 +2640,26 @@ theorem eq_σ_comp_of_not_injective'
   by_cases h' : x <= Fin.castSucc i
   · rw [Fin.predAbove_of_le_castSucc i x h']
     dsimp [δ]
-    rw [Fin.succAbove_of_castSucc
+    rw [Fin.succAbove_of_castSucc_lt]
+    · rw [Fin.castSucc_castPred]
+    · exact (Fin.castSucc_lt_succ_iff.mpr h')
+  · simp only [not_le] at h'
+let y := x.pred by rintro (rfl : x = 0); simp at h'
+    have hy : x = y.succ := (Fin.succ_pred x _).symm
+    rw [hy] at h' ⊢
+    rw [Fin.predAbove_of_castSucc_lt i y.succ h']; rw [Fin.pred_succ]
+    by_cases h'' : y = i
+    · rw [h'']
+      refine hi.symm.trans ?_
+      congr 1
+      dsimp [δ]
+      rw [Fin.succAbove_of_castSucc_lt i.succ]
+      exact Fin.castSucc_lt_succ
+    · dsimp [δ]
+      rw [Fin.succAbove_of_le_castSucc i.succ _]
+      simp only [Fin.lt_def, Fin.le_iff_val_le_val, Fin.val_succ, Fin.val_castSucc,
+        Nat.lt_succ_iff, Fin.ext_iff] at h' h'' ⊢
+      lia
 
 中文:
 定理 eq_σ_comp_of_not_injective'
@@ -2481,7 +2672,26 @@ theorem eq_σ_comp_of_not_injective'
   by_cases h' : x <= Fin.castSucc i
   · rw [Fin.predAbove_of_le_castSucc i x h']
     dsimp [δ]
-    rw [Fin.succAbove_of_castSucc
+    rw [Fin.succAbove_of_castSucc_lt]
+    · rw [Fin.castSucc_castPred]
+    · exact (Fin.castSucc_lt_succ_iff.mpr h')
+  · simp only [not_le] at h'
+let y := x.pred by rintro (rfl : x = 0); simp at h'
+    have hy : x = y.succ := (Fin.succ_pred x _).symm
+    rw [hy] at h' ⊢
+    rw [Fin.predAbove_of_castSucc_lt i y.succ h']; rw [Fin.pred_succ]
+    by_cases h'' : y = i
+    · rw [h'']
+      refine hi.symm.trans ?_
+      congr 1
+      dsimp [δ]
+      rw [Fin.succAbove_of_castSucc_lt i.succ]
+      exact Fin.castSucc_lt_succ
+    · dsimp [δ]
+      rw [Fin.succAbove_of_le_castSucc i.succ _]
+      simp only [Fin.lt_def, Fin.le_iff_val_le_val, Fin.val_succ, Fin.val_castSucc,
+        Nat.lt_succ_iff, Fin.ext_iff] at h' h'' ⊢
+      lia
 
 Depends on / 依赖: Fin.castSucc, Fin.castSucc_castPred, Fin.castSucc_lt_succ_iff.mpr, Fin.predAboveOrderHom_coe, Fin.predAbove_of_le_castSucc, Fin.succAbove_of_castSucc_lt, Fin.succ_pred, Function, Function.comp_apply, Hom.toOrderHom_mk, OrderHom, OrderHom.comp_coe, castSucc, castSucc_castPred, castSucc_lt_succ_iff, comp_apply, comp_coe, comp_toOrderHom, i.succ, len_mk
 -/
@@ -2528,7 +2738,17 @@ theorem eq_σ_comp_of_not_injective
   -- and then, `θ x = θ (x+1)`
   have hθ₂ : exists x y : Fin (n + 2), (Hom.toOrderHom θ) x = (Hom.toOrderHom θ) y ∧ x < y := by
     rcases hθ with ⟨x, y, ⟨h₁, h₂⟩⟩
-
+    by_cases h : x < y
+    · exact ⟨x, y, ⟨h₁, h⟩⟩
+    · refine ⟨y, x, ⟨h₁.symm, ?_⟩⟩
+      lia
+  rcases hθ₂ with ⟨x, y, ⟨h₁, h₂⟩⟩
+  use x.castPred ((Fin.le_last _).trans_lt' h₂).ne
+  apply eq_σ_comp_of_not_injective'
+  apply le_antisymm
+  · exact θ.toOrderHom.monotone (le_of_lt Fin.castSucc_lt_succ)
+  · rw [Fin.castSucc_castPred, h₁]
+    exact θ.toOrderHom.monotone ((Fin.succ_castPred_le_iff _).mpr h₂)
 
 中文:
 定理 eq_σ_comp_of_not_injective
@@ -2539,7 +2759,17 @@ theorem eq_σ_comp_of_not_injective
   -- and then, `θ x = θ (x+1)`
   have hθ₂ : exists x y : Fin (n + 2), (Hom.toOrderHom θ) x = (Hom.toOrderHom θ) y ∧ x < y := by
     rcases hθ with ⟨x, y, ⟨h₁, h₂⟩⟩
-
+    by_cases h : x < y
+    · exact ⟨x, y, ⟨h₁, h⟩⟩
+    · refine ⟨y, x, ⟨h₁.symm, ?_⟩⟩
+      lia
+  rcases hθ₂ with ⟨x, y, ⟨h₁, h₂⟩⟩
+  use x.castPred ((Fin.le_last _).trans_lt' h₂).ne
+  apply eq_σ_comp_of_not_injective'
+  apply le_antisymm
+  · exact θ.toOrderHom.monotone (le_of_lt Fin.castSucc_lt_succ)
+  · rw [Fin.castSucc_castPred, h₁]
+    exact θ.toOrderHom.monotone ((Fin.succ_castPred_le_iff _).mpr h₂)
 
 Depends on / 依赖: Function, Function.Injective, Injective, exists_prop, not_forall
 -/

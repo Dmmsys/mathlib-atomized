@@ -689,7 +689,8 @@ lemma stalkIso_inv
   intro W hxW
   simp only [Category.comp_id, U.germ_stalkIso_hom_assoc]
   convert! (Scheme.Hom.germ_stalkMap U.ι (U.ι ''ᵁ W) x ⟨_, hxW, rfl⟩).symm
-  refine (U.toScheme.presheaf.germ_res (homOf
+  refine (U.toScheme.presheaf.germ_res (homOfLE ?_) _ _).symm
+  exact (Set.preimage_image_eq _ Subtype.val_injective).le
 
 中文:
 引理 stalkIso_inv
@@ -700,7 +701,8 @@ lemma stalkIso_inv
   intro W hxW
   simp only [Category.comp_id, U.germ_stalkIso_hom_assoc]
   convert! (Scheme.Hom.germ_stalkMap U.ι (U.ι ''ᵁ W) x ⟨_, hxW, rfl⟩).symm
-  refine (U.toScheme.presheaf.germ_res (homOf
+  refine (U.toScheme.presheaf.germ_res (homOfLE ?_) _ _).symm
+  exact (Set.preimage_image_eq _ Subtype.val_injective).le
 
 Depends on / 依赖: Category, Category.comp_id, Iso.inv_comp_eq, Presheaf, Scheme, Scheme.Hom.germ_stalkMap, Set.preimage_image_eq, Subtype, Subtype.val_injective, TopCat, TopCat.Presheaf.stalk_hom_ext, U.germ_stalkIso_hom_assoc, U.stalkIso, U.toScheme.presheaf.germ_res, comp_id, convert, germ_res, germ_stalkIso_hom_assoc, germ_stalkMap, homOfLE
 -/
@@ -823,7 +825,9 @@ lemma Scheme.Opens.ι_image_basicOpen'
   refine (Scheme.image_basicOpen (X.ofRestrict U.isOpenEmbedding) r).trans ?_
   rw [← Scheme.basicOpen_res_eq _ _ (eqToHom U.isOpenEmbedding_obj_top).op]
   rw [← CommRingCat.comp_apply]; rw [← CategoryTheory.Functor.map_comp]; rw [← op_comp]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [op_id]
-  co
+  congr
+  exact (PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ _ _).trans
+    (CategoryTheory.Functor.map_id _ _).symm
 
 中文:
 引理 概形.Opens.ι_image_basicOpen'
@@ -832,7 +836,9 @@ lemma Scheme.Opens.ι_image_basicOpen'
   refine (Scheme.image_basicOpen (X.ofRestrict U.isOpenEmbedding) r).trans ?_
   rw [← Scheme.basicOpen_res_eq _ _ (eqToHom U.isOpenEmbedding_obj_top).op]
   rw [← CommRingCat.comp_apply]; rw [← CategoryTheory.Functor.map_comp]; rw [← op_comp]; rw [eqToHom_trans]; rw [eqToHom_refl]; rw [op_id]
-  co
+  congr
+  exact (PresheafedSpace.IsOpenImmersion.ofRestrict_invApp _ _ _).trans
+    (CategoryTheory.Functor.map_id _ _).symm
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_comp, CategoryTheory.Functor.map_id, CommRingCat, CommRingCat.comp_apply, Functor, IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.ofRestrict_invApp, Scheme, Scheme.basicOpen_res_eq, Scheme.image_basicOpen, U.isOpenEmbedding, U.isOpenEmbedding_obj_top, X.ofRestrict, basicOpen_res_eq, comp_apply, eqToHom, eqToHom_refl, eqToHom_trans
 -/
@@ -1163,7 +1169,9 @@ theorem Scheme.homOfLE_app
   have e₂ := (X.homOfLE e).naturality (eqToIso this).hom.op
   have e₃ := e₂.symm.trans e₁
   dsimp at e₃ ⊢
-  rw [← IsIso.eq_comp_inv]; rw [← Functor.map_inv]; rw [← Functor.map
+  rw [← IsIso.eq_comp_inv]; rw [← Functor.map_inv]; rw [← Functor.map_comp] at e₃
+  rw [e₃]; rw [← Functor.map_comp]
+  congr 1
 
 中文:
 定理 概形.homOfLE_app
@@ -1174,7 +1182,9 @@ theorem Scheme.homOfLE_app
   have e₂ := (X.homOfLE e).naturality (eqToIso this).hom.op
   have e₃ := e₂.symm.trans e₁
   dsimp at e₃ ⊢
-  rw [← IsIso.eq_comp_inv]; rw [← Functor.map_inv]; rw [← Functor.map
+  rw [← IsIso.eq_comp_inv]; rw [← Functor.map_inv]; rw [← Functor.map_comp] at e₃
+  rw [e₃]; rw [← Functor.map_comp]
+  congr 1
 
 Depends on / 依赖: Functor, Functor.map_comp, Functor.map_inv, IsIso.eq_comp_inv, Scheme, Scheme.Hom.congr_app, W.map_functor_eq, X.homOfLE, X.homOfLE_, congr_app, eqToIso, eq_comp_inv, hom.op, homOfLE, map_comp, map_functor_eq, map_inv, naturality, symm.trans
 -/
@@ -2108,7 +2118,12 @@ lemma basicOpenIsoSpecAway_inv_homOfLE
         (basicOpenIsoSpecAway f).inv := by
   subst hx
   rw [← cancel_mono (Scheme.Opens.ι _)]
-  
+  simp only [basicOpenIsoSpecAway, Category.assoc, Scheme.homOfLE_ι,
+    IsOpenImmersion.isoOfRangeEq_inv_fac]
+  simp only [← Spec.map_comp, ← CommRingCat.ofHom_comp]
+  congr
+  ext x
+  exact (IsLocalization.Away.awayToAwayRight_eq f g x (S := Localization.Away f)).symm
 
 中文:
 引理 basicOpenIsoSpecAway_inv_homOfLE
@@ -2119,7 +2134,12 @@ lemma basicOpenIsoSpecAway_inv_homOfLE
         (basicOpenIsoSpecAway f).inv := by
   subst hx
   rw [← cancel_mono (Scheme.Opens.ι _)]
-  
+  simp only [basicOpenIsoSpecAway, Category.assoc, Scheme.homOfLE_ι,
+    IsOpenImmersion.isoOfRangeEq_inv_fac]
+  simp only [← Spec.map_comp, ← CommRingCat.ofHom_comp]
+  congr
+  ext x
+  exact (IsLocalization.Away.awayToAwayRight_eq f g x (S := Localization.Away f)).symm
 
 Depends on / 依赖: Category, Category.assoc, CommRingCat, CommRingCat.ofHom, CommRingCat.ofHom_comp, IsLocalization, IsLocalization.Away.awayToAwayRight, IsLocalization.Away.awayToAwayRight_eq, IsOpenImmersion, IsOpenImmersion.isoOfRangeEq_inv_fac, PrimeSpectrum, PrimeSpectrum.basicOpen_mul, Scheme, Scheme.Opens, Scheme.homOfLE_, Spec.map, Spec.map_comp, awayToAwayRight, awayToAwayRight_eq, basicOpenIsoSpecAway
 -/
@@ -2320,7 +2340,9 @@ lemma isPullback_opens_inf_le
   refine (isPullback_morphismRestrict (X.homOfLE hV) (W.ι ⁻¹ᵁ U)).of_iso (V.ι.isoImage _ ≪≫
     X.isoOfEq ?_) (W.ι.isoImage _ ≪≫ X.isoOfEq ?_) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_ ?_
   · rw [← TopologicalSpace.Opens.map_comp_obj, ← Scheme.Hom.comp_base, Scheme.homOfLE_ι]
-    exact V.functor_map_eq_
+    exact V.functor_map_eq_inf U
+  · exact (W.functor_map_eq_inf U).trans (by simpa)
+  all_goals { simp [← cancel_mono (Scheme.Opens.ι _)] }
 
 中文:
 引理 isPullback_opens_inf_le
@@ -2329,7 +2351,9 @@ lemma isPullback_opens_inf_le
   refine (isPullback_morphismRestrict (X.homOfLE hV) (W.ι ⁻¹ᵁ U)).of_iso (V.ι.isoImage _ ≪≫
     X.isoOfEq ?_) (W.ι.isoImage _ ≪≫ X.isoOfEq ?_) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_ ?_
   · rw [← TopologicalSpace.Opens.map_comp_obj, ← Scheme.Hom.comp_base, Scheme.homOfLE_ι]
-    exact V.functor_map_eq_
+    exact V.functor_map_eq_inf U
+  · exact (W.functor_map_eq_inf U).trans (by simpa)
+  all_goals { simp [← cancel_mono (Scheme.Opens.ι _)] }
 
 Depends on / 依赖: Iso.refl, Scheme, Scheme.Hom.comp_base, Scheme.Opens, Scheme.homOfLE_, TopologicalSpace, TopologicalSpace.Opens.map_comp_obj, V.functor_map_eq_inf, W.functor_map_eq_inf, X.homOfLE, X.isoOfEq, all_goals, cancel_mono, comp_base, functor_map_eq_inf, homOfLE, isPullback_morphismRestrict, isoImage, isoOfEq, map_comp_obj
 -/
@@ -2410,7 +2434,10 @@ theorem morphismRestrict_comp
   rw [← cancel_mono (pullback.fst _ _)]
   simp_rw [Category.assoc]
   rw [pullbackRestrictIsoRestrict_inv_fst]; rw [pullbackRightPullbackFstIso_inv_snd_fst]; rw [←
-    pullback.conditio
+    pullback.condition]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]
+  rfl
+
+@[reassoc]
 
 中文:
 定理 morphismRestrict_comp
@@ -2423,7 +2450,10 @@ theorem morphismRestrict_comp
   rw [← cancel_mono (pullback.fst _ _)]
   simp_rw [Category.assoc]
   rw [pullbackRestrictIsoRestrict_inv_fst]; rw [pullbackRightPullbackFstIso_inv_snd_fst]; rw [←
-    pullback.conditio
+    pullback.condition]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]
+  rfl
+
+@[reassoc]
 
 Depends on / 依赖: Category, Category.assoc, cancel_mono, condition, morphismRestrict, pullback, pullback.condition, pullback.fst, pullbackRestrictIsoRestrict_inv_fst, pullbackRestrictIsoRestrict_inv_fst_assoc, pullbackRightPullbackFstIso_inv_snd_fst, pullbackRightPullbackFstIso_inv_snd_snd, simp_rw
 -/
@@ -2564,7 +2594,7 @@ theorem morphismRestrict_app
   obtain ⟨V, rfl⟩ : exists V', U.ι ⁻¹ᵁ U.ι ''ᵁ V' = V := ⟨_, U.ι.preimage_image_eq V⟩
   simpa [← Functor.map_comp_assoc, ← Functor.map_comp] using!
     congr(Y.presheaf.map (eqToHom (congr_arg (U.ι ''ᵁ ·) (U.ι.preimage_image_eq V).symm)).op ≫
- (Scheme.Hom.congr_app (morphismRestrict_ι f U) (U.ι '
+ (Scheme.Hom.congr_app (morphismRestrict_ι f U) (U.ι ''ᵁ V)))
 
 中文:
 定理 morphismRestrict_app
@@ -2573,7 +2603,7 @@ theorem morphismRestrict_app
   obtain ⟨V, rfl⟩ : exists V', U.ι ⁻¹ᵁ U.ι ''ᵁ V' = V := ⟨_, U.ι.preimage_image_eq V⟩
   simpa [← Functor.map_comp_assoc, ← Functor.map_comp] using!
     congr(Y.presheaf.map (eqToHom (congr_arg (U.ι ''ᵁ ·) (U.ι.preimage_image_eq V).symm)).op ≫
- (Scheme.Hom.congr_app (morphismRestrict_ι f U) (U.ι '
+ (Scheme.Hom.congr_app (morphismRestrict_ι f U) (U.ι ''ᵁ V)))
 
 Depends on / 依赖: Functor, Functor.map_comp, Functor.map_comp_assoc, Scheme, Scheme.Hom.congr_app, Y.presheaf.map, congr_app, congr_arg, eqToHom, map_comp, map_comp_assoc, preimage_image_eq, presheaf
 -/
@@ -2721,7 +2751,12 @@ definition morphismRestrictOpensRange
     IsOpenImmersion.isoOfRangeEq g V.ι Subtype.range_coe.symm
   let t : pullback f g ⟶ pullback f V.ι :=
     pullback.map _ _ _ _ (𝟙 _) e.hom (𝟙 _) (by rw [Category.comp_id, Category.id_comp])
-      (by rw [Category.comp_id, IsOpenImmersion.isoOfRangeE
+      (by rw [Category.comp_id, IsOpenImmersion.isoOfRangeEq_hom_fac])
+  symm
+  refine Arrow.isoMk (asIso t ≪≫ pullbackRestrictIsoRestrict f V) e ?_
+  rw [Iso.trans_hom]; rw [asIso_hom]; rw [← Iso.comp_inv_eq]; rw [← cancel_mono g]
+  dsimp
+  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [IsOpenImmersion.isoOfRangeEq_inv_fac]; rw [← pullback.condition]; rw [morphismRestrict_ι]; rw [pullbackRestrictIsoRestrict_hom_ι_assoc]; rw [pullback.lift_fst_assoc]; rw [Category.comp_id]
 
 中文:
 定义 morphismRestrictOpensRange
@@ -2732,7 +2767,12 @@ definition morphismRestrictOpensRange
     IsOpenImmersion.isoOfRangeEq g V.ι Subtype.range_coe.symm
   let t : pullback f g ⟶ pullback f V.ι :=
     pullback.map _ _ _ _ (𝟙 _) e.hom (𝟙 _) (by rw [Category.comp_id, Category.id_comp])
-      (by rw [Category.comp_id, IsOpenImmersion.isoOfRangeE
+      (by rw [Category.comp_id, IsOpenImmersion.isoOfRangeEq_hom_fac])
+  symm
+  refine Arrow.isoMk (asIso t ≪≫ pullbackRestrictIsoRestrict f V) e ?_
+  rw [Iso.trans_hom]; rw [asIso_hom]; rw [← Iso.comp_inv_eq]; rw [← cancel_mono g]
+  dsimp
+  rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [IsOpenImmersion.isoOfRangeEq_inv_fac]; rw [← pullback.condition]; rw [morphismRestrict_ι]; rw [pullbackRestrictIsoRestrict_hom_ι_assoc]; rw [pullback.lift_fst_assoc]; rw [Category.comp_id]
 
 Depends on / 依赖: Arrow.isoMk, Category, Category.assoc, Category.comp_id, Category.id_comp, IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, IsOpenImmersion.isoOfRangeEq_hom_fac, Iso.comp_inv_eq, Iso.trans_hom, Subtype, Subtype.range_coe.symm, Y.Opens, asIso_hom, cancel_mono, comp_id, comp_inv_eq, e.hom, g.opensRange, id_comp
 -/
@@ -3231,7 +3271,8 @@ definition resLEStalkMap
   body: Arrow.isoMk (U.stalkIso _ ≪≫
       (Y.presheaf.stalkCongr <| Inseparable.of_eq <| by simp)) (V.stalkIso x) <| by
     dsimp
-    rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [← Category.assoc]; rw [← Iso.comp_inv_eq]; rw [Opens.stalkIso_inv]; rw [Opens.stalkIso_inv]; rw [← stalkMap_comp]; rw [stalk
+    rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [← Category.assoc]; rw [← Iso.comp_inv_eq]; rw [Opens.stalkIso_inv]; rw [Opens.stalkIso_inv]; rw [← stalkMap_comp]; rw [stalkMap_congr_hom _ _ (resLE_comp_ι f e)]; rw [stalkMap_comp]
+    simp
 
 中文:
 定义 resLEStalkMap
@@ -3239,7 +3280,8 @@ definition resLEStalkMap
   定义体: Arrow.isoMk (U.stalkIso _ ≪≫
       (Y.presheaf.stalkCongr <| Inseparable.of_eq <| by simp)) (V.stalkIso x) <| by
     dsimp
-    rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [← Category.assoc]; rw [← Iso.comp_inv_eq]; rw [Opens.stalkIso_inv]; rw [Opens.stalkIso_inv]; rw [← stalkMap_comp]; rw [stalk
+    rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [← Category.assoc]; rw [← Iso.comp_inv_eq]; rw [Opens.stalkIso_inv]; rw [Opens.stalkIso_inv]; rw [← stalkMap_comp]; rw [stalkMap_congr_hom _ _ (resLE_comp_ι f e)]; rw [stalkMap_comp]
+    simp
 
 Depends on / 依赖: Arrow.isoMk, Category, Category.assoc, Inseparable, Inseparable.of_eq, Iso.comp_inv_eq, Iso.eq_inv_comp, Opens.stalkIso_inv, U.stalkIso, V.stalkIso, Y.presheaf.stalkCongr, comp_inv_eq, eq_inv_comp, of_eq, presheaf, stalkCongr, stalkIso, stalkIso_inv, stalkMap_comp, stalkMap_congr_hom
 -/
@@ -3290,7 +3332,12 @@ lemma Scheme.Hom.isPullback_resLE
     ((g.preimage_mono hUSX).trans_eq congr(($H.w) ⁻¹ᵁ US) :)) ?_ ?_
   · refine (IsOpenImmersion.isPullback _ _ _ _ (by simp) ?_).flip
     simp only [Scheme.opensRange_homOfLE, ← Scheme.Hom.comp_preimage, Scheme.Hom.resLE_comp_ι]
-    rw [Scheme.Hom.comp_p
+    rw [Scheme.Hom.comp_preimage]; rw [← (g ⁻¹ᵁ UX).ι.image_injective.eq_iff]
+    simp only [Scheme.Hom.image_preimage_eq_opensRange_inf, Scheme.Opens.opensRange_ι]
+    simp [hUY]
+  · refine .of_bot ?_ ?_ (isPullback_morphismRestrict f US)
+    · simpa using (isPullback_morphismRestrict g UX).paste_vert H
+    · simp [← cancel_mono US.ι, H.w]
 
 中文:
 引理 概形.态射.isPullback_resLE
@@ -3299,7 +3346,12 @@ lemma Scheme.Hom.isPullback_resLE
     ((g.preimage_mono hUSX).trans_eq congr(($H.w) ⁻¹ᵁ US) :)) ?_ ?_
   · refine (IsOpenImmersion.isPullback _ _ _ _ (by simp) ?_).flip
     simp only [Scheme.opensRange_homOfLE, ← Scheme.Hom.comp_preimage, Scheme.Hom.resLE_comp_ι]
-    rw [Scheme.Hom.comp_p
+    rw [Scheme.Hom.comp_preimage]; rw [← (g ⁻¹ᵁ UX).ι.image_injective.eq_iff]
+    simp only [Scheme.Hom.image_preimage_eq_opensRange_inf, Scheme.Opens.opensRange_ι]
+    simp [hUY]
+  · refine .of_bot ?_ ?_ (isPullback_morphismRestrict f US)
+    · simpa using (isPullback_morphismRestrict g UX).paste_vert H
+    · simp [← cancel_mono US.ι, H.w]
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isPullback, Scheme, Scheme.Hom.comp_preimage, Scheme.Hom.image_preimage_eq_opensRange_inf, Scheme.Hom.resLE_comp_, Scheme.Opens.opensRange_, Scheme.opensRange_homOfLE, comp_preimage, eq_iff, g.preimage_mono, iY.resLE, image_injective, image_injective.eq_iff, image_preimage_eq_opensRange_inf, isPullback, isPullback_morphismRestrict, of_bot, opensRange_homOfLE, paste_horiz
 -/
@@ -3339,7 +3391,12 @@ definition Scheme.OpenCover.restrict
   refine Cover.copy (𝒰.pullback₁ U.ι) 𝒰.I₀ _ (𝒰.f · ∣_ U) (Equiv.refl _)
     (fun i => IsOpenImmersion.isoOfRangeEq (Opens.ι _) (pullback.snd _ _) ?_) ?_
   · dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
-      PreZeroHypercover.pullback₁_I₀, Equiv.refl_apply, PreZeroHyperc
+      PreZeroHypercover.pullback₁_I₀, Equiv.refl_apply, PreZeroHypercover.pullback₁_X]
+    rw [IsOpenImmersion.range_pullbackSnd U.ι (𝒰.f i)]; rw [Opens.opensRange_ι]
+    exact Subtype.range_val
+  · intro i
+    rw [← cancel_mono U.ι]
+    simp [morphismRestrict_ι, Equiv.refl_apply, Category.assoc, pullback.condition]
 
 中文:
 定义 概形.OpenCover.restrict
@@ -3348,7 +3405,12 @@ definition Scheme.OpenCover.restrict
   refine Cover.copy (𝒰.pullback₁ U.ι) 𝒰.I₀ _ (𝒰.f · ∣_ U) (Equiv.refl _)
     (fun i => IsOpenImmersion.isoOfRangeEq (Opens.ι _) (pullback.snd _ _) ?_) ?_
   · dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
-      PreZeroHypercover.pullback₁_I₀, Equiv.refl_apply, PreZeroHyperc
+      PreZeroHypercover.pullback₁_I₀, Equiv.refl_apply, PreZeroHypercover.pullback₁_X]
+    rw [IsOpenImmersion.range_pullbackSnd U.ι (𝒰.f i)]; rw [Opens.opensRange_ι]
+    exact Subtype.range_val
+  · intro i
+    rw [← cancel_mono U.ι]
+    simp [morphismRestrict_ι, Equiv.refl_apply, Category.assoc, pullback.condition]
 
 Depends on / 依赖: Category, Category.assoc, Cover.copy, Equiv.refl, Equiv.refl_apply, IsOpenImmersion, IsOpenImmersion.isoOfRangeEq, IsOpenImmersion.range_pullbackSnd, Opens.opensRange_, PreZeroHypercover, PreZeroHypercover.pullback, Precoverage, Precoverage.ZeroHypercover.pullback, Subtype, Subtype.range_val, ZeroHypercover, cancel_mono, isoOfRangeEq, pullback, pullback.snd
 -/

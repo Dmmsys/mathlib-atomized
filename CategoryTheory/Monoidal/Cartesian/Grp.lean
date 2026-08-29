@@ -44,7 +44,18 @@ definition GrpObj.ofRepresentableBy
     change lift (α.homEquiv'.symm (α.homEquiv (𝟙 X))⁻¹) (𝟙 X) ≫
       α.homEquiv'.symm (α.homEquiv' (fst X X) * α.homEquiv' (snd X X)) =
         toUnit X ≫ α.homEquiv'.symm 1
-    
+    apply α.homEquiv'.injective
+    simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul, map_one]
+    simp only [← α.homEquiv'_comp, lift_fst, Equiv.apply_symm_apply, lift_snd]
+    exact inv_mul_cancel (α.homEquiv (𝟙 X))
+  right_inv := by
+    change lift (𝟙 X) (α.homEquiv'.symm (α.homEquiv' (𝟙 X))⁻¹) ≫
+      α.homEquiv'.symm (α.homEquiv' (fst X X) * α.homEquiv' (snd X X)) =
+        toUnit X ≫ α.homEquiv'.symm 1
+    apply α.homEquiv'.injective
+    simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul, map_one]
+    simp only [← α.homEquiv'_comp]
+    simp
 
 中文:
 定义 GrpObj.ofRepresentableBy
@@ -55,7 +66,18 @@ definition GrpObj.ofRepresentableBy
     change lift (α.homEquiv'.symm (α.homEquiv (𝟙 X))⁻¹) (𝟙 X) ≫
       α.homEquiv'.symm (α.homEquiv' (fst X X) * α.homEquiv' (snd X X)) =
         toUnit X ≫ α.homEquiv'.symm 1
-    
+    apply α.homEquiv'.injective
+    simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul, map_one]
+    simp only [← α.homEquiv'_comp, lift_fst, Equiv.apply_symm_apply, lift_snd]
+    exact inv_mul_cancel (α.homEquiv (𝟙 X))
+  right_inv := by
+    change lift (𝟙 X) (α.homEquiv'.symm (α.homEquiv' (𝟙 X))⁻¹) ≫
+      α.homEquiv'.symm (α.homEquiv' (fst X X) * α.homEquiv' (snd X X)) =
+        toUnit X ≫ α.homEquiv'.symm 1
+    apply α.homEquiv'.injective
+    simp only [α.homEquiv'_comp, Equiv.apply_symm_apply, map_mul, map_one]
+    simp only [← α.homEquiv'_comp]
+    simp
 
 Depends on / 依赖: GrpCat, MonCat, MonObj, MonObj.ofRepresentableBy, ofRepresentableBy
 -/
@@ -237,7 +259,7 @@ definition yonedaGrpObjIsoOfRepresentableBy
     { toEquiv := α.homEquiv
       map_mul' :=
   ((yonedaMonObjIsoOfRepresentableBy X (F ⋙ forget₂ GrpCat MonCat) α).hom.app Y).hom.map_mul })
-fun φ => G
+fun φ => GrpCat.hom_ext MonoidHom.ext α.homEquiv_comp φ.unop
 
 中文:
 定义 yonedaGrpObjIsoOfRepresentableBy
@@ -249,7 +271,7 @@ fun φ => G
     { toEquiv := α.homEquiv
       map_mul' :=
   ((yonedaMonObjIsoOfRepresentableBy X (F ⋙ forget₂ GrpCat MonCat) α).hom.app Y).hom.map_mul })
-fun φ => G
+fun φ => GrpCat.hom_ext MonoidHom.ext α.homEquiv_comp φ.unop
 
 Depends on / 依赖: GrpObj, GrpObj.ofRepresentableBy, isRegularEpiCategory_sheaf, ofRepresentableBy
 -/
@@ -329,7 +351,12 @@ definition yonedaGrpFullyFaithful
     ext X : 3
     exact congr(($(yonedaMonFullyFaithful.map_preimage (X := G.toMon) (Y := H.toMon)
       (Functor.whiskerRight α (forget₂ GrpCat MonCat))).app X).hom)
-  preima
+  preimage_map f := by
+    ext
+    congr
+    apply yonedaMonFullyFaithful.preimage_map
+
+@[to_additive]
 
 中文:
 定义 yonedaGrpFullyFaithful
@@ -339,7 +366,12 @@ definition yonedaGrpFullyFaithful
     ext X : 3
     exact congr(($(yonedaMonFullyFaithful.map_preimage (X := G.toMon) (Y := H.toMon)
       (Functor.whiskerRight α (forget₂ GrpCat MonCat))).app X).hom)
-  preima
+  preimage_map f := by
+    ext
+    congr
+    apply yonedaMonFullyFaithful.preimage_map
+
+@[to_additive]
 
 Depends on / 依赖: FullyFaithful
 -/

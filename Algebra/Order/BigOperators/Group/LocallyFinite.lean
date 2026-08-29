@@ -575,7 +575,7 @@ lemma prod_eq_prod_range_sdiff
   congrm (∏ x in ?_, g x) * ∏ k in range n, ∏ x in s (k + 1) \ ?_, g x
   · simp
   · change (Iic k).sup (s ∘ id) = s k
-   
+    rw [← apply_sup_eq_sup_comp_of_nonempty hs nonempty_Iic]; rw [sup_Iic]
 
 中文:
 引理 prod_eq_prod_range_sdiff
@@ -585,7 +585,7 @@ lemma prod_eq_prod_range_sdiff
   congrm (∏ x in ?_, g x) * ∏ k in range n, ∏ x in s (k + 1) \ ?_, g x
   · simp
   · change (Iic k).sup (s ∘ id) = s k
-   
+    rw [← apply_sup_eq_sup_comp_of_nonempty hs nonempty_Iic]; rw [sup_Iic]
 
 Depends on / 依赖: Iic_eq_Icc, Nat.bot_eq_zero, Nat.range_succ_eq_Icc_zero, apply_sup_eq_sup_comp_of_nonempty, bot_eq_zero, congrm, conv_lhs, disjiUnion_Iic_disjointed, hs.partialSups_eq, mul_comm, nonempty_Iic, partialSups_eq, prod_disjiUnion, prod_range_succ, range_succ_eq_Icc_zero, sup_Iic
 -/

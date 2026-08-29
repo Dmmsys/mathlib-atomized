@@ -82,7 +82,7 @@ theorem prod_eraseNone
       ∏ x in eraseNone s, f x = ∏ x in (eraseNone s).map Embedding.some, Option.elim' 1 f x :=
         (prod_map (eraseNone s) Embedding.some <| Option.elim' 1 f).symm
       _ = ∏ x in s.erase none, Option.elim' 1 f x := by rw [map_some_eraseNone]
-      _ = ∏ x in s, Option.elim'
+      _ = ∏ x in s, Option.elim' 1 f x := prod_erase _ rfl
 
 中文:
 定理 prod_eraseNone
@@ -92,7 +92,7 @@ theorem prod_eraseNone
       ∏ x in eraseNone s, f x = ∏ x in (eraseNone s).map Embedding.some, Option.elim' 1 f x :=
         (prod_map (eraseNone s) Embedding.some <| Option.elim' 1 f).symm
       _ = ∏ x in s.erase none, Option.elim' 1 f x := by rw [map_some_eraseNone]
-      _ = ∏ x in s, Option.elim'
+      _ = ∏ x in s, Option.elim' 1 f x := prod_erase _ rfl
 
 Depends on / 依赖: Embedding, Embedding.some, Option.elim, classical, eraseNone, map_some_eraseNone, prod_erase, prod_map, s.erase
 -/

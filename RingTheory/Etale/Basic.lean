@@ -160,7 +160,8 @@ theorem iff_comp_bijective
     have : FormallyUnramified R A := FormallyUnramified.iff_comp_injective_of_small.{max u v}.mpr
       (by aesop (add safe Function.Bijective.injective))
     have : FormallySmooth R A := FormallySmooth.of_comp_surjective
-      (by aesop (add safe Function.Bi
+      (by aesop (add safe Function.Bijective.surjective))
+   .of_formallyUnramified_and_formallySmooth⟩
 
 中文:
 定理 iff_comp_bijective
@@ -168,7 +169,8 @@ theorem iff_comp_bijective
     have : FormallyUnramified R A := FormallyUnramified.iff_comp_injective_of_small.{max u v}.mpr
       (by aesop (add safe Function.Bijective.injective))
     have : FormallySmooth R A := FormallySmooth.of_comp_surjective
-      (by aesop (add safe Function.Bi
+      (by aesop (add safe Function.Bijective.surjective))
+   .of_formallyUnramified_and_formallySmooth⟩
 
 Depends on / 依赖: Bijective, FormallySmooth, FormallySmooth.of_comp_surjective, FormallyUnramified, FormallyUnramified.iff_comp_injective_of_small, Function, Function.Bijective.injective, Function.Bijective.surjective, comp_bijective, iff_comp_injective_of_small, injective, of_comp_surjective, of_formallyUnramified_and_formallySmooth, surjective
 -/

@@ -3046,7 +3046,7 @@ lemma tensorProductComm_def
     TensorProduct.comm R A B = .trans
       (congr (eA.linearEquiv R) (eB.linearEquiv R)) (.trans
 (TensorProduct.comm R A' B') congr (eB.linearEquiv R).symm (eA.linearEquiv R).symm) := by
-  ext x; induction
+  ext x; induction x <;> simp [*]
 
 中文:
 引理 tensorProductComm_def
@@ -3058,7 +3058,7 @@ lemma tensorProductComm_def
     TensorProduct.comm R A B = .trans
       (congr (eA.linearEquiv R) (eB.linearEquiv R)) (.trans
 (TensorProduct.comm R A' B') congr (eB.linearEquiv R).symm (eA.linearEquiv R).symm) := by
-  ext x; induction
+  ext x; induction x <;> simp [*]
 
 Depends on / 依赖: addCommMonoid, eA.addCommMonoid
 -/

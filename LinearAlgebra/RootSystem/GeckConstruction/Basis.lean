@@ -53,7 +53,40 @@ definition basis
   cartan_eq_lieSpan := by
     rw [cartanSubalgebra']; rw [cartanSubalgebra_eq_lieSpan]; rw [← LieSubalgebra.comap_lieSpan_range_eq]
     rfl
-  nondegen := b.cartanMatrix_nondegenera
+  nondegen := b.cartanMatrix_nondegenerate
+  linInd := by
+    apply LinearIndependent.of_comp (lieAlgebra b).subtype
+    exact linearIndependent_h b
+  sl2 i :=
+    let t := isSl2Triple i
+    { h_ne_zero := by simp [Subtype.ext_iff, t.h_ne_zero]
+      lie_e_f := by simp [Subtype.ext_iff, t.lie_e_f]
+      lie_h_e_nsmul := by simp [Subtype.ext_iff, t.lie_h_e_nsmul]
+      lie_h_f_nsmul := by simp [Subtype.ext_iff, t.lie_h_f_nsmul] }
+  lie_h_h i j := by simp [Subtype.ext_iff, lie_h_h]
+  lie_h_e i j := by simp [Subtype.ext_iff, lie_h_e]
+  lie_h_f i j := by simp [Subtype.ext_iff, lie_h_f]
+  lie_e_f_ne i j hij := by simp [Subtype.ext_iff, lie_e_f_ne hij]
+  span_ef := by
+    let h₀ (i : b.support) : lieAlgebra b := ⟨h i, h_mem_lieAlgebra i⟩
+    let e₀ (i : b.support) : lieAlgebra b := ⟨e i, e_mem_lieAlgebra i⟩
+    let f₀ (i : b.support) : lieAlgebra b := ⟨f i, f_mem_lieAlgebra i⟩
+    change LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ union range f₀) = ⊤
+    suffices LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ union range f₀) =
+        LieSubalgebra.lieSpan K (lieAlgebra b) (range h₀ union range e₀ union range f₀) by
+      have hr : range h₀ union range e₀ union range f₀ = Subtype.val ⁻¹' (range h union range e union range f) := by
+        aesop
+      rw [this]; rw [hr]
+      exact LieSubalgebra.lieSpan_lieSpan_coe_preimage
+    simp only [union_assoc]
+    refine le_antisymm (LieSubalgebra.lieSpan_mono <| by simp) ?_
+    rw [LieSubalgebra.lieSpan_le]
+    refine union_subset ?_ LieSubalgebra.subset_lieSpan
+    rintro - ⟨i, rfl⟩
+    have hef : h₀ i = ⁅e₀ i, f₀ i⁆ := by ext1; simp [h₀, e₀, f₀, (isSl2Triple i).lie_e_f]
+    rw [hef]
+    apply LieSubalgebra.lie_mem <;>
+exact LieSubalgebra.subset_lieSpan by simp
 
 中文:
 定义 basis
@@ -65,7 +98,40 @@ definition basis
   cartan_eq_lieSpan := by
     rw [cartanSubalgebra']; rw [cartanSubalgebra_eq_lieSpan]; rw [← LieSubalgebra.comap_lieSpan_range_eq]
     rfl
-  nondegen := b.cartanMatrix_nondegenera
+  nondegen := b.cartanMatrix_nondegenerate
+  linInd := by
+    apply LinearIndependent.of_comp (lieAlgebra b).subtype
+    exact linearIndependent_h b
+  sl2 i :=
+    let t := isSl2Triple i
+    { h_ne_zero := by simp [Subtype.ext_iff, t.h_ne_zero]
+      lie_e_f := by simp [Subtype.ext_iff, t.lie_e_f]
+      lie_h_e_nsmul := by simp [Subtype.ext_iff, t.lie_h_e_nsmul]
+      lie_h_f_nsmul := by simp [Subtype.ext_iff, t.lie_h_f_nsmul] }
+  lie_h_h i j := by simp [Subtype.ext_iff, lie_h_h]
+  lie_h_e i j := by simp [Subtype.ext_iff, lie_h_e]
+  lie_h_f i j := by simp [Subtype.ext_iff, lie_h_f]
+  lie_e_f_ne i j hij := by simp [Subtype.ext_iff, lie_e_f_ne hij]
+  span_ef := by
+    let h₀ (i : b.support) : lieAlgebra b := ⟨h i, h_mem_lieAlgebra i⟩
+    let e₀ (i : b.support) : lieAlgebra b := ⟨e i, e_mem_lieAlgebra i⟩
+    let f₀ (i : b.support) : lieAlgebra b := ⟨f i, f_mem_lieAlgebra i⟩
+    change LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ union range f₀) = ⊤
+    suffices LieSubalgebra.lieSpan K (lieAlgebra b) (range e₀ union range f₀) =
+        LieSubalgebra.lieSpan K (lieAlgebra b) (range h₀ union range e₀ union range f₀) by
+      have hr : range h₀ union range e₀ union range f₀ = Subtype.val ⁻¹' (range h union range e union range f) := by
+        aesop
+      rw [this]; rw [hr]
+      exact LieSubalgebra.lieSpan_lieSpan_coe_preimage
+    simp only [union_assoc]
+    refine le_antisymm (LieSubalgebra.lieSpan_mono <| by simp) ?_
+    rw [LieSubalgebra.lieSpan_le]
+    refine union_subset ?_ LieSubalgebra.subset_lieSpan
+    rintro - ⟨i, rfl⟩
+    have hef : h₀ i = ⁅e₀ i, f₀ i⁆ := by ext1; simp [h₀, e₀, f₀, (isSl2Triple i).lie_e_f]
+    rw [hef]
+    apply LieSubalgebra.lie_mem <;>
+exact LieSubalgebra.subset_lieSpan by simp
 
 Depends on / 依赖: b.cartanMatrix, cartanMatrix
 -/

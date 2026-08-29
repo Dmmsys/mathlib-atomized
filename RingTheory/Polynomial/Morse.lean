@@ -56,7 +56,22 @@ theorem Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia
   · rw [rootSet_def f (S ⧸ p), aroots_def, hfp, roots_zero, Multiset.toFinset_zero,
       Finset.coe_empty, Set.ncard_empty, zero_add, Set.ncard_le_one_iff_subsingleton,
       ← Set.subsingleton_coe] at hp
-    exact Or.inl (Subsingleto
+    exact Or.inl (Subsingleton.elim _ _)
+  let π : S ->ₐ[R] S ⧸ p := Ideal.Quotient.mkₐ R p
+  rw [← hf.image_rootSet_of_map_ne_zero π hfp]; rw [Set.ncard_le_ncard_image_add_one_iff] at hp
+  have hπ (x : S) : π (g • x) = π x := (Ideal.Quotient.mk_eq_mk_iff_sub_mem (g • x) x).mpr (hg x)
+  rw [or_iff_not_imp_left]; rw [Equiv.ext_iff]; rw [not_forall]
+  rintro ⟨x, hx : g • x != x⟩
+  refine ⟨g • x, x, hx, ?_⟩
+  ext z
+  simp only [Equiv.swap_apply_def, MulAction.toPermHom_apply, MulAction.toPerm_apply]
+  split_ifs with hz hz'
+  · subst hz
+    have key := hp (g • g • x) (g • g • x).2 (g • x) (g • x).2 (g • x) (g • x).2 x x.2
+      (by simp [hπ]) (by simp [hπ]) (by simpa [← rootSet.coe_smul]) (by simpa [← rootSet.coe_smul])
+    grind [rootSet.coe_smul]
+  · simp [hz']
+  · grind [rootSet.coe_smul, SetLike.coe_eq_coe]
 
 中文:
 定理 Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia
@@ -66,7 +81,22 @@ theorem Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia
   · rw [rootSet_def f (S ⧸ p), aroots_def, hfp, roots_zero, Multiset.toFinset_zero,
       Finset.coe_empty, Set.ncard_empty, zero_add, Set.ncard_le_one_iff_subsingleton,
       ← Set.subsingleton_coe] at hp
-    exact Or.inl (Subsingleto
+    exact Or.inl (Subsingleton.elim _ _)
+  let π : S ->ₐ[R] S ⧸ p := Ideal.Quotient.mkₐ R p
+  rw [← hf.image_rootSet_of_map_ne_zero π hfp]; rw [Set.ncard_le_ncard_image_add_one_iff] at hp
+  have hπ (x : S) : π (g • x) = π x := (Ideal.Quotient.mk_eq_mk_iff_sub_mem (g • x) x).mpr (hg x)
+  rw [or_iff_not_imp_left]; rw [Equiv.ext_iff]; rw [not_forall]
+  rintro ⟨x, hx : g • x != x⟩
+  refine ⟨g • x, x, hx, ?_⟩
+  ext z
+  simp only [Equiv.swap_apply_def, MulAction.toPermHom_apply, MulAction.toPerm_apply]
+  split_ifs with hz hz'
+  · subst hz
+    have key := hp (g • g • x) (g • g • x).2 (g • x) (g • x).2 (g • x) (g • x).2 x x.2
+      (by simp [hπ]) (by simp [hπ]) (by simpa [← rootSet.coe_smul]) (by simpa [← rootSet.coe_smul])
+    grind [rootSet.coe_smul]
+  · simp [hz']
+  · grind [rootSet.coe_smul, SetLike.coe_eq_coe]
 
 Depends on / 依赖: Finset, Finset.coe_empty, Ideal.Quotient.mk, Ideal.Quotient.mk_eq_mk_iff_s, Multiset, Multiset.toFinset_zero, Or.inl, Quotient, Set.ncard_empty, Set.ncard_le_ncard_image_add_one_iff, Set.ncard_le_one_iff_subsingleton, Set.subsingleton_coe, Subsingleton, Subsingleton.elim, algebraMap, aroots_def, classical, coe_empty, f.map, hf.image_rootSet_of_map_ne_zero
 -/
@@ -109,7 +139,7 @@ theorem Splits.surjective_toPermHom_of_iSup_inertia_eq_top
   · intro σ hσ
     obtain ⟨m, hm⟩ := Set.mem_iUnion.mp hσ
     exact hf.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia m.asIdeal (h m) σ hm
-  · simpa [Subgroup.closure_iUn
+  · simpa [Subgroup.closure_iUnion]
 
 中文:
 定理 Splits.surjective_toPermHom_of_iSup_inertia_eq_top
@@ -120,7 +150,7 @@ theorem Splits.surjective_toPermHom_of_iSup_inertia_eq_top
   · intro σ hσ
     obtain ⟨m, hm⟩ := Set.mem_iUnion.mp hσ
     exact hf.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia m.asIdeal (h m) σ hm
-  · simpa [Subgroup.closure_iUn
+  · simpa [Subgroup.closure_iUnion]
 
 Depends on / 依赖: MaximalSpectrum, Set.mem_iUnion.mp, Subgroup, Subgroup.closure_iUnion, asIdeal, classical, closure_iUnion, hf.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia, inertia, m.asIdeal, m.asIdeal.inertia, mem_iUnion, surjective_of_isSwap_of_isPretransitive, toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia
 -/

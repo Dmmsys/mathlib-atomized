@@ -260,7 +260,9 @@ theorem MDifferentiableWithinAt.clm_precomp
     (ContinuousLinearMap.differentiable (ContinuousLinearMap.compL 𝕜 F₁ F₂ F₃).flip) hf
 
 nonrec theorem MDifferentiableAt.clm_precomp {f : M -> F₁ ->L[𝕜] F₂} {x : M} (hf : MDiffAt f x) :
-    MDiffAt (fun y => (f y).precomp F₃ : M -> (F₂ ->L[𝕜] F₃) ->L[𝕜] (
+    MDiffAt (fun y => (f y).precomp F₃ : M -> (F₂ ->L[𝕜] F₃) ->L[𝕜] (F₁ ->L[𝕜] F₃)) x :=
+  Differentiable.comp_mdifferentiableAt
+    (ContinuousLinearMap.differentiable (ContinuousLinearMap.compL 𝕜 F₁ F₂ F₃).flip) hf
 
 中文:
 定理 MDifferentiableWithinAt.clm_precomp
@@ -269,7 +271,9 @@ nonrec theorem MDifferentiableAt.clm_precomp {f : M -> F₁ ->L[𝕜] F₂} {x :
     (ContinuousLinearMap.differentiable (ContinuousLinearMap.compL 𝕜 F₁ F₂ F₃).flip) hf
 
 nonrec theorem MDifferentiableAt.clm_precomp {f : M -> F₁ ->L[𝕜] F₂} {x : M} (hf : MDiffAt f x) :
-    MDiffAt (fun y => (f y).precomp F₃ : M -> (F₂ ->L[𝕜] F₃) ->L[𝕜] (
+    MDiffAt (fun y => (f y).precomp F₃ : M -> (F₂ ->L[𝕜] F₃) ->L[𝕜] (F₁ ->L[𝕜] F₃)) x :=
+  Differentiable.comp_mdifferentiableAt
+    (ContinuousLinearMap.differentiable (ContinuousLinearMap.compL 𝕜 F₁ F₂ F₃).flip) hf
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.compL, ContinuousLinearMap.differentiable, Differentiable, Differentiable.comp_mdifferentiableWithinAt, comp_mdifferentiableWithinAt, differentiable
 -/
@@ -355,7 +359,8 @@ theorem MDifferentiableAt.clm_postcomp
     (ContinuousLinearMap.differentiable (ContinuousLinearMap.compL 𝕜 F₁ F₂ F₃)) hf
 
 nonrec theorem MDifferentiableOn.clm_postcomp {f : M -> F₂ ->L[𝕜] F₃} {s : Set M} (hf : MDiff[s] f) :
-    MDiff[s] (fun y => (f y).postcomp F₁ : M -> (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->
+    MDiff[s] (fun y => (f y).postcomp F₁ : M -> (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->L[𝕜] F₃)) := fun x hx =>
+  (hf x hx).clm_postcomp
 
 中文:
 定理 MDifferentiableAt.clm_postcomp
@@ -364,7 +369,8 @@ nonrec theorem MDifferentiableOn.clm_postcomp {f : M -> F₂ ->L[𝕜] F₃} {s 
     (ContinuousLinearMap.differentiable (ContinuousLinearMap.compL 𝕜 F₁ F₂ F₃)) hf
 
 nonrec theorem MDifferentiableOn.clm_postcomp {f : M -> F₂ ->L[𝕜] F₃} {s : Set M} (hf : MDiff[s] f) :
-    MDiff[s] (fun y => (f y).postcomp F₁ : M -> (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->
+    MDiff[s] (fun y => (f y).postcomp F₁ : M -> (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->L[𝕜] F₃)) := fun x hx =>
+  (hf x hx).clm_postcomp
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.compL, ContinuousLinearMap.differentiable, Differentiable, Differentiable.comp_mdifferentiableAt, comp_mdifferentiableAt, differentiable
 -/
@@ -492,7 +498,7 @@ theorem MDifferentiableWithinAt.clm_apply
     (g := fun x : (F₁ ->L[𝕜] F₂) × F₁ => x.1 x.2)
     (by apply (Differentiable.differentiableAt _).differentiableWithinAt
         exact differentiable_fst.clm_apply differentiable_snd) (hg.prodMk_space hf)
-    (by simp_rw [mapsTo_univ]
+    (by simp_rw [mapsTo_univ])
 
 中文:
 定理 MDifferentiableWithinAt.clm_apply
@@ -501,7 +507,7 @@ theorem MDifferentiableWithinAt.clm_apply
     (g := fun x : (F₁ ->L[𝕜] F₂) × F₁ => x.1 x.2)
     (by apply (Differentiable.differentiableAt _).differentiableWithinAt
         exact differentiable_fst.clm_apply differentiable_snd) (hg.prodMk_space hf)
-    (by simp_rw [mapsTo_univ]
+    (by simp_rw [mapsTo_univ])
 
 Depends on / 依赖: Differentiable, Differentiable.differentiableAt, DifferentiableWithinAt, DifferentiableWithinAt.comp_mdifferentiableWithinAt, clm_apply, comp_mdifferentiableWithinAt, differentiableAt, differentiableWithinAt, differentiable_fst, differentiable_fst.clm_apply, differentiable_snd, hg.prodMk_space, mapsTo_univ, prodMk_space, simp_rw
 -/
@@ -524,7 +530,7 @@ theorem MDifferentiableAt.clm_apply
     (g := fun x : (F₁ ->L[𝕜] F₂) × F₁ => x.1 x.2)
     (by apply (Differentiable.differentiableAt _).differentiableWithinAt
         exact differentiable_fst.clm_apply differentiable_snd) (hg.prodMk_space hf)
-    (by simp_rw [mapsTo_univ]
+    (by simp_rw [mapsTo_univ])
 
 中文:
 定理 MDifferentiableAt.clm_apply
@@ -533,7 +539,7 @@ theorem MDifferentiableAt.clm_apply
     (g := fun x : (F₁ ->L[𝕜] F₂) × F₁ => x.1 x.2)
     (by apply (Differentiable.differentiableAt _).differentiableWithinAt
         exact differentiable_fst.clm_apply differentiable_snd) (hg.prodMk_space hf)
-    (by simp_rw [mapsTo_univ]
+    (by simp_rw [mapsTo_univ])
 
 Depends on / 依赖: Differentiable, Differentiable.differentiableAt, DifferentiableWithinAt, DifferentiableWithinAt.comp_mdifferentiableWithinAt, clm_apply, comp_mdifferentiableWithinAt, differentiableAt, differentiableWithinAt, differentiable_fst, differentiable_fst.clm_apply, differentiable_snd, hg.prodMk_space, mapsTo_univ, prodMk_space, simp_rw
 -/
@@ -689,7 +695,12 @@ theorem MDifferentiableWithinAt.clm_prodMap
     (f := fun x => (g x, f x)) (ContinuousLinearMap.prodMapL 𝕜 F₁ F₃ F₂ F₄).differentiable
     (hg.prodMk_space hf)
 
-nonrec theorem MDifferentiableAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃} 
+nonrec theorem MDifferentiableAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {x : M}
+    (hg : MDiffAt g x) (hf : MDiffAt f x) : MDiffAt (fun x => (g x).prodMap (f x)) x :=
+  Differentiable.comp_mdifferentiableWithinAt
+    (g := fun x : (F₁ ->L[𝕜] F₃) × (F₂ ->L[𝕜] F₄) => x.1.prodMap x.2)
+    (f := fun x => (g x, f x)) (ContinuousLinearMap.prodMapL 𝕜 F₁ F₃ F₂ F₄).differentiable
+    (hg.prodMk_space hf)
 
 中文:
 定理 MDifferentiableWithinAt.clm_prodMap
@@ -699,7 +710,12 @@ nonrec theorem MDifferentiableAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃}
     (f := fun x => (g x, f x)) (ContinuousLinearMap.prodMapL 𝕜 F₁ F₃ F₂ F₄).differentiable
     (hg.prodMk_space hf)
 
-nonrec theorem MDifferentiableAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃} 
+nonrec theorem MDifferentiableAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {x : M}
+    (hg : MDiffAt g x) (hf : MDiffAt f x) : MDiffAt (fun x => (g x).prodMap (f x)) x :=
+  Differentiable.comp_mdifferentiableWithinAt
+    (g := fun x : (F₁ ->L[𝕜] F₃) × (F₂ ->L[𝕜] F₄) => x.1.prodMap x.2)
+    (f := fun x => (g x, f x)) (ContinuousLinearMap.prodMapL 𝕜 F₁ F₃ F₂ F₄).differentiable
+    (hg.prodMk_space hf)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.prodMapL, Differentiable, Differentiable.comp_mdifferentiableWithinAt, comp_mdifferentiableWithinAt, differentiable, hg.prodMk_space, prodMap, prodMapL, prodMk_space
 -/
@@ -777,7 +793,10 @@ lemma HasMFDerivAt.smul
     letI gx : 𝕜 ->L[𝕜] TangentSpace% ((f • g) x) :=
       toSpanSingleton 𝕜 ((fromTangentSpace _).symm (g x))
     -- now the main statement typechecks
-    Has
+    HasMFDerivAt% (f • g) x (f x • g'_ + gx ∘L f') := by
+  constructor
+  · exact hs.1.smul hg.1
+  · simpa using! hs.2.smul hg.2
 
 中文:
 引理 HasMFDerivAt.smul
@@ -786,7 +805,10 @@ lemma HasMFDerivAt.smul
     letI gx : 𝕜 ->L[𝕜] TangentSpace% ((f • g) x) :=
       toSpanSingleton 𝕜 ((fromTangentSpace _).symm (g x))
     -- now the main statement typechecks
-    Has
+    HasMFDerivAt% (f • g) x (f x • g'_ + gx ∘L f') := by
+  constructor
+  · exact hs.1.smul hg.1
+  · simpa using! hs.2.smul hg.2
 -/
 private lemma HasMFDerivAt.smul
     {f' : TangentSpace% x ->L[𝕜] 𝕜}

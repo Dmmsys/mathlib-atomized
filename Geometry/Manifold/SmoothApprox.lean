@@ -90,7 +90,21 @@ theorem Continuous.exists_contMDiff_approx_and_eqOn
   let t : M -> Set F := fun x => {y | dist y (f x) < ε x ∧ (x in S -> y = f x) ∧ (f x = 0 -> y = 0)}
   suffices exists g : C^n⟮I, M; 𝓘(Real, F), F⟯, forall x, g x in t x by
     rcases this with ⟨g, hg⟩
-   
+    exact ⟨g, fun x => (hg x).1, fun x => (hg x).2.1, fun x => mt (hg x).2.2⟩
+have t_conv (x) : Convex Real (t x) := (convex_ball (f x) (ε x)).inter
+    (convex_singleton _).setOfPred_const_imp.inter (convex_singleton _).setOfPred_const_imp
+  apply exists_contMDiffMap_forall_mem_convex_of_local I t_conv
+  intro x
+  by_cases hx : x in S
+  · refine ⟨U, mem_nhdsSet_iff_forall.mp hU x hx, ?_⟩
+    exact ⟨f, hfU, fun y _ => ⟨dist_f_f y, fun _ => rfl, id⟩⟩
+  · have : forallᶠ y in 𝓝 x, y ∉ S ∧ dist (f x) (f y) < ε y := (hS.isOpen_compl.eventually_mem hx).and
+      ((continuous_const.dist f_cont).continuousAt.eventually_lt ε_cont.continuousAt (dist_f_f x))
+    have : forallᶠ y in 𝓝 x, (y ∉ S ∧ dist (f x) (f y) < ε y) ∧ (f y = 0 -> f x = 0) := by
+      by_cases hx' : f x = 0
+      · simpa [hx'] using this
+      · simpa [hx'] using this.and (f_cont.continuousAt.eventually_ne hx')
+    exact ⟨_, this, (fun _ => f x), contMDiffOn_const, fun y hy => ⟨hy.1.2, by simp [hy.1.1], hy.2⟩⟩
 
 中文:
 定理 连续.存在_contMDiff_approx_and_eqOn
@@ -100,7 +114,21 @@ theorem Continuous.exists_contMDiff_approx_and_eqOn
   let t : M -> Set F := fun x => {y | dist y (f x) < ε x ∧ (x in S -> y = f x) ∧ (f x = 0 -> y = 0)}
   suffices exists g : C^n⟮I, M; 𝓘(Real, F), F⟯, forall x, g x in t x by
     rcases this with ⟨g, hg⟩
-   
+    exact ⟨g, fun x => (hg x).1, fun x => (hg x).2.1, fun x => mt (hg x).2.2⟩
+have t_conv (x) : Convex Real (t x) := (convex_ball (f x) (ε x)).inter
+    (convex_singleton _).setOfPred_const_imp.inter (convex_singleton _).setOfPred_const_imp
+  apply exists_contMDiffMap_forall_mem_convex_of_local I t_conv
+  intro x
+  by_cases hx : x in S
+  · refine ⟨U, mem_nhdsSet_iff_forall.mp hU x hx, ?_⟩
+    exact ⟨f, hfU, fun y _ => ⟨dist_f_f y, fun _ => rfl, id⟩⟩
+  · have : forallᶠ y in 𝓝 x, y ∉ S ∧ dist (f x) (f y) < ε y := (hS.isOpen_compl.eventually_mem hx).and
+      ((continuous_const.dist f_cont).continuousAt.eventually_lt ε_cont.continuousAt (dist_f_f x))
+    have : forallᶠ y in 𝓝 x, (y ∉ S ∧ dist (f x) (f y) < ε y) ∧ (f y = 0 -> f x = 0) := by
+      by_cases hx' : f x = 0
+      · simpa [hx'] using this
+      · simpa [hx'] using this.and (f_cont.continuousAt.eventually_ne hx')
+    exact ⟨_, this, (fun _ => f x), contMDiffOn_const, fun y hy => ⟨hy.1.2, by simp [hy.1.1], hy.2⟩⟩
 
 Depends on / 依赖: Convex, convex_ball, convex_singleton, dist_f_f, dist_self, setOfPred_const_imp, setOfPred_const_imp.inter, t_conv
 -/

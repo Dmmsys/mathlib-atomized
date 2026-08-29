@@ -196,14 +196,14 @@ lemma eHomWhiskerRight_comp
   given: {X X' X'' : C} (f : X ⟶ X') (f' : X' ⟶ X'') (Y : C)
   proof: by
   dsimp [eHomWhiskerRight]
-  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [← e_assoc']; rw [tensorHom_def']; rw [comp_whiskerRight_assoc]; rw [id_whiskerLeft]; rw [comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [Iso.inv_
+  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [← e_assoc']; rw [tensorHom_def']; rw [comp_whiskerRight_assoc]; rw [id_whiskerLeft]; rw [comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [Iso.inv_hom_id]; rw [id_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [leftUnitor_inv_whiskerRight_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [Iso.inv_hom_id_assoc]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]
 
 中文:
 引理 eHomWhiskerRight_comp
   条件: {X X' X'' : C} (f : X ⟶ X') (f' : X' ⟶ X'') (Y : C)
   证明: by
   dsimp [eHomWhiskerRight]
-  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [← e_assoc']; rw [tensorHom_def']; rw [comp_whiskerRight_assoc]; rw [id_whiskerLeft]; rw [comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [Iso.inv_
+  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [comp_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [← e_assoc']; rw [tensorHom_def']; rw [comp_whiskerRight_assoc]; rw [id_whiskerLeft]; rw [comp_whiskerRight_assoc]; rw [← comp_whiskerRight_assoc]; rw [Iso.inv_hom_id]; rw [id_whiskerRight_assoc]; rw [comp_whiskerRight_assoc]; rw [leftUnitor_inv_whiskerRight_assoc]; rw [← associator_inv_naturality_left_assoc]; rw [Iso.inv_hom_id_assoc]; rw [← whisker_exchange_assoc]; rw [id_whiskerLeft_assoc]; rw [Iso.inv_hom_id_assoc]
 
 Depends on / 依赖: Iso.inv_hom_id, Iso.inv_hom_id_assoc, associator_inv_naturality_left_assoc, comp_whiskerRight_assoc, eHomEquiv_comp, eHomWhiskerRight, e_assoc, id_whiskerLeft, id_whiskerRight_assoc, inv_hom_id, inv_hom_id_assoc, leftUnitor_inv_whiskerRight_assoc, tensorHom_def, whisker_exchange_as
 -/
@@ -301,14 +301,14 @@ lemma eHomWhiskerLeft_comp
   given: (X : C) {Y Y' Y'' : C} (g : Y ⟶ Y') (g' : Y' ⟶ Y'')
   proof: by
   dsimp [eHomWhiskerLeft]
-  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [tensorHom_def]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [M
+  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [tensorHom_def]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whiskerLeft_rightUnitor_assoc]; rw [whiskerLeft_rightUnitor_inv_assoc]; rw [triangle_assoc_comp_left_inv_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.inv_hom_id_assoc]; rw [associator_inv_naturality_right_assoc]; rw [Iso.hom_inv_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
 
 中文:
 引理 eHomWhiskerLeft_comp
   条件: (X : C) {Y Y' Y'' : C} (g : Y ⟶ Y') (g' : Y' ⟶ Y'')
   证明: by
   dsimp [eHomWhiskerLeft]
-  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [tensorHom_def]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [M
+  rw [assoc]; rw [assoc]; rw [eHomEquiv_comp]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [← e_assoc]; rw [tensorHom_def]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [MonoidalCategory.whiskerLeft_comp_assoc]; rw [whiskerLeft_rightUnitor_assoc]; rw [whiskerLeft_rightUnitor_inv_assoc]; rw [triangle_assoc_comp_left_inv_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.hom_inv_id_assoc]; rw [Iso.inv_hom_id_assoc]; rw [associator_inv_naturality_right_assoc]; rw [Iso.hom_inv_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
 
 Depends on / 依赖: MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, MonoidalCategory.whiskerRight_id_assoc, eHomEquiv_comp, eHomWhiskerLeft, e_assoc, tensorHom_def, triangle_assoc_comp_left_inv_assoc, whiskerLeft_comp_assoc, whiskerLeft_rightUnitor_assoc, whiskerLeft_rightUnitor_inv_assoc, whiskerRight_id_assoc
 -/
@@ -364,7 +364,9 @@ lemma eHom_whisker_cancel
     triangle_assoc_comp_left_inv_assoc, e_assoc', assoc]
   simp only [← comp_whiskerRight_assoc]
   change (eHomWhiskerLeft V X α.hom ≫ eHomWhiskerLeft V X α.inv) ▷ _ ≫ _ = _
-  sim
+  simp [← eHomWhiskerLeft_comp]
+
+@[reassoc]
 
 中文:
 引理 eHom_whisker_cancel
@@ -375,7 +377,9 @@ lemma eHom_whisker_cancel
     triangle_assoc_comp_left_inv_assoc, e_assoc', assoc]
   simp only [← comp_whiskerRight_assoc]
   change (eHomWhiskerLeft V X α.hom ≫ eHomWhiskerLeft V X α.inv) ▷ _ ≫ _ = _
-  sim
+  simp [← eHomWhiskerLeft_comp]
+
+@[reassoc]
 
 Depends on / 依赖: MonoidalCategory, MonoidalCategory.whiskerLeft_comp_assoc, comp_whiskerRight_assoc, eHomWhiskerLeft, eHomWhiskerLeft_comp, eHomWhiskerRight, e_assoc, triangle_assoc_comp_left_inv_assoc, whiskerLeft_comp_assoc, whisker_assoc_symm
 -/
@@ -422,14 +426,14 @@ lemma eHom_whisker_exchange
   given: {X X' Y Y' : C} (f : X ⟶ X') (g : Y ⟶ Y')
   proof: by
   dsimp [eHomWhiskerLeft, eHomWhiskerRight]
-  rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [leftUnitor_inv_naturality_assoc]; rw [whisker_exchange_assoc]; rw [← e_assoc]; rw [leftUnitor_tensor_inv_assoc]; rw [associator_inv_naturality_left_assoc]; rw [Iso.hom_inv_id_assoc]; rw [← comp_whisk
+  rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [leftUnitor_inv_naturality_assoc]; rw [whisker_exchange_assoc]; rw [← e_assoc]; rw [leftUnitor_tensor_inv_assoc]; rw [associator_inv_naturality_left_assoc]; rw [Iso.hom_inv_id_assoc]; rw [← comp_whiskerRight_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
 
 中文:
 引理 eHom_whisker_exchange
   条件: {X X' Y Y' : C} (f : X ⟶ X') (g : Y ⟶ Y')
   证明: by
   dsimp [eHomWhiskerLeft, eHomWhiskerRight]
-  rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [leftUnitor_inv_naturality_assoc]; rw [whisker_exchange_assoc]; rw [← e_assoc]; rw [leftUnitor_tensor_inv_assoc]; rw [associator_inv_naturality_left_assoc]; rw [Iso.hom_inv_id_assoc]; rw [← comp_whisk
+  rw [assoc]; rw [assoc]; rw [assoc]; rw [assoc]; rw [leftUnitor_inv_naturality_assoc]; rw [whisker_exchange_assoc]; rw [← e_assoc]; rw [leftUnitor_tensor_inv_assoc]; rw [associator_inv_naturality_left_assoc]; rw [Iso.hom_inv_id_assoc]; rw [← comp_whiskerRight_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [whisker_exchange_assoc]; rw [MonoidalCategory.whiskerRight_id_assoc]; rw [Iso.inv_hom_id_assoc]
 
 Depends on / 依赖: Iso.hom_inv_id_assoc, Iso.inv_hom_id_assoc, MonoidalCategory, MonoidalCategory.whiskerRight_id_assoc, associator_inv_naturality_left_assoc, comp_whiskerRight_assoc, eHomWhiskerLeft, eHomWhiskerRight, e_assoc, hom_inv_id_assoc, inv_hom_id_assoc, leftUnitor_inv_naturality_assoc, leftUnitor_tensor_inv_assoc, whiskerRight_id_assoc, whisker_exchange_assoc
 -/
@@ -540,7 +544,7 @@ definition ForgetEnrichment.equivFunctor
   map_id X := by rw [ForgetEnrichment.homTo_id, ← eHomEquiv_id, Equiv.symm_apply_apply]
   map_comp {X} {Y} {Z} f g := Equiv.injective
     (eHomEquiv V (X := ForgetEnrichment.to V X) (Y := ForgetEnrichment.to V Z))
-   
+    (by simp [eHomEquiv_comp])
 
 中文:
 定义 ForgetEnrichment.equivFunctor
@@ -550,7 +554,7 @@ definition ForgetEnrichment.equivFunctor
   map_id X := by rw [ForgetEnrichment.homTo_id, ← eHomEquiv_id, Equiv.symm_apply_apply]
   map_comp {X} {Y} {Z} f g := Equiv.injective
     (eHomEquiv V (X := ForgetEnrichment.to V X) (Y := ForgetEnrichment.to V Z))
-   
+    (by simp [eHomEquiv_comp])
 
 Depends on / 依赖: ForgetEnrichment, ForgetEnrichment.to
 -/
@@ -676,7 +680,7 @@ definition TransportEnrichment.enrichedOrdinaryCategory
   homEquiv_id {X} := by simpa using! h _ (eId V _)
   homEquiv_comp f g := by
     dsimp +instances [instEnrichedCategoryTransportEnrichment]
-    rw [h]; rw [h]; rw [h]; rw [← tensorHom_comp_tensorHom_assoc]; rw [eComp_eq]; rw [tensorHom_def_assoc]; 
+    rw [h]; rw [h]; rw [h]; rw [← tensorHom_comp_tensorHom_assoc]; rw [eComp_eq]; rw [tensorHom_def_assoc]; rw [whiskerRight_id_assoc]; rw [unitors_inv_equal]; rw [Iso.inv_hom_id_assoc]; rw [Functor.LaxMonoidal.μ_natural_assoc]; rw [Functor.LaxMonoidal.right_unitality_inv_assoc]; rw [eHomEquiv_comp]; rw [← F.map_comp]; rw [← F.map_comp]; rw [unitors_inv_equal]
 
 中文:
 定义 TransportEnrichment.enrichedOrdinaryCategory
@@ -684,7 +688,7 @@ definition TransportEnrichment.enrichedOrdinaryCategory
   homEquiv_id {X} := by simpa using! h _ (eId V _)
   homEquiv_comp f g := by
     dsimp +instances [instEnrichedCategoryTransportEnrichment]
-    rw [h]; rw [h]; rw [h]; rw [← tensorHom_comp_tensorHom_assoc]; rw [eComp_eq]; rw [tensorHom_def_assoc]; 
+    rw [h]; rw [h]; rw [h]; rw [← tensorHom_comp_tensorHom_assoc]; rw [eComp_eq]; rw [tensorHom_def_assoc]; rw [whiskerRight_id_assoc]; rw [unitors_inv_equal]; rw [Iso.inv_hom_id_assoc]; rw [Functor.LaxMonoidal.μ_natural_assoc]; rw [Functor.LaxMonoidal.right_unitality_inv_assoc]; rw [eHomEquiv_comp]; rw [← F.map_comp]; rw [← F.map_comp]; rw [unitors_inv_equal]
 
 Depends on / 依赖: eHomEquiv
 -/
@@ -722,7 +726,8 @@ map {X} {Y} f := ForgetEnrichment.homOf W (e (Hom (C := ForgetEnrichment V D) X 
     rw [h]; rw [ForgetEnrichment.homTo_id]; rw [← TransportEnrichment.eId_eq]
     simp [ForgetEnrichment.to]
   map_comp f g := by
-    rw [h]; rw
+    rw [h]; rw [h]; rw [h]; rw [ForgetEnrichment.homTo_comp]; rw [F.map_comp]; rw [F.map_comp]; rw [← Category.assoc]; rw [← Functor.LaxMonoidal.left_unitality_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← Functor.LaxMonoidal.μ_natural_assoc]; rw [← TransportEnrichment.eComp_eq]; rw [← ForgetEnrichment.homOf_comp]; rw [leftUnitor_inv_naturality_assoc]; rw [← tensorHom_def'_assoc]; rw [tensorHom_comp_tensorHom_assoc]
+    rfl
 
 中文:
 定义 TransportEnrichment.forgetEnrichmentEquivFunctor
@@ -734,7 +739,8 @@ map {X} {Y} f := ForgetEnrichment.homOf W (e (Hom (C := ForgetEnrichment V D) X 
     rw [h]; rw [ForgetEnrichment.homTo_id]; rw [← TransportEnrichment.eId_eq]
     simp [ForgetEnrichment.to]
   map_comp f g := by
-    rw [h]; rw
+    rw [h]; rw [h]; rw [h]; rw [ForgetEnrichment.homTo_comp]; rw [F.map_comp]; rw [F.map_comp]; rw [← Category.assoc]; rw [← Functor.LaxMonoidal.left_unitality_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [Category.assoc]; rw [← Functor.LaxMonoidal.μ_natural_assoc]; rw [← TransportEnrichment.eComp_eq]; rw [← ForgetEnrichment.homOf_comp]; rw [leftUnitor_inv_naturality_assoc]; rw [← tensorHom_def'_assoc]; rw [tensorHom_comp_tensorHom_assoc]
+    rfl
 
 Depends on / 依赖: ForgetEnrichment, ForgetEnrichment.of
 -/
@@ -766,7 +772,16 @@ definition TransportEnrichment.forgetEnrichmentEquivInverse
     rw [← ForgetEnrichment.homOf_eId]
     congr 1
     apply Equiv.injective (e _)
-    rw [ForgetEnrichment.homTo_id]; rw [Equi
+    rw [ForgetEnrichment.homTo_id]; rw [Equiv.apply_symm_apply]; rw [h]; rw [TransportEnrichment.eId_eq]
+  map_comp f g := by
+    rw [← ForgetEnrichment.homOf_comp]
+    congr
+    apply Equiv.injective (e _)
+    rw [Equiv.apply_symm_apply]; rw [h]
+    simp only [ForgetEnrichment.homTo_comp, eComp_eq, Category.assoc, Functor.map_comp]
+    slice_rhs 1 3 =>
+      rw [← Functor.LaxMonoidal.left_unitality_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [← Functor.LaxMonoidal.μ_natural]; rw [← leftUnitor_inv_comp_tensorHom_assoc]; rw [tensorHom_comp_tensorHom_assoc]
+    simp [← h]
 
 中文:
 定义 TransportEnrichment.forgetEnrichmentEquivInverse
@@ -777,7 +792,16 @@ definition TransportEnrichment.forgetEnrichmentEquivInverse
     rw [← ForgetEnrichment.homOf_eId]
     congr 1
     apply Equiv.injective (e _)
-    rw [ForgetEnrichment.homTo_id]; rw [Equi
+    rw [ForgetEnrichment.homTo_id]; rw [Equiv.apply_symm_apply]; rw [h]; rw [TransportEnrichment.eId_eq]
+  map_comp f g := by
+    rw [← ForgetEnrichment.homOf_comp]
+    congr
+    apply Equiv.injective (e _)
+    rw [Equiv.apply_symm_apply]; rw [h]
+    simp only [ForgetEnrichment.homTo_comp, eComp_eq, Category.assoc, Functor.map_comp]
+    slice_rhs 1 3 =>
+      rw [← Functor.LaxMonoidal.left_unitality_inv]; rw [Category.assoc]; rw [Category.assoc]; rw [← Functor.LaxMonoidal.μ_natural]; rw [← leftUnitor_inv_comp_tensorHom_assoc]; rw [tensorHom_comp_tensorHom_assoc]
+    simp [← h]
 
 Depends on / 依赖: ForgetEnrichment, ForgetEnrichment.of, ForgetEnrichment.to, TransportEnrichment
 -/
@@ -819,7 +843,12 @@ definition TransportEnrichment.forgetEnrichmentEquiv
   unitIso := NatIso.ofComponents (fun _ => Iso.refl _) (by simp)
   counitIso := NatIso.ofComponents (fun _ => Iso.refl _) fun f => by
     simp [ForgetEnrichment.to, ForgetEnrichment.of]
-  functor_unitIso_comp X :=
+  functor_unitIso_comp X := by
+    simp only [Functor.id_obj, forgetEnrichmentEquivFunctor_obj, Functor.comp_obj,
+      forgetEnrichmentEquivInverse_obj, ForgetEnrichment.to_of, NatIso.ofComponents_hom_app,
+      Iso.refl_hom, forgetEnrichmentEquivFunctor_map, h, Category.comp_id]
+    rw [← ForgetEnrichment.homOf_eId]; rw [TransportEnrichment.eId_eq]; rw [ForgetEnrichment.homTo_id]
+    rfl
 
 中文:
 定义 TransportEnrichment.forgetEnrichmentEquiv
@@ -829,7 +858,12 @@ definition TransportEnrichment.forgetEnrichmentEquiv
   unitIso := NatIso.ofComponents (fun _ => Iso.refl _) (by simp)
   counitIso := NatIso.ofComponents (fun _ => Iso.refl _) fun f => by
     simp [ForgetEnrichment.to, ForgetEnrichment.of]
-  functor_unitIso_comp X :=
+  functor_unitIso_comp X := by
+    simp only [Functor.id_obj, forgetEnrichmentEquivFunctor_obj, Functor.comp_obj,
+      forgetEnrichmentEquivInverse_obj, ForgetEnrichment.to_of, NatIso.ofComponents_hom_app,
+      Iso.refl_hom, forgetEnrichmentEquivFunctor_map, h, Category.comp_id]
+    rw [← ForgetEnrichment.homOf_eId]; rw [TransportEnrichment.eId_eq]; rw [ForgetEnrichment.homTo_id]
+    rfl
 
 Depends on / 依赖: forgetEnrichmentEquivFunctor
 -/

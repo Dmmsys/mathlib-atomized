@@ -56,7 +56,20 @@ theorem sum_coeff_eq_coeff_sum
       refine fun n => ⟨fun b c => ?_⟩
       ext
 exact congrArg (fun x => x.1)
-          (h n).
+          (h n).allEq ⟨b.1, S'.subset_insert a b.2.1, b.2.2⟩ ⟨c.1, S'.subset_insert a c.2.1, c.2.2⟩
+    replace hind := hind this
+    simp only [ha, not_false_eq_true, Finset.sum_insert]
+    have : forall (n : Nat), (x a).coeff n = 0 ∨ (∑ s in S', x s).coeff n = 0 := by
+      simp only [hind]
+      by_contra! ⟨m, hma, hmS'⟩
+      have := Finset.sum_eq_zero.mt hmS'
+      push Not at this
+      choose b hb hb' using this
+      have : a = b :=
+congrArg (fun x => x.1)
+          (h m).allEq ⟨a, S'.mem_insert_self a, hma⟩ ⟨b, S'.mem_insert_of_mem hb, hb'⟩
+      exact ha (this ▸ hb)
+    rw [coeff_add_of_disjoint n _ _ this]; rw [hind n]
 
 中文:
 定理 sum_coeff_eq_coeff_sum
@@ -71,7 +84,20 @@ exact congrArg (fun x => x.1)
       refine fun n => ⟨fun b c => ?_⟩
       ext
 exact congrArg (fun x => x.1)
-          (h n).
+          (h n).allEq ⟨b.1, S'.subset_insert a b.2.1, b.2.2⟩ ⟨c.1, S'.subset_insert a c.2.1, c.2.2⟩
+    replace hind := hind this
+    simp only [ha, not_false_eq_true, Finset.sum_insert]
+    have : forall (n : Nat), (x a).coeff n = 0 ∨ (∑ s in S', x s).coeff n = 0 := by
+      simp only [hind]
+      by_contra! ⟨m, hma, hmS'⟩
+      have := Finset.sum_eq_zero.mt hmS'
+      push Not at this
+      choose b hb hb' using this
+      have : a = b :=
+congrArg (fun x => x.1)
+          (h m).allEq ⟨a, S'.mem_insert_self a, hma⟩ ⟨b, S'.mem_insert_of_mem hb, hb'⟩
+      exact ha (this ▸ hb)
+    rw [coeff_add_of_disjoint n _ _ this]; rw [hind n]
 
 Depends on / 依赖: Finset, Finset.induction, Finset.sum_insert, Subsingleton, classical, generalizing, insert, not_false_eq_true, replace, subset_insert, sum_insert
 -/
@@ -137,7 +163,8 @@ theorem teichmuller_mul_pow_coeff_of_ne
   | inl h =>
     exact WittVector.mul_pow_charP_coeff_zero (teichmuller p x) h
   | inr h =>
-    rw [← Nat.sub_add_cancel h.le]; rw [WittVector.mul_pow_charP_coeff_succ (teichmuller p x)]; rw [WittVector.teichmuller_coeff_pos p x (m - n) (Nat.zero_lt_sub_of_lt h)]
+    rw [← Nat.sub_add_cancel h.le]; rw [WittVector.mul_pow_charP_coeff_succ (teichmuller p x)]; rw [WittVector.teichmuller_coeff_pos p x (m - n) (Nat.zero_lt_sub_of_lt h)]; rw [zero_pow]
+    simp [Nat.Prime.ne_zero Fact.out]
 
 中文:
 定理 teichmuller_mul_pow_coeff_of_ne
@@ -147,7 +174,8 @@ theorem teichmuller_mul_pow_coeff_of_ne
   | inl h =>
     exact WittVector.mul_pow_charP_coeff_zero (teichmuller p x) h
   | inr h =>
-    rw [← Nat.sub_add_cancel h.le]; rw [WittVector.mul_pow_charP_coeff_succ (teichmuller p x)]; rw [WittVector.teichmuller_coeff_pos p x (m - n) (Nat.zero_lt_sub_of_lt h)]
+    rw [← Nat.sub_add_cancel h.le]; rw [WittVector.mul_pow_charP_coeff_succ (teichmuller p x)]; rw [WittVector.teichmuller_coeff_pos p x (m - n) (Nat.zero_lt_sub_of_lt h)]; rw [zero_pow]
+    simp [Nat.Prime.ne_zero Fact.out]
 
 Depends on / 依赖: Fact.out, Nat.Prime.ne_zero, Nat.lt_or_lt_of_ne, Nat.sub_add_cancel, Nat.zero_lt_sub_of_lt, WittVector, WittVector.mul_pow_charP_coeff_succ, WittVector.mul_pow_charP_coeff_zero, WittVector.teichmuller_coeff_pos, h.le, lt_or_lt_of_ne, mul_pow_charP_coeff_succ, mul_pow_charP_coeff_zero, ne_zero, sub_add_cancel, teichmuller, teichmuller_coeff_pos, zero_lt_sub_of_lt, zero_pow
 -/
@@ -173,7 +201,17 @@ theorem dvd_sub_sum_teichmuller_iterateFrobeniusEquiv_coeff
   intro i hi
   rw [WittVector.sum_coeff_eq_coeff_sum]
   · rw [Finset.sum_eq_add_sum_sdiff_singleton_of_mem (Finset.mem_Iic.mpr (Nat.lt_succ_iff.mp hi))]
-    let g := fun x : Na
+    let g := fun x : Nat => (0 : R)
+    rw [Finset.sum_congr rfl (g := g)]
+    · simp [g]
+    · intro b hb
+      simp only [Finset.mem_sdiff, Finset.mem_Iic, Finset.mem_singleton] at hb
+      exact teichmuller_mul_pow_coeff_of_ne _ (Ne.intro hb.2).symm
+  · refine fun n => ⟨fun ⟨a, _, ha⟩ ⟨b, _, hb⟩ => ?_⟩
+    ext
+    dsimp only [ne_eq, Set.mem_ofPred_eq]
+    rw [← Not.imp_symm (teichmuller_mul_pow_coeff_of_ne _) ha]
+    exact Not.imp_symm (teichmuller_mul_pow_coeff_of_ne _) hb
 
 中文:
 定理 dvd_sub_sum_teichmuller_iterateFrobeniusEquiv_coeff
@@ -183,7 +221,17 @@ theorem dvd_sub_sum_teichmuller_iterateFrobeniusEquiv_coeff
   intro i hi
   rw [WittVector.sum_coeff_eq_coeff_sum]
   · rw [Finset.sum_eq_add_sum_sdiff_singleton_of_mem (Finset.mem_Iic.mpr (Nat.lt_succ_iff.mp hi))]
-    let g := fun x : Na
+    let g := fun x : Nat => (0 : R)
+    rw [Finset.sum_congr rfl (g := g)]
+    · simp [g]
+    · intro b hb
+      simp only [Finset.mem_sdiff, Finset.mem_Iic, Finset.mem_singleton] at hb
+      exact teichmuller_mul_pow_coeff_of_ne _ (Ne.intro hb.2).symm
+  · refine fun n => ⟨fun ⟨a, _, ha⟩ ⟨b, _, hb⟩ => ?_⟩
+    ext
+    dsimp only [ne_eq, Set.mem_ofPred_eq]
+    rw [← Not.imp_symm (teichmuller_mul_pow_coeff_of_ne _) ha]
+    exact Not.imp_symm (teichmuller_mul_pow_coeff_of_ne _) hb
 
 Depends on / 依赖: Finset, Finset.mem_Iic, Finset.mem_Iic.mpr, Finset.mem_sdiff, Finset.mem_singleton, Finset.sum_congr, Finset.sum_eq_add_sum_sdiff_singleton_of_mem, Ideal.mem_span_singleton, Nat.lt_succ_iff.mp, Ne.intro, WittVector, WittVector.sum_coeff_eq_coeff_sum, le_coeff_eq_iff_le_sub_coeff_eq_zero, lt_succ_iff, mem_Iic, mem_sdiff, mem_singleton, mem_span_p_pow_iff_le_coeff_eq_zero, mem_span_singleton, sum_coeff_eq_coeff_sum
 -/
@@ -218,7 +266,15 @@ theorem eq_of_apply_teichmuller_eq
   calc
     f x = f (x - ∑ (i <= n), teichmuller p (((_root_.frobeniusEquiv R p).symm ^ i)
         (x.coeff i)) * p ^ i) + f (∑ (i <= n), teichmuller p
-        (((_root_.frobeniusEquiv R p)
+        (((_root_.frobeniusEquiv R p).symm ^ i) (x.coeff i)) * p ^ i) := by simp
+    _ = ∑ (i <= n), f (teichmuller p (((_root_.frobeniusEquiv R p).symm ^ i)
+        (x.coeff i))) * p ^ i := by rw [hc]; simp [pow_succ, hn]
+    _ = ∑ (i <= n), g (teichmuller p
+        (((_root_.frobeniusEquiv R p).symm ^ i) (x.coeff i))) * p ^ i := by simp [h]
+    _ = g (x - ∑ (i <= n), teichmuller p (((_root_.frobeniusEquiv R p).symm ^ i)
+        (x.coeff i)) * p ^ i) + g (∑ (i <= n), teichmuller p (((_root_.frobeniusEquiv R p).symm ^ i)
+        (x.coeff i)) * p ^ i) := by rw [hc]; simp [pow_succ, hn]
+    _ = g x := by simp
 
 中文:
 定理 eq_of_apply_teichmuller_eq
@@ -229,7 +285,15 @@ theorem eq_of_apply_teichmuller_eq
   calc
     f x = f (x - ∑ (i <= n), teichmuller p (((_root_.frobeniusEquiv R p).symm ^ i)
         (x.coeff i)) * p ^ i) + f (∑ (i <= n), teichmuller p
-        (((_root_.frobeniusEquiv R p)
+        (((_root_.frobeniusEquiv R p).symm ^ i) (x.coeff i)) * p ^ i) := by simp
+    _ = ∑ (i <= n), f (teichmuller p (((_root_.frobeniusEquiv R p).symm ^ i)
+        (x.coeff i))) * p ^ i := by rw [hc]; simp [pow_succ, hn]
+    _ = ∑ (i <= n), g (teichmuller p
+        (((_root_.frobeniusEquiv R p).symm ^ i) (x.coeff i))) * p ^ i := by simp [h]
+    _ = g (x - ∑ (i <= n), teichmuller p (((_root_.frobeniusEquiv R p).symm ^ i)
+        (x.coeff i)) * p ^ i) + g (∑ (i <= n), teichmuller p (((_root_.frobeniusEquiv R p).symm ^ i)
+        (x.coeff i)) * p ^ i) := by rw [hc]; simp [pow_succ, hn]
+    _ = g x := by simp
 
 Depends on / 依赖: _root_, _root_.frobeniusEq, _root_.frobeniusEquiv, dvd_sub_sum_teichmuller_iterateFrobeniusEquiv_coeff, frobeniusEq, frobeniusEquiv, pow_succ, teichmuller, x.coeff
 -/

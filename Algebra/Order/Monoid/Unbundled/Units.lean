@@ -166,7 +166,8 @@ alias ⟨le_mul_of_inv_mul_le, inv_mul_le_of_le_mul⟩ := inv_mul_le_iff
 alias ⟨mul_le_of_le_inv_mul, le_inv_mul_of_mul_le⟩ := le_inv_mul_iff
 alias ⟨le_of_one_le_inv, one_le_inv_of_le⟩ := one_le_inv
 alias ⟨le_of_inv_le_one, inv_le_one_of_le⟩ := inv_le_one
-alias 
+alias ⟨le_of_one_le_inv_mul, one_le_inv_mul_of_le⟩ := one_le_inv_mul
+alias ⟨le_of_inv_mul_le_one, inv_mul_le_one_of_le⟩ := inv_mul_le_one
 
 中文:
 定理 inv_mul_le_one
@@ -178,7 +179,8 @@ alias ⟨le_mul_of_inv_mul_le, inv_mul_le_of_le_mul⟩ := inv_mul_le_iff
 alias ⟨mul_le_of_le_inv_mul, le_inv_mul_of_mul_le⟩ := le_inv_mul_iff
 alias ⟨le_of_one_le_inv, one_le_inv_of_le⟩ := one_le_inv
 alias ⟨le_of_inv_le_one, inv_le_one_of_le⟩ := inv_le_one
-alias 
+alias ⟨le_of_one_le_inv_mul, one_le_inv_mul_of_le⟩ := one_le_inv_mul
+alias ⟨le_of_inv_mul_le_one, inv_mul_le_one_of_le⟩ := inv_mul_le_one
 
 Depends on / 依赖: inv_mul_le_iff, mul_one, u.inv_mul_le_iff
 -/
@@ -285,7 +287,7 @@ theorem mul_inv_le_one
 alias ⟨le_mul_of_mul_inv_le, mul_inv_le_of_le_mul⟩ := mul_inv_le_iff
 alias ⟨mul_le_of_le_mul_inv, le_mul_inv_of_mul_le⟩ := le_mul_inv_iff
 alias ⟨le_of_one_le_mul_inv, one_le_mul_inv_of_le⟩ := one_le_mul_inv
-alias ⟨le_of_mul_inv_le_one, mul_inv_le_one_of_le⟩ 
+alias ⟨le_of_mul_inv_le_one, mul_inv_le_one_of_le⟩ := mul_inv_le_one
 
 中文:
 定理 mul_inv_le_one
@@ -296,7 +298,7 @@ alias ⟨le_of_mul_inv_le_one, mul_inv_le_one_of_le⟩
 alias ⟨le_mul_of_mul_inv_le, mul_inv_le_of_le_mul⟩ := mul_inv_le_iff
 alias ⟨mul_le_of_le_mul_inv, le_mul_inv_of_mul_le⟩ := le_mul_inv_iff
 alias ⟨le_of_one_le_mul_inv, one_le_mul_inv_of_le⟩ := one_le_mul_inv
-alias ⟨le_of_mul_inv_le_one, mul_inv_le_one_of_le⟩ 
+alias ⟨le_of_mul_inv_le_one, mul_inv_le_one_of_le⟩ := mul_inv_le_one
 
 Depends on / 依赖: mul_inv_le_iff, one_mul, u.mul_inv_le_iff
 -/

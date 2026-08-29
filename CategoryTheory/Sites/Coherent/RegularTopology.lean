@@ -40,7 +40,9 @@ theorem mem_sieves_of_hasEffectiveEpi
     intro W g f
     refine ⟨W, 𝟙 W, ?_⟩
     cases f
-    exact ⟨
+    exact ⟨π, ⟨h.2, Category.id_comp π⟩⟩
+  apply Coverage.saturate_of_superset (regularCoverage C) h_le
+  exact Coverage.Saturate.of X _ ⟨Y, π, rfl, h.1⟩
 
 中文:
 定理 mem_sieves_of_hasEffectiveEpi
@@ -53,7 +55,9 @@ theorem mem_sieves_of_hasEffectiveEpi
     intro W g f
     refine ⟨W, 𝟙 W, ?_⟩
     cases f
-    exact ⟨
+    exact ⟨π, ⟨h.2, Category.id_comp π⟩⟩
+  apply Coverage.saturate_of_superset (regularCoverage C) h_le
+  exact Coverage.Saturate.of X _ ⟨Y, π, rfl, h.1⟩
 
 Depends on / 依赖: Category, Category.id_comp, Coverage, Coverage.Saturate.of, Coverage.saturate_of_superset, Presieve, Presieve.le_of_factorsThru_sieve, Presieve.ofArrows, Saturate, Sieve.generate, Sieve.generate_le_iff, generate, generate_le_iff, h_le, id_comp, le_of_factorsThru_sieve, ofArrows, regularCoverage, saturate_of_superset
 -/
@@ -104,7 +108,12 @@ theorem mem_sieves_iff_hasEffectiveEpi
       refine ⟨Y', π, h'.2, ?_⟩
       rcases h' with ⟨rfl, _⟩
       exact ⟨Y', 𝟙 Y', π, Presieve.ofArrows.mk (), (by simp)⟩
-    | top Y => exact ⟨Y, (𝟙 Y), inferInstance, by simp only [Sieve.top_appl
+    | top Y => exact ⟨Y, (𝟙 Y), inferInstance, by simp only [Sieve.top_apply]⟩
+    | transitive Y R S _ _ a b =>
+      rcases a with ⟨Y₁, π, ⟨h₁, h₂⟩⟩
+      choose Y' π' _ H using b h₂
+      exact ⟨Y', π' ≫ π, inferInstance, (by simpa using H)⟩
+  · exact regularTopology.mem_sieves_of_hasEffectiveEpi S
 
 中文:
 定理 mem_sieves_iff_hasEffectiveEpi
@@ -118,7 +127,12 @@ theorem mem_sieves_iff_hasEffectiveEpi
       refine ⟨Y', π, h'.2, ?_⟩
       rcases h' with ⟨rfl, _⟩
       exact ⟨Y', 𝟙 Y', π, Presieve.ofArrows.mk (), (by simp)⟩
-    | top Y => exact ⟨Y, (𝟙 Y), inferInstance, by simp only [Sieve.top_appl
+    | top Y => exact ⟨Y, (𝟙 Y), inferInstance, by simp only [Sieve.top_apply]⟩
+    | transitive Y R S _ _ a b =>
+      rcases a with ⟨Y₁, π, ⟨h₁, h₂⟩⟩
+      choose Y' π' _ H using b h₂
+      exact ⟨Y', π' ≫ π, inferInstance, (by simpa using H)⟩
+  · exact regularTopology.mem_sieves_of_hasEffectiveEpi S
 
 Depends on / 依赖: Presieve, Presieve.ofArrows.mk, Sieve.top_apply, mem_sieves_of_hasEffectiveEpi, ofArrows, regularTopology, regularTopology.mem_sieves_of_hasEffectiveEpi, top_apply, transitive
 -/

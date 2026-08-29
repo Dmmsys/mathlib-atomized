@@ -687,7 +687,34 @@ theorem nonempty_hom_of_forall_finite_subgraph_hom
   -- Establish the required interface instances.
   have : forall G' : G.Finsubgraphᵒᵖ, Nonempty ((finsubgraphHomFunctor G F).obj G') := fun G' =>
     ⟨h G'.unop G'.unop.property⟩
-  have : forall G' : G.Finsubgraphᵒᵖ, Fintype ((f
+  have : forall G' : G.Finsubgraphᵒᵖ, Fintype ((finsubgraphHomFunctor G F).obj G') := by
+    intro G'
+    haveI : Fintype (G'.unop.val.verts : Type u) := G'.unop.property.fintype
+    haveI : Fintype (↥G'.unop.val.verts -> W) := by classical exact Pi.instFintype
+    exact Fintype.ofInjective (fun f => f.toFun) RelHom.coe_fn_injective
+  -- Use compactness to obtain a section.
+  obtain ⟨u, hu⟩ := nonempty_sections_of_finite_inverse_system (finsubgraphHomFunctor G F)
+  refine ⟨⟨fun v => ?_, ?_⟩⟩
+  · -- Map each vertex using the homomorphism provided for its singleton subgraph.
+    exact
+      (u (Opposite.op (singletonFinsubgraph v))).toFun
+        ⟨v, by
+          unfold singletonFinsubgraph
+          simp⟩
+  · -- Prove that the above mapping preserves adjacency.
+    intro v v' e
+    simp only
+    /- The homomorphism for each edge's singleton subgraph agrees with those for its source and
+        target vertices. -/
+    have hv : Opposite.op (finsubgraphOfAdj e) ⟶ Opposite.op (singletonFinsubgraph v) :=
+      Quiver.Hom.op (CategoryTheory.homOfLE singletonFinsubgraph_le_adj_left)
+    have hv' : Opposite.op (finsubgraphOfAdj e) ⟶ Opposite.op (singletonFinsubgraph v') :=
+      Quiver.Hom.op (CategoryTheory.homOfLE singletonFinsubgraph_le_adj_right)
+    rw [← hu hv]; rw [← hu hv']
+    -- Porting note: was `apply Hom.map_adj`
+    apply Hom.map_adj (u _) ?_
+    -- `v` and `v'` are definitionally adjacent in `finsubgraphOfAdj e`
+    simp [finsubgraphOfAdj]
 
 中文:
 定理 nonempty_hom_of_对任意_finite_subgraph_hom
@@ -698,7 +725,34 @@ theorem nonempty_hom_of_forall_finite_subgraph_hom
   -- Establish the required interface instances.
   have : forall G' : G.Finsubgraphᵒᵖ, Nonempty ((finsubgraphHomFunctor G F).obj G') := fun G' =>
     ⟨h G'.unop G'.unop.property⟩
-  have : forall G' : G.Finsubgraphᵒᵖ, Fintype ((f
+  have : forall G' : G.Finsubgraphᵒᵖ, Fintype ((finsubgraphHomFunctor G F).obj G') := by
+    intro G'
+    haveI : Fintype (G'.unop.val.verts : Type u) := G'.unop.property.fintype
+    haveI : Fintype (↥G'.unop.val.verts -> W) := by classical exact Pi.instFintype
+    exact Fintype.ofInjective (fun f => f.toFun) RelHom.coe_fn_injective
+  -- Use compactness to obtain a section.
+  obtain ⟨u, hu⟩ := nonempty_sections_of_finite_inverse_system (finsubgraphHomFunctor G F)
+  refine ⟨⟨fun v => ?_, ?_⟩⟩
+  · -- Map each vertex using the homomorphism provided for its singleton subgraph.
+    exact
+      (u (Opposite.op (singletonFinsubgraph v))).toFun
+        ⟨v, by
+          unfold singletonFinsubgraph
+          simp⟩
+  · -- Prove that the above mapping preserves adjacency.
+    intro v v' e
+    simp only
+    /- The homomorphism for each edge's singleton subgraph agrees with those for its source and
+        target vertices. -/
+    have hv : Opposite.op (finsubgraphOfAdj e) ⟶ Opposite.op (singletonFinsubgraph v) :=
+      Quiver.Hom.op (CategoryTheory.homOfLE singletonFinsubgraph_le_adj_left)
+    have hv' : Opposite.op (finsubgraphOfAdj e) ⟶ Opposite.op (singletonFinsubgraph v') :=
+      Quiver.Hom.op (CategoryTheory.homOfLE singletonFinsubgraph_le_adj_right)
+    rw [← hu hv]; rw [← hu hv']
+    -- Porting note: was `apply Hom.map_adj`
+    apply Hom.map_adj (u _) ?_
+    -- `v` and `v'` are definitionally adjacent in `finsubgraphOfAdj e`
+    simp [finsubgraphOfAdj]
 -/
 theorem nonempty_hom_of_forall_finite_subgraph_hom [Finite W]
     (h : forall G' : G.Subgraph, G'.verts.Finite -> G'.coe ->g F) : Nonempty (G ->g F) := by

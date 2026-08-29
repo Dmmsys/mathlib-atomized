@@ -82,7 +82,14 @@ theorem isOpen_singleton_iff
 .mp (h.mem_nhds (mem_singleton a)) (by simpa only [not_isMax_iff] using not_isMax a)
     refine ha.isSuccPrelimit l ?_
     rw [← succ_eq_iff_covBy]
+    simp only [mem_Ioo, subset_singleton_iff] at h₁ h₂
+    exact h₂ _ ⟨lt_succ l, h₁.1.succ_le.trans_lt h₁.2⟩
+  · obtain (ha | ha) := not_isSuccLimit_iff.mp ha
+    · convert! isOpen_Iio (a := Order.succ a) using 1
+      simp [ha.Iic_eq]
+    · exact isOpen_singleton_of_not_isSuccPrelimit ha
 
+@[to_dual]
 
 中文:
 定理 isOpen_singleton_iff
@@ -94,7 +101,14 @@ theorem isOpen_singleton_iff
 .mp (h.mem_nhds (mem_singleton a)) (by simpa only [not_isMax_iff] using not_isMax a)
     refine ha.isSuccPrelimit l ?_
     rw [← succ_eq_iff_covBy]
+    simp only [mem_Ioo, subset_singleton_iff] at h₁ h₂
+    exact h₂ _ ⟨lt_succ l, h₁.1.succ_le.trans_lt h₁.2⟩
+  · obtain (ha | ha) := not_isSuccLimit_iff.mp ha
+    · convert! isOpen_Iio (a := Order.succ a) using 1
+      simp [ha.Iic_eq]
+    · exact isOpen_singleton_of_not_isSuccPrelimit ha
 
+@[to_dual]
 
 Depends on / 依赖: Iic_e, Order.succ, convert, h.mem_nhds, ha.Iic_e, ha.isSuccPrelimit, ha.not_isMin, isOpen_Iio, isSuccPrelimit, lt_succ, mem_Ioo, mem_nhds, mem_nhds_iff_exists_Ioo_subset, mem_singleton, nontriviality, not_isMax, not_isMax_iff, not_isMin, not_isSuccLimit_iff, not_isSuccLimit_iff.mp
 -/

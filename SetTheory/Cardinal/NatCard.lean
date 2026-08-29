@@ -583,7 +583,7 @@ theorem induction_subsingleton_or_nontrivial
   · apply hstep
     intro β _ hlt
     rw [hn] at hlt
-    exact ih (Nat.card β) hlt 
+    exact ih (Nat.card β) hlt _ rfl
 
 中文:
 定理 induction_subsingleton_or_nontrivial
@@ -596,7 +596,7 @@ theorem induction_subsingleton_or_nontrivial
   · apply hstep
     intro β _ hlt
     rw [hn] at hlt
-    exact ih (Nat.card β) hlt 
+    exact ih (Nat.card β) hlt _ rfl
 
 Depends on / 依赖: Nat.card, Nat.strong_induction_on, generalizing, hnontriv, strong_induction_on, subsingleton_or_nontrivial
 -/
@@ -665,7 +665,8 @@ theorem card_union_le
   · rw [finite_coe_iff, finite_union, ← finite_coe_iff, ← finite_coe_iff] at h
     cases h
     rw [← @Nat.cast_le Cardinal]; rw [Nat.cast_add]; rw [Nat.cast_card]; rw [Nat.cast_card]; rw [Nat.cast_card]
-    exact Cardinal.mk_union_le s 
+    exact Cardinal.mk_union_le s t
+  · simp
 
 中文:
 定理 card_union_le
@@ -676,7 +677,8 @@ theorem card_union_le
   · rw [finite_coe_iff, finite_union, ← finite_coe_iff, ← finite_coe_iff] at h
     cases h
     rw [← @Nat.cast_le Cardinal]; rw [Nat.cast_add]; rw [Nat.cast_card]; rw [Nat.cast_card]; rw [Nat.cast_card]
-    exact Cardinal.mk_union_le s 
+    exact Cardinal.mk_union_le s t
+  · simp
 
 Depends on / 依赖: Cardinal, Cardinal.mk_union_le, Nat.cast_add, Nat.cast_card, Nat.cast_le, _root_, _root_.finite_or_infinite, cast_add, cast_card, cast_le, finite_coe_iff, finite_or_infinite, finite_union, mk_union_le
 -/
@@ -757,7 +759,13 @@ lt_of_le_not_ge (ecard_le_ecard hsub.subset) fun hle => not_subset_of_ssubset hs
   intro hle
   suffices ENat.card ↑(t \ s) <= 0 by
     rwa [← sdiff_eq_empty, ← Set.isEmpty_coe_sort, ← ENat.card_eq_zero_iff_empty,
-  
+      ← nonpos_iff_eq_zero]
+  suffices ENat.card ↑(t \ s) + ENat.card ↑s <= 0 + ENat.card ↑s from
+    WithTop.le_of_add_le_add_right (ENat.card_lt_top.mpr hs).ne this
+  suffices ENat.card ↑t <= 0 + ENat.card ↑s by
+    rwa [← ENat.card_sum, ← ENat.card_congr <| Equiv.Set.union disjoint_sdiff_left,
+      sdiff_union_of_subset hsub.subset]
+  exact le_add_of_le_right hle
 
 中文:
 定理 ecard_lt_ecard
@@ -770,7 +778,13 @@ lt_of_le_not_ge (ecard_le_ecard hsub.subset) fun hle => not_subset_of_ssubset hs
   intro hle
   suffices ENat.card ↑(t \ s) <= 0 by
     rwa [← sdiff_eq_empty, ← Set.isEmpty_coe_sort, ← ENat.card_eq_zero_iff_empty,
-  
+      ← nonpos_iff_eq_zero]
+  suffices ENat.card ↑(t \ s) + ENat.card ↑s <= 0 + ENat.card ↑s from
+    WithTop.le_of_add_le_add_right (ENat.card_lt_top.mpr hs).ne this
+  suffices ENat.card ↑t <= 0 + ENat.card ↑s by
+    rwa [← ENat.card_sum, ← ENat.card_congr <| Equiv.Set.union disjoint_sdiff_left,
+      sdiff_union_of_subset hsub.subset]
+  exact le_add_of_le_right hle
 
 Depends on / 依赖: ENat.ca, ENat.card, ENat.card_eq_zero_iff_empty, ENat.card_lt_top.mpr, Set.isEmpty_coe_sort, WithTop, WithTop.le_of_add_le_add_right, card_eq_zero_iff_empty, card_lt_top, classical, ecard_le_ecard, hsub.subset, isEmpty_coe_sort, le_of_add_le_add_right, lt_of_le_not_ge, nonpos_iff_eq_zero, not_subset_of_ssubset, sdiff_eq_empty, subset, subseteq
 -/

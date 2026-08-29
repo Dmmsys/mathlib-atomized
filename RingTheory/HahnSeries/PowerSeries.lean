@@ -71,7 +71,15 @@ definition toPowerSeries
     simp
   map_mul' f g := by
     ext n
-    simp only [PowerSeries.coeff_mul, PowerSeries.coeff_mk, coeff_mul
+    simp only [PowerSeries.coeff_mul, PowerSeries.coeff_mk, coeff_mul]
+    classical
+refine (sum_filter_ne_zero _).symm.trans (sum_congr ?_ fun _ _ => rfl).trans
+      sum_filter_ne_zero _
+    ext m
+    simp only [HasAntidiagonal.mem_antidiagonal, Finset.mem_antidiagonal, and_congr_left_iff,
+      mem_filter, mem_support]
+    rintro h
+    rw [and_iff_right (left_ne_zero_of_mul h)]; rw [and_iff_right (right_ne_zero_of_mul h)]
 
 中文:
 定义 toPowerSeries
@@ -89,7 +97,15 @@ definition toPowerSeries
     simp
   map_mul' f g := by
     ext n
-    simp only [PowerSeries.coeff_mul, PowerSeries.coeff_mk, coeff_mul
+    simp only [PowerSeries.coeff_mul, PowerSeries.coeff_mk, coeff_mul]
+    classical
+refine (sum_filter_ne_zero _).symm.trans (sum_congr ?_ fun _ _ => rfl).trans
+      sum_filter_ne_zero _
+    ext m
+    simp only [HasAntidiagonal.mem_antidiagonal, Finset.mem_antidiagonal, and_congr_left_iff,
+      mem_filter, mem_support]
+    rintro h
+    rw [and_iff_right (left_ne_zero_of_mul h)]; rw [and_iff_right (right_ne_zero_of_mul h)]
 
 Depends on / 依赖: PowerSeries, PowerSeries.mk, f.coeff
 -/
@@ -270,7 +286,12 @@ theorem ofPowerSeries_C
   · subst hn
     convert! embDomain_coeff (a := 0) <;> simp
   · rw [embDomain_notin_image_support]
-    simp only [not_exists, Set.mem_image, toPowerSeries_symm_apply
+    simp only [not_exists, Set.mem_image, toPowerSeries_symm_apply_coeff, mem_support,
+      PowerSeries.coeff_C]
+    intro
+    simp +contextual [Ne.symm hn]
+
+@[simp]
 
 中文:
 定理 ofPowerSeries_C
@@ -284,7 +305,12 @@ theorem ofPowerSeries_C
   · subst hn
     convert! embDomain_coeff (a := 0) <;> simp
   · rw [embDomain_notin_image_support]
-    simp only [not_exists, Set.mem_image, toPowerSeries_symm_apply
+    simp only [not_exists, Set.mem_image, toPowerSeries_symm_apply_coeff, mem_support,
+      PowerSeries.coeff_C]
+    intro
+    simp +contextual [Ne.symm hn]
+
+@[simp]
 
 Depends on / 依赖: MonoidHom, MonoidHom.coe_mk, Ne.symm, OneHom, OneHom.coe_mk, PowerSeries, PowerSeries.coeff_C, RingHom, RingHom.coe_mk, Set.mem_image, coe_mk, coeff_C, coeff_single, contextual, convert, embDomain_coeff, embDomain_notin_image_support, mem_image, mem_support, not_exists
 -/
@@ -318,6 +344,7 @@ theorem ofPowerSeries_X
     simp only [not_exists, Set.mem_image, toPowerSeries_symm_apply_coeff, mem_support,
       PowerSeries.coeff_X]
     intro
+    simp +contextual [Ne.symm hn]
 
 中文:
 定理 ofPowerSeries_X
@@ -332,6 +359,7 @@ theorem ofPowerSeries_X
     simp only [not_exists, Set.mem_image, toPowerSeries_symm_apply_coeff, mem_support,
       PowerSeries.coeff_X]
     intro
+    simp +contextual [Ne.symm hn]
 
 Depends on / 依赖: Ne.symm, PowerSeries, PowerSeries.coeff_X, Set.mem_image, coeff_X, coeff_single, contextual, convert, embDomain_coeff, embDomain_notin_image_support, mem_image, mem_support, not_exists, ofPowerSeries_apply, split_ifs, toPowerSeries_symm_apply_coeff
 -/
@@ -397,7 +425,13 @@ definition toMvPowerSeries
     classical
       change (f * g).coeff n = _
       simp_rw [coeff_mul]
-ref
+refine (sum_filter_ne_zero _).symm.trans (sum_congr ?_ fun _ _ => rfl).trans
+        sum_filter_ne_zero _
+      ext m
+      simp only [and_congr_left_iff, Finset.mem_antidiagonal, mem_filter, mem_support,
+        HasAntidiagonal.mem_antidiagonal]
+      rintro h
+      rw [and_iff_right (left_ne_zero_of_mul h)]; rw [and_iff_right (right_ne_zero_of_mul h)]
 
 中文:
 定义 toMvPowerSeries
@@ -418,7 +452,13 @@ ref
     classical
       change (f * g).coeff n = _
       simp_rw [coeff_mul]
-ref
+refine (sum_filter_ne_zero _).symm.trans (sum_congr ?_ fun _ _ => rfl).trans
+        sum_filter_ne_zero _
+      ext m
+      simp only [and_congr_left_iff, Finset.mem_antidiagonal, mem_filter, mem_support,
+        HasAntidiagonal.mem_antidiagonal]
+      rintro h
+      rw [and_iff_right (left_ne_zero_of_mul h)]; rw [and_iff_right (right_ne_zero_of_mul h)]
 
 Depends on / 依赖: f.coeff
 -/

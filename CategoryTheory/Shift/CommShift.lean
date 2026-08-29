@@ -306,7 +306,9 @@ lemma isoAdd'_assoc
   have := NatTrans.naturality_2 ec.hom ((shiftFunctorAdd' C a b ab hab).app X)
   dsimp at this ⊢
   simp only [isoAdd'_hom_app, Category.assoc]
-  rw [← NatTrans.naturality_assoc]; rw [← this]; rw [Category.assoc]; rw [← F.map_comp_assoc]; rw [shiftFunctorAdd'_assoc_hom_app a b c ab bc abc 
+  rw [← NatTrans.naturality_assoc]; rw [← this]; rw [Category.assoc]; rw [← F.map_comp_assoc]; rw [shiftFunctorAdd'_assoc_hom_app a b c ab bc abc hab hbc h]; rw [Functor.map_comp_assoc]; rw [Category.assoc]
+  simp_rw [← Functor.map_comp_assoc]
+  simp [shiftFunctorAdd'_assoc_inv_app a b c ab bc abc hab hbc h]
 
 中文:
 引理 isoAdd'_assoc
@@ -316,7 +318,9 @@ lemma isoAdd'_assoc
   have := NatTrans.naturality_2 ec.hom ((shiftFunctorAdd' C a b ab hab).app X)
   dsimp at this ⊢
   simp only [isoAdd'_hom_app, Category.assoc]
-  rw [← NatTrans.naturality_assoc]; rw [← this]; rw [Category.assoc]; rw [← F.map_comp_assoc]; rw [shiftFunctorAdd'_assoc_hom_app a b c ab bc abc 
+  rw [← NatTrans.naturality_assoc]; rw [← this]; rw [Category.assoc]; rw [← F.map_comp_assoc]; rw [shiftFunctorAdd'_assoc_hom_app a b c ab bc abc hab hbc h]; rw [Functor.map_comp_assoc]; rw [Category.assoc]
+  simp_rw [← Functor.map_comp_assoc]
+  simp [shiftFunctorAdd'_assoc_inv_app a b c ab bc abc hab hbc h]
 -/
 lemma isoAdd'_assoc {a b c ab bc abc : A}
     (ea : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a)
@@ -510,7 +514,15 @@ instance comp
   commShiftIso_zero := by
     ext X
     dsimp
-    simp only [id_comp, comp_id, commShiftIso_zero, isoZero_hom_app, ← F
+    simp only [id_comp, comp_id, commShiftIso_zero, isoZero_hom_app, ← Functor.map_comp_assoc,
+      assoc, Iso.inv_hom_id_app, id_obj, comp_map, comp_obj]
+  commShiftIso_add := fun a b => by
+    ext X
+    dsimp
+    simp only [commShiftIso_add, isoAdd_hom_app]
+    dsimp
+    simp only [comp_id, id_comp, assoc, ← Functor.map_comp_assoc, Iso.inv_hom_id_app, comp_obj]
+    simp only [map_comp, assoc, commShiftIso_hom_naturality_assoc]
 
 中文:
 实例 comp
@@ -521,7 +533,15 @@ instance comp
   commShiftIso_zero := by
     ext X
     dsimp
-    simp only [id_comp, comp_id, commShiftIso_zero, isoZero_hom_app, ← F
+    simp only [id_comp, comp_id, commShiftIso_zero, isoZero_hom_app, ← Functor.map_comp_assoc,
+      assoc, Iso.inv_hom_id_app, id_obj, comp_map, comp_obj]
+  commShiftIso_add := fun a b => by
+    ext X
+    dsimp
+    simp only [commShiftIso_add, isoAdd_hom_app]
+    dsimp
+    simp only [comp_id, id_comp, assoc, ← Functor.map_comp_assoc, Iso.inv_hom_id_app, comp_obj]
+    simp only [map_comp, assoc, commShiftIso_hom_naturality_assoc]
 
 Depends on / 依赖: F.commShiftIso, Functor, Functor.associator, associator, commShiftIso, isoWhiskerRight
 -/
@@ -564,7 +584,18 @@ lemma map_shiftFunctorComm_hom_app
   simp only [comp_obj, CommShift.isoAdd_hom_app,
     ← cancel_epi (F.map ((shiftFunctorAdd C a b).inv.app X)),
     ← F.map_comp_assoc, Iso.inv_hom_id_app, F.map_id, Category.id_comp] at eq
-  simp only [shiftFunctorComm
+  simp only [shiftFunctorComm_eq D a b _ rfl]
+  dsimp
+  simp only [shiftFunctorAdd'_eq_shiftFunctorAdd, Category.assoc,
+    ← reassoc_of% eq, shiftFunctorComm_eq C a b _ rfl]
+  dsimp
+  rw [Functor.map_comp]
+  simp only [NatTrans.congr_app (congr_arg Iso.hom (F.commShiftIso_add' (add_comm b a))) X,
+    CommShift.isoAdd'_hom_app, Category.assoc, Iso.inv_hom_id_app_assoc,
+    ← Functor.map_comp_assoc, Iso.hom_inv_id_app,
+    Functor.map_id, Category.id_comp, comp_obj, Category.comp_id]
+
+@[simp, reassoc]
 
 中文:
 引理 map_shiftFunctorComm_hom_app
@@ -574,7 +605,18 @@ lemma map_shiftFunctorComm_hom_app
   simp only [comp_obj, CommShift.isoAdd_hom_app,
     ← cancel_epi (F.map ((shiftFunctorAdd C a b).inv.app X)),
     ← F.map_comp_assoc, Iso.inv_hom_id_app, F.map_id, Category.id_comp] at eq
-  simp only [shiftFunctorComm
+  simp only [shiftFunctorComm_eq D a b _ rfl]
+  dsimp
+  simp only [shiftFunctorAdd'_eq_shiftFunctorAdd, Category.assoc,
+    ← reassoc_of% eq, shiftFunctorComm_eq C a b _ rfl]
+  dsimp
+  rw [Functor.map_comp]
+  simp only [NatTrans.congr_app (congr_arg Iso.hom (F.commShiftIso_add' (add_comm b a))) X,
+    CommShift.isoAdd'_hom_app, Category.assoc, Iso.inv_hom_id_app_assoc,
+    ← Functor.map_comp_assoc, Iso.hom_inv_id_app,
+    Functor.map_id, Category.id_comp, comp_obj, Category.comp_id]
+
+@[simp, reassoc]
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, CommShift, CommShift.isoAdd_hom_app, F.commShiftIso_add, F.map, F.map_comp_assoc, F.map_id, Functor, Functor.map_comp, Iso.hom, Iso.inv_hom_id_app, NatTrans, NatTrans.congr_app, _eq_shiftFunctorAdd, cancel_epi, commShiftIso_add, comp_obj, congr_app
 -/
@@ -609,7 +651,11 @@ lemma map_shiftFunctorCompIsoId_hom_app
   have eq := NatTrans.congr_app (congr_arg Iso.hom (F.commShiftIso_add' h)) X
   simp only [commShiftIso_zero, comp_obj, CommShift.isoZero_hom_app,
     CommShift.isoAdd'_hom_app] at eq
-  rw [← cancel_epi (F.map ((shiftFunctorAdd' C a b 0 h).hom.app X))]; rw [← reass
+  rw [← cancel_epi (F.map ((shiftFunctorAdd' C a b 0 h).hom.app X))]; rw [← reassoc_of% eq]; rw [F.map_comp]
+  simp only [Iso.inv_hom_id_app, id_obj, Category.comp_id, ← F.map_comp_assoc, Iso.hom_inv_id_app,
+    F.map_id, Category.id_comp]
+
+@[simp, reassoc]
 
 中文:
 引理 map_shiftFunctorCompIsoId_hom_app
@@ -619,7 +665,11 @@ lemma map_shiftFunctorCompIsoId_hom_app
   have eq := NatTrans.congr_app (congr_arg Iso.hom (F.commShiftIso_add' h)) X
   simp only [commShiftIso_zero, comp_obj, CommShift.isoZero_hom_app,
     CommShift.isoAdd'_hom_app] at eq
-  rw [← cancel_epi (F.map ((shiftFunctorAdd' C a b 0 h).hom.app X))]; rw [← reass
+  rw [← cancel_epi (F.map ((shiftFunctorAdd' C a b 0 h).hom.app X))]; rw [← reassoc_of% eq]; rw [F.map_comp]
+  simp only [Iso.inv_hom_id_app, id_obj, Category.comp_id, ← F.map_comp_assoc, Iso.hom_inv_id_app,
+    F.map_id, Category.id_comp]
+
+@[simp, reassoc]
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, CommShift, CommShift.isoAdd, CommShift.isoZero_hom_app, F.commShiftIso_add, F.map, F.map_comp, F.map_comp_assoc, F.map_id, Iso.hom, Iso.hom_inv_id_app, Iso.inv_hom_id_app, NatTrans, NatTrans.congr_app, _hom_app, cancel_epi, commShiftIso_add, commShiftIso_zero
 -/
@@ -645,7 +695,7 @@ lemma map_shiftFunctorCompIsoId_inv_app
   proof: by
   rw [← cancel_epi (F.map ((shiftFunctorCompIsoId C a b h).hom.app X))]; rw [← F.map_comp]; rw [Iso.hom_inv_id_app]; rw [F.map_id]; rw [map_shiftFunctorCompIsoId_hom_app]
   simp only [comp_obj, id_obj, Category.assoc, Iso.hom_inv_id_app_assoc,
-    ← Functor.map_comp_assoc, Iso.hom_inv_id_app, Fun
+    ← Functor.map_comp_assoc, Iso.hom_inv_id_app, Functor.map_id, Category.id_comp]
 
 中文:
 引理 map_shiftFunctorCompIsoId_inv_app
@@ -653,7 +703,7 @@ lemma map_shiftFunctorCompIsoId_inv_app
   证明: by
   rw [← cancel_epi (F.map ((shiftFunctorCompIsoId C a b h).hom.app X))]; rw [← F.map_comp]; rw [Iso.hom_inv_id_app]; rw [F.map_id]; rw [map_shiftFunctorCompIsoId_hom_app]
   simp only [comp_obj, id_obj, Category.assoc, Iso.hom_inv_id_app_assoc,
-    ← Functor.map_comp_assoc, Iso.hom_inv_id_app, Fun
+    ← Functor.map_comp_assoc, Iso.hom_inv_id_app, Functor.map_id, Category.id_comp]
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, F.map, F.map_comp, F.map_id, Functor, Functor.map_comp_assoc, Functor.map_id, Iso.hom_inv_id_app, Iso.hom_inv_id_app_assoc, cancel_epi, comp_obj, hom.app, hom_inv_id_app, hom_inv_id_app_assoc, id_comp, id_obj, map_comp, map_comp_assoc
 -/
@@ -824,7 +874,8 @@ lemma add
     simp only [Functor.commShiftIso_add, Functor.CommShift.isoAdd_hom_app,
       ← NatTrans.naturality_2 τ ((shiftFunctorAdd C a b).app X),
       Functor.comp_obj, hb.app_shift_assoc, ha.app_shift, assoc,
- 
+      (shiftFunctor D b).map_comp_assoc]
+    simp [← Functor.map_comp_assoc, this]
 
 中文:
 引理 add
@@ -836,7 +887,8 @@ lemma add
     simp only [Functor.commShiftIso_add, Functor.CommShift.isoAdd_hom_app,
       ← NatTrans.naturality_2 τ ((shiftFunctorAdd C a b).app X),
       Functor.comp_obj, hb.app_shift_assoc, ha.app_shift, assoc,
- 
+      (shiftFunctor D b).map_comp_assoc]
+    simp [← Functor.map_comp_assoc, this]
 
 Depends on / 依赖: CommShift, Functor, Functor.CommShift.isoAdd_hom_app, Functor.commShiftIso_add, Functor.comp_obj, Functor.map_comp_assoc, NatTrans, NatTrans.naturality_2, app_shift, app_shift_assoc, commShiftIso_add, comp_obj, ha.app_shift, hb.app_shift_assoc, inv.naturality, isoAdd_hom_app, map_comp_assoc, naturality, naturality_2, shiftFunctor
 -/
@@ -1121,7 +1173,7 @@ instance whiskerRight
   simp only [Functor.whiskerRight_twice, comp_app, Functor.commShiftIso_comp_hom_app,
     Functor.associator_hom_app, Functor.whiskerRight_app, Functor.comp_map,
     Functor.associator_inv_app, comp_id, id_comp, assoc, ← Functor.commShiftIso_hom_naturality, ←
-    G.map_comp_asso
+    G.map_comp_assoc, shift_app_comm, Functor.whiskerLeft_app]⟩
 
 中文:
 实例 whiskerRight
@@ -1131,7 +1183,7 @@ instance whiskerRight
   simp only [Functor.whiskerRight_twice, comp_app, Functor.commShiftIso_comp_hom_app,
     Functor.associator_hom_app, Functor.whiskerRight_app, Functor.comp_map,
     Functor.associator_inv_app, comp_id, id_comp, assoc, ← Functor.commShiftIso_hom_naturality, ←
-    G.map_comp_asso
+    G.map_comp_assoc, shift_app_comm, Functor.whiskerLeft_app]⟩
 
 Depends on / 依赖: Functor, Functor.associator_hom_app, Functor.associator_inv_app, Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_hom_naturality, Functor.comp_map, Functor.whiskerLeft_app, Functor.whiskerRight_app, Functor.whiskerRight_twice, G.map_comp_assoc, associator_hom_app, associator_inv_app, commShiftIso_comp_hom_app, commShiftIso_hom_naturality, comp_app, comp_id, comp_map, id_comp, map_comp_assoc, shift_app_comm
 -/
@@ -1225,7 +1277,11 @@ definition ofIso
   commShiftIso_add a b := by
     ext X
     simp only [comp_obj, F.commShiftIso_add, Iso.trans_hom, isoWhiskerLeft_hom,
-      Iso.symm_hom, isoW
+      Iso.symm_hom, isoWhiskerRight_hom, NatTrans.comp_app, whiskerLeft_app,
+      isoAdd_hom_app, whiskerRight_app, assoc, map_comp, NatTrans.naturality_assoc,
+      NatIso.cancel_natIso_inv_left]
+    simp only [← Functor.map_comp_assoc, e.hom_inv_id_app_assoc]
+    simp only [← NatTrans.naturality, comp_obj, comp_map, map_comp, assoc]
 
 中文:
 定义 ofIso
@@ -1237,7 +1293,11 @@ definition ofIso
   commShiftIso_add a b := by
     ext X
     simp only [comp_obj, F.commShiftIso_add, Iso.trans_hom, isoWhiskerLeft_hom,
-      Iso.symm_hom, isoW
+      Iso.symm_hom, isoWhiskerRight_hom, NatTrans.comp_app, whiskerLeft_app,
+      isoAdd_hom_app, whiskerRight_app, assoc, map_comp, NatTrans.naturality_assoc,
+      NatIso.cancel_natIso_inv_left]
+    simp only [← Functor.map_comp_assoc, e.hom_inv_id_app_assoc]
+    simp only [← NatTrans.naturality, comp_obj, comp_map, map_comp, assoc]
 
 Depends on / 依赖: F.commShiftIso, commShiftIso, e.symm, isoWhiskerLeft, isoWhiskerRight
 -/
@@ -1315,6 +1375,7 @@ definition ofHasShiftOfFullyFaithful
     commShiftIso_add := fun a b => by
       ext X
       simp [ShiftMkCore.shiftFunctorAdd_eq, ShiftMkCore.shiftFunctor_eq,
+        ← Functor.map_comp_assoc] }
 
 中文:
 定义 ofHasShiftOfFullyFaithful
@@ -1329,6 +1390,7 @@ definition ofHasShiftOfFullyFaithful
     commShiftIso_add := fun a b => by
       ext X
       simp [ShiftMkCore.shiftFunctorAdd_eq, ShiftMkCore.shiftFunctor_eq,
+        ← Functor.map_comp_assoc] }
 
 Depends on / 依赖: CommShift, F.CommShift, Functor, Functor.map_comp_assoc, ShiftMkCore, ShiftMkCore.shiftFunctorAdd_eq, ShiftMkCore.shiftFunctorZero_eq, ShiftMkCore.shiftFunctor_eq, commShiftIso, commShiftIso_add, commShiftIso_zero, hF.hasShift, hasShift, map_comp_assoc, shiftFunctorAdd_eq, shiftFunctorZero_eq, shiftFunctor_eq
 -/
@@ -1526,7 +1588,12 @@ definition ofComp
     ext X
     apply G.map_injective
     simp only [comp_obj, OfComp.map_iso_hom_app, H.commShiftIso_add, isoAdd_hom_app,
-      G.commShiftIso_ad
+      G.commShiftIso_add, isoAdd_inv_app, NatTrans.naturality_assoc, comp_map, assoc,
+      Iso.inv_hom_id_app_assoc, map_comp]
+    simp only [← NatTrans.naturality_assoc, ← commShiftIso_inv_naturality_assoc,
+      ← Functor.map_comp_assoc]
+    congr 4
+    simp
 
 中文:
 定义 ofComp
@@ -1540,7 +1607,12 @@ definition ofComp
     ext X
     apply G.map_injective
     simp only [comp_obj, OfComp.map_iso_hom_app, H.commShiftIso_add, isoAdd_hom_app,
-      G.commShiftIso_ad
+      G.commShiftIso_add, isoAdd_inv_app, NatTrans.naturality_assoc, comp_map, assoc,
+      Iso.inv_hom_id_app_assoc, map_comp]
+    simp only [← NatTrans.naturality_assoc, ← commShiftIso_inv_naturality_assoc,
+      ← Functor.map_comp_assoc]
+    congr 4
+    simp
 
 Depends on / 依赖: OfComp, OfComp.iso
 -/

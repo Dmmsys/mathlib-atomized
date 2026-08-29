@@ -179,7 +179,7 @@ lemma isCusp_iff_of_relIndex_ne_zero
   obtain ⟨n, hn, -, hgn⟩ := Subgroup.exists_pow_mem_of_relIndex_ne_zero h𝒢' hg
   refine ⟨g ^ n, (Subgroup.mem_inf.mpr hgn).1, hgp.pow hn.ne', ?_⟩
   rw [Nat.pos_iff_ne_zero] at hn
-  rwa [(hgp.pow hn).smul_eq_self
+  rwa [(hgp.pow hn).smul_eq_self_iff, hgp.parabolicFixedPoint_pow hn, ← hgp.smul_eq_self_iff]
 
 中文:
 引理 isCusp_iff_of_relIndex_ne_zero
@@ -189,7 +189,7 @@ lemma isCusp_iff_of_relIndex_ne_zero
   obtain ⟨n, hn, -, hgn⟩ := Subgroup.exists_pow_mem_of_relIndex_ne_zero h𝒢' hg
   refine ⟨g ^ n, (Subgroup.mem_inf.mpr hgn).1, hgp.pow hn.ne', ?_⟩
   rw [Nat.pos_iff_ne_zero] at hn
-  rwa [(hgp.pow hn).smul_eq_self
+  rwa [(hgp.pow hn).smul_eq_self_iff, hgp.parabolicFixedPoint_pow hn, ← hgp.smul_eq_self_iff]
 
 Depends on / 依赖: Nat.pos_iff_ne_zero, Subgroup, Subgroup.exists_pow_mem_of_relIndex_ne_zero, Subgroup.mem_inf.mpr, exists_pow_mem_of_relIndex_ne_zero, hgp.parabolicFixedPoint_pow, hgp.pow, hgp.smul_eq_self_iff, hn.ne, mem_inf, parabolicFixedPoint_pow, pos_iff_ne_zero, smul_eq_self_iff
 -/
@@ -324,7 +324,13 @@ lemma isCusp_SL2Z_iff
       by simp [GeneralLinearGroup.parabolicFixedPoint, apply_ite]⟩
   · rintro ⟨c, rfl⟩
     obtain ⟨a, rfl⟩ := c.exists_mem_SL2 Int
-    refine ⟨_, ⟨a * ModularGro
+    refine ⟨_, ⟨a * ModularGroup.T * a⁻¹, rfl⟩, ?_, ?_⟩
+    · suffices (mapGL Real ModularGroup.T).IsParabolic by simpa
+      refine ⟨fun ⟨a, ha⟩ => zero_ne_one' Real (by simpa [ModularGroup.T] using congr_fun₂ ha 0 1), ?_⟩
+      simp [discr_fin_two, trace_fin_two, det_fin_two, ModularGroup.T]
+      norm_num
+    · rw [← Rat.coe_castHom, ← (Rat.castHom Real).algebraMap_toAlgebra]
+      simp [OnePoint.map_smul, mul_smul, smul_infty_eq_self_iff, ModularGroup.T]
 
 中文:
 引理 isCusp_SL2Z_iff
@@ -337,7 +343,13 @@ lemma isCusp_SL2Z_iff
       by simp [GeneralLinearGroup.parabolicFixedPoint, apply_ite]⟩
   · rintro ⟨c, rfl⟩
     obtain ⟨a, rfl⟩ := c.exists_mem_SL2 Int
-    refine ⟨_, ⟨a * ModularGro
+    refine ⟨_, ⟨a * ModularGroup.T * a⁻¹, rfl⟩, ?_, ?_⟩
+    · suffices (mapGL Real ModularGroup.T).IsParabolic by simpa
+      refine ⟨fun ⟨a, ha⟩ => zero_ne_one' Real (by simpa [ModularGroup.T] using congr_fun₂ ha 0 1), ?_⟩
+      simp [discr_fin_two, trace_fin_two, det_fin_two, ModularGroup.T]
+      norm_num
+    · rw [← Rat.coe_castHom, ← (Rat.castHom Real).algebraMap_toAlgebra]
+      simp [OnePoint.map_smul, mul_smul, smul_infty_eq_self_iff, ModularGroup.T]
 
 Depends on / 依赖: GeneralLinearGroup, GeneralLinearGroup.parabolicFixedPoint, IsParabolic, ModularGroup, ModularGroup.T, apply_ite, c.exists_mem_SL2, det_, discr_fin_two, exists_mem_SL2, hgp.smul_eq_self_iff.mp, parabolicFixedPoint, smul_eq_self_iff, trace_fin_two, zero_ne_one
 -/
@@ -372,7 +384,8 @@ lemma isCusp_SL2Z_iff'
     refine ⟨g, ?_⟩
     rw [← Rat.coe_castHom]; rw [OnePoint.map_smul]; rw [OnePoint.map_infty]; rw [← (Rat.castHom Real).algebraMap_toAlgebra]; rw [g.map_mapGL]
   · rintro ⟨g, rfl⟩
-    refine ⟨map
+    refine ⟨mapGL Rat g • ∞, ?_⟩
+    rw [← Rat.coe_castHom]; rw [OnePoint.map_smul]; rw [OnePoint.map_infty]; rw [← (Rat.castHom Real).algebraMap_toAlgebra]; rw [g.map_mapGL]
 
 中文:
 引理 isCusp_SL2Z_iff'
@@ -386,7 +399,8 @@ lemma isCusp_SL2Z_iff'
     refine ⟨g, ?_⟩
     rw [← Rat.coe_castHom]; rw [OnePoint.map_smul]; rw [OnePoint.map_infty]; rw [← (Rat.castHom Real).algebraMap_toAlgebra]; rw [g.map_mapGL]
   · rintro ⟨g, rfl⟩
-    refine ⟨map
+    refine ⟨mapGL Rat g • ∞, ?_⟩
+    rw [← Rat.coe_castHom]; rw [OnePoint.map_smul]; rw [OnePoint.map_infty]; rw [← (Rat.castHom Real).algebraMap_toAlgebra]; rw [g.map_mapGL]
 
 Depends on / 依赖: OnePoint, OnePoint.map_infty, OnePoint.map_smul, Rat.castHom, Rat.coe_castHom, algebraMap_toAlgebra, c.exists_mem_SL2, castHom, coe_castHom, exists_mem_SL2, g.map_mapGL, isCusp_SL2Z_iff, map_infty, map_mapGL, map_smul
 -/
@@ -482,7 +496,10 @@ definition cosetToCuspOrbit
 (Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z 𝒢).mpr isCusp_SL2Z_iff.mpr
         ⟨mapGL Rat g⁻¹ • ∞, by rw [← Rat.coe_castHom, OnePoint.map_smul, OnePoint.map_infty,
           ← (Rat.castHom Real).algebraMap_toAlgebra, map_mapGL]⟩⟩⟧)
-    (fun a b hab
+    (fun a b hab => by
+      rw [← Quotient.eq_iff_equiv]; rw [Quotient.eq]; rw [QuotientGroup.leftRel_apply] at hab
+      refine Quotient.eq.mpr ⟨⟨_, hab⟩, ?_⟩
+      simp [mul_smul])
 
 中文:
 定义 cosetToCuspOrbit
@@ -492,7 +509,10 @@ definition cosetToCuspOrbit
 (Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z 𝒢).mpr isCusp_SL2Z_iff.mpr
         ⟨mapGL Rat g⁻¹ • ∞, by rw [← Rat.coe_castHom, OnePoint.map_smul, OnePoint.map_infty,
           ← (Rat.castHom Real).algebraMap_toAlgebra, map_mapGL]⟩⟩⟧)
-    (fun a b hab
+    (fun a b hab => by
+      rw [← Quotient.eq_iff_equiv]; rw [Quotient.eq]; rw [QuotientGroup.leftRel_apply] at hab
+      refine Quotient.eq.mpr ⟨⟨_, hab⟩, ?_⟩
+      simp [mul_smul])
 
 Depends on / 依赖: IsArithmetic, OnePoint, OnePoint.map_infty, OnePoint.map_smul, Quotient, Quotient.eq, Quotient.eq.mpr, Quotient.eq_iff_equiv, Quotient.lift, QuotientGroup, QuotientGroup.leftRel_apply, Rat.castHom, Rat.coe_castHom, Subgroup, Subgroup.IsArithmetic.isCusp_iff_isCusp_SL2Z, algebraMap_toAlgebra, castHom, coe_castHom, eq_iff_equiv, isCusp_SL2Z_iff
 -/
@@ -711,7 +731,12 @@ lemma relIndex_strictPeriods
   · replace h := 𝒢.strictPeriods_le_periods.lt_of_ne h
     obtain ⟨u, hu_mem, hu_notMem⟩ := (SetLike.lt_iff_le_and_exists.mp h).2
     rw [AddSubgroup.relIndex_eq_two_iff_exists_notMem_and]
-    refine .inr ⟨u, hu_mem, hu_notMem, fun b hb => ?
+    refine .inr ⟨u, hu_mem, hu_notMem, fun b hb => ?_⟩
+    simp only [Subgroup.periods, mem_strictPeriods_iff, mem_adjoinNegOne_iff,
+      AddChar.map_add_eq_mul] at hu_mem hu_notMem hb ⊢
+    rcases hb with h | h
+    · exact Or.inr h
+    · simpa only [neg_mul_neg] using Or.inl (mul_mem h <| hu_mem.resolve_left hu_notMem)
 
 中文:
 引理 relIndex_strictPeriods
@@ -721,7 +746,12 @@ lemma relIndex_strictPeriods
   · replace h := 𝒢.strictPeriods_le_periods.lt_of_ne h
     obtain ⟨u, hu_mem, hu_notMem⟩ := (SetLike.lt_iff_le_and_exists.mp h).2
     rw [AddSubgroup.relIndex_eq_two_iff_exists_notMem_and]
-    refine .inr ⟨u, hu_mem, hu_notMem, fun b hb => ?
+    refine .inr ⟨u, hu_mem, hu_notMem, fun b hb => ?_⟩
+    simp only [Subgroup.periods, mem_strictPeriods_iff, mem_adjoinNegOne_iff,
+      AddChar.map_add_eq_mul] at hu_mem hu_notMem hb ⊢
+    rcases hb with h | h
+    · exact Or.inr h
+    · simpa only [neg_mul_neg] using Or.inl (mul_mem h <| hu_mem.resolve_left hu_notMem)
 
 Depends on / 依赖: AddChar, AddChar.map_add_eq_mul, AddSubgroup, AddSubgroup.relIndex_eq_two_iff_exists_notMem_and, Or.inl, Or.inr, SetLike, SetLike.lt_iff_le_and_exists.mp, Subgroup, Subgroup.periods, hu_mem, hu_notMem, lt_iff_le_and_exists, lt_of_ne, map_add_eq_mul, mem_adjoinNegOne_iff, mem_strictPeriods_iff, mul_mem, neg_mul_neg, periods
 -/
@@ -820,7 +850,8 @@ instance instDiscreteTopStrictPeriods
   have hH : DiscreteTopology H := hG.of_subset Set.inter_subset_left
   have : Set.MapsTo upperRightHom 𝒢.strictPeriods H := fun x hx => by
     grind [SetLike.mem_coe, Subgroup.mem_strictPeriods_iff]
-  exact .of_continuous_injective (
+  exact .of_continuous_injective (continuous_upperRightHom.restrict this)
+    (this.restrict_inj.mpr injective_upperRightHom.injOn)
 
 中文:
 实例 instDiscreteTopStrictPeriods
@@ -830,7 +861,8 @@ instance instDiscreteTopStrictPeriods
   have hH : DiscreteTopology H := hG.of_subset Set.inter_subset_left
   have : Set.MapsTo upperRightHom 𝒢.strictPeriods H := fun x hx => by
     grind [SetLike.mem_coe, Subgroup.mem_strictPeriods_iff]
-  exact .of_continuous_injective (
+  exact .of_continuous_injective (continuous_upperRightHom.restrict this)
+    (this.restrict_inj.mpr injective_upperRightHom.injOn)
 
 Depends on / 依赖: DiscreteTopology, MapsTo, Set.MapsTo, Set.inter_subset_left, Set.range, SetLike, SetLike.mem_coe, Subgroup, Subgroup.mem_strictPeriods_iff, continuous_upperRightHom, continuous_upperRightHom.restrict, hG.of_subset, injective_upperRightHom, injective_upperRightHom.injOn, inter_subset_left, mem_coe, mem_strictPeriods_iff, of_continuous_injective, of_subset, restrict
 -/
@@ -878,7 +910,7 @@ lemma strictPeriods_eq_zmultiples_one_of_T_mem
   rintro ⟨m, rfl⟩
   refine ⟨ModularGroup.T ^ m, zpow_mem hΓ m, ?_⟩
   ext i j
-  fin_cases i <;> fin_cases j <
+  fin_cases i <;> fin_cases j <;> simp [ModularGroup.coe_T_zpow]
 
 中文:
 引理 strictPeriods_eq_zmultiples_one_of_T_mem
@@ -891,7 +923,7 @@ lemma strictPeriods_eq_zmultiples_one_of_T_mem
   rintro ⟨m, rfl⟩
   refine ⟨ModularGroup.T ^ m, zpow_mem hΓ m, ?_⟩
   ext i j
-  fin_cases i <;> fin_cases j <
+  fin_cases i <;> fin_cases j <;> simp [ModularGroup.coe_T_zpow]
 
 Depends on / 依赖: ModularGroup, ModularGroup.T, ModularGroup.coe_T_zpow, Subgroup, Subgroup.mem_map, Units.ext_iff, coe_T_zpow, ext_iff, fin_cases, mapGL_coe_matrix, map_apply_coe, mem_map, mem_strictPeriods_iff, zpow_mem
 -/
@@ -1050,7 +1082,9 @@ lemma strictWidthInfty_eq_one_of_T_mem
     -- In fact the image of `Γ` in `GL (Fin 2) ℝ` is itself discrete, but this is quicker:
     rw [hsp]
     infer_instance
-  rw [strictPeriods_eq_zmultiples_str
+  rw [strictPeriods_eq_zmultiples_strictWidthInfty]; rw [Eq.comm]; rw [AddSubgroup.zmultiples_eq_zmultiples_iff (not_isOfFinAddOrder_of_isAddTorsionFree one_ne_zero)]
+    at hsp
+  grind [strictWidthInfty_nonneg]
 
 中文:
 引理 strictWidthInfty_eq_one_of_T_mem
@@ -1061,7 +1095,9 @@ lemma strictWidthInfty_eq_one_of_T_mem
     -- In fact the image of `Γ` in `GL (Fin 2) ℝ` is itself discrete, but this is quicker:
     rw [hsp]
     infer_instance
-  rw [strictPeriods_eq_zmultiples_str
+  rw [strictPeriods_eq_zmultiples_strictWidthInfty]; rw [Eq.comm]; rw [AddSubgroup.zmultiples_eq_zmultiples_iff (not_isOfFinAddOrder_of_isAddTorsionFree one_ne_zero)]
+    at hsp
+  grind [strictWidthInfty_nonneg]
 
 Depends on / 依赖: DiscreteTopology, Subgroup, strictPeriods, strictPeriods_eq_zmultiples_one_of_T_mem
 -/
@@ -1205,7 +1241,21 @@ lemma strictWidthInfty_pos_iff
     · rw [GeneralLinearGroup.isParabolic_iff_of_upperTriangular (by simp)]
       simpa using h.ne'
     · simp [smul_infty_eq_self_iff]
-  · -- Hard implication: if `∞` is a cusp, show the 
+  · -- Hard implication: if `∞` is a cusp, show the strict width is positive.
+    rintro ⟨g, hgg, hgp, hgi⟩
+    apply 𝒢.strictWidthInfty_nonneg.lt_of_ne'
+    rw [← AddSubgroup.zmultiples_ne_bot]
+    simp only [AddSubgroup.ne_bot_iff_exists_ne_zero, Subtype.exists, Ne, AddSubgroup.mk_eq_zero,
+      exists_prop, and_comm, ← strictPeriods_eq_zmultiples_strictWidthInfty, mem_strictPeriods_iff]
+    -- We have some `g ∈ 𝒢` which is parabolic and fixes `∞`. So `g = ±[1, x; 0, 1]` some `x ≠ 0`.
+    rw [smul_infty_eq_self_iff] at hgi
+    rw [Subgroup.HasDetPlusMinusOne.isParabolic_iff_of_upperTriangular hgg hgi] at hgp
+    rcases hgp with ⟨x, hx, rfl⟩ | ⟨x, hx, rfl⟩
+    · -- If `g = [1, x; 0, 1]`, we're done
+      exact ⟨x, hx, hgg⟩
+    · -- If `g = -[1, x; 0, 1]` then `g ^ 2 = [1, 2 * x; 0, 1]`.
+      exact ⟨2 • x, by grind,
+        by simpa only [AddChar.map_nsmul_eq_pow, neg_sq] using pow_mem hgg 2⟩
 
 中文:
 引理 strictWidthInfty_pos_iff
@@ -1216,7 +1266,21 @@ lemma strictWidthInfty_pos_iff
     · rw [GeneralLinearGroup.isParabolic_iff_of_upperTriangular (by simp)]
       simpa using h.ne'
     · simp [smul_infty_eq_self_iff]
-  · -- Hard implication: if `∞` is a cusp, show the 
+  · -- Hard implication: if `∞` is a cusp, show the strict width is positive.
+    rintro ⟨g, hgg, hgp, hgi⟩
+    apply 𝒢.strictWidthInfty_nonneg.lt_of_ne'
+    rw [← AddSubgroup.zmultiples_ne_bot]
+    simp only [AddSubgroup.ne_bot_iff_exists_ne_zero, Subtype.exists, Ne, AddSubgroup.mk_eq_zero,
+      exists_prop, and_comm, ← strictPeriods_eq_zmultiples_strictWidthInfty, mem_strictPeriods_iff]
+    -- We have some `g ∈ 𝒢` which is parabolic and fixes `∞`. So `g = ±[1, x; 0, 1]` some `x ≠ 0`.
+    rw [smul_infty_eq_self_iff] at hgi
+    rw [Subgroup.HasDetPlusMinusOne.isParabolic_iff_of_upperTriangular hgg hgi] at hgp
+    rcases hgp with ⟨x, hx, rfl⟩ | ⟨x, hx, rfl⟩
+    · -- If `g = [1, x; 0, 1]`, we're done
+      exact ⟨x, hx, hgg⟩
+    · -- If `g = -[1, x; 0, 1]` then `g ^ 2 = [1, 2 * x; 0, 1]`.
+      exact ⟨2 • x, by grind,
+        by simpa only [AddChar.map_nsmul_eq_pow, neg_sq] using pow_mem hgg 2⟩
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.mk_eq_z, AddSubgroup.ne_bot_iff_exists_ne_zero, AddSubgroup.zmultiples_ne_bot, GeneralLinearGroup, GeneralLinearGroup.isParabolic_iff_of_upperTriangular, Subtype, Subtype.exists, h.ne, implication, isParabolic_iff_of_upperTriangular, lt_of_ne, mem_strictPeriods_iff, mem_strictPeriods_iff.mpr, mk_eq_z, ne_bot_iff_exists_ne_zero, positive, smul_infty_eq_self_iff, strict, strictWidthInfty_mem_strictPeriods
 -/
@@ -1464,7 +1528,13 @@ lemma strictPeriods_Gamma
   constructor
   · rintro ⟨g, ⟨-, hg, -, -⟩, hx⟩
     rw [show x = g 0 1 by simpa using congr_arg (· 0 1) hx.symm]
-    apply AddS
+    apply AddSubgroup.mem_map_of_mem
+    rwa [Int.mem_zmultiples_iff, ← ZMod.intCast_zmod_eq_zero_iff_dvd]
+  · simp only [AddSubgroup.mem_map, AddSubgroup.mem_zmultiples_iff, existsAndEq, true_and,
+      Units.ext_iff, mapGL_coe_matrix, map_apply_coe, forall_exists_index]
+    refine fun a ha => ⟨ModularGroup.T ^ (a * N), by simp [ModularGroup.coe_T_zpow], ?_⟩
+    ext i j
+    fin_cases i <;> fin_cases j <;> simp [ModularGroup.coe_T_zpow, ← ha]
 
 中文:
 引理 strictPeriods_Gamma
@@ -1476,7 +1546,13 @@ lemma strictPeriods_Gamma
   constructor
   · rintro ⟨g, ⟨-, hg, -, -⟩, hx⟩
     rw [show x = g 0 1 by simpa using congr_arg (· 0 1) hx.symm]
-    apply AddS
+    apply AddSubgroup.mem_map_of_mem
+    rwa [Int.mem_zmultiples_iff, ← ZMod.intCast_zmod_eq_zero_iff_dvd]
+  · simp only [AddSubgroup.mem_map, AddSubgroup.mem_zmultiples_iff, existsAndEq, true_and,
+      Units.ext_iff, mapGL_coe_matrix, map_apply_coe, forall_exists_index]
+    refine fun a ha => ⟨ModularGroup.T ^ (a * N), by simp [ModularGroup.coe_T_zpow], ?_⟩
+    ext i j
+    fin_cases i <;> fin_cases j <;> simp [ModularGroup.coe_T_zpow, ← ha]
 -/
 @[simp] lemma strictPeriods_Gamma (N : Nat) :
     strictPeriods (Gamma N : Subgroup (GL (Fin 2) Real)) = AddSubgroup.zmultiples ↑N := by

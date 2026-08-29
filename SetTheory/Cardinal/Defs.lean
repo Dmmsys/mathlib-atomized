@@ -1944,7 +1944,8 @@ theorem lift_power_sum
   apply mk_congr
   refine (Equiv.piCurry fun _ _ => ULift α).trans ?_
   refine Equiv.piCongrRight fun b => ?_
-  refine (Equiv.arrowCongr outMkEquiv
+  refine (Equiv.arrowCongr outMkEquiv Equiv.ulift).trans ?_
+  exact outMkEquiv.symm
 
 中文:
 定理 lift_power_sum
@@ -1956,7 +1957,8 @@ theorem lift_power_sum
   apply mk_congr
   refine (Equiv.piCurry fun _ _ => ULift α).trans ?_
   refine Equiv.piCongrRight fun b => ?_
-  refine (Equiv.arrowCongr outMkEquiv
+  refine (Equiv.arrowCongr outMkEquiv Equiv.ulift).trans ?_
+  exact outMkEquiv.symm
 
 Depends on / 依赖: Cardinal, Cardinal.inductionOn, Equiv.arrowCongr, Equiv.piCongrRight, Equiv.piCurry, Equiv.ulift, arrowCongr, inductionOn, induction_on_pi, mk_congr, mk_uLift, outMkEquiv, outMkEquiv.symm, piCongrRight, piCurry, power_def, simp_rw
 -/

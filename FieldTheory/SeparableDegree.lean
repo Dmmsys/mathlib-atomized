@@ -209,7 +209,10 @@ definition embEquivOfEquiv
     constructor
     intro x
     have h := isAlgebraic_algebraMap (R := E) (A := K) (i.symm.toAlgHom x)
-    rw [show forall y : E]; rw [(algebraMap E K) y = i.toAlgHom
+    rw [show forall y : E]; rw [(algebraMap E K) y = i.toAlgHom y from fun y => rfl] at h
+    simpa only [AlgEquiv.coe_toAlgHom, AlgEquiv.apply_symm_apply] using h
+  apply AlgEquiv.restrictScalars (R := F) (S := E)
+  exact IsAlgClosure.equivOfAlgebraic E K (AlgebraicClosure K) (AlgebraicClosure E)
 
 中文:
 定义 embEquivOfEquiv
@@ -220,7 +223,10 @@ definition embEquivOfEquiv
     constructor
     intro x
     have h := isAlgebraic_algebraMap (R := E) (A := K) (i.symm.toAlgHom x)
-    rw [show forall y : E]; rw [(algebraMap E K) y = i.toAlgHom
+    rw [show forall y : E]; rw [(algebraMap E K) y = i.toAlgHom y from fun y => rfl] at h
+    simpa only [AlgEquiv.coe_toAlgHom, AlgEquiv.apply_symm_apply] using h
+  apply AlgEquiv.restrictScalars (R := F) (S := E)
+  exact IsAlgClosure.equivOfAlgebraic E K (AlgebraicClosure K) (AlgebraicClosure E)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.apply_symm_apply, AlgEquiv.arrowCongr, AlgEquiv.coe_toAlgHom, AlgEquiv.restrictScalars, AlgEquiv.symm, Algebra, Algebra.IsAlgebraic, AlgebraicClo, AlgebraicClosure, IsAlgClosure, IsAlgClosure.equivOfAlgebraic, IsAlgebraic, algebraMap, apply_symm_apply, arrowCongr, coe_toAlgHom, equivOfAlgebraic, i.symm.toAlgHom, i.toAlgHom
 -/
@@ -405,7 +411,8 @@ definition embEquivOfAdjoinSplits
     (hS ▸ isAlgebraic_adjoin (S := S) fun x hx => (hK x hx).1)
   have halg := (topEquiv (F := F) (E := E)).isAlgebraic
 Classical.choice Function.Embedding.antisymm
-    (halg.algHomEmbeddingOfSplits (fun _ => splits_of_mem_adjoin F E (S := S
+    (halg.algHomEmbeddingOfSplits (fun _ => splits_of_mem_adjoin F E (S := S) hK (hS ▸ mem_top)) _)
+    (halg.algHomEmbeddingOfSplits (fun _ => IsAlgClosed.splits _) _)
 
 中文:
 定义 embEquivOfAdjoinSplits
@@ -414,7 +421,8 @@ Classical.choice Function.Embedding.antisymm
     (hS ▸ isAlgebraic_adjoin (S := S) fun x hx => (hK x hx).1)
   have halg := (topEquiv (F := F) (E := E)).isAlgebraic
 Classical.choice Function.Embedding.antisymm
-    (halg.algHomEmbeddingOfSplits (fun _ => splits_of_mem_adjoin F E (S := S
+    (halg.algHomEmbeddingOfSplits (fun _ => splits_of_mem_adjoin F E (S := S) hK (hS ▸ mem_top)) _)
+    (halg.algHomEmbeddingOfSplits (fun _ => IsAlgClosed.splits _) _)
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic, Classical, Classical.choice, Embedding, Function, Function.Embedding.antisymm, IntermediateField, IsAlgClosed, IsAlgClosed.splits, IsAlgebraic, algHomEmbeddingOfSplits, antisymm, choice, halg.algHomEmbeddingOfSplits, isAlgebraic, isAlgebraic_adjoin, mem_top, splits, splits_of_mem_adjoin
 -/
@@ -500,7 +508,10 @@ definition embProdEmbOfIsAlgebraic
       @AlgHom E K _ _ _ _ _ f.toRingHom.toAlgebra ≃ Emb E K := fun f =>
     (@embEquivOfIsAlgClosed E K _ _ _ _ _ f.toRingHom.toAlgebra).symm
   (algHomEquivSigma (A := F) (B := E) (C := K) (D := AlgebraicClosure K) |>.trans
-.trans Equiv.prodCongrLeft (
+.trans Equiv.prodCongrLeft (Equiv.sigmaEquivProdOfEquiv e)
+fun _ : Emb E K => AlgEquiv.arrowCongr (@AlgEquiv.refl F E _ _ _)
+        (IsAlgClosure.equivOfAlgebraic E K (AlgebraicClosure K)
+          (AlgebraicClosure E)).restrictScalars F).symm
 
 中文:
 定义 embProdEmbOfIsAlgebraic
@@ -509,7 +520,10 @@ definition embProdEmbOfIsAlgebraic
       @AlgHom E K _ _ _ _ _ f.toRingHom.toAlgebra ≃ Emb E K := fun f =>
     (@embEquivOfIsAlgClosed E K _ _ _ _ _ f.toRingHom.toAlgebra).symm
   (algHomEquivSigma (A := F) (B := E) (C := K) (D := AlgebraicClosure K) |>.trans
-.trans Equiv.prodCongrLeft (
+.trans Equiv.prodCongrLeft (Equiv.sigmaEquivProdOfEquiv e)
+fun _ : Emb E K => AlgEquiv.arrowCongr (@AlgEquiv.refl F E _ _ _)
+        (IsAlgClosure.equivOfAlgebraic E K (AlgebraicClosure K)
+          (AlgebraicClosure E)).restrictScalars F).symm
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.arrowCongr, AlgEquiv.refl, AlgHom, AlgebraicClosure, Equiv.prodCongrLeft, Equiv.sigmaEquivProdOfEquiv, IsAlgClosure, IsAlgClosure.equivOfAlgebraic, algHomEquivSigma, arrowCongr, embEquivOfIsAlgClosed, equivOfAlgebraic, f.toRingHom.toAlgebra, prodCongrLeft, restrictScalars, sigmaEquivProdOfEquiv, toAlgebra, toRingHom
 -/
@@ -536,7 +550,21 @@ instance infinite_emb_of_transcendental
   rw [← (embProdEmbOfIsAlgebraic F (adjoin F (Set.range x)) E).infinite_iff]
   refine @Prod.infinite_of_left _ _ ?_ _
   rw [← (embEquivOfEquiv _ _ _ hx.1.aevalEquivField).infinite_iff]
-  obtain ⟨i⟩ := hx.nonemp
+  obtain ⟨i⟩ := hx.nonempty_iff_transcendental.2 H
+  let K := FractionRing (MvPolynomial ι F)
+  let i1 := IsScalarTower.toAlgHom F (MvPolynomial ι F) (AlgebraicClosure K)
+  have hi1 : Function.Injective i1 := by
+    rw [IsScalarTower.coe_toAlgHom']; rw [IsScalarTower.algebraMap_eq _ K]
+    exact (algebraMap K (AlgebraicClosure K)).injective.comp (IsFractionRing.injective _ _)
+  let f (n : Nat) : Emb F K := IsFractionRing.liftAlgHom
+(g := i1.comp <| MvPolynomial.aeval fun i : ι => MvPolynomial.X i ^ (n + 1)) hi1.comp by
+      simpa [algebraicIndependent_iff_injective_aeval] using
+        MvPolynomial.algebraicIndependent_polynomial_aeval_X _
+          fun i : ι => (Polynomial.transcendental_X F).pow n.succ_pos
+  refine Infinite.of_injective f fun m n h => ?_
+replace h : (MvPolynomial.X i) ^ (m + 1) = (MvPolynomial.X i) ^ (n + 1) := hi1 by
+    simpa [f, -map_pow] using congr($h (algebraMap _ K (MvPolynomial.X (R := F) i)))
+  simpa using congr(MvPolynomial.totalDegree $h)
 
 中文:
 实例 infinite_emb_of_transcendental
@@ -547,7 +575,21 @@ instance infinite_emb_of_transcendental
   rw [← (embProdEmbOfIsAlgebraic F (adjoin F (Set.range x)) E).infinite_iff]
   refine @Prod.infinite_of_left _ _ ?_ _
   rw [← (embEquivOfEquiv _ _ _ hx.1.aevalEquivField).infinite_iff]
-  obtain ⟨i⟩ := hx.nonemp
+  obtain ⟨i⟩ := hx.nonempty_iff_transcendental.2 H
+  let K := FractionRing (MvPolynomial ι F)
+  let i1 := IsScalarTower.toAlgHom F (MvPolynomial ι F) (AlgebraicClosure K)
+  have hi1 : Function.Injective i1 := by
+    rw [IsScalarTower.coe_toAlgHom']; rw [IsScalarTower.algebraMap_eq _ K]
+    exact (algebraMap K (AlgebraicClosure K)).injective.comp (IsFractionRing.injective _ _)
+  let f (n : Nat) : Emb F K := IsFractionRing.liftAlgHom
+(g := i1.comp <| MvPolynomial.aeval fun i : ι => MvPolynomial.X i ^ (n + 1)) hi1.comp by
+      simpa [algebraicIndependent_iff_injective_aeval] using
+        MvPolynomial.algebraicIndependent_polynomial_aeval_X _
+          fun i : ι => (Polynomial.transcendental_X F).pow n.succ_pos
+  refine Infinite.of_injective f fun m n h => ?_
+replace h : (MvPolynomial.X i) ^ (m + 1) = (MvPolynomial.X i) ^ (n + 1) := hi1 by
+    simpa [f, -map_pow] using congr($h (algebraMap _ K (MvPolynomial.X (R := F) i)))
+  simpa using congr(MvPolynomial.totalDegree $h)
 
 Depends on / 依赖: AlgebraicClosure, FractionRing, Function, Function.Injective, Injective, IsScalarTower, IsScalarTower.coe_toAlgHom, IsScalarTower.toAlgHom, MvPolynomial, Prod.infinite_of_left, Set.range, adjoin, aevalEquivField, coe_toAlgHom, embEquivOfEquiv, embProdEmbOfIsAlgebraic, exists_isTranscendenceBasis, hx.isAlgebraic_field, hx.nonempty_iff_transcendental, infinite_iff
 -/
@@ -829,7 +871,7 @@ theorem natSepDegree_ne_zero
   use rootOfSplits (SplittingField.splits f) (degree_ne_of_natDegree_ne (by rwa [natDegree_map]))
   classical
   rw [Multiset.mem_toFinset]; rw [mem_aroots]
-  exact ⟨ne_of_apply_ne _ h, by 
+  exact ⟨ne_of_apply_ne _ h, by simp only [← eval_map_algebraMap, eval_rootOfSplits]⟩
 
 中文:
 定理 natSepDegree_ne_zero
@@ -840,7 +882,7 @@ theorem natSepDegree_ne_zero
   use rootOfSplits (SplittingField.splits f) (degree_ne_of_natDegree_ne (by rwa [natDegree_map]))
   classical
   rw [Multiset.mem_toFinset]; rw [mem_aroots]
-  exact ⟨ne_of_apply_ne _ h, by 
+  exact ⟨ne_of_apply_ne _ h, by simp only [← eval_map_algebraMap, eval_rootOfSplits]⟩
 
 Depends on / 依赖: Finset, Finset.card_eq_zero, Finset.nonempty_iff_ne_empty, Multiset, Multiset.mem_toFinset, SplittingField, SplittingField.splits, card_eq_zero, classical, degree_ne_of_natDegree_ne, eval_map_algebraMap, eval_rootOfSplits, mem_aroots, mem_toFinset, natDegree_map, natSepDegree, ne_eq, ne_of_apply_ne, nonempty_iff_ne_empty, rootOfSplits
 -/
@@ -1253,7 +1295,30 @@ theorem natSepDegree_mul_eq_iff
     wlog hf : f = 0 generalizing f g
     · simpa only [mul_comm, add_comm, and_comm,
         isCoprime_comm] using this g f h.symm (h.resolve_left hf)
-    rw [hf]; rw [zero_mul]; rw [natSepDegree_zero]; rw [zero_add]; rw [isCoprime_zero_left]; rw
+    rw [hf]; rw [zero_mul]; rw [natSepDegree_zero]; rw [zero_add]; rw [isCoprime_zero_left]; rw [isUnit_iff]; rw [eq_comm]; rw [natSepDegree_eq_zero_iff]; rw [natDegree_eq_zero]
+    refine ⟨fun ⟨x, h⟩ => ?_, ?_⟩
+    · by_cases hx : x = 0
+      · exact .inl ⟨rfl, by rw [← h, hx, map_zero]⟩
+      exact .inr ⟨x, Ne.isUnit hx, h⟩
+    rintro (⟨-, h⟩ | ⟨x, -, h⟩)
+    · exact ⟨0, by rw [h, map_zero]⟩
+    exact ⟨x, h⟩
+  classical
+  simp_rw [natSepDegree_eq_of_isAlgClosed (AlgebraicClosure F), aroots_mul h, Multiset.toFinset_add,
+    Finset.card_union_eq_card_add_card, Finset.disjoint_iff_ne, Multiset.mem_toFinset, mem_aroots]
+  rw [mul_eq_zero]; rw [not_or] at h
+  refine ⟨fun H => .inr (isCoprime_of_irreducible_dvd (not_and.2 fun _ => h.2)
+    fun u hu ⟨v, hf⟩ ⟨w, hg⟩ => ?_), ?_⟩
+  · obtain ⟨x, hx⟩ := IsAlgClosed.exists_aeval_eq_zero
+      (AlgebraicClosure F) _ (degree_pos_of_irreducible hu).ne'
+    exact H x ⟨h.1, by simpa only [map_mul, hx, zero_mul] using congr(aeval x $hf)⟩
+      x ⟨h.2, by simpa only [map_mul, hx, zero_mul] using congr(aeval x $hg)⟩ rfl
+  rintro (⟨rfl, rfl⟩ | hc)
+  · exact (h.1 rfl).elim
+  rintro x hf _ hg rfl
+  obtain ⟨u, v, hfg⟩ := hc
+  simpa only [map_add, map_mul, map_one, hf.2, hg.2, mul_zero, add_zero,
+zero_ne_one] using congr(aeval x hfg)
 
 中文:
 定理 natSepDegree_mul_eq_iff
@@ -1264,7 +1329,30 @@ theorem natSepDegree_mul_eq_iff
     wlog hf : f = 0 generalizing f g
     · simpa only [mul_comm, add_comm, and_comm,
         isCoprime_comm] using this g f h.symm (h.resolve_left hf)
-    rw [hf]; rw [zero_mul]; rw [natSepDegree_zero]; rw [zero_add]; rw [isCoprime_zero_left]; rw
+    rw [hf]; rw [zero_mul]; rw [natSepDegree_zero]; rw [zero_add]; rw [isCoprime_zero_left]; rw [isUnit_iff]; rw [eq_comm]; rw [natSepDegree_eq_zero_iff]; rw [natDegree_eq_zero]
+    refine ⟨fun ⟨x, h⟩ => ?_, ?_⟩
+    · by_cases hx : x = 0
+      · exact .inl ⟨rfl, by rw [← h, hx, map_zero]⟩
+      exact .inr ⟨x, Ne.isUnit hx, h⟩
+    rintro (⟨-, h⟩ | ⟨x, -, h⟩)
+    · exact ⟨0, by rw [h, map_zero]⟩
+    exact ⟨x, h⟩
+  classical
+  simp_rw [natSepDegree_eq_of_isAlgClosed (AlgebraicClosure F), aroots_mul h, Multiset.toFinset_add,
+    Finset.card_union_eq_card_add_card, Finset.disjoint_iff_ne, Multiset.mem_toFinset, mem_aroots]
+  rw [mul_eq_zero]; rw [not_or] at h
+  refine ⟨fun H => .inr (isCoprime_of_irreducible_dvd (not_and.2 fun _ => h.2)
+    fun u hu ⟨v, hf⟩ ⟨w, hg⟩ => ?_), ?_⟩
+  · obtain ⟨x, hx⟩ := IsAlgClosed.exists_aeval_eq_zero
+      (AlgebraicClosure F) _ (degree_pos_of_irreducible hu).ne'
+    exact H x ⟨h.1, by simpa only [map_mul, hx, zero_mul] using congr(aeval x $hf)⟩
+      x ⟨h.2, by simpa only [map_mul, hx, zero_mul] using congr(aeval x $hg)⟩ rfl
+  rintro (⟨rfl, rfl⟩ | hc)
+  · exact (h.1 rfl).elim
+  rintro x hf _ hg rfl
+  obtain ⟨u, v, hfg⟩ := hc
+  simpa only [map_add, map_mul, map_one, hf.2, hg.2, mul_zero, add_zero,
+zero_ne_one] using congr(aeval x hfg)
 
 Depends on / 依赖: Ne.isUnit, add_comm, and_comm, eq_comm, generalizing, h.resolve_left, h.symm, isCoprime_comm, isCoprime_zero_left, isUnit, isUnit_iff, map_zero, mul_comm, mul_eq_zero, natDegree_eq_zero, natSepDegree_eq_zero_iff, natSepDegree_zero, resolve_left, zero_add, zero_mul
 -/
@@ -1362,7 +1450,7 @@ theorem natSepDegree_expand
   classical
   simpa only [natSepDegree_eq_of_isAlgClosed (AlgebraicClosure F), aroots_def, map_expand,
     Fintype.card_coe] using Fintype.card_eq.2
-      ⟨(f.map (algebraMap F (AlgebraicClosure F))).rootsExpan
+      ⟨(f.map (algebraMap F (AlgebraicClosure F))).rootsExpandPowEquivRoots q n⟩
 
 中文:
 定理 natSepDegree_expand
@@ -1374,7 +1462,7 @@ theorem natSepDegree_expand
   classical
   simpa only [natSepDegree_eq_of_isAlgClosed (AlgebraicClosure F), aroots_def, map_expand,
     Fintype.card_coe] using Fintype.card_eq.2
-      ⟨(f.map (algebraMap F (AlgebraicClosure F))).rootsExpan
+      ⟨(f.map (algebraMap F (AlgebraicClosure F))).rootsExpandPowEquivRoots q n⟩
 
 Depends on / 依赖: AlgebraicClosure, Fact.mk, Fintype, Fintype.card_coe, Fintype.card_eq, algebraMap, aroots_def, card_coe, card_eq, classical, expand_one, f.map, hprime, map_expand, natSepDegree_eq_of_isAlgClosed, one_pow, rootsExpandPowEquivRoots
 -/
@@ -1501,7 +1589,8 @@ theorem natSepDegree_eq_one_iff_of_monic'
     have h2 : g.natDegree = 1 := by
       rwa [natSepDegree_expand _ q, h1.natSepDegree_eq_natDegree] at h
     rw [((monic_expand_iff <| expChar_pow_pos F q n).mp hm).eq_X_add_C h2]
-    exact ⟨n
+    exact ⟨n, -(g.coeff 0), by rw [map_neg, sub_neg_eq_add]⟩
+  rw [h]; rw [natSepDegree_expand _ q]; rw [natSepDegree_X_sub_C]
 
 中文:
 定理 natSepDegree_eq_one_iff_of_monic'
@@ -1512,7 +1601,8 @@ theorem natSepDegree_eq_one_iff_of_monic'
     have h2 : g.natDegree = 1 := by
       rwa [natSepDegree_expand _ q, h1.natSepDegree_eq_natDegree] at h
     rw [((monic_expand_iff <| expChar_pow_pos F q n).mp hm).eq_X_add_C h2]
-    exact ⟨n
+    exact ⟨n, -(g.coeff 0), by rw [map_neg, sub_neg_eq_add]⟩
+  rw [h]; rw [natSepDegree_expand _ q]; rw [natSepDegree_X_sub_C]
 
 Depends on / 依赖: eq_X_add_C, expChar_pow_pos, g.coeff, g.natDegree, h1.natSepDegree_eq_natDegree, hasSeparableContraction, hi.hasSeparableContraction, map_neg, monic_expand_iff, natDegree, natSepDegree_X_sub_C, natSepDegree_eq_natDegree, natSepDegree_expand, sub_neg_eq_add
 -/
@@ -1573,7 +1663,8 @@ theorem eq_X_sub_C_pow_of_natSepDegree_eq_one_of_splits
   have h2 := (natSepDegree_eq_of_splits f (hs.map <| .id F)).symm
   rw [h]; rw [aroots_def]; rw [Algebra.algebraMap_self]; rw [map_id]; rw [Multiset.toFinset_card_eq_one_iff] at h2
   obtain ⟨h2, y, h3⟩ := h2
-  exact ⟨_, y, h2, by rwa [h3, Mult
+  exact ⟨_, y, h2, by rwa [h3, Multiset.map_nsmul, Multiset.map_singleton, Multiset.prod_nsmul,
+    Multiset.prod_singleton] at h1⟩
 
 中文:
 定理 eq_X_sub_C_pow_of_natSepDegree_eq_one_of_splits
@@ -1584,7 +1675,8 @@ theorem eq_X_sub_C_pow_of_natSepDegree_eq_one_of_splits
   have h2 := (natSepDegree_eq_of_splits f (hs.map <| .id F)).symm
   rw [h]; rw [aroots_def]; rw [Algebra.algebraMap_self]; rw [map_id]; rw [Multiset.toFinset_card_eq_one_iff] at h2
   obtain ⟨h2, y, h3⟩ := h2
-  exact ⟨_, y, h2, by rwa [h3, Mult
+  exact ⟨_, y, h2, by rwa [h3, Multiset.map_nsmul, Multiset.map_singleton, Multiset.prod_nsmul,
+    Multiset.prod_singleton] at h1⟩
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_self, Multiset, Multiset.map_nsmul, Multiset.map_singleton, Multiset.prod_nsmul, Multiset.prod_singleton, Multiset.toFinset_card_eq_one_iff, algebraMap_self, aroots_def, classical, eq_prod_roots_of_monic, hs.eq_prod_roots_of_monic, hs.map, map_id, map_nsmul, map_singleton, natSepDegree_eq_of_splits, prod_nsmul, prod_singleton
 -/
@@ -1613,7 +1705,9 @@ theorem eq_X_pow_char_pow_sub_C_of_natSepDegree_eq_one_of_irreducible
     exact ⟨0, y, .inl rfl, hf⟩
   | prime hq =>
     refine ⟨n, y, (em _).imp id fun hn ⟨z, hy⟩ => ?_, hf⟩
-    have := expChar_of_injective_ri
+    have := expChar_of_injective_ringHom (R := F) C_injective q
+    rw [hf]; rw [← Nat.succ_pred hn]; rw [pow_succ]; rw [pow_mul]; rw [← hy]; rw [frobenius_def]; rw [map_pow]; rw [← sub_pow_expChar] at hi
+    exact not_irreducible_pow hq.ne_one hi
 
 中文:
 定理 eq_X_pow_char_pow_sub_C_of_natSepDegree_eq_one_of_irreducible
@@ -1626,7 +1720,9 @@ theorem eq_X_pow_char_pow_sub_C_of_natSepDegree_eq_one_of_irreducible
     exact ⟨0, y, .inl rfl, hf⟩
   | prime hq =>
     refine ⟨n, y, (em _).imp id fun hn ⟨z, hy⟩ => ?_, hf⟩
-    have := expChar_of_injective_ri
+    have := expChar_of_injective_ringHom (R := F) C_injective q
+    rw [hf]; rw [← Nat.succ_pred hn]; rw [pow_succ]; rw [pow_mul]; rw [← hy]; rw [frobenius_def]; rw [map_pow]; rw [← sub_pow_expChar] at hi
+    exact not_irreducible_pow hq.ne_one hi
 
 Depends on / 依赖: C_injective, ExpChar, Nat.succ_pred, expChar_of_injective_ringHom, frobenius_def, hm.natSepDegree_eq_one_iff_of_irreducible, hq.ne_one, map_pow, natSepDegree_eq_one_iff_of_irreducible, ne_one, not_irreducible_pow, one_pow, pow_mul, pow_one, pow_succ, simp_rw, sub_pow_expChar, succ_pred
 -/
@@ -1654,7 +1750,16 @@ theorem eq_X_pow_char_pow_sub_C_pow_of_natSepDegree_eq_one
 obtain ⟨p, hM, hI, hf⟩ := exists_monic_irreducible_factor _ not_isUnit_of_natDegree_pos _
  Nat.pos_of_ne_zero (natSepDegree_ne_zero_iff _).1 (h.symm ▸ Nat.one_ne_zero)
 have hD := (h ▸ natSepDegree_le_of_dvd p f hf hm.ne_zero).antisymm
-Nat.pos_of_ne_zero (natSepDegree_ne_zero_iff _).2 hI.natDegree
+Nat.pos_of_ne_zero (natSepDegree_ne_zero_iff _).2 hI.natDegree_pos.ne'
+  obtain ⟨n, y, H, hp⟩ := hM.eq_X_pow_char_pow_sub_C_of_natSepDegree_eq_one_of_irreducible q hI hD
+  have hF := finiteMultiplicity_of_degree_pos_of_monic (degree_pos_of_irreducible hI) hM hm.ne_zero
+  have hne := (multiplicity_pos_of_dvd hf).ne'
+  refine ⟨_, n, y, hne, H, ?_⟩
+  obtain ⟨c, hf, H⟩ := hF.exists_eq_pow_mul_and_not_dvd
+  rw [hf]; rw [natSepDegree_mul_of_isCoprime _ c <| IsCoprime.pow_left <|
+    (hI.isCoprime_or_dvd c).resolve_right H]; rw [natSepDegree_pow_of_ne_zero _ hne]; rw [hD]; rw [add_eq_left]; rw [natSepDegree_eq_zero_iff] at h
+  simpa only [eq_one_of_monic_natDegree_zero ((hM.pow _).of_mul_monic_left (hf ▸ hm)) h,
+    mul_one, ← hp] using hf
 
 中文:
 定理 eq_X_pow_char_pow_sub_C_pow_of_natSepDegree_eq_one
@@ -1663,7 +1768,16 @@ Nat.pos_of_ne_zero (natSepDegree_ne_zero_iff _).2 hI.natDegree
 obtain ⟨p, hM, hI, hf⟩ := exists_monic_irreducible_factor _ not_isUnit_of_natDegree_pos _
  Nat.pos_of_ne_zero (natSepDegree_ne_zero_iff _).1 (h.symm ▸ Nat.one_ne_zero)
 have hD := (h ▸ natSepDegree_le_of_dvd p f hf hm.ne_zero).antisymm
-Nat.pos_of_ne_zero (natSepDegree_ne_zero_iff _).2 hI.natDegree
+Nat.pos_of_ne_zero (natSepDegree_ne_zero_iff _).2 hI.natDegree_pos.ne'
+  obtain ⟨n, y, H, hp⟩ := hM.eq_X_pow_char_pow_sub_C_of_natSepDegree_eq_one_of_irreducible q hI hD
+  have hF := finiteMultiplicity_of_degree_pos_of_monic (degree_pos_of_irreducible hI) hM hm.ne_zero
+  have hne := (multiplicity_pos_of_dvd hf).ne'
+  refine ⟨_, n, y, hne, H, ?_⟩
+  obtain ⟨c, hf, H⟩ := hF.exists_eq_pow_mul_and_not_dvd
+  rw [hf]; rw [natSepDegree_mul_of_isCoprime _ c <| IsCoprime.pow_left <|
+    (hI.isCoprime_or_dvd c).resolve_right H]; rw [natSepDegree_pow_of_ne_zero _ hne]; rw [hD]; rw [add_eq_left]; rw [natSepDegree_eq_zero_iff] at h
+  simpa only [eq_one_of_monic_natDegree_zero ((hM.pow _).of_mul_monic_left (hf ▸ hm)) h,
+    mul_one, ← hp] using hf
 
 Depends on / 依赖: Nat.one_ne_zero, Nat.pos_of_ne_zero, antisymm, degree_pos_of_irreducible, eq_X_pow_char_pow_sub_C_of_natSepDegree_eq_one_of_irreducible, exists_monic_irreducible_factor, finiteMultiplicity_of_degree_pos_of_monic, h.symm, hI.natDegree_pos.ne, hM.eq_X_pow_char_pow_sub_C_of_natSepDegree_eq_one_of_irreducible, hm.ne_ze, hm.ne_zero, natDegree_pos, natSepDegree_le_of_dvd, natSepDegree_ne_zero_iff, ne_ze, ne_zero, not_isUnit_of_natDegree_pos, one_ne_zero, pos_of_ne_zero
 -/
@@ -1735,7 +1849,7 @@ theorem natSepDegree_eq_one_iff_eq_expand_X_sub_C
       simp only [eq_zero h', natSepDegree_zero, zero_ne_one] at h
     exact (minpoly.irreducible halg).natSepDegree_eq_one_iff_of_monic' q
 .1 h (minpoly.monic halg)
-  rw [h]; rw [natSepDegree_expa
+  rw [h]; rw [natSepDegree_expand _ q]; rw [natSepDegree_X_sub_C]
 
 中文:
 定理 natSepDegree_eq_one_iff_eq_expand_X_sub_C
@@ -1746,7 +1860,7 @@ theorem natSepDegree_eq_one_iff_eq_expand_X_sub_C
       simp only [eq_zero h', natSepDegree_zero, zero_ne_one] at h
     exact (minpoly.irreducible halg).natSepDegree_eq_one_iff_of_monic' q
 .1 h (minpoly.monic halg)
-  rw [h]; rw [natSepDegree_expa
+  rw [h]; rw [natSepDegree_expand _ q]; rw [natSepDegree_X_sub_C]
 
 Depends on / 依赖: IsIntegral, eq_zero, irreducible, minpoly, minpoly.irreducible, minpoly.monic, natSepDegree_X_sub_C, natSepDegree_eq_one_iff_of_monic, natSepDegree_expand, natSepDegree_zero, zero_ne_one
 -/
@@ -1791,6 +1905,12 @@ theorem natSepDegree_eq_one_iff_pow_mem
   · simp_rw [RingHom.mem_range, map_sub, map_pow, aeval_C, aeval_X, sub_eq_zero, eq_comm]
   refine ⟨fun h => ?_, fun ⟨n, y, h⟩ => ?_⟩
   · obtain ⟨n, y, hx⟩ := (minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C q).1 h
+    exact ⟨n, y, hx ▸ aeval F x⟩
+  have hnezero := X_pow_sub_C_ne_zero (expChar_pow_pos F q n) y
+  refine ((natSepDegree_le_of_dvd _ _ (minpoly.dvd F x h) hnezero).trans_eq <|
+    natSepDegree_X_pow_char_pow_sub_C q n y).antisymm ?_
+  rw [Nat.one_le_iff_ne_zero]; rw [natSepDegree_ne_zero_iff]; rw [← Nat.one_le_iff_ne_zero]
+exact minpoly.natDegree_pos IsAlgebraic.isIntegral ⟨_, hnezero, h⟩
 
 中文:
 定理 natSepDegree_eq_one_iff_pow_mem
@@ -1800,6 +1920,12 @@ theorem natSepDegree_eq_one_iff_pow_mem
   · simp_rw [RingHom.mem_range, map_sub, map_pow, aeval_C, aeval_X, sub_eq_zero, eq_comm]
   refine ⟨fun h => ?_, fun ⟨n, y, h⟩ => ?_⟩
   · obtain ⟨n, y, hx⟩ := (minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C q).1 h
+    exact ⟨n, y, hx ▸ aeval F x⟩
+  have hnezero := X_pow_sub_C_ne_zero (expChar_pow_pos F q n) y
+  refine ((natSepDegree_le_of_dvd _ _ (minpoly.dvd F x h) hnezero).trans_eq <|
+    natSepDegree_X_pow_char_pow_sub_C q n y).antisymm ?_
+  rw [Nat.one_le_iff_ne_zero]; rw [natSepDegree_ne_zero_iff]; rw [← Nat.one_le_iff_ne_zero]
+exact minpoly.natDegree_pos IsAlgebraic.isIntegral ⟨_, hnezero, h⟩
 
 Depends on / 依赖: Polynomial, Polynomial.aeval, RingHom, RingHom.mem_range, X_pow_sub_C_ne_zero, aeval_C, aeval_X, convert_to, eq_comm, expChar_pow_pos, hnezero, map_pow, map_sub, mem_range, minpoly, minpoly.dvd, minpoly.natSepDegree_eq_one_iff_eq_X_pow_sub_C, natSepDegree_X_pow_char_pow_sub_C, natSepDegree_eq_one_iff_eq_X_pow_sub_C, natSepDegree_le_of_dvd
 -/
@@ -1827,7 +1953,14 @@ theorem natSepDegree_eq_one_iff_eq_X_sub_C_pow
   have := expChar_of_injective_ringHom (C_injective (R := E)) q
   refine ⟨fun h => ?_, fun ⟨n, h⟩ => (natSepDegree_eq_one_iff_pow_mem q).2 ?_⟩
   · obtain ⟨n, y, h⟩ := (natSepDegree_eq_one_iff_eq_X_pow_sub_C q).1 h
-    have hx 
+    have hx := congr_arg (Polynomial.aeval x) h.symm
+    rw [minpoly.aeval]; rw [map_sub]; rw [map_pow]; rw [aeval_X]; rw [aeval_C]; rw [sub_eq_zero]; rw [eq_comm] at hx
+    use n
+    rw [h]; rw [Polynomial.map_sub]; rw [Polynomial.map_pow]; rw [map_X]; rw [map_C]; rw [hx]; rw [map_pow]; rw [← sub_pow_expChar_pow_of_commute _ _ (commute_X _)]
+  apply_fun constantCoeff at h
+  simp_rw [map_pow, map_sub, constantCoeff_apply, coeff_map, coeff_X_zero, coeff_C_zero] at h
+  rw [zero_sub]; rw [neg_pow]; rw [neg_one_pow_expChar_pow] at h
+  exact ⟨n, -(minpoly F x).coeff 0, by rw [map_neg, h, neg_mul, one_mul, neg_neg]⟩
 
 中文:
 定理 natSepDegree_eq_one_iff_eq_X_sub_C_pow
@@ -1837,7 +1970,14 @@ theorem natSepDegree_eq_one_iff_eq_X_sub_C_pow
   have := expChar_of_injective_ringHom (C_injective (R := E)) q
   refine ⟨fun h => ?_, fun ⟨n, h⟩ => (natSepDegree_eq_one_iff_pow_mem q).2 ?_⟩
   · obtain ⟨n, y, h⟩ := (natSepDegree_eq_one_iff_eq_X_pow_sub_C q).1 h
-    have hx 
+    have hx := congr_arg (Polynomial.aeval x) h.symm
+    rw [minpoly.aeval]; rw [map_sub]; rw [map_pow]; rw [aeval_X]; rw [aeval_C]; rw [sub_eq_zero]; rw [eq_comm] at hx
+    use n
+    rw [h]; rw [Polynomial.map_sub]; rw [Polynomial.map_pow]; rw [map_X]; rw [map_C]; rw [hx]; rw [map_pow]; rw [← sub_pow_expChar_pow_of_commute _ _ (commute_X _)]
+  apply_fun constantCoeff at h
+  simp_rw [map_pow, map_sub, constantCoeff_apply, coeff_map, coeff_X_zero, coeff_C_zero] at h
+  rw [zero_sub]; rw [neg_pow]; rw [neg_one_pow_expChar_pow] at h
+  exact ⟨n, -(minpoly F x).coeff 0, by rw [map_neg, h, neg_mul, one_mul, neg_neg]⟩
 
 Depends on / 依赖: C_injective, Polynomial, Polynomial.aeval, Polynomial.map_, Polynomial.map_sub, aeval_C, aeval_X, algebraMap, congr_arg, eq_comm, expChar_of_injective_algebraMap, expChar_of_injective_ringHom, h.symm, injective, map_, map_pow, map_sub, minpoly, minpoly.aeval, natSepDegree_eq_one_iff_eq_X_pow_sub_C
 -/
@@ -1871,7 +2011,7 @@ theorem finSepDegree_adjoin_simple_eq_natSepDegree
     (algHomAdjoinIntegralEquiv F (K := AlgebraicClosure F⟮α⟯) halg.isIntegral)
   classical
   rw [this]; rw [Nat.card_eq_fintype_card]; rw [natSepDegree_eq_of_isAlgClosed (E := AlgebraicClosure F⟮α⟯)]; rw [← Fintype.card_coe]
-  simp_rw [Multiset.m
+  simp_rw [Multiset.mem_toFinset]
 
 中文:
 定理 finSepDegree_adjoin_simple_eq_natSepDegree
@@ -1881,7 +2021,7 @@ theorem finSepDegree_adjoin_simple_eq_natSepDegree
     (algHomAdjoinIntegralEquiv F (K := AlgebraicClosure F⟮α⟯) halg.isIntegral)
   classical
   rw [this]; rw [Nat.card_eq_fintype_card]; rw [natSepDegree_eq_of_isAlgClosed (E := AlgebraicClosure F⟮α⟯)]; rw [← Fintype.card_coe]
-  simp_rw [Multiset.m
+  simp_rw [Multiset.mem_toFinset]
 
 Depends on / 依赖: AlgebraicClosure, Fintype, Fintype.card_coe, Multiset, Multiset.mem_toFinset, Nat.card_congr, Nat.card_eq_fintype_card, algHomAdjoinIntegralEquiv, card_coe, card_congr, card_eq_fintype_card, classical, finSepDegree, halg.isIntegral, isIntegral, mem_toFinset, natSepDegree_eq_of_isAlgClosed, simp_rw
 -/
@@ -1906,7 +2046,9 @@ theorem finSepDegree_adjoin_simple_dvd_finrank
   · rw [finSepDegree_adjoin_simple_eq_natSepDegree F E halg, adjoin.finrank halg.isIntegral]
     exact (minpoly.irreducible halg.isIntegral).natSepDegree_dvd_natDegree
   have : finrank F F⟮α⟯ = 0 := finrank_of_infinite_dimensional fun _ =>
-    halg ((AdjoinSimple
+    halg ((AdjoinSimple.isIntegral_gen F α).1 (IsIntegral.of_finite F _)).isAlgebraic
+  rw [this]
+  exact dvd_zero _
 
 中文:
 定理 finSepDegree_adjoin_simple_dvd_finrank
@@ -1916,7 +2058,9 @@ theorem finSepDegree_adjoin_simple_dvd_finrank
   · rw [finSepDegree_adjoin_simple_eq_natSepDegree F E halg, adjoin.finrank halg.isIntegral]
     exact (minpoly.irreducible halg.isIntegral).natSepDegree_dvd_natDegree
   have : finrank F F⟮α⟯ = 0 := finrank_of_infinite_dimensional fun _ =>
-    halg ((AdjoinSimple
+    halg ((AdjoinSimple.isIntegral_gen F α).1 (IsIntegral.of_finite F _)).isAlgebraic
+  rw [this]
+  exact dvd_zero _
 -/
 private theorem finSepDegree_adjoin_simple_dvd_finrank (α : E) :
     finSepDegree F F⟮α⟯ ∣ finrank F F⟮α⟯ := by
@@ -1988,7 +2132,12 @@ theorem finSepDegree_dvd_finrank
   · rw [← finSepDegree_top F, ← finrank_top F E]
     refine induction_on_adjoin (fun K : IntermediateField F E => finSepDegree F K ∣ finrank F K)
       (by simp_rw [finSepDegree_bot, IntermediateField.finrank_bot, one_dvd]) (fun L x h => ?_) ⊤
-have hdvd := m
+have hdvd := mul_dvd_mul h finSepDegree_adjoin_simple_dvd_finrank L E x
+    set M := L⟮x⟯
+    rwa [finSepDegree_mul_finSepDegree_of_isAlgebraic F L M,
+      Module.finrank_mul_finrank F L M] at hdvd
+  rw [finrank_of_infinite_dimensional hfd]
+  exact dvd_zero _
 
 中文:
 定理 finSepDegree_dvd_finrank
@@ -1998,7 +2147,12 @@ have hdvd := m
   · rw [← finSepDegree_top F, ← finrank_top F E]
     refine induction_on_adjoin (fun K : IntermediateField F E => finSepDegree F K ∣ finrank F K)
       (by simp_rw [finSepDegree_bot, IntermediateField.finrank_bot, one_dvd]) (fun L x h => ?_) ⊤
-have hdvd := m
+have hdvd := mul_dvd_mul h finSepDegree_adjoin_simple_dvd_finrank L E x
+    set M := L⟮x⟯
+    rwa [finSepDegree_mul_finSepDegree_of_isAlgebraic F L M,
+      Module.finrank_mul_finrank F L M] at hdvd
+  rw [finrank_of_infinite_dimensional hfd]
+  exact dvd_zero _
 
 Depends on / 依赖: FiniteDimensional, IntermediateField, IntermediateField.finrank_bot, Module, Module.finrank_mul_finrank, finSepDegree, finSepDegree_adjoin_simple_dvd_finrank, finSepDegree_bot, finSepDegree_mul_finSepDegree_of_isAlgebraic, finSepDegree_top, finrank, finrank_bot, finrank_mul_finrank, finrank_of_infinite_dimensional, finrank_top, induction_on_adjoin, mul_dvd_mul, one_dvd, simp_rw
 -/
@@ -2046,7 +2200,20 @@ theorem finSepDegree_eq_finrank_of_isSeparable
     obtain ⟨L, h, h'⟩ := exists_lt_finrank_of_infinite_dimensional hfd (finSepDegree F E)
     have hd := finSepDegree_mul_finSepDegree_of_isAlgebraic F L E
     rw [H L h] at hd
-    by_cases hd' :
+    by_cases hd' : finSepDegree L E = 0
+    · rw [← hd, hd', mul_zero]
+    linarith only [h', hd, Nat.le_mul_of_pos_right (finrank F L) (Nat.pos_of_ne_zero hd')]
+  rw [← finSepDegree_top F]; rw [← finrank_top F E]
+  refine induction_on_adjoin (fun K : IntermediateField F E => finSepDegree F K = finrank F K)
+    (by simp_rw [finSepDegree_bot, IntermediateField.finrank_bot]) (fun L x h => ?_) ⊤
+have heq : _ * _ = _ * _ := congr_arg₂ (· * ·) h
+(finSepDegree_adjoin_simple_eq_finrank_iff L E x (IsAlgebraic.of_finite L x)).2
+      IsSeparable.tower_top L (Algebra.IsSeparable.isSeparable F x)
+  set M := L⟮x⟯
+  rwa [finSepDegree_mul_finSepDegree_of_isAlgebraic F L M,
+    Module.finrank_mul_finrank F L M] at heq
+
+alias Algebra.IsSeparable.finSepDegree_eq := finSepDegree_eq_finrank_of_isSeparable
 
 中文:
 定理 finSepDegree_eq_finrank_of_isSeparable
@@ -2057,7 +2224,20 @@ theorem finSepDegree_eq_finrank_of_isSeparable
     obtain ⟨L, h, h'⟩ := exists_lt_finrank_of_infinite_dimensional hfd (finSepDegree F E)
     have hd := finSepDegree_mul_finSepDegree_of_isAlgebraic F L E
     rw [H L h] at hd
-    by_cases hd' :
+    by_cases hd' : finSepDegree L E = 0
+    · rw [← hd, hd', mul_zero]
+    linarith only [h', hd, Nat.le_mul_of_pos_right (finrank F L) (Nat.pos_of_ne_zero hd')]
+  rw [← finSepDegree_top F]; rw [← finrank_top F E]
+  refine induction_on_adjoin (fun K : IntermediateField F E => finSepDegree F K = finrank F K)
+    (by simp_rw [finSepDegree_bot, IntermediateField.finrank_bot]) (fun L x h => ?_) ⊤
+have heq : _ * _ = _ * _ := congr_arg₂ (· * ·) h
+(finSepDegree_adjoin_simple_eq_finrank_iff L E x (IsAlgebraic.of_finite L x)).2
+      IsSeparable.tower_top L (Algebra.IsSeparable.isSeparable F x)
+  set M := L⟮x⟯
+  rwa [finSepDegree_mul_finSepDegree_of_isAlgebraic F L M,
+    Module.finrank_mul_finrank F L M] at heq
+
+alias Algebra.IsSeparable.finSepDegree_eq := finSepDegree_eq_finrank_of_isSeparable
 
 Depends on / 依赖: FiniteDimensional, Nat.le_mul_of_pos_right, Nat.pos_of_ne_zero, exists_lt_finrank_of_infinite_dimensional, finSepDegree, finSepDegree_mul_finSepDegree_of_isAlgebraic, finSepDegree_top, finrank, finrank_of_infinite_dimensional, finrank_top, generalizing, induction_on_adjoin, le_mul_of_pos_right, mul_zero, pos_of_ne_zero
 -/
@@ -2096,7 +2276,9 @@ theorem finSepDegree_eq_finrank_iff
     have halg := IsAlgebraic.of_finite F x
 refine (finSepDegree_adjoin_simple_eq_finrank_iff F E x halg).1 le_antisymm
 (finSepDegree_adjoin_simple_le_finrank F E x halg) le_of_not_gt fun h => ?_
-    have := Nat.mul_lt_mul_of_lt_of_le' h (finSepDegree_le_finrank F⟮x⟯ E) Fin.p
+    have := Nat.mul_lt_mul_of_lt_of_le' h (finSepDegree_le_finrank F⟮x⟯ E) Fin.pos'
+    rw [finSepDegree_mul_finSepDegree_of_isAlgebraic F F⟮x⟯ E]; rw [Module.finrank_mul_finrank F F⟮x⟯ E] at this
+    linarith only [heq, this]⟩, fun _ => finSepDegree_eq_finrank_of_isSeparable F E⟩
 
 中文:
 定理 finSepDegree_eq_finrank_iff
@@ -2105,7 +2287,9 @@ refine (finSepDegree_adjoin_simple_eq_finrank_iff F E x halg).1 le_antisymm
     have halg := IsAlgebraic.of_finite F x
 refine (finSepDegree_adjoin_simple_eq_finrank_iff F E x halg).1 le_antisymm
 (finSepDegree_adjoin_simple_le_finrank F E x halg) le_of_not_gt fun h => ?_
-    have := Nat.mul_lt_mul_of_lt_of_le' h (finSepDegree_le_finrank F⟮x⟯ E) Fin.p
+    have := Nat.mul_lt_mul_of_lt_of_le' h (finSepDegree_le_finrank F⟮x⟯ E) Fin.pos'
+    rw [finSepDegree_mul_finSepDegree_of_isAlgebraic F F⟮x⟯ E]; rw [Module.finrank_mul_finrank F F⟮x⟯ E] at this
+    linarith only [heq, this]⟩, fun _ => finSepDegree_eq_finrank_of_isSeparable F E⟩
 
 Depends on / 依赖: Fin.pos, IsAlgebraic, IsAlgebraic.of_finite, Module, Module.finrank_mul_finrank, Nat.mul_lt_mul_of_lt_of_le, finSepDegree_adjoin_simple_eq_finrank_iff, finSepDegree_adjoin_simple_le_finrank, finSepDegree_eq_finrank_of_isSeparable, finSepDegree_le_finrank, finSepDegree_mul_finSepDegree_of_isAlgebraic, finrank_mul_finrank, le_antisymm, le_of_not_gt, mul_lt_mul_of_lt_of_le, of_finite
 -/
@@ -2154,7 +2338,7 @@ theorem IntermediateField.isSeparable_adjoin_simple_iff_isSeparable
   · have h := IsSeparable.isIntegral hsep
     have := adjoin.finiteDimensional h
     rwa [← finSepDegree_eq_finrank_iff,
-      finSepDegree_adjoin_simple_eq_finrank_iff F E x h.isAlgebraic
+      finSepDegree_adjoin_simple_eq_finrank_iff F E x h.isAlgebraic]
 
 中文:
 定理 中间域.isSeparable_adjoin_simple_iff_isSeparable
@@ -2165,7 +2349,7 @@ theorem IntermediateField.isSeparable_adjoin_simple_iff_isSeparable
   · have h := IsSeparable.isIntegral hsep
     have := adjoin.finiteDimensional h
     rwa [← finSepDegree_eq_finrank_iff,
-      finSepDegree_adjoin_simple_eq_finrank_iff F E x h.isAlgebraic
+      finSepDegree_adjoin_simple_eq_finrank_iff F E x h.isAlgebraic]
 
 Depends on / 依赖: IsSeparable, IsSeparable.isIntegral, adjoin, adjoin.finiteDimensional, finSepDegree_adjoin_simple_eq_finrank_iff, finSepDegree_eq_finrank_iff, finiteDimensional, h.isAlgebraic, isAlgebraic, isIntegral, isSeparable_of_mem_isSeparable, mem_adjoin_simple_self
 -/
@@ -2191,7 +2375,23 @@ theorem IsSeparable.of_algebra_isSeparable_of_isSeparable
   have : FiniteDimensional F E' :=
     finiteDimensional_adjoin fun x _ => Algebra.IsSeparable.isIntegral F x
   let g : E'[X] := f.toSubring E'.toSubring (subset_adjoin F _)
-  have h : g.map (algebraMap E' E) = f
+  have h : g.map (algebraMap E' E) = f := f.map_toSubring E'.toSubring (subset_adjoin F _)
+  clear_value g
+  have hx : x in E'⟮x⟯.restrictScalars F := mem_adjoin_simple_self _ x
+  have hzero : aeval x g = 0 := by
+    simpa only [← hf, ← h, aeval_map_algebraMap] using minpoly.aeval E x
+  have halg : IsIntegral E' x :=
+.tower_top isIntegral_trans (R := F) (A := E) _ (IsSeparable.isIntegral hsep)
+  simp only [IsSeparable, ← hf, ← h, separable_map] at hsep
+replace hsep := hsep.of_dvd minpoly.dvd E' x hzero
+  have : Algebra.IsSeparable F E' := Algebra.isSeparable_tower_bot_of_isSeparable F E' E
+  have := (isSeparable_adjoin_simple_iff_isSeparable _ _).2 hsep
+  have := adjoin.finiteDimensional halg
+  have : FiniteDimensional F E'⟮x⟯ := FiniteDimensional.trans F E' E'⟮x⟯
+  have := finSepDegree_mul_finSepDegree_of_isAlgebraic F E' E'⟮x⟯
+  rw [finSepDegree_eq_finrank_of_isSeparable F E']; rw [finSepDegree_eq_finrank_of_isSeparable E' E'⟮x⟯]; rw [Module.finrank_mul_finrank F E' E'⟮x⟯]; rw [eq_comm]; rw [finSepDegree_eq_finrank_iff F E'⟮x⟯] at this
+  change Algebra.IsSeparable F (restrictScalars F E'⟮x⟯) at this
+  exact isSeparable_of_mem_isSeparable F K hx
 
 中文:
 定理 是可分.of_algebra_isSeparable_of_isSeparable
@@ -2202,7 +2402,23 @@ theorem IsSeparable.of_algebra_isSeparable_of_isSeparable
   have : FiniteDimensional F E' :=
     finiteDimensional_adjoin fun x _ => Algebra.IsSeparable.isIntegral F x
   let g : E'[X] := f.toSubring E'.toSubring (subset_adjoin F _)
-  have h : g.map (algebraMap E' E) = f
+  have h : g.map (algebraMap E' E) = f := f.map_toSubring E'.toSubring (subset_adjoin F _)
+  clear_value g
+  have hx : x in E'⟮x⟯.restrictScalars F := mem_adjoin_simple_self _ x
+  have hzero : aeval x g = 0 := by
+    simpa only [← hf, ← h, aeval_map_algebraMap] using minpoly.aeval E x
+  have halg : IsIntegral E' x :=
+.tower_top isIntegral_trans (R := F) (A := E) _ (IsSeparable.isIntegral hsep)
+  simp only [IsSeparable, ← hf, ← h, separable_map] at hsep
+replace hsep := hsep.of_dvd minpoly.dvd E' x hzero
+  have : Algebra.IsSeparable F E' := Algebra.isSeparable_tower_bot_of_isSeparable F E' E
+  have := (isSeparable_adjoin_simple_iff_isSeparable _ _).2 hsep
+  have := adjoin.finiteDimensional halg
+  have : FiniteDimensional F E'⟮x⟯ := FiniteDimensional.trans F E' E'⟮x⟯
+  have := finSepDegree_mul_finSepDegree_of_isAlgebraic F E' E'⟮x⟯
+  rw [finSepDegree_eq_finrank_of_isSeparable F E']; rw [finSepDegree_eq_finrank_of_isSeparable E' E'⟮x⟯]; rw [Module.finrank_mul_finrank F E' E'⟮x⟯]; rw [eq_comm]; rw [finSepDegree_eq_finrank_iff F E'⟮x⟯] at this
+  change Algebra.IsSeparable F (restrictScalars F E'⟮x⟯) at this
+  exact isSeparable_of_mem_isSeparable F K hx
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isIntegral, FiniteDimensional, IntermediateField, IsSeparable, adjoin, aeval_map_algebraMap, algebraMap, clear_value, coeffs, f.coeffs, f.map_toSubring, f.toSubring, finiteDimensional_adjoin, g.map, isIntegral, map_toSubring, mem_adjoin_simple_self, minpoly, restrictScalars
 -/
@@ -2425,7 +2641,16 @@ theorem perfectField_iff_splits_of_natSepDegree_eq_one
     rw [← hu]
     refine (Splits.multisetProd fun g hg => ?_).mul u.isUnit.splits
     specialize h (UniqueFactorizationMonoid.irreducible_of_factor g hg)
- 
+    have key := natSepDegree_le_of_dvd g f (UniqueFactorizationMonoid.dvd_of_mem_factors hg) hf0
+    rw [h.natSepDegree_eq_natDegree]; rw [hf] at key
+    exact Splits.of_natDegree_le_one key
+  obtain ⟨p, _⟩ := ExpChar.exists F
+  have := PerfectRing.ofSurjective F p fun x => by
+    obtain ⟨y, hy⟩ := Splits.exists_eval_eq_zero
+      (h _ (pow_one p ▸ natSepDegree_X_pow_char_pow_sub_C p 1 x))
+      ((degree_X_pow_sub_C (expChar_pos F p) x).symm ▸ Nat.cast_pos.2 (expChar_pos F p)).ne'
+    exact ⟨y, by rwa [eval_sub, eval_X_pow, eval_C, sub_eq_zero] at hy⟩
+  exact PerfectRing.toPerfectField F p
 
 中文:
 定理 perfectField_iff_splits_of_natSepDegree_eq_one
@@ -2437,7 +2662,16 @@ theorem perfectField_iff_splits_of_natSepDegree_eq_one
     rw [← hu]
     refine (Splits.multisetProd fun g hg => ?_).mul u.isUnit.splits
     specialize h (UniqueFactorizationMonoid.irreducible_of_factor g hg)
- 
+    have key := natSepDegree_le_of_dvd g f (UniqueFactorizationMonoid.dvd_of_mem_factors hg) hf0
+    rw [h.natSepDegree_eq_natDegree]; rw [hf] at key
+    exact Splits.of_natDegree_le_one key
+  obtain ⟨p, _⟩ := ExpChar.exists F
+  have := PerfectRing.ofSurjective F p fun x => by
+    obtain ⟨y, hy⟩ := Splits.exists_eval_eq_zero
+      (h _ (pow_one p ▸ natSepDegree_X_pow_char_pow_sub_C p 1 x))
+      ((degree_X_pow_sub_C (expChar_pos F p) x).symm ▸ Nat.cast_pos.2 (expChar_pos F p)).ne'
+    exact ⟨y, by rwa [eval_sub, eval_X_pow, eval_C, sub_eq_zero] at hy⟩
+  exact PerfectRing.toPerfectField F p
 
 Depends on / 依赖: ExpChar, ExpChar.exists, Splits, Splits.multisetProd, Splits.of_natDegree_le_one, UniqueFactorizationMonoid, UniqueFactorizationMonoid.dvd_of_mem_factors, UniqueFactorizationMonoid.factors_prod, UniqueFactorizationMonoid.irreducible_of_factor, dvd_of_mem_factors, factors_prod, h.natSepDegree_eq_natDegree, irreducible_of_factor, isUnit, multisetProd, natSepDegree_eq_natDegree, natSepDegree_le_of_dvd, of_natDegree_le_one, specialize, splits
 -/

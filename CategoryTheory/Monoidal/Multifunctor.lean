@@ -705,7 +705,8 @@ definition ofBifunctor
   μ_natural_right X f := (μ.app X).naturality f
   associativity X Y Z :=
     NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app associativity X) Y) Z
-  left_unitality X := NatTrans.congr_app left_unita
+  left_unitality X := NatTrans.congr_app left_unitality X
+  right_unitality X := NatTrans.congr_app right_unitality X
 
 中文:
 定义 ofBifunctor
@@ -716,7 +717,8 @@ definition ofBifunctor
   μ_natural_right X f := (μ.app X).naturality f
   associativity X Y Z :=
     NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app associativity X) Y) Z
-  left_unitality X := NatTrans.congr_app left_unita
+  left_unitality X := NatTrans.congr_app left_unitality X
+  right_unitality X := NatTrans.congr_app right_unitality X
 -/
 def ofBifunctor : F.LaxMonoidal where
   ε := ε
@@ -1137,7 +1139,8 @@ definition ofBifunctor
   δ_natural_right X f := ((δ.app X).naturality f).symm
   oplax_associativity X Y Z :=
     NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app oplax_associativity X) Y) Z
-  oplax_left_unitality X 
+  oplax_left_unitality X := NatTrans.congr_app oplax_left_unitality X
+  oplax_right_unitality X := NatTrans.congr_app oplax_right_unitality X
 
 中文:
 定义 ofBifunctor
@@ -1148,7 +1151,8 @@ definition ofBifunctor
   δ_natural_right X f := ((δ.app X).naturality f).symm
   oplax_associativity X Y Z :=
     NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app oplax_associativity X) Y) Z
-  oplax_left_unitality X 
+  oplax_left_unitality X := NatTrans.congr_app oplax_left_unitality X
+  oplax_right_unitality X := NatTrans.congr_app oplax_right_unitality X
 -/
 def ofBifunctor : F.OplaxMonoidal where
   η := η
@@ -1208,7 +1212,7 @@ definition ofBifunctor
   ε_η := ε_η
   η_ε := η_ε
   μ_δ X Y := NatTrans.congr_app ((NatTrans.congr_app μ_δ) X) Y
-  δ_μ X Y := NatTrans.congr_app ((NatTrans.congr
+  δ_μ X Y := NatTrans.congr_app ((NatTrans.congr_app δ_μ) X) Y
 
 中文:
 定义 ofBifunctor
@@ -1218,7 +1222,7 @@ definition ofBifunctor
   ε_η := ε_η
   η_ε := η_ε
   μ_δ X Y := NatTrans.congr_app ((NatTrans.congr_app μ_δ) X) Y
-  δ_μ X Y := NatTrans.congr_app ((NatTrans.congr
+  δ_μ X Y := NatTrans.congr_app ((NatTrans.congr_app δ_μ) X) Y
 
 Depends on / 依赖: associativity, left_unitality, ofBifunctor, right_unitality
 -/
@@ -1261,7 +1265,8 @@ definition ofBifunctor
   μIso_hom_natural_right X f := (μ.hom.app X).naturality f
   associativity X Y Z :=
     NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app associativity X) Y) Z
-  left_unitality X := NatT
+  left_unitality X := NatTrans.congr_app left_unitality X
+  right_unitality X := NatTrans.congr_app right_unitality X
 
 中文:
 定义 ofBifunctor
@@ -1272,7 +1277,8 @@ definition ofBifunctor
   μIso_hom_natural_right X f := (μ.hom.app X).naturality f
   associativity X Y Z :=
     NatTrans.congr_app (NatTrans.congr_app (NatTrans.congr_app associativity X) Y) Z
-  left_unitality X := NatT
+  left_unitality X := NatTrans.congr_app left_unitality X
+  right_unitality X := NatTrans.congr_app right_unitality X
 -/
 def ofBifunctor : F.CoreMonoidal where
   εIso := ε

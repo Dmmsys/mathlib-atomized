@@ -418,7 +418,7 @@ theorem finite_projective_of_one_mem_range_dualTensorHom
   let f : (s -> R) ->ₗ[R] M := Fintype.linearCombination R (·.1.2)
   have : f ∘ₗ pi (·.1.1) = 1 := by
     ext; simp [f, ← eq, Fintype.linearCombination_apply, ← s.sum_coe_sort]
-  exact ⟨.of_surjective f (surjective_of_comp_eq_
+  exact ⟨.of_surjective f (surjective_of_comp_eq_id _ _ this), .of_split _ f this⟩
 
 中文:
 定理 finite_projective_of_one_mem_range_dualTensorHom
@@ -428,7 +428,7 @@ theorem finite_projective_of_one_mem_range_dualTensorHom
   let f : (s -> R) ->ₗ[R] M := Fintype.linearCombination R (·.1.2)
   have : f ∘ₗ pi (·.1.1) = 1 := by
     ext; simp [f, ← eq, Fintype.linearCombination_apply, ← s.sum_coe_sort]
-  exact ⟨.of_surjective f (surjective_of_comp_eq_
+  exact ⟨.of_surjective f (surjective_of_comp_eq_id _ _ this), .of_split _ f this⟩
 -/
 private theorem finite_projective_of_one_mem_range_dualTensorHom :
     Module.Finite R M ∧ Projective R M := by
@@ -494,7 +494,13 @@ definition dualTensorHomEquivOfBasis
     (by
       ext f m
       simp only [applyₗ_apply_apply, coe_sum, dualTensorHom_apply, mk_apply, id_coe, _root_.id,
-        Fintype.sum_apply, Function.comp_apply, B
+        Fintype.sum_apply, Function.comp_apply, Basis.coe_dualBasis, coe_comp, Basis.coord_apply, ←
+        f.map_smul, _root_.map_sum (dualTensorHom R M N), ← _root_.map_sum f, b.sum_repr])
+    (by
+      ext f m
+      simp only [applyₗ_apply_apply, coe_sum, dualTensorHom_apply, mk_apply, id_coe, _root_.id,
+        Fintype.sum_apply, Function.comp_apply, Basis.coe_dualBasis, coe_comp, compr₂ₛₗ_apply,
+        tmul_smul, smul_tmul', ← sum_tmul, Basis.sum_dual_apply_smul_coord])
 
 中文:
 定义 dualTensorHomEquivOfBasis
@@ -504,7 +510,13 @@ definition dualTensorHomEquivOfBasis
     (by
       ext f m
       simp only [applyₗ_apply_apply, coe_sum, dualTensorHom_apply, mk_apply, id_coe, _root_.id,
-        Fintype.sum_apply, Function.comp_apply, B
+        Fintype.sum_apply, Function.comp_apply, Basis.coe_dualBasis, coe_comp, Basis.coord_apply, ←
+        f.map_smul, _root_.map_sum (dualTensorHom R M N), ← _root_.map_sum f, b.sum_repr])
+    (by
+      ext f m
+      simp only [applyₗ_apply_apply, coe_sum, dualTensorHom_apply, mk_apply, id_coe, _root_.id,
+        Fintype.sum_apply, Function.comp_apply, Basis.coe_dualBasis, coe_comp, compr₂ₛₗ_apply,
+        tmul_smul, smul_tmul', ← sum_tmul, Basis.sum_dual_apply_smul_coord])
 
 Depends on / 依赖: Basis.coe_dualBasis, Basis.coord_apply, Fintype, Fintype.sum_apply, Function, Function.comp_apply, LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.apply, TensorProduct, TensorProduct.mk, _root_, _root_.id, _root_.map_sum, b.dualBasis, b.sum_repr, coe_comp, coe_dualBasis, coe_sum
 -/
@@ -645,7 +657,12 @@ theorem dualTensorHom_bijective
   constructor
   · refine .of_comp (f := f.lcomp R N) ?_
     rw [← coe_comp]; rw [← dualTensorHom_comp_rTensor_dualMap]; rw [coe_comp]; rw [← coe_dualTensorHomEquivOfBasis (Pi.basisFun ..)]
-    refine (EquivLike.injective _
+    refine (EquivLike.injective _).comp (injective_of_comp_eq_id _ (rTensor _ g.dualMap) ?_)
+    simp [← rTensor_comp, dualMap_comp_dualMap g f, eq]
+  · refine .of_comp (g := g.dualMap.rTensor N) ?_
+    rw [← coe_comp]; rw [dualTensorHom_comp_rTensor_dualMap]; rw [coe_comp]; rw [← coe_dualTensorHomEquivOfBasis (Pi.basisFun ..)]
+    refine (surjective_of_comp_eq_id (f.lcomp R N) _ ?_).comp (EquivLike.surjective _)
+    ext φ; exact congr(φ ($eq _))
 
 中文:
 定理 dualTensorHom_bijective
@@ -655,7 +672,12 @@ theorem dualTensorHom_bijective
   constructor
   · refine .of_comp (f := f.lcomp R N) ?_
     rw [← coe_comp]; rw [← dualTensorHom_comp_rTensor_dualMap]; rw [coe_comp]; rw [← coe_dualTensorHomEquivOfBasis (Pi.basisFun ..)]
-    refine (EquivLike.injective _
+    refine (EquivLike.injective _).comp (injective_of_comp_eq_id _ (rTensor _ g.dualMap) ?_)
+    simp [← rTensor_comp, dualMap_comp_dualMap g f, eq]
+  · refine .of_comp (g := g.dualMap.rTensor N) ?_
+    rw [← coe_comp]; rw [dualTensorHom_comp_rTensor_dualMap]; rw [coe_comp]; rw [← coe_dualTensorHomEquivOfBasis (Pi.basisFun ..)]
+    refine (surjective_of_comp_eq_id (f.lcomp R N) _ ?_).comp (EquivLike.surjective _)
+    ext φ; exact congr(φ ($eq _))
 
 Depends on / 依赖: EquivLike, EquivLike.injective, Finite, Finite.exists_comp_eq_id_of_projective, Pi.basisFun, basisFun, coe_comp, coe_dualTensorHomEquivOfBasis, dualMap, dualMap_comp_dualMap, dualTensorHom_comp_rTensor_dualMa, dualTensorHom_comp_rTensor_dualMap, exists_comp_eq_id_of_projective, f.lcomp, g.dualMap, g.dualMap.rTensor, injective, injective_of_comp_eq_id, of_comp, rTensor
 -/
@@ -775,7 +797,9 @@ theorem dualTensorHom_bijective_of_comp_eq_id_right
     refine h.1.comp (injective_of_comp_eq_id _ (g.lTensor _) ?_)
     rw [← lTensor_comp]; rw [comp_eq_id]; rw [lTensor_id]
 right := .of_comp (g := g.lTensor _) by
-    rw [← coe_comp]; rw [dualTensorHom_comp_lTens
+    rw [← coe_comp]; rw [dualTensorHom_comp_lTensor]; rw [coe_comp]
+    refine (surjective_of_comp_eq_id (f.compRight R) _ ?_).comp h.2
+    ext; exact congr($comp_eq_id _)
 
 中文:
 定理 dualTensorHom_bijective_of_comp_eq_id_right
@@ -785,7 +809,9 @@ right := .of_comp (g := g.lTensor _) by
     refine h.1.comp (injective_of_comp_eq_id _ (g.lTensor _) ?_)
     rw [← lTensor_comp]; rw [comp_eq_id]; rw [lTensor_id]
 right := .of_comp (g := g.lTensor _) by
-    rw [← coe_comp]; rw [dualTensorHom_comp_lTens
+    rw [← coe_comp]; rw [dualTensorHom_comp_lTensor]; rw [coe_comp]
+    refine (surjective_of_comp_eq_id (f.compRight R) _ ?_).comp h.2
+    ext; exact congr($comp_eq_id _)
 
 Depends on / 依赖: coe_comp, compRight, comp_eq_id, dualTensorHom_comp_lTensor, f.compRight, g.lTensor, injective_of_comp_eq_id, lTensor, lTensor_comp, lTensor_id, of_comp, surjective_of_comp_eq_id
 -/
@@ -1141,7 +1167,8 @@ theorem homTensorHomEquiv_toLinearMap
   simp only [homTensorHomEquiv, compr₂ₛₗ_apply, mk_apply, LinearEquiv.coe_toLinearMap,
     LinearEquiv.trans_apply, lift.equiv_apply, LinearEquiv.arrowCongr_apply, LinearEquiv.refl_symm,
     LinearEquiv.refl_apply, rTensorHomEquivHomRTensor_apply, lTensorHomEquivHomLTensor_apply,
-    lT
+    lTensorHomToHomLTensor_apply, rTensorHomToHomRTensor_apply, homTensorHomMap_apply,
+    map_tmul]
 
 中文:
 定理 homTensorHomEquiv_toLinearMap
@@ -1150,7 +1177,8 @@ theorem homTensorHomEquiv_toLinearMap
   simp only [homTensorHomEquiv, compr₂ₛₗ_apply, mk_apply, LinearEquiv.coe_toLinearMap,
     LinearEquiv.trans_apply, lift.equiv_apply, LinearEquiv.arrowCongr_apply, LinearEquiv.refl_symm,
     LinearEquiv.refl_apply, rTensorHomEquivHomRTensor_apply, lTensorHomEquivHomLTensor_apply,
-    lT
+    lTensorHomToHomLTensor_apply, rTensorHomToHomRTensor_apply, homTensorHomMap_apply,
+    map_tmul]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.arrowCongr_apply, LinearEquiv.coe_toLinearMap, LinearEquiv.refl_apply, LinearEquiv.refl_symm, LinearEquiv.trans_apply, arrowCongr_apply, coe_toLinearMap, equiv_apply, homTensorHomEquiv, homTensorHomMap_apply, lTensorHomEquivHomLTensor_apply, lTensorHomToHomLTensor_apply, lift.equiv_apply, map_tmul, mk_apply, rTensorHomEquivHomRTensor_apply, rTensorHomToHomRTensor_apply, refl_apply, refl_symm
 -/
@@ -1268,7 +1296,12 @@ theorem dualDistrib_dualDistribInvOfBasis_left_inverse
   rintro ⟨i', j'⟩
   simp only [dualDistrib, Basis.coe_dualBasis, coe_comp, Function.comp_apply,
     dualDistribInvOfBasis_apply, Basis.coord_apply, Basis.tensorProduct_repr_tmul_apply,
-    Basis.repr_self, _
+    Basis.repr_self, _root_.map_sum, map_smul, homTensorHomMap_apply, compRight_apply,
+    Basis.tensorProduct_apply, LinearMap.coe_sum, Finset.sum_apply, smul_apply, LinearEquiv.coe_coe,
+    map_tmul, lid_tmul, smul_eq_mul, id_coe, id_eq]
+  rw [Finset.sum_eq_single i]; rw [Finset.sum_eq_single j]
+  · simpa using mul_comm _ _
+  all_goals { intros; simp [*] at * }
 
 中文:
 定理 dualDistrib_dualDistribInvOfBasis_left_inverse
@@ -1280,7 +1313,12 @@ theorem dualDistrib_dualDistribInvOfBasis_left_inverse
   rintro ⟨i', j'⟩
   simp only [dualDistrib, Basis.coe_dualBasis, coe_comp, Function.comp_apply,
     dualDistribInvOfBasis_apply, Basis.coord_apply, Basis.tensorProduct_repr_tmul_apply,
-    Basis.repr_self, _
+    Basis.repr_self, _root_.map_sum, map_smul, homTensorHomMap_apply, compRight_apply,
+    Basis.tensorProduct_apply, LinearMap.coe_sum, Finset.sum_apply, smul_apply, LinearEquiv.coe_coe,
+    map_tmul, lid_tmul, smul_eq_mul, id_coe, id_eq]
+  rw [Finset.sum_eq_single i]; rw [Finset.sum_eq_single j]
+  · simpa using mul_comm _ _
+  all_goals { intros; simp [*] at * }
 
 Depends on / 依赖: Basis.coe_dualBasis, Basis.coord_apply, Basis.repr_self, Basis.tensorProduct_apply, Basis.tensorProduct_repr_tmul_apply, Finset, Finset.sum_apply, Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_sum, _root_, _root_.map_sum, b.tensorProduct, coe_coe, coe_comp, coe_dualBasis, coe_sum
 -/
@@ -1311,7 +1349,9 @@ theorem dualDistrib_dualDistribInvOfBasis_right_inverse
   simp only [Basis.tensorProduct_apply, Basis.coe_dualBasis, coe_comp, Function.comp_apply,
     dualDistribInvOfBasis_apply, dualDistrib_apply, Basis.coord_apply, Basis.repr_self,
     id_coe, id_eq]
-  rw [Finset.sum_eq_single i];
+  rw [Finset.sum_eq_single i]; rw [Finset.sum_eq_single j]
+  · simp
+  all_goals { intros; simp [*] at * }
 
 中文:
 定理 dualDistrib_dualDistribInvOfBasis_right_inverse
@@ -1322,7 +1362,9 @@ theorem dualDistrib_dualDistribInvOfBasis_right_inverse
   simp only [Basis.tensorProduct_apply, Basis.coe_dualBasis, coe_comp, Function.comp_apply,
     dualDistribInvOfBasis_apply, dualDistrib_apply, Basis.coord_apply, Basis.repr_self,
     id_coe, id_eq]
-  rw [Finset.sum_eq_single i];
+  rw [Finset.sum_eq_single i]; rw [Finset.sum_eq_single j]
+  · simp
+  all_goals { intros; simp [*] at * }
 
 Depends on / 依赖: Basis.coe_dualBasis, Basis.coord_apply, Basis.repr_self, Basis.tensorProduct_apply, Finset, Finset.sum_eq_single, Function, Function.comp_apply, all_goals, b.dualBasis.tensorProduct, c.dualBasis, coe_comp, coe_dualBasis, comp_apply, coord_apply, dualBasis, dualDistribInvOfBasis_apply, dualDistrib_apply, id_coe, id_eq
 -/

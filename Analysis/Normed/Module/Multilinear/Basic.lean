@@ -87,7 +87,9 @@ instance ContinuousMultilinearMap.instContinuousEval
     let _ := IsTopologicalAddGroup.rightUniformSpace F
     have := isUniformAddGroup_of_addCommGroup (G := F)
     refine (UniformOnFun.continuousOn_eval₂ fun m => ?_).comp_continuous
-      (isEmbedding_toUniformOnFun.continuous.prodMap continuous_id) fun (f, x) => f.c
+      (isEmbedding_toUniformOnFun.continuous.prodMap continuous_id) fun (f, x) => f.cont.continuousAt
+    exact ⟨ball m 1, NormedSpace.isVonNBounded_of_isBounded _ isBounded_ball,
+      ball_mem_nhds _ one_pos⟩
 
 中文:
 实例 连续多重线性映射.instContinuousEval
@@ -97,7 +99,9 @@ instance ContinuousMultilinearMap.instContinuousEval
     let _ := IsTopologicalAddGroup.rightUniformSpace F
     have := isUniformAddGroup_of_addCommGroup (G := F)
     refine (UniformOnFun.continuousOn_eval₂ fun m => ?_).comp_continuous
-      (isEmbedding_toUniformOnFun.continuous.prodMap continuous_id) fun (f, x) => f.c
+      (isEmbedding_toUniformOnFun.continuous.prodMap continuous_id) fun (f, x) => f.cont.continuousAt
+    exact ⟨ball m 1, NormedSpace.isVonNBounded_of_isBounded _ isBounded_ball,
+      ball_mem_nhds _ one_pos⟩
 
 Depends on / 依赖: IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, NormedSpace, NormedSpace.isVonNBounded_of_isBounded, UniformOnFun, UniformOnFun.continuousOn_eval, ball_mem_nhds, comp_continuous, continuous, continuousAt, continuous_id, f.cont.continuousAt, isBounded_ball, isEmbedding_toUniformOnFun, isEmbedding_toUniformOnFun.continuous.prodMap, isUniformAddGroup_of_addCommGroup, isVonNBounded_of_isBounded, nonempty_fintype, one_pos, prodMap
 -/
@@ -261,7 +265,9 @@ theorem bound_of_shell_of_norm_map_coord_zero
   · rcases hm with ⟨i, hi⟩
     rw [hf₀ hi]; rw [prod_eq_zero (mem_univ i) hi]; rw [mul_zero]
   choose δ hδ0 hδm_lt hle_δm _ using fun i => rescale_to_shell_semi_normed (hc i) (hε i) (hm i)
-  have hδ0 : 0 < ∏ i, ‖δ i‖ := prod_pos fun i _ => norm_pos_iff.2 (hδ0 
+  have hδ0 : 0 < ∏ i, ‖δ i‖ := prod_pos fun i _ => norm_pos_iff.2 (hδ0 i)
+  simpa [map_smul_univ, norm_smul, prod_mul_distrib, mul_left_comm C, hδ0] using
+    hf (fun i => δ i • m i) hle_δm hδm_lt
 
 中文:
 定理 bound_of_shell_of_norm_map_coord_zero
@@ -271,7 +277,9 @@ theorem bound_of_shell_of_norm_map_coord_zero
   · rcases hm with ⟨i, hi⟩
     rw [hf₀ hi]; rw [prod_eq_zero (mem_univ i) hi]; rw [mul_zero]
   choose δ hδ0 hδm_lt hle_δm _ using fun i => rescale_to_shell_semi_normed (hc i) (hε i) (hm i)
-  have hδ0 : 0 < ∏ i, ‖δ i‖ := prod_pos fun i _ => norm_pos_iff.2 (hδ0 
+  have hδ0 : 0 < ∏ i, ‖δ i‖ := prod_pos fun i _ => norm_pos_iff.2 (hδ0 i)
+  simpa [map_smul_univ, norm_smul, prod_mul_distrib, mul_left_comm C, hδ0] using
+    hf (fun i => δ i • m i) hle_δm hδm_lt
 
 Depends on / 依赖: map_smul_univ, mem_univ, mul_left_comm, mul_zero, norm_pos_iff, norm_smul, prod_eq_zero, prod_mul_distrib, prod_pos, rescale_to_shell_semi_normed
 -/
@@ -320,7 +328,17 @@ theorem exists_bound_of_continuous
   · refine ⟨‖f 0‖ + 1, add_pos_of_nonneg_of_pos (norm_nonneg _) zero_lt_one, fun m => ?_⟩
     obtain rfl : m = 0 := funext (IsEmpty.elim ‹_›)
     simp [univ_eq_empty, zero_le_one]
-  obtain ⟨ε : Real, ε0 : 0 < ε, hε : forall m : forall i, E i, ‖m - 0‖ < ε -> ‖f m - f 
+  obtain ⟨ε : Real, ε0 : 0 < ε, hε : forall m : forall i, E i, ‖m - 0‖ < ε -> ‖f m - f 0‖ < 1⟩ :=
+    NormedAddCommGroup.tendsto_nhds_nhds.1 (hf.tendsto 0) 1 zero_lt_one
+  simp only [sub_zero, f.map_zero] at hε
+  rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
+  have : 0 < (‖c‖ / ε) ^ Fintype.card ι := pow_pos (div_pos (zero_lt_one.trans hc) ε0) _
+  refine ⟨_, this, ?_⟩
+  refine f.bound_of_shell_of_continuous hf (fun _ => ε0) (fun _ => hc) fun m hcm hm => ?_
+  refine (hε m ((pi_norm_lt_iff ε0).2 hm)).le.trans ?_
+  rw [← div_le_iff₀' this]; rw [one_div]; rw [← inv_pow]; rw [inv_div]; rw [Fintype.card]; rw [← prod_const]
+  gcongr
+  apply hcm
 
 中文:
 定理 存在_bound_of_continuous
@@ -330,7 +348,17 @@ theorem exists_bound_of_continuous
   · refine ⟨‖f 0‖ + 1, add_pos_of_nonneg_of_pos (norm_nonneg _) zero_lt_one, fun m => ?_⟩
     obtain rfl : m = 0 := funext (IsEmpty.elim ‹_›)
     simp [univ_eq_empty, zero_le_one]
-  obtain ⟨ε : Real, ε0 : 0 < ε, hε : forall m : forall i, E i, ‖m - 0‖ < ε -> ‖f m - f 
+  obtain ⟨ε : Real, ε0 : 0 < ε, hε : forall m : forall i, E i, ‖m - 0‖ < ε -> ‖f m - f 0‖ < 1⟩ :=
+    NormedAddCommGroup.tendsto_nhds_nhds.1 (hf.tendsto 0) 1 zero_lt_one
+  simp only [sub_zero, f.map_zero] at hε
+  rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
+  have : 0 < (‖c‖ / ε) ^ Fintype.card ι := pow_pos (div_pos (zero_lt_one.trans hc) ε0) _
+  refine ⟨_, this, ?_⟩
+  refine f.bound_of_shell_of_continuous hf (fun _ => ε0) (fun _ => hc) fun m hcm hm => ?_
+  refine (hε m ((pi_norm_lt_iff ε0).2 hm)).le.trans ?_
+  rw [← div_le_iff₀' this]; rw [one_div]; rw [← inv_pow]; rw [inv_div]; rw [Fintype.card]; rw [← prod_const]
+  gcongr
+  apply hcm
 
 Depends on / 依赖: Fintype, Fintype.card, IsEmpty, IsEmpty.elim, NormedAddCommGroup, NormedAddCommGroup.tendsto_nhds_nhds, NormedField, NormedField.exists_one_lt_norm, add_pos_of_nonneg_of_pos, exists_one_lt_norm, f.map_zero, hf.tendsto, isEmpty_or_nonempty, map_zero, norm_nonneg, sub_zero, tendsto, tendsto_nhds_nhds, univ_eq_empty, zero_le_one
 -/
@@ -367,7 +395,32 @@ theorem norm_image_sub_le_of_bound'
     | empty => simp
     | insert i s his Hrec =>
       have I :
-        ‖f (s.piecew
+        ‖f (s.piecewise m₂ m₁) - f ((insert i s).piecewise m₂ m₁)‖ <=
+          C * ∏ j, if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖ := by
+        have A : (insert i s).piecewise m₂ m₁ = Function.update (s.piecewise m₂ m₁) i (m₂ i) :=
+          s.piecewise_insert _ _ _
+        have B : s.piecewise m₂ m₁ = Function.update (s.piecewise m₂ m₁) i (m₁ i) := by
+          simp [his]
+        rw [B]; rw [A]; rw [← f.map_update_sub]
+        apply le_trans (H _)
+        gcongr with j
+        by_cases h : j = i
+        · rw [h]
+          simp
+        · by_cases h' : j in s <;> simp [h', h]
+      calc
+        ‖f m₁ - f ((insert i s).piecewise m₂ m₁)‖ <=
+            ‖f m₁ - f (s.piecewise m₂ m₁)‖ +
+              ‖f (s.piecewise m₂ m₁) - f ((insert i s).piecewise m₂ m₁)‖ := by
+          rw [← dist_eq_norm]; rw [← dist_eq_norm]; rw [← dist_eq_norm]
+          exact dist_triangle _ _ _
+        _ <= (C * ∑ i in s, ∏ j, if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖) +
+              C * ∏ j, if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖ :=
+          (add_le_add Hrec I)
+        _ = C * ∑ i in insert i s, ∏ j, if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖ := by
+          simp [his, add_comm, left_distrib]
+  convert! A univ
+  simp
 
 中文:
 定理 norm_image_sub_le_of_bound'
@@ -381,7 +434,32 @@ theorem norm_image_sub_le_of_bound'
     | empty => simp
     | insert i s his Hrec =>
       have I :
-        ‖f (s.piecew
+        ‖f (s.piecewise m₂ m₁) - f ((insert i s).piecewise m₂ m₁)‖ <=
+          C * ∏ j, if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖ := by
+        have A : (insert i s).piecewise m₂ m₁ = Function.update (s.piecewise m₂ m₁) i (m₂ i) :=
+          s.piecewise_insert _ _ _
+        have B : s.piecewise m₂ m₁ = Function.update (s.piecewise m₂ m₁) i (m₁ i) := by
+          simp [his]
+        rw [B]; rw [A]; rw [← f.map_update_sub]
+        apply le_trans (H _)
+        gcongr with j
+        by_cases h : j = i
+        · rw [h]
+          simp
+        · by_cases h' : j in s <;> simp [h', h]
+      calc
+        ‖f m₁ - f ((insert i s).piecewise m₂ m₁)‖ <=
+            ‖f m₁ - f (s.piecewise m₂ m₁)‖ +
+              ‖f (s.piecewise m₂ m₁) - f ((insert i s).piecewise m₂ m₁)‖ := by
+          rw [← dist_eq_norm]; rw [← dist_eq_norm]; rw [← dist_eq_norm]
+          exact dist_triangle _ _ _
+        _ <= (C * ∑ i in s, ∏ j, if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖) +
+              C * ∏ j, if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖ :=
+          (add_le_add Hrec I)
+        _ = C * ∑ i in insert i s, ∏ j, if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖ := by
+          simp [his, add_comm, left_distrib]
+  convert! A univ
+  simp
 
 Depends on / 依赖: Finset, Finset.induction, Function, Function.update, insert, piecew, piecewise, piecewise_insert, s.piecew, s.piecewise, s.piecewise_insert, update
 -/
@@ -438,7 +516,22 @@ theorem norm_image_sub_le_of_bound
     intro i
     calc
       ∏ j, (if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖) <=
-          ∏ j : ι, Function.update (fu
+          ∏ j : ι, Function.update (fun _ => max ‖m₁‖ ‖m₂‖) i ‖m₁ - m₂‖ j := by
+        gcongr with j
+        rcases eq_or_ne j i with rfl | h
+        · simp only [ite_true, Function.update_self]
+          exact norm_le_pi_norm (m₁ - m₂) _
+        · simp [h, -le_sup_iff, -sup_le_iff, sup_le_sup, norm_le_pi_norm]
+      _ = ‖m₁ - m₂‖ * max ‖m₁‖ ‖m₂‖ ^ (Fintype.card ι - 1) := by
+        rw [prod_update_of_mem (Finset.mem_univ _)]
+        simp [card_univ_sdiff]
+  calc
+    ‖f m₁ - f m₂‖ <= C * ∑ i, ∏ j, if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖ :=
+      f.norm_image_sub_le_of_bound' hC H m₁ m₂
+    _ <= C * ∑ _i, ‖m₁ - m₂‖ * max ‖m₁‖ ‖m₂‖ ^ (Fintype.card ι - 1) := by gcongr; apply A
+    _ = C * Fintype.card ι * max ‖m₁‖ ‖m₂‖ ^ (Fintype.card ι - 1) * ‖m₁ - m₂‖ := by
+      rw [sum_const]; rw [card_univ]; rw [nsmul_eq_mul]
+      ring
 
 中文:
 定理 norm_image_sub_le_of_bound
@@ -452,7 +545,22 @@ theorem norm_image_sub_le_of_bound
     intro i
     calc
       ∏ j, (if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖) <=
-          ∏ j : ι, Function.update (fu
+          ∏ j : ι, Function.update (fun _ => max ‖m₁‖ ‖m₂‖) i ‖m₁ - m₂‖ j := by
+        gcongr with j
+        rcases eq_or_ne j i with rfl | h
+        · simp only [ite_true, Function.update_self]
+          exact norm_le_pi_norm (m₁ - m₂) _
+        · simp [h, -le_sup_iff, -sup_le_iff, sup_le_sup, norm_le_pi_norm]
+      _ = ‖m₁ - m₂‖ * max ‖m₁‖ ‖m₂‖ ^ (Fintype.card ι - 1) := by
+        rw [prod_update_of_mem (Finset.mem_univ _)]
+        simp [card_univ_sdiff]
+  calc
+    ‖f m₁ - f m₂‖ <= C * ∑ i, ∏ j, if j = i then ‖m₁ i - m₂ i‖ else max ‖m₁ j‖ ‖m₂ j‖ :=
+      f.norm_image_sub_le_of_bound' hC H m₁ m₂
+    _ <= C * ∑ _i, ‖m₁ - m₂‖ * max ‖m₁‖ ‖m₂‖ ^ (Fintype.card ι - 1) := by gcongr; apply A
+    _ = C * Fintype.card ι * max ‖m₁‖ ‖m₂‖ ^ (Fintype.card ι - 1) * ‖m₁ - m₂‖ := by
+      rw [sum_const]; rw [card_univ]; rw [nsmul_eq_mul]
+      ring
 
 Depends on / 依赖: Fintype, Fintype.card, Function, Function.update, Function.update_self, classical, eq_or_ne, ite_true, le_sup_iff, norm_le_pi_norm, sup_le_iff, sup_le_sup, update, update_self
 -/
@@ -497,7 +605,15 @@ theorem continuous_of_bound
     (H m).trans (mul_le_mul_of_nonneg_right (le_max_left _ _) <| by positivity)
   refine continuous_iff_continuousAt.2 fun m => ?_
   refine
-    continuousAt_of_locally_
+    continuousAt_of_locally_lipschitz zero_lt_one
+      (D * Fintype.card ι * (‖m‖ + 1) ^ (Fintype.card ι - 1)) fun m' h' => ?_
+  rw [dist_eq_norm]; rw [dist_eq_norm]
+  have : max ‖m'‖ ‖m‖ <= ‖m‖ + 1 := by
+    simp [zero_le_one, norm_le_of_mem_closedBall (le_of_lt h')]
+  calc
+    ‖f m' - f m‖ <= D * Fintype.card ι * max ‖m'‖ ‖m‖ ^ (Fintype.card ι - 1) * ‖m' - m‖ :=
+      f.norm_image_sub_le_of_bound D_pos H m' m
+    _ <= D * Fintype.card ι * (‖m‖ + 1) ^ (Fintype.card ι - 1) * ‖m' - m‖ := by gcongr
 
 中文:
 定理 continuous_of_bound
@@ -509,7 +625,15 @@ theorem continuous_of_bound
     (H m).trans (mul_le_mul_of_nonneg_right (le_max_left _ _) <| by positivity)
   refine continuous_iff_continuousAt.2 fun m => ?_
   refine
-    continuousAt_of_locally_
+    continuousAt_of_locally_lipschitz zero_lt_one
+      (D * Fintype.card ι * (‖m‖ + 1) ^ (Fintype.card ι - 1)) fun m' h' => ?_
+  rw [dist_eq_norm]; rw [dist_eq_norm]
+  have : max ‖m'‖ ‖m‖ <= ‖m‖ + 1 := by
+    simp [zero_le_one, norm_le_of_mem_closedBall (le_of_lt h')]
+  calc
+    ‖f m' - f m‖ <= D * Fintype.card ι * max ‖m'‖ ‖m‖ ^ (Fintype.card ι - 1) * ‖m' - m‖ :=
+      f.norm_image_sub_le_of_bound D_pos H m' m
+    _ <= D * Fintype.card ι * (‖m‖ + 1) ^ (Fintype.card ι - 1) * ‖m' - m‖ := by gcongr
 
 Depends on / 依赖: D_pos, Fintype, Fintype.card, continuousAt_of_locally_lipschitz, continuous_iff_continuousAt, dist_eq_norm, le_max_left, le_max_right, le_o, le_trans, mul_le_mul_of_nonneg_right, norm_le_of_mem_closedBall, replace, zero_le_one, zero_lt_one
 -/
@@ -584,7 +708,7 @@ theorem restr_norm_le
   simp only [apply_dite norm, Fintype.prod_dite, prod_const ‖z‖, Finset.card_univ,
     Fintype.card_of_subtype sᶜ fun _ => mem_compl, card_compl, Fintype.card_fin, hk, ←
     (s.orderIsoOfFin hk).symm.bijective.prod_comp fun x => ‖v x‖]
-
+  convert! rfl
 
 中文:
 定理 restr_norm_le
@@ -595,7 +719,7 @@ theorem restr_norm_le
   simp only [apply_dite norm, Fintype.prod_dite, prod_const ‖z‖, Finset.card_univ,
     Fintype.card_of_subtype sᶜ fun _ => mem_compl, card_compl, Fintype.card_fin, hk, ←
     (s.orderIsoOfFin hk).symm.bijective.prod_comp fun x => ‖v x‖]
-
+  convert! rfl
 
 Depends on / 依赖: Finset, Finset.card_univ, Fintype, Fintype.card_fin, Fintype.card_of_subtype, Fintype.prod_dite, apply_dite, bijective, card_compl, card_fin, card_of_subtype, card_univ, convert, mem_compl, mul_assoc, mul_right_comm, orderIsoOfFin, prod_comp, prod_const, prod_dite
 -/
@@ -1114,7 +1238,32 @@ lemma uniformity_eq_seminorm
       ‖-f.1 + f.2‖ = ‖f.1 - f.2‖ := by rw [← opNorm_neg, neg_add, neg_neg, sub_eq_add_neg]
   simp only [A]
   refine (ContinuousMultilinearMap.seminorm 𝕜 E G).uniformity_eq_of_hasBasis
-    (ContinuousMultilinearMap.ha
+    (ContinuousMultilinearMap.hasBasis_nhds_zero_of_basis Metric.nhds_basis_closedBall)
+    ?_ fun (s, r) ⟨hs, hr⟩ => ?_
+  · rcases NormedField.exists_lt_norm 𝕜 1 with ⟨c, hc⟩
+    have hc₀ : 0 < ‖c‖ := one_pos.trans hc
+    simp only [hasBasis_nhds_zero.mem_iff, Prod.exists]
+    use 1, closedBall 0 ‖c‖, closedBall 0 1
+    suffices forall f : ContinuousMultilinearMap 𝕜 E G, (forall x, ‖x‖ <= ‖c‖ -> ‖f x‖ <= 1) -> ‖f‖ <= 1 by
+      simpa [NormedSpace.isVonNBounded_closedBall, closedBall_mem_nhds, Set.subset_def, Set.MapsTo]
+    intro f hf
+refine opNorm_le_bound (by positivity)
+      f.1.bound_of_shell_of_continuous f.2 (fun _ => hc₀) (fun _ => hc) fun x hcx hx => ?_
+    calc
+‖f x‖ <= 1 := hf _ (pi_norm_le_iff_of_nonneg (norm_nonneg c)).2 fun i => (hx i).le
+      _ = ∏ i : ι, 1 := by simp
+      _ <= ∏ i, ‖x i‖ := by gcongr with i; simpa only [div_self hc₀.ne'] using hcx i
+      _ = 1 * ∏ i, ‖x i‖ := (one_mul _).symm
+  · rcases (NormedSpace.isVonNBounded_iff' _).1 hs with ⟨ε, hε⟩
+    rcases exists_pos_mul_lt hr (ε ^ Fintype.card ι) with ⟨δ, hδ₀, hδ⟩
+    refine ⟨δ, hδ₀, fun f hf x hx => ?_⟩
+    simp only [Seminorm.mem_ball_zero, mem_closedBall_zero_iff] at hf ⊢
+    replace hf : ‖f‖ <= δ := hf.le
+    replace hx : ‖x‖ <= ε := hε x hx
+    calc
+      ‖f x‖ <= ‖f‖ * ε ^ Fintype.card ι := le_opNorm_mul_pow_card_of_le f hx
+      _ <= δ * ε ^ Fintype.card ι := by have := (norm_nonneg x).trans hx; gcongr
+      _ <= r := (mul_comm _ _).trans_le hδ.le
 
 中文:
 引理 uniformity_eq_seminorm
@@ -1123,7 +1272,32 @@ lemma uniformity_eq_seminorm
       ‖-f.1 + f.2‖ = ‖f.1 - f.2‖ := by rw [← opNorm_neg, neg_add, neg_neg, sub_eq_add_neg]
   simp only [A]
   refine (ContinuousMultilinearMap.seminorm 𝕜 E G).uniformity_eq_of_hasBasis
-    (ContinuousMultilinearMap.ha
+    (ContinuousMultilinearMap.hasBasis_nhds_zero_of_basis Metric.nhds_basis_closedBall)
+    ?_ fun (s, r) ⟨hs, hr⟩ => ?_
+  · rcases NormedField.exists_lt_norm 𝕜 1 with ⟨c, hc⟩
+    have hc₀ : 0 < ‖c‖ := one_pos.trans hc
+    simp only [hasBasis_nhds_zero.mem_iff, Prod.exists]
+    use 1, closedBall 0 ‖c‖, closedBall 0 1
+    suffices forall f : ContinuousMultilinearMap 𝕜 E G, (forall x, ‖x‖ <= ‖c‖ -> ‖f x‖ <= 1) -> ‖f‖ <= 1 by
+      simpa [NormedSpace.isVonNBounded_closedBall, closedBall_mem_nhds, Set.subset_def, Set.MapsTo]
+    intro f hf
+refine opNorm_le_bound (by positivity)
+      f.1.bound_of_shell_of_continuous f.2 (fun _ => hc₀) (fun _ => hc) fun x hcx hx => ?_
+    calc
+‖f x‖ <= 1 := hf _ (pi_norm_le_iff_of_nonneg (norm_nonneg c)).2 fun i => (hx i).le
+      _ = ∏ i : ι, 1 := by simp
+      _ <= ∏ i, ‖x i‖ := by gcongr with i; simpa only [div_self hc₀.ne'] using hcx i
+      _ = 1 * ∏ i, ‖x i‖ := (one_mul _).symm
+  · rcases (NormedSpace.isVonNBounded_iff' _).1 hs with ⟨ε, hε⟩
+    rcases exists_pos_mul_lt hr (ε ^ Fintype.card ι) with ⟨δ, hδ₀, hδ⟩
+    refine ⟨δ, hδ₀, fun f hf x hx => ?_⟩
+    simp only [Seminorm.mem_ball_zero, mem_closedBall_zero_iff] at hf ⊢
+    replace hf : ‖f‖ <= δ := hf.le
+    replace hx : ‖x‖ <= ε := hε x hx
+    calc
+      ‖f x‖ <= ‖f‖ * ε ^ Fintype.card ι := le_opNorm_mul_pow_card_of_le f hx
+      _ <= δ * ε ^ Fintype.card ι := by have := (norm_nonneg x).trans hx; gcongr
+      _ <= r := (mul_comm _ _).trans_le hδ.le
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.hasBasis_nhds_zero_of_basis, ContinuousMultilinearMap.seminorm, Metric, Metric.nhds_basis_closedBall, NormedField, NormedField.exists_lt_norm, exists_lt_norm, hasBasis_nhds_zero, hasBasis_nhds_zero.mem_iff, hasBasis_nhds_zero_of_basis, mem_iff, neg_add, neg_neg, nhds_basis_closedBall, one_pos, one_pos.trans, opNorm_neg, seminorm, sub_eq_add_neg
 -/
@@ -2003,7 +2177,7 @@ theorem norm_mkPiAlgebraFin_succ_le
   refine (List.norm_prod_le' ?_).trans_eq ?_
   · rw [Ne, List.map_eq_nil_iff, List.finRange_eq_nil_iff]
     exact Nat.succ_ne_zero _
-  rw 
+  rw [List.map_map]; rw [Function.comp_def]
 
 中文:
 定理 norm_mkPiAlgebraFin_succ_le
@@ -2015,7 +2189,7 @@ theorem norm_mkPiAlgebraFin_succ_le
   refine (List.norm_prod_le' ?_).trans_eq ?_
   · rw [Ne, List.map_eq_nil_iff, List.finRange_eq_nil_iff]
     exact Nat.succ_ne_zero _
-  rw 
+  rw [List.map_map]; rw [Function.comp_def]
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.mkPiAlgebraFin_apply, Fin.prod_univ_def, Function, Function.comp_def, List.finRange_eq_nil_iff, List.map_eq_nil_iff, List.map_map, List.norm_prod_le, List.ofFn_eq_map, Nat.succ_ne_zero, comp_def, finRange_eq_nil_iff, map_eq_nil_iff, map_map, mkPiAlgebraFin_apply, norm_prod_le, ofFn_eq_map, one_mul, opNorm_le_bound
 -/
@@ -2172,7 +2346,11 @@ theorem nnnorm_smulRight
     · simp [hz]
     rw [← le_div_iff₀ hz]; rw [opNNNorm_le_iff]
     intro m
-    rw [div_mul_eq_mul_
+    rw [div_mul_eq_mul_div]; rw [le_div_iff₀ hz]
+    refine le_trans ?_ ((f.smulRight z).le_opNNNorm m)
+    rw [smulRight_apply]; rw [nnnorm_smul]
+
+@[simp]
 
 中文:
 定理 nnnorm_smulRight
@@ -2187,7 +2365,11 @@ theorem nnnorm_smulRight
     · simp [hz]
     rw [← le_div_iff₀ hz]; rw [opNNNorm_le_iff]
     intro m
-    rw [div_mul_eq_mul_
+    rw [div_mul_eq_mul_div]; rw [le_div_iff₀ hz]
+    refine le_trans ?_ ((f.smulRight z).le_opNNNorm m)
+    rw [smulRight_apply]; rw [nnnorm_smul]
+
+@[simp]
 
 Depends on / 依赖: div_mul_eq_mul_div, eq_zero_or_pos, f.smulRight, le_antisymm, le_opNNNorm, le_trans, mul_right_comm, nnnorm_smul, nnnorm_smul_le, opNNNorm_le_iff, smulRight, smulRight_apply
 -/
@@ -2266,7 +2448,8 @@ definition smulRightL
           map_add' := fun x y => by ext; simp
           map_smul' := fun c x => by ext; simp [smul_smul, mul_comm] }
       map_add' := fun f g => by ext; simp [add_smul]
-      map_smul' := fun c f => by ext; si
+      map_smul' := fun c f => by ext; simp [smul_smul] }
+    1 (fun f z => by simp [norm_smulRight])
 
 中文:
 定义 smulRightL
@@ -2277,7 +2460,8 @@ definition smulRightL
           map_add' := fun x y => by ext; simp
           map_smul' := fun c x => by ext; simp [smul_smul, mul_comm] }
       map_add' := fun f g => by ext; simp [add_smul]
-      map_smul' := fun c f => by ext; si
+      map_smul' := fun c f => by ext; simp [smul_smul] }
+    1 (fun f z => by simp [norm_smulRight])
 
 Depends on / 依赖: LinearMap, LinearMap.mkContinuous, add_smul, f.smulRight, map_add, map_smul, mul_comm, norm_smulRight, smulRight, smul_smul
 -/
@@ -2395,7 +2579,7 @@ definition mkContinuousLinear
         simp }
     (max C 0) fun x => by
 simpa using ((f x).mkContinuous_norm_le' _).trans_eq by
-        rw [max_
+        rw [max_mul_of_nonneg _ _ (norm_nonneg x)]; rw [zero_mul]
 
 中文:
 定义 mkContinuousLinear
@@ -2410,7 +2594,7 @@ simpa using ((f x).mkContinuous_norm_le' _).trans_eq by
         simp }
     (max C 0) fun x => by
 simpa using ((f x).mkContinuous_norm_le' _).trans_eq by
-        rw [max_
+        rw [max_mul_of_nonneg _ _ (norm_nonneg x)]; rw [zero_mul]
 
 Depends on / 依赖: LinearMap, LinearMap.mkContinuous, map_add, map_smul, max_mul_of_nonneg, mkContinuous, mkContinuous_norm_le, norm_nonneg, trans_eq, zero_mul
 -/
@@ -2489,7 +2673,11 @@ definition mkContinuousMultilinear
         simp }
     (max C 0) fun m => by
       simp only [coe_mk]
-      refine ((f m).mkContin
+      refine ((f m).mkContinuous_norm_le' _).trans_eq ?_
+      rw [max_mul_of_nonneg]; rw [zero_mul]
+      positivity
+
+@[simp]
 
 中文:
 定义 mkContinuousMultilinear
@@ -2504,7 +2692,11 @@ definition mkContinuousMultilinear
         simp }
     (max C 0) fun m => by
       simp only [coe_mk]
-      refine ((f m).mkContin
+      refine ((f m).mkContinuous_norm_le' _).trans_eq ?_
+      rw [max_mul_of_nonneg]; rw [zero_mul]
+      positivity
+
+@[simp]
 
 Depends on / 依赖: coe_mk, map_update_add, map_update_smul, max_mul_of_nonneg, mkContinuous, mkContinuous_norm_le, trans_eq, zero_mul
 -/
@@ -2639,7 +2831,18 @@ definition flipMultilinear
             map_smul' := by simp }
           (‖f‖ * ∏ i, ‖m i‖) fun x => by
           rw [mul_right_comm]
-          exact (f x).le_of_opNorm_le (f.le_opNorm
+          exact (f x).le_of_opNorm_le (f.le_opNorm x) _
+      map_update_add' := fun m i x y => by
+        ext1
+        simp only [add_apply, ContinuousMultilinearMap.map_update_add, LinearMap.coe_mk,
+          LinearMap.mkContinuous_apply, AddHom.coe_mk]
+      map_update_smul' := fun m i c x => by
+        ext1
+        simp only [FunLike.coe_smul, ContinuousMultilinearMap.map_update_smul, LinearMap.coe_mk,
+          LinearMap.mkContinuous_apply, Pi.smul_apply, AddHom.coe_mk] }
+    ‖f‖ fun m => by
+      dsimp only [MultilinearMap.coe_mk]
+      exact LinearMap.mkContinuous_norm_le _ (by positivity) _
 
 中文:
 定义 flipMultilinear
@@ -2652,7 +2855,18 @@ definition flipMultilinear
             map_smul' := by simp }
           (‖f‖ * ∏ i, ‖m i‖) fun x => by
           rw [mul_right_comm]
-          exact (f x).le_of_opNorm_le (f.le_opNorm
+          exact (f x).le_of_opNorm_le (f.le_opNorm x) _
+      map_update_add' := fun m i x y => by
+        ext1
+        simp only [add_apply, ContinuousMultilinearMap.map_update_add, LinearMap.coe_mk,
+          LinearMap.mkContinuous_apply, AddHom.coe_mk]
+      map_update_smul' := fun m i c x => by
+        ext1
+        simp only [FunLike.coe_smul, ContinuousMultilinearMap.map_update_smul, LinearMap.coe_mk,
+          LinearMap.mkContinuous_apply, Pi.smul_apply, AddHom.coe_mk] }
+    ‖f‖ fun m => by
+      dsimp only [MultilinearMap.coe_mk]
+      exact LinearMap.mkContinuous_norm_le _ (by positivity) _
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, ContinuousMultilinearMap, ContinuousMultilinearMap.map_u, ContinuousMultilinearMap.map_update_add, FunLike, FunLike.coe_smul, LinearMap, LinearMap.coe_mk, LinearMap.mkContinuous, LinearMap.mkContinuous_apply, MultilinearMap, MultilinearMap.mkContinuous, add_apply, coe_mk, coe_smul, f.le_opNorm, le_of_opNorm_le, le_opNorm, map_add
 -/
@@ -2695,7 +2909,10 @@ definition _root_.ContinuousMultilinearMap.flipLinear
           map_update_smul' := by simp }
       map_add' x y := by ext1; simp
       map_smul' c x := by ext1; simp } ‖f‖ <| fun x m => by
-    rw [LinearMap.coe_mk]; rw [AddHom.coe_mk]; rw
+    rw [LinearMap.coe_mk]; rw [AddHom.coe_mk]; rw [MultilinearMap.coe_mk]; rw [mul_right_comm]
+    apply ((f m).le_opNorm x).trans
+    gcongr
+    apply f.le_opNorm
 
 中文:
 定义 _root_.连续多重线性映射.flipLinear
@@ -2707,7 +2924,10 @@ definition _root_.ContinuousMultilinearMap.flipLinear
           map_update_smul' := by simp }
       map_add' x y := by ext1; simp
       map_smul' c x := by ext1; simp } ‖f‖ <| fun x m => by
-    rw [LinearMap.coe_mk]; rw [AddHom.coe_mk]; rw
+    rw [LinearMap.coe_mk]; rw [AddHom.coe_mk]; rw [MultilinearMap.coe_mk]; rw [mul_right_comm]
+    apply ((f m).le_opNorm x).trans
+    gcongr
+    apply f.le_opNorm
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, LinearMap, LinearMap.coe_mk, MultilinearMap, MultilinearMap.coe_mk, MultilinearMap.mkContinuousLinear, coe_mk, f.le_opNorm, le_opNorm, map_add, map_smul, map_update_add, map_update_smul, mkContinuousLinear, mul_right_comm
 -/
@@ -2806,7 +3026,8 @@ definition flipMultilinearEquiv
     positivity
   · intro f
     suffices ‖f.flipLinear‖ <= ‖f‖ by simpa
-    apply MultilinearMap.mkContinuo
+    apply MultilinearMap.mkContinuousLinear_norm_le
+    positivity
 
 中文:
 定义 flipMultilinearEquiv
@@ -2819,7 +3040,8 @@ definition flipMultilinearEquiv
     positivity
   · intro f
     suffices ‖f.flipLinear‖ <= ‖f‖ by simpa
-    apply MultilinearMap.mkContinuo
+    apply MultilinearMap.mkContinuousLinear_norm_le
+    positivity
 
 Depends on / 依赖: MultilinearMap, MultilinearMap.mkContinuousLinear_norm_le, MultilinearMap.mkContinuous_norm_le, f.flipLinear, f.flipMultilinear, flipLinear, flipMultilinear, mkContinuousLinear_norm_le, mkContinuous_norm_le, toContinuousLinearEquivOfBounds
 -/
@@ -2972,7 +3194,9 @@ theorem norm_compContinuous_linearIsometryEquiv
     ext1 m
     simp
   conv_lhs => rw [this]
-  apply (
+  apply (g.compContinuousLinearMap fun i =>
+    (f i : E i ->L[𝕜] E₁ i)).norm_compContinuous_linearIsometry_le
+      fun i => (f i).symm.toLinearIsometry
 
 中文:
 定理 norm_compContinuous_linearIsometryEquiv
@@ -2984,7 +3208,9 @@ theorem norm_compContinuous_linearIsometryEquiv
     ext1 m
     simp
   conv_lhs => rw [this]
-  apply (
+  apply (g.compContinuousLinearMap fun i =>
+    (f i : E i ->L[𝕜] E₁ i)).norm_compContinuous_linearIsometry_le
+      fun i => (f i).symm.toLinearIsometry
 
 Depends on / 依赖: compContinuousLinearMap, conv_lhs, g.compContinuousLinearMap, g.norm_compContinuous_linearIsometry_le, le_antisymm, norm_compContinuous_linearIsometry_le, symm.toLinearIsometry, toLinearIsometry
 -/
@@ -3036,7 +3262,16 @@ definition compContinuousLinearMapLRight
         ext x
         simp only [compContinuousLinearMap_apply, add_apply]
         convert! g.map_update_add (fun j => f j (x j)) i (f₁ (x i)) (f₂ (x i)) <;>
-        
+          exact apply_update (fun (i : ι) (f : E i ->L[𝕜] E₁ i) => f (x i)) f i _ _
+      map_update_smul' := by
+        intro h f i a f₀
+        ext x
+        simp only [compContinuousLinearMap_apply, smul_apply]
+        convert! g.map_update_smul (fun j => f j (x j)) i a (f₀ (x i)) <;>
+          exact apply_update (fun (i : ι) (f : E i ->L[𝕜] E₁ i) => f (x i)) f i _ _ }
+    (‖g‖) (fun f => by simp [norm_compContinuousLinearMap_le])
+
+@[simp]
 
 中文:
 定义 compContinuousLinearMapLRight
@@ -3048,7 +3283,16 @@ definition compContinuousLinearMapLRight
         ext x
         simp only [compContinuousLinearMap_apply, add_apply]
         convert! g.map_update_add (fun j => f j (x j)) i (f₁ (x i)) (f₂ (x i)) <;>
-        
+          exact apply_update (fun (i : ι) (f : E i ->L[𝕜] E₁ i) => f (x i)) f i _ _
+      map_update_smul' := by
+        intro h f i a f₀
+        ext x
+        simp only [compContinuousLinearMap_apply, smul_apply]
+        convert! g.map_update_smul (fun j => f j (x j)) i a (f₀ (x i)) <;>
+          exact apply_update (fun (i : ι) (f : E i ->L[𝕜] E₁ i) => f (x i)) f i _ _ }
+    (‖g‖) (fun f => by simp [norm_compContinuousLinearMap_le])
+
+@[simp]
 
 Depends on / 依赖: MultilinearMap, MultilinearMap.mkContinuous, add_apply, apply_update, compContinuousLinearMap, compContinuousLinearMap_apply, convert, g.compContinuousLinearMap, g.map_update_add, g.map_update_smul, map_update_add, map_update_smul, mkContinuous, smul_apply
 -/
@@ -3121,7 +3365,12 @@ definition compContinuousLinearMapMultilinear
     change (g fun j => update f i (f₁ + f₂) j <| x j) =
         (g fun j => update f i f₁ j <| x j) + g fun j => update f i f₂ j (x j)
     convert! g.map_update_add (fun j => f j (x j)) i (f₁ (x i)) (f₂ (x i)) <;>
-      exact app
+      exact apply_update (fun (i : ι) (f : E i ->L[𝕜] E₁ i) => f (x i)) f i _ _
+  map_update_smul' f i a f₀ := by
+    ext g x
+    change (g fun j => update f i (a • f₀) j <| x j) = a • g fun j => update f i f₀ j (x j)
+    convert! g.map_update_smul (fun j => f j (x j)) i a (f₀ (x i)) <;>
+      exact apply_update (fun (i : ι) (f : E i ->L[𝕜] E₁ i) => f (x i)) f i _ _
 
 中文:
 定义 compContinuousLinearMapMultilinear
@@ -3132,7 +3381,12 @@ definition compContinuousLinearMapMultilinear
     change (g fun j => update f i (f₁ + f₂) j <| x j) =
         (g fun j => update f i f₁ j <| x j) + g fun j => update f i f₂ j (x j)
     convert! g.map_update_add (fun j => f j (x j)) i (f₁ (x i)) (f₂ (x i)) <;>
-      exact app
+      exact apply_update (fun (i : ι) (f : E i ->L[𝕜] E₁ i) => f (x i)) f i _ _
+  map_update_smul' f i a f₀ := by
+    ext g x
+    change (g fun j => update f i (a • f₀) j <| x j) = a • g fun j => update f i f₀ j (x j)
+    convert! g.map_update_smul (fun j => f j (x j)) i a (f₀ (x i)) <;>
+      exact apply_update (fun (i : ι) (f : E i ->L[𝕜] E₁ i) => f (x i)) f i _ _
 
 Depends on / 依赖: compContinuousLinearMapL
 -/
@@ -3256,7 +3510,17 @@ definition iteratedFDerivComponent
     simp only [MultilinearMap.iteratedFDerivComponent, MultilinearMap.domDomRestrictₗ,
       MultilinearMap.coe_mk, MultilinearMap.domDomRestrict_apply, coe_coe]
     apply (f.le_opNorm _).trans _
-    classica
+    classical
+    rw [← prod_compl_mul_prod s.toFinset]; rw [mul_assoc]
+    gcongr
+    · apply le_of_eq
+      have : forall x, x in s.toFinsetᶜ ↔ (fun x => x ∉ s) x := by simp
+      rw [prod_subtype _ this]
+      congr with i
+      simp [i.2]
+    · rw [prod_subtype _ (fun _ => s.mem_toFinset), ← Equiv.prod_comp e.symm]
+      gcongr with i
+      simpa only [i.2, ↓reduceDIte, Subtype.coe_eta] using norm_le_pi_norm (m (e.symm i)) ↑i
 
 中文:
 定义 iteratedFDerivComponent
@@ -3266,7 +3530,17 @@ definition iteratedFDerivComponent
     simp only [MultilinearMap.iteratedFDerivComponent, MultilinearMap.domDomRestrictₗ,
       MultilinearMap.coe_mk, MultilinearMap.domDomRestrict_apply, coe_coe]
     apply (f.le_opNorm _).trans _
-    classica
+    classical
+    rw [← prod_compl_mul_prod s.toFinset]; rw [mul_assoc]
+    gcongr
+    · apply le_of_eq
+      have : forall x, x in s.toFinsetᶜ ↔ (fun x => x ∉ s) x := by simp
+      rw [prod_subtype _ this]
+      congr with i
+      simp [i.2]
+    · rw [prod_subtype _ (fun _ => s.mem_toFinset), ← Equiv.prod_comp e.symm]
+      gcongr with i
+      simpa only [i.2, ↓reduceDIte, Subtype.coe_eta] using norm_le_pi_norm (m (e.symm i)) ↑i
 
 Depends on / 依赖: MultilinearMap, MultilinearMap.coe_mk, MultilinearMap.domDomRestrict, MultilinearMap.domDomRestrict_apply, MultilinearMap.iteratedFDerivComponent, classical, coe_coe, coe_mk, domDomRestrict_apply, f.le_opNorm, f.toMultilinearMap.iteratedFDerivComponent, iteratedFDerivComponent, le_of_eq, le_opNorm, mkContinuousMultilinear, mul_assoc, prod_compl_mul_prod, prod_subtype, s.toFinset, toFinset
 -/
@@ -3328,7 +3602,10 @@ lemma norm_iteratedFDerivComponent_le
       ContinuousMultilinearMap.le_opNorm _ _
   _ <= ‖f‖ * ∏ _i : {a : ι // a ∉ s}, ‖x‖ := by
       gcongr
-      · exact MultilinearMap.mkContinuousMultilinear_norm_le _ (norm_n
+      · exact MultilinearMap.mkContinuousMultilinear_norm_le _ (norm_nonneg _) _
+      · exact norm_le_pi_norm _ _
+  _ = ‖f‖ * ‖x‖ ^ (Fintype.card {a : ι // a ∉ s}) := by rw [prod_const, card_univ]
+  _ = ‖f‖ * ‖x‖ ^ (Fintype.card ι - Fintype.card α) := by simp [Fintype.card_congr e]
 
 中文:
 引理 norm_iteratedFDerivComponent_le
@@ -3339,7 +3616,10 @@ lemma norm_iteratedFDerivComponent_le
       ContinuousMultilinearMap.le_opNorm _ _
   _ <= ‖f‖ * ∏ _i : {a : ι // a ∉ s}, ‖x‖ := by
       gcongr
-      · exact MultilinearMap.mkContinuousMultilinear_norm_le _ (norm_n
+      · exact MultilinearMap.mkContinuousMultilinear_norm_le _ (norm_nonneg _) _
+      · exact norm_le_pi_norm _ _
+  _ = ‖f‖ * ‖x‖ ^ (Fintype.card {a : ι // a ∉ s}) := by rw [prod_const, card_univ]
+  _ = ‖f‖ * ‖x‖ ^ (Fintype.card ι - Fintype.card α) := by simp [Fintype.card_congr e]
 -/
 lemma norm_iteratedFDerivComponent_le {α : Type*} [Fintype α]
     (f : ContinuousMultilinearMap 𝕜 E₁ G) {s : Set ι} (e : α ≃ s) [DecidablePred (· in s)]
@@ -3386,7 +3666,8 @@ lemma norm_iteratedFDeriv_le'
   _ <= ∑ _ : Fin k ↪ ι, ‖f‖ * ‖x‖ ^ (Fintype.card ι - k) := by
     gcongr with e _
     simpa using norm_iteratedFDerivComponent_le f e.toEquivRange x
-  _ 
+  _ = Nat.descFactorial (Fintype.card ι) k * ‖f‖ * ‖x‖ ^ (Fintype.card ι - k) := by
+    simp [card_univ, mul_assoc]
 
 中文:
 引理 norm_iteratedFDeriv_le'
@@ -3398,7 +3679,8 @@ lemma norm_iteratedFDeriv_le'
   _ <= ∑ _ : Fin k ↪ ι, ‖f‖ * ‖x‖ ^ (Fintype.card ι - k) := by
     gcongr with e _
     simpa using norm_iteratedFDerivComponent_le f e.toEquivRange x
-  _ 
+  _ = Nat.descFactorial (Fintype.card ι) k * ‖f‖ * ‖x‖ ^ (Fintype.card ι - k) := by
+    simp [card_univ, mul_assoc]
 
 Depends on / 依赖: Fintype, Fintype.card, Nat.descFactorial, card_univ, classical, descFactorial, e.toEquivRange, f.iteratedFDeriv, iteratedFDeriv, iteratedFDerivComponent, mul_assoc, norm_iteratedFDerivComponent_le, norm_sum_le, toEquivRange
 -/

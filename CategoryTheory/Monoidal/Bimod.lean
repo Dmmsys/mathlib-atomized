@@ -381,7 +381,11 @@ definition isoOfIso
   inv :=
     { hom := f.inv
       left_act_hom := by
-        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_left_act_hom]; rw [← Category.assoc]; rw [← whiskerLeft_comp]; rw [Iso.inv_hom_id]; rw [whiskerLeft_id];
+        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_left_act_hom]; rw [← Category.assoc]; rw [← whiskerLeft_comp]; rw [Iso.inv_hom_id]; rw [whiskerLeft_id]; rw [Category.id_comp]
+      right_act_hom := by
+        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_right_act_hom]; rw [← Category.assoc]; rw [← comp_whiskerRight]; rw [Iso.inv_hom_id]; rw [id_whiskerRight]; rw [Category.id_comp] }
+  hom_inv_id := by ext; dsimp; rw [Iso.hom_inv_id]
+  inv_hom_id := by ext; dsimp; rw [Iso.inv_hom_id]
 
 中文:
 定义 isoOfIso
@@ -390,7 +394,11 @@ definition isoOfIso
   inv :=
     { hom := f.inv
       left_act_hom := by
-        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_left_act_hom]; rw [← Category.assoc]; rw [← whiskerLeft_comp]; rw [Iso.inv_hom_id]; rw [whiskerLeft_id];
+        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_left_act_hom]; rw [← Category.assoc]; rw [← whiskerLeft_comp]; rw [Iso.inv_hom_id]; rw [whiskerLeft_id]; rw [Category.id_comp]
+      right_act_hom := by
+        rw [← cancel_mono f.hom]; rw [Category.assoc]; rw [Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.comp_id]; rw [f_right_act_hom]; rw [← Category.assoc]; rw [← comp_whiskerRight]; rw [Iso.inv_hom_id]; rw [id_whiskerRight]; rw [Category.id_comp] }
+  hom_inv_id := by ext; dsimp; rw [Iso.hom_inv_id]
+  inv_hom_id := by ext; dsimp; rw [Iso.inv_hom_id]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, Iso.inv_hom_id, cancel_mono, comp_id, comp_whiskerRi, f.hom, f.inv, f_left_act_hom, f_right_act_hom, id_comp, inv_hom_id, left_act_hom, right_act_hom, whiskerLeft_comp, whiskerLeft_id
 -/
@@ -516,7 +524,15 @@ definition actLeft
         (by
           dsimp
           simp only [Category.assoc]
-          slice_lh
+          slice_lhs 1 2 => rw [associator_inv_naturality_middle]
+          slice_rhs 3 4 => rw [← comp_whiskerRight, middle_assoc, comp_whiskerRight]
+          simp)
+        (by
+          dsimp
+          slice_lhs 1 1 => rw [whiskerLeft_comp]
+          slice_lhs 2 3 => rw [associator_inv_naturality_right]
+          slice_lhs 3 4 => rw [whisker_exchange]
+          simp))
 
 中文:
 定义 actLeft
@@ -529,7 +545,15 @@ definition actLeft
         (by
           dsimp
           simp only [Category.assoc]
-          slice_lh
+          slice_lhs 1 2 => rw [associator_inv_naturality_middle]
+          slice_rhs 3 4 => rw [← comp_whiskerRight, middle_assoc, comp_whiskerRight]
+          simp)
+        (by
+          dsimp
+          slice_lhs 1 1 => rw [whiskerLeft_comp]
+          slice_lhs 2 3 => rw [associator_inv_naturality_right]
+          slice_lhs 3 4 => rw [whisker_exchange]
+          simp))
 
 Depends on / 依赖: Category, Category.assoc, P.actLeft, PreservesCoequalizer, PreservesCoequalizer.iso, actLeft, associator_inv_naturality_middle, associator_inv_naturality_right, colimMap, comp_whiskerRight, middle_assoc, parallelPairHom, slice_lhs, slice_rhs, tensorLeft, whiskerLeft_comp, whisker_exch
 -/
@@ -591,7 +615,8 @@ theorem one_act_left'
   slice_lhs 2 3 => rw [whiskerLeft_π_actLeft]
   slice_lhs 1 2 => rw [associator_inv_naturality_left]
   slice_lhs 2 3 => rw [← comp_whiskerRight, one_actLeft]
-  slice_rhs 1 2 =>
+  slice_rhs 1 2 => rw [leftUnitor_naturality]
+  monoidal
 
 中文:
 定理 one_act_left'
@@ -603,7 +628,8 @@ theorem one_act_left'
   slice_lhs 2 3 => rw [whiskerLeft_π_actLeft]
   slice_lhs 1 2 => rw [associator_inv_naturality_left]
   slice_lhs 2 3 => rw [← comp_whiskerRight, one_actLeft]
-  slice_rhs 1 2 =>
+  slice_rhs 1 2 => rw [leftUnitor_naturality]
+  monoidal
 
 Depends on / 依赖: associator_inv_naturality_left, cancel_epi, coequalizer, comp_whiskerRight, leftUnitor_naturality, monoidal, one_actLeft, slice_lhs, slice_rhs, tensorLeft, whisker_exchange
 -/
@@ -630,7 +656,13 @@ theorem left_assoc'
   slice_lhs 1 2 => rw [whisker_exchange]
   slice_lhs 2 3 => rw [whiskerLeft_π_actLeft]
   slice_lhs 1 2 => rw [associator_inv_naturality_left]
-  slice_lhs 2 3 => rw [← comp_whiskerRight, left_assoc, comp_whiskerRight, 
+  slice_lhs 2 3 => rw [← comp_whiskerRight, left_assoc, comp_whiskerRight, comp_whiskerRight]
+  slice_rhs 1 2 => rw [associator_naturality_right]
+  slice_rhs 2 3 =>
+    rw [← whiskerLeft_comp]; rw [whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+  slice_rhs 4 5 => rw [whiskerLeft_π_actLeft]
+  slice_rhs 3 4 => rw [associator_inv_naturality_middle]
+  monoidal
 
 中文:
 定理 left_assoc'
@@ -640,7 +672,13 @@ theorem left_assoc'
   slice_lhs 1 2 => rw [whisker_exchange]
   slice_lhs 2 3 => rw [whiskerLeft_π_actLeft]
   slice_lhs 1 2 => rw [associator_inv_naturality_left]
-  slice_lhs 2 3 => rw [← comp_whiskerRight, left_assoc, comp_whiskerRight, 
+  slice_lhs 2 3 => rw [← comp_whiskerRight, left_assoc, comp_whiskerRight, comp_whiskerRight]
+  slice_rhs 1 2 => rw [associator_naturality_right]
+  slice_rhs 2 3 =>
+    rw [← whiskerLeft_comp]; rw [whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+  slice_rhs 4 5 => rw [whiskerLeft_π_actLeft]
+  slice_rhs 3 4 => rw [associator_inv_naturality_middle]
+  monoidal
 
 Depends on / 依赖: associator_inv_naturality_left, associator_naturality_right, cancel_epi, coequalizer, comp_whiskerRight, left_assoc, slice_lhs, slice_rhs, tensorLeft, whisker, whiskerLeft_comp, whisker_exchange
 -/
@@ -679,7 +717,15 @@ definition actRight
         ((α_ _ _ _).hom ≫ (P.X ◁ Q.actRight))
         (by
           dsimp
-          slice_lhs 1 2 => rw [associator
+          slice_lhs 1 2 => rw [associator_naturality_left]
+          slice_lhs 2 3 => rw [← whisker_exchange]
+          simp)
+        (by
+          dsimp
+          simp only [comp_whiskerRight, whisker_assoc, Category.assoc, Iso.inv_hom_id_assoc]
+          slice_lhs 3 4 =>
+            rw [← whiskerLeft_comp]; rw [middle_assoc]; rw [whiskerLeft_comp]
+          simp))
 
 中文:
 定义 actRight
@@ -691,7 +737,15 @@ definition actRight
         ((α_ _ _ _).hom ≫ (P.X ◁ Q.actRight))
         (by
           dsimp
-          slice_lhs 1 2 => rw [associator
+          slice_lhs 1 2 => rw [associator_naturality_left]
+          slice_lhs 2 3 => rw [← whisker_exchange]
+          simp)
+        (by
+          dsimp
+          simp only [comp_whiskerRight, whisker_assoc, Category.assoc, Iso.inv_hom_id_assoc]
+          slice_lhs 3 4 =>
+            rw [← whiskerLeft_comp]; rw [middle_assoc]; rw [whiskerLeft_comp]
+          simp))
 
 Depends on / 依赖: Category, Category.assoc, Iso.inv_hom_id_assoc, PreservesCoequalizer, PreservesCoequalizer.iso, Q.actRight, actRight, associator_naturality_left, colimMap, comp_whiskerRight, inv_hom_id_assoc, middle_assoc, parallelPairHom, slice_lhs, tensorRight, whiskerLeft_comp, whisker_assoc, whisker_exchange
 -/
@@ -791,7 +845,12 @@ theorem right_assoc'
   slice_lhs 2 3 => rw [π_tensor_id_actRight]
   slice_lhs 1 2 => rw [associator_naturality_right]
   slice_lhs 2 3 => rw [← whiskerLeft_comp, right_assoc,
-    whiskerLeft_comp
+    whiskerLeft_comp, whiskerLeft_comp]
+  slice_rhs 1 2 => rw [associator_inv_naturality_left]
+  slice_rhs 2 3 => rw [← comp_whiskerRight, π_tensor_id_actRight, comp_whiskerRight,
+    comp_whiskerRight]
+  slice_rhs 4 5 => rw [π_tensor_id_actRight]
+  simp
 
 中文:
 定理 right_assoc'
@@ -802,7 +861,12 @@ theorem right_assoc'
   slice_lhs 2 3 => rw [π_tensor_id_actRight]
   slice_lhs 1 2 => rw [associator_naturality_right]
   slice_lhs 2 3 => rw [← whiskerLeft_comp, right_assoc,
-    whiskerLeft_comp
+    whiskerLeft_comp, whiskerLeft_comp]
+  slice_rhs 1 2 => rw [associator_inv_naturality_left]
+  slice_rhs 2 3 => rw [← comp_whiskerRight, π_tensor_id_actRight, comp_whiskerRight,
+    comp_whiskerRight]
+  slice_rhs 4 5 => rw [π_tensor_id_actRight]
+  simp
 
 Depends on / 依赖: associator_inv_naturality_left, associator_naturality_right, cancel_epi, coequalizer, comp_whiskerRight, right_assoc, slice_lhs, slice_rhs, tensorRight, whiskerLeft_comp, whisker_exchange
 -/
@@ -842,7 +906,14 @@ theorem middle_assoc'
   slice_lhs 1 2 => rw [← comp_whiskerRight, whiskerLeft_π_actLeft, comp_whiskerRight,
     comp_whiskerRight]
   slice_lhs 3 4 => rw [π_tensor_id_actRight]
-  slice_lhs 2 3 => rw [associator_naturality_le
+  slice_lhs 2 3 => rw [associator_naturality_left]
+  slice_rhs 1 2 => rw [associator_naturality_middle]
+  slice_rhs 2 3 => rw [← whiskerLeft_comp, π_tensor_id_actRight,
+    whiskerLeft_comp, whiskerLeft_comp]
+  slice_rhs 4 5 => rw [whiskerLeft_π_actLeft]
+  slice_rhs 3 4 => rw [associator_inv_naturality_right]
+  slice_rhs 4 5 => rw [whisker_exchange]
+  simp
 
 中文:
 定理 middle_assoc'
@@ -852,7 +923,14 @@ theorem middle_assoc'
   slice_lhs 1 2 => rw [← comp_whiskerRight, whiskerLeft_π_actLeft, comp_whiskerRight,
     comp_whiskerRight]
   slice_lhs 3 4 => rw [π_tensor_id_actRight]
-  slice_lhs 2 3 => rw [associator_naturality_le
+  slice_lhs 2 3 => rw [associator_naturality_left]
+  slice_rhs 1 2 => rw [associator_naturality_middle]
+  slice_rhs 2 3 => rw [← whiskerLeft_comp, π_tensor_id_actRight,
+    whiskerLeft_comp, whiskerLeft_comp]
+  slice_rhs 4 5 => rw [whiskerLeft_π_actLeft]
+  slice_rhs 3 4 => rw [associator_inv_naturality_right]
+  slice_rhs 4 5 => rw [whisker_exchange]
+  simp
 
 Depends on / 依赖: associator_naturality_left, associator_naturality_middle, cancel_epi, coequalizer, comp_whiskerRight, slice_lhs, slice_rhs, tensorLeft, tensorRight, whiskerLeft_comp
 -/
@@ -897,7 +975,7 @@ definition tensorBimod
   actRight_one := TensorBimod.actRight_one' M N
   left_assoc := TensorBimod.left_assoc' M N
   right_assoc := TensorBimod.right_assoc' M N
-  middle_assoc := Ten
+  middle_assoc := TensorBimod.middle_assoc' M N
 
 中文:
 定义 tensorBimod
@@ -909,7 +987,7 @@ definition tensorBimod
   actRight_one := TensorBimod.actRight_one' M N
   left_assoc := TensorBimod.left_assoc' M N
   right_assoc := TensorBimod.right_assoc' M N
-  middle_assoc := Ten
+  middle_assoc := TensorBimod.middle_assoc' M N
 
 Depends on / 依赖: TensorBimod, TensorBimod.X
 -/
@@ -940,7 +1018,28 @@ definition whiskerLeft
           simp only [Category.assoc, tensor_whiskerLeft, Iso.inv_hom_id_assoc,
             Iso.cancel_iso_hom_left]
           slice_lhs 1 2 => rw [← whiskerLeft_comp, Hom.left_act_hom]
-    
+          simp))
+  left_act_hom := by
+    refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
+    dsimp
+    slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
+    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+    slice_rhs 1 2 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one,
+      whiskerLeft_comp]
+    slice_rhs 2 3 => rw [TensorBimod.whiskerLeft_π_actLeft]
+    slice_rhs 1 2 => rw [associator_inv_naturality_right]
+    slice_rhs 2 3 => rw [whisker_exchange]
+    simp
+  right_act_hom := by
+    refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+    dsimp
+    slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
+    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+    slice_lhs 2 3 => rw [← whiskerLeft_comp, Hom.right_act_hom]
+    slice_rhs 1 2 =>
+      rw [← comp_whiskerRight]; rw [ι_colimMap]; rw [parallelPairHom_app_one]; rw [comp_whiskerRight]
+    slice_rhs 2 3 => rw [TensorBimod.π_tensor_id_actRight]
+    simp
 
 中文:
 定义 whiskerLeft
@@ -952,7 +1051,28 @@ definition whiskerLeft
           simp only [Category.assoc, tensor_whiskerLeft, Iso.inv_hom_id_assoc,
             Iso.cancel_iso_hom_left]
           slice_lhs 1 2 => rw [← whiskerLeft_comp, Hom.left_act_hom]
-    
+          simp))
+  left_act_hom := by
+    refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
+    dsimp
+    slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
+    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+    slice_rhs 1 2 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one,
+      whiskerLeft_comp]
+    slice_rhs 2 3 => rw [TensorBimod.whiskerLeft_π_actLeft]
+    slice_rhs 1 2 => rw [associator_inv_naturality_right]
+    slice_rhs 2 3 => rw [whisker_exchange]
+    simp
+  right_act_hom := by
+    refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+    dsimp
+    slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
+    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+    slice_lhs 2 3 => rw [← whiskerLeft_comp, Hom.right_act_hom]
+    slice_rhs 1 2 =>
+      rw [← comp_whiskerRight]; rw [ι_colimMap]; rw [parallelPairHom_app_one]; rw [comp_whiskerRight]
+    slice_rhs 2 3 => rw [TensorBimod.π_tensor_id_actRight]
+    simp
 
 Depends on / 依赖: Category, Category.assoc, Hom.left_act_hom, Iso.cancel_iso_hom_left, Iso.inv_hom_id_assoc, TensorBimod, TensorBimod.whiskerLeft_, cancel_epi, cancel_iso_hom_left, coequalizer, colimMap, f.hom, inv_hom_id_assoc, left_act_hom, parallelPairHom, parallelPairHom_app_one, slice_lhs, slice_rhs, tensorLeft, tensor_whiskerLeft
 -/
@@ -1006,7 +1126,25 @@ definition whiskerRight
           slice_lhs 2 3 => rw [whisker_exchange]
           simp))
   left_act_hom := by
-    refine (cancel_epi ((tensorLeft _).map (coequalizer.π
+    refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
+    dsimp
+    slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
+    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+    slice_lhs 2 3 => rw [← comp_whiskerRight, Hom.left_act_hom]
+    slice_rhs 1 2 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one, whiskerLeft_comp]
+    slice_rhs 2 3 => rw [TensorBimod.whiskerLeft_π_actLeft]
+    slice_rhs 1 2 => rw [associator_inv_naturality_middle]
+    simp
+  right_act_hom := by
+    refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+    dsimp
+    slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
+    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+    slice_lhs 2 3 => rw [whisker_exchange]
+    slice_rhs 1 2 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one,
+      comp_whiskerRight]
+    slice_rhs 2 3 => rw [TensorBimod.π_tensor_id_actRight]
+    simp
 
 中文:
 定义 whiskerRight
@@ -1018,7 +1156,25 @@ definition whiskerRight
           slice_lhs 2 3 => rw [whisker_exchange]
           simp))
   left_act_hom := by
-    refine (cancel_epi ((tensorLeft _).map (coequalizer.π
+    refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
+    dsimp
+    slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
+    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+    slice_lhs 2 3 => rw [← comp_whiskerRight, Hom.left_act_hom]
+    slice_rhs 1 2 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one, whiskerLeft_comp]
+    slice_rhs 2 3 => rw [TensorBimod.whiskerLeft_π_actLeft]
+    slice_rhs 1 2 => rw [associator_inv_naturality_middle]
+    simp
+  right_act_hom := by
+    refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+    dsimp
+    slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
+    slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+    slice_lhs 2 3 => rw [whisker_exchange]
+    slice_rhs 1 2 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one,
+      comp_whiskerRight]
+    slice_rhs 2 3 => rw [TensorBimod.π_tensor_id_actRight]
+    simp
 
 Depends on / 依赖: Hom.left_act_hom, Hom.right_act_hom, TensorBimod, TensorBimod.whiskerLeft_, cancel_epi, coequalizer, colimMap, comp_whiskerRight, f.hom, left_act_hom, parallelPairHom, parallelPairHom_app_one, right_act_hom, slice_lhs, slice_rhs, tensorLeft, whiskerLeft_comp, whisker_exchange
 -/
@@ -1074,7 +1230,11 @@ definition homAux
         dsimp; dsimp [TensorBimod.X]
         slice_lhs 1 2 => rw [associator_naturality_left]
         slice_lhs 2 3 => rw [← whisker_exchange]
-      
+        slice_lhs 3 4 => rw [coequalizer.condition]
+        slice_lhs 2 3 => rw [associator_naturality_right]
+        slice_lhs 3 4 =>
+          rw [← whiskerLeft_comp]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]
+        simp)
 
 中文:
 定义 homAux
@@ -1085,7 +1245,11 @@ definition homAux
         dsimp; dsimp [TensorBimod.X]
         slice_lhs 1 2 => rw [associator_naturality_left]
         slice_lhs 2 3 => rw [← whisker_exchange]
-      
+        slice_lhs 3 4 => rw [coequalizer.condition]
+        slice_lhs 2 3 => rw [associator_naturality_right]
+        slice_lhs 3 4 =>
+          rw [← whiskerLeft_comp]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]
+        simp)
 
 Depends on / 依赖: PreservesCoequalizer, PreservesCoequalizer.iso, TensorBimod, TensorBimod.X, TensorBimod.whiskerLeft_, associator_naturality_left, associator_naturality_right, coequalizer, coequalizer.condition, coequalizer.desc, condition, slice_lhs, tensorRight, whiskerLeft_comp, whisker_exchange
 -/
@@ -1116,7 +1280,15 @@ definition hom
       refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
       dsimp [TensorBimod.X]
       slice_lhs 1 2 => rw [← comp_whiskerRight, TensorBimod.π_tensor_id_actRight,
-        comp_whiskerRight, comp_whiskerR
+        comp_whiskerRight, comp_whiskerRight]
+      slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+      slice_lhs 2 3 => rw [associator_naturality_middle]
+      slice_lhs 3 4 =>
+        rw [← whiskerLeft_comp]; rw [coequalizer.condition]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+      slice_rhs 1 2 => rw [associator_naturality_left]
+      slice_rhs 2 3 => rw [← whisker_exchange]
+      slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+      simp)
 
 中文:
 定义 hom
@@ -1127,7 +1299,15 @@ definition hom
       refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
       dsimp [TensorBimod.X]
       slice_lhs 1 2 => rw [← comp_whiskerRight, TensorBimod.π_tensor_id_actRight,
-        comp_whiskerRight, comp_whiskerR
+        comp_whiskerRight, comp_whiskerRight]
+      slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+      slice_lhs 2 3 => rw [associator_naturality_middle]
+      slice_lhs 3 4 =>
+        rw [← whiskerLeft_comp]; rw [coequalizer.condition]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+      slice_rhs 1 2 => rw [associator_naturality_left]
+      slice_rhs 2 3 => rw [← whisker_exchange]
+      slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+      simp)
 
 Depends on / 依赖: TensorBimod, TensorBimod.X, associator_naturality_middle, cancel_epi, coequalizer, coequalizer.condition, coequalizer.desc, comp_whiskerRight, condition, homAux, slice_lhs, tensorRight, whiskerLeft_comp
 -/
@@ -1162,7 +1342,20 @@ theorem hom_left_act_hom'
   simp only [curriedTensor_obj_map]
   slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
   slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc, 
+  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc, whiskerLeft_comp]
+  refine (cancel_epi ((tensorRight _ ⋙ tensorLeft _).map (coequalizer.π _ _))).1 ?_
+  dsimp; dsimp [TensorBimod.X]
+  slice_lhs 1 2 => rw [associator_inv_naturality_middle]
+  slice_lhs 2 3 =>
+    rw [← comp_whiskerRight]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+  slice_lhs 4 6 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_lhs 3 4 => rw [associator_naturality_left]
+  slice_rhs 1 3 =>
+    rw [← whiskerLeft_comp]; rw [← whiskerLeft_comp]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+  slice_rhs 3 4 => erw [TensorBimod.whiskerLeft_π_actLeft P (Q.tensorBimod L)]
+  slice_rhs 2 3 => erw [associator_inv_naturality_right]
+  slice_rhs 3 4 => erw [whisker_exchange]
+  monoidal
 
 中文:
 定理 hom_left_act_hom'
@@ -1172,7 +1365,20 @@ theorem hom_left_act_hom'
   simp only [curriedTensor_obj_map]
   slice_lhs 1 2 => rw [TensorBimod.whiskerLeft_π_actLeft]
   slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc, 
+  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc, whiskerLeft_comp]
+  refine (cancel_epi ((tensorRight _ ⋙ tensorLeft _).map (coequalizer.π _ _))).1 ?_
+  dsimp; dsimp [TensorBimod.X]
+  slice_lhs 1 2 => rw [associator_inv_naturality_middle]
+  slice_lhs 2 3 =>
+    rw [← comp_whiskerRight]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+  slice_lhs 4 6 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_lhs 3 4 => rw [associator_naturality_left]
+  slice_rhs 1 3 =>
+    rw [← whiskerLeft_comp]; rw [← whiskerLeft_comp]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+  slice_rhs 3 4 => erw [TensorBimod.whiskerLeft_π_actLeft P (Q.tensorBimod L)]
+  slice_rhs 2 3 => erw [associator_inv_naturality_right]
+  slice_rhs 3 4 => erw [whisker_exchange]
+  monoidal
 
 Depends on / 依赖: TensorBimod, TensorBimod.X, TensorBimod.whiskerLeft_, associator_inv_naturality_middle, cancel_epi, coequalizer, comp_, curriedTensor_obj_map, homAux, slice_lhs, slice_rhs, tensorLeft, tensorRight, whiskerLeft_comp
 -/
@@ -1212,7 +1418,21 @@ theorem hom_right_act_hom'
   simp only [Functor.flip_obj_map, curriedTensor_map_app]
   slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
   slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_rhs 1 2 => rw [← comp_whiskerRigh
+  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc, comp_whiskerRight]
+  refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
+  dsimp; dsimp [TensorBimod.X]
+  slice_lhs 1 2 => rw [associator_naturality_left]
+  slice_lhs 2 3 => rw [← whisker_exchange]
+  slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_lhs 2 3 => rw [associator_naturality_right]
+  slice_rhs 1 3 =>
+    rw [← comp_whiskerRight]; rw [← comp_whiskerRight]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+  slice_rhs 3 4 => erw [TensorBimod.π_tensor_id_actRight P (Q.tensorBimod L)]
+  slice_rhs 2 3 => erw [associator_naturality_middle]
+  dsimp
+  slice_rhs 3 4 =>
+    rw [← whiskerLeft_comp]; rw [TensorBimod.π_tensor_id_actRight]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+  monoidal
 
 中文:
 定理 hom_right_act_hom'
@@ -1222,7 +1442,21 @@ theorem hom_right_act_hom'
   simp only [Functor.flip_obj_map, curriedTensor_map_app]
   slice_lhs 1 2 => rw [TensorBimod.π_tensor_id_actRight]
   slice_lhs 3 4 => rw [coequalizer.π_desc]
-  slice_rhs 1 2 => rw [← comp_whiskerRigh
+  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc, comp_whiskerRight]
+  refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
+  dsimp; dsimp [TensorBimod.X]
+  slice_lhs 1 2 => rw [associator_naturality_left]
+  slice_lhs 2 3 => rw [← whisker_exchange]
+  slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_lhs 2 3 => rw [associator_naturality_right]
+  slice_rhs 1 3 =>
+    rw [← comp_whiskerRight]; rw [← comp_whiskerRight]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+  slice_rhs 3 4 => erw [TensorBimod.π_tensor_id_actRight P (Q.tensorBimod L)]
+  slice_rhs 2 3 => erw [associator_naturality_middle]
+  dsimp
+  slice_rhs 3 4 =>
+    rw [← whiskerLeft_comp]; rw [TensorBimod.π_tensor_id_actRight]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+  monoidal
 
 Depends on / 依赖: Functor, Functor.flip_obj_map, TensorBimod, TensorBimod.X, associator_naturality_left, cancel_epi, coequalizer, comp_whiskerRight, curriedTensor_map_app, flip_obj_map, homAux, slice_lhs, slice_rhs, tensorRight
 -/
@@ -1263,7 +1497,15 @@ definition invAux
       (by
         dsimp; dsimp [TensorBimod.X]
         slice_lhs 1 2 => rw [associator_inv_naturality_middle]
-        rw [← Iso.inv_hom_id_assoc (α_ _ _ _) (P.X
+        rw [← Iso.inv_hom_id_assoc (α_ _ _ _) (P.X ◁ Q.actRight)]; rw [comp_whiskerRight]
+        slice_lhs 3 4 =>
+          rw [← comp_whiskerRight]; rw [Category.assoc]; rw [← TensorBimod.π_tensor_id_actRight]; rw [comp_whiskerRight]
+        slice_lhs 4 5 => rw [coequalizer.condition]
+        slice_lhs 3 4 => rw [associator_naturality_left]
+        slice_rhs 1 2 => rw [whiskerLeft_comp]
+        slice_rhs 2 3 => rw [associator_inv_naturality_right]
+        slice_rhs 3 4 => rw [whisker_exchange]
+        simp)
 
 中文:
 定义 invAux
@@ -1273,7 +1515,15 @@ definition invAux
       (by
         dsimp; dsimp [TensorBimod.X]
         slice_lhs 1 2 => rw [associator_inv_naturality_middle]
-        rw [← Iso.inv_hom_id_assoc (α_ _ _ _) (P.X
+        rw [← Iso.inv_hom_id_assoc (α_ _ _ _) (P.X ◁ Q.actRight)]; rw [comp_whiskerRight]
+        slice_lhs 3 4 =>
+          rw [← comp_whiskerRight]; rw [Category.assoc]; rw [← TensorBimod.π_tensor_id_actRight]; rw [comp_whiskerRight]
+        slice_lhs 4 5 => rw [coequalizer.condition]
+        slice_lhs 3 4 => rw [associator_naturality_left]
+        slice_rhs 1 2 => rw [whiskerLeft_comp]
+        slice_rhs 2 3 => rw [associator_inv_naturality_right]
+        slice_rhs 3 4 => rw [whisker_exchange]
+        simp)
 
 Depends on / 依赖: Category, Category.assoc, Iso.inv_hom_id_assoc, PreservesCoequalizer, PreservesCoequalizer.iso, Q.actRight, TensorBimod, TensorBimod.X, actRight, associator_inv_naturality_middle, coequalizer, coequalizer.condition, coequalizer.desc, comp_whiskerRight, condition, inv_hom_id_assoc, slice_lhs, tensorLeft, trivial_covering, trivial_covering.mp
 -/
@@ -1308,7 +1558,15 @@ definition inv
       dsimp [TensorBimod.X]
       slice_lhs 1 2 => rw [whisker_exchange]
       slice_lhs 2 4 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-      slice_lhs 1 2 => 
+      slice_lhs 1 2 => rw [associator_inv_naturality_left]
+      slice_lhs 2 3 =>
+        rw [← comp_whiskerRight]; rw [coequalizer.condition]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+      slice_rhs 1 2 => rw [associator_naturality_right]
+      slice_rhs 2 3 =>
+        rw [← whiskerLeft_comp]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+      slice_rhs 4 6 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
+      slice_rhs 3 4 => rw [associator_inv_naturality_middle]
+      monoidal)
 
 中文:
 定义 inv
@@ -1320,7 +1578,15 @@ definition inv
       dsimp [TensorBimod.X]
       slice_lhs 1 2 => rw [whisker_exchange]
       slice_lhs 2 4 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-      slice_lhs 1 2 => 
+      slice_lhs 1 2 => rw [associator_inv_naturality_left]
+      slice_lhs 2 3 =>
+        rw [← comp_whiskerRight]; rw [coequalizer.condition]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+      slice_rhs 1 2 => rw [associator_naturality_right]
+      slice_rhs 2 3 =>
+        rw [← whiskerLeft_comp]; rw [TensorBimod.whiskerLeft_π_actLeft]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+      slice_rhs 4 6 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
+      slice_rhs 3 4 => rw [associator_inv_naturality_middle]
+      monoidal)
 
 Depends on / 依赖: TensorBimod, TensorBimod.X, associator_inv_naturality_left, associator_naturality_right, cancel_epi, coequalizer, coequalizer.condition, coequalizer.desc, comp_whiskerRight, condition, invAux, slice_lhs, slice_rhs, tensorLeft, whiskerLeft_c, whisker_exchange
 -/
@@ -1357,7 +1623,13 @@ theorem hom_inv_id
   slice_lhs 1 2 => rw [coequalizer.π_desc]
   refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
   simp only [Functor.flip_obj_map, curriedTensor_map_app]
-  slice_lhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_des
+  slice_lhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_lhs 3 4 => rw [coequalizer.π_desc]
+  slice_lhs 2 4 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
+  slice_lhs 1 3 => rw [Iso.hom_inv_id_assoc]
+  dsimp only [TensorBimod.X]
+  slice_rhs 2 3 => rw [Category.comp_id]
+  rfl
 
 中文:
 定理 hom_inv_id
@@ -1368,7 +1640,13 @@ theorem hom_inv_id
   slice_lhs 1 2 => rw [coequalizer.π_desc]
   refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
   simp only [Functor.flip_obj_map, curriedTensor_map_app]
-  slice_lhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_des
+  slice_lhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_lhs 3 4 => rw [coequalizer.π_desc]
+  slice_lhs 2 4 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
+  slice_lhs 1 3 => rw [Iso.hom_inv_id_assoc]
+  dsimp only [TensorBimod.X]
+  slice_rhs 2 3 => rw [Category.comp_id]
+  rfl
 
 Depends on / 依赖: Category, Category.com, Functor, Functor.flip_obj_map, Iso.hom_inv_id_assoc, TensorBimod, TensorBimod.X, cancel_epi, coequalizer, coequalizer.hom_ext, curriedTensor_map_app, flip_obj_map, homAux, hom_ext, hom_inv_id_assoc, invAux, slice_lhs, slice_rhs, tensorRight
 -/
@@ -1401,7 +1679,12 @@ theorem inv_hom_id
   refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
   simp only [curriedTensor_obj_map]
   slice_lhs 1 3 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  slice_lhs 3 4 => r
+  slice_lhs 3 4 => rw [coequalizer.π_desc]
+  slice_lhs 2 4 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_lhs 1 3 => rw [Iso.inv_hom_id_assoc]
+  dsimp only [TensorBimod.X]
+  slice_rhs 2 3 => rw [Category.comp_id]
+  rfl
 
 中文:
 定理 inv_hom_id
@@ -1413,7 +1696,12 @@ theorem inv_hom_id
   refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
   simp only [curriedTensor_obj_map]
   slice_lhs 1 3 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
-  slice_lhs 3 4 => r
+  slice_lhs 3 4 => rw [coequalizer.π_desc]
+  slice_lhs 2 4 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_lhs 1 3 => rw [Iso.inv_hom_id_assoc]
+  dsimp only [TensorBimod.X]
+  slice_rhs 2 3 => rw [Category.comp_id]
+  rfl
 
 Depends on / 依赖: Category, Category.comp_id, Iso.inv_hom_id_assoc, TensorBimod, TensorBimod.X, cancel_epi, coequalizer, coequalizer.hom_ext, comp_id, curriedTensor_obj_map, homAux, hom_ext, invAux, inv_hom_id_assoc, slice_lhs, slice_rhs, tensorLeft
 -/
@@ -1489,7 +1777,11 @@ theorem hom_inv_id
   slice_lhs 1 2 => rw [leftUnitor_inv_naturality]
   slice_lhs 2 3 => rw [whisker_exchange]
   slice_lhs 3 3 => rw [← Iso.inv_hom_id_assoc (α_ R.X R.X P.X) (R.X ◁ P.actLeft)]
-  slice_lhs 4 6 => rw [← Cate
+  slice_lhs 4 6 => rw [← Category.assoc, ← coequalizer.condition]
+  slice_lhs 2 3 => rw [associator_inv_naturality_left]
+  slice_lhs 3 4 => rw [← comp_whiskerRight, MonObj.one_mul]
+  slice_rhs 1 2 => rw [Category.comp_id]
+  monoidal
 
 中文:
 定理 hom_inv_id
@@ -1501,7 +1793,11 @@ theorem hom_inv_id
   slice_lhs 1 2 => rw [leftUnitor_inv_naturality]
   slice_lhs 2 3 => rw [whisker_exchange]
   slice_lhs 3 3 => rw [← Iso.inv_hom_id_assoc (α_ R.X R.X P.X) (R.X ◁ P.actLeft)]
-  slice_lhs 4 6 => rw [← Cate
+  slice_lhs 4 6 => rw [← Category.assoc, ← coequalizer.condition]
+  slice_lhs 2 3 => rw [associator_inv_naturality_left]
+  slice_lhs 3 4 => rw [← comp_whiskerRight, MonObj.one_mul]
+  slice_rhs 1 2 => rw [Category.comp_id]
+  monoidal
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Iso.inv_hom_id_assoc, MonObj, MonObj.one_mul, P.actLeft, TensorBimod, TensorBimod.X, actLeft, associator_inv_naturality_left, coequalizer, coequalizer.condition, comp_id, comp_whiskerRight, condition, inv_hom_id_assoc, leftUnitor_inv_naturality, monoidal, one_mul
 -/
@@ -1561,7 +1857,8 @@ theorem hom_left_act_hom'
   dsimp
   slice_lhs 1 4 => rw [id_tensor_π_preserves_coequalizer_inv_colimMap_desc]
   slice_lhs 2 3 => rw [left_assoc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_de
+  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc]
+  rw [Iso.inv_hom_id_assoc]
 
 中文:
 定理 hom_left_act_hom'
@@ -1571,7 +1868,8 @@ theorem hom_left_act_hom'
   dsimp
   slice_lhs 1 4 => rw [id_tensor_π_preserves_coequalizer_inv_colimMap_desc]
   slice_lhs 2 3 => rw [left_assoc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_de
+  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc]
+  rw [Iso.inv_hom_id_assoc]
 
 Depends on / 依赖: Iso.inv_hom_id_assoc, TensorBimod, TensorBimod.actLeft, actLeft, cancel_epi, coequalizer, inv_hom_id_assoc, left_assoc, regular, slice_lhs, slice_rhs, tensorLeft, whiskerLeft_comp
 -/
@@ -1598,7 +1896,8 @@ theorem hom_right_act_hom'
   dsimp
   slice_lhs 1 4 => rw [π_tensor_id_preserves_coequalizer_inv_colimMap_desc]
   slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
-  slice_rhs 1 2 => rw [middl
+  slice_rhs 1 2 => rw [middle_assoc]
+  simp only [Category.assoc]
 
 中文:
 定理 hom_right_act_hom'
@@ -1608,7 +1907,8 @@ theorem hom_right_act_hom'
   dsimp
   slice_lhs 1 4 => rw [π_tensor_id_preserves_coequalizer_inv_colimMap_desc]
   slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
-  slice_rhs 1 2 => rw [middl
+  slice_rhs 1 2 => rw [middle_assoc]
+  simp only [Category.assoc]
 
 Depends on / 依赖: Category, Category.assoc, TensorBimod, TensorBimod.actRight, actRight, cancel_epi, coequalizer, comp_whiskerRight, middle_assoc, regular, slice_lhs, slice_rhs, tensorRight
 -/
@@ -1681,7 +1981,9 @@ theorem hom_inv_id
   slice_lhs 2 3 => rw [← whisker_exchange]
   slice_lhs 3 4 => rw [coequalizer.condition]
   slice_lhs 2 3 => rw [associator_naturality_right]
-  slice_lh
+  slice_lhs 3 4 => rw [← whiskerLeft_comp, MonObj.mul_one]
+  slice_rhs 1 2 => rw [Category.comp_id]
+  monoidal
 
 中文:
 定理 hom_inv_id
@@ -1694,7 +1996,9 @@ theorem hom_inv_id
   slice_lhs 2 3 => rw [← whisker_exchange]
   slice_lhs 3 4 => rw [coequalizer.condition]
   slice_lhs 2 3 => rw [associator_naturality_right]
-  slice_lh
+  slice_lhs 3 4 => rw [← whiskerLeft_comp, MonObj.mul_one]
+  slice_rhs 1 2 => rw [Category.comp_id]
+  monoidal
 
 Depends on / 依赖: Category, Category.comp_id, MonObj, MonObj.mul_one, TensorBimod, TensorBimod.X, associator_naturality_right, coequalizer, coequalizer.condition, comp_id, condition, monoidal, mul_one, rightUnitor_inv_naturality, slice_lhs, slice_rhs, whiskerLeft_comp, whisker_exchange
 -/
@@ -1753,7 +2057,8 @@ theorem hom_left_act_hom'
   dsimp
   slice_lhs 1 4 => rw [id_tensor_π_preserves_coequalizer_inv_colimMap_desc]
   slice_lhs 2 3 => rw [middle_assoc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_
+  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc]
+  rw [Iso.inv_hom_id_assoc]
 
 中文:
 定理 hom_left_act_hom'
@@ -1763,7 +2068,8 @@ theorem hom_left_act_hom'
   dsimp
   slice_lhs 1 4 => rw [id_tensor_π_preserves_coequalizer_inv_colimMap_desc]
   slice_lhs 2 3 => rw [middle_assoc]
-  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_
+  slice_rhs 1 2 => rw [← whiskerLeft_comp, coequalizer.π_desc]
+  rw [Iso.inv_hom_id_assoc]
 
 Depends on / 依赖: Iso.inv_hom_id_assoc, TensorBimod, TensorBimod.actLeft, actLeft, cancel_epi, coequalizer, inv_hom_id_assoc, middle_assoc, regular, slice_lhs, slice_rhs, tensorLeft, whiskerLeft_comp
 -/
@@ -1790,7 +2096,8 @@ theorem hom_right_act_hom'
   dsimp
   slice_lhs 1 4 => rw [π_tensor_id_preserves_coequalizer_inv_colimMap_desc]
   slice_lhs 2 3 => rw [right_assoc]
-  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.
+  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
+  rw [Iso.hom_inv_id_assoc]
 
 中文:
 定理 hom_right_act_hom'
@@ -1800,7 +2107,8 @@ theorem hom_right_act_hom'
   dsimp
   slice_lhs 1 4 => rw [π_tensor_id_preserves_coequalizer_inv_colimMap_desc]
   slice_lhs 2 3 => rw [right_assoc]
-  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.
+  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
+  rw [Iso.hom_inv_id_assoc]
 
 Depends on / 依赖: Iso.hom_inv_id_assoc, TensorBimod, TensorBimod.actRight, actRight, cancel_epi, coequalizer, comp_whiskerRight, hom_inv_id_assoc, regular, right_assoc, slice_lhs, slice_rhs, tensorRight
 -/
@@ -2023,7 +2331,23 @@ theorem id_whiskerLeft_bimod
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [LeftUnitorBimod.inv]
   slice_rhs 1 2 => rw [Hom.left_act_hom]
-  sli
+  slice_rhs 2 3 => rw [leftUnitor_inv_naturality]
+  slice_rhs 3 4 => rw [whisker_exchange]
+  slice_rhs 4 4 => rw [← Iso.inv_hom_id_assoc (α_ X.X X.X N.X) (X.X ◁ N.actLeft)]
+  slice_rhs 5 7 => rw [← Category.assoc, ← coequalizer.condition]
+  slice_rhs 3 4 => rw [associator_inv_naturality_left]
+  slice_rhs 4 5 => rw [← comp_whiskerRight, MonObj.one_mul]
+  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. The original proof was:
+  ```
+  have : (λ_ (X.X ⊗ N.X)).inv ≫ (α_ (𝟙_ C) X.X N.X).inv ≫ ((λ_ X.X).hom ▷ N.X) = 𝟙 _ := by
+    monoidal
+  grind
+  ```
+  -/
+  simp
 
 中文:
 定理 id_whiskerLeft_bimod
@@ -2038,7 +2362,23 @@ theorem id_whiskerLeft_bimod
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [LeftUnitorBimod.inv]
   slice_rhs 1 2 => rw [Hom.left_act_hom]
-  sli
+  slice_rhs 2 3 => rw [leftUnitor_inv_naturality]
+  slice_rhs 3 4 => rw [whisker_exchange]
+  slice_rhs 4 4 => rw [← Iso.inv_hom_id_assoc (α_ X.X X.X N.X) (X.X ◁ N.actLeft)]
+  slice_rhs 5 7 => rw [← Category.assoc, ← coequalizer.condition]
+  slice_rhs 3 4 => rw [associator_inv_naturality_left]
+  slice_rhs 4 5 => rw [← comp_whiskerRight, MonObj.one_mul]
+  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+  It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+  canonicalizer; a minimization would help. The original proof was:
+  ```
+  have : (λ_ (X.X ⊗ N.X)).inv ≫ (α_ (𝟙_ C) X.X N.X).inv ≫ ((λ_ X.X).hom ▷ N.X) = 𝟙 _ := by
+    monoidal
+  grind
+  ```
+  -/
+  simp
 
 Depends on / 依赖: Category, Category.assoc, Hom.left_act_hom, Iso.inv_hom_id_assoc, LeftUnitorBimod, LeftUnitorBimod.hom, LeftUnitorBimod.inv, N.actLeft, actLeft, coequalizer, coequalizer.con, coequalizer.hom_ext, hom_ext, inv_hom_id_assoc, leftUnitorBimod, leftUnitor_inv_naturality, left_act_hom, parallelPairHom_app_one, regular, slice_lhs
 -/
@@ -2088,7 +2428,19 @@ theorem comp_whiskerLeft_bimod
   dsimp [TensorBimod.X, AssociatorBimod.hom]
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [AssociatorBimod.homAux, AssociatorBimod.inv]
-  r
+  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+  simp only [Functor.flip_obj_map, curriedTensor_map_app]
+  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 2 3 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 3 4 => rw [coequalizer.π_desc]
+  dsimp [AssociatorBimod.invAux]
+  slice_rhs 2 2 => rw [whiskerLeft_comp]
+  slice_rhs 3 5 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
+  slice_rhs 2 3 => rw [associator_inv_naturality_right]
+  slice_rhs 1 3 => rw [Iso.hom_inv_id_assoc]
+  slice_lhs 1 2 => rw [← whisker_exchange]
+  rfl
 
 中文:
 定理 comp_whiskerLeft_bimod
@@ -2102,7 +2454,19 @@ theorem comp_whiskerLeft_bimod
   dsimp [TensorBimod.X, AssociatorBimod.hom]
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [AssociatorBimod.homAux, AssociatorBimod.inv]
-  r
+  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+  simp only [Functor.flip_obj_map, curriedTensor_map_app]
+  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 2 3 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 3 4 => rw [coequalizer.π_desc]
+  dsimp [AssociatorBimod.invAux]
+  slice_rhs 2 2 => rw [whiskerLeft_comp]
+  slice_rhs 3 5 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
+  slice_rhs 2 3 => rw [associator_inv_naturality_right]
+  slice_rhs 1 3 => rw [Iso.hom_inv_id_assoc]
+  slice_lhs 1 2 => rw [← whisker_exchange]
+  rfl
 
 Depends on / 依赖: AssociatorBimod, AssociatorBimod.hom, AssociatorBimod.homAux, AssociatorBimod.inv, Functor, Functor.flip_obj_map, TensorBimod, TensorBimod.X, associatorBimod, cancel_epi, coequalizer, coequalizer.hom_ext, curriedTensor_map_app, flip_obj_map, homAux, hom_ext, parallelPairHom_app_one, slice_lhs, slice_rhs, tensorBimod
 -/
@@ -2179,7 +2543,12 @@ theorem whiskerRight_id_bimod
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [RightUnitorBimod.inv]
   slice_rhs 1 2 => rw [Hom.right_act_hom]
- 
+  slice_rhs 2 3 => rw [rightUnitor_inv_naturality]
+  slice_rhs 3 4 => rw [← whisker_exchange]
+  slice_rhs 4 5 => rw [coequalizer.condition]
+  slice_rhs 3 4 => rw [associator_naturality_right]
+  slice_rhs 4 5 => rw [← whiskerLeft_comp, MonObj.mul_one]
+  simp
 
 中文:
 定理 whiskerRight_id_bimod
@@ -2194,7 +2563,12 @@ theorem whiskerRight_id_bimod
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [RightUnitorBimod.inv]
   slice_rhs 1 2 => rw [Hom.right_act_hom]
- 
+  slice_rhs 2 3 => rw [rightUnitor_inv_naturality]
+  slice_rhs 3 4 => rw [← whisker_exchange]
+  slice_rhs 4 5 => rw [coequalizer.condition]
+  slice_rhs 3 4 => rw [associator_naturality_right]
+  slice_rhs 4 5 => rw [← whiskerLeft_comp, MonObj.mul_one]
+  simp
 
 Depends on / 依赖: Hom.right_act_hom, RightUnitorBimod, RightUnitorBimod.hom, RightUnitorBimod.inv, associator_naturality_right, coequalizer, coequalizer.condition, coequalizer.hom_ext, condition, hom_ext, parallelPairHom_app_one, regular, rightUnitorBimod, rightUnitor_inv_naturality, right_act_hom, slice_lhs, slice_rhs, tensorHom, whiskerLeft_, whisker_exchange
 -/
@@ -2233,7 +2607,19 @@ theorem whiskerRight_comp_bimod
   dsimp [TensorBimod.X, AssociatorBimod.inv]
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [AssociatorBimod.invAux, AssociatorBimod.hom]
-  r
+  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
+  simp only [curriedTensor_obj_map]
+  slice_rhs 1 3 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
+  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 2 3 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 3 4 => rw [coequalizer.π_desc]
+  dsimp [AssociatorBimod.homAux]
+  slice_rhs 2 2 => rw [comp_whiskerRight]
+  slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_rhs 2 3 => rw [associator_naturality_left]
+  slice_rhs 1 3 => rw [Iso.inv_hom_id_assoc]
+  slice_lhs 1 2 => rw [whisker_exchange]
+  rfl
 
 中文:
 定理 whiskerRight_comp_bimod
@@ -2247,7 +2633,19 @@ theorem whiskerRight_comp_bimod
   dsimp [TensorBimod.X, AssociatorBimod.inv]
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [AssociatorBimod.invAux, AssociatorBimod.hom]
-  r
+  refine (cancel_epi ((tensorLeft _).map (coequalizer.π _ _))).1 ?_
+  simp only [curriedTensor_obj_map]
+  slice_rhs 1 3 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
+  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 2 3 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 3 4 => rw [coequalizer.π_desc]
+  dsimp [AssociatorBimod.homAux]
+  slice_rhs 2 2 => rw [comp_whiskerRight]
+  slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_rhs 2 3 => rw [associator_naturality_left]
+  slice_rhs 1 3 => rw [Iso.inv_hom_id_assoc]
+  slice_lhs 1 2 => rw [whisker_exchange]
+  rfl
 
 Depends on / 依赖: AssociatorBimod, AssociatorBimod.hom, AssociatorBimod.inv, AssociatorBimod.invAux, TensorBimod, TensorBimod.X, associatorBimod, cancel_epi, coequalizer, coequalizer.hom_ext, curriedTensor_obj_map, hom_ext, invAux, parallelPairHom_app_o, parallelPairHom_app_one, slice_lhs, slice_rhs, tensorBimod, tensorHom, tensorLeft
 -/
@@ -2295,7 +2693,18 @@ theorem whisker_assoc_bimod
   dsimp [AssociatorBimod.hom]
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [AssociatorBimod.homAux]
-  refine (cancel_epi ((tensorRight _).m
+  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+  simp only [Functor.flip_obj_map, curriedTensor_map_app]
+  slice_lhs 1 2 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 2 3 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one]
+  dsimp [AssociatorBimod.inv]
+  slice_rhs 3 4 => rw [coequalizer.π_desc]
+  dsimp [AssociatorBimod.invAux]
+  slice_rhs 2 2 => rw [whiskerLeft_comp]
+  slice_rhs 3 5 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
+  simp
 
 中文:
 定理 whisker_assoc_bimod
@@ -2309,7 +2718,18 @@ theorem whisker_assoc_bimod
   dsimp [AssociatorBimod.hom]
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [AssociatorBimod.homAux]
-  refine (cancel_epi ((tensorRight _).m
+  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+  simp only [Functor.flip_obj_map, curriedTensor_map_app]
+  slice_lhs 1 2 => rw [← comp_whiskerRight, ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_rhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+  slice_rhs 2 3 => rw [← whiskerLeft_comp, ι_colimMap, parallelPairHom_app_one]
+  dsimp [AssociatorBimod.inv]
+  slice_rhs 3 4 => rw [coequalizer.π_desc]
+  dsimp [AssociatorBimod.invAux]
+  slice_rhs 2 2 => rw [whiskerLeft_comp]
+  slice_rhs 3 5 => rw [id_tensor_π_preserves_coequalizer_inv_desc]
+  simp
 
 Depends on / 依赖: AssociatorBimod, AssociatorBimod.hom, AssociatorBimod.homAux, Functor, Functor.flip_obj_map, associatorBimod, cancel_epi, coequalizer, coequalizer.hom_ext, comp_whiskerRight, curriedTensor_map_app, flip_obj_map, homAux, hom_ext, parallelPairHom_app_one, slice_lhs, slice_rhs, tensorBimod, tensorHom, tensorRight
 -/
@@ -2399,7 +2819,27 @@ theorem pentagon_bimod
   slice_lhs 2 3 => rw [coequalizer.π_desc]
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [AssociatorBimod.homAux]
-  refine (cance
+  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+  dsimp
+  slice_lhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
+  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_rhs 3 4 => rw [coequalizer.π_desc]
+  refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
+  dsimp
+  slice_lhs 1 2 =>
+    rw [← comp_whiskerRight]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+  slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  dsimp only [TensorBimod.X]
+  slice_lhs 2 3 => rw [associator_naturality_middle]
+  slice_lhs 5 6 => rw [ι_colimMap, parallelPairHom_app_one]
+  slice_lhs 4 5 => rw [← whiskerLeft_comp, coequalizer.π_desc]
+  slice_lhs 3 4 =>
+    rw [← whiskerLeft_comp]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+  slice_rhs 1 2 => rw [associator_naturality_left]
+  slice_rhs 2 3 => rw [← whisker_exchange]
+  slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_rhs 2 3 => rw [associator_naturality_right]
+  monoidal
 
 中文:
 定理 pentagon_bimod
@@ -2414,7 +2854,27 @@ theorem pentagon_bimod
   slice_lhs 2 3 => rw [coequalizer.π_desc]
   slice_rhs 1 2 => rw [coequalizer.π_desc]
   dsimp [AssociatorBimod.homAux]
-  refine (cance
+  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+  dsimp
+  slice_lhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
+  slice_rhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_rhs 3 4 => rw [coequalizer.π_desc]
+  refine (cancel_epi ((tensorRight _ ⋙ tensorRight _).map (coequalizer.π _ _))).1 ?_
+  dsimp
+  slice_lhs 1 2 =>
+    rw [← comp_whiskerRight]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [comp_whiskerRight]; rw [comp_whiskerRight]
+  slice_lhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  dsimp only [TensorBimod.X]
+  slice_lhs 2 3 => rw [associator_naturality_middle]
+  slice_lhs 5 6 => rw [ι_colimMap, parallelPairHom_app_one]
+  slice_lhs 4 5 => rw [← whiskerLeft_comp, coequalizer.π_desc]
+  slice_lhs 3 4 =>
+    rw [← whiskerLeft_comp]; rw [π_tensor_id_preserves_coequalizer_inv_desc]; rw [whiskerLeft_comp]; rw [whiskerLeft_comp]
+  slice_rhs 1 2 => rw [associator_naturality_left]
+  slice_rhs 2 3 => rw [← whisker_exchange]
+  slice_rhs 3 5 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_rhs 2 3 => rw [associator_naturality_right]
+  monoidal
 
 Depends on / 依赖: AssociatorBimod, AssociatorBimod.hom, AssociatorBimod.homAux, associatorBimod, cancel_epi, coequalizer, coequalizer.hom_ext, comp_whiskerRight, homAux, hom_ext, parallelPairHom_app_one, slice_lhs, slice_rhs, tensorRight
 -/
@@ -2473,7 +2933,16 @@ theorem triangle_bimod
   slice_lhs 1 2 => rw [coequalizer.π_desc]
   dsimp [AssociatorBimod.homAux]
   slice_rhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [RightUnitorBimod.ho
+  dsimp [RightUnitorBimod.hom]
+  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+  dsimp [regular]
+  slice_lhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+  dsimp [LeftUnitorBimod.hom]
+  slice_lhs 2 3 => rw [← whiskerLeft_comp, coequalizer.π_desc]
+  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
+  slice_rhs 1 2 => rw [coequalizer.condition]
+  simp only [Category.assoc]
 
 中文:
 定理 triangle_bimod
@@ -2487,7 +2956,16 @@ theorem triangle_bimod
   slice_lhs 1 2 => rw [coequalizer.π_desc]
   dsimp [AssociatorBimod.homAux]
   slice_rhs 1 2 => rw [ι_colimMap, parallelPairHom_app_one]
-  dsimp [RightUnitorBimod.ho
+  dsimp [RightUnitorBimod.hom]
+  refine (cancel_epi ((tensorRight _).map (coequalizer.π _ _))).1 ?_
+  dsimp [regular]
+  slice_lhs 1 3 => rw [π_tensor_id_preserves_coequalizer_inv_desc]
+  slice_lhs 3 4 => rw [ι_colimMap, parallelPairHom_app_one]
+  dsimp [LeftUnitorBimod.hom]
+  slice_lhs 2 3 => rw [← whiskerLeft_comp, coequalizer.π_desc]
+  slice_rhs 1 2 => rw [← comp_whiskerRight, coequalizer.π_desc]
+  slice_rhs 1 2 => rw [coequalizer.condition]
+  simp only [Category.assoc]
 
 Depends on / 依赖: AssociatorBimod, AssociatorBimod.hom, AssociatorBimod.homAux, RightUnitorBimod, RightUnitorBimod.hom, associatorBimod, cancel_epi, coequalizer, coequalizer.hom_ext, homAux, hom_ext, leftUnitorBimod, parallelPairHom_app_one, regular, rightUnitorBimod, slice_lhs, slice_rhs, tensorRight
 -/
@@ -2530,7 +3008,18 @@ definition monBicategory
   associator := associatorBimod
   leftUnitor := leftUnitorBimod
   rightUnitor := rightUnitorBimod
-  
+  whiskerLeft_id _ _ := whiskerLeft_id_bimod
+  whiskerLeft_comp M _ _ _ f g := whiskerLeft_comp_bimod M f g
+  id_whiskerLeft := id_whiskerLeft_bimod
+  comp_whiskerLeft M N _ _ f := comp_whiskerLeft_bimod M N f
+  id_whiskerRight _ _ := id_whiskerRight_bimod
+  comp_whiskerRight f g Q := comp_whiskerRight_bimod f g Q
+  whiskerRight_id := whiskerRight_id_bimod
+  whiskerRight_comp := whiskerRight_comp_bimod
+  whisker_assoc M _ _ f P := whisker_assoc_bimod M f P
+  whisker_exchange := whisker_exchange_bimod
+  pentagon := pentagon_bimod
+  triangle := triangle_bimod
 
 中文:
 定义 monBicategory
@@ -2544,7 +3033,18 @@ definition monBicategory
   associator := associatorBimod
   leftUnitor := leftUnitorBimod
   rightUnitor := rightUnitorBimod
-  
+  whiskerLeft_id _ _ := whiskerLeft_id_bimod
+  whiskerLeft_comp M _ _ _ f g := whiskerLeft_comp_bimod M f g
+  id_whiskerLeft := id_whiskerLeft_bimod
+  comp_whiskerLeft M N _ _ f := comp_whiskerLeft_bimod M N f
+  id_whiskerRight _ _ := id_whiskerRight_bimod
+  comp_whiskerRight f g Q := comp_whiskerRight_bimod f g Q
+  whiskerRight_id := whiskerRight_id_bimod
+  whiskerRight_comp := whiskerRight_comp_bimod
+  whisker_assoc M _ _ f P := whisker_assoc_bimod M f P
+  whisker_exchange := whisker_exchange_bimod
+  pentagon := pentagon_bimod
+  triangle := triangle_bimod
 -/
 noncomputable def monBicategory : Bicategory (Mon C) where
   Hom X Y := Bimod X Y

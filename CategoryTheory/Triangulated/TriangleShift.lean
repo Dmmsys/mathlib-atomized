@@ -61,7 +61,13 @@ definition Triangle.shiftFunctor
       hom₃ := f.hom₃⟦n⟧'
       comm₁ := by
         dsimp
-        simp only [Linear.units_smul_comp, 
+        simp only [Linear.units_smul_comp, Linear.comp_units_smul, ← Functor.map_comp, f.comm₁]
+      comm₂ := by
+        dsimp
+        simp only [Linear.units_smul_comp, Linear.comp_units_smul, ← Functor.map_comp, f.comm₂]
+      comm₃ := by
+        dsimp
+        rw [Linear.units_smul_comp]; rw [Linear.comp_units_smul]; rw [← Functor.map_comp_assoc]; rw [← f.comm₃]; rw [Functor.map_comp]; rw [assoc]; rw [assoc]; rw [dsimp% (shiftFunctorComm C 1 n).hom.naturality] }
 
 中文:
 定义 Triangle.shiftFunctor
@@ -74,7 +80,13 @@ definition Triangle.shiftFunctor
       hom₃ := f.hom₃⟦n⟧'
       comm₁ := by
         dsimp
-        simp only [Linear.units_smul_comp, 
+        simp only [Linear.units_smul_comp, Linear.comp_units_smul, ← Functor.map_comp, f.comm₁]
+      comm₂ := by
+        dsimp
+        simp only [Linear.units_smul_comp, Linear.comp_units_smul, ← Functor.map_comp, f.comm₂]
+      comm₃ := by
+        dsimp
+        rw [Linear.units_smul_comp]; rw [Linear.comp_units_smul]; rw [← Functor.map_comp_assoc]; rw [← f.comm₃]; rw [Functor.map_comp]; rw [assoc]; rw [assoc]; rw [dsimp% (shiftFunctorComm C 1 n).hom.naturality] }
 
 Depends on / 依赖: T.mor, Triangle, Triangle.mk, n.negOnePow, negOnePow
 -/
@@ -110,7 +122,10 @@ definition Triangle.shiftFunctorZero
       ((CategoryTheory.shiftFunctorZero C Int).app _) ((CategoryTheory.shiftFunctorZero C Int).app _)
       (by simp) (by simp) (by
         dsimp
-        simp only [one_smul, assoc, shiftFunctorComm_
+        simp only [one_smul, assoc, shiftFunctorComm_zero_hom_app,
+          ← Functor.map_comp, Iso.inv_hom_id_app, Functor.id_obj, Functor.map_id,
+          comp_id, NatTrans.naturality, Functor.id_map]))
+    (by cat_disch)
 
 中文:
 定义 Triangle.shiftFunctorZero
@@ -120,7 +135,10 @@ definition Triangle.shiftFunctorZero
       ((CategoryTheory.shiftFunctorZero C Int).app _) ((CategoryTheory.shiftFunctorZero C Int).app _)
       (by simp) (by simp) (by
         dsimp
-        simp only [one_smul, assoc, shiftFunctorComm_
+        simp only [one_smul, assoc, shiftFunctorComm_zero_hom_app,
+          ← Functor.map_comp, Iso.inv_hom_id_app, Functor.id_obj, Functor.map_id,
+          comp_id, NatTrans.naturality, Functor.id_map]))
+    (by cat_disch)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.shiftFunctorZero, Functor, Functor.id_map, Functor.id_obj, Functor.map_comp, Functor.map_id, Iso.inv_hom_id_app, NatIso, NatIso.ofComponents, NatTrans, NatTrans.naturality, Triangle, Triangle.isoMk, cat_disch, comp_id, id_map, id_obj, inv_hom_id_app, map_comp
 -/
@@ -155,7 +173,18 @@ definition Triangle.shiftFunctorAdd'
       (by
         subst h
         dsimp
-        rw [Linear.units_smul_com
+        rw [Linear.units_smul_comp]; rw [NatTrans.naturality]; rw [Linear.comp_units_smul]; rw [Functor.comp_map]; rw [Functor.map_units_smul]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [Int.negOnePow_add]; rw [mul_comm])
+      (by
+        subst h
+        dsimp
+        rw [Linear.units_smul_comp]; rw [NatTrans.naturality]; rw [Linear.comp_units_smul]; rw [Functor.comp_map]; rw [Functor.map_units_smul]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [Int.negOnePow_add]; rw [mul_comm])
+      (by
+        subst h
+        dsimp
+        rw [Linear.units_smul_comp]; rw [Linear.comp_units_smul]; rw [Functor.map_units_smul]; rw [Linear.units_smul_comp]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [assoc]; rw [Functor.map_comp]; rw [assoc]; rw [← dsimp% (CategoryTheory.shiftFunctorAdd' C a b (a + b) rfl).hom.naturality_assoc]
+        simp only [shiftFunctorAdd'_eq_shiftFunctorAdd, Int.negOnePow_add,
+          shiftFunctorComm_hom_app_comp_shift_shiftFunctorAdd_hom_app, add_comm a]))
+    (by intros; ext <;> simp)
 
 中文:
 定义 Triangle.shiftFunctorAdd'
@@ -168,7 +197,18 @@ definition Triangle.shiftFunctorAdd'
       (by
         subst h
         dsimp
-        rw [Linear.units_smul_com
+        rw [Linear.units_smul_comp]; rw [NatTrans.naturality]; rw [Linear.comp_units_smul]; rw [Functor.comp_map]; rw [Functor.map_units_smul]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [Int.negOnePow_add]; rw [mul_comm])
+      (by
+        subst h
+        dsimp
+        rw [Linear.units_smul_comp]; rw [NatTrans.naturality]; rw [Linear.comp_units_smul]; rw [Functor.comp_map]; rw [Functor.map_units_smul]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [Int.negOnePow_add]; rw [mul_comm])
+      (by
+        subst h
+        dsimp
+        rw [Linear.units_smul_comp]; rw [Linear.comp_units_smul]; rw [Functor.map_units_smul]; rw [Linear.units_smul_comp]; rw [Linear.comp_units_smul]; rw [smul_smul]; rw [assoc]; rw [Functor.map_comp]; rw [assoc]; rw [← dsimp% (CategoryTheory.shiftFunctorAdd' C a b (a + b) rfl).hom.naturality_assoc]
+        simp only [shiftFunctorAdd'_eq_shiftFunctorAdd, Int.negOnePow_add,
+          shiftFunctorComm_hom_app_comp_shift_shiftFunctorAdd_hom_app, add_comm a]))
+    (by intros; ext <;> simp)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.shiftFunctorAdd, Functor, Functor.comp_map, Functor.map_units_smul, Int.negOnePow_add, Linear, Linear.comp_units_smul, Linear.units_smul_comp, NatIso, NatIso.ofComponents, NatTra, NatTrans, NatTrans.naturality, Triangle, Triangle.isoMk, comp_map, comp_units_smul, map_units_smul, mul_comm
 -/
@@ -278,7 +318,15 @@ definition invRotateIsoRotateRotateShiftFunctorNegOne
     _ ≅ invRotate C ⋙ Triangle.shiftFunctor C 0 :=
           Functor.isoWhiskerLeft _ (Triangle.shiftFunctorZero C).symm
     _ ≅ invRotate C ⋙ Triangle.shiftFunctor C 1 ⋙ Triangle.shiftFunctor C (-1) :=
-          Functor.isoWhi
+          Functor.isoWhiskerLeft _ (Triangle.shiftFunctorAdd' C 1 (-1) 0 (add_neg_cancel 1))
+    _ ≅ invRotate C ⋙ (rotate C ⋙ rotate C ⋙ rotate C) ⋙ Triangle.shiftFunctor C (-1) :=
+          Functor.isoWhiskerLeft _ (Functor.isoWhiskerRight (rotateRotateRotateIso C).symm _)
+    _ ≅ (invRotate C ⋙ rotate C) ⋙ rotate C ⋙ rotate C ⋙ Triangle.shiftFunctor C (-1) :=
+          Functor.isoWhiskerLeft _ (Functor.associator _ _ _ ≪≫
+            Functor.isoWhiskerLeft _ (Functor.associator _ _ _)) ≪≫ (Functor.associator _ _ _).symm
+    _ ≅ 𝟭 _ ⋙ rotate C ⋙ rotate C ⋙ Triangle.shiftFunctor C (-1) :=
+          Functor.isoWhiskerRight (triangleRotation C).counitIso _
+    _ ≅ _ := Functor.leftUnitor _
 
 中文:
 定义 invRotateIsoRotateRotateShiftFunctorNegOne
@@ -288,7 +336,15 @@ definition invRotateIsoRotateRotateShiftFunctorNegOne
     _ ≅ invRotate C ⋙ Triangle.shiftFunctor C 0 :=
           Functor.isoWhiskerLeft _ (Triangle.shiftFunctorZero C).symm
     _ ≅ invRotate C ⋙ Triangle.shiftFunctor C 1 ⋙ Triangle.shiftFunctor C (-1) :=
-          Functor.isoWhi
+          Functor.isoWhiskerLeft _ (Triangle.shiftFunctorAdd' C 1 (-1) 0 (add_neg_cancel 1))
+    _ ≅ invRotate C ⋙ (rotate C ⋙ rotate C ⋙ rotate C) ⋙ Triangle.shiftFunctor C (-1) :=
+          Functor.isoWhiskerLeft _ (Functor.isoWhiskerRight (rotateRotateRotateIso C).symm _)
+    _ ≅ (invRotate C ⋙ rotate C) ⋙ rotate C ⋙ rotate C ⋙ Triangle.shiftFunctor C (-1) :=
+          Functor.isoWhiskerLeft _ (Functor.associator _ _ _ ≪≫
+            Functor.isoWhiskerLeft _ (Functor.associator _ _ _)) ≪≫ (Functor.associator _ _ _).symm
+    _ ≅ 𝟭 _ ⋙ rotate C ⋙ rotate C ⋙ Triangle.shiftFunctor C (-1) :=
+          Functor.isoWhiskerRight (triangleRotation C).counitIso _
+    _ ≅ _ := Functor.leftUnitor _
 
 Depends on / 依赖: Functor, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, Functor.rightUnitor, Triangle, Triangle.shiftFunctor, Triangle.shiftFunctorAdd, Triangle.shiftFunctorZero, add_neg_cancel, invRotate, isoWhiskerLeft, isoWhiskerRight, rightUnitor, rotate, rotateRotateRotateIso, shiftFunctor, shiftFunctorAdd, shiftFunctorZero
 -/
@@ -327,7 +383,11 @@ instance :
         ext
         all_goals
           dsimp
-          rw [← shiftFunctorAdd'_assoc_hom_app
+          rw [← shiftFunctorAdd'_assoc_hom_app a b c _ _ _ rfl rfl (add_assoc a b c)]
+          dsimp only [CategoryTheory.shiftFunctorAdd']
+          simp }
+
+@[simp]
 
 中文:
 实例 :
@@ -340,7 +400,11 @@ instance :
         ext
         all_goals
           dsimp
-          rw [← shiftFunctorAdd'_assoc_hom_app
+          rw [← shiftFunctorAdd'_assoc_hom_app a b c _ _ _ rfl rfl (add_assoc a b c)]
+          dsimp only [CategoryTheory.shiftFunctorAdd']
+          simp }
+
+@[simp]
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.shiftFunctorAdd, Triangle, Triangle.shiftFunctor, Triangle.shiftFunctorAdd, Triangle.shiftFunctorZero, _assoc_hom_app, add_assoc, all_goals, assoc_hom_app, hasShiftMk, shiftFunctor, shiftFunctorAdd, shiftFunctorZero
 -/

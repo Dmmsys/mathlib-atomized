@@ -110,7 +110,17 @@ theorem comp_single_single
       single_apply_of_row_ne (ne_of_apply_ne Prod.fst hi), Matrix.zero_apply]
   obtain hj | rfl := ne_or_eq j j'
   · rw [single_apply_of_col_ne _ _ hj,
-      single_apply_of_col_ne _
+      single_apply_of_col_ne _ _ (ne_of_apply_ne Prod.fst hj), Matrix.zero_apply]
+  rw [single_apply_same]
+  obtain hk | rfl := ne_or_eq k k'
+  · rw [single_apply_of_row_ne hk,
+      single_apply_of_row_ne (ne_of_apply_ne Prod.snd hk)]
+  obtain hj | rfl := ne_or_eq l l'
+  · rw [single_apply_of_col_ne _ _ hj,
+      single_apply_of_col_ne _ _ (ne_of_apply_ne Prod.snd hj)]
+  rw [single_apply_same]; rw [single_apply_same]
+
+@[simp]
 
 中文:
 定理 comp_single_single
@@ -122,7 +132,17 @@ theorem comp_single_single
       single_apply_of_row_ne (ne_of_apply_ne Prod.fst hi), Matrix.zero_apply]
   obtain hj | rfl := ne_or_eq j j'
   · rw [single_apply_of_col_ne _ _ hj,
-      single_apply_of_col_ne _
+      single_apply_of_col_ne _ _ (ne_of_apply_ne Prod.fst hj), Matrix.zero_apply]
+  rw [single_apply_same]
+  obtain hk | rfl := ne_or_eq k k'
+  · rw [single_apply_of_row_ne hk,
+      single_apply_of_row_ne (ne_of_apply_ne Prod.snd hk)]
+  obtain hj | rfl := ne_or_eq l l'
+  · rw [single_apply_of_col_ne _ _ hj,
+      single_apply_of_col_ne _ _ (ne_of_apply_ne Prod.snd hj)]
+  rw [single_apply_same]; rw [single_apply_same]
+
+@[simp]
 
 Depends on / 依赖: Matrix, Matrix.zero_apply, Prod.fst, Prod.snd, comp_apply, ne_of_apply_ne, ne_or_eq, single_apply_of_col_ne, single_apply_of_row_ne, single_apply_same, zero_apply
 -/
@@ -183,7 +203,10 @@ theorem comp_diagonal_diagonal
       Matrix.zero_apply]
   rw [diagonal_apply_eq]
   obtain hj | rfl := ne_or_eq j₁ j₂
-  · rw [diagonal_apply_ne _ hj, diagonal_apply_n
+  · rw [diagonal_apply_ne _ hj, diagonal_apply_ne _ (ne_of_apply_ne Prod.snd hj)]
+  rw [diagonal_apply_eq]; rw [diagonal_apply_eq]
+
+@[simp]
 
 中文:
 定理 comp_diagonal_diagonal
@@ -196,7 +219,10 @@ theorem comp_diagonal_diagonal
       Matrix.zero_apply]
   rw [diagonal_apply_eq]
   obtain hj | rfl := ne_or_eq j₁ j₂
-  · rw [diagonal_apply_ne _ hj, diagonal_apply_n
+  · rw [diagonal_apply_ne _ hj, diagonal_apply_ne _ (ne_of_apply_ne Prod.snd hj)]
+  rw [diagonal_apply_eq]; rw [diagonal_apply_eq]
+
+@[simp]
 
 Depends on / 依赖: Matrix, Matrix.zero_apply, Prod.fst, Prod.snd, comp_apply, diagonal_apply_eq, diagonal_apply_ne, ne_of_apply_ne, ne_or_eq, zero_apply
 -/

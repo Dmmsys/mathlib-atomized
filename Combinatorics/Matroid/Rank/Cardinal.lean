@@ -417,7 +417,7 @@ theorem cRk_restrict_subset
     simp_rw [isBasis'_restrict_iff, inter_eq_self_of_subset_left hYX, iff_self_and]
     exact fun I h => h.subset.trans hYX
   simp_rw [le_antisymm_iff, cRk_le_iff]
-  exact ⟨fun I hI => (aux.2 hI).cardinalMk_le_cRk, fun I hI => (
+  exact ⟨fun I hI => (aux.2 hI).cardinalMk_le_cRk, fun I hI => (aux.1 hI).cardinalMk_le_cRk⟩
 
 中文:
 定理 cRk_restrict_subset
@@ -428,7 +428,7 @@ theorem cRk_restrict_subset
     simp_rw [isBasis'_restrict_iff, inter_eq_self_of_subset_left hYX, iff_self_and]
     exact fun I h => h.subset.trans hYX
   simp_rw [le_antisymm_iff, cRk_le_iff]
-  exact ⟨fun I hI => (aux.2 hI).cardinalMk_le_cRk, fun I hI => (
+  exact ⟨fun I hI => (aux.2 hI).cardinalMk_le_cRk, fun I hI => (aux.1 hI).cardinalMk_le_cRk⟩
 
 Depends on / 依赖: IsBasis, M.IsBasis, _restrict_iff, cRk_le_iff, cardinalMk_le_cRk, h.subset.trans, iff_self_and, inter_eq_self_of_subset_left, isBasis, le_antisymm_iff, simp_rw, subset
 -/
@@ -491,7 +491,14 @@ theorem cRk_map_image_lift
   nth_rw 1 [cRk, cRank, le_antisymm_iff, lift_iSup bddAbove_of_small, cRk, cRank, cRk, cRank]
   nth_rw 2 [lift_iSup bddAbove_of_small]
   simp only [ciSup_le_iff bddAbove_of_small, Subtype.forall, isBase_restrict_iff',
-    isBasis'_iff_isBasis hX, isBasis'_iff_isBasis (show f '' X subseteq (M.map 
+    isBasis'_iff_isBasis hX, isBasis'_iff_isBasis (show f '' X subseteq (M.map f hf).E from image_mono hX)]
+  refine ⟨fun I hI => ?_, fun I hI => ?_⟩
+  · obtain ⟨I, X', hIX, rfl, hXX'⟩ := map_isBasis_iff'.1 hI
+    rw [mk_image_eq_of_injOn_lift _ _ (hf.mono hIX.indep.subset_ground)]; rw [lift_le]
+    obtain rfl : X = X' := by rwa [hf.image_eq_image_iff hX hIX.subset_ground] at hXX'
+    exact hIX.cardinalMk_le_cRk
+  rw [← mk_image_eq_of_injOn_lift _ _ (hf.mono hI.indep.subset_ground)]; rw [lift_le]
+  exact (hI.map hf).cardinalMk_le_cRk
 
 中文:
 定理 cRk_map_image_lift
@@ -500,7 +507,14 @@ theorem cRk_map_image_lift
   nth_rw 1 [cRk, cRank, le_antisymm_iff, lift_iSup bddAbove_of_small, cRk, cRank, cRk, cRank]
   nth_rw 2 [lift_iSup bddAbove_of_small]
   simp only [ciSup_le_iff bddAbove_of_small, Subtype.forall, isBase_restrict_iff',
-    isBasis'_iff_isBasis hX, isBasis'_iff_isBasis (show f '' X subseteq (M.map 
+    isBasis'_iff_isBasis hX, isBasis'_iff_isBasis (show f '' X subseteq (M.map f hf).E from image_mono hX)]
+  refine ⟨fun I hI => ?_, fun I hI => ?_⟩
+  · obtain ⟨I, X', hIX, rfl, hXX'⟩ := map_isBasis_iff'.1 hI
+    rw [mk_image_eq_of_injOn_lift _ _ (hf.mono hIX.indep.subset_ground)]; rw [lift_le]
+    obtain rfl : X = X' := by rwa [hf.image_eq_image_iff hX hIX.subset_ground] at hXX'
+    exact hIX.cardinalMk_le_cRk
+  rw [← mk_image_eq_of_injOn_lift _ _ (hf.mono hI.indep.subset_ground)]; rw [lift_le]
+  exact (hI.map hf).cardinalMk_le_cRk
 -/
 @[simp] theorem cRk_map_image_lift (M : Matroid α) (hf : InjOn f M.E) (X : Set α)
     (hX : X subseteq M.E := by aesop_mat) : lift.{u, v} ((M.map f hf).cRk (f '' X)) = lift (M.cRk X) := by
@@ -565,7 +579,15 @@ theorem cRk_comap_lift
   nth_rw 2 [lift_iSup bddAbove_of_small]
   simp only [ciSup_le_iff bddAbove_of_small, Subtype.forall, isBase_restrict_iff',
     comap_isBasis'_iff, and_imp]
-  refine ⟨fun I hI hfI hIX => ?_, fun I hIX =>
+  refine ⟨fun I hI hfI hIX => ?_, fun I hIX => ?_⟩
+  · rw [← mk_image_eq_of_injOn_lift _ _ hfI, lift_le]
+    exact hI.cardinalMk_le_cRk
+  obtain ⟨I₀, hI₀X, rfl, hfI₀⟩ := show exists I₀ subseteq X, f '' I₀ = I ∧ InjOn f I₀ by
+    obtain ⟨I₀, hI₀ss, hbij⟩ := exists_subset_bijOn (f ⁻¹' I inter X) f
+    refine ⟨I₀, hI₀ss.trans inter_subset_right, ?_, hbij.injOn⟩
+    rw [hbij.image_eq]; rw [image_preimage_inter]; rw [inter_eq_self_of_subset_left hIX.subset]
+  rw [mk_image_eq_of_injOn_lift _ _ hfI₀]; rw [lift_le]
+exact IsBasis'.cardinalMk_le_cRk comap_isBasis'_iff.2 ⟨hIX, hfI₀, hI₀X⟩
 
 中文:
 定理 cRk_comap_lift
@@ -575,7 +597,15 @@ theorem cRk_comap_lift
   nth_rw 2 [lift_iSup bddAbove_of_small]
   simp only [ciSup_le_iff bddAbove_of_small, Subtype.forall, isBase_restrict_iff',
     comap_isBasis'_iff, and_imp]
-  refine ⟨fun I hI hfI hIX => ?_, fun I hIX =>
+  refine ⟨fun I hI hfI hIX => ?_, fun I hIX => ?_⟩
+  · rw [← mk_image_eq_of_injOn_lift _ _ hfI, lift_le]
+    exact hI.cardinalMk_le_cRk
+  obtain ⟨I₀, hI₀X, rfl, hfI₀⟩ := show exists I₀ subseteq X, f '' I₀ = I ∧ InjOn f I₀ by
+    obtain ⟨I₀, hI₀ss, hbij⟩ := exists_subset_bijOn (f ⁻¹' I inter X) f
+    refine ⟨I₀, hI₀ss.trans inter_subset_right, ?_, hbij.injOn⟩
+    rw [hbij.image_eq]; rw [image_preimage_inter]; rw [inter_eq_self_of_subset_left hIX.subset]
+  rw [mk_image_eq_of_injOn_lift _ _ hfI₀]; rw [lift_le]
+exact IsBasis'.cardinalMk_le_cRk comap_isBasis'_iff.2 ⟨hIX, hfI₀, hI₀X⟩
 -/
 @[simp] theorem cRk_comap_lift (M : Matroid β) (f : α -> β) (X : Set α) :
     lift.{v, u} ((M.comap f).cRk X) = lift (M.cRk (f '' X)) := by
@@ -1085,7 +1115,8 @@ theorem cRk_inter_add_cRk_union_le
     hIi.indep.subset_isBasis'_of_subset (hIi.subset.trans inter_subset_left)
   obtain ⟨IY, hIY, hIY'⟩ :=
     hIi.indep.subset_isBasis'_of_subset (hIi.subset.trans inter_subset_right)
-  rw [← cRk_union_closure_eq]; rw 
+  rw [← cRk_union_closure_eq]; rw [← hIX.closure_eq_closure]; rw [← hIY.closure_eq_closure]; rw [cRk_union_closure_eq]; rw [← hIi.cardinalMk_eq_cRk]; rw [← hIX.cardinalMk_eq_cRk]; rw [← hIY.cardinalMk_eq_cRk]; rw [← mk_union_add_mk_inter]; rw [add_comm]
+  exact add_le_add (M.cRk_le_cardinalMk _) (mk_le_mk_of_subset (subset_inter hIX' hIY'))
 
 中文:
 定理 cRk_inter_add_cRk_union_le
@@ -1096,7 +1127,8 @@ theorem cRk_inter_add_cRk_union_le
     hIi.indep.subset_isBasis'_of_subset (hIi.subset.trans inter_subset_left)
   obtain ⟨IY, hIY, hIY'⟩ :=
     hIi.indep.subset_isBasis'_of_subset (hIi.subset.trans inter_subset_right)
-  rw [← cRk_union_closure_eq]; rw 
+  rw [← cRk_union_closure_eq]; rw [← hIX.closure_eq_closure]; rw [← hIY.closure_eq_closure]; rw [cRk_union_closure_eq]; rw [← hIi.cardinalMk_eq_cRk]; rw [← hIX.cardinalMk_eq_cRk]; rw [← hIY.cardinalMk_eq_cRk]; rw [← mk_union_add_mk_inter]; rw [add_comm]
+  exact add_le_add (M.cRk_le_cardinalMk _) (mk_le_mk_of_subset (subset_inter hIX' hIY'))
 
 Depends on / 依赖: M.exists_isBasis, _of_subset, add_co, cRk_union_closure_eq, cardinalMk_eq_cRk, closure_eq_closure, exists_isBasis, hIX.cardinalMk_eq_cRk, hIX.closure_eq_closure, hIY.cardinalMk_eq_cRk, hIY.closure_eq_closure, hIi.cardinalMk_eq_cRk, hIi.indep.subset_isBasis, hIi.subset.trans, inter_subset_left, inter_subset_right, mk_union_add_mk_inter, subset, subset_isBasis
 -/
@@ -1123,7 +1155,32 @@ instance invariantCardinalRank_of_finitary
   suffices aux : forall ⦃B B'⦄ ⦃N : Matroid α⦄, Finitary N -> N.IsBase B -> N.IsBase B' ->
       #(B \ B' : Set α) <= #(B' \ B : Set α) from
     ⟨fun I J X hI hJ => (aux (restrict_finitary X) hI.isBase_restrict hJ.isBase_restrict).antisymm
-      (aux (restrict_finitary X) hJ.isBase_restrict hI.is
+      (aux (restrict_finitary X) hJ.isBase_restrict hI.isBase_restrict)⟩
+  intro B B' N hfin hB hB'
+  by_cases h : (B' \ B).Finite
+  · rw [← cast_ncard h, ← cast_ncard, hB.ncard_sdiff_comm hB']
+    exact (hB'.sdiff_finite_comm hB).mp h
+  rw [← Set.Infinite]; rw [← infinite_coe_iff] at h
+  have (a : α) (ha : a in B' \ B) : exists S : Set α, Finite S ∧ S subseteq B ∧ ¬ N.Indep (insert a S) := by
+    have := (hB.insert_dep ⟨hB'.subset_ground ha.1, ha.2⟩).1
+    contrapose! this
+    exact Finitary.indep_of_forall_finite _ fun J hJ fin => (this (J \ {a}) fin.sdiff.to_subtype <|
+      sdiff_singleton_subset_iff.mpr hJ).subset (subset_insert_sdiff_singleton ..)
+  choose S S_fin hSB dep using this
+  let U := ⋃ a : ↥(B' \ B), S a a.2
+  suffices B \ B' subseteq U by
+refine (mk_le_mk_of_subset this).trans (mk_iUnion_le ..).trans
+ (mul_le_max_of_aleph0_le_left (by simp)).trans ?_
+    simp only [sup_le_iff, le_refl, true_and]
+exact ciSup_le' fun e => (lt_aleph0_of_finite _).le.trans by simp
+  rw [← sdiff_inter_self_eq_sdiff]; rw [sdiff_subset_iff]; rw [inter_comm]
+  have hUB : (B inter B') union U subseteq B :=
+    union_subset inter_subset_left (iUnion_subset fun e => (hSB e.1 e.2))
+  by_contra hBU
+  have ⟨a, ha, ind⟩ := hB.exists_insert_of_ssubset ⟨hUB, hBU⟩ hB'
+  have : a in B' \ B := ⟨ha.1, fun haB => ha.2 (.inl ⟨haB, ha.1⟩)⟩
+  refine dep a this (ind.subset <| insert_subset_insert <| .trans ?_ subset_union_right)
+  exact subset_iUnion_of_subset ⟨a, this⟩ subset_rfl
 
 中文:
 实例 invariantCardinalRank_of_finitary
@@ -1132,7 +1189,32 @@ instance invariantCardinalRank_of_finitary
   suffices aux : forall ⦃B B'⦄ ⦃N : Matroid α⦄, Finitary N -> N.IsBase B -> N.IsBase B' ->
       #(B \ B' : Set α) <= #(B' \ B : Set α) from
     ⟨fun I J X hI hJ => (aux (restrict_finitary X) hI.isBase_restrict hJ.isBase_restrict).antisymm
-      (aux (restrict_finitary X) hJ.isBase_restrict hI.is
+      (aux (restrict_finitary X) hJ.isBase_restrict hI.isBase_restrict)⟩
+  intro B B' N hfin hB hB'
+  by_cases h : (B' \ B).Finite
+  · rw [← cast_ncard h, ← cast_ncard, hB.ncard_sdiff_comm hB']
+    exact (hB'.sdiff_finite_comm hB).mp h
+  rw [← Set.Infinite]; rw [← infinite_coe_iff] at h
+  have (a : α) (ha : a in B' \ B) : exists S : Set α, Finite S ∧ S subseteq B ∧ ¬ N.Indep (insert a S) := by
+    have := (hB.insert_dep ⟨hB'.subset_ground ha.1, ha.2⟩).1
+    contrapose! this
+    exact Finitary.indep_of_forall_finite _ fun J hJ fin => (this (J \ {a}) fin.sdiff.to_subtype <|
+      sdiff_singleton_subset_iff.mpr hJ).subset (subset_insert_sdiff_singleton ..)
+  choose S S_fin hSB dep using this
+  let U := ⋃ a : ↥(B' \ B), S a a.2
+  suffices B \ B' subseteq U by
+refine (mk_le_mk_of_subset this).trans (mk_iUnion_le ..).trans
+ (mul_le_max_of_aleph0_le_left (by simp)).trans ?_
+    simp only [sup_le_iff, le_refl, true_and]
+exact ciSup_le' fun e => (lt_aleph0_of_finite _).le.trans by simp
+  rw [← sdiff_inter_self_eq_sdiff]; rw [sdiff_subset_iff]; rw [inter_comm]
+  have hUB : (B inter B') union U subseteq B :=
+    union_subset inter_subset_left (iUnion_subset fun e => (hSB e.1 e.2))
+  by_contra hBU
+  have ⟨a, ha, ind⟩ := hB.exists_insert_of_ssubset ⟨hUB, hBU⟩ hB'
+  have : a in B' \ B := ⟨ha.1, fun haB => ha.2 (.inl ⟨haB, ha.1⟩)⟩
+  refine dep a this (ind.subset <| insert_subset_insert <| .trans ?_ subset_union_right)
+  exact subset_iUnion_of_subset ⟨a, this⟩ subset_rfl
 
 Depends on / 依赖: Finitary, Finite, Infinite, IsBase, Matroid, N.IsBase, Set.Infinite, antisymm, cast_ncard, hB.ncard_sdiff_comm, hI.isBase_restrict, hJ.isBase_restrict, infinite_coe_iff, isBase_restrict, ncard_sdiff_comm, restrict_finitary, sdiff_finite_comm
 -/
@@ -1179,7 +1261,14 @@ instance invariantCardinalRank_map
   obtain ⟨J, X', hJX, rfl, h'⟩ := map_isBasis_iff'.1 hJ
   obtain rfl : X = X' := by
     rwa [InjOn.image_eq_image_iff hf hIX.subset_ground hJX.subset_ground] at h'
-  have hcard := hIX.cardinalMk_sdiff_comm hJ
+  have hcard := hIX.cardinalMk_sdiff_comm hJX
+  rwa [← lift_inj.{u, v},
+    ← mk_image_eq_of_injOn_lift _ _ (hf.mono ((hIX.indep.sdiff _).subset_ground)),
+    ← mk_image_eq_of_injOn_lift _ _ (hf.mono ((hJX.indep.sdiff _).subset_ground)),
+    lift_inj, (hf.mono hIX.indep.subset_ground).image_sdiff,
+    (hf.mono hJX.indep.subset_ground).image_sdiff, inter_comm,
+    hf.image_inter hJX.indep.subset_ground hIX.indep.subset_ground,
+    sdiff_inter_self_eq_sdiff, sdiff_self_inter] at hcard
 
 中文:
 实例 invariantCardinalRank_map
@@ -1190,7 +1279,14 @@ instance invariantCardinalRank_map
   obtain ⟨J, X', hJX, rfl, h'⟩ := map_isBasis_iff'.1 hJ
   obtain rfl : X = X' := by
     rwa [InjOn.image_eq_image_iff hf hIX.subset_ground hJX.subset_ground] at h'
-  have hcard := hIX.cardinalMk_sdiff_comm hJ
+  have hcard := hIX.cardinalMk_sdiff_comm hJX
+  rwa [← lift_inj.{u, v},
+    ← mk_image_eq_of_injOn_lift _ _ (hf.mono ((hIX.indep.sdiff _).subset_ground)),
+    ← mk_image_eq_of_injOn_lift _ _ (hf.mono ((hJX.indep.sdiff _).subset_ground)),
+    lift_inj, (hf.mono hIX.indep.subset_ground).image_sdiff,
+    (hf.mono hJX.indep.subset_ground).image_sdiff, inter_comm,
+    hf.image_inter hJX.indep.subset_ground hIX.indep.subset_ground,
+    sdiff_inter_self_eq_sdiff, sdiff_self_inter] at hcard
 
 Depends on / 依赖: InjOn.image_eq_image_iff, cardinalMk_sdiff_comm, hIX.cardinalMk_sdiff_comm, hIX.indep.s, hIX.indep.sdiff, hIX.subset_ground, hJX.indep.sdiff, hJX.subset_ground, hf.mono, image_eq_image_iff, lift_inj, map_isBasis_iff, mk_image_eq_of_injOn_lift, subset_ground
 -/
@@ -1220,7 +1316,8 @@ instance invariantCardinalRank_comap
   refine ⟨fun I J X hI hJ => ?_⟩
   obtain ⟨hI, hfI, hIX⟩ := comap_isBasis_iff.1 hI
   obtain ⟨hJ, hfJ, hJX⟩ := comap_isBasis_iff.1 hJ
-  rw [← lift_inj.{u]; rw [v}]; rw [← mk_image_eq_of_injOn_lift _ _ (hfI.mono sdiff_subset)]; rw [← mk_image_eq_of_injOn_lift _ _ (hfJ.mono sdiff_subset)]; rw [lift_
+  rw [← lift_inj.{u]; rw [v}]; rw [← mk_image_eq_of_injOn_lift _ _ (hfI.mono sdiff_subset)]; rw [← mk_image_eq_of_injOn_lift _ _ (hfJ.mono sdiff_subset)]; rw [lift_inj]; rw [hfI.image_sdiff]; rw [hfJ.image_sdiff]; rw [← sdiff_union_sdiff_cancel inter_subset_left (image_inter_subset f I J)]; rw [inter_comm]; rw [sdiff_inter_self_eq_sdiff]; rw [mk_union_of_disjoint]; rw [hI.cardinalMk_sdiff_comm hJ]; rw [← sdiff_union_sdiff_cancel inter_subset_left (image_inter_subset f J I)]; rw [inter_comm]; rw [sdiff_inter_self_eq_sdiff]; rw [mk_union_of_disjoint]; rw [inter_comm J I] <;>
+  exact disjoint_sdiff_left.mono_right (sdiff_subset.trans inter_subset_left)
 
 中文:
 实例 invariantCardinalRank_comap
@@ -1229,7 +1326,8 @@ instance invariantCardinalRank_comap
   refine ⟨fun I J X hI hJ => ?_⟩
   obtain ⟨hI, hfI, hIX⟩ := comap_isBasis_iff.1 hI
   obtain ⟨hJ, hfJ, hJX⟩ := comap_isBasis_iff.1 hJ
-  rw [← lift_inj.{u]; rw [v}]; rw [← mk_image_eq_of_injOn_lift _ _ (hfI.mono sdiff_subset)]; rw [← mk_image_eq_of_injOn_lift _ _ (hfJ.mono sdiff_subset)]; rw [lift_
+  rw [← lift_inj.{u]; rw [v}]; rw [← mk_image_eq_of_injOn_lift _ _ (hfI.mono sdiff_subset)]; rw [← mk_image_eq_of_injOn_lift _ _ (hfJ.mono sdiff_subset)]; rw [lift_inj]; rw [hfI.image_sdiff]; rw [hfJ.image_sdiff]; rw [← sdiff_union_sdiff_cancel inter_subset_left (image_inter_subset f I J)]; rw [inter_comm]; rw [sdiff_inter_self_eq_sdiff]; rw [mk_union_of_disjoint]; rw [hI.cardinalMk_sdiff_comm hJ]; rw [← sdiff_union_sdiff_cancel inter_subset_left (image_inter_subset f J I)]; rw [inter_comm]; rw [sdiff_inter_self_eq_sdiff]; rw [mk_union_of_disjoint]; rw [inter_comm J I] <;>
+  exact disjoint_sdiff_left.mono_right (sdiff_subset.trans inter_subset_left)
 
 Depends on / 依赖: comap_isBasis_iff, hfI.image_sdiff, hfI.mono, hfJ.image_sdiff, hfJ.mono, image_inter_subset, image_sdiff, inter_comm, inter_subset_left, lift_inj, mk_image_eq_of_injOn_lift, mk_union_of_disjoint, sdiff_inter_self_eq_sdiff, sdiff_subset, sdiff_union_sdiff_cancel
 -/

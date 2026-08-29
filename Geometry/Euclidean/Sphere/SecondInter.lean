@@ -187,7 +187,8 @@ theorem Sphere.secondInter_eq_self_iff
     · simp [hv]
     rwa [Sphere.secondInter, eq_comm, eq_vadd_iff_vsub_eq, vsub_self, eq_comm, smul_eq_zero,
       or_iff_left hv, div_eq_zero_iff, inner_self_eq_zero, or_iff_left hv, mul_eq_zero,
-      or_iff_right (by simp : (-2 : Re
+      or_iff_right (by simp : (-2 : Real) != 0)] at hp
+  · rw [Sphere.secondInter, hp, mul_zero, zero_div, zero_smul, zero_vadd]
 
 中文:
 定理 球面.second整数er_eq_self_iff
@@ -198,7 +199,8 @@ theorem Sphere.secondInter_eq_self_iff
     · simp [hv]
     rwa [Sphere.secondInter, eq_comm, eq_vadd_iff_vsub_eq, vsub_self, eq_comm, smul_eq_zero,
       or_iff_left hv, div_eq_zero_iff, inner_self_eq_zero, or_iff_left hv, mul_eq_zero,
-      or_iff_right (by simp : (-2 : Re
+      or_iff_right (by simp : (-2 : Real) != 0)] at hp
+  · rw [Sphere.secondInter, hp, mul_zero, zero_div, zero_smul, zero_vadd]
 
 Depends on / 依赖: Sphere, Sphere.secondInter, div_eq_zero_iff, eq_comm, eq_vadd_iff_vsub_eq, inner_self_eq_zero, mul_eq_zero, mul_zero, or_iff_left, or_iff_right, secondInter, smul_eq_zero, vsub_self, zero_div, zero_smul, zero_vadd
 -/
@@ -227,7 +229,12 @@ theorem Sphere.eq_or_eq_secondInter_of_mem_mk'_span_singleton_iff_mem
     rcases hp' with ⟨r, hr⟩
     rw [eq_comm]; rw [← eq_vadd_iff_vsub_eq] at hr
     subst hr
-    by_cases hv : v = 
+    by_cases hv : v = 0
+    · simp [hv]
+    rw [Sphere.secondInter]
+    rw [mem_sphere] at h hp
+    rw [← hp]; rw [dist_smul_vadd_eq_dist _ _ hv] at h
+    rcases h with (h | h) <;> simp [h]
 
 中文:
 定理 球面.eq_or_eq_second整数er_of_mem_mk'_span_singleton_iff_mem
@@ -241,7 +248,12 @@ theorem Sphere.eq_or_eq_secondInter_of_mem_mk'_span_singleton_iff_mem
     rcases hp' with ⟨r, hr⟩
     rw [eq_comm]; rw [← eq_vadd_iff_vsub_eq] at hr
     subst hr
-    by_cases hv : v = 
+    by_cases hv : v = 0
+    · simp [hv]
+    rw [Sphere.secondInter]
+    rw [mem_sphere] at h hp
+    rw [← hp]; rw [dist_smul_vadd_eq_dist _ _ hv] at h
+    rcases h with (h | h) <;> simp [h]
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.mem_mk, Sphere, Sphere.secondInter, Sphere.secondInter_mem, Submodule, Submodule.mem_span_singleton, dist_smul_vadd_eq_dist, eq_comm, eq_vadd_iff_vsub_eq, mem_mk, mem_span_singleton, mem_sphere, secondInter, secondInter_mem
 -/
@@ -363,7 +375,9 @@ theorem Sphere.secondInter_secondInter
   simp only [Sphere.secondInter, vadd_vsub_assoc, vadd_vadd, inner_add_right, inner_smul_right,
     div_mul_cancel₀ _ hv']
   rw [← @vsub_eq_zero_iff_eq V]; rw [vadd_vsub]; rw [← add_smul]; rw [← add_div]
-  conv
+  convert! zero_smul Real _
+  convert! zero_div (G₀ := Real) _
+  ring
 
 中文:
 定理 球面.second整数er_second整数er
@@ -374,7 +388,9 @@ theorem Sphere.secondInter_secondInter
   simp only [Sphere.secondInter, vadd_vsub_assoc, vadd_vadd, inner_add_right, inner_smul_right,
     div_mul_cancel₀ _ hv']
   rw [← @vsub_eq_zero_iff_eq V]; rw [vadd_vsub]; rw [← add_smul]; rw [← add_div]
-  conv
+  convert! zero_smul Real _
+  convert! zero_div (G₀ := Real) _
+  ring
 
 Depends on / 依赖: Sphere, Sphere.secondInter, add_div, add_smul, convert, inner_add_right, inner_self_ne_zero, inner_smul_right, secondInter, vadd_vadd, vadd_vsub, vadd_vsub_assoc, vsub_eq_zero_iff_eq, zero_div, zero_smul
 -/
@@ -469,7 +485,8 @@ theorem Sphere.wbtw_secondInter
     wbtw_of_collinear_of_dist_center_le_radius (s.secondInter_collinear p p') hp hp'
       ((Sphere.secondInter_mem _).2 hp) ?_
   intro he
-  rw [eq_comm]; rw [Sphere.secondInter_eq_self_iff]; rw [← neg_neg (p' -ᵥ p)]; rw [inner_neg_left]; rw [neg_vsub_eq
+  rw [eq_comm]; rw [Sphere.secondInter_eq_self_iff]; rw [← neg_neg (p' -ᵥ p)]; rw [inner_neg_left]; rw [neg_vsub_eq_vsub_rev]; rw [neg_eq_zero]; rw [eq_comm] at he
+  exact ((inner_pos_or_eq_of_dist_le_radius hp hp').resolve_right (Ne.symm h)).ne he
 
 中文:
 定理 球面.wbtw_second整数er
@@ -480,7 +497,8 @@ theorem Sphere.wbtw_secondInter
     wbtw_of_collinear_of_dist_center_le_radius (s.secondInter_collinear p p') hp hp'
       ((Sphere.secondInter_mem _).2 hp) ?_
   intro he
-  rw [eq_comm]; rw [Sphere.secondInter_eq_self_iff]; rw [← neg_neg (p' -ᵥ p)]; rw [inner_neg_left]; rw [neg_vsub_eq
+  rw [eq_comm]; rw [Sphere.secondInter_eq_self_iff]; rw [← neg_neg (p' -ᵥ p)]; rw [inner_neg_left]; rw [neg_vsub_eq_vsub_rev]; rw [neg_eq_zero]; rw [eq_comm] at he
+  exact ((inner_pos_or_eq_of_dist_le_radius hp hp').resolve_right (Ne.symm h)).ne he
 
 Depends on / 依赖: Ne.symm, Sphere, Sphere.secondInter_eq_self_iff, Sphere.secondInter_mem, eq_comm, inner_neg_left, inner_pos_or_eq_of_dist_le_radius, neg_eq_zero, neg_neg, neg_vsub_eq_vsub_rev, resolve_right, s.secondInter_collinear, secondInter_collinear, secondInter_eq_self_iff, secondInter_mem, wbtw_of_collinear_of_dist_center_le_radius
 -/
@@ -544,7 +562,7 @@ lemma Sphere.sOppSide_faceOpposite_secondInter_of_mem_interior_faceOpposite
       (fun j => hsx _)))
     (by simp)
     (Set.mem_of_mem_of_subset hp ((sx.faceOpposite i).interior_subset_closedInterior.trans
-      (sx.faceOpposite i).closedInterior_su
+      (sx.faceOpposite i).closedInterior_subset_affineSpan))
 
 中文:
 引理 球面.sOppSide_faceOpposite_second整数er_of_mem_interior_faceOpposite
@@ -554,7 +572,7 @@ lemma Sphere.sOppSide_faceOpposite_secondInter_of_mem_interior_faceOpposite
       (fun j => hsx _)))
     (by simp)
     (Set.mem_of_mem_of_subset hp ((sx.faceOpposite i).interior_subset_closedInterior.trans
-      (sx.faceOpposite i).closedInterior_su
+      (sx.faceOpposite i).closedInterior_subset_affineSpan))
 
 Depends on / 依赖: Sbtw.sOppSide_of_notMem_of_mem, Set.mem_of_mem_of_subset, closedInterior_subset_affineSpan, dist_lt_of_mem_interior_of_strictConvexSpace, faceOpposite, interior_subset_closedInterior, interior_subset_closedInterior.trans, mem_of_mem_of_subset, s.sbtw_secondInter, sOppSide_of_notMem_of_mem, sbtw_secondInter, sx.faceOpposite
 -/
@@ -586,7 +604,21 @@ lemma Sphere.sOppSide_faceOpposite_secondInter_of_mem_interior
   have hrpos : 0 < r := by simp [inv_pos, sub_pos, r, (hw01 i).2]
   let p' : P := AffineMap.lineMap (sx.points i) (Finset.univ.affineCombination Real sx.points w) r
   have hp' : (p' -ᵥ (sx.points i)) =
-      r • (Finset.univ.affineCo
+      r • (Finset.univ.affineCombination Real sx.points w -ᵥ (sx.points i)) := by simp [p']
+  suffices (affineSpan Real (Set.range (sx.faceOpposite i).points)).SOppSide (sx.points i)
+      (s.secondInter (sx.points i) (p' -ᵥ (sx.points i))) by
+    rwa [hp', s.secondInter_smul _ _ hrpos.ne'] at this
+  refine s.sOppSide_faceOpposite_secondInter_of_mem_interior_faceOpposite hi hsx ?_
+  simp_rw [p', ← Finset.univ.affineCombination_piSingle Real (sx.points)
+    (Finset.mem_univ i), AffineMap.lineMap_apply, Finset.affineCombination_vsub,
+    ← LinearMap.map_smul, Finset.weightedVSub_vadd_affineCombination,
+    Affine.Simplex.faceOpposite]
+  rw [Affine.Simplex.affineCombination_mem_interior_face_iff_pos]
+  · simp only [Finset.mem_compl, Finset.mem_singleton, Pi.add_apply, Pi.smul_apply, Pi.sub_apply,
+      smul_eq_mul, Decidable.not_not, forall_eq, Pi.single_eq_same]
+    refine ⟨fun j hj => ?_, by grind⟩
+    simp [hj, hrpos, (hw01 j).1]
+  · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hw]
 
 中文:
 引理 球面.sOppSide_faceOpposite_second整数er_of_mem_interior
@@ -597,7 +629,21 @@ lemma Sphere.sOppSide_faceOpposite_secondInter_of_mem_interior
   have hrpos : 0 < r := by simp [inv_pos, sub_pos, r, (hw01 i).2]
   let p' : P := AffineMap.lineMap (sx.points i) (Finset.univ.affineCombination Real sx.points w) r
   have hp' : (p' -ᵥ (sx.points i)) =
-      r • (Finset.univ.affineCo
+      r • (Finset.univ.affineCombination Real sx.points w -ᵥ (sx.points i)) := by simp [p']
+  suffices (affineSpan Real (Set.range (sx.faceOpposite i).points)).SOppSide (sx.points i)
+      (s.secondInter (sx.points i) (p' -ᵥ (sx.points i))) by
+    rwa [hp', s.secondInter_smul _ _ hrpos.ne'] at this
+  refine s.sOppSide_faceOpposite_secondInter_of_mem_interior_faceOpposite hi hsx ?_
+  simp_rw [p', ← Finset.univ.affineCombination_piSingle Real (sx.points)
+    (Finset.mem_univ i), AffineMap.lineMap_apply, Finset.affineCombination_vsub,
+    ← LinearMap.map_smul, Finset.weightedVSub_vadd_affineCombination,
+    Affine.Simplex.faceOpposite]
+  rw [Affine.Simplex.affineCombination_mem_interior_face_iff_pos]
+  · simp only [Finset.mem_compl, Finset.mem_singleton, Pi.add_apply, Pi.smul_apply, Pi.sub_apply,
+      smul_eq_mul, Decidable.not_not, forall_eq, Pi.single_eq_same]
+    refine ⟨fun j hj => ?_, by grind⟩
+    simp [hj, hrpos, (hw01 j).1]
+  · simp [Finset.sum_add_distrib, ← Finset.mul_sum, hw]
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap, Finset, Finset.univ.affineCombination, SOppSide, Set.range, affineCombination, affineSpan, faceOpposite, inv_pos, lineMap, points, s.secondInter, secondInter, sub_pos, sx.faceOpposite, sx.points
 -/

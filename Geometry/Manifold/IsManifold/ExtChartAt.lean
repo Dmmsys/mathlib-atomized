@@ -802,7 +802,9 @@ theorem map_extend_nhdsWithin_eq_image
       congr_arg (map e) (nhdsWithin_inter_of_mem (extend_source_mem_nhdsWithin f hy)).symm
     _ = 𝓝[e '' (e.source inter s)] e y :=
       ((f.extend I).leftInvOn.mono inter_subset_left).map_nhdsWithin_eq
-        (
+        ((f.extend I).left_inv <| by rwa [f.extend_source])
+        (continuousAt_extend_symm f hy).continuousWithinAt
+        (continuousAt_extend f hy).continuousWithinAt
 
 中文:
 定理 map_extend_nhdsWithin_eq_image
@@ -814,7 +816,9 @@ theorem map_extend_nhdsWithin_eq_image
       congr_arg (map e) (nhdsWithin_inter_of_mem (extend_source_mem_nhdsWithin f hy)).symm
     _ = 𝓝[e '' (e.source inter s)] e y :=
       ((f.extend I).leftInvOn.mono inter_subset_left).map_nhdsWithin_eq
-        (
+        ((f.extend I).left_inv <| by rwa [f.extend_source])
+        (continuousAt_extend_symm f hy).continuousWithinAt
+        (continuousAt_extend f hy).continuousWithinAt
 
 Depends on / 依赖: congr_arg, continuousAt_extend, continuousAt_extend_symm, continuousWithinAt, e.source, extend, extend_source, extend_source_mem_nhdsWithin, f.extend, f.extend_source, inter_subset_left, leftInvOn, leftInvOn.mono, left_inv, map_nhdsWithin_eq, nhdsWithin_inter_of_mem, source
 -/
@@ -968,7 +972,9 @@ theorem continuousWithinAt_writtenInExtend_iff
   simp only [comp_apply]
   rw [extend_left_inv _ hy]; rw [f'.tendsto_extend_comp_iff _ hgy]; rw [← f.map_extend_symm_nhdsWithin (I := I) hy]; rw [tendsto_map'_iff]
   rw [← f.map_extend_nhdsWithin (I := I) hy]; rw [eventually_map]
-  filter_upwards [inter_mem_nhdsWithin 
+  filter_upwards [inter_mem_nhdsWithin _ (f.open_source.mem_nhds hy)] with z hz
+  rw [comp_apply]; rw [extend_left_inv _ hz.2]
+  exact hmaps hz.1
 
 中文:
 定理 continuousWithinAt_writtenInExtend_iff
@@ -978,7 +984,9 @@ theorem continuousWithinAt_writtenInExtend_iff
   simp only [comp_apply]
   rw [extend_left_inv _ hy]; rw [f'.tendsto_extend_comp_iff _ hgy]; rw [← f.map_extend_symm_nhdsWithin (I := I) hy]; rw [tendsto_map'_iff]
   rw [← f.map_extend_nhdsWithin (I := I) hy]; rw [eventually_map]
-  filter_upwards [inter_mem_nhdsWithin 
+  filter_upwards [inter_mem_nhdsWithin _ (f.open_source.mem_nhds hy)] with z hz
+  rw [comp_apply]; rw [extend_left_inv _ hz.2]
+  exact hmaps hz.1
 
 Depends on / 依赖: ContinuousWithinAt, _iff, comp_apply, eventually_map, extend_left_inv, f.map_extend_nhdsWithin, f.map_extend_symm_nhdsWithin, f.open_source.mem_nhds, filter_upwards, inter_mem_nhdsWithin, map_extend_nhdsWithin, map_extend_symm_nhdsWithin, mem_nhds, open_source, tendsto_extend_comp_iff, tendsto_map
 -/
@@ -1004,7 +1012,8 @@ theorem continuousOn_writtenInExtend_iff
 refine forall_mem_image.trans forall₂_congr fun x hx => ?_
   refine (continuousWithinAt_congr_set ?_).trans
     (continuousWithinAt_writtenInExtend_iff _ (hs hx) (hmaps hx) hmaps)
-  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← map_extend_nhdsWithin_eq_image_of_subset]; rw [← map_extend_nhdsWithin
+  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← map_extend_nhdsWithin_eq_image_of_subset]; rw [← map_extend_nhdsWithin]
+  exacts [hs hx, hs hx, hs]
 
 中文:
 定理 continuousOn_writtenInExtend_iff
@@ -1013,7 +1022,8 @@ refine forall_mem_image.trans forall₂_congr fun x hx => ?_
 refine forall_mem_image.trans forall₂_congr fun x hx => ?_
   refine (continuousWithinAt_congr_set ?_).trans
     (continuousWithinAt_writtenInExtend_iff _ (hs hx) (hmaps hx) hmaps)
-  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← map_extend_nhdsWithin_eq_image_of_subset]; rw [← map_extend_nhdsWithin
+  rw [← nhdsWithin_eq_iff_eventuallyEq]; rw [← map_extend_nhdsWithin_eq_image_of_subset]; rw [← map_extend_nhdsWithin]
+  exacts [hs hx, hs hx, hs]
 
 Depends on / 依赖: continuousWithinAt_congr_set, continuousWithinAt_writtenInExtend_iff, exacts, forall_mem_image, forall_mem_image.trans, map_extend_nhdsWithin, map_extend_nhdsWithin_eq_image_of_subset, nhdsWithin_eq_iff_eventuallyEq
 -/
@@ -1491,7 +1501,19 @@ lemma isInvertible_fderivWithin_extendCoordChange
   have hφ : ContDiffOn 𝕜 n φ φ.source := I.contDiffOn_extendCoordChange he he'
   have hφ' : ContDiffOn 𝕜 n φ.symm φ.target := I.contDiffOn_extendCoordChange_symm he he'
   refine .of_inverse (g := (fderivWithin 𝕜 φ.symm φ.target (φ x))) ?_ ?_
-  · rw [← φ.left_in
+  · rw [← φ.left_inv hx, φ.right_inv (φ.map_source hx), ← fderivWithin_comp,
+      fderivWithin_congr' φ.rightInvOn.eqOn (φ.map_source hx), fderivWithin_id]
+    · exact I.uniqueDiffOn_extendCoordChange_source _ (φ.map_source hx)
+    · exact (φ.left_inv hx ▸ ((hφ _ hx).differentiableWithinAt hn) :)
+    · exact (hφ' _ (φ.map_source hx)).differentiableWithinAt hn
+    · exact φ.mapsTo_symm
+    · exact I.uniqueDiffOn_extendCoordChange_source _ (φ.map_source hx)
+  · rw [← fderivWithin_comp, fderivWithin_congr' φ.leftInvOn.eqOn hx, fderivWithin_id]
+    · exact I.uniqueDiffOn_extendCoordChange_source _ hx
+    · exact (hφ' _ (φ.map_source hx)).differentiableWithinAt hn
+    · exact (hφ _ hx).differentiableWithinAt hn
+    · exact φ.mapsTo
+    · exact I.uniqueDiffOn_extendCoordChange_source _ hx
 
 中文:
 引理 isInvertible_fderivWithin_extendCoordChange
@@ -1501,7 +1523,19 @@ lemma isInvertible_fderivWithin_extendCoordChange
   have hφ : ContDiffOn 𝕜 n φ φ.source := I.contDiffOn_extendCoordChange he he'
   have hφ' : ContDiffOn 𝕜 n φ.symm φ.target := I.contDiffOn_extendCoordChange_symm he he'
   refine .of_inverse (g := (fderivWithin 𝕜 φ.symm φ.target (φ x))) ?_ ?_
-  · rw [← φ.left_in
+  · rw [← φ.left_inv hx, φ.right_inv (φ.map_source hx), ← fderivWithin_comp,
+      fderivWithin_congr' φ.rightInvOn.eqOn (φ.map_source hx), fderivWithin_id]
+    · exact I.uniqueDiffOn_extendCoordChange_source _ (φ.map_source hx)
+    · exact (φ.left_inv hx ▸ ((hφ _ hx).differentiableWithinAt hn) :)
+    · exact (hφ' _ (φ.map_source hx)).differentiableWithinAt hn
+    · exact φ.mapsTo_symm
+    · exact I.uniqueDiffOn_extendCoordChange_source _ (φ.map_source hx)
+  · rw [← fderivWithin_comp, fderivWithin_congr' φ.leftInvOn.eqOn hx, fderivWithin_id]
+    · exact I.uniqueDiffOn_extendCoordChange_source _ hx
+    · exact (hφ' _ (φ.map_source hx)).differentiableWithinAt hn
+    · exact (hφ _ hx).differentiableWithinAt hn
+    · exact φ.mapsTo
+    · exact I.uniqueDiffOn_extendCoordChange_source _ hx
 
 Depends on / 依赖: ContDiffOn, I.contDiffOn_extendCoordChange, I.contDiffOn_extendCoordChange_symm, I.extendCoordChange, I.uniqueDiffOn_extendCoordChange_source, contDiffOn_extendCoordChange, contDiffOn_extendCoordChange_symm, extendCoordChange, fderivWithin, fderivWithin_comp, fderivWithin_congr, fderivWithin_id, left_inv, map_source, of_inverse, rightInvOn, rightInvOn.eqOn, right_inv, source, target
 -/
@@ -2440,7 +2474,13 @@ lemma extChartAt_target_subset_closure_interior
   have A : t inter ((extChartAt I x).target union (range I)ᶜ) in 𝓝 y :=
     inter_mem ht (extChartAt_target_union_compl_range_mem_nhds_of_mem hy)
   have B : y in closure (interior (range I)) := by
-    apply I.range_subset_closure_interior (ext
+    apply I.range_subset_closure_interior (extChartAt_target_subset_range x hy)
+  obtain ⟨z, ⟨tz, h'z⟩, hz⟩ :
+      (t inter ((extChartAt I x).target union (range ↑I)ᶜ) inter interior (range I)).Nonempty :=
+    mem_closure_iff_nhds.1 B _ A
+  refine ⟨z, ⟨tz, ?_⟩⟩
+  have h''z : z in (extChartAt I x).target := by simpa [interior_subset hz] using h'z
+  exact (extChartAt_target_eventuallyEq_of_mem h''z).symm.mem_interior hz
 
 中文:
 引理 extChartAt_target_subset_closure_interior
@@ -2452,7 +2492,13 @@ lemma extChartAt_target_subset_closure_interior
   have A : t inter ((extChartAt I x).target union (range I)ᶜ) in 𝓝 y :=
     inter_mem ht (extChartAt_target_union_compl_range_mem_nhds_of_mem hy)
   have B : y in closure (interior (range I)) := by
-    apply I.range_subset_closure_interior (ext
+    apply I.range_subset_closure_interior (extChartAt_target_subset_range x hy)
+  obtain ⟨z, ⟨tz, h'z⟩, hz⟩ :
+      (t inter ((extChartAt I x).target union (range ↑I)ᶜ) inter interior (range I)).Nonempty :=
+    mem_closure_iff_nhds.1 B _ A
+  refine ⟨z, ⟨tz, ?_⟩⟩
+  have h''z : z in (extChartAt I x).target := by simpa [interior_subset hz] using h'z
+  exact (extChartAt_target_eventuallyEq_of_mem h''z).symm.mem_interior hz
 
 Depends on / 依赖: I.range_subset_closure_interior, Nonempty, closure, extChartAt, extChartAt_target_subset_range, extChartAt_target_union_compl_range_mem_nhds_of_mem, inter_mem, interior, mem_closure_iff_nhds, range_subset_closure_interior, target
 -/
@@ -2512,7 +2558,18 @@ lemma extChartAt_mem_closure_interior
   obtain ⟨y, ⟨yo, hy⟩, ys⟩ :
       ((extChartAt I x₀) ⁻¹' o inter (extChartAt I x₀).source inter interior s).Nonempty := by
     have : (extChartAt I x₀) ⁻¹' o in 𝓝 x := by
-      apply (continuousAt_extChartAt' h'x).pre
+      apply (continuousAt_extChartAt' h'x).preimage_mem_nhds (o_open.mem_nhds ho)
+    refine (mem_closure_iff_nhds.1 hx) _ (inter_mem this ?_)
+    apply (isOpen_extChartAt_source x₀).mem_nhds h'x
+  have A : interior (↑(extChartAt I x₀).symm ⁻¹' s) in 𝓝 (extChartAt I x₀ y) := by
+    simp only [interior_mem_nhds]
+    apply (continuousAt_extChartAt_symm' hy).preimage_mem_nhds
+    simp only [hy, PartialEquiv.left_inv]
+    exact mem_interior_iff_mem_nhds.mp ys
+  have B : (extChartAt I x₀) y in closure (interior (extChartAt I x₀).target) := by
+    apply extChartAt_target_subset_closure_interior (x := x₀)
+    exact (extChartAt I x₀).map_source hy
+  exact mem_closure_iff_nhds.1 B _ (inter_mem (o_open.mem_nhds yo) A)
 
 中文:
 引理 extChartAt_mem_closure_interior
@@ -2523,7 +2580,18 @@ lemma extChartAt_mem_closure_interior
   obtain ⟨y, ⟨yo, hy⟩, ys⟩ :
       ((extChartAt I x₀) ⁻¹' o inter (extChartAt I x₀).source inter interior s).Nonempty := by
     have : (extChartAt I x₀) ⁻¹' o in 𝓝 x := by
-      apply (continuousAt_extChartAt' h'x).pre
+      apply (continuousAt_extChartAt' h'x).preimage_mem_nhds (o_open.mem_nhds ho)
+    refine (mem_closure_iff_nhds.1 hx) _ (inter_mem this ?_)
+    apply (isOpen_extChartAt_source x₀).mem_nhds h'x
+  have A : interior (↑(extChartAt I x₀).symm ⁻¹' s) in 𝓝 (extChartAt I x₀ y) := by
+    simp only [interior_mem_nhds]
+    apply (continuousAt_extChartAt_symm' hy).preimage_mem_nhds
+    simp only [hy, PartialEquiv.left_inv]
+    exact mem_interior_iff_mem_nhds.mp ys
+  have B : (extChartAt I x₀) y in closure (interior (extChartAt I x₀).target) := by
+    apply extChartAt_target_subset_closure_interior (x := x₀)
+    exact (extChartAt I x₀).map_source hy
+  exact mem_closure_iff_nhds.1 B _ (inter_mem (o_open.mem_nhds yo) A)
 
 Depends on / 依赖: Nonempty, continuousAt_extChartAt, extChartAt, inter_assoc, inter_mem, interior, interior_inter, isOpen_extChartAt_source, mem_closure_iff, mem_closure_iff_nhds, mem_nhds, o_open, o_open.mem_nhds, preimage_mem_nhds, simp_rw, source
 -/
@@ -3388,7 +3456,15 @@ lemma LocallyCompactSpace.of_locallyCompact_manifold
   have h'y : y in (extChartAt I x).target := interior_subset hy
   obtain ⟨s, hmem, hss, hcom⟩ :=
     LocallyCompactSpace.local_compact_nhds ((extChartAt I x).symm y) (extChartAt I x).source
-      ((isOpen_extChartAt_s
+      ((isOpen_extChartAt_source x).mem_nhds ((extChartAt I x).map_target h'y))
+have : IsCompact (extChartAt I x) '' s :=
+hcom.image_of_continuousOn (continuousOn_extChartAt x).mono hss
+  apply this.locallyCompactSpace_of_mem_nhds_of_addGroup (x := y)
+  rw [← (extChartAt I x).right_inv h'y]
+  apply extChartAt_image_nhds_mem_nhds_of_mem_interior_range
+    (PartialEquiv.map_target (extChartAt I x) h'y) _ hmem
+  simp only [(extChartAt I x).right_inv h'y]
+  exact interior_mono (extChartAt_target_subset_range x) hy
 
 中文:
 引理 局部紧空间.of_locallyCompact_manifold
@@ -3399,7 +3475,15 @@ lemma LocallyCompactSpace.of_locallyCompact_manifold
   have h'y : y in (extChartAt I x).target := interior_subset hy
   obtain ⟨s, hmem, hss, hcom⟩ :=
     LocallyCompactSpace.local_compact_nhds ((extChartAt I x).symm y) (extChartAt I x).source
-      ((isOpen_extChartAt_s
+      ((isOpen_extChartAt_source x).mem_nhds ((extChartAt I x).map_target h'y))
+have : IsCompact (extChartAt I x) '' s :=
+hcom.image_of_continuousOn (continuousOn_extChartAt x).mono hss
+  apply this.locallyCompactSpace_of_mem_nhds_of_addGroup (x := y)
+  rw [← (extChartAt I x).right_inv h'y]
+  apply extChartAt_image_nhds_mem_nhds_of_mem_interior_range
+    (PartialEquiv.map_target (extChartAt I x) h'y) _ hmem
+  simp only [(extChartAt I x).right_inv h'y]
+  exact interior_mono (extChartAt_target_subset_range x) hy
 
 Depends on / 依赖: IsCompact, LocallyCompactSpace, LocallyCompactSpace.local_compact_nhds, continuousOn_extChartAt, extChartAt, hcom.image_of_continuousOn, image_of_continuousOn, interior_extChartAt_target_nonempty, interior_subset, isOpen_extChartAt_source, local_compact_nhds, locallyCompactSpace_of_mem_nhds_of_addGroup, map_target, mem_nhds, source, target, this.locallyCompactSpace_of_mem_nhds_of_addGroup
 -/

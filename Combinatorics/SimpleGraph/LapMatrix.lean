@@ -332,7 +332,13 @@ theorem lapMatrix_toLinearMap₂'
   simp_rw [toLinearMap₂'_apply', lapMatrix, sub_mulVec, dotProduct_sub, dotProduct_mulVec_degMatrix,
     dotProduct_mulVec_adjMatrix, ← sum_sub_distrib, degree_eq_sum_if_adj, sum_mul, ite_mul, one_mul,
     zero_mul, ← sum_sub_distrib, ite_sub_ite, sub_zero]
-  rw [← add_self_div_two (∑ x_1 : V]; r
+  rw [← add_self_div_two (∑ x_1 : V]; rw [∑ x_2 : V]; rw [_)]
+  conv_lhs => enter [1, 2, 2, i, 2, j]; rw [if_congr (adj_comm G i j) rfl rfl]
+  conv_lhs => enter [1, 2]; rw [Finset.sum_comm]
+  simp_rw [← sum_add_distrib, ite_add_ite]
+  congr 2 with i
+  congr 2 with j
+  ring_nf
 
 中文:
 定理 lapMatrix_toLinearMap₂'
@@ -341,7 +347,13 @@ theorem lapMatrix_toLinearMap₂'
   simp_rw [toLinearMap₂'_apply', lapMatrix, sub_mulVec, dotProduct_sub, dotProduct_mulVec_degMatrix,
     dotProduct_mulVec_adjMatrix, ← sum_sub_distrib, degree_eq_sum_if_adj, sum_mul, ite_mul, one_mul,
     zero_mul, ← sum_sub_distrib, ite_sub_ite, sub_zero]
-  rw [← add_self_div_two (∑ x_1 : V]; r
+  rw [← add_self_div_two (∑ x_1 : V]; rw [∑ x_2 : V]; rw [_)]
+  conv_lhs => enter [1, 2, 2, i, 2, j]; rw [if_congr (adj_comm G i j) rfl rfl]
+  conv_lhs => enter [1, 2]; rw [Finset.sum_comm]
+  simp_rw [← sum_add_distrib, ite_add_ite]
+  congr 2 with i
+  congr 2 with j
+  ring_nf
 
 Depends on / 依赖: Finset, Finset.sum_comm, _apply, add_self_div_two, adj_comm, conv_lhs, degree_eq_sum_if_adj, dotProduct_mulVec_adjMatrix, dotProduct_mulVec_degMatrix, dotProduct_sub, if_congr, ite_add_ite, ite_mul, ite_sub_ite, lapMatrix, one_mul, simp_rw, sub_mulVec, sub_zero, sum_add_distrib
 -/
@@ -594,7 +606,12 @@ lemma linearIndependent_lapMatrix_ker_basis_aux
     simp only [lapMatrix_ker_basis_aux, SetLike.mk_smul_mk]
     repeat rw [AddSubmonoid.coe_finsetSum]
     ext i
-    simp 
+    simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul, mul_ite, mul_one, mul_zero, sum_ite_eq,
+      mem_univ, ↓reduceIte]
+  rw [h] at h0
+  intro c
+  obtain ⟨i, h'⟩ : exists i : V, G.connectedComponentMk i = c := Quot.exists_rep c
+  exact h' ▸ congrFun h0 i
 
 中文:
 引理 linearIndependent_lapMatrix_ker_basis_aux
@@ -606,7 +623,12 @@ lemma linearIndependent_lapMatrix_ker_basis_aux
     simp only [lapMatrix_ker_basis_aux, SetLike.mk_smul_mk]
     repeat rw [AddSubmonoid.coe_finsetSum]
     ext i
-    simp 
+    simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul, mul_ite, mul_one, mul_zero, sum_ite_eq,
+      mem_univ, ↓reduceIte]
+  rw [h] at h0
+  intro c
+  obtain ⟨i, h'⟩ : exists i : V, G.connectedComponentMk i = c := Quot.exists_rep c
+  exact h' ▸ congrFun h0 i
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.coe_finsetSum, Finset, Finset.sum_apply, Fintype, Fintype.linearIndependent_iff, G.connectedComponentMk, Pi.smul_apply, Quot.exists_rep, SetLike, SetLike.mk_smul_mk, Subtype, Subtype.ext_iff, coe_finsetSum, connectedComponentMk, exists_rep, ext_iff, lapMatrix_ker_basis_aux, linearIndependent_iff, mem_univ
 -/
@@ -640,7 +662,9 @@ lemma top_le_span_range_lapMatrix_ker_basis_aux
   ext j
   simp only [lapMatrix_ker_basis_aux]
   rw [AddSubmonoid.coe_finsetSum]
-  simp only [SetLike.mk_smul_mk, Fi
+  simp only [SetLike.mk_smul_mk, Finset.sum_apply, Pi.smul_apply, smul_eq_mul, mul_ite, mul_one,
+    mul_zero, sum_ite_eq, mem_univ, ↓reduceIte]
+  rfl
 
 中文:
 引理 top_le_span_range_lapMatrix_ker_basis_aux
@@ -652,7 +676,9 @@ lemma top_le_span_range_lapMatrix_ker_basis_aux
   ext j
   simp only [lapMatrix_ker_basis_aux]
   rw [AddSubmonoid.coe_finsetSum]
-  simp only [SetLike.mk_smul_mk, Fi
+  simp only [SetLike.mk_smul_mk, Finset.sum_apply, Pi.smul_apply, smul_eq_mul, mul_ite, mul_one,
+    mul_zero, sum_ite_eq, mem_univ, ↓reduceIte]
+  rfl
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.coe_finsetSum, Finset, Finset.sum_apply, LinearMap, LinearMap.map_coe_ker, Pi.smul_apply, Quot.lift, SetLike, SetLike.mk_smul_mk, Submodule, Submodule.mem_span_range_iff_exists_fun, _apply, coe_finsetSum, lapMatrix_ker_basis_aux, lapMatrix_mulVec_eq_zero_iff_forall_reachable, map_coe_ker, mem_span_range_iff_exists_fun, mem_univ, mk_smul_mk
 -/

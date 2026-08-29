@@ -84,7 +84,14 @@ theorem hasDerivAt_of_bilinear
     · simpa using (B.hasFDerivAt_of_bilinear (hu hxv).hasFDerivAt (hv hxu).hasFDerivAt).hasDerivAt
     · have hx : x ∉ tsupport fun x => B (u x) (v x) :=
         mt (closure_mono (fun x => mt fun h => by simp [h]) ·) hxv
-      co
+      convert! HasDerivAt.of_notMem_tsupport hx
+      simp [(hv hxu).unique <| .of_notMem_tsupport hxv, image_eq_zero_of_notMem_tsupport hxv]
+  · have hx : x ∉ tsupport fun x => B (u x) (v x) :=
+      mt (closure_mono (fun x => mt fun h => by simp [h]) ·) hxu
+    convert! HasDerivAt.of_notMem_tsupport hx
+    by_cases hxv : x in tsupport v
+    · simp [image_eq_zero_of_notMem_tsupport hxu, (hu hxv).unique <| .of_notMem_tsupport hxu]
+    · simp [image_eq_zero_of_notMem_tsupport hxu, image_eq_zero_of_notMem_tsupport hxv]
 
 中文:
 定理 hasDerivAt_of_bilinear
@@ -95,7 +102,14 @@ theorem hasDerivAt_of_bilinear
     · simpa using (B.hasFDerivAt_of_bilinear (hu hxv).hasFDerivAt (hv hxu).hasFDerivAt).hasDerivAt
     · have hx : x ∉ tsupport fun x => B (u x) (v x) :=
         mt (closure_mono (fun x => mt fun h => by simp [h]) ·) hxv
-      co
+      convert! HasDerivAt.of_notMem_tsupport hx
+      simp [(hv hxu).unique <| .of_notMem_tsupport hxv, image_eq_zero_of_notMem_tsupport hxv]
+  · have hx : x ∉ tsupport fun x => B (u x) (v x) :=
+      mt (closure_mono (fun x => mt fun h => by simp [h]) ·) hxu
+    convert! HasDerivAt.of_notMem_tsupport hx
+    by_cases hxv : x in tsupport v
+    · simp [image_eq_zero_of_notMem_tsupport hxu, (hu hxv).unique <| .of_notMem_tsupport hxu]
+    · simp [image_eq_zero_of_notMem_tsupport hxu, image_eq_zero_of_notMem_tsupport hxv]
 
 Depends on / 依赖: B.hasFDerivAt_of_bilinear, HasDerivAt, HasDerivAt.of_notMem_tsupport, closure_mono, convert, hasDerivAt, hasFDerivAt, hasFDerivAt_of_bilinear, image_eq_zero_of_notMem_tsupport, of_notMem_tsupport, tsupport, unique
 -/
@@ -644,7 +658,7 @@ lemma derivWithin_fun_const_smul_field
   · simp [derivWithin_zero_of_not_uniqueDiffWithinAt hsx]
 
 @[deprecated (since := "2026-01-11")] alias derivWithin_fun_const_smul' :=
-  derivWithin_fun_const_smul_fi
+  derivWithin_fun_const_smul_field
 
 中文:
 引理 derivWithin_fun_const_smul_field
@@ -655,7 +669,7 @@ lemma derivWithin_fun_const_smul_field
   · simp [derivWithin_zero_of_not_uniqueDiffWithinAt hsx]
 
 @[deprecated (since := "2026-01-11")] alias derivWithin_fun_const_smul' :=
-  derivWithin_fun_const_smul_fi
+  derivWithin_fun_const_smul_field
 
 Depends on / 依赖: Pi.smul_def, UniqueDiffWithinAt, derivWithin_zero_of_not_uniqueDiffWithinAt, fderivWithin_const_smul_field, fderivWithin_derivWithin, smul_def
 -/
@@ -1104,7 +1118,8 @@ lemma derivWithin_mul_const_field
   by_cases hu : u = 0
   · simp [hu]
   rw [derivWithin_zero_of_not_differentiableWithinAt hv]; rw [zero_mul]; rw [derivWithin_zero_of_not_differentiableWithinAt]
-  have : v = fun x => (v x * u) * u⁻¹ := by ext; simp
+  have : v = fun x => (v x * u) * u⁻¹ := by ext; simp [hu]
+exact fun h_diff => hv this ▸ h_diff.mul_const _
 
 中文:
 引理 derivWithin_mul_const_field
@@ -1115,7 +1130,8 @@ lemma derivWithin_mul_const_field
   by_cases hu : u = 0
   · simp [hu]
   rw [derivWithin_zero_of_not_differentiableWithinAt hv]; rw [zero_mul]; rw [derivWithin_zero_of_not_differentiableWithinAt]
-  have : v = fun x => (v x * u) * u⁻¹ := by ext; simp
+  have : v = fun x => (v x * u) * u⁻¹ := by ext; simp [hu]
+exact fun h_diff => hv this ▸ h_diff.mul_const _
 
 Depends on / 依赖: DifferentiableWithinAt, derivWithin_mul_const, derivWithin_zero_of_not_differentiableWithinAt, h_diff, h_diff.mul_const, mul_const, zero_mul
 -/
@@ -1162,7 +1178,9 @@ theorem deriv_mul_const_field
     rcases eq_or_ne v 0 with (rfl | hd)
     · simp only [mul_zero, deriv_const]
     · refine deriv_zero_of_not_differentiableAt (mt (fun H => ?_) hu)
-      simpa only [mu
+      simpa only [mul_inv_cancel_right₀ hd] using H.mul_const v⁻¹
+
+@[simp]
 
 中文:
 定理 deriv_mul_const_field
@@ -1175,7 +1193,9 @@ theorem deriv_mul_const_field
     rcases eq_or_ne v 0 with (rfl | hd)
     · simp only [mul_zero, deriv_const]
     · refine deriv_zero_of_not_differentiableAt (mt (fun H => ?_) hu)
-      simpa only [mu
+      simpa only [mul_inv_cancel_right₀ hd] using H.mul_const v⁻¹
+
+@[simp]
 
 Depends on / 依赖: DifferentiableAt, H.mul_const, deriv_const, deriv_mul_const, deriv_zero_of_not_differentiableAt, eq_or_ne, mul_const, mul_zero, zero_mul
 -/
@@ -1709,7 +1729,7 @@ theorem derivWithin_fun_finsetProd
   · simp [derivWithin_zero_of_not_uniqueDiffWithinAt hsx]
 
 @[deprecated (since := "2026-04-08")]
-alias derivWithin_fun_finset_prod := derivWithin_fun_finset
+alias derivWithin_fun_finset_prod := derivWithin_fun_finsetProd
 
 中文:
 定理 derivWithin_fun_finsetProd
@@ -1720,7 +1740,7 @@ alias derivWithin_fun_finset_prod := derivWithin_fun_finset
   · simp [derivWithin_zero_of_not_uniqueDiffWithinAt hsx]
 
 @[deprecated (since := "2026-04-08")]
-alias derivWithin_fun_finset_prod := derivWithin_fun_finset
+alias derivWithin_fun_finset_prod := derivWithin_fun_finsetProd
 
 Depends on / 依赖: HasDerivWithinAt, HasDerivWithinAt.fun_finsetProd, UniqueDiffWithinAt, derivWithin, derivWithin_zero_of_not_uniqueDiffWithinAt, fun_finsetProd, hasDerivWithinAt
 -/

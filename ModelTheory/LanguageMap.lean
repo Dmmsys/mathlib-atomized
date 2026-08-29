@@ -847,7 +847,9 @@ theorem Injective.isExpansionOn_default
   · have hf : ϕ.onFunction f in Set.range fun f : L.Functions n => ϕ.onFunction f := ⟨f, rfl⟩
     refine (dif_pos hf).trans ?_
     rw [h.onFunction hf.choose_spec]
-  · have hr : ϕ.onRelation r in Set.range fun r : L.R
+  · have hr : ϕ.onRelation r in Set.range fun r : L.Relations n => ϕ.onRelation r := ⟨r, rfl⟩
+    refine (dif_pos hr).trans ?_
+    rw [h.onRelation hr.choose_spec]
 
 中文:
 定理 单射.isExpansionOn_default
@@ -858,7 +860,9 @@ theorem Injective.isExpansionOn_default
   · have hf : ϕ.onFunction f in Set.range fun f : L.Functions n => ϕ.onFunction f := ⟨f, rfl⟩
     refine (dif_pos hf).trans ?_
     rw [h.onFunction hf.choose_spec]
-  · have hr : ϕ.onRelation r in Set.range fun r : L.R
+  · have hr : ϕ.onRelation r in Set.range fun r : L.Relations n => ϕ.onRelation r := ⟨r, rfl⟩
+    refine (dif_pos hr).trans ?_
+    rw [h.onRelation hr.choose_spec]
 
 Depends on / 依赖: Functions, L.Functions, L.Relations, Relations, Set.range, choose_spec, defaultExpansion, dif_pos, h.onFunction, h.onRelation, hf.choose_spec, hr.choose_spec, onFunction, onRelation
 -/
@@ -1365,7 +1369,7 @@ definition LEquiv.addEmptyConstants
   left_inv := by rw [lhomWithConstants, LHom.sumElim_comp_inl]
   right_inv := by
     simp only [LHom.comp_sumElim, lhomWithConstants, LHom.comp_id]
-    exact _root_.trans (congr rfl (Subsingleton.elim _ _)
+    exact _root_.trans (congr rfl (Subsingleton.elim _ _)) LHom.sumElim_inl_inr
 
 中文:
 定义 L等价.addEmptyConstants
@@ -1375,7 +1379,7 @@ definition LEquiv.addEmptyConstants
   left_inv := by rw [lhomWithConstants, LHom.sumElim_comp_inl]
   right_inv := by
     simp only [LHom.comp_sumElim, lhomWithConstants, LHom.comp_id]
-    exact _root_.trans (congr rfl (Subsingleton.elim _ _)
+    exact _root_.trans (congr rfl (Subsingleton.elim _ _)) LHom.sumElim_inl_inr
 
 Depends on / 依赖: lhomWithConstants
 -/

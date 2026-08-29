@@ -96,7 +96,8 @@ lemma dist_eq_max_of_dist_ne_dist
     apply (le_max_iff.mp <| dist_triangle_max y x z).resolve_left
     simpa only [not_le, dist_comm x y] using h
   · rw [max_eq_left h.le, dist_comm x y, dist_comm x z]
-    apply (le_max_iff.mp
+    apply (le_max_iff.mp <| dist_triangle_max y z x).resolve_left
+    simpa only [not_le, dist_comm x y] using h
 
 中文:
 引理 dist_eq_max_of_dist_ne_dist
@@ -108,7 +109,8 @@ lemma dist_eq_max_of_dist_ne_dist
     apply (le_max_iff.mp <| dist_triangle_max y x z).resolve_left
     simpa only [not_le, dist_comm x y] using h
   · rw [max_eq_left h.le, dist_comm x y, dist_comm x z]
-    apply (le_max_iff.mp
+    apply (le_max_iff.mp <| dist_triangle_max y z x).resolve_left
+    simpa only [not_le, dist_comm x y] using h
 
 Depends on / 依赖: dist_comm, dist_triangle_max, h.le, h.lt_or_gt, le_antisymm, le_max_iff, le_max_iff.mp, lt_or_gt, max_eq_left, max_eq_right, not_le, resolve_left
 -/
@@ -182,7 +184,9 @@ lemma ball_subset_trichotomy
   · rw [disjoint_comm, ← or_assoc, or_comm (b := (_ : Set X) subseteq _), or_assoc]
     exact this y x s r hrs.le
 .symm.imp (fun h => ?_) (Or.inr ·) · refine Set.disjoint_or_nonempty_inter (ball x r) (ball y s)
-    obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff 
+    obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff _ _ _).mp h.some_mem
+    have hx := ball_subset_ball hrs (x := x)
+    rwa [ball_eq_of_mem hyz |>.trans (ball_eq_of_mem <| hx hxz).symm]
 
 中文:
 引理 ball_subset_trichotomy
@@ -191,7 +195,9 @@ lemma ball_subset_trichotomy
   · rw [disjoint_comm, ← or_assoc, or_comm (b := (_ : Set X) subseteq _), or_assoc]
     exact this y x s r hrs.le
 .symm.imp (fun h => ?_) (Or.inr ·) · refine Set.disjoint_or_nonempty_inter (ball x r) (ball y s)
-    obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff 
+    obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff _ _ _).mp h.some_mem
+    have hx := ball_subset_ball hrs (x := x)
+    rwa [ball_eq_of_mem hyz |>.trans (ball_eq_of_mem <| hx hxz).symm]
 
 Depends on / 依赖: Or.inr, Set.disjoint_or_nonempty_inter, Set.mem_inter_iff, ball_eq_of_mem, ball_subset_ball, disjoint_comm, disjoint_or_nonempty_inter, generalizing, h.some_mem, hrs.le, mem_inter_iff, or_assoc, or_comm, some_mem, subseteq, symm.imp
 -/
@@ -274,7 +280,9 @@ lemma closedBall_subset_trichotomy
     exact this y x s r hrs.le
 .symm.imp · refine Set.disjoint_or_nonempty_inter (closedBall x r) (closedBall y s)
       (fun h => ?_) (Or.inr ·)
-    obtain ⟨hxz, hyz⟩ := (
+    obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff _ _ _).mp h.some_mem
+    have hx := closedBall_subset_closedBall hrs (x := x)
+    rwa [closedBall_eq_of_mem hyz |>.trans (closedBall_eq_of_mem <| hx hxz).symm]
 
 中文:
 引理 closedBall_subset_trichotomy
@@ -284,7 +292,9 @@ lemma closedBall_subset_trichotomy
     exact this y x s r hrs.le
 .symm.imp · refine Set.disjoint_or_nonempty_inter (closedBall x r) (closedBall y s)
       (fun h => ?_) (Or.inr ·)
-    obtain ⟨hxz, hyz⟩ := (
+    obtain ⟨hxz, hyz⟩ := (Set.mem_inter_iff _ _ _).mp h.some_mem
+    have hx := closedBall_subset_closedBall hrs (x := x)
+    rwa [closedBall_eq_of_mem hyz |>.trans (closedBall_eq_of_mem <| hx hxz).symm]
 
 Depends on / 依赖: Or.inr, Set.disjoint_or_nonempty_inter, Set.mem_inter_iff, closedBall, closedBall_eq_of_mem, closedBall_subset_closedBall, disjoint_comm, disjoint_or_nonempty_inter, generalizing, h.some_mem, hrs.le, mem_inter_iff, or_assoc, or_comm, some_mem, subseteq, symm.imp
 -/
@@ -321,7 +331,7 @@ lemma isClosed_ball
       simp [h.not_ge] at hy
     | inr hd =>
       use r
-   
+      simp [h, le_compl_iff_disjoint_left, hd]
 
 中文:
 引理 isClosed_ball
@@ -341,7 +351,7 @@ lemma isClosed_ball
       simp [h.not_ge] at hy
     | inr hd =>
       use r
-   
+      simp [h, le_compl_iff_disjoint_left, hd]
 
 Depends on / 依赖: ball_eq_empty, ball_eq_empty.mpr, ball_eq_or_disjoint, h.not_ge, isOpen_compl_iff, isOpen_iff, le_compl_iff_disjoint_left, le_or_gt, not_ge
 -/
@@ -447,7 +457,7 @@ lemma isOpen_closedBall
       use r
       simp [h, hd, ball_subset_closedBall]
     | inr hd =>
-      si
+      simp [closedBall_eq_of_mem hy, h.not_gt] at hd
 
 中文:
 引理 isOpen_closedBall
@@ -466,7 +476,7 @@ lemma isOpen_closedBall
       use r
       simp [h, hd, ball_subset_closedBall]
     | inr hd =>
-      si
+      simp [closedBall_eq_of_mem hy, h.not_gt] at hd
 
 Depends on / 依赖: ball_subset_closedBall, closedBall_eq_empty, closedBall_eq_empty.mpr, closedBall_eq_of_mem, closedBall_eq_or_disjoint, gt_iff_lt, h.not_gt, isOpen_iff, lt_or_gt_of_ne, not_gt
 -/

@@ -2648,7 +2648,8 @@ definition whiskeringObj
       w := by
         ext
         dsimp
-        rw [Category.id_comp]
+        rw [Category.id_comp]; rw [Category.id_comp]; rw [← F.map_comp]; rw [← F.map_comp]
+        simp [w_app, map_comp] }
 
 中文:
 定义 whiskeringObj
@@ -2662,7 +2663,8 @@ definition whiskeringObj
       w := by
         ext
         dsimp
-        rw [Category.id_comp]
+        rw [Category.id_comp]; rw [Category.id_comp]; rw [← F.map_comp]; rw [← F.map_comp]
+        simp [w_app, map_comp] }
 
 Depends on / 依赖: Category, Category.id_comp, F.map, F.map_comp, F.obj, Functor, Functor.constComp, X.hom, constComp, drop.obj, id_comp, map_comp, point.obj, w_app, whiskerRight, whiskering
 -/
@@ -3132,7 +3134,7 @@ definition simplicialCosimplicialAugmentedEquiv
       simp_rw [← op_comp]
       congr 1
       cat_disch
-  counitIso := NatIso.ofComponents fun X 
+  counitIso := NatIso.ofComponents fun X => X.leftOpRightOpIso
 
 中文:
 定义 simplicialCosimplicialAugmentedEquiv
@@ -3145,7 +3147,7 @@ definition simplicialCosimplicialAugmentedEquiv
       simp_rw [← op_comp]
       congr 1
       cat_disch
-  counitIso := NatIso.ofComponents fun X 
+  counitIso := NatIso.ofComponents fun X => X.leftOpRightOpIso
 
 Depends on / 依赖: simplicialToCosimplicialAugmented
 -/

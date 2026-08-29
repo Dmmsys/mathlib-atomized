@@ -319,7 +319,14 @@ lemma exists_presentation_fin
   letI f : MvPolynomial (Fin n) R ->ₐ[R] S := H.choose_spec.choose
   haveI hf : Function.Surjective f := H.choose_spec.choose_spec.1
   haveI hf' : (RingHom.ker f).FG := H.choose_spec.choose_spec.2
-  letI H' := Submodule.fg
+  letI H' := Submodule.fg_iff_exists_fin_generating_family.mp hf'
+  let m : Nat := H'.choose
+  let v : Fin m -> MvPolynomial (Fin n) R := H'.choose_spec.choose
+  have hv : Ideal.span (Set.range v) = RingHom.ker f := H'.choose_spec.choose_spec
+  ⟨n, m,
+    ⟨{__ := Generators.ofSurjective (fun x => f (.X x)) (by convert! hf; ext; simp)
+      relation := v
+      span_range_relation_eq_ker := hv.trans (by congr; ext; simp) }⟩⟩
 
 中文:
 引理 存在_presentation_fin
@@ -329,7 +336,14 @@ lemma exists_presentation_fin
   letI f : MvPolynomial (Fin n) R ->ₐ[R] S := H.choose_spec.choose
   haveI hf : Function.Surjective f := H.choose_spec.choose_spec.1
   haveI hf' : (RingHom.ker f).FG := H.choose_spec.choose_spec.2
-  letI H' := Submodule.fg
+  letI H' := Submodule.fg_iff_exists_fin_generating_family.mp hf'
+  let m : Nat := H'.choose
+  let v : Fin m -> MvPolynomial (Fin n) R := H'.choose_spec.choose
+  have hv : Ideal.span (Set.range v) = RingHom.ker f := H'.choose_spec.choose_spec
+  ⟨n, m,
+    ⟨{__ := Generators.ofSurjective (fun x => f (.X x)) (by convert! hf; ext; simp)
+      relation := v
+      span_range_relation_eq_ker := hv.trans (by congr; ext; simp) }⟩⟩
 
 Depends on / 依赖: FinitePresentation, FinitePresentation.out, Function, Function.Surjective, H.choose, H.choose_spec.choose, H.choose_spec.choose_spec, Ideal.span, MvPolynomial, RingHom, RingHom.ker, Set.range, Submodule, Submodule.fg_iff_exists_fin_generating_family.mp, Surjective, choose_spe, choose_spec, choose_spec.choose, choose_spec.choose_spe, fg_iff_exists_fin_generating_family
 -/
@@ -479,7 +493,8 @@ definition ofBijectiveAlgebraMap
     symm
     rw [← RingHom.injective_iff_ker_eq_bot]
     change Function.Injective (aeval PEmpty.elim)
-    rw [aeval_injective_iff_of_isEmp
+    rw [aeval_injective_iff_of_isEmpty]
+    exact h.injective
 
 中文:
 定义 ofBijectiveAlgebraMap
@@ -491,7 +506,8 @@ definition ofBijectiveAlgebraMap
     symm
     rw [← RingHom.injective_iff_ker_eq_bot]
     change Function.Injective (aeval PEmpty.elim)
-    rw [aeval_injective_iff_of_isEmp
+    rw [aeval_injective_iff_of_isEmpty]
+    exact h.injective
 
 Depends on / 依赖: Generators, Generators.ofSurjectiveAlgebraMap, h.surjective, ofSurjectiveAlgebraMap, surjective
 -/
@@ -582,7 +598,12 @@ lemma _root_.Algebra.Generators.ker_localizationAway
         (Ideal.Quotient.mkₐ R (Ideal.span {C r * X () - 1})) := by
     ext x
     simp only [aeval_X, Generators.localizationAway_val, AlgHom.coe_comp,
-      AlgEquiv.coe_toAlgHom, 
+      AlgEquiv.coe_toAlgHom, Ideal.Quotient.mkₐ_eq_mk, Function.comp_apply]
+    rw [IsLocalization.Away.mvPolynomialQuotientEquiv_apply]; rw [aeval_X]
+  rw [Generators.ker_eq_ker_aeval_val]; rw [this]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgHom.comp_toRingHom]; rw [← RingHom.comap_ker]
+  simp only [AlgEquiv.toAlgHom_toRingHom]
+  change Ideal.comap _ (RingHom.ker (mvPolynomialQuotientEquiv S r)) = Ideal.span {C r * X () - 1}
+  simp [RingHom.ker_equiv, ← RingHom.ker_eq_comap_bot]
 
 中文:
 引理 _root_.代数.生成元.ker_localizationAway
@@ -592,7 +613,12 @@ lemma _root_.Algebra.Generators.ker_localizationAway
         (Ideal.Quotient.mkₐ R (Ideal.span {C r * X () - 1})) := by
     ext x
     simp only [aeval_X, Generators.localizationAway_val, AlgHom.coe_comp,
-      AlgEquiv.coe_toAlgHom, 
+      AlgEquiv.coe_toAlgHom, Ideal.Quotient.mkₐ_eq_mk, Function.comp_apply]
+    rw [IsLocalization.Away.mvPolynomialQuotientEquiv_apply]; rw [aeval_X]
+  rw [Generators.ker_eq_ker_aeval_val]; rw [this]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgHom.comp_toRingHom]; rw [← RingHom.comap_ker]
+  simp only [AlgEquiv.toAlgHom_toRingHom]
+  change Ideal.comap _ (RingHom.ker (mvPolynomialQuotientEquiv S r)) = Ideal.span {C r * X () - 1}
+  simp [RingHom.ker_equiv, ← RingHom.ker_eq_comap_bot]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom, AlgHom, AlgHom.coe_comp, AlgHom.comp_toRingHom, Function, Function.comp_apply, Generators, Generators.ker_eq_ker_aeval_val, Generators.localizationAway, Generators.localizationAway_val, Ideal.Quotient.mk, Ideal.span, IsLocalization, IsLocalization.Away.mvPolynomialQuotientEquiv_apply, Quotient, RingHom, RingHom.ker_coe_toRingHom, aeval_X, coe_comp
 -/
@@ -706,7 +732,33 @@ lemma span_range_relation_eq_ker_baseChange
     rw [map_zero] at Z
     simp only [SetLike.mem_coe, RingHom.mem_ker, ← Z, ← hy,
       TensorProduct.includeRight_apply]
-    rw [ae
+    rw [aeval_map_algebraMap T (P.baseChange T).val (P.relation y)]
+    change _ = TensorProduct.includeRight.toRingHom _
+    rw [map_aeval]; rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [TensorProduct.includeRight.comp_algebraMap]
+    rfl
+  · intro x hx
+    rw [RingHom.mem_ker] at hx
+    have H := Algebra.TensorProduct.lTensor_ker (A := T) (IsScalarTower.toAlgHom R P.Ring S)
+      P.algebraMap_surjective
+    let e := MvPolynomial.algebraTensorAlgEquiv (R := R) (σ := ι) (A := T)
+    have H' : e.symm x in RingHom.ker (TensorProduct.map (AlgHom.id R T)
+        (IsScalarTower.toAlgHom R P.Ring S)) := by
+      rw [RingHom.mem_ker]; rw [← hx]
+      clear hx
+      induction x using MvPolynomial.induction_on with
+      | C a =>
+        simp only [algHom_C, TensorProduct.algebraMap_apply,
+          algebraMap_self, RingHom.id_apply, e]
+        rw [← MvPolynomial.algebraMap_eq]; rw [AlgEquiv.commutes]
+        simp only [TensorProduct.algebraMap_apply, algebraMap_self, RingHom.id_apply,
+          TensorProduct.map_tmul, AlgHom.coe_id, id_eq, map_one]
+      | add p q hp hq => simp only [map_add, hp, hq]
+      | mul_X p i hp => simp [hp, e]
+    rw [H] at H'
+    replace H' : e.symm x in Ideal.map TensorProduct.includeRight P.ker := H'
+    rw [← P.span_range_relation_eq_ker]; rw [← Ideal.mem_comap]; rw [← Ideal.comap_coe]; rw [← AlgEquiv.toRingEquiv_toRingHom]; rw [Ideal.comap_coe]; rw [AlgEquiv.symm_toRingEquiv]; rw [Ideal.comap_symm]; rw [← Ideal.map_coe]; rw [← Ideal.map_coe _ (Ideal.span _)]; rw [Ideal.map_map]; rw [Ideal.map_span]; rw [← Set.range_comp]; rw [AlgEquiv.toRingEquiv_toRingHom]; rw [RingHom.coe_comp]; rw [RingHom.coe_coe] at H'
+    convert! H'
+    simp [e]
 
 中文:
 引理 span_range_relation_eq_ker_baseChange
@@ -719,7 +771,33 @@ lemma span_range_relation_eq_ker_baseChange
     rw [map_zero] at Z
     simp only [SetLike.mem_coe, RingHom.mem_ker, ← Z, ← hy,
       TensorProduct.includeRight_apply]
-    rw [ae
+    rw [aeval_map_algebraMap T (P.baseChange T).val (P.relation y)]
+    change _ = TensorProduct.includeRight.toRingHom _
+    rw [map_aeval]; rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [TensorProduct.includeRight.comp_algebraMap]
+    rfl
+  · intro x hx
+    rw [RingHom.mem_ker] at hx
+    have H := Algebra.TensorProduct.lTensor_ker (A := T) (IsScalarTower.toAlgHom R P.Ring S)
+      P.algebraMap_surjective
+    let e := MvPolynomial.algebraTensorAlgEquiv (R := R) (σ := ι) (A := T)
+    have H' : e.symm x in RingHom.ker (TensorProduct.map (AlgHom.id R T)
+        (IsScalarTower.toAlgHom R P.Ring S)) := by
+      rw [RingHom.mem_ker]; rw [← hx]
+      clear hx
+      induction x using MvPolynomial.induction_on with
+      | C a =>
+        simp only [algHom_C, TensorProduct.algebraMap_apply,
+          algebraMap_self, RingHom.id_apply, e]
+        rw [← MvPolynomial.algebraMap_eq]; rw [AlgEquiv.commutes]
+        simp only [TensorProduct.algebraMap_apply, algebraMap_self, RingHom.id_apply,
+          TensorProduct.map_tmul, AlgHom.coe_id, id_eq, map_one]
+      | add p q hp hq => simp only [map_add, hp, hq]
+      | mul_X p i hp => simp [hp, e]
+    rw [H] at H'
+    replace H' : e.symm x in Ideal.map TensorProduct.includeRight P.ker := H'
+    rw [← P.span_range_relation_eq_ker]; rw [← Ideal.mem_comap]; rw [← Ideal.comap_coe]; rw [← AlgEquiv.toRingEquiv_toRingHom]; rw [Ideal.comap_coe]; rw [AlgEquiv.symm_toRingEquiv]; rw [Ideal.comap_symm]; rw [← Ideal.map_coe]; rw [← Ideal.map_coe _ (Ideal.span _)]; rw [Ideal.map_map]; rw [Ideal.map_span]; rw [← Set.range_comp]; rw [AlgEquiv.toRingEquiv_toRingHom]; rw [RingHom.coe_comp]; rw [RingHom.coe_coe] at H'
+    convert! H'
+    simp [e]
 
 Depends on / 依赖: AlgHom, AlgHom.toRingHom_eq_coe, Ideal.span_le, P.baseChange, P.relation, RingHom, RingHom.coe_coe, RingHom.mem_ker, SetLike, SetLike.mem_coe, TensorProduct, TensorProduct.includeRight, TensorProduct.includeRight.toRingHom, TensorProduct.includeRight_apply, aeval_map_algebraMap, aeval_val_relation, apply_fun, baseChange, coe_coe, includeRight
 -/
@@ -923,7 +1001,11 @@ lemma compRelationAux_map
     ← Finsupp.sum_single (AddMonoidAlgebra.coeff <| Q.relation r)]
   rw [AddMonoidAlgebra.ofCoeff_finsuppSum]
   congr
-  ext u
+  ext u s m
+  simp only [aeval, AlgHom.coe_mk, coe_eval₂Hom, map_one, one_mul, AddMonoidAlgebra.ofCoeff_single,
+    single_eq_monomial]
+  rw [monomial_eq]; rw [IsScalarTower.algebraMap_eq R S]; rw [algebraMap_eq]; rw [← eval₂_comp_left]; rw [← aeval_def]
+  simp [Finsupp.prod_mapDomain_index_inj (Sum.inl_injective)]
 
 中文:
 引理 compRelationAux_map
@@ -935,7 +1017,11 @@ lemma compRelationAux_map
     ← Finsupp.sum_single (AddMonoidAlgebra.coeff <| Q.relation r)]
   rw [AddMonoidAlgebra.ofCoeff_finsuppSum]
   congr
-  ext u
+  ext u s m
+  simp only [aeval, AlgHom.coe_mk, coe_eval₂Hom, map_one, one_mul, AddMonoidAlgebra.ofCoeff_single,
+    single_eq_monomial]
+  rw [monomial_eq]; rw [IsScalarTower.algebraMap_eq R S]; rw [algebraMap_eq]; rw [← eval₂_comp_left]; rw [← aeval_def]
+  simp [Finsupp.prod_mapDomain_index_inj (Sum.inl_injective)]
 -/
 private lemma compRelationAux_map (r : σ') :
     (Q.aux P) (Q.compRelationAux P r) = Q.relation r := by
@@ -968,7 +1054,7 @@ use rename Sum.inr P.σ a
     exact ⟨a + b, map_add _ _ _⟩
   | mul_X p i h =>
     obtain ⟨a, rfl⟩ := h
-    exact ⟨(a * X (Sum
+    exact ⟨(a * X (Sum.inl i)), by simp⟩
 
 中文:
 引理 aux_surjective
@@ -984,7 +1070,7 @@ use rename Sum.inr P.σ a
     exact ⟨a + b, map_add _ _ _⟩
   | mul_X p i h =>
     obtain ⟨a, rfl⟩ := h
-    exact ⟨(a * X (Sum
+    exact ⟨(a * X (Sum.inl i)), by simp⟩
 -/
 private lemma aux_surjective : Function.Surjective (Q.aux P) := fun p => by
   induction p using MvPolynomial.induction_on with
@@ -1065,7 +1151,7 @@ lemma aux_ker
   rw [aux_eq_comp]; rw [← AlgHom.comap_ker]; rw [MvPolynomial.ker_mapAlgHom]
   change Ideal.comap _ (Ideal.map (IsScalarTower.toAlgHom R (MvPolynomial ι R) _) _) = _
   rw [← sumAlgEquiv_comp_rename_inr]; rw [← Ideal.map_mapₐ]; rw [Ideal.comap_map_of_bijective]
-  simpa using AlgEquiv.bijective (su
+  simpa using AlgEquiv.bijective (sumAlgEquiv R ι' ι)
 
 中文:
 引理 aux_ker
@@ -1073,7 +1159,7 @@ lemma aux_ker
   rw [aux_eq_comp]; rw [← AlgHom.comap_ker]; rw [MvPolynomial.ker_mapAlgHom]
   change Ideal.comap _ (Ideal.map (IsScalarTower.toAlgHom R (MvPolynomial ι R) _) _) = _
   rw [← sumAlgEquiv_comp_rename_inr]; rw [← Ideal.map_mapₐ]; rw [Ideal.comap_map_of_bijective]
-  simpa using AlgEquiv.bijective (su
+  simpa using AlgEquiv.bijective (sumAlgEquiv R ι' ι)
 -/
 private lemma aux_ker :
     RingHom.ker (Q.aux P) = Ideal.map (rename Sum.inr) (RingHom.ker (aeval P.val)) := by
@@ -1117,7 +1203,11 @@ lemma span_range_relation_eq_ker_comp
   proof: by
   rw [Generators.ker_eq_ker_aeval_val]; rw [Q.aeval_comp_val_eq]; rw [← AlgHom.comap_ker]
   change _ = Ideal.comap _ (RingHom.ker (aeval Q.val))
-  rw [← Q.ker_eq_ker_aeval_val]; rw [← Q.span_range_relation_eq_ker]; rw [← Q.aux_image_relation P]; rw [← Ideal.map_span]; rw [Ideal.comap_map_of_surje
+  rw [← Q.ker_eq_ker_aeval_val]; rw [← Q.span_range_relation_eq_ker]; rw [← Q.aux_image_relation P]; rw [← Ideal.map_span]; rw [Ideal.comap_map_of_surjective' _ (Q.aux_surjective P)]
+  rw [Set.Sum.elim_range]; rw [Ideal.span_union]; rw [Q.aux_ker]; rw [← P.ker_eq_ker_aeval_val]; rw [← P.span_range_relation_eq_ker]; rw [Ideal.map_span]
+  congr
+  ext
+  simp
 
 中文:
 引理 span_range_relation_eq_ker_comp
@@ -1125,7 +1215,11 @@ lemma span_range_relation_eq_ker_comp
   证明: by
   rw [Generators.ker_eq_ker_aeval_val]; rw [Q.aeval_comp_val_eq]; rw [← AlgHom.comap_ker]
   change _ = Ideal.comap _ (RingHom.ker (aeval Q.val))
-  rw [← Q.ker_eq_ker_aeval_val]; rw [← Q.span_range_relation_eq_ker]; rw [← Q.aux_image_relation P]; rw [← Ideal.map_span]; rw [Ideal.comap_map_of_surje
+  rw [← Q.ker_eq_ker_aeval_val]; rw [← Q.span_range_relation_eq_ker]; rw [← Q.aux_image_relation P]; rw [← Ideal.map_span]; rw [Ideal.comap_map_of_surjective' _ (Q.aux_surjective P)]
+  rw [Set.Sum.elim_range]; rw [Ideal.span_union]; rw [Q.aux_ker]; rw [← P.ker_eq_ker_aeval_val]; rw [← P.span_range_relation_eq_ker]; rw [Ideal.map_span]
+  congr
+  ext
+  simp
 
 Depends on / 依赖: AlgHom, AlgHom.comap_ker, Generators, Generators.ker_eq_ker_aeval_val, Ideal.comap, Ideal.comap_map_of_surjective, Ideal.map_span, Ideal.span_union, P.ker_eq_ker_aeval_val, P.span_range_relation_eq_ker, Q.aeval_comp_val_eq, Q.aux_image_relation, Q.aux_ker, Q.aux_surjective, Q.ker_eq_ker_aeval_val, Q.span_range_relation_eq_ker, Q.val, RingHom, RingHom.ker, Set.Sum.elim_range
 -/
@@ -1246,7 +1340,8 @@ lemma relation_comp_localizationAway_inl
     ← map_one C, ← map_neg C]
   refine (Finsupp.sum_single_add_single (Finsupp.single () 1) 0 g (-1 : S) _ ?_ ?_).trans ?_
   · simp
-  · simp
+  · simp [h0]
+  · simp [h1, ← X_pow_eq_monomial]
 
 中文:
 引理 relation_comp_localizationAway_inl
@@ -1257,7 +1352,8 @@ lemma relation_comp_localizationAway_inl
     ← map_one C, ← map_neg C]
   refine (Finsupp.sum_single_add_single (Finsupp.single () 1) 0 g (-1 : S) _ ?_ ?_).trans ?_
   · simp
-  · simp
+  · simp [h0]
+  · simp [h1, ← X_pow_eq_monomial]
 
 Depends on / 依赖: C_mul_X_eq_monomial, Finsupp, Finsupp.single, Finsupp.sum_single_add_single, Presentation, Presentation.comp, Presentation.compRelationAux, Presentation.localizationAway_relation, Sum.elim_inl, X_pow_eq_monomial, compRelationAux, elim_inl, localizationAway_relation, map_neg, map_one, single, sub_eq_add_neg, sum_single_add_single
 -/
@@ -1288,7 +1384,13 @@ definition reindex
   body: P.toGenerators.reindex e
   relation := rename e.symm ∘ P.relation ∘ f
   span_range_relation_eq_ker := by
-    rw [Generators.ker_eq_ker_aeval_val]; rw [Generators.reindex_val]; rw [← aeval_comp_rename]; rw [← AlgHom.comap_ker]; rw [← P.ker_eq_ker_aeval_val]; rw [← P.span_range_relation_eq_ker]; rw [S
+    rw [Generators.ker_eq_ker_aeval_val]; rw [Generators.reindex_val]; rw [← aeval_comp_rename]; rw [← AlgHom.comap_ker]; rw [← P.ker_eq_ker_aeval_val]; rw [← P.span_range_relation_eq_ker]; rw [Set.range_comp]; rw [Set.range_comp]; rw [Equiv.range_eq_univ]; rw [Set.image_univ]; rw [← Ideal.map_span (rename ⇑e.symm)]
+    have hf : Function.Bijective (MvPolynomial.rename e.symm) := (renameEquiv R e.symm).bijective
+    apply Ideal.comap_injective_of_surjective _ hf.2
+    simp_rw [Ideal.comap_comapₐ, rename_comp_rename, Equiv.self_comp_symm]
+    simp [Ideal.comap_map_of_bijective _ hf, rename_id]
+
+@[simp]
 
 中文:
 定义 reindex
@@ -1296,7 +1398,13 @@ definition reindex
   定义体: P.toGenerators.reindex e
   relation := rename e.symm ∘ P.relation ∘ f
   span_range_relation_eq_ker := by
-    rw [Generators.ker_eq_ker_aeval_val]; rw [Generators.reindex_val]; rw [← aeval_comp_rename]; rw [← AlgHom.comap_ker]; rw [← P.ker_eq_ker_aeval_val]; rw [← P.span_range_relation_eq_ker]; rw [S
+    rw [Generators.ker_eq_ker_aeval_val]; rw [Generators.reindex_val]; rw [← aeval_comp_rename]; rw [← AlgHom.comap_ker]; rw [← P.ker_eq_ker_aeval_val]; rw [← P.span_range_relation_eq_ker]; rw [Set.range_comp]; rw [Set.range_comp]; rw [Equiv.range_eq_univ]; rw [Set.image_univ]; rw [← Ideal.map_span (rename ⇑e.symm)]
+    have hf : Function.Bijective (MvPolynomial.rename e.symm) := (renameEquiv R e.symm).bijective
+    apply Ideal.comap_injective_of_surjective _ hf.2
+    simp_rw [Ideal.comap_comapₐ, rename_comp_rename, Equiv.self_comp_symm]
+    simp [Ideal.comap_map_of_bijective _ hf, rename_id]
+
+@[simp]
 
 Depends on / 依赖: P.toGenerators.reindex, reindex, toGenerators
 -/

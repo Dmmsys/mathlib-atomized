@@ -257,7 +257,7 @@ lemma neg_of_Z_eq_zero
 have hX {n : Nat} : IsUnit P x ^ n := (isUnit_X_of_Z_eq_zero hP hPz).pow n
   erw [neg_of_Z_eq_zero' hPz, smul_fin3, neg_sq, div_pow, (equation_of_Z_eq_zero hPz).mp hP.left,
 pow_succ, hX.mul_div_cancel_left, mul_one, Odd.neg_pow by decide, div_pow, pow_succ,
-    (equation_of_Z_eq_zero hPz).mp hP.l
+    (equation_of_Z_eq_zero hPz).mp hP.left, hX.mul_div_cancel_left, mul_one, mul_zero]
 
 中文:
 引理 neg_of_Z_eq_zero
@@ -266,7 +266,7 @@ pow_succ, hX.mul_div_cancel_left, mul_one, Odd.neg_pow by decide, div_pow, pow_s
 have hX {n : Nat} : IsUnit P x ^ n := (isUnit_X_of_Z_eq_zero hP hPz).pow n
   erw [neg_of_Z_eq_zero' hPz, smul_fin3, neg_sq, div_pow, (equation_of_Z_eq_zero hPz).mp hP.left,
 pow_succ, hX.mul_div_cancel_left, mul_one, Odd.neg_pow by decide, div_pow, pow_succ,
-    (equation_of_Z_eq_zero hPz).mp hP.l
+    (equation_of_Z_eq_zero hPz).mp hP.left, hX.mul_div_cancel_left, mul_one, mul_zero]
 
 Depends on / 依赖: Homotopic, IsUnit, Odd.neg_pow, PUnit.unit, Path.Homotopic.Quotient, Quotient, Quotient.instSubsingletonQuotient, Subsingleton, convert_to, div_pow, equation_of_Z_eq_zero, hP.left, hX.mul_div_cancel_left, instSubsingletonQuotient, isUnit_X_of_Z_eq_zero, mul_div_cancel_left, mul_one, mul_zero, neg_of_Z_eq_zero, neg_pow
 -/
@@ -336,7 +336,7 @@ lemma nonsingular_neg
   · simp only [neg_of_Z_eq_zero hP hPz, nonsingular_smul _
         ((isUnit_Y_of_Z_eq_zero hP hPz).div <| isUnit_X_of_Z_eq_zero hP hPz).neg, nonsingular_zero]
   · simp only [neg_of_Z_ne_zero hPz, nonsingular_smul _ <| Ne.isUnit hPz,
-      nonsingular_neg_of_Z_ne_zero hP h
+      nonsingular_neg_of_Z_ne_zero hP hPz]
 
 中文:
 引理 nonsingular_neg
@@ -347,7 +347,7 @@ lemma nonsingular_neg
   · simp only [neg_of_Z_eq_zero hP hPz, nonsingular_smul _
         ((isUnit_Y_of_Z_eq_zero hP hPz).div <| isUnit_X_of_Z_eq_zero hP hPz).neg, nonsingular_zero]
   · simp only [neg_of_Z_ne_zero hPz, nonsingular_smul _ <| Ne.isUnit hPz,
-      nonsingular_neg_of_Z_ne_zero hP h
+      nonsingular_neg_of_Z_ne_zero hP hPz]
 
 Depends on / 依赖: Ne.isUnit, isUnit, isUnit_X_of_Z_eq_zero, isUnit_Y_of_Z_eq_zero, neg_of_Z_eq_zero, neg_of_Z_ne_zero, nonsingular_neg_of_Z_ne_zero, nonsingular_smul, nonsingular_zero
 -/
@@ -972,7 +972,23 @@ lemma nonsingular_add
     · simp only [add_of_Z_eq_zero hP hQ hPz hQz,
 nonsingular_smul _ (isUnit_X_of_Z_eq_zero hP hPz).pow 2, nonsingular_zero]
     · simpa only [add_of_Z_eq_zero_left hP.left hPz hQz,
-nonsingular_smul _ (isUnit_X_of_Z_eq_zero hP hPz).mul Ne.isUnit 
+nonsingular_smul _ (isUnit_X_of_Z_eq_zero hP hPz).mul Ne.isUnit hQz]
+  · by_cases hQz : Q z = 0
+    · simpa only [add_of_Z_eq_zero_right hQ.left hPz hQz,
+        nonsingular_smul _ ((isUnit_X_of_Z_eq_zero hQ hQz).mul <| Ne.isUnit hPz).neg]
+    · by_cases hxy : P x * Q z ^ 2 = Q x * P z ^ 2 ∧ P y * Q z ^ 3 = W.negY Q * P z ^ 3
+      · by_cases hy : P y * Q z ^ 3 = Q y * P z ^ 3
+        · simp only [add_of_Y_eq hPz hQz hxy.left hy hxy.right, nonsingular_smul _ <|
+              isUnit_dblU_of_Y_eq hP hPz hQz hxy.left hy hxy.right, nonsingular_zero]
+        · simp only [add_of_Y_ne hP.left hQ.left hPz hQz hxy.left hy,
+nonsingular_smul _ isUnit_addU_of_Y_ne hPz hQz hy, nonsingular_zero]
+      · classical
+        have := nonsingular_add_of_Z_ne_zero hP hQ hPz hQz hxy
+        by_cases hx : P x * Q z ^ 2 = Q x * P z ^ 2
+        · simpa only [add_of_Y_ne' hP.left hQ.left hPz hQz hx <| not_and.mp hxy hx,
+nonsingular_smul _ isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hx not_and.mp hxy hx]
+        · simpa only [add_of_X_ne hP.left hQ.left hPz hQz hx,
+nonsingular_smul _ isUnit_addZ_of_X_ne hx]
 
 中文:
 引理 nonsingular_add
@@ -983,7 +999,23 @@ nonsingular_smul _ (isUnit_X_of_Z_eq_zero hP hPz).mul Ne.isUnit
     · simp only [add_of_Z_eq_zero hP hQ hPz hQz,
 nonsingular_smul _ (isUnit_X_of_Z_eq_zero hP hPz).pow 2, nonsingular_zero]
     · simpa only [add_of_Z_eq_zero_left hP.left hPz hQz,
-nonsingular_smul _ (isUnit_X_of_Z_eq_zero hP hPz).mul Ne.isUnit 
+nonsingular_smul _ (isUnit_X_of_Z_eq_zero hP hPz).mul Ne.isUnit hQz]
+  · by_cases hQz : Q z = 0
+    · simpa only [add_of_Z_eq_zero_right hQ.left hPz hQz,
+        nonsingular_smul _ ((isUnit_X_of_Z_eq_zero hQ hQz).mul <| Ne.isUnit hPz).neg]
+    · by_cases hxy : P x * Q z ^ 2 = Q x * P z ^ 2 ∧ P y * Q z ^ 3 = W.negY Q * P z ^ 3
+      · by_cases hy : P y * Q z ^ 3 = Q y * P z ^ 3
+        · simp only [add_of_Y_eq hPz hQz hxy.left hy hxy.right, nonsingular_smul _ <|
+              isUnit_dblU_of_Y_eq hP hPz hQz hxy.left hy hxy.right, nonsingular_zero]
+        · simp only [add_of_Y_ne hP.left hQ.left hPz hQz hxy.left hy,
+nonsingular_smul _ isUnit_addU_of_Y_ne hPz hQz hy, nonsingular_zero]
+      · classical
+        have := nonsingular_add_of_Z_ne_zero hP hQ hPz hQz hxy
+        by_cases hx : P x * Q z ^ 2 = Q x * P z ^ 2
+        · simpa only [add_of_Y_ne' hP.left hQ.left hPz hQz hx <| not_and.mp hxy hx,
+nonsingular_smul _ isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hx not_and.mp hxy hx]
+        · simpa only [add_of_X_ne hP.left hQ.left hPz hQz hx,
+nonsingular_smul _ isUnit_addZ_of_X_ne hx]
 
 Depends on / 依赖: Ne.isUnit, add_of_Z_eq_zero, add_of_Z_eq_zero_left, add_of_Z_eq_zero_right, hP.left, hQ.left, isUnit, isUnit_X_of_Z_eq_zero, nonsingular_smul, nonsingular_zero
 -/
@@ -1062,7 +1094,8 @@ lemma addMap_of_Z_eq_zero_left
   · rw [addMap_eq, add_of_Z_eq_zero hP hQ hPz hQz,
 smul_eq _ (isUnit_X_of_Z_eq_zero hP hPz).pow 2, Quotient.eq]
 exact Setoid.symm equiv_zero_of_Z_eq_zero hQ hQz
-  · rw [addMap_eq,
+  · rw [addMap_eq, add_of_Z_eq_zero_left hP.left hPz hQz,
+smul_eq _ (isUnit_X_of_Z_eq_zero hP hPz).mul Ne.isUnit hQz]
 
 中文:
 引理 addMap_of_Z_eq_zero_left
@@ -1074,7 +1107,8 @@ exact Setoid.symm equiv_zero_of_Z_eq_zero hQ hQz
   · rw [addMap_eq, add_of_Z_eq_zero hP hQ hPz hQz,
 smul_eq _ (isUnit_X_of_Z_eq_zero hP hPz).pow 2, Quotient.eq]
 exact Setoid.symm equiv_zero_of_Z_eq_zero hQ hQz
-  · rw [addMap_eq,
+  · rw [addMap_eq, add_of_Z_eq_zero_left hP.left hPz hQz,
+smul_eq _ (isUnit_X_of_Z_eq_zero hP hPz).mul Ne.isUnit hQz]
 
 Depends on / 依赖: Ne.isUnit, Q.inductionOn, Quotient, Quotient.eq, Setoid, Setoid.symm, W.addMap, addMap, addMap_eq, add_of_Z_eq_zero, add_of_Z_eq_zero_left, equiv_zero_of_Z_eq_zero, hP.left, inductionOn, isUnit, isUnit_X_of_Z_eq_zero, motive, revert, smul_eq
 -/
@@ -1102,7 +1136,8 @@ lemma addMap_of_Z_eq_zero_right
   · rw [addMap_eq, add_of_Z_eq_zero hP hQ hPz hQz,
 smul_eq _ (isUnit_X_of_Z_eq_zero hP hPz).pow 2, Quotient.eq]
 exact Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
-  · rw [addMap_eq,
+  · rw [addMap_eq, add_of_Z_eq_zero_right hQ.left hPz hQz,
+      smul_eq _ ((isUnit_X_of_Z_eq_zero hQ hQz).mul <| Ne.isUnit hPz).neg]
 
 中文:
 引理 addMap_of_Z_eq_zero_right
@@ -1114,7 +1149,8 @@ exact Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
   · rw [addMap_eq, add_of_Z_eq_zero hP hQ hPz hQz,
 smul_eq _ (isUnit_X_of_Z_eq_zero hP hPz).pow 2, Quotient.eq]
 exact Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
-  · rw [addMap_eq,
+  · rw [addMap_eq, add_of_Z_eq_zero_right hQ.left hPz hQz,
+      smul_eq _ ((isUnit_X_of_Z_eq_zero hQ hQz).mul <| Ne.isUnit hPz).neg]
 
 Depends on / 依赖: Ne.isUnit, P.inductionOn, Quotient, Quotient.eq, Setoid, Setoid.symm, W.addMap, addMap, addMap_eq, add_of_Z_eq_zero, add_of_Z_eq_zero_right, equiv_zero_of_Z_eq_zero, hQ.left, inductionOn, isUnit, isUnit_X_of_Z_eq_zero, motive, revert, smul_eq
 -/
@@ -1692,7 +1728,9 @@ lemma toAffine_smul
   · by_cases hPz : P z = 0
     · rw [toAffine_of_Z_eq_zero <| mul_eq_zero_of_right u hPz, toAffine_of_Z_eq_zero hPz]
     · rw [toAffine_of_Z_ne_zero ((nonsingular_smul P hu).mpr hP) <| mul_ne_zero hu.ne_zero hPz,
-        toAffine_of_Z_ne_zero hP hPz, Affine.Point.s
+        toAffine_of_Z_ne_zero hP hPz, Affine.Point.some.injEq]
+      simp only [smul_fin3_ext, mul_pow, mul_div_mul_left _ _ (hu.pow _).ne_zero, and_self]
+  · rw [toAffine_of_singular <| hP.comp (nonsingular_smul P hu).mp, toAffine_of_singular hP]
 
 中文:
 引理 toAffine_smul
@@ -1702,7 +1740,9 @@ lemma toAffine_smul
   · by_cases hPz : P z = 0
     · rw [toAffine_of_Z_eq_zero <| mul_eq_zero_of_right u hPz, toAffine_of_Z_eq_zero hPz]
     · rw [toAffine_of_Z_ne_zero ((nonsingular_smul P hu).mpr hP) <| mul_ne_zero hu.ne_zero hPz,
-        toAffine_of_Z_ne_zero hP hPz, Affine.Point.s
+        toAffine_of_Z_ne_zero hP hPz, Affine.Point.some.injEq]
+      simp only [smul_fin3_ext, mul_pow, mul_div_mul_left _ _ (hu.pow _).ne_zero, and_self]
+  · rw [toAffine_of_singular <| hP.comp (nonsingular_smul P hu).mp, toAffine_of_singular hP]
 
 Depends on / 依赖: Affine, Affine.Point.some.injEq, Nonsingular, W.Nonsingular, and_self, hP.comp, hu.ne_zero, hu.pow, mul_div_mul_left, mul_eq_zero_of_right, mul_ne_zero, mul_pow, ne_zero, nonsingular_smul, smul_fin3_ext, toAffine_of_Z_eq_zero, toAffine_of_Z_ne_zero, toAffine_of_singular
 -/
@@ -1752,7 +1792,9 @@ lemma toAffine_neg
   · rw [neg_of_Z_eq_zero hP hPz,
       toAffine_smul _ ((isUnit_Y_of_Z_eq_zero hP hPz).div <| isUnit_X_of_Z_eq_zero hP hPz).neg,
       toAffine_zero, toAffine_of_Z_eq_zero hPz, Affine.Point.neg_zero]
-  · rw [neg_of_Z_ne_zero hPz, toAffine_smul _ <| Ne.isUnit hPz, toAffine
+  · rw [neg_of_Z_ne_zero hPz, toAffine_smul _ <| Ne.isUnit hPz, toAffine_some <|
+(nonsingular_smul _ <| Ne.isUnit hPz).mp neg_of_Z_ne_zero hPz ▸ nonsingular_neg hP,
+      toAffine_of_Z_ne_zero hP hPz, Affine.Point.neg_some]
 
 中文:
 引理 toAffine_neg
@@ -1762,7 +1804,9 @@ lemma toAffine_neg
   · rw [neg_of_Z_eq_zero hP hPz,
       toAffine_smul _ ((isUnit_Y_of_Z_eq_zero hP hPz).div <| isUnit_X_of_Z_eq_zero hP hPz).neg,
       toAffine_zero, toAffine_of_Z_eq_zero hPz, Affine.Point.neg_zero]
-  · rw [neg_of_Z_ne_zero hPz, toAffine_smul _ <| Ne.isUnit hPz, toAffine
+  · rw [neg_of_Z_ne_zero hPz, toAffine_smul _ <| Ne.isUnit hPz, toAffine_some <|
+(nonsingular_smul _ <| Ne.isUnit hPz).mp neg_of_Z_ne_zero hPz ▸ nonsingular_neg hP,
+      toAffine_of_Z_ne_zero hP hPz, Affine.Point.neg_some]
 
 Depends on / 依赖: Affine, Affine.Point.neg_some, Affine.Point.neg_zero, Ne.isUnit, isUnit, isUnit_X_of_Z_eq_zero, isUnit_Y_of_Z_eq_zero, neg_of_Z_eq_zero, neg_of_Z_ne_zero, neg_some, neg_zero, nonsingular_neg, nonsingular_smul, toAffine_of_Z_eq_zero, toAffine_of_Z_ne_zero, toAffine_smul, toAffine_some, toAffine_zero
 -/
@@ -1814,7 +1858,24 @@ lemma toAffine_add
     · rw [add_of_Z_eq_zero hP hQ hPz hQz, toAffine_smul _ <| (isUnit_X_of_Z_eq_zero hP hPz).pow 2,
         toAffine_zero, toAffine_of_Z_eq_zero hQz]
     · rw [add_of_Z_eq_zero_left hP.left hPz hQz,
-to
+toAffine_smul _ (isUnit_X_of_Z_eq_zero hP hPz).mul Ne.isUnit hQz]
+  · by_cases hQz : Q z = 0
+    · rw [add_of_Z_eq_zero_right hQ.left hPz hQz,
+        toAffine_smul _ ((isUnit_X_of_Z_eq_zero hQ hQz).mul <| Ne.isUnit hPz).neg,
+        toAffine_of_Z_eq_zero hQz, add_zero]
+    · by_cases hxy : P x * Q z ^ 2 = Q x * P z ^ 2 ∧ P y * Q z ^ 3 = W.negY Q * P z ^ 3
+      · rw [toAffine_of_Z_ne_zero hP hPz, toAffine_of_Z_ne_zero hQ hQz, Affine.Point.add_of_Y_eq
+            ((X_eq_iff hPz hQz).mp hxy.left) ((Y_eq_iff' hPz hQz).mp hxy.right)]
+        by_cases hy : P y * Q z ^ 3 = Q y * P z ^ 3
+        · rw [add_of_Y_eq hPz hQz hxy.left hy hxy.right,
+toAffine_smul _ isUnit_dblU_of_Y_eq hP hPz hQz hxy.left hy hxy.right, toAffine_zero]
+        · rw [add_of_Y_ne hP.left hQ.left hPz hQz hxy.left hy,
+toAffine_smul _ isUnit_addU_of_Y_ne hPz hQz hy, toAffine_zero]
+      · have := toAffine_add_of_Z_ne_zero hP hQ hPz hQz hxy
+        by_cases hx : P x * Q z ^ 2 = Q x * P z ^ 2
+        · rwa [add_of_Y_ne' hP.left hQ.left hPz hQz hx <| not_and.mp hxy hx,
+toAffine_smul _ isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hx not_and.mp hxy hx]
+        · rwa [add_of_X_ne hP.left hQ.left hPz hQz hx, toAffine_smul _ <| isUnit_addZ_of_X_ne hx]
 
 中文:
 引理 toAffine_add
@@ -1826,7 +1887,24 @@ to
     · rw [add_of_Z_eq_zero hP hQ hPz hQz, toAffine_smul _ <| (isUnit_X_of_Z_eq_zero hP hPz).pow 2,
         toAffine_zero, toAffine_of_Z_eq_zero hQz]
     · rw [add_of_Z_eq_zero_left hP.left hPz hQz,
-to
+toAffine_smul _ (isUnit_X_of_Z_eq_zero hP hPz).mul Ne.isUnit hQz]
+  · by_cases hQz : Q z = 0
+    · rw [add_of_Z_eq_zero_right hQ.left hPz hQz,
+        toAffine_smul _ ((isUnit_X_of_Z_eq_zero hQ hQz).mul <| Ne.isUnit hPz).neg,
+        toAffine_of_Z_eq_zero hQz, add_zero]
+    · by_cases hxy : P x * Q z ^ 2 = Q x * P z ^ 2 ∧ P y * Q z ^ 3 = W.negY Q * P z ^ 3
+      · rw [toAffine_of_Z_ne_zero hP hPz, toAffine_of_Z_ne_zero hQ hQz, Affine.Point.add_of_Y_eq
+            ((X_eq_iff hPz hQz).mp hxy.left) ((Y_eq_iff' hPz hQz).mp hxy.right)]
+        by_cases hy : P y * Q z ^ 3 = Q y * P z ^ 3
+        · rw [add_of_Y_eq hPz hQz hxy.left hy hxy.right,
+toAffine_smul _ isUnit_dblU_of_Y_eq hP hPz hQz hxy.left hy hxy.right, toAffine_zero]
+        · rw [add_of_Y_ne hP.left hQ.left hPz hQz hxy.left hy,
+toAffine_smul _ isUnit_addU_of_Y_ne hPz hQz hy, toAffine_zero]
+      · have := toAffine_add_of_Z_ne_zero hP hQ hPz hQz hxy
+        by_cases hx : P x * Q z ^ 2 = Q x * P z ^ 2
+        · rwa [add_of_Y_ne' hP.left hQ.left hPz hQz hx <| not_and.mp hxy hx,
+toAffine_smul _ isUnit_dblZ_of_Y_ne' hP.left hQ.left hPz hx not_and.mp hxy hx]
+        · rwa [add_of_X_ne hP.left hQ.left hPz hQz hx, toAffine_smul _ <| isUnit_addZ_of_X_ne hx]
 
 Depends on / 依赖: Ne.isUnit, add_of_Z_eq_zero, add_of_Z_eq_zero_left, add_of_Z_eq_zero_right, hP.left, hQ.left, isUnit, isUnit_X_of_Z_eq_zero, toAffine_of_Z_, toAffine_of_Z_eq_zero, toAffine_smul, toAffine_zero, zero_add
 -/
@@ -2034,7 +2112,13 @@ definition toAffineAddEquiv
     by_cases hPz : P z = 0
     · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_eq_zero hPz]
 exact Quotient.eq.mpr Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
-    · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_ne_zero 
+    · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_ne_zero hP hPz]
+exact Quotient.eq.mpr Setoid.symm equiv_some_of_Z_ne_zero hPz
+  right_inv := by
+    rintro (_ | _)
+    · rw [← Affine.Point.zero_def, fromAffine_zero, toAffineLift_zero]
+    · rw [fromAffine_some, toAffineLift_some]
+  map_add' := toAffineLift_add
 
 中文:
 定义 toAffineAddEquiv
@@ -2046,7 +2130,13 @@ exact Quotient.eq.mpr Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
     by_cases hPz : P z = 0
     · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_eq_zero hPz]
 exact Quotient.eq.mpr Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
-    · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_ne_zero 
+    · rw [Point.ext_iff, toAffineLift_eq, toAffine_of_Z_ne_zero hP hPz]
+exact Quotient.eq.mpr Setoid.symm equiv_some_of_Z_ne_zero hPz
+  right_inv := by
+    rintro (_ | _)
+    · rw [← Affine.Point.zero_def, fromAffine_zero, toAffineLift_zero]
+    · rw [fromAffine_some, toAffineLift_some]
+  map_add' := toAffineLift_add
 
 Depends on / 依赖: toAffineLift
 -/
@@ -2081,7 +2171,19 @@ instance :
   add_zero _ := by
     classical
     apply (toAffineAddEquiv W).injective
-    simp only [map_add, toAffineAddEquiv_apply
+    simp only [map_add, toAffineAddEquiv_apply, toAffineLift_zero, add_zero]
+  neg_add_cancel P := by
+    classical
+    apply (toAffineAddEquiv W).injective
+    simp only [map_add, toAffineAddEquiv_apply, toAffineLift_neg, neg_add_cancel, toAffineLift_zero]
+  add_comm _ _ := by
+    classical
+    apply (toAffineAddEquiv W).injective
+    simp only [map_add, add_comm]
+  add_assoc _ _ _ := by
+    classical
+    apply (toAffineAddEquiv W).injective
+    simp only [map_add, add_assoc]
 
 中文:
 实例 :
@@ -2095,7 +2197,19 @@ instance :
   add_zero _ := by
     classical
     apply (toAffineAddEquiv W).injective
-    simp only [map_add, toAffineAddEquiv_apply
+    simp only [map_add, toAffineAddEquiv_apply, toAffineLift_zero, add_zero]
+  neg_add_cancel P := by
+    classical
+    apply (toAffineAddEquiv W).injective
+    simp only [map_add, toAffineAddEquiv_apply, toAffineLift_neg, neg_add_cancel, toAffineLift_zero]
+  add_comm _ _ := by
+    classical
+    apply (toAffineAddEquiv W).injective
+    simp only [map_add, add_comm]
+  add_assoc _ _ _ := by
+    classical
+    apply (toAffineAddEquiv W).injective
+    simp only [map_add, add_assoc]
 
 Depends on / 依赖: nsmulRec
 -/

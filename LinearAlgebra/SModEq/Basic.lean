@@ -773,7 +773,10 @@ theorem _root_.Submodule.vadd_set_subset_vadd_set_iff
   · rw [Set.vadd_set_subset_iff_subset_neg_vadd_set, vadd_vadd, neg_add_eq_sub] at h
     simpa [Set.mem_vadd_set_iff_neg_vadd_mem] using h U.zero_mem
   · rw [Set.vadd_set_subset_iff_subset_neg_vadd_set, vadd_vadd, neg_add_eq_sub]
-    intro
+    intro z hz
+    simpa [Set.mem_vadd_set_iff_neg_vadd_mem] using U.add_mem h hz
+
+@[simp]
 
 中文:
 定理 _root_.子模.vadd_set_subset_vadd_set_iff
@@ -783,7 +786,10 @@ theorem _root_.Submodule.vadd_set_subset_vadd_set_iff
   · rw [Set.vadd_set_subset_iff_subset_neg_vadd_set, vadd_vadd, neg_add_eq_sub] at h
     simpa [Set.mem_vadd_set_iff_neg_vadd_mem] using h U.zero_mem
   · rw [Set.vadd_set_subset_iff_subset_neg_vadd_set, vadd_vadd, neg_add_eq_sub]
-    intro
+    intro z hz
+    simpa [Set.mem_vadd_set_iff_neg_vadd_mem] using U.add_mem h hz
+
+@[simp]
 
 Depends on / 依赖: SModEq, SModEq.sub_mem, Set.mem_vadd_set_iff_neg_vadd_mem, Set.vadd_set_subset_iff_subset_neg_vadd_set, U.add_mem, U.zero_mem, add_mem, mem_vadd_set_iff_neg_vadd_mem, neg_add_eq_sub, sub_mem, vadd_set_subset_iff_subset_neg_vadd_set, vadd_vadd, zero_mem
 -/

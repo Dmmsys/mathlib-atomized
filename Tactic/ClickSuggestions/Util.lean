@@ -61,7 +61,12 @@ let delab := withOptionAtCurrPos `pp.tagAppFns true delabConst
     env := (← getEnv)
     mctx := (← getMCtx)
     options := (← getOptions)
-    cu
+    currNamespace := (← getCurrNamespace)
+    openDecls := (← getOpenDecls)
+    fileMap := default
+    ngen := (← getNGen)
+  }
+  return <InteractiveCode fmt={← tagCodeInfos ctx infos tt}/>
 
 中文:
 定义 constToHtml
@@ -74,7 +79,12 @@ let delab := withOptionAtCurrPos `pp.tagAppFns true delabConst
     env := (← getEnv)
     mctx := (← getMCtx)
     options := (← getOptions)
-    cu
+    currNamespace := (← getCurrNamespace)
+    openDecls := (← getOpenDecls)
+    fileMap := default
+    ngen := (← getNGen)
+  }
+  return <InteractiveCode fmt={← tagCodeInfos ctx infos tt}/>
 -/
 def constToHtml (n : Name) : MetaM Html := do
 let delab := withOptionAtCurrPos `pp.tagAppFns true delabConst
@@ -103,7 +113,20 @@ definition formatToHtmlWithDoc
   -- Unfortunately, there is still a loose dangling ` : `.
 let infos := .insert ∅ tag .ofCommandInfo
     { elaborator := `ClickSuggestions, stx := .node .none n #[] }
-let tt := TaggedText
+let tt := TaggedText.prettyTagged .tag tag fmt
+  let ctx := {
+    env := (← getEnv)
+    mctx := (← getMCtx)
+    options := (← getOptions)
+    currNamespace := (← getCurrNamespace)
+    openDecls := (← getOpenDecls)
+    fileMap := default
+    ngen := (← getNGen)
+  }
+  -- TODO: I would love to print this using the same keyword colour used by the editor,
+  -- but I don't think this is possible. Additionally, `InteractiveCode` already overwrites the
+  -- colour and style of the text (namely the expression style)
+  return <InteractiveCode fmt={← tagCodeInfos ctx infos tt} />
 
 中文:
 定义 formatToHtmlWithDoc
@@ -114,7 +137,20 @@ let tt := TaggedText
   -- Unfortunately, there is still a loose dangling ` : `.
 let infos := .insert ∅ tag .ofCommandInfo
     { elaborator := `ClickSuggestions, stx := .node .none n #[] }
-let tt := TaggedText
+let tt := TaggedText.prettyTagged .tag tag fmt
+  let ctx := {
+    env := (← getEnv)
+    mctx := (← getMCtx)
+    options := (← getOptions)
+    currNamespace := (← getCurrNamespace)
+    openDecls := (← getOpenDecls)
+    fileMap := default
+    ngen := (← getNGen)
+  }
+  -- TODO: I would love to print this using the same keyword colour used by the editor,
+  -- but I don't think this is possible. Additionally, `InteractiveCode` already overwrites the
+  -- colour and style of the text (namely the expression style)
+  return <InteractiveCode fmt={← tagCodeInfos ctx infos tt} />
 -/
 def formatToHtmlWithDoc (fmt : Format) (n : Name) : MetaM Html := do
   let tag := 0
@@ -538,7 +574,7 @@ definition trackingComputation
       | some (n + 1) => some n
       | _ => none })
     renderStatus
-    checkProgres
+    checkProgress
 
 中文:
 定义 trackingComputation
@@ -554,7 +590,7 @@ definition trackingComputation
       | some (n + 1) => some n
       | _ => none })
     renderStatus
-    checkProgres
+    checkProgress
 -/
 def trackingComputation {α} (name : String) (k : ClickSuggestionsM α) : ClickSuggestionsM α := do
   modify (fun s => { s with status := s.status.alter name fun
@@ -599,7 +635,12 @@ definition isExplicitEq
   let tArgs := t.getAppArgs
   let sArgs := s.getAppArgs
   -- TODO: let's just use `getFunInfo`.
-  let bis ← g
+  let bis ← getBinderInfos t.getAppFn tArgs
+  t.getAppNumArgs.allM fun i _ =>
+    if bis[i]!.isExplicit then
+      isExplicitEq tArgs[i]! sArgs[i]!
+    else
+withNewMCtxDepth withReducibleAndInstances isDefEq tArgs[i]! sArgs[i]!
 
 中文:
 定义 isExplicitEq
@@ -613,7 +654,12 @@ definition isExplicitEq
   let tArgs := t.getAppArgs
   let sArgs := s.getAppArgs
   -- TODO: let's just use `getFunInfo`.
-  let bis ← g
+  let bis ← getBinderInfos t.getAppFn tArgs
+  t.getAppNumArgs.allM fun i _ =>
+    if bis[i]!.isExplicit then
+      isExplicitEq tArgs[i]! sArgs[i]!
+    else
+withNewMCtxDepth withReducibleAndInstances isDefEq tArgs[i]! sArgs[i]!
 -/
 partial def isExplicitEq (t s : Expr) : MetaM Bool := do
   let t := t.cleanupAnnotations; let s := s.cleanupAnnotations
@@ -689,7 +735,16 @@ definition mkRewrite
     match kind with
     | .valid _ none => `(tactic| grw [$rule] $[at $loc:term]?)
     | .valid _ (some n) => `(tactic| nth_grw $(mkNatLit n):num [$rule] $[at $loc:term]?)
-    | .hasBVars =
+    | .hasBVars => `(tactic| grw [$rule] $[at $loc:term]?)
+  else
+    match kind with
+    | .valid true none => `(tactic| rw [$rule] $[at $loc:term]?)
+    | .valid true (some n) => `(tactic| nth_rw $(mkNatLit n):num [$rule] $[at $loc:term]?)
+    | .valid false none => `(tactic| rw! [$rule] $[at $loc:term]?)
+    | .valid false (some n) =>
+      let occs ← `(optConfig| ($(mkIdent `occs):ident := .$(mkIdent `pos) [$(mkNatLit n)]))
+      `(tactic| rw! $occs [$rule] $[at $loc:term]?)
+    | .hasBVars => `(tactic| simp_rw [$rule] $[at $loc:term]?)
 
 中文:
 定义 mkRewrite
@@ -700,7 +755,16 @@ definition mkRewrite
     match kind with
     | .valid _ none => `(tactic| grw [$rule] $[at $loc:term]?)
     | .valid _ (some n) => `(tactic| nth_grw $(mkNatLit n):num [$rule] $[at $loc:term]?)
-    | .hasBVars =
+    | .hasBVars => `(tactic| grw [$rule] $[at $loc:term]?)
+  else
+    match kind with
+    | .valid true none => `(tactic| rw [$rule] $[at $loc:term]?)
+    | .valid true (some n) => `(tactic| nth_rw $(mkNatLit n):num [$rule] $[at $loc:term]?)
+    | .valid false none => `(tactic| rw! [$rule] $[at $loc:term]?)
+    | .valid false (some n) =>
+      let occs ← `(optConfig| ($(mkIdent `occs):ident := .$(mkIdent `pos) [$(mkNatLit n)]))
+      `(tactic| rw! $occs [$rule] $[at $loc:term]?)
+    | .hasBVars => `(tactic| simp_rw [$rule] $[at $loc:term]?)
 
 Depends on / 依赖: TSyntax, tactic
 -/
@@ -734,7 +798,20 @@ definition mergeTactics?
     if n₁.getNat == n₂.getNat then
       if let some tac ← mergeTactics? tac₁ tac₂ then
         return ← `(tactic| on_goal $n₁ => $tac:tactic)
-  | `(tactic| rw [$[$rules₁],*] $[at $h₁:ide
+  | `(tactic| rw [$[$rules₁],*] $[at $h₁:ident]?),
+    `(tactic| rw [$[$rules₂],*] $[at $h₂:ident]?) =>
+    if h₁.map (·.getId) == h₂.map (·.getId) then
+      return ← `(tactic| rw [$[$(rules₁ ++ rules₂)],*] $[at $h₁:ident]?)
+  | `(tactic| simp_rw [$[$rules₁],*] $[at $h₁:ident]?),
+    `(tactic| simp_rw [$[$rules₂],*] $[at $h₂:ident]?) =>
+    if h₁.map (·.getId) == h₂.map (·.getId) then
+      return ← `(tactic| simp_rw [$[$(rules₁ ++ rules₂)],*] $[at $h₁:ident]?)
+  | `(tactic| grw [$[$rules₁],*] $[at $h₁:ident]?),
+    `(tactic| grw [$[$rules₂],*] $[at $h₂:ident]?) =>
+    if h₁.map (·.getId) == h₂.map (·.getId) then
+      return ← `(tactic| grw [$[$(rules₁ ++ rules₂)],*] $[at $h₁:ident]?)
+  | _, _ => pure ()
+  return none
 
 中文:
 定义 mergeTactics?
@@ -745,7 +822,20 @@ definition mergeTactics?
     if n₁.getNat == n₂.getNat then
       if let some tac ← mergeTactics? tac₁ tac₂ then
         return ← `(tactic| on_goal $n₁ => $tac:tactic)
-  | `(tactic| rw [$[$rules₁],*] $[at $h₁:ide
+  | `(tactic| rw [$[$rules₁],*] $[at $h₁:ident]?),
+    `(tactic| rw [$[$rules₂],*] $[at $h₂:ident]?) =>
+    if h₁.map (·.getId) == h₂.map (·.getId) then
+      return ← `(tactic| rw [$[$(rules₁ ++ rules₂)],*] $[at $h₁:ident]?)
+  | `(tactic| simp_rw [$[$rules₁],*] $[at $h₁:ident]?),
+    `(tactic| simp_rw [$[$rules₂],*] $[at $h₂:ident]?) =>
+    if h₁.map (·.getId) == h₂.map (·.getId) then
+      return ← `(tactic| simp_rw [$[$(rules₁ ++ rules₂)],*] $[at $h₁:ident]?)
+  | `(tactic| grw [$[$rules₁],*] $[at $h₁:ident]?),
+    `(tactic| grw [$[$rules₂],*] $[at $h₂:ident]?) =>
+    if h₁.map (·.getId) == h₂.map (·.getId) then
+      return ← `(tactic| grw [$[$(rules₁ ++ rules₂)],*] $[at $h₁:ident]?)
+  | _, _ => pure ()
+  return none
 -/
 partial def mergeTactics? {m} [Monad m] [MonadQuotation m] (stx₁ stx₂ : TSyntax `tactic) :
     m (Option (TSyntax `tactic)) := do
@@ -805,7 +895,11 @@ definition mkInsertion
       if let some range := stx.raw.getRange? then
         let text := (← read).meta.text
         let endPos := max (text.lspPosToUtf8Pos (← read).cursorPos) range.stop
-        let extraWhitespace := range.stop
+        let extraWhitespace := range.stop.extract text.source endPos
+        let tactic ← tacticPasteString tac
+        return (text.utf8RangeToLspRange ⟨range.start, endPos⟩, tactic ++ extraWhitespace)
+  return (⟨(← read).cursorPos, (← read).cursorPos⟩,
+    s!"{← tacticPasteString tac}\n{String.replicate (← read).cursorPos.character ' '}")
 
 中文:
 定义 mkInsertion
@@ -816,7 +910,11 @@ definition mkInsertion
       if let some range := stx.raw.getRange? then
         let text := (← read).meta.text
         let endPos := max (text.lspPosToUtf8Pos (← read).cursorPos) range.stop
-        let extraWhitespace := range.stop
+        let extraWhitespace := range.stop.extract text.source endPos
+        let tactic ← tacticPasteString tac
+        return (text.utf8RangeToLspRange ⟨range.start, endPos⟩, tactic ++ extraWhitespace)
+  return (⟨(← read).cursorPos, (← read).cursorPos⟩,
+    s!"{← tacticPasteString tac}\n{String.replicate (← read).cursorPos.character ' '}")
 -/
 def mkInsertion (tac : TSyntax `tactic) : ClickSuggestionsM (Lsp.Range × String) := do
   if let some stx := (← read).stx then
@@ -849,7 +947,14 @@ definition mkSuggestion
   let (range, newText) ← mkInsertion tac (← read)
   let buttonText := if isClosing then "[done] " else "[apply] "
   let button :=
-    -- TODO: The hover on th
+    -- TODO: The hover on this button should be a `CodeWithInfos`, instead of a string.
+    <span style={json% { "white-space" : "pre"}} className="font-code">
+    { .ofComponent MakeEditLink (.ofReplaceRange (← read).meta range newText) #[.text buttonText] }
+    </span>;
+  return <div display="flex"
+    style={json% { "display" : "flex", "align-items" : "flex-start", "margin-bottom" : "1em" }}>
+    {button} {html}
+    </div>
 
 中文:
 定义 mkSuggestion
@@ -861,7 +966,14 @@ definition mkSuggestion
   let (range, newText) ← mkInsertion tac (← read)
   let buttonText := if isClosing then "[done] " else "[apply] "
   let button :=
-    -- TODO: The hover on th
+    -- TODO: The hover on this button should be a `CodeWithInfos`, instead of a string.
+    <span style={json% { "white-space" : "pre"}} className="font-code">
+    { .ofComponent MakeEditLink (.ofReplaceRange (← read).meta range newText) #[.text buttonText] }
+    </span>;
+  return <div display="flex"
+    style={json% { "display" : "flex", "align-items" : "flex-start", "margin-bottom" : "1em" }}>
+    {button} {html}
+    </div>
 -/
 def mkSuggestion (tac : TSyntax `tactic) (html : Html) (isClosing := false) :
     ClickSuggestionsM Html := do
@@ -891,7 +1003,10 @@ definition addSolvedSuggestion
   modify fun s => { s with solvedSuggestions := s.solvedSuggestions.push html }
   (← read).solvedToken.update <details «open»={true}>
     <summary className="mv2 pointer">
-    These tactics solve the g
+    These tactics solve the goal: 🎉️
+    </summary>
+    {.element "div" #[] (← get).solvedSuggestions}
+    </details>
 
 中文:
 定义 addSolvedSuggestion
@@ -901,7 +1016,10 @@ definition addSolvedSuggestion
   modify fun s => { s with solvedSuggestions := s.solvedSuggestions.push html }
   (← read).solvedToken.update <details «open»={true}>
     <summary className="mv2 pointer">
-    These tactics solve the g
+    These tactics solve the goal: 🎉️
+    </summary>
+    {.element "div" #[] (← get).solvedSuggestions}
+    </details>
 -/
 def addSolvedSuggestion (tac : TSyntax `tactic) : ClickSuggestionsM Unit := do
   let html ← mkSuggestion tac (.text (← PrettyPrinter.ppTactic tac).pretty) (isClosing := true)
@@ -929,7 +1047,34 @@ definition kabstractFindsPositions
   let rec visit (e : Expr) (pos : SubExpr.Pos) : MetaM Unit := do
     let visitChildren : MetaM Unit := do
       match e with
-      | .app f a => visit f pos.pushAppFn; vis
+      | .app f a => visit f pos.pushAppFn; visit a pos.pushAppArg
+      | .mdata _ e => visit e pos
+      | .proj _ _ e => visit e pos.pushProj
+      | .letE _ t v b _ =>
+        visit t pos.pushLetVarType; visit v pos.pushLetValue; visit b pos.pushLetBody
+      | .lam _ d b _ => visit d pos.pushBindingDomain; visit b pos.pushBindingBody
+      | .forallE _ d b _ => visit d pos.pushBindingDomain; visit b pos.pushBindingBody
+      | _ => pure ()
+    if e.hasLooseBVars then
+      visitChildren
+    else if e.toHeadIndex != pHeadIdx || e.headNumArgs != pNumArgs then
+      visitChildren
+    else
+      if ← isDefEq e p then
+        if pos == targetPos then
+          foundRef.set true
+        else
+          throwError "{p} unified with {e}"
+      else
+        if pos == targetPos then
+          throwError "{p} did not unify with {e}"
+        else
+          visitChildren
+  try
+    visit e .root
+    foundRef.get
+  catch _ =>
+    return false
 
 中文:
 定义 kabstractFindsPositions
@@ -942,7 +1087,34 @@ definition kabstractFindsPositions
   let rec visit (e : Expr) (pos : SubExpr.Pos) : MetaM Unit := do
     let visitChildren : MetaM Unit := do
       match e with
-      | .app f a => visit f pos.pushAppFn; vis
+      | .app f a => visit f pos.pushAppFn; visit a pos.pushAppArg
+      | .mdata _ e => visit e pos
+      | .proj _ _ e => visit e pos.pushProj
+      | .letE _ t v b _ =>
+        visit t pos.pushLetVarType; visit v pos.pushLetValue; visit b pos.pushLetBody
+      | .lam _ d b _ => visit d pos.pushBindingDomain; visit b pos.pushBindingBody
+      | .forallE _ d b _ => visit d pos.pushBindingDomain; visit b pos.pushBindingBody
+      | _ => pure ()
+    if e.hasLooseBVars then
+      visitChildren
+    else if e.toHeadIndex != pHeadIdx || e.headNumArgs != pNumArgs then
+      visitChildren
+    else
+      if ← isDefEq e p then
+        if pos == targetPos then
+          foundRef.set true
+        else
+          throwError "{p} unified with {e}"
+      else
+        if pos == targetPos then
+          throwError "{p} did not unify with {e}"
+        else
+          visitChildren
+  try
+    visit e .root
+    foundRef.get
+  catch _ =>
+    return false
 -/
 def kabstractFindsPositions (e p : Expr) (targetPos : SubExpr.Pos) : MetaM Bool := do
   let e ← instantiateMVars e

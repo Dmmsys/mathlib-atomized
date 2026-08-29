@@ -154,7 +154,15 @@ lemma IsMulIndecomposable.image_baseOf_inv_comp_eq
       v '' baseOf v (invMonoidHom.comp f) subseteq (invMonoidHom ∘ v) '' baseOf v f by
     apply subset_antisymm (this f)
 replace this := image_mono (f := invMonoidHom) this (invMonoidHom.comp f)
-    rw [← MonoidHom.comp_assoc]; rw [invMonoidHom_comp_invMonoidHom]
+    rw [← MonoidHom.comp_assoc]; rw [invMonoidHom_comp_invMonoidHom]; rw [MonoidHom.id_comp]; rw [image_comp]; rw [← image_comp invMonoidHom invMonoidHom]; rw [← MonoidHom.coe_comp]; rw [invMonoidHom_comp_invMonoidHom]; rw [← image_comp] at this
+    simpa using this
+  clear f
+  rintro f g ⟨i, ⟨hi, hi'⟩, rfl⟩
+  refine ⟨i⁻¹, ⟨by simpa [hv_inv] using hi, fun j hj k hk hi => ?_⟩, by simp [hv_inv]⟩
+  replace hi : v i = v j⁻¹ * v k⁻¹ := by
+    rwa [hv_inv, inv_eq_iff_eq_inv, mul_inv, ← hv_inv, ← hv_inv] at hi
+  specialize hi' j⁻¹ (by simpa [hv_inv]) k⁻¹ (by simpa [hv_inv]) hi
+  aesop
 
 中文:
 引理 IsMulIndecomposable.image_baseOf_inv_comp_eq
@@ -164,7 +172,15 @@ replace this := image_mono (f := invMonoidHom) this (invMonoidHom.comp f)
       v '' baseOf v (invMonoidHom.comp f) subseteq (invMonoidHom ∘ v) '' baseOf v f by
     apply subset_antisymm (this f)
 replace this := image_mono (f := invMonoidHom) this (invMonoidHom.comp f)
-    rw [← MonoidHom.comp_assoc]; rw [invMonoidHom_comp_invMonoidHom]
+    rw [← MonoidHom.comp_assoc]; rw [invMonoidHom_comp_invMonoidHom]; rw [MonoidHom.id_comp]; rw [image_comp]; rw [← image_comp invMonoidHom invMonoidHom]; rw [← MonoidHom.coe_comp]; rw [invMonoidHom_comp_invMonoidHom]; rw [← image_comp] at this
+    simpa using this
+  clear f
+  rintro f g ⟨i, ⟨hi, hi'⟩, rfl⟩
+  refine ⟨i⁻¹, ⟨by simpa [hv_inv] using hi, fun j hj k hk hi => ?_⟩, by simp [hv_inv]⟩
+  replace hi : v i = v j⁻¹ * v k⁻¹ := by
+    rwa [hv_inv, inv_eq_iff_eq_inv, mul_inv, ← hv_inv, ← hv_inv] at hi
+  specialize hi' j⁻¹ (by simpa [hv_inv]) k⁻¹ (by simpa [hv_inv]) hi
+  aesop
 
 Depends on / 依赖: MonoidHom, MonoidHom.coe_comp, MonoidHom.comp_assoc, MonoidHom.id_comp, baseOf, coe_comp, comp_assoc, id_comp, image_comp, image_mono, invMonoidHom, invMonoidHom.comp, invMonoidHom_comp_invMonoidHom, replace, subset_antisymm, subseteq
 -/
@@ -210,7 +226,23 @@ lemma Submonoid.closure_image_isMulIndecomposable_baseOf
   rintro - ⟨i, hi : 1 < f (v i), rfl⟩
   by_contra hi'
   let t : Set ι := {i | IsMulIndecomposable v {j | 1 < f (v j)} i}
-  let s : Set ι := {j | 1 < f (v j) ∧ v j ∉ closure (v 
+  let s : Set ι := {j | 1 < f (v j) ∧ v j ∉ closure (v '' t)}
+  have hne : s.Nonempty := ⟨i, hi, hi'⟩
+  clear! i
+  obtain ⟨i, hi⟩ := s.toFinite.exists_minimalFor (f ∘ v) s hne
+  have ⟨(hi₀ : 1 < f (v i)), (hi₁ : v i ∉ _)⟩ : i in s := hi.prop
+  have hi₂ (k : ι) (hk₀ : 1 < f (v k)) (hk₁ : f (v k) < f (v i)) : v k in closure (v '' t) := by
+by_contra hk₂; exact not_le.mpr hk₁ hi.le_of_le ⟨hk₀, hk₂⟩ hk₁.le
+have hi₃ : i ∉ t := by contrapose hi₁; exact subset_closure mem_image_of_mem v hi₁
+  obtain ⟨j, k, hj, hk, hjk⟩ : exists (j k : ι) (hj : 1 < f (v j)) (hk : 1 < f (v k)),
+      v i = v j * v k := by
+    grind [IsMulIndecomposable]
+have hj' : v j in closure (v '' t) := hi₂ j hj by aesop
+have hk' : v k in closure (v '' t) := hi₂ k hk by aesop
+  replace hjk : v i in closure (v '' t) := hjk ▸ mul_mem hj' hk'
+  exact hi₁ hjk
+
+@[to_additive]
 
 中文:
 引理 子幺半群.closure_image_isMulIndecomposable_baseOf
@@ -221,7 +253,23 @@ lemma Submonoid.closure_image_isMulIndecomposable_baseOf
   rintro - ⟨i, hi : 1 < f (v i), rfl⟩
   by_contra hi'
   let t : Set ι := {i | IsMulIndecomposable v {j | 1 < f (v j)} i}
-  let s : Set ι := {j | 1 < f (v j) ∧ v j ∉ closure (v 
+  let s : Set ι := {j | 1 < f (v j) ∧ v j ∉ closure (v '' t)}
+  have hne : s.Nonempty := ⟨i, hi, hi'⟩
+  clear! i
+  obtain ⟨i, hi⟩ := s.toFinite.exists_minimalFor (f ∘ v) s hne
+  have ⟨(hi₀ : 1 < f (v i)), (hi₁ : v i ∉ _)⟩ : i in s := hi.prop
+  have hi₂ (k : ι) (hk₀ : 1 < f (v k)) (hk₁ : f (v k) < f (v i)) : v k in closure (v '' t) := by
+by_contra hk₂; exact not_le.mpr hk₁ hi.le_of_le ⟨hk₀, hk₂⟩ hk₁.le
+have hi₃ : i ∉ t := by contrapose hi₁; exact subset_closure mem_image_of_mem v hi₁
+  obtain ⟨j, k, hj, hk, hjk⟩ : exists (j k : ι) (hj : 1 < f (v j)) (hk : 1 < f (v k)),
+      v i = v j * v k := by
+    grind [IsMulIndecomposable]
+have hj' : v j in closure (v '' t) := hi₂ j hj by aesop
+have hk' : v k in closure (v '' t) := hi₂ k hk by aesop
+  replace hjk : v i in closure (v '' t) := hjk ▸ mul_mem hj' hk'
+  exact hi₁ hjk
+
+@[to_additive]
 
 Depends on / 依赖: IsMulIndecomposable, IsMulIndecomposable.baseOf_subset_one_lt, Nonempty, baseOf_subset_one_lt, closure, closure_le, closure_le.mpr, closure_mono, exists_minimalFor, hi.prop, image_mono, le_antisymm, s.Nonempty, s.toFinite.exists_minimalFor, toFinite
 -/
@@ -262,7 +310,17 @@ lemma Subgroup.closure_image_isMulIndecomposable_baseOf
   refine le_antisymm (closure_mono (image_mono <| by simp)) ((closure_le _).mpr ?_)
   have : univ = {i | 1 < f (v i)} union {i | f (v i) < 1} := by ext i; simp [(hf i).symm]
   rw [this]; rw [image_union]; rw [union_subset_iff]
-  refine ⟨le_trans ?_ (le_closure_toSubmonoid (v '
+  refine ⟨le_trans ?_ (le_closure_toSubmonoid (v '' IsMulIndecomposable.baseOf v f)), ?_⟩
+  · simp [Submonoid.closure_image_isMulIndecomposable_baseOf]
+  · let f' : G ->* S := invMonoidHom.comp f
+    have h₁ : (invMonoidHom ∘ v) '' IsMulIndecomposable.baseOf v f' =
+        v '' IsMulIndecomposable.baseOf v f := by
+      rw [image_comp]; rw [IsMulIndecomposable.image_baseOf_inv_comp_eq v hv_inv f]; rw [image_comp]; rw [← image_comp]
+      simp
+    have h₂ : v '' {i | f (v i) < 1} = v '' {i | 1 < f' (v i)} := by simp [f']
+    rw [h₂]; rw [← h₁]; rw [image_comp]; rw [coe_invMonoidHom]; rw [image_inv_eq_inv]; rw [closure_inv]
+    refine le_trans ?_ (le_closure_toSubmonoid (v '' IsMulIndecomposable.baseOf v f'))
+    simp [Submonoid.closure_image_isMulIndecomposable_baseOf]
 
 中文:
 引理 子群.closure_image_isMulIndecomposable_baseOf
@@ -272,7 +330,17 @@ lemma Subgroup.closure_image_isMulIndecomposable_baseOf
   refine le_antisymm (closure_mono (image_mono <| by simp)) ((closure_le _).mpr ?_)
   have : univ = {i | 1 < f (v i)} union {i | f (v i) < 1} := by ext i; simp [(hf i).symm]
   rw [this]; rw [image_union]; rw [union_subset_iff]
-  refine ⟨le_trans ?_ (le_closure_toSubmonoid (v '
+  refine ⟨le_trans ?_ (le_closure_toSubmonoid (v '' IsMulIndecomposable.baseOf v f)), ?_⟩
+  · simp [Submonoid.closure_image_isMulIndecomposable_baseOf]
+  · let f' : G ->* S := invMonoidHom.comp f
+    have h₁ : (invMonoidHom ∘ v) '' IsMulIndecomposable.baseOf v f' =
+        v '' IsMulIndecomposable.baseOf v f := by
+      rw [image_comp]; rw [IsMulIndecomposable.image_baseOf_inv_comp_eq v hv_inv f]; rw [image_comp]; rw [← image_comp]
+      simp
+    have h₂ : v '' {i | f (v i) < 1} = v '' {i | 1 < f' (v i)} := by simp [f']
+    rw [h₂]; rw [← h₁]; rw [image_comp]; rw [coe_invMonoidHom]; rw [image_inv_eq_inv]; rw [closure_inv]
+    refine le_trans ?_ (le_closure_toSubmonoid (v '' IsMulIndecomposable.baseOf v f'))
+    simp [Submonoid.closure_image_isMulIndecomposable_baseOf]
 
 Depends on / 依赖: IsMulIndecomposable, IsMulIndecomposable.baseOf, Submonoid, Submonoid.closure_image_isMulIndecomposable_baseOf, baseOf, closure_image_isMulIndecomposable_baseOf, closure_le, closure_mono, image_mono, image_union, image_univ, invMonoidHom, invMonoidHom.comp, le_antisymm, le_closure_toSubmonoid, le_trans, union_subset_iff
 -/
@@ -312,7 +380,13 @@ lemma pairwise_div_notMem_range
   by_contra! ⟨k, hk⟩
   rcases hv_t k with hk' | hk'
   · suffices ¬ IsMulIndecomposable v t i from this (hst hi)
-    simp only [IsMulIndecomposable, hv_one, or_self, imp_false, not_and, not_forall, not_
+    simp only [IsMulIndecomposable, hv_one, or_self, imp_false, not_and, not_forall, not_not]
+    exact fun _ => ⟨k, hk', j, h_sub hj, by simp [hk]⟩
+  · suffices ¬ IsMulIndecomposable v t j from this (hst hj)
+    simp only [IsMulIndecomposable, hv_one, or_self, imp_false, not_and, not_forall, not_not]
+    exact fun _ => ⟨k⁻¹, hk', i, h_sub hi, by simp [hv_inv, hk]⟩
+
+@[to_additive]
 
 中文:
 引理 pairwise_div_notMem_range
@@ -323,7 +397,13 @@ lemma pairwise_div_notMem_range
   by_contra! ⟨k, hk⟩
   rcases hv_t k with hk' | hk'
   · suffices ¬ IsMulIndecomposable v t i from this (hst hi)
-    simp only [IsMulIndecomposable, hv_one, or_self, imp_false, not_and, not_forall, not_
+    simp only [IsMulIndecomposable, hv_one, or_self, imp_false, not_and, not_forall, not_not]
+    exact fun _ => ⟨k, hk', j, h_sub hj, by simp [hk]⟩
+  · suffices ¬ IsMulIndecomposable v t j from this (hst hj)
+    simp only [IsMulIndecomposable, hv_one, or_self, imp_false, not_and, not_forall, not_not]
+    exact fun _ => ⟨k⁻¹, hk', i, h_sub hi, by simp [hv_inv, hk]⟩
+
+@[to_additive]
 
 Depends on / 依赖: IsMulIndecomposable, IsMulIndecomposable.subset, h_sub, hst.trans, hv_one, hv_t, imp_false, not_and, not_forall, not_not, or_self, subset, subseteq
 -/
@@ -460,7 +540,9 @@ refine ⟨fun hi => ?_, fun hi => subset_closure mem_image_of_mem v hi⟩
   rcases hx with rfl | hx; · simpa
   rcases hy with rfl | hy; · right; simpa
   right
-  
+  simpa only [map_mul] using Left.one_lt_mul hx hy
+
+@[to_additive]
 
 中文:
 引理 子幺半群.mem_closure_image_one_lt_iff
@@ -472,7 +554,9 @@ refine ⟨fun hi => ?_, fun hi => subset_closure mem_image_of_mem v hi⟩
   rcases hx with rfl | hx; · simpa
   rcases hy with rfl | hy; · right; simpa
   right
-  
+  simpa only [map_mul] using Left.one_lt_mul hx hy
+
+@[to_additive]
 
 Depends on / 依赖: Left.one_lt_mul, closure_induction, hv_one, map_mul, mem_image_of_mem, one_lt_mul, resolve_left, subset_closure, this.resolve_left
 -/
@@ -499,7 +583,10 @@ lemma Submonoid.apply_ne_one_of_mem_or_inv_mem_closure
     simpa [hv_inv] using this v f s hf i⁻¹ (by simpa [hv_inv]) (by simp [hv_inv])
       (by left; simpa [hv_inv]) (by simpa [hv_inv])
   suffices v i != 1 -> 1 < f (v i) from (this hv_one).ne'
-  refine closure_induc
+  refine closure_induction (by simp_all) (by simp) (fun x y _ _ hx hy _ => ?_) hi
+  rcases eq_or_ne x 1 with rfl | hx'; · grind
+  rcases eq_or_ne y 1 with rfl | hy'; · grind
+  simpa using lt_mul_of_lt_of_one_lt (hx hx') (hy hy')
 
 中文:
 引理 子幺半群.apply_ne_one_of_mem_or_inv_mem_closure
@@ -509,7 +596,10 @@ lemma Submonoid.apply_ne_one_of_mem_or_inv_mem_closure
     simpa [hv_inv] using this v f s hf i⁻¹ (by simpa [hv_inv]) (by simp [hv_inv])
       (by left; simpa [hv_inv]) (by simpa [hv_inv])
   suffices v i != 1 -> 1 < f (v i) from (this hv_one).ne'
-  refine closure_induc
+  refine closure_induction (by simp_all) (by simp) (fun x y _ _ hx hy _ => ?_) hi
+  rcases eq_or_ne x 1 with rfl | hx'; · grind
+  rcases eq_or_ne y 1 with rfl | hy'; · grind
+  simpa using lt_mul_of_lt_of_one_lt (hx hx') (hy hy')
 
 Depends on / 依赖: closure, closure_induction, eq_or_ne, hv_inv, hv_one, lt_mul_of_lt_of_one_lt
 -/

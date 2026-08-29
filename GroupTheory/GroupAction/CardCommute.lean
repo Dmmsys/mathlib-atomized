@@ -55,7 +55,10 @@ theorem card_eq_sum_card_group_div_card_stabilizer'
     have : forall ω : Ω, Fintype.card α / Fintype.card (stabilizer α (φ ω)) =
         Fintype.card (α ⧸ stabilizer α (φ ω)) := by
       intro ω
-      rw [Fintype.card_congr (@Subgroup.groupEquivQuotientProdSubgroup α _ (stabilizer α <| φ ω))]; rw [Fintype.card_prod]; rw [Nat.mul_div_c
+      rw [Fintype.card_congr (@Subgroup.groupEquivQuotientProdSubgroup α _ (stabilizer α <| φ ω))]; rw [Fintype.card_prod]; rw [Nat.mul_div_cancel]
+      exact Fintype.card_pos_iff.mpr (by infer_instance)
+    simp_rw [this, ← Fintype.card_sigma,
+      Fintype.card_congr (selfEquivSigmaOrbitsQuotientStabilizer' α β hφ)]
 
 中文:
 定理 card_eq_sum_card_group_div_card_stabilizer'
@@ -65,7 +68,10 @@ theorem card_eq_sum_card_group_div_card_stabilizer'
     have : forall ω : Ω, Fintype.card α / Fintype.card (stabilizer α (φ ω)) =
         Fintype.card (α ⧸ stabilizer α (φ ω)) := by
       intro ω
-      rw [Fintype.card_congr (@Subgroup.groupEquivQuotientProdSubgroup α _ (stabilizer α <| φ ω))]; rw [Fintype.card_prod]; rw [Nat.mul_div_c
+      rw [Fintype.card_congr (@Subgroup.groupEquivQuotientProdSubgroup α _ (stabilizer α <| φ ω))]; rw [Fintype.card_prod]; rw [Nat.mul_div_cancel]
+      exact Fintype.card_pos_iff.mpr (by infer_instance)
+    simp_rw [this, ← Fintype.card_sigma,
+      Fintype.card_congr (selfEquivSigmaOrbitsQuotientStabilizer' α β hφ)]
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.card_congr, Fintype.card_pos_iff.mpr, Fintype.card_prod, Fintype.card_sigma, Nat.mul_div_cancel, Subgroup, Subgroup.groupEquivQuotientProdSubgroup, card_congr, card_pos_iff, card_prod, card_sigma, classical, groupEquivQuotientProdSubgroup, infer_instance, mul_div_cancel, selfEquivSigmaOrbitsQuotientStabilizer, simp_rw, stabilizer
 -/
@@ -140,7 +146,17 @@ theorem card_comm_eq_card_conjClasses_mul_card
   simp only [Nat.card_eq_fintype_card]
   calc card { p : G × G // Commute p.1 p.2 }
       _ = card ((a : G) × { b // Commute a b }) :=
-            card_congr (Equ
+            card_congr (Equiv.subtypeProdEquivSigmaSubtype Commute)
+      _ = ∑ i, card { b // Commute i b } := card_sigma
+      _ = ∑ x, card (MulAction.fixedBy G x) :=
+            sum_equiv ConjAct.toConjAct.toEquiv (fun a => card { b // Commute a b })
+              (fun g => card (MulAction.fixedBy G g))
+fun g => card_congr' congr_arg _ funext fun h => mul_inv_eq_iff_eq_mul.symm.eq
+      _ = card (Quotient (MulAction.orbitRel (ConjAct G) G)) * card (ConjAct G) :=
+             MulAction.sum_card_fixedBy_eq_card_orbits_mul_card_group _ _
+      _ = card (ConjClasses G) * card G := by
+             congr 1; apply card_congr'; congr; ext
+             exact (Setoid.comm' _).trans isConj_iff.symm
 
 中文:
 定理 card_comm_eq_card_conjClasses_mul_card
@@ -152,7 +168,17 @@ theorem card_comm_eq_card_conjClasses_mul_card
   simp only [Nat.card_eq_fintype_card]
   calc card { p : G × G // Commute p.1 p.2 }
       _ = card ((a : G) × { b // Commute a b }) :=
-            card_congr (Equ
+            card_congr (Equiv.subtypeProdEquivSigmaSubtype Commute)
+      _ = ∑ i, card { b // Commute i b } := card_sigma
+      _ = ∑ x, card (MulAction.fixedBy G x) :=
+            sum_equiv ConjAct.toConjAct.toEquiv (fun a => card { b // Commute a b })
+              (fun g => card (MulAction.fixedBy G g))
+fun g => card_congr' congr_arg _ funext fun h => mul_inv_eq_iff_eq_mul.symm.eq
+      _ = card (Quotient (MulAction.orbitRel (ConjAct G) G)) * card (ConjAct G) :=
+             MulAction.sum_card_fixedBy_eq_card_orbits_mul_card_group _ _
+      _ = card (ConjClasses G) * card G := by
+             congr 1; apply card_congr'; congr; ext
+             exact (Setoid.comm' _).trans isConj_iff.symm
 
 Depends on / 依赖: Commute, ConjAct, ConjAct.toConjAct.toEquiv, Equiv.subtypeProdEquivSigmaSubtype, MulActio, MulAction, MulAction.fixedBy, Nat.card_eq_fintype_card, Nat.card_eq_zero_of_infinite, card_congr, card_eq_fintype_card, card_eq_zero_of_infinite, card_sigma, classical, fintypeOrInfinite, fixedBy, mul_comm, subtypeProdEquivSigmaSubtype, sum_equiv, toConjAct
 -/

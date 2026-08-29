@@ -309,7 +309,10 @@ lemma noncommCoprod_injective
   · simpa using h x 1
   · simpa using h 1 x
   · intro x ⟨⟨y, hy⟩, z, hz⟩
-    rwa [(h y z⁻¹ (by rw [map_inv, hy, hz, mul_inv_canc
+    rwa [(h y z⁻¹ (by rw [map_inv, hy, hz, mul_inv_cancel])).1, map_one, eq_comm] at hy
+  · intro ⟨hf, hg, hp⟩ a b h
+    have key := hp ⟨⟨a⁻¹, by rwa [map_inv, inv_eq_iff_mul_eq_one]⟩, b, rfl⟩
+    exact ⟨hf a (by rwa [key, mul_one] at h), hg b key⟩
 
 中文:
 引理 noncommCoprod_injective
@@ -321,7 +324,10 @@ lemma noncommCoprod_injective
   · simpa using h x 1
   · simpa using h 1 x
   · intro x ⟨⟨y, hy⟩, z, hz⟩
-    rwa [(h y z⁻¹ (by rw [map_inv, hy, hz, mul_inv_canc
+    rwa [(h y z⁻¹ (by rw [map_inv, hy, hz, mul_inv_cancel])).1, map_one, eq_comm] at hy
+  · intro ⟨hf, hg, hp⟩ a b h
+    have key := hp ⟨⟨a⁻¹, by rwa [map_inv, inv_eq_iff_mul_eq_one]⟩, b, rfl⟩
+    exact ⟨hf a (by rwa [key, mul_one] at h), hg b key⟩
 
 Depends on / 依赖: Prod.forall, Prod.mk_eq_one, disjoint_iff_inf_le, eq_comm, injective_iff_map_eq_one, inv_eq_iff_mul_eq_one, map_inv, map_one, mk_eq_one, mul_inv_cancel, mul_one, noncommCoprod_apply
 -/
@@ -355,7 +361,7 @@ lemma noncommCoprod_range
     · rintro - ⟨a, rfl⟩
       exact ⟨(a, 1), by rw [noncommCoprod_apply, map_one, mul_one]⟩
     · rintro - ⟨a, rfl⟩
-      exact ⟨(1, a), by rw [nonc
+      exact ⟨(1, a), by rw [noncommCoprod_apply, map_one, one_mul]⟩
 
 中文:
 引理 noncommCoprod_range
@@ -369,7 +375,7 @@ lemma noncommCoprod_range
     · rintro - ⟨a, rfl⟩
       exact ⟨(a, 1), by rw [noncommCoprod_apply, map_one, mul_one]⟩
     · rintro - ⟨a, rfl⟩
-      exact ⟨(1, a), by rw [nonc
+      exact ⟨(1, a), by rw [noncommCoprod_apply, map_one, one_mul]⟩
 
 Depends on / 依赖: le_antisymm, map_one, mem_sup_left, mem_sup_right, mul_mem, mul_one, noncommCoprod_apply, one_mul, sup_le_iff
 -/

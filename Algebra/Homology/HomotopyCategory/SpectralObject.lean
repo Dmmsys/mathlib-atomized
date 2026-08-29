@@ -75,7 +75,15 @@ definition spectralObjectMappingCone
   δ'.app D := ((HomotopyCategory.quotient C (ComplexShape.up Int)).mapTriangle.obj
     (CochainComplex.mappingConeCompTriangle (D.map' 0 1) (D.map' 1 2))).mor₃
   δ'.naturality D₁ D₂ φ := by
-    obtain ⟨_, _, _, f, g, rfl⟩ := ComposableArrows.
+    obtain ⟨_, _, _, f, g, rfl⟩ := ComposableArrows.mk₂_surjective D₁
+    obtain ⟨_, _, _, f', g', rfl⟩ := ComposableArrows.mk₂_surjective D₂
+    have eq := CochainComplex.mappingConeCompTriangle_mor₃_naturality f g f' g' φ
+    dsimp [ComposableArrows.Precomp.map] at eq ⊢
+    simp only [Category.assoc, ← Functor.map_comp_assoc]
+    simp [eq]
+  distinguished' D := by
+    obtain ⟨_, _, _, f, g, rfl⟩ := ComposableArrows.mk₂_surjective D
+    exact HomotopyCategory.mappingConeCompTriangleh_distinguished f g
 
 中文:
 定义 spectralObjectMappingCone
@@ -84,7 +92,15 @@ definition spectralObjectMappingCone
   δ'.app D := ((HomotopyCategory.quotient C (ComplexShape.up Int)).mapTriangle.obj
     (CochainComplex.mappingConeCompTriangle (D.map' 0 1) (D.map' 1 2))).mor₃
   δ'.naturality D₁ D₂ φ := by
-    obtain ⟨_, _, _, f, g, rfl⟩ := ComposableArrows.
+    obtain ⟨_, _, _, f, g, rfl⟩ := ComposableArrows.mk₂_surjective D₁
+    obtain ⟨_, _, _, f', g', rfl⟩ := ComposableArrows.mk₂_surjective D₂
+    have eq := CochainComplex.mappingConeCompTriangle_mor₃_naturality f g f' g' φ
+    dsimp [ComposableArrows.Precomp.map] at eq ⊢
+    simp only [Category.assoc, ← Functor.map_comp_assoc]
+    simp [eq]
+  distinguished' D := by
+    obtain ⟨_, _, _, f, g, rfl⟩ := ComposableArrows.mk₂_surjective D
+    exact HomotopyCategory.mappingConeCompTriangleh_distinguished f g
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.quotient, composableArrowsFunctor, quotient
 -/

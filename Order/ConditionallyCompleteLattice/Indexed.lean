@@ -164,7 +164,11 @@ theorem WithBot.coe_biSup
   refine le_antisymm ((WithBot.coe_iSup (OrderTop.bddAbove _)).trans_le <|
     iSup_le_iff.mpr fun i => ?_) <| iSup_le_iff.mpr <| fun _ => iSup_le_iff.mpr <|
       fun hi => WithBot.coe_le_coe.mpr (le_biSup _ hi)
-  by_cases h : i in
+  by_cases h : i in s
+  · simpa only [iSup_pos h] using by apply le_biSup _ h
+  · simpa only [iSup_neg h] using le_trans (by simp) (le_biSup _ hj)
+
+@[norm_cast]
 
 中文:
 定理 WithBot.coe_biSup
@@ -175,7 +179,11 @@ theorem WithBot.coe_biSup
   refine le_antisymm ((WithBot.coe_iSup (OrderTop.bddAbove _)).trans_le <|
     iSup_le_iff.mpr fun i => ?_) <| iSup_le_iff.mpr <| fun _ => iSup_le_iff.mpr <|
       fun hi => WithBot.coe_le_coe.mpr (le_biSup _ hi)
-  by_cases h : i in
+  by_cases h : i in s
+  · simpa only [iSup_pos h] using by apply le_biSup _ h
+  · simpa only [iSup_neg h] using le_trans (by simp) (le_biSup _ hj)
+
+@[norm_cast]
 
 Depends on / 依赖: Nonempty, Nonempty.intro, OrderTop, OrderTop.bddAbove, WithBot, WithBot.coe_iSup, WithBot.coe_le_coe.mpr, bddAbove, coe_iSup, coe_le_coe, iSup_le_iff, iSup_le_iff.mpr, iSup_neg, iSup_pos, le_antisymm, le_biSup, le_trans, trans_le
 -/
@@ -928,7 +936,16 @@ lemma ciSup_prod
     rw [bddAbove_def] at hf ⊢
     obtain ⟨B, hB⟩ := hf
     refine ⟨B, fun y hy => ?_⟩
-    obtain ⟨z, rfl⟩ := Set.mem_rang
+    obtain ⟨z, rfl⟩ := Set.mem_range.mp hy
+    exact ciSup_le fun c => by grind
+  have h₂ b : BddAbove (Set.range fun c => f (b, c)) := by
+    rw [bddAbove_def] at hf ⊢
+    obtain ⟨B, hB⟩ := hf
+    exact ⟨B, by grind⟩
+  refine eq_of_forall_ge_iff fun c => ?_
+  rw [ciSup_le_iff (bddAbove_iff_subset_Iic.mpr hf)]; rw [ciSup_le_iff h₁]
+  conv_rhs => enter [b]; rw [ciSup_le_iff (h₂ b)]
+  simp [Prod.forall]
 
 中文:
 引理 ciSup_prod
@@ -942,7 +959,16 @@ lemma ciSup_prod
     rw [bddAbove_def] at hf ⊢
     obtain ⟨B, hB⟩ := hf
     refine ⟨B, fun y hy => ?_⟩
-    obtain ⟨z, rfl⟩ := Set.mem_rang
+    obtain ⟨z, rfl⟩ := Set.mem_range.mp hy
+    exact ciSup_le fun c => by grind
+  have h₂ b : BddAbove (Set.range fun c => f (b, c)) := by
+    rw [bddAbove_def] at hf ⊢
+    obtain ⟨B, hB⟩ := hf
+    exact ⟨B, by grind⟩
+  refine eq_of_forall_ge_iff fun c => ?_
+  rw [ciSup_le_iff (bddAbove_iff_subset_Iic.mpr hf)]; rw [ciSup_le_iff h₁]
+  conv_rhs => enter [b]; rw [ciSup_le_iff (h₂ b)]
+  simp [Prod.forall]
 
 Depends on / 依赖: BddAbove, Set.mem_range.mp, Set.range, bddAbove_def, ciSup_le, ciSup_le_iff, eq_of_forall_ge_iff, iSup_of_empty, isEmpty_or_nonempty, mem_range
 -/
@@ -1083,7 +1109,17 @@ theorem ciSup_subtype
   classical
   refine le_antisymm (ciSup_le ?_) ?_
   · intro ⟨i, h⟩
-    have : f ⟨i, h⟩ = (fun i : ι => ⨆ (
+    have : f ⟨i, h⟩ = (fun i : ι => ⨆ (h : p i), f ⟨i, h⟩) i := by simp [h]
+    rw [this]
+    refine le_ciSup (f := (fun i : ι => ⨆ (h : p i), f ⟨i, h⟩)) ?_ i
+    simp_rw [ciSup_eq_ite]
+    refine (hf.union (bddAbove_singleton (a := sSup ∅))).mono ?_
+    grind
+  · refine ciSup_le fun i => ?_
+    simp_rw [ciSup_eq_ite]
+    split_ifs
+    · exact le_ciSup hf ?_
+    · exact hf'
 
 中文:
 定理 ciSup_subtype
@@ -1095,7 +1131,17 @@ theorem ciSup_subtype
   classical
   refine le_antisymm (ciSup_le ?_) ?_
   · intro ⟨i, h⟩
-    have : f ⟨i, h⟩ = (fun i : ι => ⨆ (
+    have : f ⟨i, h⟩ = (fun i : ι => ⨆ (h : p i), f ⟨i, h⟩) i := by simp [h]
+    rw [this]
+    refine le_ciSup (f := (fun i : ι => ⨆ (h : p i), f ⟨i, h⟩)) ?_ i
+    simp_rw [ciSup_eq_ite]
+    refine (hf.union (bddAbove_singleton (a := sSup ∅))).mono ?_
+    grind
+  · refine ciSup_le fun i => ?_
+    simp_rw [ciSup_eq_ite]
+    split_ifs
+    · exact le_ciSup hf ?_
+    · exact hf'
 
 Depends on / 依赖: Nonempty, Subtype, bddAbove_singleton, cbiSup_eq_of_forall_not, ciSup_eq_ite, ciSup_le, classical, hf.union, iSup_of_empty, isEmptyElim, isEmpty_or_nonempty, le_antisymm, le_ciSup, nonempty, nonempty_subtype, nonempty_subtype.mp, simp_rw
 -/
@@ -1357,7 +1403,16 @@ lemma ciSup_image
     simpa [bddAbove_def] using hf
   have hf' : sSup ∅ <= ⨆ i : f '' s, g i := by
     refine hg'.trans ?_
-    have : Nonempty s := Set.N
+    have : Nonempty s := Set.Nonempty.to_subtype hs
+    refine ciSup_le ?_
+    intro ⟨i, h⟩
+    obtain ⟨t, ht⟩ : exists t : f '' s, g t = g (f (Subtype.mk i h)) := by
+      have : f i in f '' s := Set.mem_image_of_mem _ h
+      exact ⟨⟨f i, this⟩, by simp⟩
+    rw [← ht]
+    refine le_ciSup_set ?_ t.prop
+    simpa [bddAbove_def] using hf
+  rw [← csSup_image hg hf']; rw [← csSup_image hf hg']; rw [← Set.image_comp]; rw [comp_def]
 
 中文:
 引理 ciSup_image
@@ -1369,7 +1424,16 @@ lemma ciSup_image
     simpa [bddAbove_def] using hf
   have hf' : sSup ∅ <= ⨆ i : f '' s, g i := by
     refine hg'.trans ?_
-    have : Nonempty s := Set.N
+    have : Nonempty s := Set.Nonempty.to_subtype hs
+    refine ciSup_le ?_
+    intro ⟨i, h⟩
+    obtain ⟨t, ht⟩ : exists t : f '' s, g t = g (f (Subtype.mk i h)) := by
+      have : f i in f '' s := Set.mem_image_of_mem _ h
+      exact ⟨⟨f i, this⟩, by simp⟩
+    rw [← ht]
+    refine le_ciSup_set ?_ t.prop
+    simpa [bddAbove_def] using hf
+  rw [← csSup_image hg hf']; rw [← csSup_image hf hg']; rw [← Set.image_comp]; rw [comp_def]
 
 Depends on / 依赖: BddAbove, Nonempty, Set.Nonempty.to_subtype, Set.image_empty, Set.mem_image_of_mem, Set.range, Subtype, Subtype.mk, bddAbove_def, cbiSup_empty, ciSup_le, eq_empty_or_nonempty, image_empty, mem_image_of_mem, s.eq_empty_or_nonempty, to_subtype
 -/
@@ -1622,7 +1686,8 @@ theorem ciSup_sup_le
     exact le_sup_left
   by_cases! hg : ¬BddAbove (range g)
   · rw [ciSup_of_not_bddAbove hg, ciSup_of_not_bddAbove <| mt bbdAbove_range_right_of_sup hg]
-    exact le_s
+    exact le_sup_right
+.le exact ciSup_sup_eq hf hg
 
 中文:
 定理 ciSup_sup_le
@@ -1634,7 +1699,8 @@ theorem ciSup_sup_le
     exact le_sup_left
   by_cases! hg : ¬BddAbove (range g)
   · rw [ciSup_of_not_bddAbove hg, ciSup_of_not_bddAbove <| mt bbdAbove_range_right_of_sup hg]
-    exact le_s
+    exact le_sup_right
+.le exact ciSup_sup_eq hf hg
 
 Depends on / 依赖: BddAbove, bbdAbove_range_left_of_sup, bbdAbove_range_right_of_sup, ciSup_of_not_bddAbove, ciSup_sup_eq, le_sup_left, le_sup_right
 -/
@@ -1806,7 +1872,13 @@ theorem cbiSup_eq_of_not_forall
     · rw [ciSup_of_not_bddAbove bdd, cbiSup_of_not_bddAbove bdd]
   have ⟨i, hi⟩ := not_forall.mp hp
   have : Nonempty ι := ⟨i⟩
-  have bdd : BddAbove (ra
+  have bdd : BddAbove (range f) := not_not.mp fun h => gt.ne (ciSup_of_not_bddAbove h)
+  rw [max_eq_right gt.le]
+  refine ciSup_eq_of_forall_le_of_forall_lt_exists_gt (fun j => ?_) ?_
+  · by_cases hj : p j
+    · exact ((ciSup_pos hj).trans_le (le_ciSup bdd ⟨j, hj⟩)).trans gt.le
+    · exact (ciSup_neg hj).le
+  · exact fun w hw => ⟨i, hw.trans_eq (ciSup_neg hi).symm⟩
 
 中文:
 定理 cbiSup_eq_of_not_对任意
@@ -1819,7 +1891,13 @@ theorem cbiSup_eq_of_not_forall
     · rw [ciSup_of_not_bddAbove bdd, cbiSup_of_not_bddAbove bdd]
   have ⟨i, hi⟩ := not_forall.mp hp
   have : Nonempty ι := ⟨i⟩
-  have bdd : BddAbove (ra
+  have bdd : BddAbove (range f) := not_not.mp fun h => gt.ne (ciSup_of_not_bddAbove h)
+  rw [max_eq_right gt.le]
+  refine ciSup_eq_of_forall_le_of_forall_lt_exists_gt (fun j => ?_) ?_
+  · by_cases hj : p j
+    · exact ((ciSup_pos hj).trans_le (le_ciSup bdd ⟨j, hj⟩)).trans gt.le
+    · exact (ciSup_neg hj).le
+  · exact fun w hw => ⟨i, hw.trans_eq (ciSup_neg hi).symm⟩
 
 Depends on / 依赖: BddAbove, Nonempty, cbiSup_of_not_bddAbove, ciSup_eq_of_forall_le_of_forall_lt_exists_gt, ciSup_of_not_bddAbove, ciSup_pos, ciSup_subtype, gt.le, gt.ne, le_ciSup, le_or_gt, max_eq_left, max_eq_right, not_forall, not_forall.mp, not_not, not_not.mp, trans_le
 -/
@@ -2716,7 +2794,7 @@ lemma iSup_coe_eq_top
   · rcases hf r (WithTop.coe_lt_top r) with ⟨i, hi⟩
     exact ⟨f i, ⟨i, rfl⟩, WithTop.coe_lt_coe.mp hi⟩
   · rcases hf (a.untop ha.ne) with ⟨-, ⟨i, rfl⟩, hi⟩
-    exact ⟨i, by simpa only [WithTop.coe_untop _ ha.n
+    exact ⟨i, by simpa only [WithTop.coe_untop _ ha.ne] using WithTop.coe_lt_coe.mpr hi⟩
 
 中文:
 引理 iSup_coe_eq_top
@@ -2727,7 +2805,7 @@ lemma iSup_coe_eq_top
   · rcases hf r (WithTop.coe_lt_top r) with ⟨i, hi⟩
     exact ⟨f i, ⟨i, rfl⟩, WithTop.coe_lt_coe.mp hi⟩
   · rcases hf (a.untop ha.ne) with ⟨-, ⟨i, rfl⟩, hi⟩
-    exact ⟨i, by simpa only [WithTop.coe_untop _ ha.n
+    exact ⟨i, by simpa only [WithTop.coe_untop _ ha.ne] using WithTop.coe_lt_coe.mpr hi⟩
 
 Depends on / 依赖: WithTop, WithTop.coe_lt_coe.mp, WithTop.coe_lt_coe.mpr, WithTop.coe_lt_top, WithTop.coe_untop, a.untop, coe_lt_coe, coe_lt_top, coe_untop, ha.ne, iSup_eq_top, not_bddAbove_iff
 -/

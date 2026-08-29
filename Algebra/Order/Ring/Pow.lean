@@ -39,7 +39,17 @@ lemma Commute.pow_add_mul_le_add_pow_of_sq_nonneg
       _ <= a ^ (n + 3) + ↑(n + 3) * a ^ (n + 2) * b +
             ((n + 1) * (b ^ 2 * (2 * a + b) * a ^ n) + a ^ (n + 1) * b ^ 2) :=
 le_add_of_nonneg_right by
-   
+          apply_rules [add_nonneg, mul_nonneg, Nat.cast_nonneg, pow_nonneg, zero_le_one]
+      _ = (a + b) ^ 2 * (a ^ (n + 1) + ↑(n + 1) * a ^ n * b) := by
+        simp only [Nat.cast_add, Nat.cast_one, Nat.cast_ofNat, pow_succ', add_mul, mul_add,
+          two_mul, pow_zero, mul_one,
+          Hcomm.eq, (n.cast_commute (_ : R)).symm.left_comm, mul_assoc, (Hcomm.pow_left _).eq,
+          (Hcomm.pow_left _).left_comm, Hcomm.left_comm, ← @two_add_one_eq_three R, one_mul]
+        abel
+      _ <= (a + b) ^ 2 * (a + b) ^ (n + 1) := by
+        gcongr
+        apply Commute.pow_add_mul_le_add_pow_of_sq_nonneg <;> assumption
+      _ = (a + b) ^ (n + 3) := by simp [pow_succ', mul_assoc]
 
 中文:
 引理 Commute.pow_add_mul_le_add_pow_of_sq_nonneg
@@ -51,7 +61,17 @@ le_add_of_nonneg_right by
       _ <= a ^ (n + 3) + ↑(n + 3) * a ^ (n + 2) * b +
             ((n + 1) * (b ^ 2 * (2 * a + b) * a ^ n) + a ^ (n + 1) * b ^ 2) :=
 le_add_of_nonneg_right by
-   
+          apply_rules [add_nonneg, mul_nonneg, Nat.cast_nonneg, pow_nonneg, zero_le_one]
+      _ = (a + b) ^ 2 * (a ^ (n + 1) + ↑(n + 1) * a ^ n * b) := by
+        simp only [Nat.cast_add, Nat.cast_one, Nat.cast_ofNat, pow_succ', add_mul, mul_add,
+          two_mul, pow_zero, mul_one,
+          Hcomm.eq, (n.cast_commute (_ : R)).symm.left_comm, mul_assoc, (Hcomm.pow_left _).eq,
+          (Hcomm.pow_left _).left_comm, Hcomm.left_comm, ← @two_add_one_eq_three R, one_mul]
+        abel
+      _ <= (a + b) ^ 2 * (a + b) ^ (n + 1) := by
+        gcongr
+        apply Commute.pow_add_mul_le_add_pow_of_sq_nonneg <;> assumption
+      _ = (a + b) ^ (n + 3) := by simp [pow_succ', mul_assoc]
 
 Depends on / 依赖: Hcomm.eq, Nat.cast_add, Nat.cast_nonneg, Nat.cast_ofNat, Nat.cast_one, add_assoc, add_mul, add_nonneg, apply_rules, cast_add, cast_nonneg, cast_ofNat, cast_one, le_add_of_nonneg_right, mul_add, mul_nonneg, pow_nonneg, pow_succ, two_mul, zero_le_one
 -/

@@ -477,7 +477,15 @@ theorem isIndObject_of_isFiltered_of_finallySmall
   have h₁ : (factoring (fromFinalModel (CostructuredArrow yoneda A)) ⋙
       inclusion (fromFinalModel (CostructuredArrow yoneda A))).Final := Functor.final_of_natIso
     (factoringCompInclusion (fromFinalModel <| CostructuredArrow yoneda A)).symm
-  have h₂ : Functor.Final (inclusion (fromFinalMo
+  have h₂ : Functor.Final (inclusion (fromFinalModel (CostructuredArrow yoneda A))) :=
+    Functor.final_of_comp_full_faithful' (factoring _) (inclusion _)
+  let c := (Presheaf.tautologicalCocone A).whisker
+    (inclusion (fromFinalModel (CostructuredArrow yoneda A)))
+  let hc : IsColimit c := (Functor.Final.isColimitWhiskerEquiv _ _).symm
+    (Presheaf.isColimitTautologicalCocone A)
+  have hq : Nonempty (FinalModel (CostructuredArrow yoneda A)) := Nonempty.map
+    (Functor.Final.lift (fromFinalModel (CostructuredArrow yoneda A))) IsFiltered.nonempty
+  exact ⟨_, inclusion (fromFinalModel _) ⋙ CostructuredArrow.proj yoneda A, c.ι, hc⟩
 
 中文:
 定理 isIndObject_of_isFiltered_of_finallySmall
@@ -486,7 +494,15 @@ theorem isIndObject_of_isFiltered_of_finallySmall
   have h₁ : (factoring (fromFinalModel (CostructuredArrow yoneda A)) ⋙
       inclusion (fromFinalModel (CostructuredArrow yoneda A))).Final := Functor.final_of_natIso
     (factoringCompInclusion (fromFinalModel <| CostructuredArrow yoneda A)).symm
-  have h₂ : Functor.Final (inclusion (fromFinalMo
+  have h₂ : Functor.Final (inclusion (fromFinalModel (CostructuredArrow yoneda A))) :=
+    Functor.final_of_comp_full_faithful' (factoring _) (inclusion _)
+  let c := (Presheaf.tautologicalCocone A).whisker
+    (inclusion (fromFinalModel (CostructuredArrow yoneda A)))
+  let hc : IsColimit c := (Functor.Final.isColimitWhiskerEquiv _ _).symm
+    (Presheaf.isColimitTautologicalCocone A)
+  have hq : Nonempty (FinalModel (CostructuredArrow yoneda A)) := Nonempty.map
+    (Functor.Final.lift (fromFinalModel (CostructuredArrow yoneda A))) IsFiltered.nonempty
+  exact ⟨_, inclusion (fromFinalModel _) ⋙ CostructuredArrow.proj yoneda A, c.ι, hc⟩
 
 Depends on / 依赖: CostructuredArrow, Functor, Functor.Final, Functor.final_of_comp_full_faithful, Functor.final_of_natIso, Presheaf, Presheaf.tautologicalCocone, factoring, factoringCompInclusion, final_of_comp_full_faithful, final_of_natIso, fromFinalModel, inclusion, tautologicalCocone, whisker, yoneda
 -/
@@ -566,7 +582,7 @@ lemma isIndObject_iff_preservesFiniteLimits
     · apply preservesFiniteLimits_of_isFiltered_costructuredArrow_yoneda
     · exact isFiltered_costructuredArrow_yoneda_of_preservesFiniteLimits A
     · have := essentiallySmallSelf (CostructuredArrow yoneda A)
-      ap
+      apply finallySmall_of_essentiallySmall
 
 中文:
 引理 isIndObject_iff_preservesFiniteLimits
@@ -576,7 +592,7 @@ lemma isIndObject_iff_preservesFiniteLimits
     · apply preservesFiniteLimits_of_isFiltered_costructuredArrow_yoneda
     · exact isFiltered_costructuredArrow_yoneda_of_preservesFiniteLimits A
     · have := essentiallySmallSelf (CostructuredArrow yoneda A)
-      ap
+      apply finallySmall_of_essentiallySmall
 
 Depends on / 依赖: CostructuredArrow, essentiallySmallSelf, finallySmall_of_essentiallySmall, isFiltered_costructuredArrow_yoneda_of_preservesFiniteLimits, isIndObject_iff, preservesFiniteLimits_of_isFiltered_costructuredArrow_yoneda, yoneda
 -/

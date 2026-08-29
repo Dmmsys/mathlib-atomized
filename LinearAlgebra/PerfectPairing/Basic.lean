@@ -789,7 +789,11 @@ lemma map_dualCoannihilator_linearEquiv_flip
   suffices
       (p.map (e.symm : Dual R M ->ₗ[R] N)).dualAnnihilator.map (e.flip.symm : Dual R N ->ₗ[R] M) =
         (p.dualCoannihilator.map (e.flip : M ->ₗ[R] Dual R N)).map (e.flip.symm : Dual R N ->ₗ[R] M)
-    from (Submo
+    from (Submodule.map_injective_of_injective e.flip.symm.injective this).symm
+  rw [← dualCoannihilator_map_linearEquiv_flip]; rw [← LinearEquiv.coe_toLinearMap_flip]; rw [LinearEquiv.flip_flip]; rw [← map_comp]; rw [← map_comp]
+  simp [-coe_toLinearMap_flip]
+
+@[simp]
 
 中文:
 引理 map_dualCoannihilator_linearEquiv_flip
@@ -799,7 +803,11 @@ lemma map_dualCoannihilator_linearEquiv_flip
   suffices
       (p.map (e.symm : Dual R M ->ₗ[R] N)).dualAnnihilator.map (e.flip.symm : Dual R N ->ₗ[R] M) =
         (p.dualCoannihilator.map (e.flip : M ->ₗ[R] Dual R N)).map (e.flip.symm : Dual R N ->ₗ[R] M)
-    from (Submo
+    from (Submodule.map_injective_of_injective e.flip.symm.injective this).symm
+  rw [← dualCoannihilator_map_linearEquiv_flip]; rw [← LinearEquiv.coe_toLinearMap_flip]; rw [LinearEquiv.flip_flip]; rw [← map_comp]; rw [← map_comp]
+  simp [-coe_toLinearMap_flip]
+
+@[simp]
 
 Depends on / 依赖: IsReflexive, LinearEquiv, LinearEquiv.coe_toLinearMap_flip, LinearEquiv.flip_flip, Submodule, Submodule.map_injective_of_injective, coe_toLinearMap_flip, dualAnnihilator, dualAnnihilator.map, dualCoannihilator, dualCoannihilator_map_linearEquiv_flip, e.flip, e.flip.symm, e.flip.symm.injective, e.isReflexive_of_equiv_dual_of_isReflexive, e.symm, flip_flip, injective, isReflexive_of_equiv_dual_of_isReflexive, map_comp
 -/

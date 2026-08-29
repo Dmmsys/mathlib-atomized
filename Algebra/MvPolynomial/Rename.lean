@@ -691,7 +691,12 @@ lemma coeff_killCompl
     rw [killCompl_monomial]
     split_ifs with h
     · simp [← (Finsupp.mapDomain_injective hf).eq_iff, u.mapDomain_comapDomain _ hf h]
-    · simp? says simp only [coeff_zero, coef
+    · simp? says simp only [coeff_zero, coeff_monomial, right_eq_ite_iff]
+      intro rfl
+      contrapose! h
+apply subset_trans SetLike.coe_subset_coe.mpr Finsupp.mapDomain_support
+      simp
+  · simp_intro ..
 
 中文:
 引理 coeff_killCompl
@@ -703,7 +708,12 @@ lemma coeff_killCompl
     rw [killCompl_monomial]
     split_ifs with h
     · simp [← (Finsupp.mapDomain_injective hf).eq_iff, u.mapDomain_comapDomain _ hf h]
-    · simp? says simp only [coeff_zero, coef
+    · simp? says simp only [coeff_zero, coeff_monomial, right_eq_ite_iff]
+      intro rfl
+      contrapose! h
+apply subset_trans SetLike.coe_subset_coe.mpr Finsupp.mapDomain_support
+      simp
+  · simp_intro ..
 
 Depends on / 依赖: Finsupp, Finsupp.mapDomain_injective, Finsupp.mapDomain_support, SetLike, SetLike.coe_subset_coe.mpr, classical, coe_subset_coe, coeff_monomial, coeff_zero, contrapose, eq_iff, induction_on, killCompl, killCompl_monomial, mapDomain, mapDomain_comapDomain, mapDomain_injective, mapDomain_support, p.coeff, p.induction_on
 -/
@@ -1075,7 +1085,15 @@ theorem exists_finset_rename
     refine ⟨s union t, ⟨?_, ?_⟩⟩
     · refine rename (Subtype.map id ?_) p + rename (Subtype.map id ?_) q <;>
         simp +contextual only [id, true_or, or_true,
-          F
+          Finset.mem_union, forall_true_iff]
+    · simp only [rename_rename, map_add]
+      rfl
+  · rintro p n ⟨s, p, rfl⟩
+    refine ⟨insert n s, ⟨?_, ?_⟩⟩
+    · refine rename (Subtype.map id ?_) p * X ⟨n, s.mem_insert_self n⟩
+      simp +contextual only [id, or_true, Finset.mem_insert, forall_true_iff]
+    · simp only [rename_rename, rename_X, map_mul]
+      rfl
 
 中文:
 定理 存在_finset_rename
@@ -1089,7 +1107,15 @@ theorem exists_finset_rename
     refine ⟨s union t, ⟨?_, ?_⟩⟩
     · refine rename (Subtype.map id ?_) p + rename (Subtype.map id ?_) q <;>
         simp +contextual only [id, true_or, or_true,
-          F
+          Finset.mem_union, forall_true_iff]
+    · simp only [rename_rename, map_add]
+      rfl
+  · rintro p n ⟨s, p, rfl⟩
+    refine ⟨insert n s, ⟨?_, ?_⟩⟩
+    · refine rename (Subtype.map id ?_) p * X ⟨n, s.mem_insert_self n⟩
+      simp +contextual only [id, or_true, Finset.mem_insert, forall_true_iff]
+    · simp only [rename_rename, rename_X, map_mul]
+      rfl
 
 Depends on / 依赖: Finset, Finset.mem_union, Subtype, Subtype.map, classical, contextual, forall_true_iff, induction_on, insert, map_add, mem_insert_self, mem_union, or_true, rename_C, rename_rename, s.mem_insert_self, true_or
 -/
@@ -1126,7 +1152,7 @@ theorem exists_finset_rename₂
     use s₁ union s₂
     use rename (fun x => ⟨x, Finset.subset_union_left x.2⟩) q₁
     use rename (fun x => ⟨x, Finset.subset_union_right x.2⟩) q₂
-    constructor <;> simp [Function.com
+    constructor <;> simp [Function.comp_def]
 
 中文:
 定理 存在_finset_rename₂
@@ -1138,7 +1164,7 @@ theorem exists_finset_rename₂
     use s₁ union s₂
     use rename (fun x => ⟨x, Finset.subset_union_left x.2⟩) q₁
     use rename (fun x => ⟨x, Finset.subset_union_right x.2⟩) q₂
-    constructor <;> simp [Function.com
+    constructor <;> simp [Function.comp_def]
 
 Depends on / 依赖: Finset, Finset.subset_union_left, Finset.subset_union_right, Function, Function.comp_def, classical, comp_def, exists_finset_rename, subset_union_left, subset_union_right
 -/
@@ -1164,7 +1190,7 @@ theorem exists_fin_rename
   let e := Fintype.equivFin { x // x in s }
   refine ⟨n, (↑) ∘ e.symm, Subtype.val_injective.comp e.symm.injective, rename e q, ?_⟩
   rw [← rename_rename]; rw [rename_rename e]
-  simp only [Function.comp_def, E
+  simp only [Function.comp_def, Equiv.symm_apply_apply, rename_rename]
 
 中文:
 定理 存在_fin_rename
@@ -1175,7 +1201,7 @@ theorem exists_fin_rename
   let e := Fintype.equivFin { x // x in s }
   refine ⟨n, (↑) ∘ e.symm, Subtype.val_injective.comp e.symm.injective, rename e q, ?_⟩
   rw [← rename_rename]; rw [rename_rename e]
-  simp only [Function.comp_def, E
+  simp only [Function.comp_def, Equiv.symm_apply_apply, rename_rename]
 
 Depends on / 依赖: Equiv.symm_apply_apply, Fintype, Fintype.card, Fintype.equivFin, Function, Function.comp_def, Subtype, Subtype.val_injective.comp, comp_def, e.symm, e.symm.injective, equivFin, exists_finset_rename, injective, rename_rename, symm_apply_apply, val_injective
 -/

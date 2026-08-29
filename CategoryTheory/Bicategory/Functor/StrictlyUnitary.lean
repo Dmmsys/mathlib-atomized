@@ -186,7 +186,13 @@ definition mk'
   map₂_comp := S.map₂_comp
   mapComp := S.mapComp
   mapComp_naturality_left := S.mapComp_naturality_left
-  mapComp_naturality_right := S.mapComp_natura
+  mapComp_naturality_right := S.mapComp_naturality_right
+  map₂_leftUnitor f := by
+    simpa using S.map₂_leftUnitor f
+  map₂_rightUnitor f := by
+    simpa using S.map₂_rightUnitor f
+  map₂_associator f g h := by
+    simpa using S.map₂_associator f g h
 
 中文:
 定义 mk'
@@ -201,7 +207,13 @@ definition mk'
   map₂_comp := S.map₂_comp
   mapComp := S.mapComp
   mapComp_naturality_left := S.mapComp_naturality_left
-  mapComp_naturality_right := S.mapComp_natura
+  mapComp_naturality_right := S.mapComp_naturality_right
+  map₂_leftUnitor f := by
+    simpa using S.map₂_leftUnitor f
+  map₂_rightUnitor f := by
+    simpa using S.map₂_rightUnitor f
+  map₂_associator f g h := by
+    simpa using S.map₂_associator f g h
 
 Depends on / 依赖: S.obj
 -/
@@ -608,7 +620,13 @@ definition mk'
   map₂_left_unitor f := by
     simpa using S.map₂_left_unitor f
   map₂_right_unitor f := by
-    simpa usin
+    simpa using S.map₂_right_unitor f
+  map₂_associator f g h := by
+    simpa using S.map₂_associator f g h
+  map₂_whisker_left f _ _ η := by
+    simpa using S.map₂_whisker_left f η
+  map₂_whisker_right η f := by
+    simpa using S.map₂_whisker_right η f
 
 中文:
 定义 mk'
@@ -625,7 +643,13 @@ definition mk'
   map₂_left_unitor f := by
     simpa using S.map₂_left_unitor f
   map₂_right_unitor f := by
-    simpa usin
+    simpa using S.map₂_right_unitor f
+  map₂_associator f g h := by
+    simpa using S.map₂_associator f g h
+  map₂_whisker_left f _ _ η := by
+    simpa using S.map₂_whisker_left f η
+  map₂_whisker_right η f := by
+    simpa using S.map₂_whisker_right η f
 
 Depends on / 依赖: S.obj
 -/

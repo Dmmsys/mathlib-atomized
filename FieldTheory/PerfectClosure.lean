@@ -329,7 +329,9 @@ instance instMul
             mk K p (x.1 + y.1, (frobenius K p)^[y.1] x.2 * (frobenius K p)^[x.1] y.2))
           (mul_aux_right K p x))
       fun x1 x2 (H : R K p x1 x2) =>
-      funext fun e => Quot.inductionOn e fun y => mul_aux_
+      funext fun e => Quot.inductionOn e fun y => mul_aux_left K p x1 x2 y H⟩
+
+@[simp]
 
 中文:
 实例 instMul
@@ -341,7 +343,9 @@ instance instMul
             mk K p (x.1 + y.1, (frobenius K p)^[y.1] x.2 * (frobenius K p)^[x.1] y.2))
           (mul_aux_right K p x))
       fun x1 x2 (H : R K p x1 x2) =>
-      funext fun e => Quot.inductionOn e fun y => mul_aux_
+      funext fun e => Quot.inductionOn e fun y => mul_aux_left K p x1 x2 y H⟩
+
+@[simp]
 
 Depends on / 依赖: Quot.inductionOn, Quot.lift, frobenius, inductionOn, mul_aux_left, mul_aux_right
 -/
@@ -386,7 +390,21 @@ instance instCommMonoid
         Quot.inductionOn f fun ⟨n, y⟩ =>
           Quot.inductionOn g fun ⟨s, z⟩ => by
             apply congr_arg (Quot.mk _)
-            simp only [mul_assoc, iterate_map_mul, ← i
+            simp only [mul_assoc, iterate_map_mul, ← iterate_add_apply,
+              add_comm, add_left_comm]
+    one := mk K p (0, 1)
+    one_mul := fun e =>
+      Quot.inductionOn e fun ⟨n, x⟩ =>
+congr_arg (Quot.mk _) by
+          simp only [iterate_map_one, iterate_zero_apply, one_mul, zero_add]
+    mul_one := fun e =>
+      Quot.inductionOn e fun ⟨n, x⟩ =>
+congr_arg (Quot.mk _) by
+          simp only [iterate_map_one, iterate_zero_apply, mul_one, add_zero]
+    mul_comm := fun e f =>
+      Quot.inductionOn e fun ⟨m, x⟩ =>
+        Quot.inductionOn f fun ⟨n, y⟩ =>
+congr_arg (Quot.mk _) by simp only [add_comm, mul_comm] }
 
 中文:
 实例 instCommMonoid
@@ -397,7 +415,21 @@ instance instCommMonoid
         Quot.inductionOn f fun ⟨n, y⟩ =>
           Quot.inductionOn g fun ⟨s, z⟩ => by
             apply congr_arg (Quot.mk _)
-            simp only [mul_assoc, iterate_map_mul, ← i
+            simp only [mul_assoc, iterate_map_mul, ← iterate_add_apply,
+              add_comm, add_left_comm]
+    one := mk K p (0, 1)
+    one_mul := fun e =>
+      Quot.inductionOn e fun ⟨n, x⟩ =>
+congr_arg (Quot.mk _) by
+          simp only [iterate_map_one, iterate_zero_apply, one_mul, zero_add]
+    mul_one := fun e =>
+      Quot.inductionOn e fun ⟨n, x⟩ =>
+congr_arg (Quot.mk _) by
+          simp only [iterate_map_one, iterate_zero_apply, mul_one, add_zero]
+    mul_comm := fun e f =>
+      Quot.inductionOn e fun ⟨m, x⟩ =>
+        Quot.inductionOn f fun ⟨n, y⟩ =>
+congr_arg (Quot.mk _) by simp only [add_comm, mul_comm] }
 
 Depends on / 依赖: PerfectClosure, Quot.inductionOn, Quot.mk, add_comm, add_left_comm, congr_arg, inductionOn, iterate_add_apply, iterate_map_mul, iterate_map_one, iterate_zero_apply, mul_assoc, mul_one, one_mul, zero_add
 -/
@@ -533,7 +565,9 @@ instance instAdd
             mk K p (x.1 + y.1, (frobenius K p)^[y.1] x.2 + (frobenius K p)^[x.1] y.2))
           (add_aux_right K p x))
       fun x1 x2 (H : R K p x1 x2) =>
-      funext fun e => Quot.inductionOn e fun y => add_aux_
+      funext fun e => Quot.inductionOn e fun y => add_aux_left K p x1 x2 y H⟩
+
+@[simp]
 
 中文:
 实例 instAdd
@@ -545,7 +579,9 @@ instance instAdd
             mk K p (x.1 + y.1, (frobenius K p)^[y.1] x.2 + (frobenius K p)^[x.1] y.2))
           (add_aux_right K p x))
       fun x1 x2 (H : R K p x1 x2) =>
-      funext fun e => Quot.inductionOn e fun y => add_aux_
+      funext fun e => Quot.inductionOn e fun y => add_aux_left K p x1 x2 y H⟩
+
+@[simp]
 
 Depends on / 依赖: Quot.inductionOn, Quot.lift, add_aux_left, add_aux_right, frobenius, inductionOn
 -/
@@ -773,7 +809,24 @@ instance instAddCommGroup
         Quot.inductionOn f fun ⟨n, y⟩ =>
           Quot.inductionOn g fun ⟨s, z⟩ => by
             apply congr_arg (Quot.mk _)
-      
+            simp only [iterate_map_add, ← iterate_add_apply, add_assoc, add_comm s _]
+    zero_add := fun e =>
+      Quot.inductionOn e fun ⟨n, x⟩ =>
+congr_arg (Quot.mk _) by
+          simp only [iterate_map_zero, iterate_zero_apply, zero_add]
+    add_zero := fun e =>
+      Quot.inductionOn e fun ⟨n, x⟩ =>
+congr_arg (Quot.mk _) by
+          simp only [iterate_map_zero, iterate_zero_apply, add_zero]
+    sub_eq_add_neg := fun _ _ => rfl
+    neg_add_cancel := fun e =>
+      Quot.inductionOn e fun ⟨n, x⟩ => by
+        simp only [quot_mk_eq_mk, neg_mk, mk_add_mk, iterate_map_neg, neg_add_cancel, mk_zero_right]
+    add_comm := fun e f =>
+      Quot.inductionOn e fun ⟨m, x⟩ =>
+Quot.inductionOn f fun ⟨n, y⟩ => congr_arg (Quot.mk _) by simp only [add_comm]
+    nsmul := nsmulRec
+    zsmul := zsmulRec }
 
 中文:
 实例 instAddCommGroup
@@ -785,7 +838,24 @@ instance instAddCommGroup
         Quot.inductionOn f fun ⟨n, y⟩ =>
           Quot.inductionOn g fun ⟨s, z⟩ => by
             apply congr_arg (Quot.mk _)
-      
+            simp only [iterate_map_add, ← iterate_add_apply, add_assoc, add_comm s _]
+    zero_add := fun e =>
+      Quot.inductionOn e fun ⟨n, x⟩ =>
+congr_arg (Quot.mk _) by
+          simp only [iterate_map_zero, iterate_zero_apply, zero_add]
+    add_zero := fun e =>
+      Quot.inductionOn e fun ⟨n, x⟩ =>
+congr_arg (Quot.mk _) by
+          simp only [iterate_map_zero, iterate_zero_apply, add_zero]
+    sub_eq_add_neg := fun _ _ => rfl
+    neg_add_cancel := fun e =>
+      Quot.inductionOn e fun ⟨n, x⟩ => by
+        simp only [quot_mk_eq_mk, neg_mk, mk_add_mk, iterate_map_neg, neg_add_cancel, mk_zero_right]
+    add_comm := fun e f =>
+      Quot.inductionOn e fun ⟨m, x⟩ =>
+Quot.inductionOn f fun ⟨n, y⟩ => congr_arg (Quot.mk _) by simp only [add_comm]
+    nsmul := nsmulRec
+    zsmul := zsmulRec }
 
 Depends on / 依赖: PerfectClosure, Quot.inductionOn, Quot.mk, add_assoc, add_comm, add_zero, congr_arg, inductionOn, iterate_add_apply, iterate_map_add, iterate_map_zero, iterate_zero_apply, zero_add
 -/
@@ -827,7 +897,28 @@ instance instCommRing
     zero_mul := fun a => by
       refine Quot.inductionOn a fun ⟨m, x⟩ => ?_
       rw [zero_def]; rw [quot_mk_eq_mk]; rw [mk_mul_mk]
-      simp only [zero_add, iterate_zero, id_eq, iterate_map_
+      simp only [zero_add, iterate_zero, id_eq, iterate_map_zero, zero_mul, mk_zero_right]
+    mul_zero := fun a => by
+      refine Quot.inductionOn a fun ⟨m, x⟩ => ?_
+      rw [zero_def]; rw [quot_mk_eq_mk]; rw [mk_mul_mk]
+      simp only [iterate_zero, id_eq, iterate_map_zero, mul_zero, mk_zero_right]
+    left_distrib := fun e f g =>
+      Quot.inductionOn e fun ⟨m, x⟩ =>
+        Quot.inductionOn f fun ⟨n, y⟩ =>
+          Quot.inductionOn g fun ⟨s, z⟩ => by
+            simp only [quot_mk_eq_mk, mk_add_mk, mk_mul_mk, add_comm, add_left_comm]
+            apply R.sound
+            simp only [iterate_map_mul, iterate_map_add, ← iterate_add_apply,
+              mul_add, add_comm, add_left_comm]
+    right_distrib := fun e f g =>
+      Quot.inductionOn e fun ⟨m, x⟩ =>
+        Quot.inductionOn f fun ⟨n, y⟩ =>
+          Quot.inductionOn g fun ⟨s, z⟩ => by
+            simp only [quot_mk_eq_mk, mk_add_mk, mk_mul_mk, add_assoc, add_comm _ s,
+              add_left_comm _ s]
+            apply R.sound
+            simp only [iterate_map_mul, iterate_map_add, ← iterate_add_apply,
+              add_mul, add_comm, add_left_comm] }
 
 中文:
 实例 instCommRing
@@ -837,7 +928,28 @@ instance instCommRing
     zero_mul := fun a => by
       refine Quot.inductionOn a fun ⟨m, x⟩ => ?_
       rw [zero_def]; rw [quot_mk_eq_mk]; rw [mk_mul_mk]
-      simp only [zero_add, iterate_zero, id_eq, iterate_map_
+      simp only [zero_add, iterate_zero, id_eq, iterate_map_zero, zero_mul, mk_zero_right]
+    mul_zero := fun a => by
+      refine Quot.inductionOn a fun ⟨m, x⟩ => ?_
+      rw [zero_def]; rw [quot_mk_eq_mk]; rw [mk_mul_mk]
+      simp only [iterate_zero, id_eq, iterate_map_zero, mul_zero, mk_zero_right]
+    left_distrib := fun e f g =>
+      Quot.inductionOn e fun ⟨m, x⟩ =>
+        Quot.inductionOn f fun ⟨n, y⟩ =>
+          Quot.inductionOn g fun ⟨s, z⟩ => by
+            simp only [quot_mk_eq_mk, mk_add_mk, mk_mul_mk, add_comm, add_left_comm]
+            apply R.sound
+            simp only [iterate_map_mul, iterate_map_add, ← iterate_add_apply,
+              mul_add, add_comm, add_left_comm]
+    right_distrib := fun e f g =>
+      Quot.inductionOn e fun ⟨m, x⟩ =>
+        Quot.inductionOn f fun ⟨n, y⟩ =>
+          Quot.inductionOn g fun ⟨s, z⟩ => by
+            simp only [quot_mk_eq_mk, mk_add_mk, mk_mul_mk, add_assoc, add_comm _ s,
+              add_left_comm _ s]
+            apply R.sound
+            simp only [iterate_map_mul, iterate_map_add, ← iterate_add_apply,
+              add_mul, add_comm, add_left_comm] }
 
 Depends on / 依赖: AddMonoidWithOne, AddMonoidWithOne.unary, CommMonoid, PerfectClosure, Quot.inductionOn, id_eq, inductionOn, instAddCommGroup, iterate_map_zero, iterate_zero, mk_mul_mk, mk_zero_right, mul_zero, quot_mk_eq_mk, zero_add, zero_def, zero_mul
 -/
@@ -886,6 +998,20 @@ theorem mk_eq_iff
     | symm x y H ih => obtain ⟨w, ih⟩ := ih; exact ⟨w, ih.symm⟩
     | trans x y z H1 H2 ih1 ih2 =>
       obtain ⟨z1, ih1⟩ := ih1
+      obtain ⟨z2, ih2⟩ := ih2
+      exists z2 + (y.1 + z1)
+      rw [← add_assoc]; rw [iterate_add_apply]; rw [ih1]
+      rw [← iterate_add_apply]; rw [add_comm]; rw [iterate_add_apply]; rw [ih2]
+      rw [← iterate_add_apply]
+      simp only [add_comm, add_left_comm]
+  intro H
+  obtain ⟨m, x⟩ := x
+  obtain ⟨n, y⟩ := y
+  obtain ⟨z, H⟩ := H; dsimp only at H
+  rw [R.sound K p (n + z) m x _ rfl]; rw [R.sound K p (m + z) n y _ rfl]; rw [H]
+  rw [add_assoc]; rw [add_comm]; rw [add_comm z]
+
+@[simp]
 
 中文:
 定理 mk_eq_iff
@@ -900,6 +1026,20 @@ theorem mk_eq_iff
     | symm x y H ih => obtain ⟨w, ih⟩ := ih; exact ⟨w, ih.symm⟩
     | trans x y z H1 H2 ih1 ih2 =>
       obtain ⟨z1, ih1⟩ := ih1
+      obtain ⟨z2, ih2⟩ := ih2
+      exists z2 + (y.1 + z1)
+      rw [← add_assoc]; rw [iterate_add_apply]; rw [ih1]
+      rw [← iterate_add_apply]; rw [add_comm]; rw [iterate_add_apply]; rw [ih2]
+      rw [← iterate_add_apply]
+      simp only [add_comm, add_left_comm]
+  intro H
+  obtain ⟨m, x⟩ := x
+  obtain ⟨n, y⟩ := y
+  obtain ⟨z, H⟩ := H; dsimp only at H
+  rw [R.sound K p (n + z) m x _ rfl]; rw [R.sound K p (m + z) n y _ rfl]; rw [H]
+  rw [add_assoc]; rw [add_comm]; rw [add_comm z]
+
+@[simp]
 
 Depends on / 依赖: Quot.eqvGen_exact, add_assoc, add_comm, add_left_comm, eqvGen_exact, ih.symm, iterate_add_apply, replace
 -/
@@ -942,7 +1082,8 @@ theorem mk_pow
     exact ⟨0, by simp_rw [← coe_iterateFrobenius, map_one]⟩
   | succ n ih =>
     rw [pow_succ]; rw [pow_succ]; rw [ih]; rw [mk_mul_mk]; rw [mk_eq_iff]
-    exact ⟨0, by simp_rw [iterate_frobenius, add_zer
+    exact ⟨0, by simp_rw [iterate_frobenius, add_zero, mul_pow, ← pow_mul,
+      ← pow_add, mul_assoc, ← pow_add]⟩
 
 中文:
 定理 mk_pow
@@ -955,7 +1096,8 @@ theorem mk_pow
     exact ⟨0, by simp_rw [← coe_iterateFrobenius, map_one]⟩
   | succ n ih =>
     rw [pow_succ]; rw [pow_succ]; rw [ih]; rw [mk_mul_mk]; rw [mk_eq_iff]
-    exact ⟨0, by simp_rw [iterate_frobenius, add_zer
+    exact ⟨0, by simp_rw [iterate_frobenius, add_zero, mul_pow, ← pow_mul,
+      ← pow_add, mul_assoc, ← pow_add]⟩
 
 Depends on / 依赖: add_zero, coe_iterateFrobenius, iterate_frobenius, map_one, mk_eq_iff, mk_mul_mk, mul_assoc, mul_pow, one_def, pow_add, pow_mul, pow_succ, pow_zero, simp_rw
 -/
@@ -1178,7 +1320,8 @@ instance instReduced
     replace h : mk K p x ^ p ^ n = 0 := by
       rw [← Nat.sub_add_cancel ((n.lt_pow_self (Fact.out : p.Prime).one_lt).le)]; rw [pow_add]; rw [h]; rw [mul_zero]
     simp only [zero_def, mk_pow, mk_eq_iff, zero_add, ← coe_iterateFrobenius, map_zero] at h ⊢
-    obtain
+    obtain ⟨m, h⟩ := h
+    exact ⟨n + m, by simpa only [iterateFrobenius_def, pow_add, pow_mul] using h⟩
 
 中文:
 实例 instReduced
@@ -1187,7 +1330,8 @@ instance instReduced
     replace h : mk K p x ^ p ^ n = 0 := by
       rw [← Nat.sub_add_cancel ((n.lt_pow_self (Fact.out : p.Prime).one_lt).le)]; rw [pow_add]; rw [h]; rw [mul_zero]
     simp only [zero_def, mk_pow, mk_eq_iff, zero_add, ← coe_iterateFrobenius, map_zero] at h ⊢
-    obtain
+    obtain ⟨m, h⟩ := h
+    exact ⟨n + m, by simpa only [iterateFrobenius_def, pow_add, pow_mul] using h⟩
 
 Depends on / 依赖: Fact.out, Nat.sub_add_cancel, coe_iterateFrobenius, induction_on, iterateFrobenius_def, lt_pow_self, map_zero, mk_eq_iff, mk_pow, mul_zero, n.lt_pow_self, one_lt, p.Prime, pow_add, pow_mul, replace, sub_add_cancel, zero_add, zero_def
 -/
@@ -1211,7 +1355,11 @@ instance instPerfectRing
       liftOn e (fun x => mk K p (x.1 + 1, x.2)) fun x y H =>
       match x, y, H with
       | _, _, R.intro n x => Quot.sound (R.intro _ _)
-    refine bijective_iff_has_inverse.mpr ⟨f, fun e => inductio
+    refine bijective_iff_has_inverse.mpr ⟨f, fun e => induction_on e fun ⟨n, x⟩ => ?_,
+      fun e => induction_on e fun ⟨n, x⟩ => ?_⟩ <;>
+      simp only [f, liftOn_mk, frobenius_mk, mk_succ_pow]
+
+@[simp]
 
 中文:
 实例 instPerfectRing
@@ -1222,7 +1370,11 @@ instance instPerfectRing
       liftOn e (fun x => mk K p (x.1 + 1, x.2)) fun x y H =>
       match x, y, H with
       | _, _, R.intro n x => Quot.sound (R.intro _ _)
-    refine bijective_iff_has_inverse.mpr ⟨f, fun e => inductio
+    refine bijective_iff_has_inverse.mpr ⟨f, fun e => induction_on e fun ⟨n, x⟩ => ?_,
+      fun e => induction_on e fun ⟨n, x⟩ => ?_⟩ <;>
+      simp only [f, liftOn_mk, frobenius_mk, mk_succ_pow]
+
+@[simp]
 
 Depends on / 依赖: PerfectClosure, Quot.sound, R.intro, bijective_iff_has_inverse, bijective_iff_has_inverse.mpr, frobenius_def, frobenius_mk, induction_on, liftOn, liftOn_mk, mk_succ_pow, simp_rw
 -/
@@ -1279,7 +1431,23 @@ definition lift
       map_zero' := f.map_zero
       map_mul' := by
         rintro ⟨n, x⟩ ⟨m, y⟩
-        simp only [quot_mk_eq_mk, 
+        simp only [quot_mk_eq_mk, liftOn_mk, f.map_iterate_frobenius, mk_mul_mk, map_mul,
+          iterate_map_mul]
+        have := LeftInverse.iterate (frobeniusEquiv_symm_apply_frobenius L p)
+        rw [iterate_add_apply]; rw [this _ _]; rw [add_comm]; rw [iterate_add_apply]; rw [this _ _]
+      map_add' := by
+        rintro ⟨n, x⟩ ⟨m, y⟩
+        simp only [quot_mk_eq_mk, liftOn_mk, f.map_iterate_frobenius, mk_add_mk, map_add,
+          iterate_map_add]
+        have := LeftInverse.iterate (frobeniusEquiv_symm_apply_frobenius L p)
+        rw [iterate_add_apply]; rw [this _ _]; rw [add_comm n]; rw [iterate_add_apply]; rw [this _ _] }
+  invFun f := f.comp (of K p)
+  right_inv f := by
+    ext ⟨n, x⟩
+    simp only [quot_mk_eq_mk, RingHom.comp_apply, RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk,
+      liftOn_mk]
+    apply (injective_frobenius L p).iterate n
+    rw [← f.map_iterate_frobenius]; rw [iterate_frobenius_mk]; rw [RightInverse.iterate (frobenius_apply_frobeniusEquiv_symm L p) n]
 
 中文:
 定义 lift
@@ -1292,7 +1460,23 @@ definition lift
       map_zero' := f.map_zero
       map_mul' := by
         rintro ⟨n, x⟩ ⟨m, y⟩
-        simp only [quot_mk_eq_mk, 
+        simp only [quot_mk_eq_mk, liftOn_mk, f.map_iterate_frobenius, mk_mul_mk, map_mul,
+          iterate_map_mul]
+        have := LeftInverse.iterate (frobeniusEquiv_symm_apply_frobenius L p)
+        rw [iterate_add_apply]; rw [this _ _]; rw [add_comm]; rw [iterate_add_apply]; rw [this _ _]
+      map_add' := by
+        rintro ⟨n, x⟩ ⟨m, y⟩
+        simp only [quot_mk_eq_mk, liftOn_mk, f.map_iterate_frobenius, mk_add_mk, map_add,
+          iterate_map_add]
+        have := LeftInverse.iterate (frobeniusEquiv_symm_apply_frobenius L p)
+        rw [iterate_add_apply]; rw [this _ _]; rw [add_comm n]; rw [iterate_add_apply]; rw [this _ _] }
+  invFun f := f.comp (of K p)
+  right_inv f := by
+    ext ⟨n, x⟩
+    simp only [quot_mk_eq_mk, RingHom.comp_apply, RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk,
+      liftOn_mk]
+    apply (injective_frobenius L p).iterate n
+    rw [← f.map_iterate_frobenius]; rw [iterate_frobenius_mk]; rw [RightInverse.iterate (frobenius_apply_frobeniusEquiv_symm L p) n]
 
 Depends on / 依赖: LeftInverse, LeftInverse.iterate, add_comm, f.map_frobenius, f.map_iterate_frobenius, f.map_one, f.map_zero, frobeniusEquiv, frobeniusEquiv_symm_apply_frobenius, iterate, iterate_add_apply, iterate_map_mul, liftOn, liftOn_mk, map_add, map_frobenius, map_iterate_frobenius, map_mul, map_one, map_zero
 -/
@@ -1446,7 +1630,11 @@ instance instDivisionRing
     refine (eq_iff K p _ _).2 ?_
     simp only [iterate_map_one, iterate_map_zero, iterate_zero_apply, ← iterate_map_mul] at this ⊢
     rw [mul_inv_cancel₀ this]; rw [iterate_map_one]
-  inv_zero := 
+  inv_zero := congr_arg (Quot.mk (R K p)) (by rw [inv_zero])
+  nnqsmul := _
+  nnqsmul_def := fun _ _ => rfl
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
 
 中文:
 实例 instDivisionRing
@@ -1457,7 +1645,11 @@ instance instDivisionRing
     refine (eq_iff K p _ _).2 ?_
     simp only [iterate_map_one, iterate_map_zero, iterate_zero_apply, ← iterate_map_mul] at this ⊢
     rw [mul_inv_cancel₀ this]; rw [iterate_map_one]
-  inv_zero := 
+  inv_zero := congr_arg (Quot.mk (R K p)) (by rw [inv_zero])
+  nnqsmul := _
+  nnqsmul_def := fun _ _ => rfl
+  qsmul := _
+  qsmul_def := fun _ _ => rfl
 
 Depends on / 依赖: Quot.mk, congr_arg, eq_iff, induction_on, inv_zero, iterate_map_mul, iterate_map_one, iterate_map_zero, iterate_zero_apply, mk_inv, mk_mul_mk, nnqsmul, nnqsmul_def, qsmul_def
 -/

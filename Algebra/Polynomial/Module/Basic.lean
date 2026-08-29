@@ -821,7 +821,7 @@ inferInstanceAs IsScalarTower R R[X] Module.AEval' (coeffLinearEquiv R R).symm.c
     (Finsupp.lmapDomain M R Nat.succ).comp (coeffLinearEquiv R R).toLinearMap
   constructor
   intro x y z
-  rw [← @IsScalarTower.algebraMap_smul S R]; rw [← 
+  rw [← @IsScalarTower.algebraMap_smul S R]; rw [← @IsScalarTower.algebraMap_smul S R]; rw [smul_assoc]
 
 中文:
 实例 isScalarTower'
@@ -832,7 +832,7 @@ inferInstanceAs IsScalarTower R R[X] Module.AEval' (coeffLinearEquiv R R).symm.c
     (Finsupp.lmapDomain M R Nat.succ).comp (coeffLinearEquiv R R).toLinearMap
   constructor
   intro x y z
-  rw [← @IsScalarTower.algebraMap_smul S R]; rw [← 
+  rw [← @IsScalarTower.algebraMap_smul S R]; rw [← @IsScalarTower.algebraMap_smul S R]; rw [smul_assoc]
 
 Depends on / 依赖: Finsupp, Finsupp.lmapDomain, IsScalarTower, IsScalarTower.algebraMap_smul, Module, Module.AEval, Nat.succ, PolynomialModule, algebraMap_smul, coeffLinearEquiv, lmapDomain, smul_assoc, symm.comp, toLinearMap
 -/
@@ -861,7 +861,12 @@ theorem monomial_smul_single
     rw [Function.iterate_zero]; rw [zero_add]
     exact congr(ofCoeff R $(Finsupp.smul_single r j m))
   | succ n hn =>
- 
+    rw [Function.iterate_succ]; rw [Function.comp_apply]; rw [add_assoc]; rw [← hn]
+    congr 2
+    rw [Nat.one_add]
+    exact congr(ofCoeff R $(Finsupp.mapDomain_single))
+
+@[simp]
 
 中文:
 定理 monomial_smul_single
@@ -874,7 +879,12 @@ theorem monomial_smul_single
     rw [Function.iterate_zero]; rw [zero_add]
     exact congr(ofCoeff R $(Finsupp.smul_single r j m))
   | succ n hn =>
- 
+    rw [Function.iterate_succ]; rw [Function.comp_apply]; rw [add_assoc]; rw [← hn]
+    congr 2
+    rw [Nat.one_add]
+    exact congr(ofCoeff R $(Finsupp.mapDomain_single))
+
+@[simp]
 
 Depends on / 依赖: Finsupp, Finsupp.mapDomain_single, Finsupp.smul_single, Function, Function.comp_apply, Function.iterate_succ, Function.iterate_zero, Module, Module.End.mul_apply, Module.End.pow_apply, Module.algebraMap_end_apply, Nat.one_add, Polynomial, Polynomial.aeval_monomial, add_assoc, aeval_monomial, algebraMap_end_apply, comp_apply, generalizing, iterate_succ
 -/
@@ -997,7 +1007,7 @@ theorem smul_apply
   | monomial f_n f_a =>
     rw [Finset.Nat.sum_antidiagonal_eq_sum_range_succ fun i j =>
       (monomial f_n f_a).coeff i • g.coeff j]; rw [monomial_smul_apply]
-    simp [Polyn
+    simp [Polynomial.coeff_monomial]
 
 中文:
 定理 smul_apply
@@ -1008,7 +1018,7 @@ theorem smul_apply
   | monomial f_n f_a =>
     rw [Finset.Nat.sum_antidiagonal_eq_sum_range_succ fun i j =>
       (monomial f_n f_a).coeff i • g.coeff j]; rw [monomial_smul_apply]
-    simp [Polyn
+    simp [Polynomial.coeff_monomial]
 
 Depends on / 依赖: Finset, Finset.Nat.sum_antidiagonal_eq_sum_range_succ, Finset.sum_add_distrib, Polynomial, Polynomial.coeff_monomial, Polynomial.induction_on, add_smul, coeff_monomial, g.coeff, induction_on, monomial, monomial_smul_apply, sum_add_distrib, sum_antidiagonal_eq_sum_range_succ
 -/
@@ -1037,7 +1047,15 @@ definition equivPolynomialSelf
     | add _ _ hp hq => simp_all [smul_add, mul_add]
     | single n a =>
     ext i
-    simp only [coeffAddE
+    simp only [coeffAddEquiv_apply, AddMonoidAlgebra.coeffAddEquiv_symm_apply,
+      toFinsuppIso_symm_apply, coeff_ofFinsupp, smul_single_apply, smul_eq_mul, coeff_single,
+      AddMonoidAlgebra.ofCoeff_single, ofFinsupp_single]
+    split_ifs with hn
+    · rw [show i = (i - n) + n by lia, Polynomial.coeff_mul_monomial]
+      simp
+    · rw [Polynomial.coeff_mul, Finset.sum_eq_zero]
+      simp [Polynomial.coeff_monomial]
+      lia
 
 中文:
 定义 equivPolynomialSelf
@@ -1051,7 +1069,15 @@ definition equivPolynomialSelf
     | add _ _ hp hq => simp_all [smul_add, mul_add]
     | single n a =>
     ext i
-    simp only [coeffAddE
+    simp only [coeffAddEquiv_apply, AddMonoidAlgebra.coeffAddEquiv_symm_apply,
+      toFinsuppIso_symm_apply, coeff_ofFinsupp, smul_single_apply, smul_eq_mul, coeff_single,
+      AddMonoidAlgebra.ofCoeff_single, ofFinsupp_single]
+    split_ifs with hn
+    · rw [show i = (i - n) + n by lia, Polynomial.coeff_mul_monomial]
+      simp
+    · rw [Polynomial.coeff_mul, Finset.sum_eq_zero]
+      simp [Polynomial.coeff_monomial]
+      lia
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.coeffAddEquiv.symm.trans, coeffAddEquiv, coeffAddEquiv.trans
 -/
@@ -1296,7 +1322,9 @@ theorem map_smul
   | add f g e₁ e₂ => rw [smul_add, map_add, e₁, e₂, map_add, smul_add]
   | single i m =>
     induction p using Polynomial.induction_on' with
-    | add _ _ e₁ e₂ => rw [add_smul, map_add, e₁, e₂, Polynomial.m
+    | add _ _ e₁ e₂ => rw [add_smul, map_add, e₁, e₂, Polynomial.map_add, add_smul]
+    | monomial => rw [monomial_smul_single, map_single, Polynomial.map_monomial, map_single,
+        monomial_smul_single, f.map_smul, algebraMap_smul]
 
 中文:
 定理 map_smul
@@ -1307,7 +1335,9 @@ theorem map_smul
   | add f g e₁ e₂ => rw [smul_add, map_add, e₁, e₂, map_add, smul_add]
   | single i m =>
     induction p using Polynomial.induction_on' with
-    | add _ _ e₁ e₂ => rw [add_smul, map_add, e₁, e₂, Polynomial.m
+    | add _ _ e₁ e₂ => rw [add_smul, map_add, e₁, e₂, Polynomial.map_add, add_smul]
+    | monomial => rw [monomial_smul_single, map_single, Polynomial.map_monomial, map_single,
+        monomial_smul_single, f.map_smul, algebraMap_smul]
 
 Depends on / 依赖: Polynomial, Polynomial.induction_on, Polynomial.map_add, Polynomial.map_monomial, add_smul, algebraMap_smul, f.map_smul, induction_linear, induction_on, map_add, map_monomial, map_single, map_smul, map_zero, monomial, monomial_smul_single, single, smul_add, smul_zero
 -/
@@ -1338,7 +1368,10 @@ definition eval
     · exact fun i => smul_zero _
     · simp_rw [RingHom.id_apply, Finsupp.smul_sum]
       congr
-      ex
+      ext i c
+      rw [smul_comm]
+
+@[simp]
 
 中文:
 定义 eval
@@ -1350,7 +1383,10 @@ definition eval
     · exact fun i => smul_zero _
     · simp_rw [RingHom.id_apply, Finsupp.smul_sum]
       congr
-      ex
+      ext i c
+      rw [smul_comm]
+
+@[simp]
 
 Depends on / 依赖: p.coeff.sum
 -/
@@ -1428,7 +1464,10 @@ theorem eval_smul
   | add f g e₁ e₂ => rw [smul_add, map_add, e₁, e₂, map_add, smul_add]
   | single i m =>
     induction p using Polynomial.induction_on' with
-    | add _ _ e₁ e₂ => rw [add_smul, map_add, Polynomial.eval_add,
+    | add _ _ e₁ e₂ => rw [add_smul, map_add, Polynomial.eval_add, e₁, e₂, add_smul]
+    | monomial => simp only [monomial_smul_single, Polynomial.eval_monomial, eval_single]; module
+
+@[simp]
 
 中文:
 定理 eval_smul
@@ -1439,7 +1478,10 @@ theorem eval_smul
   | add f g e₁ e₂ => rw [smul_add, map_add, e₁, e₂, map_add, smul_add]
   | single i m =>
     induction p using Polynomial.induction_on' with
-    | add _ _ e₁ e₂ => rw [add_smul, map_add, Polynomial.eval_add,
+    | add _ _ e₁ e₂ => rw [add_smul, map_add, Polynomial.eval_add, e₁, e₂, add_smul]
+    | monomial => simp only [monomial_smul_single, Polynomial.eval_monomial, eval_single]; module
+
+@[simp]
 
 Depends on / 依赖: Polynomial, Polynomial.eval_add, Polynomial.eval_monomial, Polynomial.induction_on, add_smul, eval_add, eval_monomial, eval_single, induction_linear, induction_on, map_add, map_zero, module, monomial, monomial_smul_single, single, smul_add, smul_zero
 -/

@@ -148,7 +148,17 @@ definition replaceBotTop
       -- `atoms` contains atoms for all types we are working on, so here we need to filter only
       -- those with the same type as `atoms[idx]`
       let type ← inferType (← get).atoms[idx]!
- 
+      for (atom, i) in (← get).atoms.zipIdx do
+        if (← withReducible <| isDefEq type (← inferType atom)) && i != idx then
+res := res.push .le idx i (← mkAppOptM ``bot_le #[none, none, none, atom])
+    | .isTop idx =>
+      let type ← inferType (← get).atoms[idx]!
+      for (atom, i) in (← get).atoms.zipIdx do
+        if (← withReducible <| isDefEq type (← inferType atom)) && i != idx then
+res := res.push .le i idx (← mkAppOptM ``le_top #[none, none, none, atom])
+    | _ =>
+      res := res.push fact
+  return res
 
 中文:
 定义 replaceBotTop
@@ -161,7 +171,17 @@ definition replaceBotTop
       -- `atoms` contains atoms for all types we are working on, so here we need to filter only
       -- those with the same type as `atoms[idx]`
       let type ← inferType (← get).atoms[idx]!
- 
+      for (atom, i) in (← get).atoms.zipIdx do
+        if (← withReducible <| isDefEq type (← inferType atom)) && i != idx then
+res := res.push .le idx i (← mkAppOptM ``bot_le #[none, none, none, atom])
+    | .isTop idx =>
+      let type ← inferType (← get).atoms[idx]!
+      for (atom, i) in (← get).atoms.zipIdx do
+        if (← withReducible <| isDefEq type (← inferType atom)) && i != idx then
+res := res.push .le i idx (← mkAppOptM ``le_top #[none, none, none, atom])
+    | _ =>
+      res := res.push fact
+  return res
 
 Depends on / 依赖: K.isCompact, isCompact, isCompact_iff_compactSpace
 -/
@@ -200,7 +220,13 @@ definition preprocessFactsPreorder
 res := res.push .le lhs rhs (← mkAppM ``le_of_lt #[proof])
 res := res.push .nle rhs lhs (← mkAppM ``not_le_of_gt #[proof])
     | .eq lhs rhs proof =>
-res := res.push .le lhs rhs (← mkAppM
+res := res.push .le lhs rhs (← mkAppM ``le_of_eq #[proof])
+res := res.push .le rhs lhs (← mkAppM ``ge_of_eq #[proof])
+    | .ne _ _ _ =>
+      continue
+    | _ =>
+      res := res.push fact
+  return res
 
 中文:
 定义 preprocessFactsPreorder
@@ -213,7 +239,13 @@ res := res.push .le lhs rhs (← mkAppM
 res := res.push .le lhs rhs (← mkAppM ``le_of_lt #[proof])
 res := res.push .nle rhs lhs (← mkAppM ``not_le_of_gt #[proof])
     | .eq lhs rhs proof =>
-res := res.push .le lhs rhs (← mkAppM
+res := res.push .le lhs rhs (← mkAppM ``le_of_eq #[proof])
+res := res.push .le rhs lhs (← mkAppM ``ge_of_eq #[proof])
+    | .ne _ _ _ =>
+      continue
+    | _ =>
+      res := res.push fact
+  return res
 -/
 def preprocessFactsPreorder (facts : Array AtomicFact) : MetaM Array AtomicFact := do
   let mut res : Array AtomicFact := #[]
@@ -245,7 +277,26 @@ definition preprocessFactsPartial
 res := res.push .ne lhs rhs (← mkAppM ``ne_of_lt #[proof])
 res := res.push .le lhs rhs (← mkAppM ``le_of_lt #[proof])
     | .nle lhs rhs proof =>
-res := res.push .ne lhs rhs (← mkAppM ``n
+res := res.push .ne lhs rhs (← mkAppM ``ne_of_not_le #[proof])
+res := res.push .nlt lhs rhs (← mkAppM ``not_lt_of_not_le #[proof])
+    | .eq lhs rhs proof =>
+res := res.push .le lhs rhs (← mkAppM ``le_of_eq #[proof])
+res := res.push .le rhs lhs (← mkAppM ``ge_of_eq #[proof])
+    | .isSup lhs rhs sup =>
+res := res.push .le lhs sup
+        (← mkAppOptM ``le_sup_left #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+res := res.push .le rhs sup
+        (← mkAppOptM ``le_sup_right #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+      res := res.push fact
+    | .isInf lhs rhs inf =>
+res := res.push .le inf lhs
+        (← mkAppOptM ``inf_le_left #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+res := res.push .le inf rhs
+        (← mkAppOptM ``inf_le_right #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+      res := res.push fact
+    | _ =>
+      res := res.push fact
+  return res
 
 中文:
 定义 preprocessFactsPartial
@@ -258,7 +309,26 @@ res := res.push .ne lhs rhs (← mkAppM ``n
 res := res.push .ne lhs rhs (← mkAppM ``ne_of_lt #[proof])
 res := res.push .le lhs rhs (← mkAppM ``le_of_lt #[proof])
     | .nle lhs rhs proof =>
-res := res.push .ne lhs rhs (← mkAppM ``n
+res := res.push .ne lhs rhs (← mkAppM ``ne_of_not_le #[proof])
+res := res.push .nlt lhs rhs (← mkAppM ``not_lt_of_not_le #[proof])
+    | .eq lhs rhs proof =>
+res := res.push .le lhs rhs (← mkAppM ``le_of_eq #[proof])
+res := res.push .le rhs lhs (← mkAppM ``ge_of_eq #[proof])
+    | .isSup lhs rhs sup =>
+res := res.push .le lhs sup
+        (← mkAppOptM ``le_sup_left #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+res := res.push .le rhs sup
+        (← mkAppOptM ``le_sup_right #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+      res := res.push fact
+    | .isInf lhs rhs inf =>
+res := res.push .le inf lhs
+        (← mkAppOptM ``inf_le_left #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+res := res.push .le inf rhs
+        (← mkAppOptM ``inf_le_right #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+      res := res.push fact
+    | _ =>
+      res := res.push fact
+  return res
 -/
 def preprocessFactsPartial (facts : Array AtomicFact) :
 AtomM Array AtomicFact := do
@@ -304,7 +374,28 @@ definition preprocessFactsLinear
 res := res.push .ne lhs rhs (← mkAppM ``ne_of_lt #[proof])
 res := res.push .le lhs rhs (← mkAppM ``le_of_lt #[proof])
     | .nle lhs rhs proof =>
-res := res.push .ne lhs rhs (← mkAppM ``n
+res := res.push .ne lhs rhs (← mkAppM ``ne_of_not_le #[proof])
+res := res.push .le rhs lhs (← mkAppM ``le_of_not_ge #[proof])
+    | .nlt lhs rhs proof =>
+res := res.push .le rhs lhs (← mkAppM ``le_of_not_gt #[proof])
+    | .eq lhs rhs proof =>
+res := res.push .le lhs rhs (← mkAppM ``le_of_eq #[proof])
+res := res.push .le rhs lhs (← mkAppM ``ge_of_eq #[proof])
+    | .isSup lhs rhs sup =>
+res := res.push .le lhs sup
+        (← mkAppOptM ``le_sup_left #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+res := res.push .le rhs sup
+        (← mkAppOptM ``le_sup_right #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+      res := res.push fact
+    | .isInf lhs rhs inf =>
+res := res.push .le inf lhs
+        (← mkAppOptM ``inf_le_left #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+res := res.push .le inf rhs
+        (← mkAppOptM ``inf_le_right #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+      res := res.push fact
+    | _ =>
+      res := res.push fact
+  return res
 
 中文:
 定义 preprocessFactsLinear
@@ -317,7 +408,28 @@ res := res.push .ne lhs rhs (← mkAppM ``n
 res := res.push .ne lhs rhs (← mkAppM ``ne_of_lt #[proof])
 res := res.push .le lhs rhs (← mkAppM ``le_of_lt #[proof])
     | .nle lhs rhs proof =>
-res := res.push .ne lhs rhs (← mkAppM ``n
+res := res.push .ne lhs rhs (← mkAppM ``ne_of_not_le #[proof])
+res := res.push .le rhs lhs (← mkAppM ``le_of_not_ge #[proof])
+    | .nlt lhs rhs proof =>
+res := res.push .le rhs lhs (← mkAppM ``le_of_not_gt #[proof])
+    | .eq lhs rhs proof =>
+res := res.push .le lhs rhs (← mkAppM ``le_of_eq #[proof])
+res := res.push .le rhs lhs (← mkAppM ``ge_of_eq #[proof])
+    | .isSup lhs rhs sup =>
+res := res.push .le lhs sup
+        (← mkAppOptM ``le_sup_left #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+res := res.push .le rhs sup
+        (← mkAppOptM ``le_sup_right #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+      res := res.push fact
+    | .isInf lhs rhs inf =>
+res := res.push .le inf lhs
+        (← mkAppOptM ``inf_le_left #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+res := res.push .le inf rhs
+        (← mkAppOptM ``inf_le_right #[none, none, (← get).atoms[lhs]!, (← get).atoms[rhs]!])
+      res := res.push fact
+    | _ =>
+      res := res.push fact
+  return res
 -/
 def preprocessFactsLinear (facts : Array AtomicFact) :
 AtomM Array AtomicFact := do

@@ -320,7 +320,8 @@ theorem isBigO_cocompact_zpow_neg_nat
   simp_rw [Asymptotics.IsBigO, Asymptotics.IsBigOWith]
   refine ⟨d, Filter.Eventually.filter_mono Filter.cocompact_le_cofinite ?_⟩
   refine (Filter.eventually_cofinite_ne 0).mono fun x hx => ?_
-  rw [Real.norm_of_no
+  rw [Real.norm_of_nonneg (by positivity)]; rw [zpow_neg]; rw [← div_eq_mul_inv]; rw [le_div_iff₀' (by positivity)]
+  exact hd' x
 
 中文:
 定理 isBigO_cocompact_zpow_neg_nat
@@ -331,7 +332,8 @@ theorem isBigO_cocompact_zpow_neg_nat
   simp_rw [Asymptotics.IsBigO, Asymptotics.IsBigOWith]
   refine ⟨d, Filter.Eventually.filter_mono Filter.cocompact_le_cofinite ?_⟩
   refine (Filter.eventually_cofinite_ne 0).mono fun x hx => ?_
-  rw [Real.norm_of_no
+  rw [Real.norm_of_nonneg (by positivity)]; rw [zpow_neg]; rw [← div_eq_mul_inv]; rw [le_div_iff₀' (by positivity)]
+  exact hd' x
 
 Depends on / 依赖: Asymptotics, Asymptotics.IsBigO, Asymptotics.IsBigOWith, Eventually, Filter, Filter.Eventually.filter_mono, Filter.cocompact_le_cofinite, Filter.eventually_cofinite_ne, IsBigO, IsBigOWith, Real.norm_of_nonneg, cocompact_le_cofinite, div_eq_mul_inv, eventually_cofinite_ne, f.decay, filter_mono, norm_iteratedFDeriv_zero, norm_of_nonneg, simp_rw, zpow_neg
 -/
@@ -357,7 +359,10 @@ theorem isBigO_cocompact_rpow
   refine (isBigO_cocompact_zpow_neg_nat f k).trans ?_
   suffices (fun x : Real => x ^ (-k : Int)) =O[atTop] fun x : Real => x ^ s
     from this.comp_tendsto tendsto_norm_cocompact_atTop
-  simp_rw [Asymptotics.IsBigO, As
+  simp_rw [Asymptotics.IsBigO, Asymptotics.IsBigOWith]
+  refine ⟨1, (Filter.eventually_ge_atTop 1).mono fun x hx => ?_⟩
+  rw [one_mul]; rw [Real.norm_of_nonneg (by positivity)]; rw [Real.norm_of_nonneg (by positivity)]; rw [← Real.rpow_intCast]; rw [Int.cast_neg]; rw [Int.cast_natCast]
+  exact Real.rpow_le_rpow_of_exponent_le hx hk
 
 中文:
 定理 isBigO_cocompact_rpow
@@ -368,7 +373,10 @@ theorem isBigO_cocompact_rpow
   refine (isBigO_cocompact_zpow_neg_nat f k).trans ?_
   suffices (fun x : Real => x ^ (-k : Int)) =O[atTop] fun x : Real => x ^ s
     from this.comp_tendsto tendsto_norm_cocompact_atTop
-  simp_rw [Asymptotics.IsBigO, As
+  simp_rw [Asymptotics.IsBigO, Asymptotics.IsBigOWith]
+  refine ⟨1, (Filter.eventually_ge_atTop 1).mono fun x hx => ?_⟩
+  rw [one_mul]; rw [Real.norm_of_nonneg (by positivity)]; rw [Real.norm_of_nonneg (by positivity)]; rw [← Real.rpow_intCast]; rw [Int.cast_neg]; rw [Int.cast_natCast]
+  exact Real.rpow_le_rpow_of_exponent_le hx hk
 
 Depends on / 依赖: Asymptotics, Asymptotics.IsBigO, Asymptotics.IsBigOWith, Filter, Filter.eventually_ge_atTop, IsBigO, IsBigOWith, Nat.le_ceil, Real.norm_of_nonneg, Real.rpow_intCast, comp_tendsto, eventually_ge_atTop, isBigO_cocompact_zpow_neg_nat, le_ceil, neg_le, neg_le.mp, norm_of_nonneg, one_mul, rpow_intCast, simp_rw
 -/
@@ -638,7 +646,11 @@ instance instSMul
         intro x
         calc
           ‖x‖ ^ k * ‖iteratedFDeriv Real n (c • ⇑f) x‖ = ‖x‖ ^ k * ‖iteratedFDeriv Real n f x‖ * ‖c‖ := by
-         
+            rw [mul_comm _ ‖c‖]; rw [← mul_assoc]
+            exact decay_smul_aux k n f c x
+          _ <= SchwartzMap.seminormAux k n f * ‖c‖ := by
+            gcongr
+            apply f.le_seminormAux }⟩
 
 中文:
 实例 instSMul
@@ -651,7 +663,11 @@ instance instSMul
         intro x
         calc
           ‖x‖ ^ k * ‖iteratedFDeriv Real n (c • ⇑f) x‖ = ‖x‖ ^ k * ‖iteratedFDeriv Real n f x‖ * ‖c‖ := by
-         
+            rw [mul_comm _ ‖c‖]; rw [← mul_assoc]
+            exact decay_smul_aux k n f c x
+          _ <= SchwartzMap.seminormAux k n f * ‖c‖ := by
+            gcongr
+            apply f.le_seminormAux }⟩
 
 Depends on / 依赖: SchwartzMap, SchwartzMap.seminormAux, const_smul, decay_smul_aux, f.le_seminormAux, f.seminormAux, f.smooth, iteratedFDeriv, le_seminormAux, mul_assoc, mul_comm, seminormAux, smooth
 -/
@@ -1099,7 +1115,7 @@ instance instSub
       grw [← f.le_seminormAux k n x, ← g.le_seminormAux k n x]
       rw [sub_eq_add_neg]
       rw [← decay_neg_aux k n g x]
-      exact decay_add_le_au
+      exact decay_add_le_aux k n f (-g) x⟩⟩
 
 中文:
 实例 instSub
@@ -1111,7 +1127,7 @@ instance instSub
       grw [← f.le_seminormAux k n x, ← g.le_seminormAux k n x]
       rw [sub_eq_add_neg]
       rw [← decay_neg_aux k n g x]
-      exact decay_add_le_au
+      exact decay_add_le_aux k n f (-g) x⟩⟩
 
 Depends on / 依赖: decay_add_le_aux, decay_neg_aux, f.le_seminormAux, f.seminormAux, f.smooth, g.le_seminormAux, g.seminormAux, g.smooth, le_seminormAux, seminormAux, smooth, sub_eq_add_neg
 -/
@@ -1495,7 +1511,13 @@ theorem one_add_le_sup_seminorm_apply
   rw [Finset.sum_mul]
   have hk' : Finset.range (k + 1) subseteq Finset.range (m.1 + 1) := by grind
   grw [hk']
-  gcongr ∑ _i in Finset.range (m.1 + 1), ?_ with i
+  gcongr ∑ _i in Finset.range (m.1 + 1), ?_ with i hi
+  move_mul [(Nat.choose k i : Real), (Nat.choose m.1 i : Real)]
+  gcongr
+  grw [le_seminorm 𝕜 i n f x]
+  apply Seminorm.le_def.1
+  exact Finset.le_sup_of_le (Finset.mem_Iic.2 <|
+    Prod.mk_le_mk.2 ⟨Finset.mem_range_succ_iff.mp hi, hn⟩) le_rfl
 
 中文:
 定理 one_add_le_sup_seminorm_apply
@@ -1509,7 +1531,13 @@ theorem one_add_le_sup_seminorm_apply
   rw [Finset.sum_mul]
   have hk' : Finset.range (k + 1) subseteq Finset.range (m.1 + 1) := by grind
   grw [hk']
-  gcongr ∑ _i in Finset.range (m.1 + 1), ?_ with i
+  gcongr ∑ _i in Finset.range (m.1 + 1), ?_ with i hi
+  move_mul [(Nat.choose k i : Real), (Nat.choose m.1 i : Real)]
+  gcongr
+  grw [le_seminorm 𝕜 i n f x]
+  apply Seminorm.le_def.1
+  exact Finset.le_sup_of_le (Finset.mem_Iic.2 <|
+    Prod.mk_le_mk.2 ⟨Finset.mem_range_succ_iff.mp hi, hn⟩) le_rfl
 
 Depends on / 依赖: Finset, Finset.le_sup_of_le, Finset.mem_Iic, Finset.mem_range_succ_iff.mp, Finset.range, Finset.sum_mul, Nat.choose, Nat.sum_range_choose, Prod.mk_le_mk, Seminorm, Seminorm.le_def, add_comm, add_pow, le_def, le_seminorm, le_sup_of_le, mem_Iic, mem_range_succ_iff, mk_le_mk, move_mul
 -/
@@ -1753,7 +1781,9 @@ definition _root_.HasCompactSupport.toSchwartzMap
     have hg₁ : Continuous g := by
       apply Continuous.mul (by fun_prop)
       exact (h₂.of_le (mod_cast le_top)).continuous_iteratedFDeriv'.norm
-    have hg₂ : HasCompactSupport g := (h₁.iteratedFDeri
+    have hg₂ : HasCompactSupport g := (h₁.iteratedFDeriv _).norm.mul_left
+    obtain ⟨x₀, hx₀⟩ := hg₁.exists_forall_ge_of_hasCompactSupport hg₂
+    exact ⟨g x₀, hx₀⟩
 
 中文:
 定义 _root_.HasCompactSupport.toSchwartzMap
@@ -1765,7 +1795,9 @@ definition _root_.HasCompactSupport.toSchwartzMap
     have hg₁ : Continuous g := by
       apply Continuous.mul (by fun_prop)
       exact (h₂.of_le (mod_cast le_top)).continuous_iteratedFDeriv'.norm
-    have hg₂ : HasCompactSupport g := (h₁.iteratedFDeri
+    have hg₂ : HasCompactSupport g := (h₁.iteratedFDeriv _).norm.mul_left
+    obtain ⟨x₀, hx₀⟩ := hg₁.exists_forall_ge_of_hasCompactSupport hg₂
+    exact ⟨g x₀, hx₀⟩
 -/
 def _root_.HasCompactSupport.toSchwartzMap {f : E -> F} (h₁ : HasCompactSupport f)
     (h₂ : ContDiff Real ∞ f) : 𝓢(E, F) where
@@ -1850,7 +1882,9 @@ definition mkCLM
       WithSeminorms.continuous_of_isBounded (schwartz_withSeminorms 𝕜 D E)
         (schwartz_withSeminorms 𝕜' F G) _ fun n => ?_
     rcases hbound n with ⟨s, C, hC, h⟩
-    refine ⟨s, ⟨C, hC⟩, fun f => ?_
+    refine ⟨s, ⟨C, hC⟩, fun f => ?_⟩
+    exact (mkLM A hadd hsmul hsmooth hbound f).seminorm_le_bound 𝕜' n.1 n.2 (by positivity) (h f)
+  toLinearMap := mkLM A hadd hsmul hsmooth hbound
 
 中文:
 定义 mkCLM
@@ -1861,7 +1895,9 @@ definition mkCLM
       WithSeminorms.continuous_of_isBounded (schwartz_withSeminorms 𝕜 D E)
         (schwartz_withSeminorms 𝕜' F G) _ fun n => ?_
     rcases hbound n with ⟨s, C, hC, h⟩
-    refine ⟨s, ⟨C, hC⟩, fun f => ?_
+    refine ⟨s, ⟨C, hC⟩, fun f => ?_⟩
+    exact (mkLM A hadd hsmul hsmooth hbound f).seminorm_le_bound 𝕜' n.1 n.2 (by positivity) (h f)
+  toLinearMap := mkLM A hadd hsmul hsmooth hbound
 
 Depends on / 依赖: Continuous, WithSeminorms, WithSeminorms.continuous_of_isBounded, continuous_of_isBounded, hbound, hsmooth, schwartz_withSeminorms, seminorm_le_bound, toLinearMap
 -/
@@ -1896,7 +1932,8 @@ definition mkCLMtoNormedSpace
     cont := by
       change Continuous (LinearMap.mk _ _)
       apply WithSeminorms.continuous_normedSpace_rng G (schwartz_withSeminorms 𝕜 D E)
-      rcases hbound with ⟨s, C, hC
+      rcases hbound with ⟨s, C, hC, h⟩
+      exact ⟨s, ⟨C, hC⟩, h⟩ }
 
 中文:
 定义 mkCLMtoNormedSpace
@@ -1909,7 +1946,8 @@ definition mkCLMtoNormedSpace
     cont := by
       change Continuous (LinearMap.mk _ _)
       apply WithSeminorms.continuous_normedSpace_rng G (schwartz_withSeminorms 𝕜 D E)
-      rcases hbound with ⟨s, C, hC
+      rcases hbound with ⟨s, C, hC, h⟩
+      exact ⟨s, ⟨C, hC⟩, h⟩ }
 
 Depends on / 依赖: Continuous, LinearMap, LinearMap.mk, WithSeminorms, WithSeminorms.continuous_normedSpace_rng, continuous_normedSpace_rng, hbound, map_add, map_smul, schwartz_withSeminorms, toLinearMap
 -/
@@ -1951,7 +1989,15 @@ definition evalCLM
   intro f x
   simp only [Finset.sup_singleton, schwartzSeminormFamily_apply]
   calc
-    ‖x‖ ^ k * ‖iteratedFDeriv Real n (f · m) x‖ <=
+    ‖x‖ ^ k * ‖iteratedFDeriv Real n (f · m) x‖ <= ‖x‖ ^ k * (‖m‖ * ‖iteratedFDeriv Real n f x‖) := by
+      gcongr
+      exact norm_iteratedFDeriv_clm_apply_const (f.smooth _).contDiffAt le_rfl
+    _ <= ‖m‖ * SchwartzMap.seminorm 𝕜 k n f := by
+      move_mul [‖m‖]
+      gcongr
+      apply le_seminorm
+
+@[simp]
 
 中文:
 定义 evalCLM
@@ -1963,7 +2009,15 @@ definition evalCLM
   intro f x
   simp only [Finset.sup_singleton, schwartzSeminormFamily_apply]
   calc
-    ‖x‖ ^ k * ‖iteratedFDeriv Real n (f · m) x‖ <=
+    ‖x‖ ^ k * ‖iteratedFDeriv Real n (f · m) x‖ <= ‖x‖ ^ k * (‖m‖ * ‖iteratedFDeriv Real n f x‖) := by
+      gcongr
+      exact norm_iteratedFDeriv_clm_apply_const (f.smooth _).contDiffAt le_rfl
+    _ <= ‖m‖ * SchwartzMap.seminorm 𝕜 k n f := by
+      move_mul [‖m‖]
+      gcongr
+      apply le_seminorm
+
+@[simp]
 -/
 protected def evalCLM (m : F) : 𝓢(E, F ->L[Real] G) ->L[𝕜] 𝓢(E, G) :=
   mkCLM (fun f x => f x m) (fun _ _ _ => rfl) (fun _ _ _ => rfl)
@@ -2024,7 +2078,42 @@ definition bilinLeftCLM
   rintro ⟨k, n⟩
   rcases hg.norm_iteratedFDeriv_le_uniform n with ⟨l, C, hC, hgrowth⟩
   use
-   
+    Finset.Iic (l + k, n), ‖B‖ * ((n : Real) + (1 : Real)) * n.choose (n / 2) * (C * 2 ^ (l + k)),
+    by positivity
+  intro f x
+  have hxk : 0 <= ‖x‖ ^ k := by positivity
+  simp_rw [← ContinuousLinearMap.bilinearRestrictScalars_apply_apply Real B]
+  have hnorm_mul :=
+    ContinuousLinearMap.norm_iteratedFDeriv_le_of_bilinear (B.bilinearRestrictScalars Real)
+    (f.smooth ⊤) hg.1 x (n := n) (mod_cast le_top)
+  grw [hnorm_mul]
+  rw [ContinuousLinearMap.norm_bilinearRestrictScalars]
+  move_mul [‖B‖, ‖B‖]
+  gcongr ?_ * _
+  rw [Finset.mul_sum]
+  have : (∑ _x in Finset.range (n + 1), (1 : Real)) = n + 1 := by simp
+  simp_rw [mul_assoc ((n : Real) + 1)]
+  rw [← this]; rw [Finset.sum_mul]
+  refine Finset.sum_le_sum fun i hi => ?_
+  simp only [one_mul]
+  move_mul [(Nat.choose n i : Real), (Nat.choose n (n / 2) : Real)]
+  gcongr ?_ * ?_
+  swap
+  · norm_cast
+    exact i.choose_le_middle n
+  specialize hgrowth (n - i) (by simp only [tsub_le_self]) x
+  grw [hgrowth]
+  move_mul [C]
+  gcongr ?_ * C
+  rw [Finset.mem_range_succ_iff] at hi
+  change i <= (l + k, n).snd at hi
+  refine le_trans ?_ (one_add_le_sup_seminorm_apply le_rfl hi f x)
+  rw [pow_add]
+  move_mul [(1 + ‖x‖) ^ l]
+  gcongr
+  simp
+
+@[simp]
 
 中文:
 定义 bilinLeftCLM
@@ -2036,7 +2125,42 @@ definition bilinLeftCLM
   rintro ⟨k, n⟩
   rcases hg.norm_iteratedFDeriv_le_uniform n with ⟨l, C, hC, hgrowth⟩
   use
-   
+    Finset.Iic (l + k, n), ‖B‖ * ((n : Real) + (1 : Real)) * n.choose (n / 2) * (C * 2 ^ (l + k)),
+    by positivity
+  intro f x
+  have hxk : 0 <= ‖x‖ ^ k := by positivity
+  simp_rw [← ContinuousLinearMap.bilinearRestrictScalars_apply_apply Real B]
+  have hnorm_mul :=
+    ContinuousLinearMap.norm_iteratedFDeriv_le_of_bilinear (B.bilinearRestrictScalars Real)
+    (f.smooth ⊤) hg.1 x (n := n) (mod_cast le_top)
+  grw [hnorm_mul]
+  rw [ContinuousLinearMap.norm_bilinearRestrictScalars]
+  move_mul [‖B‖, ‖B‖]
+  gcongr ?_ * _
+  rw [Finset.mul_sum]
+  have : (∑ _x in Finset.range (n + 1), (1 : Real)) = n + 1 := by simp
+  simp_rw [mul_assoc ((n : Real) + 1)]
+  rw [← this]; rw [Finset.sum_mul]
+  refine Finset.sum_le_sum fun i hi => ?_
+  simp only [one_mul]
+  move_mul [(Nat.choose n i : Real), (Nat.choose n (n / 2) : Real)]
+  gcongr ?_ * ?_
+  swap
+  · norm_cast
+    exact i.choose_le_middle n
+  specialize hgrowth (n - i) (by simp only [tsub_le_self]) x
+  grw [hgrowth]
+  move_mul [C]
+  gcongr ?_ * C
+  rw [Finset.mem_range_succ_iff] at hi
+  change i <= (l + k, n).snd at hi
+  refine le_trans ?_ (one_add_le_sup_seminorm_apply le_rfl hi f x)
+  rw [pow_add]
+  move_mul [(1 + ‖x‖) ^ l]
+  gcongr
+  simp
+
+@[simp]
 
 Depends on / 依赖: B.bilinearRestrictScalars, ContinuousLinearMap, ContinuousLinearMap.bilinearRestrictScalars_apply_ap, Finset, Finset.Iic, bilinearRestrictScalars, bilinearRestrictScalars_apply_ap, contDiff, f.smooth, hg.norm_iteratedFDeriv_le_uniform, hgrowth, isBoundedBilinearMap, isBoundedBilinearMap.contDiff.comp, n.choose, norm_iteratedFDeriv_le_uniform, prodMk, simp_rw, smooth
 -/
@@ -2590,7 +2714,42 @@ definition smulRightCLM
       use {(k + 1, n), (k, n - 1)}, 2 * ‖L‖ * (max 1 n), by positivity
       intro f x
       calc
-        _ <= ‖x‖ ^ k * ∑ i in Finse
+        _ <= ‖x‖ ^ k * ∑ i in Finset.range (n + 1), (n.choose i) *
+            ‖iteratedFDeriv Real i L x‖ * ‖iteratedFDeriv Real (n - i) f x‖ := by
+          gcongr 1
+          exact norm_iteratedFDeriv_le_of_bilinear_of_le_one (smulRightL Real G F)
+            (by fun_prop) (f.smooth ⊤) x (mod_cast le_top) norm_smulRightL_le
+        _ <= ‖x‖ ^ k *
+            (‖L x‖ * ‖iteratedFDeriv Real n f x‖ + n * ‖L‖ * ‖iteratedFDeriv Real (n - 1) f x‖) := by
+          gcongr 1
+          rw [Finset.sum_range_succ']; rw [add_comm]
+          cases n with
+          | zero => simp
+          | succ n =>
+            have : ∑ k in Finset.range n,
+                (((n + 1).choose (k + 1 + 1)) : Real) * ‖iteratedFDeriv Real (k + 1 + 1) L x‖ *
+                ‖iteratedFDeriv Real (n + 1 - (k + 1 + 1)) f x‖ = 0 := by
+              apply Finset.sum_eq_zero
+              simp [iteratedFDeriv_succ_eq_comp_right, iteratedFDeriv_succ_const]
+            simp [Finset.sum_range_succ', this]
+        _ = ‖x‖ ^ k * ‖L x‖ * ‖iteratedFDeriv Real n f x‖ +
+              ‖x‖ ^ k * n * ‖L‖ * ‖iteratedFDeriv Real (n - 1) f x‖ := by ring
+        _ <= ‖L‖ * 1 * (SchwartzMap.seminorm 𝕜 (k + 1) n) f +
+              ‖L‖ * n * (SchwartzMap.seminorm 𝕜 k (n - 1) f) := by
+          grw [le_opNorm, ← le_seminorm 𝕜 (k + 1) n f x, ← le_seminorm 𝕜 k (n - 1) f x]
+          apply le_of_eq
+          ring
+        _ <= ‖L‖ * max 1 n *
+            max ((SchwartzMap.seminorm 𝕜 (k + 1) n) f) ((SchwartzMap.seminorm 𝕜 k (n - 1)) f) +
+            ‖L‖ * max 1 n *
+            max ((SchwartzMap.seminorm 𝕜 (k + 1) n) f) ((SchwartzMap.seminorm 𝕜 k (n - 1)) f) := by
+          gcongr <;> simp
+        _ = _ := by
+          simp only [Finset.sup_insert, schwartzSeminormFamily_apply, Finset.sup_singleton,
+            Seminorm.coe_sup, Pi.sup_apply]
+          ring
+
+@[simp]
 
 中文:
 定义 smulRightCLM
@@ -2602,7 +2761,42 @@ definition smulRightCLM
       use {(k + 1, n), (k, n - 1)}, 2 * ‖L‖ * (max 1 n), by positivity
       intro f x
       calc
-        _ <= ‖x‖ ^ k * ∑ i in Finse
+        _ <= ‖x‖ ^ k * ∑ i in Finset.range (n + 1), (n.choose i) *
+            ‖iteratedFDeriv Real i L x‖ * ‖iteratedFDeriv Real (n - i) f x‖ := by
+          gcongr 1
+          exact norm_iteratedFDeriv_le_of_bilinear_of_le_one (smulRightL Real G F)
+            (by fun_prop) (f.smooth ⊤) x (mod_cast le_top) norm_smulRightL_le
+        _ <= ‖x‖ ^ k *
+            (‖L x‖ * ‖iteratedFDeriv Real n f x‖ + n * ‖L‖ * ‖iteratedFDeriv Real (n - 1) f x‖) := by
+          gcongr 1
+          rw [Finset.sum_range_succ']; rw [add_comm]
+          cases n with
+          | zero => simp
+          | succ n =>
+            have : ∑ k in Finset.range n,
+                (((n + 1).choose (k + 1 + 1)) : Real) * ‖iteratedFDeriv Real (k + 1 + 1) L x‖ *
+                ‖iteratedFDeriv Real (n + 1 - (k + 1 + 1)) f x‖ = 0 := by
+              apply Finset.sum_eq_zero
+              simp [iteratedFDeriv_succ_eq_comp_right, iteratedFDeriv_succ_const]
+            simp [Finset.sum_range_succ', this]
+        _ = ‖x‖ ^ k * ‖L x‖ * ‖iteratedFDeriv Real n f x‖ +
+              ‖x‖ ^ k * n * ‖L‖ * ‖iteratedFDeriv Real (n - 1) f x‖ := by ring
+        _ <= ‖L‖ * 1 * (SchwartzMap.seminorm 𝕜 (k + 1) n) f +
+              ‖L‖ * n * (SchwartzMap.seminorm 𝕜 k (n - 1) f) := by
+          grw [le_opNorm, ← le_seminorm 𝕜 (k + 1) n f x, ← le_seminorm 𝕜 k (n - 1) f x]
+          apply le_of_eq
+          ring
+        _ <= ‖L‖ * max 1 n *
+            max ((SchwartzMap.seminorm 𝕜 (k + 1) n) f) ((SchwartzMap.seminorm 𝕜 k (n - 1)) f) +
+            ‖L‖ * max 1 n *
+            max ((SchwartzMap.seminorm 𝕜 (k + 1) n) f) ((SchwartzMap.seminorm 𝕜 k (n - 1)) f) := by
+          gcongr <;> simp
+        _ = _ := by
+          simp only [Finset.sup_insert, schwartzSeminormFamily_apply, Finset.sup_singleton,
+            Seminorm.coe_sup, Pi.sup_apply]
+          ring
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.range, f.smooth, fun_prop, intros, iteratedFDeriv, le_top, mod_cast, n.choose, norm_, norm_iteratedFDeriv_le_of_bilinear_of_le_one, smooth, smulRight, smulRightL, smul_comm
 -/
@@ -2688,7 +2882,52 @@ definition compCLM
   rcases hg_upper with ⟨kg, Cg, hg_upper'⟩
   have hCg : 1 <= 1 + Cg := by
     refine le_add_of_nonneg_right ?_
- 
+    specialize hg_upper' 0
+    rw [norm_zero] at hg_upper'
+    exact nonneg_of_mul_nonneg_left hg_upper' (by positivity)
+  let k' := kg * (k + l * n)
+  use Finset.Iic (k', n), (1 + Cg) ^ (k + l * n) * ((C + 1) ^ n * n ! * 2 ^ k'), by positivity
+  intro f x
+  let seminorm_f := ((Finset.Iic (k', n)).sup (schwartzSeminormFamily 𝕜 _ _)) f
+  have hg_upper'' : (1 + ‖x‖) ^ (k + l * n) <= (1 + Cg) ^ (k + l * n) * (1 + ‖g x‖) ^ k' := by
+    rw [pow_mul]; rw [← mul_pow]
+    gcongr
+    rw [add_mul]
+    refine add_le_add ?_ (hg_upper' x)
+    nth_rw 1 [← one_mul (1 : Real)]
+    gcongr
+    apply one_le_pow₀
+    simp only [le_add_iff_nonneg_right, norm_nonneg]
+  have hbound (i) (hi : i <= n) :
+      ‖iteratedFDeriv Real i f (g x)‖ <= 2 ^ k' * seminorm_f / (1 + ‖g x‖) ^ k' := by
+    have hpos : 0 < (1 + ‖g x‖) ^ k' := by positivity
+    rw [le_div_iff₀' hpos]
+    change i <= (k', n).snd at hi
+    exact one_add_le_sup_seminorm_apply le_rfl hi _ _
+  have hgrowth' (N : Nat) (hN₁ : 1 <= N) (hN₂ : N <= n) :
+      ‖iteratedFDeriv Real N g x‖ <= ((C + 1) * (1 + ‖x‖) ^ l) ^ N := by
+    refine (hgrowth N hN₂ x).trans ?_
+    rw [mul_pow]
+    have hN₁' := (lt_of_lt_of_le zero_lt_one hN₁).ne'
+    gcongr
+    · exact le_trans (by simp) (le_self_pow₀ (by simp [hC]) hN₁')
+    · refine le_self_pow₀ (one_le_pow₀ ?_) hN₁'
+      simp only [le_add_iff_nonneg_right, norm_nonneg]
+  have := norm_iteratedFDeriv_comp_le (f.smooth ⊤) hg.1 (mod_cast le_top) x hbound hgrowth'
+  have hxk : ‖x‖ ^ k <= (1 + ‖x‖) ^ k :=
+    pow_le_pow_left₀ (norm_nonneg _) (by simp only [zero_le_one, le_add_iff_nonneg_left]) _
+  grw [hxk, this]
+  have rearrange :
+    (1 + ‖x‖) ^ k *
+        (n ! * (2 ^ k' * seminorm_f / (1 + ‖g x‖) ^ k') * ((C + 1) * (1 + ‖x‖) ^ l) ^ n) =
+      (1 + ‖x‖) ^ (k + l * n) / (1 + ‖g x‖) ^ k' *
+        ((C + 1) ^ n * n ! * 2 ^ k' * seminorm_f) := by
+    rw [mul_pow]; rw [pow_add]; rw [← pow_mul]
+    ring
+  rw [rearrange]
+  have hgxk' : 0 < (1 + ‖g x‖) ^ k' := by positivity
+  rw [← div_le_iff₀ hgxk'] at hg_upper''
+  grw [hg_upper'', ← mul_assoc]
 
 中文:
 定义 compCLM
@@ -2700,7 +2939,52 @@ definition compCLM
   rcases hg_upper with ⟨kg, Cg, hg_upper'⟩
   have hCg : 1 <= 1 + Cg := by
     refine le_add_of_nonneg_right ?_
- 
+    specialize hg_upper' 0
+    rw [norm_zero] at hg_upper'
+    exact nonneg_of_mul_nonneg_left hg_upper' (by positivity)
+  let k' := kg * (k + l * n)
+  use Finset.Iic (k', n), (1 + Cg) ^ (k + l * n) * ((C + 1) ^ n * n ! * 2 ^ k'), by positivity
+  intro f x
+  let seminorm_f := ((Finset.Iic (k', n)).sup (schwartzSeminormFamily 𝕜 _ _)) f
+  have hg_upper'' : (1 + ‖x‖) ^ (k + l * n) <= (1 + Cg) ^ (k + l * n) * (1 + ‖g x‖) ^ k' := by
+    rw [pow_mul]; rw [← mul_pow]
+    gcongr
+    rw [add_mul]
+    refine add_le_add ?_ (hg_upper' x)
+    nth_rw 1 [← one_mul (1 : Real)]
+    gcongr
+    apply one_le_pow₀
+    simp only [le_add_iff_nonneg_right, norm_nonneg]
+  have hbound (i) (hi : i <= n) :
+      ‖iteratedFDeriv Real i f (g x)‖ <= 2 ^ k' * seminorm_f / (1 + ‖g x‖) ^ k' := by
+    have hpos : 0 < (1 + ‖g x‖) ^ k' := by positivity
+    rw [le_div_iff₀' hpos]
+    change i <= (k', n).snd at hi
+    exact one_add_le_sup_seminorm_apply le_rfl hi _ _
+  have hgrowth' (N : Nat) (hN₁ : 1 <= N) (hN₂ : N <= n) :
+      ‖iteratedFDeriv Real N g x‖ <= ((C + 1) * (1 + ‖x‖) ^ l) ^ N := by
+    refine (hgrowth N hN₂ x).trans ?_
+    rw [mul_pow]
+    have hN₁' := (lt_of_lt_of_le zero_lt_one hN₁).ne'
+    gcongr
+    · exact le_trans (by simp) (le_self_pow₀ (by simp [hC]) hN₁')
+    · refine le_self_pow₀ (one_le_pow₀ ?_) hN₁'
+      simp only [le_add_iff_nonneg_right, norm_nonneg]
+  have := norm_iteratedFDeriv_comp_le (f.smooth ⊤) hg.1 (mod_cast le_top) x hbound hgrowth'
+  have hxk : ‖x‖ ^ k <= (1 + ‖x‖) ^ k :=
+    pow_le_pow_left₀ (norm_nonneg _) (by simp only [zero_le_one, le_add_iff_nonneg_left]) _
+  grw [hxk, this]
+  have rearrange :
+    (1 + ‖x‖) ^ k *
+        (n ! * (2 ^ k' * seminorm_f / (1 + ‖g x‖) ^ k') * ((C + 1) * (1 + ‖x‖) ^ l) ^ n) =
+      (1 + ‖x‖) ^ (k + l * n) / (1 + ‖g x‖) ^ k' *
+        ((C + 1) ^ n * n ! * 2 ^ k' * seminorm_f) := by
+    rw [mul_pow]; rw [pow_add]; rw [← pow_mul]
+    ring
+  rw [rearrange]
+  have hgxk' : 0 < (1 + ‖g x‖) ^ k' := by positivity
+  rw [← div_le_iff₀ hgxk'] at hg_upper''
+  grw [hg_upper'', ← mul_assoc]
 
 Depends on / 依赖: Finset, Finset.Iic, f.smooth, hg.norm_iteratedFDeriv_le_uniform, hg_upper, hgrowth, le_add_of_nonneg_right, nonneg_of_mul_nonneg_left, norm_iteratedFDeriv_le_uniform, norm_zero, smooth, specialize
 -/
@@ -2794,7 +3078,11 @@ definition compCLMOfAntilipschitz
     exact norm_sub_le _ _
   _ <= K * (‖g x‖ + max 1 ‖g 0‖) := by
     gcongr
-    exact
+    exact le_max_right _ _
+  _ <= (K * max 1 ‖g 0‖ : Real) * (1 + ‖g x‖) ^ 1 := by
+    simp only [mul_add, add_comm (K * ‖g x‖), pow_one, mul_one, add_le_add_iff_left]
+    gcongr
+    exact le_mul_of_one_le_right (by positivity) (le_max_left _ _)
 
 中文:
 定义 compCLMOfAntilipschitz
@@ -2810,7 +3098,11 @@ definition compCLMOfAntilipschitz
     exact norm_sub_le _ _
   _ <= K * (‖g x‖ + max 1 ‖g 0‖) := by
     gcongr
-    exact
+    exact le_max_right _ _
+  _ <= (K * max 1 ‖g 0‖ : Real) * (1 + ‖g x‖) ^ 1 := by
+    simp only [mul_add, add_comm (K * ‖g x‖), pow_one, mul_one, add_le_add_iff_left]
+    gcongr
+    exact le_mul_of_one_le_right (by positivity) (le_max_left _ _)
 
 Depends on / 依赖: add_comm, add_le_add_iff_left, compCLM, dist_eq_norm, dist_zero_right, g.le_mul_dist, le_max_left, le_max_right, le_mul_dist, le_mul_of_one_le_right, mul_add, mul_one, norm_sub_le, pow_one
 -/
@@ -2938,7 +3230,18 @@ definition postcompCLM
   intro f x
   simp only [Finset.sup_singleton, schwartzSeminormFamily_apply]
   calc
-    _ = ‖x‖ ^ k * ‖(L.restrictS
+    _ = ‖x‖ ^ k * ‖(L.restrictScalars Real).compContinuousMultilinearMap
+        (iteratedFDeriv Real n f x)‖ := by
+      congr
+      exact (L.restrictScalars Real).iteratedFDeriv_comp_left f.smooth'.contDiffAt (mod_cast le_top)
+    _ <= ‖x‖ ^ k * (‖L‖ * ‖iteratedFDeriv Real n f x‖) := by
+      gcongr
+      apply (L.restrictScalars Real).norm_compContinuousMultilinearMap_le
+    _ = ‖L‖ * (‖x‖ ^ k * ‖iteratedFDeriv Real n f x‖) := by ring
+    _ <= ‖L‖ * (SchwartzMap.seminorm 𝕜 k n) f := by
+      grw [le_seminorm 𝕜 k n f x]
+
+@[simp]
 
 中文:
 定义 postcompCLM
@@ -2950,7 +3253,18 @@ definition postcompCLM
   intro f x
   simp only [Finset.sup_singleton, schwartzSeminormFamily_apply]
   calc
-    _ = ‖x‖ ^ k * ‖(L.restrictS
+    _ = ‖x‖ ^ k * ‖(L.restrictScalars Real).compContinuousMultilinearMap
+        (iteratedFDeriv Real n f x)‖ := by
+      congr
+      exact (L.restrictScalars Real).iteratedFDeriv_comp_left f.smooth'.contDiffAt (mod_cast le_top)
+    _ <= ‖x‖ ^ k * (‖L‖ * ‖iteratedFDeriv Real n f x‖) := by
+      gcongr
+      apply (L.restrictScalars Real).norm_compContinuousMultilinearMap_le
+    _ = ‖L‖ * (‖x‖ ^ k * ‖iteratedFDeriv Real n f x‖) := by ring
+    _ <= ‖L‖ * (SchwartzMap.seminorm 𝕜 k n) f := by
+      grw [le_seminorm 𝕜 k n f x]
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.sup_singleton, L.restrictScalars, compContinuousMultilinearMap, contDiff, contDiff.comp, contDiffAt, f.smooth, iteratedFDeri, iteratedFDeriv, iteratedFDeriv_comp_left, le_top, mod_cast, restrictScalars, schwartzSeminormFamily_apply, smooth, sup_singleton
 -/
@@ -3258,7 +3572,16 @@ definition integralCLM
   rcases hμ.exists_integrable with ⟨n, h⟩
   let m := (n, 0)
   use Finset.Iic m, 2 ^ n * ∫ x : D, (1 + ‖x‖) ^ (- (n : Real)) ∂μ
-  refine ⟨by positivity, fun f => (norm_integral_
+  refine ⟨by positivity, fun f => (norm_integral_le_integral_norm f).trans ?_⟩
+  have h' : forall x, ‖f x‖ <= (1 + ‖x‖) ^ (-(n : Real)) *
+      (2 ^ n * ((Finset.Iic m).sup (fun m' => SchwartzMap.seminorm 𝕜 m'.1 m'.2) f)) := by
+    intro x
+    rw [rpow_neg (by positivity)]; rw [← div_eq_inv_mul]; rw [le_div_iff₀' (by positivity)]; rw [rpow_natCast]
+    simpa using one_add_le_sup_seminorm_apply (m := m) (k := n) (n := 0) le_rfl le_rfl f x
+  apply (integral_mono (by simpa using f.integrable_pow_mul μ 0) _ h').trans
+  · unfold schwartzSeminormFamily
+    rw [integral_mul_const]; rw [← mul_assoc]; rw [mul_comm (2 ^ n)]
+  apply h.mul_const
 
 中文:
 定义 integralCLM
@@ -3269,7 +3592,16 @@ definition integralCLM
   rcases hμ.exists_integrable with ⟨n, h⟩
   let m := (n, 0)
   use Finset.Iic m, 2 ^ n * ∫ x : D, (1 + ‖x‖) ^ (- (n : Real)) ∂μ
-  refine ⟨by positivity, fun f => (norm_integral_
+  refine ⟨by positivity, fun f => (norm_integral_le_integral_norm f).trans ?_⟩
+  have h' : forall x, ‖f x‖ <= (1 + ‖x‖) ^ (-(n : Real)) *
+      (2 ^ n * ((Finset.Iic m).sup (fun m' => SchwartzMap.seminorm 𝕜 m'.1 m'.2) f)) := by
+    intro x
+    rw [rpow_neg (by positivity)]; rw [← div_eq_inv_mul]; rw [le_div_iff₀' (by positivity)]; rw [rpow_natCast]
+    simpa using one_add_le_sup_seminorm_apply (m := m) (k := n) (n := 0) le_rfl le_rfl f x
+  apply (integral_mono (by simpa using f.integrable_pow_mul μ 0) _ h').trans
+  · unfold schwartzSeminormFamily
+    rw [integral_mul_const]; rw [← mul_assoc]; rw [mul_comm (2 ^ n)]
+  apply h.mul_const
 
 Depends on / 依赖: Finset, Finset.Iic, SchwartzMap, SchwartzMap.seminorm, exists_integrable, f.integrable, g.integrable, integrable, integral_add, integral_smul, mkCLMtoNormedSpace, norm_integral_le_integral_norm, rpow_neg, seminorm
 -/
@@ -3682,7 +4014,27 @@ theorem eLpNorm_le_seminorm
   -- Apply Hölder's inequality `‖f‖_p ≤ ‖f₁‖_p * ‖f₂‖_∞` to obtain the `L^p` norm of `f = f₁ • f₂`
   -- using `f₁ = (1 + ‖x‖) ^ (-k)` and `f₂ = (1 + ‖x‖) ^ k • f x`.
   rcases hμ.exists_eLpNorm_lt_top p with ⟨k, hk⟩
-  refine ⟨k, (eLpNorm (fun x => (1 + ‖x‖) ^ (-k : Real)) p μ).toNNReal * 2 ^ k, fu
+  refine ⟨k, (eLpNorm (fun x => (1 + ‖x‖) ^ (-k : Real)) p μ).toNNReal * 2 ^ k, fun f => ?_⟩
+  have h_one_add (x : E) : 0 < 1 + ‖x‖ := lt_add_of_pos_of_le zero_lt_one (norm_nonneg x)
+  calc eLpNorm (⇑f) p μ
+  _ = eLpNorm ((fun x : E => (1 + ‖x‖) ^ (-k : Real)) • fun x => (1 + ‖x‖) ^ k • f x) p μ := by
+    refine congrArg (eLpNorm · p μ) (funext fun x => ?_)
+    simp [(h_one_add x).ne']
+  _ <= eLpNorm (fun x => (1 + ‖x‖) ^ (-k : Real)) p μ * eLpNorm (fun x => (1 + ‖x‖) ^ k • f x) ⊤ μ := by
+    refine eLpNorm_smul_le_eLpNorm_mul_eLpNorm_top p _ ?_
+    refine Continuous.aestronglyMeasurable ?_
+    exact .rpow_const (by fun_prop) fun x => .inl (h_one_add x).ne'
+  _ <= eLpNorm (fun x => (1 + ‖x‖) ^ (-k : Real)) p μ *
+      (2 ^ k * ENNReal.ofReal (((Finset.Iic (k, 0)).sup (schwartzSeminormFamily 𝕜 E F)) f)) := by
+    gcongr
+    refine eLpNormEssSup_le_of_ae_nnnorm_bound (ae_of_all μ fun x => ?_)
+    rw [← norm_toNNReal]; rw [Real.toNNReal_le_iff_le_coe]
+    simpa [norm_smul, abs_of_nonneg (h_one_add x).le] using!
+      one_add_le_sup_seminorm_apply (m := (k, 0)) (le_refl k) (le_refl 0) f x
+  _ = _ := by
+    rw [ENNReal.coe_mul]; rw [ENNReal.coe_toNNReal hk.ne]
+    simp only [ENNReal.coe_pow, ENNReal.coe_ofNat]
+    ring
 
 中文:
 定理 eLpNorm_le_seminorm
@@ -3691,7 +4043,27 @@ theorem eLpNorm_le_seminorm
   -- Apply Hölder's inequality `‖f‖_p ≤ ‖f₁‖_p * ‖f₂‖_∞` to obtain the `L^p` norm of `f = f₁ • f₂`
   -- using `f₁ = (1 + ‖x‖) ^ (-k)` and `f₂ = (1 + ‖x‖) ^ k • f x`.
   rcases hμ.exists_eLpNorm_lt_top p with ⟨k, hk⟩
-  refine ⟨k, (eLpNorm (fun x => (1 + ‖x‖) ^ (-k : Real)) p μ).toNNReal * 2 ^ k, fu
+  refine ⟨k, (eLpNorm (fun x => (1 + ‖x‖) ^ (-k : Real)) p μ).toNNReal * 2 ^ k, fun f => ?_⟩
+  have h_one_add (x : E) : 0 < 1 + ‖x‖ := lt_add_of_pos_of_le zero_lt_one (norm_nonneg x)
+  calc eLpNorm (⇑f) p μ
+  _ = eLpNorm ((fun x : E => (1 + ‖x‖) ^ (-k : Real)) • fun x => (1 + ‖x‖) ^ k • f x) p μ := by
+    refine congrArg (eLpNorm · p μ) (funext fun x => ?_)
+    simp [(h_one_add x).ne']
+  _ <= eLpNorm (fun x => (1 + ‖x‖) ^ (-k : Real)) p μ * eLpNorm (fun x => (1 + ‖x‖) ^ k • f x) ⊤ μ := by
+    refine eLpNorm_smul_le_eLpNorm_mul_eLpNorm_top p _ ?_
+    refine Continuous.aestronglyMeasurable ?_
+    exact .rpow_const (by fun_prop) fun x => .inl (h_one_add x).ne'
+  _ <= eLpNorm (fun x => (1 + ‖x‖) ^ (-k : Real)) p μ *
+      (2 ^ k * ENNReal.ofReal (((Finset.Iic (k, 0)).sup (schwartzSeminormFamily 𝕜 E F)) f)) := by
+    gcongr
+    refine eLpNormEssSup_le_of_ae_nnnorm_bound (ae_of_all μ fun x => ?_)
+    rw [← norm_toNNReal]; rw [Real.toNNReal_le_iff_le_coe]
+    simpa [norm_smul, abs_of_nonneg (h_one_add x).le] using!
+      one_add_le_sup_seminorm_apply (m := (k, 0)) (le_refl k) (le_refl 0) f x
+  _ = _ := by
+    rw [ENNReal.coe_mul]; rw [ENNReal.coe_toNNReal hk.ne]
+    simp only [ENNReal.coe_pow, ENNReal.coe_ofNat]
+    ring
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, Finset, Finset.Iic, HasTemperateGrowth, eLpNorm, ofReal, schwartzSeminormFamily, volume_tac
 -/
@@ -4074,7 +4446,13 @@ theorem denseRange_toLpCLM
   refine (mem_closure_iff_nhds_basis Metric.nhds_basis_closedBall).2 fun ε hε => ?_
   obtain ⟨g, hg₁, hg₂, hg₃⟩ := MemLp.exist_eLpNorm_sub_le hp hp'.out (Lp.memLp f) hε
   use (hg₁.toSchwartzMap hg₂).toLp p μ
-  have : (f : E -> F) - ((hg₁.toSchwartzMap hg₂).toLp p μ : E -> F) =ᵐ[μ] (f : 
+  have : (f : E -> F) - ((hg₁.toSchwartzMap hg₂).toLp p μ : E -> F) =ᵐ[μ] (f : E -> F) - g := by
+    filter_upwards [(hg₁.toSchwartzMap hg₂).coeFn_toLp p μ]
+    simp
+  simp only [Set.mem_range, toLpCLM_apply, exists_apply_eq_apply, Metric.mem_closedBall', true_and,
+    Lp.dist_def, eLpNorm_congr_ae this]
+  grw [hg₃, ENNReal.toReal_ofReal hε.le]
+  simp
 
 中文:
 定理 denseRange_toLpCLM
@@ -4084,7 +4462,13 @@ theorem denseRange_toLpCLM
   refine (mem_closure_iff_nhds_basis Metric.nhds_basis_closedBall).2 fun ε hε => ?_
   obtain ⟨g, hg₁, hg₂, hg₃⟩ := MemLp.exist_eLpNorm_sub_le hp hp'.out (Lp.memLp f) hε
   use (hg₁.toSchwartzMap hg₂).toLp p μ
-  have : (f : E -> F) - ((hg₁.toSchwartzMap hg₂).toLp p μ : E -> F) =ᵐ[μ] (f : 
+  have : (f : E -> F) - ((hg₁.toSchwartzMap hg₂).toLp p μ : E -> F) =ᵐ[μ] (f : E -> F) - g := by
+    filter_upwards [(hg₁.toSchwartzMap hg₂).coeFn_toLp p μ]
+    simp
+  simp only [Set.mem_range, toLpCLM_apply, exists_apply_eq_apply, Metric.mem_closedBall', true_and,
+    Lp.dist_def, eLpNorm_congr_ae this]
+  grw [hg₃, ENNReal.toReal_ofReal hε.le]
+  simp
 
 Depends on / 依赖: Lp.dist_def, Lp.memLp, MemLp.exist_eLpNorm_sub_le, Metric, Metric.mem_closedBall, Metric.nhds_basis_closedBall, Set.mem_range, coeFn_toLp, dist_def, eLpNorm_congr_ae, exist_eLpNorm_sub_le, exists_apply_eq_apply, filter_upwards, mem_closedBall, mem_closure_iff_nhds_basis, mem_range, nhds_basis_closedBall, toLpCLM_apply, toSchwartzMap, true_and
 -/

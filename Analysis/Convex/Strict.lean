@@ -761,7 +761,12 @@ theorem StrictConvex.add
   obtain rfl | hvx := eq_or_ne v x
   · refine interior_mono (add_subset_add (singleton_subset_iff.2 hv) Subset.rfl) ?_
     rw [Convex.combo_self hab]; rw [singleton_add]
-    
+    exact
+      (isOpenMap_add_left _).image_interior_subset _
+        (mem_image_of_mem _ <| ht hw hy (ne_of_apply_ne _ h) ha hb hab)
+  exact
+    subset_interior_add_left
+      (add_mem_add (hs hv hx hvx ha hb hab) <| ht.convex hw hy ha.le hb.le hab)
 
 中文:
 定理 严格凸.add
@@ -772,7 +777,12 @@ theorem StrictConvex.add
   obtain rfl | hvx := eq_or_ne v x
   · refine interior_mono (add_subset_add (singleton_subset_iff.2 hv) Subset.rfl) ?_
     rw [Convex.combo_self hab]; rw [singleton_add]
-    
+    exact
+      (isOpenMap_add_left _).image_interior_subset _
+        (mem_image_of_mem _ <| ht hw hy (ne_of_apply_ne _ h) ha hb hab)
+  exact
+    subset_interior_add_left
+      (add_mem_add (hs hv hx hvx ha hb hab) <| ht.convex hw hy ha.le hb.le hab)
 
 Depends on / 依赖: Convex, Convex.combo_self, Subset, Subset.rfl, add_add_add_comm, add_mem_add, add_subset_add, combo_self, convex, eq_or_ne, ha.le, hb.le, ht.convex, image_interior_subset, interior_mono, isOpenMap_add_left, mem_image_of_mem, ne_of_apply_ne, singleton_add, singleton_subset_iff
 -/
@@ -927,7 +937,8 @@ theorem StrictConvex.preimage_smul
       · exact strictConvex_univ
       · exact strictConvex_empty
     refine hs.linear_preimage (LinearMap.lsmul _ _ c) ?_ (smul_right_injective E hc)
-    unfold LinearMap.lsmul LinearMap.mk₂ 
+    unfold LinearMap.lsmul LinearMap.mk₂ LinearMap.mk₂' LinearMap.mk₂'ₛₗ
+    exact continuous_const_smul _
 
 中文:
 定理 严格凸.preimage_smul
@@ -940,7 +951,8 @@ theorem StrictConvex.preimage_smul
       · exact strictConvex_univ
       · exact strictConvex_empty
     refine hs.linear_preimage (LinearMap.lsmul _ _ c) ?_ (smul_right_injective E hc)
-    unfold LinearMap.lsmul LinearMap.mk₂ 
+    unfold LinearMap.lsmul LinearMap.mk₂ LinearMap.mk₂' LinearMap.mk₂'ₛₗ
+    exact continuous_const_smul _
 
 Depends on / 依赖: LinearMap, LinearMap.lsmul, LinearMap.mk, classical, continuous_const_smul, eq_or_ne, hs.linear_preimage, linear_preimage, preimage_const, simp_rw, smul_right_injective, split_ifs, strictConvex_empty, strictConvex_univ, zero_smul
 -/

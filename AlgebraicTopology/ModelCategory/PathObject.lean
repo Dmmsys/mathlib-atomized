@@ -770,7 +770,7 @@ definition trans
       rw [pullback.lift_fst_assoc]; rw [PrepathObject.ι_p₀]
       infer_instance
     dsimp
-    apply weakEquivalence_of_po
+    apply weakEquivalence_of_postcomp _ (pullback.fst P.p₁ P'.p₀ ≫ P.p₀)
 
 中文:
 定义 trans
@@ -782,7 +782,7 @@ definition trans
       rw [pullback.lift_fst_assoc]; rw [PrepathObject.ι_p₀]
       infer_instance
     dsimp
-    apply weakEquivalence_of_po
+    apply weakEquivalence_of_postcomp _ (pullback.fst P.p₁ P'.p₀ ≫ P.p₀)
 
 Depends on / 依赖: P.toPrepathObject.trans, toPrepathObject
 -/
@@ -809,7 +809,16 @@ instance [IsFibrant
     rw [show (P.trans P').p = ψ ≫ prod.map P.p₀ (𝟙 A) by simp [PrepathObject.p]; rw [ψ]]
     have fac : ψ ≫ prod.map P.p₁ (𝟙 A) = pullback.snd _ _ ≫ P'.p := by
       ext
-      · simp [ψ, pullback.condi
+      · simp [ψ, pullback.condition]
+      · simp [ψ]
+    have sq : IsPullback (ψ ≫ prod.fst) (pullback.snd P.p₁ P'.p₀) P.p₁ (P'.p ≫ prod.fst) := by
+      simpa [ψ] using IsPullback.of_hasPullback P.p₁ P'.p₀
+    have : Fibration ψ := by
+      rw [fibration_iff]
+      exact (fibrations C).of_isPullback
+        (IsPullback.of_right sq fac (IsPullback.of_prod_fst_with_id P.p₁ A)).flip
+          (by rw [← fibration_iff]; infer_instance)
+    infer_instance
 
 中文:
 实例 [IsFibrant
@@ -819,7 +828,16 @@ instance [IsFibrant
     rw [show (P.trans P').p = ψ ≫ prod.map P.p₀ (𝟙 A) by simp [PrepathObject.p]; rw [ψ]]
     have fac : ψ ≫ prod.map P.p₁ (𝟙 A) = pullback.snd _ _ ≫ P'.p := by
       ext
-      · simp [ψ, pullback.condi
+      · simp [ψ, pullback.condition]
+      · simp [ψ]
+    have sq : IsPullback (ψ ≫ prod.fst) (pullback.snd P.p₁ P'.p₀) P.p₁ (P'.p ≫ prod.fst) := by
+      simpa [ψ] using IsPullback.of_hasPullback P.p₁ P'.p₀
+    have : Fibration ψ := by
+      rw [fibration_iff]
+      exact (fibrations C).of_isPullback
+        (IsPullback.of_right sq fac (IsPullback.of_prod_fst_with_id P.p₁ A)).flip
+          (by rw [← fibration_iff]; infer_instance)
+    infer_instance
 
 Depends on / 依赖: Fibration, IsPullback, IsPullback.of_hasPullback, P.trans, PrepathObject, PrepathObject.p, condition, fibration_iff, fibrations, of_hasPullback, prod.fst, prod.lift, prod.map, pullback, pullback.condition, pullback.fst, pullback.snd
 -/

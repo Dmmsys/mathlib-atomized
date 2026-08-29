@@ -334,7 +334,8 @@ instance :
   have : IsIso (F.map (pullback.fst f f)) := by
     rw [← PreservesPullback.iso_hom_fst]
     exact IsIso.comp_isIso
-  have : IsIso (pullback.fst f f) := isIso_of_reflects_
+  have : IsIso (pullback.fst f f) := isIso_of_reflects_iso (pullback.fst _ _) F
+  exact (pullback.diagonal_isKernelPair f).mono_of_isIso_fst
 
 中文:
 实例 :
@@ -346,7 +347,8 @@ instance :
   have : IsIso (F.map (pullback.fst f f)) := by
     rw [← PreservesPullback.iso_hom_fst]
     exact IsIso.comp_isIso
-  have : IsIso (pullback.fst f f) := isIso_of_reflects_
+  have : IsIso (pullback.fst f f) := isIso_of_reflects_iso (pullback.fst _ _) F
+  exact (pullback.diagonal_isKernelPair f).mono_of_isIso_fst
 
 Depends on / 依赖: F.map, IsIso.comp_isIso, PreservesPullback, PreservesPullback.iso_hom_fst, ReflectsMonomorphisms, ReflectsMonomorphisms.mk, comp_isIso, diagonal_isKernelPair, isIso_fst_of_mono, isIso_of_reflects_iso, iso_hom_fst, mono_of_isIso_fst, pullback, pullback.diagonal_isKernelPair, pullback.fst
 -/
@@ -1046,7 +1048,7 @@ lemma isIso_of_mono_of_eq_card_fiber
     apply (Fintype.bijective_iff_injective_and_card (F.map f)).mpr
     refine ⟨injective_of_mono_of_preservesPullback (F.map f), ?_⟩
     simp only [← Nat.card_eq_fintype_card, h]
-  exact isIso_of_reflect
+  exact isIso_of_reflects_iso f F
 
 中文:
 引理 isIso_of_mono_of_eq_card_fiber
@@ -1057,7 +1059,7 @@ lemma isIso_of_mono_of_eq_card_fiber
     apply (Fintype.bijective_iff_injective_and_card (F.map f)).mpr
     refine ⟨injective_of_mono_of_preservesPullback (F.map f), ?_⟩
     simp only [← Nat.card_eq_fintype_card, h]
-  exact isIso_of_reflect
+  exact isIso_of_reflects_iso f F
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.isIso_iff_bijective, F.map, Fintype, Fintype.bijective_iff_injective_and_card, Nat.card_eq_fintype_card, bijective_iff_injective_and_card, card_eq_fintype_card, injective_of_mono_of_preservesPullback, isIso_iff_bijective, isIso_of_reflects_iso
 -/
@@ -1147,7 +1149,7 @@ lemma card_fiber_coprod_eq_sum
  (PreservesColimitPair.iso (F ⋙ FintypeCat.incl) X Y).symm.trans
  Types.binaryCoproductIso (FintypeCat.incl.obj (F.obj X)) (FintypeCat.incl.obj (F.obj Y))
   rw [← Nat.card_sum]
-  exact Nat.card_eq_of_bijective e.toFun (Equiv.bijective
+  exact Nat.card_eq_of_bijective e.toFun (Equiv.bijective e)
 
 中文:
 引理 card_fiber_coprod_eq_sum
@@ -1157,7 +1159,7 @@ lemma card_fiber_coprod_eq_sum
  (PreservesColimitPair.iso (F ⋙ FintypeCat.incl) X Y).symm.trans
  Types.binaryCoproductIso (FintypeCat.incl.obj (F.obj X)) (FintypeCat.incl.obj (F.obj Y))
   rw [← Nat.card_sum]
-  exact Nat.card_eq_of_bijective e.toFun (Equiv.bijective
+  exact Nat.card_eq_of_bijective e.toFun (Equiv.bijective e)
 
 Depends on / 依赖: Equiv.bijective, F.obj, FintypeCat, FintypeCat.incl, FintypeCat.incl.obj, Iso.toEquiv, Nat.card_eq_of_bijective, Nat.card_sum, PreservesColimitPair, PreservesColimitPair.iso, Types.binaryCoproductIso, bijective, binaryCoproductIso, card_eq_of_bijective, card_sum, e.toFun, symm.trans, toEquiv
 -/

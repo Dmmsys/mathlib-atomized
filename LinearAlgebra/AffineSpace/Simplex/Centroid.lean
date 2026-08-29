@@ -136,7 +136,14 @@ theorem centroid_notMem_affineSpan_of_ne_univ
   obtain ⟨i, hi⟩ := Set.exists_of_ssubset hssubset
   rw [s.centroid_eq_affineCombination] at h
   set w := (centroidWeights k (univ : Finset (Fin (n + 1)))) with wdef
-  have hw : ∑ i, w i = 1 := by rw [sum_centroidWeights_eq_one_of_nonempty _ _ 
+  have hw : ∑ i, w i = 1 := by rw [sum_centroidWeights_eq_one_of_nonempty _ _ (by simp)]
+  have h1 := AffineIndependent.eq_zero_of_affineCombination_mem_affineSpan s.independent hw h
+    (by simp) hi.2
+  have h2 : w i = (1 : k) / (n + 1) := by
+    simp [wdef, centroidWeights_apply, card_univ, Fintype.card_fin, Nat.cast_add,
+      Nat.cast_one]
+  simp only [h2, one_div, inv_eq_zero] at h1
+  norm_cast at h1
 
 中文:
 定理 centroid_notMem_affineSpan_of_ne_univ
@@ -147,7 +154,14 @@ theorem centroid_notMem_affineSpan_of_ne_univ
   obtain ⟨i, hi⟩ := Set.exists_of_ssubset hssubset
   rw [s.centroid_eq_affineCombination] at h
   set w := (centroidWeights k (univ : Finset (Fin (n + 1)))) with wdef
-  have hw : ∑ i, w i = 1 := by rw [sum_centroidWeights_eq_one_of_nonempty _ _ 
+  have hw : ∑ i, w i = 1 := by rw [sum_centroidWeights_eq_one_of_nonempty _ _ (by simp)]
+  have h1 := AffineIndependent.eq_zero_of_affineCombination_mem_affineSpan s.independent hw h
+    (by simp) hi.2
+  have h2 : w i = (1 : k) / (n + 1) := by
+    simp [wdef, centroidWeights_apply, card_univ, Fintype.card_fin, Nat.cast_add,
+      Nat.cast_one]
+  simp only [h2, one_div, inv_eq_zero] at h1
+  norm_cast at h1
 
 Depends on / 依赖: AffineIndependent, AffineIndependent.eq_zero_of_affineCombination_mem_affineSpan, Finset, Fintype, Set.exists_of_ssubset, Set.univ, card_univ, centroidWeights, centroidWeights_apply, centroid_eq_affineCombination, eq_zero_of_affineCombination_mem_affineSpan, exists_of_ssubset, hssubset, independent, s.centroid_eq_affineCombination, s.independent, sum_centroidWeights_eq_one_of_nonempty
 -/
@@ -289,7 +303,12 @@ theorem eq_centroid_iff_sum_vsub_eq_zero
     have : ∑ i, (s.points i -ᵥ p) = ∑ i, ((s.points i -ᵥ s.centroid) - (p -ᵥ s.centroid)) := by
       apply sum_congr rfl
       intro x hx
-      rw [vsub_sub_vsub_cancel_right _ _ 
+      rw [vsub_sub_vsub_cancel_right _ _ s.centroid]
+    rw [this]; rw [sum_sub_distrib]; rw [centroid_weighted_vsub_eq_zero] at h
+    simp only [sum_const, card_univ, Fintype.card_fin, zero_sub, neg_eq_zero] at h
+    have h' : ((n : k) + 1) • (p -ᵥ s.centroid) = 0 := by norm_cast
+    rw [smul_eq_zero_iff_right (by norm_cast)] at h'
+    exact h'
 
 中文:
 定理 eq_centroid_iff_sum_vsub_eq_zero
@@ -303,7 +322,12 @@ theorem eq_centroid_iff_sum_vsub_eq_zero
     have : ∑ i, (s.points i -ᵥ p) = ∑ i, ((s.points i -ᵥ s.centroid) - (p -ᵥ s.centroid)) := by
       apply sum_congr rfl
       intro x hx
-      rw [vsub_sub_vsub_cancel_right _ _ 
+      rw [vsub_sub_vsub_cancel_right _ _ s.centroid]
+    rw [this]; rw [sum_sub_distrib]; rw [centroid_weighted_vsub_eq_zero] at h
+    simp only [sum_const, card_univ, Fintype.card_fin, zero_sub, neg_eq_zero] at h
+    have h' : ((n : k) + 1) • (p -ᵥ s.centroid) = 0 := by norm_cast
+    rw [smul_eq_zero_iff_right (by norm_cast)] at h'
+    exact h'
 
 Depends on / 依赖: Fintype, Fintype.card_fin, card_fin, card_univ, centroid, centroid_weighted_vsub_eq_zero, neg_eq_zero, points, s.centroid, s.points, sum_congr, sum_const, sum_sub_distrib, vsub_eq_zero_iff_eq, vsub_sub_vsub_cancel_right, zero_sub
 -/
@@ -365,7 +389,20 @@ theorem centroid_eq_iff
   refine ⟨fun h => ?_, @congrArg _ _ fs₁ fs₂ (fun z => Finset.centroid k z s.points)⟩
   rw [Finset.centroid_eq_affineCombination_fintype]; rw [Finset.centroid_eq_affineCombination_fintype] at h
   have ha :=
-    (affineIndependent_iff_indicator_eq_of_affineCombination_eq k s.points).1 s.independen
+    (affineIndependent_iff_indicator_eq_of_affineCombination_eq k s.points).1 s.independent _ _ _ _
+      (fs₁.sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one k h₁)
+      (fs₂.sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one k h₂) h
+  simp_rw [Finset.coe_univ, Set.indicator_univ, funext_iff,
+    Finset.centroidWeightsIndicator_def, Finset.centroidWeights, h₁, h₂] at ha
+  ext i
+  specialize ha i
+  have key : forall n : Nat, (n : k) + 1 != 0 := fun n h => by norm_cast at h
+  -- we should be able to golf this to
+  -- `refine ⟨fun hi ↦ decidable.by_contradiction (fun hni ↦ ?_), ...⟩`,
+  -- but for some unknown reason it doesn't work.
+  constructor <;> intro hi <;> by_contra hni
+  · simp [hni, hi, key] at ha
+  · simpa [hni, hi, key] using ha.symm
 
 中文:
 定理 centroid_eq_iff
@@ -374,7 +411,20 @@ theorem centroid_eq_iff
   refine ⟨fun h => ?_, @congrArg _ _ fs₁ fs₂ (fun z => Finset.centroid k z s.points)⟩
   rw [Finset.centroid_eq_affineCombination_fintype]; rw [Finset.centroid_eq_affineCombination_fintype] at h
   have ha :=
-    (affineIndependent_iff_indicator_eq_of_affineCombination_eq k s.points).1 s.independen
+    (affineIndependent_iff_indicator_eq_of_affineCombination_eq k s.points).1 s.independent _ _ _ _
+      (fs₁.sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one k h₁)
+      (fs₂.sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one k h₂) h
+  simp_rw [Finset.coe_univ, Set.indicator_univ, funext_iff,
+    Finset.centroidWeightsIndicator_def, Finset.centroidWeights, h₁, h₂] at ha
+  ext i
+  specialize ha i
+  have key : forall n : Nat, (n : k) + 1 != 0 := fun n h => by norm_cast at h
+  -- we should be able to golf this to
+  -- `refine ⟨fun hi ↦ decidable.by_contradiction (fun hni ↦ ?_), ...⟩`,
+  -- but for some unknown reason it doesn't work.
+  constructor <;> intro hi <;> by_contra hni
+  · simp [hni, hi, key] at ha
+  · simpa [hni, hi, key] using ha.symm
 
 Depends on / 依赖: Finset, Finset.c, Finset.centroid, Finset.centroid_eq_affineCombination_fintype, Finset.coe_univ, Set.indicator_univ, affineIndependent_iff_indicator_eq_of_affineCombination_eq, centroid, centroid_eq_affineCombination_fintype, coe_univ, funext_iff, independent, indicator_univ, points, s.independent, s.points, simp_rw, sum_centroidWeightsIndicator_eq_one_of_card_eq_add_one
 -/
@@ -568,7 +618,7 @@ theorem centroid_restrict
   have := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
   have hf : Function.Injective (S.subtype) := by
     simp only [coe_subtype, Subtype.val_injective]
-  exact (s.
+  exact (s.restrict S hS).centroid_map S.subtype hf
 
 中文:
 定理 centroid_restrict
@@ -579,7 +629,7 @@ theorem centroid_restrict
   have := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
   have hf : Function.Injective (S.subtype) := by
     simp only [coe_subtype, Subtype.val_injective]
-  exact (s.
+  exact (s.restrict S hS).centroid_map S.subtype hf
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.inclusion, Nonempty, Nonempty.map, inclusion
 -/
@@ -645,7 +695,8 @@ theorem faceOppositeCentroid_eq_affineCombination
   rw [this]
   unfold centroid
   rw [face_centroid_eq_centroid]; rw [centroid_def]; rw [centroidWeights_eq_const]; rw [card_compl]
-  simp only [Fintype.card_fin, card_singl
+  simp only [Fintype.card_fin, card_singleton, add_tsub_cancel_right]
+  rfl
 
 中文:
 定理 faceOppositeCentroid_eq_affineCombination
@@ -656,7 +707,8 @@ theorem faceOppositeCentroid_eq_affineCombination
   rw [this]
   unfold centroid
   rw [face_centroid_eq_centroid]; rw [centroid_def]; rw [centroidWeights_eq_const]; rw [card_compl]
-  simp only [Fintype.card_fin, card_singl
+  simp only [Fintype.card_fin, card_singleton, add_tsub_cancel_right]
+  rfl
 
 Depends on / 依赖: Fintype, Fintype.card_fin, NeZero, NeZero.one_le, add_tsub_cancel_right, card_compl, card_fin, card_singleton, centroid, centroidWeights_eq_const, centroid_def, faceOpposite, faceOppositeCentroid, face_centroid_eq_centroid, one_le, s.face, s.faceOpposite
 -/
@@ -680,7 +732,13 @@ theorem faceOppositeCentroid_vsub_point_eq_smul_sum_vsub
   rw [faceOppositeCentroid_eq_affineCombination]; rw [affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ _ _ ?_ (s.points i)]
   · simp only [weightedVSubOfPoint_apply, vadd_vsub]
     have h (i : Fin (n + 1)) : ∑ j in {i}ᶜ, (n : k)⁻¹ • (s.points j -ᵥ s.points i) =
-      ∑ j : (Fin (n + 
+      ∑ j : (Fin (n + 1)), ((n : k)⁻¹ • (s.points j -ᵥ s.points i)) := by
+      rw [← Finset.sum_compl_add_sum {i}]
+      simp
+    rw [h i]; rw [smul_sum]
+  · simp only [sum_const, card_compl, Fintype.card_fin, card_singleton, add_tsub_cancel_right,
+      nsmul_eq_mul]
+    rw [mul_inv_cancel₀ (NeZero.ne (n : k))]
 
 中文:
 定理 faceOppositeCentroid_vsub_point_eq_smul_sum_vsub
@@ -689,7 +747,13 @@ theorem faceOppositeCentroid_vsub_point_eq_smul_sum_vsub
   rw [faceOppositeCentroid_eq_affineCombination]; rw [affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ _ _ ?_ (s.points i)]
   · simp only [weightedVSubOfPoint_apply, vadd_vsub]
     have h (i : Fin (n + 1)) : ∑ j in {i}ᶜ, (n : k)⁻¹ • (s.points j -ᵥ s.points i) =
-      ∑ j : (Fin (n + 
+      ∑ j : (Fin (n + 1)), ((n : k)⁻¹ • (s.points j -ᵥ s.points i)) := by
+      rw [← Finset.sum_compl_add_sum {i}]
+      simp
+    rw [h i]; rw [smul_sum]
+  · simp only [sum_const, card_compl, Fintype.card_fin, card_singleton, add_tsub_cancel_right,
+      nsmul_eq_mul]
+    rw [mul_inv_cancel₀ (NeZero.ne (n : k))]
 
 Depends on / 依赖: Finset, Finset.sum_compl_add_sum, Fintype, Fintype.card_fin, add_tsub_cancel_right, affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, card_compl, card_fin, card_singleton, faceOppositeCentroid_eq_affineCombination, points, s.points, smul_sum, sum_compl_add_sum, sum_const, vadd_vsub, weightedVSubOfPoint_apply
 -/
@@ -812,7 +876,17 @@ theorem faceOppositeCentroid_vsub_faceOppositeCentroid
   rw [faceOppositeCentroid_eq_sum_vsub_vadd s i]; rw [faceOppositeCentroid_eq_sum_vsub_vadd s j]; rw [vadd_vsub_vadd_comm _ _ (s.points i) (s.points j)]
   have h1 (i : Fin (n + 1)) : ∑ x, (s.points x -ᵥ s.points i) =
       ∑ x, (s.points x -ᵥ s.points 0 - (s.points i -ᵥ s.points 0)) := by
-    app
+    apply sum_congr rfl
+    simp
+  simp_rw [h1 i, h1 j, sum_sub_distrib]
+  rw [smul_sub]; rw [smul_sub]; rw [sub_sub_sub_cancel_left]; rw [← smul_sub]; rw [← sum_sub_distrib]; rw [vsub_sub_vsub_cancel_right]; rw [sum_const]; rw [card_univ]; rw [Fintype.card_fin]
+  have : (s.points i -ᵥ s.points j) = -(s.points j -ᵥ s.points i) := by simp
+  rw [this]; rw [← sub_eq_add_neg]; rw [add_smul]; rw [sub_eq_iff_eq_add]; rw [one_smul]; rw [smul_add]; rw [add_comm]
+  have : (n : k)⁻¹ • n • (s.points j -ᵥ s.points i) =
+      (n : k)⁻¹ • (n : k) • (s.points j -ᵥ s.points i) := by
+    norm_cast0
+    congr 1
+  rw [this]; rw [smul_smul]; rw [inv_eq_one_div]; rw [one_div_mul_cancel (NeZero.ne (n : k))]; rw [one_smul]
 
 中文:
 定理 faceOppositeCentroid_vsub_faceOppositeCentroid
@@ -821,7 +895,17 @@ theorem faceOppositeCentroid_vsub_faceOppositeCentroid
   rw [faceOppositeCentroid_eq_sum_vsub_vadd s i]; rw [faceOppositeCentroid_eq_sum_vsub_vadd s j]; rw [vadd_vsub_vadd_comm _ _ (s.points i) (s.points j)]
   have h1 (i : Fin (n + 1)) : ∑ x, (s.points x -ᵥ s.points i) =
       ∑ x, (s.points x -ᵥ s.points 0 - (s.points i -ᵥ s.points 0)) := by
-    app
+    apply sum_congr rfl
+    simp
+  simp_rw [h1 i, h1 j, sum_sub_distrib]
+  rw [smul_sub]; rw [smul_sub]; rw [sub_sub_sub_cancel_left]; rw [← smul_sub]; rw [← sum_sub_distrib]; rw [vsub_sub_vsub_cancel_right]; rw [sum_const]; rw [card_univ]; rw [Fintype.card_fin]
+  have : (s.points i -ᵥ s.points j) = -(s.points j -ᵥ s.points i) := by simp
+  rw [this]; rw [← sub_eq_add_neg]; rw [add_smul]; rw [sub_eq_iff_eq_add]; rw [one_smul]; rw [smul_add]; rw [add_comm]
+  have : (n : k)⁻¹ • n • (s.points j -ᵥ s.points i) =
+      (n : k)⁻¹ • (n : k) • (s.points j -ᵥ s.points i) := by
+    norm_cast0
+    congr 1
+  rw [this]; rw [smul_smul]; rw [inv_eq_one_div]; rw [one_div_mul_cancel (NeZero.ne (n : k))]; rw [one_smul]
 
 Depends on / 依赖: faceOppositeCentroid_eq_sum_vsub_vadd, points, s.points, simp_rw, smul_sub, sub_sub_sub_cancel_left, sum_congr, sum_const, sum_sub_distrib, vadd_vsub_vadd_comm, vsub_sub_vsub_cancel_right
 -/
@@ -853,7 +937,8 @@ theorem faceOppositeCentroid_vsub_point_eq_smul_vsub
   proof: by
   rw [← vsub_sub_vsub_cancel_right _ (s.centroid) (s.points i)]; rw [faceOppositeCentroid_vsub_point_eq_smul_sum_vsub]; rw [centroid_vsub_eq]; rw [← sub_smul]; rw [smul_smul]
   congr
-  rw [mul_sub]; rw [add_mul]; rw [mul_inv_cancel₀ (NeZero.ne (n : k))]; rw [mul_inv_cancel₀ (by norm_cast)]; rw [o
+  rw [mul_sub]; rw [add_mul]; rw [mul_inv_cancel₀ (NeZero.ne (n : k))]; rw [mul_inv_cancel₀ (by norm_cast)]; rw [one_mul]
+  grind
 
 中文:
 定理 faceOppositeCentroid_vsub_point_eq_smul_vsub
@@ -861,7 +946,8 @@ theorem faceOppositeCentroid_vsub_point_eq_smul_vsub
   证明: by
   rw [← vsub_sub_vsub_cancel_right _ (s.centroid) (s.points i)]; rw [faceOppositeCentroid_vsub_point_eq_smul_sum_vsub]; rw [centroid_vsub_eq]; rw [← sub_smul]; rw [smul_smul]
   congr
-  rw [mul_sub]; rw [add_mul]; rw [mul_inv_cancel₀ (NeZero.ne (n : k))]; rw [mul_inv_cancel₀ (by norm_cast)]; rw [o
+  rw [mul_sub]; rw [add_mul]; rw [mul_inv_cancel₀ (NeZero.ne (n : k))]; rw [mul_inv_cancel₀ (by norm_cast)]; rw [one_mul]
+  grind
 
 Depends on / 依赖: NeZero, NeZero.ne, add_mul, centroid, centroid_vsub_eq, faceOppositeCentroid_vsub_point_eq_smul_sum_vsub, mul_sub, one_mul, points, s.centroid, s.points, smul_smul, sub_smul, vsub_sub_vsub_cancel_right
 -/
@@ -907,7 +993,12 @@ theorem point_vsub_centroid_eq_smul_vsub
   symm
   rw [← vsub_sub_vsub_cancel_right _ _ (s.points i)]; rw [faceOppositeCentroid_vsub_point_eq_smul_sum_vsub]; rw [centroid_vsub_eq]; rw [← neg_vsub_eq_vsub_rev]; rw [centroid_vsub_eq]; rw [← sub_smul]; rw [smul_smul]; rw [← neg_smul]
   congr
-  simp_rw [mul_sub, sub_eq_iff_eq_add, neg_add_eq
+  simp_rw [mul_sub, sub_eq_iff_eq_add, neg_add_eq_sub]
+  symm
+  rw [sub_eq_iff_eq_add]; rw [mul_inv_cancel₀ (NeZero.ne (n : k))]
+  have : (↑n + (1 : k))⁻¹ = 1 * (↑n + (1 : k))⁻¹ := by simp
+  nth_rw 2 [this]
+  rw [← add_mul]; rw [mul_inv_cancel₀ (by norm_cast)]
 
 中文:
 定理 point_vsub_centroid_eq_smul_vsub
@@ -916,7 +1007,12 @@ theorem point_vsub_centroid_eq_smul_vsub
   symm
   rw [← vsub_sub_vsub_cancel_right _ _ (s.points i)]; rw [faceOppositeCentroid_vsub_point_eq_smul_sum_vsub]; rw [centroid_vsub_eq]; rw [← neg_vsub_eq_vsub_rev]; rw [centroid_vsub_eq]; rw [← sub_smul]; rw [smul_smul]; rw [← neg_smul]
   congr
-  simp_rw [mul_sub, sub_eq_iff_eq_add, neg_add_eq
+  simp_rw [mul_sub, sub_eq_iff_eq_add, neg_add_eq_sub]
+  symm
+  rw [sub_eq_iff_eq_add]; rw [mul_inv_cancel₀ (NeZero.ne (n : k))]
+  have : (↑n + (1 : k))⁻¹ = 1 * (↑n + (1 : k))⁻¹ := by simp
+  nth_rw 2 [this]
+  rw [← add_mul]; rw [mul_inv_cancel₀ (by norm_cast)]
 
 Depends on / 依赖: NeZero, NeZero.ne, add_mul, centroid_vsub_eq, faceOppositeCentroid_vsub_point_eq_smul_sum_vsub, mul_sub, neg_add_eq_sub, neg_smul, neg_vsub_eq_vsub_rev, nth_rw, points, s.points, simp_rw, smul_smul, sub_eq_iff_eq_add, sub_smul, vsub_sub_vsub_cancel_right
 -/
@@ -1082,7 +1178,8 @@ theorem faceOppositeCentroid_restrict
   rw [eq_comm]
   have := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
   have hf : Function.Injective (S.subtype) := by
-    simp only [coe_subtype, Subtyp
+    simp only [coe_subtype, Subtype.val_injective]
+  exact (s.restrict S hS).faceOppositeCentroid_map S.subtype hf (i := i)
 
 中文:
 定理 faceOppositeCentroid_restrict
@@ -1092,7 +1189,8 @@ theorem faceOppositeCentroid_restrict
   rw [eq_comm]
   have := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
   have hf : Function.Injective (S.subtype) := by
-    simp only [coe_subtype, Subtyp
+    simp only [coe_subtype, Subtype.val_injective]
+  exact (s.restrict S hS).faceOppositeCentroid_map S.subtype hf (i := i)
 -/
 @[simp] theorem faceOppositeCentroid_restrict [CharZero k] (s : Simplex k P n)
     (S : AffineSubspace k P) (hS : affineSpan k (Set.range s.points) <= S) {i : Fin (n + 1)} :
@@ -1281,7 +1379,9 @@ theorem centroid_mem_median
   rw [median]
   have h : s.centroid = ((n : k) * (1 / (n + 1))) • (s.faceOppositeCentroid i -ᵥ s.points i)
     +ᵥ s.points i := by
-    rw [eq_vadd_iff_vsub_eq]; rw [centroid_vsub_point_eq_smul_vsub]; rw [faceOppositeCentroid_vsub_point_eq_smul_vsub]; rw [smul_smul]; rw [one_div]; rw [mul_assoc]; 
+    rw [eq_vadd_iff_vsub_eq]; rw [centroid_vsub_point_eq_smul_vsub]; rw [faceOppositeCentroid_vsub_point_eq_smul_vsub]; rw [smul_smul]; rw [one_div]; rw [mul_assoc]; rw [inv_mul_cancel₀ (by norm_cast)]; rw [mul_one]
+  rw [h]
+  exact smul_vsub_vadd_mem_affineSpan_pair _ _ _
 
 中文:
 定理 centroid_mem_median
@@ -1290,7 +1390,9 @@ theorem centroid_mem_median
   rw [median]
   have h : s.centroid = ((n : k) * (1 / (n + 1))) • (s.faceOppositeCentroid i -ᵥ s.points i)
     +ᵥ s.points i := by
-    rw [eq_vadd_iff_vsub_eq]; rw [centroid_vsub_point_eq_smul_vsub]; rw [faceOppositeCentroid_vsub_point_eq_smul_vsub]; rw [smul_smul]; rw [one_div]; rw [mul_assoc]; 
+    rw [eq_vadd_iff_vsub_eq]; rw [centroid_vsub_point_eq_smul_vsub]; rw [faceOppositeCentroid_vsub_point_eq_smul_vsub]; rw [smul_smul]; rw [one_div]; rw [mul_assoc]; rw [inv_mul_cancel₀ (by norm_cast)]; rw [mul_one]
+  rw [h]
+  exact smul_vsub_vadd_mem_affineSpan_pair _ _ _
 
 Depends on / 依赖: centroid, centroid_vsub_point_eq_smul_vsub, eq_vadd_iff_vsub_eq, faceOppositeCentroid, faceOppositeCentroid_vsub_point_eq_smul_vsub, median, mul_assoc, mul_one, one_div, points, s.centroid, s.faceOppositeCentroid, s.points, smul_smul, smul_vsub_vadd_mem_affineSpan_pair
 -/
@@ -1316,7 +1418,18 @@ theorem median_eq_line_point_centroid
     rw [faceOppositeCentroid_eq_smul_vsub_vadd_point]
     have h : (n : k)⁻¹ • (s.centroid -ᵥ s.points i) = (-1 / n : k) • (s.points i -ᵥ s.centroid)
         := by
-      rw 
+      rw [← neg_vsub_eq_vsub_rev]
+      have : -(s.points i -ᵥ s.centroid) = (-1 : k) • (s.points i -ᵥ s.centroid) := by simp
+      rw [this]; rw [smul_smul]
+      congr 1
+      rw [mul_neg_one]; rw [inv_eq_one_div]; rw [neg_div]
+    rw [h]
+    exact smul_vsub_rev_vadd_mem_affineSpan_pair _ _ _
+  have h2 : line[k, s.points i, s.centroid] <= s.median i := by
+    rw [median]
+    apply affineSpan_pair_le_of_right_mem
+    exact centroid_mem_median s i
+  exact le_antisymm h1 h2
 
 中文:
 定理 median_eq_line_point_centroid
@@ -1328,7 +1441,18 @@ theorem median_eq_line_point_centroid
     rw [faceOppositeCentroid_eq_smul_vsub_vadd_point]
     have h : (n : k)⁻¹ • (s.centroid -ᵥ s.points i) = (-1 / n : k) • (s.points i -ᵥ s.centroid)
         := by
-      rw 
+      rw [← neg_vsub_eq_vsub_rev]
+      have : -(s.points i -ᵥ s.centroid) = (-1 : k) • (s.points i -ᵥ s.centroid) := by simp
+      rw [this]; rw [smul_smul]
+      congr 1
+      rw [mul_neg_one]; rw [inv_eq_one_div]; rw [neg_div]
+    rw [h]
+    exact smul_vsub_rev_vadd_mem_affineSpan_pair _ _ _
+  have h2 : line[k, s.points i, s.centroid] <= s.median i := by
+    rw [median]
+    apply affineSpan_pair_le_of_right_mem
+    exact centroid_mem_median s i
+  exact le_antisymm h1 h2
 
 Depends on / 依赖: affineSpan_pair_le_of_right_mem, centroid, faceOppositeCentroid_eq_smul_vsub_vadd_point, inv_eq_one_div, median, mul_neg_one, neg_div, neg_vsub_eq_vsub_rev, points, s.centroid, s.median, s.points, smul_smul, smul_vsub_rev_vadd_mem
 -/
@@ -1365,7 +1489,39 @@ theorem eq_centroid_of_forall_mem_median
   have hp : p = (p -ᵥ s.centroid) +ᵥ s.centroid := by rw [vsub_vadd]
   let s' : Finset (Fin (n + 1)) := {i₀}ᶜ
   let u : s' -> V := fun i => s.points i -ᵥ s.centroid
-  have h_span : forall i : s', p -ᵥ s.centroid in (Submodule.span k ({u i} 
+  have h_span : forall i : s', p -ᵥ s.centroid in (Submodule.span k ({u i} : Set V)) := by
+    intro i
+    have hi := h i
+    grind only [median_eq_line_point_centroid, vadd_right_mem_affineSpan_pair,
+      Submodule.smul_mem, Submodule.mem_span_singleton_self]
+  have hi : LinearIndependent k u := by
+    set p : Fin (n + 1) -> P := fun x => if x = i₀ then s.centroid else s.points x
+    have hindep : AffineIndependent k p := by
+      have := affineIndependent_points_update_centroid s i₀
+      unfold Function.update at this
+      grind
+    have h1 := (affineIndependent_iff_linearIndependent_vsub k p i₀).mp hindep
+    simp_rw [ne_eq, p] at h1
+    set f : {x // x in ({i₀}ᶜ : Finset (Fin (n + 1)))} -> {x // x != i₀} :=
+      have h (x : {x // x in ({i₀}ᶜ : Finset (Fin (n + 1)))}) : x.val != i₀ := by
+        grind [mem_compl, Finset.notMem_singleton]
+      fun x => ⟨x.val, h x⟩
+    have f_inj : Function.Injective f := by intro x y hxy; grind
+    have h2 := h1.comp f f_inj
+    convert! h2 using 1
+    grind only [mem_compl, Finset.notMem_singleton]
+  have he : exists i j : s', i != j := by
+    simp only [ne_eq, Subtype.exists, Subtype.mk.injEq, exists_prop]
+    have hcard : s'.card = n := by
+      rw [Finset.card_compl]; rw [Fintype.card_fin]; rw [card_singleton]; rw [add_tsub_cancel_right]
+    have hcard' : 1 < #s' := by grind
+    rw [Finset.one_lt_card_iff] at hcard'
+    tauto
+  choose i j hij using he
+  have h_ij : Disjoint ({i} : Set {x // x in s'}) {j} := by simp [hij]
+  have h_disjoint : Disjoint (Submodule.span k {u i}) (Submodule.span k {u j}) := by
+    simp_rw [← Set.image_singleton, hi.disjoint_span_image h_ij]
+  exact Submodule.disjoint_def.1 h_disjoint _ (h_span i) (h_span j)
 
 中文:
 定理 eq_centroid_of_对任意_mem_median
@@ -1376,7 +1532,39 @@ theorem eq_centroid_of_forall_mem_median
   have hp : p = (p -ᵥ s.centroid) +ᵥ s.centroid := by rw [vsub_vadd]
   let s' : Finset (Fin (n + 1)) := {i₀}ᶜ
   let u : s' -> V := fun i => s.points i -ᵥ s.centroid
-  have h_span : forall i : s', p -ᵥ s.centroid in (Submodule.span k ({u i} 
+  have h_span : forall i : s', p -ᵥ s.centroid in (Submodule.span k ({u i} : Set V)) := by
+    intro i
+    have hi := h i
+    grind only [median_eq_line_point_centroid, vadd_right_mem_affineSpan_pair,
+      Submodule.smul_mem, Submodule.mem_span_singleton_self]
+  have hi : LinearIndependent k u := by
+    set p : Fin (n + 1) -> P := fun x => if x = i₀ then s.centroid else s.points x
+    have hindep : AffineIndependent k p := by
+      have := affineIndependent_points_update_centroid s i₀
+      unfold Function.update at this
+      grind
+    have h1 := (affineIndependent_iff_linearIndependent_vsub k p i₀).mp hindep
+    simp_rw [ne_eq, p] at h1
+    set f : {x // x in ({i₀}ᶜ : Finset (Fin (n + 1)))} -> {x // x != i₀} :=
+      have h (x : {x // x in ({i₀}ᶜ : Finset (Fin (n + 1)))}) : x.val != i₀ := by
+        grind [mem_compl, Finset.notMem_singleton]
+      fun x => ⟨x.val, h x⟩
+    have f_inj : Function.Injective f := by intro x y hxy; grind
+    have h2 := h1.comp f f_inj
+    convert! h2 using 1
+    grind only [mem_compl, Finset.notMem_singleton]
+  have he : exists i j : s', i != j := by
+    simp only [ne_eq, Subtype.exists, Subtype.mk.injEq, exists_prop]
+    have hcard : s'.card = n := by
+      rw [Finset.card_compl]; rw [Fintype.card_fin]; rw [card_singleton]; rw [add_tsub_cancel_right]
+    have hcard' : 1 < #s' := by grind
+    rw [Finset.one_lt_card_iff] at hcard'
+    tauto
+  choose i j hij using he
+  have h_ij : Disjoint ({i} : Set {x // x in s'}) {j} := by simp [hij]
+  have h_disjoint : Disjoint (Submodule.span k {u i}) (Submodule.span k {u j}) := by
+    simp_rw [← Set.image_singleton, hi.disjoint_span_image h_ij]
+  exact Submodule.disjoint_def.1 h_disjoint _ (h_span i) (h_span j)
 
 Depends on / 依赖: Finset, LinearIndependent, Submodule, Submodule.mem_span_singleton_self, Submodule.smul_mem, Submodule.span, centroid, h_span, median_eq_line_point_centroid, mem_span_singleton_self, points, s.centroid, s.points, smul_mem, vadd_right_mem_affineSpan_pair, vsub_eq_zero_iff_eq, vsub_vadd
 -/
@@ -1436,7 +1624,7 @@ definition medial
     rw [affineIndependent_iff_linearIndependent_vsub k _ 0] at h ⊢
     simp_rw [faceOppositeCentroid_vsub_faceOppositeCentroid]
     convert! h.units_smul fun _ => Units.mk0 (-n)⁻¹ (by simpa using NeZero.ne n) with i
-    simp 
+    simp [← smul_neg]
 
 中文:
 定义 medial
@@ -1447,7 +1635,7 @@ definition medial
     rw [affineIndependent_iff_linearIndependent_vsub k _ 0] at h ⊢
     simp_rw [faceOppositeCentroid_vsub_faceOppositeCentroid]
     convert! h.units_smul fun _ => Units.mk0 (-n)⁻¹ (by simpa using NeZero.ne n) with i
-    simp 
+    simp [← smul_neg]
 
 Depends on / 依赖: faceOppositeCentroid, s.faceOppositeCentroid
 -/
@@ -1540,7 +1728,20 @@ theorem affineSpan_range_medial
     mem_affineSpan _ (by simp)
   have hmem2 : s.medial.points 0 in affineSpan k (Set.range s.points) := by
     apply Set.mem_of_mem_of_subset (s.faceOppositeCentroid_mem_affineSpan_face 0)
-    exact affineSpan_mono k 
+    exact affineSpan_mono k (by simp)
+  rw [eq_iff_direction_eq_of_mem hmem1 hmem2]
+  simp_rw [direction_affineSpan, vectorSpan_def]
+  suffices Set.range s.medial.points -ᵥ Set.range s.medial.points
+    = (-n : k)⁻¹ • (Set.range s.points -ᵥ Set.range s.points) by
+    rw [this]; rw [Submodule.span_smul_eq_of_isUnit]
+    simpa using NeZero.ne n
+  ext v
+  suffices (exists a b, (n : k)⁻¹ • (s.points b -ᵥ s.points a) = v) ↔
+    exists a b, -((n : k)⁻¹ • (s.points a -ᵥ s.points b)) = v by
+    simpa [Set.mem_vsub, Set.mem_smul_set, medial_points,
+      faceOppositeCentroid_vsub_faceOppositeCentroid]
+  congrm exists a b, ?_ = v
+  simp [← smul_neg]
 
 中文:
 定理 affineSpan_range_medial
@@ -1550,7 +1751,20 @@ theorem affineSpan_range_medial
     mem_affineSpan _ (by simp)
   have hmem2 : s.medial.points 0 in affineSpan k (Set.range s.points) := by
     apply Set.mem_of_mem_of_subset (s.faceOppositeCentroid_mem_affineSpan_face 0)
-    exact affineSpan_mono k 
+    exact affineSpan_mono k (by simp)
+  rw [eq_iff_direction_eq_of_mem hmem1 hmem2]
+  simp_rw [direction_affineSpan, vectorSpan_def]
+  suffices Set.range s.medial.points -ᵥ Set.range s.medial.points
+    = (-n : k)⁻¹ • (Set.range s.points -ᵥ Set.range s.points) by
+    rw [this]; rw [Submodule.span_smul_eq_of_isUnit]
+    simpa using NeZero.ne n
+  ext v
+  suffices (exists a b, (n : k)⁻¹ • (s.points b -ᵥ s.points a) = v) ↔
+    exists a b, -((n : k)⁻¹ • (s.points a -ᵥ s.points b)) = v by
+    simpa [Set.mem_vsub, Set.mem_smul_set, medial_points,
+      faceOppositeCentroid_vsub_faceOppositeCentroid]
+  congrm exists a b, ?_ = v
+  simp [← smul_neg]
 
 Depends on / 依赖: Set.mem_of_mem_of_subset, Set.range, affineSpan, affineSpan_mono, direction_affineSpan, eq_iff_direction_eq_of_mem, faceOppositeCentroid_mem_affineSpan_face, medial, mem_affineSpan, mem_of_mem_of_subset, points, s.faceOppositeCentroid_mem_affineSpan_face, s.medial.points, s.points, simp_rw, vectorSpan_def
 -/

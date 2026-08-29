@@ -112,7 +112,27 @@ lemma CoconeTypes.isColimit_iff
           exact congr_fun (hc.fac (F.coconeTypesEquiv.symm s) j) x
         uniq s m hm := by
           ext x
-          exact congr_fun (hc.funext fun j => f
+          exact congr_fun (hc.funext fun j => funext fun y => by simp [← hm j]) x }⟩
+  · rintro ⟨hc⟩
+    classical
+    refine ⟨⟨fun x y h => ?_, fun x => ?_⟩⟩
+    · let f (z : F.ColimitType) : ULift.{u} Bool := ULift.up (x = z)
+      suffices f x = f y by simpa [f] using this
+      suffices forall z, hc.desc (F.coconeTypesEquiv (F.coconeTypes.postcomp f))
+          (F.descColimitType c z) = f z by rw [← this x, h, ← this y]
+      intro z
+      obtain ⟨j, z, rfl⟩ := F.ιColimitType_jointly_surjective z
+      exact ConcreteCategory.congr_hom (hc.fac _ j) z
+    · let f₁ : (F.coconeTypesEquiv c).pt ⟶ (ULift.{u} Bool) :=
+        ↾fun _ => ULift.up true
+      let f₂ : (F.coconeTypesEquiv c).pt ⟶ (ULift.{u} Bool) :=
+        ↾fun x => ULift.up (exists a, F.descColimitType c a = x)
+      suffices f₁ = f₂ by
+        have := ConcreteCategory.congr_hom this x
+        simpa [f₁, f₂] using this
+      refine hc.hom_ext fun j => ?_
+      ext x
+      simpa [f₁, f₂] using ⟨F.ιColimitType j x, by simp⟩
 
 中文:
 引理 余coneTypes.isColimit_iff
@@ -127,7 +147,27 @@ lemma CoconeTypes.isColimit_iff
           exact congr_fun (hc.fac (F.coconeTypesEquiv.symm s) j) x
         uniq s m hm := by
           ext x
-          exact congr_fun (hc.funext fun j => f
+          exact congr_fun (hc.funext fun j => funext fun y => by simp [← hm j]) x }⟩
+  · rintro ⟨hc⟩
+    classical
+    refine ⟨⟨fun x y h => ?_, fun x => ?_⟩⟩
+    · let f (z : F.ColimitType) : ULift.{u} Bool := ULift.up (x = z)
+      suffices f x = f y by simpa [f] using this
+      suffices forall z, hc.desc (F.coconeTypesEquiv (F.coconeTypes.postcomp f))
+          (F.descColimitType c z) = f z by rw [← this x, h, ← this y]
+      intro z
+      obtain ⟨j, z, rfl⟩ := F.ιColimitType_jointly_surjective z
+      exact ConcreteCategory.congr_hom (hc.fac _ j) z
+    · let f₁ : (F.coconeTypesEquiv c).pt ⟶ (ULift.{u} Bool) :=
+        ↾fun _ => ULift.up true
+      let f₂ : (F.coconeTypesEquiv c).pt ⟶ (ULift.{u} Bool) :=
+        ↾fun x => ULift.up (exists a, F.descColimitType c a = x)
+      suffices f₁ = f₂ by
+        have := ConcreteCategory.congr_hom this x
+        simpa [f₁, f₂] using this
+      refine hc.hom_ext fun j => ?_
+      ext x
+      simpa [f₁, f₂] using ⟨F.ιColimitType j x, by simp⟩
 
 Depends on / 依赖: ColimitType, F.ColimitType, F.coconeTyp, F.coconeTypesEquiv, F.coconeTypesEquiv.symm, ULift.up, classical, coconeTyp, coconeTypesEquiv, congr_fun, hc.desc, hc.fac, hc.funext
 -/
@@ -612,7 +652,12 @@ theorem jointly_surjective_of_isColimit
   · refine h.hom_ext fun j => ?_
     ext y
     simp only [TypeCat.Fun.toFun_apply, comp_apply, hom_ofHom,
-      TypeCat.Fun.coe_mk, ne_eq, true_
+      TypeCat.Fun.coe_mk, ne_eq, true_iff]
+    exact hx j y
+  · intro he
+    have := ConcreteCategory.congr_hom he x
+    dsimp at this
+    exact of_eq_true (congrArg ULift.down this).symm rfl
 
 中文:
 定理 jointly_surjective_of_isColimit
@@ -626,7 +671,12 @@ theorem jointly_surjective_of_isColimit
   · refine h.hom_ext fun j => ?_
     ext y
     simp only [TypeCat.Fun.toFun_apply, comp_apply, hom_ofHom,
-      TypeCat.Fun.coe_mk, ne_eq, true_
+      TypeCat.Fun.coe_mk, ne_eq, true_iff]
+    exact hx j y
+  · intro he
+    have := ConcreteCategory.congr_hom he x
+    dsimp at this
+    exact of_eq_true (congrArg ULift.down this).symm rfl
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, TypeCat, TypeCat.Fun.coe_mk, TypeCat.Fun.toFun_apply, ULift.down, ULift.up, coe_mk, comp_apply, congr_hom, h.hom_ext, hom_ext, hom_ofHom, ne_eq, not_exists, of_eq_true, simp_rw, t.pt, toFun_apply, true_iff
 -/

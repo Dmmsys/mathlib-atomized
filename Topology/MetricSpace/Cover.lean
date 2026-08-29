@@ -330,7 +330,9 @@ lemma exists_finite_isCover_of_totallyBounded
   simp only [isCover_iff_subset_iUnion_closedEBall]
   refine ⟨N, by simpa, by simpa, ?_⟩
   · refine hN.trans fun x hx => ?_
-    simp only [Set.mem_iUnion, Metric.mem_eball, exists_prop, Metric.mem_cl
+    simp only [Set.mem_iUnion, Metric.mem_eball, exists_prop, Metric.mem_closedEBall] at hx ⊢
+    obtain ⟨y, hyN, hy⟩ := hx
+    exact ⟨y, hyN, hy.le⟩
 
 中文:
 引理 存在_finite_isCover_of_totallyBounded
@@ -341,7 +343,9 @@ lemma exists_finite_isCover_of_totallyBounded
   simp only [isCover_iff_subset_iUnion_closedEBall]
   refine ⟨N, by simpa, by simpa, ?_⟩
   · refine hN.trans fun x hx => ?_
-    simp only [Set.mem_iUnion, Metric.mem_eball, exists_prop, Metric.mem_cl
+    simp only [Set.mem_iUnion, Metric.mem_eball, exists_prop, Metric.mem_closedEBall] at hx ⊢
+    obtain ⟨y, hyN, hy⟩ := hx
+    exact ⟨y, hyN, hy.le⟩
 
 Depends on / 依赖: EMetric, EMetric.totallyBounded_iff, Metric, Metric.mem_closedEBall, Metric.mem_eball, Set.mem_iUnion, exists_prop, hN.trans, hN_finite, hy.le, isCover_iff_subset_iUnion_closedEBall, mem_closedEBall, mem_eball, mem_iUnion, totallyBounded_iff
 -/

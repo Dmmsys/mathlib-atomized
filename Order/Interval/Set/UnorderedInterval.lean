@@ -981,7 +981,8 @@ lemma monotone_or_antitone_iff_uIcc
   contrapose!
   rw [not_monotone_not_antitone_iff_exists_le_le]
   rintro ⟨a, b, c, hab, hbc, ⟨hfab, hfcb⟩ | ⟨hfba, hfbc⟩⟩
-· exac
+· exact ⟨a, c, b, Icc_subset_uIcc ⟨hab, hbc⟩, fun h => h.2.not_gt max_lt hfab hfcb⟩
+· exact ⟨a, c, b, Icc_subset_uIcc ⟨hab, hbc⟩, fun h => h.1.not_gt lt_min hfba hfbc⟩
 
 中文:
 引理 monotone_or_antitone_iff_uIcc
@@ -992,7 +993,8 @@ lemma monotone_or_antitone_iff_uIcc
   contrapose!
   rw [not_monotone_not_antitone_iff_exists_le_le]
   rintro ⟨a, b, c, hab, hbc, ⟨hfab, hfcb⟩ | ⟨hfba, hfbc⟩⟩
-· exac
+· exact ⟨a, c, b, Icc_subset_uIcc ⟨hab, hbc⟩, fun h => h.2.not_gt max_lt hfab hfcb⟩
+· exact ⟨a, c, b, Icc_subset_uIcc ⟨hab, hbc⟩, fun h => h.1.not_gt lt_min hfba hfbc⟩
 
 Depends on / 依赖: Icc_min_max, Icc_subset_uIcc, contrapose, exacts, hf.map_max, hf.map_min, lt_min, map_max, map_min, max_lt, not_gt, not_monotone_not_antitone_iff_exists_le_le, simp_rw
 -/
@@ -1363,7 +1365,11 @@ lemma uIoc_injective_right
     simp only [ha, left_mem_uIoc, true_iff, notMem_uIoc, ← not_le,
       and_true, not_true, false_and, not_false_iff, or_false] at hb
     refine hb.eq_of_not_lt fun hc => ?_
-    simpa [ha, and_iff_ri
+    simpa [ha, and_iff_right hc, ← @not_le _ _ _ a, iff_not_self, -not_le] using h c
+  · refine
+      eq_of_mem_uIoc_of_mem_uIoc ((h _).1 <| left_mem_uIoc.2 ha)
+        ((h _).2 <| left_mem_uIoc.2 <| ha.trans_le ?_)
+    simpa [ha, ha.not_ge, mem_uIoc] using h b
 
 中文:
 引理 uIoc_injective_right
@@ -1377,7 +1383,11 @@ lemma uIoc_injective_right
     simp only [ha, left_mem_uIoc, true_iff, notMem_uIoc, ← not_le,
       and_true, not_true, false_and, not_false_iff, or_false] at hb
     refine hb.eq_of_not_lt fun hc => ?_
-    simpa [ha, and_iff_ri
+    simpa [ha, and_iff_right hc, ← @not_le _ _ _ a, iff_not_self, -not_le] using h c
+  · refine
+      eq_of_mem_uIoc_of_mem_uIoc ((h _).1 <| left_mem_uIoc.2 ha)
+        ((h _).2 <| left_mem_uIoc.2 <| ha.trans_le ?_)
+    simpa [ha, ha.not_ge, mem_uIoc] using h b
 
 Depends on / 依赖: Set.ext_iff, and_iff_right, and_true, eq_of_mem_uIoc_of_mem_uIoc, eq_of_not_lt, ext_iff, false_and, ha.not_ge, ha.trans_le, hb.eq_of_not_lt, iff_not_self, le_or_gt, left_mem_uIoc, mem_uIoc, notMem_uIoc, not_false_iff, not_ge, not_le, not_true, or_false
 -/

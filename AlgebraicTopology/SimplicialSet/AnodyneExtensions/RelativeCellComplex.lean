@@ -199,7 +199,10 @@ lemma subcomplex_not_le_image_horn
   obtain ⟨x, h₁, h₂⟩ := h
   obtain ⟨g, rfl⟩ := stdSimplex.objEquiv.symm.surjective x
   rw [← stdSimplex.map_objEquiv_op_apply]; rw [Equiv.apply_symm_apply] at h₂
-  have := mono_of_nonDegenerate (x := ⟨_, c.s.val.no
+  have := mono_of_nonDegenerate (x := ⟨_, c.s.val.nonDegenerate⟩) _ _ _ h₂
+  obtain rfl := (P.isUniquelyCodimOneFace c.s).unique rfl _ h₂
+  rw [← ofSimplex_le_iff]; rw [subcomplex_le_horn_iff]; rw [← stdSimplex.face_singleton_compl] at h₁
+  tauto
 
 中文:
 引理 subcomplex_not_le_image_horn
@@ -210,7 +213,10 @@ lemma subcomplex_not_le_image_horn
   obtain ⟨x, h₁, h₂⟩ := h
   obtain ⟨g, rfl⟩ := stdSimplex.objEquiv.symm.surjective x
   rw [← stdSimplex.map_objEquiv_op_apply]; rw [Equiv.apply_symm_apply] at h₂
-  have := mono_of_nonDegenerate (x := ⟨_, c.s.val.no
+  have := mono_of_nonDegenerate (x := ⟨_, c.s.val.nonDegenerate⟩) _ _ _ h₂
+  obtain rfl := (P.isUniquelyCodimOneFace c.s).unique rfl _ h₂
+  rw [← ofSimplex_le_iff]; rw [subcomplex_le_horn_iff]; rw [← stdSimplex.face_singleton_compl] at h₁
+  tauto
 
 Depends on / 依赖: Equiv.apply_symm_apply, P.isUniquelyCodimOneFace, Set.mem_image, Subfunctor, Subfunctor.ofSection_le_iff, apply_symm_apply, c.s.val.nonDegenerate, face_singleton_compl, image_obj, isUniquelyCodimOneFace, map_objEquiv_op_apply, mem_image, mono_of_nonDegenerate, nonDegenerate, objEquiv, ofSection_le_iff, ofSimplex_le_iff, stdSimplex, stdSimplex.face_singleton_compl, stdSimplex.map_objEquiv_op_apply
 -/
@@ -463,7 +469,11 @@ lemma filtration_succ
     refine ⟨(f.le_filtration _).trans le_sup_left, fun j hj c => ?_⟩
     rw [Order.lt_succ_iff_of_not_isMax hi] at hj
     obtain hj | rfl := hj.lt_or_eq
-    · exact (f.subcomplex_le_filtration _ hj).tr
+    · exact (f.subcomplex_le_filtration _ hj).trans le_sup_left
+    · exact le_trans (le_trans (by rfl) (le_iSup _ c)) le_sup_right
+  · simp only [sup_le_iff, iSup_le_iff]
+    exact ⟨f.filtration_monotone (Order.le_succ i),
+      fun c => f.subcomplex_le_filtration _ (Order.lt_succ_of_not_isMax hi)⟩
 
 中文:
 引理 filtration_succ
@@ -475,7 +485,11 @@ lemma filtration_succ
     refine ⟨(f.le_filtration _).trans le_sup_left, fun j hj c => ?_⟩
     rw [Order.lt_succ_iff_of_not_isMax hi] at hj
     obtain hj | rfl := hj.lt_or_eq
-    · exact (f.subcomplex_le_filtration _ hj).tr
+    · exact (f.subcomplex_le_filtration _ hj).trans le_sup_left
+    · exact le_trans (le_trans (by rfl) (le_iSup _ c)) le_sup_right
+  · simp only [sup_le_iff, iSup_le_iff]
+    exact ⟨f.filtration_monotone (Order.le_succ i),
+      fun c => f.subcomplex_le_filtration _ (Order.lt_succ_of_not_isMax hi)⟩
 
 Depends on / 依赖: Order.le_succ, Order.lt_succ_iff_of_not_isMax, Order.lt_succ_of_no, conv_lhs, f.filtration_monotone, f.le_filtration, f.subcomplex_le_filtration, filtration_def, filtration_monotone, hj.lt_or_eq, iSup_le_iff, le_antisymm, le_filtration, le_iSup, le_succ, le_sup_left, le_sup_right, le_trans, lt_or_eq, lt_succ_iff_of_not_isMax
 -/
@@ -508,7 +522,12 @@ lemma filtration_of_isSuccLimit
     · refine le_trans ?_ (le_iSup _ ⊥)
       exact le_trans (by simp) (le_iSup _ hi.bot_lt)
     · refine le_trans ?_ (le_iSup _ (Order.succ j))
-      refine le_trans ?
+      refine le_trans ?_ (le_iSup _
+        (by rwa [← Order.IsSuccLimit.succ_lt_iff hi] at hj))
+      exact f.subcomplex_le_filtration _ (Order.lt_succ_of_not_isMax hj.not_isMax)
+  · simp only [iSup_le_iff]
+    intro j hj
+    exact f.filtration_monotone hj.le
 
 中文:
 引理 filtration_of_isSuccLimit
@@ -521,7 +540,12 @@ lemma filtration_of_isSuccLimit
     · refine le_trans ?_ (le_iSup _ ⊥)
       exact le_trans (by simp) (le_iSup _ hi.bot_lt)
     · refine le_trans ?_ (le_iSup _ (Order.succ j))
-      refine le_trans ?
+      refine le_trans ?_ (le_iSup _
+        (by rwa [← Order.IsSuccLimit.succ_lt_iff hi] at hj))
+      exact f.subcomplex_le_filtration _ (Order.lt_succ_of_not_isMax hj.not_isMax)
+  · simp only [iSup_le_iff]
+    intro j hj
+    exact f.filtration_monotone hj.le
 
 Depends on / 依赖: IsSuccLimit, Order.IsSuccLimit.succ_lt_iff, Order.lt_succ_of_not_isMax, Order.succ, bot_lt, conv_lhs, f.filtration_monotone, f.subcomplex_le_filtration, filtration_def, filtration_monotone, hi.bot_lt, hj.le, hj.not_isMax, iSup_le_iff, le_antisymm, le_iSup, le_trans, lt_succ_of_not_isMax, not_isMax, subcomplex_le_filtration
 -/
@@ -555,7 +579,8 @@ lemma iSup_filtration_iio
   · conv_lhs => rw [filtration_def]
     simp only [sup_le_iff, iSup_le_iff, ← f.filtration_bot]
     exact ⟨le_trans (by rfl) (le_iSup _ ⟨⊥, hm.bot_lt⟩), fun j hj c =>
-
+      (f.subcomplex_le_filtration c (Order.lt_succ_of_not_isMax (not_isMax_of_lt hj))).trans
+        (le_trans (by rfl) (le_iSup _ ⟨Order.succ j, hm.succ_lt_iff.mpr hj⟩))⟩
 
 中文:
 引理 iSup_filtration_iio
@@ -568,7 +593,8 @@ lemma iSup_filtration_iio
   · conv_lhs => rw [filtration_def]
     simp only [sup_le_iff, iSup_le_iff, ← f.filtration_bot]
     exact ⟨le_trans (by rfl) (le_iSup _ ⟨⊥, hm.bot_lt⟩), fun j hj c =>
-
+      (f.subcomplex_le_filtration c (Order.lt_succ_of_not_isMax (not_isMax_of_lt hj))).trans
+        (le_trans (by rfl) (le_iSup _ ⟨Order.succ j, hm.succ_lt_iff.mpr hj⟩))⟩
 
 Depends on / 依赖: Order.lt_succ_of_not_isMax, Order.succ, Set.mem_Iio, Subtype, Subtype.forall, bot_lt, conv_lhs, f.filtration_bot, f.filtration_monotone, f.subcomplex_le_filtration, filtration_bot, filtration_def, filtration_monotone, hj.le, hm.bot_lt, hm.succ_lt_iff.mpr, iSup_le_iff, le_antisymm, le_iSup, le_trans
 -/
@@ -597,7 +623,11 @@ lemma Cell.subcomplex_not_le_filtration
   refine ⟨c.s.val.notMem, fun i hi c' h => ?_⟩
   rw [← c.rank_s]; rw [← c'.rank_s] at hi
   refine lt_irrefl _ (hi.trans (f.lt ?_))
-  refine ⟨fun hxy => ?_
+  refine ⟨fun hxy => ?_, lt_of_le_of_ne ?_ ((P.ne _ _).symm)⟩
+  · rw [hxy] at hi
+    exact (lt_irrefl _ hi).elim
+  · rw [← ofSimplex_le_iff] at h
+    rwa [Subcomplex.N.le_iff, SSet.N.le_iff]
 
 中文:
 引理 Cell.subcomplex_not_le_filtration
@@ -608,7 +638,11 @@ lemma Cell.subcomplex_not_le_filtration
   refine ⟨c.s.val.notMem, fun i hi c' h => ?_⟩
   rw [← c.rank_s]; rw [← c'.rank_s] at hi
   refine lt_irrefl _ (hi.trans (f.lt ?_))
-  refine ⟨fun hxy => ?_
+  refine ⟨fun hxy => ?_, lt_of_le_of_ne ?_ ((P.ne _ _).symm)⟩
+  · rw [hxy] at hi
+    exact (lt_irrefl _ hi).elim
+  · rw [← ofSimplex_le_iff] at h
+    rwa [Subcomplex.N.le_iff, SSet.N.le_iff]
 
 Depends on / 依赖: P.ne, SSet.N.le_iff, Set.mem_iUnion, Set.mem_union, Subcomplex, Subcomplex.N.le_iff, Subfunctor, Subfunctor.iSup_obj, Subfunctor.max_obj, c.rank_s, c.s.val.notMem, f.lt, filtration_def, hi.trans, iSup_obj, le_iff, lt_irrefl, lt_of_le_of_ne, max_obj, mem_iUnion
 -/
@@ -642,7 +676,10 @@ lemma iSup_filtration
   | notMem s =>
     obtain ⟨t, ht⟩ := P.exists_or s
     refine le_trans ?_
-      (le_trans (f.subcomplex_le_fil
+      (le_trans (f.subcomplex_le_filtration ⟨t, rfl⟩ (Order.lt_succ _)) (le_iSup _ _))
+    obtain rfl | rfl := ht
+    · exact P.le t
+    · rfl
 
 中文:
 引理 iSup_filtration
@@ -656,7 +693,10 @@ lemma iSup_filtration
   | notMem s =>
     obtain ⟨t, ht⟩ := P.exists_or s
     refine le_trans ?_
-      (le_trans (f.subcomplex_le_fil
+      (le_trans (f.subcomplex_le_filtration ⟨t, rfl⟩ (Order.lt_succ _)) (le_iSup _ _))
+    obtain rfl | rfl := ht
+    · exact P.le t
+    · rfl
 
 Depends on / 依赖: N.subcomplex_le_iff, Order.lt_succ, P.exists_or, P.le, SSet.Subcomplex.N.cases, Subcomplex, exists_or, f.subcomplex_le_filtration, hs.trans, le_antisymm, le_iSup, le_trans, lt_succ, notMem, subcomplex_le_filtration, subcomplex_le_iff
 -/
@@ -958,7 +998,25 @@ lemma Cell.preimage_filtration_map
   · rw [← Subcomplex.image_le_iff, N.subcomplex_le_iff]
     intro s hs
     cases s using N.cases A with
-    | mem s hs' => exact hs'.trans
+    | mem s hs' => exact hs'.trans (by simp)
+    | notMem s =>
+      obtain ⟨t, ht⟩ := P.exists_or s
+      rw [← c.rank_s]
+      refine le_trans ?_ (f.subcomplex_le_filtration ⟨t, rfl⟩ (f.lt ?_))
+      · obtain rfl | rfl := ht
+        · exact P.le t
+        · simp
+      · replace hs : t.val.subcomplex <= c.horn.image c.map := by
+          obtain rfl | rfl := ht
+          · exact hs
+          · refine le_trans ?_ hs
+            rw [← S.le_def]
+            exact (P.isUniquelyCodimOneFace t).le
+        refine ⟨?_, ?_⟩
+        · rintro rfl
+          exact c.subcomplex_not_le_image_horn hs
+        · rw [Subcomplex.N.lt_iff, SSet.N.lt_iff]
+          exact lt_of_le_of_lt hs (c.image_horn_lt_subcomplex)
 
 中文:
 引理 Cell.preimage_filtration_map
@@ -970,7 +1028,25 @@ lemma Cell.preimage_filtration_map
   · rw [← Subcomplex.image_le_iff, N.subcomplex_le_iff]
     intro s hs
     cases s using N.cases A with
-    | mem s hs' => exact hs'.trans
+    | mem s hs' => exact hs'.trans (by simp)
+    | notMem s =>
+      obtain ⟨t, ht⟩ := P.exists_or s
+      rw [← c.rank_s]
+      refine le_trans ?_ (f.subcomplex_le_filtration ⟨t, rfl⟩ (f.lt ?_))
+      · obtain rfl | rfl := ht
+        · exact P.le t
+        · simp
+      · replace hs : t.val.subcomplex <= c.horn.image c.map := by
+          obtain rfl | rfl := ht
+          · exact hs
+          · refine le_trans ?_ hs
+            rw [← S.le_def]
+            exact (P.isUniquelyCodimOneFace t).le
+        refine ⟨?_, ?_⟩
+        · rintro rfl
+          exact c.subcomplex_not_le_image_horn hs
+        · rw [Subcomplex.N.lt_iff, SSet.N.lt_iff]
+          exact lt_of_le_of_lt hs (c.image_horn_lt_subcomplex)
 
 Depends on / 依赖: Cell.image_face_index_compl, N.cases, N.subcomplex_le_iff, P.exists_or, P.le, Subcomplex, Subcomplex.image_le_iff, c.rank_s, c.subcomplex_not_le_filtration, exists_or, f.lt, f.subcomplex_le_filtration, image_face_index_compl, image_le_iff, le_antisymm, le_trans, notMem, rank_s, replace, subcomplex
 -/
@@ -1124,7 +1200,10 @@ definition Cell.type₁
     infer_instance
   notMem := by
     rintro ⟨y, hy⟩
-    obtain ⟨x', ⟨y, hy'⟩, rfl⟩ := f.ιSigmaHorn_jointly_surj
+    obtain ⟨x', ⟨y, hy'⟩, rfl⟩ := f.ιSigmaHorn_jointly_surjective y
+    rw [← NatTrans.comp_app_apply]; rw [ι_m]; rw [NatTrans.comp_app_apply]; rw [ιSigmaStdSimplex_eq_iff] at hy
+    obtain ⟨rfl, rfl⟩ := hy
+    exact objEquiv_symm_notMem_horn_of_isIso _ _ hy'
 
 中文:
 定义 Cell.type₁
@@ -1135,7 +1214,10 @@ definition Cell.type₁
     infer_instance
   notMem := by
     rintro ⟨y, hy⟩
-    obtain ⟨x', ⟨y, hy'⟩, rfl⟩ := f.ιSigmaHorn_jointly_surj
+    obtain ⟨x', ⟨y, hy'⟩, rfl⟩ := f.ιSigmaHorn_jointly_surjective y
+    rw [← NatTrans.comp_app_apply]; rw [ι_m]; rw [NatTrans.comp_app_apply]; rw [ιSigmaStdSimplex_eq_iff] at hy
+    obtain ⟨rfl, rfl⟩ := hy
+    exact objEquiv_symm_notMem_horn_of_isIso _ _ hy'
 
 Depends on / 依赖: SigmaStdSimplex.app, objEquiv, stdSimplex, stdSimplex.objEquiv.symm
 -/
@@ -1171,7 +1253,10 @@ definition Cell.type₂
     infer_instance
   notMem := by
     rintro ⟨y, hy⟩
-    obtain ⟨x', ⟨y, hy'⟩, rfl⟩ :=
+    obtain ⟨x', ⟨y, hy'⟩, rfl⟩ := f.ιSigmaHorn_jointly_surjective y
+    rw [← NatTrans.comp_app_apply]; rw [ι_m]; rw [NatTrans.comp_app_apply]; rw [ιSigmaStdSimplex_eq_iff] at hy
+    obtain ⟨rfl, rfl⟩ := hy
+    simpa using (objEquiv_symm_δ_mem_horn_iff _ _).mp hy'
 
 中文:
 定义 Cell.type₂
@@ -1183,7 +1268,10 @@ definition Cell.type₂
     infer_instance
   notMem := by
     rintro ⟨y, hy⟩
-    obtain ⟨x', ⟨y, hy'⟩, rfl⟩ :=
+    obtain ⟨x', ⟨y, hy'⟩, rfl⟩ := f.ιSigmaHorn_jointly_surjective y
+    rw [← NatTrans.comp_app_apply]; rw [ι_m]; rw [NatTrans.comp_app_apply]; rw [ιSigmaStdSimplex_eq_iff] at hy
+    obtain ⟨rfl, rfl⟩ := hy
+    simpa using (objEquiv_symm_δ_mem_horn_iff _ _).mp hy'
 
 Depends on / 依赖: SigmaStdSimplex.app
 -/
@@ -1212,7 +1300,17 @@ lemma exists_or_of_range_m_N
   obtain ⟨x, s, rfl⟩ := f.ιSigmaStdSimplex_jointly_surjective s
   replace hs' : s ∉ (horn _ x.index).obj _ :=
     fun h => hs' ⟨x.ιSigmaHorn.app _ ⟨_, h⟩, by rw [← NatTrans.comp_app_apply]; simp⟩
-  obtain ⟨g, rfl⟩ := stdSimplex.objEquiv.symm.surjec
+  obtain ⟨g, rfl⟩ := stdSimplex.objEquiv.symm.surjective s
+  rw [nonDegenerate_iff_of_mono]; rw [stdSimplex.mem_nonDegenerate_iff_mono]; rw [Equiv.apply_symm_apply] at hs
+  obtain hd | rfl := (SimplexCategory.le_of_mono g).lt_or_eq
+  · rw [Nat.lt_succ_iff] at hd
+    obtain hd | rfl := hd.lt_or_eq
+    · exact (hs' (by simp [horn_obj_eq_univ x.index d (by lia)])).elim
+    · obtain ⟨i, rfl⟩ := SimplexCategory.eq_δ_of_mono g
+      obtain rfl := (objEquiv_symm_δ_notMem_horn_iff _ _).mp hs'
+      exact ⟨x, Or.inr rfl⟩
+  · obtain rfl := SimplexCategory.eq_id_of_mono g
+    exact ⟨x, Or.inl rfl⟩
 
 中文:
 引理 存在_or_of_range_m_N
@@ -1222,7 +1320,17 @@ lemma exists_or_of_range_m_N
   obtain ⟨x, s, rfl⟩ := f.ιSigmaStdSimplex_jointly_surjective s
   replace hs' : s ∉ (horn _ x.index).obj _ :=
     fun h => hs' ⟨x.ιSigmaHorn.app _ ⟨_, h⟩, by rw [← NatTrans.comp_app_apply]; simp⟩
-  obtain ⟨g, rfl⟩ := stdSimplex.objEquiv.symm.surjec
+  obtain ⟨g, rfl⟩ := stdSimplex.objEquiv.symm.surjective s
+  rw [nonDegenerate_iff_of_mono]; rw [stdSimplex.mem_nonDegenerate_iff_mono]; rw [Equiv.apply_symm_apply] at hs
+  obtain hd | rfl := (SimplexCategory.le_of_mono g).lt_or_eq
+  · rw [Nat.lt_succ_iff] at hd
+    obtain hd | rfl := hd.lt_or_eq
+    · exact (hs' (by simp [horn_obj_eq_univ x.index d (by lia)])).elim
+    · obtain ⟨i, rfl⟩ := SimplexCategory.eq_δ_of_mono g
+      obtain rfl := (objEquiv_symm_δ_notMem_horn_iff _ _).mp hs'
+      exact ⟨x, Or.inr rfl⟩
+  · obtain rfl := SimplexCategory.eq_id_of_mono g
+    exact ⟨x, Or.inl rfl⟩
 
 Depends on / 依赖: Equiv.apply_symm_apply, Nat.lt_succ_iff, NatTrans, NatTrans.comp_app_apply, SigmaHorn.app, SimplexCategory, SimplexCategory.le_of_mono, apply_symm_apply, comp_app_apply, le_of_mono, lt_or_eq, lt_succ_iff, mem_nonDegenerate_iff_mono, mk_surjective, nonDegenerate_iff_of_mono, objEquiv, replace, s.mk_surjective, stdSimplex, stdSimplex.mem_nonDegenerate_iff_mono
 -/
@@ -1351,7 +1459,20 @@ lemma isPullback
     dsimp
     refine ⟨congr_app (f.w j) (op ⦋d⦌),
       fun a₁ a₂ h => (mono_iff_injective _).mp
-        ((NatTran
+        ((NatTrans.mono_iff_mono_app (f.m j)).mp inferInstance _) h.2, fun y b h => ?_⟩
+    obtain ⟨x, b, rfl⟩ := f.ιSigmaStdSimplex_jointly_surjective b
+    have hb : b in Λ[_, x.index].obj _ := by
+      obtain ⟨y, hy⟩ := y
+      simp only [← x.preimage_filtration_map]
+      rw [Subtype.ext_iff] at h
+      dsimp at h
+      subst h
+      rwa [x.ι_b_app_apply] at hy
+    refine ⟨x.ιSigmaHorn.app _ ⟨b, hb⟩, ?_, ?_⟩
+    · simpa only [Subfunctor.toFunctor_obj, Subtype.ext_iff,
+        x.ι_b_app_apply, x.ι_t_app_apply] using! h.symm
+    · rw [← NatTrans.comp_app_apply]
+      simp)⟩
 
 中文:
 引理 isPullback
@@ -1364,7 +1485,20 @@ lemma isPullback
     dsimp
     refine ⟨congr_app (f.w j) (op ⦋d⦌),
       fun a₁ a₂ h => (mono_iff_injective _).mp
-        ((NatTran
+        ((NatTrans.mono_iff_mono_app (f.m j)).mp inferInstance _) h.2, fun y b h => ?_⟩
+    obtain ⟨x, b, rfl⟩ := f.ιSigmaStdSimplex_jointly_surjective b
+    have hb : b in Λ[_, x.index].obj _ := by
+      obtain ⟨y, hy⟩ := y
+      simp only [← x.preimage_filtration_map]
+      rw [Subtype.ext_iff] at h
+      dsimp at h
+      subst h
+      rwa [x.ι_b_app_apply] at hy
+    refine ⟨x.ιSigmaHorn.app _ ⟨b, hb⟩, ?_, ?_⟩
+    · simpa only [Subfunctor.toFunctor_obj, Subtype.ext_iff,
+        x.ι_b_app_apply, x.ι_t_app_apply] using! h.symm
+    · rw [← NatTrans.comp_app_apply]
+      simp)⟩
 -/
 lemma isPullback (j : ι) :
     IsPullback (f.t j) (f.m j) (homOfLE (f.filtration_monotone (Order.le_succ j))) (f.b j) where
@@ -1403,7 +1537,15 @@ lemma range_homOfLE_app_union_range_b_app
   -- generated by `simp? [filtration_def, Subtype.ext_iff] at hx ⊢`
   simp only [filtration_def, Order.lt_succ_iff, Subfunctor.max_obj, Subfunctor.iSup_obj,
     Set.mem_union, Set.mem_iUnion, exists_prop, Subfunctor.toFunctor_obj, Subfunctor.homOfLe_app,
-    TypeCat.hom_ofHom, TypeC
+    TypeCat.hom_ofHom, TypeCat.Fun.coe_mk, Set.sup_eq_union, Set.mem_range, Subtype.ext_iff,
+    Subtype.exists, exists_eq_right, Set.mem_univ, iff_true] at hx ⊢
+  obtain hx | ⟨i, hi, c, hx⟩ := hx
+  · exact Or.inl (Or.inl hx)
+  · obtain hi | rfl := hi.lt_or_eq
+    · exact Or.inl (Or.inr ⟨i, hi, c, hx⟩)
+    · rw [← c.range_map, ← c.mapToSucc_ι, ← c.ι_b_assoc] at hx
+      obtain ⟨y, hy⟩ := hx
+      exact Or.inr ⟨_, hy⟩
 
 中文:
 引理 range_homOfLE_app_union_range_b_app
@@ -1413,7 +1555,15 @@ lemma range_homOfLE_app_union_range_b_app
   -- generated by `simp? [filtration_def, Subtype.ext_iff] at hx ⊢`
   simp only [filtration_def, Order.lt_succ_iff, Subfunctor.max_obj, Subfunctor.iSup_obj,
     Set.mem_union, Set.mem_iUnion, exists_prop, Subfunctor.toFunctor_obj, Subfunctor.homOfLe_app,
-    TypeCat.hom_ofHom, TypeC
+    TypeCat.hom_ofHom, TypeCat.Fun.coe_mk, Set.sup_eq_union, Set.mem_range, Subtype.ext_iff,
+    Subtype.exists, exists_eq_right, Set.mem_univ, iff_true] at hx ⊢
+  obtain hx | ⟨i, hi, c, hx⟩ := hx
+  · exact Or.inl (Or.inl hx)
+  · obtain hi | rfl := hi.lt_or_eq
+    · exact Or.inl (Or.inr ⟨i, hi, c, hx⟩)
+    · rw [← c.range_map, ← c.mapToSucc_ι, ← c.ι_b_assoc] at hx
+      obtain ⟨y, hy⟩ := hx
+      exact Or.inr ⟨_, hy⟩
 -/
 lemma range_homOfLE_app_union_range_b_app (j : ι) (d : SimplexCategoryᵒᵖ) :
     Set.range ((homOfLE (f.filtration_monotone (Order.le_succ j))).app d) ⊔
@@ -1561,7 +1711,10 @@ lemma isPushout_aux₂
     simp only [mapN_type₁, mapN_type₂, ← Subcomplex.N.eq_iff_sMk_eq,
       ← Subtype.ext_iff] at h
   · obtain rfl : c = c' := by ext : 1; exact P.p.injective h
-    
+    rfl
+  · exact (P.ne _ _ h).elim
+  · exact (P.ne _ _ h.symm).elim
+  · congr; aesop
 
 中文:
 引理 isPushout_aux₂
@@ -1574,7 +1727,10 @@ lemma isPushout_aux₂
     simp only [mapN_type₁, mapN_type₂, ← Subcomplex.N.eq_iff_sMk_eq,
       ← Subtype.ext_iff] at h
   · obtain rfl : c = c' := by ext : 1; exact P.p.injective h
-    
+    rfl
+  · exact (P.ne _ _ h).elim
+  · exact (P.ne _ _ h.symm).elim
+  · congr; aesop
 -/
 private lemma isPushout_aux₂ {j : ι} : Function.Injective (f.mapN (j := j)) := by
   intro s t h
@@ -1618,7 +1774,22 @@ lemma isPushout
       (IsPushout.isColimit ?_)
     refine Types.isPushout_of_isPullback_of_mono'
       ((f.isPullback j).map ((CategoryTheory.evaluation _ _).obj _))
-      (f.range_
+      (f.range_homOfLE_app_union_range_b_app _ _) (fun x₁ x₂ hx₁ hx₂ h => ?_)
+    obtain ⟨s₁, g₁, _, hg₁⟩ := (Subcomplex.range (f.m j)).existsN x₁ hx₁
+    obtain ⟨s₂, g₂, _, hg₂⟩ := (Subcomplex.range (f.m j)).existsN x₂ hx₂
+    obtain rfl : s₁ = s₂ := f.isPushout_aux₃ (by
+      dsimp
+      rw [S.eq_iff_ofSimplex_eq]; rw [← Subcomplex.ofSimplex_map_of_epi g₁]; rw [← Subcomplex.ofSimplex_map_of_epi g₂]
+      · simp [← dsimp% (f.b j).naturality_apply, hg₁, hg₂, dsimp% h]
+      all_goals
+      · rw [Subcomplex.mem_nonDegenerate_iff]
+        apply f.isPushout_aux₁)
+    obtain rfl := X.unique_nonDegenerate_map (x := (((f.b _)).app _ x₁).val)
+      g₁ ⟨_, f.isPushout_aux₁ s₁⟩
+        (by simp [mapN, ← hg₁, dsimp% NatTrans.naturality_apply (f.b j)])
+      g₂ ⟨_, f.isPushout_aux₁ s₁⟩
+        (by simp [mapN, dsimp% h, ← hg₂, dsimp% NatTrans.naturality_apply (f.b j)])
+    rw [← hg₁]; rw [hg₂])⟩
 
 中文:
 引理 isPushout
@@ -1629,7 +1800,22 @@ lemma isPushout
       (IsPushout.isColimit ?_)
     refine Types.isPushout_of_isPullback_of_mono'
       ((f.isPullback j).map ((CategoryTheory.evaluation _ _).obj _))
-      (f.range_
+      (f.range_homOfLE_app_union_range_b_app _ _) (fun x₁ x₂ hx₁ hx₂ h => ?_)
+    obtain ⟨s₁, g₁, _, hg₁⟩ := (Subcomplex.range (f.m j)).existsN x₁ hx₁
+    obtain ⟨s₂, g₂, _, hg₂⟩ := (Subcomplex.range (f.m j)).existsN x₂ hx₂
+    obtain rfl : s₁ = s₂ := f.isPushout_aux₃ (by
+      dsimp
+      rw [S.eq_iff_ofSimplex_eq]; rw [← Subcomplex.ofSimplex_map_of_epi g₁]; rw [← Subcomplex.ofSimplex_map_of_epi g₂]
+      · simp [← dsimp% (f.b j).naturality_apply, hg₁, hg₂, dsimp% h]
+      all_goals
+      · rw [Subcomplex.mem_nonDegenerate_iff]
+        apply f.isPushout_aux₁)
+    obtain rfl := X.unique_nonDegenerate_map (x := (((f.b _)).app _ x₁).val)
+      g₁ ⟨_, f.isPushout_aux₁ s₁⟩
+        (by simp [mapN, ← hg₁, dsimp% NatTrans.naturality_apply (f.b j)])
+      g₂ ⟨_, f.isPushout_aux₁ s₁⟩
+        (by simp [mapN, dsimp% h, ← hg₂, dsimp% NatTrans.naturality_apply (f.b j)])
+    rw [← hg₁]; rw [hg₂])⟩
 -/
 lemma isPushout (j : ι) :
     IsPushout (f.t j) (f.m j) (homOfLE (f.filtration_monotone (Order.le_succ j))) (f.b j) where
@@ -1698,7 +1884,24 @@ definition relativeCellComplex
   isColimit :=
     IsColimit.ofIsoColimit (isColimitOfPreserves Subcomplex.toSSetFunctor
       (Preorder.colimitCoconeOfIsLUB f.filtration_monotone.functor (pt := ⊤)
-        (by rw [← f.iSup_fi
+        (by rw [← f.iSup_filtration]; apply isLUB_iSup)).isColimit)
+        (Cocone.ext (Subcomplex.topIso _))
+  isWellOrderContinuous :=
+    ⟨fun m hm => ⟨isColimitOfPreserves Subcomplex.toSSetFunctor
+      (Functor.isColimitOfIsWellOrderContinuous f.filtration_monotone.functor m hm)⟩⟩
+  incl.app i := (f.filtration i).ι
+  attachCells j _ :=
+    { ι := f.Cell j
+      π := id
+      cofan₁ := _
+      cofan₂ := _
+      isColimit₁ := colimit.isColimit _
+      isColimit₂ := colimit.isColimit _
+      m := f.m j
+      hm c := c.ι_m
+      g₁ := f.t j
+      g₂ := f.b j
+      isPushout := f.isPushout j }
 
 中文:
 定义 relativeCellComplex
@@ -1708,7 +1911,24 @@ definition relativeCellComplex
   isColimit :=
     IsColimit.ofIsoColimit (isColimitOfPreserves Subcomplex.toSSetFunctor
       (Preorder.colimitCoconeOfIsLUB f.filtration_monotone.functor (pt := ⊤)
-        (by rw [← f.iSup_fi
+        (by rw [← f.iSup_filtration]; apply isLUB_iSup)).isColimit)
+        (Cocone.ext (Subcomplex.topIso _))
+  isWellOrderContinuous :=
+    ⟨fun m hm => ⟨isColimitOfPreserves Subcomplex.toSSetFunctor
+      (Functor.isColimitOfIsWellOrderContinuous f.filtration_monotone.functor m hm)⟩⟩
+  incl.app i := (f.filtration i).ι
+  attachCells j _ :=
+    { ι := f.Cell j
+      π := id
+      cofan₁ := _
+      cofan₂ := _
+      isColimit₁ := colimit.isColimit _
+      isColimit₂ := colimit.isColimit _
+      m := f.m j
+      hm c := c.ι_m
+      g₁ := f.t j
+      g₂ := f.b j
+      isPushout := f.isPushout j }
 
 Depends on / 依赖: Subcomplex, Subcomplex.toSSetFunctor, f.filtration_monotone.functor, filtration_monotone, functor, toSSetFunctor
 -/

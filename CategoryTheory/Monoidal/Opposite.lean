@@ -575,7 +575,15 @@ instance monoidalCategoryOp
   tensorHom f g := (f.unop otimesₘ g.unop).op
   tensorHom_def _ _ := Quiver.Hom.unop_inj (tensorHom_def' _ _)
 tensorHom_comp_tensorHom _ _ _ _ := Quiver.Hom.unop_inj by simp
-  tensorUni
+  tensorUnit := op (𝟙_ C)
+  associator X Y Z := (α_ (unop X) (unop Y) (unop Z)).symm.op
+  leftUnitor X := (fun_ (unop X)).symm.op
+  rightUnitor X := (ρ_ (unop X)).symm.op
+associator_naturality f g h := Quiver.Hom.unop_inj by simp
+leftUnitor_naturality f := Quiver.Hom.unop_inj by simp
+rightUnitor_naturality f := Quiver.Hom.unop_inj by simp
+triangle X Y := Quiver.Hom.unop_inj by dsimp; monoidal_coherence
+pentagon W X Y Z := Quiver.Hom.unop_inj by dsimp; monoidal_coherence
 
 中文:
 实例 monoidalCategoryOp
@@ -586,7 +594,15 @@ tensorHom_comp_tensorHom _ _ _ _ := Quiver.Hom.unop_inj by simp
   tensorHom f g := (f.unop otimesₘ g.unop).op
   tensorHom_def _ _ := Quiver.Hom.unop_inj (tensorHom_def' _ _)
 tensorHom_comp_tensorHom _ _ _ _ := Quiver.Hom.unop_inj by simp
-  tensorUni
+  tensorUnit := op (𝟙_ C)
+  associator X Y Z := (α_ (unop X) (unop Y) (unop Z)).symm.op
+  leftUnitor X := (fun_ (unop X)).symm.op
+  rightUnitor X := (ρ_ (unop X)).symm.op
+associator_naturality f g h := Quiver.Hom.unop_inj by simp
+leftUnitor_naturality f := Quiver.Hom.unop_inj by simp
+rightUnitor_naturality f := Quiver.Hom.unop_inj by simp
+triangle X Y := Quiver.Hom.unop_inj by dsimp; monoidal_coherence
+pentagon W X Y Z := Quiver.Hom.unop_inj by dsimp; monoidal_coherence
 
 Depends on / 依赖: otimes
 -/
@@ -1103,7 +1119,16 @@ instance monoidalCategoryMop
   whiskerRight f X := (X.unmop ◁ f.unmop).mop
   tensorHom f g := (g.unmop otimesₘ f.unmop).mop
   tensorHom_def _ _ := Quiver.Hom.unmop_inj (tensorHom_def' _ _)
-tensorHom_comp_tensorHom _ _ _ _ := Quiver.Hom.unmop_inj by si
+tensorHom_comp_tensorHom _ _ _ _ := Quiver.Hom.unmop_inj by simp
+  tensorUnit := mop (𝟙_ C)
+  associator X Y Z := (α_ (unmop Z) (unmop Y) (unmop X)).symm.mop
+  leftUnitor X := (ρ_ (unmop X)).mop
+  rightUnitor X := (fun_ (unmop X)).mop
+associator_naturality f g h := Quiver.Hom.unmop_inj by simp
+leftUnitor_naturality f := Quiver.Hom.unmop_inj by simp
+rightUnitor_naturality f := Quiver.Hom.unmop_inj by simp
+triangle X Y := Quiver.Hom.unmop_inj by dsimp; monoidal_coherence
+pentagon W X Y Z := Quiver.Hom.unmop_inj by dsimp; monoidal_coherence
 
 中文:
 实例 monoidalCategoryMop
@@ -1113,7 +1138,16 @@ tensorHom_comp_tensorHom _ _ _ _ := Quiver.Hom.unmop_inj by si
   whiskerRight f X := (X.unmop ◁ f.unmop).mop
   tensorHom f g := (g.unmop otimesₘ f.unmop).mop
   tensorHom_def _ _ := Quiver.Hom.unmop_inj (tensorHom_def' _ _)
-tensorHom_comp_tensorHom _ _ _ _ := Quiver.Hom.unmop_inj by si
+tensorHom_comp_tensorHom _ _ _ _ := Quiver.Hom.unmop_inj by simp
+  tensorUnit := mop (𝟙_ C)
+  associator X Y Z := (α_ (unmop Z) (unmop Y) (unmop X)).symm.mop
+  leftUnitor X := (ρ_ (unmop X)).mop
+  rightUnitor X := (fun_ (unmop X)).mop
+associator_naturality f g h := Quiver.Hom.unmop_inj by simp
+leftUnitor_naturality f := Quiver.Hom.unmop_inj by simp
+rightUnitor_naturality f := Quiver.Hom.unmop_inj by simp
+triangle X Y := Quiver.Hom.unmop_inj by dsimp; monoidal_coherence
+pentagon W X Y Z := Quiver.Hom.unmop_inj by dsimp; monoidal_coherence
 
 Depends on / 依赖: otimes
 -/

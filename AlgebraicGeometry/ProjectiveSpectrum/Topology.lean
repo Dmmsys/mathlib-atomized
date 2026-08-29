@@ -1047,7 +1047,13 @@ instance zariskiTopology
       rw [Set.sInter_eq_iInter]
       let f : Zs -> Set _ := fun i => Classical.choose (h i.2)
       have H : (Set.iInter fun i => zeroLocus 𝒜 (f i)) in Set.range (zeroLocus 𝒜) :=
-    
+        ⟨_, zeroLocus_iUnion 𝒜 _⟩
+      convert! H using 2
+      funext i
+      exact (Classical.choose_spec (h i.2)).symm)
+    (by
+      rintro _ ⟨s, rfl⟩ _ ⟨t, rfl⟩
+      exact ⟨_, (union_zeroLocus 𝒜 s t).symm⟩)
 
 中文:
 实例 zariskiTopology
@@ -1058,7 +1064,13 @@ instance zariskiTopology
       rw [Set.sInter_eq_iInter]
       let f : Zs -> Set _ := fun i => Classical.choose (h i.2)
       have H : (Set.iInter fun i => zeroLocus 𝒜 (f i)) in Set.range (zeroLocus 𝒜) :=
-    
+        ⟨_, zeroLocus_iUnion 𝒜 _⟩
+      convert! H using 2
+      funext i
+      exact (Classical.choose_spec (h i.2)).symm)
+    (by
+      rintro _ ⟨s, rfl⟩ _ ⟨t, rfl⟩
+      exact ⟨_, (union_zeroLocus 𝒜 s t).symm⟩)
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, ProjectiveSpectrum, ProjectiveSpectrum.zeroLocus, Set.iInter, Set.range, Set.sInter_eq_iInter, Set.univ, TopologicalSpace, TopologicalSpace.ofClosed, choose_spec, convert, iInter, ofClosed, sInter_eq_iInter, union_zeroLocus, zeroLocus, zeroLocus_iUnion
 -/
@@ -1173,7 +1185,7 @@ theorem zeroLocus_vanishingIdeal_eq_closure
     rw [subset_zeroLocus_iff_subset_vanishingIdeal] at ht
     exact Set.Subset.trans ht hx
   · rw [(isClosed_zeroLocus _ _).closure_subset_iff]
-  
+    exact subset_zeroLocus_vanishingIdeal 𝒜 t
 
 中文:
 定理 zeroLocus_vanishingIdeal_eq_closure
@@ -1185,7 +1197,7 @@ theorem zeroLocus_vanishingIdeal_eq_closure
     rw [subset_zeroLocus_iff_subset_vanishingIdeal] at ht
     exact Set.Subset.trans ht hx
   · rw [(isClosed_zeroLocus _ _).closure_subset_iff]
-  
+    exact subset_zeroLocus_vanishingIdeal 𝒜 t
 
 Depends on / 依赖: Set.Subset.antisymm, Set.Subset.trans, Subset, antisymm, closure_subset_iff, isClosed_iff_zeroLocus, isClosed_zeroLocus, subset_zeroLocus_iff_subset_vanishingIdeal, subset_zeroLocus_vanishingIdeal, zeroLocus
 -/
@@ -1492,7 +1504,12 @@ theorem basicOpen_eq_union_of_projection
       constructor <;> intro hz
       · rcases show exists i, GradedRing.proj 𝒜 i f ∉ z.asHomogeneousIdeal by
           contrapose! hz with H
-          classi
+          classical
+          rw [← DirectSum.sum_support_decompose 𝒜 f]
+          apply Ideal.sum_mem _ fun i _ => H i with ⟨i, hi⟩
+        exact ⟨basicOpen 𝒜 (GradedRing.proj 𝒜 i f), ⟨i, rfl⟩, by rwa [mem_basicOpen]⟩
+      · obtain ⟨_, ⟨i, rfl⟩, hz⟩ := hz
+        exact fun rid => hz (z.1.2 i rid)
 
 中文:
 定理 basicOpen_eq_union_of_projection
@@ -1503,7 +1520,12 @@ theorem basicOpen_eq_union_of_projection
       constructor <;> intro hz
       · rcases show exists i, GradedRing.proj 𝒜 i f ∉ z.asHomogeneousIdeal by
           contrapose! hz with H
-          classi
+          classical
+          rw [← DirectSum.sum_support_decompose 𝒜 f]
+          apply Ideal.sum_mem _ fun i _ => H i with ⟨i, hi⟩
+        exact ⟨basicOpen 𝒜 (GradedRing.proj 𝒜 i f), ⟨i, rfl⟩, by rwa [mem_basicOpen]⟩
+      · obtain ⟨_, ⟨i, rfl⟩, hz⟩ := hz
+        exact fun rid => hz (z.1.2 i rid)
 
 Depends on / 依赖: DirectSum, DirectSum.sum_support_decompose, GradedRing, GradedRing.proj, Ideal.sum_mem, Set.ext, TopologicalSpace, TopologicalSpace.Opens.ext, TopologicalSpace.Opens.mem_sSup, asHomogeneousIdeal, basicOpen, classical, contrapose, mem_basicOpen, mem_coe, mem_coe_basicOpen, mem_sSup, sum_mem, sum_support_decompose, z.asHomogeneousIdeal
 -/
@@ -1534,7 +1556,9 @@ theorem isTopologicalBasis_basic_opens
   · rintro p U hp ⟨s, hs⟩
     rw [← compl_compl U]; rw [Set.mem_compl_iff]; rw [← hs]; rw [mem_zeroLocus]; rw [Set.not_subset] at hp
     obtain ⟨f, hfs, hfp⟩ := hp
-    refine ⟨basicOpe
+    refine ⟨basicOpen 𝒜 f, ⟨f, rfl⟩, hfp, ?_⟩
+    rw [← Set.compl_subset_compl]; rw [← hs]; rw [basicOpen_eq_zeroLocus_compl]; rw [compl_compl]
+    exact zeroLocus_anti_mono 𝒜 (Set.singleton_subset_iff.mpr hfs)
 
 中文:
 定理 isTopologicalBasis_basic_opens
@@ -1545,7 +1569,9 @@ theorem isTopologicalBasis_basic_opens
   · rintro p U hp ⟨s, hs⟩
     rw [← compl_compl U]; rw [Set.mem_compl_iff]; rw [← hs]; rw [mem_zeroLocus]; rw [Set.not_subset] at hp
     obtain ⟨f, hfs, hfp⟩ := hp
-    refine ⟨basicOpe
+    refine ⟨basicOpen 𝒜 f, ⟨f, rfl⟩, hfp, ?_⟩
+    rw [← Set.compl_subset_compl]; rw [← hs]; rw [basicOpen_eq_zeroLocus_compl]; rw [compl_compl]
+    exact zeroLocus_anti_mono 𝒜 (Set.singleton_subset_iff.mpr hfs)
 
 Depends on / 依赖: Set.compl_subset_compl, Set.mem_compl_iff, Set.not_subset, Set.singleton_subset_iff.mpr, TopologicalSpace, TopologicalSpace.isTopologicalBasis_of_isOpen_of_nhds, basicOpen, basicOpen_eq_zeroLocus_compl, compl_compl, compl_subset_compl, isOpen_basicOpen, isTopologicalBasis_of_isOpen_of_nhds, mem_compl_iff, mem_zeroLocus, not_subset, singleton_subset_iff, zeroLocus_anti_mono
 -/

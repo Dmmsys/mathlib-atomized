@@ -108,7 +108,7 @@ instance isGaussian_gaussianReal
     rw [Real.toNNReal_mul (by positivity)]; rw [Real.toNNReal_coe]
     congr
     simp only [left_eq_sup]
-    posit
+    positivity
 
 中文:
 实例 isGaussian_gaussian实数
@@ -121,7 +121,7 @@ instance isGaussian_gaussianReal
     rw [Real.toNNReal_mul (by positivity)]; rw [Real.toNNReal_coe]
     congr
     simp only [left_eq_sup]
-    posit
+    positivity
 
 Depends on / 依赖: Real.coe_toNNReal, Real.toNNReal_coe, Real.toNNReal_mul, coe_toNNReal, gaussianReal_map_continuousLinearMap, integral_continuousLinearMap_gaussianReal, left_eq_sup, toNNReal_coe, toNNReal_mul, variance_continuousLinearMap_gaussianReal
 -/
@@ -429,7 +429,11 @@ lemma IsGaussian.charFunDual_eq
     rw [IsGaussian.map_eq_gaussianReal L]
   _ = exp (μ[L] * I - Var[L; μ] / 2) := by
     rw [charFun_gaussianReal]
-    simp only [ofReal_one,
+    simp only [ofReal_one, one_mul, Real.coe_toNNReal', one_pow, mul_one]
+    congr
+    · rw [integral_complex_ofReal]
+    · simp only [sup_eq_left]
+      exact variance_nonneg _ _
 
 中文:
 引理 是Gaussian.charFunDual_eq
@@ -441,7 +445,11 @@ lemma IsGaussian.charFunDual_eq
     rw [IsGaussian.map_eq_gaussianReal L]
   _ = exp (μ[L] * I - Var[L; μ] / 2) := by
     rw [charFun_gaussianReal]
-    simp only [ofReal_one,
+    simp only [ofReal_one, one_mul, Real.coe_toNNReal', one_pow, mul_one]
+    congr
+    · rw [integral_complex_ofReal]
+    · simp only [sup_eq_left]
+      exact variance_nonneg _ _
 
 Depends on / 依赖: IsGaussian, IsGaussian.map_eq_gaussianReal, Real.coe_toNNReal, charFun, charFunDual, charFunDual_eq_charFun_map_one, charFun_gaussianReal, coe_toNNReal, gaussianReal, integral_complex_ofReal, map_eq_gaussianReal, mul_one, ofReal_one, one_mul, one_pow, sup_eq_left, toNNReal, variance_nonneg
 -/
@@ -471,7 +479,12 @@ theorem isGaussian_iff_charFunDual_eq
   rw [charFun_map_eq_charFunDual_smul L u]; rw [h (u • L)]; rw [charFun_gaussianReal]
   simp only [smul_apply, smul_eq_mul, ofReal_mul, Real.coe_toNNReal']
   congr
-  · rw [integral_const_mul, integral_comp
+  · rw [integral_const_mul, integral_complex_ofReal]
+  · rw [max_eq_left (variance_nonneg _ _), mul_comm, ← ofReal_pow, ← ofReal_mul,
+      ← variance_const_mul]
+    congr
+
+alias ⟨_, isGaussian_of_charFunDual_eq⟩ := isGaussian_iff_charFunDual_eq
 
 中文:
 定理 isGaussian_iff_charFunDual_eq
@@ -482,7 +495,12 @@ theorem isGaussian_iff_charFunDual_eq
   rw [charFun_map_eq_charFunDual_smul L u]; rw [h (u • L)]; rw [charFun_gaussianReal]
   simp only [smul_apply, smul_eq_mul, ofReal_mul, Real.coe_toNNReal']
   congr
-  · rw [integral_const_mul, integral_comp
+  · rw [integral_const_mul, integral_complex_ofReal]
+  · rw [max_eq_left (variance_nonneg _ _), mul_comm, ← ofReal_pow, ← ofReal_mul,
+      ← variance_const_mul]
+    congr
+
+alias ⟨_, isGaussian_of_charFunDual_eq⟩ := isGaussian_iff_charFunDual_eq
 
 Depends on / 依赖: Measure, Measure.ext_of_charFun, Real.coe_toNNReal, charFunDual_eq, charFun_gaussianReal, charFun_map_eq_charFunDual_smul, coe_toNNReal, ext_of_charFun, h.charFunDual_eq, integral_complex_ofReal, integral_const_mul, max_eq_left, mul_comm, ofReal_mul, ofReal_pow, smul_apply, smul_eq_mul, variance_const_mul, variance_nonneg
 -/
@@ -575,7 +593,8 @@ instance isGaussian_conv
   body: by
     have : (μ ∗ ν)[L] = ∫ x, x ∂((μ.map L).conv (ν.map L)) := by
       rw [← Measure.map_conv_continuousLinearMap L]; rw [integral_map (φ := L) (by fun_prop) (by fun_prop)]
-    rw [Measure.map_conv_continuousLinearMap L]; rw [this]; rw [← variance_id_map (by fun_prop)]; rw [Measure.map_conv_conti
+    rw [Measure.map_conv_continuousLinearMap L]; rw [this]; rw [← variance_id_map (by fun_prop)]; rw [Measure.map_conv_continuousLinearMap L]; rw [IsGaussian.map_eq_gaussianReal L]; rw [IsGaussian.map_eq_gaussianReal L]; rw [gaussianReal_conv_gaussianReal]
+    congr <;> simp [variance_nonneg]
 
 中文:
 实例 isGaussian_conv
@@ -583,7 +602,8 @@ instance isGaussian_conv
   定义体: by
     have : (μ ∗ ν)[L] = ∫ x, x ∂((μ.map L).conv (ν.map L)) := by
       rw [← Measure.map_conv_continuousLinearMap L]; rw [integral_map (φ := L) (by fun_prop) (by fun_prop)]
-    rw [Measure.map_conv_continuousLinearMap L]; rw [this]; rw [← variance_id_map (by fun_prop)]; rw [Measure.map_conv_conti
+    rw [Measure.map_conv_continuousLinearMap L]; rw [this]; rw [← variance_id_map (by fun_prop)]; rw [Measure.map_conv_continuousLinearMap L]; rw [IsGaussian.map_eq_gaussianReal L]; rw [IsGaussian.map_eq_gaussianReal L]; rw [gaussianReal_conv_gaussianReal]
+    congr <;> simp [variance_nonneg]
 
 Depends on / 依赖: IsGaussian, IsGaussian.map_eq_gaussianReal, Measure, Measure.map_conv_continuousLinearMap, fun_prop, gaussianReal_conv_gaussianReal, integral_map, map_conv_continuousLinearMap, map_eq_gaussianReal, variance_id_map, variance_nonneg
 -/
@@ -652,7 +672,16 @@ instance [SecondCountableTopologyEither
   congr
   let (eq := hL₁) L₁ := L.comp (.inl Real E F)
   let (eq := hL₂) L₂ := L.comp (.inr Real E F)
-  rw [← hL₁]; rw [← hL₂]; rw [sub
+  rw [← hL₁]; rw [← hL₂]; rw [sub_add_sub_comm]; rw [← add_mul]
+  congr
+  · simp_rw [integral_complex_ofReal]
+    rw [integral_continuousLinearMap_prod' (IsGaussian.integrable_dual μ (L.comp (.inl Real E F)))
+      (IsGaussian.integrable_dual ν (L.comp (.inr Real E F)))]
+    norm_cast
+  · field_simp
+    rw [variance_dual_prod' (IsGaussian.memLp_dual μ (L.comp (.inl Real E F)) 2 (by simp))
+      (IsGaussian.memLp_dual ν (L.comp (.inr Real E F)) 2 (by simp))]
+    norm_cast
 
 中文:
 实例 [SecondCountableTopologyEither
@@ -663,7 +692,16 @@ instance [SecondCountableTopologyEither
   congr
   let (eq := hL₁) L₁ := L.comp (.inl Real E F)
   let (eq := hL₂) L₂ := L.comp (.inr Real E F)
-  rw [← hL₁]; rw [← hL₂]; rw [sub
+  rw [← hL₁]; rw [← hL₂]; rw [sub_add_sub_comm]; rw [← add_mul]
+  congr
+  · simp_rw [integral_complex_ofReal]
+    rw [integral_continuousLinearMap_prod' (IsGaussian.integrable_dual μ (L.comp (.inl Real E F)))
+      (IsGaussian.integrable_dual ν (L.comp (.inr Real E F)))]
+    norm_cast
+  · field_simp
+    rw [variance_dual_prod' (IsGaussian.memLp_dual μ (L.comp (.inl Real E F)) 2 (by simp))
+      (IsGaussian.memLp_dual ν (L.comp (.inr Real E F)) 2 (by simp))]
+    norm_cast
 
 Depends on / 依赖: Complex.exp_add, IsGaussian, IsGaussian.charFunDual_eq, IsGaussian.integrable_dual, L.comp, add_mul, charFunDual_eq, charFunDual_prod, exp_add, integrable_dual, integral_complex_ofReal, integral_continuousLinearMap_prod, isGaussian_of_charFunDual_eq, simp_rw, sub_add_sub_comm
 -/

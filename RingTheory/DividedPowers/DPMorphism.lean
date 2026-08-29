@@ -349,7 +349,19 @@ definition _root_.DividedPowers.ideal_from_ringHom
   add_mem' := fun hx hy => by
     simp only [mem_ofPred_eq, map_add] at hx hy ⊢
     refine ⟨I.add_mem hx.1 hy.1, fun n => ?_⟩
-    rw [hI.dpow_add hx.1 hy.1]; rw [map_sum]; rw [hJ.dpow_add (hf (mem_map_of_mem f hx.1)) (hf (mem_m
+    rw [hI.dpow_add hx.1 hy.1]; rw [map_sum]; rw [hJ.dpow_add (hf (mem_map_of_mem f hx.1)) (hf (mem_map_of_mem f hy.1))]
+    apply congr_arg
+    ext k
+    rw [map_mul]; rw [hx.2]; rw [hy.2]
+  zero_mem' := by
+    simp only [mem_ofPred_eq, Submodule.zero_mem, map_zero, true_and]
+    intro n
+    induction n with
+    | zero => rw [hI.dpow_zero I.zero_mem, hJ.dpow_zero J.zero_mem, map_one]
+    | succ n => rw [hI.dpow_eval_zero n.succ_ne_zero, hJ.dpow_eval_zero n.succ_ne_zero, map_zero]
+  smul_mem' := fun r x hx => by
+    refine ⟨I.smul_mem r hx.1, (fun n => ?_)⟩
+    rw [smul_eq_mul]; rw [hI.dpow_mul hx.1]; rw [map_mul]; rw [map_mul]; rw [map_pow]; rw [hJ.dpow_mul (hf (mem_map_of_mem f hx.1))]; rw [hx.2 n]
 
 中文:
 定义 _root_.DividedPowers.ideal_from_ringHom
@@ -358,7 +370,19 @@ definition _root_.DividedPowers.ideal_from_ringHom
   add_mem' := fun hx hy => by
     simp only [mem_ofPred_eq, map_add] at hx hy ⊢
     refine ⟨I.add_mem hx.1 hy.1, fun n => ?_⟩
-    rw [hI.dpow_add hx.1 hy.1]; rw [map_sum]; rw [hJ.dpow_add (hf (mem_map_of_mem f hx.1)) (hf (mem_m
+    rw [hI.dpow_add hx.1 hy.1]; rw [map_sum]; rw [hJ.dpow_add (hf (mem_map_of_mem f hx.1)) (hf (mem_map_of_mem f hy.1))]
+    apply congr_arg
+    ext k
+    rw [map_mul]; rw [hx.2]; rw [hy.2]
+  zero_mem' := by
+    simp only [mem_ofPred_eq, Submodule.zero_mem, map_zero, true_and]
+    intro n
+    induction n with
+    | zero => rw [hI.dpow_zero I.zero_mem, hJ.dpow_zero J.zero_mem, map_one]
+    | succ n => rw [hI.dpow_eval_zero n.succ_ne_zero, hJ.dpow_eval_zero n.succ_ne_zero, map_zero]
+  smul_mem' := fun r x hx => by
+    refine ⟨I.smul_mem r hx.1, (fun n => ?_)⟩
+    rw [smul_eq_mul]; rw [hI.dpow_mul hx.1]; rw [map_mul]; rw [map_mul]; rw [map_pow]; rw [hJ.dpow_mul (hf (mem_map_of_mem f hx.1))]; rw [hx.2 n]
 
 Depends on / 依赖: hI.dpow, hJ.dpow
 -/
@@ -395,7 +419,7 @@ definition fromGens
       simp only [mem_coe, ideal_from_ringHom, Submodule.mem_mk]
       exact ⟨hS ▸ subset_span hy, fun n => h y hy⟩
     rw [← span_le]; rw [← hS] at hS'
-    exact ((hS' hx).2 n).sym
+    exact ((hS' hx).2 n).symm
 
 中文:
 定义 fromGens
@@ -407,7 +431,7 @@ definition fromGens
       simp only [mem_coe, ideal_from_ringHom, Submodule.mem_mk]
       exact ⟨hS ▸ subset_span hy, fun n => h y hy⟩
     rw [← span_le]; rw [← hS] at hS'
-    exact ((hS' hx).2 n).sym
+    exact ((hS' hx).2 n).symm
 -/
 def fromGens {f : A ->+* B} {S : Set A} (hS : I = span S) (hf : I.map f <= J)
     (h : forall {n : Nat}, forall x in S, f (hI.dpow n x) = hJ.dpow n (f x)) : DPMorphism hI hJ where
@@ -642,7 +666,7 @@ theorem dpow_eq_from_gens
       exact subset_span hs
     · intro m b hb
       simpa only [RingHom.id_apply] using (hdp b hb)
-  · rw [hI.dpow_null ha, hI'.dpow_nul
+  · rw [hI.dpow_null ha, hI'.dpow_null ha]
 
 中文:
 定理 dpow_eq_from_gens
@@ -656,7 +680,7 @@ theorem dpow_eq_from_gens
       exact subset_span hs
     · intro m b hb
       simpa only [RingHom.id_apply] using (hdp b hb)
-  · rw [hI.dpow_null ha, hI'.dpow_nul
+  · rw [hI.dpow_null ha, hI'.dpow_null ha]
 
 Depends on / 依赖: RingHom, RingHom.id, RingHom.id_apply, dpow_comp_from_gens, dpow_null, hI.dpow_comp_from_gens, hI.dpow_null, id_apply, subset_span
 -/

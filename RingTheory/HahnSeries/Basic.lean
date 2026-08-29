@@ -508,7 +508,10 @@ definition ofIterate
     refine Set.PartiallyWellOrderedOn.subsetProdLex ?_ ?_
     · refine Set.IsPWO.mono x.isPWO_support' ?_
       simp_rw [Set.image_subset_iff, support_subset_iff, Set.mem_preimage, Function.mem_support]
-      exact fun _ => ne_zero_of_coeff_ne_
+      exact fun _ => ne_zero_of_coeff_ne_zero
+    · exact fun a => by simpa [Function.mem_support, ne_eq] using! (x.coeff a).isPWO_support'
+
+@[simp]
 
 中文:
 定义 ofIterate
@@ -518,7 +521,10 @@ definition ofIterate
     refine Set.PartiallyWellOrderedOn.subsetProdLex ?_ ?_
     · refine Set.IsPWO.mono x.isPWO_support' ?_
       simp_rw [Set.image_subset_iff, support_subset_iff, Set.mem_preimage, Function.mem_support]
-      exact fun _ => ne_zero_of_coeff_ne_
+      exact fun _ => ne_zero_of_coeff_ne_zero
+    · exact fun a => by simpa [Function.mem_support, ne_eq] using! (x.coeff a).isPWO_support'
+
+@[simp]
 -/
 def ofIterate [PartialOrder Γ'] (x : R⟦Γ'⟧⟦Γ⟧) : R⟦Γ ×ₗ Γ'⟧ where
   coeff := fun g => coeff (coeff x g.1) g.2
@@ -565,7 +571,11 @@ definition toIterate
   }
   isPWO_support' := by
     have h₁ : (Function.support fun g => HahnSeries.mk (fun g' => x.coeff (g, g'))
-        (Set.PartiallyWellOrderedOn.fiberProdLex x.isPWO_su
+        (Set.PartiallyWellOrderedOn.fiberProdLex x.isPWO_support' g)) = Function.support
+        fun g g' => x.coeff (g, g') := by
+      simp only [Function.support, ne_eq, mk_eq_zero]
+    rw [h₁]; rw [Function.support_fun_curry x.coeff]
+    exact Set.PartiallyWellOrderedOn.imageProdLex x.isPWO_support'
 
 中文:
 定义 toIterate
@@ -576,7 +586,11 @@ definition toIterate
   }
   isPWO_support' := by
     have h₁ : (Function.support fun g => HahnSeries.mk (fun g' => x.coeff (g, g'))
-        (Set.PartiallyWellOrderedOn.fiberProdLex x.isPWO_su
+        (Set.PartiallyWellOrderedOn.fiberProdLex x.isPWO_support' g)) = Function.support
+        fun g g' => x.coeff (g, g') := by
+      simp only [Function.support, ne_eq, mk_eq_zero]
+    rw [h₁]; rw [Function.support_fun_curry x.coeff]
+    exact Set.PartiallyWellOrderedOn.imageProdLex x.isPWO_support'
 -/
 def toIterate [PartialOrder Γ'] (x : R⟦Γ ×ₗ Γ'⟧) : R⟦Γ'⟧⟦Γ⟧ where
   coeff := fun g => {
@@ -1834,7 +1848,7 @@ definition embDomain
         contrapose hb
         rw [Function.mem_support]; rw [dif_neg hb]; rw [Classical.not_not] }
 
-@
+@[simp]
 
 中文:
 定义 embDomain
@@ -1846,7 +1860,7 @@ definition embDomain
         contrapose hb
         rw [Function.mem_support]; rw [dif_neg hb]; rw [Classical.not_not] }
 
-@
+@[simp]
 -/
 def embDomain (f : Γ ↪o Γ') : R⟦Γ⟧ -> R⟦Γ'⟧ := fun x =>
   { coeff := fun b : Γ' => if h : b in f '' x.support then x.coeff (Classical.choose h) else 0
@@ -1870,7 +1884,10 @@ theorem embDomain_coeff
     exact congr rfl (f.injective (Classical.choose_spec (Set.mem_image_of_mem f ha)).2)
   · rw [dif_neg, Classical.not_not.1 fun c => ha ((mem_support _ _).2 c)]
     contrapose ha
-    obtain 
+    obtain ⟨b, hb1, hb2⟩ := (Set.mem_image _ _ _).1 ha
+    rwa [f.injective hb2] at hb1
+
+@[simp]
 
 中文:
 定理 embDomain_coeff
@@ -1883,7 +1900,10 @@ theorem embDomain_coeff
     exact congr rfl (f.injective (Classical.choose_spec (Set.mem_image_of_mem f ha)).2)
   · rw [dif_neg, Classical.not_not.1 fun c => ha ((mem_support _ _).2 c)]
     contrapose ha
-    obtain 
+    obtain ⟨b, hb1, hb2⟩ := (Set.mem_image _ _ _).1 ha
+    rwa [f.injective hb2] at hb1
+
+@[simp]
 
 Depends on / 依赖: Classical, Classical.choose_spec, Classical.not_not, Set.mem_image, Set.mem_image_of_mem, choose_spec, contrapose, dif_neg, dif_pos, embDomain, f.injective, injective, mem_image, mem_image_of_mem, mem_support, not_not, support, x.support
 -/
@@ -2114,7 +2134,10 @@ theorem orderTop_embDomain
   · simpa using coeff_orderTop_ne (by simp)
   intro y hy
   obtain ⟨z, hz, rfl⟩ :=
-(Set.mem_image _ _ _).mp Set.mem_of_subset_of_mem support_embDomai
+(Set.mem_image _ _ _).mp Set.mem_of_subset_of_mem support_embDomain_subset hy
+  rw [OrderEmbedding.le_iff_le]; rw [WithTop.untop_le_iff]
+  apply orderTop_le_of_coeff_ne_zero
+  simpa using hz
 
 中文:
 定理 orderTop_embDomain
@@ -2127,7 +2150,10 @@ theorem orderTop_embDomain
   · simpa using coeff_orderTop_ne (by simp)
   intro y hy
   obtain ⟨z, hz, rfl⟩ :=
-(Set.mem_image _ _ _).mp Set.mem_of_subset_of_mem support_embDomai
+(Set.mem_image _ _ _).mp Set.mem_of_subset_of_mem support_embDomain_subset hy
+  rw [OrderEmbedding.le_iff_le]; rw [WithTop.untop_le_iff]
+  apply orderTop_le_of_coeff_ne_zero
+  simpa using hz
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.le_iff_le, Set.mem_image, Set.mem_of_subset_of_mem, WithTop, WithTop.coe_untop, WithTop.map_coe, WithTop.untop_le_iff, coe_untop, coeff_orderTop_ne, eq_or_ne, le_iff_le, map_coe, mem_image, mem_of_subset_of_mem, orderTop, orderTop_eq_of_le, orderTop_le_of_coeff_ne_zero, support_embDomain_subset, untop_le_iff
 -/

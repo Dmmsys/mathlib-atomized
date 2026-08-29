@@ -43,7 +43,14 @@ definition effectiveEpiFamilyStructCompOfEffectiveEpiSplitEpi'
     simpa)
   fac e w a := by
     simp only [Category.assoc, EffectiveEpiFamily.fac]
- 
+    rw [← Category.id_comp (e a)]; rw [← Category.assoc]; rw [← Category.assoc]
+    apply w
+    simp only [Category.comp_id, Category.id_comp, ← Category.assoc]
+    aesop
+  uniq _ _ _ hm := by
+    apply EffectiveEpiFamily.uniq _ f
+    intro a
+    rw [← hm a]; rw [← Category.assoc]; rw [← Category.assoc]; rw [hi]; rw [Category.id_comp]
 
 中文:
 定义 effectiveEpiFamilyStructCompOfEffectiveEpiSplitEpi'
@@ -56,7 +63,14 @@ definition effectiveEpiFamilyStructCompOfEffectiveEpiSplitEpi'
     simpa)
   fac e w a := by
     simp only [Category.assoc, EffectiveEpiFamily.fac]
- 
+    rw [← Category.id_comp (e a)]; rw [← Category.assoc]; rw [← Category.assoc]
+    apply w
+    simp only [Category.comp_id, Category.id_comp, ← Category.assoc]
+    aesop
+  uniq _ _ _ hm := by
+    apply EffectiveEpiFamily.uniq _ f
+    intro a
+    rw [← hm a]; rw [← Category.assoc]; rw [← Category.assoc]; rw [hi]; rw [Category.id_comp]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, EffectiveEpiFamily, EffectiveEpiFamily.desc, EffectiveEpiFamily.fac, EffectiveEpiFamily.uniq, comp_id, id_comp
 -/
@@ -152,7 +166,9 @@ definition effectiveEpiFamilyStructOfComp
     (fun i => g i ≫ φ i) (fun {T} i₁ i₂ g₁ g₂ eq =>
       by simpa [assoc] using h i₁ i₂ (g₁ ≫ g i₁) (g₂ ≫ g i₂) (by simpa [assoc] using eq))
   fac {W} φ h i := by
-    rw [← cancel_epi (g i)]; rw [← assoc]; rw [EffectiveEpiFamily.fac _ (fun i => g i ≫ f
+    rw [← cancel_epi (g i)]; rw [← assoc]; rw [EffectiveEpiFamily.fac _ (fun i => g i ≫ f i)]
+  uniq {W} φ _ m hm := EffectiveEpiFamily.uniq _ (fun i => g i ≫ f i) _ _ _
+    (fun i => by rw [assoc, hm])
 
 中文:
 定义 effectiveEpiFamilyStructOfComp
@@ -161,7 +177,9 @@ definition effectiveEpiFamilyStructOfComp
     (fun i => g i ≫ φ i) (fun {T} i₁ i₂ g₁ g₂ eq =>
       by simpa [assoc] using h i₁ i₂ (g₁ ≫ g i₁) (g₂ ≫ g i₂) (by simpa [assoc] using eq))
   fac {W} φ h i := by
-    rw [← cancel_epi (g i)]; rw [← assoc]; rw [EffectiveEpiFamily.fac _ (fun i => g i ≫ f
+    rw [← cancel_epi (g i)]; rw [← assoc]; rw [EffectiveEpiFamily.fac _ (fun i => g i ≫ f i)]
+  uniq {W} φ _ m hm := EffectiveEpiFamily.uniq _ (fun i => g i ≫ f i) _ _ _
+    (fun i => by rw [assoc, hm])
 
 Depends on / 依赖: EffectiveEpiFamily, EffectiveEpiFamily.desc
 -/

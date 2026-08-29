@@ -678,7 +678,23 @@ plot_reparam hp hf := d.isPlotOn_univ.mp
   locality {n p} h := by
 refine d.isPlotOn_univ.mp d.locality _ fun x _ => ?_
     let ⟨u, hu, hxu, hu'⟩ := h x
-    le
+    let ⟨ε, hε, hε'⟩ := Metric.isOpen_iff.mp hu x hxu
+    have h : d.isPlot (p ∘ OpenPartialHomeomorph.univBall x ε) := hu'
+      (f := OpenPartialHomeomorph.univBall x ε)
+      (fun x' => by
+        replace h := (OpenPartialHomeomorph.univBall x ε).map_source (x := x')
+        rw [OpenPartialHomeomorph.univBall_target x hε] at h
+        aesop)
+      OpenPartialHomeomorph.contDiff_univBall
+    have h' := d.isPlotOn_reparam (Metric.isOpen_ball) (Set.mapsTo_univ _ _)
+      (d.isPlotOn_univ.mpr h) (OpenPartialHomeomorph.contDiffOn_univBall_symm (c := x) (r := ε))
+    refine ⟨_, Metric.isOpen_ball, Metric.mem_ball_self hε, (d.isPlotOn_congr _ ?_).mp h'⟩
+    rw [Function.comp_assoc]; rw [← OpenPartialHomeomorph.coe_trans]
+    apply Set.EqOn.comp_left
+    convert! (OpenPartialHomeomorph.symm_trans_self (OpenPartialHomeomorph.univBall x ε)).2
+    simp [OpenPartialHomeomorph.univBall_target x hε]
+  dTopology := d.dTopology
+  isOpen_iff_preimages_plots := d.isOpen_iff_preimages_plots
 
 中文:
 定义 ofCorePlotsOn
@@ -690,7 +706,23 @@ plot_reparam hp hf := d.isPlotOn_univ.mp
   locality {n p} h := by
 refine d.isPlotOn_univ.mp d.locality _ fun x _ => ?_
     let ⟨u, hu, hxu, hu'⟩ := h x
-    le
+    let ⟨ε, hε, hε'⟩ := Metric.isOpen_iff.mp hu x hxu
+    have h : d.isPlot (p ∘ OpenPartialHomeomorph.univBall x ε) := hu'
+      (f := OpenPartialHomeomorph.univBall x ε)
+      (fun x' => by
+        replace h := (OpenPartialHomeomorph.univBall x ε).map_source (x := x')
+        rw [OpenPartialHomeomorph.univBall_target x hε] at h
+        aesop)
+      OpenPartialHomeomorph.contDiff_univBall
+    have h' := d.isPlotOn_reparam (Metric.isOpen_ball) (Set.mapsTo_univ _ _)
+      (d.isPlotOn_univ.mpr h) (OpenPartialHomeomorph.contDiffOn_univBall_symm (c := x) (r := ε))
+    refine ⟨_, Metric.isOpen_ball, Metric.mem_ball_self hε, (d.isPlotOn_congr _ ?_).mp h'⟩
+    rw [Function.comp_assoc]; rw [← OpenPartialHomeomorph.coe_trans]
+    apply Set.EqOn.comp_left
+    convert! (OpenPartialHomeomorph.symm_trans_self (OpenPartialHomeomorph.univBall x ε)).2
+    simp [OpenPartialHomeomorph.univBall_target x hε]
+  dTopology := d.dTopology
+  isOpen_iff_preimages_plots := d.isOpen_iff_preimages_plots
 
 Depends on / 依赖: d.isPlot, isPlot
 -/
@@ -807,7 +839,15 @@ definition _root_.NormedSpace.toDiffeology
     isPlot := fun p => ContDiff Real ∞ p
     isPlotOn_univ := contDiffOn_univ
     isPlot_const := fun _ => contDiff_const
-    isPlotOn_reparam := fun _ _ _ h hp hf => hp.co
+    isPlotOn_reparam := fun _ _ _ h hp hf => hp.comp hf h.subset_preimage
+    locality := fun _ _ h => fun x hxu => by
+      let ⟨v, hv, hxv, hv'⟩ := h x hxu
+      exact ((hv' x hxv).contDiffAt (hv.mem_nhds hxv)).contDiffWithinAt
+    dTopology := inferInstance
+    isOpen_iff_preimages_plots := fun {u} => by
+      refine ⟨fun hu _ _ hp => IsOpen.preimage (hp.continuous) hu, fun h => ?_⟩
+      rw [← toEuclidean.preimage_symm_preimage u]
+      exact toEuclidean.continuous.isOpen_preimage _ (h _ toEuclidean.symm.contDiff) }
 
 中文:
 定义 _root_.赋范空间.toDiffeology
@@ -818,7 +858,15 @@ definition _root_.NormedSpace.toDiffeology
     isPlot := fun p => ContDiff Real ∞ p
     isPlotOn_univ := contDiffOn_univ
     isPlot_const := fun _ => contDiff_const
-    isPlotOn_reparam := fun _ _ _ h hp hf => hp.co
+    isPlotOn_reparam := fun _ _ _ h hp hf => hp.comp hf h.subset_preimage
+    locality := fun _ _ h => fun x hxu => by
+      let ⟨v, hv, hxv, hv'⟩ := h x hxu
+      exact ((hv' x hxv).contDiffAt (hv.mem_nhds hxv)).contDiffWithinAt
+    dTopology := inferInstance
+    isOpen_iff_preimages_plots := fun {u} => by
+      refine ⟨fun hu _ _ hp => IsOpen.preimage (hp.continuous) hu, fun h => ?_⟩
+      rw [← toEuclidean.preimage_symm_preimage u]
+      exact toEuclidean.continuous.isOpen_preimage _ (h _ toEuclidean.symm.contDiff) }
 
 Depends on / 依赖: ContDiff, ContDiffOn, contDiffAt, contDiffOn_congr, contDiffOn_univ, contDiffWithinAt, contDiff_const, dTopology, h.subset_preimage, hp.comp, hv.mem_nhds, isOpen_iff_preimages_plots, isPlot, isPlotOn, isPlotOn_congr, isPlotOn_reparam, isPlotOn_univ, isPlot_const, locality, mem_nhds
 -/
@@ -1197,7 +1245,8 @@ definition generateFrom
   constant_plots {n} x := fun _ _ => constant_plots x
   plot_reparam {n m p f} := fun hp hf d hd => @d.plot_reparam n m p f (hp _ hd) hf
   locality {n p} := fun hp d hd => @locality X d n p fun x => by
-    let ⟨u, h
+    let ⟨u, hxu, hu, hu'⟩ := hp x
+    exact ⟨u, hxu, hu, fun {m f} hfu hf => (hu' hfu hf) _ hd⟩
 
 中文:
 定义 generateFrom
@@ -1206,7 +1255,8 @@ definition generateFrom
   constant_plots {n} x := fun _ _ => constant_plots x
   plot_reparam {n m p f} := fun hp hf d hd => @d.plot_reparam n m p f (hp _ hd) hf
   locality {n p} := fun hp d hd => @locality X d n p fun x => by
-    let ⟨u, h
+    let ⟨u, hxu, hu, hu'⟩ := hp x
+    exact ⟨u, hxu, hu, fun {m f} hfu hf => (hu' hfu hf) _ hd⟩
 
 Depends on / 依赖: DiffeologicalSpace, d.toPlots, subseteq, toPlots
 -/

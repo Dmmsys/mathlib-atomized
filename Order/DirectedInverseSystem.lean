@@ -152,7 +152,7 @@ definition setoid
     fun ⟨j, hx, _, jeq⟩ ⟨k, _, hz, keq⟩ =>
       have ⟨i, hji, hki⟩ := exists_ge_ge j k
       ⟨i, hx.trans hji, hz.trans hki, by
-    
+        rw [← map_map' _ hx hji]; rw [← map_map' _ hz hki]; rw [jeq]; rw [← keq]; rw [map_map']; rw [map_map']⟩⟩
 
 中文:
 定义 setoid
@@ -162,7 +162,7 @@ definition setoid
     fun ⟨j, hx, _, jeq⟩ ⟨k, _, hz, keq⟩ =>
       have ⟨i, hji, hki⟩ := exists_ge_ge j k
       ⟨i, hx.trans hji, hz.trans hki, by
-    
+        rw [← map_map' _ hx hji]; rw [← map_map' _ hz hki]; rw [jeq]; rw [← keq]; rw [map_map']; rw [map_map']⟩⟩
 -/
 def setoid : Setoid (Σ i, F i) where
   r x y := existsᵉ (i) (hx : x.1 <= i) (hy : y.1 <= i), f _ _ hx x.2 = f _ _ hy y.2
@@ -598,7 +598,7 @@ fun _ _ _ _ ⟨j, hx, hyj, jeq⟩ ⟨k, hyk, hz, keq⟩ => heq_of_eq by
       have ⟨i, hji, hki⟩ := exists_ge_ge j k
       simp_rw [(lift₂Aux ..).2 _ (hx.trans hji) (hyk.trans hki),
         (lift₂Aux ..).2 _ (hyj.trans hji) (hz.trans hki),
-     
+        ← map_map' _ hx hji, jeq, ← map_map' _ hz hki, ← keq, map_map']
 
 中文:
 定义 noncomputable
@@ -608,7 +608,7 @@ fun _ _ _ _ ⟨j, hx, hyj, jeq⟩ ⟨k, hyk, hz, keq⟩ => heq_of_eq by
       have ⟨i, hji, hki⟩ := exists_ge_ge j k
       simp_rw [(lift₂Aux ..).2 _ (hx.trans hji) (hyk.trans hki),
         (lift₂Aux ..).2 _ (hyj.trans hji) (hz.trans hki),
-     
+        ← map_map' _ hx hji, jeq, ← map_map' _ hz hki, ← keq, map_map']
 -/
 protected noncomputable def lift₂ (z : DirectLimit F₁ f₁) (w : DirectLimit F₂ f₂) : C :=
   z.hrecOn₂ w (φ := fun _ _ => C) (lift₂Aux f₁ f₂ ih compat · ·)
@@ -1047,7 +1047,9 @@ theorem isNatEquiv_piEquivSucc
   · obtain rfl | hk := le_succ_iff_eq_or_le.mp hk
     · simp [InverseSystem.map_self]
     · funext l
-      rw [piEquivSucc]; rw [piSplitLE_lt (lt_succ hk)]; rw [← 
+      rw [piEquivSucc]; rw [piSplitLE_lt (lt_succ hk)]; rw [← InverseSystem.map_map (f := f) hk (le_succ i)]; rw [← H]; rw [piLTProj]; rw [nat le_rfl]
+      simp [piSplitLE_lt (l.2.trans_le hk)]
+  · rw [piEquivSucc, piSplitLE_lt (h.trans_lt <| lt_succ hj), nat hj, piSplitLE_lt (lt_succ hj)]
 
 中文:
 定理 is自然数Equiv_piEquivSucc
@@ -1058,7 +1060,9 @@ theorem isNatEquiv_piEquivSucc
   · obtain rfl | hk := le_succ_iff_eq_or_le.mp hk
     · simp [InverseSystem.map_self]
     · funext l
-      rw [piEquivSucc]; rw [piSplitLE_lt (lt_succ hk)]; rw [← 
+      rw [piEquivSucc]; rw [piSplitLE_lt (lt_succ hk)]; rw [← InverseSystem.map_map (f := f) hk (le_succ i)]; rw [← H]; rw [piLTProj]; rw [nat le_rfl]
+      simp [piSplitLE_lt (l.2.trans_le hk)]
+  · rw [piEquivSucc, piSplitLE_lt (h.trans_lt <| lt_succ hj), nat hj, piSplitLE_lt (lt_succ hj)]
 
 Depends on / 依赖: InverseSystem, InverseSystem.map_map, InverseSystem.map_self, h.trans_lt, le_rfl, le_succ, le_succ_iff_eq_or_le, le_succ_iff_eq_or_le.mp, lt_succ, lt_succ_iff_of_not_isMax, map_map, map_self, piEquivSucc, piLTProj, piSplitLE_lt, trans_le, trans_lt
 -/
@@ -1143,7 +1147,8 @@ theorem isNatEquiv_piEquivLim
     · simp [InverseSystem.map_self]
     · funext l
       simp_rw [piEquivLim, piSplitLE_lt hk, piSplitLE_eq, Equiv.trans_apply]
-      rw [piLTProj]; rw [piLTLim_symm_apply hi ⟨k]; rw [hk⟩ (by exact l.2)]; rw 
+      rw [piLTProj]; rw [piLTLim_symm_apply hi ⟨k]; rw [hk⟩ (by exact l.2)]; rw [invLimEquiv_apply_coe]; rw [H]
+  · rw [piEquivLim, piSplitLE_lt (h.trans_lt hj), piSplitLE_lt hj]; apply nat
 
 中文:
 定理 is自然数Equiv_piEquivLim
@@ -1154,7 +1159,8 @@ theorem isNatEquiv_piEquivLim
     · simp [InverseSystem.map_self]
     · funext l
       simp_rw [piEquivLim, piSplitLE_lt hk, piSplitLE_eq, Equiv.trans_apply]
-      rw [piLTProj]; rw [piLTLim_symm_apply hi ⟨k]; rw [hk⟩ (by exact l.2)]; rw 
+      rw [piLTProj]; rw [piLTLim_symm_apply hi ⟨k]; rw [hk⟩ (by exact l.2)]; rw [invLimEquiv_apply_coe]; rw [H]
+  · rw [piEquivLim, piSplitLE_lt (h.trans_lt hj), piSplitLE_lt hj]; apply nat
 
 Depends on / 依赖: Equiv.trans_apply, InverseSystem, InverseSystem.map_self, eq_or_lt, h.trans_lt, hj.eq_or_lt, hk.eq_or_lt, invLimEquiv_apply_coe, map_self, piEquivLim, piLTLim_symm_apply, piLTProj, piSplitLE_eq, piSplitLE_lt, simp_rw, trans_apply, trans_lt
 -/
@@ -1241,7 +1247,14 @@ theorem unique_pEquivOn
   refine SuccOrder.prelimitRecOn i.1 (motive := fun i => forall h : i in s, e₁ ⟨i, h⟩ = e₂ ⟨i, h⟩)
     (fun i nmax ih hi => ?_) (fun i lim ih hi => ?_) i.2
   · ext x ⟨j, hj⟩
-    obtain rfl | hj := ((l
+    obtain rfl | hj := ((lt_succ_iff_of_not_isMax nmax).mp hj).eq_or_lt
+    · exact (compat₁ _ nmax x).trans (compat₂ _ nmax x).symm
+    have hi : i in s := hs (le_succ i) hi
+    rw [piLTProj_intro (f := e₁ _ x) (le_succ i) (by exact hj)]; rw [← nat₁ _ hi (by exact le_succ i)]; rw [ih]; rw [nat₂ _ hi (by exact le_succ i)]
+  · ext x j
+    have ⟨k, hjk, hki⟩ := lim.mid j.2
+    have hk : k in s := hs hki.le hi
+    rw [piLTProj_intro (f := e₁ _ x) hki.le hjk]; rw [piLTProj_intro (f := e₂ _ x) hki.le hjk]; rw [← nat₁ _ hk]; rw [← nat₂ _ hk]; rw [ih _ hki]
 
 中文:
 定理 unique_pEquivOn
@@ -1254,7 +1267,14 @@ theorem unique_pEquivOn
   refine SuccOrder.prelimitRecOn i.1 (motive := fun i => forall h : i in s, e₁ ⟨i, h⟩ = e₂ ⟨i, h⟩)
     (fun i nmax ih hi => ?_) (fun i lim ih hi => ?_) i.2
   · ext x ⟨j, hj⟩
-    obtain rfl | hj := ((l
+    obtain rfl | hj := ((lt_succ_iff_of_not_isMax nmax).mp hj).eq_or_lt
+    · exact (compat₁ _ nmax x).trans (compat₂ _ nmax x).symm
+    have hi : i in s := hs (le_succ i) hi
+    rw [piLTProj_intro (f := e₁ _ x) (le_succ i) (by exact hj)]; rw [← nat₁ _ hi (by exact le_succ i)]; rw [ih]; rw [nat₂ _ hi (by exact le_succ i)]
+  · ext x j
+    have ⟨k, hjk, hki⟩ := lim.mid j.2
+    have hk : k in s := hs hki.le hi
+    rw [piLTProj_intro (f := e₁ _ x) hki.le hjk]; rw [piLTProj_intro (f := e₂ _ x) hki.le hjk]; rw [← nat₁ _ hk]; rw [← nat₂ _ hk]; rw [ih _ hki]
 
 Depends on / 依赖: SuccOrder, SuccOrder.prelimitRecOn, eq_or_lt, le_succ, lt_succ_iff_of_not_isMax, motive, piLTProj_intro, prelimitRecOn
 -/
@@ -1347,7 +1367,9 @@ definition pEquivOnGlue
   body: (piLTLim (X := fun j => F j ≃ piLT X j) hi).symm
     ⟨fun j => ((e j).restrict fun _ h => h.le).equiv, fun _ _ h => funext fun _ =>
       pEquivOn_apply_eq ((isLowerSet_Iio _).inter <| isLowerSet_Iio _)⟩
-  nat j k hj hk h := by rw [piLTLim_symm_apply]; exacts [(e _).nat _ _ _, h.trans_lt (hi.mid _).
+  nat j k hj hk h := by rw [piLTLim_symm_apply]; exacts [(e _).nat _ _ _, h.trans_lt (hi.mid _).2.1]
+  compat hj := have k := hi.mid hj
+    by rw [piLTLim_symm_apply hi ⟨_, k.2.2⟩ (by exact k.2.1)]; apply (e _).compat
 
 中文:
 定义 pEquivOnGlue
@@ -1355,7 +1377,9 @@ definition pEquivOnGlue
   定义体: (piLTLim (X := fun j => F j ≃ piLT X j) hi).symm
     ⟨fun j => ((e j).restrict fun _ h => h.le).equiv, fun _ _ h => funext fun _ =>
       pEquivOn_apply_eq ((isLowerSet_Iio _).inter <| isLowerSet_Iio _)⟩
-  nat j k hj hk h := by rw [piLTLim_symm_apply]; exacts [(e _).nat _ _ _, h.trans_lt (hi.mid _).
+  nat j k hj hk h := by rw [piLTLim_symm_apply]; exacts [(e _).nat _ _ _, h.trans_lt (hi.mid _).2.1]
+  compat hj := have k := hi.mid hj
+    by rw [piLTLim_symm_apply hi ⟨_, k.2.2⟩ (by exact k.2.1)]; apply (e _).compat
 
 Depends on / 依赖: piLTLim
 -/

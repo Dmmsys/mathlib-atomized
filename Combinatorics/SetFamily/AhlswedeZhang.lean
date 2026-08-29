@@ -66,7 +66,21 @@ lemma binomial_sum_eq
     rw [← sum_congr rfl this]; rw [sum_range_sub']; rw [hf]
     simp [choose_zero_right]
   intro i h₁
-  rw [mem_range
+  rw [mem_range] at h₁
+  have h₁ := le_of_lt_succ h₁
+  have h₂ := h₁.trans_lt h
+  have h₃ := h₂.le
+  have hi₄ : (i + 1 : Rat) != 0 := i.cast_add_one_ne_zero
+  have := congr_arg ((↑) : Nat -> Rat) (choose_succ_right_eq m i)
+  push_cast at this
+  dsimp [f, hf]
+  rw [(eq_mul_inv_iff_mul_eq₀ hi₄).mpr this]
+  have := congr_arg ((↑) : Nat -> Rat) (choose_succ_right_eq n i)
+  push_cast at this
+  rw [(eq_mul_inv_iff_mul_eq₀ hi₄).mpr this]
+  have : (m - i : Rat) != 0 := sub_ne_zero_of_ne (cast_lt.mpr h₂).ne'
+  have : (m.choose i : Rat) != 0 := cast_ne_zero.2 (choose_pos h₂.le).ne'
+  simp [field, *]
 
 中文:
 引理 binomial_sum_eq
@@ -77,7 +91,21 @@ lemma binomial_sum_eq
     rw [← sum_congr rfl this]; rw [sum_range_sub']; rw [hf]
     simp [choose_zero_right]
   intro i h₁
-  rw [mem_range
+  rw [mem_range] at h₁
+  have h₁ := le_of_lt_succ h₁
+  have h₂ := h₁.trans_lt h
+  have h₃ := h₂.le
+  have hi₄ : (i + 1 : Rat) != 0 := i.cast_add_one_ne_zero
+  have := congr_arg ((↑) : Nat -> Rat) (choose_succ_right_eq m i)
+  push_cast at this
+  dsimp [f, hf]
+  rw [(eq_mul_inv_iff_mul_eq₀ hi₄).mpr this]
+  have := congr_arg ((↑) : Nat -> Rat) (choose_succ_right_eq n i)
+  push_cast at this
+  rw [(eq_mul_inv_iff_mul_eq₀ hi₄).mpr this]
+  have : (m - i : Rat) != 0 := sub_ne_zero_of_ne (cast_lt.mpr h₂).ne'
+  have : (m.choose i : Rat) != 0 := cast_ne_zero.2 (choose_pos h₂.le).ne'
+  simp [field, *]
 -/
 private lemma binomial_sum_eq (h : n < m) :
     ∑ i in range (n + 1), (n.choose i * (m - n) / ((m - i) * m.choose i) : Rat) = 1 := by
@@ -114,7 +142,17 @@ lemma Fintype.sum_div_mul_card_choose_card
     (card α / ((card α - #s) * (card α).choose #s) : Rat) =
       card α / ((card α - x) * (card α).choose x) := by
     intro n s hs
-    rw [mem_powe
+    rw [mem_powersetCard_univ.1 hs]
+  simp_rw [Finset.sum_congr rfl this, sum_const, card_powersetCard, card_univ, nsmul_eq_mul,
+    mul_div, mul_comm, ← mul_div]
+  rw [← mul_sum]; rw [← mul_inv_cancel₀ (cast_ne_zero.mpr card_ne_zero : (card α : Rat) != 0)]; rw [← mul_add]; rw [add_comm _ ((card α)⁻¹ : Rat)]; rw [← sum_insert (f := fun x : Nat => (x⁻¹ : Rat)) notMem_range_self]; rw [← range_add_one]
+  have (n) (hn : n in range (card α + 1)) :
+      ((card α).choose n / ((card α - n) * (card α).choose n) : Rat) = (card α - n : Rat)⁻¹ := by
+    rw [div_mul_cancel_right₀]
+    exact cast_ne_zero.2 (choose_pos <| mem_range_succ_iff.1 hn).ne'
+  simp only [Finset.sum_congr rfl this, mul_eq_mul_left_iff, cast_eq_zero]
+convert! Or.inl sum_range_reflect _ _ with a ha
+  rw [add_tsub_cancel_right]; rw [cast_sub (mem_range_succ_iff.mp ha)]
 
 中文:
 引理 有限类型.sum_div_mul_card_choose_card
@@ -124,7 +162,17 @@ lemma Fintype.sum_div_mul_card_choose_card
     (card α / ((card α - #s) * (card α).choose #s) : Rat) =
       card α / ((card α - x) * (card α).choose x) := by
     intro n s hs
-    rw [mem_powe
+    rw [mem_powersetCard_univ.1 hs]
+  simp_rw [Finset.sum_congr rfl this, sum_const, card_powersetCard, card_univ, nsmul_eq_mul,
+    mul_div, mul_comm, ← mul_div]
+  rw [← mul_sum]; rw [← mul_inv_cancel₀ (cast_ne_zero.mpr card_ne_zero : (card α : Rat) != 0)]; rw [← mul_add]; rw [add_comm _ ((card α)⁻¹ : Rat)]; rw [← sum_insert (f := fun x : Nat => (x⁻¹ : Rat)) notMem_range_self]; rw [← range_add_one]
+  have (n) (hn : n in range (card α + 1)) :
+      ((card α).choose n / ((card α - n) * (card α).choose n) : Rat) = (card α - n : Rat)⁻¹ := by
+    rw [div_mul_cancel_right₀]
+    exact cast_ne_zero.2 (choose_pos <| mem_range_succ_iff.1 hn).ne'
+  simp only [Finset.sum_congr rfl this, mul_eq_mul_left_iff, cast_eq_zero]
+convert! Or.inl sum_range_reflect _ _ with a ha
+  rw [add_tsub_cancel_right]; rw [cast_sub (mem_range_succ_iff.mp ha)]
 -/
 private lemma Fintype.sum_div_mul_card_choose_card :
     ∑ s : Finset α, (card α / ((card α - #s) * (card α).choose #s) : Rat) =
@@ -337,7 +385,7 @@ lemma map_truncatedSup
   simp_rw [truncatedSup, apply_dite e, map_finset_sup', map_top, this]
   congr with h
   simp only [filter_map, Function.comp_def, Equiv.coe_toEmbedding, RelIso.coe_fn_toEquiv,
-    OrderIso.le_iff_l
+    OrderIso.le_iff_le, id, sup'_map]
 
 中文:
 引理 map_truncatedSup
@@ -347,7 +395,7 @@ lemma map_truncatedSup
   simp_rw [truncatedSup, apply_dite e, map_finset_sup', map_top, this]
   congr with h
   simp only [filter_map, Function.comp_def, Equiv.coe_toEmbedding, RelIso.coe_fn_toEquiv,
-    OrderIso.le_iff_l
+    OrderIso.le_iff_le, id, sup'_map]
 
 Depends on / 依赖: Equiv.coe_toEmbedding, Function, Function.comp_def, OrderIso, OrderIso.le_iff_le, RelIso, RelIso.coe_fn_toEquiv, _map, apply_dite, coe_fn_toEquiv, coe_toEmbedding, comp_def, e.toEquiv.toEmbedding, filter_map, le_iff_le, lowerClosure, map_finset_sup, map_top, s.map, simp_rw
 -/
@@ -669,7 +717,7 @@ lemma map_truncatedInf
   simp_rw [truncatedInf, apply_dite e, map_finset_inf', map_bot, this]
   congr with h
   simp only [filter_map, Function.comp_def, Equiv.coe_toEmbedding, RelIso.coe_fn_toEquiv,
-    OrderIso.le_iff_le, id, i
+    OrderIso.le_iff_le, id, inf'_map]
 
 中文:
 引理 map_truncatedInf
@@ -679,7 +727,7 @@ lemma map_truncatedInf
   simp_rw [truncatedInf, apply_dite e, map_finset_inf', map_bot, this]
   congr with h
   simp only [filter_map, Function.comp_def, Equiv.coe_toEmbedding, RelIso.coe_fn_toEquiv,
-    OrderIso.le_iff_le, id, i
+    OrderIso.le_iff_le, id, inf'_map]
 
 Depends on / 依赖: Equiv.coe_toEmbedding, Function, Function.comp_def, OrderIso, OrderIso.le_iff_le, RelIso, RelIso.coe_fn_toEquiv, _map, apply_dite, coe_fn_toEquiv, coe_toEmbedding, comp_def, e.toEquiv.toEmbedding, filter_map, le_iff_le, map_bot, map_finset_inf, s.map, simp_rw, toEmbedding
 -/
@@ -1008,7 +1056,11 @@ lemma card_truncatedSup_union_add_card_truncatedSup_infs
   · rw [truncatedSup_union h𝒜 hℬ, truncatedSup_infs h𝒜 hℬ]
     exact card_union_add_card_inter _ _
   · rw [truncatedSup_union_left h𝒜 hℬ, truncatedSup_of_notMem hℬ,
-      truncate
+      truncatedSup_infs_of_notMem fun h => hℬ h.2]
+  · rw [truncatedSup_union_right h𝒜 hℬ, truncatedSup_of_notMem h𝒜,
+      truncatedSup_infs_of_notMem fun h => h𝒜 h.1, add_comm]
+  · rw [truncatedSup_of_notMem h𝒜, truncatedSup_of_notMem hℬ,
+      truncatedSup_union_of_notMem h𝒜 hℬ, truncatedSup_infs_of_notMem fun h => h𝒜 h.1]
 
 中文:
 引理 card_truncatedSup_union_add_card_truncatedSup_infs
@@ -1019,7 +1071,11 @@ lemma card_truncatedSup_union_add_card_truncatedSup_infs
   · rw [truncatedSup_union h𝒜 hℬ, truncatedSup_infs h𝒜 hℬ]
     exact card_union_add_card_inter _ _
   · rw [truncatedSup_union_left h𝒜 hℬ, truncatedSup_of_notMem hℬ,
-      truncate
+      truncatedSup_infs_of_notMem fun h => hℬ h.2]
+  · rw [truncatedSup_union_right h𝒜 hℬ, truncatedSup_of_notMem h𝒜,
+      truncatedSup_infs_of_notMem fun h => h𝒜 h.1, add_comm]
+  · rw [truncatedSup_of_notMem h𝒜, truncatedSup_of_notMem hℬ,
+      truncatedSup_union_of_notMem h𝒜 hℬ, truncatedSup_infs_of_notMem fun h => h𝒜 h.1]
 
 Depends on / 依赖: Finset, add_comm, card_union_add_card_inter, lowerClosure, truncatedSup_infs, truncatedSup_infs_of_notMem, truncatedSup_of_notMem, truncatedSup_union, truncatedSup_union_left, truncatedSup_union_right
 -/
@@ -1049,7 +1105,11 @@ lemma card_truncatedInf_union_add_card_truncatedInf_sups
   · rw [truncatedInf_union h𝒜 hℬ, truncatedInf_sups h𝒜 hℬ]
     exact card_inter_add_card_union _ _
   · rw [truncatedInf_union_left h𝒜 hℬ, truncatedInf_of_notMem hℬ,
-      truncate
+      truncatedInf_sups_of_notMem fun h => hℬ h.2]
+  · rw [truncatedInf_union_right h𝒜 hℬ, truncatedInf_of_notMem h𝒜,
+      truncatedInf_sups_of_notMem fun h => h𝒜 h.1, add_comm]
+  · rw [truncatedInf_of_notMem h𝒜, truncatedInf_of_notMem hℬ,
+      truncatedInf_union_of_notMem h𝒜 hℬ, truncatedInf_sups_of_notMem fun h => h𝒜 h.1]
 
 中文:
 引理 card_truncatedInf_union_add_card_truncatedInf_sups
@@ -1060,7 +1120,11 @@ lemma card_truncatedInf_union_add_card_truncatedInf_sups
   · rw [truncatedInf_union h𝒜 hℬ, truncatedInf_sups h𝒜 hℬ]
     exact card_inter_add_card_union _ _
   · rw [truncatedInf_union_left h𝒜 hℬ, truncatedInf_of_notMem hℬ,
-      truncate
+      truncatedInf_sups_of_notMem fun h => hℬ h.2]
+  · rw [truncatedInf_union_right h𝒜 hℬ, truncatedInf_of_notMem h𝒜,
+      truncatedInf_sups_of_notMem fun h => h𝒜 h.1, add_comm]
+  · rw [truncatedInf_of_notMem h𝒜, truncatedInf_of_notMem hℬ,
+      truncatedInf_union_of_notMem h𝒜 hℬ, truncatedInf_sups_of_notMem fun h => h𝒜 h.1]
 
 Depends on / 依赖: Finset, add_comm, card_inter_add_card_union, truncatedInf_of_notMem, truncatedInf_sups, truncatedInf_sups_of_notMem, truncatedInf_union, truncatedInf_union_left, truncatedInf_union_right, upperClosure
 -/
@@ -1194,7 +1258,8 @@ lemma IsAntichain.le_infSum
     _ <= _ := sum_le_univ_sum_of_nonneg fun s => by positivity
   refine sum_congr rfl fun s hs => ?_
   rw [truncatedInf_of_isAntichain h𝒜 hs]; rw [div_mul_cancel_left₀]
-  have := (nonempty_iff_ne_empty.2 <| ne_of
+  have := (nonempty_iff_ne_empty.2 <| ne_of_mem_of_not_mem hs h𝒜₀).card_pos
+  positivity
 
 中文:
 引理 IsAntichain.le_infSum
@@ -1205,7 +1270,8 @@ lemma IsAntichain.le_infSum
     _ <= _ := sum_le_univ_sum_of_nonneg fun s => by positivity
   refine sum_congr rfl fun s hs => ?_
   rw [truncatedInf_of_isAntichain h𝒜 hs]; rw [div_mul_cancel_left₀]
-  have := (nonempty_iff_ne_empty.2 <| ne_of
+  have := (nonempty_iff_ne_empty.2 <| ne_of_mem_of_not_mem hs h𝒜₀).card_pos
+  positivity
 
 Depends on / 依赖: card_pos, ne_of_mem_of_not_mem, nonempty_iff_ne_empty, sum_congr, sum_le_univ_sum_of_nonneg, truncatedInf, truncatedInf_of_isAntichain
 -/
@@ -1234,7 +1300,12 @@ lemma supSum_singleton
     rintro t
     simp_rw [truncatedSup_singleton]
     split_ifs <;> simp
-  simp_rw [← 
+  simp_rw [← sub_eq_of_eq_add (Fintype.sum_div_mul_card_choose_card α), eq_sub_iff_add_eq,
+    ← eq_sub_iff_add_eq', supSum, ← sum_sub_distrib, ← sub_div]
+  rw [sum_congr rfl fun t _ => this t]; rw [sum_ite]; rw [sum_const_zero]; rw [add_zero]; rw [filter_subset_univ]; rw [sum_powerset]; rw [← binomial_sum_eq ((card_lt_iff_ne_univ _).2 hs)]; rw [eq_comm]
+  refine sum_congr rfl fun n _ => ?_
+  rw [mul_div_assoc]; rw [← nsmul_eq_mul]
+  exact sum_powersetCard n s fun m => (card α - #s : Rat) / ((card α - m) * (card α).choose m)
 
 中文:
 引理 supSum_singleton
@@ -1246,7 +1317,12 @@ lemma supSum_singleton
     rintro t
     simp_rw [truncatedSup_singleton]
     split_ifs <;> simp
-  simp_rw [← 
+  simp_rw [← sub_eq_of_eq_add (Fintype.sum_div_mul_card_choose_card α), eq_sub_iff_add_eq,
+    ← eq_sub_iff_add_eq', supSum, ← sum_sub_distrib, ← sub_div]
+  rw [sum_congr rfl fun t _ => this t]; rw [sum_ite]; rw [sum_const_zero]; rw [add_zero]; rw [filter_subset_univ]; rw [sum_powerset]; rw [← binomial_sum_eq ((card_lt_iff_ne_univ _).2 hs)]; rw [eq_comm]
+  refine sum_congr rfl fun n _ => ?_
+  rw [mul_div_assoc]; rw [← nsmul_eq_mul]
+  exact sum_powersetCard n s fun m => (card α - #s : Rat) / ((card α - m) * (card α).choose m)
 -/
 @[simp] lemma supSum_singleton (hs : s != univ) :
     supSum ({s} : Finset (Finset α)) = card α * ∑ k in range (card α), (k : Rat)⁻¹ := by
@@ -1273,7 +1349,8 @@ lemma infSum_compls_add_supSum
   unfold infSum supSum
   rw [← @map_univ_of_surjective (Finset α) _ _ _ ⟨compl]; rw [compl_injective⟩ compl_surjective]; rw [sum_map]
   simp only [Function.Embedding.coeFn_mk, univ_map_embedding, ← compl_truncatedSup,
-    ← sum_add_distrib, card_compl, cast_sub (card_le_univ _), choose_symm (card
+    ← sum_add_distrib, card_compl, cast_sub (card_le_univ _), choose_symm (card_le_univ _),
+    ← add_div, sub_add_cancel, Fintype.sum_div_mul_card_choose_card]
 
 中文:
 引理 infSum_compls_add_supSum
@@ -1282,7 +1359,8 @@ lemma infSum_compls_add_supSum
   unfold infSum supSum
   rw [← @map_univ_of_surjective (Finset α) _ _ _ ⟨compl]; rw [compl_injective⟩ compl_surjective]; rw [sum_map]
   simp only [Function.Embedding.coeFn_mk, univ_map_embedding, ← compl_truncatedSup,
-    ← sum_add_distrib, card_compl, cast_sub (card_le_univ _), choose_symm (card
+    ← sum_add_distrib, card_compl, cast_sub (card_le_univ _), choose_symm (card_le_univ _),
+    ← add_div, sub_add_cancel, Fintype.sum_div_mul_card_choose_card]
 
 Depends on / 依赖: Embedding, Finset, Fintype, Fintype.sum_div_mul_card_choose_card, Function, Function.Embedding.coeFn_mk, add_div, card_compl, card_le_univ, cast_sub, choose_symm, coeFn_mk, compl_injective, compl_surjective, compl_truncatedSup, infSum, map_univ_of_surjective, sub_add_cancel, sum_add_distrib, sum_div_mul_card_choose_card
 -/
@@ -1307,7 +1385,18 @@ lemma supSum_of_univ_notMem
   replace ih := fun 𝒜 h𝒜 h𝒜₁ h𝒜₂ => @ih _ h𝒜 𝒜 h𝒜₁ h𝒜₂ rfl
   obtain ⟨a, rfl⟩ | h𝒜₃ := h𝒜₁.exists_eq_singleton_or_nontrivial
   · refine supSum_singleton ?_
-    simpa [eq_comm] using h𝒜
+    simpa [eq_comm] using h𝒜₂
+  cases m
+  · cases h𝒜₁.card_pos.ne hm
+  obtain ⟨s, 𝒜, hs, rfl, rfl⟩ := card_eq_succ.1 hm.symm
+  have h𝒜 : 𝒜.Nonempty := by by_contra! rfl; simp at h𝒜₃
+  rw [insert_eq]; rw [eq_sub_of_add_eq (supSum_union_add_supSum_infs _ _)]; rw [singleton_infs]; rw [supSum_singleton (ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂)]; rw [ih]; rw [ih]; rw [add_sub_cancel_right]
+  · exact card_image_le.trans_lt (lt_add_one _)
+  · exact h𝒜.image _
+  · simpa using fun _ => ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂
+  · exact lt_add_one _
+  · exact h𝒜
+  · exact fun h => h𝒜₂ (mem_insert_of_mem h)
 
 中文:
 引理 supSum_of_univ_notMem
@@ -1319,7 +1408,18 @@ lemma supSum_of_univ_notMem
   replace ih := fun 𝒜 h𝒜 h𝒜₁ h𝒜₂ => @ih _ h𝒜 𝒜 h𝒜₁ h𝒜₂ rfl
   obtain ⟨a, rfl⟩ | h𝒜₃ := h𝒜₁.exists_eq_singleton_or_nontrivial
   · refine supSum_singleton ?_
-    simpa [eq_comm] using h𝒜
+    simpa [eq_comm] using h𝒜₂
+  cases m
+  · cases h𝒜₁.card_pos.ne hm
+  obtain ⟨s, 𝒜, hs, rfl, rfl⟩ := card_eq_succ.1 hm.symm
+  have h𝒜 : 𝒜.Nonempty := by by_contra! rfl; simp at h𝒜₃
+  rw [insert_eq]; rw [eq_sub_of_add_eq (supSum_union_add_supSum_infs _ _)]; rw [singleton_infs]; rw [supSum_singleton (ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂)]; rw [ih]; rw [ih]; rw [add_sub_cancel_right]
+  · exact card_image_le.trans_lt (lt_add_one _)
+  · exact h𝒜.image _
+  · simpa using fun _ => ne_of_mem_of_not_mem (mem_insert_self _ _) h𝒜₂
+  · exact lt_add_one _
+  · exact h𝒜
+  · exact fun h => h𝒜₂ (mem_insert_of_mem h)
 
 Depends on / 依赖: Nat.strongRecOn, Nonempty, card_eq_succ, card_pos, card_pos.ne, clear_value, eq_comm, eq_sub_of_add_eq, exists_eq_singleton_or_nontrivial, generalizing, hm.symm, insert_eq, replace, strongRecOn, supSum_singleton, supSum_union_add_supSum_infs
 -/

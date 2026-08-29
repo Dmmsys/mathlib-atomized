@@ -361,7 +361,9 @@ theorem isPrimePow_nat_iff_bounded_log
     · calc
         k = Nat.log 2 (2 ^ k) := by simp
         _ <= Nat.log 2 (p ^ k) := Nat.log_mono Nat.one_lt_two Nat.AtLeastTwo.prop
-                                   
+                                   (Nat.pow_le_pow_left (Nat.Prime.two_le hp') k)
+  · rintro ⟨k, hk, hk', ⟨p, hp, rfl, hp'⟩⟩
+    exact ⟨p, k, hp', hk', rfl⟩
 
 中文:
 定理 isPrimePow_nat_iff_bounded_log
@@ -374,7 +376,9 @@ theorem isPrimePow_nat_iff_bounded_log
     · calc
         k = Nat.log 2 (2 ^ k) := by simp
         _ <= Nat.log 2 (p ^ k) := Nat.log_mono Nat.one_lt_two Nat.AtLeastTwo.prop
-                                   
+                                   (Nat.pow_le_pow_left (Nat.Prime.two_le hp') k)
+  · rintro ⟨k, hk, hk', ⟨p, hp, rfl, hp'⟩⟩
+    exact ⟨p, k, hp', hk', rfl⟩
 
 Depends on / 依赖: AtLeastTwo, Nat.AtLeastTwo.prop, Nat.Prime.two_le, Nat.le_pow, Nat.log, Nat.log_mono, Nat.one_lt_two, Nat.pow_le_pow_left, isPrimePow_nat_iff, le_pow, log_mono, one_lt_two, pow_le_pow_left, two_le
 -/
@@ -407,7 +411,9 @@ theorem isPrimePow_nat_iff_bounded_log_minFac
     refine ⟨k, hkle, hk_pos, ?_⟩
     rw [heq]; rw [hprime.pow_minFac hk_pos.ne']
   · rintro ⟨k, hkle, hk_pos, heq⟩
-    refine ⟨k, hkle, hk_pos, n.minFac,
+    refine ⟨k, hkle, hk_pos, n.minFac, Nat.minFac_le ?_, heq, ?_⟩
+    · grind [Nat.minFac_prime_iff, nonpos_iff_eq_zero, Nat.log_zero_right, lt_self_iff_false]
+    · grind [Nat.minFac_prime_iff]
 
 中文:
 定理 isPrimePow_nat_iff_bounded_log_minFac
@@ -421,7 +427,9 @@ theorem isPrimePow_nat_iff_bounded_log_minFac
     refine ⟨k, hkle, hk_pos, ?_⟩
     rw [heq]; rw [hprime.pow_minFac hk_pos.ne']
   · rintro ⟨k, hkle, hk_pos, heq⟩
-    refine ⟨k, hkle, hk_pos, n.minFac,
+    refine ⟨k, hkle, hk_pos, n.minFac, Nat.minFac_le ?_, heq, ?_⟩
+    · grind [Nat.minFac_prime_iff, nonpos_iff_eq_zero, Nat.log_zero_right, lt_self_iff_false]
+    · grind [Nat.minFac_prime_iff]
 
 Depends on / 依赖: Nat.log_zero_right, Nat.minFac_le, Nat.minFac_prime_iff, eq_or_ne, hk_pos, hk_pos.ne, hprime, hprime.pow_minFac, isPrimePow_nat_iff_bounded_log, log_zero_right, lt_self_iff_false, minFac, minFac_le, minFac_prime_iff, n.minFac, nonpos_iff_eq_zero, pow_minFac
 -/

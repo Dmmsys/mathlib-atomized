@@ -442,7 +442,13 @@ theorem norm_torusIntegral_le_of_norm_le_const
       norm_setIntegral_le_of_norm_le_const measure_Icc_lt_top fun θ _ =>
         calc
           ‖(∏ i : Fin n, R i * exp (θ i * I) * I : Complex) • f (torusMap c R θ)‖ =
-              (∏ i : Fin 
+              (∏ i : Fin n, |R i|) * ‖f (torusMap c R θ)‖ := by simp [norm_smul]
+_ <= (∏ i : Fin n, |R i|) * C := mul_le_mul_of_nonneg_left (hf _) by positivity
+    _ = ((2 * π) ^ (n : Nat) * ∏ i, |R i|) * C := by
+      simp only [Pi.zero_def, Real.volume_Icc_pi_toReal fun _ => Real.two_pi_pos.le, sub_zero,
+        Fin.prod_const, mul_assoc, mul_comm ((2 * π) ^ (n : Nat))]
+
+@[simp]
 
 中文:
 定理 norm_torus整数egral_le_of_norm_le_const
@@ -452,7 +458,13 @@ theorem norm_torusIntegral_le_of_norm_le_const
       norm_setIntegral_le_of_norm_le_const measure_Icc_lt_top fun θ _ =>
         calc
           ‖(∏ i : Fin n, R i * exp (θ i * I) * I : Complex) • f (torusMap c R θ)‖ =
-              (∏ i : Fin 
+              (∏ i : Fin n, |R i|) * ‖f (torusMap c R θ)‖ := by simp [norm_smul]
+_ <= (∏ i : Fin n, |R i|) * C := mul_le_mul_of_nonneg_left (hf _) by positivity
+    _ = ((2 * π) ^ (n : Nat) * ∏ i, |R i|) * C := by
+      simp only [Pi.zero_def, Real.volume_Icc_pi_toReal fun _ => Real.two_pi_pos.le, sub_zero,
+        Fin.prod_const, mul_assoc, mul_comm ((2 * π) ^ (n : Nat))]
+
+@[simp]
 
 Depends on / 依赖: Pi.zero_def, Real.volume_Icc_pi_toReal, measure_Icc_lt_top, mul_le_mul_of_nonneg_left, norm_setIntegral_le_of_norm_le_const, norm_smul, toReal, torusMap, volume, volume_Icc_pi_toReal, zero_def
 -/
@@ -480,7 +492,7 @@ theorem torusIntegral_dim0
   simp only [torusIntegral, Fin.prod_univ_zero, one_smul,
     Subsingleton.elim (fun _ : Fin 0 => 2 * π) 0, Icc_self, Measure.restrict_singleton, volume_pi,
     integral_dirac, Measure.pi_of_empty (fun _ : Fin 0 => volume) 0,
-    Measure.dirac_apply_of_mem (mem_singleton _), Subsingleton.elim (to
+    Measure.dirac_apply_of_mem (mem_singleton _), Subsingleton.elim (torusMap c R 0) c]
 
 中文:
 定理 torus整数egral_dim0
@@ -489,7 +501,7 @@ theorem torusIntegral_dim0
   simp only [torusIntegral, Fin.prod_univ_zero, one_smul,
     Subsingleton.elim (fun _ : Fin 0 => 2 * π) 0, Icc_self, Measure.restrict_singleton, volume_pi,
     integral_dirac, Measure.pi_of_empty (fun _ : Fin 0 => volume) 0,
-    Measure.dirac_apply_of_mem (mem_singleton _), Subsingleton.elim (to
+    Measure.dirac_apply_of_mem (mem_singleton _), Subsingleton.elim (torusMap c R 0) c]
 
 Depends on / 依赖: Fin.prod_univ_zero, Icc_self, Measure, Measure.dirac_apply_of_mem, Measure.pi_of_empty, Measure.restrict_singleton, Subsingleton, Subsingleton.elim, dirac_apply_of_mem, integral_dirac, mem_singleton, one_smul, pi_of_empty, prod_univ_zero, restrict_singleton, torusIntegral, torusMap, volume, volume_pi
 -/
@@ -513,7 +525,9 @@ theorem torusIntegral_dim1
   have H₂ : torusMap c R = fun θ _ => circleMap (c 0) (R 0) (θ 0) := by
     ext θ i : 2
     rw [Subsingleton.elim i 0]; rfl
-  rw [torusInteg
+  rw [torusIntegral]; rw [circleIntegral]; rw [intervalIntegral.integral_of_le Real.two_pi_pos.le]; rw [Measure.restrict_congr_set Ioc_ae_eq_Icc]; rw [← ((volume_preserving_funUnique (Fin 1) Real).symm _).setIntegral_preimage_emb
+      (MeasurableEquiv.measurableEmbedding _)]; rw [H₁]; rw [H₂]
+  simp [circleMap_zero]
 
 中文:
 定理 torus整数egral_dim1
@@ -524,7 +538,9 @@ theorem torusIntegral_dim1
   have H₂ : torusMap c R = fun θ _ => circleMap (c 0) (R 0) (θ 0) := by
     ext θ i : 2
     rw [Subsingleton.elim i 0]; rfl
-  rw [torusInteg
+  rw [torusIntegral]; rw [circleIntegral]; rw [intervalIntegral.integral_of_le Real.two_pi_pos.le]; rw [Measure.restrict_congr_set Ioc_ae_eq_Icc]; rw [← ((volume_preserving_funUnique (Fin 1) Real).symm _).setIntegral_preimage_emb
+      (MeasurableEquiv.measurableEmbedding _)]; rw [H₁]; rw [H₂]
+  simp [circleMap_zero]
 
 Depends on / 依赖: Ioc_ae_eq_Icc, MeasurableEquiv, MeasurableEquiv.funUnique, Measure, Measure.restrict_congr_set, OrderIso, OrderIso.funUnique, Real.two_pi_pos.le, Subsingleton, Subsingleton.elim, circleIntegral, circleMap, funUnique, integral_of_le, intervalIntegral, intervalIntegral.integral_of_le, preimage_Icc, restrict_congr_set, setIntegral_preimage_emb, symm.preimage_Icc
 -/
@@ -549,7 +565,20 @@ theorem torusIntegral_succAbove
   set e : Real × Realⁿ ≃ᵐ Realⁿ⁺¹ := (MeasurableEquiv.piFinSuccAbove (fun _ => Real) i).symm
   have hem : MeasurePreserving e :=
     (volume_preserving_piFinSuccAbove (fun _ : Fin (n + 1) => Real) i).symm _
-  have heπ : (e ⁻¹' Icc 0 fun _ => 2 * π) = Icc 0 (2 * π) ×ˢ Icc (0 : Realⁿ) fun _ => 2 * 
+  have heπ : (e ⁻¹' Icc 0 fun _ => 2 * π) = Icc 0 (2 * π) ×ˢ Icc (0 : Realⁿ) fun _ => 2 * π :=
+    ((Fin.insertNthOrderIso (fun _ => Real) i).preimage_Icc _ _).trans (Icc_prod_eq _ _)
+  rw [torusIntegral]; rw [← hem.map_eq]; rw [setIntegral_map_equiv]; rw [heπ]; rw [Measure.volume_eq_prod]; rw [setIntegral_prod]; rw [circleIntegral_def_Icc]
+  · refine setIntegral_congr_fun measurableSet_Icc fun θ _ => ?_
+    simp +unfoldPartialApp only [e, torusIntegral, ← integral_smul,
+      deriv_circleMap, i.prod_univ_succAbove _, smul_smul, torusMap, circleMap_zero]
+    refine setIntegral_congr_fun measurableSet_Icc fun Θ _ => ?_
+    simp only [MeasurableEquiv.piFinSuccAbove_symm_apply, i.insertNth_apply_same,
+      i.insertNth_apply_succAbove, (· ∘ ·), Fin.insertNthEquiv, Equiv.coe_fn_mk]
+    congr 2
+    simp only [funext_iff, i.forall_iff_succAbove, circleMap, Fin.insertNth_apply_same,
+      Fin.insertNth_apply_succAbove, imp_true_iff, and_self_iff]
+  · have := hf.function_integrable
+    rwa [← hem.integrableOn_comp_preimage e.measurableEmbedding, heπ] at this
 
 中文:
 定理 torus整数egral_succAbove
@@ -557,7 +586,20 @@ theorem torusIntegral_succAbove
   set e : Real × Realⁿ ≃ᵐ Realⁿ⁺¹ := (MeasurableEquiv.piFinSuccAbove (fun _ => Real) i).symm
   have hem : MeasurePreserving e :=
     (volume_preserving_piFinSuccAbove (fun _ : Fin (n + 1) => Real) i).symm _
-  have heπ : (e ⁻¹' Icc 0 fun _ => 2 * π) = Icc 0 (2 * π) ×ˢ Icc (0 : Realⁿ) fun _ => 2 * 
+  have heπ : (e ⁻¹' Icc 0 fun _ => 2 * π) = Icc 0 (2 * π) ×ˢ Icc (0 : Realⁿ) fun _ => 2 * π :=
+    ((Fin.insertNthOrderIso (fun _ => Real) i).preimage_Icc _ _).trans (Icc_prod_eq _ _)
+  rw [torusIntegral]; rw [← hem.map_eq]; rw [setIntegral_map_equiv]; rw [heπ]; rw [Measure.volume_eq_prod]; rw [setIntegral_prod]; rw [circleIntegral_def_Icc]
+  · refine setIntegral_congr_fun measurableSet_Icc fun θ _ => ?_
+    simp +unfoldPartialApp only [e, torusIntegral, ← integral_smul,
+      deriv_circleMap, i.prod_univ_succAbove _, smul_smul, torusMap, circleMap_zero]
+    refine setIntegral_congr_fun measurableSet_Icc fun Θ _ => ?_
+    simp only [MeasurableEquiv.piFinSuccAbove_symm_apply, i.insertNth_apply_same,
+      i.insertNth_apply_succAbove, (· ∘ ·), Fin.insertNthEquiv, Equiv.coe_fn_mk]
+    congr 2
+    simp only [funext_iff, i.forall_iff_succAbove, circleMap, Fin.insertNth_apply_same,
+      Fin.insertNth_apply_succAbove, imp_true_iff, and_self_iff]
+  · have := hf.function_integrable
+    rwa [← hem.integrableOn_comp_preimage e.measurableEmbedding, heπ] at this
 
 Depends on / 依赖: Fin.insertNthOrderIso, Icc_prod_eq, MeasurableEquiv, MeasurableEquiv.piFinSuccAbove, Measure, Measure.volume_eq_prod, MeasurePreserving, hem.map_eq, insertNthOrderIso, map_eq, piFinSuccAbove, preimage_Icc, setIntegra, setIntegral_map_equiv, torusIntegral, volume_eq_prod, volume_preserving_piFinSuccAbove
 -/

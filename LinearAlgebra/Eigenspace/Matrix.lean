@@ -84,7 +84,19 @@ hasEigenvalue_of_hasEigenvector hasEigenvector_toLin_diagonal d i b
   · contrapose!
     intro hμ h_eig
     have h_iSup : ⨆ μ in Set.range d, eigenspace (toLin b b (diagonal d)) μ = ⊤ := by
-      rw [eq_top_iff]; rw [← 
+      rw [eq_top_iff]; rw [← b.span_eq]; rw [Submodule.span_le]
+      rintro - ⟨i, rfl⟩
+      simp only [SetLike.mem_coe]
+      apply Submodule.mem_iSup_of_mem (d i)
+      apply Submodule.mem_iSup_of_mem ⟨i, rfl⟩
+      rw [mem_eigenspace_iff]
+      exact (hasEigenvector_toLin_diagonal d i b).apply_eq_smul
+    have hμ_notMem : μ ∉ Set.range d := by simpa using fun i => (hμ i)
+.disjoint_biSup hμ_notMem have := eigenspaces_iSupIndep (toLin b b (diagonal d))
+    rw [h_iSup]; rw [disjoint_top] at this
+    exact h_eig this
+  · rintro ⟨i, rfl⟩
+    exact this i
 
 中文:
 引理 hasEigenvalue_toLin_diagonal_iff
@@ -96,7 +108,19 @@ hasEigenvalue_of_hasEigenvector hasEigenvector_toLin_diagonal d i b
   · contrapose!
     intro hμ h_eig
     have h_iSup : ⨆ μ in Set.range d, eigenspace (toLin b b (diagonal d)) μ = ⊤ := by
-      rw [eq_top_iff]; rw [← 
+      rw [eq_top_iff]; rw [← b.span_eq]; rw [Submodule.span_le]
+      rintro - ⟨i, rfl⟩
+      simp only [SetLike.mem_coe]
+      apply Submodule.mem_iSup_of_mem (d i)
+      apply Submodule.mem_iSup_of_mem ⟨i, rfl⟩
+      rw [mem_eigenspace_iff]
+      exact (hasEigenvector_toLin_diagonal d i b).apply_eq_smul
+    have hμ_notMem : μ ∉ Set.range d := by simpa using fun i => (hμ i)
+.disjoint_biSup hμ_notMem have := eigenspaces_iSupIndep (toLin b b (diagonal d))
+    rw [h_iSup]; rw [disjoint_top] at this
+    exact h_eig this
+  · rintro ⟨i, rfl⟩
+    exact this i
 
 Depends on / 依赖: HasEigenvalue, Set.range, SetLike, SetLike.mem_coe, Submodule, Submodule.mem_iSup_of_mem, Submodule.span_le, b.span_eq, contrapose, diagonal, eigenspace, eq_top_iff, h_eig, h_iSup, hasEigenvalue_of_hasEigenvector, hasEigenvector_toLin_diagonal, mem_coe, mem_eigenspace_iff, mem_iSup_of_mem, span_eq
 -/
@@ -235,7 +259,16 @@ lemma maxGenEigenspace_toLin_diagonal_eq_eigenspace
   obtain ⟨k, hk⟩ := (mem_maxGenEigenspace _ _ _).mp hx
   replace hk (j : n) : b.repr x j = 0 ∨ d j = μ ∧ k != 0 := by
     have aux : (diagonal d).toLin b b - μ • 1 = (diagonal (d - μ • 1)).toLin b b := by
-      rw [Pi.sub_def]; 
+      rw [Pi.sub_def]; rw [← diagonal_sub]; simp [one_eq_id]
+    rw [aux]; rw [← toLin_pow]; rw [diagonal_pow]; rw [toLin_apply_eq_zero_iff] at hk
+    simpa [mulVec_eq_sum, diagonal_apply, sub_eq_zero] using hk j
+  have aux (j : n) : (b.repr x j * d j) • b j = μ • (b.repr x j • b j) := by
+    rcases hk j with hj | hj
+    · simp [hj]
+    · rw [← hj.1, mul_comm, mul_smul]
+  simp [toLin_apply, mulVec_eq_sum, diagonal_apply, aux, ← Finset.smul_sum]
+
+@[simp]
 
 中文:
 引理 maxGenEigenspace_toLin_diagonal_eq_eigenspace
@@ -245,7 +278,16 @@ lemma maxGenEigenspace_toLin_diagonal_eq_eigenspace
   obtain ⟨k, hk⟩ := (mem_maxGenEigenspace _ _ _).mp hx
   replace hk (j : n) : b.repr x j = 0 ∨ d j = μ ∧ k != 0 := by
     have aux : (diagonal d).toLin b b - μ • 1 = (diagonal (d - μ • 1)).toLin b b := by
-      rw [Pi.sub_def]; 
+      rw [Pi.sub_def]; rw [← diagonal_sub]; simp [one_eq_id]
+    rw [aux]; rw [← toLin_pow]; rw [diagonal_pow]; rw [toLin_apply_eq_zero_iff] at hk
+    simpa [mulVec_eq_sum, diagonal_apply, sub_eq_zero] using hk j
+  have aux (j : n) : (b.repr x j * d j) • b j = μ • (b.repr x j • b j) := by
+    rcases hk j with hj | hj
+    · simp [hj]
+    · rw [← hj.1, mul_comm, mul_smul]
+  simp [toLin_apply, mulVec_eq_sum, diagonal_apply, aux, ← Finset.smul_sum]
+
+@[simp]
 
 Depends on / 依赖: Pi.sub_def, b.repr, diagonal, diagonal_apply, diagonal_pow, diagonal_sub, eigenspace_le_maxGenEigenspace, le_antisymm, mem_maxGenEigenspace, mulVec_eq_sum, one_eq_id, replace, sub_def, sub_eq_zero, toLin_apply_eq_zero_iff, toLin_pow
 -/

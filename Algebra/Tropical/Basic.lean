@@ -1094,7 +1094,13 @@ instance instLinearOrderTropical
     toDecidableEq := Tropical.instDecidableEq
     toDecidableLT := Tropical.decidableLT
     max := fun a b => trop (max (untrop a) (untrop b))
-    max_def := fun a b =>
+    max_def := fun a b => untrop_injective (by
+      simp only [max_def, untrop_le_iff, untrop_trop]; split_ifs <;> simp)
+    min := (· + ·)
+    min_def := fun a b => untrop_injective (by
+      simp only [untrop_add, min_def, untrop_le_iff]; split_ifs <;> simp) }
+
+@[simp]
 
 中文:
 实例 instLinearOrderTropical
@@ -1105,7 +1111,13 @@ instance instLinearOrderTropical
     toDecidableEq := Tropical.instDecidableEq
     toDecidableLT := Tropical.decidableLT
     max := fun a b => trop (max (untrop a) (untrop b))
-    max_def := fun a b =>
+    max_def := fun a b => untrop_injective (by
+      simp only [max_def, untrop_le_iff, untrop_trop]; split_ifs <;> simp)
+    min := (· + ·)
+    min_def := fun a b => untrop_injective (by
+      simp only [untrop_add, min_def, untrop_le_iff]; split_ifs <;> simp) }
+
+@[simp]
 
 Depends on / 依赖: Tropical, Tropical.decidableLE, Tropical.decidableLT, Tropical.instDecidableEq, decidableLE, decidableLT, instDecidableEq, instPartialOrderTropical, le_total, max_def, min_def, split_ifs, toDecidableEq, toDecidableLE, toDecidableLT, untrop, untrop_add, untrop_injective, untrop_le_iff, untrop_trop
 -/
@@ -1912,7 +1924,8 @@ div_eq_mul_inv := fun _ _ => untrop_injective by simp [sub_eq_add_neg]
 inv_mul_cancel := fun _ => untrop_injective neg_add_cancel _
 zpow := fun n x => trop n • untrop x
 zpow_zero' := fun _ => untrop_injective zero_zsmul _
-zpow_succ' := fun _ _ => untrop_injective SubNegMono
+zpow_succ' := fun _ _ => untrop_injective SubNegMonoid.zsmul_succ' _ _
+zpow_neg' := fun _ _ => untrop_injective SubNegMonoid.zsmul_neg' _ _ }
 
 中文:
 实例 instGroupTropical
@@ -1922,7 +1935,8 @@ div_eq_mul_inv := fun _ _ => untrop_injective by simp [sub_eq_add_neg]
 inv_mul_cancel := fun _ => untrop_injective neg_add_cancel _
 zpow := fun n x => trop n • untrop x
 zpow_zero' := fun _ => untrop_injective zero_zsmul _
-zpow_succ' := fun _ _ => untrop_injective SubNegMono
+zpow_succ' := fun _ _ => untrop_injective SubNegMonoid.zsmul_succ' _ _
+zpow_neg' := fun _ _ => untrop_injective SubNegMonoid.zsmul_neg' _ _ }
 
 Depends on / 依赖: SubNegMonoid, SubNegMonoid.zsmul_neg, SubNegMonoid.zsmul_succ, div_eq_mul_inv, instMonoidTropical, inv_mul_cancel, neg_add_cancel, sub_eq_add_neg, untrop, untrop_injective, zero_zsmul, zpow_neg, zpow_succ, zpow_zero, zsmul_neg, zsmul_succ
 -/

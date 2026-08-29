@@ -47,7 +47,7 @@ theorem MeromorphicOn.logDeriv_mul_eventuallyEq
     hg.eventually_codiscreteWithin_apply_ne_zero h'g]
     with y h₁y h₂y h₃y h₄y
   rw [Pi.add_apply]; rw [Pi.mul_def]
-  exact logDeriv_mul y h₃y h₄y h₁y.
+  exact logDeriv_mul y h₃y h₄y h₁y.differentiableAt h₂y.differentiableAt
 
 中文:
 定理 MeromorphicOn.logDeriv_mul_eventuallyEq
@@ -58,7 +58,7 @@ theorem MeromorphicOn.logDeriv_mul_eventuallyEq
     hg.eventually_codiscreteWithin_apply_ne_zero h'g]
     with y h₁y h₂y h₃y h₄y
   rw [Pi.add_apply]; rw [Pi.mul_def]
-  exact logDeriv_mul y h₃y h₄y h₁y.
+  exact logDeriv_mul y h₃y h₄y h₁y.differentiableAt h₂y.differentiableAt
 
 Depends on / 依赖: Pi.add_apply, Pi.mul_def, add_apply, analyticAt_mem_codiscreteWithin, differentiableAt, eventually_codiscreteWithin_apply_ne_zero, filter_upwards, hf.analyticAt_mem_codiscreteWithin, hf.eventually_codiscreteWithin_apply_ne_zero, hg.analyticAt_mem_codiscreteWithin, hg.eventually_codiscreteWithin_apply_ne_zero, logDeriv_mul, mul_def, y.differentiableAt
 -/
@@ -117,7 +117,11 @@ theorem MeromorphicOn.logDeriv_prod_eventuallyEq
   have hA : forallᶠ y in codiscreteWithin U, forall i in s, AnalyticAt 𝕜 (F i) y :=
     (eventually_all_finset s).2 fun i hi => (h i hi).analyticAt_mem_codiscreteWithin
   have hN : forallᶠ y in codiscreteWithin U, forall i in s, F i y != 0 :=
-    (eventually_all_finset s).2 fun i hi => (h i hi).e
+    (eventually_all_finset s).2 fun i hi => (h i hi).eventually_codiscreteWithin_apply_ne_zero
+      (h' i hi)
+  filter_upwards [hA, hN] with y h₁y h₂y
+  rw [Finset.sum_apply]; rw [Finset.prod_fn]
+  exact logDeriv_prod h₂y fun i hi => (h₁y i hi).differentiableAt
 
 中文:
 定理 MeromorphicOn.logDeriv_prod_eventuallyEq
@@ -126,7 +130,11 @@ theorem MeromorphicOn.logDeriv_prod_eventuallyEq
   have hA : forallᶠ y in codiscreteWithin U, forall i in s, AnalyticAt 𝕜 (F i) y :=
     (eventually_all_finset s).2 fun i hi => (h i hi).analyticAt_mem_codiscreteWithin
   have hN : forallᶠ y in codiscreteWithin U, forall i in s, F i y != 0 :=
-    (eventually_all_finset s).2 fun i hi => (h i hi).e
+    (eventually_all_finset s).2 fun i hi => (h i hi).eventually_codiscreteWithin_apply_ne_zero
+      (h' i hi)
+  filter_upwards [hA, hN] with y h₁y h₂y
+  rw [Finset.sum_apply]; rw [Finset.prod_fn]
+  exact logDeriv_prod h₂y fun i hi => (h₁y i hi).differentiableAt
 
 Depends on / 依赖: AnalyticAt, Finset, Finset.prod_fn, Finset.sum_apply, analyticAt_mem_codiscreteWithin, codiscreteWithin, differentiableAt, eventually_all_finset, eventually_codiscreteWithin_apply_ne_zero, filter_upwards, logDeriv_prod, prod_fn, sum_apply
 -/
@@ -184,7 +192,7 @@ theorem MeromorphicOn.logDeriv_finprod_eventuallyEq
   have hsub : support (fun i => logDeriv (F i)) subseteq hF.toFinset := by
     simp +contextual [Set.subset_def, not_imp_not, Pi.one_def]
   rw [finprod_eq_prod_of_mulSupport_subset F (s := hF.toFinset) (by simp)]; rw [finsum_eq_sum_of_support_subset _ hsub]
-  exact logDeriv_prod_eventuallyEq (fun
+  exact logDeriv_prod_eventuallyEq (fun i _ => h i) (fun i _ => h' i)
 
 中文:
 定理 MeromorphicOn.logDeriv_finprod_eventuallyEq
@@ -193,7 +201,7 @@ theorem MeromorphicOn.logDeriv_finprod_eventuallyEq
   have hsub : support (fun i => logDeriv (F i)) subseteq hF.toFinset := by
     simp +contextual [Set.subset_def, not_imp_not, Pi.one_def]
   rw [finprod_eq_prod_of_mulSupport_subset F (s := hF.toFinset) (by simp)]; rw [finsum_eq_sum_of_support_subset _ hsub]
-  exact logDeriv_prod_eventuallyEq (fun
+  exact logDeriv_prod_eventuallyEq (fun i _ => h i) (fun i _ => h' i)
 
 Depends on / 依赖: Pi.one_def, Set.subset_def, contextual, finprod_eq_prod_of_mulSupport_subset, finsum_eq_sum_of_support_subset, hF.toFinset, logDeriv, logDeriv_prod_eventuallyEq, not_imp_not, one_def, subset_def, subseteq, support, toFinset
 -/
@@ -301,7 +309,23 @@ theorem MeromorphicOn.logDeriv_finprod_zpow_eventuallyEq
   have hA : forallᶠ y in codiscreteWithin U, forall i in hd.toFinset, AnalyticAt 𝕜 (F i) y :=
     (eventually_all_finset hd.toFinset).2 fun i _ => (h i).analyticAt_mem_codiscreteWithin
   have hN : forallᶠ y in codiscreteWithin U, forall i in hd.toFinset, F i y != 0 :=
-    (eventually_all_finset h
+    (eventually_all_finset hd.toFinset).2 fun i _ => (h i).eventually_codiscreteWithin_apply_ne_zero
+      (h' i)
+  filter_upwards [hA, hN] with y h₁y h₂y
+  have h₀ : ∏ᶠ i, F i ^ d i = ∏ i in hd.toFinset, F i ^ d i :=
+finprod_eq_prod_of_mulSupport_subset _ by simp +contextual [Set.subset_def, not_imp_not]
+  have hsub : support (fun i => d i • logDeriv (F i) y) subseteq hd.toFinset := by
+    simp +contextual [-support_mul, -mul_eq_zero, Set.subset_def, not_imp_not]
+  calc logDeriv (∏ᶠ i, F i ^ d i) y
+      = logDeriv (fun z => ∏ i in hd.toFinset, (F i ^ d i) z) y := by rw [h₀, Finset.prod_fn]
+    _ = ∑ i in hd.toFinset, logDeriv (F i ^ d i) y :=
+        logDeriv_prod (fun i hi => zpow_ne_zero _ (h₂y i hi))
+          (fun i hi => ((h₁y i hi).zpow (h₂y i hi)).differentiableAt)
+    _ = ∑ i in hd.toFinset, d i • logDeriv (F i) y := by
+        congr! with i hi
+        rw [zsmul_eq_mul]; rw [Pi.pow_def]
+        exact logDeriv_fun_zpow (h₁y i hi).differentiableAt (d i)
+    _ = ∑ᶠ i, d i • logDeriv (F i) y := (finsum_eq_sum_of_support_subset _ hsub).symm
 
 中文:
 定理 MeromorphicOn.logDeriv_finprod_zpow_eventuallyEq
@@ -310,7 +334,23 @@ theorem MeromorphicOn.logDeriv_finprod_zpow_eventuallyEq
   have hA : forallᶠ y in codiscreteWithin U, forall i in hd.toFinset, AnalyticAt 𝕜 (F i) y :=
     (eventually_all_finset hd.toFinset).2 fun i _ => (h i).analyticAt_mem_codiscreteWithin
   have hN : forallᶠ y in codiscreteWithin U, forall i in hd.toFinset, F i y != 0 :=
-    (eventually_all_finset h
+    (eventually_all_finset hd.toFinset).2 fun i _ => (h i).eventually_codiscreteWithin_apply_ne_zero
+      (h' i)
+  filter_upwards [hA, hN] with y h₁y h₂y
+  have h₀ : ∏ᶠ i, F i ^ d i = ∏ i in hd.toFinset, F i ^ d i :=
+finprod_eq_prod_of_mulSupport_subset _ by simp +contextual [Set.subset_def, not_imp_not]
+  have hsub : support (fun i => d i • logDeriv (F i) y) subseteq hd.toFinset := by
+    simp +contextual [-support_mul, -mul_eq_zero, Set.subset_def, not_imp_not]
+  calc logDeriv (∏ᶠ i, F i ^ d i) y
+      = logDeriv (fun z => ∏ i in hd.toFinset, (F i ^ d i) z) y := by rw [h₀, Finset.prod_fn]
+    _ = ∑ i in hd.toFinset, logDeriv (F i ^ d i) y :=
+        logDeriv_prod (fun i hi => zpow_ne_zero _ (h₂y i hi))
+          (fun i hi => ((h₁y i hi).zpow (h₂y i hi)).differentiableAt)
+    _ = ∑ i in hd.toFinset, d i • logDeriv (F i) y := by
+        congr! with i hi
+        rw [zsmul_eq_mul]; rw [Pi.pow_def]
+        exact logDeriv_fun_zpow (h₁y i hi).differentiableAt (d i)
+    _ = ∑ᶠ i, d i • logDeriv (F i) y := (finsum_eq_sum_of_support_subset _ hsub).symm
 
 Depends on / 依赖: AnalyticAt, analyticAt_mem_codiscreteWithin, codiscreteWithin, eventually_all_finset, eventually_codiscreteWithin_apply_ne_zero, filter_upwards, finprod_eq_prod_of_mulSupport_su, hd.toFinset, toFinset
 -/

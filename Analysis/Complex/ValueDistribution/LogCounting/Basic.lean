@@ -164,7 +164,19 @@ definition logCounting
     ext r
     have {A B C D : Real} : A + B + (C + D) = A + C + (B + D) := by ring
     rw [Pi.add_apply]; rw [this]
-    cong
+    congr 1
+    · have h₁s : ((D₁.toClosedBall r).support union (D₂.toClosedBall r).support).Finite := by
+        apply Set.finite_union.2
+        constructor
+        <;> apply finiteSupport _ (isCompact_closedBall 0 |r|)
+      repeat
+        rw [finsum_eq_sum_of_support_subset (s := h₁s.toFinset)]
+        try simp_rw [← Finset.sum_add_distrib, ← add_mul]
+      repeat
+        intro x hx
+        by_contra
+        simp_all
+    · ring
 
 中文:
 定义 logCounting
@@ -176,7 +188,19 @@ definition logCounting
     ext r
     have {A B C D : Real} : A + B + (C + D) = A + C + (B + D) := by ring
     rw [Pi.add_apply]; rw [this]
-    cong
+    congr 1
+    · have h₁s : ((D₁.toClosedBall r).support union (D₂.toClosedBall r).support).Finite := by
+        apply Set.finite_union.2
+        constructor
+        <;> apply finiteSupport _ (isCompact_closedBall 0 |r|)
+      repeat
+        rw [finsum_eq_sum_of_support_subset (s := h₁s.toFinset)]
+        try simp_rw [← Finset.sum_add_distrib, ← add_mul]
+      repeat
+        intro x hx
+        by_contra
+        simp_all
+    · ring
 
 Depends on / 依赖: D.toClosedBall, toClosedBall
 -/
@@ -235,7 +259,13 @@ lemma logCounting_single_eq_log_sub_const
   rw [finsum_eq_sum_of_support_subset _ (s := (finite_singleton e).toFinset)
     (by simp_all [toClosedBall]; rw [restrict_apply]; rw [single_apply])]
   simp only [toFinite_toFinset, toFinset_singleton, Finset.sum_singleton]
-  rw [toC
+  rw [toClosedBall_eval_within _ (by simpa [abs_of_nonneg ((norm_nonneg e).trans hr)])]
+  by_cases he : 0 = e
+  · simp [← he, single_apply]
+  · simp only [single_apply, he, reduceIte, Int.cast_zero, zero_mul, add_zero,
+      log_mul (ne_of_lt (lt_of_lt_of_le (norm_pos_iff.mpr (he ·.symm)) hr)).symm
+      (inv_ne_zero (norm_ne_zero_iff.mpr (he ·.symm))), log_inv]
+    grind
 
 中文:
 引理 logCounting_single_eq_log_sub_const
@@ -245,7 +275,13 @@ lemma logCounting_single_eq_log_sub_const
   rw [finsum_eq_sum_of_support_subset _ (s := (finite_singleton e).toFinset)
     (by simp_all [toClosedBall]; rw [restrict_apply]; rw [single_apply])]
   simp only [toFinite_toFinset, toFinset_singleton, Finset.sum_singleton]
-  rw [toC
+  rw [toClosedBall_eval_within _ (by simpa [abs_of_nonneg ((norm_nonneg e).trans hr)])]
+  by_cases he : 0 = e
+  · simp [← he, single_apply]
+  · simp only [single_apply, he, reduceIte, Int.cast_zero, zero_mul, add_zero,
+      log_mul (ne_of_lt (lt_of_lt_of_le (norm_pos_iff.mpr (he ·.symm)) hr)).symm
+      (inv_ne_zero (norm_ne_zero_iff.mpr (he ·.symm))), log_inv]
+    grind
 -/
 @[simp] lemma logCounting_single_eq_log_sub_const [DecidableEq E] [ProperSpace E] {e : E} {r : Real}
     {n : Int} (hr : ‖e‖ <= r) :
@@ -297,7 +333,33 @@ lemma logCounting_mono
   gcongr
   · let s := (toClosedBall b D).support
     have hs : s.Finite := (toClosedBall b D).finiteSupport (isCompact_closedBall 0 |b|)
-    repeat rw [finsum_eq_sum_of_support_subset (s := hs.toFinset
+    repeat rw [finsum_eq_sum_of_support_subset (s := hs.toFinset)]
+    · gcongr 1 with z hz
+      by_cases h₂z : z = 0
+      · simp [h₂z]
+      · have := (toClosedBall_support_subset_closedBall D (hs.mem_toFinset.1 hz))
+        rw [toClosedBall_eval_within _ this]
+        by_cases h₃z : z in closedBall 0 |a|
+        · rw [toClosedBall_eval_within _ h₃z]
+          gcongr
+          exact Int.cast_nonneg (hD z)
+        · simp only [h₃z, not_false_eq_true, apply_eq_zero_of_notMem, Int.cast_zero, zero_mul,
+            ge_iff_le]
+          apply mul_nonneg (Int.cast_nonneg (hD z)) (log_nonneg _)
+          apply (le_mul_inv_iff₀ (norm_pos_iff.mpr h₂z)).2
+          simp_all [abs_of_pos hb]
+    · intro z
+      aesop
+    · intro z
+      simp only [support_mul, mem_inter_iff, mem_support, ne_eq, Int.cast_eq_zero, log_eq_zero,
+        mul_eq_zero, inv_eq_zero, norm_eq_zero, not_or, Finite.coe_toFinset, and_imp, s]
+      intro h₁ _ _ _ _
+      have : z in closedBall 0 |a| := mem_of_indicator_ne_zero h₁
+      rw [toClosedBall_eval_within _ this] at h₁
+      rwa [toClosedBall_eval_within]
+      · simp_all only [abs_of_pos ha, mem_closedBall, dist_zero_right, abs_of_pos hb]
+        linarith
+  · exact Int.cast_nonneg (hD 0)
 
 中文:
 引理 logCounting_mono
@@ -308,7 +370,33 @@ lemma logCounting_mono
   gcongr
   · let s := (toClosedBall b D).support
     have hs : s.Finite := (toClosedBall b D).finiteSupport (isCompact_closedBall 0 |b|)
-    repeat rw [finsum_eq_sum_of_support_subset (s := hs.toFinset
+    repeat rw [finsum_eq_sum_of_support_subset (s := hs.toFinset)]
+    · gcongr 1 with z hz
+      by_cases h₂z : z = 0
+      · simp [h₂z]
+      · have := (toClosedBall_support_subset_closedBall D (hs.mem_toFinset.1 hz))
+        rw [toClosedBall_eval_within _ this]
+        by_cases h₃z : z in closedBall 0 |a|
+        · rw [toClosedBall_eval_within _ h₃z]
+          gcongr
+          exact Int.cast_nonneg (hD z)
+        · simp only [h₃z, not_false_eq_true, apply_eq_zero_of_notMem, Int.cast_zero, zero_mul,
+            ge_iff_le]
+          apply mul_nonneg (Int.cast_nonneg (hD z)) (log_nonneg _)
+          apply (le_mul_inv_iff₀ (norm_pos_iff.mpr h₂z)).2
+          simp_all [abs_of_pos hb]
+    · intro z
+      aesop
+    · intro z
+      simp only [support_mul, mem_inter_iff, mem_support, ne_eq, Int.cast_eq_zero, log_eq_zero,
+        mul_eq_zero, inv_eq_zero, norm_eq_zero, not_or, Finite.coe_toFinset, and_imp, s]
+      intro h₁ _ _ _ _
+      have : z in closedBall 0 |a| := mem_of_indicator_ne_zero h₁
+      rw [toClosedBall_eval_within _ this] at h₁
+      rwa [toClosedBall_eval_within]
+      · simp_all only [abs_of_pos ha, mem_closedBall, dist_zero_right, abs_of_pos hb]
+        linarith
+  · exact Int.cast_nonneg (hD 0)
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_mk, Finite, ZeroHom, ZeroHom.coe_mk, closedBall, coe_mk, finiteSupport, finsum_eq_sum_of_support_subset, hs.mem_toFinset, hs.toFinset, isCompact_closedBall, logCounting, mem_Ioi, mem_toFinset, repeat, s.Finite, support, toClosedBall, toClosedBall_eval_within
 -/
@@ -360,7 +448,11 @@ lemma logCounting_strictMono
     rw [mem_Ioi] at ha hb
     rw [logCounting_single_eq_log_sub_const ha.le]; rw [logCounting_single_eq_log_sub_const hb.le]
     gcongr
-    exact (
+    exact (norm_nonneg e).trans_lt ha
+  · intro a ha b hb hab
+    apply logCounting_mono _ _ ((norm_nonneg e).trans_lt hb) hab
+    · simp [hD]
+    · simpa [mem_Ioi] using (norm_nonneg e).trans_lt ha
 
 中文:
 引理 logCounting_strictMono
@@ -372,7 +464,11 @@ lemma logCounting_strictMono
     rw [mem_Ioi] at ha hb
     rw [logCounting_single_eq_log_sub_const ha.le]; rw [logCounting_single_eq_log_sub_const hb.le]
     gcongr
-    exact (
+    exact (norm_nonneg e).trans_lt ha
+  · intro a ha b hb hab
+    apply logCounting_mono _ _ ((norm_nonneg e).trans_lt hb) hab
+    · simp [hD]
+    · simpa [mem_Ioi] using (norm_nonneg e).trans_lt ha
 
 Depends on / 依赖: StrictMonoOn, StrictMonoOn.add_monotone, add_monotone, ha.le, hb.le, logCounting, logCounting_mono, logCounting_single_eq_log_sub_const, mem_Ioi, norm_nonneg, single, trans_lt
 -/
@@ -405,7 +501,10 @@ add_nonneg (finsum_nonneg this) mul_nonneg (by simpa using h 0) (log_nonneg hr)
   by_cases h₁a : a = 0
   · simp_all
   by_cases h₂a : a in closedBall 0 |r|
-· refine mul_nonneg ?_ log_non
+· refine mul_nonneg ?_ log_nonneg ?_
+    · simpa [h₂a] using h a
+    · simpa [mul_comm r, one_le_inv_mul₀ (norm_pos_iff.mpr h₁a), abs_of_pos h₃r] using h₂a
+  · simp [apply_eq_zero_of_notMem ((toClosedBall r) _) h₂a]
 
 中文:
 定理 logCounting_nonneg
@@ -418,7 +517,10 @@ add_nonneg (finsum_nonneg this) mul_nonneg (by simpa using h 0) (log_nonneg hr)
   by_cases h₁a : a = 0
   · simp_all
   by_cases h₂a : a in closedBall 0 |r|
-· refine mul_nonneg ?_ log_non
+· refine mul_nonneg ?_ log_nonneg ?_
+    · simpa [h₂a] using h a
+    · simpa [mul_comm r, one_le_inv_mul₀ (norm_pos_iff.mpr h₁a), abs_of_pos h₃r] using h₂a
+  · simp [apply_eq_zero_of_notMem ((toClosedBall r) _) h₂a]
 
 Depends on / 依赖: abs_of_pos, add_nonneg, apply_eq_zero_of_notMem, closedBall, finsum_nonneg, log_nonneg, mul_comm, mul_nonneg, norm_pos_iff, norm_pos_iff.mpr, toClosedBall
 -/
@@ -1001,7 +1103,10 @@ theorem logCounting_sum_top_le
     rw [Finset.sum_insert ha]; rw [Finset.sum_insert ha]
     calc logCounting (f a + ∑ x in s, f x) ⊤ r
       _ <= (logCounting (f a) ⊤ + logCounting (∑ x in s, f x) ⊤) r :=
-        logCounting_add
+        logCounting_add_top_le (h₁f a (Finset.mem_insert_self a s))
+          (Meromorphic.sum (fun σ hσ => h₁f σ (Finset.mem_insert_of_mem hσ))) hr
+      _ <= (logCounting (f a) ⊤ + ∑ x in s, logCounting (f x) ⊤) r :=
+        add_le_add (by trivial) (hs (fun a ha => h₁f a (Finset.mem_insert_of_mem ha)))
 
 中文:
 定理 logCounting_sum_top_le
@@ -1015,7 +1120,10 @@ theorem logCounting_sum_top_le
     rw [Finset.sum_insert ha]; rw [Finset.sum_insert ha]
     calc logCounting (f a + ∑ x in s, f x) ⊤ r
       _ <= (logCounting (f a) ⊤ + logCounting (∑ x in s, f x) ⊤) r :=
-        logCounting_add
+        logCounting_add_top_le (h₁f a (Finset.mem_insert_self a s))
+          (Meromorphic.sum (fun σ hσ => h₁f σ (Finset.mem_insert_of_mem hσ))) hr
+      _ <= (logCounting (f a) ⊤ + ∑ x in s, logCounting (f x) ⊤) r :=
+        add_le_add (by trivial) (hs (fun a ha => h₁f a (Finset.mem_insert_of_mem ha)))
 
 Depends on / 依赖: Finset, Finset.induction, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.sum_insert, Meromorphic, Meromorphic.sum, add_le_add, classical, insert, logCounting, logCounting_add_top_le, mem_insert_of_mem, mem_insert_self, sum_insert
 -/
@@ -1067,7 +1175,7 @@ theorem logCounting_mul_zero_le
   simp only [logCounting, WithTop.zero_ne_top, reduceDIte, WithTop.untop₀_zero, sub_zero]
   rw [divisor_mul h₁f₁.meromorphicOn h₁f₂.meromorphicOn (fun z _ => h₂f₁ z) (fun z _ => h₂f₂ z)]; rw [← locallyFinsuppWithin.logCounting.map_add]
   apply locallyFinsuppWithin.logCounting_le _ hr
-  apply loca
+  apply locallyFinsuppWithin.posPart_add
 
 中文:
 定理 logCounting_mul_zero_le
@@ -1076,7 +1184,7 @@ theorem logCounting_mul_zero_le
   simp only [logCounting, WithTop.zero_ne_top, reduceDIte, WithTop.untop₀_zero, sub_zero]
   rw [divisor_mul h₁f₁.meromorphicOn h₁f₂.meromorphicOn (fun z _ => h₂f₁ z) (fun z _ => h₂f₂ z)]; rw [← locallyFinsuppWithin.logCounting.map_add]
   apply locallyFinsuppWithin.logCounting_le _ hr
-  apply loca
+  apply locallyFinsuppWithin.posPart_add
 
 Depends on / 依赖: WithTop, WithTop.untop, WithTop.zero_ne_top, divisor_mul, locallyFinsuppWithin, locallyFinsuppWithin.logCounting.map_add, locallyFinsuppWithin.logCounting_le, locallyFinsuppWithin.posPart_add, logCounting, logCounting_le, map_add, meromorphicOn, posPart_add, reduceDIte, sub_zero, zero_ne_top
 -/

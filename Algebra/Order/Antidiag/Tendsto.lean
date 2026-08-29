@@ -40,7 +40,7 @@ lemma tendsto_sup'_antidiagonal_cofinite
   intro x hx
   obtain ⟨i, hi, e⟩ := Finset.exists_mem_eq_sup' (nonempty_antidiagonal x) f
   obtain rfl : i.1 + i.2 = x := by simpa using hi
- 
+  exact Set.add_mem_add (by simpa using ⟨i.2, e ▸ hx⟩) (by simpa using ⟨i.1, e ▸ hx⟩)
 
 中文:
 引理 tendsto_sup'_antidiagonal_cofinite
@@ -53,7 +53,7 @@ lemma tendsto_sup'_antidiagonal_cofinite
   intro x hx
   obtain ⟨i, hi, e⟩ := Finset.exists_mem_eq_sup' (nonempty_antidiagonal x) f
   obtain rfl : i.1 + i.2 = x := by simpa using hi
- 
+  exact Set.add_mem_add (by simpa using ⟨i.2, e ▸ hx⟩) (by simpa using ⟨i.1, e ▸ hx⟩)
 
 Depends on / 依赖: Finset, Finset.exists_mem_eq_sup, Prod.fst, Prod.snd, Set.add_mem_add, Set.mem_compl_iff, Set.mem_preimage, Set.subset_def, add_mem_add, exists_mem_eq_sup, mem_compl_iff, mem_preimage, nonempty_antidiagonal, subset, subset_def
 -/

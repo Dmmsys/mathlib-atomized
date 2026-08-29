@@ -152,7 +152,7 @@ theorem coe_zeta_smul_apply
   · refine sum_congr rfl fun i hi => ?_
     rcases mem_divisorsAntidiagonal.1 hi with ⟨rfl, h⟩
     rw [natCoe_apply]; rw [zeta_apply_ne (left_ne_zero_of_mul h)]; rw [cast_one]; rw [one_smul]
-  · rw [← map_div_left_divisors, sum_map,
+  · rw [← map_div_left_divisors, sum_map, Function.Embedding.coeFn_mk]
 
 中文:
 定理 coe_zeta_smul_apply
@@ -163,7 +163,7 @@ theorem coe_zeta_smul_apply
   · refine sum_congr rfl fun i hi => ?_
     rcases mem_divisorsAntidiagonal.1 hi with ⟨rfl, h⟩
     rw [natCoe_apply]; rw [zeta_apply_ne (left_ne_zero_of_mul h)]; rw [cast_one]; rw [one_smul]
-  · rw [← map_div_left_divisors, sum_map,
+  · rw [← map_div_left_divisors, sum_map, Function.Embedding.coeFn_mk]
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.coeFn_mk, cast_one, coeFn_mk, divisorsAntidiagonal, i.snd, left_ne_zero_of_mul, map_div_left_divisors, mem_divisorsAntidiagonal, natCoe_apply, one_smul, smul_apply, sum_congr, sum_map, zeta_apply_ne
 -/

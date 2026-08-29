@@ -377,7 +377,16 @@ definition AlgHom.restrictNormalAux
       rw [← hx]; rw [← hy]
       apply minpoly.mem_range_of_degree_eq_one E
       refine ((h.splits z).of_dvd (map_ne_zero (minpoly.ne_zero (h.isIntegral z)))
-        (min
+        (minpoly.dvd E _ (by simp [aeval_algHom_apply]))).degree_eq_one_of_irreducible
+        (minpoly.irreducible ?_)
+      simp only [AlgHom.toRingHom_eq_coe, AlgHom.coe_toRingHom]
+      suffices IsIntegral F _ by exact this.tower_top
+      exact ((h.isIntegral z).map <| toAlgHom F E K₁).map ϕ⟩
+  map_zero' := Subtype.ext (map_zero _)
+  map_one' := Subtype.ext (map_one _)
+map_add' x y := Subtype.ext by simp
+map_mul' x y := Subtype.ext by simp
+  commutes' x := Subtype.ext (ϕ.commutes x)
 
 中文:
 定义 代数态射.restrictNormalAux
@@ -388,7 +397,16 @@ definition AlgHom.restrictNormalAux
       rw [← hx]; rw [← hy]
       apply minpoly.mem_range_of_degree_eq_one E
       refine ((h.splits z).of_dvd (map_ne_zero (minpoly.ne_zero (h.isIntegral z)))
-        (min
+        (minpoly.dvd E _ (by simp [aeval_algHom_apply]))).degree_eq_one_of_irreducible
+        (minpoly.irreducible ?_)
+      simp only [AlgHom.toRingHom_eq_coe, AlgHom.coe_toRingHom]
+      suffices IsIntegral F _ by exact this.tower_top
+      exact ((h.isIntegral z).map <| toAlgHom F E K₁).map ϕ⟩
+  map_zero' := Subtype.ext (map_zero _)
+  map_one' := Subtype.ext (map_one _)
+map_add' x y := Subtype.ext by simp
+map_mul' x y := Subtype.ext by simp
+  commutes' x := Subtype.ext (ϕ.commutes x)
 
 Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, AlgHom.toRingHom_eq_coe, IsIntegral, Subtype, Subtype.mem, aeval_algHom_apply, coe_toRingHom, degree_eq_one_of_irreducible, h.isIntegral, h.splits, irreducible, isIntegral, map_ne_zero, mem_range_of_degree_eq_one, minpoly, minpoly.dvd, minpoly.irreducible, minpoly.mem_range_of_degree_eq_one, minpoly.ne_zero
 -/
@@ -672,7 +690,8 @@ definition Normal.algHomEquivAut
     ext
     simp only [AlgHom.restrictNormal', AlgEquiv.coe_ofBijective]
     apply FaithfulSMul.algebraMap_injective E K₁
-    rw [
+    rw [AlgHom.restrictNormal_commutes]
+    simp
 
 中文:
 定义 正规.algHomEquivAut
@@ -686,7 +705,8 @@ definition Normal.algHomEquivAut
     ext
     simp only [AlgHom.restrictNormal', AlgEquiv.coe_ofBijective]
     apply FaithfulSMul.algebraMap_injective E K₁
-    rw [
+    rw [AlgHom.restrictNormal_commutes]
+    simp
 
 Depends on / 依赖: AlgHom, AlgHom.restrictNormal, restrictNormal
 -/

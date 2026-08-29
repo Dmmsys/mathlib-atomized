@@ -257,7 +257,38 @@ definition ofIso
   let iso₁₃ := isoTriangleOfIso₁₂ _ _ h₁₃ h₁₃' e₁ e₃ (by
     dsimp; rw [← comm, assoc, ← comm', ← reassoc_of% comm₁₂, comm₂₃])
   have eq₁₂ := iso₁₂.hom.comm₂
-  have eq₁₂' := iso
+  have eq₁₂' := iso₁₂.hom.comm₃
+  have eq₁₃ := iso₁₃.hom.comm₂
+  have eq₁₃' := iso₁₃.hom.comm₃
+  have eq₂₃ := iso₂₃.hom.comm₂
+  have eq₂₃' := iso₂₃.hom.comm₃
+  have rel₁₂ := H.triangleMorphism₁.comm₂
+  have rel₁₃ := H.triangleMorphism₁.comm₃
+  have rel₂₂ := H.triangleMorphism₂.comm₂
+  have rel₂₃ := H.triangleMorphism₂.comm₃
+  dsimp [iso₁₂, iso₂₃, iso₁₃] at eq₁₂ eq₁₂' eq₁₃ eq₁₃' eq₂₃ eq₂₃' rel₁₂ rel₁₃ rel₂₂ rel₂₃
+  rw [Functor.map_id]; rw [comp_id] at rel₁₃
+  rw [id_comp] at rel₂₂
+  refine ⟨iso₁₂.hom.hom₃ ≫ H.m₁ ≫ iso₁₃.inv.hom₃,
+    iso₁₃.hom.hom₃ ≫ H.m₃ ≫ iso₂₃.inv.hom₃, ?_, ?_, ?_, ?_, ?_⟩
+  · rw [reassoc_of% eq₁₂, ← cancel_mono iso₁₃.hom.hom₃, assoc, assoc, assoc, assoc,
+      iso₁₃.inv_hom_id_triangle_hom₃, eq₁₃, reassoc_of% comm₂₃, ← rel₁₂]
+    dsimp
+    rw [comp_id]
+  · rw [← cancel_mono (e₁.hom⟦(1 : Int)⟧'), eq₁₂', assoc, assoc, assoc, eq₁₃',
+      iso₁₃.inv_hom_id_triangle_hom₃_assoc, ← rel₁₃]
+  · rw [reassoc_of% eq₁₃, reassoc_of% rel₂₂, ← cancel_mono iso₂₃.hom.hom₃, assoc, assoc,
+      iso₂₃.inv_hom_id_triangle_hom₃, eq₂₃]
+    dsimp
+    rw [comp_id]
+  · rw [← cancel_mono (e₂.hom⟦(1 : Int)⟧'), assoc, assoc, assoc, assoc, eq₂₃',
+      iso₂₃.inv_hom_id_triangle_hom₃_assoc, ← rel₂₃, ← Functor.map_comp, comm₁₂,
+      Functor.map_comp, reassoc_of% eq₁₃']
+  · refine isomorphic_distinguished _ H.mem _ ?_
+    refine Triangle.isoMk _ _ (Triangle.π₃.mapIso iso₁₂) (Triangle.π₃.mapIso iso₁₃)
+      (Triangle.π₃.mapIso iso₂₃) (by simp) (by simp) ?_
+    dsimp
+    rw [assoc]; rw [← Functor.map_comp]; rw [eq₁₂]; rw [Functor.map_comp]; rw [reassoc_of% eq₂₃']
 
 中文:
 定义 ofIso
@@ -268,7 +299,38 @@ definition ofIso
   let iso₁₃ := isoTriangleOfIso₁₂ _ _ h₁₃ h₁₃' e₁ e₃ (by
     dsimp; rw [← comm, assoc, ← comm', ← reassoc_of% comm₁₂, comm₂₃])
   have eq₁₂ := iso₁₂.hom.comm₂
-  have eq₁₂' := iso
+  have eq₁₂' := iso₁₂.hom.comm₃
+  have eq₁₃ := iso₁₃.hom.comm₂
+  have eq₁₃' := iso₁₃.hom.comm₃
+  have eq₂₃ := iso₂₃.hom.comm₂
+  have eq₂₃' := iso₂₃.hom.comm₃
+  have rel₁₂ := H.triangleMorphism₁.comm₂
+  have rel₁₃ := H.triangleMorphism₁.comm₃
+  have rel₂₂ := H.triangleMorphism₂.comm₂
+  have rel₂₃ := H.triangleMorphism₂.comm₃
+  dsimp [iso₁₂, iso₂₃, iso₁₃] at eq₁₂ eq₁₂' eq₁₃ eq₁₃' eq₂₃ eq₂₃' rel₁₂ rel₁₃ rel₂₂ rel₂₃
+  rw [Functor.map_id]; rw [comp_id] at rel₁₃
+  rw [id_comp] at rel₂₂
+  refine ⟨iso₁₂.hom.hom₃ ≫ H.m₁ ≫ iso₁₃.inv.hom₃,
+    iso₁₃.hom.hom₃ ≫ H.m₃ ≫ iso₂₃.inv.hom₃, ?_, ?_, ?_, ?_, ?_⟩
+  · rw [reassoc_of% eq₁₂, ← cancel_mono iso₁₃.hom.hom₃, assoc, assoc, assoc, assoc,
+      iso₁₃.inv_hom_id_triangle_hom₃, eq₁₃, reassoc_of% comm₂₃, ← rel₁₂]
+    dsimp
+    rw [comp_id]
+  · rw [← cancel_mono (e₁.hom⟦(1 : Int)⟧'), eq₁₂', assoc, assoc, assoc, eq₁₃',
+      iso₁₃.inv_hom_id_triangle_hom₃_assoc, ← rel₁₃]
+  · rw [reassoc_of% eq₁₃, reassoc_of% rel₂₂, ← cancel_mono iso₂₃.hom.hom₃, assoc, assoc,
+      iso₂₃.inv_hom_id_triangle_hom₃, eq₂₃]
+    dsimp
+    rw [comp_id]
+  · rw [← cancel_mono (e₂.hom⟦(1 : Int)⟧'), assoc, assoc, assoc, assoc, eq₂₃',
+      iso₂₃.inv_hom_id_triangle_hom₃_assoc, ← rel₂₃, ← Functor.map_comp, comm₁₂,
+      Functor.map_comp, reassoc_of% eq₁₃']
+  · refine isomorphic_distinguished _ H.mem _ ?_
+    refine Triangle.isoMk _ _ (Triangle.π₃.mapIso iso₁₂) (Triangle.π₃.mapIso iso₁₃)
+      (Triangle.π₃.mapIso iso₂₃) (by simp) (by simp) ?_
+    dsimp
+    rw [assoc]; rw [← Functor.map_comp]; rw [eq₁₂]; rw [Functor.map_comp]; rw [reassoc_of% eq₂₃']
 
 Depends on / 依赖: H.triangleMorphism, highestWeight, hom.comm, reassoc_of
 -/
@@ -571,7 +633,36 @@ definition Triangulated.someOctahedron'
   let m₁ := (shiftShiftNeg Z₁₂ 1).inv ≫ o.m₁⟦-1⟧' ≫ (shiftShiftNeg Z₁₃ 1).hom
   let m₃ := (shiftShiftNeg Z₁₃ 1).inv ≫ o.m₃⟦-1⟧' ≫ (shiftShiftNeg Z₂₃ 1).hom
   have eq₁ := o.comm₁
-  have
+  have eq₂ := o.comm₂
+  have eq₃ := o.comm₃
+  have eq₄ := o.comm₄
+  dsimp only [Triangle.mk_obj₁, Triangle.mk_obj₂, Triangle.mk_mor₁, Triangle.mk_mor₃]
+    at eq₁ eq₂ eq₃ eq₄
+  rw [comp_neg]; rw [neg_inj] at eq₂
+  rw [neg_comp]; rw [comp_neg]; rw [neg_inj] at eq₄
+  refine ⟨m₁, m₃, ?_, ?_, ?_, ?_, ?_⟩
+  · rw [← shiftFunctorCompIsoId_naturality_1 v₁₃ 1 (-1) (Int.add_right_neg 1)]
+    dsimp [m₁]
+    rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app_assoc]
+    nth_rw 2 [← assoc]
+    rw [← Functor.map_comp]; rw [eq₂]; rw [shiftFunctorCompIsoId_naturality_1]
+  · dsimp [m₁]
+    rw [Functor.map_comp]; rw [Functor.map_comp]; rw [shift_shiftFunctorCompIsoId_hom_app]; rw [shift_shiftFunctorCompIsoId_inv_app]; rw [shiftFunctorCompIsoId_naturality_1]; rw [eq₁]
+  · dsimp [m₃]
+    rw [Functor.map_comp]; rw [Functor.map_comp]; rw [shift_shiftFunctorCompIsoId_hom_app]; rw [shift_shiftFunctorCompIsoId_inv_app]; rw [shiftFunctorCompIsoId_naturality_1]; rw [eq₃]
+  · rw [← shiftFunctorCompIsoId_naturality_1 v₂₃ 1 (-1) (Int.add_right_neg 1)]
+    dsimp [m₃]
+    rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app_assoc]
+    nth_rw 2 [← assoc]
+    rw [← Functor.map_comp]; rw [← eq₄]; rw [← Functor.map_comp]; rw [shiftFunctorCompIsoId_naturality_1]
+  · apply isomorphic_distinguished _ ((Triangle.shift_distinguished_iff _ (-1 : Int)).mpr o.mem)
+    refine Triangle.isoMk _ _ (shiftShiftNeg Z₁₂ (1 : Int)).symm
+      (-(shiftShiftNeg Z₁₃ (1 : Int)).symm) (shiftShiftNeg Z₂₃ (1 : Int)).symm (comm₃ := ?_)
+    dsimp
+    simp only [Int.reduceNeg, assoc, Int.negOnePow_neg, Int.negOnePow_one, neg_comp,
+      Functor.map_neg, Functor.map_comp, smul_neg, Units.neg_smul, one_smul, neg_neg]
+    rw [shift_shift_neg']; rw [shift_shift_neg']; rw [shift_shiftFunctorCompIsoId_inv_app]; rw [shiftFunctorComm_hom_app_of_add_eq_zero _ _ (Int.add_right_neg 1)]
+    simp
 
 中文:
 定义 三角.someOctahedron'
@@ -582,7 +673,36 @@ definition Triangulated.someOctahedron'
   let m₁ := (shiftShiftNeg Z₁₂ 1).inv ≫ o.m₁⟦-1⟧' ≫ (shiftShiftNeg Z₁₃ 1).hom
   let m₃ := (shiftShiftNeg Z₁₃ 1).inv ≫ o.m₃⟦-1⟧' ≫ (shiftShiftNeg Z₂₃ 1).hom
   have eq₁ := o.comm₁
-  have
+  have eq₂ := o.comm₂
+  have eq₃ := o.comm₃
+  have eq₄ := o.comm₄
+  dsimp only [Triangle.mk_obj₁, Triangle.mk_obj₂, Triangle.mk_mor₁, Triangle.mk_mor₃]
+    at eq₁ eq₂ eq₃ eq₄
+  rw [comp_neg]; rw [neg_inj] at eq₂
+  rw [neg_comp]; rw [comp_neg]; rw [neg_inj] at eq₄
+  refine ⟨m₁, m₃, ?_, ?_, ?_, ?_, ?_⟩
+  · rw [← shiftFunctorCompIsoId_naturality_1 v₁₃ 1 (-1) (Int.add_right_neg 1)]
+    dsimp [m₁]
+    rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app_assoc]
+    nth_rw 2 [← assoc]
+    rw [← Functor.map_comp]; rw [eq₂]; rw [shiftFunctorCompIsoId_naturality_1]
+  · dsimp [m₁]
+    rw [Functor.map_comp]; rw [Functor.map_comp]; rw [shift_shiftFunctorCompIsoId_hom_app]; rw [shift_shiftFunctorCompIsoId_inv_app]; rw [shiftFunctorCompIsoId_naturality_1]; rw [eq₁]
+  · dsimp [m₃]
+    rw [Functor.map_comp]; rw [Functor.map_comp]; rw [shift_shiftFunctorCompIsoId_hom_app]; rw [shift_shiftFunctorCompIsoId_inv_app]; rw [shiftFunctorCompIsoId_naturality_1]; rw [eq₃]
+  · rw [← shiftFunctorCompIsoId_naturality_1 v₂₃ 1 (-1) (Int.add_right_neg 1)]
+    dsimp [m₃]
+    rw [assoc]; rw [assoc]; rw [Iso.hom_inv_id_app_assoc]
+    nth_rw 2 [← assoc]
+    rw [← Functor.map_comp]; rw [← eq₄]; rw [← Functor.map_comp]; rw [shiftFunctorCompIsoId_naturality_1]
+  · apply isomorphic_distinguished _ ((Triangle.shift_distinguished_iff _ (-1 : Int)).mpr o.mem)
+    refine Triangle.isoMk _ _ (shiftShiftNeg Z₁₂ (1 : Int)).symm
+      (-(shiftShiftNeg Z₁₃ (1 : Int)).symm) (shiftShiftNeg Z₂₃ (1 : Int)).symm (comm₃ := ?_)
+    dsimp
+    simp only [Int.reduceNeg, assoc, Int.negOnePow_neg, Int.negOnePow_one, neg_comp,
+      Functor.map_neg, Functor.map_comp, smul_neg, Units.neg_smul, one_smul, neg_neg]
+    rw [shift_shift_neg']; rw [shift_shift_neg']; rw [shift_shiftFunctorCompIsoId_inv_app]; rw [shiftFunctorComm_hom_app_of_add_eq_zero _ _ (Int.add_right_neg 1)]
+    simp
 -/
 @[no_expose] def Triangulated.someOctahedron' [IsTriangulated C]
     {X₁ X₂ X₃ Z₁₂ Z₂₃ Z₁₃ : C}

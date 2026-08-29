@@ -44,7 +44,19 @@ lemma essentiallyLarge_top
     { F : J ⥤ _ // HasColimit (F ⋙ e.inverse ⋙ P.ι) }
   let φ : ι -> C := fun ⟨j, _, F, hF⟩ => colimit (F ⋙ e.inverse ⋙ P.ι)
   refine ⟨ObjectProperty.ofObj φ, inferInstance, fun X _ => ?_⟩
-  obtain ⟨
+  obtain ⟨J, _, _, ⟨p⟩⟩ := hP.exists_colimitsOfShape X
+  let G : J ⥤ P.FullSubcategory := P.lift p.diag p.prop_diag_obj
+  let iso : (G ⋙ e.functor) ⋙ e.inverse ⋙ P.ι ≅ p.diag :=
+    Functor.associator _ _ _ ≪≫
+    G.isoWhiskerLeft ((Functor.associator _ _ _).symm ≪≫
+    Functor.isoWhiskerRight e.unitIso.symm P.ι) ≪≫
+    (Functor.associator _ _ _).symm ≪≫
+    Functor.isoWhiskerRight (Functor.rightUnitor _) _
+  have : HasColimit p.diag := ⟨_, p.isColimit⟩
+  have := hasColimit_of_iso iso
+  let i : ι := ⟨J, inferInstance, G ⋙ e.functor, inferInstance⟩
+  exact ⟨_, ⟨i⟩, ⟨((IsColimit.precomposeHomEquiv iso _).2
+    (p.isColimit)).coconePointUniqueUpToIso (colimit.isColimit _)⟩⟩
 
 中文:
 引理 essentiallyLarge_top
@@ -54,7 +66,19 @@ lemma essentiallyLarge_top
     { F : J ⥤ _ // HasColimit (F ⋙ e.inverse ⋙ P.ι) }
   let φ : ι -> C := fun ⟨j, _, F, hF⟩ => colimit (F ⋙ e.inverse ⋙ P.ι)
   refine ⟨ObjectProperty.ofObj φ, inferInstance, fun X _ => ?_⟩
-  obtain ⟨
+  obtain ⟨J, _, _, ⟨p⟩⟩ := hP.exists_colimitsOfShape X
+  let G : J ⥤ P.FullSubcategory := P.lift p.diag p.prop_diag_obj
+  let iso : (G ⋙ e.functor) ⋙ e.inverse ⋙ P.ι ≅ p.diag :=
+    Functor.associator _ _ _ ≪≫
+    G.isoWhiskerLeft ((Functor.associator _ _ _).symm ≪≫
+    Functor.isoWhiskerRight e.unitIso.symm P.ι) ≪≫
+    (Functor.associator _ _ _).symm ≪≫
+    Functor.isoWhiskerRight (Functor.rightUnitor _) _
+  have : HasColimit p.diag := ⟨_, p.isColimit⟩
+  have := hasColimit_of_iso iso
+  let i : ι := ⟨J, inferInstance, G ⋙ e.functor, inferInstance⟩
+  exact ⟨_, ⟨i⟩, ⟨((IsColimit.precomposeHomEquiv iso _).2
+    (p.isColimit)).coconePointUniqueUpToIso (colimit.isColimit _)⟩⟩
 
 Depends on / 依赖: FullSubcategory, Functor, Functor.associator, G.isoWhiskerLe, HasColimit, ObjectProperty, ObjectProperty.ofObj, P.FullSubcategory, P.lift, SmallCategory, associator, colimit, e.functor, e.inverse, equivSmallModel, exists_colimitsOfShape, functor, hP.exists_colimitsOfShape, inverse, isoWhiskerLe
 -/

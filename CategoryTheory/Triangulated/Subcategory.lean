@@ -414,7 +414,10 @@ instance [P.IsTriangulatedClosed₂]
       (P.ext_of_isTriangulatedClosed₂'
         (Triangle.mk (e₁.inv ≫ T.mor₁) (T.mor₂ ≫ e₃.hom) (e₃.inv ≫ T.mor₃ ≫ e₁.hom⟦1⟧'))
       (isomorphic_distinguished _ hT _
-        (Triangle.isoMk _ _ e₁.symm (Iso.
+        (Triangle.isoMk _ _ e₁.symm (Iso.refl _) e₃.symm (by simp) (by simp) (by
+          dsimp
+          simp only [assoc, ← Functor.map_comp, e₁.hom_inv_id,
+            Functor.map_id, comp_id]))) h₁ h₃)
 
 中文:
 实例 [P.是TriangulatedClosed₂]
@@ -425,7 +428,10 @@ instance [P.IsTriangulatedClosed₂]
       (P.ext_of_isTriangulatedClosed₂'
         (Triangle.mk (e₁.inv ≫ T.mor₁) (T.mor₂ ≫ e₃.hom) (e₃.inv ≫ T.mor₃ ≫ e₁.hom⟦1⟧'))
       (isomorphic_distinguished _ hT _
-        (Triangle.isoMk _ _ e₁.symm (Iso.
+        (Triangle.isoMk _ _ e₁.symm (Iso.refl _) e₃.symm (by simp) (by simp) (by
+          dsimp
+          simp only [assoc, ← Functor.map_comp, e₁.hom_inv_id,
+            Functor.map_id, comp_id]))) h₁ h₃)
 
 Depends on / 依赖: Functor, Functor.map_comp, Functor.map_id, Iso.refl, ObjectProperty, ObjectProperty.le_isoClosure, P.ext_of_isTriangulatedClosed, T.mor, Triangle, Triangle.isoMk, Triangle.mk, comp_id, hom_inv_id, isomorphic_distinguished, le_isoClosure, map_comp, map_id
 -/
@@ -896,7 +902,10 @@ lemma extensionProduct_assoc
     obtain ⟨Y, g'', h'', hT''⟩ := distinguished_cocone_triangle (f' ≫ f)
     let o := someOctahedron rfl hT' hT hT''
     exact ⟨_, _, _, _, _, hT'', hP, ⟨_, _, _, _, _, o.mem, hQ, hR⟩⟩
-  · intro ⟨A, Z, f, g, 
+  · intro ⟨A, Z, f, g, h, hT, hP, ⟨B, C, f', g', h', hT', hQ, hR⟩⟩
+    obtain ⟨Y, f'', h'', hT''⟩ := distinguished_cocone_triangle₁ (g ≫ g')
+    let o := someOctahedron' rfl hT hT' hT''
+    exact ⟨_, _, _, _, _, hT'', ⟨_, _, _, _, _, o.mem, hP, hQ⟩, hR⟩
 
 中文:
 引理 extensionProduct_assoc
@@ -908,7 +917,10 @@ lemma extensionProduct_assoc
     obtain ⟨Y, g'', h'', hT''⟩ := distinguished_cocone_triangle (f' ≫ f)
     let o := someOctahedron rfl hT' hT hT''
     exact ⟨_, _, _, _, _, hT'', hP, ⟨_, _, _, _, _, o.mem, hQ, hR⟩⟩
-  · intro ⟨A, Z, f, g, 
+  · intro ⟨A, Z, f, g, h, hT, hP, ⟨B, C, f', g', h', hT', hQ, hR⟩⟩
+    obtain ⟨Y, f'', h'', hT''⟩ := distinguished_cocone_triangle₁ (g ≫ g')
+    let o := someOctahedron' rfl hT hT' hT''
+    exact ⟨_, _, _, _, _, hT'', ⟨_, _, _, _, _, o.mem, hP, hQ⟩, hR⟩
 
 Depends on / 依赖: distinguished_cocone_triangle, o.mem, someOctahedron
 -/
@@ -983,7 +995,16 @@ lemma extensionProduct_retractClosure_retractClosure_le
   obtain ⟨X', g₁, g₂, hT'⟩ := distinguished_cocone_triangle₂ (b₃ ≫ f₃ ≫ a₁⟦(1 : Int)⟧')
   obtain ⟨a₂ : X ⟶ X', ha₁₂, ha₂₃⟩ :=
     complete_distinguished_triangle_morphism₂ _ _ hT hT' a₁ a₃ (by dsimp; grind)
-  obtain 
+  obtain ⟨b₂ : X' ⟶ X, hb₁₂, hb₂₃⟩ :=
+    complete_distinguished_triangle_morphism₂ _ _ hT' hT b₁ b₃ (by dsimp; grind)
+  dsimp at ha₁₂ ha₂₃ hb₁₂ hb₂₃
+  refine ⟨X', ⟨_, _, _, _, _, hT', hP, hQ⟩, ⟨?_⟩⟩
+  let φ := Triangle.homMk (Triangle.mk f₁ f₂ f₃) (Triangle.mk f₁ f₂ f₃) (𝟙 A)
+    (a₂ ≫ b₂) (𝟙 B) (by dsimp; grind) (by dsimp; grind)
+  haveI : IsIso (a₂ ≫ b₂) := isIso₂_of_isIso₁₃ φ hT hT (IsIso.id _) (IsIso.id _)
+  exact ⟨a₂, b₂ ≫ inv (a₂ ≫ b₂), by grind⟩
+
+@[stacks 0FX2 "second part"]
 
 中文:
 引理 extensionProduct_retractClosure_retractClosure_le
@@ -992,7 +1013,16 @@ lemma extensionProduct_retractClosure_retractClosure_le
   obtain ⟨X', g₁, g₂, hT'⟩ := distinguished_cocone_triangle₂ (b₃ ≫ f₃ ≫ a₁⟦(1 : Int)⟧')
   obtain ⟨a₂ : X ⟶ X', ha₁₂, ha₂₃⟩ :=
     complete_distinguished_triangle_morphism₂ _ _ hT hT' a₁ a₃ (by dsimp; grind)
-  obtain 
+  obtain ⟨b₂ : X' ⟶ X, hb₁₂, hb₂₃⟩ :=
+    complete_distinguished_triangle_morphism₂ _ _ hT' hT b₁ b₃ (by dsimp; grind)
+  dsimp at ha₁₂ ha₂₃ hb₁₂ hb₂₃
+  refine ⟨X', ⟨_, _, _, _, _, hT', hP, hQ⟩, ⟨?_⟩⟩
+  let φ := Triangle.homMk (Triangle.mk f₁ f₂ f₃) (Triangle.mk f₁ f₂ f₃) (𝟙 A)
+    (a₂ ≫ b₂) (𝟙 B) (by dsimp; grind) (by dsimp; grind)
+  haveI : IsIso (a₂ ≫ b₂) := isIso₂_of_isIso₁₃ φ hT hT (IsIso.id _) (IsIso.id _)
+  exact ⟨a₂, b₂ ≫ inv (a₂ ≫ b₂), by grind⟩
+
+@[stacks 0FX2 "second part"]
 
 Depends on / 依赖: Triangle, Triangle.homMk
 -/
@@ -1679,7 +1709,7 @@ lemma trW_isoClosure
     refine ⟨Z', g ≫ e.hom, e.inv ≫ h, isomorphic_distinguished _ mem _ ?_, hZ'⟩
     exact Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) e.symm
   · rintro ⟨Z, g, h, mem, hZ⟩
-    exact ⟨Z, g, h, mem, ObjectProperty.le_isoClosure _ _
+    exact ⟨Z, g, h, mem, ObjectProperty.le_isoClosure _ _ hZ⟩
 
 中文:
 引理 trW_isoClosure
@@ -1691,7 +1721,7 @@ lemma trW_isoClosure
     refine ⟨Z', g ≫ e.hom, e.inv ≫ h, isomorphic_distinguished _ mem _ ?_, hZ'⟩
     exact Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) e.symm
   · rintro ⟨Z, g, h, mem, hZ⟩
-    exact ⟨Z, g, h, mem, ObjectProperty.le_isoClosure _ _
+    exact ⟨Z, g, h, mem, ObjectProperty.le_isoClosure _ _ hZ⟩
 
 Depends on / 依赖: Iso.refl, ObjectProperty, ObjectProperty.le_isoClosure, Triangle, Triangle.isoMk, e.hom, e.inv, e.symm, isomorphic_distinguished, le_isoClosure
 -/
@@ -1750,7 +1780,10 @@ instance :
     refine Triangle.isoMk _ _ (asIso e) (Iso.refl _) (Iso.refl _) (by simp) (by simp) ?_
     dsimp
     simp only [Functor.map_inv, assoc, IsIso.inv_hom_id, comp_id, id_comp]
-  pos
+  postcomp {X Y Y'} e (he : IsIso e) := by
+    rintro f ⟨Z, g, h, mem, mem'⟩
+    refine ⟨Z, inv e ≫ g, h, isomorphic_distinguished _ mem _ ?_, mem'⟩
+    exact Triangle.isoMk _ _ (Iso.refl _) (asIso e).symm (Iso.refl _)
 
 中文:
 实例 :
@@ -1761,7 +1794,10 @@ instance :
     refine Triangle.isoMk _ _ (asIso e) (Iso.refl _) (Iso.refl _) (by simp) (by simp) ?_
     dsimp
     simp only [Functor.map_inv, assoc, IsIso.inv_hom_id, comp_id, id_comp]
-  pos
+  postcomp {X Y Y'} e (he : IsIso e) := by
+    rintro f ⟨Z, g, h, mem, mem'⟩
+    refine ⟨Z, inv e ≫ g, h, isomorphic_distinguished _ mem _ ?_, mem'⟩
+    exact Triangle.isoMk _ _ (Iso.refl _) (asIso e).symm (Iso.refl _)
 
 Depends on / 依赖: Functor, Functor.map_inv, IsIso.inv_hom_id, Iso.refl, Triangle, Triangle.isoMk, comp_id, id_comp, inv_hom_id, isomorphic_distinguished, map_inv, postcomp
 -/
@@ -1931,7 +1967,7 @@ instance [IsTriangulated
     rintro X₁ X₂ X₃ u₁₂ u₂₃ ⟨Z₁₂, v₁₂, w₁₂, H₁₂, mem₁₂⟩ ⟨Z₂₃, v₂₃, w₂₃, H₂₃, mem₂₃⟩
     obtain ⟨Z₁₃, v₁₃, w₁₂, H₁₃⟩ := distinguished_cocone_triangle (u₁₂ ≫ u₂₃)
     exact ⟨_, _, _, H₁₃, P.isoClosure.ext_of_isTriangulatedClosed₂
-      _ (someOctahedron rfl H₁₂ H₂₃ H₁₃).me
+      _ (someOctahedron rfl H₁₂ H₂₃ H₁₃).mem mem₁₂ mem₂₃⟩
 
 中文:
 实例 [是三角
@@ -1941,7 +1977,7 @@ instance [IsTriangulated
     rintro X₁ X₂ X₃ u₁₂ u₂₃ ⟨Z₁₂, v₁₂, w₁₂, H₁₂, mem₁₂⟩ ⟨Z₂₃, v₂₃, w₂₃, H₂₃, mem₂₃⟩
     obtain ⟨Z₁₃, v₁₃, w₁₂, H₁₃⟩ := distinguished_cocone_triangle (u₁₂ ≫ u₂₃)
     exact ⟨_, _, _, H₁₃, P.isoClosure.ext_of_isTriangulatedClosed₂
-      _ (someOctahedron rfl H₁₂ H₂₃ H₁₃).me
+      _ (someOctahedron rfl H₁₂ H₂₃ H₁₃).mem mem₁₂ mem₂₃⟩
 
 Depends on / 依赖: P.isoClosure.ext_of_isTriangulatedClosed, distinguished_cocone_triangle, isoClosure, someOctahedron, trW_isoClosure
 -/
@@ -2109,7 +2145,17 @@ instance [IsTriangulated
     obtain ⟨Y', s', f', mem'⟩ := distinguished_cocone_triangle₂ (g ≫ φ.f⟦1⟧')
     obtain ⟨b, ⟨hb₁, _⟩⟩ :=
       complete_distinguished_triangle_morphism₂ _ _ H mem' φ.f (𝟙 Z) (by simp)
-    exact ⟨MorphismProperty.LeftFraction.mk b s' ⟨_, _, _, mem', mem⟩, hb₁.
+    exact ⟨MorphismProperty.LeftFraction.mk b s' ⟨_, _, _, mem', mem⟩, hb₁.symm⟩
+  ext := by
+    rintro X' X Y f₁ f₂ s ⟨Z, g, h, H, mem⟩ hf₁
+    have hf₂ : s ≫ (f₁ - f₂) = 0 := by rw [comp_sub, hf₁, sub_self]
+    obtain ⟨q, hq⟩ := Triangle.yoneda_exact₂ _ H _ hf₂
+    obtain ⟨Y', r, t, mem'⟩ := distinguished_cocone_triangle q
+    refine ⟨Y', r, ?_, ?_⟩
+    · exact ⟨_, _, _, rot_of_distTriang _ mem', P.le_shift _ _ mem⟩
+    · have eq := comp_distTriang_mor_zero₁₂ _ mem'
+      dsimp at eq
+      rw [← sub_eq_zero]; rw [← sub_comp]; rw [hq]; rw [assoc]; rw [eq]; rw [comp_zero]
 
 中文:
 实例 [是三角
@@ -2119,7 +2165,17 @@ instance [IsTriangulated
     obtain ⟨Y', s', f', mem'⟩ := distinguished_cocone_triangle₂ (g ≫ φ.f⟦1⟧')
     obtain ⟨b, ⟨hb₁, _⟩⟩ :=
       complete_distinguished_triangle_morphism₂ _ _ H mem' φ.f (𝟙 Z) (by simp)
-    exact ⟨MorphismProperty.LeftFraction.mk b s' ⟨_, _, _, mem', mem⟩, hb₁.
+    exact ⟨MorphismProperty.LeftFraction.mk b s' ⟨_, _, _, mem', mem⟩, hb₁.symm⟩
+  ext := by
+    rintro X' X Y f₁ f₂ s ⟨Z, g, h, H, mem⟩ hf₁
+    have hf₂ : s ≫ (f₁ - f₂) = 0 := by rw [comp_sub, hf₁, sub_self]
+    obtain ⟨q, hq⟩ := Triangle.yoneda_exact₂ _ H _ hf₂
+    obtain ⟨Y', r, t, mem'⟩ := distinguished_cocone_triangle q
+    refine ⟨Y', r, ?_, ?_⟩
+    · exact ⟨_, _, _, rot_of_distTriang _ mem', P.le_shift _ _ mem⟩
+    · have eq := comp_distTriang_mor_zero₁₂ _ mem'
+      dsimp at eq
+      rw [← sub_eq_zero]; rw [← sub_comp]; rw [hq]; rw [assoc]; rw [eq]; rw [comp_zero]
 
 Depends on / 依赖: LeftFraction, MorphismProperty, MorphismProperty.LeftFraction.mk, Triangle, Triangle.yoneda_exact, comp_sub, distinguished_cocone, sub_self
 -/
@@ -2155,7 +2211,17 @@ instance [IsTriangulated
     obtain ⟨a, ⟨ha₁, _⟩⟩ := complete_distinguished_triangle_morphism₁ _ _
       mem' H φ.f (𝟙 Z) (by simp)
     exact ⟨MorphismProperty.RightFraction.mk f' ⟨_, _, _, mem', mem⟩ a, ha₁⟩
-  
+  ext Y Z Z' f₁ f₂ s hs hf₁ := by
+    rw [P.trW_iff'] at hs
+    obtain ⟨Z, g, h, H, mem⟩ := hs
+    have hf₂ : (f₁ - f₂) ≫ s = 0 := by rw [sub_comp, hf₁, sub_self]
+    obtain ⟨q, hq⟩ := Triangle.coyoneda_exact₂ _ H _ hf₂
+    obtain ⟨Y', r, t, mem'⟩ := distinguished_cocone_triangle₁ q
+    refine ⟨Y', r, ?_, ?_⟩
+    · exact ⟨_, _, _, mem', mem⟩
+    · have eq := comp_distTriang_mor_zero₁₂ _ mem'
+      dsimp at eq
+      rw [← sub_eq_zero]; rw [← comp_sub]; rw [hq]; rw [reassoc_of% eq]; rw [zero_comp]
 
 中文:
 实例 [是三角
@@ -2166,7 +2232,17 @@ instance [IsTriangulated
     obtain ⟨a, ⟨ha₁, _⟩⟩ := complete_distinguished_triangle_morphism₁ _ _
       mem' H φ.f (𝟙 Z) (by simp)
     exact ⟨MorphismProperty.RightFraction.mk f' ⟨_, _, _, mem', mem⟩ a, ha₁⟩
-  
+  ext Y Z Z' f₁ f₂ s hs hf₁ := by
+    rw [P.trW_iff'] at hs
+    obtain ⟨Z, g, h, H, mem⟩ := hs
+    have hf₂ : (f₁ - f₂) ≫ s = 0 := by rw [sub_comp, hf₁, sub_self]
+    obtain ⟨q, hq⟩ := Triangle.coyoneda_exact₂ _ H _ hf₂
+    obtain ⟨Y', r, t, mem'⟩ := distinguished_cocone_triangle₁ q
+    refine ⟨Y', r, ?_, ?_⟩
+    · exact ⟨_, _, _, mem', mem⟩
+    · have eq := comp_distTriang_mor_zero₁₂ _ mem'
+      dsimp at eq
+      rw [← sub_eq_zero]; rw [← comp_sub]; rw [hq]; rw [reassoc_of% eq]; rw [zero_comp]
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.RightFraction.mk, P.trW_iff, RightFraction, Triangle, Triangle.coyoneda_exact, sub_comp, sub_self, trW_iff
 -/
@@ -2202,7 +2278,9 @@ instance [IsTriangulated
   obtain ⟨Z₂, g₂, h₂, mem₂⟩ := distinguished_cocone_triangle (T₁.mor₁ ≫ b)
   have H := someOctahedron rfl mem₁ mem₄ mem₂
   have H' := someOctahedron comm.symm mem₅ mem₃ mem₂
-  let φ : T₁ ⟶ T₃ := H.triangleMorph
+  let φ : T₁ ⟶ T₃ := H.triangleMorphism₁ ≫ H'.triangleMorphism₂
+  exact ⟨φ.hom₃, P.trW.comp_mem _ _ (trW.mk P H.mem mem₄') (trW.mk' P H'.mem mem₅'),
+    by simpa [φ] using φ.comm₂, by simpa [φ] using φ.comm₃⟩⟩
 
 中文:
 实例 [是三角
@@ -2212,7 +2290,9 @@ instance [IsTriangulated
   obtain ⟨Z₂, g₂, h₂, mem₂⟩ := distinguished_cocone_triangle (T₁.mor₁ ≫ b)
   have H := someOctahedron rfl mem₁ mem₄ mem₂
   have H' := someOctahedron comm.symm mem₅ mem₃ mem₂
-  let φ : T₁ ⟶ T₃ := H.triangleMorph
+  let φ : T₁ ⟶ T₃ := H.triangleMorphism₁ ≫ H'.triangleMorphism₂
+  exact ⟨φ.hom₃, P.trW.comp_mem _ _ (trW.mk P H.mem mem₄') (trW.mk' P H'.mem mem₅'),
+    by simpa [φ] using φ.comm₂, by simpa [φ] using φ.comm₃⟩⟩
 
 Depends on / 依赖: H.mem, H.triangleMorphism, P.trW.comp_mem, comm.symm, comp_mem, distinguished_cocone_triangle, someOctahedron, trW.mk
 -/
@@ -2248,7 +2328,7 @@ instance [P.IsTriangulated]
       (binaryProductTriangle_distinguished _ _)
       (p.prop_diag_obj (.mk .left)) (p.prop_diag_obj (.mk .right)))
     exact IsLimit.conePointUniqueUpToIso (prodIsProd _ _)
-      ((IsLimit.postcomposeHomEquiv (diagram
+      ((IsLimit.postcomposeHomEquiv (diagramIsoPair p.diag) _).2 p.isLimit)
 
 中文:
 实例 [P.是三角]
@@ -2259,7 +2339,7 @@ instance [P.IsTriangulated]
       (binaryProductTriangle_distinguished _ _)
       (p.prop_diag_obj (.mk .left)) (p.prop_diag_obj (.mk .right)))
     exact IsLimit.conePointUniqueUpToIso (prodIsProd _ _)
-      ((IsLimit.postcomposeHomEquiv (diagram
+      ((IsLimit.postcomposeHomEquiv (diagramIsoPair p.diag) _).2 p.isLimit)
 
 Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, IsLimit.postcomposeHomEquiv, P.ext_of_isTriangulatedClosed, P.prop_of_iso, binaryProductTriangle_distinguished, conePointUniqueUpToIso, diagramIsoPair, isLimit, p.diag, p.isLimit, p.prop_diag_obj, postcomposeHomEquiv, prodIsProd, prop_diag_obj, prop_of_iso
 -/
@@ -2303,7 +2383,7 @@ instance [P.IsTriangulated]
     exact trW.mk _ (productTriangle_distinguished _
       (fun j => (hf j).choose_spec.choose_spec.choose_spec.choose))
       (P.isoClosure.prop_pi _
-        
+        (fun j => (hf j).choose_spec.choose_spec.choose_spec.choose_spec))⟩
 
 中文:
 实例 [P.是三角]
@@ -2316,7 +2396,7 @@ instance [P.IsTriangulated]
     exact trW.mk _ (productTriangle_distinguished _
       (fun j => (hf j).choose_spec.choose_spec.choose_spec.choose))
       (P.isoClosure.prop_pi _
-        
+        (fun j => (hf j).choose_spec.choose_spec.choose_spec.choose_spec))⟩
 
 Depends on / 依赖: IsStableUnderProductsOfShape, MorphismProperty, MorphismProperty.IsStableUnderProductsOfShape.mk, P.isoClosure.prop_pi, choose_spec, choose_spec.choose_spec.choose_spec.choose, choose_spec.choose_spec.choose_spec.choose_spec, isoClosure, productTriangle_distinguished, prop_pi, trW.mk, trW_isoClosure
 -/
@@ -2347,7 +2427,25 @@ instance :
     isomorphic_distinguished _ hT₁ _ (P.ι.mapTriangle.mapIso e)
   contractible_distinguished X :=
     isomorphic_distinguished _ (contractible_distinguished (P.ι.obj X)) _
-      (Triangle.isoMk _ _ (Iso.refl _) (Iso.ref
+      (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) P.ι.mapZeroObject)
+  distinguished_cocone_triangle {X Y} f := by
+    obtain ⟨Z', g', h', mem⟩ := distinguished_cocone_triangle (P.ι.map f)
+    obtain ⟨Z'', hZ'', ⟨e⟩⟩ := P.ext_of_isTriangulatedClosed₃' _ mem X.2 Y.2
+    exact ⟨⟨Z'', hZ''⟩, P.fullyFaithfulι.preimage (g' ≫ e.hom),
+      P.fullyFaithfulι.preimage (e.inv ≫ h' ≫ (P.ι.commShiftIso (1 : Int)).inv.app X),
+      isomorphic_distinguished _ mem _ (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) e.symm)⟩
+  rotate_distinguished_triangle T :=
+    (rotate_distinguished_triangle (P.ι.mapTriangle.obj T)).trans
+      (distinguished_iff_of_iso (P.ι.mapTriangleRotateIso.app T))
+  complete_distinguished_triangle_morphism T₁ T₂ hT₁ hT₂ a b comm := by
+    obtain ⟨c, ⟨hc₁, hc₂⟩⟩ := complete_distinguished_triangle_morphism (P.ι.mapTriangle.obj T₁)
+      (P.ι.mapTriangle.obj T₂) hT₁ hT₂ (P.ι.map a) (P.ι.map b)
+      (by simpa using P.ι.congr_map comm)
+    refine ⟨P.fullyFaithfulι.preimage c, ⟨by cat_disch, ?_⟩⟩
+    ext
+    have := P.ι.commShiftIso_hom_naturality a (1 : Int)
+    rw [← cancel_mono ((Functor.commShiftIso P.ι (1 : Int)).hom.app T₂.obj₁)]
+    cat_disch
 
 中文:
 实例 :
@@ -2357,7 +2455,25 @@ instance :
     isomorphic_distinguished _ hT₁ _ (P.ι.mapTriangle.mapIso e)
   contractible_distinguished X :=
     isomorphic_distinguished _ (contractible_distinguished (P.ι.obj X)) _
-      (Triangle.isoMk _ _ (Iso.refl _) (Iso.ref
+      (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) P.ι.mapZeroObject)
+  distinguished_cocone_triangle {X Y} f := by
+    obtain ⟨Z', g', h', mem⟩ := distinguished_cocone_triangle (P.ι.map f)
+    obtain ⟨Z'', hZ'', ⟨e⟩⟩ := P.ext_of_isTriangulatedClosed₃' _ mem X.2 Y.2
+    exact ⟨⟨Z'', hZ''⟩, P.fullyFaithfulι.preimage (g' ≫ e.hom),
+      P.fullyFaithfulι.preimage (e.inv ≫ h' ≫ (P.ι.commShiftIso (1 : Int)).inv.app X),
+      isomorphic_distinguished _ mem _ (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) e.symm)⟩
+  rotate_distinguished_triangle T :=
+    (rotate_distinguished_triangle (P.ι.mapTriangle.obj T)).trans
+      (distinguished_iff_of_iso (P.ι.mapTriangleRotateIso.app T))
+  complete_distinguished_triangle_morphism T₁ T₂ hT₁ hT₂ a b comm := by
+    obtain ⟨c, ⟨hc₁, hc₂⟩⟩ := complete_distinguished_triangle_morphism (P.ι.mapTriangle.obj T₁)
+      (P.ι.mapTriangle.obj T₂) hT₁ hT₂ (P.ι.map a) (P.ι.map b)
+      (by simpa using P.ι.congr_map comm)
+    refine ⟨P.fullyFaithfulι.preimage c, ⟨by cat_disch, ?_⟩⟩
+    ext
+    have := P.ι.commShiftIso_hom_naturality a (1 : Int)
+    rw [← cancel_mono ((Functor.commShiftIso P.ι (1 : Int)).hom.app T₂.obj₁)]
+    cat_disch
 
 Depends on / 依赖: distTriang, mapTriangle, mapTriangle.obj
 -/

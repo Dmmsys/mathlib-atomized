@@ -50,7 +50,10 @@ theorem intValuation_liesOver
   proof: by
   rcases eq_or_ne x 0 with rfl | hx
   · simp [ramificationIdx'_ne_zero_of_liesOver w.asIdeal v.ne_bot]
-  rw [intValuation_eq_exp_neg_multiplicity v hx]; rw [intValuation_eq_exp_neg_multiplicity w (by simpa)]; rw [← Set.image_singleton]; rw [← Ideal.map_span]; rw [exp_neg]; rw [exp_neg]; rw [inv_p
+  rw [intValuation_eq_exp_neg_multiplicity v hx]; rw [intValuation_eq_exp_neg_multiplicity w (by simpa)]; rw [← Set.image_singleton]; rw [← Ideal.map_span]; rw [exp_neg]; rw [exp_neg]; rw [inv_pow]; rw [← exp_nsmul]; rw [Int.nsmul_eq_mul]; rw [inv_inj]; rw [exp_inj]; rw [← Nat.cast_mul]; rw [Nat.cast_inj]
+.symm refine multiplicity_eq_of_emultiplicity_eq_some ?_
+  replace hx : Ideal.span {x} != ⊥ := by simp [hx]
+  rw [emultiplicity_map_eq_ramificationIdx'_mul hx v.irreducible w.irreducible w.ne_bot]; rw [Nat.cast_mul]; rw [(FiniteMultiplicity.of_prime_left v.prime hx).emultiplicity_eq_multiplicity]
 
 中文:
 定理 intValuation_liesOver
@@ -58,7 +61,10 @@ theorem intValuation_liesOver
   证明: by
   rcases eq_or_ne x 0 with rfl | hx
   · simp [ramificationIdx'_ne_zero_of_liesOver w.asIdeal v.ne_bot]
-  rw [intValuation_eq_exp_neg_multiplicity v hx]; rw [intValuation_eq_exp_neg_multiplicity w (by simpa)]; rw [← Set.image_singleton]; rw [← Ideal.map_span]; rw [exp_neg]; rw [exp_neg]; rw [inv_p
+  rw [intValuation_eq_exp_neg_multiplicity v hx]; rw [intValuation_eq_exp_neg_multiplicity w (by simpa)]; rw [← Set.image_singleton]; rw [← Ideal.map_span]; rw [exp_neg]; rw [exp_neg]; rw [inv_pow]; rw [← exp_nsmul]; rw [Int.nsmul_eq_mul]; rw [inv_inj]; rw [exp_inj]; rw [← Nat.cast_mul]; rw [Nat.cast_inj]
+.symm refine multiplicity_eq_of_emultiplicity_eq_some ?_
+  replace hx : Ideal.span {x} != ⊥ := by simp [hx]
+  rw [emultiplicity_map_eq_ramificationIdx'_mul hx v.irreducible w.irreducible w.ne_bot]; rw [Nat.cast_mul]; rw [(FiniteMultiplicity.of_prime_left v.prime hx).emultiplicity_eq_multiplicity]
 
 Depends on / 依赖: Ideal.map_span, Ideal.span, Int.nsmul_eq_mul, Nat.cast_inj, Nat.cast_mul, Set.image_singleton, _ne_zero_of_liesOver, asIdeal, cast_inj, cast_mul, eq_or_ne, exp_inj, exp_neg, exp_nsmul, image_singleton, intValuation_eq_exp_neg_multiplicity, inv_inj, inv_pow, map_span, multiplicity_eq_of_emultiplicity_eq_some
 -/
@@ -113,7 +119,39 @@ theorem uniformContinuous_algebraMap_liesOver
     (IsValuativeTopology.hasBasis_nhds_zero _)]
   intro γL _
   /-
-  `ValueGroup₀ (w.valuation L)` <--------> `ℤᵐ⁰` <--------> `ValueGroup₀ (v.valuati
+  `ValueGroup₀ (w.valuation L)` <--------> `ℤᵐ⁰` <--------> `ValueGroup₀ (v.valuation K)`
+            ^ ^
+            | |
+            | |
+            v v
+  `ValueGroup₀ (WithVal.valuation _)` `ValueGroup₀ (WithVal.valuation _)`
+            ^ ^
+            | |
+            | |
+            v v
+  `γL : ValuativeRel.ValueGroupWithZero Lʷ` `γK: ValuativeRel.ValueGroupWithZero Kᵛ`
+  -/
+  let e := v.asIdeal.ramificationIdx' w.asIdeal
+  -- push `γL` to `ℤᵐ⁰`
+  let σL := WithVal.valueGroupOrderIso₀ (w.valuation L)
+  let σw := valueGroup₀_equiv_withZeroMulInt (w.valuation L)
+  let σwV := ValuativeRel.ValueGroupWithZero.orderMonoidIso (WithVal.valuation (w.valuation L))
+  let m : Intᵐ⁰ := σw (σL (σwV γL))
+  -- `ℤᵐ⁰` values in `K` exponentiate by `e` in `L` so take the `e`th root and pull back to `γK`
+  let σvV := ValuativeRel.ValueGroupWithZero.orderMonoidIso (WithVal.valuation (v.valuation K))
+  let σv := valueGroup₀_equiv_withZeroMulInt (v.valuation K)
+  let σK := WithVal.valueGroupOrderIso₀ (v.valuation K)
+  let γK := σvV.symm (σK.symm (σv.symm (exp (m.log / e))))
+  have hγK : γK != 0 := by simp [γK, EmbeddingLike.map_eq_zero_iff (f := σK.symm)]
+  use .mk0 _ hγK
+  simp only [Units.val_mk0, Set.mem_ofPred_eq, true_and]
+  intro x hx
+  rcases eq_or_ne x 0 with rfl | hx₀; · simp
+  rw [σvV.lt_symm_apply]; rw [σK.lt_symm_apply]; rw [σv.lt_symm_apply]; rw [ValuativeRel.ValueGroupWithZero.orderMonoidIso_valuation_eq_restrict₀]; rw [← Valuation.restrict_def]; rw [WithVal.valueGroupOrderIso₀_restrict]; rw [valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective (v.valuation_surjective K)]; rw [← log_lt_log (by simp_all) (by simp)] at hx
+  rw [← σwV.strictMono.lt_iff_lt]; rw [← σL.strictMono.lt_iff_lt]; rw [ValuativeRel.ValueGroupWithZero.orderMonoidIso_valuation_eq_restrict₀]; rw [← Valuation.restrict_def]; rw [WithVal.valueGroupOrderIso₀_restrict]; rw [← σw.strictMono.lt_iff_lt]; rw [valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective (w.valuation_surjective L)]; rw [WithVal.algebraMap_left_apply]; rw [WithVal.algebraMap_right_apply]; rw [← valuation_liesOver L v]; rw [← log_lt_log (by simp_all) (by simp [EmbeddingLike.map_eq_zero_iff (f := σwV)]), log_pow,
+    nsmul_eq_mul, mul_comm]
+  exact Int.mul_lt_of_lt_ediv
+    (mod_cast pos_of_ne_zero (ramificationIdx'_ne_zero_of_liesOver w.asIdeal v.ne_bot)) hx
 
 中文:
 定理 uniformContinuous_algebraMap_liesOver
@@ -123,7 +161,39 @@ theorem uniformContinuous_algebraMap_liesOver
     (IsValuativeTopology.hasBasis_nhds_zero _)]
   intro γL _
   /-
-  `ValueGroup₀ (w.valuation L)` <--------> `ℤᵐ⁰` <--------> `ValueGroup₀ (v.valuati
+  `ValueGroup₀ (w.valuation L)` <--------> `ℤᵐ⁰` <--------> `ValueGroup₀ (v.valuation K)`
+            ^ ^
+            | |
+            | |
+            v v
+  `ValueGroup₀ (WithVal.valuation _)` `ValueGroup₀ (WithVal.valuation _)`
+            ^ ^
+            | |
+            | |
+            v v
+  `γL : ValuativeRel.ValueGroupWithZero Lʷ` `γK: ValuativeRel.ValueGroupWithZero Kᵛ`
+  -/
+  let e := v.asIdeal.ramificationIdx' w.asIdeal
+  -- push `γL` to `ℤᵐ⁰`
+  let σL := WithVal.valueGroupOrderIso₀ (w.valuation L)
+  let σw := valueGroup₀_equiv_withZeroMulInt (w.valuation L)
+  let σwV := ValuativeRel.ValueGroupWithZero.orderMonoidIso (WithVal.valuation (w.valuation L))
+  let m : Intᵐ⁰ := σw (σL (σwV γL))
+  -- `ℤᵐ⁰` values in `K` exponentiate by `e` in `L` so take the `e`th root and pull back to `γK`
+  let σvV := ValuativeRel.ValueGroupWithZero.orderMonoidIso (WithVal.valuation (v.valuation K))
+  let σv := valueGroup₀_equiv_withZeroMulInt (v.valuation K)
+  let σK := WithVal.valueGroupOrderIso₀ (v.valuation K)
+  let γK := σvV.symm (σK.symm (σv.symm (exp (m.log / e))))
+  have hγK : γK != 0 := by simp [γK, EmbeddingLike.map_eq_zero_iff (f := σK.symm)]
+  use .mk0 _ hγK
+  simp only [Units.val_mk0, Set.mem_ofPred_eq, true_and]
+  intro x hx
+  rcases eq_or_ne x 0 with rfl | hx₀; · simp
+  rw [σvV.lt_symm_apply]; rw [σK.lt_symm_apply]; rw [σv.lt_symm_apply]; rw [ValuativeRel.ValueGroupWithZero.orderMonoidIso_valuation_eq_restrict₀]; rw [← Valuation.restrict_def]; rw [WithVal.valueGroupOrderIso₀_restrict]; rw [valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective (v.valuation_surjective K)]; rw [← log_lt_log (by simp_all) (by simp)] at hx
+  rw [← σwV.strictMono.lt_iff_lt]; rw [← σL.strictMono.lt_iff_lt]; rw [ValuativeRel.ValueGroupWithZero.orderMonoidIso_valuation_eq_restrict₀]; rw [← Valuation.restrict_def]; rw [WithVal.valueGroupOrderIso₀_restrict]; rw [← σw.strictMono.lt_iff_lt]; rw [valueGroup₀_equiv_withZeroMulInt_restrict_apply_of_surjective (w.valuation_surjective L)]; rw [WithVal.algebraMap_left_apply]; rw [WithVal.algebraMap_right_apply]; rw [← valuation_liesOver L v]; rw [← log_lt_log (by simp_all) (by simp [EmbeddingLike.map_eq_zero_iff (f := σwV)]), log_pow,
+    nsmul_eq_mul, mul_comm]
+  exact Int.mul_lt_of_lt_ediv
+    (mod_cast pos_of_ne_zero (ramificationIdx'_ne_zero_of_liesOver w.asIdeal v.ne_bot)) hx
 
 Depends on / 依赖: ContinuousAt, IsValuativeTopology, IsValuativeTopology.hasBasis_nhds_zero, hasBasis_nhds_zero, map_zero, tendsto_iff, uniformContinuous_of_continuousAt_zero
 -/

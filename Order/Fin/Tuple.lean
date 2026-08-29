@@ -202,7 +202,18 @@ lemma Fin.strictMono_insertNth_iff
   · simpa [hab] using h (a := q.succAbove a) (b := q.succAbove b)
   · have : q.succAbove i < q := by simp [succAbove_of_castSucc_lt, hlt]
     simpa using h this
-  · have : q < q.succAbove i := by simp [succAbove_of_le
+  · have : q < q.succAbove i := by simp [succAbove_of_le_castSucc, hlt, ← le_castSucc_iff]
+    simpa using h this
+  · rintro ⟨h, hlt, hgt⟩ a b hab
+    cases a using succAboveCases q <;> cases b using succAboveCases q
+    · simp at hab
+    · rename_i j
+      have : q <= j.castSucc := by simpa [lt_succAbove_iff_le_castSucc] using hab
+      simpa using hgt _ this
+    · rename_i j
+      have : j.castSucc < q := by simpa [succAbove_lt_iff_castSucc_lt] using hab
+      simpa using hlt _ this
+· simpa using h (strictMono_succAbove _).lt_iff_lt.mp hab
 
 中文:
 引理 有限集.strictMono_insertNth_iff
@@ -212,7 +223,18 @@ lemma Fin.strictMono_insertNth_iff
   · simpa [hab] using h (a := q.succAbove a) (b := q.succAbove b)
   · have : q.succAbove i < q := by simp [succAbove_of_castSucc_lt, hlt]
     simpa using h this
-  · have : q < q.succAbove i := by simp [succAbove_of_le
+  · have : q < q.succAbove i := by simp [succAbove_of_le_castSucc, hlt, ← le_castSucc_iff]
+    simpa using h this
+  · rintro ⟨h, hlt, hgt⟩ a b hab
+    cases a using succAboveCases q <;> cases b using succAboveCases q
+    · simp at hab
+    · rename_i j
+      have : q <= j.castSucc := by simpa [lt_succAbove_iff_le_castSucc] using hab
+      simpa using hgt _ this
+    · rename_i j
+      have : j.castSucc < q := by simpa [succAbove_lt_iff_castSucc_lt] using hab
+      simpa using hlt _ this
+· simpa using h (strictMono_succAbove _).lt_iff_lt.mp hab
 
 Depends on / 依赖: castSucc, j.castSucc, le_castSucc_iff, q.succAbove, rename_i, succAbove, succAboveCases, succAbove_of_castSucc_lt, succAbove_of_le_castSucc
 -/
@@ -265,7 +287,9 @@ lemma Fin.strictMono_cons_zero_succ
   refine ⟨fun h => funext fun i => ?_, fun h => by simp [h, strictMono_id]⟩
   have key (g : Fin (n + 1) -> Fin (n + 1)) (hg : StrictMono g) : g = id := by
     -- Import restrictions prevent us using `StrictMono.eq_id`: hence this manual proof.
-    refine funext fun x => le_antisymm ?_ (hg.id_le x
+    refine funext fun x => le_antisymm ?_ (hg.id_le x)
+    simpa using ((Fin.rev_strictAnti.comp_strictMono hg).comp Fin.rev_strictAnti).id_le (Fin.rev x)
+  simpa using congrFun (key _ h) i.succ
 
 中文:
 引理 有限集.strictMono_cons_zero_succ
@@ -274,7 +298,9 @@ lemma Fin.strictMono_cons_zero_succ
   refine ⟨fun h => funext fun i => ?_, fun h => by simp [h, strictMono_id]⟩
   have key (g : Fin (n + 1) -> Fin (n + 1)) (hg : StrictMono g) : g = id := by
     -- Import restrictions prevent us using `StrictMono.eq_id`: hence this manual proof.
-    refine funext fun x => le_antisymm ?_ (hg.id_le x
+    refine funext fun x => le_antisymm ?_ (hg.id_le x)
+    simpa using ((Fin.rev_strictAnti.comp_strictMono hg).comp Fin.rev_strictAnti).id_le (Fin.rev x)
+  simpa using congrFun (key _ h) i.succ
 -/
 @[simp] lemma Fin.strictMono_cons_zero_succ {f : Fin n -> Fin (n + 1)} :
     StrictMono (Fin.cons 0 f) ↔ f = Fin.succ := by

@@ -84,7 +84,10 @@ definition coneOfPreserves
         { left := c₁.π.app j
           right := c₂.π.app j
           w := ((isLimitOfPreserves R t₂).fac (limitAuxiliaryCone F c₁) j).symm }
-      naturality := f
+      naturality := fun j₁ j₂ t => by
+        ext
+        · simp [← c₁.w t]
+        · simp [← c₂.w t] }
 
 中文:
 定义 coneOfPreserves
@@ -97,7 +100,10 @@ definition coneOfPreserves
         { left := c₁.π.app j
           right := c₂.π.app j
           w := ((isLimitOfPreserves R t₂).fac (limitAuxiliaryCone F c₁) j).symm }
-      naturality := f
+      naturality := fun j₁ j₂ t => by
+        ext
+        · simp [← c₁.w t]
+        · simp [← c₂.w t] }
 
 Depends on / 依赖: isLimitOfPreserves, limitAuxiliaryCone, naturality
 -/
@@ -130,7 +136,15 @@ definition fstSndJointlyReflectLimit
       w := (isLimitOfPreserves R h₂).hom_ext (fun j => by
         simp [← Functor.map_comp, ← Functor.map_comp_assoc, ← CommaMorphism.w,
           dsimp% h₂.fac ((snd _ _).mapCone s) j,
-          dsimp% h₁.fac ((fst
+          dsimp% h₁.fac ((fst _ _).mapCone s) j]) }
+  fac s j := by
+    ext
+    · exact h₁.fac ((fst _ _).mapCone s) j
+    · exact h₂.fac ((snd _ _).mapCone s) j
+  uniq s _ hm := by
+    ext
+    · exact h₁.uniq ((fst _ _).mapCone s) _ (by simp [← hm])
+    · exact h₂.uniq ((snd _ _).mapCone s) _ (by simp [← hm])
 
 中文:
 定义 fstSndJointlyReflectLimit
@@ -140,7 +154,15 @@ definition fstSndJointlyReflectLimit
       w := (isLimitOfPreserves R h₂).hom_ext (fun j => by
         simp [← Functor.map_comp, ← Functor.map_comp_assoc, ← CommaMorphism.w,
           dsimp% h₂.fac ((snd _ _).mapCone s) j,
-          dsimp% h₁.fac ((fst
+          dsimp% h₁.fac ((fst _ _).mapCone s) j]) }
+  fac s j := by
+    ext
+    · exact h₁.fac ((fst _ _).mapCone s) j
+    · exact h₂.fac ((snd _ _).mapCone s) j
+  uniq s _ hm := by
+    ext
+    · exact h₁.uniq ((fst _ _).mapCone s) _ (by simp [← hm])
+    · exact h₂.uniq ((snd _ _).mapCone s) _ (by simp [← hm])
 
 Depends on / 依赖: CommaMorphism, CommaMorphism.w, Functor, Functor.map_comp, Functor.map_comp_assoc, hom_ext, isLimitOfPreserves, mapCone, map_comp, map_comp_assoc
 -/
@@ -227,7 +249,10 @@ definition coconeOfPreserves
         { left := c₁.ι.app j
           right := c₂.ι.app j
           w := (isColimitOfPreserves L t₁).fac (colimitAuxiliaryCocone _ c₂) j }
-      naturality
+      naturality := fun j₁ j₂ t => by
+        ext
+        · simp [← c₁.w t]
+        · simp [← c₂.w t] }
 
 中文:
 定义 coconeOfPreserves
@@ -240,7 +265,10 @@ definition coconeOfPreserves
         { left := c₁.ι.app j
           right := c₂.ι.app j
           w := (isColimitOfPreserves L t₁).fac (colimitAuxiliaryCocone _ c₂) j }
-      naturality
+      naturality := fun j₁ j₂ t => by
+        ext
+        · simp [← c₁.w t]
+        · simp [← c₂.w t] }
 
 Depends on / 依赖: colimitAuxiliaryCocone, isColimitOfPreserves, naturality
 -/
@@ -273,7 +301,15 @@ definition fstSndJointlyReflectColimit
       w := (isColimitOfPreserves L h₁).hom_ext (fun j => by
         simp [← Functor.map_comp_assoc, ← Functor.map_comp,
           dsimp% h₁.fac ((fst _ _).mapCocone s) j,
-          dsimp% h₂.fac ((snd _ _).mapCo
+          dsimp% h₂.fac ((snd _ _).mapCocone s) j]) }
+  fac s j := by
+    ext
+    · exact h₁.fac ((fst _ _).mapCocone s) j
+    · exact h₂.fac ((snd _ _).mapCocone s) j
+  uniq s _ hm := by
+    ext
+    · exact h₁.uniq ((fst _ _).mapCocone s) _ (by simp [← hm])
+    · exact h₂.uniq ((snd _ _).mapCocone s) _ (by simp [← hm])
 
 中文:
 定义 fstSndJointlyReflectColimit
@@ -283,7 +319,15 @@ definition fstSndJointlyReflectColimit
       w := (isColimitOfPreserves L h₁).hom_ext (fun j => by
         simp [← Functor.map_comp_assoc, ← Functor.map_comp,
           dsimp% h₁.fac ((fst _ _).mapCocone s) j,
-          dsimp% h₂.fac ((snd _ _).mapCo
+          dsimp% h₂.fac ((snd _ _).mapCocone s) j]) }
+  fac s j := by
+    ext
+    · exact h₁.fac ((fst _ _).mapCocone s) j
+    · exact h₂.fac ((snd _ _).mapCocone s) j
+  uniq s _ hm := by
+    ext
+    · exact h₁.uniq ((fst _ _).mapCocone s) _ (by simp [← hm])
+    · exact h₂.uniq ((snd _ _).mapCocone s) _ (by simp [← hm])
 
 Depends on / 依赖: Functor, Functor.map_comp, Functor.map_comp_assoc, hom_ext, isColimitOfPreserves, mapCocone, map_comp, map_comp_assoc
 -/
@@ -820,7 +864,7 @@ instance createsLimit
   createsLimitOfReflectsIso fun _ t =>
     { liftedCone := Comma.coneOfPreserves F punitCone t
       makesLimit := Comma.coneOfPreservesIsLimit _ punitConeIsLimit _
-      validLift := Cone.ext (Iso.refl _) fun _ => (id_comp _).symm
+      validLift := Cone.ext (Iso.refl _) fun _ => (id_comp _).symm }
 
 中文:
 实例 createsLimit
@@ -829,7 +873,7 @@ instance createsLimit
   createsLimitOfReflectsIso fun _ t =>
     { liftedCone := Comma.coneOfPreserves F punitCone t
       makesLimit := Comma.coneOfPreservesIsLimit _ punitConeIsLimit _
-      validLift := Cone.ext (Iso.refl _) fun _ => (id_comp _).symm
+      validLift := Cone.ext (Iso.refl _) fun _ => (id_comp _).symm }
 
 Depends on / 依赖: Comma.coneOfPreserves, Comma.coneOfPreservesIsLimit, Comma.snd, Cone.ext, Functor, Functor.fromPUnit, Iso.refl, PreservesLimit, coneOfPreserves, coneOfPreservesIsLimit, createsLimitOfReflectsIso, fromPUnit, id_comp, liftedCone, makesLimit, punitCone, punitConeIsLimit, validLift
 -/
@@ -1034,7 +1078,7 @@ instance createsColimit
   createsColimitOfReflectsIso fun _ t =>
     { liftedCocone := Comma.coconeOfPreserves F t punitCocone
       makesColimit := Comma.coconeOfPreservesIsColimit _ _ punitCoconeIsColimit
-      validLift := Cocone.ext (Iso.refl _) fun
+      validLift := Cocone.ext (Iso.refl _) fun _ => comp_id _ }
 
 中文:
 实例 createsColimit
@@ -1043,7 +1087,7 @@ instance createsColimit
   createsColimitOfReflectsIso fun _ t =>
     { liftedCocone := Comma.coconeOfPreserves F t punitCocone
       makesColimit := Comma.coconeOfPreservesIsColimit _ _ punitCoconeIsColimit
-      validLift := Cocone.ext (Iso.refl _) fun
+      validLift := Cocone.ext (Iso.refl _) fun _ => comp_id _ }
 
 Depends on / 依赖: Cocone, Cocone.ext, Comma.coconeOfPreserves, Comma.coconeOfPreservesIsColimit, Comma.fst, Functor, Functor.fromPUnit, Iso.refl, PreservesColimit, coconeOfPreserves, coconeOfPreservesIsColimit, comp_id, createsColimitOfReflectsIso, fromPUnit, liftedCocone, makesColimit, punitCocone, punitCoconeIsColimit, validLift
 -/

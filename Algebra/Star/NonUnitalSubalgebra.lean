@@ -1905,7 +1905,10 @@ definition ofLeftInverse'
     left_inv := h
     right_inv := fun x =>
 Subtype.ext
-        let ⟨x', hx'⟩ := (NonUnitalStarAlgHom.mem_range f).mp x.
+        let ⟨x', hx'⟩ := (NonUnitalStarAlgHom.mem_range f).mp x.prop
+        show f (g x) = x by rw [← hx', h x'] }
+
+@[simp]
 
 中文:
 定义 ofLeftInverse'
@@ -1916,7 +1919,10 @@ Subtype.ext
     left_inv := h
     right_inv := fun x =>
 Subtype.ext
-        let ⟨x', hx'⟩ := (NonUnitalStarAlgHom.mem_range f).mp x.
+        let ⟨x', hx'⟩ := (NonUnitalStarAlgHom.mem_range f).mp x.prop
+        show f (g x) = x by rw [← hx', h x'] }
+
+@[simp]
 
 Depends on / 依赖: NonUnitalStarAlgHom, NonUnitalStarAlgHom.mem_range, NonUnitalStarAlgHom.range, NonUnitalStarAlgHom.rangeRestrict, NonUnitalStarSubalgebraClass, NonUnitalStarSubalgebraClass.subtype, Subtype, Subtype.ext, invFun, left_inv, mem_range, rangeRestrict, right_inv, subtype, x.prop
 -/
@@ -2035,7 +2041,14 @@ instance instInvolutiveStar
       mul_mem' := @fun x y hx hy => by simpa only [Set.mem_star, NonUnitalSubalgebra.mem_carrier]
         using (star_mul x y).symm ▸ mul_mem hy hx
       add_mem' := @fun x y hx hy => by simpa only [Set.mem_star, NonUnitalSubalgebra.mem_carrier]
-        using (star_add x 
+        using (star_add x y).symm ▸ add_mem hx hy
+      zero_mem' := Set.mem_star.mp ((star_zero A).symm ▸ zero_mem S : star (0 : A) in S)
+      smul_mem' := fun r x hx => by simpa only [Set.mem_star, NonUnitalSubalgebra.mem_carrier]
+        using (star_smul r x).symm ▸ SMulMemClass.smul_mem (star r) hx }
+  star_involutive S := NonUnitalSubalgebra.ext fun x =>
+      ⟨fun hx => star_star x ▸ hx, fun hx => ((star_star x).symm ▸ hx : star (star x) in S)⟩
+
+@[simp]
 
 中文:
 实例 instInvolutiveStar
@@ -2044,7 +2057,14 @@ instance instInvolutiveStar
       mul_mem' := @fun x y hx hy => by simpa only [Set.mem_star, NonUnitalSubalgebra.mem_carrier]
         using (star_mul x y).symm ▸ mul_mem hy hx
       add_mem' := @fun x y hx hy => by simpa only [Set.mem_star, NonUnitalSubalgebra.mem_carrier]
-        using (star_add x 
+        using (star_add x y).symm ▸ add_mem hx hy
+      zero_mem' := Set.mem_star.mp ((star_zero A).symm ▸ zero_mem S : star (0 : A) in S)
+      smul_mem' := fun r x hx => by simpa only [Set.mem_star, NonUnitalSubalgebra.mem_carrier]
+        using (star_smul r x).symm ▸ SMulMemClass.smul_mem (star r) hx }
+  star_involutive S := NonUnitalSubalgebra.ext fun x =>
+      ⟨fun hx => star_star x ▸ hx, fun hx => ((star_star x).symm ▸ hx : star (star x) in S)⟩
+
+@[simp]
 
 Depends on / 依赖: NonUnitalSubalgebra, NonUnitalSubalgebra.mem_carrier, S.carrier, Set.mem_star, Set.mem_star.mp, add_mem, carrier, mem_carrier, mem_star, mul_mem, smul_mem, star_add, star_mul, star_smul, star_zero, zero_mem
 -/
@@ -2599,7 +2619,7 @@ theorem gc
   intro s S
   rw [← toNonUnitalSubalgebra_le_iff]; rw [adjoin_toNonUnitalSubalgebra]; rw [NonUnitalAlgebra.adjoin_le_iff]; rw [coe_toNonUnitalSubalgebra]
   exact ⟨fun h => Set.subset_union_left.trans h,
-    fun h => Set.union_subset h fun x hx => star_star x ▸ star_mem (show star x in S from h hx
+    fun h => Set.union_subset h fun x hx => star_star x ▸ star_mem (show star x in S from h hx)⟩
 
 中文:
 定理 gc
@@ -2608,7 +2628,7 @@ theorem gc
   intro s S
   rw [← toNonUnitalSubalgebra_le_iff]; rw [adjoin_toNonUnitalSubalgebra]; rw [NonUnitalAlgebra.adjoin_le_iff]; rw [coe_toNonUnitalSubalgebra]
   exact ⟨fun h => Set.subset_union_left.trans h,
-    fun h => Set.union_subset h fun x hx => star_star x ▸ star_mem (show star x in S from h hx
+    fun h => Set.union_subset h fun x hx => star_star x ▸ star_mem (show star x in S from h hx)⟩
 -/
 protected theorem gc : GaloisConnection (adjoin R : Set A -> NonUnitalStarSubalgebra R A) (↑) := by
   intro s S
@@ -3973,7 +3993,9 @@ theorem coe_iSup_of_directed
       star_mem' := fun hx =>
         let ⟨i, hi⟩ := Set.mem_iUnion.1 hx
         Set.mem_iUnion.2 ⟨i, star_mem (s := S i) hi⟩ }
-  have : iSup S = K := le_antisymm (iSup_
+  have : iSup S = K := le_antisymm (iSup_le fun i => le_iSup (fun i => (S i : Set A)) i)
+    (Set.iUnion_subset fun _ => le_iSup S _)
+  this.symm ▸ rfl
 
 中文:
 定理 coe_iSup_of_directed
@@ -3983,7 +4005,9 @@ theorem coe_iSup_of_directed
       star_mem' := fun hx =>
         let ⟨i, hi⟩ := Set.mem_iUnion.1 hx
         Set.mem_iUnion.2 ⟨i, star_mem (s := S i) hi⟩ }
-  have : iSup S = K := le_antisymm (iSup_
+  have : iSup S = K := le_antisymm (iSup_le fun i => le_iSup (fun i => (S i : Set A)) i)
+    (Set.iUnion_subset fun _ => le_iSup S _)
+  this.symm ▸ rfl
 
 Depends on / 依赖: NonUnitalStarSubalgebra, NonUnitalSubalgebra, NonUnitalSubalgebra.coe_iSup_of_directed, NonUnitalSubalgebra.copy, Set.iUnion_subset, Set.mem_iUnion, coe_iSup_of_directed, iSup_le, iUnion_subset, le_antisymm, le_iSup, mem_iUnion, star_mem, this.symm
 -/
@@ -4060,7 +4084,36 @@ definition iSupLift
             rw [hf i k hik]; rw [hf j k hjk]
             rfl)
           _ (by rw [coe_iSup_of_directed dir])
-      map_zero' :=
+      map_zero' := by
+        dsimp only [SetLike.coe_sort_coe, NonUnitalAlgHom.coe_comp, Function.comp_apply,
+          inclusion_mk, Eq.ndrec, id_eq, eq_mpr_eq_cast]
+        exact Set.iUnionLift_const _ (fun i : ι => (0 : K i)) (fun _ => rfl) _ (by simp)
+      map_mul' := by
+        dsimp only [SetLike.coe_sort_coe, NonUnitalAlgHom.coe_comp, Function.comp_apply,
+          inclusion_mk, Eq.ndrec, id_eq, eq_mpr_eq_cast, ZeroMemClass.coe_zero,
+          AddSubmonoid.mk_add_mk, Set.inclusion_mk]
+        apply Set.iUnionLift_binary (coe_iSup_of_directed dir) dir _ (fun _ => (· * ·))
+        all_goals simp
+      map_add' := by
+        dsimp only [SetLike.coe_sort_coe, NonUnitalAlgHom.coe_comp, Function.comp_apply,
+          inclusion_mk, Eq.ndrec, id_eq, eq_mpr_eq_cast]
+        apply Set.iUnionLift_binary (coe_iSup_of_directed dir) dir _ (fun _ => (· + ·))
+        all_goals simp
+      map_smul' := fun r => by
+        dsimp only [SetLike.coe_sort_coe, NonUnitalAlgHom.coe_comp, Function.comp_apply,
+          inclusion_mk, Eq.ndrec, id_eq, eq_mpr_eq_cast]
+        apply Set.iUnionLift_unary (coe_iSup_of_directed dir) _ (fun _ x => r • x)
+          (fun _ _ => rfl)
+        all_goals simp
+      map_star' := by
+        dsimp only [SetLike.coe_sort_coe, NonUnitalStarAlgHom.comp_apply, inclusion_mk, Eq.ndrec,
+          id_eq, eq_mpr_eq_cast, ZeroMemClass.coe_zero, AddSubmonoid.mk_add_mk, Set.inclusion_mk,
+          MulMemClass.mk_mul_mk, NonUnitalAlgHom.toDistribMulActionHom_eq_coe,
+          DistribMulActionHom.toFun_eq_coe, NonUnitalAlgHom.coe_to_distribMulActionHom,
+          NonUnitalAlgHom.coe_mk]
+        apply Set.iUnionLift_unary (coe_iSup_of_directed dir) _ (fun _ x => star x)
+          (fun _ _ => rfl)
+        all_goals simp [map_star] }
 
 中文:
 定义 iSupLift
@@ -4075,7 +4128,36 @@ definition iSupLift
             rw [hf i k hik]; rw [hf j k hjk]
             rfl)
           _ (by rw [coe_iSup_of_directed dir])
-      map_zero' :=
+      map_zero' := by
+        dsimp only [SetLike.coe_sort_coe, NonUnitalAlgHom.coe_comp, Function.comp_apply,
+          inclusion_mk, Eq.ndrec, id_eq, eq_mpr_eq_cast]
+        exact Set.iUnionLift_const _ (fun i : ι => (0 : K i)) (fun _ => rfl) _ (by simp)
+      map_mul' := by
+        dsimp only [SetLike.coe_sort_coe, NonUnitalAlgHom.coe_comp, Function.comp_apply,
+          inclusion_mk, Eq.ndrec, id_eq, eq_mpr_eq_cast, ZeroMemClass.coe_zero,
+          AddSubmonoid.mk_add_mk, Set.inclusion_mk]
+        apply Set.iUnionLift_binary (coe_iSup_of_directed dir) dir _ (fun _ => (· * ·))
+        all_goals simp
+      map_add' := by
+        dsimp only [SetLike.coe_sort_coe, NonUnitalAlgHom.coe_comp, Function.comp_apply,
+          inclusion_mk, Eq.ndrec, id_eq, eq_mpr_eq_cast]
+        apply Set.iUnionLift_binary (coe_iSup_of_directed dir) dir _ (fun _ => (· + ·))
+        all_goals simp
+      map_smul' := fun r => by
+        dsimp only [SetLike.coe_sort_coe, NonUnitalAlgHom.coe_comp, Function.comp_apply,
+          inclusion_mk, Eq.ndrec, id_eq, eq_mpr_eq_cast]
+        apply Set.iUnionLift_unary (coe_iSup_of_directed dir) _ (fun _ x => r • x)
+          (fun _ _ => rfl)
+        all_goals simp
+      map_star' := by
+        dsimp only [SetLike.coe_sort_coe, NonUnitalStarAlgHom.comp_apply, inclusion_mk, Eq.ndrec,
+          id_eq, eq_mpr_eq_cast, ZeroMemClass.coe_zero, AddSubmonoid.mk_add_mk, Set.inclusion_mk,
+          MulMemClass.mk_mul_mk, NonUnitalAlgHom.toDistribMulActionHom_eq_coe,
+          DistribMulActionHom.toFun_eq_coe, NonUnitalAlgHom.coe_to_distribMulActionHom,
+          NonUnitalAlgHom.coe_mk]
+        apply Set.iUnionLift_unary (coe_iSup_of_directed dir) _ (fun _ x => star x)
+          (fun _ _ => rfl)
+        all_goals simp [map_star] }
 
 Depends on / 依赖: Eq.ndrec, Function, Function.comp_apply, NonUnitalAlgHom, NonUnitalAlgHom.coe_comp, Set.iUnionLift, Set.iUnionLift_const, SetLike, SetLike.coe_sort_coe, coe_comp, coe_iSup_of_directed, coe_sort_coe, comp_apply, eq_mpr_eq_cast, iUnionLift, iUnionLift_const, id_eq, inclusion_mk, map_mul, map_zero
 -/
@@ -4687,7 +4769,11 @@ theorem isMulCommutative_adjoin
   refine .of_setLike_mul_comm fun _ h₁ _ h₂ => ?_
   have hcomm : forall a in s union star s, forall b in s union star s, a * b = b * a := fun a ha b hb =>
     Set.union_star_self_comm (fun _ ha _ hb => hcomm _ hb _ ha)
-      (fun _ ha _ hb => hcomm_
+      (fun _ ha _ hb => hcomm_star _ hb _ ha) b hb a ha
+  apply this at h₁
+  apply this at h₂
+  rw [← SetLike.mem_coe]; rw [coe_centralizer_centralizer] at h₁ h₂
+  exact Set.centralizer_centralizer_comm_of_comm hcomm _ h₁ _ h₂
 
 中文:
 定理 isMulCommutative_adjoin
@@ -4697,7 +4783,11 @@ theorem isMulCommutative_adjoin
   refine .of_setLike_mul_comm fun _ h₁ _ h₂ => ?_
   have hcomm : forall a in s union star s, forall b in s union star s, a * b = b * a := fun a ha b hb =>
     Set.union_star_self_comm (fun _ ha _ hb => hcomm _ hb _ ha)
-      (fun _ ha _ hb => hcomm_
+      (fun _ ha _ hb => hcomm_star _ hb _ ha) b hb a ha
+  apply this at h₁
+  apply this at h₂
+  rw [← SetLike.mem_coe]; rw [coe_centralizer_centralizer] at h₁ h₂
+  exact Set.centralizer_centralizer_comm_of_comm hcomm _ h₁ _ h₂
 
 Depends on / 依赖: Set.centralizer_centralizer_comm_of_comm, Set.union_star_self_comm, SetLike, SetLike.mem_coe, adjoin_le_centralizer_centralizer, centralizer_centralizer_comm_of_comm, coe_centralizer_centralizer, hcomm_star, mem_coe, of_setLike_mul_comm, union_star_self_comm
 -/

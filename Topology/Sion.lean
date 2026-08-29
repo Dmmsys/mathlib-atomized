@@ -293,7 +293,7 @@ theorem sublevelLeft_subset_or
     (isPreconnected_sublevelLeft hfy' b ⟨z, cY.segment_subset y.prop y'.prop z.prop⟩)
     _ _ (isClosed_sublevelLeft hfy b y) (isClosed_sublevelLeft hfy b y')
     (sublevelLeft_subset_union hfx' b y y' z)
-  simp [(disjoint_sublevelLeft ha hb
+  simp [(disjoint_sublevelLeft ha hb).inter_eq]
 
 中文:
 定理 sublevelLeft_subset_or
@@ -303,7 +303,7 @@ theorem sublevelLeft_subset_or
     (isPreconnected_sublevelLeft hfy' b ⟨z, cY.segment_subset y.prop y'.prop z.prop⟩)
     _ _ (isClosed_sublevelLeft hfy b y) (isClosed_sublevelLeft hfy b y')
     (sublevelLeft_subset_union hfx' b y y' z)
-  simp [(disjoint_sublevelLeft ha hb
+  simp [(disjoint_sublevelLeft ha hb).inter_eq]
 
 Depends on / 依赖: cY.segment_subset, disjoint_sublevelLeft, inter_eq, isClosed_sublevelLeft, isPreconnected_iff_subset_of_disjoint_closed, isPreconnected_iff_subset_of_disjoint_closed.mp, isPreconnected_sublevelLeft, segment_subset, sublevelLeft_subset_union, y.prop, z.prop
 -/
@@ -381,7 +381,44 @@ theorem isClosed_setOfPred_sublevelLeft_subset
   rw [isClosed_iff_clusterPt]
   /- Let `z in segment ℝ y y'` be a cluster point of `J`;
      we have to show that `z ∈ J`, i.e `sublevelLeft t z ⊆ sublevelLeft t' y1`.
-    
+     Let `x ∈ sublevelLeft t z` and let us prove that `x ∈ sublevelLeft X f b' y`. -/
+  intro z hz x hx
+  suffices exists z' in setOfPred_sublevelLeft_subset X Y f b b' y y', x in sublevelLeft X f b' (z' : F) by
+    obtain ⟨z', hz', hxz'⟩ := this
+    /- We need to prove `x ∈ sublevelLeft X f b' y`.
+       Assume that there is `z' ∈ J` such that `x ∈ sublevelLeft b' z'`.
+       It suffices to prove that `sublevelLeft X f b' z' ⊆ sublevelLeft X f b' y`.` -/
+    suffices sublevelLeft X f b' z' subseteq sublevelLeft X f b' y from this hxz'
+    /- Otherwise, using `sublevelLeft_subset_or`, we see that
+       `sublevelLeft X f b' z' ⊆ sublevelLeft t' y'`
+       hence `x ∈ sublevelLeft t' y ∩ sublevelLeft t' y' = ∅`, a contradiction. -/
+    apply (sublevelLeft_subset_or hfx' hfy hfy' cY a b' y y' ha hb' z').resolve_right
+    intro hz'2
+    have hz'Y : (z' : F) in Y := (convex_iff_segment_subset.mp cY) y.prop y'.prop z'.prop
+    apply (nonempty_sublevelLeft ne_X kX hfy ⟨z', hz'Y⟩ hb).not_subset_empty
+    rw [← (disjoint_sublevelLeft ha hb').inter_eq]
+    apply subset_inter hz'
+    grw [monotone_sublevelLeft _ hbb'.le, hz'2]
+  /- In sequential language, pretend that `z = lim z n`, with `z n ∈ J`.
+     Since `x ∈ sublevelLeft X f b z`, we have `f x z ≤ b < b'`.
+     Since `f x ·` is upper semicontinuous, we would have `f x (z n) < b'` for `n` large enough,
+     hence `x ∈ sublevelLeft X f b' (z n)` for `n` large enough. -/
+  -- The first step is to rewrite `hfy` (lower semicontinuity of `f (⬝, y)`) into an `∀ᶠ`-form
+  simp_rw [upperSemicontinuousOn_iff, upperSemicontinuousWithinAt_iff] at hfx
+  specialize hfx x.val x.prop z (cY.segment_subset y.prop y'.prop z.prop) b' (hx.trans_lt hbb')
+  -- We rewrite the assumption that `z` is a cluster point of `J` into an `∃ᶠ`-form
+  rw [clusterPt_principal_subtype_iff_frequently (cY.segment_subset y.prop y'.prop)] at hz
+  suffices forallᶠ z' : F in nhdsWithin z Y,
+    (exists hz' : z' in segment Real y.val y'.val,
+      (⟨z', hz'⟩ : segment Real y.val y'.val) in setOfPred_sublevelLeft_subset X Y f b b' y y') ->
+      exists hz' : z' in segment Real y.val y'.val, x in sublevelLeft X f b' z'
+        ∧ (⟨z', hz'⟩ : segment Real y.val y'.val) in setOfPred_sublevelLeft_subset X Y f b b' y y' by
+.exists obtain ⟨z', hz', hxz'1, hxz'2⟩ := hz.mp this
+    exact ⟨⟨z', hz'⟩, ⟨hxz'2, hxz'1⟩⟩
+exact hfx.mp .of_forall fun z hzt' ⟨hz, hz'⟩ => ⟨hz, ⟨hzt'.le, hz'⟩⟩
+
+@[deprecated (since := "2026-07-09")]
+alias isClosed_setOf_sublevelLeft_subset := isClosed_setOfPred_sublevelLeft_subset
 
 中文:
 定理 isClosed_setOfPred_sublevelLeft_subset
@@ -391,7 +428,44 @@ theorem isClosed_setOfPred_sublevelLeft_subset
   rw [isClosed_iff_clusterPt]
   /- Let `z in segment ℝ y y'` be a cluster point of `J`;
      we have to show that `z ∈ J`, i.e `sublevelLeft t z ⊆ sublevelLeft t' y1`.
-    
+     Let `x ∈ sublevelLeft t z` and let us prove that `x ∈ sublevelLeft X f b' y`. -/
+  intro z hz x hx
+  suffices exists z' in setOfPred_sublevelLeft_subset X Y f b b' y y', x in sublevelLeft X f b' (z' : F) by
+    obtain ⟨z', hz', hxz'⟩ := this
+    /- We need to prove `x ∈ sublevelLeft X f b' y`.
+       Assume that there is `z' ∈ J` such that `x ∈ sublevelLeft b' z'`.
+       It suffices to prove that `sublevelLeft X f b' z' ⊆ sublevelLeft X f b' y`.` -/
+    suffices sublevelLeft X f b' z' subseteq sublevelLeft X f b' y from this hxz'
+    /- Otherwise, using `sublevelLeft_subset_or`, we see that
+       `sublevelLeft X f b' z' ⊆ sublevelLeft t' y'`
+       hence `x ∈ sublevelLeft t' y ∩ sublevelLeft t' y' = ∅`, a contradiction. -/
+    apply (sublevelLeft_subset_or hfx' hfy hfy' cY a b' y y' ha hb' z').resolve_right
+    intro hz'2
+    have hz'Y : (z' : F) in Y := (convex_iff_segment_subset.mp cY) y.prop y'.prop z'.prop
+    apply (nonempty_sublevelLeft ne_X kX hfy ⟨z', hz'Y⟩ hb).not_subset_empty
+    rw [← (disjoint_sublevelLeft ha hb').inter_eq]
+    apply subset_inter hz'
+    grw [monotone_sublevelLeft _ hbb'.le, hz'2]
+  /- In sequential language, pretend that `z = lim z n`, with `z n ∈ J`.
+     Since `x ∈ sublevelLeft X f b z`, we have `f x z ≤ b < b'`.
+     Since `f x ·` is upper semicontinuous, we would have `f x (z n) < b'` for `n` large enough,
+     hence `x ∈ sublevelLeft X f b' (z n)` for `n` large enough. -/
+  -- The first step is to rewrite `hfy` (lower semicontinuity of `f (⬝, y)`) into an `∀ᶠ`-form
+  simp_rw [upperSemicontinuousOn_iff, upperSemicontinuousWithinAt_iff] at hfx
+  specialize hfx x.val x.prop z (cY.segment_subset y.prop y'.prop z.prop) b' (hx.trans_lt hbb')
+  -- We rewrite the assumption that `z` is a cluster point of `J` into an `∃ᶠ`-form
+  rw [clusterPt_principal_subtype_iff_frequently (cY.segment_subset y.prop y'.prop)] at hz
+  suffices forallᶠ z' : F in nhdsWithin z Y,
+    (exists hz' : z' in segment Real y.val y'.val,
+      (⟨z', hz'⟩ : segment Real y.val y'.val) in setOfPred_sublevelLeft_subset X Y f b b' y y') ->
+      exists hz' : z' in segment Real y.val y'.val, x in sublevelLeft X f b' z'
+        ∧ (⟨z', hz'⟩ : segment Real y.val y'.val) in setOfPred_sublevelLeft_subset X Y f b b' y y' by
+.exists obtain ⟨z', hz', hxz'1, hxz'2⟩ := hz.mp this
+    exact ⟨⟨z', hz'⟩, ⟨hxz'2, hxz'1⟩⟩
+exact hfx.mp .of_forall fun z hzt' ⟨hz, hz'⟩ => ⟨hz, ⟨hzt'.le, hz'⟩⟩
+
+@[deprecated (since := "2026-07-09")]
+alias isClosed_setOf_sublevelLeft_subset := isClosed_setOfPred_sublevelLeft_subset
 
 Depends on / 依赖: setOfPred_sublevelLeft_subset
 -/

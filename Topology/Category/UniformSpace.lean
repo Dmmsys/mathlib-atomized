@@ -736,7 +736,7 @@ definition completionFunctor
   map f := ConcreteCategory.ofHom ⟨Completion.map f.1, Completion.uniformContinuous_map⟩
   map_id _ := InducedCategory.hom_ext (hom_ext (by apply Completion.map_id))
   map_comp f g := InducedCategory.hom_ext (hom_ext (by
-    exact (Completion.map_comp g.hom.prop
+    exact (Completion.map_comp g.hom.property f.hom.property).symm))
 
 中文:
 定义 completionFunctor
@@ -745,7 +745,7 @@ definition completionFunctor
   map f := ConcreteCategory.ofHom ⟨Completion.map f.1, Completion.uniformContinuous_map⟩
   map_id _ := InducedCategory.hom_ext (hom_ext (by apply Completion.map_id))
   map_comp f g := InducedCategory.hom_ext (hom_ext (by
-    exact (Completion.map_comp g.hom.prop
+    exact (Completion.map_comp g.hom.property f.hom.property).symm))
 
 Depends on / 依赖: Completion, CpltSepUniformSpace, CpltSepUniformSpace.of
 -/
@@ -887,7 +887,14 @@ definition adj
           left_inv := fun f => InducedCategory.hom_ext (by simp)
           right_inv := fun f => by
             ext x
-            rcases f with ⟨⟨_, _⟩
+            rcases f with ⟨⟨_, _⟩⟩
+            exact @Completion.extension_coe _ _ _ _ _ (CpltSepUniformSpace.t0Space _)
+              ‹_› _ }
+      homEquiv_naturality_left_symm := fun {X' X Y} f g => by
+        ext x
+        dsimp [-Function.comp_apply]
+        erw [Completion.extension_map (γ := Y) g.hom.2 f.hom.2]
+        rfl }
 
 中文:
 定义 adj
@@ -899,7 +906,14 @@ definition adj
           left_inv := fun f => InducedCategory.hom_ext (by simp)
           right_inv := fun f => by
             ext x
-            rcases f with ⟨⟨_, _⟩
+            rcases f with ⟨⟨_, _⟩⟩
+            exact @Completion.extension_coe _ _ _ _ _ (CpltSepUniformSpace.t0Space _)
+              ‹_› _ }
+      homEquiv_naturality_left_symm := fun {X' X Y} f g => by
+        ext x
+        dsimp [-Function.comp_apply]
+        erw [Completion.extension_map (γ := Y) g.hom.2 f.hom.2]
+        rfl }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Completion, Completion.extension_coe, Completion.extension_map, CpltSepUniformSpace, CpltSepUniformSpace.t0Space, Function, Function.comp_apply, InducedCategory, InducedCategory.hom_ext, comp_apply, completionHom, extensionHom, extension_coe, extension_map, f.hom, g.hom, homEquiv, homEquiv_naturality_left_symm
 -/

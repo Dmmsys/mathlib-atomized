@@ -149,7 +149,11 @@ definition affineSubspaceMap
     continuous_toFun := by simpa [Topology.IsEmbedding.subtypeVal.continuous_iff] using!
       (e.continuous.comp continuous_subtype_val).congr fun _ => rfl
     continuous_invFun := by simpa [Topology.IsEmbedding.subtypeVal.continuous_iff] using!
-      (e.c
+      (e.continuous_invFun.comp continuous_subtype_val).congr fun x =>
+        (e.eq_symm_apply.mpr
+          (AffineEquiv.affineSubspaceMap_apply_symm_apply e.toAffineEquiv s x)).symm }
+
+@[simp]
 
 中文:
 定义 affineSubspaceMap
@@ -158,7 +162,11 @@ definition affineSubspaceMap
     continuous_toFun := by simpa [Topology.IsEmbedding.subtypeVal.continuous_iff] using!
       (e.continuous.comp continuous_subtype_val).congr fun _ => rfl
     continuous_invFun := by simpa [Topology.IsEmbedding.subtypeVal.continuous_iff] using!
-      (e.c
+      (e.continuous_invFun.comp continuous_subtype_val).congr fun x =>
+        (e.eq_symm_apply.mpr
+          (AffineEquiv.affineSubspaceMap_apply_symm_apply e.toAffineEquiv s x)).symm }
+
+@[simp]
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.affineSubspaceMap_apply_symm_apply, IsEmbedding, Topology, Topology.IsEmbedding.subtypeVal.continuous_iff, affineSubspaceMap, affineSubspaceMap_apply_symm_apply, continuous, continuous_iff, continuous_invFun, continuous_subtype_val, continuous_toFun, e.continuous.comp, e.continuous_invFun.comp, e.eq_symm_apply.mpr, e.toAffineEquiv, e.toAffineEquiv.affineSubspaceMap, eq_symm_apply, subtypeVal, toAffineEquiv
 -/

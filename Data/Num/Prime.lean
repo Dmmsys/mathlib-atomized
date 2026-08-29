@@ -62,7 +62,9 @@ theorem minFacAux_to_nat
     simp_rw [← mul_to_nat]
     simp only [cast_lt, dvd_to_nat]
     split_ifs <;> try rfl
-    rw [ih] <;> [congr; convert
+    rw [ih] <;> [congr; convert! Nat.lt_succ_of_lt h using 1] <;>
+      simp only [cast_bit1, cast_succ, Nat.succ_eq_add_one, add_assoc,
+        add_left_comm, ← one_add_one_eq_two]
 
 中文:
 定理 minFacAux_to_nat
@@ -76,7 +78,9 @@ theorem minFacAux_to_nat
     simp_rw [← mul_to_nat]
     simp only [cast_lt, dvd_to_nat]
     split_ifs <;> try rfl
-    rw [ih] <;> [congr; convert
+    rw [ih] <;> [congr; convert! Nat.lt_succ_of_lt h using 1] <;>
+      simp only [cast_bit1, cast_succ, Nat.succ_eq_add_one, add_assoc,
+        add_left_comm, ← one_add_one_eq_two]
 
 Depends on / 依赖: Nat.lt_succ_of_lt, Nat.minFacAux, Nat.sqrt_lt, Nat.succ_eq_add_one, Nat.zero_add, add_assoc, add_left_comm, cast_bit1, cast_lt, cast_succ, convert, dvd_to_nat, generalizing, ite_true, lt_succ_of_lt, minFacAux, mul_to_nat, one_add_one_eq_two, simp_rw, split_ifs
 -/
@@ -130,7 +134,11 @@ theorem minFac_to_nat
     rw [Nat.sqrt_lt]
     calc
       (n : Nat) + (n : Nat) + 1 <= (n : Nat) + (n : Nat) + (n : Nat) := by simp
-      
+      _ = (n : Nat) * (1 + 1 + 1) := by simp only [mul_add, mul_one]
+      _ < _ := by simp [mul_lt_mul]
+  · rw [minFac, Nat.minFac_eq, if_pos]
+    · rfl
+    simp [← two_mul]
 
 中文:
 定理 minFac_to_nat
@@ -148,7 +156,11 @@ theorem minFac_to_nat
     rw [Nat.sqrt_lt]
     calc
       (n : Nat) + (n : Nat) + 1 <= (n : Nat) + (n : Nat) + (n : Nat) := by simp
-      
+      _ = (n : Nat) * (1 + 1 + 1) := by simp only [mul_add, mul_one]
+      _ < _ := by simp [mul_lt_mul]
+  · rw [minFac, Nat.minFac_eq, if_pos]
+    · rfl
+    simp [← two_mul]
 
 Depends on / 依赖: Nat.minFac_eq, Nat.sqrt_lt, cast_bit1, cast_one, if_neg, if_pos, minFac, minFacAux_to_nat, minFac_eq, mul_add, mul_lt_mul, mul_one, sqrt_lt, two_mul
 -/

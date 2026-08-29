@@ -2216,7 +2216,13 @@ definition prodUnits
   left_inv u := by
     simp only [MonoidHom.prod_apply, Units.coe_map, MonoidHom.coe_fst, MonoidHom.coe_snd,
       Prod.mk.eta, Units.coe_map_inv, Units.mk_val]
-  right
+  right_inv := fun ⟨u₁, u₂⟩ => by
+    simp only [Units.map, MonoidHom.coe_fst, Units.inv_eq_val_inv,
+      MonoidHom.coe_snd, MonoidHom.prod_apply, Prod.mk.injEq]
+    exact ⟨rfl, rfl⟩
+  map_mul' := map_mul _
+
+@[to_additive]
 
 中文:
 定义 prodUnits
@@ -2226,7 +2232,13 @@ definition prodUnits
   left_inv u := by
     simp only [MonoidHom.prod_apply, Units.coe_map, MonoidHom.coe_fst, MonoidHom.coe_snd,
       Prod.mk.eta, Units.coe_map_inv, Units.mk_val]
-  right
+  right_inv := fun ⟨u₁, u₂⟩ => by
+    simp only [Units.map, MonoidHom.coe_fst, Units.inv_eq_val_inv,
+      MonoidHom.coe_snd, MonoidHom.prod_apply, Prod.mk.injEq]
+    exact ⟨rfl, rfl⟩
+  map_mul' := map_mul _
+
+@[to_additive]
 
 Depends on / 依赖: MonoidHom, MonoidHom.fst, MonoidHom.snd, Units.map
 -/

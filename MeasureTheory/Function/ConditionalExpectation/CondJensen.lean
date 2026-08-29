@@ -44,7 +44,10 @@ lemma Convex.condExp_mem_of_hereditarilyLindelofSpace
   simp_all only [← hLc, RCLike.re_to_real, mem_iInter, ae_all_iff]
   intro n
   have h1 := ContinuousLinearMap.comp_condExp_comm (m := m) hf_int (L n)
-  have h2 := condExp_mono (m := m) ((L n).integrable_comp hf_int) (
+  have h2 := condExp_mono (m := m) ((L n).integrable_comp hf_int) (integrable_const (c n)) (hf n)
+  filter_upwards [h1, h2] with a ha hb
+  simp_all only [condExp_const, comp_apply]
+  exact hb
 
 中文:
 引理 凸.condExp_mem_of_hereditarilyLindelofSpace
@@ -54,7 +57,10 @@ lemma Convex.condExp_mem_of_hereditarilyLindelofSpace
   simp_all only [← hLc, RCLike.re_to_real, mem_iInter, ae_all_iff]
   intro n
   have h1 := ContinuousLinearMap.comp_condExp_comm (m := m) hf_int (L n)
-  have h2 := condExp_mono (m := m) ((L n).integrable_comp hf_int) (
+  have h2 := condExp_mono (m := m) ((L n).integrable_comp hf_int) (integrable_const (c n)) (hf n)
+  filter_upwards [h1, h2] with a ha hb
+  simp_all only [condExp_const, comp_apply]
+  exact hb
 -/
 private lemma Convex.condExp_mem_of_hereditarilyLindelofSpace [IsFiniteMeasure μ]
     [HereditarilyLindelofSpace E] (hm : m <= mα) (hf_int : Integrable f μ) (hs : IsClosed s)
@@ -80,7 +86,33 @@ lemma Convex.condExp_mem_of_isFiniteMeasure
   obtain ⟨t, ht, htt⟩ := hf_int.aestronglyMeasurable.isSeparable_ae_range
   let Y := (Submodule.span Real t).topologicalClosure
   have : CompleteSpace Y := (Submodule.isClosed_topologicalClosure _).completeSpace_coe
-  have : SecondCountableTopology Y := ht.span.closure.secondCountabl
+  have : SecondCountableTopology Y := ht.span.closure.secondCountableTopology
+  classical
+  let fY : α -> Y := fun a => if h : f a in Y then ⟨f a, h⟩ else 0
+  let fX : α -> E := Y.subtypeL ∘ fY
+  have lem0 : forallᵐ a ∂μ, f a in Y := by
+    filter_upwards [htt] with a ha using
+      (Submodule.closure_subset_topologicalClosure_span t) (subset_closure ha)
+  have lem1 : f =ᵐ[μ] fX := by
+    filter_upwards [lem0] with a ha
+    simp_all [fX, fY]
+  have lem2 : forallᵐ a ∂μ, fY a in Y.subtypeL ⁻¹' s := by
+    filter_upwards [lem0, hf] with a ha hs
+    simpa [fY, ha]
+  have hfY_int : Integrable fY μ := by
+    refine (hf_int.congr lem1).mono ?_ (by simp [fX])
+    obtain ⟨g, hg1, hg2, hg3⟩ := hf_int.1.exists_stronglyMeasurable_range_subset
+      ((Submodule.isClosed_topologicalClosure _).measurableSet) Nonempty.of_subtype lem0
+    refine ⟨codRestrict g Y hg2, (hg1.measurable.codRestrict hg2).stronglyMeasurable, ?_⟩
+    filter_upwards [hg3] with a ha
+    have : g a in Y := hg2 a
+    simp_all [fY, codRestrict]
+  have lem3 : μ[f | m] =ᵐ[μ] Y.subtypeL ∘ μ[fY | m] := calc
+    _ =ᵐ[μ] μ[fX | m] := condExp_congr_ae lem1
+    _ =ᵐ[μ] _ := (Y.subtypeL.comp_condExp_comm hfY_int).symm
+  filter_upwards [(hc.linear_preimage Y.subtype).condExp_mem_of_hereditarilyLindelofSpace
+    hm hfY_int (hs.preimage Y.subtypeL.continuous) lem2, lem3] with a ha hb
+  simp_all
 
 中文:
 引理 凸.condExp_mem_of_isFiniteMeasure
@@ -90,7 +122,33 @@ lemma Convex.condExp_mem_of_isFiniteMeasure
   obtain ⟨t, ht, htt⟩ := hf_int.aestronglyMeasurable.isSeparable_ae_range
   let Y := (Submodule.span Real t).topologicalClosure
   have : CompleteSpace Y := (Submodule.isClosed_topologicalClosure _).completeSpace_coe
-  have : SecondCountableTopology Y := ht.span.closure.secondCountabl
+  have : SecondCountableTopology Y := ht.span.closure.secondCountableTopology
+  classical
+  let fY : α -> Y := fun a => if h : f a in Y then ⟨f a, h⟩ else 0
+  let fX : α -> E := Y.subtypeL ∘ fY
+  have lem0 : forallᵐ a ∂μ, f a in Y := by
+    filter_upwards [htt] with a ha using
+      (Submodule.closure_subset_topologicalClosure_span t) (subset_closure ha)
+  have lem1 : f =ᵐ[μ] fX := by
+    filter_upwards [lem0] with a ha
+    simp_all [fX, fY]
+  have lem2 : forallᵐ a ∂μ, fY a in Y.subtypeL ⁻¹' s := by
+    filter_upwards [lem0, hf] with a ha hs
+    simpa [fY, ha]
+  have hfY_int : Integrable fY μ := by
+    refine (hf_int.congr lem1).mono ?_ (by simp [fX])
+    obtain ⟨g, hg1, hg2, hg3⟩ := hf_int.1.exists_stronglyMeasurable_range_subset
+      ((Submodule.isClosed_topologicalClosure _).measurableSet) Nonempty.of_subtype lem0
+    refine ⟨codRestrict g Y hg2, (hg1.measurable.codRestrict hg2).stronglyMeasurable, ?_⟩
+    filter_upwards [hg3] with a ha
+    have : g a in Y := hg2 a
+    simp_all [fY, codRestrict]
+  have lem3 : μ[f | m] =ᵐ[μ] Y.subtypeL ∘ μ[fY | m] := calc
+    _ =ᵐ[μ] μ[fX | m] := condExp_congr_ae lem1
+    _ =ᵐ[μ] _ := (Y.subtypeL.comp_condExp_comm hfY_int).symm
+  filter_upwards [(hc.linear_preimage Y.subtype).condExp_mem_of_hereditarilyLindelofSpace
+    hm hfY_int (hs.preimage Y.subtypeL.continuous) lem2, lem3] with a ha hb
+  simp_all
 -/
 private lemma Convex.condExp_mem_of_isFiniteMeasure [IsFiniteMeasure μ] (hm : m <= mα)
     (hf_int : Integrable f μ) (hs : IsClosed s) (hc : Convex Real s) (hf : forallᵐ a ∂μ, f a in s) :
@@ -138,7 +196,12 @@ lemma Convex.condExp_mem
     rintro - ⟨n, rfl⟩
   · exact hm _ (measurableSet_spanningSets (μ.trim hm) n)
   have h1 := condExp_restrict_ae_eq_restrict hm (measurableSet_spanningSets (μ.trim hm) n) hf_int
-  have : IsFiniteMeasure (μ.res
+  have : IsFiniteMeasure (μ.restrict (spanningSets (μ.trim hm) n)) := isFiniteMeasure_restrict.2
+    ((le_trim hm).trans_lt (measure_spanningSets_lt_top (μ.trim hm) n)).ne
+  have h2 := hc.condExp_mem_of_isFiniteMeasure (μ := μ.restrict (spanningSets (μ.trim hm) n)) hm
+    hf_int.restrict hs (ae_restrict_of_ae hf)
+  filter_upwards [h1, h2] with a ha hb
+  simp_all
 
 中文:
 引理 凸.condExp_mem
@@ -148,7 +211,12 @@ lemma Convex.condExp_mem
     rintro - ⟨n, rfl⟩
   · exact hm _ (measurableSet_spanningSets (μ.trim hm) n)
   have h1 := condExp_restrict_ae_eq_restrict hm (measurableSet_spanningSets (μ.trim hm) n) hf_int
-  have : IsFiniteMeasure (μ.res
+  have : IsFiniteMeasure (μ.restrict (spanningSets (μ.trim hm) n)) := isFiniteMeasure_restrict.2
+    ((le_trim hm).trans_lt (measure_spanningSets_lt_top (μ.trim hm) n)).ne
+  have h2 := hc.condExp_mem_of_isFiniteMeasure (μ := μ.restrict (spanningSets (μ.trim hm) n)) hm
+    hf_int.restrict hs (ae_restrict_of_ae hf)
+  filter_upwards [h1, h2] with a ha hb
+  simp_all
 
 Depends on / 依赖: IsFiniteMeasure, condExp_mem_of_isFiniteMeasure, condExp_restrict_ae_eq_restrict, hc.condExp_mem_of_isFiniteMeasure, hf_int, isCountablySpanning_spanningSets, isFiniteMeasure_restrict, le_trim, measurableSet_spanningSets, measure_spanningSets_lt_top, null_of_forall_restrict_null, restrict, spanningSets, trans_lt
 -/
@@ -176,7 +244,12 @@ lemma ConvexOn.map_condExp_le_of_hereditarilyLindelofSpace
   obtain ⟨L, c, hLc1, hLc2⟩ := hφ_cvx.real_sSup_of_nat_affine_eq hs hφ_cont
   have hp := ae_all_iff.2 fun i => (L i).comp_condExp_add_const_comm hm hf_int (c i)
   have hw : forallᵐ a ∂μ, forall i : Nat, μ[(L i) ∘ f + const α (c i) | m] a <= μ[φ ∘ f | m] a := by
-    refine ae_all_iff.2 fun i => co
+    refine ae_all_iff.2 fun i => condExp_mono ?_ hφ_int ?_
+    · exact ((L i).integrable_comp hf_int).add (integrable_const (c i))
+    · filter_upwards [hf] with a ha using hLc1 i ⟨f a, ha⟩
+  filter_upwards [hp, hw, hφ_cvx.1.condExp_mem hm hf_int hs hf] with a hp hw hq
+  rw [show φ (μ[f | m] a) = s.domRestrict φ ⟨μ[f | m] a, hq⟩ by simp, ← hLc2]
+  simpa [iSup_congr hp] using! ciSup_le hw
 
 中文:
 引理 ConvexOn.map_condExp_le_of_hereditarilyLindelofSpace
@@ -185,7 +258,12 @@ lemma ConvexOn.map_condExp_le_of_hereditarilyLindelofSpace
   obtain ⟨L, c, hLc1, hLc2⟩ := hφ_cvx.real_sSup_of_nat_affine_eq hs hφ_cont
   have hp := ae_all_iff.2 fun i => (L i).comp_condExp_add_const_comm hm hf_int (c i)
   have hw : forallᵐ a ∂μ, forall i : Nat, μ[(L i) ∘ f + const α (c i) | m] a <= μ[φ ∘ f | m] a := by
-    refine ae_all_iff.2 fun i => co
+    refine ae_all_iff.2 fun i => condExp_mono ?_ hφ_int ?_
+    · exact ((L i).integrable_comp hf_int).add (integrable_const (c i))
+    · filter_upwards [hf] with a ha using hLc1 i ⟨f a, ha⟩
+  filter_upwards [hp, hw, hφ_cvx.1.condExp_mem hm hf_int hs hf] with a hp hw hq
+  rw [show φ (μ[f | m] a) = s.domRestrict φ ⟨μ[f | m] a, hq⟩ by simp, ← hLc2]
+  simpa [iSup_congr hp] using! ciSup_le hw
 -/
 private lemma ConvexOn.map_condExp_le_of_hereditarilyLindelofSpace [IsFiniteMeasure μ]
     [HereditarilyLindelofSpace E] (hm : m <= mα) (hφ_cvx : ConvexOn Real s φ)
@@ -213,7 +291,45 @@ theorem ConvexOn.map_condExp_le_of_isFiniteMeasure
   obtain ⟨t, ht, htt⟩ := hf_int.aestronglyMeasurable.isSeparable_ae_range
   let Y := (Submodule.span Real t).topologicalClosure
   have : CompleteSpace Y := (Submodule.isClosed_topologicalClosure _).completeSpace_coe
-  have : SecondCountableTopology Y := ht.span.closure.secondCountabl
+  have : SecondCountableTopology Y := ht.span.closure.secondCountableTopology
+  let φY := φ ∘ Y.subtypeL
+  classical
+  let fY : α -> Y := fun a => if h : f a in Y then ⟨f a, h⟩ else 0
+  let fX : α -> E := Y.subtypeL ∘ fY
+  have lem0 : forallᵐ a ∂μ, f a in Y := by
+    filter_upwards [htt] with a ha using
+      (Submodule.closure_subset_topologicalClosure_span t) (subset_closure ha)
+  have lem1 : f =ᵐ[μ] fX := by
+    filter_upwards [lem0] with a ha
+    simp_all [fX, fY]
+  have hfY_int : Integrable fY μ := by
+    refine (hf_int.congr lem1).mono ?_ (by simp [fX])
+    obtain ⟨g, hg1, hg2, hg3⟩ := hf_int.1.exists_stronglyMeasurable_range_subset
+      ((Submodule.isClosed_topologicalClosure _).measurableSet) Nonempty.of_subtype lem0
+    refine ⟨codRestrict g Y hg2, (hg1.measurable.codRestrict hg2).stronglyMeasurable, ?_⟩
+    filter_upwards [hg3] with a ha
+    have : g a in Y := hg2 a
+    simp_all [fY, codRestrict]
+  have lem2 : μ[f | m] =ᵐ[μ] Y.subtypeL ∘ μ[fY | m] := calc
+    _ =ᵐ[μ] μ[fX | m] := condExp_congr_ae lem1
+    _ =ᵐ[μ] _ := (Y.subtypeL.comp_condExp_comm hfY_int).symm
+  have lem3 : φ ∘ f =ᵐ[μ] φY ∘ fY := by filter_upwards [lem1] with a ha; simp [φY, ha, fX]
+  calc
+    φ ∘ μ[f | m]
+      =ᵐ[μ] φY ∘ μ[fY | m] := by filter_upwards [lem2] with a ha; simp [φY, ha]
+    _ <=ᵐ[μ] μ[φY ∘ fY | m] := by
+      refine (hφ_cvx.comp_linearMap Y.subtype).map_condExp_le_of_hereditarilyLindelofSpace
+        (s := Y.subtypeL ⁻¹' s) hm ?_ ?_ ?_ hfY_int (Integrable.congr hφ_int lem3)
+      · exact hφ_cont.comp (by fun_prop) fun x => by
+          #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+          (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+          goal. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem
+          in the new canonicalizer; a minimization would help. The original proof was: `grind` -/
+          simp
+      · filter_upwards [lem0, hf] with a ha hb
+        simp_all [fY]
+      · exact hs.preimage Y.subtypeL.continuous
+    _ =ᵐ[μ] μ[φ ∘ f | m] := condExp_congr_ae lem3.symm
 
 中文:
 定理 ConvexOn.map_condExp_le_of_isFiniteMeasure
@@ -223,7 +339,45 @@ theorem ConvexOn.map_condExp_le_of_isFiniteMeasure
   obtain ⟨t, ht, htt⟩ := hf_int.aestronglyMeasurable.isSeparable_ae_range
   let Y := (Submodule.span Real t).topologicalClosure
   have : CompleteSpace Y := (Submodule.isClosed_topologicalClosure _).completeSpace_coe
-  have : SecondCountableTopology Y := ht.span.closure.secondCountabl
+  have : SecondCountableTopology Y := ht.span.closure.secondCountableTopology
+  let φY := φ ∘ Y.subtypeL
+  classical
+  let fY : α -> Y := fun a => if h : f a in Y then ⟨f a, h⟩ else 0
+  let fX : α -> E := Y.subtypeL ∘ fY
+  have lem0 : forallᵐ a ∂μ, f a in Y := by
+    filter_upwards [htt] with a ha using
+      (Submodule.closure_subset_topologicalClosure_span t) (subset_closure ha)
+  have lem1 : f =ᵐ[μ] fX := by
+    filter_upwards [lem0] with a ha
+    simp_all [fX, fY]
+  have hfY_int : Integrable fY μ := by
+    refine (hf_int.congr lem1).mono ?_ (by simp [fX])
+    obtain ⟨g, hg1, hg2, hg3⟩ := hf_int.1.exists_stronglyMeasurable_range_subset
+      ((Submodule.isClosed_topologicalClosure _).measurableSet) Nonempty.of_subtype lem0
+    refine ⟨codRestrict g Y hg2, (hg1.measurable.codRestrict hg2).stronglyMeasurable, ?_⟩
+    filter_upwards [hg3] with a ha
+    have : g a in Y := hg2 a
+    simp_all [fY, codRestrict]
+  have lem2 : μ[f | m] =ᵐ[μ] Y.subtypeL ∘ μ[fY | m] := calc
+    _ =ᵐ[μ] μ[fX | m] := condExp_congr_ae lem1
+    _ =ᵐ[μ] _ := (Y.subtypeL.comp_condExp_comm hfY_int).symm
+  have lem3 : φ ∘ f =ᵐ[μ] φY ∘ fY := by filter_upwards [lem1] with a ha; simp [φY, ha, fX]
+  calc
+    φ ∘ μ[f | m]
+      =ᵐ[μ] φY ∘ μ[fY | m] := by filter_upwards [lem2] with a ha; simp [φY, ha]
+    _ <=ᵐ[μ] μ[φY ∘ fY | m] := by
+      refine (hφ_cvx.comp_linearMap Y.subtype).map_condExp_le_of_hereditarilyLindelofSpace
+        (s := Y.subtypeL ⁻¹' s) hm ?_ ?_ ?_ hfY_int (Integrable.congr hφ_int lem3)
+      · exact hφ_cont.comp (by fun_prop) fun x => by
+          #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+          (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
+          goal. It is not yet clear whether this is due to defeq abuse in Mathlib or a problem
+          in the new canonicalizer; a minimization would help. The original proof was: `grind` -/
+          simp
+      · filter_upwards [lem0, hf] with a ha hb
+        simp_all [fY]
+      · exact hs.preimage Y.subtypeL.continuous
+    _ =ᵐ[μ] μ[φ ∘ f | m] := condExp_congr_ae lem3.symm
 -/
 private theorem ConvexOn.map_condExp_le_of_isFiniteMeasure [IsFiniteMeasure μ] (hm : m <= mα)
     (hφ_cvx : ConvexOn Real s φ) (hφ_cont : LowerSemicontinuousOn φ s) (hf : forallᵐ a ∂μ, f a in s)
@@ -284,7 +438,13 @@ theorem ConvexOn.map_condExp_le
     rintro - ⟨n, rfl⟩
   · exact hm _ (measurableSet_spanningSets (μ.trim hm) n)
   have h1 := condExp_restrict_ae_eq_restrict hm (measurableSet_spanningSets (μ.trim hm) n) hf_int
-  have h2 := condExp_restrict_a
+  have h2 := condExp_restrict_ae_eq_restrict hm (measurableSet_spanningSets (μ.trim hm) n) hφ_int
+  have : IsFiniteMeasure (μ.restrict (spanningSets (μ.trim hm) n)) := isFiniteMeasure_restrict.2
+    ((le_trim hm).trans_lt (measure_spanningSets_lt_top (μ.trim hm) n)).ne
+  have h3 := hφ_cvx.map_condExp_le_of_isFiniteMeasure (μ := μ.restrict (spanningSets (μ.trim hm) n))
+    hm hφ_cont (ae_restrict_of_ae hf) hs hf_int.restrict hφ_int.restrict
+  filter_upwards [h1, h2, h3] with a ha hb hc
+  simpa [← ha, ← hb]
 
 中文:
 定理 ConvexOn.map_condExp_le
@@ -294,7 +454,13 @@ theorem ConvexOn.map_condExp_le
     rintro - ⟨n, rfl⟩
   · exact hm _ (measurableSet_spanningSets (μ.trim hm) n)
   have h1 := condExp_restrict_ae_eq_restrict hm (measurableSet_spanningSets (μ.trim hm) n) hf_int
-  have h2 := condExp_restrict_a
+  have h2 := condExp_restrict_ae_eq_restrict hm (measurableSet_spanningSets (μ.trim hm) n) hφ_int
+  have : IsFiniteMeasure (μ.restrict (spanningSets (μ.trim hm) n)) := isFiniteMeasure_restrict.2
+    ((le_trim hm).trans_lt (measure_spanningSets_lt_top (μ.trim hm) n)).ne
+  have h3 := hφ_cvx.map_condExp_le_of_isFiniteMeasure (μ := μ.restrict (spanningSets (μ.trim hm) n))
+    hm hφ_cont (ae_restrict_of_ae hf) hs hf_int.restrict hφ_int.restrict
+  filter_upwards [h1, h2, h3] with a ha hb hc
+  simpa [← ha, ← hb]
 
 Depends on / 依赖: IsFiniteMeasure, condExp_restrict_ae_eq_restrict, hf_int, isCountablySpanning_spanningSets, isFiniteMeasure_restrict, le_trim, measurableSet_spanningSets, measure_spanningSets_lt_to, null_of_forall_restrict_null, restrict, spanningSets, trans_lt
 -/
@@ -520,7 +686,10 @@ theorem norm_condExp_le
   · simp [condExp_of_not_sigmaFinite hm hμm]; aesop
   by_cases! hf_int : ¬ Integrable f μ
   · simp only [condExp_of_not_integrable hf_int, Pi.zero_apply, norm_zero]
-    apply condExp_nonn
+    apply condExp_nonneg
+    filter_upwards with a; positivity
+  exact convexOn_univ_norm.map_condExp_le_univ hm continuous_norm.lowerSemicontinuous hf_int
+    hf_int.norm
 
 中文:
 定理 norm_condExp_le
@@ -533,7 +702,10 @@ theorem norm_condExp_le
   · simp [condExp_of_not_sigmaFinite hm hμm]; aesop
   by_cases! hf_int : ¬ Integrable f μ
   · simp only [condExp_of_not_integrable hf_int, Pi.zero_apply, norm_zero]
-    apply condExp_nonn
+    apply condExp_nonneg
+    filter_upwards with a; positivity
+  exact convexOn_univ_norm.map_condExp_le_univ hm continuous_norm.lowerSemicontinuous hf_int
+    hf_int.norm
 
 Depends on / 依赖: Integrable, Pi.zero_apply, SigmaFinite, condExp_nonneg, condExp_of_not_integrable, condExp_of_not_le, condExp_of_not_sigmaFinite, continuous_norm, continuous_norm.lowerSemicontinuous, convexOn_univ_norm, convexOn_univ_norm.map_condExp_le_univ, filter_upwards, hf_int, hf_int.norm, lowerSemicontinuous, map_condExp_le_univ, norm_zero, zero_apply
 -/
@@ -562,7 +734,14 @@ theorem Integrable.norm_condExp_rpow_le
   by_cases! hμm : ¬ SigmaFinite (μ.trim hm)
   · simp [condExp_of_not_sigmaFinite hm hμm, Real.zero_rpow hp'.ne.symm]; aesop
   by_cases! hf_int : ¬ Integrable f μ
-  · sim
+  · simp only [condExp_of_not_integrable hf_int, Pi.zero_apply, norm_zero,
+      Real.zero_rpow hp'.ne.symm]
+    apply condExp_nonneg
+    filter_upwards with a; positivity
+  have hl := (Real.continuous_rpow_const hp'.le).lowerSemicontinuous.lowerSemicontinuousOn (Ici 0)
+  have := (convexOn_rpow hp).map_condExp_le hm hl (by simp) isClosed_Ici hf_int.norm hfint
+  filter_upwards [norm_condExp_le f, this] with a ha hb
+  exact (Real.rpow_le_rpow (norm_nonneg _) ha hp'.le).trans hb
 
 中文:
 定理 可积.norm_condExp_rpow_le
@@ -574,7 +753,14 @@ theorem Integrable.norm_condExp_rpow_le
   by_cases! hμm : ¬ SigmaFinite (μ.trim hm)
   · simp [condExp_of_not_sigmaFinite hm hμm, Real.zero_rpow hp'.ne.symm]; aesop
   by_cases! hf_int : ¬ Integrable f μ
-  · sim
+  · simp only [condExp_of_not_integrable hf_int, Pi.zero_apply, norm_zero,
+      Real.zero_rpow hp'.ne.symm]
+    apply condExp_nonneg
+    filter_upwards with a; positivity
+  have hl := (Real.continuous_rpow_const hp'.le).lowerSemicontinuous.lowerSemicontinuousOn (Ici 0)
+  have := (convexOn_rpow hp).map_condExp_le hm hl (by simp) isClosed_Ici hf_int.norm hfint
+  filter_upwards [norm_condExp_le f, this] with a ha hb
+  exact (Real.rpow_le_rpow (norm_nonneg _) ha hp'.le).trans hb
 
 Depends on / 依赖: Integrable, Pi.zero_apply, Real.continuous_rpow_const, Real.zero_rpow, SigmaFinite, condExp_nonneg, condExp_of_not_integrable, condExp_of_not_le, condExp_of_not_sigmaFinite, continuous_rpow_const, filter_upwards, hf_int, lowerSemicontinu, ne.symm, norm_zero, zero_apply, zero_rpow
 -/

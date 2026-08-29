@@ -36,7 +36,29 @@ theorem exists_prime_gt_modEq_one
   let b := k * (n !)
   have hgt : 1 < (eval (↑b) (cyclotomic k Int)).natAbs := by
     rcases le_iff_exists_add'.1 hk1.le with ⟨k, rfl⟩
-    ha
+    have hb : 2 <= b := le_mul_of_le_of_one_le hk1 n.factorial_pos
+    calc
+      1 <= b - 1 := le_tsub_of_add_le_left hb
+      _ < (eval (b : Int) (cyclotomic (k + 1) Int)).natAbs :=
+        sub_one_lt_natAbs_cyclotomic_eval hk1 (succ_le_iff.1 hb).ne'
+  let p := minFac (eval (↑b) (cyclotomic k Int)).natAbs
+  have hprime : Fact p.Prime := ⟨minFac_prime (ne_of_lt hgt).symm⟩
+  have hroot : IsRoot (cyclotomic k (ZMod p)) (castRingHom (ZMod p) b) := by
+    have : ((b : Int) : ZMod p) = ↑(Int.castRingHom (ZMod p) b) := by simp
+    rw [IsRoot.def]; rw [← map_cyclotomic_int k (ZMod p)]; rw [eval_map]; rw [coe_castRingHom]; rw [← Int.cast_natCast]; rw [this]; rw [eval₂_hom]; rw [Int.coe_castRingHom]; rw [ZMod.intCast_zmod_eq_zero_iff_dvd]
+    apply Int.dvd_natAbs.1
+    exact mod_cast minFac_dvd (eval (↑b) (cyclotomic k Int)).natAbs
+  have hpb : ¬p ∣ b :=
+    hprime.1.coprime_iff_not_dvd.1 (coprime_of_root_cyclotomic hk0.bot_lt hroot).symm
+  refine ⟨p, hprime.1, not_le.1 fun habs => ?_, ?_⟩
+  · exact hpb (dvd_mul_of_dvd_right (dvd_factorial (minFac_pos _) habs) _)
+  · have hdiv : orderOf (b : ZMod p) ∣ p - 1 :=
+      ZMod.orderOf_dvd_card_sub_one (mt (CharP.cast_eq_zero_iff _ _ _).1 hpb)
+    have : NeZero (k : ZMod p) :=
+      NeZero.of_not_dvd (ZMod p) fun hpk => hpb (dvd_mul_of_dvd_left hpk _)
+    have : k = orderOf (b : ZMod p) := (isRoot_cyclotomic_iff.mp hroot).eq_orderOf
+    rw [← this] at hdiv
+    exact ((modEq_iff_dvd' hprime.1.pos).2 hdiv).symm
 
 中文:
 定理 存在_prime_gt_modEq_one
@@ -48,7 +70,29 @@ theorem exists_prime_gt_modEq_one
   let b := k * (n !)
   have hgt : 1 < (eval (↑b) (cyclotomic k Int)).natAbs := by
     rcases le_iff_exists_add'.1 hk1.le with ⟨k, rfl⟩
-    ha
+    have hb : 2 <= b := le_mul_of_le_of_one_le hk1 n.factorial_pos
+    calc
+      1 <= b - 1 := le_tsub_of_add_le_left hb
+      _ < (eval (b : Int) (cyclotomic (k + 1) Int)).natAbs :=
+        sub_one_lt_natAbs_cyclotomic_eval hk1 (succ_le_iff.1 hb).ne'
+  let p := minFac (eval (↑b) (cyclotomic k Int)).natAbs
+  have hprime : Fact p.Prime := ⟨minFac_prime (ne_of_lt hgt).symm⟩
+  have hroot : IsRoot (cyclotomic k (ZMod p)) (castRingHom (ZMod p) b) := by
+    have : ((b : Int) : ZMod p) = ↑(Int.castRingHom (ZMod p) b) := by simp
+    rw [IsRoot.def]; rw [← map_cyclotomic_int k (ZMod p)]; rw [eval_map]; rw [coe_castRingHom]; rw [← Int.cast_natCast]; rw [this]; rw [eval₂_hom]; rw [Int.coe_castRingHom]; rw [ZMod.intCast_zmod_eq_zero_iff_dvd]
+    apply Int.dvd_natAbs.1
+    exact mod_cast minFac_dvd (eval (↑b) (cyclotomic k Int)).natAbs
+  have hpb : ¬p ∣ b :=
+    hprime.1.coprime_iff_not_dvd.1 (coprime_of_root_cyclotomic hk0.bot_lt hroot).symm
+  refine ⟨p, hprime.1, not_le.1 fun habs => ?_, ?_⟩
+  · exact hpb (dvd_mul_of_dvd_right (dvd_factorial (minFac_pos _) habs) _)
+  · have hdiv : orderOf (b : ZMod p) ∣ p - 1 :=
+      ZMod.orderOf_dvd_card_sub_one (mt (CharP.cast_eq_zero_iff _ _ _).1 hpb)
+    have : NeZero (k : ZMod p) :=
+      NeZero.of_not_dvd (ZMod p) fun hpk => hpb (dvd_mul_of_dvd_left hpk _)
+    have : k = orderOf (b : ZMod p) := (isRoot_cyclotomic_iff.mp hroot).eq_orderOf
+    rw [← this] at hdiv
+    exact ((modEq_iff_dvd' hprime.1.pos).2 hdiv).symm
 
 Depends on / 依赖: cyclotomic, eq_or_lt, exists_infinite_primes, factorial_pos, hk1.le, le_iff_exists_add, le_mul_of_le_of_one_le, le_tsub_of_add_le_left, modEq_one, n.factorial_pos, natAbs, one_le_iff_ne_zero, sub_one_lt_natAbs_cyclotomic_eval, succ_le_iff
 -/

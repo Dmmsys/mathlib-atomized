@@ -357,7 +357,8 @@ definition CommGroup.toDistribLattice
     constructor
     · rw [inv_mul_le_iff_le_mul, ← inf_mul_sup x y]
       exact mul_le_mul' (inf_le_inf_left _ inf_le_left) inf_le_left
-    · rw [inv_mul_le_iff_le_mul, ← inf_mu
+    · rw [inv_mul_le_iff_le_mul, ← inf_mul_sup x z]
+      exact mul_le_mul' (inf_le_inf_left _ inf_le_right) inf_le_right
 
 中文:
 定义 交换群.toDistribLattice
@@ -367,7 +368,8 @@ definition CommGroup.toDistribLattice
     constructor
     · rw [inv_mul_le_iff_le_mul, ← inf_mul_sup x y]
       exact mul_le_mul' (inf_le_inf_left _ inf_le_left) inf_le_left
-    · rw [inv_mul_le_iff_le_mul, ← inf_mu
+    · rw [inv_mul_le_iff_le_mul, ← inf_mul_sup x z]
+      exact mul_le_mul' (inf_le_inf_left _ inf_le_right) inf_le_right
 
 Depends on / 依赖: inf_le_inf_left, inf_le_left, inf_le_right, inf_mul_sup, inv_mul_le_iff_le_mul, le_inf_iff, mul_le_mul, mul_le_mul_iff_left
 -/

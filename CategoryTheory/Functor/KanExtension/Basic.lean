@@ -1156,7 +1156,8 @@ lemma isLeftKanExtension_iff_postcomp₁
     (LeftExtension.isUniversalPostcomp₁Equiv G e F _).trans
     (IsInitial.equivOfIso (StructuredArrow.isoMk (Iso.refl _)))
   constructor
-  · exact
+  · exact fun _ => ⟨⟨eq (isUniversalOfIsLeftKanExtension _ _)⟩⟩
+  · exact fun _ => ⟨⟨eq.symm (isUniversalOfIsLeftKanExtension _ _)⟩⟩
 
 中文:
 引理 isLeftKanExtension_iff_postcomp₁
@@ -1168,7 +1169,8 @@ lemma isLeftKanExtension_iff_postcomp₁
     (LeftExtension.isUniversalPostcomp₁Equiv G e F _).trans
     (IsInitial.equivOfIso (StructuredArrow.isoMk (Iso.refl _)))
   constructor
-  · exact
+  · exact fun _ => ⟨⟨eq (isUniversalOfIsLeftKanExtension _ _)⟩⟩
+  · exact fun _ => ⟨⟨eq.symm (isUniversalOfIsLeftKanExtension _ _)⟩⟩
 
 Depends on / 依赖: IsInitial, IsInitial.equivOfIso, IsUniversal, Iso.refl, LeftExtension, LeftExtension.isUniversalPostcomp, LeftExtension.mk, StructuredArrow, StructuredArrow.isoMk, associator, e.inv, eq.symm, equivOfIso, isUniversalOfIsLeftKanExtension, whiskerRight
 -/
@@ -1199,7 +1201,8 @@ lemma isRightKanExtension_iff_postcomp₁
   (RightExtension.isUniversalPostcomp₁Equiv G e F _).trans
     (IsTerminal.equivOfIso (CostructuredArrow.isoMk (Iso.refl _)))
   constructor
-  · exac
+  · exact fun _ => ⟨⟨eq (isUniversalOfIsRightKanExtension _ _)⟩⟩
+  · exact fun _ => ⟨⟨eq.symm (isUniversalOfIsRightKanExtension _ _)⟩⟩
 
 中文:
 引理 isRightKanExtension_iff_postcomp₁
@@ -1211,7 +1214,8 @@ lemma isRightKanExtension_iff_postcomp₁
   (RightExtension.isUniversalPostcomp₁Equiv G e F _).trans
     (IsTerminal.equivOfIso (CostructuredArrow.isoMk (Iso.refl _)))
   constructor
-  · exac
+  · exact fun _ => ⟨⟨eq (isUniversalOfIsRightKanExtension _ _)⟩⟩
+  · exact fun _ => ⟨⟨eq.symm (isUniversalOfIsRightKanExtension _ _)⟩⟩
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.isoMk, IsTerminal, IsTerminal.equivOfIso, IsUniversal, Iso.refl, RightExtension, RightExtension.isUniversalPostcomp, RightExtension.mk, associator, e.hom, eq.symm, equivOfIso, isUniversalOfIsRightKanExtension, whiskerRight
 -/
@@ -1497,7 +1501,8 @@ lemma isLeftKanExtension_iff_precomp
     (LeftExtension.isUniversalPrecompEquiv L F G _).trans
     (IsInitial.equivOfIso (StructuredArrow.isoMk (Iso.refl _)))
   constructor
-  · exact fun _ => ⟨⟨eq (isU
+  · exact fun _ => ⟨⟨eq (isUniversalOfIsLeftKanExtension _ _)⟩⟩
+  · exact fun _ => ⟨⟨eq.symm (isUniversalOfIsLeftKanExtension _ _)⟩⟩
 
 中文:
 引理 isLeftKanExtension_iff_precomp
@@ -1508,7 +1513,8 @@ lemma isLeftKanExtension_iff_precomp
     (LeftExtension.isUniversalPrecompEquiv L F G _).trans
     (IsInitial.equivOfIso (StructuredArrow.isoMk (Iso.refl _)))
   constructor
-  · exact fun _ => ⟨⟨eq (isU
+  · exact fun _ => ⟨⟨eq (isUniversalOfIsLeftKanExtension _ _)⟩⟩
+  · exact fun _ => ⟨⟨eq.symm (isUniversalOfIsLeftKanExtension _ _)⟩⟩
 
 Depends on / 依赖: IsInitial, IsInitial.equivOfIso, IsUniversal, Iso.refl, LeftExtension, LeftExtension.isUniversalPrecompEquiv, LeftExtension.mk, StructuredArrow, StructuredArrow.isoMk, associator, eq.symm, equivOfIso, isUniversalOfIsLeftKanExtension, isUniversalPrecompEquiv, whiskerLeft
 -/
@@ -1537,7 +1543,8 @@ lemma isRightKanExtension_iff_precomp
     (RightExtension.isUniversalPrecompEquiv L F G _).trans
     (IsTerminal.equivOfIso (CostructuredArrow.isoMk (Iso.refl _)))
   constructor
-  · exact fun _ => ⟨⟨e
+  · exact fun _ => ⟨⟨eq (isUniversalOfIsRightKanExtension _ _)⟩⟩
+  · exact fun _ => ⟨⟨eq.symm (isUniversalOfIsRightKanExtension _ _)⟩⟩
 
 中文:
 引理 isRightKanExtension_iff_precomp
@@ -1548,7 +1555,8 @@ lemma isRightKanExtension_iff_precomp
     (RightExtension.isUniversalPrecompEquiv L F G _).trans
     (IsTerminal.equivOfIso (CostructuredArrow.isoMk (Iso.refl _)))
   constructor
-  · exact fun _ => ⟨⟨e
+  · exact fun _ => ⟨⟨eq (isUniversalOfIsRightKanExtension _ _)⟩⟩
+  · exact fun _ => ⟨⟨eq.symm (isUniversalOfIsRightKanExtension _ _)⟩⟩
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.isoMk, IsTerminal, IsTerminal.equivOfIso, IsUniversal, Iso.refl, RightExtension, RightExtension.isUniversalPrecompEquiv, RightExtension.mk, associator, eq.symm, equivOfIso, isUniversalOfIsRightKanExtension, isUniversalPrecompEquiv, whiskerLeft
 -/
@@ -1935,7 +1943,30 @@ hα.desc LeftExtension.mk _
     refine
 ⟨⟨StructuredArrow.homMk (hb.desc u) by
           ext x
-          have hb_fac_
+          have hb_fac_app := congr_app (hb.fac u) (L.obj x)
+          have hα_fac_app :=
+            congr_app (hα.fac <| LeftExtension.mk _ <|
+              y.hom ≫ (L.associator L' y.right).hom) x
+          dsimp at hα_fac_app hb_fac_app
+          simp [hb_fac_app, u, hα_fac_app]⟩, fun a => ?_⟩
+    dsimp
+    ext1
+    apply hb.hom_ext
+    apply hα.hom_ext
+    ext t
+    dsimp
+    have a_w_t := congr_app a.w t
+    have hb_fac_app := congr_app (hb.fac u) (L.obj t)
+    have hα_fac_app :=
+      congr_app
+        (hα.fac <| LeftExtension.mk _ <|
+          y.hom ≫ (L.associator L' y.right).hom) t
+    dsimp at hb_fac_app hα_fac_app
+    simp only [whiskeringLeft_obj_obj, comp_obj,
+      precomp₂_obj_right, whiskeringLeft_obj_map, NatTrans.comp_app,
+      precomp₂_obj_hom_app, whiskerLeft_app, assoc] at a_w_t
+    simp [← a_w_t, hb_fac_app, u, hα_fac_app]
+  apply IsInitial.ofUnique
 
 中文:
 定义 LeftExtension.isUniversalPrecomp₂
@@ -1949,7 +1980,30 @@ hα.desc LeftExtension.mk _
     refine
 ⟨⟨StructuredArrow.homMk (hb.desc u) by
           ext x
-          have hb_fac_
+          have hb_fac_app := congr_app (hb.fac u) (L.obj x)
+          have hα_fac_app :=
+            congr_app (hα.fac <| LeftExtension.mk _ <|
+              y.hom ≫ (L.associator L' y.right).hom) x
+          dsimp at hα_fac_app hb_fac_app
+          simp [hb_fac_app, u, hα_fac_app]⟩, fun a => ?_⟩
+    dsimp
+    ext1
+    apply hb.hom_ext
+    apply hα.hom_ext
+    ext t
+    dsimp
+    have a_w_t := congr_app a.w t
+    have hb_fac_app := congr_app (hb.fac u) (L.obj t)
+    have hα_fac_app :=
+      congr_app
+        (hα.fac <| LeftExtension.mk _ <|
+          y.hom ≫ (L.associator L' y.right).hom) t
+    dsimp at hb_fac_app hα_fac_app
+    simp only [whiskeringLeft_obj_obj, comp_obj,
+      precomp₂_obj_right, whiskeringLeft_obj_map, NatTrans.comp_app,
+      precomp₂_obj_hom_app, whiskerLeft_app, assoc] at a_w_t
+    simp [← a_w_t, hb_fac_app, u, hα_fac_app]
+  apply IsInitial.ofUnique
 
 Depends on / 依赖: L.associator, L.obj, LeftExtension, LeftExtension.mk, StructuredArrow, StructuredArrow.homMk, Unique, associator, congr_app, hb.desc, hb.fac, hb.hom_ex, hb_fac_app, hom_ex, y.hom, y.right
 -/
@@ -2006,7 +2060,17 @@ definition LeftExtension.isUniversalOfPrecomp₂
           apply hα.hom_ext
           ext t
           have := congr_app u.w t
-          dsimp
+          dsimp at this
+          simp only [precomp₂_obj_hom_app, assoc] at this
+          simp [this]⟩, fun a => ?_⟩
+    ext1
+    apply hb.hom_ext
+    ext t
+    have := congr_app u.w t
+    dsimp at this
+    simp only [precomp₂_obj_hom_app, assoc] at this
+    simp [this, ← a.w]
+  apply IsInitial.ofUnique
 
 中文:
 定义 LeftExtension.isUniversalOfPrecomp₂
@@ -2019,7 +2083,17 @@ definition LeftExtension.isUniversalOfPrecomp₂
           apply hα.hom_ext
           ext t
           have := congr_app u.w t
-          dsimp
+          dsimp at this
+          simp only [precomp₂_obj_hom_app, assoc] at this
+          simp [this]⟩, fun a => ?_⟩
+    ext1
+    apply hb.hom_ext
+    ext t
+    have := congr_app u.w t
+    dsimp at this
+    simp only [precomp₂_obj_hom_app, assoc] at this
+    simp [this, ← a.w]
+  apply IsInitial.ofUnique
 
 Depends on / 依赖: IsInitial, IsInitial.ofUnique, LeftExtension, LeftExtension.precomp, StructuredArrow, StructuredArrow.homMk, Unique, congr_app, hb.hom_ext, hb.to, hom_ext, ofUnique, u.right
 -/
@@ -2091,7 +2165,20 @@ theorem isLeftKanExtension_iff_postcompose
 .invFun · apply IsInitial.isInitialIffObj Ψ.inverse _
     haveI := LeftExtension.isUniversalPrecomp₂ α hα h
     let i :
-        (LeftExte
+        (LeftExtension.precomp₂ L' α).obj (LeftExtension.mk F₂ β) ≅
+        Ψ.inverse.obj (LeftExtension.mk F₂ γ) :=
+StructuredArrow.isoMk (NatIso.ofComponents fun _ => .refl _) by
+        ext x
+        simp [Ψ, ← congr_app hγ x, ← Functor.map_comp]
+    exact IsInitial.ofIso this i
+  · apply LeftExtension.isUniversalOfPrecomp₂ α hα
+.invFun apply IsInitial.isInitialIffObj Ψ.functor _
+    let i :
+        (LeftExtension.mk F₂ γ) ≅
+Ψ.functor.obj (LeftExtension.precomp₂ L' α).obj
+          LeftExtension.mk F₂ β :=
+      StructuredArrow.isoMk (NatIso.ofComponents fun _ => .refl _)
+    exact IsInitial.ofIso h i
 
 中文:
 定理 isLeftKanExtension_iff_postcompose
@@ -2103,7 +2190,20 @@ theorem isLeftKanExtension_iff_postcompose
 .invFun · apply IsInitial.isInitialIffObj Ψ.inverse _
     haveI := LeftExtension.isUniversalPrecomp₂ α hα h
     let i :
-        (LeftExte
+        (LeftExtension.precomp₂ L' α).obj (LeftExtension.mk F₂ β) ≅
+        Ψ.inverse.obj (LeftExtension.mk F₂ γ) :=
+StructuredArrow.isoMk (NatIso.ofComponents fun _ => .refl _) by
+        ext x
+        simp [Ψ, ← congr_app hγ x, ← Functor.map_comp]
+    exact IsInitial.ofIso this i
+  · apply LeftExtension.isUniversalOfPrecomp₂ α hα
+.invFun apply IsInitial.isInitialIffObj Ψ.functor _
+    let i :
+        (LeftExtension.mk F₂ γ) ≅
+Ψ.functor.obj (LeftExtension.precomp₂ L' α).obj
+          LeftExtension.mk F₂ β :=
+      StructuredArrow.isoMk (NatIso.ofComponents fun _ => .refl _)
+    exact IsInitial.ofIso h i
 
 Depends on / 依赖: IsInitial, IsInitial.isInitialIffObj, IsLeftKanExtension, LeftExtension, LeftExtension.isUniversalPrecomp, LeftExtension.mk, LeftExtension.precomp, NatIso, NatIso.ofComponents, StructuredArrow, StructuredArrow.isoMk, aesop_cat, invFun, inverse, inverse.obj, isInitialIffObj, ofComponents
 -/
@@ -2183,7 +2283,11 @@ definition isColimitCoconeOfIsLeftKanExtension
         (Functor.const _).map (hc.desc (Cocone.mk _ (α ≫ whiskerLeft L s.ι))) = s.ι :=
       F'.hom_ext_of_isLeftKanExtension α _ _ (by cat_disch)
     exact congr_app this
-
+  uniq s m hm := hc.hom_ext (fun j => by
+    have := hm (L.obj j)
+    nth_rw 1 [← F'.descOfIsLeftKanExtension_fac_app α ((const D).obj c.pt)]
+    dsimp at this ⊢
+    rw [assoc]; rw [this]; rw [IsColimit.fac]; rw [NatTrans.comp_app]; rw [whiskerLeft_app])
 
 中文:
 定义 isColimitCoconeOfIsLeftKanExtension
@@ -2194,7 +2298,11 @@ definition isColimitCoconeOfIsLeftKanExtension
         (Functor.const _).map (hc.desc (Cocone.mk _ (α ≫ whiskerLeft L s.ι))) = s.ι :=
       F'.hom_ext_of_isLeftKanExtension α _ _ (by cat_disch)
     exact congr_app this
-
+  uniq s m hm := hc.hom_ext (fun j => by
+    have := hm (L.obj j)
+    nth_rw 1 [← F'.descOfIsLeftKanExtension_fac_app α ((const D).obj c.pt)]
+    dsimp at this ⊢
+    rw [assoc]; rw [this]; rw [IsColimit.fac]; rw [NatTrans.comp_app]; rw [whiskerLeft_app])
 
 Depends on / 依赖: Cocone, Cocone.mk, hc.desc, whiskerLeft
 -/
@@ -2333,7 +2441,11 @@ definition isLimitConeOfIsRightKanExtension
         F'.liftOfIsRightKanExtension α ((const D).obj c.pt) c.π = s.π :=
       F'.hom_ext_of_isRightKanExtension α _ _ (by cat_disch)
     exact congr_app this
-  
+  uniq s m hm := hc.hom_ext (fun j => by
+    have := hm (L.obj j)
+    nth_rw 1 [← F'.liftOfIsRightKanExtension_fac_app α ((const D).obj c.pt)]
+    dsimp at this ⊢
+    rw [← assoc]; rw [this]; rw [IsLimit.fac]; rw [NatTrans.comp_app]; rw [whiskerLeft_app])
 
 中文:
 定义 isLimitConeOfIsRightKanExtension
@@ -2344,7 +2456,11 @@ definition isLimitConeOfIsRightKanExtension
         F'.liftOfIsRightKanExtension α ((const D).obj c.pt) c.π = s.π :=
       F'.hom_ext_of_isRightKanExtension α _ _ (by cat_disch)
     exact congr_app this
-  
+  uniq s m hm := hc.hom_ext (fun j => by
+    have := hm (L.obj j)
+    nth_rw 1 [← F'.liftOfIsRightKanExtension_fac_app α ((const D).obj c.pt)]
+    dsimp at this ⊢
+    rw [← assoc]; rw [this]; rw [IsLimit.fac]; rw [NatTrans.comp_app]; rw [whiskerLeft_app])
 
 Depends on / 依赖: Cone.mk, hc.lift, whiskerLeft
 -/

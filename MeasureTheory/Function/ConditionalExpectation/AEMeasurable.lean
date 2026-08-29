@@ -292,7 +292,7 @@ theorem memLp_trim_of_mem_lpMeasSubgroup
   change MemLp (hf.mk f) p (μ.trim hm)
   refine ⟨hf.stronglyMeasurable_mk.aestronglyMeasurable, ?_⟩
   rw [eLpNorm_trim hm hf.stronglyMeasurable_mk]; rw [eLpNorm_congr_ae hf.ae_eq_mk.symm]
-  exact
+  exact Lp.eLpNorm_lt_top f
 
 中文:
 定理 memLp_trim_of_mem_lpMeasSubgroup
@@ -303,7 +303,7 @@ theorem memLp_trim_of_mem_lpMeasSubgroup
   change MemLp (hf.mk f) p (μ.trim hm)
   refine ⟨hf.stronglyMeasurable_mk.aestronglyMeasurable, ?_⟩
   rw [eLpNorm_trim hm hf.stronglyMeasurable_mk]; rw [eLpNorm_congr_ae hf.ae_eq_mk.symm]
-  exact
+  exact Lp.eLpNorm_lt_top f
 
 Depends on / 依赖: AEStronglyMeasurable, Lp.eLpNorm_lt_top, ae_eq_mk, aestronglyMeasurable, eLpNorm_congr_ae, eLpNorm_lt_top, eLpNorm_trim, hf.ae_eq_mk.symm, hf.mk, hf.stronglyMeasurable_mk, hf.stronglyMeasurable_mk.aestronglyMeasurable, hf_meas, mem_lpMeasSubgroup_iff_aestronglyMeasurable, mem_lpMeasSubgroup_iff_aestronglyMeasurable.mp, stronglyMeasurable_mk
 -/
@@ -1063,7 +1063,27 @@ theorem Lp.induction_stronglyMeasurable_aux
   change P ↑f'
   rw [hfg]
   refine
-    @Lp.induction α F m _ p (μ.tri
+    @Lp.induction α F m _ p (μ.trim hm) _ hp_ne_top
+      (fun g => P ((lpMeasToLpTrimLie F Real p μ hm).symm g)) ?_ ?_ ?_ g
+  · intro b t ht hμt
+    rw [@Lp.simpleFunc.coe_indicatorConst _ _ m]; rw [lpMeasToLpTrimLie_symm_indicator ht hμt.ne b]
+    have hμt' : μ t < ∞ := (le_trim hm).trans_lt hμt
+    specialize h_ind b ht hμt'
+    rwa [Lp.simpleFunc.coe_indicatorConst] at h_ind
+  · intro f g hf hg h_disj hfP hgP
+    rw [LinearIsometryEquiv.map_add]
+    push_cast
+    have h_eq :
+      forall (f : α -> F) (hf : MemLp f p (μ.trim hm)),
+        ((lpMeasToLpTrimLie F Real p μ hm).symm (MemLp.toLp f hf) : Lp F p μ) =
+          (memLp_of_memLp_trim hm hf).toLp f :=
+      lpMeasToLpTrimLie_symm_toLp hm
+    rw [h_eq f hf] at hfP ⊢
+    rw [h_eq g hg] at hgP ⊢
+    exact h_add (memLp_of_memLp_trim hm hf) (memLp_of_memLp_trim hm hg)
+      (hf.aestronglyMeasurable.of_trim hm) (hg.aestronglyMeasurable.of_trim hm) h_disj hfP hgP
+  · change IsClosed ((lpMeasToLpTrimLie F Real p μ hm).symm ⁻¹' {g : lpMeas F Real m p μ | P ↑g})
+    exact IsClosed.preimage (LinearIsometryEquiv.continuous _) h_closed
 
 中文:
 定理 Lp.induction_stronglyMeasurable_aux
@@ -1077,7 +1097,27 @@ theorem Lp.induction_stronglyMeasurable_aux
   change P ↑f'
   rw [hfg]
   refine
-    @Lp.induction α F m _ p (μ.tri
+    @Lp.induction α F m _ p (μ.trim hm) _ hp_ne_top
+      (fun g => P ((lpMeasToLpTrimLie F Real p μ hm).symm g)) ?_ ?_ ?_ g
+  · intro b t ht hμt
+    rw [@Lp.simpleFunc.coe_indicatorConst _ _ m]; rw [lpMeasToLpTrimLie_symm_indicator ht hμt.ne b]
+    have hμt' : μ t < ∞ := (le_trim hm).trans_lt hμt
+    specialize h_ind b ht hμt'
+    rwa [Lp.simpleFunc.coe_indicatorConst] at h_ind
+  · intro f g hf hg h_disj hfP hgP
+    rw [LinearIsometryEquiv.map_add]
+    push_cast
+    have h_eq :
+      forall (f : α -> F) (hf : MemLp f p (μ.trim hm)),
+        ((lpMeasToLpTrimLie F Real p μ hm).symm (MemLp.toLp f hf) : Lp F p μ) =
+          (memLp_of_memLp_trim hm hf).toLp f :=
+      lpMeasToLpTrimLie_symm_toLp hm
+    rw [h_eq f hf] at hfP ⊢
+    rw [h_eq g hg] at hgP ⊢
+    exact h_add (memLp_of_memLp_trim hm hf) (memLp_of_memLp_trim hm hg)
+      (hf.aestronglyMeasurable.of_trim hm) (hg.aestronglyMeasurable.of_trim hm) h_disj hfP hgP
+  · change IsClosed ((lpMeasToLpTrimLie F Real p μ hm).symm ⁻¹' {g : lpMeas F Real m p μ | P ↑g})
+    exact IsClosed.preimage (LinearIsometryEquiv.continuous _) h_closed
 
 Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.symm_apply_apply, Lp.induction, Lp.simpleFunc.coe_indicatorConst, coe_indicatorConst, hp_ne_top, lpMeas, lpMeasToLpTrimLie, lpMeasToLpTrimLie_symm_indicator, simpleFunc, symm_apply_apply, t.ne
 -/
@@ -1140,6 +1180,46 @@ theorem Lp.induction_stronglyMeasurable
     forall ⦃f g⦄, forall hf : MemLp f p μ, forall hg : MemLp g p μ, AEStronglyMeasurable[m] f μ ->
       AEStronglyMeasurable[m] g μ -> Disjoint (Function.support f) (Function.support g) ->
         P (hf.toLp f) -> P (hg.toLp g) -> P (hf.toLp f + hg.toLp g) from
+    Lp.induction_stronglyMeasurable_aux hm hp_ne_top _ h_ind h_add_ae h_closed f hf
+  intro f g hf hg hfm hgm h_disj hPf hPg
+  let s_f : Set α := Function.support (hfm.mk f)
+  have hs_f : MeasurableSet[m] s_f := hfm.stronglyMeasurable_mk.measurableSet_support
+  have hs_f_eq : s_f =ᵐ[μ] Function.support f := hfm.ae_eq_mk.symm.support
+  let s_g : Set α := Function.support (hgm.mk g)
+  have hs_g : MeasurableSet[m] s_g := hgm.stronglyMeasurable_mk.measurableSet_support
+  have hs_g_eq : s_g =ᵐ[μ] Function.support g := hgm.ae_eq_mk.symm.support
+  have h_inter_empty : (s_f inter s_g : Set α) =ᵐ[μ] (∅ : Set α) := by
+    refine (hs_f_eq.inter hs_g_eq).trans ?_
+    suffices Function.support f inter Function.support g = ∅ by rw [this]
+    exact Set.disjoint_iff_inter_eq_empty.mp h_disj
+  let f' := (s_f \ s_g).indicator (hfm.mk f)
+  have hff' : f =ᵐ[μ] f' := by
+    have : s_f \ s_g =ᵐ[μ] s_f := by
+      rw [← Set.sdiff_inter_self_eq_sdiff]; rw [Set.inter_comm]
+      refine ((ae_eq_refl s_f).diff h_inter_empty).trans ?_
+      rw [Set.sdiff_empty]
+    refine ((indicator_ae_eq_of_ae_eq_set this).trans ?_).symm
+    rw [Set.indicator_support]
+    exact hfm.ae_eq_mk.symm
+  have hf'_meas : StronglyMeasurable[m] f' := hfm.stronglyMeasurable_mk.indicator (hs_f.diff hs_g)
+  have hf'_Lp : MemLp f' p μ := hf.ae_eq hff'
+  let g' := (s_g \ s_f).indicator (hgm.mk g)
+  have hgg' : g =ᵐ[μ] g' := by
+    have : s_g \ s_f =ᵐ[μ] s_g := by
+      rw [← Set.sdiff_inter_self_eq_sdiff]
+      refine ((ae_eq_refl s_g).diff h_inter_empty).trans ?_
+      rw [Set.sdiff_empty]
+    refine ((indicator_ae_eq_of_ae_eq_set this).trans ?_).symm
+    rw [Set.indicator_support]
+    exact hgm.ae_eq_mk.symm
+  have hg'_meas : StronglyMeasurable[m] g' := hgm.stronglyMeasurable_mk.indicator (hs_g.diff hs_f)
+  have hg'_Lp : MemLp g' p μ := hg.ae_eq hgg'
+  have h_disj : Disjoint (Function.support f') (Function.support g') :=
+    haveI : Disjoint (s_f \ s_g) (s_g \ s_f) := disjoint_sdiff_sdiff
+    this.mono Set.support_indicator_subset Set.support_indicator_subset
+  rw [← MemLp.toLp_congr hf'_Lp hf hff'.symm] at hPf ⊢
+  rw [← MemLp.toLp_congr hg'_Lp hg hgg'.symm] at hPg ⊢
+  exact h_add hf'_Lp hg'_Lp hf'_meas hg'_meas h_disj hPf hPg
 
 中文:
 定理 Lp.induction_stronglyMeasurable
@@ -1150,6 +1230,46 @@ theorem Lp.induction_stronglyMeasurable
     forall ⦃f g⦄, forall hf : MemLp f p μ, forall hg : MemLp g p μ, AEStronglyMeasurable[m] f μ ->
       AEStronglyMeasurable[m] g μ -> Disjoint (Function.support f) (Function.support g) ->
         P (hf.toLp f) -> P (hg.toLp g) -> P (hf.toLp f + hg.toLp g) from
+    Lp.induction_stronglyMeasurable_aux hm hp_ne_top _ h_ind h_add_ae h_closed f hf
+  intro f g hf hg hfm hgm h_disj hPf hPg
+  let s_f : Set α := Function.support (hfm.mk f)
+  have hs_f : MeasurableSet[m] s_f := hfm.stronglyMeasurable_mk.measurableSet_support
+  have hs_f_eq : s_f =ᵐ[μ] Function.support f := hfm.ae_eq_mk.symm.support
+  let s_g : Set α := Function.support (hgm.mk g)
+  have hs_g : MeasurableSet[m] s_g := hgm.stronglyMeasurable_mk.measurableSet_support
+  have hs_g_eq : s_g =ᵐ[μ] Function.support g := hgm.ae_eq_mk.symm.support
+  have h_inter_empty : (s_f inter s_g : Set α) =ᵐ[μ] (∅ : Set α) := by
+    refine (hs_f_eq.inter hs_g_eq).trans ?_
+    suffices Function.support f inter Function.support g = ∅ by rw [this]
+    exact Set.disjoint_iff_inter_eq_empty.mp h_disj
+  let f' := (s_f \ s_g).indicator (hfm.mk f)
+  have hff' : f =ᵐ[μ] f' := by
+    have : s_f \ s_g =ᵐ[μ] s_f := by
+      rw [← Set.sdiff_inter_self_eq_sdiff]; rw [Set.inter_comm]
+      refine ((ae_eq_refl s_f).diff h_inter_empty).trans ?_
+      rw [Set.sdiff_empty]
+    refine ((indicator_ae_eq_of_ae_eq_set this).trans ?_).symm
+    rw [Set.indicator_support]
+    exact hfm.ae_eq_mk.symm
+  have hf'_meas : StronglyMeasurable[m] f' := hfm.stronglyMeasurable_mk.indicator (hs_f.diff hs_g)
+  have hf'_Lp : MemLp f' p μ := hf.ae_eq hff'
+  let g' := (s_g \ s_f).indicator (hgm.mk g)
+  have hgg' : g =ᵐ[μ] g' := by
+    have : s_g \ s_f =ᵐ[μ] s_g := by
+      rw [← Set.sdiff_inter_self_eq_sdiff]
+      refine ((ae_eq_refl s_g).diff h_inter_empty).trans ?_
+      rw [Set.sdiff_empty]
+    refine ((indicator_ae_eq_of_ae_eq_set this).trans ?_).symm
+    rw [Set.indicator_support]
+    exact hgm.ae_eq_mk.symm
+  have hg'_meas : StronglyMeasurable[m] g' := hgm.stronglyMeasurable_mk.indicator (hs_g.diff hs_f)
+  have hg'_Lp : MemLp g' p μ := hg.ae_eq hgg'
+  have h_disj : Disjoint (Function.support f') (Function.support g') :=
+    haveI : Disjoint (s_f \ s_g) (s_g \ s_f) := disjoint_sdiff_sdiff
+    this.mono Set.support_indicator_subset Set.support_indicator_subset
+  rw [← MemLp.toLp_congr hf'_Lp hf hff'.symm] at hPf ⊢
+  rw [← MemLp.toLp_congr hg'_Lp hg hgg'.symm] at hPg ⊢
+  exact h_add hf'_Lp hg'_Lp hf'_meas hg'_meas h_disj hPf hPg
 
 Depends on / 依赖: AEStronglyMeasurable, Disjoint, Function, Function.support, Lp.induction_stronglyMeasurable_aux, MeasurableSet, h_add_ae, h_closed, h_disj, h_ind, hf.toLp, hfm.mk, hfm.stronglyMeasura, hg.toLp, hp_ne_top, hs_f, induction_stronglyMeasurable_aux, stronglyMeasura, support
 -/
@@ -1230,7 +1350,15 @@ theorem MemLp.induction_stronglyMeasurable
   change P f_Lp
   refine Lp.induction_stronglyMeasurable hm hp_ne_top (fun f => P f) ?_ ?_ h_closed f_Lp hfm_Lp
   · intro c s hs hμs
-
+    rw [Lp.simpleFunc.coe_indicatorConst]
+    refine h_ae indicatorConstLp_coeFn.symm ?_ (h_ind c hs hμs)
+    exact memLp_indicator_const p (hm s hs) c (Or.inr hμs.ne)
+  · intro f g hf_mem hg_mem hfm hgm h_disj hfP hgP
+    have hfP' : P f := h_ae hf_mem.coeFn_toLp (Lp.memLp _) hfP
+    have hgP' : P g := h_ae hg_mem.coeFn_toLp (Lp.memLp _) hgP
+    specialize h_add h_disj hf_mem hg_mem hfm hgm hfP' hgP'
+    refine h_ae ?_ (hf_mem.add hg_mem) h_add
+    exact (hf_mem.coeFn_toLp.symm.add hg_mem.coeFn_toLp.symm).trans (Lp.coeFn_add _ _).symm
 
 中文:
 定理 MemLp.induction_stronglyMeasurable
@@ -1243,7 +1371,15 @@ theorem MemLp.induction_stronglyMeasurable
   change P f_Lp
   refine Lp.induction_stronglyMeasurable hm hp_ne_top (fun f => P f) ?_ ?_ h_closed f_Lp hfm_Lp
   · intro c s hs hμs
-
+    rw [Lp.simpleFunc.coe_indicatorConst]
+    refine h_ae indicatorConstLp_coeFn.symm ?_ (h_ind c hs hμs)
+    exact memLp_indicator_const p (hm s hs) c (Or.inr hμs.ne)
+  · intro f g hf_mem hg_mem hfm hgm h_disj hfP hgP
+    have hfP' : P f := h_ae hf_mem.coeFn_toLp (Lp.memLp _) hfP
+    have hgP' : P g := h_ae hg_mem.coeFn_toLp (Lp.memLp _) hgP
+    specialize h_add h_disj hf_mem hg_mem hfm hgm hfP' hgP'
+    refine h_ae ?_ (hf_mem.add hg_mem) h_add
+    exact (hf_mem.coeFn_toLp.symm.add hg_mem.coeFn_toLp.symm).trans (Lp.coeFn_add _ _).symm
 
 Depends on / 依赖: AEStronglyMeasurable, Lp.induction_stronglyMeasurable, Lp.memLp, Lp.simpleFunc.coe_indicatorConst, Or.inr, coeFn_toLp, coe_indicatorConst, f_Lp, h_ae, h_closed, h_disj, h_ind, hf.coeFn_toLp, hf.coeFn_toLp.symm, hf.toLp, hf_mem, hfm.congr, hfm_Lp, hg_mem, hp_ne_top
 -/

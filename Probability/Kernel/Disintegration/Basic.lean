@@ -124,7 +124,18 @@ lemma IsCondKernel.apply_of_ne_zero_of_measurableSet
   have := isSFiniteKernel ρ ρCond (by rintro rfl; simp at hx)
   nth_rewrite 2 [← ρ.disintegrate ρCond]
   rw [Measure.compProd_apply (measurableSet_prod.mpr (Or.inl ⟨measurableSet_singleton x]; rw [hs⟩))]
-  have (a : _) : ρCond a (Prod.mk a ⁻¹' {x} ×ˢ s) = ({x} : Set α).indicator (ρCond · s) a := 
+  have (a : _) : ρCond a (Prod.mk a ⁻¹' {x} ×ˢ s) = ({x} : Set α).indicator (ρCond · s) a := by
+    obtain rfl | hax := eq_or_ne a x
+    · simp only [singleton_prod, mem_singleton_iff, indicator_of_mem]
+      congr with y
+      simp
+    · simp only [singleton_prod, mem_singleton_iff, hax, not_false_eq_true, indicator_of_notMem]
+      have : Prod.mk a ⁻¹' Prod.mk x '' s = ∅ := by ext y; simp [Ne.symm hax]
+      simp only [this, measure_empty]
+  simp_rw [this]
+  rw [MeasureTheory.lintegral_indicator (measurableSet_singleton x)]
+  simp only [Measure.restrict_singleton, lintegral_smul_measure, lintegral_dirac, smul_eq_mul]
+  rw [← mul_assoc]; rw [ENNReal.inv_mul_cancel hx (measure_ne_top _ _)]; rw [one_mul]
 
 中文:
 引理 是余ndKernel.apply_of_ne_zero_of_measurableSet
@@ -133,7 +144,18 @@ lemma IsCondKernel.apply_of_ne_zero_of_measurableSet
   have := isSFiniteKernel ρ ρCond (by rintro rfl; simp at hx)
   nth_rewrite 2 [← ρ.disintegrate ρCond]
   rw [Measure.compProd_apply (measurableSet_prod.mpr (Or.inl ⟨measurableSet_singleton x]; rw [hs⟩))]
-  have (a : _) : ρCond a (Prod.mk a ⁻¹' {x} ×ˢ s) = ({x} : Set α).indicator (ρCond · s) a := 
+  have (a : _) : ρCond a (Prod.mk a ⁻¹' {x} ×ˢ s) = ({x} : Set α).indicator (ρCond · s) a := by
+    obtain rfl | hax := eq_or_ne a x
+    · simp only [singleton_prod, mem_singleton_iff, indicator_of_mem]
+      congr with y
+      simp
+    · simp only [singleton_prod, mem_singleton_iff, hax, not_false_eq_true, indicator_of_notMem]
+      have : Prod.mk a ⁻¹' Prod.mk x '' s = ∅ := by ext y; simp [Ne.symm hax]
+      simp only [this, measure_empty]
+  simp_rw [this]
+  rw [MeasureTheory.lintegral_indicator (measurableSet_singleton x)]
+  simp only [Measure.restrict_singleton, lintegral_smul_measure, lintegral_dirac, smul_eq_mul]
+  rw [← mul_assoc]; rw [ENNReal.inv_mul_cancel hx (measure_ne_top _ _)]; rw [one_mul]
 -/
 private lemma IsCondKernel.apply_of_ne_zero_of_measurableSet [MeasurableSingletonClass α] {x : α}
     (hx : ρ.fst {x} != 0) {s : Set Ω} (hs : MeasurableSet s) :
@@ -165,7 +187,7 @@ lemma IsCondKernel.apply_of_ne_zero
     congr 2 with s hs
     simp [IsCondKernel.apply_of_ne_zero_of_measurableSet _ _ hx hs,
       (measurableEmbedding_prodMk_left x).comap_apply, Set.singleton_prod]
-  simp [this, (measurableEmbedding_prodMk_left x).com
+  simp [this, (measurableEmbedding_prodMk_left x).comap_apply, Set.singleton_prod]
 
 中文:
 引理 是余ndKernel.apply_of_ne_zero
@@ -175,7 +197,7 @@ lemma IsCondKernel.apply_of_ne_zero
     congr 2 with s hs
     simp [IsCondKernel.apply_of_ne_zero_of_measurableSet _ _ hx hs,
       (measurableEmbedding_prodMk_left x).comap_apply, Set.singleton_prod]
-  simp [this, (measurableEmbedding_prodMk_left x).com
+  simp [this, (measurableEmbedding_prodMk_left x).comap_apply, Set.singleton_prod]
 
 Depends on / 依赖: IsCondKernel, IsCondKernel.apply_of_ne_zero_of_measurableSet, Set.singleton_prod, apply_of_ne_zero_of_measurableSet, comap_apply, measurableEmbedding_prodMk_left, singleton_prod
 -/
@@ -313,7 +335,49 @@ lemma IsCondKernel.isProbabilityMeasure_ae
   swap; · rw [Kernel.compProd_of_not_isSFiniteKernel_right _ _ h_sfin] at h; simp [h.symm]
   suffices forallᵐ b ∂(κ.fst a), κCond (a, b) Set.univ = 1 by
     convert! this with b
-    exact ⟨fun _ => measure_univ, fun h => ⟨
+    exact ⟨fun _ => measure_univ, fun h => ⟨h⟩⟩
+  suffices (forallᵐ b ∂(κ.fst a), κCond (a, b) Set.univ <= 1)
+      ∧ (forallᵐ b ∂(κ.fst a), 1 <= κCond (a, b) Set.univ) by
+    filter_upwards [this.1, this.2] with b h1 h2 using le_antisymm h1 h2
+  have h_eq s (hs : MeasurableSet s) :
+      ∫⁻ b, s.indicator (fun b => κCond (a, b) Set.univ) b ∂κ.fst a = κ.fst a s := by
+    conv_rhs => rw [← h]
+    rw [fst_compProd_apply _ _ _ hs]
+  have h_meas : Measurable fun b => κCond (a, b) Set.univ :=
+    (κCond.measurable_coe MeasurableSet.univ).comp measurable_prodMk_left
+  constructor
+  · rw [ae_le_const_iff_forall_gt_measure_zero]
+    intro r hr
+    let s := {b | r <= κCond (a, b) Set.univ}
+    have hs : MeasurableSet s := h_meas measurableSet_Ici
+    have h_2_le : s.indicator (fun _ => r) <= s.indicator (fun b => (κCond (a, b)) Set.univ) := by
+      intro b
+      by_cases hbs : b in s
+      · simpa [hbs]
+      · simp [hbs]
+    have : ∫⁻ b, s.indicator (fun _ => r) b ∂(κ.fst a) <= κ.fst a s :=
+      (lintegral_mono h_2_le).trans_eq (h_eq s hs)
+    rw [lintegral_indicator_const hs] at this
+    contrapose! this with h_ne_zero
+    conv_lhs => rw [← one_mul (κ.fst a s)]
+    gcongr
+    finiteness
+  · rw [ae_const_le_iff_forall_lt_measure_zero]
+    intro r hr
+    let s := {b | κCond (a, b) Set.univ <= r}
+    have hs : MeasurableSet s := h_meas measurableSet_Iic
+    have h_2_le : s.indicator (fun b => (κCond (a, b)) Set.univ) <= s.indicator (fun _ => r) := by
+      intro b
+      by_cases hbs : b in s
+      · simpa [hbs]
+      · simp [hbs]
+    have : κ.fst a s <= ∫⁻ b, s.indicator (fun _ => r) b ∂(κ.fst a) :=
+      (h_eq s hs).symm.trans_le (lintegral_mono h_2_le)
+    rw [lintegral_indicator_const hs] at this
+    contrapose! this with h_ne_zero
+    conv_rhs => rw [← one_mul (κ.fst a s)]
+    gcongr
+    finiteness
 
 中文:
 引理 是余ndKernel.isProbabilityMeasure_ae
@@ -324,7 +388,49 @@ lemma IsCondKernel.isProbabilityMeasure_ae
   swap; · rw [Kernel.compProd_of_not_isSFiniteKernel_right _ _ h_sfin] at h; simp [h.symm]
   suffices forallᵐ b ∂(κ.fst a), κCond (a, b) Set.univ = 1 by
     convert! this with b
-    exact ⟨fun _ => measure_univ, fun h => ⟨
+    exact ⟨fun _ => measure_univ, fun h => ⟨h⟩⟩
+  suffices (forallᵐ b ∂(κ.fst a), κCond (a, b) Set.univ <= 1)
+      ∧ (forallᵐ b ∂(κ.fst a), 1 <= κCond (a, b) Set.univ) by
+    filter_upwards [this.1, this.2] with b h1 h2 using le_antisymm h1 h2
+  have h_eq s (hs : MeasurableSet s) :
+      ∫⁻ b, s.indicator (fun b => κCond (a, b) Set.univ) b ∂κ.fst a = κ.fst a s := by
+    conv_rhs => rw [← h]
+    rw [fst_compProd_apply _ _ _ hs]
+  have h_meas : Measurable fun b => κCond (a, b) Set.univ :=
+    (κCond.measurable_coe MeasurableSet.univ).comp measurable_prodMk_left
+  constructor
+  · rw [ae_le_const_iff_forall_gt_measure_zero]
+    intro r hr
+    let s := {b | r <= κCond (a, b) Set.univ}
+    have hs : MeasurableSet s := h_meas measurableSet_Ici
+    have h_2_le : s.indicator (fun _ => r) <= s.indicator (fun b => (κCond (a, b)) Set.univ) := by
+      intro b
+      by_cases hbs : b in s
+      · simpa [hbs]
+      · simp [hbs]
+    have : ∫⁻ b, s.indicator (fun _ => r) b ∂(κ.fst a) <= κ.fst a s :=
+      (lintegral_mono h_2_le).trans_eq (h_eq s hs)
+    rw [lintegral_indicator_const hs] at this
+    contrapose! this with h_ne_zero
+    conv_lhs => rw [← one_mul (κ.fst a s)]
+    gcongr
+    finiteness
+  · rw [ae_const_le_iff_forall_lt_measure_zero]
+    intro r hr
+    let s := {b | κCond (a, b) Set.univ <= r}
+    have hs : MeasurableSet s := h_meas measurableSet_Iic
+    have h_2_le : s.indicator (fun b => (κCond (a, b)) Set.univ) <= s.indicator (fun _ => r) := by
+      intro b
+      by_cases hbs : b in s
+      · simpa [hbs]
+      · simp [hbs]
+    have : κ.fst a s <= ∫⁻ b, s.indicator (fun _ => r) b ∂(κ.fst a) :=
+      (h_eq s hs).symm.trans_le (lintegral_mono h_2_le)
+    rw [lintegral_indicator_const hs] at this
+    contrapose! this with h_ne_zero
+    conv_rhs => rw [← one_mul (κ.fst a s)]
+    gcongr
+    finiteness
 
 Depends on / 依赖: IsSFiniteKernel, Kernel, Kernel.compProd_of_not_isSFiniteKernel_right, Measurabl, Set.univ, compProd_of_not_isSFiniteKernel_right, convert, disintegrate, filter_upwards, h.symm, h_eq, h_sfin, le_antisymm, measure_univ
 -/

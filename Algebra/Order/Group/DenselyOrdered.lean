@@ -340,7 +340,7 @@ theorem exists_pow_lt_of_one_lt
     calc z ^ (n + 2)
       _ <= z ^ (2 * (n + 1)) := pow_right_monotone hz.le (by lia)
       _ = (z ^ 2) ^ (n + 1) := by rw [pow_mul]
-      _ <= y ^ (n + 1) := pow_le_pow
+      _ <= y ^ (n + 1) := pow_le_pow_left' hzy (n + 1)
 
 中文:
 定理 存在_pow_lt_of_one_lt
@@ -352,7 +352,7 @@ theorem exists_pow_lt_of_one_lt
     calc z ^ (n + 2)
       _ <= z ^ (2 * (n + 1)) := pow_right_monotone hz.le (by lia)
       _ = (z ^ 2) ^ (n + 1) := by rw [pow_mul]
-      _ <= y ^ (n + 1) := pow_le_pow
+      _ <= y ^ (n + 1) := pow_le_pow_left' hzy (n + 1)
 
 Depends on / 依赖: exists_pow_lt_of_one_lt
 -/

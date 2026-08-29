@@ -897,7 +897,15 @@ lemma exists_set_encard_eq_coveringNumber
   simp only [coveringNumber, ne_eq, iInf_eq_top, encard_eq_top_iff, not_forall, not_infinite] at h
   obtain ⟨C', hC'_subset, hC'_cover, hC'_fin⟩ := h
   have : Nonempty { s : Set X // s subseteq A ∧ IsCover ε A s } := ⟨C', hC'_subset, hC'_cover⟩
-  let h := ENat.exists_eq_iInf (fun C : {s : Set X /
+  let h := ENat.exists_eq_iInf (fun C : {s : Set X // s subseteq A ∧ IsCover ε A s} => (C : Set X).encard)
+  obtain ⟨C, hC⟩ := h
+  refine ⟨C, C.2.1, ?_, C.2.2, ?_⟩
+  · refine Set.encard_lt_top_iff.mp ?_
+    simp only [hC, iInf_lt_top, encard_lt_top_iff, Subtype.exists, exists_prop]
+    exact ⟨C', ⟨hC'_subset, hC'_cover⟩, hC'_fin⟩
+  · rw [hC]
+    simp_rw [iInf_subtype, iInf_and]
+    rfl
 
 中文:
 引理 存在_set_encard_eq_coveringNumber
@@ -906,7 +914,15 @@ lemma exists_set_encard_eq_coveringNumber
   simp only [coveringNumber, ne_eq, iInf_eq_top, encard_eq_top_iff, not_forall, not_infinite] at h
   obtain ⟨C', hC'_subset, hC'_cover, hC'_fin⟩ := h
   have : Nonempty { s : Set X // s subseteq A ∧ IsCover ε A s } := ⟨C', hC'_subset, hC'_cover⟩
-  let h := ENat.exists_eq_iInf (fun C : {s : Set X /
+  let h := ENat.exists_eq_iInf (fun C : {s : Set X // s subseteq A ∧ IsCover ε A s} => (C : Set X).encard)
+  obtain ⟨C, hC⟩ := h
+  refine ⟨C, C.2.1, ?_, C.2.2, ?_⟩
+  · refine Set.encard_lt_top_iff.mp ?_
+    simp only [hC, iInf_lt_top, encard_lt_top_iff, Subtype.exists, exists_prop]
+    exact ⟨C', ⟨hC'_subset, hC'_cover⟩, hC'_fin⟩
+  · rw [hC]
+    simp_rw [iInf_subtype, iInf_and]
+    rfl
 
 Depends on / 依赖: ENat.exists_eq_iInf, IsCover, Nonempty, Set.encard_lt_top_iff.mp, Subtype, Subtype.exists, _cover, _fin, _subset, coveringNumber, encard, encard_eq_top_iff, encard_lt_top_iff, exists_eq_iInf, iInf_eq_top, iInf_lt_top, ne_eq, not_forall, not_infinite, subseteq
 -/
@@ -1032,7 +1048,15 @@ lemma exists_set_encard_eq_packingNumber
     obtain ⟨a, ha⟩ := hA
     exact ⟨⟨{a}, by simp [ha], by simp⟩⟩
   let h_exists := ENat.exists_eq_iSup_of_lt_top
-    (f := fun C : { s : Set X // 
+    (f := fun C : { s : Set X // s subseteq A ∧ IsSeparated ε s } => (C : Set X).encard)
+  simp_rw [packingNumber] at h ⊢
+  simp_rw [iSup_subtype, iSup_and] at h_exists
+  specialize h_exists h.lt_top
+  obtain ⟨C, hC⟩ := h_exists
+  refine ⟨C, C.2.1, ?_, C.2.2, ?_⟩
+  · refine Set.encard_ne_top_iff.mp ?_
+    rwa [hC]
+  · rw [hC]
 
 中文:
 引理 存在_set_encard_eq_packingNumber
@@ -1044,7 +1068,15 @@ lemma exists_set_encard_eq_packingNumber
     obtain ⟨a, ha⟩ := hA
     exact ⟨⟨{a}, by simp [ha], by simp⟩⟩
   let h_exists := ENat.exists_eq_iSup_of_lt_top
-    (f := fun C : { s : Set X // 
+    (f := fun C : { s : Set X // s subseteq A ∧ IsSeparated ε s } => (C : Set X).encard)
+  simp_rw [packingNumber] at h ⊢
+  simp_rw [iSup_subtype, iSup_and] at h_exists
+  specialize h_exists h.lt_top
+  obtain ⟨C, hC⟩ := h_exists
+  refine ⟨C, C.2.1, ?_, C.2.2, ?_⟩
+  · refine Set.encard_ne_top_iff.mp ?_
+    rwa [hC]
+  · rw [hC]
 
 Depends on / 依赖: ENat.exists_eq_iSup_of_lt_top, IsSeparated, Nonempty, Set.eq_empty_or_nonempty, encard, eq_empty_or_nonempty, exists_eq_iSup_of_lt_top, h.lt_top, h_exists, iSup_and, iSup_subtype, lt_top, packingNumber, simp_rw, specialize, subseteq
 -/
@@ -1176,7 +1208,12 @@ lemma isCover_maximalSeparatedSet
   have hx_not_mem : x ∉ maximalSeparatedSet ε A := by simpa using h_dist x
   suffices C subseteq A ∧ IsSeparated ε C by
     refine absurd (encard_le_of_isSeparated this.1 this.2 h) ?_
-    simp [C, encard_insert_of_notM
+    simp [C, encard_insert_of_notMem hx_not_mem,
+      ENat.lt_add_one_iff (encard_maximalSeparatedSet h ▸ h)]
+  constructor
+  · simp [C, hxA, maximalSeparatedSet_subset, Set.insert_subset]
+.mpr · exact isSeparated_insert_of_notMem hx_not_mem
+      ⟨isSeparated_maximalSeparatedSet, by simpa using h_dist⟩
 
 中文:
 引理 isCover_maximalSeparatedSet
@@ -1188,7 +1225,12 @@ lemma isCover_maximalSeparatedSet
   have hx_not_mem : x ∉ maximalSeparatedSet ε A := by simpa using h_dist x
   suffices C subseteq A ∧ IsSeparated ε C by
     refine absurd (encard_le_of_isSeparated this.1 this.2 h) ?_
-    simp [C, encard_insert_of_notM
+    simp [C, encard_insert_of_notMem hx_not_mem,
+      ENat.lt_add_one_iff (encard_maximalSeparatedSet h ▸ h)]
+  constructor
+  · simp [C, hxA, maximalSeparatedSet_subset, Set.insert_subset]
+.mpr · exact isSeparated_insert_of_notMem hx_not_mem
+      ⟨isSeparated_maximalSeparatedSet, by simpa using h_dist⟩
 
 Depends on / 依赖: ENat.lt_add_one_iff, IsSeparated, Set.insert_subset, absurd, encard_insert_of_notMem, encard_le_of_isSeparated, encard_maximalSeparatedSet, h_dist, hx_not_mem, insert_subset, isSeparated_insert_of_notMem, isSeparated_maxima, lt_add_one_iff, maximalSeparatedSet, maximalSeparatedSet_subset, subseteq
 -/
@@ -1223,7 +1265,22 @@ theorem packingNumber_two_mul_le_externalCoveringNumber
   intro C hC_cover D hD_subset hD_separated
   -- For each point in D, choose a point in C which is ε-close to it
   let f : D -> C := fun x =>
-    ⟨(hC_cover (hD_subset x.2)).choos
+    ⟨(hC_cover (hD_subset x.2)).choose, (hC_cover (hD_subset x.2)).choose_spec.1⟩
+  have hf' (x : D) : edist x.1 (f x) <= ε := (hC_cover (hD_subset x.2)).choose_spec.2
+  -- `⊢ D.encard ≤ C.encard`
+  -- It suffices to prove that `f` is injective
+  simp only [← Set.toENat_cardinalMk]
+  gcongr
+  refine Cardinal.mk_le_of_injective (f := f) fun x y hxy => Subtype.ext ?_
+  apply Set.Pairwise.eq hD_separated x.2 y.2
+  simp only [not_lt]
+  calc
+    edist (x : X) y <= edist (x : X) (f x) + edist (f x : X) y := edist_triangle ..
+    _ <= 2 * ε := by
+      rw [two_mul]
+      gcongr
+      · exact hf' x
+      · simpa [edist_comm, hxy] using hf' y
 
 中文:
 定理 packingNumber_two_mul_le_externalCoveringNumber
@@ -1234,7 +1291,22 @@ theorem packingNumber_two_mul_le_externalCoveringNumber
   intro C hC_cover D hD_subset hD_separated
   -- For each point in D, choose a point in C which is ε-close to it
   let f : D -> C := fun x =>
-    ⟨(hC_cover (hD_subset x.2)).choos
+    ⟨(hC_cover (hD_subset x.2)).choose, (hC_cover (hD_subset x.2)).choose_spec.1⟩
+  have hf' (x : D) : edist x.1 (f x) <= ε := (hC_cover (hD_subset x.2)).choose_spec.2
+  -- `⊢ D.encard ≤ C.encard`
+  -- It suffices to prove that `f` is injective
+  simp only [← Set.toENat_cardinalMk]
+  gcongr
+  refine Cardinal.mk_le_of_injective (f := f) fun x y hxy => Subtype.ext ?_
+  apply Set.Pairwise.eq hD_separated x.2 y.2
+  simp only [not_lt]
+  calc
+    edist (x : X) y <= edist (x : X) (f x) + edist (f x : X) y := edist_triangle ..
+    _ <= 2 * ε := by
+      rw [two_mul]
+      gcongr
+      · exact hf' x
+      · simpa [edist_comm, hxy] using hf' y
 
 Depends on / 依赖: ENNReal, ENNReal.coe_mul, ENNReal.coe_ofNat, coe_mul, coe_ofNat, externalCoveringNumber, hC_cover, hD_separated, hD_subset, iSup_le_iff, le_iInf_iff, packingNumber
 -/
@@ -1334,7 +1406,9 @@ lemma coveringNumber_subset_le
   _ = packingNumber (2 * (ε / 2)) A := by ring_nf
   _ <= externalCoveringNumber (ε / 2) A :=
     packingNumber_two_mul_le_externalCoveringNumber (ε / 2) A
-  _ <= externalCoveringNumber (ε / 2) B := externalCove
+  _ <= externalCoveringNumber (ε / 2) B := externalCoveringNumber_mono_set h
+  _ <= coveringNumber (ε / 2) B :=
+    externalCoveringNumber_le_coveringNumber (ε / 2) B
 
 中文:
 引理 coveringNumber_subset_le
@@ -1345,7 +1419,9 @@ lemma coveringNumber_subset_le
   _ = packingNumber (2 * (ε / 2)) A := by ring_nf
   _ <= externalCoveringNumber (ε / 2) A :=
     packingNumber_two_mul_le_externalCoveringNumber (ε / 2) A
-  _ <= externalCoveringNumber (ε / 2) B := externalCove
+  _ <= externalCoveringNumber (ε / 2) B := externalCoveringNumber_mono_set h
+  _ <= coveringNumber (ε / 2) B :=
+    externalCoveringNumber_le_coveringNumber (ε / 2) B
 -/
 lemma coveringNumber_subset_le (h : A subseteq B) :
     coveringNumber ε A <= coveringNumber (ε / 2) B := calc
@@ -1373,7 +1449,25 @@ lemma _root_.Isometry.coveringNumber_image'
     refine (iInf_le _ (C.image f)).trans ?_
     simp only [Set.image_subset_iff]
     have : ↑C subseteq f ⁻¹' f '' A := hC_subset.trans (Set.subset_preimage_image f A)
-    refine (iInf_le _ this)
+    refine (iInf_le _ this).trans ?_
+    rw [hf.isCover_image_iff]
+    refine (iInf_le _ hC_cover).trans ?_
+    exact encard_image_le f C
+  · simp only [coveringNumber, le_iInf_iff]
+    intro C hC_subset hC_cover
+    obtain ⟨C', hC'_subset, rfl⟩ : exists C', C' subseteq A ∧ C = C'.image f := by
+      have (x : C) : exists y in A, f y = x := by simpa using hC_subset x.2
+      choose g hg_mem hg using this
+      refine ⟨Set.range g, ?_, ?_⟩
+      · rwa [Set.range_subset_iff]
+      · ext
+        simp
+        grind
+refine (iInf_le _ C').trans (iInf_le _ hC'_subset).trans ?_
+    simp only [hf.isCover_image_iff] at hC_cover
+    refine (iInf_le _ hC_cover).trans ?_
+    rw [InjOn.encard_image]
+    exact hf_inj.mono hC'_subset
 
 中文:
 引理 _root_.等距.coveringNumber_image'
@@ -1385,7 +1479,25 @@ lemma _root_.Isometry.coveringNumber_image'
     refine (iInf_le _ (C.image f)).trans ?_
     simp only [Set.image_subset_iff]
     have : ↑C subseteq f ⁻¹' f '' A := hC_subset.trans (Set.subset_preimage_image f A)
-    refine (iInf_le _ this)
+    refine (iInf_le _ this).trans ?_
+    rw [hf.isCover_image_iff]
+    refine (iInf_le _ hC_cover).trans ?_
+    exact encard_image_le f C
+  · simp only [coveringNumber, le_iInf_iff]
+    intro C hC_subset hC_cover
+    obtain ⟨C', hC'_subset, rfl⟩ : exists C', C' subseteq A ∧ C = C'.image f := by
+      have (x : C) : exists y in A, f y = x := by simpa using hC_subset x.2
+      choose g hg_mem hg using this
+      refine ⟨Set.range g, ?_, ?_⟩
+      · rwa [Set.range_subset_iff]
+      · ext
+        simp
+        grind
+refine (iInf_le _ C').trans (iInf_le _ hC'_subset).trans ?_
+    simp only [hf.isCover_image_iff] at hC_cover
+    refine (iInf_le _ hC_cover).trans ?_
+    rw [InjOn.encard_image]
+    exact hf_inj.mono hC'_subset
 
 Depends on / 依赖: C.image, Set.image_subset_iff, Set.subset_preimage_image, _subset, coveringNumber, encard_image_le, hC_cover, hC_subset, hC_subset.trans, hf.isCover_image_iff, iInf_le, image_subset_iff, isCover_image_iff, le_antisymm, le_iInf_iff, subset_preimage_image, subseteq
 -/

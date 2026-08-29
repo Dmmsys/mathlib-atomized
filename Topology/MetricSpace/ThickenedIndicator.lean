@@ -72,7 +72,9 @@ theorem continuous_thickenedIndicatorAux
   let f := fun x : α => (⟨1, infEDist x E / ENNReal.ofReal δ⟩ : Real>=0 × Real>=0∞)
   let sub := fun p : Real>=0 × Real>=0∞ => (p.1 : Real>=0∞) - p.2
   rw [show (fun x : α => (1 : Real>=0∞) - infEDist x E / ENNReal.ofReal δ) = sub ∘ f by rfl]
-  apply (@ENNReal.conti
+  apply (@ENNReal.continuous_nnreal_sub 1).comp
+  apply (ENNReal.continuous_div_const (ENNReal.ofReal δ) _).comp continuous_infEDist
+  norm_num [δ_pos]
 
 中文:
 定理 continuous_thickenedIndicatorAux
@@ -82,7 +84,9 @@ theorem continuous_thickenedIndicatorAux
   let f := fun x : α => (⟨1, infEDist x E / ENNReal.ofReal δ⟩ : Real>=0 × Real>=0∞)
   let sub := fun p : Real>=0 × Real>=0∞ => (p.1 : Real>=0∞) - p.2
   rw [show (fun x : α => (1 : Real>=0∞) - infEDist x E / ENNReal.ofReal δ) = sub ∘ f by rfl]
-  apply (@ENNReal.conti
+  apply (@ENNReal.continuous_nnreal_sub 1).comp
+  apply (ENNReal.continuous_div_const (ENNReal.ofReal δ) _).comp continuous_infEDist
+  norm_num [δ_pos]
 
 Depends on / 依赖: ENNReal, ENNReal.continuous_div_const, ENNReal.continuous_nnreal_sub, ENNReal.ofReal, continuous_div_const, continuous_infEDist, continuous_nnreal_sub, infEDist, ofReal, thickenedIndicatorAux
 -/
@@ -216,7 +220,8 @@ theorem thickenedIndicatorAux_zero
   apply le_antisymm _ bot_le
   have key := tsub_le_tsub
     (@rfl _ (1 : Real>=0∞)).le (ENNReal.div_le_div x_out (@rfl _ (ENNReal.ofReal δ : Real>=0∞)).le)
-  rw [ENNReal.div_self (ne_of_gt (ENNReal.ofReal_p
+  rw [ENNReal.div_self (ne_of_gt (ENNReal.ofReal_pos.mpr δ_pos)) ofReal_ne_top] at key
+  simpa [tsub_self] using key
 
 中文:
 定理 thickenedIndicatorAux_zero
@@ -227,7 +232,8 @@ theorem thickenedIndicatorAux_zero
   apply le_antisymm _ bot_le
   have key := tsub_le_tsub
     (@rfl _ (1 : Real>=0∞)).le (ENNReal.div_le_div x_out (@rfl _ (ENNReal.ofReal δ : Real>=0∞)).le)
-  rw [ENNReal.div_self (ne_of_gt (ENNReal.ofReal_p
+  rw [ENNReal.div_self (ne_of_gt (ENNReal.ofReal_pos.mpr δ_pos)) ofReal_ne_top] at key
+  simpa [tsub_self] using key
 
 Depends on / 依赖: ENNReal, ENNReal.div_le_div, ENNReal.div_self, ENNReal.ofReal, ENNReal.ofReal_pos.mpr, bot_le, div_le_div, div_self, le_antisymm, mem_ofPred_eq, ne_of_gt, not_lt, ofReal, ofReal_ne_top, ofReal_pos, thickenedIndicatorAux, thickening, tsub_le_tsub, tsub_self, x_out
 -/
@@ -324,7 +330,7 @@ lemma thickenedIndicatorAux_mono_infEDist
     exact hle.trans (by gcongr)
 
 @[deprecated (since := "2026-01-08")]
-alias t
+alias thickenedIndicatorAux_mono_infEdist := thickenedIndicatorAux_mono_infEDist
 
 中文:
 引理 thickenedIndicatorAux_mono_infEDist
@@ -338,7 +344,7 @@ alias t
     exact hle.trans (by gcongr)
 
 @[deprecated (since := "2026-01-08")]
-alias t
+alias thickenedIndicatorAux_mono_infEdist := thickenedIndicatorAux_mono_infEDist
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.sub_le_sub_iff_left, hle.trans, infEDist, le_total, ofReal, sub_le_sub_iff_left, thickenedIndicatorAux, tsub_eq_zero_of_le
 -/
@@ -368,7 +374,20 @@ theorem thickenedIndicatorAux_tendsto_indicator_closure
   · simp_rw [thickenedIndicatorAux_one_of_mem_closure _ E x_mem_closure]
     rw [show (indicator (closure E) fun _ => (1 : Real>=0∞)) x = 1 by
         simp only [x_mem_closure]; rw [indicator_of_mem]]
-    exact tendsto_con
+    exact tendsto_const_nhds
+  · rw [show (closure E).indicator (fun _ => (1 : Real>=0∞)) x = 0 by
+        simp only [x_mem_closure, indicator_of_notMem, not_false_iff]]
+    rcases exists_real_pos_lt_infEDist_of_notMem_closure x_mem_closure with ⟨ε, ⟨ε_pos, ε_lt⟩⟩
+    rw [Metric.tendsto_nhds] at δseq_lim
+    specialize δseq_lim ε ε_pos
+    simp only [dist_zero_right, Real.norm_eq_abs, eventually_atTop] at δseq_lim
+    rcases δseq_lim with ⟨N, hN⟩
+    apply tendsto_atTop_of_eventually_const (i₀ := N)
+    intro n n_large
+    have key : x ∉ thickening ε E := by simpa only [thickening, mem_ofPred_eq, not_lt] using ε_lt.le
+    refine le_antisymm ?_ bot_le
+    apply (thickenedIndicatorAux_mono (lt_of_abs_lt (hN n n_large)).le E x).trans
+    exact (thickenedIndicatorAux_zero ε_pos E key).le
 
 中文:
 定理 thickenedIndicatorAux_tendsto_indicator_closure
@@ -380,7 +399,20 @@ theorem thickenedIndicatorAux_tendsto_indicator_closure
   · simp_rw [thickenedIndicatorAux_one_of_mem_closure _ E x_mem_closure]
     rw [show (indicator (closure E) fun _ => (1 : Real>=0∞)) x = 1 by
         simp only [x_mem_closure]; rw [indicator_of_mem]]
-    exact tendsto_con
+    exact tendsto_const_nhds
+  · rw [show (closure E).indicator (fun _ => (1 : Real>=0∞)) x = 0 by
+        simp only [x_mem_closure, indicator_of_notMem, not_false_iff]]
+    rcases exists_real_pos_lt_infEDist_of_notMem_closure x_mem_closure with ⟨ε, ⟨ε_pos, ε_lt⟩⟩
+    rw [Metric.tendsto_nhds] at δseq_lim
+    specialize δseq_lim ε ε_pos
+    simp only [dist_zero_right, Real.norm_eq_abs, eventually_atTop] at δseq_lim
+    rcases δseq_lim with ⟨N, hN⟩
+    apply tendsto_atTop_of_eventually_const (i₀ := N)
+    intro n n_large
+    have key : x ∉ thickening ε E := by simpa only [thickening, mem_ofPred_eq, not_lt] using ε_lt.le
+    refine le_antisymm ?_ bot_le
+    apply (thickenedIndicatorAux_mono (lt_of_abs_lt (hN n n_large)).le E x).trans
+    exact (thickenedIndicatorAux_zero ε_pos E key).le
 
 Depends on / 依赖: closure, exists_real_pos_lt_infEDist_of_notMem_closure, indicator, indicator_of_mem, indicator_of_notMem, not_false_iff, simp_rw, tendsto_const_nhds, tendsto_pi_nhds, thickenedIndicatorAux_one_of_mem_closure, x_mem_closure
 -/
@@ -428,7 +460,16 @@ definition thickenedIndicator
       (continuous_thickenedIndicatorAux δ_pos E)
     intro x
     exact (lt_of_le_of_lt (@thickenedIndicatorAux_le_one _ _ δ E x) one_lt_top).ne
-  map_bounded' := 
+  map_bounded' := by
+    use 2
+    intro x y
+    rw [NNReal.dist_eq]
+    apply (abs_sub _ _).trans
+    rw [NNReal.abs_eq]; rw [NNReal.abs_eq]; rw [← one_add_one_eq_two]
+    have key := @thickenedIndicatorAux_le_one _ _ δ E
+    apply add_le_add <;>
+      · norm_cast
+        exact (toNNReal_le_toNNReal (lt_of_le_of_lt (key _) one_lt_top).ne one_ne_top).mpr (key _)
 
 中文:
 定义 thickenedIndicator
@@ -439,7 +480,16 @@ definition thickenedIndicator
       (continuous_thickenedIndicatorAux δ_pos E)
     intro x
     exact (lt_of_le_of_lt (@thickenedIndicatorAux_le_one _ _ δ E x) one_lt_top).ne
-  map_bounded' := 
+  map_bounded' := by
+    use 2
+    intro x y
+    rw [NNReal.dist_eq]
+    apply (abs_sub _ _).trans
+    rw [NNReal.abs_eq]; rw [NNReal.abs_eq]; rw [← one_add_one_eq_two]
+    have key := @thickenedIndicatorAux_le_one _ _ δ E
+    apply add_le_add <;>
+      · norm_cast
+        exact (toNNReal_le_toNNReal (lt_of_le_of_lt (key _) one_lt_top).ne one_ne_top).mpr (key _)
 
 Depends on / 依赖: thickenedIndicatorAux, toNNReal
 -/
@@ -744,7 +794,9 @@ theorem thickenedIndicator_tendsto_indicator_closure
   intro x
   rw [show indicator (closure E) (fun _ => (1 : Real>=0)) x =
         (indicator (closure E) (fun _ => (1 : Real>=0∞)) x).toNNReal
-      by refine (congr_fun (comp_indicator_const 1 ENNR
+      by refine (congr_fun (comp_indicator_const 1 ENNReal.toNNReal toNNReal_zero) x).symm]
+  refine Tendsto.comp (tendsto_toNNReal ?_) (key x)
+  by_cases x_mem : x in closure E <;> simp [x_mem]
 
 中文:
 定理 thickenedIndicator_tendsto_indicator_closure
@@ -755,7 +807,9 @@ theorem thickenedIndicator_tendsto_indicator_closure
   intro x
   rw [show indicator (closure E) (fun _ => (1 : Real>=0)) x =
         (indicator (closure E) (fun _ => (1 : Real>=0∞)) x).toNNReal
-      by refine (congr_fun (comp_indicator_const 1 ENNR
+      by refine (congr_fun (comp_indicator_const 1 ENNReal.toNNReal toNNReal_zero) x).symm]
+  refine Tendsto.comp (tendsto_toNNReal ?_) (key x)
+  by_cases x_mem : x in closure E <;> simp [x_mem]
 
 Depends on / 依赖: ENNReal, ENNReal.toNNReal, Tendsto, Tendsto.comp, closure, comp_indicator_const, congr_fun, indicator, tendsto_pi_nhds, tendsto_toNNReal, thickenedIndicatorAux_tendsto_indicator_closure, toNNReal, toNNReal_zero, x_mem
 -/
@@ -784,7 +838,27 @@ lemma lipschitzWith_thickenedIndicator
   · specialize this y x (le_of_not_ge h)
     rwa [edist_comm, edist_comm x]
   simp_rw [edist_dist, NNReal.dist_eq, thickenedIndicator_apply, coe_toNNReal_eq_toReal]
-  rw [← ENNReal.toReal_sub_of_le (thickenedIndicatorAux_mono_in
+  rw [← ENNReal.toReal_sub_of_le (thickenedIndicatorAux_mono_infEDist _ h) (by finiteness)]
+  simp only [thickenedIndicatorAux, abs_toReal, ne_eq, sub_eq_top_iff, one_ne_top, false_and,
+    not_false_eq_true, and_true, ofReal_toReal]
+  rw [ENNReal.coe_inv (by simp [δ_pos]), ENNReal.ofReal, div_eq_mul_inv, div_eq_mul_inv]
+  by_cases h_le : infEDist y E * (↑δ.toNNReal)⁻¹ <= 1
+  · calc 1 - infEDist x E * (↑δ.toNNReal)⁻¹ - (1 - infEDist y E * (↑δ.toNNReal)⁻¹)
+    _ <= infEDist y E * (↑δ.toNNReal)⁻¹ - infEDist x E * (↑δ.toNNReal)⁻¹ := by
+      rw [ENNReal.sub_sub_sub_cancel_left (by finiteness) h_le]
+    _ <= (↑δ.toNNReal)⁻¹ * edist x y := by
+      rw [← ENNReal.sub_mul (by simp [δ_pos]), mul_comm, edist_comm]
+      gcongr
+      simp only [tsub_le_iff_right]
+      exact infEDist_le_edist_add_infEDist
+  · simp only [tsub_le_iff_right]
+    rw [tsub_eq_zero_of_le (not_le.mp h_le).le]; rw [add_zero]; rw [mul_comm]
+    calc 1
+    _ <= infEDist y E * (↑δ.toNNReal)⁻¹ := (not_le.mp h_le).le
+    _ <= edist x y * (↑δ.toNNReal)⁻¹ + infEDist x E * (↑δ.toNNReal)⁻¹ := by
+      rw [← add_mul]; rw [edist_comm]
+      gcongr
+      exact infEDist_le_edist_add_infEDist
 
 中文:
 引理 lipschitzWith_thickenedIndicator
@@ -795,7 +869,27 @@ lemma lipschitzWith_thickenedIndicator
   · specialize this y x (le_of_not_ge h)
     rwa [edist_comm, edist_comm x]
   simp_rw [edist_dist, NNReal.dist_eq, thickenedIndicator_apply, coe_toNNReal_eq_toReal]
-  rw [← ENNReal.toReal_sub_of_le (thickenedIndicatorAux_mono_in
+  rw [← ENNReal.toReal_sub_of_le (thickenedIndicatorAux_mono_infEDist _ h) (by finiteness)]
+  simp only [thickenedIndicatorAux, abs_toReal, ne_eq, sub_eq_top_iff, one_ne_top, false_and,
+    not_false_eq_true, and_true, ofReal_toReal]
+  rw [ENNReal.coe_inv (by simp [δ_pos]), ENNReal.ofReal, div_eq_mul_inv, div_eq_mul_inv]
+  by_cases h_le : infEDist y E * (↑δ.toNNReal)⁻¹ <= 1
+  · calc 1 - infEDist x E * (↑δ.toNNReal)⁻¹ - (1 - infEDist y E * (↑δ.toNNReal)⁻¹)
+    _ <= infEDist y E * (↑δ.toNNReal)⁻¹ - infEDist x E * (↑δ.toNNReal)⁻¹ := by
+      rw [ENNReal.sub_sub_sub_cancel_left (by finiteness) h_le]
+    _ <= (↑δ.toNNReal)⁻¹ * edist x y := by
+      rw [← ENNReal.sub_mul (by simp [δ_pos]), mul_comm, edist_comm]
+      gcongr
+      simp only [tsub_le_iff_right]
+      exact infEDist_le_edist_add_infEDist
+  · simp only [tsub_le_iff_right]
+    rw [tsub_eq_zero_of_le (not_le.mp h_le).le]; rw [add_zero]; rw [mul_comm]
+    calc 1
+    _ <= infEDist y E * (↑δ.toNNReal)⁻¹ := (not_le.mp h_le).le
+    _ <= edist x y * (↑δ.toNNReal)⁻¹ + infEDist x E * (↑δ.toNNReal)⁻¹ := by
+      rw [← add_mul]; rw [edist_comm]
+      gcongr
+      exact infEDist_le_edist_add_infEDist
 
 Depends on / 依赖: ENNReal, ENNReal.coe_inv, ENNReal.of, ENNReal.toReal_sub_of_le, NNReal, NNReal.dist_eq, abs_toReal, and_true, coe_inv, coe_toNNReal_eq_toReal, dist_eq, edist_comm, edist_dist, false_and, finiteness, generalizing, infEDist, le_of_not_ge, ne_eq, not_false_eq_true
 -/
@@ -849,7 +943,9 @@ lemma mulIndicator_thickening_eventually_eq_mulIndicator_closure
   · filter_upwards [self_mem_nhdsWithin] with δ δ_pos
     simp only [closure_subset_thickening δ_pos E x_mem_closure, mulIndicator_of_mem, x_mem_closure]
   · have obs := eventually_notMem_thickening_of_infEDist_pos x_mem_closure
-    filter_upwards [mem_nh
+    filter_upwards [mem_nhdsWithin_of_mem_nhds obs, self_mem_nhdsWithin]
+      with δ x_notin_thE _
+    simp only [x_notin_thE, not_false_eq_true, mulIndicator_of_notMem, x_mem_closure]
 
 中文:
 引理 mulIndicator_thickening_eventually_eq_mulIndicator_closure
@@ -859,7 +955,9 @@ lemma mulIndicator_thickening_eventually_eq_mulIndicator_closure
   · filter_upwards [self_mem_nhdsWithin] with δ δ_pos
     simp only [closure_subset_thickening δ_pos E x_mem_closure, mulIndicator_of_mem, x_mem_closure]
   · have obs := eventually_notMem_thickening_of_infEDist_pos x_mem_closure
-    filter_upwards [mem_nh
+    filter_upwards [mem_nhdsWithin_of_mem_nhds obs, self_mem_nhdsWithin]
+      with δ x_notin_thE _
+    simp only [x_notin_thE, not_false_eq_true, mulIndicator_of_notMem, x_mem_closure]
 
 Depends on / 依赖: closure, closure_subset_thickening, eventually_notMem_thickening_of_infEDist_pos, filter_upwards, mem_nhdsWithin_of_mem_nhds, mulIndicator_of_mem, mulIndicator_of_notMem, not_false_eq_true, self_mem_nhdsWithin, x_mem_closure, x_notin_thE
 -/
@@ -889,7 +987,8 @@ lemma mulIndicator_cthickening_eventually_eq_mulIndicator_closure
   · filter_upwards [univ_mem] with δ _
     have obs : x in cthickening δ E := closure_subset_cthickening δ E x_mem_closure
     rw [mulIndicator_of_mem obs f]; rw [mulIndicator_of_mem x_mem_closure f]
-  · filter_upwards [eventually_notMem_cthickening_of_in
+  · filter_upwards [eventually_notMem_cthickening_of_infEDist_pos x_mem_closure] with δ hδ
+    simp only [hδ, not_false_eq_true, mulIndicator_of_notMem, x_mem_closure]
 
 中文:
 引理 mulIndicator_cthickening_eventually_eq_mulIndicator_closure
@@ -899,7 +998,8 @@ lemma mulIndicator_cthickening_eventually_eq_mulIndicator_closure
   · filter_upwards [univ_mem] with δ _
     have obs : x in cthickening δ E := closure_subset_cthickening δ E x_mem_closure
     rw [mulIndicator_of_mem obs f]; rw [mulIndicator_of_mem x_mem_closure f]
-  · filter_upwards [eventually_notMem_cthickening_of_in
+  · filter_upwards [eventually_notMem_cthickening_of_infEDist_pos x_mem_closure] with δ hδ
+    simp only [hδ, not_false_eq_true, mulIndicator_of_notMem, x_mem_closure]
 
 Depends on / 依赖: closure, closure_subset_cthickening, cthickening, eventually_notMem_cthickening_of_infEDist_pos, filter_upwards, mulIndicator_of_mem, mulIndicator_of_notMem, not_false_eq_true, univ_mem, x_mem_closure
 -/

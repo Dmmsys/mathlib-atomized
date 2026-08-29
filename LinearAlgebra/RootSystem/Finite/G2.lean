@@ -261,7 +261,17 @@ lemma IsG2.pairingIn_mem_zero_one_three
                      P.pairingIn Int i j = 2 * P.pairingIn Int j i ∨
                      P.pairingIn Int j i = 2 * P.pairingIn Int i j) by
     have aux₁ := P.forall_pairingIn_eq_swap_or.resolve_left this i j
-    have aux₂ := P
+    have aux₂ := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i j h h'
+    simp only [mem_insert_iff, mem_singleton_iff, Prod.mk_zero_zero, Prod.mk_eq_zero,
+      Prod.mk_one_one, Prod.mk_eq_one, Prod.mk.injEq] at aux₂ ⊢
+    lia
+  obtain ⟨k, l, hkl⟩ := exists_pairingIn_neg_three (P := P)
+  push Not
+  refine ⟨k, l, ?_⟩
+  have aux := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed k l
+  simp only [mem_insert_iff, mem_singleton_iff, Prod.mk_zero_zero, Prod.mk_eq_zero,
+      Prod.mk_one_one, Prod.mk_eq_one, Prod.mk.injEq] at aux
+  omega
 
 中文:
 引理 是G2.pairingIn_mem_zero_one_three
@@ -271,7 +281,17 @@ lemma IsG2.pairingIn_mem_zero_one_three
                      P.pairingIn Int i j = 2 * P.pairingIn Int j i ∨
                      P.pairingIn Int j i = 2 * P.pairingIn Int i j) by
     have aux₁ := P.forall_pairingIn_eq_swap_or.resolve_left this i j
-    have aux₂ := P
+    have aux₂ := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i j h h'
+    simp only [mem_insert_iff, mem_singleton_iff, Prod.mk_zero_zero, Prod.mk_eq_zero,
+      Prod.mk_one_one, Prod.mk_eq_one, Prod.mk.injEq] at aux₂ ⊢
+    lia
+  obtain ⟨k, l, hkl⟩ := exists_pairingIn_neg_three (P := P)
+  push Not
+  refine ⟨k, l, ?_⟩
+  have aux := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed k l
+  simp only [mem_insert_iff, mem_singleton_iff, Prod.mk_zero_zero, Prod.mk_eq_zero,
+      Prod.mk_one_one, Prod.mk_eq_one, Prod.mk.injEq] at aux
+  omega
 
 Depends on / 依赖: P.forall_pairingIn_eq_swap_or.resolve_left, P.pairingIn, P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed, Prod.mk.injEq, Prod.mk_eq_one, Prod.mk_eq_zero, Prod.mk_one_one, Prod.mk_zero_zero, exists_pairingIn_neg_thre, forall_pairingIn_eq_swap_or, mem_insert_iff, mem_singleton_iff, mk_eq_one, mk_eq_zero, mk_one_one, mk_zero_zero, pairingIn, pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed, resolve_left
 -/
@@ -312,7 +332,8 @@ lemma chainBotCoeff_add_chainTopCoeff_le_two
   by_cases h : LinearIndependent R ![P.root i, P.root j]
   swap; · simp [chainTopCoeff_of_not_linearIndependent, chainBotCoeff_of_not_linearIndependent, h]
   rw [← Int.ofNat_le]; rw [Nat.cast_add]; rw [Nat.cast_ofNat]; rw [chainBotCoeff_add_chainTopCoeff_eq_pairingIn_chainTopIdx h]
-  have := IsNo
+  have := IsNotG2.pairingIn_mem_zero_one_two (P := P) (P.chainTopIdx i j) i
+  aesop
 
 中文:
 引理 chainBotCoeff_add_chainTopCoeff_le_two
@@ -321,7 +342,8 @@ lemma chainBotCoeff_add_chainTopCoeff_le_two
   by_cases h : LinearIndependent R ![P.root i, P.root j]
   swap; · simp [chainTopCoeff_of_not_linearIndependent, chainBotCoeff_of_not_linearIndependent, h]
   rw [← Int.ofNat_le]; rw [Nat.cast_add]; rw [Nat.cast_ofNat]; rw [chainBotCoeff_add_chainTopCoeff_eq_pairingIn_chainTopIdx h]
-  have := IsNo
+  have := IsNotG2.pairingIn_mem_zero_one_two (P := P) (P.chainTopIdx i j) i
+  aesop
 
 Depends on / 依赖: Int.ofNat_le, IsNotG2, IsNotG2.pairingIn_mem_zero_one_two, LinearIndependent, Nat.cast_add, Nat.cast_ofNat, P.chainTopIdx, P.root, cast_add, cast_ofNat, chainBotCoeff_add_chainTopCoeff_eq_pairingIn_chainTopIdx, chainBotCoeff_of_not_linearIndependent, chainTopCoeff_of_not_linearIndependent, chainTopIdx, ofNat_le, pairingIn_mem_zero_one_two
 -/
@@ -344,7 +366,8 @@ have aux₁ := P.linearIndependent_of_add_mem_range_root' add_comm (P.root i) (P
   have aux₂ := P.chainBotCoeff_add_chainTopCoeff_le_two j i
   have aux₃ : 1 <= P.chainTopCoeff j i := by
     rwa [← root_add_nsmul_mem_range_iff_le_chainTopCoeff aux₁, one_smul]
-  rw [← P.chainBotCoeff_sub_
+  rw [← P.chainBotCoeff_sub_chainTopCoeff aux₁]
+  lia
 
 中文:
 引理 pairingIn_le_zero_of_root_add_mem
@@ -354,7 +377,8 @@ have aux₁ := P.linearIndependent_of_add_mem_range_root' add_comm (P.root i) (P
   have aux₂ := P.chainBotCoeff_add_chainTopCoeff_le_two j i
   have aux₃ : 1 <= P.chainTopCoeff j i := by
     rwa [← root_add_nsmul_mem_range_iff_le_chainTopCoeff aux₁, one_smul]
-  rw [← P.chainBotCoeff_sub_
+  rw [← P.chainBotCoeff_sub_chainTopCoeff aux₁]
+  lia
 
 Depends on / 依赖: P.chainBotCoeff_add_chainTopCoeff_le_two, P.chainBotCoeff_sub_chainTopCoeff, P.chainTopCoeff, P.linearIndependent_of_add_mem_range_root, P.root, add_comm, chainBotCoeff_add_chainTopCoeff_le_two, chainBotCoeff_sub_chainTopCoeff, chainTopCoeff, linearIndependent_of_add_mem_range_root, one_smul, root_add_nsmul_mem_range_iff_le_chainTopCoeff
 -/
@@ -402,7 +426,10 @@ lemma chainBotCoeff_if_one_zero
   have aux₁ := P.linearIndependent_of_add_mem_range_root' h
   have aux₂ := P.chainBotCoeff_add_chainTopCoeff_le_two i j
   have aux₃ : 1 <= P.chainTopCoeff i j := P.one_le_chainTopCoeff_of_root_add_mem h
-  rcases eq_or_ne (P.chainBotC
+  rcases eq_or_ne (P.chainBotCoeff i j) (P.chainTopCoeff i j) with aux₄ | aux₄ <;>
+  simp_rw [P.pairingIn_eq_zero_iff (i := i) (j := j), ← P.chainBotCoeff_sub_chainTopCoeff aux₁,
+    sub_eq_zero, Nat.cast_inj, aux₄, reduceIte] <;>
+  lia
 
 中文:
 引理 chainBotCoeff_if_one_zero
@@ -412,7 +439,10 @@ lemma chainBotCoeff_if_one_zero
   have aux₁ := P.linearIndependent_of_add_mem_range_root' h
   have aux₂ := P.chainBotCoeff_add_chainTopCoeff_le_two i j
   have aux₃ : 1 <= P.chainTopCoeff i j := P.one_le_chainTopCoeff_of_root_add_mem h
-  rcases eq_or_ne (P.chainBotC
+  rcases eq_or_ne (P.chainBotCoeff i j) (P.chainTopCoeff i j) with aux₄ | aux₄ <;>
+  simp_rw [P.pairingIn_eq_zero_iff (i := i) (j := j), ← P.chainBotCoeff_sub_chainTopCoeff aux₁,
+    sub_eq_zero, Nat.cast_inj, aux₄, reduceIte] <;>
+  lia
 
 Depends on / 依赖: IsReflexive, Module, Module.IsReflexive, Nat.cast_inj, P.chainBotCoeff, P.chainBotCoeff_add_chainTopCoeff_le_two, P.chainBotCoeff_sub_chainTopCoeff, P.chainTopCoeff, P.linearIndependent_of_add_mem_range_root, P.one_le_chainTopCoeff_of_root_add_mem, P.pairingIn_eq_zero_iff, P.toLinearMap, cast_inj, chainBotCoeff, chainBotCoeff_add_chainTopCoeff_le_two, chainBotCoeff_sub_chainTopCoeff, chainTopCoeff, eq_or_ne, linearIndependent_of_add_mem_range_root, of_isPerfPair
 -/
@@ -1166,7 +1196,18 @@ lemma pairingIn_shortAddLong_right
 algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul, map_ofNat]
   have : Fintype ι := Fintype.ofFinite ι
   have B := (P.posRootForm Int).toInvariantForm
-  apply mul_right_c
+  apply mul_right_cancel₀ (B.ne_zero (shortAddLong P))
+  calc P.pairing i (shortAddLong P) * B.form (P.root (shortAddLong P)) (P.root (shortAddLong P))
+    _ = 2 * B.form (P.root i) (shortAddLongRoot P) := ?_
+    _ = 2 * B.form (P.root i) (shortRoot P) + 2 * B.form (P.root i) (longRoot P) := ?_
+    _ = P.pairing i (short P) * B.form (shortRoot P) (shortRoot P) +
+          P.pairing i (long P) * B.form (longRoot P) (longRoot P) := ?_
+    _ = (P.pairing i (short P) + 3 * P.pairing i (long P)) *
+          B.form (shortAddLongRoot P) (shortAddLongRoot P) := ?_
+  · rw [B.two_mul_apply_root_root]
+  · rw [shortAddLongRoot_eq, map_add, mul_add]
+  · rw [B.two_mul_apply_root_root, B.two_mul_apply_root_root]
+  · rw [long_eq_three_mul_short, shortAddLongRoot_shortRoot]; ring
 
 中文:
 引理 pairingIn_shortAddLong_right
@@ -1175,7 +1216,18 @@ algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul
 algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul, map_ofNat]
   have : Fintype ι := Fintype.ofFinite ι
   have B := (P.posRootForm Int).toInvariantForm
-  apply mul_right_c
+  apply mul_right_cancel₀ (B.ne_zero (shortAddLong P))
+  calc P.pairing i (shortAddLong P) * B.form (P.root (shortAddLong P)) (P.root (shortAddLong P))
+    _ = 2 * B.form (P.root i) (shortAddLongRoot P) := ?_
+    _ = 2 * B.form (P.root i) (shortRoot P) + 2 * B.form (P.root i) (longRoot P) := ?_
+    _ = P.pairing i (short P) * B.form (shortRoot P) (shortRoot P) +
+          P.pairing i (long P) * B.form (longRoot P) (longRoot P) := ?_
+    _ = (P.pairing i (short P) + 3 * P.pairing i (long P)) *
+          B.form (shortAddLongRoot P) (shortAddLongRoot P) := ?_
+  · rw [B.two_mul_apply_root_root]
+  · rw [shortAddLongRoot_eq, map_add, mul_add]
+  · rw [B.two_mul_apply_root_root, B.two_mul_apply_root_root]
+  · rw [long_eq_three_mul_short, shortAddLongRoot_shortRoot]; ring
 -/
 @[simp] lemma pairingIn_shortAddLong_right :
     P.pairingIn Int i (shortAddLong P) =
@@ -1235,7 +1287,20 @@ lemma pairingIn_twoShortAddLong_right
 algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul, map_ofNat]
   have : Fintype ι := Fintype.ofFinite ι
   have B := (P.posRootForm Int).toInvariantForm
-  appl
+  apply mul_right_cancel₀ (B.ne_zero <| twoShortAddLong P)
+  calc P.pairing i (twoShortAddLong P) * B.form (twoShortAddLongRoot P) (twoShortAddLongRoot P)
+    _ = 2 * B.form (P.root i) (twoShortAddLongRoot P) := ?_
+    _ = 2 * (2 * B.form (P.root i) (shortRoot P)) + 2 * B.form (P.root i) (longRoot P) := ?_
+    _ = 2 * P.pairing i (short P) * B.form (shortRoot P) (shortRoot P) +
+          P.pairing i (long P) * B.form (longRoot P) (longRoot P) := ?_
+    _ = (2 * P.pairing i (short P) +
+          3 * P.pairing i (long P)) * B.form (twoShortAddLongRoot P) (twoShortAddLongRoot P) := ?_
+  · rw [B.two_mul_apply_root_root]
+  · rw [twoShortAddLongRoot_eq, map_add, mul_add, map_smul, smul_eq_mul]
+  · rw [B.two_mul_apply_root_root, B.two_mul_apply_root_root, mul_assoc]
+  · rw [long_eq_three_mul_short, twoShortAddLongRoot_shortRoot]; ring
+
+omit [Finite ι] [IsDomain R] in
 
 中文:
 引理 pairingIn_twoShortAddLong_right
@@ -1245,7 +1310,20 @@ algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul
 algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul, map_ofNat]
   have : Fintype ι := Fintype.ofFinite ι
   have B := (P.posRootForm Int).toInvariantForm
-  appl
+  apply mul_right_cancel₀ (B.ne_zero <| twoShortAddLong P)
+  calc P.pairing i (twoShortAddLong P) * B.form (twoShortAddLongRoot P) (twoShortAddLongRoot P)
+    _ = 2 * B.form (P.root i) (twoShortAddLongRoot P) := ?_
+    _ = 2 * (2 * B.form (P.root i) (shortRoot P)) + 2 * B.form (P.root i) (longRoot P) := ?_
+    _ = 2 * P.pairing i (short P) * B.form (shortRoot P) (shortRoot P) +
+          P.pairing i (long P) * B.form (longRoot P) (longRoot P) := ?_
+    _ = (2 * P.pairing i (short P) +
+          3 * P.pairing i (long P)) * B.form (twoShortAddLongRoot P) (twoShortAddLongRoot P) := ?_
+  · rw [B.two_mul_apply_root_root]
+  · rw [twoShortAddLongRoot_eq, map_add, mul_add, map_smul, smul_eq_mul]
+  · rw [B.two_mul_apply_root_root, B.two_mul_apply_root_root, mul_assoc]
+  · rw [long_eq_three_mul_short, twoShortAddLongRoot_shortRoot]; ring
+
+omit [Finite ι] [IsDomain R] in
 -/
 @[simp] lemma pairingIn_twoShortAddLong_right :
     P.pairingIn Int i (twoShortAddLong P) =
@@ -1307,7 +1385,19 @@ lemma pairingIn_threeShortAddLong_right
 algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul, map_ofNat]
   have : Fintype ι := Fintype.ofFinite ι
   have B := (P.posRootForm Int).toInvariantForm
-  apply mul_
+  apply mul_right_cancel₀ (B.ne_zero <| threeShortAddLong P)
+  calc P.pairing i (threeShortAddLong P) *
+          B.form (threeShortAddLongRoot P) (threeShortAddLongRoot P)
+    _ = 2 * B.form (P.root i) (threeShortAddLongRoot P) := ?_
+    _ = 3 * (2 * B.form (P.root i) (shortRoot P)) + 2 * B.form (P.root i) (longRoot P) := ?_
+    _ = P.pairing i (short P) * B.form (longRoot P) (longRoot P) +
+          P.pairing i (long P) * B.form (longRoot P) (longRoot P) := ?_
+    _ = (P.pairing i (short P) + P.pairing i (long P)) *
+          B.form (threeShortAddLongRoot P) (threeShortAddLongRoot P) := ?_
+  · rw [B.two_mul_apply_root_root]
+  · rw [threeShortAddLongRoot_eq, map_add, mul_add, map_smul, smul_eq_mul]; ring
+  · rw [B.two_mul_apply_root_root, B.two_mul_apply_root_root, long_eq_three_mul_short]; ring
+  · rw [threeShortAddLongRoot_longRoot]; ring
 
 中文:
 引理 pairingIn_threeShortAddLong_right
@@ -1317,7 +1407,19 @@ algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul
 algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul, map_ofNat]
   have : Fintype ι := Fintype.ofFinite ι
   have B := (P.posRootForm Int).toInvariantForm
-  apply mul_
+  apply mul_right_cancel₀ (B.ne_zero <| threeShortAddLong P)
+  calc P.pairing i (threeShortAddLong P) *
+          B.form (threeShortAddLongRoot P) (threeShortAddLongRoot P)
+    _ = 2 * B.form (P.root i) (threeShortAddLongRoot P) := ?_
+    _ = 3 * (2 * B.form (P.root i) (shortRoot P)) + 2 * B.form (P.root i) (longRoot P) := ?_
+    _ = P.pairing i (short P) * B.form (longRoot P) (longRoot P) +
+          P.pairing i (long P) * B.form (longRoot P) (longRoot P) := ?_
+    _ = (P.pairing i (short P) + P.pairing i (long P)) *
+          B.form (threeShortAddLongRoot P) (threeShortAddLongRoot P) := ?_
+  · rw [B.two_mul_apply_root_root]
+  · rw [threeShortAddLongRoot_eq, map_add, mul_add, map_smul, smul_eq_mul]; ring
+  · rw [B.two_mul_apply_root_root, B.two_mul_apply_root_root, long_eq_three_mul_short]; ring
+  · rw [threeShortAddLongRoot_longRoot]; ring
 -/
 @[simp] lemma pairingIn_threeShortAddLong_right :
     P.pairingIn Int i (threeShortAddLong P) =
@@ -1379,7 +1481,19 @@ lemma pairingIn_threeShortAddTwoLong_right
 algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul, map_ofNat]
   have : Fintype ι := Fintype.ofFinite ι
   have B := (P.posRootForm Int).toInvariantForm
-  app
+  apply mul_right_cancel₀ (B.ne_zero <| threeShortAddTwoLong P)
+  calc P.pairing i (threeShortAddTwoLong P) *
+          B.form (threeShortAddTwoLongRoot P) (threeShortAddTwoLongRoot P)
+    _ = 2 * B.form (P.root i) (threeShortAddTwoLongRoot P) := ?_
+    _ = 3 * (2 * B.form (P.root i) (shortRoot P)) + 2 * (2 * B.form (P.root i) (longRoot P)) := ?_
+    _ = P.pairing i (short P) * B.form (longRoot P) (longRoot P) +
+          2 * P.pairing i (long P) * B.form (longRoot P) (longRoot P) := ?_
+    _ = (P.pairing i (short P) + 2 * P.pairing i (long P)) *
+          B.form (threeShortAddTwoLongRoot P) (threeShortAddTwoLongRoot P) := ?_
+  · rw [B.two_mul_apply_root_root]
+  · simp only [threeShortAddTwoLongRoot_eq, map_add, mul_add, map_smul, smul_eq_mul]; ring
+  · rw [B.two_mul_apply_root_root, B.two_mul_apply_root_root, long_eq_three_mul_short]; ring
+  · rw [threeShortAddTwoLongRoot_longRoot]; ring
 
 中文:
 引理 pairingIn_threeShortAddTwoLong_right
@@ -1389,7 +1503,19 @@ algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul
 algebraMap_injective Int R by simpa only [algebraMap_pairingIn, map_add, map_mul, map_ofNat]
   have : Fintype ι := Fintype.ofFinite ι
   have B := (P.posRootForm Int).toInvariantForm
-  app
+  apply mul_right_cancel₀ (B.ne_zero <| threeShortAddTwoLong P)
+  calc P.pairing i (threeShortAddTwoLong P) *
+          B.form (threeShortAddTwoLongRoot P) (threeShortAddTwoLongRoot P)
+    _ = 2 * B.form (P.root i) (threeShortAddTwoLongRoot P) := ?_
+    _ = 3 * (2 * B.form (P.root i) (shortRoot P)) + 2 * (2 * B.form (P.root i) (longRoot P)) := ?_
+    _ = P.pairing i (short P) * B.form (longRoot P) (longRoot P) +
+          2 * P.pairing i (long P) * B.form (longRoot P) (longRoot P) := ?_
+    _ = (P.pairing i (short P) + 2 * P.pairing i (long P)) *
+          B.form (threeShortAddTwoLongRoot P) (threeShortAddTwoLongRoot P) := ?_
+  · rw [B.two_mul_apply_root_root]
+  · simp only [threeShortAddTwoLongRoot_eq, map_add, mul_add, map_smul, smul_eq_mul]; ring
+  · rw [B.two_mul_apply_root_root, B.two_mul_apply_root_root, long_eq_three_mul_short]; ring
+  · rw [threeShortAddTwoLongRoot_longRoot]; ring
 -/
 @[simp] lemma pairingIn_threeShortAddTwoLong_right :
     P.pairingIn Int i (threeShortAddTwoLong P) =
@@ -1464,7 +1590,14 @@ lemma isOrthogonal_short_and_long
     have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
     simpa [isOrthogonal_iff_pairing_eq_zero, ← P.algebraMap_pairingIn Int]
   simp only [mem_cons, not_mem_nil, or_false, not_or] at hi
-  obtain ⟨h₁, h₂,
+  obtain ⟨h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉, h₁₀, h₁₁, h₁₂⟩ := hi
+  have ha := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (short P) ‹_› ‹_›
+  have hb := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (long P) ‹_› ‹_›
+  have hc := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (shortAddLong P) ‹_› ‹_›
+  have hd := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (twoShortAddLong P) ‹_› ‹_›
+  have he := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (threeShortAddLong P) ‹_› ‹_›
+  have hf := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (threeShortAddTwoLong P) ‹_› ‹_›
+  apply isOrthogonal_short_and_long_aux rfl ha hb hc hd he hf <;> simp
 
 中文:
 引理 isOrthogonal_short_and_long
@@ -1474,7 +1607,14 @@ lemma isOrthogonal_short_and_long
     have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
     simpa [isOrthogonal_iff_pairing_eq_zero, ← P.algebraMap_pairingIn Int]
   simp only [mem_cons, not_mem_nil, or_false, not_or] at hi
-  obtain ⟨h₁, h₂,
+  obtain ⟨h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉, h₁₀, h₁₁, h₁₂⟩ := hi
+  have ha := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (short P) ‹_› ‹_›
+  have hb := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (long P) ‹_› ‹_›
+  have hc := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (shortAddLong P) ‹_› ‹_›
+  have hd := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (twoShortAddLong P) ‹_› ‹_›
+  have he := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (threeShortAddLong P) ‹_› ‹_›
+  have hf := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed' i (threeShortAddTwoLong P) ‹_› ‹_›
+  apply isOrthogonal_short_and_long_aux rfl ha hb hc hd he hf <;> simp
 
 Depends on / 依赖: IsReflexive, Module, Module.IsReflexive, P.algebraMap_pairingIn, P.pairingIn, P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed, P.toLinearMap, algebraMap_pairingIn, isOrthogonal_iff_pairing_eq_zero, mem_cons, not_mem_nil, not_or, of_isPerfPair, or_false, pairingIn, pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed, toLinearMap
 -/
@@ -1507,7 +1647,9 @@ lemma span_eq_top
   rw [show P.root '' {long P]; rw [short P} = {longRoot P]; rw [shortRoot P} by aesop] at this
   refine this fun k hk ij hij => ?_
   replace hk : P.root k ∉ allRoots P :=
-fun contra => hk span_subset_span Int _ _ 
+fun contra => hk span_subset_span Int _ _ mem_span_of_mem_allRoots P contra
+  have aux := isOrthogonal_short_and_long P hk
+  rcases hij with rfl | rfl <;> tauto
 
 中文:
 引理 span_eq_top
@@ -1516,7 +1658,9 @@ fun contra => hk span_subset_span Int _ _
   rw [show P.root '' {long P]; rw [short P} = {longRoot P]; rw [shortRoot P} by aesop] at this
   refine this fun k hk ij hij => ?_
   replace hk : P.root k ∉ allRoots P :=
-fun contra => hk span_subset_span Int _ _ 
+fun contra => hk span_subset_span Int _ _ mem_span_of_mem_allRoots P contra
+  have aux := isOrthogonal_short_and_long P hk
+  rcases hij with rfl | rfl <;> tauto
 -/
 @[simp] lemma span_eq_top :
     span R {longRoot P, shortRoot P} = ⊤ := by
@@ -1540,7 +1684,7 @@ definition basis
     · norm_num [h] at this
     · simp only [root_eq_neg_iff] at h
       norm_num [h] at this
-  Module.Basis
+  Module.Basis.mk this (by simp)
 
 中文:
 定义 basis
@@ -1551,7 +1695,7 @@ definition basis
     · norm_num [h] at this
     · simp only [root_eq_neg_iff] at h
       norm_num [h] at this
-  Module.Basis
+  Module.Basis.mk this (by simp)
 
 Depends on / 依赖: EmbeddedG2, EmbeddedG2.longRoot, EmbeddedG2.shortRoot, IsReduced, IsReduced.linearIndependent_iff, LinearIndependent, Module, Module.Basis.mk, linearIndependent_iff, longRoot, pairing_long_short, root_eq_neg_iff, shortRoot
 -/
@@ -1576,7 +1720,17 @@ lemma mem_allRoots
   have : Fintype ι := Fintype.ofFinite ι
   have B := (P.posRootForm Int).toInvariantForm
   have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
-  rw [isOrthogonal_iff_pairing_eq_zero]; rw [← B.apply_root_root_zero_iff] 
+  rw [isOrthogonal_iff_pairing_eq_zero]; rw [← B.apply_root_root_zero_iff] at h₁ h₂
+  have key : B.form (P.root i) = 0 := by
+    ext x
+    have hx : x in span R {longRoot P, shortRoot P} := by simp
+    simp only [LinearMap.zero_apply]
+    induction hx using Submodule.span_induction with
+    | zero => simp
+    | mem => grind
+    | add => simp_all
+    | smul => simp_all
+  simpa using LinearMap.congr_fun key (P.root i)
 
 中文:
 引理 mem_allRoots
@@ -1587,7 +1741,17 @@ lemma mem_allRoots
   have : Fintype ι := Fintype.ofFinite ι
   have B := (P.posRootForm Int).toInvariantForm
   have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
-  rw [isOrthogonal_iff_pairing_eq_zero]; rw [← B.apply_root_root_zero_iff] 
+  rw [isOrthogonal_iff_pairing_eq_zero]; rw [← B.apply_root_root_zero_iff] at h₁ h₂
+  have key : B.form (P.root i) = 0 := by
+    ext x
+    have hx : x in span R {longRoot P, shortRoot P} := by simp
+    simp only [LinearMap.zero_apply]
+    induction hx using Submodule.span_induction with
+    | zero => simp
+    | mem => grind
+    | add => simp_all
+    | smul => simp_all
+  simpa using LinearMap.congr_fun key (P.root i)
 
 Depends on / 依赖: B.apply_root_root_zero_iff, B.form, Fintype, Fintype.ofFinite, IsReflexive, LinearMap, LinearMap.zero_apply, Module, Module.IsReflexive, P.posRootForm, P.root, P.toLinearMap, Submodule, Submodule.span_induction, apply_root_root_zero_iff, isOrthogonal_iff_pairing_eq_zero, isOrthogonal_short_and_long, longRoot, ofFinite, of_isPerfPair
 -/
@@ -1625,7 +1789,7 @@ definition indexEquivAllRoots
       simp only [Subtype.mk.injEq]
       exact (allRoots_subset_range_root P hx).choose_spec }
 
-inclu
+include P in
 
 中文:
 定义 indexEquivAllRoots
@@ -1638,7 +1802,7 @@ inclu
       simp only [Subtype.mk.injEq]
       exact (allRoots_subset_range_root P hx).choose_spec }
 
-inclu
+include P in
 -/
 @[simps] def indexEquivAllRoots : ι ≃ (allRoots P).toFinset :=
   { toFun i := ⟨P.root i, List.mem_toFinset.mpr <| mem_allRoots P i⟩
@@ -1696,7 +1860,9 @@ lemma setOfPred_index_eq_univ
       twoShortAddLong P, -twoShortAddLong P,
       threeShortAddLong P, -threeShortAddLong P,
       threeShortAddTwoLong P, -threeShortAddTwoLong P } = univ :=
-  eq_univ_iff_forall.mpr fun i => by simpa
+  eq_univ_iff_forall.mpr fun i => by simpa using mem_allRoots P i
+
+@[deprecated (since := "2026-07-09")] alias setOf_index_eq_univ := setOfPred_index_eq_univ
 
 中文:
 引理 setOfPred_index_eq_univ
@@ -1707,7 +1873,9 @@ lemma setOfPred_index_eq_univ
       twoShortAddLong P, -twoShortAddLong P,
       threeShortAddLong P, -threeShortAddLong P,
       threeShortAddTwoLong P, -threeShortAddTwoLong P } = univ :=
-  eq_univ_iff_forall.mpr fun i => by simpa
+  eq_univ_iff_forall.mpr fun i => by simpa using mem_allRoots P i
+
+@[deprecated (since := "2026-07-09")] alias setOf_index_eq_univ := setOfPred_index_eq_univ
 
 Depends on / 依赖: P.indexNeg, indexNeg
 -/

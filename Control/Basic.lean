@@ -582,7 +582,10 @@ instance :
     rfl
   bind_pure_comp := by
     intros
-    casesm Sum _ _ 
+    casesm Sum _ _ <;> rfl
+  bind_map := by
+    intros
+    casesm Sum _ _ <;> rfl
 
 中文:
 实例 :
@@ -604,7 +607,10 @@ instance :
     rfl
   bind_pure_comp := by
     intros
-    casesm Sum _ _ 
+    casesm Sum _ _ <;> rfl
+  bind_map := by
+    intros
+    casesm Sum _ _ <;> rfl
 
 Depends on / 依赖: bind_assoc, bind_map, bind_pure_comp, casesm, intros, pure_bind, pure_seq, seqLeft_eq
 -/

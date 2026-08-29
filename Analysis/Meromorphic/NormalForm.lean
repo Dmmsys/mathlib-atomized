@@ -78,7 +78,41 @@ theorem meromorphicNFAt_iff_analyticAt_or
         apply MeromorphicAt.congr _ (h₃g.filter_mono nhdsWithin_le_nhds).symm
         fun_prop
       have : meromorphicOrderAt f x = n := by
-        rw
+        rw [meromorphicOrderAt_eq_int_iff hf]
+        use g, h₁g, h₂g
+        exact eventually_nhdsWithin_of_eventually_nhds h₃g
+      by_cases! hn : 0 <= n
+      · left
+        rw [analyticAt_congr h₃g]
+        apply (AnalyticAt.zpow_nonneg (by fun_prop) hn).smul h₁g
+      · right
+        use hf
+        simp [this, WithTop.coe_lt_zero.2 hn, h₃g.eq_of_nhds,
+          zero_zpow n hn.ne]
+  · rintro (h | ⟨h₁, h₂, h₃⟩)
+    · by_cases h₂f : analyticOrderAt f x = ⊤
+      · rw [analyticOrderAt_eq_top] at h₂f
+        tauto
+      · right
+        use analyticOrderNatAt f x
+        have : analyticOrderAt f x != ⊤ := h₂f
+        rw [← ENat.natCast_toNat_eq_self]; rw [eq_comm]; rw [h.analyticOrderAt_eq_natCast] at this
+        obtain ⟨g, h₁g, h₂g, h₃g⟩ := this
+        use g, h₁g, h₂g
+        simpa
+    · right
+      lift meromorphicOrderAt f x to Int using LT.lt.ne_top h₂ with n hn
+      obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_eq_int_iff h₁).1 hn.symm
+      use n, g, h₁g, h₂g
+      filter_upwards [eventually_nhdsWithin_iff.1 h₃g]
+      intro z hz
+      by_cases h₁z : z = x
+      · simp only [h₁z, Pi.smul_apply', Pi.pow_apply, sub_self]
+        rw [h₃]
+        apply (smul_eq_zero_of_left (zero_zpow n _) (g x)).symm
+        by_contra hCon
+        simp [hCon] at h₂
+      · exact hz h₁z
 
 中文:
 定理 meromorphicNFAt_iff_analyticAt_or
@@ -90,7 +124,41 @@ theorem meromorphicNFAt_iff_analyticAt_or
         apply MeromorphicAt.congr _ (h₃g.filter_mono nhdsWithin_le_nhds).symm
         fun_prop
       have : meromorphicOrderAt f x = n := by
-        rw
+        rw [meromorphicOrderAt_eq_int_iff hf]
+        use g, h₁g, h₂g
+        exact eventually_nhdsWithin_of_eventually_nhds h₃g
+      by_cases! hn : 0 <= n
+      · left
+        rw [analyticAt_congr h₃g]
+        apply (AnalyticAt.zpow_nonneg (by fun_prop) hn).smul h₁g
+      · right
+        use hf
+        simp [this, WithTop.coe_lt_zero.2 hn, h₃g.eq_of_nhds,
+          zero_zpow n hn.ne]
+  · rintro (h | ⟨h₁, h₂, h₃⟩)
+    · by_cases h₂f : analyticOrderAt f x = ⊤
+      · rw [analyticOrderAt_eq_top] at h₂f
+        tauto
+      · right
+        use analyticOrderNatAt f x
+        have : analyticOrderAt f x != ⊤ := h₂f
+        rw [← ENat.natCast_toNat_eq_self]; rw [eq_comm]; rw [h.analyticOrderAt_eq_natCast] at this
+        obtain ⟨g, h₁g, h₂g, h₃g⟩ := this
+        use g, h₁g, h₂g
+        simpa
+    · right
+      lift meromorphicOrderAt f x to Int using LT.lt.ne_top h₂ with n hn
+      obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_eq_int_iff h₁).1 hn.symm
+      use n, g, h₁g, h₂g
+      filter_upwards [eventually_nhdsWithin_iff.1 h₃g]
+      intro z hz
+      by_cases h₁z : z = x
+      · simp only [h₁z, Pi.smul_apply', Pi.pow_apply, sub_self]
+        rw [h₃]
+        apply (smul_eq_zero_of_left (zero_zpow n _) (g x)).symm
+        by_contra hCon
+        simp [hCon] at h₂
+      · exact hz h₁z
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.zpow_nonneg, MeromorphicAt, MeromorphicAt.congr, analyticAt_congr, analyticAt_const, eventually_nhdsWithin_of_eventually_nhds, filter_mono, fun_prop, g.filter_mono, meromorphicOrderAt, meromorphicOrderAt_eq_int_iff, nhdsWithin_le_nhds, zpow_nonneg
 -/
@@ -283,7 +351,18 @@ theorem MeromorphicNFAt.meromorphicOrderAt_eq_zero_iff
     rwa [h₂f.meromorphicOrderAt_eq] at h₁f
   · intro h
     rcases id hf with h₁ | ⟨n, g, h₁g, h₂g, h₃g⟩
-
+    · have := h₁.eq_of_nhds
+      tauto
+    · have : n = 0 := by
+        by_contra hContra
+        have := h₃g.eq_of_nhds
+        simp only [Pi.smul_apply', Pi.pow_apply, sub_self, zero_zpow n hContra, zero_smul] at this
+        tauto
+      simp only [this, zpow_zero] at h₃g
+      apply (meromorphicOrderAt_eq_int_iff hf.meromorphicAt).2
+      use g, h₁g, h₂g
+      simp only [zpow_zero]
+      exact h₃g.filter_mono nhdsWithin_le_nhds
 
 中文:
 定理 MeromorphicNFAt.meromorphicOrderAt_eq_zero_iff
@@ -296,7 +375,18 @@ theorem MeromorphicNFAt.meromorphicOrderAt_eq_zero_iff
     rwa [h₂f.meromorphicOrderAt_eq] at h₁f
   · intro h
     rcases id hf with h₁ | ⟨n, g, h₁g, h₂g, h₃g⟩
-
+    · have := h₁.eq_of_nhds
+      tauto
+    · have : n = 0 := by
+        by_contra hContra
+        have := h₃g.eq_of_nhds
+        simp only [Pi.smul_apply', Pi.pow_apply, sub_self, zero_zpow n hContra, zero_smul] at this
+        tauto
+      simp only [this, zpow_zero] at h₃g
+      apply (meromorphicOrderAt_eq_int_iff hf.meromorphicAt).2
+      use g, h₁g, h₂g
+      simp only [zpow_zero]
+      exact h₃g.filter_mono nhdsWithin_le_nhds
 
 Depends on / 依赖: ENat.map_natCast_eq_zero, Pi.pow_apply, Pi.smul_apply, analyticOrderAt_eq_zero, eq_of_nhds, f.analyticOrderAt_eq_zero, f.meromorphicOrderAt_eq, f.symm, g.eq_of_nhds, hContra, hf.meromorphicOrderAt_nonneg_iff_analyticAt, le_of_eq, map_natCast_eq_zero, meromorphicOrderAt_eq, meromorphicOrderAt_nonneg_iff_analyticAt, pow_apply, smul_apply, sub_self, zero_smul, zero_zpow
 -/
@@ -339,7 +429,16 @@ theorem MeromorphicNFAt.eventuallyEq_nhdsNE_iff_eventuallyEq_nhds
     by_cases cs : meromorphicOrderAt f x = 0
     · rw [cs] at t₀
       have Z := (hf.meromorphicOrderAt_nonneg_iff_analyticAt.1 (le_of_eq cs.symm)).continuousAt
-      have W := (hg.meromorphicOrderAt_nonneg_iff_analyticAt.1 (le_o
+      have W := (hg.meromorphicOrderAt_nonneg_iff_analyticAt.1 (le_of_eq t₀)).continuousAt
+      exact (Z.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE W).1 h
+    · apply eventuallyEq_nhds_of_eventuallyEq_nhdsNE h
+      let h₁f := cs
+      rw [hf.meromorphicOrderAt_eq_zero_iff] at h₁f
+      let h₁g := cs
+      rw [t₀]; rw [hg.meromorphicOrderAt_eq_zero_iff] at h₁g
+      simp only [not_not] at *
+      rw [h₁f]; rw [h₁g]
+  · exact (Filter.EventuallyEq.filter_mono · nhdsWithin_le_nhds)
 
 中文:
 定理 MeromorphicNFAt.eventuallyEq_nhdsNE_iff_eventuallyEq_nhds
@@ -351,7 +450,16 @@ theorem MeromorphicNFAt.eventuallyEq_nhdsNE_iff_eventuallyEq_nhds
     by_cases cs : meromorphicOrderAt f x = 0
     · rw [cs] at t₀
       have Z := (hf.meromorphicOrderAt_nonneg_iff_analyticAt.1 (le_of_eq cs.symm)).continuousAt
-      have W := (hg.meromorphicOrderAt_nonneg_iff_analyticAt.1 (le_o
+      have W := (hg.meromorphicOrderAt_nonneg_iff_analyticAt.1 (le_of_eq t₀)).continuousAt
+      exact (Z.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE W).1 h
+    · apply eventuallyEq_nhds_of_eventuallyEq_nhdsNE h
+      let h₁f := cs
+      rw [hf.meromorphicOrderAt_eq_zero_iff] at h₁f
+      let h₁g := cs
+      rw [t₀]; rw [hg.meromorphicOrderAt_eq_zero_iff] at h₁g
+      simp only [not_not] at *
+      rw [h₁f]; rw [h₁g]
+  · exact (Filter.EventuallyEq.filter_mono · nhdsWithin_le_nhds)
 
 Depends on / 依赖: Z.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE, continuousAt, cs.symm, eventuallyEq_nhds_iff_eventuallyEq_nhdsNE, eventuallyEq_nhds_of_eventuallyEq_nhdsNE, hf.meromorphicOrderAt_eq_zero_iff, hf.meromorphicOrderAt_nonneg_iff_analyticAt, hg.meromo, hg.meromorphicOrderAt_nonneg_iff_analyticAt, le_of_eq, meromo, meromorphicOrderAt, meromorphicOrderAt_congr, meromorphicOrderAt_eq_zero_iff, meromorphicOrderAt_nonneg_iff_analyticAt
 -/
@@ -436,7 +544,7 @@ lemma MeromorphicNFAt.smul_analytic
     · filter_upwards [h₃g_f]
       intro y hy
       simp only [Pi.smul_apply', hy, Pi.pow_apply]
-   
+      rw [smul_comm]
 
 中文:
 引理 MeromorphicNFAt.smul_analytic
@@ -453,7 +561,7 @@ lemma MeromorphicNFAt.smul_analytic
     · filter_upwards [h₃g_f]
       intro y hy
       simp only [Pi.smul_apply', hy, Pi.pow_apply]
-   
+      rw [smul_comm]
 
 Depends on / 依赖: Pi.pow_apply, Pi.smul_apply, filter_upwards, g.smul, pow_apply, smul_apply, smul_comm, smul_ne_zero
 -/
@@ -485,7 +593,9 @@ theorem meromorphicNFAt_smul_iff_right_of_analyticAt
       intro y hy
       rw [Set.preimage_compl]; rw [Set.mem_compl_iff]; rw [Set.mem_preimage]; rw [Set.mem_singleton_iff] at hy
       simp [hy]
-    rw [meromorph
+    rw [meromorphicNFAt_congr this]
+    exact hprod.smul_analytic (h₁g.inv h₂g) (inv_ne_zero h₂g)
+  mpr hf := hf.smul_analytic h₁g h₂g
 
 中文:
 定理 meromorphicNFAt_smul_iff_right_of_analyticAt
@@ -496,7 +606,9 @@ theorem meromorphicNFAt_smul_iff_right_of_analyticAt
       intro y hy
       rw [Set.preimage_compl]; rw [Set.mem_compl_iff]; rw [Set.mem_preimage]; rw [Set.mem_singleton_iff] at hy
       simp [hy]
-    rw [meromorph
+    rw [meromorphicNFAt_congr this]
+    exact hprod.smul_analytic (h₁g.inv h₂g) (inv_ne_zero h₂g)
+  mpr hf := hf.smul_analytic h₁g h₂g
 
 Depends on / 依赖: Set.mem_compl_iff, Set.mem_preimage, Set.mem_singleton_iff, Set.preimage_compl, compl_singleton_mem_nhds_iff, compl_singleton_mem_nhds_iff.mpr, continuousAt, filter_upwards, g.continuousAt.preimage_mem_nhds, g.inv, hf.smul_analytic, hprod.smul_analytic, inv_ne_zero, mem_compl_iff, mem_preimage, mem_singleton_iff, meromorphicNFAt_congr, preimage_compl, preimage_mem_nhds, smul_analytic
 -/
@@ -572,7 +684,19 @@ theorem meromorphicNFAt_prod
     apply ((h₁f τ h₁τ).meromorphicOrderAt_eq_zero_iff.2 _).symm.le
     grind
   by_cases h₄f : {σ in s | f σ x = 0} = ∅
-
+  · exact (Finset.analyticAt_prod _ (fun σ hσ => h₃f hσ (by aesop))).meromorphicNFAt
+  rw [Finset.filter_eq_empty_iff] at h₄f
+  push Not at h₄f
+  obtain ⟨τ, h₁τ, h₂τ⟩ := h₄f
+  have {μ : ι} (hμ : μ in s.erase τ) : f μ x != 0 := by
+    by_contra
+    have : τ = μ := h₂f (by aesop) (by aesop)
+    aesop
+  rw [← Finset.mul_prod_erase _ _ h₁τ]; rw [meromorphicNFAt_mul_iff_left]
+  · apply h₁f τ h₁τ
+  · apply Finset.analyticAt_prod _ (fun μ hμ => h₃f (Finset.mem_of_mem_erase hμ) (by aesop))
+  · rw [Finset.prod_apply, Finset.prod_ne_zero_iff]
+    aesop
 
 中文:
 定理 meromorphicNFAt_prod
@@ -585,7 +709,19 @@ theorem meromorphicNFAt_prod
     apply ((h₁f τ h₁τ).meromorphicOrderAt_eq_zero_iff.2 _).symm.le
     grind
   by_cases h₄f : {σ in s | f σ x = 0} = ∅
-
+  · exact (Finset.analyticAt_prod _ (fun σ hσ => h₃f hσ (by aesop))).meromorphicNFAt
+  rw [Finset.filter_eq_empty_iff] at h₄f
+  push Not at h₄f
+  obtain ⟨τ, h₁τ, h₂τ⟩ := h₄f
+  have {μ : ι} (hμ : μ in s.erase τ) : f μ x != 0 := by
+    by_contra
+    have : τ = μ := h₂f (by aesop) (by aesop)
+    aesop
+  rw [← Finset.mul_prod_erase _ _ h₁τ]; rw [meromorphicNFAt_mul_iff_left]
+  · apply h₁f τ h₁τ
+  · apply Finset.analyticAt_prod _ (fun μ hμ => h₃f (Finset.mem_of_mem_erase hμ) (by aesop))
+  · rw [Finset.prod_apply, Finset.prod_ne_zero_iff]
+    aesop
 
 Depends on / 依赖: AnalyticAt, Finset, Finset.analyticAt_prod, Finset.filter_eq_empty_iff, analyticAt_prod, by_c, classical, filter_eq_empty_iff, meromorphicNFAt, meromorphicOrderAt_eq_zero_iff, meromorphicOrderAt_nonneg_iff_analyticAt, s.erase, symm.le
 -/
@@ -692,7 +828,12 @@ theorem MeromorphicNFAt.zpow
     simp_all only [Pi.zero_apply, Pi.pow_apply, zero_zpow n hn]
   · obtain ⟨m, g, h₁g, h₂g, h₃g⟩ := hf
     right
-
+    use n * m, g ^ n, h₁g.zpow h₂g
+    constructor
+    · rw [Pi.pow_apply]
+      exact zpow_ne_zero n h₂g
+    · filter_upwards [h₃g] with z hz
+      simp [hz, mul_zpow, (zpow_mul' (z - x) n m).symm]
 
 中文:
 定理 MeromorphicNFAt.zpow
@@ -708,7 +849,12 @@ theorem MeromorphicNFAt.zpow
     simp_all only [Pi.zero_apply, Pi.pow_apply, zero_zpow n hn]
   · obtain ⟨m, g, h₁g, h₂g, h₃g⟩ := hf
     right
-
+    use n * m, g ^ n, h₁g.zpow h₂g
+    constructor
+    · rw [Pi.pow_apply]
+      exact zpow_ne_zero n h₂g
+    · filter_upwards [h₃g] with z hz
+      simp [hz, mul_zpow, (zpow_mul' (z - x) n m).symm]
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.meromorphicNFAt, Pi.pow_apply, Pi.zero_apply, analyticAt_const, filter_upwards, g.zpow, meromorphicNFAt, mul_zpow, pow_apply, zero_apply, zero_zpow, zpow_mul, zpow_ne_zero, zpow_zero
 -/
@@ -809,7 +955,8 @@ theorem MeromorphicNFOn.div
   · have hf := hf.meromorphicNFAt
     have hgAnalytic : AnalyticAt 𝕜 g x := by grind [meromorphicNFAt_iff_analyticAt_or]
     have hgInvAnalytic : AnalyticAt 𝕜 g⁻¹ x := hgAnalytic.inv hgne
-    rwa [← meromorphicNFAt_mul_iff_left hgInvAnalytic (in
+    rwa [← meromorphicNFAt_mul_iff_left hgInvAnalytic (inv_ne_zero hgne)] at hf
+  · grind [meromorphicNFAt_mul_iff_right, hg.inv]
 
 中文:
 定理 MeromorphicNFOn.div
@@ -820,7 +967,8 @@ theorem MeromorphicNFOn.div
   · have hf := hf.meromorphicNFAt
     have hgAnalytic : AnalyticAt 𝕜 g x := by grind [meromorphicNFAt_iff_analyticAt_or]
     have hgInvAnalytic : AnalyticAt 𝕜 g⁻¹ x := hgAnalytic.inv hgne
-    rwa [← meromorphicNFAt_mul_iff_left hgInvAnalytic (in
+    rwa [← meromorphicNFAt_mul_iff_left hgInvAnalytic (inv_ne_zero hgne)] at hf
+  · grind [meromorphicNFAt_mul_iff_right, hg.inv]
 
 Depends on / 依赖: AnalyticAt, div_eq_mul_inv, hf.meromorphicNFAt, hg.inv, hgAnalytic, hgAnalytic.inv, hgInvAnalytic, inv_ne_zero, meromorphicNFAt, meromorphicNFAt_iff_analyticAt_or, meromorphicNFAt_mul_iff_left, meromorphicNFAt_mul_iff_right
 -/
@@ -852,7 +1000,22 @@ theorem MeromorphicNFAt.comp_analyticAt
   · rw [analyticOrderAt_eq_top] at hord
     by_cases h : f (g x) = 0
     · apply Or.inl
-      filter_upwards [hord, hg.continuousAt.preimage_
+      filter_upwards [hord, hg.continuousAt.preimage_mem_nhds (hf.filter_mono (by simp))]
+        using by simp_all [sub_eq_zero]
+    · refine Or.inr ⟨0, fun _ => f (g x), by fun_prop, h, ?_⟩
+      filter_upwards [hord, hg.continuousAt.preimage_mem_nhds (hf.filter_mono (by simp))]
+        using by simp_all [sub_eq_zero]
+  lift analyticOrderAt (g · - g x) x to Nat using hord with m hm
+  obtain ⟨p, h₁p, h₂p, h₃p⟩ := (AnalyticAt.analyticOrderAt_eq_natCast (by fun_prop)).1 hm.symm
+  refine Or.inr ⟨n * m, fun z => (p z) ^ n • q (g z), (h₁p.zpow h₂p).smul (by fun_prop), ?_⟩
+  simp_all only [ne_eq, smul_eq_mul, isUnit_iff_ne_zero, zpow_ne_zero n h₂p, not_false_eq_true,
+    IsUnit.smul_eq_zero, true_and]
+  filter_upwards [h₃p, hg.continuousAt.preimage_mem_nhds (hf.filter_mono (by simp))]
+    with a h₁a h₂a
+  simp_all only [Pi.smul_apply', Pi.pow_apply, Set.preimage_ofPred_eq, Set.mem_ofPred_eq,
+    Function.comp_apply, ← smul_assoc, mul_zpow, smul_eq_mul]
+  congr 2
+  rw [mul_comm]; rw [zpow_mul]; rw [zpow_natCast]
 
 中文:
 定理 MeromorphicNFAt.comp_analyticAt
@@ -864,7 +1027,22 @@ theorem MeromorphicNFAt.comp_analyticAt
   · rw [analyticOrderAt_eq_top] at hord
     by_cases h : f (g x) = 0
     · apply Or.inl
-      filter_upwards [hord, hg.continuousAt.preimage_
+      filter_upwards [hord, hg.continuousAt.preimage_mem_nhds (hf.filter_mono (by simp))]
+        using by simp_all [sub_eq_zero]
+    · refine Or.inr ⟨0, fun _ => f (g x), by fun_prop, h, ?_⟩
+      filter_upwards [hord, hg.continuousAt.preimage_mem_nhds (hf.filter_mono (by simp))]
+        using by simp_all [sub_eq_zero]
+  lift analyticOrderAt (g · - g x) x to Nat using hord with m hm
+  obtain ⟨p, h₁p, h₂p, h₃p⟩ := (AnalyticAt.analyticOrderAt_eq_natCast (by fun_prop)).1 hm.symm
+  refine Or.inr ⟨n * m, fun z => (p z) ^ n • q (g z), (h₁p.zpow h₂p).smul (by fun_prop), ?_⟩
+  simp_all only [ne_eq, smul_eq_mul, isUnit_iff_ne_zero, zpow_ne_zero n h₂p, not_false_eq_true,
+    IsUnit.smul_eq_zero, true_and]
+  filter_upwards [h₃p, hg.continuousAt.preimage_mem_nhds (hf.filter_mono (by simp))]
+    with a h₁a h₂a
+  simp_all only [Pi.smul_apply', Pi.pow_apply, Set.preimage_ofPred_eq, Set.mem_ofPred_eq,
+    Function.comp_apply, ← smul_assoc, mul_zpow, smul_eq_mul]
+  congr 2
+  rw [mul_comm]; rw [zpow_mul]; rw [zpow_natCast]
 
 Depends on / 依赖: Or.inl, Or.inr, analyticOrderAt, analyticOrderAt_eq_top, continuousAt, eventually, filter_mono, filter_upwards, fun_prop, hf.filter_mono, hg.continuousAt.preimage_mem_nhds, hg.continuousAt.tendsto.eventually, hq_an, hq_ne, preimage_mem_nhds, sub_eq_zero, tendsto
 -/
@@ -998,6 +1176,7 @@ definition toMeromorphicNFAt
     · rw [meromorphicOrderAt_eq_int_iff hf] at h₁f
       exact (Classical.choose h₁f) x
     · exact 0
+  · exact 0
 
 中文:
 定义 toMeromorphicNFAt
@@ -1010,6 +1189,7 @@ definition toMeromorphicNFAt
     · rw [meromorphicOrderAt_eq_int_iff hf] at h₁f
       exact (Classical.choose h₁f) x
     · exact 0
+  · exact 0
 
 Depends on / 依赖: Classical, Classical.choose, Function, Function.update, MeromorphicAt, classical, complain, decidability, issues, meromorphicOrderAt, meromorphicOrderAt_eq_int_iff, update
 -/
@@ -1109,7 +1289,29 @@ theorem meromorphicNFAt_toMeromorphicNFAt
     · have : toMeromorphicNFAt f x =ᶠ[𝓝 x] 0 := by
         apply eventuallyEq_nhds_of_eventuallyEq_nhdsNE
         · exact hf.eq_nhdsNE_toMeromorphicNFAt.symm.trans (meromorphicOrderAt_eq_top_iff.1 h₂f)
-        · simp 
+        · simp [h₂f, toMeromorphicNFAt, hf]
+      apply AnalyticAt.meromorphicNFAt
+      rw [analyticAt_congr this]
+      exact analyticAt_const
+    · lift meromorphicOrderAt f x to Int using h₂f with n hn
+      obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_eq_int_iff hf).1 hn.symm
+      right
+      use n, g, h₁g, h₂g
+      apply eventuallyEq_nhds_of_eventuallyEq_nhdsNE (hf.eq_nhdsNE_toMeromorphicNFAt.symm.trans h₃g)
+      simp only [toMeromorphicNFAt, hf, ↓reduceDIte, ← hn, WithTop.coe_zero,
+        WithTop.coe_eq_zero, ne_eq, Function.update_self, sub_self]
+      split_ifs with h₃f
+      · obtain ⟨h₁G, _, h₃G⟩ :=
+          Classical.choose_spec ((meromorphicOrderAt_eq_int_iff hf).1 (h₃f ▸ hn.symm))
+        apply Filter.EventuallyEq.eq_of_nhds
+        apply (h₁G.continuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE (by fun_prop)).1
+        filter_upwards [h₃g, h₃G]
+        simp_all
+      · simp [h₃f, zero_zpow]
+  · simp only [toMeromorphicNFAt, hf, ↓reduceDIte]
+    exact analyticAt_const.meromorphicNFAt
+
+@[simp]
 
 中文:
 定理 meromorphicNFAt_toMeromorphicNFAt
@@ -1119,7 +1321,29 @@ theorem meromorphicNFAt_toMeromorphicNFAt
     · have : toMeromorphicNFAt f x =ᶠ[𝓝 x] 0 := by
         apply eventuallyEq_nhds_of_eventuallyEq_nhdsNE
         · exact hf.eq_nhdsNE_toMeromorphicNFAt.symm.trans (meromorphicOrderAt_eq_top_iff.1 h₂f)
-        · simp 
+        · simp [h₂f, toMeromorphicNFAt, hf]
+      apply AnalyticAt.meromorphicNFAt
+      rw [analyticAt_congr this]
+      exact analyticAt_const
+    · lift meromorphicOrderAt f x to Int using h₂f with n hn
+      obtain ⟨g, h₁g, h₂g, h₃g⟩ := (meromorphicOrderAt_eq_int_iff hf).1 hn.symm
+      right
+      use n, g, h₁g, h₂g
+      apply eventuallyEq_nhds_of_eventuallyEq_nhdsNE (hf.eq_nhdsNE_toMeromorphicNFAt.symm.trans h₃g)
+      simp only [toMeromorphicNFAt, hf, ↓reduceDIte, ← hn, WithTop.coe_zero,
+        WithTop.coe_eq_zero, ne_eq, Function.update_self, sub_self]
+      split_ifs with h₃f
+      · obtain ⟨h₁G, _, h₃G⟩ :=
+          Classical.choose_spec ((meromorphicOrderAt_eq_int_iff hf).1 (h₃f ▸ hn.symm))
+        apply Filter.EventuallyEq.eq_of_nhds
+        apply (h₁G.continuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE (by fun_prop)).1
+        filter_upwards [h₃g, h₃G]
+        simp_all
+      · simp [h₃f, zero_zpow]
+  · simp only [toMeromorphicNFAt, hf, ↓reduceDIte]
+    exact analyticAt_const.meromorphicNFAt
+
+@[simp]
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.meromorphicNFAt, MeromorphicAt, analyticAt_congr, analyticAt_const, eq_nhdsNE_toMeromorphicNFAt, eventuallyEq_nhds_of_eventuallyEq_nhdsNE, hf.eq_nhdsNE_toMeromorphicNFAt.symm.trans, meromorphicNFAt, meromorphicOrderAt, meromorphicOrderAt_eq_int_iff, meromorphicOrderAt_eq_top_iff, toMeromorphicNFAt
 -/
@@ -1228,7 +1452,9 @@ lemma toMeromorphicNFAt_eventuallyEq_nhds_congr
   · exact meromorphicNFAt_toMeromorphicNFAt.eventuallyEq_nhdsNE_iff_eventuallyEq_nhds
 .mp hf.eq_nhdsNE_toMeromorphicNFAt.symm.trans meromorphicNFAt_toMeromorphicNFAt
  hfg.trans ((MeromorphicAt.meromorphicAt_congr hfg).mp hf).eq_nhdsNE_toMeromorphicNFAt
-  · simp [
+  · simp [hf, MeromorphicAt.meromorphicAt_congr hfg |>.not.mp]
+
+@[simp]
 
 中文:
 引理 toMeromorphicNFAt_eventuallyEq_nhds_congr
@@ -1238,7 +1464,9 @@ lemma toMeromorphicNFAt_eventuallyEq_nhds_congr
   · exact meromorphicNFAt_toMeromorphicNFAt.eventuallyEq_nhdsNE_iff_eventuallyEq_nhds
 .mp hf.eq_nhdsNE_toMeromorphicNFAt.symm.trans meromorphicNFAt_toMeromorphicNFAt
  hfg.trans ((MeromorphicAt.meromorphicAt_congr hfg).mp hf).eq_nhdsNE_toMeromorphicNFAt
-  · simp [
+  · simp [hf, MeromorphicAt.meromorphicAt_congr hfg |>.not.mp]
+
+@[simp]
 
 Depends on / 依赖: MeromorphicAt, MeromorphicAt.meromorphicAt_congr, eq_nhdsNE_toMeromorphicNFAt, eventuallyEq_nhdsNE_iff_eventuallyEq_nhds, hf.eq_nhdsNE_toMeromorphicNFAt.symm.trans, hfg.trans, meromorphicAt_congr, meromorphicNFAt_toMeromorphicNFAt, meromorphicNFAt_toMeromorphicNFAt.eventuallyEq_nhdsNE_iff_eventuallyEq_nhds, not.mp
 -/
@@ -1293,7 +1521,40 @@ theorem toMeromorphicNFAt_eq_self
       simp only [toMeromorphicNFAt, hf.meromorphicAt, WithTop.coe_zero, ne_eq]
       have h₀f := hf
       rcases hf with h₁f | h₁f
-      · simpa [meromorphicOrderAt_eq_to
+      · simpa [meromorphicOrderAt_eq_top_iff.2 (h₁f.filter_mono nhdsWithin_le_nhds)]
+          using h₁f.eq_of_nhds.symm
+      · obtain ⟨n, g, h₁g, h₂g, h₃g⟩ := h₁f
+        rw [Filter.EventuallyEq.eq_of_nhds h₃g]
+        have : meromorphicOrderAt f x = n := by
+          rw [meromorphicOrderAt_eq_int_iff h₀f.meromorphicAt]
+          use g, h₁g, h₂g
+          exact eventually_nhdsWithin_of_eventually_nhds h₃g
+        by_cases h₃f : meromorphicOrderAt f x = 0
+        · simp only [Pi.smul_apply', Pi.pow_apply, sub_self, h₃f, ↓reduceDIte]
+          have hn : n = (0 : Int) := by
+            rw [h₃f] at this
+            exact WithTop.coe_eq_zero.mp this.symm
+          simp_rw [hn]
+          simp only [zpow_zero, one_smul]
+          have : g =ᶠ[𝓝 x]
+              Classical.choose ((meromorphicOrderAt_eq_int_iff h₀f.meromorphicAt).1 h₃f) := by
+            obtain ⟨h₀, h₁, h₂⟩ := Classical.choose_spec
+              ((meromorphicOrderAt_eq_int_iff h₀f.meromorphicAt).1 h₃f)
+            rw [← h₁g.continuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE h₀.continuousAt]
+            rw [hn] at h₃g
+            simp only [zpow_zero, one_smul, ne_eq] at h₃g h₂
+            exact (h₃g.filter_mono nhdsWithin_le_nhds).symm.trans h₂
+          simp only [Function.update_self]
+          exact Filter.EventuallyEq.eq_of_nhds this.symm
+        · rw [eq_comm]
+          simp only [Pi.smul_apply', Pi.pow_apply, sub_self, h₃f, ↓reduceDIte, smul_eq_zero,
+            Function.update_self, smul_eq_zero]
+          left
+          apply zero_zpow n
+          by_contra hn
+          rw [hn] at this
+          tauto
+    · exact (hf.meromorphicAt.eqOn_compl_singleton_toMeromorphicNFAt hz).symm
 
 中文:
 定理 toMeromorphicNFAt_eq_self
@@ -1307,7 +1568,40 @@ theorem toMeromorphicNFAt_eq_self
       simp only [toMeromorphicNFAt, hf.meromorphicAt, WithTop.coe_zero, ne_eq]
       have h₀f := hf
       rcases hf with h₁f | h₁f
-      · simpa [meromorphicOrderAt_eq_to
+      · simpa [meromorphicOrderAt_eq_top_iff.2 (h₁f.filter_mono nhdsWithin_le_nhds)]
+          using h₁f.eq_of_nhds.symm
+      · obtain ⟨n, g, h₁g, h₂g, h₃g⟩ := h₁f
+        rw [Filter.EventuallyEq.eq_of_nhds h₃g]
+        have : meromorphicOrderAt f x = n := by
+          rw [meromorphicOrderAt_eq_int_iff h₀f.meromorphicAt]
+          use g, h₁g, h₂g
+          exact eventually_nhdsWithin_of_eventually_nhds h₃g
+        by_cases h₃f : meromorphicOrderAt f x = 0
+        · simp only [Pi.smul_apply', Pi.pow_apply, sub_self, h₃f, ↓reduceDIte]
+          have hn : n = (0 : Int) := by
+            rw [h₃f] at this
+            exact WithTop.coe_eq_zero.mp this.symm
+          simp_rw [hn]
+          simp only [zpow_zero, one_smul]
+          have : g =ᶠ[𝓝 x]
+              Classical.choose ((meromorphicOrderAt_eq_int_iff h₀f.meromorphicAt).1 h₃f) := by
+            obtain ⟨h₀, h₁, h₂⟩ := Classical.choose_spec
+              ((meromorphicOrderAt_eq_int_iff h₀f.meromorphicAt).1 h₃f)
+            rw [← h₁g.continuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE h₀.continuousAt]
+            rw [hn] at h₃g
+            simp only [zpow_zero, one_smul, ne_eq] at h₃g h₂
+            exact (h₃g.filter_mono nhdsWithin_le_nhds).symm.trans h₂
+          simp only [Function.update_self]
+          exact Filter.EventuallyEq.eq_of_nhds this.symm
+        · rw [eq_comm]
+          simp only [Pi.smul_apply', Pi.pow_apply, sub_self, h₃f, ↓reduceDIte, smul_eq_zero,
+            Function.update_self, smul_eq_zero]
+          left
+          apply zero_zpow n
+          by_contra hn
+          rw [hn] at this
+          tauto
+    · exact (hf.meromorphicAt.eqOn_compl_singleton_toMeromorphicNFAt hz).symm
 -/
 @[simp] theorem toMeromorphicNFAt_eq_self :
     toMeromorphicNFAt f x = f ↔ MeromorphicNFAt f x where
@@ -1414,7 +1708,11 @@ theorem MeromorphicNFOn.divisor_nonneg_iff_analyticOnNhd
     simp only [Function.locallyFinsuppWithin.coe_zero, Pi.zero_apply, h₁f.meromorphicOn, hx,
       MeromorphicOn.divisor_apply, untop₀_nonneg] at this
     assumption
-  · by_cases 
+  · by_cases hx : x in U
+    · simp only [Function.locallyFinsuppWithin.coe_zero, Pi.zero_apply, h₁f.meromorphicOn, hx,
+        MeromorphicOn.divisor_apply, untop₀_nonneg]
+      exact (h₁f hx).meromorphicOrderAt_nonneg_iff_analyticAt.2 (h x hx)
+    · simp [hx]
 
 中文:
 定理 MeromorphicNFOn.divisor_nonneg_iff_analyticOnNhd
@@ -1426,7 +1724,11 @@ theorem MeromorphicNFOn.divisor_nonneg_iff_analyticOnNhd
     simp only [Function.locallyFinsuppWithin.coe_zero, Pi.zero_apply, h₁f.meromorphicOn, hx,
       MeromorphicOn.divisor_apply, untop₀_nonneg] at this
     assumption
-  · by_cases 
+  · by_cases hx : x in U
+    · simp only [Function.locallyFinsuppWithin.coe_zero, Pi.zero_apply, h₁f.meromorphicOn, hx,
+        MeromorphicOn.divisor_apply, untop₀_nonneg]
+      exact (h₁f hx).meromorphicOrderAt_nonneg_iff_analyticAt.2 (h x hx)
+    · simp [hx]
 
 Depends on / 依赖: Function, Function.locallyFinsuppWithin.coe_zero, MeromorphicOn, MeromorphicOn.divisor_apply, Pi.zero_apply, coe_zero, divisor_apply, f.meromorphicOn, locallyFinsuppWithin, meromorphicOn, meromorphicOrderAt_nonneg_iff_analyticAt, zero_apply
 -/
@@ -1479,7 +1781,17 @@ theorem MeromorphicNFOn.zero_set_eq_divisor_support
   constructor <;> intro hu
   · simp_all only [ne_eq, Subtype.forall, Set.mem_inter_iff, Set.mem_preimage,
       Set.mem_singleton_iff, Function.mem_support, h₁f.meromorphicOn, MeromorphicOn.divisor_apply,
-      WithTop.untop₀_eq_zero, (h₁f hu.1).meromorphicOrderAt_eq_zero_iff, not_true_eq
+      WithTop.untop₀_eq_zero, (h₁f hu.1).meromorphicOrderAt_eq_zero_iff, not_true_eq_false, or_self,
+      not_false_eq_true]
+  · simp only [Function.mem_support, ne_eq] at hu
+    constructor
+    · exact (MeromorphicOn.divisor f U).supportWithinDomain hu
+    · rw [Set.mem_preimage, Set.mem_singleton_iff]
+      have := h₁f ((MeromorphicOn.divisor f U).supportWithinDomain hu)
+.meromorphicOrderAt_eq_zero_iff.not
+      simp only [h₁f.meromorphicOn, (MeromorphicOn.divisor f U).supportWithinDomain hu,
+        MeromorphicOn.divisor_apply, WithTop.untop₀_eq_zero, not_or] at hu
+      simp_all [hu.1]
 
 中文:
 定理 MeromorphicNFOn.zero_set_eq_divisor_support
@@ -1489,7 +1801,17 @@ theorem MeromorphicNFOn.zero_set_eq_divisor_support
   constructor <;> intro hu
   · simp_all only [ne_eq, Subtype.forall, Set.mem_inter_iff, Set.mem_preimage,
       Set.mem_singleton_iff, Function.mem_support, h₁f.meromorphicOn, MeromorphicOn.divisor_apply,
-      WithTop.untop₀_eq_zero, (h₁f hu.1).meromorphicOrderAt_eq_zero_iff, not_true_eq
+      WithTop.untop₀_eq_zero, (h₁f hu.1).meromorphicOrderAt_eq_zero_iff, not_true_eq_false, or_self,
+      not_false_eq_true]
+  · simp only [Function.mem_support, ne_eq] at hu
+    constructor
+    · exact (MeromorphicOn.divisor f U).supportWithinDomain hu
+    · rw [Set.mem_preimage, Set.mem_singleton_iff]
+      have := h₁f ((MeromorphicOn.divisor f U).supportWithinDomain hu)
+.meromorphicOrderAt_eq_zero_iff.not
+      simp only [h₁f.meromorphicOn, (MeromorphicOn.divisor f U).supportWithinDomain hu,
+        MeromorphicOn.divisor_apply, WithTop.untop₀_eq_zero, not_or] at hu
+      simp_all [hu.1]
 
 Depends on / 依赖: Function, Function.mem_support, MeromorphicOn, MeromorphicOn.divisor, MeromorphicOn.divisor_apply, Set.mem_inter_iff, Set.mem_preimage, Set.mem_singleton_iff, Subtype, Subtype.forall, WithTop, WithTop.untop, divisor, divisor_apply, f.meromorphicOn, mem_inter_iff, mem_preimage, mem_singleton_iff, mem_support, meromorphicOn
 -/

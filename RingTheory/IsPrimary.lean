@@ -153,7 +153,10 @@ lemma isPrimary_finsetInf
     · simp only [insert_empty_eq, mem_singleton] at hi
       simpa [hi] using hs
     simp only [inf_insert]
-    have H ⦃x⦄ (
+    have H ⦃x⦄ (hx : x in s) : ((f x).colon Set.univ).radical = ((f y).colon Set.univ).radical := by
+      rw [hs' (mem_insert_of_mem hx)]; rw [hs' (mem_insert_of_mem hy)]
+    refine IsPrimary.inf (hs (by simp)) (IH hy (fun x hx => hs (by simp [hx])) H) ?_
+    rw [colon_finsetInf]; rw [Ideal.radical_finset_inf hy H]; rw [hs' (mem_insert_self _ _)]; rw [hs' (mem_insert_of_mem hy)]
 
 中文:
 引理 isPrimary_finsetInf
@@ -167,7 +170,10 @@ lemma isPrimary_finsetInf
     · simp only [insert_empty_eq, mem_singleton] at hi
       simpa [hi] using hs
     simp only [inf_insert]
-    have H ⦃x⦄ (
+    have H ⦃x⦄ (hx : x in s) : ((f x).colon Set.univ).radical = ((f y).colon Set.univ).radical := by
+      rw [hs' (mem_insert_of_mem hx)]; rw [hs' (mem_insert_of_mem hy)]
+    refine IsPrimary.inf (hs (by simp)) (IH hy (fun x hx => hs (by simp [hx])) H) ?_
+    rw [colon_finsetInf]; rw [Ideal.radical_finset_inf hy H]; rw [hs' (mem_insert_self _ _)]; rw [hs' (mem_insert_of_mem hy)]
 
 Depends on / 依赖: Finset, Finset.induction_on, IsPrimary, IsPrimary.inf, Set.univ, classical, eq_empty_or_nonempty, generalizing, induction_on, inf_insert, insert, insert_empty_eq, mem_insert_of_mem, mem_singleton, radical, s.eq_empty_or_nonempty
 -/
@@ -200,7 +206,7 @@ refine isPrime_iff.mpr hI.imp (by simp) fun h x y ⟨n, hn⟩ => ?_
   simp_rw [← mem_colon_iff_le, ← mem_radical_iff] at h
   refine or_iff_not_imp_left.mpr fun hx => ⟨n, ?_⟩
   simp only [mul_pow, mem_colon, Set.mem_univ, true_imp_iff, mul_smul] at hn ⊢
-  exact fun p => (h (hn p)).resolve_right (mt me
+  exact fun p => (h (hn p)).resolve_right (mt mem_radical_of_pow_mem hx)
 
 中文:
 定理 是准素.isPrime_radical_colon
@@ -211,7 +217,7 @@ refine isPrime_iff.mpr hI.imp (by simp) fun h x y ⟨n, hn⟩ => ?_
   simp_rw [← mem_colon_iff_le, ← mem_radical_iff] at h
   refine or_iff_not_imp_left.mpr fun hx => ⟨n, ?_⟩
   simp only [mul_pow, mem_colon, Set.mem_univ, true_imp_iff, mul_smul] at hn ⊢
-  exact fun p => (h (hn p)).resolve_right (mt me
+  exact fun p => (h (hn p)).resolve_right (mt mem_radical_of_pow_mem hx)
 
 Depends on / 依赖: Set.mem_univ, hI.imp, isPrime_iff, isPrime_iff.mpr, mem_colon, mem_colon_iff_le, mem_radical_iff, mem_radical_of_pow_mem, mem_univ, mul_pow, mul_smul, or_iff_not_imp_left, or_iff_not_imp_left.mpr, resolve_right, simp_rw, true_imp_iff
 -/
@@ -291,7 +297,7 @@ lemma isPrimary_iff_zero_divisor_quotient_imp_nilpotent_smul
   simp_rw [S.mkQ_surjective.forall, ← map_smul, ne_eq, ← LinearMap.mem_ker, ker_mkQ]
   congr! 2
   rw [forall_comm]; rw [← or_iff_not_imp_left]; rw [← LinearMap.range_eq_top.mpr S.mkQ_surjective]; rw [← map_top]
-  simp_rw [eq_bot_iff, ← map_pointwise_smul, ma
+  simp_rw [eq_bot_iff, ← map_pointwise_smul, map_le_iff_le_comap, comap_bot, ker_mkQ]
 
 中文:
 引理 isPrimary_iff_zero_divisor_quotient_imp_nilpotent_smul
@@ -300,7 +306,7 @@ lemma isPrimary_iff_zero_divisor_quotient_imp_nilpotent_smul
   simp_rw [S.mkQ_surjective.forall, ← map_smul, ne_eq, ← LinearMap.mem_ker, ker_mkQ]
   congr! 2
   rw [forall_comm]; rw [← or_iff_not_imp_left]; rw [← LinearMap.range_eq_top.mpr S.mkQ_surjective]; rw [← map_top]
-  simp_rw [eq_bot_iff, ← map_pointwise_smul, ma
+  simp_rw [eq_bot_iff, ← map_pointwise_smul, map_le_iff_le_comap, comap_bot, ker_mkQ]
 
 Depends on / 依赖: LinearMap, LinearMap.mem_ker, LinearMap.range_eq_top.mpr, S.mkQ_surjective, S.mkQ_surjective.forall, and_congr_right, comap_bot, eq_bot_iff, forall_comm, ker_mkQ, map_le_iff_le_comap, map_pointwise_smul, map_smul, map_top, mem_ker, mkQ_surjective, ne_eq, or_iff_not_imp_left, range_eq_top, simp_rw
 -/

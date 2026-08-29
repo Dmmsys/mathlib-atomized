@@ -135,7 +135,10 @@ definition hasseDeriv
     rw [Function.notMem_support]; rw [coeff_eq_zero_of_lt_order <| lt_sub_iff_add_lt.mp h]; rw [smul_zero]
   map_add' f g := by
     ext
-    simp only [ofSuppBddBe
+    simp only [ofSuppBddBelow, coeff_add', Pi.add_apply, smul_add]
+  map_smul' r f := by
+    ext
+    simp only [ofSuppBddBelow, HahnSeries.coeff_smul, RingHom.id_apply, smul_comm r]
 
 中文:
 定义 hasseDeriv
@@ -146,7 +149,10 @@ definition hasseDeriv
     rw [Function.notMem_support]; rw [coeff_eq_zero_of_lt_order <| lt_sub_iff_add_lt.mp h]; rw [smul_zero]
   map_add' f g := by
     ext
-    simp only [ofSuppBddBe
+    simp only [ofSuppBddBelow, coeff_add', Pi.add_apply, smul_add]
+  map_smul' r f := by
+    ext
+    simp only [ofSuppBddBelow, HahnSeries.coeff_smul, RingHom.id_apply, smul_comm r]
 
 Depends on / 依赖: Function, Function.notMem_support, HahnSeries, HahnSeries.coeff_smul, HahnSeries.ofSuppBddBelow, Pi.add_apply, Ring.choose, RingHom, RingHom.id_apply, add_apply, coeff_add, coeff_eq_zero_of_lt_order, coeff_smul, contrapose, f.coeff, f.order, id_apply, lt_sub_iff_add_lt, lt_sub_iff_add_lt.mp, map_add
 -/
@@ -616,7 +622,13 @@ theorem single_order_mul_powerSeriesPart
   by_cases h : x.order <= n
   · rw [Int.eq_natAbs_of_nonneg (sub_nonneg_of_le h), coeff_coe_powerSeries,
       powerSeriesPart_coeff, ← Int.eq_natAbs_of_nonneg (sub_nonneg_of_le h),
-      add_s
+      add_sub_cancel]
+  · rw [ofPowerSeries_apply, embDomain_of_notMem_range]
+    · contrapose! h
+      exact order_le_of_coeff_ne_zero h.symm
+    · contrapose h
+      simp only [Nat.castOrderEmbedding_apply, Set.mem_range] at h
+      lia
 
 中文:
 定理 single_order_mul_powerSeriesPart
@@ -627,7 +639,13 @@ theorem single_order_mul_powerSeriesPart
   by_cases h : x.order <= n
   · rw [Int.eq_natAbs_of_nonneg (sub_nonneg_of_le h), coeff_coe_powerSeries,
       powerSeriesPart_coeff, ← Int.eq_natAbs_of_nonneg (sub_nonneg_of_le h),
-      add_s
+      add_sub_cancel]
+  · rw [ofPowerSeries_apply, embDomain_of_notMem_range]
+    · contrapose! h
+      exact order_le_of_coeff_ne_zero h.symm
+    · contrapose h
+      simp only [Nat.castOrderEmbedding_apply, Set.mem_range] at h
+      lia
 
 Depends on / 依赖: Int.eq_natAbs_of_nonneg, Nat.castOrderEmbedding_apply, Set.mem_range, add_sub_cancel, castOrderEmbedding_apply, coeff_coe_powerSeries, coeff_single_mul_add, contrapose, embDomain_of_notMem_range, eq_natAbs_of_nonneg, h.symm, mem_range, ofPowerSeries_apply, one_mul, order_le_of_coeff_ne_zero, powerSeriesPart_coeff, sub_add_cancel, sub_nonneg_of_le, x.order
 -/
@@ -752,7 +770,19 @@ instance of_powerSeries_localization
   surj z := by
     by_cases! h : 0 <= z.order
     · refine ⟨⟨PowerSeries.X ^ Int.natAbs z.order * powerSeriesPart z, 1⟩, ?_⟩
-      simp only [map_o
+      simp only [map_one, mul_one, map_mul, coe_algebraMap, ofPowerSeries_X_pow,
+        Submonoid.coe_one]
+      rw [Int.natAbs_of_nonneg h]; rw [single_order_mul_powerSeriesPart]
+    · refine ⟨⟨powerSeriesPart z, PowerSeries.X ^ Int.natAbs z.order, ⟨_, rfl⟩⟩, ?_⟩
+      simp only [coe_algebraMap, ofPowerSeries_powerSeriesPart]
+      rw [mul_comm _ z]
+      refine congr rfl ?_
+      rw [ofPowerSeries_X_pow]; rw [Int.ofNat_natAbs_of_nonpos]
+      exact h.le
+  exists_of_eq {x y} := by
+    rw [coe_algebraMap]; rw [ofPowerSeries_injective.eq_iff]
+    rintro rfl
+    exact ⟨1, rfl⟩
 
 中文:
 实例 of_powerSeries_localization
@@ -766,7 +796,19 @@ instance of_powerSeries_localization
   surj z := by
     by_cases! h : 0 <= z.order
     · refine ⟨⟨PowerSeries.X ^ Int.natAbs z.order * powerSeriesPart z, 1⟩, ?_⟩
-      simp only [map_o
+      simp only [map_one, mul_one, map_mul, coe_algebraMap, ofPowerSeries_X_pow,
+        Submonoid.coe_one]
+      rw [Int.natAbs_of_nonneg h]; rw [single_order_mul_powerSeriesPart]
+    · refine ⟨⟨powerSeriesPart z, PowerSeries.X ^ Int.natAbs z.order, ⟨_, rfl⟩⟩, ?_⟩
+      simp only [coe_algebraMap, ofPowerSeries_powerSeriesPart]
+      rw [mul_comm _ z]
+      refine congr rfl ?_
+      rw [ofPowerSeries_X_pow]; rw [Int.ofNat_natAbs_of_nonpos]
+      exact h.le
+  exists_of_eq {x y} := by
+    rw [coe_algebraMap]; rw [ofPowerSeries_injective.eq_iff]
+    rintro rfl
+    exact ⟨1, rfl⟩
 
 Depends on / 依赖: Int.natAbs, Int.natAbs_of_nonneg, PowerSeries, PowerSeries.X, Submonoid, Submonoid.coe_one, coe_algebraMap, coe_one, map_mul, map_one, mul_one, natAbs, natAbs_of_nonneg, ofPowerSeries_X_pow, powerSeriesPart, single, single_order_mul_powerSeriesPart, z.order
 -/
@@ -1281,7 +1323,20 @@ theorem intValuation_eq_of_coe
   rw [intValuation_if_neg _ hP]; rw [intValuation_if_neg _ <| (by simp [hP])]
   simp only [idealX_span, exp_neg, inv_inj, exp_inj, Nat.cast_inj]
   have span_ne_zero :
-    (Ideal.span {P} : Ideal K[X]) !
+    (Ideal.span {P} : Ideal K[X]) != 0 ∧ (Ideal.span {Polynomial.X} : Ideal K[X]) != 0 := by
+    simp only [Ideal.zero_eq_bot, ne_eq, Ideal.span_singleton_eq_bot, hP, Polynomial.X_ne_zero,
+      not_false_iff, and_self_iff]
+  have span_ne_zero' :
+    (Ideal.span {↑P} : Ideal K⟦X⟧) != 0 ∧ ((idealX K).asIdeal : Ideal K⟦X⟧) != 0 := by
+    simp only [Ideal.zero_eq_bot, ne_eq, Ideal.span_singleton_eq_bot, coe_eq_zero_iff, hP,
+      not_false_eq_true, true_and, (idealX K).3]
+  classical
+  rw [Ideal.count_associates_factors_eq span_ne_zero.1
+    (Ideal.span_singleton_prime Polynomial.X_ne_zero |>.mpr prime_X) span_ne_zero.2]; rw [Ideal.count_associates_factors_eq]
+  on_goal 1 => convert! (normalized_count_X_eq_of_coe hP).symm
+  exacts [Ideal.count_span_normalizedFactors_eq_of_normUnit hP Polynomial.normUnit_X prime_X,
+    Ideal.count_span_normalizedFactors_eq_of_normUnit (by simp [hP]) normUnit_X X_prime,
+    span_ne_zero'.1, (idealX K).isPrime, span_ne_zero'.2]
 
 中文:
 定理 intValuation_eq_of_coe
@@ -1292,7 +1347,20 @@ theorem intValuation_eq_of_coe
   rw [intValuation_if_neg _ hP]; rw [intValuation_if_neg _ <| (by simp [hP])]
   simp only [idealX_span, exp_neg, inv_inj, exp_inj, Nat.cast_inj]
   have span_ne_zero :
-    (Ideal.span {P} : Ideal K[X]) !
+    (Ideal.span {P} : Ideal K[X]) != 0 ∧ (Ideal.span {Polynomial.X} : Ideal K[X]) != 0 := by
+    simp only [Ideal.zero_eq_bot, ne_eq, Ideal.span_singleton_eq_bot, hP, Polynomial.X_ne_zero,
+      not_false_iff, and_self_iff]
+  have span_ne_zero' :
+    (Ideal.span {↑P} : Ideal K⟦X⟧) != 0 ∧ ((idealX K).asIdeal : Ideal K⟦X⟧) != 0 := by
+    simp only [Ideal.zero_eq_bot, ne_eq, Ideal.span_singleton_eq_bot, coe_eq_zero_iff, hP,
+      not_false_eq_true, true_and, (idealX K).3]
+  classical
+  rw [Ideal.count_associates_factors_eq span_ne_zero.1
+    (Ideal.span_singleton_prime Polynomial.X_ne_zero |>.mpr prime_X) span_ne_zero.2]; rw [Ideal.count_associates_factors_eq]
+  on_goal 1 => convert! (normalized_count_X_eq_of_coe hP).symm
+  exacts [Ideal.count_span_normalizedFactors_eq_of_normUnit hP Polynomial.normUnit_X prime_X,
+    Ideal.count_span_normalizedFactors_eq_of_normUnit (by simp [hP]) normUnit_X X_prime,
+    span_ne_zero'.1, (idealX K).isPrime, span_ne_zero'.2]
 
 Depends on / 依赖: Ideal.span, Ideal.span_singleton_eq_bot, Ideal.zero_eq_bot, Nat.cast_inj, Polynomial, Polynomial.X, Polynomial.X_ne_zero, Polynomial.coe_zero, Valuation, Valuation.map_zero, X_ne_zero, and_self_iff, cast_inj, coe_zero, exp_inj, exp_neg, idealX_span, intValuation_if_neg, inv_inj, map_zero
 -/
@@ -1381,7 +1449,8 @@ theorem valuation_eq_LaurentSeries_valuation
   convert!
     @valuation_of_mk' K⟦X⟧ _ _ K⸨X⸩ _ _ _ (PowerSeries.idealX K) f
 ⟨g, mem_nonZeroDivisors_iff_ne_zero.2 (by simp [h])⟩
-  · simp [← IsScalarTower.algebraM
+  · simp [← IsScalarTower.algebraMap_apply K[X] K⟮X⟯ K⸨X⸩]
+  exacts [intValuation_eq_of_coe _, intValuation_eq_of_coe _]
 
 中文:
 定理 valuation_eq_LaurentSeries_valuation
@@ -1393,7 +1462,8 @@ theorem valuation_eq_LaurentSeries_valuation
   convert!
     @valuation_of_mk' K⟦X⟧ _ _ K⸨X⸩ _ _ _ (PowerSeries.idealX K) f
 ⟨g, mem_nonZeroDivisors_iff_ne_zero.2 (by simp [h])⟩
-  · simp [← IsScalarTower.algebraM
+  · simp [← IsScalarTower.algebraMap_apply K[X] K⟮X⟯ K⸨X⸩]
+  exacts [intValuation_eq_of_coe _, intValuation_eq_of_coe _]
 
 Depends on / 依赖: Eq.comm, IsScalarTower, IsScalarTower.algebraMap_apply, Polynomial, Polynomial.valuation_of_mk, PowerSeries, PowerSeries.idealX, RatFunc, RatFunc.induction_on, RatFunc.mk_eq_mk, algebraMap_apply, convert, exacts, idealX, induction_on, intValuation_eq_of_coe, mem_nonZeroDivisors_iff_ne_zero, mk_eq_mk, valuation_of_mk
 -/
@@ -1500,7 +1570,7 @@ theorem valuation_single_zpow
   · rw [Int.ofNat_eq_natCast, ← HahnSeries.ofPowerSeries_X_pow, PowerSeries.coe_pow,
       valuation_X_pow]
   · rw [Int.negSucc_eq, ← inv_inj, ← map_inv₀, inv_single, neg_neg, ← Int.natCast_succ, inv_one,
-      ← HahnSeries.ofPowerSeries_X_pow, PowerSeries.coe_pow, valuation_X
+      ← HahnSeries.ofPowerSeries_X_pow, PowerSeries.coe_pow, valuation_X_pow, exp_neg]
 
 中文:
 定理 valuation_single_zpow
@@ -1510,7 +1580,7 @@ theorem valuation_single_zpow
   · rw [Int.ofNat_eq_natCast, ← HahnSeries.ofPowerSeries_X_pow, PowerSeries.coe_pow,
       valuation_X_pow]
   · rw [Int.negSucc_eq, ← inv_inj, ← map_inv₀, inv_single, neg_neg, ← Int.natCast_succ, inv_one,
-      ← HahnSeries.ofPowerSeries_X_pow, PowerSeries.coe_pow, valuation_X
+      ← HahnSeries.ofPowerSeries_X_pow, PowerSeries.coe_pow, valuation_X_pow, exp_neg]
 
 Depends on / 依赖: HahnSeries, HahnSeries.ofPowerSeries_X_pow, Int.natCast_succ, Int.negSucc_eq, Int.ofNat_eq_natCast, PowerSeries, PowerSeries.coe_pow, coe_pow, exp_neg, inv_inj, inv_one, inv_single, natCast_succ, negSucc_eq, neg_neg, ofNat_eq_natCast, ofPowerSeries_X_pow, valuation_X_pow
 -/
@@ -1533,7 +1603,7 @@ theorem coeff_zero_of_lt_intValuation
   apply (PowerSeries.X_pow_dvd_iff).mp _ n hnd
   rwa [← LaurentSeries.coe_algebraMap, valuation_def, valuation_of_algebraMap,
     intValuation_le_pow_iff_dvd (PowerSeries.idealX K) f d, PowerSeries.idealX,
-    Ideal.span_singleton_pow, Ideal.span_singleton_dvd_span_singleton_iff_dvd] 
+    Ideal.span_singleton_pow, Ideal.span_singleton_dvd_span_singleton_iff_dvd] at H
 
 中文:
 定理 coeff_zero_of_lt_intValuation
@@ -1543,7 +1613,7 @@ theorem coeff_zero_of_lt_intValuation
   apply (PowerSeries.X_pow_dvd_iff).mp _ n hnd
   rwa [← LaurentSeries.coe_algebraMap, valuation_def, valuation_of_algebraMap,
     intValuation_le_pow_iff_dvd (PowerSeries.idealX K) f d, PowerSeries.idealX,
-    Ideal.span_singleton_pow, Ideal.span_singleton_dvd_span_singleton_iff_dvd] 
+    Ideal.span_singleton_pow, Ideal.span_singleton_dvd_span_singleton_iff_dvd] at H
 
 Depends on / 依赖: Ideal.span_singleton_dvd_span_singleton_iff_dvd, Ideal.span_singleton_pow, LaurentSeries, LaurentSeries.coe_algebraMap, PowerSeries, PowerSeries.X_pow_dvd_iff, PowerSeries.idealX, X_pow_dvd_iff, coe_algebraMap, idealX, intValuation_le_pow_iff_dvd, span_singleton_dvd_span_singleton_iff_dvd, span_singleton_pow, valuation_def, valuation_of_algebraMap
 -/
@@ -1565,7 +1635,8 @@ theorem intValuation_le_iff_coeff_lt_eq_zero
   proof: by
   have : PowerSeries.X ^ d ∣ f ↔ forall n : Nat, n < d -> (PowerSeries.coeff n) f = 0 :=
     ⟨PowerSeries.X_pow_dvd_iff.mp, PowerSeries.X_pow_dvd_iff.mpr⟩
-  rw [← this]; rw [← LaurentSeries.coe_algebraMap]; rw [valuation_def]; rw [valuation_of_algebraMap]; rw [← Ideal.span_singleton_dvd_span_sing
+  rw [← this]; rw [← LaurentSeries.coe_algebraMap]; rw [valuation_def]; rw [valuation_of_algebraMap]; rw [← Ideal.span_singleton_dvd_span_singleton_iff_dvd]; rw [← Ideal.span_singleton_pow]
+  apply intValuation_le_pow_iff_dvd
 
 中文:
 定理 intValuation_le_iff_coeff_lt_eq_zero
@@ -1573,7 +1644,8 @@ theorem intValuation_le_iff_coeff_lt_eq_zero
   证明: by
   have : PowerSeries.X ^ d ∣ f ↔ forall n : Nat, n < d -> (PowerSeries.coeff n) f = 0 :=
     ⟨PowerSeries.X_pow_dvd_iff.mp, PowerSeries.X_pow_dvd_iff.mpr⟩
-  rw [← this]; rw [← LaurentSeries.coe_algebraMap]; rw [valuation_def]; rw [valuation_of_algebraMap]; rw [← Ideal.span_singleton_dvd_span_sing
+  rw [← this]; rw [← LaurentSeries.coe_algebraMap]; rw [valuation_def]; rw [valuation_of_algebraMap]; rw [← Ideal.span_singleton_dvd_span_singleton_iff_dvd]; rw [← Ideal.span_singleton_pow]
+  apply intValuation_le_pow_iff_dvd
 
 Depends on / 依赖: Ideal.span_singleton_dvd_span_singleton_iff_dvd, Ideal.span_singleton_pow, LaurentSeries, LaurentSeries.coe_algebraMap, PowerSeries, PowerSeries.X, PowerSeries.X_pow_dvd_iff.mp, PowerSeries.X_pow_dvd_iff.mpr, PowerSeries.coeff, X_pow_dvd_iff, coe_algebraMap, intValuation_le_pow_iff_dvd, span_singleton_dvd_span_singleton_iff_dvd, span_singleton_pow, valuation_def, valuation_of_algebraMap
 -/
@@ -1598,7 +1670,19 @@ theorem coeff_zero_of_lt_valuation
   set F := powerSeriesPart f with hF
   by_cases! ord_nonpos : f.order <= 0
   · obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat ord_nonpos
-    obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le (neg_le_iff_add_nonneg.mp (hs
+    obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le (neg_le_iff_add_nonneg.mp (hs ▸ h_n_ord))
+    obtain ⟨d, hd⟩ := Int.eq_ofNat_of_zero_le (a := D + s) (by lia)
+    rw [eq_add_neg_of_add_eq hm]; rw [add_comm]; rw [← hs]; rw [← powerSeriesPart_coeff]
+    apply (intValuation_le_iff_coeff_lt_eq_zero K F).mp _ m (by linarith)
+    rw [hF]; rw [ofPowerSeries_powerSeriesPart f]; rw [hs]; rw [neg_neg]; rw [← hd]; rw [neg_add_rev]; rw [exp_add]; rw [map_mul]; rw [← ofPowerSeries_X_pow s]; rw [PowerSeries.coe_pow]; rw [valuation_X_pow K s]
+    gcongr
+  · obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat (Int.neg_nonpos_of_nonneg (le_of_lt ord_nonpos))
+    obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le (a := n - s) (by grind)
+    obtain ⟨d, hd⟩ := Int.eq_ofNat_of_zero_le (a := D - s) (by lia)
+    rw [sub_eq_iff_eq_add.mp hm]; rw [add_comm]; rw [← neg_neg (s : Int)]; rw [← hs]; rw [neg_neg]; rw [← powerSeriesPart_coeff]
+    apply (intValuation_le_iff_coeff_lt_eq_zero K F).mp _ m (by linarith)
+    rw [hF]; rw [ofPowerSeries_powerSeriesPart f]; rw [map_mul]; rw [← hd]; rw [hs]; rw [neg_sub]; rw [sub_eq_add_neg]; rw [exp_add]; rw [valuation_single_zpow]; rw [neg_neg]
+    gcongr
 
 中文:
 定理 coeff_zero_of_lt_valuation
@@ -1610,7 +1694,19 @@ theorem coeff_zero_of_lt_valuation
   set F := powerSeriesPart f with hF
   by_cases! ord_nonpos : f.order <= 0
   · obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat ord_nonpos
-    obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le (neg_le_iff_add_nonneg.mp (hs
+    obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le (neg_le_iff_add_nonneg.mp (hs ▸ h_n_ord))
+    obtain ⟨d, hd⟩ := Int.eq_ofNat_of_zero_le (a := D + s) (by lia)
+    rw [eq_add_neg_of_add_eq hm]; rw [add_comm]; rw [← hs]; rw [← powerSeriesPart_coeff]
+    apply (intValuation_le_iff_coeff_lt_eq_zero K F).mp _ m (by linarith)
+    rw [hF]; rw [ofPowerSeries_powerSeriesPart f]; rw [hs]; rw [neg_neg]; rw [← hd]; rw [neg_add_rev]; rw [exp_add]; rw [map_mul]; rw [← ofPowerSeries_X_pow s]; rw [PowerSeries.coe_pow]; rw [valuation_X_pow K s]
+    gcongr
+  · obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat (Int.neg_nonpos_of_nonneg (le_of_lt ord_nonpos))
+    obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le (a := n - s) (by grind)
+    obtain ⟨d, hd⟩ := Int.eq_ofNat_of_zero_le (a := D - s) (by lia)
+    rw [sub_eq_iff_eq_add.mp hm]; rw [add_comm]; rw [← neg_neg (s : Int)]; rw [← hs]; rw [neg_neg]; rw [← powerSeriesPart_coeff]
+    apply (intValuation_le_iff_coeff_lt_eq_zero K F).mp _ m (by linarith)
+    rw [hF]; rw [ofPowerSeries_powerSeriesPart f]; rw [map_mul]; rw [← hd]; rw [hs]; rw [neg_sub]; rw [sub_eq_add_neg]; rw [exp_add]; rw [valuation_single_zpow]; rw [neg_neg]
+    gcongr
 
 Depends on / 依赖: Int.eq_ofNat_of_zero_le, Int.exists_eq_neg_ofNat, add_comm, coeff_eq_zero_of_lt_order, eq_add_neg_of_add_eq, eq_ofNat_of_zero_le, exists_eq_neg_ofNat, f.order, h_n_ord, intValuation_le_iff_coeff_lt_eq_zero, neg_le_iff_add_nonneg, neg_le_iff_add_nonneg.mp, ord_nonpos, powerSeriesPart, powerSeriesPart_coeff
 -/
@@ -1647,7 +1743,33 @@ theorem valuation_le_iff_coeff_lt_eq_zero
   let F := powerSeriesPart f
   by_cases! ord_nonpos : f.order <= 0
   · obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat ord_nonpos
-    rw [← f.single_order_mul_powerSeriesPart]; rw [hs]; rw [map_mul]; rw [valuation_single_
+    rw [← f.single_order_mul_powerSeriesPart]; rw [hs]; rw [map_mul]; rw [valuation_single_zpow]; rw [neg_neg]; rw [mul_comm]; rw [← le_mul_inv_iff₀]; rw [exp_neg]; rw [← mul_inv]; rw [← exp_add]; rw [← exp_neg]
+    · by_cases! hDs : D + s <= 0
+      · apply le_trans ((PowerSeries.idealX K).valuation_le_one F)
+        rwa [← log_le_iff_le_exp one_ne_zero, le_neg, log_one, neg_zero]
+      · obtain ⟨d, hd⟩ := Int.eq_ofNat_of_zero_le hDs.le
+        rw [hd]
+        apply (intValuation_le_iff_coeff_lt_eq_zero K F).mpr
+        intro n hn
+        rw [powerSeriesPart_coeff f n]; rw [hs]
+        apply h_val_f
+        lia
+    · simp [ne_eq, zero_lt_iff]
+· obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat neg_nonpos_of_nonneg ord_nonpos.le
+    rw [neg_inj] at hs
+    rw [← f.single_order_mul_powerSeriesPart]; rw [hs]; rw [map_mul]; rw [valuation_single_zpow]; rw [mul_comm]; rw [← le_mul_inv_iff₀]; rw [← exp_neg]; rw [← exp_add]; rw [neg_neg]
+    · by_cases! hDs : D - s <= 0
+      · apply le_trans ((PowerSeries.idealX K).valuation_le_one F)
+        rw [← log_le_iff_le_exp one_ne_zero]; rw [log_one]
+        lia
+      · obtain ⟨d, hd⟩ := Int.eq_ofNat_of_zero_le hDs.le
+        rw [← neg_neg (-D + ↑s)]; rw [← sub_eq_neg_add]; rw [neg_sub]; rw [hd]
+        apply (intValuation_le_iff_coeff_lt_eq_zero K F).mpr
+        intro n hn
+        rw [powerSeriesPart_coeff f n]; rw [hs]
+        apply h_val_f (s + n)
+        lia
+    · simp [ne_eq, zero_lt_iff]
 
 中文:
 定理 valuation_le_iff_coeff_lt_eq_zero
@@ -1657,7 +1779,33 @@ theorem valuation_le_iff_coeff_lt_eq_zero
   let F := powerSeriesPart f
   by_cases! ord_nonpos : f.order <= 0
   · obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat ord_nonpos
-    rw [← f.single_order_mul_powerSeriesPart]; rw [hs]; rw [map_mul]; rw [valuation_single_
+    rw [← f.single_order_mul_powerSeriesPart]; rw [hs]; rw [map_mul]; rw [valuation_single_zpow]; rw [neg_neg]; rw [mul_comm]; rw [← le_mul_inv_iff₀]; rw [exp_neg]; rw [← mul_inv]; rw [← exp_add]; rw [← exp_neg]
+    · by_cases! hDs : D + s <= 0
+      · apply le_trans ((PowerSeries.idealX K).valuation_le_one F)
+        rwa [← log_le_iff_le_exp one_ne_zero, le_neg, log_one, neg_zero]
+      · obtain ⟨d, hd⟩ := Int.eq_ofNat_of_zero_le hDs.le
+        rw [hd]
+        apply (intValuation_le_iff_coeff_lt_eq_zero K F).mpr
+        intro n hn
+        rw [powerSeriesPart_coeff f n]; rw [hs]
+        apply h_val_f
+        lia
+    · simp [ne_eq, zero_lt_iff]
+· obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat neg_nonpos_of_nonneg ord_nonpos.le
+    rw [neg_inj] at hs
+    rw [← f.single_order_mul_powerSeriesPart]; rw [hs]; rw [map_mul]; rw [valuation_single_zpow]; rw [mul_comm]; rw [← le_mul_inv_iff₀]; rw [← exp_neg]; rw [← exp_add]; rw [neg_neg]
+    · by_cases! hDs : D - s <= 0
+      · apply le_trans ((PowerSeries.idealX K).valuation_le_one F)
+        rw [← log_le_iff_le_exp one_ne_zero]; rw [log_one]
+        lia
+      · obtain ⟨d, hd⟩ := Int.eq_ofNat_of_zero_le hDs.le
+        rw [← neg_neg (-D + ↑s)]; rw [← sub_eq_neg_add]; rw [neg_sub]; rw [hd]
+        apply (intValuation_le_iff_coeff_lt_eq_zero K F).mpr
+        intro n hn
+        rw [powerSeriesPart_coeff f n]; rw [hs]
+        apply h_val_f (s + n)
+        lia
+    · simp [ne_eq, zero_lt_iff]
 
 Depends on / 依赖: Int.exists_eq_neg_ofNat, PowerSeries, PowerSeries.idealX, coeff_zero_of_lt_valuation, exists_eq_neg_ofNat, exp_add, exp_neg, f.order, f.single_order_mul_powerSeriesPart, h_val_f, idealX, le_trans, map_mul, mul_comm, mul_inv, neg_neg, ord_nonpos, powerSeriesPart, single_order_mul_powerSeriesPart, valuation_le_one
 -/
@@ -1779,7 +1927,15 @@ theorem val_le_one_iff_eq_coe
   refine ⟨fun h => ⟨PowerSeries.mk fun n => f.coeff n, ?_⟩, ?_⟩
   on_goal 1 => ext (_ | n)
   · simp only [Int.ofNat_eq_natCast, coeff_coe_powerSeries, coeff_mk]
-  on_goal 1 => simp only [h (Int.negSucc n) (Int
+  on_goal 1 => simp only [h (Int.negSucc n) (Int.negSucc_lt_zero n)]
+  on_goal 2 => rintro ⟨F, rfl⟩ _ _
+  all_goals
+    apply HahnSeries.embDomain_of_notMem_range
+    simp only [Nat.coe_castAddMonoidHom, RelEmbedding.coe_mk, Function.Embedding.coeFn_mk,
+      Set.mem_range, not_exists, reduceCtorEq]
+    intro
+  · simp only [not_false_eq_true]
+  · lia
 
 中文:
 定理 val_le_one_iff_eq_coe
@@ -1790,7 +1946,15 @@ theorem val_le_one_iff_eq_coe
   refine ⟨fun h => ⟨PowerSeries.mk fun n => f.coeff n, ?_⟩, ?_⟩
   on_goal 1 => ext (_ | n)
   · simp only [Int.ofNat_eq_natCast, coeff_coe_powerSeries, coeff_mk]
-  on_goal 1 => simp only [h (Int.negSucc n) (Int
+  on_goal 1 => simp only [h (Int.negSucc n) (Int.negSucc_lt_zero n)]
+  on_goal 2 => rintro ⟨F, rfl⟩ _ _
+  all_goals
+    apply HahnSeries.embDomain_of_notMem_range
+    simp only [Nat.coe_castAddMonoidHom, RelEmbedding.coe_mk, Function.Embedding.coeFn_mk,
+      Set.mem_range, not_exists, reduceCtorEq]
+    intro
+  · simp only [not_false_eq_true]
+  · lia
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.coeFn_mk, HahnSeries, HahnSeries.embDomain_of_notMem_range, Int.negSucc, Int.negSucc_lt_zero, Int.ofNat_eq_natCast, Nat.coe_castAddMonoidHom, PowerSeries, PowerSeries.mk, RelEmbedding, RelEmbedding.coe_mk, Set.mem_range, all_goals, coeFn_mk, coe_castAddMonoidHom, coe_mk, coeff_coe_powerSeries, coeff_mk
 -/
@@ -1867,7 +2031,15 @@ theorem uniformContinuous_coeff
   use {P | Valued.v (P.snd - P.fst) < ↑γ}
   refine ⟨?_, fun _ hP => ?_⟩
   · obtain ⟨x, hx⟩ := LaurentSeries.valuation_surjective K γ
-have : Value
+have : Valued.v.restrict x != 0 := fun h => NeZero.ne γ.1
+      hx ▸ MonoidWithZeroHom.ValueGroup₀.restrict₀_eq_zero_iff.1 h
+    rw [← hx]
+    nth_rw 2 [← Valuation.coe_ofClass]
+    rw [← MonoidWithZeroHom.ValueGroup₀.embedding_restrict₀]
+    simp_rw [← Valued.v.restrict_lt_iff_lt_embedding]
+    exact (Valued.hasBasis_uniformity K⸨X⸩ Intᵐ⁰).mem_of_mem
+      (i := Units.mk0 (Valued.v.restrict x) this) (by tauto)
+  · simpa [eq_coeff_of_valuation_sub_lt K hP.le (lt_add_one _)] using mem_uniformity_of_eq hS rfl
 
 中文:
 定理 uniformContinuous_coeff
@@ -1878,7 +2050,15 @@ have : Value
   use {P | Valued.v (P.snd - P.fst) < ↑γ}
   refine ⟨?_, fun _ hP => ?_⟩
   · obtain ⟨x, hx⟩ := LaurentSeries.valuation_surjective K γ
-have : Value
+have : Valued.v.restrict x != 0 := fun h => NeZero.ne γ.1
+      hx ▸ MonoidWithZeroHom.ValueGroup₀.restrict₀_eq_zero_iff.1 h
+    rw [← hx]
+    nth_rw 2 [← Valuation.coe_ofClass]
+    rw [← MonoidWithZeroHom.ValueGroup₀.embedding_restrict₀]
+    simp_rw [← Valued.v.restrict_lt_iff_lt_embedding]
+    exact (Valued.hasBasis_uniformity K⸨X⸩ Intᵐ⁰).mem_of_mem
+      (i := Units.mk0 (Valued.v.restrict x) this) (by tauto)
+  · simpa [eq_coeff_of_valuation_sub_lt K hP.le (lt_add_one _)] using mem_uniformity_of_eq hS rfl
 
 Depends on / 依赖: LaurentSeries, LaurentSeries.valuation_surjective, MonoidWithZeroHom, MonoidWithZeroHom.ValueGroup, NeZero, NeZero.ne, P.fst, P.snd, Units.mk0, Valuation, Valuation.coe_ofClass, Valued, Valued.v, Valued.v.restrict, coe_ne_zero, coe_ofClass, eventually_iff_exists_mem, eventually_iff_exists_mem.mpr, nth_rw, restrict
 -/
@@ -1956,7 +2136,26 @@ lemma Cauchy.exists_lb_eventual_support
   let ζ : (MonoidWithZeroHom.ValueGroup₀ <| .ofClass (Valued.v (R := K⸨X⸩)))ˣ :=
     Units.mk0 1 (zero_ne_one.symm)
 obtain ⟨S, ⟨hS, ⟨T, ⟨hT, H⟩⟩⟩⟩ := mem_prod_iff.mp Filter.le_def.mp hℱ.2 entourage
- (
+ (Valued.hasBasis_uniformity K⸨X⸩ Intᵐ⁰).mem_of_mem (i := ζ) (by tauto)
+  obtain ⟨f, hf⟩ := forall_mem_nonempty_iff_neBot.mpr hℱ.1 (S inter T) (inter_mem_iff.mpr ⟨hS, hT⟩)
+  obtain ⟨N, hN⟩ : exists N : Int, forall g : K⸨X⸩,
+    Valued.v (g - f) <= 1 -> forall n < N, g.coeff n = 0 := by
+    by_cases hf : f = 0
+    · refine ⟨0, fun x hg => ?_⟩
+      rw [hf]; rw [sub_zero] at hg
+      exact (valuation_le_iff_coeff_lt_eq_zero K).mp hg
+    · refine ⟨min (f.2.isWF.min (HahnSeries.support_nonempty_iff.mpr hf)) 0 - 1, fun _ hg n hn => ?_⟩
+      rw [eq_coeff_of_valuation_sub_lt K hg (d := 0)]
+      · exact Function.notMem_support.mp fun h =>
+        f.2.isWF.not_lt_min (HahnSeries.support_nonempty_iff.mpr hf) h
+ lt_trans hn Int.sub_one_lt_iff.mpr min_le_left _ _
+exact lt_of_lt_of_le hn le_of_lt (Int.sub_one_lt_of_le <| min_le_right _ _)
+  use N
+  apply mem_of_superset (inter_mem hS hT)
+  intro g hg
+  have h_prod : (f, g) in S ×ˢ T := by simp [hf.1, hg.2]
+  refine hN g (le_of_lt ?_)
+  simpa [Valuation.restrict_def, ← Valuation.restrict_lt_one_iff] using! H h_prod
 
 中文:
 引理 Cauchy.存在_lb_eventual_support
@@ -1966,7 +2165,26 @@ obtain ⟨S, ⟨hS, ⟨T, ⟨hT, H⟩⟩⟩⟩ := mem_prod_iff.mp Filter.le_def.
   let ζ : (MonoidWithZeroHom.ValueGroup₀ <| .ofClass (Valued.v (R := K⸨X⸩)))ˣ :=
     Units.mk0 1 (zero_ne_one.symm)
 obtain ⟨S, ⟨hS, ⟨T, ⟨hT, H⟩⟩⟩⟩ := mem_prod_iff.mp Filter.le_def.mp hℱ.2 entourage
- (
+ (Valued.hasBasis_uniformity K⸨X⸩ Intᵐ⁰).mem_of_mem (i := ζ) (by tauto)
+  obtain ⟨f, hf⟩ := forall_mem_nonempty_iff_neBot.mpr hℱ.1 (S inter T) (inter_mem_iff.mpr ⟨hS, hT⟩)
+  obtain ⟨N, hN⟩ : exists N : Int, forall g : K⸨X⸩,
+    Valued.v (g - f) <= 1 -> forall n < N, g.coeff n = 0 := by
+    by_cases hf : f = 0
+    · refine ⟨0, fun x hg => ?_⟩
+      rw [hf]; rw [sub_zero] at hg
+      exact (valuation_le_iff_coeff_lt_eq_zero K).mp hg
+    · refine ⟨min (f.2.isWF.min (HahnSeries.support_nonempty_iff.mpr hf)) 0 - 1, fun _ hg n hn => ?_⟩
+      rw [eq_coeff_of_valuation_sub_lt K hg (d := 0)]
+      · exact Function.notMem_support.mp fun h =>
+        f.2.isWF.not_lt_min (HahnSeries.support_nonempty_iff.mpr hf) h
+ lt_trans hn Int.sub_one_lt_iff.mpr min_le_left _ _
+exact lt_of_lt_of_le hn le_of_lt (Int.sub_one_lt_of_le <| min_le_right _ _)
+  use N
+  apply mem_of_superset (inter_mem hS hT)
+  intro g hg
+  have h_prod : (f, g) in S ×ˢ T := by simp [hf.1, hg.2]
+  refine hN g (le_of_lt ?_)
+  simpa [Valuation.restrict_def, ← Valuation.restrict_lt_one_iff] using! H h_prod
 
 Depends on / 依赖: Filter, Filter.le_def.mp, MonoidWithZeroHom, MonoidWithZeroHom.ValueGroup, P.fst, P.snd, Units.mk0, Valued, Valued.hasBasis_uniformity, Valued.v, Valued.v.restrict, entourage, forall_mem_nonempty_iff_neBot, forall_mem_nonempty_iff_neBot.mpr, hasBasis_uniformity, inter_mem_iff, inter_mem_iff.mpr, le_def, mem_of_mem, mem_prod_iff
 -/
@@ -2009,7 +2227,7 @@ theorem Cauchy.exists_lb_support
   refine ⟨N, fun n hn => Ultrafilter.eq_of_le_pure (hℱ.map (uniformContinuous_coeff n)).1
       ((principal_singleton _).symm ▸ coeff_tendsto _ _) ?_⟩
   simp only [pure_zero, nonpos_iff]
-  apply Filter.mem_of_superset
+  apply Filter.mem_of_superset hN (fun _ ha => ha _ hn)
 
 中文:
 定理 Cauchy.存在_lb_support
@@ -2020,7 +2238,7 @@ theorem Cauchy.exists_lb_support
   refine ⟨N, fun n hn => Ultrafilter.eq_of_le_pure (hℱ.map (uniformContinuous_coeff n)).1
       ((principal_singleton _).symm ▸ coeff_tendsto _ _) ?_⟩
   simp only [pure_zero, nonpos_iff]
-  apply Filter.mem_of_superset
+  apply Filter.mem_of_superset hN (fun _ ha => ha _ hn)
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, Ultrafilter, Ultrafilter.eq_of_le_pure, UniformSpace, coeff_tendsto, eq_of_le_pure, exists_lb_eventual_support, mem_of_superset, nonpos_iff, principal_singleton, pure_zero, uniformContinuous_coeff
 -/
@@ -2117,6 +2335,32 @@ theorem Cauchy.coeff_eventually_equal
   have intersec₁ :
     (⋂ n in Set.Iio D, φ n) subseteq {x : K⸨X⸩ | forall d : Int, d < D -> coeff hℱ d = x.coeff d} := by
     intro _ hf
+    simpa only [Set.mem_iInter] using! hf
+  -- The goal is now to show that the intersection of all `φ d` (for `d < D`) is in `ℱ`.
+  let ℓ := (exists_lb_coeff_ne hℱ).choose
+  let N := max ℓ D
+  have intersec₂ : ⋂ n in Set.Iio D, φ n ⊇ (⋂ n in Set.Iio ℓ, φ n) inter (⋂ n in Set.Icc ℓ N, φ n) := by
+    simp only [Set.mem_Iio, Set.mem_Icc, Set.subset_iInter_iff]
+    intro i hi x hx
+    simp only [Set.mem_inter_iff, Set.mem_iInter, and_imp] at hx
+    by_cases! H : i < ℓ
+    exacts [hx.1 _ H, hx.2 _ H <| le_of_lt <| lt_max_of_lt_right hi]
+  suffices (⋂ n in Set.Iio ℓ, φ n) inter (⋂ n in Set.Icc ℓ N, φ n) in ℱ by
+exact ℱ.sets_of_superset this intersec₂.trans intersec₁
+  /- To show that the intersection we have in sight is in `ℱ`, we use that it contains a double
+  intersection (an infinite and a finite one): by general properties of filters, we are reduced
+  to show that both terms are in `ℱ`, which is easy in light of their definition. -/
+  · simp only [Set.mem_Iio, inter_mem_iff]
+    constructor
+    · have := (exists_lb_coeff_ne hℱ).choose_spec
+      rw [Filter.eventually_iff] at this
+      convert! this
+      ext
+      simp only [Set.mem_iInter, Set.mem_ofPred_eq]; rfl
+    · rw [biInter_mem (Set.finite_Icc ℓ N)]
+      intro i _
+      apply (coeff_tendsto hℱ _).eventually
+      simp
 
 中文:
 定理 Cauchy.coeff_eventually_equal
@@ -2127,6 +2371,32 @@ theorem Cauchy.coeff_eventually_equal
   have intersec₁ :
     (⋂ n in Set.Iio D, φ n) subseteq {x : K⸨X⸩ | forall d : Int, d < D -> coeff hℱ d = x.coeff d} := by
     intro _ hf
+    simpa only [Set.mem_iInter] using! hf
+  -- The goal is now to show that the intersection of all `φ d` (for `d < D`) is in `ℱ`.
+  let ℓ := (exists_lb_coeff_ne hℱ).choose
+  let N := max ℓ D
+  have intersec₂ : ⋂ n in Set.Iio D, φ n ⊇ (⋂ n in Set.Iio ℓ, φ n) inter (⋂ n in Set.Icc ℓ N, φ n) := by
+    simp only [Set.mem_Iio, Set.mem_Icc, Set.subset_iInter_iff]
+    intro i hi x hx
+    simp only [Set.mem_inter_iff, Set.mem_iInter, and_imp] at hx
+    by_cases! H : i < ℓ
+    exacts [hx.1 _ H, hx.2 _ H <| le_of_lt <| lt_max_of_lt_right hi]
+  suffices (⋂ n in Set.Iio ℓ, φ n) inter (⋂ n in Set.Icc ℓ N, φ n) in ℱ by
+exact ℱ.sets_of_superset this intersec₂.trans intersec₁
+  /- To show that the intersection we have in sight is in `ℱ`, we use that it contains a double
+  intersection (an infinite and a finite one): by general properties of filters, we are reduced
+  to show that both terms are in `ℱ`, which is easy in light of their definition. -/
+  · simp only [Set.mem_Iio, inter_mem_iff]
+    constructor
+    · have := (exists_lb_coeff_ne hℱ).choose_spec
+      rw [Filter.eventually_iff] at this
+      convert! this
+      ext
+      simp only [Set.mem_iInter, Set.mem_ofPred_eq]; rfl
+    · rw [biInter_mem (Set.finite_Icc ℓ N)]
+      intro i _
+      apply (coeff_tendsto hℱ _).eventually
+      simp
 -/
 theorem Cauchy.coeff_eventually_equal {ℱ : Filter K⸨X⸩} (hℱ : Cauchy ℱ) {D : Int} :
     forallᶠ f : K⸨X⸩ in ℱ, forall d, d < D -> coeff hℱ d = f.coeff d := by
@@ -2177,7 +2447,15 @@ theorem Cauchy.eventually_mem_nhds
     simp_rw [← Valued.v.restrict_lt_iff_lt_embedding] at this
     apply this.mono fun _ hf => hU₁ hf
   set D := -(log (embedding γ.1) - 1) with hD₀
-  have hD : exp (-
+  have hD : exp (-D) < embedding γ.1 := by
+    rw [← lt_log_iff_exp_lt (by simp)]; rw [hD₀]
+    simp
+.mono apply coeff_eventually_equal (D := D) hℱ
+  intro _ hf
+  apply lt_of_le_of_lt (valuation_le_iff_coeff_lt_eq_zero K |>.mpr _) hD
+  intro n hn
+  rw [HahnSeries.coeff_sub]; rw [sub_eq_zero]; rw [eq_comm]
+  exact hf _ hn
 
 中文:
 定理 Cauchy.eventually_mem_nhds
@@ -2188,7 +2466,15 @@ theorem Cauchy.eventually_mem_nhds
     simp_rw [← Valued.v.restrict_lt_iff_lt_embedding] at this
     apply this.mono fun _ hf => hU₁ hf
   set D := -(log (embedding γ.1) - 1) with hD₀
-  have hD : exp (-
+  have hD : exp (-D) < embedding γ.1 := by
+    rw [← lt_log_iff_exp_lt (by simp)]; rw [hD₀]
+    simp
+.mono apply coeff_eventually_equal (D := D) hℱ
+  intro _ hf
+  apply lt_of_le_of_lt (valuation_le_iff_coeff_lt_eq_zero K |>.mpr _) hD
+  intro n hn
+  rw [HahnSeries.coeff_sub]; rw [sub_eq_zero]; rw [eq_comm]
+  exact hf _ hn
 
 Depends on / 依赖: Valued, Valued.mem_nhds.mp, Valued.v, Valued.v.restrict_lt_iff_lt_embedding, coeff_eventually_equal, embedding, lt_log_iff_exp_lt, lt_of_le_of_lt, mem_nhds, restrict_lt_iff_lt_embedding, simp_rw, this.mono, valuation_le_iff_coeff_lt_eq_zero
 -/
@@ -2247,7 +2533,21 @@ theorem exists_Polynomial_intValuation_lt
     simpa using (intValuation_le_one (PowerSeries.idealX K) F).trans_lt h_neg
   · rw [← Units.val_le_val, Units.val_one, ← WithZero.coe_one, ← coe_unzero η.ne_zero,
       coe_le_coe, ← Multiplicative.toAdd_le, toAdd_one] at h_neg
-    obtain ⟨d, hd⟩ := Int.exist
+    obtain ⟨d, hd⟩ := Int.exists_eq_neg_ofNat h_neg
+    use F.trunc (d + 1)
+    have : Valued.v ((ofPowerSeries Int K) (F - (trunc (d + 1) F))) <=
+      (Multiplicative.ofAdd (-(d + 1 : Int))) := by
+      apply (intValuation_le_iff_coeff_lt_eq_zero K _).mpr
+      simpa only [map_sub, sub_eq_zero, Polynomial.coeff_coe, coeff_trunc] using
+        fun _ h => (if_pos h).symm
+    rw [neg_add]; rw [ofAdd_add]; rw [← hd]; rw [ofAdd_toAdd]; rw [WithZero.coe_mul]; rw [coe_unzero]; rw [← coe_algebraMap] at this
+    rw [← valuation_of_algebraMap (K := K⸨X⸩) (PowerSeries.idealX K) (F - F.trunc (d + 1))]
+    apply lt_of_le_of_lt this
+    rw [← mul_one (η : Intᵐ⁰)]; rw [mul_assoc]; rw [one_mul]
+    gcongr
+    · exact zero_lt_iff.2 η.ne_zero
+    rw [← WithZero.coe_one]; rw [coe_lt_coe]; rw [ofAdd_neg]; rw [Right.inv_lt_one_iff]; rw [← ofAdd_zero]; rw [Multiplicative.ofAdd_lt]
+    exact Int.zero_lt_one
 
 中文:
 定理 存在_Polynomial_intValuation_lt
@@ -2258,7 +2558,21 @@ theorem exists_Polynomial_intValuation_lt
     simpa using (intValuation_le_one (PowerSeries.idealX K) F).trans_lt h_neg
   · rw [← Units.val_le_val, Units.val_one, ← WithZero.coe_one, ← coe_unzero η.ne_zero,
       coe_le_coe, ← Multiplicative.toAdd_le, toAdd_one] at h_neg
-    obtain ⟨d, hd⟩ := Int.exist
+    obtain ⟨d, hd⟩ := Int.exists_eq_neg_ofNat h_neg
+    use F.trunc (d + 1)
+    have : Valued.v ((ofPowerSeries Int K) (F - (trunc (d + 1) F))) <=
+      (Multiplicative.ofAdd (-(d + 1 : Int))) := by
+      apply (intValuation_le_iff_coeff_lt_eq_zero K _).mpr
+      simpa only [map_sub, sub_eq_zero, Polynomial.coeff_coe, coeff_trunc] using
+        fun _ h => (if_pos h).symm
+    rw [neg_add]; rw [ofAdd_add]; rw [← hd]; rw [ofAdd_toAdd]; rw [WithZero.coe_mul]; rw [coe_unzero]; rw [← coe_algebraMap] at this
+    rw [← valuation_of_algebraMap (K := K⸨X⸩) (PowerSeries.idealX K) (F - F.trunc (d + 1))]
+    apply lt_of_le_of_lt this
+    rw [← mul_one (η : Intᵐ⁰)]; rw [mul_assoc]; rw [one_mul]
+    gcongr
+    · exact zero_lt_iff.2 η.ne_zero
+    rw [← WithZero.coe_one]; rw [coe_lt_coe]; rw [ofAdd_neg]; rw [Right.inv_lt_one_iff]; rw [← ofAdd_zero]; rw [Multiplicative.ofAdd_lt]
+    exact Int.zero_lt_one
 
 Depends on / 依赖: F.trunc, Int.exists_eq_neg_ofNat, Multiplicative, Multiplicative.ofAdd, Multiplicative.toAdd_le, PowerSeries, PowerSeries.idealX, Units.val_le_val, Units.val_one, Valued, Valued.v, WithZero, WithZero.coe_one, coe_le_coe, coe_one, coe_unzero, exists_eq_neg_ofNat, h_neg, idealX, intValuation_le_iff_coeff_lt_eq_zero
 -/
@@ -2298,7 +2612,21 @@ theorem exists_ratFunc_val_lt
       with hη
     obtain ⟨P, hP⟩ := exists_Polynomial_intValuation_lt F (η * γ)
     use RatFunc.X ^ f.order * (P : K⟮X⟯)
-    have F_mul := f.ofPowerSeries_powerSerie
+    have F_mul := f.ofPowerSeries_powerSeriesPart
+    obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat (le_of_lt ord_nonpos)
+    rw [← hF]; rw [hs]; rw [neg_neg]; rw [← ofPowerSeries_X_pow s]; rw [← inv_mul_eq_iff_eq_mul₀] at F_mul
+    · have : (algebraMap K⟮X⟯ K⸨X⸩) 1 = 1 := by exact algebraMap.coe_one
+      rw [hs]; rw [← F_mul]; rw [PowerSeries.coe_pow]; rw [PowerSeries.coe_X]; rw [map_mul]; rw [zpow_neg]; rw [zpow_natCast]; rw [inv_eq_one_div (RatFunc.X ^ s)]; rw [map_div₀]; rw [map_pow]; rw [RatFunc.coe_X]
+      simp only [map_one]
+      rw [← inv_eq_one_div]; rw [← mul_sub]; rw [map_mul]; rw [map_inv₀]; rw [← PowerSeries.coe_X]; rw [valuation_X_pow]; rw [← hs]; rw [← RatFunc.coe_coe]; rw [← PowerSeries.coe_sub]; rw [← coe_algebraMap]; rw [adicValued_apply]; rw [valuation_of_algebraMap]; rw [← Units.val_mk0 (a := exp f.order) exp_ne_zero]; rw [← hη]
+      apply inv_mul_lt_of_lt_mul₀
+      rwa [← Units.val_mul]
+    · simp
+  · obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat (Int.neg_nonpos_of_nonneg ord_nonpos)
+    obtain ⟨P, hP⟩ := exists_Polynomial_intValuation_lt (PowerSeries.X ^ s * F) γ
+    use P
+    rw [← X_order_mul_powerSeriesPart (neg_inj.1 hs).symm]; rw [← RatFunc.coe_coe]; rw [← PowerSeries.coe_sub]; rw [← coe_algebraMap]; rw [adicValued_apply]; rw [valuation_of_algebraMap]
+    exact hP
 
 中文:
 定理 存在_ratFunc_val_lt
@@ -2310,7 +2638,21 @@ theorem exists_ratFunc_val_lt
       with hη
     obtain ⟨P, hP⟩ := exists_Polynomial_intValuation_lt F (η * γ)
     use RatFunc.X ^ f.order * (P : K⟮X⟯)
-    have F_mul := f.ofPowerSeries_powerSerie
+    have F_mul := f.ofPowerSeries_powerSeriesPart
+    obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat (le_of_lt ord_nonpos)
+    rw [← hF]; rw [hs]; rw [neg_neg]; rw [← ofPowerSeries_X_pow s]; rw [← inv_mul_eq_iff_eq_mul₀] at F_mul
+    · have : (algebraMap K⟮X⟯ K⸨X⸩) 1 = 1 := by exact algebraMap.coe_one
+      rw [hs]; rw [← F_mul]; rw [PowerSeries.coe_pow]; rw [PowerSeries.coe_X]; rw [map_mul]; rw [zpow_neg]; rw [zpow_natCast]; rw [inv_eq_one_div (RatFunc.X ^ s)]; rw [map_div₀]; rw [map_pow]; rw [RatFunc.coe_X]
+      simp only [map_one]
+      rw [← inv_eq_one_div]; rw [← mul_sub]; rw [map_mul]; rw [map_inv₀]; rw [← PowerSeries.coe_X]; rw [valuation_X_pow]; rw [← hs]; rw [← RatFunc.coe_coe]; rw [← PowerSeries.coe_sub]; rw [← coe_algebraMap]; rw [adicValued_apply]; rw [valuation_of_algebraMap]; rw [← Units.val_mk0 (a := exp f.order) exp_ne_zero]; rw [← hη]
+      apply inv_mul_lt_of_lt_mul₀
+      rwa [← Units.val_mul]
+    · simp
+  · obtain ⟨s, hs⟩ := Int.exists_eq_neg_ofNat (Int.neg_nonpos_of_nonneg ord_nonpos)
+    obtain ⟨P, hP⟩ := exists_Polynomial_intValuation_lt (PowerSeries.X ^ s * F) γ
+    use P
+    rw [← X_order_mul_powerSeriesPart (neg_inj.1 hs).symm]; rw [← RatFunc.coe_coe]; rw [← PowerSeries.coe_sub]; rw [← coe_algebraMap]; rw [adicValued_apply]; rw [valuation_of_algebraMap]
+    exact hP
 
 Depends on / 依赖: F_mul, Int.exists_eq_neg_ofNat, RatFunc, RatFunc.X, Units.mk0, algebraMap, coe_ne_zero, exists_Polynomial_intValuation_lt, exists_eq_neg_ofNat, f.ofPowerSeries_powerSeriesPart, f.order, f.powerSeriesPart, le_of_lt, neg_neg, ofPowerSeries_X_pow, ofPowerSeries_powerSeriesPart, ord_nonpos, powerSeriesPart
 -/
@@ -2353,7 +2695,17 @@ theorem coe_range_dense
     Set.mem_inter_iff, Set.mem_range, exists_exists_eq_and]
   intro V hV h_symm
   rw [uniformity_eq_comap_neg_add_nhds_zero_swapped] at hV
-  obtain ⟨T, hT₀, hT₁⟩ 
+  obtain ⟨T, hT₀, hT₁⟩ := hV
+  obtain ⟨γ, hγ⟩ := Valued.mem_nhds_zero.mp hT₀
+  have := (embedding γ.1)
+  obtain ⟨P, hP⟩ := exists_ratFunc_val_lt f
+ γ.map (embedding (f := .ofClass (valued K).v))
+  use P
+  apply hT₁
+  apply hγ
+  simpa only [Units.coe_map, MonoidHom.coe_mk, ZeroHom.toFun_eq_coe, OneHom.coe_mk, add_comm,
+    MonoidWithZeroHom.toZeroHom_coe, ← sub_eq_add_neg, Set.mem_ofPred_eq,
+    Valuation.restrict_lt_iff_lt_embedding]
 
 中文:
 定理 coe_range_dense
@@ -2365,7 +2717,17 @@ theorem coe_range_dense
     Set.mem_inter_iff, Set.mem_range, exists_exists_eq_and]
   intro V hV h_symm
   rw [uniformity_eq_comap_neg_add_nhds_zero_swapped] at hV
-  obtain ⟨T, hT₀, hT₁⟩ 
+  obtain ⟨T, hT₀, hT₁⟩ := hV
+  obtain ⟨γ, hγ⟩ := Valued.mem_nhds_zero.mp hT₀
+  have := (embedding γ.1)
+  obtain ⟨P, hP⟩ := exists_ratFunc_val_lt f
+ γ.map (embedding (f := .ofClass (valued K).v))
+  use P
+  apply hT₁
+  apply hγ
+  simpa only [Units.coe_map, MonoidHom.coe_mk, ZeroHom.toFun_eq_coe, OneHom.coe_mk, add_comm,
+    MonoidWithZeroHom.toZeroHom_coe, ← sub_eq_add_neg, Set.mem_ofPred_eq,
+    Valuation.restrict_lt_iff_lt_embedding]
 
 Depends on / 依赖: Nonempty, Set.Nonempty, Set.mem_inter_iff, Set.mem_range, Set.mem_univ, UniformSpace, UniformSpace.mem_closure_iff_symm_ball, Units.coe_map, Valued, Valued.mem_nhds_zero.mp, coe_map, denseRange_iff_closure_range, embedding, exists_exists_eq_and, exists_ratFunc_val_lt, h_symm, iff_true, mem_closure_iff_symm_ball, mem_inter_iff, mem_nhds_zero
 -/
@@ -2448,7 +2810,38 @@ theorem inducing_coe
   constructor
   · rintro ⟨T, ⟨⟨R, ⟨hR, pre_R⟩⟩, pre_T⟩⟩
     obtain ⟨d, hd⟩ := Valued.mem_nhds.mp hR
-    use {P : K⟮X⟯ | Valued.v P < embeddin
+    use {P : K⟮X⟯ | Valued.v P < embedding d.1}
+    simp only [Valued.mem_nhds, sub_zero]
+    refine ⟨?_, subset_trans (fun _ _ => pre_R ?_) pre_T⟩
+    · obtain ⟨x, hx⟩ := RatFunc.valuation_surjective K (embedding d.1)
+      use Units.mk0 (Valued.v.restrict x) (by
+        rw [Valuation.restrict_def]; rw [ne_eq]; rw [restrict₀_eq_zero_iff]; simp [hx])
+      simp [v_def, Valuation.restrict_lt_iff, ← hx]
+    apply hd
+    simp only [sub_zero, Set.mem_ofPred_eq]
+    rw [← map_sub]; rw [Valuation.restrict_lt_iff_lt_embedding]
+    simp only [valuation_def]
+    rwa [← valuation_eq_LaurentSeries_valuation]
+  · rintro ⟨_, ⟨hT, pre_T⟩⟩
+    obtain ⟨d, hd⟩ := Valued.mem_nhds.mp hT
+    set X := {f : K⸨X⸩ | Valued.v f < embedding d.1} with X_def
+    refine ⟨(fun x : K⸨X⸩ × K⸨X⸩ => x.snd - x.fst) ⁻¹' X, ⟨X, ?_⟩, ?_⟩
+    · refine ⟨?_, Set.Subset.refl _⟩
+      · simp only [Valued.mem_nhds, sub_zero, Valuation.restrict_lt_iff_lt_embedding]
+        obtain ⟨x, hx⟩ := restrict₀_surjective _ d.1
+        use Units.mk0 (Valued.v.restrict (x : K⸨X⸩)) (by
+          simp only [ne_eq, map_eq_zero]
+          intro h
+          simp only [h, map_zero] at hx
+          exact Units.ne_zero _ hx.symm)
+        simp only [Units.val_mk0, ← Valuation.restrict_lt_iff_lt_embedding,
+          X_def, Set.ofPred_subset_ofPred, Valuation.restrict_lt_iff]
+        rw [← hx]; rw [embedding_restrict₀]
+        simp [v_def, valuation_coe_ratFunc]
+    · refine subset_trans (fun _ _ => ?_) pre_T
+      apply hd
+      rw [Set.mem_ofPred_eq]; rw [sub_zero]; rw [Valuation.restrict_lt_iff_lt_embedding]; rw [v_def]; rw [valuation_eq_LaurentSeries_valuation]; rw [map_sub]
+      assumption
 
 中文:
 定理 inducing_coe
@@ -2461,7 +2854,38 @@ theorem inducing_coe
   constructor
   · rintro ⟨T, ⟨⟨R, ⟨hR, pre_R⟩⟩, pre_T⟩⟩
     obtain ⟨d, hd⟩ := Valued.mem_nhds.mp hR
-    use {P : K⟮X⟯ | Valued.v P < embeddin
+    use {P : K⟮X⟯ | Valued.v P < embedding d.1}
+    simp only [Valued.mem_nhds, sub_zero]
+    refine ⟨?_, subset_trans (fun _ _ => pre_R ?_) pre_T⟩
+    · obtain ⟨x, hx⟩ := RatFunc.valuation_surjective K (embedding d.1)
+      use Units.mk0 (Valued.v.restrict x) (by
+        rw [Valuation.restrict_def]; rw [ne_eq]; rw [restrict₀_eq_zero_iff]; simp [hx])
+      simp [v_def, Valuation.restrict_lt_iff, ← hx]
+    apply hd
+    simp only [sub_zero, Set.mem_ofPred_eq]
+    rw [← map_sub]; rw [Valuation.restrict_lt_iff_lt_embedding]
+    simp only [valuation_def]
+    rwa [← valuation_eq_LaurentSeries_valuation]
+  · rintro ⟨_, ⟨hT, pre_T⟩⟩
+    obtain ⟨d, hd⟩ := Valued.mem_nhds.mp hT
+    set X := {f : K⸨X⸩ | Valued.v f < embedding d.1} with X_def
+    refine ⟨(fun x : K⸨X⸩ × K⸨X⸩ => x.snd - x.fst) ⁻¹' X, ⟨X, ?_⟩, ?_⟩
+    · refine ⟨?_, Set.Subset.refl _⟩
+      · simp only [Valued.mem_nhds, sub_zero, Valuation.restrict_lt_iff_lt_embedding]
+        obtain ⟨x, hx⟩ := restrict₀_surjective _ d.1
+        use Units.mk0 (Valued.v.restrict (x : K⸨X⸩)) (by
+          simp only [ne_eq, map_eq_zero]
+          intro h
+          simp only [h, map_zero] at hx
+          exact Units.ne_zero _ hx.symm)
+        simp only [Units.val_mk0, ← Valuation.restrict_lt_iff_lt_embedding,
+          X_def, Set.ofPred_subset_ofPred, Valuation.restrict_lt_iff]
+        rw [← hx]; rw [embedding_restrict₀]
+        simp [v_def, valuation_coe_ratFunc]
+    · refine subset_trans (fun _ _ => ?_) pre_T
+      apply hd
+      rw [Set.mem_ofPred_eq]; rw [sub_zero]; rw [Valuation.restrict_lt_iff_lt_embedding]; rw [v_def]; rw [valuation_eq_LaurentSeries_valuation]; rw [map_sub]
+      assumption
 
 Depends on / 依赖: Filter, Filter.comap, Filter.mem_comap, Filter.mem_mk, RatFunc, RatFunc.valuation_surjective, Set.mem_ofPred_eq, Units.mk0, Valuation, Valuation.re, Valued, Valued.mem_nhds, Valued.mem_nhds.mp, Valued.v, Valued.v.restrict, embedding, isUniformInducing_iff, mem_comap, mem_mk, mem_nhds
 -/
@@ -2623,7 +3047,7 @@ definition LaurentSeriesPkg
   separation := inferInstance
   isUniformInducing :=
     inducing_coe.comp (WithVal.uniformEquiv rfl Valuation.IsEquiv.refl).isUniformInducing
-  dense := .comp coe_range_dense (WithVal.equiv _).surjectiv
+  dense := .comp coe_range_dense (WithVal.equiv _).surjective.denseRange continuous_coe
 
 中文:
 定义 LaurentSeriesPkg
@@ -2635,7 +3059,7 @@ definition LaurentSeriesPkg
   separation := inferInstance
   isUniformInducing :=
     inducing_coe.comp (WithVal.uniformEquiv rfl Valuation.IsEquiv.refl).isUniformInducing
-  dense := .comp coe_range_dense (WithVal.equiv _).surjectiv
+  dense := .comp coe_range_dense (WithVal.equiv _).surjective.denseRange continuous_coe
 -/
 noncomputable def LaurentSeriesPkg :
     AbstractCompletion (WithVal (polynomialValuationX K)) where
@@ -2803,7 +3227,8 @@ abbreviation ratfuncAdicComplRingEquiv
         (congrArg₂ (· * ·) (comparePkg_eq_extension K x) (comparePkg_eq_extension K y)).symm
     map_add' x y :=
 (comparePkg_eq_extension K (x + y)).trans
-(map_add _ x.to
+(map_add _ x.toCompletion y.toCompletion).trans
+        (congrArg₂ (· + ·) (comparePkg_eq_extension K x) (comparePkg_eq_extension K y)).symm }
 
 中文:
 缩写 ratfuncAdicComplRingEquiv
@@ -2815,7 +3240,8 @@ abbreviation ratfuncAdicComplRingEquiv
         (congrArg₂ (· * ·) (comparePkg_eq_extension K x) (comparePkg_eq_extension K y)).symm
     map_add' x y :=
 (comparePkg_eq_extension K (x + y)).trans
-(map_add _ x.to
+(map_add _ x.toCompletion y.toCompletion).trans
+        (congrArg₂ (· + ·) (comparePkg_eq_extension K x) (comparePkg_eq_extension K y)).symm }
 
 Depends on / 依赖: comparePkg, comparePkg_eq_extension, map_add, map_mul, toCompletion, x.toCompletion, y.toCompletion
 -/
@@ -3022,7 +3448,25 @@ theorem tendsto_valuation
     rw [ha]; rw [map_zero]; rw [WithZeroTopology.hasBasis_nhds_zero.1 S] at hS
     obtain ⟨γ, γ_ne_zero, γ_le⟩ := hS
     use {t | Valued.v t < γ}
-    construct
+    constructor
+    · rw [ha, this]
+      obtain ⟨x, hx⟩ := valuedAdicCompletion_surjective K⟮X⟯ (idealX K) γ
+      use Units.mk0 (Valued.v.restrict x) (by
+        simp only [Valuation.restrict_def, ne_eq, map_eq_zero]
+        intro h
+        simp only [h, map_zero] at hx
+        tauto)
+      simp [Units.val_mk0, Valuation.restrict_lt_iff, hx]
+    · refine Set.Subset.trans (fun a _ => ?_) (Set.preimage_mono γ_le)
+      rw [Set.mem_preimage]; rw [Set.mem_Iio]; rw [← Valued.valuedCompletion_apply a]
+      simp_all
+  · rw [WithZeroTopology.tendsto_of_ne_zero ((Valuation.ne_zero_iff Valued.v).mpr ha),
+      Filter.eventually_comap, Filter.Eventually, Valued.mem_nhds]
+    use Units.mk0 (Valued.v.restrict a) (by simp [Valuation.restrict_def, ha])
+    simp only [Units.val_mk0, v_def, Set.ofPred_subset_ofPred]
+    rintro y val_y b rfl
+    rw [← valuedAdicCompletion_eq_valuation']
+exact (Valuation.restrict_inj _).mp Valuation.map_eq_of_sub_lt Valued.v.restrict val_y
 
 中文:
 定理 tendsto_valuation
@@ -3035,7 +3479,25 @@ theorem tendsto_valuation
     rw [ha]; rw [map_zero]; rw [WithZeroTopology.hasBasis_nhds_zero.1 S] at hS
     obtain ⟨γ, γ_ne_zero, γ_le⟩ := hS
     use {t | Valued.v t < γ}
-    construct
+    constructor
+    · rw [ha, this]
+      obtain ⟨x, hx⟩ := valuedAdicCompletion_surjective K⟮X⟯ (idealX K) γ
+      use Units.mk0 (Valued.v.restrict x) (by
+        simp only [Valuation.restrict_def, ne_eq, map_eq_zero]
+        intro h
+        simp only [h, map_zero] at hx
+        tauto)
+      simp [Units.val_mk0, Valuation.restrict_lt_iff, hx]
+    · refine Set.Subset.trans (fun a _ => ?_) (Set.preimage_mono γ_le)
+      rw [Set.mem_preimage]; rw [Set.mem_Iio]; rw [← Valued.valuedCompletion_apply a]
+      simp_all
+  · rw [WithZeroTopology.tendsto_of_ne_zero ((Valuation.ne_zero_iff Valued.v).mpr ha),
+      Filter.eventually_comap, Filter.Eventually, Valued.mem_nhds]
+    use Units.mk0 (Valued.v.restrict a) (by simp [Valuation.restrict_def, ha])
+    simp only [Units.val_mk0, v_def, Set.ofPred_subset_ofPred]
+    rintro y val_y b rfl
+    rw [← valuedAdicCompletion_eq_valuation']
+exact (Valuation.restrict_inj _).mp Valuation.map_eq_of_sub_lt Valued.v.restrict val_y
 
 Depends on / 依赖: Units.mk0, Valuation, Valuation.restrict_def, Valued, Valued.is_topological_valuation, Valued.v, Valued.v.restrict, WithZeroTopology, WithZeroTopology.hasBasis_nhds_zero, adicCompletion, hasBasis_nhds_zero, idealX, is_topological_valuation, map_eq_zero, map_zero, ne_eq, restrict, restrict_def, tendsto_def, valuedAdicCompletion_surjective
 -/
@@ -3081,7 +3543,20 @@ theorem valuation_compare
   rw [adicCompletion.valued_ofCompletion]
   let : UniformSpace (ratfuncAdicComplPkg (K := K).space) :=
       ratfuncAdicComplPkg.uniformStruct
-  have raw_surj : Function.Surjectiv
+  have raw_surj : Function.Surjective (Valued.v : (polynomialValuationX K).Completion -> Intᵐ⁰) :=
+Valued.valuedCompletion_surjective_iff.mpr .of_comp ((idealX K).valuation_surjective K⟮X⟯)
+  rw [← valuation_LaurentSeries_equal_extension]; rw [← compare_comp_eq_compare ratfuncAdicComplPkg _]
+  · exact congr_fun (ratfuncAdicComplPkg.isDenseInducing.extend_unique
+      Valued.valuedCompletion_apply (Valued.continuous_valuation_of_surjective raw_surj)).symm _
+  · refine Valued.continuous_valuation_of_surjective (fun x => ?_)
+    obtain ⟨y, rfl⟩ := RatFunc.valuation_surjective K x
+    exact ⟨.toVal _ y, rfl⟩
+  · intro x
+    have h_cont := Valued.continuous_valuation_of_surjective raw_surj
+    rw [ratfuncAdicComplPkg.isDenseInducing.extend_unique
+        Valued.valuedCompletion_apply h_cont]
+    exact (h_cont.continuousAt.tendsto.comp tendsto_comap).congr
+      Valued.valuedCompletion_apply
 
 中文:
 定理 valuation_compare
@@ -3092,7 +3567,20 @@ theorem valuation_compare
   rw [adicCompletion.valued_ofCompletion]
   let : UniformSpace (ratfuncAdicComplPkg (K := K).space) :=
       ratfuncAdicComplPkg.uniformStruct
-  have raw_surj : Function.Surjectiv
+  have raw_surj : Function.Surjective (Valued.v : (polynomialValuationX K).Completion -> Intᵐ⁰) :=
+Valued.valuedCompletion_surjective_iff.mpr .of_comp ((idealX K).valuation_surjective K⟮X⟯)
+  rw [← valuation_LaurentSeries_equal_extension]; rw [← compare_comp_eq_compare ratfuncAdicComplPkg _]
+  · exact congr_fun (ratfuncAdicComplPkg.isDenseInducing.extend_unique
+      Valued.valuedCompletion_apply (Valued.continuous_valuation_of_surjective raw_surj)).symm _
+  · refine Valued.continuous_valuation_of_surjective (fun x => ?_)
+    obtain ⟨y, rfl⟩ := RatFunc.valuation_surjective K x
+    exact ⟨.toVal _ y, rfl⟩
+  · intro x
+    have h_cont := Valued.continuous_valuation_of_surjective raw_surj
+    rw [ratfuncAdicComplPkg.isDenseInducing.extend_unique
+        Valued.valuedCompletion_apply h_cont]
+    exact (h_cont.continuousAt.tendsto.comp tendsto_comap).congr
+      Valued.valuedCompletion_apply
 
 Depends on / 依赖: Completion, Function, Function.Surjective, LaurentSeriesPkg, Surjective, UniformSpace, Valued, Valued.v, Valued.valuedCompletion_surjective_iff.mpr, adicCompletion, adicCompletion.ofCompletion, adicCompletion.valued_ofCompletion, compare, compare_co, idealX, ofCompletion, of_comp, polynomialValuationX, ratfuncAdicComplPkg, ratfuncAdicComplPkg.uniformStruct
 -/
@@ -3231,7 +3719,7 @@ theorem exists_powerSeries_of_memIntegers
     rw [← valuation_compare (K := K) f]; rw [hf]; rw [RingEquiv.symm_apply_apply]; rw [← mem_adicCompletionIntegers]
     exact hx
   obtain ⟨F, hF⟩ := (val_le_one_iff_eq_coe K f).mp hval
-  exact ⟨F, by rw [hF, h
+  exact ⟨F, by rw [hF, hf, RingEquiv.symm_apply_apply]⟩
 
 中文:
 定理 存在_powerSeries_of_mem整数egers
@@ -3242,7 +3730,7 @@ theorem exists_powerSeries_of_memIntegers
     rw [← valuation_compare (K := K) f]; rw [hf]; rw [RingEquiv.symm_apply_apply]; rw [← mem_adicCompletionIntegers]
     exact hx
   obtain ⟨F, hF⟩ := (val_le_one_iff_eq_coe K f).mp hval
-  exact ⟨F, by rw [hF, h
+  exact ⟨F, by rw [hF, hf, RingEquiv.symm_apply_apply]⟩
 
 Depends on / 依赖: RingEquiv, RingEquiv.symm_apply_apply, Valued, Valued.v, mem_adicCompletionIntegers, ratfuncAdicComplRingEquiv, symm_apply_apply, val_le_one_iff_eq_coe, valuation_compare
 -/

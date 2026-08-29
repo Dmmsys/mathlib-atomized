@@ -725,7 +725,9 @@ theorem coeff_monomial_mul
     forall p in antidiagonal m,
       coeff (p : (σ ->₀ Nat) × (σ ->₀ Nat)).1 (monomial n a) * coeff p.2 φ != 0 -> p.1 = n :=
     fun p _ hp => eq_of_coeff_monomial_ne_zero (left_ne_zero_of_mul hp)
-  rw [coeff_mul]; rw [← Finset.sum_filter_of_ne this]; rw [Finset.HasAntidiago
+  rw [coeff_mul]; rw [← Finset.sum_filter_of_ne this]; rw [Finset.HasAntidiagonal.filter_fst_eq_antidiagonal
+    _ n]; rw [Finset.sum_ite_index]
+  simp only [Finset.sum_singleton, coeff_monomial_same, Finset.sum_empty]
 
 中文:
 定理 coeff_monomial_mul
@@ -736,7 +738,9 @@ theorem coeff_monomial_mul
     forall p in antidiagonal m,
       coeff (p : (σ ->₀ Nat) × (σ ->₀ Nat)).1 (monomial n a) * coeff p.2 φ != 0 -> p.1 = n :=
     fun p _ hp => eq_of_coeff_monomial_ne_zero (left_ne_zero_of_mul hp)
-  rw [coeff_mul]; rw [← Finset.sum_filter_of_ne this]; rw [Finset.HasAntidiago
+  rw [coeff_mul]; rw [← Finset.sum_filter_of_ne this]; rw [Finset.HasAntidiagonal.filter_fst_eq_antidiagonal
+    _ n]; rw [Finset.sum_ite_index]
+  simp only [Finset.sum_singleton, coeff_monomial_same, Finset.sum_empty]
 
 Depends on / 依赖: Finset, Finset.HasAntidiagonal.filter_fst_eq_antidiagonal, Finset.sum_empty, Finset.sum_filter_of_ne, Finset.sum_ite_index, Finset.sum_singleton, HasAntidiagonal, antidiagonal, classical, coeff_monomial_same, coeff_mul, eq_of_coeff_monomial_ne_zero, filter_fst_eq_antidiagonal, left_ne_zero_of_mul, monomial, sum_empty, sum_filter_of_ne, sum_ite_index, sum_singleton
 -/
@@ -763,7 +767,9 @@ theorem coeff_mul_monomial
     forall p in antidiagonal m,
       coeff (p : (σ ->₀ Nat) × (σ ->₀ Nat)).1 φ * coeff p.2 (monomial n a) != 0 -> p.2 = n :=
     fun p _ hp => eq_of_coeff_monomial_ne_zero (right_ne_zero_of_mul hp)
-  rw [coeff_mul]; rw [← Finset.sum_filter_of_ne this]; rw [Finset.HasAntidiag
+  rw [coeff_mul]; rw [← Finset.sum_filter_of_ne this]; rw [Finset.HasAntidiagonal.filter_snd_eq_antidiagonal
+    _ n]; rw [Finset.sum_ite_index]
+  simp only [Finset.sum_singleton, coeff_monomial_same, Finset.sum_empty]
 
 中文:
 定理 coeff_mul_monomial
@@ -774,7 +780,9 @@ theorem coeff_mul_monomial
     forall p in antidiagonal m,
       coeff (p : (σ ->₀ Nat) × (σ ->₀ Nat)).1 φ * coeff p.2 (monomial n a) != 0 -> p.2 = n :=
     fun p _ hp => eq_of_coeff_monomial_ne_zero (right_ne_zero_of_mul hp)
-  rw [coeff_mul]; rw [← Finset.sum_filter_of_ne this]; rw [Finset.HasAntidiag
+  rw [coeff_mul]; rw [← Finset.sum_filter_of_ne this]; rw [Finset.HasAntidiagonal.filter_snd_eq_antidiagonal
+    _ n]; rw [Finset.sum_ite_index]
+  simp only [Finset.sum_singleton, coeff_monomial_same, Finset.sum_empty]
 
 Depends on / 依赖: Finset, Finset.HasAntidiagonal.filter_snd_eq_antidiagonal, Finset.sum_empty, Finset.sum_filter_of_ne, Finset.sum_ite_index, Finset.sum_singleton, HasAntidiagonal, antidiagonal, classical, coeff_monomial_same, coeff_mul, eq_of_coeff_monomial_ne_zero, filter_snd_eq_antidiagonal, monomial, right_ne_zero_of_mul, sum_empty, sum_filter_of_ne, sum_ite_index, sum_singleton
 -/
@@ -1097,7 +1105,7 @@ theorem monomial_mul_monomial
     exact (h₂ rfl).elim
   · exact zero_mul b
   · rw [h₂] at h₁
-    exact 
+    exact (h₁ <| le_add_left le_rfl).elim
 
 中文:
 定理 monomial_mul_monomial
@@ -1113,7 +1121,7 @@ theorem monomial_mul_monomial
     exact (h₂ rfl).elim
   · exact zero_mul b
   · rw [h₂] at h₁
-    exact 
+    exact (h₁ <| le_add_left le_rfl).elim
 
 Depends on / 依赖: add_tsub_cancel_right, classical, coeff_monomial, coeff_mul_monomial, le_add_left, le_rfl, split_ifs, tsub_add_cancel_of_le, zero_mul
 -/
@@ -1984,7 +1992,8 @@ theorem X_inj
       · exact H.1
       · exfalso
         exact one_ne_zero H.1
-    · 
+    · exfalso
+      exact one_ne_zero h, congr_arg X⟩
 
 中文:
 定理 X_inj
@@ -2001,7 +2010,8 @@ theorem X_inj
       · exact H.1
       · exfalso
         exact one_ne_zero H.1
-    · 
+    · exfalso
+      exact one_ne_zero h, congr_arg X⟩
 
 Depends on / 依赖: Finsupp, Finsupp.single_eq_single_iff, classical, coeff_X, congr_arg, if_pos, one_ne_zero, replace, single, single_eq_single_iff, split_ifs
 -/
@@ -2045,7 +2055,16 @@ definition map
         · simp only [map_one]
         · simp only [map_zero]
   map_add' φ ψ :=
+    ext fun n => show f (coeff n (φ + ψ)) = f (coeff n φ) + f (coeff n ψ) by simp
+  map_mul' φ ψ :=
     ext fun n =>
+      show f _ = _ by
+        classical
+        rw [coeff_mul]; rw [map_sum]; rw [coeff_mul]
+        apply Finset.sum_congr rfl
+        rintro ⟨i, j⟩ _; rw [f.map_mul]; rfl
+
+@[simp]
 
 中文:
 定义 map
@@ -2061,7 +2080,16 @@ definition map
         · simp only [map_one]
         · simp only [map_zero]
   map_add' φ ψ :=
+    ext fun n => show f (coeff n (φ + ψ)) = f (coeff n φ) + f (coeff n ψ) by simp
+  map_mul' φ ψ :=
     ext fun n =>
+      show f _ = _ by
+        classical
+        rw [coeff_mul]; rw [map_sum]; rw [coeff_mul]
+        apply Finset.sum_congr rfl
+        rintro ⟨i, j⟩ _; rw [f.map_mul]; rfl
+
+@[simp]
 -/
 def map : MvPowerSeries σ R ->+* MvPowerSeries σ S where
 toFun φ n := f coeff n φ
@@ -2411,7 +2439,47 @@ theorem X_pow_dvd_iff
     dsimp at h
     subst i
     rw [mem_antidiagonal] at hij
-    rw [← hij]; rw [Finsupp.add_apply]; rw [Finsupp.si
+    rw [← hij]; rw [Finsupp.add_apply]; rw [Finsupp.single_eq_same]
+    exact Nat.le_add_right n _
+  · intro h
+    refine ⟨fun m => coeff (m + single s n) φ, ?_⟩
+    ext m
+    by_cases H : m - single s n + single s n = m
+    · rw [coeff_mul, Finset.sum_eq_single (single s n, m - single s n)]
+      · rw [coeff_X_pow, if_pos rfl, one_mul]
+        simpa using! congr_arg (fun m : σ ->₀ Nat => coeff m φ) H.symm
+      · rintro ⟨i, j⟩ hij hne
+        rw [mem_antidiagonal] at hij
+        rw [coeff_X_pow]
+        split_ifs with hi
+        · exfalso
+          apply hne
+          rw [← hij]; rw [← hi]; rw [Prod.mk_inj]
+          refine ⟨rfl, ?_⟩
+          ext t
+          simp only [add_tsub_cancel_left]
+        · exact zero_mul _
+      · intro hni
+        exfalso
+        apply hni
+        rwa [mem_antidiagonal, add_comm]
+    · rw [h, coeff_mul, Finset.sum_eq_zero]
+      · rintro ⟨i, j⟩ hij
+        rw [mem_antidiagonal] at hij
+        rw [coeff_X_pow]
+        split_ifs with hi
+        · exfalso
+          apply H
+          rw [← hij]; rw [hi]
+          ext
+          rw [coe_add]; rw [coe_add]; rw [Pi.add_apply]; rw [Pi.add_apply]; rw [add_tsub_cancel_left]; rw [add_comm]
+        · exact zero_mul _
+      · contrapose! H
+        ext t
+        by_cases hst : s = t
+        · subst t
+          simpa using! tsub_add_cancel_of_le H
+        · simp [hst]
 
 中文:
 定理 X_pow_dvd_iff
@@ -2427,7 +2495,47 @@ theorem X_pow_dvd_iff
     dsimp at h
     subst i
     rw [mem_antidiagonal] at hij
-    rw [← hij]; rw [Finsupp.add_apply]; rw [Finsupp.si
+    rw [← hij]; rw [Finsupp.add_apply]; rw [Finsupp.single_eq_same]
+    exact Nat.le_add_right n _
+  · intro h
+    refine ⟨fun m => coeff (m + single s n) φ, ?_⟩
+    ext m
+    by_cases H : m - single s n + single s n = m
+    · rw [coeff_mul, Finset.sum_eq_single (single s n, m - single s n)]
+      · rw [coeff_X_pow, if_pos rfl, one_mul]
+        simpa using! congr_arg (fun m : σ ->₀ Nat => coeff m φ) H.symm
+      · rintro ⟨i, j⟩ hij hne
+        rw [mem_antidiagonal] at hij
+        rw [coeff_X_pow]
+        split_ifs with hi
+        · exfalso
+          apply hne
+          rw [← hij]; rw [← hi]; rw [Prod.mk_inj]
+          refine ⟨rfl, ?_⟩
+          ext t
+          simp only [add_tsub_cancel_left]
+        · exact zero_mul _
+      · intro hni
+        exfalso
+        apply hni
+        rwa [mem_antidiagonal, add_comm]
+    · rw [h, coeff_mul, Finset.sum_eq_zero]
+      · rintro ⟨i, j⟩ hij
+        rw [mem_antidiagonal] at hij
+        rw [coeff_X_pow]
+        split_ifs with hi
+        · exfalso
+          apply H
+          rw [← hij]; rw [hi]
+          ext
+          rw [coe_add]; rw [coe_add]; rw [Pi.add_apply]; rw [Pi.add_apply]; rw [add_tsub_cancel_left]; rw [add_comm]
+        · exact zero_mul _
+      · contrapose! H
+        ext t
+        by_cases hst : s = t
+        · subst t
+          simpa using! tsub_add_cancel_of_le H
+        · simp [hst]
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, Finset.sum_eq_zero, Finsupp, Finsupp.add_apply, Finsupp.single_eq_same, Nat.le_add_right, add_apply, classical, coeff_X_pow, coeff_mul, contrapose, if_neg, le_add_right, mem_antidiagonal, single, single_eq_same, sum_eq_single, sum_eq_zero, zero_mul
 -/
@@ -2538,7 +2646,28 @@ theorem coeff_prod
     · simp only [card_singleton, Nat.cast_one]
     · simp only [card_empty, Nat.cast_zero]
   | insert a s ha ih =>
-
+    rw [finsuppAntidiag_insert ha]; rw [prod_insert ha]; rw [coeff_mul]; rw [sum_biUnion]
+    · apply Finset.sum_congr rfl
+      simp only [mem_antidiagonal, sum_map, Function.Embedding.coeFn_mk, coe_update, Prod.forall]
+      rintro u v rfl
+      rw [ih]; rw [Finset.mul_sum]; rw [← Finset.sum_attach]
+      apply Finset.sum_congr rfl
+      simp only [mem_attach, Finset.prod_insert ha, Function.update_self, forall_true_left,
+        Subtype.forall]
+      rintro x -
+      rw [Finset.prod_congr rfl]
+      intro i hi
+      rw [Function.update_of_ne]
+      exact ne_of_mem_of_not_mem hi ha
+    · simp only [Set.PairwiseDisjoint, Set.Pairwise, mem_coe, mem_antidiagonal, ne_eq,
+        disjoint_left, mem_map, mem_attach, Function.Embedding.coeFn_mk, true_and, Subtype.exists,
+        exists_prop, not_exists, not_and, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,
+        Prod.forall, Prod.mk.injEq]
+      rintro u v rfl u' v' huv h k - l - hkl
+      obtain rfl : u' = u := by
+        simpa only [Finsupp.coe_update, Function.update_self] using DFunLike.congr_fun hkl a
+      simp only [add_right_inj] at huv
+      exact h rfl huv.symm
 
 中文:
 定理 coeff_prod
@@ -2551,7 +2680,28 @@ theorem coeff_prod
     · simp only [card_singleton, Nat.cast_one]
     · simp only [card_empty, Nat.cast_zero]
   | insert a s ha ih =>
-
+    rw [finsuppAntidiag_insert ha]; rw [prod_insert ha]; rw [coeff_mul]; rw [sum_biUnion]
+    · apply Finset.sum_congr rfl
+      simp only [mem_antidiagonal, sum_map, Function.Embedding.coeFn_mk, coe_update, Prod.forall]
+      rintro u v rfl
+      rw [ih]; rw [Finset.mul_sum]; rw [← Finset.sum_attach]
+      apply Finset.sum_congr rfl
+      simp only [mem_attach, Finset.prod_insert ha, Function.update_self, forall_true_left,
+        Subtype.forall]
+      rintro x -
+      rw [Finset.prod_congr rfl]
+      intro i hi
+      rw [Function.update_of_ne]
+      exact ne_of_mem_of_not_mem hi ha
+    · simp only [Set.PairwiseDisjoint, Set.Pairwise, mem_coe, mem_antidiagonal, ne_eq,
+        disjoint_left, mem_map, mem_attach, Function.Embedding.coeFn_mk, true_and, Subtype.exists,
+        exists_prop, not_exists, not_and, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,
+        Prod.forall, Prod.mk.injEq]
+      rintro u v rfl u' v' huv h k - l - hkl
+      obtain rfl : u' = u := by
+        simpa only [Finsupp.coe_update, Function.update_self] using DFunLike.congr_fun hkl a
+      simp only [add_right_inj] at huv
+      exact h rfl huv.symm
 
 Depends on / 依赖: Embedding, Finset, Finset.induction_on, Finset.sum_congr, Function, Function.Embedding.coeFn_mk, Nat.cast_one, Nat.cast_zero, Prod.forall, card_empty, card_singleton, cast_one, cast_zero, coeFn_mk, coe_update, coeff_mul, coeff_one, finsuppAntidiag_empty, finsuppAntidiag_insert, generalizing
 -/
@@ -2682,7 +2832,29 @@ theorem coeff_eq_zero_of_constantCoeff_nilpotent
   set s := {i in range n | k i = 0} with hs_def
   have hs : s subseteq range n := filter_subset _ _
   have hs' (i : Nat) (hi : i in s) : coeff (k i) f = constantCoeff f := by
-    simp only [hs_def, mem_
+    simp only [hs_def, mem_filter] at hi
+    rw [hi.2]; rw [coeff_zero_eq_constantCoeff]
+  have hs'' (i : Nat) (hi : i in s) : k i = 0 := by
+    simp only [hs_def, mem_filter] at hi
+    rw [hi.2]
+  rw [← prod_sdiff (s₁ := s) (filter_subset _ _)]
+  apply mul_eq_zero_of_right
+  rw [prod_congr rfl hs']; rw [prod_const]
+  suffices m <= #s by
+    obtain ⟨m', hm'⟩ := Nat.exists_eq_add_of_le this
+    rw [hm']; rw [pow_add]; rw [hf]; rw [zero_mul]
+  rw [← Nat.add_le_add_iff_right]; rw [add_comm #s]; rw [Finset.card_sdiff_add_card_eq_card (filter_subset _ _)]; rw [card_range]
+  apply le_trans _ hn
+  simp only [add_comm m, Nat.add_le_add_iff_right, ← hk.1,
+    ← sum_sdiff (hs), sum_eq_zero (s := s) hs'', add_zero]
+  rw [← hs_def]
+  convert! Finset.card_nsmul_le_sum (range n \ s) (fun x => degree (k x)) 1 _
+  · simp only [smul_eq_mul, mul_one]
+  · simp only [degree_eq_weight_one, map_sum]
+  · simp only [hs_def, mem_filter, mem_sdiff, mem_range, not_and, and_imp]
+    intro i hi hi'
+    rw [← not_lt]; rw [Nat.lt_one_iff]; rw [degree_eq_zero_iff]
+    exact hi' hi
 
 中文:
 定理 coeff_eq_zero_of_constantCoeff_nilpotent
@@ -2696,7 +2868,29 @@ theorem coeff_eq_zero_of_constantCoeff_nilpotent
   set s := {i in range n | k i = 0} with hs_def
   have hs : s subseteq range n := filter_subset _ _
   have hs' (i : Nat) (hi : i in s) : coeff (k i) f = constantCoeff f := by
-    simp only [hs_def, mem_
+    simp only [hs_def, mem_filter] at hi
+    rw [hi.2]; rw [coeff_zero_eq_constantCoeff]
+  have hs'' (i : Nat) (hi : i in s) : k i = 0 := by
+    simp only [hs_def, mem_filter] at hi
+    rw [hi.2]
+  rw [← prod_sdiff (s₁ := s) (filter_subset _ _)]
+  apply mul_eq_zero_of_right
+  rw [prod_congr rfl hs']; rw [prod_const]
+  suffices m <= #s by
+    obtain ⟨m', hm'⟩ := Nat.exists_eq_add_of_le this
+    rw [hm']; rw [pow_add]; rw [hf]; rw [zero_mul]
+  rw [← Nat.add_le_add_iff_right]; rw [add_comm #s]; rw [Finset.card_sdiff_add_card_eq_card (filter_subset _ _)]; rw [card_range]
+  apply le_trans _ hn
+  simp only [add_comm m, Nat.add_le_add_iff_right, ← hk.1,
+    ← sum_sdiff (hs), sum_eq_zero (s := s) hs'', add_zero]
+  rw [← hs_def]
+  convert! Finset.card_nsmul_le_sum (range n \ s) (fun x => degree (k x)) 1 _
+  · simp only [smul_eq_mul, mul_one]
+  · simp only [degree_eq_weight_one, map_sum]
+  · simp only [hs_def, mem_filter, mem_sdiff, mem_range, not_and, and_imp]
+    intro i hi hi'
+    rw [← not_lt]; rw [Nat.lt_one_iff]; rw [degree_eq_zero_iff]
+    exact hi' hi
 
 Depends on / 依赖: classical, coeff_pow, coeff_zero_eq_constantCoeff, constantCoeff, filter_subset, hs_def, mem_filter, mem_finsuppAntidiag, mul_eq_zero, prod_sdiff, subseteq, sum_eq_zero
 -/
@@ -2878,7 +3072,8 @@ instance [Nonempty
       simp only [Algebra.mem_bot, not_exists, Set.mem_range, iff_true, Algebra.mem_top]
       intro x
       rw [MvPowerSeries.ext_iff]; rw [not_forall]
-      refine ⟨Finsupp.s
+      refine ⟨Finsupp.single default 1, ?_⟩
+      simp [algebraMap_apply, coeff_C]⟩⟩
 
 中文:
 实例 [非空
@@ -2891,7 +3086,8 @@ instance [Nonempty
       simp only [Algebra.mem_bot, not_exists, Set.mem_range, iff_true, Algebra.mem_top]
       intro x
       rw [MvPowerSeries.ext_iff]; rw [not_forall]
-      refine ⟨Finsupp.s
+      refine ⟨Finsupp.single default 1, ?_⟩
+      simp [algebraMap_apply, coeff_C]⟩⟩
 
 Depends on / 依赖: Algebra, Algebra.mem_bot, Algebra.mem_top, Finsupp, Finsupp.single, MvPowerSeries, MvPowerSeries.ext_iff, Set.mem_range, SetLike, SetLike.ext_iff, algebraMap_apply, classical, coeff_C, ext_iff, iff_true, inhabit, mem_bot, mem_range, mem_top, not_exists
 -/
@@ -3511,7 +3707,11 @@ theorem _root_.MvPowerSeries.prod_smul_X_eq_smul_monomial_one
     (g2 := fun s n => ((MvPowerSeries.C (algebraMap A R (a s)) * (MvPowerSeries.X s)) ^ n))]
   · have (a : A) (f : MvPowerSeries σ R) : a • f =
       MvPowerSeries.C ((algebraMap A R) a) * f := by
-      rw [← MvPowerSeries.smul_eq_C_mul]; rw [IsScalarTower.algebraMap_smul
+      rw [← MvPowerSeries.smul_eq_C_mul]; rw [IsScalarTower.algebraMap_smul]
+    simp only [mul_pow, Finsupp.prod_mul, ← map_pow, ← MvPowerSeries.monomial_one_eq, this]
+    simp only [map_finsuppProd, map_pow]
+  · intro x _
+    rw [algebra_compatible_smul R]; rw [MvPowerSeries.smul_eq_C_mul]
 
 中文:
 定理 _root_.MvPowerSeries.prod_smul_X_eq_smul_monomial_one
@@ -3520,7 +3720,11 @@ theorem _root_.MvPowerSeries.prod_smul_X_eq_smul_monomial_one
     (g2 := fun s n => ((MvPowerSeries.C (algebraMap A R (a s)) * (MvPowerSeries.X s)) ^ n))]
   · have (a : A) (f : MvPowerSeries σ R) : a • f =
       MvPowerSeries.C ((algebraMap A R) a) * f := by
-      rw [← MvPowerSeries.smul_eq_C_mul]; rw [IsScalarTower.algebraMap_smul
+      rw [← MvPowerSeries.smul_eq_C_mul]; rw [IsScalarTower.algebraMap_smul]
+    simp only [mul_pow, Finsupp.prod_mul, ← map_pow, ← MvPowerSeries.monomial_one_eq, this]
+    simp only [map_finsuppProd, map_pow]
+  · intro x _
+    rw [algebra_compatible_smul R]; rw [MvPowerSeries.smul_eq_C_mul]
 
 Depends on / 依赖: Finsupp, Finsupp.prod_congr, Finsupp.prod_mul, IsScalarTower, IsScalarTower.algebraMap_smul, MvPowerSeries, MvPowerSeries.C, MvPowerSeries.X, MvPowerSeries.monomial_one_eq, MvPowerSeries.smul_eq_C_mul, algebraMap, algebraMap_smul, algebra_compatible_smul, map_finsuppProd, map_pow, monomial_one_eq, mul_pow, prod_congr, prod_mul, smul_eq_C_mul
 -/

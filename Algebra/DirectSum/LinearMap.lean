@@ -82,7 +82,8 @@ lemma diag_toMatrix_directSum_collectedBasis_eq_zero_of_mapsTo_ne
   · let j : s := ⟨σ i, hi⟩
 replace hσ : j != i := fun hij => hσ i Subtype.ext_iff.mp hij
 exact h.collectedBasis_repr_of_mem_ne b hσ hf _ Subtype.mem (b i k)
-  · suff
+  · suffices f (b i k) = 0 by simp [this]
+simpa [hN _ hi] using hf i Subtype.mem (b i k)
 
 中文:
 引理 diag_toMatrix_directSum_collectedBasis_eq_zero_of_mapsTo_ne
@@ -93,7 +94,8 @@ exact h.collectedBasis_repr_of_mem_ne b hσ hf _ Subtype.mem (b i k)
   · let j : s := ⟨σ i, hi⟩
 replace hσ : j != i := fun hij => hσ i Subtype.ext_iff.mp hij
 exact h.collectedBasis_repr_of_mem_ne b hσ hf _ Subtype.mem (b i k)
-  · suff
+  · suffices f (b i k) = 0 by simp [this]
+simpa [hN _ hi] using hf i Subtype.mem (b i k)
 
 Depends on / 依赖: IsInternal, IsInternal.collectedBasis_coe, Matrix, Matrix.diag_apply, Pi.zero_apply, Subtype, Subtype.ext_iff.mp, Subtype.mem, collectedBasis_coe, collectedBasis_repr_of_mem_ne, diag_apply, ext_iff, h.collectedBasis_repr_of_mem_ne, replace, toMatrix_apply, zero_apply
 -/
@@ -188,7 +190,11 @@ lemma trace_eq_zero_of_mapsTo_ne
   let s := hN.toFinset
   let κ := fun i => Module.Free.ChooseBasisIndex R (N i)
   let b : (i : s) -> Basis (κ i) R (N i) := fun i => Module.Free.chooseBasis R (N i)
-  replace h : IsInternal fun
+  replace h : IsInternal fun i : s => N i := by
+    convert! DirectSum.isInternal_ne_bot_iff.mpr h <;> simp [s]
+  simp_rw [trace_eq_matrix_trace R (h.collectedBasis b), Matrix.trace,
+    diag_toMatrix_directSum_collectedBasis_eq_zero_of_mapsTo_ne h b σ hσ hf (by simp [s]),
+    Pi.zero_apply, Finset.sum_const_zero]
 
 中文:
 引理 trace_eq_zero_of_mapsTo_ne
@@ -199,7 +205,11 @@ lemma trace_eq_zero_of_mapsTo_ne
   let s := hN.toFinset
   let κ := fun i => Module.Free.ChooseBasisIndex R (N i)
   let b : (i : s) -> Basis (κ i) R (N i) := fun i => Module.Free.chooseBasis R (N i)
-  replace h : IsInternal fun
+  replace h : IsInternal fun i : s => N i := by
+    convert! DirectSum.isInternal_ne_bot_iff.mpr h <;> simp [s]
+  simp_rw [trace_eq_matrix_trace R (h.collectedBasis b), Matrix.trace,
+    diag_toMatrix_directSum_collectedBasis_eq_zero_of_mapsTo_ne h b σ hσ hf (by simp [s]),
+    Pi.zero_apply, Finset.sum_const_zero]
 
 Depends on / 依赖: ChooseBasisIndex, DirectSum, DirectSum.isInternal_ne_bot_iff.mpr, Finite, IsInternal, Matrix, Matrix.trace, Module, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, WellFoundedGT, WellFoundedGT.finite_ne_bot_of_iSupIndep, chooseBasis, collectedBasis, convert, diag_toMatrix_directSum_collectedBasis_eq_zero_of_mapsTo_ne, finite_ne_bot_of_iSupIndep, h.collectedBasis, h.submodule_iSupIndep, hN.toFinset
 -/
@@ -230,7 +240,19 @@ lemma trace_comp_eq_zero_of_commute_of_trace_restrict_eq_zero
       (f.mapsTo_maxGenEigenspace_of_comm rfl μ)
   suffices forall μ, trace R _ ((g ∘ₗ f).restrict (hfg μ)) = 0 by
     classical
-    have h
+    have hds := DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top
+      f.independent_maxGenEigenspace hf
+    have h_fin : {μ | f.maxGenEigenspace μ != ⊥}.Finite :=
+      WellFoundedGT.finite_ne_bot_of_iSupIndep f.independent_maxGenEigenspace
+    simp [trace_eq_sum_trace_restrict' hds h_fin hfg, this]
+  intro μ
+  have hf' := f.mapsTo_maxGenEigenspace_of_comm (Commute.refl _) μ
+  have hg' := f.mapsTo_maxGenEigenspace_of_comm h_comm μ
+  replace h_comm : Commute (g.restrict (f.mapsTo_maxGenEigenspace_of_comm h_comm μ))
+      (f.restrict (f.mapsTo_maxGenEigenspace_of_comm rfl μ)) :=
+    restrict_commute h_comm.symm _ _
+  have := f.isNilpotent_restrict_maxGenEigenspace_sub_algebraMap μ
+  rw [restrict_comp hf' hg']; rw [trace_comp_eq_mul_of_commute_of_isNilpotent μ h_comm this]; rw [hg]; rw [mul_zero]
 
 中文:
 引理 trace_comp_eq_zero_of_commute_of_trace_restrict_eq_zero
@@ -241,7 +263,19 @@ lemma trace_comp_eq_zero_of_commute_of_trace_restrict_eq_zero
       (f.mapsTo_maxGenEigenspace_of_comm rfl μ)
   suffices forall μ, trace R _ ((g ∘ₗ f).restrict (hfg μ)) = 0 by
     classical
-    have h
+    have hds := DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top
+      f.independent_maxGenEigenspace hf
+    have h_fin : {μ | f.maxGenEigenspace μ != ⊥}.Finite :=
+      WellFoundedGT.finite_ne_bot_of_iSupIndep f.independent_maxGenEigenspace
+    simp [trace_eq_sum_trace_restrict' hds h_fin hfg, this]
+  intro μ
+  have hf' := f.mapsTo_maxGenEigenspace_of_comm (Commute.refl _) μ
+  have hg' := f.mapsTo_maxGenEigenspace_of_comm h_comm μ
+  replace h_comm : Commute (g.restrict (f.mapsTo_maxGenEigenspace_of_comm h_comm μ))
+      (f.restrict (f.mapsTo_maxGenEigenspace_of_comm rfl μ)) :=
+    restrict_commute h_comm.symm _ _
+  have := f.isNilpotent_restrict_maxGenEigenspace_sub_algebraMap μ
+  rw [restrict_comp hf' hg']; rw [trace_comp_eq_mul_of_commute_of_isNilpotent μ h_comm this]; rw [hg]; rw [mul_zero]
 
 Depends on / 依赖: DirectSum, DirectSum.isInternal_submodule_of_iSupIndep_of_iSup_eq_top, Finite, MapsTo, WellFoundedGT, WellFoundedGT.finite_ne_bot_of_iSupIndep, classical, f.independent_maxGenEigenspace, f.mapsTo_maxGenEigenspace_of_comm, f.maxGenEigenspace, finite_ne_bot_of_iSupIndep, h_comm, h_fin, independent_maxGenEigenspace, isInternal_submodule_of_iSupIndep_of_iSup_eq_top, mapsTo_maxGenEigenspace_of_comm, maxGenEigenspace, restrict
 -/
@@ -312,7 +346,12 @@ lemma trace_eq_sum_trace_restrict_of_eq_biSup
   let N' : s -> Submodule R p := fun i => (N i).comap p.subtype
   replace h : IsInternal N' := hp ▸ isInternal_biSup_submodule_of_iSupIndep (s : Set ι) h
   have hf' : forall i, MapsTo (restrict f hp') (N' i) (N' i) := fun i x hx' => by simpa using! hf i hx'
-  let e : (i : s) -> N' i ≃
+  let e : (i : s) -> N' i ≃ₗ[R] N i := fun ⟨i, hi⟩ => (N i).comapSubtypeEquivOfLe (hp ▸ le_biSup N hi)
+  have _i1 : forall i, Module.Finite R (N' i) := fun i => Module.Finite.equiv (e i).symm
+  have _i2 : forall i, Module.Free R (N' i) := fun i => Module.Free.of_equiv (e i).symm
+  rw [trace_eq_sum_trace_restrict h hf']; rw [← s.sum_coe_sort]
+  have : forall i : s, f.restrict (hf i) = (e i).conj ((f.restrict hp').restrict (hf' i)) := fun _ => rfl
+  simp [this]
 
 中文:
 引理 trace_eq_sum_trace_restrict_of_eq_biSup
@@ -321,7 +360,12 @@ lemma trace_eq_sum_trace_restrict_of_eq_biSup
   let N' : s -> Submodule R p := fun i => (N i).comap p.subtype
   replace h : IsInternal N' := hp ▸ isInternal_biSup_submodule_of_iSupIndep (s : Set ι) h
   have hf' : forall i, MapsTo (restrict f hp') (N' i) (N' i) := fun i x hx' => by simpa using! hf i hx'
-  let e : (i : s) -> N' i ≃
+  let e : (i : s) -> N' i ≃ₗ[R] N i := fun ⟨i, hi⟩ => (N i).comapSubtypeEquivOfLe (hp ▸ le_biSup N hi)
+  have _i1 : forall i, Module.Finite R (N' i) := fun i => Module.Finite.equiv (e i).symm
+  have _i2 : forall i, Module.Free R (N' i) := fun i => Module.Free.of_equiv (e i).symm
+  rw [trace_eq_sum_trace_restrict h hf']; rw [← s.sum_coe_sort]
+  have : forall i : s, f.restrict (hf i) = (e i).conj ((f.restrict hp').restrict (hf' i)) := fun _ => rfl
+  simp [this]
 
 Depends on / 依赖: mapsTo_biSup_of_mapsTo
 -/

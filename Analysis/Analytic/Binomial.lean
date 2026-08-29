@@ -115,7 +115,11 @@ theorem binomialSeries_eq_ordinaryHypergeometricSeries
     FormalMultilinearSeries.ofScalars_comp_neg_id]
   congr! with n
   rw [ordinaryHypergeometricCoefficient]; rw [mul_inv_cancel_right₀ (by simp [ascPochhammer_eval_eq_zero_iff]; grind)]
-  simp only [Ring.choose_eq_smul, Polynomial.descPoc
+  simp only [Ring.choose_eq_smul, Polynomial.descPochhammer_smeval_eq_ascPochhammer,
+    Polynomial.ascPochhammer_smeval_cast, Polynomial.ascPochhammer_smeval_eq_eval,
+    ascPochhammer_eval_neg_eq_descPochhammer, descPochhammer_eval_eq_ascPochhammer]
+  ring_nf
+  simp
 
 中文:
 定理 binomialSeries_eq_ordinaryHypergeometricSeries
@@ -125,7 +129,11 @@ theorem binomialSeries_eq_ordinaryHypergeometricSeries
     FormalMultilinearSeries.ofScalars_comp_neg_id]
   congr! with n
   rw [ordinaryHypergeometricCoefficient]; rw [mul_inv_cancel_right₀ (by simp [ascPochhammer_eval_eq_zero_iff]; grind)]
-  simp only [Ring.choose_eq_smul, Polynomial.descPoc
+  simp only [Ring.choose_eq_smul, Polynomial.descPochhammer_smeval_eq_ascPochhammer,
+    Polynomial.ascPochhammer_smeval_cast, Polynomial.ascPochhammer_smeval_eq_eval,
+    ascPochhammer_eval_neg_eq_descPochhammer, descPochhammer_eval_eq_ascPochhammer]
+  ring_nf
+  simp
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.ofScalars_comp_neg_id, Polynomial, Polynomial.ascPochhammer_smeval_cast, Polynomial.ascPochhammer_smeval_eq_eval, Polynomial.descPochhammer_smeval_eq_ascPochhammer, Ring.choose_eq_smul, ascPochhammer_eval_eq_zero_iff, ascPochhammer_eval_neg_eq_descPochhammer, ascPochhammer_smeval_cast, ascPochhammer_smeval_eq_eval, binomialSeries, choose_eq_smul, descPochhammer_eval_eq_ascPochhammer, descPochhammer_smeval_eq_ascPochhammer, ofScalars_comp_neg_id, ordinaryHypergeometricCoefficient, ordinaryHypergeometricSeries, ring_nf
 -/
@@ -247,7 +255,45 @@ theorem one_add_cpow_hasFPowerSeriesOnBall_zero
     convert! AnalyticOn.hasFPowerSeriesOnSubball _ _ _
     · norm_num
     · -- TODO: use `fun_prop` for this subgoal
-      apply AnalyticO
+      apply AnalyticOn.cpow (analyticOn_const.add analyticOn_id) analyticOn_const
+      intro z hz
+      apply Complex.mem_slitPlane_of_norm_lt_one
+      rw [← ENNReal.ofReal_one]; rw [Metric.eball_ofReal] at hz
+      simpa using hz
+    · rw [← this]
+      exact binomialSeries_radius_ge_one
+  simp only [binomialSeries, FormalMultilinearSeries.ofScalars_series_eq_iff]
+  ext n
+  rw [eq_div_iff_mul_eq (by simp [Nat.factorial_ne_zero]), ← nsmul_eq_mul',
+    ← Ring.descPochhammer_eq_factorial_smul_choose]
+  let B := Metric.ball (0 : Complex) 1
+  suffices Set.EqOn (iteratedDerivWithin n (fun x => (1 + x) ^ a) B)
+      (fun x => (descPochhammer Int n).smeval a * (1 + x) ^ (a - n)) B by
+    specialize this (show 0 in _ by simp [B])
+    rw [iteratedDerivWithin_of_isOpen Metric.isOpen_ball (by simp)] at this
+    symm
+    simpa using this
+  induction n with
+  | zero => simp [Set.EqOn]
+  | succ n ih =>
+    have : iteratedDerivWithin (n + 1) (fun (x : Complex) => (1 + x) ^ a) B =
+        derivWithin (iteratedDerivWithin n (fun x => (1 + x) ^ a) B) B := by
+      ext z
+      rw [iteratedDerivWithin_succ]
+    rw [this]
+    have : Set.EqOn (derivWithin (iteratedDerivWithin n (fun (x : Complex) => (1 + x) ^ a) B) B)
+        (derivWithin (fun x => (descPochhammer Int n).smeval a * (1 + x) ^ (a - ↑n)) B) B := by
+      intro z hz
+      rw [derivWithin_congr (fun _ hz => ih hz) (ih hz)]
+    apply Set.EqOn.trans this
+    intro z hz
+    simp only [Nat.cast_add, Nat.cast_one, B, derivWithin_of_isOpen Metric.isOpen_ball hz,
+      deriv_const_mul_field']
+    rw [_root_.deriv_cpow_const (by fun_prop)]; rw [deriv_const_add_id]; rw [mul_one]; rw [show a - (n + 1) = a - n - 1 by ring]; rw [← mul_assoc]
+    · congr
+      simp [descPochhammer_succ_right, Polynomial.smeval_mul, Polynomial.smeval_natCast]
+    · apply Complex.mem_slitPlane_of_norm_lt_one
+      simpa [B] using hz
 
 中文:
 定理 one_add_cpow_hasFPowerSeriesOnBall_zero
@@ -258,7 +304,45 @@ theorem one_add_cpow_hasFPowerSeriesOnBall_zero
     convert! AnalyticOn.hasFPowerSeriesOnSubball _ _ _
     · norm_num
     · -- TODO: use `fun_prop` for this subgoal
-      apply AnalyticO
+      apply AnalyticOn.cpow (analyticOn_const.add analyticOn_id) analyticOn_const
+      intro z hz
+      apply Complex.mem_slitPlane_of_norm_lt_one
+      rw [← ENNReal.ofReal_one]; rw [Metric.eball_ofReal] at hz
+      simpa using hz
+    · rw [← this]
+      exact binomialSeries_radius_ge_one
+  simp only [binomialSeries, FormalMultilinearSeries.ofScalars_series_eq_iff]
+  ext n
+  rw [eq_div_iff_mul_eq (by simp [Nat.factorial_ne_zero]), ← nsmul_eq_mul',
+    ← Ring.descPochhammer_eq_factorial_smul_choose]
+  let B := Metric.ball (0 : Complex) 1
+  suffices Set.EqOn (iteratedDerivWithin n (fun x => (1 + x) ^ a) B)
+      (fun x => (descPochhammer Int n).smeval a * (1 + x) ^ (a - n)) B by
+    specialize this (show 0 in _ by simp [B])
+    rw [iteratedDerivWithin_of_isOpen Metric.isOpen_ball (by simp)] at this
+    symm
+    simpa using this
+  induction n with
+  | zero => simp [Set.EqOn]
+  | succ n ih =>
+    have : iteratedDerivWithin (n + 1) (fun (x : Complex) => (1 + x) ^ a) B =
+        derivWithin (iteratedDerivWithin n (fun x => (1 + x) ^ a) B) B := by
+      ext z
+      rw [iteratedDerivWithin_succ]
+    rw [this]
+    have : Set.EqOn (derivWithin (iteratedDerivWithin n (fun (x : Complex) => (1 + x) ^ a) B) B)
+        (derivWithin (fun x => (descPochhammer Int n).smeval a * (1 + x) ^ (a - ↑n)) B) B := by
+      intro z hz
+      rw [derivWithin_congr (fun _ hz => ih hz) (ih hz)]
+    apply Set.EqOn.trans this
+    intro z hz
+    simp only [Nat.cast_add, Nat.cast_one, B, derivWithin_of_isOpen Metric.isOpen_ball hz,
+      deriv_const_mul_field']
+    rw [_root_.deriv_cpow_const (by fun_prop)]; rw [deriv_const_add_id]; rw [mul_one]; rw [show a - (n + 1) = a - n - 1 by ring]; rw [← mul_assoc]
+    · congr
+      simp [descPochhammer_succ_right, Polynomial.smeval_mul, Polynomial.smeval_natCast]
+    · apply Complex.mem_slitPlane_of_norm_lt_one
+      simpa [B] using hz
 
 Depends on / 依赖: AnalyticOn, AnalyticOn.cpow, AnalyticOn.hasFPowerSeriesOnSubball, Complex.mem_slitPlane_of_norm_lt_one, ENNReal, ENNReal.ofReal_one, FormalMultilinearSeries, FormalMultilinearSeries.ofScalars, Metric, Metric.eball_ofReal, analyticOn_const, analyticOn_const.add, analyticOn_id, binomialSeries, binomialSeries_rad, convert, eball_ofReal, fun_prop, hasFPowerSeriesOnSubball, iteratedDeriv
 -/
@@ -339,7 +423,10 @@ theorem one_div_one_sub_cpow_hasFPowerSeriesOnBall_zero
       .ofScalars Complex fun n => Ring.choose (a + n - 1) n := by
     ext n; simp [FormalMultilinearSeries.compContinuousLinearMap, binomialSeries, Ring.choose_neg,
       Units.smul_def, ← pow_add, ← mul_assoc]
-  have : Has
+  have : HasFPowerSeriesOnBall (fun x => (1 + x) ^ (-a)) (binomialSeries Complex (-a : Complex)) (-0) 1 := by
+    simpa using one_add_cpow_hasFPowerSeriesOnBall_zero
+  simpa [cpow_neg, Function.comp_def, ← sub_eq_add_neg, H] using
+    this.compContinuousLinearMap (u := -1) (x := (0 : Complex))
 
 中文:
 定理 one_div_one_sub_cpow_hasFPowerSeriesOnBall_zero
@@ -349,7 +436,10 @@ theorem one_div_one_sub_cpow_hasFPowerSeriesOnBall_zero
       .ofScalars Complex fun n => Ring.choose (a + n - 1) n := by
     ext n; simp [FormalMultilinearSeries.compContinuousLinearMap, binomialSeries, Ring.choose_neg,
       Units.smul_def, ← pow_add, ← mul_assoc]
-  have : Has
+  have : HasFPowerSeriesOnBall (fun x => (1 + x) ^ (-a)) (binomialSeries Complex (-a : Complex)) (-0) 1 := by
+    simpa using one_add_cpow_hasFPowerSeriesOnBall_zero
+  simpa [cpow_neg, Function.comp_def, ← sub_eq_add_neg, H] using
+    this.compContinuousLinearMap (u := -1) (x := (0 : Complex))
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.compContinuousLinearMap, Function, Function.comp_def, HasFPowerSeriesOnBall, Ring.choose, Ring.choose_neg, Units.smul_def, binomialSeries, choose_neg, compContinuousLinearMap, comp_def, cpow_neg, mul_assoc, ofScalars, one_add_cpow_hasFPowerSeriesOnBall_zero, pow_add, smul_def, sub_eq_add_neg, this.co
 -/
@@ -407,7 +497,14 @@ theorem one_div_sub_pow_hasFPowerSeriesOnBall_zero
   rw [← map_zero (z⁻¹ • 1 : Complex ->L[Complex] Complex)] at this
   have := this.compContinuousLinearMap
   have H : 1 / ‖(z⁻¹ • 1 : Complex ->L[Complex] Complex)‖ₑ = ‖z‖ₑ := by simp [enorm_smul, enorm_inv, hz]
-  simp only [one_div, FunLi
+  simp only [one_div, FunLike.coe_smul, H, Function.comp_def] at this
+  convert (this.const_smul (c := (z ^ (a + 1))⁻¹)).congr ?_
+  · ext n
+    simp only [FormalMultilinearSeries.smul_apply, smul_apply,
+      FormalMultilinearSeries.compContinuousLinearMap_apply]
+    simp [add_assoc, pow_add _ _ (a + 1), mul_assoc]
+  · intro w hw
+    simp [← mul_inv_rev, ← mul_pow, sub_mul, mul_right_comm _ w, hz]
 
 中文:
 定理 one_div_sub_pow_hasFPowerSeriesOnBall_zero
@@ -417,7 +514,14 @@ theorem one_div_sub_pow_hasFPowerSeriesOnBall_zero
   rw [← map_zero (z⁻¹ • 1 : Complex ->L[Complex] Complex)] at this
   have := this.compContinuousLinearMap
   have H : 1 / ‖(z⁻¹ • 1 : Complex ->L[Complex] Complex)‖ₑ = ‖z‖ₑ := by simp [enorm_smul, enorm_inv, hz]
-  simp only [one_div, FunLi
+  simp only [one_div, FunLike.coe_smul, H, Function.comp_def] at this
+  convert (this.const_smul (c := (z ^ (a + 1))⁻¹)).congr ?_
+  · ext n
+    simp only [FormalMultilinearSeries.smul_apply, smul_apply,
+      FormalMultilinearSeries.compContinuousLinearMap_apply]
+    simp [add_assoc, pow_add _ _ (a + 1), mul_assoc]
+  · intro w hw
+    simp [← mul_inv_rev, ← mul_pow, sub_mul, mul_right_comm _ w, hz]
 
 Depends on / 依赖: FormalMultiline, FunLike, FunLike.coe_smul, Function, Function.comp_def, Nat.choose, coe_smul, compContinuousLinearMap, comp_def, const_smul, convert, enorm_inv, enorm_smul, map_zero, one_div, one_div_one_sub_pow_hasFPowerSeriesOnBall_zero, this.compContinuousLinearMap, this.const_smul
 -/
@@ -563,7 +667,10 @@ lemma one_div_sub_sq_sub_one_div_sq_hasFPowerSeriesOnBall_zero
   refine .sub ?_ ?_
   · simpa only [sub_sub_sub_cancel_right, zero_add, sub_sq_comm w, zpow_neg, zpow_natCast, mul_comm]
       using (one_div_sub_sq_hasFPowerSeriesOnBall_zero
-        (z := w - x) (by simp [sub_eq_
+        (z := w - x) (by simp [sub_eq_zero, hw])).comp_sub x
+  · convert! hasFPowerSeriesOnBall_const.mono _ le_top
+    · ext (_ | _) <;> simp [zpow_ofNat]
+    · simpa [sub_eq_zero]
 
 中文:
 引理 one_div_sub_sq_sub_one_div_sq_hasFPowerSeriesOnBall_zero
@@ -573,7 +680,10 @@ lemma one_div_sub_sq_sub_one_div_sq_hasFPowerSeriesOnBall_zero
   refine .sub ?_ ?_
   · simpa only [sub_sub_sub_cancel_right, zero_add, sub_sq_comm w, zpow_neg, zpow_natCast, mul_comm]
       using (one_div_sub_sq_hasFPowerSeriesOnBall_zero
-        (z := w - x) (by simp [sub_eq_
+        (z := w - x) (by simp [sub_eq_zero, hw])).comp_sub x
+  · convert! hasFPowerSeriesOnBall_const.mono _ le_top
+    · ext (_ | _) <;> simp [zpow_ofNat]
+    · simpa [sub_eq_zero]
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.ofScalars_sub, Pi.sub_def, comp_sub, convert, hasFPowerSeriesOnBall_const, hasFPowerSeriesOnBall_const.mono, le_top, mul_comm, ofScalars_sub, one_div_sub_sq_hasFPowerSeriesOnBall_zero, sub_def, sub_eq_zero, sub_sq_comm, sub_sub_sub_cancel_right, zero_add, zpow_natCast, zpow_neg, zpow_ofNat
 -/
@@ -604,7 +714,11 @@ theorem one_add_rpow_hasFPowerSeriesOnBall_zero
   proof: by
   have H : binomialSeries Complex a = (binomialSeries Complex (a : Complex)).restrictScalars (𝕜 := Real) := by aesop
   have : HasFPowerSeriesOnBall (fun x => (1 + x) ^ (a : Complex)) (binomialSeries Complex a) (.ofRealCLM 0) 1 :=
-    Complex.ofRealCLM.map_zero ▸ H ▸ Complex.one_add_cpow_hasFPower
+    Complex.ofRealCLM.map_zero ▸ H ▸ Complex.one_add_cpow_hasFPowerSeriesOnBall_zero.restrictScalars
+  convert! (Complex.reCLM.comp_hasFPowerSeriesOnBall this.compContinuousLinearMap).congr ?_
+  · ext; simp [Function.comp_def]
+  · simp
+  · intro x hx; simp_all; norm_cast
 
 中文:
 定理 one_add_rpow_hasFPowerSeriesOnBall_zero
@@ -612,7 +726,11 @@ theorem one_add_rpow_hasFPowerSeriesOnBall_zero
   证明: by
   have H : binomialSeries Complex a = (binomialSeries Complex (a : Complex)).restrictScalars (𝕜 := Real) := by aesop
   have : HasFPowerSeriesOnBall (fun x => (1 + x) ^ (a : Complex)) (binomialSeries Complex a) (.ofRealCLM 0) 1 :=
-    Complex.ofRealCLM.map_zero ▸ H ▸ Complex.one_add_cpow_hasFPower
+    Complex.ofRealCLM.map_zero ▸ H ▸ Complex.one_add_cpow_hasFPowerSeriesOnBall_zero.restrictScalars
+  convert! (Complex.reCLM.comp_hasFPowerSeriesOnBall this.compContinuousLinearMap).congr ?_
+  · ext; simp [Function.comp_def]
+  · simp
+  · intro x hx; simp_all; norm_cast
 
 Depends on / 依赖: Complex.ofRealCLM.map_zero, Complex.one_add_cpow_hasFPowerSeriesOnBall_zero.restrictScalars, Complex.reCLM.comp_hasFPowerSeriesOnBall, Function, Function.comp_def, HasFPowerSeriesOnBall, binomialSeries, compContinuousLinearMap, comp_def, comp_hasFPowerSeriesOnBall, convert, map_zero, ofRealCLM, one_add_cpow_hasFPowerSeriesOnBall_zero, restrictScalars, this.compContinuousLinearMap
 -/
@@ -656,7 +774,16 @@ theorem one_div_one_sub_rpow_hasFPowerSeriesOnBall_zero
   rw [← Complex.ofRealCLM.map_zero] at this
   convert (Complex.reCLM.comp_hasFPowerSeriesOnBall this.compContinuousLinearMap).congr ?_
   · ext n
-    simp only [ContinuousLinearMap.compFormalMultiline
+    simp only [ContinuousLinearMap.compFormalMultilinearSeries_apply,
+      ContinuousLinearMap.compContinuousMultilinearMap_coe, Function.comp_apply,
+      FormalMultilinearSeries.compContinuousLinearMap_apply]
+    simp
+    norm_cast
+  · simp
+  · intro x hx
+    have : |x| < 1 := by simpa [enorm_eq_nnnorm] using! hx
+    have : 0 <= 1 - x := by grind
+    simp [-Complex.inv_re, ← Complex.ofReal_one, ← Complex.ofReal_sub, ← Complex.ofReal_cpow this]
 
 中文:
 定理 one_div_one_sub_rpow_hasFPowerSeriesOnBall_zero
@@ -666,7 +793,16 @@ theorem one_div_one_sub_rpow_hasFPowerSeriesOnBall_zero
   rw [← Complex.ofRealCLM.map_zero] at this
   convert (Complex.reCLM.comp_hasFPowerSeriesOnBall this.compContinuousLinearMap).congr ?_
   · ext n
-    simp only [ContinuousLinearMap.compFormalMultiline
+    simp only [ContinuousLinearMap.compFormalMultilinearSeries_apply,
+      ContinuousLinearMap.compContinuousMultilinearMap_coe, Function.comp_apply,
+      FormalMultilinearSeries.compContinuousLinearMap_apply]
+    simp
+    norm_cast
+  · simp
+  · intro x hx
+    have : |x| < 1 := by simpa [enorm_eq_nnnorm] using! hx
+    have : 0 <= 1 - x := by grind
+    simp [-Complex.inv_re, ← Complex.ofReal_one, ← Complex.ofReal_sub, ← Complex.ofReal_cpow this]
 
 Depends on / 依赖: Complex.ofRealCLM.map_zero, Complex.one_div_one_sub_cpow_hasFPowerSeriesOnBall_zero, Complex.reCLM.comp_hasFPowerSeriesOnBall, ContinuousLinearMap, ContinuousLinearMap.compContinuousMultilinearMap_coe, ContinuousLinearMap.compFormalMultilinearSeries_apply, FormalMultilinearSeries, FormalMultilinearSeries.compContinuousLinearMap_apply, Function, Function.comp_apply, compContinuousLinearMap, compContinuousLinearMap_apply, compContinuousMultilinearMap_coe, compFormalMultilinearSeries_apply, comp_apply, comp_hasFPowerSeriesOnBall, convert, map_zero, ofRealCLM, one_div_one_sub_cpow_hasFPowerSeriesOnBall_zero
 -/
@@ -699,7 +835,13 @@ theorem one_div_sub_pow_hasFPowerSeriesOnBall_zero
     (by simpa)).restrictScalars (𝕜 := Real)
   rw [← Complex.ofRealCLM.map_zero] at this
   convert (Complex.reCLM.comp_hasFPowerSeriesOnBall this.compContinuousLinearMap)
-  · simp [-Complex.inv_re, ← Complex.ofReal_pow, ← Com
+  · simp [-Complex.inv_re, ← Complex.ofReal_pow, ← Complex.ofReal_inv, ← Complex.ofReal_sub]
+  · ext n
+    simp only [ContinuousLinearMap.compFormalMultilinearSeries_apply,
+      ContinuousLinearMap.compContinuousMultilinearMap_coe, Function.comp_apply,
+      FormalMultilinearSeries.compContinuousLinearMap_apply]
+    simp [-Complex.inv_re, ← Complex.ofReal_pow, ← Complex.ofReal_inv]
+  · simp [enorm_eq_nnnorm]
 
 中文:
 定理 one_div_sub_pow_hasFPowerSeriesOnBall_zero
@@ -709,7 +851,13 @@ theorem one_div_sub_pow_hasFPowerSeriesOnBall_zero
     (by simpa)).restrictScalars (𝕜 := Real)
   rw [← Complex.ofRealCLM.map_zero] at this
   convert (Complex.reCLM.comp_hasFPowerSeriesOnBall this.compContinuousLinearMap)
-  · simp [-Complex.inv_re, ← Complex.ofReal_pow, ← Com
+  · simp [-Complex.inv_re, ← Complex.ofReal_pow, ← Complex.ofReal_inv, ← Complex.ofReal_sub]
+  · ext n
+    simp only [ContinuousLinearMap.compFormalMultilinearSeries_apply,
+      ContinuousLinearMap.compContinuousMultilinearMap_coe, Function.comp_apply,
+      FormalMultilinearSeries.compContinuousLinearMap_apply]
+    simp [-Complex.inv_re, ← Complex.ofReal_pow, ← Complex.ofReal_inv]
+  · simp [enorm_eq_nnnorm]
 
 Depends on / 依赖: Complex.inv_re, Complex.ofRealCLM.map_zero, Complex.ofReal_inv, Complex.ofReal_pow, Complex.ofReal_sub, Complex.one_div_sub_pow_hasFPowerSeriesOnBall_zero, Complex.reCLM.comp_hasFPowerSeriesOnBall, ContinuousLinearMap, ContinuousLinearMap.compCon, ContinuousLinearMap.compFormalMultilinearSeries_apply, Nat.choose, compCon, compContinuousLinearMap, compFormalMultilinearSeries_apply, comp_hasFPowerSeriesOnBall, convert, inv_re, map_zero, ofRealCLM, ofReal_inv
 -/

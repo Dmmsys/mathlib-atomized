@@ -51,7 +51,11 @@ lemma comp_d_eq_zero_iff
   · have hk' : e.f k = k' := by rw [← hk', ← hj', c'.next_eq' (e.rel hjk)]
     rw [K.extend_d_eq e hj' hk']; rw [Iso.inv_hom_id_assoc]; rw [← cancel_mono (K.extendXIso e hk').inv]; rw [zero_comp]; rw [assoc]
   · simp only [K.shape _ _ hjk, comp_zero, true_iff]
-    rw [K
+    rw [K.extend_d_from_eq_zero e j' k' j hj']; rw [comp_zero]; rw [comp_zero]
+    rw [hk]
+    exact hjk
+
+include hi hi' in
 
 中文:
 引理 comp_d_eq_zero_iff
@@ -62,7 +66,11 @@ lemma comp_d_eq_zero_iff
   · have hk' : e.f k = k' := by rw [← hk', ← hj', c'.next_eq' (e.rel hjk)]
     rw [K.extend_d_eq e hj' hk']; rw [Iso.inv_hom_id_assoc]; rw [← cancel_mono (K.extendXIso e hk').inv]; rw [zero_comp]; rw [assoc]
   · simp only [K.shape _ _ hjk, comp_zero, true_iff]
-    rw [K
+    rw [K.extend_d_from_eq_zero e j' k' j hj']; rw [comp_zero]; rw [comp_zero]
+    rw [hk]
+    exact hjk
+
+include hi hi' in
 
 Depends on / 依赖: Iso.inv_hom_id_assoc, K.extendXIso, K.extend_d_eq, K.extend_d_from_eq_zero, K.shape, c.Rel, cancel_mono, comp_zero, e.rel, extendXIso, extend_d_eq, extend_d_from_eq_zero, inv_hom_id_assoc, next_eq, true_iff, zero_comp
 -/
@@ -88,7 +96,10 @@ lemma d_comp_eq_zero_iff
   by_cases hij : c.Rel i j
   · have hi' : e.f i = i' := by rw [← hi', ← hj', c'.prev_eq' (e.rel hij)]
     rw [K.extend_d_eq e hi' hj']; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (K.extendXIso e hi').hom]; rw [comp_zero]
-  · simp only [K.shape _ _ hij, zero_comp, true_iff
+  · simp only [K.shape _ _ hij, zero_comp, true_iff]
+    rw [K.extend_d_to_eq_zero e i' j' j hj']; rw [zero_comp]
+    rw [hi]
+    exact hij
 
 中文:
 引理 d_comp_eq_zero_iff
@@ -98,7 +109,10 @@ lemma d_comp_eq_zero_iff
   by_cases hij : c.Rel i j
   · have hi' : e.f i = i' := by rw [← hi', ← hj', c'.prev_eq' (e.rel hij)]
     rw [K.extend_d_eq e hi' hj']; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [← cancel_epi (K.extendXIso e hi').hom]; rw [comp_zero]
-  · simp only [K.shape _ _ hij, zero_comp, true_iff
+  · simp only [K.shape _ _ hij, zero_comp, true_iff]
+    rw [K.extend_d_to_eq_zero e i' j' j hj']; rw [zero_comp]
+    rw [hi]
+    exact hij
 
 Depends on / 依赖: Iso.inv_hom_id_assoc, K.extendXIso, K.extend_d_eq, K.extend_d_to_eq_zero, K.shape, c.Rel, cancel_epi, comp_zero, e.rel, extendXIso, extend_d_eq, extend_d_to_eq_zero, inv_hom_id_assoc, prev_eq, true_iff, zero_comp
 -/
@@ -177,7 +191,19 @@ lemma lift_d_comp_eq_zero_iff'
   · have hi'' : e.f i = i' := by rw [← hi', ← hj', c'.prev_eq' (e.rel hij)]
     have : (K.extendXIso e hi'').hom ≫ f' = f'' := by
       apply Fork.IsLimit.hom_ext hcone
-      rw [assoc]; rw [hf']; rw [← cancel_mono (extendXIso K e hj').inv]; rw [assoc]; rw [assoc]; rw [
+      rw [assoc]; rw [hf']; rw [← cancel_mono (extendXIso K e hj').inv]; rw [assoc]; rw [assoc]; rw [hf'']; rw [K.extend_d_eq e hi'' hj']
+    rw [← cancel_epi (K.extendXIso e hi'').hom]; rw [comp_zero]; rw [← this]; rw [assoc]
+  · have h₁ : f' = 0 := by
+      apply Fork.IsLimit.hom_ext hcone
+      simp only [zero_comp, hf', K.shape _ _ hij]
+    have h₂ : f'' = 0 := by
+      apply Fork.IsLimit.hom_ext hcone
+      rw [← cancel_mono (extendXIso K e hj').inv]; rw [assoc]; rw [hf'']; rw [zero_comp]; rw [zero_comp]; rw [K.extend_d_to_eq_zero e i' j' j hj']
+      rw [hi]
+      exact hij
+    simp [h₁, h₂]
+
+include hi hi' in
 
 中文:
 引理 lift_d_comp_eq_zero_iff'
@@ -188,7 +214,19 @@ lemma lift_d_comp_eq_zero_iff'
   · have hi'' : e.f i = i' := by rw [← hi', ← hj', c'.prev_eq' (e.rel hij)]
     have : (K.extendXIso e hi'').hom ≫ f' = f'' := by
       apply Fork.IsLimit.hom_ext hcone
-      rw [assoc]; rw [hf']; rw [← cancel_mono (extendXIso K e hj').inv]; rw [assoc]; rw [assoc]; rw [
+      rw [assoc]; rw [hf']; rw [← cancel_mono (extendXIso K e hj').inv]; rw [assoc]; rw [assoc]; rw [hf'']; rw [K.extend_d_eq e hi'' hj']
+    rw [← cancel_epi (K.extendXIso e hi'').hom]; rw [comp_zero]; rw [← this]; rw [assoc]
+  · have h₁ : f' = 0 := by
+      apply Fork.IsLimit.hom_ext hcone
+      simp only [zero_comp, hf', K.shape _ _ hij]
+    have h₂ : f'' = 0 := by
+      apply Fork.IsLimit.hom_ext hcone
+      rw [← cancel_mono (extendXIso K e hj').inv]; rw [assoc]; rw [hf'']; rw [zero_comp]; rw [zero_comp]; rw [K.extend_d_to_eq_zero e i' j' j hj']
+      rw [hi]
+      exact hij
+    simp [h₁, h₂]
+
+include hi hi' in
 
 Depends on / 依赖: Fork.IsLimit.hom_ext, IsLimit, K.extendXIso, K.extend_d_eq, K.shape, c.Rel, cancel_epi, cancel_mono, comp_zero, e.rel, extendXIso, extend_d_eq, hom_ext, prev_eq, zero_comp
 -/
@@ -315,7 +353,8 @@ definition leftHomologyData
   wπ := by
     dsimp
     rw [← lift_d_comp_eq_zero_iff K e hj' hi hi' hk hk' _ h.hi]
-    exact 
+    exact h.wπ
+  hπ := isColimitCokernelCofork K e hj' hi hi' hk hk' _ h.hi _ h.hπ
 
 中文:
 定义 leftHomologyData
@@ -332,7 +371,8 @@ definition leftHomologyData
   wπ := by
     dsimp
     rw [← lift_d_comp_eq_zero_iff K e hj' hi hi' hk hk' _ h.hi]
-    exact 
+    exact h.wπ
+  hπ := isColimitCokernelCofork K e hj' hi hi' hk hk' _ h.hi _ h.hπ
 -/
 noncomputable def leftHomologyData (h : (K.sc' i j k).LeftHomologyData) :
     ((K.extend e).sc' i' j' k').LeftHomologyData where
@@ -416,7 +456,17 @@ lemma d_comp_desc_eq_zero_iff'
   · have hk'' : e.f k = k' := by rw [← hk', ← hj', c'.next_eq' (e.rel hjk)]
     have : f' ≫ (K.extendXIso e hk'').inv = f'' := by
       apply Cofork.IsColimit.hom_ext hcocone
-      rw [reassoc_of% hf']; rw [← cancel_epi (extendXIso K e hj').hom]; rw [hf'']; rw [K.extend
+      rw [reassoc_of% hf']; rw [← cancel_epi (extendXIso K e hj').hom]; rw [hf'']; rw [K.extend_d_eq e hj' hk'']
+    rw [← cancel_mono (K.extendXIso e hk'').inv]; rw [zero_comp]; rw [assoc]; rw [this]
+  · have h₁ : f' = 0 := by
+      apply Cofork.IsColimit.hom_ext hcocone
+      simp only [hf', comp_zero, K.shape _ _ hjk]
+    have h₂ : f'' = 0 := by
+      apply Cofork.IsColimit.hom_ext hcocone
+      rw [← cancel_epi (extendXIso K e hj').hom]; rw [hf'']; rw [comp_zero]; rw [comp_zero]; rw [K.extend_d_from_eq_zero e j' k' j hj']
+      rw [hk]
+      exact hjk
+    simp [h₁, h₂]
 
 中文:
 引理 d_comp_desc_eq_zero_iff'
@@ -427,7 +477,17 @@ lemma d_comp_desc_eq_zero_iff'
   · have hk'' : e.f k = k' := by rw [← hk', ← hj', c'.next_eq' (e.rel hjk)]
     have : f' ≫ (K.extendXIso e hk'').inv = f'' := by
       apply Cofork.IsColimit.hom_ext hcocone
-      rw [reassoc_of% hf']; rw [← cancel_epi (extendXIso K e hj').hom]; rw [hf'']; rw [K.extend
+      rw [reassoc_of% hf']; rw [← cancel_epi (extendXIso K e hj').hom]; rw [hf'']; rw [K.extend_d_eq e hj' hk'']
+    rw [← cancel_mono (K.extendXIso e hk'').inv]; rw [zero_comp]; rw [assoc]; rw [this]
+  · have h₁ : f' = 0 := by
+      apply Cofork.IsColimit.hom_ext hcocone
+      simp only [hf', comp_zero, K.shape _ _ hjk]
+    have h₂ : f'' = 0 := by
+      apply Cofork.IsColimit.hom_ext hcocone
+      rw [← cancel_epi (extendXIso K e hj').hom]; rw [hf'']; rw [comp_zero]; rw [comp_zero]; rw [K.extend_d_from_eq_zero e j' k' j hj']
+      rw [hk]
+      exact hjk
+    simp [h₁, h₂]
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.hom_ext, IsColimit, K.extendXIso, K.extend_d_eq, K.shape, c.Rel, cancel_epi, cancel_mono, comp_zero, e.rel, extendXIso, extend_d_eq, hcocone, hom_ext, next_eq, reassoc_of, zero_comp
 -/
@@ -560,7 +620,7 @@ definition rightHomologyData
     dsimp
     rw [← d_comp_desc_eq_zero_iff K e hj' hi hi' hk hk' _ h.hp]
     exact h.wι
- 
+  hι := isLimitKernelFork K e hj' hi hi' hk hk' _ h.hp _ h.hι
 
 中文:
 定义 rightHomologyData
@@ -578,7 +638,7 @@ definition rightHomologyData
     dsimp
     rw [← d_comp_desc_eq_zero_iff K e hj' hi hi' hk hk' _ h.hp]
     exact h.wι
- 
+  hι := isLimitKernelFork K e hj' hi hi' hk hk' _ h.hp _ h.hι
 -/
 noncomputable def rightHomologyData (h : (K.sc' i j k).RightHomologyData) :
     ((K.extend e).sc' i' j' k').RightHomologyData where
@@ -879,7 +939,9 @@ lemma extendCyclesIso_hom_iCycles
   dsimp [extendCyclesIso, iCycles]
   rw [assoc]; rw [ShortComplex.LeftHomologyData.cyclesIso_inv_comp_iCycles_assoc]
   dsimp
-  rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [ShortComplex.LeftHomologyData.cyclesIso_ho
+  rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [ShortComplex.LeftHomologyData.cyclesIso_hom_comp_i]
+
+@[reassoc (attr := simp)]
 
 中文:
 引理 extendCyclesIso_hom_iCycles
@@ -888,7 +950,9 @@ lemma extendCyclesIso_hom_iCycles
   dsimp [extendCyclesIso, iCycles]
   rw [assoc]; rw [ShortComplex.LeftHomologyData.cyclesIso_inv_comp_iCycles_assoc]
   dsimp
-  rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [ShortComplex.LeftHomologyData.cyclesIso_ho
+  rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [ShortComplex.LeftHomologyData.cyclesIso_hom_comp_i]
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Iso.inv_hom_id, Iso.inv_hom_id_assoc, K.extendCyclesIso, LeftHomologyData, ShortComplex, ShortComplex.LeftHomologyData.cyclesIso_hom_comp_i, ShortComplex.LeftHomologyData.cyclesIso_inv_comp_iCycles_assoc, cancel_epi, comp_id, cyclesIso_hom_comp_i, cyclesIso_inv_comp_iCycles_assoc, extendCyclesIso, iCycles, inv_hom_id, inv_hom_id_assoc
 -/
@@ -935,13 +999,21 @@ English:
 lemma homologyπ_extendHomologyIso_hom
   proof: by
   dsimp [extendHomologyIso, homologyπ]
-  rw [ShortComplex.LeftHomologyData.homologyπ_comp_homologyIso_hom_assoc]; rw [← cancel_mono (K.sc j).homologyData.left.homologyIso.hom]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [ShortComplex.LeftHomologyData.homologyπ_comp_
+  rw [ShortComplex.LeftHomologyData.homologyπ_comp_homologyIso_hom_assoc]; rw [← cancel_mono (K.sc j).homologyData.left.homologyIso.hom]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [ShortComplex.LeftHomologyData.homologyπ_comp_homologyIso_hom]
+  dsimp [extendCyclesIso]
+  simp only [assoc, Iso.inv_hom_id_assoc]
+
+@[reassoc (attr := simp)]
 
 中文:
 引理 homologyπ_extendHomologyIso_hom
   证明: by
   dsimp [extendHomologyIso, homologyπ]
-  rw [ShortComplex.LeftHomologyData.homologyπ_comp_homologyIso_hom_assoc]; rw [← cancel_mono (K.sc j).homologyData.left.homologyIso.hom]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [ShortComplex.LeftHomologyData.homologyπ_comp_
+  rw [ShortComplex.LeftHomologyData.homologyπ_comp_homologyIso_hom_assoc]; rw [← cancel_mono (K.sc j).homologyData.left.homologyIso.hom]; rw [assoc]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [ShortComplex.LeftHomologyData.homologyπ_comp_homologyIso_hom]
+  dsimp [extendCyclesIso]
+  simp only [assoc, Iso.inv_hom_id_assoc]
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Iso.inv_hom_id, Iso.inv_hom_id_assoc, K.sc, LeftHomologyData, ShortComplex, ShortComplex.LeftHomologyData.homology, cancel_mono, comp_id, extendCyclesIso, extendHomologyIso, homologyData, homologyData.left.homologyIso.hom, homologyIso, inv_hom_id, inv_hom_id_assoc
 -/
@@ -990,7 +1062,10 @@ lemma pOpcycles_extendOpcyclesIso_inv
   dsimp [extendOpcyclesIso, pOpcycles]
   rw [ShortComplex.RightHomologyData.pOpcycles_comp_opcyclesIso_hom_assoc]
   dsimp
-  rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [ShortComplex.Right
+  rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [ShortComplex.RightHomologyData.p_comp_opcyclesIso_inv]
+  rfl
+
+@[reassoc (attr := simp)]
 
 中文:
 引理 pOpcycles_extendOpcyclesIso_inv
@@ -999,7 +1074,10 @@ lemma pOpcycles_extendOpcyclesIso_inv
   dsimp [extendOpcyclesIso, pOpcycles]
   rw [ShortComplex.RightHomologyData.pOpcycles_comp_opcyclesIso_hom_assoc]
   dsimp
-  rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [ShortComplex.Right
+  rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [ShortComplex.RightHomologyData.p_comp_opcyclesIso_inv]
+  rfl
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Iso.inv_hom_id, Iso.inv_hom_id_assoc, K.extendOpcyclesIso, RightHomologyData, ShortComplex, ShortComplex.RightHomologyData.pOpcycles_comp_opcyclesIso_hom_assoc, ShortComplex.RightHomologyData.p_comp_opcyclesIso_inv, cancel_mono, comp_id, extendOpcyclesIso, inv_hom_id, inv_hom_id_assoc, pOpcycles, pOpcycles_comp_opcyclesIso_hom_assoc, p_comp_opcyclesIso_inv
 -/
@@ -1190,7 +1268,7 @@ lemma quasiIso_extendMap_iff
       exact h j
     · rw [quasiIsoAt_iff_exactAt]
       all_goals
-        exact extend_exactAt _ _ 
+        exact extend_exactAt _ _ _ (by simpa using hj')
 
 中文:
 引理 quasiIso_extendMap_iff
@@ -1205,7 +1283,7 @@ lemma quasiIso_extendMap_iff
       exact h j
     · rw [quasiIsoAt_iff_exactAt]
       all_goals
-        exact extend_exactAt _ _ 
+        exact extend_exactAt _ _ _ (by simpa using hj')
 
 Depends on / 依赖: all_goals, extend_exactAt, quasiIsoAt_extendMap_iff, quasiIsoAt_iff_exactAt, quasiIso_iff
 -/

@@ -174,7 +174,16 @@ lemma map_comp
           · lia
           · obtain rfl : j = 0 := by lia
             rw [map_id]; rw [comp_id]
-     
+          · simp only [map, Nat.reduceAdd]
+            rw [hj (fun n => f (n + 1)) (k + 1) (by lia) (by lia)]
+            obtain _ | j := j
+            all_goals simp [map]
+  | succ i hi =>
+      rcases j, k with ⟨(_ | j), (_ | k)⟩
+      · lia
+      · lia
+      · lia
+      · exact hi _ j k (by lia) (by lia)
 
 中文:
 引理 map_comp
@@ -190,7 +199,16 @@ lemma map_comp
           · lia
           · obtain rfl : j = 0 := by lia
             rw [map_id]; rw [comp_id]
-     
+          · simp only [map, Nat.reduceAdd]
+            rw [hj (fun n => f (n + 1)) (k + 1) (by lia) (by lia)]
+            obtain _ | j := j
+            all_goals simp [map]
+  | succ i hi =>
+      rcases j, k with ⟨(_ | j), (_ | k)⟩
+      · lia
+      · lia
+      · lia
+      · exact hi _ j k (by lia) (by lia)
 
 Depends on / 依赖: Nat.reduceAdd, all_goals, comp_id, generalizing, id_comp, map_id, reduceAdd
 -/
@@ -306,7 +324,10 @@ definition ofSequence
         obtain rfl : j = i := by lia
         simp
     | succ k hk =>
-      
+        intro i j hk'
+        obtain rfl : j = i + k + 1 := by lia
+        simp only [← homOfLE_comp (show i <= i + k by lia) (show i + k <= i + k + 1 by lia),
+          Functor.map_comp, assoc, naturality, reassoc_of% (hk rfl)]
 
 中文:
 定义 ofSequence
@@ -323,7 +344,10 @@ definition ofSequence
         obtain rfl : j = i := by lia
         simp
     | succ k hk =>
-      
+        intro i j hk'
+        obtain rfl : j = i + k + 1 := by lia
+        simp only [← homOfLE_comp (show i <= i + k by lia) (show i + k <= i + k + 1 by lia),
+          Functor.map_comp, assoc, naturality, reassoc_of% (hk rfl)]
 -/
 def ofSequence : F ⟶ G where
   app := app

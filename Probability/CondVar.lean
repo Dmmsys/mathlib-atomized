@@ -330,7 +330,17 @@ lemma condVar_ae_eq_condExp_sq_sub_sq_condExp
     _ =ᵐ[μ] μ[X ^ 2 | m] - 2 * μ[X | m] ^ 2 + μ[X | m] ^ 2 := by
       have aux₀ : Integrable (X ^ 2) μ := hX.integrable_sq
       have aux₁ : Integrable (2 * X * μ[X | m]) μ := by
-        rw
+        rw [mul_assoc]
+        exact (memLp_one_iff_integrable.1 <| (hX.condExp one_le_two).mul hX).const_mul _
+      have aux₂ : Integrable (μ[X | m] ^ 2) μ := (hX.condExp one_le_two).integrable_sq
+      filter_upwards [condExp_add (m := m) (aux₀.sub aux₁) aux₂, condExp_sub (m := m) aux₀ aux₁,
+        condExp_mul_of_stronglyMeasurable_right stronglyMeasurable_condExp aux₁
+          ((hX.integrable one_le_two).const_mul _), condExp_ofNat (m := m) 2 X]
+        with ω hω₀ hω₁ hω₂ hω₃
+      simp [hω₀, hω₁, hω₂, hω₃,
+        condExp_of_stronglyMeasurable hm (stronglyMeasurable_condExp.pow _) aux₂]
+      simp [mul_assoc, sq]
+    _ = μ[X ^ 2 | m] - μ[X | m] ^ 2 := by ring
 
 中文:
 引理 condVar_ae_eq_condExp_sq_sub_sq_condExp
@@ -342,7 +352,17 @@ lemma condVar_ae_eq_condExp_sq_sub_sq_condExp
     _ =ᵐ[μ] μ[X ^ 2 | m] - 2 * μ[X | m] ^ 2 + μ[X | m] ^ 2 := by
       have aux₀ : Integrable (X ^ 2) μ := hX.integrable_sq
       have aux₁ : Integrable (2 * X * μ[X | m]) μ := by
-        rw
+        rw [mul_assoc]
+        exact (memLp_one_iff_integrable.1 <| (hX.condExp one_le_two).mul hX).const_mul _
+      have aux₂ : Integrable (μ[X | m] ^ 2) μ := (hX.condExp one_le_two).integrable_sq
+      filter_upwards [condExp_add (m := m) (aux₀.sub aux₁) aux₂, condExp_sub (m := m) aux₀ aux₁,
+        condExp_mul_of_stronglyMeasurable_right stronglyMeasurable_condExp aux₁
+          ((hX.integrable one_le_two).const_mul _), condExp_ofNat (m := m) 2 X]
+        with ω hω₀ hω₁ hω₂ hω₃
+      simp [hω₀, hω₁, hω₂, hω₃,
+        condExp_of_stronglyMeasurable hm (stronglyMeasurable_condExp.pow _) aux₂]
+      simp [mul_assoc, sq]
+    _ = μ[X ^ 2 | m] - μ[X | m] ^ 2 := by ring
 
 Depends on / 依赖: Integrable, condExp, condExp_add, condVar, const_mul, filter_upwards, hX.condExp, hX.integrable_sq, integrable_sq, memLp_one_iff_integrable, mul_assoc, one_le_two, sub_sq
 -/
@@ -406,7 +426,10 @@ lemma integral_condVar_add_variance_condExp
       congr 1
 · exact integral_congr_ae condVar_ae_eq_condExp_sq_sub_sq_condExp hm hX
       · exact variance_eq_sub (hX.condExp one_le_two)
-    _ = μ[X ^
+    _ = μ[X ^ 2] - μ[μ[X | m] ^ 2] + (μ[μ[X | m] ^ 2] - μ[X] ^ 2) := by
+      rw [integral_sub' integrable_condExp]; rw [integral_condExp hm]; rw [integral_condExp hm]
+      exact (hX.condExp one_le_two).integrable_sq
+    _ = Var[X; μ] := by rw [variance_eq_sub hX]; ring
 
 中文:
 引理 integral_condVar_add_variance_condExp
@@ -418,7 +441,10 @@ lemma integral_condVar_add_variance_condExp
       congr 1
 · exact integral_congr_ae condVar_ae_eq_condExp_sq_sub_sq_condExp hm hX
       · exact variance_eq_sub (hX.condExp one_le_two)
-    _ = μ[X ^
+    _ = μ[X ^ 2] - μ[μ[X | m] ^ 2] + (μ[μ[X | m] ^ 2] - μ[X] ^ 2) := by
+      rw [integral_sub' integrable_condExp]; rw [integral_condExp hm]; rw [integral_condExp hm]
+      exact (hX.condExp one_le_two).integrable_sq
+    _ = Var[X; μ] := by rw [variance_eq_sub hX]; ring
 
 Depends on / 依赖: condExp, condVar_ae_eq_condExp_sq_sub_sq_condExp, hX.condExp, integrable_condExp, integrable_sq, integral_condExp, integral_congr_ae, integral_sub, one_le_two, variance_, variance_eq_sub
 -/

@@ -44,7 +44,18 @@ definition isLimitForkPushoutSelfOfFaithfullyFlat
   let fork : Fork (pushoutCocone R S S).inl (pushoutCocone R S S).inr :=
     Fork.ofι (ofHom (algebraMap R S)) (by rw [(PushoutCocone.condition _)])
   let isPushout : IsPushout (ofHom (algebraMap R S)) (ofHom (algebraMap R S))
-      (pushoutCocone R S S).inl (pushoutCocone R 
+      (pushoutCocone R S S).inl (pushoutCocone R S S).inr :=
+    ⟨⟨PushoutCocone.condition (pushoutCocone R S S)⟩, ⟨pushoutCoconeIsColimit R S S⟩⟩
+  let isLimit : IsLimit fork :=
+    (Fork.isLimitEquivOfIsos _
+      (equalizerFork (pushoutCocone R S S).inl (pushoutCocone R S S).inr) (Iso.refl _) (Iso.refl _)
+      (RingEquiv.toCommRingCatIso <| RingEquiv.ofBijective _
+        (Algebra.codRestrictEqLocusPushoutCocone.bijective_of_faithfullyFlat R S))
+      (by cat_disch) (by cat_disch) (by cat_disch)).symm
+    (equalizerForkIsLimit (pushoutCocone R S S).inl (pushoutCocone R S S).inr)
+  exact Fork.isLimitEquivOfIsos fork (Fork.ofι f pushout.condition) (Iso.refl _)
+    (IsPushout.isoPushout isPushout) (Iso.refl _) (IsPushout.inl_isoPushout_hom isPushout).symm
+    (IsPushout.inr_isoPushout_hom isPushout).symm rfl isLimit
 
 中文:
 定义 isLimitForkPushoutSelfOfFaithfullyFlat
@@ -54,7 +65,18 @@ definition isLimitForkPushoutSelfOfFaithfullyFlat
   let fork : Fork (pushoutCocone R S S).inl (pushoutCocone R S S).inr :=
     Fork.ofι (ofHom (algebraMap R S)) (by rw [(PushoutCocone.condition _)])
   let isPushout : IsPushout (ofHom (algebraMap R S)) (ofHom (algebraMap R S))
-      (pushoutCocone R S S).inl (pushoutCocone R 
+      (pushoutCocone R S S).inl (pushoutCocone R S S).inr :=
+    ⟨⟨PushoutCocone.condition (pushoutCocone R S S)⟩, ⟨pushoutCoconeIsColimit R S S⟩⟩
+  let isLimit : IsLimit fork :=
+    (Fork.isLimitEquivOfIsos _
+      (equalizerFork (pushoutCocone R S S).inl (pushoutCocone R S S).inr) (Iso.refl _) (Iso.refl _)
+      (RingEquiv.toCommRingCatIso <| RingEquiv.ofBijective _
+        (Algebra.codRestrictEqLocusPushoutCocone.bijective_of_faithfullyFlat R S))
+      (by cat_disch) (by cat_disch) (by cat_disch)).symm
+    (equalizerForkIsLimit (pushoutCocone R S S).inl (pushoutCocone R S S).inr)
+  exact Fork.isLimitEquivOfIsos fork (Fork.ofι f pushout.condition) (Iso.refl _)
+    (IsPushout.isoPushout isPushout) (Iso.refl _) (IsPushout.inl_isoPushout_hom isPushout).symm
+    (IsPushout.inr_isoPushout_hom isPushout).symm rfl isLimit
 
 Depends on / 依赖: Fork.isLimitEquivOfIsos, Fork.of, IsLimit, IsPushout, PushoutCocone, PushoutCocone.condition, algebraMap, algebraize, condition, equalizerFork, f.hom, isLimit, isLimitEquivOfIsos, isPushout, pushoutCocone, pushoutCoconeIsColimit
 -/

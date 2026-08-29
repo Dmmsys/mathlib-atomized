@@ -400,6 +400,18 @@ theorem right_induction
   have : x in ⊤ := Submodule.mem_top (R := R)
   rw [← iSup_ι_range_eq_top] at this
   induction this using Submodule.iSup_induction' with
+  | mem i x hx =>
+    induction hx using Submodule.pow_induction_on_right' with
+    | algebraMap r => exact algebraMap r
+    | add _x _y _i _ _ ihx ihy => exact add _ _ ihx ihy
+    | mul_mem _i x _hx px m hm =>
+      obtain ⟨m, rfl⟩ := hm
+      exact mul_ι _ _ px
+  | zero => simpa only [map_zero] using algebraMap 0
+  | add _x _y _ _ ihx ihy =>
+    exact add _ _ ihx ihy
+
+@[elab_as_elim]
 
 中文:
 定理 right_induction
@@ -411,6 +423,18 @@ theorem right_induction
   have : x in ⊤ := Submodule.mem_top (R := R)
   rw [← iSup_ι_range_eq_top] at this
   induction this using Submodule.iSup_induction' with
+  | mem i x hx =>
+    induction hx using Submodule.pow_induction_on_right' with
+    | algebraMap r => exact algebraMap r
+    | add _x _y _i _ _ ihx ihy => exact add _ _ ihx ihy
+    | mul_mem _i x _hx px m hm =>
+      obtain ⟨m, rfl⟩ := hm
+      exact mul_ι _ _ px
+  | zero => simpa only [map_zero] using algebraMap 0
+  | add _x _y _ _ ihx ihy =>
+    exact add _ _ ihx ihy
+
+@[elab_as_elim]
 -/
 theorem right_induction {P : CliffordAlgebra Q -> Prop} (algebraMap : forall r : R, P (algebraMap _ _ r))
     (add : forall x y, P x -> P y -> P (x + y)) (mul_ι : forall m x, P x -> P (x * ι Q m)) : forall x, P x := by
@@ -444,7 +468,7 @@ theorem left_induction
   induction x using CliffordAlgebra.right_induction with
   | algebraMap r => simpa only [reverse.commutes] using algebraMap r
   | add _ _ hx hy => simpa only [map_add] using add _ _ hx hy
-  | mul_ι _ _ hx => simpa only [reverse.map_mul,
+  | mul_ι _ _ hx => simpa only [reverse.map_mul, reverse_ι] using ι_mul _ _ hx
 
 中文:
 定理 left_induction
@@ -455,7 +479,7 @@ theorem left_induction
   induction x using CliffordAlgebra.right_induction with
   | algebraMap r => simpa only [reverse.commutes] using algebraMap r
   | add _ _ hx hy => simpa only [map_add] using add _ _ hx hy
-  | mul_ι _ _ hx => simpa only [reverse.map_mul,
+  | mul_ι _ _ hx => simpa only [reverse.map_mul, reverse_ι] using ι_mul _ _ hx
 
 Depends on / 依赖: CliffordAlgebra, CliffordAlgebra.right_induction, algebraMap, commutes, map_add, map_mul, reverse, reverse.commutes, reverse.map_mul, reverse_involutive, reverse_involutive.surjective.forall, right_induction, surjective
 -/
@@ -484,7 +508,11 @@ definition foldr'Aux
     { toFun := fun m => (l m).prod (f m)
       map_add' := fun v₂ v₂ =>
         LinearMap.ext fun x =>
-          Prod.ext (LinearMap.congr_fun (l.map_add _ _) x) (LinearM
+          Prod.ext (LinearMap.congr_fun (l.map_add _ _) x) (LinearMap.congr_fun (f.map_add _ _) x)
+      map_smul' := fun c v =>
+        LinearMap.ext fun x =>
+          Prod.ext (LinearMap.congr_fun (l.map_smul _ _) x)
+            (LinearMap.congr_fun (f.map_smul _ _) x) }
 
 中文:
 定义 foldr'Aux
@@ -496,7 +524,11 @@ definition foldr'Aux
     { toFun := fun m => (l m).prod (f m)
       map_add' := fun v₂ v₂ =>
         LinearMap.ext fun x =>
-          Prod.ext (LinearMap.congr_fun (l.map_add _ _) x) (LinearM
+          Prod.ext (LinearMap.congr_fun (l.map_add _ _) x) (LinearMap.congr_fun (f.map_add _ _) x)
+      map_smul' := fun c v =>
+        LinearMap.ext fun x =>
+          Prod.ext (LinearMap.congr_fun (l.map_smul _ _) x)
+            (LinearMap.congr_fun (f.map_smul _ _) x) }
 
 Depends on / 依赖: Algebra, Algebra.lmul, CliffordAlgebra, LinearMap, LinearMap.congr_fun, LinearMap.ext, LinearMap.fst, Prod.ext, congr_fun, f.map_add, f.map_smul, l.map_add, l.map_smul, map_add, map_smul, toLinearMap, v_mul, v_mul.compl
 -/
@@ -620,7 +652,8 @@ theorem foldr'_ι_mul
   congr 1
   induction x using CliffordAlgebra.left_induction with
   | algebraMap r => simp_rw [foldr_algebraMap, Prod.smul_mk, Algebra.algebraMap_eq_smul_one]
-  | add x
+  | add x y hx hy => rw [map_add, Prod.fst_add, hx, hy]
+  | ι_mul m x hx => rw [foldr_mul, foldr_ι, foldr'Aux_apply_apply, hx]
 
 中文:
 定理 foldr'_ι_mul
@@ -632,7 +665,8 @@ theorem foldr'_ι_mul
   congr 1
   induction x using CliffordAlgebra.left_induction with
   | algebraMap r => simp_rw [foldr_algebraMap, Prod.smul_mk, Algebra.algebraMap_eq_smul_one]
-  | add x
+  | add x y hx hy => rw [map_add, Prod.fst_add, hx, hy]
+  | ι_mul m x hx => rw [foldr_mul, foldr_ι, foldr'Aux_apply_apply, hx]
 -/
 theorem foldr'_ι_mul (f : M ->ₗ[R] CliffordAlgebra Q × N ->ₗ[R] N)
     (hf : forall m x fx, f m (ι Q m * x, f m (x, fx)) = Q m • fx) (n m) (x) :

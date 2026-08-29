@@ -36,7 +36,13 @@ theorem nontrivial_of_algebraMap_injective_of_isDomain
   let FB := FractionRing B
   let fa : FR ->ₐ[R] FA := IsFractionRing.liftAlgHom (g := Algebra.ofId R FA)
     ((IsFractionRing.injective A FA).comp ha)
-  let fb : FR ->ₐ[R] FB := IsFractionRing.liftAlgHom (g := Algebra.o
+  let fb : FR ->ₐ[R] FB := IsFractionRing.liftAlgHom (g := Algebra.ofId R FB)
+    ((IsFractionRing.injective B FB).comp hb)
+  algebraize_only [fa.toRingHom, fb.toRingHom]
+  let : CompatibleSMul FR R FA FB := CompatibleSMul.isScalarTower
+.comp exact Algebra.TensorProduct.mapOfCompatibleSMul FR R R FA FB
+    (Algebra.TensorProduct.map (IsScalarTower.toAlgHom R A FA) (IsScalarTower.toAlgHom R B FB))
+.toRingHom.domain_nontrivial
 
 中文:
 定理 nontrivial_of_algebraMap_injective_of_isDomain
@@ -47,7 +53,13 @@ theorem nontrivial_of_algebraMap_injective_of_isDomain
   let FB := FractionRing B
   let fa : FR ->ₐ[R] FA := IsFractionRing.liftAlgHom (g := Algebra.ofId R FA)
     ((IsFractionRing.injective A FA).comp ha)
-  let fb : FR ->ₐ[R] FB := IsFractionRing.liftAlgHom (g := Algebra.o
+  let fb : FR ->ₐ[R] FB := IsFractionRing.liftAlgHom (g := Algebra.ofId R FB)
+    ((IsFractionRing.injective B FB).comp hb)
+  algebraize_only [fa.toRingHom, fb.toRingHom]
+  let : CompatibleSMul FR R FA FB := CompatibleSMul.isScalarTower
+.comp exact Algebra.TensorProduct.mapOfCompatibleSMul FR R R FA FB
+    (Algebra.TensorProduct.map (IsScalarTower.toAlgHom R A FA) (IsScalarTower.toAlgHom R B FB))
+.toRingHom.domain_nontrivial
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.mapOfCompatibleSMul, Algebra.ofId, CompatibleSMul, CompatibleSMul.isScalarTower, FractionRing, IsFractionRing, IsFractionRing.injective, IsFractionRing.liftAlgHom, TensorProduct, algebraize_only, fa.toRingHom, fb.toRingHom, ha.isDomain, injective, isDomain, isScalarTower, liftAlgHom, mapOfCompatibleSMul, toRingHom
 -/

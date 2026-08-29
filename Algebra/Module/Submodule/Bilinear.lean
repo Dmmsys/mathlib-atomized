@@ -120,7 +120,12 @@ theorem map₂_span_span
         exact subset_span ⟨_, ‹_›, _, ‹_›, rfl⟩
     all_goals
       intros
-      simp only [*, add_mem, smul_mem, zero_mem, map_z
+      simp only [*, add_mem, smul_mem, zero_mem, map_zero, map_add,
+        LinearMap.zero_apply, LinearMap.add_apply, LinearMap.smul_apply, map_smul]
+  · rw [span_le, image2_subset_iff]
+    intro a ha b hb
+    exact apply_mem_map₂ _ (subset_span ha) (subset_span hb)
+@[simp]
 
 中文:
 定理 map₂_span_span
@@ -136,7 +141,12 @@ theorem map₂_span_span
         exact subset_span ⟨_, ‹_›, _, ‹_›, rfl⟩
     all_goals
       intros
-      simp only [*, add_mem, smul_mem, zero_mem, map_z
+      simp only [*, add_mem, smul_mem, zero_mem, map_zero, map_add,
+        LinearMap.zero_apply, LinearMap.add_apply, LinearMap.smul_apply, map_smul]
+  · rw [span_le, image2_subset_iff]
+    intro a ha b hb
+    exact apply_mem_map₂ _ (subset_span ha) (subset_span hb)
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.add_apply, LinearMap.smul_apply, LinearMap.zero_apply, add_apply, add_mem, all_goals, image2_subset_iff, intros, le_antisymm, map_add, map_smul, map_zero, on_goal, smul_apply, smul_mem, span_induction, span_le, subset_span, zero_apply
 -/
@@ -324,7 +334,7 @@ theorem map₂_sup_left
       mem_sup.2
         ⟨_, apply_mem_map₂ _ hm hp, _, apply_mem_map₂ _ hn hp,
           hmn ▸ (LinearMap.map_add₂ _ _ _ _).symm⟩)
-    (sup_le (map₂_le_map₂_left le_sup_left) (map₂_le_map₂_left le_sup_ri
+    (sup_le (map₂_le_map₂_left le_sup_left) (map₂_le_map₂_left le_sup_right))
 
 中文:
 定理 map₂_sup_left
@@ -335,7 +345,7 @@ theorem map₂_sup_left
       mem_sup.2
         ⟨_, apply_mem_map₂ _ hm hp, _, apply_mem_map₂ _ hn hp,
           hmn ▸ (LinearMap.map_add₂ _ _ _ _).symm⟩)
-    (sup_le (map₂_le_map₂_left le_sup_left) (map₂_le_map₂_left le_sup_ri
+    (sup_le (map₂_le_map₂_left le_sup_left) (map₂_le_map₂_left le_sup_right))
 
 Depends on / 依赖: LinearMap, LinearMap.map_add, le_antisymm, le_sup_left, le_sup_right, mem_sup, sup_le
 -/

@@ -381,7 +381,7 @@ lemma dirSupInacc_compl
 alias ⟨DirSupInaccOn.of_compl, DirSupInaccOn.compl⟩ := dirSupClosedOn_compl
 alias ⟨DirSupClosedOn.of_compl, DirSupClosedOn.compl⟩ := dirSupInaccOn_compl
 alias ⟨DirSupInacc.of_compl, DirSupInacc.compl⟩ := dirSupClosed_compl
-alias ⟨DirSupClosed.of_comp
+alias ⟨DirSupClosed.of_compl, DirSupClosed.compl⟩ := dirSupInacc_compl
 
 中文:
 引理 dirSupInacc_compl
@@ -392,7 +392,7 @@ alias ⟨DirSupClosed.of_comp
 alias ⟨DirSupInaccOn.of_compl, DirSupInaccOn.compl⟩ := dirSupClosedOn_compl
 alias ⟨DirSupClosedOn.of_compl, DirSupClosedOn.compl⟩ := dirSupInaccOn_compl
 alias ⟨DirSupInacc.of_compl, DirSupInacc.compl⟩ := dirSupClosed_compl
-alias ⟨DirSupClosed.of_comp
+alias ⟨DirSupClosed.of_compl, DirSupClosed.compl⟩ := dirSupInacc_compl
 
 Depends on / 依赖: compl_compl, dirSupClosed_compl
 -/
@@ -809,7 +809,11 @@ theorem DirSupClosedOn.union
   wlog h : DirectedOn (· <= ·) (d inter s) ∧ IsCofinalFor (d inter t) (d inter s)
   · rw [union_comm] at hdu hdst ⊢
 exact this hDL ht hs hD hdu hd₀ hd₁ ha hdst
-      (directedOn_union_iff.mp (by rwa [hdst])).res
+      (directedOn_union_iff.mp (by rwa [hdst])).resolve_right h
+  obtain ⟨hds, hcof⟩ := h
+  have hcof' : IsCofinalFor d (d inter s) := hcof.union_right.mono_left hdst.ge
+exact .inl hs (hDL inter_subset_left hD) inter_subset_right
+    (hcof'.nonempty hd₀) hds (ha.of_isCofinalFor inter_subset_left hcof')
 
 中文:
 定理 DirSupClosedOn.union
@@ -820,7 +824,11 @@ exact this hDL ht hs hD hdu hd₀ hd₁ ha hdst
   wlog h : DirectedOn (· <= ·) (d inter s) ∧ IsCofinalFor (d inter t) (d inter s)
   · rw [union_comm] at hdu hdst ⊢
 exact this hDL ht hs hD hdu hd₀ hd₁ ha hdst
-      (directedOn_union_iff.mp (by rwa [hdst])).res
+      (directedOn_union_iff.mp (by rwa [hdst])).resolve_right h
+  obtain ⟨hds, hcof⟩ := h
+  have hcof' : IsCofinalFor d (d inter s) := hcof.union_right.mono_left hdst.ge
+exact .inl hs (hDL inter_subset_left hD) inter_subset_right
+    (hcof'.nonempty hd₀) hds (ha.of_isCofinalFor inter_subset_left hcof')
 
 Depends on / 依赖: DirectedOn, IsCofinalFor, directedOn_union_iff, directedOn_union_iff.mp, ha.of_isCofin, hcof.union_right.mono_left, hdst.ge, inter_subset_left, inter_subset_right, mono_left, nonempty, of_isCofin, resolve_right, union_comm, union_right
 -/
@@ -958,7 +966,8 @@ theorem dirSupInaccOn_iff_inter_subset
     have hcof : IsCofinalFor t (t \ s) := by grind [IsCofinalFor, not_subset]
     obtain ⟨x, hx, hxs⟩ := h (hDL sdiff_subset hD) (hcof.nonempty ht₀)
       (ht₁.of_isCofinalFor sdiff_subset hcof)
-      (ha.of_isCofinalFor sdiff_subs
+      (ha.of_isCofinalFor sdiff_subset hcof) has
+    exact hx.2 hxs
 
 中文:
 定理 dirSupInaccOn_iff_inter_subset
@@ -969,7 +978,8 @@ theorem dirSupInaccOn_iff_inter_subset
     have hcof : IsCofinalFor t (t \ s) := by grind [IsCofinalFor, not_subset]
     obtain ⟨x, hx, hxs⟩ := h (hDL sdiff_subset hD) (hcof.nonempty ht₀)
       (ht₁.of_isCofinalFor sdiff_subset hcof)
-      (ha.of_isCofinalFor sdiff_subs
+      (ha.of_isCofinalFor sdiff_subset hcof) has
+    exact hx.2 hxs
 
 Depends on / 依赖: of_inter_subset
 -/

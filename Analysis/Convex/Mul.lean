@@ -48,7 +48,14 @@ lemma ConvexOn.smul'
     (smul_le_smul (hf.2 hx hy ha hb hab) (hg.2 hx hy ha hb hab) (hf₀ <| hf.1 hx hy ha hb hab) <|
 add_nonneg (smul_nonneg ha <| hg₀ hx) smul_nonneg hb hg₀ hy).trans ?_
   calc
-      _ = (a * a) • (f x • g x) + (b * b) • (f y • g y)
+      _ = (a * a) • (f x • g x) + (b * b) • (f y • g y) + (a * b) • (f x • g y + f y • g x) := ?_
+    _ <= (a * a) • (f x • g x) + (b * b) • (f y • g y) + (a * b) • (f x • g x + f y • g y) := by
+        gcongr _ + (a * b) • ?_; exact hfg.smul_add_smul_le_smul_add_smul hx hy
+    _ = (a * (a + b)) • (f x • g x) + (b * (a + b)) • (f y • g y) := by
+        simp only [mul_add, add_smul, smul_add, mul_comm _ a]; abel
+    _ = _ := by simp_rw [hab, mul_one]
+  simp only [add_smul, smul_add]
+  rw [← smul_smul_smul_comm a]; rw [← smul_smul_smul_comm b]; rw [← smul_smul_smul_comm a b]; rw [← smul_smul_smul_comm b b]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm b]; rw [add_comm _ ((b * b) • f y • g y)]; rw [add_add_add_comm]; rw [add_comm ((a * b) • f y • g x)]
 
 中文:
 引理 ConvexOn.smul'
@@ -60,7 +67,14 @@ add_nonneg (smul_nonneg ha <| hg₀ hx) smul_nonneg hb hg₀ hy).trans ?_
     (smul_le_smul (hf.2 hx hy ha hb hab) (hg.2 hx hy ha hb hab) (hf₀ <| hf.1 hx hy ha hb hab) <|
 add_nonneg (smul_nonneg ha <| hg₀ hx) smul_nonneg hb hg₀ hy).trans ?_
   calc
-      _ = (a * a) • (f x • g x) + (b * b) • (f y • g y)
+      _ = (a * a) • (f x • g x) + (b * b) • (f y • g y) + (a * b) • (f x • g y + f y • g x) := ?_
+    _ <= (a * a) • (f x • g x) + (b * b) • (f y • g y) + (a * b) • (f x • g x + f y • g y) := by
+        gcongr _ + (a * b) • ?_; exact hfg.smul_add_smul_le_smul_add_smul hx hy
+    _ = (a * (a + b)) • (f x • g x) + (b * (a + b)) • (f y • g y) := by
+        simp only [mul_add, add_smul, smul_add, mul_comm _ a]; abel
+    _ = _ := by simp_rw [hab, mul_one]
+  simp only [add_smul, smul_add]
+  rw [← smul_smul_smul_comm a]; rw [← smul_smul_smul_comm b]; rw [← smul_smul_smul_comm a b]; rw [← smul_smul_smul_comm b b]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm b]; rw [add_comm _ ((b * b) • f y • g y)]; rw [add_add_add_comm]; rw [add_comm ((a * b) • f y • g x)]
 
 Depends on / 依赖: add_nonneg, hfg.smul_add_smul_le_smul_add_smul, smul_add_smul_le_smul_add_smul, smul_le_smul, smul_nonneg
 -/
@@ -94,7 +108,14 @@ lemma ConcaveOn.smul'
     (add_nonneg (smul_nonneg ha <| hf₀ hx) <| smul_nonneg hb <| hf₀ hy)
     (hg₀ <| hf.1 hx hy ha hb hab)).trans' ?_
   calc a • f x • g x + b • f y • g y
-        = (a * 
+        = (a * (a + b)) • (f x • g x) + (b * (a + b)) • (f y • g y) := by simp_rw [hab, mul_one]
+    _ = (a * a) • (f x • g x) + (b * b) • (f y • g y) + (a * b) • (f x • g x + f y • g y) := by
+        simp only [mul_add, add_smul, smul_add, mul_comm _ a]; abel
+    _ <= (a * a) • (f x • g x) + (b * b) • (f y • g y) + (a * b) • (f x • g y + f y • g x) := by
+        gcongr _ + (a * b) • ?_; exact hfg.smul_add_smul_le_smul_add_smul hx hy
+    _ = _ := ?_
+  simp only [add_smul, smul_add]
+  rw [← smul_smul_smul_comm a]; rw [← smul_smul_smul_comm b]; rw [← smul_smul_smul_comm a b]; rw [← smul_smul_smul_comm b b]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm b a]; rw [add_comm ((a * b) • f x • g y)]; rw [add_comm ((a * b) • f x • g y)]; rw [add_add_add_comm]
 
 中文:
 引理 ConcaveOn.smul'
@@ -106,7 +127,14 @@ lemma ConcaveOn.smul'
     (add_nonneg (smul_nonneg ha <| hf₀ hx) <| smul_nonneg hb <| hf₀ hy)
     (hg₀ <| hf.1 hx hy ha hb hab)).trans' ?_
   calc a • f x • g x + b • f y • g y
-        = (a * 
+        = (a * (a + b)) • (f x • g x) + (b * (a + b)) • (f y • g y) := by simp_rw [hab, mul_one]
+    _ = (a * a) • (f x • g x) + (b * b) • (f y • g y) + (a * b) • (f x • g x + f y • g y) := by
+        simp only [mul_add, add_smul, smul_add, mul_comm _ a]; abel
+    _ <= (a * a) • (f x • g x) + (b * b) • (f y • g y) + (a * b) • (f x • g y + f y • g x) := by
+        gcongr _ + (a * b) • ?_; exact hfg.smul_add_smul_le_smul_add_smul hx hy
+    _ = _ := ?_
+  simp only [add_smul, smul_add]
+  rw [← smul_smul_smul_comm a]; rw [← smul_smul_smul_comm b]; rw [← smul_smul_smul_comm a b]; rw [← smul_smul_smul_comm b b]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm b a]; rw [add_comm ((a * b) • f x • g y)]; rw [add_comm ((a * b) • f x • g y)]; rw [add_add_add_comm]
 
 Depends on / 依赖: add_nonneg, add_smul, mul_add, mul_comm, mul_one, simp_rw, smul_add, smul_le_smul, smul_nonneg
 -/
@@ -488,7 +516,7 @@ lemma Even.convexOn_pow
     (fun _ _ => by positivity) _
   calc
     (0 : 𝕜) <= (a * b) * (x - y) ^ 2 := by positivity
-    _ = _ := by obtain rfl := eq_sub_of_add_eq hab; simp only [smu
+    _ = _ := by obtain rfl := eq_sub_of_add_eq hab; simp only [smul_eq_mul]; ring
 
 中文:
 引理 Even.convexOn_pow
@@ -501,7 +529,7 @@ lemma Even.convexOn_pow
     (fun _ _ => by positivity) _
   calc
     (0 : 𝕜) <= (a * b) * (x - y) ^ 2 := by positivity
-    _ = _ := by obtain rfl := eq_sub_of_add_eq hab; simp only [smu
+    _ = _ := by obtain rfl := eq_sub_of_add_eq hab; simp only [smul_eq_mul]; ring
 -/
 protected lemma Even.convexOn_pow {n : Nat} (hn : Even n) : ConvexOn 𝕜 univ fun x : 𝕜 => x ^ n := by
   obtain ⟨n, rfl⟩ := hn

@@ -2442,7 +2442,9 @@ theorem mem_range_iff_mem_finset_range_of_mod_eq
     (fun ⟨i, hi⟩ =>
       have : 0 <= i % ↑n := Int.emod_nonneg _ (ne_of_gt hn')
       ⟨Int.toNat (i % n), by
-        rw [← Int.ofNat_lt]; rw [Int.toNat_of_nonne
+        rw [← Int.ofNat_lt]; rw [Int.toNat_of_nonneg this]; exact ⟨Int.emod_lt_of_pos i hn', hi⟩⟩)
+    fun ⟨i, hi, ha⟩ =>
+    ⟨i, by rw [Int.emod_eq_of_lt (Int.natCast_nonneg _) (Int.ofNat_lt_ofNat_of_lt hi), ha]⟩
 
 中文:
 定理 mem_range_iff_mem_finset_range_of_mod_eq
@@ -2453,7 +2455,9 @@ theorem mem_range_iff_mem_finset_range_of_mod_eq
     (fun ⟨i, hi⟩ =>
       have : 0 <= i % ↑n := Int.emod_nonneg _ (ne_of_gt hn')
       ⟨Int.toNat (i % n), by
-        rw [← Int.ofNat_lt]; rw [Int.toNat_of_nonne
+        rw [← Int.ofNat_lt]; rw [Int.toNat_of_nonneg this]; exact ⟨Int.emod_lt_of_pos i hn', hi⟩⟩)
+    fun ⟨i, hi, ha⟩ =>
+    ⟨i, by rw [Int.emod_eq_of_lt (Int.natCast_nonneg _) (Int.ofNat_lt_ofNat_of_lt hi), ha]⟩
 
 Depends on / 依赖: Iff.intro, Int.emod_eq_of_lt, Int.emod_lt_of_pos, Int.emod_nonneg, Int.natCast_nonneg, Int.ofNat_lt, Int.ofNat_lt.mpr, Int.ofNat_lt_ofNat_of_lt, Int.toNat, Int.toNat_of_nonneg, emod_eq_of_lt, emod_lt_of_pos, emod_nonneg, natCast_nonneg, ne_of_gt, ofNat_lt, ofNat_lt_ofNat_of_lt, toNat_of_nonneg
 -/
@@ -3337,7 +3341,14 @@ definition finsetSubtypeComm
   invFun s := s.val.attach.map (Subtype.impEmbedding _ _ s.property)
   left_inv s := by
     ext a; constructor <;> intro h <;>
-    simp only [Finset.mem_map, Finset
+    simp only [Finset.mem_map, Finset.mem_attach, true_and, Subtype.exists, Embedding.coeFn_mk,
+      exists_and_right, exists_eq_right, Subtype.impEmbedding] at * <;>
+    grind
+  right_inv s := by
+    ext a; constructor <;> intro h <;>
+    simp only [Finset.mem_map, Finset.mem_attach, Subtype.exists, Embedding.coeFn_mk,
+      Subtype.impEmbedding] at * <;>
+    grind
 
 中文:
 定义 finsetSubtypeComm
@@ -3347,7 +3358,14 @@ definition finsetSubtypeComm
   invFun s := s.val.attach.map (Subtype.impEmbedding _ _ s.property)
   left_inv s := by
     ext a; constructor <;> intro h <;>
-    simp only [Finset.mem_map, Finset
+    simp only [Finset.mem_map, Finset.mem_attach, true_and, Subtype.exists, Embedding.coeFn_mk,
+      exists_and_right, exists_eq_right, Subtype.impEmbedding] at * <;>
+    grind
+  right_inv s := by
+    ext a; constructor <;> intro h <;>
+    simp only [Finset.mem_map, Finset.mem_attach, Subtype.exists, Embedding.coeFn_mk,
+      Subtype.impEmbedding] at * <;>
+    grind
 -/
 protected def finsetSubtypeComm (p : α -> Prop) :
     Finset {a : α // p a} ≃ {s : Finset α // forall a in s, p a} where

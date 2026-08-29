@@ -498,7 +498,8 @@ lemma image_target_subset_target
   proof: by
   rw [← h.writtenInCharts.image_eq]; rw [Set.image_comp]; rw [Set.image_comp]; rw [PartialEquiv.symm_image_target_eq_source]; rw [OpenPartialHomeomorph.extend_source]; rw [← PartialEquiv.image_source_eq_target]
   have : f '' h.domChart.source subseteq h.codChart.source := by
-    simp [h.source_su
+    simp [h.source_subset_preimage_source]
+  grw [this, OpenPartialHomeomorph.extend_source]
 
 中文:
 引理 image_target_subset_target
@@ -506,7 +507,8 @@ lemma image_target_subset_target
   证明: by
   rw [← h.writtenInCharts.image_eq]; rw [Set.image_comp]; rw [Set.image_comp]; rw [PartialEquiv.symm_image_target_eq_source]; rw [OpenPartialHomeomorph.extend_source]; rw [← PartialEquiv.image_source_eq_target]
   have : f '' h.domChart.source subseteq h.codChart.source := by
-    simp [h.source_su
+    simp [h.source_subset_preimage_source]
+  grw [this, OpenPartialHomeomorph.extend_source]
 
 Depends on / 依赖: OpenPartialHomeomorph, OpenPartialHomeomorph.extend_source, PartialEquiv, PartialEquiv.image_source_eq_target, PartialEquiv.symm_image_target_eq_source, Set.image_comp, codChart, domChart, extend_source, h.codChart.source, h.domChart.source, h.source_subset_preimage_source, h.writtenInCharts.image_eq, image_comp, image_eq, image_source_eq_target, source, source_subset_preimage_source, subseteq, symm_image_target_eq_source
 -/
@@ -663,7 +665,8 @@ lemma trans_F
     h.domChart_mem_maximalAtlas, h.codChart_mem_maximalAtlas, h.source_subset_preimage_source, ?_⟩
   use h.equiv.trans ((ContinuousLinearEquiv.refl 𝕜 E'').prodCongr e)
   apply Set.EqOn.trans h.writtenInCharts
-  intro 
+  intro x hx
+  simp
 
 中文:
 引理 trans_F
@@ -673,7 +676,8 @@ lemma trans_F
     h.domChart_mem_maximalAtlas, h.codChart_mem_maximalAtlas, h.source_subset_preimage_source, ?_⟩
   use h.equiv.trans ((ContinuousLinearEquiv.refl 𝕜 E'').prodCongr e)
   apply Set.EqOn.trans h.writtenInCharts
-  intro 
+  intro x hx
+  simp
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.refl, Set.EqOn.trans, codChart, codChart_mem_maximalAtlas, domChart, domChart_mem_maximalAtlas, h.codChart, h.codChart_mem_maximalAtlas, h.domChart, h.domChart_mem_maximalAtlas, h.equiv.trans, h.mem_codChart_source, h.mem_domChart_source, h.source_subset_preimage_source, h.writtenInCharts, mem_codChart_source, mem_domChart_source, prodCongr, source_subset_preimage_source
 -/
@@ -734,7 +738,8 @@ theorem prodMap
   apply LiftSourceTargetPropertyAt.prodMap hf.property hg.property
   rintro f φ₁ ψ₁ g φ₂ ψ₂ ⟨equiv₁, hfprop⟩ ⟨equiv₂, hgprop⟩
   use (equiv₁.prodCongr equiv₂).trans (ContinuousLinearEquiv.prodProdProdComm 𝕜 E'' F E''' F')
-  rw [φ₁.extend_prod φ₂]; rw [ψ₁.extend_prod]; rw [PartialEquiv.prod_target]
+  rw [φ₁.extend_prod φ₂]; rw [ψ₁.extend_prod]; rw [PartialEquiv.prod_target]; rw [eqOn_prod_iff]
+  exact ⟨fun x ⟨hx, hx'⟩ => by simpa using hfprop hx, fun x ⟨hx, hx'⟩ => by simpa using hgprop hx'⟩
 
 中文:
 定理 prodMap
@@ -743,7 +748,8 @@ theorem prodMap
   apply LiftSourceTargetPropertyAt.prodMap hf.property hg.property
   rintro f φ₁ ψ₁ g φ₂ ψ₂ ⟨equiv₁, hfprop⟩ ⟨equiv₂, hgprop⟩
   use (equiv₁.prodCongr equiv₂).trans (ContinuousLinearEquiv.prodProdProdComm 𝕜 E'' F E''' F')
-  rw [φ₁.extend_prod φ₂]; rw [ψ₁.extend_prod]; rw [PartialEquiv.prod_target]
+  rw [φ₁.extend_prod φ₂]; rw [ψ₁.extend_prod]; rw [PartialEquiv.prod_target]; rw [eqOn_prod_iff]
+  exact ⟨fun x ⟨hx, hx'⟩ => by simpa using hfprop hx, fun x ⟨hx, hx'⟩ => by simpa using hgprop hx'⟩
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.prodProdProdComm, LiftSourceTargetPropertyAt, LiftSourceTargetPropertyAt.prodMap, PartialEquiv, PartialEquiv.prod_target, eqOn_prod_iff, extend_prod, hf.property, hfprop, hg.property, hgprop, prodCongr, prodMap, prodProdProdComm, prod_target, property
 -/
@@ -792,7 +798,7 @@ theorem contMDiffOn
   rw [← contMDiffOn_writtenInExtend_iff h.domChart_mem_maximalAtlas
     h.codChart_mem_maximalAtlas le_rfl h.mapsto_domChart_source_codChart_source]; rw [← h.domChart.extend_target_eq_image_source]
   have : CMDiff n (Prod.fst ∘ h.equiv) := by rw [contMDiff_iff_contDiff]; fun_prop
-  exact this.con
+  exact this.contMDiffOn.congr h.writtenInCharts
 
 中文:
 定理 contMDiffOn
@@ -801,7 +807,7 @@ theorem contMDiffOn
   rw [← contMDiffOn_writtenInExtend_iff h.domChart_mem_maximalAtlas
     h.codChart_mem_maximalAtlas le_rfl h.mapsto_domChart_source_codChart_source]; rw [← h.domChart.extend_target_eq_image_source]
   have : CMDiff n (Prod.fst ∘ h.equiv) := by rw [contMDiff_iff_contDiff]; fun_prop
-  exact this.con
+  exact this.contMDiffOn.congr h.writtenInCharts
 
 Depends on / 依赖: CMDiff, Prod.fst, codChart_mem_maximalAtlas, contMDiffOn, contMDiffOn_writtenInExtend_iff, contMDiff_iff_contDiff, domChart, domChart_mem_maximalAtlas, extend_target_eq_image_source, fun_prop, h.codChart_mem_maximalAtlas, h.domChart.extend_target_eq_image_source, h.domChart_mem_maximalAtlas, h.equiv, h.mapsto_domChart_source_codChart_source, h.writtenInCharts, le_rfl, mapsto_domChart_source_codChart_source, this.contMDiffOn.congr, writtenInCharts
 -/
@@ -1448,7 +1454,7 @@ lemma isSubmersion
   inhabit M
   let x : M := Inhabited.default
   use (h x).smallComplement, by infer_instance, by infer_instance
-  exact (IsSubmersionOfComplement.congr_F (
+  exact (IsSubmersionOfComplement.congr_F (h x).smallEquiv).mp h
 
 中文:
 引理 isSubmersion
@@ -1462,7 +1468,7 @@ lemma isSubmersion
   inhabit M
   let x : M := Inhabited.default
   use (h x).smallComplement, by infer_instance, by infer_instance
-  exact (IsSubmersionOfComplement.congr_F (
+  exact (IsSubmersionOfComplement.congr_F (h x).smallEquiv).mp h
 
 Depends on / 依赖: Inhabited, Inhabited.default, IsEmpty, IsEmpty.false, IsSubmersion, IsSubmersionOfComplement, IsSubmersionOfComplement.congr_F, congr_F, infer_instance, inhabit, smallComplement, smallEquiv
 -/
@@ -1491,7 +1497,9 @@ lemma id
     (chartAt H x) (chartAt H x) (mem_chart_source H x) (mem_chart_source H x)
     (chart_mem_maximalAtlas x) (chart_mem_maximalAtlas x)
   intro y hy
-  have : I (
+  have : I ((chartAt H x) ((chartAt H x).symm (I.symm y))) = y := by
+    rw [(chartAt H x).right_inv (by simp_all)]; rw [I.right_inv (by simp_all)]
+  simpa
 
 中文:
 引理 id
@@ -1504,7 +1512,9 @@ lemma id
     (chartAt H x) (chartAt H x) (mem_chart_source H x) (mem_chart_source H x)
     (chart_mem_maximalAtlas x) (chart_mem_maximalAtlas x)
   intro y hy
-  have : I (
+  have : I ((chartAt H x) ((chartAt H x).symm (I.symm y))) = y := by
+    rw [(chartAt H x).right_inv (by simp_all)]; rw [I.right_inv (by simp_all)]
+  simpa
 -/
 protected lemma id [IsManifold I n M] : IsSubmersionOfComplement PUnit I I n (@id M) := by
   intro x

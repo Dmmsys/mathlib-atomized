@@ -594,7 +594,9 @@ lemma expDegree_cast
     push_cast [expDegree, show (2 * (n + 1)) ^ 2 = 2 * (2 * n * (n + 2)) + 4 by ring1, even_two_mul,
       Nat.add_sub_cancel, Nat.mul_div_cancel_left _ two_pos]
     ring1
-  · push_cast [expDegree, show (2 * n
+  · push_cast [expDegree, show (2 * n + 1) ^ 2 = 2 * (2 * n * (n + 1)) + 1 by ring1,
+      n.not_even_two_mul_add_one, Nat.add_sub_cancel, Nat.mul_div_cancel_left _ two_pos]
+    ring1
 
 中文:
 引理 expDegree_cast
@@ -606,7 +608,9 @@ lemma expDegree_cast
     push_cast [expDegree, show (2 * (n + 1)) ^ 2 = 2 * (2 * n * (n + 2)) + 4 by ring1, even_two_mul,
       Nat.add_sub_cancel, Nat.mul_div_cancel_left _ two_pos]
     ring1
-  · push_cast [expDegree, show (2 * n
+  · push_cast [expDegree, show (2 * n + 1) ^ 2 = 2 * (2 * n * (n + 1)) + 1 by ring1,
+      n.not_even_two_mul_add_one, Nat.add_sub_cancel, Nat.mul_div_cancel_left _ two_pos]
+    ring1
 -/
 private lemma expDegree_cast {n : Nat} (hn : n != 0) :
     2 * (expDegree n : Int) = n ^ 2 - if Even n then 4 else 1 := by
@@ -732,7 +736,33 @@ lemma natDegree_coeff_preΨ'
   let dm {m n p q} : _ -> _ -> (p * q : R[X]).natDegree <= m + n := natDegree_mul_le_of_le
   let dp {m n p} : _ -> (p ^ n : R[X]).natDegree <= n * m := natDegree_pow_le_of_le n
   let cm {m n p q} : _ -> _ -> (p * q : R[X]).coeff (m + n) = _ := coeff_mul_add_eq_of_natDegree_le
-  let cp {m n p} : _
+  let cp {m n p} : _ -> (p ^ m : R[X]).coeff (m * n) = _ := coeff_pow_of_natDegree_le
+  induction n using normEDSRec with
+  | zero => simpa only [preΨ'_zero] using ⟨natDegree_zero.le, Int.cast_zero.symm⟩
+  | one => simpa only [preΨ'_one] using ⟨natDegree_one.le, coeff_one_zero.trans Int.cast_one.symm⟩
+  | two => simpa only [preΨ'_two] using ⟨natDegree_one.le, coeff_one_zero.trans Int.cast_one.symm⟩
+  | three => simpa only [preΨ'_three] using ⟨W.natDegree_Ψ₃_le, W.coeff_Ψ₃ ▸ Int.cast_three.symm⟩
+  | four => simpa only [preΨ'_four] using ⟨W.natDegree_preΨ₄_le, W.coeff_preΨ₄ ▸ Int.cast_two.symm⟩
+  | even m h₁ h₂ h₃ h₄ h₅ =>
+    constructor
+    · nth_rw 1 [preΨ'_even, ← max_self <| expDegree _, (expDegree_rec m).1.1, (expDegree_rec m).1.2]
+      exact natDegree_sub_le_of_le (dm (dm (dp h₂.1) h₃.1) h₅.1) (dm (dm h₁.1 h₃.1) (dp h₄.1))
+    · nth_rw 1 [preΨ'_even, coeff_sub, (expDegree_rec m).1.1, cm (dm (dp h₂.1) h₃.1) h₅.1,
+        cm (dp h₂.1) h₃.1, cp h₂.1, h₂.2, h₃.2, h₅.2, (expDegree_rec m).1.2,
+        cm (dm h₁.1 h₃.1) (dp h₄.1), cm h₁.1 h₃.1, h₁.2, cp h₄.1, h₃.2, h₄.2, (expCoeff_rec m).1]
+      norm_cast
+  | odd m h₁ h₂ h₃ h₄ =>
+    rw [preΨ'_odd]
+    constructor
+    · nth_rw 1 [← max_self <| expDegree _, (expDegree_rec m).2.1, (expDegree_rec m).2.2]
+      refine natDegree_sub_le_of_le (dm (dm h₄.1 (dp h₂.1)) ?_) (dm (dm h₁.1 (dp h₃.1)) ?_) <;>
+        split_ifs <;> simp only [natDegree_one.le, dp W.natDegree_Ψ₂Sq_le]
+    · nth_rw 1 [coeff_sub, (expDegree_rec m).2.1, cm (dm h₄.1 (dp h₂.1)), cm h₄.1 (dp h₂.1),
+        h₄.2, cp h₂.1, h₂.2, apply_ite₂ coeff, cp W.natDegree_Ψ₂Sq_le, coeff_Ψ₂Sq, coeff_one_zero,
+        (expDegree_rec m).2.2, cm (dm h₁.1 (dp h₃.1)), cm h₁.1 (dp h₃.1), h₁.2, cp h₃.1, h₃.2,
+        apply_ite₂ coeff, cp W.natDegree_Ψ₂Sq_le, coeff_one_zero, coeff_Ψ₂Sq, (expCoeff_rec m).2]
+      · norm_cast
+      all_goals split_ifs <;> simp only [natDegree_one.le, dp W.natDegree_Ψ₂Sq_le]
 
 中文:
 引理 natDegree_coeff_preΨ'
@@ -741,7 +771,33 @@ lemma natDegree_coeff_preΨ'
   let dm {m n p q} : _ -> _ -> (p * q : R[X]).natDegree <= m + n := natDegree_mul_le_of_le
   let dp {m n p} : _ -> (p ^ n : R[X]).natDegree <= n * m := natDegree_pow_le_of_le n
   let cm {m n p q} : _ -> _ -> (p * q : R[X]).coeff (m + n) = _ := coeff_mul_add_eq_of_natDegree_le
-  let cp {m n p} : _
+  let cp {m n p} : _ -> (p ^ m : R[X]).coeff (m * n) = _ := coeff_pow_of_natDegree_le
+  induction n using normEDSRec with
+  | zero => simpa only [preΨ'_zero] using ⟨natDegree_zero.le, Int.cast_zero.symm⟩
+  | one => simpa only [preΨ'_one] using ⟨natDegree_one.le, coeff_one_zero.trans Int.cast_one.symm⟩
+  | two => simpa only [preΨ'_two] using ⟨natDegree_one.le, coeff_one_zero.trans Int.cast_one.symm⟩
+  | three => simpa only [preΨ'_three] using ⟨W.natDegree_Ψ₃_le, W.coeff_Ψ₃ ▸ Int.cast_three.symm⟩
+  | four => simpa only [preΨ'_four] using ⟨W.natDegree_preΨ₄_le, W.coeff_preΨ₄ ▸ Int.cast_two.symm⟩
+  | even m h₁ h₂ h₃ h₄ h₅ =>
+    constructor
+    · nth_rw 1 [preΨ'_even, ← max_self <| expDegree _, (expDegree_rec m).1.1, (expDegree_rec m).1.2]
+      exact natDegree_sub_le_of_le (dm (dm (dp h₂.1) h₃.1) h₅.1) (dm (dm h₁.1 h₃.1) (dp h₄.1))
+    · nth_rw 1 [preΨ'_even, coeff_sub, (expDegree_rec m).1.1, cm (dm (dp h₂.1) h₃.1) h₅.1,
+        cm (dp h₂.1) h₃.1, cp h₂.1, h₂.2, h₃.2, h₅.2, (expDegree_rec m).1.2,
+        cm (dm h₁.1 h₃.1) (dp h₄.1), cm h₁.1 h₃.1, h₁.2, cp h₄.1, h₃.2, h₄.2, (expCoeff_rec m).1]
+      norm_cast
+  | odd m h₁ h₂ h₃ h₄ =>
+    rw [preΨ'_odd]
+    constructor
+    · nth_rw 1 [← max_self <| expDegree _, (expDegree_rec m).2.1, (expDegree_rec m).2.2]
+      refine natDegree_sub_le_of_le (dm (dm h₄.1 (dp h₂.1)) ?_) (dm (dm h₁.1 (dp h₃.1)) ?_) <;>
+        split_ifs <;> simp only [natDegree_one.le, dp W.natDegree_Ψ₂Sq_le]
+    · nth_rw 1 [coeff_sub, (expDegree_rec m).2.1, cm (dm h₄.1 (dp h₂.1)), cm h₄.1 (dp h₂.1),
+        h₄.2, cp h₂.1, h₂.2, apply_ite₂ coeff, cp W.natDegree_Ψ₂Sq_le, coeff_Ψ₂Sq, coeff_one_zero,
+        (expDegree_rec m).2.2, cm (dm h₁.1 (dp h₃.1)), cm h₁.1 (dp h₃.1), h₁.2, cp h₃.1, h₃.2,
+        apply_ite₂ coeff, cp W.natDegree_Ψ₂Sq_le, coeff_one_zero, coeff_Ψ₂Sq, (expCoeff_rec m).2]
+      · norm_cast
+      all_goals split_ifs <;> simp only [natDegree_one.le, dp W.natDegree_Ψ₂Sq_le]
 -/
 private lemma natDegree_coeff_preΨ' (n : Nat) :
     (W.preΨ' n).natDegree <= expDegree n ∧ (W.preΨ' n).coeff (expDegree n) = expCoeff n := by
@@ -1003,7 +1059,8 @@ lemma coeff_preΨ
   | neg ih n =>
     simp_rw [preΨ_neg, coeff_neg, Int.natAbs_neg, even_neg]
     rcases ih n, n.even_or_odd' with ⟨ih, ⟨n, rfl | rfl⟩⟩ <;>
-      push_cast [even_two_mul, Int.not_even_two_mul_add_
+      push_cast [even_two_mul, Int.not_even_two_mul_add_one, Int.neg_ediv_of_dvd ⟨n, rfl⟩] at * <;>
+      rw [ih]
 
 中文:
 引理 coeff_preΨ
@@ -1015,7 +1072,8 @@ lemma coeff_preΨ
   | neg ih n =>
     simp_rw [preΨ_neg, coeff_neg, Int.natAbs_neg, even_neg]
     rcases ih n, n.even_or_odd' with ⟨ih, ⟨n, rfl | rfl⟩⟩ <;>
-      push_cast [even_two_mul, Int.not_even_two_mul_add_
+      push_cast [even_two_mul, Int.not_even_two_mul_add_one, Int.neg_ediv_of_dvd ⟨n, rfl⟩] at * <;>
+      rw [ih]
 
 Depends on / 依赖: Int.natAbs_neg, Int.negInduction, Int.neg_ediv_of_dvd, Int.not_even_two_mul_add_one, W.coeff_pre, W.pre, coeff_neg, even_neg, even_or_odd, even_two_mul, n.even_or_odd, natAbs_neg, negInduction, neg_ediv_of_dvd, not_even_two_mul_add_one, simp_rw
 -/
@@ -1189,7 +1247,19 @@ lemma natDegree_coeff_ΨSq_ofNat
   rcases n with _ | n
   · simp
   have hd : (n + 1) ^ 2 - 1 = 2 * expDegree (n + 1) + if Even (n + 1) then 3 else 0 := by
-    push_cast [← @Nat.cast_inj Int, add_sq, expDe
+    push_cast [← @Nat.cast_inj Int, add_sq, expDegree_cast n.succ_ne_zero]
+    split_ifs <;> ring1
+  have hc : (n + 1 : Nat) ^ 2 = expCoeff (n + 1) ^ 2 * if Even (n + 1) then 4 else 1 := by
+    push_cast [← @Int.cast_inj Rat, expCoeff_cast]
+    split_ifs <;> ring1
+  rw [ΨSq_ofNat]; rw [hd]
+  constructor
+  · refine natDegree_mul_le_of_le (dp h.1) ?_
+    split_ifs <;> simp only [natDegree_one.le, W.natDegree_Ψ₂Sq_le]
+  · rw [coeff_mul_add_eq_of_natDegree_le (dp h.1), coeff_pow_of_natDegree_le h.1, h.2,
+      apply_ite₂ coeff, coeff_Ψ₂Sq, coeff_one_zero, hc]
+    · norm_cast
+    split_ifs <;> simp only [natDegree_one.le, W.natDegree_Ψ₂Sq_le]
 
 中文:
 引理 natDegree_coeff_ΨSq_of自然数
@@ -1200,7 +1270,19 @@ lemma natDegree_coeff_ΨSq_ofNat
   rcases n with _ | n
   · simp
   have hd : (n + 1) ^ 2 - 1 = 2 * expDegree (n + 1) + if Even (n + 1) then 3 else 0 := by
-    push_cast [← @Nat.cast_inj Int, add_sq, expDe
+    push_cast [← @Nat.cast_inj Int, add_sq, expDegree_cast n.succ_ne_zero]
+    split_ifs <;> ring1
+  have hc : (n + 1 : Nat) ^ 2 = expCoeff (n + 1) ^ 2 * if Even (n + 1) then 4 else 1 := by
+    push_cast [← @Int.cast_inj Rat, expCoeff_cast]
+    split_ifs <;> ring1
+  rw [ΨSq_ofNat]; rw [hd]
+  constructor
+  · refine natDegree_mul_le_of_le (dp h.1) ?_
+    split_ifs <;> simp only [natDegree_one.le, W.natDegree_Ψ₂Sq_le]
+  · rw [coeff_mul_add_eq_of_natDegree_le (dp h.1), coeff_pow_of_natDegree_le h.1, h.2,
+      apply_ite₂ coeff, coeff_Ψ₂Sq, coeff_one_zero, hc]
+    · norm_cast
+    split_ifs <;> simp only [natDegree_one.le, W.natDegree_Ψ₂Sq_le]
 -/
 private lemma natDegree_coeff_ΨSq_ofNat (n : Nat) :
     (W.ΨSq n).natDegree <= n ^ 2 - 1 ∧ (W.ΨSq n).coeff (n ^ 2 - 1) = (n ^ 2 : Int) := by
@@ -1387,7 +1469,9 @@ lemma ΨSq_ne_zero
   · rcases hm : n.natAbs with _ | m
     · push_cast [Int.natAbs_eq_zero.mp hm, ne_self_iff_false] at h
     · rcases Int.natAbs_eq_iff.mp hm with rfl | rfl <;>
-        rw [hm]; rw [Nat.lt_add_left_iff_pos]; rw [N
+        rw [hm]; rw [Nat.lt_add_left_iff_pos]; rw [Nat.not_lt_eq]; rw [Nat.le_zero] at hn <;>
+        push_cast [hn, ΨSq_neg, ΨSq_one] <;>
+exact fun h' => h C_injective by push_cast [hn, C_neg, C_1, h', neg_zero, C_0]; rfl
 
 中文:
 引理 ΨSq_ne_zero
@@ -1399,7 +1483,9 @@ lemma ΨSq_ne_zero
   · rcases hm : n.natAbs with _ | m
     · push_cast [Int.natAbs_eq_zero.mp hm, ne_self_iff_false] at h
     · rcases Int.natAbs_eq_iff.mp hm with rfl | rfl <;>
-        rw [hm]; rw [Nat.lt_add_left_iff_pos]; rw [N
+        rw [hm]; rw [Nat.lt_add_left_iff_pos]; rw [Nat.not_lt_eq]; rw [Nat.le_zero] at hn <;>
+        push_cast [hn, ΨSq_neg, ΨSq_one] <;>
+exact fun h' => h C_injective by push_cast [hn, C_neg, C_1, h', neg_zero, C_0]; rfl
 
 Depends on / 依赖: C_injective, C_neg, Int.natAbs_eq_iff.mp, Int.natAbs_eq_zero.mp, Nat.le_zero, Nat.lt_add_left_iff_pos, Nat.not_lt_eq, W.natDegree_, le_zero, lt_add_left_iff_pos, n.natAbs, natAbs, natAbs_eq_iff, natAbs_eq_zero, ne_self_iff_false, ne_zero_of_natDegree_gt, neg_zero, not_lt_eq
 -/
@@ -1427,7 +1513,32 @@ lemma natDegree_coeff_Φ_ofNat
   let dm {m n p q} : _ -> _ -> (p * q : R[X]).natDegree <= m + n := natDegree_mul_le_of_le
   let dp {m n p} : _ -> (p ^ n : R[X]).natDegree <= n * m := natDegree_pow_le_of_le n
   let cm {m n p q} : _ -> _ -> (p * q : R[X]).coeff (m + n) = _ := coeff_mul_add_eq_of_natDegree_le
-  let h {n} := W.nat
+  let h {n} := W.natDegree_coeff_preΨ' n
+  rcases n with _ | _ | n
+  iterate 2 simp [natDegree_X_le]
+  have hd : (n + 1 + 1) ^ 2 = 1 + 2 * expDegree (n + 2) + if Even (n + 1) then 0 else 3 := by
+    push_cast [← @Nat.cast_inj Int, expDegree_cast (n + 1).succ_ne_zero, Nat.even_add_one, ite_not]
+    split_ifs <;> ring1
+  have hd' : (n + 1 + 1) ^ 2 =
+      expDegree (n + 3) + expDegree (n + 1) + if Even (n + 1) then 3 else 0 := by
+    push_cast [← @Nat.cast_inj Int, ← mul_left_cancel_iff_of_pos (b := (_ ^ 2 : Int)) two_pos, mul_add,
+      expDegree_cast (n + 2).succ_ne_zero, expDegree_cast n.succ_ne_zero, Nat.even_add_one, ite_not]
+    split_ifs <;> ring1
+  have hc : (1 : Int) = 1 * expCoeff (n + 2) ^ 2 * (if Even (n + 1) then 1 else 4) -
+      expCoeff (n + 3) * expCoeff (n + 1) * (if Even (n + 1) then 4 else 1) := by
+    push_cast [← @Int.cast_inj Rat, expCoeff_cast, Nat.even_add_one, ite_not]
+    split_ifs <;> ring1
+  rw [Nat.cast_add]; rw [Nat.cast_one]; rw [Φ_ofNat]
+  constructor
+  · nth_rw 1 [← max_self <| (_ + _) ^ 2, hd, hd']
+    refine natDegree_sub_le_of_le (dm (dm natDegree_X_le (dp h.1)) ?_) (dm (dm h.1 h.1) ?_) <;>
+      split_ifs <;> simp only [natDegree_one.le, W.natDegree_Ψ₂Sq_le]
+  · nth_rw 1 [coeff_sub, hd, hd', cm (dm natDegree_X_le (dp h.1)), cm natDegree_X_le (dp h.1),
+      coeff_X_one, coeff_pow_of_natDegree_le h.1, h.2, apply_ite₂ coeff, coeff_one_zero, coeff_Ψ₂Sq,
+      cm (dm h.1 h.1), cm h.1 h.1, h.2, h.2, apply_ite₂ coeff, coeff_one_zero, coeff_Ψ₂Sq]
+    conv_rhs => rw [← Int.cast_one, hc]
+    · norm_cast
+    all_goals split_ifs <;> simp only [natDegree_one.le, W.natDegree_Ψ₂Sq_le]
 
 中文:
 引理 natDegree_coeff_Φ_of自然数
@@ -1436,7 +1547,32 @@ lemma natDegree_coeff_Φ_ofNat
   let dm {m n p q} : _ -> _ -> (p * q : R[X]).natDegree <= m + n := natDegree_mul_le_of_le
   let dp {m n p} : _ -> (p ^ n : R[X]).natDegree <= n * m := natDegree_pow_le_of_le n
   let cm {m n p q} : _ -> _ -> (p * q : R[X]).coeff (m + n) = _ := coeff_mul_add_eq_of_natDegree_le
-  let h {n} := W.nat
+  let h {n} := W.natDegree_coeff_preΨ' n
+  rcases n with _ | _ | n
+  iterate 2 simp [natDegree_X_le]
+  have hd : (n + 1 + 1) ^ 2 = 1 + 2 * expDegree (n + 2) + if Even (n + 1) then 0 else 3 := by
+    push_cast [← @Nat.cast_inj Int, expDegree_cast (n + 1).succ_ne_zero, Nat.even_add_one, ite_not]
+    split_ifs <;> ring1
+  have hd' : (n + 1 + 1) ^ 2 =
+      expDegree (n + 3) + expDegree (n + 1) + if Even (n + 1) then 3 else 0 := by
+    push_cast [← @Nat.cast_inj Int, ← mul_left_cancel_iff_of_pos (b := (_ ^ 2 : Int)) two_pos, mul_add,
+      expDegree_cast (n + 2).succ_ne_zero, expDegree_cast n.succ_ne_zero, Nat.even_add_one, ite_not]
+    split_ifs <;> ring1
+  have hc : (1 : Int) = 1 * expCoeff (n + 2) ^ 2 * (if Even (n + 1) then 1 else 4) -
+      expCoeff (n + 3) * expCoeff (n + 1) * (if Even (n + 1) then 4 else 1) := by
+    push_cast [← @Int.cast_inj Rat, expCoeff_cast, Nat.even_add_one, ite_not]
+    split_ifs <;> ring1
+  rw [Nat.cast_add]; rw [Nat.cast_one]; rw [Φ_ofNat]
+  constructor
+  · nth_rw 1 [← max_self <| (_ + _) ^ 2, hd, hd']
+    refine natDegree_sub_le_of_le (dm (dm natDegree_X_le (dp h.1)) ?_) (dm (dm h.1 h.1) ?_) <;>
+      split_ifs <;> simp only [natDegree_one.le, W.natDegree_Ψ₂Sq_le]
+  · nth_rw 1 [coeff_sub, hd, hd', cm (dm natDegree_X_le (dp h.1)), cm natDegree_X_le (dp h.1),
+      coeff_X_one, coeff_pow_of_natDegree_le h.1, h.2, apply_ite₂ coeff, coeff_one_zero, coeff_Ψ₂Sq,
+      cm (dm h.1 h.1), cm h.1 h.1, h.2, h.2, apply_ite₂ coeff, coeff_one_zero, coeff_Ψ₂Sq]
+    conv_rhs => rw [← Int.cast_one, hc]
+    · norm_cast
+    all_goals split_ifs <;> simp only [natDegree_one.le, W.natDegree_Ψ₂Sq_le]
 -/
 private lemma natDegree_coeff_Φ_ofNat (n : Nat) :
     (W.Φ n).natDegree <= n ^ 2 ∧ (W.Φ n).coeff (n ^ 2) = 1 := by

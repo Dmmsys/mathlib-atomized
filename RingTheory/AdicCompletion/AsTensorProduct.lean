@@ -405,7 +405,11 @@ lemma ofTensorProduct_surjective_of_finite
     ext
     simp [f, g]
   have hf : Function.Surjective f := by
-    simp only [hfg, LinearMap.coe_
+    simp only [hfg, LinearMap.coe_comp, g]
+    apply Function.Surjective.comp
+    · exact AdicCompletion.map_surjective I hp
+    · exact (ofTensorProduct_bijective_of_pi_of_fintype I (Fin n)).surjective
+  exact Function.Surjective.of_comp hf
 
 中文:
 引理 ofTensorProduct_surjective_of_finite
@@ -418,7 +422,11 @@ lemma ofTensorProduct_surjective_of_finite
     ext
     simp [f, g]
   have hf : Function.Surjective f := by
-    simp only [hfg, LinearMap.coe_
+    simp only [hfg, LinearMap.coe_comp, g]
+    apply Function.Surjective.comp
+    · exact AdicCompletion.map_surjective I hp
+    · exact (ofTensorProduct_bijective_of_pi_of_fintype I (Fin n)).surjective
+  exact Function.Surjective.of_comp hf
 
 Depends on / 依赖: AdicCompletion, AdicCompletion.map_surjective, Finite, Function, Function.Surjective, Function.Surjective.comp, Function.Surjective.of_comp, LinearMap, LinearMap.coe_comp, Module, Module.Finite.exists_fin, Surjective, baseChange, coe_comp, exists_fin, map_surjective, ofTensorProduct, ofTensorProduct_bijective_of_pi_of_fintype, of_comp, p.baseChange
 -/
@@ -600,7 +608,27 @@ lemma ofTensorProduct_bijective_of_map_from_fin
     (0 : _ ->ₗ[AdicCompletion I R] Unit)
     (map I <| (LinearMap.ker f).subtype)
     (map I f)
-    (0 : _ ->
+    (0 : _ ->ₗ[AdicCompletion I R] Unit)
+    (0 : _ ->ₗ[AdicCompletion I R] Unit)
+    (ofTensorProduct I (LinearMap.ker f))
+    (ofTensorProduct I (ι -> R))
+    (ofTensorProduct I M)
+    0
+    0
+    (ofTensorProduct_naturality I <| (LinearMap.ker f).subtype)
+    (ofTensorProduct_naturality I f)
+    rfl
+    rfl
+    (tens_exact I M f hf)
+    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| tens_surj I M f hf)
+    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| Function.surjective_to_subsingleton _)
+    (adic_exact I M f hf)
+    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| adic_surj I M f hf)
+    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| Function.surjective_to_subsingleton _)
+    (ofTensorProduct_surjective_of_finite I (LinearMap.ker f))
+    (ofTensorProduct_bijective_of_pi_of_fintype I ι)
+    (Function.bijective_of_subsingleton _)
+    (Function.injective_of_subsingleton _)
 
 中文:
 引理 ofTensorProduct_bijective_of_map_from_fin
@@ -612,7 +640,27 @@ lemma ofTensorProduct_bijective_of_map_from_fin
     (0 : _ ->ₗ[AdicCompletion I R] Unit)
     (map I <| (LinearMap.ker f).subtype)
     (map I f)
-    (0 : _ ->
+    (0 : _ ->ₗ[AdicCompletion I R] Unit)
+    (0 : _ ->ₗ[AdicCompletion I R] Unit)
+    (ofTensorProduct I (LinearMap.ker f))
+    (ofTensorProduct I (ι -> R))
+    (ofTensorProduct I M)
+    0
+    0
+    (ofTensorProduct_naturality I <| (LinearMap.ker f).subtype)
+    (ofTensorProduct_naturality I f)
+    rfl
+    rfl
+    (tens_exact I M f hf)
+    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| tens_surj I M f hf)
+    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| Function.surjective_to_subsingleton _)
+    (adic_exact I M f hf)
+    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| adic_surj I M f hf)
+    ((LinearMap.exact_zero_iff_surjective _ _).mpr <| Function.surjective_to_subsingleton _)
+    (ofTensorProduct_surjective_of_finite I (LinearMap.ker f))
+    (ofTensorProduct_bijective_of_pi_of_fintype I ι)
+    (Function.bijective_of_subsingleton _)
+    (Function.injective_of_subsingleton _)
 
 Depends on / 依赖: AdicCompletion, LinearMap, LinearMap.bijective_of_surjective_of_bijective_of_bijective_of_injective, LinearMap.ker, bijective_of_surjective_of_bijective_of_bijective_of_injective, lTensorKerIncl, lTensorf, ofTensorP, ofTensorProduct, ofTensorProduct_naturality, otimes, subtype
 -/

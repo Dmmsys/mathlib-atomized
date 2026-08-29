@@ -351,7 +351,10 @@ instance instUnitizationNormedRing
     · apply (norm_add_le _ _).trans
       gcongr
       · simp [norm_smul]
-      · apply (norm
+      · apply (norm_add_le _ _).trans
+        gcongr
+        · simp [norm_smul, mul_comm]
+        · exact norm_mul_le _ _
 
 中文:
 实例 instUnitizationNormedRing
@@ -365,7 +368,10 @@ instance instUnitizationNormedRing
     · apply (norm_add_le _ _).trans
       gcongr
       · simp [norm_smul]
-      · apply (norm
+      · apply (norm_add_le _ _).trans
+        gcongr
+        · simp [norm_smul, mul_comm]
+        · exact norm_mul_le _ _
 
 Depends on / 依赖: dist_eq_norm_neg_add
 -/

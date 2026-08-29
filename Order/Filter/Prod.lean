@@ -143,7 +143,8 @@ theorem prod_mem_prod_iff
     (prod_subset_prod_iff.1 H).elim
       (fun ⟨hs's, ht't⟩ => ⟨mem_of_superset hs' hs's, mem_of_superset ht' ht't⟩) fun h =>
       h.elim (fun hs'e => absurd hs'e (nonempty_of_mem hs').ne_empty) fun ht'e =>
-        absurd ht'e (nonempty_
+        absurd ht'e (nonempty_of_mem ht').ne_empty,
+    fun h => prod_mem_prod h.1 h.2⟩
 
 中文:
 定理 prod_mem_prod_iff
@@ -154,7 +155,8 @@ theorem prod_mem_prod_iff
     (prod_subset_prod_iff.1 H).elim
       (fun ⟨hs's, ht't⟩ => ⟨mem_of_superset hs' hs's, mem_of_superset ht' ht't⟩) fun h =>
       h.elim (fun hs'e => absurd hs'e (nonempty_of_mem hs').ne_empty) fun ht'e =>
-        absurd ht'e (nonempty_
+        absurd ht'e (nonempty_of_mem ht').ne_empty,
+    fun h => prod_mem_prod h.1 h.2⟩
 
 Depends on / 依赖: absurd, h.elim, mem_of_superset, mem_prod_iff, ne_empty, nonempty_of_mem, prod_mem_prod, prod_subset_prod_iff
 -/
@@ -2183,7 +2185,7 @@ theorem coprod_inf_prod_le
   _ = f₁ ×ˢ ⊤ ⊓ f₂ ×ˢ g₂ ⊔ ⊤ ×ˢ g₁ ⊓ f₂ ×ˢ g₂ := inf_sup_right _ _ _
   _ = (f₁ ⊓ f₂) ×ˢ g₂ ⊔ f₂ ×ˢ (g₁ ⊓ g₂) := by simp [prod_inf_prod]
   _ <= f₁ ×ˢ g₂ ⊔ f₂ ×ˢ g₁ :=
-    sup_le_sup (prod_mo
+    sup_le_sup (prod_mono inf_le_left le_rfl) (prod_mono le_rfl inf_le_left)
 
 中文:
 定理 coprod_inf_prod_le
@@ -2194,7 +2196,7 @@ theorem coprod_inf_prod_le
   _ = f₁ ×ˢ ⊤ ⊓ f₂ ×ˢ g₂ ⊔ ⊤ ×ˢ g₁ ⊓ f₂ ×ˢ g₂ := inf_sup_right _ _ _
   _ = (f₁ ⊓ f₂) ×ˢ g₂ ⊔ f₂ ×ˢ (g₁ ⊓ g₂) := by simp [prod_inf_prod]
   _ <= f₁ ×ˢ g₂ ⊔ f₂ ×ˢ g₁ :=
-    sup_le_sup (prod_mo
+    sup_le_sup (prod_mono inf_le_left le_rfl) (prod_mono le_rfl inf_le_left)
 -/
 theorem coprod_inf_prod_le (f₁ f₂ : Filter α) (g₁ g₂ : Filter β) :
     f₁.coprod g₁ ⊓ f₂ ×ˢ g₂ <= f₁ ×ˢ g₂ ⊔ f₂ ×ˢ g₁ := calc

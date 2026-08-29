@@ -759,7 +759,7 @@ definition instAddCommGroup
   nsmul_succ _ := by smul_tac
   zsmul_zero' := by smul_tac
   zsmul_succ' _ := by smul_tac
-  zsmul_neg' _ := by smul_ta
+  zsmul_neg' _ := by smul_tac
 
 中文:
 定义 instAddCommGroup
@@ -774,7 +774,7 @@ definition instAddCommGroup
   nsmul_succ _ := by smul_tac
   zsmul_zero' := by smul_tac
   zsmul_succ' _ := by smul_tac
-  zsmul_neg' _ := by smul_ta
+  zsmul_neg' _ := by smul_tac
 
 Depends on / 依赖: add_comm, add_zero, frac_tac, neg_add_cancel, nsmul_succ, nsmul_zero, smul_tac, sub_eq_add_neg, zero_add, zsmul_neg, zsmul_succ, zsmul_zero
 -/
@@ -845,6 +845,24 @@ definition map
       fun {p q p' q'} hq hq' h => by
       simp only [Submonoid.mem_comap.mp (hφ hq), Submonoid.mem_comap.mp (hφ hq'),
         dif_pos, ofFractionRing.injEq, Localization.mk_eq_mk_iff]
+      refine Localization.r_of_eq ?_
+      simpa only [map_mul] using congr_arg φ h
+  map_one' := by
+    simp_rw [← ofFractionRing_one, ← Localization.mk_one, liftOn_ofFractionRing_mk,
+      OneMemClass.coe_one, map_one, OneMemClass.one_mem, dite_true, ofFractionRing.injEq,
+      Localization.mk_one, Localization.mk_eq_monoidOf_mk', Submonoid.LocalizationMap.mk'_self]
+  map_mul' x y := by
+    obtain ⟨x⟩ := x; obtain ⟨y⟩ := y
+    cases x using Localization.induction_on with | _ pq
+    cases y using Localization.induction_on with | _ p'q'
+    obtain ⟨p, q⟩ := pq
+    obtain ⟨p', q'⟩ := p'q'
+    have hq : φ q in S[X]⁰ := hφ q.prop
+    have hq' : φ q' in S[X]⁰ := hφ q'.prop
+    have hqq' : φ ↑(q * q') in S[X]⁰ := by simpa using Submonoid.mul_mem _ hq hq'
+    simp_rw [← ofFractionRing_mul, Localization.mk_mul, liftOn_ofFractionRing_mk, dif_pos hq,
+      dif_pos hq', dif_pos hqq', ← ofFractionRing_mul, Submonoid.coe_mul, map_mul,
+      Localization.mk_mul, Submonoid.mk_mul_mk]
 
 中文:
 定义 map
@@ -854,6 +872,24 @@ definition map
       fun {p q p' q'} hq hq' h => by
       simp only [Submonoid.mem_comap.mp (hφ hq), Submonoid.mem_comap.mp (hφ hq'),
         dif_pos, ofFractionRing.injEq, Localization.mk_eq_mk_iff]
+      refine Localization.r_of_eq ?_
+      simpa only [map_mul] using congr_arg φ h
+  map_one' := by
+    simp_rw [← ofFractionRing_one, ← Localization.mk_one, liftOn_ofFractionRing_mk,
+      OneMemClass.coe_one, map_one, OneMemClass.one_mem, dite_true, ofFractionRing.injEq,
+      Localization.mk_one, Localization.mk_eq_monoidOf_mk', Submonoid.LocalizationMap.mk'_self]
+  map_mul' x y := by
+    obtain ⟨x⟩ := x; obtain ⟨y⟩ := y
+    cases x using Localization.induction_on with | _ pq
+    cases y using Localization.induction_on with | _ p'q'
+    obtain ⟨p, q⟩ := pq
+    obtain ⟨p', q'⟩ := p'q'
+    have hq : φ q in S[X]⁰ := hφ q.prop
+    have hq' : φ q' in S[X]⁰ := hφ q'.prop
+    have hqq' : φ ↑(q * q') in S[X]⁰ := by simpa using Submonoid.mul_mem _ hq hq'
+    simp_rw [← ofFractionRing_mul, Localization.mk_mul, liftOn_ofFractionRing_mk, dif_pos hq,
+      dif_pos hq', dif_pos hqq', ← ofFractionRing_mul, Submonoid.coe_mul, map_mul,
+      Localization.mk_mul, Submonoid.mk_mul_mk]
 
 Depends on / 依赖: Localization, Localization.mk, Localization.mk_eq_mk_iff, Localization.mk_one, Localization.r_of_eq, OneMemClass, OneMemClass.coe_one, OneMemClass.one_mem, RatFunc, RatFunc.liftOn, Submonoid, Submonoid.mem_comap.mp, coe_one, congr_arg, dif_pos, dite_tr, liftOn, liftOn_ofFractionRing_mk, map_mul, map_one
 -/
@@ -922,7 +958,7 @@ theorem map_injective
   induction y using Localization.induction_on
   simpa only [map_apply_ofFractionRing_mk, ofFractionRing_injective.eq_iff,
     Localization.mk_eq_mk_iff, Localization.r_iff_exists, mul_cancel_left_coe_nonZeroDivisors,
-    exists_cons
+    exists_const, ← map_mul, hf.eq_iff] using h
 
 中文:
 定理 map_injective
@@ -933,7 +969,7 @@ theorem map_injective
   induction y using Localization.induction_on
   simpa only [map_apply_ofFractionRing_mk, ofFractionRing_injective.eq_iff,
     Localization.mk_eq_mk_iff, Localization.r_iff_exists, mul_cancel_left_coe_nonZeroDivisors,
-    exists_cons
+    exists_const, ← map_mul, hf.eq_iff] using h
 
 Depends on / 依赖: Localization, Localization.induction_on, Localization.mk_eq_mk_iff, Localization.r_iff_exists, eq_iff, exists_const, hf.eq_iff, induction_on, map_apply_ofFractionRing_mk, map_mul, mk_eq_mk_iff, mul_cancel_left_coe_nonZeroDivisors, ofFractionRing_injective, ofFractionRing_injective.eq_iff, r_iff_exists
 -/
@@ -959,7 +995,14 @@ definition mapRingHom
         ← Localization.mk_zero (1 : S[X]⁰), map_apply_ofFractionRing_mk, map_zero,
         Localization.mk_eq_mk', IsLocalization.mk'_zero]
     map_add' := by
-      r
+      rintro ⟨x⟩ ⟨y⟩
+      induction x using Localization.induction_on
+      induction y using Localization.induction_on
+      · simp only [← ofFractionRing_add, Localization.add_mk, map_add, map_mul,
+          MonoidHom.toFun_eq_coe, map_apply_ofFractionRing_mk, Submonoid.coe_mul,
+          -- We have to specify `S[X]⁰` to `mk_mul_mk`, otherwise it will try to rewrite
+          -- the wrong occurrence.
+          Submonoid.mk_mul_mk S[X]⁰] }
 
 中文:
 定义 mapRingHom
@@ -970,7 +1013,14 @@ definition mapRingHom
         ← Localization.mk_zero (1 : S[X]⁰), map_apply_ofFractionRing_mk, map_zero,
         Localization.mk_eq_mk', IsLocalization.mk'_zero]
     map_add' := by
-      r
+      rintro ⟨x⟩ ⟨y⟩
+      induction x using Localization.induction_on
+      induction y using Localization.induction_on
+      · simp only [← ofFractionRing_add, Localization.add_mk, map_add, map_mul,
+          MonoidHom.toFun_eq_coe, map_apply_ofFractionRing_mk, Submonoid.coe_mul,
+          -- We have to specify `S[X]⁰` to `mk_mul_mk`, otherwise it will try to rewrite
+          -- the wrong occurrence.
+          Submonoid.mk_mul_mk S[X]⁰] }
 
 Depends on / 依赖: IsLocalization, IsLocalization.mk, Localization, Localization.add_mk, Localization.induction_on, Localization.mk_eq_mk, Localization.mk_zero, MonoidHom, MonoidHom.toFun_eq_coe, Submono, _zero, add_mk, induction_on, map_add, map_apply_ofFractionRing_mk, map_mul, map_zero, mk_eq_mk, mk_zero, ofFractionRing_add
 -/
@@ -1019,7 +1069,20 @@ definition liftMonoidWithZeroHom
       cases subsingleton_or_nontrivial R
       · rw [Subsingleton.elim p q, Subsingleton.elim p' q, Subsingleton.elim q' q]
       rw [div_eq_div_iff]; rw [← map_mul]; rw [mul_comm p]; rw [h]; rw [map_mul]; rw [mul_comm] <;>
-     
+        exact nonZeroDivisors.ne_zero (hφ ‹_›)
+  map_one' := by
+    simp_rw [← ofFractionRing_one, ← Localization.mk_one, liftOn_ofFractionRing_mk,
+      OneMemClass.coe_one, map_one, div_one]
+  map_mul' x y := by
+    obtain ⟨x⟩ := x
+    obtain ⟨y⟩ := y
+    cases x using Localization.induction_on
+    cases y using Localization.induction_on
+    rw [← ofFractionRing_mul]; rw [Localization.mk_mul]
+    simp only [liftOn_ofFractionRing_mk, div_mul_div_comm, map_mul, Submonoid.coe_mul]
+  map_zero' := by
+    simp_rw [← ofFractionRing_zero, ← Localization.mk_zero (1 : R[X]⁰), liftOn_ofFractionRing_mk,
+      map_zero, zero_div]
 
 中文:
 定义 liftMonoidWithZeroHom
@@ -1028,7 +1091,20 @@ definition liftMonoidWithZeroHom
       cases subsingleton_or_nontrivial R
       · rw [Subsingleton.elim p q, Subsingleton.elim p' q, Subsingleton.elim q' q]
       rw [div_eq_div_iff]; rw [← map_mul]; rw [mul_comm p]; rw [h]; rw [map_mul]; rw [mul_comm] <;>
-     
+        exact nonZeroDivisors.ne_zero (hφ ‹_›)
+  map_one' := by
+    simp_rw [← ofFractionRing_one, ← Localization.mk_one, liftOn_ofFractionRing_mk,
+      OneMemClass.coe_one, map_one, div_one]
+  map_mul' x y := by
+    obtain ⟨x⟩ := x
+    obtain ⟨y⟩ := y
+    cases x using Localization.induction_on
+    cases y using Localization.induction_on
+    rw [← ofFractionRing_mul]; rw [Localization.mk_mul]
+    simp only [liftOn_ofFractionRing_mk, div_mul_div_comm, map_mul, Submonoid.coe_mul]
+  map_zero' := by
+    simp_rw [← ofFractionRing_zero, ← Localization.mk_zero (1 : R[X]⁰), liftOn_ofFractionRing_mk,
+      map_zero, zero_div]
 
 Depends on / 依赖: Localization, Localization.mk_one, OneMemClass, OneMemClass.coe_one, RatFunc, RatFunc.liftOn, Subsingleton, Subsingleton.elim, coe_one, div_eq_div_iff, div_one, liftOn, liftOn_ofFractionRing_mk, map_mul, map_one, mk_one, mul_comm, ne_zero, nonZeroDivisors, nonZeroDivisors.ne_zero
 -/
@@ -1087,7 +1163,9 @@ theorem liftMonoidWithZeroHom_injective
   intro h
   congr 1
   refine Localization.mk_eq_mk_iff.mpr (Localization.r_of_eq (M := R[X]) ?_)
-  have := mul_eq_mul_of_div_e
+  have := mul_eq_mul_of_div_eq_div _ _ ?_ ?_ h
+  · rwa [← map_mul, ← map_mul, hφ.eq_iff, mul_comm, mul_comm a'.fst] at this
+  all_goals exact map_ne_zero_of_mem_nonZeroDivisors _ hφ (SetLike.coe_mem _)
 
 中文:
 定理 liftMonoidWithZeroHom_injective
@@ -1100,7 +1178,9 @@ theorem liftMonoidWithZeroHom_injective
   intro h
   congr 1
   refine Localization.mk_eq_mk_iff.mpr (Localization.r_of_eq (M := R[X]) ?_)
-  have := mul_eq_mul_of_div_e
+  have := mul_eq_mul_of_div_eq_div _ _ ?_ ?_ h
+  · rwa [← map_mul, ← map_mul, hφ.eq_iff, mul_comm, mul_comm a'.fst] at this
+  all_goals exact map_ne_zero_of_mem_nonZeroDivisors _ hφ (SetLike.coe_mem _)
 
 Depends on / 依赖: nonZeroDivisors_le_comap_nonZeroDivisors_of_injective
 -/
@@ -1130,7 +1210,21 @@ definition liftRingHom
       simp only [ZeroHom.toFun_eq_coe, MonoidWithZeroHom.toZeroHom_coe]
       cases subsingleton_or_nontrivial R
       · rw [Subsingleton.elim (x + y) y, Subsingleton.elim x 0, map_zero, zero_add]
-      obtain ⟨x⟩ :=
+      obtain ⟨x⟩ := x
+      obtain ⟨y⟩ := y
+      cases x using Localization.induction_on with | _ pq
+      cases y using Localization.induction_on with | _ p'q'
+      obtain ⟨p, q⟩ := pq
+      obtain ⟨p', q'⟩ := p'q'
+      rw [← ofFractionRing_add]; rw [Localization.add_mk]
+      simp only [RingHom.toMonoidWithZeroHom_eq_coe,
+        liftMonoidWithZeroHom_apply_ofFractionRing_mk]
+      rw [div_add_div]; rw [div_eq_div_iff]
+      · rw [mul_comm _ p, mul_comm _ p', mul_comm _ (φ p'), add_comm]
+        simp only [map_add, map_mul, Submonoid.coe_mul]
+      all_goals
+        try simp only [← map_mul, ← Submonoid.coe_mul]
+        exact nonZeroDivisors.ne_zero (hφ (SetLike.coe_mem _)) }
 
 中文:
 定义 liftRingHom
@@ -1140,7 +1234,21 @@ definition liftRingHom
       simp only [ZeroHom.toFun_eq_coe, MonoidWithZeroHom.toZeroHom_coe]
       cases subsingleton_or_nontrivial R
       · rw [Subsingleton.elim (x + y) y, Subsingleton.elim x 0, map_zero, zero_add]
-      obtain ⟨x⟩ :=
+      obtain ⟨x⟩ := x
+      obtain ⟨y⟩ := y
+      cases x using Localization.induction_on with | _ pq
+      cases y using Localization.induction_on with | _ p'q'
+      obtain ⟨p, q⟩ := pq
+      obtain ⟨p', q'⟩ := p'q'
+      rw [← ofFractionRing_add]; rw [Localization.add_mk]
+      simp only [RingHom.toMonoidWithZeroHom_eq_coe,
+        liftMonoidWithZeroHom_apply_ofFractionRing_mk]
+      rw [div_add_div]; rw [div_eq_div_iff]
+      · rw [mul_comm _ p, mul_comm _ p', mul_comm _ (φ p'), add_comm]
+        simp only [map_add, map_mul, Submonoid.coe_mul]
+      all_goals
+        try simp only [← map_mul, ← Submonoid.coe_mul]
+        exact nonZeroDivisors.ne_zero (hφ (SetLike.coe_mem _)) }
 
 Depends on / 依赖: Localization, Localization.add_mk, Localization.induction_on, MonoidWithZeroHom, MonoidWithZeroHom.toZeroHom_coe, Subsingleton, Subsingleton.elim, ZeroHom, ZeroHom.toFun_eq_coe, add_mk, induction_on, liftMonoidWithZeroHom, map_add, map_zero, ofFractionRing_add, subsingleton_or_nontrivial, toFun_eq_coe, toMonoidWithZeroHom, toZeroHom_coe, zero_add
 -/
@@ -1530,7 +1638,9 @@ theorem map_apply_div
   proof: by
   rcases eq_or_ne q 0 with (rfl | hq)
   · have : (0 : K⟮X⟯) = algebraMap K[X] _ 0 / algebraMap K[X] _ 1 := by simp
-    rw [map_zero]; rw [map_zero]; rw [map_zero]; rw [div_zero]; rw [div_zero]; rw [this]; rw [map_apply_div_ne_zero]; rw [map_one]; rw [map_one]; rw [div_one]; rw [map_zero]; rw [map
+    rw [map_zero]; rw [map_zero]; rw [map_zero]; rw [div_zero]; rw [div_zero]; rw [this]; rw [map_apply_div_ne_zero]; rw [map_one]; rw [map_one]; rw [div_one]; rw [map_zero]; rw [map_zero]
+    exact one_ne_zero
+  exact map_apply_div_ne_zero _ _ _ _ hq
 
 中文:
 定理 map_apply_div
@@ -1538,7 +1648,9 @@ theorem map_apply_div
   证明: by
   rcases eq_or_ne q 0 with (rfl | hq)
   · have : (0 : K⟮X⟯) = algebraMap K[X] _ 0 / algebraMap K[X] _ 1 := by simp
-    rw [map_zero]; rw [map_zero]; rw [map_zero]; rw [div_zero]; rw [div_zero]; rw [this]; rw [map_apply_div_ne_zero]; rw [map_one]; rw [map_one]; rw [div_one]; rw [map_zero]; rw [map
+    rw [map_zero]; rw [map_zero]; rw [map_zero]; rw [div_zero]; rw [div_zero]; rw [this]; rw [map_apply_div_ne_zero]; rw [map_one]; rw [map_one]; rw [div_one]; rw [map_zero]; rw [map_zero]
+    exact one_ne_zero
+  exact map_apply_div_ne_zero _ _ _ _ hq
 
 Depends on / 依赖: algebraMap, div_one, div_zero, eq_or_ne, map_apply_div_ne_zero, map_one, map_zero, one_ne_zero
 -/
@@ -1915,7 +2027,12 @@ instance :
     exact (toFractionRingRingEquiv K).symm.toRingHom.isUnit_map (IsLocalization.map_units _ y)
   exists_of_eq {x y} := by
     rw [← ofFractionRing_algebraMap]; rw [← ofFractionRing_algebraMap]
-    exact fun h => IsLocalization.exists_of_eq ((toFractionRingRing
+    exact fun h => IsLocalization.exists_of_eq ((toFractionRingRingEquiv K).symm.injective h)
+  surj := by
+    rintro ⟨z⟩
+    convert! IsLocalization.surj K[X]⁰ z
+    simp only [← ofFractionRing_algebraMap, ← ofFractionRing_mul,
+      ofFractionRing.injEq]
 
 中文:
 实例 :
@@ -1925,7 +2042,12 @@ instance :
     exact (toFractionRingRingEquiv K).symm.toRingHom.isUnit_map (IsLocalization.map_units _ y)
   exists_of_eq {x y} := by
     rw [← ofFractionRing_algebraMap]; rw [← ofFractionRing_algebraMap]
-    exact fun h => IsLocalization.exists_of_eq ((toFractionRingRing
+    exact fun h => IsLocalization.exists_of_eq ((toFractionRingRingEquiv K).symm.injective h)
+  surj := by
+    rintro ⟨z⟩
+    convert! IsLocalization.surj K[X]⁰ z
+    simp only [← ofFractionRing_algebraMap, ← ofFractionRing_mul,
+      ofFractionRing.injEq]
 
 Depends on / 依赖: IsLocalization, IsLocalization.exists_of_eq, IsLocalization.map_units, IsLocalization.surj, convert, exists_of_eq, injective, isUnit_map, map_units, ofFractionRing, ofFractionRing.injEq, ofFractionRing_algebraMap, ofFractionRing_mul, symm.injective, symm.toRingHom.isUnit_map, toFractionRingRingEquiv, toRingHom
 -/
@@ -2269,7 +2391,8 @@ theorem finrank_ratFunc_ratFunc
     rw [← Module.finrank_eq_rank] at hrank
     exact (Module.finrank_eq_of_rank_eq hrank.symm).symm
   · have hf' : ¬ Module.Finite k K := by
-      rwa [← Module.rank_lt_aleph0_iff, ← rank_ratFunc_ratFunc, Module.ra
+      rwa [← Module.rank_lt_aleph0_iff, ← rank_ratFunc_ratFunc, Module.rank_lt_aleph0_iff]
+    rw [Module.finrank_of_not_finite hf]; rw [Module.finrank_of_not_finite hf']
 
 中文:
 定理 finrank_ratFunc_ratFunc
@@ -2280,7 +2403,8 @@ theorem finrank_ratFunc_ratFunc
     rw [← Module.finrank_eq_rank] at hrank
     exact (Module.finrank_eq_of_rank_eq hrank.symm).symm
   · have hf' : ¬ Module.Finite k K := by
-      rwa [← Module.rank_lt_aleph0_iff, ← rank_ratFunc_ratFunc, Module.ra
+      rwa [← Module.rank_lt_aleph0_iff, ← rank_ratFunc_ratFunc, Module.rank_lt_aleph0_iff]
+    rw [Module.finrank_of_not_finite hf]; rw [Module.finrank_of_not_finite hf']
 
 Depends on / 依赖: Finite, Module, Module.Finite, Module.finrank_eq_of_rank_eq, Module.finrank_eq_rank, Module.finrank_of_not_finite, Module.rank_lt_aleph0_iff, finrank_eq_of_rank_eq, finrank_eq_rank, finrank_of_not_finite, hrank.symm, rank_lt_aleph0_iff, rank_ratFunc_ratFunc
 -/
@@ -2358,7 +2482,22 @@ definition numDenom
       intro p q a hq ha
       dsimp
       rw [if_neg hq]; rw [if_neg (mul_ne_zero ha hq)]
- 
+      have ha' : a.leadingCoeff != 0 := Polynomial.leadingCoeff_ne_zero.mpr ha
+      have hainv : a.leadingCoeff⁻¹ != 0 := inv_ne_zero ha'
+      simp only [Prod.ext_iff, gcd_mul_left, normalize_apply a, Polynomial.coe_normUnit, mul_assoc,
+        CommGroupWithZero.coe_normUnit _ ha']
+      have hdeg : (gcd p q).degree <= q.degree := degree_gcd_le_right _ hq
+      have hdeg' : (Polynomial.C a.leadingCoeff⁻¹ * gcd p q).degree <= q.degree := by
+        rw [Polynomial.degree_mul]; rw [Polynomial.degree_C hainv]; rw [zero_add]
+        exact hdeg
+      have hdivp : Polynomial.C a.leadingCoeff⁻¹ * gcd p q ∣ p :=
+        (C_mul_dvd hainv).mpr (gcd_dvd_left p q)
+      have hdivq : Polynomial.C a.leadingCoeff⁻¹ * gcd p q ∣ q :=
+        (C_mul_dvd hainv).mpr (gcd_dvd_right p q)
+      rw [EuclideanDomain.mul_div_mul_cancel ha hdivp]; rw [EuclideanDomain.mul_div_mul_cancel ha hdivq]; rw [leadingCoeff_div hdeg]; rw [leadingCoeff_div hdeg']; rw [Polynomial.leadingCoeff_mul]; rw [Polynomial.leadingCoeff_C]; rw [div_C_mul]; rw [div_C_mul]; rw [← mul_assoc]; rw [← Polynomial.C_mul]; rw [←
+        mul_assoc]; rw [← Polynomial.C_mul]
+      constructor <;> congr <;>
+        rw [inv_div]; rw [mul_comm]; rw [mul_div_assoc]; rw [← mul_assoc]; rw [inv_inv]; rw [mul_inv_cancel₀ ha']; rw [one_mul]; rw [inv_div])
 
 中文:
 定义 numDenom
@@ -2374,7 +2513,22 @@ definition numDenom
       intro p q a hq ha
       dsimp
       rw [if_neg hq]; rw [if_neg (mul_ne_zero ha hq)]
- 
+      have ha' : a.leadingCoeff != 0 := Polynomial.leadingCoeff_ne_zero.mpr ha
+      have hainv : a.leadingCoeff⁻¹ != 0 := inv_ne_zero ha'
+      simp only [Prod.ext_iff, gcd_mul_left, normalize_apply a, Polynomial.coe_normUnit, mul_assoc,
+        CommGroupWithZero.coe_normUnit _ ha']
+      have hdeg : (gcd p q).degree <= q.degree := degree_gcd_le_right _ hq
+      have hdeg' : (Polynomial.C a.leadingCoeff⁻¹ * gcd p q).degree <= q.degree := by
+        rw [Polynomial.degree_mul]; rw [Polynomial.degree_C hainv]; rw [zero_add]
+        exact hdeg
+      have hdivp : Polynomial.C a.leadingCoeff⁻¹ * gcd p q ∣ p :=
+        (C_mul_dvd hainv).mpr (gcd_dvd_left p q)
+      have hdivq : Polynomial.C a.leadingCoeff⁻¹ * gcd p q ∣ q :=
+        (C_mul_dvd hainv).mpr (gcd_dvd_right p q)
+      rw [EuclideanDomain.mul_div_mul_cancel ha hdivp]; rw [EuclideanDomain.mul_div_mul_cancel ha hdivq]; rw [leadingCoeff_div hdeg]; rw [leadingCoeff_div hdeg']; rw [Polynomial.leadingCoeff_mul]; rw [Polynomial.leadingCoeff_C]; rw [div_C_mul]; rw [div_C_mul]; rw [← mul_assoc]; rw [← Polynomial.C_mul]; rw [←
+        mul_assoc]; rw [← Polynomial.C_mul]
+      constructor <;> congr <;>
+        rw [inv_div]; rw [mul_comm]; rw [mul_div_assoc]; rw [← mul_assoc]; rw [inv_inv]; rw [mul_inv_cancel₀ ha']; rw [one_mul]; rw [inv_div])
 
 Depends on / 依赖: CommGroupWithZero, CommGroupWithZero.coe_normUnit, Polynomial, Polynomial.C, Polynomial.coe_normUnit, Polynomial.leadingCoeff_ne_zero.mpr, Prod.ext_iff, a.leadingCoeff, coe_normUnit, ext_iff, gcd_mul_left, if_neg, inv_ne_zero, leadingCoeff, leadingCoeff_ne_zero, liftOn, mul_assoc, mul_ne_zero, normalize_apply, x.liftOn
 -/
@@ -2860,7 +3014,14 @@ theorem num_div_denom
   classical
   induction x using RatFunc.induction_on with | _ p q hq
   have q_div_ne_zero : q / gcd p q != 0 := right_div_gcd_ne_zero hq
-  rw [num_div p q]; rw [denom_div p hq]; rw [map_mul]; rw [map_mul]; rw [mul_div_mul_left]; rw [div_eq_div_iff]; rw [← map_mul]; rw [← map_mul]; rw [mul_comm _ 
+  rw [num_div p q]; rw [denom_div p hq]; rw [map_mul]; rw [map_mul]; rw [mul_div_mul_left]; rw [div_eq_div_iff]; rw [← map_mul]; rw [← map_mul]; rw [mul_comm _ q]; rw [←
+    EuclideanDomain.mul_div_assoc]; rw [← EuclideanDomain.mul_div_assoc]; rw [mul_comm]
+  · apply gcd_dvd_right
+  · apply gcd_dvd_left
+  · exact algebraMap_ne_zero q_div_ne_zero
+  · exact algebraMap_ne_zero hq
+  · refine algebraMap_ne_zero (mt Polynomial.C_eq_zero.mp ?_)
+    exact inv_ne_zero (Polynomial.leadingCoeff_ne_zero.mpr q_div_ne_zero)
 
 中文:
 定理 num_div_denom
@@ -2870,7 +3031,14 @@ theorem num_div_denom
   classical
   induction x using RatFunc.induction_on with | _ p q hq
   have q_div_ne_zero : q / gcd p q != 0 := right_div_gcd_ne_zero hq
-  rw [num_div p q]; rw [denom_div p hq]; rw [map_mul]; rw [map_mul]; rw [mul_div_mul_left]; rw [div_eq_div_iff]; rw [← map_mul]; rw [← map_mul]; rw [mul_comm _ 
+  rw [num_div p q]; rw [denom_div p hq]; rw [map_mul]; rw [map_mul]; rw [mul_div_mul_left]; rw [div_eq_div_iff]; rw [← map_mul]; rw [← map_mul]; rw [mul_comm _ q]; rw [←
+    EuclideanDomain.mul_div_assoc]; rw [← EuclideanDomain.mul_div_assoc]; rw [mul_comm]
+  · apply gcd_dvd_right
+  · apply gcd_dvd_left
+  · exact algebraMap_ne_zero q_div_ne_zero
+  · exact algebraMap_ne_zero hq
+  · refine algebraMap_ne_zero (mt Polynomial.C_eq_zero.mp ?_)
+    exact inv_ne_zero (Polynomial.leadingCoeff_ne_zero.mpr q_div_ne_zero)
 
 Depends on / 依赖: EuclideanDomain, EuclideanDomain.mul_div_assoc, RatFunc, RatFunc.induction_on, algebraMap_ne_zero, classical, denom_div, div_eq_div_iff, gcd_dvd_left, gcd_dvd_right, induction_on, map_mul, mul_comm, mul_div_assoc, mul_div_mul_left, num_div, q_div_ne_zero, right_div_gcd_ne_zero
 -/
@@ -2980,7 +3148,7 @@ theorem num_mul_eq_mul_denom_iff
   conv_rhs => rw [← num_div_denom x]
   rw [map_mul]; rw [map_mul]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [mul_comm (Inv.inv _)]; rw [←
     mul_assoc]; rw [← div_eq_mul_inv]; rw [div_eq_iff]
-  exact algebraMap_ne_z
+  exact algebraMap_ne_zero (denom_ne_zero x)
 
 中文:
 定理 num_mul_eq_mul_denom_iff
@@ -2990,7 +3158,7 @@ theorem num_mul_eq_mul_denom_iff
   conv_rhs => rw [← num_div_denom x]
   rw [map_mul]; rw [map_mul]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [mul_comm (Inv.inv _)]; rw [←
     mul_assoc]; rw [← div_eq_mul_inv]; rw [div_eq_iff]
-  exact algebraMap_ne_z
+  exact algebraMap_ne_zero (denom_ne_zero x)
 
 Depends on / 依赖: Inv.inv, algebraMap_injective, algebraMap_ne_zero, conv_rhs, denom_ne_zero, div_eq_iff, div_eq_mul_inv, eq_div_iff, eq_iff, map_mul, mul_assoc, mul_comm, num_div_denom
 -/
@@ -3012,7 +3180,7 @@ theorem num_denom_add
     conv_lhs => rw [← num_div_denom x, ← num_div_denom y]
     rw [div_add_div]; rw [map_mul]; rw [map_add]; rw [map_mul]; rw [map_mul]
     · exact algebraMap_ne_zero (denom_ne_zero x)
-    · exact algebraMap_ne_zero (
+    · exact algebraMap_ne_zero (denom_ne_zero y)
 
 中文:
 定理 num_denom_add
@@ -3021,7 +3189,7 @@ theorem num_denom_add
     conv_lhs => rw [← num_div_denom x, ← num_div_denom y]
     rw [div_add_div]; rw [map_mul]; rw [map_add]; rw [map_mul]; rw [map_mul]
     · exact algebraMap_ne_zero (denom_ne_zero x)
-    · exact algebraMap_ne_zero (
+    · exact algebraMap_ne_zero (denom_ne_zero y)
 
 Depends on / 依赖: algebraMap_ne_zero, conv_lhs, denom_ne_zero, div_add_div, map_add, map_mul, mul_ne_zero, num_div_denom, num_mul_eq_mul_denom_iff
 -/
@@ -3094,7 +3262,8 @@ theorem num_dvd
     rw [map_mul]; rw [map_mul]; rw [← div_mul_div_comm]; rw [div_self]; rw [mul_one]; rw [num_div_denom]
     · exact ⟨mul_ne_zero (denom_ne_zero x) hq, rfl⟩
     · exact algebraMap_ne_zero hq
-  · ri
+  · rintro ⟨q, hq, rfl⟩
+    exact num_div_dvd p hq
 
 中文:
 定理 num_dvd
@@ -3107,7 +3276,8 @@ theorem num_dvd
     rw [map_mul]; rw [map_mul]; rw [← div_mul_div_comm]; rw [div_self]; rw [mul_one]; rw [num_div_denom]
     · exact ⟨mul_ne_zero (denom_ne_zero x) hq, rfl⟩
     · exact algebraMap_ne_zero hq
-  · ri
+  · rintro ⟨q, hq, rfl⟩
+    exact num_div_dvd p hq
 
 Depends on / 依赖: algebraMap_ne_zero, denom_ne_zero, div_mul_div_comm, div_self, map_mul, mul_ne_zero, mul_ne_zero_iff, mul_ne_zero_iff.mp, mul_one, num_div_denom, num_div_dvd
 -/
@@ -3179,7 +3349,7 @@ theorem num_mul_dvd
   · simp [hy]
   rw [num_dvd (mul_ne_zero (num_ne_zero hx) (num_ne_zero hy))]
   refine ⟨x.denom * y.denom, mul_ne_zero (denom_ne_zero x) (denom_ne_zero y), ?_⟩
-  rw [map_mul]; rw [map_mul]; rw [← div_mul_div_comm]; rw [num_div_denom]; rw [n
+  rw [map_mul]; rw [map_mul]; rw [← div_mul_div_comm]; rw [num_div_denom]; rw [num_div_denom]
 
 中文:
 定理 num_mul_dvd
@@ -3192,7 +3362,7 @@ theorem num_mul_dvd
   · simp [hy]
   rw [num_dvd (mul_ne_zero (num_ne_zero hx) (num_ne_zero hy))]
   refine ⟨x.denom * y.denom, mul_ne_zero (denom_ne_zero x) (denom_ne_zero y), ?_⟩
-  rw [map_mul]; rw [map_mul]; rw [← div_mul_div_comm]; rw [num_div_denom]; rw [n
+  rw [map_mul]; rw [map_mul]; rw [← div_mul_div_comm]; rw [num_div_denom]; rw [num_div_denom]
 
 Depends on / 依赖: denom_ne_zero, div_mul_div_comm, map_mul, mul_ne_zero, num_div_denom, num_dvd, num_ne_zero, x.denom, y.denom
 -/
@@ -3245,7 +3415,7 @@ theorem denom_add_dvd
   refine ⟨x.num * y.denom + x.denom * y.num, ?_⟩
   rw [map_mul]; rw [map_add]; rw [map_mul]; rw [map_mul]; rw [← div_add_div]; rw [num_div_denom]; rw [num_div_denom]
   · exact algebraMap_ne_zero (denom_ne_zero x)
-  · exact algebra
+  · exact algebraMap_ne_zero (denom_ne_zero y)
 
 中文:
 定理 denom_add_dvd
@@ -3256,7 +3426,7 @@ theorem denom_add_dvd
   refine ⟨x.num * y.denom + x.denom * y.num, ?_⟩
   rw [map_mul]; rw [map_add]; rw [map_mul]; rw [map_mul]; rw [← div_add_div]; rw [num_div_denom]; rw [num_div_denom]
   · exact algebraMap_ne_zero (denom_ne_zero x)
-  · exact algebra
+  · exact algebraMap_ne_zero (denom_ne_zero y)
 
 Depends on / 依赖: algebraMap_ne_zero, denom_dvd, denom_ne_zero, div_add_div, map_add, map_mul, mul_ne_zero, num_div_denom, x.denom, x.num, y.denom, y.num
 -/

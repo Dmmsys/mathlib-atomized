@@ -40,7 +40,14 @@ theorem integral_eq_tsum
   _ = ∑' (a : support p), (p.toMeasure {a.val}).toReal • f a := by
     apply setIntegral_countable f p.support_countable
     rwa [IntegrableOn, restrict_toMeasure_support p]
-  _ = ∑' (a : support p), (p a).toReal
+  _ = ∑' (a : support p), (p a).toReal • f a := by
+    congr with x; congr 2
+    apply PMF.toMeasure_apply_singleton p x (MeasurableSet.singleton _)
+  _ = ∑' a, (p a).toReal • f a :=
+tsum_subtype_eq_of_support_subset calc
+      (fun a => (p a).toReal • f a).support subseteq (fun a => (p a).toReal).support :=
+        Function.support_smul_subset_left _ _
+      _ subseteq support p := fun x h1 h2 => h1 (by simp [h2])
 
 中文:
 定理 integral_eq_tsum
@@ -50,7 +57,14 @@ theorem integral_eq_tsum
   _ = ∑' (a : support p), (p.toMeasure {a.val}).toReal • f a := by
     apply setIntegral_countable f p.support_countable
     rwa [IntegrableOn, restrict_toMeasure_support p]
-  _ = ∑' (a : support p), (p a).toReal
+  _ = ∑' (a : support p), (p a).toReal • f a := by
+    congr with x; congr 2
+    apply PMF.toMeasure_apply_singleton p x (MeasurableSet.singleton _)
+  _ = ∑' a, (p a).toReal • f a :=
+tsum_subtype_eq_of_support_subset calc
+      (fun a => (p a).toReal • f a).support subseteq (fun a => (p a).toReal).support :=
+        Function.support_smul_subset_left _ _
+      _ subseteq support p := fun x h1 h2 => h1 (by simp [h2])
 -/
 theorem integral_eq_tsum (p : PMF α) (f : α -> E) (hf : Integrable f p.toMeasure) :
     ∫ a, f a ∂(p.toMeasure) = ∑' a, (p a).toReal • f a := calc

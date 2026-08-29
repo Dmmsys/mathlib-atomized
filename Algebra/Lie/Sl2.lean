@@ -283,7 +283,34 @@ definition toLieSubalgebra
     induction hx using span_induction with
     | zero => simp
     | add u v hu hv hu' hv' => simpa only [add_lie] using add_mem hu' hv'
-    | smul t u hu hu' => simpa only [smul_lie] using smul_m
+    | smul t u hu hu' => simpa only [smul_lie] using smul_mem _ t hu'
+    | mem u hu =>
+      induction hy using span_induction with
+      | zero => simp
+      | add u v hu hv hu' hv' => simpa only [lie_add] using add_mem hu' hv'
+      | smul t u hv hv' => simpa only [lie_smul] using smul_mem _ t hv'
+      | mem v hv =>
+        push _ in _ at hu hv
+        rcases hu with rfl | rfl | rfl <;>
+        rcases hv with rfl | rfl | rfl <;> (try simp only [lie_self, zero_mem])
+        · rw [t.lie_e_f]
+          apply subset_span
+          simp
+        · rw [← lie_skew, t.lie_h_e_nsmul, neg_mem_iff]
+apply nsmul_mem subset_span _
+          simp
+        · rw [← lie_skew, t.lie_e_f, neg_mem_iff]
+          apply subset_span
+          simp
+        · rw [← lie_skew, t.lie_h_f_nsmul, neg_neg]
+apply nsmul_mem subset_span _
+          simp
+        · rw [t.lie_h_e_nsmul]
+apply nsmul_mem subset_span _
+          simp
+        · rw [t.lie_h_f_nsmul, neg_mem_iff]
+apply nsmul_mem subset_span _
+          simp
 
 中文:
 定义 toLieSubalgebra
@@ -294,7 +321,34 @@ definition toLieSubalgebra
     induction hx using span_induction with
     | zero => simp
     | add u v hu hv hu' hv' => simpa only [add_lie] using add_mem hu' hv'
-    | smul t u hu hu' => simpa only [smul_lie] using smul_m
+    | smul t u hu hu' => simpa only [smul_lie] using smul_mem _ t hu'
+    | mem u hu =>
+      induction hy using span_induction with
+      | zero => simp
+      | add u v hu hv hu' hv' => simpa only [lie_add] using add_mem hu' hv'
+      | smul t u hv hv' => simpa only [lie_smul] using smul_mem _ t hv'
+      | mem v hv =>
+        push _ in _ at hu hv
+        rcases hu with rfl | rfl | rfl <;>
+        rcases hv with rfl | rfl | rfl <;> (try simp only [lie_self, zero_mem])
+        · rw [t.lie_e_f]
+          apply subset_span
+          simp
+        · rw [← lie_skew, t.lie_h_e_nsmul, neg_mem_iff]
+apply nsmul_mem subset_span _
+          simp
+        · rw [← lie_skew, t.lie_e_f, neg_mem_iff]
+          apply subset_span
+          simp
+        · rw [← lie_skew, t.lie_h_f_nsmul, neg_neg]
+apply nsmul_mem subset_span _
+          simp
+        · rw [t.lie_h_e_nsmul]
+apply nsmul_mem subset_span _
+          simp
+        · rw [t.lie_h_f_nsmul, neg_mem_iff]
+apply nsmul_mem subset_span _
+          simp
 -/
 def toLieSubalgebra (t : IsSl2Triple h e f) :
     LieSubalgebra R L where
@@ -401,7 +455,8 @@ lemma lie_h_pow_toEnd_f
   | zero => simpa using P.lie_h
   | succ n ih =>
     rw [pow_succ']; rw [Module.End.mul_apply]; rw [toEnd_apply_apply]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [leibniz_lie h]; rw [t.lie_lie_smul_f R]; rw [← neg_smul]; rw [ih]; rw [lie_smul]; rw [smul_lie]; rw [← add_smul]
-   
+    congr
+    ring
 
 中文:
 引理 lie_h_pow_toEnd_f
@@ -411,7 +466,8 @@ lemma lie_h_pow_toEnd_f
   | zero => simpa using P.lie_h
   | succ n ih =>
     rw [pow_succ']; rw [Module.End.mul_apply]; rw [toEnd_apply_apply]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [leibniz_lie h]; rw [t.lie_lie_smul_f R]; rw [← neg_smul]; rw [ih]; rw [lie_smul]; rw [smul_lie]; rw [← add_smul]
-   
+    congr
+    ring
 
 Depends on / 依赖: Module, Module.End.mul_apply, Nat.cast_add, Nat.cast_one, P.lie_h, add_smul, cast_add, cast_one, leibniz_lie, lie_h, lie_lie_smul_f, lie_smul, mul_apply, neg_smul, pow_succ, smul_lie, t.lie_lie_smul_f, toEnd_apply_apply
 -/
@@ -437,7 +493,9 @@ lemma lie_e_pow_succ_toEnd_f
         pow_zero, Module.End.one_apply, leibniz_lie e, t.lie_e_f, P.lie_e, P.lie_h, lie_zero,
         add_zero]
   | succ n ih =>
-    rw [pow_succ']; rw [Module.End.mul_apply]; r
+    rw [pow_succ']; rw [Module.End.mul_apply]; rw [toEnd_apply_apply]; rw [leibniz_lie e]; rw [t.lie_e_f]; rw [lie_h_pow_toEnd_f P]; rw [ih]; rw [lie_smul]; rw [lie_f_pow_toEnd_f P]; rw [← add_smul]; rw [Nat.cast_add]; rw [Nat.cast_one]
+    congr
+    ring
 
 中文:
 引理 lie_e_pow_succ_toEnd_f
@@ -449,7 +507,9 @@ lemma lie_e_pow_succ_toEnd_f
         pow_zero, Module.End.one_apply, leibniz_lie e, t.lie_e_f, P.lie_e, P.lie_h, lie_zero,
         add_zero]
   | succ n ih =>
-    rw [pow_succ']; rw [Module.End.mul_apply]; r
+    rw [pow_succ']; rw [Module.End.mul_apply]; rw [toEnd_apply_apply]; rw [leibniz_lie e]; rw [t.lie_e_f]; rw [lie_h_pow_toEnd_f P]; rw [ih]; rw [lie_smul]; rw [lie_f_pow_toEnd_f P]; rw [← add_smul]; rw [Nat.cast_add]; rw [Nat.cast_one]
+    congr
+    ring
 
 Depends on / 依赖: Module, Module.End.mul_apply, Module.End.one_apply, Nat.cast_add, Nat.cast_one, Nat.cast_zero, P.lie_e, P.lie_h, add_smul, add_zero, cast_add, cast_one, cast_zero, leibniz_lie, lie_e, lie_e_f, lie_f_pow_toEnd_f, lie_h, lie_h_pow_toEnd_f, lie_smul
 -/
@@ -476,7 +536,16 @@ lemma exists_nat
     obtain ⟨n, hn₁, hn₂⟩ := Nat.exists_not_and_succ_of_not_zero_of_exists P.ne_zero this
     refine ⟨n, ?_⟩
     have := lie_e_pow_succ_toEnd_f P n
-    rw [hn₂]; rw [lie_zero]; rw [eq_comm]; rw [smul_eq_zero_iff_left hn₁]; rw [mul_eq_zero]; rw [sub_eq_zero] 
+    rw [hn₂]; rw [lie_zero]; rw [eq_comm]; rw [smul_eq_zero_iff_left hn₁]; rw [mul_eq_zero]; rw [sub_eq_zero] at this
+exact this.resolve_left Nat.cast_add_one_ne_zero n
+  have hs : (range <| fun (n : Nat) => μ - 2 * n).Infinite := by
+    rw [infinite_range_iff (fun n m => by simp)]; infer_instance
+  by_contra! contra
+  exact hs ((toEnd R L M h).eigenvectors_linearIndependent
+    {μ - 2 * n | n : Nat}
+    (fun ⟨s, hs⟩ => ψ Classical.choose hs)
+    (fun ⟨r, hr⟩ => by simp [lie_h_pow_toEnd_f P, Classical.choose_spec hr, contra,
+      Module.End.hasEigenvector_iff])).finite
 
 中文:
 引理 存在_nat
@@ -486,7 +555,16 @@ lemma exists_nat
     obtain ⟨n, hn₁, hn₂⟩ := Nat.exists_not_and_succ_of_not_zero_of_exists P.ne_zero this
     refine ⟨n, ?_⟩
     have := lie_e_pow_succ_toEnd_f P n
-    rw [hn₂]; rw [lie_zero]; rw [eq_comm]; rw [smul_eq_zero_iff_left hn₁]; rw [mul_eq_zero]; rw [sub_eq_zero] 
+    rw [hn₂]; rw [lie_zero]; rw [eq_comm]; rw [smul_eq_zero_iff_left hn₁]; rw [mul_eq_zero]; rw [sub_eq_zero] at this
+exact this.resolve_left Nat.cast_add_one_ne_zero n
+  have hs : (range <| fun (n : Nat) => μ - 2 * n).Infinite := by
+    rw [infinite_range_iff (fun n m => by simp)]; infer_instance
+  by_contra! contra
+  exact hs ((toEnd R L M h).eigenvectors_linearIndependent
+    {μ - 2 * n | n : Nat}
+    (fun ⟨s, hs⟩ => ψ Classical.choose hs)
+    (fun ⟨r, hr⟩ => by simp [lie_h_pow_toEnd_f P, Classical.choose_spec hr, contra,
+      Module.End.hasEigenvector_iff])).finite
 
 Depends on / 依赖: Infinite, Nat.cast_add_one_ne_zero, Nat.exists_not_and_succ_of_not_zero_of_exists, P.ne_zero, cast_add_one_ne_zero, contra, eq_comm, exists_not_and_succ_of_not_zero_of_exists, infer_instance, infinite_range_iff, lie_e_pow_succ_toEnd_f, lie_zero, mul_eq_zero, ne_zero, resolve_left, smul_eq_zero_iff_left, sub_eq_zero, this.resolve_left
 -/
@@ -521,7 +599,9 @@ lemma pow_toEnd_f_ne_zero_of_eq_nat
     have : ((i + 1) * (n - i) : Int) • (toEnd R L M f ^ i) m = 0 := by
       have := congr_arg (⁅e, ·⁆) H
       simpa [← Int.cast_smul_eq_zsmul R, P.lie_e_pow_succ_toEnd_f, hn] using this
-    rw [← Int.cast_smul_eq_zs
+    rw [← Int.cast_smul_eq_zsmul R]; rw [smul_eq_zero]; rw [Int.cast_eq_zero]; rw [mul_eq_zero]; rw [sub_eq_zero]; rw [Nat.cast_inj]; rw [← @Nat.cast_one Int]; rw [← Nat.cast_add]; rw [Nat.cast_eq_zero] at this
+    simp only [add_eq_zero, one_ne_zero, and_false, false_or] at this
+    exact (hi.trans_eq (this.resolve_right (IH (i.le_succ.trans hi)))).not_gt i.lt_succ_self
 
 中文:
 引理 pow_toEnd_f_ne_zero_of_eq_nat
@@ -534,7 +614,9 @@ lemma pow_toEnd_f_ne_zero_of_eq_nat
     have : ((i + 1) * (n - i) : Int) • (toEnd R L M f ^ i) m = 0 := by
       have := congr_arg (⁅e, ·⁆) H
       simpa [← Int.cast_smul_eq_zsmul R, P.lie_e_pow_succ_toEnd_f, hn] using this
-    rw [← Int.cast_smul_eq_zs
+    rw [← Int.cast_smul_eq_zsmul R]; rw [smul_eq_zero]; rw [Int.cast_eq_zero]; rw [mul_eq_zero]; rw [sub_eq_zero]; rw [Nat.cast_inj]; rw [← @Nat.cast_one Int]; rw [← Nat.cast_add]; rw [Nat.cast_eq_zero] at this
+    simp only [add_eq_zero, one_ne_zero, and_false, false_or] at this
+    exact (hi.trans_eq (this.resolve_right (IH (i.le_succ.trans hi)))).not_gt i.lt_succ_self
 
 Depends on / 依赖: Int.cast_eq_zero, Int.cast_smul_eq_zsmul, Nat.cast_add, Nat.cast_eq_zero, Nat.cast_inj, Nat.cast_one, P.lie_e_pow_succ_toEnd_f, P.ne_zero, add_eq_zero, and_false, cast_add, cast_eq_zero, cast_inj, cast_one, cast_smul_eq_zsmul, congr_arg, lie_e_pow_succ_toEnd_f, mul_eq_zero, ne_zero, one_ne_zero
 -/
@@ -564,7 +646,8 @@ lemma pow_toEnd_f_eq_zero_of_eq_nat
       lie_h := (P.lie_h_pow_toEnd_f _).trans (by simp [hn])
       lie_e := (P.lie_e_pow_succ_toEnd_f _).trans (by simp [hn]) }
   obtain ⟨m, hm⟩ := this.exists_nat
-  have : (n : Int) < m + 2 * (
+  have : (n : Int) < m + 2 * (n + 1) := by lia
+  exact this.ne (Int.cast_injective (α := R) <| by simpa [sub_eq_iff_eq_add] using hm)
 
 中文:
 引理 pow_toEnd_f_eq_zero_of_eq_nat
@@ -576,7 +659,8 @@ lemma pow_toEnd_f_eq_zero_of_eq_nat
       lie_h := (P.lie_h_pow_toEnd_f _).trans (by simp [hn])
       lie_e := (P.lie_e_pow_succ_toEnd_f _).trans (by simp [hn]) }
   obtain ⟨m, hm⟩ := this.exists_nat
-  have : (n : Int) < m + 2 * (
+  have : (n : Int) < m + 2 * (n + 1) := by lia
+  exact this.ne (Int.cast_injective (α := R) <| by simpa [sub_eq_iff_eq_add] using hm)
 
 Depends on / 依赖: HasPrimitiveVectorWith, Int.cast_injective, P.lie_e_pow_succ_toEnd_f, P.lie_h_pow_toEnd_f, cast_injective, exists_nat, lie_e, lie_e_pow_succ_toEnd_f, lie_h, lie_h_pow_toEnd_f, ne_zero, sub_eq_iff_eq_add, t.HasPrimitiveVectorWith, this.exists_nat, this.ne
 -/
@@ -629,7 +713,7 @@ lemma lie_h_pow_toEnd_e
   | succ n ih =>
     rw [pow_succ']; rw [Module.End.mul_apply]; rw [toEnd_apply_apply]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [leibniz_lie h]; rw [IsSl2Triple.lie_h_e_smul R t]; rw [smul_lie]; rw [ih]; rw [lie_smul]; rw [← add_smul]
     congr 1
-   
+    ring
 
 中文:
 引理 lie_h_pow_toEnd_e
@@ -640,7 +724,7 @@ lemma lie_h_pow_toEnd_e
   | succ n ih =>
     rw [pow_succ']; rw [Module.End.mul_apply]; rw [toEnd_apply_apply]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [leibniz_lie h]; rw [IsSl2Triple.lie_h_e_smul R t]; rw [smul_lie]; rw [ih]; rw [lie_smul]; rw [← add_smul]
     congr 1
-   
+    ring
 
 Depends on / 依赖: IsSl2Triple, IsSl2Triple.lie_h_e_smul, Module, Module.End.mul_apply, Nat.cast_add, Nat.cast_one, add_smul, cast_add, cast_one, leibniz_lie, lie_h_e_smul, lie_smul, mul_apply, pow_succ, smul_lie, toEnd_apply_apply
 -/
@@ -672,7 +756,20 @@ lemma exists_hasPrimitiveVectorWith
   let e_vecs (n : Nat) : M := ((toEnd R L M e) ^ n) m₀
   have h_exists_zero : exists k, e_vecs k = 0 := by
     by_contra! contra
-    
+    have h_inj : Function.Injective evals := fun a b hab => by
+      simpa [evals, add_right_inj, mul_eq_mul_left_iff, Nat.cast_inj] using hab
+    have aux (μ : range evals) : (toEnd R L M h).HasEigenvector μ (e_vecs μ.property.choose) := by
+      set n := μ.property.choose
+      refine ⟨?_, contra n⟩
+      rw [Module.End.mem_eigenspace_iff]; rw [toEnd_apply_apply]; rw [← μ.property.choose_spec]
+      exact t.lie_h_pow_toEnd_e hm₀.apply_eq_smul n
+    have _i := ((toEnd R L M h).eigenvectors_linearIndependent (range evals) _ aux).finite
+    exact (Set.infinite_range_of_injective h_inj) (Set.toFinite _)
+  obtain ⟨n, hn_ne, hn_zero⟩ := Nat.exists_not_and_succ_of_not_zero_of_exists hm₀.2 h_exists_zero
+  exact ⟨evals n, e_vecs n, hn_ne,
+    { ne_zero := hn_ne
+      lie_h := t.lie_h_pow_toEnd_e hm₀.apply_eq_smul n
+      lie_e := by rwa [lie_e_pow_toEnd_e n] }⟩
 
 中文:
 引理 存在_hasPrimitiveVectorWith
@@ -683,7 +780,20 @@ lemma exists_hasPrimitiveVectorWith
   let e_vecs (n : Nat) : M := ((toEnd R L M e) ^ n) m₀
   have h_exists_zero : exists k, e_vecs k = 0 := by
     by_contra! contra
-    
+    have h_inj : Function.Injective evals := fun a b hab => by
+      simpa [evals, add_right_inj, mul_eq_mul_left_iff, Nat.cast_inj] using hab
+    have aux (μ : range evals) : (toEnd R L M h).HasEigenvector μ (e_vecs μ.property.choose) := by
+      set n := μ.property.choose
+      refine ⟨?_, contra n⟩
+      rw [Module.End.mem_eigenspace_iff]; rw [toEnd_apply_apply]; rw [← μ.property.choose_spec]
+      exact t.lie_h_pow_toEnd_e hm₀.apply_eq_smul n
+    have _i := ((toEnd R L M h).eigenvectors_linearIndependent (range evals) _ aux).finite
+    exact (Set.infinite_range_of_injective h_inj) (Set.toFinite _)
+  obtain ⟨n, hn_ne, hn_zero⟩ := Nat.exists_not_and_succ_of_not_zero_of_exists hm₀.2 h_exists_zero
+  exact ⟨evals n, e_vecs n, hn_ne,
+    { ne_zero := hn_ne
+      lie_h := t.lie_h_pow_toEnd_e hm₀.apply_eq_smul n
+      lie_e := by rwa [lie_e_pow_toEnd_e n] }⟩
 
 Depends on / 依赖: Function, Function.Injective, HasEigenvector, Injective, IsTriangularizable, IsTriangularizable.exists_hasEigenvalue, Nat.cast_inj, add_right_inj, cast_inj, contra, e_vecs, exists_hasEigenvalue, exists_hasEigenvector, h_exists_zero, h_inj, mul_eq_mul_left_iff, property, property.choo
 -/

@@ -107,7 +107,25 @@ theorem regularSpace_TFAE
     rw [regularSpace_iff]; rw [(@compl_surjective (Set X) _).forall]; rw [forall_comm]
     simp only [isClosed_compl_iff, mem_compl_iff, Classical.not_not, @and_comm (_ in _),
       (nhds_basis_opens _).lift'_closure.le_basis_iff (nhds_basis_opens _), and_imp,
-      (nhds_
+      (nhds_basis_opens _).disjoint_iff_right, ← subset_interior_iff_mem_nhdsSet,
+      interior_compl, compl_subset_compl]
+  tfae_have 5 -> 6 := fun h a => (h a).antisymm (𝓝 _).le_lift'_closure
+  tfae_have 6 -> 4
+  | H, a, s, hs => by
+    rw [← H] at hs
+    rcases (𝓝 a).basis_sets.lift'_closure.mem_iff.mp hs with ⟨U, hU, hUs⟩
+    exact ⟨closure U, mem_of_superset hU subset_closure, isClosed_closure, hUs⟩
+  tfae_have 4 -> 2
+  | H, s, a, ha => by
+    have ha' : sᶜ in 𝓝 a := by rwa [← mem_interior_iff_mem_nhds, interior_compl]
+    rcases H _ _ ha' with ⟨U, hU, hUc, hUs⟩
+    refine disjoint_of_disjoint_of_mem disjoint_compl_left ?_ hU
+    rwa [← subset_interior_iff_mem_nhdsSet, hUc.isOpen_compl.interior_eq, subset_compl_comm]
+  tfae_have 2 -> 3 := by
+    refine fun H a s => ⟨fun hd has => mem_closure_iff_nhds_ne_bot.mp has ?_, H s a⟩
+    exact (hd.symm.mono_right <| @principal_le_nhdsSet _ _ s).eq_bot
+tfae_have 3 -> 1 := fun H => ⟨fun hs ha => (H _ _).mpr hs.closure_eq.symm ▸ ha⟩
+  tfae_finish
 
 中文:
 定理 regularSpace_TFAE
@@ -117,7 +135,25 @@ theorem regularSpace_TFAE
     rw [regularSpace_iff]; rw [(@compl_surjective (Set X) _).forall]; rw [forall_comm]
     simp only [isClosed_compl_iff, mem_compl_iff, Classical.not_not, @and_comm (_ in _),
       (nhds_basis_opens _).lift'_closure.le_basis_iff (nhds_basis_opens _), and_imp,
-      (nhds_
+      (nhds_basis_opens _).disjoint_iff_right, ← subset_interior_iff_mem_nhdsSet,
+      interior_compl, compl_subset_compl]
+  tfae_have 5 -> 6 := fun h a => (h a).antisymm (𝓝 _).le_lift'_closure
+  tfae_have 6 -> 4
+  | H, a, s, hs => by
+    rw [← H] at hs
+    rcases (𝓝 a).basis_sets.lift'_closure.mem_iff.mp hs with ⟨U, hU, hUs⟩
+    exact ⟨closure U, mem_of_superset hU subset_closure, isClosed_closure, hUs⟩
+  tfae_have 4 -> 2
+  | H, s, a, ha => by
+    have ha' : sᶜ in 𝓝 a := by rwa [← mem_interior_iff_mem_nhds, interior_compl]
+    rcases H _ _ ha' with ⟨U, hU, hUc, hUs⟩
+    refine disjoint_of_disjoint_of_mem disjoint_compl_left ?_ hU
+    rwa [← subset_interior_iff_mem_nhdsSet, hUc.isOpen_compl.interior_eq, subset_compl_comm]
+  tfae_have 2 -> 3 := by
+    refine fun H a s => ⟨fun hd has => mem_closure_iff_nhds_ne_bot.mp has ?_, H s a⟩
+    exact (hd.symm.mono_right <| @principal_le_nhdsSet _ _ s).eq_bot
+tfae_have 3 -> 1 := fun H => ⟨fun hs ha => (H _ _).mpr hs.closure_eq.symm ▸ ha⟩
+  tfae_finish
 
 Depends on / 依赖: Classical, Classical.not_not, _closure, _closure.le_basis_iff, and_comm, and_imp, antisymm, compl_subset_compl, compl_surjective, disjoint_iff_right, forall_comm, interior_compl, isClosed_compl_iff, le_basis_iff, le_lift, mem_compl_iff, nhds_basis_opens, not_not, regularSpace_iff, subset_interior_iff_mem_nhdsSet
 -/
@@ -242,7 +278,15 @@ theorem regularSpace_generateFrom
     (Set.notMem_compl_iff.mpr ha), fun h' => ⟨fun {t a} ht ha => ?_⟩⟩
   obtain ⟨t, rfl⟩ := compl_involutive.surjective t
   rw [isClosed_compl_iff]; rw [h] at ht
-  rw [Set.notMem_compl_iff] at 
+  rw [Set.notMem_compl_iff] at ha
+  induction ht with
+  | basic t ht => exact h' t ht a ha
+  | univ => simp
+  | inter t₁ t₂ _ _ ih₁ ih₂ => grind [compl_inter, nhdsSet_union, disjoint_sup_left]
+  | sUnion S _ ih =>
+    obtain ⟨t, ht, ha⟩ := ha
+    grw [compl_sUnion, sInter_image, iInter₂_subset t ht]
+    exact ih t ht ha
 
 中文:
 定理 regularSpace_generateFrom
@@ -253,7 +297,15 @@ theorem regularSpace_generateFrom
     (Set.notMem_compl_iff.mpr ha), fun h' => ⟨fun {t a} ht ha => ?_⟩⟩
   obtain ⟨t, rfl⟩ := compl_involutive.surjective t
   rw [isClosed_compl_iff]; rw [h] at ht
-  rw [Set.notMem_compl_iff] at 
+  rw [Set.notMem_compl_iff] at ha
+  induction ht with
+  | basic t ht => exact h' t ht a ha
+  | univ => simp
+  | inter t₁ t₂ _ _ ih₁ ih₂ => grind [compl_inter, nhdsSet_union, disjoint_sup_left]
+  | sUnion S _ ih =>
+    obtain ⟨t, ht, ha⟩ := ha
+    grw [compl_sUnion, sInter_image, iInter₂_subset t ht]
+    exact ih t ht ha
 
 Depends on / 依赖: RegularSpace, RegularSpace.regular, Set.notMem_compl_iff, Set.notMem_compl_iff.mpr, compl_inter, compl_involutive, compl_involutive.surjective, compl_sUnion, disjoint_sup_left, isClosed_compl, isClosed_compl_iff, isOpen_generateFrom_of_mem, nhdsSet_union, notMem_compl_iff, regular, sUnion, surjective
 -/
@@ -456,7 +508,8 @@ theorem IsCompact.exists_isOpen_closure_subset
       ← subset_interior_iff_mem_nhdsSet] using! hU
   rcases ((hasBasis_nhdsSet _).disjoint_iff (hasBasis_nhdsSet _)).1 hd
     with ⟨V, ⟨hVo, hKV⟩, W, ⟨hW, hUW⟩, hVW⟩
-  refine ⟨V, hVo, hKV, Subset
+  refine ⟨V, hVo, hKV, Subset.trans ?_ (compl_subset_comm.1 hUW)⟩
+  exact closure_minimal hVW.subset_compl_right hW.isClosed_compl
 
 中文:
 定理 是紧集.存在_isOpen_closure_subset
@@ -467,7 +520,8 @@ theorem IsCompact.exists_isOpen_closure_subset
       ← subset_interior_iff_mem_nhdsSet] using! hU
   rcases ((hasBasis_nhdsSet _).disjoint_iff (hasBasis_nhdsSet _)).1 hd
     with ⟨V, ⟨hVo, hKV⟩, W, ⟨hW, hUW⟩, hVW⟩
-  refine ⟨V, hVo, hKV, Subset
+  refine ⟨V, hVo, hKV, Subset.trans ?_ (compl_subset_comm.1 hUW)⟩
+  exact closure_minimal hVW.subset_compl_right hW.isClosed_compl
 
 Depends on / 依赖: Disjoint, Subset, Subset.trans, closure_minimal, compl_subset_comm, disjoint_iff, disjoint_nhdsSet_left, disjoint_nhds_nhdsSet, hK.disjoint_nhdsSet_left, hVW.subset_compl_right, hW.isClosed_compl, hasBasis_nhdsSet, isClosed_compl, subset_compl_right, subset_interior_iff_mem_nhdsSet
 -/
@@ -611,7 +665,9 @@ theorem regularSpace_sInf
         If.1.Finite ∧ forall i : If.1, If.2 i in @nhds X i a ∧ @IsClosed X i (If.2 i))
       fun If => ⋂ i : If.1, If.snd i := fun a => by
     rw [nhds_sInf]; rw [← iInf_subtype'']
-    exact .iInf fun t
+    exact .iInf fun t : T => @closed_nhds_basis X t (h t t.2) a
+  refine .of_hasBasis this fun a If hIf => isClosed_iInter fun i => ?_
+  exact (hIf.2 i).2.mono (sInf_le (i : T).2)
 
 中文:
 定理 regularSpace_sInf
@@ -623,7 +679,9 @@ theorem regularSpace_sInf
         If.1.Finite ∧ forall i : If.1, If.2 i in @nhds X i a ∧ @IsClosed X i (If.2 i))
       fun If => ⋂ i : If.1, If.snd i := fun a => by
     rw [nhds_sInf]; rw [← iInf_subtype'']
-    exact .iInf fun t
+    exact .iInf fun t : T => @closed_nhds_basis X t (h t t.2) a
+  refine .of_hasBasis this fun a If hIf => isClosed_iInter fun i => ?_
+  exact (hIf.2 i).2.mono (sInf_le (i : T).2)
 
 Depends on / 依赖: Finite, HasBasis, If.snd, IsClosed, closed_nhds_basis, iInf_subtype, isClosed_iInter, nhds_sInf, of_hasBasis, sInf_le
 -/
@@ -743,7 +801,25 @@ lemma IsClosed.HasSeparatingCover
   -- `IsLindelof.indexed_countable_subcover` requires the space be Nonempty
   rcases isEmpty_or_nonempty X with empty_X | nonempty_X
   · rw [subset_eq_empty (t := s) (fun ⦃_⦄ _ => trivial) (univ_eq_empty_iff.mpr empty_X)]
-.1 exact hasSeparatingCovers_iff_separatedNhds.mpr (SeparatedNhds.empty_lef
+.1 exact hasSeparatingCovers_iff_separatedNhds.mpr (SeparatedNhds.empty_left t)
+  -- This is almost `HasSeparatingCover`, but is not countable. We define for all `a : X` for use
+  -- with `IsLindelof.indexed_countable_subcover` momentarily.
+  have (a : X) : exists n : Set X, IsOpen n ∧ Disjoint (closure n) t ∧ (a in s -> a in n) := by
+    wlog ains : a in s
+.disjoint_closure_left, fun a => ains a⟩ · exact ⟨∅, isOpen_empty, SeparatedNhds.empty_left t
+obtain ⟨n, nna, ncl, nsubkc⟩ := ((regularSpace_TFAE X).out 0 3 :).mp ‹RegularSpace X› a tᶜ
+      t_cl.compl_mem_nhds (disjoint_left.mp st_dis ains)
+    exact
+      ⟨interior n,
+       isOpen_interior,
+       disjoint_left.mpr fun ⦃_⦄ ain =>
+nsubkc (IsClosed.closure_subset_iff ncl).mpr interior_subset ain,
+       fun _ => mem_interior_iff_mem_nhds.mpr nna⟩
+  -- By Lindelöf, we may obtain a countable subcover witnessing `HasSeparatingCover`
+  choose u u_open u_dis u_nhds using this
+  obtain ⟨f, f_cov⟩ := s_cl.isLindelof.indexed_countable_subcover
+    u u_open (fun a ainh => mem_iUnion.mpr ⟨a, u_nhds a ainh⟩)
+  exact ⟨u ∘ f, f_cov, fun n => ⟨u_open (f n), u_dis (f n)⟩⟩
 
 中文:
 引理 是闭集.HasSeparatingCover
@@ -752,7 +828,25 @@ lemma IsClosed.HasSeparatingCover
   -- `IsLindelof.indexed_countable_subcover` requires the space be Nonempty
   rcases isEmpty_or_nonempty X with empty_X | nonempty_X
   · rw [subset_eq_empty (t := s) (fun ⦃_⦄ _ => trivial) (univ_eq_empty_iff.mpr empty_X)]
-.1 exact hasSeparatingCovers_iff_separatedNhds.mpr (SeparatedNhds.empty_lef
+.1 exact hasSeparatingCovers_iff_separatedNhds.mpr (SeparatedNhds.empty_left t)
+  -- This is almost `HasSeparatingCover`, but is not countable. We define for all `a : X` for use
+  -- with `IsLindelof.indexed_countable_subcover` momentarily.
+  have (a : X) : exists n : Set X, IsOpen n ∧ Disjoint (closure n) t ∧ (a in s -> a in n) := by
+    wlog ains : a in s
+.disjoint_closure_left, fun a => ains a⟩ · exact ⟨∅, isOpen_empty, SeparatedNhds.empty_left t
+obtain ⟨n, nna, ncl, nsubkc⟩ := ((regularSpace_TFAE X).out 0 3 :).mp ‹RegularSpace X› a tᶜ
+      t_cl.compl_mem_nhds (disjoint_left.mp st_dis ains)
+    exact
+      ⟨interior n,
+       isOpen_interior,
+       disjoint_left.mpr fun ⦃_⦄ ain =>
+nsubkc (IsClosed.closure_subset_iff ncl).mpr interior_subset ain,
+       fun _ => mem_interior_iff_mem_nhds.mpr nna⟩
+  -- By Lindelöf, we may obtain a countable subcover witnessing `HasSeparatingCover`
+  choose u u_open u_dis u_nhds using this
+  obtain ⟨f, f_cov⟩ := s_cl.isLindelof.indexed_countable_subcover
+    u u_open (fun a ainh => mem_iUnion.mpr ⟨a, u_nhds a ainh⟩)
+  exact ⟨u ∘ f, f_cov, fun n => ⟨u_open (f n), u_dis (f n)⟩⟩
 -/
 lemma IsClosed.HasSeparatingCover {s t : Set X} [LindelofSpace X] [RegularSpace X]
     (s_cl : IsClosed s) (t_cl : IsClosed t) (st_dis : Disjoint s t) : HasSeparatingCover s t := by
@@ -789,7 +883,8 @@ theorem disjoint_nested_nhds_of_not_inseparable
   rcases r1_separation h with ⟨U₁, U₂, U₁_op, U₂_op, x_in, y_in, H⟩
   rcases exists_mem_nhds_isClosed_subset (U₁_op.mem_nhds x_in) with ⟨V₁, V₁_in, V₁_closed, h₁⟩
   rcases exists_mem_nhds_isClosed_subset (U₂_op.mem_nhds y_in) with ⟨V₂, V₂_in, V₂_closed, h₂⟩
-  exact ⟨U₁, mem_of_superset V₁_in h₁, 
+  exact ⟨U₁, mem_of_superset V₁_in h₁, V₁, V₁_in, U₂, mem_of_superset V₂_in h₂, V₂, V₂_in,
+    V₁_closed, V₂_closed, U₁_op, U₂_op, h₁, h₂, H⟩
 
 中文:
 定理 disjoint_nested_nhds_of_not_inseparable
@@ -798,7 +893,8 @@ theorem disjoint_nested_nhds_of_not_inseparable
   rcases r1_separation h with ⟨U₁, U₂, U₁_op, U₂_op, x_in, y_in, H⟩
   rcases exists_mem_nhds_isClosed_subset (U₁_op.mem_nhds x_in) with ⟨V₁, V₁_in, V₁_closed, h₁⟩
   rcases exists_mem_nhds_isClosed_subset (U₂_op.mem_nhds y_in) with ⟨V₂, V₂_in, V₂_closed, h₂⟩
-  exact ⟨U₁, mem_of_superset V₁_in h₁, 
+  exact ⟨U₁, mem_of_superset V₁_in h₁, V₁, V₁_in, U₂, mem_of_superset V₂_in h₂, V₂, V₂_in,
+    V₁_closed, V₂_closed, U₁_op, U₂_op, h₁, h₂, H⟩
 
 Depends on / 依赖: _op.mem_nhds, exists_mem_nhds_isClosed_subset, mem_nhds, mem_of_superset, r1_separation, x_in, y_in
 -/
@@ -881,7 +977,7 @@ theorem exists_open_between_and_isCompact_closure
   have A : closure (interior L) subseteq L := by
     apply (closure_mono interior_subset).trans (le_of_eq L_closed.closure_eq)
   refine ⟨interior L, isOpen_interior, KL, A.trans LU, ?_⟩
-  exact L_compact.closur
+  exact L_compact.closure_of_subset interior_subset
 
 中文:
 定理 存在_open_between_and_isCompact_closure
@@ -891,7 +987,7 @@ theorem exists_open_between_and_isCompact_closure
   have A : closure (interior L) subseteq L := by
     apply (closure_mono interior_subset).trans (le_of_eq L_closed.closure_eq)
   refine ⟨interior L, isOpen_interior, KL, A.trans LU, ?_⟩
-  exact L_compact.closur
+  exact L_compact.closure_of_subset interior_subset
 
 Depends on / 依赖: A.trans, L_closed, L_closed.closure_eq, L_compact, L_compact.closure_of_subset, closure, closure_eq, closure_mono, closure_of_subset, exists_compact_closed_between, interior, interior_subset, isOpen_interior, le_of_eq, subseteq
 -/
@@ -917,7 +1013,8 @@ lemma IsCompact.closure_eq_nhdsKer
   · intro y hy
     by_contra! hy'
     rw [← _root_.disjoint_nhdsSet_nhds]; rw [Filter.disjoint_iff] at hy'
-    obtain ⟨t, hts, t', ht'y, H⟩ :=
+    obtain ⟨t, hts, t', ht'y, H⟩ := hy'
+    exact Set.disjoint_iff.mp H ⟨hy t hts, mem_of_mem_nhds ht'y⟩
 
 中文:
 引理 是紧集.closure_eq_nhdsKer
@@ -929,7 +1026,8 @@ lemma IsCompact.closure_eq_nhdsKer
   · intro y hy
     by_contra! hy'
     rw [← _root_.disjoint_nhdsSet_nhds]; rw [Filter.disjoint_iff] at hy'
-    obtain ⟨t, hts, t', ht'y, H⟩ :=
+    obtain ⟨t, hts, t', ht'y, H⟩ := hy'
+    exact Set.disjoint_iff.mp H ⟨hy t hts, mem_of_mem_nhds ht'y⟩
 
 Depends on / 依赖: Filter, Filter.disjoint_iff, Filter.lift, Set.disjoint_iff.mp, _closure_nhdsSet, _root_, _root_.disjoint_nhdsSet_nhds, closure_mono, contextual, disjoint_iff, disjoint_nhdsSet_nhds, hs.lift, mem_of_mem_nhds, nhdsKer, subset_antisymm, subset_of_mem_nhdsSet
 -/
@@ -1387,7 +1485,8 @@ theorem normal_exists_closure_subset
   rcases normal_separation hs (isClosed_compl_iff.2 ht) this with
     ⟨s', t', hs', ht', hss', htt', hs't'⟩
   refine ⟨s', hs', hss', Subset.trans (closure_minimal ?_ (isClosed_compl_iff.2 ht'))
-    (compl_subset_comm.1
+    (compl_subset_comm.1 htt')⟩
+  exact fun x hxs hxt => hs't'.le_bot ⟨hxs, hxt⟩
 
 中文:
 定理 normal_存在_closure_subset
@@ -1397,7 +1496,8 @@ theorem normal_exists_closure_subset
   rcases normal_separation hs (isClosed_compl_iff.2 ht) this with
     ⟨s', t', hs', ht', hss', htt', hs't'⟩
   refine ⟨s', hs', hss', Subset.trans (closure_minimal ?_ (isClosed_compl_iff.2 ht'))
-    (compl_subset_comm.1
+    (compl_subset_comm.1 htt')⟩
+  exact fun x hxs hxt => hs't'.le_bot ⟨hxs, hxt⟩
 
 Depends on / 依赖: Disjoint, Set.disjoint_left.mpr, Subset, Subset.trans, closure_minimal, compl_subset_comm, disjoint_left, isClosed_compl_iff, le_bot, normal_separation
 -/
@@ -1420,7 +1520,7 @@ theorem exists_mem_nhdsSet_isClosed_subset
   obtain ⟨o, ho_open, huo, hos⟩ := mem_nhdsSet_iff_exists.mp h
   obtain ⟨v, hv_open, huv, hcvo⟩ := normal_exists_closure_subset hu ho_open huo
   refine ⟨closure v, ?_, isClosed_closure, hcvo.trans hos⟩
-  exact mem_of_superset (mem_nhdsSet_iff_exists.mpr ⟨v, hv_open, huv, subset_rfl⟩) subset_closu
+  exact mem_of_superset (mem_nhdsSet_iff_exists.mpr ⟨v, hv_open, huv, subset_rfl⟩) subset_closure
 
 中文:
 定理 存在_mem_nhdsSet_isClosed_subset
@@ -1429,7 +1529,7 @@ theorem exists_mem_nhdsSet_isClosed_subset
   obtain ⟨o, ho_open, huo, hos⟩ := mem_nhdsSet_iff_exists.mp h
   obtain ⟨v, hv_open, huv, hcvo⟩ := normal_exists_closure_subset hu ho_open huo
   refine ⟨closure v, ?_, isClosed_closure, hcvo.trans hos⟩
-  exact mem_of_superset (mem_nhdsSet_iff_exists.mpr ⟨v, hv_open, huv, subset_rfl⟩) subset_closu
+  exact mem_of_superset (mem_nhdsSet_iff_exists.mpr ⟨v, hv_open, huv, subset_rfl⟩) subset_closure
 
 Depends on / 依赖: closure, hcvo.trans, ho_open, hv_open, isClosed_closure, mem_nhdsSet_iff_exists, mem_nhdsSet_iff_exists.mp, mem_nhdsSet_iff_exists.mpr, mem_of_superset, normal_exists_closure_subset, subset_closure, subset_rfl
 -/
@@ -1742,7 +1842,8 @@ theorem Topology.IsInducing.completelyNormalSpace
   refine disjoint_comap (completely_normal ?_ ?_)
   · rwa [← subset_compl_iff_disjoint_left, image_subset_iff, preimage_compl,
       ← he.closure_eq_preimage_closure_image, subset_compl_iff_disjoint_left]
-  · rwa [← subset_compl_i
+  · rwa [← subset_compl_iff_disjoint_right, image_subset_iff, preimage_compl,
+      ← he.closure_eq_preimage_closure_image, subset_compl_iff_disjoint_right]
 
 中文:
 定理 拓扑.是Inducing.completelyNormalSpace
@@ -1753,7 +1854,8 @@ theorem Topology.IsInducing.completelyNormalSpace
   refine disjoint_comap (completely_normal ?_ ?_)
   · rwa [← subset_compl_iff_disjoint_left, image_subset_iff, preimage_compl,
       ← he.closure_eq_preimage_closure_image, subset_compl_iff_disjoint_left]
-  · rwa [← subset_compl_i
+  · rwa [← subset_compl_iff_disjoint_right, image_subset_iff, preimage_compl,
+      ← he.closure_eq_preimage_closure_image, subset_compl_iff_disjoint_right]
 
 Depends on / 依赖: closure_eq_preimage_closure_image, completely_normal, disjoint_comap, he.closure_eq_preimage_closure_image, he.nhdsSet_eq_comap, image_subset_iff, nhdsSet_eq_comap, preimage_compl, subset_compl_iff_disjoint_left, subset_compl_iff_disjoint_right
 -/
@@ -1814,7 +1916,26 @@ theorem completelyNormalSpace_iff_forall_isOpen_normalSpace
   let e := (closure s inter closure t)ᶜ
   have he : IsOpen e := (isClosed_closure.inter isClosed_closure).isOpen_compl
   specialize h e he
-  have hst : Disjoint (((↑) : e -> X) ⁻¹' closure s) (((↑) : e -> X) ⁻¹' closure t) :=
+  have hst : Disjoint (((↑) : e -> X) ⁻¹' closure s) (((↑) : e -> X) ⁻¹' closure t) := by
+    rw [disjoint_left]
+    intro x hxs hxt
+    exact x.2 ⟨hxs, hxt⟩
+  obtain ⟨U, V, hU, hV, hsU, htV, hUV⟩ := normal_separation
+    (isClosed_closure.preimage continuous_subtype_val)
+    (isClosed_closure.preimage continuous_subtype_val) hst
+  rw [Topology.IsInducing.subtypeVal.isOpen_iff] at hU hV
+  obtain ⟨U, hU, rfl⟩ := hU
+  obtain ⟨V, hV, rfl⟩ := hV
+  rw [← separatedNhds_iff_disjoint]
+  rw [Subtype.preimage_val_subset_preimage_val_iff]; rw [inter_comm e]; rw [inter_comm e] at hsU htV
+  refine ⟨U inter e, V inter e, hU.inter he, hV.inter he, ?_, ?_, ?_⟩
+  · intro x hx
+    exact hsU ⟨subset_closure hx, fun h => hsT.notMem_of_mem_left hx h.2⟩
+  · intro x hx
+    exact htV ⟨subset_closure hx, fun h => hSt.notMem_of_mem_left h.1 hx⟩
+  · rw [disjoint_left] at hUV ⊢
+    intro x hxU hxV
+    exact @hUV ⟨x, hxU.2⟩ hxU.1 hxV.1
 
 中文:
 定理 completelyNormalSpace_iff_对任意_isOpen_normalSpace
@@ -1823,7 +1944,26 @@ theorem completelyNormalSpace_iff_forall_isOpen_normalSpace
   let e := (closure s inter closure t)ᶜ
   have he : IsOpen e := (isClosed_closure.inter isClosed_closure).isOpen_compl
   specialize h e he
-  have hst : Disjoint (((↑) : e -> X) ⁻¹' closure s) (((↑) : e -> X) ⁻¹' closure t) :=
+  have hst : Disjoint (((↑) : e -> X) ⁻¹' closure s) (((↑) : e -> X) ⁻¹' closure t) := by
+    rw [disjoint_left]
+    intro x hxs hxt
+    exact x.2 ⟨hxs, hxt⟩
+  obtain ⟨U, V, hU, hV, hsU, htV, hUV⟩ := normal_separation
+    (isClosed_closure.preimage continuous_subtype_val)
+    (isClosed_closure.preimage continuous_subtype_val) hst
+  rw [Topology.IsInducing.subtypeVal.isOpen_iff] at hU hV
+  obtain ⟨U, hU, rfl⟩ := hU
+  obtain ⟨V, hV, rfl⟩ := hV
+  rw [← separatedNhds_iff_disjoint]
+  rw [Subtype.preimage_val_subset_preimage_val_iff]; rw [inter_comm e]; rw [inter_comm e] at hsU htV
+  refine ⟨U inter e, V inter e, hU.inter he, hV.inter he, ?_, ?_, ?_⟩
+  · intro x hx
+    exact hsU ⟨subset_closure hx, fun h => hsT.notMem_of_mem_left hx h.2⟩
+  · intro x hx
+    exact htV ⟨subset_closure hx, fun h => hSt.notMem_of_mem_left h.1 hx⟩
+  · rw [disjoint_left] at hUV ⊢
+    intro x hxU hxV
+    exact @hUV ⟨x, hxU.2⟩ hxU.1 hxV.1
 
 Depends on / 依赖: Disjoint, IsOpen, closure, continuous_sub, continuous_subtype_val, disjoint_left, isClosed_closure, isClosed_closure.inter, isClosed_closure.preimage, isOpen_compl, normal_separation, preimage, specialize
 -/
@@ -1865,7 +2005,7 @@ theorem completelyNormalSpace_iff_forall_normalSpace
 alias ⟨_, CompletelyNormalSpace.of_forall_isOpen_normalSpace⟩ :=
   completelyNormalSpace_iff_forall_isOpen_normalSpace
 alias ⟨_, CompletelyNormalSpace.of_forall_normalSpace⟩ :=
-  completely
+  completelyNormalSpace_iff_forall_normalSpace
 
 中文:
 定理 completelyNormalSpace_iff_对任意_normalSpace
@@ -1875,7 +2015,7 @@ alias ⟨_, CompletelyNormalSpace.of_forall_normalSpace⟩ :=
 alias ⟨_, CompletelyNormalSpace.of_forall_isOpen_normalSpace⟩ :=
   completelyNormalSpace_iff_forall_isOpen_normalSpace
 alias ⟨_, CompletelyNormalSpace.of_forall_normalSpace⟩ :=
-  completely
+  completelyNormalSpace_iff_forall_normalSpace
 
 Depends on / 依赖: completelyNormalSpace_iff_forall_isOpen_normalSpace
 -/
@@ -2003,7 +2143,7 @@ theorem t5Space_iff_forall_isOpen_t4Space
       toT1Space :=
         have := h univ isOpen_univ
         t1Space_of_injective_of_continuous
-          (fun _ _ => congrArg Subtype.val) (con
+          (fun _ _ => congrArg Subtype.val) (continuous_id.subtype_mk mem_univ) }
 
 中文:
 定理 t5Space_iff_对任意_isOpen_t4Space
@@ -2014,7 +2154,7 @@ theorem t5Space_iff_forall_isOpen_t4Space
       toT1Space :=
         have := h univ isOpen_univ
         t1Space_of_injective_of_continuous
-          (fun _ _ => congrArg Subtype.val) (con
+          (fun _ _ => congrArg Subtype.val) (continuous_id.subtype_mk mem_univ) }
 -/
 theorem t5Space_iff_forall_isOpen_t4Space :
     T5Space X ↔ forall s : Set X, IsOpen s -> T4Space s where
@@ -2066,7 +2206,7 @@ instance [CompletelyNormalSpace
   completely_normal s t hd₁ hd₂ := by
     rw [← disjoint_comap_iff surjective_mk]; rw [comap_mk_nhdsSet]; rw [comap_mk_nhdsSet]
     apply completely_normal <;> rw [← preimage_mk_closure]
-    exacts [hd₁.pr
+    exacts [hd₁.preimage mk, hd₂.preimage mk]
 
 中文:
 实例 [余mpletelyNormal空间
@@ -2076,7 +2216,7 @@ instance [CompletelyNormalSpace
   completely_normal s t hd₁ hd₂ := by
     rw [← disjoint_comap_iff surjective_mk]; rw [comap_mk_nhdsSet]; rw [comap_mk_nhdsSet]
     apply completely_normal <;> rw [← preimage_mk_closure]
-    exacts [hd₁.pr
+    exacts [hd₁.preimage mk, hd₂.preimage mk]
 
 Depends on / 依赖: SeparationQuotient, SeparationQuotient.t1Space_iff, comap_mk_nhdsSet, completely_normal, disjoint_comap_iff, exacts, preimage, preimage_mk_closure, surjective_mk, t1Space_TFAE, t1Space_iff
 -/
@@ -2101,7 +2241,52 @@ theorem connectedComponent_eq_iInter_isClopen
   -- Reduce to showing that the clopen intersection is connected.
   refine IsPreconnected.subset_connectedComponent ?_ (mem_iInter.2 fun s => s.2.2)
   -- We do this by showing that any disjoint cover by two closed sets implies
-  --
+  -- that one of these closed sets must contain our whole thing.
+  -- To reduce to the case where the cover is disjoint on all of `X` we need that `s` is closed
+  have hs : @IsClosed X _ (⋂ s : { s : Set X // IsClopen s ∧ x in s }, s) :=
+    isClosed_iInter fun s => s.2.1.1
+  rw [isPreconnected_iff_subset_of_fully_disjoint_closed hs]
+  intro a b ha hb hab ab_disj
+  -- Since our space is normal, we get two larger disjoint open sets containing the disjoint
+  -- closed sets. If we can show that our intersection is a subset of any of these we can then
+  -- "descend" this to show that it is a subset of either a or b.
+  rcases normal_separation ha hb ab_disj with ⟨u, v, hu, hv, hau, hbv, huv⟩
+  obtain ⟨s, H⟩ : exists s : Set X, IsClopen s ∧ x in s ∧ s subseteq u union v := by
+    /- Now we find a clopen set `s` around `x`, contained in `u ∪ v`. We utilize the fact that
+    `X \ u ∪ v` will be compact, so there must be some finite intersection of clopen neighbourhoods
+    of `X` disjoint to it, but a finite intersection of clopen sets is clopen,
+    so we let this be our `s`. -/
+    have H1 := (hu.union hv).isClosed_compl.isCompact.inter_iInter_nonempty
+      (fun s : { s : Set X // IsClopen s ∧ x in s } => s) fun s => s.2.1.1
+    rw [← not_disjoint_iff_nonempty_inter]; rw [imp_not_comm]; rw [not_forall] at H1
+    obtain ⟨si, H2⟩ :=
+      H1 (disjoint_compl_left_iff_subset.2 <| hab.trans <| union_subset_union hau hbv)
+    refine ⟨⋂ U in si, Subtype.val U, ?_, ?_, ?_⟩
+    · exact isClopen_biInter_finset fun s _ => s.2.1
+    · exact mem_iInter₂.2 fun s _ => s.2.2
+    · rwa [← disjoint_compl_left_iff_subset, disjoint_iff_inter_eq_empty,
+        ← not_nonempty_iff_eq_empty]
+  -- So, we get a disjoint decomposition `s = s ∩ u ∪ s ∩ v` of clopen sets. The intersection of all
+  -- clopen neighbourhoods will then lie in whichever of u or v x lies in and hence will be a subset
+  -- of either a or b.
+  · have H1 := isClopen_inter_of_disjoint_cover_clopen H.1 H.2.2 hu hv huv
+    rw [union_comm] at H
+    have H2 := isClopen_inter_of_disjoint_cover_clopen H.1 H.2.2 hv hu huv.symm
+    by_cases hxu : x in u <;> [left; right]
+    -- The x ∈ u case.
+    · suffices ⋂ s : { s : Set X // IsClopen s ∧ x in s }, ↑s subseteq u
+        from Disjoint.left_le_of_le_sup_right hab (huv.mono this hbv)
+      · apply Subset.trans _ s.inter_subset_right
+        exact iInter_subset (fun s : { s : Set X // IsClopen s ∧ x in s } => s.1)
+          ⟨s inter u, H1, mem_inter H.2.1 hxu⟩
+    -- If x ∉ u, we get x ∈ v since x ∈ u ∪ v. The rest is then like the x ∈ u case.
+    · have h1 : x in v :=
+        (hab.trans (union_subset_union hau hbv) (mem_iInter.2 fun i => i.2.2)).resolve_left hxu
+      suffices ⋂ s : { s : Set X // IsClopen s ∧ x in s }, ↑s subseteq v
+        from (huv.symm.mono this hau).left_le_of_le_sup_left hab
+      · refine Subset.trans ?_ s.inter_subset_right
+        exact iInter_subset (fun s : { s : Set X // IsClopen s ∧ x in s } => s.1)
+          ⟨s inter v, H2, mem_inter H.2.1 h1⟩
 
 中文:
 定理 connectedComponent_eq_i整数er_isClopen
@@ -2111,7 +2296,52 @@ theorem connectedComponent_eq_iInter_isClopen
   -- Reduce to showing that the clopen intersection is connected.
   refine IsPreconnected.subset_connectedComponent ?_ (mem_iInter.2 fun s => s.2.2)
   -- We do this by showing that any disjoint cover by two closed sets implies
-  --
+  -- that one of these closed sets must contain our whole thing.
+  -- To reduce to the case where the cover is disjoint on all of `X` we need that `s` is closed
+  have hs : @IsClosed X _ (⋂ s : { s : Set X // IsClopen s ∧ x in s }, s) :=
+    isClosed_iInter fun s => s.2.1.1
+  rw [isPreconnected_iff_subset_of_fully_disjoint_closed hs]
+  intro a b ha hb hab ab_disj
+  -- Since our space is normal, we get two larger disjoint open sets containing the disjoint
+  -- closed sets. If we can show that our intersection is a subset of any of these we can then
+  -- "descend" this to show that it is a subset of either a or b.
+  rcases normal_separation ha hb ab_disj with ⟨u, v, hu, hv, hau, hbv, huv⟩
+  obtain ⟨s, H⟩ : exists s : Set X, IsClopen s ∧ x in s ∧ s subseteq u union v := by
+    /- Now we find a clopen set `s` around `x`, contained in `u ∪ v`. We utilize the fact that
+    `X \ u ∪ v` will be compact, so there must be some finite intersection of clopen neighbourhoods
+    of `X` disjoint to it, but a finite intersection of clopen sets is clopen,
+    so we let this be our `s`. -/
+    have H1 := (hu.union hv).isClosed_compl.isCompact.inter_iInter_nonempty
+      (fun s : { s : Set X // IsClopen s ∧ x in s } => s) fun s => s.2.1.1
+    rw [← not_disjoint_iff_nonempty_inter]; rw [imp_not_comm]; rw [not_forall] at H1
+    obtain ⟨si, H2⟩ :=
+      H1 (disjoint_compl_left_iff_subset.2 <| hab.trans <| union_subset_union hau hbv)
+    refine ⟨⋂ U in si, Subtype.val U, ?_, ?_, ?_⟩
+    · exact isClopen_biInter_finset fun s _ => s.2.1
+    · exact mem_iInter₂.2 fun s _ => s.2.2
+    · rwa [← disjoint_compl_left_iff_subset, disjoint_iff_inter_eq_empty,
+        ← not_nonempty_iff_eq_empty]
+  -- So, we get a disjoint decomposition `s = s ∩ u ∪ s ∩ v` of clopen sets. The intersection of all
+  -- clopen neighbourhoods will then lie in whichever of u or v x lies in and hence will be a subset
+  -- of either a or b.
+  · have H1 := isClopen_inter_of_disjoint_cover_clopen H.1 H.2.2 hu hv huv
+    rw [union_comm] at H
+    have H2 := isClopen_inter_of_disjoint_cover_clopen H.1 H.2.2 hv hu huv.symm
+    by_cases hxu : x in u <;> [left; right]
+    -- The x ∈ u case.
+    · suffices ⋂ s : { s : Set X // IsClopen s ∧ x in s }, ↑s subseteq u
+        from Disjoint.left_le_of_le_sup_right hab (huv.mono this hbv)
+      · apply Subset.trans _ s.inter_subset_right
+        exact iInter_subset (fun s : { s : Set X // IsClopen s ∧ x in s } => s.1)
+          ⟨s inter u, H1, mem_inter H.2.1 hxu⟩
+    -- If x ∉ u, we get x ∈ v since x ∈ u ∪ v. The rest is then like the x ∈ u case.
+    · have h1 : x in v :=
+        (hab.trans (union_subset_union hau hbv) (mem_iInter.2 fun i => i.2.2)).resolve_left hxu
+      suffices ⋂ s : { s : Set X // IsClopen s ∧ x in s }, ↑s subseteq v
+        from (huv.symm.mono this hau).left_le_of_le_sup_left hab
+      · refine Subset.trans ?_ s.inter_subset_right
+        exact iInter_subset (fun s : { s : Set X // IsClopen s ∧ x in s } => s.1)
+          ⟨s inter v, H2, mem_inter H.2.1 h1⟩
 
 Depends on / 依赖: Subset, Subset.antisymm, antisymm, connectedComponent_subset_iInter_isClopen
 -/
@@ -2182,7 +2412,22 @@ instance ConnectedComponents.t2
   rw [ConnectedComponents.coe_ne_coe] at ne
   have h := connectedComponent_disjoint ne
   -- write ↑b as the intersection of all clopen subsets containing it
-  rw 
+  rw [connectedComponent_eq_iInter_isClopen b]; rw [disjoint_iff_inter_eq_empty] at h
+  -- Now we show that this can be reduced to some clopen containing `↑b` being disjoint to `↑a`
+  obtain ⟨U, V, hU, ha, hb, rfl⟩ : exists (U : Set X) (V : Set (ConnectedComponents X)),
+      IsClopen U ∧ connectedComponent a inter U = ∅ ∧ connectedComponent b subseteq U ∧ (↑) ⁻¹' V = U := by
+    have h :=
+      (isClosed_connectedComponent (α := X)).isCompact.elim_finite_subfamily_closed
+        _ (fun s : { s : Set X // IsClopen s ∧ b in s } => s.2.1.1) h
+    obtain ⟨fin_a, ha⟩ := h
+    -- This clopen and its complement will separate the connected components of `a` and `b`
+    set U : Set X := ⋂ (i : { s // IsClopen s ∧ b in s }) (_ : i in fin_a), i
+    have hU : IsClopen U := isClopen_biInter_finset fun i _ => i.2.1
+    exact ⟨U, (↑) '' U, hU, ha, subset_iInter₂ fun s _ => s.2.1.connectedComponent_subset s.2.2,
+      (connectedComponents_preimage_image U).symm ▸ hU.biUnion_connectedComponent_eq⟩
+  rw [ConnectedComponents.isQuotientMap_coe.isClopen_preimage] at hU
+  refine ⟨Vᶜ, V, hU.compl.isOpen, hU.isOpen, ?_, hb mem_connectedComponent, disjoint_compl_left⟩
+  exact fun h => flip Set.Nonempty.ne_empty ha ⟨a, mem_connectedComponent, h⟩
 
 中文:
 实例 ConnectedComponents.t2
@@ -2193,7 +2438,22 @@ instance ConnectedComponents.t2
   rw [ConnectedComponents.coe_ne_coe] at ne
   have h := connectedComponent_disjoint ne
   -- write ↑b as the intersection of all clopen subsets containing it
-  rw 
+  rw [connectedComponent_eq_iInter_isClopen b]; rw [disjoint_iff_inter_eq_empty] at h
+  -- Now we show that this can be reduced to some clopen containing `↑b` being disjoint to `↑a`
+  obtain ⟨U, V, hU, ha, hb, rfl⟩ : exists (U : Set X) (V : Set (ConnectedComponents X)),
+      IsClopen U ∧ connectedComponent a inter U = ∅ ∧ connectedComponent b subseteq U ∧ (↑) ⁻¹' V = U := by
+    have h :=
+      (isClosed_connectedComponent (α := X)).isCompact.elim_finite_subfamily_closed
+        _ (fun s : { s : Set X // IsClopen s ∧ b in s } => s.2.1.1) h
+    obtain ⟨fin_a, ha⟩ := h
+    -- This clopen and its complement will separate the connected components of `a` and `b`
+    set U : Set X := ⋂ (i : { s // IsClopen s ∧ b in s }) (_ : i in fin_a), i
+    have hU : IsClopen U := isClopen_biInter_finset fun i _ => i.2.1
+    exact ⟨U, (↑) '' U, hU, ha, subset_iInter₂ fun s _ => s.2.1.connectedComponent_subset s.2.2,
+      (connectedComponents_preimage_image U).symm ▸ hU.biUnion_connectedComponent_eq⟩
+  rw [ConnectedComponents.isQuotientMap_coe.isClopen_preimage] at hU
+  refine ⟨Vᶜ, V, hU.compl.isOpen, hU.isOpen, ?_, hb mem_connectedComponent, disjoint_compl_left⟩
+  exact fun h => flip Set.Nonempty.ne_empty ha ⟨a, mem_connectedComponent, h⟩
 -/
 instance ConnectedComponents.t2 [T2Space X] [CompactSpace X] : T2Space (ConnectedComponents X) := by
   -- Fix 2 distinct connected components, with points a and b

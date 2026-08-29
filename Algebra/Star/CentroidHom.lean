@@ -43,7 +43,7 @@ instance :
       simp only [star_zero, map_zero]
     map_add' := fun a b => by simp only [star_add, map_add]
     map_mul_left' := fun a b => by simp only [star_mul, map_mul_right, star_star]
-    map_mul_right' := fun a b => by simp only [star_mul, map_m
+    map_mul_right' := fun a b => by simp only [star_mul, map_mul_left, star_star] }
 
 中文:
 实例 :
@@ -53,7 +53,7 @@ instance :
       simp only [star_zero, map_zero]
     map_add' := fun a b => by simp only [star_add, map_add]
     map_mul_left' := fun a b => by simp only [star_mul, map_mul_right, star_star]
-    map_mul_right' := fun a b => by simp only [star_mul, map_m
+    map_mul_right' := fun a b => by simp only [star_mul, map_mul_left, star_star] }
 
 Depends on / 依赖: map_add, map_mul_left, map_mul_right, map_zero, star_add, star_mul, star_star, star_zero
 -/
@@ -118,7 +118,8 @@ instance :
       g (star (f (star a))) = star (star g (f (star a))) := by rw [star_apply, star_star]
       _ = star ((star g * f) (star a)) := rfl
       _ = star ((f * star g) (star a)) := by rw [f.property.comm]
-      _
+      _ = star (f (star g (star a))) := rfl
+      _ = star (f (star (g a))) := by rw [star_apply, star_star]))⟩
 
 中文:
 实例 :
@@ -128,7 +129,8 @@ instance :
       g (star (f (star a))) = star (star g (f (star a))) := by rw [star_apply, star_star]
       _ = star ((star g * f) (star a)) := rfl
       _ = star ((f * star g) (star a)) := by rw [f.property.comm]
-      _
+      _ = star (f (star g (star a))) := rfl
+      _ = star (f (star (g a))) := by rw [star_apply, star_star]))⟩
 
 Depends on / 依赖: CentroidHom, Subsemiring, Subsemiring.mem_center_iff.mpr, mem_center_iff
 -/
@@ -236,7 +238,7 @@ theorem star_centerToCentroidCenter
       _ = star (star a) * star z := by simp only [star_mul, star_star, StarMemClass.coe_star]
       _ = a * star z := by rw [star_star]
       _ = (star z) * a := by rw [(star z).property.comm]
-      _ = (centerToC
+      _ = (centerToCentroidCenter ((star z) : NonUnitalStarSubsemiring.center α)) a := rfl
 
 中文:
 定理 star_centerToCentroidCenter
@@ -248,7 +250,7 @@ theorem star_centerToCentroidCenter
       _ = star (star a) * star z := by simp only [star_mul, star_star, StarMemClass.coe_star]
       _ = a * star z := by rw [star_star]
       _ = (star z) * a := by rw [(star z).property.comm]
-      _ = (centerToC
+      _ = (centerToCentroidCenter ((star z) : NonUnitalStarSubsemiring.center α)) a := rfl
 
 Depends on / 依赖: NonUnitalStarSubsemiring, NonUnitalStarSubsemiring.center, StarMemClass, StarMemClass.coe_star, center, centerToCentroidCenter, coe_star, property, property.comm, star_mul, star_star
 -/
@@ -363,7 +365,11 @@ definition starCenterIsoCentroid
     ⟨T 1, by constructor <;> simp [commute_iff_eq, ← map_mul_left, ← map_mul_right]⟩
 left_inv z := Subtype.ext by simp only [MulHom.toFun_eq_coe,
     NonUnitalRingHom.coe_toMulHom, NonUnitalStarRingHom.coe_toNonUnitalRingHom,
-    starCenterToCentroid_apply, mul_one
+    starCenterToCentroid_apply, mul_one]
+right_inv T := CentroidHom.ext fun _ => by
+    simp [starCenterToCentroid_apply, ← map_mul_right]
+
+@[simp]
 
 中文:
 定义 starCenterIsoCentroid
@@ -373,7 +379,11 @@ left_inv z := Subtype.ext by simp only [MulHom.toFun_eq_coe,
     ⟨T 1, by constructor <;> simp [commute_iff_eq, ← map_mul_left, ← map_mul_right]⟩
 left_inv z := Subtype.ext by simp only [MulHom.toFun_eq_coe,
     NonUnitalRingHom.coe_toMulHom, NonUnitalStarRingHom.coe_toNonUnitalRingHom,
-    starCenterToCentroid_apply, mul_one
+    starCenterToCentroid_apply, mul_one]
+right_inv T := CentroidHom.ext fun _ => by
+    simp [starCenterToCentroid_apply, ← map_mul_right]
+
+@[simp]
 
 Depends on / 依赖: starCenterToCentroid
 -/

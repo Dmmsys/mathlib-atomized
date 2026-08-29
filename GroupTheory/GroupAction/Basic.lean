@@ -205,7 +205,7 @@ theorem mem_fixedPoints_iff_card_orbit_eq_one
     Fintype.card_le_one_iff_subsingleton, Nat.add_one_le_iff, Fintype.card_pos_iff,
     Set.subsingleton_coe, iff_self_and, Set.nonempty_coe_sort, nonempty_orbit, implies_true]
 
-@[to_additive instDecidablePredMemSetFixedByAdd
+@[to_additive instDecidablePredMemSetFixedByAddOfDecidableEq]
 
 中文:
 定理 mem_fixedPoints_iff_card_orbit_eq_one
@@ -215,7 +215,7 @@ theorem mem_fixedPoints_iff_card_orbit_eq_one
     Fintype.card_le_one_iff_subsingleton, Nat.add_one_le_iff, Fintype.card_pos_iff,
     Set.subsingleton_coe, iff_self_and, Set.nonempty_coe_sort, nonempty_orbit, implies_true]
 
-@[to_additive instDecidablePredMemSetFixedByAdd
+@[to_additive instDecidablePredMemSetFixedByAddOfDecidableEq]
 
 Depends on / 依赖: Fintype, Fintype.card_le_one_iff_subsingleton, Fintype.card_pos_iff, Nat.add_one_le_iff, Set.nonempty_coe_sort, Set.subsingleton_coe, add_one_le_iff, card_le_one_iff_subsingleton, card_pos_iff, iff_self_and, implies_true, le_antisymm_iff, nonempty_coe_sort, nonempty_orbit, subsingleton_coe, subsingleton_orbit_iff_mem_fixedPoints
 -/
@@ -400,7 +400,12 @@ lemma orbitRel_subgroupOf
     refine mem_orbit _ (⟨gv, ?_⟩ : Subgroup.map K.subtype (H.subgroupOf K))
     simpa using! gp
   · rcases h with ⟨⟨gv, gp⟩, rfl⟩
-    sim
+    simp only
+    simp only [Subgroup.subgroupOf_map_subtype, Subgroup.mem_inf] at gp
+    refine mem_orbit _ (⟨⟨gv, ?_⟩, ?_⟩ : H.subgroupOf K)
+    · exact gp.2
+    · simp only [Subgroup.mem_subgroupOf]
+      exact gp.1
 
 中文:
 引理 orbitRel_subgroupOf
@@ -415,7 +420,12 @@ lemma orbitRel_subgroupOf
     refine mem_orbit _ (⟨gv, ?_⟩ : Subgroup.map K.subtype (H.subgroupOf K))
     simpa using! gp
   · rcases h with ⟨⟨gv, gp⟩, rfl⟩
-    sim
+    simp only
+    simp only [Subgroup.subgroupOf_map_subtype, Subgroup.mem_inf] at gp
+    refine mem_orbit _ (⟨⟨gv, ?_⟩, ?_⟩ : H.subgroupOf K)
+    · exact gp.2
+    · simp only [Subgroup.mem_subgroupOf]
+      exact gp.1
 
 Depends on / 依赖: H.subgroupOf, K.subtype, Subgroup, Subgroup.map, Subgroup.mem_inf, Subgroup.mem_subgroupOf, Subgroup.subgroupOf_map_subtype, mem_inf, mem_orbit, mem_subgroupOf, orbitRel_apply, simp_rw, subgroupOf, subgroupOf_map_subtype, subtype
 -/
@@ -946,7 +956,8 @@ theorem le_stabilizer_iff_smul_le
     use g⁻¹ • x
     constructor
     · apply hyp g⁻¹ (inv_mem hg)
-      simp only [Set.smul_mem_smu
+      simp only [Set.smul_mem_smul_set_iff, hx]
+    · simp only [smul_inv_smul]
 
 中文:
 定理 le_stabilizer_iff_smul_le
@@ -964,7 +975,8 @@ theorem le_stabilizer_iff_smul_le
     use g⁻¹ • x
     constructor
     · apply hyp g⁻¹ (inv_mem hg)
-      simp only [Set.smul_mem_smu
+      simp only [Set.smul_mem_smul_set_iff, hx]
+    · simp only [smul_inv_smul]
 
 Depends on / 依赖: Eq.subset, Set.smul_mem_smul_set_iff, inv_mem, mem_stabilizer_iff, smul_inv_smul, smul_mem_smul_set_iff, subset, subset_antisymm
 -/

@@ -609,7 +609,8 @@ theorem completedZeta_eq_tsum_of_one_lt_re
     ← tsum_mul_left]
   congr 1 with n
   split_ifs with h
-  · simp 
+  · simp only [h, Nat.cast_zero, zero_cpow (Complex.ne_zero_of_one_lt_re hs), div_zero]
+  · rfl
 
 中文:
 定理 completedZeta_eq_tsum_of_one_lt_re
@@ -621,7 +622,8 @@ theorem completedZeta_eq_tsum_of_one_lt_re
     ← tsum_mul_left]
   congr 1 with n
   split_ifs with h
-  · simp 
+  · simp only [h, Nat.cast_zero, zero_cpow (Complex.ne_zero_of_one_lt_re hs), div_zero]
+  · rfl
 
 Depends on / 依赖: Complex.ne_zero_of_one_lt_re, GammaReal_def, Nat.cast_zero, QuotientAddGroup, QuotientAddGroup.mk_zero, Real.cos_zero, cast_zero, completedCosZeta_zero, cos_zero, div_zero, hasSum_nat_completedCosZeta, mk_zero, mul_one, mul_one_div, mul_zero, ne_zero_of_one_lt_re, ofReal_one, split_ifs, tsum_eq, tsum_eq.symm
 -/
@@ -731,7 +733,9 @@ lemma two_mul_riemannZeta_eq_tsum_int_inv_pow_of_even
     norm_cast
     simp [h0, zeta_eq_tsum_one_div_nat_add_one_cpow (s := k) (by simp [hkk]),
       tsum_pnat_eq_tsum_succ (f := fun n => ((n : Complex) ^ k)⁻¹)]
-  ·
+  · intro n
+    simp [Even.neg_pow hk2]
+  · exact (Summable.of_nat_of_neg (by simp [hkk]) (by simp [hkk])).of_norm
 
 中文:
 引理 two_mul_riemannZeta_eq_tsum_int_inv_pow_of_even
@@ -743,7 +747,9 @@ lemma two_mul_riemannZeta_eq_tsum_int_inv_pow_of_even
     norm_cast
     simp [h0, zeta_eq_tsum_one_div_nat_add_one_cpow (s := k) (by simp [hkk]),
       tsum_pnat_eq_tsum_succ (f := fun n => ((n : Complex) ^ k)⁻¹)]
-  ·
+  · intro n
+    simp [Even.neg_pow hk2]
+  · exact (Summable.of_nat_of_neg (by simp [hkk]) (by simp [hkk])).of_norm
 
 Depends on / 依赖: Even.neg_pow, Summable, Summable.of_nat_of_neg, neg_pow, of_nat_of_neg, of_norm, tsum_int_eq_zero_add_two_mul_tsum_pnat, tsum_pnat_eq_tsum_succ, zeta_eq_tsum_one_div_nat_add_one_cpow
 -/
@@ -817,7 +823,8 @@ theorem tendsto_sub_mul_tsum_nat_rpow
   have : Tendsto (fun s : Real => (s : Complex)) (𝓝[>] 1) (𝓝[{s | 1 < re s}] 1) :=
     continuous_ofReal.continuousWithinAt.tendsto_nhdsWithin (fun _ _ => by simp_all)
   apply (tendsto_sub_mul_tsum_nat_cpow.comp this).congr fun s => ?_
-  simp only [one
+  simp only [one_div, Function.comp_apply, ofReal_mul, ofReal_sub, ofReal_one, ofReal_tsum,
+    ofReal_inv, ofReal_cpow (Nat.cast_nonneg _), ofReal_natCast]
 
 中文:
 定理 tendsto_sub_mul_tsum_nat_rpow
@@ -826,7 +833,8 @@ theorem tendsto_sub_mul_tsum_nat_rpow
   have : Tendsto (fun s : Real => (s : Complex)) (𝓝[>] 1) (𝓝[{s | 1 < re s}] 1) :=
     continuous_ofReal.continuousWithinAt.tendsto_nhdsWithin (fun _ _ => by simp_all)
   apply (tendsto_sub_mul_tsum_nat_cpow.comp this).congr fun s => ?_
-  simp only [one
+  simp only [one_div, Function.comp_apply, ofReal_mul, ofReal_sub, ofReal_one, ofReal_tsum,
+    ofReal_inv, ofReal_cpow (Nat.cast_nonneg _), ofReal_natCast]
 
 Depends on / 依赖: Function, Function.comp_apply, Nat.cast_nonneg, Tendsto, cast_nonneg, comp_apply, continuousWithinAt, continuous_ofReal, continuous_ofReal.continuousWithinAt.tendsto_nhdsWithin, ofReal_cpow, ofReal_inv, ofReal_mul, ofReal_natCast, ofReal_one, ofReal_sub, ofReal_tsum, one_div, tendsto_nhdsWithin, tendsto_ofReal_iff, tendsto_sub_mul_tsum_nat_cpow
 -/

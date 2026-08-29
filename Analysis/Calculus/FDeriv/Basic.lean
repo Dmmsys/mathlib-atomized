@@ -145,7 +145,10 @@ theorem HasFDerivWithinAt.lim
     exact ⟨by simpa using tendsto_const_nhds.add dlim, dtop⟩
   have := calc
     (fun n => c n • (f (x + d n) - f x) - f' (c n • d n)) =o[𝕜; l] fun n => c n • d n := by
-.smul_left c simpa [smul_sub] us
+.smul_left c simpa [smul_sub] using h.isLittleOTVS.comp_tendsto tendsto_arg
+    _ =O[𝕜; l] (1 : α -> 𝕜) := cdlim.isBigOTVS_one _
+  rw [isLittleOTVS_one] at this
+simpa using this.add ((map_continuous f').tendsto v).comp cdlim
 
 中文:
 定理 HasFDerivWithinAt.lim
@@ -156,7 +159,10 @@ theorem HasFDerivWithinAt.lim
     exact ⟨by simpa using tendsto_const_nhds.add dlim, dtop⟩
   have := calc
     (fun n => c n • (f (x + d n) - f x) - f' (c n • d n)) =o[𝕜; l] fun n => c n • d n := by
-.smul_left c simpa [smul_sub] us
+.smul_left c simpa [smul_sub] using h.isLittleOTVS.comp_tendsto tendsto_arg
+    _ =O[𝕜; l] (1 : α -> 𝕜) := cdlim.isBigOTVS_one _
+  rw [isLittleOTVS_one] at this
+simpa using this.add ((map_continuous f').tendsto v).comp cdlim
 
 Depends on / 依赖: Tendsto, cdlim.isBigOTVS_one, comp_tendsto, h.isLittleOTVS.comp_tendsto, isBigOTVS_one, isLittleOTVS, isLittleOTVS_one, map_continuous, smul_left, smul_sub, tendsto, tendsto_arg, tendsto_const_nhds, tendsto_const_nhds.add, tendsto_nhdsWithin_iff, this.add
 -/
@@ -930,7 +936,8 @@ theorem HasFDerivAt.lim
   · rw [tendsto_norm_atTop_iff_cobounded] at hc
     simpa using (tendsto_inv₀_cobounded.comp hc).smul (tendsto_const_nhds (x := v))
   · refine tendsto_nhds_of_eventually_eq ?_
-    refine (eventually_ne_of_tendsto_no
+    refine (eventually_ne_of_tendsto_norm_atTop hc (0 : 𝕜)).mono fun y hy => ?_
+    simp [hy]
 
 中文:
 定理 在点处Fréchet可导.lim
@@ -939,7 +946,8 @@ theorem HasFDerivAt.lim
   · rw [tendsto_norm_atTop_iff_cobounded] at hc
     simpa using (tendsto_inv₀_cobounded.comp hc).smul (tendsto_const_nhds (x := v))
   · refine tendsto_nhds_of_eventually_eq ?_
-    refine (eventually_ne_of_tendsto_no
+    refine (eventually_ne_of_tendsto_norm_atTop hc (0 : 𝕜)).mono fun y hy => ?_
+    simp [hy]
 
 Depends on / 依赖: _cobounded.comp, eventually_ne_of_tendsto_norm_atTop, hasFDerivWithinAt_univ, mem_univ, of_forall, tendsto_const_nhds, tendsto_nhds_of_eventually_eq, tendsto_norm_atTop_iff_cobounded
 -/
@@ -3211,7 +3219,11 @@ theorem HasFDerivAt.le_of_lip'
   · exact add_nonneg hC₀ ε0.le
   rw [← map_add_left_nhds_zero x₀]; rw [eventually_map] at hlip
   filter_upwards [isLittleO_iff.1 (hasFDerivAt_iff_isLittleO_nhds_zero.1 hf) ε0, hlip] with y hy hyC
-  rw [add_sub_cancel_left] 
+  rw [add_sub_cancel_left] at hyC
+  calc
+    ‖f' y‖ <= ‖f (x₀ + y) - f x₀‖ + ‖f (x₀ + y) - f x₀ - f' y‖ := norm_le_insert _ _
+    _ <= C * ‖y‖ + ε * ‖y‖ := add_le_add hyC hy
+    _ = (C + ε) * ‖y‖ := (add_mul _ _ _).symm
 
 中文:
 定理 在点处Fréchet可导.le_of_lip'
@@ -3221,7 +3233,11 @@ theorem HasFDerivAt.le_of_lip'
   · exact add_nonneg hC₀ ε0.le
   rw [← map_add_left_nhds_zero x₀]; rw [eventually_map] at hlip
   filter_upwards [isLittleO_iff.1 (hasFDerivAt_iff_isLittleO_nhds_zero.1 hf) ε0, hlip] with y hy hyC
-  rw [add_sub_cancel_left] 
+  rw [add_sub_cancel_left] at hyC
+  calc
+    ‖f' y‖ <= ‖f (x₀ + y) - f x₀‖ + ‖f (x₀ + y) - f x₀ - f' y‖ := norm_le_insert _ _
+    _ <= C * ‖y‖ + ε * ‖y‖ := add_le_add hyC hy
+    _ = (C + ε) * ‖y‖ := (add_mul _ _ _).symm
 
 Depends on / 依赖: add_le_add, add_mul, add_nonneg, add_sub_cancel_left, eventually_map, filter_upwards, hasFDerivAt_iff_isLittleO_nhds_zero, isLittleO_iff, le_of_forall_pos_le_add, map_add_left_nhds_zero, norm_le_insert, opNorm_le_of_nhds_zero
 -/

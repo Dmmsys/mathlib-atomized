@@ -163,7 +163,19 @@ definition applyFinsupp
     simp only [zeroDefaultSupp, List.mem_map, List.mem_filter, exists_and_right,
       List.mem_toFinset, exists_eq_right, Sigma.exists, Ne, zeroDefault]
     rw [apply_eq_dlookup]
-    c
+    constructor
+    · rintro ⟨od, hval, hod⟩
+      have := List.mem_dlookup (List.nodupKeys_dedupKeys A) hval
+      rw [(_ : List.dlookup a A = od)]
+      · simpa using hod
+      · simpa [List.dlookup_dedupKeys]
+    · intro h
+      use (A.dlookup a).getD (0 : β)
+      rw [← List.dlookup_dedupKeys] at h ⊢
+      simp only [h, ← List.mem_dlookup_iff A.nodupKeys_dedupKeys, not_false_iff, Option.mem_def]
+      cases haA : List.dlookup a A.dedupKeys
+      · simp [haA] at h
+      · simp
 
 中文:
 定义 applyFinsupp
@@ -176,7 +188,19 @@ definition applyFinsupp
     simp only [zeroDefaultSupp, List.mem_map, List.mem_filter, exists_and_right,
       List.mem_toFinset, exists_eq_right, Sigma.exists, Ne, zeroDefault]
     rw [apply_eq_dlookup]
-    c
+    constructor
+    · rintro ⟨od, hval, hod⟩
+      have := List.mem_dlookup (List.nodupKeys_dedupKeys A) hval
+      rw [(_ : List.dlookup a A = od)]
+      · simpa using hod
+      · simpa [List.dlookup_dedupKeys]
+    · intro h
+      use (A.dlookup a).getD (0 : β)
+      rw [← List.dlookup_dedupKeys] at h ⊢
+      simp only [h, ← List.mem_dlookup_iff A.nodupKeys_dedupKeys, not_false_iff, Option.mem_def]
+      cases haA : List.dlookup a A.dedupKeys
+      · simp [haA] at h
+      · simp
 
 Depends on / 依赖: zeroDefaultSupp
 -/
@@ -246,7 +270,7 @@ instance DFinsupp.sampleableExt
   interp := fun f => (f.comp SampleableExt.interp).applyFinsupp.toDFinsupp
   sample := SampleableExt.sample (α := α -> β)
   -- note: no way of shrinking the domain without an inverse to `interp`
-  shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.
+  shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.shrink }
 
 中文:
 实例 直和有限支撑.sampleableExt
@@ -255,7 +279,7 @@ instance DFinsupp.sampleableExt
   interp := fun f => (f.comp SampleableExt.interp).applyFinsupp.toDFinsupp
   sample := SampleableExt.sample (α := α -> β)
   -- note: no way of shrinking the domain without an inverse to `interp`
-  shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.
+  shrink := { shrink := letI : Shrinkable α := {}; TotalFunction.shrink }
 
 Depends on / 依赖: SampleableExt, SampleableExt.proxy, TotalFunction
 -/
@@ -405,7 +429,15 @@ theorem List.applyId_zip_eq
         getElem?_eq_getElem, getElem_cons_zero, Option.some.injEq] at h₂
       subst h₂
       cases ys
-      · cas
+      · cases h₁
+      · simp
+    · cases ys
+      · cases h₁
+      · obtain - | ⟨h₀, h₁⟩ := h₀
+        simp only [getElem?_cons_succ, zip_cons_cons, applyId_cons] at h₂ ⊢
+        rw [if_neg]
+        · apply xs_ih <;> solve_by_elim [Nat.succ.inj]
+        · apply h₀; apply List.mem_of_getElem? h₂
 
 中文:
 定理 列表.applyId_zip_eq
@@ -419,7 +451,15 @@ theorem List.applyId_zip_eq
         getElem?_eq_getElem, getElem_cons_zero, Option.some.injEq] at h₂
       subst h₂
       cases ys
-      · cas
+      · cases h₁
+      · simp
+    · cases ys
+      · cases h₁
+      · obtain - | ⟨h₀, h₁⟩ := h₀
+        simp only [getElem?_cons_succ, zip_cons_cons, applyId_cons] at h₂ ⊢
+        rw [if_neg]
+        · apply xs_ih <;> solve_by_elim [Nat.succ.inj]
+        · apply h₀; apply List.mem_of_getElem? h₂
 
 Depends on / 依赖: List.mem_of_getElem, Nat.lt_add_one, Nat.succ.inj, Option.some.injEq, _cons_succ, _eq_getElem, add_pos_iff, applyId_cons, generalizing, getElem, getElem_cons_zero, if_neg, length_cons, lt_add_iff_pos_left, lt_add_one, mem_of_getElem, or_true, solve_by_elim, xs_ih, zip_cons_cons
 -/
@@ -460,7 +500,29 @@ theorem applyId_mem_iff
     have h₂ : ys.Nodup := h₁.nodup_iff.1 h₀
     replace h₁ : xs.length = ys.length := h₁.length_eq
     dsimp
-    induction xs gen
+    induction xs generalizing ys with
+    | nil => contradiction
+    | cons x' xs xs_ih =>
+      rcases ys with - | ⟨y, ys⟩
+      · cases h₃
+      simp only [zip_cons_cons, map_cons, Prod.toSigma_mk, dlookup, eq_rec_constant,
+        dite_eq_ite] at h₃
+      split_ifs at h₃ with h
+      · rw [Option.some_inj] at h₃
+        subst x'; subst val
+        simp only [List.mem_cons, true_or]
+      · obtain - | ⟨h₀, h₅⟩ := h₀
+        obtain - | ⟨h₂, h₄⟩ := h₂
+        have h₆ := Nat.succ.inj h₁
+        specialize xs_ih h₅ h₃ h₄ h₆
+        simp only [Ne.symm h, xs_ih, List.mem_cons]
+        suffices val in ys by tauto
+        rw [← Option.mem_def]; rw [List.mem_dlookup_iff] at h₃
+        · simp only [Prod.toSigma, List.mem_map, Prod.exists] at h₃
+          rcases h₃ with ⟨a, b, h₃, h₄, h₅⟩
+          apply (List.of_mem_zip h₃).2
+        simp only [List.NodupKeys, List.keys, comp_def, Prod.fst_toSigma, List.map_map]
+        rwa [List.map_fst_zip (le_of_eq h₆)]
 
 中文:
 定理 applyId_mem_iff
@@ -475,7 +537,29 @@ theorem applyId_mem_iff
     have h₂ : ys.Nodup := h₁.nodup_iff.1 h₀
     replace h₁ : xs.length = ys.length := h₁.length_eq
     dsimp
-    induction xs gen
+    induction xs generalizing ys with
+    | nil => contradiction
+    | cons x' xs xs_ih =>
+      rcases ys with - | ⟨y, ys⟩
+      · cases h₃
+      simp only [zip_cons_cons, map_cons, Prod.toSigma_mk, dlookup, eq_rec_constant,
+        dite_eq_ite] at h₃
+      split_ifs at h₃ with h
+      · rw [Option.some_inj] at h₃
+        subst x'; subst val
+        simp only [List.mem_cons, true_or]
+      · obtain - | ⟨h₀, h₅⟩ := h₀
+        obtain - | ⟨h₂, h₄⟩ := h₂
+        have h₆ := Nat.succ.inj h₁
+        specialize xs_ih h₅ h₃ h₄ h₆
+        simp only [Ne.symm h, xs_ih, List.mem_cons]
+        suffices val in ys by tauto
+        rw [← Option.mem_def]; rw [List.mem_dlookup_iff] at h₃
+        · simp only [Prod.toSigma, List.mem_map, Prod.exists] at h₃
+          rcases h₃ with ⟨a, b, h₃, h₄, h₅⟩
+          apply (List.of_mem_zip h₃).2
+        simp only [List.NodupKeys, List.keys, comp_def, Prod.fst_toSigma, List.map_map]
+        rwa [List.map_fst_zip (le_of_eq h₆)]
 
 Depends on / 依赖: List.applyId, List.dlookup, List.map, Option.getD, Prod.toSigma, Prod.toSigma_mk, applyId, dite_eq_ite, dlookup, eq_rec_constant, generalizing, length, length_eq, map_cons, mem_iff, nodup_iff, replace, split_ifs, toSigma, toSigma_mk
 -/
@@ -571,7 +655,21 @@ theorem applyId_injective
     suffices some x = some y by injection this
     have h₂ := h₁.length_eq
     rw [List.applyId_zip_eq h₀ h₂ _ _ _ hx] at h
-    rw [← hx]; rw [
+    rw [← hx]; rw [← hy]; congr
+    apply (List.getElem?_inj _ (h₁.nodup_iff.1 h₀)).mp
+    · symm; rw [h]
+      rw [← List.applyId_zip_eq] <;> assumption
+    · rw [← h₁.length_eq]
+      rw [List.getElem?_eq_some_iff] at hx
+      obtain ⟨hx, hx'⟩ := hx
+      exact hx
+  · rw [← applyId_mem_iff h₀ h₁] at hx hy
+    rw [h] at hx
+    contradiction
+  · rw [← applyId_mem_iff h₀ h₁] at hx hy
+    rw [h] at hx
+    contradiction
+  · rwa [List.applyId_eq_self, List.applyId_eq_self] at h <;> assumption
 
 中文:
 定理 applyId_injective
@@ -585,7 +683,21 @@ theorem applyId_injective
     suffices some x = some y by injection this
     have h₂ := h₁.length_eq
     rw [List.applyId_zip_eq h₀ h₂ _ _ _ hx] at h
-    rw [← hx]; rw [
+    rw [← hx]; rw [← hy]; congr
+    apply (List.getElem?_inj _ (h₁.nodup_iff.1 h₀)).mp
+    · symm; rw [h]
+      rw [← List.applyId_zip_eq] <;> assumption
+    · rw [← h₁.length_eq]
+      rw [List.getElem?_eq_some_iff] at hx
+      obtain ⟨hx, hx'⟩ := hx
+      exact hx
+  · rw [← applyId_mem_iff h₀ h₁] at hx hy
+    rw [h] at hx
+    contradiction
+  · rw [← applyId_mem_iff h₀ h₁] at hx hy
+    rw [h] at hx
+    contradiction
+  · rwa [List.applyId_eq_self, List.applyId_eq_self] at h <;> assumption
 
 Depends on / 依赖: List.applyId_zip_eq, List.getElem, List.mem_iff_getElem, _eq_some_iff, _inj, applyId_me, applyId_zip_eq, getElem, injection, length_eq, mem_iff_getElem, nodup_iff
 -/
@@ -711,7 +823,7 @@ definition shrink
       ⟨(List.zip xs' ys').map Prod.toSigma,
         by simp only [comp_def, List.map_fst_zip, List.map_snd_zip, *, Prod.fst_toSigma,
           Prod.snd_toSigma, List.map_map],
-
+        by simp only [comp_def, List.map_snd_zip, *, Prod.snd_toSigma, List.map_map]⟩
 
 中文:
 定义 shrink
@@ -722,7 +834,7 @@ definition shrink
       ⟨(List.zip xs' ys').map Prod.toSigma,
         by simp only [comp_def, List.map_fst_zip, List.map_snd_zip, *, Prod.fst_toSigma,
           Prod.snd_toSigma, List.map_map],
-
+        by simp only [comp_def, List.map_snd_zip, *, Prod.snd_toSigma, List.map_map]⟩
 -/
 protected def shrink {α : Type} [DecidableEq α] :
     InjectiveFunction α -> List (InjectiveFunction α)
@@ -748,7 +860,7 @@ definition mk
     (by
       simp only [List.toFinmap', comp_def, List.map_fst_zip, List.map_snd_zip, *,
         List.map_map])
-    (by
+    (by simp only [List.toFinmap', comp_def, List.map_snd_zip, *, List.map_map])
 
 中文:
 定义 mk
@@ -759,7 +871,7 @@ definition mk
     (by
       simp only [List.toFinmap', comp_def, List.map_fst_zip, List.map_snd_zip, *,
         List.map_map])
-    (by
+    (by simp only [List.toFinmap', comp_def, List.map_snd_zip, *, List.map_map])
 -/
 protected def mk (xs ys : List α) (h : xs ~ ys) (h' : ys.Nodup) : InjectiveFunction α :=
   have h₀ : xs.length <= ys.length := le_of_eq h.length_eq
@@ -783,7 +895,18 @@ theorem injective
   generalize h₁ : xs.map (@id ((Σ _ : α, α) -> α) <| @Sigma.snd α fun _ : α => α) = xs₁
   dsimp [id] at h₁
   have hxs : xs = TotalFunction.List.toFinmap' (xs₀.zip xs₁) := by
-    rw [← h₀]; rw [← h₁]; rw [List.toFinmap
+    rw [← h₀]; rw [← h₁]; rw [List.toFinmap']; clear h₀ h₁ xs₀ xs₁ hperm hnodup
+    induction xs with
+    | nil => simp only [List.zip_nil_right, List.map_nil]
+    | cons xs_hd xs_tl xs_ih =>
+      simp only [Sigma.eta, List.zip_cons_cons,
+        List.map, List.cons_inj_right]
+      exact xs_ih
+  revert hperm hnodup
+  rw [hxs]; intro hperm hnodup
+  apply InjectiveFunction.applyId_injective
+  · rwa [← h₀, hxs, hperm.nodup_iff]
+  · rwa [← hxs, h₀, h₁] at hperm
 
 中文:
 定理 injective
@@ -795,7 +918,18 @@ theorem injective
   generalize h₁ : xs.map (@id ((Σ _ : α, α) -> α) <| @Sigma.snd α fun _ : α => α) = xs₁
   dsimp [id] at h₁
   have hxs : xs = TotalFunction.List.toFinmap' (xs₀.zip xs₁) := by
-    rw [← h₀]; rw [← h₁]; rw [List.toFinmap
+    rw [← h₀]; rw [← h₁]; rw [List.toFinmap']; clear h₀ h₁ xs₀ xs₁ hperm hnodup
+    induction xs with
+    | nil => simp only [List.zip_nil_right, List.map_nil]
+    | cons xs_hd xs_tl xs_ih =>
+      simp only [Sigma.eta, List.zip_cons_cons,
+        List.map, List.cons_inj_right]
+      exact xs_ih
+  revert hperm hnodup
+  rw [hxs]; intro hperm hnodup
+  apply InjectiveFunction.applyId_injective
+  · rwa [← h₀, hxs, hperm.nodup_iff]
+  · rwa [← hxs, h₀, h₁] at hperm
 -/
 protected theorem injective [DecidableEq α] (f : InjectiveFunction α) : Injective (apply f) := by
   obtain ⟨xs, hperm, hnodup⟩ := f
@@ -829,7 +963,8 @@ instance :
     have Hinj : Injective fun r : Nat => -(2 * sz + 2 : Int) + ↑r := fun _x _y h =>
         Int.ofNat.inj (add_right_injective _ h)
     let r : InjectiveFunction Int :=
-     
+      InjectiveFunction.mk.{0} xs' ys.1 ys.2 (ys.2.nodup_iff.1 <| List.nodup_range.map Hinj)
+    pure r
 
 中文:
 实例 :
@@ -841,7 +976,8 @@ instance :
     have Hinj : Injective fun r : Nat => -(2 * sz + 2 : Int) + ↑r := fun _x _y h =>
         Int.ofNat.inj (add_right_injective _ h)
     let r : InjectiveFunction Int :=
-     
+      InjectiveFunction.mk.{0} xs' ys.1 ys.2 (ys.2.nodup_iff.1 <| List.nodup_range.map Hinj)
+    pure r
 -/
 instance : Arbitrary (InjectiveFunction Int) where
   arbitrary := do

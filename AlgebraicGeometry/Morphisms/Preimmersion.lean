@@ -289,7 +289,11 @@ instance :
   constructor
   let L (x : (pullback f g :)) : { x : X × Y | f x.1 = g x.2 } :=
     ⟨⟨pullback.fst f g x, pullback.snd f g x⟩,
-    by simp only [Set.mem_ofPred, ← Scheme.Hom.comp_apply, pullb
+    by simp only [Set.mem_ofPred, ← Scheme.Hom.comp_apply, pullback.condition]⟩
+  have : IsEmbedding L := IsEmbedding.of_comp (by fun_prop) continuous_subtype_val
+    (SurjectiveOnStalks.isEmbedding_pullback f g)
+  exact IsEmbedding.subtypeVal.comp ((TopCat.pullbackHomeoPreimage _ f.continuous _
+    g.isEmbedding).isEmbedding.comp this)
 
 中文:
 实例 :
@@ -300,7 +304,11 @@ instance :
   constructor
   let L (x : (pullback f g :)) : { x : X × Y | f x.1 = g x.2 } :=
     ⟨⟨pullback.fst f g x, pullback.snd f g x⟩,
-    by simp only [Set.mem_ofPred, ← Scheme.Hom.comp_apply, pullb
+    by simp only [Set.mem_ofPred, ← Scheme.Hom.comp_apply, pullback.condition]⟩
+  have : IsEmbedding L := IsEmbedding.of_comp (by fun_prop) continuous_subtype_val
+    (SurjectiveOnStalks.isEmbedding_pullback f g)
+  exact IsEmbedding.subtypeVal.comp ((TopCat.pullbackHomeoPreimage _ f.continuous _
+    g.isEmbedding).isEmbedding.comp this)
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.of_comp, IsEmbedding.subtypeVal.comp, Scheme, Scheme.Hom.comp_apply, Set.mem_ofPred, SurjectiveOnStalks, SurjectiveOnStalks.isEmbedding_pullback, TopCat, TopCat.pullbackHomeoPreimage, comp_apply, condition, continuous_subtype_val, f.cont, fun_prop, isEmbedding_pullback, mem_ofPred, of_comp, pullback, pullback.condition
 -/

@@ -350,7 +350,11 @@ lemma factorsThroughLocalization
   rw [areEqualizedByLocalization_iff L]
   suffices L.map (homMk P.p₀) = L.map (homMk P.p₁) by
     simp only [show f = homMk h.h ≫ homMk P.p₀ by cat_disch,
-      show g = ho
+      show g = homMk h.h ≫ homMk P.p₁ by cat_disch, Functor.map_comp, this]
+  have := Localization.inverts L (weakEquivalences _) (homMk P.ι) (by
+    simp only [← weakEquivalence_iff, weakEquivalence_homMk_iff]
+    infer_instance)
+  simp only [← cancel_epi (L.map (homMk P.ι)), ← L.map_comp, homMk_homMk, P.ι_p₀, P.ι_p₁]
 
 中文:
 引理 factorsThroughLocalization
@@ -361,7 +365,11 @@ lemma factorsThroughLocalization
   rw [areEqualizedByLocalization_iff L]
   suffices L.map (homMk P.p₀) = L.map (homMk P.p₁) by
     simp only [show f = homMk h.h ≫ homMk P.p₀ by cat_disch,
-      show g = ho
+      show g = homMk h.h ≫ homMk P.p₁ by cat_disch, Functor.map_comp, this]
+  have := Localization.inverts L (weakEquivalences _) (homMk P.ι) (by
+    simp only [← weakEquivalence_iff, weakEquivalence_homMk_iff]
+    infer_instance)
+  simp only [← cancel_epi (L.map (homMk P.ι)), ← L.map_comp, homMk_homMk, P.ι_p₀, P.ι_p₁]
 
 Depends on / 依赖: CofibrantObject, Functor, Functor.map_comp, L.map, Localization, Localization.inverts, areEqualizedByLocalization_iff, cat_disch, exists_very_good_pathObject, h.exists_very_good_pathObject, infer_instance, inverts, map_comp, weakEquivalence_homMk_iff, weakEquivalence_iff, weakEquivalences
 -/
@@ -895,7 +903,31 @@ instance :
   let Lcof : CofibrantObject C ⥤ Hcof := toHoCat ⋙ Lcofπ
   let H := (weakEquivalences C).Localization
   let L : C ⥤ H := (weakEquivalences C).Q
-  let F := (locali
+  let F := (localizerMorphism C).localizedFunctor Lcof L
+  let eF : ι ⋙ L ≅ Lcof ⋙ F := CatCommSq.iso (localizerMorphism C).functor Lcof L F
+  let eF' : HoCat.toLocalization L ≅ Lcofπ ⋙ F :=
+    CategoryTheory.Quotient.natIsoLift _
+      (HoCat.toHoCatCompToLocalizationIso L ≪≫ eF ≪≫ associator _ _ _)
+  let G : H ⥤ Hcof := (HoCat.localizerMorphismResolution C).localizedFunctor L Lcofπ
+  let eG : HoCat.resolution ⋙ Lcofπ ≅ L ⋙ G :=
+    CatCommSq.iso (HoCat.localizerMorphismResolution C).functor L Lcofπ G
+  have : Localization.Lifting L (weakEquivalences C)
+      (HoCat.resolution ⋙ HoCat.toLocalization L) (G ⋙ F) :=
+    ⟨(associator _ _ _).symm ≪≫ isoWhiskerRight eG.symm _ ≪≫
+      associator _ _ _ ≪≫ isoWhiskerLeft _ eF'.symm⟩
+  have : Localization.Lifting Lcof (weakEquivalences (CofibrantObject C))
+        (ι ⋙ HoCat.resolution ⋙ Lcofπ) (F ⋙ G) :=
+    ⟨(associator _ _ _).symm ≪≫ isoWhiskerRight eF.symm G ≪≫
+      associator _ _ _ ≪≫ isoWhiskerLeft _ eG.symm⟩
+  let E : Hcof ≌ H := CategoryTheory.Equivalence.mk F G
+    (Localization.liftNatIso Lcof (weakEquivalences _) Lcof (ι ⋙ HoCat.resolution ⋙ Lcofπ) _ _
+      ((asIso (whiskerRight HoCat.ιCompResolutionNatTrans Lcofπ)).symm ≪≫
+          associator _ _ _))
+    (Localization.liftNatIso L (weakEquivalences _)
+      (HoCat.resolution ⋙ HoCat.toLocalization L) L _ _
+      (asIso (HoCat.resolutionCompToLocalizationNatTrans L)))
+  have : F.IsEquivalence := E.isEquivalence_functor
+  exact LocalizerMorphism.IsLocalizedEquivalence.mk' (localizerMorphism C) Lcof L F
 
 中文:
 实例 :
@@ -906,7 +938,31 @@ instance :
   let Lcof : CofibrantObject C ⥤ Hcof := toHoCat ⋙ Lcofπ
   let H := (weakEquivalences C).Localization
   let L : C ⥤ H := (weakEquivalences C).Q
-  let F := (locali
+  let F := (localizerMorphism C).localizedFunctor Lcof L
+  let eF : ι ⋙ L ≅ Lcof ⋙ F := CatCommSq.iso (localizerMorphism C).functor Lcof L F
+  let eF' : HoCat.toLocalization L ≅ Lcofπ ⋙ F :=
+    CategoryTheory.Quotient.natIsoLift _
+      (HoCat.toHoCatCompToLocalizationIso L ≪≫ eF ≪≫ associator _ _ _)
+  let G : H ⥤ Hcof := (HoCat.localizerMorphismResolution C).localizedFunctor L Lcofπ
+  let eG : HoCat.resolution ⋙ Lcofπ ≅ L ⋙ G :=
+    CatCommSq.iso (HoCat.localizerMorphismResolution C).functor L Lcofπ G
+  have : Localization.Lifting L (weakEquivalences C)
+      (HoCat.resolution ⋙ HoCat.toLocalization L) (G ⋙ F) :=
+    ⟨(associator _ _ _).symm ≪≫ isoWhiskerRight eG.symm _ ≪≫
+      associator _ _ _ ≪≫ isoWhiskerLeft _ eF'.symm⟩
+  have : Localization.Lifting Lcof (weakEquivalences (CofibrantObject C))
+        (ι ⋙ HoCat.resolution ⋙ Lcofπ) (F ⋙ G) :=
+    ⟨(associator _ _ _).symm ≪≫ isoWhiskerRight eF.symm G ≪≫
+      associator _ _ _ ≪≫ isoWhiskerLeft _ eG.symm⟩
+  let E : Hcof ≌ H := CategoryTheory.Equivalence.mk F G
+    (Localization.liftNatIso Lcof (weakEquivalences _) Lcof (ι ⋙ HoCat.resolution ⋙ Lcofπ) _ _
+      ((asIso (whiskerRight HoCat.ιCompResolutionNatTrans Lcofπ)).symm ≪≫
+          associator _ _ _))
+    (Localization.liftNatIso L (weakEquivalences _)
+      (HoCat.resolution ⋙ HoCat.toLocalization L) L _ _
+      (asIso (HoCat.resolutionCompToLocalizationNatTrans L)))
+  have : F.IsEquivalence := E.isEquivalence_functor
+  exact LocalizerMorphism.IsLocalizedEquivalence.mk' (localizerMorphism C) Lcof L F
 
 Depends on / 依赖: CatCommSq, CatCommSq.iso, CategoryTheory, CategoryTheory.Quotient.natIsoLift, CofibrantObject, CofibrantObject.HoCat, HoCat.toLocalization, Localization, Quotient, functor, localizedFunctor, localizerMorphism, natIsoLift, toHoCat, toLocalization, weakEquivalences
 -/

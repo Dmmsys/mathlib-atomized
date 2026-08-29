@@ -57,7 +57,10 @@ definition coconePointSMul
   map_zero' := colimit.hom_ext (by simp +instances)
   map_one' := colimit.hom_ext (by simp +instances)
   map_add' r s := colimit.hom_ext (fun j => by
-    simp +instances only [Functor.comp_obj, for
+    simp +instances only [Functor.comp_obj, forget₂_obj, map_add, ι_colimMap]
+    rw [Preadditive.add_comp]; rw [Preadditive.comp_add]
+    simp only [ι_colimMap, Functor.comp_obj, forget₂_obj])
+  map_mul' r s := colimit.hom_ext (fun j => by simp +instances)
 
 中文:
 定义 coconePointSMul
@@ -68,7 +71,10 @@ definition coconePointSMul
   map_zero' := colimit.hom_ext (by simp +instances)
   map_one' := colimit.hom_ext (by simp +instances)
   map_add' r s := colimit.hom_ext (fun j => by
-    simp +instances only [Functor.comp_obj, for
+    simp +instances only [Functor.comp_obj, forget₂_obj, map_add, ι_colimMap]
+    rw [Preadditive.add_comp]; rw [Preadditive.comp_add]
+    simp only [ι_colimMap, Functor.comp_obj, forget₂_obj])
+  map_mul' r s := colimit.hom_ext (fun j => by simp +instances)
 
 Depends on / 依赖: colimMap
 -/
@@ -102,7 +108,11 @@ definition colimitCocone
         -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
         erw [mkOfSMul_smul]
         simp)
-      naturality := 
+      naturality := fun i j f => by
+        apply (forget₂ _ AddCommGrpCat).map_injective
+        simp only [Functor.map_comp, forget₂_map_homMk]
+        dsimp
+        erw [colimit.w (F ⋙ forget₂ _ AddCommGrpCat), comp_id] }
 
 中文:
 定义 colimitCocone
@@ -114,7 +124,11 @@ definition colimitCocone
         -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
         erw [mkOfSMul_smul]
         simp)
-      naturality := 
+      naturality := fun i j f => by
+        apply (forget₂ _ AddCommGrpCat).map_injective
+        simp only [Functor.map_comp, forget₂_map_homMk]
+        dsimp
+        erw [colimit.w (F ⋙ forget₂ _ AddCommGrpCat), comp_id] }
 
 Depends on / 依赖: coconePointSMul, f.hom, mkOfSMul
 -/
@@ -148,7 +162,20 @@ definition isColimitColimitCocone
     -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
     erw [mkOfSMul_smul]
     dsimp
-    simp only
+    simp only [ι_colimMap_assoc, Functor.comp_obj, forget₂_obj, colimit.ι_desc,
+      Functor.mapCocone_pt, Functor.mapCocone_ι_app, forget₂_map]
+    exact smul_naturality (s.ι.app j) r)
+  fac s j := by
+    apply (forget₂ _ AddCommGrpCat).map_injective
+    exact colimit.ι_desc ((forget₂ _ AddCommGrpCat).mapCocone s) j
+  uniq s m hm := by
+    apply (forget₂ _ AddCommGrpCat).map_injective
+    apply colimit.hom_ext
+    intro j
+    erw [colimit.ι_desc ((forget₂ _ AddCommGrpCat).mapCocone s) j]
+    dsimp
+    rw [← hm]
+    rfl
 
 中文:
 定义 isColimitColimitCocone
@@ -161,7 +188,20 @@ definition isColimitColimitCocone
     -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
     erw [mkOfSMul_smul]
     dsimp
-    simp only
+    simp only [ι_colimMap_assoc, Functor.comp_obj, forget₂_obj, colimit.ι_desc,
+      Functor.mapCocone_pt, Functor.mapCocone_ι_app, forget₂_map]
+    exact smul_naturality (s.ι.app j) r)
+  fac s j := by
+    apply (forget₂ _ AddCommGrpCat).map_injective
+    exact colimit.ι_desc ((forget₂ _ AddCommGrpCat).mapCocone s) j
+  uniq s m hm := by
+    apply (forget₂ _ AddCommGrpCat).map_injective
+    apply colimit.hom_ext
+    intro j
+    erw [colimit.ι_desc ((forget₂ _ AddCommGrpCat).mapCocone s) j]
+    dsimp
+    rw [← hm]
+    rfl
 
 Depends on / 依赖: AddCommGrpCat, colimit, colimit.desc, colimit.hom_ext, hom_ext, mapCocone
 -/

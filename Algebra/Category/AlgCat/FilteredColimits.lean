@@ -72,7 +72,10 @@ definition AlgCat.coconeOfIsFiltered
     letI : Algebra R c.pt := algebraOfIsFiltered hc j
     refine AlgCat.ofHom { __ := (c.ι.app k).hom, commutes' r := ?_ }
     simp [RingHom.algebraMap_toAlgebra', ← c.w (IsFiltered.leftToMax j k),
-      ← c.w (Is
+      ← c.w (IsFiltered.rightToMax j k)]
+  ι.naturality k k' f := by
+    ext
+    exact c.ι.naturality_apply _ _
 
 中文:
 定义 Alg范畴.coconeOfIsFiltered
@@ -83,7 +86,10 @@ definition AlgCat.coconeOfIsFiltered
     letI : Algebra R c.pt := algebraOfIsFiltered hc j
     refine AlgCat.ofHom { __ := (c.ι.app k).hom, commutes' r := ?_ }
     simp [RingHom.algebraMap_toAlgebra', ← c.w (IsFiltered.leftToMax j k),
-      ← c.w (Is
+      ← c.w (IsFiltered.rightToMax j k)]
+  ι.naturality k k' f := by
+    ext
+    exact c.ι.naturality_apply _ _
 -/
 private def AlgCat.coconeOfIsFiltered (hc : IsColimit c) (j : J) : Cocone F where
   pt :=
@@ -114,7 +120,10 @@ definition AlgCat.isColimitCoconeOfIsFiltered
     ext
     apply elementwise_of% hc.fac
   uniq s m hm := by
-  
+    ext
+    refine congr($(hc.uniq (Functor.mapCocone _ s) ((forget₂ _ _).map m) fun j => ?_) _)
+    ext
+    exact congr($(hm _) _)
 
 中文:
 定义 Alg范畴.isColimitCoconeOfIsFiltered
@@ -127,7 +136,10 @@ definition AlgCat.isColimitCoconeOfIsFiltered
     ext
     apply elementwise_of% hc.fac
   uniq s m hm := by
-  
+    ext
+    refine congr($(hc.uniq (Functor.mapCocone _ s) ((forget₂ _ _).map m) fun j => ?_) _)
+    ext
+    exact congr($(hm _) _)
 -/
 private def AlgCat.isColimitCoconeOfIsFiltered (hc : IsColimit c) (j : J) :
     IsColimit (AlgCat.coconeOfIsFiltered hc j) where

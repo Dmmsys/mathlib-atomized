@@ -224,7 +224,8 @@ definition Cone.isLimitOfIsIsoLimMapπ
   intro j
   simp only [limit.cone_x, limit.cone_π, Iso.trans_hom, Iso.symm_hom,
     asIso_inv, assoc, IsIso.eq_inv_comp, limMap_π]
-  co
+  congr 1
+  simp [← Iso.inv_comp_eq_id]
 
 中文:
 定义 锥.isLimitOfIsIsoLimMapπ
@@ -235,7 +236,8 @@ definition Cone.isLimitOfIsIsoLimMapπ
   intro j
   simp only [limit.cone_x, limit.cone_π, Iso.trans_hom, Iso.symm_hom,
     asIso_inv, assoc, IsIso.eq_inv_comp, limMap_π]
-  co
+  congr 1
+  simp [← Iso.inv_comp_eq_id]
 
 Depends on / 依赖: Cone.ext, IsIso.eq_inv_comp, IsLimit, IsLimit.ofIsoLimit, Iso.inv_comp_eq_id, Iso.symm_hom, Iso.trans_hom, asIso_inv, c.pt, conePointUniqueUpToIso, cone_x, eq_inv_comp, inv_comp_eq_id, isLimit, isLimitConstCone, limMap, limit.cone_, limit.cone_x, limit.isLimit, ofIsoLimit
 -/
@@ -263,7 +265,8 @@ theorem IsLimit.isIso_limMap_π
   ext j
   simp only [limMap_π, limit.cone_x, Iso.trans_hom, assoc,
     limit.conePointUniqueUpToIso_hom_comp]
-  co
+  congr 1
+  simp [← Iso.inv_comp_eq_id]
 
 中文:
 定理 是极限.isIso_limMap_π
@@ -275,7 +278,8 @@ theorem IsLimit.isIso_limMap_π
   ext j
   simp only [limMap_π, limit.cone_x, Iso.trans_hom, assoc,
     limit.conePointUniqueUpToIso_hom_comp]
-  co
+  congr 1
+  simp [← Iso.inv_comp_eq_id]
 
 Depends on / 依赖: Iso.inv_comp_eq_id, Iso.trans_hom, c.pt, conePointUniqueUpToIso, conePointUniqueUpToIso_hom_comp, cone_x, hc.conePointUniqueUpToIso, infer_instance, inv_comp_eq_id, isLimit, isLimitConstCone, limMap, limit.conePointUniqueUpToIso_hom_comp, limit.cone_x, limit.isLimit, trans_hom
 -/
@@ -345,7 +349,9 @@ theorem IsColimit.isIso_colimMap_ι
     rw [this]; infer_instance
   ext j
   simp only [ι_colimMap, colimit.cocone_x, Iso.trans_hom,
-    colimit.comp_coconePointUn
+    colimit.comp_coconePointUniqueUpToIso_hom_assoc]
+  congr 1
+  simp [← Iso.comp_inv_eq_id]
 
 中文:
 定理 是余极限.isIso_colimMap_ι
@@ -356,7 +362,9 @@ theorem IsColimit.isIso_colimMap_ι
     rw [this]; infer_instance
   ext j
   simp only [ι_colimMap, colimit.cocone_x, Iso.trans_hom,
-    colimit.comp_coconePointUn
+    colimit.comp_coconePointUniqueUpToIso_hom_assoc]
+  congr 1
+  simp [← Iso.comp_inv_eq_id]
 
 Depends on / 依赖: Iso.comp_inv_eq_id, Iso.trans_hom, c.pt, coconePointUniqueUpToIso, cocone_x, colimMap, colimit, colimit.cocone_x, colimit.comp_coconePointUniqueUpToIso_hom_assoc, colimit.isColimit, comp_coconePointUniqueUpToIso_hom_assoc, comp_inv_eq_id, infer_instance, isColimit, isColimitConstCocone, trans_hom
 -/
@@ -602,7 +610,15 @@ lemma prod_preservesConnectedLimits
           fac := fun s j => by
             apply Limits.prod.hom_ext
             · erw [assoc, limMap_π, comp_id, limit.lift_π]
-              ex
+              exact (nat_trans_from_is_connected (s.π ≫ γ₁ X) j (Classical.arbitrary _)).symm
+            · simp
+          uniq := fun s m L => by
+            apply Limits.prod.hom_ext
+            · simp [← L]
+            · rw [limit.lift_π]
+              apply l.uniq (forgetCone s)
+              intro j
+              simp [← L j] }⟩ }
 
 中文:
 引理 prod_preservesConnectedLimits
@@ -613,7 +629,15 @@ lemma prod_preservesConnectedLimits
           fac := fun s j => by
             apply Limits.prod.hom_ext
             · erw [assoc, limMap_π, comp_id, limit.lift_π]
-              ex
+              exact (nat_trans_from_is_connected (s.π ≫ γ₁ X) j (Classical.arbitrary _)).symm
+            · simp
+          uniq := fun s m L => by
+            apply Limits.prod.hom_ext
+            · simp [← L]
+            · rw [limit.lift_π]
+              apply l.uniq (forgetCone s)
+              intro j
+              simp [← L j] }⟩ }
 
 Depends on / 依赖: Classical, Classical.arbitrary, Limits, Limits.prod.fst, Limits.prod.hom_ext, arbitrary, comp_id, forgetCone, hom_ext, l.lift, l.uniq, limit.lift_, nat_trans_from_is_connected, preserves, prod.lift
 -/

@@ -1514,7 +1514,16 @@ theorem restrict_union_congr
   simp only [restrict_apply hu, inter_union_distrib_left]
   rcases exists_measurable_superset₂ μ ν (u inter s) with ⟨US, hsub, hm, hμ, hν⟩
   calc
-    μ (u 
+    μ (u inter s union u inter t) = μ (US union u inter t) :=
+      measure_union_congr_of_subset hsub hμ.le Subset.rfl le_rfl
+    _ = μ US + μ ((u inter t) \ US) := (measure_add_sdiff hm.nullMeasurableSet _).symm
+    _ = restrict μ s u + restrict μ t (u \ US) := by
+      simp only [restrict_apply, hu, hu.diff hm, hμ, ← inter_comm t, inter_sdiff_assoc]
+    _ = restrict ν s u + restrict ν t (u \ US) := by rw [hs, ht]
+    _ = ν US + ν ((u inter t) \ US) := by
+      simp only [restrict_apply, hu, hu.diff hm, hν, ← inter_comm t, inter_sdiff_assoc]
+    _ = ν (US union u inter t) := measure_add_sdiff hm.nullMeasurableSet _
+_ = ν (u inter s union u inter t) := .symm measure_union_congr_of_subset hsub hν.le Subset.rfl le_rfl
 
 中文:
 定理 restrict_union_congr
@@ -1526,7 +1535,16 @@ theorem restrict_union_congr
   simp only [restrict_apply hu, inter_union_distrib_left]
   rcases exists_measurable_superset₂ μ ν (u inter s) with ⟨US, hsub, hm, hμ, hν⟩
   calc
-    μ (u 
+    μ (u inter s union u inter t) = μ (US union u inter t) :=
+      measure_union_congr_of_subset hsub hμ.le Subset.rfl le_rfl
+    _ = μ US + μ ((u inter t) \ US) := (measure_add_sdiff hm.nullMeasurableSet _).symm
+    _ = restrict μ s u + restrict μ t (u \ US) := by
+      simp only [restrict_apply, hu, hu.diff hm, hμ, ← inter_comm t, inter_sdiff_assoc]
+    _ = restrict ν s u + restrict ν t (u \ US) := by rw [hs, ht]
+    _ = ν US + ν ((u inter t) \ US) := by
+      simp only [restrict_apply, hu, hu.diff hm, hν, ← inter_comm t, inter_sdiff_assoc]
+    _ = ν (US union u inter t) := measure_add_sdiff hm.nullMeasurableSet _
+_ = ν (u inter s union u inter t) := .symm measure_union_congr_of_subset hsub hν.le Subset.rfl le_rfl
 
 Depends on / 依赖: Subset, Subset.rfl, hm.nullMeasurableSet, inter_union_distrib_left, le_rfl, measure_add_sdiff, measure_union_congr_of_subset, nullMeasurableSet, restrict, restrict_apply, restrict_congr_mono, subset_union_left, subset_union_right
 -/
@@ -1600,7 +1618,7 @@ theorem restrict_iUnion_congr
   have D : Directed (· subseteq ·) fun t : Finset ι => ⋃ i in t, s i :=
     Monotone.directed_le fun t₁ t₂ ht => biUnion_subset_biUnion_left ht
   rw [iUnion_eq_iUnion_finset]
-  simp only [restrict_iUnion_appl
+  simp only [restrict_iUnion_apply_eq_iSup D ht, restrict_biUnion_finset_congr.2 fun i _ => h i]
 
 中文:
 定理 restrict_iUnion_congr
@@ -1611,7 +1629,7 @@ theorem restrict_iUnion_congr
   have D : Directed (· subseteq ·) fun t : Finset ι => ⋃ i in t, s i :=
     Monotone.directed_le fun t₁ t₂ ht => biUnion_subset_biUnion_left ht
   rw [iUnion_eq_iUnion_finset]
-  simp only [restrict_iUnion_appl
+  simp only [restrict_iUnion_apply_eq_iSup D ht, restrict_biUnion_finset_congr.2 fun i _ => h i]
 
 Depends on / 依赖: Directed, Finset, Monotone, Monotone.directed_le, biUnion_subset_biUnion_left, directed_le, iUnion_eq_iUnion_finset, restrict_biUnion_finset_congr, restrict_congr_mono, restrict_iUnion_apply_eq_iSup, subset_iUnion, subseteq
 -/
@@ -1681,7 +1699,7 @@ theorem restrict_sInf_eq_sInf_restrict
   simp_rw [sInf_apply hs, restrict_apply hs, sInf_apply (MeasurableSet.inter hs ht),
     Set.image_image, restrict_toOuterMeasure_eq_toOuterMeasure_restrict ht, ←
     Set.image_image _ toOuterMeasure, ← OuterMeasure.restrict_sInf_eq_sInf_restrict _ (hm.image _),
-    OuterMeasure.restr
+    OuterMeasure.restrict_apply]
 
 中文:
 定理 restrict_sInf_eq_sInf_restrict
@@ -1691,7 +1709,7 @@ theorem restrict_sInf_eq_sInf_restrict
   simp_rw [sInf_apply hs, restrict_apply hs, sInf_apply (MeasurableSet.inter hs ht),
     Set.image_image, restrict_toOuterMeasure_eq_toOuterMeasure_restrict ht, ←
     Set.image_image _ toOuterMeasure, ← OuterMeasure.restrict_sInf_eq_sInf_restrict _ (hm.image _),
-    OuterMeasure.restr
+    OuterMeasure.restrict_apply]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.inter, OuterMeasure, OuterMeasure.restrict_apply, OuterMeasure.restrict_sInf_eq_sInf_restrict, Set.image_image, hm.image, image_image, restrict_apply, restrict_sInf_eq_sInf_restrict, restrict_toOuterMeasure_eq_toOuterMeasure_restrict, sInf_apply, simp_rw, toOuterMeasure
 -/
@@ -1741,7 +1759,7 @@ theorem QuasiMeasurePreserving.restrict
     refine fun hu => measure_mono_null ?_ (hf.preimage_null hu)
     rw [preimage_inter]
     gcongr
-
+    assumption
 
 中文:
 定理 拟保测.restrict
@@ -1753,7 +1771,7 @@ theorem QuasiMeasurePreserving.restrict
     refine fun hu => measure_mono_null ?_ (hf.preimage_null hu)
     rw [preimage_inter]
     gcongr
-
+    assumption
 
 Depends on / 依赖: hf.measurable, measurable
 -/
@@ -1865,6 +1883,13 @@ theorem ext_of_generateFrom_of_cover
   | basic u hu => exact ST_eq _ ht _ hu
   | compl u hu ihu =>
     have := T_eq t ht
+    rw [Set.inter_comm] at ihu ⊢
+    rwa [← measure_inter_add_sdiff t hu, ← measure_inter_add_sdiff t hu, ← ihu,
+      ENNReal.add_right_inj] at this
+    exact ne_top_of_le_ne_top (htop t ht) (measure_mono Set.inter_subset_left)
+  | iUnion f hfd hfm ihf =>
+    simp only [← restrict_apply (hfm _), ← restrict_apply (MeasurableSet.iUnion hfm)] at ihf ⊢
+    simp only [measure_iUnion hfd hfm, ihf]
 
 中文:
 定理 ext_of_generateFrom_of_cover
@@ -1878,6 +1903,13 @@ theorem ext_of_generateFrom_of_cover
   | basic u hu => exact ST_eq _ ht _ hu
   | compl u hu ihu =>
     have := T_eq t ht
+    rw [Set.inter_comm] at ihu ⊢
+    rwa [← measure_inter_add_sdiff t hu, ← measure_inter_add_sdiff t hu, ← ihu,
+      ENNReal.add_right_inj] at this
+    exact ne_top_of_le_ne_top (htop t ht) (measure_mono Set.inter_subset_left)
+  | iUnion f hfd hfm ihf =>
+    simp only [← restrict_apply (hfm _), ← restrict_apply (MeasurableSet.iUnion hfm)] at ihf ⊢
+    simp only [measure_iUnion hfd hfm, ihf]
 
 Depends on / 依赖: ENNReal, ENNReal.add_right_inj, ST_eq, Set.empty_inter, Set.inter_comm, Set.inter_subset_left, T_eq, add_right_inj, empty_inter, ext_of_sUnion_eq_univ, h_gen, h_inter, induction_on_inter, inter_comm, inter_subset_left, measure_empty, measure_inter_add_sdiff, measure_mono, ne_top_of_le_ne_top, restrict_apply
 -/
@@ -2711,7 +2743,7 @@ theorem ae_of_ae_restrict_of_ae_restrict_compl
         measure_le_inter_add_sdiff _ _ _
       _ <= μ.restrict t { x | ¬p x } + μ.restrict tᶜ { x | ¬p x } :=
         add_le_add (le_restrict_apply _ _) (le_restrict_apply _ _)
-      _ = 0 :
+      _ = 0 := by rw [ae_iff.1 ht, ae_iff.1 htc, zero_add]
 
 中文:
 定理 ae_of_ae_restrict_of_ae_restrict_compl
@@ -2722,7 +2754,7 @@ theorem ae_of_ae_restrict_of_ae_restrict_compl
         measure_le_inter_add_sdiff _ _ _
       _ <= μ.restrict t { x | ¬p x } + μ.restrict tᶜ { x | ¬p x } :=
         add_le_add (le_restrict_apply _ _) (le_restrict_apply _ _)
-      _ = 0 :
+      _ = 0 := by rw [ae_iff.1 ht, ae_iff.1 htc, zero_add]
 
 Depends on / 依赖: add_le_add, ae_iff, le_restrict_apply, measure_le_inter_add_sdiff, nonpos_iff_eq_zero, restrict, zero_add
 -/
@@ -3104,7 +3136,11 @@ lemma NullMeasurable.measure_preimage_eq_measure_restrict_preimage_of_ae_compl_e
   · apply le_antisymm _ (measure_mono inter_subset_left)
     apply (measure_mono (Eq.symm (inter_union_compl (f ⁻¹' t) s)).le).trans
     apply (measure_union_le _ _).trans
-    suffi
+    suffices μ ((f ⁻¹' t) inter sᶜ) = 0 by simp [this]
+    rw [← nonpos_iff_eq_zero]; rw [← hs]
+    gcongr
+    exact fun x hx hfx => ht (hfx ▸ hx)
+  · exact NullMeasurableSet.of_null hs
 
 中文:
 引理 NullMeasurable.measure_preimage_eq_measure_restrict_preimage_of_ae_compl_eq_const
@@ -3114,7 +3150,11 @@ lemma NullMeasurable.measure_preimage_eq_measure_restrict_preimage_of_ae_compl_e
   · apply le_antisymm _ (measure_mono inter_subset_left)
     apply (measure_mono (Eq.symm (inter_union_compl (f ⁻¹' t) s)).le).trans
     apply (measure_union_le _ _).trans
-    suffi
+    suffices μ ((f ⁻¹' t) inter sᶜ) = 0 by simp [this]
+    rw [← nonpos_iff_eq_zero]; rw [← hs]
+    gcongr
+    exact fun x hx hfx => ht (hfx ▸ hx)
+  · exact NullMeasurableSet.of_null hs
 
 Depends on / 依赖: Eq.symm, EventuallyEq, Measure, Measure.restrict_apply, NullMeasurableSet, NullMeasurableSet.of_null, ae_iff, f_mble, inter_subset_left, inter_union_compl, le_antisymm, measure_mono, measure_union_le, nonpos_iff_eq_zero, of_null, t_mble
 -/
@@ -3146,7 +3186,22 @@ lemma nullMeasurableSet_restrict
       h.exists_measurable_superset_ae_eq
     have A : (t' inter s : Set α) =ᵐ[μ] (t inter s : Set α) := by
       have : forallᵐ x ∂μ, x in s -> (x in t') = (x in t) :=
-   
+        (ae_restrict_iff'₀ hs).1 t't
+      filter_upwards [this] with y hy
+      change (y in t' inter s) = (y in t inter s)
+      simpa only [eq_iff_iff, mem_inter_iff, and_congr_left_iff] using hy
+    obtain ⟨s', -, hs', s's⟩ : exists s' ⊇ s, MeasurableSet s' ∧ s' =ᵐ[μ] s :=
+      hs.exists_measurable_superset_ae_eq
+    have B : (t' inter s' : Set α) =ᵐ[μ] (t' inter s : Set α) :=
+      ae_eq_set_inter (EventuallyEq.refl _ _) s's
+    exact (ht'.inter hs').nullMeasurableSet.congr (B.trans A)
+  · have A : NullMeasurableSet (t \ s) (μ.restrict s) := by
+      apply NullMeasurableSet.of_null
+      rw [Measure.restrict_apply₀' hs]
+      simp
+    have B : NullMeasurableSet (t inter s) (μ.restrict s) :=
+      h.mono_ac absolutelyContinuous_restrict
+    simpa using A.union B
 
 中文:
 引理 nullMeasurableSet_restrict
@@ -3157,7 +3212,22 @@ lemma nullMeasurableSet_restrict
       h.exists_measurable_superset_ae_eq
     have A : (t' inter s : Set α) =ᵐ[μ] (t inter s : Set α) := by
       have : forallᵐ x ∂μ, x in s -> (x in t') = (x in t) :=
-   
+        (ae_restrict_iff'₀ hs).1 t't
+      filter_upwards [this] with y hy
+      change (y in t' inter s) = (y in t inter s)
+      simpa only [eq_iff_iff, mem_inter_iff, and_congr_left_iff] using hy
+    obtain ⟨s', -, hs', s's⟩ : exists s' ⊇ s, MeasurableSet s' ∧ s' =ᵐ[μ] s :=
+      hs.exists_measurable_superset_ae_eq
+    have B : (t' inter s' : Set α) =ᵐ[μ] (t' inter s : Set α) :=
+      ae_eq_set_inter (EventuallyEq.refl _ _) s's
+    exact (ht'.inter hs').nullMeasurableSet.congr (B.trans A)
+  · have A : NullMeasurableSet (t \ s) (μ.restrict s) := by
+      apply NullMeasurableSet.of_null
+      rw [Measure.restrict_apply₀' hs]
+      simp
+    have B : NullMeasurableSet (t inter s) (μ.restrict s) :=
+      h.mono_ac absolutelyContinuous_restrict
+    simpa using A.union B
 
 Depends on / 依赖: Measurab, MeasurableSet, ae_restrict_iff, and_congr_left_iff, eq_iff_iff, exists_measurable_superset_ae_eq, filter_upwards, h.exists_measurable_superset_ae_eq, mem_inter_iff, restrict
 -/
@@ -3196,7 +3266,14 @@ lemma nullMeasurableSet_restrict_of_subset
   obtain ⟨t', t'_subs, ht', t't⟩ : exists t' subseteq t, MeasurableSet t' ∧ t' =ᵐ[μ.restrict s] t :=
     h.exists_measurable_subset_ae_eq
   have : forallᵐ x ∂μ, x in s -> (x in t' ↔ x in t) := by
-    apply ae_imp_of_ae_restr
+    apply ae_imp_of_ae_restrict
+    filter_upwards [t't] with x hx using by simpa using! hx
+  have : t' =ᵐ[μ] t := by
+    filter_upwards [this] with x hx
+    change (x in t') = (x in t)
+    simp only [eq_iff_iff]
+    tauto
+  exact ht'.nullMeasurableSet.congr this
 
 中文:
 引理 nullMeasurableSet_restrict_of_subset
@@ -3206,7 +3283,14 @@ lemma nullMeasurableSet_restrict_of_subset
   obtain ⟨t', t'_subs, ht', t't⟩ : exists t' subseteq t, MeasurableSet t' ∧ t' =ᵐ[μ.restrict s] t :=
     h.exists_measurable_subset_ae_eq
   have : forallᵐ x ∂μ, x in s -> (x in t' ↔ x in t) := by
-    apply ae_imp_of_ae_restr
+    apply ae_imp_of_ae_restrict
+    filter_upwards [t't] with x hx using by simpa using! hx
+  have : t' =ᵐ[μ] t := by
+    filter_upwards [this] with x hx
+    change (x in t') = (x in t)
+    simp only [eq_iff_iff]
+    tauto
+  exact ht'.nullMeasurableSet.congr this
 
 Depends on / 依赖: MeasurableSet, _subs, absolutelyContinuous_restrict, ae_imp_of_ae_restrict, eq_iff_iff, exists_measurable_subset_ae_eq, filter_upwards, h.exists_measurable_subset_ae_eq, h.mono_ac, mono_ac, nullMeasurableSet, nullMeasurableSet.congr, restrict, subseteq
 -/
@@ -3246,7 +3330,13 @@ theorem MeasurableSet.nullMeasurableSet_subtype_coe
     obtain ⟨s', hs', rfl⟩ := ht'
     rw [Subtype.image_preimage_coe]
     exact hs.inter (hs'.nullMeasurableSet)
-  | empty => simp only [image_empty, nullMeasur
+  | empty => simp only [image_empty, nullMeasurableSet_empty]
+  | compl t' _ ht' =>
+    simp only [← range_sdiff_image Subtype.coe_injective, Subtype.range_coe_subtype, ofPred_mem_eq]
+    exact hs.diff ht'
+  | iUnion f _ hf =>
+    rw [image_iUnion]
+    exact .iUnion hf
 
 中文:
 定理 可测集.nullMeasurableSet_subtype_coe
@@ -3258,7 +3348,13 @@ theorem MeasurableSet.nullMeasurableSet_subtype_coe
     obtain ⟨s', hs', rfl⟩ := ht'
     rw [Subtype.image_preimage_coe]
     exact hs.inter (hs'.nullMeasurableSet)
-  | empty => simp only [image_empty, nullMeasur
+  | empty => simp only [image_empty, nullMeasurableSet_empty]
+  | compl t' _ ht' =>
+    simp only [← range_sdiff_image Subtype.coe_injective, Subtype.range_coe_subtype, ofPred_mem_eq]
+    exact hs.diff ht'
+  | iUnion f _ hf =>
+    rw [image_iUnion]
+    exact .iUnion hf
 
 Depends on / 依赖: Subtype, Subtype.coe_injective, Subtype.image_preimage_coe, Subtype.instMeasurableSpace, Subtype.range_coe_subtype, coe_injective, comap_eq_generateFrom, generateFrom_induction, hs.diff, hs.inter, iUnion, image_empty, image_iUnion, image_preimage_coe, instMeasurableSpace, nullMeasurableSet, nullMeasurableSet_empty, ofPred_mem_eq, range_coe_subtype, range_sdiff_image
 -/
@@ -3511,7 +3607,7 @@ theorem comap_apply
     comap f μ s = comap f μ (f ⁻¹' f '' s) := by rw [hf.injective.preimage_image]
     _ = (comap f μ).map f (f '' s) := (hf.map_apply _ _).symm
     _ = μ (f '' s) := by
-      rw [hf.map_comap]; rw [restrict_apply' hf.measurableSet_range]; rw [inter_eq_self_of_subset_left (image_subset_range _ _
+      rw [hf.map_comap]; rw [restrict_apply' hf.measurableSet_range]; rw [inter_eq_self_of_subset_left (image_subset_range _ _)]
 
 中文:
 定理 comap_apply
@@ -3521,7 +3617,7 @@ theorem comap_apply
     comap f μ s = comap f μ (f ⁻¹' f '' s) := by rw [hf.injective.preimage_image]
     _ = (comap f μ).map f (f '' s) := (hf.map_apply _ _).symm
     _ = μ (f '' s) := by
-      rw [hf.map_comap]; rw [restrict_apply' hf.measurableSet_range]; rw [inter_eq_self_of_subset_left (image_subset_range _ _
+      rw [hf.map_comap]; rw [restrict_apply' hf.measurableSet_range]; rw [inter_eq_self_of_subset_left (image_subset_range _ _)]
 
 Depends on / 依赖: hf.injective.preimage_image, hf.map_apply, hf.map_comap, hf.measurableSet_range, image_subset_range, injective, inter_eq_self_of_subset_left, map_apply, map_comap, measurableSet_range, preimage_image, restrict_apply
 -/
@@ -3994,7 +4090,9 @@ theorem mem_map_indicator_ae_iff_mem_map_restrict_ae_of_zero_mem
   rw [Measure.restrict_apply' hs]; rw [Set.indicator_preimage]; rw [Set.ite]
   simp_rw [Set.compl_union, Set.compl_inter]
   change μ (((f ⁻¹' t)ᶜ union sᶜ) inter ((fun _ => (0 : β)) ⁻¹' t \ s)ᶜ) = 0 ↔ μ ((f ⁻¹' t)ᶜ inter s) = 0
-  simp only [ht, ← Set.co
+  simp only [ht, ← Set.compl_eq_univ_sdiff, compl_compl, if_true,
+    Set.preimage_const]
+  simp_rw [Set.union_inter_distrib_right, Set.compl_inter_self s, Set.union_empty]
 
 中文:
 定理 mem_map_indicator_ae_iff_mem_map_restrict_ae_of_zero_mem
@@ -4005,7 +4103,9 @@ theorem mem_map_indicator_ae_iff_mem_map_restrict_ae_of_zero_mem
   rw [Measure.restrict_apply' hs]; rw [Set.indicator_preimage]; rw [Set.ite]
   simp_rw [Set.compl_union, Set.compl_inter]
   change μ (((f ⁻¹' t)ᶜ union sᶜ) inter ((fun _ => (0 : β)) ⁻¹' t \ s)ᶜ) = 0 ↔ μ ((f ⁻¹' t)ᶜ inter s) = 0
-  simp only [ht, ← Set.co
+  simp only [ht, ← Set.compl_eq_univ_sdiff, compl_compl, if_true,
+    Set.preimage_const]
+  simp_rw [Set.union_inter_distrib_right, Set.compl_inter_self s, Set.union_empty]
 
 Depends on / 依赖: Measure, Measure.restrict_apply, Set.compl_eq_univ_sdiff, Set.compl_inter, Set.compl_inter_self, Set.compl_union, Set.indicator_preimage, Set.ite, Set.preimage_const, Set.union_empty, Set.union_inter_distrib_right, classical, compl_compl, compl_eq_univ_sdiff, compl_inter, compl_inter_self, compl_union, if_true, indicator_preimage, mem_ae_iff
 -/
@@ -4031,7 +4131,7 @@ theorem mem_map_indicator_ae_iff_of_zero_notMem
   classical
   rw [mem_map]; rw [mem_ae_iff]; rw [Set.indicator_preimage]; rw [Set.ite]; rw [Set.compl_union]; rw [Set.compl_inter]
   change μ (((f ⁻¹' t)ᶜ union sᶜ) inter ((fun _ => (0 : β)) ⁻¹' t \ s)ᶜ) = 0 ↔ μ ((f ⁻¹' t)ᶜ union sᶜ) = 0
-  simp only [ht, if_false, Set.compl_empty, Set.empty_sdiff
+  simp only [ht, if_false, Set.compl_empty, Set.empty_sdiff, Set.inter_univ, Set.preimage_const]
 
 中文:
 定理 mem_map_indicator_ae_iff_of_zero_notMem
@@ -4040,7 +4140,7 @@ theorem mem_map_indicator_ae_iff_of_zero_notMem
   classical
   rw [mem_map]; rw [mem_ae_iff]; rw [Set.indicator_preimage]; rw [Set.ite]; rw [Set.compl_union]; rw [Set.compl_inter]
   change μ (((f ⁻¹' t)ᶜ union sᶜ) inter ((fun _ => (0 : β)) ⁻¹' t \ s)ᶜ) = 0 ↔ μ ((f ⁻¹' t)ᶜ union sᶜ) = 0
-  simp only [ht, if_false, Set.compl_empty, Set.empty_sdiff
+  simp only [ht, if_false, Set.compl_empty, Set.empty_sdiff, Set.inter_univ, Set.preimage_const]
 
 Depends on / 依赖: Set.compl_empty, Set.compl_inter, Set.compl_union, Set.empty_sdiff, Set.indicator_preimage, Set.inter_univ, Set.ite, Set.preimage_const, classical, compl_empty, compl_inter, compl_union, empty_sdiff, if_false, indicator_preimage, inter_univ, mem_ae_iff, mem_map, preimage_const
 -/
@@ -4295,7 +4395,65 @@ lemma MeasureTheory.Measure.sum_restrict_le
   refine le_iff.mpr (fun t ht => le_of_eq_of_le (sum_apply _ ht) ?_)
   refine ENNReal.summable.tsum_le_of_sum_le (fun F => ?_)
   -- `P` is a partition of `⋃ i ∈ F, s i` indexed by `C ∈ Cs` (nonempty subsets of `F`).
-  -- `P` is a partition of `s i` when restricted to `C ∈ G i` (subset
+  -- `P` is a partition of `s i` when restricted to `C ∈ G i` (subsets of `F` containing `i`).
+  let P (C : Finset ι) := (⋂ i in C, s i) inter (⋂ i in (F \ C), (s i)ᶜ)
+  let Cs := F.powerset \ {∅}
+  let G (i : ι) := { C | C in F.powerset ∧ i in C }
+  have P_meas C : MeasurableSet (P C) :=
+.inter measurableSet_biInter C (fun i _ => hs_meas i)
+      measurableSet_biInter _ (fun i _ => (hs_meas i).compl)
+  have P_cover {i : ι} (hi : i in F) : s i subseteq ⋃ C in G i, P C := by
+    refine fun x hx => Set.mem_biUnion (x := F.filter (x in s ·)) ?_ ?_
+    · exact ⟨Finset.mem_powerset.mpr (filter_subset _ F), mem_filter.mpr ⟨hi, hx⟩⟩
+    · simp_rw [P, mem_inter_iff, mem_iInter, Finset.mem_sdiff, mem_filter]; tauto
+  have iUnion_P : ⋃ C in Cs, P C subseteq ⋃ i, s i := by
+    intro x hx
+    simp_rw [Cs, Finset.mem_sdiff, mem_iUnion] at hx
+    have ⟨C, ⟨_, C_nonempty⟩, hxC⟩ := hx
+have ⟨i, hi⟩ := Finset.nonempty_iff_ne_empty.mpr Finset.notMem_singleton.mp C_nonempty
+    exact ⟨s i, ⟨i, rfl⟩, hxC.1 (s i) ⟨i, by simp [hi]⟩⟩
+  have P_subset_s {i : ι} {C : Finset ι} (hiC : i in C) : P C subseteq s i := by
+    intro x hx
+    simp only [P, mem_inter_iff, mem_iInter] at hx
+    exact hx.1 i hiC
+  have mem_C {i} (hi : i in F) {C : Finset ι} {x : α} (hx : x in P C) (hxs : x in s i) : i in C := by
+    rw [mem_inter_iff]; rw [mem_iInter₂]; rw [mem_iInter₂] at hx
+    exact of_not_not fun h => hx.2 i (mem_sdiff.mpr ⟨hi, h⟩) hxs
+  have C_subset_C {C₁ C₂} (hC₁ : C₁ in Cs) {x : α} (hx : x in P C₁ inter P C₂) : C₁ subseteq C₂ :=
+fun i hi => mem_C (mem_powerset.mp (sdiff_subset hC₁) hi) hx.2 P_subset_s hi hx.1
+  calc ∑ i in F, (μ.restrict (s i)) t
+    _ <= ∑ i in F, Measure.sum (fun (C : G i) => μ.restrict (P C)) t :=
+F.sum_le_sum fun i hi => (restrict_mono_set μ (P_cover hi) t).trans
+        restrict_biUnion_le ((finite_toSet F.powerset).subset (sep_subset _ _)).countable t
+    _ = ∑ i in F, ∑' (C : G i), μ.restrict (P C) t := by simp_rw [Measure.sum_apply _ ht]
+    _ = ∑' C, ∑ i in F, (G i).indicator (fun C => μ.restrict (P C) t) C := by
+      rw [Summable.tsum_finsetSum (fun _ _ => ENNReal.summable)]
+      congr with i
+      rw [tsum_subtype (G i) (fun C => (μ.restrict (P C)) t)]
+    _ = ∑ C in Cs, ∑ i in F, (C : Set ι).indicator (fun _ => (μ.restrict (P C)) t) i := by
+      rw [sum_eq_tsum_indicator]
+      congr with C
+      by_cases hC : C in F.powerset <;> by_cases hC' : C = ∅ <;>
+        simp [hC, hC', Cs, G, indicator, -Finset.mem_powerset, -coe_powerset]
+    _ = ∑ C in Cs, {a in F | a in C}.card • μ.restrict (P C) t := by simp [indicator]; rfl
+    _ <= ∑ C in Cs, M • μ.restrict (P C) t := by
+      refine sum_le_sum fun C hC => ?_
+      by_cases hPC : P C = ∅
+      · simp [hPC]
+      have hCM : (C : Set ι).encard <= M :=
+        have ⟨x, hx⟩ := Set.nonempty_iff_ne_empty.mpr hPC
+        (encard_mono (mem_iInter₂.mp hx.1)).trans (hs x)
+exact nsmul_le_nsmul_left zero_le calc {a in F | a in C}.card
+_ <= C.card := card_mono fun i hi => (F.mem_filter.mp hi).2
+        _ = (C : Set ι).ncard := (ncard_coe_finset C).symm
+        _ <= M := ENat.toNat_le_of_le_natCast hCM
+    _ = M • (μ.restrict (⋃ C in Cs, (P C)) t) := by
+      rw [← smul_sum]; rw [← Cs.tsum_subtype]; rw [μ.restrict_biUnion_finset _ P_meas]; rw [Measure.sum_apply _ ht]
+refine fun C₁ hC₁ C₂ hC₂ hC => Set.disjoint_iff.mpr fun x hx => hC ?_
+      exact subset_antisymm (C_subset_C hC₁ hx) (C_subset_C hC₂ (Set.inter_comm _ _ ▸ hx))
+    _ <= (M • μ.restrict (⋃ i, s i)) t := by
+      rw [Measure.smul_apply]
+      exact nsmul_le_nsmul_right (μ.restrict_mono_set iUnion_P t) M
 
 中文:
 引理 测度论.测度.sum_restrict_le
@@ -4305,7 +4463,65 @@ lemma MeasureTheory.Measure.sum_restrict_le
   refine le_iff.mpr (fun t ht => le_of_eq_of_le (sum_apply _ ht) ?_)
   refine ENNReal.summable.tsum_le_of_sum_le (fun F => ?_)
   -- `P` is a partition of `⋃ i ∈ F, s i` indexed by `C ∈ Cs` (nonempty subsets of `F`).
-  -- `P` is a partition of `s i` when restricted to `C ∈ G i` (subset
+  -- `P` is a partition of `s i` when restricted to `C ∈ G i` (subsets of `F` containing `i`).
+  let P (C : Finset ι) := (⋂ i in C, s i) inter (⋂ i in (F \ C), (s i)ᶜ)
+  let Cs := F.powerset \ {∅}
+  let G (i : ι) := { C | C in F.powerset ∧ i in C }
+  have P_meas C : MeasurableSet (P C) :=
+.inter measurableSet_biInter C (fun i _ => hs_meas i)
+      measurableSet_biInter _ (fun i _ => (hs_meas i).compl)
+  have P_cover {i : ι} (hi : i in F) : s i subseteq ⋃ C in G i, P C := by
+    refine fun x hx => Set.mem_biUnion (x := F.filter (x in s ·)) ?_ ?_
+    · exact ⟨Finset.mem_powerset.mpr (filter_subset _ F), mem_filter.mpr ⟨hi, hx⟩⟩
+    · simp_rw [P, mem_inter_iff, mem_iInter, Finset.mem_sdiff, mem_filter]; tauto
+  have iUnion_P : ⋃ C in Cs, P C subseteq ⋃ i, s i := by
+    intro x hx
+    simp_rw [Cs, Finset.mem_sdiff, mem_iUnion] at hx
+    have ⟨C, ⟨_, C_nonempty⟩, hxC⟩ := hx
+have ⟨i, hi⟩ := Finset.nonempty_iff_ne_empty.mpr Finset.notMem_singleton.mp C_nonempty
+    exact ⟨s i, ⟨i, rfl⟩, hxC.1 (s i) ⟨i, by simp [hi]⟩⟩
+  have P_subset_s {i : ι} {C : Finset ι} (hiC : i in C) : P C subseteq s i := by
+    intro x hx
+    simp only [P, mem_inter_iff, mem_iInter] at hx
+    exact hx.1 i hiC
+  have mem_C {i} (hi : i in F) {C : Finset ι} {x : α} (hx : x in P C) (hxs : x in s i) : i in C := by
+    rw [mem_inter_iff]; rw [mem_iInter₂]; rw [mem_iInter₂] at hx
+    exact of_not_not fun h => hx.2 i (mem_sdiff.mpr ⟨hi, h⟩) hxs
+  have C_subset_C {C₁ C₂} (hC₁ : C₁ in Cs) {x : α} (hx : x in P C₁ inter P C₂) : C₁ subseteq C₂ :=
+fun i hi => mem_C (mem_powerset.mp (sdiff_subset hC₁) hi) hx.2 P_subset_s hi hx.1
+  calc ∑ i in F, (μ.restrict (s i)) t
+    _ <= ∑ i in F, Measure.sum (fun (C : G i) => μ.restrict (P C)) t :=
+F.sum_le_sum fun i hi => (restrict_mono_set μ (P_cover hi) t).trans
+        restrict_biUnion_le ((finite_toSet F.powerset).subset (sep_subset _ _)).countable t
+    _ = ∑ i in F, ∑' (C : G i), μ.restrict (P C) t := by simp_rw [Measure.sum_apply _ ht]
+    _ = ∑' C, ∑ i in F, (G i).indicator (fun C => μ.restrict (P C) t) C := by
+      rw [Summable.tsum_finsetSum (fun _ _ => ENNReal.summable)]
+      congr with i
+      rw [tsum_subtype (G i) (fun C => (μ.restrict (P C)) t)]
+    _ = ∑ C in Cs, ∑ i in F, (C : Set ι).indicator (fun _ => (μ.restrict (P C)) t) i := by
+      rw [sum_eq_tsum_indicator]
+      congr with C
+      by_cases hC : C in F.powerset <;> by_cases hC' : C = ∅ <;>
+        simp [hC, hC', Cs, G, indicator, -Finset.mem_powerset, -coe_powerset]
+    _ = ∑ C in Cs, {a in F | a in C}.card • μ.restrict (P C) t := by simp [indicator]; rfl
+    _ <= ∑ C in Cs, M • μ.restrict (P C) t := by
+      refine sum_le_sum fun C hC => ?_
+      by_cases hPC : P C = ∅
+      · simp [hPC]
+      have hCM : (C : Set ι).encard <= M :=
+        have ⟨x, hx⟩ := Set.nonempty_iff_ne_empty.mpr hPC
+        (encard_mono (mem_iInter₂.mp hx.1)).trans (hs x)
+exact nsmul_le_nsmul_left zero_le calc {a in F | a in C}.card
+_ <= C.card := card_mono fun i hi => (F.mem_filter.mp hi).2
+        _ = (C : Set ι).ncard := (ncard_coe_finset C).symm
+        _ <= M := ENat.toNat_le_of_le_natCast hCM
+    _ = M • (μ.restrict (⋃ C in Cs, (P C)) t) := by
+      rw [← smul_sum]; rw [← Cs.tsum_subtype]; rw [μ.restrict_biUnion_finset _ P_meas]; rw [Measure.sum_apply _ ht]
+refine fun C₁ hC₁ C₂ hC₂ hC => Set.disjoint_iff.mpr fun x hx => hC ?_
+      exact subset_antisymm (C_subset_C hC₁ hx) (C_subset_C hC₂ (Set.inter_comm _ _ ▸ hx))
+    _ <= (M • μ.restrict (⋃ i, s i)) t := by
+      rw [Measure.smul_apply]
+      exact nsmul_le_nsmul_right (μ.restrict_mono_set iUnion_P t) M
 
 Depends on / 依赖: ENNReal, ENNReal.summable.tsum_le_of_sum_le, classical, le_iff, le_iff.mpr, le_of_eq_of_le, sum_apply, summable, tsum_le_of_sum_le
 -/

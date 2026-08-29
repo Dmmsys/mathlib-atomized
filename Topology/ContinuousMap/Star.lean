@@ -329,7 +329,7 @@ definition compStarAlgHom
   map_zero' := ext fun _ => map_zero φ
   map_add' f g := ext fun x => map_add φ (f x) (g x)
   commutes' r := ext fun _x => AlgHomClass.commutes φ r
-  map_star' f := ext fun x => map_s
+  map_star' f := ext fun x => map_star φ (f x)
 
 中文:
 定义 compStarAlgHom
@@ -340,7 +340,7 @@ definition compStarAlgHom
   map_zero' := ext fun _ => map_zero φ
   map_add' f g := ext fun x => map_add φ (f x) (g x)
   commutes' r := ext fun _x => AlgHomClass.commutes φ r
-  map_star' f := ext fun x => map_s
+  map_star' f := ext fun x => map_star φ (f x)
 -/
 def compStarAlgHom (φ : A ->⋆ₐ[𝕜] B) (hφ : Continuous φ) :
     C(X, A) ->⋆ₐ[𝕜] C(X, B) where
@@ -410,7 +410,11 @@ definition compStarAlgEquiv'
     invFun := (f.symm : C(Y, X)).compStarAlgHom' 𝕜 A
     left_inv := fun g => by
       simp only [ContinuousMap.compStarAlgHom'_apply, ContinuousMap.comp_assoc,
-        toContinuousMap_comp_symm, ContinuousMap.co
+        toContinuousMap_comp_symm, ContinuousMap.comp_id]
+    right_inv := fun g => by
+      simp only [ContinuousMap.compStarAlgHom'_apply, ContinuousMap.comp_assoc,
+        symm_comp_toContinuousMap, ContinuousMap.comp_id]
+    map_smul' := fun k a => map_smul ((f : C(X, Y)).compStarAlgHom' 𝕜 A) k a }
 
 中文:
 定义 compStarAlgEquiv'
@@ -420,7 +424,11 @@ definition compStarAlgEquiv'
     invFun := (f.symm : C(Y, X)).compStarAlgHom' 𝕜 A
     left_inv := fun g => by
       simp only [ContinuousMap.compStarAlgHom'_apply, ContinuousMap.comp_assoc,
-        toContinuousMap_comp_symm, ContinuousMap.co
+        toContinuousMap_comp_symm, ContinuousMap.comp_id]
+    right_inv := fun g => by
+      simp only [ContinuousMap.compStarAlgHom'_apply, ContinuousMap.comp_assoc,
+        symm_comp_toContinuousMap, ContinuousMap.comp_id]
+    map_smul' := fun k a => map_smul ((f : C(X, Y)).compStarAlgHom' 𝕜 A) k a }
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.compStarAlgHom, ContinuousMap.comp_assoc, ContinuousMap.comp_id, _apply, compStarAlgHom, comp_assoc, comp_id, f.symm, invFun, left_inv, map_smul, right_inv, symm_comp_toContinuousMap, toContinuousMap_comp_symm
 -/

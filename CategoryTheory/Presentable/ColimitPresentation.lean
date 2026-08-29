@@ -253,7 +253,24 @@ instance [IsFiltered
     obtain ⟨a', f, hf⟩ := Total.exists_hom_of_hom (P := P) k.2 (IsFiltered.leftToMax k.1 l.1)
     obtain ⟨b', g, hg⟩ := Total.exists_hom_of_hom (P := P) l.2 (IsFiltered.rightToMax k.1 l.1)
     refine ⟨⟨a, IsFiltered.max a' b'⟩, ?_, ?_, trivial⟩
-    · exact f ≫ 
+    · exact f ≫ { base := 𝟙 _, hom := (P _).diag.map (IsFiltered.leftToMax _ _) }
+    · exact g ≫ { base := 𝟙 _, hom := (P _).diag.map (IsFiltered.rightToMax _ _) }
+  cocone_maps {k l} f g := by
+    let a := IsFiltered.coeq f.base g.base
+    obtain ⟨a', u, hu⟩ := Total.exists_hom_of_hom (P := P) l.2 (IsFiltered.coeqHom f.base g.base)
+    have : (f.hom ≫ u.hom) ≫ (P _).ι.app _ = (g.hom ≫ u.hom) ≫ (P _).ι.app _ := by
+      simp only [Category.assoc, Functor.const_obj_obj, ← u.w, ← f.w_assoc, ← g.w_assoc]
+      rw [← Functor.map_comp]; rw [hu]; rw [IsFiltered.coeq_condition f.base g.base]
+      simp
+    obtain ⟨j, p, q, hpq⟩ := IsFinitelyPresentable.exists_eq_of_isColimit (P _).isColimit _ _ this
+    dsimp at p q
+    refine ⟨⟨a, IsFiltered.coeq p q⟩,
+      u ≫ { base := 𝟙 _, hom := (P _).diag.map (p ≫ IsFiltered.coeqHom p q) }, ?_⟩
+    apply Total.Hom.ext
+    · simp [hu, IsFiltered.coeq_condition f.base g.base]
+    · rw [Category.assoc] at hpq
+      simp only [Functor.map_comp, comp_hom, reassoc_of% hpq]
+      simp [← Functor.map_comp, ← IsFiltered.coeq_condition]
 
 中文:
 实例 [是Filtered
@@ -263,7 +280,24 @@ instance [IsFiltered
     obtain ⟨a', f, hf⟩ := Total.exists_hom_of_hom (P := P) k.2 (IsFiltered.leftToMax k.1 l.1)
     obtain ⟨b', g, hg⟩ := Total.exists_hom_of_hom (P := P) l.2 (IsFiltered.rightToMax k.1 l.1)
     refine ⟨⟨a, IsFiltered.max a' b'⟩, ?_, ?_, trivial⟩
-    · exact f ≫ 
+    · exact f ≫ { base := 𝟙 _, hom := (P _).diag.map (IsFiltered.leftToMax _ _) }
+    · exact g ≫ { base := 𝟙 _, hom := (P _).diag.map (IsFiltered.rightToMax _ _) }
+  cocone_maps {k l} f g := by
+    let a := IsFiltered.coeq f.base g.base
+    obtain ⟨a', u, hu⟩ := Total.exists_hom_of_hom (P := P) l.2 (IsFiltered.coeqHom f.base g.base)
+    have : (f.hom ≫ u.hom) ≫ (P _).ι.app _ = (g.hom ≫ u.hom) ≫ (P _).ι.app _ := by
+      simp only [Category.assoc, Functor.const_obj_obj, ← u.w, ← f.w_assoc, ← g.w_assoc]
+      rw [← Functor.map_comp]; rw [hu]; rw [IsFiltered.coeq_condition f.base g.base]
+      simp
+    obtain ⟨j, p, q, hpq⟩ := IsFinitelyPresentable.exists_eq_of_isColimit (P _).isColimit _ _ this
+    dsimp at p q
+    refine ⟨⟨a, IsFiltered.coeq p q⟩,
+      u ≫ { base := 𝟙 _, hom := (P _).diag.map (p ≫ IsFiltered.coeqHom p q) }, ?_⟩
+    apply Total.Hom.ext
+    · simp [hu, IsFiltered.coeq_condition f.base g.base]
+    · rw [Category.assoc] at hpq
+      simp only [Functor.map_comp, comp_hom, reassoc_of% hpq]
+      simp [← Functor.map_comp, ← IsFiltered.coeq_condition]
 
 Depends on / 依赖: IsFiltered, IsFiltered.coeq, IsFiltered.leftToMax, IsFiltered.max, IsFiltered.rightToMax, Total.exists_hom_of_hom, cocone_maps, diag.map, exists_hom_of_hom, f.base, g.base, leftToMax, rightToMax
 -/
@@ -315,7 +349,22 @@ definition bind
       ι.app j := (Q j).isColimit.desc
         { pt := c.pt
           ι.app i := c.ι.app ⟨j, i⟩
-       
+          ι.naturality {i i'} u := by
+            let v : Total.mk Q j i ⟶ .mk _ j i' := { base := 𝟙 _, hom := (Q _).diag.map u }
+            simpa using c.ι.naturality v }
+      ι.naturality {j j'} u := by
+        refine (Q j).isColimit.hom_ext fun i => ?_
+        simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id,
+          (Q j).isColimit.fac]
+        obtain ⟨i', hom, rfl⟩ := Total.exists_hom_of_hom (P := Q) i u
+        rw [reassoc_of% hom.w]; rw [(Q j').isColimit.fac]
+        simpa using c.ι.naturality hom }
+  isColimit.fac := fun c ⟨j, i⟩ => by simp [P.isColimit.fac, (Q j).isColimit.fac]
+  isColimit.uniq c m hm := by
+    refine P.isColimit.hom_ext fun j => ?_
+    simp only [P.isColimit.fac]
+    refine (Q j).isColimit.hom_ext fun i => ?_
+    simpa [(Q j).isColimit.fac] using hm (.mk _ j i)
 
 中文:
 定义 bind
@@ -329,7 +378,22 @@ definition bind
       ι.app j := (Q j).isColimit.desc
         { pt := c.pt
           ι.app i := c.ι.app ⟨j, i⟩
-       
+          ι.naturality {i i'} u := by
+            let v : Total.mk Q j i ⟶ .mk _ j i' := { base := 𝟙 _, hom := (Q _).diag.map u }
+            simpa using c.ι.naturality v }
+      ι.naturality {j j'} u := by
+        refine (Q j).isColimit.hom_ext fun i => ?_
+        simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id,
+          (Q j).isColimit.fac]
+        obtain ⟨i', hom, rfl⟩ := Total.exists_hom_of_hom (P := Q) i u
+        rw [reassoc_of% hom.w]; rw [(Q j').isColimit.fac]
+        simpa using c.ι.naturality hom }
+  isColimit.fac := fun c ⟨j, i⟩ => by simp [P.isColimit.fac, (Q j).isColimit.fac]
+  isColimit.uniq c m hm := by
+    refine P.isColimit.hom_ext fun j => ?_
+    simp only [P.isColimit.fac]
+    refine (Q j).isColimit.hom_ext fun i => ?_
+    simpa [(Q j).isColimit.fac] using hm (.mk _ j i)
 
 Depends on / 依赖: diag.obj
 -/

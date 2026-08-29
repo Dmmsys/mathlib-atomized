@@ -125,14 +125,18 @@ theorem exp_log
   given: {x : Complex} (hx : x != 0)
   statement: exp (log x) = x
   proof: by
-  rw [log]; rw [exp_add_mul_I]; rw [← ofReal_sin]; rw [sin_arg]; rw [← ofReal_cos]; rw [cos_arg hx]; rw [← ofReal_exp]; rw [Real.exp_log (norm_pos_iff.mpr hx)]; rw [mul_add]; rw [ofReal_div]; rw [ofReal_div]; rw [mul_div_cancel₀ _ (ofReal_ne_zero.2 <| norm_ne_zero_iff.mpr hx)]; rw [← mul_assoc]; 
+  rw [log]; rw [exp_add_mul_I]; rw [← ofReal_sin]; rw [sin_arg]; rw [← ofReal_cos]; rw [cos_arg hx]; rw [← ofReal_exp]; rw [Real.exp_log (norm_pos_iff.mpr hx)]; rw [mul_add]; rw [ofReal_div]; rw [ofReal_div]; rw [mul_div_cancel₀ _ (ofReal_ne_zero.2 <| norm_ne_zero_iff.mpr hx)]; rw [← mul_assoc]; rw [mul_div_cancel₀ _ (ofReal_ne_zero.2 <| norm_ne_zero_iff.mpr hx)]; rw [re_add_im]
+
+@[simp]
 
 中文:
 定理 exp_log
   条件: {x : 复形} (hx : x != 0)
   结论: exp (log x) = x
   证明: by
-  rw [log]; rw [exp_add_mul_I]; rw [← ofReal_sin]; rw [sin_arg]; rw [← ofReal_cos]; rw [cos_arg hx]; rw [← ofReal_exp]; rw [Real.exp_log (norm_pos_iff.mpr hx)]; rw [mul_add]; rw [ofReal_div]; rw [ofReal_div]; rw [mul_div_cancel₀ _ (ofReal_ne_zero.2 <| norm_ne_zero_iff.mpr hx)]; rw [← mul_assoc]; 
+  rw [log]; rw [exp_add_mul_I]; rw [← ofReal_sin]; rw [sin_arg]; rw [← ofReal_cos]; rw [cos_arg hx]; rw [← ofReal_exp]; rw [Real.exp_log (norm_pos_iff.mpr hx)]; rw [mul_add]; rw [ofReal_div]; rw [ofReal_div]; rw [mul_div_cancel₀ _ (ofReal_ne_zero.2 <| norm_ne_zero_iff.mpr hx)]; rw [← mul_assoc]; rw [mul_div_cancel₀ _ (ofReal_ne_zero.2 <| norm_ne_zero_iff.mpr hx)]; rw [re_add_im]
+
+@[simp]
 
 Depends on / 依赖: Real.exp_log, cos_arg, exp_add_mul_I, exp_log, mul_add, mul_assoc, norm_ne_zero_iff, norm_ne_zero_iff.mpr, norm_pos_iff, norm_pos_iff.mpr, ofReal_cos, ofReal_div, ofReal_exp, ofReal_ne_zero, ofReal_sin, re_add_im, sin_arg
 -/
@@ -590,7 +594,11 @@ theorem log_inv_eq_ite
   · simp [hx]
   rw [inv_def]; rw [log_mul_ofReal]; rw [Real.log_inv]; rw [ofReal_neg]; rw [← sub_eq_neg_add]; rw [log_conj_eq_ite]
   · simp_rw [log, map_add, map_mul, conj_ofReal, conj_I, normSq_eq_norm_sq, Real.log_pow,
-      Nat.cast_two, ofReal_mul, neg_add, mul_neg, neg_
+      Nat.cast_two, ofReal_mul, neg_add, mul_neg, neg_neg]
+    norm_num
+    grind
+  · rwa [inv_pos, Complex.normSq_pos]
+  · rwa [map_ne_zero]
 
 中文:
 定理 log_inv_eq_ite
@@ -601,7 +609,11 @@ theorem log_inv_eq_ite
   · simp [hx]
   rw [inv_def]; rw [log_mul_ofReal]; rw [Real.log_inv]; rw [ofReal_neg]; rw [← sub_eq_neg_add]; rw [log_conj_eq_ite]
   · simp_rw [log, map_add, map_mul, conj_ofReal, conj_I, normSq_eq_norm_sq, Real.log_pow,
-      Nat.cast_two, ofReal_mul, neg_add, mul_neg, neg_
+      Nat.cast_two, ofReal_mul, neg_add, mul_neg, neg_neg]
+    norm_num
+    grind
+  · rwa [inv_pos, Complex.normSq_pos]
+  · rwa [map_ne_zero]
 
 Depends on / 依赖: Complex.normSq_pos, Nat.cast_two, Real.log_inv, Real.log_pow, cast_two, conj_I, conj_ofReal, inv_def, inv_pos, log_conj_eq_ite, log_inv, log_mul_ofReal, log_pow, map_add, map_mul, map_ne_zero, mul_neg, neg_add, neg_neg, normSq_eq_norm_sq
 -/
@@ -666,7 +678,9 @@ theorem exp_eq_one_iff
     use -n
     rw [Int.cast_neg]; rw [neg_mul]; rw [eq_neg_iff_add_eq_zero]
     have : (x + n * (2 * π * I)).im in Set.Ioc (-π) π := by simpa [two_mul, mul_add] using hn
-    rw [← log_exp
+    rw [← log_exp this.1 this.2]; rw [exp_periodic.int_mul n]; rw [h]; rw [log_one]
+  · rintro ⟨n, rfl⟩
+    exact (exp_periodic.int_mul n).eq.trans exp_zero
 
 中文:
 定理 exp_eq_one_iff
@@ -679,7 +693,9 @@ theorem exp_eq_one_iff
     use -n
     rw [Int.cast_neg]; rw [neg_mul]; rw [eq_neg_iff_add_eq_zero]
     have : (x + n * (2 * π * I)).im in Set.Ioc (-π) π := by simpa [two_mul, mul_add] using hn
-    rw [← log_exp
+    rw [← log_exp this.1 this.2]; rw [exp_periodic.int_mul n]; rw [h]; rw [log_one]
+  · rintro ⟨n, rfl⟩
+    exact (exp_periodic.int_mul n).eq.trans exp_zero
 
 Depends on / 依赖: Int.cast_neg, Real.two_pi_pos, Set.Ioc, cast_neg, eq.trans, eq_neg_iff_add_eq_zero, existsUnique_add_zsmul_mem_Ioc, exp_periodic, exp_periodic.int_mul, exp_zero, int_mul, log_exp, log_one, mul_add, neg_mul, two_mul, two_pi_pos, x.im
 -/
@@ -868,7 +884,14 @@ theorem countable_preimage_exp
     rw [Set.image_preimage_eq_inter_range]; rw [range_exp]; rw [← Set.sdiff_eq]; rw [← Set.union_singleton]; rw [Set.sdiff_union_self]
     exact Set.subset_union_left
   · rw [← Set.biUnion_preimage_singleton]
-    r
+    refine hs.biUnion fun z hz => ?_
+    by_cases! h : exists w, exp w = z
+    · rcases h with ⟨w, rfl⟩
+      simp only [Set.preimage, Set.mem_singleton_iff, exp_eq_exp_iff_exists_int, Set.ofPred_exists]
+      exact Set.countable_iUnion fun m => Set.countable_singleton _
+    · simp [Set.preimage, h]
+
+alias ⟨_, _root_.Set.Countable.preimage_cexp⟩ := countable_preimage_exp
 
 中文:
 定理 countable_preimage_exp
@@ -880,7 +903,14 @@ theorem countable_preimage_exp
     rw [Set.image_preimage_eq_inter_range]; rw [range_exp]; rw [← Set.sdiff_eq]; rw [← Set.union_singleton]; rw [Set.sdiff_union_self]
     exact Set.subset_union_left
   · rw [← Set.biUnion_preimage_singleton]
-    r
+    refine hs.biUnion fun z hz => ?_
+    by_cases! h : exists w, exp w = z
+    · rcases h with ⟨w, rfl⟩
+      simp only [Set.preimage, Set.mem_singleton_iff, exp_eq_exp_iff_exists_int, Set.ofPred_exists]
+      exact Set.countable_iUnion fun m => Set.countable_singleton _
+    · simp [Set.preimage, h]
+
+alias ⟨_, _root_.Set.Countable.preimage_cexp⟩ := countable_preimage_exp
 
 Depends on / 依赖: Set.biUnion_preimage_singleton, Set.countable_iUnion, Set.image_preimage_eq_inter_range, Set.mem_singleton_iff, Set.ofPred_exists, Set.preimage, Set.sdiff_eq, Set.sdiff_union_self, Set.subset_union_left, Set.union_singleton, biUnion, biUnion_preimage_singleton, countable_iUnion, exp_eq_exp_iff_exists_int, hs.biUnion, hs.image, image_preimage_eq_inter_range, insert, mem_singleton_iff, ofPred_exists
 -/
@@ -912,7 +942,9 @@ theorem tendsto_log_nhdsWithin_im_neg_of_re_neg_of_im_zero
       (((continuous_ofReal.tendsto _).comp <|
             tendsto_arg_nhdsWithin_im_neg_of_re_neg_of_im_zero hre him).mul
         tendsto_const_nhds) using 1
-  
+  · simp [sub_eq_add_neg]
+  · lift z to Real using him
+    simpa using hre.ne
 
 中文:
 定理 tendsto_log_nhdsWithin_im_neg_of_re_neg_of_im_zero
@@ -924,7 +956,9 @@ theorem tendsto_log_nhdsWithin_im_neg_of_re_neg_of_im_zero
       (((continuous_ofReal.tendsto _).comp <|
             tendsto_arg_nhdsWithin_im_neg_of_re_neg_of_im_zero hre him).mul
         tendsto_const_nhds) using 1
-  
+  · simp [sub_eq_add_neg]
+  · lift z to Real using him
+    simpa using hre.ne
 
 Depends on / 依赖: comp_continuousWithinAt, continuousAt, continuousWithinAt, continuous_norm, continuous_norm.continuousWithinAt.log, continuous_ofReal, continuous_ofReal.continuousAt.comp_continuousWithinAt, continuous_ofReal.tendsto, convert, hre.ne, sub_eq_add_neg, tendsto, tendsto.add, tendsto_arg_nhdsWithin_im_neg_of_re_neg_of_im_zero, tendsto_const_nhds
 -/
@@ -952,7 +986,9 @@ theorem continuousWithinAt_log_of_re_neg_of_im_zero
           (continuous_norm.continuousWithinAt.log _)).tendsto.add
       ((continuous_ofReal.continuousAt.comp_continuousWithinAt <|
             continuousWithinAt_arg_of_re_neg_of_im_zero hre him).mul
-        tendsto_const_nhd
+        tendsto_const_nhds) using 1
+  lift z to Real using him
+  simpa using hre.ne
 
 中文:
 定理 continuousWithinAt_log_of_re_neg_of_im_zero
@@ -963,7 +999,9 @@ theorem continuousWithinAt_log_of_re_neg_of_im_zero
           (continuous_norm.continuousWithinAt.log _)).tendsto.add
       ((continuous_ofReal.continuousAt.comp_continuousWithinAt <|
             continuousWithinAt_arg_of_re_neg_of_im_zero hre him).mul
-        tendsto_const_nhd
+        tendsto_const_nhds) using 1
+  lift z to Real using him
+  simpa using hre.ne
 
 Depends on / 依赖: comp_continuousWithinAt, continuousAt, continuousWithinAt, continuousWithinAt_arg_of_re_neg_of_im_zero, continuous_norm, continuous_norm.continuousWithinAt.log, continuous_ofReal, continuous_ofReal.continuousAt.comp_continuousWithinAt, convert, hre.ne, tendsto, tendsto.add, tendsto_const_nhds
 -/
@@ -1078,7 +1116,8 @@ theorem continuousAt_clog
     refine (Real.continuousAt_log ?_).comp continuous_norm.continuousAt
 exact norm_ne_zero_iff.mpr slitPlane_ne_zero h
   · have h_cont_mul : Continuous fun x : Complex => x * I := by fun_prop
-    refine h_cont_mul.c
+    refine h_cont_mul.continuousAt.comp (continuous_ofReal.continuousAt.comp ?_)
+    exact continuousAt_arg h
 
 中文:
 定理 continuousAt_clog
@@ -1090,7 +1129,8 @@ exact norm_ne_zero_iff.mpr slitPlane_ne_zero h
     refine (Real.continuousAt_log ?_).comp continuous_norm.continuousAt
 exact norm_ne_zero_iff.mpr slitPlane_ne_zero h
   · have h_cont_mul : Continuous fun x : Complex => x * I := by fun_prop
-    refine h_cont_mul.c
+    refine h_cont_mul.continuousAt.comp (continuous_ofReal.continuousAt.comp ?_)
+    exact continuousAt_arg h
 
 Depends on / 依赖: Continuous, ContinuousAt, ContinuousAt.add, Real.continuousAt_log, continuousAt, continuousAt_arg, continuousAt_log, continuous_norm, continuous_norm.continuousAt, continuous_ofReal, continuous_ofReal.continuousAt.comp, fun_prop, h_cont_mul, h_cont_mul.continuousAt.comp, norm_ne_zero_iff, norm_ne_zero_iff.mpr, slitPlane_ne_zero
 -/
@@ -1237,7 +1277,17 @@ definition expOpenPartialHomeomorph
     simp [exp_mem_slitPlane, h₂.ne,
       (toIocMod_eq_self Real.two_pi_pos).mpr ⟨h₁, by simpa [two_mul] using h₂.le⟩]
   map_target' z h := by
-    
+    simp only [mem_ofPred, log_im, mem_Ioo, neg_pi_lt_arg, arg_lt_pi_iff, true_and]
+    exact h.imp_left le_of_lt
+  left_inv' _x hx := log_exp hx.1 (le_of_lt hx.2)
+right_inv' _x hx := exp_log slitPlane_ne_zero hx
+  open_source := isOpen_Ioo.preimage continuous_im
+  open_target := isOpen_slitPlane
+  continuousOn_toFun := by fun_prop
+  continuousOn_invFun := continuousOn_id.clog fun _ => id
+
+@[deprecated (since := "2026-01-13")]
+alias expPartialHomeomorph := expOpenPartialHomeomorph
 
 中文:
 定义 expOpenPartialHomeomorph
@@ -1251,7 +1301,17 @@ definition expOpenPartialHomeomorph
     simp [exp_mem_slitPlane, h₂.ne,
       (toIocMod_eq_self Real.two_pi_pos).mpr ⟨h₁, by simpa [two_mul] using h₂.le⟩]
   map_target' z h := by
-    
+    simp only [mem_ofPred, log_im, mem_Ioo, neg_pi_lt_arg, arg_lt_pi_iff, true_and]
+    exact h.imp_left le_of_lt
+  left_inv' _x hx := log_exp hx.1 (le_of_lt hx.2)
+right_inv' _x hx := exp_log slitPlane_ne_zero hx
+  open_source := isOpen_Ioo.preimage continuous_im
+  open_target := isOpen_slitPlane
+  continuousOn_toFun := by fun_prop
+  continuousOn_invFun := continuousOn_id.clog fun _ => id
+
+@[deprecated (since := "2026-01-13")]
+alias expPartialHomeomorph := expOpenPartialHomeomorph
 
 Depends on / 依赖: AB4StarOfSize, CountableAB4Star, HasProducts
 -/

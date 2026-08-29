@@ -406,7 +406,24 @@ definition FiniteEtale.equivOfIsSepClosed
     inverse := FiniteEtale.finiteSpec Ω
     counitIso :=
       NatIso.ofComponents
-        (fun R => (FiniteEtale.isoMk (Algebra.FormallyEtale.equivPiOfIsS
+        (fun R => (FiniteEtale.isoMk (Algebra.FormallyEtale.equivPiOfIsSepClosed Ω R.unop)).op)
+        fun {R S} f => by
+          apply Quiver.Hom.unop_inj
+          ext x
+          exact funext fun p => Algebra.FormallyEtale.equivPiOfIsSepClosed_comap _ _ _
+    unitIso := NatIso.ofComponents
+fun X => FintypeCat.equivEquivIso
+        (Equiv.sigmaUnique _ _).symm.trans (PrimeSpectrum.sigmaToPiHomeo _).toEquiv
+    functor_unitIso_comp X := by
+      dsimp [FiniteEtale.finiteSpec]
+      apply Quiver.Hom.unop_inj
+      ext x i
+      dsimp
+      rw [FintypeCat.equivEquivIso_apply_hom]; rw [FintypeCat.homMk_apply]
+      dsimp
+      rw [← Pi.coe_evalAlgHom Ω]
+      simp [Algebra.FormallyEtale.equivPiOfIsSepClosed_comap,
+        Algebra.FormallyEtale.equivPiOfIsSepClosed_self_apply] }
 
 中文:
 定义 FiniteEtale.equivOfIsSepClosed
@@ -417,7 +434,24 @@ definition FiniteEtale.equivOfIsSepClosed
     inverse := FiniteEtale.finiteSpec Ω
     counitIso :=
       NatIso.ofComponents
-        (fun R => (FiniteEtale.isoMk (Algebra.FormallyEtale.equivPiOfIsS
+        (fun R => (FiniteEtale.isoMk (Algebra.FormallyEtale.equivPiOfIsSepClosed Ω R.unop)).op)
+        fun {R S} f => by
+          apply Quiver.Hom.unop_inj
+          ext x
+          exact funext fun p => Algebra.FormallyEtale.equivPiOfIsSepClosed_comap _ _ _
+    unitIso := NatIso.ofComponents
+fun X => FintypeCat.equivEquivIso
+        (Equiv.sigmaUnique _ _).symm.trans (PrimeSpectrum.sigmaToPiHomeo _).toEquiv
+    functor_unitIso_comp X := by
+      dsimp [FiniteEtale.finiteSpec]
+      apply Quiver.Hom.unop_inj
+      ext x i
+      dsimp
+      rw [FintypeCat.equivEquivIso_apply_hom]; rw [FintypeCat.homMk_apply]
+      dsimp
+      rw [← Pi.coe_evalAlgHom Ω]
+      simp [Algebra.FormallyEtale.equivPiOfIsSepClosed_comap,
+        Algebra.FormallyEtale.equivPiOfIsSepClosed_self_apply] }
 -/
 noncomputable def FiniteEtale.equivOfIsSepClosed (Ω : Type u) [Field Ω] [IsSepClosed Ω] :
     (FiniteEtale.{u} Ω)ᵒᵖ ≌ FintypeCat.{u} := .symm

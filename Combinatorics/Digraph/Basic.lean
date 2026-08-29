@@ -595,7 +595,8 @@ instance completeAtomicBooleanAlgebra
   inf_compl_le_bot _ _ _ h := absurd h.1 h.2
   top_le_sup_compl G v w _ := by tauto
   isLUB_sSup _ := ⟨fun G hG _ _ hab => ⟨G, hG, hab⟩, fun _ hG _ _ ⟨_, hH, hab⟩ => hG hH hab⟩
-  isGLB_sI
+  isGLB_sInf _ := ⟨fun _ hG _ _ hab => hab hG, fun _ hG _ _ hab _ hH => hG hH hab⟩
+  iInf_iSup_eq f := by ext; simp [Classical.skolem]
 
 中文:
 实例 completeAtomic布尔eanAlgebra
@@ -607,7 +608,8 @@ instance completeAtomicBooleanAlgebra
   inf_compl_le_bot _ _ _ h := absurd h.1 h.2
   top_le_sup_compl G v w _ := by tauto
   isLUB_sSup _ := ⟨fun G hG _ _ hab => ⟨G, hG, hab⟩, fun _ hG _ _ ⟨_, hH, hab⟩ => hG hH hab⟩
-  isGLB_sI
+  isGLB_sInf _ := ⟨fun _ hG _ _ hab => hab hG, fun _ hG _ _ hab _ hH => hG hH hab⟩
+  iInf_iSup_eq f := by ext; simp [Classical.skolem]
 
 Depends on / 依赖: Digraph, Digraph.completeDigraph, completeDigraph
 -/

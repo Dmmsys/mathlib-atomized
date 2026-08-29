@@ -58,7 +58,7 @@ theorem Set.Finite.dense_sInter
   | insert ha hsf ih =>
     simp only [sInter_insert, forall_mem_insert] at hd ⊢
     refine hd.1.inter_of_isOpen_right ?_ (hsf.isOpen_sInter (fun y hy => ho y (Or.inr hy)))
-    exact ih ((fun y hy => ho y (Or.in
+    exact ih ((fun y hy => ho y (Or.inr hy))) (fun y hy => hd.2 y hy)
 
 中文:
 定理 集合.有限.dense_s整数er
@@ -69,7 +69,7 @@ theorem Set.Finite.dense_sInter
   | insert ha hsf ih =>
     simp only [sInter_insert, forall_mem_insert] at hd ⊢
     refine hd.1.inter_of_isOpen_right ?_ (hsf.isOpen_sInter (fun y hy => ho y (Or.inr hy)))
-    exact ih ((fun y hy => ho y (Or.in
+    exact ih ((fun y hy => ho y (Or.inr hy))) (fun y hy => hd.2 y hy)
 
 Depends on / 依赖: Finite, Or.inr, Set.Finite.induction_on, forall_mem_insert, hsf.isOpen_sInter, induction_on, insert, inter_of_isOpen_right, isOpen_sInter, sInter_empty, sInter_insert
 -/
@@ -135,7 +135,11 @@ theorem IsGδ.baireSpace_of_dense
   intro f hof hdf
   obtain ⟨V, hV⟩ : exists V : Nat -> Set X, (forall n, IsOpen (V n)) ∧ s = ⋂ n, V n := eq_iInter_nat hG
   choose g hg1 hg2 hg3 using fun n => exists_open_dense_of_open_dense_subtype hd (hof n) (hdf n)
-  have h_inter_dense : Dense (⋂ n, g n inter V n) := BaireSpace.
+  have h_inter_dense : Dense (⋂ n, g n inter V n) := BaireSpace.baire_property (fun n => g n inter V n)
+    (fun n => (hg1 n).inter (hV.1 n))
+    (fun n => (hg2 n).inter_of_isOpen_left (hd.mono (by simp [hV.2, iInter_subset])) (hg1 n))
+  have h_inter_eq : ⋂ n, g n inter V n = ⋂ n, f n := by ext; simp_all; grind
+  exact Subtype.dense_iff.mpr fun a _ => h_inter_eq ▸ h_inter_dense a
 
 中文:
 定理 IsGδ.baireSpace_of_dense
@@ -146,7 +150,11 @@ theorem IsGδ.baireSpace_of_dense
   intro f hof hdf
   obtain ⟨V, hV⟩ : exists V : Nat -> Set X, (forall n, IsOpen (V n)) ∧ s = ⋂ n, V n := eq_iInter_nat hG
   choose g hg1 hg2 hg3 using fun n => exists_open_dense_of_open_dense_subtype hd (hof n) (hdf n)
-  have h_inter_dense : Dense (⋂ n, g n inter V n) := BaireSpace.
+  have h_inter_dense : Dense (⋂ n, g n inter V n) := BaireSpace.baire_property (fun n => g n inter V n)
+    (fun n => (hg1 n).inter (hV.1 n))
+    (fun n => (hg2 n).inter_of_isOpen_left (hd.mono (by simp [hV.2, iInter_subset])) (hg1 n))
+  have h_inter_eq : ⋂ n, g n inter V n = ⋂ n, f n := by ext; simp_all; grind
+  exact Subtype.dense_iff.mpr fun a _ => h_inter_eq ▸ h_inter_dense a
 
 Depends on / 依赖: BaireSpace, BaireSpace.baire_property, IsOpen, baire_property, eq_iInter_nat, exists_open_dense_of_open_dense_subtype, h_inter_dense, h_inter_eq, hd.mono, iInter_subset, inter_of_isOpen_left
 -/
@@ -175,7 +183,24 @@ theorem Topology.IsOpenEmbedding.baireSpace
   have c_open (n : Nat) : IsOpen (c n) := IsOpen.union (hp.isOpenMap (f n) (hof n))
     isClosed_closure.isOpen_compl
   have c_dense (n : Nat) : Dense (c n) := by
-    rw [dense_iff_closure_eq]
+    rw [dense_iff_closure_eq]; rw [subset_antisymm_iff]
+    have : univ subseteq closure (c n) := calc
+      _ subseteq (interior (closure s)) union (interior (closure s))ᶜ := by grind
+      _ subseteq closure s union (interior (closure s))ᶜ := by gcongr; exact interior_subset
+      _ subseteq closure (p '' f n) union (interior (closure s))ᶜ := union_subset_union
+          (closure_minimal (hp.continuous.range_subset_closure_image_dense (hdf n))
+          isClosed_closure) (subset_refl (interior (closure s))ᶜ)
+      _ subseteq closure (p '' f n) union closure ((closure s)ᶜ) := union_subset_union (by simp) (by simp)
+      _ = closure (c n) := closure_union.symm
+    grind
+  have c_inter_dense : Dense (⋂ n, c n) := dense_iInter_of_isOpen_nat c_open c_dense
+  have c_inter_eq : ⋂ n, f n = p ⁻¹' (⋂ n, c n) := by
+    ext x
+    simp only [mem_iInter, mem_preimage, mem_union, mem_compl_iff, c]
+    refine ⟨fun h i => by grind, fun h i => ?_⟩
+    exact hp.injective.mem_set_image.mp (imp_iff_or_not.mpr (h i)
+      (subset_closure (mem_range_self x)))
+  exact c_inter_eq ▸ Dense.preimage c_inter_dense hp.isOpenMap
 
 中文:
 定理 拓扑.是开嵌入.baireSpace
@@ -188,7 +213,24 @@ theorem Topology.IsOpenEmbedding.baireSpace
   have c_open (n : Nat) : IsOpen (c n) := IsOpen.union (hp.isOpenMap (f n) (hof n))
     isClosed_closure.isOpen_compl
   have c_dense (n : Nat) : Dense (c n) := by
-    rw [dense_iff_closure_eq]
+    rw [dense_iff_closure_eq]; rw [subset_antisymm_iff]
+    have : univ subseteq closure (c n) := calc
+      _ subseteq (interior (closure s)) union (interior (closure s))ᶜ := by grind
+      _ subseteq closure s union (interior (closure s))ᶜ := by gcongr; exact interior_subset
+      _ subseteq closure (p '' f n) union (interior (closure s))ᶜ := union_subset_union
+          (closure_minimal (hp.continuous.range_subset_closure_image_dense (hdf n))
+          isClosed_closure) (subset_refl (interior (closure s))ᶜ)
+      _ subseteq closure (p '' f n) union closure ((closure s)ᶜ) := union_subset_union (by simp) (by simp)
+      _ = closure (c n) := closure_union.symm
+    grind
+  have c_inter_dense : Dense (⋂ n, c n) := dense_iInter_of_isOpen_nat c_open c_dense
+  have c_inter_eq : ⋂ n, f n = p ⁻¹' (⋂ n, c n) := by
+    ext x
+    simp only [mem_iInter, mem_preimage, mem_union, mem_compl_iff, c]
+    refine ⟨fun h i => by grind, fun h i => ?_⟩
+    exact hp.injective.mem_set_image.mp (imp_iff_or_not.mpr (h i)
+      (subset_closure (mem_range_self x)))
+  exact c_inter_eq ▸ Dense.preimage c_inter_dense hp.isOpenMap
 
 Depends on / 依赖: IsOpen, IsOpen.union, c_dense, c_open, closure, dense_iff_closure_eq, hp.isOpenMap, interior, isClosed_closure, isClosed_closure.isOpen_compl, isOpenMap, isOpen_compl, subset_antisymm_iff, subseteq
 -/
@@ -572,7 +614,11 @@ theorem IsGδ.dense_iUnion_interior_of_closed
     refine dense_iInter_of_isOpen hgo fun i x => ?_
     rw [closure_compl]; rw [interior_frontier (hc _)]
     exact id
-  refine (hd.inter_of_Gδ hs (.iI
+  refine (hd.inter_of_Gδ hs (.iInter_of_isOpen fun i => (hgo i)) hgd).mono ?_
+  rintro x ⟨hxs, hxg⟩
+  rw [mem_iInter] at hxg
+  rcases mem_iUnion.1 (hU hxs) with ⟨i, hi⟩
+  exact mem_iUnion.2 ⟨i, self_sdiff_frontier (f i) ▸ ⟨hi, hxg _⟩⟩
 
 中文:
 定理 IsGδ.dense_iUnion_interior_of_closed
@@ -584,7 +630,11 @@ theorem IsGδ.dense_iUnion_interior_of_closed
     refine dense_iInter_of_isOpen hgo fun i x => ?_
     rw [closure_compl]; rw [interior_frontier (hc _)]
     exact id
-  refine (hd.inter_of_Gδ hs (.iI
+  refine (hd.inter_of_Gδ hs (.iInter_of_isOpen fun i => (hgo i)) hgd).mono ?_
+  rintro x ⟨hxs, hxg⟩
+  rw [mem_iInter] at hxg
+  rcases mem_iUnion.1 (hU hxs) with ⟨i, hi⟩
+  exact mem_iUnion.2 ⟨i, self_sdiff_frontier (f i) ▸ ⟨hi, hxg _⟩⟩
 
 Depends on / 依赖: IsOpen, closure_compl, dense_iInter_of_isOpen, frontier, hd.inter_of_G, iInter_of_isOpen, interior_frontier, isClosed_frontier, isClosed_frontier.isOpen_compl, isOpen_compl, mem_iInter, mem_iUnion, self_sdiff_frontier
 -/

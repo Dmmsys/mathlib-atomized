@@ -36,7 +36,8 @@ theorem mul_inverse_rev'
   · obtain ⟨⟨a, rfl⟩, b, rfl⟩ := h.isUnit_mul_iff.mp hab
     rw [← Units.val_mul]; rw [inverse_unit]; rw [inverse_unit]; rw [inverse_unit]; rw [← Units.val_mul]; rw [mul_inv_rev]
   obtain ha | hb := not_and_or.mp (mt h.isUnit_mul_iff.mpr hab)
-  · rw [inverse_non_un
+  · rw [inverse_non_unit _ hab, inverse_non_unit _ ha, mul_zero]
+  · rw [inverse_non_unit _ hab, inverse_non_unit _ hb, zero_mul]
 
 中文:
 定理 mul_inverse_rev'
@@ -46,7 +47,8 @@ theorem mul_inverse_rev'
   · obtain ⟨⟨a, rfl⟩, b, rfl⟩ := h.isUnit_mul_iff.mp hab
     rw [← Units.val_mul]; rw [inverse_unit]; rw [inverse_unit]; rw [inverse_unit]; rw [← Units.val_mul]; rw [mul_inv_rev]
   obtain ha | hb := not_and_or.mp (mt h.isUnit_mul_iff.mpr hab)
-  · rw [inverse_non_un
+  · rw [inverse_non_unit _ hab, inverse_non_unit _ ha, mul_zero]
+  · rw [inverse_non_unit _ hab, inverse_non_unit _ hb, zero_mul]
 
 Depends on / 依赖: IsUnit, Units.val_mul, h.isUnit_mul_iff.mp, h.isUnit_mul_iff.mpr, inverse_non_unit, inverse_unit, isUnit_mul_iff, mul_inv_rev, mul_zero, not_and_or, not_and_or.mp, val_mul, zero_mul
 -/

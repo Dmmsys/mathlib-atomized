@@ -729,7 +729,12 @@ definition lift₂
         rintro _ _ _ _ ⟨⟩ ⟨⟩
         exacts [rfl, (f.2 _ _ _ _).2, (f.2 _ _ _ _).1, (f.2 _ _ _ _).1.trans (f.2 _ _ _ _).2])
   invFun F :=
-    ⟨fun a₁ a₂ b₁ b₂ => F 
+    ⟨fun a₁ a₂ b₁ b₂ => F s(a₁, a₂) s(b₁, b₂), fun a₁ a₂ b₁ b₂ => by
+      constructor
+      exacts [congr_arg₂ F eq_swap rfl, congr_arg₂ F rfl eq_swap]⟩
+  right_inv _ := funext₂ fun a b => Sym2.inductionOn₂ a b fun _ _ _ _ => rfl
+
+@[simp]
 
 中文:
 定义 lift₂
@@ -740,7 +745,12 @@ definition lift₂
         rintro _ _ _ _ ⟨⟩ ⟨⟩
         exacts [rfl, (f.2 _ _ _ _).2, (f.2 _ _ _ _).1, (f.2 _ _ _ _).1.trans (f.2 _ _ _ _).2])
   invFun F :=
-    ⟨fun a₁ a₂ b₁ b₂ => F 
+    ⟨fun a₁ a₂ b₁ b₂ => F s(a₁, a₂) s(b₁, b₂), fun a₁ a₂ b₁ b₂ => by
+      constructor
+      exacts [congr_arg₂ F eq_swap rfl, congr_arg₂ F rfl eq_swap]⟩
+  right_inv _ := funext₂ fun a b => Sym2.inductionOn₂ a b fun _ _ _ _ => rfl
+
+@[simp]
 
 Depends on / 依赖: Quotient, Quotient.lift, Sym2.Rel.setoid, Sym2.inductionOn, eq_swap, exacts, invFun, right_inv, setoid
 -/
@@ -1634,7 +1644,14 @@ definition pmap
   Quot.recOn s g fun p q hpq => funext fun Hq => by
     rw [rel_iff'] at hpq
     have Hp : forall a in s(p.1, p.2), P a := fun a hmem =>
-      Hq a (Sym2.mk
+      Hq a (Sym2.mk_eq_mk_iff.2 hpq ▸ hmem : a in s(q.1, q.2))
+    have h : forall {s₂ e H}, Eq.ndrec (motive := fun s => (forall a in s, P a) -> Sym2 β) (g p) (b := s₂) e H =
+      g p Hp := by
+      rintro s₂ rfl _
+      rfl
+    refine h.trans (Quot.sound ?_)
+    rw [rel_iff']; rw [Prod.mk.injEq]; rw [Prod.swap_prod_mk]
+    apply hpq.imp <;> rintro rfl <;> simp
 
 中文:
 定义 pmap
@@ -1644,7 +1661,14 @@ definition pmap
   Quot.recOn s g fun p q hpq => funext fun Hq => by
     rw [rel_iff'] at hpq
     have Hp : forall a in s(p.1, p.2), P a := fun a hmem =>
-      Hq a (Sym2.mk
+      Hq a (Sym2.mk_eq_mk_iff.2 hpq ▸ hmem : a in s(q.1, q.2))
+    have h : forall {s₂ e H}, Eq.ndrec (motive := fun s => (forall a in s, P a) -> Sym2 β) (g p) (b := s₂) e H =
+      g p Hp := by
+      rintro s₂ rfl _
+      rfl
+    refine h.trans (Quot.sound ?_)
+    rw [rel_iff']; rw [Prod.mk.injEq]; rw [Prod.swap_prod_mk]
+    apply hpq.imp <;> rintro rfl <;> simp
 
 Depends on / 依赖: Eq.ndrec, Quot.recOn, Quot.sound, Sym2.mk, Sym2.mk_eq_mk_iff, h.trans, mem_mk_left, mem_mk_right, mk_eq_mk_iff, motive, rel_iff
 -/
@@ -2810,7 +2834,9 @@ definition _root_.Equiv.sigmaFiberFromRel
   left_inv z := by
     rcases z with ⟨⟨a₁, a₂⟩, h⟩
     rfl
-  right
+  right_inv z := by
+    rcases z with ⟨b, ⟨⟨a₁, rfl⟩, ⟨a₂, ha₂⟩⟩, h⟩
+    rfl
 
 中文:
 定义 _root_.等价.sigmaFiberFromRel
@@ -2824,7 +2850,9 @@ definition _root_.Equiv.sigmaFiberFromRel
   left_inv z := by
     rcases z with ⟨⟨a₁, a₂⟩, h⟩
     rfl
-  right
+  right_inv z := by
+    rcases z with ⟨b, ⟨⟨a₁, rfl⟩, ⟨a₂, ha₂⟩⟩, h⟩
+    rfl
 
 Depends on / 依赖: sym.comap
 -/
@@ -3426,7 +3454,9 @@ theorem perm_card_two_iff
         exists_eq_right_right, and_true]
       tauto
     mpr := fun
-        | .inl ⟨h₁, h₂⟩ | .i
+        | .inl ⟨h₁, h₂⟩ | .inr ⟨h₁, h₂⟩ => by
+          rw [h₁]; rw [h₂]
+          first | done | constructor }
 
 中文:
 定理 perm_card_two_iff
@@ -3437,7 +3467,9 @@ theorem perm_card_two_iff
         exists_eq_right_right, and_true]
       tauto
     mpr := fun
-        | .inl ⟨h₁, h₂⟩ | .i
+        | .inl ⟨h₁, h₂⟩ | .inr ⟨h₁, h₂⟩ => by
+          rw [h₁]; rw [h₂]
+          first | done | constructor }
 -/
 private theorem perm_card_two_iff {a₁ b₁ a₂ b₂ : α} :
     [a₁, b₁].Perm [a₂, b₂] ↔ a₁ = a₂ ∧ b₁ = b₂ ∨ a₁ = b₂ ∧ b₁ = a₂ :=
@@ -3470,7 +3502,31 @@ definition sym2EquivSym'
       (by
         rintro ⟨x, hx⟩ ⟨y, hy⟩ h
         rcases x with - | ⟨_, x⟩; · simp at hx
-        
+        rcases x with - | ⟨_, x⟩; · simp at hx
+        rcases x with - | ⟨_, x⟩; swap
+        · exfalso
+          simp at hx
+        rcases y with - | ⟨_, y⟩; · simp at hy
+        rcases y with - | ⟨_, y⟩; · simp at hy
+        rcases y with - | ⟨_, y⟩; swap
+        · exfalso
+          simp at hy
+        rcases perm_card_two_iff.mp h with (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)
+        · constructor
+        apply Sym2.Rel.swap)
+  left_inv := by apply Sym2.ind; aesop (add norm unfold [Sym2.fromVector])
+  right_inv x := by
+    refine x.recOnSubsingleton fun x => ?_
+    obtain ⟨x, hx⟩ := x
+    obtain - | ⟨-, x⟩ := x
+    · simp at hx
+    rcases x with - | ⟨_, x⟩
+    · simp at hx
+    rcases x with - | ⟨_, x⟩
+    swap
+    · exfalso
+      simp at hx
+    rfl
 
 中文:
 定义 sym2EquivSym'
@@ -3486,7 +3542,31 @@ definition sym2EquivSym'
       (by
         rintro ⟨x, hx⟩ ⟨y, hy⟩ h
         rcases x with - | ⟨_, x⟩; · simp at hx
-        
+        rcases x with - | ⟨_, x⟩; · simp at hx
+        rcases x with - | ⟨_, x⟩; swap
+        · exfalso
+          simp at hx
+        rcases y with - | ⟨_, y⟩; · simp at hy
+        rcases y with - | ⟨_, y⟩; · simp at hy
+        rcases y with - | ⟨_, y⟩; swap
+        · exfalso
+          simp at hy
+        rcases perm_card_two_iff.mp h with (⟨rfl, rfl⟩ | ⟨rfl, rfl⟩)
+        · constructor
+        apply Sym2.Rel.swap)
+  left_inv := by apply Sym2.ind; aesop (add norm unfold [Sym2.fromVector])
+  right_inv x := by
+    refine x.recOnSubsingleton fun x => ?_
+    obtain ⟨x, hx⟩ := x
+    obtain - | ⟨-, x⟩ := x
+    · simp at hx
+    rcases x with - | ⟨_, x⟩
+    · simp at hx
+    rcases x with - | ⟨_, x⟩
+    swap
+    · exfalso
+      simp at hx
+    rfl
 
 Depends on / 依赖: List.Perm.refl, List.Perm.swap, Quot.map, fromVector, invFun, perm_card_two_iff, perm_card_two_iff.mp
 -/

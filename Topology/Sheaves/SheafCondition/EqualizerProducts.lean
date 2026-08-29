@@ -402,7 +402,8 @@ definition diagram.isoOfIso
         simp [leftRes]
       · dsimp [diagram]
         refine Pi.hom_ext _ _ fun b => ?_
-      
+        simp [rightRes]
+      · simp)
 
 中文:
 定义 diagram.isoOfIso
@@ -419,7 +420,8 @@ definition diagram.isoOfIso
         simp [leftRes]
       · dsimp [diagram]
         refine Pi.hom_ext _ _ fun b => ?_
-      
+        simp [rightRes]
+      · simp)
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, Pi.hom_ext, diagram, hom_ext, isoOfIso, leftRes, ofComponents, piInters, piInters.isoOfIso, piOpens, piOpens.isoOfIso, rightRes
 -/
@@ -526,7 +528,20 @@ definition coneEquivFunctorObj
         cases Y <;> cases Z <;> cases f
         · dsimp
           ext
-          
+          simp
+        · dsimp
+          ext ij
+          rcases ij with ⟨i, j⟩
+          simpa [SheafConditionEqualizerProducts.leftRes]
+            using! c.π.naturality (Quiver.Hom.op (Hom.left i j))
+        · dsimp
+          ext ij
+          rcases ij with ⟨i, j⟩
+          simpa [SheafConditionEqualizerProducts.rightRes]
+            using! c.π.naturality (Quiver.Hom.op (Hom.right i j))
+        · dsimp
+          ext
+          simp }
 
 中文:
 定义 coneEquivFunctorObj
@@ -540,7 +555,20 @@ definition coneEquivFunctorObj
         cases Y <;> cases Z <;> cases f
         · dsimp
           ext
-          
+          simp
+        · dsimp
+          ext ij
+          rcases ij with ⟨i, j⟩
+          simpa [SheafConditionEqualizerProducts.leftRes]
+            using! c.π.naturality (Quiver.Hom.op (Hom.left i j))
+        · dsimp
+          ext ij
+          rcases ij with ⟨i, j⟩
+          simpa [SheafConditionEqualizerProducts.rightRes]
+            using! c.π.naturality (Quiver.Hom.op (Hom.right i j))
+        · dsimp
+          ext
+          simp }
 
 Depends on / 依赖: c.pt
 -/
@@ -639,7 +667,37 @@ definition coneEquivInverseObj
         · exact c.π.app WalkingParallelPair.one ≫ Pi.π _ (i, j)
       naturality := by
         intro x y f
-        induct
+        induction x with | op x => ?_
+        induction y with | op y => ?_
+        have ef : f = f.unop.op := rfl
+        revert ef
+        generalize f.unop = f'
+        rintro rfl
+        rcases x with (⟨i⟩ | ⟨⟩) <;> rcases y with (⟨⟩ | ⟨j, j⟩) <;> rcases f' with ⟨⟩
+        · dsimp
+          rw [F.map_id]
+          simp
+        · dsimp
+          simp only [Category.id_comp, Category.assoc]
+          have h := c.π.naturality WalkingParallelPairHom.left
+          dsimp [SheafConditionEqualizerProducts.leftRes] at h
+          simp only [Category.id_comp] at h
+          have h' := h =≫ Pi.π _ (i, j)
+          rw [h']
+          simp only [Category.assoc, limit.lift_π, Fan.mk_π_app]
+          rfl
+        · dsimp
+          simp only [Category.id_comp, Category.assoc]
+          have h := c.π.naturality WalkingParallelPairHom.right
+          dsimp [SheafConditionEqualizerProducts.rightRes] at h
+          simp only [Category.id_comp] at h
+          have h' := h =≫ Pi.π _ (j, i)
+          rw [h']
+          simp
+          rfl
+        · dsimp
+          rw [F.map_id]
+          simp }
 
 中文:
 定义 coneEquivInverseObj
@@ -654,7 +712,37 @@ definition coneEquivInverseObj
         · exact c.π.app WalkingParallelPair.one ≫ Pi.π _ (i, j)
       naturality := by
         intro x y f
-        induct
+        induction x with | op x => ?_
+        induction y with | op y => ?_
+        have ef : f = f.unop.op := rfl
+        revert ef
+        generalize f.unop = f'
+        rintro rfl
+        rcases x with (⟨i⟩ | ⟨⟩) <;> rcases y with (⟨⟩ | ⟨j, j⟩) <;> rcases f' with ⟨⟩
+        · dsimp
+          rw [F.map_id]
+          simp
+        · dsimp
+          simp only [Category.id_comp, Category.assoc]
+          have h := c.π.naturality WalkingParallelPairHom.left
+          dsimp [SheafConditionEqualizerProducts.leftRes] at h
+          simp only [Category.id_comp] at h
+          have h' := h =≫ Pi.π _ (i, j)
+          rw [h']
+          simp only [Category.assoc, limit.lift_π, Fan.mk_π_app]
+          rfl
+        · dsimp
+          simp only [Category.id_comp, Category.assoc]
+          have h := c.π.naturality WalkingParallelPairHom.right
+          dsimp [SheafConditionEqualizerProducts.rightRes] at h
+          simp only [Category.id_comp] at h
+          have h' := h =≫ Pi.π _ (j, i)
+          rw [h']
+          simp
+          rfl
+        · dsimp
+          rw [F.map_id]
+          simp }
 
 Depends on / 依赖: c.pt
 -/
@@ -723,7 +811,7 @@ definition coneEquivInverse
           dsimp only [Fork.ι]
           rw [← f.w WalkingParallelPair.zero]; rw [Category.assoc]
         · dsimp
-   
+          rw [← f.w WalkingParallelPair.one]; rw [Category.assoc] }
 
 中文:
 定义 coneEquivInverse
@@ -739,7 +827,7 @@ definition coneEquivInverse
           dsimp only [Fork.ι]
           rw [← f.w WalkingParallelPair.zero]; rw [Category.assoc]
         · dsimp
-   
+          rw [← f.w WalkingParallelPair.one]; rw [Category.assoc] }
 
 Depends on / 依赖: coneEquivInverseObj
 -/
@@ -778,7 +866,10 @@ definition coneEquivUnitIsoApp
   inv :=
     { hom := 𝟙 _
       w := fun j => by
-        induction j with | op 
+        induction j with | op j => ?_
+        rcases j with ⟨⟩ <;>
+        · dsimp [coneEquivInverse]
+          simp only [Limits.Fan.mk_π_app, Category.id_comp, Limits.limit.lift_π] }
 
 中文:
 定义 coneEquivUnitIsoApp
@@ -792,7 +883,10 @@ definition coneEquivUnitIsoApp
   inv :=
     { hom := 𝟙 _
       w := fun j => by
-        induction j with | op 
+        induction j with | op j => ?_
+        rcases j with ⟨⟩ <;>
+        · dsimp [coneEquivInverse]
+          simp only [Limits.Fan.mk_π_app, Category.id_comp, Limits.limit.lift_π] }
 
 Depends on / 依赖: Category, Category.id_comp, Limits, Limits.Fan.mk_, Limits.limit.lift_, coneEquivInverse, id_comp
 -/
@@ -860,7 +954,18 @@ definition coneEquivCounitIso
                 simp }
         inv :=
           { hom := 𝟙 _
-            w
+            w := by
+              rintro ⟨_ | _⟩
+              · dsimp
+                ext
+                simp
+              · dsimp
+                ext
+                simp } })
+    fun {c d} f => by
+    ext
+    dsimp
+    simp only [Category.comp_id, Category.id_comp]
 
 中文:
 定义 coneEquivCounitIso
@@ -879,7 +984,18 @@ definition coneEquivCounitIso
                 simp }
         inv :=
           { hom := 𝟙 _
-            w
+            w := by
+              rintro ⟨_ | _⟩
+              · dsimp
+                ext
+                simp
+              · dsimp
+                ext
+                simp } })
+    fun {c d} f => by
+    ext
+    dsimp
+    simp only [Category.comp_id, Category.id_comp]
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, NatIso, NatIso.ofComponents, comp_id, id_comp, ofComponents
 -/
@@ -963,7 +1079,26 @@ definition isLimitMapConeOfIsLimitSheafConditionFork
             rcases x with ⟨⟩
             · simp
               rfl
-            · dsimp [coneEquivInverse, SheafCondi
+            · dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
+                SheafConditionEqualizerProducts.leftRes]
+              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
+                Category.assoc]
+              rw [← F.map_comp]
+              rfl }
+      inv :=
+        { hom := 𝟙 _
+          w := by
+            intro x
+            induction x with | op x => ?_
+            rcases x with ⟨⟩
+            · simp
+              rfl
+            · dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
+                SheafConditionEqualizerProducts.leftRes]
+              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
+                Category.assoc]
+              rw [← F.map_comp]
+              rfl } }
 
 中文:
 定义 isLimitMapConeOfIsLimitSheafConditionFork
@@ -976,7 +1111,26 @@ definition isLimitMapConeOfIsLimitSheafConditionFork
             rcases x with ⟨⟩
             · simp
               rfl
-            · dsimp [coneEquivInverse, SheafCondi
+            · dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
+                SheafConditionEqualizerProducts.leftRes]
+              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
+                Category.assoc]
+              rw [← F.map_comp]
+              rfl }
+      inv :=
+        { hom := 𝟙 _
+          w := by
+            intro x
+            induction x with | op x => ?_
+            rcases x with ⟨⟩
+            · simp
+              rfl
+            · dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
+                SheafConditionEqualizerProducts.leftRes]
+              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
+                Category.assoc]
+              rw [← F.map_comp]
+              rfl } }
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, F.map_comp, Fan.mk_, IsLimit, IsLimit.ofConeEquiv, IsLimit.ofIsoLimit, SheafConditionEqualizerProducts, SheafConditionEqualizerProducts.leftRes, SheafConditionEqualizerProducts.res, coneEqui, coneEquiv, coneEquivInverse, id_comp, leftRes, limit.lift_, map_comp, ofConeEquiv, ofIsoLimit
 -/
@@ -1030,7 +1184,25 @@ definition isLimitSheafConditionForkOfIsLimitMapCone
             · dsimp
               ext
               dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
-         
+                SheafConditionEqualizerProducts.leftRes]
+              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
+                Category.assoc]
+              rw [← F.map_comp]
+              rfl }
+      inv :=
+        { hom := 𝟙 _
+          w := by
+            rintro ⟨⟩
+            · simp
+              rfl
+            · dsimp
+              ext
+              dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
+                SheafConditionEqualizerProducts.leftRes]
+              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
+                Category.assoc]
+              rw [← F.map_comp]
+              rfl } }
 
 中文:
 定义 isLimitSheafConditionForkOfIsLimitMapCone
@@ -1045,7 +1217,25 @@ definition isLimitSheafConditionForkOfIsLimitMapCone
             · dsimp
               ext
               dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
-         
+                SheafConditionEqualizerProducts.leftRes]
+              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
+                Category.assoc]
+              rw [← F.map_comp]
+              rfl }
+      inv :=
+        { hom := 𝟙 _
+          w := by
+            rintro ⟨⟩
+            · simp
+              rfl
+            · dsimp
+              ext
+              dsimp [coneEquivInverse, SheafConditionEqualizerProducts.res,
+                SheafConditionEqualizerProducts.leftRes]
+              simp only [limit.lift_π, limit.lift_π_assoc, Category.id_comp, Fan.mk_π_app,
+                Category.assoc]
+              rw [← F.map_comp]
+              rfl } }
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, F.map_comp, Fan.mk_, IsLimit, IsLimit.ofConeEquiv, IsLimit.ofIsoLimit, SheafConditionEqualizerProdu, SheafConditionEqualizerProducts, SheafConditionEqualizerProducts.leftRes, SheafConditionEqualizerProducts.res, coneEquiv, coneEquivInverse, id_comp, leftRes, limit.lift_, map_comp, ofConeEquiv, ofIsoLimit
 -/

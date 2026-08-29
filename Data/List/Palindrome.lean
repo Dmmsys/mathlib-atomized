@@ -97,7 +97,7 @@ theorem of_reverse_eq
   rw [reverse_cons]; rw [reverse_append] at hr
   rw [head_eq_of_cons_eq hr]
   have : Palindrome l := hp (append_inj_left' (tail_eq_of_cons_eq hr) rfl)
-  exact Palindrome.cons_concat 
+  exact Palindrome.cons_concat x this
 
 中文:
 定理 of_reverse_eq
@@ -109,7 +109,7 @@ theorem of_reverse_eq
   rw [reverse_cons]; rw [reverse_append] at hr
   rw [head_eq_of_cons_eq hr]
   have : Palindrome l := hp (append_inj_left' (tail_eq_of_cons_eq hr) rfl)
-  exact Palindrome.cons_concat 
+  exact Palindrome.cons_concat x this
 
 Depends on / 依赖: Palindrome, Palindrome.cons_concat, Palindrome.nil, Palindrome.singleton, append_inj_left, bidirectionalRecOn, cons_concat, head_eq_of_cons_eq, reverse_append, reverse_cons, singleton, tail_eq_of_cons_eq
 -/

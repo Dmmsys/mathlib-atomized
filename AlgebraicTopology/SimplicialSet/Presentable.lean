@@ -47,7 +47,10 @@ lemma exists_epi_from_isCardinalPresentable
     · exact hasCardinalLT_of_finite _ _ (by rfl)
     · rintro s
       dsimp
-      infe
+      infer_instance
+  · simp only [← Subcomplex.range_eq_top_iff, range_eq_iSup_sigma_ι,
+        colimit.ι_desc, Cofan.mk_ι_app, ← N.iSup_subcomplex_eq_top,
+        Subcomplex.range_eq_ofSimplex, Equiv.apply_symm_apply]
 
 中文:
 引理 存在_epi_from_isCardinalPresentable
@@ -59,7 +62,10 @@ lemma exists_epi_from_isCardinalPresentable
     · exact hasCardinalLT_of_finite _ _ (by rfl)
     · rintro s
       dsimp
-      infe
+      infer_instance
+  · simp only [← Subcomplex.range_eq_top_iff, range_eq_iSup_sigma_ι,
+        colimit.ι_desc, Cofan.mk_ι_app, ← N.iSup_subcomplex_eq_top,
+        Subcomplex.range_eq_ofSimplex, Equiv.apply_symm_apply]
 
 Depends on / 依赖: Cofan.mk_, Equiv.apply_symm_apply, N.iSup_subcomplex_eq_top, Sigma.desc, Subcomplex, Subcomplex.range_eq_ofSimplex, Subcomplex.range_eq_top_iff, allowSynthFailures, apply_symm_apply, colimit, coproductIsCoproduct, hasCardinalLT_of_finite, iSup_subcomplex_eq_top, infer_instance, isCardinalPresentable_of_isColimit, range_eq_ofSimplex, range_eq_top_iff, s.dim, s.simplex, simplex
 -/

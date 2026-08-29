@@ -44,7 +44,10 @@ definition map
     | mem a ha =>
       obtain ⟨a, ha, rfl⟩ := ha
       rw [← f.map_directSumDecompose]
-      exact Idea
+      exact Ideal.mem_map_of_mem _ (I.2 _ ha)
+    | smul a₁ a₂ ha₂ ih =>
+      classical rw [smul_eq_mul, DirectSum.decompose_mul, DirectSum.coe_mul_apply]
+exact sum_mem fun ij hij => Ideal.mul_mem_left _ _ ih _
 
 中文:
 定义 map
@@ -58,7 +61,10 @@ definition map
     | mem a ha =>
       obtain ⟨a, ha, rfl⟩ := ha
       rw [← f.map_directSumDecompose]
-      exact Idea
+      exact Ideal.mem_map_of_mem _ (I.2 _ ha)
+    | smul a₁ a₂ ha₂ ih =>
+      classical rw [smul_eq_mul, DirectSum.decompose_mul, DirectSum.coe_mul_apply]
+exact sum_mem fun ij hij => Ideal.mul_mem_left _ _ ih _
 
 Depends on / 依赖: I.toIdeal.map, toIdeal
 -/

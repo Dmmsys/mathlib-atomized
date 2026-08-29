@@ -96,7 +96,8 @@ definition algebraizeGetParam
     match thm with
     | .str `RingHom t => return .str `Algebra t
     | _ =>
-  
+      throwError "theorem name must be of the form `RingHom.Property` if no argument is provided"
+  | _ => throwError "unexpected algebraize argument"
 
 中文:
 定义 algebraizeGetParam
@@ -110,7 +111,8 @@ definition algebraizeGetParam
     match thm with
     | .str `RingHom t => return .str `Algebra t
     | _ =>
-  
+      throwError "theorem name must be of the form `RingHom.Property` if no argument is provided"
+  | _ => throwError "unexpected algebraize argument"
 -/
 def algebraizeGetParam (thm : Name) (stx : Syntax) : AttrM Name := do
   match stx with
@@ -168,7 +170,10 @@ definition addAlgebraInstanceFromRingHom
   -- If the instance already exists, we do not do anything
   unless (← synthInstance? alg).isSome do
   liftMetaTactic fun mvarid => do
-  
+    let nm ← mkFreshBinderNameForTactic `algInst
+    let mvar ← mvarid.define nm alg (← mkAppM ``RingHom.toAlgebra #[f])
+    let (_, mvar) ← mvar.intro1P
+    return [mvar]
 
 中文:
 定义 addAlgebraInstanceFromRingHom
@@ -180,7 +185,10 @@ definition addAlgebraInstanceFromRingHom
   -- If the instance already exists, we do not do anything
   unless (← synthInstance? alg).isSome do
   liftMetaTactic fun mvarid => do
-  
+    let nm ← mkFreshBinderNameForTactic `algInst
+    let mvar ← mvarid.define nm alg (← mkAppM ``RingHom.toAlgebra #[f])
+    let (_, mvar) ← mvar.intro1P
+    return [mvar]
 
 Depends on / 依赖: withMainContext
 -/
@@ -208,7 +216,19 @@ definition addIsScalarTowerInstanceFromRingHomComp
   -- If the instance already exists, we do not do anything
   unless (← synthInstance? tower).isSome do
   liftMetaTactic fun mvarid => do
-    let nm ← mkFreshBinderNameF
+    let nm ← mkFreshBinderNameForTactic `scalarTowerInst
+    let h ← mkFreshExprMVar (← mkAppM ``Eq #[
+      ← mkAppOptM ``algebraMap #[l[0]!, l[2]!, none, none, none],
+      ← mkAppM ``RingHom.comp #[
+        ← mkAppOptM ``algebraMap #[l[1]!, l[2]!, none, none, none],
+        ← mkAppOptM ``algebraMap #[l[0]!, l[1]!, none, none, none]]])
+    -- Note: this could fail, but then `algebraize` will just continue, and won't add this instance
+    h.mvarId!.refl
+    let val ← mkAppOptM ``IsScalarTower.of_algebraMap_eq'
+      #[l[0]!, l[1]!, l[2]!, none, none, none, none, none, none, h]
+    let mvar ← mvarid.define nm tower val
+    let (_, mvar) ← mvar.intro1P
+    return [mvar]
 
 中文:
 定义 addIsScalarTowerInstanceFromRingHomComp
@@ -219,7 +239,19 @@ definition addIsScalarTowerInstanceFromRingHomComp
   -- If the instance already exists, we do not do anything
   unless (← synthInstance? tower).isSome do
   liftMetaTactic fun mvarid => do
-    let nm ← mkFreshBinderNameF
+    let nm ← mkFreshBinderNameForTactic `scalarTowerInst
+    let h ← mkFreshExprMVar (← mkAppM ``Eq #[
+      ← mkAppOptM ``algebraMap #[l[0]!, l[2]!, none, none, none],
+      ← mkAppM ``RingHom.comp #[
+        ← mkAppOptM ``algebraMap #[l[1]!, l[2]!, none, none, none],
+        ← mkAppOptM ``algebraMap #[l[0]!, l[1]!, none, none, none]]])
+    -- Note: this could fail, but then `algebraize` will just continue, and won't add this instance
+    h.mvarId!.refl
+    let val ← mkAppOptM ``IsScalarTower.of_algebraMap_eq'
+      #[l[0]!, l[1]!, l[2]!, none, none, none, none, none, none, h]
+    let mvar ← mvarid.define nm tower val
+    let (_, mvar) ← mvar.intro1P
+    return [mvar]
 
 Depends on / 依赖: withMainContext
 -/
@@ -255,7 +287,56 @@ definition addProperties
     if decl.isImplementationDetail then return
     let (nm, args) := (← instantiateMVars decl.type).getAppFnArgs
     -- Check if the type of the current hypothesis has been tagged with the `algebraize` attribute
-    match Attr.algebrai
+    match Attr.algebraizeAttr.getParam? (← getEnv) nm with
+    -- If it has, `p` will either be the name of the corresponding `Algebra` property, or a
+    -- lemma/constructor.
+    | some p =>
+      let cinfo ← try getConstInfo p catch _ =>
+        logWarning m!"Hypothesis {decl.toExpr} has type{indentD decl.type}.\n\
+          Its head symbol {.ofConstName nm} is (effectively) tagged with `@[algebraize {p}]`, \
+          but no constant{indentD p}\nhas been found.\n\
+          Check for missing imports, missing namespaces or typos."
+        return
+      let p' ← mkConstWithFreshMVarLevels p
+      let (pargs, _, _) ← forallMetaTelescope (← inferType p')
+      let tp' := mkAppN p' pargs
+
+      let getValType : MetaM (Option (Expr × Expr)) := do
+        /- If the attribute points to the corresponding `Algebra` property itself, we assume that it
+        is definitionally the same as the `RingHom` property. Then, we just need to construct its
+        type and the local declaration will already give a valid term. -/
+        if cinfo.isInductive then
+          pargs[0]!.mvarId!.assignIfDefEq args[0]!
+          pargs[1]!.mvarId!.assignIfDefEq args[1]!
+          -- This should be the type `Algebra.Property A B`
+          let tp ← instantiateMVars tp'
+          if ← isDefEqGuarded decl.type tp then return (decl.toExpr, tp)
+          else return none
+        /- Otherwise, the attribute points to a lemma or a constructor for the `Algebra` property.
+        In this case, we assume that the `RingHom` property is the last argument of the lemma or
+        constructor (and that this is all we need to supply explicitly). -/
+        else
+          try pargs.back!.mvarId!.assignIfDefEq decl.toExpr catch _ => return none
+          let val ← instantiateMVars tp'
+          let tp ← inferType val -- This should be the type `Algebra.Property A B`.
+          return (val, tp)
+      let some (val, tp) ← getValType | return
+      /- Find all arguments to `Algebra.Property A B` or `Module.Property A B` which are
+        of the form `RingHom.toAlgebra f`, `RingHom.toModule f`
+        or `Algebra.toModule (RingHom.toAlgebra f)`. -/
+let ringHom_args ← tp.getAppArgs.filterMapM fun x => liftMetaM do
+        let y := (← whnfUntil x ``Algebra.toModule) >>= (·.getAppArgs.back?)
+        return ((← whnfUntil (y.getD x) ``RingHom.toAlgebra) <|> (← whnfUntil x ``RingHom.toModule))
+          >>= (·.getAppArgs.back?)
+      /- Check that we're not reproving a local hypothesis, and that all involved `RingHom`s are
+        indeed arguments to the tactic. -/
+      unless (← synthInstance? tp).isSome || !(← ringHom_args.allM (fun z => t.anyM
+        (withoutModifyingMCtx <| isDefEq z ·))) do
+      liftMetaTactic fun mvarid => do
+        let nm ← mkFreshBinderNameForTactic `algebraizeInst
+        let (_, mvar) ← mvarid.note nm val tp
+        return [mvar]
+    | none => return
 
 中文:
 定义 addProperties
@@ -266,7 +347,56 @@ definition addProperties
     if decl.isImplementationDetail then return
     let (nm, args) := (← instantiateMVars decl.type).getAppFnArgs
     -- Check if the type of the current hypothesis has been tagged with the `algebraize` attribute
-    match Attr.algebrai
+    match Attr.algebraizeAttr.getParam? (← getEnv) nm with
+    -- If it has, `p` will either be the name of the corresponding `Algebra` property, or a
+    -- lemma/constructor.
+    | some p =>
+      let cinfo ← try getConstInfo p catch _ =>
+        logWarning m!"Hypothesis {decl.toExpr} has type{indentD decl.type}.\n\
+          Its head symbol {.ofConstName nm} is (effectively) tagged with `@[algebraize {p}]`, \
+          but no constant{indentD p}\nhas been found.\n\
+          Check for missing imports, missing namespaces or typos."
+        return
+      let p' ← mkConstWithFreshMVarLevels p
+      let (pargs, _, _) ← forallMetaTelescope (← inferType p')
+      let tp' := mkAppN p' pargs
+
+      let getValType : MetaM (Option (Expr × Expr)) := do
+        /- If the attribute points to the corresponding `Algebra` property itself, we assume that it
+        is definitionally the same as the `RingHom` property. Then, we just need to construct its
+        type and the local declaration will already give a valid term. -/
+        if cinfo.isInductive then
+          pargs[0]!.mvarId!.assignIfDefEq args[0]!
+          pargs[1]!.mvarId!.assignIfDefEq args[1]!
+          -- This should be the type `Algebra.Property A B`
+          let tp ← instantiateMVars tp'
+          if ← isDefEqGuarded decl.type tp then return (decl.toExpr, tp)
+          else return none
+        /- Otherwise, the attribute points to a lemma or a constructor for the `Algebra` property.
+        In this case, we assume that the `RingHom` property is the last argument of the lemma or
+        constructor (and that this is all we need to supply explicitly). -/
+        else
+          try pargs.back!.mvarId!.assignIfDefEq decl.toExpr catch _ => return none
+          let val ← instantiateMVars tp'
+          let tp ← inferType val -- This should be the type `Algebra.Property A B`.
+          return (val, tp)
+      let some (val, tp) ← getValType | return
+      /- Find all arguments to `Algebra.Property A B` or `Module.Property A B` which are
+        of the form `RingHom.toAlgebra f`, `RingHom.toModule f`
+        or `Algebra.toModule (RingHom.toAlgebra f)`. -/
+let ringHom_args ← tp.getAppArgs.filterMapM fun x => liftMetaM do
+        let y := (← whnfUntil x ``Algebra.toModule) >>= (·.getAppArgs.back?)
+        return ((← whnfUntil (y.getD x) ``RingHom.toAlgebra) <|> (← whnfUntil x ``RingHom.toModule))
+          >>= (·.getAppArgs.back?)
+      /- Check that we're not reproving a local hypothesis, and that all involved `RingHom`s are
+        indeed arguments to the tactic. -/
+      unless (← synthInstance? tp).isSome || !(← ringHom_args.allM (fun z => t.anyM
+        (withoutModifyingMCtx <| isDefEq z ·))) do
+      liftMetaTactic fun mvarid => do
+        let nm ← mkFreshBinderNameForTactic `algebraizeInst
+        let (_, mvar) ← mvarid.note nm val tp
+        return [mvar]
+    | none => return
 
 Depends on / 依赖: withMainContext
 -/

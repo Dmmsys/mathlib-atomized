@@ -554,7 +554,12 @@ theorem units_smul_resolvent
     rw [smul_assoc]; rw [← smul_sub]
     have h' : ¬IsUnit (r⁻¹ • (s • (1 : A) - a)) := fun hu =>
       h (by simpa only [smul_inv_smul] using IsUnit.smul r hu)
-    simp only [Rin
+    simp only [Ring.inverse_non_unit _ h, Ring.inverse_non_unit _ h', smul_zero]
+  · simp only [resolvent]
+    have h' : IsUnit (r • algebraMap R A (r⁻¹ • s) - a) := by
+      simpa [Algebra.algebraMap_eq_smul_one, smul_assoc] using notMem_iff.mp h
+    rw [← h'.val_subInvSMul]; rw [← (notMem_iff.mp h).unit_spec]; rw [Ring.inverse_unit]; rw [Ring.inverse_unit]; rw [h'.val_inv_subInvSMul]
+    simp only [Algebra.algebraMap_eq_smul_one, smul_assoc, smul_inv_smul]
 
 中文:
 定理 units_smul_resolvent
@@ -566,7 +571,12 @@ theorem units_smul_resolvent
     rw [smul_assoc]; rw [← smul_sub]
     have h' : ¬IsUnit (r⁻¹ • (s • (1 : A) - a)) := fun hu =>
       h (by simpa only [smul_inv_smul] using IsUnit.smul r hu)
-    simp only [Rin
+    simp only [Ring.inverse_non_unit _ h, Ring.inverse_non_unit _ h', smul_zero]
+  · simp only [resolvent]
+    have h' : IsUnit (r • algebraMap R A (r⁻¹ • s) - a) := by
+      simpa [Algebra.algebraMap_eq_smul_one, smul_assoc] using notMem_iff.mp h
+    rw [← h'.val_subInvSMul]; rw [← (notMem_iff.mp h).unit_spec]; rw [Ring.inverse_unit]; rw [Ring.inverse_unit]; rw [h'.val_inv_subInvSMul]
+    simp only [Algebra.algebraMap_eq_smul_one, smul_assoc, smul_inv_smul]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, IsUnit, IsUnit.smul, Ring.inverse_non_unit, algebraMap, algebraMap_eq_smul_one, inverse_non_unit, mem_iff, notMem_iff, notMem_iff.mp, resolvent, smul_assoc, smul_inv_smul, smul_sub, smul_zero, spectrum
 -/
@@ -639,7 +649,11 @@ theorem inv_mem_resolventSet
   rw [mem_resolventSet_iff]; rw [Algebra.algebraMap_eq_smul_one]; rw [← Units.smul_def] at h ⊢
   rw [IsUnit.smul_sub_iff_sub_inv_smul]; rw [inv_inv]; rw [IsUnit.sub_iff]
   have h₁ : (a : A) * (r • (↑a⁻¹ : A) - 1) = r • (1 : A) - a := by
-    rw [mul_sub]; rw [mul_smul_comm]; rw [a.mul_inv]; rw [mu
+    rw [mul_sub]; rw [mul_smul_comm]; rw [a.mul_inv]; rw [mul_one]
+  have h₂ : (r • (↑a⁻¹ : A) - 1) * a = r • (1 : A) - a := by
+    rw [sub_mul]; rw [smul_mul_assoc]; rw [a.inv_mul]; rw [one_mul]
+  have hcomm : Commute (a : A) (r • (↑a⁻¹ : A) - 1) := by rwa [← h₂] at h₁
+  exact (hcomm.isUnit_mul_iff.mp (h₁.symm ▸ h)).2
 
 中文:
 定理 inv_mem_resolventSet
@@ -648,7 +662,11 @@ theorem inv_mem_resolventSet
   rw [mem_resolventSet_iff]; rw [Algebra.algebraMap_eq_smul_one]; rw [← Units.smul_def] at h ⊢
   rw [IsUnit.smul_sub_iff_sub_inv_smul]; rw [inv_inv]; rw [IsUnit.sub_iff]
   have h₁ : (a : A) * (r • (↑a⁻¹ : A) - 1) = r • (1 : A) - a := by
-    rw [mul_sub]; rw [mul_smul_comm]; rw [a.mul_inv]; rw [mu
+    rw [mul_sub]; rw [mul_smul_comm]; rw [a.mul_inv]; rw [mul_one]
+  have h₂ : (r • (↑a⁻¹ : A) - 1) * a = r • (1 : A) - a := by
+    rw [sub_mul]; rw [smul_mul_assoc]; rw [a.inv_mul]; rw [one_mul]
+  have hcomm : Commute (a : A) (r • (↑a⁻¹ : A) - 1) := by rwa [← h₂] at h₁
+  exact (hcomm.isUnit_mul_iff.mp (h₁.symm ▸ h)).2
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Commute, IsScalarTower, IsScalarTower.to_smulCommClass, IsUnit, IsUnit.smul_sub_iff_sub_inv_smul, IsUnit.sub_iff, SMulCommClass, Units.smul_def, a.inv_mul, a.mul_inv, algebraMap_eq_smul_one, inv_inv, inv_mul, mem_resolventSet_iff, mul_inv, mul_one, mul_smul_comm, mul_sub
 -/
@@ -848,7 +866,15 @@ theorem unit_mem_mul_comm
     · calc
         (1 - y * x) * (1 + y * (IsUnit.unit h).inv * x) =
             1 - y * x + y * ((1 - x * y) * h.unit.inv) * x := by noncomm_ring
-
+        _ = 1 := by simp only [Units.inv_eq_val_inv, IsUnit.mul_val_inv, mul_one, sub_add_cancel]
+    · calc
+        (1 + y * (IsUnit.unit h).inv * x) * (1 - y * x) =
+            1 - y * x + y * (h.unit.inv * (1 - x * y)) * x := by noncomm_ring
+        _ = 1 := by simp only [Units.inv_eq_val_inv, IsUnit.val_inv_mul, mul_one, sub_add_cancel]
+  have := Iff.intro (h₁ (r⁻¹ • a) b) (h₁ b (r⁻¹ • a))
+  rw [mul_smul_comm r⁻¹ b a] at this
+  simpa only [mem_iff, not_iff_not, Algebra.algebraMap_eq_smul_one, ← Units.smul_def,
+    IsUnit.smul_sub_iff_sub_inv_smul, smul_mul_assoc]
 
 中文:
 定理 unit_mem_mul_comm
@@ -860,7 +886,15 @@ theorem unit_mem_mul_comm
     · calc
         (1 - y * x) * (1 + y * (IsUnit.unit h).inv * x) =
             1 - y * x + y * ((1 - x * y) * h.unit.inv) * x := by noncomm_ring
-
+        _ = 1 := by simp only [Units.inv_eq_val_inv, IsUnit.mul_val_inv, mul_one, sub_add_cancel]
+    · calc
+        (1 + y * (IsUnit.unit h).inv * x) * (1 - y * x) =
+            1 - y * x + y * (h.unit.inv * (1 - x * y)) * x := by noncomm_ring
+        _ = 1 := by simp only [Units.inv_eq_val_inv, IsUnit.val_inv_mul, mul_one, sub_add_cancel]
+  have := Iff.intro (h₁ (r⁻¹ • a) b) (h₁ b (r⁻¹ • a))
+  rw [mul_smul_comm r⁻¹ b a] at this
+  simpa only [mem_iff, not_iff_not, Algebra.algebraMap_eq_smul_one, ← Units.smul_def,
+    IsUnit.smul_sub_iff_sub_inv_smul, smul_mul_assoc]
 
 Depends on / 依赖: IsUnit, IsUnit.mul_val_inv, IsUnit.unit, Units.inv_eq_val_inv, h.unit.inv, inv_eq_val_inv, mul_one, mul_val_inv, noncomm_ring, sub_add_cancel
 -/
@@ -1262,7 +1296,9 @@ theorem zero_eq
   intro k hk
   rw [Set.mem_compl_singleton_iff] at hk
   have : IsUnit (Units.mk0 k hk • (1 : A)) := IsUnit.smul (Units.mk0 k hk) isUnit_one
-  simpa [mem_resolventSet_iff
+  simpa [mem_resolventSet_iff, Algebra.algebraMap_eq_smul_one]
+
+@[simp]
 
 中文:
 定理 zero_eq
@@ -1274,7 +1310,9 @@ theorem zero_eq
   intro k hk
   rw [Set.mem_compl_singleton_iff] at hk
   have : IsUnit (Units.mk0 k hk • (1 : A)) := IsUnit.smul (Units.mk0 k hk) isUnit_one
-  simpa [mem_resolventSet_iff
+  simpa [mem_resolventSet_iff, Algebra.algebraMap_eq_smul_one]
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, IsUnit, IsUnit.smul, Set.Subset.antisymm, Set.compl_subset_comm, Set.mem_compl_singleton_iff, Subset, Units.mk0, algebraMap_eq_smul_one, antisymm, compl_subset_comm, isUnit_one, mem_compl_singleton_iff, mem_iff, mem_resolventSet_iff, spectrum
 -/
@@ -1503,7 +1541,7 @@ theorem apply_mem_spectrum
     simp only [RingHom.mem_ker, map_sub, RingHom.coe_coe, AlgHomClass.commutes,
       Algebra.algebraMap_self, RingHom.id_apply, sub_self]
   simp only [spectrum.mem_iff, ← mem_nonunits_iff,
-    coe_subset_nonunits (RingHom.ker_ne_top (φ 
+    coe_subset_nonunits (RingHom.ker_ne_top (φ : A ->+* R)) h]
 
 中文:
 定理 apply_mem_spectrum
@@ -1514,7 +1552,7 @@ theorem apply_mem_spectrum
     simp only [RingHom.mem_ker, map_sub, RingHom.coe_coe, AlgHomClass.commutes,
       Algebra.algebraMap_self, RingHom.id_apply, sub_self]
   simp only [spectrum.mem_iff, ← mem_nonunits_iff,
-    coe_subset_nonunits (RingHom.ker_ne_top (φ 
+    coe_subset_nonunits (RingHom.ker_ne_top (φ : A ->+* R)) h]
 
 Depends on / 依赖: AlgHomClass, AlgHomClass.commutes, Algebra, Algebra.algebraMap_self, RingHom, RingHom.coe_coe, RingHom.id_apply, RingHom.ker, RingHom.ker_ne_top, RingHom.mem_ker, algebraMap_self, coe_coe, coe_subset_nonunits, commutes, id_apply, ker_ne_top, map_sub, mem_iff, mem_ker, mem_nonunits_iff
 -/
@@ -1576,7 +1614,7 @@ apply le_of_eq_of_le ?_ this (u * a * u⁻¹) u⁻¹
   intro a u μ hμ
   rw [spectrum.mem_iff] at hμ ⊢
   contrapose hμ
-.mul u⁻¹.isUnit simpa [mul_sub, sub_mul, 
+.mul u⁻¹.isUnit simpa [mul_sub, sub_mul, Algebra.right_comm] using u.isUnit.mul hμ
 
 中文:
 引理 spectrum.units_conjugate
@@ -1589,7 +1627,7 @@ apply le_of_eq_of_le ?_ this (u * a * u⁻¹) u⁻¹
   intro a u μ hμ
   rw [spectrum.mem_iff] at hμ ⊢
   contrapose hμ
-.mul u⁻¹.isUnit simpa [mul_sub, sub_mul, 
+.mul u⁻¹.isUnit simpa [mul_sub, sub_mul, Algebra.right_comm] using u.isUnit.mul hμ
 
 Depends on / 依赖: Algebra, Algebra.right_comm, contrapose, isUnit, le_antisymm, le_of_eq_of_le, mem_iff, mul_assoc, mul_sub, right_comm, spectrum, spectrum.mem_iff, sub_mul, subseteq, u.isUnit.mul
 -/

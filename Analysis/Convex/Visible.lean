@@ -168,7 +168,40 @@ lemma IsVisible.of_convexHull_of_pos
 obtain hwi | hwi : w i = 1 ∨ w i < 1 := eq_or_lt_of_le (single_le_sum hw₀ hi).trans_eq hw₁
   · convert! hw
     rw [← one_smul 𝕜 (a i)]; rw [← hwi]; rw [eq_comm]
-    rw [← hwi]; rw [← sub_eq_zero]; rw [← sum_erase_eq_sub hi]; rw [sum_eq_zero_iff_of_nonneg fun j hj => hw₀ _ erase_subset
+    rw [← hwi]; rw [← sub_eq_zero]; rw [← sum_erase_eq_sub hi]; rw [sum_eq_zero_iff_of_nonneg fun j hj => hw₀ _ erase_subset _ _ hj] at hw₁
+    refine sum_eq_single _ (fun j hj hji => ?_) (by simp [hi])
+    rw [hw₁ _ <| mem_erase.2 ⟨hji]; rw [hj⟩]; rw [zero_smul]
+  rintro _ hε ⟨⟨ε, ⟨hε₀, hε₁⟩, rfl⟩, h⟩
+replace hε₀ : 0 < ε := hε₀.lt_of_ne by rintro rfl; simp at h
+replace hε₁ : ε < 1 := hε₁.lt_of_ne by rintro rfl; simp at h
+  have : 0 < 1 - ε := by linarith
+  have hwi : 0 < 1 - w i := by linarith
+  refine hw (z := lineMap x (∑ j in t, w j • a j) ((w i)⁻¹ / ((1 - ε) / ε + (w i)⁻¹)))
+?_ sbtw_lineMap_iff.2 ⟨(ne_of_mem_of_not_mem ((convex_convexHull ..).sum_mem hw₀ hw₁
+fun i hi => subset_convexHull _ _ ha _ hi) hx).symm, by positivity,
+    (div_lt_one <| by positivity).2 ?_⟩
+  · have : Wbtw 𝕜
+      (lineMap x (a i) ε)
+      (lineMap x (∑ j in t, w j • a j) ((w i)⁻¹ / ((1 - ε) / ε + (w i)⁻¹)))
+      (∑ j in t.erase i, (w j / (1 - w i)) • a j) := by
+      refine ⟨((1 - w i) / w i) / ((1 - ε) / ε + (1 - w i) / w i + 1), ⟨by positivity, ?_⟩, ?_⟩
+      · refine (div_le_one <| by positivity).2 ?_
+        calc
+          (1 - w i) / w i = 0 + (1 - w i) / w i + 0 := by simp
+          _ <= (1 - ε) / ε + (1 - w i) / w i + 1 := by gcongr <;> positivity
+      have :
+        w i • a i + (1 - w i) • ∑ j in t.erase i, (w j / (1 - w i)) • a j = ∑ j in t, w j • a j := by
+        rw [smul_sum]
+        simp_rw [smul_smul, mul_div_cancel₀ _ hwi.ne']
+        exact add_sum_erase _ (fun i => w i • a i) hi
+      simp_rw [lineMap_apply_module, ← this]
+      match_scalars <;> field
+refine (convex_convexHull _ _).mem_of_wbtw this hε (convex_convexHull _ _).sum_mem ?_ ?_ ?_
+    · intro j hj
+      positivity [hw₀ j <| erase_subset _ _ hj]
+    · rw [← sum_div, sum_erase_eq_sub hi, hw₁, div_self hwi.ne']
+· exact fun j hj => subset_convexHull _ _ ha _ erase_subset _ _ hj
+· exact lt_add_of_pos_left _ by positivity
 
 中文:
 引理 IsVisible.of_convexHull_of_pos
@@ -178,7 +211,40 @@ obtain hwi | hwi : w i = 1 ∨ w i < 1 := eq_or_lt_of_le (single_le_sum hw₀ hi
 obtain hwi | hwi : w i = 1 ∨ w i < 1 := eq_or_lt_of_le (single_le_sum hw₀ hi).trans_eq hw₁
   · convert! hw
     rw [← one_smul 𝕜 (a i)]; rw [← hwi]; rw [eq_comm]
-    rw [← hwi]; rw [← sub_eq_zero]; rw [← sum_erase_eq_sub hi]; rw [sum_eq_zero_iff_of_nonneg fun j hj => hw₀ _ erase_subset
+    rw [← hwi]; rw [← sub_eq_zero]; rw [← sum_erase_eq_sub hi]; rw [sum_eq_zero_iff_of_nonneg fun j hj => hw₀ _ erase_subset _ _ hj] at hw₁
+    refine sum_eq_single _ (fun j hj hji => ?_) (by simp [hi])
+    rw [hw₁ _ <| mem_erase.2 ⟨hji]; rw [hj⟩]; rw [zero_smul]
+  rintro _ hε ⟨⟨ε, ⟨hε₀, hε₁⟩, rfl⟩, h⟩
+replace hε₀ : 0 < ε := hε₀.lt_of_ne by rintro rfl; simp at h
+replace hε₁ : ε < 1 := hε₁.lt_of_ne by rintro rfl; simp at h
+  have : 0 < 1 - ε := by linarith
+  have hwi : 0 < 1 - w i := by linarith
+  refine hw (z := lineMap x (∑ j in t, w j • a j) ((w i)⁻¹ / ((1 - ε) / ε + (w i)⁻¹)))
+?_ sbtw_lineMap_iff.2 ⟨(ne_of_mem_of_not_mem ((convex_convexHull ..).sum_mem hw₀ hw₁
+fun i hi => subset_convexHull _ _ ha _ hi) hx).symm, by positivity,
+    (div_lt_one <| by positivity).2 ?_⟩
+  · have : Wbtw 𝕜
+      (lineMap x (a i) ε)
+      (lineMap x (∑ j in t, w j • a j) ((w i)⁻¹ / ((1 - ε) / ε + (w i)⁻¹)))
+      (∑ j in t.erase i, (w j / (1 - w i)) • a j) := by
+      refine ⟨((1 - w i) / w i) / ((1 - ε) / ε + (1 - w i) / w i + 1), ⟨by positivity, ?_⟩, ?_⟩
+      · refine (div_le_one <| by positivity).2 ?_
+        calc
+          (1 - w i) / w i = 0 + (1 - w i) / w i + 0 := by simp
+          _ <= (1 - ε) / ε + (1 - w i) / w i + 1 := by gcongr <;> positivity
+      have :
+        w i • a i + (1 - w i) • ∑ j in t.erase i, (w j / (1 - w i)) • a j = ∑ j in t, w j • a j := by
+        rw [smul_sum]
+        simp_rw [smul_smul, mul_div_cancel₀ _ hwi.ne']
+        exact add_sum_erase _ (fun i => w i • a i) hi
+      simp_rw [lineMap_apply_module, ← this]
+      match_scalars <;> field
+refine (convex_convexHull _ _).mem_of_wbtw this hε (convex_convexHull _ _).sum_mem ?_ ?_ ?_
+    · intro j hj
+      positivity [hw₀ j <| erase_subset _ _ hj]
+    · rw [← sum_div, sum_erase_eq_sub hi, hw₁, div_self hwi.ne']
+· exact fun j hj => subset_convexHull _ _ ha _ erase_subset _ _ hj
+· exact lt_add_of_pos_left _ by positivity
 
 Depends on / 依赖: classical, convert, eq_comm, eq_or_lt_of_le, erase_subset, lt_of_ne, mem_erase, one_smul, replace, single_le_sum, sub_eq_zero, sum_eq_single, sum_eq_zero_iff_of_nonneg, sum_erase_eq_sub, trans_eq, zero_smul
 -/
@@ -241,7 +307,7 @@ lemma IsVisible.eq_of_mem_interior
   have hmem : forallᶠ (δ : 𝕜) in 𝓝[>] 0, lineMap y x δ in s :=
     lineMap_continuous.continuousWithinAt.eventually_mem
       (by simpa using mem_interior_iff_mem_nhds.1 hy)
-  filter_upwards [hmem, Ioo
+  filter_upwards [hmem, Ioo_mem_nhdsGT zero_lt_one] with δ hmem hsbt using hsxy.symm hmem (by aesop)
 
 中文:
 引理 IsVisible.eq_of_mem_interior
@@ -252,7 +318,7 @@ lemma IsVisible.eq_of_mem_interior
   have hmem : forallᶠ (δ : 𝕜) in 𝓝[>] 0, lineMap y x δ in s :=
     lineMap_continuous.continuousWithinAt.eventually_mem
       (by simpa using mem_interior_iff_mem_nhds.1 hy)
-  filter_upwards [hmem, Ioo
+  filter_upwards [hmem, Ioo_mem_nhdsGT zero_lt_one] with δ hmem hsbt using hsxy.symm hmem (by aesop)
 
 Depends on / 依赖: Ioo_mem_nhdsGT, continuousWithinAt, eventually_mem, filter_upwards, h.exists, hsxy.symm, lineMap, lineMap_continuous, lineMap_continuous.continuousWithinAt.eventually_mem, mem_interior_iff_mem_nhds, zero_lt_one
 -/
@@ -300,7 +366,8 @@ lemma IsVisible.mem_convexHull_isVisible
   rw [← Fintype.sum_subset (s := {i | w i != 0})
     fun i hi => mem_filter.2 ⟨mem_univ _]; rw [left_ne_zero_of_smul hi⟩]
   exact (convex_convexHull ..).sum_mem (fun i _ => hw₀ _) (by rwa [sum_filter_ne_zero])
-    
+    fun i hi => subset_convexHull _ _ ⟨ha _, IsVisible.of_convexHull_of_pos (fun _ _ => hw₀ _) hw₁
+(by simpa) hx hxy (mem_univ _) (hw₀ _).lt_of_ne' (mem_filter.1 hi).2⟩
 
 中文:
 引理 IsVisible.mem_convexHull_isVisible
@@ -310,7 +377,8 @@ lemma IsVisible.mem_convexHull_isVisible
   rw [← Fintype.sum_subset (s := {i | w i != 0})
     fun i hi => mem_filter.2 ⟨mem_univ _]; rw [left_ne_zero_of_smul hi⟩]
   exact (convex_convexHull ..).sum_mem (fun i _ => hw₀ _) (by rwa [sum_filter_ne_zero])
-    
+    fun i hi => subset_convexHull _ _ ⟨ha _, IsVisible.of_convexHull_of_pos (fun _ _ => hw₀ _) hw₁
+(by simpa) hx hxy (mem_univ _) (hw₀ _).lt_of_ne' (mem_filter.1 hi).2⟩
 
 Depends on / 依赖: Fintype, Fintype.sum_subset, IsVisible, IsVisible.of_convexHull_of_pos, convex_convexHull, left_ne_zero_of_smul, lt_of_ne, mem_convexHull_iff_exists_fintype, mem_filter, mem_univ, of_convexHull_of_pos, subset_convexHull, sum_filter_ne_zero, sum_mem, sum_subset
 -/
@@ -340,7 +408,13 @@ lemma IsClosed.exists_wbtw_isVisible
   let δ : Real := sInf t
   have hδ₁ : δ <= 1 := csInf_le ht ht₁
   obtain ⟨hδ₀, hδ⟩ : 0 <= δ ∧ lineMap x y δ in s :=
-    (isClosed_Ici.inter <| hs.preimage l
+    (isClosed_Ici.inter <| hs.preimage lineMap_continuous).csInf_mem ⟨1, ht₁⟩ ht
+refine ⟨lineMap x y δ, hδ, wbtw_lineMap_iff.2 .inr ⟨hδ₀, hδ₁⟩, ?_⟩
+  rintro _ hε ⟨⟨ε, ⟨hε₀, hε₁⟩, rfl⟩, -, h⟩
+replace hδ₀ : 0 < δ := hδ₀.lt_of_ne' by rintro hδ₀; simp [hδ₀] at h
+replace hε₁ : ε < 1 := hε₁.lt_of_ne by rintro rfl; simp at h
+  rw [lineMap_lineMap_right] at hε
+exact (csInf_le ht ⟨mul_nonneg hε₀ hδ₀.le, hε⟩).not_gt mul_lt_of_lt_one_left hδ₀ hε₁
 
 中文:
 引理 是闭集.存在_wbtw_isVisible
@@ -352,7 +426,13 @@ lemma IsClosed.exists_wbtw_isVisible
   let δ : Real := sInf t
   have hδ₁ : δ <= 1 := csInf_le ht ht₁
   obtain ⟨hδ₀, hδ⟩ : 0 <= δ ∧ lineMap x y δ in s :=
-    (isClosed_Ici.inter <| hs.preimage l
+    (isClosed_Ici.inter <| hs.preimage lineMap_continuous).csInf_mem ⟨1, ht₁⟩ ht
+refine ⟨lineMap x y δ, hδ, wbtw_lineMap_iff.2 .inr ⟨hδ₀, hδ₁⟩, ?_⟩
+  rintro _ hε ⟨⟨ε, ⟨hε₀, hε₁⟩, rfl⟩, -, h⟩
+replace hδ₀ : 0 < δ := hδ₀.lt_of_ne' by rintro hδ₀; simp [hδ₀] at h
+replace hε₁ : ε < 1 := hε₁.lt_of_ne by rintro rfl; simp at h
+  rw [lineMap_lineMap_right] at hε
+exact (csInf_le ht ⟨mul_nonneg hε₀ hδ₀.le, hε⟩).not_gt mul_lt_of_lt_one_left hδ₀ hε₁
 
 Depends on / 依赖: BddBelow, bddBelow_Ici, bddBelow_Ici.inter_of_left, csInf_le, csInf_mem, hs.preimage, inter_of_left, isClosed_Ici, isClosed_Ici.inter, lineMap, lineMap_continuous, lt_of_ne, preimage, replace, wbtw_lineMap_iff
 -/
@@ -386,7 +466,7 @@ lemma IsClosed.convexHull_subset_affineSpan_isVisible
   -- TODO: `calc` doesn't work with `∈` :(
   exact AffineSubspace.right_mem_of_wbtw hxzy (subset_affineSpan _ _ <| subset_union_left rfl)
     (affineSpan_mono _ subset_union_right <| convexHull_subset_affineSpan _ <|
-     
+      hxz.mem_convexHull_isVisible hx hz) (ne_of_mem_of_not_mem hz hx).symm
 
 中文:
 引理 是闭集.convexHull_subset_affineSpan_isVisible
@@ -397,7 +477,7 @@ lemma IsClosed.convexHull_subset_affineSpan_isVisible
   -- TODO: `calc` doesn't work with `∈` :(
   exact AffineSubspace.right_mem_of_wbtw hxzy (subset_affineSpan _ _ <| subset_union_left rfl)
     (affineSpan_mono _ subset_union_right <| convexHull_subset_affineSpan _ <|
-     
+      hxz.mem_convexHull_isVisible hx hz) (ne_of_mem_of_not_mem hz hx).symm
 
 Depends on / 依赖: exists_wbtw_isVisible, hs.exists_wbtw_isVisible
 -/
@@ -426,7 +506,16 @@ lemma rank_le_card_isVisible
       push_cast
       refine Submodule.rank_mono ?_
       gcongr
-exact (subset_convexHull ..).trans h
+exact (subset_convexHull ..).trans hs.convexHull_subset_affineSpan_isVisible hx
+    _ = Module.rank Real (span Real (-x +ᵥ {y in s | IsVisible Real (convexHull Real s) x y})) := by
+      suffices h :
+        -x +ᵥ (affineSpan Real ({x} union {y in s | IsVisible Real (convexHull Real s) x y}) : Set V) =
+          span Real (-x +ᵥ {y in s | IsVisible Real (convexHull Real s) x y}) by
+        rw [AffineSubspace.coe_pointwise_vadd]; rw [h]; rw [span_span]
+      simp [← AffineSubspace.coe_pointwise_vadd, AffineSubspace.pointwise_vadd_span,
+        vadd_set_insert, affineSpan_insert_zero]
+    _ <= #(-x +ᵥ {y in s | IsVisible Real (convexHull Real s) x y}) := rank_span_le _
+    _ = #{y in s | IsVisible Real (convexHull Real s) x y} := by simp
 
 中文:
 引理 rank_le_card_isVisible
@@ -439,7 +528,16 @@ exact (subset_convexHull ..).trans h
       push_cast
       refine Submodule.rank_mono ?_
       gcongr
-exact (subset_convexHull ..).trans h
+exact (subset_convexHull ..).trans hs.convexHull_subset_affineSpan_isVisible hx
+    _ = Module.rank Real (span Real (-x +ᵥ {y in s | IsVisible Real (convexHull Real s) x y})) := by
+      suffices h :
+        -x +ᵥ (affineSpan Real ({x} union {y in s | IsVisible Real (convexHull Real s) x y}) : Set V) =
+          span Real (-x +ᵥ {y in s | IsVisible Real (convexHull Real s) x y}) by
+        rw [AffineSubspace.coe_pointwise_vadd]; rw [h]; rw [span_span]
+      simp [← AffineSubspace.coe_pointwise_vadd, AffineSubspace.pointwise_vadd_span,
+        vadd_set_insert, affineSpan_insert_zero]
+    _ <= #(-x +ᵥ {y in s | IsVisible Real (convexHull Real s) x y}) := rank_span_le _
+    _ = #{y in s | IsVisible Real (convexHull Real s) x y} := by simp
 
 Depends on / 依赖: IsVisible, Module, Module.rank, Submodule, Submodule.rank_mono, affineSpan, convexHull, convexHull_subset_affineSpan_isVisible, hs.convexHull_subset_affineSpan_isVisible, rank_mono, subset_convexHull
 -/

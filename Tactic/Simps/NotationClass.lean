@@ -70,7 +70,8 @@ definition defaultfindArgs
   else if h : args.size = 1 then
     return .replicate arity args[0]
   else
-   
+    throwError "initialize_simps_projections cannot automatically find arguments for class \
+      {className}"
 
 中文:
 定义 defaultfindArgs
@@ -83,7 +84,8 @@ definition defaultfindArgs
   else if h : args.size = 1 then
     return .replicate arity args[0]
   else
-   
+    throwError "initialize_simps_projections cannot automatically find arguments for class \
+      {className}"
 
 Depends on / 依赖: className
 -/
@@ -215,7 +217,7 @@ definition findCoercionArgs
   let arity := classExpr.type.getNumHeadForalls
   let eStr := mkAppN (← mkConstWithLevelParams str) args
   let classArgs := .replicate (arity - 1) none
-  return #[some eStr] ++ cl
+  return #[some eStr] ++ classArgs
 
 中文:
 定义 findCoercionArgs
@@ -225,7 +227,7 @@ definition findCoercionArgs
   let arity := classExpr.type.getNumHeadForalls
   let eStr := mkAppN (← mkConstWithLevelParams str) args
   let classArgs := .replicate (arity - 1) none
-  return #[some eStr] ++ cl
+  return #[some eStr] ++ classArgs
 
 Depends on / 依赖: className
 -/

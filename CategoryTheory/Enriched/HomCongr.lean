@@ -54,7 +54,9 @@ definition eHomCongr
     slice_lhs 2 3 => rw [← eHomWhiskerRight_comp]
     simp [← eHomWhiskerLeft_comp]
   inv_hom_id := by
-    rw [← eHom_whisker_e
+    rw [← eHom_whisker_exchange]
+    slice_lhs 2 3 => rw [← eHomWhiskerRight_comp]
+    simp [← eHomWhiskerLeft_comp]
 
 中文:
 定义 eHomCongr
@@ -66,7 +68,9 @@ definition eHomCongr
     slice_lhs 2 3 => rw [← eHomWhiskerRight_comp]
     simp [← eHomWhiskerLeft_comp]
   inv_hom_id := by
-    rw [← eHom_whisker_e
+    rw [← eHom_whisker_exchange]
+    slice_lhs 2 3 => rw [← eHomWhiskerRight_comp]
+    simp [← eHomWhiskerLeft_comp]
 
 Depends on / 依赖: eHomWhiskerLeft, eHomWhiskerRight
 -/
@@ -154,7 +158,7 @@ lemma eHomCongr_comp
   proof: by
   simp only [eHomCongr, MonoidalCategory.whiskerRight_id, assoc,
     MonoidalCategory.whiskerLeft_comp]
-  rw [rightUnitor_inv_naturality_assoc]; rw [rightUnitor_inv_naturality_assoc]; rw [rightUnitor_inv_naturality_assoc]; rw [hom_inv_id_assoc]; rw [← whisker_exchange_assoc]; rw [← whisker_exchan
+  rw [rightUnitor_inv_naturality_assoc]; rw [rightUnitor_inv_naturality_assoc]; rw [rightUnitor_inv_naturality_assoc]; rw [hom_inv_id_assoc]; rw [← whisker_exchange_assoc]; rw [← whisker_exchange_assoc]; rw [← eComp_eHomWhiskerLeft]; rw [eHom_whisker_cancel_assoc]; rw [← eComp_eHomWhiskerRight_assoc]; rw [← tensorHom_def_assoc]; rw [← eHomEquiv_comp_assoc]
 
 中文:
 引理 eHomCongr_comp
@@ -162,7 +166,7 @@ lemma eHomCongr_comp
   证明: by
   simp only [eHomCongr, MonoidalCategory.whiskerRight_id, assoc,
     MonoidalCategory.whiskerLeft_comp]
-  rw [rightUnitor_inv_naturality_assoc]; rw [rightUnitor_inv_naturality_assoc]; rw [rightUnitor_inv_naturality_assoc]; rw [hom_inv_id_assoc]; rw [← whisker_exchange_assoc]; rw [← whisker_exchan
+  rw [rightUnitor_inv_naturality_assoc]; rw [rightUnitor_inv_naturality_assoc]; rw [rightUnitor_inv_naturality_assoc]; rw [hom_inv_id_assoc]; rw [← whisker_exchange_assoc]; rw [← whisker_exchange_assoc]; rw [← eComp_eHomWhiskerLeft]; rw [eHom_whisker_cancel_assoc]; rw [← eComp_eHomWhiskerRight_assoc]; rw [← tensorHom_def_assoc]; rw [← eHomEquiv_comp_assoc]
 
 Depends on / 依赖: MonoidalCategory, MonoidalCategory.whiskerLeft_comp, MonoidalCategory.whiskerRight_id, eComp_eHomWhiskerLeft, eComp_eHomWhiskerRight_assoc, eHomCongr, eHomEquiv_comp_assoc, eHom_whisker_cancel_assoc, hom_inv_id_assoc, rightUnitor_inv_naturality_assoc, tensorHom_def_assoc, whiskerLeft_comp, whiskerRight_id, whisker_exchange_assoc
 -/

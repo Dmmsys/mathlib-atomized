@@ -42,7 +42,7 @@ theorem mul_log_strictMonoOn
   have hpos : 0 < x := by grind [Real.exp_pos]
   grind [deriv_mul_log, Real.lt_log_iff_exp_lt hpos |>.mpr hlt]
 
-@[deprecated Real.mul_log_strictMonoOn (
+@[deprecated Real.mul_log_strictMonoOn (since := "2026-04-07")]
 
 中文:
 定理 mul_log_strictMonoOn
@@ -53,7 +53,7 @@ theorem mul_log_strictMonoOn
   have hpos : 0 < x := by grind [Real.exp_pos]
   grind [deriv_mul_log, Real.lt_log_iff_exp_lt hpos |>.mpr hlt]
 
-@[deprecated Real.mul_log_strictMonoOn (
+@[deprecated Real.mul_log_strictMonoOn (since := "2026-04-07")]
 
 Depends on / 依赖: Real.exp_pos, Real.lt_log_iff_exp_lt, continuousOn, continuous_mul_log, continuous_mul_log.continuousOn, convex_Ici, deriv_mul_log, exp_pos, lt_log_iff_exp_lt, strictMonoOn_of_deriv_pos
 -/
@@ -124,7 +124,12 @@ theorem log_div_self_antitoneOn
   have y_pos : 0 < y := (exp_pos 1).trans_le hey
   have hlogx : 1 <= log x := by rwa [le_log_iff_exp_le x_pos]
   have hyx : 0 <= y / x - 1 := by rwa [le_sub_iff_add_le, le_div_iff₀ x_pos, zero_add, one_mul]
-  rw [div_le_iff₀
+  rw [div_le_iff₀ y_pos]; rw [← sub_le_sub_iff_right (log x)]
+  calc
+    log y - log x = log (y / x) := by rw [log_div y_pos.ne' x_pos.ne']
+    _ <= y / x - 1 := log_le_sub_one_of_pos (div_pos y_pos x_pos)
+    _ <= log x * (y / x - 1) := le_mul_of_one_le_left hyx hlogx
+    _ = log x / x * y - log x := by ring
 
 中文:
 定理 log_div_self_antitoneOn
@@ -135,7 +140,12 @@ theorem log_div_self_antitoneOn
   have y_pos : 0 < y := (exp_pos 1).trans_le hey
   have hlogx : 1 <= log x := by rwa [le_log_iff_exp_le x_pos]
   have hyx : 0 <= y / x - 1 := by rwa [le_sub_iff_add_le, le_div_iff₀ x_pos, zero_add, one_mul]
-  rw [div_le_iff₀
+  rw [div_le_iff₀ y_pos]; rw [← sub_le_sub_iff_right (log x)]
+  calc
+    log y - log x = log (y / x) := by rw [log_div y_pos.ne' x_pos.ne']
+    _ <= y / x - 1 := log_le_sub_one_of_pos (div_pos y_pos x_pos)
+    _ <= log x * (y / x - 1) := le_mul_of_one_le_left hyx hlogx
+    _ = log x / x * y - log x := by ring
 
 Depends on / 依赖: div_pos, exp_pos, le_log_iff_exp_le, le_mu, le_sub_iff_add_le, log_div, log_le_sub_one_of_pos, one_mul, sub_le_sub_iff_right, trans_le, x_pos, x_pos.ne, y_pos, y_pos.ne, zero_add
 -/
@@ -164,7 +174,14 @@ theorem log_div_self_rpow_antitoneOn
   have x_pos : 0 < x := lt_of_lt_of_le (exp_pos a⁻¹) (le_of_le_of_eq hex rfl)
   have y_pos : 0 < y := by linarith
   nth_rw 1 [← rpow_one y, ← rpow_one x]
-  rw [← div_self (ne_of_lt ha).symm]; rw [div_eq_mul_one_div a a]; rw [rpow_mul y_pos.le]; rw [rpow_mul x_pos
+  rw [← div_self (ne_of_lt ha).symm]; rw [div_eq_mul_one_div a a]; rw [rpow_mul y_pos.le]; rw [rpow_mul x_pos.le]; rw [log_rpow (rpow_pos_of_pos y_pos a)]; rw [log_rpow (rpow_pos_of_pos x_pos a)]; rw [mul_div_assoc]; rw [mul_div_assoc]; rw [mul_le_mul_iff_right₀ (one_div_pos.mpr ha)]
+  have hbound {z : Real} (hz : z in Ici (rexp a⁻¹)) : z ^ a in {b | rexp 1 <= b} := by
+    rw [mem_ofPred_eq]
+    convert! rpow_le_rpow _ hz (le_of_lt ha) using 1
+    · simp only [← exp_mul, Real.exp_eq_exp, field]
+    positivity
+  refine log_div_self_antitoneOn (hbound hex) (hbound (hex.trans hxy)) ?_
+  gcongr
 
 中文:
 定理 log_div_self_rpow_antitoneOn
@@ -175,7 +192,14 @@ theorem log_div_self_rpow_antitoneOn
   have x_pos : 0 < x := lt_of_lt_of_le (exp_pos a⁻¹) (le_of_le_of_eq hex rfl)
   have y_pos : 0 < y := by linarith
   nth_rw 1 [← rpow_one y, ← rpow_one x]
-  rw [← div_self (ne_of_lt ha).symm]; rw [div_eq_mul_one_div a a]; rw [rpow_mul y_pos.le]; rw [rpow_mul x_pos
+  rw [← div_self (ne_of_lt ha).symm]; rw [div_eq_mul_one_div a a]; rw [rpow_mul y_pos.le]; rw [rpow_mul x_pos.le]; rw [log_rpow (rpow_pos_of_pos y_pos a)]; rw [log_rpow (rpow_pos_of_pos x_pos a)]; rw [mul_div_assoc]; rw [mul_div_assoc]; rw [mul_le_mul_iff_right₀ (one_div_pos.mpr ha)]
+  have hbound {z : Real} (hz : z in Ici (rexp a⁻¹)) : z ^ a in {b | rexp 1 <= b} := by
+    rw [mem_ofPred_eq]
+    convert! rpow_le_rpow _ hz (le_of_lt ha) using 1
+    · simp only [← exp_mul, Real.exp_eq_exp, field]
+    positivity
+  refine log_div_self_antitoneOn (hbound hex) (hbound (hex.trans hxy)) ?_
+  gcongr
 
 Depends on / 依赖: div_eq_mul_one_div, div_self, exp_pos, hbound, le_of_le_of_eq, log_rpow, lt_of_lt_of_le, mul_div_assoc, ne_of_lt, nth_rw, one_div_pos, one_div_pos.mpr, rpow_mul, rpow_one, rpow_pos_of_pos, x_pos, x_pos.le, y_pos, y_pos.le
 -/

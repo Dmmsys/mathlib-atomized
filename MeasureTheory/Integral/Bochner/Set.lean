@@ -275,7 +275,7 @@ theorem integral_inter_add_sdiff₀
   · exact Integrable.mono_measure hfs (Measure.restrict_mono inter_subset_left le_rfl)
   · exact Integrable.mono_measure hfs (Measure.restrict_mono sdiff_subset le_rfl)
 
-@[deprecated (since := "2026-06-03")] alias integral
+@[deprecated (since := "2026-06-03")] alias integral_inter_add_diff₀ := integral_inter_add_sdiff₀
 
 中文:
 定理 integral_inter_add_sdiff₀
@@ -285,7 +285,7 @@ theorem integral_inter_add_sdiff₀
   · exact Integrable.mono_measure hfs (Measure.restrict_mono inter_subset_left le_rfl)
   · exact Integrable.mono_measure hfs (Measure.restrict_mono sdiff_subset le_rfl)
 
-@[deprecated (since := "2026-06-03")] alias integral
+@[deprecated (since := "2026-06-03")] alias integral_inter_add_diff₀ := integral_inter_add_sdiff₀
 
 Depends on / 依赖: Integrable, Integrable.mono_measure, Measure, Measure.restrict_inter_add_sdiff, Measure.restrict_mono, integral_add_measure, inter_subset_left, le_rfl, mono_measure, restrict_mono, sdiff_subset
 -/
@@ -335,7 +335,11 @@ theorem integral_biUnion_finset
   | insert _ _ hat IH =>
     simp only [Finset.coe_insert, Finset.forall_mem_insert, Set.pairwise_insert,
       Finset.set_biUnion_insert] at hs hf h's ⊢
-    rw [setIntegral_union _ _ hf.1 (integrableOn_finset_iUnion.2 hf.
+    rw [setIntegral_union _ _ hf.1 (integrableOn_finset_iUnion.2 hf.2)]
+    · rw [Finset.sum_insert hat, IH hs.2 h's.1 hf.2]
+    · simp only [disjoint_iUnion_right]
+      exact fun i hi => (h's.2 i hi (ne_of_mem_of_not_mem hi hat).symm).1
+    · exact Finset.measurableSet_biUnion _ hs.2
 
 中文:
 定理 integral_biUnion_finset
@@ -347,7 +351,11 @@ theorem integral_biUnion_finset
   | insert _ _ hat IH =>
     simp only [Finset.coe_insert, Finset.forall_mem_insert, Set.pairwise_insert,
       Finset.set_biUnion_insert] at hs hf h's ⊢
-    rw [setIntegral_union _ _ hf.1 (integrableOn_finset_iUnion.2 hf.
+    rw [setIntegral_union _ _ hf.1 (integrableOn_finset_iUnion.2 hf.2)]
+    · rw [Finset.sum_insert hat, IH hs.2 h's.1 hf.2]
+    · simp only [disjoint_iUnion_right]
+      exact fun i hi => (h's.2 i hi (ne_of_mem_of_not_mem hi hat).symm).1
+    · exact Finset.measurableSet_biUnion _ hs.2
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.forall_mem_insert, Finset.induction_on, Finset.measurableSet_biUnion, Finset.set_biUnion_insert, Finset.sum_insert, Set.pairwise_insert, classical, coe_insert, disjoint_iUnion_right, forall_mem_insert, induction_on, insert, integrableOn_finset_iUnion, measurableSet_biUnion, ne_of_mem_of_not_mem, pairwise_insert, setIntegral_union, set_biUnion_insert
 -/
@@ -552,7 +560,10 @@ theorem integral_indicator
   calc
     ∫ x, indicator s f x ∂μ = ∫ x in s, indicator s f x ∂μ + ∫ x in sᶜ, indicator s f x ∂μ :=
       (integral_add_compl hs (hfi.integrable_indicator hs)).symm
-    _ =
+    _ = ∫ x in s, f x ∂μ + ∫ x in sᶜ, 0 ∂μ :=
+      (congr_arg₂ (· + ·) (integral_congr_ae (indicator_ae_eq_restrict hs))
+        (integral_congr_ae (indicator_ae_eq_restrict_compl hs)))
+    _ = ∫ x in s, f x ∂μ := by simp
 
 中文:
 定理 integral_indicator
@@ -564,7 +575,10 @@ theorem integral_indicator
   calc
     ∫ x, indicator s f x ∂μ = ∫ x in s, indicator s f x ∂μ + ∫ x in sᶜ, indicator s f x ∂μ :=
       (integral_add_compl hs (hfi.integrable_indicator hs)).symm
-    _ =
+    _ = ∫ x in s, f x ∂μ + ∫ x in sᶜ, 0 ∂μ :=
+      (congr_arg₂ (· + ·) (integral_congr_ae (indicator_ae_eq_restrict hs))
+        (integral_congr_ae (indicator_ae_eq_restrict_compl hs)))
+    _ = ∫ x in s, f x ∂μ := by simp
 
 Depends on / 依赖: IntegrableOn, hfi.integrable_indicator, indicator, indicator_ae_eq_restrict, indicator_ae_eq_restrict_compl, integrable_indicator, integrable_indicator_iff, integral_add_compl, integral_congr_ae, integral_undef
 -/
@@ -656,7 +670,22 @@ theorem integral_biUnion_eq_sum_powerset
   have A (u) (hu : u in t.powerset.filter (·.Nonempty)) : MeasurableSet (⋂ i in u, s i) := by
     refine u.measurableSet_biInter fun i hi => hs i ?_
     grind
-  have : ∑ x in t.powerset with x.Nonempty, ∫ (a : X
+  have : ∑ x in t.powerset with x.Nonempty, ∫ (a : X) in ⋂ i in x, s i, (-1 : Real) ^ (#x + 1) • f a ∂μ
+      = ∑ x in t.powerset with x.Nonempty, ∫ a, indicator (⋂ i in x, s i)
+        (fun a => (-1 : Real) ^ (#x + 1) • f a) a ∂μ := by
+    apply Finset.sum_congr rfl (fun x hx => ?_)
+    rw [← integral_indicator (A x hx)]
+  rw [this]; rw [← integral_finsetSum]; swap
+  · intro u hu
+    rw [integrable_indicator_iff (A u hu)]
+    apply Integrable.smul
+    simp only [Finset.mem_filter, Finset.mem_powerset] at hu
+    rcases hu.2 with ⟨i, hi⟩
+    exact (hf i (hu.1 hi)).mono (biInter_subset_of_mem hi) le_rfl
+  congr with x
+  convert! Finset.indicator_biUnion_eq_sum_powerset t s f x with u hu
+  rw [indicator_smul_apply]
+  norm_cast
 
 中文:
 定理 integral_biUnion_eq_sum_powerset
@@ -666,7 +695,22 @@ theorem integral_biUnion_eq_sum_powerset
   have A (u) (hu : u in t.powerset.filter (·.Nonempty)) : MeasurableSet (⋂ i in u, s i) := by
     refine u.measurableSet_biInter fun i hi => hs i ?_
     grind
-  have : ∑ x in t.powerset with x.Nonempty, ∫ (a : X
+  have : ∑ x in t.powerset with x.Nonempty, ∫ (a : X) in ⋂ i in x, s i, (-1 : Real) ^ (#x + 1) • f a ∂μ
+      = ∑ x in t.powerset with x.Nonempty, ∫ a, indicator (⋂ i in x, s i)
+        (fun a => (-1 : Real) ^ (#x + 1) • f a) a ∂μ := by
+    apply Finset.sum_congr rfl (fun x hx => ?_)
+    rw [← integral_indicator (A x hx)]
+  rw [this]; rw [← integral_finsetSum]; swap
+  · intro u hu
+    rw [integrable_indicator_iff (A u hu)]
+    apply Integrable.smul
+    simp only [Finset.mem_filter, Finset.mem_powerset] at hu
+    rcases hu.2 with ⟨i, hi⟩
+    exact (hf i (hu.1 hi)).mono (biInter_subset_of_mem hi) le_rfl
+  congr with x
+  convert! Finset.indicator_biUnion_eq_sum_powerset t s f x with u hu
+  rw [indicator_smul_apply]
+  norm_cast
 
 Depends on / 依赖: Finset, Finset.measurableSet_biUnion, Finset.sum_congr, MeasurableSet, Nonempty, filter, indicator, integral_indicator, integral_smul, measurableSet_biInter, measurableSet_biUnion, powerset, simp_rw, sum_congr, t.powerset, t.powerset.filter, u.measurableSet_biInter, x.Nonempty
 -/
@@ -829,7 +873,19 @@ theorem tendsto_setIntegral_of_monotone₀
   set S := ⋃ i, s i
   have hSm : NullMeasurableSet S μ := MeasurableSet.iUnion_of_monotone h_mono hsm
   have hsub {i} : s i subseteq S := subset_iUnion s i
-  rw [← with
+  rw [← withDensity_apply₀ _ hSm] at hfi'
+  set ν := μ.withDensity (‖f ·‖ₑ) with hν
+  refine Metric.nhds_basis_closedBall.tendsto_right_iff.2 fun ε ε0 => ?_
+  lift ε to Real>=0 using ε0.le
+  have : forallᶠ i in atTop, ν (s i) in Icc (ν S - ε) (ν S + ε) :=
+    tendsto_measure_iUnion_atTop h_mono (ENNReal.Icc_mem_nhds hfi'.ne (ENNReal.coe_pos.2 ε0).ne')
+  filter_upwards [this] with i hi
+  rw [mem_closedBall_iff_norm']; rw [← setIntegral_sdiff₀ (hsm i) hfi hsub]; rw [← coe_nnnorm]; rw [NNReal.coe_le_coe]; rw [← ENNReal.coe_le_coe]
+  refine (enorm_integral_le_lintegral_enorm _).trans ?_
+  have hsm' : NullMeasurableSet (s i) ν := (hsm i).mono_ac (withDensity_absolutelyContinuous ..)
+  rw [← withDensity_apply₀ _ (hSm.diff (hsm _))]; rw [← hν]; rw [measure_sdiff hsub hsm']
+  exacts [tsub_le_iff_tsub_le.mp hi.1,
+    (hi.2.trans_lt <| ENNReal.add_lt_top.2 ⟨hfi', ENNReal.coe_lt_top⟩).ne]
 
 中文:
 定理 tendsto_set整数egral_of_monotone₀
@@ -840,7 +896,19 @@ theorem tendsto_setIntegral_of_monotone₀
   set S := ⋃ i, s i
   have hSm : NullMeasurableSet S μ := MeasurableSet.iUnion_of_monotone h_mono hsm
   have hsub {i} : s i subseteq S := subset_iUnion s i
-  rw [← with
+  rw [← withDensity_apply₀ _ hSm] at hfi'
+  set ν := μ.withDensity (‖f ·‖ₑ) with hν
+  refine Metric.nhds_basis_closedBall.tendsto_right_iff.2 fun ε ε0 => ?_
+  lift ε to Real>=0 using ε0.le
+  have : forallᶠ i in atTop, ν (s i) in Icc (ν S - ε) (ν S + ε) :=
+    tendsto_measure_iUnion_atTop h_mono (ENNReal.Icc_mem_nhds hfi'.ne (ENNReal.coe_pos.2 ε0).ne')
+  filter_upwards [this] with i hi
+  rw [mem_closedBall_iff_norm']; rw [← setIntegral_sdiff₀ (hsm i) hfi hsub]; rw [← coe_nnnorm]; rw [NNReal.coe_le_coe]; rw [← ENNReal.coe_le_coe]
+  refine (enorm_integral_le_lintegral_enorm _).trans ?_
+  have hsm' : NullMeasurableSet (s i) ν := (hsm i).mono_ac (withDensity_absolutelyContinuous ..)
+  rw [← withDensity_apply₀ _ (hSm.diff (hsm _))]; rw [← hν]; rw [measure_sdiff hsub hsm']
+  exacts [tsub_le_iff_tsub_le.mp hi.1,
+    (hi.2.trans_lt <| ENNReal.add_lt_top.2 ⟨hfi', ENNReal.coe_lt_top⟩).ne]
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.iUnion_of_monotone, Metric, Metric.nhds_basis_closedBall.tendsto_right_iff, NullMeasurableSet, atTop_neBot_iff, atTop_neBot_iff.mp, h_mono, iUnion_of_monotone, nhds_basis_closedBall, of_neBot_imp, subset_iUnion, subseteq, tendsto_right_iff, withDensity
 -/
@@ -900,7 +968,15 @@ theorem tendsto_setIntegral_of_antitone
   rcases hfi with ⟨i₀, hi₀⟩
   suffices Tendsto (∫ x in s i₀, f x ∂μ - ∫ x in s i₀ \ s ·, f x ∂μ) atTop
       (𝓝 (∫ x in s i₀, f x ∂μ - ∫ x in ⋃ i, s i₀ \ s i, f x ∂μ)) by
-convert! this.congr' (eventually_ge_atTop i₀).mono f
+convert! this.congr' (eventually_ge_atTop i₀).mono fun i hi => ?_
+    · rw [← sdiff_iInter, setIntegral_sdiff _ hi₀ (iInter_subset _ _), sub_sub_cancel]
+      exact .iInter_of_antitone h_anti hsm
+    · rw [setIntegral_sdiff (hsm i) hi₀ (h_anti hi), sub_sub_cancel]
+  apply tendsto_const_nhds.sub
+  refine tendsto_setIntegral_of_monotone (by measurability) ?_ ?_
+  · exact fun i j h => sdiff_subset_sdiff_right (h_anti h)
+  · rw [← sdiff_iInter]
+    exact hi₀.mono_set sdiff_subset
 
 中文:
 定理 tendsto_set整数egral_of_antitone
@@ -910,7 +986,15 @@ convert! this.congr' (eventually_ge_atTop i₀).mono f
   rcases hfi with ⟨i₀, hi₀⟩
   suffices Tendsto (∫ x in s i₀, f x ∂μ - ∫ x in s i₀ \ s ·, f x ∂μ) atTop
       (𝓝 (∫ x in s i₀, f x ∂μ - ∫ x in ⋃ i, s i₀ \ s i, f x ∂μ)) by
-convert! this.congr' (eventually_ge_atTop i₀).mono f
+convert! this.congr' (eventually_ge_atTop i₀).mono fun i hi => ?_
+    · rw [← sdiff_iInter, setIntegral_sdiff _ hi₀ (iInter_subset _ _), sub_sub_cancel]
+      exact .iInter_of_antitone h_anti hsm
+    · rw [setIntegral_sdiff (hsm i) hi₀ (h_anti hi), sub_sub_cancel]
+  apply tendsto_const_nhds.sub
+  refine tendsto_setIntegral_of_monotone (by measurability) ?_ ?_
+  · exact fun i j h => sdiff_subset_sdiff_right (h_anti h)
+  · rw [← sdiff_iInter]
+    exact hi₀.mono_set sdiff_subset
 
 Depends on / 依赖: Tendsto, atTop_neBot_iff, atTop_neBot_iff.mp, convert, eventually_ge_atTop, h_anti, iInter_of_antitone, iInter_subset, of_neBot_imp, sdiff_iInter, setIntegral_sdiff, sub_sub_cancel, tendsto_c, this.congr
 -/
@@ -1037,7 +1121,12 @@ theorem setIntegral_eq_zero_of_ae_eq_zero
     exact hf.1
   have : ∫ x in t, hf.mk f x ∂μ = 0 := by
     refine integral_eq_zero_of_ae ?_
-    rw [EventuallyEq]; rw [ae_restrict_iff (hf.stronglyMeasurable_mk.measurableSet_eq_fun stronglyMea
+    rw [EventuallyEq]; rw [ae_restrict_iff (hf.stronglyMeasurable_mk.measurableSet_eq_fun stronglyMeasurable_zero)]
+    filter_upwards [ae_imp_of_ae_restrict hf.ae_eq_mk, ht_eq] with x hx h'x h''x
+    rw [← hx h''x]
+    exact h'x h''x
+  rw [← this]
+  exact integral_congr_ae hf.ae_eq_mk
 
 中文:
 定理 set整数egral_eq_zero_of_ae_eq_zero
@@ -1049,7 +1138,12 @@ theorem setIntegral_eq_zero_of_ae_eq_zero
     exact hf.1
   have : ∫ x in t, hf.mk f x ∂μ = 0 := by
     refine integral_eq_zero_of_ae ?_
-    rw [EventuallyEq]; rw [ae_restrict_iff (hf.stronglyMeasurable_mk.measurableSet_eq_fun stronglyMea
+    rw [EventuallyEq]; rw [ae_restrict_iff (hf.stronglyMeasurable_mk.measurableSet_eq_fun stronglyMeasurable_zero)]
+    filter_upwards [ae_imp_of_ae_restrict hf.ae_eq_mk, ht_eq] with x hx h'x h''x
+    rw [← hx h''x]
+    exact h'x h''x
+  rw [← this]
+  exact integral_congr_ae hf.ae_eq_mk
 
 Depends on / 依赖: AEStronglyMeasurable, EventuallyEq, ae_eq_mk, ae_imp_of_ae_restrict, ae_restrict_iff, contrapose, filter_upwards, hf.ae_eq_mk, hf.mk, hf.stronglyMeasurable_mk.measurableSet_eq_fun, ht_eq, integral_congr_ae, integral_eq_zero_of_ae, integral_undef, measurableSet_eq_fun, restrict, stronglyMeasurable_mk, stronglyMeasurable_zero
 -/
@@ -1138,7 +1232,13 @@ theorem integral_union_eq_left_of_ae_aux
   have hk : MeasurableSet k := by borelize E; exact haux.measurable (measurableSet_singleton _)
   have h's : IntegrableOn f s μ := H.mono subset_union_left le_rfl
   have A : forall u : Set X, ∫ x in u inter k, f x ∂μ = 0 := fun u =>
-    setIntegral_eq_zero_of_forall_eq_zero f
+    setIntegral_eq_zero_of_forall_eq_zero fun x hx => hx.2
+  rw [← integral_inter_add_sdiff hk h's]; rw [← integral_inter_add_sdiff hk H]; rw [A]; rw [A]; rw [zero_add]; rw [zero_add]; rw [union_sdiff_distrib]; rw [union_comm]
+  apply setIntegral_congr_set
+  rw [union_ae_eq_right]
+  apply measure_mono_null sdiff_subset
+  rw [measure_eq_zero_iff_ae_notMem]
+  filter_upwards [ae_imp_of_ae_restrict ht_eq] with x hx h'x using h'x.2 (hx h'x.1)
 
 中文:
 定理 integral_union_eq_left_of_ae_aux
@@ -1148,7 +1248,13 @@ theorem integral_union_eq_left_of_ae_aux
   have hk : MeasurableSet k := by borelize E; exact haux.measurable (measurableSet_singleton _)
   have h's : IntegrableOn f s μ := H.mono subset_union_left le_rfl
   have A : forall u : Set X, ∫ x in u inter k, f x ∂μ = 0 := fun u =>
-    setIntegral_eq_zero_of_forall_eq_zero f
+    setIntegral_eq_zero_of_forall_eq_zero fun x hx => hx.2
+  rw [← integral_inter_add_sdiff hk h's]; rw [← integral_inter_add_sdiff hk H]; rw [A]; rw [A]; rw [zero_add]; rw [zero_add]; rw [union_sdiff_distrib]; rw [union_comm]
+  apply setIntegral_congr_set
+  rw [union_ae_eq_right]
+  apply measure_mono_null sdiff_subset
+  rw [measure_eq_zero_iff_ae_notMem]
+  filter_upwards [ae_imp_of_ae_restrict ht_eq] with x hx h'x using h'x.2 (hx h'x.1)
 
 Depends on / 依赖: H.mono, IntegrableOn, MeasurableSet, borelize, haux.measurable, integral_inter_add_sdiff, le_rfl, measurable, measurableSet_singleton, setIntegral_congr_set, setIntegral_eq_zero_of_forall_eq_zero, subset_union_left, union_comm, union_sdiff_distrib, zero_add
 -/
@@ -1179,7 +1285,16 @@ theorem integral_union_eq_left_of_ae
   · rw [integral_undef H, integral_undef]; simpa [integrableOn_union, ht] using! H
   let f' := H.1.mk f
   calc
-    ∫ x : X in s union t, f x ∂μ = ∫ x : X 
+    ∫ x : X in s union t, f x ∂μ = ∫ x : X in s union t, f' x ∂μ := integral_congr_ae H.1.ae_eq_mk
+    _ = ∫ x in s, f' x ∂μ := by
+      apply
+        integral_union_eq_left_of_ae_aux _ H.1.stronglyMeasurable_mk (H.congr_fun_ae H.1.ae_eq_mk)
+      filter_upwards [ht_eq,
+        ae_mono (Measure.restrict_mono subset_union_right le_rfl) H.1.ae_eq_mk] with x hx h'x
+      rw [← h'x]; rw [hx]
+    _ = ∫ x in s, f x ∂μ :=
+      integral_congr_ae
+        (ae_mono (Measure.restrict_mono subset_union_left le_rfl) H.1.ae_eq_mk.symm)
 
 中文:
 定理 integral_union_eq_left_of_ae
@@ -1190,7 +1305,16 @@ theorem integral_union_eq_left_of_ae
   · rw [integral_undef H, integral_undef]; simpa [integrableOn_union, ht] using! H
   let f' := H.1.mk f
   calc
-    ∫ x : X in s union t, f x ∂μ = ∫ x : X 
+    ∫ x : X in s union t, f x ∂μ = ∫ x : X in s union t, f' x ∂μ := integral_congr_ae H.1.ae_eq_mk
+    _ = ∫ x in s, f' x ∂μ := by
+      apply
+        integral_union_eq_left_of_ae_aux _ H.1.stronglyMeasurable_mk (H.congr_fun_ae H.1.ae_eq_mk)
+      filter_upwards [ht_eq,
+        ae_mono (Measure.restrict_mono subset_union_right le_rfl) H.1.ae_eq_mk] with x hx h'x
+      rw [← h'x]; rw [hx]
+    _ = ∫ x in s, f x ∂μ :=
+      integral_congr_ae
+        (ae_mono (Measure.restrict_mono subset_union_left le_rfl) H.1.ae_eq_mk.symm)
 
 Depends on / 依赖: H.congr_fun_ae, IntegrableOn, ae_eq_mk, ae_mono, congr_fun_ae, filter_upwards, ht_eq, integrableOn_union, integrableOn_zero, integrableOn_zero.congr_fun_ae, integral_congr_ae, integral_undef, integral_union_eq_left_of_ae_aux, stronglyMeasurable_mk
 -/
@@ -1263,7 +1387,26 @@ theorem setIntegral_eq_of_subset_of_ae_sdiff_eq_zero_aux
     ∫ x in t, f x ∂μ = ∫ x in t inter k, f x ∂μ + ∫ x in t \ k, f x ∂μ := by
       rw [integral_inter_add_sdiff hk h'aux]
     _ = ∫ x in t \ k, f x ∂μ := by
-      rw [setInt
+      rw [setIntegral_eq_zero_of_forall_eq_zero fun x hx => ?_]; rw [zero_add]; exact hx.2
+    _ = ∫ x in s \ k, f x ∂μ := by
+      apply setIntegral_congr_set
+      filter_upwards [h't] with x hx
+      change (x in t \ k) = (x in s \ k)
+      simp only [eq_iff_iff, and_congr_left_iff, Set.mem_sdiff]
+      intro h'x
+      by_cases xs : x in s
+      · simp only [xs, hts xs]
+      · simp only [xs, iff_false]
+        intro xt
+        exact h'x (hx ⟨xt, xs⟩)
+    _ = ∫ x in s inter k, f x ∂μ + ∫ x in s \ k, f x ∂μ := by
+      have : forall x in s inter k, f x = 0 := fun x hx => hx.2
+      rw [setIntegral_eq_zero_of_forall_eq_zero this]; rw [zero_add]
+    _ = ∫ x in s, f x ∂μ := by rw [integral_inter_add_sdiff hk (h'aux.mono hts le_rfl)]
+
+@[deprecated (since := "2026-06-03")]
+alias setIntegral_eq_of_subset_of_ae_diff_eq_zero_aux :=
+  setIntegral_eq_of_subset_of_ae_sdiff_eq_zero_aux
 
 中文:
 定理 set整数egral_eq_of_subset_of_ae_sdiff_eq_zero_aux
@@ -1275,7 +1418,26 @@ theorem setIntegral_eq_of_subset_of_ae_sdiff_eq_zero_aux
     ∫ x in t, f x ∂μ = ∫ x in t inter k, f x ∂μ + ∫ x in t \ k, f x ∂μ := by
       rw [integral_inter_add_sdiff hk h'aux]
     _ = ∫ x in t \ k, f x ∂μ := by
-      rw [setInt
+      rw [setIntegral_eq_zero_of_forall_eq_zero fun x hx => ?_]; rw [zero_add]; exact hx.2
+    _ = ∫ x in s \ k, f x ∂μ := by
+      apply setIntegral_congr_set
+      filter_upwards [h't] with x hx
+      change (x in t \ k) = (x in s \ k)
+      simp only [eq_iff_iff, and_congr_left_iff, Set.mem_sdiff]
+      intro h'x
+      by_cases xs : x in s
+      · simp only [xs, hts xs]
+      · simp only [xs, iff_false]
+        intro xt
+        exact h'x (hx ⟨xt, xs⟩)
+    _ = ∫ x in s inter k, f x ∂μ + ∫ x in s \ k, f x ∂μ := by
+      have : forall x in s inter k, f x = 0 := fun x hx => hx.2
+      rw [setIntegral_eq_zero_of_forall_eq_zero this]; rw [zero_add]
+    _ = ∫ x in s, f x ∂μ := by rw [integral_inter_add_sdiff hk (h'aux.mono hts le_rfl)]
+
+@[deprecated (since := "2026-06-03")]
+alias setIntegral_eq_of_subset_of_ae_diff_eq_zero_aux :=
+  setIntegral_eq_of_subset_of_ae_sdiff_eq_zero_aux
 
 Depends on / 依赖: MeasurableSet, borelize, eq_iff_iff, filter_upwards, haux.measurable, integral_inter_add_sdiff, measurable, measurableSet_singleton, setIntegral_congr_set, setIntegral_eq_zero_of_forall_eq_zero, zero_add
 -/
@@ -1322,7 +1484,19 @@ theorem setIntegral_eq_of_subset_of_ae_sdiff_eq_zero
   let f' := h.1.mk f
   calc
     ∫ x in t, f x ∂μ = ∫ x in t, f' x ∂μ := integral_congr_ae h.1.ae_eq_mk
-    _ = ∫ x in s, f' x ∂μ 
+    _ = ∫ x in s, f' x ∂μ := by
+      apply
+        setIntegral_eq_of_subset_of_ae_sdiff_eq_zero_aux hts _ h.1.stronglyMeasurable_mk
+          (h.congr h.1.ae_eq_mk)
+      filter_upwards [h't, ae_imp_of_ae_restrict h.1.ae_eq_mk] with x hx h'x h''x
+      rw [← h'x h''x.1]; rw [hx h''x]
+    _ = ∫ x in s, f x ∂μ := by
+      apply integral_congr_ae
+      apply ae_restrict_of_ae_restrict_of_subset hts
+      exact h.1.ae_eq_mk.symm
+
+@[deprecated (since := "2026-06-03")]
+alias setIntegral_eq_of_subset_of_ae_diff_eq_zero := setIntegral_eq_of_subset_of_ae_sdiff_eq_zero
 
 中文:
 定理 set整数egral_eq_of_subset_of_ae_sdiff_eq_zero
@@ -1334,7 +1508,19 @@ theorem setIntegral_eq_of_subset_of_ae_sdiff_eq_zero
   let f' := h.1.mk f
   calc
     ∫ x in t, f x ∂μ = ∫ x in t, f' x ∂μ := integral_congr_ae h.1.ae_eq_mk
-    _ = ∫ x in s, f' x ∂μ 
+    _ = ∫ x in s, f' x ∂μ := by
+      apply
+        setIntegral_eq_of_subset_of_ae_sdiff_eq_zero_aux hts _ h.1.stronglyMeasurable_mk
+          (h.congr h.1.ae_eq_mk)
+      filter_upwards [h't, ae_imp_of_ae_restrict h.1.ae_eq_mk] with x hx h'x h''x
+      rw [← h'x h''x.1]; rw [hx h''x]
+    _ = ∫ x in s, f x ∂μ := by
+      apply integral_congr_ae
+      apply ae_restrict_of_ae_restrict_of_subset hts
+      exact h.1.ae_eq_mk.symm
+
+@[deprecated (since := "2026-06-03")]
+alias setIntegral_eq_of_subset_of_ae_diff_eq_zero := setIntegral_eq_of_subset_of_ae_sdiff_eq_zero
 
 Depends on / 依赖: H.of_ae_sdiff_eq_zero, IntegrableOn, ae_eq_mk, ae_imp_of_ae_restrict, filter_upwards, h.congr, integral_congr_ae, integral_undef, of_ae_sdiff_eq_zero, setIntegral_eq_of_subset_of_ae_sdiff_eq_zero_aux, stronglyMeasurable_mk
 -/
@@ -1457,7 +1643,7 @@ theorem setIntegral_neg_eq_setIntegral_nonpos
     hf.nullMeasurableSet_eq_fun aestronglyMeasurable_zero
   symm
   refine integral_union_eq_left_of_ae ?_
-  filter_upwa
+  filter_upwards [ae_restrict_mem₀ B] with x hx using hx
 
 中文:
 定理 set整数egral_neg_eq_set整数egral_nonpos
@@ -1470,7 +1656,7 @@ theorem setIntegral_neg_eq_setIntegral_nonpos
     hf.nullMeasurableSet_eq_fun aestronglyMeasurable_zero
   symm
   refine integral_union_eq_left_of_ae ?_
-  filter_upwa
+  filter_upwards [ae_restrict_mem₀ B] with x hx using hx
 
 Depends on / 依赖: NullMeasurableSet, aestronglyMeasurable_zero, filter_upwards, h_union, hf.nullMeasurableSet_eq_fun, integral_union_eq_left_of_ae, le_iff_lt_or_eq, nullMeasurableSet_eq_fun, ofPred_or, simp_rw
 -/
@@ -1497,7 +1683,20 @@ theorem integral_norm_eq_pos_sub_neg
   calc
     ∫ x, ‖f x‖ ∂μ = ∫ x in {x | 0 <= f x}, ‖f x‖ ∂μ + ∫ x in {x | 0 <= f x}ᶜ, ‖f x‖ ∂μ := by
       rw [← integral_add_compl₀ h_meas hfi.norm]
-    _ = ∫ x in {x | 0 <= f x}, f x ∂μ + ∫
+    _ = ∫ x in {x | 0 <= f x}, f x ∂μ + ∫ x in {x | 0 <= f x}ᶜ, ‖f x‖ ∂μ := by
+      congr 1
+      refine setIntegral_congr_fun₀ h_meas fun x hx => ?_
+      rw [Real.norm_eq_abs]; rw [abs_eq_self.mpr _]
+      exact hx
+    _ = ∫ x in {x | 0 <= f x}, f x ∂μ - ∫ x in {x | 0 <= f x}ᶜ, f x ∂μ := by
+      congr 1
+      rw [← integral_neg]
+      refine setIntegral_congr_fun₀ h_meas.compl fun x hx => ?_
+      rw [Real.norm_eq_abs]; rw [abs_eq_neg_self.mpr _]
+      rw [Set.mem_compl_iff]; rw [Set.notMem_ofPred_iff] at hx
+      linarith
+    _ = ∫ x in {x | 0 <= f x}, f x ∂μ - ∫ x in {x | f x <= 0}, f x ∂μ := by
+      rw [← setIntegral_neg_eq_setIntegral_nonpos hfi.1]; rw [compl_ofPred]; simp only [not_le]
 
 中文:
 定理 integral_norm_eq_pos_sub_neg
@@ -1507,7 +1706,20 @@ theorem integral_norm_eq_pos_sub_neg
   calc
     ∫ x, ‖f x‖ ∂μ = ∫ x in {x | 0 <= f x}, ‖f x‖ ∂μ + ∫ x in {x | 0 <= f x}ᶜ, ‖f x‖ ∂μ := by
       rw [← integral_add_compl₀ h_meas hfi.norm]
-    _ = ∫ x in {x | 0 <= f x}, f x ∂μ + ∫
+    _ = ∫ x in {x | 0 <= f x}, f x ∂μ + ∫ x in {x | 0 <= f x}ᶜ, ‖f x‖ ∂μ := by
+      congr 1
+      refine setIntegral_congr_fun₀ h_meas fun x hx => ?_
+      rw [Real.norm_eq_abs]; rw [abs_eq_self.mpr _]
+      exact hx
+    _ = ∫ x in {x | 0 <= f x}, f x ∂μ - ∫ x in {x | 0 <= f x}ᶜ, f x ∂μ := by
+      congr 1
+      rw [← integral_neg]
+      refine setIntegral_congr_fun₀ h_meas.compl fun x hx => ?_
+      rw [Real.norm_eq_abs]; rw [abs_eq_neg_self.mpr _]
+      rw [Set.mem_compl_iff]; rw [Set.notMem_ofPred_iff] at hx
+      linarith
+    _ = ∫ x in {x | 0 <= f x}, f x ∂μ - ∫ x in {x | f x <= 0}, f x ∂μ := by
+      rw [← setIntegral_neg_eq_setIntegral_nonpos hfi.1]; rw [compl_ofPred]; simp only [not_le]
 
 Depends on / 依赖: NullMeasurableSet, Real.norm_eq_abs, abs_eq_self, abs_eq_self.mpr, aestronglyMeasurable_const, aestronglyMeasurable_const.nullMeasurableSet_le, h_meas, hfi.norm, norm_eq_abs, nullMeasurableSet_le
 -/
@@ -1836,7 +2048,19 @@ theorem norm_setIntegral_le_of_norm_le_const_ae'
       filter_upwards [hC, hfm.ae_mem_imp_eq_mk] with _ h1 h2 h3
       rw [← h2 h3]
       exact h1 h3
-  
+    have B : MeasurableSet {x | ‖hfm.mk f x‖ <= C} :=
+      hfm.stronglyMeasurable_mk.norm.measurable measurableSet_Iic
+    filter_upwards [hfm.ae_eq_mk, (ae_restrict_iff B).2 A] with _ h1 _
+    rwa [h1]
+  · rw [integral_non_aestronglyMeasurable hfm]
+    have : existsᵐ (x : X) ∂μ, x in s := by
+      apply frequently_ae_mem_iff.mpr
+      contrapose hfm
+      simp [Measure.restrict_eq_zero.mpr hfm]
+    rcases (this.and_eventually hC).exists with ⟨x, hx, h'x⟩
+    have : 0 <= C := (norm_nonneg _).trans (h'x hx)
+    simp only [norm_zero, ge_iff_le]
+    positivity
 
 中文:
 定理 norm_set整数egral_le_of_norm_le_const_ae'
@@ -1848,7 +2072,19 @@ theorem norm_setIntegral_le_of_norm_le_const_ae'
       filter_upwards [hC, hfm.ae_mem_imp_eq_mk] with _ h1 h2 h3
       rw [← h2 h3]
       exact h1 h3
-  
+    have B : MeasurableSet {x | ‖hfm.mk f x‖ <= C} :=
+      hfm.stronglyMeasurable_mk.norm.measurable measurableSet_Iic
+    filter_upwards [hfm.ae_eq_mk, (ae_restrict_iff B).2 A] with _ h1 _
+    rwa [h1]
+  · rw [integral_non_aestronglyMeasurable hfm]
+    have : existsᵐ (x : X) ∂μ, x in s := by
+      apply frequently_ae_mem_iff.mpr
+      contrapose hfm
+      simp [Measure.restrict_eq_zero.mpr hfm]
+    rcases (this.and_eventually hC).exists with ⟨x, hx, h'x⟩
+    have : 0 <= C := (norm_nonneg _).trans (h'x hx)
+    simp only [norm_zero, ge_iff_le]
+    positivity
 
 Depends on / 依赖: AEStronglyMeasurable, AEStronglyMeasurable.mk, MeasurableSet, ae_eq_mk, ae_mem_imp_eq_mk, ae_restrict_iff, filter_upwards, hfm.ae_eq_mk, hfm.ae_mem_imp_eq_mk, hfm.mk, hfm.stronglyMeasurable_mk.norm.measurable, integral_non_aestronglyMeasurable, measurable, measurableSet_Iic, norm_setIntegral_le_of_norm_le_const_ae, restrict, stronglyMeasurable_mk
 -/
@@ -1904,7 +2140,10 @@ theorem norm_integral_sub_setIntegral_le
     rw [sub_eq_iff_eq_add]; rw [add_comm]; rw [integral_add_compl hs hf1]
   have h1 : ∫ x in sᶜ, ‖f x‖ ∂μ <= ∫ _ in sᶜ, C ∂μ :=
     integral_mono_ae hf1.norm.restrict (integrable_const C) (ae_restrict_of_ae hf)
-  have h2 :
+  have h2 : ∫ _ in sᶜ, C ∂μ = μ.real sᶜ * C := by
+    rw [setIntegral_const C]; rw [smul_eq_mul]
+  rw [h0]; rw [← h2]
+  exact le_trans (norm_integral_le_integral_norm f) h1
 
 中文:
 定理 norm_integral_sub_set整数egral_le
@@ -1914,7 +2153,10 @@ theorem norm_integral_sub_setIntegral_le
     rw [sub_eq_iff_eq_add]; rw [add_comm]; rw [integral_add_compl hs hf1]
   have h1 : ∫ x in sᶜ, ‖f x‖ ∂μ <= ∫ _ in sᶜ, C ∂μ :=
     integral_mono_ae hf1.norm.restrict (integrable_const C) (ae_restrict_of_ae hf)
-  have h2 :
+  have h2 : ∫ _ in sᶜ, C ∂μ = μ.real sᶜ * C := by
+    rw [setIntegral_const C]; rw [smul_eq_mul]
+  rw [h0]; rw [← h2]
+  exact le_trans (norm_integral_le_integral_norm f) h1
 
 Depends on / 依赖: add_comm, ae_restrict_of_ae, hf1.norm.restrict, integrable_const, integral_add_compl, integral_mono_ae, le_trans, norm_integral_le_integral_norm, restrict, setIntegral_const, smul_eq_mul, sub_eq_iff_eq_add
 -/
@@ -1987,7 +2229,16 @@ theorem setIntegral_gt_gt
     refine ⟨aestronglyMeasurable_const, lt_of_le_of_lt ?_ hfint.2⟩
 refine setLIntegral_mono_ae hfint.1.enorm ae_of_all _ fun x hx => ?_
     simp only [ENNReal.coe_le_coe, Real.nnnorm_of_nonneg hR, enorm_eq_nnnorm,
-      Real.nnnorm_of_nonn
+      Real.nnnorm_of_nonneg (hR.trans <| le_of_lt hx)]
+    exact le_of_lt hx
+  rw [← sub_pos]; rw [← smul_eq_mul]; rw [← setIntegral_const]; rw [← integral_sub hfint this]; rw [setIntegral_pos_iff_support_of_nonneg_ae]
+  · rw [← pos_iff_ne_zero] at hμ
+    rwa [Set.inter_eq_self_of_subset_right]
+    exact fun x hx => Ne.symm (ne_of_lt <| sub_pos.2 hx)
+  · rw [Pi.zero_def, EventuallyLE, ae_restrict_iff₀]
+· exact Eventually.of_forall fun x hx => sub_nonneg.2 le_of_lt hx
+    · exact nullMeasurableSet_le aemeasurable_zero (hfint.1.aemeasurable.sub aemeasurable_const)
+  · exact Integrable.sub hfint this
 
 中文:
 定理 set整数egral_gt_gt
@@ -1997,7 +2248,16 @@ refine setLIntegral_mono_ae hfint.1.enorm ae_of_all _ fun x hx => ?_
     refine ⟨aestronglyMeasurable_const, lt_of_le_of_lt ?_ hfint.2⟩
 refine setLIntegral_mono_ae hfint.1.enorm ae_of_all _ fun x hx => ?_
     simp only [ENNReal.coe_le_coe, Real.nnnorm_of_nonneg hR, enorm_eq_nnnorm,
-      Real.nnnorm_of_nonn
+      Real.nnnorm_of_nonneg (hR.trans <| le_of_lt hx)]
+    exact le_of_lt hx
+  rw [← sub_pos]; rw [← smul_eq_mul]; rw [← setIntegral_const]; rw [← integral_sub hfint this]; rw [setIntegral_pos_iff_support_of_nonneg_ae]
+  · rw [← pos_iff_ne_zero] at hμ
+    rwa [Set.inter_eq_self_of_subset_right]
+    exact fun x hx => Ne.symm (ne_of_lt <| sub_pos.2 hx)
+  · rw [Pi.zero_def, EventuallyLE, ae_restrict_iff₀]
+· exact Eventually.of_forall fun x hx => sub_nonneg.2 le_of_lt hx
+    · exact nullMeasurableSet_le aemeasurable_zero (hfint.1.aemeasurable.sub aemeasurable_const)
+  · exact Integrable.sub hfint this
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe, IntegrableOn, Real.nnnorm_of_nonneg, ae_of_all, aestronglyMeasurable_const, coe_le_coe, enorm_eq_nnnorm, hR.trans, integral_sub, le_of_lt, lt_of_le_of_lt, nnnorm_of_nonneg, pos_iff_ne_zero, setIntegral_const, setIntegral_pos_iff_support_of_nonneg_ae, setLIntegral_mono_ae, smul_eq_mul, sub_pos
 -/
@@ -2490,7 +2750,11 @@ lemma setIntegral_mono_on_ae₀
   refine setIntegral_mono_on_ae ?_ ?_ ?_ ?_
   · rwa [integrableOn_congr_set_ae hs.toMeasurable_ae_eq]
   · rwa [integrableOn_congr_set_ae hs.toMeasurable_ae_eq]
-  · exact measurableSet_to
+  · exact measurableSet_toMeasurable μ s
+  · filter_upwards [hs.toMeasurable_ae_eq.mem_iff, h] with x hx h
+    rwa [hx]
+
+@[gcongr high] -- higher priority than `integral_mono`
 
 中文:
 引理 set整数egral_mono_on_ae₀
@@ -2500,7 +2764,11 @@ lemma setIntegral_mono_on_ae₀
   refine setIntegral_mono_on_ae ?_ ?_ ?_ ?_
   · rwa [integrableOn_congr_set_ae hs.toMeasurable_ae_eq]
   · rwa [integrableOn_congr_set_ae hs.toMeasurable_ae_eq]
-  · exact measurableSet_to
+  · exact measurableSet_toMeasurable μ s
+  · filter_upwards [hs.toMeasurable_ae_eq.mem_iff, h] with x hx h
+    rwa [hx]
+
+@[gcongr high] -- higher priority than `integral_mono`
 
 Depends on / 依赖: filter_upwards, hs.toMeasurable_ae_eq, hs.toMeasurable_ae_eq.mem_iff, hs.toMeasurable_ae_eq.symm, integrableOn_congr_set_ae, measurableSet_toMeasurable, mem_iff, setIntegral_congr_set, setIntegral_mono_on_ae, toMeasurable_ae_eq
 -/
@@ -2882,7 +3150,18 @@ lemma integral_le_measure
   have g_int : Integrable g μ := H.pos_part
   have : ENNReal.ofReal (∫ x, f x ∂μ) <= ENNReal.ofReal (∫ x, g x ∂μ) := by
     apply ENNReal.ofReal_le_ofReal
-    exact integral_mono H g_int (fun x => le_max_left
+    exact integral_mono H g_int (fun x => le_max_left _ _)
+  apply this.trans
+  rw [ofReal_integral_eq_lintegral_ofReal g_int (Eventually.of_forall (fun x => le_max_right _ _))]
+  apply lintegral_le_meas
+  · intro x
+    apply ENNReal.ofReal_le_of_le_toReal
+    by_cases H : x in s
+    · simpa [g] using hs x H
+    · apply le_trans _ zero_le_one
+      simpa [g] using h's x H
+  · intro x hx
+    simpa [g] using h's x hx
 
 中文:
 引理 integral_le_measure
@@ -2894,7 +3173,18 @@ lemma integral_le_measure
   have g_int : Integrable g μ := H.pos_part
   have : ENNReal.ofReal (∫ x, f x ∂μ) <= ENNReal.ofReal (∫ x, g x ∂μ) := by
     apply ENNReal.ofReal_le_ofReal
-    exact integral_mono H g_int (fun x => le_max_left
+    exact integral_mono H g_int (fun x => le_max_left _ _)
+  apply this.trans
+  rw [ofReal_integral_eq_lintegral_ofReal g_int (Eventually.of_forall (fun x => le_max_right _ _))]
+  apply lintegral_le_meas
+  · intro x
+    apply ENNReal.ofReal_le_of_le_toReal
+    by_cases H : x in s
+    · simpa [g] using hs x H
+    · apply le_trans _ zero_le_one
+      simpa [g] using h's x H
+  · intro x hx
+    simpa [g] using h's x hx
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.ofReal_le_ofReal, ENNReal.ofReal_le_of_le_toReal, Eventually, Eventually.of_forall, H.pos_part, Integrable, g_int, integral_mono, integral_undef, le_max_left, le_max_right, lintegral_le_meas, ofReal, ofReal_integral_eq_lintegral_ofReal, ofReal_le_ofReal, ofReal_le_of_le_toReal, of_forall, pos_part
 -/
@@ -2932,7 +3222,14 @@ lemma setIntegral_mono_of_nonneg
     apply integral_nonneg_of_ae
     apply (ae_restrict_iff₀ ?_).2
     · filter_upwards with x hx using (hf x hx).trans (h x hx)
-    · exact nullMeasurableSet_le aemeasurable_const hg.aemeas
+    · exact nullMeasurableSet_le aemeasurable_const hg.aemeasurable
+  refine integral_mono_of_nonneg ?_ hg ?_
+  · apply (ae_restrict_iff₀ ?_).2
+    · filter_upwards with x hx using hf x hx
+    · exact nullMeasurableSet_le aemeasurable_const h'f.aemeasurable
+  · apply (ae_restrict_iff₀ ?_).2
+    · filter_upwards with x hx using h x hx
+    · exact nullMeasurableSet_le h'f.aemeasurable hg.aemeasurable
 
 中文:
 引理 set整数egral_mono_of_nonneg
@@ -2943,7 +3240,14 @@ lemma setIntegral_mono_of_nonneg
     apply integral_nonneg_of_ae
     apply (ae_restrict_iff₀ ?_).2
     · filter_upwards with x hx using (hf x hx).trans (h x hx)
-    · exact nullMeasurableSet_le aemeasurable_const hg.aemeas
+    · exact nullMeasurableSet_le aemeasurable_const hg.aemeasurable
+  refine integral_mono_of_nonneg ?_ hg ?_
+  · apply (ae_restrict_iff₀ ?_).2
+    · filter_upwards with x hx using hf x hx
+    · exact nullMeasurableSet_le aemeasurable_const h'f.aemeasurable
+  · apply (ae_restrict_iff₀ ?_).2
+    · filter_upwards with x hx using h x hx
+    · exact nullMeasurableSet_le h'f.aemeasurable hg.aemeasurable
 
 Depends on / 依赖: AEStronglyMeasurable, aemeasurable, aemeasurable_const, f.aemeasurable, filter_upwards, hg.aemeasurable, integral_mono_of_nonneg, integral_non_aestronglyMeasurable, integral_nonneg_of_ae, nullMeasurableSet_le, restrict
 -/
@@ -2981,7 +3285,11 @@ theorem integrableOn_iUnion_of_summable_integral_norm
   have B := fun i => lintegral_coe_eq_integral (fun x : X => ‖f x‖₊) (hi i).norm
   simp_rw [enorm_eq_nnnorm, tsum_congr B]
   have S' : Summable fun i : ι =>
-      (NNReal.mk (∫ x : X in s i, ‖f x‖₊ ∂μ)
+      (NNReal.mk (∫ x : X in s i, ‖f x‖₊ ∂μ) (integral_nonneg fun x => NNReal.coe_nonneg _)) := by
+    rw [← NNReal.summable_coe]; exact h
+  have S'' := ENNReal.tsum_coe_eq S'.hasSum
+  simp_rw [ENNReal.coe_nnreal_eq, NNReal.coe_mk, coe_nnnorm] at S''
+  convert! ENNReal.ofReal_lt_top
 
 中文:
 定理 integrableOn_iUnion_of_summable_integral_norm
@@ -2991,7 +3299,11 @@ theorem integrableOn_iUnion_of_summable_integral_norm
   have B := fun i => lintegral_coe_eq_integral (fun x : X => ‖f x‖₊) (hi i).norm
   simp_rw [enorm_eq_nnnorm, tsum_congr B]
   have S' : Summable fun i : ι =>
-      (NNReal.mk (∫ x : X in s i, ‖f x‖₊ ∂μ)
+      (NNReal.mk (∫ x : X in s i, ‖f x‖₊ ∂μ) (integral_nonneg fun x => NNReal.coe_nonneg _)) := by
+    rw [← NNReal.summable_coe]; exact h
+  have S'' := ENNReal.tsum_coe_eq S'.hasSum
+  simp_rw [ENNReal.coe_nnreal_eq, NNReal.coe_mk, coe_nnnorm] at S''
+  convert! ENNReal.ofReal_lt_top
 
 Depends on / 依赖: AEStronglyMeasurable, AEStronglyMeasurable.iUnion, ENNRea, ENNReal, ENNReal.coe_nnreal_eq, ENNReal.tsum_coe_eq, NNReal, NNReal.coe_mk, NNReal.coe_nonneg, NNReal.mk, NNReal.summable_coe, Summable, coe_mk, coe_nnnorm, coe_nnreal_eq, coe_nonneg, convert, enorm_eq_nnnorm, hasSum, iUnion
 -/
@@ -3021,7 +3333,10 @@ theorem integrableOn_iUnion_of_summable_norm_restrict
     integrableOn_iUnion_of_summable_integral_norm
       (fun i => (map_continuous f).continuousOn.integrableOn_compact (s i).isCompact)
       (.of_nonneg_of_le (fun ι => integral_nonneg fun x => norm_nonneg _) (fun i => ?_) hf)
-  rw [← (Real.norm_of_nonneg (integral_nonneg fun x => norm_
+  rw [← (Real.norm_of_nonneg (integral_nonneg fun x => norm_nonneg _) : ‖_‖ = ∫ x in s i]; rw [‖f x‖ ∂μ)]
+  exact
+    norm_setIntegral_le_of_norm_le_const (s i).isCompact.measure_lt_top
+      fun x hx => (norm_norm (f x)).symm ▸ (f.restrict (s i : Set X)).norm_coe_le_norm ⟨x, hx⟩
 
 中文:
 定理 integrableOn_iUnion_of_summable_norm_restrict
@@ -3031,7 +3346,10 @@ theorem integrableOn_iUnion_of_summable_norm_restrict
     integrableOn_iUnion_of_summable_integral_norm
       (fun i => (map_continuous f).continuousOn.integrableOn_compact (s i).isCompact)
       (.of_nonneg_of_le (fun ι => integral_nonneg fun x => norm_nonneg _) (fun i => ?_) hf)
-  rw [← (Real.norm_of_nonneg (integral_nonneg fun x => norm_
+  rw [← (Real.norm_of_nonneg (integral_nonneg fun x => norm_nonneg _) : ‖_‖ = ∫ x in s i]; rw [‖f x‖ ∂μ)]
+  exact
+    norm_setIntegral_le_of_norm_le_const (s i).isCompact.measure_lt_top
+      fun x hx => (norm_norm (f x)).symm ▸ (f.restrict (s i : Set X)).norm_coe_le_norm ⟨x, hx⟩
 
 Depends on / 依赖: Real.norm_of_nonneg, continuousOn, continuousOn.integrableOn_compact, f.restrict, integrableOn_compact, integrableOn_iUnion_of_summable_integral_norm, integral_nonneg, isCompact, isCompact.measure_lt_top, map_continuous, measure_lt_top, norm_coe_le_norm, norm_nonneg, norm_norm, norm_of_nonneg, norm_setIntegral_le_of_norm_le_const, of_nonneg_of_le, restrict
 -/
@@ -3095,7 +3413,9 @@ theorem Lp_toLp_restrict_add
     (Lp.coeFn_add (MemLp.toLp f ((Lp.memLp f).restrict s))
           (MemLp.toLp g ((Lp.memLp g).restrict s))).mp ?_
   refine (MemLp.coeFn_toLp ((Lp.memLp f).restrict s)).mp ?_
-  refine (MemLp.coeFn_toLp ((Lp.memLp g).restrict 
+  refine (MemLp.coeFn_toLp ((Lp.memLp g).restrict s)).mp ?_
+  refine (MemLp.coeFn_toLp ((Lp.memLp (f + g)).restrict s)).mono fun x hx1 hx2 hx3 hx4 hx5 => ?_
+  rw [hx4]; rw [hx1]; rw [Pi.add_apply]; rw [hx2]; rw [hx3]; rw [hx5]; rw [Pi.add_apply]
 
 中文:
 定理 Lp_toLp_restrict_add
@@ -3107,7 +3427,9 @@ theorem Lp_toLp_restrict_add
     (Lp.coeFn_add (MemLp.toLp f ((Lp.memLp f).restrict s))
           (MemLp.toLp g ((Lp.memLp g).restrict s))).mp ?_
   refine (MemLp.coeFn_toLp ((Lp.memLp f).restrict s)).mp ?_
-  refine (MemLp.coeFn_toLp ((Lp.memLp g).restrict 
+  refine (MemLp.coeFn_toLp ((Lp.memLp g).restrict s)).mp ?_
+  refine (MemLp.coeFn_toLp ((Lp.memLp (f + g)).restrict s)).mono fun x hx1 hx2 hx3 hx4 hx5 => ?_
+  rw [hx4]; rw [hx1]; rw [Pi.add_apply]; rw [hx2]; rw [hx3]; rw [hx5]; rw [Pi.add_apply]
 
 Depends on / 依赖: Lp.coeFn_add, Lp.memLp, MemLp.coeFn_toLp, MemLp.toLp, Pi.add_apply, add_apply, ae_restrict_of_ae, coeFn_add, coeFn_toLp, restrict
 -/
@@ -3137,7 +3459,7 @@ theorem Lp_toLp_restrict_smul
   refine (MemLp.coeFn_toLp ((Lp.memLp (c • f)).restrict s)).mp ?_
   refine
     (Lp.coeFn_smul c (MemLp.toLp f ((Lp.memLp f).restrict s))).mono fun x hx1 hx2 hx3 hx4 => ?_
-  si
+  simp only [hx2, hx1, hx3, hx4, Pi.smul_apply]
 
 中文:
 定理 Lp_toLp_restrict_smul
@@ -3149,7 +3471,7 @@ theorem Lp_toLp_restrict_smul
   refine (MemLp.coeFn_toLp ((Lp.memLp (c • f)).restrict s)).mp ?_
   refine
     (Lp.coeFn_smul c (MemLp.toLp f ((Lp.memLp f).restrict s))).mono fun x hx1 hx2 hx3 hx4 => ?_
-  si
+  simp only [hx2, hx1, hx3, hx4, Pi.smul_apply]
 
 Depends on / 依赖: Lp.coeFn_smul, Lp.memLp, MemLp.coeFn_toLp, MemLp.toLp, Pi.smul_apply, ae_restrict_of_ae, coeFn_smul, coeFn_toLp, restrict, smul_apply
 -/
@@ -3257,7 +3579,8 @@ theorem continuous_setIntegral
       integral (μ.restrict s) ∘ fun f => LpToLpRestrictCLM X E Real μ 1 s f := by
     ext1 f
     rw [Function.comp_apply]; rw [integral_congr_ae (LpToLpRestrictCLM_coeFn Real s f)]
-  rw 
+  rw [h_comp]
+  exact continuous_integral.comp (LpToLpRestrictCLM X E Real μ 1 s).continuous
 
 中文:
 定理 continuous_set整数egral
@@ -3269,7 +3592,8 @@ theorem continuous_setIntegral
       integral (μ.restrict s) ∘ fun f => LpToLpRestrictCLM X E Real μ 1 s f := by
     ext1 f
     rw [Function.comp_apply]; rw [integral_congr_ae (LpToLpRestrictCLM_coeFn Real s f)]
-  rw 
+  rw [h_comp]
+  exact continuous_integral.comp (LpToLpRestrictCLM X E Real μ 1 s).continuous
 
 Depends on / 依赖: Function, Function.comp_apply, LpToLpRestrictCLM, LpToLpRestrictCLM_coeFn, comp_apply, continuous, continuous_integral, continuous_integral.comp, h_comp, integral, integral_congr_ae, le_rfl, restrict
 -/
@@ -3474,7 +3798,15 @@ theorem Integrable.simpleFunc_mul
         (h_int₁.add h_int₂).congr (by rw [SimpleFunc.coe_add, add_mul]))
       g
   simp only [SimpleFunc.const_zero, SimpleFunc.coe_piecewise, SimpleFunc.coe_const,
-    SimpleFunc.coe_zero, Set.piecewise_eq_i
+    SimpleFunc.coe_zero, Set.piecewise_eq_indicator]
+  have : Set.indicator s (Function.const X c) * f = s.indicator (c • f) := by
+    ext1 x
+    by_cases hx : x in s
+    · simp only [hx, Pi.mul_apply, Set.indicator_of_mem, Pi.smul_apply, smul_eq_mul,
+        ← Function.const_def]
+    · simp only [hx, Pi.mul_apply, Set.indicator_of_notMem, not_false_iff, zero_mul]
+  rw [this]; rw [integrable_indicator_iff hs]
+  exact (hf.smul c).integrableOn
 
 中文:
 定理 可积.simpleFunc_mul
@@ -3486,7 +3818,15 @@ theorem Integrable.simpleFunc_mul
         (h_int₁.add h_int₂).congr (by rw [SimpleFunc.coe_add, add_mul]))
       g
   simp only [SimpleFunc.const_zero, SimpleFunc.coe_piecewise, SimpleFunc.coe_const,
-    SimpleFunc.coe_zero, Set.piecewise_eq_i
+    SimpleFunc.coe_zero, Set.piecewise_eq_indicator]
+  have : Set.indicator s (Function.const X c) * f = s.indicator (c • f) := by
+    ext1 x
+    by_cases hx : x in s
+    · simp only [hx, Pi.mul_apply, Set.indicator_of_mem, Pi.smul_apply, smul_eq_mul,
+        ← Function.const_def]
+    · simp only [hx, Pi.mul_apply, Set.indicator_of_notMem, not_false_iff, zero_mul]
+  rw [this]; rw [integrable_indicator_iff hs]
+  exact (hf.smul c).integrableOn
 
 Depends on / 依赖: Function, Function.const, Function.const_def, Pi.mul_apply, Pi.smul_apply, Set.indicator, Set.indicator_of_mem, Set.piecewise_eq_indicator, SimpleFunc, SimpleFunc.coe_add, SimpleFunc.coe_const, SimpleFunc.coe_piecewise, SimpleFunc.coe_zero, SimpleFunc.const_zero, SimpleFunc.induction, add_mul, coe_add, coe_const, coe_piecewise, coe_zero
 -/
@@ -3554,7 +3894,12 @@ theorem continuous_parametric_integral_of_continuous
   rcases (U_cpct.prod hs).bddAbove_image hf.norm.continuousOn with ⟨M, hM⟩
   apply continuousAt_of_dominated
   · filter_upwards with x using Continuous.aestronglyMeasurable (by fun_prop)
-  ·
+  · filter_upwards [U_nhds] with x x_in
+    rw [ae_restrict_iff]
+    · filter_upwards with t t_in using hM (mem_image_of_mem _ <| mk_mem_prod x_in t_in)
+    · exact (isClosed_le (by fun_prop) (by fun_prop)).measurableSet
+  · exact integrableOn_const hs.measure_ne_top
+  · filter_upwards using (by fun_prop)
 
 中文:
 定理 continuous_parametric_integral_of_continuous
@@ -3565,7 +3910,12 @@ theorem continuous_parametric_integral_of_continuous
   rcases (U_cpct.prod hs).bddAbove_image hf.norm.continuousOn with ⟨M, hM⟩
   apply continuousAt_of_dominated
   · filter_upwards with x using Continuous.aestronglyMeasurable (by fun_prop)
-  ·
+  · filter_upwards [U_nhds] with x x_in
+    rw [ae_restrict_iff]
+    · filter_upwards with t t_in using hM (mem_image_of_mem _ <| mk_mem_prod x_in t_in)
+    · exact (isClosed_le (by fun_prop) (by fun_prop)).measurableSet
+  · exact integrableOn_const hs.measure_ne_top
+  · filter_upwards using (by fun_prop)
 
 Depends on / 依赖: Continuous, Continuous.aestronglyMeasurable, U_cpct, U_cpct.prod, U_nhds, ae_restrict_iff, aestronglyMeasurable, bddAbove_image, continuousAt_of_dominated, continuousOn, continuous_iff_continuousAt, exists_compact_mem_nhds, filter_upwards, fun_prop, hf.norm.continuousOn, isClosed_le, measurableSet, mem_image_of_mem, mk_mem_prod, t_in
 -/
@@ -3598,7 +3948,59 @@ lemma continuousOn_integral_bilinear_of_locally_integrable_of_compact_support
     simpa only [prodMk_mem_set_prod_eq, mem_univ, and_true] using hp
   intro q hq
   apply Metric.continuousWithinAt_iff'.2 (fun ε εpos => ?_)
-  obtain ⟨δ, δpos, hδ⟩ : exists (δ
+  obtain ⟨δ, δpos, hδ⟩ : exists (δ : Real), 0 < δ ∧ ∫ x in k, ‖L‖ * ‖g x‖ * δ ∂μ < ε := by
+    simpa [integral_mul_const] using exists_pos_mul_lt εpos _
+  obtain ⟨v, v_mem, hv⟩ : exists v in 𝓝[s] q, forall p in v, forall x in k, dist (f p x) (f q x) < δ :=
+    hk.mem_uniformity_of_prod
+      (hf.mono (Set.prod_mono_right (subset_univ k))) hq (dist_mem_uniformity δpos)
+  simp_rw [dist_eq_norm] at hv ⊢
+  have I : forall p in s, IntegrableOn (fun y => L (g y) (f p y)) k μ := by
+    intro p hp
+    obtain ⟨C, hC⟩ : exists C, forall y, ‖f p y‖ <= C := by
+      have : ContinuousOn (f p) k := by
+        have : ContinuousOn (fun y => (p, y)) k := by fun_prop
+        exact hf.comp this (by simp [MapsTo, hp])
+      rcases IsCompact.exists_bound_of_continuousOn hk this with ⟨C, hC⟩
+      refine ⟨max C 0, fun y => ?_⟩
+      by_cases hx : y in k
+      · exact (hC y hx).trans (le_max_left _ _)
+      · simp [hfs p y hp hx]
+    have : IntegrableOn (fun y => ‖L‖ * ‖g y‖ * C) k μ :=
+      (hg.norm.const_mul _).mul_const _
+    apply Integrable.mono' this ?_ ?_
+    · borelize G
+      apply L.aestronglyMeasurable_comp₂ hg.aestronglyMeasurable
+      apply StronglyMeasurable.aestronglyMeasurable
+      apply Continuous.stronglyMeasurable_of_support_subset_isCompact (A p hp) hk
+      apply support_subset_iff'.2 (fun y hy => hfs p y hp hy)
+    · apply Eventually.of_forall (fun y => (le_opNorm₂ L (g y) (f p y)).trans ?_)
+      gcongr
+      apply hC
+  filter_upwards [v_mem, self_mem_nhdsWithin] with p hp h'p
+  calc
+  ‖∫ x, L (g x) (f p x) ∂μ - ∫ x, L (g x) (f q x) ∂μ‖
+    = ‖∫ x in k, L (g x) (f p x) ∂μ - ∫ x in k, L (g x) (f q x) ∂μ‖ := by
+      congr 2
+      · refine (setIntegral_eq_integral_of_forall_compl_eq_zero (fun y hy => ?_)).symm
+        simp [hfs p y h'p hy]
+      · refine (setIntegral_eq_integral_of_forall_compl_eq_zero (fun y hy => ?_)).symm
+        simp [hfs q y hq hy]
+  _ = ‖∫ x in k, L (g x) (f p x) - L (g x) (f q x) ∂μ‖ := by rw [integral_sub (I p h'p) (I q hq)]
+  _ <= ∫ x in k, ‖L (g x) (f p x) - L (g x) (f q x)‖ ∂μ := norm_integral_le_integral_norm _
+  _ <= ∫ x in k, ‖L‖ * ‖g x‖ * δ ∂μ := by
+      apply integral_mono_of_nonneg (Eventually.of_forall (fun y => by positivity))
+      · exact (hg.norm.const_mul _).mul_const _
+      · filter_upwards with y
+        by_cases hy : y in k
+        · specialize hv p hp y hy
+          calc
+          ‖L (g y) (f p y) - L (g y) (f q y)‖
+            = ‖L (g y) (f p y - f q y)‖ := by simp only [map_sub]
+          _ <= ‖L‖ * ‖g y‖ * ‖f p y - f q y‖ := le_opNorm₂ _ _ _
+          _ <= ‖L‖ * ‖g y‖ * δ := by gcongr
+        · simp only [hfs p y h'p hy, hfs q y hq hy, sub_self, norm_zero]
+          positivity
+  _ < ε := hδ
 
 中文:
 引理 continuousOn_integral_bilinear_of_locally_integrable_of_compact_support
@@ -3608,7 +4010,59 @@ lemma continuousOn_integral_bilinear_of_locally_integrable_of_compact_support
     simpa only [prodMk_mem_set_prod_eq, mem_univ, and_true] using hp
   intro q hq
   apply Metric.continuousWithinAt_iff'.2 (fun ε εpos => ?_)
-  obtain ⟨δ, δpos, hδ⟩ : exists (δ
+  obtain ⟨δ, δpos, hδ⟩ : exists (δ : Real), 0 < δ ∧ ∫ x in k, ‖L‖ * ‖g x‖ * δ ∂μ < ε := by
+    simpa [integral_mul_const] using exists_pos_mul_lt εpos _
+  obtain ⟨v, v_mem, hv⟩ : exists v in 𝓝[s] q, forall p in v, forall x in k, dist (f p x) (f q x) < δ :=
+    hk.mem_uniformity_of_prod
+      (hf.mono (Set.prod_mono_right (subset_univ k))) hq (dist_mem_uniformity δpos)
+  simp_rw [dist_eq_norm] at hv ⊢
+  have I : forall p in s, IntegrableOn (fun y => L (g y) (f p y)) k μ := by
+    intro p hp
+    obtain ⟨C, hC⟩ : exists C, forall y, ‖f p y‖ <= C := by
+      have : ContinuousOn (f p) k := by
+        have : ContinuousOn (fun y => (p, y)) k := by fun_prop
+        exact hf.comp this (by simp [MapsTo, hp])
+      rcases IsCompact.exists_bound_of_continuousOn hk this with ⟨C, hC⟩
+      refine ⟨max C 0, fun y => ?_⟩
+      by_cases hx : y in k
+      · exact (hC y hx).trans (le_max_left _ _)
+      · simp [hfs p y hp hx]
+    have : IntegrableOn (fun y => ‖L‖ * ‖g y‖ * C) k μ :=
+      (hg.norm.const_mul _).mul_const _
+    apply Integrable.mono' this ?_ ?_
+    · borelize G
+      apply L.aestronglyMeasurable_comp₂ hg.aestronglyMeasurable
+      apply StronglyMeasurable.aestronglyMeasurable
+      apply Continuous.stronglyMeasurable_of_support_subset_isCompact (A p hp) hk
+      apply support_subset_iff'.2 (fun y hy => hfs p y hp hy)
+    · apply Eventually.of_forall (fun y => (le_opNorm₂ L (g y) (f p y)).trans ?_)
+      gcongr
+      apply hC
+  filter_upwards [v_mem, self_mem_nhdsWithin] with p hp h'p
+  calc
+  ‖∫ x, L (g x) (f p x) ∂μ - ∫ x, L (g x) (f q x) ∂μ‖
+    = ‖∫ x in k, L (g x) (f p x) ∂μ - ∫ x in k, L (g x) (f q x) ∂μ‖ := by
+      congr 2
+      · refine (setIntegral_eq_integral_of_forall_compl_eq_zero (fun y hy => ?_)).symm
+        simp [hfs p y h'p hy]
+      · refine (setIntegral_eq_integral_of_forall_compl_eq_zero (fun y hy => ?_)).symm
+        simp [hfs q y hq hy]
+  _ = ‖∫ x in k, L (g x) (f p x) - L (g x) (f q x) ∂μ‖ := by rw [integral_sub (I p h'p) (I q hq)]
+  _ <= ∫ x in k, ‖L (g x) (f p x) - L (g x) (f q x)‖ ∂μ := norm_integral_le_integral_norm _
+  _ <= ∫ x in k, ‖L‖ * ‖g x‖ * δ ∂μ := by
+      apply integral_mono_of_nonneg (Eventually.of_forall (fun y => by positivity))
+      · exact (hg.norm.const_mul _).mul_const _
+      · filter_upwards with y
+        by_cases hy : y in k
+        · specialize hv p hp y hy
+          calc
+          ‖L (g y) (f p y) - L (g y) (f q y)‖
+            = ‖L (g y) (f p y - f q y)‖ := by simp only [map_sub]
+          _ <= ‖L‖ * ‖g y‖ * ‖f p y - f q y‖ := le_opNorm₂ _ _ _
+          _ <= ‖L‖ * ‖g y‖ * δ := by gcongr
+        · simp only [hfs p y h'p hy, hfs q y hq hy, sub_self, norm_zero]
+          positivity
+  _ < ε := hδ
 
 Depends on / 依赖: Continuous, Metric, Metric.continuousWithinAt_iff, and_true, comp_continuous, continuousWithinAt_iff, exists_pos_mul_lt, hf.comp_continuous, integral_mul_const, mem_univ, prodMk_mem_set_prod_eq, prodMk_right, v_mem
 -/

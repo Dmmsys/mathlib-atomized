@@ -1361,7 +1361,10 @@ theorem mapDomain_apply'
     · rw [← Finset.add_sum_erase _ _ hax, if_pos rfl]
       convert! add_zero (x a)
       refine Finset.sum_eq_zero fun i hi => if_neg ?_
-      exact (hf.mono hS).ne (Finset.mem_o
+      exact (hf.mono hS).ne (Finset.mem_of_mem_erase hi) hax (Finset.ne_of_mem_erase hi)
+    · rw [notMem_support_iff.1 hax]
+      refine Finset.sum_eq_zero fun i hi => if_neg ?_
+      exact hf.ne (hS hi) ha (ne_of_mem_of_not_mem hi hax)
 
 中文:
 定理 mapDomain_apply'
@@ -1374,7 +1377,10 @@ theorem mapDomain_apply'
     · rw [← Finset.add_sum_erase _ _ hax, if_pos rfl]
       convert! add_zero (x a)
       refine Finset.sum_eq_zero fun i hi => if_neg ?_
-      exact (hf.mono hS).ne (Finset.mem_o
+      exact (hf.mono hS).ne (Finset.mem_of_mem_erase hi) hax (Finset.ne_of_mem_erase hi)
+    · rw [notMem_support_iff.1 hax]
+      refine Finset.sum_eq_zero fun i hi => if_neg ?_
+      exact hf.ne (hS hi) ha (ne_of_mem_of_not_mem hi hax)
 
 Depends on / 依赖: Finset, Finset.add_sum_erase, Finset.mem_of_mem_erase, Finset.ne_of_mem_erase, Finset.sum_eq_zero, add_sum_erase, add_zero, classical, convert, hf.mono, hf.ne, if_neg, if_pos, mapDomain, mem_of_mem_erase, ne_of_mem_erase, ne_of_mem_of_not_mem, notMem_support_iff, simp_rw, single_apply
 -/
@@ -1405,7 +1411,9 @@ theorem mapDomain_support_of_injOn
     simp only [mem_support_iff, Ne]
     rw [mapDomain_apply' (↑s.support : Set _) _ _ hf]
     · exact hx_h_left
-    · simp_rw [mem_coe, mem_suppor
+    · simp_rw [mem_coe, mem_support_iff, Ne]
+      exact hx_h_left
+    · exact Subset.refl _
 
 中文:
 定理 mapDomain_support_of_injOn
@@ -1417,7 +1425,9 @@ theorem mapDomain_support_of_injOn
     simp only [mem_support_iff, Ne]
     rw [mapDomain_apply' (↑s.support : Set _) _ _ hf]
     · exact hx_h_left
-    · simp_rw [mem_coe, mem_suppor
+    · simp_rw [mem_coe, mem_support_iff, Ne]
+      exact hx_h_left
+    · exact Subset.refl _
 
 Depends on / 依赖: Finset, Finset.Subset.antisymm, Subset, Subset.refl, antisymm, hx_h_left, hx_w, mapDomain_apply, mapDomain_support, mem_coe, mem_image, mem_support_iff, s.support, simp_rw, support
 -/
@@ -2055,7 +2065,8 @@ theorem comapDomain_single
   · simp_rw [single_zero, comapDomain_zero]
   · rw [eq_single_iff, comapDomain_apply, comapDomain_support, ← Finset.coe_subset, coe_preimage,
       support_single _ hm, coe_singleton, coe_singleton, single_eq_same]
-    rw [support_single _ hm]; rw [coe_single
+    rw [support_single _ hm]; rw [coe_singleton] at hif
+    exact ⟨fun x hx => hif hx rfl hx, rfl⟩
 
 中文:
 定理 comapDomain_single
@@ -2065,7 +2076,8 @@ theorem comapDomain_single
   · simp_rw [single_zero, comapDomain_zero]
   · rw [eq_single_iff, comapDomain_apply, comapDomain_support, ← Finset.coe_subset, coe_preimage,
       support_single _ hm, coe_singleton, coe_singleton, single_eq_same]
-    rw [support_single _ hm]; rw [coe_single
+    rw [support_single _ hm]; rw [coe_singleton] at hif
+    exact ⟨fun x hx => hif hx rfl hx, rfl⟩
 
 Depends on / 依赖: Finset, Finset.coe_subset, coe_preimage, coe_singleton, coe_subset, comapDomain_apply, comapDomain_support, comapDomain_zero, eq_or_ne, eq_single_iff, simp_rw, single_eq_same, single_zero, support_single
 -/
@@ -3392,7 +3404,8 @@ theorem mem_support_multiset_sum
       · exact ⟨f, Multiset.mem_cons_self _ _, h⟩
       · simp_rw [Multiset.sum_cons, mem_support_iff, add_apply, notMem_support_iff.1 h,
           zero_add] at ha
-        rcas
+        rcases ih (mem_support_iff.2 ha) with ⟨f', h₀, h₁⟩
+        exact ⟨f', Multiset.mem_cons_of_mem h₀, h₁⟩)
 
 中文:
 定理 mem_support_multiset_sum
@@ -3404,7 +3417,8 @@ theorem mem_support_multiset_sum
       · exact ⟨f, Multiset.mem_cons_self _ _, h⟩
       · simp_rw [Multiset.sum_cons, mem_support_iff, add_apply, notMem_support_iff.1 h,
           zero_add] at ha
-        rcas
+        rcases ih (mem_support_iff.2 ha) with ⟨f', h₀, h₁⟩
+        exact ⟨f', Multiset.mem_cons_of_mem h₀, h₁⟩)
 
 Depends on / 依赖: False.elim, Multiset, Multiset.induction_on, Multiset.mem_cons_of_mem, Multiset.mem_cons_self, Multiset.sum_cons, add_apply, f.support, induction_on, mem_cons_of_mem, mem_cons_self, mem_support_iff, notMem_support_iff, simp_rw, sum_cons, support, zero_add
 -/
@@ -4552,7 +4566,11 @@ support := (f.support.map (.subtype _)).disjUnion (g.support.map (.subtype _)) b
     simp_rw [Finset.disjoint_left, mem_map, forall_exists_index, Embedding.coe_subtype,
       Subtype.forall, Subtype.exists]
     rintro _ a ha ⟨-, rfl⟩ ⟨b, hb, -, rfl⟩
-    exact 
+    exact hb ha
+  mem_support_toFun a := by
+    by_cases ha : P a <;> simp [ha]
+
+@[simp]
 
 中文:
 定义 piecewise
@@ -4562,7 +4580,11 @@ support := (f.support.map (.subtype _)).disjUnion (g.support.map (.subtype _)) b
     simp_rw [Finset.disjoint_left, mem_map, forall_exists_index, Embedding.coe_subtype,
       Subtype.forall, Subtype.exists]
     rintro _ a ha ⟨-, rfl⟩ ⟨b, hb, -, rfl⟩
-    exact 
+    exact hb ha
+  mem_support_toFun a := by
+    by_cases ha : P a <;> simp [ha]
+
+@[simp]
 -/
 def piecewise (f : Subtype P ->₀ M) (g : {a // ¬ P a} ->₀ M) : α ->₀ M where
   toFun a := if h : P a then f ⟨a, h⟩ else g ⟨a, h⟩
@@ -4792,7 +4814,7 @@ definition restrictSupportEquiv
   invFun f := letI := Classical.decPred (· in s); ⟨f.extendDomain, support_extendDomain_subset _⟩
   left_inv f :=
 letI := Classical.decPred (· in s); Subtype.ext extendDomain_subtypeDomain f.1 f.prop
-  right_inv _ := letI := Classical.decPred (· in s); subtypeDomain_extend
+  right_inv _ := letI := Classical.decPred (· in s); subtypeDomain_extendDomain _
 
 中文:
 定义 restrictSupportEquiv
@@ -4801,7 +4823,7 @@ letI := Classical.decPred (· in s); Subtype.ext extendDomain_subtypeDomain f.1 
   invFun f := letI := Classical.decPred (· in s); ⟨f.extendDomain, support_extendDomain_subset _⟩
   left_inv f :=
 letI := Classical.decPred (· in s); Subtype.ext extendDomain_subtypeDomain f.1 f.prop
-  right_inv _ := letI := Classical.decPred (· in s); subtypeDomain_extend
+  right_inv _ := letI := Classical.decPred (· in s); subtypeDomain_extendDomain _
 -/
 @[simps apply] def restrictSupportEquiv (s : Set α) (M : Type*) [AddCommMonoid M] :
     { f : α ->₀ M // ↑f.support subseteq s } ≃ (s ->₀ M) where
@@ -4872,7 +4894,9 @@ definition domCongr
     intro v
     simp_rw [← equivMapDomain_trans, Equiv.symm_trans_self]
     exact equivMapDomain_refl _
-  map_add' a b :
+  map_add' a b := by simp only [equivMapDomain_eq_mapDomain, mapDomain_add]
+
+@[simp]
 
 中文:
 定义 domCongr
@@ -4886,7 +4910,9 @@ definition domCongr
     intro v
     simp_rw [← equivMapDomain_trans, Equiv.symm_trans_self]
     exact equivMapDomain_refl _
-  map_add' a b :
+  map_add' a b := by simp only [equivMapDomain_eq_mapDomain, mapDomain_add]
+
+@[simp]
 -/
 protected def domCongr [AddCommMonoid M] (e : α ≃ β) : (α ->₀ M) ≃+ (β ->₀ M) where
   toFun := equivMapDomain e

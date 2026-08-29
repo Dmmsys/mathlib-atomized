@@ -147,7 +147,11 @@ instance strongNormalizationMonoid
     rcases hna.lt_or_gt with ha | ha <;> rcases hnb.lt_or_gt with hb | hb <;>
       simp [Int.mul_nonneg_iff, ha.le, ha.not_ge, hb.le, hb.not_ge]
   normUnit_coe_units u :=
-    (units_eq_one_or u).elim (fun e
+    (units_eq_one_or u).elim (fun eq => eq.symm ▸ if_pos Int.one_nonneg) fun eq =>
+      eq.symm ▸ if_neg (not_le_of_gt <| show (-1 : Int) < 0 by decide)
+
+@[deprecated (since := "2026-07-08")]
+alias normalizationMonoid := strongNormalizationMonoid
 
 中文:
 实例 strongNormalizationMonoid
@@ -158,7 +162,11 @@ instance strongNormalizationMonoid
     rcases hna.lt_or_gt with ha | ha <;> rcases hnb.lt_or_gt with hb | hb <;>
       simp [Int.mul_nonneg_iff, ha.le, ha.not_ge, hb.le, hb.not_ge]
   normUnit_coe_units u :=
-    (units_eq_one_or u).elim (fun e
+    (units_eq_one_or u).elim (fun eq => eq.symm ▸ if_pos Int.one_nonneg) fun eq =>
+      eq.symm ▸ if_neg (not_le_of_gt <| show (-1 : Int) < 0 by decide)
+
+@[deprecated (since := "2026-07-08")]
+alias normalizationMonoid := strongNormalizationMonoid
 -/
 instance strongNormalizationMonoid : StrongNormalizationMonoid Int where
   normUnit a := if 0 <= a then 1 else -1
@@ -375,7 +383,9 @@ instance :
   dvd_gcd := dvd_coe_gcd
   gcd_mul_lcm a b := by
     rw [← Int.natCast_mul]; rw [gcd_mul_lcm]; rw [← natAbs_mul]; rw [natCast_natAbs]; rw [abs_eq_normalize]
-    exact normalize_associated (a 
+    exact normalize_associated (a * b)
+lcm_zero_left _ := natCast_eq_zero.2 Nat.lcm_zero_left _
+lcm_zero_right _ := natCast_eq_zero.2 Nat.lcm_zero_right _
 
 中文:
 实例 :
@@ -387,7 +397,9 @@ instance :
   dvd_gcd := dvd_coe_gcd
   gcd_mul_lcm a b := by
     rw [← Int.natCast_mul]; rw [gcd_mul_lcm]; rw [← natAbs_mul]; rw [natCast_natAbs]; rw [abs_eq_normalize]
-    exact normalize_associated (a 
+    exact normalize_associated (a * b)
+lcm_zero_left _ := natCast_eq_zero.2 Nat.lcm_zero_left _
+lcm_zero_right _ := natCast_eq_zero.2 Nat.lcm_zero_right _
 
 Depends on / 依赖: Int.gcd
 -/
@@ -609,7 +621,7 @@ definition associatesIntEquivNat
 refine Associates.mk_eq_mk_iff_associated.2 Associated.symm ⟨normUnit a, ?_⟩
     simp [Int.natCast_natAbs, Int.abs_eq_normalize, normalize_apply]
   · dsimp only [Associates.out_mk]
-
+    rw [← Int.abs_eq_normalize]; rw [Int.natAbs_abs]; rw [Int.natAbs_natCast]
 
 中文:
 定义 associates整数Equiv自然数
@@ -620,7 +632,7 @@ refine Associates.mk_eq_mk_iff_associated.2 Associated.symm ⟨normUnit a, ?_⟩
 refine Associates.mk_eq_mk_iff_associated.2 Associated.symm ⟨normUnit a, ?_⟩
     simp [Int.natCast_natAbs, Int.abs_eq_normalize, normalize_apply]
   · dsimp only [Associates.out_mk]
-
+    rw [← Int.abs_eq_normalize]; rw [Int.natAbs_abs]; rw [Int.natAbs_natCast]
 
 Depends on / 依赖: Associated, Associated.symm, Associates, Associates.forall_associated, Associates.mk, Associates.mk_eq_mk_iff_associated, Associates.out_mk, Int.abs_eq_normalize, Int.natAbs_abs, Int.natAbs_natCast, Int.natCast_natAbs, abs_eq_normalize, forall_associated, mk_eq_mk_iff_associated, natAbs, natAbs_abs, natAbs_natCast, natCast_natAbs, normUnit, normalize_apply
 -/

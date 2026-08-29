@@ -42,7 +42,18 @@ lemma mem_subfield_of_mul_eq_one_of_mem_subfield_right
   have hA : IsUnit A' := by
     have h_unit : IsUnit (A.submatrix id e) :=
       .of_mul_eq_one (B.submatrix e id) (by simpa)
-    have 
+    have h_det : (A.submatrix id e).det = K.subtype A'.det := by
+      simp [A', K.subtype.map_det, map, submatrix]
+    simpa [isUnit_iff_isUnit_det, h_det] using! h_unit
+  obtain ⟨B', hB⟩ := isUnit_iff_exists_inv.mp hA
+  suffices (B'.submatrix e.symm id).map K.subtype = B by simp [← this]
+  replace hB : A * (B'.submatrix e.symm id).map K.subtype = 1 := by
+    replace hB := congr_arg (fun C => C.map K.subtype) hB
+    simp_rw [Matrix.map_mul] at hB
+    rw [hA']; rw [← e.symm_symm]; rw [← submatrix_id_mul_left] at hB
+    simpa using! hB
+  classical
+  simpa [← Matrix.mul_assoc, (mul_eq_one_comm_of_equiv e).mp hAB] using! congr_arg (B * ·) hB
 
 中文:
 引理 mem_subfield_of_mul_eq_one_of_mem_subfield_right
@@ -53,7 +64,18 @@ lemma mem_subfield_of_mul_eq_one_of_mem_subfield_right
   have hA : IsUnit A' := by
     have h_unit : IsUnit (A.submatrix id e) :=
       .of_mul_eq_one (B.submatrix e id) (by simpa)
-    have 
+    have h_det : (A.submatrix id e).det = K.subtype A'.det := by
+      simp [A', K.subtype.map_det, map, submatrix]
+    simpa [isUnit_iff_isUnit_det, h_det] using! h_unit
+  obtain ⟨B', hB⟩ := isUnit_iff_exists_inv.mp hA
+  suffices (B'.submatrix e.symm id).map K.subtype = B by simp [← this]
+  replace hB : A * (B'.submatrix e.symm id).map K.subtype = 1 := by
+    replace hB := congr_arg (fun C => C.map K.subtype) hB
+    simp_rw [Matrix.map_mul] at hB
+    rw [hA']; rw [← e.symm_symm]; rw [← submatrix_id_mul_left] at hB
+    simpa using! hB
+  classical
+  simpa [← Matrix.mul_assoc, (mul_eq_one_comm_of_equiv e).mp hAB] using! congr_arg (B * ·) hB
 
 Depends on / 依赖: A.submatrix, B.submatrix, IsUnit, K.subtype, K.subtype.map_det, Matrix, h_det, h_mem, h_unit, isUnit_iff_exists_inv, isUnit_iff_exists_inv.mp, isUnit_iff_isUnit_det, map_det, nonempty_fintype, of_mul_eq_one, submatrix, subtype
 -/

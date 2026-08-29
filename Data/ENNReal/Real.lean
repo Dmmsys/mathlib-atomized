@@ -1894,7 +1894,7 @@ theorem trichotomy₂
   · simpa using p.trichotomy
   have hq' : 0 < q := lt_of_lt_of_le hp hpq
   have hp' : p < ∞ := lt_of_le_of_lt hpq hq
-  simp [ENNReal
+  simp [ENNReal.toReal_mono hq.ne hpq, ENNReal.toReal_pos_iff, hp, hp', hq', hq]
 
 中文:
 定理 trichotomy₂
@@ -1906,7 +1906,7 @@ theorem trichotomy₂
   · simpa using p.trichotomy
   have hq' : 0 < q := lt_of_lt_of_le hp hpq
   have hp' : p < ∞ := lt_of_le_of_lt hpq hq
-  simp [ENNReal
+  simp [ENNReal.toReal_mono hq.ne hpq, ENNReal.toReal_pos_iff, hp, hp', hq', hq]
 -/
 protected theorem trichotomy₂ {p q : Real>=0∞} (hpq : p <= q) :
     p = 0 ∧ q = 0 ∨

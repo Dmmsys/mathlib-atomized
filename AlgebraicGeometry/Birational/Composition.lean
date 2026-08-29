@@ -283,7 +283,11 @@ lemma comp_assoc
       ← Hom.comp_image, Hom.isoImage_hom_ι, Hom.comp_image, image_morphismRestrict_preimage]
   · dsimp
     simp_rw [morphismRestrict_comp, morphismRestrict_ι_image_ι_isoImage_inv_assoc,
-      Hom.comp
+      Hom.comp_preimage, Category.assoc]
+    conv_lhs => rw [← Category.assoc]
+    conv_rhs => rw [← Category.assoc, ← Category.assoc, ← Category.assoc]
+    congr 1
+    simp [← cancel_mono (Opens.ι _)]
 
 中文:
 引理 comp_assoc
@@ -294,7 +298,11 @@ lemma comp_assoc
       ← Hom.comp_image, Hom.isoImage_hom_ι, Hom.comp_image, image_morphismRestrict_preimage]
   · dsimp
     simp_rw [morphismRestrict_comp, morphismRestrict_ι_image_ι_isoImage_inv_assoc,
-      Hom.comp
+      Hom.comp_preimage, Category.assoc]
+    conv_lhs => rw [← Category.assoc]
+    conv_rhs => rw [← Category.assoc, ← Category.assoc, ← Category.assoc]
+    congr 1
+    simp [← cancel_mono (Opens.ι _)]
 
 Depends on / 依赖: Category, Category.assoc, Hom.comp_image, Hom.comp_preimage, Hom.inv_preimage, Hom.isoImage_hom_, cancel_mono, comp_domain, comp_hom, comp_image, comp_preimage, conv_lhs, conv_rhs, image_morphismRestrict_preimage, inv_preimage, morphismRestrict_comp, simp_rw
 -/
@@ -503,7 +511,9 @@ lemma comp_assoc
   simp_rw [comp_def, ← PartialMap.comp_assoc, PartialMap.toRationalMap_eq_iff]
   apply PartialMap.comp_equiv_of_equiv_left
   rw [← f₂.toRationalMap_representative]; rw [comp_def]
-  apply (f₁.representative.comp f₂.representative).representative_toRationalM
+  apply (f₁.representative.comp f₂.representative).representative_toRationalMap_equiv.trans
+  apply PartialMap.comp_equiv_of_equiv_right
+  rw [toRationalMap_representative]
 
 中文:
 引理 comp_assoc
@@ -513,7 +523,9 @@ lemma comp_assoc
   simp_rw [comp_def, ← PartialMap.comp_assoc, PartialMap.toRationalMap_eq_iff]
   apply PartialMap.comp_equiv_of_equiv_left
   rw [← f₂.toRationalMap_representative]; rw [comp_def]
-  apply (f₁.representative.comp f₂.representative).representative_toRationalM
+  apply (f₁.representative.comp f₂.representative).representative_toRationalMap_equiv.trans
+  apply PartialMap.comp_equiv_of_equiv_right
+  rw [toRationalMap_representative]
 
 Depends on / 依赖: PartialMap, PartialMap.comp_assoc, PartialMap.comp_equiv_of_equiv_left, PartialMap.comp_equiv_of_equiv_right, PartialMap.toRationalMap_eq_iff, comp_assoc, comp_def, comp_equiv_of_equiv_left, comp_equiv_of_equiv_right, representative, representative.comp, representative_toRationalMap_equiv, representative_toRationalMap_equiv.trans, simp_rw, toRationalMap_eq_iff, toRationalMap_representative
 -/
@@ -567,7 +579,12 @@ lemma PartialMap.id_comp
   · simp_rw [comp_domain, Hom.toPartialMap_domain, Hom.toPartialMap_hom, Category.comp_id,
       ← X.topIso_hom, ← Hom.inv_image, ← Hom.comp_image, Iso.inv_hom_id, Hom.id_image]
   · simp_rw [comp_hom, Hom.toPartialMap_hom, Hom.toPartialMap_domain, morphismRestrict_comp,
-      morphismRestr
+      morphismRestrict_id, ← X.topIso_hom, Hom.comp_preimage, Hom.id_preimage,
+      Category.comp_id, ← X.topIso.hom.isoImage_preimage_hom_homOfLE, Category.assoc,
+      Iso.inv_hom_id_assoc]
+    rfl
+
+@[simp, grind =]
 
 中文:
 引理 Partial映射.id_comp
@@ -577,7 +594,12 @@ lemma PartialMap.id_comp
   · simp_rw [comp_domain, Hom.toPartialMap_domain, Hom.toPartialMap_hom, Category.comp_id,
       ← X.topIso_hom, ← Hom.inv_image, ← Hom.comp_image, Iso.inv_hom_id, Hom.id_image]
   · simp_rw [comp_hom, Hom.toPartialMap_hom, Hom.toPartialMap_domain, morphismRestrict_comp,
-      morphismRestr
+      morphismRestrict_id, ← X.topIso_hom, Hom.comp_preimage, Hom.id_preimage,
+      Category.comp_id, ← X.topIso.hom.isoImage_preimage_hom_homOfLE, Category.assoc,
+      Iso.inv_hom_id_assoc]
+    rfl
+
+@[simp, grind =]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Hom.comp_image, Hom.comp_preimage, Hom.id_image, Hom.id_preimage, Hom.inv_image, Hom.toPartialMap_domain, Hom.toPartialMap_hom, Iso.inv_hom_id, Iso.inv_hom_id_assoc, X.topIso.hom.isoImage_preimage_hom_homOfLE, X.topIso_hom, comp_domain, comp_hom, comp_id, comp_image, comp_preimage, id_image
 -/

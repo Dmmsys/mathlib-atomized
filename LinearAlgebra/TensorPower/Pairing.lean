@@ -38,7 +38,16 @@ definition multilinearMapToDual
       Function.update (fun j => f j (v j)) i (φ (v i)) j := fun _ f φ i j v => by
     by_cases h : j = i
     · subst h
-      simp
+      simp only [Function.update_self]
+    · simp only [Function.update_of_ne h]
+  { toFun := fun f => PiTensorProduct.lift
+      (MultilinearMap.compLinearMap (MultilinearMap.mkPiRing R (Fin n) 1) f)
+    map_update_add' := fun f i φ₁ φ₂ => by
+      ext v
+      simp [this]
+    map_update_smul' := fun f i a φ => by
+      ext v
+      simp [this, Finset.prod_update_of_mem, Semigroup.mul_assoc] }
 
 中文:
 定义 multilinearMapToDual
@@ -49,7 +58,16 @@ definition multilinearMapToDual
       Function.update (fun j => f j (v j)) i (φ (v i)) j := fun _ f φ i j v => by
     by_cases h : j = i
     · subst h
-      simp
+      simp only [Function.update_self]
+    · simp only [Function.update_of_ne h]
+  { toFun := fun f => PiTensorProduct.lift
+      (MultilinearMap.compLinearMap (MultilinearMap.mkPiRing R (Fin n) 1) f)
+    map_update_add' := fun f i φ₁ φ₂ => by
+      ext v
+      simp [this]
+    map_update_smul' := fun f i a φ => by
+      ext v
+      simp [this, Finset.prod_update_of_mem, Semigroup.mul_assoc] }
 
 Depends on / 依赖: DecidableEq, Function, Function.update, Function.update_of_ne, Function.update_self, Module, Module.Dual, MultilinearMap, MultilinearMap.compLinearMap, MultilinearMap.mkPiRing, PiTensorProduct, PiTensorProduct.lift, compLinearMap, map_update_add, mkPiRing, update, update_of_ne, update_self
 -/

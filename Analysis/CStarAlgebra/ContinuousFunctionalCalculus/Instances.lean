@@ -187,7 +187,8 @@ lemma isClosedEmbedding_cfcₙAux
   refine ((cfcHom_isClosedEmbedding (hp₁.mpr ha)).comp ?_).comp
     ContinuousMapZero.isClosedEmbedding_toContinuousMap
   let e : C(σₙ 𝕜 a, 𝕜) ≃ₜ C(σ 𝕜 (a : A⁺¹), 𝕜) :=
-    (Homeomorph.setCongr (quasispectrum_eq_spectrum_inr' 𝕜 𝕜 a)).arrowCongr 
+    (Homeomorph.setCongr (quasispectrum_eq_spectrum_inr' 𝕜 𝕜 a)).arrowCongr (.refl _)
+  exact e.isClosedEmbedding
 
 中文:
 引理 isClosedEmbedding_cfcₙAux
@@ -197,7 +198,8 @@ lemma isClosedEmbedding_cfcₙAux
   refine ((cfcHom_isClosedEmbedding (hp₁.mpr ha)).comp ?_).comp
     ContinuousMapZero.isClosedEmbedding_toContinuousMap
   let e : C(σₙ 𝕜 a, 𝕜) ≃ₜ C(σ 𝕜 (a : A⁺¹), 𝕜) :=
-    (Homeomorph.setCongr (quasispectrum_eq_spectrum_inr' 𝕜 𝕜 a)).arrowCongr 
+    (Homeomorph.setCongr (quasispectrum_eq_spectrum_inr' 𝕜 𝕜 a)).arrowCongr (.refl _)
+  exact e.isClosedEmbedding
 
 Depends on / 依赖: ContinuousMapZero, ContinuousMapZero.isClosedEmbedding_toContinuousMap, Homeomorph, Homeomorph.setCongr, NonUnitalStarAlgHom, NonUnitalStarAlgHom.coe_comp, arrowCongr, cfcHom_isClosedEmbedding, coe_comp, e.isClosedEmbedding, isClosedEmbedding, isClosedEmbedding_toContinuousMap, quasispectrum_eq_spectrum_inr, setCongr
 -/
@@ -223,7 +225,13 @@ lemma cfcₙAux_mem_range_inr
   rw [← SetLike.mem_coe]
   refine closure_minimal ?_ ?_ h₁
   · rw [← NonUnitalStarSubalgebra.coe_map, SetLike.coe_subset_coe, NonUnitalStarSubalgebra.map_le]
-    a
+    apply NonUnitalStarAlgebra.adjoin_le
+    apply Set.singleton_subset_iff.mpr
+    rw [SetLike.mem_coe]; rw [NonUnitalStarSubalgebra.mem_comap]; rw [cfcₙAux_id hp₁ a ha]
+    exact ⟨a, rfl⟩
+  · simp only [NonUnitalStarAlgHom.coe_range]
+    convert! IsClosed.preimage (Unitization.continuous_fst (𝕜 := 𝕜)) isClosed_singleton
+    aesop
 
 中文:
 引理 cfcₙAux_mem_range_inr
@@ -234,7 +242,13 @@ lemma cfcₙAux_mem_range_inr
   rw [← SetLike.mem_coe]
   refine closure_minimal ?_ ?_ h₁
   · rw [← NonUnitalStarSubalgebra.coe_map, SetLike.coe_subset_coe, NonUnitalStarSubalgebra.map_le]
-    a
+    apply NonUnitalStarAlgebra.adjoin_le
+    apply Set.singleton_subset_iff.mpr
+    rw [SetLike.mem_coe]; rw [NonUnitalStarSubalgebra.mem_comap]; rw [cfcₙAux_id hp₁ a ha]
+    exact ⟨a, rfl⟩
+  · simp only [NonUnitalStarAlgHom.coe_range]
+    convert! IsClosed.preimage (Unitization.continuous_fst (𝕜 := 𝕜)) isClosed_singleton
+    aesop
 
 Depends on / 依赖: ContinuousMapZero, ContinuousMapZero.adjoin_id_dense, NonUnitalStarAlgHom, NonUnitalStarAlgHom.coe_range, NonUnitalStarAlgebra, NonUnitalStarAlgebra.adjoin_le, NonUnitalStarSubalgebra, NonUnitalStarSubalgebra.coe_map, NonUnitalStarSubalgebra.map_le, NonUnitalStarSubalgebra.mem_comap, Set.singleton_subset_iff.mpr, SetLike, SetLike.coe_subset_coe, SetLike.mem_coe, adjoin_id_dense, adjoin_le, closure_minimal, coe_map, coe_range, coe_subset_coe
 -/
@@ -268,7 +282,25 @@ theorem RCLike.nonUnitalContinuousFunctionalCalculus
   exists_cfc_of_predicate a ha := by
 let ψ : C(σₙ 𝕜 a, 𝕜)₀ ->⋆ₙₐ[𝕜] A := comp (inrRangeEquiv 𝕜 A).symm
       codRestrict (cfcₙAux hp₁ a ha) _ (cfcₙAux_mem_range_inr hp₁ a ha)
-    have coe_ψ (f : C(σₙ 𝕜 a, 𝕜)₀) : ψ f = cfcₙ
+    have coe_ψ (f : C(σₙ 𝕜 a, 𝕜)₀) : ψ f = cfcₙAux hp₁ a ha f :=
+congr_arg Subtype.val (inrRangeEquiv 𝕜 A).apply_symm_apply
+        ⟨cfcₙAux hp₁ a ha f, cfcₙAux_mem_range_inr hp₁ a ha f⟩
+    refine ⟨ψ, ?continuous, ?injective, ?map_id, fun f => ?map_spec, fun f => ?isStarNormal⟩
+    case continuous =>
+      rw [isometry_inr (𝕜 := 𝕜) |>.isEmbedding.continuous_iff]
+      have := continuous_cfcₙAux hp₁ a ha
+      simp only [coe_comp, NonUnitalStarAlgHom.coe_coe, Function.comp_def,
+        inrRangeEquiv_symm_apply, coe_codRestrict, ψ]
+      fun_prop
+    case injective =>
+      have h₁ : Function.Injective ⇑(codRestrict (cfcₙAux hp₁ a ha) _
+          (cfcₙAux_mem_range_inr hp₁ a ha)) :=
+        (Set.injective_codRestrict _).mpr (cfcₙAux_injective hp₁ a ha)
+      simpa [ψ] using (inrRangeEquiv 𝕜 A).symm.injective.comp h₁
+case map_id => exact inr_injective (R := 𝕜) coe_ψ _ ▸ cfcₙAux_id hp₁ a ha
+    case map_spec =>
+      exact quasispectrum_eq_spectrum_inr' 𝕜 𝕜 (ψ f) ▸ coe_ψ _ ▸ spec_cfcₙAux hp₁ a ha f
+case isStarNormal => exact hp₁.mp coe_ψ _ ▸ cfcHom_predicate (R := 𝕜) (hp₁.mpr ha) _
 
 中文:
 定理 RCLike.nonUnitalContinuousFunctionalCalculus
@@ -278,7 +310,25 @@ let ψ : C(σₙ 𝕜 a, 𝕜)₀ ->⋆ₙₐ[𝕜] A := comp (inrRangeEquiv �
   exists_cfc_of_predicate a ha := by
 let ψ : C(σₙ 𝕜 a, 𝕜)₀ ->⋆ₙₐ[𝕜] A := comp (inrRangeEquiv 𝕜 A).symm
       codRestrict (cfcₙAux hp₁ a ha) _ (cfcₙAux_mem_range_inr hp₁ a ha)
-    have coe_ψ (f : C(σₙ 𝕜 a, 𝕜)₀) : ψ f = cfcₙ
+    have coe_ψ (f : C(σₙ 𝕜 a, 𝕜)₀) : ψ f = cfcₙAux hp₁ a ha f :=
+congr_arg Subtype.val (inrRangeEquiv 𝕜 A).apply_symm_apply
+        ⟨cfcₙAux hp₁ a ha f, cfcₙAux_mem_range_inr hp₁ a ha f⟩
+    refine ⟨ψ, ?continuous, ?injective, ?map_id, fun f => ?map_spec, fun f => ?isStarNormal⟩
+    case continuous =>
+      rw [isometry_inr (𝕜 := 𝕜) |>.isEmbedding.continuous_iff]
+      have := continuous_cfcₙAux hp₁ a ha
+      simp only [coe_comp, NonUnitalStarAlgHom.coe_coe, Function.comp_def,
+        inrRangeEquiv_symm_apply, coe_codRestrict, ψ]
+      fun_prop
+    case injective =>
+      have h₁ : Function.Injective ⇑(codRestrict (cfcₙAux hp₁ a ha) _
+          (cfcₙAux_mem_range_inr hp₁ a ha)) :=
+        (Set.injective_codRestrict _).mpr (cfcₙAux_injective hp₁ a ha)
+      simpa [ψ] using (inrRangeEquiv 𝕜 A).symm.injective.comp h₁
+case map_id => exact inr_injective (R := 𝕜) coe_ψ _ ▸ cfcₙAux_id hp₁ a ha
+    case map_spec =>
+      exact quasispectrum_eq_spectrum_inr' 𝕜 𝕜 (ψ f) ▸ coe_ψ _ ▸ spec_cfcₙAux hp₁ a ha f
+case isStarNormal => exact hp₁.mp coe_ψ _ ▸ cfcHom_predicate (R := 𝕜) (hp₁.mpr ha) _
 
 Depends on / 依赖: Subtype, Subtype.val, Unitization, Unitization.inr_zero, apply_symm_apply, cfc_predicate_zero, codRestrict, congr_arg, continuous, exists_cfc_of_predicate, injective, inrRangeEquiv, inr_zero, isStarNormal, map_id, map_spec
 -/
@@ -322,7 +372,13 @@ lemma inrNonUnitalStarAlgHom_comp_cfcₙHom_eq_cfcₙAux
     (inrNonUnitalStarAlgHom 𝕜 A).comp (cfcₙHom ha) = cfcₙAux hp₁ a ha := by
   let _ := RCLike.nonUnitalContinuousFunctionalCalculus hp₁
   apply ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id _ _ _
-    (Unitization.continuous_inr.comp <| cfcₙHo
+    (Unitization.continuous_inr.comp <| cfcₙHom_continuous ha)
+    (continuous_cfcₙAux hp₁ a ha)
+    (by simp [cfcₙHom_id ha, cfcₙAux_id hp₁ a ha])
+  all_goals infer_instance
+
+
+include hp₁ in
 
 中文:
 引理 inrNonUnitalStarAlgHom_comp_cfcₙHom_eq_cfcₙAux
@@ -331,7 +387,13 @@ lemma inrNonUnitalStarAlgHom_comp_cfcₙHom_eq_cfcₙAux
     (inrNonUnitalStarAlgHom 𝕜 A).comp (cfcₙHom ha) = cfcₙAux hp₁ a ha := by
   let _ := RCLike.nonUnitalContinuousFunctionalCalculus hp₁
   apply ContinuousMapZero.UniqueHom.eq_of_continuous_of_map_id _ _ _
-    (Unitization.continuous_inr.comp <| cfcₙHo
+    (Unitization.continuous_inr.comp <| cfcₙHom_continuous ha)
+    (continuous_cfcₙAux hp₁ a ha)
+    (by simp [cfcₙHom_id ha, cfcₙAux_id hp₁ a ha])
+  all_goals infer_instance
+
+
+include hp₁ in
 
 Depends on / 依赖: RCLike, RCLike.nonUnitalContinuousFunctionalCalculus, nonUnitalContinuousFunctionalCalculus
 -/
@@ -401,7 +463,12 @@ lemma isSelfAdjoint_iff_isStarNormal_and_quasispectrumRestricts
       (cfcₙ_star (id : Complex -> Complex) a).symm ▸ (cfcₙ_id Complex a).symm ▸ ha.star_eq
     exact Complex.conj_eq_iff_re.mp (by simpa using this hx)
   · rintro ⟨ha₁, ha₂⟩
-    rw [isSe
+    rw [isSelfAdjoint_iff]
+    nth_rw 2 [← cfcₙ_id Complex a]
+    rw [← cfcₙ_star_id a (R := Complex)]
+    refine cfcₙ_congr fun x hx => ?_
+    obtain ⟨x, -, rfl⟩ := ha₂.algebraMap_image.symm ▸ hx
+    exact Complex.conj_ofReal _
 
 中文:
 引理 isSelfAdjoint_iff_isStarNormal_and_quasispectrumRestricts
@@ -412,7 +479,12 @@ lemma isSelfAdjoint_iff_isStarNormal_and_quasispectrumRestricts
       (cfcₙ_star (id : Complex -> Complex) a).symm ▸ (cfcₙ_id Complex a).symm ▸ ha.star_eq
     exact Complex.conj_eq_iff_re.mp (by simpa using this hx)
   · rintro ⟨ha₁, ha₂⟩
-    rw [isSe
+    rw [isSelfAdjoint_iff]
+    nth_rw 2 [← cfcₙ_id Complex a]
+    rw [← cfcₙ_star_id a (R := Complex)]
+    refine cfcₙ_congr fun x hx => ?_
+    obtain ⟨x, -, rfl⟩ := ha₂.algebraMap_image.symm ▸ hx
+    exact Complex.conj_ofReal _
 
 Depends on / 依赖: Complex.conj_eq_iff_re.mp, Complex.conj_ofReal, Complex.ofReal_re, algebraMap_image, algebraMap_image.symm, conj_eq_iff_re, conj_ofReal, ha.isStarNormal, ha.star_eq, isSelfAdjoint_iff, isStarNormal, nth_rw, ofReal_re, star_eq
 -/
@@ -531,7 +603,7 @@ instance IsSelfAdjoint.instContinuousFunctionalCalculus
     (fun _ => isSelfAdjoint_iff_isStarNormal_and_quasispectrumRestricts)
 
 @[deprecated "Use `ContinuousFunctionalCalculus.spectrum_nonempty a ha` instead."
-    (since 
+    (since := "2026-03-08")]
 
 中文:
 实例 IsSelfAdjoint.instContinuousFunctionalCalculus
@@ -541,7 +613,7 @@ instance IsSelfAdjoint.instContinuousFunctionalCalculus
     (fun _ => isSelfAdjoint_iff_isStarNormal_and_quasispectrumRestricts)
 
 @[deprecated "Use `ContinuousFunctionalCalculus.spectrum_nonempty a ha` instead."
-    (since 
+    (since := "2026-03-08")]
 
 Depends on / 依赖: Complex.isometry_ofReal.isClosedEmbedding, Complex.reCLM, IsSelfAdjoint, IsStarNormal, SpectrumRestricts, SpectrumRestricts.cfc, isClosedEmbedding, isSelfAdjoint_iff_isStarNormal_and_quasispectrumRestricts, isometry_ofReal
 -/
@@ -594,7 +666,11 @@ lemma CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts
       Set.mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
         using fun x _ => Real.sqrt_nonneg x
   · rw [← cfcₙ_mul ..]
-    nth_rw 2 [← 
+    nth_rw 2 [← cfcₙ_id Real a]
+    apply cfcₙ_congr fun x hx => ?_
+    rw [QuasispectrumRestricts.nnreal_iff] at ha₂
+    apply ha₂ x at hx
+    simp [← sq, Real.sq_sqrt hx]
 
 中文:
 引理 CFC.存在_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts
@@ -606,7 +682,11 @@ lemma CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts
       Set.mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
         using fun x _ => Real.sqrt_nonneg x
   · rw [← cfcₙ_mul ..]
-    nth_rw 2 [← 
+    nth_rw 2 [← cfcₙ_id Real a]
+    apply cfcₙ_congr fun x hx => ?_
+    rw [QuasispectrumRestricts.nnreal_iff] at ha₂
+    apply ha₂ x at hx
+    simp [← sq, Real.sq_sqrt hx]
 
 Depends on / 依赖: QuasispectrumRestricts, QuasispectrumRestricts.nnreal_iff, Real.sq_sqrt, Real.sqrt_nonneg, Set.mem_image, and_imp, forall_exists_index, mem_image, nnreal_iff, nth_rw, sq_sqrt, sqrt_nonneg
 -/
@@ -699,7 +779,9 @@ lemma Commute.mul_nonneg
 .mp h, ?_⟩ refine ⟨ha.isSelfAdjoint.commute_iff hb.isSelfAdjoint
   rw [nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts] at hb
   obtain ⟨x, hx₁, hx₂, rfl⟩ := CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts hb.1 hb.2
-  have h
+  have hx := nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts.mpr ⟨hx₁, hx₂⟩
+  rw [← mul_assoc]; rw [quasispectrumRestricts_iff]; rw [quasispectrum.mul_comm]; rw [← quasispectrumRestricts_iff]; rw [← mul_assoc]
+exact QuasispectrumRestricts.nnreal_of_nonneg conjugate_nonneg_of_nonneg ha hx
 
 中文:
 引理 Commute.mul_nonneg
@@ -709,7 +791,9 @@ lemma Commute.mul_nonneg
 .mp h, ?_⟩ refine ⟨ha.isSelfAdjoint.commute_iff hb.isSelfAdjoint
   rw [nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts] at hb
   obtain ⟨x, hx₁, hx₂, rfl⟩ := CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts hb.1 hb.2
-  have h
+  have hx := nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts.mpr ⟨hx₁, hx₂⟩
+  rw [← mul_assoc]; rw [quasispectrumRestricts_iff]; rw [quasispectrum.mul_comm]; rw [← quasispectrumRestricts_iff]; rw [← mul_assoc]
+exact QuasispectrumRestricts.nnreal_of_nonneg conjugate_nonneg_of_nonneg ha hx
 
 Depends on / 依赖: CFC.exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts, commute_iff, exists_sqrt_of_isSelfAdjoint_of_quasispectrumRestricts, ha.isSelfAdjoint.commute_iff, hb.isSelfAdjoint, isSelfAdjoint, mul_assoc, mul_comm, nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts, nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts.mpr, quasispectrum, quasispectrum.mul_comm, quasispectrumRestricts_iff
 -/

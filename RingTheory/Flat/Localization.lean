@@ -44,7 +44,9 @@ theorem IsLocalization.flat
   refine Module.Flat.iff_lTensor_injectiveₛ.mpr fun P _ _ N => ?_
   have h := ((range N.subtype).isLocalizedModule S p (TensorProduct.mk R S P 1)).isBaseChange _ S
   let e := (LinearEquiv.ofInjective _ Subtype.val_injective).lTensor S ≪≫ₗ h.equiv.restrictScalars R
-  have : N.subtype.lTensor S = S
+  have : N.subtype.lTensor S = Submodule.subtype _ ∘ₗ e.toLinearMap := by
+    ext; change _ = (h.equiv _).1; simp [h.equiv_tmul, TensorProduct.smul_tmul']
+  simpa [this] using! e.injective
 
 中文:
 定理 是Localization.flat
@@ -53,7 +55,9 @@ theorem IsLocalization.flat
   refine Module.Flat.iff_lTensor_injectiveₛ.mpr fun P _ _ N => ?_
   have h := ((range N.subtype).isLocalizedModule S p (TensorProduct.mk R S P 1)).isBaseChange _ S
   let e := (LinearEquiv.ofInjective _ Subtype.val_injective).lTensor S ≪≫ₗ h.equiv.restrictScalars R
-  have : N.subtype.lTensor S = S
+  have : N.subtype.lTensor S = Submodule.subtype _ ∘ₗ e.toLinearMap := by
+    ext; change _ = (h.equiv _).1; simp [h.equiv_tmul, TensorProduct.smul_tmul']
+  simpa [this] using! e.injective
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, Module, Module.Flat.iff_lTensor_injective, N.subtype, N.subtype.lTensor, Submodule, Submodule.subtype, Subtype, Subtype.val_injective, TensorProduct, TensorProduct.mk, TensorProduct.smul_tmul, e.injective, e.toLinearMap, equiv_tmul, h.equiv, h.equiv.restrictScalars, h.equiv_tmul, injective
 -/
@@ -134,7 +138,7 @@ theorem flat_of_isLocalized_maximal
   refine fun _ _ _ N => injective_of_isLocalized_maximal _
     (fun P => AlgebraTensorModule.rTensor R _ (f P)) _
     (fun P => AlgebraTensorModule.rTensor R _ (f P)) _ fun P hP => ?_
-  simpa [Is
+  simpa [IsLocalizedModule.map_lTensor] using H P N
 
 中文:
 定理 flat_of_isLocalized_maximal
@@ -145,7 +149,7 @@ theorem flat_of_isLocalized_maximal
   refine fun _ _ _ N => injective_of_isLocalized_maximal _
     (fun P => AlgebraTensorModule.rTensor R _ (f P)) _
     (fun P => AlgebraTensorModule.rTensor R _ (f P)) _ fun P hP => ?_
-  simpa [Is
+  simpa [IsLocalizedModule.map_lTensor] using H P N
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.coe_lTensor, AlgebraTensorModule.rTensor, Flat.iff_lTensor_injective, IsLocalizedModule, IsLocalizedModule.map_lTensor, coe_lTensor, injective_of_isLocalized_maximal, map_lTensor, rTensor, simp_rw
 -/
@@ -199,7 +203,7 @@ theorem flat_of_isLocalized_span
   refine fun _ _ _ N => injective_of_isLocalized_span s spn _
     (fun r => AlgebraTensorModule.rTensor R _ (g r)) _
     (fun r => AlgebraTensorModule.rTensor R _ (g r)) _ fun r => ?_
-  simpa [Is
+  simpa [IsLocalizedModule.map_lTensor] using H r N
 
 中文:
 定理 flat_of_isLocalized_span
@@ -210,7 +214,7 @@ theorem flat_of_isLocalized_span
   refine fun _ _ _ N => injective_of_isLocalized_span s spn _
     (fun r => AlgebraTensorModule.rTensor R _ (g r)) _
     (fun r => AlgebraTensorModule.rTensor R _ (g r)) _ fun r => ?_
-  simpa [Is
+  simpa [IsLocalizedModule.map_lTensor] using H r N
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.coe_lTensor, AlgebraTensorModule.rTensor, Flat.iff_lTensor_injective, IsLocalizedModule, IsLocalizedModule.map_lTensor, coe_lTensor, injective_of_isLocalized_span, map_lTensor, rTensor, simp_rw
 -/

@@ -1951,7 +1951,16 @@ theorem isUnit_den
     congr
     rw_mod_cast [@Rat.mul_den_eq_num r]
   rw [padicNormE.mul] at hr
-  have key : ‖(r.num : Rat_[p])‖ < 1 := b
+  have key : ‖(r.num : Rat_[p])‖ < 1 := by
+    calc
+      _ = _ := hr.symm
+      _ < 1 * 1 := mul_lt_mul' h norm_denom_lt (norm_nonneg _) zero_lt_one
+      _ = 1 := mul_one 1
+  have : ↑p ∣ r.num ∧ (p : Int) ∣ r.den := by
+    simp only [← norm_int_lt_one_iff_dvd, ← padic_norm_e_of_padicInt]
+    exact ⟨key, norm_denom_lt⟩
+  apply hp_prime.1.not_dvd_one
+  rwa [← r.reduced.gcd_eq_one, Nat.dvd_gcd_iff, ← Int.natCast_dvd, ← Int.natCast_dvd_natCast]
 
 中文:
 定理 isUnit_den
@@ -1965,7 +1974,16 @@ theorem isUnit_den
     congr
     rw_mod_cast [@Rat.mul_den_eq_num r]
   rw [padicNormE.mul] at hr
-  have key : ‖(r.num : Rat_[p])‖ < 1 := b
+  have key : ‖(r.num : Rat_[p])‖ < 1 := by
+    calc
+      _ = _ := hr.symm
+      _ < 1 * 1 := mul_lt_mul' h norm_denom_lt (norm_nonneg _) zero_lt_one
+      _ = 1 := mul_one 1
+  have : ↑p ∣ r.num ∧ (p : Int) ∣ r.den := by
+    simp only [← norm_int_lt_one_iff_dvd, ← padic_norm_e_of_padicInt]
+    exact ⟨key, norm_denom_lt⟩
+  apply hp_prime.1.not_dvd_one
+  rwa [← r.reduced.gcd_eq_one, Nat.dvd_gcd_iff, ← Int.natCast_dvd, ← Int.natCast_dvd_natCast]
 
 Depends on / 依赖: Int_, Rat.mul_den_eq_num, Rat_, coe_natCast, hr.symm, isUnit_iff, le_antisymm, mul_den_eq_num, mul_lt_mul, mul_one, norm_denom_lt, norm_int_lt_one_iff_dvd, norm_nonneg, not_lt, padicNormE, padicNormE.mul, padic_norm_e_of_padicInt, r.den, r.num, rw_mod_cast
 -/
@@ -2035,7 +2053,7 @@ theorem mem_span_pow_iff_le_valuation
     contrapose hx
     rw [hx]; rw [mul_zero]
   · nth_rewrite 2 [unitCoeff_spec hx]
-    simpa [Units.isUnit, IsUnit.dvd_mul_left] using pow_dvd_p
+    simpa [Units.isUnit, IsUnit.dvd_mul_left] using pow_dvd_pow _
 
 中文:
 定理 mem_span_pow_iff_le_valuation
@@ -2050,7 +2068,7 @@ theorem mem_span_pow_iff_le_valuation
     contrapose hx
     rw [hx]; rw [mul_zero]
   · nth_rewrite 2 [unitCoeff_spec hx]
-    simpa [Units.isUnit, IsUnit.dvd_mul_left] using pow_dvd_p
+    simpa [Units.isUnit, IsUnit.dvd_mul_left] using pow_dvd_pow _
 
 Depends on / 依赖: Ideal.mem_span_singleton, IsUnit, IsUnit.dvd_mul_left, Units.isUnit, contrapose, dvd_mul_left, isUnit, le_self_add, mem_span_singleton, mul_zero, nth_rewrite, pow_dvd_pow, unitCoeff_spec, valuation_p_pow_mul
 -/
@@ -2381,7 +2399,19 @@ instance :
     let x' : CauSeq Int_[p] norm := ⟨x, ?_⟩; swap
     · intro ε hε
       obtain ⟨m, hm⟩ := exists_pow_neg_lt p hε
-      refine ⟨
+      refine ⟨m, fun n hn => lt_of_le_of_lt ?_ hm⟩
+      rw [← neg_sub]; rw [norm_neg]
+      exact hx hn
+    · refine ⟨x'.lim, fun n => ?_⟩
+      have : (0 : Real) < (p : Real) ^ (-n : Int) := zpow_pos (mod_cast hp.out.pos) _
+      obtain ⟨i, hi⟩ := equiv_def₃ (equiv_lim x') this
+      by_cases! hin : i <= n
+      · exact (hi i le_rfl n hin).le
+      · specialize hi i le_rfl i le_rfl
+        specialize hx hin.le
+        have := nonarchimedean (x n - x i : Int_[p]) (x i - x'.lim)
+        rw [sub_add_sub_cancel] at this
+        exact this.trans (max_le_iff.mpr ⟨hx, hi.le⟩)
 
 中文:
 实例 :
@@ -2392,7 +2422,19 @@ instance :
     let x' : CauSeq Int_[p] norm := ⟨x, ?_⟩; swap
     · intro ε hε
       obtain ⟨m, hm⟩ := exists_pow_neg_lt p hε
-      refine ⟨
+      refine ⟨m, fun n hn => lt_of_le_of_lt ?_ hm⟩
+      rw [← neg_sub]; rw [norm_neg]
+      exact hx hn
+    · refine ⟨x'.lim, fun n => ?_⟩
+      have : (0 : Real) < (p : Real) ^ (-n : Int) := zpow_pos (mod_cast hp.out.pos) _
+      obtain ⟨i, hi⟩ := equiv_def₃ (equiv_lim x') this
+      by_cases! hin : i <= n
+      · exact (hi i le_rfl n hin).le
+      · specialize hi i le_rfl i le_rfl
+        specialize hx hin.le
+        have := nonarchimedean (x n - x i : Int_[p]) (x i - x'.lim)
+        rw [sub_add_sub_cancel] at this
+        exact this.trans (max_le_iff.mpr ⟨hx, hi.le⟩)
 
 Depends on / 依赖: CauSeq, Ideal.one_eq_top, Ideal.span_singleton_pow, Int_, SModEq, SModEq.sub_mem, equiv_lim, exists_pow_neg_lt, hp.out.pos, lt_of_le_of_lt, maximalIdeal_eq_span_p, mod_cast, mul_one, neg_sub, norm_le_pow_iff_mem_span_pow, norm_neg, one_eq_top, smul_eq_mul, span_singleton_pow, sub_mem
 -/
@@ -2475,7 +2517,28 @@ instance isFractionRing
   surj x := by
     by_cases hx : ‖x‖ <= 1
     · use (⟨x, hx⟩, 1)
-      rw [Submonoid.coe_one]; rw [map_one]; rw [mul_one]; rw [PadicInt.algebraMap_apply]; rw [Subtype.coe_m
+      rw [Submonoid.coe_one]; rw [map_one]; rw [mul_one]; rw [PadicInt.algebraMap_apply]; rw [Subtype.coe_mk]
+    · set n := Int.toNat (-x.valuation) with hn
+      have hn_coe : (n : Int) = -x.valuation := by
+        rw [hn]; rw [Int.toNat_of_nonneg]
+        rw [Right.nonneg_neg_iff]
+        rw [Padic.norm_le_one_iff_val_nonneg]; rw [not_le] at hx
+        exact hx.le
+      set a := x * (p : Rat_[p]) ^ n with ha
+      have ha_norm : ‖a‖ = 1 := by
+        have hx : x != 0 := by
+          intro h0
+          rw [h0]; rw [norm_zero] at hx
+          exact hx zero_le_one
+        rw [ha]; rw [padicNormE.mul]; rw [Padic.norm_p_pow]; rw [Padic.norm_eq_zpow_neg_valuation hx]; rw [← zpow_add']; rw [hn_coe]; rw [neg_neg]; rw [neg_add_cancel]; rw [zpow_zero]
+        exact Or.inl (Nat.cast_ne_zero.mpr (NeZero.ne p))
+      use
+        (⟨a, le_of_eq ha_norm⟩,
+          ⟨(p ^ n : Int_[p]), mem_nonZeroDivisors_iff_ne_zero.mpr (NeZero.ne _)⟩)
+      simp only [a, map_pow, map_natCast, algebraMap_apply]
+  exists_of_eq := by
+    simp_rw [algebraMap_apply, Subtype.coe_inj]
+    exact fun h => ⟨1, by rw [h]⟩
 
 中文:
 实例 isFractionRing
@@ -2486,7 +2549,28 @@ instance isFractionRing
   surj x := by
     by_cases hx : ‖x‖ <= 1
     · use (⟨x, hx⟩, 1)
-      rw [Submonoid.coe_one]; rw [map_one]; rw [mul_one]; rw [PadicInt.algebraMap_apply]; rw [Subtype.coe_m
+      rw [Submonoid.coe_one]; rw [map_one]; rw [mul_one]; rw [PadicInt.algebraMap_apply]; rw [Subtype.coe_mk]
+    · set n := Int.toNat (-x.valuation) with hn
+      have hn_coe : (n : Int) = -x.valuation := by
+        rw [hn]; rw [Int.toNat_of_nonneg]
+        rw [Right.nonneg_neg_iff]
+        rw [Padic.norm_le_one_iff_val_nonneg]; rw [not_le] at hx
+        exact hx.le
+      set a := x * (p : Rat_[p]) ^ n with ha
+      have ha_norm : ‖a‖ = 1 := by
+        have hx : x != 0 := by
+          intro h0
+          rw [h0]; rw [norm_zero] at hx
+          exact hx zero_le_one
+        rw [ha]; rw [padicNormE.mul]; rw [Padic.norm_p_pow]; rw [Padic.norm_eq_zpow_neg_valuation hx]; rw [← zpow_add']; rw [hn_coe]; rw [neg_neg]; rw [neg_add_cancel]; rw [zpow_zero]
+        exact Or.inl (Nat.cast_ne_zero.mpr (NeZero.ne p))
+      use
+        (⟨a, le_of_eq ha_norm⟩,
+          ⟨(p ^ n : Int_[p]), mem_nonZeroDivisors_iff_ne_zero.mpr (NeZero.ne _)⟩)
+      simp only [a, map_pow, map_natCast, algebraMap_apply]
+  exists_of_eq := by
+    simp_rw [algebraMap_apply, Subtype.coe_inj]
+    exact fun h => ⟨1, by rw [h]⟩
 
 Depends on / 依赖: Int.toNat, Int.toNat_of_nonneg, Padic.norm_le_one_iff_val_nonneg, PadicInt, PadicInt.algebraMap_apply, PadicInt.coe_ne_zero, Right.nonneg_neg_iff, Submonoid, Submonoid.coe_one, Subtype, Subtype.coe_mk, algebraMap_apply, coe_mk, coe_ne_zero, coe_one, hn_coe, hx.le, isUnit_iff_ne_zero, map_one, mem_nonZeroDivisors_iff_ne_zero
 -/

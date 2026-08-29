@@ -58,7 +58,36 @@ theorem nhds_list
     | cons a l ih =>
 suffices List.cons < > pure a <*> pure l <= List.cons < > 𝓝 a <*> traverse 𝓝 l by
         simpa only [functor_norm] using! this
-      exact Filter.seq_mono (Filter.map_mono <| pure_le_
+      exact Filter.seq_mono (Filter.map_mono <| pure_le_nhds a) ih
+  · intro l s hs
+    rcases (mem_traverse_iff _ _).1 hs with ⟨u, hu, hus⟩
+    clear as hs
+    have : exists v : List (Set α), l.Forall₂ (fun a s => IsOpen s ∧ a in s) v ∧ sequence v subseteq s := by
+      induction hu generalizing s with
+      | nil =>
+        exists []
+        simp only [List.forall₂_nil_left_iff]
+        exact ⟨trivial, hus⟩
+      | cons ht _ ih =>
+        rcases mem_nhds_iff.1 ht with ⟨u, hut, hu⟩
+        rcases ih _ Subset.rfl with ⟨v, hv, hvss⟩
+        exact
+          ⟨u::v, List.Forall₂.cons hu hv,
+            Subset.trans (Set.seq_mono (Set.image_mono hut) hvss) hus⟩
+    rcases this with ⟨v, hv, hvs⟩
+    have : forallᶠ y in traverse 𝓝 l, y in sequence v :=
+mem_traverse _ _ hv.imp fun a s ⟨hs, ha⟩ => IsOpen.mem_nhds hs ha
+    refine Eventually.mono this fun u hu => ?_
+    have hu := (List.mem_traverse _ _).1 hu
+    have : List.Forall₂ (fun a s => IsOpen s ∧ a in s) u v := by
+      refine List.Forall₂.flip ?_
+      replace hv := hv.flip
+      simp only [List.forall₂_and_left, Function.flip_def] at hv ⊢
+      exact ⟨hv.1, hu.flip⟩
+    grw [← hvs]
+    exact mem_traverse _ _ (this.imp fun a s ⟨hs, ha⟩ => IsOpen.mem_nhds hs ha)
+
+@[simp]
 
 中文:
 定理 nhds_list
@@ -72,7 +101,36 @@ suffices List.cons < > pure a <*> pure l <= List.cons < > 𝓝 a <*> traverse �
     | cons a l ih =>
 suffices List.cons < > pure a <*> pure l <= List.cons < > 𝓝 a <*> traverse 𝓝 l by
         simpa only [functor_norm] using! this
-      exact Filter.seq_mono (Filter.map_mono <| pure_le_
+      exact Filter.seq_mono (Filter.map_mono <| pure_le_nhds a) ih
+  · intro l s hs
+    rcases (mem_traverse_iff _ _).1 hs with ⟨u, hu, hus⟩
+    clear as hs
+    have : exists v : List (Set α), l.Forall₂ (fun a s => IsOpen s ∧ a in s) v ∧ sequence v subseteq s := by
+      induction hu generalizing s with
+      | nil =>
+        exists []
+        simp only [List.forall₂_nil_left_iff]
+        exact ⟨trivial, hus⟩
+      | cons ht _ ih =>
+        rcases mem_nhds_iff.1 ht with ⟨u, hut, hu⟩
+        rcases ih _ Subset.rfl with ⟨v, hv, hvss⟩
+        exact
+          ⟨u::v, List.Forall₂.cons hu hv,
+            Subset.trans (Set.seq_mono (Set.image_mono hut) hvss) hus⟩
+    rcases this with ⟨v, hv, hvs⟩
+    have : forallᶠ y in traverse 𝓝 l, y in sequence v :=
+mem_traverse _ _ hv.imp fun a s ⟨hs, ha⟩ => IsOpen.mem_nhds hs ha
+    refine Eventually.mono this fun u hu => ?_
+    have hu := (List.mem_traverse _ _).1 hu
+    have : List.Forall₂ (fun a s => IsOpen s ∧ a in s) u v := by
+      refine List.Forall₂.flip ?_
+      replace hv := hv.flip
+      simp only [List.forall₂_and_left, Function.flip_def] at hv ⊢
+      exact ⟨hv.1, hu.flip⟩
+    grw [← hvs]
+    exact mem_traverse _ _ (this.imp fun a s ⟨hs, ha⟩ => IsOpen.mem_nhds hs ha)
+
+@[simp]
 
 Depends on / 依赖: Filter, Filter.map_mono, Filter.seq_mono, IsOpen, List.cons, functor_norm, generalizing, l.Forall, le_rfl, map_mono, mem_traverse_iff, nhds_mkOfNhds, pure_le_nhds, seq_mono, sequence, subseteq, traverse
 -/
@@ -342,7 +400,7 @@ theorem tendsto_insertIdx'
     rw [this]; rw [tendsto_map'_iff]
     exact
       (tendsto_fst.comp tendsto_snd).cons
-        ((@tendsto_insertIdx' _ n l).comp <| tendsto_fst
+        ((@tendsto_insertIdx' _ n l).comp <| tendsto_fst.prodMk <| tendsto_snd.comp tendsto_snd)
 
 中文:
 定理 tendsto_insertIdx'
@@ -353,7 +411,7 @@ theorem tendsto_insertIdx'
     rw [this]; rw [tendsto_map'_iff]
     exact
       (tendsto_fst.comp tendsto_snd).cons
-        ((@tendsto_insertIdx' _ n l).comp <| tendsto_fst
+        ((@tendsto_insertIdx' _ n l).comp <| tendsto_fst.prodMk <| tendsto_snd.comp tendsto_snd)
 
 Depends on / 依赖: Filter, Filter.map_def, Filter.prod_eq, Filter.seq_eq_filter_seq, Function, Function.comp_def, _iff, comp_def, functor_norm, map_def, nhds_cons, prodMk, prod_eq, seq_eq_filter_seq, tendsto_fst, tendsto_fst.comp, tendsto_fst.prodMk, tendsto_insertIdx, tendsto_map, tendsto_snd
 -/
@@ -471,7 +529,9 @@ theorem tendsto_prod
     simp_rw [tendsto_cons_iff, prod_cons]
     have := continuous_iff_continuousAt.mp continuous_mul (x, l.prod)
     rw [ContinuousAt]; rw [nhds_prod_eq] at this
-    exact this.comp (te
+    exact this.comp (tendsto_id.prodMap ih)
+
+@[to_additive]
 
 中文:
 定理 tendsto_prod
@@ -483,7 +543,9 @@ theorem tendsto_prod
     simp_rw [tendsto_cons_iff, prod_cons]
     have := continuous_iff_continuousAt.mp continuous_mul (x, l.prod)
     rw [ContinuousAt]; rw [nhds_prod_eq] at this
-    exact this.comp (te
+    exact this.comp (tendsto_id.prodMap ih)
+
+@[to_additive]
 
 Depends on / 依赖: ContinuousAt, contextual, continuous_iff_continuousAt, continuous_iff_continuousAt.mp, continuous_mul, l.prod, mem_of_mem_nhds, nhds_nil, nhds_prod_eq, prodMap, prod_cons, simp_rw, tendsto_cons_iff, tendsto_id, tendsto_id.prodMap, tendsto_pure_left, this.comp
 -/

@@ -123,7 +123,9 @@ theorem convolution_integrand_bound_right_of_le_of_subset
   · apply_rules [L.le_of_opNorm₂_le_of_le, le_rfl]
   · have : x - t ∉ support g := by
       refine mt (fun hxt => hu ?_) ht
-      refine ⟨_, Set.neg_mem_neg.mpr (s
+      refine ⟨_, Set.neg_mem_neg.mpr (subset_closure hxt), _, hx, ?_⟩
+      simp only [neg_sub, sub_add_cancel]
+    simp only [notMem_support.mp this, (L _).map_zero, norm_zero, le_rfl]
 
 中文:
 定理 convolution_integrand_bound_right_of_le_of_subset
@@ -134,7 +136,9 @@ theorem convolution_integrand_bound_right_of_le_of_subset
   · apply_rules [L.le_of_opNorm₂_le_of_le, le_rfl]
   · have : x - t ∉ support g := by
       refine mt (fun hxt => hu ?_) ht
-      refine ⟨_, Set.neg_mem_neg.mpr (s
+      refine ⟨_, Set.neg_mem_neg.mpr (subset_closure hxt), _, hx, ?_⟩
+      simp only [neg_sub, sub_add_cancel]
+    simp only [notMem_support.mp this, (L _).map_zero, norm_zero, le_rfl]
 -/
 theorem convolution_integrand_bound_right_of_le_of_subset {C : Real} (hC : forall i, ‖g i‖ <= C) {x t : G}
     {s u : Set G} (hx : x in s) (hu : -tsupport g + s subseteq u) :
@@ -381,7 +385,15 @@ theorem _root_.BddAbove.convolutionExistsAt'
   have : forallᵐ t : G ∂μ.restrict s,
       ‖L (f t) (g (x₀ - t))‖ <= s.indicator (fun t => ‖L‖ * ‖f t‖ * ⨆ i : s', ‖g i‖) t := by
     filter_upwards
-    refine le_indicator 
+    refine le_indicator (fun t ht => ?_) fun t ht => ?_
+    · apply_rules [L.le_of_opNorm₂_le_of_le, le_rfl]
+      refine (le_ciSup_set hbg <| mem_preimage.mpr ?_)
+      rwa [neg_sub, sub_add_cancel]
+    · have : t ∉ support fun t => L (f t) (g (x₀ - t)) := mt (fun h => h2s h) ht
+      rw [notMem_support.mp this]; rw [norm_zero]
+  refine Integrable.mono' ?_ ?_ this
+  · rw [integrable_indicator_iff hs]; exact ((hf.norm.const_mul _).mul_const _).integrableOn
+  · exact hf.aestronglyMeasurable.convolution_integrand_snd' L hmg
 
 中文:
 定理 _root_.BddAbove.convolutionExistsAt'
@@ -393,7 +405,15 @@ theorem _root_.BddAbove.convolutionExistsAt'
   have : forallᵐ t : G ∂μ.restrict s,
       ‖L (f t) (g (x₀ - t))‖ <= s.indicator (fun t => ‖L‖ * ‖f t‖ * ⨆ i : s', ‖g i‖) t := by
     filter_upwards
-    refine le_indicator 
+    refine le_indicator (fun t ht => ?_) fun t ht => ?_
+    · apply_rules [L.le_of_opNorm₂_le_of_le, le_rfl]
+      refine (le_ciSup_set hbg <| mem_preimage.mpr ?_)
+      rwa [neg_sub, sub_add_cancel]
+    · have : t ∉ support fun t => L (f t) (g (x₀ - t)) := mt (fun h => h2s h) ht
+      rw [notMem_support.mp this]; rw [norm_zero]
+  refine Integrable.mono' ?_ ?_ this
+  · rw [integrable_indicator_iff hs]; exact ((hf.norm.const_mul _).mul_const _).integrableOn
+  · exact hf.aestronglyMeasurable.convolution_integrand_snd' L hmg
 
 Depends on / 依赖: ConvolutionExistsAt, L.le_of_opNorm, apply_rules, filter_upwards, indicator, integrableOn_iff_integrable_of_support_subset, le_ciSup_set, le_indicator, le_rfl, mem_preimage, mem_preimage.mpr, neg_sub, restrict, s.indicator, sub_add_cancel, support
 -/
@@ -569,7 +589,17 @@ theorem Integrable.convolution_integrand
   have h_meas : AEStronglyMeasurable (fun p : G × G => L (f p.2) (g (p.1 - p.2))) (μ.prod ν) :=
     hf.aestronglyMeasurable.convolution_integrand L hg.aestronglyMeasurable
   have h2_meas : AEStronglyMeasurable (fun y : G => ∫ x : G, ‖L (f y) (g (x - y))‖ ∂μ) ν :=
-    h_meas.prod_swap.norm.integra
+    h_meas.prod_swap.norm.integral_prod_right'
+  simp_rw [integrable_prod_iff' h_meas]
+  refine ⟨Eventually.of_forall fun t => (L (f t)).integrable_comp (hg.comp_sub_right t), ?_⟩
+  refine Integrable.mono' ?_ h2_meas
+      (Eventually.of_forall fun t => (?_ : _ <= ‖L‖ * ‖f t‖ * ∫ x, ‖g (x - t)‖ ∂μ))
+  · simp only [integral_sub_right_eq_self (‖g ·‖)]
+    fun_prop
+  · simp_rw [← integral_const_mul]
+    rw [Real.norm_of_nonneg (by positivity)]
+    exact integral_mono_of_nonneg (Eventually.of_forall fun t => norm_nonneg _)
+      ((hg.comp_sub_right t).norm.const_mul _) (Eventually.of_forall fun t => L.le_opNorm₂ _ _)
 
 中文:
 定理 可积.convolution_integrand
@@ -578,7 +608,17 @@ theorem Integrable.convolution_integrand
   have h_meas : AEStronglyMeasurable (fun p : G × G => L (f p.2) (g (p.1 - p.2))) (μ.prod ν) :=
     hf.aestronglyMeasurable.convolution_integrand L hg.aestronglyMeasurable
   have h2_meas : AEStronglyMeasurable (fun y : G => ∫ x : G, ‖L (f y) (g (x - y))‖ ∂μ) ν :=
-    h_meas.prod_swap.norm.integra
+    h_meas.prod_swap.norm.integral_prod_right'
+  simp_rw [integrable_prod_iff' h_meas]
+  refine ⟨Eventually.of_forall fun t => (L (f t)).integrable_comp (hg.comp_sub_right t), ?_⟩
+  refine Integrable.mono' ?_ h2_meas
+      (Eventually.of_forall fun t => (?_ : _ <= ‖L‖ * ‖f t‖ * ∫ x, ‖g (x - t)‖ ∂μ))
+  · simp only [integral_sub_right_eq_self (‖g ·‖)]
+    fun_prop
+  · simp_rw [← integral_const_mul]
+    rw [Real.norm_of_nonneg (by positivity)]
+    exact integral_mono_of_nonneg (Eventually.of_forall fun t => norm_nonneg _)
+      ((hg.comp_sub_right t).norm.const_mul _) (Eventually.of_forall fun t => L.le_opNorm₂ _ _)
 
 Depends on / 依赖: AEStronglyMeasurable, Eventually, Eventually.of_forall, Integrable, Integrable.mono, aestronglyMeasurable, comp_sub_right, convolution_integrand, h2_meas, h_meas, h_meas.prod_swap.norm.integral_prod_right, hf.aestronglyMeasurable.convolution_integrand, hg.aestronglyMeasurable, hg.comp_sub_right, integrable_comp, integrable_prod_iff, integral_prod_right, of_forall, prod_swap, simp_rw
 -/
@@ -638,7 +678,19 @@ theorem _root_.HasCompactSupport.convolutionExistsAt
   let u := (Homeomorph.neg G).trans (Homeomorph.addRight x₀)
   let v := (Homeomorph.neg G).trans (Homeomorph.addLeft x₀)
   apply ((u.isCompact_preimage.mpr h).bddAbove_image hg.norm.continuousOn).convolutionExistsAt' L
-    isClosed_closure.measurableSet subset_closure (hf.integrableOn_isCompact h
+    isClosed_closure.measurableSet subset_closure (hf.integrableOn_isCompact h)
+  have A : AEStronglyMeasurable (g ∘ v)
+      (μ.restrict (tsupport fun t : G => L (f t) (g (x₀ - t)))) := by
+    apply (hg.comp v.continuous).continuousOn.aestronglyMeasurable_of_isCompact h
+    exact (isClosed_tsupport _).measurableSet
+  convert!
+    ((v.continuous.measurable.measurePreserving
+              (μ.restrict (tsupport fun t => L (f t) (g (x₀ - t))))).aestronglyMeasurable_comp_iff
+          v.measurableEmbedding).1
+      A
+  ext x
+  simp only [v, Homeomorph.neg, sub_eq_add_neg, val_toAddUnits_apply, Homeomorph.trans_apply,
+    Equiv.neg_apply, Homeomorph.homeomorph_mk_coe, Homeomorph.coe_addLeft]
 
 中文:
 定理 _root_.HasCompactSupport.convolutionExistsAt
@@ -647,7 +699,19 @@ theorem _root_.HasCompactSupport.convolutionExistsAt
   let u := (Homeomorph.neg G).trans (Homeomorph.addRight x₀)
   let v := (Homeomorph.neg G).trans (Homeomorph.addLeft x₀)
   apply ((u.isCompact_preimage.mpr h).bddAbove_image hg.norm.continuousOn).convolutionExistsAt' L
-    isClosed_closure.measurableSet subset_closure (hf.integrableOn_isCompact h
+    isClosed_closure.measurableSet subset_closure (hf.integrableOn_isCompact h)
+  have A : AEStronglyMeasurable (g ∘ v)
+      (μ.restrict (tsupport fun t : G => L (f t) (g (x₀ - t)))) := by
+    apply (hg.comp v.continuous).continuousOn.aestronglyMeasurable_of_isCompact h
+    exact (isClosed_tsupport _).measurableSet
+  convert!
+    ((v.continuous.measurable.measurePreserving
+              (μ.restrict (tsupport fun t => L (f t) (g (x₀ - t))))).aestronglyMeasurable_comp_iff
+          v.measurableEmbedding).1
+      A
+  ext x
+  simp only [v, Homeomorph.neg, sub_eq_add_neg, val_toAddUnits_apply, Homeomorph.trans_apply,
+    Equiv.neg_apply, Homeomorph.homeomorph_mk_coe, Homeomorph.coe_addLeft]
 
 Depends on / 依赖: AEStronglyMeasurable, Homeomorph, Homeomorph.addLeft, Homeomorph.addRight, Homeomorph.neg, addLeft, addRight, aestronglyMeasurable_of_isCompact, bddAbove_image, continuous, continuousOn, continuousOn.aestronglyMeasurable_of_isCompact, convolutionExistsAt, hf.integrableOn_isCompact, hg.comp, hg.norm.continuousOn, integrableOn_isCompact, isClosed_closure, isClosed_closure.measurableSet, isClosed_tsupport
 -/
@@ -758,7 +822,7 @@ theorem _root_.BddAbove.convolutionExistsAt
   · have : AEStronglyMeasurable g (map (fun t : G => x₀ - t) μ) :=
       hmg.mono_ac (quasiMeasurePreserving_sub_left_of_right_invariant μ x₀).absolutelyContinuous
     apply this.mono_measure
-    exact ma
+    exact map_mono restrict_le_self (measurable_const.sub measurable_id')
 
 中文:
 定理 _root_.BddAbove.convolutionExistsAt
@@ -769,7 +833,7 @@ theorem _root_.BddAbove.convolutionExistsAt
   · have : AEStronglyMeasurable g (map (fun t : G => x₀ - t) μ) :=
       hmg.mono_ac (quasiMeasurePreserving_sub_left_of_right_invariant μ x₀).absolutelyContinuous
     apply this.mono_measure
-    exact ma
+    exact map_mono restrict_le_self (measurable_const.sub measurable_id')
 
 Depends on / 依赖: AEStronglyMeasurable, BddAbove, BddAbove.convolutionExistsAt, absolutelyContinuous, convolutionExistsAt, hmg.mono_ac, map_mono, measurable_const, measurable_const.sub, measurable_id, mono_ac, mono_measure, quasiMeasurePreserving_sub_left_of_right_invariant, restrict_le_self, simp_rw, sub_eq_neg_add, this.mono_measure
 -/
@@ -1299,7 +1363,7 @@ theorem support_convolution_subset_swap
   rcases hx (x - t) t with (h | h | h)
   · rw [h, (L _).map_zero]
   · rw [h, L.map_zero₂]
-  · exact
+  · exact (h <| sub_add_cancel x t).elim
 
 中文:
 定理 support_convolution_subset_swap
@@ -1315,7 +1379,7 @@ theorem support_convolution_subset_swap
   rcases hx (x - t) t with (h | h | h)
   · rw [h, (L _).map_zero]
   · rw [h, L.map_zero₂]
-  · exact
+  · exact (h <| sub_add_cancel x t).elim
 
 Depends on / 依赖: L.map_zero, Set.mem_add, convert, convolution_def, exists_and_left, integral_zero, map_zero, mem_add, notMem_support, not_and_or, not_exists, simp_rw, sub_add_cancel
 -/
@@ -1400,7 +1464,41 @@ theorem continuousOn_convolution_right_with_param
   by_cases! H : forall p in s, forall x, g p x = 0
   · apply (continuousOn_const (c := 0)).congr
     rintro ⟨p, x⟩ ⟨hp, -⟩
-    apply integral_eq_zero_of_ae (Even
+    apply integral_eq_zero_of_ae (Eventually.of_forall (fun y => ?_))
+    simp [H p hp _]
+  have : LocallyCompactSpace G := by
+    rcases H with ⟨p, hp, x, hx⟩
+    have A : support (g p) subseteq k := support_subset_iff'.2 (fun y hy => hgs p y hp hy)
+    have B : Continuous (g p) := by
+      refine hg.comp_continuous (.prodMk_right _) fun x => ?_
+      simpa only [prodMk_mem_set_prod_eq, mem_univ, and_true] using hp
+    rcases eq_zero_or_locallyCompactSpace_of_support_subset_isCompact_of_addGroup hk A B with H | H
+    · simp [H] at hx
+    · exact H
+  /- Since `G` is locally compact, one may thicken `k` a little bit into a larger compact set
+  `(-k) + t`, outside of which all functions that appear in the convolution vanish. Then we can
+  apply a continuity statement for integrals depending on a parameter, with respect to
+  locally integrable functions and compactly supported continuous functions. -/
+  rintro ⟨q₀, x₀⟩ ⟨hq₀, -⟩
+  obtain ⟨t, t_comp, ht⟩ : exists t, IsCompact t ∧ t in 𝓝 x₀ := exists_compact_mem_nhds x₀
+  let k' : Set G := (-k) +ᵥ t
+  have k'_comp : IsCompact k' := IsCompact.vadd_set hk.neg t_comp
+  let g' : (P × G) -> G -> E' := fun p x => g p.1 (p.2 - x)
+  let s' : Set (P × G) := s ×ˢ t
+  have A : ContinuousOn g'.uncurry (s' ×ˢ univ) := by
+    have : g'.uncurry = g.uncurry ∘ (fun w => (w.1.1, w.1.2 - w.2)) := by ext y; rfl
+    rw [this]
+    refine hg.comp (by fun_prop) ?_
+    simp +contextual [s', MapsTo]
+  have B : ContinuousOn (fun a => ∫ x, L (f x) (g' a x) ∂μ) s' := by
+    apply continuousOn_integral_bilinear_of_locally_integrable_of_compact_support L k'_comp A _
+      (hf.integrableOn_isCompact k'_comp)
+    rintro ⟨p, x⟩ y ⟨hp, hx⟩ hy
+    apply hgs p _ hp
+    contrapose hy
+    exact ⟨y - x, by simpa using hy, x, hx, by simp⟩
+  apply ContinuousWithinAt.mono_of_mem_nhdsWithin (B (q₀, x₀) ⟨hq₀, mem_of_mem_nhds ht⟩)
+  exact mem_nhdsWithin_prod_iff.2 ⟨s, self_mem_nhdsWithin, t, nhdsWithin_le_nhds ht, Subset.rfl⟩
 
 中文:
 定理 continuousOn_convolution_right_with_param
@@ -1411,7 +1509,41 @@ theorem continuousOn_convolution_right_with_param
   by_cases! H : forall p in s, forall x, g p x = 0
   · apply (continuousOn_const (c := 0)).congr
     rintro ⟨p, x⟩ ⟨hp, -⟩
-    apply integral_eq_zero_of_ae (Even
+    apply integral_eq_zero_of_ae (Eventually.of_forall (fun y => ?_))
+    simp [H p hp _]
+  have : LocallyCompactSpace G := by
+    rcases H with ⟨p, hp, x, hx⟩
+    have A : support (g p) subseteq k := support_subset_iff'.2 (fun y hy => hgs p y hp hy)
+    have B : Continuous (g p) := by
+      refine hg.comp_continuous (.prodMk_right _) fun x => ?_
+      simpa only [prodMk_mem_set_prod_eq, mem_univ, and_true] using hp
+    rcases eq_zero_or_locallyCompactSpace_of_support_subset_isCompact_of_addGroup hk A B with H | H
+    · simp [H] at hx
+    · exact H
+  /- Since `G` is locally compact, one may thicken `k` a little bit into a larger compact set
+  `(-k) + t`, outside of which all functions that appear in the convolution vanish. Then we can
+  apply a continuity statement for integrals depending on a parameter, with respect to
+  locally integrable functions and compactly supported continuous functions. -/
+  rintro ⟨q₀, x₀⟩ ⟨hq₀, -⟩
+  obtain ⟨t, t_comp, ht⟩ : exists t, IsCompact t ∧ t in 𝓝 x₀ := exists_compact_mem_nhds x₀
+  let k' : Set G := (-k) +ᵥ t
+  have k'_comp : IsCompact k' := IsCompact.vadd_set hk.neg t_comp
+  let g' : (P × G) -> G -> E' := fun p x => g p.1 (p.2 - x)
+  let s' : Set (P × G) := s ×ˢ t
+  have A : ContinuousOn g'.uncurry (s' ×ˢ univ) := by
+    have : g'.uncurry = g.uncurry ∘ (fun w => (w.1.1, w.1.2 - w.2)) := by ext y; rfl
+    rw [this]
+    refine hg.comp (by fun_prop) ?_
+    simp +contextual [s', MapsTo]
+  have B : ContinuousOn (fun a => ∫ x, L (f x) (g' a x) ∂μ) s' := by
+    apply continuousOn_integral_bilinear_of_locally_integrable_of_compact_support L k'_comp A _
+      (hf.integrableOn_isCompact k'_comp)
+    rintro ⟨p, x⟩ y ⟨hp, hx⟩ hy
+    apply hgs p _ hp
+    contrapose hy
+    exact ⟨y - x, by simpa using hy, x, hx, by simp⟩
+  apply ContinuousWithinAt.mono_of_mem_nhdsWithin (B (q₀, x₀) ⟨hq₀, mem_of_mem_nhds ht⟩)
+  exact mem_nhdsWithin_prod_iff.2 ⟨s, self_mem_nhdsWithin, t, nhdsWithin_le_nhds ht, Subset.rfl⟩
 -/
 theorem continuousOn_convolution_right_with_param {g : P -> G -> E'} {s : Set P} {k : Set G}
     (hk : IsCompact k) (hgs : forall p, forall x, p in s -> x ∉ k -> g p x = 0)
@@ -1502,7 +1634,7 @@ theorem _root_.HasCompactSupport.continuous_convolution_right
   have : ContinuousOn ↿g' (univ ×ˢ univ) := (hg.comp continuous_snd).continuousOn
   exact continuousOn_convolution_right_with_param_comp L
     (continuousOn_univ.2 continuous_id) hcg
-    (fun p x _ hx => image_eq_zero_of_notMem_
+    (fun p x _ hx => image_eq_zero_of_notMem_tsupport hx) hf this
 
 中文:
 定理 _root_.HasCompactSupport.continuous_convolution_right
@@ -1513,7 +1645,7 @@ theorem _root_.HasCompactSupport.continuous_convolution_right
   have : ContinuousOn ↿g' (univ ×ˢ univ) := (hg.comp continuous_snd).continuousOn
   exact continuousOn_convolution_right_with_param_comp L
     (continuousOn_univ.2 continuous_id) hcg
-    (fun p x _ hx => image_eq_zero_of_notMem_
+    (fun p x _ hx => image_eq_zero_of_notMem_tsupport hx) hf this
 
 Depends on / 依赖: ContinuousOn, continuousOn, continuousOn_convolution_right_with_param_comp, continuousOn_univ, continuous_id, continuous_snd, hg.comp, image_eq_zero_of_notMem_tsupport
 -/
@@ -1536,7 +1668,10 @@ theorem _root_.BddAbove.continuous_convolution_right_of_integrable
   have : forallᶠ x in 𝓝 x₀, forallᵐ t : G ∂μ, ‖L (f t) (g (x - t))‖ <= ‖L‖ * ‖f t‖ * ⨆ i, ‖g i‖ := by
     filter_upwards with x; filter_upwards with t
     apply_rules [L.le_of_opNorm₂_le_of_le, le_rfl, le_ciSup hbg (x - t)]
-  refine continuous
+  refine continuousAt_of_dominated ?_ this (by fun_prop) ?_
+  · exact Eventually.of_forall fun x =>
+      hf.aestronglyMeasurable.convolution_integrand_snd' L hg.aestronglyMeasurable
+  · filter_upwards with t; fun_prop
 
 中文:
 定理 _root_.BddAbove.continuous_convolution_right_of_integrable
@@ -1545,7 +1680,10 @@ theorem _root_.BddAbove.continuous_convolution_right_of_integrable
   have : forallᶠ x in 𝓝 x₀, forallᵐ t : G ∂μ, ‖L (f t) (g (x - t))‖ <= ‖L‖ * ‖f t‖ * ⨆ i, ‖g i‖ := by
     filter_upwards with x; filter_upwards with t
     apply_rules [L.le_of_opNorm₂_le_of_le, le_rfl, le_ciSup hbg (x - t)]
-  refine continuous
+  refine continuousAt_of_dominated ?_ this (by fun_prop) ?_
+  · exact Eventually.of_forall fun x =>
+      hf.aestronglyMeasurable.convolution_integrand_snd' L hg.aestronglyMeasurable
+  · filter_upwards with t; fun_prop
 
 Depends on / 依赖: Eventually, Eventually.of_forall, L.le_of_opNorm, aestronglyMeasurable, apply_rules, continuousAt_of_dominated, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, convolution_integrand_snd, filter_upwards, fun_prop, hf.aestronglyMeasurable.convolution_integrand_snd, hg.aestronglyMeasurable, le_ciSup, le_rfl, of_forall
 -/
@@ -1692,7 +1830,8 @@ theorem convolution_neg_of_neg_eq
       filter_upwards [h1, (eventually_add_left_iff μ x).2 h2] with t ht h't
       simp_rw [ht, ← h't, neg_add']
     _ = ∫ t : G, (L (f t)) (g (x - t)) ∂μ := by
-      rw [← integral_
+      rw [← integral_neg_eq_self]
+      simp only [neg_neg, ← sub_eq_add_neg]
 
 中文:
 定理 convolution_neg_of_neg_eq
@@ -1703,7 +1842,8 @@ theorem convolution_neg_of_neg_eq
       filter_upwards [h1, (eventually_add_left_iff μ x).2 h2] with t ht h't
       simp_rw [ht, ← h't, neg_add']
     _ = ∫ t : G, (L (f t)) (g (x - t)) ∂μ := by
-      rw [← integral_
+      rw [← integral_neg_eq_self]
+      simp only [neg_neg, ← sub_eq_add_neg]
 
 Depends on / 依赖: eventually_add_left_iff, filter_upwards, integral_congr_ae, integral_neg_eq_self, neg_add, neg_neg, simp_rw, sub_eq_add_neg
 -/
@@ -1790,7 +1930,10 @@ theorem convolution_eq_right'
       rw [mem_ball_zero_iff] at h2t
       specialize hg (x₀ - t)
       rw [sub_eq_add_neg]; rw [add_mem_ball_iff_norm]; rw [norm_neg]; rw [← sub_eq_add_neg] at hg
-  
+      rw [hg h2t]
+    · rw [notMem_support] at ht
+      simp_rw [ht, L.map_zero₂]
+  simp_rw [convolution_def, h2]
 
 中文:
 定理 convolution_eq_right'
@@ -1802,7 +1945,10 @@ theorem convolution_eq_right'
       rw [mem_ball_zero_iff] at h2t
       specialize hg (x₀ - t)
       rw [sub_eq_add_neg]; rw [add_mem_ball_iff_norm]; rw [norm_neg]; rw [← sub_eq_add_neg] at hg
-  
+      rw [hg h2t]
+    · rw [notMem_support] at ht
+      simp_rw [ht, L.map_zero₂]
+  simp_rw [convolution_def, h2]
 
 Depends on / 依赖: L.map_zero, add_mem_ball_iff_norm, convolution_def, mem_ball_zero_iff, norm_neg, notMem_support, simp_rw, specialize, sub_eq_add_neg, support
 -/
@@ -1834,7 +1980,34 @@ theorem dist_convolution_le'
       hif.integrableOn hmg
     swap; · refine fun t => mt fun ht : f t = 0 => ?_; simp_rw [ht, L.map_zero₂]
     rw [bddAbove_def]
-    refine ⟨‖z₀‖ +
+    refine ⟨‖z₀‖ + ε, ?_⟩
+    rintro _ ⟨x, hx, rfl⟩
+    refine norm_le_norm_add_const_of_dist_le (hg x ?_)
+    rwa [mem_ball_iff_norm, norm_sub_rev, ← mem_ball_zero_iff]
+  have h2 : forall t, dist (L (f t) (g (x₀ - t))) (L (f t) z₀) <= ‖L (f t)‖ * ε := by
+    intro t; by_cases ht : t in support f
+    · have h2t := hf ht
+      rw [mem_ball_zero_iff] at h2t
+      specialize hg (x₀ - t)
+      rw [sub_eq_add_neg]; rw [add_mem_ball_iff_norm]; rw [norm_neg]; rw [← sub_eq_add_neg] at hg
+      refine ((L (f t)).dist_le_opNorm _ _).trans ?_
+      gcongr
+      exact hg h2t
+    · rw [notMem_support] at ht
+      simp_rw [ht, L.map_zero₂, L.map_zero, norm_zero, zero_mul, dist_self]
+      rfl
+  simp_rw [convolution_def]
+  simp_rw [dist_eq_norm] at h2 ⊢
+  rw [← integral_sub hfg.integrable]; swap; · exact (L.flip z₀).integrable_comp hif
+  refine (norm_integral_le_of_norm_le ((L.integrable_comp hif).norm.mul_const ε)
+    (Eventually.of_forall h2)).trans ?_
+  rw [integral_mul_const]
+  gcongr
+  have h3 : forall t, ‖L (f t)‖ <= ‖L‖ * ‖f t‖ := by
+    intro t
+    exact L.le_opNorm (f t)
+  refine (integral_mono (L.integrable_comp hif).norm (hif.norm.const_mul _) h3).trans_eq ?_
+  rw [integral_const_mul]
 
 中文:
 定理 dist_convolution_le'
@@ -1845,7 +2018,34 @@ theorem dist_convolution_le'
       hif.integrableOn hmg
     swap; · refine fun t => mt fun ht : f t = 0 => ?_; simp_rw [ht, L.map_zero₂]
     rw [bddAbove_def]
-    refine ⟨‖z₀‖ +
+    refine ⟨‖z₀‖ + ε, ?_⟩
+    rintro _ ⟨x, hx, rfl⟩
+    refine norm_le_norm_add_const_of_dist_le (hg x ?_)
+    rwa [mem_ball_iff_norm, norm_sub_rev, ← mem_ball_zero_iff]
+  have h2 : forall t, dist (L (f t) (g (x₀ - t))) (L (f t) z₀) <= ‖L (f t)‖ * ε := by
+    intro t; by_cases ht : t in support f
+    · have h2t := hf ht
+      rw [mem_ball_zero_iff] at h2t
+      specialize hg (x₀ - t)
+      rw [sub_eq_add_neg]; rw [add_mem_ball_iff_norm]; rw [norm_neg]; rw [← sub_eq_add_neg] at hg
+      refine ((L (f t)).dist_le_opNorm _ _).trans ?_
+      gcongr
+      exact hg h2t
+    · rw [notMem_support] at ht
+      simp_rw [ht, L.map_zero₂, L.map_zero, norm_zero, zero_mul, dist_self]
+      rfl
+  simp_rw [convolution_def]
+  simp_rw [dist_eq_norm] at h2 ⊢
+  rw [← integral_sub hfg.integrable]; swap; · exact (L.flip z₀).integrable_comp hif
+  refine (norm_integral_le_of_norm_le ((L.integrable_comp hif).norm.mul_const ε)
+    (Eventually.of_forall h2)).trans ?_
+  rw [integral_mul_const]
+  gcongr
+  have h3 : forall t, ‖L (f t)‖ <= ‖L‖ * ‖f t‖ := by
+    intro t
+    exact L.le_opNorm (f t)
+  refine (integral_mono (L.integrable_comp hif).norm (hif.norm.const_mul _) h3).trans_eq ?_
+  rw [integral_const_mul]
 
 Depends on / 依赖: BddAbove, BddAbove.convolutionExistsAt, ConvolutionExistsAt, L.map_zero, Metric, Metric.isOpen_ball.measurableSet, Subset, Subset.trans, bddAbove_def, convolutionExistsAt, hif.integrableOn, integrableOn, isOpen_ball, measurableSet, mem_ball_iff_norm, mem_ball_zero_iff, norm_le_norm_add_const_of_dist_le, norm_sub_rev, simp_rw
 -/
@@ -1900,7 +2100,7 @@ theorem dist_convolution_le
   convert! (dist_convolution_le' (lsmul Real Real) hε hif hf hmg hg).trans _
   · simp_rw [lsmul_apply, integral_smul_const, hintf, one_smul]
   · simp_rw [Real.norm_of_nonneg (hnf _), hintf, mul_one]
-    exact (mul_le_mul_of_nonneg
+    exact (mul_le_mul_of_nonneg_right opNorm_lsmul_le hε).trans_eq (one_mul ε)
 
 中文:
 定理 dist_convolution_le
@@ -1910,7 +2110,7 @@ theorem dist_convolution_le
   convert! (dist_convolution_le' (lsmul Real Real) hε hif hf hmg hg).trans _
   · simp_rw [lsmul_apply, integral_smul_const, hintf, one_smul]
   · simp_rw [Real.norm_of_nonneg (hnf _), hintf, mul_one]
-    exact (mul_le_mul_of_nonneg
+    exact (mul_le_mul_of_nonneg_right opNorm_lsmul_le hε).trans_eq (one_mul ε)
 
 Depends on / 依赖: Integrable, Real.norm_of_nonneg, convert, dist_convolution_le, integrable_of_integral_eq_one, integral_smul_const, lsmul_apply, mul_le_mul_of_nonneg_right, mul_one, norm_of_nonneg, one_mul, one_smul, opNorm_lsmul_le, simp_rw, trans_eq
 -/
@@ -1938,7 +2138,17 @@ theorem convolution_tendsto_right
   have h2ε : 0 < ε / 3 := div_pos hε (by simp)
   obtain ⟨p, hp, δ, hδ, hgδ⟩ := hcg _ h2ε
   dsimp only [uncurry] at hgδ
-  have h2k := hk.eventually (ball_mem_
+  have h2k := hk.eventually (ball_mem_nhds x₀ <| half_pos hδ)
+have h2φ := hφ (ball (0 : G) _) ball_mem_nhds _ (half_pos hδ)
+  filter_upwards [hp, h2k, h2φ, hnφ, hiφ, hmg] with i hpi hki hφi hnφi hiφi hmgi
+  have hgi : dist (g i (k i)) z₀ < ε / 3 := hgδ hpi (hki.trans <| half_lt_self hδ)
+  have h1 : forall x' in ball (k i) (δ / 2), dist (g i x') (g i (k i)) <= ε / 3 + ε / 3 := by
+    intro x' hx'
+    grw [dist_triangle_right, hgδ hpi ?_, hgi]
+    grw [dist_triangle, hx'.out, hki, add_halves]
+  have := dist_convolution_le (add_pos h2ε h2ε).le hφi hnφi hiφi hmgi h1
+  refine ((dist_triangle _ _ _).trans_lt (add_lt_add_of_le_of_lt this hgi)).trans_eq ?_
+  ring
 
 中文:
 定理 convolution_tendsto_right
@@ -1951,7 +2161,17 @@ theorem convolution_tendsto_right
   have h2ε : 0 < ε / 3 := div_pos hε (by simp)
   obtain ⟨p, hp, δ, hδ, hgδ⟩ := hcg _ h2ε
   dsimp only [uncurry] at hgδ
-  have h2k := hk.eventually (ball_mem_
+  have h2k := hk.eventually (ball_mem_nhds x₀ <| half_pos hδ)
+have h2φ := hφ (ball (0 : G) _) ball_mem_nhds _ (half_pos hδ)
+  filter_upwards [hp, h2k, h2φ, hnφ, hiφ, hmg] with i hpi hki hφi hnφi hiφi hmgi
+  have hgi : dist (g i (k i)) z₀ < ε / 3 := hgδ hpi (hki.trans <| half_lt_self hδ)
+  have h1 : forall x' in ball (k i) (δ / 2), dist (g i x') (g i (k i)) <= ε / 3 + ε / 3 := by
+    intro x' hx'
+    grw [dist_triangle_right, hgδ hpi ?_, hgi]
+    grw [dist_triangle, hx'.out, hki, add_halves]
+  have := dist_convolution_le (add_pos h2ε h2ε).le hφi hnφi hiφi hmgi h1
+  refine ((dist_triangle _ _ _).trans_lt (add_lt_add_of_le_of_lt this hgi)).trans_eq ?_
+  ring
 
 Depends on / 依赖: Metric, Metric.eventually_prod_nhds_iff, Metric.tendsto_nhds, ball_mem_nhds, div_pos, eventually, eventually_prod_nhds_iff, filter_upwards, half_pos, hk.eventually, simp_rw, tendsto_nhds, tendsto_smallSets_iff, uncurry
 -/
@@ -2051,7 +2271,17 @@ theorem convolution_assoc'
     ((f ⋆[L, ν] g) ⋆[L₂, μ] k) x₀ = ∫ t, L₂ (∫ s, L (f s) (g (t - s)) ∂ν) (k (x₀ - t)) ∂μ := rfl
     _ = ∫ t, ∫ s, L₂ (L (f s) (g (t - s))) (k (x₀ - t)) ∂ν ∂μ :=
       (integral_congr_ae (hfg.mono fun t ht => ((L₂.flip (k (x₀ - t))).integral_comp_comm ht).symm))
-    _ = ∫ t, ∫ s, L₃ (f s) (L₄ (
+    _ = ∫ t, ∫ s, L₃ (f s) (L₄ (g (t - s)) (k (x₀ - t))) ∂ν ∂μ := by simp_rw [hL]
+    _ = ∫ s, ∫ t, L₃ (f s) (L₄ (g (t - s)) (k (x₀ - t))) ∂μ ∂ν := by rw [integral_integral_swap hi]
+    _ = ∫ s, ∫ u, L₃ (f s) (L₄ (g u) (k (x₀ - s - u))) ∂μ ∂ν := by
+      congr; ext t
+      rw [eq_comm]; rw [← integral_sub_right_eq_self _ t]
+      simp_rw [sub_sub_sub_cancel_right]
+    _ = ∫ s, L₃ (f s) (∫ u, L₄ (g u) (k (x₀ - s - u)) ∂μ) ∂ν := by
+      refine integral_congr_ae ?_
+      refine ((quasiMeasurePreserving_sub_left_of_right_invariant ν x₀).ae hgk).mono fun t ht => ?_
+      exact (L₃ (f t)).integral_comp_comm ht
+    _ = (f ⋆[L₃, ν] g ⋆[L₄, μ] k) x₀ := rfl
 
 中文:
 定理 convolution_assoc'
@@ -2060,7 +2290,17 @@ theorem convolution_assoc'
     ((f ⋆[L, ν] g) ⋆[L₂, μ] k) x₀ = ∫ t, L₂ (∫ s, L (f s) (g (t - s)) ∂ν) (k (x₀ - t)) ∂μ := rfl
     _ = ∫ t, ∫ s, L₂ (L (f s) (g (t - s))) (k (x₀ - t)) ∂ν ∂μ :=
       (integral_congr_ae (hfg.mono fun t ht => ((L₂.flip (k (x₀ - t))).integral_comp_comm ht).symm))
-    _ = ∫ t, ∫ s, L₃ (f s) (L₄ (
+    _ = ∫ t, ∫ s, L₃ (f s) (L₄ (g (t - s)) (k (x₀ - t))) ∂ν ∂μ := by simp_rw [hL]
+    _ = ∫ s, ∫ t, L₃ (f s) (L₄ (g (t - s)) (k (x₀ - t))) ∂μ ∂ν := by rw [integral_integral_swap hi]
+    _ = ∫ s, ∫ u, L₃ (f s) (L₄ (g u) (k (x₀ - s - u))) ∂μ ∂ν := by
+      congr; ext t
+      rw [eq_comm]; rw [← integral_sub_right_eq_self _ t]
+      simp_rw [sub_sub_sub_cancel_right]
+    _ = ∫ s, L₃ (f s) (∫ u, L₄ (g u) (k (x₀ - s - u)) ∂μ) ∂ν := by
+      refine integral_congr_ae ?_
+      refine ((quasiMeasurePreserving_sub_left_of_right_invariant ν x₀).ae hgk).mono fun t ht => ?_
+      exact (L₃ (f t)).integral_comp_comm ht
+    _ = (f ⋆[L₃, ν] g ⋆[L₄, μ] k) x₀ := rfl
 
 Depends on / 依赖: hfg.mono, integral_comp_comm, integral_congr_ae, integral_integral_swap, simp_rw
 -/
@@ -2097,7 +2337,35 @@ theorem convolution_assoc
   have h_meas :
     AEStronglyMeasurable (uncurry fun x y => L₃ (f y) (L₄ (g x) (k (x₀ - y - x))))
       (μ.prod ν) := by
-    refine L₃.a
+    refine L₃.aestronglyMeasurable_comp₂ hf.comp_snd ?_
+    refine L₄.aestronglyMeasurable_comp₂ hg.comp_fst ?_
+    refine (hk.mono_ac ?_).comp_measurable (by fun_prop)
+    refine QuasiMeasurePreserving.absolutelyContinuous ?_
+    refine QuasiMeasurePreserving.prod_of_left (by fun_prop) (Eventually.of_forall fun y => ?_)
+    dsimp only
+    exact quasiMeasurePreserving_sub_left_of_right_invariant μ _
+  have h2_meas :
+      AEStronglyMeasurable (fun y => ∫ x, ‖L₃ (f y) (L₄ (g x) (k (x₀ - y - x)))‖ ∂μ) ν :=
+    h_meas.prod_swap.norm.integral_prod_right'
+  have h3 : map (fun z : G × G => (z.1 - z.2, z.2)) (μ.prod ν) = μ.prod ν :=
+    (measurePreserving_sub_prod μ ν).map_eq
+  suffices Integrable (uncurry fun x y => L₃ (f y) (L₄ (g x) (k (x₀ - y - x)))) (μ.prod ν) by
+    rw [← h3] at this
+    convert! this.comp_measurable (measurable_sub.prodMk measurable_snd)
+    ext ⟨x, y⟩
+    simp +unfoldPartialApp only [uncurry, Function.comp_apply,
+      sub_sub_sub_cancel_right]
+  simp_rw [integrable_prod_iff' h_meas]
+  refine ⟨((quasiMeasurePreserving_sub_left_of_right_invariant ν x₀).ae hgk).mono fun t ht =>
+(L₃ (f t)).integrable_comp ht.of_norm L₄ hg hk, ?_⟩
+  refine (hfgk.const_mul (‖L₃‖ * ‖L₄‖)).mono' h2_meas
+    (((quasiMeasurePreserving_sub_left_of_right_invariant ν x₀).ae hgk).mono fun t ht => ?_)
+  simp_rw [convolution_def, mul_apply', mul_mul_mul_comm ‖L₃‖ ‖L₄‖, ← integral_const_mul]
+  rw [Real.norm_of_nonneg (by positivity)]
+  refine integral_mono_of_nonneg (Eventually.of_forall fun t => norm_nonneg _)
+    ((ht.const_mul _).const_mul _) (Eventually.of_forall fun s => ?_)
+  simp only [← mul_assoc ‖L₄‖]
+  apply_rules [ContinuousLinearMap.le_of_opNorm₂_le_of_le, le_rfl]
 
 中文:
 定理 convolution_assoc
@@ -2108,7 +2376,35 @@ theorem convolution_assoc
   have h_meas :
     AEStronglyMeasurable (uncurry fun x y => L₃ (f y) (L₄ (g x) (k (x₀ - y - x))))
       (μ.prod ν) := by
-    refine L₃.a
+    refine L₃.aestronglyMeasurable_comp₂ hf.comp_snd ?_
+    refine L₄.aestronglyMeasurable_comp₂ hg.comp_fst ?_
+    refine (hk.mono_ac ?_).comp_measurable (by fun_prop)
+    refine QuasiMeasurePreserving.absolutelyContinuous ?_
+    refine QuasiMeasurePreserving.prod_of_left (by fun_prop) (Eventually.of_forall fun y => ?_)
+    dsimp only
+    exact quasiMeasurePreserving_sub_left_of_right_invariant μ _
+  have h2_meas :
+      AEStronglyMeasurable (fun y => ∫ x, ‖L₃ (f y) (L₄ (g x) (k (x₀ - y - x)))‖ ∂μ) ν :=
+    h_meas.prod_swap.norm.integral_prod_right'
+  have h3 : map (fun z : G × G => (z.1 - z.2, z.2)) (μ.prod ν) = μ.prod ν :=
+    (measurePreserving_sub_prod μ ν).map_eq
+  suffices Integrable (uncurry fun x y => L₃ (f y) (L₄ (g x) (k (x₀ - y - x)))) (μ.prod ν) by
+    rw [← h3] at this
+    convert! this.comp_measurable (measurable_sub.prodMk measurable_snd)
+    ext ⟨x, y⟩
+    simp +unfoldPartialApp only [uncurry, Function.comp_apply,
+      sub_sub_sub_cancel_right]
+  simp_rw [integrable_prod_iff' h_meas]
+  refine ⟨((quasiMeasurePreserving_sub_left_of_right_invariant ν x₀).ae hgk).mono fun t ht =>
+(L₃ (f t)).integrable_comp ht.of_norm L₄ hg hk, ?_⟩
+  refine (hfgk.const_mul (‖L₃‖ * ‖L₄‖)).mono' h2_meas
+    (((quasiMeasurePreserving_sub_left_of_right_invariant ν x₀).ae hgk).mono fun t ht => ?_)
+  simp_rw [convolution_def, mul_apply', mul_mul_mul_comm ‖L₃‖ ‖L₄‖, ← integral_const_mul]
+  rw [Real.norm_of_nonneg (by positivity)]
+  refine integral_mono_of_nonneg (Eventually.of_forall fun t => norm_nonneg _)
+    ((ht.const_mul _).const_mul _) (Eventually.of_forall fun s => ?_)
+  simp only [← mul_assoc ‖L₄‖]
+  apply_rules [ContinuousLinearMap.le_of_opNorm₂_le_of_le, le_rfl]
 
 Depends on / 依赖: convolution_assoc, hgk.mono, hx.of_norm, of_norm
 -/
@@ -2224,7 +2520,24 @@ theorem posConvolution_eq_convolution_indicator
   · rw [intervalIntegral.integral_of_le (le_of_lt h), integral_Ioc_eq_integral_Ioo, ←
       integral_indicator (measurableSet_Ioo : MeasurableSet (Ioo 0 x))]
     congr 1 with t : 1
-    have : t <= 0 ∨ t in Ioo 0 x
+    have : t <= 0 ∨ t in Ioo 0 x ∨ x <= t := by
+      rcases le_or_gt t 0 with (h | h)
+      · exact Or.inl h
+      · rcases lt_or_ge t x with (h' | h')
+        exacts [Or.inr (Or.inl ⟨h, h'⟩), Or.inr (Or.inr h')]
+    rcases this with (ht | ht | ht)
+    · rw [indicator_of_notMem (notMem_Ioo_of_le ht), indicator_of_notMem (notMem_Ioi.mpr ht),
+        map_zero, zero_apply]
+    · rw [indicator_of_mem ht, indicator_of_mem (mem_Ioi.mpr ht.1),
+          indicator_of_mem (mem_Ioi.mpr <| sub_pos.mpr ht.2)]
+    · rw [indicator_of_notMem (notMem_Ioo_of_ge ht),
+          indicator_of_notMem (notMem_Ioi.mpr (sub_nonpos_of_le ht)), map_zero]
+  · convert! (integral_zero Real F).symm with t
+    by_cases ht : 0 < t
+    · rw [indicator_of_notMem (_ : x - t ∉ Ioi 0), map_zero]
+      rw [notMem_Ioi] at h ⊢
+      exact sub_nonpos.mpr (h.trans ht.le)
+    · rw [indicator_of_notMem (mem_Ioi.not.mpr ht), map_zero, zero_apply]
 
 中文:
 定理 posConvolution_eq_convolution_indicator
@@ -2236,7 +2549,24 @@ theorem posConvolution_eq_convolution_indicator
   · rw [intervalIntegral.integral_of_le (le_of_lt h), integral_Ioc_eq_integral_Ioo, ←
       integral_indicator (measurableSet_Ioo : MeasurableSet (Ioo 0 x))]
     congr 1 with t : 1
-    have : t <= 0 ∨ t in Ioo 0 x
+    have : t <= 0 ∨ t in Ioo 0 x ∨ x <= t := by
+      rcases le_or_gt t 0 with (h | h)
+      · exact Or.inl h
+      · rcases lt_or_ge t x with (h' | h')
+        exacts [Or.inr (Or.inl ⟨h, h'⟩), Or.inr (Or.inr h')]
+    rcases this with (ht | ht | ht)
+    · rw [indicator_of_notMem (notMem_Ioo_of_le ht), indicator_of_notMem (notMem_Ioi.mpr ht),
+        map_zero, zero_apply]
+    · rw [indicator_of_mem ht, indicator_of_mem (mem_Ioi.mpr ht.1),
+          indicator_of_mem (mem_Ioi.mpr <| sub_pos.mpr ht.2)]
+    · rw [indicator_of_notMem (notMem_Ioo_of_ge ht),
+          indicator_of_notMem (notMem_Ioi.mpr (sub_nonpos_of_le ht)), map_zero]
+  · convert! (integral_zero Real F).symm with t
+    by_cases ht : 0 < t
+    · rw [indicator_of_notMem (_ : x - t ∉ Ioi 0), map_zero]
+      rw [notMem_Ioi] at h ⊢
+      exact sub_nonpos.mpr (h.trans ht.le)
+    · rw [indicator_of_notMem (mem_Ioi.not.mpr ht), map_zero, zero_apply]
 
 Depends on / 依赖: MeasurableSet, NullSingletonClass, Or.inl, convolution, indicator, integral_Ioc_eq_integral_Ioo, integral_indicator, integral_of_le, intervalIntegral, intervalIntegral.integral_of_le, le_of_lt, le_or_gt, lt_or_ge, measurableSet_Ioo, posConvolution, split_ifs, volume_tac
 -/

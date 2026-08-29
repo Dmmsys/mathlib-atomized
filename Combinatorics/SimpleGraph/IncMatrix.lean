@@ -384,7 +384,14 @@ theorem incMatrix_transpose_mul_diag
     refine e.ind ?_
     intro v w h
     rw [← Nat.cast_two]; rw [← card_pair (G.ne_of_adj h)]
-    simp only [mk'_mem_incidenceSet_iff, G.m
+    simp only [mk'_mem_incidenceSet_iff, G.mem_edgeSet.mp h, true_and]
+    congr 2
+    ext u
+    simp
+  · revert h
+    refine e.ind ?_
+    intro v w h
+    simp [mk'_mem_incidenceSet_iff, G.mem_edgeSet.not.mp h]
 
 中文:
 定理 incMatrix_transpose_mul_diag
@@ -397,7 +404,14 @@ theorem incMatrix_transpose_mul_diag
     refine e.ind ?_
     intro v w h
     rw [← Nat.cast_two]; rw [← card_pair (G.ne_of_adj h)]
-    simp only [mk'_mem_incidenceSet_iff, G.m
+    simp only [mk'_mem_incidenceSet_iff, G.mem_edgeSet.mp h, true_and]
+    congr 2
+    ext u
+    simp
+  · revert h
+    refine e.ind ?_
+    intro v w h
+    simp [mk'_mem_incidenceSet_iff, G.mem_edgeSet.not.mp h]
 
 Depends on / 依赖: G.mem_edgeSet.mp, G.mem_edgeSet.not.mp, G.ne_of_adj, Matrix, Matrix.mul_apply, Nat.cast_two, _mem_incidenceSet_iff, and_self_iff, card_pair, cast_two, e.ind, incMatrix_apply, ite_zero_mul_ite_zero, mem_edgeSet, mul_apply, ne_of_adj, one_mul, revert, split_ifs, sum_boole
 -/
@@ -437,7 +451,7 @@ theorem incMatrix_mul_transpose_apply_of_adj
   convert! @Nat.cast_one R _
   convert! card_singleton s(a, b)
   rw [← coe_eq_singleton]; rw [coe_filter_univ]
-  exact G.incidenceSet_inter_incidenceSet_of_a
+  exact G.incidenceSet_inter_incidenceSet_of_adj h
 
 中文:
 定理 incMatrix_mul_transpose_apply_of_adj
@@ -448,7 +462,7 @@ theorem incMatrix_mul_transpose_apply_of_adj
   convert! @Nat.cast_one R _
   convert! card_singleton s(a, b)
   rw [← coe_eq_singleton]; rw [coe_filter_univ]
-  exact G.incidenceSet_inter_incidenceSet_of_a
+  exact G.incidenceSet_inter_incidenceSet_of_adj h
 
 Depends on / 依赖: G.incidenceSet_inter_incidenceSet_of_adj, Matrix, Matrix.mul_apply, Matrix.transpose_apply, Nat.cast_one, Pi.one_apply, Set.indicator_apply, card_singleton, cast_one, coe_eq_singleton, coe_filter_univ, convert, incMatrix_apply_mul_incMatrix_apply, incidenceSet_inter_incidenceSet_of_adj, indicator_apply, mul_apply, one_apply, simp_rw, sum_boole, transpose_apply
 -/

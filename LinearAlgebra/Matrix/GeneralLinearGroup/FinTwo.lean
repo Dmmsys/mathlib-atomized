@@ -184,7 +184,15 @@ lemma isParabolic_iff_of_upperTriangular
     suffices m.discr = (m 0 0 - m 1 1) ^ 2 by
       rw [this]; rw [pow_eq_zero_iff two_ne_zero]; rw [sub_eq_zero]
     grind [discr_fin_two, trace_fin_two, det_fin_two]
-  have (h : m 0 0 = m 1 1) : m in Set.range (scalar _) ↔ m 0 1 
+  have (h : m 0 0 = m 1 1) : m in Set.range (scalar _) ↔ m 0 1 = 0 := by
+    constructor
+    · rintro ⟨a, rfl⟩
+      simp
+    · intro h'
+      use m 1 1
+      ext i j
+      fin_cases i <;> fin_cases j <;> simp [h, h', hm]
+  tauto
 
 中文:
 引理 isParabolic_iff_of_upperTriangular
@@ -195,7 +203,15 @@ lemma isParabolic_iff_of_upperTriangular
     suffices m.discr = (m 0 0 - m 1 1) ^ 2 by
       rw [this]; rw [pow_eq_zero_iff two_ne_zero]; rw [sub_eq_zero]
     grind [discr_fin_two, trace_fin_two, det_fin_two]
-  have (h : m 0 0 = m 1 1) : m in Set.range (scalar _) ↔ m 0 1 
+  have (h : m 0 0 = m 1 1) : m in Set.range (scalar _) ↔ m 0 1 = 0 := by
+    constructor
+    · rintro ⟨a, rfl⟩
+      simp
+    · intro h'
+      use m 1 1
+      ext i j
+      fin_cases i <;> fin_cases j <;> simp [h, h', hm]
+  tauto
 
 Depends on / 依赖: IsParabolic, Set.range, det_fin_two, discr_fin_two, fin_cases, m.discr, pow_eq_zero_iff, scalar, sub_eq_zero, trace_fin_two, two_ne_zero
 -/
@@ -314,7 +330,15 @@ lemma isParabolic_iff_exists
     constructor
     · refine fun ⟨b, hb⟩ => hn0 ?_
       rw [← sub_eq_iff_eq_add'] at hm
-      simpa only [← hm, ← hb,
+      simpa only [← hm, ← hb, ← map_sub, ← map_pow, ← map_zero (scalar (Fin 2)), scalar_inj,
+        sq_eq_zero_iff] using hnsq
+    · suffices scalar (Fin 2) (m.discr / 4) = 0 by
+        rw [← map_zero (scalar (Fin 2))]; rw [scalar_inj]; rw [div_eq_zero_iff] at this
+        have : (4 : K) != 0 := by simpa [show (4 : K) = 2 ^ 2 by norm_num] using NeZero.ne _
+        tauto
+      rw [← sub_scalar_sq_eq_discr]; rw [hm]; rw [trace_add]; rw [scalar_apply]; rw [trace_diagonal]
+      simp [mul_div_cancel_left₀ _ (NeZero.ne (2 : K)),
+        (Matrix.isNilpotent_trace_of_isNilpotent ⟨2, hnsq⟩).eq_zero, hnsq]
 
 中文:
 引理 isParabolic_iff_存在
@@ -327,7 +351,15 @@ lemma isParabolic_iff_exists
     constructor
     · refine fun ⟨b, hb⟩ => hn0 ?_
       rw [← sub_eq_iff_eq_add'] at hm
-      simpa only [← hm, ← hb,
+      simpa only [← hm, ← hb, ← map_sub, ← map_pow, ← map_zero (scalar (Fin 2)), scalar_inj,
+        sq_eq_zero_iff] using hnsq
+    · suffices scalar (Fin 2) (m.discr / 4) = 0 by
+        rw [← map_zero (scalar (Fin 2))]; rw [scalar_inj]; rw [div_eq_zero_iff] at this
+        have : (4 : K) != 0 := by simpa [show (4 : K) = 2 ^ 2 by norm_num] using NeZero.ne _
+        tauto
+      rw [← sub_scalar_sq_eq_discr]; rw [hm]; rw [trace_add]; rw [scalar_apply]; rw [trace_diagonal]
+      simp [mul_div_cancel_left₀ _ (NeZero.ne (2 : K)),
+        (Matrix.isNilpotent_trace_of_isNilpotent ⟨2, hnsq⟩).eq_zero, hnsq]
 
 Depends on / 依赖: add_sub_cancel, div_eq_zero_iff, h.symm, hm.sub_eigenvalue_sq_eq_zero, m.discr, map_pow, map_sub, map_zero, scalar, scalar_inj, sq_eq_zero_iff, sub_eigenvalue_sq_eq_zero, sub_eq_iff_eq_add, sub_ne_zero, sub_ne_zero.mpr
 -/
@@ -790,7 +822,12 @@ lemma fixpointPolynomial_eq_zero_iff
     have hb : g 0 1 = 0 := by simpa using congr_arg (coeff · 0) hP
     have hc : g 1 0 = 0 := by simpa using congr_arg (coeff · 2) hP
     have hd : g 1 1 = g 0 0 := by simpa [sub_eq_zero] using congr_arg (coeff · 1) hP
-    e
+    ext i j
+    fin_cases i <;>
+    fin_cases j <;>
+    simp [hb, hc, hd]
+  · rintro ⟨a, ha⟩
+    simp [← ha]
 
 中文:
 引理 fixpointPolynomial_eq_zero_iff
@@ -802,7 +839,12 @@ lemma fixpointPolynomial_eq_zero_iff
     have hb : g 0 1 = 0 := by simpa using congr_arg (coeff · 0) hP
     have hc : g 1 0 = 0 := by simpa using congr_arg (coeff · 2) hP
     have hd : g 1 1 = g 0 0 := by simpa [sub_eq_zero] using congr_arg (coeff · 1) hP
-    e
+    ext i j
+    fin_cases i <;>
+    fin_cases j <;>
+    simp [hb, hc, hd]
+  · rintro ⟨a, ha⟩
+    simp [← ha]
 
 Depends on / 依赖: congr_arg, fin_cases, fixpointPolynomial, sub_eq_zero
 -/
@@ -829,14 +871,16 @@ lemma parabolicEigenvalue_ne_zero
   given: {g : GL (Fin 2) K} [NeZero (2 : K)] (hg : IsParabolic g)
   proof: by
   have : g.val.trace ^ 2 = 4 * g.val.det := by simpa [sub_eq_zero, discr_fin_two] using hg.2
-  rw [parabolicEigenvalue]; rw [div_ne_zero_iff]; rw [eq_true_intro (two_ne_zero' K)]; rw [and_true]; rw [Ne]; rw [← sq_eq_zero_iff]; rw [this]; rw [show (4 : K) = 2 ^ 2 by norm_num]; rw [mul_eq_zero]; rw
+  rw [parabolicEigenvalue]; rw [div_ne_zero_iff]; rw [eq_true_intro (two_ne_zero' K)]; rw [and_true]; rw [Ne]; rw [← sq_eq_zero_iff]; rw [this]; rw [show (4 : K) = 2 ^ 2 by norm_num]; rw [mul_eq_zero]; rw [sq_eq_zero_iff]; rw [not_or]
+  exact ⟨NeZero.ne _, g.det_ne_zero⟩
 
 中文:
 引理 parabolicEigenvalue_ne_zero
   条件: {g : GL (有限集 2) K} [NeZero (2 : K)] (hg : IsParabolic g)
   证明: by
   have : g.val.trace ^ 2 = 4 * g.val.det := by simpa [sub_eq_zero, discr_fin_two] using hg.2
-  rw [parabolicEigenvalue]; rw [div_ne_zero_iff]; rw [eq_true_intro (two_ne_zero' K)]; rw [and_true]; rw [Ne]; rw [← sq_eq_zero_iff]; rw [this]; rw [show (4 : K) = 2 ^ 2 by norm_num]; rw [mul_eq_zero]; rw
+  rw [parabolicEigenvalue]; rw [div_ne_zero_iff]; rw [eq_true_intro (two_ne_zero' K)]; rw [and_true]; rw [Ne]; rw [← sq_eq_zero_iff]; rw [this]; rw [show (4 : K) = 2 ^ 2 by norm_num]; rw [mul_eq_zero]; rw [sq_eq_zero_iff]; rw [not_or]
+  exact ⟨NeZero.ne _, g.det_ne_zero⟩
 
 Depends on / 依赖: NeZero, NeZero.ne, and_true, det_ne_zero, discr_fin_two, div_ne_zero_iff, eq_true_intro, g.det_ne_zero, g.val.det, g.val.trace, mul_eq_zero, not_or, parabolicEigenvalue, sq_eq_zero_iff, sub_eq_zero, two_ne_zero
 -/
@@ -859,7 +903,19 @@ lemma IsParabolic.pow
   · rw [Units.val_pow_eq_pow_val, hg]
     rw [← Nat.one_le_iff_ne_zero] at hn
     induction n, hn using Nat.le_induction with
-    
+    | base => simp
+    | succ n hn IH =>
+      simp only [pow_succ, IH, add_mul, Nat.add_sub_cancel, mul_add, ← map_mul, add_assoc]
+      simp only [scalar_apply, ← smul_eq_mul_diagonal, ← mul_smul,
+        ← smul_eq_diagonal_mul, smul_mul, ← sq, hmsq, smul_zero, add_zero, ← add_smul,
+        Nat.cast_add_one, add_mul, one_mul]
+      rw [(by lia : n = n - 1 + 1)]; rw [pow_succ]; rw [(by lia : n - 1 + 1 = n)]
+      ring_nf
+  · suffices a != 0 by simp [this, hm0, hn]
+    refine fun ha => (g ^ 2).det_ne_zero ?_
+    rw [ha]; rw [map_zero]; rw [zero_add] at hg
+    rw [← hg] at hmsq
+    rw [Units.val_pow_eq_pow_val]; rw [hmsq]; rw [det_zero]
 
 中文:
 引理 IsParabolic.pow
@@ -871,7 +927,19 @@ lemma IsParabolic.pow
   · rw [Units.val_pow_eq_pow_val, hg]
     rw [← Nat.one_le_iff_ne_zero] at hn
     induction n, hn using Nat.le_induction with
-    
+    | base => simp
+    | succ n hn IH =>
+      simp only [pow_succ, IH, add_mul, Nat.add_sub_cancel, mul_add, ← map_mul, add_assoc]
+      simp only [scalar_apply, ← smul_eq_mul_diagonal, ← mul_smul,
+        ← smul_eq_diagonal_mul, smul_mul, ← sq, hmsq, smul_zero, add_zero, ← add_smul,
+        Nat.cast_add_one, add_mul, one_mul]
+      rw [(by lia : n = n - 1 + 1)]; rw [pow_succ]; rw [(by lia : n - 1 + 1 = n)]
+      ring_nf
+  · suffices a != 0 by simp [this, hm0, hn]
+    refine fun ha => (g ^ 2).det_ne_zero ?_
+    rw [ha]; rw [map_zero]; rw [zero_add] at hg
+    rw [← hg] at hmsq
+    rw [Units.val_pow_eq_pow_val]; rw [hmsq]; rw [det_zero]
 
 Depends on / 依赖: IsParabolic, Nat.add_sub_cancel, Nat.le_induction, Nat.one_le_iff_ne_zero, Units.val_pow_eq_pow_val, add_assoc, add_mul, add_sub_cancel, isParabolic_iff_exists, le_induction, map_mul, mul_add, mul_smul, one_le_iff_ne_zero, pow_succ, scalar_apply, smul_eq_diagonal_mul, smul_eq_mul_diagonal, smul_mul, smul_pow
 -/
@@ -929,7 +997,16 @@ lemma isParabolic_iff_of_upperTriangular_of_det
     have : g 1 1 ^ 2 = 1 := by
       have : g.det = g 1 1 ^ 2 := by rw [val_det_apply, det_fin_two, hg10, hg00]; ring
       simp only [Units.ext_iff, Units.val_one, Units.val_neg, this] at h_det
-      exact h_det
+      exact h_det.resolve_right (neg_one_lt_zero.trans_le <| sq_nonneg _).ne'
+    apply (sq_eq_one_iff.mp this).imp <;> intro hg11 <;> simp only [Units.ext_iff]
+    · refine ⟨g 0 1, hg01, ?_⟩
+      rw [g.val.eta_fin_two]
+      simp_all
+    · refine ⟨-g 0 1, neg_eq_zero.not.mpr hg01, ?_⟩
+      rw [g.val.eta_fin_two]
+      simp_all
+  · rintro (⟨x, hx, rfl⟩ | ⟨x, hx, rfl⟩) <;>
+    simpa using hx
 
 中文:
 引理 isParabolic_iff_of_upperTriangular_of_det
@@ -941,7 +1018,16 @@ lemma isParabolic_iff_of_upperTriangular_of_det
     have : g 1 1 ^ 2 = 1 := by
       have : g.det = g 1 1 ^ 2 := by rw [val_det_apply, det_fin_two, hg10, hg00]; ring
       simp only [Units.ext_iff, Units.val_one, Units.val_neg, this] at h_det
-      exact h_det
+      exact h_det.resolve_right (neg_one_lt_zero.trans_le <| sq_nonneg _).ne'
+    apply (sq_eq_one_iff.mp this).imp <;> intro hg11 <;> simp only [Units.ext_iff]
+    · refine ⟨g 0 1, hg01, ?_⟩
+      rw [g.val.eta_fin_two]
+      simp_all
+    · refine ⟨-g 0 1, neg_eq_zero.not.mpr hg01, ?_⟩
+      rw [g.val.eta_fin_two]
+      simp_all
+  · rintro (⟨x, hx, rfl⟩ | ⟨x, hx, rfl⟩) <;>
+    simpa using hx
 
 Depends on / 依赖: Units.ext_iff, Units.val_neg, Units.val_one, det_fin_two, eta_fin_two, ext_iff, g.det, g.val.eta_fin_two, h_det, h_det.resolve_right, isParabolic_iff_of_upperTriangular, neg_eq_zero, neg_one_lt_zero, neg_one_lt_zero.trans_le, resolve_right, sq_eq_one_iff, sq_eq_one_iff.mp, sq_nonneg, trans_le, val_det_apply
 -/

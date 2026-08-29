@@ -730,7 +730,8 @@ definition trans
     continuous_if_le (by fun_prop) continuous_const
       (F.continuous.comp (by fun_prop)).continuousOn
       (G.continuous.comp (by fun_prop)).continuousOn (fun x hx => by norm_num [hx])
-  ma
+  map_zero_left x := by norm_num
+  map_one_left x := by norm_num
 
 中文:
 定义 trans
@@ -740,7 +741,8 @@ definition trans
     continuous_if_le (by fun_prop) continuous_const
       (F.continuous.comp (by fun_prop)).continuousOn
       (G.continuous.comp (by fun_prop)).continuousOn (fun x hx => by norm_num [hx])
-  ma
+  map_zero_left x := by norm_num
+  map_one_left x := by norm_num
 
 Depends on / 依赖: F.extend, G.extend, extend
 -/
@@ -804,7 +806,11 @@ theorem symm_trans
     simp only [coe_symm_eq]
     linarith
   · congr 2
-    apply Sub
+    apply Subtype.ext
+    simp only [coe_symm_eq]
+    linarith
+  · exfalso
+    linarith
 
 中文:
 定理 symm_trans
@@ -821,7 +827,11 @@ theorem symm_trans
     simp only [coe_symm_eq]
     linarith
   · congr 2
-    apply Sub
+    apply Subtype.ext
+    simp only [coe_symm_eq]
+    linarith
+  · exfalso
+    linarith
 
 Depends on / 依赖: Subtype, Subtype.ext, coe_symm_eq, split_ifs, symm_apply, trans_apply
 -/
@@ -1115,7 +1125,8 @@ nonrec theorem prodMk {f₀ f₁ : C(X, Y)} {g₀ g₁ : C(X, Z)} :
   | ⟨F⟩, ⟨G⟩ => ⟨F.prodMk G⟩
 
 nonrec theorem prodMap {f₀ f₁ : C(X, Y)} {g₀ g₁ : C(Z, Z')} :
-    Homotopic f₀ f₁ -> Homo
+    Homotopic f₀ f₁ -> Homotopic g₀ g₁ -> Homotopic (f₀.prodMap g₀) (f₁.prodMap g₁)
+  | ⟨F⟩, ⟨G⟩ => ⟨F.prodMap G⟩
 
 中文:
 定理 equivalence
@@ -1127,7 +1138,8 @@ nonrec theorem prodMk {f₀ f₁ : C(X, Y)} {g₀ g₁ : C(X, Z)} :
   | ⟨F⟩, ⟨G⟩ => ⟨F.prodMk G⟩
 
 nonrec theorem prodMap {f₀ f₁ : C(X, Y)} {g₀ g₁ : C(Z, Z')} :
-    Homotopic f₀ f₁ -> Homo
+    Homotopic f₀ f₁ -> Homotopic g₀ g₁ -> Homotopic (f₀.prodMap g₀) (f₁.prodMap g₁)
+  | ⟨F⟩, ⟨G⟩ => ⟨F.prodMap G⟩
 -/
 theorem equivalence : Equivalence (@Homotopic X Y _ _) :=
   ⟨refl, by apply symm, by apply trans⟩

@@ -253,7 +253,7 @@ theorem Finset.centerMass_segment'
   rw [s.centerMass_eq_of_sum_1 _ hws]; rw [t.centerMass_eq_of_sum_1 _ hwt]; rw [smul_sum]; rw [smul_sum]; rw [←
     Finset.sum_sumElim]; rw [Finset.centerMass_eq_of_sum_1]
   · congr with ⟨⟩ <;> simp only [Sum.elim_inl, Sum.elim_inr, mul_smul]
-  · rw [sum_sumElim, ← mul_sum, ← mul_sum, hws, hwt, m
+  · rw [sum_sumElim, ← mul_sum, ← mul_sum, hws, hwt, mul_one, mul_one, hab]
 
 中文:
 定理 有限集.centerMass_segment'
@@ -262,7 +262,7 @@ theorem Finset.centerMass_segment'
   rw [s.centerMass_eq_of_sum_1 _ hws]; rw [t.centerMass_eq_of_sum_1 _ hwt]; rw [smul_sum]; rw [smul_sum]; rw [←
     Finset.sum_sumElim]; rw [Finset.centerMass_eq_of_sum_1]
   · congr with ⟨⟩ <;> simp only [Sum.elim_inl, Sum.elim_inr, mul_smul]
-  · rw [sum_sumElim, ← mul_sum, ← mul_sum, hws, hwt, m
+  · rw [sum_sumElim, ← mul_sum, ← mul_sum, hws, hwt, mul_one, mul_one, hab]
 
 Depends on / 依赖: Finset, Finset.centerMass_eq_of_sum_1, Finset.sum_sumElim, Sum.elim_inl, Sum.elim_inr, centerMass_eq_of_sum_1, elim_inl, elim_inr, mul_one, mul_smul, mul_sum, s.centerMass_eq_of_sum_1, smul_sum, sum_sumElim, t.centerMass_eq_of_sum_1
 -/
@@ -614,7 +614,19 @@ theorem Convex.centerMass_mem
     have zi : z i in s := hmem _ (mem_insert_self _ _)
 have hs₀ : forall j in t, 0 <= w j := fun j hj => h₀ j mem_insert_of_mem hj
     rw [sum_insert hi] at hpos
-    by_cases hsu
+    by_cases hsum_t : ∑ j in t, w j = 0
+    · have ws : forall j in t, w j = 0 := (sum_eq_zero_iff_of_nonneg hs₀).1 hsum_t
+      have wz : ∑ j in t, w j • z j = 0 := sum_eq_zero fun i hi => by simp [ws i hi]
+      simp only [centerMass, sum_insert hi, wz, hsum_t, add_zero]
+      simp only [hsum_t, add_zero] at hpos
+      rw [← mul_smul]; rw [inv_mul_cancel₀ (ne_of_gt hpos)]; rw [one_smul]
+      exact zi
+    · rw [Finset.centerMass_insert _ _ _ hi hsum_t]
+      refine convex_iff_div.1 hs zi (ht hs₀ ?_ ?_) ?_ (sum_nonneg hs₀) hpos
+      · exact lt_of_le_of_ne (sum_nonneg hs₀) (Ne.symm hsum_t)
+      · intro j hj
+        exact hmem j (mem_insert_of_mem hj)
+      · exact h₀ _ (mem_insert_self _ _)
 
 中文:
 定理 凸.centerMass_mem
@@ -628,7 +640,19 @@ have hs₀ : forall j in t, 0 <= w j := fun j hj => h₀ j mem_insert_of_mem hj
     have zi : z i in s := hmem _ (mem_insert_self _ _)
 have hs₀ : forall j in t, 0 <= w j := fun j hj => h₀ j mem_insert_of_mem hj
     rw [sum_insert hi] at hpos
-    by_cases hsu
+    by_cases hsum_t : ∑ j in t, w j = 0
+    · have ws : forall j in t, w j = 0 := (sum_eq_zero_iff_of_nonneg hs₀).1 hsum_t
+      have wz : ∑ j in t, w j • z j = 0 := sum_eq_zero fun i hi => by simp [ws i hi]
+      simp only [centerMass, sum_insert hi, wz, hsum_t, add_zero]
+      simp only [hsum_t, add_zero] at hpos
+      rw [← mul_smul]; rw [inv_mul_cancel₀ (ne_of_gt hpos)]; rw [one_smul]
+      exact zi
+    · rw [Finset.centerMass_insert _ _ _ hi hsum_t]
+      refine convex_iff_div.1 hs zi (ht hs₀ ?_ ?_) ?_ (sum_nonneg hs₀) hpos
+      · exact lt_of_le_of_ne (sum_nonneg hs₀) (Ne.symm hsum_t)
+      · intro j hj
+        exact hmem j (mem_insert_of_mem hj)
+      · exact h₀ _ (mem_insert_self _ _)
 
 Depends on / 依赖: Finset, Finset.induction, centerMass, classical, hsum_t, insert, mem_insert_of_mem, mem_insert_self, sum_eq_zero, sum_eq_zero_iff_of_nonneg, sum_insert
 -/
@@ -693,7 +717,10 @@ theorem Convex.finsum_mem
     exact zero_ne_one h₁
   have hsub : support ((fun i => w i • z i) ∘ PLift.down) subseteq hfin_w.toFinset :=
     (support_smul_subset_left _ _).trans hfin_w.coe_toFinset.ge
-  rw [finsum
+  rw [finsum_eq_sum_plift_of_support_subset hsub]
+  refine hs.sum_mem (fun _ _ => h₀ _) ?_ fun i hi => hz _ ?_
+  · rwa [finsum, dif_pos hfin_w] at h₁
+  · rwa [hfin_w.mem_toFinset] at hi
 
 中文:
 定理 凸.finsum_mem
@@ -705,7 +732,10 @@ theorem Convex.finsum_mem
     exact zero_ne_one h₁
   have hsub : support ((fun i => w i • z i) ∘ PLift.down) subseteq hfin_w.toFinset :=
     (support_smul_subset_left _ _).trans hfin_w.coe_toFinset.ge
-  rw [finsum
+  rw [finsum_eq_sum_plift_of_support_subset hsub]
+  refine hs.sum_mem (fun _ _ => h₀ _) ?_ fun i hi => hz _ ?_
+  · rwa [finsum, dif_pos hfin_w] at h₁
+  · rwa [hfin_w.mem_toFinset] at hi
 
 Depends on / 依赖: HasFiniteSupport, PLift.down, coe_toFinset, dif_neg, dif_pos, finsum, finsum_eq_sum_plift_of_support_subset, hfin_w, hfin_w.coe_toFinset.ge, hfin_w.mem_toFinset, hfin_w.toFinset, hs.sum_mem, mem_toFinset, subseteq, sum_mem, support, support_smul_subset_left, toFinset, zero_ne_one
 -/
@@ -737,7 +767,12 @@ theorem convex_iff_sum_mem
   · rw [h_cases, ← add_smul, hab, one_smul]
     exact hy
   · convert! h { x, y } (fun z => if z = y then b else a) _ _ _
-    · simp only [sum_pair h_cases, if_n
+    · simp only [sum_pair h_cases, if_neg h_cases, if_pos trivial]
+    · grind
+    · simp only [sum_pair h_cases, if_neg h_cases, if_pos trivial, hab]
+    · intro i hi
+      simp only [Finset.mem_singleton, Finset.mem_insert] at hi
+      cases hi <;> subst i <;> assumption
 
 中文:
 定理 convex_iff_sum_mem
@@ -750,7 +785,12 @@ theorem convex_iff_sum_mem
   · rw [h_cases, ← add_smul, hab, one_smul]
     exact hy
   · convert! h { x, y } (fun z => if z = y then b else a) _ _ _
-    · simp only [sum_pair h_cases, if_n
+    · simp only [sum_pair h_cases, if_neg h_cases, if_pos trivial]
+    · grind
+    · simp only [sum_pair h_cases, if_neg h_cases, if_pos trivial, hab]
+    · intro i hi
+      simp only [Finset.mem_singleton, Finset.mem_insert] at hi
+      cases hi <;> subst i <;> assumption
 
 Depends on / 依赖: Finset, Finset.mem_insert, Finset.mem_singleton, add_smul, classical, convert, h_cases, hs.sum_mem, if_neg, if_pos, mem_insert, mem_singleton, one_smul, sum_mem, sum_pair
 -/
@@ -945,7 +985,8 @@ theorem Finset.centroid_mem_convexHull
   apply s.centerMass_id_mem_convexHull
   · simp only [inv_nonneg, imp_true_iff, Nat.cast_nonneg, Finset.centroidWeights_apply]
   · have hs_card : (#s : R) != 0 := by simp [Finset.nonempty_iff_ne_empty.mp hs]
-    simp only [hs_card, Finset.sum_const, nsmul_eq_mul
+    simp only [hs_card, Finset.sum_const, nsmul_eq_mul, mul_inv_cancel₀, Ne, not_false_iff,
+      Finset.centroidWeights_apply, zero_lt_one]
 
 中文:
 定理 有限集.centroid_mem_convexHull
@@ -955,7 +996,8 @@ theorem Finset.centroid_mem_convexHull
   apply s.centerMass_id_mem_convexHull
   · simp only [inv_nonneg, imp_true_iff, Nat.cast_nonneg, Finset.centroidWeights_apply]
   · have hs_card : (#s : R) != 0 := by simp [Finset.nonempty_iff_ne_empty.mp hs]
-    simp only [hs_card, Finset.sum_const, nsmul_eq_mul
+    simp only [hs_card, Finset.sum_const, nsmul_eq_mul, mul_inv_cancel₀, Ne, not_false_iff,
+      Finset.centroidWeights_apply, zero_lt_one]
 
 Depends on / 依赖: Finset, Finset.centroidWeights_apply, Finset.nonempty_iff_ne_empty.mp, Finset.sum_const, Nat.cast_nonneg, cast_nonneg, centerMass_id_mem_convexHull, centroidWeights_apply, centroid_eq_centerMass, hs_card, imp_true_iff, inv_nonneg, nonempty_iff_ne_empty, not_false_iff, nsmul_eq_mul, s.centerMass_id_mem_convexHull, s.centroid_eq_centerMass, sum_const, zero_lt_one
 -/
@@ -982,7 +1024,24 @@ theorem convexHull_range_eq_exists_affineCombination
     obtain ⟨i, hi⟩ := Set.mem_range.mp hx
     exact ⟨{i}, Function.const ι (1 : R), by simp, by simp, by simp [hi]⟩
   · rintro x ⟨s, w, hw₀, hw₁, rfl⟩ y ⟨s', w', hw₀', hw₁', rfl⟩ a b ha hb hab
-    let W : ι -> R := fun 
+    let W : ι -> R := fun i => (if i in s then a * w i else 0) + if i in s' then b * w' i else 0
+    have hW₁ : (s union s').sum W = 1 := by
+      rw [sum_add_distrib]; rw [← sum_subset subset_union_left]; rw [← sum_subset subset_union_right]; rw [sum_ite_of_true]; rw [sum_ite_of_true]; rw [← mul_sum]; rw [← mul_sum]; rw [hw₁]; rw [hw₁']; rw [← add_mul]; rw [hab]; rw [mul_one] <;> intros <;> simp_all
+    refine ⟨s union s', W, ?_, hW₁, ?_⟩
+    · rintro i -
+      by_cases hi : i in s <;> by_cases hi' : i in s' <;>
+        simp [W, hi, hi', add_nonneg, mul_nonneg ha (hw₀ i _), mul_nonneg hb (hw₀' i _)]
+    · simp_rw [W, affineCombination_eq_linear_combination (s union s') v _ hW₁,
+        affineCombination_eq_linear_combination s v w hw₁,
+        affineCombination_eq_linear_combination s' v w' hw₁', add_smul, sum_add_distrib]
+      rw [← sum_subset subset_union_left]; rw [← sum_subset subset_union_right]
+      · simp only [ite_smul, sum_ite_of_true fun _ hi => hi, mul_smul, ← smul_sum]
+      · intro i _ hi'
+        simp [hi']
+      · intro i _ hi'
+        simp [hi']
+  · rintro x ⟨s, w, hw₀, hw₁, rfl⟩
+    exact affineCombination_mem_convexHull hw₀ hw₁
 
 中文:
 定理 convexHull_range_eq_存在_affineCombination
@@ -995,7 +1054,24 @@ theorem convexHull_range_eq_exists_affineCombination
     obtain ⟨i, hi⟩ := Set.mem_range.mp hx
     exact ⟨{i}, Function.const ι (1 : R), by simp, by simp, by simp [hi]⟩
   · rintro x ⟨s, w, hw₀, hw₁, rfl⟩ y ⟨s', w', hw₀', hw₁', rfl⟩ a b ha hb hab
-    let W : ι -> R := fun 
+    let W : ι -> R := fun i => (if i in s then a * w i else 0) + if i in s' then b * w' i else 0
+    have hW₁ : (s union s').sum W = 1 := by
+      rw [sum_add_distrib]; rw [← sum_subset subset_union_left]; rw [← sum_subset subset_union_right]; rw [sum_ite_of_true]; rw [sum_ite_of_true]; rw [← mul_sum]; rw [← mul_sum]; rw [hw₁]; rw [hw₁']; rw [← add_mul]; rw [hab]; rw [mul_one] <;> intros <;> simp_all
+    refine ⟨s union s', W, ?_, hW₁, ?_⟩
+    · rintro i -
+      by_cases hi : i in s <;> by_cases hi' : i in s' <;>
+        simp [W, hi, hi', add_nonneg, mul_nonneg ha (hw₀ i _), mul_nonneg hb (hw₀' i _)]
+    · simp_rw [W, affineCombination_eq_linear_combination (s union s') v _ hW₁,
+        affineCombination_eq_linear_combination s v w hw₁,
+        affineCombination_eq_linear_combination s' v w' hw₁', add_smul, sum_add_distrib]
+      rw [← sum_subset subset_union_left]; rw [← sum_subset subset_union_right]
+      · simp only [ite_smul, sum_ite_of_true fun _ hi => hi, mul_smul, ← smul_sum]
+      · intro i _ hi'
+        simp [hi']
+      · intro i _ hi'
+        simp [hi']
+  · rintro x ⟨s, w, hw₀, hw₁, rfl⟩
+    exact affineCombination_mem_convexHull hw₀ hw₁
 
 Depends on / 依赖: Function, Function.const, Set.mem_range.mp, Subset, Subset.antisymm, antisymm, classical, convexHull_min, mem_range, subset_union_left, subset_union_right, sum_add_distrib, sum_ite_, sum_subset
 -/
@@ -1040,7 +1116,20 @@ theorem convexHull_eq
     use PUnit, {PUnit.unit}, fun _ => 1, fun _ => x, fun _ _ => zero_le_one, sum_singleton _ _,
       fun _ _ => hx
     simp only [Finset.centerMass, Finset.sum_singleton, inv_one, one_smul]
-  · rintro x ⟨ι, sx, wx, zx, hwx₀, hwx₁,
+  · rintro x ⟨ι, sx, wx, zx, hwx₀, hwx₁, hzx, rfl⟩ y ⟨ι', sy, wy, zy, hwy₀, hwy₁, hzy, rfl⟩ a b ha
+      hb hab
+    rw [Finset.centerMass_segment' _ _ _ _ _ _ hwx₁ hwy₁ _ _ hab]
+    refine ⟨_, _, _, _, ?_, ?_, ?_, rfl⟩
+    · rintro i hi
+      rw [Finset.mem_disjSum] at hi
+      rcases hi with (⟨j, hj, rfl⟩ | ⟨j, hj, rfl⟩) <;> simp only [Sum.elim_inl, Sum.elim_inr] <;>
+        apply_rules [mul_nonneg, hwx₀, hwy₀]
+    · simp [← mul_sum, *]
+    · intro i hi
+      rw [Finset.mem_disjSum] at hi
+      rcases hi with (⟨j, hj, rfl⟩ | ⟨j, hj, rfl⟩) <;> apply_rules [hzx, hzy]
+  · rintro _ ⟨ι, t, w, z, hw₀, hw₁, hz, rfl⟩
+    exact t.centerMass_mem_convexHull hw₀ (hw₁.symm ▸ zero_lt_one) hz
 
 中文:
 定理 convexHull_eq
@@ -1052,7 +1141,20 @@ theorem convexHull_eq
     use PUnit, {PUnit.unit}, fun _ => 1, fun _ => x, fun _ _ => zero_le_one, sum_singleton _ _,
       fun _ _ => hx
     simp only [Finset.centerMass, Finset.sum_singleton, inv_one, one_smul]
-  · rintro x ⟨ι, sx, wx, zx, hwx₀, hwx₁,
+  · rintro x ⟨ι, sx, wx, zx, hwx₀, hwx₁, hzx, rfl⟩ y ⟨ι', sy, wy, zy, hwy₀, hwy₁, hzy, rfl⟩ a b ha
+      hb hab
+    rw [Finset.centerMass_segment' _ _ _ _ _ _ hwx₁ hwy₁ _ _ hab]
+    refine ⟨_, _, _, _, ?_, ?_, ?_, rfl⟩
+    · rintro i hi
+      rw [Finset.mem_disjSum] at hi
+      rcases hi with (⟨j, hj, rfl⟩ | ⟨j, hj, rfl⟩) <;> simp only [Sum.elim_inl, Sum.elim_inr] <;>
+        apply_rules [mul_nonneg, hwx₀, hwy₀]
+    · simp [← mul_sum, *]
+    · intro i hi
+      rw [Finset.mem_disjSum] at hi
+      rcases hi with (⟨j, hj, rfl⟩ | ⟨j, hj, rfl⟩) <;> apply_rules [hzx, hzy]
+  · rintro _ ⟨ι, t, w, z, hw₀, hw₁, hz, rfl⟩
+    exact t.centerMass_mem_convexHull hw₀ (hw₁.symm ▸ zero_lt_one) hz
 
 Depends on / 依赖: Finset, Finset.centerMass, Finset.centerMass_segment, Finset.mem_disjSum, Finset.sum_singleton, PUnit.unit, Subset, Subset.antisymm, antisymm, centerMass, centerMass_segment, convexHull_min, inv_one, mem_disjSum, one_smul, sum_singleton, zero_le_one
 -/
@@ -1117,7 +1219,7 @@ lemma mem_convexHull_iff_exists_fintype
     refine ⟨t, inferInstance, w ∘ (↑), z ∘ (↑), ?_⟩
     simpa [← sum_attach t, centerMass_eq_of_sum_1 _ _ h.2.1] using h
   · rintro ⟨ι, _, w, z, hw₀, hw₁, hz, hx⟩
-    exact mem_convexHull_of_exists_fintype w z h
+    exact mem_convexHull_of_exists_fintype w z hw₀ hw₁ hz hx
 
 中文:
 引理 mem_convexHull_iff_存在_fintype
@@ -1129,7 +1231,7 @@ lemma mem_convexHull_iff_exists_fintype
     refine ⟨t, inferInstance, w ∘ (↑), z ∘ (↑), ?_⟩
     simpa [← sum_attach t, centerMass_eq_of_sum_1 _ _ h.2.1] using h
   · rintro ⟨ι, _, w, z, hw₀, hw₁, hz, hx⟩
-    exact mem_convexHull_of_exists_fintype w z h
+    exact mem_convexHull_of_exists_fintype w z hw₀ hw₁ hz hx
 
 Depends on / 依赖: centerMass_eq_of_sum_1, convexHull_eq, mem_convexHull_of_exists_fintype, mem_ofPred_eq, sum_attach
 -/
@@ -1161,7 +1263,15 @@ theorem Finset.convexHull_eq
       split_ifs
       exacts [zero_le_one, le_refl 0]
     · rw [Finset.sum_ite_eq, if_pos hx]
-  · rintro x ⟨wx, hw
+  · rintro x ⟨wx, hwx₀, hwx₁, rfl⟩ y ⟨wy, hwy₀, hwy₁, rfl⟩ a b ha hb hab
+    rw [Finset.centerMass_segment _ _ _ _ hwx₁ hwy₁ _ _ hab]
+    refine ⟨_, ?_, ?_, rfl⟩
+    · rintro i hi
+      apply_rules [add_nonneg, mul_nonneg, hwx₀, hwy₀]
+    · simp only [Finset.sum_add_distrib, ← mul_sum, mul_one, *]
+  · rintro _ ⟨w, hw₀, hw₁, rfl⟩
+    exact
+      s.centerMass_mem_convexHull (fun x hx => hw₀ _ hx) (hw₁.symm ▸ zero_lt_one) fun x hx => hx
 
 中文:
 定理 有限集.convexHull_eq
@@ -1177,7 +1287,15 @@ theorem Finset.convexHull_eq
       split_ifs
       exacts [zero_le_one, le_refl 0]
     · rw [Finset.sum_ite_eq, if_pos hx]
-  · rintro x ⟨wx, hw
+  · rintro x ⟨wx, hwx₀, hwx₁, rfl⟩ y ⟨wy, hwy₀, hwy₁, rfl⟩ a b ha hb hab
+    rw [Finset.centerMass_segment _ _ _ _ hwx₁ hwy₁ _ _ hab]
+    refine ⟨_, ?_, ?_, rfl⟩
+    · rintro i hi
+      apply_rules [add_nonneg, mul_nonneg, hwx₀, hwy₀]
+    · simp only [Finset.sum_add_distrib, ← mul_sum, mul_one, *]
+  · rintro _ ⟨w, hw₀, hw₁, rfl⟩
+    exact
+      s.centerMass_mem_convexHull (fun x hx => hw₀ _ hx) (hw₁.symm ▸ zero_lt_one) fun x hx => hx
 
 Depends on / 依赖: Finset, Finset.centerMass_ite_eq, Finset.centerMass_segment, Finset.mem_coe, Finset.sum_add_distrib, Finset.sum_ite_eq, Set.Subset.antisymm, Subset, add_nonneg, antisymm, apply_rules, centerMass_ite_eq, centerMass_segment, classical, convexHull_min, exacts, if_pos, intros, le_refl, mem_coe
 -/
@@ -1296,7 +1414,9 @@ theorem convexHull_eq_union_convexHull_finite_subsets
     · rw [coe_image, Set.image_subset_iff]
       exact hz
     · apply t.centerMass_mem_convexHull hw₀
-      · simp only [
+      · simp only [hw₁, zero_lt_one]
+      · exact fun i hi => Finset.mem_coe.2 (Finset.mem_image_of_mem _ hi)
+  · exact iUnion_subset fun i => iUnion_subset convexHull_mono
 
 中文:
 定理 convexHull_eq_union_convexHull_finite_subsets
@@ -1311,7 +1431,9 @@ theorem convexHull_eq_union_convexHull_finite_subsets
     · rw [coe_image, Set.image_subset_iff]
       exact hz
     · apply t.centerMass_mem_convexHull hw₀
-      · simp only [
+      · simp only [hw₁, zero_lt_one]
+      · exact fun i hi => Finset.mem_coe.2 (Finset.mem_image_of_mem _ hi)
+  · exact iUnion_subset fun i => iUnion_subset convexHull_mono
 
 Depends on / 依赖: Finset, Finset.mem_coe, Finset.mem_image_of_mem, Set.image_subset_iff, Subset, Subset.antisymm, _root_, _root_.convexHull_eq, antisymm, centerMass_mem_convexHull, classical, coe_image, convexHull_eq, convexHull_mono, iUnion_subset, image_subset_iff, mem_coe, mem_iUnion, mem_image_of_mem, t.centerMass_mem_convexHull
 -/
@@ -1363,7 +1485,15 @@ theorem mk_mem_convexHull_prod
   obtain ⟨κ, _, v, g, hv₀, hv₁, hgt, hg⟩ := hy
   have h_sum : ∑ i : ι × κ, w i.1 * v i.2 = 1 := by
     rw [Fintype.sum_prod_type]; rw [← sum_mul_sum]; rw [hw₁]; rw [hv₁]; rw [mul_one]
-  refine ⟨ι × 
+  refine ⟨ι × κ, inferInstance, fun p => w p.1 * v p.2, fun p => (f p.1, g p.2),
+    fun p => mul_nonneg (hw₀ _) (hv₀ _), h_sum, fun p => ⟨hfs _, hgt _⟩, ?_⟩
+  ext
+  · simp_rw [Prod.fst_sum, Prod.smul_mk, Fintype.sum_prod_type, mul_comm (w _), mul_smul,
+      sum_comm (γ := ι), ← Fintype.sum_smul_sum, hv₁, one_smul, hf]
+  · simp_rw [Prod.snd_sum, Prod.smul_mk, Fintype.sum_prod_type, mul_smul, ← Fintype.sum_smul_sum,
+      hw₁, one_smul, hg]
+
+@[simp]
 
 中文:
 定理 mk_mem_convexHull_prod
@@ -1374,7 +1504,15 @@ theorem mk_mem_convexHull_prod
   obtain ⟨κ, _, v, g, hv₀, hv₁, hgt, hg⟩ := hy
   have h_sum : ∑ i : ι × κ, w i.1 * v i.2 = 1 := by
     rw [Fintype.sum_prod_type]; rw [← sum_mul_sum]; rw [hw₁]; rw [hv₁]; rw [mul_one]
-  refine ⟨ι × 
+  refine ⟨ι × κ, inferInstance, fun p => w p.1 * v p.2, fun p => (f p.1, g p.2),
+    fun p => mul_nonneg (hw₀ _) (hv₀ _), h_sum, fun p => ⟨hfs _, hgt _⟩, ?_⟩
+  ext
+  · simp_rw [Prod.fst_sum, Prod.smul_mk, Fintype.sum_prod_type, mul_comm (w _), mul_smul,
+      sum_comm (γ := ι), ← Fintype.sum_smul_sum, hv₁, one_smul, hf]
+  · simp_rw [Prod.snd_sum, Prod.smul_mk, Fintype.sum_prod_type, mul_smul, ← Fintype.sum_smul_sum,
+      hw₁, one_smul, hg]
+
+@[simp]
 
 Depends on / 依赖: Fintype, Fintype.sum_prod_type, Prod.fst_sum, Prod.smul_mk, fst_sum, h_sum, mem_convexHull_iff_exists_fintype, mul_comm, mul_nonneg, mul_one, simp_rw, smul_mk, sum_mul_sum, sum_prod_type
 -/
@@ -1569,7 +1707,15 @@ theorem AffineBasis.convexHull_eq_nonneg_coord
     · rw [b.coord_apply_combination_of_mem hi hw₁]
       exact hw₀ i hi
     · rw [b.coord_apply_combination_of_notMem hi hw₁]
-  · have hx' : x in aff
+  · have hx' : x in affineSpan R (range b) := by
+      rw [b.tot]
+      exact AffineSubspace.mem_top R E x
+    obtain ⟨s, w, hw₁, rfl⟩ := (mem_affineSpan_iff_eq_affineCombination R E).mp hx'
+    refine ⟨s, w, ?_, hw₁, rfl⟩
+    intro i hi
+    specialize hx i
+    rw [b.coord_apply_combination_of_mem hi hw₁] at hx
+    exact hx
 
 中文:
 定理 仿射基.convexHull_eq_nonneg_coord
@@ -1583,7 +1729,15 @@ theorem AffineBasis.convexHull_eq_nonneg_coord
     · rw [b.coord_apply_combination_of_mem hi hw₁]
       exact hw₀ i hi
     · rw [b.coord_apply_combination_of_notMem hi hw₁]
-  · have hx' : x in aff
+  · have hx' : x in affineSpan R (range b) := by
+      rw [b.tot]
+      exact AffineSubspace.mem_top R E x
+    obtain ⟨s, w, hw₁, rfl⟩ := (mem_affineSpan_iff_eq_affineCombination R E).mp hx'
+    refine ⟨s, w, ?_, hw₁, rfl⟩
+    intro i hi
+    specialize hx i
+    rw [b.coord_apply_combination_of_mem hi hw₁] at hx
+    exact hx
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.mem_top, affineSpan, b.coord_apply_com, b.coord_apply_combination_of_mem, b.coord_apply_combination_of_notMem, b.tot, convexHull_range_eq_exists_affineCombination, coord_apply_com, coord_apply_combination_of_mem, coord_apply_combination_of_notMem, mem_affineSpan_iff_eq_affineCombination, mem_top, specialize
 -/
@@ -1621,7 +1775,22 @@ lemma AffineIndependent.convexHull_inter
     convexHull_mono inf_le_right).antisymm ?_
   simp_rw [Set.subset_def, mem_inter_iff, Set.inf_eq_inter, ← coe_inter, mem_convexHull']
   rintro x ⟨⟨w₁, h₁w₁, h₂w₁, h₃w₁⟩, w₂, -, h₂w₂, h₃w₂⟩
-  let w (x : E) : R := (if x in t₁
+  let w (x : E) : R := (if x in t₁ then w₁ x else 0) - if x in t₂ then w₂ x else 0
+  have h₁w : ∑ i in s, w i = 0 := by simp [w, Finset.inter_eq_right.2, *]
+replace hs := hs.eq_zero_of_sum_eq_zero_subtype h₁w by
+    simp only [w, sub_smul, zero_smul, ite_smul, Finset.sum_sub_distrib, ← Finset.sum_filter, h₃w₁,
+      Finset.filter_mem_eq_inter, Finset.inter_eq_right.2 ht₁, Finset.inter_eq_right.2 ht₂, h₃w₂,
+      sub_self]
+  have ht (x) (hx₁ : x in t₁) (hx₂ : x ∉ t₂) : w₁ x = 0 := by
+    simpa [w, hx₁, hx₂] using hs _ (ht₁ hx₁)
+  refine ⟨w₁, ?_, ?_, ?_⟩
+  · simp only [and_imp, Finset.mem_inter]
+    exact fun y hy₁ _ => h₁w₁ y hy₁
+  all_goals
+  · rwa [sum_subset inter_subset_left]
+    rintro x
+    simp_intro hx₁ hx₂
+    simp [ht x hx₁ hx₂]
 
 中文:
 引理 AffineIndependent.convexHull_inter
@@ -1632,7 +1801,22 @@ lemma AffineIndependent.convexHull_inter
     convexHull_mono inf_le_right).antisymm ?_
   simp_rw [Set.subset_def, mem_inter_iff, Set.inf_eq_inter, ← coe_inter, mem_convexHull']
   rintro x ⟨⟨w₁, h₁w₁, h₂w₁, h₃w₁⟩, w₂, -, h₂w₂, h₃w₂⟩
-  let w (x : E) : R := (if x in t₁
+  let w (x : E) : R := (if x in t₁ then w₁ x else 0) - if x in t₂ then w₂ x else 0
+  have h₁w : ∑ i in s, w i = 0 := by simp [w, Finset.inter_eq_right.2, *]
+replace hs := hs.eq_zero_of_sum_eq_zero_subtype h₁w by
+    simp only [w, sub_smul, zero_smul, ite_smul, Finset.sum_sub_distrib, ← Finset.sum_filter, h₃w₁,
+      Finset.filter_mem_eq_inter, Finset.inter_eq_right.2 ht₁, Finset.inter_eq_right.2 ht₂, h₃w₂,
+      sub_self]
+  have ht (x) (hx₁ : x in t₁) (hx₂ : x ∉ t₂) : w₁ x = 0 := by
+    simpa [w, hx₁, hx₂] using hs _ (ht₁ hx₁)
+  refine ⟨w₁, ?_, ?_, ?_⟩
+  · simp only [and_imp, Finset.mem_inter]
+    exact fun y hy₁ _ => h₁w₁ y hy₁
+  all_goals
+  · rwa [sum_subset inter_subset_left]
+    rintro x
+    simp_intro hx₁ hx₂
+    simp [ht x hx₁ hx₂]
 
 Depends on / 依赖: Finset, Finset.inter_eq_right, Set.inf_eq_inter, Set.subset_def, Set.subset_inter, antisymm, classical, coe_inter, convexHull_mono, eq_zero_of_sum_eq_zero_subtype, hs.eq_zero_of_sum_eq_zero_subtype, inf_eq_inter, inf_le_left, inf_le_right, inter_eq_right, mem_convexHull, mem_inter_iff, replace, simp_rw, sub_smul
 -/
@@ -1707,7 +1891,32 @@ lemma mem_convexHull_pi
     · simp
   subst hs
   simp only [Set.mem_univ, mem_convexHull_iff_exists_fintype, true_implies] at h
-  choose κ _ 
+  choose κ _ w f hw₀ hw₁ hft hf using h
+  refine mem_convexHull_of_exists_fintype (fun k : Π i, κ i => ∏ i, w i (k i)) (fun g i => f _ (g i))
+    (fun g => prod_nonneg fun _ _ => hw₀ _ _) ?_ (fun _ _ _ => hft _ _) ?_
+  · rw [← Fintype.prod_sum]
+    exact prod_eq_one fun _ _ => hw₁ _
+  ext i
+  calc
+    _ = ∑ g : forall i, κ i, (∏ i, w i (g i)) • f i (g i) := by
+      simp only [Finset.sum_apply, Pi.smul_apply]
+    _ = ∑ j : κ i, ∑ g : {g : forall k, κ k // g i = j},
+          (∏ k, w k (g.1 k)) • f i ((g : forall i, κ i) i) := by
+      rw [← Fintype.sum_fiberwise fun g : forall k]; rw [κ k => g i]
+    _ = ∑ j : κ i, (∑ g : {g : forall k, κ k // g i = j}, ∏ k, w k (g.1 k)) • f i j := by
+      simp_rw [sum_smul]
+      congr! with j _ g _
+      exact g.2
+    _ = ∑ j : κ i, w i j • f i j := ?_
+    _ = x i := hf _
+  congr! with j _
+  calc
+    ∑ g : {g : forall k, κ k // g i = j}, ∏ k, w k (g.1 k)
+      = ∑ g in piFinset fun k => if hk : k = i then hk ▸ {j} else univ, ∏ k, w k (g k) :=
+      Finset.sum_bij' (fun g _ => g) (fun g hg => ⟨g, by simpa using mem_piFinset.1 hg i⟩)
+        (by aesop) (by simp) (by simp) (by simp) (by simp)
+    _ = w i j := by
+      rw [← prod_univ_sum]; rw [← prod_mul_prod_compl]; rw [Finset.prod_singleton]; rw [Finset.sum_eq_single]; rw [Finset.prod_eq_one]; rw [mul_one] <;> simp +contextual [hw₁]
 
 中文:
 引理 mem_convexHull_pi
@@ -1724,7 +1933,32 @@ lemma mem_convexHull_pi
     · simp
   subst hs
   simp only [Set.mem_univ, mem_convexHull_iff_exists_fintype, true_implies] at h
-  choose κ _ 
+  choose κ _ w f hw₀ hw₁ hft hf using h
+  refine mem_convexHull_of_exists_fintype (fun k : Π i, κ i => ∏ i, w i (k i)) (fun g i => f _ (g i))
+    (fun g => prod_nonneg fun _ _ => hw₀ _ _) ?_ (fun _ _ _ => hft _ _) ?_
+  · rw [← Fintype.prod_sum]
+    exact prod_eq_one fun _ _ => hw₁ _
+  ext i
+  calc
+    _ = ∑ g : forall i, κ i, (∏ i, w i (g i)) • f i (g i) := by
+      simp only [Finset.sum_apply, Pi.smul_apply]
+    _ = ∑ j : κ i, ∑ g : {g : forall k, κ k // g i = j},
+          (∏ k, w k (g.1 k)) • f i ((g : forall i, κ i) i) := by
+      rw [← Fintype.sum_fiberwise fun g : forall k]; rw [κ k => g i]
+    _ = ∑ j : κ i, (∑ g : {g : forall k, κ k // g i = j}, ∏ k, w k (g.1 k)) • f i j := by
+      simp_rw [sum_smul]
+      congr! with j _ g _
+      exact g.2
+    _ = ∑ j : κ i, w i j • f i j := ?_
+    _ = x i := hf _
+  congr! with j _
+  calc
+    ∑ g : {g : forall k, κ k // g i = j}, ∏ k, w k (g.1 k)
+      = ∑ g in piFinset fun k => if hk : k = i then hk ▸ {j} else univ, ∏ k, w k (g k) :=
+      Finset.sum_bij' (fun g _ => g) (fun g hg => ⟨g, by simpa using mem_piFinset.1 hg i⟩)
+        (by aesop) (by simp) (by simp) (by simp) (by simp)
+    _ = w i j := by
+      rw [← prod_univ_sum]; rw [← prod_mul_prod_compl]; rw [Finset.prod_singleton]; rw [Finset.sum_eq_single]; rw [Finset.prod_eq_one]; rw [mul_one] <;> simp +contextual [hw₁]
 
 Depends on / 依赖: Fintype, Fintype.prod_sum, Set.mem_univ, Set.univ, classical, generalizing, mem_convexHull_iff_exists_fintype, mem_convexHull_of_exists_fintype, mem_univ, nonempty_fintype, pi_univ_ite, prod_nonneg, prod_sum, split_ifs, true_implies
 -/
@@ -1805,7 +2039,15 @@ theorem convexHull_eq_closedInterior
       intro i hi
       rw [← hw1]
       apply Finset.single_le_sum (fun j hj => hw j hj) hi
-    have hw1' : 
+    have hw1' : ∑ i, (u : Set (Fin (n + 1))).indicator w i = 1 := by
+      simpa [Finset.sum_indicator_subset _ u.subset_univ] using hw1
+    rw [Finset.affineCombination_indicator_subset _ _ u.subset_univ]; rw [affineCombination_mem_closedInterior_iff hw1']
+    intro i
+    by_cases hi : i in (u : Set (Fin (n + 1))) <;> aesop
+· obtain ⟨w, hw1, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
+      Set.mem_of_mem_of_subset h s.closedInterior_subset_affineSpan
+    rw [affineCombination_mem_closedInterior_iff hw1] at h
+    exact ⟨Finset.univ, w, fun i _ => (h i).1, hw1, rfl⟩
 
 中文:
 定理 convexHull_eq_closed整数erior
@@ -1819,7 +2061,15 @@ theorem convexHull_eq_closedInterior
       intro i hi
       rw [← hw1]
       apply Finset.single_le_sum (fun j hj => hw j hj) hi
-    have hw1' : 
+    have hw1' : ∑ i, (u : Set (Fin (n + 1))).indicator w i = 1 := by
+      simpa [Finset.sum_indicator_subset _ u.subset_univ] using hw1
+    rw [Finset.affineCombination_indicator_subset _ _ u.subset_univ]; rw [affineCombination_mem_closedInterior_iff hw1']
+    intro i
+    by_cases hi : i in (u : Set (Fin (n + 1))) <;> aesop
+· obtain ⟨w, hw1, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
+      Set.mem_of_mem_of_subset h s.closedInterior_subset_affineSpan
+    rw [affineCombination_mem_closedInterior_iff hw1] at h
+    exact ⟨Finset.univ, w, fun i _ => (h i).1, hw1, rfl⟩
 -/
 @[simp] theorem convexHull_eq_closedInterior {𝕜 V : Type*} [Field 𝕜] [LinearOrder 𝕜]
     [IsOrderedRing 𝕜] [AddCommGroup V] [Module 𝕜 V] {n : Nat} (s : Simplex 𝕜 V n) :

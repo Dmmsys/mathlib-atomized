@@ -180,7 +180,8 @@ theorem natCast_strictMono
   refine strictMono_nat_of_lt_succ fun n => (natCast_mono (Nat.le_succ n)).lt_of_ne fun hn => ?_
   replace hn (k : Nat) : ((n + k : Nat) : α) = n := by
     induction k with | zero => rfl | succ k k_ih => grind
-  have h : n + (floor (n : α) + 1) <= floor (n : α) := (gc_floor (natCast_nonneg n)).mp
+  have h : n + (floor (n : α) + 1) <= floor (n : α) := (gc_floor (natCast_nonneg n)).mpr (hn _).le
+  grind
 
 中文:
 定理 natCast_strictMono
@@ -189,7 +190,8 @@ theorem natCast_strictMono
   refine strictMono_nat_of_lt_succ fun n => (natCast_mono (Nat.le_succ n)).lt_of_ne fun hn => ?_
   replace hn (k : Nat) : ((n + k : Nat) : α) = n := by
     induction k with | zero => rfl | succ k k_ih => grind
-  have h : n + (floor (n : α) + 1) <= floor (n : α) := (gc_floor (natCast_nonneg n)).mp
+  have h : n + (floor (n : α) + 1) <= floor (n : α) := (gc_floor (natCast_nonneg n)).mpr (hn _).le
+  grind
 
 Depends on / 依赖: Nat.le_succ, gc_floor, k_ih, le_succ, lt_of_ne, natCast_mono, natCast_nonneg, replace, strictMono_nat_of_lt_succ
 -/
@@ -673,7 +675,7 @@ definition FloorRing.ofBounded
     obtain ⟨n, hn⟩ := bounded x
     use n
     exact_mod_cast hn
-  .ofFloor _ _ fun n x => (Classical.choose_spec (exists_floor' x (be
+  .ofFloor _ _ fun n x => (Classical.choose_spec (exists_floor' x (below x) (above x)) n).symm
 
 中文:
 定义 Floor环.ofBounded
@@ -685,7 +687,7 @@ definition FloorRing.ofBounded
     obtain ⟨n, hn⟩ := bounded x
     use n
     exact_mod_cast hn
-  .ofFloor _ _ fun n x => (Classical.choose_spec (exists_floor' x (be
+  .ofFloor _ _ fun n x => (Classical.choose_spec (exists_floor' x (below x) (above x)) n).symm
 
 Depends on / 依赖: Classical, Classical.choose_spec, MulLeftReflectLE, MulLeftStrictMono, MulLeftStrictMono.toPosMulReflectLE, bounded, choose_spec, exists_floor, neg_le, ofFloor, toPosMulReflectLE
 -/

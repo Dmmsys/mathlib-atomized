@@ -58,7 +58,51 @@ lemma isRegularEpiCategory_sheaf
     obtain ⟨I, p, i, hp, hi, hpi⟩ := h f
     -- The sheafification of `f.hom` is `f` pre- and postcomposed with isomorphisms.
     have h₁ : (presheafToSheaf J D).map f.hom =
-          (sheafificatio
+          (sheafificationAdjunction J D).counit.app F ≫ f ≫
+          inv ((sheafificationAdjunction J D).counit.app G) := by
+        simpa [← Category.assoc] using (sheafificationAdjunction J D).counit_naturality f
+    have h₂ : f = inv ((sheafificationAdjunction J D).counit.app F) ≫
+        (presheafToSheaf J D).map f.hom ≫ (sheafificationAdjunction J D).counit.app G := by
+      simp [h₁]
+    -- The sheafification of `f.val` is still an epimorphism
+    have : Epi ((presheafToSheaf J D).map f.hom) := by
+      rw [h₁]
+      infer_instance
+    -- The sheafification of `i` is an epimorphism, because the sheafification of `p ≫ i = f.val`
+    -- is an epimorphism.
+    have : Epi ((presheafToSheaf J D).map i) := by
+      rw [← hpi]; rw [Functor.map_comp] at this
+      exact epi_of_epi ((presheafToSheaf J D).map p) _
+    -- Since the sheafification of `i` is both a monomorphism and an epimorphism, it is an
+    -- isomorphism.
+    have : IsIso ((presheafToSheaf J D).map i) :=
+      Balanced.isIso_of_mono_of_epi _
+    -- The next five lines show that it suffices to show that the sheafification of `p` is a
+    -- regular epimorphism.
+    rw [h₂]; rw [isRegularEpi_iff_effectiveEpi]
+    suffices EffectiveEpi ((presheafToSheaf J D).map f.hom) by infer_instance
+    rw [← hpi]; rw [Functor.map_comp]
+    suffices EffectiveEpi ((presheafToSheaf J D).map p) by infer_instance
+    rw [← isRegularEpi_iff_effectiveEpi]
+    -- The underlying presheaf of the kernel pair of `f` is a kernel pair for `p`, and since
+    -- sheafification preserves colimits, `p` exhibits its target `I` as a coequalizer of this
+    -- kernel pair. The result follows.
+    exact ⟨⟨{
+      W := (presheafToSheaf J D).obj (pullback f f).obj
+      left := (presheafToSheaf J D).map (pullback.fst f f).hom
+      right := (presheafToSheaf J D).map (pullback.snd f f).hom
+      w := by
+        rw [← Functor.map_comp]; rw [← Functor.map_comp]
+        congr 1
+        rw [← cancel_mono i]
+        simp [hpi, ← ObjectProperty.FullSubcategory.comp_hom, pullback.condition]
+      isColimit := by
+        have := IsRegularEpiCategory.regularEpiOfEpi p
+        exact isColimitCoforkMapOfIsColimit (presheafToSheaf J D) _
+          (isColimitCoforkOfEffectiveEpi p _
+            (PullbackCone.isLimitOfFactors f.hom f.hom i _ _ hpi hpi _
+              ((isLimitPullbackConeMapOfIsLimit (sheafToPresheaf _ _) _
+                (pullbackIsPullback f f))))) }⟩⟩
 
 中文:
 引理 isRegularEpiCategory_sheaf
@@ -68,7 +112,51 @@ lemma isRegularEpiCategory_sheaf
     obtain ⟨I, p, i, hp, hi, hpi⟩ := h f
     -- The sheafification of `f.hom` is `f` pre- and postcomposed with isomorphisms.
     have h₁ : (presheafToSheaf J D).map f.hom =
-          (sheafificatio
+          (sheafificationAdjunction J D).counit.app F ≫ f ≫
+          inv ((sheafificationAdjunction J D).counit.app G) := by
+        simpa [← Category.assoc] using (sheafificationAdjunction J D).counit_naturality f
+    have h₂ : f = inv ((sheafificationAdjunction J D).counit.app F) ≫
+        (presheafToSheaf J D).map f.hom ≫ (sheafificationAdjunction J D).counit.app G := by
+      simp [h₁]
+    -- The sheafification of `f.val` is still an epimorphism
+    have : Epi ((presheafToSheaf J D).map f.hom) := by
+      rw [h₁]
+      infer_instance
+    -- The sheafification of `i` is an epimorphism, because the sheafification of `p ≫ i = f.val`
+    -- is an epimorphism.
+    have : Epi ((presheafToSheaf J D).map i) := by
+      rw [← hpi]; rw [Functor.map_comp] at this
+      exact epi_of_epi ((presheafToSheaf J D).map p) _
+    -- Since the sheafification of `i` is both a monomorphism and an epimorphism, it is an
+    -- isomorphism.
+    have : IsIso ((presheafToSheaf J D).map i) :=
+      Balanced.isIso_of_mono_of_epi _
+    -- The next five lines show that it suffices to show that the sheafification of `p` is a
+    -- regular epimorphism.
+    rw [h₂]; rw [isRegularEpi_iff_effectiveEpi]
+    suffices EffectiveEpi ((presheafToSheaf J D).map f.hom) by infer_instance
+    rw [← hpi]; rw [Functor.map_comp]
+    suffices EffectiveEpi ((presheafToSheaf J D).map p) by infer_instance
+    rw [← isRegularEpi_iff_effectiveEpi]
+    -- The underlying presheaf of the kernel pair of `f` is a kernel pair for `p`, and since
+    -- sheafification preserves colimits, `p` exhibits its target `I` as a coequalizer of this
+    -- kernel pair. The result follows.
+    exact ⟨⟨{
+      W := (presheafToSheaf J D).obj (pullback f f).obj
+      left := (presheafToSheaf J D).map (pullback.fst f f).hom
+      right := (presheafToSheaf J D).map (pullback.snd f f).hom
+      w := by
+        rw [← Functor.map_comp]; rw [← Functor.map_comp]
+        congr 1
+        rw [← cancel_mono i]
+        simp [hpi, ← ObjectProperty.FullSubcategory.comp_hom, pullback.condition]
+      isColimit := by
+        have := IsRegularEpiCategory.regularEpiOfEpi p
+        exact isColimitCoforkMapOfIsColimit (presheafToSheaf J D) _
+          (isColimitCoforkOfEffectiveEpi p _
+            (PullbackCone.isLimitOfFactors f.hom f.hom i _ _ hpi hpi _
+              ((isLimitPullbackConeMapOfIsLimit (sheafToPresheaf _ _) _
+                (pullbackIsPullback f f))))) }⟩⟩
 -/
 lemma isRegularEpiCategory_sheaf (J : GrothendieckTopology C)
     [HasPullbacks D] [HasPushouts D] [IsRegularEpiCategory D]

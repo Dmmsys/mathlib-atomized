@@ -47,7 +47,9 @@ instance Algebra.idealMap_isLocalizedModule
       fun a => ⟨⟨_, Ideal.mul_mem_left _ (map_units S x).unit⁻¹.1 a.2⟩,
         Subtype.ext (by simp [Algebra.smul_def, ← mul_assoc])⟩⟩
   surj y :=
- 
+    have ⟨x, hx⟩ := (mem_map_algebraMap_iff M S).mp y.property
+    ⟨x, Subtype.ext (by simp [Submonoid.smul_def, Algebra.smul_def, mul_comm, hx])⟩
+  exists_of_eq h := ⟨_, Subtype.ext (exists_of_eq congr(($h).1)).choose_spec⟩
 
 中文:
 实例 代数.idealMap_isLocalizedModule
@@ -57,7 +59,9 @@ instance Algebra.idealMap_isLocalizedModule
       fun a => ⟨⟨_, Ideal.mul_mem_left _ (map_units S x).unit⁻¹.1 a.2⟩,
         Subtype.ext (by simp [Algebra.smul_def, ← mul_assoc])⟩⟩
   surj y :=
- 
+    have ⟨x, hx⟩ := (mem_map_algebraMap_iff M S).mp y.property
+    ⟨x, Subtype.ext (by simp [Submonoid.smul_def, Algebra.smul_def, mul_comm, hx])⟩
+  exists_of_eq h := ⟨_, Subtype.ext (exists_of_eq congr(($h).1)).choose_spec⟩
 -/
 instance Algebra.idealMap_isLocalizedModule (I : Ideal R) :
     IsLocalizedModule M (Algebra.idealMap I (S := S)) where
@@ -114,7 +118,9 @@ definition RingHom.toKerIsLocalization
     simp only [Submodule.coe_add, map_add, AddMemClass.mk_add_mk]
   map_smul' a x := by
     simp only [SetLike.val_smul, smul_eq_mul, map_mul, id_apply, SetLike.mk_smul_of_tower_mk,
-      Algebra.smul_d
+      Algebra.smul_def]
+
+@[simp]
 
 中文:
 定义 环态射.toKerIsLocalization
@@ -124,7 +130,9 @@ definition RingHom.toKerIsLocalization
     simp only [Submodule.coe_add, map_add, AddMemClass.mk_add_mk]
   map_smul' a x := by
     simp only [SetLike.val_smul, smul_eq_mul, map_mul, id_apply, SetLike.mk_smul_of_tower_mk,
-      Algebra.smul_d
+      Algebra.smul_def]
+
+@[simp]
 
 Depends on / 依赖: RingHom, RingHom.mem_ker, RingHom.mem_ker.mp, algebraMap, mem_ker, property, x.property
 -/
@@ -323,7 +331,8 @@ lemma mapExtendScalars_eq_toLinearMap_mapₐ
     (IsScalarTower.toAlgHom R A Aₚ).toLinearMap
     ((IsScalarTower.toAlgHom R B Bₚ).toLinearMap)
   ext x
-  rw [LinearMap.coe_comp]; rw [LinearMap.coe_restrictScalars]; rw [Function.comp_apply]; rw [IsLoca
+  rw [LinearMap.coe_comp]; rw [LinearMap.coe_restrictScalars]; rw [Function.comp_apply]; rw [IsLocalizedModule.mapExtendScalars_apply_apply]; rw [IsLocalizedModule.map_apply]
+  simp
 
 中文:
 引理 mapExtendScalars_eq_toLinearMap_mapₐ
@@ -334,7 +343,8 @@ lemma mapExtendScalars_eq_toLinearMap_mapₐ
     (IsScalarTower.toAlgHom R A Aₚ).toLinearMap
     ((IsScalarTower.toAlgHom R B Bₚ).toLinearMap)
   ext x
-  rw [LinearMap.coe_comp]; rw [LinearMap.coe_restrictScalars]; rw [Function.comp_apply]; rw [IsLoca
+  rw [LinearMap.coe_comp]; rw [LinearMap.coe_restrictScalars]; rw [Function.comp_apply]; rw [IsLocalizedModule.mapExtendScalars_apply_apply]; rw [IsLocalizedModule.map_apply]
+  simp
 
 Depends on / 依赖: Function, Function.comp_apply, IsLocalizedModule, IsLocalizedModule.linearMap_ext, IsLocalizedModule.mapExtendScalars_apply_apply, IsLocalizedModule.map_apply, IsScalarTower, IsScalarTower.toAlgHom, LinearMap, LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearMap.restrictScalars_injective, coe_comp, coe_restrictScalars, comp_apply, linearMap_ext, mapExtendScalars_apply_apply, map_apply, restrictScalars_injective, toAlgHom
 -/

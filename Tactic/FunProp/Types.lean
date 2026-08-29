@@ -478,7 +478,10 @@ definition withIncreasedTransitionDepth
     trace[Meta.Tactic.fun_prop]
     "maximum transition depth ({maxDepth}) reached
     if you want `fun_prop` to continue then increase the maximum depth with \
-    `f
+    `fun_prop (maxTransitionDepth := {newDepth})`"
+    return none
+  else
+    withReader (fun s => {s with transitionDepth := newDepth}) go
 
 中文:
 定义 withIncreasedTransitionDepth
@@ -490,7 +493,10 @@ definition withIncreasedTransitionDepth
     trace[Meta.Tactic.fun_prop]
     "maximum transition depth ({maxDepth}) reached
     if you want `fun_prop` to continue then increase the maximum depth with \
-    `f
+    `fun_prop (maxTransitionDepth := {newDepth})`"
+    return none
+  else
+    withReader (fun s => {s with transitionDepth := newDepth}) go
 -/
 def withIncreasedTransitionDepth {α} (go : FunPropM (Option α)) : FunPropM (Option α) := do
   let maxDepth := (← read).config.maxTransitionDepth

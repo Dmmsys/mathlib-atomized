@@ -88,7 +88,7 @@ obtain ⟨C, hC⟩ := Metric.isBounded_iff.mp
   use C
   intro x y
   exact hC (Set.sub_mem_sub (Set.mem_range_self (f := f) x) (Set.mem_range_self (f := g) x))
-           (Set.sub_mem_sub (Set.mem_range_sel
+           (Set.sub_mem_sub (Set.mem_range_self (f := f) y) (Set.mem_range_self (f := g) y))
 
 中文:
 引理 sub_bounded_of_bounded_of_bounded
@@ -99,7 +99,7 @@ obtain ⟨C, hC⟩ := Metric.isBounded_iff.mp
   use C
   intro x y
   exact hC (Set.sub_mem_sub (Set.mem_range_self (f := f) x) (Set.mem_range_self (f := g) x))
-           (Set.sub_mem_sub (Set.mem_range_sel
+           (Set.sub_mem_sub (Set.mem_range_self (f := f) y) (Set.mem_range_self (f := g) y))
 
 Depends on / 依赖: Metric, Metric.isBounded_iff.mp, Metric.isBounded_range_iff.mpr, Set.mem_range_self, Set.sub_mem_sub, f_bdd, g_bdd, isBounded_iff, isBounded_range_iff, isBounded_sub, mem_range_self, sub_mem_sub
 -/
@@ -238,7 +238,14 @@ lemma isBounded_pow
   | succ n hn =>
     have obs : ((fun x => x ^ (n + 1)) '' s) subseteq ((fun x => x ^ n) '' s) * s := by
       intro x hx
-      simp only [mem_image
+      simp only [mem_image] at hx
+      obtain ⟨y, y_in_s, ypow_eq_x⟩ := hx
+      rw [← ypow_eq_x]; rw [pow_succ y n]
+      apply Set.mul_mem_mul _ y_in_s
+      use y
+    exact (isBounded_mul hn s_bdd).subset obs
+
+@[to_additive]
 
 中文:
 引理 isBounded_pow
@@ -253,7 +260,14 @@ lemma isBounded_pow
   | succ n hn =>
     have obs : ((fun x => x ^ (n + 1)) '' s) subseteq ((fun x => x ^ n) '' s) * s := by
       intro x hx
-      simp only [mem_image
+      simp only [mem_image] at hx
+      obtain ⟨y, y_in_s, ypow_eq_x⟩ := hx
+      rw [← ypow_eq_x]; rw [pow_succ y n]
+      apply Set.mul_mem_mul _ y_in_s
+      use y
+    exact (isBounded_mul hn s_bdd).subset obs
+
+@[to_additive]
 
 Depends on / 依赖: Set.mul_mem_mul, isBounded_mul, mem_image, mul_mem_mul, nonempty_iff_ne_empty, pow_succ, s_bdd, s_empty, simp_rw, subset, subseteq, y_in_s, ypow_eq_x
 -/
@@ -289,7 +303,9 @@ obtain ⟨C, hC⟩ := Metric.isBounded_iff.mp
   use C
   intro x y
   exact hC (Set.mul_mem_mul (Set.mem_range_self (f := f) x) (Set.mem_range_self (f := g) x))
-           (Set.mul_mem_mul (Set.mem_range_sel
+           (Set.mul_mem_mul (Set.mem_range_self (f := f) y) (Set.mem_range_self (f := g) y))
+
+@[to_additive]
 
 中文:
 引理 mul_bounded_of_bounded_of_bounded
@@ -300,7 +316,9 @@ obtain ⟨C, hC⟩ := Metric.isBounded_iff.mp
   use C
   intro x y
   exact hC (Set.mul_mem_mul (Set.mem_range_self (f := f) x) (Set.mem_range_self (f := g) x))
-           (Set.mul_mem_mul (Set.mem_range_sel
+           (Set.mul_mem_mul (Set.mem_range_self (f := f) y) (Set.mem_range_self (f := g) y))
+
+@[to_additive]
 
 Depends on / 依赖: Metric, Metric.isBounded_iff.mp, Metric.isBounded_range_iff.mpr, Set.mem_range_self, Set.mul_mem_mul, f_bdd, g_bdd, isBounded_iff, isBounded_mul, isBounded_range_iff, mem_range_self, mul_mem_mul
 -/
@@ -329,7 +347,10 @@ instance [PseudoMetricSpace
     ext p
     simp only [Set.mem_image, Set.mem_prod, Prod.exists]
     constructor
-    · intro ⟨a, a_in_s, b, b_in
+    · intro ⟨a, a_in_s, b, b_in_t, eq_p⟩
+      exact ⟨a, b, ⟨a_in_s, b_in_t⟩, eq_p⟩
+    · intro ⟨a, b, ⟨a_in_s, b_in_t⟩, eq_p⟩
+      simpa [← eq_p] using Set.mul_mem_mul a_in_s b_in_t
 
 中文:
 实例 [伪度量空间
@@ -341,7 +362,10 @@ instance [PseudoMetricSpace
     ext p
     simp only [Set.mem_image, Set.mem_prod, Prod.exists]
     constructor
-    · intro ⟨a, a_in_s, b, b_in
+    · intro ⟨a, a_in_s, b, b_in_t, eq_p⟩
+      exact ⟨a, b, ⟨a_in_s, b_in_t⟩, eq_p⟩
+    · intro ⟨a, b, ⟨a_in_s, b_in_t⟩, eq_p⟩
+      simpa [← eq_p] using Set.mul_mem_mul a_in_s b_in_t
 
 Depends on / 依赖: Bornology, Bornology.IsBounded, Bornology.IsBounded.prod, IsBounded, LipschitzMul, Prod.exists, Set.mem_image, Set.mem_prod, Set.mul_mem_mul, a_in_s, b_in_t, convert, eq_p, isBounded_image, lipschitz_mul, mem_image, mem_prod, mul_lip, mul_lip.isBounded_image, mul_mem_mul
 -/
@@ -573,7 +597,18 @@ instance :
     use 2 * Af * Ag
     intro z hz w hw
     obtain ⟨x₁, hx₁, y₁, hy₁, z_eq⟩ := Set.mem_mul.mp hz
-    obtain ⟨x
+    obtain ⟨x₂, hx₂, y₂, hy₂, w_eq⟩ := Set.mem_mul.mp hw
+    rw [← w_eq]; rw [← z_eq]; rw [dist_eq_norm]
+    have hAf' : 0 <= Af := Metric.nonempty_closedBall.mp ⟨_, hAf hx₁⟩
+    have aux : forall {x y}, x in s -> y in t -> ‖x * y‖ <= Af * Ag := by
+      intro x y x_in_s y_in_t
+      apply (norm_mul_le _ _).trans (mul_le_mul _ _ (norm_nonneg _) hAf')
+      · exact mem_closedBall_zero_iff.mp (hAf x_in_s)
+      · exact mem_closedBall_zero_iff.mp (hAg y_in_t)
+    calc ‖x₁ * y₁ - x₂ * y₂‖
+     _ <= ‖x₁ * y₁‖ + ‖x₂ * y₂‖ := norm_sub_le _ _
+     _ <= Af * Ag + Af * Ag := add_le_add (aux hx₁ hy₁) (aux hx₂ hy₂)
+     _ = 2 * Af * Ag := by simp [← two_mul, mul_assoc]
 
 中文:
 实例 :
@@ -585,7 +620,18 @@ instance :
     use 2 * Af * Ag
     intro z hz w hw
     obtain ⟨x₁, hx₁, y₁, hy₁, z_eq⟩ := Set.mem_mul.mp hz
-    obtain ⟨x
+    obtain ⟨x₂, hx₂, y₂, hy₂, w_eq⟩ := Set.mem_mul.mp hw
+    rw [← w_eq]; rw [← z_eq]; rw [dist_eq_norm]
+    have hAf' : 0 <= Af := Metric.nonempty_closedBall.mp ⟨_, hAf hx₁⟩
+    have aux : forall {x y}, x in s -> y in t -> ‖x * y‖ <= Af * Ag := by
+      intro x y x_in_s y_in_t
+      apply (norm_mul_le _ _).trans (mul_le_mul _ _ (norm_nonneg _) hAf')
+      · exact mem_closedBall_zero_iff.mp (hAf x_in_s)
+      · exact mem_closedBall_zero_iff.mp (hAg y_in_t)
+    calc ‖x₁ * y₁ - x₂ * y₂‖
+     _ <= ‖x₁ * y₁‖ + ‖x₂ * y₂‖ := norm_sub_le _ _
+     _ <= Af * Ag + Af * Ag := add_le_add (aux hx₁ hy₁) (aux hx₂ hy₂)
+     _ = 2 * Af * Ag := by simp [← two_mul, mul_assoc]
 
 Depends on / 依赖: Metric, Metric.isBounded_iff, Metric.isBounded_iff_subset_closedBall, Metric.nonempty_closedBall.mp, Set.mem_mul.mp, dist_eq_norm, isBounded_iff, isBounded_iff_subset_closedBall, mem_mul, nonempty_closedBall, w_eq, z_eq
 -/
@@ -643,7 +689,9 @@ instance :
     obtain ⟨Ag, hAg⟩ := (isBounded_iff_subset_closedBall 0).mp ht
     have key : IsCompact (closedBall (0 : Real>=0) Af ×ˢ closedBall (0 : Real>=0) Ag) :=
       IsCompact.prod (isCompact_closedBall _ _) (isCompact_closedBall _ _)
- 
+    apply Bornology.IsBounded.subset (key.image continuous_mul).isBounded
+    intro _ ⟨x, x_in_s, y, y_in_t, xy_eq⟩
+    exact ⟨⟨x, y⟩, by simpa only [Set.mem_prod] using ⟨⟨hAf x_in_s, hAg y_in_t⟩, xy_eq⟩⟩
 
 中文:
 实例 :
@@ -653,7 +701,9 @@ instance :
     obtain ⟨Ag, hAg⟩ := (isBounded_iff_subset_closedBall 0).mp ht
     have key : IsCompact (closedBall (0 : Real>=0) Af ×ˢ closedBall (0 : Real>=0) Ag) :=
       IsCompact.prod (isCompact_closedBall _ _) (isCompact_closedBall _ _)
- 
+    apply Bornology.IsBounded.subset (key.image continuous_mul).isBounded
+    intro _ ⟨x, x_in_s, y, y_in_t, xy_eq⟩
+    exact ⟨⟨x, y⟩, by simpa only [Set.mem_prod] using ⟨⟨hAf x_in_s, hAg y_in_t⟩, xy_eq⟩⟩
 
 Depends on / 依赖: Bornology, Bornology.IsBounded.subset, IsBounded, IsCompact, IsCompact.prod, Set.mem_prod, closedBall, continuous_mul, isBounded, isBounded_iff_subset_closedBall, isCompact_closedBall, key.image, mem_prod, subset, x_in_s, xy_eq, y_in_t
 -/

@@ -853,7 +853,27 @@ theorem gcd_eq_gcd_filter_ne_zero
     rw [gcd_union]
     refine Eq.trans (?_ : _ = GCDMonoid.gcd (0 : α) ?_) (?_ : GCDMonoid.gcd (0 : α) _ = _)
     · exact gcd {x in s | f x != 0} f
-    · refine congr (congr rfl <| s.i
+    · refine congr (congr rfl <| s.induction_on ?_ ?_) (by simp)
+      · simp
+      · intro a s _ h
+        rw [filter_insert]
+        split_ifs with h1 <;> simp [h, h1]
+    simp only [gcd_zero_left, normalize_gcd]
+
+nonrec theorem gcd_mul_left {α} [CommMonoidWithZero α] [StrongNormalizedGCDMonoid α]
+    {s : Finset β} {f : β -> α} {a : α} :
+    (s.gcd fun x => a * f x) = normalize a * s.gcd f := by
+  classical
+    refine s.induction_on ?_ ?_
+    · simp
+    · intro b t _ h
+      rw [gcd_insert]; rw [gcd_insert]; rw [h]; rw [← gcd_mul_left]
+      apply ((normalize_associated a).mul_right _).gcd_eq_right
+
+nonrec theorem gcd_mul_right {α} [CommMonoidWithZero α] [StrongNormalizedGCDMonoid α]
+    {s : Finset β} {f : β -> α} {a : α} :
+    (s.gcd fun x => f x * a) = s.gcd f * normalize a := by
+  simp_rw [mul_comm]; exact gcd_mul_left
 
 中文:
 定理 gcd_eq_gcd_filter_ne_zero
@@ -865,7 +885,27 @@ theorem gcd_eq_gcd_filter_ne_zero
     rw [gcd_union]
     refine Eq.trans (?_ : _ = GCDMonoid.gcd (0 : α) ?_) (?_ : GCDMonoid.gcd (0 : α) _ = _)
     · exact gcd {x in s | f x != 0} f
-    · refine congr (congr rfl <| s.i
+    · refine congr (congr rfl <| s.induction_on ?_ ?_) (by simp)
+      · simp
+      · intro a s _ h
+        rw [filter_insert]
+        split_ifs with h1 <;> simp [h, h1]
+    simp only [gcd_zero_left, normalize_gcd]
+
+nonrec theorem gcd_mul_left {α} [CommMonoidWithZero α] [StrongNormalizedGCDMonoid α]
+    {s : Finset β} {f : β -> α} {a : α} :
+    (s.gcd fun x => a * f x) = normalize a * s.gcd f := by
+  classical
+    refine s.induction_on ?_ ?_
+    · simp
+    · intro b t _ h
+      rw [gcd_insert]; rw [gcd_insert]; rw [h]; rw [← gcd_mul_left]
+      apply ((normalize_associated a).mul_right _).gcd_eq_right
+
+nonrec theorem gcd_mul_right {α} [CommMonoidWithZero α] [StrongNormalizedGCDMonoid α]
+    {s : Finset β} {f : β -> α} {a : α} :
+    (s.gcd fun x => f x * a) = s.gcd f * normalize a := by
+  simp_rw [mul_comm]; exact gcd_mul_left
 
 Depends on / 依赖: Eq.trans, GCDMonoid, GCDMonoid.gcd, classical, filter_insert, filter_union_filter_not_eq, gcd_union, gcd_zero_left, induction_on, normalize_gcd, s.induction_on, split_ifs
 -/
@@ -953,7 +993,10 @@ theorem extract_gcd
     · refine ⟨fun _ => 1, fun b hb => by rw [h b hb, gcd_eq_zero_iff.2 h, mul_one], ?_⟩
       rw [gcd_eq_gcd_image]; rw [image_const hs]; rw [gcd_singleton]; rw [id]; rw [normalize_one]
     · choose g' hg using @gcd_dvd _ _ _ _ s f
-      
+      refine ⟨fun b => if hb : b in s then g' hb else 0, fun b hb => ?_,
+          extract_gcd' f _ h fun b hb => ?_⟩
+      · simp only [hb, hg, dite_true]
+      rw [dif_pos hb]; rw [hg hb]
 
 中文:
 定理 extract_gcd
@@ -964,7 +1007,10 @@ theorem extract_gcd
     · refine ⟨fun _ => 1, fun b hb => by rw [h b hb, gcd_eq_zero_iff.2 h, mul_one], ?_⟩
       rw [gcd_eq_gcd_image]; rw [image_const hs]; rw [gcd_singleton]; rw [id]; rw [normalize_one]
     · choose g' hg using @gcd_dvd _ _ _ _ s f
-      
+      refine ⟨fun b => if hb : b in s then g' hb else 0, fun b hb => ?_,
+          extract_gcd' f _ h fun b hb => ?_⟩
+      · simp only [hb, hg, dite_true]
+      rw [dif_pos hb]; rw [hg hb]
 
 Depends on / 依赖: classical, dif_pos, dite_true, extract_gcd, gcd_dvd, gcd_eq_gcd_image, gcd_eq_zero_iff, gcd_singleton, image_const, mul_one, normalize_one
 -/
@@ -1053,7 +1099,8 @@ theorem gcd_eq_of_dvd_sub
     refine s.induction_on ?_ ?_
     · simp
     intro b s _ hi h
-    rw [gcd_insert]; rw [gcd_insert]; rw [gcd_comm (f b)]; rw [← gcd_assoc]; rw [hi fun x hx => h _ (mem_insert_of_mem hx)]; rw [gcd_comm a]; rw [gcd_assoc]; rw [gcd_comm a (GCDMonoid.gcd _ _)]; rw [gcd_comm 
+    rw [gcd_insert]; rw [gcd_insert]; rw [gcd_comm (f b)]; rw [← gcd_assoc]; rw [hi fun x hx => h _ (mem_insert_of_mem hx)]; rw [gcd_comm a]; rw [gcd_assoc]; rw [gcd_comm a (GCDMonoid.gcd _ _)]; rw [gcd_comm (g b)]; rw [gcd_assoc _ _ a]; rw [gcd_comm _ a]
+    exact congr_arg _ (gcd_eq_of_dvd_sub_right (h _ (mem_insert_self _ _)))
 
 中文:
 定理 gcd_eq_of_dvd_sub
@@ -1064,7 +1111,8 @@ theorem gcd_eq_of_dvd_sub
     refine s.induction_on ?_ ?_
     · simp
     intro b s _ hi h
-    rw [gcd_insert]; rw [gcd_insert]; rw [gcd_comm (f b)]; rw [← gcd_assoc]; rw [hi fun x hx => h _ (mem_insert_of_mem hx)]; rw [gcd_comm a]; rw [gcd_assoc]; rw [gcd_comm a (GCDMonoid.gcd _ _)]; rw [gcd_comm 
+    rw [gcd_insert]; rw [gcd_insert]; rw [gcd_comm (f b)]; rw [← gcd_assoc]; rw [hi fun x hx => h _ (mem_insert_of_mem hx)]; rw [gcd_comm a]; rw [gcd_assoc]; rw [gcd_comm a (GCDMonoid.gcd _ _)]; rw [gcd_comm (g b)]; rw [gcd_assoc _ _ a]; rw [gcd_comm _ a]
+    exact congr_arg _ (gcd_eq_of_dvd_sub_right (h _ (mem_insert_self _ _)))
 
 Depends on / 依赖: GCDMonoid, GCDMonoid.gcd, classical, congr_arg, gcd_assoc, gcd_comm, gcd_eq_of_dvd_sub_right, gcd_insert, induction_on, mem_insert_of_mem, mem_insert_self, revert, s.induction_on
 -/

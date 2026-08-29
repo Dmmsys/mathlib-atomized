@@ -1927,7 +1927,21 @@ theorem map_surjective
       have H := congr_arg length hb
       simp only [length_one, length_of, Nat.zero_ne_one, map_one] at H
     | of_mul head _ _ =>
-      simp only [map_mul, m
+      simp only [map_mul, map_of] at hb
+      use head
+      have H := congr_arg length hb
+      simp only [length_mul, length_of, add_eq_left, length_eq_zero] at H
+      rw [H]; rw [mul_one] at hb
+      exact FreeMonoid.of_injective hb
+  intro fs d
+  induction d using FreeMonoid.inductionOn' with
+  | one => use 1; rfl
+  | of_mul head tail ih =>
+    specialize fs head
+    rcases fs with ⟨a, rfl⟩
+    rcases ih with ⟨b, rfl⟩
+    use FreeMonoid.of a * b
+    rfl
 
 中文:
 定理 map_surjective
@@ -1942,7 +1956,21 @@ theorem map_surjective
       have H := congr_arg length hb
       simp only [length_one, length_of, Nat.zero_ne_one, map_one] at H
     | of_mul head _ _ =>
-      simp only [map_mul, m
+      simp only [map_mul, map_of] at hb
+      use head
+      have H := congr_arg length hb
+      simp only [length_mul, length_of, add_eq_left, length_eq_zero] at H
+      rw [H]; rw [mul_one] at hb
+      exact FreeMonoid.of_injective hb
+  intro fs d
+  induction d using FreeMonoid.inductionOn' with
+  | one => use 1; rfl
+  | of_mul head tail ih =>
+    specialize fs head
+    rcases fs with ⟨a, rfl⟩
+    rcases ih with ⟨b, rfl⟩
+    use FreeMonoid.of a * b
+    rfl
 
 Depends on / 依赖: FreeMonoid, FreeMonoid.inductionOn, FreeMonoid.of, FreeMonoid.of_injective, Nat.zero_ne_one, add_eq_left, congr_arg, inductionOn, length, length_eq_zero, length_mul, length_of, length_one, map_mul, map_of, map_one, mul_one, of_injective, of_mul, zero_ne_one
 -/

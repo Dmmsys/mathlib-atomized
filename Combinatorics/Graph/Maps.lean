@@ -49,7 +49,13 @@ definition map
   eq_or_eq_of_isLink_of_isLink := by
     rintro e - - - - ⟨x, y, hxy, rfl, rfl⟩ ⟨z, w, hzw, rfl, rfl⟩
     obtain rfl | rfl := hxy.left_eq_or_eq hzw <;> simp
-  edge_mem_iff_e
+  edge_mem_iff_exists_isLink e := by
+    refine ⟨fun h => ?_, fun ⟨_, _, _, _, h, _, _⟩ => h.edge_mem⟩
+    obtain ⟨x, y, hxy⟩ := exists_isLink_of_mem_edgeSet h
+    exact ⟨_, _, _, _, hxy, rfl, rfl⟩
+  left_mem_of_isLink := by
+    rintro e - - ⟨x, y, h, rfl, rfl⟩
+    exact Set.mem_image_of_mem _ h.left_mem
 
 中文:
 定义 map
@@ -61,7 +67,13 @@ definition map
   eq_or_eq_of_isLink_of_isLink := by
     rintro e - - - - ⟨x, y, hxy, rfl, rfl⟩ ⟨z, w, hzw, rfl, rfl⟩
     obtain rfl | rfl := hxy.left_eq_or_eq hzw <;> simp
-  edge_mem_iff_e
+  edge_mem_iff_exists_isLink e := by
+    refine ⟨fun h => ?_, fun ⟨_, _, _, _, h, _, _⟩ => h.edge_mem⟩
+    obtain ⟨x, y, hxy⟩ := exists_isLink_of_mem_edgeSet h
+    exact ⟨_, _, _, _, hxy, rfl, rfl⟩
+  left_mem_of_isLink := by
+    rintro e - - ⟨x, y, h, rfl, rfl⟩
+    exact Set.mem_image_of_mem _ h.left_mem
 -/
 def map (f : α -> α') (G : Graph α β) : Graph α' β where
   vertexSet := f '' V(G)

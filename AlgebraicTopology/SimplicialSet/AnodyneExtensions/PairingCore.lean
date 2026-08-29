@@ -102,7 +102,31 @@ definition Pairing.pairingCore
   index s := (P.isUniquelyCodimOneFace s).index rfl
   nonDegenerate₁ s := ((P.p s).val.cast (P.isUniquelyCodimOneFace s).dim_eq).nonDegenerate
   nonDegenerate₂ s := by
-    rw [(P.isUniquelyCodimOn
+    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]
+    exact s.val.nonDegenerate
+  notMem₁ s := ((P.p s).val.cast (P.isUniquelyCodimOneFace s).dim_eq).notMem
+  notMem₂ s := by
+    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]
+    exact s.val.notMem
+  injective_type₁' {s t} _ := by
+    apply P.p.injective
+    rwa [Subtype.ext_iff, N.ext_iff, SSet.N.ext_iff,
+      ← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq,
+      ← (P.p t).val.cast_eq_self (P.isUniquelyCodimOneFace t).dim_eq]
+  injective_type₂' {s t} h := by
+    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]; rw [(P.isUniquelyCodimOneFace t).δ_index rfl] at h
+    rwa [Subtype.ext_iff, N.ext_iff, SSet.N.ext_iff]
+  type₁_ne_type₂' s t h := (P.ne (P.p s) t) (by
+    rw [(P.isUniquelyCodimOneFace t).δ_index rfl] at h
+    rwa [← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq,
+      N.ext_iff, SSet.N.ext_iff])
+  surjective' x := by
+    obtain ⟨s, rfl | rfl⟩ := P.exists_or x
+    · refine ⟨s, Or.inr ?_⟩
+      simp [(P.isUniquelyCodimOneFace s).δ_index]
+    · refine ⟨s, Or.inl ?_⟩
+      nth_rw 1 [← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq]
+      rfl
 
 中文:
 定义 Pairing.pairingCore
@@ -113,7 +137,31 @@ definition Pairing.pairingCore
   index s := (P.isUniquelyCodimOneFace s).index rfl
   nonDegenerate₁ s := ((P.p s).val.cast (P.isUniquelyCodimOneFace s).dim_eq).nonDegenerate
   nonDegenerate₂ s := by
-    rw [(P.isUniquelyCodimOn
+    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]
+    exact s.val.nonDegenerate
+  notMem₁ s := ((P.p s).val.cast (P.isUniquelyCodimOneFace s).dim_eq).notMem
+  notMem₂ s := by
+    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]
+    exact s.val.notMem
+  injective_type₁' {s t} _ := by
+    apply P.p.injective
+    rwa [Subtype.ext_iff, N.ext_iff, SSet.N.ext_iff,
+      ← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq,
+      ← (P.p t).val.cast_eq_self (P.isUniquelyCodimOneFace t).dim_eq]
+  injective_type₂' {s t} h := by
+    rw [(P.isUniquelyCodimOneFace s).δ_index rfl]; rw [(P.isUniquelyCodimOneFace t).δ_index rfl] at h
+    rwa [Subtype.ext_iff, N.ext_iff, SSet.N.ext_iff]
+  type₁_ne_type₂' s t h := (P.ne (P.p s) t) (by
+    rw [(P.isUniquelyCodimOneFace t).δ_index rfl] at h
+    rwa [← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq,
+      N.ext_iff, SSet.N.ext_iff])
+  surjective' x := by
+    obtain ⟨s, rfl | rfl⟩ := P.exists_or x
+    · refine ⟨s, Or.inr ?_⟩
+      simp [(P.isUniquelyCodimOneFace s).δ_index]
+    · refine ⟨s, Or.inl ?_⟩
+      nth_rw 1 [← (P.p s).val.cast_eq_self (P.isUniquelyCodimOneFace s).dim_eq]
+      rfl
 
 Depends on / 依赖: P.II
 -/
@@ -374,7 +422,11 @@ definition pairing
   union := by
     ext s
     have := h.surjective s
-    simp on
+    simp only [I, II, Set.mem_union, Set.mem_range, Set.mem_univ, iff_true]
+    aesop
+  p := h.equivII.symm.trans h.equivI
+
+@[simp]
 
 中文:
 定义 pairing
@@ -390,7 +442,11 @@ definition pairing
   union := by
     ext s
     have := h.surjective s
-    simp on
+    simp only [I, II, Set.mem_union, Set.mem_range, Set.mem_univ, iff_true]
+    aesop
+  p := h.equivII.symm.trans h.equivI
+
+@[simp]
 -/
 noncomputable def pairing : A.Pairing where
   I := h.I
@@ -809,7 +865,7 @@ lemma isRegular_pairing_iff
   have := h.pairing.wf
   rw [wellFounded_iff_isEmpty_descending_chain] at this ⊢
   exact ⟨fun ⟨f, hf⟩ => this.false
-    ⟨fun n => h.equivII (f n), fun n => by 
+    ⟨fun n => h.equivII (f n), fun n => by simpa [ancestralRel_iff] using hf n⟩⟩
 
 中文:
 引理 isRegular_pairing_iff
@@ -823,7 +879,7 @@ lemma isRegular_pairing_iff
   have := h.pairing.wf
   rw [wellFounded_iff_isEmpty_descending_chain] at this ⊢
   exact ⟨fun ⟨f, hf⟩ => this.false
-    ⟨fun n => h.equivII (f n), fun n => by 
+    ⟨fun n => h.equivII (f n), fun n => by simpa [ancestralRel_iff] using hf n⟩⟩
 
 Depends on / 依赖: IsProper, ancestralRel_iff, equivII, h.IsProper, h.equivII, h.pairing.wf, infer_instance, isProper_pairing_iff, pairing, this.false, wellFounded_iff_isEmpty_descending_chain
 -/

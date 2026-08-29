@@ -222,7 +222,8 @@ theorem iInf_sum
     simp only [Finset.sum_cons, ← ih]
     refine (iInf_add_iInf fun i j => ?_).symm
     refine (h (Finset.cons a s ha) i j).imp fun k hk => ?_
-    rw [Finset.forall_mem_c
+    rw [Finset.forall_mem_cons] at hk
+    exact add_le_add hk.1.1 (Finset.sum_le_sum fun a ha => (hk.2 a ha).2)
 
 中文:
 定理 iInf_sum
@@ -234,7 +235,8 @@ theorem iInf_sum
     simp only [Finset.sum_cons, ← ih]
     refine (iInf_add_iInf fun i j => ?_).symm
     refine (h (Finset.cons a s ha) i j).imp fun k hk => ?_
-    rw [Finset.forall_mem_c
+    rw [Finset.forall_mem_cons] at hk
+    exact add_le_add hk.1.1 (Finset.sum_le_sum fun a ha => (hk.2 a ha).2)
 
 Depends on / 依赖: Finset, Finset.cons, Finset.cons_induction_on, Finset.forall_mem_cons, Finset.sum_cons, Finset.sum_empty, Finset.sum_le_sum, add_le_add, ciInf_const, cons_induction_on, forall_mem_cons, iInf_add_iInf, sum_cons, sum_empty, sum_le_sum
 -/
@@ -515,7 +517,9 @@ lemma prod_inv_distrib
   | cons i s hi ih => ?_
   simp only [Finset.prod_cons, ← ih (hf.mono <| by simp)]
   refine ENNReal.mul_inv (not_or_of_imp fun hi₀ => prod_ne_top fun j hj => ?_)
-    (not_or_of_imp fun hi₀ => Finset.prod_ne_zero_iff.2 fun j hj => ?_
+    (not_or_of_imp fun hi₀ => Finset.prod_ne_zero_iff.2 fun j hj => ?_)
+  · exact imp_iff_not_or.2 (hf (by simp) (by simp [hj]) <| .symm <| ne_of_mem_of_not_mem hj hi) hi₀
+  · exact imp_iff_not_or.2 (hf (by simp [hj]) (by simp) <| ne_of_mem_of_not_mem hj hi).symm hi₀
 
 中文:
 引理 prod_inv_distrib
@@ -526,7 +530,9 @@ lemma prod_inv_distrib
   | cons i s hi ih => ?_
   simp only [Finset.prod_cons, ← ih (hf.mono <| by simp)]
   refine ENNReal.mul_inv (not_or_of_imp fun hi₀ => prod_ne_top fun j hj => ?_)
-    (not_or_of_imp fun hi₀ => Finset.prod_ne_zero_iff.2 fun j hj => ?_
+    (not_or_of_imp fun hi₀ => Finset.prod_ne_zero_iff.2 fun j hj => ?_)
+  · exact imp_iff_not_or.2 (hf (by simp) (by simp [hj]) <| .symm <| ne_of_mem_of_not_mem hj hi) hi₀
+  · exact imp_iff_not_or.2 (hf (by simp [hj]) (by simp) <| ne_of_mem_of_not_mem hj hi).symm hi₀
 
 Depends on / 依赖: ENNReal, ENNReal.mul_inv, Finset, Finset.cons_induction, Finset.prod_cons, Finset.prod_ne_zero_iff, cons_induction, hf.mono, imp_iff_not_or, mul_inv, ne_of_mem_of_not_mem, not_or_of_imp, prod_cons, prod_ne_top, prod_ne_zero_iff
 -/

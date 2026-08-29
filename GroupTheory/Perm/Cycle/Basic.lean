@@ -585,7 +585,17 @@ alias ⟨SameCycle.of_apply_left, SameCycle.apply_left⟩ := sameCycle_apply_lef
 
 alias ⟨SameCycle.of_apply_right, SameCycle.apply_right⟩ := sameCycle_apply_right
 
-alias ⟨SameCycle.of_symm_apply_left, SameCycle.symm_apply_left⟩ := sameCycle_symm_appl
+alias ⟨SameCycle.of_symm_apply_left, SameCycle.symm_apply_left⟩ := sameCycle_symm_apply_left
+
+alias ⟨SameCycle.of_symm_apply_right, SameCycle.symm_apply_right⟩ := sameCycle_symm_apply_right
+
+alias ⟨SameCycle.of_pow_left, SameCycle.pow_left⟩ := sameCycle_pow_left
+
+alias ⟨SameCycle.of_pow_right, SameCycle.pow_right⟩ := sameCycle_pow_right
+
+alias ⟨SameCycle.of_zpow_left, SameCycle.zpow_left⟩ := sameCycle_zpow_left
+
+alias ⟨SameCycle.of_zpow_right, SameCycle.zpow_right⟩ := sameCycle_zpow_right
 
 中文:
 定理 sameCycle_pow_right
@@ -598,7 +608,17 @@ alias ⟨SameCycle.of_apply_left, SameCycle.apply_left⟩ := sameCycle_apply_lef
 
 alias ⟨SameCycle.of_apply_right, SameCycle.apply_right⟩ := sameCycle_apply_right
 
-alias ⟨SameCycle.of_symm_apply_left, SameCycle.symm_apply_left⟩ := sameCycle_symm_appl
+alias ⟨SameCycle.of_symm_apply_left, SameCycle.symm_apply_left⟩ := sameCycle_symm_apply_left
+
+alias ⟨SameCycle.of_symm_apply_right, SameCycle.symm_apply_right⟩ := sameCycle_symm_apply_right
+
+alias ⟨SameCycle.of_pow_left, SameCycle.pow_left⟩ := sameCycle_pow_left
+
+alias ⟨SameCycle.of_pow_right, SameCycle.pow_right⟩ := sameCycle_pow_right
+
+alias ⟨SameCycle.of_zpow_left, SameCycle.zpow_left⟩ := sameCycle_zpow_left
+
+alias ⟨SameCycle.of_zpow_right, SameCycle.zpow_right⟩ := sameCycle_zpow_right
 
 Depends on / 依赖: sameCycle_zpow_right, zpow_natCast
 -/
@@ -739,7 +759,7 @@ theorem SameCycle.exists_pow_eq'
   rw [← zpow_natCast]; rw [Int.natAbs_of_nonneg h₁]; rw [zpow_mod_orderOf]
   refine ⟨?_, by rfl⟩
   rw [← Int.ofNat_lt]; rw [Int.natAbs_of_nonneg h₁]
-  exact Int.em
+  exact Int.emod_lt_of_pos _ h₀
 
 中文:
 定理 SameCycle.存在_pow_eq'
@@ -753,7 +773,7 @@ theorem SameCycle.exists_pow_eq'
   rw [← zpow_natCast]; rw [Int.natAbs_of_nonneg h₁]; rw [zpow_mod_orderOf]
   refine ⟨?_, by rfl⟩
   rw [← Int.ofNat_lt]; rw [Int.natAbs_of_nonneg h₁]
-  exact Int.em
+  exact Int.emod_lt_of_pos _ h₀
 
 Depends on / 依赖: Int.emod_lt_of_pos, Int.emod_nonneg, Int.natAbs_of_nonneg, Int.natCast_pos.mpr, Int.ofNat_lt, emod_lt_of_pos, emod_nonneg, natAbs, natAbs_of_nonneg, natCast_pos, ofNat_lt, orderOf, orderOf_pos, zpow_mod_orderOf, zpow_natCast
 -/
@@ -1050,7 +1070,9 @@ theorem IsCycle.extendDomain
     exact Subtype.coe_injective.ne (f.injective.ne ha)
   have h : b = f (f.symm ⟨b, of_not_not <| hb ∘ extendDomain_apply_not_subtype _ _⟩) := by
     rw [apply_symm_apply]; rw [Subtype.coe_mk]
-  rw [h] at h
+  rw [h] at hb ⊢
+  simp only [extendDomain_apply_image, Subtype.coe_injective.ne_iff, f.injective.ne_iff] at hb
+  exact (ha' hb).extendDomain
 
 中文:
 定理 是环.extendDomain
@@ -1062,7 +1084,9 @@ theorem IsCycle.extendDomain
     exact Subtype.coe_injective.ne (f.injective.ne ha)
   have h : b = f (f.symm ⟨b, of_not_not <| hb ∘ extendDomain_apply_not_subtype _ _⟩) := by
     rw [apply_symm_apply]; rw [Subtype.coe_mk]
-  rw [h] at h
+  rw [h] at hb ⊢
+  simp only [extendDomain_apply_image, Subtype.coe_injective.ne_iff, f.injective.ne_iff] at hb
+  exact (ha' hb).extendDomain
 -/
 protected theorem IsCycle.extendDomain {p : β -> Prop} [DecidablePred p] (f : α ≃ Subtype p) :
     IsCycle g -> IsCycle (g.extendDomain f) := by
@@ -1281,7 +1305,19 @@ definition IsCycle.zpowersEquivSupport
         exact (Classical.choose_spec hσ).1⟩)
     (by
       constructor
- 
+      · rintro ⟨a, m, rfl⟩ ⟨b, n, rfl⟩ h
+        ext y
+        by_cases hy : σ y = y
+        · simp_rw [zpow_apply_eq_self_of_apply_eq_self hy]
+        · obtain ⟨i, rfl⟩ := (Classical.choose_spec hσ).2 hy
+          rw [Subtype.coe_mk]; rw [Subtype.coe_mk]; rw [zpow_apply_comm σ m i]; rw [zpow_apply_comm σ n i]
+          exact congr_arg _ (Subtype.ext_iff.mp h)
+      · rintro ⟨y, hy⟩
+        rw [mem_support] at hy
+        obtain ⟨n, rfl⟩ := (Classical.choose_spec hσ).2 hy
+        exact ⟨⟨σ ^ n, n, rfl⟩, rfl⟩)
+
+@[simp]
 
 中文:
 定义 是环.zpowersEquivSupport
@@ -1294,7 +1330,19 @@ definition IsCycle.zpowersEquivSupport
         exact (Classical.choose_spec hσ).1⟩)
     (by
       constructor
- 
+      · rintro ⟨a, m, rfl⟩ ⟨b, n, rfl⟩ h
+        ext y
+        by_cases hy : σ y = y
+        · simp_rw [zpow_apply_eq_self_of_apply_eq_self hy]
+        · obtain ⟨i, rfl⟩ := (Classical.choose_spec hσ).2 hy
+          rw [Subtype.coe_mk]; rw [Subtype.coe_mk]; rw [zpow_apply_comm σ m i]; rw [zpow_apply_comm σ n i]
+          exact congr_arg _ (Subtype.ext_iff.mp h)
+      · rintro ⟨y, hy⟩
+        rw [mem_support] at hy
+        obtain ⟨n, rfl⟩ := (Classical.choose_spec hσ).2 hy
+        exact ⟨⟨σ ^ n, n, rfl⟩, rfl⟩)
+
+@[simp]
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Equiv.ofBijective, Subgroup, Subgroup.zpowers, Subtype, Subtype.coe_mk, choose_spec, coe_mk, mem_support, ofBijective, simp_rw, zpow_apply_comm, zpow_apply_eq_self_of_apply_eq_self, zpow_apply_mem_support, zpowers
 -/
@@ -1405,7 +1453,12 @@ theorem isCycle_swap_mul_aux₁
     obtain hfbx | hfbx := eq_or_ne (f x) b
     · exact ⟨0, hfbx⟩
     have : f b != b ∧ b != x := ne_and_ne_of_swap_mul_apply_ne_self hb
-    have hb' : (swap x (f x) * f) (f.symm b) != f.symm b :
+    have hb' : (swap x (f x) * f) (f.symm b) != f.symm b := by
+      simpa [swap_apply_of_ne_of_ne this.2 hfbx.symm, eq_symm_apply, f.injective.eq_iff]
+        using this.1
+obtain ⟨i, hi⟩ := hn hb' f.injective by simpa [pow_succ'] using h
+    refine ⟨i + 1, ?_⟩
+    rw [add_comm]; rw [zpow_add]; rw [mul_apply]; rw [hi]; rw [zpow_one]; rw [mul_apply]; rw [apply_symm_apply]; rw [swap_apply_of_ne_of_ne (ne_and_ne_of_swap_mul_apply_ne_self hb).2 hfbx.symm]
 
 中文:
 定理 isCycle_swap_mul_aux₁
@@ -1419,7 +1472,12 @@ theorem isCycle_swap_mul_aux₁
     obtain hfbx | hfbx := eq_or_ne (f x) b
     · exact ⟨0, hfbx⟩
     have : f b != b ∧ b != x := ne_and_ne_of_swap_mul_apply_ne_self hb
-    have hb' : (swap x (f x) * f) (f.symm b) != f.symm b :
+    have hb' : (swap x (f x) * f) (f.symm b) != f.symm b := by
+      simpa [swap_apply_of_ne_of_ne this.2 hfbx.symm, eq_symm_apply, f.injective.eq_iff]
+        using this.1
+obtain ⟨i, hi⟩ := hn hb' f.injective by simpa [pow_succ'] using h
+    refine ⟨i + 1, ?_⟩
+    rw [add_comm]; rw [zpow_add]; rw [mul_apply]; rw [hi]; rw [zpow_one]; rw [mul_apply]; rw [apply_symm_apply]; rw [swap_apply_of_ne_of_ne (ne_and_ne_of_swap_mul_apply_ne_self hb).2 hfbx.symm]
 
 Depends on / 依赖: AddCommGroup, AddCon, AddCon.Quotient, Quotient, add_comm, eq_iff, eq_or_ne, eq_symm_apply, f.injective, f.injective.eq_iff, f.symm, hfbx.symm, injective, mul_appl, ne_and_ne_of_swap_mul_apply_ne_self, pow_succ, swap_apply_of_ne_of_ne, zpow_add
 -/
@@ -1452,7 +1510,17 @@ theorem isCycle_swap_mul_aux₂
     obtain ⟨hfb, hbx⟩ : f b != b ∧ b != x := ne_and_ne_of_swap_mul_apply_ne_self hb
     replace hb : (swap x (f.symm x) * f⁻¹) (f.symm b) != f.symm b := by
       rw [mul_apply]; rw [swap_apply_def]
-      split_ifs <;> simp [symm_apply_eq, eq_symm_apply] at * <;
+      split_ifs <;> simp [symm_apply_eq, eq_symm_apply] at * <;> tauto
+obtain ⟨i, hi⟩ := isCycle_swap_mul_aux₁ n hb by
+      rw [← mul_apply]; rw [← pow_succ]; simpa [pow_succ', eq_symm_apply] using! h
+    refine ⟨-i, (swap x (f⁻¹ x) * f⁻¹).injective ?_⟩
+    convert! hi using 1
+    · rw [zpow_neg, ← inv_zpow, ← mul_apply, mul_inv_rev, swap_inv, mul_swap_eq_swap_mul]
+      simp [swap_comm _ x, ← mul_apply, -coe_mul, ← inv_def, -coe_inv, ← inv_def, mul_assoc _ f⁻¹,
+        ← mul_zpow_mul, mul_assoc _ _ f]
+      simp
+    · exact swap_apply_of_ne_of_ne (by simpa [eq_comm, eq_symm_apply, symm_apply_eq] using! hfxb)
+        (by simpa [eq_comm, eq_symm_apply, symm_apply_eq])
 
 中文:
 定理 isCycle_swap_mul_aux₂
@@ -1462,7 +1530,17 @@ theorem isCycle_swap_mul_aux₂
     obtain ⟨hfb, hbx⟩ : f b != b ∧ b != x := ne_and_ne_of_swap_mul_apply_ne_self hb
     replace hb : (swap x (f.symm x) * f⁻¹) (f.symm b) != f.symm b := by
       rw [mul_apply]; rw [swap_apply_def]
-      split_ifs <;> simp [symm_apply_eq, eq_symm_apply] at * <;
+      split_ifs <;> simp [symm_apply_eq, eq_symm_apply] at * <;> tauto
+obtain ⟨i, hi⟩ := isCycle_swap_mul_aux₁ n hb by
+      rw [← mul_apply]; rw [← pow_succ]; simpa [pow_succ', eq_symm_apply] using! h
+    refine ⟨-i, (swap x (f⁻¹ x) * f⁻¹).injective ?_⟩
+    convert! hi using 1
+    · rw [zpow_neg, ← inv_zpow, ← mul_apply, mul_inv_rev, swap_inv, mul_swap_eq_swap_mul]
+      simp [swap_comm _ x, ← mul_apply, -coe_mul, ← inv_def, -coe_inv, ← inv_def, mul_assoc _ f⁻¹,
+        ← mul_zpow_mul, mul_assoc _ _ f]
+      simp
+    · exact swap_apply_of_ne_of_ne (by simpa [eq_comm, eq_symm_apply, symm_apply_eq] using! hfxb)
+        (by simpa [eq_comm, eq_symm_apply, symm_apply_eq])
 
 Depends on / 依赖: eq_or_ne
 -/
@@ -1503,7 +1581,13 @@ theorem IsCycle.eq_swap_of_apply_apply_eq_self
       else by
         rw [swap_apply_of_ne_of_ne hyx hfyx]
         refine by_contradiction fun hy => ?_
-        obtain ⟨j, hj⟩ := hz.2
+        obtain ⟨j, hj⟩ := hz.2 hy
+        rw [← sub_add_cancel j i]; rw [zpow_add]; rw [mul_apply]; rw [hi] at hj
+        rcases zpow_apply_eq_of_apply_apply_eq_self hffx (j - i) with hji | hji
+        · rw [← hj, hji] at hyx
+          tauto
+        · rw [← hj, hji] at hfyx
+          tauto
 
 中文:
 定理 是环.eq_swap_of_apply_apply_eq_self
@@ -1517,7 +1601,13 @@ theorem IsCycle.eq_swap_of_apply_apply_eq_self
       else by
         rw [swap_apply_of_ne_of_ne hyx hfyx]
         refine by_contradiction fun hy => ?_
-        obtain ⟨j, hj⟩ := hz.2
+        obtain ⟨j, hj⟩ := hz.2 hy
+        rw [← sub_add_cancel j i]; rw [zpow_add]; rw [mul_apply]; rw [hi] at hj
+        rcases zpow_apply_eq_of_apply_apply_eq_self hffx (j - i) with hji | hji
+        · rw [← hj, hji] at hyx
+          tauto
+        · rw [← hj, hji] at hfyx
+          tauto
 
 Depends on / 依赖: Equiv.ext, by_contradiction, mul_apply, sub_add_cancel, swap_apply_of_ne_of_ne, zpow_add, zpow_apply_eq_of_apply_apply_eq_self
 -/
@@ -1584,7 +1674,15 @@ theorem IsCycle.sign
       if h1 : f (f x) = x then by
         have h : swap x (f x) * f = 1 := by
           simp only [mul_def, one_def]
-          rw [hf.eq_swap_of_apply_apply_eq_self hx.1 
+          rw [hf.eq_swap_of_apply_apply_eq_self hx.1 h1]; rw [swap_apply_left]; rw [swap_swap]
+        rw [sign_mul]; rw [sign_swap hx.1.symm]; rw [h]; rw [sign_one]; rw [hf.eq_swap_of_apply_apply_eq_self hx.1 h1]; rw [card_support_swap hx.1.symm]
+        rfl
+      else by
+        have h : #(swap x (f x) * f).support + 1 = #f.support := by
+          rw [← insert_erase (mem_support.2 hx.1)]; rw [support_swap_mul_eq _ _ h1]; rw [card_insert_of_notMem (notMem_erase _ _)]; rw [sdiff_singleton_eq_erase]
+        rw [sign_mul]; rw [sign_swap hx.1.symm]; rw [(hf.swap_mul hx.1 h1).sign]; rw [← h]
+        simp only [mul_neg, neg_mul, one_mul, neg_neg, pow_add, pow_one, mul_one]
+termination_by #f.support
 
 中文:
 定理 是环.sign
@@ -1597,7 +1695,15 @@ theorem IsCycle.sign
       if h1 : f (f x) = x then by
         have h : swap x (f x) * f = 1 := by
           simp only [mul_def, one_def]
-          rw [hf.eq_swap_of_apply_apply_eq_self hx.1 
+          rw [hf.eq_swap_of_apply_apply_eq_self hx.1 h1]; rw [swap_apply_left]; rw [swap_swap]
+        rw [sign_mul]; rw [sign_swap hx.1.symm]; rw [h]; rw [sign_one]; rw [hf.eq_swap_of_apply_apply_eq_self hx.1 h1]; rw [card_support_swap hx.1.symm]
+        rfl
+      else by
+        have h : #(swap x (f x) * f).support + 1 = #f.support := by
+          rw [← insert_erase (mem_support.2 hx.1)]; rw [support_swap_mul_eq _ _ h1]; rw [card_insert_of_notMem (notMem_erase _ _)]; rw [sdiff_singleton_eq_erase]
+        rw [sign_mul]; rw [sign_swap hx.1.symm]; rw [(hf.swap_mul hx.1 h1).sign]; rw [← h]
+        simp only [mul_neg, neg_mul, one_mul, neg_neg, pow_add, pow_one, mul_one]
+termination_by #f.support
 
 Depends on / 依赖: Perm.sign, card_support_swap, eq_swap_of_apply_apply_eq_self, f.support, hf.eq_swap_of_apply_apply_eq_self, mul_def, one_def, sign_mul, sign_one, sign_swap, support, swap_apply_left, swap_swap
 -/
@@ -1722,7 +1828,15 @@ theorem IsCycle.support_congr
     obtain ⟨x, hx, _⟩ := id hf
     have hx' : g x != x := by rwa [← h' x (mem_support.mpr hx)]
     obtain ⟨m, hm⟩ := hg.exists_pow_eq hx' (mem_support.mp hz)
-    have h'' : forall x in f.support inter g.support, f x =
+    have h'' : forall x in f.support inter g.support, f x = g x := by
+      intro x hx
+      exact h' x (mem_of_mem_inter_left hx)
+    rwa [← hm, ←
+      pow_eq_on_of_mem_support h'' _ x
+        (mem_inter_of_mem (mem_support.mpr hx) (mem_support.mpr hx')),
+      pow_apply_mem_support, mem_support]
+  refine Equiv.Perm.support_congr h ?_
+  simpa [← this] using h'
 
 中文:
 定理 是环.support_congr
@@ -1734,7 +1848,15 @@ theorem IsCycle.support_congr
     obtain ⟨x, hx, _⟩ := id hf
     have hx' : g x != x := by rwa [← h' x (mem_support.mpr hx)]
     obtain ⟨m, hm⟩ := hg.exists_pow_eq hx' (mem_support.mp hz)
-    have h'' : forall x in f.support inter g.support, f x =
+    have h'' : forall x in f.support inter g.support, f x = g x := by
+      intro x hx
+      exact h' x (mem_of_mem_inter_left hx)
+    rwa [← hm, ←
+      pow_eq_on_of_mem_support h'' _ x
+        (mem_inter_of_mem (mem_support.mpr hx) (mem_support.mpr hx')),
+      pow_apply_mem_support, mem_support]
+  refine Equiv.Perm.support_congr h ?_
+  simpa [← this] using h'
 
 Depends on / 依赖: Equiv.Perm.sup, exists_pow_eq, f.support, g.support, hg.exists_pow_eq, le_antisymm, mem_inter_of_mem, mem_of_mem_inter_left, mem_support, mem_support.mp, mem_support.mpr, pow_apply_mem_support, pow_eq_on_of_mem_support, support
 -/
@@ -1767,7 +1889,9 @@ theorem IsCycle.eq_on_support_inter_nonempty_congr
   have : f.support subseteq g.support := by
     intro y hy
     obtain ⟨k, rfl⟩ := hf.exists_pow_eq (mem_support.mp hx') (mem_support.mp hy)
-    rwa [pow_eq_on_of_mem_support h _ _ (mem_inter_of_mem hx' hx''), pow_apply_mem_
+    rwa [pow_eq_on_of_mem_support h _ _ (mem_inter_of_mem hx' hx''), pow_apply_mem_support]
+  rw [inter_eq_left.mpr this] at h
+  exact hf.support_congr hg this h
 
 中文:
 定理 是环.eq_on_support_inter_nonempty_congr
@@ -1777,7 +1901,9 @@ theorem IsCycle.eq_on_support_inter_nonempty_congr
   have : f.support subseteq g.support := by
     intro y hy
     obtain ⟨k, rfl⟩ := hf.exists_pow_eq (mem_support.mp hx') (mem_support.mp hy)
-    rwa [pow_eq_on_of_mem_support h _ _ (mem_inter_of_mem hx' hx''), pow_apply_mem_
+    rwa [pow_eq_on_of_mem_support h _ _ (mem_inter_of_mem hx' hx''), pow_apply_mem_support]
+  rw [inter_eq_left.mpr this] at h
+  exact hf.support_congr hg this h
 
 Depends on / 依赖: exists_pow_eq, f.support, g.support, hf.exists_pow_eq, hf.support_congr, inter_eq_left, inter_eq_left.mpr, mem_inter_of_mem, mem_support, mem_support.mp, pow_apply_mem_support, pow_eq_on_of_mem_support, subseteq, support, support_congr
 -/
@@ -1810,7 +1936,11 @@ theorem IsCycle.support_pow_eq_iff
     contrapose H
     ext z
     by_cases hz : f z = z
-    · rw [pow_appl
+    · rw [pow_apply_eq_self_of_apply_eq_self hz, one_apply]
+    · obtain ⟨k, rfl⟩ := hf.exists_pow_eq hz (mem_support.mp hx)
+      apply (f ^ k).injective
+      rw [← mul_apply]; rw [(Commute.pow_pow_self _ _ _).eq]; rw [mul_apply]
+      simpa using H
 
 中文:
 定理 是环.support_pow_eq_iff
@@ -1827,7 +1957,11 @@ theorem IsCycle.support_pow_eq_iff
     contrapose H
     ext z
     by_cases hz : f z = z
-    · rw [pow_appl
+    · rw [pow_apply_eq_self_of_apply_eq_self hz, one_apply]
+    · obtain ⟨k, rfl⟩ := hf.exists_pow_eq hz (mem_support.mp hx)
+      apply (f ^ k).injective
+      rw [← mul_apply]; rw [(Commute.pow_pow_self _ _ _).eq]; rw [mul_apply]
+      simpa using H
 
 Depends on / 依赖: Commute, Commute.pow_pow_self, contrapose, exists_pow_eq, hf.exists_pow_eq, hf.ne_one, injective, le_antisymm, mem_support, mem_support.mp, mul_apply, ne_one, one_apply, orderOf_dvd_iff_pow_eq_one, pow_apply_eq_self_of_apply_eq_self, pow_pow_self, support_eq_empty_iff, support_one, support_pow_le
 -/
@@ -1885,7 +2019,17 @@ theorem IsCycle.pow_iff
         rintro ⟨k, rfl⟩
         refine h.ne_one ?_
         simp [pow_mul, pow_orderOf_eq_one]
-      have : orderOf (f ^ n) = orderOf f := by 
+      have : orderOf (f ^ n) = orderOf f := by rw [h.orderOf, hr, hf.orderOf]
+      rw [orderOf_pow]; rw [Nat.div_eq_self] at this
+      rcases this with h | _
+      · exact absurd h (orderOf_pos _).ne'
+      · rwa [Nat.coprime_iff_gcd_eq_one, Nat.gcd_comm]
+    · intro h
+      obtain ⟨m, hm⟩ := exists_pow_eq_self_of_coprime h
+      have hf' : IsCycle ((f ^ n) ^ m) := by rwa [hm]
+      refine hf'.of_pow fun x hx => ?_
+      rw [hm]
+      exact support_pow_le _ n hx
 
 中文:
 定理 是环.pow_iff
@@ -1900,7 +2044,17 @@ theorem IsCycle.pow_iff
         rintro ⟨k, rfl⟩
         refine h.ne_one ?_
         simp [pow_mul, pow_orderOf_eq_one]
-      have : orderOf (f ^ n) = orderOf f := by 
+      have : orderOf (f ^ n) = orderOf f := by rw [h.orderOf, hr, hf.orderOf]
+      rw [orderOf_pow]; rw [Nat.div_eq_self] at this
+      rcases this with h | _
+      · exact absurd h (orderOf_pos _).ne'
+      · rwa [Nat.coprime_iff_gcd_eq_one, Nat.gcd_comm]
+    · intro h
+      obtain ⟨m, hm⟩ := exists_pow_eq_self_of_coprime h
+      have hf' : IsCycle ((f ^ n) ^ m) := by rwa [hm]
+      refine hf'.of_pow fun x hx => ?_
+      rw [hm]
+      exact support_pow_le _ n hx
 
 Depends on / 依赖: Nat.coprime_iff_gcd_eq_one, Nat.div_eq_self, Nat.gcd_comm, absurd, classical, coprime_iff_gcd_eq_one, div_eq_self, exists_pow_eq_self_of_coprime, gcd_comm, h.ne_one, h.orderOf, hf.orderOf, hf.support_pow_eq_iff, ne_one, nonempty_fintype, orderOf, orderOf_pos, orderOf_pow, pow_mul, pow_orderOf_eq_one
 -/
@@ -1945,7 +2099,9 @@ theorem IsCycle.pow_eq_one_iff
       by_cases h : support (f ^ n) = support f
       · rw [← mem_support, ← h, mem_support] at hx
         contradiction
-      · rw [hf
+      · rw [hf.support_pow_eq_iff, Classical.not_not] at h
+        obtain ⟨k, rfl⟩ := h
+        rw [pow_mul]; rw [pow_orderOf_eq_one]; rw [one_pow]
 
 中文:
 定理 是环.pow_eq_one_iff
@@ -1961,7 +2117,9 @@ theorem IsCycle.pow_eq_one_iff
       by_cases h : support (f ^ n) = support f
       · rw [← mem_support, ← h, mem_support] at hx
         contradiction
-      · rw [hf
+      · rw [hf.support_pow_eq_iff, Classical.not_not] at h
+        obtain ⟨k, rfl⟩ := h
+        rw [pow_mul]; rw [pow_orderOf_eq_one]; rw [one_pow]
 
 Depends on / 依赖: Classical, Classical.not_not, classical, hf.support_pow_eq_iff, mem_support, nonempty_fintype, not_not, one_pow, pow_mul, pow_orderOf_eq_one, support, support_pow_eq_iff
 -/
@@ -2045,7 +2203,16 @@ theorem IsCycle.pow_eq_pow_iff
       wlog hab : a <= b generalizing a b
       · exact (this hx'.symm (le_of_not_ge hab)).symm
       suffices f ^ (b - a) = 1 by
-     
+        rw [pow_sub _ hab]; rw [mul_inv_eq_one] at this
+        rw [this]
+      rw [hf.pow_eq_one_iff]
+      by_cases hfa : (f ^ a) x in f.support
+      · refine ⟨(f ^ a) x, mem_support.mp hfa, ?_⟩
+        simp [pow_sub _ hab, ← hx']
+      · have h := @Equiv.Perm.zpow_apply_comm _ f 1 a x
+        simp only [zpow_one, zpow_natCast] at h
+        rw [notMem_support]; rw [h]; rw [Function.Injective.eq_iff (f ^ a).injective] at hfa
+        contradiction
 
 中文:
 定理 是环.pow_eq_pow_iff
@@ -2061,7 +2228,16 @@ theorem IsCycle.pow_eq_pow_iff
       wlog hab : a <= b generalizing a b
       · exact (this hx'.symm (le_of_not_ge hab)).symm
       suffices f ^ (b - a) = 1 by
-     
+        rw [pow_sub _ hab]; rw [mul_inv_eq_one] at this
+        rw [this]
+      rw [hf.pow_eq_one_iff]
+      by_cases hfa : (f ^ a) x in f.support
+      · refine ⟨(f ^ a) x, mem_support.mp hfa, ?_⟩
+        simp [pow_sub _ hab, ← hx']
+      · have h := @Equiv.Perm.zpow_apply_comm _ f 1 a x
+        simp only [zpow_one, zpow_natCast] at h
+        rw [notMem_support]; rw [h]; rw [Function.Injective.eq_iff (f ^ a).injective] at hfa
+        contradiction
 
 Depends on / 依赖: Equiv.Perm.zpow_apply_comm, classical, f.support, generalizing, hf.pow_eq_one_iff, le_of_not_ge, mem_support, mem_support.mp, mul_inv_eq_one, nonempty_fintype, pow_eq_one_iff, pow_sub, support, zpow_apply_comm
 -/
@@ -2182,7 +2358,8 @@ theorem IsCycle.isConj
       ?_
   intro x hx
   simp only [Equiv.trans_apply]
-  obtain ⟨n, rfl⟩ := hσ.exists_pow_eq (Classical.choose_spec hσ).
+  obtain ⟨n, rfl⟩ := hσ.exists_pow_eq (Classical.choose_spec hσ).1 (mem_support.1 hx)
+  simp [← Perm.mul_apply, ← pow_succ']
 
 中文:
 定理 是环.isConj
@@ -2195,7 +2372,8 @@ theorem IsCycle.isConj
       ?_
   intro x hx
   simp only [Equiv.trans_apply]
-  obtain ⟨n, rfl⟩ := hσ.exists_pow_eq (Classical.choose_spec hσ).
+  obtain ⟨n, rfl⟩ := hσ.exists_pow_eq (Classical.choose_spec hσ).1 (mem_support.1 hx)
+  simp [← Perm.mul_apply, ← pow_succ']
 
 Depends on / 依赖: Classical, Classical.choose_spec, Equiv.trans_apply, Perm.mul_apply, choose_spec, exists_pow_eq, isConj_of_support_equiv, mem_support, mul_apply, orderOf, pow_succ, trans_apply, zpowersEquivSupport, zpowersEquivSupport.symm.trans, zpowersEquivZPowers
 -/
@@ -2432,7 +2610,8 @@ theorem isCycleOn_swap
     obtain rfl | rfl := hx <;> obtain rfl | rfl := hy
     · exact ⟨0, by rw [zpow_zero, coe_one, id]⟩
     · exact ⟨1, by rw [zpow_one, swap_apply_left]⟩
-    · exact ⟨1, by rw [zpow_o
+    · exact ⟨1, by rw [zpow_one, swap_apply_right]⟩
+    · exact ⟨0, by rw [zpow_zero, coe_one, id]⟩⟩
 
 中文:
 定理 isCycleOn_swap
@@ -2443,7 +2622,8 @@ theorem isCycleOn_swap
     obtain rfl | rfl := hx <;> obtain rfl | rfl := hy
     · exact ⟨0, by rw [zpow_zero, coe_one, id]⟩
     · exact ⟨1, by rw [zpow_one, swap_apply_left]⟩
-    · exact ⟨1, by rw [zpow_o
+    · exact ⟨1, by rw [zpow_one, swap_apply_right]⟩
+    · exact ⟨0, by rw [zpow_zero, coe_one, id]⟩⟩
 
 Depends on / 依赖: Set.mem_insert_iff, Set.mem_singleton_iff, bijOn_swap, coe_one, mem_insert_iff, mem_singleton_iff, swap_apply_left, swap_apply_right, zpow_one, zpow_zero
 -/
@@ -2631,7 +2811,11 @@ theorem IsCycleOn.pow_apply_eq
   classical
     have h (x : s) : ¬f x = x := hf.apply_ne hs x.2
     have := (hf.isCycle_subtypePerm hs).orderOf
-    simp only [coe_sort_coe, support_
+    simp only [coe_sort_coe, support_subtypePerm, ne_eq, h, not_false_eq_true, univ_eq_attach,
+      mem_attach, imp_self, implies_true, filter_true_of_mem, card_attach] at this
+    rw [← this]; rw [orderOf_dvd_iff_pow_eq_one]; rw [(hf.isCycle_subtypePerm hs).pow_eq_one_iff'
+        (ne_of_apply_ne ((↑) : s -> α) <| hf.apply_ne hs (⟨a]; rw [ha⟩ : s).2)]
+    simp [-SetLike.coe_sort_coe]
 
 中文:
 定理 IsCycleOn.pow_apply_eq
@@ -2643,7 +2827,11 @@ theorem IsCycleOn.pow_apply_eq
   classical
     have h (x : s) : ¬f x = x := hf.apply_ne hs x.2
     have := (hf.isCycle_subtypePerm hs).orderOf
-    simp only [coe_sort_coe, support_
+    simp only [coe_sort_coe, support_subtypePerm, ne_eq, h, not_false_eq_true, univ_eq_attach,
+      mem_attach, imp_self, implies_true, filter_true_of_mem, card_attach] at this
+    rw [← this]; rw [orderOf_dvd_iff_pow_eq_one]; rw [(hf.isCycle_subtypePerm hs).pow_eq_one_iff'
+        (ne_of_apply_ne ((↑) : s -> α) <| hf.apply_ne hs (⟨a]; rw [ha⟩ : s).2)]
+    simp [-SetLike.coe_sort_coe]
 
 Depends on / 依赖: Finset, Finset.eq_singleton_or_nontrivial, IsFixedPt, IsFixedPt.iterate, apply_ne, card_attach, classical, coe_singleton, coe_sort_coe, eq_singleton_or_nontrivial, filter_true_of_mem, hf.apply_ne, hf.isCycle_subtypePerm, imp_self, implies_true, isCycleOn_singleton, isCycle_subtypePerm, iterate, mem_attach, ne_eq
 -/
@@ -2757,7 +2945,9 @@ theorem IsCycleOn.exists_pow_eq
   obtain ⟨k, hk⟩ := (Int.mod_modEq n #s).symm.dvd
   refine ⟨n.natMod #s, Int.natMod_lt (Nonempty.card_pos ⟨a, ha⟩).ne', ?_⟩
   rw [← zpow_natCast]; rw [Int.natMod]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ <| Nat.cast_ne_zero.2
-      (Nonempty.card_pos ⟨a]; rw [ha
+      (Nonempty.card_pos ⟨a]; rw [ha⟩).ne')]; rw [sub_eq_iff_eq_add'.1 hk]; rw [zpow_add]; rw [zpow_mul]
+  simp only [zpow_natCast, coe_mul, comp_apply, EmbeddingLike.apply_eq_iff_eq]
+  exact IsFixedPt.perm_zpow (hf.pow_card_apply ha) _
 
 中文:
 定理 IsCycleOn.存在_pow_eq
@@ -2767,7 +2957,9 @@ theorem IsCycleOn.exists_pow_eq
   obtain ⟨k, hk⟩ := (Int.mod_modEq n #s).symm.dvd
   refine ⟨n.natMod #s, Int.natMod_lt (Nonempty.card_pos ⟨a, ha⟩).ne', ?_⟩
   rw [← zpow_natCast]; rw [Int.natMod]; rw [Int.toNat_of_nonneg (Int.emod_nonneg _ <| Nat.cast_ne_zero.2
-      (Nonempty.card_pos ⟨a]; rw [ha
+      (Nonempty.card_pos ⟨a]; rw [ha⟩).ne')]; rw [sub_eq_iff_eq_add'.1 hk]; rw [zpow_add]; rw [zpow_mul]
+  simp only [zpow_natCast, coe_mul, comp_apply, EmbeddingLike.apply_eq_iff_eq]
+  exact IsFixedPt.perm_zpow (hf.pow_card_apply ha) _
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, Int.emod_nonneg, Int.mod_modEq, Int.natMod, Int.natMod_lt, Int.toNat_of_nonneg, IsFixedPt, IsFixedPt.perm_zpow, Nat.cast_ne_zero, Nonempty, Nonempty.card_pos, apply_eq_iff_eq, card_pos, cast_ne_zero, coe_mul, comp_apply, emod_nonneg, hf.pow_card_apply, mod_modEq
 -/
@@ -2961,7 +3153,9 @@ theorem Nodup.isCycleOn_formPerm
   rw [Set.mem_ofPred]; rw [← List.idxOf_lt_length_iff] at ha hb
   rw [← List.getElem_idxOf ha]; rw [← List.getElem_idxOf hb]
   refine ⟨l.idxOf b - l.idxOf a, ?_⟩
-  simp only [sub_eq_neg_add, zpow_add, zpow_neg, Eq
+  simp only [sub_eq_neg_add, zpow_add, zpow_neg, Equiv.Perm.inv_eq_iff_eq, zpow_natCast,
+    Equiv.Perm.coe_mul, List.formPerm_pow_apply_getElem _ h, Function.comp]
+  rw [add_comm]
 
 中文:
 定理 Nodup.isCycleOn_formPerm
@@ -2971,7 +3165,9 @@ theorem Nodup.isCycleOn_formPerm
   rw [Set.mem_ofPred]; rw [← List.idxOf_lt_length_iff] at ha hb
   rw [← List.getElem_idxOf ha]; rw [← List.getElem_idxOf hb]
   refine ⟨l.idxOf b - l.idxOf a, ?_⟩
-  simp only [sub_eq_neg_add, zpow_add, zpow_neg, Eq
+  simp only [sub_eq_neg_add, zpow_add, zpow_neg, Equiv.Perm.inv_eq_iff_eq, zpow_natCast,
+    Equiv.Perm.coe_mul, List.formPerm_pow_apply_getElem _ h, Function.comp]
+  rw [add_comm]
 
 Depends on / 依赖: Equiv.Perm.coe_mul, Equiv.Perm.inv_eq_iff_eq, Function, Function.comp, List.formPerm_mem_iff_mem, List.formPerm_pow_apply_getElem, List.getElem_idxOf, List.idxOf_lt_length_iff, Set.mem_ofPred, add_comm, coe_mul, formPerm, formPerm_mem_iff_mem, formPerm_pow_apply_getElem, getElem_idxOf, idxOf_lt_length_iff, inv_eq_iff_eq, l.formPerm.bijOn, l.idxOf, mem_ofPred
 -/
@@ -3044,7 +3240,13 @@ theorem Countable.exists_cycleOn
     simp
   · have := hs.to_subtype
     have := hs'.to_subtype
-    obtai
+    obtain ⟨f⟩ : Nonempty (Int ≃ s) := inferInstance
+    refine ⟨(Equiv.addRight 1).extendDomain f, ?_, fun x hx =>
+of_not_not fun h => hx Perm.extendDomain_apply_not_subtype _ _ h⟩
+    convert! Int.addRight_one_isCycle.isCycleOn.extendDomain f
+    rw [Set.image_comp]; rw [Equiv.image_eq_preimage_symm]
+    ext
+    simp
 
 中文:
 定理 可数.存在_cycleOn
@@ -3058,7 +3260,13 @@ theorem Countable.exists_cycleOn
     simp
   · have := hs.to_subtype
     have := hs'.to_subtype
-    obtai
+    obtain ⟨f⟩ : Nonempty (Int ≃ s) := inferInstance
+    refine ⟨(Equiv.addRight 1).extendDomain f, ?_, fun x hx =>
+of_not_not fun h => hx Perm.extendDomain_apply_not_subtype _ _ h⟩
+    convert! Int.addRight_one_isCycle.isCycleOn.extendDomain f
+    rw [Set.image_comp]; rw [Equiv.image_eq_preimage_symm]
+    ext
+    simp
 
 Depends on / 依赖: Equiv.addRight, Int.addRight_one_isCycle.isCycleOn.extendDomain, List.mem_of_formPerm_apply_ne, Nonempty, Perm.extendDomain_apply_not_subtype, addRight, addRight_one_isCycle, classical, convert, extendDomain, extendDomain_apply_not_subtype, finite_or_infinite, formPerm, hs.to_subtype, isCycleOn, isCycleOn_formPerm, mem_of_formPerm_apply_ne, nodup_toList, of_not_not, s.finite_or_infinite
 -/
@@ -3139,7 +3347,12 @@ theorem product_self_eq_disjiUnion_perm_aux
     rwa [card_range]
   classical
     rintro m hm n hn hmn
-    simp only [disjoint_left, Function.onFun, mem_map, Function.Embedding.co
+    simp only [disjoint_left, Function.onFun, mem_map, Function.Embedding.coeFn_mk,
+      not_exists, not_and, forall_exists_index, and_imp, Prod.forall, Prod.mk_inj]
+    rintro _ _ _ - rfl rfl a ha rfl h
+    rw [hf.pow_apply_eq_pow_apply ha] at h
+    rw [mem_coe]; rw [mem_range] at hm hn
+    exact hmn.symm (h.eq_of_lt_of_lt hn hm)
 
 中文:
 定理 product_self_eq_disjiUnion_perm_aux
@@ -3151,7 +3364,12 @@ theorem product_self_eq_disjiUnion_perm_aux
     rwa [card_range]
   classical
     rintro m hm n hn hmn
-    simp only [disjoint_left, Function.onFun, mem_map, Function.Embedding.co
+    simp only [disjoint_left, Function.onFun, mem_map, Function.Embedding.coeFn_mk,
+      not_exists, not_and, forall_exists_index, and_imp, Prod.forall, Prod.mk_inj]
+    rintro _ _ _ - rfl rfl a ha rfl h
+    rw [hf.pow_apply_eq_pow_apply ha] at h
+    rw [mem_coe]; rw [mem_range] at hm hn
+    exact hmn.symm (h.eq_of_lt_of_lt hn hm)
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.coeFn_mk, Function.onFun, Prod.forall, Prod.mk_inj, Set.Subsingleton, Set.Subsingleton.pairwise, Subsingleton, and_imp, card_le_one, card_range, classical, coeFn_mk, disjoint_left, eq_of_lt, forall_exists_index, h.eq_of_lt, hf.pow_apply_eq_pow_apply, hmn.symm
 -/
@@ -3184,7 +3402,8 @@ theorem product_self_eq_disjiUnion_perm
   refine ⟨fun hx => ?_, ?_⟩
   · obtain ⟨n, hn, rfl⟩ := hf.exists_pow_eq hx.1 hx.2
     exact ⟨n, hn, a, hx.1, rfl, by rw [f.iterate_eq_pow]⟩
-  · rintro ⟨n, -
+  · rintro ⟨n, -, a, ha, rfl, rfl⟩
+    exact ⟨ha, (hf.1.iterate _).mapsTo ha⟩
 
 中文:
 定理 product_self_eq_disjiUnion_perm
@@ -3196,7 +3415,8 @@ theorem product_self_eq_disjiUnion_perm
   refine ⟨fun hx => ?_, ?_⟩
   · obtain ⟨n, hn, rfl⟩ := hf.exists_pow_eq hx.1 hx.2
     exact ⟨n, hn, a, hx.1, rfl, by rw [f.iterate_eq_pow]⟩
-  · rintro ⟨n, -
+  · rintro ⟨n, -, a, ha, rfl, rfl⟩
+    exact ⟨ha, (hf.1.iterate _).mapsTo ha⟩
 
 Depends on / 依赖: Embedding, Equiv.Perm.coe_pow, Function, Function.Embedding.coeFn_mk, Prod.mk_inj, coeFn_mk, coe_pow, exists_pow_eq, f.iterate_eq_pow, hf.exists_pow_eq, iterate, iterate_eq_pow, mapsTo, mem_disjiUnion, mem_map, mem_product, mem_range, mk_inj
 -/
@@ -3390,7 +3610,28 @@ theorem IsCycle.commute_iff'
     obtain ⟨i, hi⟩ := hc.sameCycle (mem_support.mp ha) (mem_support.mp ((hgc' a).mpr ha))
     use i
     ext ⟨x, hx⟩
-    simp only [subtypePermOfSupport, Subty
+    simp only [subtypePermOfSupport, Subtype.coe_mk, subtypePerm_apply]
+    rw [subtypePerm_apply_zpow_of_mem]
+    obtain ⟨j, rfl⟩ := hc.sameCycle (mem_support.mp ha) (mem_support.mp hx)
+    simp only [← mul_apply, Commute.eq (Commute.zpow_right hgc j)]
+    rw [← zpow_add]; rw [add_comm i j]; rw [zpow_add]
+    simp only [mul_apply, EmbeddingLike.apply_eq_iff_eq]
+    exact hi
+  · rintro ⟨hc', ⟨i, hi⟩⟩
+    ext x
+    simp only [coe_mul, Function.comp_apply]
+    by_cases hx : x in c.support
+    · suffices hi' : forall x in c.support, g x = (c ^ i) x by
+        rw [hi' x hx]; rw [hi' (c x) (apply_mem_support.mpr hx)]
+        simp only [← mul_apply, ← zpow_add_one, ← zpow_one_add, add_comm]
+      intro x hx
+      have hix := Perm.congr_fun hi ⟨x, hx⟩
+      simp only [← Subtype.coe_inj, subtypePermOfSupport, subtypePerm_apply,
+        subtypePerm_apply_zpow_of_mem] at hix
+      exact hix.symm
+    · rw [notMem_support.mp hx, eq_comm, ← notMem_support]
+      contrapose hx
+      exact (hc' x).mp hx
 
 中文:
 定理 是环.commute_iff'
@@ -3404,7 +3645,28 @@ theorem IsCycle.commute_iff'
     obtain ⟨i, hi⟩ := hc.sameCycle (mem_support.mp ha) (mem_support.mp ((hgc' a).mpr ha))
     use i
     ext ⟨x, hx⟩
-    simp only [subtypePermOfSupport, Subty
+    simp only [subtypePermOfSupport, Subtype.coe_mk, subtypePerm_apply]
+    rw [subtypePerm_apply_zpow_of_mem]
+    obtain ⟨j, rfl⟩ := hc.sameCycle (mem_support.mp ha) (mem_support.mp hx)
+    simp only [← mul_apply, Commute.eq (Commute.zpow_right hgc j)]
+    rw [← zpow_add]; rw [add_comm i j]; rw [zpow_add]
+    simp only [mul_apply, EmbeddingLike.apply_eq_iff_eq]
+    exact hi
+  · rintro ⟨hc', ⟨i, hi⟩⟩
+    ext x
+    simp only [coe_mul, Function.comp_apply]
+    by_cases hx : x in c.support
+    · suffices hi' : forall x in c.support, g x = (c ^ i) x by
+        rw [hi' x hx]; rw [hi' (c x) (apply_mem_support.mpr hx)]
+        simp only [← mul_apply, ← zpow_add_one, ← zpow_one_add, add_comm]
+      intro x hx
+      have hix := Perm.congr_fun hi ⟨x, hx⟩
+      simp only [← Subtype.coe_inj, subtypePermOfSupport, subtypePerm_apply,
+        subtypePerm_apply_zpow_of_mem] at hix
+      exact hix.symm
+    · rw [notMem_support.mp hx, eq_comm, ← notMem_support]
+      contrapose hx
+      exact (hc' x).mp hx
 
 Depends on / 依赖: Commute, Commute.eq, Commute.zpow_right, IsCycle, IsCycle.nonempty_support, Subtype, Subtype.coe_mk, add_comm, coe_mk, hc.sameCycle, mem_support, mem_support.mp, mem_support_iff_of_commute, mul_apply, nonempty_support, sameCycle, subtypePermOfSupport, subtypePerm_apply, subtypePerm_apply_zpow_of_mem, zpow_add
 -/
@@ -3456,7 +3718,11 @@ theorem IsCycle.commute_iff
   simp only [Perm.ext_iff, subtypePerm_apply, Subtype.mk.injEq, Subtype.forall]
   apply forall_congr'
   intro a
-  by_cases ha : a 
+  by_cases ha : a in c.support
+  · rw [imp_iff_right ha, ofSubtype_subtypePerm_of_mem hc' ha]
+  · rw [iff_true_left (fun b => (ha b).elim), ofSubtype_apply_of_not_mem, ← notMem_support]
+    · exact Finset.notMem_mono (support_zpow_le c k) ha
+    · exact ha
 
 中文:
 定理 是环.commute_iff
@@ -3468,7 +3734,11 @@ theorem IsCycle.commute_iff
   simp only [Perm.ext_iff, subtypePerm_apply, Subtype.mk.injEq, Subtype.forall]
   apply forall_congr'
   intro a
-  by_cases ha : a 
+  by_cases ha : a in c.support
+  · rw [imp_iff_right ha, ofSubtype_subtypePerm_of_mem hc' ha]
+  · rw [iff_true_left (fun b => (ha b).elim), ofSubtype_apply_of_not_mem, ← notMem_support]
+    · exact Finset.notMem_mono (support_zpow_le c k) ha
+    · exact ha
 
 Depends on / 依赖: Finset, Finset.notMem_mono, Perm.ext_iff, Subgroup, Subgroup.mem_zpowers_iff, Subtype, Subtype.forall, Subtype.mk.injEq, c.support, commute_iff, exists_congr, ext_iff, forall_congr, hc.commute_iff, iff_true_left, imp_iff_right, lift.tmul, mem_zpowers_iff, notMem_mono, notMem_support
 -/
@@ -3503,7 +3773,9 @@ theorem zpow_eq_ofSubtype_subtypePerm_iff
     by_cases hx : x in s
     · rw [ofSubtype_apply_of_mem (subtypePerm c _ ^ n) hx,
         subtypePerm_zpow, subtypePerm_apply]
-    · rw [ofSubtype_app
+    · rw [ofSubtype_apply_of_not_mem (subtypePerm c _ ^ n) hx,
+        ← notMem_support]
+      exact fun hx' => hx (hc (support_zpow_le _ _ hx'))
 
 中文:
 定理 zpow_eq_ofSubtype_subtypePerm_iff
@@ -3517,7 +3789,9 @@ theorem zpow_eq_ofSubtype_subtypePerm_iff
     by_cases hx : x in s
     · rw [ofSubtype_apply_of_mem (subtypePerm c _ ^ n) hx,
         subtypePerm_zpow, subtypePerm_apply]
-    · rw [ofSubtype_app
+    · rw [ofSubtype_apply_of_not_mem (subtypePerm c _ ^ n) hx,
+        ← notMem_support]
+      exact fun hx' => hx (hc (support_zpow_le _ _ hx'))
 
 Depends on / 依赖: Perm.congr_fun, congr_fun, notMem_support, ofSubtype_apply_of_mem, ofSubtype_apply_of_not_mem, ofSubtype_subtypePerm_of_mem, subtypePerm, subtypePerm_apply, subtypePerm_zpow, support_zpow_le
 -/
@@ -3553,7 +3827,24 @@ theorem cycle_zpow_mem_support_iff
     · exact ⟨rfl, rfl⟩
     simp only [Int.natCast_pos]
     apply lt_of_lt_of_le _ (IsCycle.two_le_card_support hg); simp
-  simp only [← hg.
+  simp only [← hg.orderOf] at div_euc
+  obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le div_euc.2.1
+  simp only [hm, Nat.cast_nonneg, Nat.cast_lt, true_and] at div_euc
+  rw [← div_euc.1]; rw [zpow_add g]
+  simp only [hm, Nat.cast_eq_zero, zpow_natCast, coe_mul, comp_apply, zpow_mul,
+    pow_orderOf_eq_one, one_zpow, coe_one, id_eq]
+  have : (g ^ m) x = x ↔ g ^ m = 1 := by
+    constructor
+    · intro hgm
+      simp only [IsCycle.pow_eq_one_iff hg]
+      use x
+    · intro hgm
+      simp only [hgm, coe_one, id_eq]
+  rw [this]
+  by_cases hm0 : m = 0
+  · simp only [hm0, pow_zero]
+  · simp only [hm0, iff_false]
+    exact pow_ne_one_of_lt_orderOf hm0 div_euc.2
 
 中文:
 定理 cycle_zpow_mem_support_iff
@@ -3566,7 +3857,24 @@ theorem cycle_zpow_mem_support_iff
     · exact ⟨rfl, rfl⟩
     simp only [Int.natCast_pos]
     apply lt_of_lt_of_le _ (IsCycle.two_le_card_support hg); simp
-  simp only [← hg.
+  simp only [← hg.orderOf] at div_euc
+  obtain ⟨m, hm⟩ := Int.eq_ofNat_of_zero_le div_euc.2.1
+  simp only [hm, Nat.cast_nonneg, Nat.cast_lt, true_and] at div_euc
+  rw [← div_euc.1]; rw [zpow_add g]
+  simp only [hm, Nat.cast_eq_zero, zpow_natCast, coe_mul, comp_apply, zpow_mul,
+    pow_orderOf_eq_one, one_zpow, coe_one, id_eq]
+  have : (g ^ m) x = x ↔ g ^ m = 1 := by
+    constructor
+    · intro hgm
+      simp only [IsCycle.pow_eq_one_iff hg]
+      use x
+    · intro hgm
+      simp only [hgm, coe_one, id_eq]
+  rw [this]
+  by_cases hm0 : m = 0
+  · simp only [hm0, pow_zero]
+  · simp only [hm0, iff_false]
+    exact pow_ne_one_of_lt_orderOf hm0 div_euc.2
 
 Depends on / 依赖: Int.ediv_emod_unique, Int.eq_ofNat_of_zero_le, Int.natCast_pos, IsCycle, IsCycle.two_le_card_support, Nat.cast_eq_zero, Nat.cast_lt, Nat.cast_nonneg, cast_eq_zero, cast_lt, cast_nonneg, div_euc, ediv_emod_unique, eq_ofNat_of_zero_le, g.support, hg.orderOf, lt_of_lt_of_le, natCast_pos, orderOf, support
 -/

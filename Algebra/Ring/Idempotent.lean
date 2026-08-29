@@ -419,7 +419,8 @@ theorem mul_eq_zero_of_anticommute
     have : a * (a * b + b * a) * a = 0 := by rw [hab, mul_zero, zero_mul]
     simp_rw [mul_add, add_mul, mul_assoc, ha.eq, ← mul_assoc, ha.eq, ← two_nsmul] at this
     exact this
-  suffices a
+  suffices a * a * b + a * b * a = 0 by rwa [h, add_zero, ha.eq] at this
+  rw [mul_assoc]; rw [mul_assoc]; rw [← mul_add]; rw [hab]; rw [mul_zero]
 
 中文:
 定理 mul_eq_zero_of_anticommute
@@ -430,7 +431,8 @@ theorem mul_eq_zero_of_anticommute
     have : a * (a * b + b * a) * a = 0 := by rw [hab, mul_zero, zero_mul]
     simp_rw [mul_add, add_mul, mul_assoc, ha.eq, ← mul_assoc, ha.eq, ← two_nsmul] at this
     exact this
-  suffices a
+  suffices a * a * b + a * b * a = 0 by rwa [h, add_zero, ha.eq] at this
+  rw [mul_assoc]; rw [mul_assoc]; rw [← mul_add]; rw [hab]; rw [mul_zero]
 
 Depends on / 依赖: Nat.zero_ne_add_one, add_mul, add_zero, ha.eq, mul_add, mul_assoc, mul_zero, nsmul_right_inj, nsmul_zero, simp_rw, two_nsmul, zero_mul, zero_ne_add_one
 -/
@@ -482,7 +484,15 @@ theorem sub_iff
 .mp ((add_sub_cancel p q).symm ▸ hq) have h : p * (q - p) + (q - p) * p = 0 := hp.add_iff hqp
   have hpq : Commute p q := by
     simp_rw [IsIdempotentElem, mul_sub, sub_mul,
-    hp.eq, hq.eq, ← sub_add_eq_sub_sub, sub_right_inj, add_sub] a
+    hp.eq, hq.eq, ← sub_add_eq_sub_sub, sub_right_inj, add_sub] at hqp
+    have h1 := congr_arg (q * ·) hqp
+    have h2 := congr_arg (· * q) hqp
+    simp_rw [mul_sub, mul_add, ← mul_assoc, hq.eq, add_sub_cancel_right] at h1
+    simp_rw [sub_mul, add_mul, mul_assoc, hq.eq, add_sub_cancel_left, ← mul_assoc] at h2
+    exact h2.symm.trans h1
+  rw [hpq.eq]; rw [and_self]; rw [← nsmul_right_inj (by simp : 2 != 0)]; rw [← zero_add (2 • p)]
+  convert congrArg (· + 2 • p) h
+  simp [sub_mul, mul_sub, hp.eq, hpq.eq, two_nsmul, sub_add, sub_sub]
 
 中文:
 定理 sub_iff
@@ -492,7 +502,15 @@ theorem sub_iff
 .mp ((add_sub_cancel p q).symm ▸ hq) have h : p * (q - p) + (q - p) * p = 0 := hp.add_iff hqp
   have hpq : Commute p q := by
     simp_rw [IsIdempotentElem, mul_sub, sub_mul,
-    hp.eq, hq.eq, ← sub_add_eq_sub_sub, sub_right_inj, add_sub] a
+    hp.eq, hq.eq, ← sub_add_eq_sub_sub, sub_right_inj, add_sub] at hqp
+    have h1 := congr_arg (q * ·) hqp
+    have h2 := congr_arg (· * q) hqp
+    simp_rw [mul_sub, mul_add, ← mul_assoc, hq.eq, add_sub_cancel_right] at h1
+    simp_rw [sub_mul, add_mul, mul_assoc, hq.eq, add_sub_cancel_left, ← mul_assoc] at h2
+    exact h2.symm.trans h1
+  rw [hpq.eq]; rw [and_self]; rw [← nsmul_right_inj (by simp : 2 != 0)]; rw [← zero_add (2 • p)]
+  convert congrArg (· + 2 • p) h
+  simp [sub_mul, mul_sub, hp.eq, hpq.eq, two_nsmul, sub_add, sub_sub]
 
 Depends on / 依赖: Commute, IsIdempotentElem, add_iff, add_mul, add_sub, add_sub_cancel, add_sub_cancel_left, add_sub_cancel_right, congr_arg, hp.add_iff, hp.eq, hp.sub, hq.eq, mul_add, mul_assoc, mul_sub, simp_rw, sub_add_eq_sub_sub, sub_mul, sub_right_inj
 -/

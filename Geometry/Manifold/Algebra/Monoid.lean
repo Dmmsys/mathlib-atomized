@@ -1049,7 +1049,9 @@ theorem contMDiffWithinAt_finsetProd'
 alias contMDiffWithinAt_finset_sum' := contMDiffWithinAt_finsetSum'
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias con
+alias contMDiffWithinAt_finset_prod' := contMDiffWithinAt_finsetProd'
+
+@[to_additive]
 
 中文:
 定理 contMDiffWithinAt_finsetProd'
@@ -1061,7 +1063,9 @@ alias con
 alias contMDiffWithinAt_finset_sum' := contMDiffWithinAt_finsetSum'
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias con
+alias contMDiffWithinAt_finset_prod' := contMDiffWithinAt_finsetProd'
+
+@[to_additive]
 
 Depends on / 依赖: AddCommGroup, CMDiffAt, CommRing, CommSemiring, Finset, Finset.prod_induction, contMDiffWithinAt_const, hf.mul, instAlgebra, prod_induction
 -/
@@ -1091,7 +1095,9 @@ theorem contMDiffWithinAt_finsetProd
 alias contMDiffWithinAt_finset_sum := contMDiffWithinAt_finsetSum
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias contMDiffWithinAt_finset_prod := contMDiffWithinAt_
+alias contMDiffWithinAt_finset_prod := contMDiffWithinAt_finsetProd
+
+@[to_additive]
 
 中文:
 定理 contMDiffWithinAt_finsetProd
@@ -1104,7 +1110,9 @@ alias contMDiffWithinAt_finset_prod := contMDiffWithinAt_
 alias contMDiffWithinAt_finset_sum := contMDiffWithinAt_finsetSum
 
 @[to_additive existing, deprecated (since := "2026-04-08")]
-alias contMDiffWithinAt_finset_prod := contMDiffWithinAt_
+alias contMDiffWithinAt_finset_prod := contMDiffWithinAt_finsetProd
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.prod_apply, contMDiffWithinAt_finsetProd, prod_apply
 -/

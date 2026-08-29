@@ -235,7 +235,19 @@ definition eraseUsedTactics
     let some r := stx.getRange? true | return ranges
     let kind := stx.getKind
     -- if the tactic is allowed to not change the goals
-    if exce
+    if exceptions.contains kind then
+      return ranges.push r
+    -- if the goals have changed
+    if i.goalsAfter != i.goalsBefore then
+      return ranges.push r
+    -- bespoke check for `swap_var`: the only change that it does is
+    -- in the usernames of local declarations, so we check the names before and after
+    if (kind == `Mathlib.Tactic.«tacticSwap_var__,,») &&
+            (getNames i.mctxBefore != getNames i.mctxAfter) then
+      return ranges.push r
+    return ranges
+  for r in ranges do
+    modify (·.erase r)
 
 中文:
 定义 eraseUsedTactics
@@ -246,7 +258,19 @@ definition eraseUsedTactics
     let some r := stx.getRange? true | return ranges
     let kind := stx.getKind
     -- if the tactic is allowed to not change the goals
-    if exce
+    if exceptions.contains kind then
+      return ranges.push r
+    -- if the goals have changed
+    if i.goalsAfter != i.goalsBefore then
+      return ranges.push r
+    -- bespoke check for `swap_var`: the only change that it does is
+    -- in the usernames of local declarations, so we check the names before and after
+    if (kind == `Mathlib.Tactic.«tacticSwap_var__,,») &&
+            (getNames i.mctxBefore != getNames i.mctxAfter) then
+      return ranges.push r
+    return ranges
+  for r in ranges do
+    modify (·.erase r)
 -/
 partial def eraseUsedTactics (exceptions : Std.HashSet SyntaxNodeKind)
     (trees : PersistentArray InfoTree) : M Unit :=
@@ -283,7 +307,26 @@ definition unusedTacticLinter
     return
   let env ← getEnv
   let cats := (Parser.parserExtension.getState env).categories
-  -- These lookups may fail when 
+  -- These lookups may fail when the linter is run in a fresh, empty environment
+let some tactics := Parser.ParserCategory.kinds < > cats.find? `tactic
+    | return
+let some convs := Parser.ParserCategory.kinds < > cats.find? `conv
+    | return
+  let trees ← getInfoTrees
+let exceptions := (← allowedRef.get).union allowedUnusedTacticExt.getState env
+  let go : M Unit := do
+    getTactics (← ignoreTacticKindsRef.get) (fun k => tactics.contains k || convs.contains k) stx
+    eraseUsedTactics exceptions trees
+  let (_, map) ← go.run {}
+  let unused := map.toArray
+  let key (r : Lean.Syntax.Range) := (r.start.byteIdx, (-r.stop.byteIdx : Int))
+  let mut last : Lean.Syntax.Range := ⟨0, 0⟩
+  for (r, stx) in let _ := @lexOrd; let _ := @ltOfOrd.{0}; unused.qsort (key ·.1 < key ·.1) do
+    if stx.getKind in [``Batteries.Tactic.unreachable, ``Batteries.Tactic.unreachableConv] then
+      continue
+    if last.start <= r.start && r.stop <= last.stop then continue
+    Linter.logLint linter.unusedTactic stx m!"Unused tactic linter: `{stx}` does nothing"
+    last := r
 
 中文:
 定义 unusedTacticLinter
@@ -295,7 +338,26 @@ definition unusedTacticLinter
     return
   let env ← getEnv
   let cats := (Parser.parserExtension.getState env).categories
-  -- These lookups may fail when 
+  -- These lookups may fail when the linter is run in a fresh, empty environment
+let some tactics := Parser.ParserCategory.kinds < > cats.find? `tactic
+    | return
+let some convs := Parser.ParserCategory.kinds < > cats.find? `conv
+    | return
+  let trees ← getInfoTrees
+let exceptions := (← allowedRef.get).union allowedUnusedTacticExt.getState env
+  let go : M Unit := do
+    getTactics (← ignoreTacticKindsRef.get) (fun k => tactics.contains k || convs.contains k) stx
+    eraseUsedTactics exceptions trees
+  let (_, map) ← go.run {}
+  let unused := map.toArray
+  let key (r : Lean.Syntax.Range) := (r.start.byteIdx, (-r.stop.byteIdx : Int))
+  let mut last : Lean.Syntax.Range := ⟨0, 0⟩
+  for (r, stx) in let _ := @lexOrd; let _ := @ltOfOrd.{0}; unused.qsort (key ·.1 < key ·.1) do
+    if stx.getKind in [``Batteries.Tactic.unreachable, ``Batteries.Tactic.unreachableConv] then
+      continue
+    if last.start <= r.start && r.stop <= last.stop then continue
+    Linter.logLint linter.unusedTactic stx m!"Unused tactic linter: `{stx}` does nothing"
+    last := r
 
 Depends on / 依赖: withSetOptionIn
 -/

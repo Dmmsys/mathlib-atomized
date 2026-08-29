@@ -235,14 +235,16 @@ theorem IsEquipartition.card_large_parts_eq_mod
   given: (hP : P.IsEquipartition)
   proof: by
   have z := P.sum_card_parts
-  rw [← sum_filter_add_sum_filter_not (s := P.parts) (p := fun x => #x = #s / #P.parts + 1)]; rw [hP.filter_ne_average_add_one_eq_average]; rw [sum_const_nat (m := #s / #P.parts + 1) (by simp)]; rw [sum_const_nat (m := #s / #P.parts) (by simp)]; rw [← hP.filter_ne_ave
+  rw [← sum_filter_add_sum_filter_not (s := P.parts) (p := fun x => #x = #s / #P.parts + 1)]; rw [hP.filter_ne_average_add_one_eq_average]; rw [sum_const_nat (m := #s / #P.parts + 1) (by simp)]; rw [sum_const_nat (m := #s / #P.parts) (by simp)]; rw [← hP.filter_ne_average_add_one_eq_average]; rw [mul_add]; rw [add_comm]; rw [← add_assoc]; rw [← add_mul]; rw [mul_one]; rw [add_comm #_]; rw [card_filter_add_card_filter_not]; rw [add_comm] at z
+  rw [← add_left_inj]; rw [Nat.mod_add_div]; rw [z]
 
 中文:
 定理 IsEquipartition.card_large_parts_eq_mod
   条件: (hP : P.IsEquipartition)
   证明: by
   have z := P.sum_card_parts
-  rw [← sum_filter_add_sum_filter_not (s := P.parts) (p := fun x => #x = #s / #P.parts + 1)]; rw [hP.filter_ne_average_add_one_eq_average]; rw [sum_const_nat (m := #s / #P.parts + 1) (by simp)]; rw [sum_const_nat (m := #s / #P.parts) (by simp)]; rw [← hP.filter_ne_ave
+  rw [← sum_filter_add_sum_filter_not (s := P.parts) (p := fun x => #x = #s / #P.parts + 1)]; rw [hP.filter_ne_average_add_one_eq_average]; rw [sum_const_nat (m := #s / #P.parts + 1) (by simp)]; rw [sum_const_nat (m := #s / #P.parts) (by simp)]; rw [← hP.filter_ne_average_add_one_eq_average]; rw [mul_add]; rw [add_comm]; rw [← add_assoc]; rw [← add_mul]; rw [mul_one]; rw [add_comm #_]; rw [card_filter_add_card_filter_not]; rw [add_comm] at z
+  rw [← add_left_inj]; rw [Nat.mod_add_div]; rw [z]
 
 Depends on / 依赖: P.parts, P.sum_card_parts, add_assoc, add_comm, add_left_inj, add_mul, card_filter_add_card_filter_not, filter_ne_average_add_one_eq_average, hP.filter_ne_average_add_one_eq_average, mul_add, mul_one, sum_card_parts, sum_const_nat, sum_filter_add_sum_filter_not
 -/
@@ -294,7 +296,19 @@ theorem IsEquipartition.exists_partsEquiv
   simp_rw [mem_filter, hP.card_large_parts_eq_mod] at el
   simp_rw [mem_filter, hP.card_small_parts_eq_mod] at es
   let sneg :
-      {x // x in P.parts ∧ ¬#x = #s / #P.parts + 1} 
+      {x // x in P.parts ∧ ¬#x = #s / #P.parts + 1} ≃ {x // x in P.parts ∧ #x = #s / #P.parts} := by
+    apply (Equiv.refl _).subtypeEquiv
+    simp only [Equiv.refl_apply, and_congr_right_iff]
+    exact fun _ ha => by rw [hP.card_part_eq_average_iff ha, ne_eq]
+  replace el : { x : P.parts // #x.1 = #s / #P.parts + 1 } ≃
+      Fin (#s % #P.parts) := (Equiv.Set.sep ..).symm.trans el
+  replace es : { x : P.parts // ¬#x.1 = #s / #P.parts + 1 } ≃
+      Fin (#P.parts - #s % #P.parts) := (Equiv.Set.sep ..).symm.trans (sneg.trans es)
+  let f := (Equiv.sumCompl _).symm.trans ((el.sumCongr es).trans finSumFinEquiv)
+  use f.trans (finCongr (Nat.add_sub_of_le P.card_mod_card_parts_le))
+  intro ⟨p, _⟩
+  simp_rw [f, Equiv.trans_apply, Equiv.sumCongr_apply, finCongr_apply, Fin.val_cast]
+  by_cases hc : #p = #s / #P.parts + 1 <;> simp [hc]
 
 中文:
 定理 IsEquipartition.存在_partsEquiv
@@ -305,7 +319,19 @@ theorem IsEquipartition.exists_partsEquiv
   simp_rw [mem_filter, hP.card_large_parts_eq_mod] at el
   simp_rw [mem_filter, hP.card_small_parts_eq_mod] at es
   let sneg :
-      {x // x in P.parts ∧ ¬#x = #s / #P.parts + 1} 
+      {x // x in P.parts ∧ ¬#x = #s / #P.parts + 1} ≃ {x // x in P.parts ∧ #x = #s / #P.parts} := by
+    apply (Equiv.refl _).subtypeEquiv
+    simp only [Equiv.refl_apply, and_congr_right_iff]
+    exact fun _ ha => by rw [hP.card_part_eq_average_iff ha, ne_eq]
+  replace el : { x : P.parts // #x.1 = #s / #P.parts + 1 } ≃
+      Fin (#s % #P.parts) := (Equiv.Set.sep ..).symm.trans el
+  replace es : { x : P.parts // ¬#x.1 = #s / #P.parts + 1 } ≃
+      Fin (#P.parts - #s % #P.parts) := (Equiv.Set.sep ..).symm.trans (sneg.trans es)
+  let f := (Equiv.sumCompl _).symm.trans ((el.sumCongr es).trans finSumFinEquiv)
+  use f.trans (finCongr (Nat.add_sub_of_le P.card_mod_card_parts_le))
+  intro ⟨p, _⟩
+  simp_rw [f, Equiv.trans_apply, Equiv.sumCongr_apply, finCongr_apply, Fin.val_cast]
+  by_cases hc : #p = #s / #P.parts + 1 <;> simp [hc]
 
 Depends on / 依赖: Equiv.refl, Equiv.refl_apply, P.parts, and_congr_right_iff, card_large_parts_eq_mod, card_part_eq_average_iff, card_small_parts_eq_mod, equivFin, hP.card_large_parts_eq_mod, hP.card_part_eq_average_iff, hP.card_small_parts_eq_mod, mem_filter, ne_eq, refl_apply, replace, simp_rw, subtypeEquiv
 -/
@@ -345,7 +371,25 @@ theorem IsEquipartition.exists_partPreservingEquiv
   have less : forall a, z a < #s := fun a => by
     rcases hP.card_parts_eq_average (f a).1.2 with (c | c)
     · calc
-        _ 
+        _ < #P.parts * ((f a).2 + 1) := by simp only [z, mul_add_one]; gcongr; exact gl a
+        _ <= #P.parts * (#s / #P.parts) := by gcongr; exact c ▸ (f a).2.2
+        _ <= #P.parts * (#s / #P.parts) + #s % #P.parts := Nat.le_add_right ..
+        _ = _ := Nat.div_add_mod ..
+    · rw [← Nat.div_add_mod #s #P.parts]
+      exact add_lt_add_of_le_of_lt (mul_le_mul_right (by lia) _) ((hg (f a).1).mp c)
+  let z' : s -> Fin #s := fun a => ⟨z a, less a⟩
+  have bij : z'.Bijective := by
+    refine (bijective_iff_injective_and_card z').mpr ⟨fun a b e => ?_, by simp⟩
+    simp_rw [z', z, Fin.mk.injEq, mul_comm #P.parts] at e
+    have : NeZero #P.parts := ⟨((Nat.zero_le _).trans_lt (gl a)).ne'⟩
+    change (#P.parts).divModEquiv.symm (_, _) = (#P.parts).divModEquiv.symm (_, _) at e
+    simp only [Equiv.apply_eq_iff_eq, Prod.mk.injEq] at e
+    apply_fun f
+exact Sigma.ext e.2 (Fin.heq_ext_iff (by rw [e.2])).mpr e.1
+  use Equiv.ofBijective _ bij
+  intro a b
+  simp_rw [z', z, Equiv.ofBijective_apply, hf a b, Nat.mul_add_mod,
+    Nat.mod_eq_of_lt (gl a), Nat.mod_eq_of_lt (gl b), Fin.val_eq_val, g.apply_eq_iff_eq]
 
 中文:
 定理 IsEquipartition.存在_partPreservingEquiv
@@ -359,7 +403,25 @@ theorem IsEquipartition.exists_partPreservingEquiv
   have less : forall a, z a < #s := fun a => by
     rcases hP.card_parts_eq_average (f a).1.2 with (c | c)
     · calc
-        _ 
+        _ < #P.parts * ((f a).2 + 1) := by simp only [z, mul_add_one]; gcongr; exact gl a
+        _ <= #P.parts * (#s / #P.parts) := by gcongr; exact c ▸ (f a).2.2
+        _ <= #P.parts * (#s / #P.parts) + #s % #P.parts := Nat.le_add_right ..
+        _ = _ := Nat.div_add_mod ..
+    · rw [← Nat.div_add_mod #s #P.parts]
+      exact add_lt_add_of_le_of_lt (mul_le_mul_right (by lia) _) ((hg (f a).1).mp c)
+  let z' : s -> Fin #s := fun a => ⟨z a, less a⟩
+  have bij : z'.Bijective := by
+    refine (bijective_iff_injective_and_card z').mpr ⟨fun a b e => ?_, by simp⟩
+    simp_rw [z', z, Fin.mk.injEq, mul_comm #P.parts] at e
+    have : NeZero #P.parts := ⟨((Nat.zero_le _).trans_lt (gl a)).ne'⟩
+    change (#P.parts).divModEquiv.symm (_, _) = (#P.parts).divModEquiv.symm (_, _) at e
+    simp only [Equiv.apply_eq_iff_eq, Prod.mk.injEq] at e
+    apply_fun f
+exact Sigma.ext e.2 (Fin.heq_ext_iff (by rw [e.2])).mpr e.1
+  use Equiv.ofBijective _ bij
+  intro a b
+  simp_rw [z', z, Equiv.ofBijective_apply, hf a b, Nat.mul_add_mod,
+    Nat.mod_eq_of_lt (gl a), Nat.mod_eq_of_lt (gl b), Fin.val_eq_val, g.apply_eq_iff_eq]
 
 Depends on / 依赖: Nat.le_add_right, P.exists_enumeration, P.parts, card_parts_eq_average, exists_enumeration, exists_partsEquiv, hP.card_parts_eq_average, hP.exists_partsEquiv, le_add_right, mul_add_one
 -/

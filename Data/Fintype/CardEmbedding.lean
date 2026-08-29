@@ -63,7 +63,13 @@ theorem card_embedding_eq
   refine Fintype.induction_empty_option (P := fun t => ‖t ↪ β‖ = ‖β‖.descFactorial ‖t‖)
         (fun α₁ α₂ h₂ e ih => ?_) (?_) (fun γ h ih => ?_) α <;> clear! α
   · let := Fintype.ofEquiv _ e.symm
-    rw [← card_congr (Equiv.embeddingCongr e (Equiv.r
+    rw [← card_congr (Equiv.embeddingCongr e (Equiv.refl β))]; rw [ih]; rw [card_congr e]
+  · rw [card_pempty, Nat.descFactorial_zero, card_eq_one_iff]
+    exact ⟨Embedding.ofIsEmpty, fun x => DFunLike.ext _ _ isEmptyElim⟩
+  · classical
+    rw [card_option]; rw [Nat.descFactorial_succ]; rw [card_congr (Embedding.optionEmbeddingEquiv γ β)]; rw [card_sigma]; rw [← ih]
+    simp only [Fintype.card_compl_set, Fintype.card_range, Finset.sum_const, Finset.card_univ,
+      Nat.nsmul_eq_mul, mul_comm]
 
 中文:
 定理 card_embedding_eq
@@ -73,7 +79,13 @@ theorem card_embedding_eq
   refine Fintype.induction_empty_option (P := fun t => ‖t ↪ β‖ = ‖β‖.descFactorial ‖t‖)
         (fun α₁ α₂ h₂ e ih => ?_) (?_) (fun γ h ih => ?_) α <;> clear! α
   · let := Fintype.ofEquiv _ e.symm
-    rw [← card_congr (Equiv.embeddingCongr e (Equiv.r
+    rw [← card_congr (Equiv.embeddingCongr e (Equiv.refl β))]; rw [ih]; rw [card_congr e]
+  · rw [card_pempty, Nat.descFactorial_zero, card_eq_one_iff]
+    exact ⟨Embedding.ofIsEmpty, fun x => DFunLike.ext _ _ isEmptyElim⟩
+  · classical
+    rw [card_option]; rw [Nat.descFactorial_succ]; rw [card_congr (Embedding.optionEmbeddingEquiv γ β)]; rw [card_sigma]; rw [← ih]
+    simp only [Fintype.card_compl_set, Fintype.card_range, Finset.sum_const, Finset.card_univ,
+      Nat.nsmul_eq_mul, mul_comm]
 
 Depends on / 依赖: DFunLike, DFunLike.ext, Embedding, Embedding.fintype, Embedding.ofIsEmpty, Equiv.embeddingCongr, Equiv.refl, Fintype, Fintype.induction_empty_option, Fintype.ofEquiv, Nat.descFactorial_su, Nat.descFactorial_zero, Subsingleton, Subsingleton.elim, card_congr, card_eq_one_iff, card_option, card_pempty, classical, descFactorial
 -/

@@ -128,7 +128,9 @@ theorem induct'
   | zero => exact neg 1 h₁
   | succ n =>
     apply neg (n + 2) (add_two n (neg' _ h₀) (neg' n ?_))
-    convert! h₁ usi
+    convert! h₁ using 1; omega
+
+@[simp]
 
 中文:
 定理 induct'
@@ -142,7 +144,9 @@ theorem induct'
   | zero => exact neg 1 h₁
   | succ n =>
     apply neg (n + 2) (add_two n (neg' _ h₀) (neg' n ?_))
-    convert! h₁ usi
+    convert! h₁ using 1; omega
+
+@[simp]
 -/
 protected theorem induct' (motive : Int -> Prop)
     (zero : motive 0)
@@ -376,7 +380,10 @@ theorem T_neg
     have h₁ := T_add_two R n
     have h₂ := T_sub_two R (-n)
     linear_combination (norm := ring_nf) (2 * (X : R[X])) * ih1 - ih2 - h₁ + h₂
-  | neg_add_one n ih1 
+  | neg_add_one n ih1 ih2 =>
+    have h₁ := T_add_one R n
+    have h₂ := T_sub_one R (-n)
+    linear_combination (norm := ring_nf) (2 * (X : R[X])) * ih1 - ih2 + h₁ - h₂
 
 中文:
 定理 T_neg
@@ -390,7 +397,10 @@ theorem T_neg
     have h₁ := T_add_two R n
     have h₂ := T_sub_two R (-n)
     linear_combination (norm := ring_nf) (2 * (X : R[X])) * ih1 - ih2 - h₁ + h₂
-  | neg_add_one n ih1 
+  | neg_add_one n ih1 ih2 =>
+    have h₁ := T_add_one R n
+    have h₂ := T_sub_one R (-n)
+    linear_combination (norm := ring_nf) (2 * (X : R[X])) * ih1 - ih2 + h₁ - h₂
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, T_add_one, T_add_two, T_neg_one, T_one, T_sub_one, T_sub_two, add_two, induct, linear_combination, neg_add_one, ring_nf
 -/
@@ -500,7 +510,15 @@ theorem T_eval_neg_one
   | add_two n ih1 ih2 =>
     simp only [T_add_two, eval_sub, eval_mul, eval_ofNat, eval_X, mul_neg, mul_one, ih1,
       Int.negOnePow_add, Int.negOnePow_one, Units.val_neg, Int.cast_neg, neg_mul, neg_neg, ih2,
- 
+      Int.negOnePow_def 2]
+    norm_cast
+    norm_num
+    ring
+  | neg_add_one n ih1 ih2 =>
+    simp only [T_sub_one, eval_sub, eval_mul, eval_ofNat, eval_X, mul_neg, mul_one, ih1, neg_mul,
+      ih2, Int.negOnePow_add, Int.negOnePow_one, Units.val_neg, Int.cast_neg, sub_neg_eq_add,
+      Int.negOnePow_sub]
+    ring
 
 中文:
 定理 T_eval_neg_one
@@ -513,7 +531,15 @@ theorem T_eval_neg_one
   | add_two n ih1 ih2 =>
     simp only [T_add_two, eval_sub, eval_mul, eval_ofNat, eval_X, mul_neg, mul_one, ih1,
       Int.negOnePow_add, Int.negOnePow_one, Units.val_neg, Int.cast_neg, neg_mul, neg_neg, ih2,
- 
+      Int.negOnePow_def 2]
+    norm_cast
+    norm_num
+    ring
+  | neg_add_one n ih1 ih2 =>
+    simp only [T_sub_one, eval_sub, eval_mul, eval_ofNat, eval_X, mul_neg, mul_one, ih1, neg_mul,
+      ih2, Int.negOnePow_add, Int.negOnePow_one, Units.val_neg, Int.cast_neg, sub_neg_eq_add,
+      Int.negOnePow_sub]
+    ring
 
 Depends on / 依赖: Chebyshev, Int.cast_neg, Int.negOnePow_add, Int.negOnePow_def, Int.negOnePow_one, Polynomial, Polynomial.Chebyshev.induct, T_add_two, T_sub_one, Units.val_, Units.val_neg, add_two, cast_neg, eval_X, eval_mul, eval_ofNat, eval_sub, induct, mul_neg, mul_one
 -/
@@ -548,7 +574,10 @@ theorem T_eval_zero
     have : ((n : Int) + 2) / 2 = (n : Int) / 2 + 1 := by lia
     by_cases Even n <;> simp_all [Int.negOnePow_add]
   | neg_add_one n ih1 ih2 =>
-    have : (-(n : Int) + 1) / 2 = (-(n : In
+    have : (-(n : Int) + 1) / 2 = (-(n : Int) - 1) / 2 + 1 := by lia
+    by_cases Even n <;> simp_all [T_sub_one, ← Int.not_even_iff_odd, Int.negOnePow_add]
+
+@[simp]
 
 中文:
 定理 T_eval_zero
@@ -561,7 +590,10 @@ theorem T_eval_zero
     have : ((n : Int) + 2) / 2 = (n : Int) / 2 + 1 := by lia
     by_cases Even n <;> simp_all [Int.negOnePow_add]
   | neg_add_one n ih1 ih2 =>
-    have : (-(n : Int) + 1) / 2 = (-(n : In
+    have : (-(n : Int) + 1) / 2 = (-(n : Int) - 1) / 2 + 1 := by lia
+    by_cases Even n <;> simp_all [T_sub_one, ← Int.not_even_iff_odd, Int.negOnePow_add]
+
+@[simp]
 
 Depends on / 依赖: Chebyshev, Int.negOnePow_add, Int.not_even_iff_odd, Polynomial, Polynomial.Chebyshev.induct, T_sub_one, add_two, induct, negOnePow_add, neg_add_one, not_even_iff_odd
 -/
@@ -664,7 +696,12 @@ theorem degree_T
     have : (2 * X * T R (n + 1)).degree = ↑(n + 2) := by
       rw [mul_assoc]; rw [← C_ofNat]; rw [degree_C_mul two_ne_zero]; rw [mul_comm]; rw [degree_mul_X]; rw [ih1]
       norm_cast
-    rw [T_a
+    rw [T_add_two]; rw [degree_sub_eq_left_of_degree_lt]
+    · rw [this]; norm_cast
+    · rw [ih2, this]; tauto
+  | neg n ih => simp [ih]
+
+@[simp]
 
 中文:
 定理 degree_T
@@ -678,7 +715,12 @@ theorem degree_T
     have : (2 * X * T R (n + 1)).degree = ↑(n + 2) := by
       rw [mul_assoc]; rw [← C_ofNat]; rw [degree_C_mul two_ne_zero]; rw [mul_comm]; rw [degree_mul_X]; rw [ih1]
       norm_cast
-    rw [T_a
+    rw [T_add_two]; rw [degree_sub_eq_left_of_degree_lt]
+    · rw [this]; norm_cast
+    · rw [ih2, this]; tauto
+  | neg n ih => simp [ih]
+
+@[simp]
 
 Depends on / 依赖: C_ofNat, Chebyshev, Chebyshev.induct, T_add_two, add_two, degree, degree_C_mul, degree_mul_X, degree_sub_eq_left_of_degree_lt, induct, mul_assoc, mul_comm, two_ne_zero
 -/
@@ -735,7 +777,14 @@ theorem leadingCoeff_T
     have : leadingCoeff (2 : R[X]) = 2 := by
       change leadingCoeff (C 2) = 2
       rw [leadingCoeff_C]
-    rw [T_add_two]; rw [leadingCoeff_sub_of_degree_lt]; rw [leadingCoeff_mul]; rw [ih1]; 
+    rw [T_add_two]; rw [leadingCoeff_sub_of_degree_lt]; rw [leadingCoeff_mul]; rw [ih1]; rw [leadingCoeff_mul]; rw [leadingCoeff_X]; rw [this]
+    · norm_cast; simp [pow_add, mul_comm]
+    · rw [mul_assoc, ← C_ofNat, degree_C_mul two_ne_zero, mul_comm, degree_mul_X, degree_T,
+        degree_T]
+      tauto
+  | neg n ih => simp [ih]
+
+@[simp]
 
 中文:
 定理 leadingCoeff_T
@@ -748,7 +797,14 @@ theorem leadingCoeff_T
     have : leadingCoeff (2 : R[X]) = 2 := by
       change leadingCoeff (C 2) = 2
       rw [leadingCoeff_C]
-    rw [T_add_two]; rw [leadingCoeff_sub_of_degree_lt]; rw [leadingCoeff_mul]; rw [ih1]; 
+    rw [T_add_two]; rw [leadingCoeff_sub_of_degree_lt]; rw [leadingCoeff_mul]; rw [ih1]; rw [leadingCoeff_mul]; rw [leadingCoeff_X]; rw [this]
+    · norm_cast; simp [pow_add, mul_comm]
+    · rw [mul_assoc, ← C_ofNat, degree_C_mul two_ne_zero, mul_comm, degree_mul_X, degree_T,
+        degree_T]
+      tauto
+  | neg n ih => simp [ih]
+
+@[simp]
 
 Depends on / 依赖: C_ofNat, Chebyshev, Chebyshev.induct, T_add_two, add_two, degree_C_mul, degree_T, degree_mul_X, induct, leadingCoeff, leadingCoeff_C, leadingCoeff_X, leadingCoeff_mul, leadingCoeff_sub_of_degree_lt, mul_assoc, mul_comm, pow_add, two_ne_zero
 -/
@@ -783,7 +839,10 @@ theorem T_eval_neg
   | add_two n ih1 ih2 =>
     trans (n + 2 : Int).negOnePow * (2 * x * (T R (n + 1)).eval x - (T R n).eval x)
     · simp only [T_add_two, eval_sub, eval_mul, eval_ofNat, eval_X, mul_neg, ih1, Int.negOnePow_add,
-        Int
+        Int.negOnePow_one, Units.val_neg, Int.cast_neg, ih2, Int.negOnePow_even 2 even_two]
+      ring_nf
+    · simp
+  | neg n ih => simp [ih]
 
 中文:
 定理 T_eval_neg
@@ -796,7 +855,10 @@ theorem T_eval_neg
   | add_two n ih1 ih2 =>
     trans (n + 2 : Int).negOnePow * (2 * x * (T R (n + 1)).eval x - (T R n).eval x)
     · simp only [T_add_two, eval_sub, eval_mul, eval_ofNat, eval_X, mul_neg, ih1, Int.negOnePow_add,
-        Int
+        Int.negOnePow_one, Units.val_neg, Int.cast_neg, ih2, Int.negOnePow_even 2 even_two]
+      ring_nf
+    · simp
+  | neg n ih => simp [ih]
 
 Depends on / 依赖: Chebyshev, Chebyshev.induct, Int.cast_neg, Int.negOnePow_add, Int.negOnePow_even, Int.negOnePow_one, T_add_two, Units.val_neg, add_two, cast_neg, eval_X, eval_mul, eval_ofNat, eval_sub, even_two, induct, mul_neg, negOnePow, negOnePow_add, negOnePow_even
 -/
@@ -1104,7 +1166,9 @@ theorem U_neg_sub_one
     have h₂ := U_sub_two R (-n - 1)
     linear_combination (norm := ring_nf) 2 * (X : R[X]) * ih1 - ih2 + h₁ + h₂
   | neg_add_one n ih1 ih2 =>
-    have h₁ :=
+    have h₁ := U_eq R n
+    have h₂ := U_sub_two R (-n)
+    linear_combination (norm := ring_nf) 2 * (X : R[X]) * ih1 - ih2 + h₁ + h₂
 
 中文:
 定理 U_neg_sub_one
@@ -1119,7 +1183,9 @@ theorem U_neg_sub_one
     have h₂ := U_sub_two R (-n - 1)
     linear_combination (norm := ring_nf) 2 * (X : R[X]) * ih1 - ih2 + h₁ + h₂
   | neg_add_one n ih1 ih2 =>
-    have h₁ :=
+    have h₁ := U_eq R n
+    have h₂ := U_sub_two R (-n)
+    linear_combination (norm := ring_nf) 2 * (X : R[X]) * ih1 - ih2 + h₁ + h₂
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, U_add_one, U_eq, U_sub_two, add_two, induct, linear_combination, neg_add_one, ring_nf
 -/
@@ -1202,7 +1268,11 @@ theorem U_eval_one
     simp only [U_add_two, eval_sub, eval_mul, eval_ofNat, eval_X, mul_one, ih1,
       Int.cast_add, Int.cast_natCast, Int.cast_one, ih2, Int.cast_ofNat]
     ring
-  | neg_add_on
+  | neg_add_one n ih1 ih2 =>
+    simp only [U_sub_one, eval_sub, eval_mul, eval_ofNat, eval_X, mul_one,
+      ih1, Int.cast_neg, Int.cast_natCast, ih2, Int.cast_add, Int.cast_one, Int.cast_sub,
+      sub_add_cancel]
+    ring
 
 中文:
 定理 U_eval_one
@@ -1216,7 +1286,11 @@ theorem U_eval_one
     simp only [U_add_two, eval_sub, eval_mul, eval_ofNat, eval_X, mul_one, ih1,
       Int.cast_add, Int.cast_natCast, Int.cast_one, ih2, Int.cast_ofNat]
     ring
-  | neg_add_on
+  | neg_add_one n ih1 ih2 =>
+    simp only [U_sub_one, eval_sub, eval_mul, eval_ofNat, eval_X, mul_one,
+      ih1, Int.cast_neg, Int.cast_natCast, ih2, Int.cast_add, Int.cast_one, Int.cast_sub,
+      sub_add_cancel]
+    ring
 
 Depends on / 依赖: Chebyshev, Int.cast_add, Int.cast_natCast, Int.cast_neg, Int.cast_ofNat, Int.cast_one, Int.cast_sub, Polynomial, Polynomial.Chebyshev.induct, U_add_two, U_sub_one, add_two, cast_add, cast_natCast, cast_neg, cast_ofNat, cast_one, cast_sub, eval_X, eval_mul
 -/
@@ -1248,7 +1322,18 @@ theorem U_eval_neg_one
   | one => simp; norm_num
   | add_two n ih1 ih2 =>
     simp only [U_add_two, eval_sub, eval_mul, eval_ofNat, eval_X, mul_neg, mul_one, ih1,
-      Int.cast_add, Int.cast_natCast, Int.cast_one, neg_mul, ih2, Int.cast_ofNat, Int.n
+      Int.cast_add, Int.cast_natCast, Int.cast_one, neg_mul, ih2, Int.cast_ofNat, Int.negOnePow_add,
+      Int.negOnePow_def 2]
+    norm_cast
+    norm_num
+    ring
+  | neg_add_one n ih1 ih2 =>
+    simp only [U_sub_one, eval_sub, eval_mul, eval_ofNat, eval_X, mul_neg, mul_one, ih1,
+      Int.cast_neg, Int.cast_natCast, Int.negOnePow_neg, neg_mul, ih2, Int.cast_add, Int.cast_one,
+      Int.cast_sub, sub_add_cancel, Int.negOnePow_sub, Int.negOnePow_add]
+    norm_cast
+    norm_num
+    ring
 
 中文:
 定理 U_eval_neg_one
@@ -1260,7 +1345,18 @@ theorem U_eval_neg_one
   | one => simp; norm_num
   | add_two n ih1 ih2 =>
     simp only [U_add_two, eval_sub, eval_mul, eval_ofNat, eval_X, mul_neg, mul_one, ih1,
-      Int.cast_add, Int.cast_natCast, Int.cast_one, neg_mul, ih2, Int.cast_ofNat, Int.n
+      Int.cast_add, Int.cast_natCast, Int.cast_one, neg_mul, ih2, Int.cast_ofNat, Int.negOnePow_add,
+      Int.negOnePow_def 2]
+    norm_cast
+    norm_num
+    ring
+  | neg_add_one n ih1 ih2 =>
+    simp only [U_sub_one, eval_sub, eval_mul, eval_ofNat, eval_X, mul_neg, mul_one, ih1,
+      Int.cast_neg, Int.cast_natCast, Int.negOnePow_neg, neg_mul, ih2, Int.cast_add, Int.cast_one,
+      Int.cast_sub, sub_add_cancel, Int.negOnePow_sub, Int.negOnePow_add]
+    norm_cast
+    norm_num
+    ring
 
 Depends on / 依赖: Chebyshev, Int.cast_add, Int.cast_natCast, Int.cast_neg, Int.cast_ofNat, Int.cast_one, Int.negOnePow_add, Int.negOnePow_def, Int.negOnePow_n, Polynomial, Polynomial.Chebyshev.induct, U_add_two, U_sub_one, add_two, cast_add, cast_natCast, cast_neg, cast_ofNat, cast_one, eval_X
 -/
@@ -1297,7 +1393,10 @@ theorem U_eval_zero
     have : ((n : Int) + 2) / 2 = (n : Int) / 2 + 1 := by lia
     by_cases Even n <;> simp_all [Int.negOnePow_add]
   | neg_add_one n ih1 ih2 =>
-    have : (-(n : Int) + 1) / 2 = (-(n : In
+    have : (-(n : Int) + 1) / 2 = (-(n : Int) - 1) / 2 + 1 := by lia
+    by_cases Even n <;> simp_all [U_sub_one, ← Int.not_even_iff_odd, Int.negOnePow_add]
+
+@[simp]
 
 中文:
 定理 U_eval_zero
@@ -1310,7 +1409,10 @@ theorem U_eval_zero
     have : ((n : Int) + 2) / 2 = (n : Int) / 2 + 1 := by lia
     by_cases Even n <;> simp_all [Int.negOnePow_add]
   | neg_add_one n ih1 ih2 =>
-    have : (-(n : Int) + 1) / 2 = (-(n : In
+    have : (-(n : Int) + 1) / 2 = (-(n : Int) - 1) / 2 + 1 := by lia
+    by_cases Even n <;> simp_all [U_sub_one, ← Int.not_even_iff_odd, Int.negOnePow_add]
+
+@[simp]
 
 Depends on / 依赖: Chebyshev, Int.negOnePow_add, Int.not_even_iff_odd, Polynomial, Polynomial.Chebyshev.induct, U_sub_one, add_two, induct, negOnePow_add, neg_add_one, not_even_iff_odd
 -/
@@ -1414,7 +1516,13 @@ theorem degree_U_natCast
   | more n ih1 ih2 =>
     push_cast; push_cast at ih2
     have : (2 * X * U R (n + 1)).degree = ↑(n + 2) := by
-      rw [mul_assoc]; rw [← C_ofNa
+      rw [mul_assoc]; rw [← C_ofNat]; rw [degree_C_mul two_ne_zero]; rw [mul_comm]; rw [degree_mul_X]; rw [ih2]
+      norm_cast
+    rw [U_add_two]; rw [degree_sub_eq_left_of_degree_lt]
+    · rw [this]; norm_cast
+    · rw [ih1, this]; norm_cast; omega
+
+@[simp]
 
 中文:
 定理 degree_U_natCast
@@ -1429,7 +1537,13 @@ theorem degree_U_natCast
   | more n ih1 ih2 =>
     push_cast; push_cast at ih2
     have : (2 * X * U R (n + 1)).degree = ↑(n + 2) := by
-      rw [mul_assoc]; rw [← C_ofNa
+      rw [mul_assoc]; rw [← C_ofNat]; rw [degree_C_mul two_ne_zero]; rw [mul_comm]; rw [degree_mul_X]; rw [ih2]
+      norm_cast
+    rw [U_add_two]; rw [degree_sub_eq_left_of_degree_lt]
+    · rw [this]; norm_cast
+    · rw [ih1, this]; norm_cast; omega
+
+@[simp]
 
 Depends on / 依赖: C_ofNat, Nat.twoStepInduction, U_add_two, U_one, degree, degree_C_mul, degree_C_mul_X, degree_mul_X, degree_sub_eq_left_of_degree_lt, mul_assoc, mul_comm, twoStepInduction, two_ne_zero
 -/
@@ -1517,7 +1631,8 @@ theorem degree_U_of_ne_neg_one
       | zero => contradiction
       | succ m =>
         trans (U R m).degree
-        ·
+        · congr; omega
+        · rw [degree_U_natCast R m]; norm_cast
 
 中文:
 定理 degree_U_of_ne_neg_one
@@ -1534,7 +1649,8 @@ theorem degree_U_of_ne_neg_one
       | zero => contradiction
       | succ m =>
         trans (U R m).degree
-        ·
+        · congr; omega
+        · rw [degree_U_natCast R m]; norm_cast
 
 Depends on / 依赖: U_neg, degree, degree_U_natCast, degree_neg, eq_nat_or_neg, n.eq_nat_or_neg
 -/
@@ -1600,7 +1716,13 @@ theorem leadingCoeff_U_natCast
   | one => simp [this]
   | more n ih1 ih2 =>
     push_cast; push_cast at ih2
-    rw [U_add_two]; rw [leadingCoeff_sub_of_degree_lt]; rw [leadingCoeff_m
+    rw [U_add_two]; rw [leadingCoeff_sub_of_degree_lt]; rw [leadingCoeff_mul]; rw [ih2]; rw [leadingCoeff_mul]; rw [leadingCoeff_X]; rw [this]
+    · norm_cast; rw [pow_add, pow_add]; ring_nf
+    · norm_cast
+      rw [mul_assoc]; rw [← C_ofNat]; rw [degree_C_mul two_ne_zero]; rw [mul_comm]; rw [degree_mul_X]; rw [degree_U_natCast R n]; rw [degree_U_natCast R (n + 1)]
+      norm_cast; omega
+
+@[simp]
 
 中文:
 定理 leadingCoeff_U_natCast
@@ -1613,7 +1735,13 @@ theorem leadingCoeff_U_natCast
   | one => simp [this]
   | more n ih1 ih2 =>
     push_cast; push_cast at ih2
-    rw [U_add_two]; rw [leadingCoeff_sub_of_degree_lt]; rw [leadingCoeff_m
+    rw [U_add_two]; rw [leadingCoeff_sub_of_degree_lt]; rw [leadingCoeff_mul]; rw [ih2]; rw [leadingCoeff_mul]; rw [leadingCoeff_X]; rw [this]
+    · norm_cast; rw [pow_add, pow_add]; ring_nf
+    · norm_cast
+      rw [mul_assoc]; rw [← C_ofNat]; rw [degree_C_mul two_ne_zero]; rw [mul_comm]; rw [degree_mul_X]; rw [degree_U_natCast R n]; rw [degree_U_natCast R (n + 1)]
+      norm_cast; omega
+
+@[simp]
 
 Depends on / 依赖: C_ofNat, Nat.twoStepInduction, U_add_two, degree_C_mul, degree_mul_X, leadingCoeff, leadingCoeff_C, leadingCoeff_X, leadingCoeff_mul, leadingCoeff_sub_of_degree_lt, mul_assoc, mul_comm, pow_add, ring_nf, twoStepInduction, two_ne_zero
 -/
@@ -1647,7 +1775,9 @@ theorem U_eval_neg
   | more n ih1 ih2 =>
     trans (n + 2 : Int).negOnePow * (2 * x * (U R (n + 1)).eval x - (U R n).eval x)
     · push_cast; push_cast at ih2
-      rw [U_add_two]; rw [eval_sub]; rw [eval_mul]; rw [eval_mul]; rw [ih1]; r
+      rw [U_add_two]; rw [eval_sub]; rw [eval_mul]; rw [eval_mul]; rw [ih1]; rw [ih2]; rw [Int.negOnePow_succ]; rw [Int.negOnePow_add]; rw [Int.negOnePow_even 2 even_two]
+      simp; ring
+    · simp
 
 中文:
 定理 U_eval_neg
@@ -1660,7 +1790,9 @@ theorem U_eval_neg
   | more n ih1 ih2 =>
     trans (n + 2 : Int).negOnePow * (2 * x * (U R (n + 1)).eval x - (U R n).eval x)
     · push_cast; push_cast at ih2
-      rw [U_add_two]; rw [eval_sub]; rw [eval_mul]; rw [eval_mul]; rw [ih1]; r
+      rw [U_add_two]; rw [eval_sub]; rw [eval_mul]; rw [eval_mul]; rw [ih1]; rw [ih2]; rw [Int.negOnePow_succ]; rw [Int.negOnePow_add]; rw [Int.negOnePow_even 2 even_two]
+      simp; ring
+    · simp
 
 Depends on / 依赖: Int.negOnePow_add, Int.negOnePow_even, Int.negOnePow_succ, Nat.twoStepInduction, U_add_two, eval_mul, eval_sub, even_two, negOnePow, negOnePow_add, negOnePow_even, negOnePow_succ, twoStepInduction
 -/
@@ -1729,7 +1861,12 @@ theorem U_eq_X_mul_U_add_T
     have h₁ := U_add_two R (n + 1)
     have h₂ := U_add_two R n
     have h₃ := T_add_two R (n + 1)
-    linear_combination (norm := ring_nf) -h₃ - (X : R[X]
+    linear_combination (norm := ring_nf) -h₃ - (X : R[X]) * h₂ + h₁ + 2 * (X : R[X]) * ih1 - ih2
+  | neg_add_one n ih1 ih2 =>
+    have h₁ := U_add_two R (-n - 1)
+    have h₂ := U_add_two R (-n)
+    have h₃ := T_add_two R (-n)
+    linear_combination (norm := ring_nf) -h₃ + h₂ - (X : R[X]) * h₁ - ih2 + 2 * (X : R[X]) * ih1
 
 中文:
 定理 U_eq_X_mul_U_add_T
@@ -1743,7 +1880,12 @@ theorem U_eq_X_mul_U_add_T
     have h₁ := U_add_two R (n + 1)
     have h₂ := U_add_two R n
     have h₃ := T_add_two R (n + 1)
-    linear_combination (norm := ring_nf) -h₃ - (X : R[X]
+    linear_combination (norm := ring_nf) -h₃ - (X : R[X]) * h₂ + h₁ + 2 * (X : R[X]) * ih1 - ih2
+  | neg_add_one n ih1 ih2 =>
+    have h₁ := U_add_two R (-n - 1)
+    have h₂ := U_add_two R (-n)
+    have h₃ := T_add_two R (-n)
+    linear_combination (norm := ring_nf) -h₃ + h₂ - (X : R[X]) * h₁ - ih2 + 2 * (X : R[X]) * ih1
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, T_add_two, T_two, U_add_two, U_two, add_two, induct, linear_combination, neg_add_one, ring_nf, two_mul
 -/
@@ -1922,7 +2064,10 @@ theorem U_mem_span_T
     rw [show U R (1 : Nat) = 2 * T R 1 by simp]; rw [← smul_eq_mul]; norm_cast
     exact Submodule.smul_of_tower_mem _ 2 (Submodule.mem_span_of_mem ⟨1, by simp⟩)
   | more n h₀ _ =>
-    push_cast; rw [U_eq_two_mul_T_add_U, ←
+    push_cast; rw [U_eq_two_mul_T_add_U, ← smul_eq_mul]; norm_cast
+    refine Submodule.add_mem _ ?_ ((Submodule.span_mono (by grind)) h₀)
+    · exact Submodule.smul_of_tower_mem _ 2
+        (Submodule.mem_span_of_mem ⟨n + 2, by simp⟩)
 
 中文:
 定理 U_mem_span_T
@@ -1935,7 +2080,10 @@ theorem U_mem_span_T
     rw [show U R (1 : Nat) = 2 * T R 1 by simp]; rw [← smul_eq_mul]; norm_cast
     exact Submodule.smul_of_tower_mem _ 2 (Submodule.mem_span_of_mem ⟨1, by simp⟩)
   | more n h₀ _ =>
-    push_cast; rw [U_eq_two_mul_T_add_U, ←
+    push_cast; rw [U_eq_two_mul_T_add_U, ← smul_eq_mul]; norm_cast
+    refine Submodule.add_mem _ ?_ ((Submodule.span_mono (by grind)) h₀)
+    · exact Submodule.smul_of_tower_mem _ 2
+        (Submodule.mem_span_of_mem ⟨n + 2, by simp⟩)
 
 Depends on / 依赖: Nat.twoStepInduction, Submodule, Submodule.add_mem, Submodule.mem_span_of_mem, Submodule.smul_of_tower_mem, Submodule.span_mono, U_eq_two_mul_T_add_U, add_mem, mem_span_of_mem, smul_eq_mul, smul_of_tower_mem, span_mono, twoStepInduction
 -/
@@ -2185,6 +2333,9 @@ theorem C_neg
     have h₂ := C_sub_two R (-n)
     linear_combination (norm := ring_nf) (X : R[X]) * ih1 - ih2 - h₁ + h₂
   | neg_add_one n ih1 ih2 =>
+    have h₁ := C_add_one R n
+    have h₂ := C_sub_one R (-n)
+    linear_combination (norm := ring_nf) (X : R[X]) * ih1 - ih2 + h₁ - h₂
 
 中文:
 定理 C_neg
@@ -2199,6 +2350,9 @@ theorem C_neg
     have h₂ := C_sub_two R (-n)
     linear_combination (norm := ring_nf) (X : R[X]) * ih1 - ih2 - h₁ + h₂
   | neg_add_one n ih1 ih2 =>
+    have h₁ := C_add_one R n
+    have h₂ := C_sub_one R (-n)
+    linear_combination (norm := ring_nf) (X : R[X]) * ih1 - ih2 + h₁ - h₂
 
 Depends on / 依赖: C_add_one, C_add_two, C_neg_one, C_one, C_sub_one, C_sub_two, Chebyshev, Polynomial, Polynomial.Chebyshev.induct, add_two, induct, linear_combination, neg_add_one, ring_nf
 -/
@@ -2270,7 +2424,9 @@ theorem C_comp_two_mul_X
     ring
   | neg_add_one n ih1 ih2 =>
     simp_rw [C_sub_one, T_sub_one, sub_comp, mul_comp, X_comp, ih1, ih2]
-  
+    ring
+
+@[simp]
 
 中文:
 定理 C_comp_two_mul_X
@@ -2285,7 +2441,9 @@ theorem C_comp_two_mul_X
     ring
   | neg_add_one n ih1 ih2 =>
     simp_rw [C_sub_one, T_sub_one, sub_comp, mul_comp, X_comp, ih1, ih2]
-  
+    ring
+
+@[simp]
 
 Depends on / 依赖: C_add_two, C_sub_one, Chebyshev, Polynomial, Polynomial.Chebyshev.induct, T_add_two, T_sub_one, X_comp, add_two, induct, mul_comp, neg_add_one, simp_rw, sub_comp
 -/
@@ -2351,7 +2509,15 @@ theorem C_eval_neg_two
   | add_two n ih1 ih2 =>
     simp only [C_add_two, eval_sub, eval_mul, eval_X, mul_neg, mul_one, ih1,
       Int.negOnePow_add, Int.negOnePow_one, Units.val_neg, Int.cast_neg, neg_mul, neg_neg, ih2,
-      Int.neg
+      Int.negOnePow_def 2]
+    norm_cast
+    norm_num
+    ring
+  | neg_add_one n ih1 ih2 =>
+    simp only [C_sub_one, eval_sub, eval_mul, eval_X, mul_neg, mul_one, ih1, neg_mul,
+      ih2, Int.negOnePow_add, Int.negOnePow_one, Units.val_neg, Int.cast_neg, sub_neg_eq_add,
+      Int.negOnePow_sub]
+    ring
 
 中文:
 定理 C_eval_neg_two
@@ -2364,7 +2530,15 @@ theorem C_eval_neg_two
   | add_two n ih1 ih2 =>
     simp only [C_add_two, eval_sub, eval_mul, eval_X, mul_neg, mul_one, ih1,
       Int.negOnePow_add, Int.negOnePow_one, Units.val_neg, Int.cast_neg, neg_mul, neg_neg, ih2,
-      Int.neg
+      Int.negOnePow_def 2]
+    norm_cast
+    norm_num
+    ring
+  | neg_add_one n ih1 ih2 =>
+    simp only [C_sub_one, eval_sub, eval_mul, eval_X, mul_neg, mul_one, ih1, neg_mul,
+      ih2, Int.negOnePow_add, Int.negOnePow_one, Units.val_neg, Int.cast_neg, sub_neg_eq_add,
+      Int.negOnePow_sub]
+    ring
 
 Depends on / 依赖: C_add_two, C_sub_one, Chebyshev, Int.cast_neg, Int.negOnePow_add, Int.negOnePow_def, Int.negOnePow_one, Polynomial, Polynomial.Chebyshev.induct, Units.val_neg, add_two, cast_neg, eval_X, eval_mul, eval_sub, induct, mul_neg, mul_one, negOnePow_add, negOnePow_def
 -/
@@ -2689,7 +2863,9 @@ theorem S_neg_sub_one
     have h₂ := S_sub_two R (-n - 1)
     linear_combination (norm := ring_nf) (X : R[X]) * ih1 - ih2 + h₁ + h₂
   | neg_add_one n ih1 ih2 =>
-    have h₁ := S_e
+    have h₁ := S_eq R n
+    have h₂ := S_sub_two R (-n)
+    linear_combination (norm := ring_nf) (X : R[X]) * ih1 - ih2 + h₁ + h₂
 
 中文:
 定理 S_neg_sub_one
@@ -2704,7 +2880,9 @@ theorem S_neg_sub_one
     have h₂ := S_sub_two R (-n - 1)
     linear_combination (norm := ring_nf) (X : R[X]) * ih1 - ih2 + h₁ + h₂
   | neg_add_one n ih1 ih2 =>
-    have h₁ := S_e
+    have h₁ := S_eq R n
+    have h₂ := S_sub_two R (-n)
+    linear_combination (norm := ring_nf) (X : R[X]) * ih1 - ih2 + h₁ + h₂
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, S_add_one, S_eq, S_sub_two, add_two, induct, linear_combination, neg_add_one, ring_nf
 -/
@@ -2788,7 +2966,10 @@ theorem S_eval_two
       Int.cast_add, Int.cast_natCast, Int.cast_one, ih2, Int.cast_ofNat]
     ring
   | neg_add_one n ih1 ih2 =>
-    si
+    simp only [S_sub_one, eval_sub, eval_mul, eval_X,
+      ih1, Int.cast_neg, Int.cast_natCast, ih2, Int.cast_add, Int.cast_one, Int.cast_sub,
+      sub_add_cancel]
+    ring
 
 中文:
 定理 S_eval_two
@@ -2803,7 +2984,10 @@ theorem S_eval_two
       Int.cast_add, Int.cast_natCast, Int.cast_one, ih2, Int.cast_ofNat]
     ring
   | neg_add_one n ih1 ih2 =>
-    si
+    simp only [S_sub_one, eval_sub, eval_mul, eval_X,
+      ih1, Int.cast_neg, Int.cast_natCast, ih2, Int.cast_add, Int.cast_one, Int.cast_sub,
+      sub_add_cancel]
+    ring
 
 Depends on / 依赖: Chebyshev, Int.cast_add, Int.cast_natCast, Int.cast_neg, Int.cast_ofNat, Int.cast_one, Int.cast_sub, Polynomial, Polynomial.Chebyshev.induct, S_add_two, S_sub_one, add_two, cast_add, cast_natCast, cast_neg, cast_ofNat, cast_one, cast_sub, eval_X, eval_mul
 -/
@@ -2837,7 +3021,17 @@ theorem S_eval_neg_two
   | add_two n ih1 ih2 =>
     simp only [S_add_two, eval_sub, eval_mul, eval_X, ih1,
       Int.cast_add, Int.cast_natCast, Int.cast_one, neg_mul, ih2, Int.cast_ofNat, Int.negOnePow_add,
-      Int.negOne
+      Int.negOnePow_def 2]
+    norm_cast
+    norm_num
+    ring
+  | neg_add_one n ih1 ih2 =>
+    simp only [S_sub_one, eval_sub, eval_mul, eval_X, mul_neg, ih1,
+      Int.cast_neg, Int.cast_natCast, Int.negOnePow_neg, neg_mul, ih2, Int.cast_add, Int.cast_one,
+      Int.cast_sub, sub_add_cancel, Int.negOnePow_sub, Int.negOnePow_add]
+    norm_cast
+    norm_num
+    ring
 
 中文:
 定理 S_eval_neg_two
@@ -2850,7 +3044,17 @@ theorem S_eval_neg_two
   | add_two n ih1 ih2 =>
     simp only [S_add_two, eval_sub, eval_mul, eval_X, ih1,
       Int.cast_add, Int.cast_natCast, Int.cast_one, neg_mul, ih2, Int.cast_ofNat, Int.negOnePow_add,
-      Int.negOne
+      Int.negOnePow_def 2]
+    norm_cast
+    norm_num
+    ring
+  | neg_add_one n ih1 ih2 =>
+    simp only [S_sub_one, eval_sub, eval_mul, eval_X, mul_neg, ih1,
+      Int.cast_neg, Int.cast_natCast, Int.negOnePow_neg, neg_mul, ih2, Int.cast_add, Int.cast_one,
+      Int.cast_sub, sub_add_cancel, Int.negOnePow_sub, Int.negOnePow_add]
+    norm_cast
+    norm_num
+    ring
 
 Depends on / 依赖: Chebyshev, Int.c, Int.cast_add, Int.cast_natCast, Int.cast_neg, Int.cast_ofNat, Int.cast_one, Int.negOnePow_add, Int.negOnePow_def, Int.negOnePow_neg, Polynomial, Polynomial.Chebyshev.induct, S_add_two, S_sub_one, add_two, cast_add, cast_natCast, cast_neg, cast_ofNat, cast_one
 -/
@@ -2995,7 +3199,12 @@ theorem S_eq_X_mul_S_add_C
     have h₁ := S_add_two R (n + 1)
     have h₂ := S_add_two R n
     have h₃ := C_add_two R (n + 1)
-    linear_combination (norm := ring_nf) -h₃ - (X : R[X]
+    linear_combination (norm := ring_nf) -h₃ - (X : R[X]) * h₂ + 2 * h₁ + (X : R[X]) * ih1 - ih2
+  | neg_add_one n ih1 ih2 =>
+    have h₁ := S_add_two R (-n - 1)
+    have h₂ := S_add_two R (-n)
+    have h₃ := C_add_two R (-n)
+    linear_combination (norm := ring_nf) -h₃ + 2 * h₂ - (X : R[X]) * h₁ - ih2 + (X : R[X]) * ih1
 
 中文:
 定理 S_eq_X_mul_S_add_C
@@ -3009,7 +3218,12 @@ theorem S_eq_X_mul_S_add_C
     have h₁ := S_add_two R (n + 1)
     have h₂ := S_add_two R n
     have h₃ := C_add_two R (n + 1)
-    linear_combination (norm := ring_nf) -h₃ - (X : R[X]
+    linear_combination (norm := ring_nf) -h₃ - (X : R[X]) * h₂ + 2 * h₁ + (X : R[X]) * ih1 - ih2
+  | neg_add_one n ih1 ih2 =>
+    have h₁ := S_add_two R (-n - 1)
+    have h₂ := S_add_two R (-n)
+    have h₃ := C_add_two R (-n)
+    linear_combination (norm := ring_nf) -h₃ + 2 * h₂ - (X : R[X]) * h₁ - ih2 + (X : R[X]) * ih1
 
 Depends on / 依赖: C_add_two, C_two, Chebyshev, Polynomial, Polynomial.Chebyshev.induct, S_add_two, S_two, add_two, induct, linear_combination, neg_add_one, ring_nf, two_mul
 -/
@@ -3068,7 +3282,10 @@ theorem map_T
     simp_rw [T_add_two, Polynomial.map_sub, Polynomial.map_mul, Polynomial.map_ofNat, map_X,
       ih1, ih2]
   | neg_add_one n ih1 ih2 =>
-    simp_rw [T_sub_one, Polynomial.map_sub, Poly
+    simp_rw [T_sub_one, Polynomial.map_sub, Polynomial.map_mul, Polynomial.map_ofNat, map_X, ih1,
+      ih2]
+
+@[simp]
 
 中文:
 定理 map_T
@@ -3082,7 +3299,10 @@ theorem map_T
     simp_rw [T_add_two, Polynomial.map_sub, Polynomial.map_mul, Polynomial.map_ofNat, map_X,
       ih1, ih2]
   | neg_add_one n ih1 ih2 =>
-    simp_rw [T_sub_one, Polynomial.map_sub, Poly
+    simp_rw [T_sub_one, Polynomial.map_sub, Polynomial.map_mul, Polynomial.map_ofNat, map_X, ih1,
+      ih2]
+
+@[simp]
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, Polynomial.map_mul, Polynomial.map_ofNat, Polynomial.map_sub, T_add_two, T_sub_one, add_two, induct, map_X, map_mul, map_ofNat, map_sub, neg_add_one, simp_rw
 -/
@@ -3113,7 +3333,10 @@ theorem map_U
     simp_rw [U_add_two, Polynomial.map_sub, Polynomial.map_mul, Polynomial.map_ofNat, map_X, ih1,
       ih2]
   | neg_add_one n ih1 ih2 =>
-    simp_rw [U_sub_one, Polynomial.map_sub, Poly
+    simp_rw [U_sub_one, Polynomial.map_sub, Polynomial.map_mul, Polynomial.map_ofNat, map_X, ih1,
+      ih2]
+
+@[simp]
 
 中文:
 定理 map_U
@@ -3127,7 +3350,10 @@ theorem map_U
     simp_rw [U_add_two, Polynomial.map_sub, Polynomial.map_mul, Polynomial.map_ofNat, map_X, ih1,
       ih2]
   | neg_add_one n ih1 ih2 =>
-    simp_rw [U_sub_one, Polynomial.map_sub, Poly
+    simp_rw [U_sub_one, Polynomial.map_sub, Polynomial.map_mul, Polynomial.map_ofNat, map_X, ih1,
+      ih2]
+
+@[simp]
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, Polynomial.map_mul, Polynomial.map_ofNat, Polynomial.map_sub, U_add_two, U_sub_one, add_two, induct, map_X, map_mul, map_ofNat, map_sub, neg_add_one, simp_rw
 -/
@@ -3157,7 +3383,9 @@ theorem map_C
   | add_two n ih1 ih2 =>
     simp_rw [C_add_two, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, ih2]
   | neg_add_one n ih1 ih2 =>
-    simp_rw [C_sub_one, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, 
+    simp_rw [C_sub_one, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, ih2]
+
+@[simp]
 
 中文:
 定理 map_C
@@ -3170,7 +3398,9 @@ theorem map_C
   | add_two n ih1 ih2 =>
     simp_rw [C_add_two, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, ih2]
   | neg_add_one n ih1 ih2 =>
-    simp_rw [C_sub_one, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, 
+    simp_rw [C_sub_one, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, ih2]
+
+@[simp]
 
 Depends on / 依赖: C_add_two, C_sub_one, Chebyshev, Polynomial, Polynomial.Chebyshev.induct, Polynomial.map_mul, Polynomial.map_sub, add_two, induct, map_X, map_mul, map_sub, neg_add_one, simp_rw
 -/
@@ -3198,7 +3428,9 @@ theorem map_S
   | add_two n ih1 ih2 =>
     simp_rw [S_add_two, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, ih2]
   | neg_add_one n ih1 ih2 =>
-    simp_rw [S_sub_one, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, 
+    simp_rw [S_sub_one, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, ih2]
+
+@[simp]
 
 中文:
 定理 map_S
@@ -3211,7 +3443,9 @@ theorem map_S
   | add_two n ih1 ih2 =>
     simp_rw [S_add_two, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, ih2]
   | neg_add_one n ih1 ih2 =>
-    simp_rw [S_sub_one, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, 
+    simp_rw [S_sub_one, Polynomial.map_sub, Polynomial.map_mul, map_X, ih1, ih2]
+
+@[simp]
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, Polynomial.map_mul, Polynomial.map_sub, S_add_two, S_sub_one, add_two, induct, map_X, map_mul, map_sub, neg_add_one, simp_rw
 -/
@@ -3448,7 +3682,16 @@ theorem T_derivative_eq_U
     have h₁ := congr_arg derivative (T_add_two R n)
     have h₂ := U_sub_one R n
     have h₃ := T_eq_U_sub_X_mul_U R (n + 1)
-    simp only [derivative_sub, derivative_mul, derivative
+    simp only [derivative_sub, derivative_mul, derivative_ofNat, derivative_X] at h₁
+    linear_combination (norm := (push_cast; ring_nf))
+      h₁ - ih2 + 2 * (X : R[X]) * ih1 + 2 * h₃ - n * h₂
+  | neg_add_one n ih1 ih2 =>
+    have h₁ := congr_arg derivative (T_sub_one R (-n))
+    have h₂ := U_sub_two R (-n)
+    have h₃ := T_eq_U_sub_X_mul_U R (-n)
+    simp only [derivative_sub, derivative_mul, derivative_ofNat, derivative_X] at h₁
+    linear_combination (norm := (push_cast; ring_nf))
+      -ih2 + 2 * (X : R[X]) * ih1 + h₁ + 2 * h₃ + (n + 1) * h₂
 
 中文:
 定理 T_derivative_eq_U
@@ -3463,7 +3706,16 @@ theorem T_derivative_eq_U
     have h₁ := congr_arg derivative (T_add_two R n)
     have h₂ := U_sub_one R n
     have h₃ := T_eq_U_sub_X_mul_U R (n + 1)
-    simp only [derivative_sub, derivative_mul, derivative
+    simp only [derivative_sub, derivative_mul, derivative_ofNat, derivative_X] at h₁
+    linear_combination (norm := (push_cast; ring_nf))
+      h₁ - ih2 + 2 * (X : R[X]) * ih1 + 2 * h₃ - n * h₂
+  | neg_add_one n ih1 ih2 =>
+    have h₁ := congr_arg derivative (T_sub_one R (-n))
+    have h₂ := U_sub_two R (-n)
+    have h₃ := T_eq_U_sub_X_mul_U R (-n)
+    simp only [derivative_sub, derivative_mul, derivative_ofNat, derivative_X] at h₁
+    linear_combination (norm := (push_cast; ring_nf))
+      -ih2 + 2 * (X : R[X]) * ih1 + h₁ + 2 * h₃ + (n + 1) * h₂
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, T_add_two, T_eq_U_sub_X_mul_U, T_sub_one, U_sub_one, U_sub_two, add_two, congr_arg, derivative, derivative_X, derivative_mul, derivative_ofNat, derivative_sub, induct, linear_combination, neg_add_one, ring_nf
 -/
@@ -3534,7 +3786,13 @@ theorem T_iterate_derivative_mem_span_T
   case succ k ih =>
     rw [Function.iterate_succ_apply']
     suffices Submodule.span Nat ((fun m : Nat => derivative (T R m)) '' Set.Icc 0 (n - k)) <=
-      Submodule.span Nat ((fun
+      Submodule.span Nat ((fun m : Nat => T R m) '' Set.Icc 0 (n - (k + 1))) by
+      apply this
+      convert! Submodule.apply_mem_span_image_of_mem_span (derivative.restrictScalars Nat) ih using 2
+      simp [Set.image]
+    refine Submodule.span_le.mpr (fun x hx => ?_)
+    obtain ⟨m, hm, rfl⟩ := hx
+    refine (Submodule.span_mono (by grind)) (T_derivative_mem_span_T (R := R) m)
 
 中文:
 定理 T_iterate_derivative_mem_span_T
@@ -3547,7 +3805,13 @@ theorem T_iterate_derivative_mem_span_T
   case succ k ih =>
     rw [Function.iterate_succ_apply']
     suffices Submodule.span Nat ((fun m : Nat => derivative (T R m)) '' Set.Icc 0 (n - k)) <=
-      Submodule.span Nat ((fun
+      Submodule.span Nat ((fun m : Nat => T R m) '' Set.Icc 0 (n - (k + 1))) by
+      apply this
+      convert! Submodule.apply_mem_span_image_of_mem_span (derivative.restrictScalars Nat) ih using 2
+      simp [Set.image]
+    refine Submodule.span_le.mpr (fun x hx => ?_)
+    obtain ⟨m, hm, rfl⟩ := hx
+    refine (Submodule.span_mono (by grind)) (T_derivative_mem_span_T (R := R) m)
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, Function.iterate_zero_apply, Set.Icc, Set.image, Submodule, Submodule.apply_mem_span_image_of_mem_span, Submodule.mem_span_of_mem, Submodule.span, Submodule.span_le.mpr, apply_mem_span_image_of_mem_span, convert, derivative, derivative.restrictScalars, iterate_succ_apply, iterate_zero_apply, mem_span_of_mem, restrictScalars, span_le
 -/
@@ -3613,7 +3877,7 @@ have h₁ := congr_arg derivative T_eq_X_mul_T_sub_pol_U R n
     T_derivative_eq_U, C_eq_natCast] at h₁
   have h₂ := T_eq_U_sub_X_mul_U R (n + 1)
   linear_combination (norm := (push_cast; ring_nf))
-    h₁ +
+    h₁ + (n + 2) * h₂
 
 中文:
 定理 add_one_mul_T_eq_poly_in_U
@@ -3624,7 +3888,7 @@ have h₁ := congr_arg derivative T_eq_X_mul_T_sub_pol_U R n
     T_derivative_eq_U, C_eq_natCast] at h₁
   have h₂ := T_eq_U_sub_X_mul_U R (n + 1)
   linear_combination (norm := (push_cast; ring_nf))
-    h₁ +
+    h₁ + (n + 2) * h₂
 
 Depends on / 依赖: C_eq_natCast, T_derivative_eq_U, T_eq_U_sub_X_mul_U, T_eq_X_mul_T_sub_pol_U, congr_arg, derivative, derivative_X, derivative_X_pow, derivative_mul, derivative_one, derivative_sub, linear_combination, ring_nf
 -/
@@ -3678,7 +3942,10 @@ theorem one_sub_X_sq_mul_derivative_derivative_T_eq_poly_in_T
 have h₁ := congr_arg derivative one_sub_X_sq_mul_derivative_T_eq_poly_in_T (R := R) (n - 1)
   simp only [derivative_sub, derivative_mul, derivative_X, derivative_one, derivative_X_pow,
     C_eq_natCast, sub_add_cancel, Int.cast_sub, Int.cast_one, derivative_intCast] at h₁
-  have h₂ := add_one_mul
+  have h₂ := add_one_mul_self_mul_T_eq_poly_in_T (R := R) (n - 1)
+  rw [Function.iterate_succ]; rw [Function.iterate_one]; rw [Function.comp_apply]
+  linear_combination (norm := (push_cast; ring_nf))
+    h₁ + h₂
 
 中文:
 定理 one_sub_X_sq_mul_derivative_derivative_T_eq_poly_in_T
@@ -3687,7 +3954,10 @@ have h₁ := congr_arg derivative one_sub_X_sq_mul_derivative_T_eq_poly_in_T (R 
 have h₁ := congr_arg derivative one_sub_X_sq_mul_derivative_T_eq_poly_in_T (R := R) (n - 1)
   simp only [derivative_sub, derivative_mul, derivative_X, derivative_one, derivative_X_pow,
     C_eq_natCast, sub_add_cancel, Int.cast_sub, Int.cast_one, derivative_intCast] at h₁
-  have h₂ := add_one_mul
+  have h₂ := add_one_mul_self_mul_T_eq_poly_in_T (R := R) (n - 1)
+  rw [Function.iterate_succ]; rw [Function.iterate_one]; rw [Function.comp_apply]
+  linear_combination (norm := (push_cast; ring_nf))
+    h₁ + h₂
 
 Depends on / 依赖: C_eq_natCast, Function, Function.comp_apply, Function.iterate_one, Function.iterate_succ, Int.cast_one, Int.cast_sub, add_one_mul_self_mul_T_eq_poly_in_T, cast_one, cast_sub, comp_apply, congr_arg, derivative, derivative_X, derivative_X_pow, derivative_intCast, derivative_mul, derivative_one, derivative_sub, iterate_one
 -/
@@ -3711,7 +3981,8 @@ theorem one_sub_X_sq_mul_derivative_derivative_U_eq_poly_in_U
 have h := congr_arg derivative add_one_mul_T_eq_poly_in_U (R := R) n
   simp only [derivative_add, derivative_sub, derivative_mul, derivative_X, derivative_one,
     derivative_X_pow, derivative_intCast, C_eq_natCast, T_derivative_eq_U] at h
-  rw [Function.iterate_succ]; rw [Function.iterate_one]; 
+  rw [Function.iterate_succ]; rw [Function.iterate_one]; rw [Function.comp_apply]
+  linear_combination (norm := (push_cast; ring_nf)) h
 
 中文:
 定理 one_sub_X_sq_mul_derivative_derivative_U_eq_poly_in_U
@@ -3720,7 +3991,8 @@ have h := congr_arg derivative add_one_mul_T_eq_poly_in_U (R := R) n
 have h := congr_arg derivative add_one_mul_T_eq_poly_in_U (R := R) n
   simp only [derivative_add, derivative_sub, derivative_mul, derivative_X, derivative_one,
     derivative_X_pow, derivative_intCast, C_eq_natCast, T_derivative_eq_U] at h
-  rw [Function.iterate_succ]; rw [Function.iterate_one]; 
+  rw [Function.iterate_succ]; rw [Function.iterate_one]; rw [Function.comp_apply]
+  linear_combination (norm := (push_cast; ring_nf)) h
 
 Depends on / 依赖: C_eq_natCast, Function, Function.comp_apply, Function.iterate_one, Function.iterate_succ, T_derivative_eq_U, add_one_mul_T_eq_poly_in_U, comp_apply, congr_arg, derivative, derivative_X, derivative_X_pow, derivative_add, derivative_intCast, derivative_mul, derivative_one, derivative_sub, iterate_one, iterate_succ, linear_combination
 -/
@@ -3743,7 +4015,9 @@ theorem one_sub_X_sq_mul_iterate_derivative_T_eq_poly_in_T
 have h := congr_arg derivative^[k] one_sub_X_sq_mul_derivative_derivative_T_eq_poly_in_T
     (R := R) n
   norm_cast at h
-  rw [sub_mul]; rw [iterate_derivative_sub]; rw [one_mul]; rw [← Function.iterate_add_apply]; rw [mul_comm (X ^ 2)]; rw [iterate_derivative_sub]; rw [mul_comm X]; rw [iterate_d
+  rw [sub_mul]; rw [iterate_derivative_sub]; rw [one_mul]; rw [← Function.iterate_add_apply]; rw [mul_comm (X ^ 2)]; rw [iterate_derivative_sub]; rw [mul_comm X]; rw [iterate_derivative_intCast_mul]; rw [iterate_derivative_derivative_mul_X_sq]; rw [iterate_derivative_derivative_mul_X] at h
+  linear_combination (norm := (push_cast; ring_nf)) h
+  cases k <;> grind
 
 中文:
 定理 one_sub_X_sq_mul_iterate_derivative_T_eq_poly_in_T
@@ -3752,7 +4026,9 @@ have h := congr_arg derivative^[k] one_sub_X_sq_mul_derivative_derivative_T_eq_p
 have h := congr_arg derivative^[k] one_sub_X_sq_mul_derivative_derivative_T_eq_poly_in_T
     (R := R) n
   norm_cast at h
-  rw [sub_mul]; rw [iterate_derivative_sub]; rw [one_mul]; rw [← Function.iterate_add_apply]; rw [mul_comm (X ^ 2)]; rw [iterate_derivative_sub]; rw [mul_comm X]; rw [iterate_d
+  rw [sub_mul]; rw [iterate_derivative_sub]; rw [one_mul]; rw [← Function.iterate_add_apply]; rw [mul_comm (X ^ 2)]; rw [iterate_derivative_sub]; rw [mul_comm X]; rw [iterate_derivative_intCast_mul]; rw [iterate_derivative_derivative_mul_X_sq]; rw [iterate_derivative_derivative_mul_X] at h
+  linear_combination (norm := (push_cast; ring_nf)) h
+  cases k <;> grind
 
 Depends on / 依赖: Function, Function.iterate_add_apply, congr_arg, derivative, iterate_add_apply, iterate_derivative_derivative_mul_X, iterate_derivative_derivative_mul_X_sq, iterate_derivative_intCast_mul, iterate_derivative_sub, linear_combination, mul_comm, one_mul, one_sub_X_sq_mul_derivative_derivative_T_eq_poly_in_T, ring_nf, sub_mul
 -/
@@ -3777,7 +4053,9 @@ theorem one_sub_X_sq_mul_iterate_derivative_U_eq_poly_in_U
 have h := congr_arg derivative^[k] one_sub_X_sq_mul_derivative_derivative_U_eq_poly_in_U
     (R := R) n
   norm_cast at h
-  rw [sub_mul]; rw [iterate_derivative_sub]; rw [one_mul]; rw [← Function.iterate_add_apply]; rw [mul_comm (X ^ 2)]; rw [iterate_derivative_sub]; rw [mul_assoc 3]; rw [← Nat.ca
+  rw [sub_mul]; rw [iterate_derivative_sub]; rw [one_mul]; rw [← Function.iterate_add_apply]; rw [mul_comm (X ^ 2)]; rw [iterate_derivative_sub]; rw [mul_assoc 3]; rw [← Nat.cast_three]; rw [iterate_derivative_natCast_mul]; rw [mul_comm X]; rw [iterate_derivative_intCast_mul]; rw [iterate_derivative_derivative_mul_X_sq]; rw [iterate_derivative_derivative_mul_X] at h
+  linear_combination (norm := (push_cast; ring_nf)) h
+  cases k <;> grind
 
 中文:
 定理 one_sub_X_sq_mul_iterate_derivative_U_eq_poly_in_U
@@ -3786,7 +4064,9 @@ have h := congr_arg derivative^[k] one_sub_X_sq_mul_derivative_derivative_U_eq_p
 have h := congr_arg derivative^[k] one_sub_X_sq_mul_derivative_derivative_U_eq_poly_in_U
     (R := R) n
   norm_cast at h
-  rw [sub_mul]; rw [iterate_derivative_sub]; rw [one_mul]; rw [← Function.iterate_add_apply]; rw [mul_comm (X ^ 2)]; rw [iterate_derivative_sub]; rw [mul_assoc 3]; rw [← Nat.ca
+  rw [sub_mul]; rw [iterate_derivative_sub]; rw [one_mul]; rw [← Function.iterate_add_apply]; rw [mul_comm (X ^ 2)]; rw [iterate_derivative_sub]; rw [mul_assoc 3]; rw [← Nat.cast_three]; rw [iterate_derivative_natCast_mul]; rw [mul_comm X]; rw [iterate_derivative_intCast_mul]; rw [iterate_derivative_derivative_mul_X_sq]; rw [iterate_derivative_derivative_mul_X] at h
+  linear_combination (norm := (push_cast; ring_nf)) h
+  cases k <;> grind
 
 Depends on / 依赖: Function, Function.iterate_add_apply, Nat.cast_three, cast_three, congr_arg, derivative, iterate_add_apply, iterate_derivative_derivative_mul_X, iterate_derivative_derivative_mul_X_sq, iterate_derivative_intCast_mul, iterate_derivative_natCast_mul, iterate_derivative_sub, linear_combinat, mul_assoc, mul_comm, one_mul, one_sub_X_sq_mul_derivative_derivative_U_eq_poly_in_U, sub_mul
 -/
@@ -3994,7 +4274,7 @@ theorem iterate_derivative_T_eval_one
   case zero => simp
   case succ k ih =>
     push_cast at ih ⊢
-    rw [Finset.range_add_one]; rw [Finset.prod_insert Finset.notMem_range_self]; rw [mul_comm (2 * _ + 1)]; rw [mul_assoc]; rw [iterate_derivative_T_eval_one_recurrence]; rw [← mul_assoc]; rw [mul_comm _ (_ ^ 2 - _ ^ 2)];
+    rw [Finset.range_add_one]; rw [Finset.prod_insert Finset.notMem_range_self]; rw [mul_comm (2 * _ + 1)]; rw [mul_assoc]; rw [iterate_derivative_T_eval_one_recurrence]; rw [← mul_assoc]; rw [mul_comm _ (_ ^ 2 - _ ^ 2)]; rw [mul_assoc]; rw [ih]; rw [Finset.prod_insert Finset.notMem_range_self]
 
 中文:
 定理 iterate_derivative_T_eval_one
@@ -4004,7 +4284,7 @@ theorem iterate_derivative_T_eval_one
   case zero => simp
   case succ k ih =>
     push_cast at ih ⊢
-    rw [Finset.range_add_one]; rw [Finset.prod_insert Finset.notMem_range_self]; rw [mul_comm (2 * _ + 1)]; rw [mul_assoc]; rw [iterate_derivative_T_eval_one_recurrence]; rw [← mul_assoc]; rw [mul_comm _ (_ ^ 2 - _ ^ 2)];
+    rw [Finset.range_add_one]; rw [Finset.prod_insert Finset.notMem_range_self]; rw [mul_comm (2 * _ + 1)]; rw [mul_assoc]; rw [iterate_derivative_T_eval_one_recurrence]; rw [← mul_assoc]; rw [mul_comm _ (_ ^ 2 - _ ^ 2)]; rw [mul_assoc]; rw [ih]; rw [Finset.prod_insert Finset.notMem_range_self]
 
 Depends on / 依赖: Finset, Finset.notMem_range_self, Finset.prod_insert, Finset.range_add_one, iterate_derivative_T_eval_one_recurrence, mul_assoc, mul_comm, notMem_range_self, prod_insert, range_add_one
 -/
@@ -4028,7 +4308,7 @@ theorem iterate_derivative_U_eval_one
   case zero => simp
   case succ k ih =>
     push_cast at ih ⊢
-    rw [Finset.range_add_one]; rw [Finset.prod_insert Finset.notMem_range_self]; rw [mul_comm (2 * _ + 3)]; rw [mul_assoc]; rw [iterate_derivative_U_eval_one_recurrence]; rw [← mul_assoc]; rw [mul_comm _ (_ ^ 2 - _ ^ 2)];
+    rw [Finset.range_add_one]; rw [Finset.prod_insert Finset.notMem_range_self]; rw [mul_comm (2 * _ + 3)]; rw [mul_assoc]; rw [iterate_derivative_U_eval_one_recurrence]; rw [← mul_assoc]; rw [mul_comm _ (_ ^ 2 - _ ^ 2)]; rw [mul_assoc]; rw [ih]; rw [Finset.prod_insert Finset.notMem_range_self]; rw [mul_assoc]
 
 中文:
 定理 iterate_derivative_U_eval_one
@@ -4038,7 +4318,7 @@ theorem iterate_derivative_U_eval_one
   case zero => simp
   case succ k ih =>
     push_cast at ih ⊢
-    rw [Finset.range_add_one]; rw [Finset.prod_insert Finset.notMem_range_self]; rw [mul_comm (2 * _ + 3)]; rw [mul_assoc]; rw [iterate_derivative_U_eval_one_recurrence]; rw [← mul_assoc]; rw [mul_comm _ (_ ^ 2 - _ ^ 2)];
+    rw [Finset.range_add_one]; rw [Finset.prod_insert Finset.notMem_range_self]; rw [mul_comm (2 * _ + 3)]; rw [mul_assoc]; rw [iterate_derivative_U_eval_one_recurrence]; rw [← mul_assoc]; rw [mul_comm _ (_ ^ 2 - _ ^ 2)]; rw [mul_assoc]; rw [ih]; rw [Finset.prod_insert Finset.notMem_range_self]; rw [mul_assoc]
 
 Depends on / 依赖: Finset, Finset.notMem_range_self, Finset.prod_insert, Finset.range_add_one, iterate_derivative_U_eval_one_recurrence, mul_assoc, mul_comm, notMem_range_self, prod_insert, range_add_one
 -/
@@ -4240,7 +4520,12 @@ theorem T_mul_T
     have h₁ := T_add_two R (m + k)
     have h₂ := T_sub_two R (m - k)
     have h₃ := T_add_two R k
-    linear_combination (norm := ring_nf) 2 * T R m * h
+    linear_combination (norm := ring_nf) 2 * T R m * h₃ - h₂ - h₁ - ih2 + 2 * (X : R[X]) * ih1
+  | neg_add_one k ih1 ih2 =>
+    have h₁ := T_add_two R (m + (-k - 1))
+    have h₂ := T_sub_two R (m - (-k - 1))
+    have h₃ := T_add_two R (-k - 1)
+    linear_combination (norm := ring_nf) 2 * T R m * h₃ - h₂ - h₁ - ih2 + 2 * (X : R[X]) * ih1
 
 中文:
 定理 T_mul_T
@@ -4254,7 +4539,12 @@ theorem T_mul_T
     have h₁ := T_add_two R (m + k)
     have h₂ := T_sub_two R (m - k)
     have h₃ := T_add_two R k
-    linear_combination (norm := ring_nf) 2 * T R m * h
+    linear_combination (norm := ring_nf) 2 * T R m * h₃ - h₂ - h₁ - ih2 + 2 * (X : R[X]) * ih1
+  | neg_add_one k ih1 ih2 =>
+    have h₁ := T_add_two R (m + (-k - 1))
+    have h₂ := T_sub_two R (m - (-k - 1))
+    have h₃ := T_add_two R (-k - 1)
+    linear_combination (norm := ring_nf) 2 * T R m * h₃ - h₂ - h₁ - ih2 + 2 * (X : R[X]) * ih1
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, T_add_one, T_add_two, T_one, T_sub_two, add_two, induct, linear_combination, neg_add_one, ring_nf, two_mul
 -/
@@ -4288,7 +4578,12 @@ theorem C_mul_C
     have h₁ := C_add_two R (m + k)
     have h₂ := C_sub_two R (m - k)
     have h₃ := C_add_two R k
-    linear_combination (norm := ring_nf) C R m * h₃ - 
+    linear_combination (norm := ring_nf) C R m * h₃ - h₂ - h₁ - ih2 + (X : R[X]) * ih1
+  | neg_add_one k ih1 ih2 =>
+    have h₁ := C_add_two R (m + (-k - 1))
+    have h₂ := C_sub_two R (m - (-k - 1))
+    have h₃ := C_add_two R (-k - 1)
+    linear_combination (norm := ring_nf) C R m * h₃ - h₂ - h₁ - ih2 + (X : R[X]) * ih1
 
 中文:
 定理 C_mul_C
@@ -4302,7 +4597,12 @@ theorem C_mul_C
     have h₁ := C_add_two R (m + k)
     have h₂ := C_sub_two R (m - k)
     have h₃ := C_add_two R k
-    linear_combination (norm := ring_nf) C R m * h₃ - 
+    linear_combination (norm := ring_nf) C R m * h₃ - h₂ - h₁ - ih2 + (X : R[X]) * ih1
+  | neg_add_one k ih1 ih2 =>
+    have h₁ := C_add_two R (m + (-k - 1))
+    have h₂ := C_sub_two R (m - (-k - 1))
+    have h₃ := C_add_two R (-k - 1)
+    linear_combination (norm := ring_nf) C R m * h₃ - h₂ - h₁ - ih2 + (X : R[X]) * ih1
 
 Depends on / 依赖: C_add_one, C_add_two, C_one, C_sub_two, Chebyshev, Polynomial, Polynomial.Chebyshev.induct, add_two, induct, linear_combination, mul_two, neg_add_one, ring_nf
 -/
@@ -4336,7 +4636,12 @@ theorem T_mul
     have h₁ := T_mul_T R ((m + 1) * n) n
 have h₂ := congr_arg (comp · (T R n)) T_add_two R m
     simp only [sub_comp, mul_comp, ofNat_comp, X_comp] at h₂
-    linear_combination (norm := 
+    linear_combination (norm := ring_nf) -ih2 - h₂ - h₁ + 2 * T R n * ih1
+  | neg_add_one m ih1 ih2 =>
+    have h₁ := T_mul_T R ((-m) * n) n
+have h₂ := congr_arg (comp · (T R n)) T_add_two R (-m - 1)
+    simp only [sub_comp, mul_comp, ofNat_comp, X_comp] at h₂
+    linear_combination (norm := ring_nf) -ih2 - h₂ - h₁ + 2 * T R n * ih1
 
 中文:
 定理 T_mul
@@ -4350,7 +4655,12 @@ have h₂ := congr_arg (comp · (T R n)) T_add_two R m
     have h₁ := T_mul_T R ((m + 1) * n) n
 have h₂ := congr_arg (comp · (T R n)) T_add_two R m
     simp only [sub_comp, mul_comp, ofNat_comp, X_comp] at h₂
-    linear_combination (norm := 
+    linear_combination (norm := ring_nf) -ih2 - h₂ - h₁ + 2 * T R n * ih1
+  | neg_add_one m ih1 ih2 =>
+    have h₁ := T_mul_T R ((-m) * n) n
+have h₂ := congr_arg (comp · (T R n)) T_add_two R (-m - 1)
+    simp only [sub_comp, mul_comp, ofNat_comp, X_comp] at h₂
+    linear_combination (norm := ring_nf) -ih2 - h₂ - h₁ + 2 * T R n * ih1
 
 Depends on / 依赖: Chebyshev, Polynomial, Polynomial.Chebyshev.induct, T_add_two, T_mul_T, X_comp, add_two, congr_arg, induct, linear_combination, mul_comp, neg_add_one, ofNat_comp, ring_nf, sub_comp
 -/
@@ -4384,7 +4694,12 @@ theorem C_mul
     have h₁ := C_mul_C R ((m + 1) * n) n
 have h₂ := congr_arg (comp · (C R n)) C_add_two R m
     simp only [sub_comp, mul_comp, X_comp] at h₂
-    linear_combination (norm := ring_nf) -ih
+    linear_combination (norm := ring_nf) -ih2 - h₂ - h₁ + C R n * ih1
+  | neg_add_one m ih1 ih2 =>
+    have h₁ := C_mul_C R ((-m) * n) n
+have h₂ := congr_arg (comp · (C R n)) C_add_two R (-m - 1)
+    simp only [sub_comp, mul_comp, X_comp] at h₂
+    linear_combination (norm := ring_nf) -ih2 - h₂ - h₁ + C R n * ih1
 
 中文:
 定理 C_mul
@@ -4398,7 +4713,12 @@ have h₂ := congr_arg (comp · (C R n)) C_add_two R m
     have h₁ := C_mul_C R ((m + 1) * n) n
 have h₂ := congr_arg (comp · (C R n)) C_add_two R m
     simp only [sub_comp, mul_comp, X_comp] at h₂
-    linear_combination (norm := ring_nf) -ih
+    linear_combination (norm := ring_nf) -ih2 - h₂ - h₁ + C R n * ih1
+  | neg_add_one m ih1 ih2 =>
+    have h₁ := C_mul_C R ((-m) * n) n
+have h₂ := congr_arg (comp · (C R n)) C_add_two R (-m - 1)
+    simp only [sub_comp, mul_comp, X_comp] at h₂
+    linear_combination (norm := ring_nf) -ih2 - h₂ - h₁ + C R n * ih1
 
 Depends on / 依赖: C_add_two, C_mul_C, Chebyshev, Polynomial, Polynomial.Chebyshev.induct, X_comp, add_two, congr_arg, induct, linear_combination, mul_comp, neg_add_one, ring_nf, sub_comp
 -/

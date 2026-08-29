@@ -34,7 +34,9 @@ theorem exists_finsupp_of_mem_closure_range
     use v + w
     rw [Finsupp.prod_add_index]
     · simp
-    · si
+    · simp [pow_add]
+
+@[to_additive]
 
 中文:
 定理 存在_finsupp_of_mem_closure_range
@@ -49,7 +51,9 @@ theorem exists_finsupp_of_mem_closure_range
     use v + w
     rw [Finsupp.prod_add_index]
     · simp
-    · si
+    · simp [pow_add]
+
+@[to_additive]
 
 Depends on / 依赖: And.intro, Finsupp, Finsupp.prod_add_index, Finsupp.single, classical, closure_induction, pow_add, prod_add_index, single
 -/

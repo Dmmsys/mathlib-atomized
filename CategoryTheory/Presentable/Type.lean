@@ -41,7 +41,26 @@ lemma isCardinalPresentable
       refine Types.FilteredColimit.isColimitOf' _ _ (fun f => ?_) (fun j f g h => ?_)
       · dsimp at f
         choose j g hg using fun x => Types.jointly_surjective_of_isColimit hc (f x)
-        refine ⟨IsCardinalFil
+        refine ⟨IsCardinalFiltered.max j hX,
+          ↾fun x => F.map (IsCardinalFiltered.toMax j hX x) (g x), ?_⟩
+        dsimp
+        ext x
+        dsimp at j g hg x ⊢
+        rw [← hg]
+        exact congr_hom (c.w (IsCardinalFiltered.toMax j hX x)).symm (g x)
+      · choose k a hk using fun x =>
+          (Types.FilteredColimit.isColimit_eq_iff' hc _ _).1 (congr_hom h x)
+        dsimp at f g h k a hk ⊢
+        replace hk : forall x, F.map (a x) (f x) = F.map (a x) (g x) := by assumption
+        obtain ⟨l, b, c, hl⟩ : exists (l : J) (c : j ⟶ l) (b : forall x, k x ⟶ l),
+            forall x, a x ≫ b x = c := by
+          let φ (x : X) : j ⟶ IsCardinalFiltered.max k hX :=
+            a x ≫ IsCardinalFiltered.toMax k hX x
+          exact ⟨IsCardinalFiltered.coeq φ hX,
+            IsCardinalFiltered.toCoeq φ hX,
+            fun x => IsCardinalFiltered.toMax k hX x ≫ IsCardinalFiltered.coeqHom φ hX,
+            fun x => by simpa [φ] using IsCardinalFiltered.coeq_condition φ hX x⟩
+        refine ⟨l, b, by ext x; simp [← hl x, hk]⟩⟩⟩⟩
 
 中文:
 引理 isCardinalPresentable
@@ -51,7 +70,26 @@ lemma isCardinalPresentable
       refine Types.FilteredColimit.isColimitOf' _ _ (fun f => ?_) (fun j f g h => ?_)
       · dsimp at f
         choose j g hg using fun x => Types.jointly_surjective_of_isColimit hc (f x)
-        refine ⟨IsCardinalFil
+        refine ⟨IsCardinalFiltered.max j hX,
+          ↾fun x => F.map (IsCardinalFiltered.toMax j hX x) (g x), ?_⟩
+        dsimp
+        ext x
+        dsimp at j g hg x ⊢
+        rw [← hg]
+        exact congr_hom (c.w (IsCardinalFiltered.toMax j hX x)).symm (g x)
+      · choose k a hk using fun x =>
+          (Types.FilteredColimit.isColimit_eq_iff' hc _ _).1 (congr_hom h x)
+        dsimp at f g h k a hk ⊢
+        replace hk : forall x, F.map (a x) (f x) = F.map (a x) (g x) := by assumption
+        obtain ⟨l, b, c, hl⟩ : exists (l : J) (c : j ⟶ l) (b : forall x, k x ⟶ l),
+            forall x, a x ≫ b x = c := by
+          let φ (x : X) : j ⟶ IsCardinalFiltered.max k hX :=
+            a x ≫ IsCardinalFiltered.toMax k hX x
+          exact ⟨IsCardinalFiltered.coeq φ hX,
+            IsCardinalFiltered.toCoeq φ hX,
+            fun x => IsCardinalFiltered.toMax k hX x ≫ IsCardinalFiltered.coeqHom φ hX,
+            fun x => by simpa [φ] using IsCardinalFiltered.coeq_condition φ hX x⟩
+        refine ⟨l, b, by ext x; simp [← hl x, hk]⟩⟩⟩⟩
 
 Depends on / 依赖: F.map, FilteredCo, FilteredColimit, IsCardinalFiltered, IsCardinalFiltered.max, IsCardinalFiltered.toMax, Types.FilteredCo, Types.FilteredColimit.isColimitOf, Types.jointly_surjective_of_isColimit, congr_hom, isColimitOf, isFiltered_of_isCardinalFiltered, jointly_surjective_of_isColimit
 -/
@@ -282,7 +320,14 @@ lemma isCardinalPresentable_iff
   obtain ⟨⟨A, hA⟩, f, hf⟩ := Types.jointly_surjective_of_isColimit
     (isColimitOfPreserves (coyoneda.obj (op X))
       (HasCardinalLT.Set.isColimitCocone X κ
-        (Cardi
+        (Cardinal.IsRegular.aleph0_le Fact.out))) (𝟙 X)
+  obtain rfl : A = .univ := by
+    ext x
+    have := congr_hom hf x
+    dsimp at this
+    rw [← this]
+    simp
+  exact (hasCardinalLT_iff_of_equiv (Equiv.Set.univ X) _).1 hA
 
 中文:
 引理 isCardinalPresentable_iff
@@ -293,7 +338,14 @@ lemma isCardinalPresentable_iff
   obtain ⟨⟨A, hA⟩, f, hf⟩ := Types.jointly_surjective_of_isColimit
     (isColimitOfPreserves (coyoneda.obj (op X))
       (HasCardinalLT.Set.isColimitCocone X κ
-        (Cardi
+        (Cardinal.IsRegular.aleph0_le Fact.out))) (𝟙 X)
+  obtain rfl : A = .univ := by
+    ext x
+    have := congr_hom hf x
+    dsimp at this
+    rw [← this]
+    simp
+  exact (hasCardinalLT_iff_of_equiv (Equiv.Set.univ X) _).1 hA
 
 Depends on / 依赖: Cardinal, Cardinal.IsRegular.aleph0_le, Equiv.Set.univ, Fact.out, HasCardinalLT, HasCardinalLT.Set.isColimitCocone, IsRegular, Types.jointly_surjective_of_isColimit, aleph0_le, congr_hom, coyoneda, coyoneda.obj, hX.isCardinalPresentable, hasCardinalLT_iff_of_equiv, isCardinalPresentable, isColimitCocone, isColimitOfPreserves, jointly_surjective_of_isColimit, preservesColimitsOfShape_of_isCardinalPresentable
 -/
@@ -331,7 +383,7 @@ lemma isStrongGenerator_punit
     rw [isIso_iff_bijective]
     refine ⟨hi₁, fun y => ?_⟩
     obtain ⟨f, hf⟩ := hi₂ PUnit ⟨.unit⟩ (↾fun _ => y)
-    exact ⟨f .unit, ConcreteCategory.congr_hom hf .
+    exact ⟨f .unit, ConcreteCategory.congr_hom hf .unit⟩
 
 中文:
 引理 isStrongGenerator_punit
@@ -342,7 +394,7 @@ lemma isStrongGenerator_punit
     rw [isIso_iff_bijective]
     refine ⟨hi₁, fun y => ?_⟩
     obtain ⟨f, hf⟩ := hi₂ PUnit ⟨.unit⟩ (↾fun _ => y)
-    exact ⟨f .unit, ConcreteCategory.congr_hom hf .
+    exact ⟨f .unit, ConcreteCategory.congr_hom hf .unit⟩
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, ObjectProperty, ObjectProperty.isStrongGenerator_iff, congr_hom, isIso_iff_bijective, isSeparator_punit, isStrongGenerator_iff, mono_iff_injective
 -/

@@ -119,7 +119,8 @@ theorem det_of_basisMatrix_non_zero
     (map_ne_zero_iff _ (algebraMap Rat Complex).injective).mpr
       (Algebra.discr_not_zero_of_basis Rat (integralBasis K))
   rw [← Algebra.discr_reindex Rat (integralBasis K) (equivReindex K).symm]
-  ex
+  exact (Algebra.discr_eq_det_embeddingsMatrixReindex_pow_two Rat Complex
+    (integralBasis K ∘ (equivReindex K)) (RingHom.equivRatAlgHom K Complex)).symm
 
 中文:
 定理 det_of_basisMatrix_non_zero
@@ -131,7 +132,8 @@ theorem det_of_basisMatrix_non_zero
     (map_ne_zero_iff _ (algebraMap Rat Complex).injective).mpr
       (Algebra.discr_not_zero_of_basis Rat (integralBasis K))
   rw [← Algebra.discr_reindex Rat (integralBasis K) (equivReindex K).symm]
-  ex
+  exact (Algebra.discr_eq_det_embeddingsMatrixReindex_pow_two Rat Complex
+    (integralBasis K ∘ (equivReindex K)) (RingHom.equivRatAlgHom K Complex)).symm
 
 Depends on / 依赖: Algebra, Algebra.discr_eq_det_embeddingsMatrixReindex_pow_two, Algebra.discr_not_zero_of_basis, Algebra.discr_reindex, RingHom, RingHom.equivRatAlgHom, algebraMap, basisMatrix_eq_embeddingsMatrixReindex, convert, discr_eq_det_embeddingsMatrixReindex_pow_two, discr_not_zero_of_basis, discr_reindex, equivRatAlgHom, equivReindex, injective, integralBasis, map_ne_zero_iff, pow_ne_zero_iff, two_ne_zero
 -/
@@ -177,7 +179,7 @@ theorem canonicalEmbedding_eq_basisMatrix_mulVec
   rw [← (latticeBasis K).sum_repr (canonicalEmbedding K α)]; rw [← Equiv.sum_comp (equivReindex K)]
   simp only [canonicalEmbedding.integralBasis_repr_apply, mulVec, dotProduct,
     transpose_apply, of_apply, Fintype.sum_apply, mul_comm, Basis.repr_reindex,
-    Finsupp.mapDomain_equiv_app
+    Finsupp.mapDomain_equiv_apply, Equiv.symm_symm, Pi.smul_apply, smul_eq_mul]
 
 中文:
 定理 canonicalEmbedding_eq_basisMatrix_mulVec
@@ -187,7 +189,7 @@ theorem canonicalEmbedding_eq_basisMatrix_mulVec
   rw [← (latticeBasis K).sum_repr (canonicalEmbedding K α)]; rw [← Equiv.sum_comp (equivReindex K)]
   simp only [canonicalEmbedding.integralBasis_repr_apply, mulVec, dotProduct,
     transpose_apply, of_apply, Fintype.sum_apply, mul_comm, Basis.repr_reindex,
-    Finsupp.mapDomain_equiv_app
+    Finsupp.mapDomain_equiv_apply, Equiv.symm_symm, Pi.smul_apply, smul_eq_mul]
 
 Depends on / 依赖: Basis.repr_reindex, Equiv.sum_comp, Equiv.symm_symm, Finsupp, Finsupp.mapDomain_equiv_apply, Fintype, Fintype.sum_apply, Pi.smul_apply, canonicalEmbedding, canonicalEmbedding.integralBasis_repr_apply, dotProduct, equivReindex, integralBasis_repr_apply, latticeBasis, mapDomain_equiv_apply, mulVec, mul_comm, of_apply, repr_reindex, smul_apply
 -/

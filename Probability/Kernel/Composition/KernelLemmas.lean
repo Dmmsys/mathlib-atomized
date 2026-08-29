@@ -88,7 +88,8 @@ lemma compProd_prodMkLeft_eq_comp
   simp only [prodMkLeft_apply, ← Set.preimage_comp, Prod.snd_comp_mk, Set.preimage_id_eq, id_eq,
     prod_apply' _ _ _ hs, id_apply]
   congr with b
-  rw 
+  rw [lintegral_dirac']
+  exact measurable_measure_prodMk_left hs
 
 中文:
 引理 compProd_prodMkLeft_eq_comp
@@ -99,7 +100,8 @@ lemma compProd_prodMkLeft_eq_comp
   simp only [prodMkLeft_apply, ← Set.preimage_comp, Prod.snd_comp_mk, Set.preimage_id_eq, id_eq,
     prod_apply' _ _ _ hs, id_apply]
   congr with b
-  rw 
+  rw [lintegral_dirac']
+  exact measurable_measure_prodMk_left hs
 
 Depends on / 依赖: Prod.snd_comp_mk, Set.preimage_comp, Set.preimage_id_eq, compProd_apply, comp_eq_snd_compProd, id_apply, id_eq, lintegral_dirac, measurable_measure_prodMk_left, measurable_snd, preimage_comp, preimage_id_eq, prodMkLeft_apply, prod_apply, snd_apply, snd_comp_mk
 -/
@@ -128,7 +130,14 @@ lemma swap_parallelComp
   swap; · simp [hη]
   ext ac s hs
   simp_rw [comp_apply, parallelComp_apply, Measure.bind_apply hs (Kernel.aemeasurable _),
-    swap_apply, lintegral_dirac' _ (Kernel.measurable_coe _ hs), parallelComp_apply' 
+    swap_apply, lintegral_dirac' _ (Kernel.measurable_coe _ hs), parallelComp_apply' hs,
+    Prod.fst_swap, Prod.snd_swap]
+  rw [MeasureTheory.lintegral_prod_symm]
+  swap; · exact ((Kernel.id.measurable_coe hs).comp measurable_swap).aemeasurable
+  congr with d
+  simp_rw [Prod.swap_prod_mk, Measure.dirac_apply' _ hs, ← Set.indicator_comp_right,
+    lintegral_indicator (measurable_prodMk_left hs)]
+  simp
 
 中文:
 引理 swap_parallelComp
@@ -140,7 +149,14 @@ lemma swap_parallelComp
   swap; · simp [hη]
   ext ac s hs
   simp_rw [comp_apply, parallelComp_apply, Measure.bind_apply hs (Kernel.aemeasurable _),
-    swap_apply, lintegral_dirac' _ (Kernel.measurable_coe _ hs), parallelComp_apply' 
+    swap_apply, lintegral_dirac' _ (Kernel.measurable_coe _ hs), parallelComp_apply' hs,
+    Prod.fst_swap, Prod.snd_swap]
+  rw [MeasureTheory.lintegral_prod_symm]
+  swap; · exact ((Kernel.id.measurable_coe hs).comp measurable_swap).aemeasurable
+  congr with d
+  simp_rw [Prod.swap_prod_mk, Measure.dirac_apply' _ hs, ← Set.indicator_comp_right,
+    lintegral_indicator (measurable_prodMk_left hs)]
+  simp
 
 Depends on / 依赖: IsSFiniteKernel, Kernel, Kernel.aemeasurable, Kernel.id.measurable_coe, Kernel.measurable_coe, Measure, Measure.bind_apply, Measure.dirac_apply, MeasureTheory, MeasureTheory.lintegral_prod_symm, Prod.fst_swap, Prod.snd_swap, Prod.swap_prod_mk, aemeasurable, bind_apply, comp_apply, dirac_apply, fst_swap, lintegral_dirac, lintegral_prod_symm
 -/
@@ -177,7 +193,9 @@ lemma parallelComp_id_left_comp_parallelComp
   rw [comp_apply' _ _ _ hs]; rw [parallelComp_apply]; rw [MeasureTheory.lintegral_prod _ (Kernel.measurable_coe _ hs).aemeasurable]
   rw [parallelComp_apply]; rw [Measure.prod_apply hs]
   congr with x
-  rw [comp_apply' _ _ _ (meas
+  rw [comp_apply' _ _ _ (measurable_prodMk_left hs)]
+  congr with y
+  rw [parallelComp_apply' hs]; rw [Kernel.id_apply]; rw [lintegral_dirac' _ (measurable_measure_prodMk_left hs)]
 
 中文:
 引理 parallelComp_id_left_comp_parallelComp
@@ -188,7 +206,9 @@ lemma parallelComp_id_left_comp_parallelComp
   rw [comp_apply' _ _ _ hs]; rw [parallelComp_apply]; rw [MeasureTheory.lintegral_prod _ (Kernel.measurable_coe _ hs).aemeasurable]
   rw [parallelComp_apply]; rw [Measure.prod_apply hs]
   congr with x
-  rw [comp_apply' _ _ _ (meas
+  rw [comp_apply' _ _ _ (measurable_prodMk_left hs)]
+  congr with y
+  rw [parallelComp_apply' hs]; rw [Kernel.id_apply]; rw [lintegral_dirac' _ (measurable_measure_prodMk_left hs)]
 
 Depends on / 依赖: IsSFiniteKernel, Kernel, Kernel.id_apply, Kernel.measurable_coe, Measure, Measure.prod_apply, MeasureTheory, MeasureTheory.lintegral_prod, aemeasurable, comp_apply, id_apply, lintegral_dirac, lintegral_prod, measurable_coe, measurable_measure_prodMk_left, measurable_prodMk_left, parallelComp_apply, prod_apply
 -/
@@ -216,7 +236,10 @@ lemma parallelComp_id_right_comp_parallelComp
     calc ξ ∥ₖ Kernel.id ∘ₖ (η ∥ₖ κ)
     _ = swap Y T ∘ₖ (swap T Y ∘ₖ (ξ ∥ₖ Kernel.id) ∘ₖ (η ∥ₖ κ)) := by
       simp_rw [← comp_assoc, swap_swap, id_comp]
-    _ = swap Y T ∘ₖ (swap T Y ∘ₖ ((ξ ∘ₖ η) ∥ₖ κ)) := by rw
+    _ = swap Y T ∘ₖ (swap T Y ∘ₖ ((ξ ∘ₖ η) ∥ₖ κ)) := by rw [this]
+    _ = ξ ∘ₖ η ∥ₖ κ := by simp_rw [← comp_assoc, swap_swap, id_comp]
+  simp_rw [swap_parallelComp, comp_assoc, swap_parallelComp, ← comp_assoc,
+    parallelComp_id_left_comp_parallelComp]
 
 中文:
 引理 parallelComp_id_right_comp_parallelComp
@@ -226,7 +249,10 @@ lemma parallelComp_id_right_comp_parallelComp
     calc ξ ∥ₖ Kernel.id ∘ₖ (η ∥ₖ κ)
     _ = swap Y T ∘ₖ (swap T Y ∘ₖ (ξ ∥ₖ Kernel.id) ∘ₖ (η ∥ₖ κ)) := by
       simp_rw [← comp_assoc, swap_swap, id_comp]
-    _ = swap Y T ∘ₖ (swap T Y ∘ₖ ((ξ ∘ₖ η) ∥ₖ κ)) := by rw
+    _ = swap Y T ∘ₖ (swap T Y ∘ₖ ((ξ ∘ₖ η) ∥ₖ κ)) := by rw [this]
+    _ = ξ ∘ₖ η ∥ₖ κ := by simp_rw [← comp_assoc, swap_swap, id_comp]
+  simp_rw [swap_parallelComp, comp_assoc, swap_parallelComp, ← comp_assoc,
+    parallelComp_id_left_comp_parallelComp]
 
 Depends on / 依赖: Kernel, Kernel.id, comp_assoc, id_comp, parallelComp_id_left_comp_parallelComp, simp_rw, swap_parallelComp, swap_swap
 -/

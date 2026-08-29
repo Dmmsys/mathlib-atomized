@@ -91,7 +91,7 @@ definition preadditiveYoneda
         { toFun := fun g => g ≫ f
           map_zero' := Limits.zero_comp
           map_add' := fun _ _ => add_comp _ _ _ _ _ _ }
-      naturality := fun _ _ _ => AddCommGrpCat.ext fun _ => Category.assoc _ _ _
+      naturality := fun _ _ _ => AddCommGrpCat.ext fun _ => Category.assoc _ _ _ }
 
 中文:
 定义 preadditiveYoneda
@@ -102,7 +102,7 @@ definition preadditiveYoneda
         { toFun := fun g => g ≫ f
           map_zero' := Limits.zero_comp
           map_add' := fun _ _ => add_comp _ _ _ _ _ _ }
-      naturality := fun _ _ _ => AddCommGrpCat.ext fun _ => Category.assoc _ _ _
+      naturality := fun _ _ _ => AddCommGrpCat.ext fun _ => Category.assoc _ _ _ }
 
 Depends on / 依赖: preadditiveYonedaObj
 -/
@@ -168,7 +168,7 @@ definition preadditiveCoyoneda
           map_zero' := Limits.comp_zero
           map_add' := fun _ _ => comp_add _ _ _ _ _ _ }
       naturality := fun _ _ _ =>
-AddCommGrpCat.ext fun _ => Eq.sym
+AddCommGrpCat.ext fun _ => Eq.symm Category.assoc _ _ _ }
 
 中文:
 定义 preadditiveCoyoneda
@@ -180,7 +180,7 @@ AddCommGrpCat.ext fun _ => Eq.sym
           map_zero' := Limits.comp_zero
           map_add' := fun _ _ => comp_add _ _ _ _ _ _ }
       naturality := fun _ _ _ =>
-AddCommGrpCat.ext fun _ => Eq.sym
+AddCommGrpCat.ext fun _ => Eq.symm Category.assoc _ _ _ }
 
 Depends on / 依赖: preadditiveCoyonedaObj
 -/

@@ -76,7 +76,10 @@ definition pointwiseBinaryBicone.isBilimit
     refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ (BinaryBiproduct.isLimit (F.obj d) (G.obj d))
     · exact (pairComp F G ((evaluation D C).obj d)).symm
 · exact Cone.ext (Iso.refl _) by rintro (_ | _ | _) <;> cat_disch
-  isColimit := evaluationJointlyRefle
+  isColimit := evaluationJointlyReflectsColimits _ fun d => by
+    refine IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_ (BinaryBiproduct.isColimit (F.obj d) (G.obj d))
+    · exact (pairComp F G ((evaluation D C).obj d)).symm
+· exact Cocone.ext (Iso.refl _) by rintro (_ | _ | _) <;> cat_disch
 
 中文:
 定义 pointwiseBinaryBicone.isBilimit
@@ -85,7 +88,10 @@ definition pointwiseBinaryBicone.isBilimit
     refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ (BinaryBiproduct.isLimit (F.obj d) (G.obj d))
     · exact (pairComp F G ((evaluation D C).obj d)).symm
 · exact Cone.ext (Iso.refl _) by rintro (_ | _ | _) <;> cat_disch
-  isColimit := evaluationJointlyRefle
+  isColimit := evaluationJointlyReflectsColimits _ fun d => by
+    refine IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_ (BinaryBiproduct.isColimit (F.obj d) (G.obj d))
+    · exact (pairComp F G ((evaluation D C).obj d)).symm
+· exact Cocone.ext (Iso.refl _) by rintro (_ | _ | _) <;> cat_disch
 
 Depends on / 依赖: BinaryBiproduct, BinaryBiproduct.isColimit, BinaryBiproduct.isLimit, Cocone, Cocone.ext, Cone.ext, F.obj, G.obj, IsColimit, IsColimit.equivOfNatIsoOfIso, IsLimit, IsLimit.equivOfNatIsoOfIso, Iso.refl, cat_disch, equivOfNatIsoOfIso, evaluation, evaluationJointlyReflectsColimits, evaluationJointlyReflectsLimits, isColimit, isLimit
 -/

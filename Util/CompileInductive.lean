@@ -128,7 +128,17 @@ definition compileDefn
 return ← compileDecl .defnDecl dv
   let name ← mkFreshUserName dv.name
 addAndCompile' .defnDecl { dv with name }
-  let levels := dv
+  let levels := dv.levelParams.map .param
+  let old := .const dv.name levels
+  let new := .const name levels
+let name ← mkFreshUserName dv.name.str "eq"
+addDecl .thmDecl {
+    name
+    levelParams := dv.levelParams
+    type := ← mkEq old new
+    value := ← mkEqRefl old
+  }
+  Compiler.CSimp.add name .global
 
 中文:
 定义 compileDefn
@@ -140,7 +150,17 @@ addAndCompile' .defnDecl { dv with name }
 return ← compileDecl .defnDecl dv
   let name ← mkFreshUserName dv.name
 addAndCompile' .defnDecl { dv with name }
-  let levels := dv
+  let levels := dv.levelParams.map .param
+  let old := .const dv.name levels
+  let new := .const name levels
+let name ← mkFreshUserName dv.name.str "eq"
+addDecl .thmDecl {
+    name
+    levelParams := dv.levelParams
+    type := ← mkEq old new
+    value := ← mkEqRefl old
+  }
+  Compiler.CSimp.add name .global
 -/
 def compileDefn (dv : DefinitionVal) : MetaM Unit := do
   if ((← getEnv).getModuleIdxFor? dv.name).isNone then
@@ -263,7 +283,54 @@ definition compileInductiveOnly
     return
   let levels := rv.levelParams.map .param
   let rvs ←
-    if rv.numMotives == 1 
+    if rv.numMotives == 1 then pure [rv]
+.mapM getConstInfoRec else mkRecNames iv.all rv.numMotives
+  let rvs ← rvs.mapM fun rv => return (rv, ← mkFreshUserName rv.name)
+  let repl := rvs.foldl (fun l (rv, name) => .cons rv.name name l) .nil
+addAndCompile' .mutualDefnDecl ← rvs.mapM fun (rv, name) => do
+    pure { rv with
+      name
+      value := ← forallTelescope rv.type fun xs body => do
+        let major := xs[rv.getMajorIdx]!
+        (← whnfD <| ← inferType major).withApp fun head args => do
+          let .const iv levels' := head | throwError "not an inductive"
+          let iv ← getConstInfoInduct iv
+let rv' ← getConstInfoRec mkRecName iv.name
+          if !iv.isRec && rv'.numMotives == 1 && iv.numCtors == 1 && iv.numIndices == 0 then
+            let rule := rv.rules[0]!
+            let val := .beta (replaceConst repl rule.rhs) xs[:rv.getFirstIndexIdx]
+let val := .beta val ⟨.map (major.proj iv.name) .range rule.nfields⟩
+            mkLambdaFVars xs val
+          else
+            let val := .const (mkCasesOnName iv.name) (.param rv.levelParams.head! :: levels')
+            let val := mkAppN val args[:rv'.numParams]
+let val := .app val ← mkLambdaFVars xs[rv.getFirstIndexIdx:] body
+            let val := mkAppN val xs[rv.getFirstIndexIdx:]
+let val := mkAppN val rv.rules.toArray.map fun rule =>
+              .beta (replaceConst repl rule.rhs) xs[:rv.getFirstIndexIdx]
+            mkLambdaFVars xs val
+      hints := .opaque
+      safety := .partial
+    }
+  for (rv, name) in rvs do
+    let old := .const rv.name levels
+    let new := .const name levels
+let name ← mkFreshUserName rv.name.str "eq"
+addDecl .mutualDefnDecl [{
+      name
+      levelParams := rv.levelParams
+      type := ← mkEq old new
+      value := .const name levels
+      hints := .opaque
+      safety := .partial
+    }]
+    Compiler.CSimp.add name .global
+  for name in iv.all do
+    for aux in [mkRecOnName name, (mkBRecOnName name).str "go", mkBRecOnName name] do
+      if let some (.defnInfo dv) := (← getEnv).find? aux then
+        compileDefn dv
+
+mutual
 
 中文:
 定义 compileInductiveOnly
@@ -277,7 +344,54 @@ definition compileInductiveOnly
     return
   let levels := rv.levelParams.map .param
   let rvs ←
-    if rv.numMotives == 1 
+    if rv.numMotives == 1 then pure [rv]
+.mapM getConstInfoRec else mkRecNames iv.all rv.numMotives
+  let rvs ← rvs.mapM fun rv => return (rv, ← mkFreshUserName rv.name)
+  let repl := rvs.foldl (fun l (rv, name) => .cons rv.name name l) .nil
+addAndCompile' .mutualDefnDecl ← rvs.mapM fun (rv, name) => do
+    pure { rv with
+      name
+      value := ← forallTelescope rv.type fun xs body => do
+        let major := xs[rv.getMajorIdx]!
+        (← whnfD <| ← inferType major).withApp fun head args => do
+          let .const iv levels' := head | throwError "not an inductive"
+          let iv ← getConstInfoInduct iv
+let rv' ← getConstInfoRec mkRecName iv.name
+          if !iv.isRec && rv'.numMotives == 1 && iv.numCtors == 1 && iv.numIndices == 0 then
+            let rule := rv.rules[0]!
+            let val := .beta (replaceConst repl rule.rhs) xs[:rv.getFirstIndexIdx]
+let val := .beta val ⟨.map (major.proj iv.name) .range rule.nfields⟩
+            mkLambdaFVars xs val
+          else
+            let val := .const (mkCasesOnName iv.name) (.param rv.levelParams.head! :: levels')
+            let val := mkAppN val args[:rv'.numParams]
+let val := .app val ← mkLambdaFVars xs[rv.getFirstIndexIdx:] body
+            let val := mkAppN val xs[rv.getFirstIndexIdx:]
+let val := mkAppN val rv.rules.toArray.map fun rule =>
+              .beta (replaceConst repl rule.rhs) xs[:rv.getFirstIndexIdx]
+            mkLambdaFVars xs val
+      hints := .opaque
+      safety := .partial
+    }
+  for (rv, name) in rvs do
+    let old := .const rv.name levels
+    let new := .const name levels
+let name ← mkFreshUserName rv.name.str "eq"
+addDecl .mutualDefnDecl [{
+      name
+      levelParams := rv.levelParams
+      type := ← mkEq old new
+      value := .const name levels
+      hints := .opaque
+      safety := .partial
+    }]
+    Compiler.CSimp.add name .global
+  for name in iv.all do
+    for aux in [mkRecOnName name, (mkBRecOnName name).str "go", mkBRecOnName name] do
+      if let some (.defnInfo dv) := (← getEnv).find? aux then
+        compileDefn dv
+
+mutual
 -/
 def compileInductiveOnly (iv : InductiveVal) (rv : RecursorVal) (warn := true) : MetaM Unit := do
   if ← isProp rv.type then
@@ -383,7 +497,19 @@ definition compileSizeOf
         let deps : NameSet := dv.value.foldConsts ∅ fun c arr =>
           if let .str name "_sizeOf_inst" := c then arr.insert name else arr
         for i in deps do
-       
+          -- We only want to recompile inductives defined in external modules, because attempting
+          -- to recompile `sizeOf` functions defined in the current module multiple times will lead
+          -- to errors. An entire mutual block of inductives is compiled when compiling any
+          -- inductive within it, so every inductive within the same module can be explicitly
+          -- compiled using `compile_inductive%` if necessary.
+          if ((← getEnv).getModuleIdxFor? i).isSome then
+            if let some (.inductInfo iv) := (← getEnv).find? i then
+               compileInductive iv (warn := false)
+        compileDefn dv
+  for name in iv.all do
+    for i in [:rv.numMotives] do
+go name.str s!"_sizeOf_{i+1}"
+go name.str "_sizeOf_inst"
 
 中文:
 定义 compileSizeOf
@@ -395,7 +521,19 @@ definition compileSizeOf
         let deps : NameSet := dv.value.foldConsts ∅ fun c arr =>
           if let .str name "_sizeOf_inst" := c then arr.insert name else arr
         for i in deps do
-       
+          -- We only want to recompile inductives defined in external modules, because attempting
+          -- to recompile `sizeOf` functions defined in the current module multiple times will lead
+          -- to errors. An entire mutual block of inductives is compiled when compiling any
+          -- inductive within it, so every inductive within the same module can be explicitly
+          -- compiled using `compile_inductive%` if necessary.
+          if ((← getEnv).getModuleIdxFor? i).isSome then
+            if let some (.inductInfo iv) := (← getEnv).find? i then
+               compileInductive iv (warn := false)
+        compileDefn dv
+  for name in iv.all do
+    for i in [:rv.numMotives] do
+go name.str s!"_sizeOf_{i+1}"
+go name.str "_sizeOf_inst"
 -/
 partial def compileSizeOf (iv : InductiveVal) (rv : RecursorVal) : MetaM Unit := do
   let go aux := do

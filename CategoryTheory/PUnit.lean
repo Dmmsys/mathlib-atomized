@@ -157,7 +157,26 @@ theorem equiv_punit_iff_unique
       have hx : x ⟶ h.inverse.obj ⟨⟨⟩⟩ := by convert! h.unit.app x
       have hy : h.inverse.obj ⟨⟨⟩⟩ ⟶ y := by convert! h.unitInv.app y
       exact hx ≫ hy
-    suffices sub : Subs
+    suffices sub : Subsingleton (x ⟶ y) from uniqueOfSubsingleton f
+    have : forall z, z = h.unit.app x ≫ (h.functor ⋙ h.inverse).map z ≫ h.unitInv.app y := by
+      simp
+    apply Subsingleton.intro
+    intro a b
+    rw [this a]; rw [this b]
+    simp only [Functor.comp_map]
+    congr 3
+    apply ULift.ext
+    simp [eq_iff_true_of_subsingleton]
+  · rintro ⟨⟨p⟩, h⟩
+    have := fun x y => (h x y).some
+    refine
+      Nonempty.intro
+        (CategoryTheory.Equivalence.mk ((Functor.const _).obj ⟨⟨⟩⟩)
+          ((@Functor.const <| Discrete PUnit).obj p) ?_ (by apply Functor.punitExt))
+    exact
+      NatIso.ofComponents fun _ =>
+        { hom := default
+          inv := default }
 
 中文:
 定理 equiv_punit_iff_unique
@@ -169,7 +188,26 @@ theorem equiv_punit_iff_unique
       have hx : x ⟶ h.inverse.obj ⟨⟨⟩⟩ := by convert! h.unit.app x
       have hy : h.inverse.obj ⟨⟨⟩⟩ ⟶ y := by convert! h.unitInv.app y
       exact hx ≫ hy
-    suffices sub : Subs
+    suffices sub : Subsingleton (x ⟶ y) from uniqueOfSubsingleton f
+    have : forall z, z = h.unit.app x ≫ (h.functor ⋙ h.inverse).map z ≫ h.unitInv.app y := by
+      simp
+    apply Subsingleton.intro
+    intro a b
+    rw [this a]; rw [this b]
+    simp only [Functor.comp_map]
+    congr 3
+    apply ULift.ext
+    simp [eq_iff_true_of_subsingleton]
+  · rintro ⟨⟨p⟩, h⟩
+    have := fun x y => (h x y).some
+    refine
+      Nonempty.intro
+        (CategoryTheory.Equivalence.mk ((Functor.const _).obj ⟨⟨⟩⟩)
+          ((@Functor.const <| Discrete PUnit).obj p) ?_ (by apply Functor.punitExt))
+    exact
+      NatIso.ofComponents fun _ =>
+        { hom := default
+          inv := default }
 
 Depends on / 依赖: Functor, Functor.comp_map, Nonempty, Nonempty.intro, Subsingleton, Subsingleton.intro, comp_map, convert, functor, h.functor, h.inverse, h.inverse.obj, h.unit.app, h.unitInv.app, inverse, uniqueOfSubsingleton, unitInv
 -/

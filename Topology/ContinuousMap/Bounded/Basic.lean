@@ -640,7 +640,7 @@ theorem dist_lt_iff_of_compact
       convert! C0
       apply le_antisymm _ dist_nonneg'
       rw [dist_eq]
-      exact csInf_le ⟨0, fun C => And.left⟩ ⟨le_rfl, fun x =>
+      exact csInf_le ⟨0, fun C => And.left⟩ ⟨le_rfl, fun x => False.elim (h (Nonempty.intro x))⟩
 
 中文:
 定理 dist_lt_iff_of_compact
@@ -655,7 +655,7 @@ theorem dist_lt_iff_of_compact
       convert! C0
       apply le_antisymm _ dist_nonneg'
       rw [dist_eq]
-      exact csInf_le ⟨0, fun C => And.left⟩ ⟨le_rfl, fun x =>
+      exact csInf_le ⟨0, fun C => And.left⟩ ⟨le_rfl, fun x => False.elim (h (Nonempty.intro x))⟩
 
 Depends on / 依赖: And.left, False.elim, Nonempty, Nonempty.intro, convert, csInf_le, dist_coe_le_dist, dist_eq, dist_lt_of_nonempty_compact, dist_nonneg, fconstructor, le_antisymm, le_rfl, lt_of_le_of_lt
 -/
@@ -918,7 +918,11 @@ theorem tendsto_iff_tendstoUniformly
             lt_of_le_of_lt (dist_coe_le_dist x) (dist_comm (F n) f ▸ hn)))
     fun h =>
     Metric.tendsto_nhds.mpr fun _ ε_pos =>
-      (h _ (dis
+      (h _ (dist_mem_uniformity <| half_pos ε_pos)).mp
+        (Eventually.of_forall fun n hn =>
+          lt_of_le_of_lt
+            ((dist_le (half_pos ε_pos).le).mpr fun x => dist_comm (f x) (F n x) ▸ le_of_lt (hn x))
+            (half_lt_self ε_pos))
 
 中文:
 定理 tendsto_iff_tendstoUniformly
@@ -931,7 +935,11 @@ theorem tendsto_iff_tendstoUniformly
             lt_of_le_of_lt (dist_coe_le_dist x) (dist_comm (F n) f ▸ hn)))
     fun h =>
     Metric.tendsto_nhds.mpr fun _ ε_pos =>
-      (h _ (dis
+      (h _ (dist_mem_uniformity <| half_pos ε_pos)).mp
+        (Eventually.of_forall fun n hn =>
+          lt_of_le_of_lt
+            ((dist_le (half_pos ε_pos).le).mpr fun x => dist_comm (f x) (F n x) ▸ le_of_lt (hn x))
+            (half_lt_self ε_pos))
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Iff.intro, Metric, Metric.tendsto_nhds.mp, Metric.tendsto_nhds.mpr, dist_coe_le_dist, dist_comm, dist_le, dist_mem_uniformity, half_lt_self, half_pos, le_of_lt, lt_of_le_of_lt, of_forall, tendstoUniformly_iff, tendsto_nhds
 -/
@@ -1159,7 +1167,35 @@ instance instCompleteSpace
   body: complete_of_cauchySeq_tendsto fun (f : Nat -> α ->ᵇ β) (hf : CauchySeq f) => by
     /- We have to show that `f n` converges to a bounded continuous function.
       For this, we prove pointwise convergence to define the limit, then check
-      it is a continuous bounded function, and then check the n
+      it is a continuous bounded function, and then check the norm convergence. -/
+    rcases cauchySeq_iff_le_tendsto_0.1 hf with ⟨b, b0, b_bound, b_lim⟩
+    have f_bdd := fun x n m N hn hm => le_trans (dist_coe_le_dist x) (b_bound n m N hn hm)
+    have fx_cau : forall x, CauchySeq fun n => f n x :=
+      fun x => cauchySeq_iff_le_tendsto_0.2 ⟨b, b0, f_bdd x, b_lim⟩
+    choose F hF using fun x => cauchySeq_tendsto_of_complete (fx_cau x)
+    /- `F : α → β`, `hF : ∀ (x : α), Tendsto (fun n ↦ ↑(f n) x) atTop (𝓝 (F x))`
+      `F` is the desired limit function. Check that it is uniformly approximated by `f N`. -/
+    have fF_bdd : forall x N, dist (f N x) (F x) <= b N :=
+      fun x N => le_of_tendsto (tendsto_const_nhds.dist (hF x))
+        (Filter.eventually_atTop.2 ⟨N, fun n hn => f_bdd x N n N (le_refl N) hn⟩)
+    refine ⟨⟨⟨F, ?_⟩, ?_⟩, ?_⟩
+    · -- Check that `F` is continuous, as a uniform limit of continuous functions
+      have : TendstoUniformly (fun n x => f n x) F atTop := by
+        refine Metric.tendstoUniformly_iff.2 fun ε ε0 => ?_
+        refine ((tendsto_order.1 b_lim).2 ε ε0).mono fun n hn x => ?_
+        rw [dist_comm]
+        exact lt_of_le_of_lt (fF_bdd x n) hn
+      exact this.continuous (Frequently.of_forall fun N => (f N).continuous)
+    · -- Check that `F` is bounded
+      rcases (f 0).bounded with ⟨C, hC⟩
+      refine ⟨C + (b 0 + b 0), fun x y => ?_⟩
+      calc
+        dist (F x) (F y) <= dist (f 0 x) (f 0 y) + (dist (f 0 x) (F x) + dist (f 0 y) (F y)) :=
+          dist_triangle4_left _ _ _ _
+        _ <= C + (b 0 + b 0) := add_le_add (hC x y) (add_le_add (fF_bdd x 0) (fF_bdd y 0))
+    · -- Check that `F` is close to `f N` in distance terms
+      refine tendsto_iff_dist_tendsto_zero.2 (squeeze_zero (fun _ => dist_nonneg) ?_ b_lim)
+      exact fun N => (dist_le (b0 _)).2 fun x => fF_bdd x N
 
 中文:
 实例 instCompleteSpace
@@ -1167,7 +1203,35 @@ instance instCompleteSpace
   定义体: complete_of_cauchySeq_tendsto fun (f : Nat -> α ->ᵇ β) (hf : CauchySeq f) => by
     /- We have to show that `f n` converges to a bounded continuous function.
       For this, we prove pointwise convergence to define the limit, then check
-      it is a continuous bounded function, and then check the n
+      it is a continuous bounded function, and then check the norm convergence. -/
+    rcases cauchySeq_iff_le_tendsto_0.1 hf with ⟨b, b0, b_bound, b_lim⟩
+    have f_bdd := fun x n m N hn hm => le_trans (dist_coe_le_dist x) (b_bound n m N hn hm)
+    have fx_cau : forall x, CauchySeq fun n => f n x :=
+      fun x => cauchySeq_iff_le_tendsto_0.2 ⟨b, b0, f_bdd x, b_lim⟩
+    choose F hF using fun x => cauchySeq_tendsto_of_complete (fx_cau x)
+    /- `F : α → β`, `hF : ∀ (x : α), Tendsto (fun n ↦ ↑(f n) x) atTop (𝓝 (F x))`
+      `F` is the desired limit function. Check that it is uniformly approximated by `f N`. -/
+    have fF_bdd : forall x N, dist (f N x) (F x) <= b N :=
+      fun x N => le_of_tendsto (tendsto_const_nhds.dist (hF x))
+        (Filter.eventually_atTop.2 ⟨N, fun n hn => f_bdd x N n N (le_refl N) hn⟩)
+    refine ⟨⟨⟨F, ?_⟩, ?_⟩, ?_⟩
+    · -- Check that `F` is continuous, as a uniform limit of continuous functions
+      have : TendstoUniformly (fun n x => f n x) F atTop := by
+        refine Metric.tendstoUniformly_iff.2 fun ε ε0 => ?_
+        refine ((tendsto_order.1 b_lim).2 ε ε0).mono fun n hn x => ?_
+        rw [dist_comm]
+        exact lt_of_le_of_lt (fF_bdd x n) hn
+      exact this.continuous (Frequently.of_forall fun N => (f N).continuous)
+    · -- Check that `F` is bounded
+      rcases (f 0).bounded with ⟨C, hC⟩
+      refine ⟨C + (b 0 + b 0), fun x y => ?_⟩
+      calc
+        dist (F x) (F y) <= dist (f 0 x) (f 0 y) + (dist (f 0 x) (F x) + dist (f 0 y) (F y)) :=
+          dist_triangle4_left _ _ _ _
+        _ <= C + (b 0 + b 0) := add_le_add (hC x y) (add_le_add (fF_bdd x 0) (fF_bdd y 0))
+    · -- Check that `F` is close to `f N` in distance terms
+      refine tendsto_iff_dist_tendsto_zero.2 (squeeze_zero (fun _ => dist_nonneg) ?_ b_lim)
+      exact fun N => (dist_le (b0 _)).2 fun x => fF_bdd x N
 
 Depends on / 依赖: CauchySeq, complete_of_cauchySeq_tendsto
 -/
@@ -1390,7 +1454,10 @@ definition comp
       calc
         dist (G (f x)) (G (f y)) <= C * dist (f x) (f y) := H.dist_le_mul _ _
         _ <= max C 0 * dist (f x) (f y) := by gcongr; apply le_max_left
-        _ <= max C 0 * D := 
+        _ <= max C 0 * D := by gcongr; apply hD
+        ⟩⟩
+
+@[simp]
 
 中文:
 定义 comp
@@ -1401,7 +1468,10 @@ definition comp
       calc
         dist (G (f x)) (G (f y)) <= C * dist (f x) (f y) := H.dist_le_mul _ _
         _ <= max C 0 * dist (f x) (f y) := by gcongr; apply le_max_left
-        _ <= max C 0 * D := 
+        _ <= max C 0 * D := by gcongr; apply hD
+        ⟩⟩
+
+@[simp]
 
 Depends on / 依赖: H.continuous.comp, H.dist_le_mul, bounded, continuous, dist_le_mul, f.bounded, f.continuous, le_max_left
 -/
@@ -1550,7 +1620,7 @@ nonrec theorem extend_comp (f : α ↪ δ) (g : α ->ᵇ β) (h : δ ->ᵇ β) :
 
 nonrec theorem extend_apply' {f : α ↪ δ} {x : δ} (hx : x ∉ range f) (g : α ->ᵇ β) (h : δ ->ᵇ β) :
     extend f g h x = h x :=
-  extend_a
+  extend_apply' _ _ _ hx
 
 中文:
 定理 extend_apply
@@ -1564,7 +1634,7 @@ nonrec theorem extend_comp (f : α ↪ δ) (g : α ->ᵇ β) (h : δ ->ᵇ β) :
 
 nonrec theorem extend_apply' {f : α ↪ δ} {x : δ} (hx : x ∉ range f) (g : α ->ᵇ β) (h : δ ->ᵇ β) :
     extend f g h x = h x :=
-  extend_a
+  extend_apply' _ _ _ hx
 
 Depends on / 依赖: extend_apply, f.injective.extend_apply, injective
 -/
@@ -1616,7 +1686,19 @@ theorem dist_extend_extend
     · simp only [extend_apply]
       exact (dist_coe_le_dist x).trans (le_max_left _ _)
     · simp only [extend_apply' hx]
-      lift x to ((r
+      lift x to ((range f)ᶜ : Set δ) using hx
+      calc
+        dist (h₁ x) (h₂ x) = dist (h₁.domRestrict (range f)ᶜ x) (h₂.domRestrict (range f)ᶜ x) := rfl
+        _ <= dist (h₁.domRestrict (range f)ᶜ) (h₂.domRestrict (range f)ᶜ) := dist_coe_le_dist x
+        _ <= _ := le_max_right _ _
+  · refine (dist_le dist_nonneg).2 fun x => ?_
+    rw [← extend_apply f g₁ h₁]; rw [← extend_apply f g₂ h₂]
+    exact dist_coe_le_dist _
+  · refine (dist_le dist_nonneg).2 fun x => ?_
+    calc
+      dist (h₁ x) (h₂ x) = dist (extend f g₁ h₁ x) (extend f g₂ h₂ x) := by
+        rw [extend_apply' x.coe_prop]; rw [extend_apply' x.coe_prop]
+      _ <= _ := dist_coe_le_dist _
 
 中文:
 定理 dist_extend_extend
@@ -1627,7 +1709,19 @@ theorem dist_extend_extend
     · simp only [extend_apply]
       exact (dist_coe_le_dist x).trans (le_max_left _ _)
     · simp only [extend_apply' hx]
-      lift x to ((r
+      lift x to ((range f)ᶜ : Set δ) using hx
+      calc
+        dist (h₁ x) (h₂ x) = dist (h₁.domRestrict (range f)ᶜ x) (h₂.domRestrict (range f)ᶜ x) := rfl
+        _ <= dist (h₁.domRestrict (range f)ᶜ) (h₂.domRestrict (range f)ᶜ) := dist_coe_le_dist x
+        _ <= _ := le_max_right _ _
+  · refine (dist_le dist_nonneg).2 fun x => ?_
+    rw [← extend_apply f g₁ h₁]; rw [← extend_apply f g₂ h₂]
+    exact dist_coe_le_dist _
+  · refine (dist_le dist_nonneg).2 fun x => ?_
+    calc
+      dist (h₁ x) (h₂ x) = dist (extend f g₁ h₁ x) (extend f g₂ h₂ x) := by
+        rw [extend_apply' x.coe_prop]; rw [extend_apply' x.coe_prop]
+      _ <= _ := dist_coe_le_dist _
 
 Depends on / 依赖: Or.inl, dist_coe_le_dist, dist_le, dist_nonneg, domRestrict, extend_apply, le_antisymm, le_max_iff, le_max_left, max_le
 -/
@@ -2268,7 +2362,9 @@ instance instLipschitzAdd
       rintro ⟨f₁, g₁⟩ ⟨f₂, g₂⟩
       rw [dist_le (mul_nonneg C_nonneg dist_nonneg)]
       intro x
-      refine le_trans (lipschitz_with_lipschitz_const_add ⟨f₁ x, g₁ x⟩ ⟨f₂ x, g₂ x⟩) ?
+      refine le_trans (lipschitz_with_lipschitz_const_add ⟨f₁ x, g₁ x⟩ ⟨f₂ x, g₂ x⟩) ?_
+      gcongr
+      apply max_le_max <;> exact dist_coe_le_dist x⟩
 
 中文:
 实例 instLipschitzAdd
@@ -2279,7 +2375,9 @@ instance instLipschitzAdd
       rintro ⟨f₁, g₁⟩ ⟨f₂, g₂⟩
       rw [dist_le (mul_nonneg C_nonneg dist_nonneg)]
       intro x
-      refine le_trans (lipschitz_with_lipschitz_const_add ⟨f₁ x, g₁ x⟩ ⟨f₂ x, g₂ x⟩) ?
+      refine le_trans (lipschitz_with_lipschitz_const_add ⟨f₁ x, g₁ x⟩ ⟨f₂ x, g₂ x⟩) ?_
+      gcongr
+      apply max_le_max <;> exact dist_coe_le_dist x⟩
 
 Depends on / 依赖: C_nonneg, LipschitzAdd, LipschitzAdd.C, coe_nonneg, dist_coe_le_dist, dist_le, dist_nonneg, le_trans, lipschitzWith_iff_dist_le_mul, lipschitz_with_lipschitz_const_add, max_le_max, mul_nonneg
 -/
@@ -2642,7 +2740,7 @@ instance instIsBoundedSMul
     intro x
     refine (dist_pair_smul c₁ c₂ (f x)).trans ?_
     gcongr
-   
+    apply dist_coe_le_dist (g := 0)
 
 中文:
 实例 instIsBoundedSMul
@@ -2658,7 +2756,7 @@ instance instIsBoundedSMul
     intro x
     refine (dist_pair_smul c₁ c₂ (f x)).trans ?_
     gcongr
-   
+    apply dist_coe_le_dist (g := 0)
 
 Depends on / 依赖: dist_coe_le_dist, dist_le, dist_nonneg, dist_pair_smul, dist_smul_pair, mul_nonneg
 -/

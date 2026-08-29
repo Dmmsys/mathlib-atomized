@@ -56,7 +56,13 @@ definition leftAdjointOfStructuredArrowInitialsAux
   left_inv g := by
     let B' : StructuredArrow A G := StructuredArrow.mk ((⊥_ StructuredArrow A G).hom ≫ G.map g)
     let g' : ⊥_ StructuredArrow A G ⟶ B' := StructuredArrow.homMk g rfl
-    
+    have : initial.to _ = g' := by cat_disch
+    change CommaMorphism.right (initial.to B') = _
+    rw [this]
+    rfl
+  right_inv f := by
+    let B' : StructuredArrow A G := StructuredArrow.mk f
+    apply (CommaMorphism.w (initial.to B')).symm.trans (Category.id_comp _)
 
 中文:
 定义 leftAdjointOfStructuredArrowInitialsAux
@@ -66,7 +72,13 @@ definition leftAdjointOfStructuredArrowInitialsAux
   left_inv g := by
     let B' : StructuredArrow A G := StructuredArrow.mk ((⊥_ StructuredArrow A G).hom ≫ G.map g)
     let g' : ⊥_ StructuredArrow A G ⟶ B' := StructuredArrow.homMk g rfl
-    
+    have : initial.to _ = g' := by cat_disch
+    change CommaMorphism.right (initial.to B') = _
+    rw [this]
+    rfl
+  right_inv f := by
+    let B' : StructuredArrow A G := StructuredArrow.mk f
+    apply (CommaMorphism.w (initial.to B')).symm.trans (Category.id_comp _)
 
 Depends on / 依赖: G.map, StructuredArrow
 -/
@@ -163,7 +175,11 @@ definition rightAdjointOfCostructuredArrowTerminalsAux
   right_inv g := by
     let B' : CostructuredArrow G A :=
       CostructuredArrow.mk (G.map g ≫ (⊤_ CostructuredArrow G A).hom)
-    let g' : B' ⟶ ⊤_ Costructu
+    let g' : B' ⟶ ⊤_ CostructuredArrow G A := CostructuredArrow.homMk g rfl
+    have : terminal.from _ = g' := by cat_disch
+    change CommaMorphism.left (terminal.from B') = _
+    rw [this]
+    rfl
 
 中文:
 定义 rightAdjointOfCostructuredArrowTerminalsAux
@@ -174,7 +190,11 @@ definition rightAdjointOfCostructuredArrowTerminalsAux
   right_inv g := by
     let B' : CostructuredArrow G A :=
       CostructuredArrow.mk (G.map g ≫ (⊤_ CostructuredArrow G A).hom)
-    let g' : B' ⟶ ⊤_ Costructu
+    let g' : B' ⟶ ⊤_ CostructuredArrow G A := CostructuredArrow.homMk g rfl
+    have : terminal.from _ = g' := by cat_disch
+    change CommaMorphism.left (terminal.from B') = _
+    rw [this]
+    rfl
 
 Depends on / 依赖: CommaMorphism, CommaMorphism.left, CostructuredArrow, CostructuredArrow.mk, terminal, terminal.from
 -/

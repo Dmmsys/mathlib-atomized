@@ -301,7 +301,7 @@ theorem mem_omegaLimit_iff_frequently
     exact ⟨_, ht, _, hx, by rwa [mem_preimage]⟩
   · intro h _ hu _ hn
     rcases h _ hn hu with ⟨_, ht, _, hx, hϕtx⟩
-    exact ⟨_,
+    exact ⟨_, hϕtx, _, ht, _, hx, rfl⟩
 
 中文:
 定理 mem_omegaLimit_iff_frequently
@@ -314,7 +314,7 @@ theorem mem_omegaLimit_iff_frequently
     exact ⟨_, ht, _, hx, by rwa [mem_preimage]⟩
   · intro h _ hu _ hn
     rcases h _ hn hu with ⟨_, ht, _, hx, hϕtx⟩
-    exact ⟨_,
+    exact ⟨_, hϕtx, _, ht, _, hx, rfl⟩
 
 Depends on / 依赖: frequently_iff, mem_closure_iff_nhds, mem_iInter, mem_preimage, omegaLimit_def, simp_rw
 -/
@@ -438,7 +438,12 @@ theorem omegaLimit_union
     contrapose!
     simp only [← subset_empty_iff]
     rintro ⟨⟨n₁, hn₁, h₁⟩, ⟨n₂, hn₂, h₂⟩⟩
-    refine ⟨n₁ inter n₂, inter_mem hn₁ hn₂, h₁.mono fu
+    refine ⟨n₁ inter n₂, inter_mem hn₁ hn₂, h₁.mono fun t => ?_, h₂.mono fun t => ?_⟩
+    exacts [Subset.trans <| inter_subset_inter_right _ <| preimage_mono inter_subset_left,
+Subset.trans inter_subset_inter_right _ preimage_mono inter_subset_right]
+  · rintro (hy | hy)
+    exacts [omegaLimit_mono_right _ _ subset_union_left hy,
+      omegaLimit_mono_right _ _ subset_union_right hy]
 
 中文:
 定理 omegaLimit_union
@@ -450,7 +455,12 @@ theorem omegaLimit_union
     contrapose!
     simp only [← subset_empty_iff]
     rintro ⟨⟨n₁, hn₁, h₁⟩, ⟨n₂, hn₂, h₂⟩⟩
-    refine ⟨n₁ inter n₂, inter_mem hn₁ hn₂, h₁.mono fu
+    refine ⟨n₁ inter n₂, inter_mem hn₁ hn₂, h₁.mono fun t => ?_, h₂.mono fun t => ?_⟩
+    exacts [Subset.trans <| inter_subset_inter_right _ <| preimage_mono inter_subset_left,
+Subset.trans inter_subset_inter_right _ preimage_mono inter_subset_right]
+  · rintro (hy | hy)
+    exacts [omegaLimit_mono_right _ _ subset_union_left hy,
+      omegaLimit_mono_right _ _ subset_union_right hy]
 
 Depends on / 依赖: Subset, Subset.trans, contrapose, exacts, frequently_or_distrib, inter_mem, inter_subset_inter_right, inter_subset_left, inter_subset_right, mem_omegaLimit_iff_frequently, mem_union, omegaL, preimage_mono, subset_empty_iff, union_inter_distrib_right, union_nonempty
 -/
@@ -631,7 +641,32 @@ theorem eventually_closure_subset_of_isCompact_absorbing_of_isOpen_of_omegaLimit
   have hk : IsCompact (k \ n) :=
     (hc₁.of_isClosed_subset isClosed_closure hv₂).diff hn₁
   let j u := (closure (image2 ϕ (u inter v) s))ᶜ
-  have hj₁ : forall u in f, IsOpen (j u) := fun _ _ => isOpen_compl_iff.mpr isClosed_closu
+  have hj₁ : forall u in f, IsOpen (j u) := fun _ _ => isOpen_compl_iff.mpr isClosed_closure
+  have hj₂ : k \ n subseteq ⋃ u in f, j u := by
+    have : ⋃ u in f, j u = ⋃ u : (↥f.sets), j u := biUnion_eq_iUnion _ _
+    rw [this]; rw [sdiff_subset_comm]; rw [sdiff_iUnion]
+    rw [omegaLimit_eq_iInter_inter _ _ _ hv₁] at hn₂
+    simp_rw [j, sdiff_compl]
+    rw [← inter_iInter]
+    exact Subset.trans inter_subset_right hn₂
+  rcases hk.elim_finite_subcover_image hj₁ hj₂ with ⟨g, hg₁ : forall u in g, u in f, hg₂, hg₃⟩
+  let w := (⋂ u in g, u) inter v
+  have hw₂ : w in f := by simpa [w, *]
+  have hw₃ : k \ n subseteq (closure (image2 ϕ w s))ᶜ := by
+    apply Subset.trans hg₃
+    simp only [j, iUnion_subset_iff, compl_subset_compl]
+    intro u hu
+    unfold w
+    gcongr
+    refine iInter_subset_of_subset u (iInter_subset_of_subset hu ?_)
+    all_goals exact Subset.rfl
+  have hw₄ : kᶜ subseteq (closure (image2 ϕ w s))ᶜ := by
+    simp only [compl_subset_compl]
+    exact closure_mono (image2_subset inter_subset_right Subset.rfl)
+  have hnc : nᶜ subseteq k \ n union kᶜ := by rw [union_comm, ← inter_subset, sdiff_eq, inter_comm]
+  have hw : closure (image2 ϕ w s) subseteq n :=
+    compl_subset_compl.mp (Subset.trans hnc (union_subset hw₃ hw₄))
+  exact ⟨_, hw₂, hw⟩
 
 中文:
 定理 eventually_closure_subset_of_isCompact_absorbing_of_isOpen_of_omegaLimit_subset'
@@ -642,7 +677,32 @@ theorem eventually_closure_subset_of_isCompact_absorbing_of_isOpen_of_omegaLimit
   have hk : IsCompact (k \ n) :=
     (hc₁.of_isClosed_subset isClosed_closure hv₂).diff hn₁
   let j u := (closure (image2 ϕ (u inter v) s))ᶜ
-  have hj₁ : forall u in f, IsOpen (j u) := fun _ _ => isOpen_compl_iff.mpr isClosed_closu
+  have hj₁ : forall u in f, IsOpen (j u) := fun _ _ => isOpen_compl_iff.mpr isClosed_closure
+  have hj₂ : k \ n subseteq ⋃ u in f, j u := by
+    have : ⋃ u in f, j u = ⋃ u : (↥f.sets), j u := biUnion_eq_iUnion _ _
+    rw [this]; rw [sdiff_subset_comm]; rw [sdiff_iUnion]
+    rw [omegaLimit_eq_iInter_inter _ _ _ hv₁] at hn₂
+    simp_rw [j, sdiff_compl]
+    rw [← inter_iInter]
+    exact Subset.trans inter_subset_right hn₂
+  rcases hk.elim_finite_subcover_image hj₁ hj₂ with ⟨g, hg₁ : forall u in g, u in f, hg₂, hg₃⟩
+  let w := (⋂ u in g, u) inter v
+  have hw₂ : w in f := by simpa [w, *]
+  have hw₃ : k \ n subseteq (closure (image2 ϕ w s))ᶜ := by
+    apply Subset.trans hg₃
+    simp only [j, iUnion_subset_iff, compl_subset_compl]
+    intro u hu
+    unfold w
+    gcongr
+    refine iInter_subset_of_subset u (iInter_subset_of_subset hu ?_)
+    all_goals exact Subset.rfl
+  have hw₄ : kᶜ subseteq (closure (image2 ϕ w s))ᶜ := by
+    simp only [compl_subset_compl]
+    exact closure_mono (image2_subset inter_subset_right Subset.rfl)
+  have hnc : nᶜ subseteq k \ n union kᶜ := by rw [union_comm, ← inter_subset, sdiff_eq, inter_comm]
+  have hw : closure (image2 ϕ w s) subseteq n :=
+    compl_subset_compl.mp (Subset.trans hnc (union_subset hw₃ hw₄))
+  exact ⟨_, hw₂, hw⟩
 
 Depends on / 依赖: IsCompact, IsOpen, biUnion_eq_iUnion, closure, f.sets, image2, isClosed_closure, isOpen_compl_iff, isOpen_compl_iff.mpr, of_isClosed_subset, omegaLimit_eq_iInter_inter, sdiff_iUnion, sdiff_subset_comm, subseteq
 -/
@@ -800,7 +860,15 @@ theorem nonempty_omegaLimit_of_isCompact_absorbing
   · rintro ⟨u₁, hu₁⟩ ⟨u₂, hu₂⟩
     use ⟨u₁ inter u₂, inter_mem hu₁ hu₂⟩
     constructor
-    all_goals exact closure_mono (image2_subset (inter_subs
+    all_goals exact closure_mono (image2_subset (inter_subset_inter_left _ (by simp)) Subset.rfl)
+  · intro u
+    have hn : (image2 ϕ (u inter v) s).Nonempty :=
+      Nonempty.image2 (Filter.nonempty_of_mem (inter_mem u.prop hv₁)) hs
+    exact hn.mono subset_closure
+  · intro
+    apply hc₁.of_isClosed_subset isClosed_closure
+    grw [inter_subset_right, hv₂]
+  · exact fun _ => isClosed_closure
 
 中文:
 定理 nonempty_omegaLimit_of_isCompact_absorbing
@@ -812,7 +880,15 @@ theorem nonempty_omegaLimit_of_isCompact_absorbing
   · rintro ⟨u₁, hu₁⟩ ⟨u₂, hu₂⟩
     use ⟨u₁ inter u₂, inter_mem hu₁ hu₂⟩
     constructor
-    all_goals exact closure_mono (image2_subset (inter_subs
+    all_goals exact closure_mono (image2_subset (inter_subset_inter_left _ (by simp)) Subset.rfl)
+  · intro u
+    have hn : (image2 ϕ (u inter v) s).Nonempty :=
+      Nonempty.image2 (Filter.nonempty_of_mem (inter_mem u.prop hv₁)) hs
+    exact hn.mono subset_closure
+  · intro
+    apply hc₁.of_isClosed_subset isClosed_closure
+    grw [inter_subset_right, hv₂]
+  · exact fun _ => isClosed_closure
 
 Depends on / 依赖: Filter, Filter.nonempty_of_mem, IsCompact, IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed, Nonempty, Nonempty.image2, Subset, Subset.rfl, all_goals, closure_mono, hn.mono, image2, image2_subset, inter_mem, inter_subset_inter_left, nonempty_iInter_of_directed_nonempty_isCompact_isClosed, nonempty_of_mem, of_isClose, omegaLimit_eq_iInter_inter, subset_closure
 -/
@@ -979,7 +1055,14 @@ theorem omegaLimit_omegaLimit
   have l₁ : (ω f ϕ s inter o).Nonempty :=
     ht₂.mono
       (inter_subset_inter_left _
-
+        ((isInvariant_iff_image _ _).mp (isInvariant_omegaLimit _ _ _ hf) _))
+  have l₂ : (closure (image2 ϕ u s) inter o).Nonempty :=
+    l₁.mono fun b hb => ⟨omegaLimit_subset_closure_image2 _ _ _ hu hb.1, hb.2⟩
+  have l₃ : (o inter image2 ϕ u s).Nonempty := by
+    rcases l₂ with ⟨b, hb₁, hb₂⟩
+    exact mem_closure_iff_nhds.mp hb₁ o (IsOpen.mem_nhds ho₂ hb₂)
+  rcases l₃ with ⟨ϕra, ho, ⟨_, hr, _, ha, hϕra⟩⟩
+  exact ⟨_, hr, ϕra, ⟨_, ha, hϕra⟩, ho₁ ho⟩
 
 中文:
 定理 omegaLimit_omegaLimit
@@ -993,7 +1076,14 @@ theorem omegaLimit_omegaLimit
   have l₁ : (ω f ϕ s inter o).Nonempty :=
     ht₂.mono
       (inter_subset_inter_left _
-
+        ((isInvariant_iff_image _ _).mp (isInvariant_omegaLimit _ _ _ hf) _))
+  have l₂ : (closure (image2 ϕ u s) inter o).Nonempty :=
+    l₁.mono fun b hb => ⟨omegaLimit_subset_closure_image2 _ _ _ hu hb.1, hb.2⟩
+  have l₃ : (o inter image2 ϕ u s).Nonempty := by
+    rcases l₂ with ⟨b, hb₁, hb₂⟩
+    exact mem_closure_iff_nhds.mp hb₁ o (IsOpen.mem_nhds ho₂ hb₂)
+  rcases l₃ with ⟨ϕra, ho, ⟨_, hr, _, ha, hϕra⟩⟩
+  exact ⟨_, hr, ϕra, ⟨_, ha, hϕra⟩, ho₁ ho⟩
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, Nonempty, closure, frequently_iff, image2, inter_subset_inter_left, isInvariant_iff_image, isInvariant_omegaLimit, mem_nhds, mem_nhds_iff, mem_nhds_iff.mp, omegaLimit_subset_closure_image2, subset_def
 -/

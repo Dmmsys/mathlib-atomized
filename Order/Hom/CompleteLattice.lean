@@ -2408,7 +2408,7 @@ definition Equiv.toOrderIsoSet
   left_inv s := by simp only [← image_comp, Equiv.symm_comp_self, id, image_id']
   right_inv s := by simp only [← image_comp, Equiv.self_comp_symm, id, image_id']
   map_rel_iff' :=
-    ⟨fun h => by simpa using @monotone_image _ _ e.symm _ _ h, fun h => monotone_image
+    ⟨fun h => by simpa using @monotone_image _ _ e.symm _ _ h, fun h => monotone_image h⟩
 
 中文:
 定义 等价.toOrderIsoSet
@@ -2418,7 +2418,7 @@ definition Equiv.toOrderIsoSet
   left_inv s := by simp only [← image_comp, Equiv.symm_comp_self, id, image_id']
   right_inv s := by simp only [← image_comp, Equiv.self_comp_symm, id, image_id']
   map_rel_iff' :=
-    ⟨fun h => by simpa using @monotone_image _ _ e.symm _ _ h, fun h => monotone_image
+    ⟨fun h => by simpa using @monotone_image _ _ e.symm _ _ h, fun h => monotone_image h⟩
 
 Depends on / 依赖: Algebra, Algebra.FormallyUnramified.finite_of_free, FormallyUnramified, finite_of_free, isArtinian_of_tower
 -/

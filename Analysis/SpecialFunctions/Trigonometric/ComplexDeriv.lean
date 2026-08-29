@@ -86,7 +86,8 @@ theorem tendsto_norm_tan_of_cos_eq_zero
   have A : sin x != 0 := fun h => by simpa [*, sq] using sin_sq_add_cos_sq x
   have B : Tendsto cos (𝓝[!=] x) (𝓝[!=] 0) :=
     hx ▸ (hasDerivAt_cos x).tendsto_nhdsNE (neg_ne_zero.2 A)
-  exact continuous_sin.continuousWithinAt.norm.pos_mul_atTop (norm_pos
+  exact continuous_sin.continuousWithinAt.norm.pos_mul_atTop (norm_pos_iff.2 A)
+    (tendsto_norm_nhdsNE_zero.comp B).inv_tendsto_nhdsGT_zero
 
 中文:
 定理 tendsto_norm_tan_of_cos_eq_zero
@@ -96,7 +97,8 @@ theorem tendsto_norm_tan_of_cos_eq_zero
   have A : sin x != 0 := fun h => by simpa [*, sq] using sin_sq_add_cos_sq x
   have B : Tendsto cos (𝓝[!=] x) (𝓝[!=] 0) :=
     hx ▸ (hasDerivAt_cos x).tendsto_nhdsNE (neg_ne_zero.2 A)
-  exact continuous_sin.continuousWithinAt.norm.pos_mul_atTop (norm_pos
+  exact continuous_sin.continuousWithinAt.norm.pos_mul_atTop (norm_pos_iff.2 A)
+    (tendsto_norm_nhdsNE_zero.comp B).inv_tendsto_nhdsGT_zero
 
 Depends on / 依赖: Tendsto, continuousWithinAt, continuous_sin, continuous_sin.continuousWithinAt.norm.pos_mul_atTop, hasDerivAt_cos, inv_tendsto_nhdsGT_zero, neg_ne_zero, norm_div, norm_pos_iff, pos_mul_atTop, sin_sq_add_cos_sq, tan_eq_sin_div_cos, tendsto_nhdsNE, tendsto_norm_nhdsNE_zero, tendsto_norm_nhdsNE_zero.comp
 -/

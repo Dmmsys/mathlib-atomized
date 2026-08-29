@@ -374,7 +374,8 @@ lemma isStandardSmooth_isStableUnderBaseChange
     replace h : Algebra.IsStandardSmooth R T := by
       rw [RingHom.IsStandardSmooth] at h; convert! h; ext; simp_rw [Algebra.smul_def]; rfl
     suffices Algebra.IsStandardSmooth S (S otimes[R] T) by
-      rw 
+      rw [RingHom.IsStandardSmooth]; convert! this; ext; simp_rw [Algebra.smul_def]; rfl
+    infer_instance
 
 中文:
 引理 isStandardSmooth_isStableUnderBaseChange
@@ -385,7 +386,8 @@ lemma isStandardSmooth_isStableUnderBaseChange
     replace h : Algebra.IsStandardSmooth R T := by
       rw [RingHom.IsStandardSmooth] at h; convert! h; ext; simp_rw [Algebra.smul_def]; rfl
     suffices Algebra.IsStandardSmooth S (S otimes[R] T) by
-      rw 
+      rw [RingHom.IsStandardSmooth]; convert! this; ext; simp_rw [Algebra.smul_def]; rfl
+    infer_instance
 
 Depends on / 依赖: Algebra, Algebra.IsStandardSmooth, Algebra.smul_def, IsStableUnderBaseChange, IsStableUnderBaseChange.mk, IsStandardSmooth, RingHom, RingHom.IsStandardSmooth, convert, infer_instance, introv, isStandardSmooth_respectsIso, otimes, replace, simp_rw, smul_def
 -/
@@ -414,7 +416,10 @@ lemma isStandardSmoothOfRelativeDimension_isStableUnderBaseChange
     replace h : Algebra.IsStandardSmoothOfRelativeDimension n R T := by
       rw [RingHom.IsStandardSmoothOfRelativeDimension] at h
       convert! h; ext; simp_rw [Algebra.smul_def]; rfl
-    
+    suffices Algebra.IsStandardSmoothOfRelativeDimension n S (S otimes[R] T) by
+      rw [RingHom.IsStandardSmoothOfRelativeDimension]
+      convert! this; ext; simp_rw [Algebra.smul_def]; rfl
+    infer_instance
 
 中文:
 引理 isStandardSmoothOfRelativeDimension_isStableUnderBaseChange
@@ -425,7 +430,10 @@ lemma isStandardSmoothOfRelativeDimension_isStableUnderBaseChange
     replace h : Algebra.IsStandardSmoothOfRelativeDimension n R T := by
       rw [RingHom.IsStandardSmoothOfRelativeDimension] at h
       convert! h; ext; simp_rw [Algebra.smul_def]; rfl
-    
+    suffices Algebra.IsStandardSmoothOfRelativeDimension n S (S otimes[R] T) by
+      rw [RingHom.IsStandardSmoothOfRelativeDimension]
+      convert! this; ext; simp_rw [Algebra.smul_def]; rfl
+    infer_instance
 
 Depends on / 依赖: Algebra, Algebra.IsStandardSmoothOfRelativeDimension, Algebra.smul_def, IsStableUnderBaseChange, IsStableUnderBaseChange.mk, IsStandardSmoothOfRelativeDimension, RingHom, RingHom.IsStandardSmoothOfRelativeDimension, convert, infer_instance, introv, isStandardSmoothOfRelativeDimension_respectsIso, otimes, replace, simp_rw, smul_def
 -/
@@ -587,7 +595,9 @@ lemma isStandardSmoothOfRelativeDimension_stableUnderCompositionWithLocalization
       IsStandardSmoothOfRelativeDimension.algebraMap_isLocalizationAway r
     add_zero n ▸ IsStandardSmoothOfRelativeDimension.comp hf this
   right _ S T _ _ _ _ s _ _ hf :=
-    have : (algebraMap S T).IsStandardSmoothOfRelativeDimensi
+    have : (algebraMap S T).IsStandardSmoothOfRelativeDimension 0 :=
+      IsStandardSmoothOfRelativeDimension.algebraMap_isLocalizationAway s
+    zero_add n ▸ IsStandardSmoothOfRelativeDimension.comp this hf
 
 中文:
 引理 isStandardSmoothOfRelativeDimension_stableUnderCompositionWithLocalizationAway
@@ -595,7 +605,9 @@ lemma isStandardSmoothOfRelativeDimension_stableUnderCompositionWithLocalization
       IsStandardSmoothOfRelativeDimension.algebraMap_isLocalizationAway r
     add_zero n ▸ IsStandardSmoothOfRelativeDimension.comp hf this
   right _ S T _ _ _ _ s _ _ hf :=
-    have : (algebraMap S T).IsStandardSmoothOfRelativeDimensi
+    have : (algebraMap S T).IsStandardSmoothOfRelativeDimension 0 :=
+      IsStandardSmoothOfRelativeDimension.algebraMap_isLocalizationAway s
+    zero_add n ▸ IsStandardSmoothOfRelativeDimension.comp this hf
 
 Depends on / 依赖: IsStandardSmoothOfRelativeDimension, IsStandardSmoothOfRelativeDimension.algebraMap_isLocalizationAway, IsStandardSmoothOfRelativeDimension.comp, add_zero, algebraMap, algebraMap_isLocalizationAway, zero_add
 -/
@@ -623,7 +635,47 @@ theorem _root_.Algebra.IsStandardSmoothOfRelativeDimension.exists_etale_mvPolyno
   obtain ⟨ι, σ, _, _, P, e⟩ :=
     Algebra.IsStandardSmoothOfRelativeDimension.out (R := R) (S := S) (n := n)
   let e₀ : σ oplus Fin n ≃ ι := ((Equiv.ofInjective _ P.map_inj).sumCongr
-      (Finite.equivFinOfCardEq (by rw [Nat.card_coe_set_eq, Set.ncard_compl
+      (Finite.equivFinOfCardEq (by rw [Nat.card_coe_set_eq, Set.ncard_compl,
+        Set.ncard_range_of_injective P.map_inj, ← e, Algebra.Presentation.dimension])).symm).trans
+      (Equiv.Set.sumCompl _)
+  let e : MvPolynomial σ (MvPolynomial (Fin n) R) ≃ₐ[R] P.Ring :=
+    (MvPolynomial.sumAlgEquiv R _ _).symm.trans (MvPolynomial.renameEquiv _ e₀)
+  let φ := e.toAlgHom.comp (IsScalarTower.toAlgHom _ (MvPolynomial (Fin n) R) _)
+  algebraize [φ.toRingHom, (algebraMap P.Ring S).comp φ.toRingHom]
+  have := IsScalarTower.of_algebraMap_eq' φ.comp_algebraMap.symm
+  have : IsScalarTower R (MvPolynomial (Fin n) R) S := .to₁₂₄ _ _ P.Ring _
+  refine ⟨IsScalarTower.toAlgHom _ _ _, ?_⟩
+  have H : (MvPolynomial.aeval fun x => (algebraMap P.Ring S) (e (MvPolynomial.X x))).toRingHom =
+      (algebraMap P.Ring S).comp e.toRingHom := by
+    ext
+    · simp [e, IsScalarTower.algebraMap_eq R (MvPolynomial (Fin n) R) S]
+    · simp [e, @RingHom.algebraMap_toAlgebra (MvPolynomial (Fin n) R) S, φ]
+    · simp [e]
+  let P' : Algebra.PreSubmersivePresentation (MvPolynomial (Fin n) R) S σ σ :=
+  { toGenerators := .ofSurjective (algebraMap _ _ <| e <| .X ·) <| by
+      convert! P.algebraMap_surjective.comp e.surjective
+      exact congr($H)
+    relation := e.symm ∘ P.relation
+    span_range_relation_eq_ker := by
+      rw [Set.range_comp]; rw [← AlgEquiv.coe_ringEquiv e.symm]; rw [AlgEquiv.symm_toRingEquiv]; rw [← Ideal.map_span]; rw [P.span_range_relation_eq_ker]; rw [Ideal.map_symm]
+      exact congr(RingHom.ker $H).symm
+    map := _
+    map_inj := Function.injective_id }
+  let P' : Algebra.SubmersivePresentation (MvPolynomial (Fin n) R) S σ σ :=
+  { __ := P'
+    jacobian_isUnit := by
+      convert! P.jacobian_isUnit using 1
+      simp_rw [Algebra.PreSubmersivePresentation.jacobian_eq_jacobiMatrix_det, map_det]
+      congr 1
+      ext i j
+      trans algebraMap P.Ring S (e ((e.symm (P.relation j)).pderiv i))
+      · simpa [Algebra.PreSubmersivePresentation.jacobiMatrix_apply, P',
+Algebra.Generators.ofSurjective] using congr( H _)
+      suffices e ((e.symm (P.relation j)).pderiv i) = (P.relation j).pderiv (P.map i) by
+        simp [Algebra.PreSubmersivePresentation.jacobiMatrix_apply, this]
+      simp [e, ← MvPolynomial.pderiv_rename e₀.injective, show e₀ (Sum.inl i) = P.map i from rfl] }
+  exact etale_algebraMap.mpr (Algebra.Etale.iff_isStandardSmoothOfRelativeDimension_zero.mpr
+    ⟨_, _, _, inferInstance, P', by simp [Algebra.Presentation.dimension]⟩)
 
 中文:
 定理 _root_.代数.是StandardSmoothOfRelativeDimension.存在_etale_mvPolynomial
@@ -633,7 +685,47 @@ theorem _root_.Algebra.IsStandardSmoothOfRelativeDimension.exists_etale_mvPolyno
   obtain ⟨ι, σ, _, _, P, e⟩ :=
     Algebra.IsStandardSmoothOfRelativeDimension.out (R := R) (S := S) (n := n)
   let e₀ : σ oplus Fin n ≃ ι := ((Equiv.ofInjective _ P.map_inj).sumCongr
-      (Finite.equivFinOfCardEq (by rw [Nat.card_coe_set_eq, Set.ncard_compl
+      (Finite.equivFinOfCardEq (by rw [Nat.card_coe_set_eq, Set.ncard_compl,
+        Set.ncard_range_of_injective P.map_inj, ← e, Algebra.Presentation.dimension])).symm).trans
+      (Equiv.Set.sumCompl _)
+  let e : MvPolynomial σ (MvPolynomial (Fin n) R) ≃ₐ[R] P.Ring :=
+    (MvPolynomial.sumAlgEquiv R _ _).symm.trans (MvPolynomial.renameEquiv _ e₀)
+  let φ := e.toAlgHom.comp (IsScalarTower.toAlgHom _ (MvPolynomial (Fin n) R) _)
+  algebraize [φ.toRingHom, (algebraMap P.Ring S).comp φ.toRingHom]
+  have := IsScalarTower.of_algebraMap_eq' φ.comp_algebraMap.symm
+  have : IsScalarTower R (MvPolynomial (Fin n) R) S := .to₁₂₄ _ _ P.Ring _
+  refine ⟨IsScalarTower.toAlgHom _ _ _, ?_⟩
+  have H : (MvPolynomial.aeval fun x => (algebraMap P.Ring S) (e (MvPolynomial.X x))).toRingHom =
+      (algebraMap P.Ring S).comp e.toRingHom := by
+    ext
+    · simp [e, IsScalarTower.algebraMap_eq R (MvPolynomial (Fin n) R) S]
+    · simp [e, @RingHom.algebraMap_toAlgebra (MvPolynomial (Fin n) R) S, φ]
+    · simp [e]
+  let P' : Algebra.PreSubmersivePresentation (MvPolynomial (Fin n) R) S σ σ :=
+  { toGenerators := .ofSurjective (algebraMap _ _ <| e <| .X ·) <| by
+      convert! P.algebraMap_surjective.comp e.surjective
+      exact congr($H)
+    relation := e.symm ∘ P.relation
+    span_range_relation_eq_ker := by
+      rw [Set.range_comp]; rw [← AlgEquiv.coe_ringEquiv e.symm]; rw [AlgEquiv.symm_toRingEquiv]; rw [← Ideal.map_span]; rw [P.span_range_relation_eq_ker]; rw [Ideal.map_symm]
+      exact congr(RingHom.ker $H).symm
+    map := _
+    map_inj := Function.injective_id }
+  let P' : Algebra.SubmersivePresentation (MvPolynomial (Fin n) R) S σ σ :=
+  { __ := P'
+    jacobian_isUnit := by
+      convert! P.jacobian_isUnit using 1
+      simp_rw [Algebra.PreSubmersivePresentation.jacobian_eq_jacobiMatrix_det, map_det]
+      congr 1
+      ext i j
+      trans algebraMap P.Ring S (e ((e.symm (P.relation j)).pderiv i))
+      · simpa [Algebra.PreSubmersivePresentation.jacobiMatrix_apply, P',
+Algebra.Generators.ofSurjective] using congr( H _)
+      suffices e ((e.symm (P.relation j)).pderiv i) = (P.relation j).pderiv (P.map i) by
+        simp [Algebra.PreSubmersivePresentation.jacobiMatrix_apply, this]
+      simp [e, ← MvPolynomial.pderiv_rename e₀.injective, show e₀ (Sum.inl i) = P.map i from rfl] }
+  exact etale_algebraMap.mpr (Algebra.Etale.iff_isStandardSmoothOfRelativeDimension_zero.mpr
+    ⟨_, _, _, inferInstance, P', by simp [Algebra.Presentation.dimension]⟩)
 
 Depends on / 依赖: Algebra, Algebra.IsStandardSmoothOfRelativeDimension.out, Algebra.Presentation.dimension, Equiv.Set.sumCompl, Equiv.ofInjective, Finite, Finite.equivFinOfCardEq, Fintype, Fintype.ofFinite, IsStandardSmoothOfRelativeDimension, MvPolynomial, MvPolynomial.sumAlgEquiv, Nat.card_coe_set_eq, P.Ring, P.map_inj, Presentation, Set.ncard_compl, Set.ncard_range_of_injective, card_coe_set_eq, classical
 -/

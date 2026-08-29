@@ -51,7 +51,49 @@ theorem isTopologicalBasis_cofiltered_limit
   constructor
   · rintro ⟨j, V, hV, rfl⟩
     let U : forall i, Set (F.obj i) := fun i => if h : i = j then by rw [h]; exact V else Set.univ
-    refine ⟨U, {
+    refine ⟨U, {j}, ?_, ?_⟩
+    · simp only [Finset.mem_singleton]
+      rintro i rfl
+      simpa [U]
+    · simp [U]
+  · rintro ⟨U, G, h1, h2⟩
+    obtain ⟨j, hj⟩ := IsCofiltered.inf_objs_exists G
+    let g : forall e in G, j ⟶ e := fun _ he => (hj he).some
+    let Vs : J -> Set (F.obj j) := fun e => if h : e in G then F.map (g e h) ⁻¹' U e else Set.univ
+    let V : Set (F.obj j) := ⋂ (e : J) (_he : e in G), Vs e
+    refine ⟨j, V, ?_, ?_⟩
+    · -- An intermediate claim used to apply induction along `G : Finset J` later on.
+      have :
+        forall (S : Set (Set (F.obj j))) (E : Finset J) (P : J -> Set (F.obj j)) (_univ : Set.univ in S)
+          (_inter : forall A B : Set (F.obj j), A in S -> B in S -> A inter B in S)
+          (_cond : forall (e : J) (_he : e in E), P e in S), (⋂ (e) (_he : e in E), P e) in S := by
+        intro S E
+        induction E using Finset.induction_on with
+        | empty =>
+          intro P he _hh
+          simpa
+        | insert a E _ha hh1 =>
+          intro hh2 hh3 hh4 hh5
+          rw [Finset.set_biInter_insert]
+          refine hh4 _ _ (hh5 _ (Finset.mem_insert_self _ _)) (hh1 _ hh3 hh4 ?_)
+          intro e he
+          exact hh5 e (Finset.mem_insert_of_mem he)
+      -- use the intermediate claim to finish off the goal using `univ` and `inter`.
+      refine this _ _ _ (univ _) (inter _) ?_
+      intro e he
+      dsimp [Vs]
+      rw [dif_pos he]
+      exact compat j e (g e he) (U e) (h1 e he)
+    · -- conclude...
+      rw [h2]
+      change _ = (C.π.app j) ⁻¹' ⋂ (e : J) (_ : e in G), Vs e
+      rw [Set.preimage_iInter]
+      apply congrArg
+      ext1 e
+      rw [Set.preimage_iInter]
+      apply congrArg
+      ext1 he
+      simp [Vs, dif_pos he, ← Set.preimage_comp, ← coe_comp]
 
 中文:
 定理 isTopologicalBasis_cofiltered_limit
@@ -64,7 +106,49 @@ theorem isTopologicalBasis_cofiltered_limit
   constructor
   · rintro ⟨j, V, hV, rfl⟩
     let U : forall i, Set (F.obj i) := fun i => if h : i = j then by rw [h]; exact V else Set.univ
-    refine ⟨U, {
+    refine ⟨U, {j}, ?_, ?_⟩
+    · simp only [Finset.mem_singleton]
+      rintro i rfl
+      simpa [U]
+    · simp [U]
+  · rintro ⟨U, G, h1, h2⟩
+    obtain ⟨j, hj⟩ := IsCofiltered.inf_objs_exists G
+    let g : forall e in G, j ⟶ e := fun _ he => (hj he).some
+    let Vs : J -> Set (F.obj j) := fun e => if h : e in G then F.map (g e h) ⁻¹' U e else Set.univ
+    let V : Set (F.obj j) := ⋂ (e : J) (_he : e in G), Vs e
+    refine ⟨j, V, ?_, ?_⟩
+    · -- An intermediate claim used to apply induction along `G : Finset J` later on.
+      have :
+        forall (S : Set (Set (F.obj j))) (E : Finset J) (P : J -> Set (F.obj j)) (_univ : Set.univ in S)
+          (_inter : forall A B : Set (F.obj j), A in S -> B in S -> A inter B in S)
+          (_cond : forall (e : J) (_he : e in E), P e in S), (⋂ (e) (_he : e in E), P e) in S := by
+        intro S E
+        induction E using Finset.induction_on with
+        | empty =>
+          intro P he _hh
+          simpa
+        | insert a E _ha hh1 =>
+          intro hh2 hh3 hh4 hh5
+          rw [Finset.set_biInter_insert]
+          refine hh4 _ _ (hh5 _ (Finset.mem_insert_self _ _)) (hh1 _ hh3 hh4 ?_)
+          intro e he
+          exact hh5 e (Finset.mem_insert_of_mem he)
+      -- use the intermediate claim to finish off the goal using `univ` and `inter`.
+      refine this _ _ _ (univ _) (inter _) ?_
+      intro e he
+      dsimp [Vs]
+      rw [dif_pos he]
+      exact compat j e (g e he) (U e) (h1 e he)
+    · -- conclude...
+      rw [h2]
+      change _ = (C.π.app j) ⁻¹' ⋂ (e : J) (_ : e in G), Vs e
+      rw [Set.preimage_iInter]
+      apply congrArg
+      ext1 e
+      rw [Set.preimage_iInter]
+      apply congrArg
+      ext1 he
+      simp [Vs, dif_pos he, ← Set.preimage_comp, ← coe_comp]
 
 Depends on / 依赖: C.pt, F.obj, Finset, Finset.mem_singleton, IsCofiltered, IsCofiltered.inf_objs_exists, IsTopologicalBasis, IsTopologicalBasis.iInf_induced, Set.univ, classical, convert, iInf_induced, induced_of_isLimit, inf_objs_exists, mem_singleton
 -/

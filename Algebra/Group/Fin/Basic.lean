@@ -136,7 +136,8 @@ Fin.ext (Nat.mod_add_mod _ _ _).trans by
       exact le_of_lt ha
   sub := Fin.sub
   sub_eq_add_neg := fun ⟨a, ha⟩ ⟨b, hb⟩ =>
-Fin.ext by simp [Fin.sub_def, Fin.neg_def,
+Fin.ext by simp [Fin.sub_def, Fin.neg_def, Fin.add_def, Nat.add_comm]
+  zsmul := zsmulRec
 
 中文:
 实例 addCommGroup
@@ -149,7 +150,8 @@ Fin.ext (Nat.mod_add_mod _ _ _).trans by
       exact le_of_lt ha
   sub := Fin.sub
   sub_eq_add_neg := fun ⟨a, ha⟩ ⟨b, hb⟩ =>
-Fin.ext by simp [Fin.sub_def, Fin.neg_def,
+Fin.ext by simp [Fin.sub_def, Fin.neg_def, Fin.add_def, Nat.add_comm]
+  zsmul := zsmulRec
 
 Depends on / 依赖: addCommMonoid
 -/

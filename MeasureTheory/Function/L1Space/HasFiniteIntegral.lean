@@ -1195,7 +1195,8 @@ theorem hasFiniteIntegral_toReal_of_lintegral_ne_top
   refine lt_of_le_of_lt (lintegral_mono fun x => ?_) (lt_top_iff_ne_top.2 hf)
   by_cases hfx : f x = ∞
   · simp [hfx]
-  · lift f x to Real>=0 us
+  · lift f x to Real>=0 using hfx with fx h
+    simp
 
 中文:
 定理 hasFinite整数egral_to实数_of_lintegral_ne_top
@@ -1207,7 +1208,8 @@ theorem hasFiniteIntegral_toReal_of_lintegral_ne_top
   refine lt_of_le_of_lt (lintegral_mono fun x => ?_) (lt_top_iff_ne_top.2 hf)
   by_cases hfx : f x = ∞
   · simp [hfx]
-  · lift f x to Real>=0 us
+  · lift f x to Real>=0 using hfx with fx h
+    simp
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, Real.enorm_of_nonneg, enorm_of_nonneg, hasFiniteIntegral_iff_enorm, lintegral_mono, lt_of_le_of_lt, lt_top_iff_ne_top, ofReal, simp_rw, toReal, toReal_nonneg
 -/
@@ -1366,7 +1368,7 @@ theorem ae_norm_ofReal_f_le_bound
   intro a tendsto_norm F_le_bound
   exact le_of_tendsto' tendsto_norm F_le_bound
 
-@[deprecated (since := "2026-01-26")] alias all_ae_ofReal_f_
+@[deprecated (since := "2026-01-26")] alias all_ae_ofReal_f_le_bound := ae_norm_ofReal_f_le_bound
 
 中文:
 定理 ae_norm_of实数_f_le_bound
@@ -1378,7 +1380,7 @@ theorem ae_norm_ofReal_f_le_bound
   intro a tendsto_norm F_le_bound
   exact le_of_tendsto' tendsto_norm F_le_bound
 
-@[deprecated (since := "2026-01-26")] alias all_ae_ofReal_f_
+@[deprecated (since := "2026-01-26")] alias all_ae_ofReal_f_le_bound := ae_norm_ofReal_f_le_bound
 
 Depends on / 依赖: F_le_bound, F_le_bound.mp, ae_all_iff, ae_tendsto_ofReal_norm, all_ae_norm_ofReal_F_le_bound, h_bound, h_lim, le_of_tendsto, tendsto_norm
 -/
@@ -1436,6 +1438,7 @@ theorem hasFiniteIntegral_of_dominated_convergence_enorm
   calc
     (∫⁻ a, ‖f' a‖ₑ ∂μ) <= ∫⁻ a, bound' a ∂μ :=
 lintegral_mono_ae ae_enorm_le_bound h_bound h_lim
+    _ < ∞ := bound_hasFiniteIntegral
 
 中文:
 定理 hasFinite整数egral_of_dominated_convergence_enorm
@@ -1446,6 +1449,7 @@ lintegral_mono_ae ae_enorm_le_bound h_bound h_lim
   calc
     (∫⁻ a, ‖f' a‖ₑ ∂μ) <= ∫⁻ a, bound' a ∂μ :=
 lintegral_mono_ae ae_enorm_le_bound h_bound h_lim
+    _ < ∞ := bound_hasFiniteIntegral
 -/
 theorem hasFiniteIntegral_of_dominated_convergence_enorm
     (bound_hasFiniteIntegral : HasFiniteIntegral bound' μ)
@@ -1470,7 +1474,11 @@ theorem hasFiniteIntegral_of_dominated_convergence
   rw [hasFiniteIntegral_iff_norm]
   calc
     (∫⁻ a, ENNReal.ofReal ‖f a‖ ∂μ) <= ∫⁻ a, ENNReal.ofReal (bound a) ∂μ :=
-lintegral_mono_ae ae_norm_ofRea
+lintegral_mono_ae ae_norm_ofReal_f_le_bound h_bound h_lim
+    _ < ∞ := by
+      rw [← hasFiniteIntegral_iff_ofReal]
+      · exact bound_hasFiniteIntegral
+      exact (h_bound 0).mono fun a h => le_trans (norm_nonneg _) h
 
 中文:
 定理 hasFinite整数egral_of_dominated_convergence
@@ -1480,7 +1488,11 @@ lintegral_mono_ae ae_norm_ofRea
   rw [hasFiniteIntegral_iff_norm]
   calc
     (∫⁻ a, ENNReal.ofReal ‖f a‖ ∂μ) <= ∫⁻ a, ENNReal.ofReal (bound a) ∂μ :=
-lintegral_mono_ae ae_norm_ofRea
+lintegral_mono_ae ae_norm_ofReal_f_le_bound h_bound h_lim
+    _ < ∞ := by
+      rw [← hasFiniteIntegral_iff_ofReal]
+      · exact bound_hasFiniteIntegral
+      exact (h_bound 0).mono fun a h => le_trans (norm_nonneg _) h
 -/
 theorem hasFiniteIntegral_of_dominated_convergence
     (bound_hasFiniteIntegral : HasFiniteIntegral bound μ)
@@ -1508,7 +1520,44 @@ theorem tendsto_lintegral_norm_of_dominated_convergence
     aestronglyMeasurable_of_tendsto_ae _ F_measurable h_lim
   let b a := 2 * ENNReal.ofReal (bound a)
   /- `‖F n a‖ ≤ bound a` and `F n a --> f a` implies `‖f a‖ ≤ bound a`, and thus by the
-    triangle inequality, have `‖F n a - f a‖ ≤ 2 * (bound
+    triangle inequality, have `‖F n a - f a‖ ≤ 2 * (bound a)`. -/
+  have hb : forall n, forallᵐ a ∂μ, ENNReal.ofReal ‖F n a - f a‖ <= b a := by
+    intro n
+    filter_upwards [all_ae_norm_ofReal_F_le_bound h_bound n,
+      ae_norm_ofReal_f_le_bound h_bound h_lim] with a h₁ h₂
+    calc
+      ENNReal.ofReal ‖F n a - f a‖ <= ENNReal.ofReal ‖F n a‖ + ENNReal.ofReal ‖f a‖ := by
+        rw [← ENNReal.ofReal_add]
+        · apply ofReal_le_ofReal
+          apply norm_sub_le
+        · exact norm_nonneg _
+        · exact norm_nonneg _
+      _ <= ENNReal.ofReal (bound a) + ENNReal.ofReal (bound a) := add_le_add h₁ h₂
+      _ = b a := by rw [← two_mul]
+  -- On the other hand, `F n a --> f a` implies that `‖F n a - f a‖ --> 0`
+  have h : forallᵐ a ∂μ, Tendsto (fun n => ENNReal.ofReal ‖F n a - f a‖) atTop (𝓝 0) := by
+    rw [← ENNReal.ofReal_zero]
+    refine h_lim.mono fun a h => (continuous_ofReal.tendsto _).comp ?_
+    rwa [← tendsto_iff_norm_sub_tendsto_zero]
+  /- Therefore, by the dominated convergence theorem for nonnegative integration, have
+    ` ∫ ‖f a - F n a‖ --> 0 ` -/
+  suffices Tendsto (fun n => ∫⁻ a, ENNReal.ofReal ‖F n a - f a‖ ∂μ) atTop (𝓝 (∫⁻ _ : α, 0 ∂μ)) by
+    rwa [lintegral_zero] at this
+  -- Using the dominated convergence theorem.
+  refine tendsto_lintegral_of_dominated_convergence' _ ?_ hb ?_ ?_
+  -- Show `fun a => ‖f a - F n a‖` is almost everywhere measurable for all `n`
+  · exact fun n =>
+      measurable_ofReal.comp_aemeasurable ((F_measurable n).sub f_measurable).norm.aemeasurable
+  -- Show `2 * bound` `HasFiniteIntegral`
+  · rw [hasFiniteIntegral_iff_ofReal] at bound_hasFiniteIntegral
+    · calc
+        ∫⁻ a, b a ∂μ = 2 * ∫⁻ a, ENNReal.ofReal (bound a) ∂μ := by
+          rw [lintegral_const_mul']
+          finiteness
+        _ != ∞ := mul_ne_top coe_ne_top bound_hasFiniteIntegral.ne
+    filter_upwards [h_bound 0] with _ h using le_trans (norm_nonneg _) h
+  -- Show `‖f a - F n a‖ --> 0`
+  · exact h
 
 中文:
 定理 tendsto_lintegral_norm_of_dominated_convergence
@@ -1517,7 +1566,44 @@ theorem tendsto_lintegral_norm_of_dominated_convergence
     aestronglyMeasurable_of_tendsto_ae _ F_measurable h_lim
   let b a := 2 * ENNReal.ofReal (bound a)
   /- `‖F n a‖ ≤ bound a` and `F n a --> f a` implies `‖f a‖ ≤ bound a`, and thus by the
-    triangle inequality, have `‖F n a - f a‖ ≤ 2 * (bound
+    triangle inequality, have `‖F n a - f a‖ ≤ 2 * (bound a)`. -/
+  have hb : forall n, forallᵐ a ∂μ, ENNReal.ofReal ‖F n a - f a‖ <= b a := by
+    intro n
+    filter_upwards [all_ae_norm_ofReal_F_le_bound h_bound n,
+      ae_norm_ofReal_f_le_bound h_bound h_lim] with a h₁ h₂
+    calc
+      ENNReal.ofReal ‖F n a - f a‖ <= ENNReal.ofReal ‖F n a‖ + ENNReal.ofReal ‖f a‖ := by
+        rw [← ENNReal.ofReal_add]
+        · apply ofReal_le_ofReal
+          apply norm_sub_le
+        · exact norm_nonneg _
+        · exact norm_nonneg _
+      _ <= ENNReal.ofReal (bound a) + ENNReal.ofReal (bound a) := add_le_add h₁ h₂
+      _ = b a := by rw [← two_mul]
+  -- On the other hand, `F n a --> f a` implies that `‖F n a - f a‖ --> 0`
+  have h : forallᵐ a ∂μ, Tendsto (fun n => ENNReal.ofReal ‖F n a - f a‖) atTop (𝓝 0) := by
+    rw [← ENNReal.ofReal_zero]
+    refine h_lim.mono fun a h => (continuous_ofReal.tendsto _).comp ?_
+    rwa [← tendsto_iff_norm_sub_tendsto_zero]
+  /- Therefore, by the dominated convergence theorem for nonnegative integration, have
+    ` ∫ ‖f a - F n a‖ --> 0 ` -/
+  suffices Tendsto (fun n => ∫⁻ a, ENNReal.ofReal ‖F n a - f a‖ ∂μ) atTop (𝓝 (∫⁻ _ : α, 0 ∂μ)) by
+    rwa [lintegral_zero] at this
+  -- Using the dominated convergence theorem.
+  refine tendsto_lintegral_of_dominated_convergence' _ ?_ hb ?_ ?_
+  -- Show `fun a => ‖f a - F n a‖` is almost everywhere measurable for all `n`
+  · exact fun n =>
+      measurable_ofReal.comp_aemeasurable ((F_measurable n).sub f_measurable).norm.aemeasurable
+  -- Show `2 * bound` `HasFiniteIntegral`
+  · rw [hasFiniteIntegral_iff_ofReal] at bound_hasFiniteIntegral
+    · calc
+        ∫⁻ a, b a ∂μ = 2 * ∫⁻ a, ENNReal.ofReal (bound a) ∂μ := by
+          rw [lintegral_const_mul']
+          finiteness
+        _ != ∞ := mul_ne_top coe_ne_top bound_hasFiniteIntegral.ne
+    filter_upwards [h_bound 0] with _ h using le_trans (norm_nonneg _) h
+  -- Show `‖f a - F n a‖ --> 0`
+  · exact h
 
 Depends on / 依赖: AEStronglyMeasurable, ENNReal, ENNReal.ofReal, F_measurable, aestronglyMeasurable_of_tendsto_ae, f_measurable, h_lim, ofReal
 -/

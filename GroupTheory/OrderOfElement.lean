@@ -181,7 +181,7 @@ lemma isOfFinOrder_iff_zpow_eq_one
     fun ⟨n, hn, hn'⟩ => ⟨n.natAbs, Int.natAbs_pos.mpr hn, ?_⟩⟩
   rcases (Int.natAbs_eq_iff (a := n)).mp rfl with h | h
   · rwa [h, zpow_natCast] at hn'
-  · rwa [h, zpo
+  · rwa [h, zpow_neg, inv_eq_one, zpow_natCast] at hn'
 
 中文:
 引理 isOfFinOrder_iff_zpow_eq_one
@@ -192,7 +192,7 @@ lemma isOfFinOrder_iff_zpow_eq_one
     fun ⟨n, hn, hn'⟩ => ⟨n.natAbs, Int.natAbs_pos.mpr hn, ?_⟩⟩
   rcases (Int.natAbs_eq_iff (a := n)).mp rfl with h | h
   · rwa [h, zpow_natCast] at hn'
-  · rwa [h, zpo
+  · rwa [h, zpow_neg, inv_eq_one, zpow_natCast] at hn'
 
 Depends on / 依赖: Int.natAbs_eq_iff, Int.natAbs_pos.mpr, Int.natCast_ne_zero_iff_pos.mpr, inv_eq_one, isOfFinOrder_iff_pow_eq_one, n.natAbs, natAbs, natAbs_eq_iff, natAbs_pos, natCast_ne_zero_iff_pos, zpow_natCast, zpow_neg
 -/
@@ -1377,7 +1377,7 @@ theorem exists_pow_eq_self_of_coprime
   by_cases h1 : orderOf x = 1
   · exact ⟨0, by rw [orderOf_eq_one_iff.mp h1, one_pow, one_pow]⟩
   obtain ⟨m, -, h⟩ := exists_mul_mod_eq_one_of_coprime h (by lia)
-  exact ⟨m, by rw [← pow_
+  exact ⟨m, by rw [← pow_mul, ← pow_mod_orderOf, h, pow_one]⟩
 
 中文:
 定理 存在_pow_eq_self_of_coprime
@@ -1390,7 +1390,7 @@ theorem exists_pow_eq_self_of_coprime
   by_cases h1 : orderOf x = 1
   · exact ⟨0, by rw [orderOf_eq_one_iff.mp h1, one_pow, one_pow]⟩
   obtain ⟨m, -, h⟩ := exists_mul_mod_eq_one_of_coprime h (by lia)
-  exact ⟨m, by rw [← pow_
+  exact ⟨m, by rw [← pow_mul, ← pow_mod_orderOf, h, pow_one]⟩
 
 Depends on / 依赖: coprime_zero_right, exists_mul_mod_eq_one_of_coprime, one_pow, orderOf, orderOf_eq_one_iff, orderOf_eq_one_iff.mp, pow_mod_orderOf, pow_mul, pow_one
 -/
@@ -1420,7 +1420,17 @@ theorem orderOf_eq_of_pow_and_pow_div_prime
   -- Assume `a` is not one...
   by_contra h
   have a_min_fac_dvd_p_sub_one : a.minFac ∣ n := by
-    obtain ⟨b, hb⟩ : exists b : Nat, 
+    obtain ⟨b, hb⟩ : exists b : Nat, a = b * a.minFac := exists_eq_mul_left_of_dvd a.minFac_dvd
+    rw [hb]; rw [← mul_assoc] at ha
+    exact Dvd.intro_left (orderOf x * b) ha.symm
+  -- Use the minimum prime factor of `a` as `p`.
+  refine hd a.minFac (Nat.minFac_prime h) a_min_fac_dvd_p_sub_one ?_
+  rw [← orderOf_dvd_iff_pow_eq_one]; rw [Nat.dvd_div_iff_mul_dvd a_min_fac_dvd_p_sub_one]; rw [ha]; rw [mul_comm]; rw [Nat.mul_dvd_mul_iff_left (IsOfFinOrder.orderOf_pos _)]
+  · exact Nat.minFac_dvd a
+  · rw [isOfFinOrder_iff_pow_eq_one]
+    exact Exists.intro n (id ⟨hn, hx⟩)
+
+@[to_additive]
 
 中文:
 定理 orderOf_eq_of_pow_and_pow_div_prime
@@ -1432,7 +1442,17 @@ theorem orderOf_eq_of_pow_and_pow_div_prime
   -- Assume `a` is not one...
   by_contra h
   have a_min_fac_dvd_p_sub_one : a.minFac ∣ n := by
-    obtain ⟨b, hb⟩ : exists b : Nat, 
+    obtain ⟨b, hb⟩ : exists b : Nat, a = b * a.minFac := exists_eq_mul_left_of_dvd a.minFac_dvd
+    rw [hb]; rw [← mul_assoc] at ha
+    exact Dvd.intro_left (orderOf x * b) ha.symm
+  -- Use the minimum prime factor of `a` as `p`.
+  refine hd a.minFac (Nat.minFac_prime h) a_min_fac_dvd_p_sub_one ?_
+  rw [← orderOf_dvd_iff_pow_eq_one]; rw [Nat.dvd_div_iff_mul_dvd a_min_fac_dvd_p_sub_one]; rw [ha]; rw [mul_comm]; rw [Nat.mul_dvd_mul_iff_left (IsOfFinOrder.orderOf_pos _)]
+  · exact Nat.minFac_dvd a
+  · rw [isOfFinOrder_iff_pow_eq_one]
+    exact Exists.intro n (id ⟨hn, hx⟩)
+
+@[to_additive]
 -/
 theorem orderOf_eq_of_pow_and_pow_div_prime (hn : 0 < n) (hx : x ^ n = 1)
     (hd : forall p : Nat, p.Prime -> p ∣ n -> x ^ (n / p) != 1) : orderOf x = n := by
@@ -1940,7 +1960,10 @@ theorem orderOf_dvd_lcm_mul
   conv_lhs =>
     rw [← one_mul y]; rw [← pow_orderOf_eq_one x]; rw [← succ_pred_eq_of_pos (Nat.pos_of_ne_zero h0)]; rw [_root_.pow_succ]; rw [mul_assoc]
   exact
-    (((Commute.refl x).mul_right h).pow_left _).orderOf_mul
+    (((Commute.refl x).mul_right h).pow_left _).orderOf_mul_dvd_lcm.trans
+      (Nat.lcm_dvd_iff.2 ⟨(orderOf_pow_dvd _).trans (Nat.dvd_lcm_left _ _), Nat.dvd_lcm_right _ _⟩)
+
+@[to_additive addOrderOf_add_dvd_mul_addOrderOf]
 
 中文:
 定理 orderOf_dvd_lcm_mul
@@ -1952,7 +1975,10 @@ theorem orderOf_dvd_lcm_mul
   conv_lhs =>
     rw [← one_mul y]; rw [← pow_orderOf_eq_one x]; rw [← succ_pred_eq_of_pos (Nat.pos_of_ne_zero h0)]; rw [_root_.pow_succ]; rw [mul_assoc]
   exact
-    (((Commute.refl x).mul_right h).pow_left _).orderOf_mul
+    (((Commute.refl x).mul_right h).pow_left _).orderOf_mul_dvd_lcm.trans
+      (Nat.lcm_dvd_iff.2 ⟨(orderOf_pow_dvd _).trans (Nat.dvd_lcm_left _ _), Nat.dvd_lcm_right _ _⟩)
+
+@[to_additive addOrderOf_add_dvd_mul_addOrderOf]
 
 Depends on / 依赖: Commute, Commute.refl, Nat.dvd_lcm_left, Nat.dvd_lcm_right, Nat.lcm_dvd_iff, Nat.pos_of_ne_zero, _root_, _root_.pow_succ, conv_lhs, dvd_lcm_left, dvd_lcm_right, dvd_zero, lcm_dvd_iff, lcm_zero_left, mul_assoc, mul_right, one_mul, orderOf, orderOf_mul_dvd_lcm, orderOf_mul_dvd_lcm.trans
 -/
@@ -2058,7 +2084,10 @@ theorem orderOf_mul_eq_right_of_forall_prime_mul_dvd
   apply orderOf_eq_of_pow_and_pow_div_prime hoy <;> simp only [Ne, ← orderOf_dvd_iff_pow_eq_one]
   · exact h.orderOf_mul_dvd_lcm.trans (Nat.lcm_dvd hxy dvd_rfl)
   refine fun p hp hpy hd => hp.ne_one ?_
-  rw [← Nat.dvd_one
+  rw [← Nat.dvd_one]; rw [← mul_dvd_mul_iff_right hoy.ne']; rw [one_mul]; rw [← dvd_div_iff_mul_dvd hpy]
+  refine (orderOf_dvd_lcm_mul h).trans (Nat.lcm_dvd ((dvd_div_iff_mul_dvd hpy).2 ?_) hd)
+  by_cases h : p ∣ orderOf x
+  exacts [hdvd p hp h, (hp.coprime_iff_not_dvd.2 h).mul_dvd_of_dvd_of_dvd hpy hxy]
 
 中文:
 定理 orderOf_mul_eq_right_of_对任意_prime_mul_dvd
@@ -2069,7 +2098,10 @@ theorem orderOf_mul_eq_right_of_forall_prime_mul_dvd
   apply orderOf_eq_of_pow_and_pow_div_prime hoy <;> simp only [Ne, ← orderOf_dvd_iff_pow_eq_one]
   · exact h.orderOf_mul_dvd_lcm.trans (Nat.lcm_dvd hxy dvd_rfl)
   refine fun p hp hpy hd => hp.ne_one ?_
-  rw [← Nat.dvd_one
+  rw [← Nat.dvd_one]; rw [← mul_dvd_mul_iff_right hoy.ne']; rw [one_mul]; rw [← dvd_div_iff_mul_dvd hpy]
+  refine (orderOf_dvd_lcm_mul h).trans (Nat.lcm_dvd ((dvd_div_iff_mul_dvd hpy).2 ?_) hd)
+  by_cases h : p ∣ orderOf x
+  exacts [hdvd p hp h, (hp.coprime_iff_not_dvd.2 h).mul_dvd_of_dvd_of_dvd hpy hxy]
 
 Depends on / 依赖: Nat.dvd_one, Nat.lcm_dvd, dvd_div_iff_mul_dvd, dvd_of_forall_prime_mul_dvd, dvd_one, dvd_rfl, exacts, h.orderOf_mul_dvd_lcm.trans, hoy.ne, hp.ne_one, hy.orderOf_pos, lcm_dvd, mul_dvd_mul_iff_right, ne_one, one_mul, orderOf, orderOf_dvd_iff_pow_eq_one, orderOf_dvd_lcm_mul, orderOf_eq_of_pow_and_pow_div_prime, orderOf_mul_dvd_lcm
 -/
@@ -2375,7 +2407,9 @@ theorem IsOfFinOrder.pow_eq_pow_iff_modEq
   · rw [eq_comm, ModEq.comm, this (le_of_not_ge hmn)]
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
   rw [pow_add]; rw [(hx.isUnit.pow _).mul_eq_left]; rw [pow_eq_one_iff_modEq]
-  exact ⟨fun h => Nat.ModEq.add_left _ h, fun h => Nat.ModEq.add_left_cancel' _
+  exact ⟨fun h => Nat.ModEq.add_left _ h, fun h => Nat.ModEq.add_left_cancel' _ h⟩
+
+@[to_additive]
 
 中文:
 定理 IsOfFinOrder.pow_eq_pow_iff_modEq
@@ -2385,7 +2419,9 @@ theorem IsOfFinOrder.pow_eq_pow_iff_modEq
   · rw [eq_comm, ModEq.comm, this (le_of_not_ge hmn)]
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
   rw [pow_add]; rw [(hx.isUnit.pow _).mul_eq_left]; rw [pow_eq_one_iff_modEq]
-  exact ⟨fun h => Nat.ModEq.add_left _ h, fun h => Nat.ModEq.add_left_cancel' _
+  exact ⟨fun h => Nat.ModEq.add_left _ h, fun h => Nat.ModEq.add_left_cancel' _ h⟩
+
+@[to_additive]
 
 Depends on / 依赖: ModEq.comm, Nat.ModEq.add_left, Nat.ModEq.add_left_cancel, Nat.exists_eq_add_of_le, add_left, add_left_cancel, eq_comm, exists_eq_add_of_le, generalizing, hx.isUnit.pow, isUnit, le_of_not_ge, mul_eq_left, pow_add, pow_eq_one_iff_modEq
 -/
@@ -2434,7 +2470,9 @@ theorem pow_eq_pow_iff_modEq
   · rw [eq_comm, ModEq.comm, this (le_of_not_ge hmn)]
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
   rw [← mul_one (x ^ m)]; rw [pow_add]; rw [mul_left_cancel_iff]; rw [pow_eq_one_iff_modEq]
-  exact ⟨fun h => Nat.ModEq.add_left _ h, fun h => Nat.ModEq.add_
+  exact ⟨fun h => Nat.ModEq.add_left _ h, fun h => Nat.ModEq.add_left_cancel' _ h⟩
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 pow_eq_pow_iff_modEq
@@ -2444,7 +2482,9 @@ theorem pow_eq_pow_iff_modEq
   · rw [eq_comm, ModEq.comm, this (le_of_not_ge hmn)]
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le hmn
   rw [← mul_one (x ^ m)]; rw [pow_add]; rw [mul_left_cancel_iff]; rw [pow_eq_one_iff_modEq]
-  exact ⟨fun h => Nat.ModEq.add_left _ h, fun h => Nat.ModEq.add_
+  exact ⟨fun h => Nat.ModEq.add_left _ h, fun h => Nat.ModEq.add_left_cancel' _ h⟩
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: ModEq.comm, Nat.ModEq.add_left, Nat.ModEq.add_left_cancel, Nat.exists_eq_add_of_le, add_left, add_left_cancel, eq_comm, exists_eq_add_of_le, generalizing, le_of_not_ge, mul_left_cancel_iff, mul_one, pow_add, pow_eq_one_iff_modEq
 -/
@@ -2548,7 +2588,16 @@ theorem infinite_not_isOfFinOrder
     apply h
     rw [isOfFinOrder_iff_pow_eq_one] at contra ⊢
     obtain ⟨m, hm, hm'⟩ := contra
-    exact ⟨n * m, mul_pos h
+    exact ⟨n * m, mul_pos hn hm, by rwa [pow_mul]⟩
+  suffices s.Infinite by exact this.mono hs
+  contrapose! h
+  have : ¬Injective fun n : Nat => x ^ n := by
+    have := Set.not_injOn_infinite_finite_image (Set.Ioi_infinite 0) h
+    contrapose this
+    exact Set.injOn_of_injective this
+  rwa [injective_pow_iff_not_isOfFinOrder, Classical.not_not] at this
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 infinite_not_isOfFinOrder
@@ -2560,7 +2609,16 @@ theorem infinite_not_isOfFinOrder
     apply h
     rw [isOfFinOrder_iff_pow_eq_one] at contra ⊢
     obtain ⟨m, hm, hm'⟩ := contra
-    exact ⟨n * m, mul_pos h
+    exact ⟨n * m, mul_pos hn hm, by rwa [pow_mul]⟩
+  suffices s.Infinite by exact this.mono hs
+  contrapose! h
+  have : ¬Injective fun n : Nat => x ^ n := by
+    have := Set.not_injOn_infinite_finite_image (Set.Ioi_infinite 0) h
+    contrapose this
+    exact Set.injOn_of_injective this
+  rwa [injective_pow_iff_not_isOfFinOrder, Classical.not_not] at this
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Infinite, Injective, Ioi_infinite, IsOfFinOrder, Set.Ioi_infinite, Set.injOn_, Set.not_injOn_infinite_finite_image, contra, contrapose, injOn_, isOfFinOrder_iff_pow_eq_one, mul_pos, not_injOn_infinite_finite_image, pow_mul, s.Infinite, subseteq, this.mono
 -/
@@ -2593,7 +2651,9 @@ lemma finite_powers
   obtain ⟨m, n, hmn, ha⟩ := h.exists_lt_map_eq_of_forall_mem (f := fun n : Nat => a ^ n)
     (fun n => by simp [mem_powers_iff])
   refine isOfFinOrder_iff_pow_eq_one.2 ⟨n - m, tsub_pos_iff_lt.2 hmn, ?_⟩
-  rw [← mul_left_cancel_iff (a := a ^ m)]; 
+  rw [← mul_left_cancel_iff (a := a ^ m)]; rw [← pow_add]; rw [add_tsub_cancel_of_le hmn.le]; rw [ha]; rw [mul_one]
+
+@[to_additive (attr := simp)]
 
 中文:
 引理 finite_powers
@@ -2603,7 +2663,9 @@ lemma finite_powers
   obtain ⟨m, n, hmn, ha⟩ := h.exists_lt_map_eq_of_forall_mem (f := fun n : Nat => a ^ n)
     (fun n => by simp [mem_powers_iff])
   refine isOfFinOrder_iff_pow_eq_one.2 ⟨n - m, tsub_pos_iff_lt.2 hmn, ?_⟩
-  rw [← mul_left_cancel_iff (a := a ^ m)]; 
+  rw [← mul_left_cancel_iff (a := a ^ m)]; rw [← pow_add]; rw [add_tsub_cancel_of_le hmn.le]; rw [ha]; rw [mul_one]
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: IsOfFinOrder, IsOfFinOrder.finite_powers, add_tsub_cancel_of_le, exists_lt_map_eq_of_forall_mem, finite_powers, h.exists_lt_map_eq_of_forall_mem, hmn.le, isOfFinOrder_iff_pow_eq_one, mem_powers_iff, mul_left_cancel_iff, mul_one, pow_add, tsub_pos_iff_lt
 -/
@@ -2686,7 +2748,20 @@ theorem pow_eq_pow_iff_modEq
     have hk : x ^ k = 1 := by
       apply (mul_right_cancel_iff (a := x ^ m)).1
       calc
-        x ^ k * x ^ m = x ^ (k + m) 
+        x ^ k * x ^ m = x ^ (k + m) := (pow_add _ _ _).symm
+        _ = x ^ (m + k) := by simp [Nat.add_comm]
+        _ = x ^ m := h
+        _ = 1 * x ^ m := by simp
+    exact by simpa using Nat.ModEq.add_left m (pow_eq_one_iff_modEq.1 hk)
+  · intro h
+    have hk : x ^ k = 1 := by
+      apply pow_eq_one_iff_modEq.2
+      exact Nat.ModEq.add_left_cancel' m (by simpa using h)
+    calc
+      x ^ (m + k) = x ^ m * x ^ k := by rw [pow_add]
+      _ = x ^ m := by simp [hk]
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 pow_eq_pow_iff_modEq
@@ -2700,7 +2775,20 @@ theorem pow_eq_pow_iff_modEq
     have hk : x ^ k = 1 := by
       apply (mul_right_cancel_iff (a := x ^ m)).1
       calc
-        x ^ k * x ^ m = x ^ (k + m) 
+        x ^ k * x ^ m = x ^ (k + m) := (pow_add _ _ _).symm
+        _ = x ^ (m + k) := by simp [Nat.add_comm]
+        _ = x ^ m := h
+        _ = 1 * x ^ m := by simp
+    exact by simpa using Nat.ModEq.add_left m (pow_eq_one_iff_modEq.1 hk)
+  · intro h
+    have hk : x ^ k = 1 := by
+      apply pow_eq_one_iff_modEq.2
+      exact Nat.ModEq.add_left_cancel' m (by simpa using h)
+    calc
+      x ^ (m + k) = x ^ m * x ^ k := by rw [pow_add]
+      _ = x ^ m := by simp [hk]
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Nat.ModEq.add_left, Nat.ModEq.comm, Nat.add_comm, Nat.exists_eq_add_of_le, add_comm, add_left, eq_comm, exists_eq_add_of_le, generalizing, le_of_not_ge, mul_right_cancel_iff, pow_add, pow_eq_one_iff_m, pow_eq_one_iff_modEq
 -/
@@ -2821,7 +2909,16 @@ theorem infinite_not_isOfFinOrder
     apply h
     rw [isOfFinOrder_iff_pow_eq_one] at contra ⊢
     obtain ⟨m, hm, hm'⟩ := contra
-    exact ⟨n * m, mul_pos h
+    exact ⟨n * m, mul_pos hn hm, by rwa [pow_mul]⟩
+  suffices s.Infinite by exact this.mono hs
+  contrapose! h
+  have : ¬Function.Injective fun n : Nat => x ^ n := by
+    have := Set.not_injOn_infinite_finite_image (Set.Ioi_infinite 0) h
+    contrapose this
+    exact Set.injOn_of_injective this
+  rwa [injective_pow_iff_not_isOfFinOrder, Classical.not_not] at this
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 infinite_not_isOfFinOrder
@@ -2833,7 +2930,16 @@ theorem infinite_not_isOfFinOrder
     apply h
     rw [isOfFinOrder_iff_pow_eq_one] at contra ⊢
     obtain ⟨m, hm, hm'⟩ := contra
-    exact ⟨n * m, mul_pos h
+    exact ⟨n * m, mul_pos hn hm, by rwa [pow_mul]⟩
+  suffices s.Infinite by exact this.mono hs
+  contrapose! h
+  have : ¬Function.Injective fun n : Nat => x ^ n := by
+    have := Set.not_injOn_infinite_finite_image (Set.Ioi_infinite 0) h
+    contrapose this
+    exact Set.injOn_of_injective this
+  rwa [injective_pow_iff_not_isOfFinOrder, Classical.not_not] at this
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Function, Function.Injective, Infinite, Injective, Ioi_infinite, IsOfFinOrder, Set.Ioi_infinite, Set.not_injOn_infinite_finite_image, contra, contrapose, isOfFinOrder_iff_pow_eq_one, mul_pos, not_injOn_infinite_finite_image, pow_mul, s.Infinite, subseteq, this.mono
 -/
@@ -2866,7 +2972,14 @@ lemma finite_powers
   obtain ⟨m, n, hmn, ha⟩ := h.exists_lt_map_eq_of_forall_mem (f := fun n : Nat => a ^ n)
     (fun n => by simp [mem_powers_iff])
   refine isOfFinOrder_iff_pow_eq_one.2 ⟨n - m, tsub_pos_iff_lt.2 hmn, ?_⟩
-  apply (mul_right_cancel_iff (a := a ^ m))
+  apply (mul_right_cancel_iff (a := a ^ m)).1
+  calc
+    a ^ (n - m) * a ^ m = a ^ (n - m + m) := (pow_add _ _ _).symm
+    _ = a ^ n := by simp [tsub_add_cancel_of_le hmn.le]
+    _ = a ^ m := ha.symm
+    _ = 1 * a ^ m := by simp
+
+@[to_additive (attr := simp)]
 
 中文:
 引理 finite_powers
@@ -2876,7 +2989,14 @@ lemma finite_powers
   obtain ⟨m, n, hmn, ha⟩ := h.exists_lt_map_eq_of_forall_mem (f := fun n : Nat => a ^ n)
     (fun n => by simp [mem_powers_iff])
   refine isOfFinOrder_iff_pow_eq_one.2 ⟨n - m, tsub_pos_iff_lt.2 hmn, ?_⟩
-  apply (mul_right_cancel_iff (a := a ^ m))
+  apply (mul_right_cancel_iff (a := a ^ m)).1
+  calc
+    a ^ (n - m) * a ^ m = a ^ (n - m + m) := (pow_add _ _ _).symm
+    _ = a ^ n := by simp [tsub_add_cancel_of_le hmn.le]
+    _ = a ^ m := ha.symm
+    _ = 1 * a ^ m := by simp
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: IsOfFinOrder, IsOfFinOrder.finite_powers, exists_lt_map_eq_of_forall_mem, finite_powers, h.exists_lt_map_eq_of_forall_mem, ha.symm, hmn.le, isOfFinOrder_iff_pow_eq_one, mem_powers_iff, mul_right_cancel_iff, pow_add, tsub_add_cancel_of_le, tsub_pos_iff_lt
 -/
@@ -3572,7 +3692,9 @@ lemma isMulTorsionFree_iff_not_isOfFinOrder
     exact of_not_not fun hab' => hG hab' ⟨n, hn.bot_lt, hab⟩
 
 @[to_additive]
-alias ⟨_, IsMulTorsionFree.of_not_isOfF
+alias ⟨_, IsMulTorsionFree.of_not_isOfFinOrder⟩ := isMulTorsionFree_iff_not_isOfFinOrder
+
+@[to_additive]
 
 中文:
 引理 isMulTorsionFree_iff_not_isOfFinOrder
@@ -3584,7 +3706,9 @@ alias ⟨_, IsMulTorsionFree.of_not_isOfF
     exact of_not_not fun hab' => hG hab' ⟨n, hn.bot_lt, hab⟩
 
 @[to_additive]
-alias ⟨_, IsMulTorsionFree.of_not_isOfF
+alias ⟨_, IsMulTorsionFree.of_not_isOfFinOrder⟩ := isMulTorsionFree_iff_not_isOfFinOrder
+
+@[to_additive]
 
 Depends on / 依赖: not_isOfFinOrder_of_isMulTorsionFree
 -/
@@ -4196,7 +4320,11 @@ lemma Subgroup.zpowers_eq_zpowers_iff
   obtain ⟨k, rfl⟩ := mem_zpowers_iff.mp hy_mem
   obtain ⟨l, hl⟩ := mem_zpowers_iff.mp hx_mem
   rw [← zpow_mul] at hl
-  nth_rewrite 2 [← zpow_one x] 
+  nth_rewrite 2 [← zpow_one x] at hl
+  have h1 := (injective_zpow_iff_not_isOfFinOrder.mpr hx) hl
+  rcases (Int.mul_eq_one_iff_eq_one_or_neg_one).mp h1 with (h | h) <;> simp [h.1]
+
+@[to_additive]
 
 中文:
 引理 子群.zpowers_eq_zpowers_iff
@@ -4208,7 +4336,11 @@ lemma Subgroup.zpowers_eq_zpowers_iff
   obtain ⟨k, rfl⟩ := mem_zpowers_iff.mp hy_mem
   obtain ⟨l, hl⟩ := mem_zpowers_iff.mp hx_mem
   rw [← zpow_mul] at hl
-  nth_rewrite 2 [← zpow_one x] 
+  nth_rewrite 2 [← zpow_one x] at hl
+  have h1 := (injective_zpow_iff_not_isOfFinOrder.mpr hx) hl
+  rcases (Int.mul_eq_one_iff_eq_one_or_neg_one).mp h1 with (h | h) <;> simp [h.1]
+
+@[to_additive]
 
 Depends on / 依赖: Int.mul_eq_one_iff_eq_one_or_neg_one, hx_mem, hy_mem, injective_zpow_iff_not_isOfFinOrder, injective_zpow_iff_not_isOfFinOrder.mpr, mem_zpowers_iff, mem_zpowers_iff.mp, mul_eq_one_iff_eq_one_or_neg_one, nth_rewrite, zpow_mul, zpow_one, zpowers
 -/
@@ -4566,6 +4698,9 @@ theorem orderOf_dvd_natCard
 @[to_additive]
 nonrec lemma Subgroup.orderOf_dvd_natCard {G : Type*} [Group G] (s : Subgroup G) {x} (hx : x in s) :
     orderOf x ∣ Nat.card s := by
+  simpa using orderOf_dvd_natCard (⟨x, hx⟩ : s)
+
+@[to_additive]
 
 中文:
 定理 orderOf_dvd_natCard
@@ -4579,6 +4714,9 @@ nonrec lemma Subgroup.orderOf_dvd_natCard {G : Type*} [Group G] (s : Subgroup G)
 @[to_additive]
 nonrec lemma Subgroup.orderOf_dvd_natCard {G : Type*} [Group G] (s : Subgroup G) {x} (hx : x in s) :
     orderOf x ∣ Nat.card s := by
+  simpa using orderOf_dvd_natCard (⟨x, hx⟩ : s)
+
+@[to_additive]
 
 Depends on / 依赖: Nat.card_eq_fintype_card, card_eq_fintype_card, card_eq_zero_of_infinite, dvd_zero, fintypeOrInfinite, orderOf_dvd_card
 -/
@@ -4863,7 +5001,12 @@ definition powCoprime
     have key := congr_arg (g ^ ·) ((Nat.card G).gcd_eq_gcd_ab n)
     rwa [zpow_add, zpow_mul, zpow_mul, zpow_natCast, zpow_natCast, zpow_natCast, h.gcd_eq_one,
       pow_one, pow_card_eq_one', one_zpow, one_mul, eq_comm] at key
-  right_i
+  right_inv g := by
+    have key := congr_arg (g ^ ·) ((Nat.card G).gcd_eq_gcd_ab n)
+    rwa [zpow_add, zpow_mul, zpow_mul', zpow_natCast, zpow_natCast, zpow_natCast, h.gcd_eq_one,
+      pow_one, pow_card_eq_one', one_zpow, one_mul, eq_comm] at key
+
+@[to_additive]
 
 中文:
 定义 powCoprime
@@ -4874,7 +5017,12 @@ definition powCoprime
     have key := congr_arg (g ^ ·) ((Nat.card G).gcd_eq_gcd_ab n)
     rwa [zpow_add, zpow_mul, zpow_mul, zpow_natCast, zpow_natCast, zpow_natCast, h.gcd_eq_one,
       pow_one, pow_card_eq_one', one_zpow, one_mul, eq_comm] at key
-  right_i
+  right_inv g := by
+    have key := congr_arg (g ^ ·) ((Nat.card G).gcd_eq_gcd_ab n)
+    rwa [zpow_add, zpow_mul, zpow_mul', zpow_natCast, zpow_natCast, zpow_natCast, h.gcd_eq_one,
+      pow_one, pow_card_eq_one', one_zpow, one_mul, eq_comm] at key
+
+@[to_additive]
 -/
 noncomputable def powCoprime {G : Type*} [Group G] (h : (Nat.card G).Coprime n) : G ≃ G where
   toFun g := g ^ n
@@ -4969,7 +5117,7 @@ theorem image_range_orderOf
     Finset.image (fun i => x ^ i) (Finset.range (orderOf x)) = (zpowers x : Set G).toFinset := by
   let : Fintype (zpowers x) := (Subgroup.zpowers x).instFintypeSubtypeMemOfDecidablePred
   ext x
-  rw [Set.mem_toFinset]; rw [SetLike.mem_coe]; 
+  rw [Set.mem_toFinset]; rw [SetLike.mem_coe]; rw [mem_zpowers_iff_mem_range_orderOf]
 
 中文:
 定理 image_range_orderOf
@@ -4978,7 +5126,7 @@ theorem image_range_orderOf
     Finset.image (fun i => x ^ i) (Finset.range (orderOf x)) = (zpowers x : Set G).toFinset := by
   let : Fintype (zpowers x) := (Subgroup.zpowers x).instFintypeSubtypeMemOfDecidablePred
   ext x
-  rw [Set.mem_toFinset]; rw [SetLike.mem_coe]; 
+  rw [Set.mem_toFinset]; rw [SetLike.mem_coe]; rw [mem_zpowers_iff_mem_range_orderOf]
 
 Depends on / 依赖: Subgroup, Subgroup.zpowers, instFintypeSubtypeMemOfDecidablePred, zpowers
 -/
@@ -5063,7 +5211,9 @@ definition submonoidOfIdempotent
   { carrier := S
     one_mem' := by
       obtain ⟨a, ha⟩ := hS1
-      rw [← pow_orderO
+      rw [← pow_orderOf_eq_one a]; rw [← tsub_add_cancel_of_le (succ_le_of_lt (orderOf_pos a))]
+      exact pow_mem a ha (orderOf a - 1)
+    mul_mem' := fun ha hb => (congr_arg₂ (· in ·) rfl hS2).mp (Set.mul_mem_mul ha hb) }
 
 中文:
 定义 submonoidOfIdempotent
@@ -5077,7 +5227,9 @@ definition submonoidOfIdempotent
   { carrier := S
     one_mem' := by
       obtain ⟨a, ha⟩ := hS1
-      rw [← pow_orderO
+      rw [← pow_orderOf_eq_one a]; rw [← tsub_add_cancel_of_le (succ_le_of_lt (orderOf_pos a))]
+      exact pow_mem a ha (orderOf a - 1)
+    mul_mem' := fun ha hb => (congr_arg₂ (· in ·) rfl hS2).mp (Set.mul_mem_mul ha hb) }
 
 Depends on / 依赖: Set.mul_mem_mul, carrier, mul_mem, mul_mem_mul, one_mem, orderOf, orderOf_pos, pow_mem, pow_one, pow_orderOf_eq_one, pow_succ, succ_le_of_lt, tsub_add_cancel_of_le, zero_add
 -/
@@ -5145,7 +5297,8 @@ definition powCardSubgroup
 subgroupOfIdempotent (S ^ Fintype.card G) ⟨1, one_mem⟩ by
     classical
     apply (Set.eq_of_subset_of_card_le (Set.subset_mul_left _ one_mem) (ge_of_eq _)).symm
-    si
+    simp_rw [← pow_add,
+        Group.card_pow_eq_card_pow_card_univ S (Fintype.card G + Fintype.card G) le_add_self]
 
 中文:
 定义 powCardSubgroup
@@ -5157,7 +5310,8 @@ subgroupOfIdempotent (S ^ Fintype.card G) ⟨1, one_mem⟩ by
 subgroupOfIdempotent (S ^ Fintype.card G) ⟨1, one_mem⟩ by
     classical
     apply (Set.eq_of_subset_of_card_le (Set.subset_mul_left _ one_mem) (ge_of_eq _)).symm
-    si
+    simp_rw [← pow_add,
+        Group.card_pow_eq_card_pow_card_univ S (Fintype.card G + Fintype.card G) le_add_self]
 
 Depends on / 依赖: Fintype, Fintype.card, Group.card_pow_eq_card_pow_card_univ, Set.eq_of_subset_of_card_le, Set.pow_mem_pow, Set.subset_mul_left, card_pow_eq_card_pow_card_univ, classical, eq_of_subset_of_card_le, ge_of_eq, le_add_self, one_mem, pow_add, pow_card_eq_one, pow_mem_pow, simp_rw, subgroupOfIdempotent, subset_mul_left
 -/
@@ -5654,7 +5808,10 @@ lemma charP_of_ne_zero
       rw [← Nat.mod_add_div n p]; rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [H]; rw [zero_mul]; rw [add_zero] at h
       rw [Nat.dvd_iff_mod_eq_zero]
       apply hR _ (Nat.mod_lt _ _) h
-      rw [← hn]; r
+      rw [← hn]; rw [Fintype.card_pos_iff]
+      exact ⟨0⟩
+    · rintro ⟨n, rfl⟩
+      rw [Nat.cast_mul]; rw [H]; rw [zero_mul]
 
 中文:
 引理 charP_of_ne_zero
@@ -5667,7 +5824,10 @@ lemma charP_of_ne_zero
       rw [← Nat.mod_add_div n p]; rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [H]; rw [zero_mul]; rw [add_zero] at h
       rw [Nat.dvd_iff_mod_eq_zero]
       apply hR _ (Nat.mod_lt _ _) h
-      rw [← hn]; r
+      rw [← hn]; rw [Fintype.card_pos_iff]
+      exact ⟨0⟩
+    · rintro ⟨n, rfl⟩
+      rw [Nat.cast_mul]; rw [H]; rw [zero_mul]
 
 Depends on / 依赖: Fintype, Fintype.card_pos_iff, Nat.cast_add, Nat.cast_card_eq_zero, Nat.cast_mul, Nat.dvd_iff_mod_eq_zero, Nat.mod_add_div, Nat.mod_lt, add_zero, card_pos_iff, cast_add, cast_card_eq_zero, cast_mul, dvd_iff_mod_eq_zero, mod_add_div, mod_lt, zero_mul
 -/
@@ -5697,7 +5857,7 @@ lemma charP_of_prime_pow_injective
   have hcpn : c ∣ p ^ n := by rw [← CharP.cast_eq_zero_iff R c, ← hn, Nat.cast_card_eq_zero]
   obtain ⟨i, hi, rfl⟩ : exists i <= n, c = p ^ i := by rwa [Nat.dvd_prime_pow hp.1] at hcpn
 obtain rfl : i = n := hR i hi by rw [← Nat.cast_pow, CharP.cast_eq_zero]
-  as
+  assumption
 
 中文:
 引理 charP_of_prime_pow_injective
@@ -5707,7 +5867,7 @@ obtain rfl : i = n := hR i hi by rw [← Nat.cast_pow, CharP.cast_eq_zero]
   have hcpn : c ∣ p ^ n := by rw [← CharP.cast_eq_zero_iff R c, ← hn, Nat.cast_card_eq_zero]
   obtain ⟨i, hi, rfl⟩ : exists i <= n, c = p ^ i := by rwa [Nat.dvd_prime_pow hp.1] at hcpn
 obtain rfl : i = n := hR i hi by rw [← Nat.cast_pow, CharP.cast_eq_zero]
-  as
+  assumption
 
 Depends on / 依赖: CharP.cast_eq_zero, CharP.cast_eq_zero_iff, CharP.exists, Nat.cast_card_eq_zero, Nat.cast_pow, Nat.dvd_prime_pow, cast_card_eq_zero, cast_eq_zero, cast_eq_zero_iff, cast_pow, dvd_prime_pow
 -/

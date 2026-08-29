@@ -63,7 +63,11 @@ lemma chainLength_aux
   obtain ⟨h, e, f, isSl2, he, hf⟩ := exists_isSl2Triple_of_weight_isNonZero hα
   obtain rfl := isSl2.h_eq_coroot hα he hf
   have : isSl2.HasPrimitiveVectorWith x (chainTop α β (coroot α)) :=
-    have := lie_mem_genWeightSpace_of_mem_genWeightSpa
+    have := lie_mem_genWeightSpace_of_mem_genWeightSpace he hx
+    ⟨hx', by rw [← lie_eq_smul_of_mem_rootSpace hx]; rfl,
+      by rwa [genWeightSpace_add_chainTop α β hα] at this⟩
+  obtain ⟨μ, hμ⟩ := this.exists_nat
+  exact ⟨μ, by rw [← Nat.cast_smul_eq_nsmul K, ← hμ, lie_eq_smul_of_mem_rootSpace hx]⟩
 
 中文:
 引理 chainLength_aux
@@ -74,7 +78,11 @@ lemma chainLength_aux
   obtain ⟨h, e, f, isSl2, he, hf⟩ := exists_isSl2Triple_of_weight_isNonZero hα
   obtain rfl := isSl2.h_eq_coroot hα he hf
   have : isSl2.HasPrimitiveVectorWith x (chainTop α β (coroot α)) :=
-    have := lie_mem_genWeightSpace_of_mem_genWeightSpa
+    have := lie_mem_genWeightSpace_of_mem_genWeightSpace he hx
+    ⟨hx', by rw [← lie_eq_smul_of_mem_rootSpace hx]; rfl,
+      by rwa [genWeightSpace_add_chainTop α β hα] at this⟩
+  obtain ⟨μ, hμ⟩ := this.exists_nat
+  exact ⟨μ, by rw [← Nat.cast_smul_eq_nsmul K, ← hμ, lie_eq_smul_of_mem_rootSpace hx]⟩
 -/
 private lemma chainLength_aux (hα : α.IsNonZero) {x} (hx : x in rootSpace H (chainTop α β)) :
     exists n : Nat, n • x = ⁅coroot α, x⁆ := by
@@ -146,7 +154,10 @@ lemma chainLength_nsmul
   let x' := (chainTop α β).exists_ne_zero.choose
   have h : x' in rootSpace H (chainTop α β) ∧ x' != 0 :=
     (chainTop α β).exists_ne_zero.choose_spec
-  obtain ⟨k, rfl⟩ : exists k : K, 
+  obtain ⟨k, rfl⟩ : exists k : K, k • x' = x := by
+    simpa using (finrank_eq_one_iff_of_nonzero' ⟨x', h.1⟩ (by simpa using h.2)).mp
+      (finrank_rootSpace_eq_one _ (chainTop_isNonZero α β hα)) ⟨_, hx⟩
+  rw [lie_smul]; rw [smul_comm]; rw [chainLength]; rw [dif_neg hα]; rw [(chainLength_aux α β hα h.1).choose_spec]
 
 中文:
 引理 chainLength_nsmul
@@ -157,7 +168,10 @@ lemma chainLength_nsmul
   let x' := (chainTop α β).exists_ne_zero.choose
   have h : x' in rootSpace H (chainTop α β) ∧ x' != 0 :=
     (chainTop α β).exists_ne_zero.choose_spec
-  obtain ⟨k, rfl⟩ : exists k : K, 
+  obtain ⟨k, rfl⟩ : exists k : K, k • x' = x := by
+    simpa using (finrank_eq_one_iff_of_nonzero' ⟨x', h.1⟩ (by simpa using h.2)).mp
+      (finrank_rootSpace_eq_one _ (chainTop_isNonZero α β hα)) ⟨_, hx⟩
+  rw [lie_smul]; rw [smul_comm]; rw [chainLength]; rw [dif_neg hα]; rw [(chainLength_aux α β hα h.1).choose_spec]
 
 Depends on / 依赖: IsZero, chainLength, chainLength_of_isZero, chainTop, chainTop_isNonZero, choose_spec, coroot_eq_zero_iff, coroot_eq_zero_iff.mpr, exists_ne_zero, exists_ne_zero.choose, exists_ne_zero.choose_spec, finrank_eq_one_iff_of_nonzero, finrank_rootSpace_eq_one, lie_smul, rootSpace, smul_comm, zero_lie, zero_smul
 -/
@@ -205,7 +219,9 @@ lemma apply_coroot_eq_cast'
       CharP.cast_eq_zero, mul_zero, sub_self, Int.cast_zero]
   obtain ⟨x, hx, x_ne0⟩ := (chainTop α β).exists_ne_zero
   have := chainLength_smul _ _ hx
-  rw [lie_eq_smul_of_me
+  rw [lie_eq_smul_of_mem_rootSpace hx]; rw [← sub_eq_zero]; rw [← sub_smul]; rw [smul_eq_zero_iff_left x_ne0]; rw [sub_eq_zero]; rw [coe_chainTop']; rw [nsmul_eq_mul]; rw [Pi.natCast_def]; rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [root_apply_coroot hα] at this
+  simp only [Int.cast_sub, Int.cast_natCast, Int.cast_mul, Int.cast_ofNat, eq_sub_iff_add_eq',
+    this, mul_comm (2 : K)]
 
 中文:
 引理 apply_coroot_eq_cast'
@@ -215,7 +231,9 @@ lemma apply_coroot_eq_cast'
       CharP.cast_eq_zero, mul_zero, sub_self, Int.cast_zero]
   obtain ⟨x, hx, x_ne0⟩ := (chainTop α β).exists_ne_zero
   have := chainLength_smul _ _ hx
-  rw [lie_eq_smul_of_me
+  rw [lie_eq_smul_of_mem_rootSpace hx]; rw [← sub_eq_zero]; rw [← sub_smul]; rw [smul_eq_zero_iff_left x_ne0]; rw [sub_eq_zero]; rw [coe_chainTop']; rw [nsmul_eq_mul]; rw [Pi.natCast_def]; rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [root_apply_coroot hα] at this
+  simp only [Int.cast_sub, Int.cast_natCast, Int.cast_mul, Int.cast_ofNat, eq_sub_iff_add_eq',
+    this, mul_comm (2 : K)]
 
 Depends on / 依赖: CharP.cast_eq_zero, Int.cast_zero, IsZero, Pi.add_apply, Pi.mul_apply, Pi.natCast_def, add_apply, cast_eq_zero, cast_zero, chainLength, chainLength_smul, chainTop, chainTopCoeff_zero, coe_chainTop, coroot_eq_zero_iff, coroot_eq_zero_iff.mpr, dif_pos, exists_ne_zero, lie_eq_smul_of_mem_rootSpace, map_zero
 -/
@@ -242,7 +260,11 @@ lemma rootSpace_neg_nsmul_add_chainTop_of_le
   obtain ⟨x, hx, x_ne0⟩ := (chainTop α β).exists_ne_zero
   obtain ⟨h, e, f, isSl2, he, hf⟩ := exists_isSl2Triple_of_weight_isNonZero hα
   obtain rfl := isSl2.h_eq_coroot hα he hf
-  have
+  have prim : isSl2.HasPrimitiveVectorWith x (chainLength α β : K) :=
+    have := lie_mem_genWeightSpace_of_mem_genWeightSpace he hx
+    ⟨x_ne0, (chainLength_smul _ _ hx).symm, by rwa [genWeightSpace_add_chainTop _ _ hα] at this⟩
+  simp only [← smul_neg, ne_eq, LieSubmodule.eq_bot_iff, not_forall]
+  exact ⟨_, toEnd_pow_apply_mem hf hx n, prim.pow_toEnd_f_ne_zero_of_eq_nat rfl hn⟩
 
 中文:
 引理 rootSpace_neg_nsmul_add_chainTop_of_le
@@ -253,7 +275,11 @@ lemma rootSpace_neg_nsmul_add_chainTop_of_le
   obtain ⟨x, hx, x_ne0⟩ := (chainTop α β).exists_ne_zero
   obtain ⟨h, e, f, isSl2, he, hf⟩ := exists_isSl2Triple_of_weight_isNonZero hα
   obtain rfl := isSl2.h_eq_coroot hα he hf
-  have
+  have prim : isSl2.HasPrimitiveVectorWith x (chainLength α β : K) :=
+    have := lie_mem_genWeightSpace_of_mem_genWeightSpace he hx
+    ⟨x_ne0, (chainLength_smul _ _ hx).symm, by rwa [genWeightSpace_add_chainTop _ _ hα] at this⟩
+  simp only [← smul_neg, ne_eq, LieSubmodule.eq_bot_iff, not_forall]
+  exact ⟨_, toEnd_pow_apply_mem hf hx n, prim.pow_toEnd_f_ne_zero_of_eq_nat rfl hn⟩
 
 Depends on / 依赖: HasPrimitiveVectorWith, IsZero, chainLength, chainLength_smul, chainTop, chainTop_zero, exists_isSl2Triple_of_weight_isNonZero, exists_ne_zero, genWeightSpace_add_chainTop, h_eq_coroot, isSl2.HasPrimitiveVectorWith, isSl2.h_eq_coroot, lie_mem_genWeightSpace_of_mem_genWeightSpace, ne_eq, neg_zero, smul_zero, x_ne0, zero_add
 -/
@@ -282,7 +308,21 @@ lemma rootSpace_neg_nsmul_add_chainTop_of_lt
   have hW : (W : H -> K) = -(n • α) + chainTop α β := rfl
   have H₁ : 1 + n + chainTopCoeff (-α) W <= chainLength (-α) W := by
     have := apply_coroot_eq_cast' (-α) W
-    simp only [coroot_neg, map_neg, hW, nsmul_eq_mul, Pi.natCast_def, coe_chainTop
+    simp only [coroot_neg, map_neg, hW, nsmul_eq_mul, Pi.natCast_def, coe_chainTop, zsmul_eq_mul,
+      Int.cast_natCast, Pi.add_apply, Pi.neg_apply, Pi.mul_apply, root_apply_coroot hα, mul_two,
+      apply_coroot_eq_cast' α β, Int.cast_sub, Int.cast_mul, Int.cast_ofNat, mul_comm (2 : K),
+      add_sub_cancel, add_sub, Nat.cast_inj, eq_sub_iff_add_eq, ← Nat.cast_add, ← sub_eq_neg_add,
+      sub_eq_iff_eq_add] at this
+    lia
+  have H₂ : ((1 + n + chainTopCoeff (-α) W) • α + chainTop (-α) W : H -> K) =
+      (chainTopCoeff α β + 1) • α + β := by
+    simp only [Weight.coe_neg, ← Nat.cast_smul_eq_nsmul Int, Nat.cast_add, Nat.cast_one, coe_chainTop,
+      smul_neg, ← neg_smul, hW, ← add_assoc, ← add_smul, ← sub_eq_add_neg]
+    congr 2
+    ring
+  have := rootSpace_neg_nsmul_add_chainTop_of_le (-α) W H₁
+  rw [Weight.coe_neg]; rw [← smul_neg]; rw [neg_neg]; rw [← Weight.coe_neg]; rw [H₂] at this
+  exact this (genWeightSpace_chainTopCoeff_add_one_nsmul_add α β hα)
 
 中文:
 引理 rootSpace_neg_nsmul_add_chainTop_of_lt
@@ -293,7 +333,21 @@ lemma rootSpace_neg_nsmul_add_chainTop_of_lt
   have hW : (W : H -> K) = -(n • α) + chainTop α β := rfl
   have H₁ : 1 + n + chainTopCoeff (-α) W <= chainLength (-α) W := by
     have := apply_coroot_eq_cast' (-α) W
-    simp only [coroot_neg, map_neg, hW, nsmul_eq_mul, Pi.natCast_def, coe_chainTop
+    simp only [coroot_neg, map_neg, hW, nsmul_eq_mul, Pi.natCast_def, coe_chainTop, zsmul_eq_mul,
+      Int.cast_natCast, Pi.add_apply, Pi.neg_apply, Pi.mul_apply, root_apply_coroot hα, mul_two,
+      apply_coroot_eq_cast' α β, Int.cast_sub, Int.cast_mul, Int.cast_ofNat, mul_comm (2 : K),
+      add_sub_cancel, add_sub, Nat.cast_inj, eq_sub_iff_add_eq, ← Nat.cast_add, ← sub_eq_neg_add,
+      sub_eq_iff_eq_add] at this
+    lia
+  have H₂ : ((1 + n + chainTopCoeff (-α) W) • α + chainTop (-α) W : H -> K) =
+      (chainTopCoeff α β + 1) • α + β := by
+    simp only [Weight.coe_neg, ← Nat.cast_smul_eq_nsmul Int, Nat.cast_add, Nat.cast_one, coe_chainTop,
+      smul_neg, ← neg_smul, hW, ← add_assoc, ← add_smul, ← sub_eq_add_neg]
+    congr 2
+    ring
+  have := rootSpace_neg_nsmul_add_chainTop_of_le (-α) W H₁
+  rw [Weight.coe_neg]; rw [← smul_neg]; rw [neg_neg]; rw [← Weight.coe_neg]; rw [H₂] at this
+  exact this (genWeightSpace_chainTopCoeff_add_one_nsmul_add α β hα)
 
 Depends on / 依赖: AddCommMonoid, Int.cast_mul, Int.cast_natCast, Int.cast_ofNat, Int.cast_sub, Pi.add_apply, Pi.mul_apply, Pi.natCast_def, Pi.neg_apply, Semiring, Weight, add_, add_apply, add_sub_cancel, apply_coroot_eq_cast, cast_mul, cast_natCast, cast_ofNat, cast_sub, chainLength
 -/
@@ -333,7 +387,8 @@ lemma chainTopCoeff_le_chainLength
   intro e
   apply genWeightSpace_nsmul_add_ne_bot_of_le α β
     (Nat.sub_le (chainTopCoeff α β) (chainLength α β).succ)
-  rw [← Nat.cast_smul_eq_nsmul Int]; rw [Nat.cast_sub e]; rw 
+  rw [← Nat.cast_smul_eq_nsmul Int]; rw [Nat.cast_sub e]; rw [sub_smul]; rw [sub_eq_neg_add]; rw [add_assoc]; rw [← coe_chainTop]; rw [Nat.cast_smul_eq_nsmul]
+  exact rootSpace_neg_nsmul_add_chainTop_of_lt α β hα (Nat.lt_succ_self _)
 
 中文:
 引理 chainTopCoeff_le_chainLength
@@ -345,7 +400,8 @@ lemma chainTopCoeff_le_chainLength
   intro e
   apply genWeightSpace_nsmul_add_ne_bot_of_le α β
     (Nat.sub_le (chainTopCoeff α β) (chainLength α β).succ)
-  rw [← Nat.cast_smul_eq_nsmul Int]; rw [Nat.cast_sub e]; rw 
+  rw [← Nat.cast_smul_eq_nsmul Int]; rw [Nat.cast_sub e]; rw [sub_smul]; rw [sub_eq_neg_add]; rw [add_assoc]; rw [← coe_chainTop]; rw [Nat.cast_smul_eq_nsmul]
+  exact rootSpace_neg_nsmul_add_chainTop_of_lt α β hα (Nat.lt_succ_self _)
 
 Depends on / 依赖: AddCommMonoid, IsZero, Module, Nat.cast_smul_eq_nsmul, Nat.cast_sub, Nat.lt_succ_self, Nat.sub_le, Nat.succ_le_iff, Semiring, SetLike, add_assoc, cast_smul_eq_nsmul, cast_sub, chainLength, chainTopCoeff, chainTopCoeff_zero, coe_chainTop, genWeightSpace_nsmul_add_ne_bot_of_le, lt_succ_self, module
 -/
@@ -371,7 +427,14 @@ lemma chainBotCoeff_add_chainTopCoeff
   · rw [← Nat.le_sub_iff_add_le (chainTopCoeff_le_chainLength α β),
       ← not_lt, ← Nat.succ_le_iff, chainBotCoeff, ← Weight.coe_neg]
     intro e
-    apply
+    apply genWeightSpace_nsmul_add_ne_bot_of_le _ _ e
+    rw [← Nat.cast_smul_eq_nsmul Int]; rw [Nat.cast_succ]; rw [Nat.cast_sub (chainTopCoeff_le_chainLength α β)]; rw [LieModule.Weight.coe_neg]; rw [smul_neg]; rw [← neg_smul]; rw [neg_add_rev]; rw [neg_sub]; rw [sub_eq_neg_add]; rw [← add_assoc]; rw [← neg_add_rev]; rw [add_smul]; rw [add_assoc]; rw [← coe_chainTop]; rw [neg_smul]; rw [← @Nat.cast_one Int]; rw [← Nat.cast_add]; rw [Nat.cast_smul_eq_nsmul]
+    exact rootSpace_neg_nsmul_add_chainTop_of_lt α β hα (Nat.lt_succ_self _)
+  · rw [← not_lt]
+    intro e
+    apply rootSpace_neg_nsmul_add_chainTop_of_le α β e
+    rw [← Nat.succ_add]; rw [← Nat.cast_smul_eq_nsmul Int]; rw [← neg_smul]; rw [coe_chainTop]; rw [← add_assoc]; rw [← add_smul]; rw [Nat.cast_add]; rw [neg_add]; rw [add_assoc]; rw [neg_add_cancel]; rw [add_zero]; rw [neg_smul]; rw [← smul_neg]; rw [Nat.cast_smul_eq_nsmul]
+    exact genWeightSpace_chainTopCoeff_add_one_nsmul_add (-α) β (Weight.IsNonZero.neg hα)
 
 中文:
 引理 chainBotCoeff_add_chainTopCoeff
@@ -382,7 +445,14 @@ lemma chainBotCoeff_add_chainTopCoeff
   · rw [← Nat.le_sub_iff_add_le (chainTopCoeff_le_chainLength α β),
       ← not_lt, ← Nat.succ_le_iff, chainBotCoeff, ← Weight.coe_neg]
     intro e
-    apply
+    apply genWeightSpace_nsmul_add_ne_bot_of_le _ _ e
+    rw [← Nat.cast_smul_eq_nsmul Int]; rw [Nat.cast_succ]; rw [Nat.cast_sub (chainTopCoeff_le_chainLength α β)]; rw [LieModule.Weight.coe_neg]; rw [smul_neg]; rw [← neg_smul]; rw [neg_add_rev]; rw [neg_sub]; rw [sub_eq_neg_add]; rw [← add_assoc]; rw [← neg_add_rev]; rw [add_smul]; rw [add_assoc]; rw [← coe_chainTop]; rw [neg_smul]; rw [← @Nat.cast_one Int]; rw [← Nat.cast_add]; rw [Nat.cast_smul_eq_nsmul]
+    exact rootSpace_neg_nsmul_add_chainTop_of_lt α β hα (Nat.lt_succ_self _)
+  · rw [← not_lt]
+    intro e
+    apply rootSpace_neg_nsmul_add_chainTop_of_le α β e
+    rw [← Nat.succ_add]; rw [← Nat.cast_smul_eq_nsmul Int]; rw [← neg_smul]; rw [coe_chainTop]; rw [← add_assoc]; rw [← add_smul]; rw [Nat.cast_add]; rw [neg_add]; rw [add_assoc]; rw [neg_add_cancel]; rw [add_zero]; rw [neg_smul]; rw [← smul_neg]; rw [Nat.cast_smul_eq_nsmul]
+    exact genWeightSpace_chainTopCoeff_add_one_nsmul_add (-α) β (Weight.IsNonZero.neg hα)
 
 Depends on / 依赖: IsZero, LieModule, LieModule.Weight.coe_neg, Nat.cast_smul_eq_nsmul, Nat.cast_sub, Nat.cast_succ, Nat.le_sub_iff_add_le, Nat.succ_le_iff, Weight, Weight.coe_neg, cast_smul_eq_nsmul, cast_sub, cast_succ, chainBotCoeff, chainBotCoeff_zero, chainLength_of_isZero, chainTopCoeff_le_chainLength, chainTopCoeff_zero, coe_neg, genWeightSpace_nsmul_add_ne_bot_of_le
 -/
@@ -520,7 +590,8 @@ lemma le_chainBotCoeff_of_rootSpace_ne_top
   lift n to Nat using (Nat.cast_nonneg _).trans hn.le
   rw [Nat.cast_lt]; rw [← @Nat.add_lt_add_iff_right (chainTopCoeff α β)]; rw [chainBotCoeff_add_chainTopCoeff] at hn
   have := rootSpace_neg_nsmul_add_chainTop_of_lt α β hα hn
-  rwa [← Nat.cast_smul_eq_nsmul Int, ← neg_smul, c
+  rwa [← Nat.cast_smul_eq_nsmul Int, ← neg_smul, coe_chainTop, ← add_assoc,
+    ← add_smul, Nat.cast_add, neg_add, add_assoc, neg_add_cancel, add_zero] at this
 
 中文:
 引理 le_chainBotCoeff_of_rootSpace_ne_top
@@ -529,7 +600,8 @@ lemma le_chainBotCoeff_of_rootSpace_ne_top
   lift n to Nat using (Nat.cast_nonneg _).trans hn.le
   rw [Nat.cast_lt]; rw [← @Nat.add_lt_add_iff_right (chainTopCoeff α β)]; rw [chainBotCoeff_add_chainTopCoeff] at hn
   have := rootSpace_neg_nsmul_add_chainTop_of_lt α β hα hn
-  rwa [← Nat.cast_smul_eq_nsmul Int, ← neg_smul, c
+  rwa [← Nat.cast_smul_eq_nsmul Int, ← neg_smul, coe_chainTop, ← add_assoc,
+    ← add_smul, Nat.cast_add, neg_add, add_assoc, neg_add_cancel, add_zero] at this
 
 Depends on / 依赖: Nat.add_lt_add_iff_right, Nat.cast_add, Nat.cast_lt, Nat.cast_nonneg, Nat.cast_smul_eq_nsmul, add_assoc, add_lt_add_iff_right, add_smul, add_zero, cast_add, cast_lt, cast_nonneg, cast_smul_eq_nsmul, chainBotCoeff_add_chainTopCoeff, chainTopCoeff, coe_chainTop, contrapose, hn.le, neg_add, neg_add_cancel
 -/
@@ -556,7 +628,15 @@ lemma rootSpace_zsmul_add_ne_bot_iff
     apply le_chainBotCoeff_of_rootSpace_ne_top _ _ hα.neg
     rwa [neg_smul, Weight.coe_neg, smul_neg, neg_neg]
   · rintro ⟨h₁, h₂⟩
-    s
+    set k := chainTopCoeff α β - n with hk; clear_value k
+    lift k to Nat using (by rw [hk, le_sub_iff_add_le, zero_add]; exact h₁)
+    rw [eq_sub_iff_add_eq]; rw [← eq_sub_iff_add_eq'] at hk
+    subst hk
+    simp only [neg_sub, tsub_le_iff_right, ← Nat.cast_add, Nat.cast_le,
+      chainBotCoeff_add_chainTopCoeff] at h₂
+    have := rootSpace_neg_nsmul_add_chainTop_of_le α β h₂
+    rwa [coe_chainTop, ← Nat.cast_smul_eq_nsmul Int, ← neg_smul,
+      ← add_assoc, ← add_smul, ← sub_eq_neg_add] at this
 
 中文:
 引理 rootSpace_zsmul_add_ne_bot_iff
@@ -568,7 +648,15 @@ lemma rootSpace_zsmul_add_ne_bot_iff
     apply le_chainBotCoeff_of_rootSpace_ne_top _ _ hα.neg
     rwa [neg_smul, Weight.coe_neg, smul_neg, neg_neg]
   · rintro ⟨h₁, h₂⟩
-    s
+    set k := chainTopCoeff α β - n with hk; clear_value k
+    lift k to Nat using (by rw [hk, le_sub_iff_add_le, zero_add]; exact h₁)
+    rw [eq_sub_iff_add_eq]; rw [← eq_sub_iff_add_eq'] at hk
+    subst hk
+    simp only [neg_sub, tsub_le_iff_right, ← Nat.cast_add, Nat.cast_le,
+      chainBotCoeff_add_chainTopCoeff] at h₂
+    have := rootSpace_neg_nsmul_add_chainTop_of_le α β h₂
+    rwa [coe_chainTop, ← Nat.cast_smul_eq_nsmul Int, ← neg_smul,
+      ← add_assoc, ← add_smul, ← sub_eq_neg_add] at this
 
 Depends on / 依赖: Weight, Weight.coe_neg, chainBotCoeff_neg, chainTopCoeff, clear_value, coe_neg, eq_sub_iff_add_eq, le_chainBotCoeff_of_rootSpace_ne_top, le_sub_iff_add_le, neg_neg, neg_smul, neg_sub, smul_neg, tsub_le_iff_, zero_add
 -/
@@ -622,7 +710,8 @@ lemma chainTopCoeff_of_eq_zsmul_add
     rw [add_smul]; rw [add_assoc]; rw [← hβ']; rw [← coe_chainTop]
     exact (chainTop α β').2
   · refine ((rootSpace_zsmul_add_ne_bot_iff α β' hα _).mp ?_).1
-    rw [hβ']; rw [← add_assoc]; r
+    rw [hβ']; rw [← add_assoc]; rw [← add_smul]; rw [sub_add_cancel]; rw [← coe_chainTop]
+    exact (chainTop α β).2
 
 中文:
 引理 chainTopCoeff_of_eq_zsmul_add
@@ -632,7 +721,8 @@ lemma chainTopCoeff_of_eq_zsmul_add
     rw [add_smul]; rw [add_assoc]; rw [← hβ']; rw [← coe_chainTop]
     exact (chainTop α β').2
   · refine ((rootSpace_zsmul_add_ne_bot_iff α β' hα _).mp ?_).1
-    rw [hβ']; rw [← add_assoc]; r
+    rw [hβ']; rw [← add_assoc]; rw [← add_smul]; rw [sub_add_cancel]; rw [← coe_chainTop]
+    exact (chainTop α β).2
 
 Depends on / 依赖: add_assoc, add_smul, chainTop, coe_chainTop, le_antisymm, le_sub_iff_add_le, le_sub_iff_add_le.mpr, rootSpace_zsmul_add_ne_bot_iff, sub_add_cancel
 -/
@@ -680,7 +770,7 @@ lemma chainLength_of_eq_zsmul_add
   by_cases hα : α.IsZero
   · rw [chainLength_of_isZero _ _ hα, chainLength_of_isZero _ _ hα]
   · apply Nat.cast_injective (R := Int)
-    rw [← chainTopCoeff_add_chainBotCoeff]; rw [← chainTopCoeff_add_chainBotCoeff]; rw [Nat.cast_add]; rw [Nat.cast_add]; rw [chainTopCoeff_of_eq_zsmul_add α β hα β
+    rw [← chainTopCoeff_add_chainBotCoeff]; rw [← chainTopCoeff_add_chainBotCoeff]; rw [Nat.cast_add]; rw [Nat.cast_add]; rw [chainTopCoeff_of_eq_zsmul_add α β hα β' n hβ']; rw [chainBotCoeff_of_eq_zsmul_add α β hα β' n hβ']; rw [sub_eq_add_neg]; rw [add_add_add_comm]; rw [neg_add_cancel]; rw [add_zero]
 
 中文:
 引理 chainLength_of_eq_zsmul_add
@@ -689,7 +779,7 @@ lemma chainLength_of_eq_zsmul_add
   by_cases hα : α.IsZero
   · rw [chainLength_of_isZero _ _ hα, chainLength_of_isZero _ _ hα]
   · apply Nat.cast_injective (R := Int)
-    rw [← chainTopCoeff_add_chainBotCoeff]; rw [← chainTopCoeff_add_chainBotCoeff]; rw [Nat.cast_add]; rw [Nat.cast_add]; rw [chainTopCoeff_of_eq_zsmul_add α β hα β
+    rw [← chainTopCoeff_add_chainBotCoeff]; rw [← chainTopCoeff_add_chainBotCoeff]; rw [Nat.cast_add]; rw [Nat.cast_add]; rw [chainTopCoeff_of_eq_zsmul_add α β hα β' n hβ']; rw [chainBotCoeff_of_eq_zsmul_add α β hα β' n hβ']; rw [sub_eq_add_neg]; rw [add_add_add_comm]; rw [neg_add_cancel]; rw [add_zero]
 
 Depends on / 依赖: IsZero, Nat.cast_add, Nat.cast_injective, add_add_add_comm, add_zero, cast_add, cast_injective, chainBotCoeff_of_eq_zsmul_add, chainLength_of_isZero, chainTopCoeff_add_chainBotCoeff, chainTopCoeff_of_eq_zsmul_add, neg_add_cancel, sub_eq_add_neg
 -/
@@ -714,7 +804,26 @@ lemma chainTopCoeff_zero_right
     exact α.2 (by simpa [e] using!
       genWeightSpace_chainTopCoeff_add_one_nsmul_add α (0 : Weight K H L) hα)
   obtain ⟨x, hx, x_ne0⟩ := (chainTop α (0 : Weight K H L)).exists_ne_zero
-  obtain ⟨h, e, f, isSl2, he, hf
+  obtain ⟨h, e, f, isSl2, he, hf⟩ := exists_isSl2Triple_of_weight_isNonZero hα
+  obtain rfl := isSl2.h_eq_coroot hα he hf
+  have prim : isSl2.HasPrimitiveVectorWith x (chainLength α (0 : Weight K H L) : K) :=
+    have := lie_mem_genWeightSpace_of_mem_genWeightSpace he hx
+    ⟨x_ne0, (chainLength_smul _ _ hx).symm, by rwa [genWeightSpace_add_chainTop _ _ hα] at this⟩
+  obtain ⟨k, hk⟩ : exists k : K, k • f =
+      (toEnd K L L f ^ (chainTopCoeff α (0 : Weight K H L) + 1)) x := by
+    have : (toEnd K L L f ^ (chainTopCoeff α (0 : Weight K H L) + 1)) x in rootSpace H (-α) := by
+      convert toEnd_pow_apply_mem hf hx (chainTopCoeff α (0 : Weight K H L) + 1)
+      rw [coe_chainTop']; rw [FunLike.coe_zero]; rw [add_zero]; rw [succ_nsmul']; rw [add_assoc]; rw [smul_neg]; rw [neg_add_cancel]; rw [add_zero]
+    simpa using! (finrank_eq_one_iff_of_nonzero' ⟨f, hf⟩ (by simpa using! isSl2.f_ne_zero)).mp
+      (finrank_rootSpace_eq_one _ hα.neg) ⟨_, this⟩
+  apply_fun (⁅f, ·⁆) at hk
+  simp only [lie_smul, lie_self, smul_zero, prim.lie_f_pow_toEnd_f] at hk
+  intro e
+  refine prim.pow_toEnd_f_ne_zero_of_eq_nat rfl ?_ hk.symm
+  have := (apply_coroot_eq_cast' α 0).symm
+  simp only [← @Nat.cast_two Int, ← Nat.cast_mul, zero_apply, Int.cast_eq_zero, sub_eq_zero,
+    Nat.cast_inj] at this
+  rwa [this, Nat.succ_le_iff, two_mul, add_lt_add_iff_left]
 
 中文:
 引理 chainTopCoeff_zero_right
@@ -727,7 +836,26 @@ lemma chainTopCoeff_zero_right
     exact α.2 (by simpa [e] using!
       genWeightSpace_chainTopCoeff_add_one_nsmul_add α (0 : Weight K H L) hα)
   obtain ⟨x, hx, x_ne0⟩ := (chainTop α (0 : Weight K H L)).exists_ne_zero
-  obtain ⟨h, e, f, isSl2, he, hf
+  obtain ⟨h, e, f, isSl2, he, hf⟩ := exists_isSl2Triple_of_weight_isNonZero hα
+  obtain rfl := isSl2.h_eq_coroot hα he hf
+  have prim : isSl2.HasPrimitiveVectorWith x (chainLength α (0 : Weight K H L) : K) :=
+    have := lie_mem_genWeightSpace_of_mem_genWeightSpace he hx
+    ⟨x_ne0, (chainLength_smul _ _ hx).symm, by rwa [genWeightSpace_add_chainTop _ _ hα] at this⟩
+  obtain ⟨k, hk⟩ : exists k : K, k • f =
+      (toEnd K L L f ^ (chainTopCoeff α (0 : Weight K H L) + 1)) x := by
+    have : (toEnd K L L f ^ (chainTopCoeff α (0 : Weight K H L) + 1)) x in rootSpace H (-α) := by
+      convert toEnd_pow_apply_mem hf hx (chainTopCoeff α (0 : Weight K H L) + 1)
+      rw [coe_chainTop']; rw [FunLike.coe_zero]; rw [add_zero]; rw [succ_nsmul']; rw [add_assoc]; rw [smul_neg]; rw [neg_add_cancel]; rw [add_zero]
+    simpa using! (finrank_eq_one_iff_of_nonzero' ⟨f, hf⟩ (by simpa using! isSl2.f_ne_zero)).mp
+      (finrank_rootSpace_eq_one _ hα.neg) ⟨_, this⟩
+  apply_fun (⁅f, ·⁆) at hk
+  simp only [lie_smul, lie_self, smul_zero, prim.lie_f_pow_toEnd_f] at hk
+  intro e
+  refine prim.pow_toEnd_f_ne_zero_of_eq_nat rfl ?_ hk.symm
+  have := (apply_coroot_eq_cast' α 0).symm
+  simp only [← @Nat.cast_two Int, ← Nat.cast_mul, zero_apply, Int.cast_eq_zero, sub_eq_zero,
+    Nat.cast_inj] at this
+  rwa [this, Nat.succ_le_iff, two_mul, add_lt_add_iff_left]
 
 Depends on / 依赖: HasPrimitiveVectorWith, Nat.one_le_iff_ne_zero, Weight, chainLength, chainTop, eq_of_le_of_not_lt, exists_isSl2Triple_of_weight_isNonZero, exists_ne_zero, genWeightSpace_chainTopCoeff_add_one_nsmul_add, h_eq_coroot, isSl2.HasPrimitiveVectorWith, isSl2.h_eq_coroot, lie_mem_genWeightSpace_of_mem_genWeightSpac, one_le_iff_ne_zero, x_ne0
 -/
@@ -848,7 +976,8 @@ lemma rootSpace_one_div_two_smul
     rw [← Nat.cast_smul_eq_nsmul K]; rw [smul_smul]; simp
   apply α.genWeightSpace_ne_bot
   have := rootSpace_two_smul W (fun (e : (W : H -> K) = 0) => hα <| by
-    ap
+    apply_fun (2 • ·) at e; simpa [hW] using e)
+  rwa [hW] at this
 
 中文:
 引理 rootSpace_one_div_two_smul
@@ -862,7 +991,8 @@ lemma rootSpace_one_div_two_smul
     rw [← Nat.cast_smul_eq_nsmul K]; rw [smul_smul]; simp
   apply α.genWeightSpace_ne_bot
   have := rootSpace_two_smul W (fun (e : (W : H -> K) = 0) => hα <| by
-    ap
+    apply_fun (2 • ·) at e; simpa [hW] using e)
+  rwa [hW] at this
 
 Depends on / 依赖: Nat.cast_smul_eq_nsmul, Weight, apply_fun, cast_smul_eq_nsmul, genWeightSpace_ne_bot, rootSpace_two_smul, smul_smul
 -/
@@ -890,7 +1020,32 @@ lemma eq_neg_one_or_eq_zero_or_eq_one_of_eq_smul
   simp only [Pi.smul_apply, root_apply_coroot hα] at H
   rcases (chainLength α β).even_or_odd with (⟨n, hn⟩ | ⟨n, hn⟩)
   · rw [hn, ← two_mul] at H
-    simp only [smul_eq
+    simp only [smul_eq_mul, Nat.cast_mul, Nat.cast_ofNat, ← mul_sub, ← mul_comm (2 : K),
+      Int.cast_sub, Int.cast_mul, Int.cast_ofNat, Int.cast_natCast,
+      mul_eq_mul_left_iff, OfNat.ofNat_ne_zero, or_false] at H
+    rw [← Int.cast_natCast]; rw [← Int.cast_natCast (chainTopCoeff α β)]; rw [← Int.cast_sub] at H
+    have := (rootSpace_zsmul_add_ne_bot_iff_mem α 0 hα (n - chainTopCoeff α β)).mp
+      (by rw [← Int.cast_smul_eq_zsmul K, ← H, ← h, FunLike.coe_zero, add_zero]; exact β.2)
+    rw [chainTopCoeff_zero_right α hα]; rw [chainBotCoeff_zero_right α hα]; rw [Nat.cast_one] at this
+    set k' : Int := n - chainTopCoeff α β
+    subst H
+    have : k' in ({-1, 0, 1} : Finset Int) := by
+      change k' in Finset.Icc (-1 : Int) (1 : Int)
+      exact this
+    simpa only [Int.reduceNeg, Finset.mem_insert, Finset.mem_singleton, ← @Int.cast_inj K,
+      Int.cast_zero, Int.cast_neg, Int.cast_one] using this
+  · apply_fun (· / 2) at H
+    rw [hn]; rw [smul_eq_mul] at H
+    have hk : k = n + 2⁻¹ - chainTopCoeff α β := by simpa [sub_div, add_div] using H
+    have := (rootSpace_zsmul_add_ne_bot_iff α β hα (chainTopCoeff α β - n)).mpr ?_
+    swap
+    · simp only [tsub_le_iff_right, le_add_iff_nonneg_right, Nat.cast_nonneg, neg_sub, true_and]
+      rw [← Nat.cast_add]; rw [chainBotCoeff_add_chainTopCoeff]; rw [hn]
+      lia
+    rw [h]; rw [hk]; rw [← Int.cast_smul_eq_zsmul K]; rw [← add_smul] at this
+    simp only [Int.cast_sub, Int.cast_natCast,
+      sub_add_sub_cancel', add_sub_cancel_left, ne_eq] at this
+    cases this (rootSpace_one_div_two_smul α hα)
 
 中文:
 引理 eq_neg_one_or_eq_zero_or_eq_one_of_eq_smul
@@ -902,7 +1057,32 @@ lemma eq_neg_one_or_eq_zero_or_eq_one_of_eq_smul
   simp only [Pi.smul_apply, root_apply_coroot hα] at H
   rcases (chainLength α β).even_or_odd with (⟨n, hn⟩ | ⟨n, hn⟩)
   · rw [hn, ← two_mul] at H
-    simp only [smul_eq
+    simp only [smul_eq_mul, Nat.cast_mul, Nat.cast_ofNat, ← mul_sub, ← mul_comm (2 : K),
+      Int.cast_sub, Int.cast_mul, Int.cast_ofNat, Int.cast_natCast,
+      mul_eq_mul_left_iff, OfNat.ofNat_ne_zero, or_false] at H
+    rw [← Int.cast_natCast]; rw [← Int.cast_natCast (chainTopCoeff α β)]; rw [← Int.cast_sub] at H
+    have := (rootSpace_zsmul_add_ne_bot_iff_mem α 0 hα (n - chainTopCoeff α β)).mp
+      (by rw [← Int.cast_smul_eq_zsmul K, ← H, ← h, FunLike.coe_zero, add_zero]; exact β.2)
+    rw [chainTopCoeff_zero_right α hα]; rw [chainBotCoeff_zero_right α hα]; rw [Nat.cast_one] at this
+    set k' : Int := n - chainTopCoeff α β
+    subst H
+    have : k' in ({-1, 0, 1} : Finset Int) := by
+      change k' in Finset.Icc (-1 : Int) (1 : Int)
+      exact this
+    simpa only [Int.reduceNeg, Finset.mem_insert, Finset.mem_singleton, ← @Int.cast_inj K,
+      Int.cast_zero, Int.cast_neg, Int.cast_one] using this
+  · apply_fun (· / 2) at H
+    rw [hn]; rw [smul_eq_mul] at H
+    have hk : k = n + 2⁻¹ - chainTopCoeff α β := by simpa [sub_div, add_div] using H
+    have := (rootSpace_zsmul_add_ne_bot_iff α β hα (chainTopCoeff α β - n)).mpr ?_
+    swap
+    · simp only [tsub_le_iff_right, le_add_iff_nonneg_right, Nat.cast_nonneg, neg_sub, true_and]
+      rw [← Nat.cast_add]; rw [chainBotCoeff_add_chainTopCoeff]; rw [hn]
+      lia
+    rw [h]; rw [hk]; rw [← Int.cast_smul_eq_zsmul K]; rw [← add_smul] at this
+    simp only [Int.cast_sub, Int.cast_natCast,
+      sub_add_sub_cancel', add_sub_cancel_left, ne_eq] at this
+    cases this (rootSpace_one_div_two_smul α hα)
 
 Depends on / 依赖: Int.cast_mul, Int.cast_natCast, Int.cast_ofNat, Int.cast_sub, IsEmpty, IsEmpty.elim, Nat.cast_mul, Nat.cast_ofNat, OfNat.ofNat_ne_zero, Pi.smul_apply, apply_coroot_eq_cast, cast_mul, cast_natCast, cast_ofNat, cast_sub, chainLength, even_or_odd, mul_comm, mul_eq_mul_left_iff, mul_sub
 -/
@@ -990,7 +1170,7 @@ definition reflectRoot
     by_cases hα : α.IsZero
     · simpa [hα.eq] using β.genWeightSpace_ne_bot
     rw [sub_eq_neg_add]; rw [apply_coroot_eq_cast α β]; rw [← neg_smul]; rw [← Int.cast_neg]; rw [Int.cast_smul_eq_zsmul]; rw [rootSpace_zsmul_add_ne_bot_iff α β hα]
-    l
+    lia
 
 中文:
 定义 reflectRoot
@@ -1000,7 +1180,7 @@ definition reflectRoot
     by_cases hα : α.IsZero
     · simpa [hα.eq] using β.genWeightSpace_ne_bot
     rw [sub_eq_neg_add]; rw [apply_coroot_eq_cast α β]; rw [← neg_smul]; rw [← Int.cast_neg]; rw [Int.cast_smul_eq_zsmul]; rw [rootSpace_zsmul_add_ne_bot_iff α β hα]
-    l
+    lia
 
 Depends on / 依赖: coroot
 -/
@@ -1068,7 +1248,10 @@ definition rootSystem
       inj' := by rintro ⟨α, hα⟩ ⟨β, hβ⟩ h; simpa using h }
     (fun ⟨α, hα⟩ => by simpa using root_apply_coroot <| by simpa using hα)
     (by
-   
+      rintro ⟨α, hα⟩ - ⟨⟨β, hβ⟩, rfl⟩
+      simpa using
+⟨reflectRoot α β, by simpa using reflectRoot_isNonZero α β by simpa using hβ, rfl⟩)
+    (by convert! span_weight_isNonZero_eq_top K L H; ext; simp)
 
 中文:
 定义 rootSystem
@@ -1082,7 +1265,10 @@ definition rootSystem
       inj' := by rintro ⟨α, hα⟩ ⟨β, hβ⟩ h; simpa using h }
     (fun ⟨α, hα⟩ => by simpa using root_apply_coroot <| by simpa using hα)
     (by
-   
+      rintro ⟨α, hα⟩ - ⟨⟨β, hβ⟩, rfl⟩
+      simpa using
+⟨reflectRoot α β, by simpa using reflectRoot_isNonZero α β by simpa using hβ, rfl⟩)
+    (by convert! span_weight_isNonZero_eq_top K L H; ext; simp)
 
 Depends on / 依赖: LinearMap, LinearMap.congr_fun, RootPairing, RootPairing.mk, congr_fun, convert, coroot, reflectRoot, reflectRoot_isNonZero, root_apply_coroot, span_weight_isNonZero_eq_top
 -/
@@ -1309,7 +1495,9 @@ instance :
     simp only [rootSystem_root_apply, ne_eq, not_not] at e
     obtain ⟨u, hu⟩ := e
     obtain (h | h) := eq_neg_or_eq_of_eq_smul α β (by simpa using hβ) u
-      (by ext x; exact DFunL
+      (by ext x; exact DFunLike.congr_fun hu.symm x)
+    · right; ext x; simpa [neg_eq_iff_eq_neg] using DFunLike.congr_fun h.symm x
+    · left; ext x; simpa using DFunLike.congr_fun h.symm x
 
 中文:
 实例 :
@@ -1320,7 +1508,9 @@ instance :
     simp only [rootSystem_root_apply, ne_eq, not_not] at e
     obtain ⟨u, hu⟩ := e
     obtain (h | h) := eq_neg_or_eq_of_eq_smul α β (by simpa using hβ) u
-      (by ext x; exact DFunL
+      (by ext x; exact DFunLike.congr_fun hu.symm x)
+    · right; ext x; simpa [neg_eq_iff_eq_neg] using DFunLike.congr_fun h.symm x
+    · left; ext x; simpa using DFunLike.congr_fun h.symm x
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, LinearIndependent, LinearIndependent.pair_iff, congr_fun, eq_neg_or_eq_of_eq_smul, h.symm, hu.symm, ne_eq, ne_zero, neg_eq_iff_eq_neg, not_forall, not_not, pair_iff, rootSystem, rootSystem_root_apply
 -/

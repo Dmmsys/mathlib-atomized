@@ -266,7 +266,13 @@ obtain ⟨s, hcard⟩ := Cardinal.exists_finset_eq_card Cardinal.ofNat_le_toENat
   obtain ⟨x, y, z, hxy, hxz, hyz, -⟩ := s.card_eq_three.mp hcard.symm
 set w : Walk ⊤ x x := .cons hxy .cons hyz .cons hxz.symm .nil with hw
   have : w.IsCycle :=
- 
+    { edges_nodup := by aesop
+      ne_nil := by aesop
+      support_nodup := by aesop }
+  grw [egirth_le_length this]
+  simp [hw]
+
+@[gcongr only]
 
 中文:
 定理 egirth_top
@@ -279,7 +285,13 @@ obtain ⟨s, hcard⟩ := Cardinal.exists_finset_eq_card Cardinal.ofNat_le_toENat
   obtain ⟨x, y, z, hxy, hxz, hyz, -⟩ := s.card_eq_three.mp hcard.symm
 set w : Walk ⊤ x x := .cons hxy .cons hyz .cons hxz.symm .nil with hw
   have : w.IsCycle :=
- 
+    { edges_nodup := by aesop
+      ne_nil := by aesop
+      support_nodup := by aesop }
+  grw [egirth_le_length this]
+  simp [hw]
+
+@[gcongr only]
 
 Depends on / 依赖: Cardinal, Cardinal.exists_finset_eq_card, Cardinal.ofNat_le_toENat.mp, IsCycle, card_eq_three, classical, edges_nodup, egirth_le_length, exists_finset_eq_card, hcard.symm, hxz.symm, le_antisymm, ne_nil, ofNat_le_toENat, s.card_eq_three.mp, support_nodup, three_le_egirth, w.IsCycle
 -/

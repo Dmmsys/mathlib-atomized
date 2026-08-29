@@ -85,7 +85,7 @@ lemma tendstoInMeasure_of_ne_top
     simp only [hε_top]
     gcongr
     simp
-  · e
+  · exact h ε hε hε_top
 
 中文:
 引理 tendstoInMeasure_of_ne_top
@@ -99,7 +99,7 @@ lemma tendstoInMeasure_of_ne_top
     simp only [hε_top]
     gcongr
     simp
-  · e
+  · exact h ε hε hε_top
 
 Depends on / 依赖: Tendsto, tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le, zero_le
 -/
@@ -182,7 +182,8 @@ lemma tendstoInMeasure_iff_dist
   · convert! h (ENNReal.ofReal ε) (ENNReal.ofReal_pos.mpr hε) with i a
     rw [edist_dist]; rw [ENNReal.ofReal_le_ofReal_iff (by positivity)]
   · refine tendstoInMeasure_of_ne_top fun ε hε hε_top => ?_
-    convert! h ε.toReal (ENNReal.toReal_pos hε.ne' hε_
+    convert! h ε.toReal (ENNReal.toReal_pos hε.ne' hε_top) with i a
+    rw [edist_dist]; rw [ENNReal.le_ofReal_iff_toReal_le hε_top (by positivity)]
 
 中文:
 引理 tendstoInMeasure_iff_dist
@@ -192,7 +193,8 @@ lemma tendstoInMeasure_iff_dist
   · convert! h (ENNReal.ofReal ε) (ENNReal.ofReal_pos.mpr hε) with i a
     rw [edist_dist]; rw [ENNReal.ofReal_le_ofReal_iff (by positivity)]
   · refine tendstoInMeasure_of_ne_top fun ε hε hε_top => ?_
-    convert! h ε.toReal (ENNReal.toReal_pos hε.ne' hε_
+    convert! h ε.toReal (ENNReal.toReal_pos hε.ne' hε_top) with i a
+    rw [edist_dist]; rw [ENNReal.le_ofReal_iff_toReal_le hε_top (by positivity)]
 
 Depends on / 依赖: ENNReal, ENNReal.le_ofReal_iff_toReal_le, ENNReal.ofReal, ENNReal.ofReal_le_ofReal_iff, ENNReal.ofReal_pos.mpr, ENNReal.toReal_pos, convert, edist_dist, le_ofReal_iff_toReal_le, ofReal, ofReal_le_ofReal_iff, ofReal_pos, tendstoInMeasure_of_ne_top, toReal, toReal_pos
 -/
@@ -298,7 +300,11 @@ theorem tendstoInMeasure_iff_tendsto_toNNReal
     measure_ne_top μ {x | ε <= edist (f i x) (g x)}
   refine ⟨fun h ε hε => ?_, fun h ε hε => ?_⟩
   · have hf : (fun i => (μ { x | ε <= edist (f i x) (g x) }).toNNReal) =
-        ENNReal.toNNReal ∘ (fun i => (μ { x | ε <= edist (f i x) 
+        ENNReal.toNNReal ∘ (fun i => (μ { x | ε <= edist (f i x) (g x) })) := rfl
+    rw [hf]; rw [ENNReal.tendsto_toNNReal_iff' (hfin ε)]
+    exact h ε hε
+  · rw [← ENNReal.tendsto_toNNReal_iff ENNReal.zero_ne_top (hfin ε)]
+    exact h ε hε
 
 中文:
 定理 tendstoInMeasure_iff_tendsto_toNN实数
@@ -308,7 +314,11 @@ theorem tendstoInMeasure_iff_tendsto_toNNReal
     measure_ne_top μ {x | ε <= edist (f i x) (g x)}
   refine ⟨fun h ε hε => ?_, fun h ε hε => ?_⟩
   · have hf : (fun i => (μ { x | ε <= edist (f i x) (g x) }).toNNReal) =
-        ENNReal.toNNReal ∘ (fun i => (μ { x | ε <= edist (f i x) 
+        ENNReal.toNNReal ∘ (fun i => (μ { x | ε <= edist (f i x) (g x) })) := rfl
+    rw [hf]; rw [ENNReal.tendsto_toNNReal_iff' (hfin ε)]
+    exact h ε hε
+  · rw [← ENNReal.tendsto_toNNReal_iff ENNReal.zero_ne_top (hfin ε)]
+    exact h ε hε
 
 Depends on / 依赖: ENNReal, ENNReal.tendsto_toNNReal_iff, ENNReal.toNNReal, ENNReal.zero_ne_top, measure_ne_top, tendsto_toNNReal_iff, toNNReal, zero_ne_top
 -/
@@ -409,7 +419,10 @@ theorem congr'
     exact h_tendsto ε hε
   filter_upwards [h_left] with i h_ae_eq
   refine measure_congr ?_
-  filter_upwards [h_ae_eq, h_right] with x hxf 
+  filter_upwards [h_ae_eq, h_right] with x hxf hxg
+  rw [eq_iff_iff]
+  change ε <= edist (f' i x) (g' x) ↔ ε <= edist (f i x) (g x)
+  rw [hxg]; rw [hxf]
 
 中文:
 定理 congr'
@@ -422,7 +435,10 @@ theorem congr'
     exact h_tendsto ε hε
   filter_upwards [h_left] with i h_ae_eq
   refine measure_congr ?_
-  filter_upwards [h_ae_eq, h_right] with x hxf 
+  filter_upwards [h_ae_eq, h_right] with x hxf hxg
+  rw [eq_iff_iff]
+  change ε <= edist (f' i x) (g' x) ↔ ε <= edist (f i x) (g x)
+  rw [hxg]; rw [hxf]
 -/
 protected theorem congr' (h_left : forallᶠ i in l, f i =ᵐ[μ] f' i) (h_right : g =ᵐ[μ] g')
     (h_tendsto : TendstoInMeasure μ f l g) : TendstoInMeasure μ f' l g' := by
@@ -513,7 +529,16 @@ theorem tendstoInMeasure_of_tendsto_ae_of_measurable_edist
   lift δ to Real>=0 using hδi
   rw [gt_iff_lt]; rw [ENNReal.coe_pos]; rw [← NNReal.coe_pos] at hδ
   obtain ⟨t, _, ht, hunif⟩ :=
-    tendstoUniformlyOn_
+    tendstoUniformlyOn_of_ae_tendsto_of_measurable_edist' hf hfg hδ
+  rw [ENNReal.ofReal_coe_nnreal] at ht
+  rw [EMetric.tendstoUniformlyOn_iff] at hunif
+  obtain ⟨N, hN⟩ := eventually_atTop.1 (hunif ε hε)
+  refine ⟨N, fun n hn => ?_⟩
+  suffices { x : α | ε <= edist (f n x) (g x) } subseteq t from (measure_mono this).trans ht
+  rw [← Set.compl_subset_compl]
+  intro x hx
+  rw [Set.mem_compl_iff]; rw [Set.notMem_ofPred_iff]; rw [edist_comm]; rw [not_le]
+  exact hN n hn x hx
 
 中文:
 定理 tendstoInMeasure_of_tendsto_ae_of_measurable_edist
@@ -525,7 +550,16 @@ theorem tendstoInMeasure_of_tendsto_ae_of_measurable_edist
   lift δ to Real>=0 using hδi
   rw [gt_iff_lt]; rw [ENNReal.coe_pos]; rw [← NNReal.coe_pos] at hδ
   obtain ⟨t, _, ht, hunif⟩ :=
-    tendstoUniformlyOn_
+    tendstoUniformlyOn_of_ae_tendsto_of_measurable_edist' hf hfg hδ
+  rw [ENNReal.ofReal_coe_nnreal] at ht
+  rw [EMetric.tendstoUniformlyOn_iff] at hunif
+  obtain ⟨N, hN⟩ := eventually_atTop.1 (hunif ε hε)
+  refine ⟨N, fun n hn => ?_⟩
+  suffices { x : α | ε <= edist (f n x) (g x) } subseteq t from (measure_mono this).trans ht
+  rw [← Set.compl_subset_compl]
+  intro x hx
+  rw [Set.mem_compl_iff]; rw [Set.notMem_ofPred_iff]; rw [edist_comm]; rw [not_le]
+  exact hN n hn x hx
 
 Depends on / 依赖: EMetric, EMetric.tendstoUniformlyOn_iff, ENNReal, ENNReal.coe_pos, ENNReal.ofReal_coe_nnreal, ENNReal.tendsto_atTop_zero.mpr, NNReal, NNReal.coe_pos, coe_pos, eventually_atTop, exists_const, gt_iff_lt, imp_true_iff, le_top, ofReal_coe_nnreal, tendstoUniformlyOn_iff, tendstoUniformlyOn_of_ae_tendsto_of_measurable_edist, tendsto_atTop_zero
 -/
@@ -559,7 +593,12 @@ theorem tendstoInMeasure_of_tendsto_ae
   have hg : AEStronglyMeasurable g μ := aestronglyMeasurable_of_tendsto_ae _ hf hfg
   refine TendstoInMeasure.congr (fun i => (hf i).ae_eq_mk.symm) hg.ae_eq_mk.symm ?_
   refine tendstoInMeasure_of_tendsto_ae_of_measurable_edist
-    (fun n => ((hf n).stronglyMeasurable_mk.edist hg.stronglyMeasurab
+    (fun n => ((hf n).stronglyMeasurable_mk.edist hg.stronglyMeasurable_mk).measurable) ?_
+  have hf_eq_ae : forallᵐ x ∂μ, forall n, (hf n).mk (f n) x = f n x :=
+    ae_all_iff.mpr fun n => (hf n).ae_eq_mk.symm
+  filter_upwards [hf_eq_ae, hg.ae_eq_mk, hfg] with x hxf hxg hxfg
+  rw [← hxg]; rw [funext fun n => hxf n]
+  exact hxfg
 
 中文:
 定理 tendstoInMeasure_of_tendsto_ae
@@ -568,7 +607,12 @@ theorem tendstoInMeasure_of_tendsto_ae
   have hg : AEStronglyMeasurable g μ := aestronglyMeasurable_of_tendsto_ae _ hf hfg
   refine TendstoInMeasure.congr (fun i => (hf i).ae_eq_mk.symm) hg.ae_eq_mk.symm ?_
   refine tendstoInMeasure_of_tendsto_ae_of_measurable_edist
-    (fun n => ((hf n).stronglyMeasurable_mk.edist hg.stronglyMeasurab
+    (fun n => ((hf n).stronglyMeasurable_mk.edist hg.stronglyMeasurable_mk).measurable) ?_
+  have hf_eq_ae : forallᵐ x ∂μ, forall n, (hf n).mk (f n) x = f n x :=
+    ae_all_iff.mpr fun n => (hf n).ae_eq_mk.symm
+  filter_upwards [hf_eq_ae, hg.ae_eq_mk, hfg] with x hxf hxg hxfg
+  rw [← hxg]; rw [funext fun n => hxf n]
+  exact hxfg
 
 Depends on / 依赖: AEStronglyMeasurable, TendstoInMeasure, TendstoInMeasure.congr, ae_all_iff, ae_all_iff.mpr, ae_eq_mk, ae_eq_mk.symm, aestronglyMeasurable_of_tendsto_ae, filter_upwards, hf_eq_ae, hg.ae_eq_mk, hg.ae_eq_mk.symm, hg.stronglyMeasurable_mk, measurable, stronglyMeasurable_mk, stronglyMeasurable_mk.edist, tendstoInMeasure_of_tendsto_ae_of_measurable_edist
 -/
@@ -740,7 +784,44 @@ theorem TendstoInMeasure.exists_seq_tendsto_ae
     `s := ⋂ k, ⋃ i ≥ k, {|f (ns k) - g| ≥ 2⁻ᵏ}`, we see that `μ s = 0` by the
     first Borel-Cantelli lemma.
 
-    On the other hand, as `s` is precisel
+    On the other hand, as `s` is precisely the set for which `f (ns k)`
+    doesn't converge to `g`, `f (ns k)` converges almost everywhere to `g` as required. -/
+  have h_lt_ε_real (ε : Real>=0∞) (hε : 0 < ε) : exists k : Nat, 2 * (2 : Real>=0∞)⁻¹ ^ k < ε := by
+    obtain ⟨k, h_k⟩ : exists k : Nat, (2 : Real>=0∞)⁻¹ ^ k < ε := ENNReal.exists_inv_two_pow_lt hε.ne'
+    refine ⟨k + 1, lt_of_eq_of_lt ?_ h_k⟩
+    rw [pow_succ']; rw [← mul_assoc]; rw [ENNReal.mul_inv_cancel]; rw [one_mul]
+    · positivity
+    · simp
+  set ns := ExistsSeqTendstoAe.seqTendstoAeSeq hfg
+  use ns
+  let S := fun k => { x | (2 : Real>=0∞)⁻¹ ^ k <= edist (f (ns k) x) (g x) }
+  have hμS_le : forall k, μ (S k) <= (2 : Real>=0∞)⁻¹ ^ k :=
+    fun k => ExistsSeqTendstoAe.seqTendstoAeSeq_spec hfg k (ns k) le_rfl
+  set s := Filter.atTop.limsup S with hs
+  have hμs : μ s = 0 := by
+    refine measure_limsup_atTop_eq_zero (ne_top_of_le_ne_top ?_ (ENNReal.tsum_le_tsum hμS_le))
+    simpa only [ENNReal.tsum_geometric, ENNReal.one_sub_inv_two, inv_inv] using ENNReal.ofNat_ne_top
+  have h_tendsto : forall x in sᶜ, Tendsto (fun i => f (ns i) x) atTop (𝓝 (g x)) := by
+    refine fun x hx => EMetric.tendsto_atTop.mpr fun ε hε => ?_
+    rw [hs]; rw [limsup_eq_iInf_iSup_of_nat] at hx
+    simp only [S, Set.iSup_eq_iUnion, Set.iInf_eq_iInter, Set.compl_iInter, Set.compl_iUnion,
+      Set.mem_iUnion, Set.mem_iInter, Set.mem_compl_iff, Set.mem_ofPred_eq, not_le] at hx
+    obtain ⟨N, hNx⟩ := hx
+    obtain ⟨k, hk_lt_ε⟩ := h_lt_ε_real ε hε
+    refine ⟨max N (k - 1), fun n hn_ge => lt_of_le_of_lt ?_ hk_lt_ε⟩
+    specialize hNx n ((le_max_left _ _).trans hn_ge)
+    have h_inv_n_le_k : (2 : Real>=0∞)⁻¹ ^ n <= 2 * (2 : Real>=0∞)⁻¹ ^ k := by
+      nth_rw 2 [← pow_one (2 : Real>=0∞)]
+      rw [mul_comm]; rw [← ENNReal.inv_pow]; rw [← ENNReal.inv_pow]; rw [ENNReal.inv_le_iff_le_mul]; rw [← mul_assoc]; rw [mul_comm (_ ^ n)]; rw [mul_assoc]; rw [← ENNReal.inv_le_iff_le_mul]; rw [inv_inv]; rw [← pow_add]
+      · gcongr
+        · simp
+        · omega
+      all_goals simp
+    exact le_trans hNx.le h_inv_n_le_k
+  rw [ae_iff]
+  refine ⟨ExistsSeqTendstoAe.seqTendstoAeSeq_strictMono hfg, measure_mono_null (fun x => ?_) hμs⟩
+  rw [Set.mem_ofPred_eq]; rw [← @Classical.not_not (x in s)]; rw [not_imp_not]
+  exact h_tendsto x
 
 中文:
 定理 TendstoInMeasure.存在_seq_tendsto_ae
@@ -751,7 +832,44 @@ theorem TendstoInMeasure.exists_seq_tendsto_ae
     `s := ⋂ k, ⋃ i ≥ k, {|f (ns k) - g| ≥ 2⁻ᵏ}`, we see that `μ s = 0` by the
     first Borel-Cantelli lemma.
 
-    On the other hand, as `s` is precisel
+    On the other hand, as `s` is precisely the set for which `f (ns k)`
+    doesn't converge to `g`, `f (ns k)` converges almost everywhere to `g` as required. -/
+  have h_lt_ε_real (ε : Real>=0∞) (hε : 0 < ε) : exists k : Nat, 2 * (2 : Real>=0∞)⁻¹ ^ k < ε := by
+    obtain ⟨k, h_k⟩ : exists k : Nat, (2 : Real>=0∞)⁻¹ ^ k < ε := ENNReal.exists_inv_two_pow_lt hε.ne'
+    refine ⟨k + 1, lt_of_eq_of_lt ?_ h_k⟩
+    rw [pow_succ']; rw [← mul_assoc]; rw [ENNReal.mul_inv_cancel]; rw [one_mul]
+    · positivity
+    · simp
+  set ns := ExistsSeqTendstoAe.seqTendstoAeSeq hfg
+  use ns
+  let S := fun k => { x | (2 : Real>=0∞)⁻¹ ^ k <= edist (f (ns k) x) (g x) }
+  have hμS_le : forall k, μ (S k) <= (2 : Real>=0∞)⁻¹ ^ k :=
+    fun k => ExistsSeqTendstoAe.seqTendstoAeSeq_spec hfg k (ns k) le_rfl
+  set s := Filter.atTop.limsup S with hs
+  have hμs : μ s = 0 := by
+    refine measure_limsup_atTop_eq_zero (ne_top_of_le_ne_top ?_ (ENNReal.tsum_le_tsum hμS_le))
+    simpa only [ENNReal.tsum_geometric, ENNReal.one_sub_inv_two, inv_inv] using ENNReal.ofNat_ne_top
+  have h_tendsto : forall x in sᶜ, Tendsto (fun i => f (ns i) x) atTop (𝓝 (g x)) := by
+    refine fun x hx => EMetric.tendsto_atTop.mpr fun ε hε => ?_
+    rw [hs]; rw [limsup_eq_iInf_iSup_of_nat] at hx
+    simp only [S, Set.iSup_eq_iUnion, Set.iInf_eq_iInter, Set.compl_iInter, Set.compl_iUnion,
+      Set.mem_iUnion, Set.mem_iInter, Set.mem_compl_iff, Set.mem_ofPred_eq, not_le] at hx
+    obtain ⟨N, hNx⟩ := hx
+    obtain ⟨k, hk_lt_ε⟩ := h_lt_ε_real ε hε
+    refine ⟨max N (k - 1), fun n hn_ge => lt_of_le_of_lt ?_ hk_lt_ε⟩
+    specialize hNx n ((le_max_left _ _).trans hn_ge)
+    have h_inv_n_le_k : (2 : Real>=0∞)⁻¹ ^ n <= 2 * (2 : Real>=0∞)⁻¹ ^ k := by
+      nth_rw 2 [← pow_one (2 : Real>=0∞)]
+      rw [mul_comm]; rw [← ENNReal.inv_pow]; rw [← ENNReal.inv_pow]; rw [ENNReal.inv_le_iff_le_mul]; rw [← mul_assoc]; rw [mul_comm (_ ^ n)]; rw [mul_assoc]; rw [← ENNReal.inv_le_iff_le_mul]; rw [inv_inv]; rw [← pow_add]
+      · gcongr
+        · simp
+        · omega
+      all_goals simp
+    exact le_trans hNx.le h_inv_n_le_k
+  rw [ae_iff]
+  refine ⟨ExistsSeqTendstoAe.seqTendstoAeSeq_strictMono hfg, measure_mono_null (fun x => ?_) hμs⟩
+  rw [Set.mem_ofPred_eq]; rw [← @Classical.not_not (x in s)]; rw [not_imp_not]
+  exact h_tendsto x
 -/
 theorem TendstoInMeasure.exists_seq_tendsto_ae (hfg : TendstoInMeasure μ f atTop g) :
     exists ns : Nat -> Nat, StrictMono ns ∧ forallᵐ x ∂μ, Tendsto (fun i => f (ns i) x) atTop (𝓝 (g x)) := by
@@ -863,7 +981,15 @@ theorem exists_seq_tendstoInMeasure_atTop_iff
   rw [tendstoInMeasure_iff_tendsto_toNNReal]
   by_contra! ⟨ε, hε, h2⟩
   obtain ⟨δ, ns, hδ, hns, h3⟩ : exists (δ : Real>=0) (ns : Nat -> Nat), 0 < δ ∧ StrictMono ns ∧
-      forall n, δ <= (μ {x | ε <= edis
+      forall n, δ <= (μ {x | ε <= edist (f (ns n) x) (g x)}).toNNReal := by
+    obtain ⟨s, hs, h4⟩ := not_tendsto_iff_exists_frequently_notMem.1 h2
+    obtain ⟨δ, hδ, h5⟩ := NNReal.nhds_zero_basis.mem_iff.1 hs
+    obtain ⟨ns, hns, h6⟩ := extraction_of_frequently_atTop h4
+    exact ⟨δ, ns, hδ, hns, fun n => Set.notMem_Iio.1 (Set.notMem_subset h5 (h6 n))⟩
+  obtain ⟨ns', _, h6⟩ := h1 ns hns
+have h7 := tendstoInMeasure_iff_tendsto_toNNReal.mp
+    tendstoInMeasure_of_tendsto_ae (fun n => hf _) h6
+  exact lt_irrefl _ (lt_of_le_of_lt (ge_of_tendsto' (h7 ε hε) (fun n => h3 _)) hδ)
 
 中文:
 定理 存在_seq_tendstoInMeasure_atTop_iff
@@ -873,7 +999,15 @@ theorem exists_seq_tendstoInMeasure_atTop_iff
   rw [tendstoInMeasure_iff_tendsto_toNNReal]
   by_contra! ⟨ε, hε, h2⟩
   obtain ⟨δ, ns, hδ, hns, h3⟩ : exists (δ : Real>=0) (ns : Nat -> Nat), 0 < δ ∧ StrictMono ns ∧
-      forall n, δ <= (μ {x | ε <= edis
+      forall n, δ <= (μ {x | ε <= edist (f (ns n) x) (g x)}).toNNReal := by
+    obtain ⟨s, hs, h4⟩ := not_tendsto_iff_exists_frequently_notMem.1 h2
+    obtain ⟨δ, hδ, h5⟩ := NNReal.nhds_zero_basis.mem_iff.1 hs
+    obtain ⟨ns, hns, h6⟩ := extraction_of_frequently_atTop h4
+    exact ⟨δ, ns, hδ, hns, fun n => Set.notMem_Iio.1 (Set.notMem_subset h5 (h6 n))⟩
+  obtain ⟨ns', _, h6⟩ := h1 ns hns
+have h7 := tendstoInMeasure_iff_tendsto_toNNReal.mp
+    tendstoInMeasure_of_tendsto_ae (fun n => hf _) h6
+  exact lt_irrefl _ (lt_of_le_of_lt (ge_of_tendsto' (h7 ε hε) (fun n => h3 _)) hδ)
 
 Depends on / 依赖: NNReal, NNReal.nhds_zero_basis.mem_iff, StrictMono, exists_seq_tendsto_ae, extraction_of_frequently_a, hfg.comp, hns.tendsto_atTop, mem_iff, nhds_zero_basis, not_tendsto_iff_exists_frequently_notMem, tendstoInMeasure_iff_tendsto_toNNReal, tendsto_atTop, toNNReal
 -/
@@ -1034,7 +1168,17 @@ theorem tendstoInMeasure_of_tendsto_eLpNorm_of_stronglyMeasurable
     (Tendsto.ennrpow_const p.toReal hfg) (Or.inr <| by simp [hε.ne'])
   simp only [mul_zero,
     ENNReal.zero_rpow_of_pos (ENNReal.toReal_pos hp_ne_zero hp_ne_top)] at hfg
-
+  rw [ENNReal.tendsto_nhds_zero] at hfg ⊢
+  intro δ hδ
+  refine (hfg δ hδ).mono fun n hn => ?_
+  refine le_trans ?_ hn
+  rw [one_div]; rw [← ENNReal.inv_mul_le_iff]; rw [inv_inv]
+  · convert!
+      mul_meas_ge_le_pow_eLpNorm' μ hp_ne_zero hp_ne_top ((hf n).sub hg).aestronglyMeasurable ε
+      using 6
+    simp [edist_eq_enorm_sub]
+  · simp [hε_top]
+  · simp [hε.ne']
 
 中文:
 定理 tendstoInMeasure_of_tendsto_eLpNorm_of_stronglyMeasurable
@@ -1045,7 +1189,17 @@ theorem tendstoInMeasure_of_tendsto_eLpNorm_of_stronglyMeasurable
     (Tendsto.ennrpow_const p.toReal hfg) (Or.inr <| by simp [hε.ne'])
   simp only [mul_zero,
     ENNReal.zero_rpow_of_pos (ENNReal.toReal_pos hp_ne_zero hp_ne_top)] at hfg
-
+  rw [ENNReal.tendsto_nhds_zero] at hfg ⊢
+  intro δ hδ
+  refine (hfg δ hδ).mono fun n hn => ?_
+  refine le_trans ?_ hn
+  rw [one_div]; rw [← ENNReal.inv_mul_le_iff]; rw [inv_inv]
+  · convert!
+      mul_meas_ge_le_pow_eLpNorm' μ hp_ne_zero hp_ne_top ((hf n).sub hg).aestronglyMeasurable ε
+      using 6
+    simp [edist_eq_enorm_sub]
+  · simp [hε_top]
+  · simp [hε.ne']
 
 Depends on / 依赖: ENNReal, ENNReal.Tendsto.const_mul, ENNReal.inv_mul_le_iff, ENNReal.tendsto_nhds_zero, ENNReal.toReal_pos, ENNReal.zero_rpow_of_pos, Or.inr, Tendsto, Tendsto.ennrpow_const, const_mul, convert, ennrpow_const, hp_n, hp_ne_top, hp_ne_zero, inv_inv, inv_mul_le_iff, le_trans, mul_meas_ge_le_pow_eLpNorm, mul_zero
 -/
@@ -1081,7 +1235,10 @@ theorem tendstoInMeasure_of_tendsto_eLpNorm_of_ne_top
   refine TendstoInMeasure.congr (fun i => (hf i).ae_eq_mk.symm) hg.ae_eq_mk.symm ?_
   refine tendstoInMeasure_of_tendsto_eLpNorm_of_stronglyMeasurable
     hp_ne_zero hp_ne_top (fun i => (hf i).stronglyMeasurable_mk) hg.stronglyMeasurable_mk ?_
-  have : (fun n => eLpNorm ((hf n).mk (f n) - hg.mk g
+  have : (fun n => eLpNorm ((hf n).mk (f n) - hg.mk g) p μ) = fun n => eLpNorm (f n - g) p μ := by
+    ext1 n; refine eLpNorm_congr_ae (EventuallyEq.sub (hf n).ae_eq_mk.symm hg.ae_eq_mk.symm)
+  rw [this]
+  exact hfg
 
 中文:
 定理 tendstoInMeasure_of_tendsto_eLpNorm_of_ne_top
@@ -1090,7 +1247,10 @@ theorem tendstoInMeasure_of_tendsto_eLpNorm_of_ne_top
   refine TendstoInMeasure.congr (fun i => (hf i).ae_eq_mk.symm) hg.ae_eq_mk.symm ?_
   refine tendstoInMeasure_of_tendsto_eLpNorm_of_stronglyMeasurable
     hp_ne_zero hp_ne_top (fun i => (hf i).stronglyMeasurable_mk) hg.stronglyMeasurable_mk ?_
-  have : (fun n => eLpNorm ((hf n).mk (f n) - hg.mk g
+  have : (fun n => eLpNorm ((hf n).mk (f n) - hg.mk g) p μ) = fun n => eLpNorm (f n - g) p μ := by
+    ext1 n; refine eLpNorm_congr_ae (EventuallyEq.sub (hf n).ae_eq_mk.symm hg.ae_eq_mk.symm)
+  rw [this]
+  exact hfg
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.sub, TendstoInMeasure, TendstoInMeasure.congr, ae_eq_mk, ae_eq_mk.symm, eLpNorm, eLpNorm_congr_ae, hg.ae_eq_mk.symm, hg.mk, hg.stronglyMeasurable_mk, hp_ne_top, hp_ne_zero, stronglyMeasurable_mk, tendstoInMeasure_of_tendsto_eLpNorm_of_stronglyMeasurable
 -/
@@ -1119,7 +1279,12 @@ theorem tendstoInMeasure_of_tendsto_eLpNorm_top
   intro ε hε
   specialize hfg (δ / 2) (ENNReal.div_pos_iff.2 ⟨hδ.ne', ENNReal.ofNat_ne_top⟩)
   refine hfg.mono fun n hn => ?_
-  simp only [P
+  simp only [Pi.sub_apply] at *
+  have : essSup (fun x : α => ‖f n x - g x‖ₑ) μ < δ :=
+    hn.trans_lt (ENNReal.half_lt_self hδ.ne' hδ_top)
+  refine ((le_of_eq ?_).trans (ae_lt_of_essSup_lt this).le).trans hε.le
+  congr with x
+  simp [edist_eq_enorm_sub]
 
 中文:
 定理 tendstoInMeasure_of_tendsto_eLpNorm_top
@@ -1131,7 +1296,12 @@ theorem tendstoInMeasure_of_tendsto_eLpNorm_top
   intro ε hε
   specialize hfg (δ / 2) (ENNReal.div_pos_iff.2 ⟨hδ.ne', ENNReal.ofNat_ne_top⟩)
   refine hfg.mono fun n hn => ?_
-  simp only [P
+  simp only [Pi.sub_apply] at *
+  have : essSup (fun x : α => ‖f n x - g x‖ₑ) μ < δ :=
+    hn.trans_lt (ENNReal.half_lt_self hδ.ne' hδ_top)
+  refine ((le_of_eq ?_).trans (ae_lt_of_essSup_lt this).le).trans hε.le
+  congr with x
+  simp [edist_eq_enorm_sub]
 
 Depends on / 依赖: ENNReal, ENNReal.div_pos_iff, ENNReal.half_lt_self, ENNReal.ofNat_ne_top, ENNReal.tendsto_nhds_zero, Pi.sub_apply, ae_lt_of_essSup_lt, div_pos_iff, eLpNormEssSup, eLpNorm_exponent_top, essSup, half_lt_self, hfg.mono, hn.trans_lt, le_of_eq, ofNat_ne_top, specialize, sub_apply, tendstoInMeasure_of_ne_top, tendsto_nhds_zero
 -/

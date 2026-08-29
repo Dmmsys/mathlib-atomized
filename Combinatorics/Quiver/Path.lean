@@ -433,7 +433,9 @@ theorem comp_inj
     · cases hq
     · simp only [comp_cons, cons.injEq] at h
       obtain rfl := h.1
-      obtai
+      obtain ⟨rfl, rfl⟩ := ih (Nat.succ.inj hq) h.2.1.eq
+      rw [h.2.2.eq]
+      exact ⟨rfl, rfl⟩
 
 中文:
 定理 comp_inj
@@ -450,7 +452,9 @@ theorem comp_inj
     · cases hq
     · simp only [comp_cons, cons.injEq] at h
       obtain rfl := h.1
-      obtai
+      obtain ⟨rfl, rfl⟩ := ih (Nat.succ.inj hq) h.2.1.eq
+      rw [h.2.2.eq]
+      exact ⟨rfl, rfl⟩
 
 Depends on / 依赖: Nat.succ.inj, comp_cons, cons.injEq
 -/
@@ -601,7 +605,9 @@ lemma eq_toPath_comp_of_length_eq_succ
       obtain rfl := eq_of_length_zero p hp
       obtain rfl := eq_nil_of_length_zero p hp
       exact ⟨d, q, nil, rfl, rfl⟩
-    · rw [length_cons
+    · rw [length_cons, Nat.add_right_cancel_iff] at hp
+      obtain ⟨x, q'', p'', hl, rfl⟩ := h hp
+      exact ⟨x, q'', p''.cons q, by simpa, rfl⟩
 
 中文:
 引理 eq_toPath_comp_of_length_eq_succ
@@ -615,7 +621,9 @@ lemma eq_toPath_comp_of_length_eq_succ
       obtain rfl := eq_of_length_zero p hp
       obtain rfl := eq_nil_of_length_zero p hp
       exact ⟨d, q, nil, rfl, rfl⟩
-    · rw [length_cons
+    · rw [length_cons, Nat.add_right_cancel_iff] at hp
+      obtain ⟨x, q'', p'', hl, rfl⟩ := h hp
+      exact ⟨x, q'', p''.cons q, by simpa, rfl⟩
 
 Depends on / 依赖: Nat.add_eq_right, Nat.add_right_cancel_iff, Nat.zero_add, add_eq_right, add_right_cancel_iff, eq_nil_of_length_zero, eq_of_length_zero, generalizing, length_cons, zero_add
 -/
@@ -929,6 +937,24 @@ definition decidableEqBddPathsOfDecidableEq
     | _, _, .cons _ _, .nil =>
       isFalse fun h => Quiver.Path.noConfusion rfl .rfl .rfl .rfl (heq_of_eq (Subtype.mk.inj h))
     | _, _, .cons (b := v') p' α, .cons (b := v'') q' β =>
+      match v', v'', h₁ v' v'' with
+      | _, _, isTrue (Eq.refl _) =>
+        if h : α = β then
+          have hp' : p'.length <= n := by simp [Quiver.Path.length] at hp; lia
+          have hq' : q'.length <= n := by simp [Quiver.Path.length] at hq; lia
+          if h'' : (⟨p', hp'⟩ : BoundedPaths _ _ n) = ⟨q', hq'⟩ then
+isTrue by
+              apply Subtype.ext
+              dsimp
+              rw [h]; rw [show p' = q' from Subtype.mk.inj h'']
+          else
+            isFalse fun h =>
+h'' Subtype.ext eq_of_heq (Quiver.Path.cons.inj <| Subtype.mk.inj h).2.1
+        else
+          isFalse fun h' =>
+h eq_of_heq (Quiver.Path.cons.inj <| Subtype.mk.inj h').2.2
+      | _, _, isFalse h => isFalse fun h' =>
+        h (Quiver.Path.cons.inj <| Subtype.mk.inj h').1
 
 中文:
 定义 decidableEqBddPathsOfDecidableEq
@@ -940,6 +966,24 @@ definition decidableEqBddPathsOfDecidableEq
     | _, _, .cons _ _, .nil =>
       isFalse fun h => Quiver.Path.noConfusion rfl .rfl .rfl .rfl (heq_of_eq (Subtype.mk.inj h))
     | _, _, .cons (b := v') p' α, .cons (b := v'') q' β =>
+      match v', v'', h₁ v' v'' with
+      | _, _, isTrue (Eq.refl _) =>
+        if h : α = β then
+          have hp' : p'.length <= n := by simp [Quiver.Path.length] at hp; lia
+          have hq' : q'.length <= n := by simp [Quiver.Path.length] at hq; lia
+          if h'' : (⟨p', hp'⟩ : BoundedPaths _ _ n) = ⟨q', hq'⟩ then
+isTrue by
+              apply Subtype.ext
+              dsimp
+              rw [h]; rw [show p' = q' from Subtype.mk.inj h'']
+          else
+            isFalse fun h =>
+h'' Subtype.ext eq_of_heq (Quiver.Path.cons.inj <| Subtype.mk.inj h).2.1
+        else
+          isFalse fun h' =>
+h eq_of_heq (Quiver.Path.cons.inj <| Subtype.mk.inj h').2.2
+      | _, _, isFalse h => isFalse fun h' =>
+        h (Quiver.Path.cons.inj <| Subtype.mk.inj h').1
 
 Depends on / 依赖: Eq.refl, Quiver, Quiver.Path.length, Quiver.Path.noConfusion, Subtype, Subtype.mk.inj, heq_of_eq, isFalse, isTrue, length, noConfusion
 -/

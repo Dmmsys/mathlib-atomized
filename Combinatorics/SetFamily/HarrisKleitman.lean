@@ -124,7 +124,28 @@ theorem IsLowerSet.le_card_inter_finset'
     · simp only [card_empty, zero_mul, empty_inter, mul_zero, le_refl]
     obtain rfl | rfl := hℬs
     · simp
-  
+    · simp only [card_empty, pow_zero, inter_singleton_of_mem, mem_singleton, card_singleton,
+        le_refl]
+  | insert a s hs ih =>
+  rw [card_insert_of_notMem hs]; rw [← card_memberSubfamily_add_card_nonMemberSubfamily a 𝒜]; rw [←
+    card_memberSubfamily_add_card_nonMemberSubfamily a ℬ]; rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [add_comm (_ * _)]; rw [add_add_add_comm]
+  grw [mul_add_mul_le_mul_add_mul
+(card_le_card h𝒜.memberSubfamily_subset_nonMemberSubfamily)
+      card_le_card hℬ.memberSubfamily_subset_nonMemberSubfamily, ← two_mul, pow_succ', mul_assoc]
+  have h₀ : forall 𝒞 : Finset (Finset α), (forall t in 𝒞, t subseteq insert a s) ->
+      forall t in 𝒞.nonMemberSubfamily a, t subseteq s := by
+    rintro 𝒞 h𝒞 t ht
+    rw [mem_nonMemberSubfamily] at ht
+    exact (subset_insert_iff_of_notMem ht.2).1 (h𝒞 _ ht.1)
+  have h₁ : forall 𝒞 : Finset (Finset α), (forall t in 𝒞, t subseteq insert a s) ->
+      forall t in 𝒞.memberSubfamily a, t subseteq s := by
+    rintro 𝒞 h𝒞 t ht
+    rw [mem_memberSubfamily] at ht
+    exact (subset_insert_iff_of_notMem ht.2).1 ((subset_insert _ _).trans <| h𝒞 _ ht.1)
+  gcongr
+  refine (add_le_add (ih h𝒜.memberSubfamily hℬ.memberSubfamily (h₁ _ h𝒜s) <| h₁ _ hℬs) <|
+ih h𝒜.nonMemberSubfamily hℬ.nonMemberSubfamily (h₀ _ h𝒜s) h₀ _ hℬs).trans_eq ?_
+  rw [← mul_add]; rw [← memberSubfamily_inter]; rw [← nonMemberSubfamily_inter]; rw [card_memberSubfamily_add_card_nonMemberSubfamily]
 
 中文:
 定理 是下集.le_card_inter_finset'
@@ -137,7 +158,28 @@ theorem IsLowerSet.le_card_inter_finset'
     · simp only [card_empty, zero_mul, empty_inter, mul_zero, le_refl]
     obtain rfl | rfl := hℬs
     · simp
-  
+    · simp only [card_empty, pow_zero, inter_singleton_of_mem, mem_singleton, card_singleton,
+        le_refl]
+  | insert a s hs ih =>
+  rw [card_insert_of_notMem hs]; rw [← card_memberSubfamily_add_card_nonMemberSubfamily a 𝒜]; rw [←
+    card_memberSubfamily_add_card_nonMemberSubfamily a ℬ]; rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [add_comm (_ * _)]; rw [add_add_add_comm]
+  grw [mul_add_mul_le_mul_add_mul
+(card_le_card h𝒜.memberSubfamily_subset_nonMemberSubfamily)
+      card_le_card hℬ.memberSubfamily_subset_nonMemberSubfamily, ← two_mul, pow_succ', mul_assoc]
+  have h₀ : forall 𝒞 : Finset (Finset α), (forall t in 𝒞, t subseteq insert a s) ->
+      forall t in 𝒞.nonMemberSubfamily a, t subseteq s := by
+    rintro 𝒞 h𝒞 t ht
+    rw [mem_nonMemberSubfamily] at ht
+    exact (subset_insert_iff_of_notMem ht.2).1 (h𝒞 _ ht.1)
+  have h₁ : forall 𝒞 : Finset (Finset α), (forall t in 𝒞, t subseteq insert a s) ->
+      forall t in 𝒞.memberSubfamily a, t subseteq s := by
+    rintro 𝒞 h𝒞 t ht
+    rw [mem_memberSubfamily] at ht
+    exact (subset_insert_iff_of_notMem ht.2).1 ((subset_insert _ _).trans <| h𝒞 _ ht.1)
+  gcongr
+  refine (add_le_add (ih h𝒜.memberSubfamily hℬ.memberSubfamily (h₁ _ h𝒜s) <| h₁ _ hℬs) <|
+ih h𝒜.nonMemberSubfamily hℬ.nonMemberSubfamily (h₀ _ h𝒜s) h₀ _ hℬs).trans_eq ?_
+  rw [← mul_add]; rw [← memberSubfamily_inter]; rw [← nonMemberSubfamily_inter]; rw [card_memberSubfamily_add_card_nonMemberSubfamily]
 
 Depends on / 依赖: Finset, Finset.induction, card_empty, card_insert_of_notMem, card_me, card_memberSubfamily_add_card_nonMemberSubfamily, card_singleton, empty_inter, generalizing, insert, inter_singleton_of_mem, le_refl, mem_singleton, mul_zero, pow_zero, simp_rw, subset_empty, subset_singleton_iff, zero_mul
 -/
@@ -266,7 +308,8 @@ theorem IsUpperSet.le_card_inter_finset
   rwa [card_compl, Fintype.card_finset, tsub_mul, le_tsub_iff_le_tsub, ← mul_tsub, ←
     card_sdiff_of_subset inter_subset_right, sdiff_inter_self_right, sdiff_compl,
     _root_.inf_comm] at this
-  · grw [inter
+  · grw [inter_subset_right]
+  · grw [← Fintype.card_finset, card_le_univ]
 
 中文:
 定理 是上集.le_card_inter_finset
@@ -277,7 +320,8 @@ theorem IsUpperSet.le_card_inter_finset
   rwa [card_compl, Fintype.card_finset, tsub_mul, le_tsub_iff_le_tsub, ← mul_tsub, ←
     card_sdiff_of_subset inter_subset_right, sdiff_inter_self_right, sdiff_compl,
     _root_.inf_comm] at this
-  · grw [inter
+  · grw [inter_subset_right]
+  · grw [← Fintype.card_finset, card_le_univ]
 
 Depends on / 依赖: Fintype, Fintype.card_finset, _root_, _root_.inf_comm, card_compl, card_finset, card_inter_le_finset, card_le_univ, card_sdiff_of_subset, coe_compl, inf_comm, inter_subset_right, isLowerSet_compl, le_tsub_iff_le_tsub, mul_tsub, sdiff_compl, sdiff_inter_self_right, tsub_mul
 -/

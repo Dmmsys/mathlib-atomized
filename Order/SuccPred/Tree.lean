@@ -123,7 +123,11 @@ lemma pred_findAtom
       apply Nat.find_spec (bot_le (a := r)).exists_pred_iterate
     simp only [Function.iterate_zero, id_eq] at this
     simp [this]
-  · simp only [
+  · simp only [Nat.add_sub_cancel_right, ← Function.iterate_succ_apply', Nat.succ_eq_add_one]
+    rw [← h]
+    apply Nat.find_spec (bot_le (a := r)).exists_pred_iterate
+
+@[simp]
 
 中文:
 引理 pred_findAtom
@@ -138,7 +142,11 @@ lemma pred_findAtom
       apply Nat.find_spec (bot_le (a := r)).exists_pred_iterate
     simp only [Function.iterate_zero, id_eq] at this
     simp [this]
-  · simp only [
+  · simp only [Nat.add_sub_cancel_right, ← Function.iterate_succ_apply', Nat.succ_eq_add_one]
+    rw [← h]
+    apply Nat.find_spec (bot_le (a := r)).exists_pred_iterate
+
+@[simp]
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, Function.iterate_zero, Nat.add_sub_cancel_right, Nat.find, Nat.find_spec, Nat.succ_eq_add_one, Order.pred, add_sub_cancel_right, bot_le, exists_pred_iterate, findAtom, find_spec, generalize, id_eq, iterate_succ_apply, iterate_zero, succ_eq_add_one
 -/
@@ -598,6 +606,13 @@ lemma RootedTree.mem_subtrees_disjoint_iff
   mpr h := by
     rw [SubRootedTree.mem_iff] at h₁ h₂
     contrapose h
+    rw [disjoint_iff]; rw [← ne_eq]; rw [← bot_lt_iff_ne_bot] at h
+    rcases lt_or_le_of_directed (by simp : v₁ ⊓ v₂ <= v₁) h₁ with oh | oh
+    · simp_all [RootedTree.subtrees, IsAtom.lt_iff]
+    rw [le_inf_iff] at oh
+    ext
+    simpa only [ht₂.le_iff_eq ht₁.1, ht₁.le_iff_eq ht₂.1, eq_comm, or_self] using
+      le_total_of_directed oh.2 h₂
 
 中文:
 引理 有根树.mem_subtrees_disjoint_iff
@@ -613,6 +628,13 @@ lemma RootedTree.mem_subtrees_disjoint_iff
   mpr h := by
     rw [SubRootedTree.mem_iff] at h₁ h₂
     contrapose h
+    rw [disjoint_iff]; rw [← ne_eq]; rw [← bot_lt_iff_ne_bot] at h
+    rcases lt_or_le_of_directed (by simp : v₁ ⊓ v₂ <= v₁) h₁ with oh | oh
+    · simp_all [RootedTree.subtrees, IsAtom.lt_iff]
+    rw [le_inf_iff] at oh
+    ext
+    simpa only [ht₂.le_iff_eq ht₁.1, ht₁.le_iff_eq ht₂.1, eq_comm, or_self] using
+      le_total_of_directed oh.2 h₂
 
 Depends on / 依赖: IsAtom, IsAtom.lt_iff, RootedTree, RootedTree.subtrees, SubRootedTree, SubRootedTree.mem_iff, bot_lt_iff_ne_bot, contrapose, disjoint_iff, eq_bot, h.eq_bot, le_bot_iff, le_iff_eq, le_inf_iff, lt_iff, lt_or_le_of_directed, mem_iff, ne_eq, root_ne_bot_of_mem_subtrees, subtrees
 -/

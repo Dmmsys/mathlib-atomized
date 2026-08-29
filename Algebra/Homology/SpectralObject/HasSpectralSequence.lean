@@ -309,7 +309,21 @@ definition coreE₂Cohomological
   le₂₃ r pq hr := by simp; lia
   hc := by rintro r pq _ rfl _; dsimp; lia
   hc₀₂ := by rintro r pq hr rfl _; simp; lia
-  hc₁₃ := b
+  hc₁₃ := by rintro r pq hr rfl _; simp; lia
+  antitone_i₀ r r' pq hr hrr' := by simp; lia
+  monotone_i₃ r r' pq hr hrr' := by simp; lia
+  i₀_prev := by
+    rintro r r' hr pq rfl _ _
+    dsimp
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  i₃_next := by
+    rintro r r' hr pq rfl _ _
+    dsimp
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
 
 中文:
 定义 coreE₂Cohomological
@@ -324,7 +338,21 @@ definition coreE₂Cohomological
   le₂₃ r pq hr := by simp; lia
   hc := by rintro r pq _ rfl _; dsimp; lia
   hc₀₂ := by rintro r pq hr rfl _; simp; lia
-  hc₁₃ := b
+  hc₁₃ := by rintro r pq hr rfl _; simp; lia
+  antitone_i₀ r r' pq hr hrr' := by simp; lia
+  monotone_i₃ r r' pq hr hrr' := by simp; lia
+  i₀_prev := by
+    rintro r r' hr pq rfl _ _
+    dsimp
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  i₃_next := by
+    rintro r r' hr pq rfl _ _
+    dsimp
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
 -/
 def coreE₂Cohomological :
     SpectralSequenceDataCore EInt (fun r => ComplexShape.up' (⟨r, 1 - r⟩ : Int × Int)) 2 where
@@ -373,7 +401,29 @@ definition coreE₂CohomologicalNat
   le₀₁ r pq hr := by simp; lia
   le₁₂ pq := by simp
   le₂₃ r pq hr := by simp; lia
-  hc r pq pq' hpq hr := by simp only [ComplexShape.spectralSequenceNat_rel_iff] at 
+  hc r pq pq' hpq hr := by simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq; lia
+  hc₀₂ r pq pq' hpq hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  hc₁₃ r pq pq' hpq hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  antitone_i₀ r r' pq hr hrr' := by simp; lia
+  monotone_i₃ r r' pq hr hrr' := by simp; lia
+  i₀_prev r r' pq pq' hpq hrr' hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  i₃_next r r' pq pq' hpq hrr' hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
 
 中文:
 定义 coreE₂Cohomological自然数
@@ -386,7 +436,29 @@ definition coreE₂CohomologicalNat
   le₀₁ r pq hr := by simp; lia
   le₁₂ pq := by simp
   le₂₃ r pq hr := by simp; lia
-  hc r pq pq' hpq hr := by simp only [ComplexShape.spectralSequenceNat_rel_iff] at 
+  hc r pq pq' hpq hr := by simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq; lia
+  hc₀₂ r pq pq' hpq hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  hc₁₃ r pq pq' hpq hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  antitone_i₀ r r' pq hr hrr' := by simp; lia
+  monotone_i₃ r r' pq hr hrr' := by simp; lia
+  i₀_prev r r' pq pq' hpq hrr' hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  i₃_next r r' pq pq' hpq hrr' hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
 -/
 def coreE₂CohomologicalNat :
     SpectralSequenceDataCore EInt
@@ -440,7 +512,35 @@ definition coreE₂CohomologicalFin
   le₀₁ := by rintro r ⟨p, q, hq⟩ hr; simp; lia
   le₁₂ pq := by simp [Fin.le_iff_val_le_val]
   le₂₃ r pq hr := by
-    simp only [Fin.le
+    simp only [Fin.le_iff_val_le_val, Fin.val_succ, le_min_iff, Fin.clamp]
+    grind
+  hc _ _ _ := fun ⟨h₁, h₂⟩ => by lia
+  hc₀₂ r := by
+    rintro ⟨a₁, ⟨a₂, _⟩⟩ ⟨b₁, ⟨b₂, _⟩⟩ ⟨h₁, h₂⟩ hr
+    grind
+  hc₁₃ r := by
+    rintro ⟨a₁, ⟨a₂, _⟩⟩ ⟨b₁, ⟨b₂, _⟩⟩ ⟨h₁, h₂⟩ hr
+    rw [Fin.ext_iff]
+    dsimp
+    grind
+  antitone_i₀ := by
+    rintro r r' ⟨a, ⟨a', _⟩⟩ hr hrr'
+    rw [Fin.mk_le_mk]
+    lia
+  monotone_i₃ := by
+    rintro r r' ⟨a, ⟨a', _⟩⟩ hr hrr'
+    rw [Fin.mk_le_mk]
+    exact Fin.clamp_monotone (by lia)
+  i₀_prev := by
+    rintro r r' ⟨a, ⟨a', _⟩⟩ ⟨b, ⟨b', _⟩⟩ ⟨h₁, h₂⟩ hrr' hr
+    ext
+    dsimp
+    lia
+  i₃_next := by
+    rintro r r' ⟨a, ⟨a', _⟩⟩ ⟨b, ⟨b', _⟩⟩ ⟨h₁, h₂⟩ hrr' hr
+    ext
+    dsimp
+    grind
 
 中文:
 定义 coreE₂CohomologicalFin
@@ -453,7 +553,35 @@ definition coreE₂CohomologicalFin
   le₀₁ := by rintro r ⟨p, q, hq⟩ hr; simp; lia
   le₁₂ pq := by simp [Fin.le_iff_val_le_val]
   le₂₃ r pq hr := by
-    simp only [Fin.le
+    simp only [Fin.le_iff_val_le_val, Fin.val_succ, le_min_iff, Fin.clamp]
+    grind
+  hc _ _ _ := fun ⟨h₁, h₂⟩ => by lia
+  hc₀₂ r := by
+    rintro ⟨a₁, ⟨a₂, _⟩⟩ ⟨b₁, ⟨b₂, _⟩⟩ ⟨h₁, h₂⟩ hr
+    grind
+  hc₁₃ r := by
+    rintro ⟨a₁, ⟨a₂, _⟩⟩ ⟨b₁, ⟨b₂, _⟩⟩ ⟨h₁, h₂⟩ hr
+    rw [Fin.ext_iff]
+    dsimp
+    grind
+  antitone_i₀ := by
+    rintro r r' ⟨a, ⟨a', _⟩⟩ hr hrr'
+    rw [Fin.mk_le_mk]
+    lia
+  monotone_i₃ := by
+    rintro r r' ⟨a, ⟨a', _⟩⟩ hr hrr'
+    rw [Fin.mk_le_mk]
+    exact Fin.clamp_monotone (by lia)
+  i₀_prev := by
+    rintro r r' ⟨a, ⟨a', _⟩⟩ ⟨b, ⟨b', _⟩⟩ ⟨h₁, h₂⟩ hrr' hr
+    ext
+    dsimp
+    lia
+  i₃_next := by
+    rintro r r' ⟨a, ⟨a', _⟩⟩ ⟨b, ⟨b', _⟩⟩ ⟨h₁, h₂⟩ hrr' hr
+    ext
+    dsimp
+    grind
 -/
 def coreE₂CohomologicalFin (l : Nat) :
     SpectralSequenceDataCore (Fin (l + 1))
@@ -516,7 +644,30 @@ definition coreE₂HomologicalNat
   le₁₂ pq := by simp
   le₂₃ r pq hr := by simp; lia
   hc r pq pq' hpq hr := by
-    simp only [ComplexShape.spectralSequenceNat_rel_if
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    lia
+  hc₀₂ r pq pq' hpq hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  hc₁₃ r pq pq' hpq hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  antitone_i₀ r r' pq hr hrr' := by simp; lia
+  monotone_i₃ r r' pq hr hrr' := by simp; lia
+  i₀_prev r r' pq pq' hpq hrr' hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  i₃_next r r' pq pq' hpq hrr' hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
 
 中文:
 定义 coreE₂Homological自然数
@@ -530,7 +681,30 @@ definition coreE₂HomologicalNat
   le₁₂ pq := by simp
   le₂₃ r pq hr := by simp; lia
   hc r pq pq' hpq hr := by
-    simp only [ComplexShape.spectralSequenceNat_rel_if
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    lia
+  hc₀₂ r pq pq' hpq hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  hc₁₃ r pq pq' hpq hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  antitone_i₀ r r' pq hr hrr' := by simp; lia
+  monotone_i₃ r r' pq hr hrr' := by simp; lia
+  i₀_prev r r' pq pq' hpq hrr' hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
+  i₃_next r r' pq pq' hpq hrr' hr := by
+    simp only [ComplexShape.spectralSequenceNat_rel_iff] at hpq
+    #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+    we need to re-enable model-based theory combination in `lia` for this to go through. -/
+    lia +mbtc
 -/
 def coreE₂HomologicalNat :
     SpectralSequenceDataCore EInt
@@ -822,7 +996,16 @@ instance :
     simp only [coreE₂CohomologicalNat_i₀, WithBotTop.coe_le_coe]
     by_contra!
     obtain ⟨p', hp'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= p + r by lia)
-    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= q + 1 - r
+    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= q + 1 - r by lia)
+    exact hpq ⟨p', q'⟩ (by constructor <;> lia)
+  isZero_H_obj_mk₁_i₃_le := by
+    rintro r _ ⟨p, q⟩ hpq n rfl rfl hr
+    apply isZero₂_of_isFirstQuadrant
+    simp only [coreE₂CohomologicalNat_deg, coreE₂CohomologicalNat_i₃, WithBotTop.coe_lt_coe]
+    by_contra!
+    obtain ⟨p', hp'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= p - r by lia)
+    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= q - 1 + r by lia)
+    exact hpq ⟨p', q'⟩ (by constructor <;> lia)
 
 中文:
 实例 :
@@ -833,7 +1016,16 @@ instance :
     simp only [coreE₂CohomologicalNat_i₀, WithBotTop.coe_le_coe]
     by_contra!
     obtain ⟨p', hp'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= p + r by lia)
-    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= q + 1 - r
+    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= q + 1 - r by lia)
+    exact hpq ⟨p', q'⟩ (by constructor <;> lia)
+  isZero_H_obj_mk₁_i₃_le := by
+    rintro r _ ⟨p, q⟩ hpq n rfl rfl hr
+    apply isZero₂_of_isFirstQuadrant
+    simp only [coreE₂CohomologicalNat_deg, coreE₂CohomologicalNat_i₃, WithBotTop.coe_lt_coe]
+    by_contra!
+    obtain ⟨p', hp'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= p - r by lia)
+    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= q - 1 + r by lia)
+    exact hpq ⟨p', q'⟩ (by constructor <;> lia)
 
 Depends on / 依赖: Int.eq_ofNat_of_zero_le, WithBotT, WithBotTop, WithBotTop.coe_le_coe, coe_le_coe, eq_ofNat_of_zero_le
 -/
@@ -936,7 +1128,16 @@ instance :
     simp only [coreE₂HomologicalNat_i₀, coreE₂HomologicalNat_deg, WithBotTop.coe_le_coe]
     by_contra!
     obtain ⟨p', hp'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= p - r by lia)
-    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero
+    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= q + r - 1 by lia)
+    exact hpq ⟨p', q'⟩ (by constructor <;> lia)
+  isZero_H_obj_mk₁_i₃_le := by
+    rintro r _ ⟨p, q⟩ hpq n rfl rfl hr
+    apply isZero₁_of_isThirdQuadrant
+    simp only [coreE₂HomologicalNat_i₃, WithBotTop.coe_lt_coe]
+    by_contra!
+    obtain ⟨p', hp'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= p + r by lia)
+    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= q + 1 - r by lia)
+    exact hpq ⟨p', q'⟩ (by constructor <;> lia)
 
 中文:
 实例 :
@@ -947,7 +1148,16 @@ instance :
     simp only [coreE₂HomologicalNat_i₀, coreE₂HomologicalNat_deg, WithBotTop.coe_le_coe]
     by_contra!
     obtain ⟨p', hp'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= p - r by lia)
-    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero
+    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= q + r - 1 by lia)
+    exact hpq ⟨p', q'⟩ (by constructor <;> lia)
+  isZero_H_obj_mk₁_i₃_le := by
+    rintro r _ ⟨p, q⟩ hpq n rfl rfl hr
+    apply isZero₁_of_isThirdQuadrant
+    simp only [coreE₂HomologicalNat_i₃, WithBotTop.coe_lt_coe]
+    by_contra!
+    obtain ⟨p', hp'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= p + r by lia)
+    obtain ⟨q', hq'⟩ := Int.eq_ofNat_of_zero_le (show 0 <= q + 1 - r by lia)
+    exact hpq ⟨p', q'⟩ (by constructor <;> lia)
 
 Depends on / 依赖: Int.eq_ofNat_of_zero_le, WithBotTop, WithBotTop.coe, WithBotTop.coe_le_coe, coe_le_coe, eq_ofNat_of_zero_le
 -/

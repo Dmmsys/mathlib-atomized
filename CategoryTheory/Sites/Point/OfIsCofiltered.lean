@@ -275,7 +275,9 @@ instance [IsCofiltered
     exact ⟨U, f, by simp⟩
   · rintro ⟨X, x⟩ V ⟨φ₁, hφ₁⟩ ⟨φ₂, hφ₂⟩
     obtain ⟨U, f, rfl⟩ := fiberMk_jointly_surjective x
-    obtain ⟨W, g, hg⟩ := exists_of_fiberMk_e
+    obtain ⟨W, g, hg⟩ := exists_of_fiberMk_eq_fiberMk
+      (show fiberMk.{w} φ₁ = fiberMk.{w} φ₂ by simpa using hφ₁.trans hφ₂.symm)
+    exact ⟨_, g, by cat_disch⟩
 
 中文:
 实例 [是余filtered
@@ -287,7 +289,9 @@ instance [IsCofiltered
     exact ⟨U, f, by simp⟩
   · rintro ⟨X, x⟩ V ⟨φ₁, hφ₁⟩ ⟨φ₂, hφ₂⟩
     obtain ⟨U, f, rfl⟩ := fiberMk_jointly_surjective x
-    obtain ⟨W, g, hg⟩ := exists_of_fiberMk_e
+    obtain ⟨W, g, hg⟩ := exists_of_fiberMk_eq_fiberMk
+      (show fiberMk.{w} φ₁ = fiberMk.{w} φ₂ by simpa using hφ₁.trans hφ₂.symm)
+    exact ⟨_, g, by cat_disch⟩
 
 Depends on / 依赖: Functor, Functor.initial_of_exists_of_isCofiltered, cat_disch, exists_of_fiberMk_eq_fiberMk, fiberMk, fiberMk_jointly_surjective, initial_of_exists_of_isCofiltered
 -/

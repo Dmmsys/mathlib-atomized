@@ -50,7 +50,26 @@ theorem Ideal.iUnion_minimalPrimes
   · rintro ⟨p, ⟨⟨hp₁, hp₂⟩, hp₃⟩, hxp⟩
     have : p.map (algebraMap R (Localization.AtPrime p)) <= (I.map (algebraMap _ _)).radical := by
       rw [Ideal.radical_eq_sInf]; rw [le_sInf_iff]
-      ri
+      rintro q ⟨hq', hq⟩
+      obtain ⟨h₁, h₂⟩ := ((IsLocalization.AtPrime.orderIsoOfPrime _ p) ⟨q, hq⟩).2
+      rw [Ideal.map_le_iff_le_comap] at hq' ⊢
+      exact hp₃ ⟨h₁, hq'⟩ h₂
+    obtain ⟨n, hn⟩ := this (Ideal.mem_map_of_mem _ hxp)
+    rw [IsLocalization.mem_map_algebraMap_iff (M := p.primeCompl)] at hn
+    obtain ⟨⟨a, b⟩, hn⟩ := hn
+    rw [← map_pow]; rw [← map_mul]; rw [IsLocalization.eq_iff_exists p.primeCompl] at hn
+    obtain ⟨t, ht⟩ := hn
+    refine ⟨t * b, fun h => (t * b).2 (hp₁.radical_le_iff.mpr hp₂ h), n + 1, ?_⟩
+    simp only at ht
+    have : (x * (t.1 * b.1)) ^ (n + 1) = (t.1 ^ n * b.1 ^ n * x * t.1) * a := by
+      rw [mul_assoc]; rw [← ht]; ring
+    rw [this]
+    exact I.mul_mem_left _ a.2
+  · rintro ⟨y, hy, hx⟩
+    obtain ⟨p, hp, hyp⟩ : exists p in I.minimalPrimes, y ∉ p := by
+      simpa [← Ideal.sInf_minimalPrimes] using hy
+    refine ⟨p, hp, (hp.isPrime.mem_or_mem ?_).resolve_right hyp⟩
+    exact hp.isPrime.radical_le_iff.mpr hp.le hx
 
 中文:
 定理 理想.iUnion_minimalPrimes
@@ -61,7 +80,26 @@ theorem Ideal.iUnion_minimalPrimes
   · rintro ⟨p, ⟨⟨hp₁, hp₂⟩, hp₃⟩, hxp⟩
     have : p.map (algebraMap R (Localization.AtPrime p)) <= (I.map (algebraMap _ _)).radical := by
       rw [Ideal.radical_eq_sInf]; rw [le_sInf_iff]
-      ri
+      rintro q ⟨hq', hq⟩
+      obtain ⟨h₁, h₂⟩ := ((IsLocalization.AtPrime.orderIsoOfPrime _ p) ⟨q, hq⟩).2
+      rw [Ideal.map_le_iff_le_comap] at hq' ⊢
+      exact hp₃ ⟨h₁, hq'⟩ h₂
+    obtain ⟨n, hn⟩ := this (Ideal.mem_map_of_mem _ hxp)
+    rw [IsLocalization.mem_map_algebraMap_iff (M := p.primeCompl)] at hn
+    obtain ⟨⟨a, b⟩, hn⟩ := hn
+    rw [← map_pow]; rw [← map_mul]; rw [IsLocalization.eq_iff_exists p.primeCompl] at hn
+    obtain ⟨t, ht⟩ := hn
+    refine ⟨t * b, fun h => (t * b).2 (hp₁.radical_le_iff.mpr hp₂ h), n + 1, ?_⟩
+    simp only at ht
+    have : (x * (t.1 * b.1)) ^ (n + 1) = (t.1 ^ n * b.1 ^ n * x * t.1) * a := by
+      rw [mul_assoc]; rw [← ht]; ring
+    rw [this]
+    exact I.mul_mem_left _ a.2
+  · rintro ⟨y, hy, hx⟩
+    obtain ⟨p, hp, hyp⟩ : exists p in I.minimalPrimes, y ∉ p := by
+      simpa [← Ideal.sInf_minimalPrimes] using hy
+    refine ⟨p, hp, (hp.isPrime.mem_or_mem ?_).resolve_right hyp⟩
+    exact hp.isPrime.radical_le_iff.mpr hp.le hx
 
 Depends on / 依赖: AtPrime, I.map, Ideal.map_le_iff_le_comap, Ideal.mem_map_of_mem, Ideal.radical_eq_sInf, IsLocalizati, IsLocalization, IsLocalization.AtPrime.orderIsoOfPrime, Localization, Localization.AtPrime, Set.mem_iUnion, Set.mem_ofPred_eq, SetLike, SetLike.mem_coe, algebraMap, exists_prop, le_sInf_iff, map_le_iff_le_comap, mem_coe, mem_iUnion
 -/
@@ -105,7 +143,9 @@ theorem Ideal.exists_mul_mem_of_mem_minimalPrimes
   have H : exists m, x ^ m * y ^ n in I := ⟨n, mul_pow x y n ▸ hx⟩
   have : Nat.find H != 0 :=
     fun h => hy ⟨n, by simpa only [h, pow_zero, one_mul] using Nat.find_spec H⟩
-  refine ⟨x ^ (Nat.find H
+  refine ⟨x ^ (Nat.find H - 1) * y ^ n, Nat.find_min H (Nat.sub_one_lt this), ?_⟩
+  rw [← mul_assoc]; rw [← pow_succ']; rw [tsub_add_cancel_of_le (Nat.one_le_iff_ne_zero.mpr this)]
+  exact Nat.find_spec H
 
 中文:
 定理 理想.存在_mul_mem_of_mem_minimalPrimes
@@ -115,7 +155,9 @@ theorem Ideal.exists_mul_mem_of_mem_minimalPrimes
   have H : exists m, x ^ m * y ^ n in I := ⟨n, mul_pow x y n ▸ hx⟩
   have : Nat.find H != 0 :=
     fun h => hy ⟨n, by simpa only [h, pow_zero, one_mul] using Nat.find_spec H⟩
-  refine ⟨x ^ (Nat.find H
+  refine ⟨x ^ (Nat.find H - 1) * y ^ n, Nat.find_min H (Nat.sub_one_lt this), ?_⟩
+  rw [← mul_assoc]; rw [← pow_succ']; rw [tsub_add_cancel_of_le (Nat.one_le_iff_ne_zero.mpr this)]
+  exact Nat.find_spec H
 
 Depends on / 依赖: Ideal.iUnion_minimalPrimes.subset, Nat.find, Nat.find_min, Nat.find_spec, Nat.one_le_iff_ne_zero.mpr, Nat.sub_one_lt, Set.mem_biUnion, classical, find_min, find_spec, iUnion_minimalPrimes, mem_biUnion, mul_assoc, mul_pow, one_le_iff_ne_zero, one_mul, pow_succ, pow_zero, sub_one_lt, subset
 -/
@@ -266,7 +308,7 @@ theorem Ideal.exists_minimalPrimes_comap_eq
   refine ⟨q, hq, Eq.symm ?_⟩
   have := hq.isPrime
   have := (Ideal.comap_mono hq').trans_eq h₃
-  exact (H.2 ⟨inferInstance, Ideal.comap_mono hq.le⟩ this).antisym
+  exact (H.2 ⟨inferInstance, Ideal.comap_mono hq.le⟩ this).antisymm this
 
 中文:
 定理 理想.存在_minimalPrimes_comap_eq
@@ -277,7 +319,7 @@ theorem Ideal.exists_minimalPrimes_comap_eq
   refine ⟨q, hq, Eq.symm ?_⟩
   have := hq.isPrime
   have := (Ideal.comap_mono hq').trans_eq h₃
-  exact (H.2 ⟨inferInstance, Ideal.comap_mono hq.le⟩ this).antisym
+  exact (H.2 ⟨inferInstance, Ideal.comap_mono hq.le⟩ this).antisymm this
 
 Depends on / 依赖: Eq.symm, Ideal.comap_mono, Ideal.exists_comap_eq_of_mem_minimalPrimes, Ideal.exists_minimalPrimes_le, antisymm, comap_mono, exists_comap_eq_of_mem_minimalPrimes, exists_minimalPrimes_le, hq.isPrime, hq.le, isPrime, trans_eq
 -/
@@ -328,7 +370,12 @@ theorem Ideal.minimalPrimes_comap_of_surjective
   have : RingHom.ker f <= K := (Ideal.comap_mono bot_le).trans e₁
   rw [← sup_eq_left.mpr this]; rw [RingHom.ker_eq_comap_bot]; rw [← Ideal.comap_map_of_surjective f hf]
   apply Ideal.comap_mono _
-  a
+  apply h.2 _ _
+  · exact ⟨Ideal.map_isPrime_of_surjective hf this, Ideal.le_map_of_comap_le_of_surjective f hf e₁⟩
+  · exact Ideal.map_le_of_le_comap e₂
+
+@[deprecated (since := "2026-04-01")] alias Ideal.minimal_primes_comap_of_surjective :=
+    Ideal.minimalPrimes_comap_of_surjective
 
 中文:
 定理 理想.minimalPrimes_comap_of_surjective
@@ -340,7 +387,12 @@ theorem Ideal.minimalPrimes_comap_of_surjective
   have : RingHom.ker f <= K := (Ideal.comap_mono bot_le).trans e₁
   rw [← sup_eq_left.mpr this]; rw [RingHom.ker_eq_comap_bot]; rw [← Ideal.comap_map_of_surjective f hf]
   apply Ideal.comap_mono _
-  a
+  apply h.2 _ _
+  · exact ⟨Ideal.map_isPrime_of_surjective hf this, Ideal.le_map_of_comap_le_of_surjective f hf e₁⟩
+  · exact Ideal.map_le_of_le_comap e₂
+
+@[deprecated (since := "2026-04-01")] alias Ideal.minimal_primes_comap_of_surjective :=
+    Ideal.minimalPrimes_comap_of_surjective
 
 Depends on / 依赖: Ideal.comap_map_of_surjective, Ideal.comap_mono, Ideal.le_map_of_comap_le_of_surjective, Ideal.map_isPrime_of_surjective, Ideal.map_le_of_le_comap, RingHom, RingHom.ker, RingHom.ker_eq_comap_bot, bot_le, comap_map_of_surjective, comap_mono, h.isPrime, h.le, isPrime, ker_eq_comap_bot, le_map_of_comap_le_of_surjective, map_isPrime_of_surjective, map_le_of_le_comap, sup_eq_left, sup_eq_left.mpr
 -/
@@ -408,7 +460,7 @@ lemma Ideal.minimalPrimes_map_of_surjective
   apply Set.image_injective.mpr (Ideal.comap_injective_of_surjective f hf)
   rw [← Ideal.comap_minimalPrimes_eq_of_surjective hf]; rw [← Set.image_comp]; rw [Ideal.comap_map_of_surjective f hf]; rw [Set.image_congr]; rw [Set.image_id]; rw [RingHom.ker]
   intro x hx
-  exact (Ideal.comap_map_of_sur
+  exact (Ideal.comap_map_of_surjective f hf _).trans (sup_eq_left.mpr <| le_sup_right.trans hx.le)
 
 中文:
 引理 理想.minimalPrimes_map_of_surjective
@@ -417,7 +469,7 @@ lemma Ideal.minimalPrimes_map_of_surjective
   apply Set.image_injective.mpr (Ideal.comap_injective_of_surjective f hf)
   rw [← Ideal.comap_minimalPrimes_eq_of_surjective hf]; rw [← Set.image_comp]; rw [Ideal.comap_map_of_surjective f hf]; rw [Set.image_congr]; rw [Set.image_id]; rw [RingHom.ker]
   intro x hx
-  exact (Ideal.comap_map_of_sur
+  exact (Ideal.comap_map_of_surjective f hf _).trans (sup_eq_left.mpr <| le_sup_right.trans hx.le)
 
 Depends on / 依赖: Ideal.comap_injective_of_surjective, Ideal.comap_map_of_surjective, Ideal.comap_minimalPrimes_eq_of_surjective, RingHom, RingHom.ker, Set.image_comp, Set.image_congr, Set.image_id, Set.image_injective.mpr, comap_injective_of_surjective, comap_map_of_surjective, comap_minimalPrimes_eq_of_surjective, hx.le, image_comp, image_congr, image_id, image_injective, le_sup_right, le_sup_right.trans, sup_eq_left
 -/
@@ -468,7 +520,21 @@ theorem IsLocalization.minimalPrimes_map
     refine ⟨⟨Ideal.IsPrime.comap _, Ideal.map_le_iff_le_comap.mp hp.le⟩, ?_⟩
     rintro I hI e
     have hI' : Disjoint (S : Set R) I := Set.disjoint_of_subset_right e
-      ((IsLocalization.isPrime_iff_isPrime_disjoint S A _).mp hp.isPrime
+      ((IsLocalization.isPrime_iff_isPrime_disjoint S A _).mp hp.isPrime).2
+    refine (Ideal.comap_mono <|
+      hp.2 ⟨?_, Ideal.map_mono hI.2⟩ (Ideal.map_le_iff_le_comap.mpr e)).trans_eq ?_
+    · exact IsLocalization.isPrime_of_isPrime_disjoint S A I hI.1 hI'
+    · exact IsLocalization.under_map_of_isPrime_disjoint S A hI.1 hI'
+  · intro hp
+    refine ⟨⟨?_, Ideal.map_le_iff_le_comap.mpr hp.le⟩, ?_⟩
+    · rw [IsLocalization.isPrime_iff_isPrime_disjoint S A, IsLocalization.disjoint_under_iff S]
+      refine ⟨hp.isPrime, ?_⟩
+      rintro rfl
+      exact hp.isPrime.ne_top rfl
+    · intro I hI e
+      rw [← IsLocalization.map_under S A I]; rw [← IsLocalization.map_under S A p]
+      exact Ideal.map_mono (hp.2 ⟨hI.1.comap _, Ideal.map_le_iff_le_comap.mp hI.2⟩
+        (Ideal.comap_mono e))
 
 中文:
 定理 是Localization.minimalPrimes_map
@@ -481,7 +547,21 @@ theorem IsLocalization.minimalPrimes_map
     refine ⟨⟨Ideal.IsPrime.comap _, Ideal.map_le_iff_le_comap.mp hp.le⟩, ?_⟩
     rintro I hI e
     have hI' : Disjoint (S : Set R) I := Set.disjoint_of_subset_right e
-      ((IsLocalization.isPrime_iff_isPrime_disjoint S A _).mp hp.isPrime
+      ((IsLocalization.isPrime_iff_isPrime_disjoint S A _).mp hp.isPrime).2
+    refine (Ideal.comap_mono <|
+      hp.2 ⟨?_, Ideal.map_mono hI.2⟩ (Ideal.map_le_iff_le_comap.mpr e)).trans_eq ?_
+    · exact IsLocalization.isPrime_of_isPrime_disjoint S A I hI.1 hI'
+    · exact IsLocalization.under_map_of_isPrime_disjoint S A hI.1 hI'
+  · intro hp
+    refine ⟨⟨?_, Ideal.map_le_iff_le_comap.mpr hp.le⟩, ?_⟩
+    · rw [IsLocalization.isPrime_iff_isPrime_disjoint S A, IsLocalization.disjoint_under_iff S]
+      refine ⟨hp.isPrime, ?_⟩
+      rintro rfl
+      exact hp.isPrime.ne_top rfl
+    · intro I hI e
+      rw [← IsLocalization.map_under S A I]; rw [← IsLocalization.map_under S A p]
+      exact Ideal.map_mono (hp.2 ⟨hI.1.comap _, Ideal.map_le_iff_le_comap.mp hI.2⟩
+        (Ideal.comap_mono e))
 
 Depends on / 依赖: Disjoint, Ideal.IsPrime.comap, Ideal.comap_mono, Ideal.map_le_iff_le_comap.mp, Ideal.map_le_iff_le_comap.mpr, Ideal.map_mono, IsLocalization, IsLocalization.isPrime_iff_isPrime_disjoint, IsLocalization.isPrime_of_isPrime_disjoint, IsLocalization.under_map_of_isPrime_disjoint, IsPrime, Set.disjoint_of_subset_right, comap_mono, disjoint_of_subset_right, hp.isPrime, hp.le, isPrime, isPrime_iff_isPrime_disjoint, isPrime_of_isPrime_disjoint, map_le_iff_le_comap
 -/
@@ -547,7 +627,12 @@ theorem IsLocalization.AtPrime.radical_map_of_mem_minimalPrimes
   rw [← Ideal.sInf_minimalPrimes]; rw [IsLocalization.minimalPrimes_map q.primeCompl A I]
   refine le_antisymm (sInf_le ?_) (le_sInf fun J hJ => ?_)
   · rwa [Set.mem_preimage, map_eq_maximalIdeal q A, under_maximalIdeal A q]
-  · rw [← IsLocalizati
+  · rw [← IsLocalization.under_le_under_iff q.primeCompl A,
+      AtPrime.map_eq_maximalIdeal q A, AtPrime.under_maximalIdeal A q]
+    apply hIq.2 hJ.1
+    have := hJ.isPrime.ne_top
+    rw [ne_eq]; rw [Ideal.comap_eq_top_iff]; rw [← ne_eq]; rw [← disjoint_under_iff q.primeCompl A J] at this
+    exact Set.disjoint_compl_left_iff_subset.mp this
 
 中文:
 定理 是Localization.AtPrime.radical_map_of_mem_minimalPrimes
@@ -556,7 +641,12 @@ theorem IsLocalization.AtPrime.radical_map_of_mem_minimalPrimes
   rw [← Ideal.sInf_minimalPrimes]; rw [IsLocalization.minimalPrimes_map q.primeCompl A I]
   refine le_antisymm (sInf_le ?_) (le_sInf fun J hJ => ?_)
   · rwa [Set.mem_preimage, map_eq_maximalIdeal q A, under_maximalIdeal A q]
-  · rw [← IsLocalizati
+  · rw [← IsLocalization.under_le_under_iff q.primeCompl A,
+      AtPrime.map_eq_maximalIdeal q A, AtPrime.under_maximalIdeal A q]
+    apply hIq.2 hJ.1
+    have := hJ.isPrime.ne_top
+    rw [ne_eq]; rw [Ideal.comap_eq_top_iff]; rw [← ne_eq]; rw [← disjoint_under_iff q.primeCompl A J] at this
+    exact Set.disjoint_compl_left_iff_subset.mp this
 
 Depends on / 依赖: AtPrime, AtPrime.isLocalRing, AtPrime.map_eq_maximalIdeal, AtPrime.under_maximalIdeal, Ideal.comap_eq_top_iff, Ideal.sInf_minimalPrimes, IsLocalRing, IsLocalization, IsLocalization.minimalPrimes_map, IsLocalization.under_le_under_iff, Set.mem_preimage, comap_eq_top_iff, hJ.isPrime.ne_top, isLocalRing, isPrime, le_antisymm, le_sInf, map_eq_maximalIdeal, mem_preimage, minimalPrimes_map
 -/

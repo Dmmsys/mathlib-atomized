@@ -172,7 +172,9 @@ definition sumExtend
 Equiv.symm
       calc
         ι oplus (b \ s : Set V) ≃ s oplus (b \ s : Set V) := Equiv.sumCongr e (Equiv.refl _)
-   
+        _ ≃ b :=
+          haveI := Classical.decPred (· in s)
+          Equiv.Set.sumDiffSubset (hs.linearIndepOn_id.subset_extend _)
 
 中文:
 定义 sumExtend
@@ -184,7 +186,9 @@ Equiv.symm
 Equiv.symm
       calc
         ι oplus (b \ s : Set V) ≃ s oplus (b \ s : Set V) := Equiv.sumCongr e (Equiv.refl _)
-   
+        _ ≃ b :=
+          haveI := Classical.decPred (· in s)
+          Equiv.Set.sumDiffSubset (hs.linearIndepOn_id.subset_extend _)
 
 Depends on / 依赖: Basis.extend, Classical, Classical.decPred, Equiv.Set.sumDiffSubset, Equiv.ofInjective, Equiv.refl, Equiv.sumCongr, Equiv.symm, Set.range, decPred, extend, hs.injective, hs.linearIndepOn_id, hs.linearIndepOn_id.extend, hs.linearIndepOn_id.subset_extend, injective, linearIndepOn_id, ofInjective, reindex, subset_extend
 -/
@@ -665,7 +669,10 @@ theorem nonzero_span_atom
     change span K {v} <= T
     simp_rw [span_singleton_le_iff_mem, ← Ne.eq_def, Submodule.ne_bot_iff] at *
     rcases h with ⟨s, ⟨hs, hz⟩⟩
-    rcases mem_span_s
+    rcases mem_span_singleton.1 (hT.1 hs) with ⟨a, rfl⟩
+    rcases eq_or_ne a 0 with rfl | h
+    · simp only [zero_smul, ne_eq, not_true] at hz
+    · rwa [T.smul_mem_iff h] at hs
 
 中文:
 定理 nonzero_span_atom
@@ -681,7 +688,10 @@ theorem nonzero_span_atom
     change span K {v} <= T
     simp_rw [span_singleton_le_iff_mem, ← Ne.eq_def, Submodule.ne_bot_iff] at *
     rcases h with ⟨s, ⟨hs, hz⟩⟩
-    rcases mem_span_s
+    rcases mem_span_singleton.1 (hT.1 hs) with ⟨a, rfl⟩
+    rcases eq_or_ne a 0 with rfl | h
+    · simp only [zero_smul, ne_eq, not_true] at hz
+    · rwa [T.smul_mem_iff h] at hs
 
 Depends on / 依赖: Ne.eq_def, Submodule, Submodule.ne_bot_iff, T.smul_mem_iff, eq_def, eq_or_ne, mem_span_singleton, mem_span_singleton_self, ne_bot_iff, ne_eq, not_true, simp_rw, smul_mem_iff, span_singleton_le_iff_mem, zero_smul
 -/
@@ -714,7 +724,9 @@ theorem atom_iff_nonzero_span
     by_contra heq
     specialize h (span K {v})
     rw [span_singleton_eq_bot]; rw [lt_iff_le_and_ne] at h
-    exact hv (h ⟨(span_singleton_le_iff_m
+    exact hv (h ⟨(span_singleton_le_iff_mem v W).2 hW, Ne.symm heq⟩)
+  · rcases h with ⟨v, ⟨hv, rfl⟩⟩
+    exact nonzero_span_atom v hv
 
 中文:
 定理 atom_iff_nonzero_span
@@ -727,7 +739,9 @@ theorem atom_iff_nonzero_span
     by_contra heq
     specialize h (span K {v})
     rw [span_singleton_eq_bot]; rw [lt_iff_le_and_ne] at h
-    exact hv (h ⟨(span_singleton_le_iff_m
+    exact hv (h ⟨(span_singleton_le_iff_mem v W).2 hW, Ne.symm heq⟩)
+  · rcases h with ⟨v, ⟨hv, rfl⟩⟩
+    exact nonzero_span_atom v hv
 
 Depends on / 依赖: Ne.symm, Submodule, Submodule.ne_bot_iff, lt_iff_le_and_ne, ne_bot_iff, nonzero_span_atom, span_singleton_eq_bot, span_singleton_le_iff_mem, specialize
 -/
@@ -787,7 +801,20 @@ theorem LinearMap.exists_leftInverse_of_injective
   have hB₀ : _ := hB.linearIndependent.linearIndepOn_id
   have : LinearIndepOn K _root_.id (f '' B) := by
     have h₁ : LinearIndepOn K _root_.id (f '' Set.range (Basis.ofVectorSpace K V)) :=
-      LinearIndepOn.image (f 
+      LinearIndepOn.image (f := f) hB₀ (show Disjoint _ _ by simp [hf_inj])
+    rwa [Basis.range_ofVectorSpace K V] at h₁
+  let C := this.extend (subset_univ _)
+  have BC := this.subset_extend (subset_univ _)
+  let hC := Basis.extend this
+  have Vinh : Inhabited V := ⟨0⟩
+  refine ⟨(hC.constr Nat : _ -> _) (C.domRestrict (invFun f)), hB.ext fun b => ?_⟩
+  rw [image_subset_iff] at BC
+  have fb_eq : f b = hC ⟨f b, BC b.2⟩ := by
+    change f b = Basis.extend this _
+    simp_rw [Basis.extend_apply_self]
+  dsimp
+  rw [Basis.ofVectorSpace_apply_self]; rw [fb_eq]; rw [hC.constr_basis]
+  exact leftInverse_invFun (LinearMap.ker_eq_bot.1 hf_inj) _
 
 中文:
 定理 线性映射.存在_leftInverse_of_injective
@@ -798,7 +825,20 @@ theorem LinearMap.exists_leftInverse_of_injective
   have hB₀ : _ := hB.linearIndependent.linearIndepOn_id
   have : LinearIndepOn K _root_.id (f '' B) := by
     have h₁ : LinearIndepOn K _root_.id (f '' Set.range (Basis.ofVectorSpace K V)) :=
-      LinearIndepOn.image (f 
+      LinearIndepOn.image (f := f) hB₀ (show Disjoint _ _ by simp [hf_inj])
+    rwa [Basis.range_ofVectorSpace K V] at h₁
+  let C := this.extend (subset_univ _)
+  have BC := this.subset_extend (subset_univ _)
+  let hC := Basis.extend this
+  have Vinh : Inhabited V := ⟨0⟩
+  refine ⟨(hC.constr Nat : _ -> _) (C.domRestrict (invFun f)), hB.ext fun b => ?_⟩
+  rw [image_subset_iff] at BC
+  have fb_eq : f b = hC ⟨f b, BC b.2⟩ := by
+    change f b = Basis.extend this _
+    simp_rw [Basis.extend_apply_self]
+  dsimp
+  rw [Basis.ofVectorSpace_apply_self]; rw [fb_eq]; rw [hC.constr_basis]
+  exact leftInverse_invFun (LinearMap.ker_eq_bot.1 hf_inj) _
 
 Depends on / 依赖: Basis.extend, Basis.ofVectorSpace, Basis.ofVectorSpaceIndex, Basis.range_ofVectorSpace, Disjoint, Inhabi, LinearIndepOn, LinearIndepOn.image, Set.range, _root_, _root_.id, extend, hB.linearIndependent.linearIndepOn_id, hf_inj, linearIndepOn_id, linearIndependent, ofVectorSpace, ofVectorSpaceIndex, range_ofVectorSpace, subset_extend
 -/
@@ -968,7 +1008,7 @@ theorem LinearMap.exists_extend_of_notMem
     have := LinearPMap.supSpanSingleton_apply_mk_of_mem ⟨p, f⟩ y hv x.2
     simpa using! congr($hg _).trans this
   · have := LinearPMap.supSpanSingleton_apply_self ⟨p, f⟩ y hv
-    
+    simpa using! congr($hg _).trans this
 
 中文:
 定理 线性映射.存在_extend_of_notMem
@@ -980,7 +1020,7 @@ theorem LinearMap.exists_extend_of_notMem
     have := LinearPMap.supSpanSingleton_apply_mk_of_mem ⟨p, f⟩ y hv x.2
     simpa using! congr($hg _).trans this
   · have := LinearPMap.supSpanSingleton_apply_self ⟨p, f⟩ y hv
-    
+    simpa using! congr($hg _).trans this
 
 Depends on / 依赖: LinearPMap, LinearPMap.supSpanSingleton, LinearPMap.supSpanSingleton_apply_mk_of_mem, LinearPMap.supSpanSingleton_apply_self, exists_extend, supSpanSingleton, supSpanSingleton_apply_mk_of_mem, supSpanSingleton_apply_self, toFun.exists_extend
 -/
@@ -1136,7 +1176,31 @@ theorem exists_basis_of_pairing_ne_zero
   set n := insert v s
   have H₁ : LinearIndepOn K _root_.id n := by
     apply LinearIndepOn.id_insert
-    · apply LinearIndepOn.im
+    · apply LinearIndepOn.image
+      · exact b₁.linearIndependent.linearIndepOn_id
+      · simp
+    · simp [hs, hfv]
+  have H₂ : ⊤ <= span K n := by
+    rintro x -
+    simp only [n, mem_span_insert']
+    use -f x / f v
+    simp only [hs, mem_ker, map_add, map_smul, smul_eq_mul]
+    field
+  set b := Basis.mk H₁ (by simpa using H₂)
+  set i : n := ⟨v, s.mem_insert v⟩
+  have hi : b i = v := by simp [b, i]
+  refine ⟨n, b, i, by simp [b, i], ?_⟩
+  rw [← hi]
+  apply b.ext
+  intro j
+  by_cases h : i = j
+  · simp [h]
+  · suffices f (b j) = 0 by
+      simp [Finsupp.single_eq_of_ne h, this]
+    rw [← mem_ker]; rw [← hs]; rw [Basis.coe_mk]
+    apply subset_span
+    apply Or.resolve_left (Set.mem_insert_iff.mpr j.prop)
+    simp [← hi, b, Subtype.coe_inj, Ne.symm h]
 
 中文:
 定理 存在_basis_of_pairing_ne_zero
@@ -1149,7 +1213,31 @@ theorem exists_basis_of_pairing_ne_zero
   set n := insert v s
   have H₁ : LinearIndepOn K _root_.id n := by
     apply LinearIndepOn.id_insert
-    · apply LinearIndepOn.im
+    · apply LinearIndepOn.image
+      · exact b₁.linearIndependent.linearIndepOn_id
+      · simp
+    · simp [hs, hfv]
+  have H₂ : ⊤ <= span K n := by
+    rintro x -
+    simp only [n, mem_span_insert']
+    use -f x / f v
+    simp only [hs, mem_ker, map_add, map_smul, smul_eq_mul]
+    field
+  set b := Basis.mk H₁ (by simpa using H₂)
+  set i : n := ⟨v, s.mem_insert v⟩
+  have hi : b i = v := by simp [b, i]
+  refine ⟨n, b, i, by simp [b, i], ?_⟩
+  rw [← hi]
+  apply b.ext
+  intro j
+  by_cases h : i = j
+  · simp [h]
+  · suffices f (b j) = 0 by
+      simp [Finsupp.single_eq_of_ne h, this]
+    rw [← mem_ker]; rw [← hs]; rw [Basis.coe_mk]
+    apply subset_span
+    apply Or.resolve_left (Set.mem_insert_iff.mpr j.prop)
+    simp [← hi, b, Subtype.coe_inj, Ne.symm h]
 
 Depends on / 依赖: Basis.ofVectorSpace, LinearIndepOn, LinearIndepOn.id_insert, LinearIndepOn.image, Set.range, _root_, _root_.id, id_insert, insert, linearIndepOn_id, linearIndependent, linearIndependent.linearIndepOn_id, map_add, map_smul, mem_ker, mem_span_insert, ofVectorSpace, smul_eq_mul, span_image, subtype
 -/
@@ -1205,7 +1293,38 @@ theorem exists_basis_of_pairing_eq_zero
     rcases hf with ⟨w, hw⟩
     use (f w)⁻¹ • w
     simp_all
-  s
+  set s : Set V := (ker f).subtype '' Set.range b₁
+  have hs : span K s = ker f := by
+    simp only [s, span_image]
+    simp
+  have hvs : ↑v in s := by
+    refine ⟨v, ?_, by simp⟩
+    simp [b₁, this.subset_extend _ _]
+  set n := insert w s
+  have H₁ : LinearIndepOn K _root_.id n := by
+    apply LinearIndepOn.id_insert
+    · apply LinearIndepOn.image
+      · exact b₁.linearIndependent.linearIndepOn_id
+      · simp
+    · simp [hs, hw]
+  have H₂ : ⊤ <= span K n := by
+    rintro x -
+    simp only [n, mem_span_insert']
+    use -f x
+    simp [hs, hw]
+  set b := Basis.mk H₁ (by simpa using H₂)
+  refine ⟨n, b, ⟨v, by simp [n, hvs]⟩, ⟨w, by simp [n]⟩, ?_, by simp [b], ?_⟩
+  · apply_fun (f ∘ (↑))
+    simp [hw]
+  · apply b.ext
+    intro i
+    rw [Basis.coord_apply]; rw [Basis.repr_self]
+    simp only [b]
+    rcases i with ⟨x, rfl | ⟨x, hx, rfl⟩⟩
+    · simp [hw]
+    · suffices x != w by simp [this]
+      apply_fun f
+      simp [hw]
 
 中文:
 定理 存在_basis_of_pairing_eq_zero
@@ -1218,7 +1337,38 @@ theorem exists_basis_of_pairing_eq_zero
     rcases hf with ⟨w, hw⟩
     use (f w)⁻¹ • w
     simp_all
-  s
+  set s : Set V := (ker f).subtype '' Set.range b₁
+  have hs : span K s = ker f := by
+    simp only [s, span_image]
+    simp
+  have hvs : ↑v in s := by
+    refine ⟨v, ?_, by simp⟩
+    simp [b₁, this.subset_extend _ _]
+  set n := insert w s
+  have H₁ : LinearIndepOn K _root_.id n := by
+    apply LinearIndepOn.id_insert
+    · apply LinearIndepOn.image
+      · exact b₁.linearIndependent.linearIndepOn_id
+      · simp
+    · simp [hs, hw]
+  have H₂ : ⊤ <= span K n := by
+    rintro x -
+    simp only [n, mem_span_insert']
+    use -f x
+    simp [hs, hw]
+  set b := Basis.mk H₁ (by simpa using H₂)
+  refine ⟨n, b, ⟨v, by simp [n, hvs]⟩, ⟨w, by simp [n]⟩, ?_, by simp [b], ?_⟩
+  · apply_fun (f ∘ (↑))
+    simp [hw]
+  · apply b.ext
+    intro i
+    rw [Basis.coord_apply]; rw [Basis.repr_self]
+    simp only [b]
+    rcases i with ⟨x, rfl | ⟨x, hx, rfl⟩⟩
+    · simp [hw]
+    · suffices x != w by simp [this]
+      apply_fun f
+      simp [hw]
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, LinearIndepOn, Set.range, _root_, _root_.id, ext_iff, extend, insert, ne_eq, not_forall, span_image, subset_extend, subtype, this.subset_extend
 -/

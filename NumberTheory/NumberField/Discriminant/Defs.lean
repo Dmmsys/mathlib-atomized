@@ -124,7 +124,12 @@ theorem discr_eq_discr_of_algEquiv
   let f₀ : 𝓞 K ≃ₗ[Int] 𝓞 L := (f.restrictScalars Int).mapIntegralClosure.toLinearEquiv
   rw [← Rat.intCast_inj]; rw [coe_discr]; rw [Algebra.discr_eq_discr_of_algEquiv (integralBasis K) f]; rw [← discr_eq_discr L ((RingOfIntegers.basis K).map f₀)]
   change _ = algebraMap Int Rat _
-  rw [← Algebra
+  rw [← Algebra.discr_localizationLocalization Int (nonZeroDivisors Int) L]
+  congr 1
+  ext
+  simp only [Function.comp_apply, integralBasis_apply, Basis.localizationLocalization_apply,
+    Basis.map_apply]
+  rfl
 
 中文:
 定理 discr_eq_discr_of_algEquiv
@@ -133,7 +138,12 @@ theorem discr_eq_discr_of_algEquiv
   let f₀ : 𝓞 K ≃ₗ[Int] 𝓞 L := (f.restrictScalars Int).mapIntegralClosure.toLinearEquiv
   rw [← Rat.intCast_inj]; rw [coe_discr]; rw [Algebra.discr_eq_discr_of_algEquiv (integralBasis K) f]; rw [← discr_eq_discr L ((RingOfIntegers.basis K).map f₀)]
   change _ = algebraMap Int Rat _
-  rw [← Algebra
+  rw [← Algebra.discr_localizationLocalization Int (nonZeroDivisors Int) L]
+  congr 1
+  ext
+  simp only [Function.comp_apply, integralBasis_apply, Basis.localizationLocalization_apply,
+    Basis.map_apply]
+  rfl
 
 Depends on / 依赖: Algebra, Algebra.discr_eq_discr_of_algEquiv, Algebra.discr_localizationLocalization, Basis.localizationLocalization_apply, Basis.map_apply, Function, Function.comp_apply, Rat.intCast_inj, RingOfIntegers, RingOfIntegers.basis, algebraMap, coe_discr, comp_apply, discr_eq_discr, discr_eq_discr_of_algEquiv, discr_localizationLocalization, f.restrictScalars, intCast_inj, integralBasis, integralBasis_apply
 -/
@@ -187,7 +197,13 @@ theorem numberField_discr
     Basis.map (Basis.singleton (Fin 1) Int) ringOfIntegersEquiv.toAddEquiv.toIntLinearEquiv.symm
   calc NumberField.discr Rat
     _ = Algebra.discr Int b := by convert! (discr_eq_discr Rat b).symm
-    _ = Algebra.trace Int (𝓞 Rat) (b default * b default) := 
+    _ = Algebra.trace Int (𝓞 Rat) (b default * b default) := by
+      rw [Algebra.discr_def]; rw [Matrix.det_unique]; rw [Algebra.traceMatrix_apply]; rw [Algebra.traceForm_apply]
+    _ = Algebra.trace Int (𝓞 Rat) 1 := by
+      rw [Basis.map_apply]; rw [RingEquiv.toAddEquiv_eq_coe]; rw [← AddEquiv.toIntLinearEquiv_symm]; rw [AddEquiv.coe_toIntLinearEquiv]; rw [Basis.singleton_apply]; rw [show (AddEquiv.symm ↑ringOfIntegersEquiv) (1 : Int) = ringOfIntegersEquiv.symm 1 by rfl]; rw [map_one]; rw [mul_one]
+    _ = 1 := by rw [Algebra.trace_eq_matrix_trace b]; simp
+
+alias _root_.NumberField.discr_rat := numberField_discr
 
 中文:
 定理 numberField_discr
@@ -197,7 +213,13 @@ theorem numberField_discr
     Basis.map (Basis.singleton (Fin 1) Int) ringOfIntegersEquiv.toAddEquiv.toIntLinearEquiv.symm
   calc NumberField.discr Rat
     _ = Algebra.discr Int b := by convert! (discr_eq_discr Rat b).symm
-    _ = Algebra.trace Int (𝓞 Rat) (b default * b default) := 
+    _ = Algebra.trace Int (𝓞 Rat) (b default * b default) := by
+      rw [Algebra.discr_def]; rw [Matrix.det_unique]; rw [Algebra.traceMatrix_apply]; rw [Algebra.traceForm_apply]
+    _ = Algebra.trace Int (𝓞 Rat) 1 := by
+      rw [Basis.map_apply]; rw [RingEquiv.toAddEquiv_eq_coe]; rw [← AddEquiv.toIntLinearEquiv_symm]; rw [AddEquiv.coe_toIntLinearEquiv]; rw [Basis.singleton_apply]; rw [show (AddEquiv.symm ↑ringOfIntegersEquiv) (1 : Int) = ringOfIntegersEquiv.symm 1 by rfl]; rw [map_one]; rw [mul_one]
+    _ = 1 := by rw [Algebra.trace_eq_matrix_trace b]; simp
+
+alias _root_.NumberField.discr_rat := numberField_discr
 
 Depends on / 依赖: Algebra, Algebra.discr, Algebra.discr_def, Algebra.trace, Algebra.traceForm_apply, Algebra.traceMatrix_apply, Basis.map, Basis.map_apply, Basis.singleton, Matrix, Matrix.det_unique, NumberField, NumberField.discr, RingEquiv, RingEquiv.toAddEquiv_eq_coe, convert, det_unique, discr_def, discr_eq_discr, map_apply
 -/
@@ -229,7 +251,24 @@ theorem Algebra.discr_eq_discr_of_toMatrix_coeff_isIntegral
     intro i j
     convert! h' i ((b.indexEquiv b').symm j)
     simp [Basis.toMatrix_apply]
-  rw [← (b.reindex (b.indexEquiv b')).toMatrix_map_vecMul b']; rw [discr_of_matrix_vecMul]; rw [← one_mul (dis
+  rw [← (b.reindex (b.indexEquiv b')).toMatrix_map_vecMul b']; rw [discr_of_matrix_vecMul]; rw [← one_mul (discr Rat b)]; rw [Basis.coe_reindex]; rw [discr_reindex]
+  congr
+  have hint : IsIntegral Int ((b.reindex (b.indexEquiv b')).toMatrix b').det :=
+    IsIntegral.det fun i j => h _ _
+  obtain ⟨r, hr⟩ := IsIntegrallyClosed.isIntegral_iff.1 hint
+  have hunit : IsUnit r := by
+    have : IsIntegral Int (b'.toMatrix (b.reindex (b.indexEquiv b'))).det :=
+      IsIntegral.det fun i j => h' _ _
+    obtain ⟨r', hr'⟩ := IsIntegrallyClosed.isIntegral_iff.1 this
+    refine isUnit_iff_exists_inv.2 ⟨r', ?_⟩
+    suffices algebraMap Int Rat (r * r') = 1 by
+      rw [← map_one (algebraMap Int Rat)] at this
+      exact (IsFractionRing.injective Int Rat) this
+    rw [map_mul]; rw [hr]; rw [hr']; rw [← Matrix.det_mul]; rw [Basis.toMatrix_mul_toMatrix_flip]; rw [Matrix.det_one]
+  rw [← map_one (algebraMap Int Rat)]; rw [← hr]
+  rcases Int.isUnit_iff.1 hunit with hp | hm
+  · simp [hp]
+  · simp [hm]
 
 中文:
 定理 代数.discr_eq_discr_of_toMatrix_coeff_is整数egral
@@ -239,7 +278,24 @@ theorem Algebra.discr_eq_discr_of_toMatrix_coeff_isIntegral
     intro i j
     convert! h' i ((b.indexEquiv b').symm j)
     simp [Basis.toMatrix_apply]
-  rw [← (b.reindex (b.indexEquiv b')).toMatrix_map_vecMul b']; rw [discr_of_matrix_vecMul]; rw [← one_mul (dis
+  rw [← (b.reindex (b.indexEquiv b')).toMatrix_map_vecMul b']; rw [discr_of_matrix_vecMul]; rw [← one_mul (discr Rat b)]; rw [Basis.coe_reindex]; rw [discr_reindex]
+  congr
+  have hint : IsIntegral Int ((b.reindex (b.indexEquiv b')).toMatrix b').det :=
+    IsIntegral.det fun i j => h _ _
+  obtain ⟨r, hr⟩ := IsIntegrallyClosed.isIntegral_iff.1 hint
+  have hunit : IsUnit r := by
+    have : IsIntegral Int (b'.toMatrix (b.reindex (b.indexEquiv b'))).det :=
+      IsIntegral.det fun i j => h' _ _
+    obtain ⟨r', hr'⟩ := IsIntegrallyClosed.isIntegral_iff.1 this
+    refine isUnit_iff_exists_inv.2 ⟨r', ?_⟩
+    suffices algebraMap Int Rat (r * r') = 1 by
+      rw [← map_one (algebraMap Int Rat)] at this
+      exact (IsFractionRing.injective Int Rat) this
+    rw [map_mul]; rw [hr]; rw [hr']; rw [← Matrix.det_mul]; rw [Basis.toMatrix_mul_toMatrix_flip]; rw [Matrix.det_one]
+  rw [← map_one (algebraMap Int Rat)]; rw [← hr]
+  rcases Int.isUnit_iff.1 hunit with hp | hm
+  · simp [hp]
+  · simp [hm]
 
 Depends on / 依赖: Basis.coe_reindex, Basis.toMatrix_apply, IsIntegral, IsIntegral.det, IsIntegrallyClosed, IsIntegrallyClosed.isIntegr, b.indexEquiv, b.reindex, coe_reindex, convert, discr_of_matrix_vecMul, discr_reindex, indexEquiv, isIntegr, one_mul, reindex, replace, toMatrix, toMatrix_apply, toMatrix_map_vecMul
 -/

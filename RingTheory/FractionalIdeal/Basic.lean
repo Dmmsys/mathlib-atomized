@@ -255,7 +255,12 @@ abbreviation equivNumOfIsSMulRegular
       ⟨fun _ _ hxy => ?_, fun ⟨y, hy⟩ => ?_⟩)
     (Submodule.equivMapOfInjective (Algebra.linearMap R P)
       (FaithfulSMul.algebraMap_injective R P) (num I)).symm
-  · rw [← den_
+  · rw [← den_mul_self_eq_num]
+    exact Submodule.smul_mem_pointwise_smul _ _ _ hx
+  · simpa [LinearMap.restrict_apply, reg.eq_iff] using hxy
+  · rw [← den_mul_self_eq_num] at hy
+    obtain ⟨x, hx, hxy⟩ := hy
+    exact ⟨⟨x, hx⟩, by simp_rw [LinearMap.restrict_apply, Subtype.ext_iff, ← hxy]; rfl⟩
 
 中文:
 缩写 equivNumOfIsSMulRegular
@@ -266,7 +271,12 @@ abbreviation equivNumOfIsSMulRegular
       ⟨fun _ _ hxy => ?_, fun ⟨y, hy⟩ => ?_⟩)
     (Submodule.equivMapOfInjective (Algebra.linearMap R P)
       (FaithfulSMul.algebraMap_injective R P) (num I)).symm
-  · rw [← den_
+  · rw [← den_mul_self_eq_num]
+    exact Submodule.smul_mem_pointwise_smul _ _ _ hx
+  · simpa [LinearMap.restrict_apply, reg.eq_iff] using hxy
+  · rw [← den_mul_self_eq_num] at hy
+    obtain ⟨x, hx, hxy⟩ := hy
+    exact ⟨⟨x, hx⟩, by simp_rw [LinearMap.restrict_apply, Subtype.ext_iff, ← hxy]; rfl⟩
 
 Depends on / 依赖: Algebra, Algebra.linearMap, DistribSMul, DistribSMul.toLinearMap, FaithfulSMul, FaithfulSMul.algebraMap_injective, I.den, LinearEquiv, LinearEquiv.ofBijective, LinearEquiv.trans, LinearMap, LinearMap.re, LinearMap.restrict_apply, Submodule, Submodule.equivMapOfInjective, Submodule.smul_mem_pointwise_smul, algebraMap_injective, den_mul_self_eq_num, eq_iff, equivMapOfInjective
 -/
@@ -1191,7 +1201,7 @@ theorem zero_of_num_eq_bot
   suffices (den I : R) • x = 0 from
     (smul_eq_zero.mp this).resolve_left (ne_of_mem_of_not_mem (SetLike.coe_mem _) hS)
   have h_eq : I.den • (I : Submodule R P) = ⊥ := by rw [den_mul_self_eq_num, hI, Submodule.map_bot]
-  exact (Submo
+  exact (Submodule.eq_bot_iff _).mp h_eq (den I • x) ⟨x, hx, rfl⟩
 
 中文:
 定理 zero_of_num_eq_bot
@@ -1202,7 +1212,7 @@ theorem zero_of_num_eq_bot
   suffices (den I : R) • x = 0 from
     (smul_eq_zero.mp this).resolve_left (ne_of_mem_of_not_mem (SetLike.coe_mem _) hS)
   have h_eq : I.den • (I : Submodule R P) = ⊥ := by rw [den_mul_self_eq_num, hI, Submodule.map_bot]
-  exact (Submo
+  exact (Submodule.eq_bot_iff _).mp h_eq (den I • x) ⟨x, hx, rfl⟩
 
 Depends on / 依赖: I.den, SetLike, SetLike.coe_mem, Submodule, Submodule.eq_bot_iff, Submodule.map_bot, coeToSubmodule_eq_bot, coe_mem, den_mul_self_eq_num, eq_bot_iff, h_eq, map_bot, ne_of_mem_of_not_mem, resolve_left, smul_eq_zero, smul_eq_zero.mp
 -/
@@ -2363,7 +2373,20 @@ theorem le_one_iff_exists_coeIdeal
     · rw [mem_ofPred, map_zero]
       exact J.zero_mem
     · intro c x hx
-      rw [smul_eq_mul]; rw [mem_ofPre
+      rw [smul_eq_mul]; rw [mem_ofPred]; rw [map_mul]; rw [← Algebra.smul_def]
+      exact J.val.smul_mem c hx
+    · ext x
+      constructor
+      · rintro ⟨y, hy, eq_y⟩
+        rwa [← eq_y]
+      · intro hx
+        obtain ⟨y, rfl⟩ := (mem_one_iff S).mp (hJ hx)
+        exact mem_ofPred.mpr ⟨y, hx, rfl⟩
+  · rintro ⟨I, hI⟩
+    rw [← hI]
+    apply coeIdeal_le_one
+
+@[simp]
 
 中文:
 定理 le_one_iff_存在_coeIdeal
@@ -2378,7 +2401,20 @@ theorem le_one_iff_exists_coeIdeal
     · rw [mem_ofPred, map_zero]
       exact J.zero_mem
     · intro c x hx
-      rw [smul_eq_mul]; rw [mem_ofPre
+      rw [smul_eq_mul]; rw [mem_ofPred]; rw [map_mul]; rw [← Algebra.smul_def]
+      exact J.val.smul_mem c hx
+    · ext x
+      constructor
+      · rintro ⟨y, hy, eq_y⟩
+        rwa [← eq_y]
+      · intro hx
+        obtain ⟨y, rfl⟩ := (mem_one_iff S).mp (hJ hx)
+        exact mem_ofPred.mpr ⟨y, hx, rfl⟩
+  · rintro ⟨I, hI⟩
+    rw [← hI]
+    apply coeIdeal_le_one
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, J.val.add_mem, J.val.smul_mem, J.zero_mem, add_mem, algebraMap, eq_y, map_add, map_mul, map_zero, mem_ofPred, mem_ofPred.mpr, mem_one_iff, smul_def, smul_eq_mul, smul_mem, zero_mem
 -/

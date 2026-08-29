@@ -37,7 +37,22 @@ lemma TensorProduct.map_injective_of_flat_flat_of_isDomain
   have H₁ := TensorProduct.map_injective_of_flat_flat (f.baseChange K) (g.baseChange K)
     (Module.Flat.lTensor_preserves_injective_linearMap f hf)
     (Module.Flat.lTensor_preserves_injective_linearMap g hg)
-  have H
+  have H₂ := (AlgebraTensorModule.cancelBaseChange R K K (K otimes[R] P) Q).symm.injective
+  have H₃ := (AlgebraTensorModule.cancelBaseChange R K K (K otimes[R] M) N).injective
+  have H₄ := (AlgebraTensorModule.assoc R R K K P Q).symm.injective
+  have H₅ := (AlgebraTensorModule.assoc R R K K M N).injective
+  have H₆ := Module.Flat.rTensor_preserves_injective_linearMap (M := P otimes[R] Q)
+    (Algebra.linearMap R K) (FaithfulSMul.algebraMap_injective R K)
+  have H₇ := (TensorProduct.lid R (P otimes[R] Q)).symm.injective
+convert! H₅.comp H₃.comp H₁.comp H₂.comp H₄.comp H₆.comp H₇
+  dsimp only [← LinearMap.coe_comp, ← LinearEquiv.coe_toLinearMap,
+    ← @LinearMap.coe_restrictScalars R K]
+  congr! 1
+  ext p q
+  -- `simp` solves the goal but it times out
+  change (1 : K) otimesₜ[R] (f p otimesₜ[R] g q) = (AlgebraTensorModule.assoc R R K K M N)
+    (((1 : K) • (algebraMap R K) 1 otimesₜ[R] f p) otimesₜ[R] g q)
+  simp only [map_one, one_smul, AlgebraTensorModule.assoc_tmul]
 
 中文:
 引理 张量积.map_injective_of_flat_flat_of_isDomain
@@ -47,7 +62,22 @@ lemma TensorProduct.map_injective_of_flat_flat_of_isDomain
   have H₁ := TensorProduct.map_injective_of_flat_flat (f.baseChange K) (g.baseChange K)
     (Module.Flat.lTensor_preserves_injective_linearMap f hf)
     (Module.Flat.lTensor_preserves_injective_linearMap g hg)
-  have H
+  have H₂ := (AlgebraTensorModule.cancelBaseChange R K K (K otimes[R] P) Q).symm.injective
+  have H₃ := (AlgebraTensorModule.cancelBaseChange R K K (K otimes[R] M) N).injective
+  have H₄ := (AlgebraTensorModule.assoc R R K K P Q).symm.injective
+  have H₅ := (AlgebraTensorModule.assoc R R K K M N).injective
+  have H₆ := Module.Flat.rTensor_preserves_injective_linearMap (M := P otimes[R] Q)
+    (Algebra.linearMap R K) (FaithfulSMul.algebraMap_injective R K)
+  have H₇ := (TensorProduct.lid R (P otimes[R] Q)).symm.injective
+convert! H₅.comp H₃.comp H₁.comp H₂.comp H₄.comp H₆.comp H₇
+  dsimp only [← LinearMap.coe_comp, ← LinearEquiv.coe_toLinearMap,
+    ← @LinearMap.coe_restrictScalars R K]
+  congr! 1
+  ext p q
+  -- `simp` solves the goal but it times out
+  change (1 : K) otimesₜ[R] (f p otimesₜ[R] g q) = (AlgebraTensorModule.assoc R R K K M N)
+    (((1 : K) • (algebraMap R K) 1 otimesₜ[R] f p) otimesₜ[R] g q)
+  simp only [map_one, one_smul, AlgebraTensorModule.assoc_tmul]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.assoc, AlgebraTensorModule.cancelBaseChange, FractionRing, Module, Module.Flat.lTensor_preserves_injective_linearMap, TensorProduct, TensorProduct.map_injective_of_flat_flat, TensorProduct.mk, baseChange, cancelBaseChange, f.baseChange, g.baseChange, injective, lTensor_preserves_injective_linearMap, map_injective_of_flat_flat, of_comp, otimes, symm.injective
 -/
@@ -92,7 +122,7 @@ lemma LinearIndependent.tmul_of_isDomain
   rw [← LinearEquiv.coe_toLinearMap]; rw [← LinearMap.coe_comp]
   congr!
   ext i
-  simp [finsuppTensorFinsupp'_symm_single_eq_single_one
+  simp [finsuppTensorFinsupp'_symm_single_eq_single_one_tmul]
 
 中文:
 引理 LinearIndependent.tmul_of_isDomain
@@ -105,7 +135,7 @@ lemma LinearIndependent.tmul_of_isDomain
   rw [← LinearEquiv.coe_toLinearMap]; rw [← LinearMap.coe_comp]
   congr!
   ext i
-  simp [finsuppTensorFinsupp'_symm_single_eq_single_one
+  simp [finsuppTensorFinsupp'_symm_single_eq_single_one_tmul]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_toLinearMap, LinearIndependent, LinearMap, LinearMap.coe_comp, TensorProduct, TensorProduct.map_injective_of_flat_flat_of_isDomain, _symm_single_eq_single_one_tmul, coe_comp, coe_toLinearMap, convert, finsuppTensorFinsupp, injective, map_injective_of_flat_flat_of_isDomain, symm.injective
 -/

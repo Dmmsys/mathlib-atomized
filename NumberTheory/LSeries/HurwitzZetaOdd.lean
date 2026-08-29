@@ -108,7 +108,10 @@ lemma jacobiTheta₂''_add_left
   generalize jacobiTheta₂' (z * τ) τ = J'
   -- clear denominator
   simp_rw [div_add' _ _ _ two_pi_I_ne_zero, ← mul_div_assoc]
-  refine congr_arg (· / (2 * π 
+  refine congr_arg (· / (2 * π * I)) ?_
+  -- get all exponential terms to left
+  rw [mul_left_comm _ (cexp _)]; rw [← mul_add]; rw [mul_assoc (cexp _)]; rw [← mul_add]; rw [← mul_assoc (cexp _)]; rw [← Complex.exp_add]
+  congrm (cexp ?_ * ?_) <;> ring
 
 中文:
 引理 jacobiTheta₂''_add_left
@@ -120,7 +123,10 @@ lemma jacobiTheta₂''_add_left
   generalize jacobiTheta₂' (z * τ) τ = J'
   -- clear denominator
   simp_rw [div_add' _ _ _ two_pi_I_ne_zero, ← mul_div_assoc]
-  refine congr_arg (· / (2 * π 
+  refine congr_arg (· / (2 * π * I)) ?_
+  -- get all exponential terms to left
+  rw [mul_left_comm _ (cexp _)]; rw [← mul_add]; rw [mul_assoc (cexp _)]; rw [← mul_add]; rw [← mul_assoc (cexp _)]; rw [← Complex.exp_add]
+  congrm (cexp ?_ * ?_) <;> ring
 -/
 lemma jacobiTheta₂''_add_left (z τ : Complex) : jacobiTheta₂'' (z + 1) τ = jacobiTheta₂'' z τ := by
   simp only [jacobiTheta₂'', add_mul z 1, one_mul, jacobiTheta₂'_add_left', jacobiTheta₂_add_left']
@@ -163,7 +169,16 @@ lemma jacobiTheta₂'_functional_equation'
   rcases eq_or_ne τ 0 with rfl | hτ
   · rw [jacobiTheta₂'_undef _ (by simp), mul_zero, zero_cpow (by simp), div_zero, zero_mul]
   have aux1 : (-2 * π : Complex) / (2 * π * I) = I := by
-    rw [div_eq_iff two_pi_I_ne_zero]; rw [mul_comm I]; rw [mul_assoc _ I I]; rw [I_mul_I]; rw [neg_mul]; rw [mul
+    rw [div_eq_iff two_pi_I_ne_zero]; rw [mul_comm I]; rw [mul_assoc _ I I]; rw [I_mul_I]; rw [neg_mul]; rw [mul_neg]; rw [mul_one]
+  rw [jacobiTheta₂'_functional_equation]; rw [← mul_one_div _ τ]; rw [mul_right_comm _ (cexp _)]; rw [(by rw [cpow_one]; rw [← div_div]; rw [div_self (neg_ne_zero.mpr I_ne_zero)] :
+      1 / τ = -I / (-I * τ) ^ (1 : Complex)), div_mul_div_comm,
+    ← cpow_add _ _ (mul_ne_zero (neg_ne_zero.mpr I_ne_zero) hτ), ← div_mul_eq_mul_div,
+    (by norm_num : (1 / 2 + 1 : Complex) = 3 / 2), mul_assoc (1 / _), mul_assoc (1 / _),
+    ← mul_one_div (-2 * π : Complex), mul_comm _ (1 / _), mul_assoc (1 / _)]
+  congr 1
+  rw [jacobiTheta₂'']; rw [div_add' _ _ _ two_pi_I_ne_zero]; rw [← mul_div_assoc]; rw [← mul_div_assoc]; rw [← div_mul_eq_mul_div (-2 * π : Complex)]; rw [mul_assoc]; rw [aux1]; rw [mul_div z (-1)]; rw [mul_neg_one]; rw [neg_div τ z]; rw [jacobiTheta₂_neg_left]; rw [jacobiTheta₂'_neg_left]; rw [neg_mul]; rw [← mul_neg]; rw [← mul_neg]; rw [mul_div]; rw [mul_neg_one]; rw [neg_div]; rw [neg_mul]; rw [neg_mul]; rw [neg_div]
+  congr 2
+  rw [neg_sub]; rw [← sub_eq_neg_add]; rw [mul_comm _ (_ * I)]; rw [← mul_assoc]
 
 中文:
 引理 jacobiTheta₂'_functional_equation'
@@ -172,7 +187,16 @@ lemma jacobiTheta₂'_functional_equation'
   rcases eq_or_ne τ 0 with rfl | hτ
   · rw [jacobiTheta₂'_undef _ (by simp), mul_zero, zero_cpow (by simp), div_zero, zero_mul]
   have aux1 : (-2 * π : Complex) / (2 * π * I) = I := by
-    rw [div_eq_iff two_pi_I_ne_zero]; rw [mul_comm I]; rw [mul_assoc _ I I]; rw [I_mul_I]; rw [neg_mul]; rw [mul
+    rw [div_eq_iff two_pi_I_ne_zero]; rw [mul_comm I]; rw [mul_assoc _ I I]; rw [I_mul_I]; rw [neg_mul]; rw [mul_neg]; rw [mul_one]
+  rw [jacobiTheta₂'_functional_equation]; rw [← mul_one_div _ τ]; rw [mul_right_comm _ (cexp _)]; rw [(by rw [cpow_one]; rw [← div_div]; rw [div_self (neg_ne_zero.mpr I_ne_zero)] :
+      1 / τ = -I / (-I * τ) ^ (1 : Complex)), div_mul_div_comm,
+    ← cpow_add _ _ (mul_ne_zero (neg_ne_zero.mpr I_ne_zero) hτ), ← div_mul_eq_mul_div,
+    (by norm_num : (1 / 2 + 1 : Complex) = 3 / 2), mul_assoc (1 / _), mul_assoc (1 / _),
+    ← mul_one_div (-2 * π : Complex), mul_comm _ (1 / _), mul_assoc (1 / _)]
+  congr 1
+  rw [jacobiTheta₂'']; rw [div_add' _ _ _ two_pi_I_ne_zero]; rw [← mul_div_assoc]; rw [← mul_div_assoc]; rw [← div_mul_eq_mul_div (-2 * π : Complex)]; rw [mul_assoc]; rw [aux1]; rw [mul_div z (-1)]; rw [mul_neg_one]; rw [neg_div τ z]; rw [jacobiTheta₂_neg_left]; rw [jacobiTheta₂'_neg_left]; rw [neg_mul]; rw [← mul_neg]; rw [← mul_neg]; rw [mul_div]; rw [mul_neg_one]; rw [neg_div]; rw [neg_mul]; rw [neg_mul]; rw [neg_div]
+  congr 2
+  rw [neg_sub]; rw [← sub_eq_neg_add]; rw [mul_comm _ (_ * I)]; rw [← mul_assoc]
 
 Depends on / 依赖: I_mul_I, I_ne_zero, _functional_equation, _undef, cpow_one, div_div, div_eq_iff, div_self, div_zero, eq_or_ne, mul_assoc, mul_comm, mul_neg, mul_one, mul_one_div, mul_right_comm, mul_zero, neg_mul, neg_ne_zero, neg_ne_zero.mpr
 -/
@@ -454,7 +478,14 @@ lemma continuousOn_oddKernel
   suffices ContinuousOn (fun x => (oddKernel a x : Complex)) (Ioi 0) from
     (continuous_re.comp_continuousOn this).congr fun a _ => (ofReal_re _).symm
   simp_rw [oddKernel_def' a]
-  refine fun x hx => ((Continuous.continuousAt ?_).
+  refine fun x hx => ((Continuous.continuousAt ?_).mul ?_).continuousWithinAt
+  · fun_prop
+  · have hf : Continuous fun u : Real => (a * I * u, I * u) := by fun_prop
+    apply ContinuousAt.add
+    · exact ((continuousAt_jacobiTheta₂' (a * I * x) (by rwa [I_mul_im, ofReal_re])).comp
+        (f := fun u : Real => (a * I * u, I * u)) hf.continuousAt).div_const _
+· exact continuousAt_const.mul (continuousAt_jacobiTheta₂ (a * I * x)
+        (by rwa [I_mul_im, ofReal_re])).comp (f := fun u : Real => (a * I * u, I * u)) hf.continuousAt
 
 中文:
 引理 continuousOn_oddKernel
@@ -465,7 +496,14 @@ lemma continuousOn_oddKernel
   suffices ContinuousOn (fun x => (oddKernel a x : Complex)) (Ioi 0) from
     (continuous_re.comp_continuousOn this).congr fun a _ => (ofReal_re _).symm
   simp_rw [oddKernel_def' a]
-  refine fun x hx => ((Continuous.continuousAt ?_).
+  refine fun x hx => ((Continuous.continuousAt ?_).mul ?_).continuousWithinAt
+  · fun_prop
+  · have hf : Continuous fun u : Real => (a * I * u, I * u) := by fun_prop
+    apply ContinuousAt.add
+    · exact ((continuousAt_jacobiTheta₂' (a * I * x) (by rwa [I_mul_im, ofReal_re])).comp
+        (f := fun u : Real => (a * I * u, I * u)) hf.continuousAt).div_const _
+· exact continuousAt_const.mul (continuousAt_jacobiTheta₂ (a * I * x)
+        (by rwa [I_mul_im, ofReal_re])).comp (f := fun u : Real => (a * I * u, I * u)) hf.continuousAt
 
 Depends on / 依赖: Continuous, Continuous.continuousAt, ContinuousAt, ContinuousAt.add, ContinuousOn, I_mul_im, QuotientAddGroup, QuotientAddGroup.induction_on, comp_continuousOn, continuousAt, continuousWithinAt, continuous_re, continuous_re.comp_continuousOn, fun_prop, induction_on, oddKernel, oddKernel_def, ofReal_re, simp_rw
 -/
@@ -495,7 +533,9 @@ lemma continuousOn_sinKernel
   suffices ContinuousOn (fun x => (sinKernel a x : Complex)) (Ioi 0) from
     (continuous_re.comp_continuousOn this).congr fun a _ => (ofReal_re _).symm
   simp_rw [sinKernel_def]
-  apply (continuousOn_of_forall_continuousAt (fun x hx
+  apply (continuousOn_of_forall_continuousAt (fun x hx => ?_)).div_const
+  have h := continuousAt_jacobiTheta₂' a (by rwa [I_mul_im, ofReal_re])
+  fun_prop
 
 中文:
 引理 continuousOn_sinKernel
@@ -506,7 +546,9 @@ lemma continuousOn_sinKernel
   suffices ContinuousOn (fun x => (sinKernel a x : Complex)) (Ioi 0) from
     (continuous_re.comp_continuousOn this).congr fun a _ => (ofReal_re _).symm
   simp_rw [sinKernel_def]
-  apply (continuousOn_of_forall_continuousAt (fun x hx
+  apply (continuousOn_of_forall_continuousAt (fun x hx => ?_)).div_const
+  have h := continuousAt_jacobiTheta₂' a (by rwa [I_mul_im, ofReal_re])
+  fun_prop
 
 Depends on / 依赖: ContinuousOn, I_mul_im, QuotientAddGroup, QuotientAddGroup.induction_on, comp_continuousOn, continuousOn_of_forall_continuousAt, continuous_re, continuous_re.comp_continuousOn, div_const, fun_prop, induction_on, ofReal_re, simp_rw, sinKernel, sinKernel_def
 -/
@@ -530,7 +572,16 @@ lemma oddKernel_functional_equation
   rcases le_or_gt x 0 with hx | hx
   · rw [oddKernel_undef _ hx, sinKernel_undef _ (one_div_nonpos.mpr hx), mul_zero]
   induction a using QuotientAddGroup.induction_on with | H a =>
-  have h1 : -1 / (I * ↑(1 / x)) = I * x := by rw [one_div, ofReal_inv, mul_comm, ← div
+  have h1 : -1 / (I * ↑(1 / x)) = I * x := by rw [one_div, ofReal_inv, mul_comm, ← div_div,
+    div_inv_eq_mul, div_eq_mul_inv, inv_I, mul_neg, neg_one_mul, neg_mul, neg_neg, mul_comm]
+  have h2 : (-I * (I * ↑(1 / x))) = 1 / x := by
+    rw [← mul_assoc]; rw [neg_mul]; rw [I_mul_I]; rw [neg_neg]; rw [one_mul]; rw [ofReal_div]; rw [ofReal_one]
+  have h3 : (x : Complex) ^ (3 / 2 : Complex) != 0 := by
+    simp only [Ne, cpow_eq_zero_iff, ofReal_eq_zero, hx.ne', false_and, not_false_eq_true]
+  have h4 : arg x != π := by rw [arg_ofReal_of_nonneg hx.le]; exact pi_ne_zero.symm
+  rw [← ofReal_inj]; rw [oddKernel_def]; rw [ofReal_mul]; rw [sinKernel_def]; rw [jacobiTheta₂'_functional_equation']; rw [h1]; rw [h2]
+  generalize jacobiTheta₂'' a (I * ↑x) = J
+  rw [one_div (x : Complex)]; rw [inv_cpow _ _ h4]; rw [div_inv_eq_mul]; rw [one_div]; rw [ofReal_inv]; rw [ofReal_cpow hx.le]; rw [ofReal_div]; rw [ofReal_ofNat]; rw [ofReal_ofNat]; rw [← mul_div_assoc _ _ (-2 * π : Complex)]; rw [eq_div_iff mul_ne_zero (neg_ne_zero.mpr two_ne_zero) (ofReal_ne_zero.mpr pi_ne_zero)]; rw [← div_eq_inv_mul]; rw [eq_div_iff h3]; rw [mul_comm J _]; rw [mul_right_comm]
 
 中文:
 引理 oddKernel_functional_equation
@@ -540,7 +591,16 @@ lemma oddKernel_functional_equation
   rcases le_or_gt x 0 with hx | hx
   · rw [oddKernel_undef _ hx, sinKernel_undef _ (one_div_nonpos.mpr hx), mul_zero]
   induction a using QuotientAddGroup.induction_on with | H a =>
-  have h1 : -1 / (I * ↑(1 / x)) = I * x := by rw [one_div, ofReal_inv, mul_comm, ← div
+  have h1 : -1 / (I * ↑(1 / x)) = I * x := by rw [one_div, ofReal_inv, mul_comm, ← div_div,
+    div_inv_eq_mul, div_eq_mul_inv, inv_I, mul_neg, neg_one_mul, neg_mul, neg_neg, mul_comm]
+  have h2 : (-I * (I * ↑(1 / x))) = 1 / x := by
+    rw [← mul_assoc]; rw [neg_mul]; rw [I_mul_I]; rw [neg_neg]; rw [one_mul]; rw [ofReal_div]; rw [ofReal_one]
+  have h3 : (x : Complex) ^ (3 / 2 : Complex) != 0 := by
+    simp only [Ne, cpow_eq_zero_iff, ofReal_eq_zero, hx.ne', false_and, not_false_eq_true]
+  have h4 : arg x != π := by rw [arg_ofReal_of_nonneg hx.le]; exact pi_ne_zero.symm
+  rw [← ofReal_inj]; rw [oddKernel_def]; rw [ofReal_mul]; rw [sinKernel_def]; rw [jacobiTheta₂'_functional_equation']; rw [h1]; rw [h2]
+  generalize jacobiTheta₂'' a (I * ↑x) = J
+  rw [one_div (x : Complex)]; rw [inv_cpow _ _ h4]; rw [div_inv_eq_mul]; rw [one_div]; rw [ofReal_inv]; rw [ofReal_cpow hx.le]; rw [ofReal_div]; rw [ofReal_ofNat]; rw [ofReal_ofNat]; rw [← mul_div_assoc _ _ (-2 * π : Complex)]; rw [eq_div_iff mul_ne_zero (neg_ne_zero.mpr two_ne_zero) (ofReal_ne_zero.mpr pi_ne_zero)]; rw [← div_eq_inv_mul]; rw [eq_div_iff h3]; rw [mul_comm J _]; rw [mul_right_comm]
 -/
 lemma oddKernel_functional_equation (a : UnitAddCircle) (x : Real) :
     oddKernel a x = 1 / x ^ (3 / 2 : Real) * sinKernel a (1 / x) := by
@@ -575,7 +635,13 @@ lemma hasSum_int_oddKernel
   have h1 := hasSum_jacobiTheta₂_term (a * I * x) (by rwa [I_mul_im, ofReal_re])
   have h2 := hasSum_jacobiTheta₂'_term (a * I * x) (by rwa [I_mul_im, ofReal_re])
   refine (((h2.div_const (2 * π * I)).add (h1.mul_left ↑a)).mul_left
-    (cexp (-π * a
+    (cexp (-π * a ^ 2 * x))).congr_fun (fun n => ?_)
+  rw [jacobiTheta₂'_term]; rw [mul_assoc (2 * π * I)]; rw [mul_div_cancel_left₀ _ two_pi_I_ne_zero]; rw [← add_mul]; rw [mul_left_comm]; rw [jacobiTheta₂_term]; rw [← Complex.exp_add]
+  push_cast
+  simp only [← mul_assoc, ← add_mul]
+  congrm _ * cexp (?_ * x)
+  simp only [mul_right_comm _ I, add_mul, mul_assoc _ I, I_mul_I]
+  ring_nf
 
 中文:
 引理 hasSum_int_oddKernel
@@ -585,7 +651,13 @@ lemma hasSum_int_oddKernel
   have h1 := hasSum_jacobiTheta₂_term (a * I * x) (by rwa [I_mul_im, ofReal_re])
   have h2 := hasSum_jacobiTheta₂'_term (a * I * x) (by rwa [I_mul_im, ofReal_re])
   refine (((h2.div_const (2 * π * I)).add (h1.mul_left ↑a)).mul_left
-    (cexp (-π * a
+    (cexp (-π * a ^ 2 * x))).congr_fun (fun n => ?_)
+  rw [jacobiTheta₂'_term]; rw [mul_assoc (2 * π * I)]; rw [mul_div_cancel_left₀ _ two_pi_I_ne_zero]; rw [← add_mul]; rw [mul_left_comm]; rw [jacobiTheta₂_term]; rw [← Complex.exp_add]
+  push_cast
+  simp only [← mul_assoc, ← add_mul]
+  congrm _ * cexp (?_ * x)
+  simp only [mul_right_comm _ I, add_mul, mul_assoc _ I, I_mul_I]
+  ring_nf
 
 Depends on / 依赖: Complex.exp, I_mul_im, _term, add_mul, congr_fun, div_const, h1.mul_left, h2.div_const, hasSum_ofReal, mul_assoc, mul_left, mul_left_comm, oddKernel_def, ofReal_re, two_pi_I_ne_zero
 -/
@@ -616,7 +688,12 @@ lemma hasSum_int_sinKernel
       OfNat.ofNat_ne_zero, ofReal_eq_zero, pi_ne_zero, or_self, not_false_eq_true]
   rw [sinKernel_def]
   refine ((hasSum_jacobiTheta₂'_term a
-    (by rwa [I_mul_im, ofReal_re])).div_cons
+    (by rwa [I_mul_im, ofReal_re])).div_const _).congr_fun fun n => ?_
+  rw [jacobiTheta₂'_term]; rw [jacobiTheta₂_term]; rw [ofReal_exp]; rw [mul_assoc (-I * n)]; rw [← Complex.exp_add]; rw [eq_div_iff h]; rw [ofReal_mul]; rw [ofReal_mul]; rw [ofReal_pow]; rw [ofReal_neg]; rw [ofReal_intCast]; rw [mul_comm _ (-2 * π : Complex)]; rw [← mul_assoc]
+  congrm ?_ * cexp (?_ + ?_)
+  · simp [mul_assoc]
+  · exact mul_right_comm (2 * π * I) a n
+  · simp [← mul_assoc, mul_comm _ I]
 
 中文:
 引理 hasSum_int_sinKernel
@@ -628,7 +705,12 @@ lemma hasSum_int_sinKernel
       OfNat.ofNat_ne_zero, ofReal_eq_zero, pi_ne_zero, or_self, not_false_eq_true]
   rw [sinKernel_def]
   refine ((hasSum_jacobiTheta₂'_term a
-    (by rwa [I_mul_im, ofReal_re])).div_cons
+    (by rwa [I_mul_im, ofReal_re])).div_const _).congr_fun fun n => ?_
+  rw [jacobiTheta₂'_term]; rw [jacobiTheta₂_term]; rw [ofReal_exp]; rw [mul_assoc (-I * n)]; rw [← Complex.exp_add]; rw [eq_div_iff h]; rw [ofReal_mul]; rw [ofReal_mul]; rw [ofReal_pow]; rw [ofReal_neg]; rw [ofReal_intCast]; rw [mul_comm _ (-2 * π : Complex)]; rw [← mul_assoc]
+  congrm ?_ * cexp (?_ + ?_)
+  · simp [mul_assoc]
+  · exact mul_right_comm (2 * π * I) a n
+  · simp [← mul_assoc, mul_comm _ I]
 
 Depends on / 依赖: Complex.exp_add, I_mul_im, OfNat.ofNat_ne_zero, _term, congr_fun, div_const, eq_div_iff, exp_add, mul_assoc, mul_eq_zero, ne_eq, neg_eq_zero, neg_mul, not_false_eq_true, ofNat_ne_zero, ofReal_eq_zero, ofReal_exp, ofReal_mul, ofReal_pow, ofReal_re
 -/
@@ -658,7 +740,11 @@ lemma hasSum_nat_sinKernel
   simp only [Int.cast_zero, zero_mul, mul_zero, add_zero] at this
   refine this.congr_fun fun n => ?_
   simp_rw [Int.cast_neg, neg_sq, mul_neg, ofReal_mul, Int.cast_natCast, ofReal_natCast,
-      ofReal_ofNat, ← add_mul, ofR
+      ofReal_ofNat, ← add_mul, ofReal_sin, Complex.sin]
+  push_cast
+  congr 1
+  rw [← mul_div_assoc]; rw [← div_mul_eq_mul_div]; rw [← div_mul_eq_mul_div]; rw [div_self two_ne_zero]; rw [one_mul]; rw [neg_mul]; rw [neg_mul]; rw [neg_neg]; rw [mul_comm _ I]; rw [← mul_assoc]; rw [mul_comm _ I]; rw [neg_mul]; rw [← sub_eq_neg_add]; rw [mul_sub]
+  congr 3 <;> ring
 
 中文:
 引理 hasSum_nat_sinKernel
@@ -669,7 +755,11 @@ lemma hasSum_nat_sinKernel
   simp only [Int.cast_zero, zero_mul, mul_zero, add_zero] at this
   refine this.congr_fun fun n => ?_
   simp_rw [Int.cast_neg, neg_sq, mul_neg, ofReal_mul, Int.cast_natCast, ofReal_natCast,
-      ofReal_ofNat, ← add_mul, ofR
+      ofReal_ofNat, ← add_mul, ofReal_sin, Complex.sin]
+  push_cast
+  congr 1
+  rw [← mul_div_assoc]; rw [← div_mul_eq_mul_div]; rw [← div_mul_eq_mul_div]; rw [div_self two_ne_zero]; rw [one_mul]; rw [neg_mul]; rw [neg_mul]; rw [neg_neg]; rw [mul_comm _ I]; rw [← mul_assoc]; rw [mul_comm _ I]; rw [neg_mul]; rw [← sub_eq_neg_add]; rw [mul_sub]
+  congr 3 <;> ring
 
 Depends on / 依赖: Complex.sin, Int.cast_natCast, Int.cast_neg, Int.cast_zero, add_mul, add_zero, cast_natCast, cast_neg, cast_zero, congr_fun, div_mul_eq_mul_div, div_self, hasSum_int_sinKernel, hasSum_ofReal, mul_comm, mul_div_assoc, mul_neg, mul_zero, nat_add_neg, neg_mul
 -/
@@ -705,7 +795,9 @@ lemma isBigO_atTop_oddKernel
   obtain ⟨p, hp, hp'⟩ := HurwitzKernelBounds.isBigO_atTop_F_int_one b
   refine ⟨p, hp, (Eventually.isBigO ?_).trans hp'⟩
   filter_upwards [eventually_gt_atTop 0] with t ht
-  simpa [← (hasSum_int_oddKernel b ht).tsum_eq, HurwitzKernel
+  simpa [← (hasSum_int_oddKernel b ht).tsum_eq, HurwitzKernelBounds.F_int,
+    HurwitzKernelBounds.f_int, abs_of_nonneg (exp_pos _).le] using
+    norm_tsum_le_tsum_norm (hasSum_int_oddKernel b ht).summable.norm
 
 中文:
 引理 isBigO_atTop_oddKernel
@@ -715,7 +807,9 @@ lemma isBigO_atTop_oddKernel
   obtain ⟨p, hp, hp'⟩ := HurwitzKernelBounds.isBigO_atTop_F_int_one b
   refine ⟨p, hp, (Eventually.isBigO ?_).trans hp'⟩
   filter_upwards [eventually_gt_atTop 0] with t ht
-  simpa [← (hasSum_int_oddKernel b ht).tsum_eq, HurwitzKernel
+  simpa [← (hasSum_int_oddKernel b ht).tsum_eq, HurwitzKernelBounds.F_int,
+    HurwitzKernelBounds.f_int, abs_of_nonneg (exp_pos _).le] using
+    norm_tsum_le_tsum_norm (hasSum_int_oddKernel b ht).summable.norm
 
 Depends on / 依赖: Eventually, Eventually.isBigO, F_int, HurwitzKernelBounds, HurwitzKernelBounds.F_int, HurwitzKernelBounds.f_int, HurwitzKernelBounds.isBigO_atTop_F_int_one, QuotientAddGroup, QuotientAddGroup.induction_on, abs_of_nonneg, eventually_gt_atTop, exp_pos, f_int, filter_upwards, hasSum_int_oddKernel, induction_on, isBigO, isBigO_atTop_F_int_one, norm_tsum_le_tsum_norm, summable
 -/
@@ -740,7 +834,12 @@ lemma isBigO_atTop_sinKernel
   obtain ⟨p, hp, hp'⟩ := HurwitzKernelBounds.isBigO_atTop_F_nat_one (le_refl 0)
   refine ⟨p, hp, (Eventually.isBigO ?_).trans (hp'.const_mul_left 2)⟩
   filter_upwards [eventually_gt_atTop 0] with t ht
-  rw [HurwitzKernelBounds.F_nat]
+  rw [HurwitzKernelBounds.F_nat]; rw [← (hasSum_nat_sinKernel a ht).tsum_eq]
+  apply tsum_of_norm_bounded (g := fun n => 2 * HurwitzKernelBounds.f_nat 1 0 t n)
+  · exact (HurwitzKernelBounds.summable_f_nat 1 0 ht).hasSum.mul_left _
+  · intro n
+    rw [norm_mul]; rw [norm_mul]; rw [norm_mul]; rw [norm_two]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_le_mul_iff_of_pos_left two_pos]; rw [HurwitzKernelBounds.f_nat]; rw [pow_one]; rw [add_zero]; rw [norm_of_nonneg (exp_pos _).le]; rw [Real.norm_eq_abs]; rw [Nat.abs_cast]; rw [← mul_assoc]; rw [mul_le_mul_iff_of_pos_right (exp_pos _)]
+    exact mul_le_of_le_one_right (Nat.cast_nonneg _) (abs_sin_le_one _)
 
 中文:
 引理 isBigO_atTop_sinKernel
@@ -750,7 +849,12 @@ lemma isBigO_atTop_sinKernel
   obtain ⟨p, hp, hp'⟩ := HurwitzKernelBounds.isBigO_atTop_F_nat_one (le_refl 0)
   refine ⟨p, hp, (Eventually.isBigO ?_).trans (hp'.const_mul_left 2)⟩
   filter_upwards [eventually_gt_atTop 0] with t ht
-  rw [HurwitzKernelBounds.F_nat]
+  rw [HurwitzKernelBounds.F_nat]; rw [← (hasSum_nat_sinKernel a ht).tsum_eq]
+  apply tsum_of_norm_bounded (g := fun n => 2 * HurwitzKernelBounds.f_nat 1 0 t n)
+  · exact (HurwitzKernelBounds.summable_f_nat 1 0 ht).hasSum.mul_left _
+  · intro n
+    rw [norm_mul]; rw [norm_mul]; rw [norm_mul]; rw [norm_two]; rw [mul_assoc]; rw [mul_assoc]; rw [mul_le_mul_iff_of_pos_left two_pos]; rw [HurwitzKernelBounds.f_nat]; rw [pow_one]; rw [add_zero]; rw [norm_of_nonneg (exp_pos _).le]; rw [Real.norm_eq_abs]; rw [Nat.abs_cast]; rw [← mul_assoc]; rw [mul_le_mul_iff_of_pos_right (exp_pos _)]
+    exact mul_le_of_le_one_right (Nat.cast_nonneg _) (abs_sin_le_one _)
 
 Depends on / 依赖: Eventually, Eventually.isBigO, F_nat, HurwitzKernelBounds, HurwitzKernelBounds.F_nat, HurwitzKernelBounds.f_nat, HurwitzKernelBounds.isBigO_atTop_F_nat_one, HurwitzKernelBounds.summable_f_nat, QuotientAddGroup, QuotientAddGroup.induction_on, const_mul_left, eventually_gt_atTop, f_nat, filter_upwards, hasSum, hasSum.mul_left, hasSum_nat_sinKernel, induction_on, isBigO, isBigO_atTop_F_nat_one
 -/
@@ -789,7 +893,20 @@ definition hurwitzOddFEPair
   hg_int := (continuous_ofReal.comp_continuousOn (continuousOn_sinKernel a)).locallyIntegrableOn
     measurableSet_Ioi
   k := 3 / 2
-
+  hk := by norm_num
+  ε := 1
+  hε := one_ne_zero
+  f₀ := 0
+  g₀ := 0
+  hf_top r := by
+    let ⟨v, hv, hv'⟩ := isBigO_atTop_oddKernel a
+    rw [← isBigO_norm_left] at hv' ⊢
+    simpa using hv'.trans (isLittleO_exp_neg_mul_rpow_atTop hv _).isBigO
+  hg_top r := by
+    let ⟨v, hv, hv'⟩ := isBigO_atTop_sinKernel a
+    rw [← isBigO_norm_left] at hv' ⊢
+    simpa using hv'.trans (isLittleO_exp_neg_mul_rpow_atTop hv _).isBigO
+  h_feq x hx := by simp [← ofReal_mul, oddKernel_functional_equation a, inv_rpow (le_of_lt hx)]
 
 中文:
 定义 hurwitzOddFEPair
@@ -801,7 +918,20 @@ definition hurwitzOddFEPair
   hg_int := (continuous_ofReal.comp_continuousOn (continuousOn_sinKernel a)).locallyIntegrableOn
     measurableSet_Ioi
   k := 3 / 2
-
+  hk := by norm_num
+  ε := 1
+  hε := one_ne_zero
+  f₀ := 0
+  g₀ := 0
+  hf_top r := by
+    let ⟨v, hv, hv'⟩ := isBigO_atTop_oddKernel a
+    rw [← isBigO_norm_left] at hv' ⊢
+    simpa using hv'.trans (isLittleO_exp_neg_mul_rpow_atTop hv _).isBigO
+  hg_top r := by
+    let ⟨v, hv, hv'⟩ := isBigO_atTop_sinKernel a
+    rw [← isBigO_norm_left] at hv' ⊢
+    simpa using hv'.trans (isLittleO_exp_neg_mul_rpow_atTop hv _).isBigO
+  h_feq x hx := by simp [← ofReal_mul, oddKernel_functional_equation a, inv_rpow (le_of_lt hx)]
 
 Depends on / 依赖: oddKernel, ofReal
 -/
@@ -1041,7 +1171,20 @@ lemma hasSum_int_completedSinZeta
   have hc (n : Int) : ‖c n‖ = 1 / 2 := by
     simp_rw [c, (by { push_cast; ring } : 2 * π * I * a * n = ↑(2 * π * a * n) * I), norm_div,
       RCLike.norm_ofNat, norm_mul, norm_neg, norm_I, one_mul, norm_exp_ofReal_mul_I]
-  have hF 
+  have hF t (ht : 0 < t) :
+      HasSum (fun n => c n * n * rexp (-π * n ^ 2 * t)) (sinKernel a t / 2) := by
+    refine ((hasSum_int_sinKernel a ht).div_const 2).congr_fun fun n => ?_
+    rw [div_mul_eq_mul_div]; rw [div_mul_eq_mul_div]; rw [mul_right_comm (-I)]
+  have h_sum : Summable fun i => ‖c i‖ / |↑i| ^ s.re := by
+    simp_rw [hc, div_right_comm]
+    apply Summable.div_const
+    apply Summable.of_nat_of_neg <;>
+    simpa
+  rw [completedSinZeta]; rw [(isStrong_hurwitzOddFEPair _).symm_Λ_eq]
+  refine (mellin_div_const .. ▸ hasSum_mellin_pi_mul_sq' (zero_lt_one.trans hs) hF h_sum).congr_fun
+    fun n => ?_
+  simp [Int.sign_eq_sign, ← Int.cast_abs] -- non-terminal simp OK when `ring` follows
+  ring
 
 中文:
 引理 hasSum_int_completedSinZeta
@@ -1051,7 +1194,20 @@ lemma hasSum_int_completedSinZeta
   have hc (n : Int) : ‖c n‖ = 1 / 2 := by
     simp_rw [c, (by { push_cast; ring } : 2 * π * I * a * n = ↑(2 * π * a * n) * I), norm_div,
       RCLike.norm_ofNat, norm_mul, norm_neg, norm_I, one_mul, norm_exp_ofReal_mul_I]
-  have hF 
+  have hF t (ht : 0 < t) :
+      HasSum (fun n => c n * n * rexp (-π * n ^ 2 * t)) (sinKernel a t / 2) := by
+    refine ((hasSum_int_sinKernel a ht).div_const 2).congr_fun fun n => ?_
+    rw [div_mul_eq_mul_div]; rw [div_mul_eq_mul_div]; rw [mul_right_comm (-I)]
+  have h_sum : Summable fun i => ‖c i‖ / |↑i| ^ s.re := by
+    simp_rw [hc, div_right_comm]
+    apply Summable.div_const
+    apply Summable.of_nat_of_neg <;>
+    simpa
+  rw [completedSinZeta]; rw [(isStrong_hurwitzOddFEPair _).symm_Λ_eq]
+  refine (mellin_div_const .. ▸ hasSum_mellin_pi_mul_sq' (zero_lt_one.trans hs) hF h_sum).congr_fun
+    fun n => ?_
+  simp [Int.sign_eq_sign, ← Int.cast_abs] -- non-terminal simp OK when `ring` follows
+  ring
 
 Depends on / 依赖: HasSum, RCLike, RCLike.norm_ofNat, congr_fun, div_const, div_mul_eq_mul_div, hasSum_int_sinKernel, norm_I, norm_div, norm_exp_ofReal_mul_I, norm_mul, norm_neg, norm_ofNat, one_mul, simp_rw, sinKernel
 -/
@@ -1089,7 +1245,13 @@ lemma hasSum_nat_completedSinZeta
     Int.sign_neg, Nat.abs_cast, Int.cast_neg, Int.cast_natCast, ← add_div] at this
   refine this.congr_fun fun n => ?_
   rw [div_right_comm]
-  rcases 
+  rcases eq_or_ne n 0 with rfl | h
+  · simp
+  simp_rw [Int.sign_natCast_of_ne_zero h, Int.cast_one, ofReal_sin, Complex.sin]
+  simp only [← mul_div_assoc, push_cast, mul_assoc (GammaReal _), ← mul_add]
+  congr 3
+  rw [mul_one]; rw [mul_neg_one]; rw [neg_neg]; rw [neg_mul I]; rw [← sub_eq_neg_add]; rw [← mul_sub]; rw [mul_comm]; rw [mul_neg]; rw [neg_mul]
+  congr 3 <;> ring
 
 中文:
 引理 hasSum_nat_completedSinZeta
@@ -1100,7 +1262,13 @@ lemma hasSum_nat_completedSinZeta
     Int.sign_neg, Nat.abs_cast, Int.cast_neg, Int.cast_natCast, ← add_div] at this
   refine this.congr_fun fun n => ?_
   rw [div_right_comm]
-  rcases 
+  rcases eq_or_ne n 0 with rfl | h
+  · simp
+  simp_rw [Int.sign_natCast_of_ne_zero h, Int.cast_one, ofReal_sin, Complex.sin]
+  simp only [← mul_div_assoc, push_cast, mul_assoc (GammaReal _), ← mul_add]
+  congr 3
+  rw [mul_one]; rw [mul_neg_one]; rw [neg_neg]; rw [neg_mul I]; rw [← sub_eq_neg_add]; rw [← mul_sub]; rw [mul_comm]; rw [mul_neg]; rw [neg_mul]
+  congr 3 <;> ring
 
 Depends on / 依赖: Complex.sin, GammaReal, Int.cast_natCast, Int.cast_neg, Int.cast_one, Int.cast_zero, Int.sign_natCast_of_ne_zero, Int.sign_neg, Int.sign_zero, Nat.abs_cast, abs_cast, abs_neg, add_div, add_zero, cast_natCast, cast_neg, cast_one, cast_zero, congr_fun, div_right_comm
 -/
@@ -1132,7 +1300,15 @@ lemma hasSum_int_completedHurwitzZetaOdd
   have hF t (ht : 0 < t) : HasSum (fun n => c n * r n * rexp (-π * (r n) ^ 2 * t))
       (oddKernel a t / 2) := by
     refine ((hasSum_ofReal.mpr (hasSum_int_oddKernel a ht)).div_const 2).congr_fun fun n => ?_
-    simp [r, c, 
+    simp [r, c, push_cast, div_mul_eq_mul_div, -one_div]
+  have h_sum : Summable fun i => ‖c i‖ / |r i| ^ s.re := by
+    simp_rw [c, ← mul_one_div ‖_‖]
+    apply Summable.mul_left
+    rwa [summable_one_div_int_add_rpow]
+  rw [completedHurwitzZetaOdd]; rw [(isStrong_hurwitzOddFEPair _).Λ_eq]
+  have := mellin_div_const .. ▸ hasSum_mellin_pi_mul_sq' (zero_lt_one.trans hs) hF h_sum
+  refine this.congr_fun fun n => ?_
+  simp only [r, c, mul_one_div, div_mul_eq_mul_div, div_right_comm]
 
 中文:
 引理 hasSum_int_completedHurwitzZetaOdd
@@ -1143,7 +1319,15 @@ lemma hasSum_int_completedHurwitzZetaOdd
   have hF t (ht : 0 < t) : HasSum (fun n => c n * r n * rexp (-π * (r n) ^ 2 * t))
       (oddKernel a t / 2) := by
     refine ((hasSum_ofReal.mpr (hasSum_int_oddKernel a ht)).div_const 2).congr_fun fun n => ?_
-    simp [r, c, 
+    simp [r, c, push_cast, div_mul_eq_mul_div, -one_div]
+  have h_sum : Summable fun i => ‖c i‖ / |r i| ^ s.re := by
+    simp_rw [c, ← mul_one_div ‖_‖]
+    apply Summable.mul_left
+    rwa [summable_one_div_int_add_rpow]
+  rw [completedHurwitzZetaOdd]; rw [(isStrong_hurwitzOddFEPair _).Λ_eq]
+  have := mellin_div_const .. ▸ hasSum_mellin_pi_mul_sq' (zero_lt_one.trans hs) hF h_sum
+  refine this.congr_fun fun n => ?_
+  simp only [r, c, mul_one_div, div_mul_eq_mul_div, div_right_comm]
 
 Depends on / 依赖: HasSum, Summable, Summable.mul_left, completedHurwitzZetaOdd, congr_fun, div_const, div_mul_eq_mul_div, h_sum, hasSum_int_oddKernel, hasSum_ofReal, hasSum_ofReal.mpr, mul_left, mul_one_div, oddKernel, one_div, s.re, simp_rw, summable_one_div_int_add_rpow
 -/
@@ -1328,7 +1512,7 @@ lemma hasSum_nat_hurwitzZetaOdd
   refine (hasSum_int_hurwitzZetaOdd a hs).nat_add_neg_add_one.congr_fun fun n => ?_
   rw [Int.cast_neg]; rw [Int.cast_add]; rw [Int.cast_one]; rw [sub_div]; rw [sub_eq_add_neg]; rw [Int.cast_natCast]
   have : -(n + 1) + a = -(n + 1 - a) := by ring_nf
-  rw [this]; rw [Left.sign_neg]; rw [abs_neg];
+  rw [this]; rw [Left.sign_neg]; rw [abs_neg]; rw [SignType.coe_neg]; rw [neg_div]; rw [neg_div]
 
 中文:
 引理 hasSum_nat_hurwitzZetaOdd
@@ -1337,7 +1521,7 @@ lemma hasSum_nat_hurwitzZetaOdd
   refine (hasSum_int_hurwitzZetaOdd a hs).nat_add_neg_add_one.congr_fun fun n => ?_
   rw [Int.cast_neg]; rw [Int.cast_add]; rw [Int.cast_one]; rw [sub_div]; rw [sub_eq_add_neg]; rw [Int.cast_natCast]
   have : -(n + 1) + a = -(n + 1 - a) := by ring_nf
-  rw [this]; rw [Left.sign_neg]; rw [abs_neg];
+  rw [this]; rw [Left.sign_neg]; rw [abs_neg]; rw [SignType.coe_neg]; rw [neg_div]; rw [neg_div]
 
 Depends on / 依赖: Int.cast_add, Int.cast_natCast, Int.cast_neg, Int.cast_one, Left.sign_neg, SignType, SignType.coe_neg, abs_neg, cast_add, cast_natCast, cast_neg, cast_one, coe_neg, congr_fun, hasSum_int_hurwitzZetaOdd, nat_add_neg_add_one, nat_add_neg_add_one.congr_fun, neg_div, ring_nf, sign_neg
 -/
@@ -1360,7 +1544,11 @@ lemma hasSum_nat_hurwitzZetaOdd_of_mem_Icc
   suffices forall b : Real, 0 <= b -> SignType.sign (n + b) / (↑|n + b| : Complex) ^ s = 1 / (n + b) ^ s by
     simp only [add_sub_assoc, this a ha.1, this (1 - a) (sub_nonneg.mpr ha.2), push_cast]
   intro b hb
-  rw [abs_of_nonneg (b
+  rw [abs_of_nonneg (by positivity)]; rw [(by simp : (n : Complex) + b = ↑(n + b))]
+  rcases lt_or_eq_of_le (by positivity : 0 <= n + b) with hb | hb
+  · simp [sign_pos hb]
+  · rw [← hb, ofReal_zero, zero_cpow ((not_lt.mpr zero_le_one) ∘ (zero_re ▸ · ▸ hs)),
+      div_zero, div_zero]
 
 中文:
 引理 hasSum_nat_hurwitzZetaOdd_of_mem_Icc
@@ -1370,7 +1558,11 @@ lemma hasSum_nat_hurwitzZetaOdd_of_mem_Icc
   suffices forall b : Real, 0 <= b -> SignType.sign (n + b) / (↑|n + b| : Complex) ^ s = 1 / (n + b) ^ s by
     simp only [add_sub_assoc, this a ha.1, this (1 - a) (sub_nonneg.mpr ha.2), push_cast]
   intro b hb
-  rw [abs_of_nonneg (b
+  rw [abs_of_nonneg (by positivity)]; rw [(by simp : (n : Complex) + b = ↑(n + b))]
+  rcases lt_or_eq_of_le (by positivity : 0 <= n + b) with hb | hb
+  · simp [sign_pos hb]
+  · rw [← hb, ofReal_zero, zero_cpow ((not_lt.mpr zero_le_one) ∘ (zero_re ▸ · ▸ hs)),
+      div_zero, div_zero]
 
 Depends on / 依赖: SignType, SignType.sign, abs_of_nonneg, add_sub_assoc, congr_fun, hasSum_nat_hurwitzZetaOdd, lt_or_eq_of_le, not_lt, not_lt.mpr, ofReal_zero, sign_pos, sub_nonneg, sub_nonneg.mpr, zero_cpow, zero_le_one
 -/
@@ -1431,7 +1623,12 @@ lemma hasSum_nat_sinZeta
   simp_rw [abs_neg, Int.sign_neg, Int.cast_neg, Nat.abs_cast, Int.cast_natCast, mul_neg, abs_zero,
     Int.cast_zero, zero_cpow (ne_zero_of_one_lt_re hs), div_zero, zero_div, add_zero] at this
   simp_rw [push_cast, Complex.sin]
-  refine this.congr_f
+  refine this.congr_fun fun n => ?_
+  rcases ne_or_eq n 0 with h | rfl
+  · simp only [neg_mul, sub_mul, div_right_comm _ (2 : Complex), Int.sign_natCast_of_ne_zero h,
+      Int.cast_one, mul_one, mul_comm I, neg_neg, ← add_div, ← sub_eq_neg_add]
+    congr 5 <;> ring
+  · simp
 
 中文:
 引理 hasSum_nat_sinZeta
@@ -1441,7 +1638,12 @@ lemma hasSum_nat_sinZeta
   simp_rw [abs_neg, Int.sign_neg, Int.cast_neg, Nat.abs_cast, Int.cast_natCast, mul_neg, abs_zero,
     Int.cast_zero, zero_cpow (ne_zero_of_one_lt_re hs), div_zero, zero_div, add_zero] at this
   simp_rw [push_cast, Complex.sin]
-  refine this.congr_f
+  refine this.congr_fun fun n => ?_
+  rcases ne_or_eq n 0 with h | rfl
+  · simp only [neg_mul, sub_mul, div_right_comm _ (2 : Complex), Int.sign_natCast_of_ne_zero h,
+      Int.cast_one, mul_one, mul_comm I, neg_neg, ← add_div, ← sub_eq_neg_add]
+    congr 5 <;> ring
+  · simp
 
 Depends on / 依赖: Complex.sin, Int.cast_natCast, Int.cast_neg, Int.cast_one, Int.cast_zero, Int.sign_natCast_of_ne_zero, Int.sign_neg, Nat.abs_cast, abs_cast, abs_neg, abs_zero, add_div, add_zero, cast_natCast, cast_neg, cast_one, cast_zero, congr_fun, div_right_comm, div_zero
 -/

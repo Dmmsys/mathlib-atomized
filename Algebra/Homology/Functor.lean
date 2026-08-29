@@ -53,7 +53,19 @@ definition asFunctor
         exact this t
       shape := fun i j h => by
         have := C.shape _ _ h
-        rw [NatTrans.ex
+        rw [NatTrans.ext_iff]; rw [funext_iff] at this
+        exact this t }
+  map h :=
+    { f := fun i => (C.X i).map h
+      comm' := fun _ _ _ => NatTrans.naturality _ _ }
+  map_id t := by
+    ext i
+    dsimp
+    rw [(C.X i).map_id]
+  map_comp h₁ h₂ := by
+    ext i
+    dsimp
+    rw [Functor.map_comp]
 
 中文:
 定义 asFunctor
@@ -66,7 +78,19 @@ definition asFunctor
         exact this t
       shape := fun i j h => by
         have := C.shape _ _ h
-        rw [NatTrans.ex
+        rw [NatTrans.ext_iff]; rw [funext_iff] at this
+        exact this t }
+  map h :=
+    { f := fun i => (C.X i).map h
+      comm' := fun _ _ _ => NatTrans.naturality _ _ }
+  map_id t := by
+    ext i
+    dsimp
+    rw [(C.X i).map_id]
+  map_comp h₁ h₂ := by
+    ext i
+    dsimp
+    rw [Functor.map_comp]
 
 Depends on / 依赖: C.d_comp_d, C.shape, Functor, Functor.map_comp, NatTrans, NatTrans.ext_iff, NatTrans.naturality, d_comp_d, ext_iff, funext_iff, map_comp, map_id, naturality
 -/
@@ -154,7 +178,7 @@ lemma quasiIso_iff_evaluation
     exact fun j => ((MorphismProperty.isomorphisms V).arrow_mk_iso_iff
       (((Functor.mapArrowFunctor _ _).mapIso
       ((homologyFunctorIso ((evaluation T V).obj j)))).app (Arrow.mk f))).1
-        ((qua
+        ((quasiIso_iff _).1 (hf j))⟩
 
 中文:
 引理 quasiIso_iff_evaluation
@@ -163,7 +187,7 @@ lemma quasiIso_iff_evaluation
     exact fun j => ((MorphismProperty.isomorphisms V).arrow_mk_iso_iff
       (((Functor.mapArrowFunctor _ _).mapIso
       ((homologyFunctorIso ((evaluation T V).obj j)))).app (Arrow.mk f))).1
-        ((qua
+        ((quasiIso_iff _).1 (hf j))⟩
 
 Depends on / 依赖: Arrow.mk, Functor, Functor.mapArrowFunctor, MorphismProperty, MorphismProperty.isomorphisms, NatTrans, NatTrans.isIso_iff_isIso_app, arrow_mk_iso_iff, evaluation, homologyFunctorIso, isIso_iff_isIso_app, isomorphisms, mapArrowFunctor, mapIso, quasiIso_iff
 -/

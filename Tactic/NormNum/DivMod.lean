@@ -126,7 +126,25 @@ definition evalIntDiv
   -- We assert that the default instance for `HDiv` is `Int.div` when the first parameter is `ℤ`.
 guard ← withNewMCtxDepth isDefEq f q(HDiv.hDiv (α := Int))
 haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Int := ⟨⟩
-haveI' : e =Q ($a / $b) :=
+haveI' : e =Q ($a / $b) := ⟨⟩
+  let rInt : Q(Ring Int) := q(Int.instRing)
+  let ⟨za, na, pa⟩ ← (← derive a).toInt rInt
+  match ← derive (u := .zero) b with
+  | .isNat inst nb pb =>
+    assumeInstancesCommute
+    if nb.natLit! == 0 then
+have _ : nb =Q nat_lit 0 := ⟨⟩
+      return .isNat q(instAddMonoidWithOne) q(nat_lit 0) q(isInt_ediv_zero $pa $pb)
+    else
+      let ⟨zq, q, p⟩ := core a na za pa b nb pb
+      return .isInt rInt q zq p
+  | .isNegNat _ nb pb =>
+    assumeInstancesCommute
+    let ⟨zq, q, p⟩ := core a na za pa q(-$b) nb q(isNat_neg_of_isNegNat $pb)
+    have q' := mkRawIntLit (-zq)
+    have : Q(-$q = $q') := (q(Eq.refl $q') :)
+    return .isInt rInt q' (-zq) q(isInt_ediv_neg $p $this)
+  | _ => failure
 
 中文:
 定义 eval整数Div
@@ -136,7 +154,25 @@ haveI' : e =Q ($a / $b) :=
   -- We assert that the default instance for `HDiv` is `Int.div` when the first parameter is `ℤ`.
 guard ← withNewMCtxDepth isDefEq f q(HDiv.hDiv (α := Int))
 haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Int := ⟨⟩
-haveI' : e =Q ($a / $b) :=
+haveI' : e =Q ($a / $b) := ⟨⟩
+  let rInt : Q(Ring Int) := q(Int.instRing)
+  let ⟨za, na, pa⟩ ← (← derive a).toInt rInt
+  match ← derive (u := .zero) b with
+  | .isNat inst nb pb =>
+    assumeInstancesCommute
+    if nb.natLit! == 0 then
+have _ : nb =Q nat_lit 0 := ⟨⟩
+      return .isNat q(instAddMonoidWithOne) q(nat_lit 0) q(isInt_ediv_zero $pa $pb)
+    else
+      let ⟨zq, q, p⟩ := core a na za pa b nb pb
+      return .isInt rInt q zq p
+  | .isNegNat _ nb pb =>
+    assumeInstancesCommute
+    let ⟨zq, q, p⟩ := core a na za pa q(-$b) nb q(isNat_neg_of_isNegNat $pb)
+    have q' := mkRawIntLit (-zq)
+    have : Q(-$q = $q') := (q(Eq.refl $q') :)
+    return .isInt rInt q' (-zq) q(isInt_ediv_neg $p $this)
+  | _ => failure
 -/
 partial def evalIntDiv : NormNumExt where eval {u α} e := do
   let .app (.app f (a : Q(Int))) (b : Q(Int)) ← whnfR e | failure
@@ -257,7 +293,10 @@ definition evalIntMod
   -- We assert that the default instance for `HMod` is `Int.mod` when the first parameter is `ℤ`.
 guard ← withNewMCtxDepth isDefEq f q(HMod.hMod (α := Int))
 haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Int := ⟨⟩
-haveI' : e =Q ($a % $b) :=
+haveI' : e =Q ($a % $b) := ⟨⟩
+  let rInt : Q(Ring Int) := q(Int.instRing)
+  let some ⟨za, na, pa⟩ := (← derive a).toInt rInt | failure
+  go a na za pa b (← derive (u := .zero) b)
 
 中文:
 定义 eval整数Mod
@@ -267,7 +306,10 @@ haveI' : e =Q ($a % $b) :=
   -- We assert that the default instance for `HMod` is `Int.mod` when the first parameter is `ℤ`.
 guard ← withNewMCtxDepth isDefEq f q(HMod.hMod (α := Int))
 haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Int := ⟨⟩
-haveI' : e =Q ($a % $b) :=
+haveI' : e =Q ($a % $b) := ⟨⟩
+  let rInt : Q(Ring Int) := q(Int.instRing)
+  let some ⟨za, na, pa⟩ := (← derive a).toInt rInt | failure
+  go a na za pa b (← derive (u := .zero) b)
 -/
 partial def evalIntMod : NormNumExt where eval {u α} e := do
   let .app (.app f (a : Q(Int))) (b : Q(Int)) ← whnfR e | failure
@@ -354,7 +396,18 @@ definition evalIntDvd
 haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Prop := ⟨⟩
 haveI' : e =Q ($a ∣ $b) := ⟨⟩
   -- We assert that the default instance for `Dvd` is `Int.dvd` when the first parameter is `ℕ`.
-guard ← withNewMCtxDepth isDefEq f q(Dvd.dvd (α := Int)
+guard ← withNewMCtxDepth isDefEq f q(Dvd.dvd (α := Int))
+  let rInt : Q(Ring Int) := q(Int.instRing)
+  let ⟨za, na, pa⟩ ← (← derive a).toInt rInt
+  let ⟨zb, nb, pb⟩ ← (← derive b).toInt rInt
+  if zb % za == 0 then
+    let zc := zb / za
+    have c := mkRawIntLit zc
+haveI' : Int.mul na c =Q nb := ⟨⟩
+    return .isTrue q(isInt_dvd_true $pa $pb (.refl $nb))
+  else
+    have : Q(Int.emod $nb $na != 0) := (q(Eq.refl true) : Expr)
+    return .isFalse q(isInt_dvd_false $pa $pb $this)
 
 中文:
 定义 eval整数Dvd
@@ -364,7 +417,18 @@ guard ← withNewMCtxDepth isDefEq f q(Dvd.dvd (α := Int)
 haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Prop := ⟨⟩
 haveI' : e =Q ($a ∣ $b) := ⟨⟩
   -- We assert that the default instance for `Dvd` is `Int.dvd` when the first parameter is `ℕ`.
-guard ← withNewMCtxDepth isDefEq f q(Dvd.dvd (α := Int)
+guard ← withNewMCtxDepth isDefEq f q(Dvd.dvd (α := Int))
+  let rInt : Q(Ring Int) := q(Int.instRing)
+  let ⟨za, na, pa⟩ ← (← derive a).toInt rInt
+  let ⟨zb, nb, pb⟩ ← (← derive b).toInt rInt
+  if zb % za == 0 then
+    let zc := zb / za
+    have c := mkRawIntLit zc
+haveI' : Int.mul na c =Q nb := ⟨⟩
+    return .isTrue q(isInt_dvd_true $pa $pb (.refl $nb))
+  else
+    have : Q(Int.emod $nb $na != 0) := (q(Eq.refl true) : Expr)
+    return .isFalse q(isInt_dvd_false $pa $pb $this)
 -/
 @[norm_num (_ : Int) ∣ _] def evalIntDvd : NormNumExt where eval {u α} e := do
   let .app (.app f (a : Q(Int))) (b : Q(Int)) ← whnfR e | failure

@@ -1437,7 +1437,8 @@ instance instAdd
       use c • x, C₁.smul_mem hc hx, c • y, C₂.smul_mem hc hy
     add_mem' := by
       rintro _ ⟨x₁, hx₁, x₂, hx₂, rfl⟩ y ⟨y₁, hy₁, y₂, hy₂, rfl⟩
-      exact ⟨x₁ + y₁, add_mem hx₁ hy₁, x₂ + y₂, ad
+      exact ⟨x₁ + y₁, add_mem hx₁ hy₁, x₂ + y₂, add_mem hx₂ hy₂, add_add_add_comm ..⟩
+  }
 
 中文:
 实例 instAdd
@@ -1450,7 +1451,8 @@ instance instAdd
       use c • x, C₁.smul_mem hc hx, c • y, C₂.smul_mem hc hy
     add_mem' := by
       rintro _ ⟨x₁, hx₁, x₂, hx₂, rfl⟩ y ⟨y₁, hy₁, y₂, hy₂, rfl⟩
-      exact ⟨x₁ + y₁, add_mem hx₁ hy₁, x₂ + y₂, ad
+      exact ⟨x₁ + y₁, add_mem hx₁ hy₁, x₂ + y₂, add_mem hx₂ hy₂, add_add_add_comm ..⟩
+  }
 -/
 instance instAdd : Add (ConvexCone R M) where
   add C₁ C₂ := {
@@ -1794,7 +1796,7 @@ theorem IsReproducing.span_eq_top
   obtain ⟨y, hy, z, hz, rfl⟩ := Set.mem_sub.mp (h x)
   exact sub_mem (Submodule.subset_span hy) (Submodule.subset_span hz)
 
-@[deprecated (since := "2026-03-30")] alias IsReproducing.isGenerating := IsReproducing
+@[deprecated (since := "2026-03-30")] alias IsReproducing.isGenerating := IsReproducing.span_eq_top
 
 中文:
 定理 IsReproducing.span_eq_top
@@ -1806,7 +1808,7 @@ theorem IsReproducing.span_eq_top
   obtain ⟨y, hy, z, hz, rfl⟩ := Set.mem_sub.mp (h x)
   exact sub_mem (Submodule.subset_span hy) (Submodule.subset_span hz)
 
-@[deprecated (since := "2026-03-30")] alias IsReproducing.isGenerating := IsReproducing
+@[deprecated (since := "2026-03-30")] alias IsReproducing.isGenerating := IsReproducing.span_eq_top
 
 Depends on / 依赖: IsReproducing, Set.eq_univ_iff_forall, Set.mem_sub.mp, Submodule, Submodule.subset_span, eq_top_iff, eq_univ_iff_forall, mem_sub, sub_mem, subset_span
 -/
@@ -1833,7 +1835,34 @@ theorem IsReproducing.of_span_eq_top
   -- A generating cone in a nontrivial module must be nonempty
   have hne : (C : Set M).Nonempty := Set.nonempty_iff_ne_empty.2 fun h' => by simp [h'] at h
   -- Build the submodule S = C - C and show span C ⊆ S
-  let S : Submodule R M :=
+  let S : Submodule R M := {
+    carrier := (C : Set M) - (C : Set M)
+    add_mem' := by
+      rintro _ _ ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
+      exact ⟨y₁ + y₂, C.add_mem hy₁ hy₂, z₁ + z₂, C.add_mem hz₁ hz₂, add_sub_add_comm ..⟩
+    zero_mem' := by
+      obtain ⟨c, hc⟩ := hne
+      exact ⟨c, hc, c, hc, sub_self c⟩
+    smul_mem' := by
+      rintro r _ ⟨y, hy, z, hz, rfl⟩
+      simp only [Set.mem_sub, SetLike.mem_coe]
+      rcases lt_trichotomy r 0 with hr | rfl | hr
+      · -- r < 0: use (-r) • z - (-r) • y = r • (y - z)
+        refine ⟨(-r) • z, C.smul_mem (neg_pos.mpr hr) hz,
+               (-r) • y, C.smul_mem (neg_pos.mpr hr) hy, ?_⟩
+        rw [neg_smul]; rw [neg_smul]; rw [neg_sub_neg]; rw [smul_sub]
+      · -- r = 0
+        simp only [zero_smul]
+        obtain ⟨c, hc⟩ := hne
+        exact ⟨c, hc, c, hc, sub_self c⟩
+      · -- r > 0: use r • y - r • z
+        exact ⟨r • y, C.smul_mem hr hy, r • z, C.smul_mem hr hz, (smul_sub r y z).symm⟩}
+  have hCS : (C : Set M) subseteq S := fun x hx =>
+    let ⟨c, hc⟩ := hne; ⟨x + c, C.add_mem hx hc, c, hc, add_sub_cancel_right x c⟩
+  exact (h ▸ Submodule.span_le.mpr hCS) trivial
+
+@[deprecated (since := "2026-03-30")]
+alias IsGenerating.isReproducing := IsReproducing.of_span_eq_top
 
 中文:
 定理 IsReproducing.of_span_eq_top
@@ -1844,7 +1873,34 @@ theorem IsReproducing.of_span_eq_top
   -- A generating cone in a nontrivial module must be nonempty
   have hne : (C : Set M).Nonempty := Set.nonempty_iff_ne_empty.2 fun h' => by simp [h'] at h
   -- Build the submodule S = C - C and show span C ⊆ S
-  let S : Submodule R M :=
+  let S : Submodule R M := {
+    carrier := (C : Set M) - (C : Set M)
+    add_mem' := by
+      rintro _ _ ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
+      exact ⟨y₁ + y₂, C.add_mem hy₁ hy₂, z₁ + z₂, C.add_mem hz₁ hz₂, add_sub_add_comm ..⟩
+    zero_mem' := by
+      obtain ⟨c, hc⟩ := hne
+      exact ⟨c, hc, c, hc, sub_self c⟩
+    smul_mem' := by
+      rintro r _ ⟨y, hy, z, hz, rfl⟩
+      simp only [Set.mem_sub, SetLike.mem_coe]
+      rcases lt_trichotomy r 0 with hr | rfl | hr
+      · -- r < 0: use (-r) • z - (-r) • y = r • (y - z)
+        refine ⟨(-r) • z, C.smul_mem (neg_pos.mpr hr) hz,
+               (-r) • y, C.smul_mem (neg_pos.mpr hr) hy, ?_⟩
+        rw [neg_smul]; rw [neg_smul]; rw [neg_sub_neg]; rw [smul_sub]
+      · -- r = 0
+        simp only [zero_smul]
+        obtain ⟨c, hc⟩ := hne
+        exact ⟨c, hc, c, hc, sub_self c⟩
+      · -- r > 0: use r • y - r • z
+        exact ⟨r • y, C.smul_mem hr hy, r • z, C.smul_mem hr hz, (smul_sub r y z).symm⟩}
+  have hCS : (C : Set M) subseteq S := fun x hx =>
+    let ⟨c, hc⟩ := hne; ⟨x + c, C.add_mem hx hc, c, hc, add_sub_cancel_right x c⟩
+  exact (h ▸ Submodule.span_le.mpr hCS) trivial
+
+@[deprecated (since := "2026-03-30")]
+alias IsGenerating.isReproducing := IsReproducing.of_span_eq_top
 
 Depends on / 依赖: IsReproducing, Set.eq_univ_iff_forall, eq_univ_iff_forall
 -/
@@ -1939,7 +1995,13 @@ lemma mem_hull_of_convex
                 refine ⟨r₁ * r₂, mul_pos hr₁ hr₂, ?_⟩
                 rw [mul_smul]
                 exact smul_mem_smul_set hy
-              add
+              add_mem' := by
+                rintro y₁ ⟨r₁, hr₁, hy₁⟩ y₂ ⟨r₂, hr₂, hy₂⟩
+                refine ⟨r₁ + r₂, add_pos hr₁ hr₂, ?_⟩
+                rw [hs.add_smul hr₁.le hr₂.le]
+                exact add_mem_add hy₁ hy₂
+            }) (fun y hy => ⟨1, by simpa⟩) hx
+mpr := by rintro ⟨r, hr, y, hy, rfl⟩; exact (hull 𝕜 s).smul_mem hr subset_hull hy
 
 中文:
 引理 mem_hull_of_convex
@@ -1952,7 +2014,13 @@ lemma mem_hull_of_convex
                 refine ⟨r₁ * r₂, mul_pos hr₁ hr₂, ?_⟩
                 rw [mul_smul]
                 exact smul_mem_smul_set hy
-              add
+              add_mem' := by
+                rintro y₁ ⟨r₁, hr₁, hy₁⟩ y₂ ⟨r₂, hr₂, hy₂⟩
+                refine ⟨r₁ + r₂, add_pos hr₁ hr₂, ?_⟩
+                rw [hs.add_smul hr₁.le hr₂.le]
+                exact add_mem_add hy₁ hy₂
+            }) (fun y hy => ⟨1, by simpa⟩) hx
+mpr := by rintro ⟨r, hr, y, hy, rfl⟩; exact (hull 𝕜 s).smul_mem hr subset_hull hy
 
 Depends on / 依赖: hull_min
 -/
@@ -2472,7 +2540,9 @@ definition toCone
   · rintro c c_pos _ ⟨c', c'_pos, x, hx, rfl⟩
     exact ⟨c * c', mul_pos c_pos c'_pos, x, hx, (smul_smul _ _ _).symm⟩
   · rintro _ ⟨cx, cx_pos, x, hx, rfl⟩ _ ⟨cy, cy_pos, y, hy, rfl⟩
-    have : 0 < cx + 
+    have : 0 < cx + cy := add_pos cx_pos cy_pos
+    refine ⟨_, this, _, convex_iff_div.1 hs hx hy cx_pos.le cy_pos.le this, ?_⟩
+    simp only [smul_add, smul_smul, mul_div_assoc', mul_div_cancel_left₀ _ this.ne']
 
 中文:
 定义 toCone
@@ -2482,7 +2552,9 @@ definition toCone
   · rintro c c_pos _ ⟨c', c'_pos, x, hx, rfl⟩
     exact ⟨c * c', mul_pos c_pos c'_pos, x, hx, (smul_smul _ _ _).symm⟩
   · rintro _ ⟨cx, cx_pos, x, hx, rfl⟩ _ ⟨cy, cy_pos, y, hy, rfl⟩
-    have : 0 < cx + 
+    have : 0 < cx + cy := add_pos cx_pos cy_pos
+    refine ⟨_, this, _, convex_iff_div.1 hs hx hy cx_pos.le cy_pos.le this, ?_⟩
+    simp only [smul_add, smul_smul, mul_div_assoc', mul_div_cancel_left₀ _ this.ne']
 
 Depends on / 依赖: ConvexCone, ConvexCone.mk, _pos, add_pos, c_pos, convex_iff_div, cx_pos, cx_pos.le, cy_pos, cy_pos.le, mem_iUnion, mem_smul_set, mul_div_assoc, mul_pos, smul_add, smul_smul, this.ne
 -/
@@ -2536,7 +2608,7 @@ theorem mem_toCone'
   · rintro ⟨c, hc, hcx⟩
     exact ⟨c⁻¹, inv_pos.2 hc, _, hcx, by rw [smul_smul, inv_mul_cancel₀ hc.ne', one_smul]⟩
 
-@[deprecated ConvexCone.subs
+@[deprecated ConvexCone.subset_hull (since := "2026-03-30")]
 
 中文:
 定理 mem_toCone'
@@ -2548,7 +2620,7 @@ theorem mem_toCone'
   · rintro ⟨c, hc, hcx⟩
     exact ⟨c⁻¹, inv_pos.2 hc, _, hcx, by rw [smul_smul, inv_mul_cancel₀ hc.ne', one_smul]⟩
 
-@[deprecated ConvexCone.subs
+@[deprecated ConvexCone.subset_hull (since := "2026-03-30")]
 
 Depends on / 依赖: hc.ne, hs.mem_toCone.trans, inv_pos, mem_toCone, one_smul, smul_smul
 -/

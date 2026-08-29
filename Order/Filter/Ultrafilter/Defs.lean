@@ -898,7 +898,13 @@ nonrec theorem comap_id (f : Ultrafilter α) (h₀ : Injective (id : α -> α) :
   coe_injective comap_id
 
 @[simp]
-nonrec theorem comap_comap (f : Ultrafilter γ) {m : α -> β} {n : β -> γ}
+nonrec theorem comap_comap (f : Ultrafilter γ) {m : α -> β} {n : β -> γ} (inj₀ : Injective n)
+    (large₀ : range n in f) (inj₁ : Injective m) (large₁ : range m in f.comap inj₀ large₀)
+    (inj₂ : Injective (n ∘ m) := inj₀.comp inj₁)
+    (large₂ : range (n ∘ m) in f :=
+      (by rw [range_comp]; exact image_mem_of_mem_comap large₀ large₁)) :
+    (f.comap inj₀ large₀).comap inj₁ large₁ = f.comap inj₂ large₂ :=
+  coe_injective comap_comap
 
 中文:
 定理 coe_comap
@@ -912,7 +918,13 @@ nonrec theorem comap_id (f : Ultrafilter α) (h₀ : Injective (id : α -> α) :
   coe_injective comap_id
 
 @[simp]
-nonrec theorem comap_comap (f : Ultrafilter γ) {m : α -> β} {n : β -> γ}
+nonrec theorem comap_comap (f : Ultrafilter γ) {m : α -> β} {n : β -> γ} (inj₀ : Injective n)
+    (large₀ : range n in f) (inj₁ : Injective m) (large₁ : range m in f.comap inj₀ large₀)
+    (inj₂ : Injective (n ∘ m) := inj₀.comp inj₁)
+    (large₂ : range (n ∘ m) in f :=
+      (by rw [range_comp]; exact image_mem_of_mem_comap large₀ large₁)) :
+    (f.comap inj₀ large₀).comap inj₁ large₁ = f.comap inj₂ large₂ :=
+  coe_injective comap_comap
 -/
 theorem coe_comap {m : α -> β} (u : Ultrafilter β) (inj : Injective m) (large : Set.range m in u) :
     (u.comap inj large : Filter α) = Filter.comap m u :=
@@ -1194,7 +1206,8 @@ instance lawfulMonad
   map_const := rfl
   seqLeft_eq _ _ := rfl
   seqRight_eq _ _ := rfl
-  
+  pure_seq _ _ := rfl
+  bind_map _ _ := rfl
 
 中文:
 实例 lawfulMonad
@@ -1206,7 +1219,8 @@ instance lawfulMonad
   map_const := rfl
   seqLeft_eq _ _ := rfl
   seqRight_eq _ _ := rfl
-  
+  pure_seq _ _ := rfl
+  bind_map _ _ := rfl
 
 Depends on / 依赖: coe_injective, f.toFilter, id_map, toFilter
 -/
@@ -1643,7 +1657,9 @@ theorem ofComapInfPrincipal_eq_of_map
   calc
     Filter.map m (of f) <= Filter.map m f := map_mono (of_le _)
     _ <= (Filter.map m <| Filter.comap m g) ⊓ Filter.map m (𝓟 s) := map_inf_le
-    _ = (Filter.map m <| Filter.com
+    _ = (Filter.map m <| Filter.comap m g) ⊓ (𝓟 <| m '' s) := by rw [map_principal]
+    _ <= ↑g ⊓ (𝓟 <| m '' s) := inf_le_inf_right _ map_comap_le
+    _ = ↑g := inf_of_le_left (le_principal_iff.mpr h)
 
 中文:
 定理 ofComapInfPrincipal_eq_of_map
@@ -1656,7 +1672,9 @@ theorem ofComapInfPrincipal_eq_of_map
   calc
     Filter.map m (of f) <= Filter.map m f := map_mono (of_le _)
     _ <= (Filter.map m <| Filter.comap m g) ⊓ Filter.map m (𝓟 s) := map_inf_le
-    _ = (Filter.map m <| Filter.com
+    _ = (Filter.map m <| Filter.comap m g) ⊓ (𝓟 <| m '' s) := by rw [map_principal]
+    _ <= ↑g ⊓ (𝓟 <| m '' s) := inf_le_inf_right _ map_comap_le
+    _ = ↑g := inf_of_le_left (le_principal_iff.mpr h)
 
 Depends on / 依赖: Filter, Filter.comap, Filter.map, comap_inf_principal_neBot_of_image_mem, eq_of_le, f.NeBot, inf_le_inf_right, inf_of_le_left, le_principal_iff, le_principal_iff.mpr, map_comap_le, map_inf_le, map_mono, map_principal, of_le
 -/

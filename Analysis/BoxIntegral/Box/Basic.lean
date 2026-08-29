@@ -886,7 +886,9 @@ instance :
 fun i => (min_le_left _ _).trans_lt (I.lower_lt_upper i).trans_le (le_max_left _ _)⟩
     le_sup_left := fun _ _ => le_iff_bounds.2 ⟨inf_le_left, le_sup_left⟩
     le_sup_right := fun _ _ => le_iff_bounds.2 ⟨inf_le_right, le_sup_right⟩
-    sup
+    sup_le := fun _ _ _ h₁ h₂ => le_iff_bounds.2
+      ⟨le_inf (antitone_lower h₁) (antitone_lower h₂),
+        sup_le (monotone_upper h₁) (monotone_upper h₂)⟩ }
 
 中文:
 实例 :
@@ -895,7 +897,9 @@ fun i => (min_le_left _ _).trans_lt (I.lower_lt_upper i).trans_le (le_max_left _
 fun i => (min_le_left _ _).trans_lt (I.lower_lt_upper i).trans_le (le_max_left _ _)⟩
     le_sup_left := fun _ _ => le_iff_bounds.2 ⟨inf_le_left, le_sup_left⟩
     le_sup_right := fun _ _ => le_iff_bounds.2 ⟨inf_le_right, le_sup_right⟩
-    sup
+    sup_le := fun _ _ _ h₁ h₂ => le_iff_bounds.2
+      ⟨le_inf (antitone_lower h₁) (antitone_lower h₂),
+        sup_le (monotone_upper h₁) (monotone_upper h₂)⟩ }
 
 Depends on / 依赖: I.lower, I.lower_lt_upper, I.upper, J.lower, J.upper, antitone_lower, inf_le_left, inf_le_right, le_iff_bounds, le_inf, le_max_left, le_sup_left, le_sup_right, lower_lt_upper, min_le_left, monotone_upper, sup_le, trans_le, trans_lt
 -/
@@ -1299,7 +1303,10 @@ instance :
       rw [← withBotCoe_subset_iff]; rw [coe_inf]
       exact inter_subset_right
     le_inf := fun I J₁ J₂ h₁ h₂ => by
-      simp only [← with
+      simp only [← withBotCoe_subset_iff, coe_inf] at *
+      exact subset_inter h₁ h₂ }
+
+@[simp, norm_cast]
 
 中文:
 实例 :
@@ -1312,7 +1319,10 @@ instance :
       rw [← withBotCoe_subset_iff]; rw [coe_inf]
       exact inter_subset_right
     le_inf := fun I J₁ J₂ h₁ h₂ => by
-      simp only [← with
+      simp only [← withBotCoe_subset_iff, coe_inf] at *
+      exact subset_inter h₁ h₂ }
+
+@[simp, norm_cast]
 
 Depends on / 依赖: coe_inf, inf_le_left, inf_le_right, inter_subset_left, inter_subset_right, le_inf, subset_inter, withBotCoe_subset_iff
 -/
@@ -1629,7 +1639,13 @@ theorem iUnion_Ioo_of_tendsto
   have hu' : forall i, Monotone fun n => (J n).upper i :=
     fun i => (monotone_eval i).comp (monotone_upper.comp hJ)
   calc
-    ⋃ n, Box.Ioo (J n) = pi univ fun i 
+    ⋃ n, Box.Ioo (J n) = pi univ fun i => ⋃ n, Ioo ((J n).lower i) ((J n).upper i) :=
+      iUnion_univ_pi_of_monotone fun i => (hl' i).Ioo (hu' i)
+    _ = Box.Ioo I :=
+      pi_congr rfl fun i _ =>
+        iUnion_Ioo_of_mono_of_isGLB_of_isLUB (hl' i) (hu' i)
+          (isGLB_of_tendsto_atTop (hl' i) (tendsto_pi_nhds.1 hl _))
+          (isLUB_of_tendsto_atTop (hu' i) (tendsto_pi_nhds.1 hu _))
 
 中文:
 定理 iUnion_Ioo_of_tendsto
@@ -1639,7 +1655,13 @@ theorem iUnion_Ioo_of_tendsto
   have hu' : forall i, Monotone fun n => (J n).upper i :=
     fun i => (monotone_eval i).comp (monotone_upper.comp hJ)
   calc
-    ⋃ n, Box.Ioo (J n) = pi univ fun i 
+    ⋃ n, Box.Ioo (J n) = pi univ fun i => ⋃ n, Ioo ((J n).lower i) ((J n).upper i) :=
+      iUnion_univ_pi_of_monotone fun i => (hl' i).Ioo (hu' i)
+    _ = Box.Ioo I :=
+      pi_congr rfl fun i _ =>
+        iUnion_Ioo_of_mono_of_isGLB_of_isLUB (hl' i) (hu' i)
+          (isGLB_of_tendsto_atTop (hl' i) (tendsto_pi_nhds.1 hl _))
+          (isLUB_of_tendsto_atTop (hu' i) (tendsto_pi_nhds.1 hu _))
 
 Depends on / 依赖: Antitone, Box.Ioo, Monotone, antitone_lower, antitone_lower.comp_monotone, comp_antitone, comp_monotone, iUnion_Ioo_of_mono_of_isGLB_of_isLUB, iUnion_univ_pi_of_monotone, isGLB_of_tendsto_a, monotone_eval, monotone_upper, monotone_upper.comp, pi_congr
 -/
@@ -1670,7 +1692,9 @@ theorem exists_seq_mono_tendsto
     fun i => exists_seq_strictAnti_strictMono_tendsto (I.lower_lt_upper i)
   exact
     ⟨⟨fun k => ⟨flip a k, flip b k, fun i => hab _ _ _⟩, fun k l hkl =>
-        le_iff_bounds.2 ⟨fun i => (ha_anti i).antitone hkl, fun i =
+        le_iff_bounds.2 ⟨fun i => (ha_anti i).antitone hkl, fun i => (hb_mono i).monotone hkl⟩⟩,
+      fun n x hx i _ => ⟨(ha_mem _ _).1.trans_le (hx.1 _), (hx.2 _).trans_lt (hb_mem _ _).2⟩,
+      tendsto_pi_nhds.2 ha_tendsto, tendsto_pi_nhds.2 hb_tendsto⟩
 
 中文:
 定理 存在_seq_mono_tendsto
@@ -1680,7 +1704,9 @@ theorem exists_seq_mono_tendsto
     fun i => exists_seq_strictAnti_strictMono_tendsto (I.lower_lt_upper i)
   exact
     ⟨⟨fun k => ⟨flip a k, flip b k, fun i => hab _ _ _⟩, fun k l hkl =>
-        le_iff_bounds.2 ⟨fun i => (ha_anti i).antitone hkl, fun i =
+        le_iff_bounds.2 ⟨fun i => (ha_anti i).antitone hkl, fun i => (hb_mono i).monotone hkl⟩⟩,
+      fun n x hx i _ => ⟨(ha_mem _ _).1.trans_le (hx.1 _), (hx.2 _).trans_lt (hb_mem _ _).2⟩,
+      tendsto_pi_nhds.2 ha_tendsto, tendsto_pi_nhds.2 hb_tendsto⟩
 
 Depends on / 依赖: I.lower_lt_upper, antitone, exists_seq_strictAnti_strictMono_tendsto, ha_anti, ha_mem, ha_tendsto, hb_mem, hb_mono, hb_tendsto, le_iff_bounds, lower_lt_upper, monotone, tendsto_pi_nhds, trans_le, trans_lt
 -/
@@ -1732,7 +1758,8 @@ theorem distortion_eq_of_sub_eq_div
     have := div_nonpos_of_nonneg_of_nonpos (sub_nonneg.2 <| J.lower_le_upper i) (not_lt.1 hr)
     rw [← h] at this
     exact this.not_gt (sub_pos.2 <| I.lower_lt_upper i)
- 
+  have hn0 := (map_ne_zero Real.nnabs).2 this.ne'
+  simp_rw [NNReal.finset_sup_div, div_div_div_cancel_right₀ hn0]
 
 中文:
 定理 distortion_eq_of_sub_eq_div
@@ -1745,7 +1772,8 @@ theorem distortion_eq_of_sub_eq_div
     have := div_nonpos_of_nonneg_of_nonpos (sub_nonneg.2 <| J.lower_le_upper i) (not_lt.1 hr)
     rw [← h] at this
     exact this.not_gt (sub_pos.2 <| I.lower_lt_upper i)
- 
+  have hn0 := (map_ne_zero Real.nnabs).2 this.ne'
+  simp_rw [NNReal.finset_sup_div, div_div_div_cancel_right₀ hn0]
 
 Depends on / 依赖: I.lower_lt_upper, J.lower_le_upper, NNReal, NNReal.finset_sup_div, Real.nnabs, Real.nndist_eq, distortion, div_nonpos_of_nonneg_of_nonpos, finset_sup_div, lower_le_upper, lower_lt_upper, map_ne_zero, nndist_eq, nndist_pi_def, not_gt, not_lt, simp_rw, sub_nonneg, sub_pos, this.ne
 -/
@@ -1773,7 +1801,7 @@ theorem nndist_le_distortion_mul
         nndist I.lower I.upper / nndist (I.lower i) (I.upper i) * nndist (I.lower i) (I.upper i) :=
       (div_mul_cancel₀ _ <| mt nndist_eq_zero.1 (I.lower_lt_upper i).ne).symm
     _ <= I.distortion * nndist (I.lower i) (I.upper i) := by
-      grw [distortion, ← Fi
+      grw [distortion, ← Finset.le_sup (Finset.mem_univ i)]
 
 中文:
 定理 nndist_le_distortion_mul
@@ -1783,7 +1811,7 @@ theorem nndist_le_distortion_mul
         nndist I.lower I.upper / nndist (I.lower i) (I.upper i) * nndist (I.lower i) (I.upper i) :=
       (div_mul_cancel₀ _ <| mt nndist_eq_zero.1 (I.lower_lt_upper i).ne).symm
     _ <= I.distortion * nndist (I.lower i) (I.upper i) := by
-      grw [distortion, ← Fi
+      grw [distortion, ← Finset.le_sup (Finset.mem_univ i)]
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.mem_univ, I.distortion, I.lower, I.lower_lt_upper, I.upper, distortion, le_sup, lower_lt_upper, mem_univ, nndist, nndist_eq_zero
 -/
@@ -1834,7 +1862,8 @@ theorem diam_Icc_le_of_distortion_le
   diam_le_of_forall_dist_le this fun x hx y hy =>
     calc
       dist x y <= dist I.lower I.upper := Real.dist_le_of_mem_pi_Icc hx hy
-      _ <= I.distortion * (I.upper i - I.lower i)
+      _ <= I.distortion * (I.upper i - I.lower i) := I.dist_le_distortion_mul i
+      _ <= c * (I.upper i - I.lower i) := by gcongr; exact sub_nonneg.2 (I.lower_le_upper i)
 
 中文:
 定理 diam_Icc_le_of_distortion_le
@@ -1844,7 +1873,8 @@ theorem diam_Icc_le_of_distortion_le
   diam_le_of_forall_dist_le this fun x hx y hy =>
     calc
       dist x y <= dist I.lower I.upper := Real.dist_le_of_mem_pi_Icc hx hy
-      _ <= I.distortion * (I.upper i - I.lower i)
+      _ <= I.distortion * (I.upper i - I.lower i) := I.dist_le_distortion_mul i
+      _ <= c * (I.upper i - I.lower i) := by gcongr; exact sub_nonneg.2 (I.lower_le_upper i)
 
 Depends on / 依赖: I.dist_le_distortion_mul, I.distortion, I.lower, I.lower_le_upper, I.upper, Real.dist_le_of_mem_pi_Icc, c.coe_nonneg, coe_nonneg, diam_le_of_forall_dist_le, dist_le_distortion_mul, dist_le_of_mem_pi_Icc, distortion, lower_le_upper, mul_nonneg, sub_nonneg
 -/

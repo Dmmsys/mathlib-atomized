@@ -683,7 +683,19 @@ lemma addPolynomial_slope
     rcases hx, Y_eq_of_Y_ne h₁ h₂ hx hy with ⟨rfl, rfl⟩
     rw [equation_iff] at h₁ h₂
     rw [slope_of_Y_ne rfl hy]
-    
+    rw [negY]; rw [← sub_ne_zero] at hy
+    replace hy : y₁ - (-y₁ - x₁ * W.a₁ - W.a₃) != 0 := by convert! hy using 1; ring
+    ext
+    · rfl
+    · simp only [addX]
+      ring1
+    · simp [field]
+      ring1
+    · linear_combination (norm := (simp [field]; ring1)) -h₁
+  · rw [equation_iff] at h₁ h₂
+    rw [slope_of_X_ne hx]
+    simp only [addX]
+    grind
 
 中文:
 引理 addPolynomial_slope
@@ -695,7 +707,19 @@ lemma addPolynomial_slope
     rcases hx, Y_eq_of_Y_ne h₁ h₂ hx hy with ⟨rfl, rfl⟩
     rw [equation_iff] at h₁ h₂
     rw [slope_of_Y_ne rfl hy]
-    
+    rw [negY]; rw [← sub_ne_zero] at hy
+    replace hy : y₁ - (-y₁ - x₁ * W.a₁ - W.a₃) != 0 := by convert! hy using 1; ring
+    ext
+    · rfl
+    · simp only [addX]
+      ring1
+    · simp [field]
+      ring1
+    · linear_combination (norm := (simp [field]; ring1)) -h₁
+  · rw [equation_iff] at h₁ h₂
+    rw [slope_of_X_ne hx]
+    simp only [addX]
+    grind
 
 Depends on / 依赖: Cubic.prod_X_sub_C_eq, Cubic.toPoly_injective, W.negY, Y_eq_of_Y_ne, addPolynomial_eq, convert, equation_iff, linear_combination, neg_inj, prod_X_sub_C_eq, replace, slope_of_Y_ne, sub_ne_zero, toPoly_injective
 -/
@@ -792,7 +816,7 @@ lemma nonsingular_negAdd_of_eval_derivative_ne_zero
   derivative_simp
   simp only [zero_add, add_zero, sub_zero, zero_mul, mul_one]
   eval_simp
-  linear_com
+  linear_combination (norm := (norm_num1; ring1)) hx.left + ℓ * hx.right
 
 中文:
 引理 nonsingular_negAdd_of_eval_derivative_ne_zero
@@ -806,7 +830,7 @@ lemma nonsingular_negAdd_of_eval_derivative_ne_zero
   derivative_simp
   simp only [zero_add, add_zero, sub_zero, zero_mul, mul_one]
   eval_simp
-  linear_com
+  linear_combination (norm := (norm_num1; ring1)) hx.left + ℓ * hx.right
 
 Depends on / 依赖: Nonsingular, addPolynomial, add_zero, and_iff_right, contrapose, derivative_simp, eval_simp, hx.left, hx.right, linePolynomial, linear_combination, mul_one, negAddY, norm_num1, polynomial, polynomialX, polynomialY, sub_zero, zero_add, zero_mul
 -/
@@ -911,7 +935,13 @@ lemma nonsingular_negAdd
     · by_cases hx : x₁ = x₂
       · subst hx
         contradiction
-      · rwa [negAddY, ← neg_sub, mul_neg, hx₂, slope_of_X_ne 
+      · rwa [negAddY, ← neg_sub, mul_neg, hx₂, slope_of_X_ne hx,
+div_mul_cancel₀ _ sub_ne_zero_of_ne hx, neg_sub, sub_add_cancel]
+· apply nonsingular_negAdd_of_eval_derivative_ne_zero equation_negAdd h₁.left h₂.left hxy
+      rw [derivative_addPolynomial_slope h₁.left h₂.left hxy]
+      eval_simp
+      simp only [neg_ne_zero, sub_self, mul_zero, add_zero]
+      exact mul_ne_zero (sub_ne_zero_of_ne hx₁) (sub_ne_zero_of_ne hx₂)
 
 中文:
 引理 nonsingular_negAdd
@@ -923,7 +953,13 @@ lemma nonsingular_negAdd
     · by_cases hx : x₁ = x₂
       · subst hx
         contradiction
-      · rwa [negAddY, ← neg_sub, mul_neg, hx₂, slope_of_X_ne 
+      · rwa [negAddY, ← neg_sub, mul_neg, hx₂, slope_of_X_ne hx,
+div_mul_cancel₀ _ sub_ne_zero_of_ne hx, neg_sub, sub_add_cancel]
+· apply nonsingular_negAdd_of_eval_derivative_ne_zero equation_negAdd h₁.left h₂.left hxy
+      rw [derivative_addPolynomial_slope h₁.left h₂.left hxy]
+      eval_simp
+      simp only [neg_ne_zero, sub_self, mul_zero, add_zero]
+      exact mul_ne_zero (sub_ne_zero_of_ne hx₁) (sub_ne_zero_of_ne hx₂)
 
 Depends on / 依赖: W.addX, W.slope, derivative_addPolynomial_slope, equation_negAdd, eval_simp, mul_neg, mul_zero, negAddY, neg_sub, nonsingular_negAdd_of_eval_derivative_ne_zero, slope_of_X_ne, sub_add_cancel, sub_ne_zero_of_ne, sub_self, zero_add
 -/
@@ -1033,7 +1069,7 @@ lemma addY_sub_negY_addY
     y₃ - W.negY x₃ y₃ =
       ((y₂ - W.negY x₂ y₂) * (x₁ - x₃) - (y₁ - W.negY x₁ y₁) * (x₂ - x₃)) / (x₂ - x₁) := by
   simp_rw [addY, negY, eq_div_iff (sub_ne_zero.mpr hx.symm)]
-  linear_combination (norm := ring1)
+  linear_combination (norm := ring1) 2 * cyclic_sum_Y_mul_X_sub_X y₁ y₂ hx
 
 中文:
 引理 addY_sub_negY_addY
@@ -1043,7 +1079,7 @@ lemma addY_sub_negY_addY
     y₃ - W.negY x₃ y₃ =
       ((y₂ - W.negY x₂ y₂) * (x₁ - x₃) - (y₁ - W.negY x₁ y₁) * (x₂ - x₃)) / (x₂ - x₁) := by
   simp_rw [addY, negY, eq_div_iff (sub_ne_zero.mpr hx.symm)]
-  linear_combination (norm := ring1)
+  linear_combination (norm := ring1) 2 * cyclic_sum_Y_mul_X_sub_X y₁ y₂ hx
 
 Depends on / 依赖: W.addX, W.slope
 -/
@@ -1230,7 +1266,9 @@ lemma map_slope
     · rw [slope_of_Y_eq (congr_arg f hx) <| by rw [hy, map_negY], slope_of_Y_eq hx hy, map_zero]
     · rw [slope_of_Y_ne (congr_arg f hx) <| map_negY f x₂ y₂ ▸ fun h => hy <| f.injective h,
         map_negY, slope_of_Y_ne hx hy]
-      ma
+      map_simp
+  · rw [slope_of_X_ne fun h => hx <| f.injective h, slope_of_X_ne hx]
+    map_simp
 
 中文:
 引理 map_slope
@@ -1241,7 +1279,9 @@ lemma map_slope
     · rw [slope_of_Y_eq (congr_arg f hx) <| by rw [hy, map_negY], slope_of_Y_eq hx hy, map_zero]
     · rw [slope_of_Y_ne (congr_arg f hx) <| map_negY f x₂ y₂ ▸ fun h => hy <| f.injective h,
         map_negY, slope_of_Y_ne hx hy]
-      ma
+      map_simp
+  · rw [slope_of_X_ne fun h => hx <| f.injective h, slope_of_X_ne hx]
+    map_simp
 
 Depends on / 依赖: W.negY, congr_arg, f.injective, injective, map_negY, map_simp, map_zero, slope_of_X_ne, slope_of_Y_eq, slope_of_Y_ne
 -/

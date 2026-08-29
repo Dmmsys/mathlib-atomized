@@ -615,7 +615,10 @@ lemma disjoint_subtype_iff
     Disjoint a b ↔ Disjoint a.val b.val := by
   let : SemilatticeInf (Subtype pr) := Subtype.semilatticeInf Pinf
   let : OrderBot (Subtype pr) := Subtype.orderBot hbot
-  rw [disjoint_iff]; rw [disjoint_iff]; rw [← 
+  rw [disjoint_iff]; rw [disjoint_iff]; rw [← Subtype.coe_inf Pinf]; rw [← Subtype.coe_bot hbot]
+  exact Subtype.coe_inj.symm
+
+@[to_dual top_le]
 
 中文:
 引理 disjoint_subtype_iff
@@ -625,7 +628,10 @@ lemma disjoint_subtype_iff
     Disjoint a b ↔ Disjoint a.val b.val := by
   let : SemilatticeInf (Subtype pr) := Subtype.semilatticeInf Pinf
   let : OrderBot (Subtype pr) := Subtype.orderBot hbot
-  rw [disjoint_iff]; rw [disjoint_iff]; rw [← 
+  rw [disjoint_iff]; rw [disjoint_iff]; rw [← Subtype.coe_inf Pinf]; rw [← Subtype.coe_bot hbot]
+  exact Subtype.coe_inj.symm
+
+@[to_dual top_le]
 
 Depends on / 依赖: Subtype, Subtype.semilatticeInf, semilatticeInf
 -/

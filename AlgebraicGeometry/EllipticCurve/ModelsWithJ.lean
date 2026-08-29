@@ -570,7 +570,16 @@ instance :
       infer_instance
     · have := Fact.mk (Ne.isUnit h3)
       rw [h0]; rw [ofJ_0_of_three_ne_zero h3]
-      infer_instanc
+      infer_instance
+  · by_cases h1728 : j = 1728
+    · have h2 : (2 : F) != 0 := fun h => h0 (by linear_combination h1728 + 864 * h)
+      have := Fact.mk h2.isUnit
+      rw [h1728]; rw [ofJ_1728_of_two_ne_zero h2]
+      infer_instance
+    · have := Fact.mk (Ne.isUnit h0)
+      have := Fact.mk (sub_ne_zero.2 h1728).isUnit
+      rw [ofJ_ne_0_ne_1728 j h0 h1728]
+      infer_instance
 
 中文:
 实例 :
@@ -583,7 +592,16 @@ instance :
       infer_instance
     · have := Fact.mk (Ne.isUnit h3)
       rw [h0]; rw [ofJ_0_of_three_ne_zero h3]
-      infer_instanc
+      infer_instance
+  · by_cases h1728 : j = 1728
+    · have h2 : (2 : F) != 0 := fun h => h0 (by linear_combination h1728 + 864 * h)
+      have := Fact.mk h2.isUnit
+      rw [h1728]; rw [ofJ_1728_of_two_ne_zero h2]
+      infer_instance
+    · have := Fact.mk (Ne.isUnit h0)
+      have := Fact.mk (sub_ne_zero.2 h1728).isUnit
+      rw [ofJ_ne_0_ne_1728 j h0 h1728]
+      infer_instance
 
 Depends on / 依赖: Fact.mk, IsUnit, Ne.isUnit, h2.isUnit, infer_instance, isUnit, linear_combination, ofJ_0_of_three_eq_zero, ofJ_0_of_three_ne_zero, ofJ_1728_of_two_ne_zero, of_mul_eq_one
 -/
@@ -619,7 +637,14 @@ lemma ofJ_j
       simp_rw [h0, ofJ_0_of_three_eq_zero h3, ofJ1728_j]
       linear_combination 576 * h3
     · have := Fact.mk (Ne.isUnit h3)
-      simp_rw [h0, ofJ_0_of_three_ne_zero
+      simp_rw [h0, ofJ_0_of_three_ne_zero h3, ofJ0_j]
+  · by_cases h1728 : j = 1728
+    · have h2 : (2 : F) != 0 := fun h => h0 (by linear_combination h1728 + 864 * h)
+      have := Fact.mk h2.isUnit
+      simp_rw [h1728, ofJ_1728_of_two_ne_zero h2, ofJ1728_j]
+    · have := Fact.mk (Ne.isUnit h0)
+      have := Fact.mk (sub_ne_zero.2 h1728).isUnit
+      simp_rw [ofJ_ne_0_ne_1728 j h0 h1728, ofJNe0Or1728_j]
 
 中文:
 引理 ofJ_j
@@ -631,7 +656,14 @@ lemma ofJ_j
       simp_rw [h0, ofJ_0_of_three_eq_zero h3, ofJ1728_j]
       linear_combination 576 * h3
     · have := Fact.mk (Ne.isUnit h3)
-      simp_rw [h0, ofJ_0_of_three_ne_zero
+      simp_rw [h0, ofJ_0_of_three_ne_zero h3, ofJ0_j]
+  · by_cases h1728 : j = 1728
+    · have h2 : (2 : F) != 0 := fun h => h0 (by linear_combination h1728 + 864 * h)
+      have := Fact.mk h2.isUnit
+      simp_rw [h1728, ofJ_1728_of_two_ne_zero h2, ofJ1728_j]
+    · have := Fact.mk (Ne.isUnit h0)
+      have := Fact.mk (sub_ne_zero.2 h1728).isUnit
+      simp_rw [ofJ_ne_0_ne_1728 j h0 h1728, ofJNe0Or1728_j]
 
 Depends on / 依赖: Fact.mk, IsUnit, Ne.is, Ne.isUnit, h2.isUnit, isUnit, linear_combination, ofJ0_j, ofJ1728_j, ofJ_0_of_three_eq_zero, ofJ_0_of_three_ne_zero, ofJ_1728_of_two_ne_zero, of_mul_eq_one, simp_rw
 -/

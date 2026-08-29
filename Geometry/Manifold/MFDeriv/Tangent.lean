@@ -77,7 +77,7 @@ theorem tangentMap_chart_symm
     mfld_simps]
   -- `simp` fails to apply `PartialEquiv.prod_symm` with `ModelProd`
   congr
-  exact ((chartAt H (TotalSpace.pro
+  exact ((chartAt H (TotalSpace.proj p)).right_inv h).symm
 
 中文:
 定理 tangentMap_chart_symm
@@ -89,7 +89,7 @@ theorem tangentMap_chart_symm
     mfld_simps]
   -- `simp` fails to apply `PartialEquiv.prod_symm` with `ModelProd`
   congr
-  exact ((chartAt H (TotalSpace.pro
+  exact ((chartAt H (TotalSpace.proj p)).right_inv h).symm
 
 Depends on / 依赖: MDifferentiableAt, MDifferentiableAt.mfderiv, TangentBundle, TangentBundle.chartAt, chartAt, chart_mem_atlas, mdifferentiableAt_atlas_symm, mfderiv, mfld_simps, tangentBundleCore, tangentMap
 -/
@@ -161,7 +161,11 @@ lemma inTangentCoordinates_eq_mfderiv_comp
   · have : MDiffAt (extChartAt I' (g x₀)) (g x) := mdifferentiableAt_extChartAt hy
     simp_all [mfderiv]
   · simp only [mfderivWithin, writtenInExtChartAt, modelWithCornersSelf_coe, range_id, inter_univ]
-    r
+    rw [if_pos]
+    · simp [Function.comp_def, OpenPartialHomeomorph.left_inv (chartAt H (f x₀)) hx]
+    · apply mdifferentiableWithinAt_extChartAt_symm
+      apply (extChartAt I (f x₀)).map_source
+      simpa using hx
 
 中文:
 引理 inTangentCoordinates_eq_mfderiv_comp
@@ -171,7 +175,11 @@ lemma inTangentCoordinates_eq_mfderiv_comp
   · have : MDiffAt (extChartAt I' (g x₀)) (g x) := mdifferentiableAt_extChartAt hy
     simp_all [mfderiv]
   · simp only [mfderivWithin, writtenInExtChartAt, modelWithCornersSelf_coe, range_id, inter_univ]
-    r
+    rw [if_pos]
+    · simp [Function.comp_def, OpenPartialHomeomorph.left_inv (chartAt H (f x₀)) hx]
+    · apply mdifferentiableWithinAt_extChartAt_symm
+      apply (extChartAt I (f x₀)).map_source
+      simpa using hx
 
 Depends on / 依赖: Function, Function.comp_def, MDiffAt, OpenPartialHomeomorph, OpenPartialHomeomorph.left_inv, chartAt, comp_def, extChartAt, if_pos, inTangentCoordinates_eq, inter_univ, left_inv, map_source, mdifferentiableAt_extChartAt, mdifferentiableWithinAt_extChartAt_symm, mfderiv, mfderivWithin, modelWithCornersSelf_coe, range_id, tangentBundleCore_coordChange
 -/

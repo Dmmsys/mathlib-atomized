@@ -66,7 +66,7 @@ theorem eLpNorm'_add_le_of_le_one
       gcongr with a
       simp only [Pi.add_apply, enorm_add_le]
     _ <= (2 : Real>=0∞) ^ (1 / q - 1) * (eLpNorm' f q μ + eLpNorm' g q μ) :=
-      ENNReal.lintegral_Lp_add_le_of_le_one hf.enor
+      ENNReal.lintegral_Lp_add_le_of_le_one hf.enorm hq0 hq1
 
 中文:
 定理 eLpNorm'_add_le_of_le_one
@@ -76,7 +76,7 @@ theorem eLpNorm'_add_le_of_le_one
       gcongr with a
       simp only [Pi.add_apply, enorm_add_le]
     _ <= (2 : Real>=0∞) ^ (1 / q - 1) * (eLpNorm' f q μ + eLpNorm' g q μ) :=
-      ENNReal.lintegral_Lp_add_le_of_le_one hf.enor
+      ENNReal.lintegral_Lp_add_le_of_le_one hf.enorm hq0 hq1
 -/
 theorem eLpNorm'_add_le_of_le_one (hf : AEStronglyMeasurable f μ) (hq0 : 0 <= q) (hq1 : q <= 1) :
     eLpNorm' (f + g) q μ <= 2 ^ (1 / q - 1) * (eLpNorm' f q μ + eLpNorm' g q μ) :=
@@ -126,7 +126,7 @@ theorem eLpNorm_add_le
   have hp1_real : 1 <= p.toReal := by
     rwa [← ENNReal.toReal_one, ENNReal.toReal_le_toReal ENNReal.one_ne_top hp_top]
   repeat rw [eLpNorm_eq_eLpNorm' hp0 hp_top]
-  exact eLpNorm'_add_le hf 
+  exact eLpNorm'_add_le hf hg hp1_real
 
 中文:
 定理 eLpNorm_add_le
@@ -139,7 +139,7 @@ theorem eLpNorm_add_le
   have hp1_real : 1 <= p.toReal := by
     rwa [← ENNReal.toReal_one, ENNReal.toReal_le_toReal ENNReal.one_ne_top hp_top]
   repeat rw [eLpNorm_eq_eLpNorm' hp0 hp_top]
-  exact eLpNorm'_add_le hf 
+  exact eLpNorm'_add_le hf hg hp1_real
 
 Depends on / 依赖: ENNReal, ENNReal.one_ne_top, ENNReal.toReal_le_toReal, ENNReal.toReal_one, _add_le, eLpNorm, eLpNormEssSup_add_le, eLpNorm_eq_eLpNorm, hp1_real, hp_top, one_ne_top, p.toReal, repeat, toReal, toReal_le_toReal, toReal_one
 -/
@@ -167,7 +167,9 @@ theorem eLpNorm_add_le'
   · simp only [eLpNorm_eq_eLpNorm' hp (h'p.trans ENNReal.one_lt_top).ne]
     convert! eLpNorm'_add_le_of_le_one hf ENNReal.toReal_nonneg _
     · have : p in Set.Ioo (0 : Real>=0∞) 1 := ⟨hp.bot_lt, h'p⟩
-      sim
+      simp only [LpAddConst, if_pos this]
+    · simpa using ENNReal.toReal_mono ENNReal.one_ne_top h'p.le
+  · simpa [LpAddConst_of_one_le h'p] using eLpNorm_add_le hf hg h'p
 
 中文:
 定理 eLpNorm_add_le'
@@ -179,7 +181,9 @@ theorem eLpNorm_add_le'
   · simp only [eLpNorm_eq_eLpNorm' hp (h'p.trans ENNReal.one_lt_top).ne]
     convert! eLpNorm'_add_le_of_le_one hf ENNReal.toReal_nonneg _
     · have : p in Set.Ioo (0 : Real>=0∞) 1 := ⟨hp.bot_lt, h'p⟩
-      sim
+      simp only [LpAddConst, if_pos this]
+    · simpa using ENNReal.toReal_mono ENNReal.one_ne_top h'p.le
+  · simpa [LpAddConst_of_one_le h'p] using eLpNorm_add_le hf hg h'p
 
 Depends on / 依赖: ENNReal, ENNReal.one_lt_top, ENNReal.one_ne_top, ENNReal.toReal_mono, ENNReal.toReal_nonneg, LpAddConst, LpAddConst_of_one_le, Set.Ioo, _add_le_of_le_one, bot_lt, convert, eLpNorm, eLpNorm_add_le, eLpNorm_eq_eLpNorm, eq_or_ne, hp.bot_lt, if_pos, lt_or_ge, one_lt_top, one_ne_top
 -/
@@ -211,7 +215,13 @@ theorem exists_Lp_half
           (Or.inr (LpAddConst_lt_top p).ne)).mono_left
       nhdsWithin_le_nhds
   simp only [add_zero, mul_zero] at this
-  
+  rcases (((tendsto_order.1 this).2 δ hδ.bot_lt).and self_mem_nhdsWithin).exists with ⟨η, hη, ηpos⟩
+  refine ⟨η, ηpos, fun f g hf hg Hf Hg => ?_⟩
+  calc
+    eLpNorm (f + g) p μ <= LpAddConst p * (eLpNorm f p μ + eLpNorm g p μ) :=
+      eLpNorm_add_le' hf hg p
+    _ <= LpAddConst p * (η + η) := by gcongr
+    _ < δ := hη
 
 中文:
 定理 存在_Lp_half
@@ -224,7 +234,13 @@ theorem exists_Lp_half
           (Or.inr (LpAddConst_lt_top p).ne)).mono_left
       nhdsWithin_le_nhds
   simp only [add_zero, mul_zero] at this
-  
+  rcases (((tendsto_order.1 this).2 δ hδ.bot_lt).and self_mem_nhdsWithin).exists with ⟨η, hη, ηpos⟩
+  refine ⟨η, ηpos, fun f g hf hg Hf Hg => ?_⟩
+  calc
+    eLpNorm (f + g) p μ <= LpAddConst p * (eLpNorm f p μ + eLpNorm g p μ) :=
+      eLpNorm_add_le' hf hg p
+    _ <= LpAddConst p * (η + η) := by gcongr
+    _ < δ := hη
 
 Depends on / 依赖: ENNReal, ENNReal.Tendsto.const_mul, LpAddConst, LpAddConst_lt_top, Or.inr, Tendsto, add_zero, bot_lt, const_mul, eLpNorm, eLpNorm_add_le, mono_left, mul_zero, nhdsWithin_le_nhds, self_mem_nhdsWithin, tendsto_id, tendsto_id.add, tendsto_order
 -/
@@ -441,7 +457,7 @@ theorem memLp_finsetSum
     simp only [his, Finset.sum_insert, not_false_iff]
     exact (hf i (s.mem_insert_self i)).add (ih fun j hj => hf j (Finset.mem_insert_of_mem hj))
 
-@[deprecated (since :
+@[deprecated (since := "2026-04-08")] alias memLp_finset_sum := memLp_finsetSum
 
 中文:
 定理 memLp_finsetSum
@@ -455,7 +471,7 @@ theorem memLp_finsetSum
     simp only [his, Finset.sum_insert, not_false_iff]
     exact (hf i (s.mem_insert_self i)).add (ih fun j hj => hf j (Finset.mem_insert_of_mem hj))
 
-@[deprecated (since :
+@[deprecated (since := "2026-04-08")] alias memLp_finset_sum := memLp_finsetSum
 
 Depends on / 依赖: Classical, Classical.decEq, DecidableEq, Finset, Finset.induction_on, Finset.mem_insert_of_mem, Finset.sum_insert, induction_on, mem_insert_of_mem, mem_insert_self, not_false_iff, revert, s.mem_insert_self, sum_insert
 -/

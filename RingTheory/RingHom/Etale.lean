@@ -336,7 +336,7 @@ lemma Etale.iff_flat_and_formallyUnramified
   simp_rw [← f.algebraMap_toAlgebra, RingHom.etale_algebraMap, RingHom.flat_algebraMap_iff,
     RingHom.formallyUnramified_algebraMap, RingHom.finitePresentation_algebraMap]
   refine ⟨fun h => ⟨inferInstance, inferInstance, inferInstance⟩,
-    fun ⟨_, _, _⟩ => .of_formallyUnramif
+    fun ⟨_, _, _⟩ => .of_formallyUnramified_of_flat⟩
 
 中文:
 引理 平展.iff_flat_and_formallyUnramified
@@ -346,7 +346,7 @@ lemma Etale.iff_flat_and_formallyUnramified
   simp_rw [← f.algebraMap_toAlgebra, RingHom.etale_algebraMap, RingHom.flat_algebraMap_iff,
     RingHom.formallyUnramified_algebraMap, RingHom.finitePresentation_algebraMap]
   refine ⟨fun h => ⟨inferInstance, inferInstance, inferInstance⟩,
-    fun ⟨_, _, _⟩ => .of_formallyUnramif
+    fun ⟨_, _, _⟩ => .of_formallyUnramified_of_flat⟩
 
 Depends on / 依赖: RingHom, RingHom.etale_algebraMap, RingHom.finitePresentation_algebraMap, RingHom.flat_algebraMap_iff, RingHom.formallyUnramified_algebraMap, algebraMap_toAlgebra, algebraize, etale_algebraMap, f.algebraMap_toAlgebra, finitePresentation_algebraMap, flat_algebraMap_iff, formallyUnramified_algebraMap, of_formallyUnramified_of_flat, simp_rw
 -/

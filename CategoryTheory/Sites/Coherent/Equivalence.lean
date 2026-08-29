@@ -112,7 +112,8 @@ theorem precoherent_isSheaf_iff
     IsSheaf (coherentTopology C) F ↔ IsSheaf (coherentTopology D) (e.inverse.op ⋙ F) := by
   refine ⟨fun hF => ((e.sheafCongrPrecoherent A).functor.obj ⟨F, hF⟩).property, fun hF => ?_⟩
   rw [isSheaf_of_iso_iff (P' := e.functor.op ⋙ e.inverse.op ⋙ F)]
-.property · exact (e.sheafCongrPrec
+.property · exact (e.sheafCongrPrecoherent A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩
+  · exact Functor.isoWhiskerRight e.op.unitIso F
 
 中文:
 定理 precoherent_isSheaf_iff
@@ -122,7 +123,8 @@ theorem precoherent_isSheaf_iff
     IsSheaf (coherentTopology C) F ↔ IsSheaf (coherentTopology D) (e.inverse.op ⋙ F) := by
   refine ⟨fun hF => ((e.sheafCongrPrecoherent A).functor.obj ⟨F, hF⟩).property, fun hF => ?_⟩
   rw [isSheaf_of_iso_iff (P' := e.functor.op ⋙ e.inverse.op ⋙ F)]
-.property · exact (e.sheafCongrPrec
+.property · exact (e.sheafCongrPrecoherent A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩
+  · exact Functor.isoWhiskerRight e.op.unitIso F
 
 Depends on / 依赖: e.precoherent, precoherent
 -/
@@ -240,7 +242,8 @@ theorem preregular_isSheaf_iff
     IsSheaf (regularTopology C) F ↔ IsSheaf (regularTopology D) (e.inverse.op ⋙ F) := by
   refine ⟨fun hF => ((e.sheafCongrPreregular A).functor.obj ⟨F, hF⟩).property, fun hF => ?_⟩
   rw [isSheaf_of_iso_iff (P' := e.functor.op ⋙ e.inverse.op ⋙ F)]
-.property · exact (e.sheafCongrPreregul
+.property · exact (e.sheafCongrPreregular A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩
+  · exact Functor.isoWhiskerRight e.op.unitIso F
 
 中文:
 定理 preregular_isSheaf_iff
@@ -250,7 +253,8 @@ theorem preregular_isSheaf_iff
     IsSheaf (regularTopology C) F ↔ IsSheaf (regularTopology D) (e.inverse.op ⋙ F) := by
   refine ⟨fun hF => ((e.sheafCongrPreregular A).functor.obj ⟨F, hF⟩).property, fun hF => ?_⟩
   rw [isSheaf_of_iso_iff (P' := e.functor.op ⋙ e.inverse.op ⋙ F)]
-.property · exact (e.sheafCongrPreregul
+.property · exact (e.sheafCongrPreregular A).inverse.obj ⟨e.inverse.op ⋙ F, hF⟩
+  · exact Functor.isoWhiskerRight e.op.unitIso F
 
 Depends on / 依赖: e.preregular, preregular
 -/

@@ -371,7 +371,9 @@ definition WalkingCospan.ext
     have h₂ := t.π.naturality WalkingCospan.Hom.inl
     dsimp at h₂
     simp only [Category.id_comp] at h₂
-    simp_rw [h₂, ← Category.assoc, ← w₁, 
+    simp_rw [h₂, ← Category.assoc, ← w₁, ← h₁]
+  · exact w₁
+  · exact w₂
 
 中文:
 定义 WalkingCospan.ext
@@ -385,7 +387,9 @@ definition WalkingCospan.ext
     have h₂ := t.π.naturality WalkingCospan.Hom.inl
     dsimp at h₂
     simp only [Category.id_comp] at h₂
-    simp_rw [h₂, ← Category.assoc, ← w₁, 
+    simp_rw [h₂, ← Category.assoc, ← w₁, ← h₁]
+  · exact w₁
+  · exact w₂
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, Cone.ext, WalkingCospan, WalkingCospan.Hom.inl, id_comp, naturality, simp_rw
 -/
@@ -422,7 +426,8 @@ definition WalkingSpan.ext
     dsimp at h₂
     simp only [Category.comp_id] at h₂
     simp_rw [← h₁, Category.assoc, w₁, h₂]
-
+  · exact w₁
+  · exact w₂
 
 中文:
 定义 WalkingSpan.ext
@@ -437,7 +442,8 @@ definition WalkingSpan.ext
     dsimp at h₂
     simp only [Category.comp_id] at h₂
     simp_rw [← h₁, Category.assoc, w₁, h₂]
-
+  · exact w₁
+  · exact w₂
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Cocone, Cocone.ext, WalkingSpan, WalkingSpan.Hom.fst, comp_id, naturality, simp_rw
 -/

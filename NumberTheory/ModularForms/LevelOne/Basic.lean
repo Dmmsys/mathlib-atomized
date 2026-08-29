@@ -43,7 +43,7 @@ lemma exists_one_half_le_im_and_norm_le
     have : SlashInvariantFormClass F Γ(1) k := Gamma_one_coe_eq_SL ▸ ‹_›
     simpa only [slash_action_eqn_SL'' _ (mem_Gamma_one γ), norm_mul, norm_zpow]
 using le_mul_of_one_le_left (norm_nonneg _)
-        one_le_z
+        one_le_zpow_of_nonpos₀ (norm_pos_iff.2 (denom_ne_zero _ _)) hdenom hk⟩
 
 中文:
 引理 存在_one_half_le_im_and_norm_le
@@ -53,7 +53,7 @@ using le_mul_of_one_le_left (norm_nonneg _)
     have : SlashInvariantFormClass F Γ(1) k := Gamma_one_coe_eq_SL ▸ ‹_›
     simpa only [slash_action_eqn_SL'' _ (mem_Gamma_one γ), norm_mul, norm_zpow]
 using le_mul_of_one_le_left (norm_nonneg _)
-        one_le_z
+        one_le_zpow_of_nonpos₀ (norm_pos_iff.2 (denom_ne_zero _ _)) hdenom hk⟩
 
 Depends on / 依赖: Gamma_one_coe_eq_SL, SlashInvariantFormClass, denom_ne_zero, exists_one_half_le_im_smul_and_norm_denom_le, hdenom, le_mul_of_one_le_left, mem_Gamma_one, norm_mul, norm_nonneg, norm_pos_iff, norm_zpow, slash_action_eqn_SL
 -/
@@ -78,7 +78,9 @@ lemma wt_eq_zero_of_eq_const
   have hI := slash_action_eqn_SL'' f (mem_Gamma_one S) I
   have h2I2 := slash_action_eqn_SL'' f (mem_Gamma_one S) ((⟨2, two_pos⟩ : {x : Real // 0 < x}) • .I)
   simp_rw [sl_moeb, hf, Function.const, denom_S] at hI h2I2
-  suffic
+  suffices (2 : Complex) ^ k = 1 ↔ k = 0 by
+    simpa [mul_zpow, zpow_ne_zero, this] using h2I2.symm.trans hI
+simpa using ofReal_inj.trans zpow_eq_one_iff_right₀ (two_pos.le : (0 : Real) <= 2) (by norm_num1)
 
 中文:
 引理 wt_eq_zero_of_eq_const
@@ -88,7 +90,9 @@ lemma wt_eq_zero_of_eq_const
   have hI := slash_action_eqn_SL'' f (mem_Gamma_one S) I
   have h2I2 := slash_action_eqn_SL'' f (mem_Gamma_one S) ((⟨2, two_pos⟩ : {x : Real // 0 < x}) • .I)
   simp_rw [sl_moeb, hf, Function.const, denom_S] at hI h2I2
-  suffic
+  suffices (2 : Complex) ^ k = 1 ↔ k = 0 by
+    simpa [mul_zpow, zpow_ne_zero, this] using h2I2.symm.trans hI
+simpa using ofReal_inj.trans zpow_eq_one_iff_right₀ (two_pos.le : (0 : Real) <= 2) (by norm_num1)
 
 Depends on / 依赖: Function, Function.const, Gamma_one_coe_eq_SL, SlashInvariantFormClass, denom_S, h2I2.symm.trans, mem_Gamma_one, mul_zpow, norm_num1, ofReal_inj, ofReal_inj.trans, simp_rw, sl_moeb, slash_action_eqn_SL, two_pos, two_pos.le, zpow_ne_zero
 -/
@@ -113,7 +117,8 @@ theorem slash_action_generators_SL2Z
   have h𝒮ℒ : 𝒮ℒ = Subgroup.closure ({↑S, ↑T} : Set (GL (Fin 2) Real)) := by
     rw [MonoidHom.range_eq_map]; rw [← SpecialLinearGroup.SL2Z_generators]; rw [MonoidHom.map_closure]; rw [Set.image_pair]
     rfl
-  exact (slash_action_generators h𝒮ℒ).mpr (fun g hg => by rcases hg with rfl | 
+  exact (slash_action_generators h𝒮ℒ).mpr (fun g hg => by rcases hg with rfl | rfl <;> assumption)
+    _ (MonoidHom.mem_range.mpr ⟨γ, rfl⟩)
 
 中文:
 定理 slash_action_generators_SL2Z
@@ -123,7 +128,8 @@ theorem slash_action_generators_SL2Z
   have h𝒮ℒ : 𝒮ℒ = Subgroup.closure ({↑S, ↑T} : Set (GL (Fin 2) Real)) := by
     rw [MonoidHom.range_eq_map]; rw [← SpecialLinearGroup.SL2Z_generators]; rw [MonoidHom.map_closure]; rw [Set.image_pair]
     rfl
-  exact (slash_action_generators h𝒮ℒ).mpr (fun g hg => by rcases hg with rfl | 
+  exact (slash_action_generators h𝒮ℒ).mpr (fun g hg => by rcases hg with rfl | rfl <;> assumption)
+    _ (MonoidHom.mem_range.mpr ⟨γ, rfl⟩)
 
 Depends on / 依赖: MonoidHom, MonoidHom.map_closure, MonoidHom.mem_range.mpr, MonoidHom.range_eq_map, SL2Z_generators, Set.image_pair, SpecialLinearGroup, SpecialLinearGroup.SL2Z_generators, Subgroup, Subgroup.closure, closure, image_pair, map_closure, mem_range, range_eq_map, slash_action_generators
 -/
@@ -168,7 +174,14 @@ theorem cuspFunction_eqOn_const_of_nonpos_wt
   · exact (ModularFormClass.differentiableAt_cuspFunction f one_pos one_mem_strictPeriods_SL
       (mem_ball_zero_iff.mp hq)).differentiableWithinAt
   · simp [pi_pos]
-  · simp only [Metric.mem_closedBall, dist_z
+  · simp only [Metric.mem_closedBall, dist_zero_right]
+    rcases eq_or_ne q 0 with rfl | hq'
+    · refine ⟨0, by simpa only [norm_zero] using exp_nonneg _, le_rfl⟩
+    · obtain ⟨ξ, hξ, hξ₂⟩ := exists_one_half_le_im_and_norm_le hk f
+        ⟨_, im_invQParam_pos_of_norm_lt_one Real.zero_lt_one (mem_ball_zero_iff.mp hq) hq'⟩
+      exact ⟨_, norm_qParam_le_of_one_half_le_im hξ,
+        by simpa [← SlashInvariantFormClass.eq_cuspFunction f _ one_mem_strictPeriods_SL
+            one_ne_zero, qParam_right_inv one_ne_zero hq'] using hξ₂⟩
 
 中文:
 定理 cuspFunction_eqOn_const_of_nonpos_wt
@@ -178,7 +191,14 @@ theorem cuspFunction_eqOn_const_of_nonpos_wt
   · exact (ModularFormClass.differentiableAt_cuspFunction f one_pos one_mem_strictPeriods_SL
       (mem_ball_zero_iff.mp hq)).differentiableWithinAt
   · simp [pi_pos]
-  · simp only [Metric.mem_closedBall, dist_z
+  · simp only [Metric.mem_closedBall, dist_zero_right]
+    rcases eq_or_ne q 0 with rfl | hq'
+    · refine ⟨0, by simpa only [norm_zero] using exp_nonneg _, le_rfl⟩
+    · obtain ⟨ξ, hξ, hξ₂⟩ := exists_one_half_le_im_and_norm_le hk f
+        ⟨_, im_invQParam_pos_of_norm_lt_one Real.zero_lt_one (mem_ball_zero_iff.mp hq) hq'⟩
+      exact ⟨_, norm_qParam_le_of_one_half_le_im hξ,
+        by simpa [← SlashInvariantFormClass.eq_cuspFunction f _ one_mem_strictPeriods_SL
+            one_ne_zero, qParam_right_inv one_ne_zero hq'] using hξ₂⟩
 -/
 private theorem cuspFunction_eqOn_const_of_nonpos_wt (hk : k <= 0) (f : F) :
     Set.EqOn (cuspFunction 1 f) (const Complex (cuspFunction 1 f 0)) (Metric.ball 0 1) := by

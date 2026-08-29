@@ -166,7 +166,7 @@ definition comap
   measurableSet_compl := fun _ ⟨s', h₁, h₂⟩ => ⟨s'ᶜ, m.measurableSet_compl _ h₁, h₂ ▸ rfl⟩
   measurableSet_iUnion s hs :=
     let ⟨s', hs'⟩ := Classical.axiom_of_choice hs
-    ⟨⋃ i, s' i, m.measura
+    ⟨⋃ i, s' i, m.measurableSet_iUnion _ fun i => (hs' i).left, by simp [hs']⟩
 
 中文:
 定义 comap
@@ -176,7 +176,7 @@ definition comap
   measurableSet_compl := fun _ ⟨s', h₁, h₂⟩ => ⟨s'ᶜ, m.measurableSet_compl _ h₁, h₂ ▸ rfl⟩
   measurableSet_iUnion s hs :=
     let ⟨s', hs'⟩ := Classical.axiom_of_choice hs
-    ⟨⋃ i, s' i, m.measura
+    ⟨⋃ i, s' i, m.measurableSet_iUnion _ fun i => (hs' i).left, by simp [hs']⟩
 -/
 protected def comap (f : α -> β) (m : MeasurableSpace β) : MeasurableSpace α where
   MeasurableSet' s := exists s', MeasurableSet[m] s' ∧ f ⁻¹' s' = s
@@ -1399,7 +1399,11 @@ theorem Measurable.measurable_of_countable_ne
     simp [← inter_union_distrib_left]
   rw [this]
   refine (h.mono inter_subset_right).measurableSet.union ?_
-  have : g ⁻¹' t inter { x : α | f x = g x } = f ⁻¹' t inter { x : α | f x = g
+  have : g ⁻¹' t inter { x : α | f x = g x } = f ⁻¹' t inter { x : α | f x = g x } := by
+    ext x
+    simp +contextual
+  rw [this]
+  exact (hf ht).inter h.measurableSet.of_compl
 
 中文:
 定理 可测.measurable_of_countable_ne
@@ -1410,7 +1414,11 @@ theorem Measurable.measurable_of_countable_ne
     simp [← inter_union_distrib_left]
   rw [this]
   refine (h.mono inter_subset_right).measurableSet.union ?_
-  have : g ⁻¹' t inter { x : α | f x = g x } = f ⁻¹' t inter { x : α | f x = g
+  have : g ⁻¹' t inter { x : α | f x = g x } = f ⁻¹' t inter { x : α | f x = g x } := by
+    ext x
+    simp +contextual
+  rw [this]
+  exact (hf ht).inter h.measurableSet.of_compl
 
 Depends on / 依赖: contextual, h.measurableSet.of_compl, h.mono, inter_subset_right, inter_union_distrib_left, measurableSet, measurableSet.union, of_compl
 -/

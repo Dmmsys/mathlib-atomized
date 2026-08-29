@@ -131,7 +131,9 @@ theorem Disjoint.commute
           simp [mul_apply, hf, g.injective hg])
       fun hg =>
       (h (f x)).elim (fun hf => by simp [mul_apply, f.injective hf, hg]) fun hf => by
-        simp [mul_apply
+        simp [mul_apply, hf, hg]
+
+@[simp]
 
 中文:
 定理 Disjoint.commute
@@ -144,7 +146,9 @@ theorem Disjoint.commute
           simp [mul_apply, hf, g.injective hg])
       fun hg =>
       (h (f x)).elim (fun hf => by simp [mul_apply, f.injective hf, hg]) fun hf => by
-        simp [mul_apply
+        simp [mul_apply, hf, hg]
+
+@[simp]
 
 Depends on / 依赖: Equiv.ext, f.injective, g.injective, injective, mul_apply
 -/
@@ -1341,7 +1345,13 @@ lemma ofSubtype_eq_iff
       rw [mem_support]; rw [← h a]; rw [ofSubtype_apply_of_not_mem (p := (· in s)) _ ha'] at ha
       exact ha rfl
     · intro _ a ha
-   
+      rw [← h a]; rw [ofSubtype_apply_of_mem (p := (· in s)) _ ha]; rw [subtypePerm_apply]
+  · rintro ⟨hc, h⟩ a
+    specialize h (isInvariant_of_support_le hc)
+    by_cases ha : a in s
+    · rw [h a ha, ofSubtype_apply_of_mem (p := (· in s)) _ ha, subtypePerm_apply]
+    · rw [ofSubtype_apply_of_not_mem (p := (· in s)) _ ha, eq_comm, ← notMem_support]
+      exact Finset.notMem_mono hc ha
 
 中文:
 引理 ofSubtype_eq_iff
@@ -1356,7 +1366,13 @@ lemma ofSubtype_eq_iff
       rw [mem_support]; rw [← h a]; rw [ofSubtype_apply_of_not_mem (p := (· in s)) _ ha'] at ha
       exact ha rfl
     · intro _ a ha
-   
+      rw [← h a]; rw [ofSubtype_apply_of_mem (p := (· in s)) _ ha]; rw [subtypePerm_apply]
+  · rintro ⟨hc, h⟩ a
+    specialize h (isInvariant_of_support_le hc)
+    by_cases ha : a in s
+    · rw [h a ha, ofSubtype_apply_of_mem (p := (· in s)) _ ha, subtypePerm_apply]
+    · rw [ofSubtype_apply_of_not_mem (p := (· in s)) _ ha, eq_comm, ← notMem_support]
+      exact Finset.notMem_mono hc ha
 
 Depends on / 依赖: Equiv.ext_iff, Subtype, Subtype.forall, Subtype.mk.injEq, ext_iff, isInvariant_of_support_le, mem_support, ofSubtype_apply_of_mem, ofSubtype_apply_of_not_mem, specialize, subtypePerm, subtypePerm_apply
 -/
@@ -1394,7 +1410,7 @@ theorem support_ofSubtype
     exists_and_right, exists_eq_right, not_iff_comm, not_exists, not_not]
   by_cases hx : p x
   · simp only [forall_prop_of_true hx, ofSubtype_apply_of_mem u hx, ← Subtype.coe_inj]
-  · simp on
+  · simp only [forall_prop_of_false hx, ofSubtype_apply_of_not_mem u hx]
 
 中文:
 定理 support_ofSubtype
@@ -1405,7 +1421,7 @@ theorem support_ofSubtype
     exists_and_right, exists_eq_right, not_iff_comm, not_exists, not_not]
   by_cases hx : p x
   · simp only [forall_prop_of_true hx, ofSubtype_apply_of_mem u hx, ← Subtype.coe_inj]
-  · simp on
+  · simp only [forall_prop_of_false hx, ofSubtype_apply_of_not_mem u hx]
 
 Depends on / 依赖: Embedding, Finset, Finset.mem_map, Function, Function.Embedding.coe_subtype, Subtype, Subtype.coe_inj, Subtype.exists, coe_inj, coe_subtype, exists_and_right, exists_eq_right, forall_prop_of_false, forall_prop_of_true, mem_map, mem_support, ne_eq, not_exists, not_iff_comm, not_not
 -/
@@ -1455,7 +1471,7 @@ theorem mem_support_of_mem_noncommProd_support
     rw [Finset.noncommProd_insert_of_notMem s a f comm ha]
     apply mt (Finset.mem_of_subset (support_mul_le _ _))
     rw [Finset.sup_eq_union]; rw [Finset.notMem_union]
-    exact ⟨hs a 
+    exact ⟨hs a (s.mem_insert_self a), ih (fun a ha => hs a (Finset.mem_insert_of_mem ha))⟩
 
 中文:
 定理 mem_support_of_mem_noncommProd_support
@@ -1470,7 +1486,7 @@ theorem mem_support_of_mem_noncommProd_support
     rw [Finset.noncommProd_insert_of_notMem s a f comm ha]
     apply mt (Finset.mem_of_subset (support_mul_le _ _))
     rw [Finset.sup_eq_union]; rw [Finset.notMem_union]
-    exact ⟨hs a 
+    exact ⟨hs a (s.mem_insert_self a), ih (fun a ha => hs a (Finset.mem_insert_of_mem ha))⟩
 
 Depends on / 依赖: Finset, Finset.induction, Finset.mem_insert_of_mem, Finset.mem_of_subset, Finset.noncommProd_insert_of_notMem, Finset.notMem_union, Finset.sup_eq_union, classical, contrapose, mem_insert_of_mem, mem_insert_self, mem_of_subset, noncommProd_insert_of_notMem, notMem_union, revert, s.mem_insert_self, sup_eq_union, support_mul_le
 -/
@@ -1624,7 +1640,7 @@ theorem Disjoint.support_mul
   rw [mem_union]; rw [mem_support]; rw [mem_support]; rw [mem_support]; rw [mul_apply]; rw [← not_and_or]; rw [not_imp_not]
   exact
     (h a).elim (fun hf h => ⟨hf, f.apply_eq_iff_eq.mp (h.trans hf.symm)⟩) fun hg h =>
-      ⟨(congr_arg f hg).s
+      ⟨(congr_arg f hg).symm.trans h, hg⟩
 
 中文:
 定理 Disjoint.support_mul
@@ -1635,7 +1651,7 @@ theorem Disjoint.support_mul
   rw [mem_union]; rw [mem_support]; rw [mem_support]; rw [mem_support]; rw [mul_apply]; rw [← not_and_or]; rw [not_imp_not]
   exact
     (h a).elim (fun hf h => ⟨hf, f.apply_eq_iff_eq.mp (h.trans hf.symm)⟩) fun hg h =>
-      ⟨(congr_arg f hg).s
+      ⟨(congr_arg f hg).symm.trans h, hg⟩
 
 Depends on / 依赖: apply_eq_iff_eq, congr_arg, f.apply_eq_iff_eq.mp, h.trans, hf.symm, le_antisymm, mem_support, mem_union, mul_apply, not_and_or, not_imp_not, support_mul_le, symm.trans
 -/
@@ -1695,7 +1711,12 @@ theorem support_noncommProd
   | insert i s hi hrec =>
     have hs' : (s : Set ι).Pairwise fun i j => Disjoint (k i) (k j) :=
       hs.mono (by simp only [Finset.coe_insert, Set.subset_insert])
-    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hi]; 
+    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hi]; rw [Finset.biUnion_insert]
+    rw [Equiv.Perm.Disjoint.support_mul]; rw [hrec hs']
+    apply disjoint_noncommProd_right
+    intro j hj
+    apply hs _ _ (ne_of_mem_of_not_mem hj hi).symm <;>
+      simp only [Finset.coe_insert, Set.mem_insert_iff, Finset.mem_coe, hj, or_true, true_or]
 
 中文:
 定理 support_noncommProd
@@ -1707,7 +1728,12 @@ theorem support_noncommProd
   | insert i s hi hrec =>
     have hs' : (s : Set ι).Pairwise fun i j => Disjoint (k i) (k j) :=
       hs.mono (by simp only [Finset.coe_insert, Set.subset_insert])
-    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hi]; 
+    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ hi]; rw [Finset.biUnion_insert]
+    rw [Equiv.Perm.Disjoint.support_mul]; rw [hrec hs']
+    apply disjoint_noncommProd_right
+    intro j hj
+    apply hs _ _ (ne_of_mem_of_not_mem hj hi).symm <;>
+      simp only [Finset.coe_insert, Set.mem_insert_iff, Finset.mem_coe, hj, or_true, true_or]
 
 Depends on / 依赖: Disjoint, Equiv.Perm.Disjoint.support_mul, Finset, Finset.biUnion_insert, Finset.coe_insert, Finset.induction_on, Finset.noncommProd_insert_of_notMem, Pairwise, Set.mem_insert_iff, Set.subset_insert, biUnion_insert, classical, coe_insert, disjoint_noncommProd_right, hs.mono, induction_on, insert, mem_insert_iff, ne_of_mem_of_not_mem, noncommProd_insert_of_notMem
 -/
@@ -1853,7 +1879,12 @@ theorem support_swap_mul_swap
   apply le_antisymm
   · convert! support_mul_le (swap x y) (swap y z) using 1
     rw [support_swap h.left.left]; rw [support_swap h.right.left]
-    simp [
+    simp [-Finset.union_singleton]
+  · intro
+    simp only [mem_insert, mem_singleton]
+    rintro (rfl | rfl | rfl | _) <;>
+      simp [swap_apply_of_ne_of_ne, h.left.left, h.left.left.symm, h.left.right.symm,
+        h.left.right.left.symm, h.right.left.symm]
 
 中文:
 定理 support_swap_mul_swap
@@ -1865,7 +1896,12 @@ theorem support_swap_mul_swap
   apply le_antisymm
   · convert! support_mul_le (swap x y) (swap y z) using 1
     rw [support_swap h.left.left]; rw [support_swap h.right.left]
-    simp [
+    simp [-Finset.union_singleton]
+  · intro
+    simp only [mem_insert, mem_singleton]
+    rintro (rfl | rfl | rfl | _) <;>
+      simp [swap_apply_of_ne_of_ne, h.left.left, h.left.left.symm, h.left.right.symm,
+        h.left.right.left.symm, h.right.left.symm]
 
 Depends on / 依赖: Finset, Finset.union_singleton, List.mem_cons, List.nodup_cons, List.nodup_nil, List.not_mem_nil, and_self_iff, and_true, convert, h.left.left, h.left.left.symm, h.left.right.left.symm, h.left.right.symm, h.right.left, le_antisymm, mem_cons, mem_insert, mem_singleton, nodup_cons, nodup_nil
 -/
@@ -1900,7 +1936,7 @@ theorem support_swap_mul_ge_support_sdiff
   exact ha H
 
 @[deprecated (since := "2026-06-03")]
-alias support_swap_mul
+alias support_swap_mul_ge_support_diff := support_swap_mul_ge_support_sdiff
 
 中文:
 定理 support_swap_mul_ge_support_sdiff
@@ -1915,7 +1951,7 @@ alias support_swap_mul
   exact ha H
 
 @[deprecated (since := "2026-06-03")]
-alias support_swap_mul
+alias support_swap_mul_ge_support_diff := support_swap_mul_ge_support_sdiff
 
 Depends on / 依赖: Function, Function.comp_apply, Perm.coe_mul, and_imp, coe_mul, comp_apply, mem_insert, mem_sdiff, mem_singleton, mem_support, swap_apply_eq_iff, swap_apply_of_ne_of_ne
 -/
@@ -1947,7 +1983,8 @@ theorem support_swap_mul_eq
   by_cases hzf : z = f x
   · simp [hzf, hx, h, swap_apply_of_ne_of_ne]
   by_cases hzfx : f z = x
-  · simp [Ne.symm hzx, hzx, Ne.symm h
+  · simp [Ne.symm hzx, hzx, Ne.symm hzf, hzfx]
+  · simp [hzx, hzfx, f.injective.ne hzx, swap_apply_of_ne_of_ne]
 
 中文:
 定理 support_swap_mul_eq
@@ -1961,7 +1998,8 @@ theorem support_swap_mul_eq
   by_cases hzf : z = f x
   · simp [hzf, hx, h, swap_apply_of_ne_of_ne]
   by_cases hzfx : f z = x
-  · simp [Ne.symm hzx, hzx, Ne.symm h
+  · simp [Ne.symm hzx, hzx, Ne.symm hzf, hzfx]
+  · simp [hzx, hzfx, f.injective.ne hzx, swap_apply_of_ne_of_ne]
 
 Depends on / 依赖: Ne.symm, erase_eq_of_notMem, f.injective.ne, injective, notMem_support, notMem_support.mpr, pull_end, sdiff_singleton_eq_erase, swap_apply_of_ne_of_ne
 -/
@@ -2062,7 +2100,9 @@ theorem eq_on_support_mem_disjoint
     rcases h with (rfl | h)
     · rw [List.prod_cons, mul_apply,
         notMem_support.mp ((disjoint_prod_right tl hl.left).mem_imp hx)]
-    · rw [List.prod_c
+    · rw [List.prod_cons, mul_apply, ← IH h hl.right _ hx, eq_comm, ← notMem_support]
+      refine (hl.left _ h).symm.mem_imp ?_
+      simpa using hx
 
 中文:
 定理 eq_on_support_mem_disjoint
@@ -2077,7 +2117,9 @@ theorem eq_on_support_mem_disjoint
     rcases h with (rfl | h)
     · rw [List.prod_cons, mul_apply,
         notMem_support.mp ((disjoint_prod_right tl hl.left).mem_imp hx)]
-    · rw [List.prod_c
+    · rw [List.prod_cons, mul_apply, ← IH h hl.right _ hx, eq_comm, ← notMem_support]
+      refine (hl.left _ h).symm.mem_imp ?_
+      simpa using hx
 
 Depends on / 依赖: List.mem_cons, List.pairwise_cons, List.prod_cons, disjoint_prod_right, eq_comm, hl.left, hl.right, mem_cons, mem_imp, mul_apply, notMem_support, notMem_support.mp, pairwise_cons, prod_cons, symm.mem_imp
 -/
@@ -2417,7 +2459,15 @@ theorem card_support_eq_two
     refine ⟨x, y, hmem, ?_⟩
     ext a
     have key : forall b, f b != b ↔ _ := fun b => by rw [← mem_support, ← hins, mem_insert, mem_singleton]
- 
+    by_cases ha : f a = a
+    · have ha' := not_or.mp (mt (key a).mpr (not_not.mpr ha))
+      rw [ha]; rw [swap_apply_of_ne_of_ne ha'.1 ha'.2]
+    · have ha' := (key (f a)).mp (mt f.apply_eq_iff_eq.mp ha)
+      obtain rfl | rfl := (key a).mp ha
+      · rw [Or.resolve_left ha' ha, swap_apply_left]
+      · rw [Or.resolve_right ha' ha, swap_apply_right]
+  · obtain ⟨x, y, hxy, rfl⟩ := h
+    exact card_support_swap hxy
 
 中文:
 定理 card_support_eq_two
@@ -2431,7 +2481,15 @@ theorem card_support_eq_two
     refine ⟨x, y, hmem, ?_⟩
     ext a
     have key : forall b, f b != b ↔ _ := fun b => by rw [← mem_support, ← hins, mem_insert, mem_singleton]
- 
+    by_cases ha : f a = a
+    · have ha' := not_or.mp (mt (key a).mpr (not_not.mpr ha))
+      rw [ha]; rw [swap_apply_of_ne_of_ne ha'.1 ha'.2]
+    · have ha' := (key (f a)).mp (mt f.apply_eq_iff_eq.mp ha)
+      obtain rfl | rfl := (key a).mp ha
+      · rw [Or.resolve_left ha' ha, swap_apply_left]
+      · rw [Or.resolve_right ha' ha, swap_apply_right]
+  · obtain ⟨x, y, hxy, rfl⟩ := h
+    exact card_support_swap hxy
 
 Depends on / 依赖: apply_eq_iff_eq, card_eq_one, card_eq_succ, f.apply_eq_iff_eq.mp, mem_insert, mem_singleton, mem_support, not_not, not_not.mpr, not_or, not_or.mp, swap_apply_of_ne_of_ne
 -/

@@ -39,7 +39,9 @@ definition Subgroup.subgroupOfContinuousMulEquivOfLe
     simp only [subgroupOfEquivOfLe, Topology.IsInducing.subtypeVal.isOpen_iff,
       exists_exists_and_eq_and]
     simpa [Set.ext_iff] using fun s => exists_congr
-      fun t => and_congr_right fun _ => ⟨fun aux g hgh => aux g (hHK hgh) hgh, by grin
+      fun t => and_congr_right fun _ => ⟨fun aux g hgh => aux g (hHK hgh) hgh, by grind⟩)
+
+@[to_additive (attr := simp)]
 
 中文:
 定义 子群.subgroupOfContinuousMulEquivOfLe
@@ -48,7 +50,9 @@ definition Subgroup.subgroupOfContinuousMulEquivOfLe
     simp only [subgroupOfEquivOfLe, Topology.IsInducing.subtypeVal.isOpen_iff,
       exists_exists_and_eq_and]
     simpa [Set.ext_iff] using fun s => exists_congr
-      fun t => and_congr_right fun _ => ⟨fun aux g hgh => aux g (hHK hgh) hgh, by grin
+      fun t => and_congr_right fun _ => ⟨fun aux g hgh => aux g (hHK hgh) hgh, by grind⟩)
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: IsInducing, Set.ext_iff, Topology, Topology.IsInducing.subtypeVal.isOpen_iff, and_congr_right, exists_congr, exists_exists_and_eq_and, ext_iff, isOpen_iff, subgroupOfEquivOfLe, subtypeVal, toContinuousMulEquiv
 -/
@@ -116,7 +120,9 @@ lemma Subgroup.discreteTopology_iff_of_finiteIndex
   refine ⟨fun hH => ?_, fun hG => inferInstance⟩
   suffices IsOpen (H : Set G) by
     rw [discreteTopology_iff_isOpen_singleton_one]; rw [isOpen_singleton_iff_nhds_eq_pure]; rw [← H.coe_one]; rw [← this.isOpenEmbedding_subtypeVal.map_nhds_eq]; rw [nhds_discrete]; rw [map_pure]
-  exact H.isOpen_of
+  exact H.isOpen_of_isClosed_of_finiteIndex Subgroup.isClosed_of_discrete
+
+@[to_additive]
 
 中文:
 引理 子群.discreteTopology_iff_of_finiteIndex
@@ -125,7 +131,9 @@ lemma Subgroup.discreteTopology_iff_of_finiteIndex
   refine ⟨fun hH => ?_, fun hG => inferInstance⟩
   suffices IsOpen (H : Set G) by
     rw [discreteTopology_iff_isOpen_singleton_one]; rw [isOpen_singleton_iff_nhds_eq_pure]; rw [← H.coe_one]; rw [← this.isOpenEmbedding_subtypeVal.map_nhds_eq]; rw [nhds_discrete]; rw [map_pure]
-  exact H.isOpen_of
+  exact H.isOpen_of_isClosed_of_finiteIndex Subgroup.isClosed_of_discrete
+
+@[to_additive]
 
 Depends on / 依赖: H.coe_one, H.isOpen_of_isClosed_of_finiteIndex, IsOpen, Subgroup, Subgroup.isClosed_of_discrete, coe_one, discreteTopology_iff_isOpen_singleton_one, isClosed_of_discrete, isOpenEmbedding_subtypeVal, isOpen_of_isClosed_of_finiteIndex, isOpen_singleton_iff_nhds_eq_pure, map_nhds_eq, map_pure, nhds_discrete, this.isOpenEmbedding_subtypeVal.map_nhds_eq
 -/
@@ -175,7 +183,8 @@ lemma Subgroup.Commensurable.discreteTopology_iff
     haveI : IsFiniteRelIndex (H ⊓ K) H := ⟨Subgroup.inf_relIndex_left H K ▸ h.2⟩
     (Subgroup.discreteTopology_iff_of_isFiniteRelIndex inf_le_left).symm
   _ ↔ DiscreteTopology K :=
-    haveI : IsFiniteRelIndex (H ⊓ K) K := ⟨Subgroup.inf_relInde
+    haveI : IsFiniteRelIndex (H ⊓ K) K := ⟨Subgroup.inf_relIndex_right H K ▸ h.1⟩
+    Subgroup.discreteTopology_iff_of_isFiniteRelIndex inf_le_right
 
 中文:
 引理 子群.Commensurable.discreteTopology_iff
@@ -183,7 +192,8 @@ lemma Subgroup.Commensurable.discreteTopology_iff
     haveI : IsFiniteRelIndex (H ⊓ K) H := ⟨Subgroup.inf_relIndex_left H K ▸ h.2⟩
     (Subgroup.discreteTopology_iff_of_isFiniteRelIndex inf_le_left).symm
   _ ↔ DiscreteTopology K :=
-    haveI : IsFiniteRelIndex (H ⊓ K) K := ⟨Subgroup.inf_relInde
+    haveI : IsFiniteRelIndex (H ⊓ K) K := ⟨Subgroup.inf_relIndex_right H K ▸ h.1⟩
+    Subgroup.discreteTopology_iff_of_isFiniteRelIndex inf_le_right
 
 Depends on / 依赖: DiscreteTopology, IsFiniteRelIndex, Subgroup, Subgroup.discreteTopology_iff_of_isFiniteRelIndex, Subgroup.inf_relIndex_left, Subgroup.inf_relIndex_right, discreteTopology_iff_of_isFiniteRelIndex, inf_le_left, inf_le_right, inf_relIndex_left, inf_relIndex_right
 -/

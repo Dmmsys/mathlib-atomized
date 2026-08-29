@@ -71,6 +71,7 @@ definition quotientFunc
     obtain ⟨j, hj, hj'⟩ : exists g in 𝒢, h' = h * g := by
       rw [← Quotient.eq_iff_equiv]; rw [Quotient.eq]; rw [QuotientGroup.leftRel_apply] at hhh'
       exact ⟨h⁻¹ * h', hhh', mod_cast (mul_inv_cancel_left h h').symm⟩
+    simp [hj', SlashAction.slash_mul, SlashInvariantFormClass.slash_action_eq f j⁻¹ (inv_mem hj)])
 
 中文:
 定义 quotientFunc
@@ -79,6 +80,7 @@ definition quotientFunc
     obtain ⟨j, hj, hj'⟩ : exists g in 𝒢, h' = h * g := by
       rw [← Quotient.eq_iff_equiv]; rw [Quotient.eq]; rw [QuotientGroup.leftRel_apply] at hhh'
       exact ⟨h⁻¹ * h', hhh', mod_cast (mul_inv_cancel_left h h').symm⟩
+    simp [hj', SlashAction.slash_mul, SlashInvariantFormClass.slash_action_eq f j⁻¹ (inv_mem hj)])
 
 Depends on / 依赖: Quotient, Quotient.eq, Quotient.eq_iff_equiv, QuotientGroup, QuotientGroup.leftRel_apply, SlashAction, SlashAction.slash_mul, SlashInvariantFormClass, SlashInvariantFormClass.slash_action_eq, eq_iff_equiv, g.val, inv_mem, leftRel_apply, liftOn, mod_cast, mul_inv_cancel_left, q.liftOn, slash_action_eq, slash_mul
 -/
@@ -176,7 +178,7 @@ definition norm
     let := Fintype.ofFinite 𝒬
     simpa [← Finset.card_univ, ModularForm.prod_slash,
       quotientFunc_smul f hh, Subgroup.HasDetPlusMinusOne.abs_det hh,
-      -Matrix.GeneralLinearGroup.val_det_apply] using Equiv.pr
+      -Matrix.GeneralLinearGroup.val_det_apply] using Equiv.prod_comp (MulAction.toPerm (_ : ℋ)) _
 
 中文:
 定义 norm
@@ -186,7 +188,7 @@ definition norm
     let := Fintype.ofFinite 𝒬
     simpa [← Finset.card_univ, ModularForm.prod_slash,
       quotientFunc_smul f hh, Subgroup.HasDetPlusMinusOne.abs_det hh,
-      -Matrix.GeneralLinearGroup.val_det_apply] using Equiv.pr
+      -Matrix.GeneralLinearGroup.val_det_apply] using Equiv.prod_comp (MulAction.toPerm (_ : ℋ)) _
 -/
 protected def norm [ℋ.HasDetPlusMinusOne] : SlashInvariantForm ℋ (k * Nat.card 𝒬) where
   toFun := let := Fintype.ofFinite 𝒬; ∏ q : 𝒬, quotientFunc f q
@@ -217,7 +219,8 @@ definition ModularForm.trace
   bdd_at_cusps' h γ := by
     rintro rfl
     rw [SlashInvariantForm.trace]; rw [IsBoundedAtImInfty]; rw [Filter.BoundedAtFilter]; rw [SlashAction.sum_slash]; rw [Finset.sum_fn]
-    refine .fun
+    refine .fun_sum (Quotient.forall.mpr fun ⟨r, hr⟩ _ => (translate f _).bdd_at_cusps' ?_ γ rfl)
+    simpa using h.of_isFiniteRelIndex_conj hr
 
 中文:
 定义 模形式.trace
@@ -227,7 +230,8 @@ definition ModularForm.trace
   bdd_at_cusps' h γ := by
     rintro rfl
     rw [SlashInvariantForm.trace]; rw [IsBoundedAtImInfty]; rw [Filter.BoundedAtFilter]; rw [SlashAction.sum_slash]; rw [Finset.sum_fn]
-    refine .fun
+    refine .fun_sum (Quotient.forall.mpr fun ⟨r, hr⟩ _ => (translate f _).bdd_at_cusps' ?_ γ rfl)
+    simpa using h.of_isFiniteRelIndex_conj hr
 -/
 protected def ModularForm.trace [ModularFormClass F 𝒢 k] : ModularForm ℋ k where
   __ := SlashInvariantForm.trace ℋ f
@@ -252,7 +256,10 @@ definition CuspForm.trace
     simp_rw [ModularForm.toFun_eq_coe, ModularForm.coe_trace, IsZeroAtImInfty, Filter.ZeroAtFilter,
       SlashAction.sum_slash, Finset.sum_fn]
     let := Fintype.ofFinite 𝒬
-    rw [show (0 : Complex) = ∑ c : ℋ ⧸ 𝒢.subgroupOf ℋ]; rw [0 
+    rw [show (0 : Complex) = ∑ c : ℋ ⧸ 𝒢.subgroupOf ℋ]; rw [0 by simp]
+    refine tendsto_finsetSum _ (Quotient.forall.mpr fun ⟨r, hr⟩ _ => ?_)
+    refine (translate f _).zero_at_cusps' ?_ γ rfl
+    simpa using h.of_isFiniteRelIndex_conj hr
 
 中文:
 定义 尖点形式.trace
@@ -263,7 +270,10 @@ definition CuspForm.trace
     simp_rw [ModularForm.toFun_eq_coe, ModularForm.coe_trace, IsZeroAtImInfty, Filter.ZeroAtFilter,
       SlashAction.sum_slash, Finset.sum_fn]
     let := Fintype.ofFinite 𝒬
-    rw [show (0 : Complex) = ∑ c : ℋ ⧸ 𝒢.subgroupOf ℋ]; rw [0 
+    rw [show (0 : Complex) = ∑ c : ℋ ⧸ 𝒢.subgroupOf ℋ]; rw [0 by simp]
+    refine tendsto_finsetSum _ (Quotient.forall.mpr fun ⟨r, hr⟩ _ => ?_)
+    refine (translate f _).zero_at_cusps' ?_ γ rfl
+    simpa using h.of_isFiniteRelIndex_conj hr
 -/
 protected def CuspForm.trace [CuspFormClass F 𝒢 k] : CuspForm ℋ k where
   __ := ModularForm.trace ℋ f
@@ -291,7 +301,11 @@ definition ModularForm.norm
     rintro rfl
     simp_rw [SlashInvariantForm.norm, IsBoundedAtImInfty, Filter.BoundedAtFilter]
     let := Fintype.ofFinite 𝒬
-    rw [Nat.card_eq_fintype_card]; rw [
+    rw [Nat.card_eq_fintype_card]; rw [← Finset.card_univ]; rw [ModularForm.prod_slash]
+    apply Asymptotics.IsBigO.const_smul_left
+    rw [show (1 : ℍ -> Real) = (fun x => ∏ (i : 𝒬)]; rw [1) by ext; simp]; rw [Finset.prod_fn]
+    refine .finsetProd (Quotient.forall.mpr fun ⟨r, hr⟩ _ => (translate f _).bdd_at_cusps' ?_ γ rfl)
+    simpa using h.of_isFiniteRelIndex_conj hr
 
 中文:
 定义 模形式.norm
@@ -302,7 +316,11 @@ definition ModularForm.norm
     rintro rfl
     simp_rw [SlashInvariantForm.norm, IsBoundedAtImInfty, Filter.BoundedAtFilter]
     let := Fintype.ofFinite 𝒬
-    rw [Nat.card_eq_fintype_card]; rw [
+    rw [Nat.card_eq_fintype_card]; rw [← Finset.card_univ]; rw [ModularForm.prod_slash]
+    apply Asymptotics.IsBigO.const_smul_left
+    rw [show (1 : ℍ -> Real) = (fun x => ∏ (i : 𝒬)]; rw [1) by ext; simp]; rw [Finset.prod_fn]
+    refine .finsetProd (Quotient.forall.mpr fun ⟨r, hr⟩ _ => (translate f _).bdd_at_cusps' ?_ γ rfl)
+    simpa using h.of_isFiniteRelIndex_conj hr
 -/
 protected def ModularForm.norm [ℋ.HasDetPlusMinusOne] [ModularFormClass F 𝒢 k] :
     ModularForm ℋ (k * Nat.card 𝒬) where
@@ -431,7 +449,14 @@ lemma ModularForm.eq_const_of_weight_zero₀
   let : ModularFormClass (ModularForm 𝒮ℒ (0 * Nat.card (𝒮ℒ ⧸ 𝒢.subgroupOf 𝒮ℒ))) 𝒮ℒ 0 := by
     rw [zero_mul]; infer_instance
   obtain ⟨c, hc⟩ := ModularFormClass.levelOne_weight_zero_const
-    (Mod
+    (ModularForm.norm 𝒮ℒ (f - .const (f I)))
+  -- But the constant must be 0, since `f - f I` vanishes at `I`.
+  have : ModularForm.norm 𝒮ℒ (f - .const (f I)) I = 0 := by
+    simpa [Finset.prod_eq_zero_iff, QuotientGroup.exists_mk] using ⟨1, by simp⟩
+  obtain rfl : c = 0 := by simpa [hc]
+  -- So `f - f I` has zero norm, hence it's the zero form.
+  simp only [Function.const_zero, FunLike.coe_zero_iff, norm_eq_zero_iff, sub_eq_zero] at hc
+  exact ⟨f I, by rw [hc, ModularForm.coe_const, Function.const_apply]⟩
 
 中文:
 引理 模形式.eq_const_of_weight_zero₀
@@ -441,7 +466,14 @@ lemma ModularForm.eq_const_of_weight_zero₀
   let : ModularFormClass (ModularForm 𝒮ℒ (0 * Nat.card (𝒮ℒ ⧸ 𝒢.subgroupOf 𝒮ℒ))) 𝒮ℒ 0 := by
     rw [zero_mul]; infer_instance
   obtain ⟨c, hc⟩ := ModularFormClass.levelOne_weight_zero_const
-    (Mod
+    (ModularForm.norm 𝒮ℒ (f - .const (f I)))
+  -- But the constant must be 0, since `f - f I` vanishes at `I`.
+  have : ModularForm.norm 𝒮ℒ (f - .const (f I)) I = 0 := by
+    simpa [Finset.prod_eq_zero_iff, QuotientGroup.exists_mk] using ⟨1, by simp⟩
+  obtain rfl : c = 0 := by simpa [hc]
+  -- So `f - f I` has zero norm, hence it's the zero form.
+  simp only [Function.const_zero, FunLike.coe_zero_iff, norm_eq_zero_iff, sub_eq_zero] at hc
+  exact ⟨f I, by rw [hc, ModularForm.coe_const, Function.const_apply]⟩
 -/
 private lemma ModularForm.eq_const_of_weight_zero₀ [𝒢.IsArithmetic] [𝒢.HasDetOne]
     (f : ModularForm 𝒢 0) : exists c, (f : ℍ -> Complex) = Function.const ℍ c := by

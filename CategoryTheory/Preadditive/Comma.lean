@@ -142,7 +142,16 @@ instance :
   neg_add_cancel _ := by cat_disch
   sub_eq_add_neg _ _ := by ext <;> simp [sub_eq_add_neg]
   nsmul n α := CommaMorphism.mk (n • α.left) (n • α.right)
-    (by simp [Func
+    (by simp [Functor.map_nsmul, Preadditive.comp_nsmul, Preadditive.nsmul_comp])
+  zsmul n α := CommaMorphism.mk (n • α.left) (n • α.right)
+    (by simp [Functor.map_zsmul, Preadditive.comp_zsmul, Preadditive.zsmul_comp])
+  nsmul_zero := by simp_rw [HSMul.hSMul, SMul.smul]; cat_disch
+  nsmul_succ _ _ := by simp_rw [HSMul.hSMul, SMul.smul]; ext <;> dsimp <;> simp [add_nsmul]
+  zsmul_zero' := by simp_rw [HSMul.hSMul, SMul.smul]; cat_disch
+  zsmul_succ' _ _ := by simp_rw [HSMul.hSMul, SMul.smul]; ext <;> dsimp <;> simp [add_zsmul]
+  zsmul_neg' _ _ := by
+    simp_rw [HSMul.hSMul, SMul.smul]
+    ext <;> dsimp <;> simp [add_nsmul, add_zsmul]
 
 中文:
 实例 :
@@ -154,7 +163,16 @@ instance :
   neg_add_cancel _ := by cat_disch
   sub_eq_add_neg _ _ := by ext <;> simp [sub_eq_add_neg]
   nsmul n α := CommaMorphism.mk (n • α.left) (n • α.right)
-    (by simp [Func
+    (by simp [Functor.map_nsmul, Preadditive.comp_nsmul, Preadditive.nsmul_comp])
+  zsmul n α := CommaMorphism.mk (n • α.left) (n • α.right)
+    (by simp [Functor.map_zsmul, Preadditive.comp_zsmul, Preadditive.zsmul_comp])
+  nsmul_zero := by simp_rw [HSMul.hSMul, SMul.smul]; cat_disch
+  nsmul_succ _ _ := by simp_rw [HSMul.hSMul, SMul.smul]; ext <;> dsimp <;> simp [add_nsmul]
+  zsmul_zero' := by simp_rw [HSMul.hSMul, SMul.smul]; cat_disch
+  zsmul_succ' _ _ := by simp_rw [HSMul.hSMul, SMul.smul]; ext <;> dsimp <;> simp [add_zsmul]
+  zsmul_neg' _ _ := by
+    simp_rw [HSMul.hSMul, SMul.smul]
+    ext <;> dsimp <;> simp [add_nsmul, add_zsmul]
 
 Depends on / 依赖: CommaMorphism, CommaMorphism.mk, Functor, Functor.map_nsmul, Functor.map_zsmul, Preadditive, Preadditive.comp_nsmul, Preadditive.comp_zsmul, Preadditive.nsmul_comp, Preadditive.zsmul_comp, add_assoc, add_comm, add_zero, cat_disch, comp_nsmul, comp_zsmul, map_nsmul, map_zsmul, neg_add_cancel, nsmul_comp
 -/

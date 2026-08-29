@@ -286,7 +286,7 @@ theorem tprod_iSup_decode₂
   · simp [encode_injective.extend_apply]
   · rw [extend_apply' _ _ _ hn]
     rw [← decode₂_ne_none_iff]; rw [ne_eq]; rw [not_not] at hn
-    simp [
+    simp [hn, m0]
 
 中文:
 定理 tprod_iSup_decode₂
@@ -298,7 +298,7 @@ theorem tprod_iSup_decode₂
   · simp [encode_injective.extend_apply]
   · rw [extend_apply' _ _ _ hn]
     rw [← decode₂_ne_none_iff]; rw [ne_eq]; rw [not_not] at hn
-    simp [
+    simp [hn, m0]
 
 Depends on / 依赖: Set.range, encode, encode_injective, encode_injective.extend_apply, extend_apply, ne_eq, not_not, tprod_congr, tprod_extend_one
 -/
@@ -653,7 +653,10 @@ theorem tendsto_prod_nat_add
   · have h₀ : (fun i => (∏' i, f i) / ∏ j in range i, f j) = fun i => ∏' k : Nat, f (k + i) := by
       ext1 i
       rw [div_eq_iff_eq_mul]; rw [mul_comm]; rw [hf.prod_mul_tprod_nat_add i]
-    have h₁ : Tendsto (fun _ : Nat => ∏' i, f i) atTop (𝓝 (∏' i, f i)) := ten
+    have h₁ : Tendsto (fun _ : Nat => ∏' i, f i) atTop (𝓝 (∏' i, f i)) := tendsto_const_nhds
+    simpa only [h₀, div_self'] using Tendsto.div' h₁ hf.hasProd.tendsto_prod_nat
+  · refine tendsto_const_nhds.congr fun n => (tprod_eq_one_of_not_multipliable ?_).symm
+    rwa [multipliable_nat_add_iff n]
 
 中文:
 定理 tendsto_prod_nat_add
@@ -663,7 +666,10 @@ theorem tendsto_prod_nat_add
   · have h₀ : (fun i => (∏' i, f i) / ∏ j in range i, f j) = fun i => ∏' k : Nat, f (k + i) := by
       ext1 i
       rw [div_eq_iff_eq_mul]; rw [mul_comm]; rw [hf.prod_mul_tprod_nat_add i]
-    have h₁ : Tendsto (fun _ : Nat => ∏' i, f i) atTop (𝓝 (∏' i, f i)) := ten
+    have h₁ : Tendsto (fun _ : Nat => ∏' i, f i) atTop (𝓝 (∏' i, f i)) := tendsto_const_nhds
+    simpa only [h₀, div_self'] using Tendsto.div' h₁ hf.hasProd.tendsto_prod_nat
+  · refine tendsto_const_nhds.congr fun n => (tprod_eq_one_of_not_multipliable ?_).symm
+    rwa [multipliable_nat_add_iff n]
 
 Depends on / 依赖: Multipliable, Tendsto, Tendsto.div, div_eq_iff_eq_mul, div_self, hasProd, hf.hasProd.tendsto_prod_nat, hf.prod_mul_tprod_nat_add, mul_comm, multipliable_nat_add_iff, prod_mul_tprod_nat_add, tendsto_const_nhds, tendsto_const_nhds.congr, tendsto_prod_nat, tprod_eq_one_of_not_multipliable
 -/
@@ -697,7 +703,11 @@ theorem cauchySeq_finset_iff_nat_tprod_vanishing
     refine ⟨if h : s.Nonempty then s.max' h + 1 else 0,
 fun t ht => hs _ Set.disjoint_left.mpr ?_⟩
     split_ifs at ht with h
-    · exact fun m hmt hms => (s.le_max
+    · exact fun m hmt hms => (s.le_max' _ hms).not_gt (Nat.succ_le_iff.mp <| ht hmt)
+    · exact fun _ _ hs => h ⟨_, hs⟩
+  · obtain ⟨N, hN⟩ := vanish e he
+    exact ⟨range N, fun t ht => hN _ fun n hnt =>
+      le_of_not_gt fun h => Set.disjoint_left.mp ht hnt (mem_range.mpr h)⟩
 
 中文:
 定理 cauchySeq_finset_iff_nat_tprod_vanishing
@@ -708,7 +718,11 @@ fun t ht => hs _ Set.disjoint_left.mpr ?_⟩
     refine ⟨if h : s.Nonempty then s.max' h + 1 else 0,
 fun t ht => hs _ Set.disjoint_left.mpr ?_⟩
     split_ifs at ht with h
-    · exact fun m hmt hms => (s.le_max
+    · exact fun m hmt hms => (s.le_max' _ hms).not_gt (Nat.succ_le_iff.mp <| ht hmt)
+    · exact fun _ _ hs => h ⟨_, hs⟩
+  · obtain ⟨N, hN⟩ := vanish e he
+    exact ⟨range N, fun t ht => hN _ fun n hnt =>
+      le_of_not_gt fun h => Set.disjoint_left.mp ht hnt (mem_range.mpr h)⟩
 
 Depends on / 依赖: Nat.succ_le_iff.mp, Nonempty, Set.disjoint_left.mp, Set.disjoint_left.mpr, cauchySeq_finset_iff_tprod_vanishing, cauchySeq_finset_iff_tprod_vanishing.trans, disjoint_left, le_max, le_of_not_gt, mem_rang, not_gt, s.Nonempty, s.le_max, s.max, split_ifs, succ_le_iff, vanish
 -/
@@ -841,7 +855,17 @@ lemma HasProd.nat_mul_neg_add_one
   have : Injective Int.negSucc := @Int.negSucc.inj
   refine hf.hasProd_of_prod_eq fun u => ?_
   refine ⟨u.preimage _ Nat.cast_injective.injOn union u.preimage _ this.injOn,
-      fun v' hv' => ⟨v'.image Nat.cast union v'.image Int.negSuc
+      fun v' hv' => ⟨v'.image Nat.cast union v'.image Int.negSucc, fun x hx => ?_, ?_⟩⟩
+  · simp only [mem_union, mem_image]
+    cases x
+    · exact Or.inl ⟨_, hv' (by simpa using Or.inl hx), rfl⟩
+    · exact Or.inr ⟨_, hv' (by simpa using Or.inr hx), rfl⟩
+  · rw [prod_union, prod_image Nat.cast_injective.injOn, prod_image this.injOn,
+      prod_mul_distrib]
+    simp only [disjoint_iff_ne, mem_image, ne_eq, forall_exists_index, and_imp,
+      forall_apply_eq_imp_iff₂, not_false_eq_true, implies_true, reduceCtorEq]
+
+@[to_additive Summable.nat_add_neg_add_one]
 
 中文:
 引理 有积类型.nat_mul_neg_add_one
@@ -851,7 +875,17 @@ lemma HasProd.nat_mul_neg_add_one
   have : Injective Int.negSucc := @Int.negSucc.inj
   refine hf.hasProd_of_prod_eq fun u => ?_
   refine ⟨u.preimage _ Nat.cast_injective.injOn union u.preimage _ this.injOn,
-      fun v' hv' => ⟨v'.image Nat.cast union v'.image Int.negSuc
+      fun v' hv' => ⟨v'.image Nat.cast union v'.image Int.negSucc, fun x hx => ?_, ?_⟩⟩
+  · simp only [mem_union, mem_image]
+    cases x
+    · exact Or.inl ⟨_, hv' (by simpa using Or.inl hx), rfl⟩
+    · exact Or.inr ⟨_, hv' (by simpa using Or.inr hx), rfl⟩
+  · rw [prod_union, prod_image Nat.cast_injective.injOn, prod_image this.injOn,
+      prod_mul_distrib]
+    simp only [disjoint_iff_ne, mem_image, ne_eq, forall_exists_index, and_imp,
+      forall_apply_eq_imp_iff₂, not_false_eq_true, implies_true, reduceCtorEq]
+
+@[to_additive Summable.nat_add_neg_add_one]
 
 Depends on / 依赖: HasProd, Injective, Int.negSucc, Int.negSucc.inj, Nat.ca, Nat.cast, Nat.cast_injective.injOn, Or.inl, Or.inr, cast_injective, hasProd_of_prod_eq, hf.hasProd_of_prod_eq, mem_image, mem_union, negSucc, preimage, prod_image, prod_union, this.injOn, u.preimage
 -/
@@ -934,7 +968,11 @@ lemma HasProd.of_nat_of_neg_add_one
       rintro _ ⟨⟨i, rfl⟩, ⟨j, ⟨⟩⟩⟩
     · rw [codisjoint_iff_le_sup]
       rintro (i | j) <;> simp
-  exact (Nat.cast_i
+  exact (Nat.cast_injective.hasProd_range_iff.mpr hf₁).mul_isCompl
+    this (hi₂.hasProd_range_iff.mpr hf₂)
+
+
+@[to_additive Summable.of_nat_of_neg_add_one]
 
 中文:
 引理 有积类型.of_nat_of_neg_add_one
@@ -947,7 +985,11 @@ lemma HasProd.of_nat_of_neg_add_one
       rintro _ ⟨⟨i, rfl⟩, ⟨j, ⟨⟩⟩⟩
     · rw [codisjoint_iff_le_sup]
       rintro (i | j) <;> simp
-  exact (Nat.cast_i
+  exact (Nat.cast_injective.hasProd_range_iff.mpr hf₁).mul_isCompl
+    this (hi₂.hasProd_range_iff.mpr hf₂)
+
+
+@[to_additive Summable.of_nat_of_neg_add_one]
 
 Depends on / 依赖: Injective, Int.negSucc, Int.negSucc.inj, IsCompl, Nat.cast_injective.hasProd_range_iff.mpr, Set.range, cast_injective, codisjoint_iff_le_sup, disjoint_iff_inf_le, hasProd_range_iff, hasProd_range_iff.mpr, mul_isCompl, negSucc
 -/
@@ -1100,7 +1142,35 @@ theorem HasProd.nat_mul_neg
   -- work hard to prove it under the very minimal assumptions here.
   apply (hf.mul (hasProd_ite_eq (0 : Int) (f 0))).hasProd_of_prod_eq fun u => ?_
   refine ⟨u.image Int.natAbs, fun v' hv' => ?_⟩
-  l
+  let u1 := v'.image fun x : Nat => (x : Int)
+  let u2 := v'.image fun x : Nat => -(x : Int)
+  have A : u subseteq u1 union u2 := by
+    intro x hx
+    simp only [u1, u2, mem_union, mem_image]
+    rcases le_total 0 x with (h'x | h'x)
+· refine Or.inl ⟨_, hv' mem_image.mpr ⟨x, hx, rfl⟩, ?_⟩
+      simp only [Int.natCast_natAbs, abs_eq_self, h'x]
+· refine Or.inr ⟨_, hv' mem_image.mpr ⟨x, hx, rfl⟩, ?_⟩
+      simp only [abs_of_nonpos h'x, Int.natCast_natAbs, neg_neg]
+  exact ⟨_, A, calc
+    (∏ x in u1 union u2, (f x * if x = 0 then f 0 else 1)) =
+        (∏ x in u1 union u2, f x) * ∏ x in u1 inter u2, f x := by
+      rw [prod_mul_distrib]
+      congr 1
+      refine (prod_subset_one_on_sdiff inter_subset_union ?_ ?_).symm
+      · intro x hx
+        suffices x != 0 by simp only [this, if_false]
+        rintro rfl
+        simp [u1, u2] at hx
+      · intro x hx
+        simp only [u1, u2, mem_inter, mem_image] at hx
+        suffices x = 0 by simp only [this, if_true]
+        lia
+    _ = (∏ x in u1, f x) * ∏ x in u2, f x := prod_union_inter
+    _ = (∏ b in v', f b) * ∏ b in v', f (-b) := by simp [u1, u2]
+    _ = ∏ b in v', (f b * f (-b)) := prod_mul_distrib.symm⟩
+
+@[to_additive]
 
 中文:
 定理 有积类型.nat_mul_neg
@@ -1110,7 +1180,35 @@ theorem HasProd.nat_mul_neg
   -- work hard to prove it under the very minimal assumptions here.
   apply (hf.mul (hasProd_ite_eq (0 : Int) (f 0))).hasProd_of_prod_eq fun u => ?_
   refine ⟨u.image Int.natAbs, fun v' hv' => ?_⟩
-  l
+  let u1 := v'.image fun x : Nat => (x : Int)
+  let u2 := v'.image fun x : Nat => -(x : Int)
+  have A : u subseteq u1 union u2 := by
+    intro x hx
+    simp only [u1, u2, mem_union, mem_image]
+    rcases le_total 0 x with (h'x | h'x)
+· refine Or.inl ⟨_, hv' mem_image.mpr ⟨x, hx, rfl⟩, ?_⟩
+      simp only [Int.natCast_natAbs, abs_eq_self, h'x]
+· refine Or.inr ⟨_, hv' mem_image.mpr ⟨x, hx, rfl⟩, ?_⟩
+      simp only [abs_of_nonpos h'x, Int.natCast_natAbs, neg_neg]
+  exact ⟨_, A, calc
+    (∏ x in u1 union u2, (f x * if x = 0 then f 0 else 1)) =
+        (∏ x in u1 union u2, f x) * ∏ x in u1 inter u2, f x := by
+      rw [prod_mul_distrib]
+      congr 1
+      refine (prod_subset_one_on_sdiff inter_subset_union ?_ ?_).symm
+      · intro x hx
+        suffices x != 0 by simp only [this, if_false]
+        rintro rfl
+        simp [u1, u2] at hx
+      · intro x hx
+        simp only [u1, u2, mem_inter, mem_image] at hx
+        suffices x = 0 by simp only [this, if_true]
+        lia
+    _ = (∏ x in u1, f x) * ∏ x in u2, f x := prod_union_inter
+    _ = (∏ b in v', f b) * ∏ b in v', f (-b) := by simp [u1, u2]
+    _ = ∏ b in v', (f b * f (-b)) := prod_mul_distrib.symm⟩
+
+@[to_additive]
 -/
 theorem HasProd.nat_mul_neg {f : Int -> M} (hf : HasProd f m) :
     HasProd (fun n : Nat => f n * f (-n)) (m * f 0) := by
@@ -1425,7 +1523,9 @@ theorem Summable.alternating
     exact hf.comp_injective (mul_right_injective₀ (two_ne_zero' Nat))
   · simp only [pow_add, even_two, Even.mul_right, Even.neg_pow, one_pow, pow_one, mul_neg, mul_one,
       neg_mul, one_mul]
-
+    apply Summable.neg
+    apply hf.comp_injective
+    exact (add_left_injective 1).comp (mul_right_injective₀ (two_ne_zero' Nat))
 
 中文:
 定理 Summable.alternating
@@ -1436,7 +1536,9 @@ theorem Summable.alternating
     exact hf.comp_injective (mul_right_injective₀ (two_ne_zero' Nat))
   · simp only [pow_add, even_two, Even.mul_right, Even.neg_pow, one_pow, pow_one, mul_neg, mul_one,
       neg_mul, one_mul]
-
+    apply Summable.neg
+    apply hf.comp_injective
+    exact (add_left_injective 1).comp (mul_right_injective₀ (two_ne_zero' Nat))
 
 Depends on / 依赖: Even.mul_right, Even.neg_pow, Summable, Summable.even_add_odd, Summable.neg, add_left_injective, comp_injective, even_add_odd, even_two, hf.comp_injective, mul_neg, mul_one, mul_right, neg_mul, neg_pow, one_mul, one_pow, pow_add, pow_one, two_ne_zero
 -/
@@ -1656,7 +1758,17 @@ theorem tprod_int_eq_zero_mul_tprod_pnat
   have h2 : Multipliable fun n : Nat => f (-n) :=
     (multipliable_int_iff_multipliable_nat_and_neg.mp hf2).2
   have h3 : Multipliable fun n : Nat+ => f n := by
-    rwa [multipliable_pnat_
+    rwa [multipliable_pnat_iff_multipliable_succ (f := (f ·)),
+      multipliable_nat_add_iff 1 (f := (f ·))]
+  have h4 : Multipliable fun n : Nat+ => f (-n) := by
+    rwa [multipliable_pnat_iff_multipliable_succ (f := (fun x => f (-x))),
+      multipliable_nat_add_iff 1 (f := (fun x => f (-x)))]
+  have := tprod_nat_mul_neg hf2
+  simp only [← tprod_zero_pnat_eq_tprod_nat (by simpa using h1.mul h2), Nat.cast_zero, neg_zero,
+    mul_comm _ (f 0), mul_assoc, mul_right_inj] at this
+  simp [← this, h3.tprod_mul h4, ← mul_assoc]
+
+@[to_additive tsum_int_eq_zero_add_two_mul_tsum_pnat]
 
 中文:
 定理 tprod_int_eq_zero_mul_tprod_pnat
@@ -1667,7 +1779,17 @@ theorem tprod_int_eq_zero_mul_tprod_pnat
   have h2 : Multipliable fun n : Nat => f (-n) :=
     (multipliable_int_iff_multipliable_nat_and_neg.mp hf2).2
   have h3 : Multipliable fun n : Nat+ => f n := by
-    rwa [multipliable_pnat_
+    rwa [multipliable_pnat_iff_multipliable_succ (f := (f ·)),
+      multipliable_nat_add_iff 1 (f := (f ·))]
+  have h4 : Multipliable fun n : Nat+ => f (-n) := by
+    rwa [multipliable_pnat_iff_multipliable_succ (f := (fun x => f (-x))),
+      multipliable_nat_add_iff 1 (f := (fun x => f (-x)))]
+  have := tprod_nat_mul_neg hf2
+  simp only [← tprod_zero_pnat_eq_tprod_nat (by simpa using h1.mul h2), Nat.cast_zero, neg_zero,
+    mul_comm _ (f 0), mul_assoc, mul_right_inj] at this
+  simp [← this, h3.tprod_mul h4, ← mul_assoc]
+
+@[to_additive tsum_int_eq_zero_add_two_mul_tsum_pnat]
 
 Depends on / 依赖: Multipliable, multipliable_int_iff_multipliable_nat_and_neg, multipliable_int_iff_multipliable_nat_and_neg.mp, multipliable_nat_a, multipliable_nat_add_iff, multipliable_pnat_iff_multipliable_succ
 -/

@@ -64,7 +64,9 @@ lemma integrable_sum_measure
     convert! h.tsum_ofReal_lt_top with i
     rw [ofReal_integral_eq_lintegral_ofReal (hf i).norm]
     · simp_rw [ofReal_norm]
-    · exact ae_of_all _ fun 
+    · exact ae_of_all _ fun _ => by positivity
+
+omit [Countable ι] in
 
 中文:
 引理 integrable_sum_measure
@@ -74,7 +76,9 @@ lemma integrable_sum_measure
     convert! h.tsum_ofReal_lt_top with i
     rw [ofReal_integral_eq_lintegral_ofReal (hf i).norm]
     · simp_rw [ofReal_norm]
-    · exact ae_of_all _ fun 
+    · exact ae_of_all _ fun _ => by positivity
+
+omit [Countable ι] in
 
 Depends on / 依赖: HasFiniteIntegral, ae_of_all, aestronglyMeasurable, aestronglyMeasurable_sum_measure_iff, aestronglyMeasurable_sum_measure_iff.mpr, convert, h.tsum_ofReal_lt_top, lintegral_sum_measure, ofReal_integral_eq_lintegral_ofReal, ofReal_norm, simp_rw, tsum_ofReal_lt_top
 -/
@@ -240,7 +244,21 @@ theorem hasSum_integral_measure
   simp only [HasSum, ← integral_finsetSum_measure fun i _ => hfi i]
   refine Metric.nhds_basis_ball.tendsto_right_iff.mpr fun ε ε0 => ?_
   lift ε to Real>=0 using ε0.le
-  have hf_lt : (∫⁻ x, ‖f x‖ₑ ∂Measure
+  have hf_lt : (∫⁻ x, ‖f x‖ₑ ∂Measure.sum μ) < ∞ := hf.2
+  have hmem : forallᶠ y in 𝓝 (∫⁻ x, ‖f x‖ₑ ∂Measure.sum μ), (∫⁻ x, ‖f x‖ₑ ∂Measure.sum μ) < y + ε := by
+    refine tendsto_id.add tendsto_const_nhds (lt_mem_nhds (α := Real>=0∞) <| ENNReal.lt_add_right ?_ ?_)
+    exacts [hf_lt.ne, ENNReal.coe_ne_zero.2 (NNReal.coe_ne_zero.1 ε0.ne')]
+  refine ((hasSum_lintegral_measure (fun x => ‖f x‖ₑ) μ).eventually hmem).mono fun s hs => ?_
+  obtain ⟨ν, hν⟩ : exists ν, (∑ i in s, μ i) + ν = Measure.sum μ := by
+    refine ⟨Measure.sum fun i : ↥(sᶜ : Set ι) => μ i, ?_⟩
+    simpa only [← Measure.sum_coe_finset] using! Measure.sum_add_sum_compl (s : Set ι) μ
+  rw [Metric.mem_ball]; rw [← coe_nndist]; rw [NNReal.coe_lt_coe]; rw [← ENNReal.coe_lt_coe]; rw [← hν]
+  rw [← hν]; rw [integrable_add_measure] at hf
+  refine (nndist_integral_add_measure_le_lintegral hf.1 hf.2).trans_lt ?_
+  rw [← hν]; rw [lintegral_add_measure]; rw [lintegral_finsetSum_measure] at hs
+  exact lt_of_add_lt_add_left hs
+
+omit [Countable ι] in
 
 中文:
 定理 hasSum_integral_measure
@@ -250,7 +268,21 @@ theorem hasSum_integral_measure
   simp only [HasSum, ← integral_finsetSum_measure fun i _ => hfi i]
   refine Metric.nhds_basis_ball.tendsto_right_iff.mpr fun ε ε0 => ?_
   lift ε to Real>=0 using ε0.le
-  have hf_lt : (∫⁻ x, ‖f x‖ₑ ∂Measure
+  have hf_lt : (∫⁻ x, ‖f x‖ₑ ∂Measure.sum μ) < ∞ := hf.2
+  have hmem : forallᶠ y in 𝓝 (∫⁻ x, ‖f x‖ₑ ∂Measure.sum μ), (∫⁻ x, ‖f x‖ₑ ∂Measure.sum μ) < y + ε := by
+    refine tendsto_id.add tendsto_const_nhds (lt_mem_nhds (α := Real>=0∞) <| ENNReal.lt_add_right ?_ ?_)
+    exacts [hf_lt.ne, ENNReal.coe_ne_zero.2 (NNReal.coe_ne_zero.1 ε0.ne')]
+  refine ((hasSum_lintegral_measure (fun x => ‖f x‖ₑ) μ).eventually hmem).mono fun s hs => ?_
+  obtain ⟨ν, hν⟩ : exists ν, (∑ i in s, μ i) + ν = Measure.sum μ := by
+    refine ⟨Measure.sum fun i : ↥(sᶜ : Set ι) => μ i, ?_⟩
+    simpa only [← Measure.sum_coe_finset] using! Measure.sum_add_sum_compl (s : Set ι) μ
+  rw [Metric.mem_ball]; rw [← coe_nndist]; rw [NNReal.coe_lt_coe]; rw [← ENNReal.coe_lt_coe]; rw [← hν]
+  rw [← hν]; rw [integrable_add_measure] at hf
+  refine (nndist_integral_add_measure_le_lintegral hf.1 hf.2).trans_lt ?_
+  rw [← hν]; rw [lintegral_add_measure]; rw [lintegral_finsetSum_measure] at hs
+  exact lt_of_add_lt_add_left hs
+
+omit [Countable ι] in
 
 Depends on / 依赖: ENNReal, ENNReal.lt_add_, HasSum, Integrable, Measure, Measure.le_sum, Measure.sum, Metric, Metric.nhds_basis_ball.tendsto_right_iff.mpr, hf.mono_measure, hf_lt, integral_finsetSum_measure, le_sum, lt_add_, lt_mem_nhds, mono_measure, nhds_basis_ball, tendsto_const_nhds, tendsto_id, tendsto_id.add
 -/
@@ -311,7 +343,8 @@ lemma integral_sum_dirac
     rw [integral_smul_measure]; rw [integral_dirac]
   · rw [integral_undef hf, tsum_eq_zero_of_not_summable]
     apply mt Summable.norm
-    convert! mt (integrable_sum_dirac hc) h
+    convert! mt (integrable_sum_dirac hc) hf
+    simp [norm_smul]
 
 中文:
 引理 integral_sum_dirac
@@ -323,7 +356,8 @@ lemma integral_sum_dirac
     rw [integral_smul_measure]; rw [integral_dirac]
   · rw [integral_undef hf, tsum_eq_zero_of_not_summable]
     apply mt Summable.norm
-    convert! mt (integrable_sum_dirac hc) h
+    convert! mt (integrable_sum_dirac hc) hf
+    simp [norm_smul]
 
 Depends on / 依赖: Integrable, Summable, Summable.norm, convert, integrable_sum_dirac, integral_dirac, integral_smul_measure, integral_sum_measure, integral_undef, norm_smul, tsum_eq_zero_of_not_summable
 -/
@@ -399,7 +433,7 @@ theorem integral_countable
   congr 1 with a : 1
   rw [integral_smul_measure]; rw [integral_dirac]; rw [Measure.sum_smul_dirac]; rw [measureReal_def]
 
-@[deprecated (since := "2026-03-09")] alias integral_countable' := int
+@[deprecated (since := "2026-03-09")] alias integral_countable' := integral_countable
 
 中文:
 定理 integral_countable
@@ -410,7 +444,7 @@ theorem integral_countable
   congr 1 with a : 1
   rw [integral_smul_measure]; rw [integral_dirac]; rw [Measure.sum_smul_dirac]; rw [measureReal_def]
 
-@[deprecated (since := "2026-03-09")] alias integral_countable' := int
+@[deprecated (since := "2026-03-09")] alias integral_countable' := integral_countable
 
 Depends on / 依赖: Measure, Measure.sum_smul_dirac, integral_dirac, integral_smul_measure, integral_sum_measure, measureReal_def, sum_smul_dirac
 -/
@@ -434,7 +468,15 @@ theorem setIntegral_countable
   have hf' : Integrable (fun (x : s) => f x) (Measure.comap Subtype.val μ) := by
     rw [IntegrableOn]; rw [← map_comap_subtype_coe]; rw [integrable_map_measure] at hf
     · apply hf
-    · exact Integrable.aestronglyMeasurable 
+    · exact Integrable.aestronglyMeasurable hf
+    · exact Measurable.aemeasurable measurable_subtype_coe
+    · exact Countable.measurableSet hs
+  rw [← integral_subtype_comap hs.measurableSet]; rw [integral_countable hf']
+  congr 1 with a : 1
+  rw [measureReal_def]; rw [Measure.comap_apply Subtype.val Subtype.coe_injective
+    (fun s' hs' => MeasurableSet.subtype_image (Countable.measurableSet hs) hs') _
+    (MeasurableSet.singleton a)]
+  simp [measureReal_def]
 
 中文:
 定理 set整数egral_countable
@@ -444,7 +486,15 @@ theorem setIntegral_countable
   have hf' : Integrable (fun (x : s) => f x) (Measure.comap Subtype.val μ) := by
     rw [IntegrableOn]; rw [← map_comap_subtype_coe]; rw [integrable_map_measure] at hf
     · apply hf
-    · exact Integrable.aestronglyMeasurable 
+    · exact Integrable.aestronglyMeasurable hf
+    · exact Measurable.aemeasurable measurable_subtype_coe
+    · exact Countable.measurableSet hs
+  rw [← integral_subtype_comap hs.measurableSet]; rw [integral_countable hf']
+  congr 1 with a : 1
+  rw [measureReal_def]; rw [Measure.comap_apply Subtype.val Subtype.coe_injective
+    (fun s' hs' => MeasurableSet.subtype_image (Countable.measurableSet hs) hs') _
+    (MeasurableSet.singleton a)]
+  simp [measureReal_def]
 
 Depends on / 依赖: Countable, Countable.measurableSet, Iff.mpr, Integrable, Integrable.aestronglyMeasurable, IntegrableOn, Measurable, Measurable.aemeasurable, Measure, Measure.comap, Subtype, Subtype.val, aemeasurable, aestronglyMeasurable, countable_coe_iff, hs.measurableSet, integrable_map_measure, integral_countable, integral_subtype_comap, map_comap_subtype_coe
 -/

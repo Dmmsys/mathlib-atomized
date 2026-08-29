@@ -88,7 +88,32 @@ theorem MonotoneOn.intervalIntegral_slope_le
     apply hf <;> grind
   rw [← uIcc_of_le (by linarith)] at hf
   have hf' := hf.intervalIntegrable (μ := volume)
-  simp only [slope, add_sub_cancel_left, vsub_eq_sub, smu
+  simp only [slope, add_sub_cancel_left, vsub_eq_sub, smul_eq_mul,
+    intervalIntegral.integral_const_mul]
+  rw [intervalIntegral.integral_sub
+        (hf'.comp_add_right c |>.mono_set (by grind [uIcc]))
+        (hf'.mono_set (by grind [uIcc])),
+      intervalIntegral.integral_comp_add_right,
+      intervalIntegral.integral_interval_sub_interval_comm'
+        (hf'.mono_set (by grind [uIcc]))
+        (hf'.mono_set (by grind [uIcc]))
+        (hf'.mono_set (by grind [uIcc]))]
+  have fU : ∫ (x : Real) in b..b + c, f x <= c * f (b + c) := by
+    grw [intervalIntegral.integral_mono_on (g := fun _ => f (b + c))
+          (by linarith)
+          (hf'.mono_set (by grind [uIcc]))
+          (by simp)
+          (by intros; apply hf <;> grind [uIcc])]
+    simp
+  have fL : c * f a <= ∫ (x : Real) in a..a + c, f x := by
+    grw [← intervalIntegral.integral_mono_on (f := fun _ => f a)
+            (by linarith)
+            (by simp)
+            (hf'.mono_set (by grind [uIcc]))
+            (by intros; apply hf <;> grind [uIcc])]
+    simp
+  grw [fU, ← fL]
+  field_simp; rfl
 
 中文:
 定理 MonotoneOn.interval整数egral_slope_le
@@ -99,7 +124,32 @@ theorem MonotoneOn.intervalIntegral_slope_le
     apply hf <;> grind
   rw [← uIcc_of_le (by linarith)] at hf
   have hf' := hf.intervalIntegrable (μ := volume)
-  simp only [slope, add_sub_cancel_left, vsub_eq_sub, smu
+  simp only [slope, add_sub_cancel_left, vsub_eq_sub, smul_eq_mul,
+    intervalIntegral.integral_const_mul]
+  rw [intervalIntegral.integral_sub
+        (hf'.comp_add_right c |>.mono_set (by grind [uIcc]))
+        (hf'.mono_set (by grind [uIcc])),
+      intervalIntegral.integral_comp_add_right,
+      intervalIntegral.integral_interval_sub_interval_comm'
+        (hf'.mono_set (by grind [uIcc]))
+        (hf'.mono_set (by grind [uIcc]))
+        (hf'.mono_set (by grind [uIcc]))]
+  have fU : ∫ (x : Real) in b..b + c, f x <= c * f (b + c) := by
+    grw [intervalIntegral.integral_mono_on (g := fun _ => f (b + c))
+          (by linarith)
+          (hf'.mono_set (by grind [uIcc]))
+          (by simp)
+          (by intros; apply hf <;> grind [uIcc])]
+    simp
+  have fL : c * f a <= ∫ (x : Real) in a..a + c, f x := by
+    grw [← intervalIntegral.integral_mono_on (f := fun _ => f a)
+            (by linarith)
+            (by simp)
+            (hf'.mono_set (by grind [uIcc]))
+            (by intros; apply hf <;> grind [uIcc])]
+    simp
+  grw [fU, ← fL]
+  field_simp; rfl
 
 Depends on / 依赖: add_sub_cancel_left, add_zero, comp_add_right, eq_or_lt_of_le, hf.intervalIntegrable, integral_comp_add_right, integral_const_mul, integral_sub, integral_zero, intervalIntegrable, intervalIntegral, intervalIntegral.integral_comp_add_right, intervalIntegral.integral_const_mul, intervalIntegral.integral_sub, intervalIntegral.integral_zero, mono_set, slope_same, smul_eq_mul, sub_nonneg, uIcc_of_le
 -/

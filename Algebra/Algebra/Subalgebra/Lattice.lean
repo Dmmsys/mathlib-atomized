@@ -547,7 +547,7 @@ theorem sup_toSubsemiring
   rintro _ ⟨x, rfl⟩
   exact Set.mem_union_left _ (algebraMap_mem S x)
 
-@[simp, norm_
+@[simp, norm_cast]
 
 中文:
 定理 sup_toSubsemiring
@@ -560,7 +560,7 @@ theorem sup_toSubsemiring
   rintro _ ⟨x, rfl⟩
   exact Set.mem_union_left _ (algebraMap_mem S x)
 
-@[simp, norm_
+@[simp, norm_cast]
 
 Depends on / 依赖: S.toSubsemiring.closure_eq, Set.mem_union_left, Set.union_eq_right, Subalgebra, Subalgebra.coe_toSubsemiring, Subsemiring, Subsemiring.closure_union, T.toSubsemiring.closure_eq, adjoin_toSubsemiring, algebraMap_mem, closure_eq, closure_union, coe_toSubsemiring, mem_union_left, simp_rw, sup_def, toSubsemiring, union_eq_right
 -/
@@ -684,7 +684,13 @@ theorem sSup_toSubsemiring
     exact x.toSubsemiring.closure_eq.symm
   rw [h]; rw [sSup_image]; rw [← Subsemiring.closure_sUnion]; rw [sSup_def]; rw [adjoin_toSubsemiring]
   congr 1
-  rw [Set.union_eq_ri
+  rw [Set.union_eq_right]
+  rintro _ ⟨x, rfl⟩
+  obtain ⟨y, hy⟩ := hS
+  simp only [Set.mem_sUnion, Set.mem_image, exists_exists_and_eq_and, SetLike.mem_coe]
+  exact ⟨y, hy, algebraMap_mem y x⟩
+
+@[simp, norm_cast]
 
 中文:
 定理 sSup_toSubsemiring
@@ -696,7 +702,13 @@ theorem sSup_toSubsemiring
     exact x.toSubsemiring.closure_eq.symm
   rw [h]; rw [sSup_image]; rw [← Subsemiring.closure_sUnion]; rw [sSup_def]; rw [adjoin_toSubsemiring]
   congr 1
-  rw [Set.union_eq_ri
+  rw [Set.union_eq_right]
+  rintro _ ⟨x, rfl⟩
+  obtain ⟨y, hy⟩ := hS
+  simp only [Set.mem_sUnion, Set.mem_image, exists_exists_and_eq_and, SetLike.mem_coe]
+  exact ⟨y, hy, algebraMap_mem y x⟩
+
+@[simp, norm_cast]
 
 Depends on / 依赖: Set.image_image, Set.mem_image, Set.mem_sUnion, Set.union_eq_right, SetLike, SetLike.coe, SetLike.mem_coe, Subsemiring, Subsemiring.closure, Subsemiring.closure_sUnion, adjoin_toSubsemiring, algebraMap_mem, closure, closure_eq, closure_sUnion, exists_exists_and_eq_and, image_image, mem_coe, mem_image, mem_sUnion
 -/
@@ -938,7 +950,7 @@ theorem iSup_induction'
   refine Exists.elim ?_ fun (hx : x in ⨆ i, S i) (hc : motive x hx) => hc
   exact iSup_induction S (motive := fun x' => exists h, motive x' h) mem
     (fun _ _ h => ⟨_, basic _ _ h⟩) (fun _ _ h h' => ⟨_, add _ _ _ _ h.2 h'.2⟩)
-    (fun _ _ h h' => ⟨_, mul _ _ _ _ h.2 h'.2⟩) fun _ => ⟨_, algebraMa
+    (fun _ _ h h' => ⟨_, mul _ _ _ _ h.2 h'.2⟩) fun _ => ⟨_, algebraMap _⟩
 
 中文:
 定理 iSup_induction'
@@ -947,7 +959,7 @@ theorem iSup_induction'
   refine Exists.elim ?_ fun (hx : x in ⨆ i, S i) (hc : motive x hx) => hc
   exact iSup_induction S (motive := fun x' => exists h, motive x' h) mem
     (fun _ _ h => ⟨_, basic _ _ h⟩) (fun _ _ h h' => ⟨_, add _ _ _ _ h.2 h'.2⟩)
-    (fun _ _ h h' => ⟨_, mul _ _ _ _ h.2 h'.2⟩) fun _ => ⟨_, algebraMa
+    (fun _ _ h h' => ⟨_, mul _ _ _ _ h.2 h'.2⟩) fun _ => ⟨_, algebraMap _⟩
 
 Depends on / 依赖: Exists, Exists.elim, algebraMap, iSup_induction, motive
 -/
@@ -1723,7 +1735,9 @@ definition saturation
   add_mem' := by
     intro a b ⟨m, hm, ha⟩ ⟨n, hn, hb⟩
     refine ⟨_, mul_mem hn hm, ?_⟩
-    rw [mul_add]; rw [mul_assoc]; rw [mul_comm n m
+    rw [mul_add]; rw [mul_assoc]; rw [mul_comm n m]; rw [mul_assoc]
+    exact add_mem (mul_mem (H hn) ha) (mul_mem (H hm) hb)
+  algebraMap_mem' r := ⟨1, one_mem _, by simp⟩
 
 中文:
 定义 saturation
@@ -1735,7 +1749,9 @@ definition saturation
   add_mem' := by
     intro a b ⟨m, hm, ha⟩ ⟨n, hn, hb⟩
     refine ⟨_, mul_mem hn hm, ?_⟩
-    rw [mul_add]; rw [mul_assoc]; rw [mul_comm n m
+    rw [mul_add]; rw [mul_assoc]; rw [mul_comm n m]; rw [mul_assoc]
+    exact add_mem (mul_mem (H hn) ha) (mul_mem (H hm) hb)
+  algebraMap_mem' r := ⟨1, one_mem _, by simp⟩
 -/
 def saturation (s : Subalgebra R S) (M : Submonoid S) (H : M <= s.toSubmonoid) :
     Subalgebra R S where
@@ -2174,7 +2190,7 @@ theorem adjoin_induction
       mul_mem' := by rintro _ _ ⟨_, hpx⟩ ⟨_, hpy⟩; exact ⟨_, mul _ _ _ _ hpx hpy⟩
       add_mem' := by rintro _ _ ⟨_, hpx⟩ ⟨_, hpy⟩; exact ⟨_, add _ _ _ _ hpx hpy⟩
       algebraMap_mem' := fun r => ⟨_, algebraMap r⟩ }
-.elim fun _ =
+.elim fun _ => _root_.id adjoin_le (S := S) (fun y hy => ⟨subset_adjoin hy, mem y hy⟩) hx
 
 中文:
 定理 adjoin_induction
@@ -2184,7 +2200,7 @@ theorem adjoin_induction
       mul_mem' := by rintro _ _ ⟨_, hpx⟩ ⟨_, hpy⟩; exact ⟨_, mul _ _ _ _ hpx hpy⟩
       add_mem' := by rintro _ _ ⟨_, hpx⟩ ⟨_, hpy⟩; exact ⟨_, add _ _ _ _ hpx hpy⟩
       algebraMap_mem' := fun r => ⟨_, algebraMap r⟩ }
-.elim fun _ =
+.elim fun _ => _root_.id adjoin_le (S := S) (fun y hy => ⟨subset_adjoin hy, mem y hy⟩) hx
 
 Depends on / 依赖: Subalgebra, _root_, _root_.id, add_mem, adjoin_le, algebraMap, algebraMap_mem, carrier, mul_mem, subset_adjoin
 -/
@@ -2217,7 +2233,17 @@ theorem adjoin_induction₂
     | mem _ h => exact mem_mem _ _ h hz
     | algebraMap _ => exact algebraMap_left _ _ hz
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
-    | add _ _ _ _ h₁ h₂ => exact add_left _ _ 
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+  | algebraMap r =>
+    induction hx using adjoin_induction with
+    | mem _ h => exact algebraMap_right _ _ h
+    | algebraMap _ => exact algebraMap_both _ _
+    | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+
+@[simp]
 
 中文:
 定理 adjoin_induction₂
@@ -2228,7 +2254,17 @@ theorem adjoin_induction₂
     | mem _ h => exact mem_mem _ _ h hz
     | algebraMap _ => exact algebraMap_left _ _ hz
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
-    | add _ _ _ _ h₁ h₂ => exact add_left _ _ 
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+  | algebraMap r =>
+    induction hx using adjoin_induction with
+    | mem _ h => exact algebraMap_right _ _ h
+    | algebraMap _ => exact algebraMap_both _ _
+    | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+
+@[simp]
 
 Depends on / 依赖: add_left, adjoin_induction, algebraMap, algebraMap_both, algebraMap_left, algebraMap_right, mem_mem, mul_left
 -/
@@ -2575,7 +2611,28 @@ theorem adjoin_eq_span
     | cons hd tl ih => ?_
     rw [List.forall_mem_cons] at HL
     rw [List.map_cons]; rw [List.sum_cons]
-    refine Submodul
+    refine Submodule.add_mem _ ?_ (ih HL.2)
+    replace HL := HL.1
+    clear ih tl
+    suffices exists (z r : _) (_hr : r in Submonoid.closure s), z • r = List.prod hd by
+      rcases this with ⟨z, r, hr, hzr⟩
+      rw [← hzr]
+      exact smul_mem _ _ (subset_span hr)
+    induction hd with
+    | nil => exact ⟨1, 1, (Submonoid.closure s).one_mem', one_smul _ _⟩
+    | cons hd tl ih => ?_
+    rw [List.forall_mem_cons] at HL
+    rcases ih HL.2 with ⟨z, r, hr, hzr⟩
+    rw [List.prod_cons]; rw [← hzr]
+    rcases HL.1 with (⟨hd, rfl⟩ | hs)
+    · refine ⟨hd * z, r, hr, ?_⟩
+      rw [Algebra.smul_def]; rw [Algebra.smul_def]; rw [(algebraMap _ _).map_mul]; rw [_root_.mul_assoc]
+    · exact
+        ⟨z, hd * r, Submonoid.mul_mem _ (Submonoid.subset_closure hs) hr,
+          (mul_smul_comm _ _ _).symm⟩
+  refine span_le.2 ?_
+  change Submonoid.closure s <= (adjoin R s).toSubsemiring.toSubmonoid
+  exact Submonoid.closure_le.2 subset_adjoin
 
 中文:
 定理 adjoin_eq_span
@@ -2590,7 +2647,28 @@ theorem adjoin_eq_span
     | cons hd tl ih => ?_
     rw [List.forall_mem_cons] at HL
     rw [List.map_cons]; rw [List.sum_cons]
-    refine Submodul
+    refine Submodule.add_mem _ ?_ (ih HL.2)
+    replace HL := HL.1
+    clear ih tl
+    suffices exists (z r : _) (_hr : r in Submonoid.closure s), z • r = List.prod hd by
+      rcases this with ⟨z, r, hr, hzr⟩
+      rw [← hzr]
+      exact smul_mem _ _ (subset_span hr)
+    induction hd with
+    | nil => exact ⟨1, 1, (Submonoid.closure s).one_mem', one_smul _ _⟩
+    | cons hd tl ih => ?_
+    rw [List.forall_mem_cons] at HL
+    rcases ih HL.2 with ⟨z, r, hr, hzr⟩
+    rw [List.prod_cons]; rw [← hzr]
+    rcases HL.1 with (⟨hd, rfl⟩ | hs)
+    · refine ⟨hd * z, r, hr, ?_⟩
+      rw [Algebra.smul_def]; rw [Algebra.smul_def]; rw [(algebraMap _ _).map_mul]; rw [_root_.mul_assoc]
+    · exact
+        ⟨z, hd * r, Submonoid.mul_mem _ (Submonoid.subset_closure hs) hr,
+          (mul_smul_comm _ _ _).symm⟩
+  refine span_le.2 ?_
+  change Submonoid.closure s <= (adjoin R s).toSubsemiring.toSubmonoid
+  exact Submonoid.closure_le.2 subset_adjoin
 
 Depends on / 依赖: List.forall_mem_cons, List.map_cons, List.prod, List.sum_cons, Submodule, Submodule.add_mem, Submonoid, Submonoid.closure, Subsemiring, Subsemiring.mem_closure_iff_exists_list, add_mem, closure, forall_mem_cons, le_antisymm, map_cons, mem_closure_iff_exists_list, replace, smul_mem, subset_span, sum_cons
 -/
@@ -2769,7 +2847,11 @@ theorem mem_adjoin_of_map_mul
   | algebraMap r =>
     have : f 1 in adjoin R (f '' (s union {1})) :=
 subset_adjoin ⟨1, ⟨Set.subset_union_right Set.mem_singleton 1, rfl⟩⟩
-    convert! Subalgebra.smul_mem (adjoin R
+    convert! Subalgebra.smul_mem (adjoin R (f '' (s union { 1 }))) this r
+    rw [algebraMap_eq_smul_one]
+    exact f.map_smul _ _
+  | add y z _ _ hy hz => simpa [hy, hz] using Subalgebra.add_mem _ hy hz
+  | mul y z _ _ hy hz => simpa [hf, hy, hz] using Subalgebra.mul_mem _ hy hz
 
 中文:
 定理 mem_adjoin_of_map_mul
@@ -2780,7 +2862,11 @@ subset_adjoin ⟨1, ⟨Set.subset_union_right Set.mem_singleton 1, rfl⟩⟩
   | algebraMap r =>
     have : f 1 in adjoin R (f '' (s union {1})) :=
 subset_adjoin ⟨1, ⟨Set.subset_union_right Set.mem_singleton 1, rfl⟩⟩
-    convert! Subalgebra.smul_mem (adjoin R
+    convert! Subalgebra.smul_mem (adjoin R (f '' (s union { 1 }))) this r
+    rw [algebraMap_eq_smul_one]
+    exact f.map_smul _ _
+  | add y z _ _ hy hz => simpa [hy, hz] using Subalgebra.add_mem _ hy hz
+  | mul y z _ _ hy hz => simpa [hf, hy, hz] using Subalgebra.mul_mem _ hy hz
 
 Depends on / 依赖: Set.mem_singleton, Set.subset_union_left, Set.subset_union_right, Subalgebra, Subalgebra.add_mem, Subalgebra.mul, Subalgebra.smul_mem, add_mem, adjoin, adjoin_induction, algebraMap, algebraMap_eq_smul_one, convert, f.map_smul, map_smul, mem_singleton, smul_mem, subset_adjoin, subset_union_left, subset_union_right
 -/
@@ -3624,7 +3710,11 @@ theorem comap_map_eq
     replace hxy : x - y in f ⁻¹' {0} := by simp [hxy]
     rw [← Algebra.adjoin_eq S]; rw [← Algebra.adjoin_union]; rw [← add_sub_cancel y x]
     exact Subalgebra.add_mem _
-      (Algebra.subset
+      (Algebra.subset_adjoin <| Or.inl hy) (Algebra.subset_adjoin <| Or.inr hxy)
+  · rw [← map_le, Algebra.map_sup, f.map_adjoin]
+    apply le_of_eq
+    rw [sup_eq_left]; rw [Algebra.adjoin_le_iff]
+    exact (Set.image_preimage_subset f {0}).trans (Set.singleton_subset_iff.2 (S.map f).zero_mem)
 
 中文:
 定理 comap_map_eq
@@ -3637,7 +3727,11 @@ theorem comap_map_eq
     replace hxy : x - y in f ⁻¹' {0} := by simp [hxy]
     rw [← Algebra.adjoin_eq S]; rw [← Algebra.adjoin_union]; rw [← add_sub_cancel y x]
     exact Subalgebra.add_mem _
-      (Algebra.subset
+      (Algebra.subset_adjoin <| Or.inl hy) (Algebra.subset_adjoin <| Or.inr hxy)
+  · rw [← map_le, Algebra.map_sup, f.map_adjoin]
+    apply le_of_eq
+    rw [sup_eq_left]; rw [Algebra.adjoin_le_iff]
+    exact (Set.image_preimage_subset f {0}).trans (Set.singleton_subset_iff.2 (S.map f).zero_mem)
 
 Depends on / 依赖: Algebra, Algebra.adjoin_eq, Algebra.adjoin_le_iff, Algebra.adjoin_union, Algebra.map_sup, Algebra.subset_adjoin, Or.inl, Or.inr, Set.image_preimage_subset, Set.singleton_su, Subalgebra, Subalgebra.add_mem, add_mem, add_sub_cancel, adjoin_eq, adjoin_le_iff, adjoin_union, f.map_adjoin, image_preimage_subset, le_antisymm
 -/

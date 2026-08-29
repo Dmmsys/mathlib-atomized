@@ -408,7 +408,9 @@ lemma logHeight₁_eq
     intro a ha
     contrapose ha
     rw [ha]
-exact Multiset.prod_eq_zero_iff.not.mp lef
+exact Multiset.prod_eq_zero_iff.not.mp left_ne_zero_of_mul H
+  rw [log_mul (left_ne_zero_of_mul H) (right_ne_zero_of_mul H)]; rw [log_multiset_prod this]; rw [Multiset.map_map]; rw [log_finprod (fun _ => by positivity)]
+  congr 2 <;> simp [max_comm, posLog_eq_log_max_one]
 
 中文:
 引理 logHeight₁_eq
@@ -421,7 +423,9 @@ exact Multiset.prod_eq_zero_iff.not.mp lef
     intro a ha
     contrapose ha
     rw [ha]
-exact Multiset.prod_eq_zero_iff.not.mp lef
+exact Multiset.prod_eq_zero_iff.not.mp left_ne_zero_of_mul H
+  rw [log_mul (left_ne_zero_of_mul H) (right_ne_zero_of_mul H)]; rw [log_multiset_prod this]; rw [Multiset.map_map]; rw [log_finprod (fun _ => by positivity)]
+  congr 2 <;> simp [max_comm, posLog_eq_log_max_one]
 
 Depends on / 依赖: Multiset, Multiset.map_map, Multiset.prod_eq_zero_iff.not.mp, archAbsVal, archAbsVal.map, contrapose, left_ne_zero_of_mul, log_finprod, log_mul, log_multiset_prod, map_map, max_comm, posLog_eq_log_ma, prod_eq_zero_iff, right_ne_zero_of_mul
 -/
@@ -612,7 +616,7 @@ lemma mulHeight_comp_equiv
   · have hx' : x ∘ e != 0 := by
       obtain ⟨i, hi⟩ : exists i, x i != 0 := ne_iff.mp hx
       exact ne_iff.mpr ⟨e.symm i, by simp [hi]⟩
-    simp [mul
+    simp [mulHeight_eq hx, mulHeight_eq hx', comp_apply, H]
 
 中文:
 引理 mulHeight_comp_equiv
@@ -624,7 +628,7 @@ lemma mulHeight_comp_equiv
   · have hx' : x ∘ e != 0 := by
       obtain ⟨i, hi⟩ : exists i, x i != 0 := ne_iff.mp hx
       exact ne_iff.mpr ⟨e.symm i, by simp [hi]⟩
-    simp [mul
+    simp [mulHeight_eq hx, mulHeight_eq hx', comp_apply, H]
 
 Depends on / 依赖: AbsoluteValue, comp_apply, e.iSup_congr, e.symm, eq_or_ne, iSup_congr, mulHeight_eq, ne_iff, ne_iff.mp, ne_iff.mpr
 -/
@@ -879,7 +883,14 @@ have : Nonempty {j // x j != 0} := nonempty_subtype.mpr ne_iff.mp hx
     convert! this with v
     obtain ⟨i, hi⟩ : exists j, x j != 0 := Function.ne_iff.mp hx
     have : Nonempty ι := .intro i
-    refi
+    refine le_antisymm (ciSup_le fun j => ?_) (ciSup_le fun ⟨j, hj⟩ => Finite.le_ciSup_of_le j le_rfl)
+    rcases eq_or_ne (x j) 0 with h | h
+    · rw [h, v.val.map_zero]
+      exact Real.iSup_nonneg' ⟨⟨i, hi⟩, v.val.nonneg ..⟩
+    · exact Finite.le_ciSup_of_le ⟨j, h⟩ le_rfl
+  fun_prop (disch := grind)
+
+@[fun_prop]
 
 中文:
 引理 hasFiniteMulSupport_iSup_nonarchAbsVal
@@ -890,7 +901,14 @@ have : Nonempty {j // x j != 0} := nonempty_subtype.mpr ne_iff.mp hx
     convert! this with v
     obtain ⟨i, hi⟩ : exists j, x j != 0 := Function.ne_iff.mp hx
     have : Nonempty ι := .intro i
-    refi
+    refine le_antisymm (ciSup_le fun j => ?_) (ciSup_le fun ⟨j, hj⟩ => Finite.le_ciSup_of_le j le_rfl)
+    rcases eq_or_ne (x j) 0 with h | h
+    · rw [h, v.val.map_zero]
+      exact Real.iSup_nonneg' ⟨⟨i, hi⟩, v.val.nonneg ..⟩
+    · exact Finite.le_ciSup_of_le ⟨j, h⟩ le_rfl
+  fun_prop (disch := grind)
+
+@[fun_prop]
 -/
 private lemma hasFiniteMulSupport_iSup_nonarchAbsVal {x : ι -> K} (hx : x != 0) :
     (fun v : nonarchAbsVal => ⨆ i, v.val (x i)).HasFiniteMulSupport := by
@@ -944,7 +962,8 @@ lemma mulHeight_smul_eq_mulHeight
   have : Nonempty ι := (ne_iff.mp hx).nonempty
   have hcx : c • x != 0 := by simp [hc, hx]
   simp only [mulHeight_eq hx, mulHeight_eq hcx, Pi.smul_apply, smul_eq_mul, map_mul,
-← mul_iSup_of_nonneg AbsoluteValue.nonneg .., Multiset.prod_map_mu
+← mul_iSup_of_nonneg AbsoluteValue.nonneg .., Multiset.prod_map_mul]
+  rw [finprod_mul_distrib (by fun_prop) (by fun_prop)]; rw [mul_mul_mul_comm]; rw [product_formula hc]; rw [one_mul]
 
 中文:
 引理 mulHeight_smul_eq_mulHeight
@@ -955,7 +974,8 @@ lemma mulHeight_smul_eq_mulHeight
   have : Nonempty ι := (ne_iff.mp hx).nonempty
   have hcx : c • x != 0 := by simp [hc, hx]
   simp only [mulHeight_eq hx, mulHeight_eq hcx, Pi.smul_apply, smul_eq_mul, map_mul,
-← mul_iSup_of_nonneg AbsoluteValue.nonneg .., Multiset.prod_map_mu
+← mul_iSup_of_nonneg AbsoluteValue.nonneg .., Multiset.prod_map_mul]
+  rw [finprod_mul_distrib (by fun_prop) (by fun_prop)]; rw [mul_mul_mul_comm]; rw [product_formula hc]; rw [one_mul]
 
 Depends on / 依赖: AbsoluteValue, AbsoluteValue.nonneg, Multiset, Multiset.prod_map_mul, Nonempty, Pi.smul_apply, eq_or_ne, finprod_mul_distrib, fun_prop, map_mul, mulHeight_eq, mul_iSup_of_nonneg, mul_mul_mul_comm, ne_iff, ne_iff.mp, nonempty, nonneg, one_mul, prod_map_mul, product_formula
 -/
@@ -982,7 +1002,11 @@ lemma one_le_mulHeight
   obtain ⟨i, hi⟩ : exists i, x i != 0 := ne_iff.mp hx
   have hx' : (x i)⁻¹ • x != 0 := by simp [hi, hx]
   rw [← mulHeight_smul_eq_mulHeight _ <| inv_ne_zero hi]; rw [mulHeight_eq hx']
-  refine one_le_mul_of_one_le_of_one_le (Multiset.one_le_prod_map fu
+  refine one_le_mul_of_one_le_of_one_le (Multiset.one_le_prod_map fun v _ => ?_) ?_
+· refine Finite.le_ciSup_of_le i le_of_eq ?_
+    simpa using (inv_mul_cancel₀ <| v.ne_zero_iff.mpr hi).symm
+  · refine one_le_finprod fun v => Finite.le_ciSup_of_le i ?_
+    simp [inv_mul_cancel₀ <| v.val.ne_zero_iff.mpr hi]
 
 中文:
 引理 one_le_mulHeight
@@ -994,7 +1018,11 @@ lemma one_le_mulHeight
   obtain ⟨i, hi⟩ : exists i, x i != 0 := ne_iff.mp hx
   have hx' : (x i)⁻¹ • x != 0 := by simp [hi, hx]
   rw [← mulHeight_smul_eq_mulHeight _ <| inv_ne_zero hi]; rw [mulHeight_eq hx']
-  refine one_le_mul_of_one_le_of_one_le (Multiset.one_le_prod_map fu
+  refine one_le_mul_of_one_le_of_one_le (Multiset.one_le_prod_map fun v _ => ?_) ?_
+· refine Finite.le_ciSup_of_le i le_of_eq ?_
+    simpa using (inv_mul_cancel₀ <| v.ne_zero_iff.mpr hi).symm
+  · refine one_le_finprod fun v => Finite.le_ciSup_of_le i ?_
+    simp [inv_mul_cancel₀ <| v.val.ne_zero_iff.mpr hi]
 
 Depends on / 依赖: Finite, Finite.le_ciSup_of_le, Multiset, Multiset.one_le_prod_map, eq_or_ne, inv_ne_zero, le_ciSup_of_le, le_of_eq, mulHeight_eq, mulHeight_smul_eq_mulHeight, ne_iff, ne_iff.mp, ne_zero_iff, one_le_finprod, one_le_mul_of_one_le_of_one_le, one_le_prod_map, v.ne_zero_iff.mpr, v.val.n
 -/
@@ -1084,7 +1112,16 @@ lemma mulHeight_comp_le
   · simp
   have : Nonempty ι := .intro (ne_iff.mp h₀).choose
   rw [mulHeight_eq h₀]; rw [mulHeight_eq hx]
-  have H (v : AbsoluteValue K Real) : ⨆ i, v ((x ∘ f) i) <= ⨆ i, v (x i) :
+  have H (v : AbsoluteValue K Real) : ⨆ i, v ((x ∘ f) i) <= ⨆ i, v (x i) :=
+    ciSup_le fun i => Finite.le_ciSup_of_le (f i) le_rfl
+  gcongr
+  · exact finprod_nonneg fun v => Real.iSup_nonneg_of_nonnegHomClass v.val _
+  · exact Multiset.prod_map_nonneg fun v _ => Real.iSup_nonneg_of_nonnegHomClass v _
+  · exact Multiset.prod_map_le_prod_map₀ _ _ (fun v _ => Real.iSup_nonneg_of_nonnegHomClass v _)
+      fun v _ => H v
+  · exact finprod_le_finprod (hasFiniteMulSupport_iSup_nonarchAbsVal h₀)
+      (fun v => Real.iSup_nonneg_of_nonnegHomClass v.val _)
+      (hasFiniteMulSupport_iSup_nonarchAbsVal hx) fun v => H v.val
 
 中文:
 引理 mulHeight_comp_le
@@ -1096,7 +1133,16 @@ lemma mulHeight_comp_le
   · simp
   have : Nonempty ι := .intro (ne_iff.mp h₀).choose
   rw [mulHeight_eq h₀]; rw [mulHeight_eq hx]
-  have H (v : AbsoluteValue K Real) : ⨆ i, v ((x ∘ f) i) <= ⨆ i, v (x i) :
+  have H (v : AbsoluteValue K Real) : ⨆ i, v ((x ∘ f) i) <= ⨆ i, v (x i) :=
+    ciSup_le fun i => Finite.le_ciSup_of_le (f i) le_rfl
+  gcongr
+  · exact finprod_nonneg fun v => Real.iSup_nonneg_of_nonnegHomClass v.val _
+  · exact Multiset.prod_map_nonneg fun v _ => Real.iSup_nonneg_of_nonnegHomClass v _
+  · exact Multiset.prod_map_le_prod_map₀ _ _ (fun v _ => Real.iSup_nonneg_of_nonnegHomClass v _)
+      fun v _ => H v
+  · exact finprod_le_finprod (hasFiniteMulSupport_iSup_nonarchAbsVal h₀)
+      (fun v => Real.iSup_nonneg_of_nonnegHomClass v.val _)
+      (hasFiniteMulSupport_iSup_nonarchAbsVal hx) fun v => H v.val
 
 Depends on / 依赖: AbsoluteValue, Finite, Finite.le_ciSup_of_le, Multiset, Multiset.prod_map_nonneg, Nonempty, Real.iSup_nonneg_of_nonnegHomClas, Real.iSup_nonneg_of_nonnegHomClass, ciSup_le, eq_or_ne, finprod_nonneg, iSup_nonneg_of_nonnegHomClas, iSup_nonneg_of_nonnegHomClass, le_ciSup_of_le, le_rfl, mulHeight_eq, ne_iff, ne_iff.mp, one_le_mulHeight, prod_map_nonneg
 -/
@@ -1155,7 +1201,15 @@ lemma mulHeight_sumElim_zero_eq
   have : Nonempty ι := .intro i
   have hx' : Sum.elim x (0 : ι' -> K) != 0 := ne_iff.mpr ⟨.inl i, by simpa using hi⟩
   rw [mulHeight_eq hx]; rw [mulHeight_eq hx']
-  have H (v : AbsoluteValue K Real) : ⨆ j, v (Sum.elim x
+  have H (v : AbsoluteValue K Real) : ⨆ j, v (Sum.elim x (0 : ι' -> K) j) = ⨆ i, v (x i) := by
+refine le_antisymm ?_ ciSup_le fun i => Finite.le_ciSup_of_le (.inl i) le_rfl
+    refine ciSup_le fun j => ?_
+    cases j with
+    | inl i => exact Finite.le_ciSup_of_le i le_rfl
+    | inr _ => simpa using Real.iSup_nonneg_of_nonnegHomClass v _
+  congr <;> ext1 v
+  · exact H v
+  · exact H v.val
 
 中文:
 引理 mulHeight_sumElim_zero_eq
@@ -1167,7 +1221,15 @@ lemma mulHeight_sumElim_zero_eq
   have : Nonempty ι := .intro i
   have hx' : Sum.elim x (0 : ι' -> K) != 0 := ne_iff.mpr ⟨.inl i, by simpa using hi⟩
   rw [mulHeight_eq hx]; rw [mulHeight_eq hx']
-  have H (v : AbsoluteValue K Real) : ⨆ j, v (Sum.elim x
+  have H (v : AbsoluteValue K Real) : ⨆ j, v (Sum.elim x (0 : ι' -> K) j) = ⨆ i, v (x i) := by
+refine le_antisymm ?_ ciSup_le fun i => Finite.le_ciSup_of_le (.inl i) le_rfl
+    refine ciSup_le fun j => ?_
+    cases j with
+    | inl i => exact Finite.le_ciSup_of_le i le_rfl
+    | inr _ => simpa using Real.iSup_nonneg_of_nonnegHomClass v _
+  congr <;> ext1 v
+  · exact H v
+  · exact H v.val
 
 Depends on / 依赖: AbsoluteValue, Finite, Finite.le_ciSup_of_le, Nonempty, Sum.elim, ciSup_le, eq_or_ne, le_antisymm, le_ciSup_of_le, le_rfl, mulHeight_eq, ne_iff, ne_iff.mp, ne_iff.mpr
 -/
@@ -1223,7 +1285,8 @@ lemma mulHeight_eq_mulHeight_restrict_support
     cases i with
     | inl val => simp [e]
 | inr val => exact notMem_support.mp (Set.mem_compl_iff _ _).mp val.prop
-  rw [← mulHeight_comp_
+  rw [← mulHeight_comp_equiv e]; rw [hx]
+  exact mulHeight_sumElim_zero_eq ..
 
 中文:
 引理 mulHeight_eq_mulHeight_restrict_support
@@ -1237,7 +1300,8 @@ lemma mulHeight_eq_mulHeight_restrict_support
     cases i with
     | inl val => simp [e]
 | inr val => exact notMem_support.mp (Set.mem_compl_iff _ _).mp val.prop
-  rw [← mulHeight_comp_
+  rw [← mulHeight_comp_equiv e]; rw [hx]
+  exact mulHeight_sumElim_zero_eq ..
 
 Depends on / 依赖: Equiv.Set.sumCompl, Set.mem_compl_iff, Sum.elim, classical, comp_apply, i.val, mem_compl_iff, mulHeight_comp_equiv, mulHeight_sumElim_zero_eq, notMem_support, notMem_support.mp, sumCompl, support, val.prop, x.support
 -/
@@ -1373,7 +1437,10 @@ let e := (Equiv.sumComm ..).trans finSumFinEquiv.trans finCongr n.one_add
     match j with
     | .inl _ => simp [e]
     | .inr ⟨i, h⟩ =>
-      simp [show i = 0 by lia, e, show Fin.castAdd n 0 = 0 from Fin.castAdd_mk _ _ zero_l
+      simp [show i = 0 by lia, e, show Fin.castAdd n 0 = 0 from Fin.castAdd_mk _ _ zero_lt_one]
+  rw [← mulHeight_comp_equiv e]; rw [he]; rw [mulHeight_sumElim_zero_eq]
+
+@[simp]
 
 中文:
 引理 mulHeight_cons_zero
@@ -1385,7 +1452,10 @@ let e := (Equiv.sumComm ..).trans finSumFinEquiv.trans finCongr n.one_add
     match j with
     | .inl _ => simp [e]
     | .inr ⟨i, h⟩ =>
-      simp [show i = 0 by lia, e, show Fin.castAdd n 0 = 0 from Fin.castAdd_mk _ _ zero_l
+      simp [show i = 0 by lia, e, show Fin.castAdd n 0 = 0 from Fin.castAdd_mk _ _ zero_lt_one]
+  rw [← mulHeight_comp_equiv e]; rw [he]; rw [mulHeight_sumElim_zero_eq]
+
+@[simp]
 
 Depends on / 依赖: Equiv.sumComm, Fin.castAdd, Fin.castAdd_mk, Matrix, Matrix.vecCons, Sum.elim, castAdd, castAdd_mk, finCongr, finSumFinEquiv, finSumFinEquiv.trans, mulHeight_comp_equiv, mulHeight_sumElim_zero_eq, n.one_add, one_add, sumComm, vecCons, zero_lt_one
 -/
@@ -1717,7 +1787,12 @@ lemma mulHeight_pow
   have H (v : AbsoluteValue K Real) : ⨆ i : ι, v ((x ^ n) i) = (⨆ i, v (x i)) ^ n := by
     simp only [Pi.pow_apply, map_pow]
     simp +singlePass only [← coe_toNNReal _ (v.nonneg _)]
-    norm_
+    norm_cast
+    exact (pow_left_mono n).map_ciSup_of_continuousAt (continuous_pow n).continuousAt
+.symm (Finite.bddAbove_range _)
+  have hxn : x ^ n != 0 := by simp [hx]
+  simp only [mulHeight_eq hx, mulHeight_eq hxn, H, mul_pow,
+finprod_pow hasFiniteMulSupport_iSup_nonarchAbsVal hx, ← Multiset.prod_map_pow]
 
 中文:
 引理 mulHeight_pow
@@ -1729,7 +1804,12 @@ lemma mulHeight_pow
   have H (v : AbsoluteValue K Real) : ⨆ i : ι, v ((x ^ n) i) = (⨆ i, v (x i)) ^ n := by
     simp only [Pi.pow_apply, map_pow]
     simp +singlePass only [← coe_toNNReal _ (v.nonneg _)]
-    norm_
+    norm_cast
+    exact (pow_left_mono n).map_ciSup_of_continuousAt (continuous_pow n).continuousAt
+.symm (Finite.bddAbove_range _)
+  have hxn : x ^ n != 0 := by simp [hx]
+  simp only [mulHeight_eq hx, mulHeight_eq hxn, H, mul_pow,
+finprod_pow hasFiniteMulSupport_iSup_nonarchAbsVal hx, ← Multiset.prod_map_pow]
 
 Depends on / 依赖: AbsoluteValue, Finite, Finite.bddAbove_range, Nonempty, Pi.pow_apply, bddAbove_range, coe_toNNReal, continuousAt, continuous_pow, eq_or_ne, map_ciSup_of_continuousAt, map_pow, mulHeight_eq, mul_pow, ne_iff, ne_iff.mp, nonempty, nonneg, pow_apply, pow_left_mono
 -/
@@ -1970,7 +2050,8 @@ lemma mulHeight_fun_prod_eq
     choose f hf using hx
     exact ⟨f, prod_ne_zero_iff.mpr fun a _ => hf a⟩
   simp_rw [_root_.map_prod, Real.iSup_prod_eq_prod_iSup_of_nonnegHomClass]
-  rw [Multiset.prod_map_prod]; rw [finprod_prod_comm _ _ fun b _ =
+  rw [Multiset.prod_map_prod]; rw [finprod_prod_comm _ _ fun b _ => hasFiniteMulSupport_iSup_nonarchAbsVal (hx b)]; rw [← prod_mul_distrib]
+  exact prod_congr rfl fun a _ => by rw [mulHeight_eq (hx a)]
 
 中文:
 引理 mulHeight_fun_prod_eq
@@ -1982,7 +2063,8 @@ lemma mulHeight_fun_prod_eq
     choose f hf using hx
     exact ⟨f, prod_ne_zero_iff.mpr fun a _ => hf a⟩
   simp_rw [_root_.map_prod, Real.iSup_prod_eq_prod_iSup_of_nonnegHomClass]
-  rw [Multiset.prod_map_prod]; rw [finprod_prod_comm _ _ fun b _ =
+  rw [Multiset.prod_map_prod]; rw [finprod_prod_comm _ _ fun b _ => hasFiniteMulSupport_iSup_nonarchAbsVal (hx b)]; rw [← prod_mul_distrib]
+  exact prod_congr rfl fun a _ => by rw [mulHeight_eq (hx a)]
 
 Depends on / 依赖: Multiset, Multiset.prod_map_prod, Pi.zero_def, Real.iSup_prod_eq_prod_iSup_of_nonnegHomClass, _root_, _root_.map_prod, finprod_prod_comm, hasFiniteMulSupport_iSup_nonarchAbsVal, iSup_prod_eq_prod_iSup_of_nonnegHomClass, map_prod, mulHeight_eq, ne_iff, prod_congr, prod_map_prod, prod_mul_distrib, prod_ne_zero_iff, prod_ne_zero_iff.mpr, simp_rw, zero_def
 -/
@@ -2048,7 +2130,11 @@ lemma mulHeight_fun_mul_eq
     obtain ⟨i, hi⟩ := ne_iff.mp hx
     obtain ⟨j, hj⟩ := ne_iff.mp hy
     exact ne_iff.mpr ⟨⟨i, j⟩, mul_ne_zero hi hj⟩
-  rw [mulHeight_eq hx]; rw [mulHeight_eq hy]; rw [mulHeight_eq hxy]; rw [mul_mul_mul_comm]; rw [← Multiset.prod_map_mul]
+  rw [mulHeight_eq hx]; rw [mulHeight_eq hy]; rw [mulHeight_eq hxy]; rw [mul_mul_mul_comm]; rw [← Multiset.prod_map_mul]; rw [← finprod_mul_distrib
+        (hasFiniteMulSupport_iSup_nonarchAbsVal hx) (hasFiniteMulSupport_iSup_nonarchAbsVal hy)]
+  congr <;> ext1 v
+  · exact Real.iSup_fun_mul_eq_iSup_mul_iSup_of_nonneg v x y
+  · exact Real.iSup_fun_mul_eq_iSup_mul_iSup_of_nonneg v.val x y
 
 中文:
 引理 mulHeight_fun_mul_eq
@@ -2058,7 +2144,11 @@ lemma mulHeight_fun_mul_eq
     obtain ⟨i, hi⟩ := ne_iff.mp hx
     obtain ⟨j, hj⟩ := ne_iff.mp hy
     exact ne_iff.mpr ⟨⟨i, j⟩, mul_ne_zero hi hj⟩
-  rw [mulHeight_eq hx]; rw [mulHeight_eq hy]; rw [mulHeight_eq hxy]; rw [mul_mul_mul_comm]; rw [← Multiset.prod_map_mul]
+  rw [mulHeight_eq hx]; rw [mulHeight_eq hy]; rw [mulHeight_eq hxy]; rw [mul_mul_mul_comm]; rw [← Multiset.prod_map_mul]; rw [← finprod_mul_distrib
+        (hasFiniteMulSupport_iSup_nonarchAbsVal hx) (hasFiniteMulSupport_iSup_nonarchAbsVal hy)]
+  congr <;> ext1 v
+  · exact Real.iSup_fun_mul_eq_iSup_mul_iSup_of_nonneg v x y
+  · exact Real.iSup_fun_mul_eq_iSup_mul_iSup_of_nonneg v.val x y
 
 Depends on / 依赖: Multiset, Multiset.prod_map_mul, Real.iSup_fun_m, Real.iSup_fun_mul_eq_iSup_mul_iSup_of_nonneg, finprod_mul_distrib, hasFiniteMulSupport_iSup_nonarchAbsVal, iSup_fun_m, iSup_fun_mul_eq_iSup_mul_iSup_of_nonneg, mulHeight_eq, mul_mul_mul_comm, mul_ne_zero, ne_iff, ne_iff.mp, ne_iff.mpr, prod_map_mul
 -/
@@ -2184,7 +2274,8 @@ lemma mulHeight_mul_le
   · simpa using one_le_mulHeight y
   rcases eq_or_ne y 0 with rfl | hy
   · simpa using one_le_mulHeight x
-  rw [← mulHeight_fun_mul_eq hx hy]; rw [show x * y = (fun a => x a.1 * y a.2) ∘ Function.diag by ext1
+  rw [← mulHeight_fun_mul_eq hx hy]; rw [show x * y = (fun a => x a.1 * y a.2) ∘ Function.diag by ext1; simp]
+  exact mulHeight_comp_le ..
 
 中文:
 引理 mulHeight_mul_le
@@ -2197,7 +2288,8 @@ lemma mulHeight_mul_le
   · simpa using one_le_mulHeight y
   rcases eq_or_ne y 0 with rfl | hy
   · simpa using one_le_mulHeight x
-  rw [← mulHeight_fun_mul_eq hx hy]; rw [show x * y = (fun a => x a.1 * y a.2) ∘ Function.diag by ext1
+  rw [← mulHeight_fun_mul_eq hx hy]; rw [show x * y = (fun a => x a.1 * y a.2) ∘ Function.diag by ext1; simp]
+  exact mulHeight_comp_le ..
 
 Depends on / 依赖: Function, Function.diag, eq_or_ne, isEmpty_or_nonempty, mulHeight_comp_le, mulHeight_fun_mul_eq, one_le_mulHeight
 -/
@@ -2479,7 +2571,11 @@ lemma mulHeight₁_sum_le
   rw [prod_mul_distrib]; rw [← prod_replicate]; rw [← map_const]; rw [← finprod_prod_comm _ _ (by fun_prop)]; rw [← prod_map_prod]; rw [← mul_assoc]; rw [← prod_map_mul]
   simp only [Function.const_apply]
   gcongr
-  · exact finprod_nonneg fun _ => by posit
+  · exact finprod_nonneg fun _ => by positivity
+  · exact prod_map_nonneg fun _ h => by positivity
+  · exact prod_map_le_prod_map₀ _ _ (fun _ _ => by positivity) fun _ _ => max_abv_sum_one_le _ hs x
+· exact finprod_le_finprod (by fun_prop) (fun _ => by grind) (by fun_prop)
+      fun v => max_abv_sum_one_le_of_isNonarchimedean (isNonarchimedean _ v.prop) _ x
 
 中文:
 引理 mulHeight₁_sum_le
@@ -2489,7 +2585,11 @@ lemma mulHeight₁_sum_le
   rw [prod_mul_distrib]; rw [← prod_replicate]; rw [← map_const]; rw [← finprod_prod_comm _ _ (by fun_prop)]; rw [← prod_map_prod]; rw [← mul_assoc]; rw [← prod_map_mul]
   simp only [Function.const_apply]
   gcongr
-  · exact finprod_nonneg fun _ => by posit
+  · exact finprod_nonneg fun _ => by positivity
+  · exact prod_map_nonneg fun _ h => by positivity
+  · exact prod_map_le_prod_map₀ _ _ (fun _ _ => by positivity) fun _ _ => max_abv_sum_one_le _ hs x
+· exact finprod_le_finprod (by fun_prop) (fun _ => by grind) (by fun_prop)
+      fun v => max_abv_sum_one_le_of_isNonarchimedean (isNonarchimedean _ v.prop) _ x
 
 Depends on / 依赖: Function, Function.const_apply, const_apply, finprod_le_finprod, finprod_nonneg, finprod_prod_comm, fun_prop, map_const, max_abv_sum_one_le, mul_assoc, prod_map_mul, prod_map_nonneg, prod_map_prod, prod_mul_distrib, prod_replicate, totalWeight
 -/
@@ -2519,7 +2619,7 @@ lemma logHeight₁_sum_le
   have : forall a in s, mulHeight₁ (x a) != 0 := fun _ _ => by positivity
   have : (#s : Real) ^ totalWeight K != 0 := by simp [hs.ne_empty]
   pull (disch := first | assumption | positivity) log
-exac
+exact (log_le_log <| by positivity) mulHeight₁_sum_le hs x
 
 中文:
 引理 logHeight₁_sum_le
@@ -2531,7 +2631,7 @@ exac
   have : forall a in s, mulHeight₁ (x a) != 0 := fun _ _ => by positivity
   have : (#s : Real) ^ totalWeight K != 0 := by simp [hs.ne_empty]
   pull (disch := first | assumption | positivity) log
-exac
+exact (log_le_log <| by positivity) mulHeight₁_sum_le hs x
 
 Depends on / 依赖: eq_empty_or_nonempty, hs.ne_empty, log_le_log, ne_empty, s.eq_empty_or_nonempty, totalWeight
 -/

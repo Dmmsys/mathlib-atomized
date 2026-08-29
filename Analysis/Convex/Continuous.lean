@@ -35,7 +35,40 @@ lemma ConvexOn.lipschitzOnWith_of_abs_le
     obtain rfl | hxy := eq_or_ne x y
     · simp
 have hx₀r : ball x₀ (r - ε) subseteq ball x₀ r := ball_subset_ball by linarith
-    have hx' : x in b
+    have hx' : x in ball x₀ r := hx₀r hx
+    have hy' : y in ball x₀ r := hx₀r hy
+    let z := x + (ε / ‖x - y‖) • (x - y)
+    replace hxy : 0 < ‖x - y‖ := by rwa [norm_sub_pos_iff]
+have hz : z in ball x₀ r := mem_ball_iff_norm.2 by
+      calc
+        _ = ‖(x - x₀) + (ε / ‖x - y‖) • (x - y)‖ := by simp only [z, add_sub_right_comm]
+        _ <= ‖x - x₀‖ + ‖(ε / ‖x - y‖) • (x - y)‖ := norm_add_le ..
+        _ < r - ε + ε :=
+add_lt_add_of_lt_of_le (mem_ball_iff_norm.1 hx) by
+            simp [norm_smul, abs_of_nonneg, hε.le, hxy.ne']
+        _ = r := by simp
+    let a := ε / (ε + ‖x - y‖)
+    let b := ‖x - y‖ / (ε + ‖x - y‖)
+    have hab : a + b = 1 := by simp [field, a, b]
+    have hxyz : x = a • y + b • z := by
+      calc
+        x = a • x + b • x := by rw [Convex.combo_self hab]
+        _ = a • y + b • z := by simp [z, a, b, smul_smul, hxy.ne', smul_sub]; abel
+    rw [hK]; rw [mul_comm]; rw [← mul_div_assoc]; rw [le_div_iff₀' hε]
+    calc
+      ε * (f x - f y) <= ‖x - y‖ * (f z - f x) := by
+        have h := hf.2 hy' hz (by positivity) (by positivity) hab
+        simp only [← hxyz, smul_eq_mul, a, b] at h
+        field_simp at h
+        linear_combination h
+      _ <= _ := by
+        rw [sub_eq_add_neg (f _)]; rw [two_mul]
+        gcongr
+· exact (le_abs_self _).trans hM _ hz
+· exact (neg_le_abs _).trans hM _ hx'
+  refine .of_dist_le' fun x hx y hy => ?_
+  simp_rw [dist_eq_norm_sub, Real.norm_eq_abs, abs_sub_le_iff]
+  exact ⟨oneside hx hy, norm_sub_rev x _ ▸ oneside hy hx⟩
 
 中文:
 引理 ConvexOn.lipschitzOnWith_of_abs_le
@@ -47,7 +80,40 @@ have hx₀r : ball x₀ (r - ε) subseteq ball x₀ r := ball_subset_ball by lin
     obtain rfl | hxy := eq_or_ne x y
     · simp
 have hx₀r : ball x₀ (r - ε) subseteq ball x₀ r := ball_subset_ball by linarith
-    have hx' : x in b
+    have hx' : x in ball x₀ r := hx₀r hx
+    have hy' : y in ball x₀ r := hx₀r hy
+    let z := x + (ε / ‖x - y‖) • (x - y)
+    replace hxy : 0 < ‖x - y‖ := by rwa [norm_sub_pos_iff]
+have hz : z in ball x₀ r := mem_ball_iff_norm.2 by
+      calc
+        _ = ‖(x - x₀) + (ε / ‖x - y‖) • (x - y)‖ := by simp only [z, add_sub_right_comm]
+        _ <= ‖x - x₀‖ + ‖(ε / ‖x - y‖) • (x - y)‖ := norm_add_le ..
+        _ < r - ε + ε :=
+add_lt_add_of_lt_of_le (mem_ball_iff_norm.1 hx) by
+            simp [norm_smul, abs_of_nonneg, hε.le, hxy.ne']
+        _ = r := by simp
+    let a := ε / (ε + ‖x - y‖)
+    let b := ‖x - y‖ / (ε + ‖x - y‖)
+    have hab : a + b = 1 := by simp [field, a, b]
+    have hxyz : x = a • y + b • z := by
+      calc
+        x = a • x + b • x := by rw [Convex.combo_self hab]
+        _ = a • y + b • z := by simp [z, a, b, smul_smul, hxy.ne', smul_sub]; abel
+    rw [hK]; rw [mul_comm]; rw [← mul_div_assoc]; rw [le_div_iff₀' hε]
+    calc
+      ε * (f x - f y) <= ‖x - y‖ * (f z - f x) := by
+        have h := hf.2 hy' hz (by positivity) (by positivity) hab
+        simp only [← hxyz, smul_eq_mul, a, b] at h
+        field_simp at h
+        linear_combination h
+      _ <= _ := by
+        rw [sub_eq_add_neg (f _)]; rw [two_mul]
+        gcongr
+· exact (le_abs_self _).trans hM _ hz
+· exact (neg_le_abs _).trans hM _ hx'
+  refine .of_dist_le' fun x hx y hy => ?_
+  simp_rw [dist_eq_norm_sub, Real.norm_eq_abs, abs_sub_le_iff]
+  exact ⟨oneside hx hy, norm_sub_rev x _ ▸ oneside hy hx⟩
 
 Depends on / 依赖: ball_subset_ball, eq_or_ne, mem_ball_iff_norm, norm_sub_pos_iff, oneside, replace, subseteq
 -/
@@ -129,7 +195,7 @@ lemma ConvexOn.exists_lipschitzOnWith_of_isBounded
     forall_exists_index, and_imp, forall_apply_eq_imp_iff₂] at hf'
   obtain ⟨M, hM⟩ := hf'
   rw [← sub_sub_cancel r r']
-  exact ⟨_, hf.lipschitzOnWith_of_abs_le (sub_pos.
+  exact ⟨_, hf.lipschitzOnWith_of_abs_le (sub_pos.2 hr) fun a ha => (hM a ha).le⟩
 
 中文:
 引理 ConvexOn.存在_lipschitzOnWith_of_isBounded
@@ -140,7 +206,7 @@ lemma ConvexOn.exists_lipschitzOnWith_of_isBounded
     forall_exists_index, and_imp, forall_apply_eq_imp_iff₂] at hf'
   obtain ⟨M, hM⟩ := hf'
   rw [← sub_sub_cancel r r']
-  exact ⟨_, hf.lipschitzOnWith_of_abs_le (sub_pos.
+  exact ⟨_, hf.lipschitzOnWith_of_abs_le (sub_pos.2 hr) fun a ha => (hM a ha).le⟩
 
 Depends on / 依赖: Real.norm_eq_abs, Set.subset_def, and_imp, dist_zero_right, forall_exists_index, hf.lipschitzOnWith_of_abs_le, isBounded_iff_subset_ball, lipschitzOnWith_of_abs_le, mem_ball, mem_image, norm_eq_abs, sub_pos, sub_sub_cancel, subset_def
 -/
@@ -189,7 +255,19 @@ refine ⟨fun h => h.mono_le .of_forall fun x => le_abs_self _, ?_⟩
   refine ⟨|r| + 2 * |f x₀|, ?_⟩
   have : (𝓝 x₀).Tendsto (fun y => 2 • x₀ - y) (𝓝 x₀) :=
     tendsto_nhds_nhds.2 (⟨·, ·, by simp [two_nsmul, dist_comm]⟩)
-  simp only [Filter.eventually_map, Pi.abs_apply, abs_le'] at
+  simp only [Filter.eventually_map, Pi.abs_apply, abs_le'] at hr ⊢
+  filter_upwards [this.eventually_mem hC, hC, hr, this.eventually hr] with y hx hx' hfr hfr'
+refine ⟨hfr.trans (le_abs_self _).trans by simp, ?_⟩
+  rw [← sub_le_iff_le_add]; rw [neg_sub_comm]; rw [sub_le_iff_le_add']; rw [← abs_two]; rw [← abs_mul]
+  calc
+    -|2 * f x₀| <= 2 * f x₀ := neg_abs_le _
+    _ <= f y + f (2 • x₀ - y) := by
+      have := hf.2 hx' hx (by positivity) (by positivity) (add_halves _)
+      simp only [one_div, ← Nat.cast_smul_eq_nsmul Real, Nat.cast_ofNat, smul_sub, ne_eq,
+        OfNat.ofNat_ne_zero, not_false_eq_true, inv_smul_smul₀, add_sub_cancel, smul_eq_mul] at this
+      cancel_denoms at this
+      rwa [← Nat.cast_two, Nat.cast_smul_eq_nsmul] at this
+    _ <= f y + |r| := by gcongr; exact hfr'.trans (le_abs_self _)
 
 中文:
 引理 ConvexOn.isBoundedUnder_abs
@@ -200,7 +278,19 @@ refine ⟨fun h => h.mono_le .of_forall fun x => le_abs_self _, ?_⟩
   refine ⟨|r| + 2 * |f x₀|, ?_⟩
   have : (𝓝 x₀).Tendsto (fun y => 2 • x₀ - y) (𝓝 x₀) :=
     tendsto_nhds_nhds.2 (⟨·, ·, by simp [two_nsmul, dist_comm]⟩)
-  simp only [Filter.eventually_map, Pi.abs_apply, abs_le'] at
+  simp only [Filter.eventually_map, Pi.abs_apply, abs_le'] at hr ⊢
+  filter_upwards [this.eventually_mem hC, hC, hr, this.eventually hr] with y hx hx' hfr hfr'
+refine ⟨hfr.trans (le_abs_self _).trans by simp, ?_⟩
+  rw [← sub_le_iff_le_add]; rw [neg_sub_comm]; rw [sub_le_iff_le_add']; rw [← abs_two]; rw [← abs_mul]
+  calc
+    -|2 * f x₀| <= 2 * f x₀ := neg_abs_le _
+    _ <= f y + f (2 • x₀ - y) := by
+      have := hf.2 hx' hx (by positivity) (by positivity) (add_halves _)
+      simp only [one_div, ← Nat.cast_smul_eq_nsmul Real, Nat.cast_ofNat, smul_sub, ne_eq,
+        OfNat.ofNat_ne_zero, not_false_eq_true, inv_smul_smul₀, add_sub_cancel, smul_eq_mul] at this
+      cancel_denoms at this
+      rwa [← Nat.cast_two, Nat.cast_smul_eq_nsmul] at this
+    _ <= f y + |r| := by gcongr; exact hfr'.trans (le_abs_self _)
 
 Depends on / 依赖: Filter, Filter.eventually_map, Pi.abs_apply, Tendsto, abs_apply, abs_le, dist_comm, eventually, eventually_map, eventually_mem, filter_upwards, h.mono_le, hfr.trans, le_abs_self, mono_le, neg_sub_comm, of_forall, sub_le_iff_le, sub_le_iff_le_add, tendsto_nhds_nhds
 -/
@@ -261,7 +351,39 @@ exact fun h => ⟨x₀, hx₀, h.continuousAt hC.mem_nhds hx₀⟩
   tfae_have 3 -> 4
   | ⟨x₀, hx₀, h⟩ =>
     ⟨x₀, hx₀, f x₀ + 1, by simpa using! h.eventually (eventually_le_nhds (by simp))⟩
-  tfae_ha
+  tfae_have 4 -> 5
+  | ⟨x₀, hx₀, r, hr⟩, x, hx => by
+    have : forallᶠ δ in 𝓝 (0 : Real), (1 - δ)⁻¹ • x - (δ / (1 - δ)) • x₀ in C := by
+      have h : ContinuousAt (fun δ : Real => (1 - δ)⁻¹ • x - (δ / (1 - δ)) • x₀) 0 := by
+        fun_prop (disch := norm_num)
+      exact h (by simpa using! hC.mem_nhds hx)
+    obtain ⟨δ, hδ₀, hy, hδ₁⟩ := (this.and <| eventually_lt_nhds zero_lt_one).exists_gt
+    set y := (1 - δ)⁻¹ • x - (δ / (1 - δ)) • x₀
+    refine ⟨max r (f y), ?_⟩
+    simp only [Filter.eventually_map] at hr ⊢
+obtain ⟨ε, hε, hr⟩ := Metric.eventually_nhds_iff.1 hr.and (hC.eventually_mem hx₀)
+    refine Metric.eventually_nhds_iff.2 ⟨ε * δ, by positivity, fun z hz => ?_⟩
+have hx₀' : δ⁻¹ • (x - y) + y = x₀ := MulAction.injective₀ (sub_ne_zero.2 hδ₁.ne') by
+      simp [y, smul_sub, smul_smul, hδ₀.ne', div_eq_mul_inv, sub_ne_zero.2 hδ₁.ne', mul_left_comm,
+        sub_mul, sub_smul]
+    let w := δ⁻¹ • (z - y) + y
+    have hwyz : δ • w + (1 - δ) • y = z := by simp [w, hδ₀.ne', sub_smul]
+    have hw : dist w x₀ < ε := by
+      simpa [w, ← hx₀', dist_smul₀, abs_of_nonneg, hδ₀.le, inv_mul_lt_iff₀', hδ₀]
+    calc
+      f z <= max (f w) (f y) :=
+        hf.le_max_of_mem_segment (hr hw).2 hy ⟨_, _, hδ₀.le, sub_nonneg.2 hδ₁.le, by simp, hwyz⟩
+      _ <= max r (f y) := by gcongr; exact (hr hw).1
+  tfae_have 6 ↔ 5 := forall₂_congr fun x₀ hx₀ => hf.isBoundedUnder_abs (hC.mem_nhds hx₀)
+  tfae_have 6 -> 1
+  | h, x, hx => by
+    obtain ⟨r, hr⟩ := h hx
+obtain ⟨ε, hε, hεD⟩ := Metric.mem_nhds_iff.1 Filter.inter_mem (hC.mem_nhds hx) hr
+    simp only [preimage_ofPred_eq, Pi.abs_apply, subset_inter_iff, hC.nhdsWithin_eq hx] at hεD ⊢
+    obtain ⟨K, hK⟩ := exists_lipschitzOnWith_of_isBounded (hf.subset hεD.1 (convex_ball ..))
+(half_lt_self hε) isBounded_iff_forall_norm_le.2 ⟨r, by simpa using! hεD.2⟩
+    exact ⟨K, _, ball_mem_nhds _ (by simpa), hK⟩
+  tfae_finish
 
 中文:
 引理 ConvexOn.continuousOn_tfae
@@ -275,7 +397,39 @@ exact fun h => ⟨x₀, hx₀, h.continuousAt hC.mem_nhds hx₀⟩
   tfae_have 3 -> 4
   | ⟨x₀, hx₀, h⟩ =>
     ⟨x₀, hx₀, f x₀ + 1, by simpa using! h.eventually (eventually_le_nhds (by simp))⟩
-  tfae_ha
+  tfae_have 4 -> 5
+  | ⟨x₀, hx₀, r, hr⟩, x, hx => by
+    have : forallᶠ δ in 𝓝 (0 : Real), (1 - δ)⁻¹ • x - (δ / (1 - δ)) • x₀ in C := by
+      have h : ContinuousAt (fun δ : Real => (1 - δ)⁻¹ • x - (δ / (1 - δ)) • x₀) 0 := by
+        fun_prop (disch := norm_num)
+      exact h (by simpa using! hC.mem_nhds hx)
+    obtain ⟨δ, hδ₀, hy, hδ₁⟩ := (this.and <| eventually_lt_nhds zero_lt_one).exists_gt
+    set y := (1 - δ)⁻¹ • x - (δ / (1 - δ)) • x₀
+    refine ⟨max r (f y), ?_⟩
+    simp only [Filter.eventually_map] at hr ⊢
+obtain ⟨ε, hε, hr⟩ := Metric.eventually_nhds_iff.1 hr.and (hC.eventually_mem hx₀)
+    refine Metric.eventually_nhds_iff.2 ⟨ε * δ, by positivity, fun z hz => ?_⟩
+have hx₀' : δ⁻¹ • (x - y) + y = x₀ := MulAction.injective₀ (sub_ne_zero.2 hδ₁.ne') by
+      simp [y, smul_sub, smul_smul, hδ₀.ne', div_eq_mul_inv, sub_ne_zero.2 hδ₁.ne', mul_left_comm,
+        sub_mul, sub_smul]
+    let w := δ⁻¹ • (z - y) + y
+    have hwyz : δ • w + (1 - δ) • y = z := by simp [w, hδ₀.ne', sub_smul]
+    have hw : dist w x₀ < ε := by
+      simpa [w, ← hx₀', dist_smul₀, abs_of_nonneg, hδ₀.le, inv_mul_lt_iff₀', hδ₀]
+    calc
+      f z <= max (f w) (f y) :=
+        hf.le_max_of_mem_segment (hr hw).2 hy ⟨_, _, hδ₀.le, sub_nonneg.2 hδ₁.le, by simp, hwyz⟩
+      _ <= max r (f y) := by gcongr; exact (hr hw).1
+  tfae_have 6 ↔ 5 := forall₂_congr fun x₀ hx₀ => hf.isBoundedUnder_abs (hC.mem_nhds hx₀)
+  tfae_have 6 -> 1
+  | h, x, hx => by
+    obtain ⟨r, hr⟩ := h hx
+obtain ⟨ε, hε, hεD⟩ := Metric.mem_nhds_iff.1 Filter.inter_mem (hC.mem_nhds hx) hr
+    simp only [preimage_ofPred_eq, Pi.abs_apply, subset_inter_iff, hC.nhdsWithin_eq hx] at hεD ⊢
+    obtain ⟨K, hK⟩ := exists_lipschitzOnWith_of_isBounded (hf.subset hεD.1 (convex_ball ..))
+(half_lt_self hε) isBounded_iff_forall_norm_le.2 ⟨r, by simpa using! hεD.2⟩
+    exact ⟨K, _, ball_mem_nhds _ (by simpa), hK⟩
+  tfae_finish
 
 Depends on / 依赖: ContinuousAt, LocallyLipschitzOn, LocallyLipschitzOn.continuousOn, continuousAt, continuousOn, eventually, eventually_le_nhds, fun_prop, h.continuousAt, h.eventually, hC.mem_nhds, mem_nhds, tfae_have
 -/
@@ -425,7 +579,9 @@ lemma ConvexOn.locallyLipschitzOn
   · simp
   · obtain ⟨b, hx₀b, hbC⟩ := exists_mem_interior_convexHull_affineBasis (hC.mem_nhds hx₀)
     refine ((hf.continuousOn_tfae hC ⟨x₀, hx₀⟩).out 3 0).mp ?_
-    refine ⟨x₀, hx₀, BddAbove.isBoundedUnder (IsOpen.mem_nhds isOpen_interior hx₀b) 
+    refine ⟨x₀, hx₀, BddAbove.isBoundedUnder (IsOpen.mem_nhds isOpen_interior hx₀b) ?_⟩
+    exact (hf.bddAbove_convexHull ((subset_convexHull ..).trans hbC)
+      ((finite_range _).image _).bddAbove).mono (by gcongr; exact interior_subset)
 
 中文:
 引理 ConvexOn.locallyLipschitzOn
@@ -435,7 +591,9 @@ lemma ConvexOn.locallyLipschitzOn
   · simp
   · obtain ⟨b, hx₀b, hbC⟩ := exists_mem_interior_convexHull_affineBasis (hC.mem_nhds hx₀)
     refine ((hf.continuousOn_tfae hC ⟨x₀, hx₀⟩).out 3 0).mp ?_
-    refine ⟨x₀, hx₀, BddAbove.isBoundedUnder (IsOpen.mem_nhds isOpen_interior hx₀b) 
+    refine ⟨x₀, hx₀, BddAbove.isBoundedUnder (IsOpen.mem_nhds isOpen_interior hx₀b) ?_⟩
+    exact (hf.bddAbove_convexHull ((subset_convexHull ..).trans hbC)
+      ((finite_range _).image _).bddAbove).mono (by gcongr; exact interior_subset)
 -/
 protected lemma ConvexOn.locallyLipschitzOn (hC : IsOpen C) (hf : ConvexOn Real C f) :
     LocallyLipschitzOn C f := by
@@ -765,7 +923,8 @@ lemma ConvexOn.continuousOn_Ioc
     exact hf_cont
   · have h := hf_cvx.continuousOn_interior x
     simp only [interior_Ioc, mem_Ioo, hx.1, hxz, and_self, forall_const] at h
-    rw [continuousWithinAt_iff_continuousA
+    rw [continuousWithinAt_iff_continuousAt (Ioo_mem_nhds hx.1 hxz)] at h
+    exact h.continuousWithinAt
 
 中文:
 引理 ConvexOn.continuousOn_Ioc
@@ -777,7 +936,8 @@ lemma ConvexOn.continuousOn_Ioc
     exact hf_cont
   · have h := hf_cvx.continuousOn_interior x
     simp only [interior_Ioc, mem_Ioo, hx.1, hxz, and_self, forall_const] at h
-    rw [continuousWithinAt_iff_continuousA
+    rw [continuousWithinAt_iff_continuousAt (Ioo_mem_nhds hx.1 hxz)] at h
+    exact h.continuousWithinAt
 
 Depends on / 依赖: Ioo_mem_nhds, and_self, continuousOn_interior, continuousWithinAt, continuousWithinAt_Ioc_iff_Iic, continuousWithinAt_iff_continuousAt, eq_or_lt_of_le, forall_const, h.continuousWithinAt, hf_cont, hf_cvx, hf_cvx.continuousOn_interior, interior_Ioc, mem_Ioo
 -/
@@ -828,7 +988,8 @@ lemma ConvexOn.continuousOn_Ico
     exact hf_cont
   · have h := hf_cvx.continuousOn_interior x
     simp only [interior_Ico, mem_Ioo, hyx, hx.2, and_self, forall_const] at h
-    rw [continuousWithinAt_iff_continuousA
+    rw [continuousWithinAt_iff_continuousAt (Ioo_mem_nhds hyx hx.2)] at h
+    exact h.continuousWithinAt
 
 中文:
 引理 ConvexOn.continuousOn_Ico
@@ -840,7 +1001,8 @@ lemma ConvexOn.continuousOn_Ico
     exact hf_cont
   · have h := hf_cvx.continuousOn_interior x
     simp only [interior_Ico, mem_Ioo, hyx, hx.2, and_self, forall_const] at h
-    rw [continuousWithinAt_iff_continuousA
+    rw [continuousWithinAt_iff_continuousAt (Ioo_mem_nhds hyx hx.2)] at h
+    exact h.continuousWithinAt
 
 Depends on / 依赖: Ioo_mem_nhds, and_self, continuousOn_interior, continuousWithinAt, continuousWithinAt_Ico_iff_Ici, continuousWithinAt_iff_continuousAt, eq_or_lt_of_le, forall_const, h.continuousWithinAt, hf_cont, hf_cvx, hf_cvx.continuousOn_interior, interior_Ico, mem_Ioo
 -/
@@ -892,7 +1054,11 @@ lemma ConvexOn.continuousOn_Icc
     rcases eq_or_lt_of_le (α := Real) hx.2 with rfl | hxz
     · exact hfz.mono (by grind)
     have hx := this.1 x (by grind)
- 
+    rw [continuousWithinAt_iff_continuousAt (Ico_mem_nhds hyx hxz)] at hx
+    exact hx.continuousWithinAt
+  refine ⟨ConvexOn.continuousOn_Ico ?_ hfy, ConvexOn.continuousOn_Ioc ?_ hfz⟩
+  · exact hf_cvx.subset Ico_subset_Icc_self (convex_Ico y z)
+  · exact hf_cvx.subset Ioc_subset_Icc_self (convex_Ioc y z)
 
 中文:
 引理 ConvexOn.continuousOn_Icc
@@ -905,7 +1071,11 @@ lemma ConvexOn.continuousOn_Icc
     rcases eq_or_lt_of_le (α := Real) hx.2 with rfl | hxz
     · exact hfz.mono (by grind)
     have hx := this.1 x (by grind)
- 
+    rw [continuousWithinAt_iff_continuousAt (Ico_mem_nhds hyx hxz)] at hx
+    exact hx.continuousWithinAt
+  refine ⟨ConvexOn.continuousOn_Ico ?_ hfy, ConvexOn.continuousOn_Ioc ?_ hfz⟩
+  · exact hf_cvx.subset Ico_subset_Icc_self (convex_Ico y z)
+  · exact hf_cvx.subset Ioc_subset_Icc_self (convex_Ioc y z)
 
 Depends on / 依赖: ContinuousOn, ConvexOn, ConvexOn.continuousOn_Ico, ConvexOn.continuousOn_Ioc, Ico_mem_nhds, Ico_subset_Icc_self, continuousOn_Ico, continuousOn_Ioc, continuousWithinAt, continuousWithinAt_iff_continuousAt, convex_Ico, eq_or_lt_of_le, hf_cvx, hf_cvx.subset, hfy.mono, hfz.mono, hx.continuousWithinAt, subset
 -/

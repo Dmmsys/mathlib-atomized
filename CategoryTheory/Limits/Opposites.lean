@@ -49,7 +49,7 @@ Quiver.Hom.op_inj by
         coconeOfConeLeftOp_ι_app, op_unop]
   uniq s m w := by
     refine Quiver.Hom.op_inj (hc.hom_ext fun j => Quiver.Hom.unop_inj ?_)
-    s
+    simpa only [Quiver.Hom.op_unop, IsColimit.fac, coconeOfConeLeftOp_ι_app] using! w (op j)
 
 中文:
 定义 isLimitConeLeftOpOfCocone
@@ -61,7 +61,7 @@ Quiver.Hom.op_inj by
         coconeOfConeLeftOp_ι_app, op_unop]
   uniq s m w := by
     refine Quiver.Hom.op_inj (hc.hom_ext fun j => Quiver.Hom.unop_inj ?_)
-    s
+    simpa only [Quiver.Hom.op_unop, IsColimit.fac, coconeOfConeLeftOp_ι_app] using! w (op j)
 
 Depends on / 依赖: coconeOfConeLeftOp, hc.desc
 -/
@@ -92,7 +92,7 @@ Quiver.Hom.op_inj by
         coneOfCoconeLeftOp_π_app, op_unop]
   uniq s m w := by
     refine Quiver.Hom.op_inj (hc.hom_ext fun j => Quiver.Hom.unop_inj ?_)
-    sim
+    simpa only [Quiver.Hom.op_unop, IsLimit.fac, coneOfCoconeLeftOp_π_app] using! w (op j)
 
 中文:
 定义 isColimitCoconeLeftOpOfCone
@@ -104,7 +104,7 @@ Quiver.Hom.op_inj by
         coneOfCoconeLeftOp_π_app, op_unop]
   uniq s m w := by
     refine Quiver.Hom.op_inj (hc.hom_ext fun j => Quiver.Hom.unop_inj ?_)
-    sim
+    simpa only [Quiver.Hom.op_unop, IsLimit.fac, coneOfCoconeLeftOp_π_app] using! w (op j)
 
 Depends on / 依赖: coneOfCoconeLeftOp, hc.lift
 -/
@@ -271,7 +271,7 @@ Quiver.Hom.unop_inj by
         coconeLeftOpOfCone_ι_app, unop_op]
   uniq s m w := by
     refine Quiver.Hom.unop_inj (hc.hom_ext fun j => Quiver.Hom.op_inj ?_)
-   
+    simpa only [Quiver.Hom.unop_op, IsColimit.fac, coneOfCoconeLeftOp_π_app] using! w (unop j)
 
 中文:
 定义 isLimitConeOfCoconeLeftOp
@@ -283,7 +283,7 @@ Quiver.Hom.unop_inj by
         coconeLeftOpOfCone_ι_app, unop_op]
   uniq s m w := by
     refine Quiver.Hom.unop_inj (hc.hom_ext fun j => Quiver.Hom.op_inj ?_)
-   
+    simpa only [Quiver.Hom.unop_op, IsColimit.fac, coneOfCoconeLeftOp_π_app] using! w (unop j)
 
 Depends on / 依赖: coconeLeftOpOfCone, hc.desc
 -/
@@ -314,7 +314,7 @@ Quiver.Hom.unop_inj by
         coneLeftOpOfCocone_π_app, unop_op]
   uniq s m w := by
     refine Quiver.Hom.unop_inj (hc.hom_ext fun j => Quiver.Hom.op_inj ?_)
-    s
+    simpa only [Quiver.Hom.unop_op, IsLimit.fac, coconeOfConeLeftOp_ι_app] using! w (unop j)
 
 中文:
 定义 isColimitCoconeOfConeLeftOp
@@ -326,7 +326,7 @@ Quiver.Hom.unop_inj by
         coneLeftOpOfCocone_π_app, unop_op]
   uniq s m w := by
     refine Quiver.Hom.unop_inj (hc.hom_ext fun j => Quiver.Hom.op_inj ?_)
-    s
+    simpa only [Quiver.Hom.unop_op, IsLimit.fac, coconeOfConeLeftOp_ι_app] using! w (unop j)
 
 Depends on / 依赖: coneLeftOpOfCocone, hc.lift
 -/

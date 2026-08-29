@@ -544,7 +544,20 @@ instance :
   inf c d :=
     { toSetoid := c.toSetoid ⊓ d.toSetoid
       mul' := fun h1 h2 => ⟨c.mul h1.1 h2.1, d.mul h1.2 h2.2⟩
-      add' := fun h1 h2 =>
+      add' := fun h1 h2 => ⟨c.add h1.1 h2.1, d.add h1.2 h2.2⟩ }
+  inf_le_left _ _ := fun _ _ h => h.1
+  inf_le_right _ _ := fun _ _ h => h.2
+  le_inf _ _ _ hb hc := fun _ _ h => ⟨hb h, hc h⟩
+  top :=
+    { (⊤ : Setoid R) with
+      mul' := fun _ _ => trivial
+      add' := fun _ _ => trivial }
+  le_top _ := fun _ _ _h => trivial
+  bot :=
+    { (⊥ : Setoid R) with
+      mul' := congr_arg₂ _
+      add' := congr_arg₂ _ }
+  bot_le c := fun x _y h => h ▸ c.refl x
 
 中文:
 实例 :
@@ -555,7 +568,20 @@ instance :
   inf c d :=
     { toSetoid := c.toSetoid ⊓ d.toSetoid
       mul' := fun h1 h2 => ⟨c.mul h1.1 h2.1, d.mul h1.2 h2.2⟩
-      add' := fun h1 h2 =>
+      add' := fun h1 h2 => ⟨c.add h1.1 h2.1, d.add h1.2 h2.2⟩ }
+  inf_le_left _ _ := fun _ _ h => h.1
+  inf_le_right _ _ := fun _ _ h => h.2
+  le_inf _ _ _ hb hc := fun _ _ h => ⟨hb h, hc h⟩
+  top :=
+    { (⊤ : Setoid R) with
+      mul' := fun _ _ => trivial
+      add' := fun _ _ => trivial }
+  le_top _ := fun _ _ _h => trivial
+  bot :=
+    { (⊥ : Setoid R) with
+      mul' := congr_arg₂ _
+      add' := congr_arg₂ _ }
+  bot_le c := fun x _y h => h ▸ c.refl x
 
 Depends on / 依赖: RingCon, completeLatticeOfInf
 -/
@@ -859,7 +885,7 @@ theorem ringConGen_eq
         (fun _ => RingCon.symm _) (fun _ _ => RingCon.trans _)
         (fun _ _ h1 h2 c hc => c.add (h1 c hc) <| h2 c hc)
         (fun _ _ h1 h2 c hc => c.mul (h1 c hc) <| h2 c hc))
-    (sInf_l
+    (sInf_le le_ringConGen)
 
 中文:
 定理 ringConGen_eq
@@ -870,7 +896,7 @@ theorem ringConGen_eq
         (fun _ => RingCon.symm _) (fun _ _ => RingCon.trans _)
         (fun _ _ h1 h2 c hc => c.add (h1 c hc) <| h2 c hc)
         (fun _ _ h1 h2 c hc => c.mul (h1 c hc) <| h2 c hc))
-    (sInf_l
+    (sInf_le le_ringConGen)
 
 Depends on / 依赖: RingCon, RingCon.refl, RingCon.symm, RingCon.trans, RingConGen, RingConGen.Rel.recOn, c.add, c.mul, le_antisymm, le_ringConGen, sInf_le
 -/
@@ -1209,7 +1235,8 @@ theorem comap_ringConGen_ringEquiv
     grw [← le_comap_ringConGen]
     gcongr
     simp [Function.onFun, RingEquiv.coe_toNonUnitalRingHom']
-  · rw [← comap_nonUnitalRing
+  · rw [← comap_nonUnitalRingHomComp]
+    simp
 
 中文:
 定理 comap_ringConGen_ringEquiv
@@ -1221,7 +1248,8 @@ theorem comap_ringConGen_ringEquiv
     grw [← le_comap_ringConGen]
     gcongr
     simp [Function.onFun, RingEquiv.coe_toNonUnitalRingHom']
-  · rw [← comap_nonUnitalRing
+  · rw [← comap_nonUnitalRingHomComp]
+    simp
 
 Depends on / 依赖: Function, Function.onFun, RingEquiv, RingEquiv.coe_toNonUnitalRingHom, coe_toNonUnitalRingHom, comap_mono, comap_nonUnitalRingHomComp, f.symm.toNonUnitalRingHom, f.toNonUnitalRingHom, le_antisymm, le_comap_ringConGen, ringConGen, toNonUnitalRingHom
 -/

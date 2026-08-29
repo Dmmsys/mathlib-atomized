@@ -515,7 +515,10 @@ definition equivSubmodule
     refine ⟨fun ⟨v, hv⟩ => hv ▸ v.finrank_submodule, fun h => ?_⟩
     rcases finrank_eq_one_iff'.1 h with ⟨v : H, hv₀, hv : forall w : H, _⟩
     use mk K (v : V) (Subtype.coe_injective.ne hv₀)
-    rw [submodule_mk]; 
+    rw [submodule_mk]; rw [SetLike.ext'_iff]; rw [Submodule.span_singleton_eq_range]
+    refine (Set.range_subset_iff.2 fun _ => H.smul_mem _ v.2).antisymm fun x hx => ?_
+    rcases hv ⟨x, hx⟩ with ⟨c, hc⟩
+    exact ⟨c, congr_arg Subtype.val hc⟩
 
 中文:
 定义 equivSubmodule
@@ -524,7 +527,10 @@ definition equivSubmodule
     refine ⟨fun ⟨v, hv⟩ => hv ▸ v.finrank_submodule, fun h => ?_⟩
     rcases finrank_eq_one_iff'.1 h with ⟨v : H, hv₀, hv : forall w : H, _⟩
     use mk K (v : V) (Subtype.coe_injective.ne hv₀)
-    rw [submodule_mk]; 
+    rw [submodule_mk]; rw [SetLike.ext'_iff]; rw [Submodule.span_singleton_eq_range]
+    refine (Set.range_subset_iff.2 fun _ => H.smul_mem _ v.2).antisymm fun x hx => ?_
+    rcases hv ⟨x, hx⟩ with ⟨c, hc⟩
+    exact ⟨c, congr_arg Subtype.val hc⟩
 
 Depends on / 依赖: Equiv.ofInjective, H.smul_mem, Set.range_subset_iff, SetLike, SetLike.ext, Submodule, Submodule.span_singleton_eq_range, Subtype, Subtype.coe_injective.ne, Subtype.val, _iff, antisymm, coe_injective, congr_arg, finrank_eq_one_iff, finrank_submodule, ofInjective, of_pseudoMetrizableSpace_of_isFiniteMeasure, range_subset_iff, smul_mem
 -/
@@ -768,7 +774,7 @@ theorem linearIndependent_pair_iff_ne
     refine ⟨fun h hD => h 1 (by simp [hD]), fun h a hD => h ?_⟩
     rw [eq_comm]; rw [← mk_rep D]; rw [← mk_rep D']; rw [mk_eq_mk_iff]
     suffices a != 0 by refine ⟨(Ne.isUnit this).unit, by simp [← hD]⟩
-    exact fun ha => D'.rep_nonzero (by 
+    exact fun ha => D'.rep_nonzero (by simp [← hD, ha])
 
 中文:
 定理 linearIndependent_pair_iff_ne
@@ -778,7 +784,7 @@ theorem linearIndependent_pair_iff_ne
     refine ⟨fun h hD => h 1 (by simp [hD]), fun h a hD => h ?_⟩
     rw [eq_comm]; rw [← mk_rep D]; rw [← mk_rep D']; rw [mk_eq_mk_iff]
     suffices a != 0 by refine ⟨(Ne.isUnit this).unit, by simp [← hD]⟩
-    exact fun ha => D'.rep_nonzero (by 
+    exact fun ha => D'.rep_nonzero (by simp [← hD, ha])
 
 Depends on / 依赖: LinearIndependent, LinearIndependent.pair_iff, Ne.isUnit, eq_comm, isUnit, mk_eq_mk_iff, mk_rep, pair_iff, rep_nonzero
 -/

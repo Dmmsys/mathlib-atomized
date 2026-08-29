@@ -246,7 +246,10 @@ lemma isUniform_singleton
   obtain rfl | rfl := Finset.subset_singleton_iff.1 hs'
   · replace hs : ε <= 0 := by simpa using hs
     exact (hε.not_ge hs).elim
-  obtain rfl | rfl := Finset.subset_singlet
+  obtain rfl | rfl := Finset.subset_singleton_iff.1 ht'
+  · replace ht : ε <= 0 := by simpa using ht
+    exact (hε.not_ge ht).elim
+  · rwa [sub_self, abs_zero]
 
 中文:
 引理 isUniform_singleton
@@ -257,7 +260,10 @@ lemma isUniform_singleton
   obtain rfl | rfl := Finset.subset_singleton_iff.1 hs'
   · replace hs : ε <= 0 := by simpa using hs
     exact (hε.not_ge hs).elim
-  obtain rfl | rfl := Finset.subset_singlet
+  obtain rfl | rfl := Finset.subset_singleton_iff.1 ht'
+  · replace ht : ε <= 0 := by simpa using ht
+    exact (hε.not_ge ht).elim
+  · rwa [sub_self, abs_zero]
 -/
 @[simp] lemma isUniform_singleton : G.IsUniform ε {a} {b} ↔ 0 < ε := by
   refine ⟨IsUniform.pos, fun hε s' hs' t' ht' hs ht => ?_⟩
@@ -553,7 +559,7 @@ theorem nonuniformWitness_spec
     exact G.nonuniformWitnesses_spec h₂
   · cases h₁ rfl
   · rw [if_neg (asymm gt), if_pos gt, edgeDensity_comm, edgeDensity_comm _ s]
-    apply G.nonuniformWitnesses
+    apply G.nonuniformWitnesses_spec fun i => h₂ i.symm
 
 中文:
 定理 nonuniformWitness_spec
@@ -566,7 +572,7 @@ theorem nonuniformWitness_spec
     exact G.nonuniformWitnesses_spec h₂
   · cases h₁ rfl
   · rw [if_neg (asymm gt), if_pos gt, edgeDensity_comm, edgeDensity_comm _ s]
-    apply G.nonuniformWitnesses
+    apply G.nonuniformWitnesses_spec fun i => h₂ i.symm
 
 Depends on / 依赖: G.nonuniformWitnesses_spec, WellOrderingRel, edgeDensity_comm, i.symm, if_neg, if_pos, nonuniformWitness, nonuniformWitnesses_spec, trichotomous_of
 -/
@@ -974,7 +980,27 @@ lemma IsEquipartition.card_interedges_sparsePairs_le'
     _ <= ∑ UV in P.sparsePairs G ε, (#(G.interedges UV.1 UV.2) : 𝕜) := mod_cast card_biUnion_le
     _ <= ∑ UV in P.sparsePairs G ε, ε * (#UV.1 * #UV.2) := ?_
     _ <= ∑ UV in P.parts.offDiag, ε * (#UV.1 * #UV.2) := by gcongr; apply filter_subset
-    _ = ε * ∑ UV in P.parts.offDiag, (#UV.1 
+    _ = ε * ∑ UV in P.parts.offDiag, (#UV.1 * #UV.2 : 𝕜) := (mul_sum _ _ _).symm
+    _ <= _ := ?_
+  · gcongr with ⟨U, V⟩ hUV
+    simp only [mk_mem_sparsePairs, ne_eq, ← card_interedges_div_card, Rat.cast_div,
+      Rat.cast_natCast, Rat.cast_mul] at hUV
+    refine ((div_lt_iff₀ ?_).1 hUV.2.2.2).le
+    exact mul_pos (Nat.cast_pos.2 (P.nonempty_of_mem_parts hUV.1).card_pos)
+      (Nat.cast_pos.2 (P.nonempty_of_mem_parts hUV.2.1).card_pos)
+  norm_cast
+  gcongr
+  calc
+    (_ : Nat) <= _ := sum_le_card_nsmul P.parts.offDiag (fun i => #i.1 * #i.2)
+            ((#A / #P.parts + 1) ^ 2 : Nat) ?_
+    _ <= (#P.parts * (#A / #P.parts) + #P.parts) ^ 2 := ?_
+    _ <= _ := by gcongr; apply Nat.mul_div_le
+  · simp only [Prod.forall, and_imp, mem_offDiag, sq]
+    rintro U V hU hV -
+    exact_mod_cast Nat.mul_le_mul (hP.card_part_le_average_add_one hU)
+      (hP.card_part_le_average_add_one hV)
+  · rw [smul_eq_mul, offDiag_card, Nat.mul_sub_right_distrib, ← sq, ← mul_pow, mul_add_one (α := Nat)]
+    exact Nat.sub_le _ _
 
 中文:
 引理 IsEquipartition.card_interedges_sparsePairs_le'
@@ -984,7 +1010,27 @@ lemma IsEquipartition.card_interedges_sparsePairs_le'
     _ <= ∑ UV in P.sparsePairs G ε, (#(G.interedges UV.1 UV.2) : 𝕜) := mod_cast card_biUnion_le
     _ <= ∑ UV in P.sparsePairs G ε, ε * (#UV.1 * #UV.2) := ?_
     _ <= ∑ UV in P.parts.offDiag, ε * (#UV.1 * #UV.2) := by gcongr; apply filter_subset
-    _ = ε * ∑ UV in P.parts.offDiag, (#UV.1 
+    _ = ε * ∑ UV in P.parts.offDiag, (#UV.1 * #UV.2 : 𝕜) := (mul_sum _ _ _).symm
+    _ <= _ := ?_
+  · gcongr with ⟨U, V⟩ hUV
+    simp only [mk_mem_sparsePairs, ne_eq, ← card_interedges_div_card, Rat.cast_div,
+      Rat.cast_natCast, Rat.cast_mul] at hUV
+    refine ((div_lt_iff₀ ?_).1 hUV.2.2.2).le
+    exact mul_pos (Nat.cast_pos.2 (P.nonempty_of_mem_parts hUV.1).card_pos)
+      (Nat.cast_pos.2 (P.nonempty_of_mem_parts hUV.2.1).card_pos)
+  norm_cast
+  gcongr
+  calc
+    (_ : Nat) <= _ := sum_le_card_nsmul P.parts.offDiag (fun i => #i.1 * #i.2)
+            ((#A / #P.parts + 1) ^ 2 : Nat) ?_
+    _ <= (#P.parts * (#A / #P.parts) + #P.parts) ^ 2 := ?_
+    _ <= _ := by gcongr; apply Nat.mul_div_le
+  · simp only [Prod.forall, and_imp, mem_offDiag, sq]
+    rintro U V hU hV -
+    exact_mod_cast Nat.mul_le_mul (hP.card_part_le_average_add_one hU)
+      (hP.card_part_le_average_add_one hV)
+  · rw [smul_eq_mul, offDiag_card, Nat.mul_sub_right_distrib, ← sq, ← mul_pow, mul_add_one (α := Nat)]
+    exact Nat.sub_le _ _
 
 Depends on / 依赖: G.interedges, P.parts.offDiag, P.sparsePairs, Rat.cast_div, Rat.cast_mul, Rat.cast_natCast, card_biUnion_le, card_interedges_div_card, cast_div, cast_mul, cast_natCast, filter_subset, interedges, mk_mem_sparsePairs, mod_cast, mul_sum, ne_eq, offDiag, sparsePairs
 -/
@@ -1095,7 +1141,15 @@ lemma IsEquipartition.card_biUnion_offDiag_le'
     _ <= (#P.parts : 𝕜) * (↑(#A / #P.parts) * ↑(#A / #P.parts + 1)) :=
         mod_cast card_biUnion_le_card_mul _ _ _ fun U hU => ?_
     _ = #P.parts * ↑(#A / #P.parts) * ↑(#A / #P.parts + 1) := by rw [mul_assoc]
-    _ <= #A * (#
+    _ <= #A * (#A / #P.parts + 1) :=
+        mul_le_mul (mod_cast Nat.mul_div_le _ _) ?_ (by positivity) (by positivity)
+    _ = _ := by rw [← div_add_same (mod_cast h.card_pos.ne'), mul_div_assoc]
+  · simpa using Nat.cast_div_le
+  suffices (#U - 1) * #U <= #A / #P.parts * (#A / #P.parts + 1) by
+    rwa [Nat.mul_sub_right_distrib, one_mul, ← offDiag_card] at this
+  have := hP.card_part_le_average_add_one hU
+  refine Nat.mul_le_mul ((Nat.sub_le_sub_right this 1).trans ?_) this
+  simp only [Nat.add_succ_sub_one, add_zero, le_rfl]
 
 中文:
 引理 IsEquipartition.card_biUnion_offDiag_le'
@@ -1107,7 +1161,15 @@ lemma IsEquipartition.card_biUnion_offDiag_le'
     _ <= (#P.parts : 𝕜) * (↑(#A / #P.parts) * ↑(#A / #P.parts + 1)) :=
         mod_cast card_biUnion_le_card_mul _ _ _ fun U hU => ?_
     _ = #P.parts * ↑(#A / #P.parts) * ↑(#A / #P.parts + 1) := by rw [mul_assoc]
-    _ <= #A * (#
+    _ <= #A * (#A / #P.parts + 1) :=
+        mul_le_mul (mod_cast Nat.mul_div_le _ _) ?_ (by positivity) (by positivity)
+    _ = _ := by rw [← div_add_same (mod_cast h.card_pos.ne'), mul_div_assoc]
+  · simpa using Nat.cast_div_le
+  suffices (#U - 1) * #U <= #A / #P.parts * (#A / #P.parts + 1) by
+    rwa [Nat.mul_sub_right_distrib, one_mul, ← offDiag_card] at this
+  have := hP.card_part_le_average_add_one hU
+  refine Nat.mul_le_mul ((Nat.sub_le_sub_right this 1).trans ?_) this
+  simp only [Nat.add_succ_sub_one, add_zero, le_rfl]
 
 Depends on / 依赖: Nat.cast_div_le, Nat.mul_div_le, P.parts, P.parts.eq_empty_or_nonempty, card_biUnion_le_card_mul, card_pos, cast_div_le, div_add_same, eq_empty_or_nonempty, h.card_pos.ne, mod_cast, mul_assoc, mul_div_assoc, mul_div_le, mul_le_mul
 -/
@@ -1141,7 +1203,14 @@ lemma IsEquipartition.card_biUnion_offDiag_le
   apply hP.card_biUnion_offDiag_le'.trans
   rw [div_le_iff₀ (Nat.cast_pos.2 (P.parts_nonempty hA.ne_empty).card_pos)]
   have : (#A : 𝕜) + #P.parts <= 2 * #A := by
-    rw [two_mul]; gcongr; exact P.card_parts_
+    rw [two_mul]; gcongr; exact P.card_parts_le_card
+  refine (mul_le_mul_of_nonneg_left this <| by positivity).trans ?_
+  suffices 1 <= ε / 4 * #P.parts by
+    rw [mul_left_comm]; rw [← sq]
+    convert! mul_le_mul_of_nonneg_left this (mul_nonneg zero_le_two <| sq_nonneg (#A : 𝕜)) using 1
+      <;> ring
+  rwa [← div_le_iff₀', one_div_div]
+  positivity
 
 中文:
 引理 IsEquipartition.card_biUnion_offDiag_le
@@ -1152,7 +1221,14 @@ lemma IsEquipartition.card_biUnion_offDiag_le
   apply hP.card_biUnion_offDiag_le'.trans
   rw [div_le_iff₀ (Nat.cast_pos.2 (P.parts_nonempty hA.ne_empty).card_pos)]
   have : (#A : 𝕜) + #P.parts <= 2 * #A := by
-    rw [two_mul]; gcongr; exact P.card_parts_
+    rw [two_mul]; gcongr; exact P.card_parts_le_card
+  refine (mul_le_mul_of_nonneg_left this <| by positivity).trans ?_
+  suffices 1 <= ε / 4 * #P.parts by
+    rw [mul_left_comm]; rw [← sq]
+    convert! mul_le_mul_of_nonneg_left this (mul_nonneg zero_le_two <| sq_nonneg (#A : 𝕜)) using 1
+      <;> ring
+  rwa [← div_le_iff₀', one_div_div]
+  positivity
 
 Depends on / 依赖: A.eq_empty_or_nonempty, Nat.cast_pos, P.card_parts_le_card, P.parts, P.parts_nonempty, Subsingleton, Subsingleton.elim, card_biUnion_offDiag_le, card_parts_le_card, card_pos, cast_pos, convert, eq_empty_or_nonempty, hA.ne_empty, hP.card_biUnion_offDiag_le, mul_le_mul_of_nonneg_left, mul_left_comm, mul_nonneg, ne_empty, parts_nonempty
 -/
@@ -1186,7 +1262,14 @@ lemma IsEquipartition.sum_nonUniforms_lt'
 _ <= _ := mul_le_mul_of_nonneg_right hG by positivity
     _ < _ := ?_
   · simp only [Prod.forall, Finpartition.mk_mem_nonUniforms, and_imp]
-    rintro U V hU hV 
+    rintro U V hU hV - -
+    rw [sq]; rw [← Nat.cast_mul]; rw [← Nat.cast_mul]; rw [Nat.cast_le]
+    exact Nat.mul_le_mul (hP.card_part_le_average_add_one hU)
+      (hP.card_part_le_average_add_one hV)
+  · rw [mul_right_comm _ ε, mul_comm ε]
+    gcongr
+    norm_cast
+    exact aux (P.parts_nonempty hA.ne_empty).card_pos
 
 中文:
 引理 IsEquipartition.sum_nonUniforms_lt'
@@ -1199,7 +1282,14 @@ _ <= _ := mul_le_mul_of_nonneg_right hG by positivity
 _ <= _ := mul_le_mul_of_nonneg_right hG by positivity
     _ < _ := ?_
   · simp only [Prod.forall, Finpartition.mk_mem_nonUniforms, and_imp]
-    rintro U V hU hV 
+    rintro U V hU hV - -
+    rw [sq]; rw [← Nat.cast_mul]; rw [← Nat.cast_mul]; rw [Nat.cast_le]
+    exact Nat.mul_le_mul (hP.card_part_le_average_add_one hU)
+      (hP.card_part_le_average_add_one hV)
+  · rw [mul_right_comm _ ε, mul_comm ε]
+    gcongr
+    norm_cast
+    exact aux (P.parts_nonempty hA.ne_empty).card_pos
 
 Depends on / 依赖: Finpartition, Finpartition.mk_mem_nonUniforms, Nat.cast_le, Nat.cast_mul, Nat.mul_le_mul, P.nonUniforms, P.parts, Prod.forall, and_imp, card_part_le_average_add_one, cast_le, cast_mul, hP.card_part_le_average_add_one, mk_mem_nonUniforms, mul_comm, mul_le_mul, mul_le_mul_of_nonneg_right, mul_right_comm, nonUniforms, nsmul_eq_mul
 -/
@@ -1395,7 +1485,14 @@ lemma unreduced_edges_subset
     not_le, mem_biUnion, mem_union, mem_product, Prod.exists, mem_offDiag, and_imp,
     or_assoc, and_assoc, P.mk_mem_nonUniforms, Finpartition.mk_mem_sparsePairs, mem_interedges_iff]
   intro hx hy h h'
-  replace
+  replace h' := h' h
+  obtain ⟨U, hU, hx⟩ := P.exists_mem hx
+  obtain ⟨V, hV, hy⟩ := P.exists_mem hy
+  obtain rfl | hUV := eq_or_ne U V
+  · exact Or.inr (Or.inl ⟨U, hU, hx, hy, G.ne_of_adj h⟩)
+  by_cases h₂ : G.IsUniform (ε / 8) U V
+· exact Or.inr Or.inr ⟨U, V, hU, hV, hUV, h' _ hU _ hV hx hy hUV h₂, hx, hy, h⟩
+  · exact Or.inl ⟨U, V, hU, hV, hUV, h₂, hx, hy⟩
 
 中文:
 引理 unreduced_edges_subset
@@ -1405,7 +1502,14 @@ lemma unreduced_edges_subset
     not_le, mem_biUnion, mem_union, mem_product, Prod.exists, mem_offDiag, and_imp,
     or_assoc, and_assoc, P.mk_mem_nonUniforms, Finpartition.mk_mem_sparsePairs, mem_interedges_iff]
   intro hx hy h h'
-  replace
+  replace h' := h' h
+  obtain ⟨U, hU, hx⟩ := P.exists_mem hx
+  obtain ⟨V, hV, hy⟩ := P.exists_mem hy
+  obtain rfl | hUV := eq_or_ne U V
+  · exact Or.inr (Or.inl ⟨U, hU, hx, hy, G.ne_of_adj h⟩)
+  by_cases h₂ : G.IsUniform (ε / 8) U V
+· exact Or.inr Or.inr ⟨U, V, hU, hV, hUV, h' _ hU _ hV hx hy hUV h₂, hx, hy, h⟩
+  · exact Or.inl ⟨U, V, hU, hV, hUV, h₂, hx, hy⟩
 
 Depends on / 依赖: Finpartition, Finpartition.mk_mem_sparsePairs, G.IsUniform, G.ne_of_adj, IsUniform, Or.inl, Or.inr, P.exists_mem, P.mk_mem_nonUniforms, Prod.exists, and_assoc, and_imp, eq_or_ne, exists_mem, mem_biUnion, mem_filter, mem_interedges_iff, mem_offDiag, mem_product, mem_union
 -/

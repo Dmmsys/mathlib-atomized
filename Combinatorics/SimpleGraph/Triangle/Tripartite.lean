@@ -489,7 +489,7 @@ definition toTriangle
   body: {in₀ x.1, in₁ x.2.1, in₂ x.2.2}
   inj' := fun ⟨a, b, c⟩ ⟨a', b', c'⟩ => by simpa only [Finset.Subset.antisymm_iff, Finset.subset_iff,
     mem_insert, mem_singleton, forall_eq_or_imp, forall_eq, Prod.mk_inj, or_false, false_or,
-    in₀, in₁, in₂, Sum.inl.inj_iff, Sum.inr.inj_iff, reduceCtorEq] using 
+    in₀, in₁, in₂, Sum.inl.inj_iff, Sum.inr.inj_iff, reduceCtorEq] using And.left
 
 中文:
 定义 toTriangle
@@ -497,7 +497,7 @@ definition toTriangle
   定义体: {in₀ x.1, in₁ x.2.1, in₂ x.2.2}
   inj' := fun ⟨a, b, c⟩ ⟨a', b', c'⟩ => by simpa only [Finset.Subset.antisymm_iff, Finset.subset_iff,
     mem_insert, mem_singleton, forall_eq_or_imp, forall_eq, Prod.mk_inj, or_false, false_or,
-    in₀, in₁, in₂, Sum.inl.inj_iff, Sum.inr.inj_iff, reduceCtorEq] using 
+    in₀, in₁, in₂, Sum.inl.inj_iff, Sum.inr.inj_iff, reduceCtorEq] using And.left
 -/
 @[simps] def toTriangle : α × β × γ ↪ Finset (α oplus β oplus γ) where
   toFun x := {in₀ x.1, in₁ x.2.1, in₂ x.2.2}
@@ -543,7 +543,14 @@ nonrec lemma is3Clique_iff [NoAccidental t] {s : Finset (α oplus β oplus γ)} 
   refine ⟨fun h => ?_, ?_⟩
   · rw [is3Clique_iff] at h
     obtain ⟨x, y, z, hxy, hxz, hyz, rfl⟩ := h
-    ob
+    obtain ⟨a, b, c, habc, hab, hac, hbc⟩ := graph_triple hxy hxz hyz
+    refine ⟨(a, b, c), ?_, habc⟩
+    obtain ⟨c', hc'⟩ := in₀₁_iff.1 hab
+    obtain ⟨b', hb'⟩ := in₀₂_iff.1 hac
+    obtain ⟨a', ha'⟩ := in₁₂_iff.1 hbc
+    obtain rfl | rfl | rfl := NoAccidental.eq_or_eq_or_eq ha' hb' hc' <;> assumption
+  · rintro ⟨x, hx, rfl⟩
+    exact toTriangle_is3Clique hx
 
 中文:
 引理 存在_mem_toTriangle
@@ -555,7 +562,14 @@ nonrec lemma is3Clique_iff [NoAccidental t] {s : Finset (α oplus β oplus γ)} 
   refine ⟨fun h => ?_, ?_⟩
   · rw [is3Clique_iff] at h
     obtain ⟨x, y, z, hxy, hxz, hyz, rfl⟩ := h
-    ob
+    obtain ⟨a, b, c, habc, hab, hac, hbc⟩ := graph_triple hxy hxz hyz
+    refine ⟨(a, b, c), ?_, habc⟩
+    obtain ⟨c', hc'⟩ := in₀₁_iff.1 hab
+    obtain ⟨b', hb'⟩ := in₀₂_iff.1 hac
+    obtain ⟨a', ha'⟩ := in₁₂_iff.1 hbc
+    obtain rfl | rfl | rfl := NoAccidental.eq_or_eq_or_eq ha' hb' hc' <;> assumption
+  · rintro ⟨x, hx, rfl⟩
+    exact toTriangle_is3Clique hx
 -/
 lemma exists_mem_toTriangle {x y : α oplus β oplus γ} (hxy : (graph t).Adj x y) :
     exists z in t, x in toTriangle z ∧ y in toTriangle z := by cases hxy <;> exact ⟨_, ‹_›, by simp⟩
@@ -607,7 +621,17 @@ lemma map_toTriangle_disjoint
   rintro a b c habc rfl e x y z hxyz rfl h'
   have := ne_of_apply_ne _ h'
   simp only [Ne, Prod.mk_inj, not_and] at this
-  simp only [toTriangle_apply, in₀, in₁, in₂, Set.mem_int
+  simp only [toTriangle_apply, in₀, in₁, in₂, Set.mem_inter_iff, mem_insert, mem_singleton,
+    mem_coe, and_imp, Sum.forall,
+    Set.Subsingleton]
+  suffices ¬ (a = x ∧ b = y) ∧ ¬ (a = x ∧ c = z) ∧ ¬ (b = y ∧ c = z) by aesop
+  refine ⟨?_, ?_, ?_⟩
+  · rintro ⟨rfl, rfl⟩
+    exact this rfl rfl (ExplicitDisjoint.inj₂ habc hxyz)
+  · rintro ⟨rfl, rfl⟩
+    exact this rfl (ExplicitDisjoint.inj₁ habc hxyz) rfl
+  · rintro ⟨rfl, rfl⟩
+    exact this (ExplicitDisjoint.inj₀ habc hxyz) rfl rfl
 
 中文:
 引理 map_toTriangle_disjoint
@@ -619,7 +643,17 @@ lemma map_toTriangle_disjoint
   rintro a b c habc rfl e x y z hxyz rfl h'
   have := ne_of_apply_ne _ h'
   simp only [Ne, Prod.mk_inj, not_and] at this
-  simp only [toTriangle_apply, in₀, in₁, in₂, Set.mem_int
+  simp only [toTriangle_apply, in₀, in₁, in₂, Set.mem_inter_iff, mem_insert, mem_singleton,
+    mem_coe, and_imp, Sum.forall,
+    Set.Subsingleton]
+  suffices ¬ (a = x ∧ b = y) ∧ ¬ (a = x ∧ c = z) ∧ ¬ (b = y ∧ c = z) by aesop
+  refine ⟨?_, ?_, ?_⟩
+  · rintro ⟨rfl, rfl⟩
+    exact this rfl rfl (ExplicitDisjoint.inj₂ habc hxyz)
+  · rintro ⟨rfl, rfl⟩
+    exact this rfl (ExplicitDisjoint.inj₁ habc hxyz) rfl
+  · rintro ⟨rfl, rfl⟩
+    exact this (ExplicitDisjoint.inj₀ habc hxyz) rfl rfl
 
 Depends on / 依赖: Finset, Finset.coe_map, Finset.mem_coe, Prod.exists, Prod.mk_inj, Set.Subsingleton, Set.mem_image, Set.mem_inter_iff, Subsingleton, Sum.forall, and_imp, coe_map, forall_exists_index, mem_coe, mem_image, mem_insert, mem_inter_iff, mem_singleton, mk_inj, ne_of_apply_ne
 -/

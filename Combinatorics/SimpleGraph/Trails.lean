@@ -82,7 +82,13 @@ theorem IsTrail.even_countP_edges_iff
     · rw [decide_eq_true_eq] at h
       obtain (rfl | rfl) := h
       · rw [Nat.even_add_one, ih]
-        
+        simp only [huv.ne, imp_false, Ne, not_false_iff, true_and, not_forall,
+          Classical.not_not, exists_prop, not_true, false_and,
+          and_iff_right_iff_imp]
+        rintro rfl rfl
+        exact G.loopless.irrefl _ huv
+      · have := huv.ne; grind
+    · grind
 
 中文:
 定理 是Trail.even_countP_edges_iff
@@ -98,7 +104,13 @@ theorem IsTrail.even_countP_edges_iff
     · rw [decide_eq_true_eq] at h
       obtain (rfl | rfl) := h
       · rw [Nat.even_add_one, ih]
-        
+        simp only [huv.ne, imp_false, Ne, not_false_iff, true_and, not_forall,
+          Classical.not_not, exists_prop, not_true, false_and,
+          and_iff_right_iff_imp]
+        rintro rfl rfl
+        exact G.loopless.irrefl _ huv
+      · have := huv.ne; grind
+    · grind
 
 Depends on / 依赖: Classical, Classical.not_not, G.loopless.irrefl, List.countP_cons, Nat.even_add_one, Sym2.mem_iff, and_iff_right_iff_imp, countP_cons, decide_eq_true_eq, edges_cons, even_add_one, exists_prop, false_and, huv.ne, imp_false, irrefl, isTrail_cons, loopless, mem_iff, not_false_iff
 -/
@@ -353,7 +365,7 @@ theorem IsEulerian.even_degree_iff
   change Multiset.card _ = _
   congr 1
   convert_to! _ = (ht.isTrail.edgesFinset.filter (x in ·)).val
-  rw [ht.edgesFinset_eq]; rw [G.incidenceFin
+  rw [ht.edgesFinset_eq]; rw [G.incidenceFinset_eq_filter x]
 
 中文:
 定理 IsEulerian.even_degree_iff
@@ -364,7 +376,7 @@ theorem IsEulerian.even_degree_iff
   change Multiset.card _ = _
   congr 1
   convert_to! _ = (ht.isTrail.edgesFinset.filter (x in ·)).val
-  rw [ht.edgesFinset_eq]; rw [G.incidenceFin
+  rw [ht.edgesFinset_eq]; rw [G.incidenceFinset_eq_filter x]
 
 Depends on / 依赖: G.incidenceFinset_eq_filter, Multiset, Multiset.card, Multiset.coe_countP, Multiset.countP_eq_card_filter, card_incidenceFinset_eq_degree, coe_countP, convert, convert_to, countP_eq_card_filter, edgesFinset, edgesFinset_eq, even_countP_edges_iff, filter, ht.edgesFinset_eq, ht.isTrail.edgesFinset.filter, ht.isTrail.even_countP_edges_iff, incidenceFinset_eq_filter, isTrail
 -/
@@ -394,7 +406,7 @@ theorem IsEulerian.card_filter_odd_degree
     · simp [hn]
     · congr
       ext x
-  
+      simp [hn, imp_iff_not_or]
 
 中文:
 定理 IsEulerian.card_filter_odd_degree
@@ -410,7 +422,7 @@ theorem IsEulerian.card_filter_odd_degree
     · simp [hn]
     · congr
       ext x
-  
+      simp [hn, imp_iff_not_or]
 
 Depends on / 依赖: Classical, Classical.not_not, Finset, Finset.card_eq_zero, Nat.not_even_iff_odd, card_eq_zero, convert_to, eq_or_ne, even_degree_iff, exists_prop, ht.even_degree_iff, imp_iff_not_or, not_and, not_even_iff_odd, not_forall, not_not
 -/

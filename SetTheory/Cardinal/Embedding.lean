@@ -55,7 +55,12 @@ theorem exists_embedding_disjoint_range_of_add_le_ENat_card
   rcases finite_or_infinite α with hα | hα
   · let _ : Fintype α := Fintype.ofFinite α
     classical
-    a
+    apply nonempty_of_card_le
+    rwa [Fintype.card_fin, ← add_le_add_iff_left s.ncard,
+      ← Nat.card_eq_fintype_card, Nat.card_coe_set_eq,
+        ncard_add_ncard_compl, ← ENat.natCast_le_natCast,
+        ← ENat.card_eq_coe_natCard, ENat.natCast_add]
+  · exact ⟨valEmbedding.trans s.toFinite.infinite_compl.to_subtype.natEmbedding⟩
 
 中文:
 定理 存在_embedding_disjoint_range_of_add_le_E自然数_card
@@ -68,7 +73,12 @@ theorem exists_embedding_disjoint_range_of_add_le_ENat_card
   rcases finite_or_infinite α with hα | hα
   · let _ : Fintype α := Fintype.ofFinite α
     classical
-    a
+    apply nonempty_of_card_le
+    rwa [Fintype.card_fin, ← add_le_add_iff_left s.ncard,
+      ← Nat.card_eq_fintype_card, Nat.card_coe_set_eq,
+        ncard_add_ncard_compl, ← ENat.natCast_le_natCast,
+        ← ENat.card_eq_coe_natCard, ENat.natCast_add]
+  · exact ⟨valEmbedding.trans s.toFinite.infinite_compl.to_subtype.natEmbedding⟩
 
 Depends on / 依赖: ENat.card_eq_coe_natCard, ENat.natCast_add, ENat.natCast_le_natCast, Fintype, Fintype.card_fin, Fintype.ofFinite, Nat.card_coe_set_eq, Nat.card_eq_fintype_card, Nonempty, Set.disjoint_right, Subtype, Subtype.coe_prop, add_le_add_iff_left, card_coe_set_eq, card_eq_coe_natCard, card_eq_fintype_card, card_fin, classical, coe_prop, disjoint_right
 -/

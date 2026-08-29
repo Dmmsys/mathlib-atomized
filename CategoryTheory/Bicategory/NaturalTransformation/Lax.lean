@@ -202,7 +202,11 @@ theorem vComp_naturality_naturality
       bicategory
     _ = 𝟙 _ otimes≫ η.app a ◁ (θ.naturality f ≫ G.map₂ β ▷ θ.app b) otimes≫
           η.naturality g ▷ θ.app b otimes≫ 𝟙 _ := by
-      rw [naturality
+      rw [naturality_naturality]
+      bicategory
+    _ = _ := by
+      rw [naturality_naturality]
+      bicategory
 
 中文:
 定理 vComp_naturality_naturality
@@ -213,7 +217,11 @@ theorem vComp_naturality_naturality
       bicategory
     _ = 𝟙 _ otimes≫ η.app a ◁ (θ.naturality f ≫ G.map₂ β ▷ θ.app b) otimes≫
           η.naturality g ▷ θ.app b otimes≫ 𝟙 _ := by
-      rw [naturality
+      rw [naturality_naturality]
+      bicategory
+    _ = _ := by
+      rw [naturality_naturality]
+      bicategory
 
 Depends on / 依赖: F.map, G.map, bicategory, naturality, naturality_naturality, otimes
 -/
@@ -245,7 +253,9 @@ theorem vComp_naturality_id
     _ = 𝟙 _ otimes≫ (η.app a ◁ G.mapId a ≫ η.naturality (𝟙 a)) ▷ θ.app a otimes≫ 𝟙 _ := by
       rw [naturality_id]
       bicategory
-    _ =
+    _ = _ := by
+      rw [naturality_id]
+      bicategory
 
 中文:
 定理 vComp_naturality_id
@@ -257,7 +267,9 @@ theorem vComp_naturality_id
     _ = 𝟙 _ otimes≫ (η.app a ◁ G.mapId a ≫ η.naturality (𝟙 a)) ▷ θ.app a otimes≫ 𝟙 _ := by
       rw [naturality_id]
       bicategory
-    _ =
+    _ = _ := by
+      rw [naturality_id]
+      bicategory
 
 Depends on / 依赖: G.mapId, H.mapId, bicategory, naturality, naturality_id, otimes
 -/
@@ -286,7 +298,18 @@ theorem vComp_naturality_comp
           η.naturality (f ≫ g) ▷ θ.app c otimes≫ 𝟙 _ := by
       bicategory
     _ = 𝟙 _ otimes≫ η.app a ◁ (θ.naturality f ▷ (H.map g) otimes≫ G.map f ◁ θ.naturality g) otimes≫
-          (η.app a ◁ G.mapComp f
+          (η.app a ◁ G.mapComp f g ≫ η.naturality (f ≫ g)) ▷ θ.app c otimes≫ 𝟙 _ := by
+      rw [naturality_comp θ]
+      bicategory
+    _ = 𝟙 _ otimes≫ η.app a ◁ θ.naturality f ▷ H.map g otimes≫
+          ((η.app a ≫ G.map f) ◁ θ.naturality g ≫ η.naturality f ▷ (G.map g ≫ θ.app c)) otimes≫
+            F.map f ◁ η.naturality g ▷ θ.app c otimes≫
+              F.mapComp f g ▷ η.app c ▷ θ.app c otimes≫ 𝟙 _ := by
+      rw [naturality_comp η]
+      bicategory
+    _ = _ := by
+      rw [whisker_exchange]
+      bicategory
 
 中文:
 定理 vComp_naturality_comp
@@ -296,7 +319,18 @@ theorem vComp_naturality_comp
           η.naturality (f ≫ g) ▷ θ.app c otimes≫ 𝟙 _ := by
       bicategory
     _ = 𝟙 _ otimes≫ η.app a ◁ (θ.naturality f ▷ (H.map g) otimes≫ G.map f ◁ θ.naturality g) otimes≫
-          (η.app a ◁ G.mapComp f
+          (η.app a ◁ G.mapComp f g ≫ η.naturality (f ≫ g)) ▷ θ.app c otimes≫ 𝟙 _ := by
+      rw [naturality_comp θ]
+      bicategory
+    _ = 𝟙 _ otimes≫ η.app a ◁ θ.naturality f ▷ H.map g otimes≫
+          ((η.app a ≫ G.map f) ◁ θ.naturality g ≫ η.naturality f ▷ (G.map g ≫ θ.app c)) otimes≫
+            F.map f ◁ η.naturality g ▷ θ.app c otimes≫
+              F.mapComp f g ▷ η.app c ▷ θ.app c otimes≫ 𝟙 _ := by
+      rw [naturality_comp η]
+      bicategory
+    _ = _ := by
+      rw [whisker_exchange]
+      bicategory
 
 Depends on / 依赖: G.map, G.mapComp, H.map, H.mapComp, bicategory, mapComp, naturality, naturality_comp, otimes
 -/
@@ -510,7 +544,11 @@ theorem vComp_naturality_naturality
       bicategory
     _ = 𝟙 _ otimes≫ η.naturality f ▷ θ.app b otimes≫
           η.app a ◁ (G.map₂ β ▷ θ.app b ≫ θ.naturality g) otimes≫ 𝟙 _ := by
-      rw [η.nat
+      rw [η.naturality_naturality]
+      bicategory
+    _ = _ := by
+      rw [θ.naturality_naturality]
+      bicategory
 
 中文:
 定理 vComp_naturality_naturality
@@ -522,7 +560,11 @@ theorem vComp_naturality_naturality
       bicategory
     _ = 𝟙 _ otimes≫ η.naturality f ▷ θ.app b otimes≫
           η.app a ◁ (G.map₂ β ▷ θ.app b ≫ θ.naturality g) otimes≫ 𝟙 _ := by
-      rw [η.nat
+      rw [η.naturality_naturality]
+      bicategory
+    _ = _ := by
+      rw [θ.naturality_naturality]
+      bicategory
 
 Depends on / 依赖: F.map, G.map, bicategory, naturality, naturality_naturality, otimes
 -/
@@ -555,7 +597,9 @@ theorem vComp_naturality_id
     _ = 𝟙 _ otimes≫ η.app a ◁ (G.mapId a ▷ θ.app a ≫ θ.naturality (𝟙 a)) otimes≫ 𝟙 _ := by
       rw [η.naturality_id]
       bicategory
-
+    _ = _ := by
+      rw [θ.naturality_id]
+      bicategory
 
 中文:
 定理 vComp_naturality_id
@@ -568,7 +612,9 @@ theorem vComp_naturality_id
     _ = 𝟙 _ otimes≫ η.app a ◁ (G.mapId a ▷ θ.app a ≫ θ.naturality (𝟙 a)) otimes≫ 𝟙 _ := by
       rw [η.naturality_id]
       bicategory
-
+    _ = _ := by
+      rw [θ.naturality_id]
+      bicategory
 
 Depends on / 依赖: F.mapId, G.mapId, bicategory, naturality, naturality_id, otimes
 -/
@@ -598,7 +644,17 @@ theorem vComp_naturality_comp
           η.app a ◁ θ.naturality (f ≫ g) otimes≫ 𝟙 _ := by
       bicategory
     _ = 𝟙 _ otimes≫ (F.map f ◁ η.naturality g otimes≫ η.naturality f ▷ G.map g) ▷ θ.app c otimes≫
-          η.app a ◁ (G.mapCom
+          η.app a ◁ (G.mapComp f g ▷ θ.app c ≫ θ.naturality (f ≫ g)) otimes≫ 𝟙 _ := by
+      rw [η.naturality_comp]
+      bicategory
+    _ = 𝟙 _ otimes≫ F.map f ◁ η.naturality g ▷ θ.app c otimes≫
+          (η.naturality f ▷ (G.map g ≫ θ.app c) ≫ (η.app a ≫ G.map f) ◁ θ.naturality g) otimes≫
+            η.app a ◁ (θ.naturality f ▷ H.map g otimes≫ θ.app a ◁ H.mapComp f g) otimes≫ 𝟙 _ := by
+      rw [θ.naturality_comp]
+      bicategory
+    _ = _ := by
+      rw [← whisker_exchange]
+      bicategory
 
 中文:
 定理 vComp_naturality_comp
@@ -609,7 +665,17 @@ theorem vComp_naturality_comp
           η.app a ◁ θ.naturality (f ≫ g) otimes≫ 𝟙 _ := by
       bicategory
     _ = 𝟙 _ otimes≫ (F.map f ◁ η.naturality g otimes≫ η.naturality f ▷ G.map g) ▷ θ.app c otimes≫
-          η.app a ◁ (G.mapCom
+          η.app a ◁ (G.mapComp f g ▷ θ.app c ≫ θ.naturality (f ≫ g)) otimes≫ 𝟙 _ := by
+      rw [η.naturality_comp]
+      bicategory
+    _ = 𝟙 _ otimes≫ F.map f ◁ η.naturality g ▷ θ.app c otimes≫
+          (η.naturality f ▷ (G.map g ≫ θ.app c) ≫ (η.app a ≫ G.map f) ◁ θ.naturality g) otimes≫
+            η.app a ◁ (θ.naturality f ▷ H.map g otimes≫ θ.app a ◁ H.mapComp f g) otimes≫ 𝟙 _ := by
+      rw [θ.naturality_comp]
+      bicategory
+    _ = _ := by
+      rw [← whisker_exchange]
+      bicategory
 
 Depends on / 依赖: F.map, F.mapComp, G.map, G.mapComp, bicategory, mapComp, naturality, naturality_comp, otimes
 -/

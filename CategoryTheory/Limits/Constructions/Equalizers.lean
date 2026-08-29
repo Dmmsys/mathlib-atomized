@@ -233,7 +233,29 @@ preservesLimit_of_preserves_limit_cone (equalizerConeIsLimit K)
           refine pullback.lift ?_ ?_ ?_ ≫ (PreservesPullback.iso _ _ _ ).inv
           · exact c.π.app WalkingParallelPair.zero
           · exact c.π.app WalkingParallelPair.zero
-          apply (
+          apply (mapIsLimitOfPreservesOfIsLimit G _ _ (prodIsProd _ _)).hom_ext
+          rintro (_ | _)
+          · simp only [Category.assoc, ← G.map_comp, prod.lift_fst, BinaryFan.π_app_left,
+              BinaryFan.mk_fst]
+          · simp only [BinaryFan.π_app_right, BinaryFan.mk_snd, Category.assoc, ← G.map_comp,
+              prod.lift_snd]
+            exact
+              (c.π.naturality WalkingParallelPairHom.left).symm.trans
+                (c.π.naturality WalkingParallelPairHom.right)
+        fac := fun c j => by
+          rcases j with (_ | _) <;>
+            simp only [Category.comp_id, PreservesPullback.iso_inv_fst, Cone.ofFork_π, G.map_comp,
+              PreservesPullback.iso_inv_fst_assoc, Functor.mapCone_π_app, eqToHom_refl,
+              Category.assoc, Fork.ofι_π_app, pullback.lift_fst, pullback.lift_fst_assoc]
+          exact (c.π.naturality WalkingParallelPairHom.left).symm.trans (Category.id_comp _)
+        uniq := fun s m h => by
+          rw [Iso.eq_comp_inv]
+          have := h WalkingParallelPair.zero
+          dsimp [equalizerCone] at this
+          ext <;>
+            simp only [PreservesPullback.iso_hom_snd, Category.assoc,
+              PreservesPullback.iso_hom_fst, pullback.lift_fst, pullback.lift_snd,
+              Category.comp_id, ← pullbackFst_eq_pullback_snd, ← this] }⟩
 
 中文:
 引理 preservesEqualizers_of_preservesPullbacks_and_binaryProducts
@@ -243,7 +265,29 @@ preservesLimit_of_preserves_limit_cone (equalizerConeIsLimit K)
           refine pullback.lift ?_ ?_ ?_ ≫ (PreservesPullback.iso _ _ _ ).inv
           · exact c.π.app WalkingParallelPair.zero
           · exact c.π.app WalkingParallelPair.zero
-          apply (
+          apply (mapIsLimitOfPreservesOfIsLimit G _ _ (prodIsProd _ _)).hom_ext
+          rintro (_ | _)
+          · simp only [Category.assoc, ← G.map_comp, prod.lift_fst, BinaryFan.π_app_left,
+              BinaryFan.mk_fst]
+          · simp only [BinaryFan.π_app_right, BinaryFan.mk_snd, Category.assoc, ← G.map_comp,
+              prod.lift_snd]
+            exact
+              (c.π.naturality WalkingParallelPairHom.left).symm.trans
+                (c.π.naturality WalkingParallelPairHom.right)
+        fac := fun c j => by
+          rcases j with (_ | _) <;>
+            simp only [Category.comp_id, PreservesPullback.iso_inv_fst, Cone.ofFork_π, G.map_comp,
+              PreservesPullback.iso_inv_fst_assoc, Functor.mapCone_π_app, eqToHom_refl,
+              Category.assoc, Fork.ofι_π_app, pullback.lift_fst, pullback.lift_fst_assoc]
+          exact (c.π.naturality WalkingParallelPairHom.left).symm.trans (Category.id_comp _)
+        uniq := fun s m h => by
+          rw [Iso.eq_comp_inv]
+          have := h WalkingParallelPair.zero
+          dsimp [equalizerCone] at this
+          ext <;>
+            simp only [PreservesPullback.iso_hom_snd, Category.assoc,
+              PreservesPullback.iso_hom_fst, pullback.lift_fst, pullback.lift_snd,
+              Category.comp_id, ← pullbackFst_eq_pullback_snd, ← this] }⟩
 
 Depends on / 依赖: BinaryFan, BinaryFan.mk_fst, BinaryFan.mk_snd, Category, Category.assoc, G.map_comp, PreservesPullback, PreservesPullback.iso, WalkingParallelPair, WalkingParallelPair.zero, equalizerConeIsLimit, hom_ext, lift_fst, mapIsLimitOfPreservesOfIsLimit, map_comp, mk_fst, mk_snd, preservesLimit_of_preserves_limit_cone, prod.lift_fst, prodIsProd
 -/
@@ -408,7 +452,8 @@ definition coequalizerCoconeIsColimit
     apply pushout.hom_ext
     · rw [colimit.ι_desc]
       exact J1
-    · rw [coli
+    · rw [colimit.ι_desc, ← pushoutInl_eq_pushout_inr]
+      exact J1
 
 中文:
 定义 coequalizerCoconeIsColimit
@@ -422,7 +467,8 @@ definition coequalizerCoconeIsColimit
     apply pushout.hom_ext
     · rw [colimit.ι_desc]
       exact J1
-    · rw [coli
+    · rw [colimit.ι_desc, ← pushoutInl_eq_pushout_inr]
+      exact J1
 
 Depends on / 依赖: pushout, pushout.desc
 -/
@@ -491,7 +537,29 @@ preservesColimit_of_preserves_colimit_cocone (coequalizerCoconeIsColimit K)
           refine (PreservesPushout.iso _ _ _).inv ≫ pushout.desc ?_ ?_ ?_
           · exact c.ι.app WalkingParallelPair.one
           · exact c.ι.app WalkingParallelPair.one
-          
+          apply (mapIsColimitOfPreservesOfIsColimit G _ _ (coprodIsCoprod _ _)).hom_ext
+          rintro (_ | _)
+          · simp only [BinaryCofan.ι_app_left, BinaryCofan.mk_inl, ←
+              G.map_comp_assoc, coprod.inl_desc]
+          · simp only [BinaryCofan.ι_app_right, BinaryCofan.mk_inr, ←
+              G.map_comp_assoc, coprod.inr_desc]
+            exact
+              (c.ι.naturality WalkingParallelPairHom.left).trans
+                (c.ι.naturality WalkingParallelPairHom.right).symm
+        fac := fun c j => by
+          rcases j with (_ | _) <;>
+            simp only [Functor.mapCocone_ι_app, Cocone.ofCofork_ι, Category.id_comp,
+              eqToHom_refl, Category.assoc, Functor.map_comp, Cofork.ofπ_ι_app, pushout.inl_desc,
+              PreservesPushout.inl_iso_inv_assoc]
+          exact (c.ι.naturality WalkingParallelPairHom.left).trans (Category.comp_id _)
+        uniq := fun s m h => by
+          rw [Iso.eq_inv_comp]
+          have := h WalkingParallelPair.one
+          dsimp [coequalizerCocone] at this
+          ext <;>
+            simp only [PreservesPushout.inl_iso_hom_assoc, Category.id_comp, pushout.inl_desc,
+              pushout.inr_desc, PreservesPushout.inr_iso_hom_assoc, ← pushoutInl_eq_pushout_inr, ←
+              this] }⟩
 
 中文:
 引理 preservesCoequalizers_of_preservesPushouts_and_binaryCoproducts
@@ -502,7 +570,29 @@ preservesColimit_of_preserves_colimit_cocone (coequalizerCoconeIsColimit K)
           refine (PreservesPushout.iso _ _ _).inv ≫ pushout.desc ?_ ?_ ?_
           · exact c.ι.app WalkingParallelPair.one
           · exact c.ι.app WalkingParallelPair.one
-          
+          apply (mapIsColimitOfPreservesOfIsColimit G _ _ (coprodIsCoprod _ _)).hom_ext
+          rintro (_ | _)
+          · simp only [BinaryCofan.ι_app_left, BinaryCofan.mk_inl, ←
+              G.map_comp_assoc, coprod.inl_desc]
+          · simp only [BinaryCofan.ι_app_right, BinaryCofan.mk_inr, ←
+              G.map_comp_assoc, coprod.inr_desc]
+            exact
+              (c.ι.naturality WalkingParallelPairHom.left).trans
+                (c.ι.naturality WalkingParallelPairHom.right).symm
+        fac := fun c j => by
+          rcases j with (_ | _) <;>
+            simp only [Functor.mapCocone_ι_app, Cocone.ofCofork_ι, Category.id_comp,
+              eqToHom_refl, Category.assoc, Functor.map_comp, Cofork.ofπ_ι_app, pushout.inl_desc,
+              PreservesPushout.inl_iso_inv_assoc]
+          exact (c.ι.naturality WalkingParallelPairHom.left).trans (Category.comp_id _)
+        uniq := fun s m h => by
+          rw [Iso.eq_inv_comp]
+          have := h WalkingParallelPair.one
+          dsimp [coequalizerCocone] at this
+          ext <;>
+            simp only [PreservesPushout.inl_iso_hom_assoc, Category.id_comp, pushout.inl_desc,
+              pushout.inr_desc, PreservesPushout.inr_iso_hom_assoc, ← pushoutInl_eq_pushout_inr, ←
+              this] }⟩
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.mk_inl, BinaryCofan.mk_inr, G.map_comp_assoc, PreservesPushout, PreservesPushout.iso, WalkingParallelPair, WalkingParallelPair.one, coequalizerCoconeIsColimit, coprod, coprod.inl_desc, coprodIsCoprod, hom_ext, inl_desc, mapIsColimitOfPreservesOfIsColimit, map_comp_assoc, mk_inl, mk_inr, preservesColimit_of_preserves_colimit_cocone, pushout
 -/

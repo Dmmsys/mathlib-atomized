@@ -592,7 +592,11 @@ theorem exists_compl_positive_negative
   obtain ⟨S, hS₁, hS₂, hS₃⟩ := j.mutuallySingular
   refine ⟨S, hS₁, ?_, ?_, hS₂, hS₃⟩
   · refine restrict_le_restrict_of_subset_le _ _ fun A hA hA₁ => ?_
-    rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply hA]; rw [measureReal_def]; rw [show j.posPart A = 0 from nonpos_iff_eq_zero.1 (hS₂ ▸ me
+    rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply hA]; rw [measureReal_def]; rw [show j.posPart A = 0 from nonpos_iff_eq_zero.1 (hS₂ ▸ measure_mono hA₁)]; rw [ENNReal.toReal_zero]; rw [zero_sub]; rw [neg_le]; rw [zero_apply]; rw [neg_zero]
+    exact ENNReal.toReal_nonneg
+  · refine restrict_le_restrict_of_subset_le _ _ fun A hA hA₁ => ?_
+    rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply hA]; rw [measureReal_def (μ := j.negPart)]; rw [show j.negPart A = 0 from nonpos_iff_eq_zero.1 (hS₃ ▸ measure_mono hA₁)]; rw [ENNReal.toReal_zero]; rw [sub_zero]
+    exact ENNReal.toReal_nonneg
 
 中文:
 定理 存在_compl_positive_negative
@@ -600,7 +604,11 @@ theorem exists_compl_positive_negative
   obtain ⟨S, hS₁, hS₂, hS₃⟩ := j.mutuallySingular
   refine ⟨S, hS₁, ?_, ?_, hS₂, hS₃⟩
   · refine restrict_le_restrict_of_subset_le _ _ fun A hA hA₁ => ?_
-    rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply hA]; rw [measureReal_def]; rw [show j.posPart A = 0 from nonpos_iff_eq_zero.1 (hS₂ ▸ me
+    rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply hA]; rw [measureReal_def]; rw [show j.posPart A = 0 from nonpos_iff_eq_zero.1 (hS₂ ▸ measure_mono hA₁)]; rw [ENNReal.toReal_zero]; rw [zero_sub]; rw [neg_le]; rw [zero_apply]; rw [neg_zero]
+    exact ENNReal.toReal_nonneg
+  · refine restrict_le_restrict_of_subset_le _ _ fun A hA hA₁ => ?_
+    rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply hA]; rw [measureReal_def (μ := j.negPart)]; rw [show j.negPart A = 0 from nonpos_iff_eq_zero.1 (hS₃ ▸ measure_mono hA₁)]; rw [ENNReal.toReal_zero]; rw [sub_zero]
+    exact ENNReal.toReal_nonneg
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, ENNReal.toReal_zero, j.mutuallySingular, j.posPart, measureReal_def, measure_mono, mutuallySingular, neg_le, neg_zero, nonpos_iff_eq_zero, posPart, restrict_le_restrict_of_subset_le, toReal_nonneg, toReal_zero, toSignedM, toSignedMeasure, toSignedMeasure_sub_apply, zero_apply, zero_sub
 -/
@@ -638,7 +646,10 @@ definition toJordanDecomposition
     negPart := s.toMeasureOfLEZero iᶜ hi.1.compl hi.2.2
     posPart_finite := inferInstance
     negPart_finite := inferInstance
-    mutuallySing
+    mutuallySingular := by
+      refine ⟨iᶜ, hi.1.compl, ?_, ?_⟩
+      · rw [toMeasureOfZeroLE_apply _ _ hi.1 hi.1.compl]; simp
+      · rw [toMeasureOfLEZero_apply _ _ hi.1.compl hi.1.compl.compl]; simp }
 
 中文:
 定义 toJordanDecomposition
@@ -649,7 +660,10 @@ definition toJordanDecomposition
     negPart := s.toMeasureOfLEZero iᶜ hi.1.compl hi.2.2
     posPart_finite := inferInstance
     negPart_finite := inferInstance
-    mutuallySing
+    mutuallySingular := by
+      refine ⟨iᶜ, hi.1.compl, ?_, ?_⟩
+      · rw [toMeasureOfZeroLE_apply _ _ hi.1 hi.1.compl]; simp
+      · rw [toMeasureOfLEZero_apply _ _ hi.1.compl hi.1.compl.compl]; simp }
 
 Depends on / 依赖: choose_spec, compl.compl, exists_compl_positive_negative, mutuallySingular, negPart, negPart_finite, posPart, posPart_finite, s.exists_compl_positive_negative.choose, s.exists_compl_positive_negative.choose_spec, s.toMeasureOfLEZero, s.toMeasureOfZeroLE, toMeasureOfLEZero, toMeasureOfLEZero_apply, toMeasureOfZeroLE, toMeasureOfZeroLE_apply
 -/
@@ -714,7 +728,9 @@ theorem toSignedMeasure_toJordanDecomposition
   simp only [JordanDecomposition.toSignedMeasure, hμ, hν]
   ext k hk
   rw [toSignedMeasure_sub_apply hk]; rw [toMeasureOfZeroLE_real_apply _ hi₂ hi₁ hk]; rw [toMeasureOfLEZero_real_apply _ hi₃ hi₁.compl hk]
-  simp only [sub_neg_e
+  simp only [sub_neg_eq_add]
+  rw [← of_union _ (MeasurableSet.inter hi₁ hk) (MeasurableSet.inter hi₁.compl hk)]; rw [Set.inter_comm i]; rw [Set.inter_comm iᶜ]; rw [Set.inter_union_compl _ _]
+  exact (disjoint_compl_right.inf_left _).inf_right _
 
 中文:
 定理 toSignedMeasure_toJordanDecomposition
@@ -724,7 +740,9 @@ theorem toSignedMeasure_toJordanDecomposition
   simp only [JordanDecomposition.toSignedMeasure, hμ, hν]
   ext k hk
   rw [toSignedMeasure_sub_apply hk]; rw [toMeasureOfZeroLE_real_apply _ hi₂ hi₁ hk]; rw [toMeasureOfLEZero_real_apply _ hi₃ hi₁.compl hk]
-  simp only [sub_neg_e
+  simp only [sub_neg_eq_add]
+  rw [← of_union _ (MeasurableSet.inter hi₁ hk) (MeasurableSet.inter hi₁.compl hk)]; rw [Set.inter_comm i]; rw [Set.inter_comm iᶜ]; rw [Set.inter_union_compl _ _]
+  exact (disjoint_compl_right.inf_left _).inf_right _
 
 Depends on / 依赖: JordanDecomposition, JordanDecomposition.toSignedMeasure, MeasurableSet, MeasurableSet.inter, Set.inter_comm, Set.inter_union_compl, disjoint_compl_right, disjoint_compl_right.inf_left, inf_left, inter_comm, inter_union_compl, of_union, s.toJordanDecomposition_spec, sub_neg_eq_add, toJordanDecomposition_spec, toMeasureOfLEZero_real_apply, toMeasureOfZeroLE_real_apply, toSignedMeasure, toSignedMeasure_sub_apply
 -/
@@ -752,7 +770,10 @@ theorem subset_positive_null_set
   have : s v + s (w \ v) = 0 := by
     rw [← hw₁]; rw [← of_union Set.disjoint_sdiff_right hv (hw.diff hv)]; rw [Set.union_sdiff_self]; rw [Set.union_eq_self_of_subset_left hwt]
   have h₁ := nonneg_of_zero_le_restrict _ (restrict_le_restrict_subset _ _ hu hsu (hwt.trans hw₂))
-  have h₂ : 0 <= s (
+  have h₂ : 0 <= s (w \ v) :=
+    nonneg_of_zero_le_restrict _
+      (restrict_le_restrict_subset _ _ hu hsu (sdiff_subset.trans hw₂))
+  linarith
 
 中文:
 定理 subset_positive_null_set
@@ -761,7 +782,10 @@ theorem subset_positive_null_set
   have : s v + s (w \ v) = 0 := by
     rw [← hw₁]; rw [← of_union Set.disjoint_sdiff_right hv (hw.diff hv)]; rw [Set.union_sdiff_self]; rw [Set.union_eq_self_of_subset_left hwt]
   have h₁ := nonneg_of_zero_le_restrict _ (restrict_le_restrict_subset _ _ hu hsu (hwt.trans hw₂))
-  have h₂ : 0 <= s (
+  have h₂ : 0 <= s (w \ v) :=
+    nonneg_of_zero_le_restrict _
+      (restrict_le_restrict_subset _ _ hu hsu (sdiff_subset.trans hw₂))
+  linarith
 
 Depends on / 依赖: Set.disjoint_sdiff_right, Set.union_eq_self_of_subset_left, Set.union_sdiff_self, disjoint_sdiff_right, hw.diff, hwt.trans, nonneg_of_zero_le_restrict, of_union, restrict_le_restrict_subset, sdiff_subset, sdiff_subset.trans, union_eq_self_of_subset_left, union_sdiff_self
 -/
@@ -821,7 +845,16 @@ theorem of_sdiff_eq_zero_of_symmDiff_eq_zero_positive
     have a := hsu (hu.diff hv) sdiff_subset
     have b := hsv (hv.diff hu) sdiff_subset
     rw [Set.symmDiff_def]; rw [of_union (v := s) (Set.disjoint_of_subset_left sdiff_subset disjoint_sdiff_self_right)
-        (hu.diff hv) (hv.diff hu)
+        (hu.diff hv) (hv.diff hu)] at hs
+    rw [zero_apply] at a b
+    constructor
+  · linarith
+  · linarith
+  · assumption
+  · assumption
+
+@[deprecated (since := "2026-06-03")]
+alias of_diff_eq_zero_of_symmDiff_eq_zero_positive := of_sdiff_eq_zero_of_symmDiff_eq_zero_positive
 
 中文:
 定理 of_sdiff_eq_zero_of_symmDiff_eq_zero_positive
@@ -832,7 +865,16 @@ theorem of_sdiff_eq_zero_of_symmDiff_eq_zero_positive
     have a := hsu (hu.diff hv) sdiff_subset
     have b := hsv (hv.diff hu) sdiff_subset
     rw [Set.symmDiff_def]; rw [of_union (v := s) (Set.disjoint_of_subset_left sdiff_subset disjoint_sdiff_self_right)
-        (hu.diff hv) (hv.diff hu)
+        (hu.diff hv) (hv.diff hu)] at hs
+    rw [zero_apply] at a b
+    constructor
+  · linarith
+  · linarith
+  · assumption
+  · assumption
+
+@[deprecated (since := "2026-06-03")]
+alias of_diff_eq_zero_of_symmDiff_eq_zero_positive := of_sdiff_eq_zero_of_symmDiff_eq_zero_positive
 
 Depends on / 依赖: Set.disjoint_of_subset_left, Set.symmDiff_def, disjoint_of_subset_left, disjoint_sdiff_self_right, hu.diff, hv.diff, of_union, on_goal, restrict_le_restrict_iff, sdiff_subset, symmDiff_def, zero_apply
 -/
@@ -868,7 +910,7 @@ theorem of_sdiff_eq_zero_of_symmDiff_eq_zero_negative
   exact this hs
 
 @[deprecated (since := "2026-06-03")]
-alias of_diff_eq_zero
+alias of_diff_eq_zero_of_symmDiff_eq_zero_negative := of_sdiff_eq_zero_of_symmDiff_eq_zero_negative
 
 中文:
 定理 of_sdiff_eq_zero_of_symmDiff_eq_zero_negative
@@ -881,7 +923,7 @@ alias of_diff_eq_zero
   exact this hs
 
 @[deprecated (since := "2026-06-03")]
-alias of_diff_eq_zero
+alias of_diff_eq_zero_of_symmDiff_eq_zero_negative := of_sdiff_eq_zero_of_symmDiff_eq_zero_negative
 
 Depends on / 依赖: neg_apply, neg_eq_zero, neg_le_neg_iff, neg_zero, of_sdiff_eq_zero_of_symmDiff_eq_zero_positive, s.neg_le_neg_iff
 -/
@@ -908,7 +950,13 @@ theorem of_inter_eq_of_symmDiff_eq_zero_positive
       subset_positive_null_set (hu.union hv) ((hw.inter hu).symmDiff (hw.inter hv))
         (hu.symmDiff hv) (restrict_le_restrict_union _ _ hu hsu hv hsv) hs
         Set.symmDiff_subset_union ?_
-    rw [← Set.inter_symmDiff_distrib
+    rw [← Set.inter_symmDiff_distrib_left]
+    exact Set.inter_subset_right
+  obtain ⟨huv, hvu⟩ :=
+    of_sdiff_eq_zero_of_symmDiff_eq_zero_positive (hw.inter hu) (hw.inter hv)
+      (restrict_le_restrict_subset _ _ hu hsu (w.inter_subset_right))
+      (restrict_le_restrict_subset _ _ hv hsv (w.inter_subset_right)) hwuv
+  rw [← of_sdiff_of_sdiff_eq_zero (hw.inter hu) (hw.inter hv) hvu]; rw [huv]; rw [zero_add]
 
 中文:
 定理 of_inter_eq_of_symmDiff_eq_zero_positive
@@ -919,7 +967,13 @@ theorem of_inter_eq_of_symmDiff_eq_zero_positive
       subset_positive_null_set (hu.union hv) ((hw.inter hu).symmDiff (hw.inter hv))
         (hu.symmDiff hv) (restrict_le_restrict_union _ _ hu hsu hv hsv) hs
         Set.symmDiff_subset_union ?_
-    rw [← Set.inter_symmDiff_distrib
+    rw [← Set.inter_symmDiff_distrib_left]
+    exact Set.inter_subset_right
+  obtain ⟨huv, hvu⟩ :=
+    of_sdiff_eq_zero_of_symmDiff_eq_zero_positive (hw.inter hu) (hw.inter hv)
+      (restrict_le_restrict_subset _ _ hu hsu (w.inter_subset_right))
+      (restrict_le_restrict_subset _ _ hv hsv (w.inter_subset_right)) hwuv
+  rw [← of_sdiff_of_sdiff_eq_zero (hw.inter hu) (hw.inter hv) hvu]; rw [huv]; rw [zero_add]
 
 Depends on / 依赖: Set.inter_subset_right, Set.inter_symmDiff_distrib_left, Set.symmDiff_subset_union, hu.symmDiff, hu.union, hw.inter, inter_subset_right, inter_symmDiff_distrib_left, of_sdiff_eq_zero_of_symmDiff_eq_zero_positive, restrict_le_restrict_subset, restrict_le_restrict_union, subset_positive_null_set, symmDiff, symmDiff_subset_union, w.inter_subset_right
 -/
@@ -1025,7 +1079,47 @@ theorem toSignedMeasure_injective
   /- The main idea is that two Jordan decompositions of a signed measure provide two
     Hahn decompositions for that measure. Then, from `of_symmDiff_compl_positive_negative`,
     the symmetric difference of the two Hahn decompositions has measure zero, thus, allowing us to
-    show the equality
+    show the equality of the underlying measures of the Jordan decompositions. -/
+  intro j₁ j₂ hj
+  -- obtain the two Hahn decompositions from the Jordan decompositions
+  obtain ⟨S, hS₁, hS₂, hS₃, hS₄, hS₅⟩ := j₁.exists_compl_positive_negative
+  obtain ⟨T, hT₁, hT₂, hT₃, hT₄, hT₅⟩ := j₂.exists_compl_positive_negative
+  rw [← hj] at hT₂ hT₃
+  -- the symmetric differences of the two Hahn decompositions have measure zero
+  obtain ⟨hST₁, -⟩ :=
+    of_symmDiff_compl_positive_negative hS₁.compl hT₁.compl ⟨hS₃, (compl_compl S).symm ▸ hS₂⟩
+      ⟨hT₃, (compl_compl T).symm ▸ hT₂⟩
+  -- it suffices to show the Jordan decompositions have the same positive parts
+  refine eq_of_posPart_eq_posPart ?_ hj
+  ext1 i hi
+  -- we see that the positive parts of the two Jordan decompositions are equal to their
+  -- associated signed measures restricted on their associated Hahn decompositions
+  have hμ₁ : j₁.posPart.real i = j₁.toSignedMeasure (i inter Sᶜ) := by
+    rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply (hi.inter hS₁.compl)]; rw [measureReal_def (μ := j₁.negPart)]; rw [show j₁.negPart (i inter Sᶜ) = 0 from
+        nonpos_iff_eq_zero.1 (hS₅ ▸ measure_mono Set.inter_subset_right)]; rw [ENNReal.toReal_zero]; rw [sub_zero]
+    conv_lhs => rw [← Set.inter_union_compl i S]
+    rw [measureReal_union]; rw [measureReal_def]; rw [show j₁.posPart (i inter S) = 0 from
+        nonpos_iff_eq_zero.1 (hS₄ ▸ measure_mono Set.inter_subset_right)]; rw [ENNReal.toReal_zero]; rw [zero_add]
+    · refine
+        Set.disjoint_of_subset_left Set.inter_subset_right
+          (Set.disjoint_of_subset_right Set.inter_subset_right disjoint_compl_right)
+    · exact hi.inter hS₁.compl
+  have hμ₂ : j₂.posPart.real i = j₂.toSignedMeasure (i inter Tᶜ) := by
+    rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply (hi.inter hT₁.compl)]; rw [measureReal_def (μ := j₂.negPart)]; rw [show j₂.negPart (i inter Tᶜ) = 0 from
+        nonpos_iff_eq_zero.1 (hT₅ ▸ measure_mono Set.inter_subset_right)]; rw [ENNReal.toReal_zero]; rw [sub_zero]
+    conv_lhs => rw [← Set.inter_union_compl i T]
+    rw [measureReal_union]; rw [measureReal_def]; rw [show j₂.posPart (i inter T) = 0 from
+        nonpos_iff_eq_zero.1 (hT₄ ▸ measure_mono Set.inter_subset_right)]; rw [ENNReal.toReal_zero]; rw [zero_add]
+    · exact
+        Set.disjoint_of_subset_left Set.inter_subset_right
+          (Set.disjoint_of_subset_right Set.inter_subset_right disjoint_compl_right)
+    · exact hi.inter hT₁.compl
+  -- since the two signed measures associated with the Jordan decompositions are the same,
+  -- and the symmetric difference of the Hahn decompositions have measure zero, the result follows
+  rw [← measureReal_eq_measureReal_iff]; rw [hμ₁]; rw [hμ₂]; rw [← hj]
+  exact of_inter_eq_of_symmDiff_eq_zero_positive hS₁.compl hT₁.compl hi hS₃ hT₃ hST₁
+
+@[simp]
 
 中文:
 定理 toSignedMeasure_injective
@@ -1034,7 +1128,47 @@ theorem toSignedMeasure_injective
   /- The main idea is that two Jordan decompositions of a signed measure provide two
     Hahn decompositions for that measure. Then, from `of_symmDiff_compl_positive_negative`,
     the symmetric difference of the two Hahn decompositions has measure zero, thus, allowing us to
-    show the equality
+    show the equality of the underlying measures of the Jordan decompositions. -/
+  intro j₁ j₂ hj
+  -- obtain the two Hahn decompositions from the Jordan decompositions
+  obtain ⟨S, hS₁, hS₂, hS₃, hS₄, hS₅⟩ := j₁.exists_compl_positive_negative
+  obtain ⟨T, hT₁, hT₂, hT₃, hT₄, hT₅⟩ := j₂.exists_compl_positive_negative
+  rw [← hj] at hT₂ hT₃
+  -- the symmetric differences of the two Hahn decompositions have measure zero
+  obtain ⟨hST₁, -⟩ :=
+    of_symmDiff_compl_positive_negative hS₁.compl hT₁.compl ⟨hS₃, (compl_compl S).symm ▸ hS₂⟩
+      ⟨hT₃, (compl_compl T).symm ▸ hT₂⟩
+  -- it suffices to show the Jordan decompositions have the same positive parts
+  refine eq_of_posPart_eq_posPart ?_ hj
+  ext1 i hi
+  -- we see that the positive parts of the two Jordan decompositions are equal to their
+  -- associated signed measures restricted on their associated Hahn decompositions
+  have hμ₁ : j₁.posPart.real i = j₁.toSignedMeasure (i inter Sᶜ) := by
+    rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply (hi.inter hS₁.compl)]; rw [measureReal_def (μ := j₁.negPart)]; rw [show j₁.negPart (i inter Sᶜ) = 0 from
+        nonpos_iff_eq_zero.1 (hS₅ ▸ measure_mono Set.inter_subset_right)]; rw [ENNReal.toReal_zero]; rw [sub_zero]
+    conv_lhs => rw [← Set.inter_union_compl i S]
+    rw [measureReal_union]; rw [measureReal_def]; rw [show j₁.posPart (i inter S) = 0 from
+        nonpos_iff_eq_zero.1 (hS₄ ▸ measure_mono Set.inter_subset_right)]; rw [ENNReal.toReal_zero]; rw [zero_add]
+    · refine
+        Set.disjoint_of_subset_left Set.inter_subset_right
+          (Set.disjoint_of_subset_right Set.inter_subset_right disjoint_compl_right)
+    · exact hi.inter hS₁.compl
+  have hμ₂ : j₂.posPart.real i = j₂.toSignedMeasure (i inter Tᶜ) := by
+    rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply (hi.inter hT₁.compl)]; rw [measureReal_def (μ := j₂.negPart)]; rw [show j₂.negPart (i inter Tᶜ) = 0 from
+        nonpos_iff_eq_zero.1 (hT₅ ▸ measure_mono Set.inter_subset_right)]; rw [ENNReal.toReal_zero]; rw [sub_zero]
+    conv_lhs => rw [← Set.inter_union_compl i T]
+    rw [measureReal_union]; rw [measureReal_def]; rw [show j₂.posPart (i inter T) = 0 from
+        nonpos_iff_eq_zero.1 (hT₄ ▸ measure_mono Set.inter_subset_right)]; rw [ENNReal.toReal_zero]; rw [zero_add]
+    · exact
+        Set.disjoint_of_subset_left Set.inter_subset_right
+          (Set.disjoint_of_subset_right Set.inter_subset_right disjoint_compl_right)
+    · exact hi.inter hT₁.compl
+  -- since the two signed measures associated with the Jordan decompositions are the same,
+  -- and the symmetric difference of the Hahn decompositions have measure zero, the result follows
+  rw [← measureReal_eq_measureReal_iff]; rw [hμ₁]; rw [hμ₂]; rw [← hj]
+  exact of_inter_eq_of_symmDiff_eq_zero_positive hS₁.compl hT₁.compl hi hS₃ hT₃ hST₁
+
+@[simp]
 -/
 theorem toSignedMeasure_injective : Injective @JordanDecomposition.toSignedMeasure α _ := by
   /- The main idea is that two Jordan decompositions of a signed measure provide two
@@ -1245,7 +1379,12 @@ theorem toJordanDecomposition_smul_real
   · ext1
     · rw [real_smul_posPart_neg _ _ hr,
         show r • s = -(-r • s) by rw [neg_smul, neg_neg], toJordanDecomposition_neg, neg_posPart,
-        toJordanDecomposition_smul_real_nonneg, ← smul_negPart, real_s
+        toJordanDecomposition_smul_real_nonneg, ← smul_negPart, real_smul_nonneg]
+      all_goals exact Left.nonneg_neg_iff.2 hr.le
+    · rw [real_smul_negPart_neg _ _ hr,
+        show r • s = -(-r • s) by rw [neg_smul, neg_neg], toJordanDecomposition_neg, neg_negPart,
+        toJordanDecomposition_smul_real_nonneg, ← smul_posPart, real_smul_nonneg]
+      all_goals exact Left.nonneg_neg_iff.2 hr.le
 
 中文:
 定理 toJordanDecomposition_smul_real
@@ -1256,7 +1395,12 @@ theorem toJordanDecomposition_smul_real
   · ext1
     · rw [real_smul_posPart_neg _ _ hr,
         show r • s = -(-r • s) by rw [neg_smul, neg_neg], toJordanDecomposition_neg, neg_posPart,
-        toJordanDecomposition_smul_real_nonneg, ← smul_negPart, real_s
+        toJordanDecomposition_smul_real_nonneg, ← smul_negPart, real_smul_nonneg]
+      all_goals exact Left.nonneg_neg_iff.2 hr.le
+    · rw [real_smul_negPart_neg _ _ hr,
+        show r • s = -(-r • s) by rw [neg_smul, neg_neg], toJordanDecomposition_neg, neg_negPart,
+        toJordanDecomposition_smul_real_nonneg, ← smul_posPart, real_smul_nonneg]
+      all_goals exact Left.nonneg_neg_iff.2 hr.le
 
 Depends on / 依赖: Left.nonneg_neg_iff, all_goals, hr.le, neg_neg, neg_negPart, neg_posPart, neg_smul, nonneg_neg_iff, real_smul_negPart_neg, real_smul_nonneg, real_smul_posPart_neg, smul_negPart, toJordanDecomposition_neg, toJordanDecomposition_smul_real_nonneg
 -/
@@ -1423,7 +1567,13 @@ theorem absolutelyContinuous_ennreal_iff
   constructor <;> intro h
   · refine Measure.AbsolutelyContinuous.mk fun S hS₁ hS₂ => ?_
     obtain ⟨i, hi₁, hi₂, hi₃, hpos, hneg⟩ := s.toJordanDecomposition_spec
-    rw [totalVariation]; rw [Measure.add_apply]; rw [hpos]; rw [hneg]; rw [toMeasureOfZeroLE_apply _ _ _ hS₁]; rw [toMeasureOfLEZero_a
+    rw [totalVariation]; rw [Measure.add_apply]; rw [hpos]; rw [hneg]; rw [toMeasureOfZeroLE_apply _ _ _ hS₁]; rw [toMeasureOfLEZero_apply _ _ _ hS₁]
+    rw [← VectorMeasure.AbsolutelyContinuous.ennrealToMeasure] at h
+    simp [h (measure_mono_null (i.inter_subset_right) hS₂),
+      h (measure_mono_null (iᶜ.inter_subset_right) hS₂)]
+  · refine VectorMeasure.AbsolutelyContinuous.mk fun S hS₁ hS₂ => ?_
+    rw [← VectorMeasure.ennrealToMeasure_apply hS₁] at hS₂
+    exact null_of_totalVariation_zero s (h hS₂)
 
 中文:
 定理 absolutelyContinuous_ennreal_iff
@@ -1432,7 +1582,13 @@ theorem absolutelyContinuous_ennreal_iff
   constructor <;> intro h
   · refine Measure.AbsolutelyContinuous.mk fun S hS₁ hS₂ => ?_
     obtain ⟨i, hi₁, hi₂, hi₃, hpos, hneg⟩ := s.toJordanDecomposition_spec
-    rw [totalVariation]; rw [Measure.add_apply]; rw [hpos]; rw [hneg]; rw [toMeasureOfZeroLE_apply _ _ _ hS₁]; rw [toMeasureOfLEZero_a
+    rw [totalVariation]; rw [Measure.add_apply]; rw [hpos]; rw [hneg]; rw [toMeasureOfZeroLE_apply _ _ _ hS₁]; rw [toMeasureOfLEZero_apply _ _ _ hS₁]
+    rw [← VectorMeasure.AbsolutelyContinuous.ennrealToMeasure] at h
+    simp [h (measure_mono_null (i.inter_subset_right) hS₂),
+      h (measure_mono_null (iᶜ.inter_subset_right) hS₂)]
+  · refine VectorMeasure.AbsolutelyContinuous.mk fun S hS₁ hS₂ => ?_
+    rw [← VectorMeasure.ennrealToMeasure_apply hS₁] at hS₂
+    exact null_of_totalVariation_zero s (h hS₂)
 
 Depends on / 依赖: AbsolutelyContinuous, Measure, Measure.AbsolutelyContinuous.mk, Measure.add_apply, VectorMeasure, VectorMeasure.Ab, VectorMeasure.AbsolutelyContinuous.ennrealToMeasure, add_apply, ennrealToMeasure, i.inter_subset_right, inter_subset_right, measure_mono_null, s.toJordanDecomposition_spec, toJordanDecomposition_spec, toMeasureOfLEZero_apply, toMeasureOfZeroLE_apply, totalVariation
 -/
@@ -1463,7 +1619,8 @@ theorem totalVariation_absolutelyContinuous_iff
       have := h hS₂
       rw [totalVariation]; rw [Measure.add_apply]; rw [add_eq_zero] at this
     exacts [this.1, this.2]
-  · refine Measure.AbsolutelyContinuous.mk fun S _ hS₂
+  · refine Measure.AbsolutelyContinuous.mk fun S _ hS₂ => ?_
+    rw [totalVariation]; rw [Measure.add_apply]; rw [h.1 hS₂]; rw [h.2 hS₂]; rw [add_zero]
 
 中文:
 定理 totalVariation_absolutelyContinuous_iff
@@ -1476,7 +1633,8 @@ theorem totalVariation_absolutelyContinuous_iff
       have := h hS₂
       rw [totalVariation]; rw [Measure.add_apply]; rw [add_eq_zero] at this
     exacts [this.1, this.2]
-  · refine Measure.AbsolutelyContinuous.mk fun S _ hS₂
+  · refine Measure.AbsolutelyContinuous.mk fun S _ hS₂ => ?_
+    rw [totalVariation]; rw [Measure.add_apply]; rw [h.1 hS₂]; rw [h.2 hS₂]; rw [add_zero]
 
 Depends on / 依赖: AbsolutelyContinuous, Measure, Measure.AbsolutelyContinuous.mk, Measure.add_apply, add_apply, add_eq_zero, add_zero, all_goals, exacts, totalVariation
 -/
@@ -1506,7 +1664,17 @@ theorem mutuallySingular_iff
     obtain ⟨i, hi₁, hi₂, hi₃, hipos, hineg⟩ := s.toJordanDecomposition_spec
     obtain ⟨j, hj₁, hj₂, hj₃, hjpos, hjneg⟩ := t.toJordanDecomposition_spec
     refine ⟨u, hmeas, ?_, ?_⟩
-    · rw [totalVariation, Measure.add_apply, hipos, hineg, toMeasureO
+    · rw [totalVariation, Measure.add_apply, hipos, hineg, toMeasureOfZeroLE_apply _ _ _ hmeas,
+        toMeasureOfLEZero_apply _ _ _ hmeas]
+      simp [hu₁ _ Set.inter_subset_right]
+    · rw [totalVariation, Measure.add_apply, hjpos, hjneg,
+        toMeasureOfZeroLE_apply _ _ _ hmeas.compl,
+        toMeasureOfLEZero_apply _ _ _ hmeas.compl]
+      simp [hu₂ _ Set.inter_subset_right]
+  · rintro ⟨u, hmeas, hu₁, hu₂⟩
+    exact
+      ⟨u, hmeas, fun t htu => null_of_totalVariation_zero _ (measure_mono_null htu hu₁),
+        fun t htv => null_of_totalVariation_zero _ (measure_mono_null htv hu₂)⟩
 
 中文:
 定理 mutuallySingular_iff
@@ -1517,7 +1685,17 @@ theorem mutuallySingular_iff
     obtain ⟨i, hi₁, hi₂, hi₃, hipos, hineg⟩ := s.toJordanDecomposition_spec
     obtain ⟨j, hj₁, hj₂, hj₃, hjpos, hjneg⟩ := t.toJordanDecomposition_spec
     refine ⟨u, hmeas, ?_, ?_⟩
-    · rw [totalVariation, Measure.add_apply, hipos, hineg, toMeasureO
+    · rw [totalVariation, Measure.add_apply, hipos, hineg, toMeasureOfZeroLE_apply _ _ _ hmeas,
+        toMeasureOfLEZero_apply _ _ _ hmeas]
+      simp [hu₁ _ Set.inter_subset_right]
+    · rw [totalVariation, Measure.add_apply, hjpos, hjneg,
+        toMeasureOfZeroLE_apply _ _ _ hmeas.compl,
+        toMeasureOfLEZero_apply _ _ _ hmeas.compl]
+      simp [hu₂ _ Set.inter_subset_right]
+  · rintro ⟨u, hmeas, hu₁, hu₂⟩
+    exact
+      ⟨u, hmeas, fun t htu => null_of_totalVariation_zero _ (measure_mono_null htu hu₁),
+        fun t htv => null_of_totalVariation_zero _ (measure_mono_null htv hu₂)⟩
 
 Depends on / 依赖: Measure, Measure.add_apply, Set.inter_subset_right, add_apply, hmeas.compl, inter_subset_right, s.toJordanDecomposition_spec, t.toJordanDecomposition_spec, toJordanDecomposition_spec, toMeasureOfLEZero_appl, toMeasureOfLEZero_apply, toMeasureOfZeroLE_apply, totalVariation
 -/
@@ -1553,7 +1731,16 @@ theorem mutuallySingular_ennreal_iff
     refine ⟨u, hmeas, ?_, ?_⟩
     · rw [totalVariation, Measure.add_apply, hpos, hneg, toMeasureOfZeroLE_apply _ _ _ hmeas,
         toMeasureOfLEZero_apply _ _ _ hmeas]
-      si
+      simp [hu₁ _ Set.inter_subset_right]
+    · rw [VectorMeasure.ennrealToMeasure_apply hmeas.compl]
+      exact hu₂ _ (Set.Subset.refl _)
+  · rintro ⟨u, hmeas, hu₁, hu₂⟩
+    refine
+      VectorMeasure.MutuallySingular.mk u hmeas
+        (fun t htu _ => null_of_totalVariation_zero _ (measure_mono_null htu hu₁)) fun t htv hmt =>
+        ?_
+    rw [← VectorMeasure.ennrealToMeasure_apply hmt]
+    exact measure_mono_null htv hu₂
 
 中文:
 定理 mutuallySingular_ennreal_iff
@@ -1565,7 +1752,16 @@ theorem mutuallySingular_ennreal_iff
     refine ⟨u, hmeas, ?_, ?_⟩
     · rw [totalVariation, Measure.add_apply, hpos, hneg, toMeasureOfZeroLE_apply _ _ _ hmeas,
         toMeasureOfLEZero_apply _ _ _ hmeas]
-      si
+      simp [hu₁ _ Set.inter_subset_right]
+    · rw [VectorMeasure.ennrealToMeasure_apply hmeas.compl]
+      exact hu₂ _ (Set.Subset.refl _)
+  · rintro ⟨u, hmeas, hu₁, hu₂⟩
+    refine
+      VectorMeasure.MutuallySingular.mk u hmeas
+        (fun t htu _ => null_of_totalVariation_zero _ (measure_mono_null htu hu₁)) fun t htv hmt =>
+        ?_
+    rw [← VectorMeasure.ennrealToMeasure_apply hmt]
+    exact measure_mono_null htv hu₂
 
 Depends on / 依赖: Measure, Measure.add_apply, MutuallySingular, Set.Subset.refl, Set.inter_subset_right, Subset, VectorMeasure, VectorMeasure.MutuallySingular.mk, VectorMeasure.ennrealToMeasure_apply, add_apply, ennrealToMeasure_apply, hmeas.compl, inter_subset_right, null_of_total, s.toJordanDecomposition_spec, toJordanDecomposition_spec, toMeasureOfLEZero_apply, toMeasureOfZeroLE_apply, totalVariation
 -/

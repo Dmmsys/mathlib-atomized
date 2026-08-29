@@ -64,7 +64,8 @@ lemma coprime_mul_succ
       rcases (Nat.Prime.dvd_mul pp).mp this with (hp | hp)
       · exact Nat.dvd_trans hp ha
       · exact hp
- 
+    apply pp.ne_one
+    simpa [Nat.add_sub_cancel_left] using Nat.dvd_sub hn (this.mul_left n)
 
 中文:
 引理 coprime_mul_succ
@@ -78,7 +79,8 @@ lemma coprime_mul_succ
       rcases (Nat.Prime.dvd_mul pp).mp this with (hp | hp)
       · exact Nat.dvd_trans hp ha
       · exact hp
- 
+    apply pp.ne_one
+    simpa [Nat.add_sub_cancel_left] using Nat.dvd_sub hn (this.mul_left n)
 
 Depends on / 依赖: Nat.Prime.dvd_mul, Nat.add_sub_cancel_left, Nat.coprime_of_dvd, Nat.dvd_sub, Nat.dvd_trans, Nat.mul_sub_right_distrib, Nat.succ_sub_succ, add_sub_cancel_left, coprime_of_dvd, dvd_mul, dvd_sub, dvd_trans, mul_left, mul_sub_right_distrib, ne_one, pp.ne_one, succ_sub_succ, this.mul_left
 -/
@@ -143,7 +145,7 @@ lemma coprimes_lt
   have h₂ : supOfSeq a <= (i + 1) * (supOfSeq a)! + 1 :=
     le_trans (self_le_factorial _) (le_trans (Nat.le_mul_of_pos_left (supOfSeq a)! (succ_pos i))
       (le_add_right _ _))
-  simpa on
+  simpa only [coprimes] using lt_of_lt_of_le h₁ h₂
 
 中文:
 引理 coprimes_lt
@@ -155,7 +157,7 @@ lemma coprimes_lt
   have h₂ : supOfSeq a <= (i + 1) * (supOfSeq a)! + 1 :=
     le_trans (self_le_factorial _) (le_trans (Nat.le_mul_of_pos_left (supOfSeq a)! (succ_pos i))
       (le_add_right _ _))
-  simpa on
+  simpa only [coprimes] using lt_of_lt_of_le h₁ h₂
 
 Depends on / 依赖: Finset, Finset.le_sup, Nat.le_mul_of_pos_left, Nat.lt_add_one_iff.mpr, coprimes, le_add_right, le_max_of_le_right, le_mul_of_pos_left, le_sup, le_trans, lt_add_one_iff, lt_of_lt_of_le, self_le_factorial, succ_pos, supOfSeq
 -/
@@ -183,7 +185,7 @@ lemma pairwise_coprime_coprimes
   have hja : j < supOfSeq a := lt_of_lt_of_le j.prop (le_succ_of_le (le_max_left _ _))
   exact coprime_mul_succ
     (Nat.dvd_factorial (by lia)
-      (by simpa onl
+      (by simpa only [Nat.succ_sub_succ] using le_of_lt (lt_of_le_of_lt (sub_le j i) hja)))
 
 中文:
 引理 pairwise_coprime_coprimes
@@ -197,7 +199,7 @@ lemma pairwise_coprime_coprimes
   have hja : j < supOfSeq a := lt_of_lt_of_le j.prop (le_succ_of_le (le_max_left _ _))
   exact coprime_mul_succ
     (Nat.dvd_factorial (by lia)
-      (by simpa onl
+      (by simpa only [Nat.succ_sub_succ] using le_of_lt (lt_of_le_of_lt (sub_le j i) hja)))
 -/
 private lemma pairwise_coprime_coprimes (a : Fin m -> Nat) : Pairwise (Coprime on coprimes a) := by
   intro i j hij

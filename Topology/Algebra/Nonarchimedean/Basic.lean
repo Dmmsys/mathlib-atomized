@@ -299,7 +299,8 @@ let ⟨V, H⟩ := prod_self_subset (U.isOpen.preimage continuous_mul).mem_nhds b
   rintro v ⟨a, ha, b, hb, hv⟩
   have hy := H (Set.mk_mem_prod ha hb)
   simp only [Set.mem_preimage, SetLike.mem_coe, hv] at hy
-  rw [S
+  rw [SetLike.mem_coe]
+  exact hy
 
 中文:
 定理 mul_subset
@@ -312,7 +313,8 @@ let ⟨V, H⟩ := prod_self_subset (U.isOpen.preimage continuous_mul).mem_nhds b
   rintro v ⟨a, ha, b, hb, hv⟩
   have hy := H (Set.mk_mem_prod ha hb)
   simp only [Set.mem_preimage, SetLike.mem_coe, hv] at hy
-  rw [S
+  rw [SetLike.mem_coe]
+  exact hy
 
 Depends on / 依赖: Prod.snd_zero, Set.mem_preimage, Set.mk_mem_prod, SetLike, SetLike.mem_coe, U.isOpen.preimage, U.zero_mem, continuous_mul, isOpen, mem_coe, mem_nhds, mem_preimage, mk_mem_prod, mul_zero, preimage, prod_self_subset, snd_zero, zero_mem
 -/

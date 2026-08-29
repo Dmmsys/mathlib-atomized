@@ -147,7 +147,11 @@ lemma IsStronglyTranscendental.of_isLocalization
   obtain ⟨a, haM, e⟩ : exists a in M, a * ((aeval x) p * u) = 0 := by
     simpa [aeval_algebraMap_apply, ← Algebra.smul_def, IsLocalization.smul_mk',
       IsLocalization.mk'_eq_zero_iff] using hp
-  have : p.map (algebraMap R
+  have : p.map (algebraMap R T) * C (a • algebraMap S T u) = 0 := by
+    simpa [map_map, ← IsScalarTower.algebraMap_eq, Algebra.smul_def] using
+      congr(map (algebraMap S T) $(h (a * u) p (by linear_combination e)))
+  refine ((IsLocalization.map_units T (⟨a, haM⟩ * s)).map C).mul_right_cancel ?_
+  simpa [mul_assoc, ← map_mul, mul_comm _ (algebraMap _ _ _), ← Algebra.smul_def, mul_smul]
 
 中文:
 引理 IsStronglyTranscendental.of_isLocalization
@@ -158,7 +162,11 @@ lemma IsStronglyTranscendental.of_isLocalization
   obtain ⟨a, haM, e⟩ : exists a in M, a * ((aeval x) p * u) = 0 := by
     simpa [aeval_algebraMap_apply, ← Algebra.smul_def, IsLocalization.smul_mk',
       IsLocalization.mk'_eq_zero_iff] using hp
-  have : p.map (algebraMap R
+  have : p.map (algebraMap R T) * C (a • algebraMap S T u) = 0 := by
+    simpa [map_map, ← IsScalarTower.algebraMap_eq, Algebra.smul_def] using
+      congr(map (algebraMap S T) $(h (a * u) p (by linear_combination e)))
+  refine ((IsLocalization.map_units T (⟨a, haM⟩ * s)).map C).mul_right_cancel ?_
+  simpa [mul_assoc, ← map_mul, mul_comm _ (algebraMap _ _ _), ← Algebra.smul_def, mul_smul]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsLocalization, IsLocalization.exists_mk, IsLocalization.map_units, IsLocalization.mk, IsLocalization.smul_mk, IsScalarTower, IsScalarTower.algebraMap_eq, _eq_zero_iff, aeval_algebraMap_apply, algebraMap, algebraMap_eq, exists_mk, linear_combination, map_map, map_units, p.map, smul_def, smul_mk
 -/
@@ -188,7 +196,10 @@ lemma IsStronglyTranscendental.of_isLocalization_left
   obtain ⟨a, ha₁, ha₂⟩ := IsLocalization.integerNormalization_spec M p
   have H : aeval x (IsLocalization.integerNormalization M p) = a • aeval x p := by
     simpa [AlgHom.map_smul_of_tower] using congr(aeval x $ha₂)
-  have := h t (IsLocalization.integerNormalization M p) (by simp 
+  have := h t (IsLocalization.integerNormalization M p) (by simp [H, hp])
+  rw [IsScalarTower.algebraMap_eq R S T]; rw [← map_map]; rw [ha₂] at this
+  rw [← (((IsLocalization.map_units S ⟨a]; rw [ha₁⟩).map (algebraMap S T)).map C).mul_right_inj]
+  simpa [Algebra.smul_def, mul_assoc] using this
 
 中文:
 引理 IsStronglyTranscendental.of_isLocalization_left
@@ -198,7 +209,10 @@ lemma IsStronglyTranscendental.of_isLocalization_left
   obtain ⟨a, ha₁, ha₂⟩ := IsLocalization.integerNormalization_spec M p
   have H : aeval x (IsLocalization.integerNormalization M p) = a • aeval x p := by
     simpa [AlgHom.map_smul_of_tower] using congr(aeval x $ha₂)
-  have := h t (IsLocalization.integerNormalization M p) (by simp 
+  have := h t (IsLocalization.integerNormalization M p) (by simp [H, hp])
+  rw [IsScalarTower.algebraMap_eq R S T]; rw [← map_map]; rw [ha₂] at this
+  rw [← (((IsLocalization.map_units S ⟨a]; rw [ha₁⟩).map (algebraMap S T)).map C).mul_right_inj]
+  simpa [Algebra.smul_def, mul_assoc] using this
 
 Depends on / 依赖: AlgHom, AlgHom.map_smul_of_tower, Algebra, Algebra.smul_def, IsLocalization, IsLocalization.integerNormalization, IsLocalization.integerNormalization_spec, IsLocalization.map_units, IsScalarTower, IsScalarTower.algebraMap_eq, algebraMap, algebraMap_eq, integerNormalization, integerNormalization_spec, map_map, map_smul_of_tower, map_units, mul_assoc, mul_right_inj, smul_def
 -/
@@ -360,7 +374,17 @@ lemma isStronglyTranscendental_mk_of_mem_minimalPrimes
   refine Ideal.Quotient.mk_surjective.forall.mpr fun u p e => ?_
   rw [← Ideal.Quotient.algebraMap_eq]; rw [aeval_algebraMap_apply]; rw [Ideal.Quotient.algebraMap_eq]; rw [← map_mul]; rw [Ideal.Quotient.eq_zero_iff_mem] at e
   have := hq.1.1
-  have : Ring.KrullDimLE 0 (Localization.AtPrime q) := 
+  have : Ring.KrullDimLE 0 (Localization.AtPrime q) := .of_isLocalization _ hq _
+  let : Field (Localization.AtPrime q) := Ring.KrullDimLE.isField_of_isReduced.toField
+  obtain ⟨⟨m, hmq⟩, hm⟩ := (IsLocalization.map_eq_zero_iff q.primeCompl (Localization.AtPrime q)
+    (aeval x p * u)).mp (by rw [← Ideal.mem_bot, ← IsLocalRing.maximalIdeal_eq_bot,
+      ← Localization.AtPrime.map_eq_maximalIdeal]; exact Ideal.mem_map_of_mem _ e)
+  ext i
+  simp only [coeff_mul_C, coeff_map, coeff_zero, ← Ideal.Quotient.mk_algebraMap, ← map_mul,
+    Ideal.Quotient.eq_zero_iff_mem]
+  have : algebraMap R S (p.coeff i) * u * m = 0 := by
+    simpa [← mul_assoc] using congr(($(hx (u * m) p (by linear_combination hm))).coeff i)
+  exact (Ideal.IsPrime.mem_or_mem_of_mul_eq_zero ‹_› (by linear_combination this)).resolve_left hmq
 
 中文:
 引理 isStronglyTranscendental_mk_of_mem_minimalPrimes
@@ -369,7 +393,17 @@ lemma isStronglyTranscendental_mk_of_mem_minimalPrimes
   refine Ideal.Quotient.mk_surjective.forall.mpr fun u p e => ?_
   rw [← Ideal.Quotient.algebraMap_eq]; rw [aeval_algebraMap_apply]; rw [Ideal.Quotient.algebraMap_eq]; rw [← map_mul]; rw [Ideal.Quotient.eq_zero_iff_mem] at e
   have := hq.1.1
-  have : Ring.KrullDimLE 0 (Localization.AtPrime q) := 
+  have : Ring.KrullDimLE 0 (Localization.AtPrime q) := .of_isLocalization _ hq _
+  let : Field (Localization.AtPrime q) := Ring.KrullDimLE.isField_of_isReduced.toField
+  obtain ⟨⟨m, hmq⟩, hm⟩ := (IsLocalization.map_eq_zero_iff q.primeCompl (Localization.AtPrime q)
+    (aeval x p * u)).mp (by rw [← Ideal.mem_bot, ← IsLocalRing.maximalIdeal_eq_bot,
+      ← Localization.AtPrime.map_eq_maximalIdeal]; exact Ideal.mem_map_of_mem _ e)
+  ext i
+  simp only [coeff_mul_C, coeff_map, coeff_zero, ← Ideal.Quotient.mk_algebraMap, ← map_mul,
+    Ideal.Quotient.eq_zero_iff_mem]
+  have : algebraMap R S (p.coeff i) * u * m = 0 := by
+    simpa [← mul_assoc] using congr(($(hx (u * m) p (by linear_combination hm))).coeff i)
+  exact (Ideal.IsPrime.mem_or_mem_of_mul_eq_zero ‹_› (by linear_combination this)).resolve_left hmq
 
 Depends on / 依赖: AtPrime, Ideal.Quotient.algebraMap_eq, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk_surjective.forall.mpr, IsLocalization, IsLocalization.map_eq_zero_iff, KrullDimLE, Localization, Localization.AtPrime, Quotient, Ring.KrullDimLE, Ring.KrullDimLE.isField_of_isReduced.toField, aeval_algebraMap_apply, algebraMap_eq, eq_zero_iff_mem, isField_of_isReduced, map_eq_zero_iff, map_mul, mk_surjective, of_isLocalization
 -/

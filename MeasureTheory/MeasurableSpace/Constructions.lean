@@ -98,7 +98,7 @@ refine ⟨fun hf n => hf measurableSet_singleton _, fun h => measurable_to_count
   | top =>
     rw [← WithTop.none_eq_top]; rw [← compl_range_some]; rw [preimage_compl]; rw [← iUnion_singleton_eq_range]; rw [preimage_iUnion]
 exact .compl .iUnion h
-  | coe n => exact
+  | coe n => exact h n
 
 中文:
 定理 E自然数.measurable_iff
@@ -109,7 +109,7 @@ refine ⟨fun hf n => hf measurableSet_singleton _, fun h => measurable_to_count
   | top =>
     rw [← WithTop.none_eq_top]; rw [← compl_range_some]; rw [preimage_compl]; rw [← iUnion_singleton_eq_range]; rw [preimage_iUnion]
 exact .compl .iUnion h
-  | coe n => exact
+  | coe n => exact h n
 
 Depends on / 依赖: WithTop, WithTop.none_eq_top, compl_range_some, iUnion, iUnion_singleton_eq_range, measurableSet_singleton, measurable_to_countable, none_eq_top, preimage_compl, preimage_iUnion
 -/
@@ -1264,7 +1264,15 @@ lemma MeasurableSet.measurableAtom_of_countable
   have : measurableAtom x = ⋂ (y in (measurableAtom x)ᶜ), s y := by
     apply Subset.antisymm
     · intro z hz
-      simp onl
+      simp only [mem_iInter, mem_compl_iff]
+      intro i hi
+      exact mem_of_mem_measurableAtom hz (hs i hi).2.1 (hs i hi).1
+    · apply compl_subset_compl.1
+      intro z hz
+      simp only [compl_iInter, mem_iUnion, mem_compl_iff, exists_prop]
+      exact ⟨z, hz, (hs z hz).2.2⟩
+  rw [this]
+  exact MeasurableSet.biInter (to_countable (measurableAtom x)ᶜ) (fun i hi => (hs i hi).2.1)
 
 中文:
 引理 可测集.measurableAtom_of_countable
@@ -1276,7 +1284,15 @@ lemma MeasurableSet.measurableAtom_of_countable
   have : measurableAtom x = ⋂ (y in (measurableAtom x)ᶜ), s y := by
     apply Subset.antisymm
     · intro z hz
-      simp onl
+      simp only [mem_iInter, mem_compl_iff]
+      intro i hi
+      exact mem_of_mem_measurableAtom hz (hs i hi).2.1 (hs i hi).1
+    · apply compl_subset_compl.1
+      intro z hz
+      simp only [compl_iInter, mem_iUnion, mem_compl_iff, exists_prop]
+      exact ⟨z, hz, (hs z hz).2.2⟩
+  rw [this]
+  exact MeasurableSet.biInter (to_countable (measurableAtom x)ᶜ) (fun i hi => (hs i hi).2.1)
 
 Depends on / 依赖: MeasurableSet, Subset, Subset.antisymm, antisymm, compl_iInter, compl_subset_compl, exists_prop, measurableAtom, mem_compl_iff, mem_iInter, mem_iUnion, mem_of_mem_measurableAtom
 -/
@@ -1940,7 +1956,7 @@ theorem measurable_from_prod_countable_left'
     rintro ⟨y', hy's, hy'⟩
     rwa [h'f y' y x hy']
   rw [this]
-  exac
+  exact .iUnion (fun y => (hf y hs).prod (.measurableAtom_of_countable y))
 
 中文:
 定理 measurable_from_prod_countable_left'
@@ -1953,7 +1969,7 @@ theorem measurable_from_prod_countable_left'
     rintro ⟨y', hy's, hy'⟩
     rwa [h'f y' y x hy']
   rw [this]
-  exac
+  exact .iUnion (fun y => (hf y hs).prod (.measurableAtom_of_countable y))
 
 Depends on / 依赖: iUnion, measurableAtom, measurableAtom_of_countable, mem_iUnion, mem_measurableAtom_self, mem_preimage, mem_prod
 -/
@@ -2121,7 +2137,17 @@ theorem exists_measurable_piecewise
   -- see https://github.com/leanprover-community/mathlib4/issues/2184
   have ht' : forall (i j) (x : α) (hxi : x in t i) (hxj : x in t j), g' i ⟨x, hxi⟩ = g' j ⟨x, hxj⟩ := by
     intro i j x hxi hxj
-    rcases eq_or_ne i j with rfl 
+    rcases eq_or_ne i j with rfl | hij
+    · rfl
+    · exact ht hij ⟨hxi, hxj⟩
+  set f : (⋃ i, t i) -> β := iUnionLift t g' ht' _ Subset.rfl
+  have hfm : Measurable f := measurable_iUnionLift _ _ t_meas
+    (fun i => (hg i).comp measurable_subtype_coe)
+  classical
+    refine ⟨fun x => if hx : x in ⋃ i, t i then f ⟨x, hx⟩ else g default x,
+      hfm.dite ((hg default).comp measurable_subtype_coe) (.iUnion t_meas), fun i x hx => ?_⟩
+    simp only [dif_pos (mem_iUnion.2 ⟨i, hx⟩)]
+    exact iUnionLift_of_mem ⟨x, mem_iUnion.2 ⟨i, hx⟩⟩ hx
 
 中文:
 定理 存在_measurable_piecewise
@@ -2132,7 +2158,17 @@ theorem exists_measurable_piecewise
   -- see https://github.com/leanprover-community/mathlib4/issues/2184
   have ht' : forall (i j) (x : α) (hxi : x in t i) (hxj : x in t j), g' i ⟨x, hxi⟩ = g' j ⟨x, hxj⟩ := by
     intro i j x hxi hxj
-    rcases eq_or_ne i j with rfl 
+    rcases eq_or_ne i j with rfl | hij
+    · rfl
+    · exact ht hij ⟨hxi, hxj⟩
+  set f : (⋃ i, t i) -> β := iUnionLift t g' ht' _ Subset.rfl
+  have hfm : Measurable f := measurable_iUnionLift _ _ t_meas
+    (fun i => (hg i).comp measurable_subtype_coe)
+  classical
+    refine ⟨fun x => if hx : x in ⋃ i, t i then f ⟨x, hx⟩ else g default x,
+      hfm.dite ((hg default).comp measurable_subtype_coe) (.iUnion t_meas), fun i x hx => ?_⟩
+    simp only [dif_pos (mem_iUnion.2 ⟨i, hx⟩)]
+    exact iUnionLift_of_mem ⟨x, mem_iUnion.2 ⟨i, hx⟩⟩ hx
 
 Depends on / 依赖: inhabit
 -/
@@ -2942,7 +2978,13 @@ theorem measurable_piEquivPiSubtypeProd_symm
   · simp only [hj, dif_pos, Equiv.piEquivPiSubtypeProd_symm_apply]
     have : Measurable fun (f : forall i : { x // p x }, X i.1) => f ⟨j, hj⟩ :=
       measurable_pi_apply (X := fun i : {x // p x} => X i.1) ⟨j, hj⟩
-    exact Measurable.
+    exact Measurable.comp this measurable_fst
+  · simp only [hj, Equiv.piEquivPiSubtypeProd_symm_apply, dif_neg, not_false_iff]
+    have : Measurable fun (f : forall i : { x // ¬p x }, X i.1) => f ⟨j, hj⟩ :=
+      measurable_pi_apply (X := fun i : {x // ¬p x} => X i.1) ⟨j, hj⟩
+    exact Measurable.comp this measurable_snd
+
+@[fun_prop]
 
 中文:
 定理 measurable_piEquivPiSubtypeProd_symm
@@ -2953,7 +2995,13 @@ theorem measurable_piEquivPiSubtypeProd_symm
   · simp only [hj, dif_pos, Equiv.piEquivPiSubtypeProd_symm_apply]
     have : Measurable fun (f : forall i : { x // p x }, X i.1) => f ⟨j, hj⟩ :=
       measurable_pi_apply (X := fun i : {x // p x} => X i.1) ⟨j, hj⟩
-    exact Measurable.
+    exact Measurable.comp this measurable_fst
+  · simp only [hj, Equiv.piEquivPiSubtypeProd_symm_apply, dif_neg, not_false_iff]
+    have : Measurable fun (f : forall i : { x // ¬p x }, X i.1) => f ⟨j, hj⟩ :=
+      measurable_pi_apply (X := fun i : {x // ¬p x} => X i.1) ⟨j, hj⟩
+    exact Measurable.comp this measurable_snd
+
+@[fun_prop]
 
 Depends on / 依赖: Equiv.piEquivPiSubtypeProd_symm_apply, Measurable, Measurable.comp, dif_neg, dif_pos, measurable_fst, measurable_pi_apply, measurable_pi_iff, not_false_iff, piEquivPiSubtypeProd_symm_apply
 -/

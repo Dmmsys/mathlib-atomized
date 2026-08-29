@@ -443,7 +443,13 @@ theorem uniq
   · ext X
     cases X
     apply Functor.congr_obj h
- 
+  · rintro ⟨X⟩ ⟨Y⟩ (f | ⟨w, hw⟩)
+    · simpa only using! Functor.congr_hom h f
+    · have hw : W.Q.map w = (wIso w hw).hom := rfl
+      have hw' := Functor.congr_hom h w
+      simp only [Functor.comp_map, hw] at hw'
+      refine Functor.congr_inv_of_congr_hom _ _ _ ?_ ?_ hw'
+      all_goals apply Functor.congr_obj h
 
 中文:
 定理 uniq
@@ -460,7 +466,13 @@ theorem uniq
   · ext X
     cases X
     apply Functor.congr_obj h
- 
+  · rintro ⟨X⟩ ⟨Y⟩ (f | ⟨w, hw⟩)
+    · simpa only using! Functor.congr_hom h f
+    · have hw : W.Q.map w = (wIso w hw).hom := rfl
+      have hw' := Functor.congr_hom h w
+      simp only [Functor.comp_map, hw] at hw'
+      refine Functor.congr_inv_of_congr_hom _ _ _ ?_ ?_ hw'
+      all_goals apply Functor.congr_obj h
 
 Depends on / 依赖: Functor, Functor.comp_map, Functor.congr_hom, Functor.congr_inv_of_congr_hom, Functor.congr_obj, Functor.ext, Paths.ext_functor, Quotient, Quotient.functor, W.Q.map, comp_map, congr_hom, congr_inv_of_congr_hom, congr_obj, ext_functor, functor
 -/
@@ -553,7 +565,18 @@ theorem morphismProperty_eq_top
     have : G.Full := Quotient.full_functor _
     suffices forall (X₁ X₂ : Paths (LocQuiver W)) (f : X₁ ⟶ X₂), P (G.map f) by
       rcases X with ⟨⟨X⟩⟩
- 
+      rcases Y with ⟨⟨Y⟩⟩
+      simpa only [Functor.map_preimage] using! this _ _ (G.preimage f)
+    intro X₁ X₂ p
+    induction p with
+    | nil => simpa only [Functor.map_id] using! hP₁ (𝟙 X₁.obj)
+    | @cons X₂ X₃ p g hp =>
+      let p' : X₁ ⟶ X₂ := p
+      rw [show p'.cons g = p' ≫ Quiver.Hom.toPath g by rfl]; rw [G.map_comp]
+      refine P.comp_mem _ _ hp ?_
+      rcases g with (g | ⟨g, hg⟩)
+      · apply hP₁
+      · apply hP₂
 
 中文:
 定理 morphismProperty_eq_top
@@ -569,7 +592,18 @@ theorem morphismProperty_eq_top
     have : G.Full := Quotient.full_functor _
     suffices forall (X₁ X₂ : Paths (LocQuiver W)) (f : X₁ ⟶ X₂), P (G.map f) by
       rcases X with ⟨⟨X⟩⟩
- 
+      rcases Y with ⟨⟨Y⟩⟩
+      simpa only [Functor.map_preimage] using! this _ _ (G.preimage f)
+    intro X₁ X₂ p
+    induction p with
+    | nil => simpa only [Functor.map_id] using! hP₁ (𝟙 X₁.obj)
+    | @cons X₂ X₃ p g hp =>
+      let p' : X₁ ⟶ X₂ := p
+      rw [show p'.cons g = p' ≫ Quiver.Hom.toPath g by rfl]; rw [G.map_comp]
+      refine P.comp_mem _ _ hp ?_
+      rcases g with (g | ⟨g, hg⟩)
+      · apply hP₁
+      · apply hP₂
 
 Depends on / 依赖: Functor, Functor.map_id, Functor.map_preimage, G.Full, G.map, G.preimage, LocQuiver, Localization, MorphismProperty, MorphismProperty.top_apply, Quotient, Quotient.full_functor, Quotient.functor, W.Localization, full_functor, functor, map_id, map_preimage, preimage, top_apply
 -/
@@ -689,7 +723,13 @@ definition natTransExtension
       intro X Y f
       simpa only [← this] using! MorphismProperty.top_apply f
     refine morphismProperty_eq_top'
-      (MorphismProperty.naturalityProperty (NatTransExtensi
+      (MorphismProperty.naturalityProperty (NatTransExtension.app τ))
+      ?_ (MorphismProperty.naturalityProperty.stableUnderInverse _)
+    intro X Y f
+    dsimp
+    simpa only [NatTransExtension.app_eq] using! τ.naturality f
+
+@[simp]
 
 中文:
 定义 natTransExtension
@@ -700,7 +740,13 @@ definition natTransExtension
       intro X Y f
       simpa only [← this] using! MorphismProperty.top_apply f
     refine morphismProperty_eq_top'
-      (MorphismProperty.naturalityProperty (NatTransExtensi
+      (MorphismProperty.naturalityProperty (NatTransExtension.app τ))
+      ?_ (MorphismProperty.naturalityProperty.stableUnderInverse _)
+    intro X Y f
+    dsimp
+    simpa only [NatTransExtension.app_eq] using! τ.naturality f
+
+@[simp]
 
 Depends on / 依赖: NatTransExtension, NatTransExtension.app
 -/
@@ -829,7 +875,16 @@ definition inverse
         rw [natTransExtension_hcomp]
         ext X
         simp only [NatTrans.comp_app, eqToHom_app, eqToHom_refl, comp_id, id_comp,
-      
+          NatTrans.hcomp_id_app, NatTrans.id_app, Functor.map_id]
+        rfl)
+  map_comp τ₁ τ₂ :=
+    natTrans_hcomp_injective
+      (by
+        ext X
+        simp only [natTransExtension_hcomp, NatTrans.comp_app, eqToHom_app, eqToHom_refl,
+          id_comp, comp_id, NatTrans.hcomp_app, NatTrans.id_app, Functor.map_id,
+          natTransExtension_app, NatTransExtension.app_eq]
+        rfl)
 
 中文:
 定义 inverse
@@ -842,7 +897,16 @@ definition inverse
         rw [natTransExtension_hcomp]
         ext X
         simp only [NatTrans.comp_app, eqToHom_app, eqToHom_refl, comp_id, id_comp,
-      
+          NatTrans.hcomp_id_app, NatTrans.id_app, Functor.map_id]
+        rfl)
+  map_comp τ₁ τ₂ :=
+    natTrans_hcomp_injective
+      (by
+        ext X
+        simp only [natTransExtension_hcomp, NatTrans.comp_app, eqToHom_app, eqToHom_refl,
+          id_comp, comp_id, NatTrans.hcomp_app, NatTrans.id_app, Functor.map_id,
+          natTransExtension_app, NatTransExtension.app_eq]
+        rfl)
 
 Depends on / 依赖: G.obj, G.property, property
 -/
@@ -927,7 +991,8 @@ definition counitIso
         ext
         dsimp
         -- Why does `rw` work but not `simp`?
-        rw [NatTransExtension.app_eq]; rw [InducedCategory.eqToHom_hom]; rw [InducedCa
+        rw [NatTransExtension.app_eq]; rw [InducedCategory.eqToHom_hom]; rw [InducedCategory.eqToHom_hom]
+        simp)
 
 中文:
 定义 counitIso
@@ -942,7 +1007,8 @@ definition counitIso
         ext
         dsimp
         -- Why does `rw` work but not `simp`?
-        rw [NatTransExtension.app_eq]; rw [InducedCategory.eqToHom_hom]; rw [InducedCa
+        rw [NatTransExtension.app_eq]; rw [InducedCategory.eqToHom_hom]; rw [InducedCategory.eqToHom_hom]
+        simp)
 
 Depends on / 依赖: Functor, Functor.ext, eqToIso
 -/
@@ -974,7 +1040,8 @@ definition whiskeringLeftEquivalence
   counitIso := WhiskeringLeftEquivalence.counitIso W D
   functor_unitIso_comp F := by
     ext
-    simp only [WhiskeringLeftEquivalence.unitIso_hom, eqToHom_app,
+    simp only [WhiskeringLeftEquivalence.unitIso_hom, eqToHom_app, eqToHom_refl,
+      WhiskeringLeftEquivalence.counitIso_hom, eqToHom_map, eqToHom_trans]
 
 中文:
 定义 whiskeringLeftEquivalence
@@ -985,7 +1052,8 @@ definition whiskeringLeftEquivalence
   counitIso := WhiskeringLeftEquivalence.counitIso W D
   functor_unitIso_comp F := by
     ext
-    simp only [WhiskeringLeftEquivalence.unitIso_hom, eqToHom_app,
+    simp only [WhiskeringLeftEquivalence.unitIso_hom, eqToHom_app, eqToHom_refl,
+      WhiskeringLeftEquivalence.counitIso_hom, eqToHom_map, eqToHom_trans]
 
 Depends on / 依赖: WhiskeringLeftEquivalence, WhiskeringLeftEquivalence.functor, functor
 -/

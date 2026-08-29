@@ -213,7 +213,14 @@ theorem generateMeasurableRec_induction
   unfold generateMeasurableRec
   rintro (((ht | rfl) | ht) | ⟨f, rfl⟩)
   · exact hs t ht
-  
+  · exact h0
+  · simp_rw [mem_image, mem_iUnion₂] at ht
+    obtain ⟨u, ⟨⟨j, hj, hj'⟩, rfl⟩⟩ := ht
+    exact hc u (IH j hj u hj') ⟨j, hj.trans_le hk, hj'⟩
+  · apply hn
+    intro n
+    obtain ⟨j, hj, hj'⟩ := mem_iUnion₂.1 (f n).2
+    use IH j hj _ hj', j, hj.trans_le hk
 
 中文:
 定理 generateMeasurableRec_induction
@@ -227,7 +234,14 @@ theorem generateMeasurableRec_induction
   unfold generateMeasurableRec
   rintro (((ht | rfl) | ht) | ⟨f, rfl⟩)
   · exact hs t ht
-  
+  · exact h0
+  · simp_rw [mem_image, mem_iUnion₂] at ht
+    obtain ⟨u, ⟨⟨j, hj, hj'⟩, rfl⟩⟩ := ht
+    exact hc u (IH j hj u hj') ⟨j, hj.trans_le hk, hj'⟩
+  · apply hn
+    intro n
+    obtain ⟨j, hj, hj'⟩ := mem_iUnion₂.1 (f n).2
+    use IH j hj _ hj', j, hj.trans_le hk
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.induction, generateMeasurableRec, hj.le.trans, hj.trans_le, le_rfl, mem_image, replace, simp_rw, trans_le
 -/
@@ -267,7 +281,16 @@ theorem generateMeasurableRec_omega_one
   refine generateMeasurableRec_induction ?_ ?_ ?_ ?_ ht
   · intro t ht
     exact ⟨0, omega_pos 1, self_subset_generateMeasurableRec s 0 ht⟩
-  · exact ⟨0, omega_pos 1, empty_mem_generate
+  · exact ⟨0, omega_pos 1, empty_mem_generateMeasurableRec s 0⟩
+  · rintro u - ⟨j, hj, hj'⟩
+    exact ⟨_, (isSuccLimit_omega 1).succ_lt hj,
+      compl_mem_generateMeasurableRec (Order.lt_succ j) hj'⟩
+  · intro f H
+    choose I hI using fun n => (H n).1
+    simp_rw [exists_prop] at hI
+    refine ⟨_, Ordinal.lift_iSup_add_one_lt_of_lt_cof ?_ fun n => (hI n).1,
+      iUnion_mem_generateMeasurableRec fun n => ⟨_, Ordinal.lt_iSup_add_one I n, (hI n).2⟩⟩
+    simp
 
 中文:
 定理 generateMeasurableRec_omega_one
@@ -279,7 +302,16 @@ theorem generateMeasurableRec_omega_one
   refine generateMeasurableRec_induction ?_ ?_ ?_ ?_ ht
   · intro t ht
     exact ⟨0, omega_pos 1, self_subset_generateMeasurableRec s 0 ht⟩
-  · exact ⟨0, omega_pos 1, empty_mem_generate
+  · exact ⟨0, omega_pos 1, empty_mem_generateMeasurableRec s 0⟩
+  · rintro u - ⟨j, hj, hj'⟩
+    exact ⟨_, (isSuccLimit_omega 1).succ_lt hj,
+      compl_mem_generateMeasurableRec (Order.lt_succ j) hj'⟩
+  · intro f H
+    choose I hI using fun n => (H n).1
+    simp_rw [exists_prop] at hI
+    refine ⟨_, Ordinal.lift_iSup_add_one_lt_of_lt_cof ?_ fun n => (hI n).1,
+      iUnion_mem_generateMeasurableRec fun n => ⟨_, Ordinal.lt_iSup_add_one I n, (hI n).2⟩⟩
+    simp
 
 Depends on / 依赖: Order.lt_succ, antisymm, compl_mem_generateMeasurableRec, empty_mem_generateMeasurableRec, exists_prop, generateMeasurableRec_induction, generateMeasurableRec_mono, h.le, isSuccLimit_omega, lt_succ, omega_pos, self_subset_generateMeasurableRec, simp_rw, succ_lt
 -/
@@ -344,7 +376,12 @@ theorem generateMeasurable_eq_rec
   | empty => exact empty_mem_generateMeasurableRec s _
   | compl u _ IH =>
     rw [generateMeasurableRec_omega_one]; rw [mem_iUnion₂] at IH
-    ob
+    obtain ⟨i, hi, hi'⟩ := IH
+    exact generateMeasurableRec_mono _ ((isSuccLimit_omega 1).succ_lt hi).le
+      (compl_mem_generateMeasurableRec (Order.lt_succ i) hi')
+  | iUnion f _ IH =>
+    simp_rw [generateMeasurableRec_omega_one, mem_iUnion₂, exists_prop] at IH
+    exact iUnion_mem_generateMeasurableRec IH
 
 中文:
 定理 generateMeasurable_eq_rec
@@ -357,7 +394,12 @@ theorem generateMeasurable_eq_rec
   | empty => exact empty_mem_generateMeasurableRec s _
   | compl u _ IH =>
     rw [generateMeasurableRec_omega_one]; rw [mem_iUnion₂] at IH
-    ob
+    obtain ⟨i, hi, hi'⟩ := IH
+    exact generateMeasurableRec_mono _ ((isSuccLimit_omega 1).succ_lt hi).le
+      (compl_mem_generateMeasurableRec (Order.lt_succ i) hi')
+  | iUnion f _ IH =>
+    simp_rw [generateMeasurableRec_omega_one, mem_iUnion₂, exists_prop] at IH
+    exact iUnion_mem_generateMeasurableRec IH
 
 Depends on / 依赖: Order.lt_succ, antisymm, compl_mem_generateMeasurableRec, empty_mem_generateMeasurableRec, generateMeasurableRec_mono, generateMeasurableRec_omega_one, generateMeasurableRec_subset, iUnion, isSuccLimit_omega, lt_succ, mem_iU, self_subset_generateMeasurableRec, simp_rw, succ_lt
 -/
@@ -419,7 +461,29 @@ theorem cardinal_generateMeasurableRec_le
   intro i
   apply WellFoundedLT.induction i
   intro i IH hi
-  have A : 𝔠 <= max 
+  have A : 𝔠 <= max #s 2 ^ ℵ₀ := power_le_power_right (le_max_right _ _)
+  have B := aleph0_le_continuum.trans A
+  have C : #(⋃ j < i, generateMeasurableRec s j) <= max #s 2 ^ ℵ₀ := by
+    apply mk_biUnion_le_of_le_lift _ B _
+    · intro j hj
+      exact IH j hj (hj.trans_le hi).le
+    · rw [lift_power, lift_aleph0]
+      rw [← Ordinal.lift_le.{u}]; rw [lift_omega]; rw [Ordinal.lift_one]; rw [← ord_aleph] at hi
+      have H := card_le_of_le_ord hi
+      rw [← Ordinal.lift_card] at H
+apply H.trans aleph_one_le_continuum.trans power_le_power_right _
+      rw [lift_max]; rw [Cardinal.lift_ofNat]
+      exact le_max_right _ _
+  rw [generateMeasurableRec]
+  apply_rules [(mk_union_le _ _).trans, add_le_of_le (aleph_one_le_continuum.trans A),
+    mk_image_le.trans]
+  · exact (self_le_power _ one_le_aleph0).trans (power_le_power_right (le_max_left _ _))
+  · rw [mk_singleton]
+    exact one_lt_aleph0.le.trans B
+  · apply mk_range_le.trans
+    simp only [mk_pi, prod_const, Cardinal.lift_uzero, mk_denumerable, lift_aleph0]
+    have := @power_le_power_right _ _ ℵ₀ C
+    rwa [← power_mul, aleph0_mul_aleph0] at this
 
 中文:
 定理 cardinal_generateMeasurableRec_le
@@ -433,7 +497,29 @@ theorem cardinal_generateMeasurableRec_le
   intro i
   apply WellFoundedLT.induction i
   intro i IH hi
-  have A : 𝔠 <= max 
+  have A : 𝔠 <= max #s 2 ^ ℵ₀ := power_le_power_right (le_max_right _ _)
+  have B := aleph0_le_continuum.trans A
+  have C : #(⋃ j < i, generateMeasurableRec s j) <= max #s 2 ^ ℵ₀ := by
+    apply mk_biUnion_le_of_le_lift _ B _
+    · intro j hj
+      exact IH j hj (hj.trans_le hi).le
+    · rw [lift_power, lift_aleph0]
+      rw [← Ordinal.lift_le.{u}]; rw [lift_omega]; rw [Ordinal.lift_one]; rw [← ord_aleph] at hi
+      have H := card_le_of_le_ord hi
+      rw [← Ordinal.lift_card] at H
+apply H.trans aleph_one_le_continuum.trans power_le_power_right _
+      rw [lift_max]; rw [Cardinal.lift_ofNat]
+      exact le_max_right _ _
+  rw [generateMeasurableRec]
+  apply_rules [(mk_union_le _ _).trans, add_le_of_le (aleph_one_le_continuum.trans A),
+    mk_image_le.trans]
+  · exact (self_le_power _ one_le_aleph0).trans (power_le_power_right (le_max_left _ _))
+  · rw [mk_singleton]
+    exact one_lt_aleph0.le.trans B
+  · apply mk_range_le.trans
+    simp only [mk_pi, prod_const, Cardinal.lift_uzero, mk_denumerable, lift_aleph0]
+    have := @power_le_power_right _ _ ℵ₀ C
+    rwa [← power_mul, aleph0_mul_aleph0] at this
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.induction, aleph0_le_continuum, aleph0_le_continuum.trans, generateMeasurableRec, generateMeasurableRec_of_omega_one_le, hi.le, le_max_right, le_or_gt, le_rfl, mk_biUnion_le_of_le_lift, power_le_power_right
 -/

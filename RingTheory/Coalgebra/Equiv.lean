@@ -563,7 +563,10 @@ definition symm
     map_comp_comul := by
       change (TensorProduct.congr (e : A ≃ₗ[R] B) (e : A ≃ₗ[R] B)).symm.toLinearMap ∘ₗ comul
         = comul ∘ₗ (e : A ≃ₗ[R] B).symm
-      rw [LinearEquiv.toLinearM
+      rw [LinearEquiv.toLinearMap_symm_comp_eq]
+      simp only [TensorProduct.congr, toCoalgHom_eq_coe, CoalgHom.toLinearMap_eq_coe,
+        LinearEquiv.toLinearMap_ofLinearMap, ← LinearMap.comp_assoc, CoalgHomClass.map_comp_comul]
+      rw [← toLinearEquiv_toLinearMap]; rw [LinearEquiv.comp_symm_cancel_right] }
 
 中文:
 定义 symm
@@ -573,7 +576,10 @@ definition symm
     map_comp_comul := by
       change (TensorProduct.congr (e : A ≃ₗ[R] B) (e : A ≃ₗ[R] B)).symm.toLinearMap ∘ₗ comul
         = comul ∘ₗ (e : A ≃ₗ[R] B).symm
-      rw [LinearEquiv.toLinearM
+      rw [LinearEquiv.toLinearMap_symm_comp_eq]
+      simp only [TensorProduct.congr, toCoalgHom_eq_coe, CoalgHom.toLinearMap_eq_coe,
+        LinearEquiv.toLinearMap_ofLinearMap, ← LinearMap.comp_assoc, CoalgHomClass.map_comp_comul]
+      rw [← toLinearEquiv_toLinearMap]; rw [LinearEquiv.comp_symm_cancel_right] }
 
 Depends on / 依赖: CoalgHom, CoalgHom.toLinearMap_eq_coe, CoalgHomClass, CoalgHomClass.map_comp_comul, LinearEquiv, LinearEquiv.comp_toLinearMap_symm_eq, LinearEquiv.toLinearMap_ofLinearMap, LinearEquiv.toLinearMap_symm_comp_eq, LinearMap, LinearMap.comp_assoc, TensorProduct, TensorProduct.congr, comp_assoc, comp_toLinearMap_symm_eq, counit_comp, e.counit_comp.symm, map_comp_comul, symm.toLinearMap, toCoalgHom_eq_coe, toLinearEquiv_toLinearMap
 -/
@@ -1109,7 +1115,22 @@ definition toCoalgebra
     congr 1
     ext x
     simpa only [toCoalgHom_eq_coe, CoalgHom.toLinearMap_eq_coe, LinearMap.coe_comp,
-      LinearEquiv.coe_coe, Function.comp_apply, ← (ℛ R _).eq, map_sum, Tensor
+      LinearEquiv.coe_coe, Function.comp_apply, ← (ℛ R _).eq, map_sum, TensorProduct.map_tmul,
+      LinearMap.coe_coe, CoalgHom.coe_coe, LinearMap.rTensor_tmul, coe_symm_toLinearEquiv,
+      symm_apply_apply, LinearMap.lTensor_comp_map, TensorProduct.sum_tmul,
+      TensorProduct.assoc_tmul, TensorProduct.tmul_sum] using (sum_map_tmul_tmul_eq f f f x).symm
+  rTensor_counit_comp_comul := by
+    simp_rw [(f.toLinearEquiv.eq_comp_toLinearMap_symm _ _).2 f.counit_comp,
+      ← (f.toLinearEquiv.comp_toLinearMap_symm_eq _ _).2 f.map_comp_comul, ← LinearMap.comp_assoc,
+      f.toLinearEquiv.comp_toLinearMap_symm_eq]
+    ext x
+    simp [← (ℛ R _).eq]
+  lTensor_counit_comp_comul := by
+    simp_rw [(f.toLinearEquiv.eq_comp_toLinearMap_symm _ _).2 f.counit_comp,
+      ← (f.toLinearEquiv.comp_toLinearMap_symm_eq _ _).2 f.map_comp_comul, ← LinearMap.comp_assoc,
+      f.toLinearEquiv.comp_toLinearMap_symm_eq]
+    ext x
+    simp [← (ℛ R _).eq]
 
 中文:
 定义 toCoalgebra
@@ -1120,7 +1141,22 @@ definition toCoalgebra
     congr 1
     ext x
     simpa only [toCoalgHom_eq_coe, CoalgHom.toLinearMap_eq_coe, LinearMap.coe_comp,
-      LinearEquiv.coe_coe, Function.comp_apply, ← (ℛ R _).eq, map_sum, Tensor
+      LinearEquiv.coe_coe, Function.comp_apply, ← (ℛ R _).eq, map_sum, TensorProduct.map_tmul,
+      LinearMap.coe_coe, CoalgHom.coe_coe, LinearMap.rTensor_tmul, coe_symm_toLinearEquiv,
+      symm_apply_apply, LinearMap.lTensor_comp_map, TensorProduct.sum_tmul,
+      TensorProduct.assoc_tmul, TensorProduct.tmul_sum] using (sum_map_tmul_tmul_eq f f f x).symm
+  rTensor_counit_comp_comul := by
+    simp_rw [(f.toLinearEquiv.eq_comp_toLinearMap_symm _ _).2 f.counit_comp,
+      ← (f.toLinearEquiv.comp_toLinearMap_symm_eq _ _).2 f.map_comp_comul, ← LinearMap.comp_assoc,
+      f.toLinearEquiv.comp_toLinearMap_symm_eq]
+    ext x
+    simp [← (ℛ R _).eq]
+  lTensor_counit_comp_comul := by
+    simp_rw [(f.toLinearEquiv.eq_comp_toLinearMap_symm _ _).2 f.counit_comp,
+      ← (f.toLinearEquiv.comp_toLinearMap_symm_eq _ _).2 f.map_comp_comul, ← LinearMap.comp_assoc,
+      f.toLinearEquiv.comp_toLinearMap_symm_eq]
+    ext x
+    simp [← (ℛ R _).eq]
 -/
 @[reducible] def toCoalgebra (f : A ≃ₗc[R] B) :
     Coalgebra R B where

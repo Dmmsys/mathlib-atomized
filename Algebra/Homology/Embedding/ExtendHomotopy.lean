@@ -172,7 +172,34 @@ definition extend
   comm i' := by
     by_cases hi' : exists i, e.f i = i'
     · obtain ⟨i, rfl⟩ := hi'
-      rw [extendMap_f _ _ rfl]; rw [extendMap_f _ _ rfl]; rw [h.comm i]; rw [Preadditive.add_comp]; rw [Preadditive.add_comp]; rw [Preadditive.comp_add]; rw [Preadditive.comp_add]; rw [add_left_in
+      rw [extendMap_f _ _ rfl]; rw [extendMap_f _ _ rfl]; rw [h.comm i]; rw [Preadditive.add_comp]; rw [Preadditive.add_comp]; rw [Preadditive.comp_add]; rw [Preadditive.comp_add]; rw [add_left_inj]
+      congr 1
+      · by_cases hi : c.Rel i (c.next i)
+        · have hi' : c'.Rel (e.f i) (e.f (c.next i)) := by rwa [e.rel_iff]
+          simp [dNext_eq _ hi, dNext_eq _ hi', extend.hom_eq _ _ rfl rfl,
+            extend_d_eq _ _ rfl rfl]
+        · rw [dNext_eq_zero _ _ hi]
+          by_cases hi' : c'.Rel (e.f i) (c'.next (e.f i))
+          · simp [dNext_eq _ hi', K.extend_d_from_eq_zero _ _ _ _ rfl hi]
+          · simp [dNext_eq_zero _ _ hi']
+      · by_cases hi : c.Rel (c.prev i) i
+        · have hi' : c'.Rel (e.f (c.prev i)) (e.f i) := by rwa [e.rel_iff]
+          simp [prevD_eq _ hi, prevD_eq _ hi', extend.hom_eq _ _ rfl rfl,
+            extend_d_eq _ _ rfl rfl]
+        · rw [prevD_eq_zero _ _ hi]
+          by_cases hi' : c'.Rel (c'.prev (e.f i)) (e.f i)
+          · simp [prevD_eq _ hi', L.extend_d_to_eq_zero _ _ _ _ rfl hi]
+          · simp [prevD_eq_zero _ _ hi']
+    · exact (isZero_extend_X _ _ _ (by tauto)).eq_of_src _ _
+  zero i' j' hij' := by
+    by_cases hi' : exists i, e.f i = i'
+    · obtain ⟨i, rfl⟩ := hi'
+      by_cases hj' : exists j, e.f j = j'
+      · obtain ⟨j, rfl⟩ := hj'
+        rw [extend.hom_eq _ _ rfl rfl]; rw [h.zero _ _ (by rwa [← e.rel_iff]),
+          zero_comp, comp_zero]
+      · exact extend.hom_eq_zero₂ _ _ _ _ (by tauto)
+    · exact extend.hom_eq_zero₁ _ _ _ _ (by tauto)
 
 中文:
 定义 extend
@@ -181,7 +208,34 @@ definition extend
   comm i' := by
     by_cases hi' : exists i, e.f i = i'
     · obtain ⟨i, rfl⟩ := hi'
-      rw [extendMap_f _ _ rfl]; rw [extendMap_f _ _ rfl]; rw [h.comm i]; rw [Preadditive.add_comp]; rw [Preadditive.add_comp]; rw [Preadditive.comp_add]; rw [Preadditive.comp_add]; rw [add_left_in
+      rw [extendMap_f _ _ rfl]; rw [extendMap_f _ _ rfl]; rw [h.comm i]; rw [Preadditive.add_comp]; rw [Preadditive.add_comp]; rw [Preadditive.comp_add]; rw [Preadditive.comp_add]; rw [add_left_inj]
+      congr 1
+      · by_cases hi : c.Rel i (c.next i)
+        · have hi' : c'.Rel (e.f i) (e.f (c.next i)) := by rwa [e.rel_iff]
+          simp [dNext_eq _ hi, dNext_eq _ hi', extend.hom_eq _ _ rfl rfl,
+            extend_d_eq _ _ rfl rfl]
+        · rw [dNext_eq_zero _ _ hi]
+          by_cases hi' : c'.Rel (e.f i) (c'.next (e.f i))
+          · simp [dNext_eq _ hi', K.extend_d_from_eq_zero _ _ _ _ rfl hi]
+          · simp [dNext_eq_zero _ _ hi']
+      · by_cases hi : c.Rel (c.prev i) i
+        · have hi' : c'.Rel (e.f (c.prev i)) (e.f i) := by rwa [e.rel_iff]
+          simp [prevD_eq _ hi, prevD_eq _ hi', extend.hom_eq _ _ rfl rfl,
+            extend_d_eq _ _ rfl rfl]
+        · rw [prevD_eq_zero _ _ hi]
+          by_cases hi' : c'.Rel (c'.prev (e.f i)) (e.f i)
+          · simp [prevD_eq _ hi', L.extend_d_to_eq_zero _ _ _ _ rfl hi]
+          · simp [prevD_eq_zero _ _ hi']
+    · exact (isZero_extend_X _ _ _ (by tauto)).eq_of_src _ _
+  zero i' j' hij' := by
+    by_cases hi' : exists i, e.f i = i'
+    · obtain ⟨i, rfl⟩ := hi'
+      by_cases hj' : exists j, e.f j = j'
+      · obtain ⟨j, rfl⟩ := hj'
+        rw [extend.hom_eq _ _ rfl rfl]; rw [h.zero _ _ (by rwa [← e.rel_iff]),
+          zero_comp, comp_zero]
+      · exact extend.hom_eq_zero₂ _ _ _ _ (by tauto)
+    · exact extend.hom_eq_zero₁ _ _ _ _ (by tauto)
 
 Depends on / 依赖: extend, extend.hom, h.hom
 -/
@@ -257,7 +311,25 @@ definition ofExtend
     simp only [extendMap_f _ _ rfl] at this
     simp only [← cancel_mono (L.extendXIso e rfl).inv,
       ← cancel_epi (K.extendXIso e rfl).hom, this, Preadditive.add_comp,
-      Prea
+      Preadditive.comp_add, add_left_inj]
+    congr 1
+    · by_cases hi : c.Rel i (c.next i)
+      · have hi' : c'.Rel (e.f i) (e.f (c.next i)) := by rwa [e.rel_iff]
+        simp [dNext_eq _ hi, dNext_eq _ hi', K.extend_d_eq _ rfl rfl]
+      · rw [dNext_eq_zero _ _ hi]
+        by_cases hi' : c'.Rel (e.f i) (c'.next (e.f i))
+        · simp [dNext_eq _ hi', extend_d_from_eq_zero _ _ _ _ _ rfl hi]
+        · simp [dNext_eq_zero _ _ hi']
+    · by_cases hi : c.Rel (c.prev i) i
+      · have hi' : c'.Rel (e.f (c.prev i)) (e.f i) := by rwa [e.rel_iff]
+        simp [prevD_eq _ hi, prevD_eq _ hi', L.extend_d_eq _ rfl rfl]
+      · rw [prevD_eq_zero _ _ hi]
+        by_cases hi' : c'.Rel (c'.prev (e.f i)) (e.f i)
+        · simp [prevD_eq _ hi', extend_d_to_eq_zero _ _ _ _ _ rfl hi]
+        · simp [prevD_eq_zero _ _ hi']
+  zero i j hij := by rw [h.zero _ _ (by rwa [e.rel_iff]), zero_comp, comp_zero]
+
+@[simp]
 
 中文:
 定义 ofExtend
@@ -268,7 +340,25 @@ definition ofExtend
     simp only [extendMap_f _ _ rfl] at this
     simp only [← cancel_mono (L.extendXIso e rfl).inv,
       ← cancel_epi (K.extendXIso e rfl).hom, this, Preadditive.add_comp,
-      Prea
+      Preadditive.comp_add, add_left_inj]
+    congr 1
+    · by_cases hi : c.Rel i (c.next i)
+      · have hi' : c'.Rel (e.f i) (e.f (c.next i)) := by rwa [e.rel_iff]
+        simp [dNext_eq _ hi, dNext_eq _ hi', K.extend_d_eq _ rfl rfl]
+      · rw [dNext_eq_zero _ _ hi]
+        by_cases hi' : c'.Rel (e.f i) (c'.next (e.f i))
+        · simp [dNext_eq _ hi', extend_d_from_eq_zero _ _ _ _ _ rfl hi]
+        · simp [dNext_eq_zero _ _ hi']
+    · by_cases hi : c.Rel (c.prev i) i
+      · have hi' : c'.Rel (e.f (c.prev i)) (e.f i) := by rwa [e.rel_iff]
+        simp [prevD_eq _ hi, prevD_eq _ hi', L.extend_d_eq _ rfl rfl]
+      · rw [prevD_eq_zero _ _ hi]
+        by_cases hi' : c'.Rel (c'.prev (e.f i)) (e.f i)
+        · simp [prevD_eq _ hi', extend_d_to_eq_zero _ _ _ _ _ rfl hi]
+        · simp [prevD_eq_zero _ _ hi']
+  zero i j hij := by rw [h.zero _ _ (by rwa [e.rel_iff]), zero_comp, comp_zero]
+
+@[simp]
 
 Depends on / 依赖: K.extendXIso, L.extendXIso, extendXIso, h.hom
 -/
@@ -314,7 +404,9 @@ lemma extend_ofExtend
     · obtain ⟨j, rfl⟩ := hj'
       simp [extend_hom_eq _ e rfl rfl, ofExtend_hom]
     · exact (isZero_extend_X _ _ _ (by tauto)).eq_of_tgt _ _
-  · exact (isZero_extend_X _ _ _ (by 
+  · exact (isZero_extend_X _ _ _ (by tauto)).eq_of_src _ _
+
+@[simp]
 
 中文:
 引理 extend_ofExtend
@@ -327,7 +419,9 @@ lemma extend_ofExtend
     · obtain ⟨j, rfl⟩ := hj'
       simp [extend_hom_eq _ e rfl rfl, ofExtend_hom]
     · exact (isZero_extend_X _ _ _ (by tauto)).eq_of_tgt _ _
-  · exact (isZero_extend_X _ _ _ (by 
+  · exact (isZero_extend_X _ _ _ (by tauto)).eq_of_src _ _
+
+@[simp]
 
 Depends on / 依赖: eq_of_src, eq_of_tgt, extend_hom_eq, isZero_extend_X, ofExtend_hom
 -/
@@ -461,7 +555,7 @@ instance :
     obtain ⟨φ : K.extend e ⟶ L.extend e, rfl⟩ :=
       (HomotopyCategory.quotient C c').map_surjective φ
     obtain ⟨φ, rfl⟩ := (e.extendFunctor C).map_surjective φ
-
+    exact ⟨(HomotopyCategory.quotient _ _).map φ, rfl⟩
 
 中文:
 实例 :
@@ -472,7 +566,7 @@ instance :
     obtain ⟨φ : K.extend e ⟶ L.extend e, rfl⟩ :=
       (HomotopyCategory.quotient C c').map_surjective φ
     obtain ⟨φ, rfl⟩ := (e.extendFunctor C).map_surjective φ
-
+    exact ⟨(HomotopyCategory.quotient _ _).map φ, rfl⟩
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.quotient, HomotopyCategory.quotient_obj_surjective, K.extend, L.extend, e.extendFunctor, extend, extendFunctor, map_surjective, quotient, quotient_obj_surjective
 -/
@@ -496,7 +590,8 @@ instance :
     obtain ⟨L, rfl⟩ := HomotopyCategory.quotient_obj_surjective L
     obtain ⟨φ₁, rfl⟩ := (HomotopyCategory.quotient C c).map_surjective φ₁
     obtain ⟨φ₂, rfl⟩ := (HomotopyCategory.quotient C c).map_surjective φ₂
-    exact Homotop
+    exact HomotopyCategory.eq_of_homotopy _ _
+      (.ofExtend (HomotopyCategory.homotopyOfEq _ _ hφ))
 
 中文:
 实例 :
@@ -506,7 +601,8 @@ instance :
     obtain ⟨L, rfl⟩ := HomotopyCategory.quotient_obj_surjective L
     obtain ⟨φ₁, rfl⟩ := (HomotopyCategory.quotient C c).map_surjective φ₁
     obtain ⟨φ₂, rfl⟩ := (HomotopyCategory.quotient C c).map_surjective φ₂
-    exact Homotop
+    exact HomotopyCategory.eq_of_homotopy _ _
+      (.ofExtend (HomotopyCategory.homotopyOfEq _ _ hφ))
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.eq_of_homotopy, HomotopyCategory.homotopyOfEq, HomotopyCategory.quotient, HomotopyCategory.quotient_obj_surjective, eq_of_homotopy, homotopyOfEq, map_surjective, ofExtend, quotient, quotient_obj_surjective
 -/
@@ -531,7 +627,12 @@ lemma HomologicalComplex.homotopyEquivalences_extendMap_iff
   #adaptation_note /-- Prior to nightly-2026-05-07, `dsimp%` was used directly inline as the last
   argument to the original `simp`; it now reports `made no progress` so we apply
   `NatIso.isIso_map_iff` via a `change` + `rw` after the rest of the simp set has done its work. -/
-  simp only [← Hom
+  simp only [← HomotopyCategory.inverseImage_quotient_isomorphisms,
+    MorphismProperty.inverseImage_iff, MorphismProperty.isomorphisms.iff,
+    ← isIso_iff_of_reflects_iso _ (e.extendHomotopyFunctor C)]
+  change _ ↔ IsIso ((HomotopyCategory.quotient C c ⋙ e.extendHomotopyFunctor C).map f)
+  rw [NatIso.isIso_map_iff (e.extendHomotopyFunctorFactors C) f]
+  rfl
 
 中文:
 引理 同调复形.homotopyEquivalences_extendMap_iff
@@ -539,7 +640,12 @@ lemma HomologicalComplex.homotopyEquivalences_extendMap_iff
   #adaptation_note /-- Prior to nightly-2026-05-07, `dsimp%` was used directly inline as the last
   argument to the original `simp`; it now reports `made no progress` so we apply
   `NatIso.isIso_map_iff` via a `change` + `rw` after the rest of the simp set has done its work. -/
-  simp only [← Hom
+  simp only [← HomotopyCategory.inverseImage_quotient_isomorphisms,
+    MorphismProperty.inverseImage_iff, MorphismProperty.isomorphisms.iff,
+    ← isIso_iff_of_reflects_iso _ (e.extendHomotopyFunctor C)]
+  change _ ↔ IsIso ((HomotopyCategory.quotient C c ⋙ e.extendHomotopyFunctor C).map f)
+  rw [NatIso.isIso_map_iff (e.extendHomotopyFunctorFactors C) f]
+  rfl
 
 Depends on / 依赖: HomotopyCa, HomotopyCategory, HomotopyCategory.inverseImage_quotient_isomorphisms, MorphismProperty, MorphismProperty.inverseImage_iff, MorphismProperty.isomorphisms.iff, NatIso, NatIso.isIso_map_iff, adaptation_note, argument, directly, e.extendHomotopyFunctor, extendHomotopyFunctor, infer_instance, inline, inverseImage_iff, inverseImage_quotient_isomorphisms, isIso_iff_of_reflects_iso, isIso_map_iff, isomorphisms
 -/

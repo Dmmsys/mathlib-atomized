@@ -47,7 +47,19 @@ lemma isSplitEpi_to_singleFunctor_obj_of_projective
     ((K.isZero_of_isStrictlyLE i (i + 1) (by simp)).eq_of_tgt _ _)
   let α := e.inv ≫ K.homologyπ i ≫ homologyMap π i ≫ (singleObjHomologySelfIso _ _ _).hom
   have : π.f i = α ≫ (singleObjXSelf (ComplexShape.up Int) i P).inv := by
-    rw [← cancel_epi e
+    rw [← cancel_epi e.hom]
+    dsimp [α, e]
+    rw [assoc]; rw [assoc]; rw [assoc]; rw [iCyclesIso_hom_inv_id_assoc]; rw [homologyπ_naturality_assoc]
+    dsimp [singleFunctor, singleFunctors]
+    rw [homologyπ_singleObjHomologySelfIso_hom_assoc]; rw [← singleObjCyclesSelfIso_inv_iCycles]; rw [Iso.hom_inv_id_assoc]; rw [← cyclesMap_i]
+  exact ⟨⟨{
+    section_ := mkHomFromSingle (Projective.factorThru (𝟙 P) α) (by
+      rintro _ rfl
+      apply (K.isZero_of_isStrictlyLE i (i + 1) (by simp)).eq_of_tgt)
+    id := by
+      apply HomologicalComplex.from_single_hom_ext
+      rw [comp_f]; rw [mkHomFromSingle_f]; rw [assoc]; rw [id_f]; rw [this]; rw [Projective.factorThru_comp_assoc]; rw [id_comp]; rw [Iso.hom_inv_id]
+      rfl }⟩⟩
 
 中文:
 引理 isSplitEpi_to_singleFunctor_obj_of_projective
@@ -56,7 +68,19 @@ lemma isSplitEpi_to_singleFunctor_obj_of_projective
     ((K.isZero_of_isStrictlyLE i (i + 1) (by simp)).eq_of_tgt _ _)
   let α := e.inv ≫ K.homologyπ i ≫ homologyMap π i ≫ (singleObjHomologySelfIso _ _ _).hom
   have : π.f i = α ≫ (singleObjXSelf (ComplexShape.up Int) i P).inv := by
-    rw [← cancel_epi e
+    rw [← cancel_epi e.hom]
+    dsimp [α, e]
+    rw [assoc]; rw [assoc]; rw [assoc]; rw [iCyclesIso_hom_inv_id_assoc]; rw [homologyπ_naturality_assoc]
+    dsimp [singleFunctor, singleFunctors]
+    rw [homologyπ_singleObjHomologySelfIso_hom_assoc]; rw [← singleObjCyclesSelfIso_inv_iCycles]; rw [Iso.hom_inv_id_assoc]; rw [← cyclesMap_i]
+  exact ⟨⟨{
+    section_ := mkHomFromSingle (Projective.factorThru (𝟙 P) α) (by
+      rintro _ rfl
+      apply (K.isZero_of_isStrictlyLE i (i + 1) (by simp)).eq_of_tgt)
+    id := by
+      apply HomologicalComplex.from_single_hom_ext
+      rw [comp_f]; rw [mkHomFromSingle_f]; rw [assoc]; rw [id_f]; rw [this]; rw [Projective.factorThru_comp_assoc]; rw [id_comp]; rw [Iso.hom_inv_id]
+      rfl }⟩⟩
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, K.homology, K.iCyclesIso, K.isZero_of_isStrictlyLE, cancel_epi, e.hom, e.inv, eq_of_tgt, homologyMap, iCyclesIso, iCyclesIso_hom_inv_id_assoc, isZero_of_isStrictlyLE, singleFunctor, singleFunctors, singleObjHomologySelfIso, singleObjXSelf
 -/
@@ -100,7 +124,11 @@ lemma from_singleFunctor_obj_eq_zero_of_projective
     rw [isIso_Q_map_iff_quasiIso] at h
     exact CochainComplex.isSplitEpi_to_singleFunctor_obj_of_projective π
   have h₁ : inv (Q.map π) = Q.map (section_ π) := by
-    rw [← cancel_mono (Q.map π)]; rw [
+    rw [← cancel_mono (Q.map π)]; rw [IsIso.inv_hom_id]; rw [← Q.map_comp]; rw [IsSplitEpi.id]; rw [Q.map_id]
+  have h₂ : section_ π ≫ g = 0 := by
+    apply HomologicalComplex.from_single_hom_ext
+    apply (L.isZero_of_isStrictlyLE n i hn).eq_of_tgt
+  rw [h₁]; rw [← Q.map_comp]; rw [h₂]; rw [Q.map_zero]
 
 中文:
 引理 from_singleFunctor_obj_eq_zero_of_projective
@@ -111,7 +139,11 @@ lemma from_singleFunctor_obj_eq_zero_of_projective
     rw [isIso_Q_map_iff_quasiIso] at h
     exact CochainComplex.isSplitEpi_to_singleFunctor_obj_of_projective π
   have h₁ : inv (Q.map π) = Q.map (section_ π) := by
-    rw [← cancel_mono (Q.map π)]; rw [
+    rw [← cancel_mono (Q.map π)]; rw [IsIso.inv_hom_id]; rw [← Q.map_comp]; rw [IsSplitEpi.id]; rw [Q.map_id]
+  have h₂ : section_ π ≫ g = 0 := by
+    apply HomologicalComplex.from_single_hom_ext
+    apply (L.isZero_of_isStrictlyLE n i hn).eq_of_tgt
+  rw [h₁]; rw [← Q.map_comp]; rw [h₂]; rw [Q.map_zero]
 
 Depends on / 依赖: CochainComplex, CochainComplex.isSplitEpi_to_singleFunctor_obj_of_projective, HomologicalComplex, HomologicalComplex.from_single_hom_ext, IsIso.inv_hom_id, IsSplitEpi, IsSplitEpi.id, L.isZero_of_isStrictlyLE, Q.map, Q.map_comp, Q.map_id, cancel_mono, eq_of_tgt, from_single_hom_ext, inv_hom_id, isIso_Q_map_iff_quasiIso, isSplitEpi_to_singleFunctor_obj_of_projective, isZero_of_isStrictlyLE, map_comp, map_id
 -/
@@ -156,7 +188,7 @@ lemma eq_zero_of_projective
   simp only [← cancel_mono (((singleFunctors C).shiftIso (n + 1) (-(n + 1)) 0
     (by lia)).hom.app _), zero_hom, Limits.zero_comp]
   apply from_singleFunctor_obj_eq_zero_of_projective
-    (L := (CochainComplex.singleFunctor C (-(n
+    (L := (CochainComplex.singleFunctor C (-(n + 1))).obj Y) (n := -(n + 1)) _ (by lia)
 
 中文:
 引理 eq_zero_of_projective
@@ -167,7 +199,7 @@ lemma eq_zero_of_projective
   simp only [← cancel_mono (((singleFunctors C).shiftIso (n + 1) (-(n + 1)) 0
     (by lia)).hom.app _), zero_hom, Limits.zero_comp]
   apply from_singleFunctor_obj_eq_zero_of_projective
-    (L := (CochainComplex.singleFunctor C (-(n
+    (L := (CochainComplex.singleFunctor C (-(n + 1))).obj Y) (n := -(n + 1)) _ (by lia)
 
 Depends on / 依赖: CochainComplex, CochainComplex.singleFunctor, HasDerivedCategory, HasDerivedCategory.standard, Limits, Limits.zero_comp, cancel_mono, from_singleFunctor_obj_eq_zero_of_projective, hom.app, homEquiv, homEquiv.injective, injective, shiftIso, singleFunctor, singleFunctors, standard, zero_comp, zero_hom
 -/
@@ -222,7 +254,13 @@ lemma hasExt_of_enoughProjectives
     rw [small_congr Ext.homEquiv₀]
     infer_instance
   | succ n hn =>
-    let S := ShortComplex.mk _ _ (kernel.condition (
+    let S := ShortComplex.mk _ _ (kernel.condition (Projective.π X))
+    have hS : S.ShortExact :=
+      { exact := ShortComplex.exact_of_f_is_kernel _ (kernelIsKernel S.g) }
+    have : Function.Surjective (Ext.precomp hS.extClass Y (add_comm 1 n)) := fun x₃ =>
+      Ext.contravariant_sequence_exact₃ hS Y x₃
+        (Ext.eq_zero_of_projective _) (by lia)
+    exact small_of_surjective.{w} this
 
 中文:
 引理 hasExt_of_enoughProjectives
@@ -238,7 +276,13 @@ lemma hasExt_of_enoughProjectives
     rw [small_congr Ext.homEquiv₀]
     infer_instance
   | succ n hn =>
-    let S := ShortComplex.mk _ _ (kernel.condition (
+    let S := ShortComplex.mk _ _ (kernel.condition (Projective.π X))
+    have hS : S.ShortExact :=
+      { exact := ShortComplex.exact_of_f_is_kernel _ (kernelIsKernel S.g) }
+    have : Function.Surjective (Ext.precomp hS.extClass Y (add_comm 1 n)) := fun x₃ =>
+      Ext.contravariant_sequence_exact₃ hS Y x₃
+        (Ext.eq_zero_of_projective _) (by lia)
+    exact small_of_surjective.{w} this
 
 Depends on / 依赖: Ext.contravariant_sequence_exa, Ext.homEquiv, Ext.precomp, Function, Function.Surjective, HasDerivedCategory, HasDerivedCategory.standard, Projective, S.ShortExact, ShortComplex, ShortComplex.exact_of_f_is_kernel, ShortComplex.mk, ShortExact, Surjective, add_comm, condition, contravariant_sequence_exa, exact_of_f_is_kernel, extClass, generalizing
 -/

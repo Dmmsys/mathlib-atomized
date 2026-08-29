@@ -104,7 +104,17 @@ theorem integral_comp_commSL
   proof: by
   apply φ_int.induction (P := fun φ => ∫ x, L (φ x) ∂μ = L (∫ x, φ x ∂μ))
   · intro e s s_meas _
-    rw [integral_indicator_const e s_meas]; rw [← @smul_one_smul E Real 𝕜 _ _ _ _ _ (μ.real s) e]; rw [map_smulₛₗ]; rw [hσ]; rw [map_one]; rw [smul_assoc]; rw [one_smul]; rw [← integral_indicator_cons
+    rw [integral_indicator_const e s_meas]; rw [← @smul_one_smul E Real 𝕜 _ _ _ _ _ (μ.real s) e]; rw [map_smulₛₗ]; rw [hσ]; rw [map_one]; rw [smul_assoc]; rw [one_smul]; rw [← integral_indicator_const (L e) s_meas]
+    congr 1 with a
+    rw [← Function.comp_def L]; rw [Set.indicator_comp_of_zero L.map_zero]; rw [Function.comp_apply]
+  · intro f g _ f_int g_int hf hg
+    simp [L.map_add, integral_add (μ := μ) f_int g_int,
+      integral_add (μ := μ) (L.integrable_comp f_int) (L.integrable_comp g_int), hf, hg]
+  · exact isClosed_eq L.continuous_integral_comp_L1 (L.continuous.comp continuous_integral)
+  · intro f g hfg _ hf
+    convert! hf using 1 <;> clear hf
+    · exact integral_congr_ae (hfg.fun_comp L).symm
+    · rw [integral_congr_ae hfg.symm]
 
 中文:
 定理 integral_comp_commSL
@@ -112,7 +122,17 @@ theorem integral_comp_commSL
   证明: by
   apply φ_int.induction (P := fun φ => ∫ x, L (φ x) ∂μ = L (∫ x, φ x ∂μ))
   · intro e s s_meas _
-    rw [integral_indicator_const e s_meas]; rw [← @smul_one_smul E Real 𝕜 _ _ _ _ _ (μ.real s) e]; rw [map_smulₛₗ]; rw [hσ]; rw [map_one]; rw [smul_assoc]; rw [one_smul]; rw [← integral_indicator_cons
+    rw [integral_indicator_const e s_meas]; rw [← @smul_one_smul E Real 𝕜 _ _ _ _ _ (μ.real s) e]; rw [map_smulₛₗ]; rw [hσ]; rw [map_one]; rw [smul_assoc]; rw [one_smul]; rw [← integral_indicator_const (L e) s_meas]
+    congr 1 with a
+    rw [← Function.comp_def L]; rw [Set.indicator_comp_of_zero L.map_zero]; rw [Function.comp_apply]
+  · intro f g _ f_int g_int hf hg
+    simp [L.map_add, integral_add (μ := μ) f_int g_int,
+      integral_add (μ := μ) (L.integrable_comp f_int) (L.integrable_comp g_int), hf, hg]
+  · exact isClosed_eq L.continuous_integral_comp_L1 (L.continuous.comp continuous_integral)
+  · intro f g hfg _ hf
+    convert! hf using 1 <;> clear hf
+    · exact integral_congr_ae (hfg.fun_comp L).symm
+    · rw [integral_congr_ae hfg.symm]
 
 Depends on / 依赖: Function, Function.comp_apply, Function.comp_def, Int.le.intro, Int.ofNat_le, L.map_add, L.map_zero, Nat.le_add_left, Set.indicator_comp_of_zero, _int.induction, add_comm, comp_apply, comp_def, f_int, g_int, indicator_comp_of_zero, integral_add, integral_indicator_const, le_add_left, le_of_neg_le_neg
 -/
@@ -162,7 +182,8 @@ theorem integral_apply
   · rcases subsingleton_or_nontrivial H with hH | hH
     · simp [Subsingleton.eq_zero v]
     · have : ¬(CompleteSpace (H ->L[𝕜] E)) := by
-        rwa [SeparatingDual.completeSpace_continuou
+        rwa [SeparatingDual.completeSpace_continuousLinearMap_iff]
+      simp [integral, hE, this]
 
 中文:
 定理 integral_apply
@@ -173,7 +194,8 @@ theorem integral_apply
   · rcases subsingleton_or_nontrivial H with hH | hH
     · simp [Subsingleton.eq_zero v]
     · have : ¬(CompleteSpace (H ->L[𝕜] E)) := by
-        rwa [SeparatingDual.completeSpace_continuou
+        rwa [SeparatingDual.completeSpace_continuousLinearMap_iff]
+      simp [integral, hE, this]
 
 Depends on / 依赖: CompleteSpace, ContinuousLinearMap, ContinuousLinearMap.apply, SeparatingDual, SeparatingDual.completeSpace_continuousLinearMap_iff, Subsingleton, Subsingleton.eq_zero, completeSpace_continuousLinearMap_iff, eq_zero, integral, integral_comp_comm, subsingleton_or_nontrivial
 -/
@@ -198,7 +220,10 @@ theorem _root_.ContinuousMultilinearMap.integral_apply
   · exact ((ContinuousMultilinearMap.apply 𝕜 M E m).integral_comp_comm φ_int).symm
   · by_cases! hm : forall i, m i != 0
     · have : ¬ CompleteSpace (ContinuousMultilinearMap 𝕜 M E) := by
-        rwa [SeparatingDual.completeSpace_continuousMultilinearMap_iff _ _ h
+        rwa [SeparatingDual.completeSpace_continuousMultilinearMap_iff _ _ hm]
+      simp [integral, hE, this]
+    · rcases hm with ⟨i, hi⟩
+      simp [ContinuousMultilinearMap.map_coord_zero _ i hi]
 
 中文:
 定理 _root_.连续多重线性映射.integral_apply
@@ -208,7 +233,10 @@ theorem _root_.ContinuousMultilinearMap.integral_apply
   · exact ((ContinuousMultilinearMap.apply 𝕜 M E m).integral_comp_comm φ_int).symm
   · by_cases! hm : forall i, m i != 0
     · have : ¬ CompleteSpace (ContinuousMultilinearMap 𝕜 M E) := by
-        rwa [SeparatingDual.completeSpace_continuousMultilinearMap_iff _ _ h
+        rwa [SeparatingDual.completeSpace_continuousMultilinearMap_iff _ _ hm]
+      simp [integral, hE, this]
+    · rcases hm with ⟨i, hi⟩
+      simp [ContinuousMultilinearMap.map_coord_zero _ i hi]
 
 Depends on / 依赖: CompleteSpace, ContinuousMultilinearMap, ContinuousMultilinearMap.apply, ContinuousMultilinearMap.map_coord_zero, SeparatingDual, SeparatingDual.completeSpace_continuousMultilinearMap_iff, completeSpace_continuousMultilinearMap_iff, integral, integral_comp_comm, map_coord_zero
 -/
@@ -817,7 +845,43 @@ theorem integral_withDensity_eq_integral_smul
   · rw [integral_undef hg, integral_undef]
     rwa [← integrable_withDensity_iff_integrable_smul f_meas]
   refine Integrable.induction
-    (P := fun g => ∫ x, g x ∂μ.withDe
+    (P := fun g => ∫ x, g x ∂μ.withDensity (fun x => f x) = ∫ x, f x • g x ∂μ) ?_ ?_ ?_ ?_ hg
+  · intro c s s_meas hs
+    rw [integral_indicator s_meas]
+    simp_rw [← Set.indicator_smul_apply, integral_indicator s_meas]
+    simp only [s_meas, integral_const, Measure.restrict_apply', Set.univ_inter, withDensity_apply,
+      measureReal_def]
+    rw [lintegral_coe_eq_integral]; rw [ENNReal.toReal_ofReal]; rw [← integral_smul_const]
+    · rfl
+    · exact integral_nonneg fun x => NNReal.coe_nonneg _
+    · refine ⟨f_meas.coe_nnreal_real.aemeasurable.aestronglyMeasurable, ?_⟩
+      simpa [withDensity_apply _ s_meas, hasFiniteIntegral_iff_enorm] using hs
+  · intro u u' _ u_int u'_int h h'
+    change
+      (∫ x : X, u x + u' x ∂μ.withDensity fun x : X => ↑(f x)) = ∫ x : X, f x • (u x + u' x) ∂μ
+    simp_rw [smul_add]
+    rw [integral_add u_int u'_int]; rw [h]; rw [h']; rw [integral_add]
+    · exact (integrable_withDensity_iff_integrable_smul f_meas).1 u_int
+    · exact (integrable_withDensity_iff_integrable_smul f_meas).1 u'_int
+  · have C1 :
+      Continuous fun u : Lp E 1 (μ.withDensity fun x => f x) =>
+        ∫ x, u x ∂μ.withDensity fun x => f x :=
+      continuous_integral
+    have C2 : Continuous fun u : Lp E 1 (μ.withDensity fun x => f x) => ∫ x, f x • u x ∂μ := by
+      have : Continuous ((fun u : Lp E 1 μ => ∫ x, u x ∂μ) ∘ withDensitySMulLI (E := E) μ f_meas) :=
+        continuous_integral.comp (withDensitySMulLI (E := E) μ f_meas).continuous
+      convert! this with u
+      simp only [Function.comp_apply, withDensitySMulLI_apply]
+      exact integral_congr_ae (memL1_smul_of_L1_withDensity f_meas u).coeFn_toLp.symm
+    exact isClosed_eq C1 C2
+  · intro u v huv _ hu
+    rw [← integral_congr_ae huv]; rw [hu]
+    apply integral_congr_ae
+    filter_upwards [(ae_withDensity_iff f_meas.coe_nnreal_ennreal).1 huv] with x hx
+    rcases eq_or_ne (f x) 0 with (h'x | h'x)
+    · simp only [h'x, zero_smul]
+    · rw [hx _]
+      simpa only [Ne, ENNReal.coe_eq_zero] using h'x
 
 中文:
 定理 integral_withDensity_eq_integral_smul
@@ -828,7 +892,43 @@ theorem integral_withDensity_eq_integral_smul
   · rw [integral_undef hg, integral_undef]
     rwa [← integrable_withDensity_iff_integrable_smul f_meas]
   refine Integrable.induction
-    (P := fun g => ∫ x, g x ∂μ.withDe
+    (P := fun g => ∫ x, g x ∂μ.withDensity (fun x => f x) = ∫ x, f x • g x ∂μ) ?_ ?_ ?_ ?_ hg
+  · intro c s s_meas hs
+    rw [integral_indicator s_meas]
+    simp_rw [← Set.indicator_smul_apply, integral_indicator s_meas]
+    simp only [s_meas, integral_const, Measure.restrict_apply', Set.univ_inter, withDensity_apply,
+      measureReal_def]
+    rw [lintegral_coe_eq_integral]; rw [ENNReal.toReal_ofReal]; rw [← integral_smul_const]
+    · rfl
+    · exact integral_nonneg fun x => NNReal.coe_nonneg _
+    · refine ⟨f_meas.coe_nnreal_real.aemeasurable.aestronglyMeasurable, ?_⟩
+      simpa [withDensity_apply _ s_meas, hasFiniteIntegral_iff_enorm] using hs
+  · intro u u' _ u_int u'_int h h'
+    change
+      (∫ x : X, u x + u' x ∂μ.withDensity fun x : X => ↑(f x)) = ∫ x : X, f x • (u x + u' x) ∂μ
+    simp_rw [smul_add]
+    rw [integral_add u_int u'_int]; rw [h]; rw [h']; rw [integral_add]
+    · exact (integrable_withDensity_iff_integrable_smul f_meas).1 u_int
+    · exact (integrable_withDensity_iff_integrable_smul f_meas).1 u'_int
+  · have C1 :
+      Continuous fun u : Lp E 1 (μ.withDensity fun x => f x) =>
+        ∫ x, u x ∂μ.withDensity fun x => f x :=
+      continuous_integral
+    have C2 : Continuous fun u : Lp E 1 (μ.withDensity fun x => f x) => ∫ x, f x • u x ∂μ := by
+      have : Continuous ((fun u : Lp E 1 μ => ∫ x, u x ∂μ) ∘ withDensitySMulLI (E := E) μ f_meas) :=
+        continuous_integral.comp (withDensitySMulLI (E := E) μ f_meas).continuous
+      convert! this with u
+      simp only [Function.comp_apply, withDensitySMulLI_apply]
+      exact integral_congr_ae (memL1_smul_of_L1_withDensity f_meas u).coeFn_toLp.symm
+    exact isClosed_eq C1 C2
+  · intro u v huv _ hu
+    rw [← integral_congr_ae huv]; rw [hu]
+    apply integral_congr_ae
+    filter_upwards [(ae_withDensity_iff f_meas.coe_nnreal_ennreal).1 huv] with x hx
+    rcases eq_or_ne (f x) 0 with (h'x | h'x)
+    · simp only [h'x, zero_smul]
+    · rw [hx _]
+      simpa only [Ne, ENNReal.coe_eq_zero] using h'x
 
 Depends on / 依赖: CompleteSpace, Integrable, Integrable.induction, Measure, Set.indicator_smul_apply, f_meas, indicator_smul_apply, integrable_withDensity_iff_integrable_smul, integral, integral_const, integral_indicator, integral_undef, s_meas, simp_rw, withDensity
 -/
@@ -891,7 +991,11 @@ theorem integral_withDensity_eq_integral_smul₀
       apply withDensity_congr_ae
       filter_upwards [hf.ae_eq_mk] with x hx
       rw [hx]
-    _ = ∫ x, f' x • g x ∂μ := integral_withDensity_eq_integral_smul hf.meas
+    _ = ∫ x, f' x • g x ∂μ := integral_withDensity_eq_integral_smul hf.measurable_mk _
+    _ = ∫ x, f x • g x ∂μ := by
+      apply integral_congr_ae
+      filter_upwards [hf.ae_eq_mk] with x hx
+      rw [hx]
 
 中文:
 定理 integral_withDensity_eq_integral_smul₀
@@ -904,7 +1008,11 @@ theorem integral_withDensity_eq_integral_smul₀
       apply withDensity_congr_ae
       filter_upwards [hf.ae_eq_mk] with x hx
       rw [hx]
-    _ = ∫ x, f' x • g x ∂μ := integral_withDensity_eq_integral_smul hf.meas
+    _ = ∫ x, f' x • g x ∂μ := integral_withDensity_eq_integral_smul hf.measurable_mk _
+    _ = ∫ x, f x • g x ∂μ := by
+      apply integral_congr_ae
+      filter_upwards [hf.ae_eq_mk] with x hx
+      rw [hx]
 
 Depends on / 依赖: ae_eq_mk, filter_upwards, hf.ae_eq_mk, hf.measurable_mk, hf.mk, integral_congr_ae, integral_withDensity_eq_integral_smul, measurable_mk, withDensity, withDensity_congr_ae
 -/

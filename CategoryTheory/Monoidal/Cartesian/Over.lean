@@ -39,7 +39,7 @@ abbreviation cartesianMonoidalCategory
     ⟨asEmptyCone (Over.mk (𝟙 X)), IsTerminal.ofUniqueHom (fun Y => Over.homMk Y.hom)
       fun Y m => Over.OverMorphism.ext (by simpa using m.w)⟩
     fun Y Z => ⟨pullbackConeEquivBinaryFan.functor.obj (pullback.cone Y.hom Z.hom),
-    (pullback.isLimit _ _).pullbackConeEquivBi
+    (pullback.isLimit _ _).pullbackConeEquivBinaryFanFunctor⟩
 
 中文:
 缩写 cartesianMonoidalCategory
@@ -48,7 +48,7 @@ abbreviation cartesianMonoidalCategory
     ⟨asEmptyCone (Over.mk (𝟙 X)), IsTerminal.ofUniqueHom (fun Y => Over.homMk Y.hom)
       fun Y m => Over.OverMorphism.ext (by simpa using m.w)⟩
     fun Y Z => ⟨pullbackConeEquivBinaryFan.functor.obj (pullback.cone Y.hom Z.hom),
-    (pullback.isLimit _ _).pullbackConeEquivBi
+    (pullback.isLimit _ _).pullbackConeEquivBinaryFanFunctor⟩
 
 Depends on / 依赖: IsTerminal, IsTerminal.ofUniqueHom, Over.OverMorphism.ext, Over.homMk, Over.mk, OverMorphism, Y.hom, Z.hom, asEmptyCone, functor, isLimit, ofChosenFiniteProducts, ofUniqueHom, pullback, pullback.cone, pullback.isLimit, pullbackConeEquivBinaryFan, pullbackConeEquivBinaryFan.functor.obj, pullbackConeEquivBinaryFanFunctor
 -/

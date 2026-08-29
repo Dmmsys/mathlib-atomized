@@ -1015,7 +1015,7 @@ theorem injOn_of_card_image_eq
     refine Multiset.eq_of_le_of_card_le (Multiset.dedup_le _) ?_
     simp only [H, Multiset.card_map, le_rfl]
   rw [Multiset.dedup_eq_self] at this
-  exact inj_on_of_nodup
+  exact inj_on_of_nodup_map this
 
 中文:
 定理 injOn_of_card_image_eq
@@ -1028,7 +1028,7 @@ theorem injOn_of_card_image_eq
     refine Multiset.eq_of_le_of_card_le (Multiset.dedup_le _) ?_
     simp only [H, Multiset.card_map, le_rfl]
   rw [Multiset.dedup_eq_self] at this
-  exact inj_on_of_nodup
+  exact inj_on_of_nodup_map this
 
 Depends on / 依赖: Multiset, Multiset.card_map, Multiset.dedup_eq_self, Multiset.dedup_le, Multiset.eq_of_le_of_card_le, card_def, card_map, dedup_eq_self, dedup_le, eq_of_le_of_card_le, inj_on_of_nodup_map, le_rfl, toFinset
 -/
@@ -1417,7 +1417,16 @@ theorem card_eq_of_bijective
     suffices _ : a in s ↔ exists (i : _) (hi : i in range n), f i (mem_range.1 hi) = a by
       simpa only [mem_image, mem_attach, true_and, Subtype.exists]
     constructor
-    · intro ha; obtain ⟨i, 
+    · intro ha; obtain ⟨i, hi, rfl⟩ := hf a ha; use i, mem_range.2 hi
+    · rintro ⟨i, hi, rfl⟩; apply hf'
+  calc
+    #s = #((range n).attach.image fun i => f i.1 (mem_range.1 i.2)) := by rw [this]
+    _ = #(range n).attach := ?_
+    _ = #(range n) := card_attach
+    _ = n := card_range n
+  apply card_image_of_injective
+  intro ⟨i, hi⟩ ⟨j, hj⟩ eq
+exact Subtype.ext f_inj i j (mem_range.1 hi) (mem_range.1 hj) eq
 
 中文:
 定理 card_eq_of_bijective
@@ -1429,7 +1438,16 @@ theorem card_eq_of_bijective
     suffices _ : a in s ↔ exists (i : _) (hi : i in range n), f i (mem_range.1 hi) = a by
       simpa only [mem_image, mem_attach, true_and, Subtype.exists]
     constructor
-    · intro ha; obtain ⟨i, 
+    · intro ha; obtain ⟨i, hi, rfl⟩ := hf a ha; use i, mem_range.2 hi
+    · rintro ⟨i, hi, rfl⟩; apply hf'
+  calc
+    #s = #((range n).attach.image fun i => f i.1 (mem_range.1 i.2)) := by rw [this]
+    _ = #(range n).attach := ?_
+    _ = #(range n) := card_attach
+    _ = n := card_range n
+  apply card_image_of_injective
+  intro ⟨i, hi⟩ ⟨j, hj⟩ eq
+exact Subtype.ext f_inj i j (mem_range.1 hi) (mem_range.1 hj) eq
 
 Depends on / 依赖: Subtype, Subtype.exists, attach, attach.image, card_attach, classical, mem_attach, mem_image, mem_range, true_and
 -/
@@ -1473,7 +1491,8 @@ lemma card_bij
   · congr 1
     ext b
     constructor <;> intro h
-    · obtain ⟨_, _, r
+    · obtain ⟨_, _, rfl⟩ := mem_image.1 h; apply hi
+    · obtain ⟨a, ha, rfl⟩ := i_surj b h; exact mem_image.2 ⟨⟨a, ha⟩, by simp⟩
 
 中文:
 引理 card_bij
@@ -1490,7 +1509,8 @@ lemma card_bij
   · congr 1
     ext b
     constructor <;> intro h
-    · obtain ⟨_, _, r
+    · obtain ⟨_, _, rfl⟩ := mem_image.1 h; apply hi
+    · obtain ⟨a, ha, rfl⟩ := i_surj b h; exact mem_image.2 ⟨⟨a, ha⟩, by simp⟩
 
 Depends on / 依赖: Eq.symm, attach, card_attach, card_attach.symm, card_image_of_injective, classical, i_inj, i_surj, mem_image, s.attach, s.attach.image
 -/
@@ -1683,7 +1703,11 @@ lemma card_le_card_of_injective
     · aesop (add safe unfold Set.MapsTo)
     · intro a₁ ha₁ a₂ ha₂ haa
       rw [mem_coe] at ha₁ ha₂
-      
+      simp only [f', ha₁, ha₂, ← Subtype.ext_iff] at haa
+      exact Subtype.ext_iff.mp (hf haa)
+
+grind_pattern card_le_card_of_injective => f.Injective, #s
+grind_pattern card_le_card_of_injective => f.Injective, #t
 
 中文:
 引理 card_le_card_of_injective
@@ -1698,7 +1722,11 @@ lemma card_le_card_of_injective
     · aesop (add safe unfold Set.MapsTo)
     · intro a₁ ha₁ a₂ ha₂ haa
       rw [mem_coe] at ha₁ ha₂
-      
+      simp only [f', ha₁, ha₂, ← Subtype.ext_iff] at haa
+      exact Subtype.ext_iff.mp (hf haa)
+
+grind_pattern card_le_card_of_injective => f.Injective, #s
+grind_pattern card_le_card_of_injective => f.Injective, #t
 
 Depends on / 依赖: MapsTo, Set.MapsTo, Subtype, Subtype.ext_iff, Subtype.ext_iff.mp, card_le_card_of_injOn, classical, eq_empty_or_nonempty, ext_iff, mem_coe, s.eq_empty_or_nonempty
 -/
@@ -1876,7 +1904,8 @@ lemma surj_on_of_inj_on_of_card_le
   have hinj' : Set.InjOn f' s.attach := fun x hx y hy hxy => Subtype.ext (hinj _ _ x.2 y.2 hxy)
   have hmapsto' : Set.MapsTo f' s.attach t := fun x hx => hf _ _
   intro b hb
-  obtain ⟨a, ha, rfl⟩ := surjOn_of_injOn_of_card_le _ hmapsto' hinj' (by rwa [card_at
+  obtain ⟨a, ha, rfl⟩ := surjOn_of_injOn_of_card_le _ hmapsto' hinj' (by rwa [card_attach]) hb
+  exact ⟨a, a.2, rfl⟩
 
 中文:
 引理 surj_on_of_inj_on_of_card_le
@@ -1886,7 +1915,8 @@ lemma surj_on_of_inj_on_of_card_le
   have hinj' : Set.InjOn f' s.attach := fun x hx y hy hxy => Subtype.ext (hinj _ _ x.2 y.2 hxy)
   have hmapsto' : Set.MapsTo f' s.attach t := fun x hx => hf _ _
   intro b hb
-  obtain ⟨a, ha, rfl⟩ := surjOn_of_injOn_of_card_le _ hmapsto' hinj' (by rwa [card_at
+  obtain ⟨a, ha, rfl⟩ := surjOn_of_injOn_of_card_le _ hmapsto' hinj' (by rwa [card_attach]) hb
+  exact ⟨a, a.2, rfl⟩
 
 Depends on / 依赖: MapsTo, Set.InjOn, Set.MapsTo, Subtype, Subtype.ext, attach, card_attach, hmapsto, s.attach, surjOn_of_injOn_of_card_le
 -/
@@ -2033,7 +2063,8 @@ grind_pattern card_union_add_card_inter => #(s union t), s inter t
 grind_pattern card_union_add_card_inter => s union t, #(s inter t)
 grind_pattern card_union_add_card_inter => #(s union t), #s
 grind_pattern card_union_add_card_inter => #(s union t), #t
-gr
+grind_pattern card_union_add_card_inter => #(s inter t), #s
+grind_pattern card_union_add_card_inter => #(s inter t), #t
 
 中文:
 定理 card_union_add_card_inter
@@ -2044,7 +2075,8 @@ grind_pattern card_union_add_card_inter => #(s union t), s inter t
 grind_pattern card_union_add_card_inter => s union t, #(s inter t)
 grind_pattern card_union_add_card_inter => #(s union t), #s
 grind_pattern card_union_add_card_inter => #(s union t), #t
-gr
+grind_pattern card_union_add_card_inter => #(s inter t), #s
+grind_pattern card_union_add_card_inter => #(s inter t), #t
 
 Depends on / 依赖: Finset, Finset.induction_on, induction_on
 -/
@@ -3179,7 +3211,8 @@ theorem two_lt_card_iff
     constructor
     · rintro ⟨a, b, c, t, hsub, hab, hac, hbc, rfl⟩
       exact ⟨a, b, c, by simp_all [insert_subset_iff]⟩
-    · rintro ⟨a, b
+    · rintro ⟨a, b, c, ha, hb, hc, hab, hac, hbc⟩
+      exact ⟨a, b, c, {a, b, c}, by simp_all [insert_subset_iff]⟩
 
 中文:
 定理 two_lt_card_iff
@@ -3191,7 +3224,8 @@ theorem two_lt_card_iff
     constructor
     · rintro ⟨a, b, c, t, hsub, hab, hac, hbc, rfl⟩
       exact ⟨a, b, c, by simp_all [insert_subset_iff]⟩
-    · rintro ⟨a, b
+    · rintro ⟨a, b, c, ha, hb, hc, hab, hac, hbc⟩
+      exact ⟨a, b, c, {a, b, c}, by simp_all [insert_subset_iff]⟩
 
 Depends on / 依赖: Finset, card_eq_three, classical, exists_and_left, exists_comm, insert_subset_iff, le_card_iff_exists_subset_card, lt_iff_add_one_le, reduceAdd, simp_rw
 -/
@@ -3237,7 +3271,9 @@ theorem three_lt_card_iff
       ← exists_and_left, exists_comm (α := Finset α)]
     constructor
     · rintro ⟨a, b, c, d, t, hsub, hab, hac, had, hbc, hbd, hcd, rfl⟩
-      exact ⟨a, b, c, d, by simp_all [insert_subset_iff]
+      exact ⟨a, b, c, d, by simp_all [insert_subset_iff]⟩
+    · rintro ⟨a, b, c, d, ha, hb, hc, hd, hab, hac, had, hbc, hbd, hcd⟩
+      exact ⟨a, b, c, d, {a, b, c, d}, by simp_all [insert_subset_iff]⟩
 
 中文:
 定理 three_lt_card_iff
@@ -3248,7 +3284,9 @@ theorem three_lt_card_iff
       ← exists_and_left, exists_comm (α := Finset α)]
     constructor
     · rintro ⟨a, b, c, d, t, hsub, hab, hac, had, hbc, hbd, hcd, rfl⟩
-      exact ⟨a, b, c, d, by simp_all [insert_subset_iff]
+      exact ⟨a, b, c, d, by simp_all [insert_subset_iff]⟩
+    · rintro ⟨a, b, c, d, ha, hb, hc, hd, hab, hac, had, hbc, hbd, hcd⟩
+      exact ⟨a, b, c, d, {a, b, c, d}, by simp_all [insert_subset_iff]⟩
 
 Depends on / 依赖: Finset, card_eq_four, classical, exists_and_left, exists_comm, insert_subset_iff, le_card_iff_exists_subset_card, lt_iff_add_one_le, reduceAdd, simp_rw
 -/
@@ -3612,7 +3650,13 @@ theorem image_iterate_stabilises_lt_card
 have hg : Antitone g := antitone_nat_of_succ_le fun i => by
     simp_rw [g, Function.iterate_succ, ← image_image]
     grw [hs.finsetImage_subset]
-  have eq_iff (i j : Nat) : #(g i) - 1 = #(g j) -
+  have eq_iff (i j : Nat) : #(g i) - 1 = #(g j) - 1 ↔ g i = g j := by
+    wlog hij : j <= i generalizing i j
+    · grind
+    exact ⟨fun h => eq_of_subset_of_card_le (hg hij) (by grind), by grind⟩
+  have hG : Antitone (fun i => #(g i) - 1) := fun i j h => by dsimp; gcongr #?_ - 1; exact hg h
+  rcases Nat.stabilises_of_antitone hG (by grind [=_ image_image, iterate_succ']) with ⟨n, hn, hn'⟩
+  exact ⟨n, by grind⟩
 
 中文:
 定理 image_iterate_stabilises_lt_card
@@ -3623,7 +3667,13 @@ have hg : Antitone g := antitone_nat_of_succ_le fun i => by
 have hg : Antitone g := antitone_nat_of_succ_le fun i => by
     simp_rw [g, Function.iterate_succ, ← image_image]
     grw [hs.finsetImage_subset]
-  have eq_iff (i j : Nat) : #(g i) - 1 = #(g j) -
+  have eq_iff (i j : Nat) : #(g i) - 1 = #(g j) - 1 ↔ g i = g j := by
+    wlog hij : j <= i generalizing i j
+    · grind
+    exact ⟨fun h => eq_of_subset_of_card_le (hg hij) (by grind), by grind⟩
+  have hG : Antitone (fun i => #(g i) - 1) := fun i j h => by dsimp; gcongr #?_ - 1; exact hg h
+  rcases Nat.stabilises_of_antitone hG (by grind [=_ image_image, iterate_succ']) with ⟨n, hn, hn'⟩
+  exact ⟨n, by grind⟩
 
 Depends on / 依赖: Antitone, Finset, Function, Function.iterate_succ, antitone_nat_of_succ_le, card_pos, eq_iff, eq_of_subset_of_card_le, finsetImage_subset, generalizing, hs.finsetImage_subset, image_image, iterate_succ, s.image, simp_rw
 -/

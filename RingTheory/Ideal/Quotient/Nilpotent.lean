@@ -55,7 +55,18 @@ theorem Ideal.IsNilpotent.induction_on
     rw [← Ideal.zero_eq_bot]; rw [zero_pow two_ne_zero]
   rcases n with - | n
   · rw [pow_zero, Ideal.one_eq_top] at hI
-    have := subsingl
+    have := subsingleton_of_bot_eq_top hI.symm
+    exact (hI' (Subsingleton.elim _ _)).elim
+  rcases n with - | n
+  · rw [pow_one] at hI
+    exact (hI' hI).elim
+  apply h₂ (I ^ 2) _ (Ideal.pow_le_self two_ne_zero)
+  · apply H n.succ _ (I ^ 2)
+    · rw [← pow_mul, eq_bot_iff, ← hI, Nat.succ_eq_add_one]
+      apply Ideal.pow_le_pow_right (by lia)
+    · exact n.succ.lt_succ_self
+  · apply h₁
+    rw [← Ideal.map_pow]; rw [Ideal.map_quotient_self]
 
 中文:
 定理 理想.是幂零.induction_on
@@ -69,7 +80,18 @@ theorem Ideal.IsNilpotent.induction_on
     rw [← Ideal.zero_eq_bot]; rw [zero_pow two_ne_zero]
   rcases n with - | n
   · rw [pow_zero, Ideal.one_eq_top] at hI
-    have := subsingl
+    have := subsingleton_of_bot_eq_top hI.symm
+    exact (hI' (Subsingleton.elim _ _)).elim
+  rcases n with - | n
+  · rw [pow_one] at hI
+    exact (hI' hI).elim
+  apply h₂ (I ^ 2) _ (Ideal.pow_le_self two_ne_zero)
+  · apply H n.succ _ (I ^ 2)
+    · rw [← pow_mul, eq_bot_iff, ← hI, Nat.succ_eq_add_one]
+      apply Ideal.pow_le_pow_right (by lia)
+    · exact n.succ.lt_succ_self
+  · apply h₁
+    rw [← Ideal.map_pow]; rw [Ideal.map_quotient_self]
 
 Depends on / 依赖: Ideal.one_eq_top, Ideal.pow_le_self, Ideal.zero_eq_bot, Nat.strong_induction_on, Subsingleton, Subsingleton.elim, generalizing, hI.symm, n.succ, one_eq_top, pow_le_self, pow_mul, pow_one, pow_zero, strong_induction_on, subsingleton_of_bot_eq_top, two_ne_zero, zero_eq_bot, zero_pow
 -/
@@ -117,7 +139,19 @@ refine ⟨?_, fun h => h.map Ideal.Quotient.mk I⟩
     exact
       h₃.map
         ((DoubleQuot.quotQuotEquivQuotSup I J).trans
-              (Ideal.quotEquivOfEq (sup
+              (Ideal.quotEquivOfEq (sup_eq_right.mpr e))).symm.toRingHom
+  · introv e H
+    obtain ⟨y, hy⟩ := Ideal.Quotient.mk_surjective (↑H.unit⁻¹ : S ⧸ I)
+    have : Ideal.Quotient.mk I (x * y) = Ideal.Quotient.mk I 1 := by
+      rw [map_one]; rw [map_mul]; rw [hy]; rw [IsUnit.mul_val_inv]
+    rw [Ideal.Quotient.eq] at this
+    have : (x * y - 1) ^ 2 = 0 := by
+      rw [← Ideal.mem_bot]; rw [← e]
+      exact Ideal.pow_mem_pow this _
+    have : x * (y * (2 - x * y)) = 1 := by
+      rw [eq_comm]; rw [← sub_eq_zero]; rw [← this]
+      ring
+    exact .of_mul_eq_one _ this
 
 中文:
 定理 是幂零.isUnit_quotient_mk_iff
@@ -133,7 +167,19 @@ refine ⟨?_, fun h => h.map Ideal.Quotient.mk I⟩
     exact
       h₃.map
         ((DoubleQuot.quotQuotEquivQuotSup I J).trans
-              (Ideal.quotEquivOfEq (sup
+              (Ideal.quotEquivOfEq (sup_eq_right.mpr e))).symm.toRingHom
+  · introv e H
+    obtain ⟨y, hy⟩ := Ideal.Quotient.mk_surjective (↑H.unit⁻¹ : S ⧸ I)
+    have : Ideal.Quotient.mk I (x * y) = Ideal.Quotient.mk I 1 := by
+      rw [map_one]; rw [map_mul]; rw [hy]; rw [IsUnit.mul_val_inv]
+    rw [Ideal.Quotient.eq] at this
+    have : (x * y - 1) ^ 2 = 0 := by
+      rw [← Ideal.mem_bot]; rw [← e]
+      exact Ideal.pow_mem_pow this _
+    have : x * (y * (2 - x * y)) = 1 := by
+      rw [eq_comm]; rw [← sub_eq_zero]; rw [← this]
+      ring
+    exact .of_mul_eq_one _ this
 
 Depends on / 依赖: DoubleQuot, DoubleQuot.quotQuotEquivQuotSup, H.unit, Ideal.IsNilpotent.induction_on, Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, Ideal.quotEquivOfEq, IsNilpotent, IsUnit, IsUnit.mul_val_inv, Quotient, h.map, induction_on, introv, map_mul, map_one, mk_surjective, mul_val_inv, quotEquivOfEq, quotQuotEquivQuotSup
 -/

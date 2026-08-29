@@ -92,7 +92,8 @@ theorem IsLocalMaxOn.closure
   refine ContinuousWithinAt.closure_le ?_ ?_ continuousWithinAt_const hU
   · rwa [mem_closure_iff_nhdsWithin_neBot, nhdsWithin_inter_of_mem, ←
       mem_closure_iff_nhdsWithin_neBot]
- 
+    exact nhdsWithin_le_nhds (Uo.mem_nhds hxU)
+  · exact (hc _ hxs).mono (inter_subset_right.trans subset_closure)
 
 中文:
 定理 IsLocalMaxOn.closure
@@ -104,7 +105,8 @@ theorem IsLocalMaxOn.closure
   refine ContinuousWithinAt.closure_le ?_ ?_ continuousWithinAt_const hU
   · rwa [mem_closure_iff_nhdsWithin_neBot, nhdsWithin_inter_of_mem, ←
       mem_closure_iff_nhdsWithin_neBot]
- 
+    exact nhdsWithin_le_nhds (Uo.mem_nhds hxU)
+  · exact (hc _ hxs).mono (inter_subset_right.trans subset_closure)
 -/
 protected theorem IsLocalMaxOn.closure (h : IsLocalMaxOn f s a) (hc : ContinuousOn f (closure s)) :
     IsLocalMaxOn f (closure s) a := by

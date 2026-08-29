@@ -39,7 +39,7 @@ definition baseSupp'
   refine ⟨⟨b.baseSupp i, ?_⟩, ?_⟩
   · simp only [LieSubmodule.eq_bot_iff, ne_eq, not_forall]
     exact ⟨b.e i, (mem_genWeightSpace _ _ _).mpr fun x => ⟨1, by simp⟩, (b.sl2 i).e_ne_zero⟩
-  · simpa [Weight.IsNonZero, Weight.IsZero] us
+  · simpa [Weight.IsNonZero, Weight.IsZero] using b.linearIndependent_baseSupp.ne_zero i
 
 中文:
 定义 baseSupp'
@@ -50,7 +50,7 @@ definition baseSupp'
   refine ⟨⟨b.baseSupp i, ?_⟩, ?_⟩
   · simp only [LieSubmodule.eq_bot_iff, ne_eq, not_forall]
     exact ⟨b.e i, (mem_genWeightSpace _ _ _).mpr fun x => ⟨1, by simp⟩, (b.sl2 i).e_ne_zero⟩
-  · simpa [Weight.IsNonZero, Weight.IsZero] us
+  · simpa [Weight.IsNonZero, Weight.IsZero] using b.linearIndependent_baseSupp.ne_zero i
 
 Depends on / 依赖: b.isCartanSubalgebra, isCartanSubalgebra
 -/
@@ -92,7 +92,7 @@ lemma linearIndepOn_root_baseSupp
 let e : ι ≃ range b.baseSupp' := Equiv.ofInjective _ fun i j hij =>
 b.linearIndependent_baseSupp.injective by simpa [baseSupp'] using hij
   rw [LinearIndepOn]; rw [← linearIndependent_equiv e]
-  exact b.linearInde
+  exact b.linearIndependent_baseSupp
 
 中文:
 引理 linearIndepOn_root_baseSupp
@@ -101,7 +101,7 @@ b.linearIndependent_baseSupp.injective by simpa [baseSupp'] using hij
 let e : ι ≃ range b.baseSupp' := Equiv.ofInjective _ fun i j hij =>
 b.linearIndependent_baseSupp.injective by simpa [baseSupp'] using hij
   rw [LinearIndepOn]; rw [← linearIndependent_equiv e]
-  exact b.linearInde
+  exact b.linearIndependent_baseSupp
 
 Depends on / 依赖: b.isCartanSubalgebra, isCartanSubalgebra
 -/
@@ -124,7 +124,28 @@ lemma root_mem_or_mem_neg
      -(rootSystem H).root χ in closure ((rootSystem H).root '' range b.baseSupp')) := by
   let := b.isCartanSubalgebra
   have (n : ι -> Nat) :
-      ∑ i, n i • b.baseSupp i in closure (⇑(rootSyst
+      ∑ i, n i • b.baseSupp i in closure (⇑(rootSystem H).root '' range b.baseSupp') := by
+    simp_rw [← Submodule.span_nat_eq_addSubmonoidClosure, Submodule.mem_toAddSubmonoid]
+exact Submodule.sum_smul_mem _ _ fun i _ => Submodule.subset_span by simp
+  let s : Set (H -> K) := {0} union
+    {f | exists n : ι -> Nat, n != 0 ∧ f = -∑ i, n i • b.baseSupp i} union
+    {f | exists n : ι -> Nat, n != 0 ∧ f = ∑ i, n i • b.baseSupp i}
+  have hs : ⨆ α in s, rootSpace H α = ⊤ := by
+    have := b.iSup_cartan_borelLower_borelUpper_eq_top
+    rw [borelLower_eq]; rw [borelUpper_eq]; rw [b.cartan_eq] at this
+    rw [iSup_union]; rw [iSup_union]
+    simpa [iSup_and, iSup_comm (ι := H -> K)] using this
+  obtain ⟨χ, hχ⟩ := χ
+  change χ.toLinear in _ ∨ -χ.toLinear in _
+  replace hs : ⇑χ in s :=
+    (iSupIndep_genWeightSpace K H L).mem_of_biSup_eq_top hs χ.genWeightSpace_ne_bot
+  replace hs : (exists n : ι -> Nat, n != 0 ∧ χ.toLinear = -∑ i, n i • b.baseSupp i) ∨
+               (exists n : ι -> Nat, n != 0 ∧ χ.toLinear = ∑ i, n i • b.baseSupp i) := by
+    have hχ' : ¬ χ.IsZero := by simpa using hχ
+    simp only [hχ', s, singleton_union, mem_union, mem_insert_iff, Weight.coe_eq_zero_iff,
+      mem_ofPred_eq, false_or] at hs
+    simpa only [← LinearMap.coe_neg, ← Weight.coe_coe, LinearMap.coe_injective.eq_iff] using hs
+  refine hs.symm.imp (fun ⟨n, hn₀, hn⟩ => ?_) (fun ⟨n, hn₀, hn⟩ => ?_) <;> simpa [hn] using this n
 
 中文:
 引理 root_mem_or_mem_neg
@@ -134,7 +155,28 @@ lemma root_mem_or_mem_neg
      -(rootSystem H).root χ in closure ((rootSystem H).root '' range b.baseSupp')) := by
   let := b.isCartanSubalgebra
   have (n : ι -> Nat) :
-      ∑ i, n i • b.baseSupp i in closure (⇑(rootSyst
+      ∑ i, n i • b.baseSupp i in closure (⇑(rootSystem H).root '' range b.baseSupp') := by
+    simp_rw [← Submodule.span_nat_eq_addSubmonoidClosure, Submodule.mem_toAddSubmonoid]
+exact Submodule.sum_smul_mem _ _ fun i _ => Submodule.subset_span by simp
+  let s : Set (H -> K) := {0} union
+    {f | exists n : ι -> Nat, n != 0 ∧ f = -∑ i, n i • b.baseSupp i} union
+    {f | exists n : ι -> Nat, n != 0 ∧ f = ∑ i, n i • b.baseSupp i}
+  have hs : ⨆ α in s, rootSpace H α = ⊤ := by
+    have := b.iSup_cartan_borelLower_borelUpper_eq_top
+    rw [borelLower_eq]; rw [borelUpper_eq]; rw [b.cartan_eq] at this
+    rw [iSup_union]; rw [iSup_union]
+    simpa [iSup_and, iSup_comm (ι := H -> K)] using this
+  obtain ⟨χ, hχ⟩ := χ
+  change χ.toLinear in _ ∨ -χ.toLinear in _
+  replace hs : ⇑χ in s :=
+    (iSupIndep_genWeightSpace K H L).mem_of_biSup_eq_top hs χ.genWeightSpace_ne_bot
+  replace hs : (exists n : ι -> Nat, n != 0 ∧ χ.toLinear = -∑ i, n i • b.baseSupp i) ∨
+               (exists n : ι -> Nat, n != 0 ∧ χ.toLinear = ∑ i, n i • b.baseSupp i) := by
+    have hχ' : ¬ χ.IsZero := by simpa using hχ
+    simp only [hχ', s, singleton_union, mem_union, mem_insert_iff, Weight.coe_eq_zero_iff,
+      mem_ofPred_eq, false_or] at hs
+    simpa only [← LinearMap.coe_neg, ← Weight.coe_coe, LinearMap.coe_injective.eq_iff] using hs
+  refine hs.symm.imp (fun ⟨n, hn₀, hn⟩ => ?_) (fun ⟨n, hn₀, hn⟩ => ?_) <;> simpa [hn] using this n
 
 Depends on / 依赖: H.root, b.isCartanSubalgebra, isCartanSubalgebra
 -/
@@ -246,7 +288,17 @@ lemma coroot_eq_h'
   let := b.isCartanSubalgebra
   suffices b.h' i in corootSpace (b.baseSupp' i) by
     have _i : IsAddTorsionFree L := .of_isTorsionFree K L
-    exact (eq_coroot_of_mem_corootSpace_of_two (b.baseSupp' i).val this (by simp [baseSupp
+    exact (eq_coroot_of_mem_corootSpace_of_two (b.baseSupp' i).val this (by simp [baseSupp'])).symm
+  have h_mem : ⁅b.e i, b.f i⁆ in H := by
+    nth_rw 1 [(b.sl2 i).lie_e_f, b.cartan_eq_lieSpan]
+exact subset_lieSpan mem_range_self i
+  have h_eq : b.h' i = ⟨⁅b.e i, b.f i⁆, h_mem⟩ := by simp [(b.sl2 i).lie_e_f, h']
+  rw [h_eq]
+  have he : b.e i in rootSpace H (b.baseSupp i) :=
+    (mem_genWeightSpace _ _ _).mpr fun ⟨z, hz⟩ => ⟨1, by simp⟩
+  have hf : b.f i in rootSpace H (-b.baseSupp i) :=
+    (mem_genWeightSpace _ _ _).mpr fun ⟨z, hz⟩ => ⟨1, by simp [← eq_neg_iff_add_eq_zero]⟩
+exact (mem_corootSpace _).mpr Submodule.subset_span ⟨b.e i, he, b.f i, hf, rfl⟩
 
 中文:
 引理 coroot_eq_h'
@@ -256,7 +308,17 @@ lemma coroot_eq_h'
   let := b.isCartanSubalgebra
   suffices b.h' i in corootSpace (b.baseSupp' i) by
     have _i : IsAddTorsionFree L := .of_isTorsionFree K L
-    exact (eq_coroot_of_mem_corootSpace_of_two (b.baseSupp' i).val this (by simp [baseSupp
+    exact (eq_coroot_of_mem_corootSpace_of_two (b.baseSupp' i).val this (by simp [baseSupp'])).symm
+  have h_mem : ⁅b.e i, b.f i⁆ in H := by
+    nth_rw 1 [(b.sl2 i).lie_e_f, b.cartan_eq_lieSpan]
+exact subset_lieSpan mem_range_self i
+  have h_eq : b.h' i = ⟨⁅b.e i, b.f i⁆, h_mem⟩ := by simp [(b.sl2 i).lie_e_f, h']
+  rw [h_eq]
+  have he : b.e i in rootSpace H (b.baseSupp i) :=
+    (mem_genWeightSpace _ _ _).mpr fun ⟨z, hz⟩ => ⟨1, by simp⟩
+  have hf : b.f i in rootSpace H (-b.baseSupp i) :=
+    (mem_genWeightSpace _ _ _).mpr fun ⟨z, hz⟩ => ⟨1, by simp [← eq_neg_iff_add_eq_zero]⟩
+exact (mem_corootSpace _).mpr Submodule.subset_span ⟨b.e i, he, b.f i, hf, rfl⟩
 -/
 @[simp] lemma coroot_eq_h' (i : ι) :
     letI := b.isCartanSubalgebra
@@ -286,7 +348,8 @@ lemma cartanMatrix_base_eq
     rwa [← (reindex b.baseSupportEquiv b.baseSupportEquiv).symm_apply_eq]
   ext i j
   apply FaithfulSMul.algebraMap_injective Int K
-  rw [reindex_apply]; rw [submatrix_apply]; rw [RootPairing.Base.alge
+  rw [reindex_apply]; rw [submatrix_apply]; rw [RootPairing.Base.algebraMap_cartanMatrixIn_apply]
+  simp [← Weight.coe_coe]
 
 中文:
 引理 cartanMatrix_base_eq
@@ -295,7 +358,8 @@ lemma cartanMatrix_base_eq
     rwa [← (reindex b.baseSupportEquiv b.baseSupportEquiv).symm_apply_eq]
   ext i j
   apply FaithfulSMul.algebraMap_injective Int K
-  rw [reindex_apply]; rw [submatrix_apply]; rw [RootPairing.Base.alge
+  rw [reindex_apply]; rw [submatrix_apply]; rw [RootPairing.Base.algebraMap_cartanMatrixIn_apply]
+  simp [← Weight.coe_coe]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, RootPairing, RootPairing.Base.algebraMap_cartanMatrixIn_apply, Weight, Weight.coe_coe, algebraMap_cartanMatrixIn_apply, algebraMap_injective, b.base.cartanMatrix.reindex, b.baseSupportEquiv, b.baseSupportEquiv.symm, baseSupportEquiv, cartanMatrix, coe_coe, reindex, reindex_apply, submatrix_apply, symm_apply_eq
 -/

@@ -1617,7 +1617,9 @@ instance [T2Space
  isCompact_closure_of_mem_openRcNhds U2.coe_prop).of_isClosed_subset
 isClosed_closure closure_inter_subset_inter_closure ..,
       le_inf (subset_of_mem_openRcNhds (Subtype.coe_prop U1))
- subset_of_mem_openRcNhds (Subtype
+ subset_of_mem_openRcNhds (Subtype.coe_prop U2)⟩,
+         Subtype.coe_le_coe.mp inf_le_left,
+         Subtype.coe_le_coe.mp inf_le_right⟩
 
 中文:
 实例 [T2空间
@@ -1626,7 +1628,9 @@ isClosed_closure closure_inter_subset_inter_closure ..,
  isCompact_closure_of_mem_openRcNhds U2.coe_prop).of_isClosed_subset
 isClosed_closure closure_inter_subset_inter_closure ..,
       le_inf (subset_of_mem_openRcNhds (Subtype.coe_prop U1))
- subset_of_mem_openRcNhds (Subtype
+ subset_of_mem_openRcNhds (Subtype.coe_prop U2)⟩,
+         Subtype.coe_le_coe.mp inf_le_left,
+         Subtype.coe_le_coe.mp inf_le_right⟩
 
 Depends on / 依赖: Subtype, Subtype.coe_prop, coe_prop, isCompact_closure_of_mem_openRcNhds
 -/

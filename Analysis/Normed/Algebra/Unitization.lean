@@ -124,7 +124,8 @@ theorem splitMul_injective_of_clm_mul_injective
     zero_add, Prod.mk_add_mk, Prod.mk_eq_zero] at hx
   obtain ⟨rfl, hx⟩ := hx
   simp only [map_zero, zero_add, inl_zero] at hx ⊢
-  
+  rw [← map_zero (mul 𝕜 A)] at hx
+  rw [h hx]; rw [inr_zero]
 
 中文:
 定理 splitMul_injective_of_clm_mul_injective
@@ -137,7 +138,8 @@ theorem splitMul_injective_of_clm_mul_injective
     zero_add, Prod.mk_add_mk, Prod.mk_eq_zero] at hx
   obtain ⟨rfl, hx⟩ := hx
   simp only [map_zero, zero_add, inl_zero] at hx ⊢
-  
+  rw [← map_zero (mul 𝕜 A)] at hx
+  rw [h hx]; rw [inr_zero]
 
 Depends on / 依赖: Prod.mk_add_mk, Prod.mk_eq_zero, add_zero, fst_inl, fst_inr, injective_iff_map_eq_zero, inl_zero, inr_zero, map_add, map_zero, mk_add_mk, mk_eq_zero, snd_inl, snd_inr, splitMul_apply, zero_add
 -/
@@ -307,7 +309,16 @@ theorem lipschitzWith_addEquiv
   rw [norm_eq_sup]; rw [Prod.norm_def]
   refine max_le ?_ ?_
   · rw [mul_max_of_nonneg _ _ (zero_le_two : (0 : Real) <= 2)]
-    exact le_max_of_le_left ((le_add_of_nonneg_left (norm
+    exact le_max_of_le_left ((le_add_of_nonneg_left (norm_nonneg _)).trans_eq (two_mul _).symm)
+  · nontriviality A
+    rw [two_mul]
+    calc
+      ‖x.snd‖ = ‖mul 𝕜 A x.snd‖ :=
+.symm (isometry_mul 𝕜 A).norm_map_of_map_zero (map_zero _) _
+      _ <= ‖algebraMap 𝕜 _ x.fst + mul 𝕜 A x.snd‖ + ‖x.fst‖ := by
+        simpa only [add_comm _ (mul 𝕜 A x.snd), norm_algebraMap'] using
+          norm_le_add_norm_add (mul 𝕜 A x.snd) (algebraMap 𝕜 _ x.fst)
+      _ <= _ := add_le_add le_sup_right le_sup_left
 
 中文:
 定理 lipschitzWith_addEquiv
@@ -317,7 +328,16 @@ theorem lipschitzWith_addEquiv
   rw [norm_eq_sup]; rw [Prod.norm_def]
   refine max_le ?_ ?_
   · rw [mul_max_of_nonneg _ _ (zero_le_two : (0 : Real) <= 2)]
-    exact le_max_of_le_left ((le_add_of_nonneg_left (norm
+    exact le_max_of_le_left ((le_add_of_nonneg_left (norm_nonneg _)).trans_eq (two_mul _).symm)
+  · nontriviality A
+    rw [two_mul]
+    calc
+      ‖x.snd‖ = ‖mul 𝕜 A x.snd‖ :=
+.symm (isometry_mul 𝕜 A).norm_map_of_map_zero (map_zero _) _
+      _ <= ‖algebraMap 𝕜 _ x.fst + mul 𝕜 A x.snd‖ + ‖x.fst‖ := by
+        simpa only [add_comm _ (mul 𝕜 A x.snd), norm_algebraMap'] using
+          norm_le_add_norm_add (mul 𝕜 A x.snd) (algebraMap 𝕜 _ x.fst)
+      _ <= _ := add_le_add le_sup_right le_sup_left
 
 Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.lipschitz_of_bound, Prod.norm_def, Real.toNNReal_ofNat, Unitization, Unitization.addEquiv, addEquiv, algebraMap, isometry_mul, le_add_of_nonneg_left, le_max_of_le_left, lipschitz_of_bound, map_zero, max_le, mul_max_of_nonneg, nontriviality, norm_def, norm_eq_sup, norm_map_of_map_zero, norm_nonneg
 -/
@@ -349,7 +369,14 @@ theorem antilipschitzWith_addEquiv
   rw [norm_eq_sup]; rw [Prod.norm_def]; rw [NNReal.coe_two]
   refine max_le ?_ ?_
   · rw [mul_max_of_nonneg _ _ (zero_le_two : (0 : Real) <= 2)]
-    exact le_max_of_le_left ((le_add_of_nonneg_left (norm_nonneg _)).trans_
+    exact le_max_of_le_left ((le_add_of_nonneg_left (norm_nonneg _)).trans_eq (two_mul _).symm)
+  · nontriviality A
+    calc
+      ‖algebraMap 𝕜 _ x.fst + mul 𝕜 A x.snd‖ <= ‖algebraMap 𝕜 _ x.fst‖ + ‖mul 𝕜 A x.snd‖ :=
+        norm_add_le _ _
+      _ = ‖x.fst‖ + ‖x.snd‖ := by
+        rw [norm_algebraMap']; rw [(AddMonoidHomClass.isometry_iff_norm (mul 𝕜 A)).mp (isometry_mul 𝕜 A)]
+      _ <= _ := (add_le_add (le_max_left _ _) (le_max_right _ _)).trans_eq (two_mul _).symm
 
 中文:
 定理 antilipschitzWith_addEquiv
@@ -358,7 +385,14 @@ theorem antilipschitzWith_addEquiv
   rw [norm_eq_sup]; rw [Prod.norm_def]; rw [NNReal.coe_two]
   refine max_le ?_ ?_
   · rw [mul_max_of_nonneg _ _ (zero_le_two : (0 : Real) <= 2)]
-    exact le_max_of_le_left ((le_add_of_nonneg_left (norm_nonneg _)).trans_
+    exact le_max_of_le_left ((le_add_of_nonneg_left (norm_nonneg _)).trans_eq (two_mul _).symm)
+  · nontriviality A
+    calc
+      ‖algebraMap 𝕜 _ x.fst + mul 𝕜 A x.snd‖ <= ‖algebraMap 𝕜 _ x.fst‖ + ‖mul 𝕜 A x.snd‖ :=
+        norm_add_le _ _
+      _ = ‖x.fst‖ + ‖x.snd‖ := by
+        rw [norm_algebraMap']; rw [(AddMonoidHomClass.isometry_iff_norm (mul 𝕜 A)).mp (isometry_mul 𝕜 A)]
+      _ <= _ := (add_le_add (le_max_left _ _) (le_max_right _ _)).trans_eq (two_mul _).symm
 
 Depends on / 依赖: AddMonoidH, AddMonoidHomClass, AddMonoidHomClass.antilipschitz_of_bound, NNReal, NNReal.coe_two, Prod.norm_def, addEquiv, algebraMap, antilipschitz_of_bound, coe_two, le_add_of_nonneg_left, le_max_of_le_left, max_le, mul_max_of_nonneg, nontriviality, norm_add_le, norm_algebraMap, norm_def, norm_eq_sup, norm_nonneg
 -/

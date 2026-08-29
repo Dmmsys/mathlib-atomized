@@ -268,7 +268,8 @@ theorem centroid_pair
       rw [card_insert_of_notMem (notMem_singleton.2 h)]; rw [card_singleton]
       simpa using Invertible.ne_zero _
     rw [centroid_def]; rw [affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ _ _
-        (su
+        (sum_centroidWeights_eq_one_of_cast_card_ne_zero _ hc) (p i₁)]
+    simp [h, one_add_one_eq_two]
 
 中文:
 定理 centroid_pair
@@ -280,7 +281,8 @@ theorem centroid_pair
       rw [card_insert_of_notMem (notMem_singleton.2 h)]; rw [card_singleton]
       simpa using Invertible.ne_zero _
     rw [centroid_def]; rw [affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ _ _
-        (su
+        (sum_centroidWeights_eq_one_of_cast_card_ne_zero _ hc) (p i₁)]
+    simp [h, one_add_one_eq_two]
 
 Depends on / 依赖: Invertible, Invertible.ne_zero, affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one, card_insert_of_notMem, card_singleton, centroid_def, ne_zero, notMem_singleton, one_add_one_eq_two, sum_centroidWeights_eq_one_of_cast_card_ne_zero
 -/
@@ -494,7 +496,24 @@ theorem centroid_eq_centroid_image_of_inj_on
   have hf : forall x, f x in s ∧ p (f x) = x := fun x => x.property.choose_spec
   let f' : ps -> ι := fun x => f ⟨x, hps ▸ x.property⟩
   have hf' : forall x, f' x in s ∧ p (f' x) = x := fun x => hf ⟨x, hps ▸ x.property⟩
-  have hf'i : Function.I
+  have hf'i : Function.Injective f' := by
+    intro x y h
+    rw [Subtype.ext_iff]; rw [← (hf' x).2]; rw [← (hf' y).2]; rw [h]
+  let f'e : ps ↪ ι := ⟨f', hf'i⟩
+  have hu : Finset.univ.map f'e = s := by
+    ext x
+    rw [mem_map]
+    constructor
+    · rintro ⟨i, _, rfl⟩
+      exact (hf' i).1
+    · intro hx
+      use ⟨p x, hps.symm ▸ Set.mem_image_of_mem _ hx⟩, mem_univ _
+      refine hi _ (hf' _).1 _ hx ?_
+      rw [(hf' _).2]
+  rw [← hu]; rw [centroid_map]
+  congr with x
+  change p (f' x) = ↑x
+  rw [(hf' x).2]
 
 中文:
 定理 centroid_eq_centroid_image_of_inj_on
@@ -504,7 +523,24 @@ theorem centroid_eq_centroid_image_of_inj_on
   have hf : forall x, f x in s ∧ p (f x) = x := fun x => x.property.choose_spec
   let f' : ps -> ι := fun x => f ⟨x, hps ▸ x.property⟩
   have hf' : forall x, f' x in s ∧ p (f' x) = x := fun x => hf ⟨x, hps ▸ x.property⟩
-  have hf'i : Function.I
+  have hf'i : Function.Injective f' := by
+    intro x y h
+    rw [Subtype.ext_iff]; rw [← (hf' x).2]; rw [← (hf' y).2]; rw [h]
+  let f'e : ps ↪ ι := ⟨f', hf'i⟩
+  have hu : Finset.univ.map f'e = s := by
+    ext x
+    rw [mem_map]
+    constructor
+    · rintro ⟨i, _, rfl⟩
+      exact (hf' i).1
+    · intro hx
+      use ⟨p x, hps.symm ▸ Set.mem_image_of_mem _ hx⟩, mem_univ _
+      refine hi _ (hf' _).1 _ hx ?_
+      rw [(hf' _).2]
+  rw [← hu]; rw [centroid_map]
+  congr with x
+  change p (f' x) = ↑x
+  rw [(hf' x).2]
 
 Depends on / 依赖: Finset, Finset.univ.map, Function, Function.Injective, Injective, Subtype, Subtype.ext_iff, choose_spec, ext_iff, mem_map, property, x.property, x.property.choose, x.property.choose_spec
 -/

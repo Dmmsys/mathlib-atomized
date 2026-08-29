@@ -132,7 +132,24 @@ lemma degree_between_verts_lt_of_mem_sdiff
   simp_rw [Finset.mem_sdiff, ErdosStone.filter, mem_filter, not_and_or, and_or_left,
     and_not_self_iff, false_or, not_forall, not_exists, not_and_or, not_forall, exists_prop] at hv
   obtain ⟨hv, p, hp, hs⟩ := hv
-  rw [← card_neighborFinset_eq_degree]; rw [isBipartiteWith_neighborFinset' (betwe
+  rw [← card_neighborFinset_eq_degree]; rw [isBipartiteWith_neighborFinset' (between_verts_isBipartiteWith K) hv]
+  conv =>
+    enter [1, 1, 2]
+    unfold CompleteEquipartiteSubgraph.verts
+  rw [filter_disjiUnion]; rw [card_disjiUnion]; rw [sum_eq_sum_sdiff_singleton_add hp]
+  apply add_lt_add_of_le_of_lt
+  · conv_rhs =>
+      rw [K.card_verts]; rw [← Nat.sub_one_mul]; rw [← K.card_parts.resolve_right ht'_pos.ne']; rw [← card_singleton p]; rw [← Finset.card_sdiff_of_subset (singleton_subset_iff.mpr hp)]; rw [← smul_eq_mul]; rw [← sum_const]; rw [← Finset.sum_congr rfl fun _ h => K.card_mem_parts (mem_sdiff.mp h).1]
+    exact sum_le_sum (fun _ _ => card_filter_le _ _)
+  · contrapose! hs
+    obtain ⟨s, hs⟩ := powersetCard_nonempty.mpr hs
+    have hs' : s in p.powersetCard t := powersetCard_mono (filter_subset _ _) hs
+    refine ⟨s, hs', fun w hw => ?_⟩
+    obtain ⟨_, hadj, _⟩ := by
+      rw [mem_powersetCard] at hs
+      apply hs.1 at hw
+      rwa [mem_filter, between_adj] at hw
+    exact hadj.symm
 
 中文:
 引理 degree_between_verts_lt_of_mem_sdiff
@@ -140,7 +157,24 @@ lemma degree_between_verts_lt_of_mem_sdiff
   simp_rw [Finset.mem_sdiff, ErdosStone.filter, mem_filter, not_and_or, and_or_left,
     and_not_self_iff, false_or, not_forall, not_exists, not_and_or, not_forall, exists_prop] at hv
   obtain ⟨hv, p, hp, hs⟩ := hv
-  rw [← card_neighborFinset_eq_degree]; rw [isBipartiteWith_neighborFinset' (betwe
+  rw [← card_neighborFinset_eq_degree]; rw [isBipartiteWith_neighborFinset' (between_verts_isBipartiteWith K) hv]
+  conv =>
+    enter [1, 1, 2]
+    unfold CompleteEquipartiteSubgraph.verts
+  rw [filter_disjiUnion]; rw [card_disjiUnion]; rw [sum_eq_sum_sdiff_singleton_add hp]
+  apply add_lt_add_of_le_of_lt
+  · conv_rhs =>
+      rw [K.card_verts]; rw [← Nat.sub_one_mul]; rw [← K.card_parts.resolve_right ht'_pos.ne']; rw [← card_singleton p]; rw [← Finset.card_sdiff_of_subset (singleton_subset_iff.mpr hp)]; rw [← smul_eq_mul]; rw [← sum_const]; rw [← Finset.sum_congr rfl fun _ h => K.card_mem_parts (mem_sdiff.mp h).1]
+    exact sum_le_sum (fun _ _ => card_filter_le _ _)
+  · contrapose! hs
+    obtain ⟨s, hs⟩ := powersetCard_nonempty.mpr hs
+    have hs' : s in p.powersetCard t := powersetCard_mono (filter_subset _ _) hs
+    refine ⟨s, hs', fun w hw => ?_⟩
+    obtain ⟨_, hadj, _⟩ := by
+      rw [mem_powersetCard] at hs
+      apply hs.1 at hw
+      rwa [mem_filter, between_adj] at hw
+    exact hadj.symm
 
 Depends on / 依赖: CompleteEquipartiteSubgraph, CompleteEquipartiteSubgraph.verts, ErdosStone, ErdosStone.filter, Finset, Finset.mem_sdiff, add_lt_add_of_le_of_lt, and_not_self_iff, and_or_left, between_verts_isBipartiteWith, card_disjiUnion, card_neighborFinset_eq_degree, exists_prop, false_or, filter, filter_disjiUnion, isBipartiteWith_neighborFinset, mem_filter, mem_sdiff, not_and_or
 -/
@@ -178,7 +212,19 @@ lemma card_edgeFinset_between_verts_le
   proof: calc (#(G.between K.verts K.vertsᶜ).edgeFinset : Real)
     _ = ∑ v in K.vertsᶜ \ filter K t, ((G.between K.verts K.vertsᶜ).degree v : Real)
       + ∑ v in filter K t, ((G.between K.verts K.vertsᶜ).degree v : Real) := by
-        rw [ErdosStone.filter]; rw [sum_sdiff (filter_subset _ K.vertsᶜ)]; rw [e
+        rw [ErdosStone.filter]; rw [sum_sdiff (filter_subset _ K.vertsᶜ)]; rw [eq_comm]
+        exact_mod_cast isBipartiteWith_sum_degrees_eq_card_edges'
+          (between_verts_isBipartiteWith K)
+    _ <= ∑ _ in K.vertsᶜ \ filter K t, (#K.verts - t' + t : Real)
+      + ∑ _ in filter K t, (#K.verts : Real) := by
+        apply add_le_add <;> refine sum_le_sum (fun v hv => ?_)
+        · rw [← Nat.cast_sub ((Nat.le_mul_of_pos_left t' hr_pos).trans_eq K.card_verts.symm)]
+          exact_mod_cast (degree_between_verts_lt_of_mem_sdiff K hv ht'_pos).le
+        · exact_mod_cast isBipartiteWith_degree_le'
+            (between_verts_isBipartiteWith K) (filter_subset_compl_verts K hv)
+    _ = (n - #K.verts) * (#K.verts - (t' - t))
+      + #(filter K t) * (t' - t) := by
+        rw [sum_const]; rw [nsmul_eq_mul]; rw [card_sdiff_of_subset (filter_subset_compl_verts K)]; rw [Nat.cast_sub (card_le_card (filter_subset_compl_verts K))]; rw [card_compl]; rw [Nat.cast_sub (card_le_univ K.verts)]; rw [Fintype.card_fin]; rw [sum_const]; rw [nsmul_eq_mul]; rw [sub_mul]; rw [sub_add (#K.verts : Real) _ _]; rw [mul_sub (#(filter K t) : Real) _ _]; rw [← sub_add]; rw [sub_add_eq_add_sub]; rw [sub_add_cancel]
 
 中文:
 引理 card_edgeFinset_between_verts_le
@@ -186,7 +232,19 @@ lemma card_edgeFinset_between_verts_le
   证明: calc (#(G.between K.verts K.vertsᶜ).edgeFinset : Real)
     _ = ∑ v in K.vertsᶜ \ filter K t, ((G.between K.verts K.vertsᶜ).degree v : Real)
       + ∑ v in filter K t, ((G.between K.verts K.vertsᶜ).degree v : Real) := by
-        rw [ErdosStone.filter]; rw [sum_sdiff (filter_subset _ K.vertsᶜ)]; rw [e
+        rw [ErdosStone.filter]; rw [sum_sdiff (filter_subset _ K.vertsᶜ)]; rw [eq_comm]
+        exact_mod_cast isBipartiteWith_sum_degrees_eq_card_edges'
+          (between_verts_isBipartiteWith K)
+    _ <= ∑ _ in K.vertsᶜ \ filter K t, (#K.verts - t' + t : Real)
+      + ∑ _ in filter K t, (#K.verts : Real) := by
+        apply add_le_add <;> refine sum_le_sum (fun v hv => ?_)
+        · rw [← Nat.cast_sub ((Nat.le_mul_of_pos_left t' hr_pos).trans_eq K.card_verts.symm)]
+          exact_mod_cast (degree_between_verts_lt_of_mem_sdiff K hv ht'_pos).le
+        · exact_mod_cast isBipartiteWith_degree_le'
+            (between_verts_isBipartiteWith K) (filter_subset_compl_verts K hv)
+    _ = (n - #K.verts) * (#K.verts - (t' - t))
+      + #(filter K t) * (t' - t) := by
+        rw [sum_const]; rw [nsmul_eq_mul]; rw [card_sdiff_of_subset (filter_subset_compl_verts K)]; rw [Nat.cast_sub (card_le_card (filter_subset_compl_verts K))]; rw [card_compl]; rw [Nat.cast_sub (card_le_univ K.verts)]; rw [Fintype.card_fin]; rw [sum_const]; rw [nsmul_eq_mul]; rw [sub_mul]; rw [sub_add (#K.verts : Real) _ _]; rw [mul_sub (#(filter K t) : Real) _ _]; rw [← sub_add]; rw [sub_add_eq_add_sub]; rw [sub_add_cancel]
 
 Depends on / 依赖: ErdosStone, ErdosStone.filter, G.between, K.verts, add_l, between, between_verts_isBipartiteWith, degree, edgeFinset, eq_comm, filter, filter_subset, isBipartiteWith_sum_degrees_eq_card_edges, sum_sdiff
 -/
@@ -223,6 +281,17 @@ lemma mul_le_card_filter_mul
         exact sub_le_sub_right hN _
     _ = #K.verts * ((1 - 1 / r + ε) * n - #K.verts)
       - (n - #K.verts) * (#K.verts - (t' - t)) := by
+        conv_rhs => rw [sub_eq_add_neg, ← neg_mul, neg_sub, sub_mul, mul_sub, ← add_sub_assoc,
+          mul_sub, ← add_sub_assoc, sub_add_cancel, sub_right_comm, ← mul_assoc, ← mul_rotate,
+          mul_assoc, ← mul_sub, mul_add, mul_sub (#K.verts : Real) _ _, mul_one,
+          sub_add_eq_add_sub, add_sub_assoc, add_sub_sub_cancel, K.card_verts, Nat.cast_mul,
+          mul_one_div, mul_div_cancel_left₀ (t' : Real) (mod_cast hr_pos.ne'), sub_add_sub_cancel]
+    _ <= #K.verts * (G.minDegree - #K.verts) - (n - #K.verts) * (#K.verts - (t' - t)) :=
+        sub_le_sub_right (mul_le_mul_of_nonneg_left
+          (sub_le_sub_right hδ _) (#K.verts).cast_nonneg) _
+    _ <= #(filter K t) * (t' - t) :=
+sub_left_le_of_le_add (le_card_edgeFinset_between_verts K).trans
+          (card_edgeFinset_between_verts_le K hr_pos ht'_pos)
 
 中文:
 引理 mul_le_card_filter_mul
@@ -233,6 +302,17 @@ lemma mul_le_card_filter_mul
         exact sub_le_sub_right hN _
     _ = #K.verts * ((1 - 1 / r + ε) * n - #K.verts)
       - (n - #K.verts) * (#K.verts - (t' - t)) := by
+        conv_rhs => rw [sub_eq_add_neg, ← neg_mul, neg_sub, sub_mul, mul_sub, ← add_sub_assoc,
+          mul_sub, ← add_sub_assoc, sub_add_cancel, sub_right_comm, ← mul_assoc, ← mul_rotate,
+          mul_assoc, ← mul_sub, mul_add, mul_sub (#K.verts : Real) _ _, mul_one,
+          sub_add_eq_add_sub, add_sub_assoc, add_sub_sub_cancel, K.card_verts, Nat.cast_mul,
+          mul_one_div, mul_div_cancel_left₀ (t' : Real) (mod_cast hr_pos.ne'), sub_add_sub_cancel]
+    _ <= #K.verts * (G.minDegree - #K.verts) - (n - #K.verts) * (#K.verts - (t' - t)) :=
+        sub_le_sub_right (mul_le_mul_of_nonneg_left
+          (sub_le_sub_right hδ _) (#K.verts).cast_nonneg) _
+    _ <= #(filter K t) * (t' - t) :=
+sub_left_le_of_le_add (le_card_edgeFinset_between_verts K).trans
+          (card_edgeFinset_between_verts_le K hr_pos ht'_pos)
 
 Depends on / 依赖: K.verts, add_sub_assoc, add_sub_cancel_right, conv_rhs, mul_add, mul_assoc, mul_rotate, mul_sub, neg_mul, neg_sub, sub_add_cancel, sub_eq_add_neg, sub_le_sub_right, sub_mul, sub_right_comm
 -/
@@ -319,7 +399,18 @@ theorem filter.pi.exists_le_card_fiber
     exact ht_lt_t'.le
   apply exists_le_card_fiber_of_mul_le_card
   simp_rw [card_coe]
-  calc #(K.parts.pi (·.powersetCard t)) * 
+  calc #(K.parts.pi (·.powersetCard t)) * t
+    _ = (∏ x in K.parts, (#x).choose t) * t := by
+        simp_rw [Finset.card_pi, card_powersetCard]
+    _ = (∏ p in K.parts, t'.choose t) * t :=
+congrArg (· * t) prod_congr rfl
+fun p hp => congrArg (Nat.choose · t) K.card_mem_parts hp
+    _ <= t'.choose t ^ r * t := by
+        rw [prod_const]; rw [K.card_parts.resolve_right ht'_pos.ne']
+    _ <= #(filter K t) := by
+        refine Nat.le_of_mul_le_mul_right ?_ (Nat.sub_pos_of_lt ht_lt_t')
+        rw [← @Nat.cast_le Real]; rw [Nat.cast_mul _ (t' - t)]; rw [Nat.cast_mul _ (t' - t)]; rw [Nat.cast_sub ht_lt_t'.le]
+        exact mul_le_card_filter_mul K hr_pos ht'_pos hδ (mod_cast hN)
 
 中文:
 定理 filter.pi.存在_le_card_fiber
@@ -332,7 +423,18 @@ theorem filter.pi.exists_le_card_fiber
     exact ht_lt_t'.le
   apply exists_le_card_fiber_of_mul_le_card
   simp_rw [card_coe]
-  calc #(K.parts.pi (·.powersetCard t)) * 
+  calc #(K.parts.pi (·.powersetCard t)) * t
+    _ = (∏ x in K.parts, (#x).choose t) * t := by
+        simp_rw [Finset.card_pi, card_powersetCard]
+    _ = (∏ p in K.parts, t'.choose t) * t :=
+congrArg (· * t) prod_congr rfl
+fun p hp => congrArg (Nat.choose · t) K.card_mem_parts hp
+    _ <= t'.choose t ^ r * t := by
+        rw [prod_const]; rw [K.card_parts.resolve_right ht'_pos.ne']
+    _ <= #(filter K t) := by
+        refine Nat.le_of_mul_le_mul_right ?_ (Nat.sub_pos_of_lt ht_lt_t')
+        rw [← @Nat.cast_le Real]; rw [Nat.cast_mul _ (t' - t)]; rw [Nat.cast_mul _ (t' - t)]; rw [Nat.cast_sub ht_lt_t'.le]
+        exact mul_le_card_filter_mul K hr_pos ht'_pos hδ (mod_cast hN)
 
 Depends on / 依赖: Finset, Finset.card_pi, K.card_mem_parts, K.parts, K.parts.pi, Nat.choose, Nonempty, card_coe, card_mem_parts, card_pi, card_powersetCard, exists_le_card_fiber_of_mul_le_card, ht_lt_t, nonempty_coe_sort, pi_nonempty, powersetCard, powersetCard_nonempty, prod_congr, simp_rw
 -/

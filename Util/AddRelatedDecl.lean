@@ -53,7 +53,20 @@ definition checkImplicitTransparency
     let counterDefault := (← get).diag.unfoldCounter
     modify ({ · with diag := origDiag })
     try
-      Meta.check declType .i
+      Meta.check declType .implicit
+      return none
+    catch _ =>
+      let counterInst := (← get).diag.unfoldCounter
+      let diff := Meta.subCounters counterDefault counterInst
+      let env ← getEnv
+return some diff.toList.filterMap fun (n, count) => do
+guard count > 0
+guard getReducibilityStatusCore env n matches .semireducible
+guard !Meta.isInstanceCore env n
+        return n
+  -- Always restore the original diagnostics snapshot, mirroring `tacticCheckInstances`.
+  modify ({ · with diag := origDiag })
+  return result
 
 中文:
 定义 checkImplicitTransparency
@@ -65,7 +78,20 @@ definition checkImplicitTransparency
     let counterDefault := (← get).diag.unfoldCounter
     modify ({ · with diag := origDiag })
     try
-      Meta.check declType .i
+      Meta.check declType .implicit
+      return none
+    catch _ =>
+      let counterInst := (← get).diag.unfoldCounter
+      let diff := Meta.subCounters counterDefault counterInst
+      let env ← getEnv
+return some diff.toList.filterMap fun (n, count) => do
+guard count > 0
+guard getReducibilityStatusCore env n matches .semireducible
+guard !Meta.isInstanceCore env n
+        return n
+  -- Always restore the original diagnostics snapshot, mirroring `tacticCheckInstances`.
+  modify ({ · with diag := origDiag })
+  return result
 -/
 private def checkImplicitTransparency (declType : Expr) : MetaM (Option (List Name)) := do
   let origDiag := (← get).diag
@@ -101,7 +127,11 @@ definition warnIfImplicitIllTyped
   unless lintOpt.get (← getOptions) do return
   let some candidates ← checkImplicitTransparency declType | return
   if candidates.isEmpty then return
-  let bullets := MessageData.joinSep (candidate
+  let bullets := MessageData.joinSep (candidates.map (m!"{MessageData.ofConstName ·}")) Format.line
+  Lean.Linter.logLint lintOpt ref
+    m!"generated lemma {MessageData.ofConstName declName} is not type-correct at \
+      `.implicit` transparency; consider marking some of the following as \
+      `@[implicit_reducible]`:{indentD bullets}"
 
 中文:
 定义 warnIfImplicitIllTyped
@@ -112,7 +142,11 @@ definition warnIfImplicitIllTyped
   unless lintOpt.get (← getOptions) do return
   let some candidates ← checkImplicitTransparency declType | return
   if candidates.isEmpty then return
-  let bullets := MessageData.joinSep (candidate
+  let bullets := MessageData.joinSep (candidates.map (m!"{MessageData.ofConstName ·}")) Format.line
+  Lean.Linter.logLint lintOpt ref
+    m!"generated lemma {MessageData.ofConstName declName} is not type-correct at \
+      `.implicit` transparency; consider marking some of the following as \
+      `@[implicit_reducible]`:{indentD bullets}"
 -/
 def warnIfImplicitIllTyped (ref : Syntax) (declName : Name) (declType : Expr) : MetaM Unit := do
   let lintOpt : Lean.Option Bool :=
@@ -137,7 +171,29 @@ definition addRelatedDecl
   -- below panics (and if it exists in the current module, `addDecl` would fail with a less
   -- helpful message), so we check for a pre-existing declaration up front.
   checkNotAlreadyDeclared tgt
-  add
+  addDeclarationRangesFromSyntax tgt (← getRef) ref
+let info ← withoutExporting getConstInfo src
+  let value := .const src (info.levelParams.map mkLevelParam)
+  let (newValue, newLevels) ← construct value info.levelParams
+  let newValue ← instantiateMVars newValue
+  let newType ← instantiateMVars (← inferType newValue)
+  unless ← isProp newType do throwError "Related declaration is not a proposition: {newType}"
+  warnIfImplicitIllTyped ref tgt newType
+addDecl ← mkThmOrUnsafeDef
+    { levelParams := newLevels, type := newType, name := tgt, value := newValue }
+  if isProtected (← getEnv) src then
+setEnv addProtected (← getEnv) tgt
+  match docstringPrefix?, ← findDocString? (← getEnv) src with
+  | none, none => pure ()
+  | some doc, none | none, some doc => addDocStringCore tgt doc
+  | some docPre, some docPost => addDocStringCore tgt s!"{docPre}\n\n---\n\n{docPost}"
+  inferDefEqAttr tgt
+  Term.TermElabM.run' do
+    let attrs ← elabOptAttrArg attrs
+    Term.applyAttributes src attrs
+    Term.applyAttributes tgt attrs
+    if hoverInfo then
+      Term.addTermInfo' ref (← mkConstWithLevelParams tgt) (isBinder := true)
 
 中文:
 定义 addRelatedDecl
@@ -147,7 +203,29 @@ definition addRelatedDecl
   -- below panics (and if it exists in the current module, `addDecl` would fail with a less
   -- helpful message), so we check for a pre-existing declaration up front.
   checkNotAlreadyDeclared tgt
-  add
+  addDeclarationRangesFromSyntax tgt (← getRef) ref
+let info ← withoutExporting getConstInfo src
+  let value := .const src (info.levelParams.map mkLevelParam)
+  let (newValue, newLevels) ← construct value info.levelParams
+  let newValue ← instantiateMVars newValue
+  let newType ← instantiateMVars (← inferType newValue)
+  unless ← isProp newType do throwError "Related declaration is not a proposition: {newType}"
+  warnIfImplicitIllTyped ref tgt newType
+addDecl ← mkThmOrUnsafeDef
+    { levelParams := newLevels, type := newType, name := tgt, value := newValue }
+  if isProtected (← getEnv) src then
+setEnv addProtected (← getEnv) tgt
+  match docstringPrefix?, ← findDocString? (← getEnv) src with
+  | none, none => pure ()
+  | some doc, none | none, some doc => addDocStringCore tgt doc
+  | some docPre, some docPost => addDocStringCore tgt s!"{docPre}\n\n---\n\n{docPost}"
+  inferDefEqAttr tgt
+  Term.TermElabM.run' do
+    let attrs ← elabOptAttrArg attrs
+    Term.applyAttributes src attrs
+    Term.applyAttributes tgt attrs
+    if hoverInfo then
+      Term.addTermInfo' ref (← mkConstWithLevelParams tgt) (isBinder := true)
 -/
 def addRelatedDecl (src tgt : Name) (ref : Syntax)
     (attrs : TSyntax ``optAttrArg)

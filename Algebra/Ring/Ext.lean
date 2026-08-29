@@ -209,7 +209,14 @@ theorem AddMonoidWithOne.ext
   have h_zero' : inst₁.toZero = inst₂.toZero := congrArg (·.toZero) h_monoid
   have h_one' : inst₁.toOne = inst₂.toOne :=
     congrArg One.mk h_one
-  have h_natCast : inst₁.toNatCast.natCast = inst₂.toNatCast.natCa
+  have h_natCast : inst₁.toNatCast.natCast = inst₂.toNatCast.natCast := by
+    funext n; induction n with
+    | zero => rewrite [inst₁.natCast_zero, inst₂.natCast_zero]
+              exact congrArg (@Zero.zero R) h_zero'
+    | succ n h => rw [inst₁.natCast_succ, inst₂.natCast_succ, h_add]
+                  exact congrArg₂ _ h h_one
+  rcases inst₁ with @⟨⟨⟩⟩; rcases inst₂ with @⟨⟨⟩⟩
+  congr
 
 中文:
 定理 加法带幺幺半群.ext
@@ -220,7 +227,14 @@ theorem AddMonoidWithOne.ext
   have h_zero' : inst₁.toZero = inst₂.toZero := congrArg (·.toZero) h_monoid
   have h_one' : inst₁.toOne = inst₂.toOne :=
     congrArg One.mk h_one
-  have h_natCast : inst₁.toNatCast.natCast = inst₂.toNatCast.natCa
+  have h_natCast : inst₁.toNatCast.natCast = inst₂.toNatCast.natCast := by
+    funext n; induction n with
+    | zero => rewrite [inst₁.natCast_zero, inst₂.natCast_zero]
+              exact congrArg (@Zero.zero R) h_zero'
+    | succ n h => rw [inst₁.natCast_succ, inst₂.natCast_succ, h_add]
+                  exact congrArg₂ _ h h_one
+  rcases inst₁ with @⟨⟨⟩⟩; rcases inst₂ with @⟨⟨⟩⟩
+  congr
 
 Depends on / 依赖: LocallyOfFiniteType, LocallyOfFiniteType.jacobsonSpace, MorphismProperty, MorphismProperty.pullback_snd, f.fiberToSpecResidueField, fiberToSpecResidueField, jacobsonSpace, pullback_snd
 -/
@@ -296,7 +310,19 @@ theorem ext
     ext : 1 <;> assumption
   have h_zero : (inst₁.toMulZeroClass).toZero.zero = (inst₂.toMulZeroClass).toZero.zero :=
     congrArg (fun inst => (inst.toMulZeroClass).toZero.zero) h
-  have h_one' : (inst₁.toMulZ
+  have h_one' : (inst₁.toMulZeroOneClass).toMulOneClass.toOne
+                = (inst₂.toMulZeroOneClass).toMulOneClass.toOne := by
+    congr 2; ext : 1; exact h_mul
+  have h_one : (inst₁.toMulZeroOneClass).toMulOneClass.toOne.one
+               = (inst₂.toMulZeroOneClass).toMulOneClass.toOne.one :=
+    congrArg (@One.one R) h_one'
+  have : inst₁.toAddCommMonoidWithOne = inst₂.toAddCommMonoidWithOne := by
+    ext : 1 <;> assumption
+  have : inst₁.toNatCast = inst₂.toNatCast :=
+    congrArg (·.toNatCast) this
+  -- Split into `NonUnitalNonAssocSemiring`, `One` and `natCast` instances.
+  cases inst₁; cases inst₂
+  congr
 
 中文:
 定理 ext
@@ -307,7 +333,19 @@ theorem ext
     ext : 1 <;> assumption
   have h_zero : (inst₁.toMulZeroClass).toZero.zero = (inst₂.toMulZeroClass).toZero.zero :=
     congrArg (fun inst => (inst.toMulZeroClass).toZero.zero) h
-  have h_one' : (inst₁.toMulZ
+  have h_one' : (inst₁.toMulZeroOneClass).toMulOneClass.toOne
+                = (inst₂.toMulZeroOneClass).toMulOneClass.toOne := by
+    congr 2; ext : 1; exact h_mul
+  have h_one : (inst₁.toMulZeroOneClass).toMulOneClass.toOne.one
+               = (inst₂.toMulZeroOneClass).toMulOneClass.toOne.one :=
+    congrArg (@One.one R) h_one'
+  have : inst₁.toAddCommMonoidWithOne = inst₂.toAddCommMonoidWithOne := by
+    ext : 1 <;> assumption
+  have : inst₁.toNatCast = inst₂.toNatCast :=
+    congrArg (·.toNatCast) this
+  -- Split into `NonUnitalNonAssocSemiring`, `One` and `natCast` instances.
+  cases inst₁; cases inst₂
+  congr
 -/
 @[ext] theorem ext ⦃inst₁ inst₂ : NonAssocSemiring R⦄
     (h_add : local_hAdd[R, inst₁] = local_hAdd[R, inst₂])
@@ -518,7 +556,14 @@ theorem AddGroupWithOne.ext
     AddMonoidWithOne.ext h_add h_one
   have : inst₁.toNatCast = inst₂.toNatCast := congrArg (·.toNatCast) this
   have h_group : inst₁.toAddGroup = inst₂.toAddGroup := by ext : 1; exact h_add
-  -- Extract equality of necessary substru
+  -- Extract equality of necessary substructures from h_group
+  injection h_group with h_group; injection h_group
+  have : inst₁.toIntCast.intCast = inst₂.toIntCast.intCast := by
+    funext n; cases n with
+    | ofNat n => rewrite [Int.ofNat_eq_natCast, inst₁.intCast_ofNat, inst₂.intCast_ofNat]; congr
+    | negSucc n => rewrite [inst₁.intCast_negSucc, inst₂.intCast_negSucc]; congr
+  rcases inst₁ with @⟨⟨⟩⟩; rcases inst₂ with @⟨⟨⟩⟩
+  congr
 
 中文:
 定理 加法带幺群.ext
@@ -529,7 +574,14 @@ theorem AddGroupWithOne.ext
     AddMonoidWithOne.ext h_add h_one
   have : inst₁.toNatCast = inst₂.toNatCast := congrArg (·.toNatCast) this
   have h_group : inst₁.toAddGroup = inst₂.toAddGroup := by ext : 1; exact h_add
-  -- Extract equality of necessary substru
+  -- Extract equality of necessary substructures from h_group
+  injection h_group with h_group; injection h_group
+  have : inst₁.toIntCast.intCast = inst₂.toIntCast.intCast := by
+    funext n; cases n with
+    | ofNat n => rewrite [Int.ofNat_eq_natCast, inst₁.intCast_ofNat, inst₂.intCast_ofNat]; congr
+    | negSucc n => rewrite [inst₁.intCast_negSucc, inst₂.intCast_negSucc]; congr
+  rcases inst₁ with @⟨⟨⟩⟩; rcases inst₂ with @⟨⟨⟩⟩
+  congr
 -/
 @[ext] theorem AddGroupWithOne.ext ⦃inst₁ inst₂ : AddGroupWithOne R⦄
     (h_add : local_hAdd[R, inst₁] = local_hAdd[R, inst₂])
@@ -604,7 +656,10 @@ theorem ext
   have h₂ : inst₁.toNonAssocSemiring = inst₂.toNonAssocSemiring := by
     ext : 1 <;> assumption
   -- Mathematically non-trivial fact: `intCast` is determined by the rest.
-  have h₃ : inst₁.
+  have h₃ : inst₁.toAddCommGroupWithOne = inst₂.toAddCommGroupWithOne :=
+    AddCommGroupWithOne.ext h_add (congrArg (·.toOne.one) h₂)
+  cases inst₁; cases inst₂
+  congr <;> solve | injection h₁ | injection h₂ | injection h₃
 
 中文:
 定理 ext
@@ -616,7 +671,10 @@ theorem ext
   have h₂ : inst₁.toNonAssocSemiring = inst₂.toNonAssocSemiring := by
     ext : 1 <;> assumption
   -- Mathematically non-trivial fact: `intCast` is determined by the rest.
-  have h₃ : inst₁.
+  have h₃ : inst₁.toAddCommGroupWithOne = inst₂.toAddCommGroupWithOne :=
+    AddCommGroupWithOne.ext h_add (congrArg (·.toOne.one) h₂)
+  cases inst₁; cases inst₂
+  congr <;> solve | injection h₁ | injection h₂ | injection h₃
 -/
 @[ext] theorem ext ⦃inst₁ inst₂ : NonAssocRing R⦄
     (h_add : local_hAdd[R, inst₁] = local_hAdd[R, inst₂])
@@ -698,7 +756,13 @@ theorem ext
     ext : 1 <;> assumption
   have h₁ : inst₁.toNonUnitalSemiring = inst₂.toNonUnitalSemiring := by
     ext : 1 <;> assumption
-  have h₂ : inst₁.toNonAssocSemiring = inst₂.toNonAssocSemir
+  have h₂ : inst₁.toNonAssocSemiring = inst₂.toNonAssocSemiring := by
+    ext : 1 <;> assumption
+  have h₃ : (inst₁.toMonoidWithZero).toMonoid = (inst₂.toMonoidWithZero).toMonoid := by
+    ext : 1; exact h_mul
+  -- Split into fields and prove they are equal using the above.
+  cases inst₁; cases inst₂
+  congr <;> solve | injection h₁ | injection h₂
 
 中文:
 定理 ext
@@ -710,7 +774,13 @@ theorem ext
     ext : 1 <;> assumption
   have h₁ : inst₁.toNonUnitalSemiring = inst₂.toNonUnitalSemiring := by
     ext : 1 <;> assumption
-  have h₂ : inst₁.toNonAssocSemiring = inst₂.toNonAssocSemir
+  have h₂ : inst₁.toNonAssocSemiring = inst₂.toNonAssocSemiring := by
+    ext : 1 <;> assumption
+  have h₃ : (inst₁.toMonoidWithZero).toMonoid = (inst₂.toMonoidWithZero).toMonoid := by
+    ext : 1; exact h_mul
+  -- Split into fields and prove they are equal using the above.
+  cases inst₁; cases inst₂
+  congr <;> solve | injection h₁ | injection h₂
 -/
 @[ext] theorem ext ⦃inst₁ inst₂ : Semiring R⦄
     (h_add : local_hAdd[R, inst₁] = local_hAdd[R, inst₂])
@@ -804,7 +874,13 @@ theorem ext
   have h₂ : inst₁.toNonAssocRing = inst₂.toNonAssocRing := by
     ext : 1 <;> assumption
   /- We prove that the `SubNegMonoid`s are equal because they are one
-  field aw
+  field away from `Sub` and `Neg`, enabling use of `injection`. -/
+  have h₃ : (inst₁.toAddCommGroup).toAddGroup.toSubNegMonoid
+            = (inst₂.toAddCommGroup).toAddGroup.toSubNegMonoid :=
+congrArg (@AddGroup.toSubNegMonoid R) by ext : 1; exact h_add
+  -- Split into fields and prove they are equal using the above.
+  cases inst₁; cases inst₂
+  congr <;> solve | injection h₂ | injection h₃
 
 中文:
 定理 ext
@@ -817,7 +893,13 @@ theorem ext
   have h₂ : inst₁.toNonAssocRing = inst₂.toNonAssocRing := by
     ext : 1 <;> assumption
   /- We prove that the `SubNegMonoid`s are equal because they are one
-  field aw
+  field away from `Sub` and `Neg`, enabling use of `injection`. -/
+  have h₃ : (inst₁.toAddCommGroup).toAddGroup.toSubNegMonoid
+            = (inst₂.toAddCommGroup).toAddGroup.toSubNegMonoid :=
+congrArg (@AddGroup.toSubNegMonoid R) by ext : 1; exact h_add
+  -- Split into fields and prove they are equal using the above.
+  cases inst₁; cases inst₂
+  congr <;> solve | injection h₂ | injection h₃
 -/
 @[ext] theorem ext ⦃inst₁ inst₂ : Ring R⦄
     (h_add : local_hAdd[R, inst₁] = local_hAdd[R, inst₂])

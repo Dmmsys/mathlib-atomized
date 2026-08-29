@@ -76,7 +76,13 @@ lemma of_mvPolynomial_int_ext
     ext x
     · obtain ⟨x⟩ := x
       simpa [-map_intCast, -eq_intCast] using! DFunLike.congr_fun this (C x)
-    · simpa [-map_intCast, -eq
+    · simpa [-map_intCast, -eq_intCast] using! DFunLike.congr_fun this (X x)
+  ext1
+  · exact RingHom.ext_int _ _
+  · simpa using! h _
+
+
+@[simps -isSimp]
 
 中文:
 引理 of_mvPolynomial_int_ext
@@ -88,7 +94,13 @@ lemma of_mvPolynomial_int_ext
     ext x
     · obtain ⟨x⟩ := x
       simpa [-map_intCast, -eq_intCast] using! DFunLike.congr_fun this (C x)
-    · simpa [-map_intCast, -eq
+    · simpa [-map_intCast, -eq_intCast] using! DFunLike.congr_fun this (X x)
+  ext1
+  · exact RingHom.ext_int _ _
+  · simpa using! h _
+
+
+@[simps -isSimp]
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, MvPolynomial, MvPolynomial.mapEquiv, RingHom, RingHom.ext_int, ULift.ringEquiv.symm, congr_fun, eq_intCast, ext_int, f.hom.comp, g.hom.comp, mapEquiv, map_intCast, ringEquiv, toRingHom
 -/
@@ -159,7 +171,14 @@ definition toSpecMvPolyIntEquiv
   left_inv f := by
     apply (ΓSpec.adjunction.homEquiv _ _).symm.injective
     apply Quiver.Hom.unop_inj
-    rw [Ad
+    rw [Adjunction.homEquiv_symm_apply]; rw [Adjunction.homEquiv_symm_apply]
+    dsimp
+    simp only [Scheme.toSpecΓ_appTop, Scheme.ΓSpecIso_naturality, Iso.inv_hom_id_assoc]
+    apply of_mvPolynomial_int_ext
+    intro i
+    rw [ConcreteCategory.hom_ofHom]; rw [coe_eval₂Hom]; rw [eval₂_X]
+    rfl
+  right_inv v := by ext; simp
 
 中文:
 定义 toSpecMvPoly整数Equiv
@@ -170,7 +189,14 @@ definition toSpecMvPolyIntEquiv
   left_inv f := by
     apply (ΓSpec.adjunction.homEquiv _ _).symm.injective
     apply Quiver.Hom.unop_inj
-    rw [Ad
+    rw [Adjunction.homEquiv_symm_apply]; rw [Adjunction.homEquiv_symm_apply]
+    dsimp
+    simp only [Scheme.toSpecΓ_appTop, Scheme.ΓSpecIso_naturality, Iso.inv_hom_id_assoc]
+    apply of_mvPolynomial_int_ext
+    intro i
+    rw [ConcreteCategory.hom_ofHom]; rw [coe_eval₂Hom]; rw [eval₂_X]
+    rfl
+  right_inv v := by ext; simp
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.eq_affineLocally, LocallyOfFinitePresentation, Scheme, Smooth, affineLocally_le, appTop, eq_affineLocally, f.appTop, finitePresentation, hf.finitePresentation
 -/
@@ -443,7 +469,31 @@ definition isoOfIsAffine
         ((Scheme.ΓSpecIso (.of (MvPolynomial n Γ(S, ⊤)))).inv ∘ MvPolynomial.X)
       hom_inv_id := by
         ext1
-       
+        · simp only [Category.assoc, homOfVector_over, Category.id_comp]
+          rw [← Spec.map_comp_assoc]; rw [← CommRingCat.ofHom_comp]; rw [eval₂Hom_comp_C]; rw [CommRingCat.ofHom_hom]; rw [← Scheme.toSpecΓ_naturality_assoc]
+          simp [Scheme.isoSpec]
+        · simp
+      inv_hom_id := by
+        apply ext_of_isAffine
+        simp only [Scheme.Hom.comp_base, TopologicalSpace.Opens.map_comp_obj,
+          TopologicalSpace.Opens.map_top, Scheme.Hom.comp_app, Scheme.toSpecΓ_appTop,
+          Scheme.ΓSpecIso_naturality, Category.assoc, Scheme.Hom.id_app, ← Iso.eq_inv_comp,
+          Category.comp_id]
+        ext : 1
+        apply ringHom_ext'
+        · change _ = (CommRingCat.ofHom C ≫ _).hom
+          rw [CommRingCat.hom_comp]; rw [RingHom.comp_assoc]; rw [CommRingCat.hom_ofHom]; rw [eval₂Hom_comp_C]; rw [← CommRingCat.hom_comp]; rw [← CommRingCat.hom_ext_iff]; rw [← cancel_mono (Scheme.ΓSpecIso _).hom]
+          rw [← Scheme.Hom.comp_appTop]; rw [homOfVector_over]; rw [Scheme.Hom.comp_appTop]
+          simp only [Category.assoc, Scheme.ΓSpecIso_naturality, CommRingCat.of_carrier,
+            ← Scheme.toSpecΓ_appTop]
+          rw [← Scheme.Hom.comp_appTop_assoc]; rw [Scheme.isoSpec]; rw [asIso_inv]; rw [IsIso.hom_inv_id]
+          simp
+        · intro i
+          rw [CommRingCat.comp_apply]; rw [ConcreteCategory.hom_ofHom]; rw [coe_eval₂Hom]
+          simp only [eval₂_X]
+          exact homOfVector_appTop_coord _ _ _
+
+@[simp]
 
 中文:
 定义 isoOfIsAffine
@@ -454,7 +504,31 @@ definition isoOfIsAffine
         ((Scheme.ΓSpecIso (.of (MvPolynomial n Γ(S, ⊤)))).inv ∘ MvPolynomial.X)
       hom_inv_id := by
         ext1
-       
+        · simp only [Category.assoc, homOfVector_over, Category.id_comp]
+          rw [← Spec.map_comp_assoc]; rw [← CommRingCat.ofHom_comp]; rw [eval₂Hom_comp_C]; rw [CommRingCat.ofHom_hom]; rw [← Scheme.toSpecΓ_naturality_assoc]
+          simp [Scheme.isoSpec]
+        · simp
+      inv_hom_id := by
+        apply ext_of_isAffine
+        simp only [Scheme.Hom.comp_base, TopologicalSpace.Opens.map_comp_obj,
+          TopologicalSpace.Opens.map_top, Scheme.Hom.comp_app, Scheme.toSpecΓ_appTop,
+          Scheme.ΓSpecIso_naturality, Category.assoc, Scheme.Hom.id_app, ← Iso.eq_inv_comp,
+          Category.comp_id]
+        ext : 1
+        apply ringHom_ext'
+        · change _ = (CommRingCat.ofHom C ≫ _).hom
+          rw [CommRingCat.hom_comp]; rw [RingHom.comp_assoc]; rw [CommRingCat.hom_ofHom]; rw [eval₂Hom_comp_C]; rw [← CommRingCat.hom_comp]; rw [← CommRingCat.hom_ext_iff]; rw [← cancel_mono (Scheme.ΓSpecIso _).hom]
+          rw [← Scheme.Hom.comp_appTop]; rw [homOfVector_over]; rw [Scheme.Hom.comp_appTop]
+          simp only [Category.assoc, Scheme.ΓSpecIso_naturality, CommRingCat.of_carrier,
+            ← Scheme.toSpecΓ_appTop]
+          rw [← Scheme.Hom.comp_appTop_assoc]; rw [Scheme.isoSpec]; rw [asIso_inv]; rw [IsIso.hom_inv_id]
+          simp
+        · intro i
+          rw [CommRingCat.comp_apply]; rw [ConcreteCategory.hom_ofHom]; rw [coe_eval₂Hom]
+          simp only [eval₂_X]
+          exact homOfVector_appTop_coord _ _ _
+
+@[simp]
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, Spec.map
 -/
@@ -635,7 +709,9 @@ lemma SpecIso_inv_appTop_coord
   proof: by
   simp only [SpecIso, Iso.trans_inv, Functor.mapIso_inv, Iso.op_inv, Scheme.Spec_map,
     Quiver.Hom.unop_op, TopologicalSpace.Opens.map_top, Scheme.Hom.comp_app, CommRingCat.comp_apply]
-  rw [isoOfIsAffine_inv_appTop_coord]; rw [← CommRingCat.comp_apply]; rw [← Scheme.ΓSpecIso_inv_naturality]; r
+  rw [isoOfIsAffine_inv_appTop_coord]; rw [← CommRingCat.comp_apply]; rw [← Scheme.ΓSpecIso_inv_naturality]; rw [CommRingCat.comp_apply]
+  congr 1
+  exact map_X _ _
 
 中文:
 引理 SpecIso_inv_appTop_coord
@@ -643,7 +719,9 @@ lemma SpecIso_inv_appTop_coord
   证明: by
   simp only [SpecIso, Iso.trans_inv, Functor.mapIso_inv, Iso.op_inv, Scheme.Spec_map,
     Quiver.Hom.unop_op, TopologicalSpace.Opens.map_top, Scheme.Hom.comp_app, CommRingCat.comp_apply]
-  rw [isoOfIsAffine_inv_appTop_coord]; rw [← CommRingCat.comp_apply]; rw [← Scheme.ΓSpecIso_inv_naturality]; r
+  rw [isoOfIsAffine_inv_appTop_coord]; rw [← CommRingCat.comp_apply]; rw [← Scheme.ΓSpecIso_inv_naturality]; rw [CommRingCat.comp_apply]
+  congr 1
+  exact map_X _ _
 
 Depends on / 依赖: CommRingCat, CommRingCat.comp_apply, Functor, Functor.mapIso_inv, Iso.op_inv, Iso.trans_inv, Quiver, Quiver.Hom.unop_op, Scheme, Scheme.Hom.comp_app, Scheme.Spec_map, SpecIso, Spec_map, TopologicalSpace, TopologicalSpace.Opens.map_top, comp_app, comp_apply, isoOfIsAffine_inv_appTop_coord, mapIso_inv, map_X
 -/
@@ -861,7 +939,10 @@ lemma map_SpecMap
   · simp only [map_over, Category.assoc, SpecIso_inv_over, SpecIso_inv_over_assoc,
       ← Spec.map_comp, ← CommRingCat.ofHom_comp]
     rw [map_comp_C]; rw [CommRingCat.ofHom_comp]; rw [CommRingCat.ofHom_hom]
-  · simp only [TopologicalSpace.Opens.map_top, Scheme.Ho
+  · simp only [TopologicalSpace.Opens.map_top, Scheme.Hom.comp_app, CommRingCat.comp_apply]
+    conv_lhs => enter [2]; tactic => exact map_appTop_coord _ _
+    conv_rhs => enter [2]; tactic => exact SpecIso_inv_appTop_coord _ _
+    rw [SpecIso_inv_appTop_coord]; rw [← CommRingCat.comp_apply]; rw [← Scheme.ΓSpecIso_inv_naturality]; rw [CommRingCat.comp_apply]; rw [ConcreteCategory.hom_ofHom]; rw [map_X]
 
 中文:
 引理 map_SpecMap
@@ -872,7 +953,10 @@ lemma map_SpecMap
   · simp only [map_over, Category.assoc, SpecIso_inv_over, SpecIso_inv_over_assoc,
       ← Spec.map_comp, ← CommRingCat.ofHom_comp]
     rw [map_comp_C]; rw [CommRingCat.ofHom_comp]; rw [CommRingCat.ofHom_hom]
-  · simp only [TopologicalSpace.Opens.map_top, Scheme.Ho
+  · simp only [TopologicalSpace.Opens.map_top, Scheme.Hom.comp_app, CommRingCat.comp_apply]
+    conv_lhs => enter [2]; tactic => exact map_appTop_coord _ _
+    conv_rhs => enter [2]; tactic => exact SpecIso_inv_appTop_coord _ _
+    rw [SpecIso_inv_appTop_coord]; rw [← CommRingCat.comp_apply]; rw [← Scheme.ΓSpecIso_inv_naturality]; rw [CommRingCat.comp_apply]; rw [ConcreteCategory.hom_ofHom]; rw [map_X]
 
 Depends on / 依赖: Category, Category.assoc, CommRingCat, CommRingCat.comp_, CommRingCat.comp_apply, CommRingCat.ofHom_comp, CommRingCat.ofHom_hom, Iso.inv_comp_eq, Scheme, Scheme.Hom.comp_app, Spec.map_comp, SpecIso_inv_appTop_coord, SpecIso_inv_over, SpecIso_inv_over_assoc, TopologicalSpace, TopologicalSpace.Opens.map_top, comp_, comp_app, comp_apply, conv_lhs
 -/
@@ -1159,14 +1243,18 @@ instance [Finite
   signature: n] : LocallyOfFinitePresentation (𝔸(n; S) ↘ S)
   body: MorphismProperty.pullback_fst _ _ by
   have := isIso_of_isTerminal specULiftZIsTerminal.{u} terminalIsTerminal (terminal.from _)
-  rw [← terminal.comp_from (Spec.map (CommRingCat.ofHom C))]; rw [MorphismProperty.cancel_right_of_respectsIso (P := @LocallyOfFinitePresentation)]; rw [HasRingHomProperty
+  rw [← terminal.comp_from (Spec.map (CommRingCat.ofHom C))]; rw [MorphismProperty.cancel_right_of_respectsIso (P := @LocallyOfFinitePresentation)]; rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFinitePresentation)]; rw [RingHom.FinitePresentation]
+  convert! (inferInstance : Algebra.FinitePresentation (ULift Int) Int[n])
+  exact Algebra.algebra_ext _ _ fun _ => rfl
 
 中文:
 实例 [有限
   签名: n] : 局部有限呈现 (𝔸(n; S) ↘ S)
   定义体: MorphismProperty.pullback_fst _ _ by
   have := isIso_of_isTerminal specULiftZIsTerminal.{u} terminalIsTerminal (terminal.from _)
-  rw [← terminal.comp_from (Spec.map (CommRingCat.ofHom C))]; rw [MorphismProperty.cancel_right_of_respectsIso (P := @LocallyOfFinitePresentation)]; rw [HasRingHomProperty
+  rw [← terminal.comp_from (Spec.map (CommRingCat.ofHom C))]; rw [MorphismProperty.cancel_right_of_respectsIso (P := @LocallyOfFinitePresentation)]; rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFinitePresentation)]; rw [RingHom.FinitePresentation]
+  convert! (inferInstance : Algebra.FinitePresentation (ULift Int) Int[n])
+  exact Algebra.algebra_ext _ _ fun _ => rfl
 
 Depends on / 依赖: Algebra, Algebra.FinitePresentation, Algebra.algebra_ext, CommRingCat, CommRingCat.ofHom, FinitePresentation, HasRingHomProperty, HasRingHomProperty.Spec_iff, LocallyOfFinitePresentation, MorphismProperty, MorphismProperty.cancel_right_of_respectsIso, MorphismProperty.pullback_fst, RingHom, RingHom.FinitePresentation, Spec.map, Spec_iff, algebra_ext, cancel_right_of_respectsIso, comp_from, convert
 -/
@@ -1190,7 +1278,12 @@ lemma isOpenMap_over
       (P := topologically @IsOpenMap) S.affineCover).mpr ?_
     intro i
     have := this (n := n) (S.affineCover.X i) ⟨_, rfl⟩
-    rwa [← (isPullback_map (n := n) (S.affineCove
+    rwa [← (isPullback_map (n := n) (S.affineCover.f i)).isoPullback_hom_snd,
+      MorphismProperty.cancel_left_of_respectsIso (P := topologically @IsOpenMap)] at this
+  obtain ⟨R, rfl⟩ := hS
+  rw [← MorphismProperty.cancel_left_of_respectsIso (P := topologically @IsOpenMap)
+    (SpecIso n R).inv]; rw [SpecIso_inv_over]
+  exact MvPolynomial.isOpenMap_comap_C
 
 中文:
 引理 isOpenMap_over
@@ -1202,7 +1295,12 @@ lemma isOpenMap_over
       (P := topologically @IsOpenMap) S.affineCover).mpr ?_
     intro i
     have := this (n := n) (S.affineCover.X i) ⟨_, rfl⟩
-    rwa [← (isPullback_map (n := n) (S.affineCove
+    rwa [← (isPullback_map (n := n) (S.affineCover.f i)).isoPullback_hom_snd,
+      MorphismProperty.cancel_left_of_respectsIso (P := topologically @IsOpenMap)] at this
+  obtain ⟨R, rfl⟩ := hS
+  rw [← MorphismProperty.cancel_left_of_respectsIso (P := topologically @IsOpenMap)
+    (SpecIso n R).inv]; rw [SpecIso_inv_over]
+  exact MvPolynomial.isOpenMap_comap_C
 
 Depends on / 依赖: IsOpenMap, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_openCover, MorphismProperty, MorphismProperty.cancel_left_of_respectsIso, S.affineCover, S.affineCover.X, S.affineCover.f, affineCover, cancel_left_of_respectsIso, iff_of_openCover, isPullback_map, isoPullback_hom_snd, topologically
 -/
@@ -1316,7 +1414,8 @@ instance [h
     have : IsReduced 𝔸(n; S.affineCover.X i) := this _ ⟨_, rfl⟩
     exact isReduced_of_isOpenImmersion ((isPullback_map _).isoPullback.inv)
   obtain ⟨R, rfl⟩ := hS
-  rw [affi
+  rw [affine_isReduced_iff] at h
+  exact isReduced_of_isOpenImmersion (SpecIso n R).hom
 
 中文:
 实例 [h
@@ -1328,7 +1427,8 @@ instance [h
     have : IsReduced 𝔸(n; S.affineCover.X i) := this _ ⟨_, rfl⟩
     exact isReduced_of_isOpenImmersion ((isPullback_map _).isoPullback.inv)
   obtain ⟨R, rfl⟩ := hS
-  rw [affi
+  rw [affine_isReduced_iff] at h
+  exact isReduced_of_isOpenImmersion (SpecIso n R).hom
 
 Depends on / 依赖: IsReduced, IsReduced.iff_of_openCover, S.affineCover.X, S.affineCover.pullback, SpecIso, affineCover, affine_isReduced_iff, iff_of_openCover, isPullback_map, isReduced_of_isOpenImmersion, isoPullback, isoPullback.inv
 -/
@@ -1391,7 +1491,9 @@ instance [IsEmpty
   apply IsStableUnderComposition.comp_mem
   · rw [HasAffineProperty.iff_of_isAffine (P := isomorphisms _), ← isomorphisms,
       ← arrow_mk_iso_iff (isomorphisms _) (arrowIsoΓSpecOfIsAffine _)]
-   
+    exact ⟨inferInstance, (ConcreteCategory.isIso_iff_bijective _).mpr
+      ⟨C_injective n _, C_surjective _⟩⟩
+  · exact isIso_of_isTerminal specULiftZIsTerminal terminalIsTerminal (terminal.from _)
 
 中文:
 实例 [是空
@@ -1402,7 +1504,9 @@ instance [IsEmpty
   apply IsStableUnderComposition.comp_mem
   · rw [HasAffineProperty.iff_of_isAffine (P := isomorphisms _), ← isomorphisms,
       ← arrow_mk_iso_iff (isomorphisms _) (arrowIsoΓSpecOfIsAffine _)]
-   
+    exact ⟨inferInstance, (ConcreteCategory.isIso_iff_bijective _).mpr
+      ⟨C_injective n _, C_surjective _⟩⟩
+  · exact isIso_of_isTerminal specULiftZIsTerminal terminalIsTerminal (terminal.from _)
 
 Depends on / 依赖: pullback_fst
 -/
@@ -1432,7 +1536,24 @@ lemma isIntegralHom_over_iff_isEmpty
     wlog hS : exists R, S = Spec R
     · obtain ⟨x⟩ := ‹Nonempty S›
       obtain ⟨y, hy⟩ := S.affineCover.covers x
-      exact this (S.affineCover.X _) (MorphismProperty.IsStableUnderBaseChange.of_is
+      exact this (S.affineCover.X _) (MorphismProperty.IsStableUnderBaseChange.of_isPullback
+        (isPullback_map (S.affineCover.f _)) h) ⟨y⟩ ⟨_, rfl⟩
+    obtain ⟨R, rfl⟩ := hS
+    have : Nontrivial R := (subsingleton_or_nontrivial R).resolve_left fun H =>
+        not_isEmpty_of_nonempty (Spec R) (inferInstanceAs (IsEmpty (PrimeSpectrum R)))
+    constructor
+    intro i
+    have := RingHom.toMorphismProperty_respectsIso_iff.mp RingHom.isIntegral_respectsIso.{u}
+    rw [← MorphismProperty.cancel_left_of_respectsIso @IsIntegralHom (SpecIso n R).inv]; rw [SpecIso_inv_over]; rw [HasAffineProperty.iff_of_isAffine (P := @IsIntegralHom)] at h
+    obtain ⟨p : Polynomial R, hp, hp'⟩ :=
+      (MorphismProperty.arrow_mk_iso_iff (RingHom.toMorphismProperty RingHom.IsIntegral)
+        (arrowIsoΓSpecOfIsAffine _)).mpr h.2 (X i)
+    have : (rename fun _ => i).comp (uniqueAlgEquiv.{_, u} _ PUnit).symm.toAlgHom p = 0 := by
+      simp [← hp', ← algebraMap_eq]
+    rw [AlgHom.comp_apply]; rw [map_eq_zero_iff _ (rename_injective _ (fun _ _ _ => rfl))] at this
+    simp only [AlgEquiv.coe_toAlgHom, EmbeddingLike.map_eq_zero_iff] at this
+    simp [this] at hp
+  · rintro (_ | _) <;> infer_instance
 
 中文:
 引理 is整数egralHom_over_iff_isEmpty
@@ -1446,7 +1567,24 @@ lemma isIntegralHom_over_iff_isEmpty
     wlog hS : exists R, S = Spec R
     · obtain ⟨x⟩ := ‹Nonempty S›
       obtain ⟨y, hy⟩ := S.affineCover.covers x
-      exact this (S.affineCover.X _) (MorphismProperty.IsStableUnderBaseChange.of_is
+      exact this (S.affineCover.X _) (MorphismProperty.IsStableUnderBaseChange.of_isPullback
+        (isPullback_map (S.affineCover.f _)) h) ⟨y⟩ ⟨_, rfl⟩
+    obtain ⟨R, rfl⟩ := hS
+    have : Nontrivial R := (subsingleton_or_nontrivial R).resolve_left fun H =>
+        not_isEmpty_of_nonempty (Spec R) (inferInstanceAs (IsEmpty (PrimeSpectrum R)))
+    constructor
+    intro i
+    have := RingHom.toMorphismProperty_respectsIso_iff.mp RingHom.isIntegral_respectsIso.{u}
+    rw [← MorphismProperty.cancel_left_of_respectsIso @IsIntegralHom (SpecIso n R).inv]; rw [SpecIso_inv_over]; rw [HasAffineProperty.iff_of_isAffine (P := @IsIntegralHom)] at h
+    obtain ⟨p : Polynomial R, hp, hp'⟩ :=
+      (MorphismProperty.arrow_mk_iso_iff (RingHom.toMorphismProperty RingHom.IsIntegral)
+        (arrowIsoΓSpecOfIsAffine _)).mpr h.2 (X i)
+    have : (rename fun _ => i).comp (uniqueAlgEquiv.{_, u} _ PUnit).symm.toAlgHom p = 0 := by
+      simp [← hp', ← algebraMap_eq]
+    rw [AlgHom.comp_apply]; rw [map_eq_zero_iff _ (rename_injective _ (fun _ _ _ => rfl))] at this
+    simp only [AlgEquiv.coe_toAlgHom, EmbeddingLike.map_eq_zero_iff] at this
+    simp [this] at hp
+  · rintro (_ | _) <;> infer_instance
 
 Depends on / 依赖: IsEmpty, IsStableUnderBaseChange, MorphismProperty, MorphismProperty.IsStableUnderBaseChange.of_isPullback, Nonempty, Nontrivial, PrimeSpectrum, S.affineCover.X, S.affineCover.covers, S.affineCover.f, Unique, affineCover, covers, isEmpty_or_nonempty, isPullback_map, not_isEmpty_of_nonempty, of_isPullback, resolve_left, subsingleton_or_nontrivial
 -/

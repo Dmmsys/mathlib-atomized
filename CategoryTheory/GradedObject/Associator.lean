@@ -125,13 +125,13 @@ English:
 lemma ι_mapBifunctorAssociator_inv
   given: (i₁ : I₁) (i₂ : I₂) (i₃ : I₃) (j : J) (h : r (i₁, i₂, i₃) = j)
   proof: by
-  rw [← cancel_mono ((mapBifunctorAssociator associator ρ₁₂ ρ₂₃ X₁ X₂ X₃).hom j)]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_eval]; rw [comp_id]; rw [ι_mapBifunctorAssociator_hom]; rw [← NatTrans.comp_app_assoc]; rw [← NatTrans.comp_app]; rw [Iso.inv_hom_id_app]; rw [NatTrans.id_app]; rw [NatTra
+  rw [← cancel_mono ((mapBifunctorAssociator associator ρ₁₂ ρ₂₃ X₁ X₂ X₃).hom j)]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_eval]; rw [comp_id]; rw [ι_mapBifunctorAssociator_hom]; rw [← NatTrans.comp_app_assoc]; rw [← NatTrans.comp_app]; rw [Iso.inv_hom_id_app]; rw [NatTrans.id_app]; rw [NatTrans.id_app]; rw [id_comp]
 
 中文:
 引理 ι_mapBifunctorAssociator_inv
   条件: (i₁ : I₁) (i₂ : I₂) (i₃ : I₃) (j : J) (h : r (i₁, i₂, i₃) = j)
   证明: by
-  rw [← cancel_mono ((mapBifunctorAssociator associator ρ₁₂ ρ₂₃ X₁ X₂ X₃).hom j)]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_eval]; rw [comp_id]; rw [ι_mapBifunctorAssociator_hom]; rw [← NatTrans.comp_app_assoc]; rw [← NatTrans.comp_app]; rw [Iso.inv_hom_id_app]; rw [NatTrans.id_app]; rw [NatTra
+  rw [← cancel_mono ((mapBifunctorAssociator associator ρ₁₂ ρ₂₃ X₁ X₂ X₃).hom j)]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_eval]; rw [comp_id]; rw [ι_mapBifunctorAssociator_hom]; rw [← NatTrans.comp_app_assoc]; rw [← NatTrans.comp_app]; rw [Iso.inv_hom_id_app]; rw [NatTrans.id_app]; rw [NatTrans.id_app]; rw [id_comp]
 
 Depends on / 依赖: Iso.inv_hom_id_app, Iso.inv_hom_id_eval, NatTrans, NatTrans.comp_app, NatTrans.comp_app_assoc, NatTrans.id_app, associator, cancel_mono, comp_app, comp_app_assoc, comp_id, id_app, id_comp, inv_hom_id_app, inv_hom_id_eval, mapBifunctorAssociator
 -/

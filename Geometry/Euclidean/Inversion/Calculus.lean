@@ -69,7 +69,12 @@ theorem ContDiffOn.inversion
 protected nonrec theorem ContDiffAt.inversion (hc : ContDiffAt Real n c a) (hR : ContDiffAt Real n R a)
     (hx : ContDiffAt Real n x a) (hne : x a != c a) :
     ContDiffAt Real n (fun a => inversion (c a) (R a) (x a)) a :=
-  hc.inver
+  hc.inversion hR hx hne
+
+protected nonrec theorem ContDiff.inversion (hc : ContDiff Real n c) (hR : ContDiff Real n R)
+    (hx : ContDiff Real n x) (hne : forall a, x a != c a) :
+    ContDiff Real n (fun a => inversion (c a) (R a) (x a)) :=
+  contDiff_iff_contDiffAt.2 fun a => hc.contDiffAt.inversion hR.contDiffAt hx.contDiffAt (hne a)
 
 中文:
 定理 ContDiffOn.inversion
@@ -80,7 +85,12 @@ protected nonrec theorem ContDiffAt.inversion (hc : ContDiffAt Real n c a) (hR :
 protected nonrec theorem ContDiffAt.inversion (hc : ContDiffAt Real n c a) (hR : ContDiffAt Real n R a)
     (hx : ContDiffAt Real n x a) (hne : x a != c a) :
     ContDiffAt Real n (fun a => inversion (c a) (R a) (x a)) a :=
-  hc.inver
+  hc.inversion hR hx hne
+
+protected nonrec theorem ContDiff.inversion (hc : ContDiff Real n c) (hR : ContDiff Real n R)
+    (hx : ContDiff Real n x) (hne : forall a, x a != c a) :
+    ContDiff Real n (fun a => inversion (c a) (R a) (x a)) :=
+  contDiff_iff_contDiffAt.2 fun a => hc.contDiffAt.inversion hR.contDiffAt hx.contDiffAt (hne a)
 -/
 protected theorem ContDiffOn.inversion (hc : ContDiffOn Real n c s) (hR : ContDiffOn Real n R s)
     (hx : ContDiffOn Real n x s) (hne : forall a in s, x a != c a) :
@@ -199,7 +209,18 @@ theorem hasFDerivAt_inversion
     simp +unfoldPartialApp only [inversion]
     simp_rw [dist_eq_norm, div_pow, div_eq_mul_inv]
     have A := (hasFDerivAt_id (𝕜 := Real) (c + x)).sub_const c
-    have B := ((has
+    have B := ((hasDerivAt_inv <| by simpa using hx).comp_hasFDerivAt _ A.norm_sq).const_mul
+      (R ^ 2)
+    exact (B.smul A).add_const c
+  refine this.congr_fderiv (LinearMap.ext_on_codisjoint
+    (Submodule.isCompl_orthogonal (Real ∙ x)).codisjoint
+    (LinearMap.eqOn_span' ?_) fun y hy => ?_)
+  · have : ((‖x‖ ^ 2) ^ 2)⁻¹ * (‖x‖ ^ 2) = (‖x‖ ^ 2)⁻¹ := by
+      rw [← div_eq_inv_mul]; rw [sq (‖x‖ ^ 2)]; rw [div_self_mul_self']
+    simp [Submodule.reflection_orthogonalComplement_singleton_eq_neg,
+      two_mul, this, div_eq_mul_inv, mul_add, add_smul, mul_pow]
+  · simp [Submodule.mem_orthogonal_singleton_iff_inner_right.1 hy,
+      Submodule.reflection_mem_subspace_eq_self hy, div_eq_mul_inv, mul_pow]
 
 中文:
 定理 hasFDerivAt_inversion
@@ -210,7 +231,18 @@ theorem hasFDerivAt_inversion
     simp +unfoldPartialApp only [inversion]
     simp_rw [dist_eq_norm, div_pow, div_eq_mul_inv]
     have A := (hasFDerivAt_id (𝕜 := Real) (c + x)).sub_const c
-    have B := ((has
+    have B := ((hasDerivAt_inv <| by simpa using hx).comp_hasFDerivAt _ A.norm_sq).const_mul
+      (R ^ 2)
+    exact (B.smul A).add_const c
+  refine this.congr_fderiv (LinearMap.ext_on_codisjoint
+    (Submodule.isCompl_orthogonal (Real ∙ x)).codisjoint
+    (LinearMap.eqOn_span' ?_) fun y hy => ?_)
+  · have : ((‖x‖ ^ 2) ^ 2)⁻¹ * (‖x‖ ^ 2) = (‖x‖ ^ 2)⁻¹ := by
+      rw [← div_eq_inv_mul]; rw [sq (‖x‖ ^ 2)]; rw [div_self_mul_self']
+    simp [Submodule.reflection_orthogonalComplement_singleton_eq_neg,
+      two_mul, this, div_eq_mul_inv, mul_add, add_smul, mul_pow]
+  · simp [Submodule.mem_orthogonal_singleton_iff_inner_right.1 hy,
+      Submodule.reflection_mem_subspace_eq_self hy, div_eq_mul_inv, mul_pow]
 
 Depends on / 依赖: A.norm_sq, B.smul, HasFDerivAt, LinearMap, LinearMap.ext_on_codisjoint, Submodule, Submodule.isCompl_orthogonal, add_const, add_left_surjective, codisjoint, comp_hasFDerivAt, congr_fderiv, const_mul, dist_eq_norm, div_eq_mul_inv, div_pow, ext_on_codisjoint, hasDerivAt_inv, hasFDerivAt_id, inversion
 -/

@@ -614,7 +614,11 @@ instance instPreorderSum
     lt_iff_le_not_ge := fun a b => by
       refine ⟨fun hab => ⟨hab.mono (fun _ _ => le_of_lt) fun _ _ => le_of_lt, ?_⟩, ?_⟩
       · rintro (⟨hba⟩ | ⟨hba⟩)
-        · exact hba.not_
+        · exact hba.not_gt (inl_lt_inl_iff.1 hab)
+        · exact hba.not_gt (inr_lt_inr_iff.1 hab)
+      · rintro ⟨⟨hab⟩ | ⟨hab⟩, hba⟩
+        · exact LiftRel.inl (hab.lt_of_not_ge fun h => hba <| LiftRel.inl h)
+        · exact LiftRel.inr (hab.lt_of_not_ge fun h => hba <| LiftRel.inr h) }
 
 中文:
 实例 instPreorderSum
@@ -625,7 +629,11 @@ instance instPreorderSum
     lt_iff_le_not_ge := fun a b => by
       refine ⟨fun hab => ⟨hab.mono (fun _ _ => le_of_lt) fun _ _ => le_of_lt, ?_⟩, ?_⟩
       · rintro (⟨hba⟩ | ⟨hba⟩)
-        · exact hba.not_
+        · exact hba.not_gt (inl_lt_inl_iff.1 hab)
+        · exact hba.not_gt (inr_lt_inr_iff.1 hab)
+      · rintro ⟨⟨hab⟩ | ⟨hab⟩, hba⟩
+        · exact LiftRel.inl (hab.lt_of_not_ge fun h => hba <| LiftRel.inl h)
+        · exact LiftRel.inr (hab.lt_of_not_ge fun h => hba <| LiftRel.inr h) }
 
 Depends on / 依赖: LiftRel, LiftRel.inl, LiftRel.inr, LiftRel.refl, LiftRel.trans, hab.lt_of_not_ge, hab.mono, hba.not_gt, inl_lt_inl_iff, inr_lt_inr_iff, instLESum, instLTSum, le_of_lt, le_refl, le_trans, lt_iff_le_not_ge, lt_of_not_ge, not_gt
 -/
@@ -831,7 +839,10 @@ theorem noMinOrder_iff
       ⟨fun a => by
         obtain ⟨b | b, h⟩ := exists_lt (inr a : α oplus β)
         · exact (not_inl_lt_inr h).elim
-        · exa
+        · exact ⟨b, inr_lt_inr_iff.1 h⟩⟩⟩,
+    fun h => @Sum.noMinOrder _ _ _ _ h.1 h.2⟩
+
+@[simp]
 
 中文:
 定理 noMinOrder_iff
@@ -845,7 +856,10 @@ theorem noMinOrder_iff
       ⟨fun a => by
         obtain ⟨b | b, h⟩ := exists_lt (inr a : α oplus β)
         · exact (not_inl_lt_inr h).elim
-        · exa
+        · exact ⟨b, inr_lt_inr_iff.1 h⟩⟩⟩,
+    fun h => @Sum.noMinOrder _ _ _ _ h.1 h.2⟩
+
+@[simp]
 
 Depends on / 依赖: Sum.noMinOrder, exists_lt, inl_lt_inl_iff, inr_lt_inr_iff, noMinOrder, not_inl_lt_inr, not_inr_lt_inl
 -/
@@ -877,7 +891,8 @@ theorem noMaxOrder_iff
       ⟨fun a => by
         obtain ⟨b | b, h⟩ := exists_gt (inr a : α oplus β)
         · exact (not_inr_lt_inl h).elim
-        · exa
+        · exact ⟨b, inr_lt_inr_iff.1 h⟩⟩⟩,
+    fun h => @Sum.noMaxOrder _ _ _ _ h.1 h.2⟩
 
 中文:
 定理 noMaxOrder_iff
@@ -891,7 +906,8 @@ theorem noMaxOrder_iff
       ⟨fun a => by
         obtain ⟨b | b, h⟩ := exists_gt (inr a : α oplus β)
         · exact (not_inr_lt_inl h).elim
-        · exa
+        · exact ⟨b, inr_lt_inr_iff.1 h⟩⟩⟩,
+    fun h => @Sum.noMaxOrder _ _ _ _ h.1 h.2⟩
 
 Depends on / 依赖: Sum.noMaxOrder, exists_gt, inl_lt_inl_iff, inr_lt_inr_iff, noMaxOrder, not_inl_lt_inr, not_inr_lt_inl
 -/
@@ -920,7 +936,9 @@ instance denselyOrdered
       ⟨toLex (inl c), LiftRel.inl ha, LiftRel.inl hb⟩
     | inr _, inr _, LiftRel.inr h =>
       let ⟨c, ha, hb⟩ := exists_between h
-      ⟨toLex (inr c), LiftRel.inr ha, LiftRel.inr h
+      ⟨toLex (inr c), LiftRel.inr ha, LiftRel.inr hb⟩⟩
+
+@[simp]
 
 中文:
 实例 denselyOrdered
@@ -932,7 +950,9 @@ instance denselyOrdered
       ⟨toLex (inl c), LiftRel.inl ha, LiftRel.inl hb⟩
     | inr _, inr _, LiftRel.inr h =>
       let ⟨c, ha, hb⟩ := exists_between h
-      ⟨toLex (inr c), LiftRel.inr ha, LiftRel.inr h
+      ⟨toLex (inr c), LiftRel.inr ha, LiftRel.inr hb⟩⟩
+
+@[simp]
 
 Depends on / 依赖: LiftRel, LiftRel.inl, LiftRel.inr, exists_between
 -/
@@ -960,7 +980,12 @@ theorem denselyOrdered_iff
         · exact ⟨c, inl_lt_inl_iff.1 ha, inl_lt_inl_iff.1 hb⟩
         · exact (not_inl_lt_inr ha).elim⟩,
       ⟨fun a b h => by
-        obtain ⟨c | c, ha, hb⟩ := @exists_between
+        obtain ⟨c | c, ha, hb⟩ := @exists_between (α oplus β) _ _ _ _ (inr_lt_inr_iff.2 h)
+        · exact (not_inl_lt_inr hb).elim
+        · exact ⟨c, inr_lt_inr_iff.1 ha, inr_lt_inr_iff.1 hb⟩⟩⟩,
+    fun h => @Sum.denselyOrdered _ _ _ _ h.1 h.2⟩
+
+@[simp]
 
 中文:
 定理 denselyOrdered_iff
@@ -971,7 +996,12 @@ theorem denselyOrdered_iff
         · exact ⟨c, inl_lt_inl_iff.1 ha, inl_lt_inl_iff.1 hb⟩
         · exact (not_inl_lt_inr ha).elim⟩,
       ⟨fun a b h => by
-        obtain ⟨c | c, ha, hb⟩ := @exists_between
+        obtain ⟨c | c, ha, hb⟩ := @exists_between (α oplus β) _ _ _ _ (inr_lt_inr_iff.2 h)
+        · exact (not_inl_lt_inr hb).elim
+        · exact ⟨c, inr_lt_inr_iff.1 ha, inr_lt_inr_iff.1 hb⟩⟩⟩,
+    fun h => @Sum.denselyOrdered _ _ _ _ h.1 h.2⟩
+
+@[simp]
 
 Depends on / 依赖: Sum.denselyOrdered, denselyOrdered, exists_between, inl_lt_inl_iff, inr_lt_inr_iff, not_inl_lt_inr
 -/
@@ -1520,7 +1550,13 @@ instance preorder
     lt_iff_le_not_ge := fun a b => by
       refine ⟨fun hab => ⟨hab.mono (fun _ _ => le_of_lt) fun _ _ => le_of_lt, ?_⟩, ?_⟩
       · rintro (⟨hba⟩ | ⟨hba⟩ | ⟨b, a⟩)
-  
+        · exact hba.not_gt (inl_lt_inl_iff.1 hab)
+        · exact hba.not_gt (inr_lt_inr_iff.1 hab)
+        · exact not_inr_lt_inl hab
+      · rintro ⟨⟨hab⟩ | ⟨hab⟩ | ⟨a, b⟩, hba⟩
+        · exact Lex.inl (hab.lt_of_not_ge fun h => hba <| Lex.inl h)
+        · exact Lex.inr (hab.lt_of_not_ge fun h => hba <| Lex.inr h)
+        · exact Lex.sep _ _ }
 
 中文:
 实例 preorder
@@ -1531,7 +1567,13 @@ instance preorder
     lt_iff_le_not_ge := fun a b => by
       refine ⟨fun hab => ⟨hab.mono (fun _ _ => le_of_lt) fun _ _ => le_of_lt, ?_⟩, ?_⟩
       · rintro (⟨hba⟩ | ⟨hba⟩ | ⟨b, a⟩)
-  
+        · exact hba.not_gt (inl_lt_inl_iff.1 hab)
+        · exact hba.not_gt (inr_lt_inr_iff.1 hab)
+        · exact not_inr_lt_inl hab
+      · rintro ⟨⟨hab⟩ | ⟨hab⟩ | ⟨a, b⟩, hba⟩
+        · exact Lex.inl (hab.lt_of_not_ge fun h => hba <| Lex.inl h)
+        · exact Lex.inr (hab.lt_of_not_ge fun h => hba <| Lex.inr h)
+        · exact Lex.sep _ _ }
 
 Depends on / 依赖: Lex.LE, Lex.LT, Lex.inl, Lex.inr, hab.lt_of_not_ge, hab.mono, hba.not_gt, inl_lt_inl_iff, inr_lt_inr_iff, le_of_lt, le_refl, le_trans, lt_iff_le_not_ge, lt_of_not_ge, not_gt, not_inr_lt_inl, refl_of, trans_of
 -/
@@ -1986,6 +2028,9 @@ instance denselyOrdered_of_noMaxOrder
     | inl a, inr _, Lex.sep _ _ =>
       let ⟨c, h⟩ := exists_gt a
       ⟨toLex (inl c), inl_lt_inl_iff.2 h, inl_lt_inr _ _⟩
+    | inr _, inr _, Lex.inr h =>
+      let ⟨c, ha, hb⟩ := exists_between h
+      ⟨toLex (inr c), inr_lt_inr_iff.2 ha, inr_lt_inr_iff.2 hb⟩⟩
 
 中文:
 实例 denselyOrdered_of_noMaxOrder
@@ -1998,6 +2043,9 @@ instance denselyOrdered_of_noMaxOrder
     | inl a, inr _, Lex.sep _ _ =>
       let ⟨c, h⟩ := exists_gt a
       ⟨toLex (inl c), inl_lt_inl_iff.2 h, inl_lt_inr _ _⟩
+    | inr _, inr _, Lex.inr h =>
+      let ⟨c, ha, hb⟩ := exists_between h
+      ⟨toLex (inr c), inr_lt_inr_iff.2 ha, inr_lt_inr_iff.2 hb⟩⟩
 
 Depends on / 依赖: Lex.inl, Lex.inr, Lex.sep, exists_between, exists_gt, inl_lt_inl_iff, inl_lt_inr, inr_lt_inr_iff
 -/
@@ -2029,6 +2077,9 @@ instance denselyOrdered_of_noMinOrder
     | inl _, inr b, Lex.sep _ _ =>
       let ⟨c, h⟩ := exists_lt b
       ⟨toLex (inr c), inl_lt_inr _ _, inr_lt_inr_iff.2 h⟩
+    | inr _, inr _, Lex.inr h =>
+      let ⟨c, ha, hb⟩ := exists_between h
+      ⟨toLex (inr c), inr_lt_inr_iff.2 ha, inr_lt_inr_iff.2 hb⟩⟩
 
 中文:
 实例 denselyOrdered_of_noMinOrder
@@ -2041,6 +2092,9 @@ instance denselyOrdered_of_noMinOrder
     | inl _, inr b, Lex.sep _ _ =>
       let ⟨c, h⟩ := exists_lt b
       ⟨toLex (inr c), inl_lt_inr _ _, inr_lt_inr_iff.2 h⟩
+    | inr _, inr _, Lex.inr h =>
+      let ⟨c, ha, hb⟩ := exists_between h
+      ⟨toLex (inr c), inr_lt_inr_iff.2 ha, inr_lt_inr_iff.2 hb⟩⟩
 
 Depends on / 依赖: Lex.inl, Lex.inr, Lex.sep, exists_between, exists_lt, inl_lt_inl_iff, inl_lt_inr, inr_lt_inr_iff
 -/
@@ -2371,7 +2425,11 @@ definition sumDualDistrib
       · change inl (toDual a) <= inl (toDual b) ↔ toDual (inl a) <= toDual (inl b)
         simp [toDual_le_toDual, inl_le_inl_iff]
       · exact iff_of_false (@not_inl_le_inr (OrderDual β) (OrderDual α) _ _ _ _) not_inr_le_inl
- 
+      · exact iff_of_false (@not_inr_le_inl (OrderDual α) (OrderDual β) _ _ _ _) not_inl_le_inr
+      · change inr (toDual a) <= inr (toDual b) ↔ toDual (inr a) <= toDual (inr b)
+        simp [toDual_le_toDual, inr_le_inr_iff] }
+
+@[simp]
 
 中文:
 定义 sumDualDistrib
@@ -2382,7 +2440,11 @@ definition sumDualDistrib
       · change inl (toDual a) <= inl (toDual b) ↔ toDual (inl a) <= toDual (inl b)
         simp [toDual_le_toDual, inl_le_inl_iff]
       · exact iff_of_false (@not_inl_le_inr (OrderDual β) (OrderDual α) _ _ _ _) not_inr_le_inl
- 
+      · exact iff_of_false (@not_inr_le_inl (OrderDual α) (OrderDual β) _ _ _ _) not_inl_le_inr
+      · change inr (toDual a) <= inr (toDual b) ↔ toDual (inr a) <= toDual (inr b)
+        simp [toDual_le_toDual, inr_le_inr_iff] }
+
+@[simp]
 
 Depends on / 依赖: Equiv.refl, OrderDual, iff_of_false, inl_le_inl_iff, inr_le_inr_iff, map_rel_iff, not_inl_le_inr, not_inr_le_inl, toDual, toDual_le_toDual
 -/
@@ -2582,7 +2644,19 @@ definition sumLexAssoc
 | inlₗ (inlₗ _), inlₗ (inlₗ _), Lex.inl h => Lex.inl Lex.inl h
 | inlₗ (inlₗ _), inlₗ (inrₗ _), Lex.sep _ _ => Lex.inl Lex.sep _ _
         | inlₗ (inlₗ _), inrₗ _, Lex.sep _ _ => Lex.sep _ _
-| inlₗ
+| inlₗ (inrₗ _), inlₗ (inrₗ _), Lex.inr (Lex.inl h) => Lex.inl Lex.inr h
+        | inlₗ (inrₗ _), inrₗ _, Lex.inr (Lex.sep _ _) => Lex.sep _ _
+        | inrₗ _, inrₗ _, Lex.inr (Lex.inr h) => Lex.inr h,
+        fun h =>
+        match a, b, h with
+        | inlₗ (inlₗ _), inlₗ (inlₗ _), Lex.inl (Lex.inl h) => Lex.inl h
+        | inlₗ (inlₗ _), inlₗ (inrₗ _), Lex.inl (Lex.sep _ _) => Lex.sep _ _
+        | inlₗ (inlₗ _), inrₗ _, Lex.sep _ _ => Lex.sep _ _
+| inlₗ (inrₗ _), inlₗ (inrₗ _), Lex.inl (Lex.inr h) => Lex.inr Lex.inl h
+| inlₗ (inrₗ _), inrₗ _, Lex.sep _ _ => Lex.inr Lex.sep _ _
+| inrₗ _, inrₗ _, Lex.inr h => Lex.inr Lex.inr h⟩ }
+
+@[simp]
 
 中文:
 定义 sumLexAssoc
@@ -2594,7 +2668,19 @@ definition sumLexAssoc
 | inlₗ (inlₗ _), inlₗ (inlₗ _), Lex.inl h => Lex.inl Lex.inl h
 | inlₗ (inlₗ _), inlₗ (inrₗ _), Lex.sep _ _ => Lex.inl Lex.sep _ _
         | inlₗ (inlₗ _), inrₗ _, Lex.sep _ _ => Lex.sep _ _
-| inlₗ
+| inlₗ (inrₗ _), inlₗ (inrₗ _), Lex.inr (Lex.inl h) => Lex.inl Lex.inr h
+        | inlₗ (inrₗ _), inrₗ _, Lex.inr (Lex.sep _ _) => Lex.sep _ _
+        | inrₗ _, inrₗ _, Lex.inr (Lex.inr h) => Lex.inr h,
+        fun h =>
+        match a, b, h with
+        | inlₗ (inlₗ _), inlₗ (inlₗ _), Lex.inl (Lex.inl h) => Lex.inl h
+        | inlₗ (inlₗ _), inlₗ (inrₗ _), Lex.inl (Lex.sep _ _) => Lex.sep _ _
+        | inlₗ (inlₗ _), inrₗ _, Lex.sep _ _ => Lex.sep _ _
+| inlₗ (inrₗ _), inlₗ (inrₗ _), Lex.inl (Lex.inr h) => Lex.inr Lex.inl h
+| inlₗ (inrₗ _), inrₗ _, Lex.sep _ _ => Lex.inr Lex.sep _ _
+| inrₗ _, inrₗ _, Lex.inr h => Lex.inr Lex.inr h⟩ }
+
+@[simp]
 
 Depends on / 依赖: Equiv.sumAssoc, Lex.inl, Lex.inr, Lex.sep, _stabilizer, eq_one_of_smul_eq_one, exists_smul_eq, isComplement, map_rel_iff, sumAssoc
 -/
@@ -2750,7 +2836,16 @@ definition sumLexDualAntidistrib
           toLex (inr <| toDual a) <= toLex (inr <| toDual b) ↔
             toDual (toLex <| inl a) <= toDual (toLex <| inl b)
         simp [toDual_le_toDual]
-      · exac
+      · exact iff_of_false (@Lex.not_inr_le_inl (OrderDual β) (OrderDual α) _ _ _ _)
+          Lex.not_inr_le_inl
+      · exact iff_of_true (@Lex.inl_le_inr (OrderDual β) (OrderDual α) _ _ _ _)
+          (Lex.inl_le_inr _ _)
+      · change
+          toLex (inl <| toDual a) <= toLex (inl <| toDual b) ↔
+            toDual (toLex <| inr a) <= toDual (toLex <| inr b)
+        simp [toDual_le_toDual] }
+
+@[simp]
 
 中文:
 定义 sumLexDualAntidistrib
@@ -2762,7 +2857,16 @@ definition sumLexDualAntidistrib
           toLex (inr <| toDual a) <= toLex (inr <| toDual b) ↔
             toDual (toLex <| inl a) <= toDual (toLex <| inl b)
         simp [toDual_le_toDual]
-      · exac
+      · exact iff_of_false (@Lex.not_inr_le_inl (OrderDual β) (OrderDual α) _ _ _ _)
+          Lex.not_inr_le_inl
+      · exact iff_of_true (@Lex.inl_le_inr (OrderDual β) (OrderDual α) _ _ _ _)
+          (Lex.inl_le_inr _ _)
+      · change
+          toLex (inl <| toDual a) <= toLex (inl <| toDual b) ↔
+            toDual (toLex <| inr a) <= toDual (toLex <| inr b)
+        simp [toDual_le_toDual] }
+
+@[simp]
 
 Depends on / 依赖: Equiv.sumComm, Lex.inl_le_inr, Lex.not_inr_le_inl, OrderDual, iff_of_false, iff_of_true, inl_le_inr, map_rel_iff, not_inr_le_inl, sumComm, toDual, toDual_le_toDual
 -/
@@ -2958,7 +3062,14 @@ definition orderIsoPUnitSumLex
     simp only [Equiv.optionEquivSumPUnit, Option.elim, Equiv.trans_apply, Equiv.coe_fn_mk,
       Equiv.sumComm_apply, swap, Lex.toLex_le_toLex, le_refl]
     cases a <;> cases b
-    · simp only [elim_inr, lex_inl_in
+    · simp only [elim_inr, lex_inl_inl, bot_le]
+    · simp only [elim_inr, elim_inl, Lex.sep, bot_le]
+    · simp only [elim_inl, elim_inr, lex_inr_inl, false_iff]
+      exact not_coe_le_bot _
+    · simp only [elim_inl, lex_inr_inr, coe_le_coe]
+  ⟩
+
+@[simp]
 
 中文:
 定义 orderIsoPUnitSumLex
@@ -2967,7 +3078,14 @@ definition orderIsoPUnitSumLex
     simp only [Equiv.optionEquivSumPUnit, Option.elim, Equiv.trans_apply, Equiv.coe_fn_mk,
       Equiv.sumComm_apply, swap, Lex.toLex_le_toLex, le_refl]
     cases a <;> cases b
-    · simp only [elim_inr, lex_inl_in
+    · simp only [elim_inr, lex_inl_inl, bot_le]
+    · simp only [elim_inr, elim_inl, Lex.sep, bot_le]
+    · simp only [elim_inl, elim_inr, lex_inr_inl, false_iff]
+      exact not_coe_le_bot _
+    · simp only [elim_inl, lex_inr_inr, coe_le_coe]
+  ⟩
+
+@[simp]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Equiv.optionEquivSumPUnit, Equiv.sumComm, Equiv.sumComm_apply, Equiv.trans_apply, Lex.sep, Lex.toLex_le_toLex, Option.elim, bot_le, coe_fn_mk, coe_le_coe, elim_inl, elim_inr, false_iff, le_refl, lex_inl_inl, lex_inr_inl, lex_inr_inr, not_coe_le_bot, optionEquivSumPUnit
 -/
@@ -3085,7 +3203,11 @@ definition orderIsoSumLexPUnit
     cases a <;> cases b
     · simp only [lex_inr_inr, le_top]
     · simp only [lex_inr_inl, false_iff]
-      exact
+      exact not_top_le_coe _
+    · simp only [Lex.sep, le_top]
+    · simp only [lex_inl_inl, coe_le_coe]⟩
+
+@[simp]
 
 中文:
 定义 orderIsoSumLexPUnit
@@ -3096,7 +3218,11 @@ definition orderIsoSumLexPUnit
     cases a <;> cases b
     · simp only [lex_inr_inr, le_top]
     · simp only [lex_inr_inl, false_iff]
-      exact
+      exact not_top_le_coe _
+    · simp only [Lex.sep, le_top]
+    · simp only [lex_inl_inl, coe_le_coe]⟩
+
+@[simp]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Equiv.optionEquivSumPUnit, Equiv.trans_apply, Lex.sep, Lex.toLex_le_toLex, Option.elim, coe_fn_mk, coe_le_coe, false_iff, le_refl, le_top, lex_inl_inl, lex_inr_inl, lex_inr_inr, not_top_le_coe, optionEquivSumPUnit, toLex_le_toLex, trans_apply
 -/

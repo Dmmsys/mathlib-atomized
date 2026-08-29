@@ -209,7 +209,21 @@ public lemma generator_mem : generator E in E := by
     exact SetLike.coe_mem _
 
 public lemma generator_spec (h : E != ⊥) : generator E ∉ (algebraMap K K⟮X⟯).range := by
-  rw [generator_eq
+  rw [generator_eq_coeff h]
+  intro ⟨f, hf⟩
+  exact (exists_φ_coeff_not_mem h).choose_spec ⟨f, by ext; exact hf⟩
+
+public lemma generator_ne_C (h : E != ⊥) : ¬ exists c, generator E = C c :=
+  fun ⟨c, hc⟩ => generator_spec h ⟨c, (by simpa using hc.symm)⟩
+
+public lemma transcendental_generator (h : E != ⊥) : Transcendental K (generator E) :=
+  (generator E).transcendental_of_ne_C (generator_ne_C h)
+
+public lemma generator_ne_zero (h : E != ⊥) : generator E != 0 :=
+  fun H => generator_ne_C h ⟨0, by simp [H]⟩
+
+public lemma adjoin_generator_le : K⟮generator E⟯ <= E :=
+  adjoin_simple_le_iff.mpr generator_mem
 
 中文:
 引理 generator_eq_coeff
@@ -225,7 +239,21 @@ public lemma generator_mem : generator E in E := by
     exact SetLike.coe_mem _
 
 public lemma generator_spec (h : E != ⊥) : generator E ∉ (algebraMap K K⟮X⟯).range := by
-  rw [generator_eq
+  rw [generator_eq_coeff h]
+  intro ⟨f, hf⟩
+  exact (exists_φ_coeff_not_mem h).choose_spec ⟨f, by ext; exact hf⟩
+
+public lemma generator_ne_C (h : E != ⊥) : ¬ exists c, generator E = C c :=
+  fun ⟨c, hc⟩ => generator_spec h ⟨c, (by simpa using hc.symm)⟩
+
+public lemma transcendental_generator (h : E != ⊥) : Transcendental K (generator E) :=
+  (generator E).transcendental_of_ne_C (generator_ne_C h)
+
+public lemma generator_ne_zero (h : E != ⊥) : generator E != 0 :=
+  fun H => generator_ne_C h ⟨0, by simp [H]⟩
+
+public lemma adjoin_generator_le : K⟮generator E⟯ <= E :=
+  adjoin_simple_le_iff.mpr generator_mem
 
 Depends on / 依赖: dif_neg
 -/
@@ -456,7 +484,9 @@ lemma C_c_mul_φ
   conv =>
     enter [1, 2]
     rw [← Polynomial.smul_eq_C_mul]; rw [algebraMap_smul]; rw [← Φ'_map]; rw [eq_C_content_mul_primPart (Φ' E)]
-  rw [Polynomial.map_mul]; rw [map_C]; rw [← mul_assoc]; rw [← C_mul]; rw [inv_mul_cancel₀]; rw [map_one]; rw [one_
+  rw [Polynomial.map_mul]; rw [map_C]; rw [← mul_assoc]; rw [← C_mul]; rw [inv_mul_cancel₀]; rw [map_one]; rw [one_mul]
+  · rw [ne_eq, FaithfulSMul.algebraMap_eq_zero_iff, content_eq_zero_iff]
+    exact Φ'_ne_zero h
 
 中文:
 引理 C_c_mul_φ
@@ -467,7 +497,9 @@ lemma C_c_mul_φ
   conv =>
     enter [1, 2]
     rw [← Polynomial.smul_eq_C_mul]; rw [algebraMap_smul]; rw [← Φ'_map]; rw [eq_C_content_mul_primPart (Φ' E)]
-  rw [Polynomial.map_mul]; rw [map_C]; rw [← mul_assoc]; rw [← C_mul]; rw [inv_mul_cancel₀]; rw [map_one]; rw [one_
+  rw [Polynomial.map_mul]; rw [map_C]; rw [← mul_assoc]; rw [← C_mul]; rw [inv_mul_cancel₀]; rw [map_one]; rw [one_mul]
+  · rw [ne_eq, FaithfulSMul.algebraMap_eq_zero_iff, content_eq_zero_iff]
+    exact Φ'_ne_zero h
 
 Depends on / 依赖: C_mul, FaithfulSMul, FaithfulSMul.algebraMap_eq_zero_iff, Polynomial, Polynomial.map_mul, Polynomial.smul_eq_C_mul, _map, _ne_zero, algebraMap_eq_zero_iff, algebraMap_smul, classical, content_eq_zero_iff, eq_C_content_mul_primPart, map_C, map_mul, map_one, mul_assoc, ne_eq, one_mul, smul_eq_C_mul
 -/
@@ -741,7 +773,9 @@ lemma le_Φ_coeff_generatorIndex_natDegree
   have := congr($(Φ_coeff_generatorIndex h) * algebraMap K[X] K⟮X⟯ (g E))
   conv at this => enter [2, 1, 2]; rw [← num_div_denom (generator E)]
   rw [mul_assoc]; rw [div_mul_cancel₀ _ (algebraMap_ne_zero (generator E).denom_ne_zero)]; rw [← map_mul]; rw [← map_mul] at this
-  replace this := congr
+  replace this := congr($(algebraMap_injective K this).natDegree)
+  rw [natDegree_mul (Φ_coeff_generatorIndex_ne_zero h) (generator E).denom_ne_zero]; rw [natDegree_mul (num_ne_zero (c_ne_zero h)) (num_ne_zero (generator_ne_zero h))] at this
+  grind [natDegree_le_of_dvd (generator_denom_dvd_c_num h) (num_ne_zero (c_ne_zero h))]
 
 中文:
 引理 le_Φ_coeff_generatorIndex_natDegree
@@ -750,7 +784,9 @@ lemma le_Φ_coeff_generatorIndex_natDegree
   have := congr($(Φ_coeff_generatorIndex h) * algebraMap K[X] K⟮X⟯ (g E))
   conv at this => enter [2, 1, 2]; rw [← num_div_denom (generator E)]
   rw [mul_assoc]; rw [div_mul_cancel₀ _ (algebraMap_ne_zero (generator E).denom_ne_zero)]; rw [← map_mul]; rw [← map_mul] at this
-  replace this := congr
+  replace this := congr($(algebraMap_injective K this).natDegree)
+  rw [natDegree_mul (Φ_coeff_generatorIndex_ne_zero h) (generator E).denom_ne_zero]; rw [natDegree_mul (num_ne_zero (c_ne_zero h)) (num_ne_zero (generator_ne_zero h))] at this
+  grind [natDegree_le_of_dvd (generator_denom_dvd_c_num h) (num_ne_zero (c_ne_zero h))]
 
 Depends on / 依赖: algebraMap, algebraMap_injective, algebraMap_ne_zero, c_ne_zero, denom_ne_zero, generator, generator_ne_zero, map_mul, mul_assoc, natDegree, natDegree_mul, num_div_denom, num_ne_zero, replace
 -/
@@ -817,7 +853,14 @@ lemma m_le_swap_Φ_natDegree
     ext
     rw [Bivariate.swap_monomial]; rw [mul_comm]; rw [← Polynomial.smul_eq_C_mul]; rw [← monomial_one_right_eq_X_pow]; rw [← Polynomial.algebraMap_eq]
   rw [natDegree_sum_eq_of_linearIndepOn _
-    (coe_bas
+    (coe_basisMonomials K ▸ (basisMonomials K).linearIndepOn (Φ E).support)]
+  apply max_le
+· exact (le_Φ_coeff_generatorIndex_natDegree h).trans
+Finset.le_sup (f := fun i => ((Φ E).coeff i).natDegree)
+      mem_support_iff.mpr (Φ_coeff_generatorIndex_ne_zero h)
+· exact (le_Φ_coeff_natDegree_natDegree h).trans
+Finset.le_sup (f := fun i => ((Φ E).coeff i).natDegree)
+      mem_support_iff.mpr (Φ_coeff_φ_natDegree_ne_zero h)
 
 中文:
 引理 m_le_swap_Φ_natDegree
@@ -828,7 +871,14 @@ lemma m_le_swap_Φ_natDegree
     ext
     rw [Bivariate.swap_monomial]; rw [mul_comm]; rw [← Polynomial.smul_eq_C_mul]; rw [← monomial_one_right_eq_X_pow]; rw [← Polynomial.algebraMap_eq]
   rw [natDegree_sum_eq_of_linearIndepOn _
-    (coe_bas
+    (coe_basisMonomials K ▸ (basisMonomials K).linearIndepOn (Φ E).support)]
+  apply max_le
+· exact (le_Φ_coeff_generatorIndex_natDegree h).trans
+Finset.le_sup (f := fun i => ((Φ E).coeff i).natDegree)
+      mem_support_iff.mpr (Φ_coeff_generatorIndex_ne_zero h)
+· exact (le_Φ_coeff_natDegree_natDegree h).trans
+Finset.le_sup (f := fun i => ((Φ E).coeff i).natDegree)
+      mem_support_iff.mpr (Φ_coeff_φ_natDegree_ne_zero h)
 
 Depends on / 依赖: Bivariate, Bivariate.swap_monomial, Finset, Finset.le_sup, Polynomial, Polynomial.algebraMap_eq, Polynomial.smul_eq_C_mul, algebraMap_eq, basisMonomials, coe_basisMonomials, le_sup, linearIndepOn, map_sum, max_le, mem_support_iff, mem_support_iff.mpr, monomial_one_right_eq_X_pow, mul_comm, natDegree, natDegree_sum_eq_of_linearIndepOn
 -/
@@ -1060,7 +1110,7 @@ lemma θ_natDegree_le
       (Polynomial.map_ne_zero (num_ne_zero (generator_ne_zero h))), natDegree_C, zero_add,
       natDegree_map]
   · rw [natDegree_mul (C_ne_zero.mpr (num_ne_zero (generator_ne_zero h)))
-     
+      (Polynomial.map_ne_zero (generator E).denom_ne_zero), natDegree_C, zero_add, natDegree_map]
 
 中文:
 引理 θ_natDegree_le
@@ -1072,7 +1122,7 @@ lemma θ_natDegree_le
       (Polynomial.map_ne_zero (num_ne_zero (generator_ne_zero h))), natDegree_C, zero_add,
       natDegree_map]
   · rw [natDegree_mul (C_ne_zero.mpr (num_ne_zero (generator_ne_zero h)))
-     
+      (Polynomial.map_ne_zero (generator E).denom_ne_zero), natDegree_C, zero_add, natDegree_map]
 
 Depends on / 依赖: C_ne_zero, C_ne_zero.mpr, IsEmpty, IsEmpty.oriented, Module, Module.Oriented, Oriented, Polynomial, Polynomial.map_ne_zero, convert, denom_ne_zero, generator, generator_ne_zero, map_ne_zero, natDegree_C, natDegree_map, natDegree_mul, natDegree_sub_le, num_ne_zero, oriented
 -/
@@ -1095,7 +1145,11 @@ lemma Q₀_mul_Φ
     Polynomial.C ((algebraMap K[X] K⟮X⟯) (g E)) * (q E).map (algebraMap (↥E) K⟮X⟯) *
        (φ E).map (algebraMap (↥E) K⟮X⟯) = (θ E).map (algebraMap K[X] K⟮X⟯) by
     rw [← C_c_mul_φ h]; rw [mul_assoc]; rw [← mul_assoc _ (Polynomial.C (c E)) _]; rw [mul_comm _ (Polynomial.C (c E))]
-   
+    simpa only [← mul_assoc, ← C_mul, div_mul_cancel₀ _ (c_ne_zero h)] using this
+  rw [mul_assoc]; rw [← Polynomial.map_mul]; rw [mul_comm (q E) (φ E)]; rw [φ_mul_q]; rw [Polynomial.map_map]; rw [Polynomial.map_sub]; rw [Polynomial.map_mul]; rw [map_C]; rw [RingHom.coe_comp]; rw [Function.comp_apply]; rw [IntermediateField.algebraMap_apply]; rw [Polynomial.map_map]; rw [Polynomial.map_map]; rw [mul_sub]; rw [← mul_assoc]; rw [← map_mul]; rw [(inclusion adjoin_generator_le).algebraMap_toAlgebra]; rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [coe_inclusion]; rw [coe_algebraMap]
+  conv => enter [1, 2, 1, 2, 2]; rw [← num_div_denom (generator E)]
+  rw [mul_div_cancel₀ _ (algebraMap_ne_zero (generator E).denom_ne_zero)]; rw [Polynomial.map_sub]; rw [Polynomial.map_mul]; rw [Polynomial.map_mul]; rw [map_C]; rw [map_C]; rw [Polynomial.map_map]; rw [Polynomial.map_map]
+  rfl
 
 中文:
 引理 Q₀_mul_Φ
@@ -1105,7 +1159,11 @@ lemma Q₀_mul_Φ
     Polynomial.C ((algebraMap K[X] K⟮X⟯) (g E)) * (q E).map (algebraMap (↥E) K⟮X⟯) *
        (φ E).map (algebraMap (↥E) K⟮X⟯) = (θ E).map (algebraMap K[X] K⟮X⟯) by
     rw [← C_c_mul_φ h]; rw [mul_assoc]; rw [← mul_assoc _ (Polynomial.C (c E)) _]; rw [mul_comm _ (Polynomial.C (c E))]
-   
+    simpa only [← mul_assoc, ← C_mul, div_mul_cancel₀ _ (c_ne_zero h)] using this
+  rw [mul_assoc]; rw [← Polynomial.map_mul]; rw [mul_comm (q E) (φ E)]; rw [φ_mul_q]; rw [Polynomial.map_map]; rw [Polynomial.map_sub]; rw [Polynomial.map_mul]; rw [map_C]; rw [RingHom.coe_comp]; rw [Function.comp_apply]; rw [IntermediateField.algebraMap_apply]; rw [Polynomial.map_map]; rw [Polynomial.map_map]; rw [mul_sub]; rw [← mul_assoc]; rw [← map_mul]; rw [(inclusion adjoin_generator_le).algebraMap_toAlgebra]; rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [coe_inclusion]; rw [coe_algebraMap]
+  conv => enter [1, 2, 1, 2, 2]; rw [← num_div_denom (generator E)]
+  rw [mul_div_cancel₀ _ (algebraMap_ne_zero (generator E).denom_ne_zero)]; rw [Polynomial.map_sub]; rw [Polynomial.map_mul]; rw [Polynomial.map_mul]; rw [map_C]; rw [map_C]; rw [Polynomial.map_map]; rw [Polynomial.map_map]
+  rfl
 
 Depends on / 依赖: C_mul, Polynomial, Polynomial.C, Polynomial.map_map, Polynomial.map_mul, Polynomial.map_sub, algebraMap, c_ne_zero, map_map, map_mul, map_sub, mul_assoc, mul_comm
 -/
@@ -1258,7 +1316,10 @@ lemma swap_Q₁_natDegree
   rw [natDegree_mul
     ((map_ne_zero_iff _ Bivariate.swap.injective).mpr (Q₁_ne_zero h))
     ((map_ne_zero_iff _ Bivariate.swap.injective).mpr (Φ_ne_zero h))] at this
- 
+  have h₁ : (Bivariate.swap (θ E)).natDegree <= m E := by
+    rw [swap_θ]; rw [natDegree_neg]
+    exact θ_natDegree_le h
+  grind [m_le_swap_Φ_natDegree h]
 
 中文:
 引理 swap_Q₁_natDegree
@@ -1272,7 +1333,10 @@ lemma swap_Q₁_natDegree
   rw [natDegree_mul
     ((map_ne_zero_iff _ Bivariate.swap.injective).mpr (Q₁_ne_zero h))
     ((map_ne_zero_iff _ Bivariate.swap.injective).mpr (Φ_ne_zero h))] at this
- 
+  have h₁ : (Bivariate.swap (θ E)).natDegree <= m E := by
+    rw [swap_θ]; rw [natDegree_neg]
+    exact θ_natDegree_le h
+  grind [m_le_swap_Φ_natDegree h]
 
 Depends on / 依赖: Bivariate, Bivariate.swap, Bivariate.swap.injective, apply_fun, injective, map_mul, map_ne_zero_iff, natDegree, natDegree_mul, natDegree_neg
 -/
@@ -1399,7 +1463,40 @@ lemma Q₂_natDegree
   by_contra H
   apply (generator E).eq_C_iff.not.mp (generator_ne_C h)
   let F := AlgebraicClosure K
-  rw [natDegree_eq_zero_iff_degree_le_zero.not]; rw [← degree_map _ (algebr
+  rw [natDegree_eq_zero_iff_degree_le_zero.not]; rw [← degree_map _ (algebraMap K F)] at H
+  obtain ⟨α, hα⟩ := IsAlgClosed.exists_root ((Q₂ h).map (algebraMap K F)) (ne_of_not_ge H).symm
+  -- Evaluate at the root, get that f(α)*g(Y) = g(α)*f(Y)
+  rw [IsRoot.def]; rw [eval_map_algebraMap] at hα
+  have eq :
+      (Polynomial.mapRingHom (algebraMap K F)) (g E) * Polynomial.C ((aeval α) (f E)) =
+      (Polynomial.mapRingHom (algebraMap K F)) (f E) * Polynomial.C ((aeval α) (g E)) := by
+    have := congr(aeval (Polynomial.C α) $(Q₂_mul_Φ h)).symm
+    rwa [aeval_mul, ← map_aeval_eq_aeval_map (by ext; simp), hα, map_zero, zero_mul, aeval_sub,
+      aeval_mul, aeval_mul, aeval_C, aeval_C, ← map_aeval_eq_aeval_map (by ext; simp),
+      ← map_aeval_eq_aeval_map (by ext; simp), algebraMap_def, coe_mapRingHom, sub_eq_zero,
+      ← Polynomial.coe_mapRingHom] at this
+  obtain ⟨isUnit₁, isUnit₂⟩ :
+      IsUnit (Polynomial.C <| aeval α (f E)) ∧ IsUnit (Polynomial.C <| aeval α (g E)) := by
+    rw [Polynomial.isUnit_C]; rw [isUnit_iff_ne_zero]; rw [Polynomial.isUnit_C]; rw [isUnit_iff_ne_zero]
+    obtain (H | H) := aeval_ne_zero_of_isCoprime (generator E).isCoprime_num_denom α
+    · refine ⟨H, Polynomial.C_injective.ne_iff.mp ?_⟩
+      rw [map_zero]; rw [← mul_ne_zero_iff_left <| Polynomial.map_ne_zero <|
+        num_ne_zero (generator_ne_zero h)]
+exact eq ▸ mul_ne_zero (Polynomial.map_ne_zero (generator E).denom_ne_zero)
+        Polynomial.C_ne_zero.mpr H
+    · refine ⟨Polynomial.C_injective.ne_iff.mp ?_, H⟩
+      rw [map_zero]; rw [← mul_ne_zero_iff_left <| Polynomial.map_ne_zero (generator E).denom_ne_zero]
+exact eq ▸ mul_ne_zero (Polynomial.map_ne_zero (num_ne_zero (generator_ne_zero h)))
+        Polynomial.C_ne_zero.mpr H
+  -- obtain contradiction because f and g are coprime
+have isCoprime := IsCoprime.map (generator E).isCoprime_num_denom
+    Polynomial.mapRingHom (algebraMap K F)
+  have : Associated ((f E).mapRingHom (algebraMap K F)) ((g E).mapRingHom (algebraMap K F)) := by
+    rw [← associated_mul_isUnit_left_iff isUnit₂]; rw [Associated.comm]
+    exact ⟨isUnit₁.unit, by simpa⟩
+  have := isCoprime.isUnit_of_associated this
+  exact ⟨by simpa using (natDegree_eq_zero_of_isUnit this.1),
+    by simpa using (natDegree_eq_zero_of_isUnit this.2)⟩
 
 中文:
 引理 Q₂_natDegree
@@ -1411,7 +1508,40 @@ lemma Q₂_natDegree
   by_contra H
   apply (generator E).eq_C_iff.not.mp (generator_ne_C h)
   let F := AlgebraicClosure K
-  rw [natDegree_eq_zero_iff_degree_le_zero.not]; rw [← degree_map _ (algebr
+  rw [natDegree_eq_zero_iff_degree_le_zero.not]; rw [← degree_map _ (algebraMap K F)] at H
+  obtain ⟨α, hα⟩ := IsAlgClosed.exists_root ((Q₂ h).map (algebraMap K F)) (ne_of_not_ge H).symm
+  -- Evaluate at the root, get that f(α)*g(Y) = g(α)*f(Y)
+  rw [IsRoot.def]; rw [eval_map_algebraMap] at hα
+  have eq :
+      (Polynomial.mapRingHom (algebraMap K F)) (g E) * Polynomial.C ((aeval α) (f E)) =
+      (Polynomial.mapRingHom (algebraMap K F)) (f E) * Polynomial.C ((aeval α) (g E)) := by
+    have := congr(aeval (Polynomial.C α) $(Q₂_mul_Φ h)).symm
+    rwa [aeval_mul, ← map_aeval_eq_aeval_map (by ext; simp), hα, map_zero, zero_mul, aeval_sub,
+      aeval_mul, aeval_mul, aeval_C, aeval_C, ← map_aeval_eq_aeval_map (by ext; simp),
+      ← map_aeval_eq_aeval_map (by ext; simp), algebraMap_def, coe_mapRingHom, sub_eq_zero,
+      ← Polynomial.coe_mapRingHom] at this
+  obtain ⟨isUnit₁, isUnit₂⟩ :
+      IsUnit (Polynomial.C <| aeval α (f E)) ∧ IsUnit (Polynomial.C <| aeval α (g E)) := by
+    rw [Polynomial.isUnit_C]; rw [isUnit_iff_ne_zero]; rw [Polynomial.isUnit_C]; rw [isUnit_iff_ne_zero]
+    obtain (H | H) := aeval_ne_zero_of_isCoprime (generator E).isCoprime_num_denom α
+    · refine ⟨H, Polynomial.C_injective.ne_iff.mp ?_⟩
+      rw [map_zero]; rw [← mul_ne_zero_iff_left <| Polynomial.map_ne_zero <|
+        num_ne_zero (generator_ne_zero h)]
+exact eq ▸ mul_ne_zero (Polynomial.map_ne_zero (generator E).denom_ne_zero)
+        Polynomial.C_ne_zero.mpr H
+    · refine ⟨Polynomial.C_injective.ne_iff.mp ?_, H⟩
+      rw [map_zero]; rw [← mul_ne_zero_iff_left <| Polynomial.map_ne_zero (generator E).denom_ne_zero]
+exact eq ▸ mul_ne_zero (Polynomial.map_ne_zero (num_ne_zero (generator_ne_zero h)))
+        Polynomial.C_ne_zero.mpr H
+  -- obtain contradiction because f and g are coprime
+have isCoprime := IsCoprime.map (generator E).isCoprime_num_denom
+    Polynomial.mapRingHom (algebraMap K F)
+  have : Associated ((f E).mapRingHom (algebraMap K F)) ((g E).mapRingHom (algebraMap K F)) := by
+    rw [← associated_mul_isUnit_left_iff isUnit₂]; rw [Associated.comm]
+    exact ⟨isUnit₁.unit, by simpa⟩
+  have := isCoprime.isUnit_of_associated this
+  exact ⟨by simpa using (natDegree_eq_zero_of_isUnit this.1),
+    by simpa using (natDegree_eq_zero_of_isUnit this.2)⟩
 -/
 lemma Q₂_natDegree (h : E != ⊥) : (Q₂ h).natDegree = 0 := by
   -- We have f(X)*g(Y) - g(X)*f(Y) = Q₂(X) * Φ
@@ -1547,7 +1677,7 @@ lemma swap_Φ_natDegree_eq_θ_natDegree
   rwa [map_mul, Polynomial.map_C, Bivariate.swap_C_C,
     natDegree_mul (C_ne_zero.mpr (Q₃_map h ▸ Q₂_ne_zero h))
       ((map_ne_zero_iff _ Bivariate.swap.injective).mpr (Φ_ne_zero h)),
-    natDegree_C, zero_add, swap_θ, natDegree_neg] at 
+    natDegree_C, zero_add, swap_θ, natDegree_neg] at this
 
 中文:
 引理 swap_Φ_natDegree_eq_θ_natDegree
@@ -1557,7 +1687,7 @@ lemma swap_Φ_natDegree_eq_θ_natDegree
   rwa [map_mul, Polynomial.map_C, Bivariate.swap_C_C,
     natDegree_mul (C_ne_zero.mpr (Q₃_map h ▸ Q₂_ne_zero h))
       ((map_ne_zero_iff _ Bivariate.swap.injective).mpr (Φ_ne_zero h)),
-    natDegree_C, zero_add, swap_θ, natDegree_neg] at 
+    natDegree_C, zero_add, swap_θ, natDegree_neg] at this
 
 Depends on / 依赖: Bivariate, Bivariate.swap, Bivariate.swap.injective, Bivariate.swap_C_C, C_ne_zero, C_ne_zero.mpr, Polynomial, Polynomial.map_C, injective, map_C, map_mul, map_ne_zero_iff, natDegree, natDegree_C, natDegree_mul, natDegree_neg, swap_C_C, zero_add
 -/

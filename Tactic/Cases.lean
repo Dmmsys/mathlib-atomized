@@ -82,7 +82,19 @@ definition ElimApp.evalNames
     let numFields ← getAltNumFields elimInfo altName
     let (altVarNames, names') := names.splitAtD numFields (Unhygienic.run `(_))
     names := names'
-let (f
+let (fvars, g) ← g.introN numFields altVarNames.map (getNameOfIdent' ·[0])
+    let some (g, subst) ← Cases.unifyEqs? numEqs g {} | pure ()
+    let (introduced, g) ← g.introNP generalized.size
+    let subst := (generalized.zip introduced).foldl (init := subst) fun subst (a, b) =>
+      subst.insert a (.fvar b)
+let g ← liftM toClear.foldlM (·.tryClear) g
+    g.withContext do
+      for (stx, fvar) in toTag do
+        Term.addLocalVarInfo stx (subst.get fvar)
+      for fvar in fvars, stx in altVarNames do
+        (subst.get fvar).addLocalVarInfoForBinderIdent ⟨stx⟩
+    subgoals := subgoals.push g
+  pure subgoals
 
 中文:
 定义 ElimApp.evalNames
@@ -94,7 +106,19 @@ let (f
     let numFields ← getAltNumFields elimInfo altName
     let (altVarNames, names') := names.splitAtD numFields (Unhygienic.run `(_))
     names := names'
-let (f
+let (fvars, g) ← g.introN numFields altVarNames.map (getNameOfIdent' ·[0])
+    let some (g, subst) ← Cases.unifyEqs? numEqs g {} | pure ()
+    let (introduced, g) ← g.introNP generalized.size
+    let subst := (generalized.zip introduced).foldl (init := subst) fun subst (a, b) =>
+      subst.insert a (.fvar b)
+let g ← liftM toClear.foldlM (·.tryClear) g
+    g.withContext do
+      for (stx, fvar) in toTag do
+        Term.addLocalVarInfo stx (subst.get fvar)
+      for fvar in fvars, stx in altVarNames do
+        (subst.get fvar).addLocalVarInfoForBinderIdent ⟨stx⟩
+    subgoals := subgoals.push g
+  pure subgoals
 
 Depends on / 依赖: FVarId, generalized, toClear
 -/

@@ -229,7 +229,7 @@ instance instNonUnitalCommRing
           (fun _ _ => toBitVec_sub)
           (fun _ _ => toBitVec_nsmul _ _) (fun _ _ => toBitVec_zsmul _ _)
 
-      attribute [local i
+      attribute [local instance] intCast natCast
 
 中文:
 实例 instNonUnitalCommRing
@@ -239,7 +239,7 @@ instance instNonUnitalCommRing
           (fun _ _ => toBitVec_sub)
           (fun _ _ => toBitVec_nsmul _ _) (fun _ _ => toBitVec_zsmul _ _)
 
-      attribute [local i
+      attribute [local instance] intCast natCast
 
 Depends on / 依赖: Function, Function.Injective.nonUnitalCommRing, Injective, nonUnitalCommRing, toBitVec, toBitVec_add, toBitVec_injective, toBitVec_mul, toBitVec_neg, toBitVec_nsmul, toBitVec_sub, toBitVec_zero, toBitVec_zsmul
 -/

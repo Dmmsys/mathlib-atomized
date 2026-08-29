@@ -133,7 +133,13 @@ lemma exists_ltSeries_of_hasGoingUp
     simpa [PrimeSpectrum.ext_iff] using lo.over.symm
   | cons l q lt ih =>
     simp only [RelSeries.head_cons] at lo
-    obtain ⟨Q, PQlt, hQ, Qlo⟩ :
+    obtain ⟨Q, PQlt, hQ, Qlo⟩ :=
+      Ideal.exists_ideal_gt_liesOver_of_lt P lt
+    obtain ⟨L, len, head, spec⟩ := ih Q
+    refine ⟨L.cons ⟨P, inferInstance⟩ (by
+      simp_all only [Set.mem_ofPred_eq]
+      exact PQlt), by simpa using len, rfl, ?_⟩
+    simpa [spec, PrimeSpectrum.ext_iff] using lo.over.symm
 
 中文:
 引理 存在_ltSeries_of_hasGoingUp
@@ -145,7 +151,13 @@ lemma exists_ltSeries_of_hasGoingUp
     simpa [PrimeSpectrum.ext_iff] using lo.over.symm
   | cons l q lt ih =>
     simp only [RelSeries.head_cons] at lo
-    obtain ⟨Q, PQlt, hQ, Qlo⟩ :
+    obtain ⟨Q, PQlt, hQ, Qlo⟩ :=
+      Ideal.exists_ideal_gt_liesOver_of_lt P lt
+    obtain ⟨L, len, head, spec⟩ := ih Q
+    refine ⟨L.cons ⟨P, inferInstance⟩ (by
+      simp_all only [Set.mem_ofPred_eq]
+      exact PQlt), by simpa using len, rfl, ?_⟩
+    simpa [spec, PrimeSpectrum.ext_iff] using lo.over.symm
 
 Depends on / 依赖: Ideal.exists_ideal_gt_liesOver_of_lt, L.cons, PrimeSpectrum, PrimeSpectrum.e, PrimeSpectrum.ext_iff, RelSeries, RelSeries.head_cons, RelSeries.inductionOn, RelSeries.singleton, Set.mem_ofPred_eq, exists_ideal_gt_liesOver_of_lt, ext_iff, generalizing, head_cons, inductionOn, lo.over.symm, mem_ofPred_eq, singleton
 -/
@@ -192,7 +204,14 @@ lemma iff_specializingMap_primeSpectrumComap
     rw [← PrimeSpectrum.le_iff_specializes] at hq
     obtain ⟨Q, hle, hQ, h⟩ := P.asIdeal.exists_ideal_ge_liesOver_of_le (q := q.asIdeal)
       (p := P.asIdeal.under R) hq
-    refine ⟨⟨Q, hQ⟩, (Prime
+    refine ⟨⟨Q, hQ⟩, (PrimeSpectrum.le_iff_specializes P _).mp hle, ?_⟩
+    ext : 1
+    exact h.over.symm
+  · have : PrimeSpectrum.comap (algebraMap R S) ⟨P, hP⟩ ⤳ (⟨q, hq⟩ : PrimeSpectrum R) :=
+      (PrimeSpectrum.le_iff_specializes _ _).mp hlt.le
+    obtain ⟨Q, hs, heq⟩ := h this
+    refine ⟨Q.asIdeal, (PrimeSpectrum.le_iff_specializes _ _).mpr hs, Q.2, ⟨?_⟩⟩
+    simpa [PrimeSpectrum.ext_iff] using heq.symm
 
 中文:
 引理 iff_specializingMap_primeSpectrumComap
@@ -203,7 +222,14 @@ lemma iff_specializingMap_primeSpectrumComap
     rw [← PrimeSpectrum.le_iff_specializes] at hq
     obtain ⟨Q, hle, hQ, h⟩ := P.asIdeal.exists_ideal_ge_liesOver_of_le (q := q.asIdeal)
       (p := P.asIdeal.under R) hq
-    refine ⟨⟨Q, hQ⟩, (Prime
+    refine ⟨⟨Q, hQ⟩, (PrimeSpectrum.le_iff_specializes P _).mp hle, ?_⟩
+    ext : 1
+    exact h.over.symm
+  · have : PrimeSpectrum.comap (algebraMap R S) ⟨P, hP⟩ ⤳ (⟨q, hq⟩ : PrimeSpectrum R) :=
+      (PrimeSpectrum.le_iff_specializes _ _).mp hlt.le
+    obtain ⟨Q, hs, heq⟩ := h this
+    refine ⟨Q.asIdeal, (PrimeSpectrum.le_iff_specializes _ _).mpr hs, Q.2, ⟨?_⟩⟩
+    simpa [PrimeSpectrum.ext_iff] using heq.symm
 
 Depends on / 依赖: P.asIdeal.exists_ideal_ge_liesOver_of_le, P.asIdeal.under, PrimeSpectrum, PrimeSpectrum.comap, PrimeSpectrum.le_iff_specializes, algebraMap, asIdeal, exists_ideal_ge_liesOver_of_le, h.over.symm, hlt.le, le_iff_specializes, q.asIdeal
 -/

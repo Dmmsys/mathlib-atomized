@@ -465,7 +465,22 @@ theorem mahlerMeasure_mul
   · simpa [hpq, mahlerMeasure_zero] using mul_eq_zero.mp hpq
   rw [mul_eq_zero]; rw [not_or] at hpq
   simp only [mahlerMeasure, ne_eq, mul_eq_zero, hpq, or_self, not_false_eq_true, ↓reduceIte,
-    logMahlerMeasure, eval_mul, Complex.norm_mul, circleAverage_def, mul_inv_
+    logMahlerMeasure, eval_mul, Complex.norm_mul, circleAverage_def, mul_inv_rev, smul_eq_mul]
+  rw [← exp_add]; rw [← left_distrib]
+  congr
+  rw [← integral_add p.intervalIntegrable_mahlerMeasure q.intervalIntegrable_mahlerMeasure]
+  apply integral_congr_ae
+  rw [MeasureTheory.ae_iff]
+  apply Set.Finite.measure_zero _ MeasureTheory.volume
+  simp only [Classical.not_imp]
+apply Set.Finite.of_finite_image (f := circleMap 0 1) _
+    (injOn_circleMap_of_abs_sub_le one_ne_zero (by simp [le_of_eq, pi_nonneg])).mono (fun _ h => h.1)
+  apply (p * q).roots.finite_toSet.subset
+  rintro _ ⟨_, ⟨_, h⟩, _⟩
+  contrapose h
+  simp_all [log_mul]
+
+@[simp]
 
 中文:
 定理 mahlerMeasure_mul
@@ -475,7 +490,22 @@ theorem mahlerMeasure_mul
   · simpa [hpq, mahlerMeasure_zero] using mul_eq_zero.mp hpq
   rw [mul_eq_zero]; rw [not_or] at hpq
   simp only [mahlerMeasure, ne_eq, mul_eq_zero, hpq, or_self, not_false_eq_true, ↓reduceIte,
-    logMahlerMeasure, eval_mul, Complex.norm_mul, circleAverage_def, mul_inv_
+    logMahlerMeasure, eval_mul, Complex.norm_mul, circleAverage_def, mul_inv_rev, smul_eq_mul]
+  rw [← exp_add]; rw [← left_distrib]
+  congr
+  rw [← integral_add p.intervalIntegrable_mahlerMeasure q.intervalIntegrable_mahlerMeasure]
+  apply integral_congr_ae
+  rw [MeasureTheory.ae_iff]
+  apply Set.Finite.measure_zero _ MeasureTheory.volume
+  simp only [Classical.not_imp]
+apply Set.Finite.of_finite_image (f := circleMap 0 1) _
+    (injOn_circleMap_of_abs_sub_le one_ne_zero (by simp [le_of_eq, pi_nonneg])).mono (fun _ h => h.1)
+  apply (p * q).roots.finite_toSet.subset
+  rintro _ ⟨_, ⟨_, h⟩, _⟩
+  contrapose h
+  simp_all [log_mul]
+
+@[simp]
 
 Depends on / 依赖: Complex.norm_mul, MeasureTheory, MeasureTheory.ae_iff, Set.Fi, ae_iff, circleAverage_def, eval_mul, exp_add, integral_add, integral_congr_ae, intervalIntegrable_mahlerMeasure, left_distrib, logMahlerMeasure, mahlerMeasure, mahlerMeasure_zero, mul_eq_zero, mul_eq_zero.mp, mul_inv_rev, ne_eq, norm_mul
 -/
@@ -689,7 +719,7 @@ theorem mahlerMeasure_X_sub_C
     exp_log (mahlerMeasure_pos_of_ne_zero <| X_sub_C_ne_zero z),
     exp_log (lt_of_lt_of_le zero_lt_one <| le_max_left 1 ‖z‖)] at this
 
-
+@[simp]
 
 中文:
 定理 mahlerMeasure_X_sub_C
@@ -703,7 +733,7 @@ theorem mahlerMeasure_X_sub_C
     exp_log (mahlerMeasure_pos_of_ne_zero <| X_sub_C_ne_zero z),
     exp_log (lt_of_lt_of_le zero_lt_one <| le_max_left 1 ‖z‖)] at this
 
-
+@[simp]
 
 Depends on / 依赖: X_sub_C_ne_zero, apply_fun, exp_log, le_max_left, logMahlerMeasure_X_sub_C, logMahlerMeasure_eq_log_MahlerMeasure, lt_of_lt_of_le, mahlerMeasure_pos_of_ne_zero, norm_nonneg, posLog_eq_log_max_one, zero_lt_one
 -/
@@ -810,7 +840,8 @@ theorem logMahlerMeasure_eq_log_leadingCoeff_add_sum_log_roots
   have : forall x in Multiset.map (fun x => max 1 ‖x‖) p.roots, x != 0 := by grind [Multiset.mem_map]
   nth_rw 1 [(IsAlgClosed.splits p).eq_prod_roots]
   rw [logMahlerMeasure_mul_eq_add_logMahlerMeasure (by simp [hp]; rw [X_sub_C_ne_zero])]
-  simp [posLog_eq_lo
+  simp [posLog_eq_log_max_one, logMahlerMeasure_eq_log_MahlerMeasure,
+    prod_mahlerMeasure_eq_mahlerMeasure_prod, log_multiset_prod this]
 
 中文:
 定理 logMahlerMeasure_eq_log_leadingCoeff_add_sum_log_roots
@@ -822,7 +853,8 @@ theorem logMahlerMeasure_eq_log_leadingCoeff_add_sum_log_roots
   have : forall x in Multiset.map (fun x => max 1 ‖x‖) p.roots, x != 0 := by grind [Multiset.mem_map]
   nth_rw 1 [(IsAlgClosed.splits p).eq_prod_roots]
   rw [logMahlerMeasure_mul_eq_add_logMahlerMeasure (by simp [hp]; rw [X_sub_C_ne_zero])]
-  simp [posLog_eq_lo
+  simp [posLog_eq_log_max_one, logMahlerMeasure_eq_log_MahlerMeasure,
+    prod_mahlerMeasure_eq_mahlerMeasure_prod, log_multiset_prod this]
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.splits, Multiset, Multiset.map, Multiset.mem_map, X_sub_C_ne_zero, eq_prod_roots, logMahlerMeasure_eq_log_MahlerMeasure, logMahlerMeasure_mul_eq_add_logMahlerMeasure, log_multiset_prod, mem_map, nth_rw, p.roots, posLog_eq_log_max_one, prod_mahlerMeasure_eq_mahlerMeasure_prod, splits
 -/
@@ -849,7 +881,8 @@ theorem mahlerMeasure_eq_leadingCoeff_mul_prod_roots
   have := logMahlerMeasure_eq_log_leadingCoeff_add_sum_log_roots p
   rw [logMahlerMeasure_eq_log_MahlerMeasure] at this
   apply_fun exp at this
-  rw [exp_add]; rw [exp_log <| mahlerMeasure_pos_of_ne_zero hp]; rw [exp_log norm_pos_iff.mpr leadingCoeff_ne_zero.mp
+  rw [exp_add]; rw [exp_log <| mahlerMeasure_pos_of_ne_zero hp]; rw [exp_log norm_pos_iff.mpr leadingCoeff_ne_zero.mpr hp] at this
+  simp [this, exp_multiset_sum, posLog_eq_log_max_one, exp_log]
 
 中文:
 定理 mahlerMeasure_eq_leadingCoeff_mul_prod_roots
@@ -861,7 +894,8 @@ theorem mahlerMeasure_eq_leadingCoeff_mul_prod_roots
   have := logMahlerMeasure_eq_log_leadingCoeff_add_sum_log_roots p
   rw [logMahlerMeasure_eq_log_MahlerMeasure] at this
   apply_fun exp at this
-  rw [exp_add]; rw [exp_log <| mahlerMeasure_pos_of_ne_zero hp]; rw [exp_log norm_pos_iff.mpr leadingCoeff_ne_zero.mp
+  rw [exp_add]; rw [exp_log <| mahlerMeasure_pos_of_ne_zero hp]; rw [exp_log norm_pos_iff.mpr leadingCoeff_ne_zero.mpr hp] at this
+  simp [this, exp_multiset_sum, posLog_eq_log_max_one, exp_log]
 
 Depends on / 依赖: apply_fun, exp_add, exp_log, exp_multiset_sum, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, logMahlerMeasure_eq_log_MahlerMeasure, logMahlerMeasure_eq_log_leadingCoeff_add_sum_log_roots, mahlerMeasure_pos_of_ne_zero, norm_pos_iff, norm_pos_iff.mpr, posLog_eq_log_max_one
 -/
@@ -995,7 +1029,26 @@ theorem mahlerMeasure_le_sum_norm_coeff
   have : 0 < p.sum fun _ a => ‖a‖ :=
     Finset.sum_pos' (fun i _ => norm_nonneg (p.coeff i)) ⟨p.natDegree, by simp [hp]⟩
   rw [show (p.sum fun _ a => ‖a‖) = rexp (circleAverage (fun _ => log (p.sum fun _ a => ‖a‖)) 0 1)
-    by simp [circleAverage_def]; rw [mul
+    by simp [circleAverage_def]; rw [mul_assoc]; rw [exp_log this], mahlerMeasure_def_of_ne_zero hp,
+    circleAverage_def, smul_eq_mul]
+  gcongr
+  apply intervalIntegral.integral_mono_ae_restrict (by positivity)
+    p.intervalIntegrable_mahlerMeasure (by simp)
+  rw [EventuallyLE]; rw [eventually_iff_exists_mem]
+  use {x : Real | eval (circleMap 0 1 x) p != 0}
+  constructor
+  · rw [mem_ae_iff, compl_def, Measure.restrict_apply' (by simp)]
+    apply (Finite.of_sdiff _ <| finite_singleton (2 * π)).measure_zero
+    simp only [ne_eq, mem_ofPred_eq, Decidable.not_not, inter_sdiff_assoc, Icc_sdiff_right]
+    rw [ofPred_inter_eq_sep]
+    apply Finite.of_finite_image (f := circleMap 0 1) ((Multiset.finite_toSet p.roots).subset _)
+ fun _ h _ k l => injOn_circleMap_of_abs_sub_le' one_ne_zero (by linarith) h.1 k.1 l
+    simp [hp]
+  · intro _ _
+    gcongr
+    rw [eval_eq_sum]
+    apply norm_sum_le_of_le p.support
+    simp
 
 中文:
 定理 mahlerMeasure_le_sum_norm_coeff
@@ -1007,7 +1060,26 @@ theorem mahlerMeasure_le_sum_norm_coeff
   have : 0 < p.sum fun _ a => ‖a‖ :=
     Finset.sum_pos' (fun i _ => norm_nonneg (p.coeff i)) ⟨p.natDegree, by simp [hp]⟩
   rw [show (p.sum fun _ a => ‖a‖) = rexp (circleAverage (fun _ => log (p.sum fun _ a => ‖a‖)) 0 1)
-    by simp [circleAverage_def]; rw [mul
+    by simp [circleAverage_def]; rw [mul_assoc]; rw [exp_log this], mahlerMeasure_def_of_ne_zero hp,
+    circleAverage_def, smul_eq_mul]
+  gcongr
+  apply intervalIntegral.integral_mono_ae_restrict (by positivity)
+    p.intervalIntegrable_mahlerMeasure (by simp)
+  rw [EventuallyLE]; rw [eventually_iff_exists_mem]
+  use {x : Real | eval (circleMap 0 1 x) p != 0}
+  constructor
+  · rw [mem_ae_iff, compl_def, Measure.restrict_apply' (by simp)]
+    apply (Finite.of_sdiff _ <| finite_singleton (2 * π)).measure_zero
+    simp only [ne_eq, mem_ofPred_eq, Decidable.not_not, inter_sdiff_assoc, Icc_sdiff_right]
+    rw [ofPred_inter_eq_sep]
+    apply Finite.of_finite_image (f := circleMap 0 1) ((Multiset.finite_toSet p.roots).subset _)
+ fun _ h _ k l => injOn_circleMap_of_abs_sub_le' one_ne_zero (by linarith) h.1 k.1 l
+    simp [hp]
+  · intro _ _
+    gcongr
+    rw [eval_eq_sum]
+    apply norm_sum_le_of_le p.support
+    simp
 
 Depends on / 依赖: Finset, Finset.sum_pos, circleAverage, circleAverage_def, exp_log, integral_mono_ae_restrict, intervalIntegrable_mahlerMeasure, intervalIntegral, intervalIntegral.integral_mono_ae_restrict, mahlerMeasure_def_of_ne_zero, mul_assoc, natDegree, norm_nonneg, p.coeff, p.intervalIntegrable_mahlerMeasure, p.natDegree, p.sum, smul_eq_mul, sum_pos
 -/
@@ -1052,7 +1124,41 @@ theorem mahlerMeasure_le_sqrt_sum_sq_norm_coeff
   have : NeZero (volume (uIoc 0 (2 * π))) := ⟨by simp⟩
   by_cases! hp : p = 0
   · simp [hp]
-  have : forallᵐ (θ : Rea
+  have : forallᵐ (θ : Real) ∂volume.restrict (uIoc 0 (2 * π)), 0 < ‖p.eval (circleMap 0 1 θ)‖ := by
+    rw [ae_restrict_iff' measurableSet_uIoc]
+    refine Set.Finite.measure_zero ?_ _
+    simp only [norm_pos_iff, ne_eq, compl_ofPred, Classical.not_imp, Decidable.not_not]
+    refine Finite.of_finite_image (f := circleMap 0 1) (p.roots.finite_toSet.subset ?_) ?_
+    · rintro z ⟨θ, ⟨_, heval⟩, rfl⟩
+      exact (mem_roots hp).mpr heval
+    · grw [ofPred_and, inter_subset_left]
+      exact injOn_circleMap_of_abs_sub_le one_ne_zero (by simp [abs_of_pos pi_pos])
+  have hlogAe : forallᵐ (θ : Real) ∂volume.restrict (uIoc 0 (2 * π)),
+      exp (log ‖p.eval (circleMap 0 1 θ)‖) = ‖p.eval (circleMap 0 1 θ)‖ := by
+    filter_upwards [this] with θ hθ
+    exact exp_log hθ
+  have hcont : Continuous (fun x : Real => ‖eval (circleMap 0 1 x) p‖) := by fun_prop
+  simp only [mahlerMeasure, logMahlerMeasure, ne_eq, hp, not_false_eq_true, ↓reduceIte]
+  rw [circleAverage_eq_intervalAverage]
+  calc exp (⨍ (θ : Real) in 0..(2 * π), log ‖p.eval (circleMap 0 1 θ)‖)
+    <= ⨍ (θ : Real) in 0..(2 * π), exp (log ‖p.eval (circleMap 0 1 θ)‖) := by
+        -- First Jensen's inequality invocation
+        refine convexOn_exp.map_average_le continuousOn_exp isClosed_univ (by simp) ?_ ?_
+        · rw [Set.uIoc_of_le (by positivity : 0 <= 2 * Real.pi)]
+          exact ((analyticOnNhd_id.aeval_polynomial p).meromorphicOn.circleIntegrable_log_norm).1
+        · exact (integrable_congr hlogAe).mpr hcont.integrableOn_uIoc
+    _ = ⨍ (θ : Real) in 0..(2 * π), ‖p.eval (circleMap 0 1 θ)‖ := average_congr hlogAe
+    _ = √((⨍ (θ : Real) in 0..(2 * π), ‖p.eval (circleMap 0 1 θ)‖) ^ 2) := by
+        rw [sqrt_sq]; exact integral_nonneg (fun _ => norm_nonneg _)
+    _ <= √(⨍ (θ : Real) in 0..(2 * π), ‖p.eval (circleMap 0 1 θ)‖ ^ 2) := by
+        -- Second Jensen's inequality invocation
+        gcongr
+        refine (convexOn_pow 2).map_average_le (continuousOn_pow 2)
+            isClosed_Ici (by filter_upwards; simp) ?_ ?_
+        · exact hcont.integrableOn_Icc.mono_set Set.Ioc_subset_Icc_self
+        · exact ((continuous_pow 2).comp hcont).integrableOn_Icc.mono_set Set.Ioc_subset_Icc_self
+    _ = √(circleAverage (fun θ => ‖p.eval θ‖ ^ 2) 0 1) := by simp [circleAverage_eq_intervalAverage]
+    _ = √(∑ i in p.support, ‖p.coeff i‖ ^ 2) := by simp [p.sum_sq_norm_coeff_eq_circleAverage]
 
 中文:
 定理 mahlerMeasure_le_sqrt_sum_sq_norm_coeff
@@ -1064,7 +1170,41 @@ theorem mahlerMeasure_le_sqrt_sum_sq_norm_coeff
   have : NeZero (volume (uIoc 0 (2 * π))) := ⟨by simp⟩
   by_cases! hp : p = 0
   · simp [hp]
-  have : forallᵐ (θ : Rea
+  have : forallᵐ (θ : Real) ∂volume.restrict (uIoc 0 (2 * π)), 0 < ‖p.eval (circleMap 0 1 θ)‖ := by
+    rw [ae_restrict_iff' measurableSet_uIoc]
+    refine Set.Finite.measure_zero ?_ _
+    simp only [norm_pos_iff, ne_eq, compl_ofPred, Classical.not_imp, Decidable.not_not]
+    refine Finite.of_finite_image (f := circleMap 0 1) (p.roots.finite_toSet.subset ?_) ?_
+    · rintro z ⟨θ, ⟨_, heval⟩, rfl⟩
+      exact (mem_roots hp).mpr heval
+    · grw [ofPred_and, inter_subset_left]
+      exact injOn_circleMap_of_abs_sub_le one_ne_zero (by simp [abs_of_pos pi_pos])
+  have hlogAe : forallᵐ (θ : Real) ∂volume.restrict (uIoc 0 (2 * π)),
+      exp (log ‖p.eval (circleMap 0 1 θ)‖) = ‖p.eval (circleMap 0 1 θ)‖ := by
+    filter_upwards [this] with θ hθ
+    exact exp_log hθ
+  have hcont : Continuous (fun x : Real => ‖eval (circleMap 0 1 x) p‖) := by fun_prop
+  simp only [mahlerMeasure, logMahlerMeasure, ne_eq, hp, not_false_eq_true, ↓reduceIte]
+  rw [circleAverage_eq_intervalAverage]
+  calc exp (⨍ (θ : Real) in 0..(2 * π), log ‖p.eval (circleMap 0 1 θ)‖)
+    <= ⨍ (θ : Real) in 0..(2 * π), exp (log ‖p.eval (circleMap 0 1 θ)‖) := by
+        -- First Jensen's inequality invocation
+        refine convexOn_exp.map_average_le continuousOn_exp isClosed_univ (by simp) ?_ ?_
+        · rw [Set.uIoc_of_le (by positivity : 0 <= 2 * Real.pi)]
+          exact ((analyticOnNhd_id.aeval_polynomial p).meromorphicOn.circleIntegrable_log_norm).1
+        · exact (integrable_congr hlogAe).mpr hcont.integrableOn_uIoc
+    _ = ⨍ (θ : Real) in 0..(2 * π), ‖p.eval (circleMap 0 1 θ)‖ := average_congr hlogAe
+    _ = √((⨍ (θ : Real) in 0..(2 * π), ‖p.eval (circleMap 0 1 θ)‖) ^ 2) := by
+        rw [sqrt_sq]; exact integral_nonneg (fun _ => norm_nonneg _)
+    _ <= √(⨍ (θ : Real) in 0..(2 * π), ‖p.eval (circleMap 0 1 θ)‖ ^ 2) := by
+        -- Second Jensen's inequality invocation
+        gcongr
+        refine (convexOn_pow 2).map_average_le (continuousOn_pow 2)
+            isClosed_Ici (by filter_upwards; simp) ?_ ?_
+        · exact hcont.integrableOn_Icc.mono_set Set.Ioc_subset_Icc_self
+        · exact ((continuous_pow 2).comp hcont).integrableOn_Icc.mono_set Set.Ioc_subset_Icc_self
+    _ = √(circleAverage (fun θ => ‖p.eval θ‖ ^ 2) 0 1) := by simp [circleAverage_eq_intervalAverage]
+    _ = √(∑ i in p.support, ‖p.coeff i‖ ^ 2) := by simp [p.sum_sq_norm_coeff_eq_circleAverage]
 -/
 theorem mahlerMeasure_le_sqrt_sum_sq_norm_coeff (p : Polynomial Complex) :
     p.mahlerMeasure <= √(∑ i in p.support, ‖p.coeff i‖ ^ 2) := by
@@ -1120,7 +1260,11 @@ theorem mahlerMeasure_le_sqrt_natDegree_add_one_mul_supNorm
     rw [show √(↑(p.natDegree) + 1) * p.supNorm = √((p.natDegree + 1) * p.supNorm ^ 2) by
       rw [Real.sqrt_mul (by positivity)]; rw [Real.sqrt_sq p.supNorm_nonneg]]
     gcongr
-    refine (p.support.sum_le_card_nsmul _ (p.supNorm ^ 2) fun i _ => 
+    refine (p.support.sum_le_card_nsmul _ (p.supNorm ^ 2) fun i _ => ?_).trans ?_
+    · gcongr; exact p.le_supNorm _
+    · simp only [nsmul_eq_mul]
+      gcongr
+      exact mod_cast p.card_supp_le_succ_natDegree
 
 中文:
 定理 mahlerMeasure_le_sqrt_natDegree_add_one_mul_supNorm
@@ -1129,7 +1273,11 @@ theorem mahlerMeasure_le_sqrt_natDegree_add_one_mul_supNorm
     rw [show √(↑(p.natDegree) + 1) * p.supNorm = √((p.natDegree + 1) * p.supNorm ^ 2) by
       rw [Real.sqrt_mul (by positivity)]; rw [Real.sqrt_sq p.supNorm_nonneg]]
     gcongr
-    refine (p.support.sum_le_card_nsmul _ (p.supNorm ^ 2) fun i _ => 
+    refine (p.support.sum_le_card_nsmul _ (p.supNorm ^ 2) fun i _ => ?_).trans ?_
+    · gcongr; exact p.le_supNorm _
+    · simp only [nsmul_eq_mul]
+      gcongr
+      exact mod_cast p.card_supp_le_succ_natDegree
 
 Depends on / 依赖: Real.sqrt_mul, Real.sqrt_sq, card_supp_le_succ_natDegree, le_supNorm, mahlerMeasure_le_sqrt_sum_sq_norm_coeff, mod_cast, natDegree, nsmul_eq_mul, p.card_supp_le_succ_natDegree, p.le_supNorm, p.mahlerMeasure_le_sqrt_sum_sq_norm_coeff, p.natDegree, p.supNorm, p.supNorm_nonneg, p.support.sum_le_card_nsmul, sqrt_mul, sqrt_sq, sum_le_card_nsmul, supNorm, supNorm_nonneg
 -/
@@ -1157,7 +1305,44 @@ theorem norm_coeff_le_choose_mul_mahlerMeasure
   · simp [hp]
   rcases lt_or_ge p.natDegree n with hlt | hn
   · simp [coeff_eq_zero_of_natDegree_lt hlt, Nat.choose_eq_zero_of_lt hlt]
-  rw [mahlerMeasure_eq_leadingCoeff_mul_prod_roots]; rw [mul_left_comm]; rw [coeff_eq_esymm_roots_of_card (splits_iff_card_roots.mp (IsAlgCl
+  rw [mahlerMeasure_eq_leadingCoeff_mul_prod_roots]; rw [mul_left_comm]; rw [coeff_eq_esymm_roots_of_card (splits_iff_card_roots.mp (IsAlgClosed.splits p)) hn]; rw [mul_assoc]; rw [norm_mul]; rw [norm_mul]; rw [norm_pow]; rw [norm_neg]; rw [norm_one]; rw [one_pow]; rw [one_mul]; rw [mul_le_mul_iff_right₀ (by simp [leadingCoeff_ne_zero.mpr hp]), esymm,
+    Finset.sum_multiset_map_count]
+apply le_trans norm_sum_le _ _
+  simp_rw [nsmul_eq_mul, norm_mul, _root_.norm_natCast]
+  let S := powersetCard (p.natDegree - n) p.roots
+  --to be used later in the calc block:
+  have (x : Multiset Complex) (hx : x in S.toFinset) : ∏ x_1 in x.toFinset, ‖x_1‖ ^ count x_1 x
+      <= ∏ m in p.roots.toFinset, max 1 ‖m‖ ^ count m p.roots := by
+    rw [mem_toFinset]; rw [mem_powersetCard] at hx
+    calc
+    ∏ z in x.toFinset, ‖z‖ ^ count z x
+      <= ∏ z in x.toFinset, (1 ⊔ ‖z‖) ^ count z x := by
+      gcongr with a
+      exact le_max_right 1 ‖a‖
+    _ <= ∏ z in p.roots.toFinset, (1 ⊔ ‖z‖) ^ count z x := by
+      simp_rw [← coe_nnnorm]
+      norm_cast
+      exact Finset.prod_le_prod_of_subset_of_one_le' (toFinset_subset.mpr (subset_of_le hx.1))
+        (fun a _ _ => one_le_pow₀ (le_max_left 1 ‖a‖))
+    _ <= ∏ z in p.roots.toFinset, (1 ⊔ ‖z‖) ^ count z p.roots := by
+      gcongr with a
+      · exact le_max_left 1 ‖a‖
+      · exact hx.1
+  --final calc block:
+  calc ∑ x in S.toFinset, count x S * ‖x.prod‖
+    _ <= ∑ x in S.toFinset, count x S * ((p.roots).map (fun a => max 1 ‖a‖)).prod := by
+      gcongr with x hx
+      rw [Finset.prod_multiset_map_count]; rw [Finset.prod_multiset_count]; rw [norm_prod]
+      simp_rw [norm_pow]
+      exact this x hx
+    _ = p.natDegree.choose n * (p.roots.map (fun a => 1 ⊔ ‖a‖)).prod := by
+      rw [← Finset.sum_mul]
+      congr
+      norm_cast
+      simp only [mem_powersetCard, mem_toFinset, imp_self, implies_true, sum_count_eq_card,
+        card_powersetCard, S, ← Nat.choose_symm hn]
+      congr
+exact splits_iff_card_roots.mp IsAlgClosed.splits p
 
 中文:
 定理 norm_coeff_le_choose_mul_mahlerMeasure
@@ -1167,7 +1352,44 @@ theorem norm_coeff_le_choose_mul_mahlerMeasure
   · simp [hp]
   rcases lt_or_ge p.natDegree n with hlt | hn
   · simp [coeff_eq_zero_of_natDegree_lt hlt, Nat.choose_eq_zero_of_lt hlt]
-  rw [mahlerMeasure_eq_leadingCoeff_mul_prod_roots]; rw [mul_left_comm]; rw [coeff_eq_esymm_roots_of_card (splits_iff_card_roots.mp (IsAlgCl
+  rw [mahlerMeasure_eq_leadingCoeff_mul_prod_roots]; rw [mul_left_comm]; rw [coeff_eq_esymm_roots_of_card (splits_iff_card_roots.mp (IsAlgClosed.splits p)) hn]; rw [mul_assoc]; rw [norm_mul]; rw [norm_mul]; rw [norm_pow]; rw [norm_neg]; rw [norm_one]; rw [one_pow]; rw [one_mul]; rw [mul_le_mul_iff_right₀ (by simp [leadingCoeff_ne_zero.mpr hp]), esymm,
+    Finset.sum_multiset_map_count]
+apply le_trans norm_sum_le _ _
+  simp_rw [nsmul_eq_mul, norm_mul, _root_.norm_natCast]
+  let S := powersetCard (p.natDegree - n) p.roots
+  --to be used later in the calc block:
+  have (x : Multiset Complex) (hx : x in S.toFinset) : ∏ x_1 in x.toFinset, ‖x_1‖ ^ count x_1 x
+      <= ∏ m in p.roots.toFinset, max 1 ‖m‖ ^ count m p.roots := by
+    rw [mem_toFinset]; rw [mem_powersetCard] at hx
+    calc
+    ∏ z in x.toFinset, ‖z‖ ^ count z x
+      <= ∏ z in x.toFinset, (1 ⊔ ‖z‖) ^ count z x := by
+      gcongr with a
+      exact le_max_right 1 ‖a‖
+    _ <= ∏ z in p.roots.toFinset, (1 ⊔ ‖z‖) ^ count z x := by
+      simp_rw [← coe_nnnorm]
+      norm_cast
+      exact Finset.prod_le_prod_of_subset_of_one_le' (toFinset_subset.mpr (subset_of_le hx.1))
+        (fun a _ _ => one_le_pow₀ (le_max_left 1 ‖a‖))
+    _ <= ∏ z in p.roots.toFinset, (1 ⊔ ‖z‖) ^ count z p.roots := by
+      gcongr with a
+      · exact le_max_left 1 ‖a‖
+      · exact hx.1
+  --final calc block:
+  calc ∑ x in S.toFinset, count x S * ‖x.prod‖
+    _ <= ∑ x in S.toFinset, count x S * ((p.roots).map (fun a => max 1 ‖a‖)).prod := by
+      gcongr with x hx
+      rw [Finset.prod_multiset_map_count]; rw [Finset.prod_multiset_count]; rw [norm_prod]
+      simp_rw [norm_pow]
+      exact this x hx
+    _ = p.natDegree.choose n * (p.roots.map (fun a => 1 ⊔ ‖a‖)).prod := by
+      rw [← Finset.sum_mul]
+      congr
+      norm_cast
+      simp only [mem_powersetCard, mem_toFinset, imp_self, implies_true, sum_count_eq_card,
+        card_powersetCard, S, ← Nat.choose_symm hn]
+      congr
+exact splits_iff_card_roots.mp IsAlgClosed.splits p
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.splits, Nat.choose_eq_zero_of_lt, choose_eq_zero_of_lt, coeff_eq_esymm_roots_of_card, coeff_eq_zero_of_natDegree_lt, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, lt_or_ge, mahlerMeasure_eq_leadingCoeff_mul_prod_roots, mul_assoc, mul_left_comm, natDegree, norm_mul, norm_neg, norm_one, norm_pow, one_mul, one_pow, p.natDegree
 -/
@@ -1227,7 +1449,8 @@ theorem supNorm_le_choose_natDegree_div_two_mul_mahlerMeasure
   calc p.supNorm = ‖p.coeff i‖ := hi
     _ <= (p.natDegree.choose i) * p.mahlerMeasure := p.norm_coeff_le_choose_mul_mahlerMeasure i
     _ <= (p.natDegree.choose (p.natDegree / 2)) * p.mahlerMeasure :=
-      mul_le_mul_of_nonneg_right (by exact_mod_cast Nat
+      mul_le_mul_of_nonneg_right (by exact_mod_cast Nat.choose_le_middle i p.natDegree)
+        p.mahlerMeasure_nonneg
 
 中文:
 定理 supNorm_le_choose_natDegree_div_two_mul_mahlerMeasure
@@ -1237,7 +1460,8 @@ theorem supNorm_le_choose_natDegree_div_two_mul_mahlerMeasure
   calc p.supNorm = ‖p.coeff i‖ := hi
     _ <= (p.natDegree.choose i) * p.mahlerMeasure := p.norm_coeff_le_choose_mul_mahlerMeasure i
     _ <= (p.natDegree.choose (p.natDegree / 2)) * p.mahlerMeasure :=
-      mul_le_mul_of_nonneg_right (by exact_mod_cast Nat
+      mul_le_mul_of_nonneg_right (by exact_mod_cast Nat.choose_le_middle i p.natDegree)
+        p.mahlerMeasure_nonneg
 
 Depends on / 依赖: Nat.choose_le_middle, choose_le_middle, exists_eq_supNorm, mahlerMeasure, mahlerMeasure_nonneg, mul_le_mul_of_nonneg_right, natDegree, norm_coeff_le_choose_mul_mahlerMeasure, p.coeff, p.exists_eq_supNorm, p.mahlerMeasure, p.mahlerMeasure_nonneg, p.natDegree, p.natDegree.choose, p.norm_coeff_le_choose_mul_mahlerMeasure, p.supNorm, supNorm
 -/
@@ -1457,7 +1681,8 @@ lemma leadingCoeff_le_mapMahlerMeasure
   · have hv_ne : v p.leadingCoeff != 0 :=
 fun h => hp hv.injective h.trans (map_zero _).symm
     have hv_norm : ‖v p.leadingCoeff‖ = ‖p.leadingCoeff‖ := hv.norm_map_of_map_zero (map_zero _) _
-    grw [← hv_norm, ← leadingCo
+    grw [← hv_norm, ← leadingCoeff_map_of_leadingCoeff_ne_zero v hv_ne,
+      leadingCoeff_le_mahlerMeasure, mapMahlerMeasure]
 
 中文:
 引理 leadingCoeff_le_mapMahlerMeasure
@@ -1468,7 +1693,8 @@ fun h => hp hv.injective h.trans (map_zero _).symm
   · have hv_ne : v p.leadingCoeff != 0 :=
 fun h => hp hv.injective h.trans (map_zero _).symm
     have hv_norm : ‖v p.leadingCoeff‖ = ‖p.leadingCoeff‖ := hv.norm_map_of_map_zero (map_zero _) _
-    grw [← hv_norm, ← leadingCo
+    grw [← hv_norm, ← leadingCoeff_map_of_leadingCoeff_ne_zero v hv_ne,
+      leadingCoeff_le_mahlerMeasure, mapMahlerMeasure]
 
 Depends on / 依赖: h.trans, hv.injective, hv.norm_map_of_map_zero, hv_ne, hv_norm, injective, leadingCoeff, leadingCoeff_le_mahlerMeasure, leadingCoeff_map_of_leadingCoeff_ne_zero, mapMahlerMeasure, mapMahlerMeasure_nonneg, map_zero, norm_map_of_map_zero, p.leadingCoeff
 -/

@@ -937,7 +937,7 @@ theorem equicontinuousWithinAt_iff_pair
     refine ⟨_, H V hV, fun x hx y hy i => hVU (SetRel.prodMk_mem_comp ?_ (hy i))⟩
     exact SetRel.symm V (hx i)
   · rcases H U hU with ⟨V, hV, hVU⟩
-    filter_upwards [hV] using fun x hx i => hVU
+    filter_upwards [hV] using fun x hx i => hVU x₀ (mem_of_mem_nhdsWithin hx₀ hV) x hx i
 
 中文:
 定理 equicontinuousWithinAt_iff_pair
@@ -948,7 +948,7 @@ theorem equicontinuousWithinAt_iff_pair
     refine ⟨_, H V hV, fun x hx y hy i => hVU (SetRel.prodMk_mem_comp ?_ (hy i))⟩
     exact SetRel.symm V (hx i)
   · rcases H U hU with ⟨V, hV, hVU⟩
-    filter_upwards [hV] using fun x hx i => hVU
+    filter_upwards [hV] using fun x hx i => hVU x₀ (mem_of_mem_nhdsWithin hx₀ hV) x hx i
 
 Depends on / 依赖: SetRel, SetRel.prodMk_mem_comp, SetRel.symm, comp_symm_mem_uniformity_sets, filter_upwards, hVsymm, mem_of_mem_nhdsWithin, prodMk_mem_comp
 -/
@@ -2491,7 +2491,8 @@ theorem EquicontinuousWithinAt.closure'
   filter_upwards [hA V hV, eventually_mem_nhdsWithin] with x hx hxS
   rw [SetCoe.forall] at *
   change A subseteq (fun f => (u f x₀, u f x)) ⁻¹' V at hx
-  refine (closure_minimal hx <| hVclosed.preimage <| hu₂.prodMk ?_)
+  refine (closure_minimal hx <| hVclosed.preimage <| hu₂.prodMk ?_).trans (preimage_mono hVU)
+  exact (continuous_apply ⟨x, hxS⟩).comp hu₁
 
 中文:
 定理 EquicontinuousWithinAt.closure'
@@ -2502,7 +2503,8 @@ theorem EquicontinuousWithinAt.closure'
   filter_upwards [hA V hV, eventually_mem_nhdsWithin] with x hx hxS
   rw [SetCoe.forall] at *
   change A subseteq (fun f => (u f x₀, u f x)) ⁻¹' V at hx
-  refine (closure_minimal hx <| hVclosed.preimage <| hu₂.prodMk ?_)
+  refine (closure_minimal hx <| hVclosed.preimage <| hu₂.prodMk ?_).trans (preimage_mono hVU)
+  exact (continuous_apply ⟨x, hxS⟩).comp hu₁
 
 Depends on / 依赖: SetCoe, SetCoe.forall, closure_minimal, continuous_apply, eventually_mem_nhdsWithin, filter_upwards, hVclosed, hVclosed.preimage, mem_uniformity_isClosed, preimage, preimage_mono, prodMk, subseteq
 -/
@@ -2663,7 +2665,9 @@ theorem UniformEquicontinuousOn.closure'
   rintro ⟨x, y⟩ hxy ⟨hxS, hyS⟩
   rw [SetCoe.forall] at *
   change A subseteq (fun f => (u f x, u f y)) ⁻¹' V at hxy
-  refine (closure_minimal hxy <| hVc
+  refine (closure_minimal hxy <| hVclosed.preimage <| .prodMk ?_ ?_).trans (preimage_mono hVU)
+  · exact (continuous_apply ⟨x, hxS⟩).comp hu
+  · exact (continuous_apply ⟨y, hyS⟩).comp hu
 
 中文:
 定理 UniformEquicontinuousOn.closure'
@@ -2675,7 +2679,9 @@ theorem UniformEquicontinuousOn.closure'
   rintro ⟨x, y⟩ hxy ⟨hxS, hyS⟩
   rw [SetCoe.forall] at *
   change A subseteq (fun f => (u f x, u f y)) ⁻¹' V at hxy
-  refine (closure_minimal hxy <| hVc
+  refine (closure_minimal hxy <| hVclosed.preimage <| .prodMk ?_ ?_).trans (preimage_mono hVU)
+  · exact (continuous_apply ⟨x, hxS⟩).comp hu
+  · exact (continuous_apply ⟨y, hyS⟩).comp hu
 
 Depends on / 依赖: SetCoe, SetCoe.forall, closure_minimal, continuous_apply, filter_upwards, hVclosed, hVclosed.preimage, mem_inf_of_right, mem_principal_self, mem_uniformity_isClosed, preimage, preimage_mono, prodMk, subseteq
 -/
@@ -2783,7 +2789,8 @@ theorem Filter.Tendsto.continuousWithinAt_of_equicontinuousWithinAt
   rcases UniformSpace.mem_nhds_iff.mp hU with ⟨V, hV, hVU⟩
   rcases mem_uniformity_isClosed hV with ⟨W, hW, hWclosed, hWV⟩
   filter_upwards [h₃ W hW, eventually_mem_nhdsWithin] with x hx hxS using
-hVU ball_mono hWV (f x₀) hWclosed.mem_of_tendsto (h₂.prodMk_nhds (h₁ x hx
+hVU ball_mono hWV (f x₀) hWclosed.mem_of_tendsto (h₂.prodMk_nhds (h₁ x hxS))
+    Eventually.of_forall hx
 
 中文:
 定理 滤子.收敛.continuousWithinAt_of_equicontinuousWithinAt
@@ -2793,7 +2800,8 @@ hVU ball_mono hWV (f x₀) hWclosed.mem_of_tendsto (h₂.prodMk_nhds (h₁ x hx
   rcases UniformSpace.mem_nhds_iff.mp hU with ⟨V, hV, hVU⟩
   rcases mem_uniformity_isClosed hV with ⟨W, hW, hWclosed, hWV⟩
   filter_upwards [h₃ W hW, eventually_mem_nhdsWithin] with x hx hxS using
-hVU ball_mono hWV (f x₀) hWclosed.mem_of_tendsto (h₂.prodMk_nhds (h₁ x hx
+hVU ball_mono hWV (f x₀) hWclosed.mem_of_tendsto (h₂.prodMk_nhds (h₁ x hxS))
+    Eventually.of_forall hx
 
 Depends on / 依赖: Eventually, Eventually.of_forall, UniformSpace, UniformSpace.mem_nhds_iff.mp, ball_mono, eventually_mem_nhdsWithin, filter_upwards, hWclosed, hWclosed.mem_of_tendsto, mem_map, mem_nhds_iff, mem_of_tendsto, mem_uniformity_isClosed, of_forall, prodMk_nhds
 -/
@@ -2943,7 +2951,10 @@ theorem EquicontinuousAt.tendsto_of_mem_closure
   rcases comp_comp_symm_mem_uniformity_sets hU with ⟨V, hV, hVs, hVU⟩
   rw [mem_closure_iff_nhdsWithin_neBot] at hx
   have : forallᶠ y in 𝓝[s] x, y in s ∧ (forall i, (F i x, F i y) in V) ∧ (f y, z) in V :=
-even
+eventually_mem_nhdsWithin.and ((hF V hV).filter_mono nhdsWithin_le_nhds).and (hf V hV)
+  rcases this.exists with ⟨y, hys, hFy, hfy⟩
+  filter_upwards [hs y hys (ball_mem_nhds _ hV)] with i hi
+  exact hVU ⟨_, ⟨_, hFy i, mem_ball_symmetry.2 hi⟩, hfy⟩
 
 中文:
 定理 EquicontinuousAt.tendsto_of_mem_closure
@@ -2954,7 +2965,10 @@ even
   rcases comp_comp_symm_mem_uniformity_sets hU with ⟨V, hV, hVs, hVU⟩
   rw [mem_closure_iff_nhdsWithin_neBot] at hx
   have : forallᶠ y in 𝓝[s] x, y in s ∧ (forall i, (F i x, F i y) in V) ∧ (f y, z) in V :=
-even
+eventually_mem_nhdsWithin.and ((hF V hV).filter_mono nhdsWithin_le_nhds).and (hf V hV)
+  rcases this.exists with ⟨y, hys, hFy, hfy⟩
+  filter_upwards [hs y hys (ball_mem_nhds _ hV)] with i hi
+  exact hVU ⟨_, ⟨_, hFy i, mem_ball_symmetry.2 hi⟩, hfy⟩
 
 Depends on / 依赖: ball_mem_nhds, basis_sets, comp_comp_symm_mem_uniformity_sets, eventually_mem_nhdsWithin, eventually_mem_nhdsWithin.and, filter_mono, filter_upwards, mem_closure_iff_nhdsWithin_neBot, nhdsWithin_le_nhds, nhds_basis_uniformity, tendsto_right_iff, this.exists
 -/

@@ -350,7 +350,8 @@ instance :
         rintro ⟨E, hE, rfl⟩
         exact ha hE hx)
     inf_le_left := fun A B _ hx => (@inf_le_left _ _ A B) hx
-    inf_le_right := fun A B _ hx => (@inf_le_righ
+    inf_le_right := fun A B _ hx => (@inf_le_right _ _ A B) hx
+    le_inf := fun _ _ _ h1 h2 _ hx => (le_inf h1 h2) hx }
 
 中文:
 实例 :
@@ -361,7 +362,8 @@ instance :
         rintro ⟨E, hE, rfl⟩
         exact ha hE hx)
     inf_le_left := fun A B _ hx => (@inf_le_left _ _ A B) hx
-    inf_le_right := fun A B _ hx => (@inf_le_righ
+    inf_le_right := fun A B _ hx => (@inf_le_right _ _ A B) hx
+    le_inf := fun _ _ _ h1 h2 _ hx => (le_inf h1 h2) hx }
 
 Depends on / 依赖: Subspace, completeLatticeOfInf, inf_le_left, inf_le_right, le_inf
 -/
@@ -721,7 +723,30 @@ definition submodule
       rcases eq_or_ne y 0 with rfl | hy₂
       · rwa [add_zero]
       intro hxy
-      exact s.mem_add _ _ hx₂ hy₂ hxy (hx₁ hx₂) (
+      exact s.mem_add _ _ hx₂ hy₂ hxy (hx₁ hx₂) (hy₁ hy₂)
+    zero_mem' h := h.irrefl.elim
+    smul_mem' c x h₁ h₂ := by
+      convert! h₁ (right_ne_zero_of_smul h₂) using 1
+      rw [Projectivization.mk_eq_mk_iff']
+      exact ⟨c, rfl⟩ }
+  invFun s :=
+  { carrier := Set.ofPred <| Projectivization.lift (↑· in s) <| by
+      rintro ⟨-, h⟩ ⟨y, -⟩ c rfl
+exact Iff.eq s.smul_mem_iff left_ne_zero_of_smul h
+    mem_add' _ _ _ _ _ h₁ h₂ := s.add_mem h₁ h₂ }
+  left_inv s := by
+    ext ⟨x, hx⟩
+    exact ⟨fun h => h hx, fun h _ => h⟩
+  right_inv s := by
+    ext x
+    suffices x = 0 -> x in s by
+      simpa [imp_iff_not_or]
+    rintro rfl
+    exact s.zero_mem
+  map_rel_iff'.mp h₁ := Projectivization.ind fun _ hx h₂ => h₁ (fun _ => h₂) hx
+map_rel_iff'.mpr h₁ _ h₂ hx := h₁ h₂ hx
+
+@[simp]
 
 中文:
 定义 submodule
@@ -733,7 +758,30 @@ definition submodule
       rcases eq_or_ne y 0 with rfl | hy₂
       · rwa [add_zero]
       intro hxy
-      exact s.mem_add _ _ hx₂ hy₂ hxy (hx₁ hx₂) (
+      exact s.mem_add _ _ hx₂ hy₂ hxy (hx₁ hx₂) (hy₁ hy₂)
+    zero_mem' h := h.irrefl.elim
+    smul_mem' c x h₁ h₂ := by
+      convert! h₁ (right_ne_zero_of_smul h₂) using 1
+      rw [Projectivization.mk_eq_mk_iff']
+      exact ⟨c, rfl⟩ }
+  invFun s :=
+  { carrier := Set.ofPred <| Projectivization.lift (↑· in s) <| by
+      rintro ⟨-, h⟩ ⟨y, -⟩ c rfl
+exact Iff.eq s.smul_mem_iff left_ne_zero_of_smul h
+    mem_add' _ _ _ _ _ h₁ h₂ := s.add_mem h₁ h₂ }
+  left_inv s := by
+    ext ⟨x, hx⟩
+    exact ⟨fun h => h hx, fun h _ => h⟩
+  right_inv s := by
+    ext x
+    suffices x = 0 -> x in s by
+      simpa [imp_iff_not_or]
+    rintro rfl
+    exact s.zero_mem
+  map_rel_iff'.mp h₁ := Projectivization.ind fun _ hx h₂ => h₁ (fun _ => h₂) hx
+map_rel_iff'.mpr h₁ _ h₂ hx := h₁ h₂ hx
+
+@[simp]
 
 Depends on / 依赖: Projectivization, Projectivization.lift, Projectivization.mk, Projectivization.mk_eq_mk_iff, Set.ofPred, add_mem, add_zero, carrier, convert, eq_or_ne, h.irrefl.elim, invFun, irrefl, mem_add, mk_eq_mk_iff, ofPred, right_ne_zero_of_smul, s.carrier, s.mem_add, smul_mem
 -/

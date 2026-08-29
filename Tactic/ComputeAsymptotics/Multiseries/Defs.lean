@@ -2255,7 +2255,8 @@ theorem elim_cons
   obtain ⟨h_all, h_Pairwise⟩ := h_Pairwise.cons_elim
   constructor
   · simp only [leadingExp_cons, WithBot.coe_lt_coe]
-    exact 
+    exact h_all (tl_exp, tl_coef) (by simp [Multiseries.cons])
+  · exact Sorted.seq _ (fun x hx => h_coef _ (by simp_all)) h_Pairwise
 
 中文:
 定理 elim_cons
@@ -2270,7 +2271,8 @@ theorem elim_cons
   obtain ⟨h_all, h_Pairwise⟩ := h_Pairwise.cons_elim
   constructor
   · simp only [leadingExp_cons, WithBot.coe_lt_coe]
-    exact 
+    exact h_all (tl_exp, tl_coef) (by simp [Multiseries.cons])
+  · exact Sorted.seq _ (fun x hx => h_coef _ (by simp_all)) h_Pairwise
 
 Depends on / 依赖: Multiseries, Multiseries.cons, Sorted, Sorted.seq, WithBot, WithBot.coe_lt_coe, coe_lt_coe, cons_elim, h_Pairwise, h_Pairwise.cons_elim, h_all, h_coef, leadingExp_cons, tl_coef, tl_exp, tl_tl
 -/
@@ -2334,6 +2336,10 @@ theorem coind
       constructor
       · intro (tl_exp, tl_coef) h_tl
         rw [gt_iff_lt]; rw [lt_iff_lt]
+        replace h_step := (h_step exp coef tl h).right.left
+        cases tl <;> simp [leadingExp, head] at h_tl h_step
+        grind
+      · grind [h_step exp coef tl h]
 
 中文:
 定理 coind
@@ -2350,6 +2356,10 @@ theorem coind
       constructor
       · intro (tl_exp, tl_coef) h_tl
         rw [gt_iff_lt]; rw [lt_iff_lt]
+        replace h_step := (h_step exp coef tl h).right.left
+        cases tl <;> simp [leadingExp, head] at h_tl h_step
+        grind
+      · grind [h_step exp coef tl h]
 
 Depends on / 依赖: Pairwise, Seq.Pairwise.coind_trans, Seq.all_coind, all_coind, coind_trans, gt_iff_lt, h_base, h_step, h_tl, leadingExp, lt_iff_lt, replace, right.left, tl_coef, tl_exp
 -/
@@ -2542,7 +2552,13 @@ theorem coind
   · rintro basis ms (h_ms | ⟨rfl, h_ms⟩)
     · cases h_ms <;> grind
     simp only [reduceCtorEq, List.cons.injEq, ↓existsAndEq, and_true, heq_eq_eq, ms_eq_mk_iff,
-    
+      true_and, exists_eq_right_right', exists_and_left, false_or] at h_ms ⊢
+    rcases h_step _ h_ms with h_step | ⟨exp, coef, tl, h_seq, h_coef, h_maj, h_tl⟩
+    · grind
+    · refine .inr ⟨basis_hd, ms.toFun, basis_tl, exp, coef, by simpa, ‹_›, tl, ?_⟩
+      simp
+      grind
+  · grind
 
 中文:
 定理 coind
@@ -2553,7 +2569,13 @@ theorem coind
   · rintro basis ms (h_ms | ⟨rfl, h_ms⟩)
     · cases h_ms <;> grind
     simp only [reduceCtorEq, List.cons.injEq, ↓existsAndEq, and_true, heq_eq_eq, ms_eq_mk_iff,
-    
+      true_and, exists_eq_right_right', exists_and_left, false_or] at h_ms ⊢
+    rcases h_step _ h_ms with h_step | ⟨exp, coef, tl, h_seq, h_coef, h_maj, h_tl⟩
+    · grind
+    · refine .inr ⟨basis_hd, ms.toFun, basis_tl, exp, coef, by simpa, ‹_›, tl, ?_⟩
+      simp
+      grind
+  · grind
 
 Depends on / 依赖: basis_hd, coef.toFun, ms.toFun
 -/
@@ -2667,7 +2689,20 @@ theorem replaceFun
       exists (ms' : MultiseriesExpansion (basis_hd :: basis_tl)) (f' : Real -> Real),
       ms = ms'.replaceFun f' ∧ ms'.Approximates ∧ ms'.toFun =ᶠ[atTop] f'
   apply Approximates.coind motive ⟨ms, f, by grind⟩
-  rintro _ ⟨
+  rintro _ ⟨ms, f, rfl, h_approx, h_eq⟩
+  cases ms with
+  | nil g =>
+    simp only [nil_iff, mk_toFun, mk_replaceFun, mk_seq, true_and,
+      Multiseries.nil_ne_cons, false_and, exists_const, or_false] at h_approx h_eq ⊢
+    grw [← h_eq, h_approx]
+  | cons exp coef tl g =>
+    obtain ⟨h_coef, h_maj, h_tl⟩ := h_approx.elim_cons
+    refine .inr ⟨exp, coef, tl, ?_⟩
+    simp only [mk_replaceFun, mk_seq, h_coef, mk_toFun, true_and]
+    simp only [mk_toFun] at h_eq
+    refine ⟨h_maj.of_eventuallyEq h_eq.symm, mk tl (g - basis_hd ^ exp * coef.toFun), _, rfl,
+      h_tl, ?_⟩
+    grw [mk_toFun, h_eq]
 
 中文:
 定理 replaceFun
@@ -2677,7 +2712,20 @@ theorem replaceFun
       exists (ms' : MultiseriesExpansion (basis_hd :: basis_tl)) (f' : Real -> Real),
       ms = ms'.replaceFun f' ∧ ms'.Approximates ∧ ms'.toFun =ᶠ[atTop] f'
   apply Approximates.coind motive ⟨ms, f, by grind⟩
-  rintro _ ⟨
+  rintro _ ⟨ms, f, rfl, h_approx, h_eq⟩
+  cases ms with
+  | nil g =>
+    simp only [nil_iff, mk_toFun, mk_replaceFun, mk_seq, true_and,
+      Multiseries.nil_ne_cons, false_and, exists_const, or_false] at h_approx h_eq ⊢
+    grw [← h_eq, h_approx]
+  | cons exp coef tl g =>
+    obtain ⟨h_coef, h_maj, h_tl⟩ := h_approx.elim_cons
+    refine .inr ⟨exp, coef, tl, ?_⟩
+    simp only [mk_replaceFun, mk_seq, h_coef, mk_toFun, true_and]
+    simp only [mk_toFun] at h_eq
+    refine ⟨h_maj.of_eventuallyEq h_eq.symm, mk tl (g - basis_hd ^ exp * coef.toFun), _, rfl,
+      h_tl, ?_⟩
+    grw [mk_toFun, h_eq]
 
 Depends on / 依赖: Approximates, Approximates.coind, Multiseries, Multiseries.nil_ne_cons, MultiseriesExpansion, basis_hd, basis_tl, exists_const, false_and, h_approx, h_eq, mk_replaceFun, mk_seq, mk_toFun, motive, nil_iff, nil_ne_cons, or_false, replaceFun, true_and
 -/

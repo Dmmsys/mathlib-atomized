@@ -31,7 +31,10 @@ lemma analyticAt_localInverse
   let i : 𝕜 ≃L[𝕜] 𝕜 := .unitsEquivAut 𝕜 (.mk0 _ hf') -- multiplication by `deriv f a` as equiv
   have hfd : HasStrictFDerivAt f i.toContinuousLinearMap x := hf.hasStrictDerivAt
   let R : OpenPartialHomeomorph 𝕜 𝕜 := hfd.toOpenPartialHomeomorph _
-  have hx : x in R.source := HasStrictFDerivAt.mem_
+  have hx : x in R.source := HasStrictFDerivAt.mem_toOpenPartialHomeomorph_source _
+.analyticAt refine R.hasFPowerSeriesAt_symm hx hf.hasFPowerSeriesAt (i := i) ?_
+  ext
+  simp [i]
 
 中文:
 引理 analyticAt_localInverse
@@ -40,7 +43,10 @@ lemma analyticAt_localInverse
   let i : 𝕜 ≃L[𝕜] 𝕜 := .unitsEquivAut 𝕜 (.mk0 _ hf') -- multiplication by `deriv f a` as equiv
   have hfd : HasStrictFDerivAt f i.toContinuousLinearMap x := hf.hasStrictDerivAt
   let R : OpenPartialHomeomorph 𝕜 𝕜 := hfd.toOpenPartialHomeomorph _
-  have hx : x in R.source := HasStrictFDerivAt.mem_
+  have hx : x in R.source := HasStrictFDerivAt.mem_toOpenPartialHomeomorph_source _
+.analyticAt refine R.hasFPowerSeriesAt_symm hx hf.hasFPowerSeriesAt (i := i) ?_
+  ext
+  simp [i]
 
 Depends on / 依赖: HasStrictFDerivAt, HasStrictFDerivAt.mem_toOpenPartialHomeomorph_source, OpenPartialHomeomorph, R.hasFPowerSeriesAt_symm, R.source, analyticAt, hasFPowerSeriesAt, hasFPowerSeriesAt_symm, hasStrictDerivAt, hf.hasFPowerSeriesAt, hf.hasStrictDerivAt, hfd.toOpenPartialHomeomorph, i.toContinuousLinearMap, mem_toOpenPartialHomeomorph_source, multiplication, source, toContinuousLinearMap, toOpenPartialHomeomorph, unitsEquivAut
 -/
@@ -70,7 +76,7 @@ lemma analyticAt_comp_iff_of_deriv_ne_zero
   have hra : AnalyticAt 𝕜 r (f x) := hf.analyticAt_localInverse hf'
   have : r (f x) = x := HasStrictFDerivAt.localInverse_apply_image ..
   rw [← this] at hg
-exact (hg.comp hra).congr .fun_comp (
+exact (hg.comp hra).congr .fun_comp (HasStrictDerivAt.eventually_right_inverse ..) g
 
 中文:
 引理 analyticAt_comp_iff_of_deriv_ne_zero
@@ -81,7 +87,7 @@ exact (hg.comp hra).congr .fun_comp (
   have hra : AnalyticAt 𝕜 r (f x) := hf.analyticAt_localInverse hf'
   have : r (f x) = x := HasStrictFDerivAt.localInverse_apply_image ..
   rw [← this] at hg
-exact (hg.comp hra).congr .fun_comp (
+exact (hg.comp hra).congr .fun_comp (HasStrictDerivAt.eventually_right_inverse ..) g
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.comp, HasStrictDerivAt, HasStrictDerivAt.eventually_right_inverse, HasStrictFDerivAt, HasStrictFDerivAt.localInverse_apply_image, analyticAt_localInverse, eventually_right_inverse, fun_comp, hasStrictDerivAt, hf.analyticAt_localInverse, hf.hasStrictDerivAt.localInverse, hg.comp, localInverse, localInverse_apply_image
 -/

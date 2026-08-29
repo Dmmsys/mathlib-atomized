@@ -228,7 +228,18 @@ lemma isConnected_rightResolution_of_functorial_resolutions
   have : IsPreconnected (Φ.RightResolution X₂) :=
     zigzag_isPreconnected (fun R₀ R₄ =>
       calc
-
+        Zigzag R₀ { hw := W₂.comp_mem _ _ R₀.hw (hi _), .. } :=
+          Zigzag.of_hom { f := (ι i).app R₀.X₁ }
+        Zigzag (J := Φ.RightResolution X₂) _ { hw := hi X₂, .. } :=
+          Zigzag.of_inv
+            { f := ρ.map R₀.w
+              comm := (i.naturality R₀.w).symm }
+        Zigzag (J := Φ.RightResolution X₂) _ { hw := W₂.comp_mem _ _ R₄.hw (hi _), .. } :=
+          Zigzag.of_hom
+            { f := ρ.map R₄.w
+              comm := (i.naturality R₄.w).symm }
+        Zigzag _ R₄ := Zigzag.of_inv { f := (ι i).app R₄.X₁ })
+  constructor
 
 中文:
 引理 isConnected_rightResolution_of_functorial_resolutions
@@ -240,7 +251,18 @@ lemma isConnected_rightResolution_of_functorial_resolutions
   have : IsPreconnected (Φ.RightResolution X₂) :=
     zigzag_isPreconnected (fun R₀ R₄ =>
       calc
-
+        Zigzag R₀ { hw := W₂.comp_mem _ _ R₀.hw (hi _), .. } :=
+          Zigzag.of_hom { f := (ι i).app R₀.X₁ }
+        Zigzag (J := Φ.RightResolution X₂) _ { hw := hi X₂, .. } :=
+          Zigzag.of_inv
+            { f := ρ.map R₀.w
+              comm := (i.naturality R₀.w).symm }
+        Zigzag (J := Φ.RightResolution X₂) _ { hw := W₂.comp_mem _ _ R₄.hw (hi _), .. } :=
+          Zigzag.of_hom
+            { f := ρ.map R₄.w
+              comm := (i.naturality R₄.w).symm }
+        Zigzag _ R₄ := Zigzag.of_inv { f := (ι i).app R₄.X₁ })
+  constructor
 
 Depends on / 依赖: IsConnected, IsMultiplicative, IsPreconnected, Nonempty, RightResolution, Zigzag, Zigzag.of_hom, Zigzag.of_inv, comp_mem, i.naturality, infer_instance, naturality, of_hom, of_inv, zigzag_isPreconnected
 -/
@@ -275,7 +297,7 @@ lemma isRightDerivabilityStructure_of_functorial_resolutions
   have := Φ.isLocalizedEquivalence_of_functorial_right_resolutions i hi hW₁
   have := Φ.hasRightResolutions_arrow_of_functorial_resolutions i hi
   have := Φ.isConnected_rightResolution_of_functorial_resolutions i hi hW₁
-  apply IsRightDe
+  apply IsRightDerivabilityStructure.mk'
 
 中文:
 引理 isRightDerivabilityStructure_of_functorial_resolutions
@@ -284,7 +306,7 @@ lemma isRightDerivabilityStructure_of_functorial_resolutions
   have := Φ.isLocalizedEquivalence_of_functorial_right_resolutions i hi hW₁
   have := Φ.hasRightResolutions_arrow_of_functorial_resolutions i hi
   have := Φ.isConnected_rightResolution_of_functorial_resolutions i hi hW₁
-  apply IsRightDe
+  apply IsRightDerivabilityStructure.mk'
 
 Depends on / 依赖: IsMultiplicative, IsRightDerivabilityStructure, IsRightDerivabilityStructure.mk, hasRightResolutions_arrow_of_functorial_resolutions, infer_instance, isConnected_rightResolution_of_functorial_resolutions, isLocalizedEquivalence_of_functorial_right_resolutions
 -/

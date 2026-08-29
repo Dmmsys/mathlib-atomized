@@ -156,7 +156,9 @@ theorem renameFunAux'
   apply Set.Finite.subset (s := ↑((Finset.antidiagonal x).sup (fun q => Finset.product {q}
     ((TendstoCofinite.finite_preimage_singleton (Finsupp.mapDomain f) q.1).toFinset ×ˢ
       (TendstoCofinite.finite_preimage_singleton (Finsupp.mapDomain f) q.2).toFinset))))
-  · exact Finset.f
+  · exact Finset.finite_toSet ..
+  · intro; simp
+    grind
 
 中文:
 定理 renameFunAux'
@@ -166,7 +168,9 @@ theorem renameFunAux'
   apply Set.Finite.subset (s := ↑((Finset.antidiagonal x).sup (fun q => Finset.product {q}
     ((TendstoCofinite.finite_preimage_singleton (Finsupp.mapDomain f) q.1).toFinset ×ˢ
       (TendstoCofinite.finite_preimage_singleton (Finsupp.mapDomain f) q.2).toFinset))))
-  · exact Finset.f
+  · exact Finset.finite_toSet ..
+  · intro; simp
+    grind
 -/
 private theorem renameFunAux' [DecidableEq τ] (x : τ ->₀ Nat) :
     {p : ((τ ->₀ Nat) × (τ ->₀ Nat)) × (σ ->₀ Nat) × (σ ->₀ Nat) | p.1 in Finset.antidiagonal x
@@ -214,7 +218,7 @@ theorem renameFun_mul
   classical
   ext x
   simp only [coeff_renameFun, coeff_mul, sum_mul_sum, ← sum_product']
-  rw [← sum_finset_product' (renameFunAux f x).toFinset _ _ (by simp)]; rw [← sum_finset_product' (renameFunAux' f x).toFinset _ _ (by simp)]; rw [← renameFunAuxImage f x]; rw [sum_image fun _ => by simp; gr
+  rw [← sum_finset_product' (renameFunAux f x).toFinset _ _ (by simp)]; rw [← sum_finset_product' (renameFunAux' f x).toFinset _ _ (by simp)]; rw [← renameFunAuxImage f x]; rw [sum_image fun _ => by simp; grind]
 
 中文:
 定理 renameFun_mul
@@ -223,7 +227,7 @@ theorem renameFun_mul
   classical
   ext x
   simp only [coeff_renameFun, coeff_mul, sum_mul_sum, ← sum_product']
-  rw [← sum_finset_product' (renameFunAux f x).toFinset _ _ (by simp)]; rw [← sum_finset_product' (renameFunAux' f x).toFinset _ _ (by simp)]; rw [← renameFunAuxImage f x]; rw [sum_image fun _ => by simp; gr
+  rw [← sum_finset_product' (renameFunAux f x).toFinset _ _ (by simp)]; rw [← sum_finset_product' (renameFunAux' f x).toFinset _ _ (by simp)]; rw [← renameFunAuxImage f x]; rw [sum_image fun _ => by simp; grind]
 -/
 private theorem renameFun_mul (p q : MvPowerSeries σ R) :
     renameFun f (p * q) = renameFun f p * renameFun f q := by
@@ -1146,7 +1150,13 @@ theorem rename_eq_subst
     (coeff_subst_finite (HasSubst.X_comp _) p n)]
   have (d : σ ->₀ Nat) (hd : (coeff d) p * (coeff n) (d.prod fun s e => X (f s) ^ e) != 0) :
       mapDomain f d = n := by
-    simp_rw [← monomi
+    simp_rw [← monomial_mapDomain_apply_one] at hd
+    exact (eq_of_coeff_monomial_ne_zero (right_ne_zero_of_mul hd)).symm
+  refine (Finset.sum_subset_zero_on_sdiff ?_ ?_ (fun x hx => ?_)).symm
+  · exact Set.Finite.toFinset_mono this
+  · simp +contextual [← monomial_mapDomain_apply_one]
+  · simp only [Set.Finite.mem_toFinset] at hx
+    simp [← this _ hx, ← monomial_mapDomain_apply_one, coeff_monomial_same]
 
 中文:
 定理 rename_eq_subst
@@ -1158,7 +1168,13 @@ theorem rename_eq_subst
     (coeff_subst_finite (HasSubst.X_comp _) p n)]
   have (d : σ ->₀ Nat) (hd : (coeff d) p * (coeff n) (d.prod fun s e => X (f s) ^ e) != 0) :
       mapDomain f d = n := by
-    simp_rw [← monomi
+    simp_rw [← monomial_mapDomain_apply_one] at hd
+    exact (eq_of_coeff_monomial_ne_zero (right_ne_zero_of_mul hd)).symm
+  refine (Finset.sum_subset_zero_on_sdiff ?_ ?_ (fun x hx => ?_)).symm
+  · exact Set.Finite.toFinset_mono this
+  · simp +contextual [← monomial_mapDomain_apply_one]
+  · simp only [Set.Finite.mem_toFinset] at hx
+    simp [← this _ hx, ← monomial_mapDomain_apply_one, coeff_monomial_same]
 
 Depends on / 依赖: Finite, Finset, Finset.sum_subset_zero_on_sdiff, HasSubst, HasSubst.X_comp, Set.Finite.toFinset_mono, X_comp, classical, coeff_rename, coeff_subst, coeff_subst_finite, contextua, d.prod, eq_of_coeff_monomial_ne_zero, finsum_eq_sum, mapDomain, monomial_mapDomain_apply_one, right_ne_zero_of_mul, simp_rw, sum_subset_zero_on_sdiff
 -/

@@ -53,7 +53,7 @@ definition withDensity
       by
         refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
         simp_rw [withDensity_apply _ hs]
-        exact hf.setLIntegral_kernel_prod_right hs⟩ : Kernel α β)) fun
+        exact hf.setLIntegral_kernel_prod_right hs⟩ : Kernel α β)) fun _ => 0
 
 中文:
 定义 withDensity
@@ -63,7 +63,7 @@ definition withDensity
       by
         refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
         simp_rw [withDensity_apply _ hs]
-        exact hf.setLIntegral_kernel_prod_right hs⟩ : Kernel α β)) fun
+        exact hf.setLIntegral_kernel_prod_right hs⟩ : Kernel α β)) fun _ => 0
 
 Depends on / 依赖: Classical, Classical.dec, Function, Function.uncurry, Kernel, Measurable, Measure, Measure.measurable_of_measurable_coe, hf.setLIntegral_kernel_prod_right, measurable_of_measurable_coe, setLIntegral_kernel_prod_right, simp_rw, uncurry, withDensity, withDensity_apply
 -/
@@ -129,7 +129,20 @@ theorem withDensity_apply'
 nonrec lemma withDensity_congr_ae (κ : Kernel α β) [IsSFiniteKernel κ] {f g : α -> β -> Real>=0∞}
     (hf : Measurable (Function.uncurry f)) (hg : Measurable (Function.uncurry g))
     (hfg : forall a, f a =ᵐ[κ a] g a) :
-    withDe
+    withDensity κ f = withDensity κ g := by
+  ext a
+  rw [Kernel.withDensity_apply _ hf]; rw [Kernel.withDensity_apply _ hg]; rw [withDensity_congr_ae (hfg a)]
+
+nonrec lemma withDensity_absolutelyContinuous [IsSFiniteKernel κ]
+    (f : α -> β -> Real>=0∞) (a : α) :
+    Kernel.withDensity κ f a ≪ κ a := by
+  by_cases hf : Measurable (Function.uncurry f)
+  · rw [Kernel.withDensity_apply _ hf]
+    exact withDensity_absolutelyContinuous _ _
+  · rw [withDensity_of_not_measurable _ hf]
+    simp [Measure.AbsolutelyContinuous.zero]
+
+@[simp]
 
 中文:
 定理 withDensity_apply'
@@ -140,7 +153,20 @@ nonrec lemma withDensity_congr_ae (κ : Kernel α β) [IsSFiniteKernel κ] {f g 
 nonrec lemma withDensity_congr_ae (κ : Kernel α β) [IsSFiniteKernel κ] {f g : α -> β -> Real>=0∞}
     (hf : Measurable (Function.uncurry f)) (hg : Measurable (Function.uncurry g))
     (hfg : forall a, f a =ᵐ[κ a] g a) :
-    withDe
+    withDensity κ f = withDensity κ g := by
+  ext a
+  rw [Kernel.withDensity_apply _ hf]; rw [Kernel.withDensity_apply _ hg]; rw [withDensity_congr_ae (hfg a)]
+
+nonrec lemma withDensity_absolutelyContinuous [IsSFiniteKernel κ]
+    (f : α -> β -> Real>=0∞) (a : α) :
+    Kernel.withDensity κ f a ≪ κ a := by
+  by_cases hf : Measurable (Function.uncurry f)
+  · rw [Kernel.withDensity_apply _ hf]
+    exact withDensity_absolutelyContinuous _ _
+  · rw [withDensity_of_not_measurable _ hf]
+    simp [Measure.AbsolutelyContinuous.zero]
+
+@[simp]
 -/
 protected theorem withDensity_apply' (κ : Kernel α β) [IsSFiniteKernel κ]
     (hf : Measurable (Function.uncurry f)) (a : α) (s : Set β) :
@@ -459,7 +485,19 @@ theorem withDensity_tsum
   ext a s hs
   rw [sum_apply' _ a hs]; rw [Kernel.withDensity_apply' κ _ a s]
   swap
-  · have : Function.uncurry (∑' n, f n) = ∑
+  · have : Function.uncurry (∑' n, f n) = ∑' n, Function.uncurry (f n) := by
+      ext1 p
+      simp only [Function.uncurry_def]
+      rw [tsum_apply h_sum]; rw [tsum_apply (h_sum_a _)]; rw [tsum_apply]
+      exact Pi.summable.mpr fun p => ENNReal.summable
+    rw [this]
+    fun_prop
+  have : ∫⁻ b in s, (∑' n, f n) a b ∂κ a = ∫⁻ b in s, ∑' n, (fun b => f n a b) b ∂κ a := by
+    congr with b
+    rw [tsum_apply h_sum]; rw [tsum_apply (h_sum_a a)]
+  rw [this]; rw [lintegral_tsum fun n => by fun_prop]
+  congr with n
+  rw [Kernel.withDensity_apply' _ (hf n) a s]
 
 中文:
 定理 withDensity_tsum
@@ -470,7 +508,19 @@ theorem withDensity_tsum
   ext a s hs
   rw [sum_apply' _ a hs]; rw [Kernel.withDensity_apply' κ _ a s]
   swap
-  · have : Function.uncurry (∑' n, f n) = ∑
+  · have : Function.uncurry (∑' n, f n) = ∑' n, Function.uncurry (f n) := by
+      ext1 p
+      simp only [Function.uncurry_def]
+      rw [tsum_apply h_sum]; rw [tsum_apply (h_sum_a _)]; rw [tsum_apply]
+      exact Pi.summable.mpr fun p => ENNReal.summable
+    rw [this]
+    fun_prop
+  have : ∫⁻ b in s, (∑' n, f n) a b ∂κ a = ∫⁻ b in s, ∑' n, (fun b => f n a b) b ∂κ a := by
+    congr with b
+    rw [tsum_apply h_sum]; rw [tsum_apply (h_sum_a a)]
+  rw [this]; rw [lintegral_tsum fun n => by fun_prop]
+  congr with n
+  rw [Kernel.withDensity_apply' _ (hf n) a s]
 
 Depends on / 依赖: ENNReal, ENNReal.summable, Function, Function.uncurry, Function.uncurry_def, Kernel, Kernel.withDensity_apply, Pi.summable.mpr, Summable, fun_prop, h_sum, h_sum_a, sum_apply, summable, tsum_apply, uncurry, uncurry_def, withDensity_apply
 -/
@@ -508,7 +558,11 @@ theorem isFiniteKernel_withDensity_of_bounded
         rw [Kernel.withDensity_apply' κ hf a Set.univ]
         calc
           ∫⁻ b in Set.univ, f a b ∂κ a <= ∫⁻ _ in Set.univ, B ∂κ a := lintegral_mono (hf_B a)
- 
+          _ = B * κ a Set.univ := by
+            simp only [Measure.restrict_univ, MeasureTheory.lintegral_const]
+          _ <= B * κ.bound := by grw [measure_le_bound]⟩⟩
+  · rw [withDensity_of_not_measurable _ hf]
+    infer_instance
 
 中文:
 定理 isFiniteKernel_withDensity_of_bounded
@@ -519,7 +573,11 @@ theorem isFiniteKernel_withDensity_of_bounded
         rw [Kernel.withDensity_apply' κ hf a Set.univ]
         calc
           ∫⁻ b in Set.univ, f a b ∂κ a <= ∫⁻ _ in Set.univ, B ∂κ a := lintegral_mono (hf_B a)
- 
+          _ = B * κ a Set.univ := by
+            simp only [Measure.restrict_univ, MeasureTheory.lintegral_const]
+          _ <= B * κ.bound := by grw [measure_le_bound]⟩⟩
+  · rw [withDensity_of_not_measurable _ hf]
+    infer_instance
 
 Depends on / 依赖: ENNReal, ENNReal.mul_lt_top, Function, Function.uncurry, Kernel, Kernel.withDensity_apply, Measurable, Measure, Measure.restrict_univ, MeasureTheory, MeasureTheory.lintegral_const, Set.univ, bound_lt_top, hB_top, hB_top.lt_top, hf_B, infer_instance, lintegral_const, lintegral_mono, lt_top
 -/
@@ -546,7 +604,50 @@ theorem isSFiniteKernel_withDensity_of_isFiniteKernel
   -- We already have that for `f` bounded from above and a `κ` a finite kernel,
   -- `withDensity κ f` is finite. We write any function as a countable sum of bounded
   -- functions, and decompose an s-finite kernel as a sum of finite kernels. We then use that
-  -- `withDensity` commutes with sums
+  -- `withDensity` commutes with sums for both arguments and get a sum of finite kernels.
+  by_cases hf : Measurable (Function.uncurry f)
+  swap; · rw [withDensity_of_not_measurable _ hf]; infer_instance
+  let fs : Nat -> α -> β -> Real>=0∞ := fun n a b => min (f a b) (n + 1) - min (f a b) n
+  have h_le : forall a b n, ⌈(f a b).toReal⌉₊ <= n -> f a b <= n := by
+    intro a b n hn
+    have : (f a b).toReal <= n := Nat.le_of_ceil_le hn
+    rw [← ENNReal.le_ofReal_iff_toReal_le (hf_ne_top a b) _] at this
+    · simpa
+    · exact n.cast_nonneg
+  have h_zero : forall a b n, ⌈(f a b).toReal⌉₊ <= n -> fs n a b = 0 := by
+    intro a b n hn
+    suffices min (f a b) (n + 1) = f a b ∧ min (f a b) n = f a b by
+      simp_rw [fs, this.1, this.2, tsub_self (f a b)]
+    exact ⟨min_eq_left ((h_le a b n hn).trans (le_add_of_nonneg_right zero_le_one)),
+      min_eq_left (h_le a b n hn)⟩
+  have hf_eq_tsum : f = ∑' n, fs n := by
+    have h_sum_a : forall a, Summable fun n => fs n a :=
+      fun _ => Pi.summable.mpr fun _ => ENNReal.summable
+    ext a b : 2
+    rw [tsum_apply (Pi.summable.mpr h_sum_a)]; rw [tsum_apply (h_sum_a a)]; rw [ENNReal.tsum_eq_liminf_sum_nat]
+    have h_finsetSum : forall n, ∑ i in Finset.range n, fs i a b = min (f a b) n := fun n => by
+      induction n with
+      | zero => simp
+      | succ n hn =>
+        rw [Finset.sum_range_succ]; rw [hn]
+        simp [fs]
+    simp_rw [h_finsetSum]
+    refine (Filter.Tendsto.liminf_eq ?_).symm
+    refine Filter.Tendsto.congr' ?_ tendsto_const_nhds
+    rw [Filter.EventuallyEq]; rw [Filter.eventually_atTop]
+    exact ⟨⌈(f a b).toReal⌉₊, fun n hn => (min_eq_left (h_le a b n hn)).symm⟩
+  rw [hf_eq_tsum]; rw [withDensity_tsum _ fun n : Nat => _]
+  swap; · fun_prop
+  refine isSFiniteKernel_sum (hκs := fun n => ?_)
+  suffices IsFiniteKernel (withDensity κ (fs n)) by infer_instance
+  refine isFiniteKernel_withDensity_of_bounded _ (ENNReal.coe_ne_top : ↑n + 1 != ∞) fun a b => ?_
+  -- After https://github.com/leanprover/lean4/pull/2734, we need to do beta reduction before `norm_cast`
+  beta_reduce
+  norm_cast
+  calc
+    fs n a b <= min (f a b) (n + 1) := tsub_le_self
+    _ <= n + 1 := min_le_right _ _
+    _ = ↑(n + 1) := by norm_cast
 
 中文:
 定理 isSFiniteKernel_withDensity_of_isFiniteKernel
@@ -555,7 +656,50 @@ theorem isSFiniteKernel_withDensity_of_isFiniteKernel
   -- We already have that for `f` bounded from above and a `κ` a finite kernel,
   -- `withDensity κ f` is finite. We write any function as a countable sum of bounded
   -- functions, and decompose an s-finite kernel as a sum of finite kernels. We then use that
-  -- `withDensity` commutes with sums
+  -- `withDensity` commutes with sums for both arguments and get a sum of finite kernels.
+  by_cases hf : Measurable (Function.uncurry f)
+  swap; · rw [withDensity_of_not_measurable _ hf]; infer_instance
+  let fs : Nat -> α -> β -> Real>=0∞ := fun n a b => min (f a b) (n + 1) - min (f a b) n
+  have h_le : forall a b n, ⌈(f a b).toReal⌉₊ <= n -> f a b <= n := by
+    intro a b n hn
+    have : (f a b).toReal <= n := Nat.le_of_ceil_le hn
+    rw [← ENNReal.le_ofReal_iff_toReal_le (hf_ne_top a b) _] at this
+    · simpa
+    · exact n.cast_nonneg
+  have h_zero : forall a b n, ⌈(f a b).toReal⌉₊ <= n -> fs n a b = 0 := by
+    intro a b n hn
+    suffices min (f a b) (n + 1) = f a b ∧ min (f a b) n = f a b by
+      simp_rw [fs, this.1, this.2, tsub_self (f a b)]
+    exact ⟨min_eq_left ((h_le a b n hn).trans (le_add_of_nonneg_right zero_le_one)),
+      min_eq_left (h_le a b n hn)⟩
+  have hf_eq_tsum : f = ∑' n, fs n := by
+    have h_sum_a : forall a, Summable fun n => fs n a :=
+      fun _ => Pi.summable.mpr fun _ => ENNReal.summable
+    ext a b : 2
+    rw [tsum_apply (Pi.summable.mpr h_sum_a)]; rw [tsum_apply (h_sum_a a)]; rw [ENNReal.tsum_eq_liminf_sum_nat]
+    have h_finsetSum : forall n, ∑ i in Finset.range n, fs i a b = min (f a b) n := fun n => by
+      induction n with
+      | zero => simp
+      | succ n hn =>
+        rw [Finset.sum_range_succ]; rw [hn]
+        simp [fs]
+    simp_rw [h_finsetSum]
+    refine (Filter.Tendsto.liminf_eq ?_).symm
+    refine Filter.Tendsto.congr' ?_ tendsto_const_nhds
+    rw [Filter.EventuallyEq]; rw [Filter.eventually_atTop]
+    exact ⟨⌈(f a b).toReal⌉₊, fun n hn => (min_eq_left (h_le a b n hn)).symm⟩
+  rw [hf_eq_tsum]; rw [withDensity_tsum _ fun n : Nat => _]
+  swap; · fun_prop
+  refine isSFiniteKernel_sum (hκs := fun n => ?_)
+  suffices IsFiniteKernel (withDensity κ (fs n)) by infer_instance
+  refine isFiniteKernel_withDensity_of_bounded _ (ENNReal.coe_ne_top : ↑n + 1 != ∞) fun a b => ?_
+  -- After https://github.com/leanprover/lean4/pull/2734, we need to do beta reduction before `norm_cast`
+  beta_reduce
+  norm_cast
+  calc
+    fs n a b <= min (f a b) (n + 1) := tsub_le_self
+    _ <= n + 1 := min_le_right _ _
+    _ = ↑(n + 1) := by norm_cast
 -/
 theorem isSFiniteKernel_withDensity_of_isFiniteKernel (κ : Kernel α β) [IsFiniteKernel κ]
     (hf_ne_top : forall a b, f a b != ∞) : IsSFiniteKernel (withDensity κ f) := by

@@ -1047,7 +1047,20 @@ definition fderivLM
     else 0
   map_add' f g := by
     split_ifs with hk
-    · have hk' : 0 < (n : Nat∞ω) := mod_cast (add_pos_of_right zero_lt_one k).trans_l
+    · have hk' : 0 < (n : Nat∞ω) := mod_cast (add_pos_of_right zero_lt_one k).trans_le hk
+      ext
+      simp [fderiv_add (f.contDiff.differentiable hk'.ne').differentiableAt
+                       (g.contDiff.differentiable hk'.ne').differentiableAt, FunLike.coe_add]
+    · simp
+  map_smul' c f := by
+    split_ifs with hk
+    · have hk' : 0 < (n : Nat∞ω) := mod_cast (add_pos_of_right zero_lt_one k).trans_le hk
+      ext
+      simp [fderiv_const_smul (f.contDiff.differentiable hk'.ne').differentiableAt,
+        FunLike.coe_smul]
+    · simp
+
+@[simp]
 
 中文:
 定义 fderivLM
@@ -1059,7 +1072,20 @@ definition fderivLM
     else 0
   map_add' f g := by
     split_ifs with hk
-    · have hk' : 0 < (n : Nat∞ω) := mod_cast (add_pos_of_right zero_lt_one k).trans_l
+    · have hk' : 0 < (n : Nat∞ω) := mod_cast (add_pos_of_right zero_lt_one k).trans_le hk
+      ext
+      simp [fderiv_add (f.contDiff.differentiable hk'.ne').differentiableAt
+                       (g.contDiff.differentiable hk'.ne').differentiableAt, FunLike.coe_add]
+    · simp
+  map_smul' c f := by
+    split_ifs with hk
+    · have hk' : 0 < (n : Nat∞ω) := mod_cast (add_pos_of_right zero_lt_one k).trans_le hk
+      ext
+      simp [fderiv_const_smul (f.contDiff.differentiable hk'.ne').differentiableAt,
+        FunLike.coe_smul]
+    · simp
+
+@[simp]
 
 Depends on / 依赖: FunLike, FunLike.coe_add, add_pos_of_right, coe_add, contDiff, differentiable, differentiableAt, f.contDiff.differentiable, f.contDiff.fderiv_right, f.tsupport_subset, fderiv_add, fderiv_right, g.contDiff.differentiable, map_add, map_smul, mod_cast, of_support_subset, split_ifs, support_fderiv_subset, trans_le
 -/
@@ -1187,7 +1213,17 @@ definition iteratedFDerivLM
   map_add' f g := by
     split_ifs with hi
     · have hi' : (i : Nat∞ω) <= n := mod_cast (le_of_add_le_right hi)
-  
+      ext
+      simp [iteratedFDeriv_add (f.contDiff.of_le hi') (g.contDiff.of_le hi'), FunLike.coe_add]
+    · simp
+  map_smul' c f := by
+    split_ifs with hi
+    · have hi' : (i : Nat∞ω) <= n := mod_cast (le_of_add_le_right hi)
+      ext
+      simp [iteratedFDeriv_const_smul_apply (f.contDiff.of_le hi').contDiffAt, FunLike.coe_smul]
+    · simp
+
+@[simp]
 
 中文:
 定义 iteratedFDerivLM
@@ -1200,7 +1236,17 @@ definition iteratedFDerivLM
   map_add' f g := by
     split_ifs with hi
     · have hi' : (i : Nat∞ω) <= n := mod_cast (le_of_add_le_right hi)
-  
+      ext
+      simp [iteratedFDeriv_add (f.contDiff.of_le hi') (g.contDiff.of_le hi'), FunLike.coe_add]
+    · simp
+  map_smul' c f := by
+    split_ifs with hi
+    · have hi' : (i : Nat∞ω) <= n := mod_cast (le_of_add_le_right hi)
+      ext
+      simp [iteratedFDeriv_const_smul_apply (f.contDiff.of_le hi').contDiffAt, FunLike.coe_smul]
+    · simp
+
+@[simp]
 
 Depends on / 依赖: FunLike, FunLike.coe_add, coe_add, contDiff, f.contDiff.iteratedFDeriv_right, f.contDiff.of_le, f.tsupport_subset, g.contDiff.of_le, iteratedFDeriv_add, iteratedFDeriv_const_smu, iteratedFDeriv_right, le_of_add_le_right, map_add, map_smul, mod_cast, of_le, of_support_subset, split_ifs, support_iteratedFDeriv_subset, tsupport_subset
 -/
@@ -1882,7 +1928,8 @@ theorem withSeminorms
     SeminormFamily.sigma fun i _ =>
       (normSeminorm 𝕜 (E ->ᵇ (E [×i]->L[Real] F))).comp (structureMapLM 𝕜 n i)
   have : WithSeminorms p :=
-    withSeminorms_iInf fun i => LinearMap.withSeminorms_induced (norm_withSeminorms _ _)
+    withSeminorms_iInf fun i => LinearMap.withSeminorms_induced (norm_withSeminorms _ _) _
+  exact this.congr_equiv (Equiv.sigmaUnique _ _).symm
 
 中文:
 定理 withSeminorms
@@ -1891,7 +1938,8 @@ theorem withSeminorms
     SeminormFamily.sigma fun i _ =>
       (normSeminorm 𝕜 (E ->ᵇ (E [×i]->L[Real] F))).comp (structureMapLM 𝕜 n i)
   have : WithSeminorms p :=
-    withSeminorms_iInf fun i => LinearMap.withSeminorms_induced (norm_withSeminorms _ _)
+    withSeminorms_iInf fun i => LinearMap.withSeminorms_induced (norm_withSeminorms _ _) _
+  exact this.congr_equiv (Equiv.sigmaUnique _ _).symm
 -/
 protected theorem withSeminorms :
     WithSeminorms (ContDiffMapSupportedIn.seminorm 𝕜 E F n K) := by
@@ -1977,7 +2025,10 @@ theorem seminorm_le_iff
     · simp [hx]
     · simp [hx, f.iteratedFDeriv_zero_on_compl hx, hC]
   by_cases hi : i <= n
-  · simp [hi, forall_const, ContDiffMapSup
+  · simp [hi, forall_const, ContDiffMapSupportedIn.seminorm_apply, structureMapCLM_apply,
+      BoundedContinuousFunction.norm_le hC, this]
+  · push Not at hi
+    simp [hi, ContDiffMapSupportedIn.seminorm_eq_bot_of_gt _ hi, hC]
 
 中文:
 定理 seminorm_le_iff
@@ -1989,7 +2040,10 @@ theorem seminorm_le_iff
     · simp [hx]
     · simp [hx, f.iteratedFDeriv_zero_on_compl hx, hC]
   by_cases hi : i <= n
-  · simp [hi, forall_const, ContDiffMapSup
+  · simp [hi, forall_const, ContDiffMapSupportedIn.seminorm_apply, structureMapCLM_apply,
+      BoundedContinuousFunction.norm_le hC, this]
+  · push Not at hi
+    simp [hi, ContDiffMapSupportedIn.seminorm_eq_bot_of_gt _ hi, hC]
 -/
 protected theorem seminorm_le_iff {C : Real} (hC : 0 <= C) (i : Nat) (f : 𝓓^{n}_{K}(E, F)) :
     N[𝕜]_{K, n, i} f <= C ↔ (i <= n -> forall x in K, ‖iteratedFDeriv Real i f x‖ <= C) := by
@@ -2135,7 +2189,14 @@ definition noncomputable
       map_smul' c f := ext (hsmul c f) }
   { toLinearMap := Φ
     cont := show Continuous Φ by
-      refine continuous_of_isBounded (ContDiffMapSupportedIn.withSemi
+      refine continuous_of_isBounded (ContDiffMapSupportedIn.withSeminorms ..)
+        (ContDiffMapSupportedIn.withSeminorms ..) _ (.of_real fun i => ?_)
+      by_cases hi : i <= n₂
+      · obtain ⟨s, C, hC, h⟩ := hbound i hi
+        exact ⟨s, C, fun f => ((Φ f).seminorm_le_iff 𝕜 (mul_nonneg hC (apply_nonneg _ _)) i).2
+          fun _ x hx => h f x hx⟩
+      · exact ⟨∅, 0, fun f => by
+          simp [ContDiffMapSupportedIn.seminorm_eq_bot_of_gt 𝕜 (not_le.1 hi)]⟩ }
 
 中文:
 定义 noncomputable
@@ -2146,7 +2207,14 @@ definition noncomputable
       map_smul' c f := ext (hsmul c f) }
   { toLinearMap := Φ
     cont := show Continuous Φ by
-      refine continuous_of_isBounded (ContDiffMapSupportedIn.withSemi
+      refine continuous_of_isBounded (ContDiffMapSupportedIn.withSeminorms ..)
+        (ContDiffMapSupportedIn.withSeminorms ..) _ (.of_real fun i => ?_)
+      by_cases hi : i <= n₂
+      · obtain ⟨s, C, hC, h⟩ := hbound i hi
+        exact ⟨s, C, fun f => ((Φ f).seminorm_le_iff 𝕜 (mul_nonneg hC (apply_nonneg _ _)) i).2
+          fun _ x hx => h f x hx⟩
+      · exact ⟨∅, 0, fun f => by
+          simp [ContDiffMapSupportedIn.seminorm_eq_bot_of_gt 𝕜 (not_le.1 hi)]⟩ }
 -/
 protected noncomputable def mkCLM (A : 𝓓^{n₁}_{K₁}(E, F) -> E -> F')
     (hadd : forall f g x, A (f + g) x = A f x + A g x)
@@ -2345,7 +2413,10 @@ theorem seminorm_postcompLM_le
   rw [postcompLM_apply]
   calc
       ‖iteratedFDeriv Real i (T' ∘ f) x‖
-  _ = ‖T'.compContinuousMultilin
+  _ = ‖T'.compContinuousMultilinearMap (iteratedFDeriv Real i f x)‖ := by
+        rw [T'.iteratedFDeriv_comp_left f.contDiff.contDiffAt (mod_cast hi)]
+  _ <= ‖T'‖ * ‖iteratedFDeriv Real i f x‖ := T'.norm_compContinuousMultilinearMap_le _
+  _ <= ‖T'‖ * N[Real]_{K, n, i} f := by grw [norm_iteratedFDeriv_apply_le_seminorm Real hi]
 
 中文:
 定理 seminorm_postcompLM_le
@@ -2358,7 +2429,10 @@ theorem seminorm_postcompLM_le
   rw [postcompLM_apply]
   calc
       ‖iteratedFDeriv Real i (T' ∘ f) x‖
-  _ = ‖T'.compContinuousMultilin
+  _ = ‖T'.compContinuousMultilinearMap (iteratedFDeriv Real i f x)‖ := by
+        rw [T'.iteratedFDeriv_comp_left f.contDiff.contDiffAt (mod_cast hi)]
+  _ <= ‖T'‖ * ‖iteratedFDeriv Real i f x‖ := T'.norm_compContinuousMultilinearMap_le _
+  _ <= ‖T'‖ * N[Real]_{K, n, i} f := by grw [norm_iteratedFDeriv_apply_le_seminorm Real hi]
 
 Depends on / 依赖: ContDiffMapSupportedIn, ContDiffMapSupportedIn.seminorm_le_iff, NormedCommGroup, T.restrictScalars, compContinuousMultilinearMap, contDiff, contDiffAt, f.contDiff.contDiffAt, iteratedFDeriv, iteratedFDeriv_comp_left, mod_cast, norm_compContinuousMultilinearMap_le, normedCommGroup, postcompLM, postcompLM_apply, restrictScalars, seminorm_le_iff
 -/
@@ -2596,7 +2670,7 @@ theorem seminorm_fderivLM_le
     have hi' : i + 1 <= n := (add_le_add_left hi 1).trans hk
     simpa [hk, norm_iteratedFDeriv_fderiv] using
       norm_iteratedFDeriv_apply_le_seminorm 𝕜 hi'
-  · simp [fderivLM_appl
+  · simp [fderivLM_apply_of_gt 𝕜 f hk]
 
 中文:
 定理 seminorm_fderivLM_le
@@ -2608,7 +2682,7 @@ theorem seminorm_fderivLM_le
     have hi' : i + 1 <= n := (add_le_add_left hi 1).trans hk
     simpa [hk, norm_iteratedFDeriv_fderiv] using
       norm_iteratedFDeriv_apply_le_seminorm 𝕜 hi'
-  · simp [fderivLM_appl
+  · simp [fderivLM_apply_of_gt 𝕜 f hk]
 
 Depends on / 依赖: ContDiffMapSupportedIn, ContDiffMapSupportedIn.seminorm_le_iff, add_le_add_left, apply_nonneg, fderivLM_apply_of_gt, norm_iteratedFDeriv_apply_le_seminorm, norm_iteratedFDeriv_fderiv, seminorm_le_iff
 -/
@@ -2863,7 +2937,7 @@ theorem integrable_bilin
     refine subset_trans ?_ f.support_subset
     exact fun x hx hfx => hx (by simp [hfx])
   rw [IntegrableOn]; rw [← memLp_one_iff_integrable] at hφ ⊢
-  exact B.memLp_of_bilin 1 
+  exact B.memLp_of_bilin 1 f.memLp_top hφ
 
 中文:
 定理 integrable_bilin
@@ -2874,7 +2948,7 @@ theorem integrable_bilin
     refine subset_trans ?_ f.support_subset
     exact fun x hx hfx => hx (by simp [hfx])
   rw [IntegrableOn]; rw [← memLp_one_iff_integrable] at hφ ⊢
-  exact B.memLp_of_bilin 1 
+  exact B.memLp_of_bilin 1 f.memLp_top hφ
 -/
 protected theorem integrable_bilin (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {μ : Measure E} {φ : E -> F₂}
     (hφ : IntegrableOn φ K μ) (f : 𝓓^{n}_{K}(E, F₁)) :
@@ -2903,7 +2977,11 @@ definition integralAgainstBilinLM
         integral_add (f.integrable_bilin B hφ) (g.integrable_bilin B hφ)]
     · simp
   map_smul' c f := by
-    split_ifs with 
+    split_ifs with hφ
+    · simp_rw [smul_apply, map_smul, smul_apply, integral_smul c, RingHom.id_apply]
+    · simp
+
+@[simp]
 
 中文:
 定义 integralAgainstBilinLM
@@ -2916,7 +2994,11 @@ definition integralAgainstBilinLM
         integral_add (f.integrable_bilin B hφ) (g.integrable_bilin B hφ)]
     · simp
   map_smul' c f := by
-    split_ifs with 
+    split_ifs with hφ
+    · simp_rw [smul_apply, map_smul, smul_apply, integral_smul c, RingHom.id_apply]
+    · simp
+
+@[simp]
 
 Depends on / 依赖: Classical, scoped
 -/
@@ -3016,7 +3098,11 @@ lemma norm_integralAgainstBilinLM_le
       filter_upwards [] with x
       grw [ContinuousLinearMap.le_opNorm, ContinuousLinearMap.le_opNorm, norm_apply_le_seminorm 𝕜,
         mul_comm, mul_assoc]
-    rw 
+    rw [integralAgainstBilinLM_eq_setIntegral hφ]
+    apply le_trans (norm_integral_le_of_norm_le ((hφ.norm.mul_const _).mul_const _) h)
+    rw [integral_mul_const]; rw [integral_mul_const]
+  · simp only [integralAgainstBilinLM, hφ, ↓reduceIte, LinearMap.coe_mk, AddHom.coe_mk, norm_zero]
+    positivity
 
 中文:
 引理 norm_integralAgainstBilinLM_le
@@ -3027,7 +3113,11 @@ lemma norm_integralAgainstBilinLM_le
       filter_upwards [] with x
       grw [ContinuousLinearMap.le_opNorm, ContinuousLinearMap.le_opNorm, norm_apply_le_seminorm 𝕜,
         mul_comm, mul_assoc]
-    rw 
+    rw [integralAgainstBilinLM_eq_setIntegral hφ]
+    apply le_trans (norm_integral_le_of_norm_le ((hφ.norm.mul_const _).mul_const _) h)
+    rw [integral_mul_const]; rw [integral_mul_const]
+  · simp only [integralAgainstBilinLM, hφ, ↓reduceIte, LinearMap.coe_mk, AddHom.coe_mk, norm_zero]
+    positivity
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.le_opNorm, IntegrableOn, filter_upwards, integralAgainstBilinLM, integralAgainstBilinLM_eq_setIntegral, integral_mul_const, le_opNorm, le_trans, mul_assoc, mul_comm, mul_const, norm.mul_const, norm_apply_le_seminorm, norm_integral_le_of_norm_le, reduceIte, restrict
 -/

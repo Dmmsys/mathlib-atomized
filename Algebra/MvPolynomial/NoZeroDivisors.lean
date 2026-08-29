@@ -80,7 +80,10 @@ lemma degreeOf_prod_eq
     induction s using Finset.induction_on with
     | empty => simp
     | insert a s a_not_mem ih =>
-      simp only [mem_insert, ne_eq, forall_
+      simp only [mem_insert, ne_eq, forall_eq_or_imp] at h
+      obtain ⟨ha, hs⟩ := h
+      simp [a_not_mem, not_false_eq_true, prod_insert, sum_insert, degreeOf_mul_eq ha
+        (by rw [prod_ne_zero_iff]; exact hs), ih hs]
 
 中文:
 引理 degreeOf_prod_eq
@@ -92,7 +95,10 @@ lemma degreeOf_prod_eq
     induction s using Finset.induction_on with
     | empty => simp
     | insert a s a_not_mem ih =>
-      simp only [mem_insert, ne_eq, forall_
+      simp only [mem_insert, ne_eq, forall_eq_or_imp] at h
+      obtain ⟨ha, hs⟩ := h
+      simp [a_not_mem, not_false_eq_true, prod_insert, sum_insert, degreeOf_mul_eq ha
+        (by rw [prod_ne_zero_iff]; exact hs), ih hs]
 
 Depends on / 依赖: Finset, Finset.induction_on, MvPolynomial, Subsingleton, Subsingleton.eq_zero, a_not_mem, classical, degreeOf_mul_eq, eq_zero, forall_eq_or_imp, induction_on, insert, mem_insert, ne_eq, nontrivial, not_false_eq_true, prod_insert, prod_ne_zero_iff, subsingleton_or_nontrivial, sum_insert
 -/
@@ -236,7 +242,9 @@ theorem dvd_C_iff_exists
       rw [this]; rw [C_dvd_iff_dvd_coeff] at hf
       simpa using hf 0
     apply Nat.eq_zero_of_le_zero
-    simpa using totalDegree_le_of_dvd_of_i
+    simpa using totalDegree_le_of_dvd_of_isDomain hf (by simp [ha])
+  · rintro ⟨b, hab, rfl⟩
+    exact map_dvd C hab
 
 中文:
 定理 dvd_C_iff_存在
@@ -251,7 +259,9 @@ theorem dvd_C_iff_exists
       rw [this]; rw [C_dvd_iff_dvd_coeff] at hf
       simpa using hf 0
     apply Nat.eq_zero_of_le_zero
-    simpa using totalDegree_le_of_dvd_of_i
+    simpa using totalDegree_le_of_dvd_of_isDomain hf (by simp [ha])
+  · rintro ⟨b, hab, rfl⟩
+    exact map_dvd C hab
 
 Depends on / 依赖: C_dvd_iff_dvd_coeff, Nat.eq_zero_of_le_zero, eq_zero_of_le_zero, f.totalDegree, map_dvd, totalDegree, totalDegree_eq_zero_iff_eq_C, totalDegree_le_of_dvd_of_isDomain
 -/
@@ -292,7 +302,13 @@ theorem degreeOf_C_mul
   · simp
   · have hp' : (optionEquivLeft R _ ((rename (optionSubtypeNe j).symm) p)).leadingCoeff != 0 := by
       intro h
-      exact hp (rename_injecti
+      exact hp (rename_injective _ (Equiv.injective _) (by simpa using h))
+    simp_rw [ne_eq, renameEquiv_apply, algHom_C, algebraMap_eq, optionEquivLeft_C,
+      Polynomial.leadingCoeff_C]
+    contrapose hp'
+    ext m
+    apply hc.1
+    simpa using congr_arg (coeff m) hp'
 
 中文:
 定理 degreeOf_C_mul
@@ -307,7 +323,13 @@ theorem degreeOf_C_mul
   · simp
   · have hp' : (optionEquivLeft R _ ((rename (optionSubtypeNe j).symm) p)).leadingCoeff != 0 := by
       intro h
-      exact hp (rename_injecti
+      exact hp (rename_injective _ (Equiv.injective _) (by simpa using h))
+    simp_rw [ne_eq, renameEquiv_apply, algHom_C, algebraMap_eq, optionEquivLeft_C,
+      Polynomial.leadingCoeff_C]
+    contrapose hp'
+    ext m
+    apply hc.1
+    simpa using congr_arg (coeff m) hp'
 
 Depends on / 依赖: Equiv.injective, Polynomial, Polynomial.leadingCoeff_C, Polynomial.natDegree_mul, algHom_C, algebraMap_eq, classical, congr_arg, contrapose, degreeOf_eq_natDegree, injective, leadingCoeff, leadingCoeff_C, map_mul, natDegree_mul, ne_eq, optionEquivLeft, optionEquivLeft_C, optionSubtypeNe, renameEquiv_apply
 -/
@@ -352,7 +374,10 @@ theorem dvd_monomial_iff_exists
     rw [dvd_C_iff_exists ha] at hr
     obtain ⟨b, hb, hr⟩ := hr
     use b, hmn, hb
-    rw [h];
+    rw [h]; rw [mul_comm]; rw [hr]; rw [C_mul_monomial]; rw [mul_one]
+  · rintro ⟨b, hmn, hb, h⟩
+    use C b, hmn, map_dvd C hb
+    rwa [mul_comm, C_mul_monomial, mul_one]
 
 中文:
 定理 dvd_monomial_iff_存在
@@ -367,7 +392,10 @@ theorem dvd_monomial_iff_exists
     rw [dvd_C_iff_exists ha] at hr
     obtain ⟨b, hb, hr⟩ := hr
     use b, hmn, hb
-    rw [h];
+    rw [h]; rw [mul_comm]; rw [hr]; rw [C_mul_monomial]; rw [mul_one]
+  · rintro ⟨b, hmn, hb, h⟩
+    use C b, hmn, map_dvd C hb
+    rwa [mul_comm, C_mul_monomial, mul_one]
 
 Depends on / 依赖: C_mul_monomial, dvd_C_iff_exists, dvd_monomial_mul_iff_exists, exists_congr, map_dvd, monomial, mul_comm, mul_one
 -/
@@ -440,7 +468,24 @@ theorem dvd_smul_X_iff_exists
   · rintro ⟨m, hmn, hb, rfl⟩
     simp only [hb, true_and]
     suffices m = 0 ∨ m = Finsupp.single i 1 by
-      apply this.imp <;> simp +cont
+      apply this.imp <;> simp +contextual [smul_monomial, smul_eq_mul, mul_one]
+    by_cases hm : m i = 0
+    · left
+      ext j
+      simp only [Finsupp.coe_zero, Pi.zero_apply, ← Nat.le_zero]
+      by_cases hj : j = i
+      · rw [← hm, hj]
+      · exact (hmn j).trans (Finsupp.single_eq_of_ne hj).le
+    · right
+      ext j
+      apply le_antisymm (hmn j)
+      by_cases hj : j = i
+      · simpa [hj, Nat.one_le_iff_ne_zero]
+      · simp [Finsupp.single_eq_of_ne hj]
+  · rintro ⟨hb, hp | hp⟩
+    · use 0; simp [hb, hp]
+    · use Finsupp.single i 1, le_rfl, hb
+      simp [hp, smul_monomial]
 
 中文:
 定理 dvd_smul_X_iff_存在
@@ -453,7 +498,24 @@ theorem dvd_smul_X_iff_exists
   · rintro ⟨m, hmn, hb, rfl⟩
     simp only [hb, true_and]
     suffices m = 0 ∨ m = Finsupp.single i 1 by
-      apply this.imp <;> simp +cont
+      apply this.imp <;> simp +contextual [smul_monomial, smul_eq_mul, mul_one]
+    by_cases hm : m i = 0
+    · left
+      ext j
+      simp only [Finsupp.coe_zero, Pi.zero_apply, ← Nat.le_zero]
+      by_cases hj : j = i
+      · rw [← hm, hj]
+      · exact (hmn j).trans (Finsupp.single_eq_of_ne hj).le
+    · right
+      ext j
+      apply le_antisymm (hmn j)
+      by_cases hj : j = i
+      · simpa [hj, Nat.one_le_iff_ne_zero]
+      · simp [Finsupp.single_eq_of_ne hj]
+  · rintro ⟨hb, hp | hp⟩
+    · use 0; simp [hb, hp]
+    · use Finsupp.single i 1, le_rfl, hb
+      simp [hp, smul_monomial]
 
 Depends on / 依赖: Finsupp, Finsupp.coe_zero, Finsupp.single, Finsupp.single_eq_of_ne, Nat.le_zero, Pi.zero_apply, coe_zero, contextual, dvd_monomial_iff_exists, exists_comm, exists_congr, le_zero, mul_one, single, single_eq_of_ne, smul_eq_mul, smul_monomial, this.imp, true_and, zero_apply
 -/

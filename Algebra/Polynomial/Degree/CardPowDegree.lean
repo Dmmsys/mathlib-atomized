@@ -48,7 +48,29 @@ definition cardPowDegree
   have pow_pos : forall n, 0 < (Fintype.card Fq : Int) ^ n := fun n =>
     pow_pos (Int.natCast_pos.mpr card_pos) n
   letI := Classical.decEq Fq
-  { toFun := fun p => if p = 0 then 0 else (Fintype.card Fq : Int) ^ p.natDeg
+  { toFun := fun p => if p = 0 then 0 else (Fintype.card Fq : Int) ^ p.natDegree
+    nonneg' := fun p => by
+      split_ifs
+      · rfl
+      exact pow_nonneg (Int.natCast_nonneg _) _
+    eq_zero' := fun p =>
+      ite_eq_left_iff.trans
+        ⟨fun h => by
+          contrapose! h
+          exact ⟨h, (pow_pos _).ne'⟩, absurd⟩
+    add_le' := fun p q => by
+      by_cases hp : p = 0; · simp [hp]
+      by_cases hq : q = 0; · simp [hq]
+      by_cases hpq : p + q = 0
+      · simp only [hpq, hp, hq, if_true, if_false]
+        exact add_nonneg (pow_pos _).le (pow_pos _).le
+      simp only [hpq, hp, hq, if_false]
+      exact le_trans (pow_right_mono₀ (by lia) (Polynomial.natDegree_add_le _ _)) (by grind)
+    map_mul' := fun p q => by
+      by_cases hp : p = 0; · simp [hp]
+      by_cases hq : q = 0; · simp [hq]
+      have hpq : p * q != 0 := mul_ne_zero hp hq
+      simp only [hpq, hp, hq, if_false, Polynomial.natDegree_mul hp hq, pow_add] }
 
 中文:
 定义 cardPowDegree
@@ -57,7 +79,29 @@ definition cardPowDegree
   have pow_pos : forall n, 0 < (Fintype.card Fq : Int) ^ n := fun n =>
     pow_pos (Int.natCast_pos.mpr card_pos) n
   letI := Classical.decEq Fq
-  { toFun := fun p => if p = 0 then 0 else (Fintype.card Fq : Int) ^ p.natDeg
+  { toFun := fun p => if p = 0 then 0 else (Fintype.card Fq : Int) ^ p.natDegree
+    nonneg' := fun p => by
+      split_ifs
+      · rfl
+      exact pow_nonneg (Int.natCast_nonneg _) _
+    eq_zero' := fun p =>
+      ite_eq_left_iff.trans
+        ⟨fun h => by
+          contrapose! h
+          exact ⟨h, (pow_pos _).ne'⟩, absurd⟩
+    add_le' := fun p q => by
+      by_cases hp : p = 0; · simp [hp]
+      by_cases hq : q = 0; · simp [hq]
+      by_cases hpq : p + q = 0
+      · simp only [hpq, hp, hq, if_true, if_false]
+        exact add_nonneg (pow_pos _).le (pow_pos _).le
+      simp only [hpq, hp, hq, if_false]
+      exact le_trans (pow_right_mono₀ (by lia) (Polynomial.natDegree_add_le _ _)) (by grind)
+    map_mul' := fun p q => by
+      by_cases hp : p = 0; · simp [hp]
+      by_cases hq : q = 0; · simp [hq]
+      have hpq : p * q != 0 := mul_ne_zero hp hq
+      simp only [hpq, hp, hq, if_false, Polynomial.natDegree_mul hp hq, pow_add] }
 
 Depends on / 依赖: Classical, Classical.decEq, Fintype, Fintype.card, Fintype.card_pos_iff.mpr, Int.natCast_nonneg, Int.natCast_pos.mpr, absurd, add_le, card_pos, card_pos_iff, contrapose, eq_zero, ite_eq_left_iff, ite_eq_left_iff.trans, natCast_nonneg, natCast_pos, natDegree, nonneg, p.natDegree
 -/
@@ -166,7 +210,15 @@ theorem cardPowDegree_isEuclidean
     pow_pos (Int.natCast_pos.mpr card_pos) n
   { map_lt_map_iff' := fun {p q} => by
       classical
-      change cardPowDegree p < cardPowDegree q ↔ de
+      change cardPowDegree p < cardPowDegree q ↔ degree p < degree q
+      simp only [cardPowDegree_apply]
+      split_ifs with hp hq hq
+      · simp only [hp, hq, lt_self_iff_false]
+      · simp only [hp, hq, degree_zero, Ne, bot_lt_iff_ne_bot, degree_eq_bot, pow_pos,
+          not_false_iff]
+      · simp only [hq, degree_zero, not_lt_bot, (pow_pos _).not_gt]
+      · rw [degree_eq_natDegree hp, degree_eq_natDegree hq, Nat.cast_lt, pow_lt_pow_iff_right₀]
+        exact mod_cast @Fintype.one_lt_card Fq _ _ }
 
 中文:
 定理 cardPowDegree_isEuclidean
@@ -176,7 +228,15 @@ theorem cardPowDegree_isEuclidean
     pow_pos (Int.natCast_pos.mpr card_pos) n
   { map_lt_map_iff' := fun {p q} => by
       classical
-      change cardPowDegree p < cardPowDegree q ↔ de
+      change cardPowDegree p < cardPowDegree q ↔ degree p < degree q
+      simp only [cardPowDegree_apply]
+      split_ifs with hp hq hq
+      · simp only [hp, hq, lt_self_iff_false]
+      · simp only [hp, hq, degree_zero, Ne, bot_lt_iff_ne_bot, degree_eq_bot, pow_pos,
+          not_false_iff]
+      · simp only [hq, degree_zero, not_lt_bot, (pow_pos _).not_gt]
+      · rw [degree_eq_natDegree hp, degree_eq_natDegree hq, Nat.cast_lt, pow_lt_pow_iff_right₀]
+        exact mod_cast @Fintype.one_lt_card Fq _ _ }
 
 Depends on / 依赖: Fintype, Fintype.card, Fintype.card_pos_iff.mpr, Int.natCast_pos.mpr, bot_lt_iff_ne_bot, cardPowDegree, cardPowDegree_apply, card_pos, card_pos_iff, classical, degree, degree_eq_bot, degree_zero, lt_self_iff_false, map_lt_map_iff, natCast_pos, not_false_iff, pow_pos, split_ifs
 -/

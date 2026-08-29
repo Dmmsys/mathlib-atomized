@@ -152,7 +152,8 @@ lemma d_comp_d
   | succ n ih =>
     rw [d_succ _ (n + 1)]; rw [Preadditive.comp_sub]
     nth_rw 2 [d_succ]
-    rw [Preadditive.sub_comp]; rw [← Functor.map_comp]; rw [ih]; rw [Functor.map_z
+    rw [Preadditive.sub_comp]; rw [← Functor.map_comp]; rw [ih]; rw [Functor.map_zero]; rw [sub_zero]; rw [sub_eq_zero]
+    rfl
 
 中文:
 引理 d_comp_d
@@ -166,7 +167,8 @@ lemma d_comp_d
   | succ n ih =>
     rw [d_succ _ (n + 1)]; rw [Preadditive.comp_sub]
     nth_rw 2 [d_succ]
-    rw [Preadditive.sub_comp]; rw [← Functor.map_comp]; rw [ih]; rw [Functor.map_z
+    rw [Preadditive.sub_comp]; rw [← Functor.map_comp]; rw [ih]; rw [Functor.map_zero]; rw [sub_zero]; rw [sub_eq_zero]
+    rfl
 
 Depends on / 依赖: ContIntertwiningMap, ContIntertwiningMap.toContinuousLinearMap_apply, Functor, Functor.map_comp, Functor.map_zero, Preadditive, Preadditive.comp_sub, Preadditive.sub_comp, comp_sub, d_succ, d_zero, hom_sub, map_comp, map_zero, nth_rw, sub_comp, sub_eq_zero, sub_zero, toContinuousLinearMap_apply
 -/

@@ -1107,7 +1107,16 @@ theorem linfty_opNNNorm_mul
     (Finset.univ.sup fun i => ∑ k, ‖∑ j, A i j * B j k‖₊) <=
         Finset.univ.sup fun i => ∑ k, ∑ j, ‖A i j‖₊ * ‖B j k‖₊ :=
       Finset.sup_mono_fun fun i _hi =>
-        Finset.sum_le_sum fun k _hk => nnnorm_sum_le_of_le _ fun j _hj => 
+        Finset.sum_le_sum fun k _hk => nnnorm_sum_le_of_le _ fun j _hj => nnnorm_mul_le _ _
+    _ = Finset.univ.sup fun i => ∑ j, ‖A i j‖₊ * ∑ k, ‖B j k‖₊ := by
+      simp_rw [@Finset.sum_comm m, Finset.mul_sum]
+    _ <= Finset.univ.sup fun i => ∑ j, ‖A i j‖₊ * Finset.univ.sup fun i => ∑ j, ‖B i j‖₊ := by
+      refine Finset.sup_mono_fun fun i _hi => ?_
+      gcongr with j hj
+      exact Finset.le_sup (f := fun i => ∑ k : n, ‖B i k‖₊) hj
+    _ <= (Finset.univ.sup fun i => ∑ j, ‖A i j‖₊) * Finset.univ.sup fun i => ∑ j, ‖B i j‖₊ := by
+      simp_rw [← Finset.sum_mul, ← NNReal.finset_sup_mul]
+      rfl
 
 中文:
 定理 linfty_opNNNorm_mul
@@ -1119,7 +1128,16 @@ theorem linfty_opNNNorm_mul
     (Finset.univ.sup fun i => ∑ k, ‖∑ j, A i j * B j k‖₊) <=
         Finset.univ.sup fun i => ∑ k, ∑ j, ‖A i j‖₊ * ‖B j k‖₊ :=
       Finset.sup_mono_fun fun i _hi =>
-        Finset.sum_le_sum fun k _hk => nnnorm_sum_le_of_le _ fun j _hj => 
+        Finset.sum_le_sum fun k _hk => nnnorm_sum_le_of_le _ fun j _hj => nnnorm_mul_le _ _
+    _ = Finset.univ.sup fun i => ∑ j, ‖A i j‖₊ * ∑ k, ‖B j k‖₊ := by
+      simp_rw [@Finset.sum_comm m, Finset.mul_sum]
+    _ <= Finset.univ.sup fun i => ∑ j, ‖A i j‖₊ * Finset.univ.sup fun i => ∑ j, ‖B i j‖₊ := by
+      refine Finset.sup_mono_fun fun i _hi => ?_
+      gcongr with j hj
+      exact Finset.le_sup (f := fun i => ∑ k : n, ‖B i k‖₊) hj
+    _ <= (Finset.univ.sup fun i => ∑ j, ‖A i j‖₊) * Finset.univ.sup fun i => ∑ j, ‖B i j‖₊ := by
+      simp_rw [← Finset.sum_mul, ← NNReal.finset_sup_mul]
+      rfl
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_comm, Finset.sum_le_sum, Finset.sup_mono_fun, Finset.univ.sup, Matrix, Matrix.mul_apply, linfty_opNNNorm_def, mul_apply, mul_sum, nnnorm_mul_le, nnnorm_sum_le_of_le, simp_rw, sum_comm, sum_le_sum, sup_mono_fun
 -/
@@ -1441,7 +1459,14 @@ lemma linfty_opNNNorm_eq_opNNNorm
   · simp
   let x : n -> α := fun j => unitOf (A i j)
   have hxn : ‖x‖₊ = 1 := by
-    simp_rw [x, Pi.nnnorm_def
+    simp_rw [x, Pi.nnnorm_def, norm_unitOf, Finset.sup_const Finset.univ_nonempty]
+  specialize hN x
+  rw [hxn]; rw [mul_one]; rw [Pi.nnnorm_def]; rw [Finset.sup_le_iff] at hN
+  replace hN := hN i (Finset.mem_univ _)
+  dsimp [mulVec, dotProduct] at hN
+  simp_rw [x, mul_unitOf, ← map_sum, nnnorm_algebraMap, ← NNReal.coe_sum, NNReal.nnnorm_eq,
+    nnnorm_one, mul_one] at hN
+  exact hN
 
 中文:
 引理 linfty_opNNNorm_eq_opNNNorm
@@ -1454,7 +1479,14 @@ lemma linfty_opNNNorm_eq_opNNNorm
   · simp
   let x : n -> α := fun j => unitOf (A i j)
   have hxn : ‖x‖₊ = 1 := by
-    simp_rw [x, Pi.nnnorm_def
+    simp_rw [x, Pi.nnnorm_def, norm_unitOf, Finset.sup_const Finset.univ_nonempty]
+  specialize hN x
+  rw [hxn]; rw [mul_one]; rw [Pi.nnnorm_def]; rw [Finset.sup_le_iff] at hN
+  replace hN := hN i (Finset.mem_univ _)
+  dsimp [mulVec, dotProduct] at hN
+  simp_rw [x, mul_unitOf, ← map_sum, nnnorm_algebraMap, ← NNReal.coe_sum, NNReal.nnnorm_eq,
+    nnnorm_one, mul_one] at hN
+  exact hN
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.opNNNorm_eq_of_bounds, Finset, Finset.mem_univ, Finset.sup_const, Finset.sup_le, Finset.sup_le_iff, Finset.univ_nonempty, Pi.nnnorm_def, dotProduct, isEmpty_or_nonempty, linfty_opNNNorm_def, linfty_opNNNorm_mulVec, mem_univ, mulVec, mul_one, nnnorm_def, norm_unitOf, opNNNorm_eq_of_bounds, replace
 -/
@@ -2038,7 +2070,14 @@ lemma frobenius_nnnorm_diagonal
     PiLp.nnnorm_eq_of_L2]
   let s := (Finset.univ : Finset n).map ⟨fun i : n => (i, i), fun i j h => congr_arg Prod.fst h⟩
   rw [← Finset.sum_subset (Finset.subset_univ s) fun i _hi his => ?_]
-  · rw [Finset.sum_map
+  · rw [Finset.sum_map, NNReal.sqrt_eq_rpow]
+    dsimp
+    simp_rw [diagonal_apply_eq, NNReal.rpow_two]
+  · suffices i.1 != i.2 by rw [diagonal_apply_ne _ this, nnnorm_zero, NNReal.zero_rpow two_ne_zero]
+    intro h
+    exact Finset.mem_map.not.mp his ⟨i.1, Finset.mem_univ _, Prod.ext rfl h⟩
+
+@[simp]
 
 中文:
 引理 frobenius_nnnorm_diagonal
@@ -2049,7 +2088,14 @@ lemma frobenius_nnnorm_diagonal
     PiLp.nnnorm_eq_of_L2]
   let s := (Finset.univ : Finset n).map ⟨fun i : n => (i, i), fun i j h => congr_arg Prod.fst h⟩
   rw [← Finset.sum_subset (Finset.subset_univ s) fun i _hi his => ?_]
-  · rw [Finset.sum_map
+  · rw [Finset.sum_map, NNReal.sqrt_eq_rpow]
+    dsimp
+    simp_rw [diagonal_apply_eq, NNReal.rpow_two]
+  · suffices i.1 != i.2 by rw [diagonal_apply_ne _ this, nnnorm_zero, NNReal.zero_rpow two_ne_zero]
+    intro h
+    exact Finset.mem_map.not.mp his ⟨i.1, Finset.mem_univ _, Prod.ext rfl h⟩
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.mem_map.not.mp, Finset.subset_univ, Finset.sum_map, Finset.sum_product, Finset.sum_subset, Finset.univ, Finset.univ_product_univ, NNReal, NNReal.rpow_two, NNReal.sqrt_eq_rpow, NNReal.zero_rpow, PiLp.nnnorm_eq_of_L2, Prod.fst, congr_arg, diagonal_apply_eq, diagonal_apply_ne, frobenius_nnnorm_def, mem_map, nnnorm_eq_of_L2
 -/
@@ -2139,7 +2185,10 @@ theorem frobenius_nnnorm_mul
   simp_rw [frobenius_nnnorm_def, Matrix.mul_apply]
   rw [← NNReal.mul_rpow]; rw [@Finset.sum_comm _ _ m]; rw [Finset.sum_mul_sum]
   gcongr with i _ j
-  rw [← NNReal.rpow_le_rpow_iff one_half_pos]; rw [← NNReal.rpow_mul]; rw [mul_div_cancel₀ (1 : Real) two_ne_zero]; rw [NNReal.rpow_one]; rw [NNRea
+  rw [← NNReal.rpow_le_rpow_iff one_half_pos]; rw [← NNReal.rpow_mul]; rw [mul_div_cancel₀ (1 : Real) two_ne_zero]; rw [NNReal.rpow_one]; rw [NNReal.mul_rpow]
+  simpa only [PiLp.toLp_apply, PiLp.inner_apply, RCLike.inner_apply', starRingEnd_apply,
+    Pi.nnnorm_def, PiLp.nnnorm_eq_of_L2, star_star, nnnorm_star, NNReal.sqrt_eq_rpow,
+    NNReal.rpow_two] using nnnorm_inner_le_nnnorm (𝕜 := α) (toLp 2 (star <| A i ·)) (toLp 2 (B · j))
 
 中文:
 定理 frobenius_nnnorm_mul
@@ -2149,7 +2198,10 @@ theorem frobenius_nnnorm_mul
   simp_rw [frobenius_nnnorm_def, Matrix.mul_apply]
   rw [← NNReal.mul_rpow]; rw [@Finset.sum_comm _ _ m]; rw [Finset.sum_mul_sum]
   gcongr with i _ j
-  rw [← NNReal.rpow_le_rpow_iff one_half_pos]; rw [← NNReal.rpow_mul]; rw [mul_div_cancel₀ (1 : Real) two_ne_zero]; rw [NNReal.rpow_one]; rw [NNRea
+  rw [← NNReal.rpow_le_rpow_iff one_half_pos]; rw [← NNReal.rpow_mul]; rw [mul_div_cancel₀ (1 : Real) two_ne_zero]; rw [NNReal.rpow_one]; rw [NNReal.mul_rpow]
+  simpa only [PiLp.toLp_apply, PiLp.inner_apply, RCLike.inner_apply', starRingEnd_apply,
+    Pi.nnnorm_def, PiLp.nnnorm_eq_of_L2, star_star, nnnorm_star, NNReal.sqrt_eq_rpow,
+    NNReal.rpow_two] using nnnorm_inner_le_nnnorm (𝕜 := α) (toLp 2 (star <| A i ·)) (toLp 2 (B · j))
 
 Depends on / 依赖: Finset, Finset.sum_comm, Finset.sum_mul_sum, Matrix, Matrix.mul_apply, NNReal, NNReal.mul_rpow, NNReal.rpow_le_rpow_iff, NNReal.rpow_mul, NNReal.rpow_one, NNReal.rpow_two, NNReal.sqrt_eq_rpow, Pi.nnnorm_def, PiLp.inner_apply, PiLp.nnnorm_eq_of_L2, PiLp.toLp_apply, RCLike, RCLike.inner_apply, frobenius_nnnorm_def, inner_apply
 -/

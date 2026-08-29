@@ -142,7 +142,12 @@ lemma linearIndependent_h
       Sum.elimZeroLeft ∘ fun i : b.support => algebraMap Int R ∘ (P.pairingIn Int · i) := by
     ext; rw [comp_apply, h_def]; aesop
   apply LinearIndependent.of_comp (Matrix.diagLinearMap _ _ _)
-  rw [this]; rw [LinearMap.lin
+  rw [this]; rw [LinearMap.linearIndependent_iff_of_injOn _ Sum.elim_injective'.injOn]; rw [linearIndependent_algebraMap_comp_iff]
+  suffices LinearIndependent Int (fun i j : b.support => P.pairingIn Int j i) from
+    this.of_linearIndependent_subset b.support
+  apply b.cartanMatrix.transpose.linearIndependent_rows_of_det_ne_zero
+  rw [Matrix.det_transpose]; rw [← Matrix.nondegenerate_iff_det_ne_zero]
+  exact b.cartanMatrix_nondegenerate
 
 中文:
 引理 linearIndependent_h
@@ -153,7 +158,12 @@ lemma linearIndependent_h
       Sum.elimZeroLeft ∘ fun i : b.support => algebraMap Int R ∘ (P.pairingIn Int · i) := by
     ext; rw [comp_apply, h_def]; aesop
   apply LinearIndependent.of_comp (Matrix.diagLinearMap _ _ _)
-  rw [this]; rw [LinearMap.lin
+  rw [this]; rw [LinearMap.linearIndependent_iff_of_injOn _ Sum.elim_injective'.injOn]; rw [linearIndependent_algebraMap_comp_iff]
+  suffices LinearIndependent Int (fun i j : b.support => P.pairingIn Int j i) from
+    this.of_linearIndependent_subset b.support
+  apply b.cartanMatrix.transpose.linearIndependent_rows_of_det_ne_zero
+  rw [Matrix.det_transpose]; rw [← Matrix.nondegenerate_iff_det_ne_zero]
+  exact b.cartanMatrix_nondegenerate
 
 Depends on / 依赖: LinearIndependent, LinearIndependent.of_comp, LinearMap, LinearMap.linearIndependent_iff_of_injOn, Matrix, Matrix.diagLinearMap, P.pairingIn, Sum.elimZeroLeft, Sum.elim_injective, algebraMap, b.support, classical, comp_apply, diagLinearMap, elimZeroLeft, elim_injective, h_def, linearIndependent_algebraMap_comp_iff, linearIndependent_iff_of_injOn, of_comp
 -/
@@ -213,7 +223,13 @@ lemma diagonal_elim_mem_span_h_iff
     { toFun := .fromBlocks 0 0 0
       map_add' x y := by ext (i | i) (j | j) <;> simp
       map_smul' t x := by ext (i | i) (j | j) <;> simp }
-have h₀ : Injective (g ∘ diagonalLinearMap ι R R) := fun _ _ hd => fune
+have h₀ : Injective (g ∘ diagonalLinearMap ι R R) := fun _ _ hd => funext by simpa [g] using hd
+  have h₁ {d : ι -> R} : diagonal (Sum.elim 0 d) = g (diagonalLinearMap ι R R d) := by
+    ext (i | i) (j | j) <;> simp [g]
+  have h₂ : range h = g '' (diagonalLinearMap ι R R ''
+    (range <| fun (i : b.support) j => (P.pairingIn Int j i : R))) := by ext; simp [g, h_def]
+  simp_rw [h₁, h₂, span_image, ← map_comp, ← comp_apply (f := g), mem_map, LinearMap.coe_comp,
+    h₀.eq_iff, exists_eq_right]
 
 中文:
 引理 diagonal_elim_mem_span_h_iff
@@ -223,7 +239,13 @@ have h₀ : Injective (g ∘ diagonalLinearMap ι R R) := fun _ _ hd => fune
     { toFun := .fromBlocks 0 0 0
       map_add' x y := by ext (i | i) (j | j) <;> simp
       map_smul' t x := by ext (i | i) (j | j) <;> simp }
-have h₀ : Injective (g ∘ diagonalLinearMap ι R R) := fun _ _ hd => fune
+have h₀ : Injective (g ∘ diagonalLinearMap ι R R) := fun _ _ hd => funext by simpa [g] using hd
+  have h₁ {d : ι -> R} : diagonal (Sum.elim 0 d) = g (diagonalLinearMap ι R R d) := by
+    ext (i | i) (j | j) <;> simp [g]
+  have h₂ : range h = g '' (diagonalLinearMap ι R R ''
+    (range <| fun (i : b.support) j => (P.pairingIn Int j i : R))) := by ext; simp [g, h_def]
+  simp_rw [h₁, h₂, span_image, ← map_comp, ← comp_apply (f := g), mem_map, LinearMap.coe_comp,
+    h₀.eq_iff, exists_eq_right]
 -/
 @[simp] lemma diagonal_elim_mem_span_h_iff [DecidableEq ι] {d : ι -> R} :
     diagonal (Sum.elim 0 d) in span R (range <| h (b := b)) ↔
@@ -426,7 +448,8 @@ definition cartanSubalgebra
     have aux : (forall u in range (h (b := b)), forall v in range (h (b := b)), ⁅u, v⁆ = 0) := by
       rintro - ⟨i, rfl⟩ - ⟨j, rfl⟩; exact lie_h_h i j
     simp only [Submodule.carrier_eq_coe, SetLike.mem_coe, LieSubalgebra.mem_toSubmodule,
-   
+      ← LieSubalgebra.coe_lieSpan_eq_span_of_forall_lie_eq_zero (R := R) aux] at hx hy ⊢
+    exact LieSubalgebra.lie_mem _ hx hy
 
 中文:
 定义 cartanSubalgebra
@@ -436,7 +459,8 @@ definition cartanSubalgebra
     have aux : (forall u in range (h (b := b)), forall v in range (h (b := b)), ⁅u, v⁆ = 0) := by
       rintro - ⟨i, rfl⟩ - ⟨j, rfl⟩; exact lie_h_h i j
     simp only [Submodule.carrier_eq_coe, SetLike.mem_coe, LieSubalgebra.mem_toSubmodule,
-   
+      ← LieSubalgebra.coe_lieSpan_eq_span_of_forall_lie_eq_zero (R := R) aux] at hx hy ⊢
+    exact LieSubalgebra.lie_mem _ hx hy
 
 Depends on / 依赖: Submodule, Submodule.span
 -/
@@ -631,7 +655,11 @@ lemma span_range_h'_eq_top
   let g : cartanSubalgebra' b ->ₗ[R] Matrix (b.support oplus ι) (b.support oplus ι) R :=
     (lieAlgebra b).subtype ∘ₗ (cartanSubalgebra' b).subtype
   suffices x in (span R (range h')).map g by
-    rwa [← SetLike.mem_coe, ← (inject
+    rwa [← SetLike.mem_coe, ← (injective_subtype _).mem_set_image,
+        ← (injective_subtype _).mem_set_image, ← image_comp]
+  rwa [map_span, ← range_comp]
+
+omit [Finite ι] [IsDomain R] [CharZero R] [P.IsCrystallographic] in
 
 中文:
 引理 span_range_h'_eq_top
@@ -642,7 +670,11 @@ lemma span_range_h'_eq_top
   let g : cartanSubalgebra' b ->ₗ[R] Matrix (b.support oplus ι) (b.support oplus ι) R :=
     (lieAlgebra b).subtype ∘ₗ (cartanSubalgebra' b).subtype
   suffices x in (span R (range h')).map g by
-    rwa [← SetLike.mem_coe, ← (inject
+    rwa [← SetLike.mem_coe, ← (injective_subtype _).mem_set_image,
+        ← (injective_subtype _).mem_set_image, ← image_comp]
+  rwa [map_span, ← range_comp]
+
+omit [Finite ι] [IsDomain R] [CharZero R] [P.IsCrystallographic] in
 
 Depends on / 依赖: Matrix, SetLike, SetLike.mem_coe, b.support, cartanSubalgebra, eq_top_iff, image_comp, injective_subtype, lieAlgebra, map_span, mem_coe, mem_set_image, range_comp, subtype, support
 -/
@@ -737,7 +769,13 @@ lemma ω_mul_e
   · simp [ω, e, f]
   · simp only [ω, e, f, mul_ite, mul_zero, Fintype.sum_sum_type, Matrix.mul_apply, Matrix.of_apply,
       Matrix.fromBlocks_apply₁₂, Matrix.fromBlocks_apply₂₂, Finset.sum_ite_eq']
-    rw [Finset.sum_eq_single_of_mem i (Finse
+    rw [Finset.sum_eq_single_of_mem i (Finset.mem_univ _) (by simp_all)]
+    simp [← ite_and, and_comm, -indexNeg_neg, neg_eq_iff_eq_neg]
+  · simp [ω, e, f]
+  · simp only [ω, e, f, Matrix.mul_apply, Fintype.sum_sum_type, Matrix.fromBlocks_apply₂₁,
+      Matrix.fromBlocks_apply₂₂, Matrix.of_apply, mul_ite, ← neg_eq_iff_eq_neg (a := k)]
+    rw [Finset.sum_eq_single_of_mem (-k) (Finset.mem_univ _) (by aesop)]
+    simp [neg_eq_iff_eq_neg, sub_eq_add_neg]
 
 中文:
 引理 ω_mul_e
@@ -749,7 +787,13 @@ lemma ω_mul_e
   · simp [ω, e, f]
   · simp only [ω, e, f, mul_ite, mul_zero, Fintype.sum_sum_type, Matrix.mul_apply, Matrix.of_apply,
       Matrix.fromBlocks_apply₁₂, Matrix.fromBlocks_apply₂₂, Finset.sum_ite_eq']
-    rw [Finset.sum_eq_single_of_mem i (Finse
+    rw [Finset.sum_eq_single_of_mem i (Finset.mem_univ _) (by simp_all)]
+    simp [← ite_and, and_comm, -indexNeg_neg, neg_eq_iff_eq_neg]
+  · simp [ω, e, f]
+  · simp only [ω, e, f, Matrix.mul_apply, Fintype.sum_sum_type, Matrix.fromBlocks_apply₂₁,
+      Matrix.fromBlocks_apply₂₂, Matrix.of_apply, mul_ite, ← neg_eq_iff_eq_neg (a := k)]
+    rw [Finset.sum_eq_single_of_mem (-k) (Finset.mem_univ _) (by aesop)]
+    simp [neg_eq_iff_eq_neg, sub_eq_add_neg]
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum_eq_single_of_mem, Finset.sum_ite_eq, Fintype, Fintype.sum_sum_type, Matrix, Matrix.fromBlocks_apply, Matrix.mul_apply, Matrix.of_apply, P.indexNeg, and_comm, classical, indexNeg, indexNeg_neg, ite_and, mem_univ, mul_apply, mul_ite, mul_zero
 -/
@@ -809,7 +853,12 @@ lemma lie_e_f_mul_ω
   calc ⁅e i, f j⁆ * ω b = e i * f j * ω b - f j * e i * ω b := by rw [Ring.lie_def, sub_mul]
                       _ = e i * (f j * ω b) - f j * (e i * ω b) := by rw [mul_assoc, mul_assoc]
                       _ = e i * (ω b * e j) - f j * (ω b * f i) := by rw [← ω_mul_e, ← ω_mul_f]
-            
+                      _ = (e i * ω b) * e j - (f j * ω b) * f i := by rw [← mul_assoc, ← mul_assoc]
+                      _ = (ω b * f i) * e j - (ω b * e j) * f i := by rw [← ω_mul_e, ← ω_mul_f]
+                      _ = ω b * (f i * e j) - ω b * (e j * f i) := by rw [mul_assoc, mul_assoc]
+                      _ = -ω b * ⁅e j, f i⁆ := ?_
+  rw [Ring.lie_def]; rw [mul_sub]; rw [neg_mul]; rw [neg_mul]; rw [sub_neg_eq_add]
+  abel
 
 中文:
 引理 lie_e_f_mul_ω
@@ -818,7 +867,12 @@ lemma lie_e_f_mul_ω
   calc ⁅e i, f j⁆ * ω b = e i * f j * ω b - f j * e i * ω b := by rw [Ring.lie_def, sub_mul]
                       _ = e i * (f j * ω b) - f j * (e i * ω b) := by rw [mul_assoc, mul_assoc]
                       _ = e i * (ω b * e j) - f j * (ω b * f i) := by rw [← ω_mul_e, ← ω_mul_f]
-            
+                      _ = (e i * ω b) * e j - (f j * ω b) * f i := by rw [← mul_assoc, ← mul_assoc]
+                      _ = (ω b * f i) * e j - (ω b * e j) * f i := by rw [← ω_mul_e, ← ω_mul_f]
+                      _ = ω b * (f i * e j) - ω b * (e j * f i) := by rw [mul_assoc, mul_assoc]
+                      _ = -ω b * ⁅e j, f i⁆ := ?_
+  rw [Ring.lie_def]; rw [mul_sub]; rw [neg_mul]; rw [neg_mul]; rw [sub_neg_eq_add]
+  abel
 
 Depends on / 依赖: Ring.lie_def, lie_def, mul_assoc, sub_mul
 -/
@@ -1178,7 +1232,11 @@ definition ωConj
     simp only [← ω_mul_ω (b := b)]
     noncomm_ring
   left_inv x := by
-    simp only [← mul
+    simp only [← mul_assoc, ω_mul_ω, one_mul]
+    simp [mul_assoc]
+  right_inv x := by
+    simp only [← mul_assoc, ω_mul_ω, one_mul]
+    simp [mul_assoc]
 
 中文:
 定义 ωConj
@@ -1194,7 +1252,11 @@ definition ωConj
     simp only [← ω_mul_ω (b := b)]
     noncomm_ring
   left_inv x := by
-    simp only [← mul
+    simp only [← mul_assoc, ω_mul_ω, one_mul]
+    simp [mul_assoc]
+  right_inv x := by
+    simp only [← mul_assoc, ω_mul_ω, one_mul]
+    simp [mul_assoc]
 -/
 @[simps] def ωConj :
     Matrix (b.support oplus ι) (b.support oplus ι) R ≃ₗ⁅R⁆ Matrix (b.support oplus ι) (b.support oplus ι) R where
@@ -1226,7 +1288,15 @@ lemma ωConj_mem_of_mem
     obtain (⟨i, rfl⟩ | ⟨i, rfl⟩ | ⟨i, rfl⟩) : (exists j, h j = u) ∨ (exists j, e j = u) ∨ (exists j, f j = u) := by
       simpa only [mem_union, mem_range, or_assoc] using hu
     · rw [← neg_mem_iff]
-exact LieSubalgebra.sub
+exact LieSubalgebra.subset_lieSpan by simp [ω_mul_h, mul_assoc]
+· exact LieSubalgebra.subset_lieSpan by simp [ω_mul_e, mul_assoc]
+· exact LieSubalgebra.subset_lieSpan by simp [ω_mul_f, mul_assoc]
+  | zero => simp
+  | add u v _ _ hu hv => simpa [mul_add, add_mul] using add_mem hu hv
+  | smul t u _ hu => simpa using SMulMemClass.smul_mem _ hu
+  | lie u v _ _ hu hv =>
+    rw [LieEquiv.map_lie]
+    exact (lieAlgebra b).lie_mem hu hv
 
 中文:
 引理 ωConj_mem_of_mem
@@ -1236,7 +1306,15 @@ exact LieSubalgebra.sub
     obtain (⟨i, rfl⟩ | ⟨i, rfl⟩ | ⟨i, rfl⟩) : (exists j, h j = u) ∨ (exists j, e j = u) ∨ (exists j, f j = u) := by
       simpa only [mem_union, mem_range, or_assoc] using hu
     · rw [← neg_mem_iff]
-exact LieSubalgebra.sub
+exact LieSubalgebra.subset_lieSpan by simp [ω_mul_h, mul_assoc]
+· exact LieSubalgebra.subset_lieSpan by simp [ω_mul_e, mul_assoc]
+· exact LieSubalgebra.subset_lieSpan by simp [ω_mul_f, mul_assoc]
+  | zero => simp
+  | add u v _ _ hu hv => simpa [mul_add, add_mul] using add_mem hu hv
+  | smul t u _ hu => simpa using SMulMemClass.smul_mem _ hu
+  | lie u v _ _ hu hv =>
+    rw [LieEquiv.map_lie]
+    exact (lieAlgebra b).lie_mem hu hv
 
 Depends on / 依赖: LieSubalgebra, LieSubalgebra.lieSpan_induction, LieSubalgebra.subset_lieSpan, lieSpan_induction, mem_range, mem_union, mul_assoc, neg_mem_iff, or_assoc, subset_lieSpan
 -/

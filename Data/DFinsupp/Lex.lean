@@ -161,7 +161,7 @@ theorem lex_lt_of_lt_of_preorder
   have : (x.neLocus y : Set ι).WellFoundedOn r := (x.neLocus y).finite_toSet.wellFoundedOn
   obtain ⟨i, hi, hl⟩ := this.has_min { i | x i < y i } ⟨⟨j, mem_neLocus.2 hlt.ne⟩, hlt⟩
   refine ⟨i, fun k hk => ⟨hle k, ?_⟩, hi⟩
-  exact of_not_not fun
+  exact of_not_not fun h => hl ⟨k, mem_neLocus.2 (ne_of_not_le h).symm⟩ ((hle k).lt_of_not_ge h) hk
 
 中文:
 定理 lex_lt_of_lt_of_preorder
@@ -172,7 +172,7 @@ theorem lex_lt_of_lt_of_preorder
   have : (x.neLocus y : Set ι).WellFoundedOn r := (x.neLocus y).finite_toSet.wellFoundedOn
   obtain ⟨i, hi, hl⟩ := this.has_min { i | x i < y i } ⟨⟨j, mem_neLocus.2 hlt.ne⟩, hlt⟩
   refine ⟨i, fun k hk => ⟨hle k, ?_⟩, hi⟩
-  exact of_not_not fun
+  exact of_not_not fun h => hl ⟨k, mem_neLocus.2 (ne_of_not_le h).symm⟩ ((hle k).lt_of_not_ge h) hk
 
 Depends on / 依赖: Pi.lt_def, WellFoundedOn, classical, finite_toSet, finite_toSet.wellFoundedOn, has_min, hlt.ne, lt_def, lt_of_not_ge, mem_neLocus, neLocus, ne_of_not_le, of_not_not, this.has_min, wellFoundedOn, x.neLocus
 -/
@@ -419,7 +419,9 @@ definition lt_trichotomy_rec
   | ⊤, h => h_eq (neLocus_eq_empty.mp <| Finset.min_eq_top.mp h)
   | (wit : ι), h => by
     apply (mem_neLocus.mp <| Finset.mem_of_min h).lt_or_gt.by_cases <;> intro hwit
-    · exact h_lt ⟨wit, fun j
+    · exact h_lt ⟨wit, fun j hj => notMem_neLocus.mp (Finset.notMem_of_lt_min hj h), hwit⟩
+    · exact h_gt ⟨wit, fun j hj =>
+        notMem_neLocus.mp (Finset.notMem_of_lt_min hj <| by rwa [neLocus_comm]), hwit⟩
 
 中文:
 定义 lt_trichotomy_rec
@@ -428,7 +430,9 @@ definition lt_trichotomy_rec
   | ⊤, h => h_eq (neLocus_eq_empty.mp <| Finset.min_eq_top.mp h)
   | (wit : ι), h => by
     apply (mem_neLocus.mp <| Finset.mem_of_min h).lt_or_gt.by_cases <;> intro hwit
-    · exact h_lt ⟨wit, fun j
+    · exact h_lt ⟨wit, fun j hj => notMem_neLocus.mp (Finset.notMem_of_lt_min hj h), hwit⟩
+    · exact h_gt ⟨wit, fun j hj =>
+        notMem_neLocus.mp (Finset.notMem_of_lt_min hj <| by rwa [neLocus_comm]), hwit⟩
 -/
 private def lt_trichotomy_rec {P : Lex (Π₀ i, α i) -> Lex (Π₀ i, α i) -> Sort*}
     (h_lt : forall {f g}, toLex f < toLex g -> P (toLex f) (toLex g))

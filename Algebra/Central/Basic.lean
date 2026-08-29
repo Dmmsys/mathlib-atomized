@@ -104,7 +104,12 @@ lemma baseField_essentially_unique
       simp only [center_eq_bot, mem_bot, Set.mem_range, forall_exists_index]
       rintro x rfl
       exact ⟨algebraMap k K x, by simp [algebraMap_eq_smul_one, smul_assoc]⟩ }
-  refine ⟨FaithfulSMul.algebraMap_in
+  refine ⟨FaithfulSMul.algebraMap_injective k K, fun x => ?_⟩
+  have H : algebraMap K D x in (Subalgebra.center K D : Set D) := Subalgebra.algebraMap_mem _ _
+  rw [show (Subalgebra.center K D : Set D) = Subalgebra.center k D by rfl] at H
+  simp only [center_eq_bot, coe_bot, Set.mem_range] at H
+  obtain ⟨x', H⟩ := H
+exact ⟨x', (algebraMap K D).injective by simp [← H, algebraMap_eq_smul_one]⟩
 
 中文:
 引理 baseField_essentially_unique
@@ -114,7 +119,12 @@ lemma baseField_essentially_unique
       simp only [center_eq_bot, mem_bot, Set.mem_range, forall_exists_index]
       rintro x rfl
       exact ⟨algebraMap k K x, by simp [algebraMap_eq_smul_one, smul_assoc]⟩ }
-  refine ⟨FaithfulSMul.algebraMap_in
+  refine ⟨FaithfulSMul.algebraMap_injective k K, fun x => ?_⟩
+  have H : algebraMap K D x in (Subalgebra.center K D : Set D) := Subalgebra.algebraMap_mem _ _
+  rw [show (Subalgebra.center K D : Set D) = Subalgebra.center k D by rfl] at H
+  simp only [center_eq_bot, coe_bot, Set.mem_range] at H
+  obtain ⟨x', H⟩ := H
+exact ⟨x', (algebraMap K D).injective by simp [← H, algebraMap_eq_smul_one]⟩
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsCentral, Set.mem_range, Subalgebra, Subalgebra.algebraMap_mem, Subalgebra.center, algebraMap, algebraMap_eq_smul_one, algebraMap_injective, algebraMap_mem, center, center_eq_bot, forall_exists_index, mem_bot, mem_range, smul_assoc
 -/

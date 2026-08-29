@@ -113,7 +113,10 @@ lemma Ideal.mulQuot_injective
   apply le_antisymm
   · have : Submodule.map (mul R R a) I = a • I := rfl
     rw [le_ker_iff_map]; rw [Submodule.map_comp]; rw [this]; rw [Submodule.mkQ_map_self]
-  · have m : I = Submodule.comap (mul R R a) (
+  · have m : I = Submodule.comap (mul R R a) (a • I) := by
+      ext b
+      exact (Submodule.mul_mem_smul_iff ha).symm
+    simp [← m, ker_comp]
 
 中文:
 引理 理想.mulQuot_injective
@@ -124,7 +127,10 @@ lemma Ideal.mulQuot_injective
   apply le_antisymm
   · have : Submodule.map (mul R R a) I = a • I := rfl
     rw [le_ker_iff_map]; rw [Submodule.map_comp]; rw [this]; rw [Submodule.mkQ_map_self]
-  · have m : I = Submodule.comap (mul R R a) (
+  · have m : I = Submodule.comap (mul R R a) (a • I) := by
+      ext b
+      exact (Submodule.mul_mem_smul_iff ha).symm
+    simp [← m, ker_comp]
 
 Depends on / 依赖: Submodule, Submodule.comap, Submodule.ker_liftQ_eq_bot, Submodule.map, Submodule.mapQ, Submodule.map_comp, Submodule.mkQ_map_self, Submodule.mul_mem_smul_iff, ker_comp, ker_eq_bot, ker_liftQ_eq_bot, le_antisymm, le_ker_iff_map, map_comp, mkQ_map_self, mulQuot, mul_mem_smul_iff
 -/
@@ -198,7 +204,9 @@ lemma Ideal.exact_mulQuot_quotOfMul
   have : ker (Ideal.quotOfMul a I) = a • ⊤ := by
     simp only [← submodule_span_eq, quotOfMul, Submodule.factor, Submodule.mapQ, comp_id,
       Submodule.ker_liftQ, Submodule.ker_mkQ, Submodule.map_span, Submodule.mkQ_apply,
-      Quotient.mk_eq_mk, Set.image_singleton, Q
+      Quotient.mk_eq_mk, Set.image_singleton, Quotient.smul_top]
+  simp [this, Ideal.mulQuot, Submodule.mapQ.eq_1, Submodule.range_liftQ,
+    range_comp, Ideal.Quotient.smul_top, ← Ideal.submodule_span_eq, LinearMap.map_span]
 
 中文:
 引理 理想.exact_mulQuot_quotOfMul
@@ -208,7 +216,9 @@ lemma Ideal.exact_mulQuot_quotOfMul
   have : ker (Ideal.quotOfMul a I) = a • ⊤ := by
     simp only [← submodule_span_eq, quotOfMul, Submodule.factor, Submodule.mapQ, comp_id,
       Submodule.ker_liftQ, Submodule.ker_mkQ, Submodule.map_span, Submodule.mkQ_apply,
-      Quotient.mk_eq_mk, Set.image_singleton, Q
+      Quotient.mk_eq_mk, Set.image_singleton, Quotient.smul_top]
+  simp [this, Ideal.mulQuot, Submodule.mapQ.eq_1, Submodule.range_liftQ,
+    range_comp, Ideal.Quotient.smul_top, ← Ideal.submodule_span_eq, LinearMap.map_span]
 
 Depends on / 依赖: Ideal.Quotient.smul_top, Ideal.mulQuot, Ideal.quotOfMul, Ideal.submodule_span_eq, LinearMap, LinearMap.map_span, Quotient, Quotient.mk_eq_mk, Quotient.smul_top, Set.image_singleton, Submodule, Submodule.factor, Submodule.ker_liftQ, Submodule.ker_mkQ, Submodule.mapQ, Submodule.mapQ.eq_1, Submodule.map_span, Submodule.mkQ_apply, Submodule.range_liftQ, comp_id
 -/
@@ -235,7 +245,13 @@ theorem ord_mul
           (Ideal.quotOfMul b (Ideal.span {a})) (Ideal.mulQuot_injective (Ideal.span {a}) hb)
           (Ideal.quotOfMul_surjective (Ideal.span {a}))
           (Ideal.exact_mulQuot_quotOfMul (Ideal.span {a}))
-  simp only [R
+  simp only [Ring.ord, ← this]
+  have lem : (({b} : Set R) • Ideal.span {a}) = Ideal.span {b * a} := by
+    simp [← Ideal.submodule_span_eq, Submodule.set_smul_span]
+  have : (({b} : Set R) • Ideal.span {a}) = b • Ideal.span {a} := Submodule.singleton_set_smul
+    (Ideal.span {a}) b
+  rw [this] at lem
+  rw [lem]; rw [mul_comm]
 
 中文:
 定理 ord_mul
@@ -245,7 +261,13 @@ theorem ord_mul
           (Ideal.quotOfMul b (Ideal.span {a})) (Ideal.mulQuot_injective (Ideal.span {a}) hb)
           (Ideal.quotOfMul_surjective (Ideal.span {a}))
           (Ideal.exact_mulQuot_quotOfMul (Ideal.span {a}))
-  simp only [R
+  simp only [Ring.ord, ← this]
+  have lem : (({b} : Set R) • Ideal.span {a}) = Ideal.span {b * a} := by
+    simp [← Ideal.submodule_span_eq, Submodule.set_smul_span]
+  have : (({b} : Set R) • Ideal.span {a}) = b • Ideal.span {a} := Submodule.singleton_set_smul
+    (Ideal.span {a}) b
+  rw [this] at lem
+  rw [lem]; rw [mul_comm]
 
 Depends on / 依赖: Ideal.exact_mulQuot_quotOfMul, Ideal.mulQuot, Ideal.mulQuot_injective, Ideal.quotOfMul, Ideal.quotOfMul_surjective, Ideal.span, Ideal.submodule_span_eq, Module, Module.length_eq_add_of_exact, Ring.ord, Submodule, Submodule.set_smul_span, Submodule.singleton_set_, exact_mulQuot_quotOfMul, length_eq_add_of_exact, mulQuot, mulQuot_injective, quotOfMul, quotOfMul_surjective, set_smul_span
 -/
@@ -497,7 +519,8 @@ lemma ord_le_ord_mul
   suffices Ideal.span {a * x} <= Ideal.span {x} by
     let g : (R ⧸ Ideal.span {a * x}) ->ₗ[R] (R ⧸ Ideal.span {x}) := Submodule.factor this
     refine Module.length_le_of_surjective (Submodule.factor this) (Submodule.factor_surjective this)
-  rw [Ideal.span_singleton_le_span_si
+  rw [Ideal.span_singleton_le_span_singleton]
+  exact Dvd.intro_left (algebraMap R R a) rfl
 
 中文:
 引理 ord_le_ord_mul
@@ -508,7 +531,8 @@ lemma ord_le_ord_mul
   suffices Ideal.span {a * x} <= Ideal.span {x} by
     let g : (R ⧸ Ideal.span {a * x}) ->ₗ[R] (R ⧸ Ideal.span {x}) := Submodule.factor this
     refine Module.length_le_of_surjective (Submodule.factor this) (Submodule.factor_surjective this)
-  rw [Ideal.span_singleton_le_span_si
+  rw [Ideal.span_singleton_le_span_singleton]
+  exact Dvd.intro_left (algebraMap R R a) rfl
 
 Depends on / 依赖: Dvd.intro_left, Ideal.span, Ideal.span_singleton_le_span_singleton, Module, Module.length_le_of_surjective, Submodule, Submodule.factor, Submodule.factor_surjective, algebraMap, factor, factor_surjective, intro_left, length_le_of_surjective, span_singleton_le_span_singleton
 -/
@@ -609,7 +633,8 @@ theorem ord_of_irreducible
     PrincipalIdealRing.isMaximal_of_irreducible hϖ
   rw [isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective (S := R ⧸ Ideal.span {ϖ})
     Ideal.Quotient.mk_surjective]
-  let := Ideal.Quotient.field (Idea
+  let := Ideal.Quotient.field (Ideal.span {ϖ})
+  exact instIsSimpleModule _
 
 中文:
 定理 ord_of_irreducible
@@ -621,7 +646,8 @@ theorem ord_of_irreducible
     PrincipalIdealRing.isMaximal_of_irreducible hϖ
   rw [isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective (S := R ⧸ Ideal.span {ϖ})
     Ideal.Quotient.mk_surjective]
-  let := Ideal.Quotient.field (Idea
+  let := Ideal.Quotient.field (Ideal.span {ϖ})
+  exact instIsSimpleModule _
 
 Depends on / 依赖: Ideal.Quotient.field, Ideal.Quotient.mk_surjective, Ideal.span, IsMaximal, Module, Module.length_eq_one_iff, PrincipalIdealRing, PrincipalIdealRing.isMaximal_of_irreducible, Quotient, Ring.ord, instIsSimpleModule, isMaximal_of_irreducible, isSimpleModule_iff_isSimpleModule_of_algebraMap_surjective, length_eq_one_iff, mk_surjective
 -/
@@ -662,7 +688,15 @@ definition ordMonoidWithZeroHom
   map_mul' := by
     intro x y
     split_ifs with _ _ b
-    · rw [ord
+    · rw [ord_mul _ b]
+      generalize ord R x = x'
+      generalize ord R y = y'
+      cases x' <;> cases y'
+      on_goal 4 =>
+        simp only [← ENat.natCast_add, ENat.recTopCoe_natCast, Nat.cast_add (R := Int),
+          ofAdd_add, WithZero.coe_mul]
+      all_goals simp
+    all_goals simp_all [mul_mem_nonZeroDivisors]
 
 中文:
 定义 ordMonoidWithZeroHom
@@ -675,7 +709,15 @@ definition ordMonoidWithZeroHom
   map_mul' := by
     intro x y
     split_ifs with _ _ b
-    · rw [ord
+    · rw [ord_mul _ b]
+      generalize ord R x = x'
+      generalize ord R y = y'
+      cases x' <;> cases y'
+      on_goal 4 =>
+        simp only [← ENat.natCast_add, ENat.recTopCoe_natCast, Nat.cast_add (R := Int),
+          ofAdd_add, WithZero.coe_mul]
+      all_goals simp
+    all_goals simp_all [mul_mem_nonZeroDivisors]
 
 Depends on / 依赖: nonZeroDivisors
 -/
@@ -805,7 +847,8 @@ theorem _root_.isFiniteLength_quotient_span_singleton
   suffices IsArtinianRing (R ⧸ Ideal.span {x}) from
     ⟨isNoetherian_quotient (Ideal.span {x}),
       isArtinian_of_surjective_algebraMap (Ideal.Quotient.mk_surjective (I := .span {x}))⟩
-  rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ring.KrullDi
+  rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ring.KrullDimLE]; rw [Order.krullDimLE_iff]; rw [← ENat.WithBot.add_le_add_one_right_iff]; rw [Nat.cast_zero]; rw [zero_add]
+  exact (ringKrullDim_quotient_succ_le_of_nonZeroDivisor hx).trans (Order.KrullDimLE.krullDim_le)
 
 中文:
 定理 _root_.isFiniteLength_quotient_span_singleton
@@ -815,7 +858,8 @@ theorem _root_.isFiniteLength_quotient_span_singleton
   suffices IsArtinianRing (R ⧸ Ideal.span {x}) from
     ⟨isNoetherian_quotient (Ideal.span {x}),
       isArtinian_of_surjective_algebraMap (Ideal.Quotient.mk_surjective (I := .span {x}))⟩
-  rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ring.KrullDi
+  rw [isArtinianRing_iff_krullDimLE_zero]; rw [Ring.KrullDimLE]; rw [Order.krullDimLE_iff]; rw [← ENat.WithBot.add_le_add_one_right_iff]; rw [Nat.cast_zero]; rw [zero_add]
+  exact (ringKrullDim_quotient_succ_le_of_nonZeroDivisor hx).trans (Order.KrullDimLE.krullDim_le)
 
 Depends on / 依赖: ENat.WithBot.add_le_add_one_right_iff, Ideal.Quotient.mk_surjective, Ideal.span, IsArtinianRing, KrullDimLE, Nat.cast_zero, Order.KrullDimLE.krullDim_le, Order.krullDimLE_iff, Quotient, Ring.KrullDimLE, WithBot, add_le_add_one_right_iff, cast_zero, isArtinianRing_iff_krullDimLE_zero, isArtinian_of_surjective_algebraMap, isFiniteLength_iff_isNoetherian_isArtinian, isNoetherian_quotient, krullDimLE_iff, krullDim_le, mk_surjective
 -/

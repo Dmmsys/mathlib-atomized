@@ -525,7 +525,9 @@ theorem prod_eq_one_iff_of_one_le'
       (fun _ => ⟨fun _ _ h => False.elim (Finset.notMem_empty _ h), fun _ => rfl⟩) ?_
     intro a s ha ih H
     have : forall i in s, 1 <= f i := fun _ => H _ ∘ mem_insert_of_mem
-    rw [prod_insert ha]; rw [mul_eq_one_iff_of_one_le (H _ <| mem_insert_
+    rw [prod_insert ha]; rw [mul_eq_one_iff_of_one_le (H _ <| mem_insert_self _ _) (one_le_prod' this)]; rw [forall_mem_insert]; rw [ih this]
+
+@[to_additive sum_pos_iff_of_nonneg]
 
 中文:
 定理 prod_eq_one_iff_of_one_le'
@@ -536,7 +538,9 @@ theorem prod_eq_one_iff_of_one_le'
       (fun _ => ⟨fun _ _ h => False.elim (Finset.notMem_empty _ h), fun _ => rfl⟩) ?_
     intro a s ha ih H
     have : forall i in s, 1 <= f i := fun _ => H _ ∘ mem_insert_of_mem
-    rw [prod_insert ha]; rw [mul_eq_one_iff_of_one_le (H _ <| mem_insert_
+    rw [prod_insert ha]; rw [mul_eq_one_iff_of_one_le (H _ <| mem_insert_self _ _) (one_le_prod' this)]; rw [forall_mem_insert]; rw [ih this]
+
+@[to_additive sum_pos_iff_of_nonneg]
 
 Depends on / 依赖: False.elim, Finset, Finset.induction_on, Finset.notMem_empty, classical, forall_mem_insert, induction_on, mem_insert_of_mem, mem_insert_self, mul_eq_one_iff_of_one_le, notMem_empty, one_le_prod, prod_insert
 -/
@@ -787,7 +791,9 @@ theorem prod_fiberwise_le_prod_of_one_le_prod_fiber'
         ∏ y in t union s.image g, ∏ x in s with g x = y, f x :=
       prod_le_prod_of_subset_of_one_le' subset_union_left fun y _ => h y
     _ = ∏ x in s, f x :=
-      prod_fiberwise_of_maps_to (fun _ hx => mem_union.2 <| Or.inr <| mem_image_of_mem 
+      prod_fiberwise_of_maps_to (fun _ hx => mem_union.2 <| Or.inr <| mem_image_of_mem _ hx) _
+
+@[to_additive sum_le_sum_fiberwise_of_sum_fiber_nonpos]
 
 中文:
 定理 prod_fiberwise_le_prod_of_one_le_prod_fiber'
@@ -797,7 +803,9 @@ theorem prod_fiberwise_le_prod_of_one_le_prod_fiber'
         ∏ y in t union s.image g, ∏ x in s with g x = y, f x :=
       prod_le_prod_of_subset_of_one_le' subset_union_left fun y _ => h y
     _ = ∏ x in s, f x :=
-      prod_fiberwise_of_maps_to (fun _ hx => mem_union.2 <| Or.inr <| mem_image_of_mem 
+      prod_fiberwise_of_maps_to (fun _ hx => mem_union.2 <| Or.inr <| mem_image_of_mem _ hx) _
+
+@[to_additive sum_le_sum_fiberwise_of_sum_fiber_nonpos]
 
 Depends on / 依赖: Or.inr, mem_image_of_mem, mem_union, prod_fiberwise_of_maps_to, prod_le_prod_of_subset_of_one_le, s.image, subset_union_left
 -/
@@ -1493,7 +1501,11 @@ theorem prod_le_prod_of_ne_one'
       rw [← prod_union]; rw [filter_union_filter_not_eq]
       exact disjoint_filter.2 fun _ _ h n_h => n_h h
     _ <= ∏ x in t, f x :=
+      mul_le_of_le_one_of_le
+        (prod_le_one' <| by simp only [mem_filter, and_imp]; exact fun _ _ => le_of_eq)
+        (prod_le_prod_of_subset' <| by simpa only [subset_iff, mem_filter, and_imp])
 
+@[to_additive sum_pos_iff]
 
 中文:
 定理 prod_le_prod_of_ne_one'
@@ -1505,7 +1517,11 @@ theorem prod_le_prod_of_ne_one'
       rw [← prod_union]; rw [filter_union_filter_not_eq]
       exact disjoint_filter.2 fun _ _ h n_h => n_h h
     _ <= ∏ x in t, f x :=
+      mul_le_of_le_one_of_le
+        (prod_le_one' <| by simp only [mem_filter, and_imp]; exact fun _ _ => le_of_eq)
+        (prod_le_prod_of_subset' <| by simpa only [subset_iff, mem_filter, and_imp])
 
+@[to_additive sum_pos_iff]
 
 Depends on / 依赖: CanonicallyOrderedMul, CanonicallyOrderedMul.toIsOrderedMonoid, and_imp, classical, disjoint_filter, filter_union_filter_not_eq, le_of_eq, mem_filter, mul_le_of_le_one_of_le, prod_le_one, prod_le_prod_of_subset, prod_union, subset_iff, toIsOrderedMonoid
 -/
@@ -1561,7 +1577,21 @@ lemma prod_lt_prod_of_subset_erase_union_singleton
     (fun h => hlt.ne' (congrArg f (Finset.mem_singleton.mp h)))
   by_cases hd'S : d' in S
   · calc ∏ x in S', f x
-        <= ∏ x in S.erase d, f x := Finset.prod_le_prod_of_subset'
+        <= ∏ x in S.erase d, f x := Finset.prod_le_prod_of_subset' (fun x hx =>
+          Finset.mem_erase.mpr ⟨fun h => hd_not (h ▸ hx),
+            match Finset.mem_union.mp (hS' hx) with
+            | .inl h => Finset.mem_of_mem_erase h
+            | .inr h => Finset.mem_singleton.mp h ▸ hd'S⟩)
+      _ < (∏ x in S.erase d, f x) * f d :=
+          lt_mul_of_one_lt_right' _ (one_le.trans_lt hlt)
+      _ = ∏ x in S, f x := Finset.prod_erase_mul S f hd_mem
+  · calc ∏ x in S', f x
+        <= ∏ x in S.erase d union {d'}, f x := Finset.prod_le_prod_of_subset' hS'
+      _ = (∏ x in S.erase d, f x) * f d' := by
+          rw [Finset.prod_union (Finset.disjoint_singleton_right.mpr
+            (fun h => hd'S (Finset.mem_of_mem_erase h)))]; rw [Finset.prod_singleton]
+      _ < (∏ x in S.erase d, f x) * f d := mul_lt_mul_right hlt _
+      _ = ∏ x in S, f x := Finset.prod_erase_mul S f hd_mem
 
 中文:
 引理 prod_lt_prod_of_subset_erase_union_singleton
@@ -1572,7 +1602,21 @@ lemma prod_lt_prod_of_subset_erase_union_singleton
     (fun h => hlt.ne' (congrArg f (Finset.mem_singleton.mp h)))
   by_cases hd'S : d' in S
   · calc ∏ x in S', f x
-        <= ∏ x in S.erase d, f x := Finset.prod_le_prod_of_subset'
+        <= ∏ x in S.erase d, f x := Finset.prod_le_prod_of_subset' (fun x hx =>
+          Finset.mem_erase.mpr ⟨fun h => hd_not (h ▸ hx),
+            match Finset.mem_union.mp (hS' hx) with
+            | .inl h => Finset.mem_of_mem_erase h
+            | .inr h => Finset.mem_singleton.mp h ▸ hd'S⟩)
+      _ < (∏ x in S.erase d, f x) * f d :=
+          lt_mul_of_one_lt_right' _ (one_le.trans_lt hlt)
+      _ = ∏ x in S, f x := Finset.prod_erase_mul S f hd_mem
+  · calc ∏ x in S', f x
+        <= ∏ x in S.erase d union {d'}, f x := Finset.prod_le_prod_of_subset' hS'
+      _ = (∏ x in S.erase d, f x) * f d' := by
+          rw [Finset.prod_union (Finset.disjoint_singleton_right.mpr
+            (fun h => hd'S (Finset.mem_of_mem_erase h)))]; rw [Finset.prod_singleton]
+      _ < (∏ x in S.erase d, f x) * f d := mul_lt_mul_right hlt _
+      _ = ∏ x in S, f x := Finset.prod_erase_mul S f hd_mem
 
 Depends on / 依赖: Finset, Finset.mem_erase.mp, Finset.mem_erase.mpr, Finset.mem_of_mem_erase, Finset.mem_singleton.mp, Finset.mem_union.mp, Finset.prod_le_prod_of_subset, S.erase, hd_not, hlt.ne, mem_erase, mem_of_mem_erase, mem_singleton, mem_union, prod_le_prod_of_subset
 -/
@@ -1672,7 +1716,10 @@ theorem prod_lt_prod_of_subset'
       apply prod_le_prod_of_subset_of_one_le'
       · simp [Finset.insert_subset_iff, h, ht]
       · intro x hx h'x
-     
+        simp only [mem_insert, not_or] at h'x
+        exact hle x hx h'x.2
+
+@[to_additive single_lt_sum]
 
 中文:
 定理 prod_lt_prod_of_subset'
@@ -1686,7 +1733,10 @@ theorem prod_lt_prod_of_subset'
       apply prod_le_prod_of_subset_of_one_le'
       · simp [Finset.insert_subset_iff, h, ht]
       · intro x hx h'x
-     
+        simp only [mem_insert, not_or] at h'x
+        exact hle x hx h'x.2
+
+@[to_additive single_lt_sum]
 
 Depends on / 依赖: Finset, Finset.insert_subset_iff, classical, insert, insert_subset_iff, lt_mul_of_one_lt_left, mem_insert, not_or, prod_insert, prod_le_prod_of_subset_of_one_le
 -/
@@ -1849,7 +1899,10 @@ theorem prod_eq_prod_iff_of_le
     refine Finset.induction_on s (fun _ => ⟨fun _ _ h => False.elim (Finset.notMem_empty _ h),
       fun _ => rfl⟩) fun a s ha ih H => ?_
     specialize ih fun i => H i ∘ Finset.mem_insert_of_mem
-    rw [Finset.prod_insert ha]; rw [Finset.prod_insert ha]; rw [Finset.foral
+    rw [Finset.prod_insert ha]; rw [Finset.prod_insert ha]; rw [Finset.forall_mem_insert]; rw [← ih]
+    exact
+      mul_eq_mul_iff_eq_and_eq (H a (s.mem_insert_self a))
+        (Finset.prod_le_prod' fun i => H i ∘ Finset.mem_insert_of_mem)
 
 中文:
 定理 prod_eq_prod_iff_of_le
@@ -1860,7 +1913,10 @@ theorem prod_eq_prod_iff_of_le
     refine Finset.induction_on s (fun _ => ⟨fun _ _ h => False.elim (Finset.notMem_empty _ h),
       fun _ => rfl⟩) fun a s ha ih H => ?_
     specialize ih fun i => H i ∘ Finset.mem_insert_of_mem
-    rw [Finset.prod_insert ha]; rw [Finset.prod_insert ha]; rw [Finset.foral
+    rw [Finset.prod_insert ha]; rw [Finset.prod_insert ha]; rw [Finset.forall_mem_insert]; rw [← ih]
+    exact
+      mul_eq_mul_iff_eq_and_eq (H a (s.mem_insert_self a))
+        (Finset.prod_le_prod' fun i => H i ∘ Finset.mem_insert_of_mem)
 
 Depends on / 依赖: False.elim, Finset, Finset.forall_mem_insert, Finset.induction_on, Finset.mem_insert_of_mem, Finset.notMem_empty, Finset.prod_insert, Finset.prod_le_prod, classical, forall_mem_insert, induction_on, mem_insert_of_mem, mem_insert_self, mul_eq_mul_iff_eq_and_eq, notMem_empty, prod_insert, prod_le_prod, revert, s.mem_insert_self, specialize
 -/
@@ -2088,7 +2144,8 @@ theorem sum_le_one_iff
   · by_cases! hx : exists x in s, f x != 0
     · obtain ⟨x, hsx, hfx⟩ := hx
       have hs : forall y in s \ {x}, f y = 0 := by grind
-      simp
+      simp [← sum_sdiff (singleton_subset_iff.2 hsx), sum_congr rfl hs, (h x x hsx hsx hfx hfx).2]
+    · simp [sum_congr rfl hx]
 
 中文:
 定理 sum_le_one_iff
@@ -2101,7 +2158,8 @@ theorem sum_le_one_iff
   · by_cases! hx : exists x in s, f x != 0
     · obtain ⟨x, hsx, hfx⟩ := hx
       have hs : forall y in s \ {x}, f y = 0 := by grind
-      simp
+      simp [← sum_sdiff (singleton_subset_iff.2 hsx), sum_congr rfl hs, (h x x hsx hsx hfx hfx).2]
+    · simp [sum_congr rfl hx]
 
 Depends on / 依赖: classical, replace, singleton_subset_iff, subseteq, sum_congr, sum_mono_set, sum_sdiff
 -/
@@ -2382,7 +2440,17 @@ theorem finsetSum_eq_sup_iff_disjoint
     simp only [Finset.notMem_empty, IsEmpty.forall_iff, imp_true_iff, Finset.sum_empty,
       Finset.sup_empty, bot_eq_zero]
   | cons z i hz hr =>
-    simp_rw [Finset.sum_cons hz, Finset.sup_cons, Finset.mem_cons, Multiset.sup_eq_unio
+    simp_rw [Finset.sum_cons hz, Finset.sup_cons, Finset.mem_cons, Multiset.sup_eq_union,
+      forall_eq_or_imp, Ne, not_true_eq_false, IsEmpty.forall_iff, true_and,
+      imp_and, forall_and, ← hr, @eq_comm _ z]
+    have := fun x (H : x in i) => ne_of_mem_of_not_mem H hz
+    simp +contextual only [this, not_false_iff, true_imp_iff]
+    simp_rw [← disjoint_finsetSum_left, ← disjoint_finsetSum_right, disjoint_comm, ← and_assoc,
+      and_self_iff]
+    exact add_eq_union_left_of_le (Finset.sup_le fun x hx => le_sum_of_mem (mem_map_of_mem f hx))
+
+@[deprecated (since := "2026-04-08")]
+alias finset_sum_eq_sup_iff_disjoint := finsetSum_eq_sup_iff_disjoint
 
 中文:
 定理 finsetSum_eq_sup_iff_disjoint
@@ -2393,7 +2461,17 @@ theorem finsetSum_eq_sup_iff_disjoint
     simp only [Finset.notMem_empty, IsEmpty.forall_iff, imp_true_iff, Finset.sum_empty,
       Finset.sup_empty, bot_eq_zero]
   | cons z i hz hr =>
-    simp_rw [Finset.sum_cons hz, Finset.sup_cons, Finset.mem_cons, Multiset.sup_eq_unio
+    simp_rw [Finset.sum_cons hz, Finset.sup_cons, Finset.mem_cons, Multiset.sup_eq_union,
+      forall_eq_or_imp, Ne, not_true_eq_false, IsEmpty.forall_iff, true_and,
+      imp_and, forall_and, ← hr, @eq_comm _ z]
+    have := fun x (H : x in i) => ne_of_mem_of_not_mem H hz
+    simp +contextual only [this, not_false_iff, true_imp_iff]
+    simp_rw [← disjoint_finsetSum_left, ← disjoint_finsetSum_right, disjoint_comm, ← and_assoc,
+      and_self_iff]
+    exact add_eq_union_left_of_le (Finset.sup_le fun x hx => le_sum_of_mem (mem_map_of_mem f hx))
+
+@[deprecated (since := "2026-04-08")]
+alias finset_sum_eq_sup_iff_disjoint := finsetSum_eq_sup_iff_disjoint
 
 Depends on / 依赖: Finset, Finset.cons_induction_on, Finset.mem_cons, Finset.notMem_empty, Finset.sum_cons, Finset.sum_empty, Finset.sup_cons, Finset.sup_empty, IsEmpty, IsEmpty.forall_iff, Multiset, Multiset.sup_eq_union, bot_eq_zero, cons_induction_on, contextual, eq_comm, forall_and, forall_eq_or_imp, forall_iff, imp_and
 -/
@@ -2455,7 +2533,8 @@ theorem card_le_card_toFinset_add_one_iff
   proof: by
   rw [← m.toFinset_sum_count_eq]; rw [m.toFinset.card_eq_sum_ones]; rw [← tsub_le_iff_left]; rw [← Finset.sum_tsub_distrib _ (by simp [one_le_count_iff_mem]), Finset.sum_le_one_iff]
   simp only [← pos_iff_ne_zero, Nat.sub_pos_iff_lt, mem_toFinset, Nat.pred_eq_succ_iff]
-  exact ⟨fun h x y hx hy =>
+  exact ⟨fun h x y hx hy => h x y (one_le_count_iff_mem.mp hx.le)
+    (one_le_count_iff_mem.mp hy.le) hx hy, fun h x y _ _ hx hy => h x y hx hy⟩
 
 中文:
 定理 card_le_card_toFinset_add_one_iff
@@ -2463,7 +2542,8 @@ theorem card_le_card_toFinset_add_one_iff
   证明: by
   rw [← m.toFinset_sum_count_eq]; rw [m.toFinset.card_eq_sum_ones]; rw [← tsub_le_iff_left]; rw [← Finset.sum_tsub_distrib _ (by simp [one_le_count_iff_mem]), Finset.sum_le_one_iff]
   simp only [← pos_iff_ne_zero, Nat.sub_pos_iff_lt, mem_toFinset, Nat.pred_eq_succ_iff]
-  exact ⟨fun h x y hx hy =>
+  exact ⟨fun h x y hx hy => h x y (one_le_count_iff_mem.mp hx.le)
+    (one_le_count_iff_mem.mp hy.le) hx hy, fun h x y _ _ hx hy => h x y hx hy⟩
 
 Depends on / 依赖: Finset, Finset.sum_le_one_iff, Finset.sum_tsub_distrib, Nat.pred_eq_succ_iff, Nat.sub_pos_iff_lt, card_eq_sum_ones, hx.le, hy.le, m.toFinset.card_eq_sum_ones, m.toFinset_sum_count_eq, mem_toFinset, one_le_count_iff_mem, one_le_count_iff_mem.mp, pos_iff_ne_zero, pred_eq_succ_iff, sub_pos_iff_lt, sum_le_one_iff, sum_tsub_distrib, toFinset, toFinset_sum_count_eq
 -/

@@ -155,7 +155,15 @@ theorem exists_algebraMap_quot_eq_of_mem_quot
   obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
   obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq (algebraMapSubmonoid S p.primeCompl) x
   obtain ⟨s', hs⟩ := Ideal.Quotient.mk_surjective (I := P) (Ideal.Quotient.mk P s)⁻¹
-  simp only [IsScalarTower.algebraMap_eq S Sₚ (Sₚ ⧸ _), Quotient.alg
+  simp only [IsScalarTower.algebraMap_eq S Sₚ (Sₚ ⧸ _), Quotient.algebraMap_eq, RingHom.comp_apply]
+  use x * s'
+  rw [← sub_eq_zero]; rw [← map_sub]; rw [Quotient.eq_zero_iff_mem]
+  have h₀ : (P.map (algebraMap S Sₚ)).IsPrime := isPrime_map_of_liesOver S p Sₚ P
+  have h₁ : s.1 ∉ P := (Set.disjoint_left.mp <| disjoint_primeCompl_of_liesOver P p) s.prop
+  have h₂ : algebraMap S Sₚ s ∉ Ideal.map (algebraMap S Sₚ) P := by
+    rwa [← mem_comap, comap_map_eq_self_of_isMaximal _ h₀.ne_top]
+  refine (h₀.mem_or_mem ?_).resolve_left h₂
+  rw [mul_sub]; rw [mul_mk'_eq_mk'_of_mul]; rw [mk'_mul_cancel_left]; rw [← map_mul]; rw [← map_sub]; rw [← mem_comap]; rw [comap_map_eq_self_of_isMaximal _ IsPrime.ne_top']; rw [← Ideal.Quotient.eq]; rw [map_mul]; rw [map_mul]; rw [hs]; rw [mul_comm]; rw [inv_mul_cancel_right₀ (Quotient.eq_zero_iff_mem.not.mpr h₁)]
 
 中文:
 定理 存在_algebraMap_quot_eq_of_mem_quot
@@ -164,7 +172,15 @@ theorem exists_algebraMap_quot_eq_of_mem_quot
   obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
   obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq (algebraMapSubmonoid S p.primeCompl) x
   obtain ⟨s', hs⟩ := Ideal.Quotient.mk_surjective (I := P) (Ideal.Quotient.mk P s)⁻¹
-  simp only [IsScalarTower.algebraMap_eq S Sₚ (Sₚ ⧸ _), Quotient.alg
+  simp only [IsScalarTower.algebraMap_eq S Sₚ (Sₚ ⧸ _), Quotient.algebraMap_eq, RingHom.comp_apply]
+  use x * s'
+  rw [← sub_eq_zero]; rw [← map_sub]; rw [Quotient.eq_zero_iff_mem]
+  have h₀ : (P.map (algebraMap S Sₚ)).IsPrime := isPrime_map_of_liesOver S p Sₚ P
+  have h₁ : s.1 ∉ P := (Set.disjoint_left.mp <| disjoint_primeCompl_of_liesOver P p) s.prop
+  have h₂ : algebraMap S Sₚ s ∉ Ideal.map (algebraMap S Sₚ) P := by
+    rwa [← mem_comap, comap_map_eq_self_of_isMaximal _ h₀.ne_top]
+  refine (h₀.mem_or_mem ?_).resolve_left h₂
+  rw [mul_sub]; rw [mul_mk'_eq_mk'_of_mul]; rw [mk'_mul_cancel_left]; rw [← map_mul]; rw [← map_sub]; rw [← mem_comap]; rw [comap_map_eq_self_of_isMaximal _ IsPrime.ne_top']; rw [← Ideal.Quotient.eq]; rw [map_mul]; rw [map_mul]; rw [hs]; rw [mul_comm]; rw [inv_mul_cancel_right₀ (Quotient.eq_zero_iff_mem.not.mpr h₁)]
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.Quotient.mk_surjective, IsLocalization, IsLocalization.exists_mk, IsPrime, IsScalarTower, IsScalarTower.algebraMap_eq, P.map, Quotient, Quotient.algebraMap_eq, Quotient.eq_zero_iff_mem, RingHom, RingHom.comp_apply, algebraMap, algebraMapSubmonoid, algebraMap_eq, comp_apply, eq_zero_iff_mem, exists_mk, isPrime_map_of_liesOver
 -/
@@ -193,7 +209,10 @@ definition equivQuotientMapOfIsMaximal
   body: .trans
     (Ideal.quotEquivOfEq (by
       rw [IsScalarTower.algebraMap_eq S Sₚ (Sₚ ⧸ _)]; rw [← RingHom.comap_ker]; rw [Quotient.algebraMap_eq]; rw [mk_ker]; rw [comap_map_eq_self_of_isMaximal _ (isPrime_map_of_liesOver S p Sₚ P).ne_top]))
-    (RingHom.quotientKerEquivOfSurjective (f := algebraMap S
+    (RingHom.quotientKerEquivOfSurjective (f := algebraMap S (Sₚ ⧸ _))
+      fun x => exists_algebraMap_quot_eq_of_mem_quot p Sₚ P x)
+
+@[simp]
 
 中文:
 定义 equivQuotientMapOfIsMaximal
@@ -201,7 +220,10 @@ definition equivQuotientMapOfIsMaximal
   定义体: .trans
     (Ideal.quotEquivOfEq (by
       rw [IsScalarTower.algebraMap_eq S Sₚ (Sₚ ⧸ _)]; rw [← RingHom.comap_ker]; rw [Quotient.algebraMap_eq]; rw [mk_ker]; rw [comap_map_eq_self_of_isMaximal _ (isPrime_map_of_liesOver S p Sₚ P).ne_top]))
-    (RingHom.quotientKerEquivOfSurjective (f := algebraMap S
+    (RingHom.quotientKerEquivOfSurjective (f := algebraMap S (Sₚ ⧸ _))
+      fun x => exists_algebraMap_quot_eq_of_mem_quot p Sₚ P x)
+
+@[simp]
 
 Depends on / 依赖: Ideal.quotEquivOfEq, IsScalarTower, IsScalarTower.algebraMap_eq, Quotient, Quotient.algebraMap_eq, RingHom, RingHom.comap_ker, RingHom.quotientKerEquivOfSurjective, algebraMap, algebraMap_eq, comap_ker, comap_map_eq_self_of_isMaximal, exists_algebraMap_quot_eq_of_mem_quot, isPrime_map_of_liesOver, mk_ker, ne_top, quotEquivOfEq, quotientKerEquivOfSurjective
 -/
@@ -247,7 +269,9 @@ theorem equivQuotientMapOfIsMaximal_symm_apply_mk
   have h₁ : Ideal.Quotient.mk P ↑s != 0 :=
 Quotient.eq_zero_iff_mem.not.mpr
       (Set.disjoint_left.mp <| disjoint_primeCompl_of_liesOver P p) s.prop
-  have h₂ : equivQuotientMapOfIsMaximal p Sₚ P (Ideal.Quotien
+  have h₂ : equivQuotientMapOfIsMaximal p Sₚ P (Ideal.Quotient.mk P ↑s) != 0 := by
+    rwa [RingEquiv.map_ne_zero_iff]
+  rw [RingEquiv.symm_apply_eq]; rw [← mul_left_inj' h₂]; rw [map_mul]; rw [mul_assoc]; rw [← map_mul]; rw [inv_mul_cancel₀ h₁]; rw [map_one]; rw [mul_one]; rw [equivQuotientMapOfIsMaximal_apply_mk]; rw [← map_mul]; rw [mk'_spec]; rw [Quotient.mk_algebraMap]; rw [equivQuotientMapOfIsMaximal_apply_mk]; rw [Quotient.mk_algebraMap]
 
 中文:
 定理 equivQuotientMapOfIsMaximal_symm_apply_mk
@@ -257,7 +281,9 @@ Quotient.eq_zero_iff_mem.not.mpr
   have h₁ : Ideal.Quotient.mk P ↑s != 0 :=
 Quotient.eq_zero_iff_mem.not.mpr
       (Set.disjoint_left.mp <| disjoint_primeCompl_of_liesOver P p) s.prop
-  have h₂ : equivQuotientMapOfIsMaximal p Sₚ P (Ideal.Quotien
+  have h₂ : equivQuotientMapOfIsMaximal p Sₚ P (Ideal.Quotient.mk P ↑s) != 0 := by
+    rwa [RingEquiv.map_ne_zero_iff]
+  rw [RingEquiv.symm_apply_eq]; rw [← mul_left_inj' h₂]; rw [map_mul]; rw [mul_assoc]; rw [← map_mul]; rw [inv_mul_cancel₀ h₁]; rw [map_one]; rw [mul_one]; rw [equivQuotientMapOfIsMaximal_apply_mk]; rw [← map_mul]; rw [mk'_spec]; rw [Quotient.mk_algebraMap]; rw [equivQuotientMapOfIsMaximal_apply_mk]; rw [Quotient.mk_algebraMap]
 
 Depends on / 依赖: Ideal.Quotient.mk, Ideal.map, IsPrime, Quotient, Quotient.eq_zero_iff_mem.not.mpr, RingEquiv, RingEquiv.map_ne_zero_iff, RingEquiv.symm_apply_eq, Set.disjoint_left.mp, algebraMap, disjoint_left, disjoint_primeCompl_of_liesOver, eq_zero_iff_mem, equivQuotientMapOfIsMaximal, isPrime_map_of_liesOver, map_mul, map_ne_zero_iff, map_one, mul_assoc, mul_left_inj
 -/
@@ -379,7 +405,20 @@ theorem ramificationIdx_map_eq_ramificationIdx
   have := IsLocalization.liesOver_map_of_isPrime_disjoint (algebraMapSubmonoid S p.primeCompl) Sₚ
     (Set.disjoint_image_left.mpr (Set.disjoint_compl_left_iff_subset.mpr hPp.over.ge))
   have := isPrime_map_of_liesOver S p Sₚ P
-  rw [ramificationIdx_eq
+  rw [ramificationIdx_eq (maximalIdeal Rₚ) (P.map (algebraMap S Sₚ))]; rw [ramificationIdx_eq p P]
+  let R₁ := Localization.AtPrime (P.map (algebraMap S Sₚ))
+  let R₂ := Localization.AtPrime P
+  let : Algebra R₂ R₁ := Localization.AtPrime.algebraOfLiesOver P (P.map (algebraMap S Sₚ))
+  have : IsLocalization.AtPrime R₁ P := by
+    convert isLocalization_isLocalization_atPrime_isLocalization
+      (algebraMapSubmonoid S p.primeCompl) R₁ (P.map (algebraMap S Sₚ))
+    rw [← Ideal.under_def]; rw [← Ideal.over_def (P.map (algebraMap S Sₚ)) P]
+  have h : Function.Bijective (algebraMap R₂ R₁) :=
+    (Localization.algEquiv P.primeCompl R₁).bijective
+  have key : p.map (algebraMap R R₂) =
+      ((maximalIdeal Rₚ).map (algebraMap Rₚ R₁)).comap (algebraMap R₂ R₁) := by
+    rw [← IsLocalization.AtPrime.map_eq_maximalIdeal p]; rw [p.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq R R₂ R₁]; rw [← p.map_map]; rw [comap_map_of_bijective _ h]
+  rw [Module.length_quotient]; rw [Module.length_quotient]; rw [key]; rw [coheight_comap_of_surjective _ h.2]
 
 中文:
 定理 ramificationIdx_map_eq_ramificationIdx
@@ -389,7 +428,20 @@ theorem ramificationIdx_map_eq_ramificationIdx
   have := IsLocalization.liesOver_map_of_isPrime_disjoint (algebraMapSubmonoid S p.primeCompl) Sₚ
     (Set.disjoint_image_left.mpr (Set.disjoint_compl_left_iff_subset.mpr hPp.over.ge))
   have := isPrime_map_of_liesOver S p Sₚ P
-  rw [ramificationIdx_eq
+  rw [ramificationIdx_eq (maximalIdeal Rₚ) (P.map (algebraMap S Sₚ))]; rw [ramificationIdx_eq p P]
+  let R₁ := Localization.AtPrime (P.map (algebraMap S Sₚ))
+  let R₂ := Localization.AtPrime P
+  let : Algebra R₂ R₁ := Localization.AtPrime.algebraOfLiesOver P (P.map (algebraMap S Sₚ))
+  have : IsLocalization.AtPrime R₁ P := by
+    convert isLocalization_isLocalization_atPrime_isLocalization
+      (algebraMapSubmonoid S p.primeCompl) R₁ (P.map (algebraMap S Sₚ))
+    rw [← Ideal.under_def]; rw [← Ideal.over_def (P.map (algebraMap S Sₚ)) P]
+  have h : Function.Bijective (algebraMap R₂ R₁) :=
+    (Localization.algEquiv P.primeCompl R₁).bijective
+  have key : p.map (algebraMap R R₂) =
+      ((maximalIdeal Rₚ).map (algebraMap Rₚ R₁)).comap (algebraMap R₂ R₁) := by
+    rw [← IsLocalization.AtPrime.map_eq_maximalIdeal p]; rw [p.map_map]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq R R₂ R₁]; rw [← p.map_map]; rw [comap_map_of_bijective _ h]
+  rw [Module.length_quotient]; rw [Module.length_quotient]; rw [key]; rw [coheight_comap_of_surjective _ h.2]
 
 Depends on / 依赖: Algebra, AtPrime, IsLocalization, IsLocalization.liesOver_map_of_isPrime_disjoint, Localization, Localization.AtPrime, Localization.AtPrime.alg, P.map, Set.disjoint_compl_left_iff_subset.mpr, Set.disjoint_image_left.mpr, algebraMap, algebraMapSubmonoid, disjoint_compl_left_iff_subset, disjoint_image_left, hPp.over.ge, isPrime_map_of_liesOver, liesOver_map_of_isPrime_disjoint, liesOver_map_of_liesOver, maximalIdeal, p.primeCompl
 -/
@@ -436,7 +488,16 @@ definition primesOverEquivPrimesOver
     refine ⟨fun h => ?_, fun h => map_mono h⟩
     have : Q'.1.IsMaximal :=
       (primesOver.isPrime p Q').isMaximal (ne_bot_of_mem_primesOver hp Q'.prop)
-    simpa [
+    simpa [under_map_of_isMaximal S p] using le_comap_of_map_le h
+  invFun Q := ⟨comap (algebraMap S Sₚ) Q.1, IsPrime.under S Q.1,
+    liesOver_comap_of_liesOver p Rₚ Q.1⟩
+  left_inv P := by
+    have : P.val.IsMaximal := Ring.DimensionLEOne.maximalOfPrime
+      (ne_bot_of_mem_primesOver hp P.prop) (primesOver.isPrime p P)
+exact SetCoe.ext IsLocalization.AtPrime.under_map_of_isMaximal S p Sₚ P.1
+right_inv Q := SetCoe.ext map_under (algebraMapSubmonoid S p.primeCompl) Sₚ Q
+
+@[simp]
 
 中文:
 定义 primesOverEquivPrimesOver
@@ -447,7 +508,16 @@ definition primesOverEquivPrimesOver
     refine ⟨fun h => ?_, fun h => map_mono h⟩
     have : Q'.1.IsMaximal :=
       (primesOver.isPrime p Q').isMaximal (ne_bot_of_mem_primesOver hp Q'.prop)
-    simpa [
+    simpa [under_map_of_isMaximal S p] using le_comap_of_map_le h
+  invFun Q := ⟨comap (algebraMap S Sₚ) Q.1, IsPrime.under S Q.1,
+    liesOver_comap_of_liesOver p Rₚ Q.1⟩
+  left_inv P := by
+    have : P.val.IsMaximal := Ring.DimensionLEOne.maximalOfPrime
+      (ne_bot_of_mem_primesOver hp P.prop) (primesOver.isPrime p P)
+exact SetCoe.ext IsLocalization.AtPrime.under_map_of_isMaximal S p Sₚ P.1
+right_inv Q := SetCoe.ext map_under (algebraMapSubmonoid S p.primeCompl) Sₚ Q
+
+@[simp]
 
 Depends on / 依赖: algebraMap, isPrime_map_of_liesOver
 -/
@@ -517,7 +587,7 @@ theorem primesOverEquivPrimesOver_inertiagDeg_eq
   have : P.val.IsMaximal := Ring.DimensionLEOne.maximalOfPrime
     (ne_bot_of_mem_primesOver (NeZero.ne _) P.prop) inferInstance
   have : (P.1.map (algebraMap S Sₚ)).LiesOver (maximalIdeal Rₚ) := liesOver_map_of_liesOver p _ _ _
-  exact inertiaDeg_map_eq_inertiaDeg p _ _
+  exact inertiaDeg_map_eq_inertiaDeg p _ _ _
 
 中文:
 定理 primesOverEquivPrimesOver_inertiagDeg_eq
@@ -527,7 +597,7 @@ theorem primesOverEquivPrimesOver_inertiagDeg_eq
   have : P.val.IsMaximal := Ring.DimensionLEOne.maximalOfPrime
     (ne_bot_of_mem_primesOver (NeZero.ne _) P.prop) inferInstance
   have : (P.1.map (algebraMap S Sₚ)).LiesOver (maximalIdeal Rₚ) := liesOver_map_of_liesOver p _ _ _
-  exact inertiaDeg_map_eq_inertiaDeg p _ _
+  exact inertiaDeg_map_eq_inertiaDeg p _ _ _
 
 Depends on / 依赖: DimensionLEOne, IsMaximal, LiesOver, NeZero, NeZero.ne, P.prop, P.val.IsMaximal, Ring.DimensionLEOne.maximalOfPrime, algebraMap, inertiaDeg_map_eq_inertiaDeg, liesOver_map_of_liesOver, maximalIdeal, maximalOfPrime, ne_bot_of_mem_primesOver
 -/

@@ -81,7 +81,12 @@ definition foldModules
       Core.checkInterrupted
       let modName := env.header.moduleNames[i]!
       let { constNames, constants, .. } := env.header.moduleData[i]!
-      fo
+      for h : i in *...constNames.size do
+        let name := constNames[i]
+        let constInfo := constants[i]!
+        a ← visitConst modName errorRef act a name constInfo
+    return a
+.run' cctx { env, ngen } go.run' mctx {}
 
 中文:
 定义 foldModules
@@ -94,7 +99,12 @@ definition foldModules
       Core.checkInterrupted
       let modName := env.header.moduleNames[i]!
       let { constNames, constants, .. } := env.header.moduleData[i]!
-      fo
+      for h : i in *...constNames.size do
+        let name := constNames[i]
+        let constInfo := constants[i]!
+        a ← visitConst modName errorRef act a name constInfo
+    return a
+.run' cctx { env, ngen } go.run' mctx {}
 -/
 def foldModules (ngen : NameGenerator) (errorRef : FoldDeclErrorRef)
     (env : Environment) (init : α) (act : α -> Name -> ConstantInfo -> MetaM α)

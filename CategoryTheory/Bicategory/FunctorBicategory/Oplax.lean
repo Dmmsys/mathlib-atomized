@@ -48,7 +48,13 @@ definition whiskerLeft
         _ = 𝟙 _ otimes≫ η.app a ◁ (Γ.as.app a ▷ H.map f ≫ ι.naturality f) otimes≫
                 η.naturality f ▷ ι.app b otimes≫ 𝟙 _ := by
           bicategory
-        _ = 𝟙 _ o
+        _ = 𝟙 _ otimes≫ η.app a ◁ θ.naturality f otimes≫ ((η.app a ≫ G.map f) ◁ Γ.as.app b ≫
+              η.naturality f ▷ ι.app b) otimes≫ 𝟙 _ := by
+          rw [Γ.as.naturality]
+          bicategory
+        _ = _ := by
+          rw [whisker_exchange]
+          bicategory }
 
 中文:
 定义 whiskerLeft
@@ -61,7 +67,13 @@ definition whiskerLeft
         _ = 𝟙 _ otimes≫ η.app a ◁ (Γ.as.app a ▷ H.map f ≫ ι.naturality f) otimes≫
                 η.naturality f ▷ ι.app b otimes≫ 𝟙 _ := by
           bicategory
-        _ = 𝟙 _ o
+        _ = 𝟙 _ otimes≫ η.app a ◁ θ.naturality f otimes≫ ((η.app a ≫ G.map f) ◁ Γ.as.app b ≫
+              η.naturality f ▷ ι.app b) otimes≫ 𝟙 _ := by
+          rw [Γ.as.naturality]
+          bicategory
+        _ = _ := by
+          rw [whisker_exchange]
+          bicategory }
 -/
 def whiskerLeft (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι) : η ≫ θ ⟶ η ≫ ι where
   as := {
@@ -97,7 +109,13 @@ definition whiskerRight
         _ = 𝟙 _ otimes≫ (Γ.as.app a ▷ (ι.app a ≫ H.map f) ≫ θ.app a ◁ ι.naturality f) otimes≫
               θ.naturality f ▷ ι.app b otimes≫ 𝟙 _ := by
           bicategory
-       
+        _ = 𝟙 _ otimes≫ η.app a ◁ ι.naturality f otimes≫ (Γ.as.app a ▷ G.map f ≫
+              θ.naturality f) ▷ ι.app b otimes≫ 𝟙 _ := by
+          rw [← whisker_exchange]
+          bicategory
+        _ = _ := by
+          rw [Γ.as.naturality]
+          bicategory }
 
 中文:
 定义 whiskerRight
@@ -110,7 +128,13 @@ definition whiskerRight
         _ = 𝟙 _ otimes≫ (Γ.as.app a ▷ (ι.app a ≫ H.map f) ≫ θ.app a ◁ ι.naturality f) otimes≫
               θ.naturality f ▷ ι.app b otimes≫ 𝟙 _ := by
           bicategory
-       
+        _ = 𝟙 _ otimes≫ η.app a ◁ ι.naturality f otimes≫ (Γ.as.app a ▷ G.map f ≫
+              θ.naturality f) ▷ ι.app b otimes≫ 𝟙 _ := by
+          rw [← whisker_exchange]
+          bicategory
+        _ = _ := by
+          rw [Γ.as.naturality]
+          bicategory }
 -/
 def whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ ι ⟶ θ ≫ ι where
   as := {

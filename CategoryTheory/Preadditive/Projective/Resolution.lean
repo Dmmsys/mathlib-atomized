@@ -268,7 +268,11 @@ definition isColimitCokernelCofork
   refine IsColimit.ofIsoColimit (P.complex.opcyclesIsCokernel 1 0 (by simp)) ?_
   refine Cofork.ext (P.complex.isoHomologyι₀.symm ≪≫ isoOfQuasiIsoAt P.π 0 ≪≫
     singleObjHomologySelfIso _ _ _) ?_
-  rw [← cancel_mono (singleObjHomologySelfIso (ComplexShape.down Nat) 0 _).inv]; rw [← cancel_mono (
+  rw [← cancel_mono (singleObjHomologySelfIso (ComplexShape.down Nat) 0 _).inv]; rw [← cancel_mono (isoHomologyι₀ _).hom]
+  dsimp
+  simp only [isoHomologyι₀_inv_naturality_assoc, p_opcyclesMap_assoc, single₀_obj_zero, assoc,
+    Iso.hom_inv_id, comp_id, isoHomologyι_inv_hom_id, singleObjHomologySelfIso_inv_homologyι,
+    singleObjOpcyclesSelfIso_hom, single₀ObjXSelf, Iso.refl_inv, id_comp]
 
 中文:
 定义 isColimitCokernelCofork
@@ -277,7 +281,11 @@ definition isColimitCokernelCofork
   refine IsColimit.ofIsoColimit (P.complex.opcyclesIsCokernel 1 0 (by simp)) ?_
   refine Cofork.ext (P.complex.isoHomologyι₀.symm ≪≫ isoOfQuasiIsoAt P.π 0 ≪≫
     singleObjHomologySelfIso _ _ _) ?_
-  rw [← cancel_mono (singleObjHomologySelfIso (ComplexShape.down Nat) 0 _).inv]; rw [← cancel_mono (
+  rw [← cancel_mono (singleObjHomologySelfIso (ComplexShape.down Nat) 0 _).inv]; rw [← cancel_mono (isoHomologyι₀ _).hom]
+  dsimp
+  simp only [isoHomologyι₀_inv_naturality_assoc, p_opcyclesMap_assoc, single₀_obj_zero, assoc,
+    Iso.hom_inv_id, comp_id, isoHomologyι_inv_hom_id, singleObjHomologySelfIso_inv_homologyι,
+    singleObjOpcyclesSelfIso_hom, single₀ObjXSelf, Iso.refl_inv, id_comp]
 
 Depends on / 依赖: Cofork, Cofork.ext, ComplexShape, ComplexShape.down, IsColimit, IsColimit.ofIsoColimit, Iso.hom_inv_id, P.complex.isoHomology, P.complex.opcyclesIsCokernel, cancel_mono, comp_id, complex, hom_inv_id, isoOfQuasiIsoAt, ofIsoColimit, opcyclesIsCokernel, p_opcyclesMap_assoc, singleObjHomologySelfIso
 -/

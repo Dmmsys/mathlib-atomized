@@ -930,7 +930,12 @@ instance :
     bot_le := fun s _ hx =>
       let ⟨n, hn⟩ := mem_bot.1 hx
       hn ▸ natCast_mem s n
-
+    top := ⊤
+    le_top := fun _ _ _ => mem_top _
+    inf := (· ⊓ ·)
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right
+    le_inf := fun _ _ _ h₁ h₂ _ hx => ⟨h₁ hx, h₂ hx⟩ }
 
 中文:
 实例 :
@@ -943,7 +948,12 @@ instance :
     bot_le := fun s _ hx =>
       let ⟨n, hn⟩ := mem_bot.1 hx
       hn ▸ natCast_mem s n
-
+    top := ⊤
+    le_top := fun _ _ _ => mem_top _
+    inf := (· ⊓ ·)
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right
+    le_inf := fun _ _ _ h₁ h₂ _ hx => ⟨h₁ hx, h₂ hx⟩ }
 
 Depends on / 依赖: And.left, And.right, IsGLB.of_image, SetLike, SetLike.coe_subset_coe, Subsemiring, bot_le, coe_subset_coe, completeLatticeOfInf, inf_le_left, inf_le_right, isGLB_biInf, le_inf, le_top, mem_bot, mem_top, natCast_mem, of_image, subseteq
 -/
@@ -1849,7 +1859,7 @@ theorem closure_addSubmonoid_closure
   rintro - ⟨J, rfl⟩
   refine (AddSubmonoid.mem_closure.mp (mem_closure_iff.mp hx)) H.toAddSubmonoid fun y hy => ?_
   refine (Submonoid.mem_closure.mp hy) H.toSubmonoid fun z hz => ?_
-  exact
+  exact (AddSubmonoid.mem_closure.mp hz) H.toAddSubmonoid fun w hw => J hw
 
 中文:
 定理 closure_addSubmonoid_closure
@@ -1861,7 +1871,7 @@ theorem closure_addSubmonoid_closure
   rintro - ⟨J, rfl⟩
   refine (AddSubmonoid.mem_closure.mp (mem_closure_iff.mp hx)) H.toAddSubmonoid fun y hy => ?_
   refine (Submonoid.mem_closure.mp hy) H.toSubmonoid fun z hz => ?_
-  exact
+  exact (AddSubmonoid.mem_closure.mp hz) H.toAddSubmonoid fun w hw => J hw
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_closure.mp, AddSubmonoid.subset_closure, H.toAddSubmonoid, H.toSubmonoid, Submonoid, Submonoid.mem_closure.mp, closure_mono, mem_closure, mem_closure_iff, mem_closure_iff.mp, subset_closure, toAddSubmonoid, toSubmonoid
 -/
@@ -1891,7 +1901,7 @@ theorem closure_induction
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       one_mem' := ⟨_, one⟩
       zero_mem' := ⟨_, zero⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨s
+.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx closure_le (t := K)
 
 中文:
 定理 closure_induction
@@ -1902,7 +1912,7 @@ theorem closure_induction
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       one_mem' := ⟨_, one⟩
       zero_mem' := ⟨_, zero⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨s
+.elim fun _ => id .mpr (fun y hy => ⟨subset_closure hy, mem y hy⟩) hx closure_le (t := K)
 
 Depends on / 依赖: Subsemiring, add_mem, carrier, closure_le, mul_mem, one_mem, subset_closure, zero_mem
 -/
@@ -1935,7 +1945,11 @@ theorem closure_induction₂
     | zero => exact zero_left _ _
     | one => exact one_left _ _
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
-    | add _ _ _ _ h₁ h₂ => ex
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+  | zero => exact zero_right x hx
+  | one => exact one_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
 
 中文:
 定理 closure_induction₂
@@ -1947,7 +1961,11 @@ theorem closure_induction₂
     | zero => exact zero_left _ _
     | one => exact one_left _ _
     | mul _ _ _ _ h₁ h₂ => exact mul_left _ _ _ _ _ _ h₁ h₂
-    | add _ _ _ _ h₁ h₂ => ex
+    | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
+  | zero => exact zero_right x hx
+  | one => exact one_right x hx
+  | mul _ _ _ _ h₁ h₂ => exact mul_right _ _ _ _ _ _ h₁ h₂
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
 
 Depends on / 依赖: add_left, add_right, closure_induction, mem_mem, mul_left, mul_right, one_left, one_right, zero_left, zero_right
 -/
@@ -1988,7 +2006,23 @@ theorem mem_closure_iff_exists_list
       suffices exists t : List R, (forall y in t, y in s) ∧ t.prod = x from
         let ⟨t, ht1, ht2⟩ := this
         ⟨[t], List.forall_mem_singleton.2 ht1, by
-  
+          rw [List.map_singleton]; rw [List.sum_singleton]; rw [ht2]⟩
+      induction hx using Submonoid.closure_induction with
+      | mem x hx => exact ⟨[x], List.forall_mem_singleton.2 hx, List.prod_singleton⟩
+      | one => exact ⟨[], List.forall_mem_nil _, rfl⟩
+      | mul x y _ _ ht hu =>
+        obtain ⟨⟨t, ht1, ht2⟩, ⟨u, hu1, hu2⟩⟩ := And.intro ht hu
+        exact ⟨t ++ u, List.forall_mem_append.2 ⟨ht1, hu1⟩, by rw [List.prod_append, ht2, hu2]⟩
+    | zero => exact ⟨[], List.forall_mem_nil _, rfl⟩
+    | add x y _ _ hL hM =>
+      obtain ⟨⟨L, HL1, HL2⟩, ⟨M, HM1, HM2⟩⟩ := And.intro hL hM
+      exact ⟨L ++ M, List.forall_mem_append.2 ⟨HL1, HM1⟩, by
+        rw [List.map_append]; rw [List.sum_append]; rw [HL2]; rw [HM2]⟩
+  · rintro ⟨L, HL1, rfl⟩
+    exact
+      list_sum_mem fun r hr =>
+        let ⟨t, ht1, ht2⟩ := List.mem_map.1 hr
+ht2 ▸ list_prod_mem _ fun y hy => subset_closure HL1 t ht1 y hy
 
 中文:
 定理 mem_closure_iff_存在_list
@@ -2002,7 +2036,23 @@ theorem mem_closure_iff_exists_list
       suffices exists t : List R, (forall y in t, y in s) ∧ t.prod = x from
         let ⟨t, ht1, ht2⟩ := this
         ⟨[t], List.forall_mem_singleton.2 ht1, by
-  
+          rw [List.map_singleton]; rw [List.sum_singleton]; rw [ht2]⟩
+      induction hx using Submonoid.closure_induction with
+      | mem x hx => exact ⟨[x], List.forall_mem_singleton.2 hx, List.prod_singleton⟩
+      | one => exact ⟨[], List.forall_mem_nil _, rfl⟩
+      | mul x y _ _ ht hu =>
+        obtain ⟨⟨t, ht1, ht2⟩, ⟨u, hu1, hu2⟩⟩ := And.intro ht hu
+        exact ⟨t ++ u, List.forall_mem_append.2 ⟨ht1, hu1⟩, by rw [List.prod_append, ht2, hu2]⟩
+    | zero => exact ⟨[], List.forall_mem_nil _, rfl⟩
+    | add x y _ _ hL hM =>
+      obtain ⟨⟨L, HL1, HL2⟩, ⟨M, HM1, HM2⟩⟩ := And.intro hL hM
+      exact ⟨L ++ M, List.forall_mem_append.2 ⟨HL1, HM1⟩, by
+        rw [List.map_append]; rw [List.sum_append]; rw [HL2]; rw [HM2]⟩
+  · rintro ⟨L, HL1, rfl⟩
+    exact
+      list_sum_mem fun r hr =>
+        let ⟨t, ht1, ht2⟩ := List.mem_map.1 hr
+ht2 ▸ list_prod_mem _ fun y hy => subset_closure HL1 t ht1 y hy
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure_induction, List.forall_mem_nil, List.forall_mem_singleton, List.map_singleton, List.prod_singleton, List.sum_singleton, Submonoid, Submonoid.closure_induction, closure_induction, forall_mem_nil, forall_mem_singleton, map_singleton, mem_closure_iff, prod_singleton, sum_singleton, t.prod
 -/
@@ -2774,7 +2824,8 @@ theorem mem_iSup_of_directed
     Subsemiring.mk' (⋃ i, (S i : Set R))
       (⨆ i, (S i).toSubmonoid) (Submonoid.coe_iSup_of_directed hS)
       (⨆ i, (S i).toAddSubmonoid) (AddSubmonoid.coe_iSup_of_directed hS)
-  suffices ⨆ i, S i <= U by simpa [U] using 
+  suffices ⨆ i, S i <= U by simpa [U] using @this x
+  exact iSup_le fun i x hx => Set.mem_iUnion.2 ⟨i, hx⟩
 
 中文:
 定理 mem_iSup_of_directed
@@ -2785,7 +2836,8 @@ theorem mem_iSup_of_directed
     Subsemiring.mk' (⋃ i, (S i : Set R))
       (⨆ i, (S i).toSubmonoid) (Submonoid.coe_iSup_of_directed hS)
       (⨆ i, (S i).toAddSubmonoid) (AddSubmonoid.coe_iSup_of_directed hS)
-  suffices ⨆ i, S i <= U by simpa [U] using 
+  suffices ⨆ i, S i <= U by simpa [U] using @this x
+  exact iSup_le fun i x hx => Set.mem_iUnion.2 ⟨i, hx⟩
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.coe_iSup_of_directed, Set.mem_iUnion, Submonoid, Submonoid.coe_iSup_of_directed, Subsemiring, Subsemiring.mk, coe_iSup_of_directed, iSup_le, le_iSup, mem_iUnion, toAddSubmonoid, toSubmonoid
 -/
@@ -3459,7 +3511,7 @@ theorem prod_bot_sup_bot_prod
     Prod.fst_mul_snd p ▸
       mul_mem
         ((le_sup_left : s.prod ⊥ <= s.prod ⊥ ⊔ prod ⊥ t) ⟨hp.1, SetLike.mem_coe.2 <| one_mem ⊥⟩)
-        ((le_sup_right : prod ⊥ t <= s.prod ⊥ ⊔ prod ⊥ t) ⟨SetLike.mem_coe.2 <
+        ((le_sup_right : prod ⊥ t <= s.prod ⊥ ⊔ prod ⊥ t) ⟨SetLike.mem_coe.2 <| one_mem ⊥, hp.2⟩)
 
 中文:
 定理 prod_bot_sup_bot_prod
@@ -3468,7 +3520,7 @@ theorem prod_bot_sup_bot_prod
     Prod.fst_mul_snd p ▸
       mul_mem
         ((le_sup_left : s.prod ⊥ <= s.prod ⊥ ⊔ prod ⊥ t) ⟨hp.1, SetLike.mem_coe.2 <| one_mem ⊥⟩)
-        ((le_sup_right : prod ⊥ t <= s.prod ⊥ ⊔ prod ⊥ t) ⟨SetLike.mem_coe.2 <
+        ((le_sup_right : prod ⊥ t <= s.prod ⊥ ⊔ prod ⊥ t) ⟨SetLike.mem_coe.2 <| one_mem ⊥, hp.2⟩)
 
 Depends on / 依赖: Prod.fst_mul_snd, SetLike, SetLike.mem_coe, bot_le, fst_mul_snd, le_antisymm, le_sup_left, le_sup_right, mem_coe, mul_mem, one_mem, prod_mono_left, prod_mono_right, s.prod, sup_le
 -/

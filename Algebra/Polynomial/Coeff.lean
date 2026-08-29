@@ -135,7 +135,7 @@ theorem card_support_mul_le
     _ = #(p.toFinsupp * q.toFinsupp).coeff.support := by rw [← support_toFinsupp, toFinsupp_mul]
     _ <= #(p.toFinsupp.coeff.support + q.toFinsupp.coeff.support) := by
       grw [AddMonoidAlgebra.support_coeff_mul_subset]
-    _ <= #p.support * #q.support := Finset.card_im
+    _ <= #p.support * #q.support := Finset.card_image₂_le ..
 
 中文:
 定理 card_support_mul_le
@@ -145,7 +145,7 @@ theorem card_support_mul_le
     _ = #(p.toFinsupp * q.toFinsupp).coeff.support := by rw [← support_toFinsupp, toFinsupp_mul]
     _ <= #(p.toFinsupp.coeff.support + q.toFinsupp.coeff.support) := by
       grw [AddMonoidAlgebra.support_coeff_mul_subset]
-    _ <= #p.support * #q.support := Finset.card_im
+    _ <= #p.support * #q.support := Finset.card_image₂_le ..
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.support_coeff_mul_subset, Finset, Finset.card_image, coeff.support, p.support, p.toFinsupp, p.toFinsupp.coeff.support, q.support, q.toFinsupp, q.toFinsupp.coeff.support, support, support_coeff_mul_subset, support_toFinsupp, toFinsupp, toFinsupp_mul
 -/
@@ -800,7 +800,7 @@ theorem support_binomial
   apply subset_antisymm (support_binomial_subset k m x y)
   simp_rw [insert_subset_iff, singleton_subset_iff, mem_support_iff, coeff_add, coeff_C_mul,
     coeff_X_pow_self, mul_one, coeff_X_pow, if_neg hkm, if_neg hkm.symm, mul_zero, zero_add,
-    add_zero, Ne, hx, hy, not_false_eq_true, and_true
+    add_zero, Ne, hx, hy, not_false_eq_true, and_true]
 
 中文:
 定理 support_binomial
@@ -809,7 +809,7 @@ theorem support_binomial
   apply subset_antisymm (support_binomial_subset k m x y)
   simp_rw [insert_subset_iff, singleton_subset_iff, mem_support_iff, coeff_add, coeff_C_mul,
     coeff_X_pow_self, mul_one, coeff_X_pow, if_neg hkm, if_neg hkm.symm, mul_zero, zero_add,
-    add_zero, Ne, hx, hy, not_false_eq_true, and_true
+    add_zero, Ne, hx, hy, not_false_eq_true, and_true]
 
 Depends on / 依赖: add_zero, and_true, coeff_C_mul, coeff_X_pow, coeff_X_pow_self, coeff_add, hkm.symm, if_neg, insert_subset_iff, mem_support_iff, mul_one, mul_zero, not_false_eq_true, simp_rw, singleton_subset_iff, subset_antisymm, support_binomial_subset, zero_add
 -/
@@ -830,7 +830,8 @@ theorem support_trinomial
   apply subset_antisymm (support_trinomial_subset k m n x y z)
   simp_rw [insert_subset_iff, singleton_subset_iff, mem_support_iff, coeff_add, coeff_C_mul,
     coeff_X_pow_self, mul_one, coeff_X_pow, if_neg hkm.ne, if_neg hkm.ne', if_neg hmn.ne,
-    if_neg hmn.ne', if_neg (hkm.trans hmn).ne, if_n
+    if_neg hmn.ne', if_neg (hkm.trans hmn).ne, if_neg (hkm.trans hmn).ne', mul_zero, add_zero,
+    zero_add, Ne, hx, hy, hz, not_false_eq_true, and_true]
 
 中文:
 定理 support_trinomial
@@ -839,7 +840,8 @@ theorem support_trinomial
   apply subset_antisymm (support_trinomial_subset k m n x y z)
   simp_rw [insert_subset_iff, singleton_subset_iff, mem_support_iff, coeff_add, coeff_C_mul,
     coeff_X_pow_self, mul_one, coeff_X_pow, if_neg hkm.ne, if_neg hkm.ne', if_neg hmn.ne,
-    if_neg hmn.ne', if_neg (hkm.trans hmn).ne, if_n
+    if_neg hmn.ne', if_neg (hkm.trans hmn).ne, if_neg (hkm.trans hmn).ne', mul_zero, add_zero,
+    zero_add, Ne, hx, hy, hz, not_false_eq_true, and_true]
 
 Depends on / 依赖: add_zero, and_true, coeff_C_mul, coeff_X_pow, coeff_X_pow_self, coeff_add, hkm.ne, hkm.trans, hmn.ne, if_neg, insert_subset_iff, mem_support_iff, mul_one, mul_zero, not_false_eq_true, simp_rw, singleton_subset_iff, subset_antisymm, support_trinomial_subset, zero_add
 -/
@@ -970,7 +972,7 @@ theorem coeff_mul_X_pow'
   · rw [← tsub_add_cancel_of_le h, coeff_mul_X_pow, add_tsub_cancel_right]
   · refine (coeff_mul _ _ _).trans (Finset.sum_eq_zero fun x hx => ?_)
     rw [coeff_X_pow]; rw [if_neg]; rw [mul_zero]
-    exact ((le_of_add_le_right (mem_antidiagonal.mp hx).le).trans_lt <| not_le.mp h
+    exact ((le_of_add_le_right (mem_antidiagonal.mp hx).le).trans_lt <| not_le.mp h).ne
 
 中文:
 定理 coeff_mul_X_pow'
@@ -980,7 +982,7 @@ theorem coeff_mul_X_pow'
   · rw [← tsub_add_cancel_of_le h, coeff_mul_X_pow, add_tsub_cancel_right]
   · refine (coeff_mul _ _ _).trans (Finset.sum_eq_zero fun x hx => ?_)
     rw [coeff_X_pow]; rw [if_neg]; rw [mul_zero]
-    exact ((le_of_add_le_right (mem_antidiagonal.mp hx).le).trans_lt <| not_le.mp h
+    exact ((le_of_add_le_right (mem_antidiagonal.mp hx).le).trans_lt <| not_le.mp h).ne
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, add_tsub_cancel_right, coeff_X_pow, coeff_mul, coeff_mul_X_pow, if_neg, le_of_add_le_right, mem_antidiagonal, mem_antidiagonal.mp, mul_zero, not_le, not_le.mp, split_ifs, sum_eq_zero, trans_lt, tsub_add_cancel_of_le
 -/
@@ -1230,7 +1232,9 @@ theorem coeff_X_add_C_pow
   rw [Finset.sum_eq_single k]; rw [coeff_X_pow_self]; rw [one_mul]
   · intro _ _ h
     simp [coeff_X_pow, h.symm]
-  · simp only [coeff_X_pow_self, one_mul, not_lt, Fin
+  · simp only [coeff_X_pow_self, one_mul, not_lt, Finset.mem_range]
+    intro h
+    rw [Nat.choose_eq_zero_of_lt h]; rw [Nat.cast_zero]; rw [mul_zero]
 
 中文:
 定理 coeff_X_add_C_pow
@@ -1241,7 +1245,9 @@ theorem coeff_X_add_C_pow
   rw [Finset.sum_eq_single k]; rw [coeff_X_pow_self]; rw [one_mul]
   · intro _ _ h
     simp [coeff_X_pow, h.symm]
-  · simp only [coeff_X_pow_self, one_mul, not_lt, Fin
+  · simp only [coeff_X_pow_self, one_mul, not_lt, Finset.mem_range]
+    intro h
+    rw [Nat.choose_eq_zero_of_lt h]; rw [Nat.cast_zero]; rw [mul_zero]
 
 Depends on / 依赖: C_eq_natCast, C_pow, Finset, Finset.mem_range, Finset.sum_eq_single, Nat.cast_zero, Nat.choose_eq_zero_of_lt, add_pow, cast_zero, choose_eq_zero_of_lt, coeff_X_pow, coeff_X_pow_self, coeff_mul_C, commute_X, h.symm, lcoeff_apply, map_sum, mem_range, mul_zero, not_lt
 -/
@@ -1338,7 +1344,12 @@ theorem C_dvd_iff_dvd_coeff
       let ψ : R[X] := ∑ i in φ.support, monomial i (c' i)
       use ψ
       ext i
-      simp onl
+      simp only [c', ψ, coeff_C_mul, mem_support_iff, coeff_monomial, finsetSum_coeff,
+        Finset.sum_ite_eq']
+      split_ifs with hi
+      · rw [hc]
+      · rw [Classical.not_not] at hi
+        rwa [mul_zero]
 
 中文:
 定理 C_dvd_iff_dvd_coeff
@@ -1356,7 +1367,12 @@ theorem C_dvd_iff_dvd_coeff
       let ψ : R[X] := ∑ i in φ.support, monomial i (c' i)
       use ψ
       ext i
-      simp onl
+      simp only [c', ψ, coeff_C_mul, mem_support_iff, coeff_monomial, finsetSum_coeff,
+        Finset.sum_ite_eq']
+      split_ifs with hi
+      · rw [hc]
+      · rw [Classical.not_not] at hi
+        rwa [mul_zero]
 
 Depends on / 依赖: Classical, Classical.not_not, Finset, Finset.sum_ite_eq, classical, coeff_C_mul, coeff_monomial, dvd_mul_right, finsetSum_coeff, mem_support_iff, monomial, mul_zero, not_not, split_ifs, sum_ite_eq, support
 -/

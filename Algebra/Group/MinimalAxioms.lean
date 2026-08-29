@@ -50,7 +50,12 @@ abbreviation Group.ofLeftAxioms
       have mul_inv_cancel : forall a : G, a * a⁻¹ = 1 := fun a =>
         calc a * a⁻¹ = 1 * (a * a⁻¹) := (one_mul _).symm
           _ = ((a * a⁻¹)⁻¹ * (a * a⁻¹)) * (a * a⁻¹) := by
-        
+            rw [inv_mul_cancel]
+          _ = (a * a⁻¹)⁻¹ * (a * ((a⁻¹ * a) * a⁻¹)) := by
+            simp only [assoc]
+          _ = 1 := by
+            rw [inv_mul_cancel]; rw [one_mul]; rw [inv_mul_cancel]
+      rw [← inv_mul_cancel a]; rw [← assoc]; rw [mul_inv_cancel a]; rw [one_mul] }
 
 中文:
 缩写 群.ofLeftAxioms
@@ -62,7 +67,12 @@ abbreviation Group.ofLeftAxioms
       have mul_inv_cancel : forall a : G, a * a⁻¹ = 1 := fun a =>
         calc a * a⁻¹ = 1 * (a * a⁻¹) := (one_mul _).symm
           _ = ((a * a⁻¹)⁻¹ * (a * a⁻¹)) * (a * a⁻¹) := by
-        
+            rw [inv_mul_cancel]
+          _ = (a * a⁻¹)⁻¹ * (a * ((a⁻¹ * a) * a⁻¹)) := by
+            simp only [assoc]
+          _ = 1 := by
+            rw [inv_mul_cancel]; rw [one_mul]; rw [inv_mul_cancel]
+      rw [← inv_mul_cancel a]; rw [← assoc]; rw [mul_inv_cancel a]; rw [one_mul] }
 
 Depends on / 依赖: inv_mul_cancel, mul_assoc, mul_inv_cancel, mul_one, one_mul
 -/
@@ -106,7 +116,12 @@ abbreviation Group.ofRightAxioms
       _ = ((a⁻¹ * (a * a⁻¹)) * a) * (a⁻¹ * a)⁻¹ := by
         simp only [assoc]
       _ = 1 := by
-       
+        rw [mul_inv_cancel]; rw [mul_one]; rw [mul_inv_cancel]
+  { mul_assoc := assoc,
+    mul_one := mul_one,
+    inv_mul_cancel := inv_mul_cancel,
+    one_mul := fun a => by
+      rw [← mul_inv_cancel a]; rw [assoc]; rw [inv_mul_cancel]; rw [mul_one] }
 
 中文:
 缩写 群.ofRightAxioms
@@ -118,7 +133,12 @@ abbreviation Group.ofRightAxioms
       _ = ((a⁻¹ * (a * a⁻¹)) * a) * (a⁻¹ * a)⁻¹ := by
         simp only [assoc]
       _ = 1 := by
-       
+        rw [mul_inv_cancel]; rw [mul_one]; rw [mul_inv_cancel]
+  { mul_assoc := assoc,
+    mul_one := mul_one,
+    inv_mul_cancel := inv_mul_cancel,
+    one_mul := fun a => by
+      rw [← mul_inv_cancel a]; rw [assoc]; rw [inv_mul_cancel]; rw [mul_one] }
 
 Depends on / 依赖: inv_mul_cancel, mul_assoc, mul_inv_cancel, mul_one, one_mul
 -/

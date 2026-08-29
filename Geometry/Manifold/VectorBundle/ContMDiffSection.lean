@@ -65,6 +65,8 @@ lemma ContMDiffWithinAt.add_section
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F V x₀)
     · intro x hx
+      apply (e.linear 𝕜 hx).1
+  · apply (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).1
 
 中文:
 引理 ContMDiffWithinAt.add_section
@@ -77,6 +79,8 @@ lemma ContMDiffWithinAt.add_section
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F V x₀)
     · intro x hx
+      apply (e.linear 𝕜 hx).1
+  · apply (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).1
 
 Depends on / 依赖: FiberBundle, FiberBundle.mem_baseSet_trivializationAt, baseSet, congr_of_eventuallyEq, contMDiffWithinAt_section, e.baseSet, e.linear, e.open_baseSet.mem_nhds, eventually_of_mem, hs.add, linear, mem_baseSet_trivializationAt, mem_nhds, mem_nhdsWithin_of_mem_nhds, open_baseSet, trivializationAt
 -/
@@ -167,7 +171,8 @@ lemma ContMDiffWithinAt.neg_section
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F V x₀)
     · intro x hx
-      a
+      apply (e.linear 𝕜 hx).map_neg
+  · apply (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).map_neg
 
 中文:
 引理 ContMDiffWithinAt.neg_section
@@ -179,7 +184,8 @@ lemma ContMDiffWithinAt.neg_section
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F V x₀)
     · intro x hx
-      a
+      apply (e.linear 𝕜 hx).map_neg
+  · apply (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).map_neg
 
 Depends on / 依赖: FiberBundle, FiberBundle.mem_baseSet_trivializationAt, baseSet, congr_of_eventuallyEq, contMDiffWithinAt_section, e.baseSet, e.linear, e.open_baseSet.mem_nhds, eventually_of_mem, hs.neg.congr_of_eventuallyEq, linear, map_neg, mem_baseSet_trivializationAt, mem_nhds, mem_nhdsWithin_of_mem_nhds, open_baseSet, trivializationAt
 -/
@@ -361,7 +367,8 @@ lemma ContMDiffWithinAt.smul_section
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F V x₀)
     · intro x hx
- 
+      apply (e.linear 𝕜 hx).2
+  · apply (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).2
 
 中文:
 引理 ContMDiffWithinAt.smul_section
@@ -374,7 +381,8 @@ lemma ContMDiffWithinAt.smul_section
 · exact mem_nhdsWithin_of_mem_nhds
         (e.open_baseSet.mem_nhds <| mem_baseSet_trivializationAt F V x₀)
     · intro x hx
- 
+      apply (e.linear 𝕜 hx).2
+  · apply (e.linear 𝕜 (FiberBundle.mem_baseSet_trivializationAt' x₀)).2
 
 Depends on / 依赖: FiberBundle, FiberBundle.mem_baseSet_trivializationAt, baseSet, congr_of_eventuallyEq, contMDiffWithinAt_section, e.baseSet, e.linear, e.open_baseSet.mem_nhds, eventually_of_mem, hf.smul, linear, mem_baseSet_trivializationAt, mem_nhds, mem_nhdsWithin_of_mem_nhds, open_baseSet, trivializationAt
 -/
@@ -546,7 +554,7 @@ lemma ContMDiffWithinAt.sum_section
   | insert i s hi h =>
     simp only [Finset.sum_insert hi]
     apply (hs _ (s.mem_insert_self i)).add_section
-    exact h fun i a => hs _ (s.mem_insert_
+    exact h fun i a => hs _ (s.mem_insert_of_mem a)
 
 中文:
 引理 ContMDiffWithinAt.sum_section
@@ -559,7 +567,7 @@ lemma ContMDiffWithinAt.sum_section
   | insert i s hi h =>
     simp only [Finset.sum_insert hi]
     apply (hs _ (s.mem_insert_self i)).add_section
-    exact h fun i a => hs _ (s.mem_insert_
+    exact h fun i a => hs _ (s.mem_insert_of_mem a)
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.sum_empty, Finset.sum_insert, add_section, classical, contMDiffWithinAt_zeroSection, induction_on, insert, mem_insert_of_mem, mem_insert_self, s.mem_insert_of_mem, s.mem_insert_self, sum_empty, sum_insert
 -/
@@ -651,7 +659,7 @@ lemma ContMDiffOn.smul_section_of_tsupport
   · apply ((contMDiff_zeroSection _ _).contMDiffOn (s := (tsupport ψ)ᶜ)).congr
     intro y hy
     simp [image_eq_zero_of_notMem_tsupport hy, zeroSection]
-· exact Set.
+· exact Set.compl_subset_iff_union.mp Set.compl_subset_compl.mpr ht'
 
 中文:
 引理 ContMDiffOn.smul_section_of_tsupport
@@ -662,7 +670,7 @@ lemma ContMDiffOn.smul_section_of_tsupport
   · apply ((contMDiff_zeroSection _ _).contMDiffOn (s := (tsupport ψ)ᶜ)).congr
     intro y hy
     simp [image_eq_zero_of_notMem_tsupport hy, zeroSection]
-· exact Set.
+· exact Set.compl_subset_iff_union.mp Set.compl_subset_compl.mpr ht'
 
 Depends on / 依赖: Set.compl_subset_compl.mpr, Set.compl_subset_iff_union.mp, compl_subset_compl, compl_subset_iff_union, contMDiffOn, contMDiff_of_contMDiffOn_union_of_isOpen, contMDiff_zeroSection, image_eq_zero_of_notMem_tsupport, isClosed_tsupport, isOpen_compl_iff, isOpen_compl_iff.mpr, smul_section, tsupport, zeroSection
 -/
@@ -687,7 +695,28 @@ lemma ContMDiffWithinAt.sum_section_of_locallyFinite
   -- and a finite set `s` of sections which don't vanish.
   let s := {i | ((fun i => {x | t i x != 0}) i inter u').Nonempty}
   have := hfin.fintype
-  have : CMDiffAt
+  have : CMDiffAt[u inter u'] n (T% (fun x => (∑ i in s, (t i x)))) x₀ :=
+    .sum_section fun i hi => ((ht' i).mono Set.inter_subset_left)
+  apply (contMDiffWithinAt_inter hu').mp
+  apply this.congr fun y hy => ?_
+  · rw [TotalSpace.mk_inj, tsum_eq_sum']
+    refine support_subset_iff'.mpr fun i hi => ?_
+    by_contra! h
+    have : i in s.toFinset := by
+      refine Set.mem_toFinset.mpr ?_
+      simp only [s, ne_eq, Set.mem_ofPred_eq]
+      use x₀
+      simpa using ⟨h, mem_of_mem_nhds hu'⟩
+    exact hi this
+  rw [TotalSpace.mk_inj]; rw [tsum_eq_sum']
+  refine support_subset_iff'.mpr fun i hi => ?_
+  by_contra! h
+  have : i in s.toFinset := by
+    refine Set.mem_toFinset.mpr ?_
+    simp only [s, ne_eq, Set.mem_ofPred_eq]
+    use y
+    simpa using ⟨h, Set.mem_of_mem_inter_right hy⟩
+  exact hi this
 
 中文:
 引理 ContMDiffWithinAt.sum_section_of_locallyFinite
@@ -697,7 +726,28 @@ lemma ContMDiffWithinAt.sum_section_of_locallyFinite
   -- and a finite set `s` of sections which don't vanish.
   let s := {i | ((fun i => {x | t i x != 0}) i inter u').Nonempty}
   have := hfin.fintype
-  have : CMDiffAt
+  have : CMDiffAt[u inter u'] n (T% (fun x => (∑ i in s, (t i x)))) x₀ :=
+    .sum_section fun i hi => ((ht' i).mono Set.inter_subset_left)
+  apply (contMDiffWithinAt_inter hu').mp
+  apply this.congr fun y hy => ?_
+  · rw [TotalSpace.mk_inj, tsum_eq_sum']
+    refine support_subset_iff'.mpr fun i hi => ?_
+    by_contra! h
+    have : i in s.toFinset := by
+      refine Set.mem_toFinset.mpr ?_
+      simp only [s, ne_eq, Set.mem_ofPred_eq]
+      use x₀
+      simpa using ⟨h, mem_of_mem_nhds hu'⟩
+    exact hi this
+  rw [TotalSpace.mk_inj]; rw [tsum_eq_sum']
+  refine support_subset_iff'.mpr fun i hi => ?_
+  by_contra! h
+  have : i in s.toFinset := by
+    refine Set.mem_toFinset.mpr ?_
+    simp only [s, ne_eq, Set.mem_ofPred_eq]
+    use y
+    simpa using ⟨h, Set.mem_of_mem_inter_right hy⟩
+  exact hi this
 -/
 lemma ContMDiffWithinAt.sum_section_of_locallyFinite
     (ht : LocallyFinite fun i => {x : M | t i x != 0})
@@ -808,7 +858,12 @@ lemma ContMDiffWithinAt.finsum_section_of_locallyFinite
       (fun y hy => ?_) (by grind) trivial
   rw [← tsum_eq_finsum (L := SummationFilter.unconditional ι)]
   choose U hu hfin using ht y
-  have : {x | t x y != 0} subseteq {i | ((fun i => {x | t i x != 0}) i inte
+  have : {x | t x y != 0} subseteq {i | ((fun i => {x | t i x != 0}) i inter U).Nonempty} := by
+    intro x hx
+    rw [Set.mem_ofPred] at hx ⊢
+    use y
+    simpa using ⟨hx, mem_of_mem_nhds hu⟩
+  exact Set.Finite.subset hfin this
 
 中文:
 引理 ContMDiffWithinAt.finsum_section_of_locallyFinite
@@ -817,7 +872,12 @@ lemma ContMDiffWithinAt.finsum_section_of_locallyFinite
       (fun y hy => ?_) (by grind) trivial
   rw [← tsum_eq_finsum (L := SummationFilter.unconditional ι)]
   choose U hu hfin using ht y
-  have : {x | t x y != 0} subseteq {i | ((fun i => {x | t i x != 0}) i inte
+  have : {x | t x y != 0} subseteq {i | ((fun i => {x | t i x != 0}) i inter U).Nonempty} := by
+    intro x hx
+    rw [Set.mem_ofPred] at hx ⊢
+    use y
+    simpa using ⟨hx, mem_of_mem_nhds hu⟩
+  exact Set.Finite.subset hfin this
 
 Depends on / 依赖: ContMDiffWithinAt, ContMDiffWithinAt.sum_section_of_locallyFinite, Finite, Nonempty, Set.Finite.subset, Set.mem_ofPred, Set.univ, SummationFilter, SummationFilter.unconditional, mem_ofPred, mem_of_mem_nhds, subset, subseteq, sum_section_of_locallyFinite, tsum_eq_finsum, unconditional
 -/

@@ -300,7 +300,18 @@ lemma inverts_iff_factors
     have := isCofibrant_of_cofibration P.ι
     have : IsIso (F.map (homMk P.ι)) := H _ (by
       rw [← weakEquivalence_iff]; rw [weakEquivalence_iff_of_objectProperty]
-      exact inferI
+      exact inferInstanceAs (WeakEquivalence P.ι))
+    simp only [show f = homMk h.h ≫ homMk P.p₀ by cat_disch,
+      show g = homMk h.h ≫ homMk P.p₁ by cat_disch, Functor.map_comp]
+    congr 1
+    simp [← cancel_epi (F.map (homMk P.ι)), ← Functor.map_comp]
+  · rw [← weakEquivalence_iff, weakEquivalence_iff_of_objectProperty] at hf
+    obtain ⟨g', h₁, h₂⟩ := RightHomotopyClass.whitehead f.hom
+    refine ⟨F.map (homMk g'), ?_, ?_⟩
+    all_goals
+      rw [← F.map_comp]; rw [← F.map_id]
+      apply h
+      assumption
 
 中文:
 引理 inverts_iff_factors
@@ -311,7 +322,18 @@ lemma inverts_iff_factors
     have := isCofibrant_of_cofibration P.ι
     have : IsIso (F.map (homMk P.ι)) := H _ (by
       rw [← weakEquivalence_iff]; rw [weakEquivalence_iff_of_objectProperty]
-      exact inferI
+      exact inferInstanceAs (WeakEquivalence P.ι))
+    simp only [show f = homMk h.h ≫ homMk P.p₀ by cat_disch,
+      show g = homMk h.h ≫ homMk P.p₁ by cat_disch, Functor.map_comp]
+    congr 1
+    simp [← cancel_epi (F.map (homMk P.ι)), ← Functor.map_comp]
+  · rw [← weakEquivalence_iff, weakEquivalence_iff_of_objectProperty] at hf
+    obtain ⟨g', h₁, h₂⟩ := RightHomotopyClass.whitehead f.hom
+    refine ⟨F.map (homMk g'), ?_, ?_⟩
+    all_goals
+      rw [← F.map_comp]; rw [← F.map_id]
+      apply h
+      assumption
 
 Depends on / 依赖: F.map, Functor, Functor.map_comp, WeakEquivalence, cancel_epi, cat_disch, exists_very_good_pathObject, h.exists_very_good_pathObject, isCofibrant_of_cofibration, map_comp, weakEquivalence_iff, weakEquivalence_iff_of_objectProperty
 -/
@@ -748,7 +770,8 @@ lemma exists_bifibrant
   have : IsFibrant h.Z := by
     rw [isFibrant_iff_of_isTerminal h.p terminalIsTerminal]
     infer_instance
-  exact ⟨BifibrantObject.mk h.Z, ho
+  exact ⟨BifibrantObject.mk h.Z, homMk h.i, inferInstanceAs (Cofibration h.i),
+    inferInstanceAs (WeakEquivalence h.i)⟩
 
 中文:
 引理 存在_bifibrant
@@ -760,7 +783,8 @@ lemma exists_bifibrant
   have : IsFibrant h.Z := by
     rw [isFibrant_iff_of_isTerminal h.p terminalIsTerminal]
     infer_instance
-  exact ⟨BifibrantObject.mk h.Z, ho
+  exact ⟨BifibrantObject.mk h.Z, homMk h.i, inferInstanceAs (Cofibration h.i),
+    inferInstanceAs (WeakEquivalence h.i)⟩
 
 Depends on / 依赖: BifibrantObject, BifibrantObject.mk, Cofibration, IsFibrant, MorphismProperty, MorphismProperty.factorizationData, WeakEquivalence, X.obj, factorizationData, fibrations, infer_instance, isCofibrant_of_cofibration, isFibrant_iff_of_isTerminal, terminal, terminal.from, terminalIsTerminal, trivialCofibrations
 -/
@@ -951,7 +975,12 @@ lemma bifibrantResolutionObj_hom_ext
   obtain ⟨f, rfl⟩ := BifibrantObject.toHoCat.map_surjective f
   obtain ⟨g, rfl⟩ := BifibrantObject.toHoCat.map_surjective g
   change toHoCat.map (X.iBifibrantResolutionObj ≫ BifibrantObject.ιCofibrantObject.map f) =
-    toHoCat.map (X.
+    toHoCat.map (X.iBifibrantResolutionObj ≫ BifibrantObject.ιCofibrantObject.map g) at h
+  rw [CofibrantObject.toHoCat_map_eq_iff]; rw [CofibrantObject.homRel_iff_rightHomotopyRel]; rw [← RightHomotopyClass.mk_eq_mk_iff] at h
+  rw [BifibrantObject.toHoCat_map_eq_iff]; rw [BifibrantObject.homRel_iff_rightHomotopyRel]; rw [← RightHomotopyClass.mk_eq_mk_iff]
+  apply (RightHomotopyClass.precomp_bijective_of_cofibration_of_weakEquivalence
+    _ (iBifibrantResolutionObj X).hom).1
+  simpa using! h
 
 中文:
 引理 bifibrantResolutionObj_hom_ext
@@ -960,7 +989,12 @@ lemma bifibrantResolutionObj_hom_ext
   obtain ⟨f, rfl⟩ := BifibrantObject.toHoCat.map_surjective f
   obtain ⟨g, rfl⟩ := BifibrantObject.toHoCat.map_surjective g
   change toHoCat.map (X.iBifibrantResolutionObj ≫ BifibrantObject.ιCofibrantObject.map f) =
-    toHoCat.map (X.
+    toHoCat.map (X.iBifibrantResolutionObj ≫ BifibrantObject.ιCofibrantObject.map g) at h
+  rw [CofibrantObject.toHoCat_map_eq_iff]; rw [CofibrantObject.homRel_iff_rightHomotopyRel]; rw [← RightHomotopyClass.mk_eq_mk_iff] at h
+  rw [BifibrantObject.toHoCat_map_eq_iff]; rw [BifibrantObject.homRel_iff_rightHomotopyRel]; rw [← RightHomotopyClass.mk_eq_mk_iff]
+  apply (RightHomotopyClass.precomp_bijective_of_cofibration_of_weakEquivalence
+    _ (iBifibrantResolutionObj X).hom).1
+  simpa using! h
 
 Depends on / 依赖: BifibrantObject, BifibrantObject.toHoCat.map_surjective, BifibrantObject.toHoCat_obj_surjective, CofibrantObject, CofibrantObject.homRel_iff_rightHomotopyRel, CofibrantObject.map, CofibrantObject.toHoCat_map_eq_iff, RightHomotopyClass, RightHomotopyClass.mk_eq_mk_iff, X.iBifibrantResolutionObj, homRel_iff_rightHomotopyRel, iBifibrantResolutionObj, map_surjective, mk_eq_mk_iff, toHoCat, toHoCat.map, toHoCat_map_eq_iff, toHoCat_obj_surjective
 -/
@@ -1151,7 +1185,10 @@ definition HoCat.adjCounit'
           (BifibrantObject.homMk (iBifibrantResolutionObj (.mk X.obj)).hom)
       naturality X₁ X₂ f := BifibrantObject.toHoCat.congr_map (by
         have := (ObjectProperty.ι _).congr_map
-          (bifibrantResolutionMap_fa
+          (bifibrantResolutionMap_fac (CofibrantObject.homMk f.hom)).symm
+        ext : 1
+        dsimp
+        exact this) }
 
 中文:
 定义 HoCat.adjCounit'
@@ -1162,7 +1199,10 @@ definition HoCat.adjCounit'
           (BifibrantObject.homMk (iBifibrantResolutionObj (.mk X.obj)).hom)
       naturality X₁ X₂ f := BifibrantObject.toHoCat.congr_map (by
         have := (ObjectProperty.ι _).congr_map
-          (bifibrantResolutionMap_fa
+          (bifibrantResolutionMap_fac (CofibrantObject.homMk f.hom)).symm
+        ext : 1
+        dsimp
+        exact this) }
 
 Depends on / 依赖: BifibrantObject, BifibrantObject.homMk, BifibrantObject.toHoCat.congr_map, BifibrantObject.toHoCat.map, CofibrantObject, CofibrantObject.homMk, ObjectProperty, Quotient, Quotient.natTransLift, X.obj, bifibrantResolutionMap_fac, congr_map, f.hom, iBifibrantResolutionObj, natTransLift, naturality, toHoCat
 -/
@@ -1276,7 +1316,12 @@ definition HoCat.adj
     rw [comp_hom_eq_id]; push inv
     apply bifibrantResolutionObj_hom_ext
     dsimp
-    simp only [HoCat.adjC
+    simp only [HoCat.adjCounitIso_inv_app]
+    apply bifibrantResolutionMap_fac'
+  right_triangle_components X := by
+    obtain ⟨X, rfl⟩ := BifibrantObject.toHoCat_obj_surjective X
+    rw [comp_hom_eq_id]; push inv
+    cat_disch
 
 中文:
 定义 HoCat.adj
@@ -1289,7 +1334,12 @@ definition HoCat.adj
     rw [comp_hom_eq_id]; push inv
     apply bifibrantResolutionObj_hom_ext
     dsimp
-    simp only [HoCat.adjC
+    simp only [HoCat.adjCounitIso_inv_app]
+    apply bifibrantResolutionMap_fac'
+  right_triangle_components X := by
+    obtain ⟨X, rfl⟩ := BifibrantObject.toHoCat_obj_surjective X
+    rw [comp_hom_eq_id]; push inv
+    cat_disch
 
 Depends on / 依赖: BifibrantObject, BifibrantObject.HoCat
 -/
@@ -1384,7 +1434,13 @@ instance :
     obtain ⟨Y, rfl⟩ := toHoCat_obj_surjective Y
     obtain ⟨f, rfl⟩ := toHoCat.map_surjective f
     rw [← weakEquivalence_iff]; rw [weakEquivalence_toHoCat_map_iff] at hf
-    rw [HoCat.bifib
+    rw [HoCat.bifibrantResolution_map]
+    apply Localization.inverts _ (weakEquivalences _)
+    rw [← weakEquivalence_iff]
+    infer_instance) (fun X => by
+    rw [← weakEquivalence_iff]
+    dsimp
+    infer_instance)
 
 中文:
 实例 :
@@ -1395,7 +1451,13 @@ instance :
     obtain ⟨Y, rfl⟩ := toHoCat_obj_surjective Y
     obtain ⟨f, rfl⟩ := toHoCat.map_surjective f
     rw [← weakEquivalence_iff]; rw [weakEquivalence_toHoCat_map_iff] at hf
-    rw [HoCat.bifib
+    rw [HoCat.bifibrantResolution_map]
+    apply Localization.inverts _ (weakEquivalences _)
+    rw [← weakEquivalence_iff]
+    infer_instance) (fun X => by
+    rw [← weakEquivalence_iff]
+    dsimp
+    infer_instance)
 
 Depends on / 依赖: HoCat.adj.isLocalization_leftAdjoint, HoCat.bifibrantResolution_map, Localization, Localization.inverts, bifibrantResolution_map, infer_instance, inverts, isLocalization_leftAdjoint, map_surjective, toHoCat, toHoCat.map_surjective, toHoCat_obj_surjective, weakEquivalence_iff, weakEquivalence_toHoCat_map_iff, weakEquivalences
 -/
@@ -1499,7 +1561,10 @@ instance :
       (CofibrantObject.toHoCat ⋙ CofibrantObject.HoCat.bifibrantResolution) (𝟭 _) :=
     ⟨(associator _ _ _).symm ≪≫
       isoWhiskerRight toHoCatCompιCofibrantObject.symm _ ≪≫
-      associator _ _ _ ≪≫ isoWhiskerLeft _ (asIso Cof
+      associator _ _ _ ≪≫ isoWhiskerLeft _ (asIso CofibrantObject.HoCat.adj.counit)⟩
+  LocalizerMorphism.IsLocalizedEquivalence.mk'
+    (ιCofibrantObjectLocalizerMorphism C) BifibrantObject.toHoCat
+    (CofibrantObject.toHoCat ⋙ CofibrantObject.HoCat.bifibrantResolution) (𝟭 _)
 
 中文:
 实例 :
@@ -1508,7 +1573,10 @@ instance :
       (CofibrantObject.toHoCat ⋙ CofibrantObject.HoCat.bifibrantResolution) (𝟭 _) :=
     ⟨(associator _ _ _).symm ≪≫
       isoWhiskerRight toHoCatCompιCofibrantObject.symm _ ≪≫
-      associator _ _ _ ≪≫ isoWhiskerLeft _ (asIso Cof
+      associator _ _ _ ≪≫ isoWhiskerLeft _ (asIso CofibrantObject.HoCat.adj.counit)⟩
+  LocalizerMorphism.IsLocalizedEquivalence.mk'
+    (ιCofibrantObjectLocalizerMorphism C) BifibrantObject.toHoCat
+    (CofibrantObject.toHoCat ⋙ CofibrantObject.HoCat.bifibrantResolution) (𝟭 _)
 
 Depends on / 依赖: BifibrantObject, BifibrantObject.toHoCat, CatCommSq, CofibrantObject, CofibrantObject.HoCat.adj.counit, CofibrantObject.HoCat.bifibrantResolution, CofibrantObject.symm, CofibrantObject.toHoCat, IsLocalizedEquivalence, LocalizerMorphism, LocalizerMorphism.IsLocalizedEquivalence.mk, associator, bifibrantResolution, counit, functor, isoWhiskerLeft, isoWhiskerRight, toHoCat
 -/
@@ -1563,7 +1631,7 @@ instance :
   have : ((ιFibrantObjectLocalizerMorphism C).functor ⋙ L).IsLocalization
     (weakEquivalences _) :=
     inferInstanceAs ((ι ⋙ (weakEquivalences C).Q).IsLocalization (weakEquivalences _))
-  LocalizerMorphism.IsLocalizedEquivalence.of_isLocalization_
+  LocalizerMorphism.IsLocalizedEquivalence.of_isLocalization_of_isLocalization _ L
 
 中文:
 实例 :
@@ -1572,7 +1640,7 @@ instance :
   have : ((ιFibrantObjectLocalizerMorphism C).functor ⋙ L).IsLocalization
     (weakEquivalences _) :=
     inferInstanceAs ((ι ⋙ (weakEquivalences C).Q).IsLocalization (weakEquivalences _))
-  LocalizerMorphism.IsLocalizedEquivalence.of_isLocalization_
+  LocalizerMorphism.IsLocalizedEquivalence.of_isLocalization_of_isLocalization _ L
 
 Depends on / 依赖: FibrantObject, IsLocalization, IsLocalizedEquivalence, LocalizerMorphism, LocalizerMorphism.IsLocalizedEquivalence.of_isLocalization_of_isLocalization, functor, of_isLocalization_of_isLocalization, weakEquivalences
 -/

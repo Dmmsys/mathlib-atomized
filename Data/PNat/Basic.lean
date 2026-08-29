@@ -1272,7 +1272,8 @@ theorem mod_add_div
     rintro ⟨hr, hq⟩
     rw [hr]; rw [hq]; rw [mul_zero]; rw [zero_add] at h₀
     exact (m.ne_zero h₀.symm).elim
-  have := modDivAux_spec k ((m : Nat) % (k : Nat)) ((m : Nat) / (
+  have := modDivAux_spec k ((m : Nat) % (k : Nat)) ((m : Nat) / (k : Nat)) this
+  exact this.trans h₀
 
 中文:
 定理 mod_add_div
@@ -1284,7 +1285,8 @@ theorem mod_add_div
     rintro ⟨hr, hq⟩
     rw [hr]; rw [hq]; rw [mul_zero]; rw [zero_add] at h₀
     exact (m.ne_zero h₀.symm).elim
-  have := modDivAux_spec k ((m : Nat) % (k : Nat)) ((m : Nat) / (
+  have := modDivAux_spec k ((m : Nat) % (k : Nat)) ((m : Nat) / (k : Nat)) this
+  exact this.trans h₀
 
 Depends on / 依赖: Nat.mod_add_div, m.ne_zero, modDivAux_spec, mod_add_div, mul_zero, ne_zero, this.trans, zero_add
 -/
@@ -1382,7 +1384,7 @@ theorem mod_le
     rw [← Nat.mod_add_div (m : Nat) (k : Nat)]; rw [h]; rw [zero_add] at hm ⊢
     simp
     lia
-  · exact ⟨Nat.mod_le (m : Nat) (k : Nat), (Nat.mod_lt (m : Na
+  · exact ⟨Nat.mod_le (m : Nat) (k : Nat), (Nat.mod_lt (m : Nat) k.pos).le⟩
 
 中文:
 定理 mod_le
@@ -1396,7 +1398,7 @@ theorem mod_le
     rw [← Nat.mod_add_div (m : Nat) (k : Nat)]; rw [h]; rw [zero_add] at hm ⊢
     simp
     lia
-  · exact ⟨Nat.mod_le (m : Nat) (k : Nat), (Nat.mod_lt (m : Na
+  · exact ⟨Nat.mod_le (m : Nat) (k : Nat), (Nat.mod_lt (m : Nat) k.pos).le⟩
 
 Depends on / 依赖: Nat.mod_add_div, Nat.mod_le, Nat.mod_lt, k.pos, m.pos, mod_add_div, mod_coe, mod_le, mod_lt, split_ifs, zero_add
 -/
@@ -1427,7 +1429,7 @@ obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (n := a) by
       rintro rfl
       simp only [mul_zero, ne_zero] at h
     use ⟨n.succ, n.succ_pos⟩
-    rw [← coe_inj]; rw [h]; rw [mul_coe]; rw [m
+    rw [← coe_inj]; rw [h]; rw [mul_coe]; rw [mk_coe]
 
 中文:
 定理 dvd_iff
@@ -1442,7 +1444,7 @@ obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (n := a) by
       rintro rfl
       simp only [mul_zero, ne_zero] at h
     use ⟨n.succ, n.succ_pos⟩
-    rw [← coe_inj]; rw [h]; rw [mul_coe]; rw [m
+    rw [← coe_inj]; rw [h]; rw [mul_coe]; rw [mk_coe]
 
 Depends on / 依赖: Nat.exists_eq_succ_of_ne_zero, coe_inj, dvd_mul_right, exists_eq_succ_of_ne_zero, mk_coe, mul_coe, mul_zero, n.succ, n.succ_pos, ne_zero, succ_pos
 -/
@@ -1475,7 +1477,7 @@ theorem dvd_iff'
     · exact h'
     · replace h : (mod m k : Nat) = (k : Nat) := congr_arg _ h
       rw [mod_coe]; rw [if_neg h'] at h
-  
+      exact ((Nat.mod_lt (m : Nat) k.pos).ne h).elim
 
 中文:
 定理 dvd_iff'
@@ -1492,7 +1494,7 @@ theorem dvd_iff'
     · exact h'
     · replace h : (mod m k : Nat) = (k : Nat) := congr_arg _ h
       rw [mod_coe]; rw [if_neg h'] at h
-  
+      exact ((Nat.mod_lt (m : Nat) k.pos).ne h).elim
 
 Depends on / 依赖: Nat.dvd_iff_mod_eq_zero, Nat.mod_lt, PNat.eq, congr_arg, dvd_iff, dvd_iff_mod_eq_zero, if_neg, if_pos, k.pos, mod_coe, mod_lt, replace
 -/

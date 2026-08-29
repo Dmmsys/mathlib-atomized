@@ -531,7 +531,8 @@ theorem of_map_injective
     rwa [hf hy] at yC
   · simp only [mem_map, forall_exists_index, and_imp] at hF
     obtain ⟨_, ⟨hx', hhx'⟩⟩ := hF _ hx rfl _ hy rfl ha _ h (by simp)
-    convert hx
+    convert hx'
+    exact hf hhx'.symm
 
 中文:
 定理 of_map_injective
@@ -543,7 +544,8 @@ theorem of_map_injective
     rwa [hf hy] at yC
   · simp only [mem_map, forall_exists_index, and_imp] at hF
     obtain ⟨_, ⟨hx', hhx'⟩⟩ := hF _ hx rfl _ hy rfl ha _ h (by simp)
-    convert hx
+    convert hx'
+    exact hf hhx'.symm
 
 Depends on / 依赖: and_imp, convert, forall_exists_index, mem_map, mem_map.mp, mem_map_of_mem
 -/
@@ -796,7 +798,7 @@ theorem prod
   simp only [mem_prod, Prod.fst_add, Prod.smul_fst, Prod.snd_add,
     Prod.smul_snd, and_imp, Prod.forall]
   intro _ _ _ _ _ xc₁ xc₂ yc₁ yc₂ a0 hab₁ hab₂
-  exact ⟨hF₁.mem_of_smul_add_mem xc₁ yc₁ a0 hab₁, hF₂.mem_of_sm
+  exact ⟨hF₁.mem_of_smul_add_mem xc₁ yc₁ a0 hab₁, hF₂.mem_of_smul_add_mem xc₂ yc₂ a0 hab₂⟩
 
 中文:
 定理 乘积
@@ -806,7 +808,7 @@ theorem prod
   simp only [mem_prod, Prod.fst_add, Prod.smul_fst, Prod.snd_add,
     Prod.smul_snd, and_imp, Prod.forall]
   intro _ _ _ _ _ xc₁ xc₂ yc₁ yc₂ a0 hab₁ hab₂
-  exact ⟨hF₁.mem_of_smul_add_mem xc₁ yc₁ a0 hab₁, hF₂.mem_of_sm
+  exact ⟨hF₁.mem_of_smul_add_mem xc₁ yc₁ a0 hab₁, hF₂.mem_of_smul_add_mem xc₂ yc₂ a0 hab₂⟩
 -/
 protected theorem prod {C₁ F₁ : PointedCone R M} {C₂ F₂ : PointedCone R N}
     (hF₁ : F₁.IsFaceOf C₁) (hF₂ : F₂.IsFaceOf C₂) : IsFaceOf (F₁.prod F₂) (C₁.prod C₂) := by
@@ -828,7 +830,11 @@ theorem fst
     simp only [mem_map, LinearMap.fst_apply, Prod.exists, exists_and_right, exists_eq_right] at hx
     exact (Set.mem_prod.mp <| hF.le hx.choose_spec).1
   · simp only [mem_map, LinearMap.fst_apply, Prod.exists, exists_and_right, exists_eq_right,
-      forall_exists_in
+      forall_exists_index]
+    intro x y a hx hy ha z h
+    refine ⟨0, hF.mem_of_smul_add_mem (x := (x, 0)) (y := (y, z)) ?_ ?_ ha (by simpa)⟩
+    · exact mem_prod.mp ⟨hx, zero_mem C₂⟩
+    · exact mem_prod.mp ⟨hy, (hF.le h).2⟩
 
 中文:
 定理 fst
@@ -839,7 +845,11 @@ theorem fst
     simp only [mem_map, LinearMap.fst_apply, Prod.exists, exists_and_right, exists_eq_right] at hx
     exact (Set.mem_prod.mp <| hF.le hx.choose_spec).1
   · simp only [mem_map, LinearMap.fst_apply, Prod.exists, exists_and_right, exists_eq_right,
-      forall_exists_in
+      forall_exists_index]
+    intro x y a hx hy ha z h
+    refine ⟨0, hF.mem_of_smul_add_mem (x := (x, 0)) (y := (y, z)) ?_ ?_ ha (by simpa)⟩
+    · exact mem_prod.mp ⟨hx, zero_mem C₂⟩
+    · exact mem_prod.mp ⟨hy, (hF.le h).2⟩
 -/
 protected theorem fst {C₁ : PointedCone R M} {C₂ : PointedCone R N}
     {F : PointedCone R (M × N)}

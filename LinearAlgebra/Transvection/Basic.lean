@@ -277,7 +277,12 @@ theorem eq_id_of_finrank_le_one
     suffices f x • v = 0 by
       simp [apply, this]
     let i : Fin (finrank R V) := ⟨0, by simp [h]⟩
-    suffices forall x, 
+    suffices forall x, x = b.repr x i • (b i) by
+      rw [this v]; rw [map_smul]; rw [smul_eq_mul]; rw [mul_comm] at hfv
+      rw [this x]; rw [this v]; rw [map_smul]; rw [smul_eq_mul]; rw [← mul_smul]; rw [mul_assoc]; rw [hfv]; rw [mul_zero]; rw [zero_smul]
+    intro x
+    have : x = ∑ i, b.repr x i • b i := (b.sum_equivFun x).symm
+    rwa [Finset.sum_eq_single_of_mem i (Finset.mem_univ i) (by grind)] at this
 
 中文:
 定理 eq_id_of_finrank_le_one
@@ -290,7 +295,12 @@ theorem eq_id_of_finrank_le_one
     suffices f x • v = 0 by
       simp [apply, this]
     let i : Fin (finrank R V) := ⟨0, by simp [h]⟩
-    suffices forall x, 
+    suffices forall x, x = b.repr x i • (b i) by
+      rw [this v]; rw [map_smul]; rw [smul_eq_mul]; rw [mul_comm] at hfv
+      rw [this x]; rw [this v]; rw [map_smul]; rw [smul_eq_mul]; rw [← mul_smul]; rw [mul_assoc]; rw [hfv]; rw [mul_zero]; rw [zero_smul]
+    intro x
+    have : x = ∑ i, b.repr x i • b i := (b.sum_equivFun x).symm
+    rwa [Finset.sum_eq_single_of_mem i (Finset.mem_univ i) (by grind)] at this
 
 Depends on / 依赖: Subsingleton, Subsingleton.eq_zero, b.repr, eq_zero, finBasis, finrank, finrank_eq_zero_iff_of_free, interval_cases, map_smul, mul_assoc, mul_comm, mul_smul, mul_zero, smul_eq_mul, zero_smul
 -/
@@ -997,7 +1007,9 @@ theorem symm_mem_dilatransvections_iff
   ext x
   suffices x = e x - f x • v by
     simpa [LinearMap.transvection.apply, ← sub_eq_add_neg, symm_apply_eq]
-  rw [eq_comm]; r
+  rw [eq_comm]; rw [sub_eq_iff_eq_add]; rw [← coe_coe]; rw [he]; rw [LinearMap.transvection.apply]
+
+@[simp]
 
 中文:
 定理 symm_mem_dilatransvections_iff
@@ -1010,7 +1022,9 @@ theorem symm_mem_dilatransvections_iff
   ext x
   suffices x = e x - f x • v by
     simpa [LinearMap.transvection.apply, ← sub_eq_add_neg, symm_apply_eq]
-  rw [eq_comm]; r
+  rw [eq_comm]; rw [sub_eq_iff_eq_add]; rw [← coe_coe]; rw [he]; rw [LinearMap.transvection.apply]
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.transvection.apply, coe_coe, dilatransvections, e.symm, eq_comm, sub_eq_add_neg, sub_eq_iff_eq_add, symm_apply_eq, transvection
 -/
@@ -1058,7 +1072,24 @@ definition dilatransvection
   left_inv x := by
     nth_rewrite 3 [← one_smul R v]
     rw [← LinearMap.comp_apply]; rw [Units.smul_def]; rw [LinearMap.transvection.comp_smul_smul]
-    si
+    simp only [Units.val_neg, one_mul, mul_neg, ← sub_eq_add_neg]
+    suffices (-h.unit⁻¹) + 1 - f v * (h.unit⁻¹) = 0 by simp [this]
+    rw [sub_eq_zero]; rw [neg_add_eq_iff_eq_add]
+    nth_rewrite 1 [← one_mul (h.unit⁻¹), Units.val_mul, ← add_mul]
+    simp
+  right_inv x := by
+    simp only [LinearMap.transvection.apply, add_assoc, add_eq_left,
+      Units.smul_def]
+    rw [smul_smul]; rw [← add_smul]
+    suffices (f x * ↑(-h.unit⁻¹) + f (x + (f x * ↑(-h.unit⁻¹)) • v)) = 0 by rw [this, zero_smul]
+    rw [LinearMap.map_add]; rw [LinearMap.map_smul]; rw [smul_eq_mul]
+    nth_rewrite 2 [← mul_one (f x)]
+    rw [mul_assoc]; rw [← mul_add]; rw [← mul_add]
+    rw [← add_assoc]; rw [add_comm _ 1]; rw [add_assoc]
+    nth_rewrite 1 [← mul_one (-h.unit⁻¹), Units.val_mul, Units.val_one, ← mul_add]
+    simp
+
+@[simp]
 
 中文:
 定义 dilatransvection
@@ -1070,7 +1101,24 @@ definition dilatransvection
   left_inv x := by
     nth_rewrite 3 [← one_smul R v]
     rw [← LinearMap.comp_apply]; rw [Units.smul_def]; rw [LinearMap.transvection.comp_smul_smul]
-    si
+    simp only [Units.val_neg, one_mul, mul_neg, ← sub_eq_add_neg]
+    suffices (-h.unit⁻¹) + 1 - f v * (h.unit⁻¹) = 0 by simp [this]
+    rw [sub_eq_zero]; rw [neg_add_eq_iff_eq_add]
+    nth_rewrite 1 [← one_mul (h.unit⁻¹), Units.val_mul, ← add_mul]
+    simp
+  right_inv x := by
+    simp only [LinearMap.transvection.apply, add_assoc, add_eq_left,
+      Units.smul_def]
+    rw [smul_smul]; rw [← add_smul]
+    suffices (f x * ↑(-h.unit⁻¹) + f (x + (f x * ↑(-h.unit⁻¹)) • v)) = 0 by rw [this, zero_smul]
+    rw [LinearMap.map_add]; rw [LinearMap.map_smul]; rw [smul_eq_mul]
+    nth_rewrite 2 [← mul_one (f x)]
+    rw [mul_assoc]; rw [← mul_add]; rw [← mul_add]
+    rw [← add_assoc]; rw [add_comm _ 1]; rw [add_assoc]
+    nth_rewrite 1 [← mul_one (-h.unit⁻¹), Units.val_mul, Units.val_one, ← mul_add]
+    simp
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.transvection, transvection
 -/
@@ -1206,7 +1254,29 @@ theorem mem_dilatransvections_iff_rank
     rintro _ ⟨x, rfl⟩
     simp [mem_span_singleton, he, LinearMap.transvection.apply]
   · intro he
- 
+    simp only [Set.mem_ofPred_eq]
+    set u := (e : V ->ₗ[K] V) - LinearMap.id with hu
+    rw [eq_sub_iff_add_eq] at hu
+    by_cases hr : Module.rank K (range u) = 0
+    · use 0, 0
+      ext x
+      suffices u x = 0 by simp [← hu, this]
+      rw [rank_zero_iff] at hr
+      simpa [← Subtype.coe_inj] using Subsingleton.allEq (⟨u x , mem_range_self u x⟩ : range u) 0
+    rw [← ne_eq]; rw [← Cardinal.one_le_iff_ne_zero] at hr
+    replace he : Module.rank K (range u) = 1 := le_antisymm he hr
+    rw [rank_eq_one_iff_finrank_eq_one]; rw [finrank_eq_one_iff Unit] at he
+    obtain ⟨b⟩ := he
+    use (b.coord default) ∘ₗ u.rangeRestrict, b default
+    ext x
+    rw [← hu]; rw [LinearMap.transvection.apply]; rw [add_comm]
+    suffices u x = b.repr (u.rangeRestrict x) default • b default by
+      simp [this]
+    suffices u.rangeRestrict x = u x by
+      rw [← this]; rw [← Submodule.coe_smul]; rw [Subtype.coe_inj]
+      nth_rewrite 1 [← b.linearCombination_repr (u.rangeRestrict x)]
+      rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum_eq_single default] <;> simp
+    exact codRestrict_apply (range u) u x
 
 中文:
 定理 mem_dilatransvections_iff_rank
@@ -1221,7 +1291,29 @@ theorem mem_dilatransvections_iff_rank
     rintro _ ⟨x, rfl⟩
     simp [mem_span_singleton, he, LinearMap.transvection.apply]
   · intro he
- 
+    simp only [Set.mem_ofPred_eq]
+    set u := (e : V ->ₗ[K] V) - LinearMap.id with hu
+    rw [eq_sub_iff_add_eq] at hu
+    by_cases hr : Module.rank K (range u) = 0
+    · use 0, 0
+      ext x
+      suffices u x = 0 by simp [← hu, this]
+      rw [rank_zero_iff] at hr
+      simpa [← Subtype.coe_inj] using Subsingleton.allEq (⟨u x , mem_range_self u x⟩ : range u) 0
+    rw [← ne_eq]; rw [← Cardinal.one_le_iff_ne_zero] at hr
+    replace he : Module.rank K (range u) = 1 := le_antisymm he hr
+    rw [rank_eq_one_iff_finrank_eq_one]; rw [finrank_eq_one_iff Unit] at he
+    obtain ⟨b⟩ := he
+    use (b.coord default) ∘ₗ u.rangeRestrict, b default
+    ext x
+    rw [← hu]; rw [LinearMap.transvection.apply]; rw [add_comm]
+    suffices u x = b.repr (u.rangeRestrict x) default • b default by
+      simp [this]
+    suffices u.rangeRestrict x = u x by
+      rw [← this]; rw [← Submodule.coe_smul]; rw [Subtype.coe_inj]
+      nth_rewrite 1 [← b.linearCombination_repr (u.rangeRestrict x)]
+      rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum_eq_single default] <;> simp
+    exact codRestrict_apply (range u) u x
 
 Depends on / 依赖: LinearMap, LinearMap.id, LinearMap.transvection.apply, Module, Module.rank, Set.mem_ofPred_eq, dilatransvections, eq_sub_iff_add_eq, le_trans, mem_ofPred_eq, mem_span_singleton, rank_mono, rank_span_le, rank_ze, transvection
 -/
@@ -1343,6 +1435,52 @@ theorem mem_transvections_iff_mem_dilatransvections_and_fixedReduce_eq_one
       apply ker_le_fixedSubmodule_transvection hfv
       rw [transvection.apply]
       simp [hfv]
+  · by_cases he_one : e = 1
+    · use 0, 0, by simp, by aesop
+    have hefixed_ne_top : e.fixedSubmodule != ⊤ := by
+      rwa [ne_eq, LinearEquiv.fixedSubmodule_eq_top_iff]
+    obtain ⟨w : V, hw : w ∉ e.fixedSubmodule⟩ :=
+      SetLike.exists_not_mem_of_ne_top e.fixedSubmodule hefixed_ne_top rfl
+    obtain ⟨f, hfw, hf⟩ := Submodule.exists_dual_map_eq_bot_of_notMem hw inferInstance
+    rw [mem_dilatransvections_iff_finrank_quotient] at he
+    have hf' : e.fixedSubmodule = LinearMap.ker f := by
+      suffices finrank K (V ⧸ LinearMap.ker f) = 1 by
+        apply Submodule.eq_of_le_of_finrank_le
+        · intro x
+          rw [mem_ker]; rw [← Submodule.mem_bot K]; rw [← hf]
+          exact mem_map_of_mem
+        rw [← Nat.add_le_add_iff_right]; rw [finrank_quotient_add_finrank] at he
+        have := (LinearMap.ker f).finrank_quotient_add_finrank
+        linarith
+      rw [← Nat.add_left_inj]; rw [Submodule.finrank_quotient_add_finrank]
+      rw [← f.finrank_ker_add_one_of_ne_zero]; rw [add_comm]
+      aesop
+    have eq_top : e.fixedSubmodule ⊔ Submodule.span K {w} = ⊤ := by
+      rw [Submodule.sup_span_singleton_eq_top_iff hw]
+      apply le_antisymm he
+      apply Nat.one_le_of_lt
+      rw [← Nat.ne_zero_iff_zero_lt]
+      contrapose hefixed_ne_top
+      apply eq_top_of_finrank_eq
+      rw [← Nat.add_left_cancel_iff]; rw [finrank_quotient_add_finrank]; rw [hefixed_ne_top]; rw [zero_add]
+    set v := (f w)⁻¹ • (e w - w)
+    suffices hfv : f v = 0 by
+      use f, v, hfv
+      rw [← LinearEquiv.toLinearMap_inj]; rw [← sub_eq_zero]; rw [← LinearMap.ker_eq_top]; rw [eq_top_iff]; rw [← eq_top]
+      simp only [LinearEquiv.transvection.coe_toLinearMap,
+        sup_le_iff, Submodule.span_singleton_le_iff_mem, LinearMap.mem_ker, LinearMap.sub_apply,
+        LinearEquiv.coe_coe]
+      constructor
+      · intro x hx
+        suffices f x = 0 by
+          simpa [this, LinearMap.transvection.apply, sub_eq_zero] using hx
+        rwa [hf', LinearMap.mem_ker] at hx
+      · simp_all [v, LinearMap.transvection.apply]
+    suffices e w - w in LinearMap.ker f by
+      simp only [LinearMap.mem_ker, map_sub] at this
+      simp only [v, LinearMap.map_smul, map_sub, this, smul_zero]
+    rw [← hf']; rw [← Submodule.ker_mkQ e.fixedSubmodule]; rw [LinearMap.mem_ker]
+    simp [Submodule.mkQ_apply, Submodule.Quotient.mk_sub, ← fixedReduce_mk, he']
 
 中文:
 定理 mem_transvections_iff_mem_dilatransvections_and_fixedReduce_eq_one
@@ -1356,6 +1494,52 @@ theorem mem_transvections_iff_mem_dilatransvections_and_fixedReduce_eq_one
       apply ker_le_fixedSubmodule_transvection hfv
       rw [transvection.apply]
       simp [hfv]
+  · by_cases he_one : e = 1
+    · use 0, 0, by simp, by aesop
+    have hefixed_ne_top : e.fixedSubmodule != ⊤ := by
+      rwa [ne_eq, LinearEquiv.fixedSubmodule_eq_top_iff]
+    obtain ⟨w : V, hw : w ∉ e.fixedSubmodule⟩ :=
+      SetLike.exists_not_mem_of_ne_top e.fixedSubmodule hefixed_ne_top rfl
+    obtain ⟨f, hfw, hf⟩ := Submodule.exists_dual_map_eq_bot_of_notMem hw inferInstance
+    rw [mem_dilatransvections_iff_finrank_quotient] at he
+    have hf' : e.fixedSubmodule = LinearMap.ker f := by
+      suffices finrank K (V ⧸ LinearMap.ker f) = 1 by
+        apply Submodule.eq_of_le_of_finrank_le
+        · intro x
+          rw [mem_ker]; rw [← Submodule.mem_bot K]; rw [← hf]
+          exact mem_map_of_mem
+        rw [← Nat.add_le_add_iff_right]; rw [finrank_quotient_add_finrank] at he
+        have := (LinearMap.ker f).finrank_quotient_add_finrank
+        linarith
+      rw [← Nat.add_left_inj]; rw [Submodule.finrank_quotient_add_finrank]
+      rw [← f.finrank_ker_add_one_of_ne_zero]; rw [add_comm]
+      aesop
+    have eq_top : e.fixedSubmodule ⊔ Submodule.span K {w} = ⊤ := by
+      rw [Submodule.sup_span_singleton_eq_top_iff hw]
+      apply le_antisymm he
+      apply Nat.one_le_of_lt
+      rw [← Nat.ne_zero_iff_zero_lt]
+      contrapose hefixed_ne_top
+      apply eq_top_of_finrank_eq
+      rw [← Nat.add_left_cancel_iff]; rw [finrank_quotient_add_finrank]; rw [hefixed_ne_top]; rw [zero_add]
+    set v := (f w)⁻¹ • (e w - w)
+    suffices hfv : f v = 0 by
+      use f, v, hfv
+      rw [← LinearEquiv.toLinearMap_inj]; rw [← sub_eq_zero]; rw [← LinearMap.ker_eq_top]; rw [eq_top_iff]; rw [← eq_top]
+      simp only [LinearEquiv.transvection.coe_toLinearMap,
+        sup_le_iff, Submodule.span_singleton_le_iff_mem, LinearMap.mem_ker, LinearMap.sub_apply,
+        LinearEquiv.coe_coe]
+      constructor
+      · intro x hx
+        suffices f x = 0 by
+          simpa [this, LinearMap.transvection.apply, sub_eq_zero] using hx
+        rwa [hf', LinearMap.mem_ker] at hx
+      · simp_all [v, LinearMap.transvection.apply]
+    suffices e w - w in LinearMap.ker f by
+      simp only [LinearMap.mem_ker, map_sub] at this
+      simp only [v, LinearMap.map_smul, map_sub, this, smul_zero]
+    rw [← hf']; rw [← Submodule.ker_mkQ e.fixedSubmodule]; rw [LinearMap.mem_ker]
+    simp [Submodule.mkQ_apply, Submodule.Quotient.mk_sub, ← fixedReduce_mk, he']
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.fixedSubmodule_eq_top_iff, SetLike, SetLike.exists_not_mem_of_ne_top, e.fixe, e.fixedSubmodule, exists_not_mem_of_ne_top, fixedReduce_eq_one, fixedSubmodule, fixedSubmodule_eq_top_iff, he_one, hefixed_ne_top, ker_le_fixedSubmodule_transvection, ne_eq, one_eq_refl, transvection, transvection.apply, transvection_mem_dilatransvections
 -/
@@ -1587,7 +1771,49 @@ theorem det_ofField
     obtain ⟨ι, b, i, j, hi, hj⟩ := exists_basis_of_pairing_eq_zero hfv hf hv
     have : Fintype ι := FiniteDimensional.fintypeBasisIndex b
     rw [← det_toMatrix b]
-    suffices to
+    suffices toMatrix b b (LinearMap.transvection f v) = Matrix.transvection i j 1 by
+      rw [this]; rw [Matrix.det_transvection_of_ne i j hi 1]; rw [hfv]; rw [add_zero]
+    ext x y
+    rw [toMatrix_apply]; rw [transvection.apply]; rw [Matrix.transvection]
+    simp only [hj.2, Basis.coord_apply, Basis.repr_self, hj.1, map_add, map_smul,
+      Finsupp.smul_single, smul_eq_mul, mul_one, Finsupp.coe_add, Pi.add_apply, Matrix.add_apply]
+    apply congr_arg₂
+    · by_cases h : x = y
+      · rw [h]; simp
+      · rw [Finsupp.single_eq_of_ne h, Matrix.one_apply_ne h]
+    · by_cases h : i = x ∧ j = y
+      · rw [h.1, h.2]; simp
+      · rcases not_and_or.mp h with h' | h' <;>
+          simp [Finsupp.single_eq_of_ne' h',
+            Finsupp.single_eq_of_ne h',
+            Matrix.single_apply_of_ne (h := h)]
+  · obtain ⟨ι, b, i, hv, hf⟩ := exists_basis_of_pairing_ne_zero hfv
+    have : Fintype ι := FiniteDimensional.fintypeBasisIndex b
+    rw [← det_toMatrix b]
+    suffices toMatrix b b (transvection f v) =
+      Matrix.diagonal (Function.update 1 i (1 + f v)) by
+      rw [this]
+      simp only [Matrix.det_diagonal]
+      rw [Finset.prod_eq_single i]
+      · simp
+      · intro j _ hj
+        simp [Function.update_of_ne hj]
+      · simp
+    ext x y
+    rw [toMatrix_apply]; rw [transvection.apply]; rw [Matrix.diagonal]
+    simp only [map_add, Basis.repr_self, map_smul, Finsupp.coe_add, Finsupp.coe_smul,
+      Pi.add_apply, Pi.smul_apply, smul_eq_mul, Matrix.of_apply]
+    rw [hv]; rw [Function.update_apply]; rw [Basis.repr_self]; rw [Pi.one_apply]; rw [hf]
+    simp only [smul_apply, Basis.coord_apply, Basis.repr_self, smul_eq_mul,
+      Finsupp.single_eq_same, mul_one]
+    split_ifs with hxy hxi
+    · simp [← hxy, hxi]
+    · rw [Finsupp.single_eq_of_ne hxi]; simp [hxy]
+    · rw [Finsupp.single_eq_of_ne hxy, zero_add, mul_assoc]
+      convert! mul_zero _
+      by_cases hxi : x = i
+      · simp [← hxi, Finsupp.single_eq_of_ne hxy]
+      · simp [Finsupp.single_eq_of_ne hxi]
 
 中文:
 定理 det_ofField
@@ -1602,7 +1828,49 @@ theorem det_ofField
     obtain ⟨ι, b, i, j, hi, hj⟩ := exists_basis_of_pairing_eq_zero hfv hf hv
     have : Fintype ι := FiniteDimensional.fintypeBasisIndex b
     rw [← det_toMatrix b]
-    suffices to
+    suffices toMatrix b b (LinearMap.transvection f v) = Matrix.transvection i j 1 by
+      rw [this]; rw [Matrix.det_transvection_of_ne i j hi 1]; rw [hfv]; rw [add_zero]
+    ext x y
+    rw [toMatrix_apply]; rw [transvection.apply]; rw [Matrix.transvection]
+    simp only [hj.2, Basis.coord_apply, Basis.repr_self, hj.1, map_add, map_smul,
+      Finsupp.smul_single, smul_eq_mul, mul_one, Finsupp.coe_add, Pi.add_apply, Matrix.add_apply]
+    apply congr_arg₂
+    · by_cases h : x = y
+      · rw [h]; simp
+      · rw [Finsupp.single_eq_of_ne h, Matrix.one_apply_ne h]
+    · by_cases h : i = x ∧ j = y
+      · rw [h.1, h.2]; simp
+      · rcases not_and_or.mp h with h' | h' <;>
+          simp [Finsupp.single_eq_of_ne' h',
+            Finsupp.single_eq_of_ne h',
+            Matrix.single_apply_of_ne (h := h)]
+  · obtain ⟨ι, b, i, hv, hf⟩ := exists_basis_of_pairing_ne_zero hfv
+    have : Fintype ι := FiniteDimensional.fintypeBasisIndex b
+    rw [← det_toMatrix b]
+    suffices toMatrix b b (transvection f v) =
+      Matrix.diagonal (Function.update 1 i (1 + f v)) by
+      rw [this]
+      simp only [Matrix.det_diagonal]
+      rw [Finset.prod_eq_single i]
+      · simp
+      · intro j _ hj
+        simp [Function.update_of_ne hj]
+      · simp
+    ext x y
+    rw [toMatrix_apply]; rw [transvection.apply]; rw [Matrix.diagonal]
+    simp only [map_add, Basis.repr_self, map_smul, Finsupp.coe_add, Finsupp.coe_smul,
+      Pi.add_apply, Pi.smul_apply, smul_eq_mul, Matrix.of_apply]
+    rw [hv]; rw [Function.update_apply]; rw [Basis.repr_self]; rw [Pi.one_apply]; rw [hf]
+    simp only [smul_apply, Basis.coord_apply, Basis.repr_self, smul_eq_mul,
+      Finsupp.single_eq_same, mul_one]
+    split_ifs with hxy hxi
+    · simp [← hxy, hxi]
+    · rw [Finsupp.single_eq_of_ne hxi]; simp [hxy]
+    · rw [Finsupp.single_eq_of_ne hxy, zero_add, mul_assoc]
+      convert! mul_zero _
+      by_cases hxi : x = i
+      · simp [← hxi, Finsupp.single_eq_of_ne hxy]
+      · simp [Finsupp.single_eq_of_ne hxi]
 -/
 private theorem det_ofField [FiniteDimensional K V] (f : Dual K V) (v : V) :
     (LinearMap.transvection f v).det = 1 + f v := by
@@ -1675,7 +1943,7 @@ theorem det_ofDomain
   apply FaithfulSMul.algebraMap_injective R K
   have := det_ofField (f.baseChange K) (1 otimesₜ[R] v)
   rw [← transvection.baseChange]; rw [det_baseChange]; rw [← algebraMap.coe_one (R := R) (A := K)] at this
-  simpa [Algebra.algebraMap_e
+  simpa [Algebra.algebraMap_eq_smul_one, add_smul] using this
 
 中文:
 定理 det_ofDomain
@@ -1686,7 +1954,7 @@ theorem det_ofDomain
   apply FaithfulSMul.algebraMap_injective R K
   have := det_ofField (f.baseChange K) (1 otimesₜ[R] v)
   rw [← transvection.baseChange]; rw [det_baseChange]; rw [← algebraMap.coe_one (R := R) (A := K)] at this
-  simpa [Algebra.algebraMap_e
+  simpa [Algebra.algebraMap_eq_smul_one, add_smul] using this
 -/
 private theorem det_ofDomain [Free R V] [Module.Finite R V] [IsDomain R] (f : Dual R V) (v : V) :
     (transvection f v).det = 1 + f v := by
@@ -1713,7 +1981,32 @@ theorem det
   let S := MvPolynomial (Fin n oplus Fin n) Int
   let γ : S ->+* R :=
     (MvPolynomial.aeval (Sum.elim (fun i => f (b i)) (fun i => b.coord i v)) :
-      MvPolynomial (Fin n oplus F
+      MvPolynomial (Fin n oplus Fin n) Int ->ₐ[Int] R)
+  have : IsDomain S := inferInstance
+  let _ : Algebra S R := RingHom.toAlgebra γ
+  let _ : Module S V := compHom V γ
+  have _ : IsScalarTower S R V := IsScalarTower.of_compHom S R V
+  have ibc := IsBaseChange.of_fintype_basis S b
+  set ε := Fintype.linearCombination S (fun i => b i)
+  set M := Fin n -> S
+  have hε (i) : ε (Pi.single i 1) = b i := by
+    rw [Fintype.linearCombination_apply_single]; rw [one_smul]
+  let fM : Dual S M :=
+    Fintype.linearCombination S fun i => MvPolynomial.X (Sum.inl i)
+  let vM : M := fun i => MvPolynomial.X (Sum.inr i)
+  have hf : ibc.toDual fM = f := by
+    apply b.ext
+    intro i
+    rw [← hε]; rw [toDual_comp_apply]; rw [Fintype.linearCombination_apply_single]; rw [one_smul]; rw [RingHom.algebraMap_toAlgebra]; rw [hε]
+    apply MvPolynomial.aeval_X
+  have hv : ε vM = v := by
+    rw [of_fintype_basis_eq]
+    ext i
+    rw [RingHom.algebraMap_toAlgebra]
+    simp only [vM, γ, Function.comp_apply]
+    apply MvPolynomial.aeval_X
+  rw [← hf]; rw [← hv]; rw [← IsBaseChange.transvection]; rw [det_endHom]; rw [det_ofDomain]
+  rw [map_add]; rw [map_one]; rw [add_right_inj]; rw [toDual_comp_apply]
 
 中文:
 定理 det
@@ -1726,7 +2019,32 @@ theorem det
   let S := MvPolynomial (Fin n oplus Fin n) Int
   let γ : S ->+* R :=
     (MvPolynomial.aeval (Sum.elim (fun i => f (b i)) (fun i => b.coord i v)) :
-      MvPolynomial (Fin n oplus F
+      MvPolynomial (Fin n oplus Fin n) Int ->ₐ[Int] R)
+  have : IsDomain S := inferInstance
+  let _ : Algebra S R := RingHom.toAlgebra γ
+  let _ : Module S V := compHom V γ
+  have _ : IsScalarTower S R V := IsScalarTower.of_compHom S R V
+  have ibc := IsBaseChange.of_fintype_basis S b
+  set ε := Fintype.linearCombination S (fun i => b i)
+  set M := Fin n -> S
+  have hε (i) : ε (Pi.single i 1) = b i := by
+    rw [Fintype.linearCombination_apply_single]; rw [one_smul]
+  let fM : Dual S M :=
+    Fintype.linearCombination S fun i => MvPolynomial.X (Sum.inl i)
+  let vM : M := fun i => MvPolynomial.X (Sum.inr i)
+  have hf : ibc.toDual fM = f := by
+    apply b.ext
+    intro i
+    rw [← hε]; rw [toDual_comp_apply]; rw [Fintype.linearCombination_apply_single]; rw [one_smul]; rw [RingHom.algebraMap_toAlgebra]; rw [hε]
+    apply MvPolynomial.aeval_X
+  have hv : ε vM = v := by
+    rw [of_fintype_basis_eq]
+    ext i
+    rw [RingHom.algebraMap_toAlgebra]
+    simp only [vM, γ, Function.comp_apply]
+    apply MvPolynomial.aeval_X
+  rw [← hf]; rw [← hv]; rw [← IsBaseChange.transvection]; rw [det_endHom]; rw [det_ofDomain]
+  rw [map_add]; rw [map_one]; rw [add_right_inj]; rw [toDual_comp_apply]
 -/
 @[simp] theorem det [Free R V] [Module.Finite R V] (f : Dual R V) (v : V) :
     (transvection f v).det = 1 + f v := by

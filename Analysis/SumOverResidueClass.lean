@@ -62,7 +62,15 @@ lemma summable_indicator_mod_iff_summable
   · rw [← (finite_lt_nat k).summable_compl_iff (f := {n : Nat | (n : ZMod m) = k}.indicator f)]
     simp only [summable_subtype_iff_indicator, indicator_indicator, inter_comm, ofPred_and,
       compl_ofPred, not_lt]
-  · let g : 
+  · let g : Nat -> Nat := fun n => m * n + k
+    have hg : Function.Injective g := fun m n hmn => by simpa [g, hm.ne] using hmn
+    have hg' : forall n ∉ range g, {n : Nat | (n : ZMod m) = k ∧ k <= n}.indicator f n = 0 := by
+      intro n hn
+      contrapose! hn
+      exact (Nat.range_mul_add m k).symm ▸ mem_of_indicator_ne_zero hn
+    convert (Function.Injective.summable_iff hg hg').symm
+    simp only [Function.comp_apply, mem_ofPred_eq, Nat.cast_add, Nat.cast_mul, CharP.cast_eq_zero,
+      zero_mul, zero_add, le_add_iff_nonneg_left, zero_le, and_self, indicator_of_mem, g]
 
 中文:
 引理 summable_indicator_mod_iff_summable
@@ -72,7 +80,15 @@ lemma summable_indicator_mod_iff_summable
   · rw [← (finite_lt_nat k).summable_compl_iff (f := {n : Nat | (n : ZMod m) = k}.indicator f)]
     simp only [summable_subtype_iff_indicator, indicator_indicator, inter_comm, ofPred_and,
       compl_ofPred, not_lt]
-  · let g : 
+  · let g : Nat -> Nat := fun n => m * n + k
+    have hg : Function.Injective g := fun m n hmn => by simpa [g, hm.ne] using hmn
+    have hg' : forall n ∉ range g, {n : Nat | (n : ZMod m) = k ∧ k <= n}.indicator f n = 0 := by
+      intro n hn
+      contrapose! hn
+      exact (Nat.range_mul_add m k).symm ▸ mem_of_indicator_ne_zero hn
+    convert (Function.Injective.summable_iff hg hg').symm
+    simp only [Function.comp_apply, mem_ofPred_eq, Nat.cast_add, Nat.cast_mul, CharP.cast_eq_zero,
+      zero_mul, zero_add, le_add_iff_nonneg_left, zero_le, and_self, indicator_of_mem, g]
 
 Depends on / 依赖: Function, Function.Injective, Injective, Summable, compl_ofPred, finite_lt_nat, hm.ne, indicator, indicator_indicator, inter_comm, not_lt, ofPred_and, summable_compl_iff, summable_subtype_iff_indicator
 -/
@@ -106,7 +122,8 @@ lemma not_summable_of_antitone_of_neg
   obtain ⟨N, hN⟩ := this (|f n|) (abs_pos_of_neg hn)
   specialize hN (max n N) (n.le_max_right N)
   contrapose! hN; clear hN
-  have H : f (max n N) <= f n := hf (n.le_max_left 
+  have H : f (max n N) <= f n := hf (n.le_max_left N)
+  rwa [abs_of_neg hn, abs_of_neg (H.trans_lt hn), neg_le_neg_iff]
 
 中文:
 引理 not_summable_of_antitone_of_neg
@@ -118,7 +135,8 @@ lemma not_summable_of_antitone_of_neg
   obtain ⟨N, hN⟩ := this (|f n|) (abs_pos_of_neg hn)
   specialize hN (max n N) (n.le_max_right N)
   contrapose! hN; clear hN
-  have H : f (max n N) <= f n := hf (n.le_max_left 
+  have H : f (max n N) <= f n := hf (n.le_max_left N)
+  rwa [abs_of_neg hn, abs_of_neg (H.trans_lt hn), neg_le_neg_iff]
 
 Depends on / 依赖: H.trans_lt, Metric, Metric.tendsto_atTop, Real.norm_eq_abs, abs_of_neg, abs_pos_of_neg, contrapose, dist_zero_right, hs.tendsto_atTop_zero, le_max_left, le_max_right, n.le_max_left, n.le_max_right, neg_le_neg_iff, norm_eq_abs, specialize, tendsto_atTop, tendsto_atTop_zero, trans_lt
 -/
@@ -175,7 +193,11 @@ lemma summable_indicator_mod_iff_summable_indicator_mod
   · rw [← ZMod.natCast_zmod_val k, summable_indicator_mod_iff_summable] at hs
     have hl : (l.val + m : ZMod m) = l := by
       simp only [ZMod.natCast_val, ZMod.cast_id', id_eq, CharP.cast_eq_zero, add_zero]
-    rw [← hl]; rw [← Nat.c
+    rw [← hl]; rw [← Nat.cast_add]; rw [summable_indicator_mod_iff_summable]
+    exact hs.of_nonneg_of_le (fun _ => hf₀ _)
+fun _ => hf Nat.add_le_add Nat.le.refl (k.val_lt.trans_le <| m.le_add_left l.val).le
+  · obtain ⟨n, hn⟩ := hf₀
+    exact (not_summable_indicator_mod_of_antitone_of_neg hf hn k hs).elim
 
 中文:
 引理 summable_indicator_mod_iff_summable_indicator_mod
@@ -185,7 +207,11 @@ lemma summable_indicator_mod_iff_summable_indicator_mod
   · rw [← ZMod.natCast_zmod_val k, summable_indicator_mod_iff_summable] at hs
     have hl : (l.val + m : ZMod m) = l := by
       simp only [ZMod.natCast_val, ZMod.cast_id', id_eq, CharP.cast_eq_zero, add_zero]
-    rw [← hl]; rw [← Nat.c
+    rw [← hl]; rw [← Nat.cast_add]; rw [summable_indicator_mod_iff_summable]
+    exact hs.of_nonneg_of_le (fun _ => hf₀ _)
+fun _ => hf Nat.add_le_add Nat.le.refl (k.val_lt.trans_le <| m.le_add_left l.val).le
+  · obtain ⟨n, hn⟩ := hf₀
+    exact (not_summable_indicator_mod_of_antitone_of_neg hf hn k hs).elim
 
 Depends on / 依赖: CharP.cast_eq_zero, Nat.add_le_add, Nat.cast_add, Nat.le.refl, ZMod.cast_id, ZMod.natCast_val, ZMod.natCast_zmod_val, add_le_add, add_zero, cast_add, cast_eq_zero, cast_id, hs.of_nonneg_of_le, id_eq, interesting, k.val_lt.trans_le, l.val, le_add_left, m.le_add_left, natCast_val
 -/

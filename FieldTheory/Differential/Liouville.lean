@@ -87,7 +87,16 @@ lemma IsLiouville.trans
         ((↑) ∘ c)
         (fun _ => by simp only [Function.comp_apply, ← coe_deriv, coe_eq_zero_iff, hc])
         ((↑) ∘ u) v (by simpa only [Function.comp_apply, ← IsScalarTower.algebraMap_apply])
-    have hc (x : ι₀) := mem_
+    have hc (x : ι₀) := mem_range_of_deriv_eq_zero F (hc₀ x)
+    choose c₀ hc using hc
+    apply inst1.isLiouville a ι₀ c₀ _ u₀ v₀
+    · rw [h₀]
+      simp [hc]
+    · intro
+      apply_fun ((↑) : F -> K)
+      · simp only [coe_deriv, hc, algebraMap.coe_zero]
+        apply hc₀
+      · apply FaithfulSMul.algebraMap_injective
 
 中文:
 引理 是Liouville.trans
@@ -97,7 +106,16 @@ lemma IsLiouville.trans
         ((↑) ∘ c)
         (fun _ => by simp only [Function.comp_apply, ← coe_deriv, coe_eq_zero_iff, hc])
         ((↑) ∘ u) v (by simpa only [Function.comp_apply, ← IsScalarTower.algebraMap_apply])
-    have hc (x : ι₀) := mem_
+    have hc (x : ι₀) := mem_range_of_deriv_eq_zero F (hc₀ x)
+    choose c₀ hc using hc
+    apply inst1.isLiouville a ι₀ c₀ _ u₀ v₀
+    · rw [h₀]
+      simp [hc]
+    · intro
+      apply_fun ((↑) : F -> K)
+      · simp only [coe_deriv, hc, algebraMap.coe_zero]
+        apply hc₀
+      · apply FaithfulSMul.algebraMap_injective
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.alge, Function, Function.comp_apply, IsScalarTower, IsScalarTower.algebraMap_apply, algebraMap, algebraMap.coe_zero, algebraMap_apply, apply_fun, coe_deriv, coe_eq_zero_iff, coe_zero, comp_apply, inst1.isLiouville, inst2.isLiouville, isLiouville, mem_range_of_deriv_eq_zero
 -/
@@ -268,7 +286,11 @@ instance isLiouville_of_finiteDimensional
   have : FiniteDimensional F K' :=
     LinearMap.finiteDimensional_range map.toLinearMap
   let K'' := normalClosure F K' (AlgebraicClosure F)
-  let B : IntermediateField F K'' := IntermediateField.rest
+  let B : IntermediateField F K'' := IntermediateField.restrict
+    (F := K') (IntermediateField.le_normalClosure ..)
+  have kequiv : K ≃ₐ[F] ↥B := (show K ≃ₐ[F] K' from AlgEquiv.ofInjectiveField map).trans
+    (IntermediateField.restrictAlgEquiv _)
+  IsLiouville.equiv kequiv.symm
 
 中文:
 实例 isLiouville_of_finiteDimensional
@@ -278,7 +300,11 @@ instance isLiouville_of_finiteDimensional
   have : FiniteDimensional F K' :=
     LinearMap.finiteDimensional_range map.toLinearMap
   let K'' := normalClosure F K' (AlgebraicClosure F)
-  let B : IntermediateField F K'' := IntermediateField.rest
+  let B : IntermediateField F K'' := IntermediateField.restrict
+    (F := K') (IntermediateField.le_normalClosure ..)
+  have kequiv : K ≃ₐ[F] ↥B := (show K ≃ₐ[F] K' from AlgEquiv.ofInjectiveField map).trans
+    (IntermediateField.restrictAlgEquiv _)
+  IsLiouville.equiv kequiv.symm
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjectiveField, AlgebraicClosure, FiniteDimensional, IntermediateField, IntermediateField.le_normalClosure, IntermediateField.restrict, IntermediateField.restrictAlgEquiv, IsAlgClosed, IsAlgClosed.lift, IsLiouville, IsLiouville.equiv, LinearMap, LinearMap.finiteDimensional_range, fieldRange, finiteDimensional_range, kequiv, kequiv.symm, le_normalClosure, map.fieldRange
 -/

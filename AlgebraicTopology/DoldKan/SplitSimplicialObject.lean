@@ -167,7 +167,9 @@ theorem σ_comp_πSummand_id_eq_zero
   rw [ne_comm]
   change ¬(A.epiComp (SimplexCategory.σ i).op).EqId
   rw [IndexSet.eqId_iff_len_eq]
-  have h := Simplex
+  have h := SimplexCategory.len_le_of_epi A.e
+  dsimp at h ⊢
+  lia
 
 中文:
 定理 σ_comp_πSummand_id_eq_zero
@@ -180,7 +182,9 @@ theorem σ_comp_πSummand_id_eq_zero
   rw [ne_comm]
   change ¬(A.epiComp (SimplexCategory.σ i).op).EqId
   rw [IndexSet.eqId_iff_len_eq]
-  have h := Simplex
+  have h := SimplexCategory.len_le_of_epi A.e
+  dsimp at h ⊢
+  lia
 
 Depends on / 依赖: A.epiComp, IndexSet, IndexSet.eqId_iff_len_eq, SimplexCategory, SimplexCategory.len_le_of_epi, SimplicialObject, cofan_inj_epi_naturality_assoc, comp_zero, epiComp, eqId_iff_len_eq, hom_ext, len_le_of_epi, ne_comm, s.cofan_inj_epi_naturality_assoc, s.hom_ext
 -/
@@ -240,7 +244,17 @@ theorem comp_PInfty_eq_zero_iff
     · have h' := f ≫= PInfty_f_add_QInfty_f (n + 1)
       dsimp at h'
       rw [comp_id]; rw [comp_add]; rw [h]; rw [zero_add] at h'
-      rw [← h']; rw [assoc]; rw [QInfty_f]; 
+      rw [← h']; rw [assoc]; rw [QInfty_f]; rw [decomposition_Q]; rw [Preadditive.sum_comp]; rw [Preadditive.comp_sum]; rw [Finset.sum_eq_zero]
+      intro i _
+      simp only [assoc, σ_comp_πSummand_id_eq_zero, comp_zero]
+  · intro h
+    rw [← comp_id f]; rw [assoc]; rw [s.decomposition_id]; rw [Preadditive.sum_comp]; rw [Preadditive.comp_sum]; rw [Fintype.sum_eq_zero]
+    intro A
+    by_cases hA : A.EqId
+    · dsimp at hA
+      subst hA
+      rw [assoc]; rw [reassoc_of% h]; rw [zero_comp]
+    · simp only [assoc, s.cofan_inj_comp_PInfty_eq_zero A hA, comp_zero]
 
 中文:
 定理 comp_PInfty_eq_zero_iff
@@ -255,7 +269,17 @@ theorem comp_PInfty_eq_zero_iff
     · have h' := f ≫= PInfty_f_add_QInfty_f (n + 1)
       dsimp at h'
       rw [comp_id]; rw [comp_add]; rw [h]; rw [zero_add] at h'
-      rw [← h']; rw [assoc]; rw [QInfty_f]; 
+      rw [← h']; rw [assoc]; rw [QInfty_f]; rw [decomposition_Q]; rw [Preadditive.sum_comp]; rw [Preadditive.comp_sum]; rw [Finset.sum_eq_zero]
+      intro i _
+      simp only [assoc, σ_comp_πSummand_id_eq_zero, comp_zero]
+  · intro h
+    rw [← comp_id f]; rw [assoc]; rw [s.decomposition_id]; rw [Preadditive.sum_comp]; rw [Preadditive.comp_sum]; rw [Fintype.sum_eq_zero]
+    intro A
+    by_cases hA : A.EqId
+    · dsimp at hA
+      subst hA
+      rw [assoc]; rw [reassoc_of% h]; rw [zero_comp]
+    · simp only [assoc, s.cofan_inj_comp_PInfty_eq_zero A hA, comp_zero]
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, PInfty_f_add_QInfty_f, Preadditiv, Preadditive, Preadditive.comp_sum, Preadditive.sum_comp, QInfty_f, comp_add, comp_id, comp_sum, comp_zero, decomposition_Q, decomposition_id, s.decomposition_id, sum_comp, sum_eq_zero, zero_add, zero_comp
 -/
@@ -325,7 +349,7 @@ theorem πSummand_comp_cofan_inj_id_comp_PInfty_eq_PInfty
   rw [s.decomposition_id]; rw [Preadditive.sum_comp]
   rw [Fintype.sum_eq_single (IndexSet.id (op ⦋n⦌))]; rw [assoc]
   rintro A (hA : ¬A.EqId)
-  rw [assoc]; rw [s.cofan_inj_comp_PInfty_eq_zero A hA]; rw [comp
+  rw [assoc]; rw [s.cofan_inj_comp_PInfty_eq_zero A hA]; rw [comp_zero]
 
 中文:
 定理 πSummand_comp_cofan_inj_id_comp_PInfty_eq_PInfty
@@ -336,7 +360,7 @@ theorem πSummand_comp_cofan_inj_id_comp_PInfty_eq_PInfty
   rw [s.decomposition_id]; rw [Preadditive.sum_comp]
   rw [Fintype.sum_eq_single (IndexSet.id (op ⦋n⦌))]; rw [assoc]
   rintro A (hA : ¬A.EqId)
-  rw [assoc]; rw [s.cofan_inj_comp_PInfty_eq_zero A hA]; rw [comp
+  rw [assoc]; rw [s.cofan_inj_comp_PInfty_eq_zero A hA]; rw [comp_zero]
 
 Depends on / 依赖: A.EqId, AlternatingFaceMapComplex, AlternatingFaceMapComplex.obj_X, Fintype, Fintype.sum_eq_single, IndexSet, IndexSet.id, PInfty, PInfty.f, Preadditive, Preadditive.sum_comp, cofan_inj_comp_PInfty_eq_zero, comp_zero, conv_rhs, decomposition_id, id_comp, obj_X, s.cofan_inj_comp_PInfty_eq_zero, s.decomposition_id, sum_comp
 -/
@@ -417,7 +441,14 @@ definition nondegComplex
     have eq : K[X].d i j ≫ 𝟙 (X.obj (op ⦋j⦌)) ≫ K[X].d j k ≫
         s.πSummand (IndexSet.id (op ⦋k⦌)) = 0 := by
       simp
-    rw [s.decomposition_id] at
+    rw [s.decomposition_id] at eq
+    classical
+    rw [Fintype.sum_eq_add_sum_compl (IndexSet.id (op ⦋j⦌))]; rw [add_comp]; rw [comp_add]; rw [assoc]; rw [Preadditive.sum_comp]; rw [Preadditive.comp_sum]; rw [Finset.sum_eq_zero]; rw [add_zero] at eq
+    swap
+    · intro A hA
+      simp only [Finset.mem_compl, Finset.mem_singleton] at hA
+      simp only [assoc, ιSummand_comp_d_comp_πSummand_eq_zero _ _ _ _ hA, comp_zero]
+    rw [eq]; rw [comp_zero]
 
 中文:
 定义 nondegComplex
@@ -430,7 +461,14 @@ definition nondegComplex
     have eq : K[X].d i j ≫ 𝟙 (X.obj (op ⦋j⦌)) ≫ K[X].d j k ≫
         s.πSummand (IndexSet.id (op ⦋k⦌)) = 0 := by
       simp
-    rw [s.decomposition_id] at
+    rw [s.decomposition_id] at eq
+    classical
+    rw [Fintype.sum_eq_add_sum_compl (IndexSet.id (op ⦋j⦌))]; rw [add_comp]; rw [comp_add]; rw [assoc]; rw [Preadditive.sum_comp]; rw [Preadditive.comp_sum]; rw [Finset.sum_eq_zero]; rw [add_zero] at eq
+    swap
+    · intro A hA
+      simp only [Finset.mem_compl, Finset.mem_singleton] at hA
+      simp only [assoc, ιSummand_comp_d_comp_πSummand_eq_zero _ _ _ _ hA, comp_zero]
+    rw [eq]; rw [comp_zero]
 -/
 noncomputable def nondegComplex : ChainComplex C Nat where
   X := s.N
@@ -468,7 +506,33 @@ definition toKaroubiNondegComplexIsoN₁
             dsimp
             rw [assoc]; rw [assoc]; rw [assoc]; rw [πSummand_comp_cofan_inj_id_comp_PInfty_eq_PInfty]; rw [HomologicalComplex.Hom.comm] }
       comm := by
-        e
+        ext n
+        dsimp
+        rw [id_comp]; rw [assoc]; rw [PInfty_f_idem] }
+  inv :=
+    { f :=
+        { f := fun n => s.πSummand (IndexSet.id (op ⦋n⦌))
+          comm' := fun i j _ => by
+            dsimp
+            slice_rhs 1 1 => rw [← id_comp (K[X].d i j)]
+            dsimp only [AlternatingFaceMapComplex.obj_X]
+            rw [s.decomposition_id]; rw [sum_comp]; rw [sum_comp]; rw [Finset.sum_eq_single (IndexSet.id (op ⦋i⦌))]; rw [assoc]; rw [assoc]
+            · intro A _ hA
+              simp only [assoc, s.ιSummand_comp_d_comp_πSummand_eq_zero _ _ _ hA, comp_zero]
+            · simp only [Finset.mem_univ, not_true, IsEmpty.forall_iff] }
+      comm := by
+        ext n
+        dsimp
+        simp only [comp_id, PInfty_comp_πSummand_id] }
+  hom_inv_id := by
+    ext n
+    simp only [assoc, PInfty_comp_πSummand_id, Karoubi.comp_f, HomologicalComplex.comp_f,
+      cofan_inj_πSummand_eq_id]
+    rfl
+  inv_hom_id := by
+    ext n
+    simp only [πSummand_comp_cofan_inj_id_comp_PInfty_eq_PInfty, Karoubi.comp_f,
+      HomologicalComplex.comp_f, N₁_obj_p, Karoubi.id_f]
 
 中文:
 定义 toKaroubiNondegComplexIsoN₁
@@ -479,7 +543,33 @@ definition toKaroubiNondegComplexIsoN₁
             dsimp
             rw [assoc]; rw [assoc]; rw [assoc]; rw [πSummand_comp_cofan_inj_id_comp_PInfty_eq_PInfty]; rw [HomologicalComplex.Hom.comm] }
       comm := by
-        e
+        ext n
+        dsimp
+        rw [id_comp]; rw [assoc]; rw [PInfty_f_idem] }
+  inv :=
+    { f :=
+        { f := fun n => s.πSummand (IndexSet.id (op ⦋n⦌))
+          comm' := fun i j _ => by
+            dsimp
+            slice_rhs 1 1 => rw [← id_comp (K[X].d i j)]
+            dsimp only [AlternatingFaceMapComplex.obj_X]
+            rw [s.decomposition_id]; rw [sum_comp]; rw [sum_comp]; rw [Finset.sum_eq_single (IndexSet.id (op ⦋i⦌))]; rw [assoc]; rw [assoc]
+            · intro A _ hA
+              simp only [assoc, s.ιSummand_comp_d_comp_πSummand_eq_zero _ _ _ hA, comp_zero]
+            · simp only [Finset.mem_univ, not_true, IsEmpty.forall_iff] }
+      comm := by
+        ext n
+        dsimp
+        simp only [comp_id, PInfty_comp_πSummand_id] }
+  hom_inv_id := by
+    ext n
+    simp only [assoc, PInfty_comp_πSummand_id, Karoubi.comp_f, HomologicalComplex.comp_f,
+      cofan_inj_πSummand_eq_id]
+    rfl
+  inv_hom_id := by
+    ext n
+    simp only [πSummand_comp_cofan_inj_id_comp_PInfty_eq_PInfty, Karoubi.comp_f,
+      HomologicalComplex.comp_f, N₁_obj_p, Karoubi.id_f]
 
 Depends on / 依赖: AlternatingFaceMapComplex, AlternatingFaceMapComplex.obj_X, HomologicalComplex, HomologicalComplex.Hom.comm, IndexSet, IndexSet.id, PInfty, PInfty.f, PInfty_f_idem, decompo, id_comp, obj_X, s.cofan, s.decompo, slice_rhs
 -/
@@ -827,7 +917,18 @@ definition nondegComplexFunctor
           ((alternatingFaceMapComplex C).map Φ.F).comm_assoc i j]
         simp only [assoc]
         congr 2
-        appl
+        apply S₁.s.hom_ext'
+        intro A
+        dsimp [alternatingFaceMapComplex]
+        rw [cofan_inj_naturality_symm_assoc Φ A]
+        by_cases h : A.EqId
+        · dsimp at h
+          subst h
+          rw [Splitting.cofan_inj_πSummand_eq_id]
+          dsimp
+          rw [comp_id]; rw [Splitting.cofan_inj_πSummand_eq_id_assoc]
+        · rw [S₁.s.cofan_inj_πSummand_eq_zero_assoc _ _ (Ne.symm h),
+            S₂.s.cofan_inj_πSummand_eq_zero _ _ (Ne.symm h), zero_comp, comp_zero] }
 
 中文:
 定义 nondegComplexFunctor
@@ -841,7 +942,18 @@ definition nondegComplexFunctor
           ((alternatingFaceMapComplex C).map Φ.F).comm_assoc i j]
         simp only [assoc]
         congr 2
-        appl
+        apply S₁.s.hom_ext'
+        intro A
+        dsimp [alternatingFaceMapComplex]
+        rw [cofan_inj_naturality_symm_assoc Φ A]
+        by_cases h : A.EqId
+        · dsimp at h
+          subst h
+          rw [Splitting.cofan_inj_πSummand_eq_id]
+          dsimp
+          rw [comp_id]; rw [Splitting.cofan_inj_πSummand_eq_id_assoc]
+        · rw [S₁.s.cofan_inj_πSummand_eq_zero_assoc _ _ (Ne.symm h),
+            S₂.s.cofan_inj_πSummand_eq_zero _ _ (Ne.symm h), zero_comp, comp_zero] }
 
 Depends on / 依赖: S.s.nondegComplex, nondegComplex
 -/

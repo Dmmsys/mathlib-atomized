@@ -118,7 +118,8 @@ instance instAdd
       iUnion_nat := fun s _ =>
         calc
           m₁ (⋃ i, s i) + m₂ (⋃ i, s i) <= (∑' i, m₁ (s i)) + ∑' i, m₂ (s i) :=
-            ad
+            add_le_add (measure_iUnion_le s) (measure_iUnion_le s)
+          _ = _ := ENNReal.tsum_add.symm }⟩
 
 中文:
 实例 instAdd
@@ -130,7 +131,8 @@ instance instAdd
       iUnion_nat := fun s _ =>
         calc
           m₁ (⋃ i, s i) + m₂ (⋃ i, s i) <= (∑' i, m₁ (s i)) + ∑' i, m₂ (s i) :=
-            ad
+            add_le_add (measure_iUnion_le s) (measure_iUnion_le s)
+          _ = _ := ENNReal.tsum_add.symm }⟩
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_add.symm, add_le_add, iUnion_nat, measureOf, measure_iUnion_le, tsum_add
 -/
@@ -191,7 +193,8 @@ instance instSMul
         rw [← smul_one_mul c]; rw [← smul_one_mul c (m t)]
         exact mul_right_mono (m.mono h)
       iUnion_nat := fun s _ => by
-        simp_r
+        simp_rw [← smul_one_mul c (m _), ENNReal.tsum_mul_left]
+        exact mul_right_mono (measure_iUnion_le _) }⟩
 
 中文:
 实例 instSMul
@@ -203,7 +206,8 @@ instance instSMul
         rw [← smul_one_mul c]; rw [← smul_one_mul c (m t)]
         exact mul_right_mono (m.mono h)
       iUnion_nat := fun s _ => by
-        simp_r
+        simp_rw [← smul_one_mul c (m _), ENNReal.tsum_mul_left]
+        exact mul_right_mono (measure_iUnion_le _) }⟩
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_mul_left, iUnion_nat, m.mono, measureOf, measure_empty, measure_iUnion_le, mul_right_mono, simp_rw, smul_one_mul, tsum_mul_left
 -/
@@ -522,7 +526,10 @@ empty := nonpos_iff_eq_zero.1 iSup₂_le fun m _ => le_of_eq m.empty
       iUnion_nat := fun f _ =>
         iSup₂_le fun m hm =>
           calc
-            m (⋃ i, f i
+            m (⋃ i, f i) <= ∑' i : Nat, m (f i) := measure_iUnion_le _
+            _ <= ∑' i, ⨆ m in ms, (m : OuterMeasure α) (f i) :=
+               ENNReal.tsum_le_tsum fun i => by apply le_iSup₂ m hm
+             }⟩
 
 中文:
 实例 instSupSet
@@ -534,7 +541,10 @@ empty := nonpos_iff_eq_zero.1 iSup₂_le fun m _ => le_of_eq m.empty
       iUnion_nat := fun f _ =>
         iSup₂_le fun m hm =>
           calc
-            m (⋃ i, f i
+            m (⋃ i, f i) <= ∑' i : Nat, m (f i) := measure_iUnion_le _
+            _ <= ∑' i, ⨆ m in ms, (m : OuterMeasure α) (f i) :=
+               ENNReal.tsum_le_tsum fun i => by apply le_iSup₂ m hm
+             }⟩
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_le_tsum, OuterMeasure, iUnion_nat, le_of_eq, m.empty, m.mono, measureOf, measure_iUnion_le, nonpos_iff_eq_zero, tsum_le_tsum
 -/

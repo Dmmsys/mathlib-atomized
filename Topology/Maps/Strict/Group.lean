@@ -81,7 +81,8 @@ lemma isStrictMap_iff_isHomeomorph_quotientKerEquivRange
   -- Note: `G ⧸ MonoidHom.ker f` and `G ⧸ Setoid.ker f` are not definitionally equal, so
   -- using `Topology.isStrictMap_iff_isHomeomorph_quotientKerEquivRange` is too painful here.
   simp_rw [isHomeomorph_iff_isStrictMap_bijective, EquivLike.bijective, and_true,
-    (isQuotientMap_mk _).isStric
+    (isQuotientMap_mk _).isStrictMap_iff, IsEmbedding.subtypeVal.isStrictMap_iff]
+  rfl
 
 中文:
 引理 isStrictMap_iff_isHomeomorph_quotientKerEquivRange
@@ -89,7 +90,8 @@ lemma isStrictMap_iff_isHomeomorph_quotientKerEquivRange
   -- Note: `G ⧸ MonoidHom.ker f` and `G ⧸ Setoid.ker f` are not definitionally equal, so
   -- using `Topology.isStrictMap_iff_isHomeomorph_quotientKerEquivRange` is too painful here.
   simp_rw [isHomeomorph_iff_isStrictMap_bijective, EquivLike.bijective, and_true,
-    (isQuotientMap_mk _).isStric
+    (isQuotientMap_mk _).isStrictMap_iff, IsEmbedding.subtypeVal.isStrictMap_iff]
+  rfl
 -/
 protected lemma isStrictMap_iff_isHomeomorph_quotientKerEquivRange :
     IsStrictMap f ↔ IsHomeomorph (quotientKerEquivRange f) := by
@@ -163,7 +165,8 @@ lemma isStrictMap_prodMap_iff
   simp_rw [MonoidHom.isStrictMap_iff_isOpenQuotientMap_rangeRestrict]
   let Φ : (f.prodMap g).range ≃ₜ f.range × g.range :=
     (Homeomorph.setCongr (by simp [Subgroup.coe_prod])).trans (Homeomorph.Set.prod _ _)
-  have eq : Φ ∘ (f.prodMap g).rangeRestrict = f.rangeRestrict.prodMap g.rangeRestrict
+  have eq : Φ ∘ (f.prodMap g).rangeRestrict = f.rangeRestrict.prodMap g.rangeRestrict := rfl
+  rw [← Φ.comp_isOpenQuotientMap_iff]; rw [eq]; rw [MonoidHom.coe_prodMap]; rw [isOpenQuotientMap_prodMap_iff]
 
 中文:
 引理 isStrictMap_prodMap_iff
@@ -171,7 +174,8 @@ lemma isStrictMap_prodMap_iff
   simp_rw [MonoidHom.isStrictMap_iff_isOpenQuotientMap_rangeRestrict]
   let Φ : (f.prodMap g).range ≃ₜ f.range × g.range :=
     (Homeomorph.setCongr (by simp [Subgroup.coe_prod])).trans (Homeomorph.Set.prod _ _)
-  have eq : Φ ∘ (f.prodMap g).rangeRestrict = f.rangeRestrict.prodMap g.rangeRestrict
+  have eq : Φ ∘ (f.prodMap g).rangeRestrict = f.rangeRestrict.prodMap g.rangeRestrict := rfl
+  rw [← Φ.comp_isOpenQuotientMap_iff]; rw [eq]; rw [MonoidHom.coe_prodMap]; rw [isOpenQuotientMap_prodMap_iff]
 -/
 protected lemma isStrictMap_prodMap_iff :
     IsStrictMap (f.prodMap g) ↔ IsStrictMap f ∧ IsStrictMap g := by

@@ -132,7 +132,20 @@ definition dfinsuppFamily
     support' := (Trunc.finChoice fun i => (x i).support').map fun s => ⟨
 .map fun f i => f i (Finset.mem_univ _), Finset.univ.val.pi (fun i => (s i).val)
       fun p => by
-        simp only [Multiset.mem_map, Multiset.mem_pi, Finset.mem_val, Finset.mem_un
+        simp only [Multiset.mem_map, Multiset.mem_pi, Finset.mem_val, Finset.mem_univ,
+          forall_true_left]
+        simp_rw [or_iff_not_imp_right]
+        intro h
+        push Not at h
+.resolve_right ?_, rfl⟩ refine ⟨fun i _ => p i, fun i => (s i).prop _
+        exact mt ((f p).map_coord_zero (m := fun i => x i _) i) h⟩}
+  map_update_add' {dec} m i x y := DFinsupp.ext fun p => by
+    dsimp
+    simp_rw [Function.apply_update (fun i m => m (p i)) m, DFinsupp.add_apply, (f p).map_update_add]
+  map_update_smul' {dec} m i c x := DFinsupp.ext fun p => by
+    dsimp
+    simp_rw [Function.apply_update (fun i m => m (p i)) m, DFinsupp.smul_apply,
+      (f p).map_update_smul]
 
 中文:
 定义 dfinsuppFamily
@@ -140,7 +153,20 @@ definition dfinsuppFamily
     support' := (Trunc.finChoice fun i => (x i).support').map fun s => ⟨
 .map fun f i => f i (Finset.mem_univ _), Finset.univ.val.pi (fun i => (s i).val)
       fun p => by
-        simp only [Multiset.mem_map, Multiset.mem_pi, Finset.mem_val, Finset.mem_un
+        simp only [Multiset.mem_map, Multiset.mem_pi, Finset.mem_val, Finset.mem_univ,
+          forall_true_left]
+        simp_rw [or_iff_not_imp_right]
+        intro h
+        push Not at h
+.resolve_right ?_, rfl⟩ refine ⟨fun i _ => p i, fun i => (s i).prop _
+        exact mt ((f p).map_coord_zero (m := fun i => x i _) i) h⟩}
+  map_update_add' {dec} m i x y := DFinsupp.ext fun p => by
+    dsimp
+    simp_rw [Function.apply_update (fun i m => m (p i)) m, DFinsupp.add_apply, (f p).map_update_add]
+  map_update_smul' {dec} m i c x := DFinsupp.ext fun p => by
+    dsimp
+    simp_rw [Function.apply_update (fun i m => m (p i)) m, DFinsupp.smul_apply,
+      (f p).map_update_smul]
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.mem_val, Finset.univ.val.pi, Multiset, Multiset.mem_map, Multiset.mem_pi, Trunc.finChoice, finChoice, forall_true_left, map_coord_zero, map_update_ad, mem_map, mem_pi, mem_univ, mem_val, or_iff_not_imp_right, resolve_right, simp_rw, support
 -/
@@ -636,7 +662,11 @@ theorem freeDFinsuppEquiv_single
   obtain ⟨p, j⟩ := p
   rcases eq_or_ne j i with rfl | h
   · suffices forall (l : ι), (x l) (p l) = 0 -> 0 = ∏ i, (x i) (p i) by
-      simpa [freeDFinsuppEquiv_def, MultilinearMap.
+      simpa [freeDFinsuppEquiv_def, MultilinearMap.piRingEquiv, DFinsupp.sigmaCurryEquiv,
+        fromDFinsuppEquiv_apply]
+    exact fun i h => (Finset.prod_eq_zero (Finset.mem_univ i) h).symm
+  · simp [freeDFinsuppEquiv_def, MultilinearMap.piRingEquiv, DFinsupp.sigmaCurryEquiv,
+      fromDFinsuppEquiv_apply, h]
 
 中文:
 定理 freeDFinsuppEquiv_single
@@ -649,7 +679,11 @@ theorem freeDFinsuppEquiv_single
   obtain ⟨p, j⟩ := p
   rcases eq_or_ne j i with rfl | h
   · suffices forall (l : ι), (x l) (p l) = 0 -> 0 = ∏ i, (x i) (p i) by
-      simpa [freeDFinsuppEquiv_def, MultilinearMap.
+      simpa [freeDFinsuppEquiv_def, MultilinearMap.piRingEquiv, DFinsupp.sigmaCurryEquiv,
+        fromDFinsuppEquiv_apply]
+    exact fun i h => (Finset.prod_eq_zero (Finset.mem_univ i) h).symm
+  · simp [freeDFinsuppEquiv_def, MultilinearMap.piRingEquiv, DFinsupp.sigmaCurryEquiv,
+      fromDFinsuppEquiv_apply, h]
 
 Depends on / 依赖: DFinsupp, DFinsupp.sigmaCurryEquiv, DFinsupp.single_smul, Finset, Finset.mem_univ, Finset.prod_eq_zero, MultilinearMap, MultilinearMap.piRingEquiv, classical, conv_lhs, eq_or_ne, freeDFinsuppEquiv_def, fromDFinsuppEquiv_apply, map_smul, mem_univ, mul_one, piRingEquiv, prod_eq_zero, sigmaCurryEquiv, single_smul
 -/

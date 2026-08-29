@@ -242,7 +242,13 @@ instance :
   commShiftIso_add p q := by
     ext X
     refine Quiver.Hom.unop_inj (Quiver.Hom.unop_inj ?_)
-    simp [← sh
+    simp [← shiftFunctorAdd'_eq_shiftFunctorAdd, ← unop_comp_assoc, ← Functor.map_comp,
+      fun X n => iso_hom_app X n (-n) (add_neg_cancel n),
+      shiftFunctor_op_map _ q (-q),
+      shiftFunctorAdd'_op_inv_app _ p q (p + q) rfl (-p) (-q) (-(p + q))
+        (add_neg_cancel p) (add_neg_cancel q) (add_neg_cancel (p + q)),
+      shiftFunctorAdd'_op_hom_app _ (-p) (-q) (-(p + q)) (by lia) p q (p + q)
+        (neg_add_cancel p) (neg_add_cancel q) (neg_add_cancel (p + q))]
 
 中文:
 实例 :
@@ -256,7 +262,13 @@ instance :
   commShiftIso_add p q := by
     ext X
     refine Quiver.Hom.unop_inj (Quiver.Hom.unop_inj ?_)
-    simp [← sh
+    simp [← shiftFunctorAdd'_eq_shiftFunctorAdd, ← unop_comp_assoc, ← Functor.map_comp,
+      fun X n => iso_hom_app X n (-n) (add_neg_cancel n),
+      shiftFunctor_op_map _ q (-q),
+      shiftFunctorAdd'_op_inv_app _ p q (p + q) rfl (-p) (-q) (-(p + q))
+        (add_neg_cancel p) (add_neg_cancel q) (add_neg_cancel (p + q)),
+      shiftFunctorAdd'_op_hom_app _ (-p) (-q) (-(p + q)) (by lia) p q (p + q)
+        (neg_add_cancel p) (neg_add_cancel q) (neg_add_cancel (p + q))]
 -/
 instance : (opOp C).CommShift Int where
   commShiftIso := iso _
@@ -294,7 +306,13 @@ instance :
     ext X
     simp only [Functor.CommShift.isoAdd_hom_app, op_comp,
       ← shiftFunctorAdd'_eq_shiftFunctorAdd, Functor.map_comp,
-     
+      fun X n => iso_hom_app X n (-n) (add_neg_cancel n),
+      shiftFunctorAdd'_op_hom_app _ p q (p + q) rfl (-p) (-q) (-(p + q))
+        (add_neg_cancel p) (add_neg_cancel q) (add_neg_cancel (p + q)),
+      shiftFunctorAdd'_op_inv_app _ (-p) (-q) (-(p + q)) (by lia) p q (p + q)
+        (neg_add_cancel p) (neg_add_cancel q) (neg_add_cancel (p + q)),
+      shiftFunctor_op_map _ (-q) q, shiftFunctor_op_map _ q (-q)]
+    simp [← Functor.map_comp_assoc, ← unop_comp, ← unop_comp_assoc]
 
 中文:
 实例 :
@@ -308,7 +326,13 @@ instance :
     ext X
     simp only [Functor.CommShift.isoAdd_hom_app, op_comp,
       ← shiftFunctorAdd'_eq_shiftFunctorAdd, Functor.map_comp,
-     
+      fun X n => iso_hom_app X n (-n) (add_neg_cancel n),
+      shiftFunctorAdd'_op_hom_app _ p q (p + q) rfl (-p) (-q) (-(p + q))
+        (add_neg_cancel p) (add_neg_cancel q) (add_neg_cancel (p + q)),
+      shiftFunctorAdd'_op_inv_app _ (-p) (-q) (-(p + q)) (by lia) p q (p + q)
+        (neg_add_cancel p) (neg_add_cancel q) (neg_add_cancel (p + q)),
+      shiftFunctor_op_map _ (-q) q, shiftFunctor_op_map _ q (-q)]
+    simp [← Functor.map_comp_assoc, ← unop_comp, ← unop_comp_assoc]
 -/
 instance : (unopUnop C).CommShift Int where
   commShiftIso := iso _
@@ -522,7 +546,14 @@ instance :
       (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) (by simp) (by simp)
       (Quiver.Hom.unop_inj ?_))
     have := (shiftFunctorCompIsoId C (-1) 1 (neg_add_cancel 1)).inv.naturality T.mor₃
-    dsimp
+    dsimp at this ⊢
+    simp only [shiftFunctor_op_map _ 1 (-1), Functor.op_obj,
+      unop_id, shiftFunctor_op_map _ (-1) 1,
+      commShiftIso_opOp_hom_app _ 1 (-1),
+      opShiftFunctorEquivalence_counitIso_inv_app _ 1 (-1) (add_neg_cancel 1),
+      unop_comp, Quiver.Hom.unop_op, Category.assoc, ← op_comp, Iso.inv_hom_id_app_assoc,
+      shiftFunctorCompIsoId_op_hom_app, Iso.unop_hom_inv_id_app_assoc, ← Functor.map_comp]
+    simp [Functor.map_comp, shift_shiftFunctorCompIsoId_hom_app, ← reassoc_of% this]
 
 中文:
 实例 :
@@ -532,7 +563,14 @@ instance :
       (Triangle.isoMk _ _ (Iso.refl _) (Iso.refl _) (Iso.refl _) (by simp) (by simp)
       (Quiver.Hom.unop_inj ?_))
     have := (shiftFunctorCompIsoId C (-1) 1 (neg_add_cancel 1)).inv.naturality T.mor₃
-    dsimp
+    dsimp at this ⊢
+    simp only [shiftFunctor_op_map _ 1 (-1), Functor.op_obj,
+      unop_id, shiftFunctor_op_map _ (-1) 1,
+      commShiftIso_opOp_hom_app _ 1 (-1),
+      opShiftFunctorEquivalence_counitIso_inv_app _ 1 (-1) (add_neg_cancel 1),
+      unop_comp, Quiver.Hom.unop_op, Category.assoc, ← op_comp, Iso.inv_hom_id_app_assoc,
+      shiftFunctorCompIsoId_op_hom_app, Iso.unop_hom_inv_id_app_assoc, ← Functor.map_comp]
+    simp [Functor.map_comp, shift_shiftFunctorCompIsoId_hom_app, ← reassoc_of% this]
 
 Depends on / 依赖: Functor, Functor.op_obj, Iso.refl, Quiver, Quiver.Hom.unop_inj, T.mor, Triangle, Triangle.isoMk, add_neg_cancel, commShiftIso_opOp_hom_app, inv.naturality, isomorphic_distinguished, naturality, neg_add_cancel, opShiftFunctorEquivalence_counitIso_inv_app, op_distinguished, op_obj, shiftFunctorCompIsoId, shiftFunctor_op_map, unop_com
 -/

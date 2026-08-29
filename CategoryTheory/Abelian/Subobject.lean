@@ -44,7 +44,30 @@ definition subobjectIsoSubobjectOp
   · change (cokernelOrderHom X).comp (kernelOrderHom X) = _
     refine OrderHom.ext _ _ (funext (Subobject.ind _ ?_))
     intro A f hf
-    dsimp only [OrderHom.comp_coe, Function.comp_apply, kernelOrderHom_coe, Subobject.lif
+    dsimp only [OrderHom.comp_coe, Function.comp_apply, kernelOrderHom_coe, Subobject.lift_mk,
+      cokernelOrderHom_coe, OrderHom.id_coe, id]
+    refine Subobject.mk_eq_mk_of_comm _ _
+        ⟨?_, ?_, Quiver.Hom.unop_inj ?_, Quiver.Hom.unop_inj ?_⟩ ?_
+    · exact (Abelian.epiDesc f.unop _ (cokernel.condition (kernel.ι f.unop))).op
+    · exact (cokernel.desc _ _ (kernel.condition f.unop)).op
+    · rw [← cancel_epi (cokernel.π (kernel.ι f.unop))]
+      simp only [unop_comp, Quiver.Hom.unop_op, unop_id_op, cokernel.π_desc_assoc,
+        comp_epiDesc, Category.comp_id]
+    · simp only [← cancel_epi f.unop, unop_comp, Quiver.Hom.unop_op, unop_id, comp_epiDesc_assoc,
+        cokernel.π_desc, Category.comp_id]
+    · exact Quiver.Hom.unop_inj (by simp only [unop_comp, Quiver.Hom.unop_op, comp_epiDesc])
+  · change (kernelOrderHom X).comp (cokernelOrderHom X) = _
+    refine OrderHom.ext _ _ (funext (Subobject.ind _ ?_))
+    intro A f hf
+    dsimp only [OrderHom.comp_coe, Function.comp_apply, cokernelOrderHom_coe, Subobject.lift_mk,
+      kernelOrderHom_coe, OrderHom.id_coe, id, unop_op, Quiver.Hom.unop_op]
+    refine Subobject.mk_eq_mk_of_comm _ _ ⟨?_, ?_, ?_, ?_⟩ ?_
+    · exact Abelian.monoLift f _ (kernel.condition (cokernel.π f))
+    · exact kernel.lift _ _ (cokernel.condition f)
+    · simp only [← cancel_mono (kernel.ι (cokernel.π f)), Category.assoc, image.fac, monoLift_comp,
+        Category.id_comp]
+    · simp only [← cancel_mono f, Category.assoc, monoLift_comp, image.fac, Category.id_comp]
+    · simp only [monoLift_comp]
 
 中文:
 定义 subobjectIsoSubobjectOp
@@ -54,7 +77,30 @@ definition subobjectIsoSubobjectOp
   · change (cokernelOrderHom X).comp (kernelOrderHom X) = _
     refine OrderHom.ext _ _ (funext (Subobject.ind _ ?_))
     intro A f hf
-    dsimp only [OrderHom.comp_coe, Function.comp_apply, kernelOrderHom_coe, Subobject.lif
+    dsimp only [OrderHom.comp_coe, Function.comp_apply, kernelOrderHom_coe, Subobject.lift_mk,
+      cokernelOrderHom_coe, OrderHom.id_coe, id]
+    refine Subobject.mk_eq_mk_of_comm _ _
+        ⟨?_, ?_, Quiver.Hom.unop_inj ?_, Quiver.Hom.unop_inj ?_⟩ ?_
+    · exact (Abelian.epiDesc f.unop _ (cokernel.condition (kernel.ι f.unop))).op
+    · exact (cokernel.desc _ _ (kernel.condition f.unop)).op
+    · rw [← cancel_epi (cokernel.π (kernel.ι f.unop))]
+      simp only [unop_comp, Quiver.Hom.unop_op, unop_id_op, cokernel.π_desc_assoc,
+        comp_epiDesc, Category.comp_id]
+    · simp only [← cancel_epi f.unop, unop_comp, Quiver.Hom.unop_op, unop_id, comp_epiDesc_assoc,
+        cokernel.π_desc, Category.comp_id]
+    · exact Quiver.Hom.unop_inj (by simp only [unop_comp, Quiver.Hom.unop_op, comp_epiDesc])
+  · change (kernelOrderHom X).comp (cokernelOrderHom X) = _
+    refine OrderHom.ext _ _ (funext (Subobject.ind _ ?_))
+    intro A f hf
+    dsimp only [OrderHom.comp_coe, Function.comp_apply, cokernelOrderHom_coe, Subobject.lift_mk,
+      kernelOrderHom_coe, OrderHom.id_coe, id, unop_op, Quiver.Hom.unop_op]
+    refine Subobject.mk_eq_mk_of_comm _ _ ⟨?_, ?_, ?_, ?_⟩ ?_
+    · exact Abelian.monoLift f _ (kernel.condition (cokernel.π f))
+    · exact kernel.lift _ _ (cokernel.condition f)
+    · simp only [← cancel_mono (kernel.ι (cokernel.π f)), Category.assoc, image.fac, monoLift_comp,
+        Category.id_comp]
+    · simp only [← cancel_mono f, Category.assoc, monoLift_comp, image.fac, Category.id_comp]
+    · simp only [monoLift_comp]
 
 Depends on / 依赖: Abelian, Abelian.epiDesc, Function, Function.comp_apply, OrderHom, OrderHom.comp_coe, OrderHom.ext, OrderHom.id_coe, OrderIso, OrderIso.ofHomInv, Quiver, Quiver.Hom.unop_inj, Subobject, Subobject.ind, Subobject.lift_mk, Subobject.mk_eq_mk_of_comm, cokernel, cokernel.condition, cokernelOrderHom, cokernelOrderHom_coe
 -/

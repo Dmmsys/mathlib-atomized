@@ -63,7 +63,25 @@ definition extend
   -- extension of `f` is continuous
   have cont := (uniformContinuous_uniformly_extend h.2 h.1 f.uniformContinuous).continuous
   -- extension of `f` agrees with `f` on the domain of the embedding `e`
-  have eq := uniformly_extend_of_ind h.2 h.1 f.unifor
+  have eq := uniformly_extend_of_ind h.2 h.1 f.uniformContinuous
+  { toFun := (h.2.isDenseInducing h.1).extend f
+    map_add' := by
+      refine h.1.induction_on₂ ?_ ?_
+      · exact isClosed_eq (cont.comp continuous_add)
+          ((cont.comp continuous_fst).add (cont.comp continuous_snd))
+      · intro x y
+        simp only [eq, ← e.map_add]
+        exact f.map_add _ _
+    map_smul' := fun k => by
+      refine fun b => h.1.induction_on b ?_ ?_
+      · exact isClosed_eq (cont.comp (continuous_const_smul _))
+          ((continuous_const_smul _).comp cont)
+      · intro x
+        rw [← map_smul]
+        simp only [eq]
+        exact map_smulₛₗ _ _ _
+    cont }
+  else 0
 
 中文:
 定义 extend
@@ -72,7 +90,25 @@ definition extend
   -- extension of `f` is continuous
   have cont := (uniformContinuous_uniformly_extend h.2 h.1 f.uniformContinuous).continuous
   -- extension of `f` agrees with `f` on the domain of the embedding `e`
-  have eq := uniformly_extend_of_ind h.2 h.1 f.unifor
+  have eq := uniformly_extend_of_ind h.2 h.1 f.uniformContinuous
+  { toFun := (h.2.isDenseInducing h.1).extend f
+    map_add' := by
+      refine h.1.induction_on₂ ?_ ?_
+      · exact isClosed_eq (cont.comp continuous_add)
+          ((cont.comp continuous_fst).add (cont.comp continuous_snd))
+      · intro x y
+        simp only [eq, ← e.map_add]
+        exact f.map_add _ _
+    map_smul' := fun k => by
+      refine fun b => h.1.induction_on b ?_ ?_
+      · exact isClosed_eq (cont.comp (continuous_const_smul _))
+          ((continuous_const_smul _).comp cont)
+      · intro x
+        rw [← map_smul]
+        simp only [eq]
+        exact map_smulₛₗ _ _ _
+    cont }
+  else 0
 
 Depends on / 依赖: DenseRange, IsUniformInducing
 -/
@@ -205,7 +241,15 @@ theorem opNorm_extend_le
     | inl hN => exact mul_nonneg hN (norm_nonneg _)
     | inr hN =>
 have : Unique E := ⟨⟨0⟩, fun x => norm_le_zero_iff.mp
-        (h_e x)
+        (h_e x).trans (mul_nonpos_of_nonpos_of_nonneg hN (norm_nonneg _))⟩
+      obtain rfl : f = 0 := Subsingleton.elim ..
+      simp
+  · exact (cont _).norm
+  · rw [extend_eq _ h_dense (isUniformEmbedding_of_bound _ h_e).isUniformInducing]
+    calc
+      ‖f x‖ <= ‖f‖ * ‖x‖ := le_opNorm _ _
+      _ <= ‖f‖ * (N * ‖e x‖) := by gcongr; exact h_e x
+      _ <= N * ‖f‖ * ‖e x‖ := by rw [mul_comm ↑N ‖f‖, mul_assoc]
 
 中文:
 定理 opNorm_extend_le
@@ -217,7 +261,15 @@ have : Unique E := ⟨⟨0⟩, fun x => norm_le_zero_iff.mp
     | inl hN => exact mul_nonneg hN (norm_nonneg _)
     | inr hN =>
 have : Unique E := ⟨⟨0⟩, fun x => norm_le_zero_iff.mp
-        (h_e x)
+        (h_e x).trans (mul_nonpos_of_nonpos_of_nonneg hN (norm_nonneg _))⟩
+      obtain rfl : f = 0 := Subsingleton.elim ..
+      simp
+  · exact (cont _).norm
+  · rw [extend_eq _ h_dense (isUniformEmbedding_of_bound _ h_e).isUniformInducing]
+    calc
+      ‖f x‖ <= ‖f‖ * ‖x‖ := le_opNorm _ _
+      _ <= ‖f‖ * (N * ‖e x‖) := by gcongr; exact h_e x
+      _ <= N * ‖f‖ * ‖e x‖ := by rw [mul_comm ↑N ‖f‖, mul_assoc]
 -/
 theorem opNorm_extend_le (h_dense : DenseRange e) (h_e : forall x, ‖x‖ <= N * ‖e x‖) :
     ‖f.extend e‖ <= N * ‖f‖ := by
@@ -271,7 +323,10 @@ definition compLeftInverse
     g.quotKerEquivRange.symm.toLinearMap).mkContinuousOfExistsBound
   (by
     obtain ⟨C, h⟩ := h
-    
+    use C
+    intro ⟨x, y, hxy⟩
+    simpa [← hxy] using h y)
+  else 0
 
 中文:
 定义 compLeftInverse
@@ -286,7 +341,10 @@ definition compLeftInverse
     g.quotKerEquivRange.symm.toLinearMap).mkContinuousOfExistsBound
   (by
     obtain ⟨C, h⟩ := h
-    
+    use C
+    intro ⟨x, y, hxy⟩
+    simpa [← hxy] using h y)
+  else 0
 
 Depends on / 依赖: LinearMap, LinearMap.ker, g.quotKerEquivRange.symm.toLinearMap, mkContinuousOfExistsBound, quotKerEquivRange, specialize, toLinearMap
 -/
@@ -514,7 +572,15 @@ definition extend
     refine h_dense₁.induction ?_ ?_
     · rintro _ ⟨_, rfl⟩
       simp [LinearMap.extendOfNorm_eq, h_dense₁, h_norm₁, h_dense₂, h_norm₂]
-    · exact isClosed_eq (by simp only [AddHom.toFun
+    · exact isClosed_eq (by simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom,
+      ContinuousLinearMap.coe_coe]; fun_prop) continuous_id
+  right_inv := by
+    refine h_dense₂.induction ?_ ?_
+    · rintro _ ⟨_, rfl⟩
+      simp [LinearMap.extendOfNorm_eq, h_dense₁, h_norm₁, h_dense₂, h_norm₂]
+    · exact isClosed_eq (by simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom,
+      ContinuousLinearMap.coe_coe]; fun_prop) continuous_id
+  continuous_invFun := ContinuousLinearMap.continuous _
 
 中文:
 定义 extend
@@ -525,7 +591,15 @@ definition extend
     refine h_dense₁.induction ?_ ?_
     · rintro _ ⟨_, rfl⟩
       simp [LinearMap.extendOfNorm_eq, h_dense₁, h_norm₁, h_dense₂, h_norm₂]
-    · exact isClosed_eq (by simp only [AddHom.toFun
+    · exact isClosed_eq (by simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom,
+      ContinuousLinearMap.coe_coe]; fun_prop) continuous_id
+  right_inv := by
+    refine h_dense₂.induction ?_ ?_
+    · rintro _ ⟨_, rfl⟩
+      simp [LinearMap.extendOfNorm_eq, h_dense₁, h_norm₁, h_dense₂, h_norm₂]
+    · exact isClosed_eq (by simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom,
+      ContinuousLinearMap.coe_coe]; fun_prop) continuous_id
+  continuous_invFun := ContinuousLinearMap.continuous _
 
 Depends on / 依赖: extendOfNorm, f.toLinearMap, toLinearMap
 -/
@@ -700,7 +774,10 @@ definition extendOfIsometry
   { __ := f.extend e₁ e₂ h_dense₁ ⟨1, by simp [h_norm]⟩ h_dense₂ ⟨1, by simp [h_norm₂]⟩
     norm_map' := by
       refine h_dense₁.induction ?_ (isClosed_eq (by
-        simp only [ContinuousLinearEqu
+        simp only [ContinuousLinearEquiv.coe_toLinearEquiv]; fun_prop) continuous_norm)
+      rintro x ⟨y, rfl⟩
+      convert! h_norm y
+      apply LinearMap.extendOfNorm_eq h_dense₁ (by use 1; simp [h_norm]) }
 
 中文:
 定义 extendOfIsometry
@@ -709,7 +786,10 @@ definition extendOfIsometry
   { __ := f.extend e₁ e₂ h_dense₁ ⟨1, by simp [h_norm]⟩ h_dense₂ ⟨1, by simp [h_norm₂]⟩
     norm_map' := by
       refine h_dense₁.induction ?_ (isClosed_eq (by
-        simp only [ContinuousLinearEqu
+        simp only [ContinuousLinearEquiv.coe_toLinearEquiv]; fun_prop) continuous_norm)
+      rintro x ⟨y, rfl⟩
+      convert! h_norm y
+      apply LinearMap.extendOfNorm_eq h_dense₁ (by use 1; simp [h_norm]) }
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.coe_toLinearEquiv, LinearMap, LinearMap.extendOfNorm_eq, coe_toLinearEquiv, continuous_norm, convert, extend, extendOfNorm_eq, f.extend, f.symm, fun_prop, h_norm, isClosed_eq, norm_map
 -/

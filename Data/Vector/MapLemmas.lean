@@ -397,7 +397,9 @@ theorem mapAccumr₂_mapAccumr₂_left_left
               )
             xs ys (s₁, s₂)
     (m.fst.fst, m.snd) := by
-  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_
+  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_all
+
+@[simp]
 
 中文:
 定理 mapAccumr₂_mapAccumr₂_left_left
@@ -409,7 +411,9 @@ theorem mapAccumr₂_mapAccumr₂_left_left
               )
             xs ys (s₁, s₂)
     (m.fst.fst, m.snd) := by
-  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_
+  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_all
+
+@[simp]
 -/
 theorem mapAccumr₂_mapAccumr₂_left_left (f₁ : γ -> α -> σ₁ -> σ₁ × φ) (f₂ : α -> β -> σ₂ -> σ₂ × γ) :
     (mapAccumr₂ f₁ (mapAccumr₂ f₂ xs ys s₂).snd xs s₁)
@@ -435,7 +439,9 @@ theorem mapAccumr₂_mapAccumr₂_left_right
               )
             xs ys (s₁, s₂)
     (m.fst.fst, m.snd) := by
-  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_
+  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_all
+
+@[simp]
 
 中文:
 定理 mapAccumr₂_mapAccumr₂_left_right
@@ -446,7 +452,9 @@ theorem mapAccumr₂_mapAccumr₂_left_right
               )
             xs ys (s₁, s₂)
     (m.fst.fst, m.snd) := by
-  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_
+  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_all
+
+@[simp]
 -/
 theorem mapAccumr₂_mapAccumr₂_left_right
     (f₁ : γ -> β -> σ₁ -> σ₁ × φ) (f₂ : α -> β -> σ₂ -> σ₂ × γ) :
@@ -474,7 +482,9 @@ theorem mapAccumr₂_mapAccumr₂_right_left
               )
             xs ys (s₁, s₂)
     (m.fst.fst, m.snd) := by
-  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_
+  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_all
+
+@[simp]
 
 中文:
 定理 mapAccumr₂_mapAccumr₂_right_left
@@ -486,7 +496,9 @@ theorem mapAccumr₂_mapAccumr₂_right_left
               )
             xs ys (s₁, s₂)
     (m.fst.fst, m.snd) := by
-  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_
+  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_all
+
+@[simp]
 -/
 theorem mapAccumr₂_mapAccumr₂_right_left (f₁ : α -> γ -> σ₁ -> σ₁ × φ) (f₂ : α -> β -> σ₂ -> σ₂ × γ) :
     (mapAccumr₂ f₁ xs (mapAccumr₂ f₂ xs ys s₂).snd s₁)
@@ -513,7 +525,7 @@ theorem mapAccumr₂_mapAccumr₂_right_right
               )
             xs ys (s₁, s₂)
     (m.fst.fst, m.snd) := by
-  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_
+  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_all
 
 中文:
 定理 mapAccumr₂_mapAccumr₂_right_right
@@ -525,7 +537,7 @@ theorem mapAccumr₂_mapAccumr₂_right_right
               )
             xs ys (s₁, s₂)
     (m.fst.fst, m.snd) := by
-  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_
+  induction xs, ys using Vector.revInductionOn₂ generalizing s₁ s₂ <;> simp_all
 -/
 theorem mapAccumr₂_mapAccumr₂_right_right (f₁ : β -> γ -> σ₁ -> σ₁ × φ) (f₂ : α -> β -> σ₂ -> σ₂ × γ) :
     (mapAccumr₂ f₁ ys (mapAccumr₂ f₂ xs ys s₂).snd s₁)

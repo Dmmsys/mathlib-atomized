@@ -55,7 +55,15 @@ definition oneHypercover
   p₂ i₁ i₂ _ := D.t i₁ i₂ ≫ D.f i₂ i₁
   w i₁ i₂ _ := by simp only [Category.assoc, Scheme.GlueData.glue_condition]
   mem₀ := by
-    refine zariskiTopology.superset_covering ?_ D.openCover.mem_grothendie
+    refine zariskiTopology.superset_covering ?_ D.openCover.mem_grothendieckTopology
+    rw [Sieve.generate_le_iff]
+    rintro W _ ⟨i⟩
+    exact ⟨_, 𝟙 _, _, ⟨i⟩, by simp; rfl⟩
+  mem₁ i₁ i₂ W p₁ p₂ fac := by
+    refine zariskiTopology.superset_covering (fun T g _ => ?_) (zariskiTopology.top_mem _)
+    have ⟨φ, h₁, h₂⟩ := PullbackCone.IsLimit.lift' (D.vPullbackConeIsLimit i₁ i₂)
+      (g ≫ p₁) (g ≫ p₂) (by simpa using g ≫= fac)
+    exact ⟨⟨⟩, φ, h₁.symm, h₂.symm⟩
 
 中文:
 定义 oneHypercover
@@ -69,7 +77,15 @@ definition oneHypercover
   p₂ i₁ i₂ _ := D.t i₁ i₂ ≫ D.f i₂ i₁
   w i₁ i₂ _ := by simp only [Category.assoc, Scheme.GlueData.glue_condition]
   mem₀ := by
-    refine zariskiTopology.superset_covering ?_ D.openCover.mem_grothendie
+    refine zariskiTopology.superset_covering ?_ D.openCover.mem_grothendieckTopology
+    rw [Sieve.generate_le_iff]
+    rintro W _ ⟨i⟩
+    exact ⟨_, 𝟙 _, _, ⟨i⟩, by simp; rfl⟩
+  mem₁ i₁ i₂ W p₁ p₂ fac := by
+    refine zariskiTopology.superset_covering (fun T g _ => ?_) (zariskiTopology.top_mem _)
+    have ⟨φ, h₁, h₂⟩ := PullbackCone.IsLimit.lift' (D.vPullbackConeIsLimit i₁ i₂)
+      (g ≫ p₁) (g ≫ p₂) (by simpa using g ≫= fac)
+    exact ⟨⟨⟩, φ, h₁.symm, h₂.symm⟩
 -/
 noncomputable def oneHypercover : Scheme.zariskiTopology.OneHypercover D.glued where
   I₀ := D.J

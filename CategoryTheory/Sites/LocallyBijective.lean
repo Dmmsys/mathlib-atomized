@@ -51,7 +51,30 @@ lemma isLocallyBijective_iff_isIso'
       rw [← isIso_iff_of_reflects_iso _ (sheafToPresheaf _ _)]; rw [NatTrans.isIso_iff_isIso_app]
       intro X
       rw [isIso_iff_bijective]
-     
+      exact ⟨h₁ X, this X⟩
+    intro X s
+    have H := (isSheaf_iff_isSheaf_of_type J F.obj).1 F.property _
+      (Presheaf.imageSieve_mem J f.hom s)
+    let t : Presieve.FamilyOfElements F.obj (Presheaf.imageSieve f.hom s).arrows :=
+      fun Y g hg => Presheaf.localPreimage f.hom s g hg
+    have ht : t.Compatible := by
+      intro Y₁ Y₂ W g₁ g₂ f₁ f₂ hf₁ hf₂ w
+      apply h₁
+      have eq₁ := NatTrans.naturality_apply f.hom g₁.op (t f₁ hf₁)
+      have eq₂ := NatTrans.naturality_apply f.hom g₂.op (t f₂ hf₂)
+      have eq₃ := congr_arg (G.obj.map g₁.op) (Presheaf.app_localPreimage f.hom s _ hf₁)
+      have eq₄ := congr_arg (G.obj.map g₂.op) (Presheaf.app_localPreimage f.hom s _ hf₂)
+      refine eq₁.trans (eq₃.trans (Eq.trans ?_ (eq₄.symm.trans eq₂.symm)))
+      rw [← Functor.map_comp_apply]; rw [← Functor.map_comp_apply]
+      simp only [← op_comp, w]
+    refine ⟨H.amalgamate t ht, ?_⟩
+    · apply (((isSheaf_iff_isSheaf_of_type J G.obj).1 G.property).isSeparated _
+        (Presheaf.imageSieve_mem J f.hom s)).ext
+      intro Y g hg
+      rw [← NatTrans.naturality_apply]; rw [H.valid_glue ht]
+      exact Presheaf.app_localPreimage f.hom s g hg
+  · intro
+    constructor <;> infer_instance
 
 中文:
 引理 isLocallyBijective_iff_isIso'
@@ -63,7 +86,30 @@ lemma isLocallyBijective_iff_isIso'
       rw [← isIso_iff_of_reflects_iso _ (sheafToPresheaf _ _)]; rw [NatTrans.isIso_iff_isIso_app]
       intro X
       rw [isIso_iff_bijective]
-     
+      exact ⟨h₁ X, this X⟩
+    intro X s
+    have H := (isSheaf_iff_isSheaf_of_type J F.obj).1 F.property _
+      (Presheaf.imageSieve_mem J f.hom s)
+    let t : Presieve.FamilyOfElements F.obj (Presheaf.imageSieve f.hom s).arrows :=
+      fun Y g hg => Presheaf.localPreimage f.hom s g hg
+    have ht : t.Compatible := by
+      intro Y₁ Y₂ W g₁ g₂ f₁ f₂ hf₁ hf₂ w
+      apply h₁
+      have eq₁ := NatTrans.naturality_apply f.hom g₁.op (t f₁ hf₁)
+      have eq₂ := NatTrans.naturality_apply f.hom g₂.op (t f₂ hf₂)
+      have eq₃ := congr_arg (G.obj.map g₁.op) (Presheaf.app_localPreimage f.hom s _ hf₁)
+      have eq₄ := congr_arg (G.obj.map g₂.op) (Presheaf.app_localPreimage f.hom s _ hf₂)
+      refine eq₁.trans (eq₃.trans (Eq.trans ?_ (eq₄.symm.trans eq₂.symm)))
+      rw [← Functor.map_comp_apply]; rw [← Functor.map_comp_apply]
+      simp only [← op_comp, w]
+    refine ⟨H.amalgamate t ht, ?_⟩
+    · apply (((isSheaf_iff_isSheaf_of_type J G.obj).1 G.property).isSeparated _
+        (Presheaf.imageSieve_mem J f.hom s)).ext
+      intro Y g hg
+      rw [← NatTrans.naturality_apply]; rw [H.valid_glue ht]
+      exact Presheaf.app_localPreimage f.hom s g hg
+  · intro
+    constructor <;> infer_instance
 -/
 private lemma isLocallyBijective_iff_isIso' :
     IsLocallyInjective f ∧ IsLocallySurjective f ↔ IsIso f := by
@@ -304,13 +350,13 @@ English:
 lemma WEqualsLocallyBijective.mk'
   statement: [HasWeakSheafify J A] [(forget A).ReflectsIsomorphisms]
   proof: by
-    rw [W_iff]; rw [← Sheaf.isLocallyBijective_iff_isIso (A := A)]; rw [← Presheaf.isLocallyInjective_comp_iff J f (CategoryTheory.toSheafify J Q)]; rw [← Presheaf.isLocallySurjective_comp_iff J f (CategoryTheory.toSheafify J Q)]; rw [CategoryTheory.toSheafify_naturality]; rw [Presheaf.comp_isLoc
+    rw [W_iff]; rw [← Sheaf.isLocallyBijective_iff_isIso (A := A)]; rw [← Presheaf.isLocallyInjective_comp_iff J f (CategoryTheory.toSheafify J Q)]; rw [← Presheaf.isLocallySurjective_comp_iff J f (CategoryTheory.toSheafify J Q)]; rw [CategoryTheory.toSheafify_naturality]; rw [Presheaf.comp_isLocallyInjective_iff]; rw [Presheaf.comp_isLocallySurjective_iff]
 
 中文:
 引理 WEqualsLocallyBijective.mk'
   结论: [HasWeakSheafify J A] [(forget A).反映同构]
   证明: by
-    rw [W_iff]; rw [← Sheaf.isLocallyBijective_iff_isIso (A := A)]; rw [← Presheaf.isLocallyInjective_comp_iff J f (CategoryTheory.toSheafify J Q)]; rw [← Presheaf.isLocallySurjective_comp_iff J f (CategoryTheory.toSheafify J Q)]; rw [CategoryTheory.toSheafify_naturality]; rw [Presheaf.comp_isLoc
+    rw [W_iff]; rw [← Sheaf.isLocallyBijective_iff_isIso (A := A)]; rw [← Presheaf.isLocallyInjective_comp_iff J f (CategoryTheory.toSheafify J Q)]; rw [← Presheaf.isLocallySurjective_comp_iff J f (CategoryTheory.toSheafify J Q)]; rw [CategoryTheory.toSheafify_naturality]; rw [Presheaf.comp_isLocallyInjective_iff]; rw [Presheaf.comp_isLocallySurjective_iff]
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.toSheafify, CategoryTheory.toSheafify_naturality, Presheaf, Presheaf.comp_isLocallyInjective_iff, Presheaf.comp_isLocallySurjective_iff, Presheaf.isLocallyInjective_comp_iff, Presheaf.isLocallySurjective_comp_iff, Sheaf.isLocallyBijective_iff_isIso, W_iff, comp_isLocallyInjective_iff, comp_isLocallySurjective_iff, isLocallyBijective_iff_isIso, isLocallyInjective_comp_iff, isLocallySurjective_comp_iff, toSheafify, toSheafify_naturality
 -/

@@ -53,7 +53,27 @@ theorem wilsons_lemma
         rw [← Finset.prod_Ico_id_eq_factorial]; rw [prod_natCast]
       _ = ∏ x : (ZMod p)ˣ, (x : ZMod p) := ?_
       _ = -1 := by
-        simp_rw [← Units.coeHom_apply, ← map_prod (Units.coeHom (ZMod p)
+        simp_rw [← Units.coeHom_apply, ← map_prod (Units.coeHom (ZMod p)),
+          prod_univ_units_id_eq_neg_one, Units.coeHom_apply, Units.val_neg, Units.val_one]
+  have hp : 0 < p := (Fact.out (p := p.Prime)).pos
+  symm
+  refine prod_bij (fun a _ => (a : ZMod p).val) ?_ ?_ ?_ ?_
+  · intro a ha
+    rw [mem_Ico]; rw [← Nat.succ_sub hp]; rw [Nat.add_one_sub_one]
+    constructor
+    · apply Nat.pos_of_ne_zero; rw [← @val_zero p]
+      intro h; apply Units.ne_zero a (val_injective p h)
+    · exact val_lt _
+  · intro _ _ _ _ h; rw [Units.ext_iff]; exact val_injective p h
+  · intro b hb
+    rw [mem_Ico]; rw [Nat.succ_le_iff]; rw [← succ_sub hp]; rw [Nat.add_one_sub_one]; rw [pos_iff_ne_zero] at hb
+    refine ⟨Units.mk0 b ?_, Finset.mem_univ _, ?_⟩
+    · intro h; apply hb.1; apply_fun val at h
+      simpa only [val_cast_of_lt hb.right, val_zero] using h
+    · simp only [val_cast_of_lt hb.right, Units.val_mk0]
+  · rintro a -; simp only [cast_id, natCast_val]
+
+@[simp]
 
 中文:
 定理 wilsons_lemma
@@ -65,7 +85,27 @@ theorem wilsons_lemma
         rw [← Finset.prod_Ico_id_eq_factorial]; rw [prod_natCast]
       _ = ∏ x : (ZMod p)ˣ, (x : ZMod p) := ?_
       _ = -1 := by
-        simp_rw [← Units.coeHom_apply, ← map_prod (Units.coeHom (ZMod p)
+        simp_rw [← Units.coeHom_apply, ← map_prod (Units.coeHom (ZMod p)),
+          prod_univ_units_id_eq_neg_one, Units.coeHom_apply, Units.val_neg, Units.val_one]
+  have hp : 0 < p := (Fact.out (p := p.Prime)).pos
+  symm
+  refine prod_bij (fun a _ => (a : ZMod p).val) ?_ ?_ ?_ ?_
+  · intro a ha
+    rw [mem_Ico]; rw [← Nat.succ_sub hp]; rw [Nat.add_one_sub_one]
+    constructor
+    · apply Nat.pos_of_ne_zero; rw [← @val_zero p]
+      intro h; apply Units.ne_zero a (val_injective p h)
+    · exact val_lt _
+  · intro _ _ _ _ h; rw [Units.ext_iff]; exact val_injective p h
+  · intro b hb
+    rw [mem_Ico]; rw [Nat.succ_le_iff]; rw [← succ_sub hp]; rw [Nat.add_one_sub_one]; rw [pos_iff_ne_zero] at hb
+    refine ⟨Units.mk0 b ?_, Finset.mem_univ _, ?_⟩
+    · intro h; apply hb.1; apply_fun val at h
+      simpa only [val_cast_of_lt hb.right, val_zero] using h
+    · simp only [val_cast_of_lt hb.right, Units.val_mk0]
+  · rintro a -; simp only [cast_id, natCast_val]
+
+@[simp]
 
 Depends on / 依赖: Fact.out, Finset, Finset.prod_Ico_id_eq_factorial, Nat.succ_su, Units.coeHom, Units.coeHom_apply, Units.val_neg, Units.val_one, coeHom, coeHom_apply, map_prod, mem_Ico, p.Prime, prod_Ico_id_eq_factorial, prod_bij, prod_natCast, prod_univ_units_id_eq_neg_one, simp_rw, succ_su, val_neg
 -/
@@ -150,7 +190,8 @@ theorem prime_of_fac_equiv_neg_one
   by_contra h2
   obtain ⟨m, hm1, hm2 : 1 < m, hm3⟩ := exists_dvd_of_not_prime2 h1 h2
   have hm : m ∣ (n - 1)! := Nat.dvd_factorial (pos_of_gt hm2) (le_pred_of_lt hm3)
-  refine hm2.ne' (Nat.dv
+  refine hm2.ne' (Nat.dvd_one.mp ((Nat.dvd_add_right hm).mp (hm1.trans ?_)))
+  rw [← ZMod.natCast_eq_zero_iff]; rw [cast_add]; rw [cast_one]; rw [h]; rw [neg_add_cancel]
 
 中文:
 定理 prime_of_fac_equiv_neg_one
@@ -163,7 +204,8 @@ theorem prime_of_fac_equiv_neg_one
   by_contra h2
   obtain ⟨m, hm1, hm2 : 1 < m, hm3⟩ := exists_dvd_of_not_prime2 h1 h2
   have hm : m ∣ (n - 1)! := Nat.dvd_factorial (pos_of_gt hm2) (le_pred_of_lt hm3)
-  refine hm2.ne' (Nat.dv
+  refine hm2.ne' (Nat.dvd_one.mp ((Nat.dvd_add_right hm).mp (hm1.trans ?_)))
+  rw [← ZMod.natCast_eq_zero_iff]; rw [cast_add]; rw [cast_one]; rw [h]; rw [neg_add_cancel]
 
 Depends on / 依赖: Nat.dvd_add_right, Nat.dvd_factorial, Nat.dvd_one.mp, ZMod.natCast_eq_zero_iff, cast_add, cast_one, dvd_add_right, dvd_factorial, dvd_one, eq_or_ne, exists_dvd_of_not_prime2, hm1.trans, hm2.ne, le_pred_of_lt, n.two_le_iff.mpr, natCast_eq_zero_iff, neg_add_cancel, pos_of_gt, replace, two_le_iff
 -/

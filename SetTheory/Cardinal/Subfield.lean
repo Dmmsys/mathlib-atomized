@@ -80,7 +80,10 @@ definition rangeOfWType
   body: Set.range (WType.elim _ <| operate s)
   add_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 0) (Bool.rec x y), by rfl⟩
   mul_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 1) (Bool.rec x y), by rfl⟩
-  neg_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 2) fun _ => 
+  neg_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 2) fun _ => x, rfl⟩
+  inv_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 3) fun _ => x, rfl⟩
+  zero_mem' := ⟨WType.mk (.inl 4) Empty.rec, rfl⟩
+  one_mem' := ⟨WType.mk (.inl 5) Empty.rec, rfl⟩
 
 中文:
 定义 rangeOfWType
@@ -88,7 +91,10 @@ definition rangeOfWType
   定义体: Set.range (WType.elim _ <| operate s)
   add_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 0) (Bool.rec x y), by rfl⟩
   mul_mem' := by rintro _ _ ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨WType.mk (.inl 1) (Bool.rec x y), by rfl⟩
-  neg_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 2) fun _ => 
+  neg_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 2) fun _ => x, rfl⟩
+  inv_mem' := by rintro _ ⟨x, rfl⟩; exact ⟨WType.mk (.inl 3) fun _ => x, rfl⟩
+  zero_mem' := ⟨WType.mk (.inl 4) Empty.rec, rfl⟩
+  one_mem' := ⟨WType.mk (.inl 5) Empty.rec, rfl⟩
 -/
 private def rangeOfWType : Subfield (closure s) where
   carrier := Set.range (WType.elim _ <| operate s)
@@ -160,7 +166,12 @@ lemma cardinalMk_closure_le_max
     · rw [lift_uzero, mk_sum, lift_uzero]
       have : lift.{u, 0} #(Fin 6) < ℵ₀ := lift_lt_aleph0.mpr (lt_aleph0_of_finite _)
       obtain h | h := lt_or_ge #s ℵ₀
-      · r
+      · rw [max_eq_right h.le, max_eq_right]
+        exact (add_lt_aleph0 this h).le
+      · rw [max_eq_left h, add_eq_right h (this.le.trans h), max_eq_left h]
+    rintro (n | _)
+    · fin_cases n <;> (dsimp only [id_eq]; infer_instance)
+    infer_instance
 
 中文:
 引理 cardinalMk_closure_le_max
@@ -170,7 +181,12 @@ lemma cardinalMk_closure_le_max
     · rw [lift_uzero, mk_sum, lift_uzero]
       have : lift.{u, 0} #(Fin 6) < ℵ₀ := lift_lt_aleph0.mpr (lt_aleph0_of_finite _)
       obtain h | h := lt_or_ge #s ℵ₀
-      · r
+      · rw [max_eq_right h.le, max_eq_right]
+        exact (add_lt_aleph0 this h).le
+      · rw [max_eq_left h, add_eq_right h (this.le.trans h), max_eq_left h]
+    rintro (n | _)
+    · fin_cases n <;> (dsimp only [id_eq]; infer_instance)
+    infer_instance
 
 Depends on / 依赖: Cardinal, Cardinal.mk_le_of_surjective, WType.cardinalMk_le_max_aleph0_of_finite, add_eq_right, add_lt_aleph0, cardinalMk_le_max_aleph0_of_finite, convert, fin_cases, h.le, id_eq, infer_instance, lift_lt_aleph0, lift_lt_aleph0.mpr, lift_uzero, lt_aleph0_of_finite, lt_or_ge, max_eq_left, max_eq_right, mk_le_of_surjective, mk_sum
 -/

@@ -164,7 +164,17 @@ lemma one_half_le_sum_primes_ge_one_div
     convert! this using 5
     rw [show 4 = 2 ^ 2 by simp]; rw [pow_right_comm]
     ring
-  suffices 2 * 
+  suffices 2 * N₀ <= m * (2 * N₀).sqrt + 2 * N₀ * S by
+    rwa [hN₀, ← mul_assoc, ← pow_two 2, ← mul_pow, sqrt_eq', ← sub_le_iff_le_add',
+      cast_mul, cast_mul, cast_pow, cast_two,
+      show (2 * (2 * m ^ 2) - m * (2 * m) : Real) = 2 * (2 * m ^ 2) * (1 / 2) by ring,
+mul_le_mul_iff_right₀ by positivity] at this
+  calc (2 * N₀ : Real)
+    _ = ((2 * N₀).smoothNumbersUpTo k).card + ((2 * N₀).roughNumbersUpTo k).card := by
+        exact_mod_cast ((2 * N₀).smoothNumbersUpTo_card_add_roughNumbersUpTo_card k).symm
+    _ <= m * (2 * N₀).sqrt + ((2 * N₀).roughNumbersUpTo k).card := by
+        exact_mod_cast Nat.add_le_add_right ((2 * N₀).smoothNumbersUpTo_card_le k) _
+    _ <= m * (2 * N₀).sqrt + 2 * N₀ * S := by grw [roughNumbersUpTo_card_le']; norm_cast
 
 中文:
 引理 one_half_le_sum_primes_ge_one_div
@@ -177,7 +187,17 @@ lemma one_half_le_sum_primes_ge_one_div
     convert! this using 5
     rw [show 4 = 2 ^ 2 by simp]; rw [pow_right_comm]
     ring
-  suffices 2 * 
+  suffices 2 * N₀ <= m * (2 * N₀).sqrt + 2 * N₀ * S by
+    rwa [hN₀, ← mul_assoc, ← pow_two 2, ← mul_pow, sqrt_eq', ← sub_le_iff_le_add',
+      cast_mul, cast_mul, cast_pow, cast_two,
+      show (2 * (2 * m ^ 2) - m * (2 * m) : Real) = 2 * (2 * m ^ 2) * (1 / 2) by ring,
+mul_le_mul_iff_right₀ by positivity] at this
+  calc (2 * N₀ : Real)
+    _ = ((2 * N₀).smoothNumbersUpTo k).card + ((2 * N₀).roughNumbersUpTo k).card := by
+        exact_mod_cast ((2 * N₀).smoothNumbersUpTo_card_add_roughNumbersUpTo_card k).symm
+    _ <= m * (2 * N₀).sqrt + ((2 * N₀).roughNumbersUpTo k).card := by
+        exact_mod_cast Nat.add_le_add_right ((2 * N₀).smoothNumbersUpTo_card_le k) _
+    _ <= m * (2 * N₀).sqrt + 2 * N₀ * S := by grw [roughNumbersUpTo_card_le']; norm_cast
 
 Depends on / 依赖: cast_mul, cast_pow, cast_two, convert, k.primesBelow, k.primesBelow.card, mul_assoc, mul_pow, pow_right_comm, pow_two, primesBelow, sqrt_eq, sub_le_iff_le_add, succ.primesBelow
 -/
@@ -213,7 +233,18 @@ theorem not_summable_one_div_on_primes
   obtain ⟨k, hk⟩ := h.nat_tsum_vanishing (Iio_mem_nhds one_half_pos : Iio (1 / 2 : Real) in 𝓝 0)
   specialize hk ({p | Nat.Prime p} inter {p | k <= p}) inter_subset_right
   rw [tsum_subtype]; rw [indicator_indicator]; rw [inter_eq_left.mpr fun n hn => hn.1]; rw [mem_Iio] at hk
-  have h'
+  have h' : Summable (indicator ({p | Nat.Prime p} inter {p | k <= p}) fun n => (1 : Real) / n) := by
+    convert! h.indicator {n : Nat | k <= n} using 1
+    simp only [indicator_indicator, inter_comm]
+  refine ((one_half_le_sum_primes_ge_one_div k).trans_lt <| LE.le.trans_lt ?_ hk).false
+  convert!
+    Summable.sum_le_tsum (primesBelow ((4 ^ (k.primesBelow.card + 1)).succ) \ primesBelow k)
+      (fun n _ => indicator_nonneg (fun p _ => by positivity) _) h' using
+    2 with p hp
+  obtain ⟨hp₁, hp₂⟩ := mem_ofPred_eq ▸ Finset.mem_sdiff.mp hp
+  have hpp := prime_of_mem_primesBelow hp₁
+  refine (indicator_of_mem ?_ fun n : Nat => (1 / n : Real)).symm
+  exact ⟨hpp, by simpa [primesBelow, hpp] using hp₂⟩
 
 中文:
 定理 not_summable_one_div_on_primes
@@ -222,7 +253,18 @@ theorem not_summable_one_div_on_primes
   obtain ⟨k, hk⟩ := h.nat_tsum_vanishing (Iio_mem_nhds one_half_pos : Iio (1 / 2 : Real) in 𝓝 0)
   specialize hk ({p | Nat.Prime p} inter {p | k <= p}) inter_subset_right
   rw [tsum_subtype]; rw [indicator_indicator]; rw [inter_eq_left.mpr fun n hn => hn.1]; rw [mem_Iio] at hk
-  have h'
+  have h' : Summable (indicator ({p | Nat.Prime p} inter {p | k <= p}) fun n => (1 : Real) / n) := by
+    convert! h.indicator {n : Nat | k <= n} using 1
+    simp only [indicator_indicator, inter_comm]
+  refine ((one_half_le_sum_primes_ge_one_div k).trans_lt <| LE.le.trans_lt ?_ hk).false
+  convert!
+    Summable.sum_le_tsum (primesBelow ((4 ^ (k.primesBelow.card + 1)).succ) \ primesBelow k)
+      (fun n _ => indicator_nonneg (fun p _ => by positivity) _) h' using
+    2 with p hp
+  obtain ⟨hp₁, hp₂⟩ := mem_ofPred_eq ▸ Finset.mem_sdiff.mp hp
+  have hpp := prime_of_mem_primesBelow hp₁
+  refine (indicator_of_mem ?_ fun n : Nat => (1 / n : Real)).symm
+  exact ⟨hpp, by simpa [primesBelow, hpp] using hp₂⟩
 
 Depends on / 依赖: Iio_mem_nhds, Nat.Prime, Summable, convert, h.indicator, h.nat_tsum_vanishing, indicator, indicator_indicator, inter_comm, inter_eq_left, inter_eq_left.mpr, inter_subset_right, mem_Iio, nat_tsum_vanishing, one_half_le_sum_, one_half_pos, specialize, tsum_subtype
 -/
@@ -281,7 +323,8 @@ theorem Nat.Primes.summable_rpow
     simp only [h, iff_false]
 refine fun H => Nat.Primes.not_summable_one_div H.of_nonneg_of_le (fun _ => by positivity) ?_
     intro p
-    rw [one_div]; r
+    rw [one_div]; rw [← Real.rpow_neg_one]
+exact Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast p.prop.one_lt.le) not_lt.mp h
 
 中文:
 定理 自然数.Primes.summable_rpow
@@ -295,7 +338,8 @@ refine fun H => Nat.Primes.not_summable_one_div H.of_nonneg_of_le (fun _ => by p
     simp only [h, iff_false]
 refine fun H => Nat.Primes.not_summable_one_div H.of_nonneg_of_le (fun _ => by positivity) ?_
     intro p
-    rw [one_div]; r
+    rw [one_div]; rw [← Real.rpow_neg_one]
+exact Real.rpow_le_rpow_of_exponent_le (by exact_mod_cast p.prop.one_lt.le) not_lt.mp h
 
 Depends on / 依赖: H.of_nonneg_of_le, Nat.Primes.not_summable_one_div, Primes, Real.rpow_le_rpow_of_exponent_le, Real.rpow_neg_one, Real.summable_nat_rpow.mpr, iff_false, iff_true, not_lt, not_lt.mp, not_summable_one_div, of_nonneg_of_le, one_div, one_lt, p.prop.one_lt.le, rpow_le_rpow_of_exponent_le, rpow_neg_one, subtype, summable_nat_rpow
 -/

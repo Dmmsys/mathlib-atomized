@@ -417,7 +417,10 @@ lemma ordinaryHypergeometricSeries_eq_zero_iff
     rcases h with ((hn | h) | h) | h
     · simp [Nat.factorial_ne_zero] at hn
     all_goals
-      obtain ⟨kn, hkn, hn⟩ := (ascPochhammer_eval_e
+      obtain ⟨kn, hkn, hn⟩ := (ascPochhammer_eval_eq_zero_iff _ _).1 h
+      exact ⟨kn, hkn, by tauto⟩
+  · obtain ⟨_, h, hn⟩ := zero
+    exact ordinaryHypergeometricSeries_eq_zero_of_neg_nat a b c hn h
 
 中文:
 引理 ordinaryHypergeometricSeries_eq_zero_iff
@@ -429,7 +432,10 @@ lemma ordinaryHypergeometricSeries_eq_zero_iff
     rcases h with ((hn | h) | h) | h
     · simp [Nat.factorial_ne_zero] at hn
     all_goals
-      obtain ⟨kn, hkn, hn⟩ := (ascPochhammer_eval_e
+      obtain ⟨kn, hkn, hn⟩ := (ascPochhammer_eval_eq_zero_iff _ _).1 h
+      exact ⟨kn, hkn, by tauto⟩
+  · obtain ⟨_, h, hn⟩ := zero
+    exact ordinaryHypergeometricSeries_eq_zero_of_neg_nat a b c hn h
 
 Depends on / 依赖: Nat.factorial_ne_zero, _root_, _root_.mul_eq_zero, all_goals, ascPochhammer_eval_eq_zero_iff, factorial_ne_zero, inv_eq_zero, mul_eq_zero, ofScalars_eq_zero, ordinaryHypergeometricSeries, ordinaryHypergeometricSeries_eq_zero_of_neg_nat
 -/
@@ -457,7 +463,20 @@ theorem ordinaryHypergeometricSeries_norm_div_succ_norm
     cast_one, ascPochhammer_succ_eval, norm_mul, norm_inv]
   calc
     _ = ‖Polynomial.eval a (ascPochhammer 𝕂 n)‖ * ‖Polynomial.eval a (ascPochhammer 𝕂 n)‖⁻¹ *
-        ‖Polynomial.eval b (ascPochhammer 𝕂 n)‖ * ‖Polynomial.eval b (ascPo
+        ‖Polynomial.eval b (ascPochhammer 𝕂 n)‖ * ‖Polynomial.eval b (ascPochhammer 𝕂 n)‖⁻¹ *
+        ‖Polynomial.eval c (ascPochhammer 𝕂 n)‖⁻¹⁻¹ * ‖Polynomial.eval c (ascPochhammer 𝕂 n)‖⁻¹ *
+        ‖(n ! : 𝕂)‖⁻¹⁻¹ * ‖(n ! : 𝕂)‖⁻¹ * ‖a + n‖⁻¹ * ‖b + n‖⁻¹ * ‖c + n‖⁻¹⁻¹ *
+        ‖1 + (n : 𝕂)‖⁻¹⁻¹ := by ring_nf
+    _ = _ := by
+      simp only [inv_inv]
+      repeat rw [DivisionRing.mul_inv_cancel, one_mul]
+      all_goals
+        rw [norm_ne_zero_iff]
+      any_goals
+        apply (ascPochhammer_eval_eq_zero_iff n _).not.2
+        push Not
+        exact fun kn hkn => by simp [habc kn hkn]
+      exact cast_ne_zero.2 (factorial_ne_zero n)
 
 中文:
 定理 ordinaryHypergeometricSeries_norm_div_succ_norm
@@ -467,7 +486,20 @@ theorem ordinaryHypergeometricSeries_norm_div_succ_norm
     cast_one, ascPochhammer_succ_eval, norm_mul, norm_inv]
   calc
     _ = ‖Polynomial.eval a (ascPochhammer 𝕂 n)‖ * ‖Polynomial.eval a (ascPochhammer 𝕂 n)‖⁻¹ *
-        ‖Polynomial.eval b (ascPochhammer 𝕂 n)‖ * ‖Polynomial.eval b (ascPo
+        ‖Polynomial.eval b (ascPochhammer 𝕂 n)‖ * ‖Polynomial.eval b (ascPochhammer 𝕂 n)‖⁻¹ *
+        ‖Polynomial.eval c (ascPochhammer 𝕂 n)‖⁻¹⁻¹ * ‖Polynomial.eval c (ascPochhammer 𝕂 n)‖⁻¹ *
+        ‖(n ! : 𝕂)‖⁻¹⁻¹ * ‖(n ! : 𝕂)‖⁻¹ * ‖a + n‖⁻¹ * ‖b + n‖⁻¹ * ‖c + n‖⁻¹⁻¹ *
+        ‖1 + (n : 𝕂)‖⁻¹⁻¹ := by ring_nf
+    _ = _ := by
+      simp only [inv_inv]
+      repeat rw [DivisionRing.mul_inv_cancel, one_mul]
+      all_goals
+        rw [norm_ne_zero_iff]
+      any_goals
+        apply (ascPochhammer_eval_eq_zero_iff n _).not.2
+        push Not
+        exact fun kn hkn => by simp [habc kn hkn]
+      exact cast_ne_zero.2 (factorial_ne_zero n)
 
 Depends on / 依赖: Polynomial, Polynomial.eval, ascPochhammer, ascPochhammer_succ_eval, cast_add, cast_mul, cast_one, factorial_succ, mul_inv_rev, norm_inv, norm_mul, ring_nf
 -/
@@ -503,7 +535,14 @@ theorem ordinaryHypergeometricSeries_radius_eq_one
   convert! ofScalars_radius_eq_of_tendsto 𝔸 _ one_ne_zero ?_
   suffices Tendsto (fun k : Nat => (a + k)⁻¹ * (b + k)⁻¹ * (c + k) * ((1 : 𝕂) + k)) atTop (𝓝 1) by
     simp_rw [ordinaryHypergeometricSeries_norm_div_succ_norm a b c _ (fun n _ => habc n)]
-    simp only [← norm_inv, ← norm_mul, NNReal.c
+    simp only [← norm_inv, ← norm_mul, NNReal.coe_one]
+    convert! Filter.Tendsto.norm this
+    exact norm_one.symm
+  have (k : Nat) : (a + k)⁻¹ * (b + k)⁻¹ * (c + k) * ((1 : 𝕂) + k) =
+        (c + k) / (a + k) * ((1 + k) / (b + k)) := by field
+  simp_rw [this]
+  apply (mul_one (1 : 𝕂)) ▸ Filter.Tendsto.mul <;>
+  convert! tendsto_add_mul_div_add_mul_atTop_nhds _ _ (1 : 𝕂) one_ne_zero <;> simp
 
 中文:
 定理 ordinaryHypergeometricSeries_radius_eq_one
@@ -511,7 +550,14 @@ theorem ordinaryHypergeometricSeries_radius_eq_one
   convert! ofScalars_radius_eq_of_tendsto 𝔸 _ one_ne_zero ?_
   suffices Tendsto (fun k : Nat => (a + k)⁻¹ * (b + k)⁻¹ * (c + k) * ((1 : 𝕂) + k)) atTop (𝓝 1) by
     simp_rw [ordinaryHypergeometricSeries_norm_div_succ_norm a b c _ (fun n _ => habc n)]
-    simp only [← norm_inv, ← norm_mul, NNReal.c
+    simp only [← norm_inv, ← norm_mul, NNReal.coe_one]
+    convert! Filter.Tendsto.norm this
+    exact norm_one.symm
+  have (k : Nat) : (a + k)⁻¹ * (b + k)⁻¹ * (c + k) * ((1 : 𝕂) + k) =
+        (c + k) / (a + k) * ((1 + k) / (b + k)) := by field
+  simp_rw [this]
+  apply (mul_one (1 : 𝕂)) ▸ Filter.Tendsto.mul <;>
+  convert! tendsto_add_mul_div_add_mul_atTop_nhds _ _ (1 : 𝕂) one_ne_zero <;> simp
 
 Depends on / 依赖: Filter, Filter.Tendsto.norm, NNReal, NNReal.coe_one, Tendsto, coe_one, convert, mul_one, norm_inv, norm_mul, norm_one, norm_one.symm, ofScalars_radius_eq_of_tendsto, one_ne_zero, ordinaryHypergeometricSeries_norm_div_succ_norm, simp_rw
 -/

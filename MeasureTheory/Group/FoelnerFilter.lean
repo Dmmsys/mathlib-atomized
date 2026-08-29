@@ -187,7 +187,7 @@ theorem mono
   eventually_meas_ne_top := hfoel.eventually_meas_ne_top.filter_mono hle
   tendsto_meas_smul_symmDiff (g : G) := Tendsto.mono_left (hfoel.tendsto_meas_smul_symmDiff g) hle
 
-@[to_
+@[to_additive]
 
 中文:
 定理 mono
@@ -197,7 +197,7 @@ theorem mono
   eventually_meas_ne_top := hfoel.eventually_meas_ne_top.filter_mono hle
   tendsto_meas_smul_symmDiff (g : G) := Tendsto.mono_left (hfoel.tendsto_meas_smul_symmDiff g) hle
 
-@[to_
+@[to_additive]
 
 Depends on / 依赖: eventually_measurableSet, filter_mono, hfoel.eventually_measurableSet.filter_mono
 -/
@@ -276,7 +276,10 @@ theorem tendsto_nhds_mean
     filter_upwards [hfoel.eventually_meas_ne_zero, hfoel.eventually_meas_ne_top] with i hi hi'
     simpa [ENNReal.div_le_iff hi hi'] using μ.mono inter_subset_right
   obtain ⟨x, hx⟩ := isCompact_Icc.ultrafilter_le_nhds'
- 
+    (u.map (fun i => μ (s inter F i) / μ (F i))) (mem_map.1 mem_Icc)
+  exact tendsto_nhds_limUnder (by use x; exact hx.2)
+
+@[to_additive]
 
 中文:
 定理 tendsto_nhds_mean
@@ -286,7 +289,10 @@ theorem tendsto_nhds_mean
     filter_upwards [hfoel.eventually_meas_ne_zero, hfoel.eventually_meas_ne_top] with i hi hi'
     simpa [ENNReal.div_le_iff hi hi'] using μ.mono inter_subset_right
   obtain ⟨x, hx⟩ := isCompact_Icc.ultrafilter_le_nhds'
- 
+    (u.map (fun i => μ (s inter F i) / μ (F i))) (mem_map.1 mem_Icc)
+  exact tendsto_nhds_limUnder (by use x; exact hx.2)
+
+@[to_additive]
 
 Depends on / 依赖: ENNReal, ENNReal.div_le_iff, div_le_iff, eventually_meas_ne_top, eventually_meas_ne_zero, filter_upwards, hfoel.eventually_meas_ne_top, hfoel.eventually_meas_ne_zero, inter_subset_right, isCompact_Icc, isCompact_Icc.ultrafilter_le_nhds, mem_Icc, mem_map, tendsto_nhds_limUnder, u.map, ultrafilter_le_nhds
 -/
@@ -342,7 +348,9 @@ theorem mean_union_eq_add_of_disjoint
   refine tendsto_nhds_unique_of_eventuallyEq
     (hfoel.tendsto_nhds_mean _) (hfoel.tendsto_nhds_mean _ |>.add <| hfoel.tendsto_nhds_mean _) ?_
   filter_upwards [hfoel.eventually_measurableSet] with i hi
-  rw [union_inter_distrib_right]; rw [measure_union (hdisj.inter_left _ |>.inter_right _) (ht
+  rw [union_inter_distrib_right]; rw [measure_union (hdisj.inter_left _ |>.inter_right _) (ht.inter hi)]; rw [ENNReal.add_div]
+
+@[to_additive]
 
 中文:
 定理 mean_union_eq_add_of_disjoint
@@ -351,7 +359,9 @@ theorem mean_union_eq_add_of_disjoint
   refine tendsto_nhds_unique_of_eventuallyEq
     (hfoel.tendsto_nhds_mean _) (hfoel.tendsto_nhds_mean _ |>.add <| hfoel.tendsto_nhds_mean _) ?_
   filter_upwards [hfoel.eventually_measurableSet] with i hi
-  rw [union_inter_distrib_right]; rw [measure_union (hdisj.inter_left _ |>.inter_right _) (ht
+  rw [union_inter_distrib_right]; rw [measure_union (hdisj.inter_left _ |>.inter_right _) (ht.inter hi)]; rw [ENNReal.add_div]
+
+@[to_additive]
 
 Depends on / 依赖: ENNReal, ENNReal.add_div, add_div, eventually_measurableSet, filter_upwards, hdisj.inter_left, hfoel.eventually_measurableSet, hfoel.tendsto_nhds_mean, ht.inter, inter_left, inter_right, measure_union, tendsto_nhds_mean, tendsto_nhds_unique_of_eventuallyEq, union_inter_distrib_right
 -/
@@ -404,7 +414,13 @@ theorem mean_smul_eq_mean_smul
   rw [← add_zero <| mean μ u F (h • s)]
   refine le_of_tendsto_of_tendsto
     (hfoel.tendsto_nhds_mean (g • s))
-    (hfoel.tendsto_nhds_mean (h • s) |>.add <| hfoel.tends
+    (hfoel.tendsto_nhds_mean (h • s) |>.add <| hfoel.tendsto_meas_smul_symmDiff_smul g⁻¹ h⁻¹) ?_
+  filter_upwards [hfoel.eventually_meas_ne_zero] with i hi
+  rw [← tsub_le_iff_left]; rw [← ENNReal.sub_div <| fun _ _ => hi]
+  refine ENNReal.div_le_div_right (le_trans ?_ (measure_mono <| @inter_subset_right _ s _)) _
+  simpa [inter_symmDiff_distrib_left, ← measure_inter_inv_smul] using le_measure_symmDiff
+
+@[to_additive]
 
 中文:
 定理 mean_smul_eq_mean_smul
@@ -416,7 +432,13 @@ theorem mean_smul_eq_mean_smul
   rw [← add_zero <| mean μ u F (h • s)]
   refine le_of_tendsto_of_tendsto
     (hfoel.tendsto_nhds_mean (g • s))
-    (hfoel.tendsto_nhds_mean (h • s) |>.add <| hfoel.tends
+    (hfoel.tendsto_nhds_mean (h • s) |>.add <| hfoel.tendsto_meas_smul_symmDiff_smul g⁻¹ h⁻¹) ?_
+  filter_upwards [hfoel.eventually_meas_ne_zero] with i hi
+  rw [← tsub_le_iff_left]; rw [← ENNReal.sub_div <| fun _ _ => hi]
+  refine ENNReal.div_le_div_right (le_trans ?_ (measure_mono <| @inter_subset_right _ s _)) _
+  simpa [inter_symmDiff_distrib_left, ← measure_inter_inv_smul] using le_measure_symmDiff
+
+@[to_additive]
 
 Depends on / 依赖: ENNReal, ENNReal.div_le_div_right, ENNReal.sub_div, add_zero, div_le_div_right, eventually_meas_ne_zero, filter_upwards, hfoel.eventually_meas_ne_zero, hfoel.tendsto_meas_smul_symmDiff_smul, hfoel.tendsto_nhds_mean, le_antisymm, le_of_tendsto_of_tendsto, le_trans, measure_mono, sub_div, tendsto_meas_smul_symmDiff_smul, tendsto_nhds_mean, tsub_le_iff_left
 -/

@@ -677,7 +677,8 @@ theorem exists_eq_comp_of_le_length
     rw [length_cons] at hn
     rcases (Nat.le_succ_iff).1 hn with h | rfl
     · obtain ⟨d, p₁, p₂, hp, hl⟩ := ih h
-      exact ⟨d, p₁
+      exact ⟨d, p₁, p₂.cons e, by simp [hp], hl⟩
+    · exact ⟨c, p'.cons e, Path.nil, by simp, by simp⟩
 
 中文:
 定理 存在_eq_comp_of_le_length
@@ -691,7 +692,8 @@ theorem exists_eq_comp_of_le_length
     rw [length_cons] at hn
     rcases (Nat.le_succ_iff).1 hn with h | rfl
     · obtain ⟨d, p₁, p₂, hp, hl⟩ := ih h
-      exact ⟨d, p₁
+      exact ⟨d, p₁, p₂.cons e, by simp [hp], hl⟩
+    · exact ⟨c, p'.cons e, Path.nil, by simp, by simp⟩
 
 Depends on / 依赖: Nat.le_succ_iff, Path.nil, generalizing, le_succ_iff, length_cons
 -/
@@ -788,7 +790,26 @@ theorem exists_eq_comp_and_notMem_tail_of_mem_vertices
     exact ⟨Path.nil, Path.nil, by simp only [comp_nil],
       by simp only [vertices_nil, tail_cons, not_mem_nil, not_false_eq_true]⟩
   | cons pPrev e ih =>
-    have hv' 
+    have hv' : v in pPrev.vertices ∨ v = (pPrev.cons e).end := by
+      simpa using (mem_vertices_cons pPrev e).1 hv
+    have h_case₁ : v = (pPrev.cons e).end -> exists (p₁ : Path a v) (p₂ : Path v (pPrev.cons e).end),
+        pPrev.cons e = p₁.comp p₂ ∧ v ∉ p₂.vertices.tail := by
+      rintro rfl
+      exact ⟨pPrev.cons e, Path.nil, by simp [comp_nil], by simp [vertices_nil]⟩
+    have h_case₂ : v in pPrev.vertices -> v != (pPrev.cons e).end ->
+        exists (p₁ : Path a v) (p₂ : Path v (pPrev.cons e).end),
+          pPrev.cons e = p₁.comp p₂ ∧ v ∉ p₂.vertices.tail := by
+      intro hxPrev hxe_ne
+      obtain ⟨q₁, q₂, h_prev, h_not_tail⟩ := ih hxPrev
+      let q₂' : Path v (pPrev.cons e).end := q₂.cons e
+      have h_no_tail : v ∉ q₂'.vertices.tail := by grind [vertices_cons, end_cons]
+      exact ⟨q₁, q₂', by simp [q₂', h_prev], h_no_tail⟩
+    cases hv' with
+    | inl h_in_prefix =>
+      by_cases h_eq_end : v = (pPrev.cons e).end
+      · exact h_case₁ h_eq_end
+      · exact h_case₂ h_in_prefix h_eq_end
+    | inr h_eq_end => exact h_case₁ h_eq_end
 
 中文:
 定理 存在_eq_comp_and_notMem_tail_of_mem_vertices
@@ -802,7 +823,26 @@ theorem exists_eq_comp_and_notMem_tail_of_mem_vertices
     exact ⟨Path.nil, Path.nil, by simp only [comp_nil],
       by simp only [vertices_nil, tail_cons, not_mem_nil, not_false_eq_true]⟩
   | cons pPrev e ih =>
-    have hv' 
+    have hv' : v in pPrev.vertices ∨ v = (pPrev.cons e).end := by
+      simpa using (mem_vertices_cons pPrev e).1 hv
+    have h_case₁ : v = (pPrev.cons e).end -> exists (p₁ : Path a v) (p₂ : Path v (pPrev.cons e).end),
+        pPrev.cons e = p₁.comp p₂ ∧ v ∉ p₂.vertices.tail := by
+      rintro rfl
+      exact ⟨pPrev.cons e, Path.nil, by simp [comp_nil], by simp [vertices_nil]⟩
+    have h_case₂ : v in pPrev.vertices -> v != (pPrev.cons e).end ->
+        exists (p₁ : Path a v) (p₂ : Path v (pPrev.cons e).end),
+          pPrev.cons e = p₁.comp p₂ ∧ v ∉ p₂.vertices.tail := by
+      intro hxPrev hxe_ne
+      obtain ⟨q₁, q₂, h_prev, h_not_tail⟩ := ih hxPrev
+      let q₂' : Path v (pPrev.cons e).end := q₂.cons e
+      have h_no_tail : v ∉ q₂'.vertices.tail := by grind [vertices_cons, end_cons]
+      exact ⟨q₁, q₂', by simp [q₂', h_prev], h_no_tail⟩
+    cases hv' with
+    | inl h_in_prefix =>
+      by_cases h_eq_end : v = (pPrev.cons e).end
+      · exact h_case₁ h_eq_end
+      · exact h_case₂ h_in_prefix h_eq_end
+    | inr h_eq_end => exact h_case₁ h_eq_end
 
 Depends on / 依赖: List.mem_singleton, Path.nil, comp_nil, mem_singleton, mem_vertices_cons, not_false_eq_true, not_mem_nil, pPrev.cons, pPrev.vertices, tail_cons, vertices, vertices_nil
 -/

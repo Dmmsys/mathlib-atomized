@@ -155,7 +155,10 @@ definition congrFullSubcategory
     exact Q.prop_of_iso (e.counitIso.app Y).symm hY)
   unitIso := (P.fullyFaithfulι.whiskeringRight _).preimageIso
     (P.ι.isoWhiskerLeft e.unitIso)
-  counitIso := (Q.f
+  counitIso := (Q.fullyFaithfulι.whiskeringRight _).preimageIso
+    (Q.ι.isoWhiskerLeft e.counitIso)
+  functor_unitIso_comp X :=
+    ObjectProperty.hom_ext _ (e.functor_unit_comp X.obj)
 
 中文:
 定义 congrFullSubcategory
@@ -166,7 +169,10 @@ definition congrFullSubcategory
     exact Q.prop_of_iso (e.counitIso.app Y).symm hY)
   unitIso := (P.fullyFaithfulι.whiskeringRight _).preimageIso
     (P.ι.isoWhiskerLeft e.unitIso)
-  counitIso := (Q.f
+  counitIso := (Q.fullyFaithfulι.whiskeringRight _).preimageIso
+    (Q.ι.isoWhiskerLeft e.counitIso)
+  functor_unitIso_comp X :=
+    ObjectProperty.hom_ext _ (e.functor_unit_comp X.obj)
 
 Depends on / 依赖: Q.lift, e.functor, functor, infer_instance
 -/

@@ -57,7 +57,21 @@ lemma surjective_localRingHom_iff
   · intro H y
     obtain ⟨a, ha⟩ := H (IsLocalization.mk' _ y (1 : P.primeCompl))
     obtain ⟨a, t, rfl⟩ := IsLocalization.exists_mk'_eq (P.comap f).primeCompl a
-    rw [Localization.localRingHom_mk']; rw [IsLocalization.mk'_eq_iff_eq]; rw [Submonoid.coe_one]; rw [one_mul]; rw [IsLo
+    rw [Localization.localRingHom_mk']; rw [IsLocalization.mk'_eq_iff_eq]; rw [Submonoid.coe_one]; rw [one_mul]; rw [IsLocalization.eq_iff_exists P.primeCompl] at ha
+    obtain ⟨c, hc⟩ := ha
+    simp only [← mul_assoc] at hc
+    exact ⟨_, _, _, c.2, t.2, hc.symm⟩
+  · refine fun H y => Localization.ind (fun ⟨y, t, h⟩ => ?_) y
+    simp only
+    obtain ⟨yx, ys, yc, hyc, hy, ey⟩ := H y
+    obtain ⟨tx, ts, yt, hyt, ht, et⟩ := H t
+    refine ⟨Localization.mk (yx * ts) ⟨ys * tx, Submonoid.mul_mem _ hy ?_⟩, ?_⟩
+    · exact fun H => mul_mem (P.primeCompl.mul_mem hyt ht) h (et ▸ Ideal.mul_mem_left _ yt H)
+    · simp only [Localization.mk_eq_mk', Localization.localRingHom_mk', map_mul f,
+        IsLocalization.mk'_eq_iff_eq, IsLocalization.eq_iff_exists P.primeCompl]
+      refine ⟨⟨yc, hyc⟩ * ⟨yt, hyt⟩, ?_⟩
+      simp only [Submonoid.coe_mul]
+      convert! congr($(ey.symm) * $(et)) using 1 <;> ring
 
 中文:
 引理 surjective_localRingHom_iff
@@ -67,7 +81,21 @@ lemma surjective_localRingHom_iff
   · intro H y
     obtain ⟨a, ha⟩ := H (IsLocalization.mk' _ y (1 : P.primeCompl))
     obtain ⟨a, t, rfl⟩ := IsLocalization.exists_mk'_eq (P.comap f).primeCompl a
-    rw [Localization.localRingHom_mk']; rw [IsLocalization.mk'_eq_iff_eq]; rw [Submonoid.coe_one]; rw [one_mul]; rw [IsLo
+    rw [Localization.localRingHom_mk']; rw [IsLocalization.mk'_eq_iff_eq]; rw [Submonoid.coe_one]; rw [one_mul]; rw [IsLocalization.eq_iff_exists P.primeCompl] at ha
+    obtain ⟨c, hc⟩ := ha
+    simp only [← mul_assoc] at hc
+    exact ⟨_, _, _, c.2, t.2, hc.symm⟩
+  · refine fun H y => Localization.ind (fun ⟨y, t, h⟩ => ?_) y
+    simp only
+    obtain ⟨yx, ys, yc, hyc, hy, ey⟩ := H y
+    obtain ⟨tx, ts, yt, hyt, ht, et⟩ := H t
+    refine ⟨Localization.mk (yx * ts) ⟨ys * tx, Submonoid.mul_mem _ hy ?_⟩, ?_⟩
+    · exact fun H => mul_mem (P.primeCompl.mul_mem hyt ht) h (et ▸ Ideal.mul_mem_left _ yt H)
+    · simp only [Localization.mk_eq_mk', Localization.localRingHom_mk', map_mul f,
+        IsLocalization.mk'_eq_iff_eq, IsLocalization.eq_iff_exists P.primeCompl]
+      refine ⟨⟨yc, hyc⟩ * ⟨yt, hyt⟩, ?_⟩
+      simp only [Submonoid.coe_mul]
+      convert! congr($(ey.symm) * $(et)) using 1 <;> ring
 
 Depends on / 依赖: IsLocalization, IsLocalization.eq_iff_exists, IsLocalization.exists_mk, IsLocalization.mk, Localization, Localization.ind, Localization.localRingHom_mk, P.comap, P.primeCompl, Submonoid, Submonoid.coe_one, _eq_iff_eq, coe_one, eq_iff_exists, exists_mk, hc.symm, localRingHom_mk, mul_assoc, one_mul, primeCompl
 -/
@@ -341,7 +369,15 @@ lemma SurjectiveOnStalks.exists_mul_eq_tmul
   | tmul x₁ x₂ =>
     obtain ⟨y, s, c, hs, hc, e⟩ := (surjective_localRingHom_iff _).mp (hf₂ J hJ) x₂
     simp_rw [Algebra.smul_def]
-    refine ⟨c, s, 
+    refine ⟨c, s, y • x₁, J.primeCompl.mul_mem hc hs, ?_⟩
+    rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [one_mul]; rw [mul_comm _ c]; rw [e]; rw [TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_comm]
+  | add x₁ x₂ hx₁ hx₂ =>
+    obtain ⟨t₁, r₁, a₁, hr₁, e₁⟩ := hx₁
+    obtain ⟨t₂, r₂, a₂, hr₂, e₂⟩ := hx₂
+    have : (r₁ * r₂) • (t₁ * t₂) = (r₁ • t₁) * (r₂ • t₂) := by
+      simp_rw [← smul_eq_mul]; rw [smul_smul_smul_comm]
+    refine ⟨t₁ * t₂, r₁ * r₂, r₂ • a₁ + r₁ • a₂, this.symm ▸ J.primeCompl.mul_mem hr₁ hr₂, ?_⟩
+    rw [this]; rw [← one_mul (1 : S)]; rw [← Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_add]; rw [mul_comm (_ otimesₜ _)]; rw [mul_assoc]; rw [e₁]; rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [one_mul]; rw [smul_mul_assoc]; rw [← TensorProduct.smul_tmul]; rw [mul_comm (_ otimesₜ _)]; rw [mul_assoc]; rw [e₂]; rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [one_mul]; rw [smul_mul_assoc]; rw [← TensorProduct.smul_tmul]; rw [TensorProduct.add_tmul]; rw [mul_comm t₁ t₂]
 
 中文:
 引理 SurjectiveOnStalks.存在_mul_eq_tmul
@@ -353,7 +389,15 @@ lemma SurjectiveOnStalks.exists_mul_eq_tmul
   | tmul x₁ x₂ =>
     obtain ⟨y, s, c, hs, hc, e⟩ := (surjective_localRingHom_iff _).mp (hf₂ J hJ) x₂
     simp_rw [Algebra.smul_def]
-    refine ⟨c, s, 
+    refine ⟨c, s, y • x₁, J.primeCompl.mul_mem hc hs, ?_⟩
+    rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [one_mul]; rw [mul_comm _ c]; rw [e]; rw [TensorProduct.smul_tmul]; rw [Algebra.smul_def]; rw [mul_comm]
+  | add x₁ x₂ hx₁ hx₂ =>
+    obtain ⟨t₁, r₁, a₁, hr₁, e₁⟩ := hx₁
+    obtain ⟨t₂, r₂, a₂, hr₂, e₂⟩ := hx₂
+    have : (r₁ * r₂) • (t₁ * t₂) = (r₁ • t₁) * (r₂ • t₂) := by
+      simp_rw [← smul_eq_mul]; rw [smul_smul_smul_comm]
+    refine ⟨t₁ * t₂, r₁ * r₂, r₂ • a₁ + r₁ • a₂, this.symm ▸ J.primeCompl.mul_mem hr₁ hr₂, ?_⟩
+    rw [this]; rw [← one_mul (1 : S)]; rw [← Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_add]; rw [mul_comm (_ otimesₜ _)]; rw [mul_assoc]; rw [e₁]; rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [one_mul]; rw [smul_mul_assoc]; rw [← TensorProduct.smul_tmul]; rw [mul_comm (_ otimesₜ _)]; rw [mul_assoc]; rw [e₂]; rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [one_mul]; rw [smul_mul_assoc]; rw [← TensorProduct.smul_tmul]; rw [TensorProduct.add_tmul]; rw [mul_comm t₁ t₂]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.tmul_mul_tmul, Algebra.smul_def, J.primeCompl.mul_mem, J.primeCompl.one_mem, TensorProduct, TensorProduct.smul_tmul, TensorProduct.zero_tmul, mul_comm, mul_mem, mul_zero, one_mem, one_mul, one_smul, primeCompl, simp_rw, smul_def, smul_tmul, surjective_localRingHom_iff, tmul_mul_tmul
 -/
@@ -419,7 +463,14 @@ lemma SurjectiveOnStalks.baseChange
   obtain ⟨t, r, a, ht, e⟩ := hf.exists_mul_eq_tmul x (J.comap g) inferInstance
   refine ⟨a, algebraMap _ _ r, 1 otimesₜ (r • t), ht, ?_, ?_⟩
   · intro H
-    sim
+    simp only [Algebra.algebraMap_eq_smul_one (A := S), Algebra.TensorProduct.algebraMap_apply,
+      Algebra.algebraMap_self, id_apply, smul_tmul, ← Algebra.algebraMap_eq_smul_one (A := T)] at H
+    rw [Ideal.mem_comap]; rw [Algebra.smul_def]; rw [g.map_mul] at ht
+    exact ht (J.mul_mem_right _ H)
+  · simp only [tmul_smul, Algebra.TensorProduct.algebraMap_apply, Algebra.algebraMap_self,
+      RingHomCompTriple.comp_apply, Algebra.smul_mul_assoc, Algebra.TensorProduct.tmul_mul_tmul,
+      one_mul, mul_one, id_apply, ← e]
+    rw [Algebra.algebraMap_eq_smul_one]; rw [← smul_tmul']; rw [smul_mul_assoc]
 
 中文:
 引理 SurjectiveOnStalks.baseChange
@@ -431,7 +482,14 @@ lemma SurjectiveOnStalks.baseChange
   obtain ⟨t, r, a, ht, e⟩ := hf.exists_mul_eq_tmul x (J.comap g) inferInstance
   refine ⟨a, algebraMap _ _ r, 1 otimesₜ (r • t), ht, ?_, ?_⟩
   · intro H
-    sim
+    simp only [Algebra.algebraMap_eq_smul_one (A := S), Algebra.TensorProduct.algebraMap_apply,
+      Algebra.algebraMap_self, id_apply, smul_tmul, ← Algebra.algebraMap_eq_smul_one (A := T)] at H
+    rw [Ideal.mem_comap]; rw [Algebra.smul_def]; rw [g.map_mul] at ht
+    exact ht (J.mul_mem_right _ H)
+  · simp only [tmul_smul, Algebra.TensorProduct.algebraMap_apply, Algebra.algebraMap_self,
+      RingHomCompTriple.comp_apply, Algebra.smul_mul_assoc, Algebra.TensorProduct.tmul_mul_tmul,
+      one_mul, mul_one, id_apply, ← e]
+    rw [Algebra.algebraMap_eq_smul_one]; rw [← smul_tmul']; rw [smul_mul_assoc]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.algebraMap_apply, Algebra.TensorProduct.includeRight.toRingHom, Algebra.algebraMap_eq_smul_one, Algebra.algebraMap_self, Algebra.s, Ideal.mem_comap, J.comap, TensorProduct, algebraMap, algebraMap_apply, algebraMap_eq_smul_one, algebraMap_self, exists_mul_eq_tmul, hf.exists_mul_eq_tmul, id_apply, includeRight, mem_comap, otimes, smul_tmul
 -/
@@ -498,7 +556,10 @@ lemma SurjectiveOnStalks.tensorProductMap_id
   have := IsScalarTower.of_algebraMap_eq' f.comp_algebraMap.symm
   change (Algebra.TensorProduct.map (Algebra.ofId S S') (AlgHom.id R T)).SurjectiveOnStalks
   convert_to ((Algebra.TensorProduct.cancelBaseChange R S S S' T).toAlgHom.comp
-    Algebra.TensorProduct.inc
+    Algebra.TensorProduct.includeRight).SurjectiveOnStalks
+  · congr; ext; simp
+  exact (Algebra.TensorProduct.cancelBaseChange R S S S' T).toRingEquiv.surjectiveOnStalks.comp
+    Hf.baseChange'
 
 中文:
 引理 SurjectiveOnStalks.tensorProductMap_id
@@ -507,7 +568,10 @@ lemma SurjectiveOnStalks.tensorProductMap_id
   have := IsScalarTower.of_algebraMap_eq' f.comp_algebraMap.symm
   change (Algebra.TensorProduct.map (Algebra.ofId S S') (AlgHom.id R T)).SurjectiveOnStalks
   convert_to ((Algebra.TensorProduct.cancelBaseChange R S S S' T).toAlgHom.comp
-    Algebra.TensorProduct.inc
+    Algebra.TensorProduct.includeRight).SurjectiveOnStalks
+  · congr; ext; simp
+  exact (Algebra.TensorProduct.cancelBaseChange R S S S' T).toRingEquiv.surjectiveOnStalks.comp
+    Hf.baseChange'
 -/
 private lemma SurjectiveOnStalks.tensorProductMap_id
     {S' : Type*} [CommRing S'] [Algebra R S] [Algebra R T] [Algebra R S']
@@ -533,7 +597,10 @@ lemma SurjectiveOnStalks.tensorProductMap
 .comp (Algebra.TensorProduct.comm _ _ _).toRingEquiv.surjectiveOnStalks
 .comp RingHom.SurjectiveOnStalks.tensorProductMap_id (T := S) Hg
           (Algebra.TensorProduct.comm _ _ _).toRingEquiv.surjectiveOnStalks
-  simp 
+  simp only [AlgHom.toRingHom_eq_coe, RingEquiv.toRingHom_eq_coe,
+    AlgEquiv.toRingEquiv_toRingHom, ← AlgEquiv.toAlgHom_toRingHom, ← AlgHom.comp_toRingHom]
+  congr
+  ext <;> simp
 
 中文:
 引理 SurjectiveOnStalks.tensorProductMap
@@ -543,7 +610,10 @@ lemma SurjectiveOnStalks.tensorProductMap
 .comp (Algebra.TensorProduct.comm _ _ _).toRingEquiv.surjectiveOnStalks
 .comp RingHom.SurjectiveOnStalks.tensorProductMap_id (T := S) Hg
           (Algebra.TensorProduct.comm _ _ _).toRingEquiv.surjectiveOnStalks
-  simp 
+  simp only [AlgHom.toRingHom_eq_coe, RingEquiv.toRingHom_eq_coe,
+    AlgEquiv.toRingEquiv_toRingHom, ← AlgEquiv.toAlgHom_toRingHom, ← AlgHom.comp_toRingHom]
+  congr
+  ext <;> simp
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.toAlgHom_toRingHom, AlgEquiv.toRingEquiv_toRingHom, AlgHom, AlgHom.comp_toRingHom, AlgHom.toRingHom_eq_coe, Algebra, Algebra.TensorProduct.comm, RingEquiv, RingEquiv.toRingHom_eq_coe, RingHom, RingHom.SurjectiveOnStalks.tensorProductMap_id, SurjectiveOnStalks, TensorProduct, comp_toRingHom, convert, surjectiveOnStalks, tensorProductMap_id, toAlgHom_toRingHom, toRingEquiv
 -/
@@ -573,7 +643,10 @@ lemma surjectiveOnStalks_iff_of_isLocalHom
   obtain ⟨y, r, c, hc, hr, e⟩ :=
     (surjective_localRingHom_iff _).mp (H (IsLocalRing.maximalIdeal _) inferInstance) x
   simp only [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff, not_not] at hc hr
-  refine ⟨(isUnit_of_map_un
+  refine ⟨(isUnit_of_map_unit f r hr).unit⁻¹ * y, ?_⟩
+  apply hr.mul_right_injective
+  apply hc.mul_right_injective
+  simp only [← map_mul, ← mul_assoc, IsUnit.mul_val_inv, one_mul, e]
 
 中文:
 引理 surjectiveOnStalks_iff_of_isLocalHom
@@ -583,7 +656,10 @@ lemma surjectiveOnStalks_iff_of_isLocalHom
   obtain ⟨y, r, c, hc, hr, e⟩ :=
     (surjective_localRingHom_iff _).mp (H (IsLocalRing.maximalIdeal _) inferInstance) x
   simp only [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff, not_not] at hc hr
-  refine ⟨(isUnit_of_map_un
+  refine ⟨(isUnit_of_map_unit f r hr).unit⁻¹ * y, ?_⟩
+  apply hr.mul_right_injective
+  apply hc.mul_right_injective
+  simp only [← map_mul, ← mul_assoc, IsUnit.mul_val_inv, one_mul, e]
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.maximalIdeal, IsLocalRing.mem_maximalIdeal, IsUnit, IsUnit.mul_val_inv, hc.mul_right_injective, hr.mul_right_injective, isUnit_of_map_unit, map_mul, maximalIdeal, mem_maximalIdeal, mem_nonunits_iff, mul_assoc, mul_right_injective, mul_val_inv, not_not, one_mul, surjectiveOnStalks_of_surjective, surjective_localRingHom_iff
 -/

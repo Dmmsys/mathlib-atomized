@@ -46,7 +46,12 @@ lemma iteratedDeriv_alternating
   split
   · exact le_rfl
 · refine mul_nonneg ?_ (inv_natCast_cpow_ofReal_pos (by assumption) x).le
-    induc
+    induction n with
+    | zero => simpa only [Function.iterate_zero, id_eq] using! hn k
+    | succ n IH =>
+        rw [Function.iterate_succ_apply']
+        refine mul_nonneg ?_ IH
+        simp only [← natCast_log, zero_le_real, Real.log_natCast_nonneg]
 
 中文:
 引理 iteratedDeriv_alternating
@@ -58,7 +63,12 @@ lemma iteratedDeriv_alternating
   split
   · exact le_rfl
 · refine mul_nonneg ?_ (inv_natCast_cpow_ofReal_pos (by assumption) x).le
-    induc
+    induction n with
+    | zero => simpa only [Function.iterate_zero, id_eq] using! hn k
+    | succ n IH =>
+        rw [Function.iterate_succ_apply']
+        refine mul_nonneg ?_ IH
+        simp only [← natCast_log, zero_le_real, Real.log_natCast_nonneg]
 
 Depends on / 依赖: Even.neg_one_pow, Function, Function.iterate_succ_apply, Function.iterate_zero, LSeries, LSeries.term_def, LSeries_iteratedDeriv, Real.log_natCast_nonneg, id_eq, inv_natCast_cpow_ofReal_pos, iterate_succ_apply, iterate_zero, le_rfl, log_natCast_nonneg, mul_assoc, mul_nonneg, natCast_log, neg_one_pow, one_mul, pow_add
 -/
@@ -116,7 +126,13 @@ lemma positive_of_differentiable_of_eqOn
 have hxy' : abscissaOfAbsConv a < max x y + 1 := hx.trans_lt mod_cast hxy
   have hys : (max x y + 1 : Complex) in {s | x < s.re} := by
     simp only [Set.mem_ofPred_eq, add_re, ofReal_re, one_re, hxy]
-  have hfx : 0 < f (ma
+  have hfx : 0 < f (max x y + 1) := by
+    simpa only [hf' hys, ofReal_add, ofReal_one] using positive ha₀ ha₁ hxy'
+  refine (hfx.trans_le <| hf.apply_le_of_iteratedDeriv_alternating (fun n _ => ?_) ?_)
+  · have hs : IsOpen {s : Complex | x < s.re} := continuous_re.isOpen_preimage _ isOpen_Ioi
+    simpa only [hf'.iteratedDeriv_of_isOpen hs n hys, ofReal_add, ofReal_one] using
+      iteratedDeriv_alternating ha₀ hxy' n
+  · exact_mod_cast (le_max_right x y).trans (lt_add_one _).le
 
 中文:
 引理 positive_of_differentiable_of_eqOn
@@ -126,7 +142,13 @@ have hxy' : abscissaOfAbsConv a < max x y + 1 := hx.trans_lt mod_cast hxy
 have hxy' : abscissaOfAbsConv a < max x y + 1 := hx.trans_lt mod_cast hxy
   have hys : (max x y + 1 : Complex) in {s | x < s.re} := by
     simp only [Set.mem_ofPred_eq, add_re, ofReal_re, one_re, hxy]
-  have hfx : 0 < f (ma
+  have hfx : 0 < f (max x y + 1) := by
+    simpa only [hf' hys, ofReal_add, ofReal_one] using positive ha₀ ha₁ hxy'
+  refine (hfx.trans_le <| hf.apply_le_of_iteratedDeriv_alternating (fun n _ => ?_) ?_)
+  · have hs : IsOpen {s : Complex | x < s.re} := continuous_re.isOpen_preimage _ isOpen_Ioi
+    simpa only [hf'.iteratedDeriv_of_isOpen hs n hys, ofReal_add, ofReal_one] using
+      iteratedDeriv_alternating ha₀ hxy' n
+  · exact_mod_cast (le_max_right x y).trans (lt_add_one _).le
 
 Depends on / 依赖: IsOpen, Set.mem_ofPred_eq, abscissaOfAbsConv, add_re, apply_le_of_iteratedDeriv_alternating, hf.apply_le_of_iteratedDeriv_alternating, hfx.trans_le, hx.trans_lt, le_max_left, lt_add_one, mem_ofPred_eq, mod_cast, ofReal_add, ofReal_one, ofReal_re, one_re, positive, s.re, trans_le, trans_lt
 -/

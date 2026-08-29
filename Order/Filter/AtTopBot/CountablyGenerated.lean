@@ -195,7 +195,13 @@ theorem exists_seq_monotone_tendsto_atTop_atTop
   choose c hleft hright using exists_ge_ge (α := α)
   set xs : Nat -> α := fun n => (List.range n).foldl (fun x n => c x (ys n)) (ys 0)
   have hsucc (n : Nat) : xs (n + 1) = c (xs n) (ys n) := by simp [xs, List.range_succ]
-  refine ⟨xs, ?_
+  refine ⟨xs, ?_, ?_⟩
+  · refine monotone_nat_of_le_succ fun n => ?_
+    rw [hsucc]
+    apply hleft
+· refine (tendsto_add_atTop_iff_nat 1).1 tendsto_atTop_mono (fun n => ?_) h
+    rw [hsucc]
+    apply hright
 
 中文:
 定理 存在_seq_monotone_tendsto_atTop_atTop
@@ -205,7 +211,13 @@ theorem exists_seq_monotone_tendsto_atTop_atTop
   choose c hleft hright using exists_ge_ge (α := α)
   set xs : Nat -> α := fun n => (List.range n).foldl (fun x n => c x (ys n)) (ys 0)
   have hsucc (n : Nat) : xs (n + 1) = c (xs n) (ys n) := by simp [xs, List.range_succ]
-  refine ⟨xs, ?_
+  refine ⟨xs, ?_, ?_⟩
+  · refine monotone_nat_of_le_succ fun n => ?_
+    rw [hsucc]
+    apply hleft
+· refine (tendsto_add_atTop_iff_nat 1).1 tendsto_atTop_mono (fun n => ?_) h
+    rw [hsucc]
+    apply hright
 
 Depends on / 依赖: Filter, List.range, List.range_succ, exists_ge_ge, exists_seq_tendsto, hright, monotone_nat_of_le_succ, range_succ, tendsto_add_atTop_iff_nat, tendsto_atTop_mono
 -/
@@ -257,7 +269,8 @@ theorem tendsto_iff_seq_tendsto
   rcases (k ⊓ 𝓟 (f ⁻¹' sᶜ)).exists_seq_tendsto with ⟨x, hx⟩
   rw [tendsto_inf]; rw [tendsto_principal] at hx
   refine ⟨x, hx.1, fun h => ?_⟩
-  rcase
+  rcases (hx.2.and (h hs)).exists with ⟨N, hnotMem, hmem⟩
+  exact hnotMem hmem
 
 中文:
 定理 tendsto_iff_seq_tendsto
@@ -269,7 +282,8 @@ theorem tendsto_iff_seq_tendsto
   rcases (k ⊓ 𝓟 (f ⁻¹' sᶜ)).exists_seq_tendsto with ⟨x, hx⟩
   rw [tendsto_inf]; rw [tendsto_principal] at hx
   refine ⟨x, hx.1, fun h => ?_⟩
-  rcase
+  rcases (hx.2.and (h hs)).exists with ⟨N, hnotMem, hmem⟩
+  exact hnotMem hmem
 
 Depends on / 依赖: contrapose, exists_seq_tendsto, h.comp, hnotMem, inf_principal_eq_bot, neBot_iff, tendsto_inf, tendsto_principal
 -/
@@ -416,7 +430,8 @@ theorem tendsto_of_subseq_tendsto
     rwa [not_tendsto_iff_exists_frequently_notMem] at hxy
   obtain ⟨y, hy_tendsto, hy_freq⟩ := exists_seq_forall_of_frequently hfreq
   refine ⟨y, hy_tendsto, fun ms hms_tendsto => ?_⟩
-  rcases (hms_tendsto.ev
+  rcases (hms_tendsto.eventually_mem hs).exists with ⟨n, hn⟩
+exact absurd hn hy_freq _
 
 中文:
 定理 tendsto_of_subseq_tendsto
@@ -427,7 +442,8 @@ theorem tendsto_of_subseq_tendsto
     rwa [not_tendsto_iff_exists_frequently_notMem] at hxy
   obtain ⟨y, hy_tendsto, hy_freq⟩ := exists_seq_forall_of_frequently hfreq
   refine ⟨y, hy_tendsto, fun ms hms_tendsto => ?_⟩
-  rcases (hms_tendsto.ev
+  rcases (hms_tendsto.eventually_mem hs).exists with ⟨n, hn⟩
+exact absurd hn hy_freq _
 
 Depends on / 依赖: absurd, contrapose, eventually_mem, exists_seq_forall_of_frequently, hms_tendsto, hms_tendsto.eventually_mem, hy_freq, hy_tendsto, not_tendsto_iff_exists_frequently_notMem
 -/

@@ -161,7 +161,12 @@ definition isLimitOfFactors
       rw [← Category.assoc]; rw [← Category.assoc]
       apply congrArg (· ≫ h) t.condition
     ⟨hs.lift (PullbackCone.mk t.fst t.snd <| by rw [← hxh, ← hyh, this]),
-      ⟨hs.fac _
+      ⟨hs.fac _ WalkingCospan.left, hs.fac _ WalkingCospan.right, fun hr hr' => by
+        apply PullbackCone.IsLimit.hom_ext hs <;>
+              simp only [PullbackCone.mk_fst, PullbackCone.mk_snd] at hr hr' ⊢ <;>
+            simp only [hr, hr'] <;>
+          symm
+        exacts [hs.fac _ WalkingCospan.left, hs.fac _ WalkingCospan.right]⟩⟩
 
 中文:
 定义 isLimitOfFactors
@@ -171,7 +176,12 @@ definition isLimitOfFactors
       rw [← Category.assoc]; rw [← Category.assoc]
       apply congrArg (· ≫ h) t.condition
     ⟨hs.lift (PullbackCone.mk t.fst t.snd <| by rw [← hxh, ← hyh, this]),
-      ⟨hs.fac _
+      ⟨hs.fac _ WalkingCospan.left, hs.fac _ WalkingCospan.right, fun hr hr' => by
+        apply PullbackCone.IsLimit.hom_ext hs <;>
+              simp only [PullbackCone.mk_fst, PullbackCone.mk_snd] at hr hr' ⊢ <;>
+            simp only [hr, hr'] <;>
+          symm
+        exacts [hs.fac _ WalkingCospan.left, hs.fac _ WalkingCospan.right]⟩⟩
 
 Depends on / 依赖: Category, Category.assoc, IsLimit, Porting, PullbackCone, PullbackCone.IsLimit.hom_ext, PullbackCone.isLimitAux, PullbackCone.mk, PullbackCone.mk_fst, PullbackCone.mk_snd, WalkingCospan, WalkingCospan.left, WalkingCospan.right, condition, exacts, hom_ext, hs.fac, hs.lift, isLimitAux, mk_fst
 -/
@@ -747,7 +757,19 @@ definition isColimitOfFactors
     have reassoc₂ : h ≫ y ≫ inr s = g ≫ inr s := by
       rw [← Category.assoc]; apply congrArg (· ≫ inr s) hhy
     IsColimit (PushoutCocone.mk _ _ (show x ≫ s.inl = y ≫ s.inr from
-(cancel_epi h).1
+(cancel_epi h).1 by rw [reassoc₁, reassoc₂, s.condition])) :=
+  PushoutCocone.isColimitAux' _ fun t => ⟨hs.desc (PushoutCocone.mk t.inl t.inr <| by
+    rw [← hhx]; rw [← hhy]; rw [Category.assoc]; rw [Category.assoc]; rw [t.condition]),
+      ⟨hs.fac _ WalkingSpan.left, hs.fac _ WalkingSpan.right, fun hr hr' => by
+        apply PushoutCocone.IsColimit.hom_ext hs
+        · simp only [PushoutCocone.mk_inl, PushoutCocone.mk_inr] at hr hr' ⊢
+          simp only [hr]
+          symm
+          exact hs.fac _ WalkingSpan.left
+        · simp only [PushoutCocone.mk_inl, PushoutCocone.mk_inr] at hr hr' ⊢
+          simp only [hr']
+          symm
+          exact hs.fac _ WalkingSpan.right⟩⟩
 
 中文:
 定义 isColimitOfFactors
@@ -757,7 +779,19 @@ definition isColimitOfFactors
     have reassoc₂ : h ≫ y ≫ inr s = g ≫ inr s := by
       rw [← Category.assoc]; apply congrArg (· ≫ inr s) hhy
     IsColimit (PushoutCocone.mk _ _ (show x ≫ s.inl = y ≫ s.inr from
-(cancel_epi h).1
+(cancel_epi h).1 by rw [reassoc₁, reassoc₂, s.condition])) :=
+  PushoutCocone.isColimitAux' _ fun t => ⟨hs.desc (PushoutCocone.mk t.inl t.inr <| by
+    rw [← hhx]; rw [← hhy]; rw [Category.assoc]; rw [Category.assoc]; rw [t.condition]),
+      ⟨hs.fac _ WalkingSpan.left, hs.fac _ WalkingSpan.right, fun hr hr' => by
+        apply PushoutCocone.IsColimit.hom_ext hs
+        · simp only [PushoutCocone.mk_inl, PushoutCocone.mk_inr] at hr hr' ⊢
+          simp only [hr]
+          symm
+          exact hs.fac _ WalkingSpan.left
+        · simp only [PushoutCocone.mk_inl, PushoutCocone.mk_inr] at hr hr' ⊢
+          simp only [hr']
+          symm
+          exact hs.fac _ WalkingSpan.right⟩⟩
 
 Depends on / 依赖: Category, Category.assoc, IsColimit, Porting, PushoutCocone, PushoutCocone.isColimitAux, PushoutCocone.mk, around, cancel_epi, condition, hs.desc, hs.f, isColimitAux, reassoc, s.condition, s.inl, s.inr, t.condition, t.inl, t.inr
 -/
@@ -796,7 +830,7 @@ definition isColimitOfEpiComp
     ⟨l, h₁, h₂⟩
   refine ⟨l, h₁, h₂, ?_⟩
   intro m hm₁ hm₂
-  exact (PushoutCocone.IsColimit.hom_ext H (hm₁.trans h₁.symm) (hm₂.trans h₂.sy
+  exact (PushoutCocone.IsColimit.hom_ext H (hm₁.trans h₁.symm) (hm₂.trans h₂.symm) :)
 
 中文:
 定义 isColimitOfEpiComp
@@ -809,7 +843,7 @@ definition isColimitOfEpiComp
     ⟨l, h₁, h₂⟩
   refine ⟨l, h₁, h₂, ?_⟩
   intro m hm₁ hm₂
-  exact (PushoutCocone.IsColimit.hom_ext H (hm₁.trans h₁.symm) (hm₂.trans h₂.sy
+  exact (PushoutCocone.IsColimit.hom_ext H (hm₁.trans h₁.symm) (hm₂.trans h₂.symm) :)
 
 Depends on / 依赖: IsColimit, PushoutCocone, PushoutCocone.IsColimit.desc, PushoutCocone.IsColimit.hom_ext, PushoutCocone.isColimitAux, cancel_epi, condition, hom_ext, isColimitAux, s.condition, s.inl, s.inr
 -/

@@ -896,7 +896,7 @@ definition lift
   map_zero' := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ (map_zero _)]
   map_add' z w := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ (h.repr z + h.repr w)]
   map_one' := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ (map_one _)]
-  map_mul' z w := by simp [h.eval₂_repr_
+  map_mul' z w := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ (h.repr z * h.repr w)]
 
 中文:
 定义 lift
@@ -905,7 +905,7 @@ definition lift
   map_zero' := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ (map_zero _)]
   map_add' z w := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ (h.repr z + h.repr w)]
   map_one' := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ (map_one _)]
-  map_mul' z w := by simp [h.eval₂_repr_
+  map_mul' z w := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ (h.repr z * h.repr w)]
 
 Depends on / 依赖: h.repr
 -/
@@ -1368,7 +1368,9 @@ definition modByMonicHom
     conv_lhs =>
       rw [← h.map_repr x]; rw [← h.map_repr y]; rw [← map_add]; rw [h.modByMonic_repr_map]; rw [add_modByMonic]
   map_smul' c x := by
-    rw [RingHom.id_apply]; rw [← h.map_repr x]; rw [Algebra.smul_def]; rw [h.algebraMap_apply]; rw [← map_mul]; rw 
+    rw [RingHom.id_apply]; rw [← h.map_repr x]; rw [Algebra.smul_def]; rw [h.algebraMap_apply]; rw [← map_mul]; rw [h.modByMonic_repr_map]; rw [← smul_eq_C_mul]; rw [smul_modByMonic]; rw [h.map_repr]
+
+@[simp]
 
 中文:
 定义 modByMonicHom
@@ -1378,7 +1380,9 @@ definition modByMonicHom
     conv_lhs =>
       rw [← h.map_repr x]; rw [← h.map_repr y]; rw [← map_add]; rw [h.modByMonic_repr_map]; rw [add_modByMonic]
   map_smul' c x := by
-    rw [RingHom.id_apply]; rw [← h.map_repr x]; rw [Algebra.smul_def]; rw [h.algebraMap_apply]; rw [← map_mul]; rw 
+    rw [RingHom.id_apply]; rw [← h.map_repr x]; rw [Algebra.smul_def]; rw [h.algebraMap_apply]; rw [← map_mul]; rw [h.modByMonic_repr_map]; rw [← smul_eq_C_mul]; rw [smul_modByMonic]; rw [h.map_repr]
+
+@[simp]
 
 Depends on / 依赖: h.repr
 -/
@@ -1512,7 +1516,31 @@ repr.invFun g := h.map ofFinsupp .ofCoeff g.mapDomain Fin.val
   repr.left_inv x := by
     nontriviality R using Algebra.subsingleton R S
     dsimp
-    rw [Finsupp.mapDomain_comapDomain]; rw [Polynomial.eta]; rw [h.map_modByMon
+    rw [Finsupp.mapDomain_comapDomain]; rw [Polynomial.eta]; rw [h.map_modByMonicHom x]
+    · exact Fin.val_injective
+    intro i hi
+    refine Set.mem_range.mpr ⟨⟨i, ?_⟩, rfl⟩
+    contrapose! hi
+    simp only [Polynomial.toFinsupp_apply, Classical.not_not, Finsupp.mem_support_iff, Ne,
+      modByMonicHom, LinearMap.coe_mk, Finset.mem_coe]
+    obtain rfl | hf := eq_or_ne f 1
+    · simp
+· exact coeff_eq_zero_of_natDegree_lt (natDegree_modByMonic_lt _ h.monic hf).trans_le hi
+  repr.right_inv g := by
+    nontriviality R
+    ext i
+    simp only [h.modByMonicHom_map, Finsupp.comapDomain_apply, Polynomial.toFinsupp_apply]
+    rw [(Polynomial.modByMonic_eq_self_iff h.monic).mpr]; rw [Polynomial.coeff]
+    · rw [Finsupp.mapDomain_apply Fin.val_injective]
+    rw [degree_eq_natDegree h.monic.ne_zero]; rw [degree_lt_iff_coeff_zero]
+    intro m hm
+    rw [Polynomial.coeff]
+    rw [Finsupp.mapDomain_of_notMem_range]
+    rw [Set.mem_range]; rw [not_exists]
+    rintro i rfl
+    exact i.prop.not_ge hm
+  repr.map_add' := by simp [Finsupp.comapDomain_add_of_injective Fin.val_injective]
+  repr.map_smul' := by simp [Finsupp.comapDomain_smul_of_injective Fin.val_injective]
 
 中文:
 定义 basis
@@ -1522,7 +1550,31 @@ repr.invFun g := h.map ofFinsupp .ofCoeff g.mapDomain Fin.val
   repr.left_inv x := by
     nontriviality R using Algebra.subsingleton R S
     dsimp
-    rw [Finsupp.mapDomain_comapDomain]; rw [Polynomial.eta]; rw [h.map_modByMon
+    rw [Finsupp.mapDomain_comapDomain]; rw [Polynomial.eta]; rw [h.map_modByMonicHom x]
+    · exact Fin.val_injective
+    intro i hi
+    refine Set.mem_range.mpr ⟨⟨i, ?_⟩, rfl⟩
+    contrapose! hi
+    simp only [Polynomial.toFinsupp_apply, Classical.not_not, Finsupp.mem_support_iff, Ne,
+      modByMonicHom, LinearMap.coe_mk, Finset.mem_coe]
+    obtain rfl | hf := eq_or_ne f 1
+    · simp
+· exact coeff_eq_zero_of_natDegree_lt (natDegree_modByMonic_lt _ h.monic hf).trans_le hi
+  repr.right_inv g := by
+    nontriviality R
+    ext i
+    simp only [h.modByMonicHom_map, Finsupp.comapDomain_apply, Polynomial.toFinsupp_apply]
+    rw [(Polynomial.modByMonic_eq_self_iff h.monic).mpr]; rw [Polynomial.coeff]
+    · rw [Finsupp.mapDomain_apply Fin.val_injective]
+    rw [degree_eq_natDegree h.monic.ne_zero]; rw [degree_lt_iff_coeff_zero]
+    intro m hm
+    rw [Polynomial.coeff]
+    rw [Finsupp.mapDomain_of_notMem_range]
+    rw [Set.mem_range]; rw [not_exists]
+    rintro i rfl
+    exact i.prop.not_ge hm
+  repr.map_add' := by simp [Finsupp.comapDomain_add_of_injective Fin.val_injective]
+  repr.map_smul' := by simp [Finsupp.comapDomain_smul_of_injective Fin.val_injective]
 
 Depends on / 依赖: Fin.val_injective.injOn, comapDomain, h.modByMonicHom, modByMonicHom, toFinsupp, toFinsupp.coeff.comapDomain, val_injective
 -/
@@ -1936,7 +1988,12 @@ theorem coeff_root_pow
       h.basis.repr (h.root ^ n) ⟨i, _⟩ = h.basis.repr (h.basis ⟨n, hn⟩) ⟨i, hi⟩ := by
         rw [h.basis_apply]; rw [Fin.val_mk]
       _ = Pi.single (M := fun _ => R) ((⟨n, hn⟩ : Fin _) : Nat) (1 : (fun _ => R) n)
-        ↑(⟨i, _⟩ : Fin _) 
+        ↑(⟨i, _⟩ : Fin _) := by
+        rw [h.basis.repr_self]; rw [← Finsupp.single_eq_pi_single]; rw [Finsupp.single_apply_left Fin.val_injective]
+      _ = Pi.single (M := fun _ => R) n 1 i := by rw [Fin.val_mk, Fin.val_mk]
+  · rw [Pi.single_eq_of_ne]
+    rintro rfl
+    simp [hi] at hn
 
 中文:
 定理 coeff_root_pow
@@ -1950,7 +2007,12 @@ theorem coeff_root_pow
       h.basis.repr (h.root ^ n) ⟨i, _⟩ = h.basis.repr (h.basis ⟨n, hn⟩) ⟨i, hi⟩ := by
         rw [h.basis_apply]; rw [Fin.val_mk]
       _ = Pi.single (M := fun _ => R) ((⟨n, hn⟩ : Fin _) : Nat) (1 : (fun _ => R) n)
-        ↑(⟨i, _⟩ : Fin _) 
+        ↑(⟨i, _⟩ : Fin _) := by
+        rw [h.basis.repr_self]; rw [← Finsupp.single_eq_pi_single]; rw [Finsupp.single_apply_left Fin.val_injective]
+      _ = Pi.single (M := fun _ => R) n 1 i := by rw [Fin.val_mk, Fin.val_mk]
+  · rw [Pi.single_eq_of_ne]
+    rintro rfl
+    simp [hi] at hn
 
 Depends on / 依赖: Fin.val_injective, Fin.val_mk, Finsupp, Finsupp.single_apply_left, Finsupp.single_eq_pi_single, Pi.single, Pi.single_eq_of_ne, basis_apply, coeff_apply, h.basis, h.basis.repr, h.basis.repr_self, h.basis_apply, h.root, repr_self, single, single_apply_left, single_eq_of_ne, single_eq_pi_single, split_ifs
 -/
@@ -2335,7 +2397,8 @@ eq_of_monic_of_associated h.monic (minpoly.monic h.isIntegral_root) by
       convert!
 Associated.mul_left (minpoly R h.root)
 associated_one_iff_isUnit.2
-(hirr.isUnit_or_isUnit hq).resolve_left minpoly.not_isUnit R
+(hirr.isUnit_or_isUnit hq).resolve_left minpoly.not_isUnit R h.root
+      rw [mul_one]
 
 中文:
 定理 minpoly_eq
@@ -2346,7 +2409,8 @@ eq_of_monic_of_associated h.monic (minpoly.monic h.isIntegral_root) by
       convert!
 Associated.mul_left (minpoly R h.root)
 associated_one_iff_isUnit.2
-(hirr.isUnit_or_isUnit hq).resolve_left minpoly.not_isUnit R
+(hirr.isUnit_or_isUnit hq).resolve_left minpoly.not_isUnit R h.root
+      rw [mul_one]
 
 Depends on / 依赖: Associated, Associated.mul_left, aeval_root_self, associated_one_iff_isUnit, convert, eq_of_monic_of_associated, h.aeval_root_self, h.isIntegral_root, h.monic, h.root, hirr.isUnit_or_isUnit, isIntegral_root, isIntegrallyClosed_dvd, isUnit_or_isUnit, minpoly, minpoly.isIntegrallyClosed_dvd, minpoly.monic, minpoly.not_isUnit, mul_left, mul_one
 -/
@@ -2377,7 +2441,16 @@ definition mkOfAdjoinEqTop'
     haveI := monic.finite_adjoinRoot
     let φ := AdjoinRoot.liftAlgHom _ (Algebra.ofId R S) _ (minpoly.aeval R α)
 IsAdjoinRoot.ofAdjoinRootEquiv AlgEquiv.ofBijective φ by
-      refine OrzechPro
+      refine OrzechProperty.bijective_of_surjective_of_finrank_le φ.toLinearMap (fun s => ?_) ?_
+      · rw [Algebra.adjoin_singleton_eq_range_aeval, AlgHom.range_eq_top] at hα
+        rcases hα s with ⟨p, hp⟩
+        exact ⟨AdjoinRoot.mk (minpoly R α) p, by simp [φ, ← aeval_def, hp]⟩
+      · nontriviality R
+        exact finrank_quotient_span_eq_natDegree' monic ▸ minpoly.natDegree_le α
+  map := aeval α
+  monic := minpoly.monic (Algebra.IsIntegral.isIntegral α)
+
+@[simp]
 
 中文:
 定义 mkOfAdjoinEqTop'
@@ -2387,7 +2460,16 @@ IsAdjoinRoot.ofAdjoinRootEquiv AlgEquiv.ofBijective φ by
     haveI := monic.finite_adjoinRoot
     let φ := AdjoinRoot.liftAlgHom _ (Algebra.ofId R S) _ (minpoly.aeval R α)
 IsAdjoinRoot.ofAdjoinRootEquiv AlgEquiv.ofBijective φ by
-      refine OrzechPro
+      refine OrzechProperty.bijective_of_surjective_of_finrank_le φ.toLinearMap (fun s => ?_) ?_
+      · rw [Algebra.adjoin_singleton_eq_range_aeval, AlgHom.range_eq_top] at hα
+        rcases hα s with ⟨p, hp⟩
+        exact ⟨AdjoinRoot.mk (minpoly R α) p, by simp [φ, ← aeval_def, hp]⟩
+      · nontriviality R
+        exact finrank_quotient_span_eq_natDegree' monic ▸ minpoly.natDegree_le α
+  map := aeval α
+  monic := minpoly.monic (Algebra.IsIntegral.isIntegral α)
+
+@[simp]
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.liftAlgHom, AdjoinRoot.mk, AlgEquiv, AlgEquiv.ofBijective, AlgHom, AlgHom.range_eq_top, Algebra, Algebra.IsIntegral.isIntegral, Algebra.adjoin_singleton_eq_range_aeval, Algebra.ofId, IsAdjoinRoot, IsAdjoinRoot.ofAdjoinRootEquiv, IsIntegral, OrzechProperty, OrzechProperty.bijective_of_surjective_of_finrank_le, adjoin_singleton_eq_range_aeval, bijective_of_surjective_of_finrank_le, finite_adjoinRoot, free_adjoinRoot
 -/
@@ -2445,7 +2527,7 @@ theorem Algebra.adjoin.powerBasis'_minpoly_gen
   have :=
     noZeroSMulDivisors_of_prime_of_degree_ne_zero (prime_of_isIntegrallyClosed hx')
       (degree_pos hx').ne'
-  rw [← minpolyGen_eq]; rw [adjoin.powerBasis']; rw [minpolyGen_map]; rw [minpolyGen_eq]; rw [AdjoinRoot.powerBasi
+  rw [← minpolyGen_eq]; rw [adjoin.powerBasis']; rw [minpolyGen_map]; rw [minpolyGen_eq]; rw [AdjoinRoot.powerBasis'_gen]; rw [← isAdjoinRoot_root_eq_root _]; rw [← isAdjoinRootMonic_toAdjoinRoot _ (monic hx')]; rw [minpoly_eq (AdjoinRoot.isAdjoinRootMonic _ (monic hx')) (irreducible hx')]
 
 中文:
 定理 代数.adjoin.powerBasis'_minpoly_gen
@@ -2455,7 +2537,7 @@ theorem Algebra.adjoin.powerBasis'_minpoly_gen
   have :=
     noZeroSMulDivisors_of_prime_of_degree_ne_zero (prime_of_isIntegrallyClosed hx')
       (degree_pos hx').ne'
-  rw [← minpolyGen_eq]; rw [adjoin.powerBasis']; rw [minpolyGen_map]; rw [minpolyGen_eq]; rw [AdjoinRoot.powerBasi
+  rw [← minpolyGen_eq]; rw [adjoin.powerBasis']; rw [minpolyGen_map]; rw [minpolyGen_eq]; rw [AdjoinRoot.powerBasis'_gen]; rw [← isAdjoinRoot_root_eq_root _]; rw [← isAdjoinRootMonic_toAdjoinRoot _ (monic hx')]; rw [minpoly_eq (AdjoinRoot.isAdjoinRootMonic _ (monic hx')) (irreducible hx')]
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.isAdjoinRootMonic, AdjoinRoot.powerBasis, _gen, adjoin, adjoin.powerBasis, degree_pos, irreducible, isAdjoinRootMonic, isAdjoinRootMonic_toAdjoinRoot, isAdjoinRoot_root_eq_root, isDomain_of_prime, minpolyGen_eq, minpolyGen_map, minpoly_eq, noZeroSMulDivisors_of_prime_of_degree_ne_zero, powerBasis, prime_of_isIntegrallyClosed
 -/

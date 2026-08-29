@@ -59,7 +59,18 @@ theorem lintegral_rpow_eq_lintegral_meas_le_mul
     rw [integral_rpow (Or.inl one_lt_p)]
     simp [Real.zero_rpow p_pos.ne.symm]
   set g := fun t : Real => t ^ (p - 1)
-  have g_nn : forallᵐ t ∂volume.restrict 
+  have g_nn : forallᵐ t ∂volume.restrict (Ioi (0 : Real)), 0 <= g t := by
+    filter_upwards [self_mem_ae_restrict (measurableSet_Ioi : MeasurableSet (Ioi (0 : Real)))]
+    intro t t_pos
+    exact Real.rpow_nonneg (mem_Ioi.mp t_pos).le (p - 1)
+  have g_intble (t) (ht : 0 < t) : IntervalIntegrable g volume 0 t :=
+    intervalIntegral.intervalIntegrable_rpow' one_lt_p
+  have key := lintegral_comp_eq_lintegral_meas_le_mul μ f_nn f_mble g_intble g_nn
+  rw [← key]; rw [← lintegral_const_mul'' (ENNReal.ofReal p)] <;> simp_rw [obs]
+  · congr with ω
+    rw [← ENNReal.ofReal_mul p_pos.le]; rw [mul_div_cancel₀ (f ω ^ p) p_pos.ne.symm]
+  · have aux := (measurable_const (a := p)).aemeasurable (μ := μ)
+exact measurable_id.ennreal_ofReal.comp_aemeasurable (f_mble.pow aux).div_const p
 
 中文:
 定理 lintegral_rpow_eq_lintegral_meas_le_mul
@@ -70,7 +81,18 @@ theorem lintegral_rpow_eq_lintegral_meas_le_mul
     rw [integral_rpow (Or.inl one_lt_p)]
     simp [Real.zero_rpow p_pos.ne.symm]
   set g := fun t : Real => t ^ (p - 1)
-  have g_nn : forallᵐ t ∂volume.restrict 
+  have g_nn : forallᵐ t ∂volume.restrict (Ioi (0 : Real)), 0 <= g t := by
+    filter_upwards [self_mem_ae_restrict (measurableSet_Ioi : MeasurableSet (Ioi (0 : Real)))]
+    intro t t_pos
+    exact Real.rpow_nonneg (mem_Ioi.mp t_pos).le (p - 1)
+  have g_intble (t) (ht : 0 < t) : IntervalIntegrable g volume 0 t :=
+    intervalIntegral.intervalIntegrable_rpow' one_lt_p
+  have key := lintegral_comp_eq_lintegral_meas_le_mul μ f_nn f_mble g_intble g_nn
+  rw [← key]; rw [← lintegral_const_mul'' (ENNReal.ofReal p)] <;> simp_rw [obs]
+  · congr with ω
+    rw [← ENNReal.ofReal_mul p_pos.le]; rw [mul_div_cancel₀ (f ω ^ p) p_pos.ne.symm]
+  · have aux := (measurable_const (a := p)).aemeasurable (μ := μ)
+exact measurable_id.ennreal_ofReal.comp_aemeasurable (f_mble.pow aux).div_const p
 
 Depends on / 依赖: MeasurableSet, Or.inl, Real.rpow_nonneg, Real.zero_rpow, filter_upwards, g_intble, g_nn, integral_rpow, measurableSet_Ioi, mem_Ioi, mem_Ioi.mp, one_lt_p, p_pos, p_pos.ne.symm, restrict, rpow_nonneg, self_mem_ae_restrict, t_pos, volume, volume.restrict
 -/
@@ -154,7 +176,20 @@ lemma integrableOn_ball_of_norm_le_rpow
     positivity
   have hint : IntegrableOn (fun y => y ^ (Module.finrank Real E - 1) • (C * y ^ (-α))) (Ioo 0 r) := by
     simp only [smul_eq_mul]
-    have h_rpow : IntegrableOn (fun y => y ^ ((Module.finrank Real E
+    have h_rpow : IntegrableOn (fun y => y ^ ((Module.finrank Real E : Real) - 1 - α)) (Ioo 0 r) := by
+      by_cases! hr : 0 < r
+      · rw [intervalIntegral.integrableOn_Ioo_rpow_iff hr]
+        linarith
+      · simp [hr]
+    apply IntegrableOn.congr_fun (h_rpow.const_mul C) ?_ measurableSet_Ioo
+    intro y ⟨hy, _⟩
+    simp only
+    move_mul [C]
+    rw [← Real.rpow_natCast y (Module.finrank Real E - 1)]; rw [← Real.rpow_add hy]
+    congr
+    norm_cast
+  rw [← integrableOn_fun_norm_addHaar μ] at hint
+  exact Integrable.mono' hint h_meas.restrict h_decay
 
 中文:
 引理 integrableOn_ball_of_norm_le_rpow
@@ -165,7 +200,20 @@ lemma integrableOn_ball_of_norm_le_rpow
     positivity
   have hint : IntegrableOn (fun y => y ^ (Module.finrank Real E - 1) • (C * y ^ (-α))) (Ioo 0 r) := by
     simp only [smul_eq_mul]
-    have h_rpow : IntegrableOn (fun y => y ^ ((Module.finrank Real E
+    have h_rpow : IntegrableOn (fun y => y ^ ((Module.finrank Real E : Real) - 1 - α)) (Ioo 0 r) := by
+      by_cases! hr : 0 < r
+      · rw [intervalIntegral.integrableOn_Ioo_rpow_iff hr]
+        linarith
+      · simp [hr]
+    apply IntegrableOn.congr_fun (h_rpow.const_mul C) ?_ measurableSet_Ioo
+    intro y ⟨hy, _⟩
+    simp only
+    move_mul [C]
+    rw [← Real.rpow_natCast y (Module.finrank Real E - 1)]; rw [← Real.rpow_add hy]
+    congr
+    norm_cast
+  rw [← integrableOn_fun_norm_addHaar μ] at hint
+  exact Integrable.mono' hint h_meas.restrict h_decay
 
 Depends on / 依赖: IntegrableOn, IntegrableOn.congr_fun, Module, Module.finrank, Module.nontrivial_of_finrank_pos, Nontrivial, congr_fun, const_mul, finrank, h_rpow, h_rpow.const_mul, integrableOn_Ioo_rpow_iff, intervalIntegral, intervalIntegral.integrableOn_Ioo_rpow_iff, measurableSet_Ioo, nontrivial_of_finrank_pos, smul_eq_mul
 -/

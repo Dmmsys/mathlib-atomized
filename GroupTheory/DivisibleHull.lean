@@ -267,7 +267,10 @@ definition liftOn₂
         obtain ⟨u, hu⟩ := heq
         exact mk_eq_mk.mpr ⟨↑ⁿ.symm u, hu⟩)
       (by
-        obtain 
+        obtain ⟨u, hu⟩ := heq'
+        exact mk_eq_mk.mpr ⟨↑ⁿ.symm u, hu⟩)
+
+@[simp]
 
 中文:
 定义 liftOn₂
@@ -279,7 +282,10 @@ definition liftOn₂
         obtain ⟨u, hu⟩ := heq
         exact mk_eq_mk.mpr ⟨↑ⁿ.symm u, hu⟩)
       (by
-        obtain 
+        obtain ⟨u, hu⟩ := heq'
+        exact mk_eq_mk.mpr ⟨↑ⁿ.symm u, hu⟩)
+
+@[simp]
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.liftOn, mk_eq_mk, mk_eq_mk.mpr
 -/
@@ -758,7 +764,24 @@ instance :
   add_smul a b x := by
     induction x with | mk m s
     simp_rw [qsmul_mk, mk_add_mk, mk_eq_mk]
-    us
+    use 1
+    suffices ((a + b).num * a.den * b.den * (s * s)) • m =
+        ((a.num * b.den + b.num * a.den) * (a + b).den * (s * s)) • m by
+      convert! this using 1
+      all_goals
+      simp [← natCast_zsmul, smul_smul, ← add_smul]
+      ring_nf
+    rw [Rat.add_num_den']
+  mul_smul a b x := by
+    induction x with | mk m s
+    simp_rw [qsmul_mk, mk_eq_mk]
+    use 1
+    suffices ((a * b).num * a.den * b.den * s) • m = (a.num * b.num * (a * b).den * s) • m by
+      convert! this using 1
+      all_goals
+      simp [← natCast_zsmul, smul_smul]
+      ring_nf
+    rw [Rat.mul_num_den']
 
 中文:
 实例 :
@@ -772,7 +795,24 @@ instance :
   add_smul a b x := by
     induction x with | mk m s
     simp_rw [qsmul_mk, mk_add_mk, mk_eq_mk]
-    us
+    use 1
+    suffices ((a + b).num * a.den * b.den * (s * s)) • m =
+        ((a.num * b.den + b.num * a.den) * (a + b).den * (s * s)) • m by
+      convert! this using 1
+      all_goals
+      simp [← natCast_zsmul, smul_smul, ← add_smul]
+      ring_nf
+    rw [Rat.add_num_den']
+  mul_smul a b x := by
+    induction x with | mk m s
+    simp_rw [qsmul_mk, mk_eq_mk]
+    use 1
+    suffices ((a * b).num * a.den * b.den * s) • m = (a.num * b.num * (a * b).den * s) • m by
+      convert! this using 1
+      all_goals
+      simp [← natCast_zsmul, smul_smul]
+      ring_nf
+    rw [Rat.mul_num_den']
 
 Depends on / 依赖: Rat.add_num_de, a.den, a.num, add_num_de, add_smul, all_goals, b.den, b.num, convert, mk_add_mk, mk_eq_mk, natCast_zsmul, nnqsmul_mk, qsmul_def, qsmul_mk, qsmul_of_nonneg, ring_nf, simp_rw, smul_add, smul_smul
 -/
@@ -844,7 +884,9 @@ theorem lift_aux
   rw [propext_iff]; rw [← nsmul_le_nsmul_iff_right (mul_ne_zero s'.ne_zero t'.ne_zero)]
   convert! (nsmul_le_nsmul_iff_right (M := M) (mul_ne_zero s.ne_zero t.ne_zero)) using 2
   · simp_rw [smul_smul, mul_rotate s'.val, ← smul_smul, h, smul_smul]
-    ring_
+    ring_nf
+  · simp_rw [smul_smul, ← mul_rotate s'.val, ← smul_smul, ← h', smul_smul]
+    ring_nf
 
 中文:
 定理 lift_aux
@@ -854,7 +896,9 @@ theorem lift_aux
   rw [propext_iff]; rw [← nsmul_le_nsmul_iff_right (mul_ne_zero s'.ne_zero t'.ne_zero)]
   convert! (nsmul_le_nsmul_iff_right (M := M) (mul_ne_zero s.ne_zero t.ne_zero)) using 2
   · simp_rw [smul_smul, mul_rotate s'.val, ← smul_smul, h, smul_smul]
-    ring_
+    ring_nf
+  · simp_rw [smul_smul, ← mul_rotate s'.val, ← smul_smul, ← h', smul_smul]
+    ring_nf
 -/
 private theorem lift_aux (m n m' n' : M) (s t s' t' : Nat+)
     (h : mk m s = mk m' s') (h' : mk n t = mk n' t') :
@@ -923,7 +967,26 @@ instance :
     induction b with | mk mb sb
     induction c with | mk mc sc
     rw [mk_le_mk] at ⊢ hab hbc
-    rw [← nsmul_le_nsmul_iff_right (show sb.val != 0 by simp)]; rw [smul_comm _ _ ma]; rw [smul_comm
+    rw [← nsmul_le_nsmul_iff_right (show sb.val != 0 by simp)]; rw [smul_comm _ _ ma]; rw [smul_comm _ _ mc]
+    rw [← nsmul_le_nsmul_iff_right (show sc.val != 0 by simp)]; rw [smul_comm _ _ mb] at hab
+    rw [← nsmul_le_nsmul_iff_right (show sa.val != 0 by simp)] at hbc
+    exact hab.trans hbc
+  le_antisymm a b h h' := by
+    induction a with | mk ma sa
+    induction b with | mk mb sb
+    rw [mk_le_mk] at h h'
+    rw [mk_eq_mk_iff_smul_eq_smul]
+    exact le_antisymm h h'
+  le_total a b := by
+    induction a with | mk ma sa
+    induction b with | mk mb sb
+    simp_rw [mk_le_mk]
+    exact le_total _ _
+  toDecidableLE := by
+    unfold DecidableLE LE.le instLE liftOn₂ LocalizedModule.liftOn₂
+    infer_instance
+
+@[simp]
 
 中文:
 实例 :
@@ -936,7 +999,26 @@ instance :
     induction b with | mk mb sb
     induction c with | mk mc sc
     rw [mk_le_mk] at ⊢ hab hbc
-    rw [← nsmul_le_nsmul_iff_right (show sb.val != 0 by simp)]; rw [smul_comm _ _ ma]; rw [smul_comm
+    rw [← nsmul_le_nsmul_iff_right (show sb.val != 0 by simp)]; rw [smul_comm _ _ ma]; rw [smul_comm _ _ mc]
+    rw [← nsmul_le_nsmul_iff_right (show sc.val != 0 by simp)]; rw [smul_comm _ _ mb] at hab
+    rw [← nsmul_le_nsmul_iff_right (show sa.val != 0 by simp)] at hbc
+    exact hab.trans hbc
+  le_antisymm a b h h' := by
+    induction a with | mk ma sa
+    induction b with | mk mb sb
+    rw [mk_le_mk] at h h'
+    rw [mk_eq_mk_iff_smul_eq_smul]
+    exact le_antisymm h h'
+  le_total a b := by
+    induction a with | mk ma sa
+    induction b with | mk mb sb
+    simp_rw [mk_le_mk]
+    exact le_total _ _
+  toDecidableLE := by
+    unfold DecidableLE LE.le instLE liftOn₂ LocalizedModule.liftOn₂
+    infer_instance
+
+@[simp]
 
 Depends on / 依赖: hab.trans, le_antisymm, le_trans, mk_le_mk, nsmul_le_nsmul_iff_right, sa.val, sb.val, sc.val, smul_comm
 -/
@@ -1004,7 +1086,9 @@ instance :
     simp_rw [mk_add_mk]
     rw [mk_lt_mk] at ⊢ h
     simp_rw [PNat.mul_coe, mul_smul, smul_add, smul_smul]
-    have := add_lt_add_right (nsmul_lt_nsmul_right (sa * s
+    have := add_lt_add_right (nsmul_lt_nsmul_right (sa * sa).ne_zero h) ((sa * sb * sc.val) • ma)
+    simp_rw [PNat.mul_coe, smul_smul] at this
+    convert! this using 3 <;> ring)
 
 中文:
 实例 :
@@ -1016,7 +1100,9 @@ instance :
     simp_rw [mk_add_mk]
     rw [mk_lt_mk] at ⊢ h
     simp_rw [PNat.mul_coe, mul_smul, smul_add, smul_smul]
-    have := add_lt_add_right (nsmul_lt_nsmul_right (sa * s
+    have := add_lt_add_right (nsmul_lt_nsmul_right (sa * sa).ne_zero h) ((sa * sb * sc.val) • ma)
+    simp_rw [PNat.mul_coe, smul_smul] at this
+    convert! this using 3 <;> ring)
 
 Depends on / 依赖: PNat.mul_coe, add_lt_add_right, convert, mk_add_mk, mk_lt_mk, mul_coe, mul_smul, ne_zero, nsmul_lt_nsmul_right, of_add_lt_add_left, sc.val, simp_rw, smul_add, smul_smul
 -/
@@ -1045,7 +1131,14 @@ instance :
     simp_rw [mk_lt_mk] at h
     simp_rw [nnqsmul_mk, mk_lt_mk, smul_smul, PNat.mul_coe]
     simp_rw [mul_right_comm _ _ a.num, mul_smul _ _ mc, mul_smul _ _ mb]
-    exact (nsmul_right_strictMono (by simpa using ha.ne.symm)).lt_iff_lt
+    exact (nsmul_right_strictMono (by simpa using ha.ne.symm)).lt_iff_lt.mpr h
+  smul_lt_smul_of_pos_right a ha b c h := by
+    induction a with | mk m s
+    simp_rw [nnqsmul_mk, mk_lt_mk, smul_smul, PNat.mul_coe, PNat.mk_coe]
+    refine smul_lt_smul_of_pos_right ?_ ?_
+    · convert! mul_lt_mul_of_pos_right (NNRat.lt_def.mp h) (show 0 < s.val by simp) using 1 <;> ring
+    · rw [← mk_zero 1, mk_lt_mk] at ha
+      simpa using ha
 
 中文:
 实例 :
@@ -1056,7 +1149,14 @@ instance :
     simp_rw [mk_lt_mk] at h
     simp_rw [nnqsmul_mk, mk_lt_mk, smul_smul, PNat.mul_coe]
     simp_rw [mul_right_comm _ _ a.num, mul_smul _ _ mc, mul_smul _ _ mb]
-    exact (nsmul_right_strictMono (by simpa using ha.ne.symm)).lt_iff_lt
+    exact (nsmul_right_strictMono (by simpa using ha.ne.symm)).lt_iff_lt.mpr h
+  smul_lt_smul_of_pos_right a ha b c h := by
+    induction a with | mk m s
+    simp_rw [nnqsmul_mk, mk_lt_mk, smul_smul, PNat.mul_coe, PNat.mk_coe]
+    refine smul_lt_smul_of_pos_right ?_ ?_
+    · convert! mul_lt_mul_of_pos_right (NNRat.lt_def.mp h) (show 0 < s.val by simp) using 1 <;> ring
+    · rw [← mk_zero 1, mk_lt_mk] at ha
+      simpa using ha
 
 Depends on / 依赖: PNat.mk_coe, PNat.mul_coe, a.num, convert, ha.ne.symm, lt_iff_lt, lt_iff_lt.mpr, mk_coe, mk_lt_mk, mul_coe, mul_lt_mul_of_pos_right, mul_right_comm, mul_smul, nnqsmul_mk, nsmul_right_strictMono, simp_rw, smul_lt_smul_of_pos_right, smul_smul
 -/
@@ -1157,7 +1257,7 @@ theorem archimedeanClassMk_mk_eq
     rw [ArchimedeanClass.mk_smul _ (by simp)] at this
     rw [ArchimedeanClass.mk_smul _ (by simp)] at this
     exact this
-  simp_rw [zsmul_mk, mk_eq_mk_iff_smul_eq_smul, natCast_zsmul, smul_smul, mu
+  simp_rw [zsmul_mk, mk_eq_mk_iff_smul_eq_smul, natCast_zsmul, smul_smul, mul_comm s'.val]
 
 中文:
 定理 archimedeanClassMk_mk_eq
@@ -1168,7 +1268,7 @@ theorem archimedeanClassMk_mk_eq
     rw [ArchimedeanClass.mk_smul _ (by simp)] at this
     rw [ArchimedeanClass.mk_smul _ (by simp)] at this
     exact this
-  simp_rw [zsmul_mk, mk_eq_mk_iff_smul_eq_smul, natCast_zsmul, smul_smul, mu
+  simp_rw [zsmul_mk, mk_eq_mk_iff_smul_eq_smul, natCast_zsmul, smul_smul, mul_comm s'.val]
 
 Depends on / 依赖: ArchimedeanClass, ArchimedeanClass.mk, ArchimedeanClass.mk_smul, apply_fun, mk_eq_mk_iff_smul_eq_smul, mk_smul, mul_comm, natCast_zsmul, simp_rw, smul_smul, zsmul_mk
 -/
@@ -1257,7 +1357,11 @@ definition archimedeanClassOrderHomInv
       apply_fun ArchimedeanClass.mk at h
       simpa [aux_archimedeanClassMk_mk] using h))
     (fun a b h => by
-      induction a with | mk 
+      induction a with | mk _ _
+      induction b with | mk _ _
+      simp_rw [aux_archimedeanClassMk_mk] at h
+      simpa using ((archimedeanClassOrderHom M).monotone.strictMono_of_injective
+        aux_archimedeanClassOrderHom_injective).le_iff_le.mp h)
 
 中文:
 定义 archimedeanClassOrderHomInv
@@ -1268,7 +1372,11 @@ definition archimedeanClassOrderHomInv
       apply_fun ArchimedeanClass.mk at h
       simpa [aux_archimedeanClassMk_mk] using h))
     (fun a b h => by
-      induction a with | mk 
+      induction a with | mk _ _
+      induction b with | mk _ _
+      simp_rw [aux_archimedeanClassMk_mk] at h
+      simpa using ((archimedeanClassOrderHom M).monotone.strictMono_of_injective
+        aux_archimedeanClassOrderHom_injective).le_iff_le.mp h)
 
 Depends on / 依赖: ArchimedeanClass, ArchimedeanClass.liftOrderHom, ArchimedeanClass.mk, apply_fun, archimedeanClassOrderHom, aux_archimedeanClassMk_mk, aux_archimedeanClassOrderHom_injective, le_iff_le, le_iff_le.mp, liftOn, liftOrderHom, monotone, monotone.strictMono_of_injective, simp_rw, strictMono_of_injective, x.liftOn
 -/
@@ -1302,7 +1410,13 @@ definition archimedeanClassOrderIso
     induction a with | mk a
     induction a with | mk m s
     suffices ArchimedeanClass.mk (mk m 1) = ArchimedeanClass.mk (mk m s) by
-      simpa [archimedeanClassOrderHom, archimedeanClassOrderHomInv
+      simpa [archimedeanClassOrderHom, archimedeanClassOrderHomInv]
+    simp_rw [aux_archimedeanClassMk_mk]
+  · ext a
+    induction a with | mk _
+    simp [archimedeanClassOrderHom, archimedeanClassOrderHomInv]
+
+@[simp]
 
 中文:
 定义 archimedeanClassOrderIso
@@ -1313,7 +1427,13 @@ definition archimedeanClassOrderIso
     induction a with | mk a
     induction a with | mk m s
     suffices ArchimedeanClass.mk (mk m 1) = ArchimedeanClass.mk (mk m s) by
-      simpa [archimedeanClassOrderHom, archimedeanClassOrderHomInv
+      simpa [archimedeanClassOrderHom, archimedeanClassOrderHomInv]
+    simp_rw [aux_archimedeanClassMk_mk]
+  · ext a
+    induction a with | mk _
+    simp [archimedeanClassOrderHom, archimedeanClassOrderHomInv]
+
+@[simp]
 
 Depends on / 依赖: ArchimedeanClass, ArchimedeanClass.mk, OrderIso, OrderIso.ofHomInv, archimedeanClassOrderHom, archimedeanClassOrderHomInv, aux_archimedeanClassMk_mk, ofHomInv, simp_rw
 -/

@@ -43,7 +43,16 @@ instance range_Iio
   · exact image_subset_range _ _
   · rintro x - y - h
     by_contra! hne
-    wlo
+    wlog hlt : x < y generalizing x y
+    · refine this y x ?_ hne.symm (hne.lt_or_gt.resolve_left hlt)
+      simpa only [iff_comm] using h
+    cases (Ioo x y).eq_empty_or_nonempty with
+    | inl he =>
+      specialize h (Iio y) (mem_image_of_mem _ (.inr ⟨x, hlt, by simpa using Set.ext_iff.mp he⟩))
+      simp [hlt.not_ge] at h
+    | inr hne =>
+      rcases hsd.inter_open_nonempty _ isOpen_Ioo hne with ⟨z, ⟨hxz, hzy⟩, hzs⟩
+      simpa [hxz, hzy.not_gt] using h (Iio z) (mem_image_of_mem _ (.inl hzs))
 
 中文:
 实例 range_Iio
@@ -57,7 +66,16 @@ instance range_Iio
   · exact image_subset_range _ _
   · rintro x - y - h
     by_contra! hne
-    wlo
+    wlog hlt : x < y generalizing x y
+    · refine this y x ?_ hne.symm (hne.lt_or_gt.resolve_left hlt)
+      simpa only [iff_comm] using h
+    cases (Ioo x y).eq_empty_or_nonempty with
+    | inl he =>
+      specialize h (Iio y) (mem_image_of_mem _ (.inr ⟨x, hlt, by simpa using Set.ext_iff.mp he⟩))
+      simp [hlt.not_ge] at h
+    | inr hne =>
+      rcases hsd.inter_open_nonempty _ isOpen_Ioo hne with ⟨z, ⟨hxz, hzy⟩, hzs⟩
+      simpa [hxz, hzy.not_gt] using h (Iio z) (mem_image_of_mem _ (.inl hzs))
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.exists_countable_dense, countable_setOfPred_covBy_left, eq_empty_or_nonempty, exists_countable_dense, generalizing, hne.lt_or_gt.resolve_left, hne.symm, hsc.union, iff_comm, image_subset_range, lt_or_gt, mem_image_of_mem, resolve_left, specialize
 -/

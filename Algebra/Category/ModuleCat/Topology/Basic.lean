@@ -792,7 +792,18 @@ definition isColimit
   body: ofHom (X := (ofCocone c).pt) ⟨(hc.desc ((forget₂ _ _).mapCocone s)).hom, by
     rw [continuous_iff_le_induced]
     refine sInf_le ⟨continuousSMul_induced (M₂ := s.pt) (hc.desc ((forget₂ _ _).mapCocone s)).hom,
-      continuousAdd_induced (N := s.pt) (hc.desc ((forget₂ _ _).mapCocone s)).hom, fun i =
+      continuousAdd_induced (N := s.pt) (hc.desc ((forget₂ _ _).mapCocone s)).hom, fun i => ?_⟩
+    rw [coinduced_le_iff_le_induced]; rw [induced_compose]; rw [← continuous_iff_le_induced]
+    change Continuous (X := F.obj i) (Y := s.pt)
+      (c.ι.app i ≫ hc.desc ((forget₂ _ (ModuleCat R)).mapCocone s)).hom
+    rw [hc.fac]
+    exact (s.ι.app i).hom.2⟩
+  fac s i := by ext x; exact congr($(hc.fac ((forget₂ _ _).mapCocone s) i).hom x)
+  uniq s m H := by
+    ext x
+    refine congr($(hc.uniq ((forget₂ _ _).mapCocone s) ((forget₂ _ _).map m) fun j => ?_).hom x)
+    ext y
+    exact congr($(H j).hom y)
 
 中文:
 定义 isColimit
@@ -800,7 +811,18 @@ definition isColimit
   定义体: ofHom (X := (ofCocone c).pt) ⟨(hc.desc ((forget₂ _ _).mapCocone s)).hom, by
     rw [continuous_iff_le_induced]
     refine sInf_le ⟨continuousSMul_induced (M₂ := s.pt) (hc.desc ((forget₂ _ _).mapCocone s)).hom,
-      continuousAdd_induced (N := s.pt) (hc.desc ((forget₂ _ _).mapCocone s)).hom, fun i =
+      continuousAdd_induced (N := s.pt) (hc.desc ((forget₂ _ _).mapCocone s)).hom, fun i => ?_⟩
+    rw [coinduced_le_iff_le_induced]; rw [induced_compose]; rw [← continuous_iff_le_induced]
+    change Continuous (X := F.obj i) (Y := s.pt)
+      (c.ι.app i ≫ hc.desc ((forget₂ _ (ModuleCat R)).mapCocone s)).hom
+    rw [hc.fac]
+    exact (s.ι.app i).hom.2⟩
+  fac s i := by ext x; exact congr($(hc.fac ((forget₂ _ _).mapCocone s) i).hom x)
+  uniq s m H := by
+    ext x
+    refine congr($(hc.uniq ((forget₂ _ _).mapCocone s) ((forget₂ _ _).map m) fun j => ?_).hom x)
+    ext y
+    exact congr($(H j).hom y)
 
 Depends on / 依赖: Continuous, F.obj, ModuleCat, coinduced_le_iff_le_induced, continuousAdd_induced, continuousSMul_induced, continuous_iff_le_induced, hc.desc, hc.f, induced_compose, mapCocone, ofCocone, s.pt, sInf_le
 -/
@@ -939,7 +961,15 @@ definition isLimit
     refine le_iInf fun i => ?_
     rw [coinduced_le_iff_le_induced]; rw [induced_compose]; rw [← continuous_iff_le_induced]
     change Continuous (X := s.pt) (Y := F.obj i)
-      (hc.lift ((f
+      (hc.lift ((forget₂ _ (ModuleCat R)).mapCone s) ≫ c.π.app i).hom
+    rw [hc.fac]
+    exact (s.π.app i).hom.2⟩
+  fac s i := by ext x; exact congr($(hc.fac ((forget₂ _ _).mapCone s) i).hom x)
+  uniq s m H := by
+    ext x
+    refine congr($(hc.uniq ((forget₂ _ _).mapCone s) ((forget₂ _ _).map m) fun j => ?_).hom x)
+    ext y
+    exact congr($(H j).hom y)
 
 中文:
 定义 isLimit
@@ -949,7 +979,15 @@ definition isLimit
     refine le_iInf fun i => ?_
     rw [coinduced_le_iff_le_induced]; rw [induced_compose]; rw [← continuous_iff_le_induced]
     change Continuous (X := s.pt) (Y := F.obj i)
-      (hc.lift ((f
+      (hc.lift ((forget₂ _ (ModuleCat R)).mapCone s) ≫ c.π.app i).hom
+    rw [hc.fac]
+    exact (s.π.app i).hom.2⟩
+  fac s i := by ext x; exact congr($(hc.fac ((forget₂ _ _).mapCone s) i).hom x)
+  uniq s m H := by
+    ext x
+    refine congr($(hc.uniq ((forget₂ _ _).mapCone s) ((forget₂ _ _).map m) fun j => ?_).hom x)
+    ext y
+    exact congr($(H j).hom y)
 
 Depends on / 依赖: Continuous, F.obj, ModuleCat, coinduced_le_iff_le_induced, continuous_iff_coinduced_le, continuous_iff_le_induced, hc.fac, hc.lift, hc.uniq, induced_compose, le_iInf, mapCone, ofCone, s.pt
 -/
@@ -1155,7 +1193,8 @@ definition indiscrete
   map {X Y} f :=
     letI : TopologicalSpace X := ⊤
     letI : TopologicalSpace Y := ⊤
- 
+    ConcreteCategory.ofHom (C := TopModuleCat R)
+      ⟨f.hom, by rw [continuous_iff_coinduced_le]; exact le_top⟩
 
 中文:
 定义 indiscrete
@@ -1167,7 +1206,8 @@ definition indiscrete
   map {X Y} f :=
     letI : TopologicalSpace X := ⊤
     letI : TopologicalSpace Y := ⊤
- 
+    ConcreteCategory.ofHom (C := TopModuleCat R)
+      ⟨f.hom, by rw [continuous_iff_coinduced_le]; exact le_top⟩
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, ContinuousAdd, ContinuousSMul, TopModuleCat, TopologicalSpace, continuous_iff_coinduced_le, f.hom, le_top
 -/
@@ -1251,7 +1291,7 @@ definition freeObj
       X.str.coinduced (Finsupp.single · 1) <= t }
   letI : ContinuousAdd (X ->₀ R) := continuousAdd_sInf fun _ h => h.2.1
   letI : ContinuousSMul R (X ->₀ R) := continuousSMul_sInf fun _ h => h.1
- 
+  of R (X ->₀ R)
 
 中文:
 定义 freeObj
@@ -1261,7 +1301,7 @@ definition freeObj
       X.str.coinduced (Finsupp.single · 1) <= t }
   letI : ContinuousAdd (X ->₀ R) := continuousAdd_sInf fun _ h => h.2.1
   letI : ContinuousSMul R (X ->₀ R) := continuousSMul_sInf fun _ h => h.1
- 
+  of R (X ->₀ R)
 
 Depends on / 依赖: ContinuousAdd, ContinuousSMul, Finsupp, Finsupp.single, TopologicalSpace, X.str.coinduced, coinduced, continuousAdd_sInf, continuousSMul_sInf, single
 -/
@@ -1304,7 +1344,13 @@ definition freeMap
     refine le_sInf fun (τ : TopologicalSpace (_ ->₀ R)) ⟨hτ₁, hτ₂, hτ₃⟩ => ?_
     rw [coinduced_le_iff_le_induced]
     refine sInf_le ⟨continuousSMul_induced (Finsupp.lmapDomain _ _ f.hom),
-      continuous
+      continuousAdd_induced (Finsupp.lmapDomain _ _ f.hom), ?_⟩
+    rw [← coinduced_le_iff_le_induced]
+    grw [← hτ₃, ← coinduced_mono (continuous_iff_coinduced_le.mp f.hom.2)]
+    rw [coinduced_compose]; rw [coinduced_compose]
+    congr! 1
+    ext x
+    simp [coe_freeObj]⟩
 
 中文:
 定义 freeMap
@@ -1314,7 +1360,13 @@ definition freeMap
     refine le_sInf fun (τ : TopologicalSpace (_ ->₀ R)) ⟨hτ₁, hτ₂, hτ₃⟩ => ?_
     rw [coinduced_le_iff_le_induced]
     refine sInf_le ⟨continuousSMul_induced (Finsupp.lmapDomain _ _ f.hom),
-      continuous
+      continuousAdd_induced (Finsupp.lmapDomain _ _ f.hom), ?_⟩
+    rw [← coinduced_le_iff_le_induced]
+    grw [← hτ₃, ← coinduced_mono (continuous_iff_coinduced_le.mp f.hom.2)]
+    rw [coinduced_compose]; rw [coinduced_compose]
+    congr! 1
+    ext x
+    simp [coe_freeObj]⟩
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, Finsupp, Finsupp.lmapDomain, TopologicalSpace, coinduced_compose, coinduced_le_iff_le_induced, coinduced_mono, continuousAdd_induced, continuousSMul_induced, continuous_iff_coinduced_le, continuous_iff_coinduced_le.mp, f.hom, le_sInf, lmapDomain, sInf_le
 -/
@@ -1393,7 +1445,27 @@ definition freeAdj
     naturality {X Y} f := by ext x; simp [freeMap_map] }
   counit :=
   { app X := ConcreteCategory.ofHom (C := TopModuleCat R) ⟨Finsupp.lift _ R X id, by
-      rw [continuous_iff_le_indu
+      rw [continuous_iff_le_induced]
+      refine sInf_le ⟨continuousSMul_induced (Finsupp.lift _ R X id),
+        continuousAdd_induced (Finsupp.lift _ R X id), ?_⟩
+      rw [coinduced_le_iff_le_induced]; rw [induced_compose]
+      convert! induced_id.symm.le
+      ext
+      simp [coe_freeObj]⟩,
+    naturality {X Y} f := by
+      ext1
+      apply ContinuousLinearMap.coe_injective
+      refine Finsupp.lhom_ext' fun a => LinearMap.ext_ring ?_
+      dsimp [freeObj, freeMap]
+      simp }
+  left_triangle_components X := by
+    ext1
+    apply ContinuousLinearMap.coe_injective
+    refine Finsupp.lhom_ext' fun a => LinearMap.ext_ring ?_
+    simp [freeMap, freeObj]
+  right_triangle_components X := by
+    ext
+    simp [freeObj]
 
 中文:
 定义 freeAdj
@@ -1403,7 +1475,27 @@ definition freeAdj
     naturality {X Y} f := by ext x; simp [freeMap_map] }
   counit :=
   { app X := ConcreteCategory.ofHom (C := TopModuleCat R) ⟨Finsupp.lift _ R X id, by
-      rw [continuous_iff_le_indu
+      rw [continuous_iff_le_induced]
+      refine sInf_le ⟨continuousSMul_induced (Finsupp.lift _ R X id),
+        continuousAdd_induced (Finsupp.lift _ R X id), ?_⟩
+      rw [coinduced_le_iff_le_induced]; rw [induced_compose]
+      convert! induced_id.symm.le
+      ext
+      simp [coe_freeObj]⟩,
+    naturality {X Y} f := by
+      ext1
+      apply ContinuousLinearMap.coe_injective
+      refine Finsupp.lhom_ext' fun a => LinearMap.ext_ring ?_
+      dsimp [freeObj, freeMap]
+      simp }
+  left_triangle_components X := by
+    ext1
+    apply ContinuousLinearMap.coe_injective
+    refine Finsupp.lhom_ext' fun a => LinearMap.ext_ring ?_
+    simp [freeMap, freeObj]
+  right_triangle_components X := by
+    ext
+    simp [freeObj]
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, Finsupp, Finsupp.lift, Finsupp.single, TopCat, TopCat.ofHom, TopModuleCat, coe_fre, coinduced_le_iff_le_induced, continuousAdd_induced, continuousSMul_induced, continuous_iff_coinduced_le, continuous_iff_coinduced_le.mpr, continuous_iff_le_induced, convert, counit, freeMap_map, induced_compose, induced_id
 -/

@@ -36,7 +36,9 @@ theorem tangentConeAt_eq_univ
 .mono_left inf_le_left · exact Continuous.tendsto' (by fun_prop) _ _ (by simp)
   · simpa [accPt_iff_frequently_nhdsNE] using hx
   · apply tendsto_nhds_of_eventually_eq
-    refin
+    refine eventually_mem_nhdsWithin.mono fun z hz => ?_
+    have : z - x != 0 := by simpa [sub_eq_zero] using hz
+    simp [div_mul_cancel₀ _ this]
 
 中文:
 定理 tangentConeAt_eq_univ
@@ -47,7 +49,9 @@ theorem tangentConeAt_eq_univ
 .mono_left inf_le_left · exact Continuous.tendsto' (by fun_prop) _ _ (by simp)
   · simpa [accPt_iff_frequently_nhdsNE] using hx
   · apply tendsto_nhds_of_eventually_eq
-    refin
+    refine eventually_mem_nhdsWithin.mono fun z hz => ?_
+    have : z - x != 0 := by simpa [sub_eq_zero] using hz
+    simp [div_mul_cancel₀ _ this]
 
 Depends on / 依赖: Continuous, Continuous.tendsto, accPt_iff_frequently_nhdsNE, eq_univ_of_forall, eventually_mem_nhdsWithin, eventually_mem_nhdsWithin.mono, fun_prop, inf_le_left, mem_tangentConeAt_of_frequently, mono_left, sub_eq_zero, tendsto, tendsto_nhds_of_eventually_eq
 -/

@@ -149,7 +149,7 @@ lemma isStronglyCartesian_homCartesianLift
         (by simp [← Cat.Hom₂.comp_app])
     rintro χ' ⟨hχ'.symm, rfl⟩
     obtain ⟨rfl⟩ : g = χ'.1 := by simpa using IsHomLift.fac (forget F) g χ'
-    ext <;> 
+    ext <;> simp [← Cat.Hom₂.comp_app]
 
 中文:
 引理 isStronglyCartesian_homCartesianLift
@@ -159,7 +159,7 @@ lemma isStronglyCartesian_homCartesianLift
         (by simp [← Cat.Hom₂.comp_app])
     rintro χ' ⟨hχ'.symm, rfl⟩
     obtain ⟨rfl⟩ : g = χ'.1 := by simpa using IsHomLift.fac (forget F) g χ'
-    ext <;> 
+    ext <;> simp [← Cat.Hom₂.comp_app]
 
 Depends on / 依赖: Cat.Hom, Finite, HasFiniteBiproducts, Hom.ext, IsHomLift, IsHomLift.fac, comp_app, forget, hasBiproductsOfShape_finite, homCartesianLift
 -/
@@ -214,7 +214,9 @@ definition ι
     ext
     · simp
     · simp [← (F.mapId ⟨op S⟩).inv.toNatTrans.naturality_assoc ψ, F.whiskerRight_mapId_inv_app,
-        Strict.leftUnitor_eqToIso, ← Cat.Hom₂
+        Strict.leftUnitor_eqToIso, ← Cat.Hom₂.comp_app]
+
+#adaptation_note
 
 中文:
 定义 ι
@@ -225,7 +227,9 @@ definition ι
     ext
     · simp
     · simp [← (F.mapId ⟨op S⟩).inv.toNatTrans.naturality_assoc ψ, F.whiskerRight_mapId_inv_app,
-        Strict.leftUnitor_eqToIso, ← Cat.Hom₂
+        Strict.leftUnitor_eqToIso, ← Cat.Hom₂.comp_app]
+
+#adaptation_note
 
 Depends on / 依赖: HasFiniteBiproducts, hasFiniteCoproducts_of_hasFiniteBiproducts
 -/

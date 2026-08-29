@@ -227,7 +227,10 @@ lemma iff_isIntegralHom_and_locallyOfFiniteType
   · rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @IsFinite) Y.affineCover,
       IsZariskiLocalAtTarget.iff_of_openCover (P := @IsIntegralHom) Y.affineCover,
       IsZariskiLocalAtTarget.iff_of_openCover (P := @LocallyOfFiniteType) Y.affineCover]
-    simp_rw [this, for
+    simp_rw [this, forall_and]
+  rw [HasAffineProperty.iff_of_isAffine (P := @IsFinite)]; rw [HasAffineProperty.iff_of_isAffine (P := @IsIntegralHom)]; rw [RingHom.finite_iff_isIntegral_and_finiteType]; rw [← and_assoc]
+  refine and_congr_right fun ⟨_, _⟩ =>
+    (HasRingHomProperty.iff_of_isAffine (P := @LocallyOfFiniteType)).symm
 
 中文:
 引理 iff_is整数egralHom_and_locallyOfFiniteType
@@ -236,7 +239,10 @@ lemma iff_isIntegralHom_and_locallyOfFiniteType
   · rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @IsFinite) Y.affineCover,
       IsZariskiLocalAtTarget.iff_of_openCover (P := @IsIntegralHom) Y.affineCover,
       IsZariskiLocalAtTarget.iff_of_openCover (P := @LocallyOfFiniteType) Y.affineCover]
-    simp_rw [this, for
+    simp_rw [this, forall_and]
+  rw [HasAffineProperty.iff_of_isAffine (P := @IsFinite)]; rw [HasAffineProperty.iff_of_isAffine (P := @IsIntegralHom)]; rw [RingHom.finite_iff_isIntegral_and_finiteType]; rw [← and_assoc]
+  refine and_congr_right fun ⟨_, _⟩ =>
+    (HasRingHomProperty.iff_of_isAffine (P := @LocallyOfFiniteType)).symm
 
 Depends on / 依赖: HasAffineProperty, HasAffineProperty.iff_of_isAffine, IsAffine, IsFinite, IsIntegralHom, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_openCover, LocallyOfFiniteType, RingHom, RingHom.finite_iff_isIntegral_and_finiteType, Y.affineCover, affineCover, and_assoc, and_congr_right, finite_iff_isIntegral_and_finiteType, forall_and, iff_of_isAffine, iff_of_openCover, simp_rw
 -/
@@ -287,7 +293,13 @@ lemma _root_.AlgebraicGeometry.IsClosedImmersion.iff_isFinite_and_mono
   · rw [← monomorphisms.iff, IsZariskiLocalAtTarget.iff_of_openCover (P := @IsFinite) Y.affineCover,
       IsZariskiLocalAtTarget.iff_of_openCover (P := @IsClosedImmersion) Y.affineCover,
       IsZariskiLocalAtTarget.iff_of_openCover (P := monomorphisms _) Y.affineCover]
-  
+    simp_rw [this, forall_and]
+  rw [HasAffineProperty.iff_of_isAffine (P := @IsClosedImmersion)]; rw [HasAffineProperty.iff_of_isAffine (P := @IsFinite)]; rw [RingHom.surjective_iff_epi_and_finite]; rw [@and_comm (Epi _)]; rw [← and_assoc]
+  refine and_congr_right fun ⟨_, _⟩ =>
+    Iff.trans ?_ (arrow_mk_iso_iff (monomorphisms _) (arrowIsoSpecΓOfIsAffine f).symm)
+  trans Mono (f.app ⊤).op
+  · exact ⟨fun h => inferInstance, fun h => show Epi (f.app ⊤).op.unop by infer_instance⟩
+  exact (Functor.mono_map_iff_mono Scheme.Spec _).symm
 
 中文:
 引理 _root_.AlgebraicGeometry.是闭浸入.iff_isFinite_and_mono
@@ -296,7 +308,13 @@ lemma _root_.AlgebraicGeometry.IsClosedImmersion.iff_isFinite_and_mono
   · rw [← monomorphisms.iff, IsZariskiLocalAtTarget.iff_of_openCover (P := @IsFinite) Y.affineCover,
       IsZariskiLocalAtTarget.iff_of_openCover (P := @IsClosedImmersion) Y.affineCover,
       IsZariskiLocalAtTarget.iff_of_openCover (P := monomorphisms _) Y.affineCover]
-  
+    simp_rw [this, forall_and]
+  rw [HasAffineProperty.iff_of_isAffine (P := @IsClosedImmersion)]; rw [HasAffineProperty.iff_of_isAffine (P := @IsFinite)]; rw [RingHom.surjective_iff_epi_and_finite]; rw [@and_comm (Epi _)]; rw [← and_assoc]
+  refine and_congr_right fun ⟨_, _⟩ =>
+    Iff.trans ?_ (arrow_mk_iso_iff (monomorphisms _) (arrowIsoSpecΓOfIsAffine f).symm)
+  trans Mono (f.app ⊤).op
+  · exact ⟨fun h => inferInstance, fun h => show Epi (f.app ⊤).op.unop by infer_instance⟩
+  exact (Functor.mono_map_iff_mono Scheme.Spec _).symm
 
 Depends on / 依赖: Finset, Finset.card_compl, HasAffineProperty, HasAffineProperty.iff_of_isAffine, IsAffine, IsClosedImmersion, IsFinite, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_openCover, RingHom, RingHom.surjective_iff_epi_and_finite, Y.affineCover, affineCover, and_comm, card_compl, forall_and, hasDimensionLT_face, hasDimensionLT_iSup_iff, horn_eq_iSup, iff_of_isAffine
 -/
@@ -435,7 +453,31 @@ lemma isFinite_iff_locallyOfFiniteType_of_jacobsonSpace
   wlog hY : exists S, Y = Spec S generalizing X Y
   · rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @IsFinite) Y.affineCover,
       IsZariskiLocalAtTarget.iff_of_openCover (P := @LocallyOfFiniteType) Y.affineCover]
-    have inst (i) := ((Y.affineCover.pullback₁ f).f i).isOpenEmbedding.injecti
+    have inst (i) := ((Y.affineCover.pullback₁ f).f i).isOpenEmbedding.injective.subsingleton
+    have inst (i) := isReduced_of_isOpenImmersion ((Y.affineCover.pullback₁ f).f i)
+    have inst (i) := JacobsonSpace.of_isOpenEmbedding (Y.affineCover.f i).isOpenEmbedding
+    exact forall_congr' fun i => this ⟨_, rfl⟩
+  obtain ⟨S, rfl⟩ := hY
+  wlog hX : exists R, X = Spec R generalizing X
+  · rw [← MorphismProperty.cancel_left_of_respectsIso (P := @IsFinite) X.isoSpec.inv,
+      ← MorphismProperty.cancel_left_of_respectsIso (P := @LocallyOfFiniteType) X.isoSpec.inv]
+    have inst := X.isoSpec.inv.isOpenEmbedding.injective.subsingleton
+    refine this ⟨_, rfl⟩
+  cases isEmpty_or_nonempty X
+  · exact ⟨inferInstance, inferInstance⟩
+  have : IrreducibleSpace X := ⟨‹_›⟩
+  obtain ⟨R, rfl⟩ := hX
+  have : IsDomain R := (affine_isIntegral_iff R).mp (isIntegral_of_irreducibleSpace_of_isReduced _)
+  obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+  rw [IsFinite.SpecMap_iff]; rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFiniteType)]
+  have := (PrimeSpectrum.t1Space_iff_isField (R := R)).mp (show T1Space (Spec R) by infer_instance)
+  let := this.toField
+  let := φ.hom.toAlgebra
+  have := PrimeSpectrum.isJacobsonRing_iff_jacobsonSpace.mpr ‹_›
+  change Module.Finite _ _ ↔ Algebra.FiniteType _ _
+  exact ⟨fun _ => inferInstance, fun _ => finite_of_finite_type_of_isJacobsonRing _ _⟩
+
+@[stacks 01TB "(1) => (3)"]
 
 中文:
 引理 isFinite_iff_locallyOfFiniteType_of_jacobsonSpace
@@ -443,7 +485,31 @@ lemma isFinite_iff_locallyOfFiniteType_of_jacobsonSpace
   wlog hY : exists S, Y = Spec S generalizing X Y
   · rw [IsZariskiLocalAtTarget.iff_of_openCover (P := @IsFinite) Y.affineCover,
       IsZariskiLocalAtTarget.iff_of_openCover (P := @LocallyOfFiniteType) Y.affineCover]
-    have inst (i) := ((Y.affineCover.pullback₁ f).f i).isOpenEmbedding.injecti
+    have inst (i) := ((Y.affineCover.pullback₁ f).f i).isOpenEmbedding.injective.subsingleton
+    have inst (i) := isReduced_of_isOpenImmersion ((Y.affineCover.pullback₁ f).f i)
+    have inst (i) := JacobsonSpace.of_isOpenEmbedding (Y.affineCover.f i).isOpenEmbedding
+    exact forall_congr' fun i => this ⟨_, rfl⟩
+  obtain ⟨S, rfl⟩ := hY
+  wlog hX : exists R, X = Spec R generalizing X
+  · rw [← MorphismProperty.cancel_left_of_respectsIso (P := @IsFinite) X.isoSpec.inv,
+      ← MorphismProperty.cancel_left_of_respectsIso (P := @LocallyOfFiniteType) X.isoSpec.inv]
+    have inst := X.isoSpec.inv.isOpenEmbedding.injective.subsingleton
+    refine this ⟨_, rfl⟩
+  cases isEmpty_or_nonempty X
+  · exact ⟨inferInstance, inferInstance⟩
+  have : IrreducibleSpace X := ⟨‹_›⟩
+  obtain ⟨R, rfl⟩ := hX
+  have : IsDomain R := (affine_isIntegral_iff R).mp (isIntegral_of_irreducibleSpace_of_isReduced _)
+  obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+  rw [IsFinite.SpecMap_iff]; rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFiniteType)]
+  have := (PrimeSpectrum.t1Space_iff_isField (R := R)).mp (show T1Space (Spec R) by infer_instance)
+  let := this.toField
+  let := φ.hom.toAlgebra
+  have := PrimeSpectrum.isJacobsonRing_iff_jacobsonSpace.mpr ‹_›
+  change Module.Finite _ _ ↔ Algebra.FiniteType _ _
+  exact ⟨fun _ => inferInstance, fun _ => finite_of_finite_type_of_isJacobsonRing _ _⟩
+
+@[stacks 01TB "(1) => (3)"]
 
 Depends on / 依赖: IsFinite, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_openCover, JacobsonSpace, JacobsonSpace.of_isOpenEmbedding, LocallyOfFiniteType, Y.affineCover, Y.affineCover.f, Y.affineCover.pullback, affineCover, forall_congr, generalizing, iff_of_openCover, injective, isOpenEmbedding, isOpenEmbedding.injective.subsingleton, isReduced_of_isOpenImmersion, of_isOpenEmbedding, subsingleton
 -/
@@ -489,7 +555,7 @@ lemma Scheme.Hom.closePoints_subset_preimage_closedPoints
   have := (isFinite_iff_locallyOfFiniteType_of_jacobsonSpace
     (f := X.fromSpecResidueField x ≫ f)).mpr inferInstance
   simpa [Set.range_comp, Scheme.range_fromSpecResidueField] using
-    (X.fromSpecResidueField x ≫ f).isClos
+    (X.fromSpecResidueField x ≫ f).isClosedMap.isClosed_range
 
 中文:
 引理 概形.态射.closePoints_subset_preimage_closedPoints
@@ -499,7 +565,7 @@ lemma Scheme.Hom.closePoints_subset_preimage_closedPoints
   have := (isFinite_iff_locallyOfFiniteType_of_jacobsonSpace
     (f := X.fromSpecResidueField x ≫ f)).mpr inferInstance
   simpa [Set.range_comp, Scheme.range_fromSpecResidueField] using
-    (X.fromSpecResidueField x ≫ f).isClos
+    (X.fromSpecResidueField x ≫ f).isClosedMap.isClosed_range
 
 Depends on / 依赖: Scheme, Scheme.range_fromSpecResidueField, Set.range_comp, X.fromSpecResidueField, fromSpecResidueField, isClosedMap, isClosedMap.isClosed_range, isClosed_range, isClosed_singleton_iff_isClosedImmersion, isClosed_singleton_iff_isClosedImmersion.mp, isFinite_iff_locallyOfFiniteType_of_jacobsonSpace, range_comp, range_fromSpecResidueField
 -/

@@ -627,7 +627,10 @@ definition changeInv
     invFun := g
     left_inv := by convert! f.left_inv
     right_inv := by convert! f.right_inv using 1
-    uniformContinuous_toFun := f.uniformCont
+    uniformContinuous_toFun := f.uniformContinuous
+    uniformContinuous_invFun := by convert! f.symm.uniformContinuous }
+
+@[simp]
 
 中文:
 定义 changeInv
@@ -640,7 +643,10 @@ definition changeInv
     invFun := g
     left_inv := by convert! f.left_inv
     right_inv := by convert! f.right_inv using 1
-    uniformContinuous_toFun := f.uniformCont
+    uniformContinuous_toFun := f.uniformContinuous
+    uniformContinuous_invFun := by convert! f.symm.uniformContinuous }
+
+@[simp]
 
 Depends on / 依赖: convert, f.left_inv, f.right_inv, f.symm, f.symm.uniformContinuous, f.uniformContinuous, invFun, left_inv, right_inv, uniformContinuous, uniformContinuous_invFun, uniformContinuous_toFun
 -/
@@ -957,7 +963,9 @@ definition prodCongr
   uniformContinuous_invFun :=
     (h₁.symm.uniformContinuous.comp uniformContinuous_fst).prodMk
       (h₂.symm.uniformContinuous.comp uniformContinuous_snd)
-  toEquiv := h₁.toEquiv.prodCo
+  toEquiv := h₁.toEquiv.prodCongr h₂.toEquiv
+
+@[simp]
 
 中文:
 定义 prodCongr
@@ -967,7 +975,9 @@ definition prodCongr
   uniformContinuous_invFun :=
     (h₁.symm.uniformContinuous.comp uniformContinuous_fst).prodMk
       (h₂.symm.uniformContinuous.comp uniformContinuous_snd)
-  toEquiv := h₁.toEquiv.prodCo
+  toEquiv := h₁.toEquiv.prodCongr h₂.toEquiv
+
+@[simp]
 
 Depends on / 依赖: prodCongr, prodMk, symm.uniformContinuous.comp, toEquiv, toEquiv.prodCongr, uniformContinuous, uniformContinuous.comp, uniformContinuous_fst, uniformContinuous_invFun, uniformContinuous_snd
 -/
@@ -1101,7 +1111,8 @@ definition prodAssoc
       ((uniformContinuous_snd.comp uniformContinuous_fst).prodMk uniformContinuous_snd)
   uniformContinuous_invFun :=
     (uniformContinuous_fst.prodMk (uniformContinuous_fst.comp
-      uniformContinuous_snd)).prodMk (uniformContinuous_snd.co
+      uniformContinuous_snd)).prodMk (uniformContinuous_snd.comp uniformContinuous_snd)
+  toEquiv := Equiv.prodAssoc α β γ
 
 中文:
 定义 prodAssoc
@@ -1110,7 +1121,8 @@ definition prodAssoc
       ((uniformContinuous_snd.comp uniformContinuous_fst).prodMk uniformContinuous_snd)
   uniformContinuous_invFun :=
     (uniformContinuous_fst.prodMk (uniformContinuous_fst.comp
-      uniformContinuous_snd)).prodMk (uniformContinuous_snd.co
+      uniformContinuous_snd)).prodMk (uniformContinuous_snd.comp uniformContinuous_snd)
+  toEquiv := Equiv.prodAssoc α β γ
 
 Depends on / 依赖: Equiv.prodAssoc, prodAssoc, prodMk, toEquiv, uniformContinuous_fst, uniformContinuous_fst.comp, uniformContinuous_fst.prodMk, uniformContinuous_invFun, uniformContinuous_snd, uniformContinuous_snd.comp
 -/

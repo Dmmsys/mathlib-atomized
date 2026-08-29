@@ -82,7 +82,11 @@ theorem card_increment
   have hPpos : 0 < stepBound #P.parts := stepBound_pos (nonempty_of_not_uniform hPG).card_pos
   rw [increment]; rw [card_bind]
   simp_rw [chunk, apply_dite Finpartition.parts, apply_dite card, sum_dite]
-  rw [su
+  rw [sum_const_nat]; rw [sum_const_nat]; rw [univ_eq_attach]; rw [univ_eq_attach]; rw [card_attach]; rw [card_attach]
+  any_goals exact fun x hx => card_parts_equitabilise _ _ (Nat.div_pos hPα' hPpos).ne'
+  rw [Nat.sub_add_cancel a_add_one_le_four_pow_parts_card]; rw [Nat.sub_add_cancel ((Nat.le_succ _).trans a_add_one_le_four_pow_parts_card)]; rw [← add_mul]
+  congr
+  rw [card_filter_add_card_filter_not]; rw [card_attach]
 
 中文:
 定理 card_increment
@@ -92,7 +96,11 @@ theorem card_increment
   have hPpos : 0 < stepBound #P.parts := stepBound_pos (nonempty_of_not_uniform hPG).card_pos
   rw [increment]; rw [card_bind]
   simp_rw [chunk, apply_dite Finpartition.parts, apply_dite card, sum_dite]
-  rw [su
+  rw [sum_const_nat]; rw [sum_const_nat]; rw [univ_eq_attach]; rw [univ_eq_attach]; rw [card_attach]; rw [card_attach]
+  any_goals exact fun x hx => card_parts_equitabilise _ _ (Nat.div_pos hPα' hPpos).ne'
+  rw [Nat.sub_add_cancel a_add_one_le_four_pow_parts_card]; rw [Nat.sub_add_cancel ((Nat.le_succ _).trans a_add_one_le_four_pow_parts_card)]; rw [← add_mul]
+  congr
+  rw [card_filter_add_card_filter_not]; rw [card_attach]
 
 Depends on / 依赖: Finpartition, Finpartition.parts, Nat.div_pos, Nat.sub_ad, P.parts, any_goals, apply_dite, card_attach, card_bind, card_parts_equitabilise, card_pos, div_pos, increment, nonempty_of_not_uniform, simp_rw, stepBound, stepBound_pos, sub_ad, sum_const_nat, sum_dite
 -/
@@ -173,7 +181,10 @@ theorem distinctPairs_increment
     mem_product, mem_attach, true_and, Subtype.exists, and_imp,
     mem_offDiag, forall_exists_index, Ne]
   refine fun U V hUV hUi hVj => ⟨⟨_, hUV.1, hUi⟩, ⟨_, hUV.2.1, hVj⟩, ?_⟩
-  rintro r
+  rintro rfl
+  obtain ⟨i, hi⟩ := nonempty_of_mem_parts _ hUi
+  exact hUV.2.2 (P.disjoint.elim_finset hUV.1 hUV.2.1 i (Finpartition.le _ hUi hi) <|
+    Finpartition.le _ hVj hi)
 
 中文:
 定理 distinctPairs_increment
@@ -183,7 +194,10 @@ theorem distinctPairs_increment
     mem_product, mem_attach, true_and, Subtype.exists, and_imp,
     mem_offDiag, forall_exists_index, Ne]
   refine fun U V hUV hUi hVj => ⟨⟨_, hUV.1, hUi⟩, ⟨_, hUV.2.1, hVj⟩, ?_⟩
-  rintro r
+  rintro rfl
+  obtain ⟨i, hi⟩ := nonempty_of_mem_parts _ hUi
+  exact hUV.2.2 (P.disjoint.elim_finset hUV.1 hUV.2.1 i (Finpartition.le _ hUi hi) <|
+    Finpartition.le _ hVj hi)
 -/
 private theorem distinctPairs_increment :
     P.parts.offDiag.attach.biUnion (distinctPairs hP G ε) subseteq (increment hP G ε).parts.offDiag := by
@@ -208,7 +222,12 @@ lemma pairwiseDisjoint_distinctPairs
   rintro ⟨⟨s₁, s₂⟩, hs⟩ _ ⟨⟨t₁, t₂⟩, ht⟩ _ hst ⟨u, v⟩ huv₁ huv₂
   rw [mem_offDiag] at hs ht
   obtain ⟨a, ha⟩ := Finpartition.nonempty_of_mem_parts _ huv₁.1
-  obtain ⟨b, hb⟩ :
+  obtain ⟨b, hb⟩ := Finpartition.nonempty_of_mem_parts _ huv₁.2
+exact hst Subtype.ext Prod.ext
+    (P.disjoint.elim_finset hs.1 ht.1 a (Finpartition.le _ huv₁.1 ha) <|
+      Finpartition.le _ huv₂.1 ha) <|
+P.disjoint.elim_finset hs.2.1 ht.2.1 b (Finpartition.le _ huv₁.2 hb)
+          Finpartition.le _ huv₂.2 hb
 
 中文:
 引理 pairwiseDisjoint_distinctPairs
@@ -218,7 +237,12 @@ lemma pairwiseDisjoint_distinctPairs
   rintro ⟨⟨s₁, s₂⟩, hs⟩ _ ⟨⟨t₁, t₂⟩, ht⟩ _ hst ⟨u, v⟩ huv₁ huv₂
   rw [mem_offDiag] at hs ht
   obtain ⟨a, ha⟩ := Finpartition.nonempty_of_mem_parts _ huv₁.1
-  obtain ⟨b, hb⟩ :
+  obtain ⟨b, hb⟩ := Finpartition.nonempty_of_mem_parts _ huv₁.2
+exact hst Subtype.ext Prod.ext
+    (P.disjoint.elim_finset hs.1 ht.1 a (Finpartition.le _ huv₁.1 ha) <|
+      Finpartition.le _ huv₂.1 ha) <|
+P.disjoint.elim_finset hs.2.1 ht.2.1 b (Finpartition.le _ huv₁.2 hb)
+          Finpartition.le _ huv₂.2 hb
 -/
 private lemma pairwiseDisjoint_distinctPairs :
     (P.parts.offDiag.attach : Set {x // x in P.parts.offDiag}).PairwiseDisjoint
@@ -287,7 +311,38 @@ theorem energy_increment
           #P.parts ^ 2 * (ε ^ 5 / 4) : Real) / #P.parts ^ 2 := by
         rw [coe_energy]; rw [add_div]; rw [mul_div_cancel_left₀]; positivity
     _ <= (∑ x in P.parts.offDiag.attach, (∑ i in distinctPairs hP G ε x,
-    
+          G.edgeDensity i.1 i.2 ^ 2 : Real) / 16 ^ #P.parts) / #P.parts ^ 2 := ?_
+    _ = (∑ x in P.parts.offDiag.attach, ∑ i in distinctPairs hP G ε x,
+          G.edgeDensity i.1 i.2 ^ 2 : Real) / #(increment hP G ε).parts ^ 2 := by
+        rw [card_increment hPα hPG]; rw [coe_stepBound]; rw [mul_pow]; rw [pow_right_comm]; rw [div_mul_eq_div_div_swap]; rw [← sum_div]; norm_num
+    _ <= _ := by
+        rw [coe_energy]
+        gcongr
+        rw [← sum_biUnion pairwiseDisjoint_distinctPairs]
+        exact sum_le_sum_of_subset_of_nonneg distinctPairs_increment fun i _ _ => sq_nonneg _
+  gcongr
+  rw [Finpartition.IsUniform]; rw [not_le]; rw [mul_tsub]; rw [mul_one]; rw [← offDiag_card] at hPG
+  calc
+    _ <= ∑ x in P.parts.offDiag, (edgeDensity G x.1 x.2 : Real) ^ 2 +
+        (#(nonUniforms P G ε) * (ε ^ 4 / 3) - #P.parts.offDiag * (ε ^ 5 / 25)) := ?_
+    _ = ∑ x in P.parts.offDiag, ((G.edgeDensity x.1 x.2 : Real) ^ 2 +
+        ((if G.IsUniform ε x.1 x.2 then (0 : Real) else ε ^ 4 / 3) - ε ^ 5 / 25) : Real) := by
+        rw [sum_add_distrib]; rw [sum_sub_distrib]; rw [sum_const]; rw [nsmul_eq_mul]; rw [sum_ite]; rw [sum_const_zero]; rw [zero_add]; rw [sum_const]; rw [nsmul_eq_mul]; rw [← Finpartition.nonUniforms]; rw [← add_sub_assoc]; rw [add_sub_right_comm]
+    _ = _ := (sum_attach ..).symm
+    _ <= _ := sum_le_sum fun i _ => le_sum_distinctPairs_edgeDensity_sq i hε₁ hPα hPε
+  gcongr
+  calc
+    _ = (6 / 7 * #P.parts ^ 2) * ε ^ 5 * (7 / 24) := by ring
+    _ <= #P.parts.offDiag * ε ^ 5 * (22 / 75) := by
+        gcongr ?_ * _ * ?_
+        · rw [← mul_div_right_comm, div_le_iff₀ (by simp), offDiag_card]
+          norm_cast
+          rw [tsub_mul]
+          refine le_tsub_of_add_le_left ?_
+          nlinarith
+        · norm_num
+    _ = (#P.parts.offDiag * ε * (ε ^ 4 / 3) - #P.parts.offDiag * (ε ^ 5 / 25)) := by ring
+    _ <= (#(nonUniforms P G ε) * (ε ^ 4 / 3) - #P.parts.offDiag * (ε ^ 5 / 25)) := by gcongr
 
 中文:
 定理 energy_increment
@@ -298,7 +353,38 @@ theorem energy_increment
           #P.parts ^ 2 * (ε ^ 5 / 4) : Real) / #P.parts ^ 2 := by
         rw [coe_energy]; rw [add_div]; rw [mul_div_cancel_left₀]; positivity
     _ <= (∑ x in P.parts.offDiag.attach, (∑ i in distinctPairs hP G ε x,
-    
+          G.edgeDensity i.1 i.2 ^ 2 : Real) / 16 ^ #P.parts) / #P.parts ^ 2 := ?_
+    _ = (∑ x in P.parts.offDiag.attach, ∑ i in distinctPairs hP G ε x,
+          G.edgeDensity i.1 i.2 ^ 2 : Real) / #(increment hP G ε).parts ^ 2 := by
+        rw [card_increment hPα hPG]; rw [coe_stepBound]; rw [mul_pow]; rw [pow_right_comm]; rw [div_mul_eq_div_div_swap]; rw [← sum_div]; norm_num
+    _ <= _ := by
+        rw [coe_energy]
+        gcongr
+        rw [← sum_biUnion pairwiseDisjoint_distinctPairs]
+        exact sum_le_sum_of_subset_of_nonneg distinctPairs_increment fun i _ _ => sq_nonneg _
+  gcongr
+  rw [Finpartition.IsUniform]; rw [not_le]; rw [mul_tsub]; rw [mul_one]; rw [← offDiag_card] at hPG
+  calc
+    _ <= ∑ x in P.parts.offDiag, (edgeDensity G x.1 x.2 : Real) ^ 2 +
+        (#(nonUniforms P G ε) * (ε ^ 4 / 3) - #P.parts.offDiag * (ε ^ 5 / 25)) := ?_
+    _ = ∑ x in P.parts.offDiag, ((G.edgeDensity x.1 x.2 : Real) ^ 2 +
+        ((if G.IsUniform ε x.1 x.2 then (0 : Real) else ε ^ 4 / 3) - ε ^ 5 / 25) : Real) := by
+        rw [sum_add_distrib]; rw [sum_sub_distrib]; rw [sum_const]; rw [nsmul_eq_mul]; rw [sum_ite]; rw [sum_const_zero]; rw [zero_add]; rw [sum_const]; rw [nsmul_eq_mul]; rw [← Finpartition.nonUniforms]; rw [← add_sub_assoc]; rw [add_sub_right_comm]
+    _ = _ := (sum_attach ..).symm
+    _ <= _ := sum_le_sum fun i _ => le_sum_distinctPairs_edgeDensity_sq i hε₁ hPα hPε
+  gcongr
+  calc
+    _ = (6 / 7 * #P.parts ^ 2) * ε ^ 5 * (7 / 24) := by ring
+    _ <= #P.parts.offDiag * ε ^ 5 * (22 / 75) := by
+        gcongr ?_ * _ * ?_
+        · rw [← mul_div_right_comm, div_le_iff₀ (by simp), offDiag_card]
+          norm_cast
+          rw [tsub_mul]
+          refine le_tsub_of_add_le_left ?_
+          nlinarith
+        · norm_num
+    _ = (#P.parts.offDiag * ε * (ε ^ 4 / 3) - #P.parts.offDiag * (ε ^ 5 / 25)) := by ring
+    _ <= (#(nonUniforms P G ε) * (ε ^ 4 / 3) - #P.parts.offDiag * (ε ^ 5 / 25)) := by gcongr
 
 Depends on / 依赖: G.edgeDensity, P.parts, P.parts.offDiag, P.parts.offDiag.attach, add_div, attach, card_increment, coe_energy, distinctPairs, edgeDensity, increment, offDiag
 -/

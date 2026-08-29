@@ -112,7 +112,30 @@ theorem effectiveEpiFamily_tfae
     rw [epi_iff_surjective]
     intro b
     obtain ⟨t, x, h⟩ := e b
-    refine ⟨Sigma.ι X t x,
+    refine ⟨Sigma.ι X t x, ?_⟩
+    change (Sigma.ι X t ≫ Sigma.desc π) x = _
+    simpa using h
+  tfae_have 2 -> 3
+  | e => by
+    rw [epi_iff_surjective] at e
+    let i : ∐ X ≅ finiteCoproduct X :=
+      (colimit.isColimit _).coconePointUniqueUpToIso (finiteCoproduct.isColimit _)
+    intro b
+    obtain ⟨t, rfl⟩ := e b
+    let q := i.hom t
+    refine ⟨q.1,q.2,?_⟩
+    have : t = i.inv (i.hom t) := show t = (i.hom ≫ i.inv) t by simp only [i.hom_inv_id]; rfl
+    rw [this]
+    change _ = (i.inv ≫ Sigma.desc π) (i.hom t)
+    suffices i.inv ≫ Sigma.desc π = finiteCoproduct.desc X π by
+      rw [this]; rfl
+    rw [Iso.inv_comp_eq]
+    apply colimit.hom_ext
+    rintro ⟨a⟩
+    simp only [i, Discrete.functor_obj, colimit.ι_desc, Cofan.mk_ι_app,
+      colimit.comp_coconePointUniqueUpToIso_hom_assoc]
+    ext; rfl
+  tfae_finish
 
 中文:
 定理 effectiveEpiFamily_tfae
@@ -127,7 +150,30 @@ theorem effectiveEpiFamily_tfae
     rw [epi_iff_surjective]
     intro b
     obtain ⟨t, x, h⟩ := e b
-    refine ⟨Sigma.ι X t x,
+    refine ⟨Sigma.ι X t x, ?_⟩
+    change (Sigma.ι X t ≫ Sigma.desc π) x = _
+    simpa using h
+  tfae_have 2 -> 3
+  | e => by
+    rw [epi_iff_surjective] at e
+    let i : ∐ X ≅ finiteCoproduct X :=
+      (colimit.isColimit _).coconePointUniqueUpToIso (finiteCoproduct.isColimit _)
+    intro b
+    obtain ⟨t, rfl⟩ := e b
+    let q := i.hom t
+    refine ⟨q.1,q.2,?_⟩
+    have : t = i.inv (i.hom t) := show t = (i.hom ≫ i.inv) t by simp only [i.hom_inv_id]; rfl
+    rw [this]
+    change _ = (i.inv ≫ Sigma.desc π) (i.hom t)
+    suffices i.inv ≫ Sigma.desc π = finiteCoproduct.desc X π by
+      rw [this]; rfl
+    rw [Iso.inv_comp_eq]
+    apply colimit.hom_ext
+    rintro ⟨a⟩
+    simp only [i, Discrete.functor_obj, colimit.ι_desc, Cofan.mk_ι_app,
+      colimit.comp_coconePointUniqueUpToIso_hom_assoc]
+    ext; rfl
+  tfae_finish
 
 Depends on / 依赖: Sigma.desc, coconePointUniqueUpToIso, colimit, colimit.isColimit, effectiveEpi_desc_iff_effectiveEpiFamily, effectiveEpi_tfae, epi_iff_surjective, finiteCoproduct, finiteCoproduct.isColimit, isColimit, tfae_have
 -/

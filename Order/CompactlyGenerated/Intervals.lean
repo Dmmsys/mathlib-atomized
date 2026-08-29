@@ -69,7 +69,11 @@ instance instIsCompactlyGenerated
   refine ⟨range f, ?_, ?_⟩
   · rintro - ⟨⟨y, hy⟩, hy', rfl⟩
     exact isCompactElement (hs _ hy)
-  · rw [Subtype.ex
+  · rw [Subtype.ext_iff]
+    change sSup (((↑) : Iic a -> α) '' (range f)) = sSup s
+    congr
+    ext b
+    simpa [f] using hx b
 
 中文:
 实例 instIsCompactlyGenerated
@@ -82,7 +86,11 @@ instance instIsCompactlyGenerated
   refine ⟨range f, ?_, ?_⟩
   · rintro - ⟨⟨y, hy⟩, hy', rfl⟩
     exact isCompactElement (hs _ hy)
-  · rw [Subtype.ex
+  · rw [Subtype.ext_iff]
+    change sSup (((↑) : Iic a -> α) '' (range f)) = sSup s
+    congr
+    ext b
+    simpa [f] using hx b
 
 Depends on / 依赖: IsCompactlyGenerated, IsCompactlyGenerated.exists_sSup_eq, Subtype, Subtype.ext_iff, exists_sSup_eq, ext_iff, isCompactElement, property, sSup_le_iff, y.property
 -/
@@ -115,7 +123,19 @@ theorem complementedLattice_of_complementedLattice_Iic
   have : forall i in s, exists t : Set α, f i = sSup t ∧ forall a in t, IsAtom a := fun i hi => by
     replace h := complementedLattice_iff_isAtomistic.mp (h i hi)
     obtain ⟨u, hu, hu'⟩ := eq_sSup_atoms (⊤ : Iic (f i))
-    refine ⟨(↑) '' u, ?_, ?
+    refine ⟨(↑) '' u, ?_, ?_⟩
+    · replace hu : f i = ↑(sSup u) := Subtype.ext_iff.mp hu
+      simp_rw [hu, Iic.coe_sSup]
+    · rintro b ⟨⟨a, ha'⟩, ha, rfl⟩
+      exact IsAtom.of_isAtom_coe_Iic (hu' _ ha)
+  choose t ht ht' using this
+  let u : Set α := ⋃ i, ⋃ hi : i in s, t i hi
+  have hu₁ : u subseteq {a | IsAtom a} := by
+    rintro a ⟨-, ⟨i, rfl⟩, ⟨-, ⟨hi, rfl⟩, ha : a in t i hi⟩⟩
+    exact ht' i hi a ha
+  have hu₂ : sSup u = ⨆ i in s, f i := by simp_rw [u, sSup_iUnion, biSup_congr' ht]
+  rw [eq_top_iff]; rw [← h']; rw [← hu₂]
+  exact sSup_le_sSup hu₁
 
 中文:
 定理 complementedLattice_of_complementedLattice_Iic
@@ -124,7 +144,19 @@ theorem complementedLattice_of_complementedLattice_Iic
   have : forall i in s, exists t : Set α, f i = sSup t ∧ forall a in t, IsAtom a := fun i hi => by
     replace h := complementedLattice_iff_isAtomistic.mp (h i hi)
     obtain ⟨u, hu, hu'⟩ := eq_sSup_atoms (⊤ : Iic (f i))
-    refine ⟨(↑) '' u, ?_, ?
+    refine ⟨(↑) '' u, ?_, ?_⟩
+    · replace hu : f i = ↑(sSup u) := Subtype.ext_iff.mp hu
+      simp_rw [hu, Iic.coe_sSup]
+    · rintro b ⟨⟨a, ha'⟩, ha, rfl⟩
+      exact IsAtom.of_isAtom_coe_Iic (hu' _ ha)
+  choose t ht ht' using this
+  let u : Set α := ⋃ i, ⋃ hi : i in s, t i hi
+  have hu₁ : u subseteq {a | IsAtom a} := by
+    rintro a ⟨-, ⟨i, rfl⟩, ⟨-, ⟨hi, rfl⟩, ha : a in t i hi⟩⟩
+    exact ht' i hi a ha
+  have hu₂ : sSup u = ⨆ i in s, f i := by simp_rw [u, sSup_iUnion, biSup_congr' ht]
+  rw [eq_top_iff]; rw [← h']; rw [← hu₂]
+  exact sSup_le_sSup hu₁
 
 Depends on / 依赖: Iic.coe_sSup, IsAtom, IsAtom.of_isAtom_coe_Iic, Subtype, Subtype.ext_iff.mp, coe_sSup, complementedLattice_iff_isAtomistic, complementedLattice_iff_isAtomistic.mp, complementedLattice_of_sSup_atoms_eq_top, eq_sSup_atoms, ext_iff, of_isAtom_coe_Iic, replace, simp_rw
 -/

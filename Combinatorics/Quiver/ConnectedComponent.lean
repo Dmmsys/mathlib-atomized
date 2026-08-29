@@ -508,7 +508,11 @@ lemma stronglyConnectedComponent_singleton_iff
       stronglyConnectedComponent_eq_of_path (a := w) (b := v) hba hab
     obtain ⟨rfl⟩ := h_singleton w h_same_scc
     contradiction
-  · intro h_no_
+  · intro h_no_bidir w h_same_scc
+    by_contra hw_ne
+    obtain ⟨hab, hba⟩ :=
+      exists_path_of_stronglyConnectedComponent_eq (a := w) (b := v) h_same_scc
+    exact (h_no_bidir w hw_ne) ⟨hba, hab⟩
 
 中文:
 引理 stronglyConnectedComponent_singleton_iff
@@ -521,7 +525,11 @@ lemma stronglyConnectedComponent_singleton_iff
       stronglyConnectedComponent_eq_of_path (a := w) (b := v) hba hab
     obtain ⟨rfl⟩ := h_singleton w h_same_scc
     contradiction
-  · intro h_no_
+  · intro h_no_bidir w h_same_scc
+    by_contra hw_ne
+    obtain ⟨hab, hba⟩ :=
+      exists_path_of_stronglyConnectedComponent_eq (a := w) (b := v) h_same_scc
+    exact (h_no_bidir w hw_ne) ⟨hba, hab⟩
 
 Depends on / 依赖: StronglyConnectedComponent, exists_path_of_stronglyConnectedComponent_eq, h_bidir, h_no_bidir, h_same_scc, h_singleton, hw_ne, stronglyConnectedComponent_eq_of_path
 -/
@@ -588,7 +596,7 @@ lemma IsStronglyConnected.isSStronglyConnected_of_hom
   have hp_pos : 0 < p.length := by
     simpa [p, Path.length_comp, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using
       Nat.succ_pos (p₁.length + p₂.length)
-  exact ⟨p, hp_po
+  exact ⟨p, hp_pos⟩
 
 中文:
 引理 IsStronglyConnected.isSStronglyConnected_of_hom
@@ -601,7 +609,7 @@ lemma IsStronglyConnected.isSStronglyConnected_of_hom
   have hp_pos : 0 < p.length := by
     simpa [p, Path.length_comp, Nat.add_comm, Nat.add_left_comm, Nat.add_assoc] using
       Nat.succ_pos (p₁.length + p₂.length)
-  exact ⟨p, hp_po
+  exact ⟨p, hp_pos⟩
 
 Depends on / 依赖: Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, Nat.succ_pos, Path.length_comp, add_assoc, add_comm, add_left_comm, h_sc, hp_pos, length, length_comp, p.length, succ_pos, toPath, toPath.comp
 -/

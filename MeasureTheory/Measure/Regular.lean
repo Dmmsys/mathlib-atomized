@@ -396,7 +396,7 @@ theorem comap
   have hKrange := hKU.trans (image_subset_range _ _)
   refine ⟨f ⁻¹' K, ?_, hAB' K hKrange hK, ?_⟩
   · rw [← hf.injective.preimage_image U]; exact preimage_mono hKU
-  · rwa [hf.comap_apply, image_preimag
+  · rwa [hf.comap_apply, image_preimage_eq_iff.mpr hKrange]
 
 中文:
 定理 comap
@@ -408,7 +408,7 @@ theorem comap
   have hKrange := hKU.trans (image_subset_range _ _)
   refine ⟨f ⁻¹' K, ?_, hAB' K hKrange hK, ?_⟩
   · rw [← hf.injective.preimage_image U]; exact preimage_mono hKU
-  · rwa [hf.comap_apply, image_preimag
+  · rwa [hf.comap_apply, image_preimage_eq_iff.mpr hKrange]
 -/
 protected theorem comap {α β} [MeasurableSpace α] {mβ : MeasurableSpace β}
     {μ : Measure β} {pa qa : Set α -> Prop} {pb qb : Set β -> Prop}
@@ -791,7 +791,7 @@ theorem _root_.MeasurableSet.exists_isOpen_sdiff_lt
   exact measure_sdiff_lt_of_lt_add hA.nullMeasurableSet hAU hA' hU
 
 @[deprecated (since := "2026-06-03")]
-alias _root_.MeasurableSet.exists_isOpen_diff_lt := _root_.MeasurableSet.exists_isOpen_sdif
+alias _root_.MeasurableSet.exists_isOpen_diff_lt := _root_.MeasurableSet.exists_isOpen_sdiff_lt
 
 中文:
 定理 _root_.可测集.存在_isOpen_sdiff_lt
@@ -802,7 +802,7 @@ alias _root_.MeasurableSet.exists_isOpen_diff_lt := _root_.MeasurableSet.exists_
   exact measure_sdiff_lt_of_lt_add hA.nullMeasurableSet hAU hA' hU
 
 @[deprecated (since := "2026-06-03")]
-alias _root_.MeasurableSet.exists_isOpen_diff_lt := _root_.MeasurableSet.exists_isOpen_sdif
+alias _root_.MeasurableSet.exists_isOpen_diff_lt := _root_.MeasurableSet.exists_isOpen_sdiff_lt
 
 Depends on / 依赖: A.exists_isOpen_lt_add, exists_isOpen_lt_add, hA.nullMeasurableSet, hU.trans_le, le_top, measure_sdiff_lt_of_lt_add, nullMeasurableSet, trans_le
 -/
@@ -828,7 +828,7 @@ theorem map
   rcases Set.exists_isOpen_lt_of_lt _ r hr with ⟨U, hAU, hUo, hU⟩
   have : IsOpen (f.symm ⁻¹' U) := hUo.preimage f.symm.continuous
   refine ⟨f.symm ⁻¹' U, image_subset_iff.1 hAU, this, ?_⟩
-  rwa [map_apply 
+  rwa [map_apply f.measurable this.measurableSet, f.preimage_symm, f.preimage_image]
 
 中文:
 定理 map
@@ -839,7 +839,7 @@ theorem map
   rcases Set.exists_isOpen_lt_of_lt _ r hr with ⟨U, hAU, hUo, hU⟩
   have : IsOpen (f.symm ⁻¹' U) := hUo.preimage f.symm.continuous
   refine ⟨f.symm ⁻¹' U, image_subset_iff.1 hAU, this, ?_⟩
-  rwa [map_apply 
+  rwa [map_apply f.measurable this.measurableSet, f.preimage_symm, f.preimage_image]
 -/
 protected theorem map [OpensMeasurableSpace α] [MeasurableSpace β] [TopologicalSpace β]
     [BorelSpace β] (f : α ≃ₜ β) (μ : Measure α) [OuterRegular μ] :
@@ -862,7 +862,7 @@ theorem comap'
     obtain ⟨U, hUA, Uopen, hμU⟩ := OuterRegular.outerRegular (f_me.measurableSet_image' hA) r hr
     refine ⟨f ⁻¹' U, by rwa [ge_iff_le, ← image_subset_iff], Uopen.preimage f_cont, ?_⟩
     rw [f_me.comap_apply]
-    exact (measure_mono (image_preimage_subset _ _)).t
+    exact (measure_mono (image_preimage_subset _ _)).trans_lt hμU
 
 中文:
 定理 comap'
@@ -872,7 +872,7 @@ theorem comap'
     obtain ⟨U, hUA, Uopen, hμU⟩ := OuterRegular.outerRegular (f_me.measurableSet_image' hA) r hr
     refine ⟨f ⁻¹' U, by rwa [ge_iff_le, ← image_subset_iff], Uopen.preimage f_cont, ?_⟩
     rw [f_me.comap_apply]
-    exact (measure_mono (image_preimage_subset _ _)).t
+    exact (measure_mono (image_preimage_subset _ _)).trans_lt hμU
 
 Depends on / 依赖: OuterRegular, OuterRegular.outerRegular, Uopen.preimage, comap_apply, f_cont, f_me, f_me.comap_apply, f_me.measurableSet_image, ge_iff_le, image_preimage_subset, image_subset_iff, measurableSet_image, measure_mono, outerRegular, preimage, trans_lt
 -/
@@ -969,7 +969,33 @@ lemma of_restrict
   have hm : forall n, MeasurableSet (s n) := fun n => (h' n).measurableSet
   -- Note that `A = ⋃ n, A ∩ disjointed s n`. We replace `A` with this sequence.
   obtain ⟨A, hAm, hAs, hAd, rfl⟩ :
-    exists A' : Nat -> Set 
+    exists A' : Nat -> Set α,
+      (forall n, MeasurableSet (A' n)) ∧
+        (forall n, A' n subseteq s n) ∧ Pairwise (Disjoint on A') ∧ A = ⋃ n, A' n := by
+    refine
+      ⟨fun n => A inter disjointed s n, fun n => hA.inter (MeasurableSet.disjointed hm _), fun n =>
+        inter_subset_right.trans (disjointed_subset _ _),
+        (disjoint_disjointed s).mono fun k l hkl => hkl.mono inf_le_right inf_le_right, ?_⟩
+    rw [← inter_iUnion]; rw [iUnion_disjointed]; rw [univ_subset_iff.mp h'']; rw [inter_univ]
+  rcases ENNReal.exists_pos_sum_of_countable' (tsub_pos_iff_lt.2 hr).ne' Nat with ⟨δ, δ0, hδε⟩
+  rw [lt_tsub_iff_right]; rw [add_comm] at hδε
+  have : forall n, exists U ⊇ A n, IsOpen U ∧ μ U < μ (A n) + δ n := by
+    intro n
+    have H₁ : forall t, μ.restrict (s n) t = μ (t inter s n) := fun t => restrict_apply' (hm n)
+    have Ht : μ.restrict (s n) (A n) != ∞ := by
+      rw [H₁]
+      exact ((measure_mono (inter_subset_left.trans (subset_iUnion A n))).trans_lt HA).ne
+    rcases (A n).exists_isOpen_lt_add Ht (δ0 n).ne' with ⟨U, hAU, hUo, hU⟩
+    rw [H₁]; rw [H₁]; rw [inter_eq_self_of_subset_left (hAs _)] at hU
+    exact ⟨U inter s n, subset_inter hAU (hAs _), hUo.inter (h' n), hU⟩
+  choose U hAU hUo hU using this
+  refine ⟨⋃ n, U n, iUnion_mono hAU, isOpen_iUnion hUo, ?_⟩
+  calc
+    μ (⋃ n, U n) <= ∑' n, μ (U n) := measure_iUnion_le _
+    _ <= ∑' n, (μ (A n) + δ n) := ENNReal.tsum_le_tsum fun n => (hU n).le
+    _ = ∑' n, μ (A n) + ∑' n, δ n := ENNReal.tsum_add
+    _ = μ (⋃ n, A n) + ∑' n, δ n := (congr_arg₂ (· + ·) (measure_iUnion hAd hAm).symm rfl)
+    _ < r := hδε
 
 中文:
 引理 of_restrict
@@ -980,7 +1006,33 @@ lemma of_restrict
   have hm : forall n, MeasurableSet (s n) := fun n => (h' n).measurableSet
   -- Note that `A = ⋃ n, A ∩ disjointed s n`. We replace `A` with this sequence.
   obtain ⟨A, hAm, hAs, hAd, rfl⟩ :
-    exists A' : Nat -> Set 
+    exists A' : Nat -> Set α,
+      (forall n, MeasurableSet (A' n)) ∧
+        (forall n, A' n subseteq s n) ∧ Pairwise (Disjoint on A') ∧ A = ⋃ n, A' n := by
+    refine
+      ⟨fun n => A inter disjointed s n, fun n => hA.inter (MeasurableSet.disjointed hm _), fun n =>
+        inter_subset_right.trans (disjointed_subset _ _),
+        (disjoint_disjointed s).mono fun k l hkl => hkl.mono inf_le_right inf_le_right, ?_⟩
+    rw [← inter_iUnion]; rw [iUnion_disjointed]; rw [univ_subset_iff.mp h'']; rw [inter_univ]
+  rcases ENNReal.exists_pos_sum_of_countable' (tsub_pos_iff_lt.2 hr).ne' Nat with ⟨δ, δ0, hδε⟩
+  rw [lt_tsub_iff_right]; rw [add_comm] at hδε
+  have : forall n, exists U ⊇ A n, IsOpen U ∧ μ U < μ (A n) + δ n := by
+    intro n
+    have H₁ : forall t, μ.restrict (s n) t = μ (t inter s n) := fun t => restrict_apply' (hm n)
+    have Ht : μ.restrict (s n) (A n) != ∞ := by
+      rw [H₁]
+      exact ((measure_mono (inter_subset_left.trans (subset_iUnion A n))).trans_lt HA).ne
+    rcases (A n).exists_isOpen_lt_add Ht (δ0 n).ne' with ⟨U, hAU, hUo, hU⟩
+    rw [H₁]; rw [H₁]; rw [inter_eq_self_of_subset_left (hAs _)] at hU
+    exact ⟨U inter s n, subset_inter hAU (hAs _), hUo.inter (h' n), hU⟩
+  choose U hAU hUo hU using this
+  refine ⟨⋃ n, U n, iUnion_mono hAU, isOpen_iUnion hUo, ?_⟩
+  calc
+    μ (⋃ n, U n) <= ∑' n, μ (U n) := measure_iUnion_le _
+    _ <= ∑' n, (μ (A n) + δ n) := ENNReal.tsum_le_tsum fun n => (hU n).le
+    _ = ∑' n, μ (A n) + ∑' n, δ n := ENNReal.tsum_add
+    _ = μ (⋃ n, A n) + ∑' n, δ n := (congr_arg₂ (· + ·) (measure_iUnion hAd hAm).symm rfl)
+    _ < r := hδε
 
 Depends on / 依赖: MeasurableSet, le_top, lt_of_lt_of_le, measurableSet
 -/
@@ -1150,7 +1202,9 @@ lemma of_restrict
     rw [← (monotone_const.inter hmono).measure_iUnion]; rw [hBU]
   rw [this] at hr
   rcases lt_iSup_iff.1 hr with ⟨n, hn⟩
-  rw [← restrict_app
+  rw [← restrict_apply hF] at hn
+  rcases h n hF _ hn with ⟨K, KF, hKp, hK⟩
+  exact ⟨K, KF, hKp, hK.trans_le (restrict_apply_le _ _)⟩
 
 中文:
 引理 of_restrict
@@ -1162,7 +1216,9 @@ lemma of_restrict
     rw [← (monotone_const.inter hmono).measure_iUnion]; rw [hBU]
   rw [this] at hr
   rcases lt_iSup_iff.1 hr with ⟨n, hn⟩
-  rw [← restrict_app
+  rw [← restrict_apply hF] at hn
+  rcases h n hF _ hn with ⟨K, KF, hKp, hK⟩
+  exact ⟨K, KF, hKp, hK.trans_le (restrict_apply_le _ _)⟩
 
 Depends on / 依赖: hK.trans_le, inter_iUnion, inter_univ, lt_iSup_iff, measure_iUnion, monotone_const, monotone_const.inter, restrict_apply, restrict_apply_le, trans_le, univ_subset_iff, univ_subset_iff.mp
 -/
@@ -1192,7 +1248,21 @@ lemma restrict
     have : r < μ ((toMeasurable μ (s inter A)) inter s) := by
       apply hr.trans_le
       rw [restrict_apply s_meas]
-exa
+exact measure_mono subset_inter (subset_toMeasurable μ (s inter A)) inter_subset_left
+    refine h ⟨(measurableSet_toMeasurable _ _).inter s_meas, ?_⟩ _ this
+    apply (lt_of_le_of_lt _ hs.lt_top).ne
+    rw [← measure_toMeasurable (s inter A)]
+    exact measure_mono inter_subset_left
+  refine ⟨K, K_subs.trans inter_subset_right, pK, ?_⟩
+  calc
+  r < μ K := rK
+  _ = μ.restrict (toMeasurable μ (s inter A)) K := by
+    rw [restrict_apply' (measurableSet_toMeasurable μ (s inter A))]
+    congr
+    apply (inter_eq_left.2 ?_).symm
+    exact K_subs.trans inter_subset_left
+  _ = μ.restrict (s inter A) K := by rwa [restrict_toMeasurable]
+  _ <= μ.restrict A K := Measure.le_iff'.1 (restrict_mono inter_subset_right le_rfl) K
 
 中文:
 引理 restrict
@@ -1204,7 +1274,21 @@ exa
     have : r < μ ((toMeasurable μ (s inter A)) inter s) := by
       apply hr.trans_le
       rw [restrict_apply s_meas]
-exa
+exact measure_mono subset_inter (subset_toMeasurable μ (s inter A)) inter_subset_left
+    refine h ⟨(measurableSet_toMeasurable _ _).inter s_meas, ?_⟩ _ this
+    apply (lt_of_le_of_lt _ hs.lt_top).ne
+    rw [← measure_toMeasurable (s inter A)]
+    exact measure_mono inter_subset_left
+  refine ⟨K, K_subs.trans inter_subset_right, pK, ?_⟩
+  calc
+  r < μ K := rK
+  _ = μ.restrict (toMeasurable μ (s inter A)) K := by
+    rw [restrict_apply' (measurableSet_toMeasurable μ (s inter A))]
+    congr
+    apply (inter_eq_left.2 ?_).symm
+    exact K_subs.trans inter_subset_left
+  _ = μ.restrict (s inter A) K := by rwa [restrict_toMeasurable]
+  _ <= μ.restrict A K := Measure.le_iff'.1 (restrict_mono inter_subset_right le_rfl) K
 
 Depends on / 依赖: K_subs, hr.trans_le, hs.lt_top, inter_subset_left, lt_of_le_of_lt, lt_top, measurableSet_toMeasurable, measure_mono, measure_toMeasurable, restrict_apply, s_meas, subset_inter, subset_toMeasurable, subseteq, toMeasurable, trans_le
 -/
@@ -1270,7 +1354,9 @@ lemma of_sigmaFinite
   have : μ s = ⨆ n, μ (s inter B n) := by
     rw [← (monotone_const.inter (monotone_spanningSets μ)).measure_iUnion]; rw [hBU]
   rw [this] at hr
-
+  rcases lt_iSup_iff.1 hr with ⟨n, hn⟩
+  refine ⟨s inter B n, inter_subset_left, ⟨hs.inter (measurableSet_spanningSets μ n), ?_⟩, hn⟩
+  exact ((measure_mono inter_subset_right).trans_lt (measure_spanningSets_lt_top μ n)).ne
 
 中文:
 引理 of_sigmaFinite
@@ -1282,7 +1368,9 @@ lemma of_sigmaFinite
   have : μ s = ⨆ n, μ (s inter B n) := by
     rw [← (monotone_const.inter (monotone_spanningSets μ)).measure_iUnion]; rw [hBU]
   rw [this] at hr
-
+  rcases lt_iSup_iff.1 hr with ⟨n, hn⟩
+  refine ⟨s inter B n, inter_subset_left, ⟨hs.inter (measurableSet_spanningSets μ n), ?_⟩, hn⟩
+  exact ((measure_mono inter_subset_right).trans_lt (measure_spanningSets_lt_top μ n)).ne
 
 Depends on / 依赖: hs.inter, iUnion_spanningSets, inter_iUnion, inter_subset_left, inter_subset_right, inter_univ, lt_iSup_iff, measurableSet_spanningSets, measure_iUnion, measure_mono, measure_spanningSets_lt_top, monotone_const, monotone_const.inter, monotone_spanningSets, spanningSets, trans_lt
 -/
@@ -1312,7 +1400,20 @@ theorem measurableSet_of_isOpen
     have : 0 < μ univ := (bot_le.trans_lt hr).trans_le (measure_mono (subset_univ _))
     obtain ⟨K, -, hK, -⟩ : exists K, K subseteq univ ∧ p K ∧ 0 < μ K := H isOpen_univ _ this
     simpa using hd hK isOpen_univ
-  obtain ⟨ε, hε, hεs, rfl⟩ : exists 
+  obtain ⟨ε, hε, hεs, rfl⟩ : exists ε != 0, ε + ε <= μ s ∧ r = μ s - (ε + ε) := by
+    use (μ s - r) / 2
+    simp [*, hr.le, ENNReal.add_halves, ENNReal.sub_sub_cancel, tsub_eq_zero_iff_le]
+  rcases hs.exists_isOpen_sdiff_lt hμs hε with ⟨U, hsU, hUo, hUt, hμU⟩
+  rcases (U \ s).exists_isOpen_lt_of_lt _ hμU with ⟨U', hsU', hU'o, hμU'⟩
+  replace hsU' := sdiff_subset_comm.1 hsU'
+  rcases H.exists_subset_lt_add h0 hUo hUt.ne hε with ⟨K, hKU, hKc, hKr⟩
+  refine ⟨K \ U', fun x hx => hsU' ⟨hKU hx.1, hx.2⟩, hd hKc hU'o, ENNReal.sub_lt_of_lt_add hεs ?_⟩
+  calc
+    μ s <= μ U := μ.mono hsU
+    _ < μ K + ε := hKr
+    _ <= μ (K \ U') + μ U' + ε := by grw [tsub_le_iff_right.1 le_measure_sdiff]
+    _ <= μ (K \ U') + ε + ε := by gcongr
+    _ = μ (K \ U') + (ε + ε) := add_assoc _ _ _
 
 中文:
 定理 measurableSet_of_isOpen
@@ -1323,7 +1424,20 @@ theorem measurableSet_of_isOpen
     have : 0 < μ univ := (bot_le.trans_lt hr).trans_le (measure_mono (subset_univ _))
     obtain ⟨K, -, hK, -⟩ : exists K, K subseteq univ ∧ p K ∧ 0 < μ K := H isOpen_univ _ this
     simpa using hd hK isOpen_univ
-  obtain ⟨ε, hε, hεs, rfl⟩ : exists 
+  obtain ⟨ε, hε, hεs, rfl⟩ : exists ε != 0, ε + ε <= μ s ∧ r = μ s - (ε + ε) := by
+    use (μ s - r) / 2
+    simp [*, hr.le, ENNReal.add_halves, ENNReal.sub_sub_cancel, tsub_eq_zero_iff_le]
+  rcases hs.exists_isOpen_sdiff_lt hμs hε with ⟨U, hsU, hUo, hUt, hμU⟩
+  rcases (U \ s).exists_isOpen_lt_of_lt _ hμU with ⟨U', hsU', hU'o, hμU'⟩
+  replace hsU' := sdiff_subset_comm.1 hsU'
+  rcases H.exists_subset_lt_add h0 hUo hUt.ne hε with ⟨K, hKU, hKc, hKr⟩
+  refine ⟨K \ U', fun x hx => hsU' ⟨hKU hx.1, hx.2⟩, hd hKc hU'o, ENNReal.sub_lt_of_lt_add hεs ?_⟩
+  calc
+    μ s <= μ U := μ.mono hsU
+    _ < μ K + ε := hKr
+    _ <= μ (K \ U') + μ U' + ε := by grw [tsub_le_iff_right.1 le_measure_sdiff]
+    _ <= μ (K \ U') + ε + ε := by gcongr
+    _ = μ (K \ U') + (ε + ε) := add_assoc _ _ _
 
 Depends on / 依赖: ENNReal, ENNReal.add_halves, ENNReal.sub_sub_cancel, add_halves, bot_le, bot_le.trans_lt, exists_isOpen_sdiff_lt, hr.le, hs.exists_isOpen_sdiff_lt, isOpen_univ, measure_mono, sub_sub_cancel, subset_univ, subseteq, trans_le, trans_lt, tsub_eq_zero_iff_le
 -/
@@ -1363,7 +1477,62 @@ theorem weaklyRegular_of_finite
       IsClosed F ∧ IsOpen U ∧ μ s <= μ F + ε ∧ μ U <= μ s + ε by
     refine
       { outerRegular := fun s hs r hr => ?_
-        innerReg
+        innerRegular := H }
+    rcases exists_between hr with ⟨r', hsr', hr'r⟩
+    rcases this s hs _ (tsub_pos_iff_lt.2 hsr').ne' with ⟨-, -, U, hsU, -, hUo, -, H⟩
+    refine ⟨U, hsU, hUo, ?_⟩
+    rw [add_tsub_cancel_of_le hsr'.le] at H
+    exact H.trans_lt hr'r
+  apply MeasurableSet.induction_on_open
+  /- The proof is by measurable induction: we should check that the property is true for the empty
+    set, for open sets, and is stable by taking the complement and by taking countable disjoint
+    unions. The point of the property we are proving is that it is stable by taking complements
+    (exchanging the roles of closed and open sets and thanks to the finiteness of the measure). -/
+  -- check for open set
+  · intro U hU ε hε
+    rcases H.exists_subset_lt_add isClosed_empty hU hfin hε with ⟨F, hsF, hFc, hF⟩
+    exact ⟨F, hsF, U, Subset.rfl, hFc, hU, hF.le, le_self_add⟩
+  -- check for complements
+  · rintro s hs H ε hε
+    rcases H ε hε with ⟨F, hFs, U, hsU, hFc, hUo, hF, hU⟩
+    refine
+      ⟨Uᶜ, compl_subset_compl.2 hsU, Fᶜ, compl_subset_compl.2 hFs, hUo.isClosed_compl,
+        hFc.isOpen_compl, ?_⟩
+    simp only [measure_compl_le_add_iff, *, hUo.measurableSet, hFc.measurableSet, true_and]
+  -- check for disjoint unions
+  · intro s hsd hsm H ε ε0
+    have ε0' : ε / 2 != 0 := (ENNReal.half_pos ε0).ne'
+    rcases ENNReal.exists_pos_sum_of_countable' ε0' Nat with ⟨δ, δ0, hδε⟩
+    choose F hFs U hsU hFc hUo hF hU using fun n => H n (δ n) (δ0 n).ne'
+    -- the approximating closed set is constructed by considering finitely many sets `s i`, which
+    -- cover all the measure up to `ε/2`, approximating each of these by a closed set `F i`, and
+    -- taking the union of these (finitely many) `F i`.
+    have : Tendsto (fun t => (∑ k in t, μ (s k)) + ε / 2) atTop (𝓝 <| μ (⋃ n, s n) + ε / 2) := by
+      rw [measure_iUnion hsd hsm]
+      exact Tendsto.add ENNReal.summable.hasSum tendsto_const_nhds
+    rcases (this.eventually <| lt_mem_nhds <| ENNReal.lt_add_right hfin ε0').exists with ⟨t, ht⟩
+    -- the approximating open set is constructed by taking for each `s n` an approximating open set
+    -- `U n` with measure at most `μ (s n) + δ n` for a summable `δ`, and taking the union of these.
+    refine
+      ⟨⋃ k in t, F k, iUnion_mono fun k => iUnion_subset fun _ => hFs _, ⋃ n, U n, iUnion_mono hsU,
+        isClosed_biUnion_finset fun k _ => hFc k, isOpen_iUnion hUo, ht.le.trans ?_, ?_⟩
+    · calc
+        (∑ k in t, μ (s k)) + ε / 2 <= ((∑ k in t, μ (F k)) + ∑ k in t, δ k) + ε / 2 := by
+          rw [← sum_add_distrib]
+          gcongr
+          apply hF
+        _ <= (∑ k in t, μ (F k)) + ε / 2 + ε / 2 := by
+          gcongr
+          exact (ENNReal.sum_le_tsum _).trans hδε.le
+        _ = μ (⋃ k in t, F k) + ε := by
+          rw [measure_biUnion_finset]; rw [add_assoc]; rw [ENNReal.add_halves]
+          exacts [fun k _ n _ hkn => (hsd hkn).mono (hFs k) (hFs n),
+            fun k _ => (hFc k).measurableSet]
+    · calc
+        μ (⋃ n, U n) <= ∑' n, μ (U n) := measure_iUnion_le _
+        _ <= ∑' n, (μ (s n) + δ n) := ENNReal.tsum_le_tsum hU
+        _ = μ (⋃ n, s n) + ∑' n, δ n := by rw [measure_iUnion hsd hsm, ENNReal.tsum_add]
+        _ <= μ (⋃ n, s n) + ε := by grw [hδε, ENNReal.half_le_self]
 
 中文:
 定理 weaklyRegular_of_finite
@@ -1374,7 +1543,62 @@ theorem weaklyRegular_of_finite
       IsClosed F ∧ IsOpen U ∧ μ s <= μ F + ε ∧ μ U <= μ s + ε by
     refine
       { outerRegular := fun s hs r hr => ?_
-        innerReg
+        innerRegular := H }
+    rcases exists_between hr with ⟨r', hsr', hr'r⟩
+    rcases this s hs _ (tsub_pos_iff_lt.2 hsr').ne' with ⟨-, -, U, hsU, -, hUo, -, H⟩
+    refine ⟨U, hsU, hUo, ?_⟩
+    rw [add_tsub_cancel_of_le hsr'.le] at H
+    exact H.trans_lt hr'r
+  apply MeasurableSet.induction_on_open
+  /- The proof is by measurable induction: we should check that the property is true for the empty
+    set, for open sets, and is stable by taking the complement and by taking countable disjoint
+    unions. The point of the property we are proving is that it is stable by taking complements
+    (exchanging the roles of closed and open sets and thanks to the finiteness of the measure). -/
+  -- check for open set
+  · intro U hU ε hε
+    rcases H.exists_subset_lt_add isClosed_empty hU hfin hε with ⟨F, hsF, hFc, hF⟩
+    exact ⟨F, hsF, U, Subset.rfl, hFc, hU, hF.le, le_self_add⟩
+  -- check for complements
+  · rintro s hs H ε hε
+    rcases H ε hε with ⟨F, hFs, U, hsU, hFc, hUo, hF, hU⟩
+    refine
+      ⟨Uᶜ, compl_subset_compl.2 hsU, Fᶜ, compl_subset_compl.2 hFs, hUo.isClosed_compl,
+        hFc.isOpen_compl, ?_⟩
+    simp only [measure_compl_le_add_iff, *, hUo.measurableSet, hFc.measurableSet, true_and]
+  -- check for disjoint unions
+  · intro s hsd hsm H ε ε0
+    have ε0' : ε / 2 != 0 := (ENNReal.half_pos ε0).ne'
+    rcases ENNReal.exists_pos_sum_of_countable' ε0' Nat with ⟨δ, δ0, hδε⟩
+    choose F hFs U hsU hFc hUo hF hU using fun n => H n (δ n) (δ0 n).ne'
+    -- the approximating closed set is constructed by considering finitely many sets `s i`, which
+    -- cover all the measure up to `ε/2`, approximating each of these by a closed set `F i`, and
+    -- taking the union of these (finitely many) `F i`.
+    have : Tendsto (fun t => (∑ k in t, μ (s k)) + ε / 2) atTop (𝓝 <| μ (⋃ n, s n) + ε / 2) := by
+      rw [measure_iUnion hsd hsm]
+      exact Tendsto.add ENNReal.summable.hasSum tendsto_const_nhds
+    rcases (this.eventually <| lt_mem_nhds <| ENNReal.lt_add_right hfin ε0').exists with ⟨t, ht⟩
+    -- the approximating open set is constructed by taking for each `s n` an approximating open set
+    -- `U n` with measure at most `μ (s n) + δ n` for a summable `δ`, and taking the union of these.
+    refine
+      ⟨⋃ k in t, F k, iUnion_mono fun k => iUnion_subset fun _ => hFs _, ⋃ n, U n, iUnion_mono hsU,
+        isClosed_biUnion_finset fun k _ => hFc k, isOpen_iUnion hUo, ht.le.trans ?_, ?_⟩
+    · calc
+        (∑ k in t, μ (s k)) + ε / 2 <= ((∑ k in t, μ (F k)) + ∑ k in t, δ k) + ε / 2 := by
+          rw [← sum_add_distrib]
+          gcongr
+          apply hF
+        _ <= (∑ k in t, μ (F k)) + ε / 2 + ε / 2 := by
+          gcongr
+          exact (ENNReal.sum_le_tsum _).trans hδε.le
+        _ = μ (⋃ k in t, F k) + ε := by
+          rw [measure_biUnion_finset]; rw [add_assoc]; rw [ENNReal.add_halves]
+          exacts [fun k _ n _ hkn => (hsd hkn).mono (hFs k) (hFs n),
+            fun k _ => (hFc k).measurableSet]
+    · calc
+        μ (⋃ n, U n) <= ∑' n, μ (U n) := measure_iUnion_le _
+        _ <= ∑' n, (μ (s n) + δ n) := ENNReal.tsum_le_tsum hU
+        _ = μ (⋃ n, s n) + ∑' n, δ n := by rw [measure_iUnion hsd hsm, ENNReal.tsum_add]
+        _ <= μ (⋃ n, s n) + ε := by grw [hδε, ENNReal.half_le_self]
 
 Depends on / 依赖: H.trans_lt, IsClosed, IsOpen, MeasurableSet, add_tsub_cancel_of_le, exists_between, innerRegular, measure_ne_top, outerRegular, subseteq, trans_lt, tsub_pos_iff_lt
 -/
@@ -1489,7 +1713,12 @@ theorem isCompact_isClosed
   set B : Nat -> Set X := compactCovering X
   have hBc : forall n, IsCompact (F inter B n) := fun n => (isCompact_compactCovering X n).inter_left hF
   have hBU : ⋃ n, F inter B n = F := by rw [← inter_iUnion, iUnion_compactCovering, Set.inter_univ]
-  have : μ F = ⨆ n, μ (F inter
+  have : μ F = ⨆ n, μ (F inter B n) := by
+    rw [← Monotone.measure_iUnion]; rw [hBU]
+    exact monotone_const.inter monotone_accumulate
+  rw [this] at hr
+  rcases lt_iSup_iff.1 hr with ⟨n, hn⟩
+  exact ⟨_, inter_subset_left, hBc n, hn⟩
 
 中文:
 定理 isCompact_isClosed
@@ -1499,7 +1728,12 @@ theorem isCompact_isClosed
   set B : Nat -> Set X := compactCovering X
   have hBc : forall n, IsCompact (F inter B n) := fun n => (isCompact_compactCovering X n).inter_left hF
   have hBU : ⋃ n, F inter B n = F := by rw [← inter_iUnion, iUnion_compactCovering, Set.inter_univ]
-  have : μ F = ⨆ n, μ (F inter
+  have : μ F = ⨆ n, μ (F inter B n) := by
+    rw [← Monotone.measure_iUnion]; rw [hBU]
+    exact monotone_const.inter monotone_accumulate
+  rw [this] at hr
+  rcases lt_iSup_iff.1 hr with ⟨n, hn⟩
+  exact ⟨_, inter_subset_left, hBc n, hn⟩
 
 Depends on / 依赖: IsCompact, Monotone, Monotone.measure_iUnion, Set.inter_univ, compactCovering, iUnion_compactCovering, inter_iUnion, inter_left, inter_subset_left, inter_univ, isCompact_compactCovering, lt_iSup_iff, measure_iUnion, monotone_accumulate, monotone_const, monotone_const.inter
 -/
@@ -1894,7 +2128,7 @@ theorem _root_.MeasurableSet.exists_isCompact_sdiff_lt
 
 @[deprecated (since := "2026-06-03")]
 alias _root_.MeasurableSet.exists_isCompact_diff_lt :=
-  _root_
+  _root_.MeasurableSet.exists_isCompact_sdiff_lt
 
 中文:
 定理 _root_.可测集.存在_isCompact_sdiff_lt
@@ -1906,7 +2140,7 @@ alias _root_.MeasurableSet.exists_isCompact_diff_lt :=
 
 @[deprecated (since := "2026-06-03")]
 alias _root_.MeasurableSet.exists_isCompact_diff_lt :=
-  _root_
+  _root_.MeasurableSet.exists_isCompact_sdiff_lt
 
 Depends on / 依赖: exists_isCompact_lt_add, hA.exists_isCompact_lt_add, hKc.nullMeasurableSet, measure_mono, measure_sdiff_lt_of_lt_add, ne_top_of_le_ne_top, nullMeasurableSet
 -/
@@ -1934,7 +2168,8 @@ theorem _root_.MeasurableSet.exists_isCompact_isClosed_sdiff_lt
     (ne_top_of_le_ne_top h'A <| measure_mono hKA) hK⟩
 
 @[deprecated (since := "2026-06-03")]
-alias _root_.MeasurableSet.exists_isCom
+alias _root_.MeasurableSet.exists_isCompact_isClosed_diff_lt :=
+  _root_.MeasurableSet.exists_isCompact_isClosed_sdiff_lt
 
 中文:
 定理 _root_.可测集.存在_isCompact_isClosed_sdiff_lt
@@ -1945,7 +2180,8 @@ alias _root_.MeasurableSet.exists_isCom
     (ne_top_of_le_ne_top h'A <| measure_mono hKA) hK⟩
 
 @[deprecated (since := "2026-06-03")]
-alias _root_.MeasurableSet.exists_isCom
+alias _root_.MeasurableSet.exists_isCompact_isClosed_diff_lt :=
+  _root_.MeasurableSet.exists_isCompact_isClosed_sdiff_lt
 
 Depends on / 依赖: exists_isCompact_isClosed_lt_add, hA.exists_isCompact_isClosed_lt_add, hKcl.nullMeasurableSet, measure_mono, measure_sdiff_lt_of_lt_add, ne_top_of_le_ne_top, nullMeasurableSet
 -/
@@ -2048,7 +2284,8 @@ lemma _root_.IsCompact.exists_isOpen_lt_of_lt
   have := Fact.mk hμV
   obtain ⟨U, hKU, hUo, hμU⟩ : exists U, K subseteq U ∧ IsOpen U ∧ μ.restrict V U < r :=
 exists_isOpen_lt_of_lt K r (restrict_apply_le _ _).trans_lt hr
-  refine ⟨U inter V, subset_inter hKU hKV, hUo.int
+  refine ⟨U inter V, subset_inter hKU hKV, hUo.inter hVo, ?_⟩
+  rwa [restrict_apply hUo.measurableSet] at hμU
 
 中文:
 引理 _root_.是紧集.存在_isOpen_lt_of_lt
@@ -2058,7 +2295,8 @@ exists_isOpen_lt_of_lt K r (restrict_apply_le _ _).trans_lt hr
   have := Fact.mk hμV
   obtain ⟨U, hKU, hUo, hμU⟩ : exists U, K subseteq U ∧ IsOpen U ∧ μ.restrict V U < r :=
 exists_isOpen_lt_of_lt K r (restrict_apply_le _ _).trans_lt hr
-  refine ⟨U inter V, subset_inter hKU hKV, hUo.int
+  refine ⟨U inter V, subset_inter hKU hKV, hUo.inter hVo, ?_⟩
+  rwa [restrict_apply hUo.measurableSet] at hμU
 -/
 protected lemma _root_.IsCompact.exists_isOpen_lt_of_lt [InnerRegularCompactLTTop μ]
     [IsLocallyFiniteMeasure μ] [R1Space α] [BorelSpace α] {K : Set α}
@@ -2133,7 +2371,14 @@ theorem _root_.MeasurableSet.exists_isOpen_symmDiff_lt
   rcases hs.exists_isCompact_isClosed_sdiff_lt hμs this with ⟨K, hKs, hKco, hKcl, hμK⟩
   rcases hKco.exists_isOpen_lt_add (μ := μ) this with ⟨U, hKU, hUo, hμU⟩
   refine ⟨U, hUo, hμU.trans_le le_top, ?_⟩
-  rw [← ENNReal.add_halves ε]; rw [measure_sy
+  rw [← ENNReal.add_halves ε]; rw [measure_symmDiff_eq hUo.nullMeasurableSet hs.nullMeasurableSet]
+  gcongr
+  · calc
+      μ (U \ s) <= μ (U \ K) := by gcongr
+      _ < ε / 2 := by
+        apply measure_sdiff_lt_of_lt_add hKcl.nullMeasurableSet hKU _ hμU
+        exact ne_top_of_le_ne_top hμs (by gcongr)
+  · exact lt_of_le_of_lt (by gcongr) hμK
 
 中文:
 定理 _root_.可测集.存在_isOpen_symmDiff_lt
@@ -2143,7 +2388,14 @@ theorem _root_.MeasurableSet.exists_isOpen_symmDiff_lt
   rcases hs.exists_isCompact_isClosed_sdiff_lt hμs this with ⟨K, hKs, hKco, hKcl, hμK⟩
   rcases hKco.exists_isOpen_lt_add (μ := μ) this with ⟨U, hKU, hUo, hμU⟩
   refine ⟨U, hUo, hμU.trans_le le_top, ?_⟩
-  rw [← ENNReal.add_halves ε]; rw [measure_sy
+  rw [← ENNReal.add_halves ε]; rw [measure_symmDiff_eq hUo.nullMeasurableSet hs.nullMeasurableSet]
+  gcongr
+  · calc
+      μ (U \ s) <= μ (U \ K) := by gcongr
+      _ < ε / 2 := by
+        apply measure_sdiff_lt_of_lt_add hKcl.nullMeasurableSet hKU _ hμU
+        exact ne_top_of_le_ne_top hμs (by gcongr)
+  · exact lt_of_le_of_lt (by gcongr) hμK
 -/
 protected theorem _root_.MeasurableSet.exists_isOpen_symmDiff_lt [InnerRegularCompactLTTop μ]
     [IsLocallyFiniteMeasure μ] [R1Space α] [BorelSpace α]
@@ -2208,7 +2460,8 @@ instance smul
     · simp [h'c, h's] at hs
   · constructor
     convert! InnerRegularWRT.smul h.innerRegular c using 2 with s
-    hav
+    have : (c • μ) s != ∞ ↔ μ s != ∞ := by simp [ENNReal.mul_eq_top, hc, h'c]
+    simp only [this]
 
 中文:
 实例 smul
@@ -2225,7 +2478,8 @@ instance smul
     · simp [h'c, h's] at hs
   · constructor
     convert! InnerRegularWRT.smul h.innerRegular c using 2 with s
-    hav
+    have : (c • μ) s != ∞ ↔ μ s != ∞ := by simp [ENNReal.mul_eq_top, hc, h'c]
+    simp only [this]
 
 Depends on / 依赖: ENNReal, ENNReal.mul_eq_top, InnerRegularWRT, InnerRegularWRT.smul, convert, h.innerRegular, infer_instance, innerRegular, mul_eq_top, zero_smul
 -/
@@ -2420,7 +2674,7 @@ theorem _root_.MeasurableSet.exists_isClosed_sdiff_lt
     (ne_top_of_le_ne_top h'A <| measure_mono hFA) hF⟩
 
 @[deprecated (since := "2026-06-03")]
-alias _root_.MeasurableSet.exists_isClosed_diff_lt := _root_.Mea
+alias _root_.MeasurableSet.exists_isClosed_diff_lt := _root_.MeasurableSet.exists_isClosed_sdiff_lt
 
 中文:
 定理 _root_.可测集.存在_isClosed_sdiff_lt
@@ -2431,7 +2685,7 @@ alias _root_.MeasurableSet.exists_isClosed_diff_lt := _root_.Mea
     (ne_top_of_le_ne_top h'A <| measure_mono hFA) hF⟩
 
 @[deprecated (since := "2026-06-03")]
-alias _root_.MeasurableSet.exists_isClosed_diff_lt := _root_.Mea
+alias _root_.MeasurableSet.exists_isClosed_diff_lt := _root_.MeasurableSet.exists_isClosed_sdiff_lt
 
 Depends on / 依赖: exists_isClosed_lt_add, hA.exists_isClosed_lt_add, hFc.nullMeasurableSet, measure_mono, measure_sdiff_lt_of_lt_add, ne_top_of_le_ne_top, nullMeasurableSet
 -/
@@ -2499,7 +2753,7 @@ theorem restrict_of_measure_ne_top
   refine InnerRegularWRT.weaklyRegular_of_finite (μ.restrict A) (fun V V_open r hr => ?_)
   have : InnerRegularWRT (μ.restrict A) IsClosed (fun s => MeasurableSet s) :=
     InnerRegularWRT.restrict_of_measure_ne_top innerRegular_measurable h'A
-  exact this 
+  exact this V_open.measurableSet r hr
 
 中文:
 定理 restrict_of_measure_ne_top
@@ -2509,7 +2763,7 @@ theorem restrict_of_measure_ne_top
   refine InnerRegularWRT.weaklyRegular_of_finite (μ.restrict A) (fun V V_open r hr => ?_)
   have : InnerRegularWRT (μ.restrict A) IsClosed (fun s => MeasurableSet s) :=
     InnerRegularWRT.restrict_of_measure_ne_top innerRegular_measurable h'A
-  exact this 
+  exact this V_open.measurableSet r hr
 
 Depends on / 依赖: A.lt_top, InnerRegularWRT, InnerRegularWRT.restrict_of_measure_ne_top, InnerRegularWRT.weaklyRegular_of_finite, IsClosed, MeasurableSet, V_open, V_open.measurableSet, innerRegular_measurable, lt_top, measurableSet, restrict, restrict_of_measure_ne_top, weaklyRegular_of_finite
 -/
@@ -2754,7 +3008,7 @@ theorem comap'
   have := IsFiniteMeasureOnCompacts.comap' μ hf.continuous hf.measurableEmbedding
   exact ⟨InnerRegularWRT.comap Regular.innerRegular hf.measurableEmbedding
     (fun _ hU => hf.isOpen_iff_image_isOpen.mp hU)
-    (fun _ hKrange h
+    (fun _ hKrange hK => hf.isInducing.isCompact_preimage' hK hKrange)⟩
 
 中文:
 定理 comap'
@@ -2764,7 +3018,7 @@ theorem comap'
   have := IsFiniteMeasureOnCompacts.comap' μ hf.continuous hf.measurableEmbedding
   exact ⟨InnerRegularWRT.comap Regular.innerRegular hf.measurableEmbedding
     (fun _ hU => hf.isOpen_iff_image_isOpen.mp hU)
-    (fun _ hKrange h
+    (fun _ hKrange hK => hf.isInducing.isCompact_preimage' hK hKrange)⟩
 -/
 protected theorem comap' [BorelSpace α]
     {mβ : MeasurableSpace β} [TopologicalSpace β] [BorelSpace β] (μ : Measure β) [Regular μ]
@@ -2848,7 +3102,7 @@ theorem restrict_of_measure_ne_top
   have R : restrict μ A V != ∞ := by
     rw [restrict_apply hV.measurableSet]
     exact ((measure_mono inter_subset_right).trans_lt h'A.lt_top).ne
-  exact MeasurableSet.exists_lt_
+  exact MeasurableSet.exists_lt_isCompact_of_ne_top hV.measurableSet R hr
 
 中文:
 定理 restrict_of_measure_ne_top
@@ -2860,7 +3114,7 @@ theorem restrict_of_measure_ne_top
   have R : restrict μ A V != ∞ := by
     rw [restrict_apply hV.measurableSet]
     exact ((measure_mono inter_subset_right).trans_lt h'A.lt_top).ne
-  exact MeasurableSet.exists_lt_
+  exact MeasurableSet.exists_lt_isCompact_of_ne_top hV.measurableSet R hr
 
 Depends on / 依赖: A.lt_top, MeasurableSet, MeasurableSet.exists_lt_isCompact_of_ne_top, WeaklyRegular, WeaklyRegular.restrict_of_measure_ne_top, exists_lt_isCompact_of_ne_top, hV.measurableSet, inter_subset_right, lt_top, measurableSet, measure_mono, restrict, restrict_apply, restrict_of_measure_ne_top, trans_lt
 -/

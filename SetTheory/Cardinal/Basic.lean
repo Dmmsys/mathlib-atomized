@@ -173,7 +173,11 @@ theorem prod_eq_of_fintype
     rw [← e.prod_comp f]; rw [← h]
     exact mk_congr (e.piCongrLeft _).symm
   · intro f
-    rw [Fintype.univ_pempty]; rw [Finset.prod_empty]; rw [lift_one]; r
+    rw [Fintype.univ_pempty]; rw [Finset.prod_empty]; rw [lift_one]; rw [Cardinal.prod]; rw [mk_eq_one]
+  · intro α hα h f
+    rw [Cardinal.prod]; rw [mk_congr Equiv.piOptionEquivProd]; rw [mk_prod]; rw [lift_umax.{v]; rw [u}]; rw [mk_out]; rw [←
+        Cardinal.prod]; rw [lift_prod]; rw [Fintype.prod_option]; rw [lift_mul]; rw [← h fun a => f (some a)]
+    simp only [lift_id]
 
 中文:
 定理 prod_eq_of_fintype
@@ -186,7 +190,11 @@ theorem prod_eq_of_fintype
     rw [← e.prod_comp f]; rw [← h]
     exact mk_congr (e.piCongrLeft _).symm
   · intro f
-    rw [Fintype.univ_pempty]; rw [Finset.prod_empty]; rw [lift_one]; r
+    rw [Fintype.univ_pempty]; rw [Finset.prod_empty]; rw [lift_one]; rw [Cardinal.prod]; rw [mk_eq_one]
+  · intro α hα h f
+    rw [Cardinal.prod]; rw [mk_congr Equiv.piOptionEquivProd]; rw [mk_prod]; rw [lift_umax.{v]; rw [u}]; rw [mk_out]; rw [←
+        Cardinal.prod]; rw [lift_prod]; rw [Fintype.prod_option]; rw [lift_mul]; rw [← h fun a => f (some a)]
+    simp only [lift_id]
 
 Depends on / 依赖: Cardinal, Cardinal.prod, Equiv.piOptionEquivProd, Finset, Finset.prod_empty, Fintype, Fintype.induction_empty_option, Fintype.ofEquiv, Fintype.prod_opti, Fintype.univ_pempty, e.piCongrLeft, e.prod_comp, e.symm, h_fintype, induction_empty_option, lift_one, lift_prod, lift_umax, mk_congr, mk_eq_one
 -/
@@ -804,7 +812,9 @@ theorem lift_sSup
     obtain ⟨d, rfl⟩ := Cardinal.mem_range_lift_of_le (not_le.1 h).le
     simp_rw [lift_le] at h hc
     rw [csSup_le_iff' hs] at h
-exact h fun a ha => lift_le.1 hc (mem_imag
+exact h fun a ha => lift_le.1 hc (mem_image_of_mem _ ha)
+  · rintro i ⟨j, hj, rfl⟩
+    exact lift_le.2 (le_csSup hs hj)
 
 中文:
 定理 lift_sSup
@@ -816,7 +826,9 @@ exact h fun a ha => lift_le.1 hc (mem_imag
     obtain ⟨d, rfl⟩ := Cardinal.mem_range_lift_of_le (not_le.1 h).le
     simp_rw [lift_le] at h hc
     rw [csSup_le_iff' hs] at h
-exact h fun a ha => lift_le.1 hc (mem_imag
+exact h fun a ha => lift_le.1 hc (mem_image_of_mem _ ha)
+  · rintro i ⟨j, hj, rfl⟩
+    exact lift_le.2 (le_csSup hs hj)
 
 Depends on / 依赖: Cardinal, Cardinal.mem_range_lift_of_le, antisymm, bddAbove_image, csSup_le, csSup_le_iff, le_csSup, le_csSup_iff, lift_le, mem_image_of_mem, mem_range_lift_of_le, not_le, simp_rw
 -/
@@ -1535,7 +1547,7 @@ theorem lt_aleph0
       simp
     contrapose! h'
     have := Infinite.to_subtype h'
-    exact ⟨Infinite.natEmbedding S⟩, fun ⟨_, e⟩ => e.symm ▸ n
+    exact ⟨Infinite.natEmbedding S⟩, fun ⟨_, e⟩ => e.symm ▸ natCast_lt_aleph0⟩
 
 中文:
 定理 lt_aleph0
@@ -1549,7 +1561,7 @@ theorem lt_aleph0
       simp
     contrapose! h'
     have := Infinite.to_subtype h'
-    exact ⟨Infinite.natEmbedding S⟩, fun ⟨_, e⟩ => e.symm ▸ n
+    exact ⟨Infinite.natEmbedding S⟩, fun ⟨_, e⟩ => e.symm ▸ natCast_lt_aleph0⟩
 
 Depends on / 依赖: Finite, Finset, Infinite, Infinite.natEmbedding, Infinite.to_subtype, S.Finite, contrapose, e.symm, le_mk_iff_exists_set, lt_lift_iff, natCast_lt_aleph0, natEmbedding, to_subtype
 -/
@@ -2279,7 +2291,9 @@ theorem mul_lt_aleph0_iff
     constructor
     · rw [← mul_one a]
       exact (mul_le_mul' le_rfl hb).trans_lt h
-    · rw [← o
+    · rw [← one_mul b]
+      exact (mul_le_mul' ha le_rfl).trans_lt h
+  rintro (rfl | rfl | ⟨ha, hb⟩) <;> simp only [*, mul_lt_aleph0, aleph0_pos, zero_mul, mul_zero]
 
 中文:
 定理 mul_lt_aleph0_iff
@@ -2297,7 +2311,9 @@ theorem mul_lt_aleph0_iff
     constructor
     · rw [← mul_one a]
       exact (mul_le_mul' le_rfl hb).trans_lt h
-    · rw [← o
+    · rw [← one_mul b]
+      exact (mul_le_mul' ha le_rfl).trans_lt h
+  rintro (rfl | rfl | ⟨ha, hb⟩) <;> simp only [*, mul_lt_aleph0, aleph0_pos, zero_mul, mul_zero]
 
 Depends on / 依赖: Cardinal, Cardinal.one_le_iff_ne_zero, Or.inl, aleph0_pos, le_rfl, mul_le_mul, mul_lt_aleph0, mul_one, mul_zero, one_le_iff_ne_zero, one_mul, trans_lt, zero_mul
 -/
@@ -4935,7 +4951,7 @@ theorem mk_eq_two_iff'
     rcases h x with (rfl | rfl)
     exacts [⟨b, hne.symm, fun z => (h z).resolve_left⟩, ⟨a, hne, fun z => (h z).resolve_right⟩]
   · rintro ⟨y, hne, hy⟩
-    exact 
+    exact ⟨x, y, hne.symm, eq_univ_of_forall fun z => or_iff_not_imp_left.2 (hy z)⟩
 
 中文:
 定理 mk_eq_two_iff'
@@ -4948,7 +4964,7 @@ theorem mk_eq_two_iff'
     rcases h x with (rfl | rfl)
     exacts [⟨b, hne.symm, fun z => (h z).resolve_left⟩, ⟨a, hne, fun z => (h z).resolve_right⟩]
   · rintro ⟨y, hne, hy⟩
-    exact 
+    exact ⟨x, y, hne.symm, eq_univ_of_forall fun z => or_iff_not_imp_left.2 (hy z)⟩
 
 Depends on / 依赖: eq_univ_iff_forall, eq_univ_of_forall, exacts, hne.symm, mem_insert_iff, mem_singleton_iff, mk_eq_two_iff, or_iff_not_imp_left, resolve_left, resolve_right
 -/

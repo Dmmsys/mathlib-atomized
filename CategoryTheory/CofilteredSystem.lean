@@ -72,7 +72,7 @@ theorem nonempty_sections_of_finite_cofiltered_system.init
   have : forall j, Finite (F'.obj j) := hf
   have : forall j, Nonempty (F'.obj j) := hne
   obtain ⟨⟨u, hu⟩⟩ := TopCat.nonempty_limitCone_of_compact_t2_cofiltered_system.{u} F'
-  exact ⟨u,
+  exact ⟨u, hu⟩
 
 中文:
 定理 nonempty_sections_of_finite_cofiltered_system.init
@@ -83,7 +83,7 @@ theorem nonempty_sections_of_finite_cofiltered_system.init
   have : forall j, Finite (F'.obj j) := hf
   have : forall j, Nonempty (F'.obj j) := hne
   obtain ⟨⟨u, hu⟩⟩ := TopCat.nonempty_limitCone_of_compact_t2_cofiltered_system.{u} F'
-  exact ⟨u,
+  exact ⟨u, hu⟩
 
 Depends on / 依赖: DiscreteTopology, Finite, Nonempty, TopCat, TopCat.discrete, TopCat.nonempty_limitCone_of_compact_t2_cofiltered_system, discrete, nonempty_limitCone_of_compact_t2_cofiltered_system
 -/
@@ -108,7 +108,20 @@ theorem nonempty_sections_of_finite_cofiltered_system
   let J' : Type max w v u := AsSmall.{max w v} J
   let down : J' ⥤ J := AsSmall.down
   let F' : J' ⥤ Type (max u v w) := down ⋙ F ⋙ uliftFunctor.{max u w, v}
-  have : forall i, Nonempty (F'.obj i) := fun i => ⟨⟨Classical.arbitrary (F.obj (
+  have : forall i, Nonempty (F'.obj i) := fun i => ⟨⟨Classical.arbitrary (F.obj (down.obj i))⟩⟩
+  have : forall i, Finite (F'.obj i) := fun i => Finite.of_equiv (F.obj (down.obj i)) Equiv.ulift.symm
+  -- Step 2: apply the bootstrap theorem
+  cases isEmpty_or_nonempty J
+  · fconstructor <;> apply isEmptyElim
+  have : IsCofiltered J := ⟨⟩
+  obtain ⟨u, hu⟩ := nonempty_sections_of_finite_cofiltered_system.init F'
+  -- Step 3: interpret the results
+  use fun j => (u ⟨j⟩).down
+  intro j j' f
+  have h := @hu (⟨j⟩ : J') (⟨j'⟩ : J') (ULift.up f)
+  simp only [F', down, AsSmall.down] at h
+  simp_rw [← h]
+  rfl
 
 中文:
 定理 nonempty_sections_of_finite_cofiltered_system
@@ -118,7 +131,20 @@ theorem nonempty_sections_of_finite_cofiltered_system
   let J' : Type max w v u := AsSmall.{max w v} J
   let down : J' ⥤ J := AsSmall.down
   let F' : J' ⥤ Type (max u v w) := down ⋙ F ⋙ uliftFunctor.{max u w, v}
-  have : forall i, Nonempty (F'.obj i) := fun i => ⟨⟨Classical.arbitrary (F.obj (
+  have : forall i, Nonempty (F'.obj i) := fun i => ⟨⟨Classical.arbitrary (F.obj (down.obj i))⟩⟩
+  have : forall i, Finite (F'.obj i) := fun i => Finite.of_equiv (F.obj (down.obj i)) Equiv.ulift.symm
+  -- Step 2: apply the bootstrap theorem
+  cases isEmpty_or_nonempty J
+  · fconstructor <;> apply isEmptyElim
+  have : IsCofiltered J := ⟨⟩
+  obtain ⟨u, hu⟩ := nonempty_sections_of_finite_cofiltered_system.init F'
+  -- Step 3: interpret the results
+  use fun j => (u ⟨j⟩).down
+  intro j j' f
+  have h := @hu (⟨j⟩ : J') (⟨j'⟩ : J') (ULift.up f)
+  simp only [F', down, AsSmall.down] at h
+  simp_rw [← h]
+  rfl
 -/
 theorem nonempty_sections_of_finite_cofiltered_system {J : Type u} [Category.{w} J]
     [IsCofilteredOrEmpty J] (F : J ⥤ Type v) [forall j : J, Finite (F.obj j)]
@@ -449,7 +475,7 @@ theorem eventualRange_eq_iff
   obtain ⟨k, g, g', he⟩ := cospan f f'
   refine (h g).trans ?_
   rw [he]; rw [F.map_comp]; rw [types_comp]
-  apply range_comp_subset_ra
+  apply range_comp_subset_range
 
 中文:
 定理 eventualRange_eq_iff
@@ -460,7 +486,7 @@ theorem eventualRange_eq_iff
   obtain ⟨k, g, g', he⟩ := cospan f f'
   refine (h g).trans ?_
   rw [he]; rw [F.map_comp]; rw [types_comp]
-  apply range_comp_subset_ra
+  apply range_comp_subset_range
 
 Depends on / 依赖: F.map_comp, and_iff_right, cospan, eventualRange, map_comp, range_comp_subset_range, subset_antisymm_iff, types_comp
 -/
@@ -509,7 +535,19 @@ theorem IsMittagLeffler.toPreimages
     obtain ⟨j₂, f₂, h₂⟩ := F.isMittagLeffler_iff_eventualRange.1 h j₁
     refine ⟨j₂, f₂ ≫ f₁, fun j₃ f₃ => ?_⟩
     rintro _ ⟨⟨x, hx⟩, rfl⟩
-    have : F.map f₂ x in F.eventualRange
+    have : F.map f₂ x in F.eventualRange j₁ := by
+      rw [h₂]
+      exact ⟨_, rfl⟩
+    obtain ⟨y, hy, h₃⟩ := h.subset_image_eventualRange F (f₃ ≫ f₂) this
+    refine ⟨⟨y, mem_iInter.2 fun g₂ => ?_⟩, Subtype.ext ?_⟩
+    · obtain ⟨j₄, f₄, h₄⟩ := IsCofilteredOrEmpty.cone_maps g₂ ((f₃ ≫ f₂) ≫ g₁)
+      obtain ⟨y, rfl⟩ := F.mem_eventualRange_iff.1 hy f₄
+      rw [← comp_apply]; rw [← map_comp] at h₃
+      rw [mem_preimage]; rw [← comp_apply]; rw [← map_comp]; rw [h₄]; rw [← Category.assoc]; rw [map_comp]; rw [comp_apply]; rw [h₃]; rw [← comp_apply]; rw [← map_comp]
+      apply mem_iInter.1 hx
+    · simp only [toPreimages_obj, toPreimages_map, ConcreteCategory.hom_ofHom,
+        TypeCat.Fun.coe_mk, MapsTo.val_restrict_apply]
+      rw [← Category.assoc]; rw [map_comp]; rw [comp_apply]; rw [h₃]; rw [map_comp]; rw [comp_apply]
 
 中文:
 定理 IsMittagLeffler.toPreimages
@@ -520,7 +558,19 @@ theorem IsMittagLeffler.toPreimages
     obtain ⟨j₂, f₂, h₂⟩ := F.isMittagLeffler_iff_eventualRange.1 h j₁
     refine ⟨j₂, f₂ ≫ f₁, fun j₃ f₃ => ?_⟩
     rintro _ ⟨⟨x, hx⟩, rfl⟩
-    have : F.map f₂ x in F.eventualRange
+    have : F.map f₂ x in F.eventualRange j₁ := by
+      rw [h₂]
+      exact ⟨_, rfl⟩
+    obtain ⟨y, hy, h₃⟩ := h.subset_image_eventualRange F (f₃ ≫ f₂) this
+    refine ⟨⟨y, mem_iInter.2 fun g₂ => ?_⟩, Subtype.ext ?_⟩
+    · obtain ⟨j₄, f₄, h₄⟩ := IsCofilteredOrEmpty.cone_maps g₂ ((f₃ ≫ f₂) ≫ g₁)
+      obtain ⟨y, rfl⟩ := F.mem_eventualRange_iff.1 hy f₄
+      rw [← comp_apply]; rw [← map_comp] at h₃
+      rw [mem_preimage]; rw [← comp_apply]; rw [← map_comp]; rw [h₄]; rw [← Category.assoc]; rw [map_comp]; rw [comp_apply]; rw [h₃]; rw [← comp_apply]; rw [← map_comp]
+      apply mem_iInter.1 hx
+    · simp only [toPreimages_obj, toPreimages_map, ConcreteCategory.hom_ofHom,
+        TypeCat.Fun.coe_mk, MapsTo.val_restrict_apply]
+      rw [← Category.assoc]; rw [map_comp]; rw [comp_apply]; rw [h₃]; rw [map_comp]; rw [comp_apply]
 
 Depends on / 依赖: F.eventualRange, F.isMittagLeffler_iff_eventualRange, F.map, IsCofilteredOrEmpty, IsCofilteredOrEmpty.cone_maps, IsCofilteredOrEmpty.cone_objs, Subtype, Subtype.ext, cone_maps, cone_objs, eventualRange, h.subset_image_eventualRange, isMittagLeffler_iff_eventualRange, isMittagLeffler_iff_subset_range_comp, mem_iInter, subset_image_eventualRange
 -/
@@ -556,7 +606,11 @@ theorem isMittagLeffler_of_exists_finite_range
     { s : Finset (F.obj j) | exists (i : _) (f : i ⟶ j), ↑s = range (F.map f) }
     ⟨_, i, hi, hf.coe_toFinset⟩
   refine ⟨i, f, fun k g =>
-    (F.ranges_directed j).directedOn_range.is_bot_of_i
+    (F.ranges_directed j).directedOn_range.is_bot_of_is_min ⟨⟨i, f⟩, rfl⟩ ?_ _ ⟨⟨k, g⟩, rfl⟩⟩
+  rintro _ ⟨⟨k', g'⟩, rfl⟩ hl
+  refine (eq_of_le_of_not_lt hl ?_).ge
+  have := hmin _ ⟨k', g', (m.finite_toSet.subset <| hm.substr hl).coe_toFinset⟩
+  rwa [← Finset.coe_ssubset, Set.Finite.coe_toFinset, hm] at this
 
 中文:
 定理 isMittagLeffler_of_存在_finite_range
@@ -567,7 +621,11 @@ theorem isMittagLeffler_of_exists_finite_range
     { s : Finset (F.obj j) | exists (i : _) (f : i ⟶ j), ↑s = range (F.map f) }
     ⟨_, i, hi, hf.coe_toFinset⟩
   refine ⟨i, f, fun k g =>
-    (F.ranges_directed j).directedOn_range.is_bot_of_i
+    (F.ranges_directed j).directedOn_range.is_bot_of_is_min ⟨⟨i, f⟩, rfl⟩ ?_ _ ⟨⟨k, g⟩, rfl⟩⟩
+  rintro _ ⟨⟨k', g'⟩, rfl⟩ hl
+  refine (eq_of_le_of_not_lt hl ?_).ge
+  have := hmin _ ⟨k', g', (m.finite_toSet.subset <| hm.substr hl).coe_toFinset⟩
+  rwa [← Finset.coe_ssubset, Set.Finite.coe_toFinset, hm] at this
 
 Depends on / 依赖: F.map, F.obj, F.ranges_directed, Finite, Finset, Finset.coe_ssubset, Finset.wellFoundedLT.wf.has_min, Set.Finite, coe_ssubset, coe_toFinset, directedOn_range, directedOn_range.is_bot_of_is_min, eq_of_le_of_not_lt, finite_toSet, has_min, hf.coe_toFinset, hm.substr, is_bot_of_is_min, m.finite_toSet.subset, ranges_directed
 -/
@@ -745,7 +803,7 @@ theorem toPreimages_nonempty_of_surjective
   · exact ⟨(hFn j).some, fun ji => h.elim ji⟩
   · obtain ⟨y, ys⟩ := hs
     obtain ⟨x, rfl⟩ := Fsur ji y
-    exact ⟨x, fun ji' => (F.thin_diagram_of_surjective Fsur ji
+    exact ⟨x, fun ji' => (F.thin_diagram_of_surjective Fsur ji' ji).symm ▸ ys⟩
 
 中文:
 定理 toPreimages_nonempty_of_surjective
@@ -756,7 +814,7 @@ theorem toPreimages_nonempty_of_surjective
   · exact ⟨(hFn j).some, fun ji => h.elim ji⟩
   · obtain ⟨y, ys⟩ := hs
     obtain ⟨x, rfl⟩ := Fsur ji y
-    exact ⟨x, fun ji' => (F.thin_diagram_of_surjective Fsur ji
+    exact ⟨x, fun ji' => (F.thin_diagram_of_surjective Fsur ji' ji).symm ▸ ys⟩
 
 Depends on / 依赖: F.thin_diagram_of_surjective, h.elim, isEmpty_or_nonempty, mem_preimage, nonempty_coe_sort, nonempty_iInter, thin_diagram_of_surjective, toPreimages_obj
 -/
@@ -826,7 +884,10 @@ theorem eval_section_surjective_of_surjective
   have := F.toPreimages_nonempty_of_surjective s Fsur (singleton_nonempty x)
   obtain ⟨sec, h⟩ := nonempty_sections_of_finite_cofiltered_system (F.toPreimages s)
   refine ⟨⟨fun j => (sec j).val, fun jk => by simpa [Subtype.ext_iff] using! h jk⟩, ?_⟩
-  · hav
+  · have := (sec i).prop
+    simp only [mem_iInter, mem_preimage] at this
+    have := this (𝟙 i)
+    rwa [map_id, id_apply] at this
 
 中文:
 定理 eval_section_surjective_of_surjective
@@ -836,7 +897,10 @@ theorem eval_section_surjective_of_surjective
   have := F.toPreimages_nonempty_of_surjective s Fsur (singleton_nonempty x)
   obtain ⟨sec, h⟩ := nonempty_sections_of_finite_cofiltered_system (F.toPreimages s)
   refine ⟨⟨fun j => (sec j).val, fun jk => by simpa [Subtype.ext_iff] using! h jk⟩, ?_⟩
-  · hav
+  · have := (sec i).prop
+    simp only [mem_iInter, mem_preimage] at this
+    have := this (𝟙 i)
+    rwa [map_id, id_apply] at this
 
 Depends on / 依赖: F.obj, F.toPreimages, F.toPreimages_nonempty_of_surjective, Subtype, Subtype.ext_iff, ext_iff, id_apply, map_id, mem_iInter, mem_preimage, nonempty_sections_of_finite_cofiltered_system, singleton_nonempty, toPreimages, toPreimages_nonempty_of_surjective
 -/
@@ -861,7 +925,13 @@ theorem eventually_injective
   have : forall j, Fintype (F.obj j) := fun j => Fintype.ofFinite (F.obj j)
   have : Fintype F.sections := Fintype.ofFinite F.sections
   have card_le : forall j, Fintype.card (F.obj j) <= Fintype.card F.sections :=
-    fun j => Fintype.card_le_of_surjective _ (F.eval_section_surjective_of_surject
+    fun j => Fintype.card_le_of_surjective _ (F.eval_section_surjective_of_surjective Fsur j)
+  let fn j := Fintype.card F.sections - Fintype.card (F.obj j)
+  refine ⟨fn.argmin,
+    fun i f => ((Fintype.bijective_iff_surjective_and_card _).2
+      ⟨Fsur f, le_antisymm ?_ (Fintype.card_le_of_surjective _ <| Fsur f)⟩).1⟩
+  rw [← Nat.sub_le_sub_iff_left (card_le i)]
+  apply fn.argmin_le
 
 中文:
 定理 eventually_injective
@@ -870,7 +940,13 @@ theorem eventually_injective
   have : forall j, Fintype (F.obj j) := fun j => Fintype.ofFinite (F.obj j)
   have : Fintype F.sections := Fintype.ofFinite F.sections
   have card_le : forall j, Fintype.card (F.obj j) <= Fintype.card F.sections :=
-    fun j => Fintype.card_le_of_surjective _ (F.eval_section_surjective_of_surject
+    fun j => Fintype.card_le_of_surjective _ (F.eval_section_surjective_of_surjective Fsur j)
+  let fn j := Fintype.card F.sections - Fintype.card (F.obj j)
+  refine ⟨fn.argmin,
+    fun i f => ((Fintype.bijective_iff_surjective_and_card _).2
+      ⟨Fsur f, le_antisymm ?_ (Fintype.card_le_of_surjective _ <| Fsur f)⟩).1⟩
+  rw [← Nat.sub_le_sub_iff_left (card_le i)]
+  apply fn.argmin_le
 
 Depends on / 依赖: F.eval_section_surjective_of_surjective, F.obj, F.sections, Fintype, Fintype.bijective_iff_surjective_and_card, Fintype.card, Fintype.card_le_of_surjective, Fintype.ofFinite, HasBinaryCoproducts, SemilatticeSup, argmin, bijective_iff_surjective_and_card, card_le, card_le_of_surjective, eval_section_surjective_of_surjective, fn.argmin, le_antisymm, ofFinite, sections
 -/

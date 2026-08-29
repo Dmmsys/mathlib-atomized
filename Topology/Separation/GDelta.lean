@@ -220,7 +220,25 @@ theorem Disjoint.hasSeparatingCover_closed_gdelta_right
     rw [(s.disjoint_univ).mp st_dis]
     exact t.hasSeparatingCover_empty_left
   obtain ⟨g, g_surj⟩ := T_count.exists_surjective T_nonempty
-  choose g' g'_open
+  choose g' g'_open clt_sub_g' clg'_sub_g using fun n => by
+    apply normal_exists_closure_subset t_cl (T_open (g n).1 (g n).2)
+    rw [T_int]
+    exact sInter_subset_of_mem (g n).2
+  have clg'_int : t = ⋂ i, closure (g' i) := by
+    apply (subset_iInter fun n => (clt_sub_g' n).trans subset_closure).antisymm
+    rw [T_int]
+    refine subset_sInter fun t tinT => ?_
+    obtain ⟨n, gn⟩ := g_surj ⟨t, tinT⟩
+refine iInter_subset_of_subset n (clg'_sub_g n).trans ?_
+    rw [gn]
+  use fun n => (closure (g' n))ᶜ
+  constructor
+  · rw [← compl_iInter, subset_compl_comm, ← clg'_int]
+    exact st_dis.subset_compl_left
+  · refine fun n => ⟨isOpen_compl_iff.mpr isClosed_closure, ?_⟩
+    simp only [closure_compl, disjoint_compl_left_iff_subset]
+    rw [← closure_eq_iff_isClosed.mpr t_cl] at clt_sub_g'
+exact subset_closure.trans (clt_sub_g' n).trans (g'_open n).subset_interior_closure
 
 中文:
 定理 Disjoint.hasSeparatingCover_closed_gdelta_right
@@ -232,7 +250,25 @@ theorem Disjoint.hasSeparatingCover_closed_gdelta_right
     rw [(s.disjoint_univ).mp st_dis]
     exact t.hasSeparatingCover_empty_left
   obtain ⟨g, g_surj⟩ := T_count.exists_surjective T_nonempty
-  choose g' g'_open
+  choose g' g'_open clt_sub_g' clg'_sub_g using fun n => by
+    apply normal_exists_closure_subset t_cl (T_open (g n).1 (g n).2)
+    rw [T_int]
+    exact sInter_subset_of_mem (g n).2
+  have clg'_int : t = ⋂ i, closure (g' i) := by
+    apply (subset_iInter fun n => (clt_sub_g' n).trans subset_closure).antisymm
+    rw [T_int]
+    refine subset_sInter fun t tinT => ?_
+    obtain ⟨n, gn⟩ := g_surj ⟨t, tinT⟩
+refine iInter_subset_of_subset n (clg'_sub_g n).trans ?_
+    rw [gn]
+  use fun n => (closure (g' n))ᶜ
+  constructor
+  · rw [← compl_iInter, subset_compl_comm, ← clg'_int]
+    exact st_dis.subset_compl_left
+  · refine fun n => ⟨isOpen_compl_iff.mpr isClosed_closure, ?_⟩
+    simp only [closure_compl, disjoint_compl_left_iff_subset]
+    rw [← closure_eq_iff_isClosed.mpr t_cl] at clt_sub_g'
+exact subset_closure.trans (clt_sub_g' n).trans (g'_open n).subset_interior_closure
 
 Depends on / 依赖: T.eq_empty_or_nonempty, T_count, T_count.exists_surjective, T_int, T_nonempty, T_open, _int, _open, _sub_g, closure, clt_sub_g, disjoint_univ, eq_empty_or_nonempty, exists_surjective, g_surj, hasSeparatingCover_empty_left, normal_exists_closure_subset, s.disjoint_univ, sInter_empty, sInter_subset_of_mem
 -/

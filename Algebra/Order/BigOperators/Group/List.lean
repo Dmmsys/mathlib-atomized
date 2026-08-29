@@ -178,7 +178,7 @@ lemma prod_lt_prod'
     · exact mul_lt_mul_of_lt_of_le ‹_› (prod_le_prod' h₁.2)
 · exact mul_lt_mul_of_le_of_lt h₁.1 ihl h₁.2 ‹_›
 
-@[t
+@[to_additive]
 
 中文:
 引理 prod_lt_prod'
@@ -193,7 +193,7 @@ lemma prod_lt_prod'
     · exact mul_lt_mul_of_lt_of_le ‹_› (prod_le_prod' h₁.2)
 · exact mul_lt_mul_of_le_of_lt h₁.1 ihl h₁.2 ‹_›
 
-@[t
+@[to_additive]
 
 Depends on / 依赖: exists_eq_or_imp, forall_mem_cons, map_cons, mem_cons, mul_lt_mul_of_le_of_lt, mul_lt_mul_of_lt_of_le, prod_cons, prod_le_prod
 -/
@@ -562,7 +562,9 @@ lemma le_prod_of_submultiplicative_on_pred
   | cons a s ih =>
     have hpla : forall x, x in s -> p x := fun x hx => hpl x (mem_cons_of_mem _ hx)
     have hp_prod : p s.prod := prod_induction p hp_mul hp_one hpla
-    grw [prod_cons, map_cons, prod_cons, h_mul a s.prod (hpl _ mem_cons_self) hp_pro
+    grw [prod_cons, map_cons, prod_cons, h_mul a s.prod (hpl _ mem_cons_self) hp_prod, ih hpla]
+
+@[to_additive le_sum_of_subadditive]
 
 中文:
 引理 le_prod_of_submultiplicative_on_pred
@@ -573,7 +575,9 @@ lemma le_prod_of_submultiplicative_on_pred
   | cons a s ih =>
     have hpla : forall x, x in s -> p x := fun x hx => hpl x (mem_cons_of_mem _ hx)
     have hp_prod : p s.prod := prod_induction p hp_mul hp_one hpla
-    grw [prod_cons, map_cons, prod_cons, h_mul a s.prod (hpl _ mem_cons_self) hp_pro
+    grw [prod_cons, map_cons, prod_cons, h_mul a s.prod (hpl _ mem_cons_self) hp_prod, ih hpla]
+
+@[to_additive le_sum_of_subadditive]
 
 Depends on / 依赖: h_mul, h_one, hp_mul, hp_one, hp_prod, map_cons, mem_cons_of_mem, mem_cons_self, prod_cons, prod_induction, s.prod
 -/
@@ -630,7 +634,11 @@ lemma le_prod_nonempty_of_submultiplicative_on_pred
     by_cases hl_empty : l = []
     · simp [hl_empty]
     have hla_restrict : forall x, x in l -> p x := fun x hx => hl x (mem_cons_of_mem _ hx)
-    have hp_sup : p l.prod := prod
+    have hp_sup : p l.prod := prod_induction_nonempty p hp_mul hl_empty hla_restrict
+    have hp_a : p a := hl a mem_cons_self
+    grw [h_mul a _ hp_a hp_sup, ← ih hl_empty hla_restrict]
+
+@[to_additive le_sum_nonempty_of_subadditive]
 
 中文:
 引理 le_prod_nonempty_of_submultiplicative_on_pred
@@ -643,7 +651,11 @@ lemma le_prod_nonempty_of_submultiplicative_on_pred
     by_cases hl_empty : l = []
     · simp [hl_empty]
     have hla_restrict : forall x, x in l -> p x := fun x hx => hl x (mem_cons_of_mem _ hx)
-    have hp_sup : p l.prod := prod
+    have hp_sup : p l.prod := prod_induction_nonempty p hp_mul hl_empty hla_restrict
+    have hp_a : p a := hl a mem_cons_self
+    grw [h_mul a _ hp_a hp_sup, ← ih hl_empty hla_restrict]
+
+@[to_additive le_sum_nonempty_of_subadditive]
 
 Depends on / 依赖: h_mul, hl_empty, hl_nonempty, hla_restrict, hp_a, hp_mul, hp_sup, l.prod, map_cons, mem_cons_of_mem, mem_cons_self, prod_cons, prod_induction_nonempty
 -/
@@ -763,7 +775,7 @@ lemma single_le_prod
   case cons.left => exact le_mul_of_one_le_right' (one_le_prod_of_one_le hl₁.2)
   case cons.right hd tl ih => exact fun x H => le_mul_of_one_le_of_le hl₁.1 (ih hl₁.right x H)
 
-@[to_additive all_zero_of_le_zero_le
+@[to_additive all_zero_of_le_zero_le_of_sum_eq_zero]
 
 中文:
 引理 single_le_prod
@@ -776,7 +788,7 @@ lemma single_le_prod
   case cons.left => exact le_mul_of_one_le_right' (one_le_prod_of_one_le hl₁.2)
   case cons.right hd tl ih => exact fun x H => le_mul_of_one_le_of_le hl₁.1 (ih hl₁.right x H)
 
-@[to_additive all_zero_of_le_zero_le
+@[to_additive all_zero_of_le_zero_le_of_sum_eq_zero]
 
 Depends on / 依赖: cons.left, cons.right, forall_mem_cons, le_mul_of_one_le_of_le, le_mul_of_one_le_right, one_le_prod_of_one_le, prod_cons, simp_rw
 -/

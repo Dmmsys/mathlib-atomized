@@ -44,7 +44,14 @@ theorem CovBy.length_restrictScalars
     rwa [range_inclusion, ← covBy_iff_quot_is_simple h.le]
   obtain ⟨m, hm, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp key
   rw [eq_maximalIdeal hm] at e
-  -- `0 -> p -> q -> κ(B) -> 0` is exact, and length i
+  -- `0 -> p -> q -> κ(B) -> 0` is exact, and length is additive
+  let g : q ->ₗ[B] ResidueField B := e.comp f.range.mkQ
+  have : Function.Injective f := inclusion_injective _
+  have : Function.Surjective g := e.surjective.comp f.range.mkQ_surjective
+  have : Function.Exact f g := exact_iff.mpr ((e.ker_comp f.range.mkQ).trans f.range.ker_mkQ)
+  rw [length_eq_add_of_exact (f.restrictScalars A) (g.restrictScalars A)
+    (by simpa) (by simpa) (by simpa)]; rw [Module.length_eq_of_surjective (M := ResidueField B)
+      (residue_surjective (R := A))]; rw [Module.length_eq_rank]
 
 中文:
 定理 CovBy.length_restrictScalars
@@ -55,7 +62,14 @@ theorem CovBy.length_restrictScalars
     rwa [range_inclusion, ← covBy_iff_quot_is_simple h.le]
   obtain ⟨m, hm, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp key
   rw [eq_maximalIdeal hm] at e
-  -- `0 -> p -> q -> κ(B) -> 0` is exact, and length i
+  -- `0 -> p -> q -> κ(B) -> 0` is exact, and length is additive
+  let g : q ->ₗ[B] ResidueField B := e.comp f.range.mkQ
+  have : Function.Injective f := inclusion_injective _
+  have : Function.Surjective g := e.surjective.comp f.range.mkQ_surjective
+  have : Function.Exact f g := exact_iff.mpr ((e.ker_comp f.range.mkQ).trans f.range.ker_mkQ)
+  rw [length_eq_add_of_exact (f.restrictScalars A) (g.restrictScalars A)
+    (by simpa) (by simpa) (by simpa)]; rw [Module.length_eq_of_surjective (M := ResidueField B)
+      (residue_surjective (R := A))]; rw [Module.length_eq_rank]
 
 Depends on / 依赖: IsSimpleModule, covBy_iff_quot_is_simple, eq_maximalIdeal, f.range, h.le, inclusion, isSimpleModule_iff_quot_maximal, isSimpleModule_iff_quot_maximal.mp, range_inclusion
 -/
@@ -86,7 +100,20 @@ theorem IsLocalRing.length_restrictScalars
   · obtain ⟨s, hs_bot, hs_top⟩ := isFiniteLength_iff_exists_compositionSeries.mp h
     rw [← length_compositionSeries s hs_bot hs_top]
     suffices forall k, length A (s k) = k * Module.length (ResidueField A) (ResidueField B) by
-      rw [← Fin.val_last s.length
+      rw [← Fin.val_last s.length]; rw [← this]; rw [← RelSeries.last]; rw [hs_top]
+      exact length_top.symm
+    intro k
+    induction k using Fin.induction with
+    | zero => rw [← RelSeries.head, hs_bot]; simp
+    | succ i hi => simpa [hi, add_one_mul] using (s.step i).length_restrictScalars A
+  · have : ¬ IsFiniteLength A M := by
+      contrapose! h
+      rw [isFiniteLength_iff_isNoetherian_isArtinian] at h ⊢
+      exact h.imp (isNoetherian_of_tower A) (isArtinian_of_tower A)
+    rw [← length_ne_top_iff]; rw [not_ne_iff] at h this
+    have ne : length (ResidueField A) (ResidueField B) != 0 := by
+      simpa [pos_iff_ne_zero] using Module.length_pos
+    rw [h]; rw [this]; rw [ENat.top_mul ne]
 
 中文:
 定理 是局部环.length_restrictScalars
@@ -95,7 +122,20 @@ theorem IsLocalRing.length_restrictScalars
   · obtain ⟨s, hs_bot, hs_top⟩ := isFiniteLength_iff_exists_compositionSeries.mp h
     rw [← length_compositionSeries s hs_bot hs_top]
     suffices forall k, length A (s k) = k * Module.length (ResidueField A) (ResidueField B) by
-      rw [← Fin.val_last s.length
+      rw [← Fin.val_last s.length]; rw [← this]; rw [← RelSeries.last]; rw [hs_top]
+      exact length_top.symm
+    intro k
+    induction k using Fin.induction with
+    | zero => rw [← RelSeries.head, hs_bot]; simp
+    | succ i hi => simpa [hi, add_one_mul] using (s.step i).length_restrictScalars A
+  · have : ¬ IsFiniteLength A M := by
+      contrapose! h
+      rw [isFiniteLength_iff_isNoetherian_isArtinian] at h ⊢
+      exact h.imp (isNoetherian_of_tower A) (isArtinian_of_tower A)
+    rw [← length_ne_top_iff]; rw [not_ne_iff] at h this
+    have ne : length (ResidueField A) (ResidueField B) != 0 := by
+      simpa [pos_iff_ne_zero] using Module.length_pos
+    rw [h]; rw [this]; rw [ENat.top_mul ne]
 
 Depends on / 依赖: Fin.induction, Fin.val_last, IsFiniteLength, Module, Module.length, RelSeries, RelSeries.head, RelSeries.last, ResidueField, add_one_mul, hs_bot, hs_top, isFiniteLength_iff_exists_compositionSeries, isFiniteLength_iff_exists_compositionSeries.mp, length, length_compositionSeries, length_top, length_top.symm, s.length, s.step
 -/
@@ -138,7 +178,17 @@ theorem CovBy.length_baseChange
   rw [← (toBaseChange.toLinearEquiv B p).length_eq]; rw [← (toBaseChange.toLinearEquiv B q).length_eq]
   -- Identify q / p with A / m_A, so (B ⊗[A] p ⧸ B ⊗[A] q) ≃ₗ B ⧸ m_A B
   let f : p ->ₗ[A] q := inclusion h.le
-  have 
+  have key : IsSimpleModule A (q ⧸ f.range) := by
+    rwa [range_inclusion, ← covBy_iff_quot_is_simple h.le]
+  obtain ⟨m, hm, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp key
+  obtain rfl := eq_maximalIdeal hm
+  -- `0 -> B ⊗[A] p -> B ⊗[A] q -> B ⧸ m_A B -> 0` is exact by flatness, and length is additive
+  let g := e.comp f.range.mkQ
+  have : Function.Injective f := inclusion_injective _
+  have : Function.Surjective g := e.surjective.comp f.range.mkQ_surjective
+  have : Function.Exact f g := exact_iff.mpr (by simp [f, g])
+  have : FaithfullyFlat A B := FaithfullyFlat.of_flat_of_isLocalHom
+  rw [length_eq_add_of_exact (lTensor B B f) (lTensor B B g) (by simpa) (by simpa) (by simpa)]; rw [(Algebra.TensorProduct.quotIdealMapEquivTensorQuot B (maximalIdeal A)).toLinearEquiv.length_eq]
 
 中文:
 定理 CovBy.length_baseChange
@@ -148,7 +198,17 @@ theorem CovBy.length_baseChange
   rw [← (toBaseChange.toLinearEquiv B p).length_eq]; rw [← (toBaseChange.toLinearEquiv B q).length_eq]
   -- Identify q / p with A / m_A, so (B ⊗[A] p ⧸ B ⊗[A] q) ≃ₗ B ⧸ m_A B
   let f : p ->ₗ[A] q := inclusion h.le
-  have 
+  have key : IsSimpleModule A (q ⧸ f.range) := by
+    rwa [range_inclusion, ← covBy_iff_quot_is_simple h.le]
+  obtain ⟨m, hm, ⟨e⟩⟩ := isSimpleModule_iff_quot_maximal.mp key
+  obtain rfl := eq_maximalIdeal hm
+  -- `0 -> B ⊗[A] p -> B ⊗[A] q -> B ⧸ m_A B -> 0` is exact by flatness, and length is additive
+  let g := e.comp f.range.mkQ
+  have : Function.Injective f := inclusion_injective _
+  have : Function.Surjective g := e.surjective.comp f.range.mkQ_surjective
+  have : Function.Exact f g := exact_iff.mpr (by simp [f, g])
+  have : FaithfullyFlat A B := FaithfullyFlat.of_flat_of_isLocalHom
+  rw [length_eq_add_of_exact (lTensor B B f) (lTensor B B g) (by simpa) (by simpa) (by simpa)]; rw [(Algebra.TensorProduct.quotIdealMapEquivTensorQuot B (maximalIdeal A)).toLinearEquiv.length_eq]
 -/
 theorem CovBy.length_baseChange {p q : Submodule A M} (h : p ⋖ q) :
     length B (q.baseChange B) =
@@ -181,7 +241,21 @@ theorem IsLocalRing.length_baseChange
     rw [← length_compositionSeries s hs_bot hs_top]
     suffices forall k, length B ((s k).baseChange B) =
         k * length B (B ⧸ (maximalIdeal A).map (algebraMap A B)) by
-     
+      rw [← Fin.val_last s.length]; rw [← this]; rw [← RelSeries.last]; rw [hs_top]; rw [baseChange_top]; rw [length_top]
+    intro k
+    induction k using Fin.induction with
+    | zero => rw [← RelSeries.head, hs_bot, baseChange_bot]; simp
+    | succ i hi => simpa [hi, add_one_mul] using (s.step i).length_baseChange B
+  · have : ¬ IsFiniteLength B (B otimes[A] M) := by
+      contrapose! h
+      rw [isFiniteLength_iff_isNoetherian_isArtinian] at h ⊢
+      have : FaithfullyFlat A B := FaithfullyFlat.of_flat_of_isLocalHom
+      exact h.imp IsNoetherian.of_isNoetherian_tensorProduct_of_faithfullyFlat
+        IsArtinian.of_isArtinian_tensorProduct_of_faithfullyFlat
+    rw [← length_ne_top_iff]; rw [not_ne_iff] at h this
+    have ne : length B (B ⧸ (maximalIdeal A).map (algebraMap A B)) != 0 := by
+      simpa [← pos_iff_ne_zero, length_pos_iff] using (map_maximalIdeal_lt_top (algebraMap A B)).ne
+    rw [h]; rw [this]; rw [ENat.top_mul ne]
 
 中文:
 定理 是局部环.length_baseChange
@@ -191,7 +265,21 @@ theorem IsLocalRing.length_baseChange
     rw [← length_compositionSeries s hs_bot hs_top]
     suffices forall k, length B ((s k).baseChange B) =
         k * length B (B ⧸ (maximalIdeal A).map (algebraMap A B)) by
-     
+      rw [← Fin.val_last s.length]; rw [← this]; rw [← RelSeries.last]; rw [hs_top]; rw [baseChange_top]; rw [length_top]
+    intro k
+    induction k using Fin.induction with
+    | zero => rw [← RelSeries.head, hs_bot, baseChange_bot]; simp
+    | succ i hi => simpa [hi, add_one_mul] using (s.step i).length_baseChange B
+  · have : ¬ IsFiniteLength B (B otimes[A] M) := by
+      contrapose! h
+      rw [isFiniteLength_iff_isNoetherian_isArtinian] at h ⊢
+      have : FaithfullyFlat A B := FaithfullyFlat.of_flat_of_isLocalHom
+      exact h.imp IsNoetherian.of_isNoetherian_tensorProduct_of_faithfullyFlat
+        IsArtinian.of_isArtinian_tensorProduct_of_faithfullyFlat
+    rw [← length_ne_top_iff]; rw [not_ne_iff] at h this
+    have ne : length B (B ⧸ (maximalIdeal A).map (algebraMap A B)) != 0 := by
+      simpa [← pos_iff_ne_zero, length_pos_iff] using (map_maximalIdeal_lt_top (algebraMap A B)).ne
+    rw [h]; rw [this]; rw [ENat.top_mul ne]
 
 Depends on / 依赖: Fin.induction, Fin.val_last, IsFiniteLength, RelSeries, RelSeries.head, RelSeries.last, algebraMap, baseChange, baseChange_bot, baseChange_top, hs_bot, hs_top, isFiniteLength_iff_exists_compositionSeries, isFiniteLength_iff_exists_compositionSeries.mp, length, length_compositionSeries, length_top, maximalIdeal, s.length, val_last
 -/

@@ -803,7 +803,7 @@ definition down
         Equiv.ulift.invFun.comp g by
       ext x
       simpa using congr_fun this x
-    e
+    exact hc.funext (fun j => by simp [Function.comp_assoc, h])
 
 中文:
 定义 down
@@ -818,7 +818,7 @@ definition down
         Equiv.ulift.invFun.comp g by
       ext x
       simpa using congr_fun this x
-    e
+    exact hc.funext (fun j => by simp [Function.comp_assoc, h])
 
 Depends on / 依赖: Equiv.ulift.toFun.comp
 -/
@@ -847,7 +847,9 @@ definition precompose
   fac c' j := by
     rw [precompose_ι]; rw [← Function.comp_assoc]; rw [hc.fac]; rw [precompose_ι]; rw [Function.comp_assoc]; rw [Equiv.symm_comp_self]; rw [Function.comp_id]
   funext {T f g} h := hc.funext (fun j => by
-    ext 
+    ext x
+    obtain ⟨y, rfl⟩ := (e j).surjective x
+    exact congr_fun (h j) y)
 
 中文:
 定义 precompose
@@ -856,7 +858,9 @@ definition precompose
   fac c' j := by
     rw [precompose_ι]; rw [← Function.comp_assoc]; rw [hc.fac]; rw [precompose_ι]; rw [Function.comp_assoc]; rw [Equiv.symm_comp_self]; rw [Function.comp_id]
   funext {T f g} h := hc.funext (fun j => by
-    ext 
+    ext x
+    obtain ⟨y, rfl⟩ := (e j).surjective x
+    exact congr_fun (h j) y)
 
 Depends on / 依赖: FunctorToTypes, FunctorToTypes.naturality_symm, hc.desc, naturality, naturality_symm, precompose
 -/
@@ -916,7 +920,12 @@ lemma IsColimitCore.isColimit
           obtain ⟨j, x, rfl⟩ := F.ιColimitType_jointly_surjective y
           simp
         right_inv := by
-          have : (F.descColimitTyp
+          have : (F.descColimitType c).comp
+              ((down.{max u w₁} hc).desc F.coconeTypes) = id :=
+            (down.{max u w₀} hc).funext (fun j => by
+              rw [Function.id_comp]; rw [Function.comp_assoc]; rw [fac]; rw [coconeTypes_ι]; rw [descColimitType_comp_ι])
+          exact congr_fun this }
+    exact e.bijective
 
 中文:
 引理 是余limitCore.isColimit
@@ -929,7 +938,12 @@ lemma IsColimitCore.isColimit
           obtain ⟨j, x, rfl⟩ := F.ιColimitType_jointly_surjective y
           simp
         right_inv := by
-          have : (F.descColimitTyp
+          have : (F.descColimitType c).comp
+              ((down.{max u w₁} hc).desc F.coconeTypes) = id :=
+            (down.{max u w₀} hc).funext (fun j => by
+              rw [Function.id_comp]; rw [Function.comp_assoc]; rw [fac]; rw [coconeTypes_ι]; rw [descColimitType_comp_ι])
+          exact congr_fun this }
+    exact e.bijective
 
 Depends on / 依赖: ColimitType, F.ColimitType, F.coconeTypes, F.descColimitType, Function, Function.comp_assoc, Function.id_comp, bijective, c.pt, coconeTypes, comp_assoc, congr_fun, descColimitType, e.bijective, id_comp, invFun, left_inv, right_inv
 -/

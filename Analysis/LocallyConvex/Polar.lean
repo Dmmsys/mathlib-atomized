@@ -512,7 +512,9 @@ theorem polar_univ
   rcases NormedField.exists_norm_lt 𝕜 hε with ⟨c, hc, hcε⟩
   calc
     ‖B x y‖ = ‖c‖ * ‖B (c⁻¹ • x) y‖ := by
-  
+      rw [B.map_smul]; rw [LinearMap.smul_apply]; rw [smul_eq_mul]; rw [norm_mul]; rw [norm_inv]; rw [mul_inv_cancel_left₀ hc.ne']
+    _ <= ε * 1 := by gcongr; exact hy _ trivial
+    _ = ε := mul_one _
 
 中文:
 定理 polar_univ
@@ -525,7 +527,9 @@ theorem polar_univ
   rcases NormedField.exists_norm_lt 𝕜 hε with ⟨c, hc, hcε⟩
   calc
     ‖B x y‖ = ‖c‖ * ‖B (c⁻¹ • x) y‖ := by
-  
+      rw [B.map_smul]; rw [LinearMap.smul_apply]; rw [smul_eq_mul]; rw [norm_mul]; rw [norm_inv]; rw [mul_inv_cancel_left₀ hc.ne']
+    _ <= ε * 1 := by gcongr; exact hy _ trivial
+    _ = ε := mul_one _
 
 Depends on / 依赖: B.map_smul, LinearMap, LinearMap.smul_apply, NormedField, NormedField.exists_norm_lt, Set.eq_singleton_iff_unique_mem, eq_singleton_iff_unique_mem, exists_norm_lt, hc.ne, le_of_forall_gt_imp_ge_of_dense, map_smul, mul_one, norm_inv, norm_le_zero_iff, norm_le_zero_iff.mp, norm_mul, smul_apply, smul_eq_mul, zero_mem_polar
 -/

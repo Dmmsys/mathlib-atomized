@@ -1964,7 +1964,12 @@ definition symm
       rw [Equiv.symm_apply_eq]
       refine Eq.trans ?_ (f.map_fun' f' (f.toEquiv.symm ∘ x)).symm
       rw [← Function.comp_assoc]; rw [Equiv.toFun_as_coe]; rw [Equiv.self_comp_symm]; rw [Function.id_comp]
+    map_rel' := fun n r {x} => by
+      simp only [Equiv.toFun_as_coe]
+      refine (f.map_rel' r (f.toEquiv.symm ∘ x)).symm.trans ?_
+      rw [← Function.comp_assoc]; rw [Equiv.toFun_as_coe]; rw [Equiv.self_comp_symm]; rw [Function.id_comp] }
 
+@[simp]
 
 中文:
 定义 symm
@@ -1975,7 +1980,12 @@ definition symm
       rw [Equiv.symm_apply_eq]
       refine Eq.trans ?_ (f.map_fun' f' (f.toEquiv.symm ∘ x)).symm
       rw [← Function.comp_assoc]; rw [Equiv.toFun_as_coe]; rw [Equiv.self_comp_symm]; rw [Function.id_comp]
+    map_rel' := fun n r {x} => by
+      simp only [Equiv.toFun_as_coe]
+      refine (f.map_rel' r (f.toEquiv.symm ∘ x)).symm.trans ?_
+      rw [← Function.comp_assoc]; rw [Equiv.toFun_as_coe]; rw [Equiv.self_comp_symm]; rw [Function.id_comp] }
 
+@[simp]
 
 Depends on / 依赖: Eq.trans, Equiv.self_comp_symm, Equiv.symm_apply_eq, Equiv.toFun_as_coe, Function, Function.comp_assoc, Function.id_comp, comp_assoc, f.map_fun, f.map_rel, f.toEquiv.symm, id_comp, map_fun, map_rel, self_comp_symm, symm.trans, symm_apply_eq, toEquiv, toFun_as_coe
 -/
@@ -2452,7 +2462,9 @@ definition comp
     -- Porting note: should be done by autoparam?
     map_fun' := by intros; simp only [Function.comp_apply, map_fun]; trivial
     -- Porting note: should be done by autoparam?
-    map_rel' := by intros; rw [Function.comp_assoc, map_rel, ma
+    map_rel' := by intros; rw [Function.comp_assoc, map_rel, map_rel] }
+
+@[simp]
 
 中文:
 定义 comp
@@ -2462,7 +2474,9 @@ definition comp
     -- Porting note: should be done by autoparam?
     map_fun' := by intros; simp only [Function.comp_apply, map_fun]; trivial
     -- Porting note: should be done by autoparam?
-    map_rel' := by intros; rw [Function.comp_assoc, map_rel, ma
+    map_rel' := by intros; rw [Function.comp_assoc, map_rel, map_rel] }
+
+@[simp]
 
 Depends on / 依赖: hmn.toEquiv.trans, hnp.toEquiv, toEquiv
 -/

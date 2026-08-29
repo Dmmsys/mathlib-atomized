@@ -656,7 +656,15 @@ lemma exists_smul_of_last_eq
   have H : forall i, Fin.Embedding.init (g • x) i in ofStabilizer G a := fun i => by
     simp only [mem_ofStabilizer_iff,
       Nat.succ_eq_add_one, ← hgx, ← smul_apply, ne_eq]
-    suffices Fin.Embedding.init (g • x) i = (g • x) i.castSucc 
+    suffices Fin.Embedding.init (g • x) i = (g • x) i.castSucc by
+      simp [this]
+    simp [Fin.Embedding.init, Fin.init_def]
+  use g, (Fin.Embedding.init (g • x)).codRestrict (ofStabilizer G a) H
+  ext i
+  rcases Fin.eq_castSucc_or_eq_last i with ⟨i, rfl⟩ | ⟨rfl⟩
+  · simpa [ofStabilizer.snoc] using!
+Subtype.ext_iff.mp Function.Embedding.codRestrict_apply _ _ H i
+  · simpa only [smul_apply, ofStabilizer.snoc, Fin.Embedding.snoc_last]
 
 中文:
 引理 存在_smul_of_last_eq
@@ -666,7 +674,15 @@ lemma exists_smul_of_last_eq
   have H : forall i, Fin.Embedding.init (g • x) i in ofStabilizer G a := fun i => by
     simp only [mem_ofStabilizer_iff,
       Nat.succ_eq_add_one, ← hgx, ← smul_apply, ne_eq]
-    suffices Fin.Embedding.init (g • x) i = (g • x) i.castSucc 
+    suffices Fin.Embedding.init (g • x) i = (g • x) i.castSucc by
+      simp [this]
+    simp [Fin.Embedding.init, Fin.init_def]
+  use g, (Fin.Embedding.init (g • x)).codRestrict (ofStabilizer G a) H
+  ext i
+  rcases Fin.eq_castSucc_or_eq_last i with ⟨i, rfl⟩ | ⟨rfl⟩
+  · simpa [ofStabilizer.snoc] using!
+Subtype.ext_iff.mp Function.Embedding.codRestrict_apply _ _ H i
+  · simpa only [smul_apply, ofStabilizer.snoc, Fin.Embedding.snoc_last]
 
 Depends on / 依赖: Embedding, Fin.Embedding.init, Fin.eq_castSucc_or_eq_last, Fin.init_def, Fin.last, Nat.succ_eq_add_one, castSucc, codRestrict, eq_castSucc_or_eq_last, exists_smul_eq, i.castSucc, init_def, mem_ofStabilizer_iff, ne_eq, ofStabilizer, ofStabilizer.snoc, smul_apply, succ_eq_add_one
 -/

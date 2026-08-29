@@ -405,7 +405,12 @@ theorem mem_zip_inits_tails
     · rintro (⟨rfl, rfl⟩ | ⟨_, _, h, rfl, rfl⟩)
       · simp
       · simp [ih.mp h]
-    · rcases init wit
+    · rcases init with - | ⟨hd', tl'⟩
+      · simp
+      · intro h
+        right
+        use tl', tail
+        simp_all
 
 中文:
 定理 mem_zip_inits_tails
@@ -418,7 +423,12 @@ theorem mem_zip_inits_tails
     · rintro (⟨rfl, rfl⟩ | ⟨_, _, h, rfl, rfl⟩)
       · simp
       · simp [ih.mp h]
-    · rcases init wit
+    · rcases init with - | ⟨hd', tl'⟩
+      · simp
+      · intro h
+        right
+        use tl', tail
+        simp_all
 
 Depends on / 依赖: Prod.exists, generalizing, ih.mp, mem_cons, mem_map, simp_rw, zip_cons_cons, zip_map_left
 -/

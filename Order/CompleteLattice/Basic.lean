@@ -588,7 +588,10 @@ theorem biSup_congr'
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
   It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization w
+  canonicalizer; a minimization would help. The original proof was: `grind` -/
+  simp_all
+
+@[to_dual]
 
 中文:
 定理 biSup_congr'
@@ -597,7 +600,10 @@ theorem biSup_congr'
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
   It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
-  canonicalizer; a minimization w
+  canonicalizer; a minimization would help. The original proof was: `grind` -/
+  simp_all
+
+@[to_dual]
 
 Depends on / 依赖: Before, Mathlib, adaptation_note, canonicalizer, closed, directed, github, github.com, leanprover, minimization, normalizer, original, problem, replacing, whether
 -/

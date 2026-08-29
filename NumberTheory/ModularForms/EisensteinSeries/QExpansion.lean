@@ -99,7 +99,11 @@ lemma aux_IsBigO_mul
         fun n : Nat => ((2 * π * I / p) ^ k) * n ^ k := by
       ext z
       ring
-    simpa [h1] using isBigO_ofReal_right.mp (Asymptotics.isBigO
+    simpa [h1] using isBigO_ofReal_right.mp (Asymptotics.isBigO_const_mul_self
+      ((2 * π * I / p) ^ k) (fun (n : Nat) => (↑(n ^ k) : Real)) atTop)
+  push_cast
+  convert! hf.mul h0
+  ring
 
 中文:
 引理 aux_IsBigO_mul
@@ -110,7 +114,11 @@ lemma aux_IsBigO_mul
         fun n : Nat => ((2 * π * I / p) ^ k) * n ^ k := by
       ext z
       ring
-    simpa [h1] using isBigO_ofReal_right.mp (Asymptotics.isBigO
+    simpa [h1] using isBigO_ofReal_right.mp (Asymptotics.isBigO_const_mul_self
+      ((2 * π * I / p) ^ k) (fun (n : Nat) => (↑(n ^ k) : Real)) atTop)
+  push_cast
+  convert! hf.mul h0
+  ring
 -/
 private lemma aux_IsBigO_mul (k l : Nat) (p : Real) {f : Nat -> Complex}
     (hf : f =O[atTop] fun n => ((n ^ l) : Real)) :
@@ -138,7 +146,25 @@ theorem summableLocallyUniformlyOn_iteratedDerivWithin_smul_cexp
   intro K hK hKc
   have : CompactSpace K := isCompact_univ_iff.mp (isCompact_iff_isCompact_univ.mp hKc)
   let c : ContinuousMap K Complex := ⟨fun r : K => Complex.exp (2 * π * I * r / p), by fun_prop⟩
-  let r : Real :=
+  let r : Real := ‖mkOfCompact c‖
+  have hr : ‖r‖ < 1 := by
+    simp only [norm_norm, r, norm_lt_iff_of_compact Real.zero_lt_one, mkOfCompact_apply,
+      ContinuousMap.coe_mk, c]
+    intro x
+    have h1 : cexp (2 * π * I * (x / p)) = cexp (2 * π * I * x / p) := by
+      ring_nf
+    simpa using h1 ▸ norm_exp_two_pi_I_lt_one ⟨((x : Complex) / p), by aesop⟩
+  refine ⟨_, by simpa using (summable_norm_mul_geometric_of_norm_lt_one' hr
+    (Asymptotics.isBigO_norm_left.mpr (aux_IsBigO_mul k l p hf))), fun n z hz => ?_⟩
+  have h0 := pow_le_pow_left₀ (norm_nonneg _) (norm_coe_le_norm (mkOfCompact c) ⟨z, hz⟩) n
+  simp only [norm_mkOfCompact, mkOfCompact_apply, ContinuousMap.coe_mk, ← exp_nsmul', Pi.smul_apply,
+    iteratedDerivWithin_cexp_aux k n p isOpen_upperHalfPlaneSet (hK hz), smul_eq_mul,
+    norm_mul, norm_pow, Complex.norm_div, norm_ofNat, norm_real, Real.norm_eq_abs, norm_I, mul_one,
+    norm_natCast, abs_norm, ge_iff_le, r, c] at *
+  rw [← mul_assoc]
+  gcongr
+  convert! h0
+  rw [← norm_pow]; rw [← exp_nsmul']
 
 中文:
 定理 summableLocallyUniformlyOn_iteratedDerivWithin_smul_cexp
@@ -148,7 +174,25 @@ theorem summableLocallyUniformlyOn_iteratedDerivWithin_smul_cexp
   intro K hK hKc
   have : CompactSpace K := isCompact_univ_iff.mp (isCompact_iff_isCompact_univ.mp hKc)
   let c : ContinuousMap K Complex := ⟨fun r : K => Complex.exp (2 * π * I * r / p), by fun_prop⟩
-  let r : Real :=
+  let r : Real := ‖mkOfCompact c‖
+  have hr : ‖r‖ < 1 := by
+    simp only [norm_norm, r, norm_lt_iff_of_compact Real.zero_lt_one, mkOfCompact_apply,
+      ContinuousMap.coe_mk, c]
+    intro x
+    have h1 : cexp (2 * π * I * (x / p)) = cexp (2 * π * I * x / p) := by
+      ring_nf
+    simpa using h1 ▸ norm_exp_two_pi_I_lt_one ⟨((x : Complex) / p), by aesop⟩
+  refine ⟨_, by simpa using (summable_norm_mul_geometric_of_norm_lt_one' hr
+    (Asymptotics.isBigO_norm_left.mpr (aux_IsBigO_mul k l p hf))), fun n z hz => ?_⟩
+  have h0 := pow_le_pow_left₀ (norm_nonneg _) (norm_coe_le_norm (mkOfCompact c) ⟨z, hz⟩) n
+  simp only [norm_mkOfCompact, mkOfCompact_apply, ContinuousMap.coe_mk, ← exp_nsmul', Pi.smul_apply,
+    iteratedDerivWithin_cexp_aux k n p isOpen_upperHalfPlaneSet (hK hz), smul_eq_mul,
+    norm_mul, norm_pow, Complex.norm_div, norm_ofNat, norm_real, Real.norm_eq_abs, norm_I, mul_one,
+    norm_natCast, abs_norm, ge_iff_le, r, c] at *
+  rw [← mul_assoc]
+  gcongr
+  convert! h0
+  rw [← norm_pow]; rw [← exp_nsmul']
 
 Depends on / 依赖: CompactSpace, Complex.exp, ContinuousMap, ContinuousMap.coe_mk, Real.zero_lt_one, SummableLocallyUniformlyOn_of_locally_bounded, coe_mk, fun_prop, isCompact_iff_isCompact_univ, isCompact_iff_isCompact_univ.mp, isCompact_univ_iff, isCompact_univ_iff.mp, isOpen_upperHalfPlaneSet, mkOfCompact, mkOfCompact_apply, norm_lt_iff_of_compact, norm_norm, zero_lt_one
 -/
@@ -190,7 +234,8 @@ theorem summableLocallyUniformlyOn_iteratedDerivWithin_cexp
   have h0 : (fun n : Nat => (1 : Complex)) =O[atTop] fun n => ((n ^ 1) : Real) := by
     simp only [Asymptotics.isBigO_iff, norm_one, norm_pow, Real.norm_natCast, eventually_atTop]
     exact ⟨1, 1, fun b hb => by norm_cast; simp [hb]⟩
-  simpa using summableLocallyUniformlyOn_iteratedDerivWithin_s
+  simpa using summableLocallyUniformlyOn_iteratedDerivWithin_smul_cexp k 1 (p := 1)
+    (by norm_num) h0
 
 中文:
 定理 summableLocallyUniformlyOn_iteratedDerivWithin_cexp
@@ -199,7 +244,8 @@ theorem summableLocallyUniformlyOn_iteratedDerivWithin_cexp
   have h0 : (fun n : Nat => (1 : Complex)) =O[atTop] fun n => ((n ^ 1) : Real) := by
     simp only [Asymptotics.isBigO_iff, norm_one, norm_pow, Real.norm_natCast, eventually_atTop]
     exact ⟨1, 1, fun b hb => by norm_cast; simp [hb]⟩
-  simpa using summableLocallyUniformlyOn_iteratedDerivWithin_s
+  simpa using summableLocallyUniformlyOn_iteratedDerivWithin_smul_cexp k 1 (p := 1)
+    (by norm_num) h0
 
 Depends on / 依赖: Asymptotics, Asymptotics.isBigO_iff, Real.norm_natCast, eventually_atTop, isBigO_iff, norm_natCast, norm_one, norm_pow, summableLocallyUniformlyOn_iteratedDerivWithin_smul_cexp
 -/
@@ -254,7 +300,8 @@ lemma iteratedDerivWithin_tsum_cexp_eq
   · exact fun x hx => summable_geometric_iff_norm_lt_one.mpr
       (UpperHalfPlane.norm_exp_two_pi_I_lt_one ⟨x, hx⟩)
   · exact fun n _ _ => summableLocallyUniformlyOn_iteratedDerivWithin_cexp n
-  · exact fun n l z hl 
+  · exact fun n l z hl hz => differentiableAt_iteratedDerivWithin_cexp n l
+      isOpen_upperHalfPlaneSet hz
 
 中文:
 引理 iteratedDerivWithin_tsum_cexp_eq
@@ -264,7 +311,8 @@ lemma iteratedDerivWithin_tsum_cexp_eq
   · exact fun x hx => summable_geometric_iff_norm_lt_one.mpr
       (UpperHalfPlane.norm_exp_two_pi_I_lt_one ⟨x, hx⟩)
   · exact fun n _ _ => summableLocallyUniformlyOn_iteratedDerivWithin_cexp n
-  · exact fun n l z hl 
+  · exact fun n l z hl hz => differentiableAt_iteratedDerivWithin_cexp n l
+      isOpen_upperHalfPlaneSet hz
 
 Depends on / 依赖: UpperHalfPlane, UpperHalfPlane.norm_exp_two_pi_I_lt_one, differentiableAt_iteratedDerivWithin_cexp, isOpen_upperHalfPlaneSet, iteratedDerivWithin_tsum, norm_exp_two_pi_I_lt_one, summableLocallyUniformlyOn_iteratedDerivWithin_cexp, summable_geometric_iff_norm_lt_one, summable_geometric_iff_norm_lt_one.mpr
 -/
@@ -287,7 +335,8 @@ lemma contDiffOn_tsum_cexp
   proof: contDiffOn_of_differentiableOn_deriv fun m _ z hz =>
   (((summableLocallyUniformlyOn_iteratedDerivWithin_cexp m).differentiableOn
   isOpen_upperHalfPlaneSet (fun n _ hz => differentiableAt_iteratedDerivWithin_cexp n m
-  isOpen_upperHalfPlaneSet hz)) z hz).congr (fun z hz => iteratedDerivWithin_tsum_
+  isOpen_upperHalfPlaneSet hz)) z hz).congr (fun z hz => iteratedDerivWithin_tsum_cexp_eq m ⟨z, hz⟩)
+  (iteratedDerivWithin_tsum_cexp_eq m ⟨z, hz⟩)
 
 中文:
 引理 contDiffOn_tsum_cexp
@@ -295,7 +344,8 @@ lemma contDiffOn_tsum_cexp
   证明: contDiffOn_of_differentiableOn_deriv fun m _ z hz =>
   (((summableLocallyUniformlyOn_iteratedDerivWithin_cexp m).differentiableOn
   isOpen_upperHalfPlaneSet (fun n _ hz => differentiableAt_iteratedDerivWithin_cexp n m
-  isOpen_upperHalfPlaneSet hz)) z hz).congr (fun z hz => iteratedDerivWithin_tsum_
+  isOpen_upperHalfPlaneSet hz)) z hz).congr (fun z hz => iteratedDerivWithin_tsum_cexp_eq m ⟨z, hz⟩)
+  (iteratedDerivWithin_tsum_cexp_eq m ⟨z, hz⟩)
 
 Depends on / 依赖: contDiffOn_of_differentiableOn_deriv, differentiableAt_iteratedDerivWithin_cexp, differentiableOn, isOpen_upperHalfPlaneSet, iteratedDerivWithin_tsum_cexp_eq, summableLocallyUniformlyOn_iteratedDerivWithin_cexp
 -/
@@ -317,7 +367,23 @@ lemma iteratedDerivWithin_tsum_exp_aux_eq
   have : iteratedDerivWithin k (fun z => ((π * I) -
     (2 * π * I) * ∑' n : Nat, cexp (2 * π * I * z) ^ n)) ℍₒ z =
     -(2 * π * I) * ∑' n : Nat, iteratedDerivWithin k (fun s : Complex => cexp (2 * π * I * s) ^ n) ℍₒ z := by
-    rw [iteratedDerivWithin_const_sub hk]; rw [iteratedDerivWithin_fun_
+    rw [iteratedDerivWithin_const_sub hk]; rw [iteratedDerivWithin_fun_neg]; rw [iteratedDerivWithin_const_mul (by simpa using z.2) (isOpen_upperHalfPlaneSet.uniqueDiffOn)]
+    · simp only [iteratedDerivWithin_tsum_cexp_eq, neg_mul]
+    · exact (contDiffOn_tsum_cexp k).contDiffWithinAt (by simpa using z.2)
+  have h : -(2 * π * I * (2 * π * I) ^ k) * ∑' (n : Nat), n ^ k * cexp (2 * π * I * z) ^ n =
+        -(2 * π * I) * ∑' n : Nat, (2 * π * I * n) ^ k * cexp (2 * π * I * z) ^ n := by
+    simp_rw [← tsum_mul_left]
+    congr
+    ext y
+    ring
+  simp only [this, neg_mul, pow_succ', h, neg_inj, mul_eq_mul_left_iff, mul_eq_zero,
+    OfNat.ofNat_ne_zero, ofReal_eq_zero, Real.pi_ne_zero, or_self, I_ne_zero, or_false]
+  congr
+  ext n
+  have := exp_nsmul' (p := 1) (a := 2 * π * I) (n := n)
+  simp_rw [div_one] at this
+  simpa [this, UpperHalfPlane.coe] using
+    iteratedDerivWithin_cexp_aux k n 1 isOpen_upperHalfPlaneSet z.2
 
 中文:
 引理 iteratedDerivWithin_tsum_exp_aux_eq
@@ -326,7 +392,23 @@ lemma iteratedDerivWithin_tsum_exp_aux_eq
   have : iteratedDerivWithin k (fun z => ((π * I) -
     (2 * π * I) * ∑' n : Nat, cexp (2 * π * I * z) ^ n)) ℍₒ z =
     -(2 * π * I) * ∑' n : Nat, iteratedDerivWithin k (fun s : Complex => cexp (2 * π * I * s) ^ n) ℍₒ z := by
-    rw [iteratedDerivWithin_const_sub hk]; rw [iteratedDerivWithin_fun_
+    rw [iteratedDerivWithin_const_sub hk]; rw [iteratedDerivWithin_fun_neg]; rw [iteratedDerivWithin_const_mul (by simpa using z.2) (isOpen_upperHalfPlaneSet.uniqueDiffOn)]
+    · simp only [iteratedDerivWithin_tsum_cexp_eq, neg_mul]
+    · exact (contDiffOn_tsum_cexp k).contDiffWithinAt (by simpa using z.2)
+  have h : -(2 * π * I * (2 * π * I) ^ k) * ∑' (n : Nat), n ^ k * cexp (2 * π * I * z) ^ n =
+        -(2 * π * I) * ∑' n : Nat, (2 * π * I * n) ^ k * cexp (2 * π * I * z) ^ n := by
+    simp_rw [← tsum_mul_left]
+    congr
+    ext y
+    ring
+  simp only [this, neg_mul, pow_succ', h, neg_inj, mul_eq_mul_left_iff, mul_eq_zero,
+    OfNat.ofNat_ne_zero, ofReal_eq_zero, Real.pi_ne_zero, or_self, I_ne_zero, or_false]
+  congr
+  ext n
+  have := exp_nsmul' (p := 1) (a := 2 * π * I) (n := n)
+  simp_rw [div_one] at this
+  simpa [this, UpperHalfPlane.coe] using
+    iteratedDerivWithin_cexp_aux k n 1 isOpen_upperHalfPlaneSet z.2
 -/
 private lemma iteratedDerivWithin_tsum_exp_aux_eq {k : Nat} (hk : 1 <= k) (z : ℍ) :
     iteratedDerivWithin k (fun z => ((π * I) -
@@ -363,7 +445,15 @@ theorem EisensteinSeries.qExpansion_identity
   have : (-1) ^ k * k ! * ∑' n : Int, 1 / ((z : Complex) + n) ^ (k + 1) =
     -(2 * π * I) ^ (k + 1) * ∑' n : Nat, n ^ k * cexp (2 * π * I * z) ^ n := by
     rw [← iteratedDerivWithin_tsum_exp_aux_eq hk z]; rw [← iteratedDerivWithin_cot_pi_mul_eq_mul_tsum_div_pow hk (by simpa using z.2)]
-    exac
+    exact iteratedDerivWithin_congr (fun x hx => by (simpa using pi_mul_cot_pi_q_exp ⟨x, hx⟩))
+      (by simpa using z.2)
+  simp_rw [(eq_inv_mul_iff_mul_eq₀ (by simp [Nat.factorial_ne_zero])).mpr this, ← tsum_mul_left]
+  congr
+  ext n
+  rw [show (-2 * π * I) ^ (k + 1) = (-1) ^ (k + 1) * (2 * π * I) ^ (k + 1) by rw [← neg_pow]; ring]
+  field_simp
+  ring_nf
+  simp [Nat.mul_two]
 
 中文:
 定理 EisensteinSeries.qExpansion_identity
@@ -372,7 +462,15 @@ theorem EisensteinSeries.qExpansion_identity
   have : (-1) ^ k * k ! * ∑' n : Int, 1 / ((z : Complex) + n) ^ (k + 1) =
     -(2 * π * I) ^ (k + 1) * ∑' n : Nat, n ^ k * cexp (2 * π * I * z) ^ n := by
     rw [← iteratedDerivWithin_tsum_exp_aux_eq hk z]; rw [← iteratedDerivWithin_cot_pi_mul_eq_mul_tsum_div_pow hk (by simpa using z.2)]
-    exac
+    exact iteratedDerivWithin_congr (fun x hx => by (simpa using pi_mul_cot_pi_q_exp ⟨x, hx⟩))
+      (by simpa using z.2)
+  simp_rw [(eq_inv_mul_iff_mul_eq₀ (by simp [Nat.factorial_ne_zero])).mpr this, ← tsum_mul_left]
+  congr
+  ext n
+  rw [show (-2 * π * I) ^ (k + 1) = (-1) ^ (k + 1) * (2 * π * I) ^ (k + 1) by rw [← neg_pow]; ring]
+  field_simp
+  ring_nf
+  simp [Nat.mul_two]
 
 Depends on / 依赖: Nat.factorial_ne_zero, factorial_ne_zero, iteratedDerivWithin_congr, iteratedDerivWithin_cot_pi_mul_eq_mul_tsum_div_pow, iteratedDerivWithin_tsum_exp_aux_eq, pi_mul_cot_pi_q_exp, simp_rw, tsum_mul_left
 -/
@@ -404,7 +502,7 @@ lemma summable_pow_mul_cexp
   apply ((summableLocallyUniformlyOn_iteratedDerivWithin_smul_cexp 0 k (p := 1)
     (f := fun n => (n ^ k : Complex)) (by norm_num)
     (by simp [← Complex.isBigO_ofReal_right, Asymptotics.isBigO_refl])).summable he).congr
-  grind [
+  grind [ofReal_one, iteratedDerivWithin_zero, Pi.smul_apply, smul_eq_mul]
 
 中文:
 引理 summable_pow_mul_cexp
@@ -415,7 +513,7 @@ lemma summable_pow_mul_cexp
   apply ((summableLocallyUniformlyOn_iteratedDerivWithin_smul_cexp 0 k (p := 1)
     (f := fun n => (n ^ k : Complex)) (by norm_num)
     (by simp [← Complex.isBigO_ofReal_right, Asymptotics.isBigO_refl])).summable he).congr
-  grind [
+  grind [ofReal_one, iteratedDerivWithin_zero, Pi.smul_apply, smul_eq_mul]
 
 Depends on / 依赖: Asymptotics, Asymptotics.isBigO_refl, Complex.isBigO_ofReal_right, Pi.smul_apply, isBigO_ofReal_right, isBigO_refl, iteratedDerivWithin_zero, ofReal_one, smul_apply, smul_eq_mul, summable, summableLocallyUniformlyOn_iteratedDerivWithin_smul_cexp
 -/
@@ -512,7 +610,20 @@ lemma tsum_eisSummand_eq_tsum_sigma_mul_cexp_pow
   rw [← (finTwoArrowEquiv Int).symm.tsum_eq]; rw [finTwoArrowEquiv_symm_apply]; rw [Summable.tsum_prod (summable_prod_eisSummand hk z)]; rw [tsum_int_eq_zero_add_two_mul_tsum_pnat (fun n => ?h₁)
       (by simpa using (summable_prod_eisSummand hk z).prod)]
   case h₁ =>
-    nth_rewrite 1 [← tsum_co
+    nth_rewrite 1 [← tsum_comp_neg]
+    exact tsum_congr fun y => by simp [eisSummand, ← neg_add _ (y : Complex), -neg_add_rev, hk2.neg_pow]
+  have H (b : Nat+) := qExpansion_identity_pnat (k := k - 1) (by grind) ⟨b * z, by simpa using z.2⟩
+  simp_rw [show k - 1 + 1 = k by grind, one_div] at H
+  simp only [neg_mul] at H
+  rw [nsmul_eq_mul]; rw [mul_assoc]
+  congr
+  · simp [eisSummand, two_mul_riemannZeta_eq_tsum_int_inv_pow_of_even (by grind) hk2]
+  · suffices ∑' (m : Nat+) (n : Nat+), (n : Nat) ^ (k - 1) * cexp (2 * π * I * (m * z)) ^ (n : Nat) =
+        ∑' (m : Nat+) (n : Nat+), (n : Nat) ^ (k - 1) * cexp (2 * π * I * z) ^ (m * n : Nat) by
+      simp [eisSummand, H, tsum_mul_left,
+        ← tsum_prod_pow_eq_tsum_sigma (k - 1) (norm_exp_two_pi_I_lt_one z), this]
+    simp_rw [← Complex.exp_nat_mul]
+    exact tsum_congr₂ (fun m n => by push_cast; ring_nf)
 
 中文:
 引理 tsum_eisSummand_eq_tsum_sigma_mul_cexp_pow
@@ -521,7 +632,20 @@ lemma tsum_eisSummand_eq_tsum_sigma_mul_cexp_pow
   rw [← (finTwoArrowEquiv Int).symm.tsum_eq]; rw [finTwoArrowEquiv_symm_apply]; rw [Summable.tsum_prod (summable_prod_eisSummand hk z)]; rw [tsum_int_eq_zero_add_two_mul_tsum_pnat (fun n => ?h₁)
       (by simpa using (summable_prod_eisSummand hk z).prod)]
   case h₁ =>
-    nth_rewrite 1 [← tsum_co
+    nth_rewrite 1 [← tsum_comp_neg]
+    exact tsum_congr fun y => by simp [eisSummand, ← neg_add _ (y : Complex), -neg_add_rev, hk2.neg_pow]
+  have H (b : Nat+) := qExpansion_identity_pnat (k := k - 1) (by grind) ⟨b * z, by simpa using z.2⟩
+  simp_rw [show k - 1 + 1 = k by grind, one_div] at H
+  simp only [neg_mul] at H
+  rw [nsmul_eq_mul]; rw [mul_assoc]
+  congr
+  · simp [eisSummand, two_mul_riemannZeta_eq_tsum_int_inv_pow_of_even (by grind) hk2]
+  · suffices ∑' (m : Nat+) (n : Nat+), (n : Nat) ^ (k - 1) * cexp (2 * π * I * (m * z)) ^ (n : Nat) =
+        ∑' (m : Nat+) (n : Nat+), (n : Nat) ^ (k - 1) * cexp (2 * π * I * z) ^ (m * n : Nat) by
+      simp [eisSummand, H, tsum_mul_left,
+        ← tsum_prod_pow_eq_tsum_sigma (k - 1) (norm_exp_two_pi_I_lt_one z), this]
+    simp_rw [← Complex.exp_nat_mul]
+    exact tsum_congr₂ (fun m n => by push_cast; ring_nf)
 
 Depends on / 依赖: Summable, Summable.tsum_prod, eisSummand, finTwoArrowEquiv, finTwoArrowEquiv_symm_apply, hk2.neg_pow, neg_add, neg_add_rev, neg_pow, nth_rewrite, qExpansion_identity_pnat, simp_rw, summable_prod_eisSummand, symm.tsum_eq, tsum_comp_neg, tsum_congr, tsum_eq, tsum_int_eq_zero_add_two_mul_tsum_pnat, tsum_prod
 -/
@@ -583,7 +707,24 @@ lemma tsum_eisSummand_eq_riemannZeta_mul_eisensteinSeries
   have hk1 : 1 < k := by grind
   have hk2 : 3 <= (k : Int) := mod_cast hk
   simp_rw [← gammaSetDivGcdSigmaEquiv.symm.tsum_eq, gammaSetDivGcdSigmaEquiv_symm_eq]
-  rw [eisensteinSeries]; rw [Summable.tsum_sigma ?hsumm]; rw [zeta_nat_eq_tsum_of_gt_one hk1]; rw [tsum_mul_tsum_of_summable_norm (by sim
+  rw [eisensteinSeries]; rw [Summable.tsum_sigma ?hsumm]; rw [zeta_nat_eq_tsum_of_gt_one hk1]; rw [tsum_mul_tsum_of_summable_norm (by simp [hk1]) ((summable_norm_eisSummand hk2 z).subtype _)]
+  case hsumm =>
+    exact gammaSetDivGcdSigmaEquiv.symm.summable_iff.mpr (summable_norm_eisSummand hk2 z).of_norm
+.congr by simp
+  simp_rw [one_div]
+  rw [Summable.tsum_prod' ?h₁ fun b => ?h₂]
+  case h₁ =>
+    exact summable_mul_of_summable_norm (f := fun (n : Nat) => ((n : Complex) ^ k)⁻¹)
+      (g := fun (v : gammaSet 1 1 0) => eisSummand k v z) (by simp [hk1])
+      ((summable_norm_eisSummand hk2 z).subtype _)
+  case h₂ =>
+    simpa using ((summable_norm_eisSummand hk2 z).subtype _).of_norm.mul_left (a := ((b : Complex) ^ k)⁻¹)
+  refine tsum_congr fun b => ?_
+  rcases eq_or_ne b 0 with rfl | hb
+  · simp [show ((0 : Complex) ^ k)⁻¹ = 0 by aesop, eisSummand_of_gammaSet_eq_divIntMap]
+  · have : NeZero b := ⟨hb⟩
+    simpa [eisSummand_of_gammaSet_eq_divIntMap k z, tsum_mul_left, hb]
+      using (gammaSetDivGcdEquiv b).tsum_eq (eisSummand k · z)
 
 中文:
 引理 tsum_eisSummand_eq_riemannZeta_mul_eisensteinSeries
@@ -592,7 +733,24 @@ lemma tsum_eisSummand_eq_riemannZeta_mul_eisensteinSeries
   have hk1 : 1 < k := by grind
   have hk2 : 3 <= (k : Int) := mod_cast hk
   simp_rw [← gammaSetDivGcdSigmaEquiv.symm.tsum_eq, gammaSetDivGcdSigmaEquiv_symm_eq]
-  rw [eisensteinSeries]; rw [Summable.tsum_sigma ?hsumm]; rw [zeta_nat_eq_tsum_of_gt_one hk1]; rw [tsum_mul_tsum_of_summable_norm (by sim
+  rw [eisensteinSeries]; rw [Summable.tsum_sigma ?hsumm]; rw [zeta_nat_eq_tsum_of_gt_one hk1]; rw [tsum_mul_tsum_of_summable_norm (by simp [hk1]) ((summable_norm_eisSummand hk2 z).subtype _)]
+  case hsumm =>
+    exact gammaSetDivGcdSigmaEquiv.symm.summable_iff.mpr (summable_norm_eisSummand hk2 z).of_norm
+.congr by simp
+  simp_rw [one_div]
+  rw [Summable.tsum_prod' ?h₁ fun b => ?h₂]
+  case h₁ =>
+    exact summable_mul_of_summable_norm (f := fun (n : Nat) => ((n : Complex) ^ k)⁻¹)
+      (g := fun (v : gammaSet 1 1 0) => eisSummand k v z) (by simp [hk1])
+      ((summable_norm_eisSummand hk2 z).subtype _)
+  case h₂ =>
+    simpa using ((summable_norm_eisSummand hk2 z).subtype _).of_norm.mul_left (a := ((b : Complex) ^ k)⁻¹)
+  refine tsum_congr fun b => ?_
+  rcases eq_or_ne b 0 with rfl | hb
+  · simp [show ((0 : Complex) ^ k)⁻¹ = 0 by aesop, eisSummand_of_gammaSet_eq_divIntMap]
+  · have : NeZero b := ⟨hb⟩
+    simpa [eisSummand_of_gammaSet_eq_divIntMap k z, tsum_mul_left, hb]
+      using (gammaSetDivGcdEquiv b).tsum_eq (eisSummand k · z)
 
 Depends on / 依赖: Summable, Summable.tsum_sigma, eisensteinSeries, gammaSetDivGcdSigmaEquiv, gammaSetDivGcdSigmaEquiv.symm.summable_iff.mpr, gammaSetDivGcdSigmaEquiv.symm.tsum_eq, gammaSetDivGcdSigmaEquiv_symm_eq, mod_cast, of_norm, one_div, simp_rw, subtype, summable_iff, summable_norm_eisSummand, tsum_eq, tsum_mul_tsum_of_summable_norm, tsum_sigma, zeta_nat_eq_tsum_of_gt_one
 -/
@@ -630,7 +788,9 @@ lemma EisensteinSeries.q_expansion_riemannZeta
   rw [show E hk z = (1 / 2 : Complex) • eisensteinSeriesSIF (N := 1) 0 k z from rfl]; rw [eisensteinSeriesSIF_apply 0 k z]; rw [eisensteinSeries]
   have HE1 := tsum_eisSummand_eq_tsum_sigma_mul_cexp_pow hk hk2 z
   have HE2 := tsum_eisSummand_eq_riemannZeta_mul_eisensteinSeries hk z
-have z2 : riem
+have z2 : riemannZeta k != 0 := riemannZeta_ne_zero_of_one_lt_re by norm_cast; grind
+  simp [eisSummand, eisensteinSeries, ← inv_mul_eq_iff_eq_mul₀ z2] at HE1 HE2 ⊢
+  grind
 
 中文:
 引理 EisensteinSeries.q_expansion_riemannZeta
@@ -639,7 +799,9 @@ have z2 : riem
   rw [show E hk z = (1 / 2 : Complex) • eisensteinSeriesSIF (N := 1) 0 k z from rfl]; rw [eisensteinSeriesSIF_apply 0 k z]; rw [eisensteinSeries]
   have HE1 := tsum_eisSummand_eq_tsum_sigma_mul_cexp_pow hk hk2 z
   have HE2 := tsum_eisSummand_eq_riemannZeta_mul_eisensteinSeries hk z
-have z2 : riem
+have z2 : riemannZeta k != 0 := riemannZeta_ne_zero_of_one_lt_re by norm_cast; grind
+  simp [eisSummand, eisensteinSeries, ← inv_mul_eq_iff_eq_mul₀ z2] at HE1 HE2 ⊢
+  grind
 
 Depends on / 依赖: eisSummand, eisensteinSeries, eisensteinSeriesSIF, eisensteinSeriesSIF_apply, riemannZeta, riemannZeta_ne_zero_of_one_lt_re, tsum_eisSummand_eq_riemannZeta_mul_eisensteinSeries, tsum_eisSummand_eq_tsum_sigma_mul_cexp_pow
 -/
@@ -663,7 +825,10 @@ lemma eisensteinSeries_coeff_identity
   have h2 : k = 2 * (k / 2 - 1 + 1) := by grind
   set m := k / 2 - 1
   rw [h2]; rw [Nat.cast_mul 2 (m + 1)]; rw [Nat.cast_two]; rw [riemannZeta_two_mul_nat (show m + 1 != 0 by grind)]; rw [show (2 * (m + 1))! = 2 * (m + 1) * (2 * m + 1)! by grind [Nat.factorial_succ],
-    show 2 * (m + 1) - 1 = 2
+    show 2 * (m + 1) - 1 = 2 * m + 1 by grind, mul_pow, mul_pow, pow_mul I, I_sq]
+  norm_cast
+  simp [field]
+  grind
 
 中文:
 引理 eisensteinSeries_coeff_identity
@@ -672,7 +837,10 @@ lemma eisensteinSeries_coeff_identity
   have h2 : k = 2 * (k / 2 - 1 + 1) := by grind
   set m := k / 2 - 1
   rw [h2]; rw [Nat.cast_mul 2 (m + 1)]; rw [Nat.cast_two]; rw [riemannZeta_two_mul_nat (show m + 1 != 0 by grind)]; rw [show (2 * (m + 1))! = 2 * (m + 1) * (2 * m + 1)! by grind [Nat.factorial_succ],
-    show 2 * (m + 1) - 1 = 2
+    show 2 * (m + 1) - 1 = 2 * m + 1 by grind, mul_pow, mul_pow, pow_mul I, I_sq]
+  norm_cast
+  simp [field]
+  grind
 -/
 private lemma eisensteinSeries_coeff_identity {k : Nat} (hk2 : Even k) (hkn0 : k != 0) :
     (riemannZeta k)⁻¹ * (-2 * π * I) ^ k / (k - 1)! = -(2 * k / bernoulli k) := by
@@ -761,7 +929,22 @@ lemma EisensteinSeries.E_qExpansion_coeff
   set β : Complex := -(2 * k / bernoulli k : Complex)
   set c : Nat -> Complex := fun m => if m = 0 then 1 else β * ↑(σ (k - 1) m)
   suffices forall τ : ℍ, HasSum (fun m => c m • 𝕢 (1 : Real) τ ^ m) (E hk τ) from
-    (ModularFormClass.qExpansion_coeff_unique one_pos one_mem_strictPeriods_SL this 
+    (ModularFormClass.qExpansion_coeff_unique one_pos one_mem_strictPeriods_SL this m).symm
+  intro τ
+  have hS : Summable fun n : Nat => (σ (k - 1) (n + 1) : Complex) * cexp (2 * π * I * τ) ^ (n + 1) :=
+    (summable_nat_add_iff 1).mpr (summable_sigma_mul_cexp_pow (by omega) τ)
+  rw [← hasSum_nat_add_iff' 1]
+  simp only [Nat.add_eq_zero_iff, one_ne_zero, and_false, ↓reduceIte, smul_eq_mul, Finset.range_one,
+    ite_mul, one_mul, Finset.sum_singleton, pow_zero, c]
+  have hval : E hk τ - 1 = β * ∑' n : Nat, (σ (k - 1) (n + 1)) * cexp (2 * π * I * τ) ^ (n + 1) := by
+    have := q_expansion_bernoulli hk hk2 τ
+    simp_rw [zpow_natCast] at this
+    rw [this]; rw [← tsum_pnat_eq_tsum_succ (f := fun n => (σ (k - 1) n : Complex) * cexp (2 * π * I * τ) ^ n)]
+    ring
+  rw [hval]
+  convert! (hS.mul_left β).hasSum using 1
+  · grind [Periodic.qParam, ofReal_one, div_one]
+  · rw [tsum_mul_left]
 
 中文:
 引理 EisensteinSeries.E_qExpansion_coeff
@@ -770,7 +953,22 @@ lemma EisensteinSeries.E_qExpansion_coeff
   set β : Complex := -(2 * k / bernoulli k : Complex)
   set c : Nat -> Complex := fun m => if m = 0 then 1 else β * ↑(σ (k - 1) m)
   suffices forall τ : ℍ, HasSum (fun m => c m • 𝕢 (1 : Real) τ ^ m) (E hk τ) from
-    (ModularFormClass.qExpansion_coeff_unique one_pos one_mem_strictPeriods_SL this 
+    (ModularFormClass.qExpansion_coeff_unique one_pos one_mem_strictPeriods_SL this m).symm
+  intro τ
+  have hS : Summable fun n : Nat => (σ (k - 1) (n + 1) : Complex) * cexp (2 * π * I * τ) ^ (n + 1) :=
+    (summable_nat_add_iff 1).mpr (summable_sigma_mul_cexp_pow (by omega) τ)
+  rw [← hasSum_nat_add_iff' 1]
+  simp only [Nat.add_eq_zero_iff, one_ne_zero, and_false, ↓reduceIte, smul_eq_mul, Finset.range_one,
+    ite_mul, one_mul, Finset.sum_singleton, pow_zero, c]
+  have hval : E hk τ - 1 = β * ∑' n : Nat, (σ (k - 1) (n + 1)) * cexp (2 * π * I * τ) ^ (n + 1) := by
+    have := q_expansion_bernoulli hk hk2 τ
+    simp_rw [zpow_natCast] at this
+    rw [this]; rw [← tsum_pnat_eq_tsum_succ (f := fun n => (σ (k - 1) n : Complex) * cexp (2 * π * I * τ) ^ n)]
+    ring
+  rw [hval]
+  convert! (hS.mul_left β).hasSum using 1
+  · grind [Periodic.qParam, ofReal_one, div_one]
+  · rw [tsum_mul_left]
 
 Depends on / 依赖: HasSum, ModularFormClass, ModularFormClass.qExpansion_coeff_unique, Summable, bernoulli, hasSum_nat_add_i, one_mem_strictPeriods_SL, one_pos, qExpansion_coeff_unique, summable_nat_add_iff, summable_sigma_mul_cexp_pow
 -/

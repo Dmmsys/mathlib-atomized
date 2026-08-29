@@ -345,7 +345,10 @@ theorem Bornology.IsBounded.uniformContinuousOn_smul
   refine ⟨ε / (2 * C), by positivity, fun ⟨a, b⟩ hab ⟨x, y⟩ hxy h => ?_⟩
   grw [hC, Metric.mem_ball, Prod.dist_eq, max_lt_iff] at hab hxy
   rw [Prod.dist_eq]; rw [max_le_iff] at h
-  dsimp at hab
+  dsimp at hab hxy h ⊢
+  grw [dist_triangle _ (a • y), dist_pair_smul, dist_smul_pair, hab.1, hxy.2, h.2, h.1]
+  field_simp
+  norm_num1
 
 中文:
 定理 有界结构.IsBounded.uniformContinuousOn_smul
@@ -357,7 +360,10 @@ theorem Bornology.IsBounded.uniformContinuousOn_smul
   refine ⟨ε / (2 * C), by positivity, fun ⟨a, b⟩ hab ⟨x, y⟩ hxy h => ?_⟩
   grw [hC, Metric.mem_ball, Prod.dist_eq, max_lt_iff] at hab hxy
   rw [Prod.dist_eq]; rw [max_le_iff] at h
-  dsimp at hab
+  dsimp at hab hxy h ⊢
+  grw [dist_triangle _ (a • y), dist_pair_smul, dist_smul_pair, hab.1, hxy.2, h.2, h.1]
+  field_simp
+  norm_num1
 
 Depends on / 依赖: Metric, Metric.mem_ball, Metric.uniformContinuousOn_iff_le, Prod.dist_eq, dist_eq, dist_pair_smul, dist_smul_pair, dist_triangle, hs.subset_ball_lt, max_le_iff, max_lt_iff, mem_ball, norm_num1, subset_ball_lt, uniformContinuousOn_iff_le
 -/
@@ -404,7 +410,16 @@ theorem TendstoLocallyUniformlyOn.smul₀_of_isBoundedUnder
   rcases (hf x hx).sup (hg x hx) with ⟨C, hC⟩
   simp_rw [Filter.eventually_map, max_le_iff] at hC
   refine Tendsto.comp
-    (Metric.isBounded_ball (x := (0 : α × β)) (r := C + 1)).uniformContinuousOn_sm
+    (Metric.isBounded_ball (x := (0 : α × β)) (r := C + 1)).uniformContinuousOn_smul
+    (tendsto_inf.mpr ⟨H x hx, tendsto_principal.mpr ?_⟩)
+  filter_upwards [hF x hx (Metric.dist_mem_uniformity one_pos),
+    hG x hx (Metric.dist_mem_uniformity one_pos), tendsto_snd hC] with ⟨n, y⟩ hFn hGn hfg
+  simp only [mem_prod, Metric.mem_ball, Prod.dist_eq, Prod.fst_zero, Prod.snd_zero, sup_lt_iff,
+    mem_preimage, mem_ofPred] at hFn hGn hfg ⊢
+  grw [dist_triangle_left (F n y) 0 (f y), dist_triangle_left (G n y) 0 (g y)]
+  constructor <;> constructor <;> linarith
+
+@[to_fun]
 
 中文:
 定理 TendstoLocallyUniformlyOn.smul₀_of_isBoundedUnder
@@ -416,7 +431,16 @@ theorem TendstoLocallyUniformlyOn.smul₀_of_isBoundedUnder
   rcases (hf x hx).sup (hg x hx) with ⟨C, hC⟩
   simp_rw [Filter.eventually_map, max_le_iff] at hC
   refine Tendsto.comp
-    (Metric.isBounded_ball (x := (0 : α × β)) (r := C + 1)).uniformContinuousOn_sm
+    (Metric.isBounded_ball (x := (0 : α × β)) (r := C + 1)).uniformContinuousOn_smul
+    (tendsto_inf.mpr ⟨H x hx, tendsto_principal.mpr ?_⟩)
+  filter_upwards [hF x hx (Metric.dist_mem_uniformity one_pos),
+    hG x hx (Metric.dist_mem_uniformity one_pos), tendsto_snd hC] with ⟨n, y⟩ hFn hGn hfg
+  simp only [mem_prod, Metric.mem_ball, Prod.dist_eq, Prod.fst_zero, Prod.snd_zero, sup_lt_iff,
+    mem_preimage, mem_ofPred] at hFn hGn hfg ⊢
+  grw [dist_triangle_left (F n y) 0 (f y), dist_triangle_left (G n y) 0 (g y)]
+  constructor <;> constructor <;> linarith
+
+@[to_fun]
 
 Depends on / 依赖: Filter, Filter.eventually_map, Metric, Metric.dist_mem_uniformity, Metric.isBounded_ball, Tendsto, Tendsto.comp, dist_mem_uniformity, eventually_map, filter_upwards, hF.prodMk, isBounded_ball, max_le_iff, one_pos, prodMk, simp_rw, tendstoLocallyUniformlyOn_iff_forall_tendsto, tendsto_inf, tendsto_inf.mpr, tendsto_principal
 -/
@@ -795,7 +819,7 @@ instance Pi.instIsBoundedSMul
 (dist_smul_pair _ _ _).trans mul_le_mul_of_nonneg_left (dist_le_pi_dist _ _ _) dist_nonneg
   dist_pair_smul' x₁ x₂ y :=
     (dist_pi_le_iff <| by positivity).2 fun _ =>
-(dist_pair_smul _ _ _).trans mul_le_mul_of_nonneg_left (dist_le_pi_dist _ 0 _) dist_no
+(dist_pair_smul _ _ _).trans mul_le_mul_of_nonneg_left (dist_le_pi_dist _ 0 _) dist_nonneg
 
 中文:
 实例 依赖函数类型.instIsBoundedSMul
@@ -804,7 +828,7 @@ instance Pi.instIsBoundedSMul
 (dist_smul_pair _ _ _).trans mul_le_mul_of_nonneg_left (dist_le_pi_dist _ _ _) dist_nonneg
   dist_pair_smul' x₁ x₂ y :=
     (dist_pi_le_iff <| by positivity).2 fun _ =>
-(dist_pair_smul _ _ _).trans mul_le_mul_of_nonneg_left (dist_le_pi_dist _ 0 _) dist_no
+(dist_pair_smul _ _ _).trans mul_le_mul_of_nonneg_left (dist_le_pi_dist _ 0 _) dist_nonneg
 
 Depends on / 依赖: dist_le_pi_dist, dist_nonneg, dist_pair_smul, dist_pi_le_iff, dist_smul_pair, mul_le_mul_of_nonneg_left
 -/
@@ -830,7 +854,7 @@ instance Pi.instIsBoundedSMul'
   dist_pair_smul' x₁ x₂ y :=
     (dist_pi_le_iff <| by positivity).2 fun _ =>
 (dist_pair_smul _ _ _).trans
-        mul_le_mul (dist_le_
+        mul_le_mul (dist_le_pi_dist _ _ _) (dist_le_pi_dist _ 0 _) dist_nonneg dist_nonneg
 
 中文:
 实例 依赖函数类型.instIsBoundedSMul'
@@ -841,7 +865,7 @@ instance Pi.instIsBoundedSMul'
   dist_pair_smul' x₁ x₂ y :=
     (dist_pi_le_iff <| by positivity).2 fun _ =>
 (dist_pair_smul _ _ _).trans
-        mul_le_mul (dist_le_
+        mul_le_mul (dist_le_pi_dist _ _ _) (dist_le_pi_dist _ 0 _) dist_nonneg dist_nonneg
 
 Depends on / 依赖: dist_le_pi_dist, dist_nonneg, dist_pair_smul, dist_pi_le_iff, dist_smul_pair, mul_le_mul
 -/
@@ -866,7 +890,8 @@ instance Prod.instIsBoundedSMul
   body: max_le ((dist_smul_pair _ _ _).trans <| mul_le_mul_of_nonneg_left (le_max_left _ _) dist_nonneg)
       ((dist_smul_pair _ _ _).trans <| mul_le_mul_of_nonneg_left (le_max_right _ _) dist_nonneg)
   dist_pair_smul' _x₁ _x₂ _y :=
-    max_le ((dist_pair_smul _ _ _).trans <| mul_le_mul_of_nonneg_left (le_
+    max_le ((dist_pair_smul _ _ _).trans <| mul_le_mul_of_nonneg_left (le_max_left _ _) dist_nonneg)
+      ((dist_pair_smul _ _ _).trans <| mul_le_mul_of_nonneg_left (le_max_right _ _) dist_nonneg)
 
 中文:
 实例 积类型.instIsBoundedSMul
@@ -874,7 +899,8 @@ instance Prod.instIsBoundedSMul
   定义体: max_le ((dist_smul_pair _ _ _).trans <| mul_le_mul_of_nonneg_left (le_max_left _ _) dist_nonneg)
       ((dist_smul_pair _ _ _).trans <| mul_le_mul_of_nonneg_left (le_max_right _ _) dist_nonneg)
   dist_pair_smul' _x₁ _x₂ _y :=
-    max_le ((dist_pair_smul _ _ _).trans <| mul_le_mul_of_nonneg_left (le_
+    max_le ((dist_pair_smul _ _ _).trans <| mul_le_mul_of_nonneg_left (le_max_left _ _) dist_nonneg)
+      ((dist_pair_smul _ _ _).trans <| mul_le_mul_of_nonneg_left (le_max_right _ _) dist_nonneg)
 
 Depends on / 依赖: dist_nonneg, dist_pair_smul, dist_smul_pair, le_max_left, le_max_right, max_le, mul_le_mul_of_nonneg_left
 -/

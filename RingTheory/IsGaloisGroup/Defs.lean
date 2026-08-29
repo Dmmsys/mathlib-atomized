@@ -79,7 +79,7 @@ theorem of_mulEquiv
   commutes := ⟨fun x a b => by simpa [he] using hG.commutes.smul_comm (e x) a b⟩
   isInvariant := ⟨fun b h =>
     have he' : forall (g : G) (x : B), e.symm g • x = g • x := fun g x => by simp [← he]
-    hG.isInvariant.isInvaria
+    hG.isInvariant.isInvariant b (fun g => by simpa [he'] using h (e.symm g))⟩
 
 中文:
 定理 of_mulEquiv
@@ -88,7 +88,7 @@ theorem of_mulEquiv
   commutes := ⟨fun x a b => by simpa [he] using hG.commutes.smul_comm (e x) a b⟩
   isInvariant := ⟨fun b h =>
     have he' : forall (g : G) (x : B), e.symm g • x = g • x := fun g x => by simp [← he]
-    hG.isInvariant.isInvaria
+    hG.isInvariant.isInvariant b (fun g => by simpa [he'] using h (e.symm g))⟩
 
 Depends on / 依赖: e.injective, eq_of_smul_eq_smul, faithful, hG.faithful.eq_of_smul_eq_smul, injective
 -/
@@ -177,7 +177,12 @@ theorem of_algEquiv
       apply e.injective
       simp [he]
     apply e.symm.injective
-    simpa [h', map_smul] using hG.commutes.smul_comm g a (e.sym
+    simpa [h', map_smul] using hG.commutes.smul_comm g a (e.symm b')⟩
+  isInvariant := ⟨fun x' hx' => by
+    obtain ⟨a, ha⟩ := hG.isInvariant.isInvariant (e.symm x') (fun g => by
+      apply e.injective
+      simp [he, hx'])
+    exact ⟨a, by rw [← e.commutes, ha, AlgEquiv.apply_symm_apply]⟩⟩
 
 中文:
 定理 of_algEquiv
@@ -188,7 +193,12 @@ theorem of_algEquiv
       apply e.injective
       simp [he]
     apply e.symm.injective
-    simpa [h', map_smul] using hG.commutes.smul_comm g a (e.sym
+    simpa [h', map_smul] using hG.commutes.smul_comm g a (e.symm b')⟩
+  isInvariant := ⟨fun x' hx' => by
+    obtain ⟨a, ha⟩ := hG.isInvariant.isInvariant (e.symm x') (fun g => by
+      apply e.injective
+      simp [he, hx'])
+    exact ⟨a, by rw [← e.commutes, ha, AlgEquiv.apply_symm_apply]⟩⟩
 
 Depends on / 依赖: eq_of_smul_eq_smul, faithful, hG.faithful.eq_of_smul_eq_smul
 -/
@@ -223,7 +233,8 @@ theorem of_ringHom_surjective
     exact hG.commutes.smul_comm g a b⟩
   isInvariant := ⟨by
     intro b h
-    obtain ⟨a, ha⟩ :
+    obtain ⟨a, ha⟩ := hG.isInvariant.isInvariant b h
+    exact ⟨e a, by rw [he, ha]⟩⟩
 
 中文:
 定理 of_ringHom_surjective
@@ -236,7 +247,8 @@ theorem of_ringHom_surjective
     exact hG.commutes.smul_comm g a b⟩
   isInvariant := ⟨by
     intro b h
-    obtain ⟨a, ha⟩ :
+    obtain ⟨a, ha⟩ := hG.isInvariant.isInvariant b h
+    exact ⟨e a, by rw [he, ha]⟩⟩
 
 Depends on / 依赖: faithful, hG.faithful
 -/
@@ -292,7 +304,9 @@ definition ringEquivFixedPoints
   map_mul' _ _ := by simp [Subtype.ext_iff]
   map_add' _ _ := by simp [Subtype.ext_iff]
   left_inv _ := by simp
-  right_inv x := by simpa [Subtype.ext_iff] using (hA.isInvariant.isInvarian
+  right_inv x := by simpa [Subtype.ext_iff] using (hA.isInvariant.isInvariant x x.prop).choose_spec
+
+@[simp]
 
 中文:
 定义 ringEquivFixedPoints
@@ -302,7 +316,9 @@ definition ringEquivFixedPoints
   map_mul' _ _ := by simp [Subtype.ext_iff]
   map_add' _ _ := by simp [Subtype.ext_iff]
   left_inv _ := by simp
-  right_inv x := by simpa [Subtype.ext_iff] using (hA.isInvariant.isInvarian
+  right_inv x := by simpa [Subtype.ext_iff] using (hA.isInvariant.isInvariant x x.prop).choose_spec
+
+@[simp]
 
 Depends on / 依赖: algebraMap, smul_algebraMap
 -/

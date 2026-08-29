@@ -99,7 +99,9 @@ lemma isSmall_iff_eq_ofHoms
     · intro hf
       exact ⟨equivShrink _ ⟨f, hf⟩, by simp⟩
     · rintro ⟨i, hi⟩
-      simp only [← W.arrow_mk_mem_toSet_iff, hi, Arrow.mk_e
+      simp only [← W.arrow_mk_mem_toSet_iff, hi, Arrow.mk_eq, Subtype.coe_prop]
+  · rintro ⟨_, _, _, _, rfl⟩
+    infer_instance
 
 中文:
 引理 isSmall_iff_eq_ofHoms
@@ -113,7 +115,9 @@ lemma isSmall_iff_eq_ofHoms
     · intro hf
       exact ⟨equivShrink _ ⟨f, hf⟩, by simp⟩
     · rintro ⟨i, hi⟩
-      simp only [← W.arrow_mk_mem_toSet_iff, hi, Arrow.mk_e
+      simp only [← W.arrow_mk_mem_toSet_iff, hi, Arrow.mk_eq, Subtype.coe_prop]
+  · rintro ⟨_, _, _, _, rfl⟩
+    infer_instance
 
 Depends on / 依赖: Arrow.mk_eq, Shrink, Subtype, Subtype.coe_prop, W.arrow_mk_mem_toSet_iff, W.toSet, arrow_mk_mem_toSet_iff, coe_prop, equivShrink, infer_instance, mk_eq, ofHoms_iff
 -/

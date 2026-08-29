@@ -57,7 +57,14 @@ definition normalizeDetFromEntries
   -- `List.ofFn` is exposed (unlike `Array.ofFn`) and so this reduction can be
   -- checked by the kernel
 have : (List.ofFn fun k : Fin ($n * $n) => $A k.divNat k.modNat) =Q xs := ⟨⟩
-  let hlis
+  let hlist : Q(List.ofFn (fun k : Fin ($n * $n) => $A k.divNat k.modNat) = $xs) := q(rfl)
+  let hArray := q($hlist ▸ List.toArray_ofFn)
+  let birdDet := q(BirdDet.birdDet $n $arrayExpr)
+  let detEqBirdDet := q($hArray ▸ Matrix.ofArray_ofFn $A ▸ BirdDet.det_eq_birdDet
+    (Array.ofFn fun k : Fin ($n * $n) => $A k.divNat k.modNat) Array.size_ofFn)
+  let birdDetNorm ← normalizeBirdDet birdDet
+  let detEqBirdDetRes : Simp.Result := ⟨birdDet, some detEqBirdDet, true⟩
+  detEqBirdDetRes.mkEqTrans birdDetNorm
 
 中文:
 定义 normalizeDetFromEntries
@@ -68,7 +75,14 @@ have : (List.ofFn fun k : Fin ($n * $n) => $A k.divNat k.modNat) =Q xs := ⟨⟩
   -- `List.ofFn` is exposed (unlike `Array.ofFn`) and so this reduction can be
   -- checked by the kernel
 have : (List.ofFn fun k : Fin ($n * $n) => $A k.divNat k.modNat) =Q xs := ⟨⟩
-  let hlis
+  let hlist : Q(List.ofFn (fun k : Fin ($n * $n) => $A k.divNat k.modNat) = $xs) := q(rfl)
+  let hArray := q($hlist ▸ List.toArray_ofFn)
+  let birdDet := q(BirdDet.birdDet $n $arrayExpr)
+  let detEqBirdDet := q($hArray ▸ Matrix.ofArray_ofFn $A ▸ BirdDet.det_eq_birdDet
+    (Array.ofFn fun k : Fin ($n * $n) => $A k.divNat k.modNat) Array.size_ofFn)
+  let birdDetNorm ← normalizeBirdDet birdDet
+  let detEqBirdDetRes : Simp.Result := ⟨birdDet, some detEqBirdDet, true⟩
+  detEqBirdDetRes.mkEqTrans birdDetNorm
 
 Depends on / 依赖: CofiniteTopology, CofiniteTopology.isClosed_iff.mpr, isClosed_iff
 -/
@@ -101,7 +115,13 @@ definition entriesOfMatrixLiteral?
   let (matrixRows, _, _) ← Matrix.matchVecConsPrefix n rows
   unless matrixRows.length == dim do return none
   let entriesByRow ← matrixRows.mapM fun row => do
-    let (entries, _, _) ← Matrix.matchVecConsP
+    let (entries, _, _) ← Matrix.matchVecConsPrefix n row
+    return entries
+  unless entriesByRow.all (·.length == dim) do return none
+  let entries ← entriesByRow.flatten.mapM fun entry => do
+    let some entry ← checkTypeQ entry α | throwError "expected matrix entry to have type {α}"
+    return entry
+  return some entries.toArray
 
 中文:
 定义 entriesOfMatrixLiteral?
@@ -112,7 +132,13 @@ definition entriesOfMatrixLiteral?
   let (matrixRows, _, _) ← Matrix.matchVecConsPrefix n rows
   unless matrixRows.length == dim do return none
   let entriesByRow ← matrixRows.mapM fun row => do
-    let (entries, _, _) ← Matrix.matchVecConsP
+    let (entries, _, _) ← Matrix.matchVecConsPrefix n row
+    return entries
+  unless entriesByRow.all (·.length == dim) do return none
+  let entries ← entriesByRow.flatten.mapM fun entry => do
+    let some entry ← checkTypeQ entry α | throwError "expected matrix entry to have type {α}"
+    return entry
+  return some entries.toArray
 -/
 private def entriesOfMatrixLiteral? {u : Level} {α : Q(Type u)} {n : Q(Nat)}
     (A : Q(Matrix (Fin $n) (Fin $n) $α)) :

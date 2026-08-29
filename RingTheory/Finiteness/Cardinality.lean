@@ -63,7 +63,7 @@ theorem AddSubmonoid.fg_iff_exists_fin_addMonoidHom
   rw [← S.toNatSubmodule_toAddSubmonoid]; rw [← Submodule.fg_iff_addSubmonoid_fg]; rw [Submodule.fg_iff_exists_fin_linearMap]
   exact exists_congr fun n => ⟨fun ⟨f, hf⟩ => ⟨f, hf ▸ LinearMap.range_toAddSubmonoid _⟩,
 fun ⟨f, hf⟩ => ⟨f.toNatLinearMap, Submodule.toAddSubmonoid_inj.mp
-      hf ▸ Line
+      hf ▸ LinearMap.range_toAddSubmonoid _⟩⟩
 
 中文:
 定理 加法子幺半群.fg_iff_存在_fin_addMonoidHom
@@ -72,7 +72,7 @@ fun ⟨f, hf⟩ => ⟨f.toNatLinearMap, Submodule.toAddSubmonoid_inj.mp
   rw [← S.toNatSubmodule_toAddSubmonoid]; rw [← Submodule.fg_iff_addSubmonoid_fg]; rw [Submodule.fg_iff_exists_fin_linearMap]
   exact exists_congr fun n => ⟨fun ⟨f, hf⟩ => ⟨f, hf ▸ LinearMap.range_toAddSubmonoid _⟩,
 fun ⟨f, hf⟩ => ⟨f.toNatLinearMap, Submodule.toAddSubmonoid_inj.mp
-      hf ▸ Line
+      hf ▸ LinearMap.range_toAddSubmonoid _⟩⟩
 
 Depends on / 依赖: LinearMap, LinearMap.range_toAddSubmonoid, S.toNatSubmodule_toAddSubmonoid, Submodule, Submodule.fg_iff_addSubmonoid_fg, Submodule.fg_iff_exists_fin_linearMap, Submodule.toAddSubmonoid_inj.mp, exists_congr, f.toNatLinearMap, fg_iff_addSubmonoid_fg, fg_iff_exists_fin_linearMap, range_toAddSubmonoid, toAddSubmonoid_inj, toNatLinearMap, toNatSubmodule_toAddSubmonoid
 -/
@@ -93,7 +93,7 @@ theorem AddSubgroup.fg_iff_exists_fin_addMonoidHom
   rw [← H.toIntSubmodule_toAddSubgroup]; rw [← Submodule.fg_iff_addSubgroup_fg]; rw [Submodule.fg_iff_exists_fin_linearMap]
   refine exists_congr fun n => ⟨fun ⟨f, hf⟩ => ⟨f, hf ▸ LinearMap.range_toAddSubgroup _⟩,
     fun ⟨f, hf⟩ => ⟨f.toIntLinearMap, Submodule.toAddSubmonoid_inj.mp ?_⟩⟩
-  simp [
+  simp [hf]
 
 中文:
 定理 加法子群.fg_iff_存在_fin_addMonoidHom
@@ -102,7 +102,7 @@ theorem AddSubgroup.fg_iff_exists_fin_addMonoidHom
   rw [← H.toIntSubmodule_toAddSubgroup]; rw [← Submodule.fg_iff_addSubgroup_fg]; rw [Submodule.fg_iff_exists_fin_linearMap]
   refine exists_congr fun n => ⟨fun ⟨f, hf⟩ => ⟨f, hf ▸ LinearMap.range_toAddSubgroup _⟩,
     fun ⟨f, hf⟩ => ⟨f.toIntLinearMap, Submodule.toAddSubmonoid_inj.mp ?_⟩⟩
-  simp [
+  simp [hf]
 
 Depends on / 依赖: H.toIntSubmodule_toAddSubgroup, LinearMap, LinearMap.range_toAddSubgroup, Submodule, Submodule.fg_iff_addSubgroup_fg, Submodule.fg_iff_exists_fin_linearMap, Submodule.toAddSubmonoid_inj.mp, exists_congr, f.toIntLinearMap, fg_iff_addSubgroup_fg, fg_iff_exists_fin_linearMap, range_toAddSubgroup, toAddSubmonoid_inj, toIntLinearMap, toIntSubmodule_toAddSubgroup
 -/

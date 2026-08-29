@@ -415,7 +415,14 @@ theorem infEDist_closure
   have ε0 : 0 < (ε / 2 : Real>=0∞) := by simpa [pos_iff_ne_zero] using εpos
   have : infEDist x (closure s) < infEDist x (closure s) + ε / 2 :=
     ENNReal.lt_add_right h.ne ε0.ne'
- 
+  obtain ⟨y : α, ycs : y in closure s, hy : edist x y < infEDist x (closure s) + ↑ε / 2⟩ :=
+    infEDist_lt_iff.mp this
+  obtain ⟨z : α, zs : z in s, dyz : edist y z < ↑ε / 2⟩ := EMetric.mem_closure_iff.1 ycs (ε / 2) ε0
+  calc
+    infEDist x s <= edist x z := infEDist_le_edist_of_mem zs
+    _ <= edist x y + edist y z := edist_triangle _ _ _
+    _ <= infEDist x (closure s) + ε / 2 + ε / 2 := add_le_add (le_of_lt hy) (le_of_lt dyz)
+    _ = infEDist x (closure s) + ↑ε := by rw [add_assoc, ENNReal.add_halves]
 
 中文:
 定理 infEDist_closure
@@ -426,7 +433,14 @@ theorem infEDist_closure
   have ε0 : 0 < (ε / 2 : Real>=0∞) := by simpa [pos_iff_ne_zero] using εpos
   have : infEDist x (closure s) < infEDist x (closure s) + ε / 2 :=
     ENNReal.lt_add_right h.ne ε0.ne'
- 
+  obtain ⟨y : α, ycs : y in closure s, hy : edist x y < infEDist x (closure s) + ↑ε / 2⟩ :=
+    infEDist_lt_iff.mp this
+  obtain ⟨z : α, zs : z in s, dyz : edist y z < ↑ε / 2⟩ := EMetric.mem_closure_iff.1 ycs (ε / 2) ε0
+  calc
+    infEDist x s <= edist x z := infEDist_le_edist_of_mem zs
+    _ <= edist x y + edist y z := edist_triangle _ _ _
+    _ <= infEDist x (closure s) + ε / 2 + ε / 2 := add_le_add (le_of_lt hy) (le_of_lt dyz)
+    _ = infEDist x (closure s) + ↑ε := by rw [add_assoc, ENNReal.add_halves]
 
 Depends on / 依赖: EMetric, EMetric.mem_closure_iff, ENNReal, ENNReal.le_of_forall_pos_le_add, ENNReal.lt_add_right, closure, h.ne, infEDist, infEDist_anti, infEDist_lt_iff, infEDist_lt_iff.mp, le_antisymm, le_of_forall_pos_le_add, lt_add_right, mem_closure_iff, pos_iff_ne_zero, subset_closure
 -/
@@ -662,7 +676,23 @@ theorem _root_.IsOpen.exists_iUnion_isClosed
   let F := fun n : Nat => (fun x => infEDist x Uᶜ) ⁻¹' Ici (a ^ n)
   have F_subset : forall n, F n subseteq U := fun n x hx => by
     by_contra h
-    have : infEDist x Uᶜ != 0 := ((ENNReal.pow_pos a_p
+    have : infEDist x Uᶜ != 0 := ((ENNReal.pow_pos a_pos _).trans_le hx).ne'
+    exact this (infEDist_zero_of_mem h)
+  refine ⟨F, fun n => IsClosed.preimage continuous_infEDist isClosed_Ici, F_subset, ?_, ?_⟩
+  · show ⋃ n, F n = U
+    refine Subset.antisymm (by simp only [iUnion_subset_iff, F_subset, forall_const]) fun x hx => ?_
+    have : x ∉ Uᶜ := by simpa using hx
+    rw [mem_iff_infEDist_zero_of_closed hU.isClosed_compl] at this
+    have B : 0 < infEDist x Uᶜ := by simpa [pos_iff_ne_zero] using this
+    have : Filter.Tendsto (fun n => a ^ n) atTop (𝓝 0) :=
+      ENNReal.tendsto_pow_atTop_nhds_zero_of_lt_one a_lt_one
+    rcases ((tendsto_order.1 this).2 _ B).exists with ⟨n, hn⟩
+    simp only [mem_iUnion]
+    exact ⟨n, hn.le⟩
+  show Monotone F
+  intro m n hmn x hx
+  simp only [F, mem_Ici, mem_preimage] at hx ⊢
+  apply le_trans (pow_le_pow_right_of_le_one' a_lt_one.le hmn) hx
 
 中文:
 定理 _root_.是开集.存在_iUnion_isClosed
@@ -672,7 +702,23 @@ theorem _root_.IsOpen.exists_iUnion_isClosed
   let F := fun n : Nat => (fun x => infEDist x Uᶜ) ⁻¹' Ici (a ^ n)
   have F_subset : forall n, F n subseteq U := fun n x hx => by
     by_contra h
-    have : infEDist x Uᶜ != 0 := ((ENNReal.pow_pos a_p
+    have : infEDist x Uᶜ != 0 := ((ENNReal.pow_pos a_pos _).trans_le hx).ne'
+    exact this (infEDist_zero_of_mem h)
+  refine ⟨F, fun n => IsClosed.preimage continuous_infEDist isClosed_Ici, F_subset, ?_, ?_⟩
+  · show ⋃ n, F n = U
+    refine Subset.antisymm (by simp only [iUnion_subset_iff, F_subset, forall_const]) fun x hx => ?_
+    have : x ∉ Uᶜ := by simpa using hx
+    rw [mem_iff_infEDist_zero_of_closed hU.isClosed_compl] at this
+    have B : 0 < infEDist x Uᶜ := by simpa [pos_iff_ne_zero] using this
+    have : Filter.Tendsto (fun n => a ^ n) atTop (𝓝 0) :=
+      ENNReal.tendsto_pow_atTop_nhds_zero_of_lt_one a_lt_one
+    rcases ((tendsto_order.1 this).2 _ B).exists with ⟨n, hn⟩
+    simp only [mem_iUnion]
+    exact ⟨n, hn.le⟩
+  show Monotone F
+  intro m n hmn x hx
+  simp only [F, mem_Ici, mem_preimage] at hx ⊢
+  apply le_trans (pow_le_pow_right_of_le_one' a_lt_one.le hmn) hx
 
 Depends on / 依赖: ENNReal, ENNReal.pow_pos, F_subset, IsClosed, IsClosed.preimage, Subset, Subset.antisymm, a_lt_one, a_pos, antisymm, continuous_infEDist, exists_between, iUnion_, infEDist, infEDist_zero_of_mem, isClosed_Ici, pow_pos, preimage, subseteq, trans_le
 -/
@@ -740,7 +786,8 @@ theorem exists_pos_forall_lt_edist
   obtain ⟨x, hx, h⟩ := hs.exists_isMinOn hne continuous_infEDist.continuousOn
   have : 0 < infEDist x t :=
     pos_iff_ne_zero.2 fun H => hst.le_bot ⟨hx, (mem_iff_infEDist_zero_of_closed ht).mpr H⟩
-  rcases ENNReal.lt_iff_exists_
+  rcases ENNReal.lt_iff_exists_nnreal_btwn.1 this with ⟨r, h₀, hr⟩
+exact ⟨r, ENNReal.coe_pos.mp h₀, fun y hy z hz => hr.trans_le le_infEDist.1 (h hy) z hz⟩
 
 中文:
 定理 存在_pos_对任意_lt_edist
@@ -752,7 +799,8 @@ theorem exists_pos_forall_lt_edist
   obtain ⟨x, hx, h⟩ := hs.exists_isMinOn hne continuous_infEDist.continuousOn
   have : 0 < infEDist x t :=
     pos_iff_ne_zero.2 fun H => hst.le_bot ⟨hx, (mem_iff_infEDist_zero_of_closed ht).mpr H⟩
-  rcases ENNReal.lt_iff_exists_
+  rcases ENNReal.lt_iff_exists_nnreal_btwn.1 this with ⟨r, h₀, hr⟩
+exact ⟨r, ENNReal.coe_pos.mp h₀, fun y hy z hz => hr.trans_le le_infEDist.1 (h hy) z hz⟩
 
 Depends on / 依赖: ENNReal, ENNReal.coe_pos.mp, ENNReal.lt_iff_exists_nnreal_btwn, coe_pos, continuousOn, continuous_infEDist, continuous_infEDist.continuousOn, eq_empty_or_nonempty, exists_isMinOn, hr.trans_le, hs.exists_isMinOn, hst.le_bot, infEDist, le_bot, le_infEDist, lt_iff_exists_nnreal_btwn, mem_iff_infEDist_zero_of_closed, pos_iff_ne_zero, s.eq_empty_or_nonempty, trans_le
 -/
@@ -971,7 +1019,17 @@ theorem infEDist_le_infEDist_add_hausdorffEDist
     have ε0 : (ε / 2 : Real>=0∞) != 0 := by simpa [pos_iff_ne_zero] using εpos
     have : infEDist x s < infEDist x s + ε / 2 :=
       ENNReal.lt_add_right (ENNReal.add_lt_top.1 h).1.ne ε0
-    obtain ⟨y : α, ys : y in s, dxy : edist x y < infEDist x
+    obtain ⟨y : α, ys : y in s, dxy : edist x y < infEDist x s + ↑ε / 2⟩ := infEDist_lt_iff.mp this
+    have : hausdorffEDist s t < hausdorffEDist s t + ε / 2 :=
+      ENNReal.lt_add_right (ENNReal.add_lt_top.1 h).2.ne ε0
+    obtain ⟨z : α, zt : z in t, dyz : edist y z < hausdorffEDist s t + ↑ε / 2⟩ :=
+      exists_edist_lt_of_hausdorffEDist_lt ys this
+    calc
+      infEDist x t <= edist x z := infEDist_le_edist_of_mem zt
+      _ <= edist x y + edist y z := edist_triangle _ _ _
+      _ <= infEDist x s + ε / 2 + (hausdorffEDist s t + ε / 2) := add_le_add dxy.le dyz.le
+      _ = infEDist x s + hausdorffEDist s t + ε := by
+        rw [add_add_add_comm]; rw [ENNReal.add_halves]
 
 中文:
 定理 infEDist_le_infEDist_add_hausdorffEDist
@@ -979,7 +1037,17 @@ theorem infEDist_le_infEDist_add_hausdorffEDist
     have ε0 : (ε / 2 : Real>=0∞) != 0 := by simpa [pos_iff_ne_zero] using εpos
     have : infEDist x s < infEDist x s + ε / 2 :=
       ENNReal.lt_add_right (ENNReal.add_lt_top.1 h).1.ne ε0
-    obtain ⟨y : α, ys : y in s, dxy : edist x y < infEDist x
+    obtain ⟨y : α, ys : y in s, dxy : edist x y < infEDist x s + ↑ε / 2⟩ := infEDist_lt_iff.mp this
+    have : hausdorffEDist s t < hausdorffEDist s t + ε / 2 :=
+      ENNReal.lt_add_right (ENNReal.add_lt_top.1 h).2.ne ε0
+    obtain ⟨z : α, zt : z in t, dyz : edist y z < hausdorffEDist s t + ↑ε / 2⟩ :=
+      exists_edist_lt_of_hausdorffEDist_lt ys this
+    calc
+      infEDist x t <= edist x z := infEDist_le_edist_of_mem zt
+      _ <= edist x y + edist y z := edist_triangle _ _ _
+      _ <= infEDist x s + ε / 2 + (hausdorffEDist s t + ε / 2) := add_le_add dxy.le dyz.le
+      _ = infEDist x s + hausdorffEDist s t + ε := by
+        rw [add_add_add_comm]; rw [ENNReal.add_halves]
 
 Depends on / 依赖: ENNReal, ENNReal.add_lt_top, ENNReal.le_of_forall_pos_le_add, ENNReal.lt_add_right, add_lt_top, hausdorffEDist, infEDist, infEDist_lt_iff, infEDist_lt_iff.mp, le_of_forall_pos_le_add, lt_add_right, pos_iff_ne_zero
 -/
@@ -1035,7 +1103,7 @@ theorem hausdorffEDist_le_ediam
   · intro z hz
     exact ⟨y, yt, Metric.edist_le_ediam_of_mem (subset_union_left hz) (subset_union_right yt)⟩
   · intro z hz
-    exact ⟨x, xs, Metric.edist_le_ediam_of_mem (subset_union_right hz) (subs
+    exact ⟨x, xs, Metric.edist_le_ediam_of_mem (subset_union_right hz) (subset_union_left xs)⟩
 
 中文:
 定理 hausdorffEDist_le_ediam
@@ -1047,7 +1115,7 @@ theorem hausdorffEDist_le_ediam
   · intro z hz
     exact ⟨y, yt, Metric.edist_le_ediam_of_mem (subset_union_left hz) (subset_union_right yt)⟩
   · intro z hz
-    exact ⟨x, xs, Metric.edist_le_ediam_of_mem (subset_union_right hz) (subs
+    exact ⟨x, xs, Metric.edist_le_ediam_of_mem (subset_union_right hz) (subset_union_left xs)⟩
 
 Depends on / 依赖: Metric, Metric.edist_le_ediam_of_mem, edist_le_ediam_of_mem, hausdorffEDist_le_of_mem_edist, subset_union_left, subset_union_right
 -/
@@ -1075,7 +1143,15 @@ theorem hausdorffEDist_triangle
     exact fun x xs =>
       calc
         infEDist x u <= infEDist x t + hausdorffEDist t u :=
-          infEDist_le_infEDist_add_hausdorf
+          infEDist_le_infEDist_add_hausdorffEDist
+        _ <= hausdorffEDist s t + hausdorffEDist t u := by grw [infEDist_le_hausdorffEDist_of_mem xs]
+  · change forall x in u, infEDist x s <= hausdorffEDist s t + hausdorffEDist t u
+    exact fun x xu =>
+      calc
+        infEDist x s <= infEDist x t + hausdorffEDist t s :=
+          infEDist_le_infEDist_add_hausdorffEDist
+        _ <= hausdorffEDist u t + hausdorffEDist t s := by grw [infEDist_le_hausdorffEDist_of_mem xu]
+        _ = hausdorffEDist s t + hausdorffEDist t u := by simp [hausdorffEDist_comm, add_comm]
 
 中文:
 定理 hausdorffEDist_triangle
@@ -1088,7 +1164,15 @@ theorem hausdorffEDist_triangle
     exact fun x xs =>
       calc
         infEDist x u <= infEDist x t + hausdorffEDist t u :=
-          infEDist_le_infEDist_add_hausdorf
+          infEDist_le_infEDist_add_hausdorffEDist
+        _ <= hausdorffEDist s t + hausdorffEDist t u := by grw [infEDist_le_hausdorffEDist_of_mem xs]
+  · change forall x in u, infEDist x s <= hausdorffEDist s t + hausdorffEDist t u
+    exact fun x xu =>
+      calc
+        infEDist x s <= infEDist x t + hausdorffEDist t s :=
+          infEDist_le_infEDist_add_hausdorffEDist
+        _ <= hausdorffEDist u t + hausdorffEDist t s := by grw [infEDist_le_hausdorffEDist_of_mem xu]
+        _ = hausdorffEDist s t + hausdorffEDist t u := by simp [hausdorffEDist_comm, add_comm]
 
 Depends on / 依赖: hausdorffEDist, hausdorffEDist_def, iSup_le_iff, infEDist, infEDist_le_hausdorffEDist_of_mem, infEDist_le_infEDist_add_hausdorffEDist, sup_le_iff
 -/
@@ -1169,7 +1253,7 @@ theorem hausdorffEDist_closure_left
       _ = hausdorffEDist s t := by simp [hausdorffEDist_comm]
   · calc
       _ <= hausdorffEDist s (closure s) + hausdorffEDist (closure s) t := hausdorffEDist_triangle
-    
+      _ = hausdorffEDist (closure s) t := by simp
 
 中文:
 定理 hausdorffEDist_closure_left
@@ -1181,7 +1265,7 @@ theorem hausdorffEDist_closure_left
       _ = hausdorffEDist s t := by simp [hausdorffEDist_comm]
   · calc
       _ <= hausdorffEDist s (closure s) + hausdorffEDist (closure s) t := hausdorffEDist_triangle
-    
+      _ = hausdorffEDist (closure s) t := by simp
 
 Depends on / 依赖: closure, hausdorffEDist, hausdorffEDist_comm, hausdorffEDist_triangle, le_antisymm
 -/
@@ -1316,7 +1400,7 @@ theorem empty_or_nonempty_of_hausdorffEDist_ne_top
       exact Or.inr ⟨nonempty_of_hausdorffEDist_ne_top ht fin, ht⟩
   · exact Or.inr ⟨hs, nonempty_of_hausdorffEDist_ne_top hs fin⟩
 
-@[si
+@[simp]
 
 中文:
 定理 empty_or_nonempty_of_hausdorffEDist_ne_top
@@ -1329,7 +1413,7 @@ theorem empty_or_nonempty_of_hausdorffEDist_ne_top
       exact Or.inr ⟨nonempty_of_hausdorffEDist_ne_top ht fin, ht⟩
   · exact Or.inr ⟨hs, nonempty_of_hausdorffEDist_ne_top hs fin⟩
 
-@[si
+@[simp]
 
 Depends on / 依赖: Or.inl, Or.inr, eq_empty_or_nonempty, hausdorffEDist_comm, nonempty_of_hausdorffEDist_ne_top, s.eq_empty_or_nonempty, t.eq_empty_or_nonempty
 -/
@@ -2278,7 +2362,10 @@ theorem infDist_inter_closedBall_of_mem
   refine le_antisymm ?_ (infDist_le_infDist_of_subset inter_subset_left ⟨y, h⟩)
   refine not_lt.1 fun hlt => ?_
   rcases (infDist_lt_iff ⟨y, h.1⟩).mp hlt with ⟨z, hzs, hz⟩
-  rcases le_or_gt (dist z x) (dist y x) wi
+  rcases le_or_gt (dist z x) (dist y x) with hle | hlt
+  · exact hz.not_ge (infDist_le_dist_of_mem ⟨hzs, hle⟩)
+  · rw [dist_comm z, dist_comm y] at hlt
+    exact (hlt.trans hz).not_ge (infDist_le_dist_of_mem h)
 
 中文:
 定理 infDist_inter_closedBall_of_mem
@@ -2288,7 +2375,10 @@ theorem infDist_inter_closedBall_of_mem
   refine le_antisymm ?_ (infDist_le_infDist_of_subset inter_subset_left ⟨y, h⟩)
   refine not_lt.1 fun hlt => ?_
   rcases (infDist_lt_iff ⟨y, h.1⟩).mp hlt with ⟨z, hzs, hz⟩
-  rcases le_or_gt (dist z x) (dist y x) wi
+  rcases le_or_gt (dist z x) (dist y x) with hle | hlt
+  · exact hz.not_ge (infDist_le_dist_of_mem ⟨hzs, hle⟩)
+  · rw [dist_comm z, dist_comm y] at hlt
+    exact (hlt.trans hz).not_ge (infDist_le_dist_of_mem h)
 
 Depends on / 依赖: closedBall, dist_comm, hlt.trans, hz.not_ge, infDist_le_dist_of_mem, infDist_le_infDist_of_subset, infDist_lt_iff, inter_subset_left, le_antisymm, le_or_gt, le_rfl, mem_closedBall, not_ge, not_lt, replace
 -/
@@ -2337,7 +2427,8 @@ theorem _root_.IsClosed.exists_infDist_eq_dist
   set t := s inter closedBall x (dist z x)
   have htc : IsCompact t := (isCompact_closedBall x (dist z x)).inter_left h
   have htne : t.Nonempty := ⟨z, hz, mem_closedBall.2 le_rfl⟩
-  obtain ⟨y, ⟨hys, -⟩, hyd⟩ : exists y in t, i
+  obtain ⟨y, ⟨hys, -⟩, hyd⟩ : exists y in t, infDist x t = dist x y := htc.exists_infDist_eq_dist htne x
+  exact ⟨y, hys, hyd⟩
 
 中文:
 定理 _root_.是闭集.存在_infDist_eq_dist
@@ -2348,7 +2439,8 @@ theorem _root_.IsClosed.exists_infDist_eq_dist
   set t := s inter closedBall x (dist z x)
   have htc : IsCompact t := (isCompact_closedBall x (dist z x)).inter_left h
   have htne : t.Nonempty := ⟨z, hz, mem_closedBall.2 le_rfl⟩
-  obtain ⟨y, ⟨hys, -⟩, hyd⟩ : exists y in t, i
+  obtain ⟨y, ⟨hys, -⟩, hyd⟩ : exists y in t, infDist x t = dist x y := htc.exists_infDist_eq_dist htne x
+  exact ⟨y, hys, hyd⟩
 
 Depends on / 依赖: IsCompact, Nonempty, closedBall, exists_infDist_eq_dist, htc.exists_infDist_eq_dist, infDist, infDist_inter_closedBall_of_mem, inter_left, isCompact_closedBall, le_rfl, mem_closedBall, t.Nonempty
 -/
@@ -2538,7 +2630,18 @@ theorem hausdorffEDist_ne_top_of_nonempty_of_bounded
     apply hausdorffEDist_le_of_mem_edist
     · intro x xs
       exists ct, hct
-    
+      have : dist x ct <= max rs rt := le_trans (hrs xs) (le_max_left _ _)
+      rwa [edist_dist, ENNReal.ofReal_le_ofReal_iff]
+      exact le_trans dist_nonneg this
+    · intro x xt
+      exists cs, hcs
+      have : dist x cs <= max rs rt := le_trans (hrt xt) (le_max_right _ _)
+      rwa [edist_dist, ENNReal.ofReal_le_ofReal_iff]
+      exact le_trans dist_nonneg this
+  exact ne_top_of_le_ne_top ENNReal.ofReal_ne_top this
+
+@[deprecated (since := "2026-01-08")]
+alias hausdorffEdist_ne_top_of_nonempty_of_bounded := hausdorffEDist_ne_top_of_nonempty_of_bounded
 
 中文:
 定理 hausdorffEDist_ne_top_of_nonempty_of_bounded
@@ -2552,7 +2655,18 @@ theorem hausdorffEDist_ne_top_of_nonempty_of_bounded
     apply hausdorffEDist_le_of_mem_edist
     · intro x xs
       exists ct, hct
-    
+      have : dist x ct <= max rs rt := le_trans (hrs xs) (le_max_left _ _)
+      rwa [edist_dist, ENNReal.ofReal_le_ofReal_iff]
+      exact le_trans dist_nonneg this
+    · intro x xt
+      exists cs, hcs
+      have : dist x cs <= max rs rt := le_trans (hrt xt) (le_max_right _ _)
+      rwa [edist_dist, ENNReal.ofReal_le_ofReal_iff]
+      exact le_trans dist_nonneg this
+  exact ne_top_of_le_ne_top ENNReal.ofReal_ne_top this
+
+@[deprecated (since := "2026-01-08")]
+alias hausdorffEdist_ne_top_of_nonempty_of_bounded := hausdorffEDist_ne_top_of_nonempty_of_bounded
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.ofReal_le_ofReal_iff, bs.subset_closedBall, bt.subset_closedBall, dist_nonneg, edist_dist, hausdorffEDist, hausdorffEDist_le_of_mem_edist, le_max_left, le_trans, ofReal, ofReal_le_ofReal_iff, subset_closedBall
 -/
@@ -2680,7 +2794,9 @@ theorem hausdorffDist_le_of_infDist
   · rwa [hausdorffDist_empty]
   have : hausdorffEDist s t <= ENNReal.ofReal r := by
     apply hausdorffEDist_le_of_infEDist _ _
-    · simpa only [infDist, ← ENNReal.le_ofReal
+    · simpa only [infDist, ← ENNReal.le_ofReal_iff_toReal_le (infEDist_ne_top ht) hr] using H1
+    · simpa only [infDist, ← ENNReal.le_ofReal_iff_toReal_le (infEDist_ne_top hs) hr] using H2
+  exact ENNReal.toReal_le_of_le_ofReal hr this
 
 中文:
 定理 hausdorffDist_le_of_infDist
@@ -2692,7 +2808,9 @@ theorem hausdorffDist_le_of_infDist
   · rwa [hausdorffDist_empty]
   have : hausdorffEDist s t <= ENNReal.ofReal r := by
     apply hausdorffEDist_le_of_infEDist _ _
-    · simpa only [infDist, ← ENNReal.le_ofReal
+    · simpa only [infDist, ← ENNReal.le_ofReal_iff_toReal_le (infEDist_ne_top ht) hr] using H1
+    · simpa only [infDist, ← ENNReal.le_ofReal_iff_toReal_le (infEDist_ne_top hs) hr] using H2
+  exact ENNReal.toReal_le_of_le_ofReal hr this
 
 Depends on / 依赖: ENNReal, ENNReal.le_ofReal_iff_toReal_le, ENNReal.ofReal, ENNReal.toReal_le_of_le_ofReal, eq_empty_or_nonempty, hausdorffDist_empty, hausdorffEDist, hausdorffEDist_le_of_infEDist, infDist, infEDist_ne_top, le_ofReal_iff_toReal_le, ofReal, s.eq_empty_or_nonempty, t.eq_empty_or_nonempty, toReal_le_of_le_ofReal
 -/
@@ -2759,7 +2877,8 @@ theorem hausdorffDist_le_diam
   refine hausdorffDist_le_of_mem_dist diam_nonneg ?_ ?_
   · exact fun z hz => ⟨y, yt, dist_le_diam_of_mem (bs.union bt) (subset_union_left hz)
       (subset_union_right yt)⟩
-  · exact fun z hz => ⟨x, xs, dist_le_diam_of_mem (bs.union bt) (subset_u
+  · exact fun z hz => ⟨x, xs, dist_le_diam_of_mem (bs.union bt) (subset_union_right hz)
+      (subset_union_left xs)⟩
 
 中文:
 定理 hausdorffDist_le_diam
@@ -2770,7 +2889,8 @@ theorem hausdorffDist_le_diam
   refine hausdorffDist_le_of_mem_dist diam_nonneg ?_ ?_
   · exact fun z hz => ⟨y, yt, dist_le_diam_of_mem (bs.union bt) (subset_union_left hz)
       (subset_union_right yt)⟩
-  · exact fun z hz => ⟨x, xs, dist_le_diam_of_mem (bs.union bt) (subset_u
+  · exact fun z hz => ⟨x, xs, dist_le_diam_of_mem (bs.union bt) (subset_union_right hz)
+      (subset_union_left xs)⟩
 
 Depends on / 依赖: bs.union, diam_nonneg, dist_le_diam_of_mem, hausdorffDist_le_of_mem_dist, subset_union_left, subset_union_right
 -/
@@ -2814,7 +2934,9 @@ theorem exists_dist_lt_of_hausdorffDist_lt
   have : hausdorffEDist s t < ENNReal.ofReal r := by
     rwa [hausdorffDist, ← ENNReal.toReal_ofReal (le_of_lt r0),
       ENNReal.toReal_lt_toReal fin ENNReal.ofReal_ne_top] at H
-  rcases exists_edist_lt_of_hausdorffEDist_lt h this with ⟨
+  rcases exists_edist_lt_of_hausdorffEDist_lt h this with ⟨y, hy, yr⟩
+  rw [edist_dist]; rw [ENNReal.ofReal_lt_ofReal_iff r0] at yr
+  exact ⟨y, hy, yr⟩
 
 中文:
 定理 存在_dist_lt_of_hausdorffDist_lt
@@ -2824,7 +2946,9 @@ theorem exists_dist_lt_of_hausdorffDist_lt
   have : hausdorffEDist s t < ENNReal.ofReal r := by
     rwa [hausdorffDist, ← ENNReal.toReal_ofReal (le_of_lt r0),
       ENNReal.toReal_lt_toReal fin ENNReal.ofReal_ne_top] at H
-  rcases exists_edist_lt_of_hausdorffEDist_lt h this with ⟨
+  rcases exists_edist_lt_of_hausdorffEDist_lt h this with ⟨y, hy, yr⟩
+  rw [edist_dist]; rw [ENNReal.ofReal_lt_ofReal_iff r0] at yr
+  exact ⟨y, hy, yr⟩
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.ofReal_lt_ofReal_iff, ENNReal.ofReal_ne_top, ENNReal.toReal_lt_toReal, ENNReal.toReal_ofReal, edist_dist, exists_edist_lt_of_hausdorffEDist_lt, hausdorffDist, hausdorffDist_nonneg, hausdorffEDist, le_of_lt, lt_of_le_of_lt, ofReal, ofReal_lt_ofReal_iff, ofReal_ne_top, toReal_lt_toReal, toReal_ofReal
 -/

@@ -356,7 +356,8 @@ theorem nhds_top
 nonrec theorem nhds_top_basis : (𝓝 (⊤ : EReal)).HasBasis (fun _ : Real => True) (Ioi ·) := by
   refine (nhds_top_basis (α := EReal)).to_hasBasis (fun x hx => ?_)
     fun _ _ => ⟨_, coe_lt_top _, Subset.rfl⟩
-  rcases exists_rat_btwn_of_lt hx with
+  rcases exists_rat_btwn_of_lt hx with ⟨y, hxy, -⟩
+  exact ⟨_, trivial, Ioi_subset_Ioi hxy.le⟩
 
 中文:
 定理 nhds_top
@@ -366,7 +367,8 @@ nonrec theorem nhds_top_basis : (𝓝 (⊤ : EReal)).HasBasis (fun _ : Real => T
 nonrec theorem nhds_top_basis : (𝓝 (⊤ : EReal)).HasBasis (fun _ : Real => True) (Ioi ·) := by
   refine (nhds_top_basis (α := EReal)).to_hasBasis (fun x hx => ?_)
     fun _ _ => ⟨_, coe_lt_top _, Subset.rfl⟩
-  rcases exists_rat_btwn_of_lt hx with
+  rcases exists_rat_btwn_of_lt hx with ⟨y, hxy, -⟩
+  exact ⟨_, trivial, Ioi_subset_Ioi hxy.le⟩
 
 Depends on / 依赖: lt_top_iff_ne_top, nhds_top_order, nhds_top_order.trans
 -/
@@ -553,7 +555,10 @@ lemma nhdsWithin_top
     · simp [hx_bot]
     lift x to Real using ⟨hx.ne_top, hx_bot⟩
     refine ⟨x, fun x ⟨h1, h2⟩ => ?_⟩
-    simp [h1, h2.ne_
+    simp [h1, h2.ne_top]
+  · simp only [EReal.image_coe_Ici, true_implies]
+    refine fun x => ⟨x, ⟨EReal.coe_lt_top x, fun x ⟨(h1 : _ <= x), h2⟩ => ?_⟩⟩
+    simp [h1, Ne.lt_top' fun a => h2 a.symm]
 
 中文:
 引理 nhdsWithin_top
@@ -566,7 +571,10 @@ lemma nhdsWithin_top
     · simp [hx_bot]
     lift x to Real using ⟨hx.ne_top, hx_bot⟩
     refine ⟨x, fun x ⟨h1, h2⟩ => ?_⟩
-    simp [h1, h2.ne_
+    simp [h1, h2.ne_top]
+  · simp only [EReal.image_coe_Ici, true_implies]
+    refine fun x => ⟨x, ⟨EReal.coe_lt_top x, fun x ⟨(h1 : _ <= x), h2⟩ => ?_⟩⟩
+    simp [h1, Ne.lt_top' fun a => h2 a.symm]
 
 Depends on / 依赖: EReal.coe_lt_top, EReal.image_coe_Ici, Ne.lt_top, Real.toEReal, a.symm, atTop_basis, atTop_basis.map, coe_lt_top, h2.ne_top, hx.ne_top, hx_bot, image_coe_Ici, lt_top, ne_top, nhdsWithin_hasBasis, nhds_top_basis_Ici, toEReal, true_and, true_implies
 -/
@@ -598,7 +606,13 @@ lemma nhdsWithin_bot
     · simp [hx_top]
     lift x to Real using ⟨hx_top, hx.ne_bot⟩
     refine ⟨x, fun x ⟨h1, h2⟩ => ?_⟩
-    simp [h2, 
+    simp [h2, h1.ne_bot]
+  · simp only [EReal.image_coe_Iic, true_implies]
+    refine fun x => ⟨x, ⟨EReal.bot_lt_coe x, fun x ⟨(h1 : x <= _), h2⟩ => ?_⟩⟩
+    simp [h1, Ne.bot_lt' fun a => h2 a.symm]
+
+omit [TopologicalSpace α] in
+@[simp]
 
 中文:
 引理 nhdsWithin_bot
@@ -612,7 +626,13 @@ lemma nhdsWithin_bot
     · simp [hx_top]
     lift x to Real using ⟨hx_top, hx.ne_bot⟩
     refine ⟨x, fun x ⟨h1, h2⟩ => ?_⟩
-    simp [h2, 
+    simp [h2, h1.ne_bot]
+  · simp only [EReal.image_coe_Iic, true_implies]
+    refine fun x => ⟨x, ⟨EReal.bot_lt_coe x, fun x ⟨(h1 : x <= _), h2⟩ => ?_⟩⟩
+    simp [h1, Ne.bot_lt' fun a => h2 a.symm]
+
+omit [TopologicalSpace α] in
+@[simp]
 
 Depends on / 依赖: EReal.bot_lt_coe, EReal.image_coe_Iic, Ne.bot_lt, Real.toEReal, a.symm, atBot_basis, atBot_basis.map, bot_lt, bot_lt_coe, h1.ne_bot, hx.ne_bot, hx_top, image_coe_Iic, ne_bot, nhdsWithin_hasBasis, nhds_bot_basis_Iic, toEReal, true_and, true_implies
 -/
@@ -778,7 +798,19 @@ lemma continuous_toENNReal
   · simp only [ContinuousAt, h_top, toENNReal_top]
     refine ENNReal.tendsto_nhds_top fun n => ?_
     filter_upwards [eventually_gt_nhds (coe_lt_top n)] with y hy
-    exact toENNReal_coe (x := n) ▸ toENNReal_lt_toENNRe
+    exact toENNReal_coe (x := n) ▸ toENNReal_lt_toENNReal (coe_ennreal_nonneg _) hy
+  refine ContinuousOn.continuousAt ?_ (compl_singleton_mem_nhds_iff.mpr h_top)
+  refine (continuousOn_of_forall_continuousAt fun x hx => ?_).congr (fun _ h => toENNReal_of_ne_top h)
+  by_cases h_bot : x = ⊥
+  · refine tendsto_nhds_of_eventually_eq ?_
+    rw [h_bot]; rw [nhds_bot_basis.eventually_iff]
+    simpa [toReal_bot, ENNReal.ofReal_zero, ENNReal.ofReal_eq_zero, true_and] using
+      ⟨0, fun _ hx => toReal_nonpos hx.le⟩
+refine ENNReal.continuous_ofReal.continuousAt.comp' continuousOn_toReal.continuousAt
+ (toFinite _).isClosed.compl_mem_nhds ?_
+  simp_all only [mem_compl_iff, mem_singleton_iff, mem_insert_iff, or_self, not_false_eq_true]
+
+@[fun_prop]
 
 中文:
 引理 continuous_toENN实数
@@ -789,7 +821,19 @@ lemma continuous_toENNReal
   · simp only [ContinuousAt, h_top, toENNReal_top]
     refine ENNReal.tendsto_nhds_top fun n => ?_
     filter_upwards [eventually_gt_nhds (coe_lt_top n)] with y hy
-    exact toENNReal_coe (x := n) ▸ toENNReal_lt_toENNRe
+    exact toENNReal_coe (x := n) ▸ toENNReal_lt_toENNReal (coe_ennreal_nonneg _) hy
+  refine ContinuousOn.continuousAt ?_ (compl_singleton_mem_nhds_iff.mpr h_top)
+  refine (continuousOn_of_forall_continuousAt fun x hx => ?_).congr (fun _ h => toENNReal_of_ne_top h)
+  by_cases h_bot : x = ⊥
+  · refine tendsto_nhds_of_eventually_eq ?_
+    rw [h_bot]; rw [nhds_bot_basis.eventually_iff]
+    simpa [toReal_bot, ENNReal.ofReal_zero, ENNReal.ofReal_eq_zero, true_and] using
+      ⟨0, fun _ hx => toReal_nonpos hx.le⟩
+refine ENNReal.continuous_ofReal.continuousAt.comp' continuousOn_toReal.continuousAt
+ (toFinite _).isClosed.compl_mem_nhds ?_
+  simp_all only [mem_compl_iff, mem_singleton_iff, mem_insert_iff, or_self, not_false_eq_true]
+
+@[fun_prop]
 
 Depends on / 依赖: ContinuousAt, ContinuousOn, ContinuousOn.continuousAt, ENNReal, ENNReal.tendsto_nhds_top, coe_ennreal_nonneg, coe_lt_top, compl_singleton_mem_nhds_iff, compl_singleton_mem_nhds_iff.mpr, continuousAt, continuousOn_of_forall_continuousAt, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, eventually_gt_nhds, filter_upwards, h_top, tendsto_nhds_top, toENNReal_coe, toENNReal_lt_toENNReal, toENNReal_of_ne_top
 -/
@@ -1203,7 +1247,8 @@ theorem limsup_const_mul_of_nonneg_of_ne_top
     simpa [← EReal.lt_div_iff (by aesop) (by aesop)]
       using fun _ => eventually_lt_of_limsup_lt
   · rw [le_limsup_iff]
-    simpa [← EReal.div_lt_iff (by aesop) (by aeso
+    simpa [← EReal.div_lt_iff (by aesop) (by aesop)]
+      using fun _ => frequently_lt_of_lt_limsup
 
 中文:
 定理 limsup_const_mul_of_nonneg_of_ne_top
@@ -1217,7 +1262,8 @@ theorem limsup_const_mul_of_nonneg_of_ne_top
     simpa [← EReal.lt_div_iff (by aesop) (by aesop)]
       using fun _ => eventually_lt_of_limsup_lt
   · rw [le_limsup_iff]
-    simpa [← EReal.div_lt_iff (by aesop) (by aeso
+    simpa [← EReal.div_lt_iff (by aesop) (by aesop)]
+      using fun _ => frequently_lt_of_lt_limsup
 
 Depends on / 依赖: EReal.div_lt_iff, EReal.lt_div_iff, EReal.mul_comm, div_lt_iff, eq_of_le_of_ge, eq_or_lt, eventually_lt_of_limsup_lt, frequently_lt_of_lt_limsup, le_limsup_iff, limsup_le_iff, lt_div_iff, mul_comm, simp_rw
 -/
@@ -1318,7 +1364,11 @@ lemma le_limsup_mul
   have u0 : 0 <= limsup u f := le_limsup_of_frequently_le hu
   have uv0 : 0 <= limsup (u * v) f :=
 le_limsup_of_frequently_le (hu.and_eventually hv).mono fun _ ⟨hu, hv⟩ => mul_nonneg hu hv
-  refine mul_le
+  refine mul_le_of_forall_lt_of_nonneg u0 uv0 fun a ha b hb => (le_limsup_iff).2 fun c c_ab => ?_
+  refine (((frequently_lt_of_lt_limsup) (mem_Ioo.1 ha).2).and_eventually
+ (eventually_lt_of_lt_liminf (mem_Ioo.1 hb).2).and
+ hv).mono fun x ⟨xa, ⟨xb, vx⟩⟩ => ?_
+  exact c_ab.trans_le (mul_le_mul xa.le xb.le (mem_Ioo.1 hb).1.le ((mem_Ioo.1 ha).1.le.trans xa.le))
 
 中文:
 引理 le_limsup_mul
@@ -1329,7 +1379,11 @@ le_limsup_of_frequently_le (hu.and_eventually hv).mono fun _ ⟨hu, hv⟩ => mul
   have u0 : 0 <= limsup u f := le_limsup_of_frequently_le hu
   have uv0 : 0 <= limsup (u * v) f :=
 le_limsup_of_frequently_le (hu.and_eventually hv).mono fun _ ⟨hu, hv⟩ => mul_nonneg hu hv
-  refine mul_le
+  refine mul_le_of_forall_lt_of_nonneg u0 uv0 fun a ha b hb => (le_limsup_iff).2 fun c c_ab => ?_
+  refine (((frequently_lt_of_lt_limsup) (mem_Ioo.1 ha).2).and_eventually
+ (eventually_lt_of_lt_liminf (mem_Ioo.1 hb).2).and
+ hv).mono fun x ⟨xa, ⟨xb, vx⟩⟩ => ?_
+  exact c_ab.trans_le (mul_le_mul xa.le xb.le (mem_Ioo.1 hb).1.le ((mem_Ioo.1 ha).1.le.trans xa.le))
 
 Depends on / 依赖: and_eventually, bot_mul_top, c_ab, eq_or_neBot, eventually_lt_of_lt_liminf, f.eq_or_neBot, frequently_lt_of_lt_limsup, hu.and_eventually, le_limsup_iff, le_limsup_of_frequently_le, liminf_bot, limsup, limsup_bot, mem_Ioo, mul_le_of_forall_lt_of_nonneg, mul_nonneg
 -/
@@ -1358,7 +1412,15 @@ lemma limsup_mul_le
   have u_0 : 0 <= limsup u f := le_limsup_of_frequently_le hu
   replace h₁ : 0 < limsup u f ∨ limsup v f != ⊤ := h₁.imp_left fun h => lt_of_le_of_ne u_0 h.symm
   replace h₂ : limsup u f != ⊤ ∨ 0 < limsup v f :=
-    h₂.imp_right
+    h₂.imp_right fun h => lt_of_le_of_ne (le_limsup_of_frequently_le hv.frequently) h.symm
+  refine le_mul_of_forall_lt h₁ h₂ fun a a_u b b_v => (limsup_le_iff).2 fun c c_ab => ?_
+  filter_upwards [eventually_lt_of_limsup_lt a_u, eventually_lt_of_limsup_lt b_v, hv]
+    with x x_a x_b v_0
+  apply lt_of_le_of_lt _ c_ab
+  rcases lt_or_ge (u x) 0 with hux | hux
+  · apply (mul_nonpos_iff.2 (.inr ⟨hux.le, v_0⟩)).trans
+    exact mul_nonneg (u_0.trans a_u.le) (v_0.trans x_b.le)
+  · exact mul_le_mul x_a.le x_b.le v_0 (hux.trans x_a.le)
 
 中文:
 引理 limsup_mul_le
@@ -1369,7 +1431,15 @@ lemma limsup_mul_le
   have u_0 : 0 <= limsup u f := le_limsup_of_frequently_le hu
   replace h₁ : 0 < limsup u f ∨ limsup v f != ⊤ := h₁.imp_left fun h => lt_of_le_of_ne u_0 h.symm
   replace h₂ : limsup u f != ⊤ ∨ 0 < limsup v f :=
-    h₂.imp_right
+    h₂.imp_right fun h => lt_of_le_of_ne (le_limsup_of_frequently_le hv.frequently) h.symm
+  refine le_mul_of_forall_lt h₁ h₂ fun a a_u b b_v => (limsup_le_iff).2 fun c c_ab => ?_
+  filter_upwards [eventually_lt_of_limsup_lt a_u, eventually_lt_of_limsup_lt b_v, hv]
+    with x x_a x_b v_0
+  apply lt_of_le_of_lt _ c_ab
+  rcases lt_or_ge (u x) 0 with hux | hux
+  · apply (mul_nonpos_iff.2 (.inr ⟨hux.le, v_0⟩)).trans
+    exact mul_nonneg (u_0.trans a_u.le) (v_0.trans x_b.le)
+  · exact mul_le_mul x_a.le x_b.le v_0 (hux.trans x_a.le)
 
 Depends on / 依赖: bot_le, c_ab, eq_or_neBot, eventually_lt_of_limsup_lt, f.eq_or_neBot, filter_upwards, frequently, h.symm, hv.frequently, imp_left, imp_right, le_limsup_of_frequently_le, le_mul_of_forall_lt, limsup, limsup_bot, limsup_le_iff, lt_of_le_of_ne, replace
 -/
@@ -1402,7 +1472,8 @@ lemma le_liminf_mul
  (le_liminf_of_le) ((hu.and hv).mono fun x ⟨u0, v0⟩ => mul_nonneg u0 v0)
   refine fun a ha b hb => (le_liminf_iff).2 fun c c_ab => ?_
   filter_upwards [eventually_lt_of_lt_liminf (mem_Ioo.1 ha).2,
-    eventually_lt_of_lt_liminf (mem_Ioo
+    eventually_lt_of_lt_liminf (mem_Ioo.1 hb).2] with x xa xb
+  exact c_ab.trans_le (mul_le_mul xa.le xb.le (mem_Ioo.1 hb).1.le ((mem_Ioo.1 ha).1.le.trans xa.le))
 
 中文:
 引理 le_liminf_mul
@@ -1412,7 +1483,8 @@ lemma le_liminf_mul
  (le_liminf_of_le) ((hu.and hv).mono fun x ⟨u0, v0⟩ => mul_nonneg u0 v0)
   refine fun a ha b hb => (le_liminf_iff).2 fun c c_ab => ?_
   filter_upwards [eventually_lt_of_lt_liminf (mem_Ioo.1 ha).2,
-    eventually_lt_of_lt_liminf (mem_Ioo
+    eventually_lt_of_lt_liminf (mem_Ioo.1 hb).2] with x xa xb
+  exact c_ab.trans_le (mul_le_mul xa.le xb.le (mem_Ioo.1 hb).1.le ((mem_Ioo.1 ha).1.le.trans xa.le))
 
 Depends on / 依赖: c_ab, c_ab.trans_le, eventually_lt_of_lt_liminf, filter_upwards, hu.and, le.trans, le_liminf_iff, le_liminf_of_le, mem_Ioo, mul_le_mul, mul_le_of_forall_lt_of_nonneg, mul_nonneg, trans_le, xa.le, xb.le
 -/
@@ -1437,7 +1509,11 @@ lemma liminf_mul_le
     exact le_of_eq_of_le (limsup_const 0).symm (limsup_le_limsup hu)
   replace h₂ : limsup u f != ⊤ ∨ 0 < liminf v f := by
     refine h₂.imp_right fun h => lt_of_le_of_ne ?_ h.symm
-    e
+    exact le_of_eq_of_le (liminf_const 0).symm (liminf_le_liminf hv)
+  refine le_mul_of_forall_lt h₁ h₂ fun a a_u b b_v => (liminf_le_iff).2 fun c c_ab => ?_
+  refine (((frequently_lt_of_liminf_lt) b_v).and_eventually <| (eventually_lt_of_limsup_lt a_u).and
+ hu.and hv).mono fun x ⟨x_v, x_u, u_0, v_0⟩ => ?_
+  exact (mul_le_mul x_u.le x_v.le v_0 (u_0.trans x_u.le)).trans_lt c_ab
 
 中文:
 引理 liminf_mul_le
@@ -1448,7 +1524,11 @@ lemma liminf_mul_le
     exact le_of_eq_of_le (limsup_const 0).symm (limsup_le_limsup hu)
   replace h₂ : limsup u f != ⊤ ∨ 0 < liminf v f := by
     refine h₂.imp_right fun h => lt_of_le_of_ne ?_ h.symm
-    e
+    exact le_of_eq_of_le (liminf_const 0).symm (liminf_le_liminf hv)
+  refine le_mul_of_forall_lt h₁ h₂ fun a a_u b b_v => (liminf_le_iff).2 fun c c_ab => ?_
+  refine (((frequently_lt_of_liminf_lt) b_v).and_eventually <| (eventually_lt_of_limsup_lt a_u).and
+ hu.and hv).mono fun x ⟨x_v, x_u, u_0, v_0⟩ => ?_
+  exact (mul_le_mul x_u.le x_v.le v_0 (u_0.trans x_u.le)).trans_lt c_ab
 
 Depends on / 依赖: and_eventually, c_ab, eventua, frequently_lt_of_liminf_lt, h.symm, imp_left, imp_right, le_mul_of_forall_lt, le_of_eq_of_le, liminf, liminf_const, liminf_le_iff, liminf_le_liminf, limsup, limsup_const, limsup_le_limsup, lt_of_le_of_ne, replace
 -/
@@ -1675,7 +1755,8 @@ theorem continuousAt_add
   · exact continuousAt_add_coe_coe _ _
   · exact continuousAt_add_coe_top _
   · simp at h
-  · exact continuousAt_add_top
+  · exact continuousAt_add_top_coe _
+  · exact continuousAt_add_top_top
 
 中文:
 定理 continuousAt_add
@@ -1690,7 +1771,8 @@ theorem continuousAt_add
   · exact continuousAt_add_coe_coe _ _
   · exact continuousAt_add_coe_top _
   · simp at h
-  · exact continuousAt_add_top
+  · exact continuousAt_add_top_coe _
+  · exact continuousAt_add_top_top
 
 Depends on / 依赖: continuousAt_add_bot_bot, continuousAt_add_bot_coe, continuousAt_add_coe_bot, continuousAt_add_coe_coe, continuousAt_add_coe_top, continuousAt_add_top_coe, continuousAt_add_top_top
 -/
@@ -1782,7 +1864,9 @@ lemma continuousAt_mul_symm1
     simp
   rw [this]
   apply ContinuousAt.comp (Continuous.continuousAt continuous_neg)
- ContinuousAt.comp _ (ContinuousAt.pr
+ ContinuousAt.comp _ (ContinuousAt.prodMap (Continuous.continuousAt continuous_neg)
+      (Continuous.continuousAt continuous_id))
+  simp [h]
 
 中文:
 引理 continuousAt_mul_symm1
@@ -1794,7 +1878,9 @@ lemma continuousAt_mul_symm1
     simp
   rw [this]
   apply ContinuousAt.comp (Continuous.continuousAt continuous_neg)
- ContinuousAt.comp _ (ContinuousAt.pr
+ ContinuousAt.comp _ (ContinuousAt.prodMap (Continuous.continuousAt continuous_neg)
+      (Continuous.continuousAt continuous_id))
+  simp [h]
 -/
 private lemma continuousAt_mul_symm1 {a b : EReal}
     (h : ContinuousAt (fun p : EReal × EReal => p.1 * p.2) (a, b)) :
@@ -1880,7 +1966,13 @@ lemma continuousAt_mul_top_top
   split_ands
   · intro p p_in_prod
     simp only [Set.mem_prod, Set.mem_Ioi, max_lt_iff] at p_in_prod
-    rcases p_in_prod 
+    rcases p_in_prod with ⟨⟨p1_gt_x, p1_pos⟩, p2_gt_1⟩
+    have := mul_le_mul_of_nonneg_left (le_of_lt p2_gt_1) (le_of_lt p1_pos)
+    rw [mul_one p.1] at this
+    exact lt_of_lt_of_le p1_gt_x this
+  · exact IsOpen.prod isOpen_Ioi isOpen_Ioi
+  · simp
+  · rw [Set.mem_Ioi, ← EReal.coe_one]; exact EReal.coe_lt_top 1
 
 中文:
 引理 continuousAt_mul_top_top
@@ -1892,7 +1984,13 @@ lemma continuousAt_mul_top_top
   split_ands
   · intro p p_in_prod
     simp only [Set.mem_prod, Set.mem_Ioi, max_lt_iff] at p_in_prod
-    rcases p_in_prod 
+    rcases p_in_prod with ⟨⟨p1_gt_x, p1_pos⟩, p2_gt_1⟩
+    have := mul_le_mul_of_nonneg_left (le_of_lt p2_gt_1) (le_of_lt p1_pos)
+    rw [mul_one p.1] at this
+    exact lt_of_lt_of_le p1_gt_x this
+  · exact IsOpen.prod isOpen_Ioi isOpen_Ioi
+  · simp
+  · rw [Set.mem_Ioi, ← EReal.coe_one]; exact EReal.coe_lt_top 1
 -/
 private lemma continuousAt_mul_top_top :
     ContinuousAt (fun p : EReal × EReal => p.1 * p.2) (⊤, ⊤) := by
@@ -1924,7 +2022,24 @@ lemma continuousAt_mul_top_pos
   use (Set.Ioi ((2 * (max (x + 1) 0) / a : Real) : EReal)) ×ˢ (Set.Ioi ((a / 2 : Real) : EReal))
   split_ands
   · intro p p_in_prod
-    simp only [Set.mem_prod, Set.
+    simp only [Set.mem_prod, Set.mem_Ioi] at p_in_prod
+    rcases p_in_prod with ⟨p1_gt, p2_gt⟩
+    have p1_pos : 0 < p.1 := by
+      apply lt_of_le_of_lt _ p1_gt
+      rw [EReal.coe_nonneg]
+      apply mul_nonneg _ (le_of_lt (inv_pos_of_pos h))
+      simp only [Nat.ofNat_pos, mul_nonneg_iff_of_pos_left, le_max_iff, le_refl, or_true]
+    have a2_pos : 0 < ((a / 2 : Real) : EReal) := by rw [EReal.coe_pos]; linarith
+    have lock := mul_le_mul_of_nonneg_right (le_of_lt p1_gt) (le_of_lt a2_pos)
+    have key := mul_le_mul_of_nonneg_left (le_of_lt p2_gt) (le_of_lt p1_pos)
+    replace lock := le_trans lock key
+    apply lt_of_lt_of_le _ lock
+    rw [← EReal.coe_mul]; rw [EReal.coe_lt_coe_iff]; rw [_root_.div_mul_div_comm]; rw [mul_comm]; rw [← _root_.div_mul_div_comm]; rw [mul_div_right_comm]
+    simp only [ne_eq, Ne.symm (ne_of_lt h), not_false_eq_true, _root_.div_self, OfNat.ofNat_ne_zero,
+      one_mul, lt_max_iff, lt_add_iff_pos_right, zero_lt_one, true_or]
+  · exact IsOpen.prod isOpen_Ioi isOpen_Ioi
+  · simp
+  · simp [h]
 
 中文:
 引理 continuousAt_mul_top_pos
@@ -1936,7 +2051,24 @@ lemma continuousAt_mul_top_pos
   use (Set.Ioi ((2 * (max (x + 1) 0) / a : Real) : EReal)) ×ˢ (Set.Ioi ((a / 2 : Real) : EReal))
   split_ands
   · intro p p_in_prod
-    simp only [Set.mem_prod, Set.
+    simp only [Set.mem_prod, Set.mem_Ioi] at p_in_prod
+    rcases p_in_prod with ⟨p1_gt, p2_gt⟩
+    have p1_pos : 0 < p.1 := by
+      apply lt_of_le_of_lt _ p1_gt
+      rw [EReal.coe_nonneg]
+      apply mul_nonneg _ (le_of_lt (inv_pos_of_pos h))
+      simp only [Nat.ofNat_pos, mul_nonneg_iff_of_pos_left, le_max_iff, le_refl, or_true]
+    have a2_pos : 0 < ((a / 2 : Real) : EReal) := by rw [EReal.coe_pos]; linarith
+    have lock := mul_le_mul_of_nonneg_right (le_of_lt p1_gt) (le_of_lt a2_pos)
+    have key := mul_le_mul_of_nonneg_left (le_of_lt p2_gt) (le_of_lt p1_pos)
+    replace lock := le_trans lock key
+    apply lt_of_lt_of_le _ lock
+    rw [← EReal.coe_mul]; rw [EReal.coe_lt_coe_iff]; rw [_root_.div_mul_div_comm]; rw [mul_comm]; rw [← _root_.div_mul_div_comm]; rw [mul_div_right_comm]
+    simp only [ne_eq, Ne.symm (ne_of_lt h), not_false_eq_true, _root_.div_self, OfNat.ofNat_ne_zero,
+      one_mul, lt_max_iff, lt_add_iff_pos_right, zero_lt_one, true_or]
+  · exact IsOpen.prod isOpen_Ioi isOpen_Ioi
+  · simp
+  · simp [h]
 -/
 private lemma continuousAt_mul_top_pos {a : Real} (h : 0 < a) :
     ContinuousAt (fun p : EReal × EReal => p.1 * p.2) (⊤, a) := by
@@ -2002,7 +2134,16 @@ theorem continuousAt_mul
   · exact continuousAt_mul_symm3 continuousAt_mul_top_top
   · simp only [ne_eq, not_true_eq_false, EReal.coe_eq_zero, false_or] at h₃
     exact continuousAt_mul_symm1 (continuousAt_mul_top_ne_zero h₃)
-  · exact EReal.neg_top ▸ continuousAt_mul_
+  · exact EReal.neg_top ▸ continuousAt_mul_symm1 continuousAt_mul_top_top
+  · simp only [ne_eq, EReal.coe_eq_zero, not_true_eq_false, or_false] at h₁
+    exact continuousAt_mul_symm2 (continuousAt_mul_swap (continuousAt_mul_top_ne_zero h₁))
+  · exact continuousAt_mul_coe_coe _ _
+  · simp only [ne_eq, EReal.coe_eq_zero, not_true_eq_false, or_false] at h₂
+    exact continuousAt_mul_swap (continuousAt_mul_top_ne_zero h₂)
+  · exact continuousAt_mul_symm2 continuousAt_mul_top_top
+  · simp only [ne_eq, not_true_eq_false, EReal.coe_eq_zero, false_or] at h₄
+    exact continuousAt_mul_top_ne_zero h₄
+  · exact continuousAt_mul_top_top
 
 中文:
 定理 continuousAt_mul
@@ -2013,7 +2154,16 @@ theorem continuousAt_mul
   · exact continuousAt_mul_symm3 continuousAt_mul_top_top
   · simp only [ne_eq, not_true_eq_false, EReal.coe_eq_zero, false_or] at h₃
     exact continuousAt_mul_symm1 (continuousAt_mul_top_ne_zero h₃)
-  · exact EReal.neg_top ▸ continuousAt_mul_
+  · exact EReal.neg_top ▸ continuousAt_mul_symm1 continuousAt_mul_top_top
+  · simp only [ne_eq, EReal.coe_eq_zero, not_true_eq_false, or_false] at h₁
+    exact continuousAt_mul_symm2 (continuousAt_mul_swap (continuousAt_mul_top_ne_zero h₁))
+  · exact continuousAt_mul_coe_coe _ _
+  · simp only [ne_eq, EReal.coe_eq_zero, not_true_eq_false, or_false] at h₂
+    exact continuousAt_mul_swap (continuousAt_mul_top_ne_zero h₂)
+  · exact continuousAt_mul_symm2 continuousAt_mul_top_top
+  · simp only [ne_eq, not_true_eq_false, EReal.coe_eq_zero, false_or] at h₄
+    exact continuousAt_mul_top_ne_zero h₄
+  · exact continuousAt_mul_top_top
 
 Depends on / 依赖: EReal.coe_eq_zero, EReal.neg_top, coe_eq_zero, continuousAt_m, continuousAt_mul_swap, continuousAt_mul_symm1, continuousAt_mul_symm2, continuousAt_mul_symm3, continuousAt_mul_top_ne_zero, continuousAt_mul_top_top, false_or, ne_eq, neg_top, not_true_eq_false, or_false
 -/

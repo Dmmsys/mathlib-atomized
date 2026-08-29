@@ -398,7 +398,8 @@ theorem weightedOrder_eq_nat
     obtain ⟨d, hd⟩ := f.exists_coeff_ne_zero_and_weightedOrder w (by simp only [h, toNat_natCast])
     exact ⟨⟨d, by simpa [h, Nat.cast_inj, ne_eq] using hd⟩,
       fun e he => f.coeff_eq_zero_of_lt_weightedOrder w (by simp only [h, Nat.cast_lt, he])⟩
-  · rintro ⟨⟨d, hd'
+  · rintro ⟨⟨d, hd', hd⟩, h⟩
+    exact le_antisymm (hd.symm ▸ f.weightedOrder_le w hd') (nat_le_weightedOrder w h)
 
 中文:
 定理 weightedOrder_eq_nat
@@ -409,7 +410,8 @@ theorem weightedOrder_eq_nat
     obtain ⟨d, hd⟩ := f.exists_coeff_ne_zero_and_weightedOrder w (by simp only [h, toNat_natCast])
     exact ⟨⟨d, by simpa [h, Nat.cast_inj, ne_eq] using hd⟩,
       fun e he => f.coeff_eq_zero_of_lt_weightedOrder w (by simp only [h, Nat.cast_lt, he])⟩
-  · rintro ⟨⟨d, hd'
+  · rintro ⟨⟨d, hd', hd⟩, h⟩
+    exact le_antisymm (hd.symm ▸ f.weightedOrder_le w hd') (nat_le_weightedOrder w h)
 
 Depends on / 依赖: Nat.cast_inj, Nat.cast_lt, cast_inj, cast_lt, coeff_eq_zero_of_lt_weightedOrder, exists_coeff_ne_zero_and_weightedOrder, f.coeff_eq_zero_of_lt_weightedOrder, f.exists_coeff_ne_zero_and_weightedOrder, f.weightedOrder_le, hd.symm, le_antisymm, nat_le_weightedOrder, ne_eq, toNat_natCast, weightedOrder_le
 -/
@@ -441,7 +443,7 @@ theorem weightedOrder_monomial
     · intro b hb
       rw [coeff_monomial]; rw [if_neg]
       rintro rfl
-      exact
+      exact hb.false
 
 中文:
 定理 weightedOrder_monomial
@@ -457,7 +459,7 @@ theorem weightedOrder_monomial
     · intro b hb
       rw [coeff_monomial]; rw [if_neg]
       rintro rfl
-      exact
+      exact hb.false
 
 Depends on / 依赖: and_self, classical, coeff_monomial, coeff_monomial_same, hb.false, if_neg, map_zero, ne_eq, not_false_eq_true, split_ifs, weightedOrder_eq_nat, weightedOrder_eq_top_iff
 -/
@@ -564,7 +566,13 @@ theorem weightedOrder_add_of_weightedOrder_lt.aux
   constructor
   · refine ⟨d, ?_, hd⟩
     rw [← hn]; rw [← hd] at H
-    rw [(coeff _).map_add]; rw [coeff_eq_zero_
+    rw [(coeff _).map_add]; rw [coeff_eq_zero_of_lt_weightedOrder w H]; rw [add_zero]
+    exact hd'
+  · intro b hb
+    suffices weight w b < weightedOrder w f by
+      rw [(coeff _).map_add]; rw [coeff_eq_zero_of_lt_weightedOrder w this]; rw [coeff_eq_zero_of_lt_weightedOrder w (lt_trans this H)]; rw [add_zero]
+    rw [← hn]; rw [Nat.cast_lt]
+    exact hb
 
 中文:
 定理 weightedOrder_add_of_weightedOrder_lt.aux
@@ -575,7 +583,13 @@ theorem weightedOrder_add_of_weightedOrder_lt.aux
   constructor
   · refine ⟨d, ?_, hd⟩
     rw [← hn]; rw [← hd] at H
-    rw [(coeff _).map_add]; rw [coeff_eq_zero_
+    rw [(coeff _).map_add]; rw [coeff_eq_zero_of_lt_weightedOrder w H]; rw [add_zero]
+    exact hd'
+  · intro b hb
+    suffices weight w b < weightedOrder w f by
+      rw [(coeff _).map_add]; rw [coeff_eq_zero_of_lt_weightedOrder w this]; rw [coeff_eq_zero_of_lt_weightedOrder w (lt_trans this H)]; rw [add_zero]
+    rw [← hn]; rw [Nat.cast_lt]
+    exact hb
 -/
 private theorem weightedOrder_add_of_weightedOrder_lt.aux
     (H : f.weightedOrder w < g.weightedOrder w) :
@@ -644,7 +658,11 @@ theorem le_weightedOrder_mul
   by_cases! hi : weight w i < f.weightedOrder w
   · rw [coeff_eq_zero_of_lt_weightedOrder w hi, zero_mul]
   · by_cases! hj : weight w j < g.weightedOrder w
-    · rw [coeff_eq_zero_of_lt
+    · rw [coeff_eq_zero_of_lt_weightedOrder w hj, mul_zero]
+    · simp only [Finset.mem_antidiagonal] at hij
+      exfalso
+      apply ne_of_lt (lt_of_lt_of_le hd <| add_le_add hi hj)
+      rw [← hij]; rw [map_add]; rw [Nat.cast_add]
 
 中文:
 定理 le_weightedOrder_mul
@@ -657,7 +675,11 @@ theorem le_weightedOrder_mul
   by_cases! hi : weight w i < f.weightedOrder w
   · rw [coeff_eq_zero_of_lt_weightedOrder w hi, zero_mul]
   · by_cases! hj : weight w j < g.weightedOrder w
-    · rw [coeff_eq_zero_of_lt
+    · rw [coeff_eq_zero_of_lt_weightedOrder w hj, mul_zero]
+    · simp only [Finset.mem_antidiagonal] at hij
+      exfalso
+      apply ne_of_lt (lt_of_lt_of_le hd <| add_le_add hi hj)
+      rw [← hij]; rw [map_add]; rw [Nat.cast_add]
 
 Depends on / 依赖: Finset, Finset.mem_antidiagonal, Finset.sum_eq_zero, Nat.cast_add, add_le_add, cast_add, classical, coeff_eq_zero_of_lt_weightedOrder, coeff_mul, f.weightedOrder, g.weightedOrder, le_weightedOrder, lt_of_lt_of_le, map_add, mem_antidiagonal, mul_zero, ne_of_lt, sum_eq_zero, weight, weightedOrder
 -/
@@ -851,7 +873,9 @@ theorem coeff_mul_prod_one_sub_of_lt_weightedOrder
   | empty => simp only [Finset.prod_empty, mul_one]
   | insert a s ha ih =>
     simp only [Finset.mem_insert, forall_eq_or_imp] at h
-    rw [Finset.prod_insert ha]; rw [← mul_assoc]; rw [mul_right_comm]; rw [coeff_mul_left_one_sub_of_lt_wei
+    rw [Finset.prod_insert ha]; rw [← mul_assoc]; rw [mul_right_comm]; rw [coeff_mul_left_one_sub_of_lt_weightedOrder w h.1]; rw [ih h.2]
+
+@[simp]
 
 中文:
 定理 coeff_mul_prod_one_sub_of_lt_weightedOrder
@@ -862,7 +886,9 @@ theorem coeff_mul_prod_one_sub_of_lt_weightedOrder
   | empty => simp only [Finset.prod_empty, mul_one]
   | insert a s ha ih =>
     simp only [Finset.mem_insert, forall_eq_or_imp] at h
-    rw [Finset.prod_insert ha]; rw [← mul_assoc]; rw [mul_right_comm]; rw [coeff_mul_left_one_sub_of_lt_wei
+    rw [Finset.prod_insert ha]; rw [← mul_assoc]; rw [mul_right_comm]; rw [coeff_mul_left_one_sub_of_lt_weightedOrder w h.1]; rw [ih h.2]
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert, Finset.prod_empty, Finset.prod_insert, classical, coeff_mul_left_one_sub_of_lt_weightedOrder, forall_eq_or_imp, induction_on, insert, mem_insert, mul_assoc, mul_one, mul_right_comm, prod_empty, prod_insert
 -/
@@ -1700,7 +1726,11 @@ theorem IsWeightedHomogeneous.mul
   suffices weight w x.1 != p ∨ weight w x.2 != q by
     rcases this with hp | hq
     · rw [hf.coeff_eq_zero hp, zero_mul]
-    · rw [hg.coeff_eq_zero 
+    · rw [hg.coeff_eq_zero hq, mul_zero]
+  rw [← not_and_or]
+  rintro ⟨hp, hq⟩
+  apply hd
+  rw [← hx]; rw [map_add]; rw [hp]; rw [hq]
 
 中文:
 定理 IsWeightedHomogeneous.mul
@@ -1716,7 +1746,11 @@ theorem IsWeightedHomogeneous.mul
   suffices weight w x.1 != p ∨ weight w x.2 != q by
     rcases this with hp | hq
     · rw [hf.coeff_eq_zero hp, zero_mul]
-    · rw [hg.coeff_eq_zero 
+    · rw [hg.coeff_eq_zero hq, mul_zero]
+  rw [← not_and_or]
+  rintro ⟨hp, hq⟩
+  apply hd
+  rw [← hx]; rw [map_add]; rw [hp]; rw [hq]
 -/
 protected theorem IsWeightedHomogeneous.mul {f g : MvPowerSeries σ R} {p q : Nat}
     (hf : f.IsWeightedHomogeneous w p) (hg : g.IsWeightedHomogeneous w q) :
@@ -1859,7 +1893,8 @@ theorem weightedHomogeneousComponent_of_weightedOrder
   apply hd.1
   rw [MvPowerSeries.ext_iff] at hf'
   specialize hf' d
-  simp only [coeff_weightedHomogeneousComponent, coeff_zero, ite_eq_right_iff]
+  simp only [coeff_weightedHomogeneousComponent, coeff_zero, ite_eq_right_iff] at hf'
+  exact hf' hd.2
 
 中文:
 定理 weightedHomogeneousComponent_of_weightedOrder
@@ -1870,7 +1905,8 @@ theorem weightedHomogeneousComponent_of_weightedOrder
   apply hd.1
   rw [MvPowerSeries.ext_iff] at hf'
   specialize hf' d
-  simp only [coeff_weightedHomogeneousComponent, coeff_zero, ite_eq_right_iff]
+  simp only [coeff_weightedHomogeneousComponent, coeff_zero, ite_eq_right_iff] at hf'
+  exact hf' hd.2
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.ext_iff, Nat.cast_inj, cast_inj, coeff_weightedHomogeneousComponent, coeff_zero, exists_coeff_ne_zero_and_weightedOrder, ext_iff, f.exists_coeff_ne_zero_and_weightedOrder, ite_eq_right_iff, ne_eq, specialize, toNat_natCast
 -/
@@ -1978,7 +2014,19 @@ theorem weightedHomogeneousComponent_mul_of_le_weightedOrder
     rw [Finset.mem_antidiagonal] at hx
     rw [← hx]; rw [map_add] at hd
     simp only [coeff_weightedHomogeneousComponent]
-    rcases trichotomy_of_add_eq_add hd with h
+    rcases trichotomy_of_add_eq_add hd with h | h | h
+    · rw [if_pos h.1, if_pos h.2]
+    · rw [if_neg (ne_of_lt h), zero_mul]
+      rw [← ENat.natCast_lt_natCast] at h
+      rw [coeff_eq_zero_of_lt_weightedOrder w (lt_of_lt_of_le h hf)]; rw [zero_mul]
+    · rw [if_neg (ne_of_lt h), mul_zero]
+      rw [← ENat.natCast_lt_natCast] at h
+      rw [coeff_eq_zero_of_lt_weightedOrder w (lt_of_lt_of_le h hg)]; rw [mul_zero]
+  · symm
+    apply IsWeightedHomogeneous.coeff_eq_zero _ hd
+    exact IsWeightedHomogeneous.mul
+      (isWeightedHomogeneous_weightedHomogeneousComponent w f p)
+      (isWeightedHomogeneous_weightedHomogeneousComponent w g q)
 
 中文:
 定理 weightedHomogeneousComponent_mul_of_le_weightedOrder
@@ -1993,7 +2041,19 @@ theorem weightedHomogeneousComponent_mul_of_le_weightedOrder
     rw [Finset.mem_antidiagonal] at hx
     rw [← hx]; rw [map_add] at hd
     simp only [coeff_weightedHomogeneousComponent]
-    rcases trichotomy_of_add_eq_add hd with h
+    rcases trichotomy_of_add_eq_add hd with h | h | h
+    · rw [if_pos h.1, if_pos h.2]
+    · rw [if_neg (ne_of_lt h), zero_mul]
+      rw [← ENat.natCast_lt_natCast] at h
+      rw [coeff_eq_zero_of_lt_weightedOrder w (lt_of_lt_of_le h hf)]; rw [zero_mul]
+    · rw [if_neg (ne_of_lt h), mul_zero]
+      rw [← ENat.natCast_lt_natCast] at h
+      rw [coeff_eq_zero_of_lt_weightedOrder w (lt_of_lt_of_le h hg)]; rw [mul_zero]
+  · symm
+    apply IsWeightedHomogeneous.coeff_eq_zero _ hd
+    exact IsWeightedHomogeneous.mul
+      (isWeightedHomogeneous_weightedHomogeneousComponent w f p)
+      (isWeightedHomogeneous_weightedHomogeneousComponent w g q)
 
 Depends on / 依赖: ENat.natCast_lt_natCast, Finset, Finset.mem_antidiagonal, Finset.sum_congr, classical, coeff_eq_zero_of_lt_weightedOrder, coeff_weightedHomogeneousComponent, if_neg, if_pos, lt_of_lt_of_le, map_add, mem_antidiagonal, mul_zero, natCast_lt_natCast, ne_of_lt, split_ifs, sum_congr, trichotomy_of_add_eq_add, zero_mul
 -/

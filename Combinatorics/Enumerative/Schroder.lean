@@ -259,7 +259,21 @@ theorem smallSchroder_succ
         2 * (n + 3).smallSchroder
     _ = 3 * (n + 1).largeSchroder +
           ∑ i in Ioo 0 (n + 1), i.largeSchroder * (n + 1 - i).largeSchroder := by
-      rw [two_mul_smallSchroder_succ]; r
+      rw [two_mul_smallSchroder_succ]; rw [largeSchroder_succ]; rw [← Icc_bot]; rw [← sum_Ioc_add_eq_sum_Icc]; rw [← sum_Ioo_add_eq_sum_Ioc] <;> simp; lia
+    _ = 3 * (n + 1).largeSchroder +
+          ∑ i in Ioo 0 (n + 1), (2 * (i + 1).smallSchroder) * (2 * (n + 2 - i).smallSchroder) := by
+      congr! 2 with i hi
+      simp at hi
+      rw [← two_mul_smallSchroder_succ]; rw [← two_mul_smallSchroder_succ] <;>
+      · #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+        we need to re-enable model-based theory combination in `lia` for this to go through. -/
+        lia +mbtc
+    _ = 6 * (n + 2).smallSchroder +
+          4 * ∑ i in Ioo 0 (n + 1), (i + 1).smallSchroder * (n + 2 - i).smallSchroder := by
+      rw [← two_mul_smallSchroder_succ (by lia)]
+      simp [mul_mul_mul_comm _ _ 2, ← Finset.mul_sum]
+      lia
+    _ = _ := by lia
 
 中文:
 定理 smallSchroder_succ
@@ -273,7 +287,21 @@ theorem smallSchroder_succ
         2 * (n + 3).smallSchroder
     _ = 3 * (n + 1).largeSchroder +
           ∑ i in Ioo 0 (n + 1), i.largeSchroder * (n + 1 - i).largeSchroder := by
-      rw [two_mul_smallSchroder_succ]; r
+      rw [two_mul_smallSchroder_succ]; rw [largeSchroder_succ]; rw [← Icc_bot]; rw [← sum_Ioc_add_eq_sum_Icc]; rw [← sum_Ioo_add_eq_sum_Ioc] <;> simp; lia
+    _ = 3 * (n + 1).largeSchroder +
+          ∑ i in Ioo 0 (n + 1), (2 * (i + 1).smallSchroder) * (2 * (n + 2 - i).smallSchroder) := by
+      congr! 2 with i hi
+      simp at hi
+      rw [← two_mul_smallSchroder_succ]; rw [← two_mul_smallSchroder_succ] <;>
+      · #adaptation_note /-- After https://github.com/leanprover/lean4/pull/13593
+        we need to re-enable model-based theory combination in `lia` for this to go through. -/
+        lia +mbtc
+    _ = 6 * (n + 2).smallSchroder +
+          4 * ∑ i in Ioo 0 (n + 1), (i + 1).smallSchroder * (n + 2 - i).smallSchroder := by
+      rw [← two_mul_smallSchroder_succ (by lia)]
+      simp [mul_mul_mul_comm _ _ 2, ← Finset.mul_sum]
+      lia
+    _ = _ := by lia
 
 Depends on / 依赖: Icc_bot, Nat.mul_left_cancel, i.largeSchroder, largeSchroder, largeSchroder_succ, mul_left_cancel, smallSchroder, sum_Ioc_add_eq_sum_Icc, sum_Ioo_add_eq_sum_Ioc, two_mul_smallSchroder_succ, zero_lt_two
 -/

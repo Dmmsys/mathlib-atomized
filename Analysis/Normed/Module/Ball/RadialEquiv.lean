@@ -45,7 +45,17 @@ definition homeomorphSphereProd
       ⟨‖x.1‖ / r, by rw [mem_Ioi]; positivity⟩)
   invFun x := ⟨x.2.1 • x.1.1, smul_ne_zero x.2.2.out.ne' (ne_of_mem_sphere x.1.2 hr.ne')⟩
   left_inv
-  | ⟨x, hx⟩ => b
+  | ⟨x, hx⟩ => by
+    have : 0 < ‖x‖ := by simpa using hx
+    ext; simp only [smul_smul]; field_simp; simp
+  right_inv
+  | (⟨x, hx⟩, ⟨d, hd⟩) => by
+    rw [mem_Ioi] at hd
+    rw [mem_sphere_zero_iff_norm] at hx
+    simp (disch := positivity) [norm_smul, smul_smul, abs_of_pos hd, hx]
+  continuous_toFun := by
+    simp only
+    fun_prop (disch := simp)
 
 中文:
 定义 homeomorphSphereProd
@@ -55,7 +65,17 @@ definition homeomorphSphereProd
       ⟨‖x.1‖ / r, by rw [mem_Ioi]; positivity⟩)
   invFun x := ⟨x.2.1 • x.1.1, smul_ne_zero x.2.2.out.ne' (ne_of_mem_sphere x.1.2 hr.ne')⟩
   left_inv
-  | ⟨x, hx⟩ => b
+  | ⟨x, hx⟩ => by
+    have : 0 < ‖x‖ := by simpa using hx
+    ext; simp only [smul_smul]; field_simp; simp
+  right_inv
+  | (⟨x, hx⟩, ⟨d, hd⟩) => by
+    rw [mem_Ioi] at hd
+    rw [mem_sphere_zero_iff_norm] at hx
+    simp (disch := positivity) [norm_smul, smul_smul, abs_of_pos hd, hx]
+  continuous_toFun := by
+    simp only
+    fun_prop (disch := simp)
 
 Depends on / 依赖: Subtype, Subtype.coe_prop, abs_of_pos, coe_prop, hr.ne, invFun, left_inv, mem_Ioi, mem_sphere_zero_iff_norm, ne_of_mem_sphere, norm_smul, out.ne, right_inv, smul_ne_zero, smul_smul, this.ne
 -/
@@ -123,7 +143,22 @@ theorem IsOpen.smul_sphere
   · replace hx₀ : 0 < -x := by
       rw [not_lt]; rw [le_iff_eq_or_lt]; rw [← neg_pos] at hx₀
 exact hx₀.resolve_left ne_of_mem_of_not_mem hxU hU₀
-    specialize this hU.neg (by simpa) (-x) (b
+    specialize this hU.neg (by simpa) (-x) (by simpa) hx₀
+    simp only [neg_smul, nhds_neg, Set.neg_smul, Filter.mem_neg] at this
+    simpa using this
+  have hr₀ : 0 < r := lt_of_le_of_ne (by simpa using norm_nonneg y.1) hr.symm
+  lift x to Ioi (0 : Real) using hx₀
+  have : V ×ˢ (Ioi (0 : Real) ↓inter U) in 𝓝 (y, x) :=
+    prod_mem_nhds (hV.mem_nhds hyV) (hU.preimage_val.mem_nhds hxU)
+  replace := image_mem_map (m := Subtype.val ∘ (homeomorphSphereProd E r hr₀).symm) this
+  rw [← Filter.map_map]; rw [(homeomorphSphereProd _ r hr₀).symm.map_nhds_eq]; rw [map_nhds_subtype_val]; rw [IsOpen.nhdsWithin_eq]; rw [homeomorphSphereProd_symm_apply_coe] at this
+  · filter_upwards [this]
+    rintro _ ⟨⟨a, b⟩, ⟨ha, hb⟩, rfl⟩
+    rw [Function.comp_apply]; rw [homeomorphSphereProd_symm_apply_coe]
+    apply Set.smul_mem_smul
+    exacts [hb, mem_image_of_mem _ ha]
+  · exact isOpen_compl_singleton
+  · simp [x.2.out.ne', ne_zero_of_mem_sphere, hr₀.ne']
 
 中文:
 定理 是开集.smul_sphere
@@ -135,7 +170,22 @@ exact hx₀.resolve_left ne_of_mem_of_not_mem hxU hU₀
   · replace hx₀ : 0 < -x := by
       rw [not_lt]; rw [le_iff_eq_or_lt]; rw [← neg_pos] at hx₀
 exact hx₀.resolve_left ne_of_mem_of_not_mem hxU hU₀
-    specialize this hU.neg (by simpa) (-x) (b
+    specialize this hU.neg (by simpa) (-x) (by simpa) hx₀
+    simp only [neg_smul, nhds_neg, Set.neg_smul, Filter.mem_neg] at this
+    simpa using this
+  have hr₀ : 0 < r := lt_of_le_of_ne (by simpa using norm_nonneg y.1) hr.symm
+  lift x to Ioi (0 : Real) using hx₀
+  have : V ×ˢ (Ioi (0 : Real) ↓inter U) in 𝓝 (y, x) :=
+    prod_mem_nhds (hV.mem_nhds hyV) (hU.preimage_val.mem_nhds hxU)
+  replace := image_mem_map (m := Subtype.val ∘ (homeomorphSphereProd E r hr₀).symm) this
+  rw [← Filter.map_map]; rw [(homeomorphSphereProd _ r hr₀).symm.map_nhds_eq]; rw [map_nhds_subtype_val]; rw [IsOpen.nhdsWithin_eq]; rw [homeomorphSphereProd_symm_apply_coe] at this
+  · filter_upwards [this]
+    rintro _ ⟨⟨a, b⟩, ⟨ha, hb⟩, rfl⟩
+    rw [Function.comp_apply]; rw [homeomorphSphereProd_symm_apply_coe]
+    apply Set.smul_mem_smul
+    exacts [hb, mem_image_of_mem _ ha]
+  · exact isOpen_compl_singleton
+  · simp [x.2.out.ne', ne_zero_of_mem_sphere, hr₀.ne']
 
 Depends on / 依赖: Filter, Filter.mem_neg, Set.neg_smul, generalizing, hU.neg, hr.symm, isOpen_iff_mem_nhds, le_iff_eq_or_lt, lt_of_le_of_ne, mem_neg, ne_of_mem_of_not_mem, neg_pos, neg_smul, nhds_neg, norm_nonneg, not_lt, replace, resolve_left, specialize
 -/

@@ -75,7 +75,7 @@ theorem fg_unit
   refine ⟨T, span_eq_of_le _ hT ?_⟩
   rw [← one_mul I]; rw [← mul_one (span R (T : Set A))]
   conv_rhs => rw [← I.inv_mul, ← mul_assoc]
-  grw [← span_le.mpr hT', Units.val_mul, Units.val_one, span_
+  grw [← span_le.mpr hT', Units.val_mul, Units.val_one, span_mul_span, one_le.2 one_mem]
 
 中文:
 定理 fg_unit
@@ -85,7 +85,7 @@ theorem fg_unit
   refine ⟨T, span_eq_of_le _ hT ?_⟩
   rw [← one_mul I]; rw [← mul_one (span R (T : Set A))]
   conv_rhs => rw [← I.inv_mul, ← mul_assoc]
-  grw [← span_le.mpr hT', Units.val_mul, Units.val_one, span_
+  grw [← span_le.mpr hT', Units.val_mul, Units.val_one, span_mul_span, one_le.2 one_mem]
 
 Depends on / 依赖: I.inv_mul, I.mul_inv, Units.val_mul, Units.val_one, conv_rhs, inv_mul, le_rfl, mem_span_mul_finite_of_mem_mul, mul_assoc, mul_inv, mul_one, one_le, one_le.mp, one_mem, one_mul, span_eq_of_le, span_le, span_le.mpr, span_mul_span, val_mul
 -/

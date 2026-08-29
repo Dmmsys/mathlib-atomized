@@ -201,7 +201,19 @@ RingCon.liftₐ (ringCon R M) (FreeAlgebra.lift R (f)) by
         induction h <;>
           simp [Algebra.smul_def, FreeAlgebra.lift_ι_apply,
             map_mul, AlgHom.commutes, map_add, RingCon.ker]
-    invFun := fun F =>
+    invFun := fun F => F.toLinearMap.comp (ι R)
+    left_inv := fun f => by
+      rw [ι]
+      ext1 x
+      dsimp
+      exact (RingCon.liftₐ_mk _ _ _ _).trans (FreeAlgebra.lift_ι_apply f x)
+    right_inv := fun F =>
+RingCon.Quotient.hom_extₐ
+FreeAlgebra.hom_ext
+          funext fun x => by
+            rw [ι]
+            simp
+            rfl }
 
 中文:
 定义 lift
@@ -213,7 +225,19 @@ RingCon.liftₐ (ringCon R M) (FreeAlgebra.lift R (f)) by
         induction h <;>
           simp [Algebra.smul_def, FreeAlgebra.lift_ι_apply,
             map_mul, AlgHom.commutes, map_add, RingCon.ker]
-    invFun := fun F =>
+    invFun := fun F => F.toLinearMap.comp (ι R)
+    left_inv := fun f => by
+      rw [ι]
+      ext1 x
+      dsimp
+      exact (RingCon.liftₐ_mk _ _ _ _).trans (FreeAlgebra.lift_ι_apply f x)
+    right_inv := fun F =>
+RingCon.Quotient.hom_extₐ
+FreeAlgebra.hom_ext
+          funext fun x => by
+            rw [ι]
+            simp
+            rfl }
 
 Depends on / 依赖: AlgHom, AlgHom.commutes, Algebra, Algebra.smul_def, F.toLinearMap.comp, FreeAlgebra, FreeAlgebra.hom_ext, FreeAlgebra.lift, FreeAlgebra.lift_, Quotient, RingCon, RingCon.Quotient.hom_ext, RingCon.ker, RingCon.lift, RingCon.ringConGen_le, commutes, hom_ext, invFun, left_inv, map_add
 -/
@@ -390,7 +414,17 @@ theorem induction
       mul_mem' := @mul
       add_mem' := @add
       algebraMap_mem' := algebraMap }
-  let of : M ->ₗ[R] s := (TensorAlgebra.ι R).codRestri
+  let of : M ->ₗ[R] s := (TensorAlgebra.ι R).codRestrict (Subalgebra.toSubmodule s) ι
+  have of_apply {x : M} : of x = (TensorAlgebra.ι R) x := by rfl
+  -- the mapping through the subalgebra is the identity
+  have of_id : AlgHom.id R (TensorAlgebra R M) = s.val.comp (lift R of) := by
+    ext
+    simp [of_apply]
+  -- finding a proof is finding an element of the subalgebra
+  rw [← AlgHom.id_apply (R := R) a]; rw [of_id]
+  exact Subtype.prop (lift R of a)
+
+@[simp]
 
 中文:
 定理 induction
@@ -402,7 +436,17 @@ theorem induction
       mul_mem' := @mul
       add_mem' := @add
       algebraMap_mem' := algebraMap }
-  let of : M ->ₗ[R] s := (TensorAlgebra.ι R).codRestri
+  let of : M ->ₗ[R] s := (TensorAlgebra.ι R).codRestrict (Subalgebra.toSubmodule s) ι
+  have of_apply {x : M} : of x = (TensorAlgebra.ι R) x := by rfl
+  -- the mapping through the subalgebra is the identity
+  have of_id : AlgHom.id R (TensorAlgebra R M) = s.val.comp (lift R of) := by
+    ext
+    simp [of_apply]
+  -- finding a proof is finding an element of the subalgebra
+  rw [← AlgHom.id_apply (R := R) a]; rw [of_id]
+  exact Subtype.prop (lift R of a)
+
+@[simp]
 -/
 theorem induction {C : TensorAlgebra R M -> Prop}
     (algebraMap : forall r, C (algebraMap R (TensorAlgebra R M) r)) (ι : forall x, C (ι R x))
@@ -768,7 +812,12 @@ theorem ι_eq_algebraMap_iff
     have : IsCentralScalar R M := ⟨fun r m => rfl⟩
     have hf0 : toTrivSqZeroExt (ι R x) = (0, x) := lift_ι_apply _ _
     rw [h]; rw [AlgHom.commutes] at hf0
-    have : r = 0 ∧ 0 = x := 
+    have : r = 0 ∧ 0 = x := Prod.ext_iff.1 hf0
+    exact this.symm.imp_left Eq.symm
+  · rintro ⟨rfl, rfl⟩
+    rw [map_zero]; rw [map_zero]
+
+@[simp]
 
 中文:
 定理 ι_eq_algebraMap_iff
@@ -780,7 +829,12 @@ theorem ι_eq_algebraMap_iff
     have : IsCentralScalar R M := ⟨fun r m => rfl⟩
     have hf0 : toTrivSqZeroExt (ι R x) = (0, x) := lift_ι_apply _ _
     rw [h]; rw [AlgHom.commutes] at hf0
-    have : r = 0 ∧ 0 = x := 
+    have : r = 0 ∧ 0 = x := Prod.ext_iff.1 hf0
+    exact this.symm.imp_left Eq.symm
+  · rintro ⟨rfl, rfl⟩
+    rw [map_zero]; rw [map_zero]
+
+@[simp]
 
 Depends on / 依赖: AlgHom, AlgHom.commutes, Eq.symm, IsCentralScalar, Module, Module.compHom, Prod.ext_iff, RingHom, RingHom.id, commutes, compHom, ext_iff, fromOpposite, imp_left, map_zero, mul_comm, this.symm.imp_left, toTrivSqZeroExt
 -/

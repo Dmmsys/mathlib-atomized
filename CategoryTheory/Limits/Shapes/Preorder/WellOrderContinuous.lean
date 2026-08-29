@@ -157,7 +157,15 @@ instance IsWellOrderContinuous.restriction_setIci
       push _ in _ at hj'
       dsimp only [f]
       by_cases! h : j' <= j
-      · refin
+      · refine ⟨⟨⟨j, le_refl j⟩, ?_⟩, h⟩
+        by_contra h'
+        simp only [Set.mem_Iio, not_lt] at h'
+        apply hm.1
+        rintro ⟨k, hk⟩ hkm
+        exact h'.trans hk
+      · exact ⟨⟨⟨j', h.le⟩, hj'⟩, by rfl⟩
+    exact (Functor.Final.isColimitWhiskerEquiv (F := hf.functor) _).2
+      (F.isColimitOfIsWellOrderContinuous m.1 (Set.Ici.isSuccLimit_coe m hm))⟩
 
 中文:
 实例 是WellOrderContinuous.restriction_setIci
@@ -170,7 +178,15 @@ instance IsWellOrderContinuous.restriction_setIci
       push _ in _ at hj'
       dsimp only [f]
       by_cases! h : j' <= j
-      · refin
+      · refine ⟨⟨⟨j, le_refl j⟩, ?_⟩, h⟩
+        by_contra h'
+        simp only [Set.mem_Iio, not_lt] at h'
+        apply hm.1
+        rintro ⟨k, hk⟩ hkm
+        exact h'.trans hk
+      · exact ⟨⟨⟨j', h.le⟩, hj'⟩, by rfl⟩
+    exact (Functor.Final.isColimitWhiskerEquiv (F := hf.functor) _).2
+      (F.isColimitOfIsWellOrderContinuous m.1 (Set.Ici.isSuccLimit_coe m hm))⟩
 
 Depends on / 依赖: F.isColimitOfIsWel, Functor, Functor.Final.isColimitWhiskerEquiv, Monotone, Monotone.final_functor_iff, Set.Iio, Set.mem_Iio, final_functor_iff, functor, h.le, hf.functor, hf.functor.Final, isColimitOfIsWel, isColimitWhiskerEquiv, le_refl, mem_Iio, not_lt
 -/

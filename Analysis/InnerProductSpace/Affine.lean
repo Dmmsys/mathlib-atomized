@@ -167,7 +167,8 @@ theorem dist_sq_lineMap_lineMap_of_inner_eq_zero
   have hvec : AffineMap.lineMap a b t₁ -ᵥ AffineMap.lineMap a c t₂ =
               t₁ • (b -ᵥ a) - t₂ • (c -ᵥ a) := by
     rw [AffineMap.lineMap_apply]; rw [AffineMap.lineMap_apply]; rw [vadd_vsub_vadd_cancel_right]
-  rw [dist_eq_norm_vsub V]; rw [hvec]; rw [norm_sub_sq_real]; rw [norm_smul]; rw 
+  rw [dist_eq_norm_vsub V]; rw [hvec]; rw [norm_sub_sq_real]; rw [norm_smul]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [Real.norm_eq_abs]; rw [inner_smul_left]; rw [inner_smul_right]; rw [h_inner]
+  simp only [mul_zero, sub_zero, mul_pow, sq_abs, ← dist_eq_norm_vsub' V]
 
 中文:
 定理 dist_sq_lineMap_lineMap_of_inner_eq_zero
@@ -176,7 +177,8 @@ theorem dist_sq_lineMap_lineMap_of_inner_eq_zero
   have hvec : AffineMap.lineMap a b t₁ -ᵥ AffineMap.lineMap a c t₂ =
               t₁ • (b -ᵥ a) - t₂ • (c -ᵥ a) := by
     rw [AffineMap.lineMap_apply]; rw [AffineMap.lineMap_apply]; rw [vadd_vsub_vadd_cancel_right]
-  rw [dist_eq_norm_vsub V]; rw [hvec]; rw [norm_sub_sq_real]; rw [norm_smul]; rw 
+  rw [dist_eq_norm_vsub V]; rw [hvec]; rw [norm_sub_sq_real]; rw [norm_smul]; rw [norm_smul]; rw [Real.norm_eq_abs]; rw [Real.norm_eq_abs]; rw [inner_smul_left]; rw [inner_smul_right]; rw [h_inner]
+  simp only [mul_zero, sub_zero, mul_pow, sq_abs, ← dist_eq_norm_vsub' V]
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap, AffineMap.lineMap_apply, Real.norm_eq_abs, dist_eq_norm_vsub, h_inner, inner_smul_left, inner_smul_right, lineMap, lineMap_apply, mul_pow, mul_zero, norm_eq_abs, norm_smul, norm_sub_sq_real, sq_abs, sub_zero, vadd_vsub_vadd_cancel_right
 -/

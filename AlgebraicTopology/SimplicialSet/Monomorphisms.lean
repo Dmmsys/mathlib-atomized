@@ -83,7 +83,7 @@ instance :
 
 example (K : Type u) [LinearOrder K] [SuccOrder K] [OrderBot K] [WellFoundedLT K] :
     (monomorphisms SSet.{u}).IsStableUnderTransfiniteCompositionOfShape K := by
-  infe
+  infer_instance
 
 中文:
 实例 :
@@ -95,7 +95,7 @@ example (K : Type u) [LinearOrder K] [SuccOrder K] [OrderBot K] [WellFoundedLT K
 
 example (K : Type u) [LinearOrder K] [SuccOrder K] [OrderBot K] [WellFoundedLT K] :
     (monomorphisms SSet.{u}).IsStableUnderTransfiniteCompositionOfShape K := by
-  infe
+  infer_instance
 
 Depends on / 依赖: IsStableUnderColimitsOfShape, functorCategory_monomorphisms, infer_instance, monomorphisms
 -/

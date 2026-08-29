@@ -525,7 +525,35 @@ definition associativity
     (Functor.sumIsoExt
       ((Functor.associator _ _ _).symm ≪≫ Functor.rightUnitor _ ≪≫
         (isoWhiskerRight (inlCompInlCompAssociator C D E) (inverseAssociator C D E) ≪≫
-          inlCompInverseAssociator C D
+          inlCompInverseAssociator C D E).symm ≪≫ Functor.associator _ _ _ ≪≫
+          isoWhiskerLeft _ (Functor.associator _ _ _))
+      ((Functor.associator _ _ _).symm ≪≫ Functor.rightUnitor _ ≪≫
+        (isoWhiskerRight (inrCompInlCompAssociator C D E) (inverseAssociator C D E) ≪≫
+          Functor.associator _ _ _ ≪≫
+          inlCompInrCompInverseAssociator C D E).symm ≪≫
+        Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (Functor.associator _ _ _)))
+    (Functor.rightUnitor _ ≪≫
+      (isoWhiskerRight (inrCompAssociator C D E) (inverseAssociator C D E) ≪≫
+        Functor.associator _ _ _ ≪≫ inrCompInrCompInverseAssociator C D E).symm ≪≫
+      Functor.associator _ _ _)
+  counitIso := Functor.sumIsoExt
+    ((Functor.associator _ _ _).symm ≪≫
+      isoWhiskerRight (inlCompInverseAssociator C D E) (associator C D E) ≪≫
+      Functor.associator _ _ _ ≪≫ inlCompInlCompAssociator C D E ≪≫ (Functor.rightUnitor _).symm)
+    (Functor.sumIsoExt
+      ((Functor.associator _ _ _).symm ≪≫ (Functor.associator _ _ _).symm ≪≫
+        isoWhiskerRight (Functor.associator _ _ _ ≪≫
+          inlCompInrCompInverseAssociator C D E) (associator C D E) ≪≫
+        Functor.associator _ _ _ ≪≫ inrCompInlCompAssociator C D E ≪≫
+        (Functor.rightUnitor _).symm ≪≫ Functor.associator _ _ _)
+      ((Functor.associator _ _ _).symm ≪≫ (Functor.associator _ _ _).symm ≪≫
+        isoWhiskerRight (Functor.associator _ _ _ ≪≫
+          inrCompInrCompInverseAssociator C D E) (associator C D E) ≪≫
+        inrCompAssociator C D E ≪≫ isoWhiskerLeft _ (Functor.rightUnitor _).symm))
+  functor_unitIso_comp x := match x with
+    | inl (inl c) => by simp [inlCompInlCompAssociator, inlCompInverseAssociator]
+    | inl (inr d) => by simp [inrCompInlCompAssociator, inlCompInrCompInverseAssociator]
+    | inr e => by simp [inrCompAssociator, inrCompInrCompInverseAssociator]
 
 中文:
 定义 associativity
@@ -536,7 +564,35 @@ definition associativity
     (Functor.sumIsoExt
       ((Functor.associator _ _ _).symm ≪≫ Functor.rightUnitor _ ≪≫
         (isoWhiskerRight (inlCompInlCompAssociator C D E) (inverseAssociator C D E) ≪≫
-          inlCompInverseAssociator C D
+          inlCompInverseAssociator C D E).symm ≪≫ Functor.associator _ _ _ ≪≫
+          isoWhiskerLeft _ (Functor.associator _ _ _))
+      ((Functor.associator _ _ _).symm ≪≫ Functor.rightUnitor _ ≪≫
+        (isoWhiskerRight (inrCompInlCompAssociator C D E) (inverseAssociator C D E) ≪≫
+          Functor.associator _ _ _ ≪≫
+          inlCompInrCompInverseAssociator C D E).symm ≪≫
+        Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (Functor.associator _ _ _)))
+    (Functor.rightUnitor _ ≪≫
+      (isoWhiskerRight (inrCompAssociator C D E) (inverseAssociator C D E) ≪≫
+        Functor.associator _ _ _ ≪≫ inrCompInrCompInverseAssociator C D E).symm ≪≫
+      Functor.associator _ _ _)
+  counitIso := Functor.sumIsoExt
+    ((Functor.associator _ _ _).symm ≪≫
+      isoWhiskerRight (inlCompInverseAssociator C D E) (associator C D E) ≪≫
+      Functor.associator _ _ _ ≪≫ inlCompInlCompAssociator C D E ≪≫ (Functor.rightUnitor _).symm)
+    (Functor.sumIsoExt
+      ((Functor.associator _ _ _).symm ≪≫ (Functor.associator _ _ _).symm ≪≫
+        isoWhiskerRight (Functor.associator _ _ _ ≪≫
+          inlCompInrCompInverseAssociator C D E) (associator C D E) ≪≫
+        Functor.associator _ _ _ ≪≫ inrCompInlCompAssociator C D E ≪≫
+        (Functor.rightUnitor _).symm ≪≫ Functor.associator _ _ _)
+      ((Functor.associator _ _ _).symm ≪≫ (Functor.associator _ _ _).symm ≪≫
+        isoWhiskerRight (Functor.associator _ _ _ ≪≫
+          inrCompInrCompInverseAssociator C D E) (associator C D E) ≪≫
+        inrCompAssociator C D E ≪≫ isoWhiskerLeft _ (Functor.rightUnitor _).symm))
+  functor_unitIso_comp x := match x with
+    | inl (inl c) => by simp [inlCompInlCompAssociator, inlCompInverseAssociator]
+    | inl (inr d) => by simp [inrCompInlCompAssociator, inlCompInrCompInverseAssociator]
+    | inr e => by simp [inrCompAssociator, inrCompInrCompInverseAssociator]
 
 Depends on / 依赖: associator
 -/

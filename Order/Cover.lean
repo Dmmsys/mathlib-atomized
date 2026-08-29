@@ -1819,7 +1819,7 @@ theorem Set.Ico_eq_singleton_iff
     exact ⟨rfl, ⟨hcb, fun d hcd hdb => hcd.ne ((h d).mp ⟨hcd.le, hdb⟩).symm⟩⟩
   mpr := fun ⟨rfl, hcov⟩ => hcov.Ico_eq
 
-@[to_dual Ioc_eq_singleto
+@[to_dual Ioc_eq_singleton_right_iff]
 
 中文:
 定理 集合.Ico_eq_singleton_iff
@@ -1831,7 +1831,7 @@ theorem Set.Ico_eq_singleton_iff
     exact ⟨rfl, ⟨hcb, fun d hcd hdb => hcd.ne ((h d).mp ⟨hcd.le, hdb⟩).symm⟩⟩
   mpr := fun ⟨rfl, hcov⟩ => hcov.Ico_eq
 
-@[to_dual Ioc_eq_singleto
+@[to_dual Ioc_eq_singleton_right_iff]
 
 Depends on / 依赖: Ico_eq, Set.ext_iff, ext_iff, hac.trans_lt, hcd.le, hcd.ne, hcov.Ico_eq, le_refl, mem_Ico, mem_singleton_iff, simp_rw, trans_lt
 -/
@@ -2007,7 +2007,9 @@ theorem Set.Ioo_eq_singleton_iff
     exact ⟨⟨hac, fun d had hdc => hdc.ne ((h d).mp ⟨had, hdc.trans hcb⟩)⟩,
       ⟨hcb, fun d hcd hdb => hcd.ne ((h d).mp ⟨hac.trans hcd, hdb⟩).symm⟩⟩
   mpr := fun ⟨hac, hcb⟩ => by
-    rw [← Ioc_union_I
+    rw [← Ioc_union_Ico_eq_Ioo hac.lt hcb.lt]; rw [hac.Ioc_eq]; rw [hcb.Ico_eq]; rw [union_self]
+
+@[to_dual]
 
 中文:
 定理 集合.Ioo_eq_singleton_iff
@@ -2018,7 +2020,9 @@ theorem Set.Ioo_eq_singleton_iff
     exact ⟨⟨hac, fun d had hdc => hdc.ne ((h d).mp ⟨had, hdc.trans hcb⟩)⟩,
       ⟨hcb, fun d hcd hdb => hcd.ne ((h d).mp ⟨hac.trans hcd, hdb⟩).symm⟩⟩
   mpr := fun ⟨hac, hcb⟩ => by
-    rw [← Ioc_union_I
+    rw [← Ioc_union_Ico_eq_Ioo hac.lt hcb.lt]; rw [hac.Ioc_eq]; rw [hcb.Ico_eq]; rw [union_self]
+
+@[to_dual]
 
 Depends on / 依赖: Ico_eq, Ioc_eq, Ioc_union_Ico_eq_Ioo, Set.ext_iff, ext_iff, hac.Ioc_eq, hac.lt, hac.trans, hcb.Ico_eq, hcb.lt, hcd.ne, hdc.ne, hdc.trans, mem_Ioo, mem_singleton_iff, simp_rw, union_self
 -/
@@ -2044,7 +2048,9 @@ theorem Set.Ioi_eq_singleton_iff
     exact ⟨fun c => not_lt.mp fun hc => hc.ne.symm ((h c).mp (hb.trans hc)),
       ⟨hb, fun c hac hcb => hcb.ne ((h c).mp hac)⟩⟩
   mpr := fun ⟨hb, hab⟩ => by
-    cases b, hb using IsTop.rec; rwa [← Ioc
+    cases b, hb using IsTop.rec; rwa [← Ioc_top, Ioc_eq_singleton_right_iff]
+
+@[to_dual unique_right]
 
 中文:
 定理 集合.Ioi_eq_singleton_iff
@@ -2055,7 +2061,9 @@ theorem Set.Ioi_eq_singleton_iff
     exact ⟨fun c => not_lt.mp fun hc => hc.ne.symm ((h c).mp (hb.trans hc)),
       ⟨hb, fun c hac hcb => hcb.ne ((h c).mp hac)⟩⟩
   mpr := fun ⟨hb, hab⟩ => by
-    cases b, hb using IsTop.rec; rwa [← Ioc
+    cases b, hb using IsTop.rec; rwa [← Ioc_top, Ioc_eq_singleton_right_iff]
+
+@[to_dual unique_right]
 
 Depends on / 依赖: Ioc_eq_singleton_right_iff, Ioc_top, IsTop.rec, Set.ext_iff, ext_iff, hb.trans, hc.ne.symm, hcb.ne, mem_Ioi, mem_singleton_iff, not_lt, not_lt.mp, simp_rw
 -/
@@ -2812,7 +2820,9 @@ theorem mk_wcovBy_mk_iff
     · exact Or.inl ⟨mk_wcovBy_mk_iff_left.1 h, rfl⟩
   · rintro (⟨h, rfl⟩ | ⟨h, rfl⟩)
     · exact mk_wcovBy_mk_iff_left.2 h
-    · exact mk_wcovBy
+    · exact mk_wcovBy_mk_iff_right.2 h
+
+@[to_dual none]
 
 中文:
 定理 mk_wcovBy_mk_iff
@@ -2824,7 +2834,9 @@ theorem mk_wcovBy_mk_iff
     · exact Or.inl ⟨mk_wcovBy_mk_iff_left.1 h, rfl⟩
   · rintro (⟨h, rfl⟩ | ⟨h, rfl⟩)
     · exact mk_wcovBy_mk_iff_left.2 h
-    · exact mk_wcovBy
+    · exact mk_wcovBy_mk_iff_right.2 h
+
+@[to_dual none]
 
 Depends on / 依赖: Or.inl, Or.inr, fst_eq_or_snd_eq_of_wcovBy, mk_wcovBy_mk_iff_left, mk_wcovBy_mk_iff_right
 -/
@@ -2851,7 +2863,9 @@ theorem mk_covBy_mk_iff
     · exact Or.inl ⟨mk_covBy_mk_iff_left.1 h, rfl⟩
   · rintro (⟨h, rfl⟩ | ⟨h, rfl⟩)
     · exact mk_covBy_mk_iff_left.2 h
-    · exact mk_co
+    · exact mk_covBy_mk_iff_right.2 h
+
+@[to_dual none]
 
 中文:
 定理 mk_covBy_mk_iff
@@ -2863,7 +2877,9 @@ theorem mk_covBy_mk_iff
     · exact Or.inl ⟨mk_covBy_mk_iff_left.1 h, rfl⟩
   · rintro (⟨h, rfl⟩ | ⟨h, rfl⟩)
     · exact mk_covBy_mk_iff_left.2 h
-    · exact mk_co
+    · exact mk_covBy_mk_iff_right.2 h
+
+@[to_dual none]
 
 Depends on / 依赖: Or.inl, Or.inr, fst_eq_or_snd_eq_of_wcovBy, h.wcovBy, mk_covBy_mk_iff_left, mk_covBy_mk_iff_right, wcovBy
 -/
@@ -2990,7 +3006,8 @@ lemma exists_forall_antisymmRel_of_covBy
   refine ⟨i, fun j hj => ?_⟩
   let c : (i : ι) -> α i := Function.update a i (b i)
   have h₁ : c <= b := by simpa [update_le_iff, c] using fun k hk => hab k
-  have 
+  have h₂ : ¬ c j < b j := h (by simp [c, hi.le]) i (by simpa [c]) h₁ j
+  exact ⟨hab j, by simpa [lt_iff_le_not_ge, hab j, c, hj] using h₂⟩
 
 中文:
 引理 存在_对任意_antisymmRel_of_covBy
@@ -3002,7 +3019,8 @@ lemma exists_forall_antisymmRel_of_covBy
   refine ⟨i, fun j hj => ?_⟩
   let c : (i : ι) -> α i := Function.update a i (b i)
   have h₁ : c <= b := by simpa [update_le_iff, c] using fun k hk => hab k
-  have 
+  have h₂ : ¬ c j < b j := h (by simp [c, hi.le]) i (by simpa [c]) h₁ j
+  exact ⟨hab j, by simpa [lt_iff_le_not_ge, hab j, c, hj] using h₂⟩
 
 Depends on / 依赖: Function, Function.update, Pi.lt_def, and_imp, classical, forall_exists_index, hi.le, lt_def, lt_iff_le_not_ge, not_and, not_exists, update, update_le_iff
 -/
@@ -3065,7 +3083,13 @@ lemma wcovBy_iff_antisymmRel
   refine ⟨fun j => (eq_or_ne j i).elim (· ▸ hab.1) (h j · |>.1), fun c hac hcb => ?_⟩
   have haci : a i < c i := by
     obtain ⟨hac, j, hj⟩ := Pi.lt_def.1 hac
-   
+    exact (eq_or_ne j i).elim (· ▸ hj) fun hj' =>
+      ((lt_of_antisymmRel_of_lt (h j hj').symm hj).not_ge (hcb.le j)).elim
+  have hcbi : c i < b i := by
+    obtain ⟨hcb, j, hj⟩ := Pi.lt_def.1 hcb
+    exact (eq_or_ne j i).elim (· ▸ hj) fun hj' =>
+      ((lt_of_lt_of_antisymmRel hj (h j hj').symm).not_ge (hac.le j)).elim
+  exact hab.2 haci hcbi
 
 中文:
 引理 wcovBy_iff_antisymmRel
@@ -3079,7 +3103,13 @@ lemma wcovBy_iff_antisymmRel
   refine ⟨fun j => (eq_or_ne j i).elim (· ▸ hab.1) (h j · |>.1), fun c hac hcb => ?_⟩
   have haci : a i < c i := by
     obtain ⟨hac, j, hj⟩ := Pi.lt_def.1 hac
-   
+    exact (eq_or_ne j i).elim (· ▸ hj) fun hj' =>
+      ((lt_of_antisymmRel_of_lt (h j hj').symm hj).not_ge (hcb.le j)).elim
+  have hcbi : c i < b i := by
+    obtain ⟨hcb, j, hj⟩ := Pi.lt_def.1 hcb
+    exact (eq_or_ne j i).elim (· ▸ hj) fun hj' =>
+      ((lt_of_lt_of_antisymmRel hj (h j hj').symm).not_ge (hac.le j)).elim
+  exact hab.2 haci hcbi
 
 Depends on / 依赖: Pi.lt_def, eq_or_ne, exists_forall_antisymmRel_of_wcovBy, h.eval, hcb.le, lt_def, lt_of_antisymmRel_of_lt, not_ge
 -/
@@ -3113,7 +3143,11 @@ lemma covBy_iff_antisymmRel
     have : Nonempty ι := ⟨j⟩
     obtain ⟨i, hi⟩ := exists_forall_antisymmRel_of_wcovBy h.wcovBy
     obtain rfl : i = j := by_contra fun this => (hi j (Ne.symm this)).2.not_gt hj
-    exact ⟨i, covBy_iff_wcovBy_and_lt.2 ⟨h.wcovBy.e
+    exact ⟨i, covBy_iff_wcovBy_and_lt.2 ⟨h.wcovBy.eval i, hj⟩, hi⟩
+  rintro ⟨i, hi, h⟩
+  have : Nonempty ι := ⟨i⟩
+  refine covBy_iff_wcovBy_and_lt.2 ⟨wcovBy_iff_antisymmRel.2 ⟨i, hi.wcovBy, h⟩, ?_⟩
+  exact Pi.lt_def.2 ⟨fun j => (eq_or_ne j i).elim (· ▸ hi.1.le) (h j · |>.1), i, hi.1⟩
 
 中文:
 引理 covBy_iff_antisymmRel
@@ -3124,7 +3158,11 @@ lemma covBy_iff_antisymmRel
     have : Nonempty ι := ⟨j⟩
     obtain ⟨i, hi⟩ := exists_forall_antisymmRel_of_wcovBy h.wcovBy
     obtain rfl : i = j := by_contra fun this => (hi j (Ne.symm this)).2.not_gt hj
-    exact ⟨i, covBy_iff_wcovBy_and_lt.2 ⟨h.wcovBy.e
+    exact ⟨i, covBy_iff_wcovBy_and_lt.2 ⟨h.wcovBy.eval i, hj⟩, hi⟩
+  rintro ⟨i, hi, h⟩
+  have : Nonempty ι := ⟨i⟩
+  refine covBy_iff_wcovBy_and_lt.2 ⟨wcovBy_iff_antisymmRel.2 ⟨i, hi.wcovBy, h⟩, ?_⟩
+  exact Pi.lt_def.2 ⟨fun j => (eq_or_ne j i).elim (· ▸ hi.1.le) (h j · |>.1), i, hi.1⟩
 
 Depends on / 依赖: Ne.symm, Nonempty, Pi.lt_def, covBy_iff_wcovBy_and_lt, eq_or_ne, exists_forall_antisymmRel_of_wcovBy, h.wcovBy, h.wcovBy.eval, hi.wcovBy, lt_def, not_gt, wcovBy, wcovBy_iff_antisymmRel
 -/

@@ -35,7 +35,7 @@ lemma IsFiniteKernel.integrable
     ((κ.measurable_coe hs).ennreal_toReal.aestronglyMeasurable)
     (ae_of_all μ fun x => ?_)
   rw [Real.norm_eq_abs]; rw [abs_of_nonneg measureReal_nonneg]
-  exact ENNReal.toReal_mono (Kernel.bound_ne_top _) (Kernel.measure_le_bound _ _
+  exact ENNReal.toReal_mono (Kernel.bound_ne_top _) (Kernel.measure_le_bound _ _ _)
 
 中文:
 引理 是FiniteKernel.integrable
@@ -45,7 +45,7 @@ lemma IsFiniteKernel.integrable
     ((κ.measurable_coe hs).ennreal_toReal.aestronglyMeasurable)
     (ae_of_all μ fun x => ?_)
   rw [Real.norm_eq_abs]; rw [abs_of_nonneg measureReal_nonneg]
-  exact ENNReal.toReal_mono (Kernel.bound_ne_top _) (Kernel.measure_le_bound _ _
+  exact ENNReal.toReal_mono (Kernel.bound_ne_top _) (Kernel.measure_le_bound _ _ _)
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_mono, Integrable, Integrable.mono, Kernel, Kernel.bound_ne_top, Kernel.measure_le_bound, Real.norm_eq_abs, abs_of_nonneg, ae_of_all, aestronglyMeasurable, bound.toReal, bound_ne_top, ennreal_toReal, ennreal_toReal.aestronglyMeasurable, integrable_const, measurable_coe, measureReal_nonneg, measure_le_bound, norm_eq_abs
 -/

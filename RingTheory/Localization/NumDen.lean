@@ -44,7 +44,11 @@ theorem exists_reduced_fraction
   obtain ⟨a', b', c', no_factor, rfl, rfl⟩ :=
     UniqueFactorizationMonoid.exists_reduced_factors' a b
       (mem_nonZeroDivisors_iff_ne_zero.mp b_nonzero)
-  obtain ⟨_, b'_nonzero⟩ := mul_mem_nonZeroDivisors.mp b_
+  obtain ⟨_, b'_nonzero⟩ := mul_mem_nonZeroDivisors.mp b_nonzero
+  refine ⟨a', ⟨b', b'_nonzero⟩, no_factor, ?_⟩
+  refine mul_left_cancel₀ (IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors b_nonzero) ?_
+  simp only [map_mul, Algebra.smul_def] at *
+  rw [← hab]; rw [mul_assoc]; rw [mk'_spec' _ a' ⟨b']; rw [b'_nonzero⟩]
 
 中文:
 定理 存在_reduced_fraction
@@ -54,7 +58,11 @@ theorem exists_reduced_fraction
   obtain ⟨a', b', c', no_factor, rfl, rfl⟩ :=
     UniqueFactorizationMonoid.exists_reduced_factors' a b
       (mem_nonZeroDivisors_iff_ne_zero.mp b_nonzero)
-  obtain ⟨_, b'_nonzero⟩ := mul_mem_nonZeroDivisors.mp b_
+  obtain ⟨_, b'_nonzero⟩ := mul_mem_nonZeroDivisors.mp b_nonzero
+  refine ⟨a', ⟨b', b'_nonzero⟩, no_factor, ?_⟩
+  refine mul_left_cancel₀ (IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors b_nonzero) ?_
+  simp only [map_mul, Algebra.smul_def] at *
+  rw [← hab]; rw [mul_assoc]; rw [mk'_spec' _ a' ⟨b']; rw [b'_nonzero⟩]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsFractionRing, IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors, UniqueFactorizationMonoid, UniqueFactorizationMonoid.exists_reduced_factors, _nonzero, b_nonzero, exists_integer_multiple, exists_reduced_factors, map_mul, mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero.mp, mul_assoc, mul_mem_nonZeroDivisors, mul_mem_nonZeroDivisors.mp, no_factor, nonZeroDivisors, smul_def, to_map_ne_zero_of_mem_nonZeroDivisors
 -/
@@ -331,7 +339,7 @@ theorem isInteger_of_isUnit_den
   refine _root_.trans ?_ (mk'_num_den A x)
   rw [map_mul]; rw [map_units_inv]; rw [hd]
   apply mul_left_cancel₀ d_ne_zero
-  rw [← mul
+  rw [← mul_assoc]; rw [mul_inv_cancel₀ d_ne_zero]; rw [one_mul]; rw [mk'_spec']
 
 中文:
 定理 is整数eger_of_isUnit_den
@@ -345,7 +353,7 @@ theorem isInteger_of_isUnit_den
   refine _root_.trans ?_ (mk'_num_den A x)
   rw [map_mul]; rw [map_units_inv]; rw [hd]
   apply mul_left_cancel₀ d_ne_zero
-  rw [← mul
+  rw [← mul_assoc]; rw [mul_inv_cancel₀ d_ne_zero]; rw [one_mul]; rw [mk'_spec']
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors, _num_den, _root_, _root_.trans, _spec, algebraMap, d_ne_zero, map_mul, map_units_inv, mul_assoc, one_mul, to_map_ne_zero_of_mem_nonZeroDivisors
 -/
@@ -376,7 +384,7 @@ theorem isUnit_den_iff
       rw [mul_comm]; rw [← div_eq_iff]
       · simp only [mk'_num_den']
       simp
-    exact FaithfulSMul.algeb
+    exact FaithfulSMul.algebraMap_injective A K
 
 中文:
 定理 isUnit_den_iff
@@ -392,7 +400,7 @@ theorem isUnit_den_iff
       rw [mul_comm]; rw [← div_eq_iff]
       · simp only [mk'_num_den']
       simp
-    exact FaithfulSMul.algeb
+    exact FaithfulSMul.algebraMap_injective A K
 
 Depends on / 依赖: isInteger_of_isUnit_den
 -/
@@ -441,7 +449,10 @@ lemma associated_den_num_inv
 dvd_of_mul_left_dvd (a := (den A x⁻¹ : A)) dvd_of_eq
 FaithfulSMul.algebraMap_injective A K Eq.symm eq_of_div_eq_one
       (by simp [mul_div_mul_comm, hx]))
-    (IsRelPrime.dvd_of_dvd_mul_right (Is
+    (IsRelPrime.dvd_of_dvd_mul_right (IsFractionRing.num_den_reduced A x⁻¹) <|
+dvd_of_mul_left_dvd (a := (num A x : A)) dvd_of_eq
+FaithfulSMul.algebraMap_injective A K eq_of_div_eq_one
+      (by simp [mul_div_mul_comm, hx]))
 
 中文:
 引理 associated_den_num_inv
@@ -452,7 +463,10 @@ FaithfulSMul.algebraMap_injective A K Eq.symm eq_of_div_eq_one
 dvd_of_mul_left_dvd (a := (den A x⁻¹ : A)) dvd_of_eq
 FaithfulSMul.algebraMap_injective A K Eq.symm eq_of_div_eq_one
       (by simp [mul_div_mul_comm, hx]))
-    (IsRelPrime.dvd_of_dvd_mul_right (Is
+    (IsRelPrime.dvd_of_dvd_mul_right (IsFractionRing.num_den_reduced A x⁻¹) <|
+dvd_of_mul_left_dvd (a := (num A x : A)) dvd_of_eq
+FaithfulSMul.algebraMap_injective A K eq_of_div_eq_one
+      (by simp [mul_div_mul_comm, hx]))
 
 Depends on / 依赖: Eq.symm, FaithfulSMul, FaithfulSMul.algebraMap_injective, IsFractionRing, IsFractionRing.num_den_reduced, IsRelPrime, IsRelPrime.dvd_of_dvd_mul_right, algebraMap_injective, associated_of_dvd_dvd, dvd_of_dvd_mul_right, dvd_of_eq, dvd_of_mul_left_dvd, eq_of_div_eq_one, mul_div_mul_comm, num_den_reduced
 -/
@@ -509,7 +523,10 @@ theorem num_den_unique
   rw [← IsFractionRing.mk'_num_den A x]; rw [IsLocalization.mk'_eq_iff_eq']; rw [(FaithfulSMul.algebraMap_injective _ _).eq_iff] at h
   refine ⟨associated_of_dvd_dvd
       ((num_den_reduced A x).dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _)
-      (pr.dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _
+      (pr.dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _),
+    associated_of_dvd_dvd
+      ((num_den_reduced A x).symm.dvd_of_dvd_mul_left <| h ▸ dvd_mul_left _ _)
+      (pr.symm.dvd_of_dvd_mul_left <| h ▸ dvd_mul_left _ _)⟩
 
 中文:
 定理 num_den_unique
@@ -518,7 +535,10 @@ theorem num_den_unique
   rw [← IsFractionRing.mk'_num_den A x]; rw [IsLocalization.mk'_eq_iff_eq']; rw [(FaithfulSMul.algebraMap_injective _ _).eq_iff] at h
   refine ⟨associated_of_dvd_dvd
       ((num_den_reduced A x).dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _)
-      (pr.dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _
+      (pr.dvd_of_dvd_mul_right <| h ▸ dvd_mul_right _ _),
+    associated_of_dvd_dvd
+      ((num_den_reduced A x).symm.dvd_of_dvd_mul_left <| h ▸ dvd_mul_left _ _)
+      (pr.symm.dvd_of_dvd_mul_left <| h ▸ dvd_mul_left _ _)⟩
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsFractionRing, IsFractionRing.mk, IsLocalization, IsLocalization.mk, _eq_iff_eq, _num_den, algebraMap_injective, associated_of_dvd_dvd, dvd_mul_left, dvd_mul_right, dvd_of_dvd_mul_left, dvd_of_dvd_mul_right, eq_iff, num_den_reduced, pr.dvd_of_dvd_mul_right, pr.symm.dvd_of_dvd_mul_left, symm.dvd_of_dvd_mul_left
 -/

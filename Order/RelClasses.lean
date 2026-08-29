@@ -307,7 +307,12 @@ abbreviation partialOrderOfSO
     | _, _, Or.inr h₁, Or.inr h₂ => Or.inr (_root_.trans h₁ h₂)
   le_antisymm x y h₁ h₂ :=
     match y, h₁, h₂ with
-    | _, Or.in
+    | _, Or.inl rfl, _ => rfl
+    | _, _, Or.inl rfl => rfl
+    | _, Or.inr h₁, Or.inr h₂ => (asymm h₁ h₂).elim
+  lt_iff_le_not_ge x y :=
+    ⟨fun h => ⟨Or.inr h, not_or_intro (fun e => by rw [e] at h; exact irrefl _ h) (asymm h)⟩,
+fun ⟨h₁, h₂⟩ => h₁.resolve_left fun e => h₂ e ▸ Or.inl rfl⟩
 
 中文:
 缩写 partialOrderOfSO
@@ -322,7 +327,12 @@ abbreviation partialOrderOfSO
     | _, _, Or.inr h₁, Or.inr h₂ => Or.inr (_root_.trans h₁ h₂)
   le_antisymm x y h₁ h₂ :=
     match y, h₁, h₂ with
-    | _, Or.in
+    | _, Or.inl rfl, _ => rfl
+    | _, _, Or.inl rfl => rfl
+    | _, Or.inr h₁, Or.inr h₂ => (asymm h₁ h₂).elim
+  lt_iff_le_not_ge x y :=
+    ⟨fun h => ⟨Or.inr h, not_or_intro (fun e => by rw [e] at h; exact irrefl _ h) (asymm h)⟩,
+fun ⟨h₁, h₂⟩ => h₁.resolve_left fun e => h₂ e ▸ Or.inl rfl⟩
 -/
 abbrev partialOrderOfSO (r) [IsStrictOrder α r] : PartialOrder α where
   le x y := x = y ∨ r x y
@@ -353,7 +363,15 @@ abbreviation linearOrderOfSTO
       h.elim (fun h => h ▸ irrefl_of _ _) (asymm_of r)⟩
   { __ := partialOrderOfSO r
     le_total := fun x y =>
-      match y, tric
+      match y, trichotomous_of r x y with
+      | _, Or.inl h => Or.inl (Or.inr h)
+      | _, Or.inr (Or.inl rfl) => Or.inl (Or.inl rfl)
+      | _, Or.inr (Or.inr h) => Or.inr (Or.inr h),
+    toMin := minOfLe,
+    toMax := maxOfLe,
+    toDecidableLE := hD }
+
+@[deprecated inferInstance (since := "2026-04-28")]
 
 中文:
 缩写 linearOrderOfSTO
@@ -363,7 +381,15 @@ abbreviation linearOrderOfSTO
       h.elim (fun h => h ▸ irrefl_of _ _) (asymm_of r)⟩
   { __ := partialOrderOfSO r
     le_total := fun x y =>
-      match y, tric
+      match y, trichotomous_of r x y with
+      | _, Or.inl h => Or.inl (Or.inr h)
+      | _, Or.inr (Or.inl rfl) => Or.inl (Or.inl rfl)
+      | _, Or.inr (Or.inr h) => Or.inr (Or.inr h),
+    toMin := minOfLe,
+    toMax := maxOfLe,
+    toDecidableLE := hD }
+
+@[deprecated inferInstance (since := "2026-04-28")]
 
 Depends on / 依赖: DecidableRel, Eq.symm, Or.inl, Or.inr, asymm_of, decidable_of_iff, h.elim, irrefl_of, le_total, maxOfLe, minOfLe, partialOrderOfSO, resolve_left, toDecidableLE, trichotomous_of
 -/
@@ -1222,7 +1248,13 @@ instance Prod.wellFoundedLT
     intro a a' ha b
     induction a using WellFoundedLT.induction generalizing a' b with | ind a iha
     induction b using WellFoundedLT.induction generalizing a' with | ind b ihb
-    ref
+    refine Acc.intro (a', b) fun x hx => ?_
+    obtain ⟨ha', hb⟩ | ⟨ha', hb⟩ := Prod.lt_iff.1 hx
+    · exact iha x.1 (ha'.trans_le ha) x.1 le_rfl x.2
+    · exact ihb x.2 hb x.1 (ha'.trans ha)
+
+@[deprecated (since := "2026-01-12")] alias Prod.wellFoundedLT' := Prod.wellFoundedLT
+@[deprecated (since := "2026-01-12")] alias Prod.wellFoundedGT' := Prod.wellFoundedGT
 
 中文:
 实例 积类型.wellFoundedLT
@@ -1232,7 +1264,13 @@ instance Prod.wellFoundedLT
     intro a a' ha b
     induction a using WellFoundedLT.induction generalizing a' b with | ind a iha
     induction b using WellFoundedLT.induction generalizing a' with | ind b ihb
-    ref
+    refine Acc.intro (a', b) fun x hx => ?_
+    obtain ⟨ha', hb⟩ | ⟨ha', hb⟩ := Prod.lt_iff.1 hx
+    · exact iha x.1 (ha'.trans_le ha) x.1 le_rfl x.2
+    · exact ihb x.2 hb x.1 (ha'.trans ha)
+
+@[deprecated (since := "2026-01-12")] alias Prod.wellFoundedLT' := Prod.wellFoundedLT
+@[deprecated (since := "2026-01-12")] alias Prod.wellFoundedGT' := Prod.wellFoundedGT
 
 Depends on / 依赖: Acc.intro, Prod.lt_iff, WellFoundedLT, WellFoundedLT.induction, generalizing, le_rfl, lt_iff, trans_le
 -/

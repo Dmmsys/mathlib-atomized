@@ -33,7 +33,21 @@ definition _root_.Lean.MVarId.changeLocalDecl'
   let lctx := (← mvarId.getDecl).lctx
   let some decl := lctx.find? fvarId | throwTacticEx `changeLocalDecl mvarId m!"\
     local variable {Expr.fvar fvarId} is not present in local context{mvarId}"
-  let toRevert := lctx.foldl (init := #[]) fun arr decl
+  let toRevert := lctx.foldl (init := #[]) fun arr decl' =>
+    if decl.index <= decl'.index then arr.push decl'.fvarId else arr
+  let (_, mvarId) ← mvarId.withReverted toRevert fun mvarId fvars => mvarId.withContext do
+    let check (typeOld : Expr) : MetaM Unit := do
+      if checkDefEq then
+        unless ← isDefEq typeNew typeOld do
+          throwTacticEx `changeLocalDecl mvarId
+            m!"given type{indentExpr typeNew}\nis not definitionally equal to{indentExpr typeOld}"
+    let finalize (targetNew : Expr) := do
+      return ((), fvars.map some, ← mvarId.replaceTargetDefEq targetNew)
+    match ← mvarId.getType with
+    | .forallE n d b bi => do check d; finalize (.forallE n typeNew b bi)
+    | .letE n t v b ndep => do check t; finalize (.letE n typeNew v b ndep)
+    | _ => throwTacticEx `changeLocalDecl mvarId "unexpected auxiliary target"
+  return mvarId
 
 中文:
 定义 _root_.Lean.MVarId.changeLocalDecl'
@@ -43,7 +57,21 @@ definition _root_.Lean.MVarId.changeLocalDecl'
   let lctx := (← mvarId.getDecl).lctx
   let some decl := lctx.find? fvarId | throwTacticEx `changeLocalDecl mvarId m!"\
     local variable {Expr.fvar fvarId} is not present in local context{mvarId}"
-  let toRevert := lctx.foldl (init := #[]) fun arr decl
+  let toRevert := lctx.foldl (init := #[]) fun arr decl' =>
+    if decl.index <= decl'.index then arr.push decl'.fvarId else arr
+  let (_, mvarId) ← mvarId.withReverted toRevert fun mvarId fvars => mvarId.withContext do
+    let check (typeOld : Expr) : MetaM Unit := do
+      if checkDefEq then
+        unless ← isDefEq typeNew typeOld do
+          throwTacticEx `changeLocalDecl mvarId
+            m!"given type{indentExpr typeNew}\nis not definitionally equal to{indentExpr typeOld}"
+    let finalize (targetNew : Expr) := do
+      return ((), fvars.map some, ← mvarId.replaceTargetDefEq targetNew)
+    match ← mvarId.getType with
+    | .forallE n d b bi => do check d; finalize (.forallE n typeNew b bi)
+    | .letE n t v b ndep => do check t; finalize (.letE n typeNew v b ndep)
+    | _ => throwTacticEx `changeLocalDecl mvarId "unexpected auxiliary target"
+  return mvarId
 
 Depends on / 依赖: MVarId
 -/
@@ -83,7 +111,11 @@ definition runDefEqTactic
       if Expr.equal ty ty' then
         return mvarId
       else
-        mvarId.changeLocalD
+        mvarId.changeLocalDecl' (checkDefEq := checkDefEq) h ty')
+    (atTarget := liftMetaTactic1 fun mvarId => do
+      let ty ← instantiateMVars (← mvarId.getType)
+      mvarId.change (checkDefEq := checkDefEq) (← m none ty))
+    (failed := fun _ => throwError "{tacticName} failed")
 
 中文:
 定义 runDefEqTactic
@@ -96,7 +128,11 @@ definition runDefEqTactic
       if Expr.equal ty ty' then
         return mvarId
       else
-        mvarId.changeLocalD
+        mvarId.changeLocalDecl' (checkDefEq := checkDefEq) h ty')
+    (atTarget := liftMetaTactic1 fun mvarId => do
+      let ty ← instantiateMVars (← mvarId.getType)
+      mvarId.change (checkDefEq := checkDefEq) (← m none ty))
+    (failed := fun _ => throwError "{tacticName} failed")
 -/
 def runDefEqTactic (m : Option FVarId -> Expr -> MetaM Expr)
     (loc? : Option (TSyntax ``Parser.Tactic.location))
@@ -197,7 +233,8 @@ definition unfoldFVars
         else
           return .continue
       else
-        return .cont
+        return .continue
+    | _ => return .continue
 
 中文:
 定义 unfoldFVars
@@ -212,7 +249,8 @@ definition unfoldFVars
         else
           return .continue
       else
-        return .cont
+        return .continue
+    | _ => return .continue
 -/
 def unfoldFVars (fvars : Array FVarId) (e : Expr) : MetaM Expr := do
   transform (usedLetOnly := true) e fun node => do
@@ -242,7 +280,15 @@ definition refoldFVars
       let locIndex := (← loc.getDecl).index
       fvars.filterM fun fvar => do
         let some decl ← fvar.findDecl? | return false
-        return decl.index < locI
+        return decl.index < locIndex
+    else
+      pure fvars
+  let mut e := e
+  for fvar in fvars do
+    let some val ← fvar.getValue?
+      | throwError "local variable {Expr.fvar fvar} has no value to refold"
+    e := (← kabstract e val).instantiate1 (Expr.fvar fvar)
+  return e
 
 中文:
 定义 refoldFVars
@@ -254,7 +300,15 @@ definition refoldFVars
       let locIndex := (← loc.getDecl).index
       fvars.filterM fun fvar => do
         let some decl ← fvar.findDecl? | return false
-        return decl.index < locI
+        return decl.index < locIndex
+    else
+      pure fvars
+  let mut e := e
+  for fvar in fvars do
+    let some val ← fvar.getValue?
+      | throwError "local variable {Expr.fvar fvar} has no value to refold"
+    e := (← kabstract e val).instantiate1 (Expr.fvar fvar)
+  return e
 -/
 def refoldFVars (fvars : Array FVarId) (loc? : Option FVarId) (e : Expr) : MetaM Expr := do
   -- Filter the fvars, only taking those that are from earlier in the local context.
@@ -479,7 +533,8 @@ definition getProjectedExpr
     if let some info ← getProjectionFnInfo? fn then
       if e.getAppNumArgs == info.numParams + 1 then
         if let some (ConstantInfo.ctorInfo fVal) := (← getEnv).find? info.ctorName then
-          ret
+          return (fVal.induct, info.i, e.appArg!)
+  return none
 
 中文:
 定义 getProjectedExpr
@@ -491,7 +546,8 @@ definition getProjectedExpr
     if let some info ← getProjectionFnInfo? fn then
       if e.getAppNumArgs == info.numParams + 1 then
         if let some (ConstantInfo.ctorInfo fVal) := (← getEnv).find? info.ctorName then
-          ret
+          return (fVal.induct, info.i, e.appArg!)
+  return none
 -/
 def getProjectedExpr (e : Expr) : MetaM (Option (Name × Nat × Expr)) := do
   if let .proj S i x := e then
@@ -514,7 +570,16 @@ definition etaStruct?
   let some (ConstantInfo.ctorInfo fVal) := (← getEnv).find? f | return none
   unless 0 < fVal.numFields && e.getAppNumArgs == fVal.numParams + fVal.numFields do return none
   unless isStructure (← getEnv) fVal.induct do return none
-  let args := e.getA
+  let args := e.getAppArgs
+  let mut x? ← findProj fVal args pure
+  if tryWhnfR then
+    if let .undef := x? then
+      x? ← findProj fVal args whnfR
+  if let .some x := x? then
+    -- Rely on eta for structures to make the check:
+    if ← isDefEq x e then
+      return x
+  return none
 
 中文:
 定义 etaStruct?
@@ -524,7 +589,16 @@ definition etaStruct?
   let some (ConstantInfo.ctorInfo fVal) := (← getEnv).find? f | return none
   unless 0 < fVal.numFields && e.getAppNumArgs == fVal.numParams + fVal.numFields do return none
   unless isStructure (← getEnv) fVal.induct do return none
-  let args := e.getA
+  let args := e.getAppArgs
+  let mut x? ← findProj fVal args pure
+  if tryWhnfR then
+    if let .undef := x? then
+      x? ← findProj fVal args whnfR
+  if let .some x := x? then
+    -- Rely on eta for structures to make the check:
+    if ← isDefEq x e then
+      return x
+  return none
 -/
 def etaStruct? (e : Expr) (tryWhnfR : Bool := true) : MetaM (Option Expr) := do
   let .const f _ := e.getAppFn | return none

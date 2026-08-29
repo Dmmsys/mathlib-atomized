@@ -551,7 +551,9 @@ lemma le_egauge_of_forall_ne_zero
   apply le_of_forall_gt
   intro b hb
 rcases Filter.nonempty_of_mem
-    inter_mem_nhdsWithin {(0 : 𝕜)}ᶜ (Metric.eba
+    inter_mem_nhdsWithin {(0 : 𝕜)}ᶜ (Metric.eball_mem_nhds 0 (by simpa using hb))
+    with ⟨c, hc₀, hcb⟩
+  exact (h c (by simpa using hc₀) ⟨_, hs₀, by simp⟩).trans_lt (by simpa using hcb)
 
 中文:
 引理 le_egauge_of_对任意_ne_zero
@@ -567,7 +569,9 @@ rcases Filter.nonempty_of_mem
   apply le_of_forall_gt
   intro b hb
 rcases Filter.nonempty_of_mem
-    inter_mem_nhdsWithin {(0 : 𝕜)}ᶜ (Metric.eba
+    inter_mem_nhdsWithin {(0 : 𝕜)}ᶜ (Metric.eball_mem_nhds 0 (by simpa using hb))
+    with ⟨c, hc₀, hcb⟩
+  exact (h c (by simpa using hc₀) ⟨_, hs₀, by simp⟩).trans_lt (by simpa using hcb)
 
 Depends on / 依赖: Filter, Filter.nonempty_of_mem, Metric, Metric.eball_mem_nhds, Set.mem_zero, eball_mem_nhds, inter_mem_nhdsWithin, le_egauge_iff, le_of_forall_gt, mem_zero, ne_or_eq, nonempty_of_mem, trans_lt, zero_smul_set_subset
 -/
@@ -632,7 +636,8 @@ lemma egauge_smul_left
   calc
     egauge 𝕜 (c • s) x * ‖c‖ₑ = egauge 𝕜 (c • s) x / ‖c⁻¹‖ₑ := by
       rw [enorm_inv (by simpa)]; rw [div_eq_mul_inv]; rw [inv_inv]
-    _ <= egauge 𝕜 (c⁻¹ • c • s) x := le_egauge_s
+    _ <= egauge 𝕜 (c⁻¹ • c • s) x := le_egauge_smul_left _ _ _
+    _ = egauge 𝕜 s x := by rw [inv_smul_smul₀ hc]
 
 中文:
 引理 egauge_smul_left
@@ -643,7 +648,8 @@ lemma egauge_smul_left
   calc
     egauge 𝕜 (c • s) x * ‖c‖ₑ = egauge 𝕜 (c • s) x / ‖c⁻¹‖ₑ := by
       rw [enorm_inv (by simpa)]; rw [div_eq_mul_inv]; rw [inv_inv]
-    _ <= egauge 𝕜 (c⁻¹ • c • s) x := le_egauge_s
+    _ <= egauge 𝕜 (c⁻¹ • c • s) x := le_egauge_smul_left _ _ _
+    _ = egauge 𝕜 s x := by rw [inv_smul_smul₀ hc]
 
 Depends on / 依赖: ENNReal, ENNReal.le_div_iff_mul_le, div_eq_mul_inv, egauge, enorm_inv, inv_inv, le_antisymm, le_div_iff_mul_le, le_egauge_smul_left
 -/
@@ -671,7 +677,7 @@ lemma le_egauge_smul_right
 · refine ENNReal.mul_le_of_le_div' le_trans ?_ ENNReal.coe_div_le
     rw [div_eq_inv_mul]; rw [← nnnorm_inv]; rw [← nnnorm_mul]
     refine egauge_le_of_mem_smul ⟨y, hy, ?_⟩
-    simp only [mul_smul, hxy, inv_
+    simp only [mul_smul, hxy, inv_smul_smul₀ hc]
 
 中文:
 引理 le_egauge_smul_right
@@ -684,7 +690,7 @@ lemma le_egauge_smul_right
 · refine ENNReal.mul_le_of_le_div' le_trans ?_ ENNReal.coe_div_le
     rw [div_eq_inv_mul]; rw [← nnnorm_inv]; rw [← nnnorm_mul]
     refine egauge_le_of_mem_smul ⟨y, hy, ?_⟩
-    simp only [mul_smul, hxy, inv_
+    simp only [mul_smul, hxy, inv_smul_smul₀ hc]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_div_le, ENNReal.mul_le_of_le_div, coe_div_le, div_eq_inv_mul, egauge_le_of_mem_smul, eq_or_ne, le_egauge_iff, le_trans, mul_le_of_le_div, mul_smul, nnnorm_inv, nnnorm_mul
 -/
@@ -711,7 +717,8 @@ lemma egauge_smul_right
   · simp [egauge_zero_right _ (h rfl)]
   · rw [mul_comm, ← ENNReal.div_le_iff_le_mul (.inl <| by simpa) (.inl enorm_ne_top),
       ENNReal.div_eq_inv_mul, ← enorm_inv (by simpa)]
-    refine (le_egauge_smul_ri
+    refine (le_egauge_smul_right _ _ _).trans_eq ?_
+    rw [inv_smul_smul₀ hc]
 
 中文:
 引理 egauge_smul_right
@@ -722,7 +729,8 @@ lemma egauge_smul_right
   · simp [egauge_zero_right _ (h rfl)]
   · rw [mul_comm, ← ENNReal.div_le_iff_le_mul (.inl <| by simpa) (.inl enorm_ne_top),
       ENNReal.div_eq_inv_mul, ← enorm_inv (by simpa)]
-    refine (le_egauge_smul_ri
+    refine (le_egauge_smul_right _ _ _).trans_eq ?_
+    rw [inv_smul_smul₀ hc]
 
 Depends on / 依赖: ENNReal, ENNReal.div_eq_inv_mul, ENNReal.div_le_iff_le_mul, div_eq_inv_mul, div_le_iff_le_mul, egauge_zero_right, enorm_inv, enorm_ne_top, eq_or_ne, le_antisymm, le_egauge_smul_right, mul_comm, trans_eq
 -/
@@ -748,7 +756,7 @@ theorem egauge_prod_mk
   rcases hr with ⟨⟨x, hx, hxr⟩, ⟨y, hy, hyr⟩⟩
   cases le_total ‖x‖ ‖y‖ with
   | inl hle => exact ⟨y, ⟨hU.smul_mono hle hx, hy⟩, hyr⟩
-  | inr hle => exact ⟨
+  | inr hle => exact ⟨x, ⟨hx, hV.smul_mono hle hy⟩, hxr⟩
 
 中文:
 定理 egauge_prod_mk
@@ -759,7 +767,7 @@ theorem egauge_prod_mk
   rcases hr with ⟨⟨x, hx, hxr⟩, ⟨y, hy, hyr⟩⟩
   cases le_total ‖x‖ ‖y‖ with
   | inl hle => exact ⟨y, ⟨hU.smul_mono hle hx, hy⟩, hyr⟩
-  | inr hle => exact ⟨
+  | inr hle => exact ⟨x, ⟨hx, hV.smul_mono hle hy⟩, hxr⟩
 
 Depends on / 依赖: egauge_lt_iff, hU.smul_mono, hV.smul_mono, le_antisymm, le_egauge_prod, le_of_forall_gt, le_total, max_lt_iff, smul_mono, smul_set_prod
 -/
@@ -817,7 +825,29 @@ theorem egauge_pi'
 egauge_lt_iff.mp (le_iSup₂ i hi).trans_lt hr
   choose! c hc hcr using this
   obtain ⟨c₀, hc₀, hc₀I, hc₀r⟩ :
-   
+      exists c₀ : 𝕜, (c₀ != 0 ∨ I = univ) ∧ (forall i in I, ‖c i‖ <= ‖c₀‖) ∧ ‖c₀‖ₑ < r := by
+    have hr₀ : 0 < r := hr.bot_lt
+    rcases I.eq_empty_or_nonempty with rfl | hIne
+    · obtain hι | hbot : IsEmpty ι ∨ (𝓝[!=] (0 : 𝕜)).NeBot := by simpa [@eq_comm _ ∅] using hI₀
+      · use 0
+        simp [@eq_comm _ ∅, hι, hr₀]
+      · rcases exists_enorm_lt 𝕜 hr₀.ne' with ⟨c₀, hc₀, hc₀r⟩
+        exact ⟨c₀, .inl hc₀, by simp, hc₀r⟩
+    · obtain ⟨i₀, hi₀I, hc_max⟩ : exists i₀ in I, IsMaxOn (‖c ·‖ₑ) I i₀ :=
+        exists_max_image _ (‖c ·‖ₑ) hI hIne
+      by_cases! H : c i₀ != 0 ∨ I = univ
+      · exact ⟨c i₀, H, fun i hi => by simpa [enorm] using! hc_max hi, hcr _ hi₀I⟩
+      · have hc0 (i : ι) (hi : i in I) : c i = 0 := by simpa [H] using hc_max hi
+        have heg0 (i : ι) (hi : i in I) : x i = 0 :=
+          zero_smul_set_subset (α := 𝕜) (U i) (hc0 i hi ▸ hc i hi)
+        have : (𝓝[!=] (0 : 𝕜)).NeBot := (hI₀.resolve_left H.2).resolve_left (by simpa)
+        rcases exists_enorm_lt 𝕜 hr₀.ne' with ⟨c₁, hc₁, hc₁r⟩
+        refine ⟨c₁, .inl hc₁, fun i hi => ?_, hc₁r⟩
+        simp [hc0 i hi]
+  refine egauge_lt_iff.2 ⟨c₀, ?_, hc₀r⟩
+  rw [smul_set_pi₀' hc₀]
+  intro i hi
+  exact (hU i hi).smul_mono (hc₀I i hi) (hc i hi)
 
 中文:
 定理 egauge_pi'
@@ -829,7 +859,29 @@ egauge_lt_iff.mp (le_iSup₂ i hi).trans_lt hr
 egauge_lt_iff.mp (le_iSup₂ i hi).trans_lt hr
   choose! c hc hcr using this
   obtain ⟨c₀, hc₀, hc₀I, hc₀r⟩ :
-   
+      exists c₀ : 𝕜, (c₀ != 0 ∨ I = univ) ∧ (forall i in I, ‖c i‖ <= ‖c₀‖) ∧ ‖c₀‖ₑ < r := by
+    have hr₀ : 0 < r := hr.bot_lt
+    rcases I.eq_empty_or_nonempty with rfl | hIne
+    · obtain hι | hbot : IsEmpty ι ∨ (𝓝[!=] (0 : 𝕜)).NeBot := by simpa [@eq_comm _ ∅] using hI₀
+      · use 0
+        simp [@eq_comm _ ∅, hι, hr₀]
+      · rcases exists_enorm_lt 𝕜 hr₀.ne' with ⟨c₀, hc₀, hc₀r⟩
+        exact ⟨c₀, .inl hc₀, by simp, hc₀r⟩
+    · obtain ⟨i₀, hi₀I, hc_max⟩ : exists i₀ in I, IsMaxOn (‖c ·‖ₑ) I i₀ :=
+        exists_max_image _ (‖c ·‖ₑ) hI hIne
+      by_cases! H : c i₀ != 0 ∨ I = univ
+      · exact ⟨c i₀, H, fun i hi => by simpa [enorm] using! hc_max hi, hcr _ hi₀I⟩
+      · have hc0 (i : ι) (hi : i in I) : c i = 0 := by simpa [H] using hc_max hi
+        have heg0 (i : ι) (hi : i in I) : x i = 0 :=
+          zero_smul_set_subset (α := 𝕜) (U i) (hc0 i hi ▸ hc i hi)
+        have : (𝓝[!=] (0 : 𝕜)).NeBot := (hI₀.resolve_left H.2).resolve_left (by simpa)
+        rcases exists_enorm_lt 𝕜 hr₀.ne' with ⟨c₁, hc₁, hc₁r⟩
+        refine ⟨c₁, .inl hc₁, fun i hi => ?_, hc₁r⟩
+        simp [hc0 i hi]
+  refine egauge_lt_iff.2 ⟨c₀, ?_, hc₀r⟩
+  rw [smul_set_pi₀' hc₀]
+  intro i hi
+  exact (hU i hi).smul_mono (hc₀I i hi) (hc i hi)
 
 Depends on / 依赖: I.eq_empty_or_nonempty, IsEmpty, bot_lt, egauge_lt_iff, egauge_lt_iff.mp, eq_empty_or_nonempty, hr.bot_lt, le_antisymm, le_egauge_pi, le_of_forall_gt, trans_lt
 -/
@@ -1033,7 +1085,16 @@ lemma egauge_ball_le_of_one_lt_norm
     · simpa using one_pos.trans hc
     · simpa [enorm, ← NNReal.coe_eq_zero] using h₀
   · rcases eq_or_ne ‖x‖ 0 with hx | hx
-    · 
+    · have hx' : ‖x‖ₑ = 0 := by simpa [enorm, ← coe_nnnorm, NNReal.coe_eq_zero] using hx
+      simp only [hx', mul_zero, ENNReal.zero_div, nonpos_iff_eq_zero, egauge_eq_zero_iff]
+      refine (frequently_iff_neBot.2 (inferInstance : NeBot (𝓝[!=] (0 : 𝕜)))).mono fun c hc => ?_
+      simp [mem_smul_set_iff_inv_smul_mem₀ hc, norm_smul, hx, hr]
+    · rcases rescale_to_shell_semi_normed hc hr hx with ⟨a, ha₀, har, -, hainv⟩
+      calc
+        egauge 𝕜 (ball 0 r) x <= ↑(‖a‖₊⁻¹) :=
+          egauge_le_of_smul_mem_of_ne (mem_ball_zero_iff.2 har) ha₀
+        _ <= ↑(‖c‖₊ * ‖x‖₊ / r) := by rwa [ENNReal.coe_le_coe, div_eq_inv_mul, ← mul_assoc]
+_ <= ‖c‖ₑ * ‖x‖ₑ / r := ENNReal.coe_div_le.trans by simp [ENNReal.coe_mul, enorm]
 
 中文:
 引理 egauge_ball_le_of_one_lt_norm
@@ -1046,7 +1107,16 @@ lemma egauge_ball_le_of_one_lt_norm
     · simpa using one_pos.trans hc
     · simpa [enorm, ← NNReal.coe_eq_zero] using h₀
   · rcases eq_or_ne ‖x‖ 0 with hx | hx
-    · 
+    · have hx' : ‖x‖ₑ = 0 := by simpa [enorm, ← coe_nnnorm, NNReal.coe_eq_zero] using hx
+      simp only [hx', mul_zero, ENNReal.zero_div, nonpos_iff_eq_zero, egauge_eq_zero_iff]
+      refine (frequently_iff_neBot.2 (inferInstance : NeBot (𝓝[!=] (0 : 𝕜)))).mono fun c hc => ?_
+      simp [mem_smul_set_iff_inv_smul_mem₀ hc, norm_smul, hx, hr]
+    · rcases rescale_to_shell_semi_normed hc hr hx with ⟨a, ha₀, har, -, hainv⟩
+      calc
+        egauge 𝕜 (ball 0 r) x <= ↑(‖a‖₊⁻¹) :=
+          egauge_le_of_smul_mem_of_ne (mem_ball_zero_iff.2 har) ha₀
+        _ <= ↑(‖c‖₊ * ‖x‖₊ / r) := by rwa [ENNReal.coe_le_coe, div_eq_inv_mul, ← mul_assoc]
+_ <= ‖c‖ₑ * ‖x‖ₑ / r := ENNReal.coe_div_le.trans by simp [ENNReal.coe_mul, enorm]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_zero, ENNReal.div_zero, ENNReal.zero_div, NNReal, NNReal.coe_eq_zero, NontriviallyNormedField, coe_eq_zero, coe_nnnorm, coe_zero, div_zero, egauge_eq_zero_iff, eq_or_ne, eq_zero_or_pos, frequently_iff_neBot, le_top, mul_ne_zero, mul_zero, nonpos_iff_eq_zero, one_pos
 -/

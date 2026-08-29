@@ -211,7 +211,11 @@ theorem eventually_forall_le_dist_cast_div
   have B : x ∉ range (fun m => (n : Real)⁻¹ * m : Int -> Real) := by
     rintro ⟨m, rfl⟩
     simp at hx
-  rcases Metric.me
+  rcases Metric.mem_nhds_iff.1 (A.isOpen_compl.mem_nhds B) with ⟨ε, ε0, hε⟩
+  refine (ge_mem_nhds ε0).mono fun δ hδ m => not_lt.1 fun hlt => ?_
+  rw [dist_comm] at hlt
+  refine hε (ball_subset_ball hδ hlt) ⟨m, ?_⟩
+  simp [div_eq_inv_mul]
 
 中文:
 定理 eventually_对任意_le_dist_cast_div
@@ -222,7 +226,11 @@ theorem eventually_forall_le_dist_cast_div
   have B : x ∉ range (fun m => (n : Real)⁻¹ * m : Int -> Real) := by
     rintro ⟨m, rfl⟩
     simp at hx
-  rcases Metric.me
+  rcases Metric.mem_nhds_iff.1 (A.isOpen_compl.mem_nhds B) with ⟨ε, ε0, hε⟩
+  refine (ge_mem_nhds ε0).mono fun δ hδ m => not_lt.1 fun hlt => ?_
+  rw [dist_comm] at hlt
+  refine hε (ball_subset_ball hδ hlt) ⟨m, ?_⟩
+  simp [div_eq_inv_mul]
 
 Depends on / 依赖: A.isOpen_compl.mem_nhds, Int.isClosedEmbedding_coe_real.isClosedMap, IsClosed, Metric, Metric.mem_nhds_iff, ball_subset_ball, dist_comm, div_eq_inv_mul, ge_mem_nhds, isClosedEmbedding_coe_real, isClosedMap, isClosed_range, isOpen_compl, mem_nhds, mem_nhds_iff, not_lt
 -/

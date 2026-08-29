@@ -387,7 +387,10 @@ lemma IsAtom.le_iSup
   push Not at ha'
   have ha'' : Disjoint a (⨆ i, f i) :=
 disjoint_iSup_iff.2 fun i => fun x hxa hxf => le_bot_iff.2 of_not_not fun hx =>
-      have hxa : x < a := (le_i
+      have hxa : x < a := (le_iff_eq_or_lt.1 hxa).resolve_left (by rintro rfl; exact ha' _ hxf)
+      hx (ha.2 _ hxa)
+  obtain rfl := le_bot_iff.1 (ha'' le_rfl h)
+  exact ha.1 rfl
 
 中文:
 引理 IsAtom.le_iSup
@@ -400,7 +403,10 @@ disjoint_iSup_iff.2 fun i => fun x hxa hxf => le_bot_iff.2 of_not_not fun hx =>
   push Not at ha'
   have ha'' : Disjoint a (⨆ i, f i) :=
 disjoint_iSup_iff.2 fun i => fun x hxa hxf => le_bot_iff.2 of_not_not fun hx =>
-      have hxa : x < a := (le_i
+      have hxa : x < a := (le_iff_eq_or_lt.1 hxa).resolve_left (by rintro rfl; exact ha' _ hxf)
+      hx (ha.2 _ hxa)
+  obtain rfl := le_bot_iff.1 (ha'' le_rfl h)
+  exact ha.1 rfl
 -/
 protected lemma IsAtom.le_iSup (ha : IsAtom a) : a <= iSup f ↔ exists i, a <= f i := by
   refine ⟨?_, fun ⟨i, hi⟩ => le_trans hi (le_iSup _ _)⟩
@@ -856,7 +862,7 @@ theorem covBy_iff
   contrapose!
   rw [lt_iff_le_not_ge]; rw [lt_iff_le_and_ne]; rw [and_and_and_comm]
   simp_rw [exists_and_left, and_assoc, and_congr_right_iff, ← and_assoc, and_comm, exists_and_left,
-    SetLike.not_le_iff_exists, and_comm, implies_true
+    SetLike.not_le_iff_exists, and_comm, implies_true]
 
 中文:
 定理 covBy_iff
@@ -866,7 +872,7 @@ theorem covBy_iff
   contrapose!
   rw [lt_iff_le_not_ge]; rw [lt_iff_le_and_ne]; rw [and_and_and_comm]
   simp_rw [exists_and_left, and_assoc, and_congr_right_iff, ← and_assoc, and_comm, exists_and_left,
-    SetLike.not_le_iff_exists, and_comm, implies_true
+    SetLike.not_le_iff_exists, and_comm, implies_true]
 
 Depends on / 依赖: SetLike, SetLike.not_le_iff_exists, and_and_and_comm, and_assoc, and_comm, and_congr_right, and_congr_right_iff, contrapose, exists_and_left, forall_congr, implies_true, lt_iff_le_and_ne, lt_iff_le_not_ge, not_le_iff_exists, simp_rw
 -/
@@ -889,7 +895,7 @@ theorem covBy_iff'
   push Not
   rw [lt_iff_le_and_ne]; rw [lt_iff_le_not_ge]; rw [and_and_and_comm]
   simp_rw [exists_and_left, and_assoc, and_congr_right_iff, ← and_assoc, and_comm, exists_and_left,
-    SetLike.not_le_iff_exists, ne_comm, i
+    SetLike.not_le_iff_exists, ne_comm, implies_true]
 
 中文:
 定理 covBy_iff'
@@ -899,7 +905,7 @@ theorem covBy_iff'
   push Not
   rw [lt_iff_le_and_ne]; rw [lt_iff_le_not_ge]; rw [and_and_and_comm]
   simp_rw [exists_and_left, and_assoc, and_congr_right_iff, ← and_assoc, and_comm, exists_and_left,
-    SetLike.not_le_iff_exists, ne_comm, i
+    SetLike.not_le_iff_exists, ne_comm, implies_true]
 
 Depends on / 依赖: SetLike, SetLike.not_le_iff_exists, and_and_and_comm, and_assoc, and_comm, and_congr_right, and_congr_right_iff, exists_and_left, forall_congr, implies_true, lt_iff_le_and_ne, lt_iff_le_not_ge, ne_comm, not_iff_not, not_iff_not.mp, not_le_iff_exists, simp_rw
 -/
@@ -2028,7 +2034,8 @@ theorem le_iff_atom_le_imp
     have ⟨hx, hy'⟩ := le_inf_iff.1 hle
     have hy := h a ha hx
     have : a <= y ⊓ yᶜ := le_inf_iff.2 ⟨hy, hy'⟩
-    ha.1 (by s
+    ha.1 (by simpa using this)
+  exact (eq_compl_iff_isCompl.1 (by simp)).inf_right_eq_bot_iff.1 this
 
 中文:
 定理 le_iff_atom_le_imp
@@ -2040,7 +2047,8 @@ theorem le_iff_atom_le_imp
     have ⟨hx, hy'⟩ := le_inf_iff.1 hle
     have hy := h a ha hx
     have : a <= y ⊓ yᶜ := le_inf_iff.2 ⟨hy, hy'⟩
-    ha.1 (by s
+    ha.1 (by simpa using this)
+  exact (eq_compl_iff_isCompl.1 (by simp)).inf_right_eq_bot_iff.1 this
 
 Depends on / 依赖: eq_bot_or_exists_atom_le, eq_compl_iff_isCompl, inf_right_eq_bot_iff, le_inf_iff, le_trans, of_not_not, resolve_left
 -/
@@ -2527,7 +2535,7 @@ lemma eq_setOfPred_le_sSup_and_isAtom
   assumption
 
 @[deprecated (since := "2026-07-09")]
-alias eq_setOf_le_sSup_and_isAtom := eq_setO
+alias eq_setOf_le_sSup_and_isAtom := eq_setOfPred_le_sSup_and_isAtom
 
 中文:
 引理 eq_setOfPred_le_sSup_and_isAtom
@@ -2541,7 +2549,7 @@ alias eq_setOf_le_sSup_and_isAtom := eq_setO
   assumption
 
 @[deprecated (since := "2026-07-09")]
-alias eq_setOf_le_sSup_and_isAtom := eq_setO
+alias eq_setOf_le_sSup_and_isAtom := eq_setOfPred_le_sSup_and_isAtom
 
 Depends on / 依赖: IsAtom, IsAtom.le_sSup, le_iff, le_iff.mp, le_sSup
 -/
@@ -2571,7 +2579,11 @@ definition toSetOfIsAtom
     have h : forall a in Subtype.val '' S, IsAtom a := by
       rintro a ⟨a', ha', rfl⟩
       exact a'.prop
-    rw [← Subtype.val_injective.image_injective.eq_iff]; rw [eq_setOfPred_le_
+    rw [← Subtype.val_injective.image_injective.eq_iff]; rw [eq_setOfPred_le_sSup_and_isAtom h]
+    ext a
+    simp
+  map_rel_iff' {a b} := by
+    simpa using le_iff_atom_le_imp.symm
 
 中文:
 定义 toSetOfIsAtom
@@ -2583,7 +2595,11 @@ definition toSetOfIsAtom
     have h : forall a in Subtype.val '' S, IsAtom a := by
       rintro a ⟨a', ha', rfl⟩
       exact a'.prop
-    rw [← Subtype.val_injective.image_injective.eq_iff]; rw [eq_setOfPred_le_
+    rw [← Subtype.val_injective.image_injective.eq_iff]; rw [eq_setOfPred_le_sSup_and_isAtom h]
+    ext a
+    simp
+  map_rel_iff' {a b} := by
+    simpa using le_iff_atom_le_imp.symm
 -/
 def toSetOfIsAtom {α} [CompleteAtomicBooleanAlgebra α] : α ≃o (Set {a : α // IsAtom a}) where
   toFun A := {a | a <= A}
@@ -2784,7 +2800,14 @@ definition IsSimpleOrder.linearOrder
     le_total := fun a b => by rcases eq_bot_or_eq_top a with (rfl | rfl) <;> simp
     -- Note from https://github.com/leanprover-community/mathlib4/issues/23976: do we want this inlined or should this be a separate definition?
     toDecidableLE := fun a b =>
- 
+      if ha : a = ⊥ then isTrue (ha.le.trans bot_le)
+      else
+        if hb : b = ⊤ then isTrue (le_top.trans hb.ge)
+        else
+          isFalse fun H =>
+            hb (top_unique (le_trans (top_le_iff.mpr (Or.resolve_left
+              (eq_bot_or_eq_top a) ha)) H))
+    toDecidableEq := ‹_› }
 
 中文:
 定义 是单序.linearOrder
@@ -2793,7 +2816,14 @@ definition IsSimpleOrder.linearOrder
     le_total := fun a b => by rcases eq_bot_or_eq_top a with (rfl | rfl) <;> simp
     -- Note from https://github.com/leanprover-community/mathlib4/issues/23976: do we want this inlined or should this be a separate definition?
     toDecidableLE := fun a b =>
- 
+      if ha : a = ⊥ then isTrue (ha.le.trans bot_le)
+      else
+        if hb : b = ⊤ then isTrue (le_top.trans hb.ge)
+        else
+          isFalse fun H =>
+            hb (top_unique (le_trans (top_le_iff.mpr (Or.resolve_left
+              (eq_bot_or_eq_top a) ha)) H))
+    toDecidableEq := ‹_› }
 -/
 protected def IsSimpleOrder.linearOrder [DecidableEq α] : LinearOrder α :=
   { (inferInstance : PartialOrder α) with
@@ -3106,7 +3136,10 @@ definition booleanAlgebra
     sdiff_eq := fun x y => by
       rcases eq_bot_or_eq_top x with (rfl | rfl) <;> simp
     inf_compl_le_bot := fun x => by
-      
+      rcases eq_bot_or_eq_top x with (rfl | rfl)
+      · simp
+      · simp
+    top_le_sup_compl := fun x => by rcases eq_bot_or_eq_top x with (rfl | rfl) <;> simp }
 
 中文:
 定义 booleanAlgebra
@@ -3117,7 +3150,10 @@ definition booleanAlgebra
     sdiff_eq := fun x y => by
       rcases eq_bot_or_eq_top x with (rfl | rfl) <;> simp
     inf_compl_le_bot := fun x => by
-      
+      rcases eq_bot_or_eq_top x with (rfl | rfl)
+      · simp
+      · simp
+    top_le_sup_compl := fun x => by rcases eq_bot_or_eq_top x with (rfl | rfl) <;> simp }
 -/
 protected def booleanAlgebra {α} [DecidableEq α] [Lattice α] [BoundedOrder α] [IsSimpleOrder α] :
     BooleanAlgebra α :=
@@ -3152,7 +3188,23 @@ definition noncomputable
     isLUB_sSup s := by
       refine ⟨fun x h => ?_, fun x h => ?_⟩
       · rcases eq_bot_or_eq_top x with (rfl | rfl)
-        · exact bot
+        · exact bot_le
+        · rw [if_pos h]
+      · rcases eq_bot_or_eq_top x with (rfl | rfl)
+        · rw [if_neg]
+          intro con
+          exact bot_ne_top (eq_top_iff.2 (h con))
+        · exact le_top
+    isGLB_sInf s := by
+      refine ⟨fun x h => ?_, fun x h => ?_⟩
+      · rcases eq_bot_or_eq_top x with (rfl | rfl)
+        · rw [if_pos h]
+        · exact le_top
+      · rcases eq_bot_or_eq_top x with (rfl | rfl)
+        · exact bot_le
+        · rw [if_neg]
+          intro con
+          exact top_ne_bot (eq_bot_iff.2 (h con)) }
 
 中文:
 定义 noncomputable
@@ -3164,7 +3216,23 @@ definition noncomputable
     isLUB_sSup s := by
       refine ⟨fun x h => ?_, fun x h => ?_⟩
       · rcases eq_bot_or_eq_top x with (rfl | rfl)
-        · exact bot
+        · exact bot_le
+        · rw [if_pos h]
+      · rcases eq_bot_or_eq_top x with (rfl | rfl)
+        · rw [if_neg]
+          intro con
+          exact bot_ne_top (eq_top_iff.2 (h con))
+        · exact le_top
+    isGLB_sInf s := by
+      refine ⟨fun x h => ?_, fun x h => ?_⟩
+      · rcases eq_bot_or_eq_top x with (rfl | rfl)
+        · rw [if_pos h]
+        · exact le_top
+      · rcases eq_bot_or_eq_top x with (rfl | rfl)
+        · exact bot_le
+        · rw [if_neg]
+          intro con
+          exact top_ne_bot (eq_bot_iff.2 (h con)) }
 -/
 protected noncomputable def completeLattice : CompleteLattice α :=
   { (inferInstance : Lattice α),
@@ -3472,7 +3540,13 @@ theorem isAtom_iff
   obtain ⟨a', ha', hab'⟩ :=
     (eq_bot_or_exists_atom_le (u (l a))).resolve_left (hbot ▸ fun h => hla.1 (gi.u_injective h))
   have :=
-    (hla.le_iff.mp <| (gi.l_u_eq (l a) ▸ gi.gc.monotone_l hab' : l a' <= l a
+    (hla.le_iff.mp <| (gi.l_u_eq (l a) ▸ gi.gc.monotone_l hab' : l a' <= l a)).resolve_left fun h =>
+      ha'.1 (hbot ▸ h_atom a' ha' ▸ congr_arg u h)
+  have haa' : a = a' :=
+    (ha'.le_iff.mp <|
+          (gi.gc.le_u_l a).trans_eq (h_atom a' ha' ▸ congr_arg u this.symm)).resolve_left
+      (mt (congr_arg l) (gi.gc.l_bot.symm ▸ hla.1))
+  exact haa'.symm ▸ ha'
 
 中文:
 定理 isAtom_iff
@@ -3482,7 +3556,13 @@ theorem isAtom_iff
   obtain ⟨a', ha', hab'⟩ :=
     (eq_bot_or_exists_atom_le (u (l a))).resolve_left (hbot ▸ fun h => hla.1 (gi.u_injective h))
   have :=
-    (hla.le_iff.mp <| (gi.l_u_eq (l a) ▸ gi.gc.monotone_l hab' : l a' <= l a
+    (hla.le_iff.mp <| (gi.l_u_eq (l a) ▸ gi.gc.monotone_l hab' : l a' <= l a)).resolve_left fun h =>
+      ha'.1 (hbot ▸ h_atom a' ha' ▸ congr_arg u h)
+  have haa' : a = a' :=
+    (ha'.le_iff.mp <|
+          (gi.gc.le_u_l a).trans_eq (h_atom a' ha' ▸ congr_arg u this.symm)).resolve_left
+      (mt (congr_arg l) (gi.gc.l_bot.symm ▸ hla.1))
+  exact haa'.symm ▸ ha'
 
 Depends on / 依赖: congr_arg, eq_bot_or_exists_atom_le, gi.gc, gi.gc.le_u_l, gi.gc.monotone_l, gi.isAtom_of_u_bot, gi.l_u_eq, gi.u_injective, h_atom, hla.le_iff.mp, isAtom_of_u_bot, l_u_eq, le_iff, le_iff.mp, le_u_l, monotone_l, resolve_left, this.symm, trans_eq, u_injective
 -/
@@ -3554,7 +3634,9 @@ theorem isCoatom_iff
     (eq_top_or_exists_le_coatom (u b)).resolve_left fun h =>
 hb.1 (gi.gc.u_top ▸ gi.l_u_eq ⊤ : l ⊤ = ⊤) ▸ gi.l_u_eq b ▸ congr_arg l h
   have : l a = b :=
-    (hb.le_iff.mp (gi.l_u_eq b ▸ gi.gc.monotone_l hab : b <
+    (hb.le_iff.mp (gi.l_u_eq b ▸ gi.gc.monotone_l hab : b <= l a)).resolve_left fun hla =>
+      ha.1 (gi.gc.u_top ▸ h_coatom a ha ▸ congr_arg u hla)
+  exact this ▸ (h_coatom a ha).symm ▸ ha
 
 中文:
 定理 isCoatom_iff
@@ -3565,7 +3647,9 @@ hb.1 (gi.gc.u_top ▸ gi.l_u_eq ⊤ : l ⊤ = ⊤) ▸ gi.l_u_eq b ▸ congr_arg
     (eq_top_or_exists_le_coatom (u b)).resolve_left fun h =>
 hb.1 (gi.gc.u_top ▸ gi.l_u_eq ⊤ : l ⊤ = ⊤) ▸ gi.l_u_eq b ▸ congr_arg l h
   have : l a = b :=
-    (hb.le_iff.mp (gi.l_u_eq b ▸ gi.gc.monotone_l hab : b <
+    (hb.le_iff.mp (gi.l_u_eq b ▸ gi.gc.monotone_l hab : b <= l a)).resolve_left fun hla =>
+      ha.1 (gi.gc.u_top ▸ h_coatom a ha ▸ congr_arg u hla)
+  exact this ▸ (h_coatom a ha).symm ▸ ha
 
 Depends on / 依赖: congr_arg, eq_top_or_exists_le_coatom, gi.gc.monotone_l, gi.gc.u_top, gi.isCoatom_of_image, gi.l_u_eq, h_coatom, hb.le_iff.mp, isCoatom_of_image, l_u_eq, le_iff, monotone_l, resolve_left, u_top
 -/
@@ -3836,7 +3920,10 @@ theorem Lattice.isStronglyAtomic
 refine by_contra fun hcon => hab.not_ge (isLUB_le_iff hsb).2 fun x hx => ?_
     simp_rw [not_exists, and_comm (b := _ <= _), not_and] at hcon
     specialize hcon (x ⊔ a) (sup_le (hsb.1 hx) hab.le)
-    obtain (hbot | h_inf) := (h x hx).bot_covBy.eq_or_eq (c 
+    obtain (hbot | h_inf) := (h x hx).bot_covBy.eq_or_eq (c := x ⊓ a) (by simp) (by simp)
+· exact False.elim hcon
+        (hbot ▸ IsUpperModularLattice.covBy_sup_of_inf_covBy) (h x hx).bot_covBy
+    rwa [inf_eq_left] at h_inf
 
 中文:
 定理 格.isStronglyAtomic
@@ -3846,7 +3933,10 @@ refine by_contra fun hcon => hab.not_ge (isLUB_le_iff hsb).2 fun x hx => ?_
 refine by_contra fun hcon => hab.not_ge (isLUB_le_iff hsb).2 fun x hx => ?_
     simp_rw [not_exists, and_comm (b := _ <= _), not_and] at hcon
     specialize hcon (x ⊔ a) (sup_le (hsb.1 hx) hab.le)
-    obtain (hbot | h_inf) := (h x hx).bot_covBy.eq_or_eq (c 
+    obtain (hbot | h_inf) := (h x hx).bot_covBy.eq_or_eq (c := x ⊓ a) (by simp) (by simp)
+· exact False.elim hcon
+        (hbot ▸ IsUpperModularLattice.covBy_sup_of_inf_covBy) (h x hx).bot_covBy
+    rwa [inf_eq_left] at h_inf
 
 Depends on / 依赖: False.elim, IsUpperModularLattice, IsUpperModularLattice.covBy_sup_of_inf_covBy, and_comm, bot_covBy, bot_covBy.eq_or_eq, covBy_sup_of_inf_covBy, eq_or_eq, h_inf, hab.le, hab.not_ge, inf_eq_left, isLUB_atoms, isLUB_le_iff, not_and, not_exists, not_ge, simp_rw, specialize, sup_le
 -/
@@ -3953,7 +4043,9 @@ theorem isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
       exact eq_top_of_isCompl_bot xy
     · rintro ⟨a, ha, ay⟩
       rcases exists_isCompl (xy.symm.IicOrderIsoIci ⟨a, ay⟩) with ⟨⟨b, xb⟩, hb⟩
-      refine ⟨↑(⟨b, xb⟩ : Set.Ici x), Is
+      refine ⟨↑(⟨b, xb⟩ : Set.Ici x), IsCoatom.of_isCoatom_coe_Ici ?_, xb⟩
+      rw [← hb.isAtom_iff_isCoatom]; rw [OrderIso.isAtom_iff]
+      apply ha.Iic⟩
 
 中文:
 定理 isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
@@ -3965,7 +4057,9 @@ theorem isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
       exact eq_top_of_isCompl_bot xy
     · rintro ⟨a, ha, ay⟩
       rcases exists_isCompl (xy.symm.IicOrderIsoIci ⟨a, ay⟩) with ⟨⟨b, xb⟩, hb⟩
-      refine ⟨↑(⟨b, xb⟩ : Set.Ici x), Is
+      refine ⟨↑(⟨b, xb⟩ : Set.Ici x), IsCoatom.of_isCoatom_coe_Ici ?_, xb⟩
+      rw [← hb.isAtom_iff_isCoatom]; rw [OrderIso.isAtom_iff]
+      apply ha.Iic⟩
 
 Depends on / 依赖: IicOrderIsoIci, IsCoatom, IsCoatom.of_isCoatom_coe_Ici, OrderIso, OrderIso.isAtom_iff, Set.Ici, eq_bot_or_exists_atom_le, eq_top_of_isCompl_bot, exists_isCompl, ha.Iic, hb.isAtom_iff_isCoatom, isAtom_iff, isAtom_iff_isCoatom, of_isCoatom_coe_Ici, xy.symm.IicOrderIsoIci
 -/
@@ -4035,7 +4129,10 @@ theorem ComplementedLattice.isStronglyAtomic
     obtain (rfl | ⟨d, hd⟩) := eq_bot_or_exists_atom_le a'
     · obtain rfl : a = b := by simpa [codisjoint_bot, ← Subtype.coe_inj] using ha'.codisjoint
 exact False.elim hab.ne rfl
-    refine ⟨d ⊔ a, IsUpperModul
+    refine ⟨d ⊔ a, IsUpperModularLattice.covBy_sup_of_inf_covBy ?_, sup_le (hd.2.trans ha'b) hab.le⟩
+    convert! hd.1.bot_covBy
+    rw [← le_bot_iff]; rw [← show a ⊓ a' = ⊥ by simpa using Subtype.coe_inj.2 ha'.inf_eq_bot]; rw [inf_comm]
+    exact inf_le_inf_left _ hd.2
 
 中文:
 定理 有补格.isStronglyAtomic
@@ -4046,7 +4143,10 @@ exact False.elim hab.ne rfl
     obtain (rfl | ⟨d, hd⟩) := eq_bot_or_exists_atom_le a'
     · obtain rfl : a = b := by simpa [codisjoint_bot, ← Subtype.coe_inj] using ha'.codisjoint
 exact False.elim hab.ne rfl
-    refine ⟨d ⊔ a, IsUpperModul
+    refine ⟨d ⊔ a, IsUpperModularLattice.covBy_sup_of_inf_covBy ?_, sup_le (hd.2.trans ha'b) hab.le⟩
+    convert! hd.1.bot_covBy
+    rw [← le_bot_iff]; rw [← show a ⊓ a' = ⊥ by simpa using Subtype.coe_inj.2 ha'.inf_eq_bot]; rw [inf_comm]
+    exact inf_le_inf_left _ hd.2
 
 Depends on / 依赖: False.elim, IsUpperModularLattice, IsUpperModularLattice.covBy_sup_of_inf_covBy, Set.Iic, Subtype, Subtype.coe_inj, bot_covBy, codisjoint, codisjoint_bot, coe_inj, convert, covBy_sup_of_inf_covBy, eq_bot_or_exists_atom_le, exists_isCompl, hab.le, hab.ne, inf_comm, inf_eq_bot, inf_le_inf_, le_bot_iff
 -/
@@ -4338,7 +4438,7 @@ instance isAtomistic
     · rintro _ ⟨_, ⟨⟨_, _, _, rfl⟩, hs⟩, rfl⟩
       exact hs i
     · refine fun j hj => (isLUB_atoms_le (s i)).2 fun x ⟨hx₁, hx₂⟩ => ?_
-
+      exact hj ⟨Function.update ⊥ i x, ⟨⟨_, x, hx₁, rfl⟩, by simp [update_le_iff, hx₂]⟩, by simp⟩
 
 中文:
 实例 isAtomistic
@@ -4353,7 +4453,7 @@ instance isAtomistic
     · rintro _ ⟨_, ⟨⟨_, _, _, rfl⟩, hs⟩, rfl⟩
       exact hs i
     · refine fun j hj => (isLUB_atoms_le (s i)).2 fun x ⟨hx₁, hx₂⟩ => ?_
-
+      exact hj ⟨Function.update ⊥ i x, ⟨⟨_, x, hx₁, rfl⟩, by simp [update_le_iff, hx₂]⟩, by simp⟩
 
 Depends on / 依赖: Function, Function.update, IsAtom, classical, contextual, isAtom_iff_eq_single, isLUB_atoms_le, isLUB_pi, simp_rw, update, update_le_iff
 -/
@@ -4476,7 +4576,7 @@ theorem isAtom_iff
   rintro ⟨⟨x, hx⟩, hs⟩
   exact
     ⟨x, eq_singleton_iff_unique_mem.2
-        ⟨hx, fun y hy => (hs {y} (singleton_ne_empty _) (singleton_subset_iff
+        ⟨hx, fun y hy => (hs {y} (singleton_ne_empty _) (singleton_subset_iff.2 hy) hx).symm⟩⟩
 
 中文:
 定理 isAtom_iff
@@ -4491,7 +4591,7 @@ theorem isAtom_iff
   rintro ⟨⟨x, hx⟩, hs⟩
   exact
     ⟨x, eq_singleton_iff_unique_mem.2
-        ⟨hx, fun y hy => (hs {y} (singleton_ne_empty _) (singleton_subset_iff
+        ⟨hx, fun y hy => (hs {y} (singleton_ne_empty _) (singleton_subset_iff.2 hy) hx).symm⟩⟩
 
 Depends on / 依赖: bot_eq_empty, eq_singleton_iff_unique_mem, isAtom_iff_le_of_ge, isAtom_singleton, nonempty_iff_ne_empty, singleton_ne_empty, singleton_subset_iff
 -/

@@ -710,7 +710,10 @@ lemma mem_upShadow_iterate_iff_exists_card
       subset_erase, erase_sdiff_comm, ← sdiff_insert]
     constructor
     · rintro ⟨a, hat, u, rfl, ⟨hut, hau⟩, htu⟩
-      exact ⟨_, ⟨_, _
+      exact ⟨_, ⟨_, _, hau, rfl, rfl⟩, insert_subset hat hut, htu⟩
+    · rintro ⟨_, ⟨a, u, hau, rfl, rfl⟩, hut, htu⟩
+      rw [insert_subset_iff] at hut
+      exact ⟨a, hut.1, _, rfl, ⟨hut.2, hau⟩, htu⟩
 
 中文:
 引理 mem_upShadow_iterate_iff_存在_card
@@ -722,7 +725,10 @@ lemma mem_upShadow_iterate_iff_exists_card
       subset_erase, erase_sdiff_comm, ← sdiff_insert]
     constructor
     · rintro ⟨a, hat, u, rfl, ⟨hut, hau⟩, htu⟩
-      exact ⟨_, ⟨_, _
+      exact ⟨_, ⟨_, _, hau, rfl, rfl⟩, insert_subset hat hut, htu⟩
+    · rintro ⟨_, ⟨a, u, hau, rfl, rfl⟩, hut, htu⟩
+      rw [insert_subset_iff] at hut
+      exact ⟨a, hut.1, _, rfl, ⟨hut.2, hau⟩, htu⟩
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, card_eq_succ, erase_sdiff_comm, generalizing, insert_subset, insert_subset_iff, iterate_succ_apply, mem_upShadow_iff_erase_mem, sdiff_insert, subset_erase
 -/
@@ -866,7 +872,18 @@ theorem mem_upShadow_iff_exists_mem_card_add
     simp only [Function.comp_apply, Function.iterate_succ]
     refine ih.trans ?_
     clear ih
-  
+    constructor
+    · rintro ⟨t, ht, hts, hcardst⟩
+      obtain ⟨u, hu, hut, hcardtu⟩ := mem_upShadow_iff_exists_mem_card_add_one.1 ht
+      refine ⟨u, hu, hut.trans hts, ?_⟩
+      rw [← hcardst]; rw [hcardtu]; rw [add_right_comm]
+      rfl
+    · rintro ⟨t, ht, hts, hcard⟩
+      obtain ⟨u, htu, hus, hu⟩ := Finset.exists_subsuperset_card_eq hts (Nat.le_add_right _ 1)
+        (by lia)
+      refine ⟨u, mem_upShadow_iff_exists_mem_card_add_one.2 ⟨t, ht, htu, hu⟩, hus, ?_⟩
+      rw [hu]; rw [← hcard]; rw [add_right_comm]
+      rfl
 
 中文:
 定理 mem_upShadow_iff_存在_mem_card_add
@@ -880,7 +897,18 @@ theorem mem_upShadow_iff_exists_mem_card_add
     simp only [Function.comp_apply, Function.iterate_succ]
     refine ih.trans ?_
     clear ih
-  
+    constructor
+    · rintro ⟨t, ht, hts, hcardst⟩
+      obtain ⟨u, hu, hut, hcardtu⟩ := mem_upShadow_iff_exists_mem_card_add_one.1 ht
+      refine ⟨u, hu, hut.trans hts, ?_⟩
+      rw [← hcardst]; rw [hcardtu]; rw [add_right_comm]
+      rfl
+    · rintro ⟨t, ht, hts, hcard⟩
+      obtain ⟨u, htu, hus, hu⟩ := Finset.exists_subsuperset_card_eq hts (Nat.le_add_right _ 1)
+        (by lia)
+      refine ⟨u, mem_upShadow_iff_exists_mem_card_add_one.2 ⟨t, ht, htu, hu⟩, hus, ?_⟩
+      rw [hu]; rw [← hcard]; rw [add_right_comm]
+      rfl
 
 Depends on / 依赖: Function, Function.comp_apply, Function.iterate_succ, Subset, Subset.refl, add_right_comm, comp_apply, eq_of_subset_of_card_le, generalizing, hcard.ge, hcardst, hcardtu, hut.trans, ih.trans, iterate_succ, mem_upShadow_iff_exists_mem_card_add_one
 -/

@@ -391,7 +391,9 @@ theorem vsub_mem_vectorSpan_of_mem_spanPoints_of_mem_spanPoints
   rcases hp₁ with ⟨p₁a, ⟨hp₁a, ⟨v₁, ⟨hv₁, hv₁p⟩⟩⟩⟩
   rcases hp₂ with ⟨p₂a, ⟨hp₂a, ⟨v₂, ⟨hv₂, hv₂p⟩⟩⟩⟩
   rw [hv₁p]; rw [hv₂p]; rw [vsub_vadd_eq_vsub_sub (v₁ +ᵥ p₁a)]; rw [vadd_vsub_assoc]; rw [add_comm]; rw [add_sub_assoc]
-  have hv₁v₂ : v₁ - v₂ in vectorSpan k s := (vectorSpan k s).sub_mem hv₁ hv
+  have hv₁v₂ : v₁ - v₂ in vectorSpan k s := (vectorSpan k s).sub_mem hv₁ hv₂
+  refine (vectorSpan k s).add_mem ?_ hv₁v₂
+  exact vsub_mem_vectorSpan k hp₁a hp₂a
 
 中文:
 定理 vsub_mem_vectorSpan_of_mem_spanPoints_of_mem_spanPoints
@@ -400,7 +402,9 @@ theorem vsub_mem_vectorSpan_of_mem_spanPoints_of_mem_spanPoints
   rcases hp₁ with ⟨p₁a, ⟨hp₁a, ⟨v₁, ⟨hv₁, hv₁p⟩⟩⟩⟩
   rcases hp₂ with ⟨p₂a, ⟨hp₂a, ⟨v₂, ⟨hv₂, hv₂p⟩⟩⟩⟩
   rw [hv₁p]; rw [hv₂p]; rw [vsub_vadd_eq_vsub_sub (v₁ +ᵥ p₁a)]; rw [vadd_vsub_assoc]; rw [add_comm]; rw [add_sub_assoc]
-  have hv₁v₂ : v₁ - v₂ in vectorSpan k s := (vectorSpan k s).sub_mem hv₁ hv
+  have hv₁v₂ : v₁ - v₂ in vectorSpan k s := (vectorSpan k s).sub_mem hv₁ hv₂
+  refine (vectorSpan k s).add_mem ?_ hv₁v₂
+  exact vsub_mem_vectorSpan k hp₁a hp₂a
 
 Depends on / 依赖: add_comm, add_mem, add_sub_assoc, sub_mem, vadd_vsub_assoc, vectorSpan, vsub_mem_vectorSpan, vsub_vadd_eq_vsub_sub
 -/
@@ -782,7 +786,13 @@ definition directionOfNonempty
     rw [← vadd_vsub_assoc]
     refine vsub_mem_vsub ?_ hp₄
     rw [mem_coe]
-    convert s.smul_vsub_vadd_mem 1 hp₁ hp
+    convert s.smul_vsub_vadd_mem 1 hp₁ hp₂ hp₃
+    rw [one_smul]
+  smul_mem' := by
+    rintro c _ ⟨p₁, hp₁, p₂, hp₂, rfl⟩
+    rw [← vadd_vsub (c • (p₁ -ᵥ p₂)) p₂]
+    refine vsub_mem_vsub ?_ hp₂
+    exact s.smul_vsub_vadd_mem c hp₁ hp₂ hp₂
 
 中文:
 定义 directionOfNonempty
@@ -796,7 +806,13 @@ definition directionOfNonempty
     rw [← vadd_vsub_assoc]
     refine vsub_mem_vsub ?_ hp₄
     rw [mem_coe]
-    convert s.smul_vsub_vadd_mem 1 hp₁ hp
+    convert s.smul_vsub_vadd_mem 1 hp₁ hp₂ hp₃
+    rw [one_smul]
+  smul_mem' := by
+    rintro c _ ⟨p₁, hp₁, p₂, hp₂, rfl⟩
+    rw [← vadd_vsub (c • (p₁ -ᵥ p₂)) p₂]
+    refine vsub_mem_vsub ?_ hp₂
+    exact s.smul_vsub_vadd_mem c hp₁ hp₂ hp₂
 -/
 def directionOfNonempty {s : AffineSubspace k P} (h : (s : Set P).Nonempty) : Submodule k V where
   carrier := (s : Set P) -ᵥ s
@@ -1171,7 +1187,10 @@ theorem ext_of_direction_eq
     rw [← hd]
     exact vsub_mem_direction hp hq1
   · intro hp
-    rw [← vsub_vadd
+    rw [← vsub_vadd p hn.some]
+    refine vadd_mem_of_mem_direction ?_ hq1
+    rw [hd]
+    exact vsub_mem_direction hp hq2
 
 中文:
 定理 ext_of_direction_eq
@@ -1187,7 +1206,10 @@ theorem ext_of_direction_eq
     rw [← hd]
     exact vsub_mem_direction hp hq1
   · intro hp
-    rw [← vsub_vadd
+    rw [← vsub_vadd p hn.some]
+    refine vadd_mem_of_mem_direction ?_ hq1
+    rw [hd]
+    exact vsub_mem_direction hp hq2
 
 Depends on / 依赖: Set.mem_of_mem_inter_left, Set.mem_of_mem_inter_right, hn.some, hn.some_mem, mem_of_mem_inter_left, mem_of_mem_inter_right, some_mem, vadd_mem_of_mem_direction, vsub_mem_direction, vsub_vadd
 -/
@@ -1410,7 +1432,7 @@ theorem spanPoints_subset_coe_of_subset_coe
   have hs : vectorSpan k s <= s₁.direction := vectorSpan_mono k h
   rw [SetLike.le_def] at hs
   rw [← SetLike.mem_coe]
-  exact Set.mem_of_mem_o
+  exact Set.mem_of_mem_of_subset hv hs
 
 中文:
 定理 spanPoints_subset_coe_of_subset_coe
@@ -1423,7 +1445,7 @@ theorem spanPoints_subset_coe_of_subset_coe
   have hs : vectorSpan k s <= s₁.direction := vectorSpan_mono k h
   rw [SetLike.le_def] at hs
   rw [← SetLike.mem_coe]
-  exact Set.mem_of_mem_o
+  exact Set.mem_of_mem_of_subset hv hs
 
 Depends on / 依赖: Set.mem_of_mem_of_subset, SetLike, SetLike.le_def, SetLike.mem_coe, direction, le_def, mem_coe, mem_of_mem_of_subset, vadd_mem_of_mem_direction, vectorSpan, vectorSpan_mono
 -/
@@ -1577,7 +1599,8 @@ theorem direction_affineSpan
     simp only [SetLike.mem_coe]
     rw [hp₁]; rw [hp₃]; rw [vsub_vadd_eq_vsub_sub]; rw [vadd_vsub_assoc]
     exact
-      (vectorSpan k s).sub_mem ((vectorSpan k s).ad
+      (vectorSpan k s).sub_mem ((vectorSpan k s).add_mem hv₁ (vsub_mem_vectorSpan k hp₂ hp₄)) hv₂
+  · exact vectorSpan_mono k (subset_spanPoints k s)
 
 中文:
 定理 direction_affineSpan
@@ -1590,7 +1613,8 @@ theorem direction_affineSpan
     simp only [SetLike.mem_coe]
     rw [hp₁]; rw [hp₃]; rw [vsub_vadd_eq_vsub_sub]; rw [vadd_vsub_assoc]
     exact
-      (vectorSpan k s).sub_mem ((vectorSpan k s).ad
+      (vectorSpan k s).sub_mem ((vectorSpan k s).add_mem hv₁ (vsub_mem_vectorSpan k hp₂ hp₄)) hv₂
+  · exact vectorSpan_mono k (subset_spanPoints k s)
 
 Depends on / 依赖: SetLike, SetLike.mem_coe, Submodule, Submodule.span_le, add_mem, le_antisymm, mem_coe, span_le, sub_mem, subset_spanPoints, vadd_vsub_assoc, vectorSpan, vectorSpan_mono, vsub_mem_vectorSpan, vsub_vadd_eq_vsub_sub
 -/
@@ -1734,7 +1758,31 @@ instance :
     Set.Subset.trans Set.subset_union_left (subset_spanPoints k _)
   le_sup_right := fun _ _ =>
     Set.Subset.trans Set.subset_union_right (subset_spanPoints k _)
-  sup_le := fun _ _ _ hs₁ hs₂ => spanPoints_subset_coe_of_subset_coe
+  sup_le := fun _ _ _ hs₁ hs₂ => spanPoints_subset_coe_of_subset_coe (Set.union_subset hs₁ hs₂)
+  inf := fun s₁ s₂ =>
+    mk (s₁ inter s₂) fun c _ _ _ hp₁ hp₂ hp₃ =>
+      ⟨s₁.smul_vsub_vadd_mem c hp₁.1 hp₂.1 hp₃.1, s₂.smul_vsub_vadd_mem c hp₁.2 hp₂.2 hp₃.2⟩
+  inf_le_left := fun _ _ => Set.inter_subset_left
+  inf_le_right := fun _ _ => Set.inter_subset_right
+  top :=
+    { carrier := Set.univ
+      smul_vsub_vadd_mem' _ _ _ _ _ _ _ := Set.mem_univ _ }
+  le_top := fun _ _ _ => Set.mem_univ _
+  bot :=
+    { carrier := ∅
+      smul_vsub_vadd_mem' _ _ _ _ := False.elim }
+  bot_le := fun _ _ => False.elim
+  sSup := fun s => affineSpan k (⋃ s' in s, (s' : Set P))
+  sInf := fun s =>
+    mk (⋂ s' in s, (s' : Set P)) fun c p₁ p₂ p₃ hp₁ hp₂ hp₃ =>
+      Set.mem_iInter₂.2 fun s₂ hs₂ => by
+        rw [Set.mem_iInter₂] at *
+        exact s₂.smul_vsub_vadd_mem c (hp₁ s₂ hs₂) (hp₂ s₂ hs₂) (hp₃ s₂ hs₂)
+  isLUB_sSup _ :=
+    ⟨fun _ h => Set.Subset.trans (Set.subset_biUnion_of_mem h) (subset_spanPoints k _),
+      fun _ h => spanPoints_subset_coe_of_subset_coe (Set.iUnion₂_subset h)⟩
+  isGLB_sInf _ := .of_image SetLike.coe_subset_coe isGLB_biInf
+  le_inf := fun _ _ _ => Set.subset_inter
 
 中文:
 实例 :
@@ -1744,7 +1792,31 @@ instance :
     Set.Subset.trans Set.subset_union_left (subset_spanPoints k _)
   le_sup_right := fun _ _ =>
     Set.Subset.trans Set.subset_union_right (subset_spanPoints k _)
-  sup_le := fun _ _ _ hs₁ hs₂ => spanPoints_subset_coe_of_subset_coe
+  sup_le := fun _ _ _ hs₁ hs₂ => spanPoints_subset_coe_of_subset_coe (Set.union_subset hs₁ hs₂)
+  inf := fun s₁ s₂ =>
+    mk (s₁ inter s₂) fun c _ _ _ hp₁ hp₂ hp₃ =>
+      ⟨s₁.smul_vsub_vadd_mem c hp₁.1 hp₂.1 hp₃.1, s₂.smul_vsub_vadd_mem c hp₁.2 hp₂.2 hp₃.2⟩
+  inf_le_left := fun _ _ => Set.inter_subset_left
+  inf_le_right := fun _ _ => Set.inter_subset_right
+  top :=
+    { carrier := Set.univ
+      smul_vsub_vadd_mem' _ _ _ _ _ _ _ := Set.mem_univ _ }
+  le_top := fun _ _ _ => Set.mem_univ _
+  bot :=
+    { carrier := ∅
+      smul_vsub_vadd_mem' _ _ _ _ := False.elim }
+  bot_le := fun _ _ => False.elim
+  sSup := fun s => affineSpan k (⋃ s' in s, (s' : Set P))
+  sInf := fun s =>
+    mk (⋂ s' in s, (s' : Set P)) fun c p₁ p₂ p₃ hp₁ hp₂ hp₃ =>
+      Set.mem_iInter₂.2 fun s₂ hs₂ => by
+        rw [Set.mem_iInter₂] at *
+        exact s₂.smul_vsub_vadd_mem c (hp₁ s₂ hs₂) (hp₂ s₂ hs₂) (hp₃ s₂ hs₂)
+  isLUB_sSup _ :=
+    ⟨fun _ h => Set.Subset.trans (Set.subset_biUnion_of_mem h) (subset_spanPoints k _),
+      fun _ h => spanPoints_subset_coe_of_subset_coe (Set.iUnion₂_subset h)⟩
+  isGLB_sInf _ := .of_image SetLike.coe_subset_coe isGLB_biInf
+  le_inf := fun _ _ _ => Set.subset_inter
 
 Depends on / 依赖: affineSpan
 -/
@@ -2360,7 +2432,7 @@ theorem affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty
     obtain ⟨p, hp : p in affineSpan k s⟩ := this
     rw [eq_iff_direction_eq_of_mem hp (mem_top k V p)]; rw [direction_affineSpan]; rw [h]; rw [direction_top]
   obtain ⟨x, hx⟩ := hs
-  exa
+  exact ⟨⟨x, mem_affineSpan k hx⟩⟩
 
 中文:
 定理 affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty
@@ -2372,7 +2444,7 @@ theorem affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty
     obtain ⟨p, hp : p in affineSpan k s⟩ := this
     rw [eq_iff_direction_eq_of_mem hp (mem_top k V p)]; rw [direction_affineSpan]; rw [h]; rw [direction_top]
   obtain ⟨x, hx⟩ := hs
-  exa
+  exact ⟨⟨x, mem_affineSpan k hx⟩⟩
 
 Depends on / 依赖: Nonempty, affineSpan, direction_affineSpan, direction_top, eq_iff_direction_eq_of_mem, mem_affineSpan, mem_top, vectorSpan_eq_top_of_affineSpan_eq_top
 -/
@@ -3120,7 +3192,13 @@ theorem sup_direction_lt_of_nonempty_of_inter_empty
     vsub_mem_direction ((le_sup_right : s₂ <= s₁ ⊔ s₂) hp₂) ((le_sup_left : s₁ <= s₁ ⊔ s₂) hp₁)
   intro h
   rw [Submodule.mem_sup] at h
-  rcases h with ⟨v₁, hv₁, v₂, hv₂, 
+  rcases h with ⟨v₁, hv₁, v₂, hv₂, hv₁v₂⟩
+  rw [← sub_eq_zero]; rw [sub_eq_add_neg]; rw [neg_vsub_eq_vsub_rev]; rw [add_comm v₁]; rw [add_assoc]; rw [←
+    vadd_vsub_assoc]; rw [← neg_neg v₂]; rw [add_comm]; rw [← sub_eq_add_neg]; rw [← vsub_vadd_eq_vsub_sub]; rw [vsub_eq_zero_iff_eq] at hv₁v₂
+  refine Set.Nonempty.ne_empty ?_ he
+  use v₁ +ᵥ p₁, vadd_mem_of_mem_direction hv₁ hp₁
+  rw [hv₁v₂]
+  exact vadd_mem_of_mem_direction (Submodule.neg_mem _ hv₂) hp₂
 
 中文:
 定理 sup_direction_lt_of_nonempty_of_inter_empty
@@ -3133,7 +3211,13 @@ theorem sup_direction_lt_of_nonempty_of_inter_empty
     vsub_mem_direction ((le_sup_right : s₂ <= s₁ ⊔ s₂) hp₂) ((le_sup_left : s₁ <= s₁ ⊔ s₂) hp₁)
   intro h
   rw [Submodule.mem_sup] at h
-  rcases h with ⟨v₁, hv₁, v₂, hv₂, 
+  rcases h with ⟨v₁, hv₁, v₂, hv₂, hv₁v₂⟩
+  rw [← sub_eq_zero]; rw [sub_eq_add_neg]; rw [neg_vsub_eq_vsub_rev]; rw [add_comm v₁]; rw [add_assoc]; rw [←
+    vadd_vsub_assoc]; rw [← neg_neg v₂]; rw [add_comm]; rw [← sub_eq_add_neg]; rw [← vsub_vadd_eq_vsub_sub]; rw [vsub_eq_zero_iff_eq] at hv₁v₂
+  refine Set.Nonempty.ne_empty ?_ he
+  use v₁ +ᵥ p₁, vadd_mem_of_mem_direction hv₁ hp₁
+  rw [hv₁v₂]
+  exact vadd_mem_of_mem_direction (Submodule.neg_mem _ hv₂) hp₂
 
 Depends on / 依赖: SetLike, SetLike.lt_iff_le_and_exists, Submodule, Submodule.mem_sup, add_assoc, add_comm, le_sup_left, le_sup_right, lt_iff_le_and_exists, mem_sup, neg_neg, neg_vsub_eq_vsub_rev, sub_eq_add_neg, sub_eq_zero, sup_direction_le, vadd_vsub_assoc, vsub_mem_direction, vsub_vadd_eq_vsub_sub
 -/
@@ -3204,7 +3288,8 @@ theorem inter_eq_singleton_of_nonempty_of_isCompl
   · rintro ⟨hq1, hq2⟩
     have hqp : q -ᵥ p in s₁.direction ⊓ s₂.direction :=
       ⟨vsub_mem_direction hq1 hp.1, vsub_mem_direction hq2 hp.2⟩
-    
+    rwa [hd.inf_eq_bot, Submodule.mem_bot, vsub_eq_zero_iff_eq] at hqp
+  · exact fun h => h.symm ▸ hp
 
 中文:
 定理 inter_eq_singleton_of_nonempty_of_isCompl
@@ -3218,7 +3303,8 @@ theorem inter_eq_singleton_of_nonempty_of_isCompl
   · rintro ⟨hq1, hq2⟩
     have hqp : q -ᵥ p in s₁.direction ⊓ s₂.direction :=
       ⟨vsub_mem_direction hq1 hp.1, vsub_mem_direction hq2 hp.2⟩
-    
+    rwa [hd.inf_eq_bot, Submodule.mem_bot, vsub_eq_zero_iff_eq] at hqp
+  · exact fun h => h.symm ▸ hp
 
 Depends on / 依赖: Nonempty, Nontrivial, Nontrivial.to_nonempty, Set.mem_singleton_iff, Submodule, Submodule.mem_bot, direction, h.symm, hd.inf_eq_bot, hd.sup_eq_top, inf_eq_bot, inter_nonempty_of_nonempty_of_sup_direction_eq_top, mem_bot, mem_singleton_iff, sup_eq_top, to_nonempty, vsub_eq_zero_iff_eq, vsub_mem_direction
 -/
@@ -3488,7 +3574,13 @@ theorem affineSpan_induction'
   -- TODO: `induction h using affineSpan_induction` gives the error:
   -- extra targets for '@affineSpan_induction'
   -- It seems that the `induction` tactic has decided to ignore the clause
-  -- `using affineSpan
+  -- `using affineSpan_induction` and use `Exists.rec` instead.
+  refine affineSpan_induction h ?mem ?smul_vsub_vadd
+  · exact fun y hy => ⟨subset_affineSpan _ _ hy, mem y hy⟩
+  · exact fun c u v w hu hv hw =>
+      hu.elim fun hu' hu => hv.elim fun hv' hv => hw.elim fun hw' hw =>
+        ⟨AffineSubspace.smul_vsub_vadd_mem _ _ hu' hv' hw',
+              smul_vsub_vadd _ _ _ _ _ _ _ hu hv hw⟩
 
 中文:
 定理 affineSpan_induction'
@@ -3498,7 +3590,13 @@ theorem affineSpan_induction'
   -- TODO: `induction h using affineSpan_induction` gives the error:
   -- extra targets for '@affineSpan_induction'
   -- It seems that the `induction` tactic has decided to ignore the clause
-  -- `using affineSpan
+  -- `using affineSpan_induction` and use `Exists.rec` instead.
+  refine affineSpan_induction h ?mem ?smul_vsub_vadd
+  · exact fun y hy => ⟨subset_affineSpan _ _ hy, mem y hy⟩
+  · exact fun c u v w hu hv hw =>
+      hu.elim fun hu' hu => hv.elim fun hv' hv => hw.elim fun hw' hw =>
+        ⟨AffineSubspace.smul_vsub_vadd_mem _ _ hu' hv' hw',
+              smul_vsub_vadd _ _ _ _ _ _ _ hu hv hw⟩
 
 Depends on / 依赖: affineSpan, this.elim
 -/
@@ -3817,7 +3915,7 @@ lemma affineSpan_le_toAffineSubspace_span
   | smul_vsub_vadd c u _ v _ w _ hu hv hw =>
     simp only [vsub_eq_sub, vadd_eq_add]
     apply Submodule.add_mem _ _ hw
-    exact Submodule.smu
+    exact Submodule.smul_mem _ _ (Submodule.sub_mem _ hu hv)
 
 中文:
 引理 affineSpan_le_toAffineSubspace_span
@@ -3830,7 +3928,7 @@ lemma affineSpan_le_toAffineSubspace_span
   | smul_vsub_vadd c u _ v _ w _ hu hv hw =>
     simp only [vsub_eq_sub, vadd_eq_add]
     apply Submodule.add_mem _ _ hw
-    exact Submodule.smu
+    exact Submodule.smul_mem _ _ (Submodule.sub_mem _ hu hv)
 
 Depends on / 依赖: Submodule, Submodule.add_mem, Submodule.mem_toAffineSubspace, Submodule.smul_mem, Submodule.sub_mem, Submodule.subset_span, add_mem, affineSpan_induction, mem_toAffineSubspace, smul_mem, smul_vsub_vadd, sub_mem, subset_span, vadd_eq_add, vsub_eq_sub
 -/

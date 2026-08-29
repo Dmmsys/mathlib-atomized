@@ -379,7 +379,8 @@ definition rootsOfUnityCircleEquiv
     rw [mem_rootsOfUnity']; rw [MonoidHom.coe_toHomUnits]; rw [← map_pow]; rw [← (rootsOfUnitytoCircle n).map_one]
     congr
     aesop⟩
-  left_inv _
+  left_inv _ := by aesop
+  right_inv _ := by aesop
 
 中文:
 定义 rootsOfUnityCircleEquiv
@@ -389,7 +390,8 @@ definition rootsOfUnityCircleEquiv
     rw [mem_rootsOfUnity']; rw [MonoidHom.coe_toHomUnits]; rw [← map_pow]; rw [← (rootsOfUnitytoCircle n).map_one]
     congr
     aesop⟩
-  left_inv _
+  left_inv _ := by aesop
+  right_inv _ := by aesop
 
 Depends on / 依赖: Circle, Circle.toUnits, restrictRootsOfUnity, rootsOfUnityUnitsMulEquiv, toMonoidHom, toMonoidHom.comp, toUnits
 -/

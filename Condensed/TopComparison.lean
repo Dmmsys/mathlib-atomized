@@ -45,7 +45,13 @@ let xy : G.obj (pullback π π) := (PreservesPullback.iso G π π).inv
   have ha' := congr_fun ha xy
   dsimp at ha'
   have h₁ : forall y, G.map (pullback.fst _ _) ((PreservesPullback.iso G π π).inv y) =
-      pu
+      pullback.fst (G.map π) (G.map π) y := by
+    simp only [← PreservesPullback.iso_inv_fst]; intro y; rfl
+  have h₂ : forall y, G.map (pullback.snd _ _) ((PreservesPullback.iso G π π).inv y) =
+      pullback.snd (G.map π) (G.map π) y := by
+    simp only [← PreservesPullback.iso_inv_snd]; intro y; rfl
+  rw [h₁]; rw [h₂]; rw [TopCat.pullbackIsoProdSubtype_inv_fst_apply]; rw [TopCat.pullbackIsoProdSubtype_inv_snd_apply] at ha'
+  simpa using ha'
 
 中文:
 定理 factorsThrough_of_pullbackCondition
@@ -57,7 +63,13 @@ let xy : G.obj (pullback π π) := (PreservesPullback.iso G π π).inv
   have ha' := congr_fun ha xy
   dsimp at ha'
   have h₁ : forall y, G.map (pullback.fst _ _) ((PreservesPullback.iso G π π).inv y) =
-      pu
+      pullback.fst (G.map π) (G.map π) y := by
+    simp only [← PreservesPullback.iso_inv_fst]; intro y; rfl
+  have h₂ : forall y, G.map (pullback.snd _ _) ((PreservesPullback.iso G π π).inv y) =
+      pullback.snd (G.map π) (G.map π) y := by
+    simp only [← PreservesPullback.iso_inv_snd]; intro y; rfl
+  rw [h₁]; rw [h₂]; rw [TopCat.pullbackIsoProdSubtype_inv_fst_apply]; rw [TopCat.pullbackIsoProdSubtype_inv_snd_apply] at ha'
+  simpa using ha'
 
 Depends on / 依赖: G.map, G.obj, PreservesPullback, PreservesPullback.iso, PreservesPullback.iso_inv_fst, TopCat, TopCat.pullbackIsoProdSubtype, congr_fun, iso_inv_fst, pullback, pullback.fst, pullback.snd, pullbackIsoProdSubtype
 -/
@@ -93,7 +105,20 @@ theorem equalizerCondition_yonedaPresheaf
   · simp only [yonedaPresheaf, comp, Quiver.Hom.unop_op, TypeCat.Fun.coe_mk,
       Set.coe_ofPred, mapToEqualizer, Set.mem_ofPred_eq, ConcreteCategory.hom_ofHom,
       Subtype.mk.injEq, mk.injEq] at h
-  
+    simp only [yonedaPresheaf, unop_op]
+    ext x
+    obtain ⟨y, hy⟩ := (hq Z B π).surjective x
+    rw [← hy]
+    exact congr_fun h y
+  · simp only [yonedaPresheaf, comp, Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom,
+      TypeCat.Fun.coe_mk, mk.injEq, Set.mem_ofPred_eq] at ha
+    simp only [yonedaPresheaf, comp, Quiver.Hom.unop_op, TypeCat.Fun.coe_mk,
+      Set.coe_ofPred, mapToEqualizer, Set.mem_ofPred_eq, ConcreteCategory.hom_ofHom,
+      Subtype.mk.injEq]
+    simp only [yonedaPresheaf, unop_op] at a
+    refine ⟨(hq Z B π).lift a (factorsThrough_of_pullbackCondition G X ha), ?_⟩
+    congr 1
+    exact DFunLike.ext'_iff.mp ((hq Z B π).lift_comp a (factorsThrough_of_pullbackCondition G X ha))
 
 中文:
 定理 equalizerCondition_yonedaPresheaf
@@ -104,7 +129,20 @@ theorem equalizerCondition_yonedaPresheaf
   · simp only [yonedaPresheaf, comp, Quiver.Hom.unop_op, TypeCat.Fun.coe_mk,
       Set.coe_ofPred, mapToEqualizer, Set.mem_ofPred_eq, ConcreteCategory.hom_ofHom,
       Subtype.mk.injEq, mk.injEq] at h
-  
+    simp only [yonedaPresheaf, unop_op]
+    ext x
+    obtain ⟨y, hy⟩ := (hq Z B π).surjective x
+    rw [← hy]
+    exact congr_fun h y
+  · simp only [yonedaPresheaf, comp, Quiver.Hom.unop_op, ConcreteCategory.hom_ofHom,
+      TypeCat.Fun.coe_mk, mk.injEq, Set.mem_ofPred_eq] at ha
+    simp only [yonedaPresheaf, comp, Quiver.Hom.unop_op, TypeCat.Fun.coe_mk,
+      Set.coe_ofPred, mapToEqualizer, Set.mem_ofPred_eq, ConcreteCategory.hom_ofHom,
+      Subtype.mk.injEq]
+    simp only [yonedaPresheaf, unop_op] at a
+    refine ⟨(hq Z B π).lift a (factorsThrough_of_pullbackCondition G X ha), ?_⟩
+    congr 1
+    exact DFunLike.ext'_iff.mp ((hq Z B π).lift_comp a (factorsThrough_of_pullbackCondition G X ha))
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ofHom, EqualizerCondition, EqualizerCondition.mk, Quiver, Quiver.Hom.unop_op, Set.coe_ofPred, Set.mem_ofPred_eq, Subtype, Subtype.mk.injEq, TypeCat, TypeCat.Fun.coe_mk, coe_mk, coe_ofPred, congr_fun, hom_ofHom, mapToEqualizer, mem_ofPred_eq, mk.in, mk.injEq
 -/
@@ -176,7 +214,12 @@ definition TopCat.toSheafCompHausLike
   obj := yonedaPresheaf.{u, max u w} (CompHausLike.compHausLikeToTop.{u} P) X
   property := by
     have := CompHausLike.preregular hs
-    rw [Presheaf.isSheaf_iff_preservesFiniteProducts_and_equalizer
+    rw [Presheaf.isSheaf_iff_preservesFiniteProducts_and_equalizerCondition]
+    refine ⟨inferInstance, ?_⟩
+    apply +allowSynthFailures equalizerCondition_yonedaPresheaf
+      (CompHausLike.compHausLikeToTop.{u} P) X
+    intro Z B π he
+    exact .of_surjective_continuous (hs _ he) π.hom.hom.continuous
 
 中文:
 定义 顶元素范畴.toSheafCompHausLike
@@ -186,7 +229,12 @@ definition TopCat.toSheafCompHausLike
   obj := yonedaPresheaf.{u, max u w} (CompHausLike.compHausLikeToTop.{u} P) X
   property := by
     have := CompHausLike.preregular hs
-    rw [Presheaf.isSheaf_iff_preservesFiniteProducts_and_equalizer
+    rw [Presheaf.isSheaf_iff_preservesFiniteProducts_and_equalizerCondition]
+    refine ⟨inferInstance, ?_⟩
+    apply +allowSynthFailures equalizerCondition_yonedaPresheaf
+      (CompHausLike.compHausLikeToTop.{u} P) X
+    intro Z B π he
+    exact .of_surjective_continuous (hs _ he) π.hom.hom.continuous
 
 Depends on / 依赖: CompHausLike, CompHausLike.preregular, preregular
 -/

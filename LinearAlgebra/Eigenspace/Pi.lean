@@ -93,7 +93,14 @@ lemma iInf_maxGenEigenspace_restrict_map_subtype_eq
     (⨅ j, q j).map p.subtype = ⨅ j, (f j).maxGenEigenspace (μ j) := by
   have : Nonempty ι := ⟨i⟩
   set p := (f i).maxGenEigenspace (μ i)
-  have : ⨅ j, (f j).maxGenEigenspace (μ j) = p ⊓ ⨅ j, (f j).maxGe
+  have : ⨅ j, (f j).maxGenEigenspace (μ j) = p ⊓ ⨅ j, (f j).maxGenEigenspace (μ j) := by
+    refine le_antisymm ?_ inf_le_right
+    simpa only [le_inf_iff, le_refl, and_true] using iInf_le _ _
+  rw [Submodule.map_iInf _ p.injective_subtype]; rw [this]; rw [Submodule.inf_iInf]
+  conv_rhs =>
+    enter [1]
+    ext
+    rw [p.inf_genEigenspace (f _) (h _)]
 
 中文:
 引理 iInf_maxGenEigenspace_restrict_map_subtype_eq
@@ -102,7 +109,14 @@ lemma iInf_maxGenEigenspace_restrict_map_subtype_eq
     (⨅ j, q j).map p.subtype = ⨅ j, (f j).maxGenEigenspace (μ j) := by
   have : Nonempty ι := ⟨i⟩
   set p := (f i).maxGenEigenspace (μ i)
-  have : ⨅ j, (f j).maxGenEigenspace (μ j) = p ⊓ ⨅ j, (f j).maxGe
+  have : ⨅ j, (f j).maxGenEigenspace (μ j) = p ⊓ ⨅ j, (f j).maxGenEigenspace (μ j) := by
+    refine le_antisymm ?_ inf_le_right
+    simpa only [le_inf_iff, le_refl, and_true] using iInf_le _ _
+  rw [Submodule.map_iInf _ p.injective_subtype]; rw [this]; rw [Submodule.inf_iInf]
+  conv_rhs =>
+    enter [1]
+    ext
+    rw [p.inf_genEigenspace (f _) (h _)]
 
 Depends on / 依赖: maxGenEigenspace
 -/
@@ -190,7 +204,51 @@ lemma independent_iInf_maxGenEigenspace_of_forall_mapsTo
     simp only [iInf_eq_iInter, mem_iInter, SetLike.mem_coe] at hx ⊢
     exact fun i => h l i (χ i) (hx i)
   classical
-  suffices forall χ (s : Finset 
+  suffices forall χ (s : Finset (ι -> R)) (_ : χ ∉ s),
+      Disjoint (⨅ i, (f i).maxGenEigenspace (χ i))
+        (s.sup fun (χ : ι -> R) => ⨅ i, (f i).maxGenEigenspace (χ i)) by
+    simpa only [iSupIndep_iff_supIndep,
+      Finset.supIndep_iff_disjoint_erase] using! fun s χ _ => this _ _ (s.notMem_erase χ)
+  intro χ₁ s
+  induction s using Finset.induction_on with
+  | empty => simp
+  | insert χ₂ s _n ih =>
+  intro hχ₁₂
+  obtain ⟨hχ₁₂ : χ₁ != χ₂, hχ₁ : χ₁ ∉ s⟩ := by rwa [Finset.mem_insert, not_or] at hχ₁₂
+  specialize ih hχ₁
+  rw [Finset.sup_insert]; rw [disjoint_iff]; rw [Submodule.eq_bot_iff]
+  rintro x ⟨hx, hx'⟩
+  simp only [SetLike.mem_coe] at hx hx'
+  suffices x in ⨅ i, (f i).maxGenEigenspace (χ₂ i) by
+    rw [← Submodule.mem_bot (R := R)]; rw [← (disjoint_iInf_maxGenEigenspace f hχ₁₂).eq_bot]
+    exact ⟨hx, this⟩
+  obtain ⟨y, hy, z, hz, rfl⟩ := Submodule.mem_sup.mp hx'; clear hx'
+  suffices forall l, exists (k : Nat),
+      ((f l - algebraMap R (Module.End R M) (χ₂ l)) ^ k) (y + z) in
+      (⨅ i, (f i).maxGenEigenspace (χ₁ i)) ⊓
+        Finset.sup s fun χ => ⨅ i, (f i).maxGenEigenspace (χ i) by
+    simpa [ih.eq_bot, Submodule.mem_bot] using! this
+  intro l
+  let g : Module.End R M := f l - algebraMap R (Module.End R M) (χ₂ l)
+  obtain ⟨k, hk : (g ^ k) y = 0⟩ := (mem_iInf_maxGenEigenspace_iff _ _ _).mp hy l
+  have aux (f : End R M) (φ : R) (k : Nat) (p : Submodule R M) (hp : MapsTo f p p) :
+      MapsTo ((f - algebraMap R (Module.End R M) φ) ^ k) p p := by
+    rw [Module.End.coe_pow]
+    exact MapsTo.iterate (fun m hm => p.sub_mem (hp hm) (p.smul_mem _ hm)) k
+  refine ⟨k, Submodule.mem_inf.mp ⟨?_, ?_⟩⟩
+  · refine aux (f l) (χ₂ l) k (⨅ i, (f i).maxGenEigenspace (χ₁ i)) ?_ hx
+    simp only [Submodule.coe_iInf]
+    exact h l χ₁
+  · rw [map_add, hk, zero_add]
+    suffices (s.sup fun χ => (⨅ i, (f i).maxGenEigenspace (χ i))).map (g ^ k) <=
+        s.sup fun χ => (⨅ i, (f i).maxGenEigenspace (χ i)) from
+      this (Submodule.mem_map_of_mem hz)
+    simp_rw [Finset.sup_eq_iSup, Submodule.map_iSup (ι := ι -> R), Submodule.map_iSup (ι := _ in s)]
+    refine iSup₂_mono fun χ _ => ?_
+    rintro - ⟨u, hu, rfl⟩
+    refine aux (f l) (χ₂ l) k (⨅ i, (f i).maxGenEigenspace (χ i)) ?_ hu
+    simp only [Submodule.coe_iInf]
+    exact h l χ
 
 中文:
 引理 independent_iInf_maxGenEigenspace_of_对任意_mapsTo
@@ -201,7 +259,51 @@ lemma independent_iInf_maxGenEigenspace_of_forall_mapsTo
     simp only [iInf_eq_iInter, mem_iInter, SetLike.mem_coe] at hx ⊢
     exact fun i => h l i (χ i) (hx i)
   classical
-  suffices forall χ (s : Finset 
+  suffices forall χ (s : Finset (ι -> R)) (_ : χ ∉ s),
+      Disjoint (⨅ i, (f i).maxGenEigenspace (χ i))
+        (s.sup fun (χ : ι -> R) => ⨅ i, (f i).maxGenEigenspace (χ i)) by
+    simpa only [iSupIndep_iff_supIndep,
+      Finset.supIndep_iff_disjoint_erase] using! fun s χ _ => this _ _ (s.notMem_erase χ)
+  intro χ₁ s
+  induction s using Finset.induction_on with
+  | empty => simp
+  | insert χ₂ s _n ih =>
+  intro hχ₁₂
+  obtain ⟨hχ₁₂ : χ₁ != χ₂, hχ₁ : χ₁ ∉ s⟩ := by rwa [Finset.mem_insert, not_or] at hχ₁₂
+  specialize ih hχ₁
+  rw [Finset.sup_insert]; rw [disjoint_iff]; rw [Submodule.eq_bot_iff]
+  rintro x ⟨hx, hx'⟩
+  simp only [SetLike.mem_coe] at hx hx'
+  suffices x in ⨅ i, (f i).maxGenEigenspace (χ₂ i) by
+    rw [← Submodule.mem_bot (R := R)]; rw [← (disjoint_iInf_maxGenEigenspace f hχ₁₂).eq_bot]
+    exact ⟨hx, this⟩
+  obtain ⟨y, hy, z, hz, rfl⟩ := Submodule.mem_sup.mp hx'; clear hx'
+  suffices forall l, exists (k : Nat),
+      ((f l - algebraMap R (Module.End R M) (χ₂ l)) ^ k) (y + z) in
+      (⨅ i, (f i).maxGenEigenspace (χ₁ i)) ⊓
+        Finset.sup s fun χ => ⨅ i, (f i).maxGenEigenspace (χ i) by
+    simpa [ih.eq_bot, Submodule.mem_bot] using! this
+  intro l
+  let g : Module.End R M := f l - algebraMap R (Module.End R M) (χ₂ l)
+  obtain ⟨k, hk : (g ^ k) y = 0⟩ := (mem_iInf_maxGenEigenspace_iff _ _ _).mp hy l
+  have aux (f : End R M) (φ : R) (k : Nat) (p : Submodule R M) (hp : MapsTo f p p) :
+      MapsTo ((f - algebraMap R (Module.End R M) φ) ^ k) p p := by
+    rw [Module.End.coe_pow]
+    exact MapsTo.iterate (fun m hm => p.sub_mem (hp hm) (p.smul_mem _ hm)) k
+  refine ⟨k, Submodule.mem_inf.mp ⟨?_, ?_⟩⟩
+  · refine aux (f l) (χ₂ l) k (⨅ i, (f i).maxGenEigenspace (χ₁ i)) ?_ hx
+    simp only [Submodule.coe_iInf]
+    exact h l χ₁
+  · rw [map_add, hk, zero_add]
+    suffices (s.sup fun χ => (⨅ i, (f i).maxGenEigenspace (χ i))).map (g ^ k) <=
+        s.sup fun χ => (⨅ i, (f i).maxGenEigenspace (χ i)) from
+      this (Submodule.mem_map_of_mem hz)
+    simp_rw [Finset.sup_eq_iSup, Submodule.map_iSup (ι := ι -> R), Submodule.map_iSup (ι := _ in s)]
+    refine iSup₂_mono fun χ _ => ?_
+    rintro - ⟨u, hu, rfl⟩
+    refine aux (f l) (χ₂ l) k (⨅ i, (f i).maxGenEigenspace (χ i)) ?_ hu
+    simp only [Submodule.coe_iInf]
+    exact h l χ
 
 Depends on / 依赖: Disjoint, Finset, Finset.supIndep_iff_disjoint_erase, MapsTo, SetLike, SetLike.mem_coe, classical, iInf_eq_iInter, iSupIndep_iff_supIndep, maxGenEigenspace, mem_coe, mem_iInter, replace, s.sup, supIndep_iff_disjoint_erase
 -/
@@ -272,7 +374,38 @@ lemma iSup_iInf_maxGenEigenspace_eq_top_of_forall_mapsTo
   obtain this | ⟨i : ι, hy : ¬ exists φ, (f i).maxGenEigenspace φ = ⊤⟩ :=
     forall_or_exists_not (fun j : ι => exists φ : K, (f j).maxGenEigenspace φ = ⊤)
   · choose χ hχ using this
-   
+    replace hχ : ⨅ i, (f i).maxGenEigenspace (χ i) = ⊤ := by simpa
+    simp_rw [eq_top_iff] at hχ ⊢
+exact le_trans hχ le_iSup (fun χ : ι -> K => ⨅ i, (f i).maxGenEigenspace (χ i)) χ
+  · replace hy : forall φ, finrank K ((f i).maxGenEigenspace φ) < n := fun φ => by
+      simp_rw [not_exists, ← lt_top_iff_ne_top] at hy; exact h_dim ▸ Submodule.finrank_lt (hy φ).ne
+    have hi (j : ι) (φ : K) :
+        MapsTo (f j) ((f i).maxGenEigenspace φ) ((f i).maxGenEigenspace φ) := by
+      exact h j i φ
+    replace ih (φ : K) :
+        ⨆ χ : ι -> K, ⨅ j, maxGenEigenspace ((f j).restrict (hi j φ)) (χ j) = ⊤ := by
+      apply ih _ (hy φ)
+      · intro j k μ
+        exact mapsTo_restrict_maxGenEigenspace_restrict_of_mapsTo (f j) (f k) _ _ (h j k μ)
+      · exact fun j => Module.End.genEigenspace_restrict_eq_top _ (h' j)
+      · rfl
+    replace ih (φ : K) :
+        ⨆ (χ : ι -> K) (_ : χ i = φ), ⨅ j, maxGenEigenspace ((f j).restrict (hi j φ)) (χ j) = ⊤ := by
+      suffices forall χ : ι -> K, χ i != φ -> ⨅ j, maxGenEigenspace ((f j).restrict (hi j φ)) (χ j) = ⊥ by
+        specialize ih φ; rw [iSup_split, biSup_congr this] at ih; simpa using ih
+      intro χ hχ
+      rw [eq_bot_iff]; rw [← ((f i).maxGenEigenspace φ).ker_subtype]; rw [LinearMap.ker]; rw [← Submodule.map_le_iff_le_comap]; rw [← Submodule.inf_iInf_maxGenEigenspace_of_forall_mapsTo]; rw [← disjoint_iff_inf_le]
+      exact ((f i).disjoint_genEigenspace hχ.symm _ _).mono_right (iInf_le _ i)
+    replace ih (φ : K) :
+        ⨆ (χ : ι -> K) (_ : χ i = φ), ⨅ j, maxGenEigenspace (f j) (χ j) =
+        maxGenEigenspace (f i) φ := by
+      have (χ : ι -> K) (hχ : χ i = φ) : ⨅ j, maxGenEigenspace (f j) (χ j) =
+          (⨅ j, maxGenEigenspace ((f j).restrict (hi j φ)) (χ j)).map
+            ((f i).maxGenEigenspace φ).subtype := by
+        rw [← hχ]; rw [iInf_maxGenEigenspace_restrict_map_subtype_eq]
+      simp_rw [biSup_congr this, ← Submodule.map_iSup, ih, Submodule.map_top,
+        Submodule.range_subtype]
+    simpa only [← ih, iSup_comm (ι := K), iSup_iSup_eq_right] using h' i
 
 中文:
 引理 iSup_iInf_maxGenEigenspace_eq_top_of_对任意_mapsTo
@@ -283,7 +416,38 @@ lemma iSup_iInf_maxGenEigenspace_eq_top_of_forall_mapsTo
   obtain this | ⟨i : ι, hy : ¬ exists φ, (f i).maxGenEigenspace φ = ⊤⟩ :=
     forall_or_exists_not (fun j : ι => exists φ : K, (f j).maxGenEigenspace φ = ⊤)
   · choose χ hχ using this
-   
+    replace hχ : ⨅ i, (f i).maxGenEigenspace (χ i) = ⊤ := by simpa
+    simp_rw [eq_top_iff] at hχ ⊢
+exact le_trans hχ le_iSup (fun χ : ι -> K => ⨅ i, (f i).maxGenEigenspace (χ i)) χ
+  · replace hy : forall φ, finrank K ((f i).maxGenEigenspace φ) < n := fun φ => by
+      simp_rw [not_exists, ← lt_top_iff_ne_top] at hy; exact h_dim ▸ Submodule.finrank_lt (hy φ).ne
+    have hi (j : ι) (φ : K) :
+        MapsTo (f j) ((f i).maxGenEigenspace φ) ((f i).maxGenEigenspace φ) := by
+      exact h j i φ
+    replace ih (φ : K) :
+        ⨆ χ : ι -> K, ⨅ j, maxGenEigenspace ((f j).restrict (hi j φ)) (χ j) = ⊤ := by
+      apply ih _ (hy φ)
+      · intro j k μ
+        exact mapsTo_restrict_maxGenEigenspace_restrict_of_mapsTo (f j) (f k) _ _ (h j k μ)
+      · exact fun j => Module.End.genEigenspace_restrict_eq_top _ (h' j)
+      · rfl
+    replace ih (φ : K) :
+        ⨆ (χ : ι -> K) (_ : χ i = φ), ⨅ j, maxGenEigenspace ((f j).restrict (hi j φ)) (χ j) = ⊤ := by
+      suffices forall χ : ι -> K, χ i != φ -> ⨅ j, maxGenEigenspace ((f j).restrict (hi j φ)) (χ j) = ⊥ by
+        specialize ih φ; rw [iSup_split, biSup_congr this] at ih; simpa using ih
+      intro χ hχ
+      rw [eq_bot_iff]; rw [← ((f i).maxGenEigenspace φ).ker_subtype]; rw [LinearMap.ker]; rw [← Submodule.map_le_iff_le_comap]; rw [← Submodule.inf_iInf_maxGenEigenspace_of_forall_mapsTo]; rw [← disjoint_iff_inf_le]
+      exact ((f i).disjoint_genEigenspace hχ.symm _ _).mono_right (iInf_le _ i)
+    replace ih (φ : K) :
+        ⨆ (χ : ι -> K) (_ : χ i = φ), ⨅ j, maxGenEigenspace (f j) (χ j) =
+        maxGenEigenspace (f i) φ := by
+      have (χ : ι -> K) (hχ : χ i = φ) : ⨅ j, maxGenEigenspace (f j) (χ j) =
+          (⨅ j, maxGenEigenspace ((f j).restrict (hi j φ)) (χ j)).map
+            ((f i).maxGenEigenspace φ).subtype := by
+        rw [← hχ]; rw [iInf_maxGenEigenspace_restrict_map_subtype_eq]
+      simp_rw [biSup_congr this, ← Submodule.map_iSup, ih, Submodule.map_top,
+        Submodule.range_subtype]
+    simpa only [← ih, iSup_comm (ι := K), iSup_iSup_eq_right] using h' i
 
 Depends on / 依赖: Nat.strongRecOn, eq_top_iff, finrank, forall_or_exists_not, generalize, generalizing, h_dim, le_iSup, le_trans, maxGenEigenspace, replace, simp_rw, strongRecOn
 -/

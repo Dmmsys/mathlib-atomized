@@ -403,7 +403,7 @@ theorem rank_eq_wfRank
   · rw [lt_lift_iff]
     rintro ⟨o, h, rfl⟩
     simpa [Ordinal.lt_iSup_iff] using lt_rank_iff.1 h
-
+  · simpa using rank_lt_of_mem h.2
 
 中文:
 定理 rank_eq_wfRank
@@ -416,7 +416,7 @@ theorem rank_eq_wfRank
   · rw [lt_lift_iff]
     rintro ⟨o, h, rfl⟩
     simpa [Ordinal.lt_iSup_iff] using lt_rank_iff.1 h
-
+  · simpa using rank_lt_of_mem h.2
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.rank_eq, Ordinal, Ordinal.iSup_le, Ordinal.lt_iSup_iff, antisymm, iSup_le, le_of_forall_lt, lt_iSup_iff, lt_lift_iff, lt_rank_iff, mem_wf, mem_wf.induction, rank_eq, rank_lt_of_mem, simp_rw
 -/
@@ -871,7 +871,7 @@ theorem rank_eq_wfRank
   · rw [lt_lift_iff]
     rintro ⟨o, h, rfl⟩
     simpa [Ordinal.lt_iSup_iff] using lt_rank_iff.1 h
-  · s
+  · simpa using rank_lt_of_mem h.2
 
 中文:
 定理 rank_eq_wfRank
@@ -884,7 +884,7 @@ theorem rank_eq_wfRank
   · rw [lt_lift_iff]
     rintro ⟨o, h, rfl⟩
     simpa [Ordinal.lt_iSup_iff] using lt_rank_iff.1 h
-  · s
+  · simpa using rank_lt_of_mem h.2
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.rank_eq, Ordinal, Ordinal.iSup_le, Ordinal.lt_iSup_iff, antisymm, iSup_le, inductionOn, le_of_forall_lt, lt_iSup_iff, lt_lift_iff, lt_rank_iff, rank_eq, rank_lt_of_mem, simp_rw
 -/

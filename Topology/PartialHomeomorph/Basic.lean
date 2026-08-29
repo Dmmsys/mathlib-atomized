@@ -451,7 +451,11 @@ definition homeomorphOfImageSubsetSource
   have h₃ : MapsTo e.symm t s := ht ▸ forall_mem_image.2 fun _x hx =>
       (e.left_inv (hs hx)).symm ▸ hx
   { toFun := MapsTo.restrict e s t h₁
-    invFun :
+    invFun := MapsTo.restrict e.symm t s h₃
+    left_inv := fun a => Subtype.ext (e.left_inv (hs a.2))
+right_inv := fun b => Subtype.ext e.right_inv (h₂ b.2)
+    continuous_toFun := (e.continuousOn.mono hs).mapsToRestrict h₁
+    continuous_invFun := (e.continuousOn_symm.mono h₂).mapsToRestrict h₃ }
 
 中文:
 定义 homeomorphOfImageSubsetSource
@@ -461,7 +465,11 @@ definition homeomorphOfImageSubsetSource
   have h₃ : MapsTo e.symm t s := ht ▸ forall_mem_image.2 fun _x hx =>
       (e.left_inv (hs hx)).symm ▸ hx
   { toFun := MapsTo.restrict e s t h₁
-    invFun :
+    invFun := MapsTo.restrict e.symm t s h₃
+    left_inv := fun a => Subtype.ext (e.left_inv (hs a.2))
+right_inv := fun b => Subtype.ext e.right_inv (h₂ b.2)
+    continuous_toFun := (e.continuousOn.mono hs).mapsToRestrict h₁
+    continuous_invFun := (e.continuousOn_symm.mono h₂).mapsToRestrict h₃ }
 
 Depends on / 依赖: MapsTo, MapsTo.restrict, Subtype, Subtype.ext, continuousOn, continuous_, continuous_toFun, e.continuousOn.mono, e.image_source_eq_target, e.left_inv, e.right_inv, e.symm, e.target, forall_mem_image, ht.subset, image_mono, image_source_eq_target, invFun, left_inv, mapsToRestrict
 -/
@@ -540,7 +548,7 @@ e.right_inv by
   continuous_toFun := by
     simpa only [continuousOn_univ, h] using e.continuousOn
   continuous_invFun := by
-    simpa only [continuousOn_univ,
+    simpa only [continuousOn_univ, h'] using e.continuousOn_symm
 
 中文:
 定义 toHomeomorphOfSourceEqUnivTargetEqUniv
@@ -558,7 +566,7 @@ e.right_inv by
   continuous_toFun := by
     simpa only [continuousOn_univ, h] using e.continuousOn
   continuous_invFun := by
-    simpa only [continuousOn_univ,
+    simpa only [continuousOn_univ, h'] using e.continuousOn_symm
 -/
 def toHomeomorphOfSourceEqUnivTargetEqUniv (h : e.source = (univ : Set X)) (h' : e.target = univ) :
     X ≃ₜ Y where
@@ -590,7 +598,7 @@ theorem isEmbedding_restrict
     rw [← PartialEquiv.toEquiv_eq_codRestrict_restrict]
     exact e.toHomeomorphSourceTarget.isInducing
   · rw [domRestrict_eq, toFun_eq_coe e, e.injOn.injective_iff e.source (by simp)]
-   
+    exact Subtype.val_injective
 
 中文:
 定理 isEmbedding_restrict
@@ -602,7 +610,7 @@ theorem isEmbedding_restrict
     rw [← PartialEquiv.toEquiv_eq_codRestrict_restrict]
     exact e.toHomeomorphSourceTarget.isInducing
   · rw [domRestrict_eq, toFun_eq_coe e, e.injOn.injective_iff e.source (by simp)]
-   
+    exact Subtype.val_injective
 
 Depends on / 依赖: IsInducing, PartialEquiv, PartialEquiv.toEquiv_eq_codRestrict_restrict, Subtype, Subtype.val_injective, Topology, Topology.IsInducing.of_codRestrict, domRestrict_eq, e.injOn.injective_iff, e.source, e.target, e.toHomeomorphSourceTarget.isInducing, injective_iff, isEmbedding_iff, isInducing, of_codRestrict, source, target, toEquiv_eq_codRestrict_restrict, toFun_eq_coe
 -/
@@ -650,7 +658,7 @@ definition ofIsHomeomorphToEquiv
     exact h.continuous
   continuousOn_invFun := by
     rw [continuousOn_iff_continuous_domRestrict]; rw [← continuous_codRestrict_iff (s := f.source) (by simp)]
-
+    exact ((Equiv.isHomeomorph_iff _).1 h).2
 
 中文:
 定义 ofIsHomeomorphToEquiv
@@ -661,7 +669,7 @@ definition ofIsHomeomorphToEquiv
     exact h.continuous
   continuousOn_invFun := by
     rw [continuousOn_iff_continuous_domRestrict]; rw [← continuous_codRestrict_iff (s := f.source) (by simp)]
-
+    exact ((Equiv.isHomeomorph_iff _).1 h).2
 -/
 def ofIsHomeomorphToEquiv (f : PartialEquiv X Y) (h : IsHomeomorph (f.toEquiv)) :
     PartialHomeomorph X Y where
@@ -697,7 +705,7 @@ definition toPartialHomeomorph
     refine ⟨?_, Equiv.surjective _⟩
     rw [PartialEquiv.toEquiv_eq_codRestrict_restrict]
     apply IsEmbedding.codRestrict
-    simpa! [domRestrict_eq] using h.comp 
+    simpa! [domRestrict_eq] using h.comp subtypeVal)
 
 中文:
 定义 toPartialHomeomorph
@@ -707,7 +715,7 @@ definition toPartialHomeomorph
     refine ⟨?_, Equiv.surjective _⟩
     rw [PartialEquiv.toEquiv_eq_codRestrict_restrict]
     apply IsEmbedding.codRestrict
-    simpa! [domRestrict_eq] using h.comp 
+    simpa! [domRestrict_eq] using h.comp subtypeVal)
 
 Depends on / 依赖: Equiv.surjective, IsEmbedding, IsEmbedding.codRestrict, PartialEquiv, PartialEquiv.toEquiv_eq_codRestrict_restrict, PartialHomeomorph, PartialHomeomorph.ofIsHomeomorphToEquiv, codRestrict, domRestrict_eq, h.comp, h.injective.injOn.toPartialEquiv, injective, isHomeomorph_iff_isEmbedding_surjective, ofIsHomeomorphToEquiv, subtypeVal, surjective, toEquiv_eq_codRestrict_restrict, toPartialEquiv
 -/

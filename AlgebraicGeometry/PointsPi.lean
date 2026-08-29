@@ -38,7 +38,7 @@ lemma Ideal.span_eq_top_of_span_image_evalRingHom
   have : Fintype s := hs.fintype
   refine ⟨Finsupp.equivFunOnFinite.symm fun i x => f x i, ?_⟩
   ext i
-  simpa [Finsupp.sum_fint
+  simpa [Finsupp.sum_fintype] using hf i
 
 中文:
 引理 理想.span_eq_top_of_span_image_evalRingHom
@@ -49,7 +49,7 @@ lemma Ideal.span_eq_top_of_span_image_evalRingHom
   have : Fintype s := hs.fintype
   refine ⟨Finsupp.equivFunOnFinite.symm fun i x => f x i, ?_⟩
   ext i
-  simpa [Finsupp.sum_fint
+  simpa [Finsupp.sum_fintype] using hf i
 
 Depends on / 依赖: Finsupp, Finsupp.equivFunOnFinite.symm, Finsupp.mem_ideal_span_range_iff_exists_finsupp, Finsupp.sum_fintype, Fintype, Ideal.eq_top_iff_one, Set.range_comp, Subtype, Subtype.range_val, eq_top_iff_one, equivFunOnFinite, fintype, hs.fintype, mem_ideal_span_range_iff_exists_finsupp, range_comp, range_val, sum_fintype
 -/
@@ -76,7 +76,19 @@ lemma eq_top_of_sigmaSpec_subset_of_isCompact
   obtain ⟨t, hts, ht, ht'⟩ : exists t subseteq s, t.Finite ∧ V subseteq ⋃ i in t, (basicOpen i).1 := by
     obtain ⟨t, ht⟩ := hV'.elim_finite_subcover
       (fun i : s => (basicOpen i.1).1) (fun _ => (basicOpen _).2)
-      (by simpa [← Set.c
+      (by simpa [← Set.compl_iInter, ← zeroLocus_iUnion₂ (κ := (· in s)), ← hs])
+    exact ⟨t.map (Function.Embedding.subtype _), by simp, Finset.finite_toSet _, by simpa using ht⟩
+  replace ht' : V subseteq (zeroLocus t)ᶜ := by
+    simpa [← Set.compl_iInter, ← zeroLocus_iUnion₂ (κ := (· in t))] using ht'
+  have (i : _) : Ideal.span (Pi.evalRingHom (R ·) i '' t) = ⊤ := by
+    rw [← zeroLocus_empty_iff_eq_top]; rw [zeroLocus_span]; rw [← preimage_comap_zeroLocus]; rw [← Set.compl_univ_iff]; rw [← Set.preimage_compl]; rw [Set.preimage_eq_univ_iff]
+    trans (Sigma.ι _ i ≫ sigmaSpec R).opensRange.1
+    · simp; rfl
+    · rw [Scheme.Hom.opensRange_comp]
+      exact (Set.image_subset_range _ _).trans (hV.trans ht')
+  have : Ideal.span s = ⊤ := top_le_iff.mp
+    ((Ideal.span_eq_top_of_span_image_evalRingHom _ ht this).ge.trans (Ideal.span_mono hts))
+  simpa [← zeroLocus_span s, zeroLocus_empty_iff_eq_top.mpr this] using hs
 
 中文:
 引理 eq_top_of_sigmaSpec_subset_of_isCompact
@@ -85,7 +97,19 @@ lemma eq_top_of_sigmaSpec_subset_of_isCompact
   obtain ⟨t, hts, ht, ht'⟩ : exists t subseteq s, t.Finite ∧ V subseteq ⋃ i in t, (basicOpen i).1 := by
     obtain ⟨t, ht⟩ := hV'.elim_finite_subcover
       (fun i : s => (basicOpen i.1).1) (fun _ => (basicOpen _).2)
-      (by simpa [← Set.c
+      (by simpa [← Set.compl_iInter, ← zeroLocus_iUnion₂ (κ := (· in s)), ← hs])
+    exact ⟨t.map (Function.Embedding.subtype _), by simp, Finset.finite_toSet _, by simpa using ht⟩
+  replace ht' : V subseteq (zeroLocus t)ᶜ := by
+    simpa [← Set.compl_iInter, ← zeroLocus_iUnion₂ (κ := (· in t))] using ht'
+  have (i : _) : Ideal.span (Pi.evalRingHom (R ·) i '' t) = ⊤ := by
+    rw [← zeroLocus_empty_iff_eq_top]; rw [zeroLocus_span]; rw [← preimage_comap_zeroLocus]; rw [← Set.compl_univ_iff]; rw [← Set.preimage_compl]; rw [Set.preimage_eq_univ_iff]
+    trans (Sigma.ι _ i ≫ sigmaSpec R).opensRange.1
+    · simp; rfl
+    · rw [Scheme.Hom.opensRange_comp]
+      exact (Set.image_subset_range _ _).trans (hV.trans ht')
+  have : Ideal.span s = ⊤ := top_le_iff.mp
+    ((Ideal.span_eq_top_of_span_image_evalRingHom _ ht this).ge.trans (Ideal.span_mono hts))
+  simpa [← zeroLocus_span s, zeroLocus_empty_iff_eq_top.mpr this] using hs
 -/
 lemma eq_top_of_sigmaSpec_subset_of_isCompact
     (U : (Spec <| .of <| Π i, R i).Opens) (V : Set (Spec <| .of <| Π i, R i))
@@ -154,7 +178,13 @@ lemma isIso_of_comp_eq_sigmaSpec
     · simpa only [← hU'] using! Set.range_comp_subset_range f g
     · exact isCompact_range g.continuous
   have : IsClosedImmersion g := by
-    have : IsIso g.coborderRange.ι := by rw [th
+    have : IsIso g.coborderRange.ι := by rw [this, ← Scheme.topIso_hom]; infer_instance
+    rw [← g.liftCoborder_ι]
+    infer_instance
+  obtain ⟨I, e, rfl⟩ := IsClosedImmersion.Spec_iff.mp this
+  obtain rfl := eq_bot_of_comp_quotientMk_eq_sigmaSpec R I (f ≫ e.hom) (by rwa [Category.assoc])
+  convert_to! IsIso (e.hom ≫ Spec.map (RingEquiv.quotientBot _).toCommRingCatIso.inv)
+  infer_instance
 
 中文:
 引理 isIso_of_comp_eq_sigmaSpec
@@ -165,7 +195,13 @@ lemma isIso_of_comp_eq_sigmaSpec
     · simpa only [← hU'] using! Set.range_comp_subset_range f g
     · exact isCompact_range g.continuous
   have : IsClosedImmersion g := by
-    have : IsIso g.coborderRange.ι := by rw [th
+    have : IsIso g.coborderRange.ι := by rw [this, ← Scheme.topIso_hom]; infer_instance
+    rw [← g.liftCoborder_ι]
+    infer_instance
+  obtain ⟨I, e, rfl⟩ := IsClosedImmersion.Spec_iff.mp this
+  obtain rfl := eq_bot_of_comp_quotientMk_eq_sigmaSpec R I (f ≫ e.hom) (by rwa [Category.assoc])
+  convert_to! IsIso (e.hom ≫ Spec.map (RingEquiv.quotientBot _).toCommRingCatIso.inv)
+  infer_instance
 
 Depends on / 依赖: IsClosedImmersion, IsClosedImmersion.Spec_iff.mp, Scheme, Scheme.topIso_hom, Set.range_comp_subset_range, Spec_iff, coborderRange, continuous, e.hom, eq_bot_of_comp_quotientMk_eq_sigmaSpec, eq_top_of_sigmaSpec_subset_of_isCompact, g.coborderRange, g.continuous, g.liftCoborder_, infer_instance, isCompact_range, range_comp_subset_range, subset_coborder, topIso_hom
 -/
@@ -294,7 +330,26 @@ lemma pointsPi_surjective
   have (i : _) : exists j, Set.range (f i) subseteq (𝒰.f j).opensRange := by
     refine ⟨𝒰.idx ((f i) (IsLocalRing.closedPoint (R i))), ?_⟩
     rintro _ ⟨x, rfl⟩
-    exact ((IsLocalRing.specializes_closedPoint x).map (f i).continuous
+    exact ((IsLocalRing.specializes_closedPoint x).map (f i).continuous).mem_open
+      (𝒰.f _).opensRange.2 (𝒰.covers _)
+  choose j hj using this
+  have (j₀ : _) := pointsPi_surjective_of_isAffine (ι := { i // j i = j₀ }) (R ·) (𝒰.X j₀)
+    (fun i => IsOpenImmersion.lift (𝒰.f j₀) (f i.1) (by rcases i with ⟨i, rfl⟩; exact hj i))
+  choose g hg using this
+  simp_rw [funext_iff, pointsPi] at hg
+  let R' (j₀) := CommRingCat.of (Π i : { i // j i = j₀ }, R i)
+  let e : (Π i, R i) ≃+* Π j₀, R' j₀ :=
+  { toFun f _ i := f i
+    invFun f i := f _ ⟨i, rfl⟩
+    right_inv _ := funext₂ fun j₀ i => by rcases i with ⟨i, rfl⟩; rfl
+    map_mul' _ _ := rfl
+    map_add' _ _ := rfl }
+  refine ⟨Spec.map (CommRingCat.ofHom e.symm.toRingHom) ≫ inv (sigmaSpec R') ≫
+    Sigma.desc fun j₀ => g j₀ ≫ 𝒰.f j₀, ?_⟩
+  ext i : 1
+  have : (Pi.evalRingHom (R ·) i).comp e.symm.toRingHom =
+    (Pi.evalRingHom _ ⟨i, rfl⟩).comp (Pi.evalRingHom (R' ·) (j i)) := rfl
+  rw [pointsPi]; rw [← Spec.map_comp_assoc]; rw [← CommRingCat.ofHom_comp]; rw [this]; rw [CommRingCat.ofHom_comp]; rw [Spec.map_comp_assoc]; rw [← ι_sigmaSpec R']; rw [Category.assoc]; rw [IsIso.hom_inv_id_assoc]; rw [Sigma.ι_desc]; rw [← Category.assoc]; rw [hg]; rw [IsOpenImmersion.lift_fac]
 
 中文:
 引理 pointsPi_surjective
@@ -305,7 +360,26 @@ lemma pointsPi_surjective
   have (i : _) : exists j, Set.range (f i) subseteq (𝒰.f j).opensRange := by
     refine ⟨𝒰.idx ((f i) (IsLocalRing.closedPoint (R i))), ?_⟩
     rintro _ ⟨x, rfl⟩
-    exact ((IsLocalRing.specializes_closedPoint x).map (f i).continuous
+    exact ((IsLocalRing.specializes_closedPoint x).map (f i).continuous).mem_open
+      (𝒰.f _).opensRange.2 (𝒰.covers _)
+  choose j hj using this
+  have (j₀ : _) := pointsPi_surjective_of_isAffine (ι := { i // j i = j₀ }) (R ·) (𝒰.X j₀)
+    (fun i => IsOpenImmersion.lift (𝒰.f j₀) (f i.1) (by rcases i with ⟨i, rfl⟩; exact hj i))
+  choose g hg using this
+  simp_rw [funext_iff, pointsPi] at hg
+  let R' (j₀) := CommRingCat.of (Π i : { i // j i = j₀ }, R i)
+  let e : (Π i, R i) ≃+* Π j₀, R' j₀ :=
+  { toFun f _ i := f i
+    invFun f i := f _ ⟨i, rfl⟩
+    right_inv _ := funext₂ fun j₀ i => by rcases i with ⟨i, rfl⟩; rfl
+    map_mul' _ _ := rfl
+    map_add' _ _ := rfl }
+  refine ⟨Spec.map (CommRingCat.ofHom e.symm.toRingHom) ≫ inv (sigmaSpec R') ≫
+    Sigma.desc fun j₀ => g j₀ ≫ 𝒰.f j₀, ?_⟩
+  ext i : 1
+  have : (Pi.evalRingHom (R ·) i).comp e.symm.toRingHom =
+    (Pi.evalRingHom _ ⟨i, rfl⟩).comp (Pi.evalRingHom (R' ·) (j i)) := rfl
+  rw [pointsPi]; rw [← Spec.map_comp_assoc]; rw [← CommRingCat.ofHom_comp]; rw [this]; rw [CommRingCat.ofHom_comp]; rw [Spec.map_comp_assoc]; rw [← ι_sigmaSpec R']; rw [Category.assoc]; rw [IsIso.hom_inv_id_assoc]; rw [Sigma.ι_desc]; rw [← Category.assoc]; rw [hg]; rw [IsOpenImmersion.lift_fac]
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.closedPoint, IsLocalRing.specializes_closedPoint, IsOpenImmersion, IsOpenImmersion.lift, OpenCover, Set.range, X.OpenCover, X.affineCover.finiteSubcover, affineCover, closedPoint, continuous, covers, finiteSubcover, mem_open, opensRange, pointsPi_surjective_of_isAffine, specializes_closedPoint, subseteq
 -/

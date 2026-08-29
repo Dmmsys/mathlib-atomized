@@ -183,7 +183,26 @@ lemma coassoc
     A otimes[R] B otimes[S] (A otimes[R] B otimes[S] (A otimes[R] B)) :=
     AlgebraTensorModule.tensorTensorTensorComm _ _ _ _ _ _ _ _ ≪≫ₗ
       AlgebraTensorModule.congr (.refl _ _)
-        (AlgebraTen
+        (AlgebraTensorModule.tensorTensorTensorComm _ _ _ _ _ _ _ _)
+  let F' : A otimes[S] (A otimes[S] A) otimes[R] (B otimes[R] (B otimes[R] B)) ->ₗ[S]
+      A otimes[R] B otimes[S] (A otimes[R] B otimes[S] (A otimes[R] B)) :=
+    TensorProduct.mapOfCompatibleSMul .. ∘ₗ
+        TensorProduct.map .id (TensorProduct.mapOfCompatibleSMul ..) ∘ₗ F.toLinearMap
+  convert! congr(F ($(Coalgebra.coassoc_apply x) otimesₜ[R] $(Coalgebra.coassoc_apply y))) using 1
+  · dsimp
+    hopf_tensor_induction comul (R := S) x with x₁ x₂
+    hopf_tensor_induction comul (R := R) y with y₁ y₂
+    dsimp
+    hopf_tensor_induction comul (R := S) x₁ with x₁₁ x₁₂
+    hopf_tensor_induction comul (R := R) y₁ with y₁₁ y₁₂
+    rfl
+  · dsimp
+    hopf_tensor_induction comul (R := S) x with x₁ x₂
+    hopf_tensor_induction comul (R := R) y with y₁ y₂
+    dsimp
+    hopf_tensor_induction comul (R := S) x₂ with x₂₁ x₂₂
+    hopf_tensor_induction comul (R := R) y₂ with y₂₁ y₂₂
+    rfl
 
 中文:
 引理 coassoc
@@ -193,7 +212,26 @@ lemma coassoc
     A otimes[R] B otimes[S] (A otimes[R] B otimes[S] (A otimes[R] B)) :=
     AlgebraTensorModule.tensorTensorTensorComm _ _ _ _ _ _ _ _ ≪≫ₗ
       AlgebraTensorModule.congr (.refl _ _)
-        (AlgebraTen
+        (AlgebraTensorModule.tensorTensorTensorComm _ _ _ _ _ _ _ _)
+  let F' : A otimes[S] (A otimes[S] A) otimes[R] (B otimes[R] (B otimes[R] B)) ->ₗ[S]
+      A otimes[R] B otimes[S] (A otimes[R] B otimes[S] (A otimes[R] B)) :=
+    TensorProduct.mapOfCompatibleSMul .. ∘ₗ
+        TensorProduct.map .id (TensorProduct.mapOfCompatibleSMul ..) ∘ₗ F.toLinearMap
+  convert! congr(F ($(Coalgebra.coassoc_apply x) otimesₜ[R] $(Coalgebra.coassoc_apply y))) using 1
+  · dsimp
+    hopf_tensor_induction comul (R := S) x with x₁ x₂
+    hopf_tensor_induction comul (R := R) y with y₁ y₂
+    dsimp
+    hopf_tensor_induction comul (R := S) x₁ with x₁₁ x₁₂
+    hopf_tensor_induction comul (R := R) y₁ with y₁₁ y₁₂
+    rfl
+  · dsimp
+    hopf_tensor_induction comul (R := S) x with x₁ x₂
+    hopf_tensor_induction comul (R := R) y with y₁ y₂
+    dsimp
+    hopf_tensor_induction comul (R := S) x₂ with x₂₁ x₂₂
+    hopf_tensor_induction comul (R := R) y₂ with y₂₁ y₂₂
+    rfl
 -/
 private lemma coassoc :
     TensorProduct.assoc S (A otimes[R] B) (A otimes[R] B) (A otimes[R] B) ∘ₗ
@@ -245,7 +283,27 @@ instance instCoalgebra
         (TensorProduct.lid _ _ $(rTensor_counit_comul (R := S) x) otimesₜ[R]
 TensorProduct.lid _ _ (rTensor_counit_comul (R := R) y)))
     · dsimp
-      hopf_tensor_induction comul (R
+      hopf_tensor_induction comul (R := S) x with x₁ x₂
+      hopf_tensor_induction comul (R := R) y with y₁ y₂
+      apply (TensorProduct.lid S _).injective
+      dsimp
+      rw [tmul_smul]; rw [smul_assoc]; rw [one_smul]; rw [smul_tmul']
+    · dsimp
+      simp only [one_smul]
+  lTensor_counit_comp_comul := by
+    ext x y
+    convert!
+      congr((TensorProduct.rid S _).symm
+        (TensorProduct.rid _ _ $(lTensor_counit_comul (R := S) x) otimesₜ[R]
+TensorProduct.rid _ _ (lTensor_counit_comul (R := R) y)))
+    · dsimp
+      hopf_tensor_induction comul (R := S) x with x₁ x₂
+      hopf_tensor_induction comul (R := R) y with y₁ y₂
+      apply (TensorProduct.rid S _).injective
+      dsimp
+      rw [tmul_smul]; rw [smul_assoc]; rw [one_smul]; rw [smul_tmul']
+    · dsimp
+      simp only [one_smul]
 
 中文:
 实例 instCoalgebra
@@ -258,7 +316,27 @@ TensorProduct.lid _ _ (rTensor_counit_comul (R := R) y)))
         (TensorProduct.lid _ _ $(rTensor_counit_comul (R := S) x) otimesₜ[R]
 TensorProduct.lid _ _ (rTensor_counit_comul (R := R) y)))
     · dsimp
-      hopf_tensor_induction comul (R
+      hopf_tensor_induction comul (R := S) x with x₁ x₂
+      hopf_tensor_induction comul (R := R) y with y₁ y₂
+      apply (TensorProduct.lid S _).injective
+      dsimp
+      rw [tmul_smul]; rw [smul_assoc]; rw [one_smul]; rw [smul_tmul']
+    · dsimp
+      simp only [one_smul]
+  lTensor_counit_comp_comul := by
+    ext x y
+    convert!
+      congr((TensorProduct.rid S _).symm
+        (TensorProduct.rid _ _ $(lTensor_counit_comul (R := S) x) otimesₜ[R]
+TensorProduct.rid _ _ (lTensor_counit_comul (R := R) y)))
+    · dsimp
+      hopf_tensor_induction comul (R := S) x with x₁ x₂
+      hopf_tensor_induction comul (R := R) y with y₁ y₂
+      apply (TensorProduct.rid S _).injective
+      dsimp
+      rw [tmul_smul]; rw [smul_assoc]; rw [one_smul]; rw [smul_tmul']
+    · dsimp
+      simp only [one_smul]
 
 Depends on / 依赖: coassoc
 -/
@@ -359,7 +437,7 @@ definition map
     hopf_tensor_induction comul (R := R) y with y₁ y₂
     simp
 
-@[
+@[simp]
 
 中文:
 定义 map
@@ -374,7 +452,7 @@ definition map
     hopf_tensor_induction comul (R := R) y with y₁ y₂
     simp
 
-@[
+@[simp]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.map, f.toLinearMap, g.toLinearMap, toLinearMap
 -/
@@ -446,7 +524,7 @@ definition noncomputable
       hopf_tensor_induction comul (R := S) x with x₁ x₂
       hopf_tensor_induction comul (R := S) y with y₁ y₂
       hopf_tensor_induction comul (R := R) z with z₁ z₂
-  
+      simp }
 
 中文:
 定义 noncomputable
@@ -459,7 +537,7 @@ definition noncomputable
       hopf_tensor_induction comul (R := S) x with x₁ x₂
       hopf_tensor_induction comul (R := S) y with y₁ y₂
       hopf_tensor_induction comul (R := R) z with z₁ z₂
-  
+      simp }
 -/
 protected noncomputable def assoc :
     (M otimes[S] N) otimes[R] P ≃ₗc[S] M otimes[S] (N otimes[R] P) :=

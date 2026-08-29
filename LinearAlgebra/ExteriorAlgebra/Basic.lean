@@ -666,7 +666,12 @@ theorem ι_eq_algebraMap_iff
     have : IsCentralScalar R M := ⟨fun r m => rfl⟩
     have hf0 : toTrivSqZeroExt (ι R x) = (0, x) := toTrivSqZeroExt_ι _
     rw [h]; rw [AlgHom.commutes] at hf0
-    have : r = 0 ∧ 0 = x 
+    have : r = 0 ∧ 0 = x := Prod.ext_iff.1 hf0
+    exact this.symm.imp_left Eq.symm
+  · rintro ⟨rfl, rfl⟩
+    rw [map_zero]; rw [map_zero]
+
+@[simp]
 
 中文:
 定理 ι_eq_algebraMap_iff
@@ -678,7 +683,12 @@ theorem ι_eq_algebraMap_iff
     have : IsCentralScalar R M := ⟨fun r m => rfl⟩
     have hf0 : toTrivSqZeroExt (ι R x) = (0, x) := toTrivSqZeroExt_ι _
     rw [h]; rw [AlgHom.commutes] at hf0
-    have : r = 0 ∧ 0 = x 
+    have : r = 0 ∧ 0 = x := Prod.ext_iff.1 hf0
+    exact this.symm.imp_left Eq.symm
+  · rintro ⟨rfl, rfl⟩
+    rw [map_zero]; rw [map_zero]
+
+@[simp]
 
 Depends on / 依赖: AlgHom, AlgHom.commutes, Eq.symm, IsCentralScalar, Module, Module.compHom, Prod.ext_iff, RingHom, RingHom.id, commutes, compHom, ext_iff, fromOpposite, imp_left, map_zero, mul_comm, this.symm.imp_left, toTrivSqZeroExt
 -/
@@ -791,7 +801,9 @@ theorem ι_mul_prod_list
     · rw [h, ι_sq_zero, zero_mul]
     · replace hn :=
 congr_arg (ι R (f 0) * ·) hn (fun i => f <| Fin.succ i) (i.pred h)
-      rw [Fin.succ_pred]; rw
+      rw [Fin.succ_pred]; rw [← mul_assoc]; rw [mul_zero] at hn
+      refine (eq_zero_iff_eq_zero_of_add_eq_zero ?_).mp hn
+      rw [← add_mul]; rw [ι_add_mul_swap]; rw [zero_mul]
 
 中文:
 定理 ι_mul_prod_list
@@ -805,7 +817,9 @@ congr_arg (ι R (f 0) * ·) hn (fun i => f <| Fin.succ i) (i.pred h)
     · rw [h, ι_sq_zero, zero_mul]
     · replace hn :=
 congr_arg (ι R (f 0) * ·) hn (fun i => f <| Fin.succ i) (i.pred h)
-      rw [Fin.succ_pred]; rw
+      rw [Fin.succ_pred]; rw [← mul_assoc]; rw [mul_zero] at hn
+      refine (eq_zero_iff_eq_zero_of_add_eq_zero ?_).mp hn
+      rw [← add_mul]; rw [ι_add_mul_swap]; rw [zero_mul]
 
 Depends on / 依赖: Fin.succ, Fin.succ_pred, List.ofFn_succ, List.prod_cons, add_mul, congr_arg, eq_zero_iff_eq_zero_of_add_eq_zero, i.elim0, i.pred, mul_assoc, mul_zero, ofFn_succ, prod_cons, replace, succ_pred, zero_mul
 -/
@@ -840,6 +854,25 @@ definition ιMulti
       wlog h : x < y
       · exact this R n f y x hfxy.symm hxy.symm (hxy.lt_or_gt.resolve_left h)
       clear hxy
+      induction n with
+      | zero => exact x.elim0
+      | succ n hn =>
+        rw [List.ofFn_succ]; rw [List.prod_cons]
+        by_cases hx : x = 0
+        -- one of the repeated terms is on the left
+        · rw [hx] at hfxy h
+          rw [hfxy]; rw [← Fin.succ_pred y (ne_of_lt h).symm]
+          exact ι_mul_prod_list (f ∘ Fin.succ) _
+        -- ignore the left-most term and induct on the remaining ones, decrementing indices
+        · convert! mul_zero (ι R (f 0))
+          refine
+            hn
+              (fun i => f <| Fin.succ i) (x.pred hx)
+              (y.pred (ne_of_lt <| lt_of_le_of_lt x.zero_le h).symm) ?_
+              (Fin.pred_lt_pred_iff.mpr h)
+          simp only [Fin.succ_pred]
+          exact hfxy
+    toFun := F }
 
 中文:
 定义 ιMulti
@@ -852,6 +885,25 @@ definition ιMulti
       wlog h : x < y
       · exact this R n f y x hfxy.symm hxy.symm (hxy.lt_or_gt.resolve_left h)
       clear hxy
+      induction n with
+      | zero => exact x.elim0
+      | succ n hn =>
+        rw [List.ofFn_succ]; rw [List.prod_cons]
+        by_cases hx : x = 0
+        -- one of the repeated terms is on the left
+        · rw [hx] at hfxy h
+          rw [hfxy]; rw [← Fin.succ_pred y (ne_of_lt h).symm]
+          exact ι_mul_prod_list (f ∘ Fin.succ) _
+        -- ignore the left-most term and induct on the remaining ones, decrementing indices
+        · convert! mul_zero (ι R (f 0))
+          refine
+            hn
+              (fun i => f <| Fin.succ i) (x.pred hx)
+              (y.pred (ne_of_lt <| lt_of_le_of_lt x.zero_le h).symm) ?_
+              (Fin.pred_lt_pred_iff.mpr h)
+          simp only [Fin.succ_pred]
+          exact hfxy
+    toFun := F }
 
 Depends on / 依赖: ExteriorAlgebra, List.ofFn_succ, List.prod_cons, MultilinearMap, MultilinearMap.mkPiAlgebraFin, compLinearMap, hfxy.symm, hxy.lt_or_gt.resolve_left, hxy.symm, lt_or_gt, map_eq_zero_of_eq, mkPiAlgebraFin, ofFn_succ, prod_cons, resolve_left, x.elim0
 -/
@@ -1076,7 +1128,9 @@ lemma ιMulti_span_fixedDegree
   obtain ⟨f, rfl⟩ := Set.mem_pow.mp hu
   refine ⟨fun i => ιInv (f i).1, ?_⟩
   rw [ιMulti_apply]
-  congr w
+  congr with i
+  obtain ⟨v, hv⟩ := (f i).prop
+  rw [← hv]; rw [ι_leftInverse]
 
 中文:
 引理 ιMulti_span_fixedDegree
@@ -1088,7 +1142,9 @@ lemma ιMulti_span_fixedDegree
   obtain ⟨f, rfl⟩ := Set.mem_pow.mp hu
   refine ⟨fun i => ιInv (f i).1, ?_⟩
   rw [ιMulti_apply]
-  congr w
+  congr with i
+  obtain ⟨v, hv⟩ := (f i).prop
+  rw [← hv]; rw [ι_leftInverse]
 
 Depends on / 依赖: Set.mem_pow.mp, Submodule, Submodule.pow_eq_span_pow_set, Submodule.span_le, Submodule.subset_span, exteriorPower, le_antisymm, mem_pow, pow_eq_span_pow_set, span_le, subset_span
 -/
@@ -1137,7 +1193,10 @@ lemma ιMulti_family_mul_of_not_disjoint
   obtain ⟨j, hj⟩ := (mem_range_ofFinEmbEquiv_symm_iff_mem s i).mpr his
   obtain ⟨k, hk⟩ := (mem_range_ofFinEmbEquiv_symm_iff_mem t i).mpr hit
   simp only [ιMulti_family, ιMulti_mul_ιMulti]
-  apply AlternatingMap.map_eq_zero_of_eq (i 
+  apply AlternatingMap.map_eq_zero_of_eq (i := Fin.castAdd n j) (j := Fin.natAdd m k)
+  · simp [hj, hk]
+  · apply ne_of_lt
+    apply lt_of_lt_of_le (b := m) <;> simp
 
 中文:
 引理 ιMulti_family_mul_of_not_disjoint
@@ -1148,7 +1207,10 @@ lemma ιMulti_family_mul_of_not_disjoint
   obtain ⟨j, hj⟩ := (mem_range_ofFinEmbEquiv_symm_iff_mem s i).mpr his
   obtain ⟨k, hk⟩ := (mem_range_ofFinEmbEquiv_symm_iff_mem t i).mpr hit
   simp only [ιMulti_family, ιMulti_mul_ιMulti]
-  apply AlternatingMap.map_eq_zero_of_eq (i 
+  apply AlternatingMap.map_eq_zero_of_eq (i := Fin.castAdd n j) (j := Fin.natAdd m k)
+  · simp [hj, hk]
+  · apply ne_of_lt
+    apply lt_of_lt_of_le (b := m) <;> simp
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.map_eq_zero_of_eq, Fin.castAdd, Fin.natAdd, Finset, Finset.not_disjoint_iff, castAdd, lt_of_lt_of_le, map_eq_zero_of_eq, mem_range_ofFinEmbEquiv_symm_iff_mem, natAdd, ne_of_lt, not_disjoint_iff
 -/
@@ -1179,7 +1241,12 @@ lemma ιMulti_family_mul_of_disjoint
   let e := powersetCard.orderIsoOfFin (powersetCard.disjUnion h)
   change _ = v (e (e.symm _))
   by_cases! hi : i < m
-  · rw [← Fin.castAdd_castLT n i hi, Fin.append_left, OrderIso
+  · rw [← Fin.castAdd_castLT n i hi, Fin.append_left, OrderIso.apply_symm_apply,
+      finSumFinEquiv_symm_apply_castAdd]
+    aesop
+  · rw [← Fin.natAdd_subNat_cast hi, Fin.append_right, OrderIso.apply_symm_apply,
+      finSumFinEquiv_symm_apply_natAdd]
+    aesop
 
 中文:
 引理 ιMulti_family_mul_of_disjoint
@@ -1192,7 +1259,12 @@ lemma ιMulti_family_mul_of_disjoint
   let e := powersetCard.orderIsoOfFin (powersetCard.disjUnion h)
   change _ = v (e (e.symm _))
   by_cases! hi : i < m
-  · rw [← Fin.castAdd_castLT n i hi, Fin.append_left, OrderIso
+  · rw [← Fin.castAdd_castLT n i hi, Fin.append_left, OrderIso.apply_symm_apply,
+      finSumFinEquiv_symm_apply_castAdd]
+    aesop
+  · rw [← Fin.natAdd_subNat_cast hi, Fin.append_right, OrderIso.apply_symm_apply,
+      finSumFinEquiv_symm_apply_natAdd]
+    aesop
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.map_perm, Fin.append_left, Fin.append_right, Fin.castAdd_castLT, Fin.natAdd_subNat_cast, OrderIso, OrderIso.apply_symm_apply, append_left, append_right, apply_symm_apply, castAdd_castLT, disjUnion, e.symm, finSumFinEquiv_symm_apply_castAdd, finSumFinEquiv_symm_apply_natAdd, map_perm, natAdd_subNat_cast, orderIsoOfFin, permOfDisjoint
 -/
@@ -1475,7 +1547,9 @@ theorem ιInv_comp_map
   let : Module Rᵐᵒᵖ N := Module.compHom _ ((RingHom.id R).fromOpposite mul_comm)
   have : IsCentralScalar R N := ⟨fun r m => rfl⟩
   unfold ιInv
-  conv_lhs => rw [Linea
+  conv_lhs => rw [LinearMap.comp_assoc, ← AlgHom.comp_toLinearMap, toTrivSqZeroExt_comp_map,
+                AlgHom.comp_toLinearMap, ← LinearMap.comp_assoc, TrivSqZeroExt.sndHom_comp_map]
+  rfl
 
 中文:
 定理 ιInv_comp_map
@@ -1486,7 +1560,9 @@ theorem ιInv_comp_map
   let : Module Rᵐᵒᵖ N := Module.compHom _ ((RingHom.id R).fromOpposite mul_comm)
   have : IsCentralScalar R N := ⟨fun r m => rfl⟩
   unfold ιInv
-  conv_lhs => rw [Linea
+  conv_lhs => rw [LinearMap.comp_assoc, ← AlgHom.comp_toLinearMap, toTrivSqZeroExt_comp_map,
+                AlgHom.comp_toLinearMap, ← LinearMap.comp_assoc, TrivSqZeroExt.sndHom_comp_map]
+  rfl
 
 Depends on / 依赖: AlgHom, AlgHom.comp_toLinearMap, IsCentralScalar, LinearMap, LinearMap.comp_assoc, Module, Module.compHom, RingHom, RingHom.id, TrivSqZeroExt, TrivSqZeroExt.sndHom_comp_map, compHom, comp_assoc, comp_toLinearMap, conv_lhs, fromOpposite, mul_comm, sndHom_comp_map, toTrivSqZeroExt_comp_map
 -/

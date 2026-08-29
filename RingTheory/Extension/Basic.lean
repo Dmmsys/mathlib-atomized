@@ -266,7 +266,16 @@ definition localization
       (g := (algebraMap S S').comp (algebraMap P.Ring S))
       (by simpa using fun x hx => IsLocalization.map_units S' ⟨_, hx⟩)).toAlgebra
   isScalarTower := by
-    let : Algebra (
+    let : Algebra (Localization (M.comap (algebraMap P.Ring S))) S' :=
+      (IsLocalization.lift (M := (M.comap (algebraMap P.Ring S)))
+        (g := (algebraMap S S').comp (algebraMap P.Ring S))
+        (by simpa using fun x hx => IsLocalization.map_units S' ⟨_, hx⟩)).toAlgebra
+    apply IsScalarTower.of_algebraMap_eq'
+    rw [RingHom.algebraMap_toAlgebra]; rw [IsScalarTower.algebraMap_eq R P.Ring (Localization _)]; rw [← RingHom.comp_assoc]; rw [IsLocalization.lift_comp]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
+  σ s := Localization.mk (P.σ (IsLocalization.sec M s).1) ⟨P.σ (IsLocalization.sec M s).2, by simp⟩
+  algebraMap_σ s := by
+    simp [RingHom.algebraMap_toAlgebra, Localization.mk_eq_mk', IsLocalization.lift_mk',
+      Units.mul_inv_eq_iff_eq_mul, IsUnit.coe_liftRight, IsLocalization.sec_spec]
 
 中文:
 定义 localization
@@ -276,7 +285,16 @@ definition localization
       (g := (algebraMap S S').comp (algebraMap P.Ring S))
       (by simpa using fun x hx => IsLocalization.map_units S' ⟨_, hx⟩)).toAlgebra
   isScalarTower := by
-    let : Algebra (
+    let : Algebra (Localization (M.comap (algebraMap P.Ring S))) S' :=
+      (IsLocalization.lift (M := (M.comap (algebraMap P.Ring S)))
+        (g := (algebraMap S S').comp (algebraMap P.Ring S))
+        (by simpa using fun x hx => IsLocalization.map_units S' ⟨_, hx⟩)).toAlgebra
+    apply IsScalarTower.of_algebraMap_eq'
+    rw [RingHom.algebraMap_toAlgebra]; rw [IsScalarTower.algebraMap_eq R P.Ring (Localization _)]; rw [← RingHom.comp_assoc]; rw [IsLocalization.lift_comp]; rw [RingHom.comp_assoc]; rw [← IsScalarTower.algebraMap_eq]; rw [← IsScalarTower.algebraMap_eq]
+  σ s := Localization.mk (P.σ (IsLocalization.sec M s).1) ⟨P.σ (IsLocalization.sec M s).2, by simp⟩
+  algebraMap_σ s := by
+    simp [RingHom.algebraMap_toAlgebra, Localization.mk_eq_mk', IsLocalization.lift_mk',
+      Units.mul_inv_eq_iff_eq_mul, IsUnit.coe_liftRight, IsLocalization.sec_spec]
 
 Depends on / 依赖: Localization, M.comap, P.Ring, algebraMap
 -/
@@ -1034,7 +1052,16 @@ instance Cotangent.module
   smul_add := fun r x y => ext (smul_add (P.σ r) x.val y.val)
   add_smul := fun r s x => by
     have := smul_eq_zero_of_mem (P.σ (r + s) - (P.σ r + P.σ s) : P.Ring) (by simp) x
-    simpa only [sub_smul, add_smul, sub_eq_z
+    simpa only [sub_smul, add_smul, sub_eq_zero]
+  zero_smul := fun x => smul_eq_zero_of_mem (P.σ 0 : P.Ring) (by simp) x
+  one_smul := fun x => by
+    have := smul_eq_zero_of_mem (P.σ 1 - 1 : P.Ring) (by simp) x
+    simpa [sub_eq_zero, sub_smul]
+  mul_smul := fun r s x => by
+    have := smul_eq_zero_of_mem (P.σ (r * s) - (P.σ r * P.σ s) : P.Ring) (by simp) x
+    simpa only [sub_smul, mul_smul, sub_eq_zero] using! this
+
+noncomputable
 
 中文:
 实例 余切.module
@@ -1044,7 +1071,16 @@ instance Cotangent.module
   smul_add := fun r x y => ext (smul_add (P.σ r) x.val y.val)
   add_smul := fun r s x => by
     have := smul_eq_zero_of_mem (P.σ (r + s) - (P.σ r + P.σ s) : P.Ring) (by simp) x
-    simpa only [sub_smul, add_smul, sub_eq_z
+    simpa only [sub_smul, add_smul, sub_eq_zero]
+  zero_smul := fun x => smul_eq_zero_of_mem (P.σ 0 : P.Ring) (by simp) x
+  one_smul := fun x => by
+    have := smul_eq_zero_of_mem (P.σ 1 - 1 : P.Ring) (by simp) x
+    simpa [sub_eq_zero, sub_smul]
+  mul_smul := fun r s x => by
+    have := smul_eq_zero_of_mem (P.σ (r * s) - (P.σ r * P.σ s) : P.Ring) (by simp) x
+    simpa only [sub_smul, mul_smul, sub_eq_zero] using! this
+
+noncomputable
 
 Depends on / 依赖: s.val
 -/
@@ -1329,7 +1365,8 @@ lemma Cotangent.span_eq_top_of_span_eq_ker
   proof: by
   rw [Ideal.span]; rw [← Submodule.span_range_subtype_eq_top_iff] at hs
   · apply Submodule.span_eq_top_of_span_eq_top (R := P.Ring)
-    rw [← Function.comp_def]; rw [Set.range_comp]; rw [← Submodule.map_span]; rw [hs]; rw [Submodule.map_top]; rw [LinearMap.range_eq_top_of_surjective _ mk_surject
+    rw [← Function.comp_def]; rw [Set.range_comp]; rw [← Submodule.map_span]; rw [hs]; rw [Submodule.map_top]; rw [LinearMap.range_eq_top_of_surjective _ mk_surjective]
+  · simp [← hs, Ideal.mem_span_range_self]
 
 中文:
 引理 余切.span_eq_top_of_span_eq_ker
@@ -1337,7 +1374,8 @@ lemma Cotangent.span_eq_top_of_span_eq_ker
   证明: by
   rw [Ideal.span]; rw [← Submodule.span_range_subtype_eq_top_iff] at hs
   · apply Submodule.span_eq_top_of_span_eq_top (R := P.Ring)
-    rw [← Function.comp_def]; rw [Set.range_comp]; rw [← Submodule.map_span]; rw [hs]; rw [Submodule.map_top]; rw [LinearMap.range_eq_top_of_surjective _ mk_surject
+    rw [← Function.comp_def]; rw [Set.range_comp]; rw [← Submodule.map_span]; rw [hs]; rw [Submodule.map_top]; rw [LinearMap.range_eq_top_of_surjective _ mk_surjective]
+  · simp [← hs, Ideal.mem_span_range_self]
 
 Depends on / 依赖: Function, Function.comp_def, Ideal.mem_span_range_self, Ideal.span, LinearMap, LinearMap.range_eq_top_of_surjective, P.Ring, Set.range_comp, Submodule, Submodule.map_span, Submodule.map_top, Submodule.span_eq_top_of_span_eq_top, Submodule.span_range_subtype_eq_top_iff, comp_def, map_span, map_top, mem_span_range_self, mk_surjective, range_comp, range_eq_top_of_surjective
 -/
@@ -1369,6 +1407,15 @@ definition Cotangent.map
     ext
     obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
     obtain ⟨r, rfl⟩ := P.algebraMap_surjective r
+    simp only [algebraMap_smul, val_smul', val_mk, val_of, Ideal.mapCotangent_toCotangent,
+      RingHomCompTriple.comp_apply, ← (Ideal.toCotangent _).map_smul]
+    conv_rhs => rw [← algebraMap_smul S', ← f.algebraMap_toRingHom, algebraMap_smul, val_smul',
+      val_of, ← (Ideal.toCotangent _).map_smul]
+    congr 1
+    ext1
+    simp only [SetLike.val_smul, smul_eq_mul, map_mul, Hom.toAlgHom_apply]
+
+@[simp]
 
 中文:
 定义 余切.map
@@ -1380,6 +1427,15 @@ definition Cotangent.map
     ext
     obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
     obtain ⟨r, rfl⟩ := P.algebraMap_surjective r
+    simp only [algebraMap_smul, val_smul', val_mk, val_of, Ideal.mapCotangent_toCotangent,
+      RingHomCompTriple.comp_apply, ← (Ideal.toCotangent _).map_smul]
+    conv_rhs => rw [← algebraMap_smul S', ← f.algebraMap_toRingHom, algebraMap_smul, val_smul',
+      val_of, ← (Ideal.toCotangent _).map_smul]
+    congr 1
+    ext1
+    simp only [SetLike.val_smul, smul_eq_mul, map_mul, Hom.toAlgHom_apply]
+
+@[simp]
 
 Depends on / 依赖: Ideal.mapCotangent, f.toAlgHom, mapCotangent, toAlgHom
 -/
@@ -1551,7 +1607,19 @@ lemma Cotangent.map_ker_of_surjective
   · obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
     simp only [Submodule.restrictScalars_mem, LinearMap.mem_ker, map_mk, Hom.toAlgHom_apply,
       mk_eq_zero_iff] at hx
-    rw [eq_map]
+    rw [eq_map]; rw [← Ideal.map_pow]; rw [← Ideal.mem_comap]; rw [Ideal.comap_map_of_surjective' f.toRingHom h]; rw [Submodule.mem_sup] at hx
+    rcases hx with ⟨y, y_in, z, z_in, hyz⟩
+    suffices exists a, a in RingHom.ker f.toRingHom ∧ a in P.ker ∧ a - x in P.ker ^ 2 by
+      simpa [mk_eq_mk_iff_sub_mem]
+    refine ⟨z, z_in, ?_, by simpa [← hyz]⟩
+    rw [← eq_sub_iff_add_eq'] at hyz
+    exact hyz ▸ Ideal.sub_mem _ x.prop (Ideal.pow_le_self (show 2 != 0 by lia) y_in)
+  · obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
+    obtain ⟨y, y_in, y_in', hy⟩ : exists a in RingHom.ker f.toRingHom, a in P.ker ∧
+      a - x in P.ker ^ 2 := by simpa [mk_eq_mk_iff_sub_mem] using hx
+    suffices f.toRingHom x in P'.ker ^ 2 by simpa [mk_eq_zero_iff]
+    rw [eq_map]; rw [← Ideal.map_pow]; rw [← Ideal.mem_comap]; rw [Ideal.comap_map_of_surjective' f.toRingHom h]; rw [Submodule.mem_sup]
+    exact ⟨x - y, by rwa [← Submodule.neg_mem_iff, neg_sub], y, y_in, by ring⟩
 
 中文:
 引理 余切.map_ker_of_surjective
@@ -1562,7 +1630,19 @@ lemma Cotangent.map_ker_of_surjective
   · obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
     simp only [Submodule.restrictScalars_mem, LinearMap.mem_ker, map_mk, Hom.toAlgHom_apply,
       mk_eq_zero_iff] at hx
-    rw [eq_map]
+    rw [eq_map]; rw [← Ideal.map_pow]; rw [← Ideal.mem_comap]; rw [Ideal.comap_map_of_surjective' f.toRingHom h]; rw [Submodule.mem_sup] at hx
+    rcases hx with ⟨y, y_in, z, z_in, hyz⟩
+    suffices exists a, a in RingHom.ker f.toRingHom ∧ a in P.ker ∧ a - x in P.ker ^ 2 by
+      simpa [mk_eq_mk_iff_sub_mem]
+    refine ⟨z, z_in, ?_, by simpa [← hyz]⟩
+    rw [← eq_sub_iff_add_eq'] at hyz
+    exact hyz ▸ Ideal.sub_mem _ x.prop (Ideal.pow_le_self (show 2 != 0 by lia) y_in)
+  · obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
+    obtain ⟨y, y_in, y_in', hy⟩ : exists a in RingHom.ker f.toRingHom, a in P.ker ∧
+      a - x in P.ker ^ 2 := by simpa [mk_eq_mk_iff_sub_mem] using hx
+    suffices f.toRingHom x in P'.ker ^ 2 by simpa [mk_eq_zero_iff]
+    rw [eq_map]; rw [← Ideal.map_pow]; rw [← Ideal.mem_comap]; rw [Ideal.comap_map_of_surjective' f.toRingHom h]; rw [Submodule.mem_sup]
+    exact ⟨x - y, by rwa [← Submodule.neg_mem_iff, neg_sub], y, y_in, by ring⟩
 
 Depends on / 依赖: Cotangent, Cotangent.mk_surjective, Hom.toAlgHom_apply, Ideal.comap_map_of_surjective, Ideal.eq_map_of_comap_eq_ker_sup, Ideal.map_pow, Ideal.mem_comap, LinearMap, LinearMap.mem_ker, RingHom, RingHom.ker, Submodule, Submodule.mem_sup, Submodule.restrictScalars_mem, comap_map_of_surjective, eq_map, eq_map_of_comap_eq_ker_sup, f.toRingHom, le_antisymm, map_mk
 -/
@@ -1600,7 +1680,23 @@ definition cotangentEquiv
   refine .ofBijective (Cotangent.mk.liftBaseChange _) ⟨?_, ?_⟩
   · refine (injective_iff_map_eq_zero _).mpr fun x hx => ?_
     obtain ⟨x, rfl⟩ := TensorProduct.mk_surjective P.Ring P.ker S P.algebraMap_surjective x
-    simp only [mk_apply, LinearMap.liftBaseChange_tmul, one_smul, Cotangent.mk_eq_
+    simp only [mk_apply, LinearMap.liftBaseChange_tmul, one_smul, Cotangent.mk_eq_zero_iff,
+      pow_two] at hx ⊢
+    refine Submodule.smul_induction_on' (p := fun x (hx : x in P.ker * P.ker) =>
+      (1 : S) otimesₜ[P.Ring] (⟨x, Ideal.mul_le_left hx⟩ : P.ker) = 0) (hx := hx) ?_ ?_
+    · intro r hr s hs
+      trans (r • 1) otimesₜ[P.Ring] ⟨s, hs⟩
+      · rw [smul_tmul]; rfl
+      · simp_all [Algebra.smul_def]
+    · intro a ha b hb ha' hb'
+      convert! congr($ha' + $hb')
+      rw [← tmul_add]
+      rfl
+  · intro x
+    obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
+    exact ⟨1 otimesₜ x, by simp⟩
+
+@[simp]
 
 中文:
 定义 cotangentEquiv
@@ -1609,7 +1705,23 @@ definition cotangentEquiv
   refine .ofBijective (Cotangent.mk.liftBaseChange _) ⟨?_, ?_⟩
   · refine (injective_iff_map_eq_zero _).mpr fun x hx => ?_
     obtain ⟨x, rfl⟩ := TensorProduct.mk_surjective P.Ring P.ker S P.algebraMap_surjective x
-    simp only [mk_apply, LinearMap.liftBaseChange_tmul, one_smul, Cotangent.mk_eq_
+    simp only [mk_apply, LinearMap.liftBaseChange_tmul, one_smul, Cotangent.mk_eq_zero_iff,
+      pow_two] at hx ⊢
+    refine Submodule.smul_induction_on' (p := fun x (hx : x in P.ker * P.ker) =>
+      (1 : S) otimesₜ[P.Ring] (⟨x, Ideal.mul_le_left hx⟩ : P.ker) = 0) (hx := hx) ?_ ?_
+    · intro r hr s hs
+      trans (r • 1) otimesₜ[P.Ring] ⟨s, hs⟩
+      · rw [smul_tmul]; rfl
+      · simp_all [Algebra.smul_def]
+    · intro a ha b hb ha' hb'
+      convert! congr($ha' + $hb')
+      rw [← tmul_add]
+      rfl
+  · intro x
+    obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
+    exact ⟨1 otimesₜ x, by simp⟩
+
+@[simp]
 
 Depends on / 依赖: Cotangent, Cotangent.mk.liftBaseChange, Cotangent.mk_eq_zero_iff, Ideal.mul_le_left, LinearMap, LinearMap.liftBaseChange_tmul, P.Ring, P.algebraMap_surjective, P.ker, Submodule, Submodule.smul_induction_on, TensorProduct, TensorProduct.mk_surjective, algebraMap_surjective, injective_iff_map_eq_zero, liftBaseChange, liftBaseChange_tmul, mk_apply, mk_eq_zero_iff, mk_surjective
 -/

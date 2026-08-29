@@ -49,7 +49,10 @@ theorem TFAE_mem_nhdsGT
   | ⟨u, hau, hu⟩ => mem_of_superset (Ioo_mem_nhdsGT hau) hu
   tfae_have 1 -> 4
   | h => by
-    
+    rcases mem_nhdsWithin_iff_exists_mem_nhds_inter.1 h with ⟨v, va, hv⟩
+    rcases exists_Ico_subset_of_mem_nhds' va hab with ⟨u, au, hu⟩
+    exact ⟨u, au, fun x hx => hv ⟨hu ⟨le_of_lt hx.1, hx.2⟩, hx.1⟩⟩
+  tfae_finish
 
 中文:
 定理 TFAE_mem_nhdsGT
@@ -64,7 +67,10 @@ theorem TFAE_mem_nhdsGT
   | ⟨u, hau, hu⟩ => mem_of_superset (Ioo_mem_nhdsGT hau) hu
   tfae_have 1 -> 4
   | h => by
-    
+    rcases mem_nhdsWithin_iff_exists_mem_nhds_inter.1 h with ⟨v, va, hv⟩
+    rcases exists_Ico_subset_of_mem_nhds' va hab with ⟨u, au, hu⟩
+    exact ⟨u, au, fun x hx => hv ⟨hu ⟨le_of_lt hx.1, hx.2⟩, hx.1⟩⟩
+  tfae_finish
 
 Depends on / 依赖: Ioo_mem_nhdsGT, exists_Ico_subset_of_mem_nhds, le_of_lt, mem_nhdsWithin_iff_exists_mem_nhds_inter, mem_of_superset, nhdsWithin_Ioc_eq_nhdsGT, nhdsWithin_Ioo_eq_nhdsGT, tfae_finish, tfae_have
 -/
@@ -346,7 +352,41 @@ theorem countable_setOfPred_isolated_right_within
   /- This does not follow from `countable_setOfPred_isolated_right`, which gives the result when `s`
   is the whole space, as one cannot use it inside the subspace since it doesn't have the order
   topology. Instead, we follow the main steps of its proof. -/
-  let t := { x in s | 𝓝[s inter Ioi x]
+  let t := { x in s | 𝓝[s inter Ioi x] x = ⊥ ∧ ¬ IsTop x}
+  suffices H : t.Countable by
+    have : { x in s | 𝓝[s inter Ioi x] x = ⊥ } subseteq t union {x | IsTop x} := by
+      intro x hx
+      by_cases h'x : IsTop x
+      · simp [h'x]
+      · simpa [-sep_and, t, h'x]
+    apply Countable.mono this
+    simp [H, (subsingleton_isTop α).countable]
+  have (x) (hx : x in t) : exists y > x, s inter Ioo x y = ∅ := by
+    simp only [← empty_mem_iff_bot, mem_nhdsWithin_iff_exists_mem_nhds_inter,
+      subset_empty_iff, IsTop, not_forall, not_le, mem_ofPred_eq, t] at hx
+    rcases hx.2.1 with ⟨u, hu, h'u⟩
+    obtain ⟨y, hxy, hy⟩ : exists y, x < y ∧ Ico x y subseteq u := exists_Ico_subset_of_mem_nhds hu hx.2.2
+    refine ⟨y, hxy, ?_⟩
+    contrapose! h'u
+    apply h'u.mono
+    intro z hz
+    exact ⟨hy ⟨hz.2.1.le, hz.2.2⟩, hz.1, hz.2.1⟩
+  choose! y hy h'y using this
+  apply Set.PairwiseDisjoint.countable_of_Ioo (y := y) _ hy
+  simp only [PairwiseDisjoint, Set.Pairwise, Function.onFun]
+  intro a ha b hb hab
+  wlog! H : a < b generalizing a b with h
+  · have : b < a := lt_of_le_of_ne H hab.symm
+    exact (h hb ha hab.symm this).symm
+  have : y a <= b := by
+    by_contra!
+    have : b in s inter Ioo a (y a) := by simp [hb.1, H, this]
+    simp [h'y a ha] at this
+  rw [disjoint_iff_forall_ne]
+  exact fun u hu v hv => ((hu.2.trans_le this).trans hv.1).ne
+
+@[deprecated (since := "2026-07-09")]
+alias countable_setOf_isolated_right_within := countable_setOfPred_isolated_right_within
 
 中文:
 定理 countable_setOfPred_isolated_right_within
@@ -355,7 +395,41 @@ theorem countable_setOfPred_isolated_right_within
   /- This does not follow from `countable_setOfPred_isolated_right`, which gives the result when `s`
   is the whole space, as one cannot use it inside the subspace since it doesn't have the order
   topology. Instead, we follow the main steps of its proof. -/
-  let t := { x in s | 𝓝[s inter Ioi x]
+  let t := { x in s | 𝓝[s inter Ioi x] x = ⊥ ∧ ¬ IsTop x}
+  suffices H : t.Countable by
+    have : { x in s | 𝓝[s inter Ioi x] x = ⊥ } subseteq t union {x | IsTop x} := by
+      intro x hx
+      by_cases h'x : IsTop x
+      · simp [h'x]
+      · simpa [-sep_and, t, h'x]
+    apply Countable.mono this
+    simp [H, (subsingleton_isTop α).countable]
+  have (x) (hx : x in t) : exists y > x, s inter Ioo x y = ∅ := by
+    simp only [← empty_mem_iff_bot, mem_nhdsWithin_iff_exists_mem_nhds_inter,
+      subset_empty_iff, IsTop, not_forall, not_le, mem_ofPred_eq, t] at hx
+    rcases hx.2.1 with ⟨u, hu, h'u⟩
+    obtain ⟨y, hxy, hy⟩ : exists y, x < y ∧ Ico x y subseteq u := exists_Ico_subset_of_mem_nhds hu hx.2.2
+    refine ⟨y, hxy, ?_⟩
+    contrapose! h'u
+    apply h'u.mono
+    intro z hz
+    exact ⟨hy ⟨hz.2.1.le, hz.2.2⟩, hz.1, hz.2.1⟩
+  choose! y hy h'y using this
+  apply Set.PairwiseDisjoint.countable_of_Ioo (y := y) _ hy
+  simp only [PairwiseDisjoint, Set.Pairwise, Function.onFun]
+  intro a ha b hb hab
+  wlog! H : a < b generalizing a b with h
+  · have : b < a := lt_of_le_of_ne H hab.symm
+    exact (h hb ha hab.symm this).symm
+  have : y a <= b := by
+    by_contra!
+    have : b in s inter Ioo a (y a) := by simp [hb.1, H, this]
+    simp [h'y a ha] at this
+  rw [disjoint_iff_forall_ne]
+  exact fun u hu v hv => ((hu.2.trans_le this).trans hv.1).ne
+
+@[deprecated (since := "2026-07-09")]
+alias countable_setOf_isolated_right_within := countable_setOfPred_isolated_right_within
 -/
 theorem countable_setOfPred_isolated_right_within [SecondCountableTopology α] {s : Set α} :
     { x in s | 𝓝[s inter Ioi x] x = ⊥ }.Countable := by
@@ -711,7 +785,9 @@ theorem TFAE_mem_nhdsGE
   tfae_have 1 ↔ 5 := (nhdsGE_basis_of_exists_gt ⟨b, hab⟩).mem_iff
   tfae_have 4 -> 5 := fun ⟨u, umem, hu⟩ => ⟨u, umem.1, hu⟩
   tfae_have 5 -> 4
-  | ⟨u, hua, hus⟩ => ⟨min u b
+  | ⟨u, hua, hus⟩ => ⟨min u b, ⟨lt_min hua hab, min_le_right _ _⟩,
+      (Ico_subset_Ico_right <| min_le_left _ _).trans hus⟩
+  tfae_finish
 
 中文:
 定理 TFAE_mem_nhdsGE
@@ -724,7 +800,9 @@ theorem TFAE_mem_nhdsGE
   tfae_have 1 ↔ 5 := (nhdsGE_basis_of_exists_gt ⟨b, hab⟩).mem_iff
   tfae_have 4 -> 5 := fun ⟨u, umem, hu⟩ => ⟨u, umem.1, hu⟩
   tfae_have 5 -> 4
-  | ⟨u, hua, hus⟩ => ⟨min u b
+  | ⟨u, hua, hus⟩ => ⟨min u b, ⟨lt_min hua hab, min_le_right _ _⟩,
+      (Ico_subset_Ico_right <| min_le_left _ _).trans hus⟩
+  tfae_finish
 
 Depends on / 依赖: Ico_subset_Ico_right, lt_min, mem_iff, min_le_left, min_le_right, nhdsGE_basis_of_exists_gt, nhdsWithin_Icc_eq_nhdsGE, nhdsWithin_Ico_eq_nhdsGE, tfae_finish, tfae_have
 -/

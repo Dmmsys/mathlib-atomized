@@ -601,7 +601,13 @@ theorem iteratedDerivWithin_comp_const_smul
         (iteratedDerivWithin n (fun x => f (c * x)) s)
         (fun x => c ^ n • iteratedDerivWithin n f s (c * x)) :=
       fun x hx => ih hx hf.of_succ
-    have h₁ : Diffe
+    have h₁ : DifferentiableWithinAt 𝕜 (iteratedDerivWithin n f s) s (c * x) :=
+      hf.differentiableOn_iteratedDerivWithin (Nat.cast_lt.mpr n.lt_succ_self) h _ hcx
+    have h₂ : DifferentiableWithinAt 𝕜 (fun x => iteratedDerivWithin n f s (c * x)) s x := by
+      rw [← Function.comp_def]
+      apply DifferentiableWithinAt.comp _ ?_ (by fun_prop) hs
+      exact hf.differentiableOn_iteratedDerivWithin (Nat.cast_lt.mpr n.lt_succ_self) h _ hcx
+    rw [iteratedDerivWithin_succ]; rw [derivWithin_congr h₀ (ih hx hf.of_succ)]; rw [derivWithin_fun_const_smul (c ^ n) h₂]; rw [iteratedDerivWithin_succ]; rw [← Function.comp_def]; rw [derivWithin.scomp x h₁ (by fun_prop) hs]; rw [derivWithin_const_mul _ differentiableWithinAt_id]; rw [derivWithin_id' _ _ (h _ hx)]; rw [smul_smul]; rw [mul_one]; rw [pow_succ]
 
 中文:
 定理 iteratedDerivWithin_comp_const_smul
@@ -615,7 +621,13 @@ theorem iteratedDerivWithin_comp_const_smul
         (iteratedDerivWithin n (fun x => f (c * x)) s)
         (fun x => c ^ n • iteratedDerivWithin n f s (c * x)) :=
       fun x hx => ih hx hf.of_succ
-    have h₁ : Diffe
+    have h₁ : DifferentiableWithinAt 𝕜 (iteratedDerivWithin n f s) s (c * x) :=
+      hf.differentiableOn_iteratedDerivWithin (Nat.cast_lt.mpr n.lt_succ_self) h _ hcx
+    have h₂ : DifferentiableWithinAt 𝕜 (fun x => iteratedDerivWithin n f s (c * x)) s x := by
+      rw [← Function.comp_def]
+      apply DifferentiableWithinAt.comp _ ?_ (by fun_prop) hs
+      exact hf.differentiableOn_iteratedDerivWithin (Nat.cast_lt.mpr n.lt_succ_self) h _ hcx
+    rw [iteratedDerivWithin_succ]; rw [derivWithin_congr h₀ (ih hx hf.of_succ)]; rw [derivWithin_fun_const_smul (c ^ n) h₂]; rw [iteratedDerivWithin_succ]; rw [← Function.comp_def]; rw [derivWithin.scomp x h₁ (by fun_prop) hs]; rw [derivWithin_const_mul _ differentiableWithinAt_id]; rw [derivWithin_id' _ _ (h _ hx)]; rw [smul_smul]; rw [mul_one]; rw [pow_succ]
 
 Depends on / 依赖: DifferentiableWithinAt, Nat.cast_lt.mpr, cast_lt, differentiableOn_iteratedDerivWithin, generalizing, hf.differentiableOn_iteratedDerivWithin, hf.of_succ, iteratedDerivWithin, lt_succ_self, n.lt_succ_self, of_succ, s.EqOn
 -/
@@ -829,7 +841,17 @@ lemma iteratedDerivWithin_smul
   | succ n IH =>
     obtain ⟨U, hU, H⟩ := ((hf.eventually (by simp)).and (hg.eventually (by simp))).exists_mem
     rw [iteratedDerivWithin_succ']; rw [Filter.EventuallyEq.iteratedDerivWithin_eq_of_nhds_insert
-        (g := f • derivWithin g s +
+        (g := f • derivWithin g s + derivWithin f s • g)]
+    · rw [Finset.sum_range_succ', iteratedDerivWithin_add hx h, IH, Finset.sum_range_succ', IH]
+      · simp only [Nat.choose_succ_succ', add_smul, Finset.sum_add_distrib]
+        nth_rw 3 [Finset.sum_range_succ]
+        have : forall i in Finset.range n, 1 <= n - i := by simp; lia
+        simp +contextual [← iteratedDerivWithin_succ', ← n.sub_sub, Nat.sub_add_cancel, this]
+        abel
+      all_goals clear IH H U hU; fun_prop (disch := simp_all)
+    · filter_upwards [hf.eventually (by simp), hg.eventually (by simp)] with y hfy hgy
+      rw [derivWithin_smul (hfy.differentiableWithinAt _) (hgy.differentiableWithinAt _)]
+      all_goals simp
 
 中文:
 引理 iteratedDerivWithin_smul
@@ -840,7 +862,17 @@ lemma iteratedDerivWithin_smul
   | succ n IH =>
     obtain ⟨U, hU, H⟩ := ((hf.eventually (by simp)).and (hg.eventually (by simp))).exists_mem
     rw [iteratedDerivWithin_succ']; rw [Filter.EventuallyEq.iteratedDerivWithin_eq_of_nhds_insert
-        (g := f • derivWithin g s +
+        (g := f • derivWithin g s + derivWithin f s • g)]
+    · rw [Finset.sum_range_succ', iteratedDerivWithin_add hx h, IH, Finset.sum_range_succ', IH]
+      · simp only [Nat.choose_succ_succ', add_smul, Finset.sum_add_distrib]
+        nth_rw 3 [Finset.sum_range_succ]
+        have : forall i in Finset.range n, 1 <= n - i := by simp; lia
+        simp +contextual [← iteratedDerivWithin_succ', ← n.sub_sub, Nat.sub_add_cancel, this]
+        abel
+      all_goals clear IH H U hU; fun_prop (disch := simp_all)
+    · filter_upwards [hf.eventually (by simp), hg.eventually (by simp)] with y hfy hgy
+      rw [derivWithin_smul (hfy.differentiableWithinAt _) (hgy.differentiableWithinAt _)]
+      all_goals simp
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.iteratedDerivWithin_eq_of_nhds_insert, Finset, Finset.sum_add_distrib, Finset.sum_range_succ, Nat.choose_succ_succ, add_smul, choose_succ_succ, derivWithin, eventually, exists_mem, generalizing, hf.eventually, hg.eventually, iteratedDerivWithin_add, iteratedDerivWithin_eq_of_nhds_insert, iteratedDerivWithin_succ, nth_rw, sum_add_distrib
 -/
@@ -903,7 +935,15 @@ theorem iteratedDerivWithin_pow
     simp only [pow_succ]
     refine (iteratedDerivWithin_mul hx h (by fun_prop) (by fun_prop)).trans ?_
     have : ((i + 1).descFactorial (k + 1)) =
-     
+        (k + 1) * (i.descFactorial k) + (i.descFactorial (k + 1)) := by
+      rw [Nat.succ_descFactorial_succ]
+      cases le_or_gt k i <;> simp [Nat.descFactorial, ← add_mul, *]; lia
+    obtain hik | hik := le_or_gt i k <;>
+      simp +contextual [IH, iteratedDerivWithin_fun_id, h, hx, Finset.sum_range_succ,
+        show forall x in Finset.range k, k + 1 - x != 0 by simp; lia, -Nat.descFactorial_succ,
+        show forall x in Finset.range k, k + 1 - x != 1 by simp; lia, this,
+        Nat.descFactorial_eq_zero_iff_lt.mpr, hik,
+        show k < i -> i - k = (i - (k + 1) + 1) by lia]; ring
 
 中文:
 定理 iteratedDerivWithin_pow
@@ -917,7 +957,15 @@ theorem iteratedDerivWithin_pow
     simp only [pow_succ]
     refine (iteratedDerivWithin_mul hx h (by fun_prop) (by fun_prop)).trans ?_
     have : ((i + 1).descFactorial (k + 1)) =
-     
+        (k + 1) * (i.descFactorial k) + (i.descFactorial (k + 1)) := by
+      rw [Nat.succ_descFactorial_succ]
+      cases le_or_gt k i <;> simp [Nat.descFactorial, ← add_mul, *]; lia
+    obtain hik | hik := le_or_gt i k <;>
+      simp +contextual [IH, iteratedDerivWithin_fun_id, h, hx, Finset.sum_range_succ,
+        show forall x in Finset.range k, k + 1 - x != 0 by simp; lia, -Nat.descFactorial_succ,
+        show forall x in Finset.range k, k + 1 - x != 1 by simp; lia, this,
+        Nat.descFactorial_eq_zero_iff_lt.mpr, hik,
+        show k < i -> i - k = (i - (k + 1) + 1) by lia]; ring
 
 Depends on / 依赖: Nat.descFactorial, Nat.succ_descFactorial_succ, add_mul, contextual, descFactorial, fun_prop, generalizing, i.descFactorial, iterated, iteratedDerivWithin_const, iteratedDerivWithin_mul, le_or_gt, pow_succ, succ_descFactorial_succ
 -/

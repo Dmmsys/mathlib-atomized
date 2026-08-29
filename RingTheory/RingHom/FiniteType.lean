@@ -263,7 +263,8 @@ theorem finiteType_isLocal
     finiteType_ofLocalizationSpanTarget.ofLocalizationSpan
       (finiteType_stableUnderComposition.stableUnderCompositionWithLocalizationAway
         finiteType_holdsForLocalizationAway).left,
-    (finiteType_stableUnd
+    (finiteType_stableUnderComposition.stableUnderCompositionWithLocalizationAway
+      finiteType_holdsForLocalizationAway).right⟩
 
 中文:
 定理 finiteType_isLocal
@@ -273,7 +274,8 @@ theorem finiteType_isLocal
     finiteType_ofLocalizationSpanTarget.ofLocalizationSpan
       (finiteType_stableUnderComposition.stableUnderCompositionWithLocalizationAway
         finiteType_holdsForLocalizationAway).left,
-    (finiteType_stableUnd
+    (finiteType_stableUnderComposition.stableUnderCompositionWithLocalizationAway
+      finiteType_holdsForLocalizationAway).right⟩
 
 Depends on / 依赖: finiteType_holdsForLocalizationAway, finiteType_localizationPreserves, finiteType_localizationPreserves.away, finiteType_ofLocalizationSpanTarget, finiteType_ofLocalizationSpanTarget.ofLocalizationSpan, finiteType_stableUnderComposition, finiteType_stableUnderComposition.stableUnderCompositionWithLocalizationAway, ofLocalizationSpan, stableUnderCompositionWithLocalizationAway
 -/

@@ -664,7 +664,7 @@ theorem injective_piecewise_iff
   proof: by
   rw [← injOn_univ]; rw [← union_compl_self s]; rw [injOn_union (@disjoint_compl_right _ _ s)]; rw [(piecewise_eqOn s f g).injOn_iff]; rw [(piecewise_eqOn_compl s f g).injOn_iff]
   refine and_congr Iff.rfl (and_congr Iff.rfl <| forall₄_congr fun x hx y hy => ?_)
-  rw [piecewise_eq_of_mem s f g hx
+  rw [piecewise_eq_of_mem s f g hx]; rw [piecewise_eq_of_notMem s f g hy]
 
 中文:
 定理 injective_piecewise_iff
@@ -672,7 +672,7 @@ theorem injective_piecewise_iff
   证明: by
   rw [← injOn_univ]; rw [← union_compl_self s]; rw [injOn_union (@disjoint_compl_right _ _ s)]; rw [(piecewise_eqOn s f g).injOn_iff]; rw [(piecewise_eqOn_compl s f g).injOn_iff]
   refine and_congr Iff.rfl (and_congr Iff.rfl <| forall₄_congr fun x hx y hy => ?_)
-  rw [piecewise_eq_of_mem s f g hx
+  rw [piecewise_eq_of_mem s f g hx]; rw [piecewise_eq_of_notMem s f g hy]
 
 Depends on / 依赖: Iff.rfl, and_congr, disjoint_compl_right, injOn_iff, injOn_union, injOn_univ, piecewise_eqOn, piecewise_eqOn_compl, piecewise_eq_of_mem, piecewise_eq_of_notMem, union_compl_self
 -/

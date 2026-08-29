@@ -169,7 +169,7 @@ definition whiskeringLeft
     { app := fun H =>
         { app := fun c => H.map (τ.app c)
           naturality := fun X Y f => by dsimp; rw [← H.map_comp, ← H.map_comp, ← τ.naturality] }
-      naturality := fun X Y f => by ext; dsimp; rw [f.naturality
+      naturality := fun X Y f => by ext; dsimp; rw [f.naturality] }
 
 中文:
 定义 whiskeringLeft
@@ -180,7 +180,7 @@ definition whiskeringLeft
     { app := fun H =>
         { app := fun c => H.map (τ.app c)
           naturality := fun X Y f => by dsimp; rw [← H.map_comp, ← H.map_comp, ← τ.naturality] }
-      naturality := fun X Y f => by ext; dsimp; rw [f.naturality
+      naturality := fun X Y f => by ext; dsimp; rw [f.naturality] }
 
 Depends on / 依赖: H.map, H.map_comp, f.naturality, map_comp, naturality, whiskerLeft
 -/
@@ -1349,7 +1349,7 @@ definition whiskeringLeft₂
       map := fun φ => whiskerRight
         ((whiskeringRight D₁ (D₂ ⥤ E) (C₂ ⥤ E)).map ((whiskeringLeft C₂ D₂ E).map φ)) _ }
   map ψ :=
-    { app
+    { app := fun F₂ => whiskerLeft _ ((whiskeringLeft C₁ D₁ (C₂ ⥤ E)).map ψ) }
 
 中文:
 定义 whiskeringLeft₂
@@ -1360,7 +1360,7 @@ definition whiskeringLeft₂
       map := fun φ => whiskerRight
         ((whiskeringRight D₁ (D₂ ⥤ E) (C₂ ⥤ E)).map ((whiskeringLeft C₂ D₂ E).map φ)) _ }
   map ψ :=
-    { app
+    { app := fun F₂ => whiskerLeft _ ((whiskeringLeft C₁ D₁ (C₂ ⥤ E)).map ψ) }
 
 Depends on / 依赖: whiskerLeft, whiskerRight, whiskeringLeft, whiskeringRight
 -/

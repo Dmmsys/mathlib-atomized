@@ -204,7 +204,9 @@ lemma le_tfae
   tfae_have 2 -> 3 := fun h => by
     simpa [hp.isSelfAdjoint.star_eq, hq.isSelfAdjoint.star_eq] using congr(star $h)
   tfae_have 3 -> 4 := hp.sub_of_mul_eq_left hq
-  tfae_have 4 -> 1 := fun h => by simpa usi
+  tfae_have 4 -> 1 := fun h => by simpa using h.nonneg
+  tfae_have 4 ↔ 5 := by simp [isStarProjection_iff, hq.isSelfAdjoint.sub hp.isSelfAdjoint]
+  tfae_finish
 
 中文:
 引理 le_tfae
@@ -214,7 +216,9 @@ lemma le_tfae
   tfae_have 2 -> 3 := fun h => by
     simpa [hp.isSelfAdjoint.star_eq, hq.isSelfAdjoint.star_eq] using congr(star $h)
   tfae_have 3 -> 4 := hp.sub_of_mul_eq_left hq
-  tfae_have 4 -> 1 := fun h => by simpa usi
+  tfae_have 4 -> 1 := fun h => by simpa using h.nonneg
+  tfae_have 4 ↔ 5 := by simp [isStarProjection_iff, hq.isSelfAdjoint.sub hp.isSelfAdjoint]
+  tfae_finish
 
 Depends on / 依赖: h.nonneg, hp.isSelfAdjoint, hp.isSelfAdjoint.star_eq, hp.nonneg, hp.sub_of_mul_eq_left, hq.isSelfAdjoint.star_eq, hq.isSelfAdjoint.sub, hq.mul_right_and_mul_left_of_nonneg_of_le, isSelfAdjoint, isStarProjection_iff, mul_right_and_mul_left_of_nonneg_of_le, nonneg, star_eq, sub_of_mul_eq_left, tfae_finish, tfae_have
 -/

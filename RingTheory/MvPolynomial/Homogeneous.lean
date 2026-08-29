@@ -618,7 +618,12 @@ lemma homogeneousSubmodule_one_pow
       grw [pow_add, pow_one, ih]
       apply homogeneousSubmodule_mul
   · simp only [mem_homogeneousSubmodule] at hx
-    induction hx using IsWeightedHomogeneous.induction
+    induction hx using IsWeightedHomogeneous.induction_on with
+    | zero => simp
+    | add p q _ _ hp hq => exact Submodule.add_mem _ hp hq
+    | monomial d r hr =>
+      convert! monomial_mem_homogeneousSubmodule_pow_degree _ _
+      rw [Finsupp.degree_eq_weight_one]; rw [← Pi.one_def]; rw [← hr]
 
 中文:
 引理 homogeneousSubmodule_one_pow
@@ -631,7 +636,12 @@ lemma homogeneousSubmodule_one_pow
       grw [pow_add, pow_one, ih]
       apply homogeneousSubmodule_mul
   · simp only [mem_homogeneousSubmodule] at hx
-    induction hx using IsWeightedHomogeneous.induction
+    induction hx using IsWeightedHomogeneous.induction_on with
+    | zero => simp
+    | add p q _ _ hp hq => exact Submodule.add_mem _ hp hq
+    | monomial d r hr =>
+      convert! monomial_mem_homogeneousSubmodule_pow_degree _ _
+      rw [Finsupp.degree_eq_weight_one]; rw [← Pi.one_def]; rw [← hr]
 
 Depends on / 依赖: Finsupp, Finsupp.degree_eq_weight_one, IsWeightedHomogeneous, IsWeightedHomogeneous.induction_on, Pi.one_def, Submodule, Submodule.add_mem, add_mem, convert, degree_eq_weight_one, homogeneousSubmodule_mul, homogeneousSubmodule_zero, induction_on, le_antisymm, mem_homogeneousSubmodule, monomial, monomial_mem_homogeneousSubmodule_pow_degree, one_def, pow_add, pow_one
 -/
@@ -933,7 +943,9 @@ lemma eval₂
   convert! IsHomogeneous.prod _ _ (fun k => n * i k) _
   · rw [Finsupp.mem_support_iff] at hi
     rw [← Finset.mul_sum]; rw [← hφ hi]; rw [weight_apply]
-    simp_rw [smul_eq_mul, Finsupp.sum, Pi.on
+    simp_rw [smul_eq_mul, Finsupp.sum, Pi.one_apply, mul_one]
+  · rintro k -
+    apply (hg k).pow
 
 中文:
 引理 eval₂
@@ -946,7 +958,9 @@ lemma eval₂
   convert! IsHomogeneous.prod _ _ (fun k => n * i k) _
   · rw [Finsupp.mem_support_iff] at hi
     rw [← Finset.mul_sum]; rw [← hφ hi]; rw [weight_apply]
-    simp_rw [smul_eq_mul, Finsupp.sum, Pi.on
+    simp_rw [smul_eq_mul, Finsupp.sum, Pi.one_apply, mul_one]
+  · rintro k -
+    apply (hg k).pow
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finsupp, Finsupp.mem_support_iff, Finsupp.sum, IsHomogeneous, IsHomogeneous.mul, IsHomogeneous.prod, IsHomogeneous.sum, Pi.one_apply, convert, mem_support_iff, mul_one, mul_sum, one_apply, simp_rw, smul_eq_mul, weight_apply, zero_add
 -/
@@ -1120,7 +1134,8 @@ theorem totalDegree
   simp only [← hφ hd, MvPolynomial.totalDegree, Finsupp.sum]
   replace hd := Finsupp.mem_support_iff.mpr hd
   simp only [weight_apply, Pi.one_apply, smul_eq_mul, mul_one]
-  -- Porting note:
+  -- Porting note: Original proof did not define `f`
+  exact Finset.le_sup (f := fun s => ∑ x in s.support, s x) hd
 
 中文:
 定理 totalDegree
@@ -1132,7 +1147,8 @@ theorem totalDegree
   simp only [← hφ hd, MvPolynomial.totalDegree, Finsupp.sum]
   replace hd := Finsupp.mem_support_iff.mpr hd
   simp only [weight_apply, Pi.one_apply, smul_eq_mul, mul_one]
-  -- Porting note:
+  -- Porting note: Original proof did not define `f`
+  exact Finset.le_sup (f := fun s => ∑ x in s.support, s x) hd
 
 Depends on / 依赖: Finsupp, Finsupp.mem_support_iff.mpr, Finsupp.sum, MvPolynomial, MvPolynomial.totalDegree, Pi.one_apply, exists_coeff_ne_zero, le_antisymm, mem_support_iff, mul_one, one_apply, replace, smul_eq_mul, totalDegree, totalDegree_le, weight_apply
 -/
@@ -1178,7 +1194,7 @@ theorem rename_isHomogeneous
   intro d hd
   apply (Finsupp.sum_mapDomain_index_addMonoidHom fun _ => .id Nat).trans
   convert! h (mem_support_iff.mp hd)
-  simp only [weight_app
+  simp only [weight_apply, AddMonoidHom.id_apply, Pi.one_apply, smul_eq_mul, mul_one]
 
 中文:
 定理 rename_isHomogeneous
@@ -1189,7 +1205,7 @@ theorem rename_isHomogeneous
   intro d hd
   apply (Finsupp.sum_mapDomain_index_addMonoidHom fun _ => .id Nat).trans
   convert! h (mem_support_iff.mp hd)
-  simp only [weight_app
+  simp only [weight_apply, AddMonoidHom.id_apply, Pi.one_apply, smul_eq_mul, mul_one]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.id_apply, Finsupp, Finsupp.sum_mapDomain_index_addMonoidHom, IsHomogeneous, IsHomogeneous.sum, Pi.one_apply, convert, id_apply, isHomogeneous_monomial, map_sum, mem_support_iff, mem_support_iff.mp, mul_one, one_apply, rename_monomial, simp_rw, smul_eq_mul, sum_mapDomain_index_addMonoidHom, support_sum_monomial_coeff
 -/
@@ -1247,7 +1263,9 @@ lemma finSuccEquiv_coeff_isHomogeneous
   have h' : (weight 1) (Finsupp.cons i d) = i + j := by
     simpa [Finset.sum_subset_zero_on_sdiff (g := d.cons i)
      (d.cons_support (y := i)) (by simp) (fun _ _ => rfl), ← h] using hφ hd
-  simp only [weight_apply, Pi.one_apply, smul_eq_mul, m
+  simp only [weight_apply, Pi.one_apply, smul_eq_mul, mul_one, Finsupp.sum_cons,
+    add_right_inj] at h' ⊢
+  exact h'
 
 中文:
 引理 finSuccEquiv_coeff_isHomogeneous
@@ -1258,7 +1276,9 @@ lemma finSuccEquiv_coeff_isHomogeneous
   have h' : (weight 1) (Finsupp.cons i d) = i + j := by
     simpa [Finset.sum_subset_zero_on_sdiff (g := d.cons i)
      (d.cons_support (y := i)) (by simp) (fun _ _ => rfl), ← h] using hφ hd
-  simp only [weight_apply, Pi.one_apply, smul_eq_mul, m
+  simp only [weight_apply, Pi.one_apply, smul_eq_mul, mul_one, Finsupp.sum_cons,
+    add_right_inj] at h' ⊢
+  exact h'
 
 Depends on / 依赖: Finset, Finset.sum_subset_zero_on_sdiff, Finsupp, Finsupp.cons, Finsupp.sum_cons, Pi.one_apply, add_right_inj, cons_support, d.cons, d.cons_support, finSuccEquiv_coeff_coeff, mul_one, one_apply, smul_eq_mul, sum_cons, sum_subset_zero_on_sdiff, weight, weight_apply
 -/
@@ -1288,7 +1308,12 @@ lemma coeff_isHomogeneous_of_optionEquivLeft_symm
   let F' := renameEquiv R e'
   let φ := F' ((optionEquivLeft R σ).symm p)
   have hφ : φ.IsHomogeneous n := hp.rename_isHomogeneous
-  suffices IsHomogeneous (F (p.
+  suffices IsHomogeneous (F (p.coeff i)) j by
+    rwa [← (IsHomogeneous.rename_isHomogeneous_iff e.injective)]
+  convert! hφ.finSuccEquiv_coeff_isHomogeneous i j h using 1
+  dsimp only [φ, F', F, renameEquiv_apply]
+  rw [finSuccEquiv_rename_finSuccEquiv]; rw [AlgEquiv.apply_symm_apply]
+  simp
 
 中文:
 引理 coeff_isHomogeneous_of_optionEquivLeft_symm
@@ -1299,7 +1324,12 @@ lemma coeff_isHomogeneous_of_optionEquivLeft_symm
   let F' := renameEquiv R e'
   let φ := F' ((optionEquivLeft R σ).symm p)
   have hφ : φ.IsHomogeneous n := hp.rename_isHomogeneous
-  suffices IsHomogeneous (F (p.
+  suffices IsHomogeneous (F (p.coeff i)) j by
+    rwa [← (IsHomogeneous.rename_isHomogeneous_iff e.injective)]
+  convert! hφ.finSuccEquiv_coeff_isHomogeneous i j h using 1
+  dsimp only [φ, F', F, renameEquiv_apply]
+  rw [finSuccEquiv_rename_finSuccEquiv]; rw [AlgEquiv.apply_symm_apply]
+  simp
 
 Depends on / 依赖: Finite, Finite.exists_equiv_fin, IsHomogeneous, IsHomogeneous.rename_isHomogeneous_iff, _root_, _root_.finSuccEquiv, convert, e.injective, e.optionCongr.trans, exists_equiv_fin, finSuccEquiv, finSuccEquiv_coeff_isHomogeneous, finSuccEquiv_rename_finSuccEquiv, hp.rename_isHomogeneous, injective, optionCongr, optionEquivLeft, p.coeff, renameEquiv, renameEquiv_apply
 -/
@@ -1332,7 +1362,29 @@ lemma exists_eval_ne_zero_of_coeff_finSuccEquiv_ne_zero_aux
   have hdeg : natDegree (finSuccEquiv R N F) < n + 1 := by
     linarith [natDegree_finSuccEquiv F, degreeOf_le_totalDegree F 0, hF.totalDegree hF₀]
   use Fin.cons 1 0
-  have aux : forall i in Finset.range n, constantCoeff ((finSuccEquiv R N F).
+  have aux : forall i in Finset.range n, constantCoeff ((finSuccEquiv R N F).coeff i) = 0 := by
+    intro i hi
+    rw [Finset.mem_range] at hi
+    apply (hF.finSuccEquiv_coeff_isHomogeneous i (n - i) (by lia)).coeff_eq_zero
+    simp only [map_zero]
+    rw [← Nat.sub_ne_zero_iff_lt] at hi
+    exact hi.symm
+  simp_rw [eval_eq_eval_mv_eval', eval_one_map, Polynomial.eval_eq_sum_range' hdeg,
+    eval_zero, one_pow, mul_one, map_sum, Finset.sum_range_succ, Finset.sum_eq_zero aux, zero_add]
+  contrapose hFn
+  ext d
+  rw [coeff_zero]
+  obtain rfl | hd := eq_or_ne d 0
+  · apply hFn
+  · contrapose! hd
+    ext i
+    rw [Finsupp.coe_zero]; rw [Pi.zero_apply]
+    by_cases hi : i in d.support
+    · have := hF.finSuccEquiv_coeff_isHomogeneous n 0 (add_zero _) hd
+      simp only [weight_apply, Pi.one_apply, smul_eq_mul, mul_one, Finsupp.sum] at this
+      rw [Finset.sum_eq_zero_iff_of_nonneg (fun _ _ => zero_le)] at this
+      exact this i hi
+    · simpa using hi
 
 中文:
 引理 存在_eval_ne_zero_of_coeff_finSuccEquiv_ne_zero_aux
@@ -1341,7 +1393,29 @@ lemma exists_eval_ne_zero_of_coeff_finSuccEquiv_ne_zero_aux
   have hdeg : natDegree (finSuccEquiv R N F) < n + 1 := by
     linarith [natDegree_finSuccEquiv F, degreeOf_le_totalDegree F 0, hF.totalDegree hF₀]
   use Fin.cons 1 0
-  have aux : forall i in Finset.range n, constantCoeff ((finSuccEquiv R N F).
+  have aux : forall i in Finset.range n, constantCoeff ((finSuccEquiv R N F).coeff i) = 0 := by
+    intro i hi
+    rw [Finset.mem_range] at hi
+    apply (hF.finSuccEquiv_coeff_isHomogeneous i (n - i) (by lia)).coeff_eq_zero
+    simp only [map_zero]
+    rw [← Nat.sub_ne_zero_iff_lt] at hi
+    exact hi.symm
+  simp_rw [eval_eq_eval_mv_eval', eval_one_map, Polynomial.eval_eq_sum_range' hdeg,
+    eval_zero, one_pow, mul_one, map_sum, Finset.sum_range_succ, Finset.sum_eq_zero aux, zero_add]
+  contrapose hFn
+  ext d
+  rw [coeff_zero]
+  obtain rfl | hd := eq_or_ne d 0
+  · apply hFn
+  · contrapose! hd
+    ext i
+    rw [Finsupp.coe_zero]; rw [Pi.zero_apply]
+    by_cases hi : i in d.support
+    · have := hF.finSuccEquiv_coeff_isHomogeneous n 0 (add_zero _) hd
+      simp only [weight_apply, Pi.one_apply, smul_eq_mul, mul_one, Finsupp.sum] at this
+      rw [Finset.sum_eq_zero_iff_of_nonneg (fun _ _ => zero_le)] at this
+      exact this i hi
+    · simpa using hi
 
 Depends on / 依赖: Fin.cons, Finset, Finset.mem_range, Finset.range, Nat.sub_ne_zero_iff_lt, coeff_eq_zero, constantCoeff, contrapose, degreeOf_le_totalDegree, finSuccEquiv, finSuccEquiv_coeff_isHomogeneous, hF.finSuccEquiv_coeff_isHomogeneous, hF.totalDegree, hi.symm, map_zero, mem_range, natDegree, natDegree_finSuccEquiv, simp_r, sub_ne_zero_iff_lt
 -/
@@ -1400,7 +1474,34 @@ lemma exists_eval_ne_zero_of_totalDegree_le_card_aux
     simpa only [Subsingleton.elim d 0, eval_zero, coeff_zero] using! hF₀
   | succ N IH =>
     have hdeg : natDegree (finSuccEquiv R N F) < n + 1 := by
-      linarith [natDegree_finSuccEquiv F, degreeOf_le_totalDe
+      linarith [natDegree_finSuccEquiv F, degreeOf_le_totalDegree F 0, hF.totalDegree hF₀]
+    obtain ⟨i, hi⟩ : exists i : Nat, (finSuccEquiv R N F).coeff i != 0 := by
+      contrapose! hF₀
+exact (finSuccEquiv _ _).injective Polynomial.ext by simpa using! hF₀
+    have hin : i <= n := by
+      contrapose! hi
+exact coeff_eq_zero_of_natDegree_lt (Nat.le_of_lt_succ hdeg).trans_lt hi
+    obtain hFn | hFn := ne_or_eq ((finSuccEquiv R N F).coeff n) 0
+    · exact hF.exists_eval_ne_zero_of_coeff_finSuccEquiv_ne_zero_aux hFn
+have hin : i < n := hin.lt_or_eq.elim id by aesop
+obtain ⟨j, hj⟩ : exists j, i + (j + 1) = n := (Nat.exists_eq_add_of_lt hin).imp by lia
+    obtain ⟨r, hr⟩ : exists r, (eval r) (Polynomial.coeff ((finSuccEquiv R N) F) i) != 0 :=
+      IH (hF.finSuccEquiv_coeff_isHomogeneous _ _ hj) hi (.trans (by norm_cast; lia) hnR)
+    set φ : R[X] := Polynomial.map (eval r) (finSuccEquiv _ _ F) with hφ
+have hφ₀ : φ != 0 := fun hφ₀ => hr by
+      rw [← coeff_eval_eq_eval_coeff]; rw [← hφ]; rw [hφ₀]; rw [Polynomial.coeff_zero]
+    have hφR : φ.natDegree < #R := by
+      refine lt_of_lt_of_le ?_ hnR
+      norm_cast
+      refine lt_of_le_of_lt natDegree_map_le ?_
+      suffices (finSuccEquiv _ _ F).natDegree != n by lia
+      rintro rfl
+      refine leadingCoeff_ne_zero.mpr ?_ hFn
+      simpa using! (finSuccEquiv R N).injective.ne hF₀
+    obtain ⟨r₀, hr₀⟩ : exists r₀, Polynomial.eval r₀ φ != 0 :=
+      φ.exists_eval_ne_zero_of_natDegree_lt_card hφ₀ hφR
+    use Fin.cons r₀ r
+    rwa [eval_eq_eval_mv_eval']
 
 中文:
 引理 存在_eval_ne_zero_of_totalDegree_le_card_aux
@@ -1414,7 +1515,34 @@ lemma exists_eval_ne_zero_of_totalDegree_le_card_aux
     simpa only [Subsingleton.elim d 0, eval_zero, coeff_zero] using! hF₀
   | succ N IH =>
     have hdeg : natDegree (finSuccEquiv R N F) < n + 1 := by
-      linarith [natDegree_finSuccEquiv F, degreeOf_le_totalDe
+      linarith [natDegree_finSuccEquiv F, degreeOf_le_totalDegree F 0, hF.totalDegree hF₀]
+    obtain ⟨i, hi⟩ : exists i : Nat, (finSuccEquiv R N F).coeff i != 0 := by
+      contrapose! hF₀
+exact (finSuccEquiv _ _).injective Polynomial.ext by simpa using! hF₀
+    have hin : i <= n := by
+      contrapose! hi
+exact coeff_eq_zero_of_natDegree_lt (Nat.le_of_lt_succ hdeg).trans_lt hi
+    obtain hFn | hFn := ne_or_eq ((finSuccEquiv R N F).coeff n) 0
+    · exact hF.exists_eval_ne_zero_of_coeff_finSuccEquiv_ne_zero_aux hFn
+have hin : i < n := hin.lt_or_eq.elim id by aesop
+obtain ⟨j, hj⟩ : exists j, i + (j + 1) = n := (Nat.exists_eq_add_of_lt hin).imp by lia
+    obtain ⟨r, hr⟩ : exists r, (eval r) (Polynomial.coeff ((finSuccEquiv R N) F) i) != 0 :=
+      IH (hF.finSuccEquiv_coeff_isHomogeneous _ _ hj) hi (.trans (by norm_cast; lia) hnR)
+    set φ : R[X] := Polynomial.map (eval r) (finSuccEquiv _ _ F) with hφ
+have hφ₀ : φ != 0 := fun hφ₀ => hr by
+      rw [← coeff_eval_eq_eval_coeff]; rw [← hφ]; rw [hφ₀]; rw [Polynomial.coeff_zero]
+    have hφR : φ.natDegree < #R := by
+      refine lt_of_lt_of_le ?_ hnR
+      norm_cast
+      refine lt_of_le_of_lt natDegree_map_le ?_
+      suffices (finSuccEquiv _ _ F).natDegree != n by lia
+      rintro rfl
+      refine leadingCoeff_ne_zero.mpr ?_ hFn
+      simpa using! (finSuccEquiv R N).injective.ne hF₀
+    obtain ⟨r₀, hr₀⟩ : exists r₀, Polynomial.eval r₀ φ != 0 :=
+      φ.exists_eval_ne_zero_of_natDegree_lt_card hφ₀ hφR
+    use Fin.cons r₀ r
+    rwa [eval_eq_eval_mv_eval']
 
 Depends on / 依赖: Polynomial, Polynomial.ext, Subsingleton, Subsingleton.elim, coeff_zero, contrapose, degreeOf_le_totalDegree, eval_zero, finSuccEquiv, generalizing, hF.totalDegree, injective, natDegree, natDegree_finSuccEquiv, totalDegree
 -/
@@ -1469,7 +1597,10 @@ lemma eq_zero_of_forall_eval_eq_zero_of_le_card
   obtain ⟨k, f, hf, F, rfl⟩ := exists_fin_rename F
   have hF₀ : F != 0 := by rintro rfl; simp at h
   have hF : F.IsHomogeneous n := by rwa [rename_isHomogeneous_iff hf] at hF
-  obtain ⟨r, hr⟩ := exists_eval_ne_zero_of_totalDegree_le_card_a
+  obtain ⟨r, hr⟩ := exists_eval_ne_zero_of_totalDegree_le_card_aux hF hF₀ hnR
+obtain ⟨r, rfl⟩ := (Function.factorsThrough_iff _).mp (hf.factorsThrough r)
+  use r
+  rwa [eval_rename]
 
 中文:
 引理 eq_zero_of_对任意_eval_eq_zero_of_le_card
@@ -1479,7 +1610,10 @@ lemma eq_zero_of_forall_eval_eq_zero_of_le_card
   obtain ⟨k, f, hf, F, rfl⟩ := exists_fin_rename F
   have hF₀ : F != 0 := by rintro rfl; simp at h
   have hF : F.IsHomogeneous n := by rwa [rename_isHomogeneous_iff hf] at hF
-  obtain ⟨r, hr⟩ := exists_eval_ne_zero_of_totalDegree_le_card_a
+  obtain ⟨r, hr⟩ := exists_eval_ne_zero_of_totalDegree_le_card_aux hF hF₀ hnR
+obtain ⟨r, rfl⟩ := (Function.factorsThrough_iff _).mp (hf.factorsThrough r)
+  use r
+  rwa [eval_rename]
 
 Depends on / 依赖: contrapose
 -/
@@ -1909,7 +2043,7 @@ lemma rename_homogeneousComponent
   | monomial d c =>
     rw [rename_monomial]; rw [homogeneousComponent_of_mem (isHomogeneous_monomial c rfl)]; rw [homogeneousComponent_of_mem (isHomogeneous_monomial c (Finsupp.degree_mapDomain φ d))]
     split_ifs <;> simp [rename_monomial]
-  
+  | add p q hp hq => simp [map_add, hp, hq]
 
 中文:
 引理 rename_homogeneousComponent
@@ -1919,7 +2053,7 @@ lemma rename_homogeneousComponent
   | monomial d c =>
     rw [rename_monomial]; rw [homogeneousComponent_of_mem (isHomogeneous_monomial c rfl)]; rw [homogeneousComponent_of_mem (isHomogeneous_monomial c (Finsupp.degree_mapDomain φ d))]
     split_ifs <;> simp [rename_monomial]
-  
+  | add p q hp hq => simp [map_add, hp, hq]
 
 Depends on / 依赖: Finsupp, Finsupp.degree_mapDomain, MvPolynomial, MvPolynomial.induction_on, degree_mapDomain, homogeneousComponent_of_mem, induction_on, isHomogeneous_monomial, map_add, monomial, rename_monomial, split_ifs
 -/

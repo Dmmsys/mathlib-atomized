@@ -1679,7 +1679,11 @@ definition _root_.UniformEquiv.arrowCongrLeft₀
 left_inv g := ext fun _ => congrArg g f.left_inv _
 right_inv g := ext fun _ => congrArg g f.right_inv _
 uniformContinuous_toFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr
-.comp ContinuousMap.uniformCont
+.comp ContinuousMap.uniformContinuous_comp_left (f.symm : C(Y, X))
+    isUniformEmbedding_toContinuousMap.uniformContinuous
+uniformContinuous_invFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr
+.comp ContinuousMap.uniformContinuous_comp_left (f : C(X, Y))
+    isUniformEmbedding_toContinuousMap.uniformContinuous
 
 中文:
 定义 _root_.一致等价.arrowCongrLeft₀
@@ -1689,7 +1693,11 @@ uniformContinuous_toFun := isUniformEmbedding_toContinuousMap.uniformContinuous_
 left_inv g := ext fun _ => congrArg g f.left_inv _
 right_inv g := ext fun _ => congrArg g f.right_inv _
 uniformContinuous_toFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr
-.comp ContinuousMap.uniformCont
+.comp ContinuousMap.uniformContinuous_comp_left (f.symm : C(Y, X))
+    isUniformEmbedding_toContinuousMap.uniformContinuous
+uniformContinuous_invFun := isUniformEmbedding_toContinuousMap.uniformContinuous_iff.mpr
+.comp ContinuousMap.uniformContinuous_comp_left (f : C(X, Y))
+    isUniformEmbedding_toContinuousMap.uniformContinuous
 
 Depends on / 依赖: eq_symm_apply, f.eq_symm_apply.eq, f.symm, g.comp
 -/

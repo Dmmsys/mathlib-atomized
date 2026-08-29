@@ -151,7 +151,9 @@ definition colimitTypeRelEquivOrbitRelQuotient
 invFun := Quot.lift (fun x => Quot.mk _ ⟨SingleObj.star G, x⟩) fun a b h =>
 Quot.sound (colimitTypeRel_iff_orbitRel J a b).mpr h
   left_inv := fun x => Quot.inductionOn x (fun _ => rfl)
-  right_in
+  right_inv := fun x => Quot.inductionOn x (fun _ => rfl)
+
+#adaptation_note
 
 中文:
 定义 colimitTypeRelEquivOrbitRelQuotient
@@ -161,7 +163,9 @@ Quot.sound (colimitTypeRel_iff_orbitRel J a b).mpr h
 invFun := Quot.lift (fun x => Quot.mk _ ⟨SingleObj.star G, x⟩) fun a b h =>
 Quot.sound (colimitTypeRel_iff_orbitRel J a b).mpr h
   left_inv := fun x => Quot.inductionOn x (fun _ => rfl)
-  right_in
+  right_inv := fun x => Quot.inductionOn x (fun _ => rfl)
+
+#adaptation_note
 
 Depends on / 依赖: Quot.lift, Quotient, Quotient.sound
 -/

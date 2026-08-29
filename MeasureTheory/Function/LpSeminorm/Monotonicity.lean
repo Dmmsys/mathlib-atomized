@@ -37,7 +37,12 @@ theorem eLpNorm'_le_nnreal_smul_eLpNorm'_of_ae_le_mul
   simp_rw [eLpNorm'_eq_lintegral_enorm]
   rw [← ENNReal.rpow_le_rpow_iff hp]; rw [ENNReal.smul_def]; rw [smul_eq_mul]; rw [ENNReal.mul_rpow_of_nonneg _ _ hp.le]
   simp_rw [← ENNReal.rpow_mul, one_div, inv_mul_cancel₀ hp.ne', ENNReal.rpow_one, enorm,
-    ← ENNReal.coe_rpow_of_nonneg _ hp.le, ← lin
+    ← ENNReal.coe_rpow_of_nonneg _ hp.le, ← lintegral_const_mul' _ _ ENNReal.coe_ne_top,
+    ← ENNReal.coe_mul]
+  apply lintegral_mono_ae
+  filter_upwards [h] with x hx
+  rw [← NNReal.mul_rpow]
+  gcongr
 
 中文:
 定理 eLpNorm'_le_nnreal_smul_eLpNorm'_of_ae_le_mul
@@ -46,7 +51,12 @@ theorem eLpNorm'_le_nnreal_smul_eLpNorm'_of_ae_le_mul
   simp_rw [eLpNorm'_eq_lintegral_enorm]
   rw [← ENNReal.rpow_le_rpow_iff hp]; rw [ENNReal.smul_def]; rw [smul_eq_mul]; rw [ENNReal.mul_rpow_of_nonneg _ _ hp.le]
   simp_rw [← ENNReal.rpow_mul, one_div, inv_mul_cancel₀ hp.ne', ENNReal.rpow_one, enorm,
-    ← ENNReal.coe_rpow_of_nonneg _ hp.le, ← lin
+    ← ENNReal.coe_rpow_of_nonneg _ hp.le, ← lintegral_const_mul' _ _ ENNReal.coe_ne_top,
+    ← ENNReal.coe_mul]
+  apply lintegral_mono_ae
+  filter_upwards [h] with x hx
+  rw [← NNReal.mul_rpow]
+  gcongr
 -/
 theorem eLpNorm'_le_nnreal_smul_eLpNorm'_of_ae_le_mul {f : α -> F} {g : α -> G} {c : Real>=0}
     (h : forallᵐ x ∂μ, ‖f x‖₊ <= c * ‖g x‖₊) {p : Real} (hp : 0 < p) :
@@ -72,7 +82,12 @@ theorem eLpNorm'_le_nnreal_smul_eLpNorm'_of_ae_le_mul'
   simp_rw [eLpNorm'_eq_lintegral_enorm]
   rw [← ENNReal.rpow_le_rpow_iff hp]; rw [ENNReal.smul_def]; rw [smul_eq_mul]; rw [ENNReal.mul_rpow_of_nonneg _ _ hp.le]
   simp_rw [← ENNReal.rpow_mul, one_div, inv_mul_cancel₀ hp.ne', ENNReal.rpow_one,
-    ← ENNReal.coe_rpow_of_nonneg _ hp.le, ← lintegral_
+    ← ENNReal.coe_rpow_of_nonneg _ hp.le, ← lintegral_const_mul' _ _ ENNReal.coe_ne_top]
+  apply lintegral_mono_ae
+  have aux (x) : (↑c) ^ p * ‖g x‖ₑ ^ p = (↑c * ‖g x‖ₑ) ^ p := by
+    have : ¬(p < 0) := by linarith
+    simp [ENNReal.mul_rpow_eq_ite, this]
+  simpa [ENNReal.coe_rpow_of_nonneg _ hp.le, aux, ENNReal.rpow_le_rpow_iff hp]
 
 中文:
 定理 eLpNorm'_le_nnreal_smul_eLpNorm'_of_ae_le_mul'
@@ -81,7 +96,12 @@ theorem eLpNorm'_le_nnreal_smul_eLpNorm'_of_ae_le_mul'
   simp_rw [eLpNorm'_eq_lintegral_enorm]
   rw [← ENNReal.rpow_le_rpow_iff hp]; rw [ENNReal.smul_def]; rw [smul_eq_mul]; rw [ENNReal.mul_rpow_of_nonneg _ _ hp.le]
   simp_rw [← ENNReal.rpow_mul, one_div, inv_mul_cancel₀ hp.ne', ENNReal.rpow_one,
-    ← ENNReal.coe_rpow_of_nonneg _ hp.le, ← lintegral_
+    ← ENNReal.coe_rpow_of_nonneg _ hp.le, ← lintegral_const_mul' _ _ ENNReal.coe_ne_top]
+  apply lintegral_mono_ae
+  have aux (x) : (↑c) ^ p * ‖g x‖ₑ ^ p = (↑c * ‖g x‖ₑ) ^ p := by
+    have : ¬(p < 0) := by linarith
+    simp [ENNReal.mul_rpow_eq_ite, this]
+  simpa [ENNReal.coe_rpow_of_nonneg _ hp.le, aux, ENNReal.rpow_le_rpow_iff hp]
 -/
 theorem eLpNorm'_le_nnreal_smul_eLpNorm'_of_ae_le_mul' {f : α -> ε} {g : α -> ε'} {c : Real>=0}
     (h : forallᵐ x ∂μ, ‖f x‖ₑ <= c * ‖g x‖ₑ) {p : Real} (hp : 0 < p) :
@@ -112,7 +132,21 @@ theorem eLpNorm'_le_mul_eLpNorm'_of_ae_le_mul
   · by_cases hg' : eLpNorm' g p μ = 0
     · have : forallᵐ (x : α) ∂μ, ‖g x‖ₑ = 0 := by
         simp only [eLpNorm'_eq_lintegral_enorm, one_div, ENNReal.rpow_eq_zero_iff, inv_pos, hp,
-          and_true, inv_neg'', hp', and_false, or_fals
+          and_true, inv_neg'', hp', and_false, or_false] at hg'
+        rw [MeasureTheory.lintegral_eq_zero_iff' (by fun_prop)] at hg'
+        exact hg'.mono fun x hx => by simpa [hp, hp'] using hx
+      have : forallᵐ (x : α) ∂μ, ‖f x‖ₑ = 0 := (this.and h).mono fun x ⟨h, h'⟩ => by simp_all
+      simpa only [hg', mul_zero, nonpos_iff_eq_zero] using eLpNorm'_eq_zero_of_ae_eq_zero hp this
+    · simp_all
+  have : c ^ p != ⊤ := by simp [hp.le, hc]
+  simp_rw [eLpNorm'_eq_lintegral_enorm]
+  rw [← ENNReal.rpow_le_rpow_iff hp]; rw [ENNReal.mul_rpow_of_nonneg _ _ hp.le]
+  simp_rw [← ENNReal.rpow_mul, one_div, inv_mul_cancel₀ hp.ne', ENNReal.rpow_one,
+    ← lintegral_const_mul' _ _ this]
+  apply lintegral_mono_ae
+  have aux (x) : (↑c) ^ p * ‖g x‖ₑ ^ p = (↑c * ‖g x‖ₑ) ^ p := by
+    simp [ENNReal.mul_rpow_eq_ite, hp']
+  simpa [ENNReal.coe_rpow_of_nonneg _ hp.le, aux, ENNReal.rpow_le_rpow_iff hp]
 
 中文:
 定理 eLpNorm'_le_mul_eLpNorm'_of_ae_le_mul
@@ -123,7 +157,21 @@ theorem eLpNorm'_le_mul_eLpNorm'_of_ae_le_mul
   · by_cases hg' : eLpNorm' g p μ = 0
     · have : forallᵐ (x : α) ∂μ, ‖g x‖ₑ = 0 := by
         simp only [eLpNorm'_eq_lintegral_enorm, one_div, ENNReal.rpow_eq_zero_iff, inv_pos, hp,
-          and_true, inv_neg'', hp', and_false, or_fals
+          and_true, inv_neg'', hp', and_false, or_false] at hg'
+        rw [MeasureTheory.lintegral_eq_zero_iff' (by fun_prop)] at hg'
+        exact hg'.mono fun x hx => by simpa [hp, hp'] using hx
+      have : forallᵐ (x : α) ∂μ, ‖f x‖ₑ = 0 := (this.and h).mono fun x ⟨h, h'⟩ => by simp_all
+      simpa only [hg', mul_zero, nonpos_iff_eq_zero] using eLpNorm'_eq_zero_of_ae_eq_zero hp this
+    · simp_all
+  have : c ^ p != ⊤ := by simp [hp.le, hc]
+  simp_rw [eLpNorm'_eq_lintegral_enorm]
+  rw [← ENNReal.rpow_le_rpow_iff hp]; rw [ENNReal.mul_rpow_of_nonneg _ _ hp.le]
+  simp_rw [← ENNReal.rpow_mul, one_div, inv_mul_cancel₀ hp.ne', ENNReal.rpow_one,
+    ← lintegral_const_mul' _ _ this]
+  apply lintegral_mono_ae
+  have aux (x) : (↑c) ^ p * ‖g x‖ₑ ^ p = (↑c * ‖g x‖ₑ) ^ p := by
+    simp [ENNReal.mul_rpow_eq_ite, hp']
+  simpa [ENNReal.coe_rpow_of_nonneg _ hp.le, aux, ENNReal.rpow_le_rpow_iff hp]
 -/
 theorem eLpNorm'_le_mul_eLpNorm'_of_ae_le_mul {f : α -> ε} {c : Real>=0∞} {g : α -> ε'} {p : Real}
     (hg : AEStronglyMeasurable g μ) (h : forallᵐ x ∂μ, ‖f x‖ₑ <= c * ‖g x‖ₑ) (hp : 0 < p) :
@@ -541,13 +589,27 @@ English:
 theorem le_eLpNorm_of_bddBelow
   statement: (hp : p != 0) (hp' : p != ∞) {f : α -> F} (C : Real>=0) {s : Set α}
   proof: by
-  rw [ENNReal.smul_def]; rw [smul_eq_mul]; rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp hp']; rw [one_div]; rw [ENNReal.le_rpow_inv_iff (ENNReal.toReal_pos hp hp')]; rw [ENNReal.mul_rpow_of_nonneg _ _ ENNReal.toReal_nonneg]; rw [← ENNReal.rpow_mul]; rw [inv_mul_cancel₀ (ENNReal.toReal_pos hp hp'
+  rw [ENNReal.smul_def]; rw [smul_eq_mul]; rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp hp']; rw [one_div]; rw [ENNReal.le_rpow_inv_iff (ENNReal.toReal_pos hp hp')]; rw [ENNReal.mul_rpow_of_nonneg _ _ ENNReal.toReal_nonneg]; rw [← ENNReal.rpow_mul]; rw [inv_mul_cancel₀ (ENNReal.toReal_pos hp hp').ne']; rw [ENNReal.rpow_one]; rw [← setLIntegral_const]; rw [← lintegral_indicator hs]
+  refine lintegral_mono_ae ?_
+  filter_upwards [hf] with x hx
+  by_cases hxs : x in s
+  · simp only [Set.indicator_of_mem, hxs, true_implies] at hx ⊢
+    gcongr
+    rwa [coe_le_enorm]
+  · simp [Set.indicator_of_notMem hxs]
 
 中文:
 定理 le_eLpNorm_of_bddBelow
   结论: (hp : p != 0) (hp' : p != ∞) {f : α -> F} (C : 实数>=0) {s : 集合 α}
   证明: by
-  rw [ENNReal.smul_def]; rw [smul_eq_mul]; rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp hp']; rw [one_div]; rw [ENNReal.le_rpow_inv_iff (ENNReal.toReal_pos hp hp')]; rw [ENNReal.mul_rpow_of_nonneg _ _ ENNReal.toReal_nonneg]; rw [← ENNReal.rpow_mul]; rw [inv_mul_cancel₀ (ENNReal.toReal_pos hp hp'
+  rw [ENNReal.smul_def]; rw [smul_eq_mul]; rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp hp']; rw [one_div]; rw [ENNReal.le_rpow_inv_iff (ENNReal.toReal_pos hp hp')]; rw [ENNReal.mul_rpow_of_nonneg _ _ ENNReal.toReal_nonneg]; rw [← ENNReal.rpow_mul]; rw [inv_mul_cancel₀ (ENNReal.toReal_pos hp hp').ne']; rw [ENNReal.rpow_one]; rw [← setLIntegral_const]; rw [← lintegral_indicator hs]
+  refine lintegral_mono_ae ?_
+  filter_upwards [hf] with x hx
+  by_cases hxs : x in s
+  · simp only [Set.indicator_of_mem, hxs, true_implies] at hx ⊢
+    gcongr
+    rwa [coe_le_enorm]
+  · simp [Set.indicator_of_notMem hxs]
 
 Depends on / 依赖: ENNReal, ENNReal.le_rpow_inv_iff, ENNReal.mul_rpow_of_nonneg, ENNReal.rpow_mul, ENNReal.rpow_one, ENNReal.smul_def, ENNReal.toReal_nonneg, ENNReal.toReal_pos, Set.indicator_of_mem, eLpNorm_eq_lintegral_rpow_enorm_toReal, filter_upwards, indicator_of_mem, le_rpow_inv_iff, lintegral_indicator, lintegral_mono_ae, mul_rpow_of_nonneg, one_div, rpow_mul, rpow_one, setLIntegral_const
 -/

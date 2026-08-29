@@ -299,7 +299,9 @@ theorem smulAntidiagonal_min_smul_min
     obtain rfl :=
       (hs.min_le hns has).eq_of_not_lt fun hlt =>
         (SMul.smul_lt_smul_of_lt_of_le hlt <| ht.min_le hnt hat).ne' hst
-    exact ⟨rfl, IsCancelSMul.left_canc
+    exact ⟨rfl, IsCancelSMul.left_cancel _ _ _ hst⟩
+  · rintro ⟨rfl, rfl⟩
+    exact ⟨hs.min_mem _, ht.min_mem _, rfl⟩
 
 中文:
 定理 smulAntidiagonal_min_smul_min
@@ -312,7 +314,9 @@ theorem smulAntidiagonal_min_smul_min
     obtain rfl :=
       (hs.min_le hns has).eq_of_not_lt fun hlt =>
         (SMul.smul_lt_smul_of_lt_of_le hlt <| ht.min_le hnt hat).ne' hst
-    exact ⟨rfl, IsCancelSMul.left_canc
+    exact ⟨rfl, IsCancelSMul.left_cancel _ _ _ hst⟩
+  · rintro ⟨rfl, rfl⟩
+    exact ⟨hs.min_mem _, ht.min_mem _, rfl⟩
 
 Depends on / 依赖: IsCancelSMul, IsCancelSMul.left_cancel, Prod.ext_iff, SMul.smul_lt_smul_of_lt_of_le, eq_of_not_lt, ext_iff, hs.min_le, hs.min_mem, ht.min_le, ht.min_mem, left_cancel, mem_singleton, mem_smulAntidiagonal, min_le, min_mem, smul_lt_smul_of_lt_of_le
 -/

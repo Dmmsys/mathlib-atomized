@@ -37,7 +37,12 @@ lemma isSuccLimit_coe
       rw [not_covBy_iff (by exact hb)] at this
       obtain ⟨⟨x, h₁⟩, h₂, h₃⟩ := this
       refine ⟨x, h₂, h₃⟩
-    · simp only [not_le]
+    · simp only [not_le] at hb'
+      refine ⟨j, hb', ?_⟩
+      by_contra!
+      apply hm.1
+      rintro ⟨k, hk⟩ _
+      exact this.trans (by simpa using hk)⟩
 
 中文:
 引理 isSuccLimit_coe
@@ -50,7 +55,12 @@ lemma isSuccLimit_coe
       rw [not_covBy_iff (by exact hb)] at this
       obtain ⟨⟨x, h₁⟩, h₂, h₃⟩ := this
       refine ⟨x, h₂, h₃⟩
-    · simp only [not_le]
+    · simp only [not_le] at hb'
+      refine ⟨j, hb', ?_⟩
+      by_contra!
+      apply hm.1
+      rintro ⟨k, hk⟩ _
+      exact this.trans (by simpa using hk)⟩
 
 Depends on / 依赖: Set.not_isMin_coe, not_and, not_covBy_iff, not_forall, not_isMin_coe, not_le, not_lt, this.trans
 -/

@@ -95,7 +95,40 @@ theorem d_squared
   -- then, we decompose the index set P into a subset S and its complement Sᶜ
   let P := Fin (n + 2) × Fin (n + 3)
   let S : Finset P := {ij : P | (ij.2 : Nat) <= (ij.1 : Nat)}
-  rw [F
+  rw [Finset.univ_product_univ]; rw [← Finset.sum_add_sum_compl S]; rw [← eq_neg_iff_add_eq_zero]; rw [← Finset.sum_neg_distrib]
+  /- we are reduced to showing that two sums are equal, and this is obtained
+    by constructing a bijection φ : S -> Sᶜ, which maps (i,j) to (j,i+1),
+    and by comparing the terms -/
+  let φ : forall ij : P, ij in S -> P := fun ij hij =>
+    (Fin.castLT ij.2 (lt_of_le_of_lt (Finset.mem_filter.mp hij).right (Fin.is_lt ij.1)), ij.1.succ)
+  apply Finset.sum_bij φ
+  · -- φ(S) is contained in Sᶜ
+    intro ij hij
+    simp_rw [S, φ, Finset.compl_filter, Finset.mem_filter_univ, Fin.val_succ,
+      Fin.val_castLT] at hij ⊢
+    lia
+  · -- φ : S → Sᶜ is injective
+    rintro ⟨i, j⟩ hij ⟨i', j'⟩ hij' h
+    rw [Prod.mk_inj]
+    exact ⟨by simpa [φ] using! congr_arg Prod.snd h,
+      by simpa [φ, Fin.castSucc_castLT] using! congr_arg Fin.castSucc (congr_arg Prod.fst h)⟩
+  · -- φ : S → Sᶜ is surjective
+    rintro ⟨i', j'⟩ hij'
+    simp_rw [S, Finset.compl_filter, Finset.mem_filter_univ, not_le] at hij'
+    refine ⟨(j'.pred <| ?_, Fin.castSucc i'), ?_, ?_⟩
+    · rintro rfl
+      simp only [Fin.val_zero, not_lt_zero] at hij'
+    · simpa [S] using! Nat.le_sub_one_of_lt hij'
+    · simp only [φ, Fin.castLT_castSucc, Fin.succ_pred]
+  · -- identification of corresponding terms in both sums
+    rintro ⟨i, j⟩ hij
+    dsimp
+    simp only [zsmul_comp, comp_zsmul, smul_smul, ← neg_smul]
+    congr 1
+    · simp only [φ, Fin.val_succ, pow_add, pow_one, mul_neg, neg_neg, mul_one]
+      apply mul_comm
+    · rw [CategoryTheory.SimplicialObject.δ_comp_δ'']
+      simpa [S] using! hij
 
 中文:
 定理 d_squared
@@ -108,7 +141,40 @@ theorem d_squared
   -- then, we decompose the index set P into a subset S and its complement Sᶜ
   let P := Fin (n + 2) × Fin (n + 3)
   let S : Finset P := {ij : P | (ij.2 : Nat) <= (ij.1 : Nat)}
-  rw [F
+  rw [Finset.univ_product_univ]; rw [← Finset.sum_add_sum_compl S]; rw [← eq_neg_iff_add_eq_zero]; rw [← Finset.sum_neg_distrib]
+  /- we are reduced to showing that two sums are equal, and this is obtained
+    by constructing a bijection φ : S -> Sᶜ, which maps (i,j) to (j,i+1),
+    and by comparing the terms -/
+  let φ : forall ij : P, ij in S -> P := fun ij hij =>
+    (Fin.castLT ij.2 (lt_of_le_of_lt (Finset.mem_filter.mp hij).right (Fin.is_lt ij.1)), ij.1.succ)
+  apply Finset.sum_bij φ
+  · -- φ(S) is contained in Sᶜ
+    intro ij hij
+    simp_rw [S, φ, Finset.compl_filter, Finset.mem_filter_univ, Fin.val_succ,
+      Fin.val_castLT] at hij ⊢
+    lia
+  · -- φ : S → Sᶜ is injective
+    rintro ⟨i, j⟩ hij ⟨i', j'⟩ hij' h
+    rw [Prod.mk_inj]
+    exact ⟨by simpa [φ] using! congr_arg Prod.snd h,
+      by simpa [φ, Fin.castSucc_castLT] using! congr_arg Fin.castSucc (congr_arg Prod.fst h)⟩
+  · -- φ : S → Sᶜ is surjective
+    rintro ⟨i', j'⟩ hij'
+    simp_rw [S, Finset.compl_filter, Finset.mem_filter_univ, not_le] at hij'
+    refine ⟨(j'.pred <| ?_, Fin.castSucc i'), ?_, ?_⟩
+    · rintro rfl
+      simp only [Fin.val_zero, not_lt_zero] at hij'
+    · simpa [S] using! Nat.le_sub_one_of_lt hij'
+    · simp only [φ, Fin.castLT_castSucc, Fin.succ_pred]
+  · -- identification of corresponding terms in both sums
+    rintro ⟨i, j⟩ hij
+    dsimp
+    simp only [zsmul_comp, comp_zsmul, smul_smul, ← neg_smul]
+    congr 1
+    · simp only [φ, Fin.val_succ, pow_add, pow_one, mul_neg, neg_neg, mul_one]
+      apply mul_comm
+    · rw [CategoryTheory.SimplicialObject.δ_comp_δ'']
+      simpa [S] using! hij
 -/
 theorem d_squared (n : Nat) : objD X (n + 1) ≫ objD X n = 0 := by
   -- we start by expanding d ≫ d as a double sum
@@ -398,7 +464,17 @@ theorem map_alternatingFaceMapComplex
     ext n
     simp only [Functor.comp_map, HomologicalComplex.comp_f, alternatingFaceMapComplex_map_f,
       Functor.mapHomologicalComplex_map_f, HomologicalComplex.eqToHom_f, eqToHom_refl, comp_id,
-      id_comp, SimplicialObject.whiskering_obj_
+      id_comp, SimplicialObject.whiskering_obj_map_app]
+  · intro X
+    apply HomologicalComplex.ext
+    · rintro i j (rfl : j + 1 = i)
+      dsimp only [Functor.comp_obj]
+      simp only [Functor.mapHomologicalComplex_obj_d, alternatingFaceMapComplex_obj_d,
+        eqToHom_refl, id_comp, comp_id, AlternatingFaceMapComplex.objD, Functor.map_sum,
+        Functor.map_zsmul]
+      rfl
+    · ext n
+      rfl
 
 中文:
 定理 map_alternatingFaceMapComplex
@@ -409,7 +485,17 @@ theorem map_alternatingFaceMapComplex
     ext n
     simp only [Functor.comp_map, HomologicalComplex.comp_f, alternatingFaceMapComplex_map_f,
       Functor.mapHomologicalComplex_map_f, HomologicalComplex.eqToHom_f, eqToHom_refl, comp_id,
-      id_comp, SimplicialObject.whiskering_obj_
+      id_comp, SimplicialObject.whiskering_obj_map_app]
+  · intro X
+    apply HomologicalComplex.ext
+    · rintro i j (rfl : j + 1 = i)
+      dsimp only [Functor.comp_obj]
+      simp only [Functor.mapHomologicalComplex_obj_d, alternatingFaceMapComplex_obj_d,
+        eqToHom_refl, id_comp, comp_id, AlternatingFaceMapComplex.objD, Functor.map_sum,
+        Functor.map_zsmul]
+      rfl
+    · ext n
+      rfl
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.ext, Functor, Functor.comp_map, Functor.comp_obj, Functor.mapHomologicalComplex_map_f, Functor.mapHomologicalComplex_obj_d, HomologicalComplex, HomologicalComplex.comp_f, HomologicalComplex.eqToHom_f, HomologicalComplex.ext, SimplicialObject, SimplicialObject.whiskering_obj_map_app, alternatingFaceMapComplex_map_f, alternatingFaceMapComplex_obj_d, comp_f, comp_id, comp_map, comp_obj, eqToHom_f
 -/
@@ -510,7 +596,22 @@ definition ε
     refine (ChainComplex.toSingle₀Equiv _ _).symm ?_
     refine ⟨X.hom.app (op ⦋0⦌), ?_⟩
     dsimp
-    rw [alternatingFaceMapComplex_obj_d]; rw [objD]; rw [Fin.sum_univ_two]; rw [Fin.val_zero]; rw [pow_zero]; rw [one_smul]; rw [Fin.val_one]; rw [pow_one]; rw [neg_smul]; rw [one_smul]; rw [add_com
+    rw [alternatingFaceMapComplex_obj_d]; rw [objD]; rw [Fin.sum_univ_two]; rw [Fin.val_zero]; rw [pow_zero]; rw [one_smul]; rw [Fin.val_one]; rw [pow_one]; rw [neg_smul]; rw [one_smul]; rw [add_comp]; rw [neg_comp]; rw [SimplicialObject.δ_naturality]; rw [SimplicialObject.δ_naturality]
+    apply add_neg_cancel
+  naturality X Y f := by
+    apply HomologicalComplex.to_single_hom_ext
+    #adaptation_note /-- This proof broke at nightly-2026-04-28. It used to be:
+    ```
+    dsimp
+    simp [ChainComplex.toSingle₀Equiv, SimplicialObject.Augmented.w₀]
+    ```
+    The proof below is an emergency repair, and I've asked the authors of this file to review.
+    -/
+    change f.left.app _ ≫ _ = _ ≫ ((ChainComplex.single₀ _).map f.right).f 0
+    rw [ChainComplex.toSingle₀Equiv_symm_apply_f_zero]; rw [ChainComplex.toSingle₀Equiv_symm_apply_f_zero]; rw [ChainComplex.single₀_map_f_zero]
+    exact SimplicialObject.Augmented.w₀ f
+
+@[simp]
 
 中文:
 定义 ε
@@ -519,7 +620,22 @@ definition ε
     refine (ChainComplex.toSingle₀Equiv _ _).symm ?_
     refine ⟨X.hom.app (op ⦋0⦌), ?_⟩
     dsimp
-    rw [alternatingFaceMapComplex_obj_d]; rw [objD]; rw [Fin.sum_univ_two]; rw [Fin.val_zero]; rw [pow_zero]; rw [one_smul]; rw [Fin.val_one]; rw [pow_one]; rw [neg_smul]; rw [one_smul]; rw [add_com
+    rw [alternatingFaceMapComplex_obj_d]; rw [objD]; rw [Fin.sum_univ_two]; rw [Fin.val_zero]; rw [pow_zero]; rw [one_smul]; rw [Fin.val_one]; rw [pow_one]; rw [neg_smul]; rw [one_smul]; rw [add_comp]; rw [neg_comp]; rw [SimplicialObject.δ_naturality]; rw [SimplicialObject.δ_naturality]
+    apply add_neg_cancel
+  naturality X Y f := by
+    apply HomologicalComplex.to_single_hom_ext
+    #adaptation_note /-- This proof broke at nightly-2026-04-28. It used to be:
+    ```
+    dsimp
+    simp [ChainComplex.toSingle₀Equiv, SimplicialObject.Augmented.w₀]
+    ```
+    The proof below is an emergency repair, and I've asked the authors of this file to review.
+    -/
+    change f.left.app _ ≫ _ = _ ≫ ((ChainComplex.single₀ _).map f.right).f 0
+    rw [ChainComplex.toSingle₀Equiv_symm_apply_f_zero]; rw [ChainComplex.toSingle₀Equiv_symm_apply_f_zero]; rw [ChainComplex.single₀_map_f_zero]
+    exact SimplicialObject.Augmented.w₀ f
+
+@[simp]
 
 Depends on / 依赖: ChainComplex, ChainComplex.toSingle, Fin.sum_univ_two, Fin.val_one, Fin.val_zero, HomologicalComplex, HomologicalComplex.to_single_hom_ext, SimplicialObject, X.hom.app, adaptation_note, add_comp, add_neg_cancel, alternatingFaceMapComplex_obj_d, naturality, neg_comp, neg_smul, one_smul, pow_one, pow_zero, sum_univ_two
 -/
@@ -604,7 +720,20 @@ definition inclusionOfMooreComplexMap
   body: ChainComplex.ofHom (fun n => (NormalizedMooreComplex.objX X n).arrow) fun i => by
   /- we have to show the compatibility of the differentials on the alternating
            face map complex with those defined on the normalized Moore complex:
-           we first get rid of the terms of the alternating
+           we first get rid of the terms of the alternating sum that are obviously
+           zero on the normalized_Moore_complex -/
+  simp only [normalizedMooreComplex, NormalizedMooreComplex.obj, alternatingFaceMapComplex,
+    AlternatingFaceMapComplex.obj, ChainComplex.of_d, AlternatingFaceMapComplex.objD, comp_sum]
+  rw [Fin.sum_univ_succ]; rw [Fintype.sum_eq_zero]
+  swap
+  · intro j
+    rw [NormalizedMooreComplex.objX_add_one]; rw [comp_zsmul]; rw [← factorThru_arrow _ _ (finset_inf_arrow_factors Finset.univ _ _ (Finset.mem_univ j))]; rw [Category.assoc]; rw [kernelSubobject_arrow_comp]; rw [comp_zero]; rw [smul_zero]
+  -- finally, we study the remaining term which is induced by X.δ 0
+  rw [add_zero]; rw [Fin.val_zero]; rw [pow_zero]; rw [one_zsmul]
+  dsimp [NormalizedMooreComplex.objD, NormalizedMooreComplex.objX]
+  cases i <;> simp
+
+@[simp]
 
 中文:
 定义 inclusionOfMooreComplexMap
@@ -612,7 +741,20 @@ definition inclusionOfMooreComplexMap
   定义体: ChainComplex.ofHom (fun n => (NormalizedMooreComplex.objX X n).arrow) fun i => by
   /- we have to show the compatibility of the differentials on the alternating
            face map complex with those defined on the normalized Moore complex:
-           we first get rid of the terms of the alternating
+           we first get rid of the terms of the alternating sum that are obviously
+           zero on the normalized_Moore_complex -/
+  simp only [normalizedMooreComplex, NormalizedMooreComplex.obj, alternatingFaceMapComplex,
+    AlternatingFaceMapComplex.obj, ChainComplex.of_d, AlternatingFaceMapComplex.objD, comp_sum]
+  rw [Fin.sum_univ_succ]; rw [Fintype.sum_eq_zero]
+  swap
+  · intro j
+    rw [NormalizedMooreComplex.objX_add_one]; rw [comp_zsmul]; rw [← factorThru_arrow _ _ (finset_inf_arrow_factors Finset.univ _ _ (Finset.mem_univ j))]; rw [Category.assoc]; rw [kernelSubobject_arrow_comp]; rw [comp_zero]; rw [smul_zero]
+  -- finally, we study the remaining term which is induced by X.δ 0
+  rw [add_zero]; rw [Fin.val_zero]; rw [pow_zero]; rw [one_zsmul]
+  dsimp [NormalizedMooreComplex.objD, NormalizedMooreComplex.objX]
+  cases i <;> simp
+
+@[simp]
 
 Depends on / 依赖: ChainComplex, ChainComplex.ofHom, NormalizedMooreComplex, NormalizedMooreComplex.objX
 -/

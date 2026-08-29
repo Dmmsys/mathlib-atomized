@@ -38,7 +38,17 @@ theorem mul_eq_mul_prime_prod
   | insert i s his ih =>
     rw [prod_insert his]; rw [← mul_assoc] at hx
     have hpi : Prime (p i) := hp i (mem_insert_self _ _)
-    rcases ih (fun i hi => hp i (mem_insert_of_mem hi)) hx 
+    rcases ih (fun i hi => hp i (mem_insert_of_mem hi)) hx with
+      ⟨t, u, b, c, htus, htu, hbc, rfl, rfl⟩
+    have hit : i ∉ t := fun hit => his (htus ▸ mem_union_left _ hit)
+    have hiu : i ∉ u := fun hiu => his (htus ▸ mem_union_right _ hiu)
+    obtain ⟨d, rfl⟩ | ⟨d, rfl⟩ : p i ∣ b ∨ p i ∣ c := hpi.dvd_or_dvd ⟨a, by rw [← hbc, mul_comm]⟩
+    · rw [mul_assoc, mul_comm a, mul_right_inj' hpi.ne_zero] at hbc
+      exact ⟨insert i t, u, d, c, by rw [insert_union, htus], disjoint_insert_left.2 ⟨hiu, htu⟩, by
+          simp [hbc, prod_insert hit, mul_comm, mul_left_comm]⟩
+    · rw [← mul_assoc, mul_right_comm b, mul_left_inj' hpi.ne_zero] at hbc
+      exact ⟨t, insert i u, b, d, by rw [union_insert, htus], disjoint_insert_right.2 ⟨hit, htu⟩, by
+          simp [← hbc, prod_insert hiu, mul_comm, mul_left_comm]⟩
 
 中文:
 定理 mul_eq_mul_prime_prod
@@ -49,7 +59,17 @@ theorem mul_eq_mul_prime_prod
   | insert i s his ih =>
     rw [prod_insert his]; rw [← mul_assoc] at hx
     have hpi : Prime (p i) := hp i (mem_insert_self _ _)
-    rcases ih (fun i hi => hp i (mem_insert_of_mem hi)) hx 
+    rcases ih (fun i hi => hp i (mem_insert_of_mem hi)) hx with
+      ⟨t, u, b, c, htus, htu, hbc, rfl, rfl⟩
+    have hit : i ∉ t := fun hit => his (htus ▸ mem_union_left _ hit)
+    have hiu : i ∉ u := fun hiu => his (htus ▸ mem_union_right _ hiu)
+    obtain ⟨d, rfl⟩ | ⟨d, rfl⟩ : p i ∣ b ∨ p i ∣ c := hpi.dvd_or_dvd ⟨a, by rw [← hbc, mul_comm]⟩
+    · rw [mul_assoc, mul_comm a, mul_right_inj' hpi.ne_zero] at hbc
+      exact ⟨insert i t, u, d, c, by rw [insert_union, htus], disjoint_insert_left.2 ⟨hiu, htu⟩, by
+          simp [hbc, prod_insert hit, mul_comm, mul_left_comm]⟩
+    · rw [← mul_assoc, mul_right_comm b, mul_left_inj' hpi.ne_zero] at hbc
+      exact ⟨t, insert i u, b, d, by rw [union_insert, htus], disjoint_insert_right.2 ⟨hit, htu⟩, by
+          simp [← hbc, prod_insert hiu, mul_comm, mul_left_comm]⟩
 
 Depends on / 依赖: Finset, Finset.induction, generalizing, insert, mem_insert_of_mem, mem_insert_self, mem_union_left, mem_union_right, mul_assoc, prod_insert
 -/

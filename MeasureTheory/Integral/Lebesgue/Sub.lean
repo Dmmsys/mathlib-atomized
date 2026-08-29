@@ -137,7 +137,28 @@ theorem lintegral_iInf_ae
     lintegral_mono fun _ => iInf_le_of_le 0 le_rfl
   have fn_le_f0' : ⨅ n, ∫⁻ a, f n a ∂μ <= ∫⁻ a, f 0 a ∂μ := iInf_le_of_le 0 le_rfl
 (ENNReal.sub_right_inj h_fin fn_le_f0 fn_le_f0').1
-    show ∫⁻ a, f 0 a ∂μ - ∫⁻ a, ⨅ n, f n a ∂μ = ∫⁻ a, f 0 
+    show ∫⁻ a, f 0 a ∂μ - ∫⁻ a, ⨅ n, f n a ∂μ = ∫⁻ a, f 0 a ∂μ - ⨅ n, ∫⁻ a, f n a ∂μ from
+      calc
+        ∫⁻ a, f 0 a ∂μ - ∫⁻ a, ⨅ n, f n a ∂μ = ∫⁻ a, f 0 a - ⨅ n, f n a ∂μ :=
+          (lintegral_sub (.iInf h_meas)
+              (ne_top_of_le_ne_top h_fin <| lintegral_mono fun _ => iInf_le _ _)
+              (ae_of_all _ fun _ => iInf_le _ _)).symm
+        _ = ∫⁻ a, ⨆ n, f 0 a - f n a ∂μ := congr rfl (funext fun _ => ENNReal.sub_iInf)
+        _ = ⨆ n, ∫⁻ a, f 0 a - f n a ∂μ :=
+          (lintegral_iSup_ae (fun n => (h_meas 0).sub (h_meas n)) fun n =>
+            (h_mono n).mono fun _ ha => tsub_le_tsub le_rfl ha)
+        _ = ⨆ n, ∫⁻ a, f 0 a ∂μ - ∫⁻ a, f n a ∂μ :=
+          (have h_mono : forallᵐ a ∂μ, forall n : Nat, f n.succ a <= f n a := ae_all_iff.2 h_mono
+          have h_mono : forall n, forallᵐ a ∂μ, f n a <= f 0 a := fun n =>
+            h_mono.mono fun a h => by
+              induction n with
+              | zero => rfl
+              | succ n ih => exact (h n).trans ih
+congr_arg iSup
+            funext fun n =>
+              lintegral_sub (h_meas _) (ne_top_of_le_ne_top h_fin <| lintegral_mono_ae <| h_mono n)
+                (h_mono n))
+        _ = ∫⁻ a, f 0 a ∂μ - ⨅ n, ∫⁻ a, f n a ∂μ := ENNReal.sub_iInf.symm
 
 中文:
 定理 lintegral_iInf_ae
@@ -146,7 +167,28 @@ theorem lintegral_iInf_ae
     lintegral_mono fun _ => iInf_le_of_le 0 le_rfl
   have fn_le_f0' : ⨅ n, ∫⁻ a, f n a ∂μ <= ∫⁻ a, f 0 a ∂μ := iInf_le_of_le 0 le_rfl
 (ENNReal.sub_right_inj h_fin fn_le_f0 fn_le_f0').1
-    show ∫⁻ a, f 0 a ∂μ - ∫⁻ a, ⨅ n, f n a ∂μ = ∫⁻ a, f 0 
+    show ∫⁻ a, f 0 a ∂μ - ∫⁻ a, ⨅ n, f n a ∂μ = ∫⁻ a, f 0 a ∂μ - ⨅ n, ∫⁻ a, f n a ∂μ from
+      calc
+        ∫⁻ a, f 0 a ∂μ - ∫⁻ a, ⨅ n, f n a ∂μ = ∫⁻ a, f 0 a - ⨅ n, f n a ∂μ :=
+          (lintegral_sub (.iInf h_meas)
+              (ne_top_of_le_ne_top h_fin <| lintegral_mono fun _ => iInf_le _ _)
+              (ae_of_all _ fun _ => iInf_le _ _)).symm
+        _ = ∫⁻ a, ⨆ n, f 0 a - f n a ∂μ := congr rfl (funext fun _ => ENNReal.sub_iInf)
+        _ = ⨆ n, ∫⁻ a, f 0 a - f n a ∂μ :=
+          (lintegral_iSup_ae (fun n => (h_meas 0).sub (h_meas n)) fun n =>
+            (h_mono n).mono fun _ ha => tsub_le_tsub le_rfl ha)
+        _ = ⨆ n, ∫⁻ a, f 0 a ∂μ - ∫⁻ a, f n a ∂μ :=
+          (have h_mono : forallᵐ a ∂μ, forall n : Nat, f n.succ a <= f n a := ae_all_iff.2 h_mono
+          have h_mono : forall n, forallᵐ a ∂μ, f n a <= f 0 a := fun n =>
+            h_mono.mono fun a h => by
+              induction n with
+              | zero => rfl
+              | succ n ih => exact (h n).trans ih
+congr_arg iSup
+            funext fun n =>
+              lintegral_sub (h_meas _) (ne_top_of_le_ne_top h_fin <| lintegral_mono_ae <| h_mono n)
+                (h_mono n))
+        _ = ∫⁻ a, f 0 a ∂μ - ⨅ n, ∫⁻ a, f n a ∂μ := ENNReal.sub_iInf.symm
 
 Depends on / 依赖: ENNReal, ENNReal.sub_right_inj, ae_of, fn_le_f0, h_fin, h_meas, iInf_le, iInf_le_of_le, le_rfl, lintegral_mono, lintegral_sub, ne_top_of_le_ne_top, sub_right_inj
 -/
@@ -212,7 +254,15 @@ theorem lintegral_iInf'
   have h_ae_seq_mono : Antitone (aeSeq h_meas p) := by
     intro n m hnm x
     by_cases hx : x in aeSeqSet h_meas p
-    · exact aeSeq.prop_of_mem_aeS
+    · exact aeSeq.prop_of_mem_aeSeqSet h_meas hx hnm
+    · simp only [aeSeq, hx, if_false]
+      exact le_rfl
+  rw [lintegral_congr_ae (aeSeq.iInf h_meas hp).symm]
+  simp_rw [iInf_apply]
+  rw [lintegral_iInf (aeSeq.measurable h_meas p) h_ae_seq_mono]
+  · congr
+    exact funext fun n => lintegral_congr_ae (aeSeq.aeSeq_n_eq_fun_n_ae h_meas hp n)
+  · rwa [lintegral_congr_ae (aeSeq.aeSeq_n_eq_fun_n_ae h_meas hp 0)]
 
 中文:
 定理 lintegral_iInf'
@@ -224,7 +274,15 @@ theorem lintegral_iInf'
   have h_ae_seq_mono : Antitone (aeSeq h_meas p) := by
     intro n m hnm x
     by_cases hx : x in aeSeqSet h_meas p
-    · exact aeSeq.prop_of_mem_aeS
+    · exact aeSeq.prop_of_mem_aeSeqSet h_meas hx hnm
+    · simp only [aeSeq, hx, if_false]
+      exact le_rfl
+  rw [lintegral_congr_ae (aeSeq.iInf h_meas hp).symm]
+  simp_rw [iInf_apply]
+  rw [lintegral_iInf (aeSeq.measurable h_meas p) h_ae_seq_mono]
+  · congr
+    exact funext fun n => lintegral_congr_ae (aeSeq.aeSeq_n_eq_fun_n_ae h_meas hp n)
+  · rwa [lintegral_congr_ae (aeSeq.aeSeq_n_eq_fun_n_ae h_meas hp 0)]
 
 Depends on / 依赖: Antitone, aeSeq.iInf, aeSeq.measurable, aeSeq.prop_of_mem_aeSeqSet, aeSeqSet, h_ae_seq_mono, h_anti, h_meas, iInf_apply, if_false, le_rfl, lintegral_congr_ae, lintegral_iInf, measurable, prop_of_mem_aeSeqSet, simp_rw
 -/
@@ -261,7 +319,20 @@ theorem lintegral_iInf_directed_of_measurable
   inhabit β
   have : forall a, ⨅ b, f b a = ⨅ n, f (h_directed.sequence f n) a := by
     refine fun a =>
-      le_antisymm (le_iIn
+      le_antisymm (le_iInf fun n => iInf_le _ _)
+        (le_iInf fun b => iInf_le_of_le (Encodable.encode b + 1) ?_)
+    exact h_directed.sequence_le b a
+  calc
+    ∫⁻ a, ⨅ b, f b a ∂μ
+    _ = ∫⁻ a, ⨅ n, (f ∘ h_directed.sequence f) n a ∂μ := by simp only [this, Function.comp_apply]
+    _ = ⨅ n, ∫⁻ a, (f ∘ h_directed.sequence f) n a ∂μ := by
+      rw [lintegral_iInf ?_ h_directed.sequence_anti]
+      · exact hf_int _
+      · exact fun n => hf _
+    _ = ⨅ b, ∫⁻ a, f b a ∂μ := by
+      refine le_antisymm (le_iInf fun b => ?_) (le_iInf fun n => ?_)
+      · exact iInf_le_of_le (Encodable.encode b + 1) (lintegral_mono <| h_directed.sequence_le b)
+      · exact iInf_le (fun b => ∫⁻ a, f b a ∂μ) _
 
 中文:
 定理 lintegral_iInf_directed_of_measurable
@@ -274,7 +345,20 @@ theorem lintegral_iInf_directed_of_measurable
   inhabit β
   have : forall a, ⨅ b, f b a = ⨅ n, f (h_directed.sequence f n) a := by
     refine fun a =>
-      le_antisymm (le_iIn
+      le_antisymm (le_iInf fun n => iInf_le _ _)
+        (le_iInf fun b => iInf_le_of_le (Encodable.encode b + 1) ?_)
+    exact h_directed.sequence_le b a
+  calc
+    ∫⁻ a, ⨅ b, f b a ∂μ
+    _ = ∫⁻ a, ⨅ n, (f ∘ h_directed.sequence f) n a ∂μ := by simp only [this, Function.comp_apply]
+    _ = ⨅ n, ∫⁻ a, (f ∘ h_directed.sequence f) n a ∂μ := by
+      rw [lintegral_iInf ?_ h_directed.sequence_anti]
+      · exact hf_int _
+      · exact fun n => hf _
+    _ = ⨅ b, ∫⁻ a, f b a ∂μ := by
+      refine le_antisymm (le_iInf fun b => ?_) (le_iInf fun n => ?_)
+      · exact iInf_le_of_le (Encodable.encode b + 1) (lintegral_mono <| h_directed.sequence_le b)
+      · exact iInf_le (fun b => ∫⁻ a, f b a ∂μ) _
 
 Depends on / 依赖: ENNReal, ENNReal.top_mul, Encodable, Encodable.encode, Function, Function.c, Measure, Measure.measure_univ_ne_zero.mpr, encode, h_directed, h_directed.sequence, h_directed.sequence_le, iInf_le, iInf_le_of_le, iInf_of_empty, inhabit, isEmpty_or_nonempty, le_antisymm, le_iInf, lintegral_const
 -/
@@ -318,7 +402,8 @@ theorem lintegral_tendsto_of_tendsto_of_antitone
     exact tendsto_atTop_iInf this
   rw [← lintegral_iInf' hf h_anti h0]
   refine lintegral_congr_ae ?_
-  filter_up
+  filter_upwards [h_anti, h_tendsto] with _ hx_anti hx_tendsto
+    using tendsto_nhds_unique hx_tendsto (tendsto_atTop_iInf hx_anti)
 
 中文:
 定理 lintegral_tendsto_of_tendsto_of_antitone
@@ -331,7 +416,8 @@ theorem lintegral_tendsto_of_tendsto_of_antitone
     exact tendsto_atTop_iInf this
   rw [← lintegral_iInf' hf h_anti h0]
   refine lintegral_congr_ae ?_
-  filter_up
+  filter_upwards [h_anti, h_tendsto] with _ hx_anti hx_tendsto
+    using tendsto_nhds_unique hx_tendsto (tendsto_atTop_iInf hx_anti)
 
 Depends on / 依赖: Antitone, filter_upwards, h_anti, h_anti.mono, h_tendsto, hx_anti, hx_tendsto, lintegral_congr_ae, lintegral_iInf, lintegral_mono_ae, tendsto_atTop_iInf, tendsto_nhds_unique
 -/
@@ -366,7 +452,21 @@ theorem exists_setLIntegral_compl_lt
   · exact ⟨∅, .empty, by simp, by simpa [hf₀, pos_iff_ne_zero]⟩
   obtain ⟨g, hgf, hg_meas, hgsupp, hgε⟩ :
       exists g <= f, Measurable g ∧ μ (support g) < ∞ ∧ ∫⁻ a, f a ∂μ - ε < ∫⁻ a, g a ∂μ := by
-    obtain ⟨g, hgf, hgε⟩ : exists (g : α ->ₛ Real>=0∞) (_ : g <
+    obtain ⟨g, hgf, hgε⟩ : exists (g : α ->ₛ Real>=0∞) (_ : g <= f), ∫⁻ a, f a ∂μ - ε < g.lintegral μ := by
+      simpa only [← lt_iSup_iff, ← lintegral_def] using ENNReal.sub_lt_self hf hf₀ hε
+    refine ⟨g, hgf, g.measurable, ?_, by rwa [g.lintegral_eq_lintegral]⟩
+exact SimpleFunc.FinMeasSupp.of_lintegral_ne_top ne_top_of_le_ne_top hf
+      g.lintegral_eq_lintegral μ ▸ lintegral_mono hgf
+  refine ⟨_, measurableSet_support hg_meas, hgsupp, ?_⟩
+  calc
+    ∫⁻ a in (support g)ᶜ, f a ∂μ
+      = ∫⁻ a in (support g)ᶜ, f a - g a ∂μ := setLIntegral_congr_fun
+(measurableSet_support hg_meas).compl by intro; simp_all
+    _ <= ∫⁻ a, f a - g a ∂μ := setLIntegral_le_lintegral _ _
+    _ = ∫⁻ a, f a ∂μ - ∫⁻ a, g a ∂μ :=
+      lintegral_sub hg_meas (ne_top_of_le_ne_top hf <| lintegral_mono hgf) (ae_of_all _ hgf)
+_ < ε := ENNReal.sub_lt_of_lt_add (lintegral_mono hgf)
+      ENNReal.lt_add_of_sub_lt_left (.inl hf) hgε
 
 中文:
 定理 存在_setL整数egral_compl_lt
@@ -376,7 +476,21 @@ theorem exists_setLIntegral_compl_lt
   · exact ⟨∅, .empty, by simp, by simpa [hf₀, pos_iff_ne_zero]⟩
   obtain ⟨g, hgf, hg_meas, hgsupp, hgε⟩ :
       exists g <= f, Measurable g ∧ μ (support g) < ∞ ∧ ∫⁻ a, f a ∂μ - ε < ∫⁻ a, g a ∂μ := by
-    obtain ⟨g, hgf, hgε⟩ : exists (g : α ->ₛ Real>=0∞) (_ : g <
+    obtain ⟨g, hgf, hgε⟩ : exists (g : α ->ₛ Real>=0∞) (_ : g <= f), ∫⁻ a, f a ∂μ - ε < g.lintegral μ := by
+      simpa only [← lt_iSup_iff, ← lintegral_def] using ENNReal.sub_lt_self hf hf₀ hε
+    refine ⟨g, hgf, g.measurable, ?_, by rwa [g.lintegral_eq_lintegral]⟩
+exact SimpleFunc.FinMeasSupp.of_lintegral_ne_top ne_top_of_le_ne_top hf
+      g.lintegral_eq_lintegral μ ▸ lintegral_mono hgf
+  refine ⟨_, measurableSet_support hg_meas, hgsupp, ?_⟩
+  calc
+    ∫⁻ a in (support g)ᶜ, f a ∂μ
+      = ∫⁻ a in (support g)ᶜ, f a - g a ∂μ := setLIntegral_congr_fun
+(measurableSet_support hg_meas).compl by intro; simp_all
+    _ <= ∫⁻ a, f a - g a ∂μ := setLIntegral_le_lintegral _ _
+    _ = ∫⁻ a, f a ∂μ - ∫⁻ a, g a ∂μ :=
+      lintegral_sub hg_meas (ne_top_of_le_ne_top hf <| lintegral_mono hgf) (ae_of_all _ hgf)
+_ < ε := ENNReal.sub_lt_of_lt_add (lintegral_mono hgf)
+      ENNReal.lt_add_of_sub_lt_left (.inl hf) hgε
 
 Depends on / 依赖: ENNReal, ENNReal.sub_lt_self, Measurable, SimpleFunc, SimpleFunc.FinMe, g.lintegral, g.lintegral_eq_lintegral, g.measurable, hg_meas, hgsupp, lintegral, lintegral_def, lintegral_eq_lintegral, lt_iSup_iff, measurable, pos_iff_ne_zero, sub_lt_self, support
 -/
@@ -415,7 +529,9 @@ theorem exists_measurable_le_setLIntegral_eq_of_integrable
   refine fun s hms => le_antisymm ?_ (lintegral_mono hgf)
   rw [← compl_compl s]; rw [setLIntegral_compl hms.compl]; rw [setLIntegral_compl hms.compl]; rw [hifg]
   · gcongr; apply hgf
-  · rw [hifg] at h
+  · rw [hifg] at hf
+    exact ne_top_of_le_ne_top hf (setLIntegral_le_lintegral _ _)
+  · exact ne_top_of_le_ne_top hf (setLIntegral_le_lintegral _ _)
 
 中文:
 定理 存在_measurable_le_setL整数egral_eq_of_integrable
@@ -426,7 +542,9 @@ theorem exists_measurable_le_setLIntegral_eq_of_integrable
   refine fun s hms => le_antisymm ?_ (lintegral_mono hgf)
   rw [← compl_compl s]; rw [setLIntegral_compl hms.compl]; rw [setLIntegral_compl hms.compl]; rw [hifg]
   · gcongr; apply hgf
-  · rw [hifg] at h
+  · rw [hifg] at hf
+    exact ne_top_of_le_ne_top hf (setLIntegral_le_lintegral _ _)
+  · exact ne_top_of_le_ne_top hf (setLIntegral_le_lintegral _ _)
 
 Depends on / 依赖: compl_compl, exists_measurable_le_lintegral_eq, hms.compl, le_antisymm, lintegral_mono, ne_top_of_le_ne_top, setLIntegral_compl, setLIntegral_le_lintegral
 -/

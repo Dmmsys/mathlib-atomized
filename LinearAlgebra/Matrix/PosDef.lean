@@ -645,7 +645,12 @@ theorem diagonal
   right x hx := by
     refine Finsupp.sum_pos' (fun _ _ => Finsupp.sum_nonneg ?_) ?_
     · simp +contextual [diagonal, apply_ite, star_left_conjugate_nonneg (h _).le]
-    obtain ⟨i, hxi⟩ := by simpa [Finsupp.ext_
+    obtain ⟨i, hxi⟩ := by simpa [Finsupp.ext_iff] using hx
+    refine ⟨i, ?_, Finsupp.sum_pos' ?_ ⟨i, ?_, ?_⟩⟩ <;> simp +contextual [diagonal,
+      apply_ite, star_left_conjugate_nonneg (h _).le,
+      star_left_conjugate_pos (h i), IsRegular.of_ne_zero hxi, Finsupp.mem_support_iff.mpr hxi]
+
+@[simp]
 
 中文:
 定理 diagonal
@@ -654,7 +659,12 @@ theorem diagonal
   right x hx := by
     refine Finsupp.sum_pos' (fun _ _ => Finsupp.sum_nonneg ?_) ?_
     · simp +contextual [diagonal, apply_ite, star_left_conjugate_nonneg (h _).le]
-    obtain ⟨i, hxi⟩ := by simpa [Finsupp.ext_
+    obtain ⟨i, hxi⟩ := by simpa [Finsupp.ext_iff] using hx
+    refine ⟨i, ?_, Finsupp.sum_pos' ?_ ⟨i, ?_, ?_⟩⟩ <;> simp +contextual [diagonal,
+      apply_ite, star_left_conjugate_nonneg (h _).le,
+      star_left_conjugate_pos (h i), IsRegular.of_ne_zero hxi, Finsupp.mem_support_iff.mpr hxi]
+
+@[simp]
 -/
 protected theorem diagonal [StarOrderedRing R] [DecidableEq n] [NoZeroDivisors R]
     {d : n -> R} (h : forall i, 0 < d i) :
@@ -919,7 +929,7 @@ theorem _root_.Matrix.posDef_sum
       by_cases h : ¬ hi.Nonempty
       · simp_all
 · exact PosDef.add (hA _ <| Finset.mem_insert_self i hi)
-          H (not_not.mp h) fun _ _hi => hA _ (Fin
+          H (not_not.mp h) fun _ _hi => hA _ (Finset.mem_insert_of_mem _hi)
 
 中文:
 定理 _root_.矩阵.posDef_sum
@@ -933,7 +943,7 @@ theorem _root_.Matrix.posDef_sum
       by_cases h : ¬ hi.Nonempty
       · simp_all
 · exact PosDef.add (hA _ <| Finset.mem_insert_self i hi)
-          H (not_not.mp h) fun _ _hi => hA _ (Fin
+          H (not_not.mp h) fun _ _hi => hA _ (Finset.mem_insert_of_mem _hi)
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.sum_insert, Nonempty, PosDef, PosDef.add, classical, hi.Nonempty, induction_on, insert, mem_insert_of_mem, mem_insert_self, not_not, not_not.mp, sum_insert
 -/
@@ -1295,7 +1305,7 @@ theorem posSemidef_conjTranspose_mul_self
   rw [← mulVec_mulVec]; rw [dotProduct_mulVec]; rw [vecMul_conjTranspose]; rw [star_star]
   exact Finset.sum_nonneg fun i _ => star_mul_self_nonneg _
 
-omit [Fintype m] in variable
+omit [Fintype m] in variable [Finite m] in
 
 中文:
 定理 posSemidef_conjTranspose_mul_self
@@ -1306,7 +1316,7 @@ omit [Fintype m] in variable
   rw [← mulVec_mulVec]; rw [dotProduct_mulVec]; rw [vecMul_conjTranspose]; rw [star_star]
   exact Finset.sum_nonneg fun i _ => star_mul_self_nonneg _
 
-omit [Fintype m] in variable
+omit [Fintype m] in variable [Finite m] in
 
 Depends on / 依赖: Finset, Finset.sum_nonneg, Fintype, Fintype.ofFinite, dotProduct_mulVec, isHermitian_conjTranspose_mul_self, mulVec_mulVec, ofFinite, of_dotProduct_mulVec_nonneg, star_mul_self_nonneg, star_star, sum_nonneg, vecMul_conjTranspose
 -/
@@ -1403,7 +1413,7 @@ theorem IsUnit.posSemidef_star_left_conjugate_iff
   lift U to (Matrix n n R)ˣ using hU
   have := h.conjTranspose_mul_mul_same ((U⁻¹ : (Matrix n n R)ˣ) : Matrix n n R)
   rwa [← star_eq_conjTranspose, ← mul_assoc, ← mul_assoc, ← star_mul, mul_assoc,
-    Units.mul_inv, mul_one, star_on
+    Units.mul_inv, mul_one, star_one, one_mul] at this
 
 中文:
 定理 是单位.posSemidef_star_left_conjugate_iff
@@ -1413,7 +1423,7 @@ theorem IsUnit.posSemidef_star_left_conjugate_iff
   lift U to (Matrix n n R)ˣ using hU
   have := h.conjTranspose_mul_mul_same ((U⁻¹ : (Matrix n n R)ˣ) : Matrix n n R)
   rwa [← star_eq_conjTranspose, ← mul_assoc, ← mul_assoc, ← star_mul, mul_assoc,
-    Units.mul_inv, mul_one, star_on
+    Units.mul_inv, mul_one, star_one, one_mul] at this
 
 Depends on / 依赖: Matrix, Units.mul_inv, conjTranspose_mul_mul_same, h.conjTranspose_mul_mul_same, mul_assoc, mul_inv, mul_one, one_mul, star_eq_conjTranspose, star_mul, star_one
 -/
@@ -1735,7 +1745,11 @@ theorem _root_.LinearMap.BilinForm.posDef_toQuadraticMap_iff_matrix
     grind [hB_symm.eq (b i) (b j)]
   refine ⟨fun h => ⟨?_, fun v hv => ?_⟩, fun h v hv => ?_⟩
   · simp [isHermitian_iff_isSymm, IsSymm.ext_iff, hB_symm.eq (b _) (b _)]
-  · simpa [Finsupp.linearCombination_apply
+  · simpa [Finsupp.linearCombination_apply, map_finsuppSum, Finsupp.mul_sum, ← aux] using
+      h _ (b.repr.symm.map_ne_zero_iff.mpr hv)
+  · rw [B.toQuadraticMap_apply, ← b.linearCombination_repr (x := v)]
+    simpa [Finsupp.linearCombination_apply, map_finsuppSum, Finsupp.mul_sum, aux]
+      using h.2 (b.repr.map_ne_zero_iff.mpr hv)
 
 中文:
 定理 _root_.线性映射.BilinForm.posDef_toQuadraticMap_iff_matrix
@@ -1744,7 +1758,11 @@ theorem _root_.LinearMap.BilinForm.posDef_toQuadraticMap_iff_matrix
     grind [hB_symm.eq (b i) (b j)]
   refine ⟨fun h => ⟨?_, fun v hv => ?_⟩, fun h v hv => ?_⟩
   · simp [isHermitian_iff_isSymm, IsSymm.ext_iff, hB_symm.eq (b _) (b _)]
-  · simpa [Finsupp.linearCombination_apply
+  · simpa [Finsupp.linearCombination_apply, map_finsuppSum, Finsupp.mul_sum, ← aux] using
+      h _ (b.repr.symm.map_ne_zero_iff.mpr hv)
+  · rw [B.toQuadraticMap_apply, ← b.linearCombination_repr (x := v)]
+    simpa [Finsupp.linearCombination_apply, map_finsuppSum, Finsupp.mul_sum, aux]
+      using h.2 (b.repr.map_ne_zero_iff.mpr hv)
 
 Depends on / 依赖: B.toQuadraticMap_apply, Finsupp, Finsupp.linearCombination_apply, Finsupp.mul_sum, IsSymm, IsSymm.ext_iff, b.linearCombination_repr, b.repr.symm.map_ne_zero_iff.mpr, ext_iff, hB_symm, hB_symm.eq, isHermitian_iff_isSymm, linearCombination_apply, linearCombination_repr, map_finsuppSum, map_ne_zero_iff, mul_sum, toQuadraticMap_apply
 -/
@@ -1895,7 +1913,7 @@ refine ⟨fun h => ?_, fun h => h.conjTranspose_mul_mul_same mulVec_injective_of
   lift U to (Matrix n n R)ˣ using hU
   have := h.conjTranspose_mul_mul_same (mulVec_injective_of_isUnit (Units.isUnit U⁻¹))
   rwa [← star_eq_conjTranspose, ← mul_assoc, ← mul_assoc, ← star_mul, mul_assoc,
-  
+    Units.mul_inv, mul_one, star_one, one_mul] at this
 
 中文:
 定理 _root_.矩阵.是单位.posDef_star_left_conjugate_iff
@@ -1905,7 +1923,7 @@ refine ⟨fun h => ?_, fun h => h.conjTranspose_mul_mul_same mulVec_injective_of
   lift U to (Matrix n n R)ˣ using hU
   have := h.conjTranspose_mul_mul_same (mulVec_injective_of_isUnit (Units.isUnit U⁻¹))
   rwa [← star_eq_conjTranspose, ← mul_assoc, ← mul_assoc, ← star_mul, mul_assoc,
-  
+    Units.mul_inv, mul_one, star_one, one_mul] at this
 
 Depends on / 依赖: Matrix, Units.isUnit, Units.mul_inv, conjTranspose_mul_mul_same, h.conjTranspose_mul_mul_same, isUnit, mulVec_injective_of_isUnit, mul_assoc, mul_inv, mul_one, one_mul, star_eq_conjTranspose, star_mul, star_one
 -/
@@ -1957,7 +1975,17 @@ theorem fromBlocks₁₁
   constructor
   · refine fun h => .of_dotProduct_mulVec_nonneg h.1 fun x => ?_
     have := h.2 (-((A⁻¹ * B) *ᵥ x) oplusᵥ x)
-    rwa [dotProduct_mulVec, schur_complement_eq₁₁ B D _ _ hA.1, 
+    rwa [dotProduct_mulVec, schur_complement_eq₁₁ B D _ _ hA.1, neg_add_cancel, dotProduct_zero,
+      zero_add, ← dotProduct_mulVec] at this
+  · refine fun h => ⟨h.1, fun x => ?_⟩
+    rw [dotProduct_mulVec]; rw [← Sum.elim_comp_inl_inr x]; rw [schur_complement_eq₁₁ B D _ _ hA.1]
+    apply le_add_of_nonneg_of_le
+    · rw [← dotProduct_mulVec]
+      apply (posSemidef_iff_dotProduct_mulVec.mp hA.posSemidef).2
+    · rw [← dotProduct_mulVec (star (x ∘ Sum.inr))]
+      apply (posSemidef_iff_dotProduct_mulVec.mp h).2
+
+omit [Fintype m] in variable [Finite m] in
 
 中文:
 定理 fromBlocks₁₁
@@ -1968,7 +1996,17 @@ theorem fromBlocks₁₁
   constructor
   · refine fun h => .of_dotProduct_mulVec_nonneg h.1 fun x => ?_
     have := h.2 (-((A⁻¹ * B) *ᵥ x) oplusᵥ x)
-    rwa [dotProduct_mulVec, schur_complement_eq₁₁ B D _ _ hA.1, 
+    rwa [dotProduct_mulVec, schur_complement_eq₁₁ B D _ _ hA.1, neg_add_cancel, dotProduct_zero,
+      zero_add, ← dotProduct_mulVec] at this
+  · refine fun h => ⟨h.1, fun x => ?_⟩
+    rw [dotProduct_mulVec]; rw [← Sum.elim_comp_inl_inr x]; rw [schur_complement_eq₁₁ B D _ _ hA.1]
+    apply le_add_of_nonneg_of_le
+    · rw [← dotProduct_mulVec]
+      apply (posSemidef_iff_dotProduct_mulVec.mp hA.posSemidef).2
+    · rw [← dotProduct_mulVec (star (x ∘ Sum.inr))]
+      apply (posSemidef_iff_dotProduct_mulVec.mp h).2
+
+omit [Fintype m] in variable [Finite m] in
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, IsHermitian, IsHermitian.fromBlocks, Sum.elim_comp_inl_inr, dotProduct_mulVec, dotProduct_zero, elim_comp_inl_inr, le_ad, neg_add_cancel, ofFinite, of_dotProduct_mulVec_nonneg, posSemidef_iff_dotProduct_mulVec, zero_add
 -/

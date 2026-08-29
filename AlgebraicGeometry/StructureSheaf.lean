@@ -174,7 +174,14 @@ definition sectionsSubmodule
     obtain ⟨Vb, mb, ib, rb, sb, wb⟩ := hb x
     refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, sb • ra + sa • rb, sa * sb, fun x => ?_⟩
     obtain ⟨hsax, hsa⟩ := wa ⟨x.1, x.2.1⟩
-  
+    obtain ⟨hsbx, hsb⟩ := wb ⟨x.1, x.2.2⟩
+    exact ⟨x.1.asIdeal.primeCompl.mul_mem hsax hsbx,
+      congr($hsa + $hsb).trans (LocalizedModule.mk_add_mk ..)⟩
+  zero_mem' x := ⟨U, x.2, 𝟙 _, 0, 1, fun y => by simp [Ideal.IsPrime.one_notMem]⟩
+  smul_mem' r {a} ha x := by
+    obtain ⟨V, m, i, ra, sa, wa⟩ := ha x
+    exact ⟨V, m, i, r • ra, sa, fun x => ⟨(wa x).1,
+      congr(r • $((wa x).2)).trans (LocalizedModule.smul'_mk ..)⟩⟩
 
 中文:
 定义 sectionsSubmodule
@@ -185,7 +192,14 @@ definition sectionsSubmodule
     obtain ⟨Vb, mb, ib, rb, sb, wb⟩ := hb x
     refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, sb • ra + sa • rb, sa * sb, fun x => ?_⟩
     obtain ⟨hsax, hsa⟩ := wa ⟨x.1, x.2.1⟩
-  
+    obtain ⟨hsbx, hsb⟩ := wb ⟨x.1, x.2.2⟩
+    exact ⟨x.1.asIdeal.primeCompl.mul_mem hsax hsbx,
+      congr($hsa + $hsb).trans (LocalizedModule.mk_add_mk ..)⟩
+  zero_mem' x := ⟨U, x.2, 𝟙 _, 0, 1, fun y => by simp [Ideal.IsPrime.one_notMem]⟩
+  smul_mem' r {a} ha x := by
+    obtain ⟨V, m, i, ra, sa, wa⟩ := ha x
+    exact ⟨V, m, i, r • ra, sa, fun x => ⟨(wa x).1,
+      congr(r • $((wa x).2)).trans (LocalizedModule.smul'_mk ..)⟩⟩
 
 Depends on / 依赖: isLocallyFraction
 -/
@@ -220,7 +234,11 @@ definition sectionsSubalgebra
     obtain ⟨Vb, mb, ib, rb, sb, wb⟩ := hb x
     refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, ra * rb, sa * sb, fun x => ?_⟩
     obtain ⟨hsax, hsa⟩ := wa ⟨x.1, x.2.1⟩
-    obtain ⟨hsbx, hsb⟩ := wb 
+    obtain ⟨hsbx, hsb⟩ := wb ⟨x.1, x.2.2⟩
+    exact ⟨x.1.asIdeal.primeCompl.mul_mem hsax hsbx,
+      congr($hsa * $hsb).trans (LocalizedModule.mk_mul_mk ..)⟩
+  algebraMap_mem' r x :=
+    ⟨U, x.2, 𝟙 _, algebraMap R A r, 1, fun y => ⟨by simp [Ideal.IsPrime.one_notMem], rfl⟩⟩
 
 中文:
 定义 sectionsSubalgebra
@@ -231,7 +249,11 @@ definition sectionsSubalgebra
     obtain ⟨Vb, mb, ib, rb, sb, wb⟩ := hb x
     refine ⟨Va ⊓ Vb, ⟨ma, mb⟩, Opens.infLELeft _ _ ≫ ia, ra * rb, sa * sb, fun x => ?_⟩
     obtain ⟨hsax, hsa⟩ := wa ⟨x.1, x.2.1⟩
-    obtain ⟨hsbx, hsb⟩ := wb 
+    obtain ⟨hsbx, hsb⟩ := wb ⟨x.1, x.2.2⟩
+    exact ⟨x.1.asIdeal.primeCompl.mul_mem hsax hsbx,
+      congr($hsa * $hsb).trans (LocalizedModule.mk_mul_mk ..)⟩
+  algebraMap_mem' r x :=
+    ⟨U, x.2, 𝟙 _, algebraMap R A r, 1, fun y => ⟨by simp [Ideal.IsPrime.one_notMem], rfl⟩⟩
 
 Depends on / 依赖: sectionsSubmodule
 -/
@@ -263,7 +285,8 @@ definition sectionsSubalgebraSubmodule
     obtain ⟨W, hxW, hWU, ax, as, ha⟩ := ha x
     refine ⟨V ⊓ W, ⟨hxV, hxW⟩, homOfLE (inf_le_left.trans hVU.le), rx • ax, as * rs, fun y => ?_⟩
     obtain ⟨hrsy, hry⟩ := hr ⟨y.1, y.2.1⟩
-    obtain ⟨hasy, 
+    obtain ⟨hasy, hay⟩ := ha ⟨y.1, y.2.2⟩
+    exact ⟨y.1.asIdeal.primeCompl.mul_mem hasy hrsy, congr($hry • $hay)⟩
 
 中文:
 定义 sectionsSubalgebraSubmodule
@@ -274,7 +297,8 @@ definition sectionsSubalgebraSubmodule
     obtain ⟨W, hxW, hWU, ax, as, ha⟩ := ha x
     refine ⟨V ⊓ W, ⟨hxV, hxW⟩, homOfLE (inf_le_left.trans hVU.le), rx • ax, as * rs, fun y => ?_⟩
     obtain ⟨hrsy, hry⟩ := hr ⟨y.1, y.2.1⟩
-    obtain ⟨hasy, 
+    obtain ⟨hasy, hay⟩ := ha ⟨y.1, y.2.2⟩
+    exact ⟨y.1.asIdeal.primeCompl.mul_mem hasy hrsy, congr($hry • $hay)⟩
 
 Depends on / 依赖: sectionsSubmodule
 -/
@@ -487,7 +511,7 @@ definition moduleStructurePresheaf
     Module ↑((structurePresheafInCommRingCat R ⋙ forget₂ CommRingCat RingCat).obj X)
       ↑((structurePresheafInModuleCat R M ⋙ forget₂ (ModuleCat R) Ab).obj X) := by
     dsimp; infer_instance
-  .ofPresheaf (structurePresheafInModuleCat R M ⋙ forget₂ _ 
+  .ofPresheaf (structurePresheafInModuleCat R M ⋙ forget₂ _ _) fun X Y f r m => rfl
 
 中文:
 定义 moduleStructurePresheaf
@@ -496,7 +520,7 @@ definition moduleStructurePresheaf
     Module ↑((structurePresheafInCommRingCat R ⋙ forget₂ CommRingCat RingCat).obj X)
       ↑((structurePresheafInModuleCat R M ⋙ forget₂ (ModuleCat R) Ab).obj X) := by
     dsimp; infer_instance
-  .ofPresheaf (structurePresheafInModuleCat R M ⋙ forget₂ _ 
+  .ofPresheaf (structurePresheafInModuleCat R M ⋙ forget₂ _ _) fun X Y f r m => rfl
 
 Depends on / 依赖: CommRingCat, Module, ModuleCat, PrimeSpectrum, PrimeSpectrum.Top, RingCat, infer_instance, ofPresheaf, structurePresheafInCommRingCat, structurePresheafInModuleCat
 -/
@@ -602,7 +626,14 @@ theorem exists_const
     PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxV V.2
 refine ⟨g' * g, ?_, ?_, g' • f, Subtype.ext funext fun ⟨y, hy⟩ => ?_⟩ <;>
     simp only [PrimeSpectrum.basicOpen_mul]
-  · exact
+  · exact ⟨hxg', (hfg ⟨x, hxV⟩).1⟩
+  · exact inf_le_left.trans (hg'U.trans iVU.le)
+  · rw [PrimeSpectrum.basicOpen_mul] at hy
+    obtain ⟨hgy, H⟩ := hfg ⟨y, hg'U hy.1⟩
+    refine (LocalizedModule.mk_eq.mpr ⟨1, ?_⟩).trans H.symm
+    simp [Submonoid.smul_def, ← smul_assoc]; ring_nf
+
+@[simp]
 
 中文:
 定理 存在_const
@@ -613,7 +644,14 @@ refine ⟨g' * g, ?_, ?_, g' • f, Subtype.ext funext fun ⟨y, hy⟩ => ?_⟩ 
     PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open hxV V.2
 refine ⟨g' * g, ?_, ?_, g' • f, Subtype.ext funext fun ⟨y, hy⟩ => ?_⟩ <;>
     simp only [PrimeSpectrum.basicOpen_mul]
-  · exact
+  · exact ⟨hxg', (hfg ⟨x, hxV⟩).1⟩
+  · exact inf_le_left.trans (hg'U.trans iVU.le)
+  · rw [PrimeSpectrum.basicOpen_mul] at hy
+    obtain ⟨hgy, H⟩ := hfg ⟨y, hg'U hy.1⟩
+    refine (LocalizedModule.mk_eq.mpr ⟨1, ?_⟩).trans H.symm
+    simp [Submonoid.smul_def, ← smul_assoc]; ring_nf
+
+@[simp]
 
 Depends on / 依赖: H.symm, LocalizedModule, LocalizedModule.mk_eq.mpr, PrimeSpectrum, PrimeSpectrum.basicOpen_mul, PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open, Subtype, Subtype.ext, U.trans, basicOpen_mul, exists_subset_of_mem_open, iVU.le, inf_le_left, inf_le_left.trans, isBasis_basic_opens, mk_eq
 -/
@@ -1087,7 +1125,9 @@ theorem toBasicOpenₗ_mk
   apply ((Module.End.isUnit_iff _).mp ((isUnit_basicOpen_end ..).pow n)).1 ?_
   rw [← map_pow]
   dsimp [toBasicOpenₗ]
-  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.mk_smul (S := .powers s) _ ⟨n]; rw [rfl⟩]; rw [LocalizedModule.mk_cancel]; rw [← Locali
+  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.mk_smul (S := .powers s) _ ⟨n]; rw [rfl⟩]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [smul_const]
+  dsimp [toOpenₗ]
+  exact const_eq_const_of_smul_eq_smul (H := by simp) ..
 
 中文:
 定理 toBasicOpenₗ_mk
@@ -1097,7 +1137,9 @@ theorem toBasicOpenₗ_mk
   apply ((Module.End.isUnit_iff _).mp ((isUnit_basicOpen_end ..).pow n)).1 ?_
   rw [← map_pow]
   dsimp [toBasicOpenₗ]
-  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.mk_smul (S := .powers s) _ ⟨n]; rw [rfl⟩]; rw [LocalizedModule.mk_cancel]; rw [← Locali
+  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.mk_smul (S := .powers s) _ ⟨n]; rw [rfl⟩]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [smul_const]
+  dsimp [toOpenₗ]
+  exact const_eq_const_of_smul_eq_smul (H := by simp) ..
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.lift_apply, LocalizedModule, LocalizedModule.mkLinearMap_apply, LocalizedModule.mk_cancel, LocalizedModule.smul, Module, Module.End.isUnit_iff, PrimeSpectrum, PrimeSpectrum.le_basicOpen_pow, Submonoid, Submonoid.mem_powers_iff, Submonoid.mk_smul, const_eq_const_of_smul_eq, isUnit_basicOpen_end, isUnit_iff, le_basicOpen_pow, lift_apply, map_pow, map_smul
 -/
@@ -1126,7 +1168,14 @@ theorem toBasicOpenₗ_injective
   suffices f in ((⊥ : Submodule R M).colon {d • a - b • c}).radical by
     rw [LocalizedModule.mk_eq]
     obtain ⟨n, hn⟩ := this
-    exact ⟨⟨f ^ n, n,
+    exact ⟨⟨f ^ n, n, rfl⟩, by simpa [sub_eq_zero, smul_sub] using! Submodule.mem_colon.mp hn _ rfl⟩
+  simp only [toBasicOpenₗ_mk] at h_eq
+  rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical]; rw [PrimeSpectrum.mem_vanishingIdeal]
+  intro p hfp
+  contrapose hfp
+  obtain ⟨u, hu⟩ := LocalizedModule.mk_eq.mp congr(($h_eq).1 ⟨p, hfp⟩)
+  rw [PrimeSpectrum.mem_zeroLocus]; rw [Set.not_subset]
+  exact ⟨u.1, by simpa [sub_eq_zero, smul_sub], u.2⟩
 
 中文:
 定理 toBasicOpenₗ_injective
@@ -1139,7 +1188,14 @@ theorem toBasicOpenₗ_injective
   suffices f in ((⊥ : Submodule R M).colon {d • a - b • c}).radical by
     rw [LocalizedModule.mk_eq]
     obtain ⟨n, hn⟩ := this
-    exact ⟨⟨f ^ n, n,
+    exact ⟨⟨f ^ n, n, rfl⟩, by simpa [sub_eq_zero, smul_sub] using! Submodule.mem_colon.mp hn _ rfl⟩
+  simp only [toBasicOpenₗ_mk] at h_eq
+  rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical]; rw [PrimeSpectrum.mem_vanishingIdeal]
+  intro p hfp
+  contrapose hfp
+  obtain ⟨u, hu⟩ := LocalizedModule.mk_eq.mp congr(($h_eq).1 ⟨p, hfp⟩)
+  rw [PrimeSpectrum.mem_zeroLocus]; rw [Set.not_subset]
+  exact ⟨u.1, by simpa [sub_eq_zero, smul_sub], u.2⟩
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.induction_on, LocalizedModule.mk_eq, PrimeSpectrum, PrimeSpectrum.mem_vanishingIdeal, PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical, Submodule, Submodule.mem_colon.mp, h_eq, induction_on, mem_colon, mem_vanishingIdeal, mk_eq, radical, smul_sub, sub_eq_zero, vanishingIdeal_zeroLocus_eq_radical
 -/
@@ -1170,7 +1226,36 @@ theorem exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const
   have (i j : _) : LocalizedModule.mk (g i • f j) ⟨g i * g j, Submonoid.mem_powers _⟩ =
       LocalizedModule.mk (g j • f i) ⟨g i * g j, Submonoid.mem_powers _⟩ := by
     refine toBasicOpenₗ_injective (g i * g j) ?_
-    simp only 
+    simp only [toBasicOpenₗ_mk]
+    have := H i
+    trans (structureSheafInType R M).obj.map (homOfLE ?_).op s
+    · refine .trans (Subtype.ext <| funext fun a => ?_) congr((structureSheafInType R M).obj.map
+(homOfLE ((PrimeSpectrum.basicOpen_mul (g i) (g j)).trans_le inf_le_right)).op (H j))
+      exact LocalizedModule.mk_eq.mpr ⟨1, by simp [Submonoid.smul_def, ← smul_assoc]; ring_nf⟩
+    · refine congr((structureSheafInType R M).obj.map (homOfLE ((PrimeSpectrum.basicOpen_mul (g i)
+        (g j)).trans_le inf_le_left)).op $(H i)).symm.trans (Subtype.ext <| funext fun a => ?_)
+      exact LocalizedModule.mk_eq.mpr ⟨1, by simp [Submonoid.smul_def, ← smul_assoc]⟩
+    · exact ((PrimeSpectrum.basicOpen_mul (g i) (g j)).trans_le inf_le_right).trans (igU _)
+  simp only [LocalizedModule.mk_eq, Submonoid.smul_def, Subtype.exists, Submonoid.mem_powers_iff,
+    exists_prop, exists_exists_eq_and, ← mul_smul, ← pow_succ, ← mul_assoc _ (_ * _)] at this
+  choose n hn using this
+  obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun i => (basicOpen (g i) : Set (PrimeSpectrum R)))
+    (fun _ => (basicOpen _).2) (fun x hx => Set.mem_iUnion_of_mem ⟨x, hx⟩ (hxg _))
+  let N := (t ×ˢ t).sup fun x => n x.1 x.2 + 1
+  refine ⟨t, inferInstance, fun i => g i ^ N • f i, fun i => (g i) ^ (N + 1),
+    fun x => by simpa using igU x.1, fun x hx => by simpa using ht hx, fun i j => ?_, fun i => ?_⟩
+  · dsimp
+    convert_to (g i * g ↑j) ^ N • g j • f i = (g i * g ↑j) ^ N • g i • f j
+    · module
+    · module
+    have : n i j + 1 <= N := (t ×ˢ t).le_sup (f := fun x => n x.1 x.2 + 1) (b := ⟨_, _⟩) (by simp)
+    rw [← Nat.sub_add_cancel this]; rw [pow_add]; rw [mul_smul]; rw [mul_smul]
+    congr 1
+    convert! (hn i j).symm using 1 <;> module
+  · convert! congr((structureSheafInType R M).presheaf.map (homOfLE ?_).op $((H i).symm)) using 1
+· refine Subtype.ext funext fun x => LocalizedModule.mk_eq.mpr ⟨1, ?_⟩
+      simp [Submonoid.smul_def, pow_succ', mul_smul]
+    · simp
 
 中文:
 定理 存在_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const
@@ -1179,7 +1264,36 @@ theorem exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const
   have (i j : _) : LocalizedModule.mk (g i • f j) ⟨g i * g j, Submonoid.mem_powers _⟩ =
       LocalizedModule.mk (g j • f i) ⟨g i * g j, Submonoid.mem_powers _⟩ := by
     refine toBasicOpenₗ_injective (g i * g j) ?_
-    simp only 
+    simp only [toBasicOpenₗ_mk]
+    have := H i
+    trans (structureSheafInType R M).obj.map (homOfLE ?_).op s
+    · refine .trans (Subtype.ext <| funext fun a => ?_) congr((structureSheafInType R M).obj.map
+(homOfLE ((PrimeSpectrum.basicOpen_mul (g i) (g j)).trans_le inf_le_right)).op (H j))
+      exact LocalizedModule.mk_eq.mpr ⟨1, by simp [Submonoid.smul_def, ← smul_assoc]; ring_nf⟩
+    · refine congr((structureSheafInType R M).obj.map (homOfLE ((PrimeSpectrum.basicOpen_mul (g i)
+        (g j)).trans_le inf_le_left)).op $(H i)).symm.trans (Subtype.ext <| funext fun a => ?_)
+      exact LocalizedModule.mk_eq.mpr ⟨1, by simp [Submonoid.smul_def, ← smul_assoc]⟩
+    · exact ((PrimeSpectrum.basicOpen_mul (g i) (g j)).trans_le inf_le_right).trans (igU _)
+  simp only [LocalizedModule.mk_eq, Submonoid.smul_def, Subtype.exists, Submonoid.mem_powers_iff,
+    exists_prop, exists_exists_eq_and, ← mul_smul, ← pow_succ, ← mul_assoc _ (_ * _)] at this
+  choose n hn using this
+  obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun i => (basicOpen (g i) : Set (PrimeSpectrum R)))
+    (fun _ => (basicOpen _).2) (fun x hx => Set.mem_iUnion_of_mem ⟨x, hx⟩ (hxg _))
+  let N := (t ×ˢ t).sup fun x => n x.1 x.2 + 1
+  refine ⟨t, inferInstance, fun i => g i ^ N • f i, fun i => (g i) ^ (N + 1),
+    fun x => by simpa using igU x.1, fun x hx => by simpa using ht hx, fun i j => ?_, fun i => ?_⟩
+  · dsimp
+    convert_to (g i * g ↑j) ^ N • g j • f i = (g i * g ↑j) ^ N • g i • f j
+    · module
+    · module
+    have : n i j + 1 <= N := (t ×ˢ t).le_sup (f := fun x => n x.1 x.2 + 1) (b := ⟨_, _⟩) (by simp)
+    rw [← Nat.sub_add_cancel this]; rw [pow_add]; rw [mul_smul]; rw [mul_smul]
+    congr 1
+    convert! (hn i j).symm using 1 <;> module
+  · convert! congr((structureSheafInType R M).presheaf.map (homOfLE ?_).op $((H i).symm)) using 1
+· refine Subtype.ext funext fun x => LocalizedModule.mk_eq.mpr ⟨1, ?_⟩
+      simp [Submonoid.smul_def, pow_succ', mul_smul]
+    · simp
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.mk, PrimeSpectrum, PrimeSpectrum.basicOpen_m, Submonoid, Submonoid.mem_powers, Subtype, Subtype.ext, basicOpen_m, exists_const, homOfLE, mem_powers, obj.map, structureSheafInType
 -/
@@ -1238,7 +1352,22 @@ theorem toBasicOpenₗ_surjective
   obtain ⟨ι, _, a, b, ibU, iU, hab, H⟩ := exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const _
     (PrimeSpectrum.isCompact_basicOpen _) s
   obtain ⟨n, hn⟩ : f in (Ideal.span (Set.range b)).radical := by
-    have : PrimeSpectrum.zeroLocus (Set.range b) subseteq PrimeSpectrum.zeroLoc
+    have : PrimeSpectrum.zeroLocus (Set.range b) subseteq PrimeSpectrum.zeroLocus {f} := by
+      simpa [← SetLike.coe_subset_coe, ← Set.compl_iInter,
+        ← PrimeSpectrum.zeroLocus_iUnion, PrimeSpectrum.Top] using iU
+    rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical]; rw [PrimeSpectrum.zeroLocus_span]; rw [PrimeSpectrum.mem_vanishingIdeal]
+    exact fun x hx => by simpa using this hx
+  replace hn := Ideal.mul_mem_right f _ hn
+  rw [← pow_succ]; rw [Ideal.span]; rw [Finsupp.mem_span_range_iff_exists_finsupp] at hn
+  obtain ⟨c, hc⟩ := hn
+  rw [Finsupp.sum_fintype _ _ (by simp)] at hc
+  refine ⟨LocalizedModule.mk (∑ i, c i • a i) ⟨f ^ (n + 1), _, rfl⟩, ?_⟩
+  refine (structureSheafInType R M).eq_of_locally_eq' (fun i => basicOpen (b i)) _
+    (fun i => (ibU _).hom) iU _ _ fun i => (Subtype.ext (funext fun x => ?_)).trans (H _).symm
+  rw [toBasicOpenₗ_mk]
+  refine LocalizedModule.mk_eq.mpr ⟨1, ?_⟩
+  simp_rw [one_smul, Finset.smul_sum, Submonoid.smul_def, smul_comm (b i), hab _ i, ← smul_assoc,
+    ← Finset.sum_smul, hc]
 
 中文:
 定理 toBasicOpenₗ_surjective
@@ -1249,7 +1378,22 @@ theorem toBasicOpenₗ_surjective
   obtain ⟨ι, _, a, b, ibU, iU, hab, H⟩ := exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const _
     (PrimeSpectrum.isCompact_basicOpen _) s
   obtain ⟨n, hn⟩ : f in (Ideal.span (Set.range b)).radical := by
-    have : PrimeSpectrum.zeroLocus (Set.range b) subseteq PrimeSpectrum.zeroLoc
+    have : PrimeSpectrum.zeroLocus (Set.range b) subseteq PrimeSpectrum.zeroLocus {f} := by
+      simpa [← SetLike.coe_subset_coe, ← Set.compl_iInter,
+        ← PrimeSpectrum.zeroLocus_iUnion, PrimeSpectrum.Top] using iU
+    rw [← PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical]; rw [PrimeSpectrum.zeroLocus_span]; rw [PrimeSpectrum.mem_vanishingIdeal]
+    exact fun x hx => by simpa using this hx
+  replace hn := Ideal.mul_mem_right f _ hn
+  rw [← pow_succ]; rw [Ideal.span]; rw [Finsupp.mem_span_range_iff_exists_finsupp] at hn
+  obtain ⟨c, hc⟩ := hn
+  rw [Finsupp.sum_fintype _ _ (by simp)] at hc
+  refine ⟨LocalizedModule.mk (∑ i, c i • a i) ⟨f ^ (n + 1), _, rfl⟩, ?_⟩
+  refine (structureSheafInType R M).eq_of_locally_eq' (fun i => basicOpen (b i)) _
+    (fun i => (ibU _).hom) iU _ _ fun i => (Subtype.ext (funext fun x => ?_)).trans (H _).symm
+  rw [toBasicOpenₗ_mk]
+  refine LocalizedModule.mk_eq.mpr ⟨1, ?_⟩
+  simp_rw [one_smul, Finset.smul_sum, Submonoid.smul_def, smul_comm (b i), hab _ i, ← smul_assoc,
+    ← Finset.sum_smul, hc]
 
 Depends on / 依赖: Ideal.span, PrimeSpectrum, PrimeSpectrum.Top, PrimeSpectrum.isCompact_basicOpen, PrimeSpectrum.vanishingIdeal_zeroLocus_eq_radical, PrimeSpectrum.zeroLocus, PrimeSpectrum.zeroLocus_, PrimeSpectrum.zeroLocus_iUnion, Set.compl_iInter, Set.range, SetLike, SetLike.coe_subset_coe, coe_subset_coe, compl_iInter, exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const, isCompact_basicOpen, radical, subseteq, vanishingIdeal_zeroLocus_eq_radical, zeroLocus
 -/
@@ -1366,7 +1510,10 @@ definition germₗ
     change _ = toStalk R x _ • TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf _ _ _ _
     rw [← algebraMap_germ_apply U x hxU]
     refine .trans ?_ (PresheafOfModules.germ_smul ..)
-    congr 
+    congr 1
+    exact (IsScalarTower.algebraMap_smul Γ(R, U) r m).symm
+
+public
 
 中文:
 定义 germₗ
@@ -1376,7 +1523,10 @@ definition germₗ
     change _ = toStalk R x _ • TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf _ _ _ _
     rw [← algebraMap_germ_apply U x hxU]
     refine .trans ?_ (PresheafOfModules.germ_smul ..)
-    congr 
+    congr 1
+    exact (IsScalarTower.algebraMap_smul Γ(R, U) r m).symm
+
+public
 
 Depends on / 依赖: Presheaf, TopCat, TopCat.Presheaf.germ, moduleStructurePresheaf, presheaf
 -/
@@ -1408,7 +1558,24 @@ definition modulePresheafStalkIso
     (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
       structurePresheafInModuleCat R M))⟩:).addCommGroupIsoToAddEquiv
   map_smul' r m := by
-    let α : TopCat.Presheaf.stalk (moduleStructurePreshea
+    let α : TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x ≅
+      (forget₂ _ _).obj ((structurePresheafInModuleCat R M).stalk x) :=
+      Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves (forget₂ (ModuleCat R) Ab)
+      (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
+        structurePresheafInModuleCat R M))⟩
+    obtain ⟨U, hxU, s, rfl⟩ := TopCat.Presheaf.exists_germ_eq _ m
+    have : TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU ≫ α.hom =
+        (forget₂ _ _).map ((structurePresheafInModuleCat R M).germ U x hxU) :=
+      Limits.colimit.isoColimitCocone_ι_hom (C := Ab) ..
+    have (m : _) : α.hom (TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU m) =
+        (structurePresheafInModuleCat R M).germ U x hxU m := congr($this m)
+    change α.hom (r • germₗ M U x hxU _) =
+      r • (show (structurePresheafInModuleCat R M).stalk x from _)
+    rw [← map_smul]
+    refine (this _).trans ?_
+    dsimp [toStalk]
+    erw [this]
+    exact ((structurePresheafInModuleCat R M).germ U x hxU).hom.map_smul _ _
 
 中文:
 定义 modulePresheafStalkIso
@@ -1417,7 +1584,24 @@ definition modulePresheafStalkIso
     (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
       structurePresheafInModuleCat R M))⟩:).addCommGroupIsoToAddEquiv
   map_smul' r m := by
-    let α : TopCat.Presheaf.stalk (moduleStructurePreshea
+    let α : TopCat.Presheaf.stalk (moduleStructurePresheaf R M).presheaf x ≅
+      (forget₂ _ _).obj ((structurePresheafInModuleCat R M).stalk x) :=
+      Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves (forget₂ (ModuleCat R) Ab)
+      (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
+        structurePresheafInModuleCat R M))⟩
+    obtain ⟨U, hxU, s, rfl⟩ := TopCat.Presheaf.exists_germ_eq _ m
+    have : TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU ≫ α.hom =
+        (forget₂ _ _).map ((structurePresheafInModuleCat R M).germ U x hxU) :=
+      Limits.colimit.isoColimitCocone_ι_hom (C := Ab) ..
+    have (m : _) : α.hom (TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU m) =
+        (structurePresheafInModuleCat R M).germ U x hxU m := congr($this m)
+    change α.hom (r • germₗ M U x hxU _) =
+      r • (show (structurePresheafInModuleCat R M).stalk x from _)
+    rw [← map_smul]
+    refine (this _).trans ?_
+    dsimp [toStalk]
+    erw [this]
+    exact ((structurePresheafInModuleCat R M).germ U x hxU).hom.map_smul _ _
 
 Depends on / 依赖: Limits, Limits.colimit.isoColimitCocone, Limits.isColimitOfPreserves, ModuleCat, colimit, isColimitOfPreserves, isoColimitCocone
 -/
@@ -1635,7 +1819,10 @@ theorem localizationtoStalkₗ_mk
   proof: by
   apply ((Module.End.isUnit_iff _).mp (isUnit_toStalkₗ' _ s.1 s.2)).1 ?_
   dsimp [localizationtoStalkₗ]
-  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [← m
+  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [← map_smul]; rw [← toOpenₗ_germ (basicOpen ↑s) _ s.2]; rw [smul_const]
+  dsimp [toOpenₗ]
+  congr 1
+  exact const_eq_const_of_smul_eq_smul (H := by simp) ..
 
 中文:
 定理 localizationtoStalkₗ_mk
@@ -1643,7 +1830,10 @@ theorem localizationtoStalkₗ_mk
   证明: by
   apply ((Module.End.isUnit_iff _).mp (isUnit_toStalkₗ' _ s.1 s.2)).1 ?_
   dsimp [localizationtoStalkₗ]
-  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [← m
+  rw [← map_smul]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [← map_smul]; rw [← toOpenₗ_germ (basicOpen ↑s) _ s.2]; rw [smul_const]
+  dsimp [toOpenₗ]
+  congr 1
+  exact const_eq_const_of_smul_eq_smul (H := by simp) ..
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.lift_apply, LocalizedModule, LocalizedModule.mkLinearMap_apply, LocalizedModule.mk_cancel, LocalizedModule.smul, Module, Module.End.isUnit_iff, Submonoid, Submonoid.smul_def, basicOpen, const_eq_const_of_smul_eq_smul, isUnit_iff, lift_apply, map_smul, mkLinearMap_apply, mk_cancel, smul_const, smul_def
 -/
@@ -1784,7 +1974,17 @@ definition stalkIsoₗ
     obtain ⟨g, hxg, igU, f, hs⟩ :=
       exists_const _ s x hxU
     rw [germ_stalkToLocalizationₗ_assoc]; rw [Category.comp_id]; rw [← germ_res_apply _ igU.hom _ hxg]
- 
+    refine congr(localizationtoStalkₗ R M x (openToLocalizationₗ R M _ x hxg $hs)).symm.trans ?_
+    refine (localizationtoStalkₗ_mk ..).trans
+      congr((structurePresheafInModuleCat R M).germ _ x hxg $hs)
+  inv_hom_id := by
+    ext1
+    refine IsLocalizedModule.ext x.asIdeal.primeCompl (LocalizedModule.mkLinearMap ..)
+      (IsLocalizedModule.map_units (LocalizedModule.mkLinearMap ..)) ?_
+    ext
+    dsimp [localizationtoStalkₗ]
+    rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [elementwise_of% toStalkₗ'_stalkToFiberRingHom (M := M) x]
+    simp
 
 中文:
 定义 stalkIsoₗ
@@ -1798,7 +1998,17 @@ definition stalkIsoₗ
     obtain ⟨g, hxg, igU, f, hs⟩ :=
       exists_const _ s x hxU
     rw [germ_stalkToLocalizationₗ_assoc]; rw [Category.comp_id]; rw [← germ_res_apply _ igU.hom _ hxg]
- 
+    refine congr(localizationtoStalkₗ R M x (openToLocalizationₗ R M _ x hxg $hs)).symm.trans ?_
+    refine (localizationtoStalkₗ_mk ..).trans
+      congr((structurePresheafInModuleCat R M).germ _ x hxg $hs)
+  inv_hom_id := by
+    ext1
+    refine IsLocalizedModule.ext x.asIdeal.primeCompl (LocalizedModule.mkLinearMap ..)
+      (IsLocalizedModule.map_units (LocalizedModule.mkLinearMap ..)) ?_
+    ext
+    dsimp [localizationtoStalkₗ]
+    rw [← LocalizedModule.mkLinearMap_apply]; rw [IsLocalizedModule.lift_apply]; rw [elementwise_of% toStalkₗ'_stalkToFiberRingHom (M := M) x]
+    simp
 -/
 def stalkIsoₗ (x : PrimeSpectrum.Top R) :
     (structurePresheafInModuleCat R M).stalk x ≅
@@ -1902,7 +2112,9 @@ definition toStalkₗ
   map_smul' r m := by
     change _ = toStalk R x r • TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf _ _ _ _
     rw [map_smul]
-    refine .trans ?_ ((moduleStructurePresheaf 
+    refine .trans ?_ ((moduleStructurePresheaf R M).germ_smul ..)
+    congr 1
+    exact (IsScalarTower.algebraMap_smul Γ(R, _) (M := Γ(M, _)) _ _).symm
 
 中文:
 定义 toStalkₗ
@@ -1912,7 +2124,9 @@ definition toStalkₗ
   map_smul' r m := by
     change _ = toStalk R x r • TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf _ _ _ _
     rw [map_smul]
-    refine .trans ?_ ((moduleStructurePresheaf 
+    refine .trans ?_ ((moduleStructurePresheaf R M).germ_smul ..)
+    congr 1
+    exact (IsScalarTower.algebraMap_smul Γ(R, _) (M := Γ(M, _)) _ _).symm
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_smul, Presheaf, TopCat, TopCat.Presheaf.germ, algebraMap_smul, germ_smul, map_add, map_smul, moduleStructurePresheaf, presheaf, toStalk
 -/
@@ -1962,7 +2176,27 @@ definition commRingCatStalkEquivModuleStalk
     (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
       structurePresheafInCommRingCat R))⟩).addCommGroupIsoToAddEquiv
   map_smul' r m := by
-    let α : TopCa
+    let α : TopCat.Presheaf.stalk (moduleStructurePresheaf R R).presheaf x ≅
+      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj
+        ((structurePresheafInCommRingCat R).stalk x) :=
+      (Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves
+      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat)
+      (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
+        structurePresheafInCommRingCat R))⟩)
+    obtain ⟨U, hxU, s, rfl⟩ := TopCat.Presheaf.exists_germ_eq _ m
+    have : (TopCat.Presheaf.germ (moduleStructurePresheaf R R).presheaf U x hxU) ≫ α.hom =
+        (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
+          ((structurePresheafInCommRingCat R).germ U x hxU) :=
+      Limits.colimit.isoColimitCocone_ι_hom ..
+    change α.hom (r • germₗ R U x hxU _) = toStalk R _ _ * _
+    rw [← map_smul]; rw [Algebra.smul_def]
+    refine congr($this _).trans ?_
+    refine (((structurePresheafInCommRingCat R).germ U x hxU).hom.map_mul _ _).trans ?_
+    congr 1
+    · dsimp [toStalk]
+      erw [← (structurePresheafInCommRingCat R).germ_res_apply (homOfLE (le_top : U <= ⊤)) _ hxU]
+      rfl
+    · exact congr($this _).symm
 
 中文:
 定义 commRingCatStalkEquivModuleStalk
@@ -1972,7 +2206,27 @@ definition commRingCatStalkEquivModuleStalk
     (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
       structurePresheafInCommRingCat R))⟩).addCommGroupIsoToAddEquiv
   map_smul' r m := by
-    let α : TopCa
+    let α : TopCat.Presheaf.stalk (moduleStructurePresheaf R R).presheaf x ≅
+      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).obj
+        ((structurePresheafInCommRingCat R).stalk x) :=
+      (Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves
+      (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat)
+      (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
+        structurePresheafInCommRingCat R))⟩)
+    obtain ⟨U, hxU, s, rfl⟩ := TopCat.Presheaf.exists_germ_eq _ m
+    have : (TopCat.Presheaf.germ (moduleStructurePresheaf R R).presheaf U x hxU) ≫ α.hom =
+        (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat).map
+          ((structurePresheafInCommRingCat R).germ U x hxU) :=
+      Limits.colimit.isoColimitCocone_ι_hom ..
+    change α.hom (r • germₗ R U x hxU _) = toStalk R _ _ * _
+    rw [← map_smul]; rw [Algebra.smul_def]
+    refine congr($this _).trans ?_
+    refine (((structurePresheafInCommRingCat R).germ U x hxU).hom.map_mul _ _).trans ?_
+    congr 1
+    · dsimp [toStalk]
+      erw [← (structurePresheafInCommRingCat R).germ_res_apply (homOfLE (le_top : U <= ⊤)) _ hxU]
+      rfl
+    · exact congr($this _).symm
 
 Depends on / 依赖: Limits, Limits.colimit.isoColimitCocone, Limits.isColimitOfPreserves, colimit, isColimitOfPreserves, isoColimitCocone
 -/
@@ -2327,7 +2581,16 @@ definition Localizations.comapFun
   letI f' : M ->ₗ[R] N := { __ := f }
   letI g : LocalizedModule (y.comap σ).asIdeal.primeCompl M ->ₗ[R]
       LocalizedModule y.asIdeal.primeCompl N :=
-    IsLocalizedModule.lift (y.
+    IsLocalizedModule.lift (y.comap σ).asIdeal.primeCompl (LocalizedModule.mkLinearMap _ _)
+      ((LocalizedModule.mkLinearMap _ _).restrictScalars R ∘ₗ f') (by
+      intro x
+      have := IsLocalizedModule.map_units (S := y.asIdeal.primeCompl)
+        (LocalizedModule.mkLinearMap y.asIdeal.primeCompl N) ⟨σ x, x.2⟩
+      rw [Module.End.isUnit_iff] at this ⊢
+      convert! this using 2 with a
+      exact (IsScalarTower.algebraMap_smul ..).symm)
+  { __ := g,
+    map_smul' r x := by simpa [Localizations] using! (IsScalarTower.algebraMap_smul ..).symm }
 
 中文:
 定义 Localizations.comapFun
@@ -2338,7 +2601,16 @@ definition Localizations.comapFun
   letI f' : M ->ₗ[R] N := { __ := f }
   letI g : LocalizedModule (y.comap σ).asIdeal.primeCompl M ->ₗ[R]
       LocalizedModule y.asIdeal.primeCompl N :=
-    IsLocalizedModule.lift (y.
+    IsLocalizedModule.lift (y.comap σ).asIdeal.primeCompl (LocalizedModule.mkLinearMap _ _)
+      ((LocalizedModule.mkLinearMap _ _).restrictScalars R ∘ₗ f') (by
+      intro x
+      have := IsLocalizedModule.map_units (S := y.asIdeal.primeCompl)
+        (LocalizedModule.mkLinearMap y.asIdeal.primeCompl N) ⟨σ x, x.2⟩
+      rw [Module.End.isUnit_iff] at this ⊢
+      convert! this using 2 with a
+      exact (IsScalarTower.algebraMap_smul ..).symm)
+  { __ := g,
+    map_smul' r x := by simpa [Localizations] using! (IsScalarTower.algebraMap_smul ..).symm }
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.lift, IsLocalizedModule.map_units, IsScalarTower, LocalizedModule, LocalizedModule.mkL, LocalizedModule.mkLinearMap, Module, Module.compHom, asIdeal, asIdeal.primeCompl, compHom, map_units, mkLinearMap, of_algebraMap_smul, primeCompl, restrictScalars, toAlgebra, y.asIdeal.primeCompl, y.comap
 -/
@@ -2377,7 +2649,12 @@ lemma Localizations.comapFun_mk
   apply ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units (S := y.asIdeal.primeCompl)
     (LocalizedModule.mkLinearMap y.asIdeal.primeCompl N) ⟨σ b, b.2⟩)).1
   dsimp
-  rw [
+  rw [← (comapFun f y).map_smulₛₗ]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]
+  dsimp [comapFun, Localizations]
+  refine (IsLocalizedModule.lift_apply ..).trans ?_
+  dsimp
+  rw [← LocalizedModule.mk_cancel ⟨σ b.1]; rw [b.2⟩]; rw [LocalizedModule.smul'_mk]
+  rfl
 
 中文:
 引理 Localizations.comapFun_mk
@@ -2389,7 +2666,12 @@ lemma Localizations.comapFun_mk
   apply ((Module.End.isUnit_iff _).mp (IsLocalizedModule.map_units (S := y.asIdeal.primeCompl)
     (LocalizedModule.mkLinearMap y.asIdeal.primeCompl N) ⟨σ b, b.2⟩)).1
   dsimp
-  rw [
+  rw [← (comapFun f y).map_smulₛₗ]; rw [LocalizedModule.smul'_mk]; rw [← Submonoid.smul_def]; rw [LocalizedModule.mk_cancel]; rw [← LocalizedModule.mkLinearMap_apply]
+  dsimp [comapFun, Localizations]
+  refine (IsLocalizedModule.lift_apply ..).trans ?_
+  dsimp
+  rw [← LocalizedModule.mk_cancel ⟨σ b.1]; rw [b.2⟩]; rw [LocalizedModule.smul'_mk]
+  rfl
 
 Depends on / 依赖: IsLocalizedModu, IsLocalizedModule, IsLocalizedModule.map_units, IsScalarTower, Localizations, LocalizedModule, LocalizedModule.mkLinearMap, LocalizedModule.mkLinearMap_apply, LocalizedModule.mk_cancel, LocalizedModule.smul, Module, Module.End.isUnit_iff, Module.compHom, Submonoid, Submonoid.smul_def, asIdeal, comapFun, compHom, isUnit_iff, map_units
 -/
@@ -2443,7 +2725,13 @@ theorem isLocallyFraction_comapFun
   rintro ⟨p, hpV⟩
   obtain ⟨W, m, iWU, a, b, h_frac⟩ := hs ⟨PrimeSpectrum.comap σ p, hUV hpV⟩
   refine ⟨⟨_, (PrimeSpectrum.continuous_comap σ).isOpen_preimage _ W.2⟩ ⊓ V,
-    ⟨m, hp
+    ⟨m, hpV⟩, Opens.infLERight _ _, f a, σ b, ?_⟩
+  rintro ⟨q, ⟨hqW, hqV⟩⟩
+  obtain ⟨hs, H⟩ := h_frac ⟨PrimeSpectrum.comap σ q, hqW⟩
+  refine ⟨hs, ?_⟩
+  dsimp [comapFun] at H ⊢
+  rw [H]
+  simp
 
 中文:
 定理 isLocallyFraction_comapFun
@@ -2455,7 +2743,13 @@ theorem isLocallyFraction_comapFun
   rintro ⟨p, hpV⟩
   obtain ⟨W, m, iWU, a, b, h_frac⟩ := hs ⟨PrimeSpectrum.comap σ p, hUV hpV⟩
   refine ⟨⟨_, (PrimeSpectrum.continuous_comap σ).isOpen_preimage _ W.2⟩ ⊓ V,
-    ⟨m, hp
+    ⟨m, hpV⟩, Opens.infLERight _ _, f a, σ b, ?_⟩
+  rintro ⟨q, ⟨hqW, hqV⟩⟩
+  obtain ⟨hs, H⟩ := h_frac ⟨PrimeSpectrum.comap σ q, hqW⟩
+  refine ⟨hs, ?_⟩
+  dsimp [comapFun] at H ⊢
+  rw [H]
+  simp
 
 Depends on / 依赖: IsScalarTower, Module, Module.compHom, Opens.infLERight, PrimeSpectrum, PrimeSpectrum.comap, PrimeSpectrum.continuous_comap, comapFun, compHom, continuous_comap, h_frac, infLERight, isOpen_preimage, of_algebraMap_smul, toAlgebra
 -/
@@ -2552,7 +2846,10 @@ theorem comapₗ_eq_localRingHom
     congr($this _)
   ext m
   induction m using LocalizedModule.induction_on with | h m s =>
-  trans LocalizedModule.mk (f m) 
+  trans LocalizedModule.mk (f m) ⟨f ↑s, s.2⟩
+  · simp
+  convert_to! Localization.mk _ _ = Localization.localRingHom _ _ _ _ (Localization.mk _ _)
+  simp [Localization.mk_eq_mk']
 
 中文:
 定理 comapₗ_eq_localRingHom
@@ -2564,7 +2861,10 @@ theorem comapₗ_eq_localRingHom
     congr($this _)
   ext m
   induction m using LocalizedModule.induction_on with | h m s =>
-  trans LocalizedModule.mk (f m) 
+  trans LocalizedModule.mk (f m) ⟨f ↑s, s.2⟩
+  · simp
+  convert_to! Localization.mk _ _ = Localization.localRingHom _ _ _ _ (Localization.mk _ _)
+  simp [Localization.mk_eq_mk']
 
 Depends on / 依赖: Localization, Localization.localRingHom, Localization.mk, Localization.mk_eq_mk, Localizations, Localizations.comapFun, LocalizedModule, LocalizedModule.induction_on, LocalizedModule.mk, PrimeSpectrum, PrimeSpectrum.comap, asIdeal, comapFun, convert_to, f.toSemilinearMap, induction_on, localRingHom, mk_eq_mk, toSemilinearMap
 -/
@@ -2599,7 +2899,13 @@ map_one' := Subtype.ext funext fun _ => by
     exact (Localization.localRingHom ..).map_one
 map_mul' r s := Subtype.ext funext fun p => by
     dsimp
-    change _ = (comapₗ f.toSemilinearMap
+    change _ = (comapₗ f.toSemilinearMap U V hUV r).1 p * (comapₗ f.toSemilinearMap U V hUV s).1 p
+    simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
+    exact (Localization.localRingHom ..).map_mul _ _
+map_zero' := Subtype.ext funext fun _ => by
+    dsimp
+    simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
+    exact (Localization.localRingHom ..).map_zero
 
 中文:
 定义 comap
@@ -2611,7 +2917,13 @@ map_one' := Subtype.ext funext fun _ => by
     exact (Localization.localRingHom ..).map_one
 map_mul' r s := Subtype.ext funext fun p => by
     dsimp
-    change _ = (comapₗ f.toSemilinearMap
+    change _ = (comapₗ f.toSemilinearMap U V hUV r).1 p * (comapₗ f.toSemilinearMap U V hUV s).1 p
+    simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
+    exact (Localization.localRingHom ..).map_mul _ _
+map_zero' := Subtype.ext funext fun _ => by
+    dsimp
+    simp only [comapₗ_eq_localRingHom, PrimeSpectrum.comap_asIdeal]
+    exact (Localization.localRingHom ..).map_zero
 
 Depends on / 依赖: f.toSemilinearMap, toSemilinearMap
 -/

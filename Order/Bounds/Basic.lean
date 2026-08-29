@@ -382,7 +382,12 @@ alias LE.le.isCofinalFor := IsCofinalFor.of_subset
 @[deprecated (since := "2026-03-23")] alias HasSubset.Subset.isCofinalFor := LE.le.isCofinalFor
 @[deprecated (since := "2026-03-23")] alias HasSubset.Subset.isCoinitialFor := LE.le.isCoinitialFor
 
-@[depre
+@[deprecated LE.le.isCofinalFor (since := "2026-01-08")]
+alias HasSubset.Subset.iscofinalfor := IsCofinalFor.of_subset
+@[deprecated LE.le.isCoinitialFor (since := "2026-01-08")]
+alias HasSubset.Subset.iscoinitialfor := IsCoinitialFor.of_subset
+
+@[to_dual (attr := refl)]
 
 中文:
 引理 IsCofinalFor.of_subset
@@ -396,7 +401,12 @@ alias LE.le.isCofinalFor := IsCofinalFor.of_subset
 @[deprecated (since := "2026-03-23")] alias HasSubset.Subset.isCofinalFor := LE.le.isCofinalFor
 @[deprecated (since := "2026-03-23")] alias HasSubset.Subset.isCoinitialFor := LE.le.isCoinitialFor
 
-@[depre
+@[deprecated LE.le.isCofinalFor (since := "2026-01-08")]
+alias HasSubset.Subset.iscofinalfor := IsCofinalFor.of_subset
+@[deprecated LE.le.isCoinitialFor (since := "2026-01-08")]
+alias HasSubset.Subset.iscoinitialfor := IsCoinitialFor.of_subset
+
+@[to_dual (attr := refl)]
 
 Depends on / 依赖: le_rfl
 -/
@@ -674,7 +684,15 @@ theorem directedOn_union_iff
   · rcases isCofinalFor_or_isCofinalFor_of_directedOn_union h with hts | hst
     · exact .inl ⟨DirectedOn.of_isCofinalFor h subset_union_left hts.union_right, hts⟩
     · exact .inr ⟨DirectedOn.of_isCofinalFor h subset_union_right hst.union_left, hst⟩
-  · rintro (⟨hs, ht
+  · rintro (⟨hs, hts⟩ | ⟨ht, hst⟩) x hx y hy
+    · obtain ⟨x', hx', hxx'⟩ := hts.union_right hx
+      obtain ⟨y', hy', hyy'⟩ := hts.union_right hy
+      obtain ⟨z, hz, hx'z, hy'z⟩ := hs x' hx' y' hy'
+      exact ⟨z, .inl hz, hxx'.trans hx'z, hyy'.trans hy'z⟩
+    · obtain ⟨x', hx', hxx'⟩ := hst.union_left hx
+      obtain ⟨y', hy', hyy'⟩ := hst.union_left hy
+      obtain ⟨z, hz, hx'z, hy'z⟩ := ht x' hx' y' hy'
+      exact ⟨z, .inr hz, hxx'.trans hx'z, hyy'.trans hy'z⟩
 
 中文:
 定理 directedOn_union_iff
@@ -683,7 +701,15 @@ theorem directedOn_union_iff
   · rcases isCofinalFor_or_isCofinalFor_of_directedOn_union h with hts | hst
     · exact .inl ⟨DirectedOn.of_isCofinalFor h subset_union_left hts.union_right, hts⟩
     · exact .inr ⟨DirectedOn.of_isCofinalFor h subset_union_right hst.union_left, hst⟩
-  · rintro (⟨hs, ht
+  · rintro (⟨hs, hts⟩ | ⟨ht, hst⟩) x hx y hy
+    · obtain ⟨x', hx', hxx'⟩ := hts.union_right hx
+      obtain ⟨y', hy', hyy'⟩ := hts.union_right hy
+      obtain ⟨z, hz, hx'z, hy'z⟩ := hs x' hx' y' hy'
+      exact ⟨z, .inl hz, hxx'.trans hx'z, hyy'.trans hy'z⟩
+    · obtain ⟨x', hx', hxx'⟩ := hst.union_left hx
+      obtain ⟨y', hy', hyy'⟩ := hst.union_left hy
+      obtain ⟨z, hz, hx'z, hy'z⟩ := ht x' hx' y' hy'
+      exact ⟨z, .inr hz, hxx'.trans hx'z, hyy'.trans hy'z⟩
 
 Depends on / 依赖: DirectedOn, DirectedOn.of_isCofinalFor, hst.union_left, hts.union_right, isCofinalFor_or_isCofinalFor_of_directedOn_union, of_isCofinalFor, subset_union_left, subset_union_right, union_left, union_right
 -/
@@ -2337,7 +2363,10 @@ theorem isGLB_Ioo
     · exact h₁.symm ▸ le_sup_left
     obtain ⟨y, lty, ylt⟩ := exists_between h₂
     apply (not_lt_of_ge (sup_le (hx ⟨lty, ylt.trans_le (sup_le _ h.le)⟩) lty.le) ylt).elim
-    obtain ⟨u, au, ub⟩ :=
+    obtain ⟨u, au, ub⟩ := exists_between h
+    apply (hx ⟨au, ub⟩).trans ub.le⟩
+
+@[to_dual]
 
 中文:
 定理 isGLB_Ioo
@@ -2348,7 +2377,10 @@ theorem isGLB_Ioo
     · exact h₁.symm ▸ le_sup_left
     obtain ⟨y, lty, ylt⟩ := exists_between h₂
     apply (not_lt_of_ge (sup_le (hx ⟨lty, ylt.trans_le (sup_le _ h.le)⟩) lty.le) ylt).elim
-    obtain ⟨u, au, ub⟩ :=
+    obtain ⟨u, au, ub⟩ := exists_between h
+    apply (hx ⟨au, ub⟩).trans ub.le⟩
+
+@[to_dual]
 
 Depends on / 依赖: eq_or_lt_of_le, exists_between, h.le, le_sup_left, le_sup_right, lty.le, not_lt_of_ge, sup_le, trans_le, ub.le, ylt.trans_le
 -/

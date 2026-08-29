@@ -182,7 +182,9 @@ lemma of_associated
     use n, (u ^ n) • x
     simp [mul_pow, ← hx, mul_smul, Units.smul_def]
   · intro x y hxy
-    obtain ⟨n, hn⟩ := exists_of_eq 
+    obtain ⟨n, hn⟩ := exists_of_eq r hxy
+    use n
+    simp [mul_pow, mul_smul, hn]
 
 中文:
 引理 of_associated
@@ -197,7 +199,9 @@ lemma of_associated
     use n, (u ^ n) • x
     simp [mul_pow, ← hx, mul_smul, Units.smul_def]
   · intro x y hxy
-    obtain ⟨n, hn⟩ := exists_of_eq 
+    obtain ⟨n, hn⟩ := exists_of_eq r hxy
+    use n
+    simp [mul_pow, mul_smul, hn]
 
 Depends on / 依赖: IsUnit, IsUnit.mul, Units.smul_def, exists_of_eq, isUnit, isUnit_algebraMap, mul_comm, mul_pow, mul_smul, smul_def, u.isUnit.map
 -/

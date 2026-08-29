@@ -87,7 +87,12 @@ theorem ker_tensorProductMk_quotient
   rw [← (TensorProduct.lid R M).conj_exact_iff_exact]; rw [exact_iff] at this
   convert! this
   · classical simp [pi_mkQ_rTensor, LinearMap.comp_assoc]
-  refine le_antisymm (Submodule.smul_le.mpr fun r hr m _ => ⟨⟨r, ?_⟩ o
+  refine le_antisymm (Submodule.smul_le.mpr fun r hr m _ => ⟨⟨r, ?_⟩ otimesₜ m, rfl⟩) ?_
+  · simpa only [ker_pi, Submodule.ker_mkQ]
+  rintro _ ⟨x, rfl⟩
+  refine x.induction_on (by simp) (fun r m => Submodule.smul_mem_smul ?_ ⟨⟩) fun _ _ => ?_
+  · simpa only [← (I _).ker_mkQ, ← ker_pi] using! Subtype.mem _
+  · simpa using! add_mem
 
 中文:
 定理 ker_tensorProductMk_quotient
@@ -96,7 +101,12 @@ theorem ker_tensorProductMk_quotient
   rw [← (TensorProduct.lid R M).conj_exact_iff_exact]; rw [exact_iff] at this
   convert! this
   · classical simp [pi_mkQ_rTensor, LinearMap.comp_assoc]
-  refine le_antisymm (Submodule.smul_le.mpr fun r hr m _ => ⟨⟨r, ?_⟩ o
+  refine le_antisymm (Submodule.smul_le.mpr fun r hr m _ => ⟨⟨r, ?_⟩ otimesₜ m, rfl⟩) ?_
+  · simpa only [ker_pi, Submodule.ker_mkQ]
+  rintro _ ⟨x, rfl⟩
+  refine x.induction_on (by simp) (fun r m => Submodule.smul_mem_smul ?_ ⟨⟩) fun _ _ => ?_
+  · simpa only [← (I _).ker_mkQ, ← ker_pi] using! Subtype.mem _
+  · simpa using! add_mem
 
 Depends on / 依赖: LinearMap, LinearMap.comp_assoc, Submodule, Submodule.ker_mkQ, Submodule.smul_le.mpr, Submodule.smul_mem_smul, TensorProduct, TensorProduct.lid, classical, comp_assoc, conj_exact_iff_exact, convert, exact_iff, exact_subtype_ker_map, induction_on, ker_mkQ, ker_pi, le_antisymm, pi_mkQ_rTensor, pi_mkQ_surjective
 -/

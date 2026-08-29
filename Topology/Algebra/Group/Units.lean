@@ -60,7 +60,8 @@ definition ContinuousMulEquiv.piUnits
 .comp Units.continuous_val, ⟨continuous_apply _
 .comp Units.continuous_coe_inv⟩ continuous_apply _
   continuous_invFun := Units.continuous_iff.mpr
-⟨continuous_pi fun _ => Units.continuous_val.comp continuous_apply
+⟨continuous_pi fun _ => Units.continuous_val.comp continuous_apply _,
+continuous_pi fun _ => Units.continuous_coe_inv.comp continuous_apply _⟩
 
 中文:
 定义 连续乘法等价.piUnits
@@ -70,7 +71,8 @@ definition ContinuousMulEquiv.piUnits
 .comp Units.continuous_val, ⟨continuous_apply _
 .comp Units.continuous_coe_inv⟩ continuous_apply _
   continuous_invFun := Units.continuous_iff.mpr
-⟨continuous_pi fun _ => Units.continuous_val.comp continuous_apply
+⟨continuous_pi fun _ => Units.continuous_val.comp continuous_apply _,
+continuous_pi fun _ => Units.continuous_coe_inv.comp continuous_apply _⟩
 
 Depends on / 依赖: MulEquiv, MulEquiv.piUnits, piUnits
 -/

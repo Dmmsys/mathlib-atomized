@@ -808,7 +808,7 @@ instance [MonadCont
     intros
     ext
     simp [callCC, OptionT.goto_mkLabel, @callCC_bind_left m _]
-  callCC_dummy := by
+  callCC_dummy := by intros; ext; simp [callCC, OptionT.callCC, @callCC_dummy m _]
 
 中文:
 实例 [MonadCont
@@ -821,7 +821,7 @@ instance [MonadCont
     intros
     ext
     simp [callCC, OptionT.goto_mkLabel, @callCC_bind_left m _]
-  callCC_dummy := by
+  callCC_dummy := by intros; ext; simp [callCC, OptionT.callCC, @callCC_dummy m _]
 
 Depends on / 依赖: Option.elimM, OptionT, OptionT.callCC, OptionT.ext, OptionT.goto_mkLabel, bind_congr, callCC, callCC_bind_left, callCC_bind_right, callCC_dummy, goto_mkLabel, intros
 -/

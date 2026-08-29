@@ -59,7 +59,8 @@ instance :
   le_sup_left := fun P Q => by rw [← Subtype.coe_le_coe]; exact le_sup_left
   le_sup_right := fun P Q => by rw [← Subtype.coe_le_coe]; exact le_sup_right
   sup_le := fun _ _ _ hPR hQR => by
-    rw [← Subtype.coe_le_c
+    rw [← Subtype.coe_le_coe] at hPR hQR ⊢
+    exact sup_le hPR hQR
 
 中文:
 实例 :
@@ -68,7 +69,8 @@ instance :
   le_sup_left := fun P Q => by rw [← Subtype.coe_le_coe]; exact le_sup_left
   le_sup_right := fun P Q => by rw [← Subtype.coe_le_coe]; exact le_sup_right
   sup_le := fun _ _ _ hPR hQR => by
-    rw [← Subtype.coe_le_c
+    rw [← Subtype.coe_le_coe] at hPR hQR ⊢
+    exact sup_le hPR hQR
 
 Depends on / 依赖: P.property, P.val, Q.property, Q.val, property, smallP, smallQ, small_sup
 -/

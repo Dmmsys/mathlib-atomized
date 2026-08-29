@@ -71,7 +71,18 @@ lemma iIndepFun_of_covariance_strongDual
   refine iIndepFun.iIndepFun_process₀ mX fun I J =>
     HasGaussianLaw.iIndepFun_of_covariance_strongDual ?_ fun i j hij L₁ L₂ => ?_
   · let L : (I.sigma (fun i => if hi : i in I then J ⟨i, hi⟩ else ∅) -> E) ->L[Real] (i : I) -> J i -> E :=
-      { to
+      { toFun x i j := x ⟨⟨i, j⟩, by simp⟩
+        map_add' x y := by ext; simp
+        map_smul' c x := by ext; simp }
+    exact (hX.hasGaussianLaw _).map L
+  have h1 : L₁ ∘ (fun ω k => X i k ω) = ∑ k : J i, (L₁ ∘L .single Real _ k) ∘ X i k := by
+    ext; simp [-ContinuousLinearMap.comp_apply, ← L₁.sum_comp_single]
+  have h2 : L₂ ∘ (fun ω k => X j k ω) = ∑ k : J j, (L₂ ∘L .single Real _ k) ∘ X j k := by
+    ext; simp [-ContinuousLinearMap.comp_apply, ← L₂.sum_comp_single]
+  rw [h1]; rw [h2]; rw [covariance_sum_sum]
+  · exact sum_eq_zero fun _ _ => sum_eq_zero fun _ _ => h i j (by simpa) ..
+  · exact fun k => ((hX.hasGaussianLaw_eval ⟨i, k⟩).map _).memLp_two
+  · exact fun k => ((hX.hasGaussianLaw_eval ⟨j, k⟩).map _).memLp_two
 
 中文:
 引理 iIndepFun_of_covariance_strongDual
@@ -82,7 +93,18 @@ lemma iIndepFun_of_covariance_strongDual
   refine iIndepFun.iIndepFun_process₀ mX fun I J =>
     HasGaussianLaw.iIndepFun_of_covariance_strongDual ?_ fun i j hij L₁ L₂ => ?_
   · let L : (I.sigma (fun i => if hi : i in I then J ⟨i, hi⟩ else ∅) -> E) ->L[Real] (i : I) -> J i -> E :=
-      { to
+      { toFun x i j := x ⟨⟨i, j⟩, by simp⟩
+        map_add' x y := by ext; simp
+        map_smul' c x := by ext; simp }
+    exact (hX.hasGaussianLaw _).map L
+  have h1 : L₁ ∘ (fun ω k => X i k ω) = ∑ k : J i, (L₁ ∘L .single Real _ k) ∘ X i k := by
+    ext; simp [-ContinuousLinearMap.comp_apply, ← L₁.sum_comp_single]
+  have h2 : L₂ ∘ (fun ω k => X j k ω) = ∑ k : J j, (L₂ ∘L .single Real _ k) ∘ X j k := by
+    ext; simp [-ContinuousLinearMap.comp_apply, ← L₂.sum_comp_single]
+  rw [h1]; rw [h2]; rw [covariance_sum_sum]
+  · exact sum_eq_zero fun _ _ => sum_eq_zero fun _ _ => h i j (by simpa) ..
+  · exact fun k => ((hX.hasGaussianLaw_eval ⟨i, k⟩).map _).memLp_two
+  · exact fun k => ((hX.hasGaussianLaw_eval ⟨j, k⟩).map _).memLp_two
 
 Depends on / 依赖: HasGaussianLaw, HasGaussianLaw.iIndepFun_of_covariance_strongDual, I.sigma, classical, hX.hasGaussianLaw, hX.isProbabilityMeasure, hasGaussianLaw, iIndepFun, iIndepFun.iIndepFun_process, iIndepFun_of_covariance_strongDual, isProbabilityMeasure, map_add, map_smul, single
 -/
@@ -178,7 +200,20 @@ lemma indepFun_of_covariance_strongDual
   refine IndepFun.process_indepFun_process₀ mX mY fun I J =>
     HasGaussianLaw.indepFun_of_covariance_strongDual ?_ fun L₁ L₂ => ?_
   · let L : (I.disjSum J -> E) ->L[Real] (I -> E) × (J -> E) :=
-      { toFun x := (fun s => x ⟨Sum.inl s, inl_mem_disjSum.2 s.2⟩
+      { toFun x := (fun s => x ⟨Sum.inl s, inl_mem_disjSum.2 s.2⟩,
+          fun t => x ⟨Sum.inr t, inr_mem_disjSum.2 t.2⟩)
+        map_add' x y := by ext <;> simp
+        map_smul' c x := by ext <;> simp }
+    exact (hXY.hasGaussianLaw _).map L
+  classical
+  have h1 : L₁ ∘ (fun ω i => X i ω) = ∑ i : I, (L₁ ∘L .single Real _ i) ∘ X i := by
+    ext; simp [-ContinuousLinearMap.comp_apply, ← L₁.sum_comp_single]
+  have h2 : L₂ ∘ (fun ω j => Y j ω) = ∑ j : J, (L₂ ∘L .single Real _ j) ∘ Y j := by
+    ext; simp [-ContinuousLinearMap.comp_apply, ← L₂.sum_comp_single]
+  rw [h1]; rw [h2]; rw [covariance_sum_sum]
+  · exact sum_eq_zero fun i _ => sum_eq_zero fun j _ => h ..
+  · exact fun s => ((hXY.hasGaussianLaw_eval (.inl s)).map _).memLp_two
+  · exact fun t => ((hXY.hasGaussianLaw_eval (.inr t)).map _).memLp_two
 
 中文:
 引理 indepFun_of_covariance_strongDual
@@ -188,7 +223,20 @@ lemma indepFun_of_covariance_strongDual
   refine IndepFun.process_indepFun_process₀ mX mY fun I J =>
     HasGaussianLaw.indepFun_of_covariance_strongDual ?_ fun L₁ L₂ => ?_
   · let L : (I.disjSum J -> E) ->L[Real] (I -> E) × (J -> E) :=
-      { toFun x := (fun s => x ⟨Sum.inl s, inl_mem_disjSum.2 s.2⟩
+      { toFun x := (fun s => x ⟨Sum.inl s, inl_mem_disjSum.2 s.2⟩,
+          fun t => x ⟨Sum.inr t, inr_mem_disjSum.2 t.2⟩)
+        map_add' x y := by ext <;> simp
+        map_smul' c x := by ext <;> simp }
+    exact (hXY.hasGaussianLaw _).map L
+  classical
+  have h1 : L₁ ∘ (fun ω i => X i ω) = ∑ i : I, (L₁ ∘L .single Real _ i) ∘ X i := by
+    ext; simp [-ContinuousLinearMap.comp_apply, ← L₁.sum_comp_single]
+  have h2 : L₂ ∘ (fun ω j => Y j ω) = ∑ j : J, (L₂ ∘L .single Real _ j) ∘ Y j := by
+    ext; simp [-ContinuousLinearMap.comp_apply, ← L₂.sum_comp_single]
+  rw [h1]; rw [h2]; rw [covariance_sum_sum]
+  · exact sum_eq_zero fun i _ => sum_eq_zero fun j _ => h ..
+  · exact fun s => ((hXY.hasGaussianLaw_eval (.inl s)).map _).memLp_two
+  · exact fun t => ((hXY.hasGaussianLaw_eval (.inr t)).map _).memLp_two
 
 Depends on / 依赖: HasGaussianLaw, HasGaussianLaw.indepFun_of_covariance_strongDual, I.disjSum, IndepFun, IndepFun.process_indepFun_process, Sum.inl, Sum.inr, classical, disjSum, hXY.hasGaussianLaw, hXY.isProbabilityMeasure, hasGaussianLaw, indepFun_of_covariance_strongDual, inl_mem_disjSum, inr_mem_disjSum, isProbabilityMeasure, map_add, map_smul
 -/

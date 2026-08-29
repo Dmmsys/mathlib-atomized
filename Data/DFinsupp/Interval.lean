@@ -104,7 +104,7 @@ theorem mem_dfinsupp_iff
   · refine fun h => ⟨fun i _ => f i, mem_pi.2 h.2, ?_⟩
     ext i
     dsimp
-    exact ite_eq_left_iff.2 f
+    exact ite_eq_left_iff.2 fun hi => (notMem_support_iff.1 fun H => hi <| h.1 H).symm
 
 中文:
 定理 mem_dfinsupp_iff
@@ -119,7 +119,7 @@ theorem mem_dfinsupp_iff
   · refine fun h => ⟨fun i _ => f i, mem_pi.2 h.2, ?_⟩
     ext i
     dsimp
-    exact ite_eq_left_iff.2 f
+    exact ite_eq_left_iff.2 fun hi => (notMem_support_iff.1 fun H => hi <| h.1 H).symm
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.coeFn_mk, coeFn_mk, convert, ite_eq_left_iff, mem_map, mem_map.trans, mem_pi, mk_of_mem, notMem_support_iff, support_mk_subset, zipLeft
 -/
@@ -150,7 +150,9 @@ theorem mem_dfinsupp_iff_of_support_subset
 fun h => ⟨fun hi => ht mem_support_iff.2 fun H => mem_support_iff.1 hi ?_, fun _ => h⟩⟩)
   · by_cases hi : i in s
     · exact h.2 hi
-    · rw [notMem_support_iff.1 (mt h.1 hi), notMem_support_iff
+    · rw [notMem_support_iff.1 (mt h.1 hi), notMem_support_iff.1 (notMem_mono ht hi)]
+      exact zero_mem_zero
+  · rwa [H, mem_zero] at h
 
 中文:
 定理 mem_dfinsupp_iff_of_support_subset
@@ -161,7 +163,9 @@ fun h => ⟨fun hi => ht mem_support_iff.2 fun H => mem_support_iff.1 hi ?_, fun
 fun h => ⟨fun hi => ht mem_support_iff.2 fun H => mem_support_iff.1 hi ?_, fun _ => h⟩⟩)
   · by_cases hi : i in s
     · exact h.2 hi
-    · rw [notMem_support_iff.1 (mt h.1 hi), notMem_support_iff
+    · rw [notMem_support_iff.1 (mt h.1 hi), notMem_support_iff.1 (notMem_mono ht hi)]
+      exact zero_mem_zero
+  · rwa [H, mem_zero] at h
 
 Depends on / 依赖: forall_and, forall_and.symm.trans, forall_congr, mem_dfinsupp_iff, mem_dfinsupp_iff.trans, mem_support_iff, mem_zero, notMem_mono, notMem_support_iff, zero_mem_zero
 -/
@@ -240,7 +244,12 @@ definition rangeIcc
       fun i => or_iff_not_imp_left.2 fun h => by
         have hf : f i = 0 := (fs.prop i).resolve_left
             (Multiset.notMem_mono (Multiset.Le.subset <| Multiset.le_add_right _ _) h)
-        ha
+        have hg : g i = 0 := (gs.prop i).resolve_left
+            (Multiset.notMem_mono (Multiset.Le.subset <| Multiset.le_add_left _ _) h)
+        simp_rw [hf, hg]
+        exact Icc_self _⟩
+
+@[simp]
 
 中文:
 定义 rangeIcc
@@ -251,7 +260,12 @@ definition rangeIcc
       fun i => or_iff_not_imp_left.2 fun h => by
         have hf : f i = 0 := (fs.prop i).resolve_left
             (Multiset.notMem_mono (Multiset.Le.subset <| Multiset.le_add_right _ _) h)
-        ha
+        have hg : g i = 0 := (gs.prop i).resolve_left
+            (Multiset.notMem_mono (Multiset.Le.subset <| Multiset.le_add_left _ _) h)
+        simp_rw [hf, hg]
+        exact Icc_self _⟩
+
+@[simp]
 
 Depends on / 依赖: zipRight
 -/

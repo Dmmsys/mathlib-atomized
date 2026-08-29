@@ -370,7 +370,9 @@ lemma simplex_fst_le_castSucc_iff
       dsimp at this
       rw [simplex_fst_min]; rw [← not_lt] at this
       tauto
-    
+    · exact Finset.min'_le _ _ (by simpa using h.symm)
+  · rw [Fin.castSucc_lt_iff_succ_le, ← simplex_fst_min x hd]
+    exact stdSimplex.monotone_apply _ h
 
 中文:
 引理 simplex_fst_le_castSucc_iff
@@ -385,7 +387,9 @@ lemma simplex_fst_le_castSucc_iff
       dsimp at this
       rw [simplex_fst_min]; rw [← not_lt] at this
       tauto
-    
+    · exact Finset.min'_le _ _ (by simpa using h.symm)
+  · rw [Fin.castSucc_lt_iff_succ_le, ← simplex_fst_min x hd]
+    exact stdSimplex.monotone_apply _ h
 
 Depends on / 依赖: Fin.castSucc_lt_iff_succ_le, Finset, Finset.min, castSucc_lt_iff_succ_le, contrapose, h.lt_or_eq, h.symm, lt_or_eq, monotone_apply, not_lt, simplex, simplex_fst_min, stdSimplex, stdSimplex.monotone_apply, x.cast
 -/
@@ -595,7 +599,22 @@ abbreviation δ
     dsimp
     -- `simp? [Subcomplex.mem_unionProd_iff, mem_boundary_iff_notMem_range,
     -- mem_horn_iff_notMem_range,stdSimplex.δ_apply]` says:
-    s
+    simp only [Subcomplex.mem_unionProd_iff, prod_δ_snd, mem_boundary_iff_notMem_range,
+      Set.mem_range, stdSimplex.δ_apply, not_exists, prod_δ_fst, mem_horn_iff_notMem_range,
+      ne_eq, exists_prop, not_or, not_forall, Decidable.not_not, not_and]
+    refine ⟨fun j => ?_, fun j hj => ?_⟩
+    · obtain ⟨i, hi⟩ := mem_range_right x hd j
+      dsimp at hi
+      obtain rfl | ⟨i, rfl⟩ := Fin.eq_self_or_eq_succAbove l.castSucc i
+      · refine ⟨l, ?_⟩
+        rw [Fin.succAbove_castSucc_self]; rw [← hi]; rw [← hl.simplex_snd_succ]
+        rfl
+      · exact ⟨_, hi⟩
+    · obtain ⟨i, hi⟩ := mem_range_left x hd j hj
+      dsimp at hi
+      obtain rfl | ⟨i, rfl⟩ := Fin.eq_self_or_eq_succAbove l.castSucc i
+      · exact (hj (by rw [← hi, hl.simplex_fst_castSucc])).elim
+      · exact ⟨_, hi⟩
 
 中文:
 缩写 δ
@@ -607,7 +626,22 @@ abbreviation δ
     dsimp
     -- `simp? [Subcomplex.mem_unionProd_iff, mem_boundary_iff_notMem_range,
     -- mem_horn_iff_notMem_range,stdSimplex.δ_apply]` says:
-    s
+    simp only [Subcomplex.mem_unionProd_iff, prod_δ_snd, mem_boundary_iff_notMem_range,
+      Set.mem_range, stdSimplex.δ_apply, not_exists, prod_δ_fst, mem_horn_iff_notMem_range,
+      ne_eq, exists_prop, not_or, not_forall, Decidable.not_not, not_and]
+    refine ⟨fun j => ?_, fun j hj => ?_⟩
+    · obtain ⟨i, hi⟩ := mem_range_right x hd j
+      dsimp at hi
+      obtain rfl | ⟨i, rfl⟩ := Fin.eq_self_or_eq_succAbove l.castSucc i
+      · refine ⟨l, ?_⟩
+        rw [Fin.succAbove_castSucc_self]; rw [← hi]; rw [← hl.simplex_snd_succ]
+        rfl
+      · exact ⟨_, hi⟩
+    · obtain ⟨i, hi⟩ := mem_range_left x hd j hj
+      dsimp at hi
+      obtain rfl | ⟨i, rfl⟩ := Fin.eq_self_or_eq_succAbove l.castSucc i
+      · exact (hj (by rw [← hi, hl.simplex_fst_castSucc])).elim
+      · exact ⟨_, hi⟩
 -/
 noncomputable abbrev δ :
     (Subcomplex.unionProd.{u} Λ[m + 1, k.castSucc] ∂Δ[n]).N where
@@ -993,7 +1027,32 @@ lemma strictMono_φ
   intro i
   obtain hi | rfl | hi := lt_trichotomy i (min x hd)
   · obtain ⟨i, rfl⟩ := Fin.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hi)
-    rw [φ_of_lt _ _ _ (b
+    rw [φ_of_lt _ _ _ (by grind)]; rw [Fin.castPred_castSucc]
+    rw [Fin.castSucc_lt_iff_succ_le] at hi
+    obtain hi | hi := hi.lt_or_eq
+    · rw [φ_of_lt _ _ _ (by grind)]
+      exact hx' (Fin.lt_def.2 (by dsimp; grind))
+    · rw [← Fin.castSucc_succ, hi, φ_castSucc]
+      refine lt_of_le_of_ne ⟨?_, ?_⟩ ?_
+      · dsimp
+        rw [simplex_fst_le_castSucc_iff]
+        grind
+      · exact stdSimplex.monotone_apply _
+          (by dsimp; rw [← hi]; exact Fin.castSucc_le_succ i)
+      · intro h
+        rw [Prod.ext_iff] at h
+        dsimp at h
+        obtain ⟨h₁, h₂⟩ := h
+        apply hx _ hd i.succ
+        rw [isIndex_succ]
+        refine ⟨h₁, ?_, by aesop⟩
+        have := φ_succAbove x hd (min x hd)
+        rw [Fin.succAbove_castSucc_self] at this
+        rw [← φ_succ_fst x hd]; rw [this]; rw [hi]
+        dsimp
+  · exact Prod.lt_of_lt_of_le (by simp) (by simp)
+  · rw [φ_of_gt _ _ _ (by grind), φ_of_gt _ _ _ (by grind)]
+    exact hx' (by grind)
 
 中文:
 引理 strictMono_φ
@@ -1005,7 +1064,32 @@ lemma strictMono_φ
   intro i
   obtain hi | rfl | hi := lt_trichotomy i (min x hd)
   · obtain ⟨i, rfl⟩ := Fin.eq_castSucc_of_ne_last (Fin.ne_last_of_lt hi)
-    rw [φ_of_lt _ _ _ (b
+    rw [φ_of_lt _ _ _ (by grind)]; rw [Fin.castPred_castSucc]
+    rw [Fin.castSucc_lt_iff_succ_le] at hi
+    obtain hi | hi := hi.lt_or_eq
+    · rw [φ_of_lt _ _ _ (by grind)]
+      exact hx' (Fin.lt_def.2 (by dsimp; grind))
+    · rw [← Fin.castSucc_succ, hi, φ_castSucc]
+      refine lt_of_le_of_ne ⟨?_, ?_⟩ ?_
+      · dsimp
+        rw [simplex_fst_le_castSucc_iff]
+        grind
+      · exact stdSimplex.monotone_apply _
+          (by dsimp; rw [← hi]; exact Fin.castSucc_le_succ i)
+      · intro h
+        rw [Prod.ext_iff] at h
+        dsimp at h
+        obtain ⟨h₁, h₂⟩ := h
+        apply hx _ hd i.succ
+        rw [isIndex_succ]
+        refine ⟨h₁, ?_, by aesop⟩
+        have := φ_succAbove x hd (min x hd)
+        rw [Fin.succAbove_castSucc_self] at this
+        rw [← φ_succ_fst x hd]; rw [this]; rw [hi]
+        dsimp
+  · exact Prod.lt_of_lt_of_le (by simp) (by simp)
+  · rw [φ_of_gt _ _ _ (by grind), φ_of_gt _ _ _ (by grind)]
+    exact hx' (by grind)
 
 Depends on / 依赖: Fin.castPred_castSucc, Fin.castSucc_lt_iff_succ_le, Fin.castSucc_succ, Fin.eq_castSucc_of_ne_last, Fin.lt_def, Fin.ne_last_of_lt, Fin.strictMono_iff_lt_succ, castPred_castSucc, castSucc_lt_iff_succ_le, castSucc_succ, eq_castSucc_of_ne_last, hi.lt_or_eq, lt_def, lt_or_eq, lt_trichotomy, ne_last_of_lt, nonDegenerate, nonDegenerate_iff_strictMono_objEquiv, prodStdSimplex, prodStdSimplex.nonDegenerate_iff_strictMono_objEquiv
 -/
@@ -1242,7 +1326,11 @@ lemma min_δ
     simp only [Monoidal.tensorObj_obj, S.cast_dim, S.cast_simplex_rfl, prod_δ_fst,
       stdSimplex.δ_apply, Fin.succAbove_castSucc_self]
     exact hl.simplex_fst_succ
-  · simp 
+  · simp only [mem_finset_iff, Monoidal.tensorObj_obj, S.cast_dim,
+      S.cast_simplex_rfl, prod_δ_fst, stdSimplex.δ_apply] at hy
+    by_contra!
+    rw [Fin.succAbove_of_castSucc_lt _ _ (by grind)] at hy
+    grind [(hl.succ_le_simplex_fst_iff y.castSucc).1 hy.symm.le]
 
 中文:
 引理 min_δ
@@ -1254,7 +1342,11 @@ lemma min_δ
     simp only [Monoidal.tensorObj_obj, S.cast_dim, S.cast_simplex_rfl, prod_δ_fst,
       stdSimplex.δ_apply, Fin.succAbove_castSucc_self]
     exact hl.simplex_fst_succ
-  · simp 
+  · simp only [mem_finset_iff, Monoidal.tensorObj_obj, S.cast_dim,
+      S.cast_simplex_rfl, prod_δ_fst, stdSimplex.δ_apply] at hy
+    by_contra!
+    rw [Fin.succAbove_of_castSucc_lt _ _ (by grind)] at hy
+    grind [(hl.succ_le_simplex_fst_iff y.castSucc).1 hy.symm.le]
 
 Depends on / 依赖: Fin.succAbove_castSucc_self, Fin.succAbove_of_castSucc_lt, Finset, Finset.le_min, Finset.min, Monoidal, Monoidal.tensorObj_obj, S.cast_dim, S.cast_simplex_rfl, cast_dim, cast_simplex_rfl, hl.simplex_fst_succ, hl.succ_le_simp, le_antisymm, le_min, mem_finset_iff, simplex_fst_succ, stdSimplex, succAbove_castSucc_self, succAbove_of_castSucc_lt
 -/
@@ -1285,7 +1377,10 @@ lemma isType₂_δ
   obtain ⟨t, rfl⟩ := Fin.eq_succ_of_ne_zero (i := t) (fun h => by simp [h] at ht)
   obtain rfl : l = t.succ := by rw [← ht.min_eq, hl.min_δ]
   refine ((prodStdSimplex.nonDegenerate_iff_strictMono_objEquiv _).1
-    (x.cast hd).nonDegenerate t.castSucc.castSucc_lt
+    (x.cast hd).nonDegenerate t.castSucc.castSucc_lt_succ).ne ?_
+  simp only [isIndex_succ] at hl ht
+  dsimp [stdSimplex.δ_apply] at hl ht ⊢
+  aesop
 
 中文:
 引理 isType₂_δ
@@ -1296,7 +1391,10 @@ lemma isType₂_δ
   obtain ⟨t, rfl⟩ := Fin.eq_succ_of_ne_zero (i := t) (fun h => by simp [h] at ht)
   obtain rfl : l = t.succ := by rw [← ht.min_eq, hl.min_δ]
   refine ((prodStdSimplex.nonDegenerate_iff_strictMono_objEquiv _).1
-    (x.cast hd).nonDegenerate t.castSucc.castSucc_lt
+    (x.cast hd).nonDegenerate t.castSucc.castSucc_lt_succ).ne ?_
+  simp only [isIndex_succ] at hl ht
+  dsimp [stdSimplex.δ_apply] at hl ht ⊢
+  aesop
 
 Depends on / 依赖: Fin.eq_succ_of_ne_zero, castSucc, castSucc_lt_succ, eq_succ_of_ne_zero, hl.min_, ht.min_eq, isIndex_succ, min_eq, nonDegenerate, nonDegenerate_iff_strictMono_objEquiv, prodStdSimplex, prodStdSimplex.nonDegenerate_iff_strictMono_objEquiv, stdSimplex, t.castSucc.castSucc_lt_succ, t.succ, x.cast
 -/
@@ -1327,7 +1425,19 @@ lemma eq_of_isType₂_δ
   · obtain ⟨l, rfl⟩ := Fin.eq_succ_of_ne_zero (i := l) (by grind)
     refine (hu _ rfl l.succ ?_).elim
     simp [isIndex_succ, S.cast_simplex_rfl, hu', stdSimplex.δ_apply,
-
+      Fin.succAbove_of_lt_succ i l.castSucc hi,
+      Fin.succAbove_of_lt_succ i l.succ (by grind), dsimp% hl.simplex_fst_succ,
+      dsimp% hl.simplex_snd_succ, dsimp% hl.simplex_fst_castSucc]
+  · exact Or.inl rfl
+  · obtain rfl | hi := (Fin.castSucc_lt_iff_succ_le.1 hi).eq_or_lt
+    · exact Or.inr rfl
+    · obtain ⟨l, rfl⟩ := Fin.eq_castSucc_of_ne_last (x := l) (by grind)
+      refine (hu _ rfl l.succ ?_).elim
+      simp [isIndex_succ, hu', stdSimplex.δ_apply,
+        Fin.succAbove_of_castSucc_lt i l.castSucc (by grind),
+        Fin.succAbove_of_castSucc_lt i l.succ (by grind),
+        dsimp% hl.simplex_fst_castSucc, dsimp% hl.simplex_snd_succ,
+        dsimp% hl.simplex_fst_succ]
 
 中文:
 引理 eq_of_isType₂_δ
@@ -1339,7 +1449,19 @@ lemma eq_of_isType₂_δ
   · obtain ⟨l, rfl⟩ := Fin.eq_succ_of_ne_zero (i := l) (by grind)
     refine (hu _ rfl l.succ ?_).elim
     simp [isIndex_succ, S.cast_simplex_rfl, hu', stdSimplex.δ_apply,
-
+      Fin.succAbove_of_lt_succ i l.castSucc hi,
+      Fin.succAbove_of_lt_succ i l.succ (by grind), dsimp% hl.simplex_fst_succ,
+      dsimp% hl.simplex_snd_succ, dsimp% hl.simplex_fst_castSucc]
+  · exact Or.inl rfl
+  · obtain rfl | hi := (Fin.castSucc_lt_iff_succ_le.1 hi).eq_or_lt
+    · exact Or.inr rfl
+    · obtain ⟨l, rfl⟩ := Fin.eq_castSucc_of_ne_last (x := l) (by grind)
+      refine (hu _ rfl l.succ ?_).elim
+      simp [isIndex_succ, hu', stdSimplex.δ_apply,
+        Fin.succAbove_of_castSucc_lt i l.castSucc (by grind),
+        Fin.succAbove_of_castSucc_lt i l.succ (by grind),
+        dsimp% hl.simplex_fst_castSucc, dsimp% hl.simplex_snd_succ,
+        dsimp% hl.simplex_fst_succ]
 
 Depends on / 依赖: Fin.eq_succ_of_ne_zero, Fin.succAbove_of_lt_succ, Or.inl, S.cast_simplex_rfl, S.dim, S.ext_iff, castSucc, cast_simplex_rfl, congr_arg, eq_succ_of_ne_zero, ext_iff, hl.simplex_fst_castSucc, hl.simplex_fst_succ, hl.simplex_snd_succ, isIndex_succ, l.castSucc, l.succ, lt_trichotomy, simplex_fst_castSucc, simplex_fst_succ
 -/
@@ -1385,7 +1507,22 @@ lemma IsType₂.type₁_eq_of_δ_eq
   by_cases! hi : i = s.index.castSucc
   · subst hi
     conv_lhs => rw [← s.isIndex.min_δ]
- 
+    dsimp
+    rw [φ_castSucc]
+    ext : 1
+    · simp [← s.isIndex.simplex_fst_castSucc]
+      rfl
+    · change (s.x.cast s.hd).simplex.2
+        (s.index.castSucc.succAbove (min s.δ rfl)) = _
+      rw [s.isIndex.min_δ]; rw [Fin.succAbove_castSucc_self]
+      exact s.isIndex.simplex_snd_succ -- defeq abuse
+  · rw [← s.isIndex.min_δ] at hi
+    rw [φ_of_ne _ rfl _ hi]
+    change objEquiv (s.x.cast s.hd).simplex
+      (s.index.castSucc.succAbove ((min s.δ rfl).predAbove i)) = _
+    congr 1
+    rw [← s.isIndex.min_δ]
+    exact Fin.succAbove_predAbove hi -- `simp [hi]` should work but doesn't
 
 中文:
 引理 IsType₂.type₁_eq_of_δ_eq
@@ -1399,7 +1536,22 @@ lemma IsType₂.type₁_eq_of_δ_eq
   by_cases! hi : i = s.index.castSucc
   · subst hi
     conv_lhs => rw [← s.isIndex.min_δ]
- 
+    dsimp
+    rw [φ_castSucc]
+    ext : 1
+    · simp [← s.isIndex.simplex_fst_castSucc]
+      rfl
+    · change (s.x.cast s.hd).simplex.2
+        (s.index.castSucc.succAbove (min s.δ rfl)) = _
+      rw [s.isIndex.min_δ]; rw [Fin.succAbove_castSucc_self]
+      exact s.isIndex.simplex_snd_succ -- defeq abuse
+  · rw [← s.isIndex.min_δ] at hi
+    rw [φ_of_ne _ rfl _ hi]
+    change objEquiv (s.x.cast s.hd).simplex
+      (s.index.castSucc.succAbove ((min s.δ rfl).predAbove i)) = _
+    congr 1
+    rw [← s.isIndex.min_δ]
+    exact Fin.succAbove_predAbove hi -- `simp [hi]` should work but doesn't
 
 Depends on / 依赖: Fin.succAbove_castSucc_self, N.ext_iff, S.ext_iff, Subcomplex, Subcomplex.N.ext_iff, castSucc, cast_eq_self, conv_lhs, ext_iff, injective, isIndex, objEquiv, objEquiv.injective, s.hd, s.index.castSucc, s.index.castSucc.succAbove, s.isIndex.min_, s.isIndex.simplex_fst_castSucc, s.x.cast, s.x.toS.cast_eq_self
 -/
@@ -1505,7 +1657,37 @@ definition pairingCore
   nonDegenerate₂ s := s.isIndex.δ.nonDegenerate
   notMem₁ s := (s.x.cast s.hd).notMem
   notMem₂ s := s.isIndex.δ.notMem
-  injective_type₁' {s t} h := 
+  injective_type₁' {s t} h := by
+    rw [Type₁.ext_iff]; rw [Subcomplex.N.ext_iff]; rw [N.ext_iff]
+    rwa [← s.x.toS.cast_eq_self s.hd, ← t.x.toS.cast_eq_self t.hd]
+  injective_type₂' {s t} h := by
+    replace h : s.δ = t.δ := by rwa [Subcomplex.N.ext_iff, N.ext_iff]
+    generalize hs : s.δ = u
+    have hu' : IsType₂ u := by simpa only [hs] using s.isType₂_δ
+    rw [← hu'.type₁_eq_of_δ_eq _ hs rfl]; rw [hu'.type₁_eq_of_δ_eq _ (h.symm.trans hs) rfl]
+  type₁_ne_type₂' s t hst := by
+    replace hst : s.x = t.isIndex.δ := by
+      rwa [Subcomplex.N.ext_iff, N.ext_iff, ← s.x.cast_eq_self s.hd]
+    have := t.isIndex.isType₂_δ
+    rw [← hst] at this
+    exact this _ _ _ s.isIndex
+  surjective' x := by
+    by_cases hx : IsType₂ x
+    · generalize hd : x.dim = d
+      refine ⟨hx.type₁ hd, Or.inr ?_⟩
+      rw [S.ext_iff']
+      exact ⟨hd, (hx.δ_simplex hd).symm⟩
+    · simp only [IsType₂, not_forall, not_not] at hx
+      obtain ⟨_ | d, hd, i, hx⟩ := hx
+      · fin_cases i
+        simp at hx
+      · obtain ⟨i, rfl⟩ := Fin.eq_succ_of_ne_zero (i := i) (by rintro rfl; simp at hx)
+        refine ⟨{ x := x, d := d, hd := hd, index := i, isIndex := hx }, Or.inl ?_⟩
+        dsimp
+        rw [S.ext_iff']
+        exact ⟨hd, rfl⟩
+
+@[simp]
 
 中文:
 定义 pairingCore
@@ -1518,7 +1700,37 @@ definition pairingCore
   nonDegenerate₂ s := s.isIndex.δ.nonDegenerate
   notMem₁ s := (s.x.cast s.hd).notMem
   notMem₂ s := s.isIndex.δ.notMem
-  injective_type₁' {s t} h := 
+  injective_type₁' {s t} h := by
+    rw [Type₁.ext_iff]; rw [Subcomplex.N.ext_iff]; rw [N.ext_iff]
+    rwa [← s.x.toS.cast_eq_self s.hd, ← t.x.toS.cast_eq_self t.hd]
+  injective_type₂' {s t} h := by
+    replace h : s.δ = t.δ := by rwa [Subcomplex.N.ext_iff, N.ext_iff]
+    generalize hs : s.δ = u
+    have hu' : IsType₂ u := by simpa only [hs] using s.isType₂_δ
+    rw [← hu'.type₁_eq_of_δ_eq _ hs rfl]; rw [hu'.type₁_eq_of_δ_eq _ (h.symm.trans hs) rfl]
+  type₁_ne_type₂' s t hst := by
+    replace hst : s.x = t.isIndex.δ := by
+      rwa [Subcomplex.N.ext_iff, N.ext_iff, ← s.x.cast_eq_self s.hd]
+    have := t.isIndex.isType₂_δ
+    rw [← hst] at this
+    exact this _ _ _ s.isIndex
+  surjective' x := by
+    by_cases hx : IsType₂ x
+    · generalize hd : x.dim = d
+      refine ⟨hx.type₁ hd, Or.inr ?_⟩
+      rw [S.ext_iff']
+      exact ⟨hd, (hx.δ_simplex hd).symm⟩
+    · simp only [IsType₂, not_forall, not_not] at hx
+      obtain ⟨_ | d, hd, i, hx⟩ := hx
+      · fin_cases i
+        simp at hx
+      · obtain ⟨i, rfl⟩ := Fin.eq_succ_of_ne_zero (i := i) (by rintro rfl; simp at hx)
+        refine ⟨{ x := x, d := d, hd := hd, index := i, isIndex := hx }, Or.inl ?_⟩
+        dsimp
+        rw [S.ext_iff']
+        exact ⟨hd, rfl⟩
+
+@[simp]
 -/
 noncomputable def pairingCore {m : Nat} (k : Fin (m + 1)) (n : Nat) :
     (Subcomplex.unionProd.{u} Λ[m + 1, k.castSucc] ∂Δ[n]).PairingCore where
@@ -1596,7 +1808,48 @@ definition weakRankFunction
     obtain ⟨dt, t, ht₁, ht₂, rfl⟩ := Subcomplex.N.mk_surjective t
     obtain rfl : d = d' := h₃
     obtain rfl : ds = d + 1 := hds
-    obt
+    obtain rfl : dt = d + 1 := hdt
+    simp only [ne_eq, pairingCore_ι, Type₁.ext_iff] at h₁
+    obtain ⟨f, hf, hδ⟩ := N.le_iff_exists_mono.1 h₂.le
+    dsimp at f hf
+    obtain ⟨i, rfl⟩ := SimplexCategory.eq_δ_of_mono f
+    obtain rfl | rfl := ht.eq_of_isType₂_δ hs.isType₂_δ i (by
+      rw [S.ext_iff']
+      exact ⟨rfl, hδ.symm⟩)
+    · refine (h₁ (hs.δ_injective ht ?_)).elim
+      rw [Subcomplex.N.ext_iff]; rw [N.ext_iff]; rw [S.ext_iff']
+      exact ⟨rfl, hδ.symm⟩
+    · let Ss := finset (Subcomplex.N.mk s hs₁ hs₂) rfl
+      let St := finset (Subcomplex.N.mk t ht₁ ht₂) rfl
+      let Sδ := finset hs.δ rfl
+      replace hδ (i : Fin (d + 1)) :
+          s.1 (is.castSucc.succAbove i) = t.1 (it.succ.succAbove i) :=
+        DFunLike.congr_fun (congr_arg Prod.fst hδ.symm) i
+      have hSs (i : Fin (d + 1)) : i in Sδ ↔ is.castSucc.succAbove i in Ss := by
+        simp [Sδ, Ss, stdSimplex.δ_apply]
+      have hSt (i : Fin (d + 1)) : i in Sδ ↔ it.succ.succAbove i in St := by
+        simp [Sδ, St, stdSimplex.δ_apply, hδ]
+      suffices Ss.card = Sδ.card ∧ St.card = Sδ.card + 1 by grind
+      constructor
+      · suffices Ss = Finset.image is.castSucc.succAbove Sδ by
+          rw [this]
+          exact Finset.card_image_of_injective _ Fin.succAbove_right_injective
+        ext i
+        obtain rfl | ⟨i, rfl⟩ := is.castSucc.eq_self_or_eq_succAbove i
+        · have : is.castSucc ∉ Ss := fun h => by
+            have : s.1 is.castSucc <= k.castSucc := by
+              simpa using (hs.simplex_fst_le_castSucc_iff is.castSucc).2 (by simp)
+            simp_all [Ss]
+          simpa
+        · simp [hSs]
+      · suffices St = Finset.image it.succ.succAbove Sδ union {it.succ} by
+          rw [this]; rw [Finset.card_union_of_disjoint (by simp)]; rw [Finset.card_image_of_injective _ Fin.succAbove_right_injective]; rw [Finset.card_singleton]
+        ext i
+        obtain rfl | ⟨i, rfl⟩ := it.succ.eq_self_or_eq_succAbove i
+        · have : it.succ in St := by
+            simpa [St, mem_finset_iff] using ht.simplex_fst_succ
+          simp [hSt, this]
+        · simp [hSt]
 
 中文:
 定义 weakRankFunction
@@ -1608,7 +1861,48 @@ definition weakRankFunction
     obtain ⟨dt, t, ht₁, ht₂, rfl⟩ := Subcomplex.N.mk_surjective t
     obtain rfl : d = d' := h₃
     obtain rfl : ds = d + 1 := hds
-    obt
+    obtain rfl : dt = d + 1 := hdt
+    simp only [ne_eq, pairingCore_ι, Type₁.ext_iff] at h₁
+    obtain ⟨f, hf, hδ⟩ := N.le_iff_exists_mono.1 h₂.le
+    dsimp at f hf
+    obtain ⟨i, rfl⟩ := SimplexCategory.eq_δ_of_mono f
+    obtain rfl | rfl := ht.eq_of_isType₂_δ hs.isType₂_δ i (by
+      rw [S.ext_iff']
+      exact ⟨rfl, hδ.symm⟩)
+    · refine (h₁ (hs.δ_injective ht ?_)).elim
+      rw [Subcomplex.N.ext_iff]; rw [N.ext_iff]; rw [S.ext_iff']
+      exact ⟨rfl, hδ.symm⟩
+    · let Ss := finset (Subcomplex.N.mk s hs₁ hs₂) rfl
+      let St := finset (Subcomplex.N.mk t ht₁ ht₂) rfl
+      let Sδ := finset hs.δ rfl
+      replace hδ (i : Fin (d + 1)) :
+          s.1 (is.castSucc.succAbove i) = t.1 (it.succ.succAbove i) :=
+        DFunLike.congr_fun (congr_arg Prod.fst hδ.symm) i
+      have hSs (i : Fin (d + 1)) : i in Sδ ↔ is.castSucc.succAbove i in Ss := by
+        simp [Sδ, Ss, stdSimplex.δ_apply]
+      have hSt (i : Fin (d + 1)) : i in Sδ ↔ it.succ.succAbove i in St := by
+        simp [Sδ, St, stdSimplex.δ_apply, hδ]
+      suffices Ss.card = Sδ.card ∧ St.card = Sδ.card + 1 by grind
+      constructor
+      · suffices Ss = Finset.image is.castSucc.succAbove Sδ by
+          rw [this]
+          exact Finset.card_image_of_injective _ Fin.succAbove_right_injective
+        ext i
+        obtain rfl | ⟨i, rfl⟩ := is.castSucc.eq_self_or_eq_succAbove i
+        · have : is.castSucc ∉ Ss := fun h => by
+            have : s.1 is.castSucc <= k.castSucc := by
+              simpa using (hs.simplex_fst_le_castSucc_iff is.castSucc).2 (by simp)
+            simp_all [Ss]
+          simpa
+        · simp [hSs]
+      · suffices St = Finset.image it.succ.succAbove Sδ union {it.succ} by
+          rw [this]; rw [Finset.card_union_of_disjoint (by simp)]; rw [Finset.card_image_of_injective _ Fin.succAbove_right_injective]; rw [Finset.card_singleton]
+        ext i
+        obtain rfl | ⟨i, rfl⟩ := it.succ.eq_self_or_eq_succAbove i
+        · have : it.succ in St := by
+            simpa [St, mem_finset_iff] using ht.simplex_fst_succ
+          simp [hSt, this]
+        · simp [hSt]
 
 Depends on / 依赖: finset
 -/
@@ -1694,7 +1988,9 @@ definition pairing
       (((stdSimplex.opIso _).symm otimesᵢ (stdSimplex.opIso _).symm) ≪≫
         Functor.Monoidal.μIso opFunctor _ _) (by
           dsimp
-          rw [hk]; rw [Subcomplex.preimage_comp]; rw [Subcomplex.preimage_
+          rw [hk]; rw [Subcomplex.preimage_comp]; rw [Subcomplex.preimage_op_unionProd]; rw [Subcomplex.preimage_unionProd]; rw [op_boundary]; rw [op_horn]; rw [Fin.rev_zero])
+  else
+    (pairingCore.{u} (k.castPred hk) n).pairing
 
 中文:
 定义 pairing
@@ -1704,7 +2000,9 @@ definition pairing
       (((stdSimplex.opIso _).symm otimesᵢ (stdSimplex.opIso _).symm) ≪≫
         Functor.Monoidal.μIso opFunctor _ _) (by
           dsimp
-          rw [hk]; rw [Subcomplex.preimage_comp]; rw [Subcomplex.preimage_
+          rw [hk]; rw [Subcomplex.preimage_comp]; rw [Subcomplex.preimage_op_unionProd]; rw [Subcomplex.preimage_unionProd]; rw [op_boundary]; rw [op_horn]; rw [Fin.rev_zero])
+  else
+    (pairingCore.{u} (k.castPred hk) n).pairing
 
 Depends on / 依赖: Fin.last, Fin.rev_zero, Functor, Functor.Monoidal, Monoidal, Subcomplex, Subcomplex.preimage_comp, Subcomplex.preimage_op_unionProd, Subcomplex.preimage_unionProd, castPred, k.castPred, opFunctor, op_boundary, op_horn, pairing, pairing.op.ofIso, pairingCore, preimage_comp, preimage_op_unionProd, preimage_unionProd
 -/

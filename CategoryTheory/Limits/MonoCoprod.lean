@@ -87,7 +87,7 @@ theorem binaryCofan_inr
       (fun f₁ f₂ => BinaryCofan.IsColimit.desc (s := c) hc f₂ f₁)
       (by simp) (by simp)
       (fun f₁ f₂ m h₁ h₂ => BinaryCofan.IsColimit.hom_ext hc (by cat_disch) (by cat_disch))
-  exact binaryCofan_inl _ h
+  exact binaryCofan_inl _ hc'
 
 中文:
 定理 binaryCofan_inr
@@ -98,7 +98,7 @@ theorem binaryCofan_inr
       (fun f₁ f₂ => BinaryCofan.IsColimit.desc (s := c) hc f₂ f₁)
       (by simp) (by simp)
       (fun f₁ f₂ m h₁ h₂ => BinaryCofan.IsColimit.hom_ext hc (by cat_disch) (by cat_disch))
-  exact binaryCofan_inl _ h
+  exact binaryCofan_inl _ hc'
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.desc, BinaryCofan.IsColimit.hom_ext, BinaryCofan.IsColimit.mk, BinaryCofan.mk, IsColimit, binaryCofan_inl, c.inl, c.inr, cat_disch, hom_ext
 -/
@@ -131,7 +131,7 @@ theorem mono_inl_iff
     ⟨fun h₁ => this _ _ hc₁ hc₂ h₁, fun h₂ => this _ _ hc₂ hc₁ h₂⟩
   intro c₁ c₂ hc₁ hc₂ _
   simpa only [IsColimit.comp_coconePointUniqueUpToIso_hom] using!
-    mono_comp c₁.
+    mono_comp c₁.inl (hc₁.coconePointUniqueUpToIso hc₂).hom
 
 中文:
 定理 mono_inl_iff
@@ -143,7 +143,7 @@ theorem mono_inl_iff
     ⟨fun h₁ => this _ _ hc₁ hc₂ h₁, fun h₂ => this _ _ hc₂ hc₁ h₂⟩
   intro c₁ c₂ hc₁ hc₂ _
   simpa only [IsColimit.comp_coconePointUniqueUpToIso_hom] using!
-    mono_comp c₁.
+    mono_comp c₁.inl (hc₁.coconePointUniqueUpToIso hc₂).hom
 
 Depends on / 依赖: BinaryCofan, IsColimit, IsColimit.comp_coconePointUniqueUpToIso_hom, coconePointUniqueUpToIso, comp_coconePointUniqueUpToIso_hom, mono_comp
 -/
@@ -199,7 +199,15 @@ instance monoCoprodType
           rcases x with x | x
           exacts [f₁ x, f₂ x])
         (fun f₁ f₂ => by rfl)
-        (fun f₁ f₂ => b
+        (fun f₁ f₂ => by rfl)
+        (fun f₁ f₂ m h₁ h₂ => by
+          ext x
+          rcases x with x | x
+          · exact ConcreteCategory.congr_hom h₁ x
+          · exact ConcreteCategory.congr_hom h₂ x)
+    · rw [mono_iff_injective]
+      intro a₁ a₂ h
+      simpa using h
 
 中文:
 实例 monoCoprodType
@@ -212,7 +220,15 @@ instance monoCoprodType
           rcases x with x | x
           exacts [f₁ x, f₂ x])
         (fun f₁ f₂ => by rfl)
-        (fun f₁ f₂ => b
+        (fun f₁ f₂ => by rfl)
+        (fun f₁ f₂ m h₁ h₂ => by
+          ext x
+          rcases x with x | x
+          · exact ConcreteCategory.congr_hom h₁ x
+          · exact ConcreteCategory.congr_hom h₂ x)
+    · rw [mono_iff_injective]
+      intro a₁ a₂ h
+      simpa using h
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.mk, BinaryCofan.mk, ConcreteCategory, ConcreteCategory.congr_hom, IsColimit, MonoCoprod, MonoCoprod.mk, Sum.inl, Sum.inr, congr_hom, exacts, mono_iff_injective
 -/
@@ -279,7 +295,9 @@ definition isColimitBinaryCofanSum
       | Sum.inr i₂ => c₂.inj i₂ ≫ f₂))
     (fun f₁ f₂ => Cofan.IsColimit.hom_ext hc₁ _ _ (by simp))
     (fun f₁ f₂ => Cofan.IsColimit.hom_ext hc₂ _ _ (by simp))
-    (fun f₁ f₂
+    (fun f₁ f₂ m hm₁ hm₂ => by
+      apply Cofan.IsColimit.hom_ext hc
+      rintro (i₁ | i₂) <;> cat_disch)
 
 中文:
 定义 isColimitBinaryCofanSum
@@ -289,7 +307,9 @@ definition isColimitBinaryCofanSum
       | Sum.inr i₂ => c₂.inj i₂ ≫ f₂))
     (fun f₁ f₂ => Cofan.IsColimit.hom_ext hc₁ _ _ (by simp))
     (fun f₁ f₂ => Cofan.IsColimit.hom_ext hc₂ _ _ (by simp))
-    (fun f₁ f₂
+    (fun f₁ f₂ m hm₁ hm₂ => by
+      apply Cofan.IsColimit.hom_ext hc
+      rintro (i₁ | i₂) <;> cat_disch)
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.mk, Cofan.IsColimit.desc, Cofan.IsColimit.hom_ext, IsColimit, Sum.inl, Sum.inr, cat_disch, hom_ext
 -/
@@ -424,7 +444,8 @@ lemma mono_of_injective_aux
   let e := ((Equiv.ofInjective ι hι).sumCongr (Equiv.refl _)).trans (Equiv.Set.sumCompl _)
   refine mono_binaryCofanSum_inl' (Cofan.mk c.pt (fun i' => c.inj (e i'))) _ _ ?_
     hc₁ hc₂ _ (by simp [e])
-  exact IsColimit.ofIsoColimit ((IsColimit.ofCoconeEquiv (Cocone.equivalenceOfReinde
+  exact IsColimit.ofIsoColimit ((IsColimit.ofCoconeEquiv (Cocone.equivalenceOfReindexing
+    (Discrete.equivalence e) (Iso.refl _))).symm hc) (Cocone.ext (Iso.refl _))
 
 中文:
 引理 mono_of_injective_aux
@@ -434,7 +455,8 @@ lemma mono_of_injective_aux
   let e := ((Equiv.ofInjective ι hι).sumCongr (Equiv.refl _)).trans (Equiv.Set.sumCompl _)
   refine mono_binaryCofanSum_inl' (Cofan.mk c.pt (fun i' => c.inj (e i'))) _ _ ?_
     hc₁ hc₂ _ (by simp [e])
-  exact IsColimit.ofIsoColimit ((IsColimit.ofCoconeEquiv (Cocone.equivalenceOfReinde
+  exact IsColimit.ofIsoColimit ((IsColimit.ofCoconeEquiv (Cocone.equivalenceOfReindexing
+    (Discrete.equivalence e) (Iso.refl _))).symm hc) (Cocone.ext (Iso.refl _))
 
 Depends on / 依赖: Cocone, Cocone.equivalenceOfReindexing, Cocone.ext, Cofan.mk, Discrete, Discrete.equivalence, Equiv.Set.sumCompl, Equiv.ofInjective, Equiv.refl, IsColimit, IsColimit.ofCoconeEquiv, IsColimit.ofIsoColimit, Iso.refl, c.inj, c.pt, classical, equivalence, equivalenceOfReindexing, mono_binaryCofanSum_inl, ofCoconeEquiv
 -/
@@ -608,7 +630,8 @@ theorem monoCoprod_of_preservesCoprod_of_reflectsMono
     apply mapIsColimitOfPreservesOfIsColimit F
     apply IsColimit.ofIsoColimit h
     refine Cocone.ext (φ := eqToIso rfl) ?_
-    rintro ⟨(j₁ | j₂)⟩ <;
+    rintro ⟨(j₁ | j₂)⟩ <;> simp only [eqToIso_refl, Iso.refl_hom,
+      Category.comp_id, BinaryCofan.mk_inl, BinaryCofan.mk_inr]
 
 中文:
 定理 monoCoprod_of_preservesCoprod_of_reflectsMono
@@ -621,7 +644,8 @@ theorem monoCoprod_of_preservesCoprod_of_reflectsMono
     apply mapIsColimitOfPreservesOfIsColimit F
     apply IsColimit.ofIsoColimit h
     refine Cocone.ext (φ := eqToIso rfl) ?_
-    rintro ⟨(j₁ | j₂)⟩ <;
+    rintro ⟨(j₁ | j₂)⟩ <;> simp only [eqToIso_refl, Iso.refl_hom,
+      Category.comp_id, BinaryCofan.mk_inl, BinaryCofan.mk_inr]
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.mk, BinaryCofan.mk_inl, BinaryCofan.mk_inr, Category, Category.comp_id, Cocone, Cocone.ext, F.map, IsColimit, IsColimit.ofIsoColimit, Iso.refl_hom, MonoCoprod, MonoCoprod.binaryCofan_inl, binaryCofan_inl, c.inl, c.inr, comp_id, eqToIso, eqToIso_refl
 -/

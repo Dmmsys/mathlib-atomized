@@ -172,7 +172,31 @@ theorem commute
       rw [← norm_sub_eq_zero_iff]
       have e1 : ‖R • x‖ >= ‖R • x‖ + 2 • ‖(P * R) • x - (R * P * R) • x‖ :=
         calc
-          ‖R • x‖ = ‖R • P • 
+          ‖R • x‖ = ‖R • P • R • x‖ + ‖(1 - R) • P • R • x‖ +
+              (‖(R * R) • x - R • P • R • x‖ + ‖(1 - R) • (1 - P) • R • x‖) := by
+            rw [h₁.Lnorm]; rw [h₃.Lnorm]; rw [h₃.Lnorm ((1 - P) • R • x)]; rw [sub_smul 1 P]; rw [one_smul]; rw [smul_sub]; rw [mul_smul]
+          _ = ‖R • P • R • x‖ + ‖(1 - R) • P • R • x‖ +
+              (‖R • x - R • P • R • x‖ + ‖((1 - R) * R) • x - (1 - R) • P • R • x‖) := by
+            rw [h₃.proj.eq]; rw [sub_smul 1 P]; rw [one_smul]; rw [smul_sub]; rw [mul_smul]
+          _ = ‖R • P • R • x‖ + ‖(1 - R) • P • R • x‖ +
+              (‖R • x - R • P • R • x‖ + ‖(1 - R) • P • R • x‖) := by
+            rw [sub_mul]; rw [h₃.proj.eq]; rw [one_mul]; rw [sub_self]; rw [zero_smul]; rw [zero_sub]; rw [norm_neg]
+          _ = ‖R • P • R • x‖ + ‖R • x - R • P • R • x‖ + 2 • ‖(1 - R) • P • R • x‖ := by abel
+          _ >= ‖R • x‖ + 2 • ‖(P * R) • x - (R * P * R) • x‖ := by
+            rw [ge_iff_le]
+            have :=
+              add_le_add_left (norm_le_insert' (R • x) (R • P • R • x)) (2 • ‖(1 - R) • P • R • x‖)
+            simpa only [mul_smul, sub_smul, one_smul] using this
+      rw [two_smul] at e1
+      nlinarith [e1, norm_nonneg ((P * R) • x - (R * P * R) • x)]
+  have QP_eq_QPQ : Q * P = Q * P * Q := by
+    have e1 : Q * P - Q * P * Q = 0 := by
+      calc
+        Q * P - Q * P * Q = P * (1 - Q) - (1 - Q) * P * (1 - Q) := by noncomm_ring
+        _ = 0 := sub_eq_zero.mpr (PR_eq_RPR (1 - Q) h₂.Lcomplement)
+    simpa [sub_eq_zero] using e1
+  change P * Q = Q * P
+  rw [QP_eq_QPQ]; rw [PR_eq_RPR Q h₂]
 
 中文:
 定理 commute
@@ -183,7 +207,31 @@ theorem commute
       rw [← norm_sub_eq_zero_iff]
       have e1 : ‖R • x‖ >= ‖R • x‖ + 2 • ‖(P * R) • x - (R * P * R) • x‖ :=
         calc
-          ‖R • x‖ = ‖R • P • 
+          ‖R • x‖ = ‖R • P • R • x‖ + ‖(1 - R) • P • R • x‖ +
+              (‖(R * R) • x - R • P • R • x‖ + ‖(1 - R) • (1 - P) • R • x‖) := by
+            rw [h₁.Lnorm]; rw [h₃.Lnorm]; rw [h₃.Lnorm ((1 - P) • R • x)]; rw [sub_smul 1 P]; rw [one_smul]; rw [smul_sub]; rw [mul_smul]
+          _ = ‖R • P • R • x‖ + ‖(1 - R) • P • R • x‖ +
+              (‖R • x - R • P • R • x‖ + ‖((1 - R) * R) • x - (1 - R) • P • R • x‖) := by
+            rw [h₃.proj.eq]; rw [sub_smul 1 P]; rw [one_smul]; rw [smul_sub]; rw [mul_smul]
+          _ = ‖R • P • R • x‖ + ‖(1 - R) • P • R • x‖ +
+              (‖R • x - R • P • R • x‖ + ‖(1 - R) • P • R • x‖) := by
+            rw [sub_mul]; rw [h₃.proj.eq]; rw [one_mul]; rw [sub_self]; rw [zero_smul]; rw [zero_sub]; rw [norm_neg]
+          _ = ‖R • P • R • x‖ + ‖R • x - R • P • R • x‖ + 2 • ‖(1 - R) • P • R • x‖ := by abel
+          _ >= ‖R • x‖ + 2 • ‖(P * R) • x - (R * P * R) • x‖ := by
+            rw [ge_iff_le]
+            have :=
+              add_le_add_left (norm_le_insert' (R • x) (R • P • R • x)) (2 • ‖(1 - R) • P • R • x‖)
+            simpa only [mul_smul, sub_smul, one_smul] using this
+      rw [two_smul] at e1
+      nlinarith [e1, norm_nonneg ((P * R) • x - (R * P * R) • x)]
+  have QP_eq_QPQ : Q * P = Q * P * Q := by
+    have e1 : Q * P - Q * P * Q = 0 := by
+      calc
+        Q * P - Q * P * Q = P * (1 - Q) - (1 - Q) * P * (1 - Q) := by noncomm_ring
+        _ = 0 := sub_eq_zero.mpr (PR_eq_RPR (1 - Q) h₂.Lcomplement)
+    simpa [sub_eq_zero] using e1
+  change P * Q = Q * P
+  rw [QP_eq_QPQ]; rw [PR_eq_RPR Q h₂]
 
 Depends on / 依赖: IsLprojection, PR_eq_RPR, eq_of_smul_eq_smul, mul_smul, norm_sub_eq_zero_iff, one_smul, smul_sub, sub_smul
 -/
@@ -233,7 +281,14 @@ theorem mul
   · calc
       ‖x‖ = ‖(P * Q) • x + (x - (P * Q) • x)‖ := by rw [add_sub_cancel ((P * Q) • x) x]
       _ <= ‖(P * Q) • x‖ + ‖x - (P * Q) • x‖ := by apply norm_add_le
-      _ = ‖(P *
+      _ = ‖(P * Q) • x‖ + ‖(1 - P * Q) • x‖ := by rw [sub_smul, one_smul]
+  · calc
+      ‖x‖ = ‖P • Q • x‖ + (‖Q • x - P • Q • x‖ + ‖x - Q • x‖) := by
+        rw [h₂.Lnorm x]; rw [h₁.Lnorm (Q • x)]; rw [sub_smul]; rw [one_smul]; rw [sub_smul]; rw [one_smul]; rw [add_assoc]
+      _ >= ‖P • Q • x‖ + ‖Q • x - P • Q • x + (x - Q • x)‖ :=
+        ((add_le_add_iff_left ‖P • Q • x‖).mpr (norm_add_le (Q • x - P • Q • x) (x - Q • x)))
+      _ = ‖(P * Q) • x‖ + ‖(1 - P * Q) • x‖ := by
+        rw [sub_add_sub_cancel']; rw [sub_smul]; rw [one_smul]; rw [mul_smul]
 
 中文:
 定理 mul
@@ -245,7 +300,14 @@ theorem mul
   · calc
       ‖x‖ = ‖(P * Q) • x + (x - (P * Q) • x)‖ := by rw [add_sub_cancel ((P * Q) • x) x]
       _ <= ‖(P * Q) • x‖ + ‖x - (P * Q) • x‖ := by apply norm_add_le
-      _ = ‖(P *
+      _ = ‖(P * Q) • x‖ + ‖(1 - P * Q) • x‖ := by rw [sub_smul, one_smul]
+  · calc
+      ‖x‖ = ‖P • Q • x‖ + (‖Q • x - P • Q • x‖ + ‖x - Q • x‖) := by
+        rw [h₂.Lnorm x]; rw [h₁.Lnorm (Q • x)]; rw [sub_smul]; rw [one_smul]; rw [sub_smul]; rw [one_smul]; rw [add_assoc]
+      _ >= ‖P • Q • x‖ + ‖Q • x - P • Q • x + (x - Q • x)‖ :=
+        ((add_le_add_iff_left ‖P • Q • x‖).mpr (norm_add_le (Q • x - P • Q • x) (x - Q • x)))
+      _ = ‖(P * Q) • x‖ + ‖(1 - P * Q) • x‖ := by
+        rw [sub_add_sub_cancel']; rw [sub_smul]; rw [one_smul]; rw [mul_smul]
 
 Depends on / 依赖: IsIdempotentElem, IsIdempotentElem.mul_of_commute, add_sub_cancel, commute, le_antisymm, mul_of_commute, norm_add_le, one_smul, sub_smul
 -/
@@ -704,13 +766,13 @@ English:
 theorem distrib_lattice_lemma
   given: [FaithfulSMul M X] {P Q R : { P : M // IsLprojection X P }}
   proof: by
-  rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [(mul_assoc _ (R : M) (↑Q * ↑R * ↑Pᶜ))]; rw [← mul_assoc (R : M) (↑Q * ↑R) _]; rw [← coe_inf Q]; rw [(Pᶜ.prop.commute R.prop).eq]; rw [((Q ⊓ R).prop.commute Pᶜ.prop).eq]; rw [(R.prop.commute (Q ⊓ R).prop).eq]; rw [coe_inf Q]; rw [mul_assoc (Q : M)]; 
+  rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [(mul_assoc _ (R : M) (↑Q * ↑R * ↑Pᶜ))]; rw [← mul_assoc (R : M) (↑Q * ↑R) _]; rw [← coe_inf Q]; rw [(Pᶜ.prop.commute R.prop).eq]; rw [((Q ⊓ R).prop.commute Pᶜ.prop).eq]; rw [(R.prop.commute (Q ⊓ R).prop).eq]; rw [coe_inf Q]; rw [mul_assoc (Q : M)]; rw [← mul_assoc]; rw [mul_assoc (R : M)]; rw [(Pᶜ.prop.commute P.prop).eq]; rw [mul_compl_self]; rw [zero_mul]; rw [mul_zero]; rw [zero_add]; rw [add_zero]; rw [← mul_assoc]; rw [P.prop.proj.eq]; rw [R.prop.proj.eq]; rw [← coe_inf Q]; rw [mul_assoc]; rw [((Q ⊓ R).prop.commute Pᶜ.prop).eq]; rw [← mul_assoc]; rw [Pᶜ.prop.proj.eq]
 
 中文:
 定理 distrib_lattice_lemma
   条件: [忠实标量乘法 M X] {P Q R : { P : M // 是Lprojection X P }}
   证明: by
-  rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [(mul_assoc _ (R : M) (↑Q * ↑R * ↑Pᶜ))]; rw [← mul_assoc (R : M) (↑Q * ↑R) _]; rw [← coe_inf Q]; rw [(Pᶜ.prop.commute R.prop).eq]; rw [((Q ⊓ R).prop.commute Pᶜ.prop).eq]; rw [(R.prop.commute (Q ⊓ R).prop).eq]; rw [coe_inf Q]; rw [mul_assoc (Q : M)]; 
+  rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [(mul_assoc _ (R : M) (↑Q * ↑R * ↑Pᶜ))]; rw [← mul_assoc (R : M) (↑Q * ↑R) _]; rw [← coe_inf Q]; rw [(Pᶜ.prop.commute R.prop).eq]; rw [((Q ⊓ R).prop.commute Pᶜ.prop).eq]; rw [(R.prop.commute (Q ⊓ R).prop).eq]; rw [coe_inf Q]; rw [mul_assoc (Q : M)]; rw [← mul_assoc]; rw [mul_assoc (R : M)]; rw [(Pᶜ.prop.commute P.prop).eq]; rw [mul_compl_self]; rw [zero_mul]; rw [mul_zero]; rw [zero_add]; rw [add_zero]; rw [← mul_assoc]; rw [P.prop.proj.eq]; rw [R.prop.proj.eq]; rw [← coe_inf Q]; rw [mul_assoc]; rw [((Q ⊓ R).prop.commute Pᶜ.prop).eq]; rw [← mul_assoc]; rw [Pᶜ.prop.proj.eq]
 
 Depends on / 依赖: P.prop, P.prop.proj.eq, R.prop, R.prop.commute, add_mul, add_zero, coe_inf, commute, mul_add, mul_assoc, mul_compl_self, mul_zero, prop.commute, zero_add, zero_mul
 -/
@@ -729,7 +791,18 @@ instance [FaithfulSMul
   le_sup_left P Q := by
     rw [le_def]; rw [coe_inf]; rw [coe_sup]; rw [← add_sub]; rw [mul_add]; rw [mul_sub]; rw [← mul_assoc]; rw [P.prop.proj.eq]; rw [sub_self]; rw [add_zero]
   le_sup_right P Q := by
-    rw [le_def]; rw [coe_inf]; rw [coe_sup]; rw [← add_sub]; rw [mul_add]; rw
+    rw [le_def]; rw [coe_inf]; rw [coe_sup]; rw [← add_sub]; rw [mul_add]; rw [mul_sub]; rw [(P.prop.commute Q.prop).eq]; rw [← mul_assoc]; rw [Q.prop.proj.eq]; rw [add_sub_cancel]
+  sup_le P Q R := by
+    rw [le_def]; rw [le_def]; rw [le_def]; rw [coe_inf]; rw [coe_inf]; rw [coe_sup]; rw [coe_inf]; rw [coe_sup]; rw [← add_sub]; rw [add_mul]; rw [sub_mul]; rw [mul_assoc]
+    intro h₁ h₂
+    rw [← h₂]; rw [← h₁]
+  inf_le_left P Q := by
+    rw [le_def]; rw [coe_inf]; rw [coe_inf]; rw [coe_inf]; rw [mul_assoc]; rw [(Q.prop.commute P.prop).eq]; rw [← mul_assoc]; rw [P.prop.proj.eq]
+  inf_le_right P Q := by rw [le_def, coe_inf, coe_inf, coe_inf, mul_assoc, Q.prop.proj.eq]
+  le_inf P Q R := by
+    rw [le_def]; rw [le_def]; rw [le_def]; rw [coe_inf]; rw [coe_inf]; rw [coe_inf]; rw [coe_inf]; rw [← mul_assoc]
+    intro h₁ h₂
+    rw [← h₁]; rw [← h₂]
 
 中文:
 实例 [忠实标量乘法
@@ -739,7 +812,18 @@ instance [FaithfulSMul
   le_sup_left P Q := by
     rw [le_def]; rw [coe_inf]; rw [coe_sup]; rw [← add_sub]; rw [mul_add]; rw [mul_sub]; rw [← mul_assoc]; rw [P.prop.proj.eq]; rw [sub_self]; rw [add_zero]
   le_sup_right P Q := by
-    rw [le_def]; rw [coe_inf]; rw [coe_sup]; rw [← add_sub]; rw [mul_add]; rw
+    rw [le_def]; rw [coe_inf]; rw [coe_sup]; rw [← add_sub]; rw [mul_add]; rw [mul_sub]; rw [(P.prop.commute Q.prop).eq]; rw [← mul_assoc]; rw [Q.prop.proj.eq]; rw [add_sub_cancel]
+  sup_le P Q R := by
+    rw [le_def]; rw [le_def]; rw [le_def]; rw [coe_inf]; rw [coe_inf]; rw [coe_sup]; rw [coe_inf]; rw [coe_sup]; rw [← add_sub]; rw [add_mul]; rw [sub_mul]; rw [mul_assoc]
+    intro h₁ h₂
+    rw [← h₂]; rw [← h₁]
+  inf_le_left P Q := by
+    rw [le_def]; rw [coe_inf]; rw [coe_inf]; rw [coe_inf]; rw [mul_assoc]; rw [(Q.prop.commute P.prop).eq]; rw [← mul_assoc]; rw [P.prop.proj.eq]
+  inf_le_right P Q := by rw [le_def, coe_inf, coe_inf, coe_inf, mul_assoc, Q.prop.proj.eq]
+  le_inf P Q R := by
+    rw [le_def]; rw [le_def]; rw [le_def]; rw [coe_inf]; rw [coe_inf]; rw [coe_inf]; rw [coe_inf]; rw [← mul_assoc]
+    intro h₁ h₂
+    rw [← h₁]; rw [← h₂]
 -/
 instance [FaithfulSMul M X] : Lattice { P : M // IsLprojection X P } where
   sup := max
@@ -768,14 +852,22 @@ instance Subtype.distribLattice
   signature: [FaithfulSMul M X]
   body: by
     have e₁ : ↑((P ⊔ Q) ⊓ (P ⊔ R)) = ↑P + ↑Q * (R : M) * ↑Pᶜ := by
-      rw [coe_inf]; rw [coe_sup]; rw [coe_sup]; rw [← add_sub]; rw [← add_sub]; rw [← compl_mul]; rw [← compl_mul]; rw [add_mul]; rw [mul_add]; rw [(Pᶜ.prop.commute Q.prop).eq]; rw [mul_add]; rw [← mul_assoc]; rw [mul_assoc (Q : M
+      rw [coe_inf]; rw [coe_sup]; rw [coe_sup]; rw [← add_sub]; rw [← add_sub]; rw [← compl_mul]; rw [← compl_mul]; rw [add_mul]; rw [mul_add]; rw [(Pᶜ.prop.commute Q.prop).eq]; rw [mul_add]; rw [← mul_assoc]; rw [mul_assoc (Q : M)]; rw [(Pᶜ.prop.commute P.prop).eq]; rw [mul_compl_self]; rw [zero_mul]; rw [mul_zero]; rw [zero_add]; rw [add_zero]; rw [← mul_assoc]; rw [mul_assoc (Q : M)]; rw [P.prop.proj.eq]; rw [Pᶜ.prop.proj.eq]; rw [mul_assoc]; rw [(Pᶜ.prop.commute R.prop).eq]; rw [← mul_assoc]
+    have e₂ : ↑((P ⊔ Q) ⊓ (P ⊔ R)) * ↑(P ⊔ Q ⊓ R) = (P : M) + ↑Q * ↑R * ↑Pᶜ := by
+      rw [coe_inf]; rw [coe_sup]; rw [coe_sup]; rw [coe_sup]; rw [← add_sub]; rw [← add_sub]; rw [← add_sub]; rw [← compl_mul]; rw [←
+        compl_mul]; rw [← compl_mul]; rw [(Pᶜ.prop.commute (Q ⊓ R).prop).eq]; rw [coe_inf]; rw [mul_assoc]; rw [distrib_lattice_lemma]; rw [(Q.prop.commute R.prop).eq]; rw [distrib_lattice_lemma]
+    rw [le_def]; rw [e₁]; rw [coe_inf]; rw [e₂]
 
 中文:
 实例 子类型.distribLattice
   签名: [忠实标量乘法 M X]
   定义体: by
     have e₁ : ↑((P ⊔ Q) ⊓ (P ⊔ R)) = ↑P + ↑Q * (R : M) * ↑Pᶜ := by
-      rw [coe_inf]; rw [coe_sup]; rw [coe_sup]; rw [← add_sub]; rw [← add_sub]; rw [← compl_mul]; rw [← compl_mul]; rw [add_mul]; rw [mul_add]; rw [(Pᶜ.prop.commute Q.prop).eq]; rw [mul_add]; rw [← mul_assoc]; rw [mul_assoc (Q : M
+      rw [coe_inf]; rw [coe_sup]; rw [coe_sup]; rw [← add_sub]; rw [← add_sub]; rw [← compl_mul]; rw [← compl_mul]; rw [add_mul]; rw [mul_add]; rw [(Pᶜ.prop.commute Q.prop).eq]; rw [mul_add]; rw [← mul_assoc]; rw [mul_assoc (Q : M)]; rw [(Pᶜ.prop.commute P.prop).eq]; rw [mul_compl_self]; rw [zero_mul]; rw [mul_zero]; rw [zero_add]; rw [add_zero]; rw [← mul_assoc]; rw [mul_assoc (Q : M)]; rw [P.prop.proj.eq]; rw [Pᶜ.prop.proj.eq]; rw [mul_assoc]; rw [(Pᶜ.prop.commute R.prop).eq]; rw [← mul_assoc]
+    have e₂ : ↑((P ⊔ Q) ⊓ (P ⊔ R)) * ↑(P ⊔ Q ⊓ R) = (P : M) + ↑Q * ↑R * ↑Pᶜ := by
+      rw [coe_inf]; rw [coe_sup]; rw [coe_sup]; rw [coe_sup]; rw [← add_sub]; rw [← add_sub]; rw [← add_sub]; rw [← compl_mul]; rw [←
+        compl_mul]; rw [← compl_mul]; rw [(Pᶜ.prop.commute (Q ⊓ R).prop).eq]; rw [coe_inf]; rw [mul_assoc]; rw [distrib_lattice_lemma]; rw [(Q.prop.commute R.prop).eq]; rw [distrib_lattice_lemma]
+    rw [le_def]; rw [e₁]; rw [coe_inf]; rw [e₂]
 
 Depends on / 依赖: P.prop, P.prop.proj.eq, Q.prop, add_mul, add_sub, add_zero, coe_inf, coe_sup, commute, compl_mul, mul_add, mul_assoc, mul_compl_self, mul_zero, prop.commute, prop.proj.eq, zero_add, zero_mul
 -/
@@ -803,7 +895,8 @@ instance Subtype.BooleanAlgebra
     top_le_sup_compl := fun P =>
       (Subtype.ext
         (by
- 
+          rw [coe_top]; rw [coe_sup]; rw [coe_compl]; rw [add_sub_cancel]; rw [← coe_compl]; rw [mul_compl_self]; rw [sub_zero])).le
+sdiff_eq := fun P Q => Subtype.ext by rw [coe_sdiff, ← coe_compl, coe_inf] }
 
 中文:
 实例 子类型.布尔代数
@@ -816,7 +909,8 @@ instance Subtype.BooleanAlgebra
     top_le_sup_compl := fun P =>
       (Subtype.ext
         (by
- 
+          rw [coe_top]; rw [coe_sup]; rw [coe_compl]; rw [add_sub_cancel]; rw [← coe_compl]; rw [mul_compl_self]; rw [sub_zero])).le
+sdiff_eq := fun P Q => Subtype.ext by rw [coe_sdiff, ← coe_compl, coe_inf] }
 
 Depends on / 依赖: IsLprojection, IsLprojection.Subtype.boundedOrder, IsLprojection.Subtype.instCompl, IsLprojection.Subtype.sdiff, Subtype, Subtype.ext, add_sub_cancel, boundedOrder, coe_bot, coe_compl, coe_inf, coe_sdiff, coe_sup, coe_top, inf_compl_le_bot, instCompl, mul_compl_self, sdiff_eq, sub_zero, top_le_sup_compl
 -/

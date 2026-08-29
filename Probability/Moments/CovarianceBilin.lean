@@ -240,7 +240,7 @@ lemma covarianceBilin_real
   by_cases h : MemLp id 2 μ
   · simp only [covarianceBilin_apply_eq_cov h, RCLike.inner_apply, conj_trivial, mul_comm]
     rw [covariance_const_mul_left]; rw [covariance_const_mul_right]; rw [← mul_assoc]; rw [covariance_self aemeasurable_id']; rw [Function.id_def]
-  · simp [h, variance_of_not_me
+  · simp [h, variance_of_not_memLp, aestronglyMeasurable_id]
 
 中文:
 引理 covarianceBilin_real
@@ -249,7 +249,7 @@ lemma covarianceBilin_real
   by_cases h : MemLp id 2 μ
   · simp only [covarianceBilin_apply_eq_cov h, RCLike.inner_apply, conj_trivial, mul_comm]
     rw [covariance_const_mul_left]; rw [covariance_const_mul_right]; rw [← mul_assoc]; rw [covariance_self aemeasurable_id']; rw [Function.id_def]
-  · simp [h, variance_of_not_me
+  · simp [h, variance_of_not_memLp, aestronglyMeasurable_id]
 
 Depends on / 依赖: Function, Function.id_def, RCLike, RCLike.inner_apply, aemeasurable_id, aestronglyMeasurable_id, conj_trivial, covarianceBilin_apply_eq_cov, covariance_const_mul_left, covariance_const_mul_right, covariance_self, id_def, inner_apply, mul_assoc, mul_comm, variance_of_not_memLp
 -/
@@ -374,7 +374,18 @@ lemma covarianceBilin_map_const_add
     have h_Lp : MemLp id 2 (μ.map (fun x => c + x)) :=
 (measurableEmbedding_addLeft _).memLp_map_measure_iff.mpr (memLp_const c).add h
     rw [covarianceBilin_apply h_Lp]; rw [covarianceBilin_apply h]; rw [integral_map (by fun_prop) (by fun_prop)]
-    congr
+    congr with z
+    rw [integral_map (by fun_prop) h_Lp.1]
+    simp only [id_eq]
+    rw [integral_add (integrable_const _)]
+    · simp
+    · exact h.integrable (by simp)
+  · ext
+    rw [covarianceBilin_of_not_memLp]; rw [covarianceBilin_of_not_memLp h]
+    rw [(measurableEmbedding_addLeft _).memLp_map_measure_iff.not]
+    contrapose h
+    convert! (memLp_const (-c)).add h
+    ext; simp
 
 中文:
 引理 covarianceBilin_map_const_add
@@ -385,7 +396,18 @@ lemma covarianceBilin_map_const_add
     have h_Lp : MemLp id 2 (μ.map (fun x => c + x)) :=
 (measurableEmbedding_addLeft _).memLp_map_measure_iff.mpr (memLp_const c).add h
     rw [covarianceBilin_apply h_Lp]; rw [covarianceBilin_apply h]; rw [integral_map (by fun_prop) (by fun_prop)]
-    congr
+    congr with z
+    rw [integral_map (by fun_prop) h_Lp.1]
+    simp only [id_eq]
+    rw [integral_add (integrable_const _)]
+    · simp
+    · exact h.integrable (by simp)
+  · ext
+    rw [covarianceBilin_of_not_memLp]; rw [covarianceBilin_of_not_memLp h]
+    rw [(measurableEmbedding_addLeft _).memLp_map_measure_iff.not]
+    contrapose h
+    convert! (memLp_const (-c)).add h
+    ext; simp
 
 Depends on / 依赖: covarianceBilin_apply, covarianceBilin_of_not_memLp, fun_prop, h.integrable, h_Lp, id_eq, integrable, integrable_const, integral_add, integral_map, measurableEmbedding_addLeft, memLp_const, memLp_map_measure_iff, memLp_map_measure_iff.mpr
 -/
@@ -422,7 +444,7 @@ lemma covarianceBilin_apply_basisFun
   · exact Measurable.aestronglyMeasurable (by fun_prop)
   · exact Measurable.aestronglyMeasurable (by fun_prop)
   · fun_prop
-  · exact (memLp_map_measure_iff aestronglyMea
+  · exact (memLp_map_measure_iff aestronglyMeasurable_id (by fun_prop)).2 (MemLp.of_eval_piLp hX)
 
 中文:
 引理 covarianceBilin_apply_basisFun
@@ -434,7 +456,7 @@ lemma covarianceBilin_apply_basisFun
   · exact Measurable.aestronglyMeasurable (by fun_prop)
   · exact Measurable.aestronglyMeasurable (by fun_prop)
   · fun_prop
-  · exact (memLp_map_measure_iff aestronglyMea
+  · exact (memLp_map_measure_iff aestronglyMeasurable_id (by fun_prop)).2 (MemLp.of_eval_piLp hX)
 
 Depends on / 依赖: Measurable, Measurable.aestronglyMeasurable, MemLp.of_eval_piLp, aemeasurable, aestronglyMeasurable, aestronglyMeasurable_id, basisFun_inner, covarianceBilin_apply_eq_cov, covariance_map, fun_prop, memLp_map_measure_iff, of_eval_piLp
 -/
@@ -491,7 +513,13 @@ lemma covarianceBilin_apply_pi
     ← (basisFun ι Real).sum_repr' y]
   · simp_rw [sum_inner, real_inner_smul_left, basisFun_inner]
     rw [covariance_fun_sum_fun_sum]
-    · refine Finset.sum_congr
+    · refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
+      rw [covariance_const_mul_left]; rw [covariance_const_mul_right]
+      ring
+    all_goals exact fun i => (hX i).const_mul _
+  any_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+  · fun_prop
+  · exact (memLp_map_measure_iff aestronglyMeasurable_id (by fun_prop)).2 (MemLp.of_eval_piLp hX)
 
 中文:
 引理 covarianceBilin_apply_pi
@@ -502,7 +530,13 @@ lemma covarianceBilin_apply_pi
     ← (basisFun ι Real).sum_repr' y]
   · simp_rw [sum_inner, real_inner_smul_left, basisFun_inner]
     rw [covariance_fun_sum_fun_sum]
-    · refine Finset.sum_congr
+    · refine Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => ?_
+      rw [covariance_const_mul_left]; rw [covariance_const_mul_right]
+      ring
+    all_goals exact fun i => (hX i).const_mul _
+  any_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+  · fun_prop
+  · exact (memLp_map_measure_iff aestronglyMeasurable_id (by fun_prop)).2 (MemLp.of_eval_piLp hX)
 
 Depends on / 依赖: Finset, Finset.sum_congr, Measurable, Measurable.aestronglyMeasurable, aemeasurable, aestronglyMeasurable, all_goals, any_goals, basisFun, basisFun_inner, const_mul, covarianceBilin_apply_eq_cov, covariance_const_mul_left, covariance_const_mul_right, covariance_fun_sum_fun_sum, covariance_map_fun, nth_rw, real_inner_smul_left, simp_rw, sum_congr
 -/
@@ -668,7 +702,8 @@ lemma isPositive_covarianceOperator
   · simp_rw [ContinuousLinearMap.coe_coe, real_inner_comm _ x, covarianceOperator_inner hμ,
       mul_comm]
   · simp only [ContinuousLinearMap.coe_coe, covarianceOperator_inner hμ, ← pow_two,
-      RCLike.re_to
+      RCLike.re_to_real]
+    positivity
 
 中文:
 引理 isPositive_covarianceOperator
@@ -680,7 +715,8 @@ lemma isPositive_covarianceOperator
   · simp_rw [ContinuousLinearMap.coe_coe, real_inner_comm _ x, covarianceOperator_inner hμ,
       mul_comm]
   · simp only [ContinuousLinearMap.coe_coe, covarianceOperator_inner hμ, ← pow_two,
-      RCLike.re_to
+      RCLike.re_to_real]
+    positivity
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_coe, RCLike, RCLike.re_to_real, coe_coe, covarianceOperator_inner, mul_comm, pow_two, re_to_real, real_inner_comm, simp_rw
 -/

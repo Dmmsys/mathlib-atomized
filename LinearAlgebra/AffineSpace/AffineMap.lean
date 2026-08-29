@@ -1021,7 +1021,11 @@ instance :
   add_vadd f₁ f₂ f₃ := ext fun p => add_vadd (f₁ p) (f₂ p) (f₃ p)
   vsub f g :=
     ⟨fun p => f p -ᵥ g p, f.linear - g.linear, fun p v => by
-      simp [vs
+      simp [vsub_vadd_eq_vsub_sub, vadd_vsub_assoc, sub_add_eq_add_sub]⟩
+  vsub_vadd' f g := ext fun p => vsub_vadd (f p) (g p)
+  vadd_vsub' f g := ext fun p => vadd_vsub (f p) (g p)
+
+@[simp]
 
 中文:
 实例 :
@@ -1032,7 +1036,11 @@ instance :
   add_vadd f₁ f₂ f₃ := ext fun p => add_vadd (f₁ p) (f₂ p) (f₃ p)
   vsub f g :=
     ⟨fun p => f p -ᵥ g p, f.linear - g.linear, fun p v => by
-      simp [vs
+      simp [vsub_vadd_eq_vsub_sub, vadd_vsub_assoc, sub_add_eq_add_sub]⟩
+  vsub_vadd' f g := ext fun p => vsub_vadd (f p) (g p)
+  vadd_vsub' f g := ext fun p => vadd_vsub (f p) (g p)
+
+@[simp]
 
 Depends on / 依赖: add_right_comm, add_vadd, f.linear, g.linear, linear, sub_add_eq_add_sub, vadd_vadd, vadd_vsub, vadd_vsub_assoc, vsub_vadd, vsub_vadd_eq_vsub_sub, zero_vadd
 -/
@@ -2668,7 +2676,8 @@ theorem image_uIcc
     change f x = x • (f 1 -ᵥ f 0) +ᵥ f 0
     rw [← f.linearMap_vsub]; rw [← f.linear.map_smul]; rw [← f.map_vadd]
     simp only [vsub_eq_sub, add_zero, mul_one, vadd_eq_add, sub_zero, smul_eq_mul]
-  rw [this]; rw [Set.ima
+  rw [this]; rw [Set.image_comp]
+  simp only [Set.image_add_const_uIcc, Set.image_mul_const_uIcc, Function.comp_apply]
 
 中文:
 定理 image_uIcc
@@ -2679,7 +2688,8 @@ theorem image_uIcc
     change f x = x • (f 1 -ᵥ f 0) +ᵥ f 0
     rw [← f.linearMap_vsub]; rw [← f.linear.map_smul]; rw [← f.map_vadd]
     simp only [vsub_eq_sub, add_zero, mul_one, vadd_eq_add, sub_zero, smul_eq_mul]
-  rw [this]; rw [Set.ima
+  rw [this]; rw [Set.image_comp]
+  simp only [Set.image_add_const_uIcc, Set.image_mul_const_uIcc, Function.comp_apply]
 
 Depends on / 依赖: Function, Function.comp_apply, Set.image_add_const_uIcc, Set.image_comp, Set.image_mul_const_uIcc, add_zero, comp_apply, f.linear.map_smul, f.linearMap_vsub, f.map_vadd, image_add_const_uIcc, image_comp, image_mul_const_uIcc, linear, linearMap_vsub, map_smul, map_vadd, mul_one, smul_eq_mul, sub_zero
 -/
@@ -3089,7 +3099,8 @@ theorem pi_ext_zero
     rw [vadd_eq_add]; rw [add_zero] at s₂ s₃
     replace h₂ := h i 0
     simp only [Pi.single_zero] at h₂
-    rwa [s₂, s₃, h₂, v
+    rwa [s₂, s₃, h₂, vadd_right_cancel_iff] at s₁
+  · exact h₂
 
 中文:
 定理 pi_ext_zero
@@ -3104,7 +3115,8 @@ theorem pi_ext_zero
     rw [vadd_eq_add]; rw [add_zero] at s₂ s₃
     replace h₂ := h i 0
     simp only [Pi.single_zero] at h₂
-    rwa [s₂, s₃, h₂, v
+    rwa [s₂, s₃, h₂, vadd_right_cancel_iff] at s₁
+  · exact h₂
 
 Depends on / 依赖: LinearMap, LinearMap.pi_ext, Pi.single, Pi.single_zero, add_zero, ext_linear, f.map_vadd, g.map_vadd, map_vadd, pi_ext, replace, single, single_zero, vadd_eq_add, vadd_right_cancel_iff
 -/

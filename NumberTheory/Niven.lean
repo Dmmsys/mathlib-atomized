@@ -406,7 +406,14 @@ theorem niven
   obtain ⟨r, rfl⟩ := hθ
   obtain ⟨k, hk⟩ : exists k : Int, 2 * cos (r * π) = k := by
     rw [← (Real.isIntegral_two_mul_cos_rat_mul_pi r).exists_int_iff_exists_rat]
-    ex
+    exact ⟨2 * hcos.choose, by push_cast; linarith [hcos.choose_spec]⟩
+  -- Since k is an integer and `2 * cos (w * pi) = k`, we have $k ∈ {-2, -1, 0, 1, 2}$.
+  have hk_values : k in Finset.Icc (-2 : Int) 2 := by
+    rw [Finset.mem_Icc]
+    rify
+    constructor <;> linarith [hk, (r * π).neg_one_le_cos, (r * π).cos_le_one]
+  rw [show cos (r * π) = k / 2 by grind]
+  fin_cases hk_values <;> simp
 
 中文:
 定理 niven
@@ -417,7 +424,14 @@ theorem niven
   obtain ⟨r, rfl⟩ := hθ
   obtain ⟨k, hk⟩ : exists k : Int, 2 * cos (r * π) = k := by
     rw [← (Real.isIntegral_two_mul_cos_rat_mul_pi r).exists_int_iff_exists_rat]
-    ex
+    exact ⟨2 * hcos.choose, by push_cast; linarith [hcos.choose_spec]⟩
+  -- Since k is an integer and `2 * cos (w * pi) = k`, we have $k ∈ {-2, -1, 0, 1, 2}$.
+  have hk_values : k in Finset.Icc (-2 : Int) 2 := by
+    rw [Finset.mem_Icc]
+    rify
+    constructor <;> linarith [hk, (r * π).neg_one_le_cos, (r * π).cos_le_one]
+  rw [show cos (r * π) = k / 2 by grind]
+  fin_cases hk_values <;> simp
 -/
 theorem niven (hθ : exists r : Rat, θ = r * π) (hcos : exists q : Rat, cos θ = q) :
     cos θ in ({-1, -1 / 2, 0, 1 / 2, 1} : Set Real) := by
@@ -480,7 +494,9 @@ theorem niven_angle_eq
       have := cos_pi_div_three
       grind;;
     have h₂ := cos_pi_div_two;
-    have h₂ := c
+    have h₂ := cos_pi_div_three;
+    have h₂ := cos_zero] <;>
+  simp [injOn_cos h_bnd ⟨by positivity, by linarith [pi_nonneg]⟩ (h₂ ▸ h)]
 
 中文:
 定理 niven_angle_eq
@@ -494,7 +510,9 @@ theorem niven_angle_eq
       have := cos_pi_div_three
       grind;;
     have h₂ := cos_pi_div_two;
-    have h₂ := c
+    have h₂ := cos_pi_div_three;
+    have h₂ := cos_zero] <;>
+  simp [injOn_cos h_bnd ⟨by positivity, by linarith [pi_nonneg]⟩ (h₂ ▸ h)]
 -/
 theorem niven_angle_eq (hθ : exists r : Rat, θ = r * π) (hcos : exists q : Rat, cos θ = q)
     (h_bnd : θ in Set.Icc 0 π) : θ in ({0, π / 3, π / 2, π * (2 / 3), π} : Set Real) := by
@@ -521,7 +539,9 @@ theorem niven_angle_div_pi_eq
   replace h_bnd : (r : Real) * π in Set.Icc (0 * π) (1 * π) := by
     obtain ⟨hr, hr'⟩ := h_bnd; constructor <;> gcongr <;> norm_cast
   generalize h : (r : Real) * π = θ at *
-  have := niven_angle_eq ⟨r, h.symm⟩ hcos (by simpa using h_bnd
+  have := niven_angle_eq ⟨r, h.symm⟩ hcos (by simpa using h_bnd)
+  simp_all [Rat.smul_def]
+  grind
 
 中文:
 定理 niven_angle_div_pi_eq
@@ -531,7 +551,9 @@ theorem niven_angle_div_pi_eq
   replace h_bnd : (r : Real) * π in Set.Icc (0 * π) (1 * π) := by
     obtain ⟨hr, hr'⟩ := h_bnd; constructor <;> gcongr <;> norm_cast
   generalize h : (r : Real) * π = θ at *
-  have := niven_angle_eq ⟨r, h.symm⟩ hcos (by simpa using h_bnd
+  have := niven_angle_eq ⟨r, h.symm⟩ hcos (by simpa using h_bnd)
+  simp_all [Rat.smul_def]
+  grind
 
 Depends on / 依赖: Rat.smul_def, Set.Icc, generalize, h.symm, h_bnd, mem_set_image, mem_set_image.mp, niven_angle_eq, pi_ne_zero, replace, smul_def, smul_left_injective
 -/
@@ -556,7 +578,7 @@ theorem niven_fract_angle_div_pi_eq
     grind [ne_of_lt (Int.fract_lt_one r)]
   refine niven_angle_div_pi_eq (r := Int.fract r) ?_ (by simp [le_of_lt <| Int.fract_lt_one r])
   obtain ⟨q, hq⟩ := hcos
-  exact ⟨(-1) ^ ⌊r⌋ * q, by rw [Int.fract]; push_cast; rw [sub_mu
+  exact ⟨(-1) ^ ⌊r⌋ * q, by rw [Int.fract]; push_cast; rw [sub_mul, cos_sub_int_mul_pi, hq]⟩
 
 中文:
 定理 niven_fract_angle_div_pi_eq
@@ -566,7 +588,7 @@ theorem niven_fract_angle_div_pi_eq
     grind [ne_of_lt (Int.fract_lt_one r)]
   refine niven_angle_div_pi_eq (r := Int.fract r) ?_ (by simp [le_of_lt <| Int.fract_lt_one r])
   obtain ⟨q, hq⟩ := hcos
-  exact ⟨(-1) ^ ⌊r⌋ * q, by rw [Int.fract]; push_cast; rw [sub_mu
+  exact ⟨(-1) ^ ⌊r⌋ * q, by rw [Int.fract]; push_cast; rw [sub_mul, cos_sub_int_mul_pi, hq]⟩
 
 Depends on / 依赖: Int.fract, Int.fract_lt_one, cos_sub_int_mul_pi, fract_lt_one, le_of_lt, ne_of_lt, niven_angle_div_pi_eq, sub_mul
 -/

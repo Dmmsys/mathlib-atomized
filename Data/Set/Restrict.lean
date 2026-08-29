@@ -742,7 +742,30 @@ theorem domRestrict_eq_domRestrict_iff
 @[deprecated (since := "2026-07-19")] alias restrict := domRestrict
 @[deprecated (since := "2026-07-19")] alias restrict_def := domRestrict_def
 @[deprecated (since := "2026-07-19")] alias restrict_eq := domRestrict_eq
-@[deprecated (since := "2026-07-19")] alias restrict_id := dom
+@[deprecated (since := "2026-07-19")] alias restrict_id := domRestrict_id
+@[deprecated (since := "2026-07-19")] alias restrict_apply := domRestrict_apply
+@[deprecated (since := "2026-07-19")] alias restrict_eq_iff := domRestrict_eq_iff
+@[deprecated (since := "2026-07-19")] alias eq_restrict_iff := eq_domRestrict_iff
+@[deprecated (since := "2026-07-19")] alias range_restrict := range_domRestrict
+@[deprecated (since := "2026-07-19")] alias image_restrict := image_domRestrict
+@[deprecated (since := "2026-07-19")] alias restrict_dite := domRestrict_dite
+@[deprecated (since := "2026-07-19")] alias restrict_dite_compl := domRestrict_dite_compl
+@[deprecated (since := "2026-07-19")] alias restrict_ite := domRestrict_ite
+@[deprecated (since := "2026-07-19")] alias restrict_ite_compl := domRestrict_ite_compl
+@[deprecated (since := "2026-07-19")] alias restrict_piecewise := domRestrict_piecewise
+@[deprecated (since := "2026-07-19")] alias restrict_piecewise_compl := domRestrict_piecewise_compl
+@[deprecated (since := "2026-07-19")] alias restrict_extend_range := domRestrict_extend_range
+@[deprecated (since := "2026-07-19")]
+alias restrict_extend_compl_range := domRestrict_extend_compl_range
+@[deprecated (since := "2026-07-19")] alias restrict₂ := domRestrict₂
+@[deprecated (since := "2026-07-19")] alias restrict₂_def := domRestrict₂_def
+@[deprecated (since := "2026-07-19")] alias restrict₂_comp_restrict := domRestrict₂_comp_domRestrict
+@[deprecated (since := "2026-07-19")]
+alias restrict₂_comp_restrict₂ := domRestrict₂_comp_domRestrict₂
+@[deprecated (since := "2026-07-19")]
+alias restrict_comp_codRestrict := domRestrict_comp_codRestrict
+@[deprecated (since := "2026-07-19")]
+alias restrict_eq_restrict_iff := domRestrict_eq_domRestrict_iff
 
 中文:
 定理 domRestrict_eq_domRestrict_iff
@@ -751,7 +774,30 @@ theorem domRestrict_eq_domRestrict_iff
 @[deprecated (since := "2026-07-19")] alias restrict := domRestrict
 @[deprecated (since := "2026-07-19")] alias restrict_def := domRestrict_def
 @[deprecated (since := "2026-07-19")] alias restrict_eq := domRestrict_eq
-@[deprecated (since := "2026-07-19")] alias restrict_id := dom
+@[deprecated (since := "2026-07-19")] alias restrict_id := domRestrict_id
+@[deprecated (since := "2026-07-19")] alias restrict_apply := domRestrict_apply
+@[deprecated (since := "2026-07-19")] alias restrict_eq_iff := domRestrict_eq_iff
+@[deprecated (since := "2026-07-19")] alias eq_restrict_iff := eq_domRestrict_iff
+@[deprecated (since := "2026-07-19")] alias range_restrict := range_domRestrict
+@[deprecated (since := "2026-07-19")] alias image_restrict := image_domRestrict
+@[deprecated (since := "2026-07-19")] alias restrict_dite := domRestrict_dite
+@[deprecated (since := "2026-07-19")] alias restrict_dite_compl := domRestrict_dite_compl
+@[deprecated (since := "2026-07-19")] alias restrict_ite := domRestrict_ite
+@[deprecated (since := "2026-07-19")] alias restrict_ite_compl := domRestrict_ite_compl
+@[deprecated (since := "2026-07-19")] alias restrict_piecewise := domRestrict_piecewise
+@[deprecated (since := "2026-07-19")] alias restrict_piecewise_compl := domRestrict_piecewise_compl
+@[deprecated (since := "2026-07-19")] alias restrict_extend_range := domRestrict_extend_range
+@[deprecated (since := "2026-07-19")]
+alias restrict_extend_compl_range := domRestrict_extend_compl_range
+@[deprecated (since := "2026-07-19")] alias restrict₂ := domRestrict₂
+@[deprecated (since := "2026-07-19")] alias restrict₂_def := domRestrict₂_def
+@[deprecated (since := "2026-07-19")] alias restrict₂_comp_restrict := domRestrict₂_comp_domRestrict
+@[deprecated (since := "2026-07-19")]
+alias restrict₂_comp_restrict₂ := domRestrict₂_comp_domRestrict₂
+@[deprecated (since := "2026-07-19")]
+alias restrict_comp_codRestrict := domRestrict_comp_codRestrict
+@[deprecated (since := "2026-07-19")]
+alias restrict_eq_restrict_iff := domRestrict_eq_domRestrict_iff
 
 Depends on / 依赖: domRestrict_eq_iff
 -/
@@ -1148,7 +1194,7 @@ lemma restrictPreimage_bijective
 
 alias _root_.Function.Injective.restrictPreimage := Set.restrictPreimage_injective
 alias _root_.Function.Surjective.restrictPreimage := Set.restrictPreimage_surjective
-alias _root_.Function.Bijective.restrictPreimage := Set.res
+alias _root_.Function.Bijective.restrictPreimage := Set.restrictPreimage_bijective
 
 中文:
 引理 restrictPreimage_bijective
@@ -1158,7 +1204,7 @@ alias _root_.Function.Bijective.restrictPreimage := Set.res
 
 alias _root_.Function.Injective.restrictPreimage := Set.restrictPreimage_injective
 alias _root_.Function.Surjective.restrictPreimage := Set.restrictPreimage_surjective
-alias _root_.Function.Bijective.restrictPreimage := Set.res
+alias _root_.Function.Bijective.restrictPreimage := Set.restrictPreimage_bijective
 
 Depends on / 依赖: restrictPreimage_injective, restrictPreimage_surjective, t.restrictPreimage_injective, t.restrictPreimage_surjective
 -/

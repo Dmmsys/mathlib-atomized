@@ -812,7 +812,12 @@ instance instInf
       sets_of_superset := by
         rintro x y ⟨a, ha, b, hb, rfl⟩ xy
         refine ⟨a union y, mem_of_superset ha subset_union_left, b union y,
-         
+          mem_of_superset hb subset_union_left, ?_⟩
+        rw [← inter_union_distrib_right]; rw [union_eq_self_of_subset_left xy]
+      inter_sets := by
+        rintro x y ⟨a, ha, b, hb, rfl⟩ ⟨c, hc, d, hd, rfl⟩
+        refine ⟨a inter c, inter_mem ha hc, b inter d, inter_mem hb hd, ?_⟩
+        ac_rfl }⟩
 
 中文:
 实例 instInf
@@ -823,7 +828,12 @@ instance instInf
       sets_of_superset := by
         rintro x y ⟨a, ha, b, hb, rfl⟩ xy
         refine ⟨a union y, mem_of_superset ha subset_union_left, b union y,
-         
+          mem_of_superset hb subset_union_left, ?_⟩
+        rw [← inter_union_distrib_right]; rw [union_eq_self_of_subset_left xy]
+      inter_sets := by
+        rintro x y ⟨a, ha, b, hb, rfl⟩ ⟨c, hc, d, hd, rfl⟩
+        refine ⟨a inter c, inter_mem ha hc, b inter d, inter_mem hb hd, ?_⟩
+        ac_rfl }⟩
 
 Depends on / 依赖: Filter, inter_mem, inter_sets, inter_union_distrib_right, mem_of_superset, sets_of_superset, subset_union_left, union_eq_self_of_subset_left, univ_mem, univ_sets
 -/
@@ -870,7 +880,9 @@ instance instSDiff
     inter_sets hx hy t htg ht := by
       rw [← union_eq_right.2 ht]; rw [inter_union_distrib_right]
       apply inter_mem
-      · exact
+      · exact hx (mem_of_superset htg subset_union_right) subset_union_left
+      · exact hy (mem_of_superset htg subset_union_right) subset_union_left
+  }
 
 中文:
 实例 instSDiff
@@ -882,7 +894,9 @@ instance instSDiff
     inter_sets hx hy t htg ht := by
       rw [← union_eq_right.2 ht]; rw [inter_union_distrib_right]
       apply inter_mem
-      · exact
+      · exact hx (mem_of_superset htg subset_union_right) subset_union_left
+      · exact hy (mem_of_superset htg subset_union_right) subset_union_left
+  }
 -/
 instance instSDiff : SDiff (Filter α) where
   sdiff f g := {
@@ -1254,7 +1268,9 @@ definition seq
   univ_sets := ⟨univ, univ_mem, univ, univ_mem, fun _ _ _ _ => trivial⟩
   sets_of_superset := fun ⟨t₀, t₁, h₀, h₁, h⟩ hst =>
 ⟨t₀, t₁, h₀, h₁, fun _ hx _ hy => hst h _ hx _ hy⟩
-  inter_sets := fun ⟨t₀, ht₀, t₁, ht
+  inter_sets := fun ⟨t₀, ht₀, t₁, ht₁, ht⟩ ⟨u₀, hu₀, u₁, hu₁, hu⟩ =>
+    ⟨t₀ inter u₀, inter_mem ht₀ hu₀, t₁ inter u₁, inter_mem ht₁ hu₁, fun _ ⟨hx₀, hx₁⟩ _ ⟨hy₀, hy₁⟩ =>
+      ⟨ht _ hx₀ _ hy₀, hu _ hx₁ _ hy₁⟩⟩
 
 中文:
 定义 seq
@@ -1263,7 +1279,9 @@ definition seq
   univ_sets := ⟨univ, univ_mem, univ, univ_mem, fun _ _ _ _ => trivial⟩
   sets_of_superset := fun ⟨t₀, t₁, h₀, h₁, h⟩ hst =>
 ⟨t₀, t₁, h₀, h₁, fun _ hx _ hy => hst h _ hx _ hy⟩
-  inter_sets := fun ⟨t₀, ht₀, t₁, ht
+  inter_sets := fun ⟨t₀, ht₀, t₁, ht₁, ht⟩ ⟨u₀, hu₀, u₁, hu₁, hu⟩ =>
+    ⟨t₀ inter u₀, inter_mem ht₀ hu₀, t₁ inter u₁, inter_mem ht₁ hu₁, fun _ ⟨hx₀, hx₁⟩ _ ⟨hy₀, hy₁⟩ =>
+      ⟨ht _ hx₀ _ hy₀, hu _ hx₁ _ hy₁⟩⟩
 -/
 def seq (f : Filter (α -> β)) (g : Filter α) : Filter β where
   sets := { s | exists u in f, exists t in g, forall m in u, forall x in t, (m : α -> β) x in s }

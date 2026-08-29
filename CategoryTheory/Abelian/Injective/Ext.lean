@@ -85,7 +85,10 @@ lemma extEquivCohomologyClass_symm_mk_hom
   change SmallShiftedHom.equiv _ _ ((CohomologyClass.mk x).toSmallShiftedHom.comp _ _) = _
   simp only [SmallShiftedHom.equiv_comp, CohomologyClass.equiv_toSmallShiftedHom_mk,
     SmallShiftedHom.equiv_mk₀Inv, isoOfHom, asIso_inv,
-    DerivedCategory.singleFunctorIsoCompQ, Iso.refl_hom, NatTrans.
+    DerivedCategory.singleFunctorIsoCompQ, Iso.refl_hom, NatTrans.id_app, Iso.refl_inv,
+    ShiftedHom.mk₀_id_comp]
+  congr
+  cat_disch
 
 中文:
 引理 extEquivCohomologyClass_symm_mk_hom
@@ -94,7 +97,10 @@ lemma extEquivCohomologyClass_symm_mk_hom
   change SmallShiftedHom.equiv _ _ ((CohomologyClass.mk x).toSmallShiftedHom.comp _ _) = _
   simp only [SmallShiftedHom.equiv_comp, CohomologyClass.equiv_toSmallShiftedHom_mk,
     SmallShiftedHom.equiv_mk₀Inv, isoOfHom, asIso_inv,
-    DerivedCategory.singleFunctorIsoCompQ, Iso.refl_hom, NatTrans.
+    DerivedCategory.singleFunctorIsoCompQ, Iso.refl_hom, NatTrans.id_app, Iso.refl_inv,
+    ShiftedHom.mk₀_id_comp]
+  congr
+  cat_disch
 
 Depends on / 依赖: CohomologyClass, CohomologyClass.equiv_toSmallShiftedHom_mk, CohomologyClass.mk, DerivedCategory, DerivedCategory.singleFunctorIsoCompQ, Iso.refl_hom, Iso.refl_inv, NatTrans, NatTrans.id_app, ShiftedHom, ShiftedHom.mk, SmallShiftedHom, SmallShiftedHom.equiv, SmallShiftedHom.equiv_comp, SmallShiftedHom.equiv_mk, asIso_inv, cat_disch, equiv_comp, equiv_toSmallShiftedHom_mk, id_app
 -/
@@ -560,7 +566,9 @@ lemma extMk_eq_zero_iff
     extEquivCohomologyClass_extMk, extEquivCohomologyClass_zero,
     CohomologyClass.mk_eq_zero_iff]
   rw [Cocycle.fromSingleMk_mem_coboundaries_iff _ _ _ _ _ p (by lia)]; rw [R.cochainComplex_d _ _ _ _ rfl rfl]
-  exact ⟨fun ⟨g, hg⟩ => ⟨g 
+  exact ⟨fun ⟨g, hg⟩ => ⟨g ≫ (R.cochainComplexXIso p p rfl).hom,
+      by simp only [← cancel_mono (R.cochainComplexXIso n n rfl).inv, Category.assoc, hg]⟩,
+    fun ⟨g, hg⟩ => ⟨g ≫ (R.cochainComplexXIso p p rfl).inv, by simp [← hg]⟩⟩
 
 中文:
 引理 extMk_eq_zero_iff
@@ -570,7 +578,9 @@ lemma extMk_eq_zero_iff
     extEquivCohomologyClass_extMk, extEquivCohomologyClass_zero,
     CohomologyClass.mk_eq_zero_iff]
   rw [Cocycle.fromSingleMk_mem_coboundaries_iff _ _ _ _ _ p (by lia)]; rw [R.cochainComplex_d _ _ _ _ rfl rfl]
-  exact ⟨fun ⟨g, hg⟩ => ⟨g 
+  exact ⟨fun ⟨g, hg⟩ => ⟨g ≫ (R.cochainComplexXIso p p rfl).hom,
+      by simp only [← cancel_mono (R.cochainComplexXIso n n rfl).inv, Category.assoc, hg]⟩,
+    fun ⟨g, hg⟩ => ⟨g ≫ (R.cochainComplexXIso p p rfl).inv, by simp [← hg]⟩⟩
 
 Depends on / 依赖: Category, Category.assoc, Cocycle, Cocycle.fromSingleMk_mem_coboundaries_iff, CohomologyClass, CohomologyClass.mk_eq_zero_iff, R.cochainComplexXIso, R.cochainComplex_d, R.extEquivCohomologyClass.apply_eq_iff_eq, apply_eq_iff_eq, cancel_mono, cochainComplexXIso, cochainComplex_d, extEquivCohomologyClass, extEquivCohomologyClass_extMk, extEquivCohomologyClass_zero, fromSingleMk_mem_coboundaries_iff, mk_eq_zero_iff
 -/
@@ -599,7 +609,7 @@ lemma extMk_surjective
   obtain ⟨f, hf, rfl⟩ := Cocycle.fromSingleMk_surjective x n (by simp) m (by lia)
   exact ⟨f ≫ (R.cochainComplexXIso n n rfl).hom,
     by simpa [R.cochainComplex_d _ _ _ _ rfl rfl,
-      ← cancel
+      ← cancel_mono (R.cochainComplexXIso m m rfl).inv] using hf, by simp [extMk]⟩
 
 中文:
 引理 extMk_surjective
@@ -610,7 +620,7 @@ lemma extMk_surjective
   obtain ⟨f, hf, rfl⟩ := Cocycle.fromSingleMk_surjective x n (by simp) m (by lia)
   exact ⟨f ≫ (R.cochainComplexXIso n n rfl).hom,
     by simpa [R.cochainComplex_d _ _ _ _ rfl rfl,
-      ← cancel
+      ← cancel_mono (R.cochainComplexXIso m m rfl).inv] using hf, by simp [extMk]⟩
 
 Depends on / 依赖: Cocycle, Cocycle.fromSingleMk_surjective, R.cochainComplexXIso, R.cochainComplex_d, R.extEquivCohomologyClass.symm.surjective, cancel_mono, cochainComplexXIso, cochainComplex_d, extEquivCohomologyClass, fromSingleMk_surjective, mk_surjective, surjective, x.mk_surjective
 -/
@@ -636,7 +646,12 @@ lemma mk₀_comp_extMk
   simp only [extMk, Ext.comp_hom, Int.cast_ofNat_Int, Ext.mk₀_hom,
     extEquivCohomologyClass_symm_mk_hom, Category.assoc]
   rw [Cocycle.fromSingleMk_precomp g _ (zero_add _) _ (by lia) (by
-      simp [cochainComplex_d _ _ _ n m rfl rfl]; rw [reassoc
+      simp [cochainComplex_d _ _ _ n m rfl rfl]; rw [reassoc_of% hf]),
+    Cocycle.equivHomShift_symm_precomp, ← ShiftedHom.mk₀_comp 0 rfl,
+    ShiftedHom.map_comp,
+    ShiftedHom.comp_assoc _ _ _ (add_zero _) (zero_add _) (by simp),
+    ← ShiftedHom.comp_assoc _ _ _ (add_zero _) (add_zero (n : Int)) (by simp)]
+  simp
 
 中文:
 引理 mk₀_comp_extMk
@@ -647,7 +662,12 @@ lemma mk₀_comp_extMk
   simp only [extMk, Ext.comp_hom, Int.cast_ofNat_Int, Ext.mk₀_hom,
     extEquivCohomologyClass_symm_mk_hom, Category.assoc]
   rw [Cocycle.fromSingleMk_precomp g _ (zero_add _) _ (by lia) (by
-      simp [cochainComplex_d _ _ _ n m rfl rfl]; rw [reassoc
+      simp [cochainComplex_d _ _ _ n m rfl rfl]; rw [reassoc_of% hf]),
+    Cocycle.equivHomShift_symm_precomp, ← ShiftedHom.mk₀_comp 0 rfl,
+    ShiftedHom.map_comp,
+    ShiftedHom.comp_assoc _ _ _ (add_zero _) (zero_add _) (by simp),
+    ← ShiftedHom.comp_assoc _ _ _ (add_zero _) (add_zero (n : Int)) (by simp)]
+  simp
 
 Depends on / 依赖: Category, Category.assoc, Cocycle, Cocycle.equivHomShift_symm_precomp, Cocycle.fromSingleMk_precomp, Ext.comp_hom, Ext.mk, HasDerivedCategory, HasDerivedCategory.standard, Int.cast_ofNat_Int, ShiftedHom, ShiftedHom.comp_assoc, ShiftedHom.map_comp, ShiftedHom.mk, add_zero, cast_ofNat_Int, cochainComplex_d, comp_assoc, comp_hom, equivHomShift_symm_precomp
 -/
@@ -681,7 +701,19 @@ lemma extMk_comp_mk₀
       (f ≫ (R.cochainComplexXIso n n (by lia)).inv) ≫ φ.hom'.f n := by
     simp [φ.hom'_f n n rfl]
   simp only [Ext.comp_hom, extMk_hom, Ext.mk₀_hom, this]
-  rw [Cocycle.fromSingleM
+  rw [Cocycle.fromSingleMk_postcomp _ (zero_add _) _ (by lia)
+      (by simp [R.cochainComplex_d _ _ _ _ rfl rfl]; rw [reassoc_of% hf]),
+    Cocycle.equivHomShift_symm_postcomp,
+    ← ShiftedHom.comp_mk₀ _ 0 rfl, ShiftedHom.map_comp,
+    ShiftedHom.comp_assoc _ _ _ _ (zero_add _) (by simp),
+    ShiftedHom.comp_assoc _ _ _ _ (zero_add _) (by simp),
+    ShiftedHom.comp_assoc _ _ _ _ (zero_add _) (by simp),
+    ShiftedHom.map_mk₀, ShiftedHom.mk₀_comp_mk₀, ShiftedHom.mk₀_comp_mk₀]
+  congr 3
+  rw [Category.assoc]; rw [← NatTrans.naturality]; rw [← Category.assoc]; rw [← Category.assoc]
+  congr 1
+  simpa only [IsIso.eq_comp_inv, Category.assoc, IsIso.inv_comp_eq,
+    Functor.map_comp] using! DerivedCategory.Q.congr_map φ.ι'_comp_hom'.symm
 
 中文:
 引理 extMk_comp_mk₀
@@ -693,7 +725,19 @@ lemma extMk_comp_mk₀
       (f ≫ (R.cochainComplexXIso n n (by lia)).inv) ≫ φ.hom'.f n := by
     simp [φ.hom'_f n n rfl]
   simp only [Ext.comp_hom, extMk_hom, Ext.mk₀_hom, this]
-  rw [Cocycle.fromSingleM
+  rw [Cocycle.fromSingleMk_postcomp _ (zero_add _) _ (by lia)
+      (by simp [R.cochainComplex_d _ _ _ _ rfl rfl]; rw [reassoc_of% hf]),
+    Cocycle.equivHomShift_symm_postcomp,
+    ← ShiftedHom.comp_mk₀ _ 0 rfl, ShiftedHom.map_comp,
+    ShiftedHom.comp_assoc _ _ _ _ (zero_add _) (by simp),
+    ShiftedHom.comp_assoc _ _ _ _ (zero_add _) (by simp),
+    ShiftedHom.comp_assoc _ _ _ _ (zero_add _) (by simp),
+    ShiftedHom.map_mk₀, ShiftedHom.mk₀_comp_mk₀, ShiftedHom.mk₀_comp_mk₀]
+  congr 3
+  rw [Category.assoc]; rw [← NatTrans.naturality]; rw [← Category.assoc]; rw [← Category.assoc]
+  congr 1
+  simpa only [IsIso.eq_comp_inv, Category.assoc, IsIso.inv_comp_eq,
+    Functor.map_comp] using! DerivedCategory.Q.congr_map φ.ι'_comp_hom'.symm
 
 Depends on / 依赖: Cocycle, Cocycle.equivHomShift_symm_postcomp, Cocycle.fromSingleMk_postcomp, Ext.comp_hom, Ext.mk, HasDerivedCategory, HasDerivedCategory.standard, R.cochainComplexXIso, R.cochainComplex_d, ShiftedHom, ShiftedHom.comp_assoc, ShiftedHom.comp_mk, ShiftedHom.map_comp, cochainComplexXIso, cochainComplex_d, comp_assoc, comp_hom, equivHomShift_symm_postcomp, extMk_hom, fromSingleMk_postcomp
 -/

@@ -335,7 +335,13 @@ definition IProp.cmp
   case false.false => exact .eq
 case and'.and' ap p₁ p₂ aq q₁ q₂ => exact (ap.cmp aq).then (p₁.cmp q₁).then (p₂.cmp q₂)
   case or.or p₁ p₂ q₁ q₂ => exact (p₁.cmp q₁).then (p₂.cmp q₂)
-  case imp.imp p₁ p₂ q
+  case imp.imp p₁ p₂ q₁ q₂ => exact (p₁.cmp q₁).then (p₂.cmp q₂)
+  exacts [.lt, .lt, .lt, .lt, .lt,
+          .gt, .lt, .lt, .lt, .lt,
+          .gt, .gt, .lt, .lt, .lt,
+          .gt, .gt, .gt, .lt, .lt,
+          .gt, .gt, .gt, .gt, .lt,
+          .gt, .gt, .gt, .gt, .gt]
 
 中文:
 定义 IProp.cmp
@@ -347,7 +353,13 @@ case and'.and' ap p₁ p₂ aq q₁ q₂ => exact (ap.cmp aq).then (p₁.cmp q�
   case false.false => exact .eq
 case and'.and' ap p₁ p₂ aq q₁ q₂ => exact (ap.cmp aq).then (p₁.cmp q₁).then (p₂.cmp q₂)
   case or.or p₁ p₂ q₁ q₂ => exact (p₁.cmp q₁).then (p₂.cmp q₂)
-  case imp.imp p₁ p₂ q
+  case imp.imp p₁ p₂ q₁ q₂ => exact (p₁.cmp q₁).then (p₂.cmp q₂)
+  exacts [.lt, .lt, .lt, .lt, .lt,
+          .gt, .lt, .lt, .lt, .lt,
+          .gt, .gt, .lt, .lt, .lt,
+          .gt, .gt, .gt, .lt, .lt,
+          .gt, .gt, .gt, .gt, .lt,
+          .gt, .gt, .gt, .gt, .gt]
 
 Depends on / 依赖: ap.cmp, compare, exacts, false.false, imp.imp, or.or, true.true, var.var
 -/
@@ -652,7 +664,31 @@ definition Proof.check
     let (A', B') := ak.sides A B
     guard (ak = ak' ∧ A₂ = A') *> pure (B'.imp C)
   | Γ, .app' p q => do
-    let .imp A B ← p.check Γ | 
+    let .imp A B ← p.check Γ | none
+    let A' ← q.check Γ
+    guard (A = A') *> pure B
+  | Γ, .orImpL B p => do
+    let .imp (.or A B') C ← p.check Γ | none
+    guard (B = B') *> pure (A.imp C)
+  | Γ, .orImpR A p => do
+    let .imp (.or A' B) C ← p.check Γ | none
+    guard (A = A') *> pure (B.imp C)
+  | Γ, .orInL B p => do let A ← p.check Γ; pure (A.or B)
+  | Γ, .orInR A p => do let B ← p.check Γ; pure (A.or B)
+  | Γ, .orElim' p x q r => do
+    let .or A B ← p.check Γ | none
+    let C ← q.check (Γ.insert x A)
+    let C' ← r.check (Γ.insert x B)
+    guard (C = C') *> pure C
+  | _, .em _ _ A => pure (A.or A.not)
+  | Γ, .decidableElim _ A _ x p₂ p₃ => do
+    let C ← p₂.check (Γ.insert x A)
+    let C' ← p₃.check (Γ.insert x A.not)
+    guard (C = C') *> pure C
+  | Γ, .impImpSimp _ A p => do
+    let .imp (.imp A' B) C ← p.check Γ | none
+    guard (A = A') *> pure (B.imp C)
+-/
 
 中文:
 定义 证明.check
@@ -665,7 +701,31 @@ definition Proof.check
     let (A', B') := ak.sides A B
     guard (ak = ak' ∧ A₂ = A') *> pure (B'.imp C)
   | Γ, .app' p q => do
-    let .imp A B ← p.check Γ | 
+    let .imp A B ← p.check Γ | none
+    let A' ← q.check Γ
+    guard (A = A') *> pure B
+  | Γ, .orImpL B p => do
+    let .imp (.or A B') C ← p.check Γ | none
+    guard (B = B') *> pure (A.imp C)
+  | Γ, .orImpR A p => do
+    let .imp (.or A' B) C ← p.check Γ | none
+    guard (A = A') *> pure (B.imp C)
+  | Γ, .orInL B p => do let A ← p.check Γ; pure (A.or B)
+  | Γ, .orInR A p => do let B ← p.check Γ; pure (A.or B)
+  | Γ, .orElim' p x q r => do
+    let .or A B ← p.check Γ | none
+    let C ← q.check (Γ.insert x A)
+    let C' ← r.check (Γ.insert x B)
+    guard (C = C') *> pure C
+  | _, .em _ _ A => pure (A.or A.not)
+  | Γ, .decidableElim _ A _ x p₂ p₃ => do
+    let C ← p₂.check (Γ.insert x A)
+    let C' ← p₃.check (Γ.insert x A.not)
+    guard (C = C') *> pure C
+  | Γ, .impImpSimp _ A p => do
+    let .imp (.imp A' B) C ← p.check Γ | none
+    guard (A = A') *> pure (B.imp C)
+-/
 
 Depends on / 依赖: ak.sides
 -/
@@ -803,7 +863,10 @@ definition Context.add
     let (A, B) := ak.sides A B
     Γ.add (A.imp (B.imp C)) (p.curry ak)
   | .imp (.or A B) C, p, Γ => do
-  
+    let Γ ← Γ.add (A.imp C) p.orImpL
+    Γ.add (B.imp C) p.orImpR
+  | .imp _ .true, _, Γ => pure Γ
+  | A, p, Γ => pure (Γ.insert A p)
 
 中文:
 定义 余ntext.add
@@ -817,7 +880,10 @@ definition Context.add
     let (A, B) := ak.sides A B
     Γ.add (A.imp (B.imp C)) (p.curry ak)
   | .imp (.or A B) C, p, Γ => do
-  
+    let Γ ← Γ.add (A.imp C) p.orImpL
+    Γ.add (B.imp C) p.orImpR
+  | .imp _ .true, _, Γ => pure Γ
+  | A, p, Γ => pure (Γ.insert A p)
 -/
 partial def Context.add : IProp -> Proof -> Context -> Except (IProp -> Proof) Context
   | .true, _, Γ => pure Γ
@@ -923,7 +989,19 @@ definition search
     if let some q := Γ[A']? then
 isOk Context.withAdd (Γ.erase A) C (p.app q) B prove n
     else
-      let .imp A₁ A
+      let .imp A₁ A₂ := A' | none
+      let Γ : Context := Γ.erase A
+      let (a, n) := freshName n
+let (p₁, n) ← isOk Γ.withAdd A₁ (.hyp a) A₂ (fun Γ_A₁ A₂ =>
+        Γ_A₁.withAdd (IProp.imp A₂ C) (.impImpSimp a p) A₂ prove) n
+isOk Γ.withAdd C (p.app (.intro a p₁)) B prove n
+  if let some (r, n) := search₁ then
+    ((true, r), n)
+  else if let .or B₁ B₂ := B then
+    match (mapProof .orInL <$> prove Γ B₁) n with
+    | ((false, _), _) => (mapProof .orInR <$> prove Γ B₂) n
+    | r => r
+  else ((false, .sorry), n)
 
 中文:
 定义 search
@@ -937,7 +1015,19 @@ isOk Context.withAdd (Γ.erase A) C (p.app q) B prove n
     if let some q := Γ[A']? then
 isOk Context.withAdd (Γ.erase A) C (p.app q) B prove n
     else
-      let .imp A₁ A
+      let .imp A₁ A₂ := A' | none
+      let Γ : Context := Γ.erase A
+      let (a, n) := freshName n
+let (p₁, n) ← isOk Γ.withAdd A₁ (.hyp a) A₂ (fun Γ_A₁ A₂ =>
+        Γ_A₁.withAdd (IProp.imp A₂ C) (.impImpSimp a p) A₂ prove) n
+isOk Γ.withAdd C (p.app (.intro a p₁)) B prove n
+  if let some (r, n) := search₁ then
+    ((true, r), n)
+  else if let .or B₁ B₂ := B then
+    match (mapProof .orInL <$> prove Γ B₁) n with
+    | ((false, _), _) => (mapProof .orInR <$> prove Γ B₂) n
+    | r => r
+  else ((false, .sorry), n)
 -/
 partial def search (Γ : Context) (B : IProp) : StateM Nat (Bool × Proof) := do
   if let some p := Γ[B]? then return (true, p)
@@ -979,7 +1069,16 @@ mapProof (.intro a) < > Γ.withAdd A (.hyp a) B prove
 mapProof (p.andIntro ak) < > whenOk ok B (prove Γ B)
   | B =>
     Γ.foldl
-     
+      (init := fun found Γ => bif found then prove Γ B else search Γ B)
+      (f := fun IH A p found Γ => do
+        if let .or A₁ A₂ := A then
+          let Γ : Context := Γ.erase A
+          let a ← freshName
+          let (ok, p₁) ← Γ.withAdd A₁ (.hyp a) B fun Γ _ => IH true Γ
+mapProof (.orElim p a p₁) < >
+            whenOk ok B (Γ.withAdd A₂ (.hyp a) B fun Γ _ => IH true Γ)
+        else IH found Γ)
+      (found := false) (Γ := Γ)
 
 中文:
 定义 prove
@@ -995,7 +1094,16 @@ mapProof (.intro a) < > Γ.withAdd A (.hyp a) B prove
 mapProof (p.andIntro ak) < > whenOk ok B (prove Γ B)
   | B =>
     Γ.foldl
-     
+      (init := fun found Γ => bif found then prove Γ B else search Γ B)
+      (f := fun IH A p found Γ => do
+        if let .or A₁ A₂ := A then
+          let Γ : Context := Γ.erase A
+          let a ← freshName
+          let (ok, p₁) ← Γ.withAdd A₁ (.hyp a) B fun Γ _ => IH true Γ
+mapProof (.orElim p a p₁) < >
+            whenOk ok B (Γ.withAdd A₂ (.hyp a) B fun Γ _ => IH true Γ)
+        else IH found Γ)
+      (found := false) (Γ := Γ)
 -/
 partial def prove (Γ : Context) (B : IProp) : StateM Nat (Bool × Proof) :=
   match B with
@@ -1037,7 +1145,12 @@ definition reify
   | ~q($a ∧ $b) => return .and (← reify a) (← reify b)
   | ~q($a ∨ $b) => return .or (← reify a) (← reify b)
   | ~q($a ↔ $b) => return .iff (← reify a) (← reify b)
-  | ~q(Xor $a $b) => re
+  | ~q(Xor $a $b) => return .xor (← reify a) (← reify b)
+  | ~q(@Eq Prop $a $b) => return .eq (← reify a) (← reify b)
+  | ~q(@Ne Prop $a $b) => return .not (.eq (← reify a) (← reify b))
+  | e =>
+    if e.isArrow then return .imp (← reify e.bindingDomain!) (← reify e.bindingBody!)
+    else return .var (← AtomM.addAtom e).1
 
 中文:
 定义 reify
@@ -1049,7 +1162,12 @@ definition reify
   | ~q($a ∧ $b) => return .and (← reify a) (← reify b)
   | ~q($a ∨ $b) => return .or (← reify a) (← reify b)
   | ~q($a ↔ $b) => return .iff (← reify a) (← reify b)
-  | ~q(Xor $a $b) => re
+  | ~q(Xor $a $b) => return .xor (← reify a) (← reify b)
+  | ~q(@Eq Prop $a $b) => return .eq (← reify a) (← reify b)
+  | ~q(@Ne Prop $a $b) => return .not (.eq (← reify a) (← reify b))
+  | e =>
+    if e.isArrow then return .imp (← reify e.bindingDomain!) (← reify e.bindingBody!)
+    else return .var (← AtomM.addAtom e).1
 -/
 partial def reify (e : Q(Prop)) : AtomM IProp :=
   match e with
@@ -1080,7 +1198,136 @@ definition applyProof
     let A ← mkFreshExprMVarQ q(Prop)
     let t ← mkFreshExprMVarQ q(False)
     g.assignIfDefEq q(@False.elim $A $t)
-   
+    applyProof t.mvarId! Γ p
+  | .intro x p => do
+    let (e, g) ← g.intro x; g.withContext do
+      applyProof g (Γ.insert x (.fvar e)) p
+  | .andLeft .and p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A ∧ $B)
+    g.assignIfDefEq q(And.left $t)
+    applyProof t.mvarId! Γ p
+  | .andLeft .iff p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A ↔ $B)
+    g.assignIfDefEq q(Iff.mp $t)
+    applyProof t.mvarId! Γ p
+  | .andLeft .eq p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A = $B)
+    g.assignIfDefEq q(cast $t)
+    applyProof t.mvarId! Γ p
+  | .andRight .and p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A ∧ $B)
+    g.assignIfDefEq q(And.right $t)
+    applyProof t.mvarId! Γ p
+  | .andRight .iff p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A ↔ $B)
+    g.assignIfDefEq q(Iff.mpr $t)
+    applyProof t.mvarId! Γ p
+  | .andRight .eq p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A = $B)
+    g.assignIfDefEq q(cast (Eq.symm $t))
+    applyProof t.mvarId! Γ p
+  | .andIntro .and p q => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A)
+    let t₂ ← mkFreshExprMVarQ q($B)
+    g.assignIfDefEq q(And.intro $t₁ $t₂)
+    applyProof t₁.mvarId! Γ p
+    applyProof t₂.mvarId! Γ q
+  | .andIntro .iff p q => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A -> $B)
+    let t₂ ← mkFreshExprMVarQ q($B -> $A)
+    g.assignIfDefEq q(Iff.intro $t₁ $t₂)
+    applyProof t₁.mvarId! Γ p
+    applyProof t₂.mvarId! Γ q
+  | .andIntro .eq p q => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A -> $B)
+    let t₂ ← mkFreshExprMVarQ q($B -> $A)
+    g.assignIfDefEq q(propext (Iff.intro $t₁ $t₂))
+    applyProof t₁.mvarId! Γ p
+    applyProof t₂.mvarId! Γ q
+  | .app' p q => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A -> $B)
+    let t₂ ← mkFreshExprMVarQ q($A)
+    g.assignIfDefEq q($t₁ $t₂)
+    applyProof t₁.mvarId! Γ p
+    applyProof t₂.mvarId! Γ q
+  | .orInL p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A)
+    g.assignIfDefEq q(@Or.inl $A $B $t)
+    applyProof t.mvarId! Γ p
+  | .orInR p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($B)
+    g.assignIfDefEq q(@Or.inr $A $B $t)
+    applyProof t.mvarId! Γ p
+  | .orElim' p x p₁ p₂ => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let C ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A ∨ $B)
+    let t₂ ← mkFreshExprMVarQ q($A -> $C)
+    let t₃ ← mkFreshExprMVarQ q($B -> $C)
+    g.assignIfDefEq q(Or.elim $t₁ $t₂ $t₃)
+    applyProof t₁.mvarId! Γ p
+    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
+      applyProof t₂ (Γ.insert x (.fvar e)) p₁
+    let (e, t₃) ← t₃.mvarId!.intro x; t₃.withContext do
+      applyProof t₃ (Γ.insert x (.fvar e)) p₂
+  | .em false n => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let e : Q(Decidable $A) ← liftOption (Γ.find? n)
+    let .true ← Meta.isDefEq (← Meta.inferType e) q(Decidable $A) | failure
+    g.assignIfDefEq q(@Decidable.em $A $e)
+  | .em true n => do
+    let A : Q(Prop) ← liftOption (Γ.find? n)
+    g.assignIfDefEq q(@Classical.em $A)
+  | .decidableElim false n x p₁ p₂ => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let e : Q(Decidable $A) ← liftOption (Γ.find? n)
+    let .true ← Meta.isDefEq (← Meta.inferType e) q(Decidable $A) | failure
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A -> $B)
+    let t₂ ← mkFreshExprMVarQ q(¬$A -> $B)
+    g.assignIfDefEq q(@dite $B $A $e $t₁ $t₂)
+    let (e, t₁) ← t₁.mvarId!.intro x; t₁.withContext do
+      applyProof t₁ (Γ.insert x (.fvar e)) p₁
+    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
+      applyProof t₂ (Γ.insert x (.fvar e)) p₂
+  | .decidableElim true n x p₁ p₂ => do
+    let A : Q(Prop) ← liftOption (Γ.find? n)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A -> $B)
+    let t₂ ← mkFreshExprMVarQ q(¬$A -> $B)
+    g.assignIfDefEq q(@Classical.byCases $A $B $t₁ $t₂)
+    let (e, t₁) ← t₁.mvarId!.intro x; t₁.withContext do
+      applyProof t₁ (Γ.insert x (.fvar e)) p₁
+    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
+      applyProof t₂ (Γ.insert x (.fvar e)) p₂
+  | .curry .. | .curry₂ .. | .orImpL .. | .orImpR .. | .impImpSimp .. => do
+    let (e, g) ← g.intro1; g.withContext do
+      applyProof g (Γ.insert e.name (.fvar e)) (p.app (.hyp e.name))
 
 中文:
 定义 applyProof
@@ -1093,7 +1340,136 @@ definition applyProof
     let A ← mkFreshExprMVarQ q(Prop)
     let t ← mkFreshExprMVarQ q(False)
     g.assignIfDefEq q(@False.elim $A $t)
-   
+    applyProof t.mvarId! Γ p
+  | .intro x p => do
+    let (e, g) ← g.intro x; g.withContext do
+      applyProof g (Γ.insert x (.fvar e)) p
+  | .andLeft .and p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A ∧ $B)
+    g.assignIfDefEq q(And.left $t)
+    applyProof t.mvarId! Γ p
+  | .andLeft .iff p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A ↔ $B)
+    g.assignIfDefEq q(Iff.mp $t)
+    applyProof t.mvarId! Γ p
+  | .andLeft .eq p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A = $B)
+    g.assignIfDefEq q(cast $t)
+    applyProof t.mvarId! Γ p
+  | .andRight .and p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A ∧ $B)
+    g.assignIfDefEq q(And.right $t)
+    applyProof t.mvarId! Γ p
+  | .andRight .iff p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A ↔ $B)
+    g.assignIfDefEq q(Iff.mpr $t)
+    applyProof t.mvarId! Γ p
+  | .andRight .eq p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A = $B)
+    g.assignIfDefEq q(cast (Eq.symm $t))
+    applyProof t.mvarId! Γ p
+  | .andIntro .and p q => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A)
+    let t₂ ← mkFreshExprMVarQ q($B)
+    g.assignIfDefEq q(And.intro $t₁ $t₂)
+    applyProof t₁.mvarId! Γ p
+    applyProof t₂.mvarId! Γ q
+  | .andIntro .iff p q => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A -> $B)
+    let t₂ ← mkFreshExprMVarQ q($B -> $A)
+    g.assignIfDefEq q(Iff.intro $t₁ $t₂)
+    applyProof t₁.mvarId! Γ p
+    applyProof t₂.mvarId! Γ q
+  | .andIntro .eq p q => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A -> $B)
+    let t₂ ← mkFreshExprMVarQ q($B -> $A)
+    g.assignIfDefEq q(propext (Iff.intro $t₁ $t₂))
+    applyProof t₁.mvarId! Γ p
+    applyProof t₂.mvarId! Γ q
+  | .app' p q => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A -> $B)
+    let t₂ ← mkFreshExprMVarQ q($A)
+    g.assignIfDefEq q($t₁ $t₂)
+    applyProof t₁.mvarId! Γ p
+    applyProof t₂.mvarId! Γ q
+  | .orInL p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($A)
+    g.assignIfDefEq q(@Or.inl $A $B $t)
+    applyProof t.mvarId! Γ p
+  | .orInR p => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t ← mkFreshExprMVarQ q($B)
+    g.assignIfDefEq q(@Or.inr $A $B $t)
+    applyProof t.mvarId! Γ p
+  | .orElim' p x p₁ p₂ => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let C ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A ∨ $B)
+    let t₂ ← mkFreshExprMVarQ q($A -> $C)
+    let t₃ ← mkFreshExprMVarQ q($B -> $C)
+    g.assignIfDefEq q(Or.elim $t₁ $t₂ $t₃)
+    applyProof t₁.mvarId! Γ p
+    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
+      applyProof t₂ (Γ.insert x (.fvar e)) p₁
+    let (e, t₃) ← t₃.mvarId!.intro x; t₃.withContext do
+      applyProof t₃ (Γ.insert x (.fvar e)) p₂
+  | .em false n => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let e : Q(Decidable $A) ← liftOption (Γ.find? n)
+    let .true ← Meta.isDefEq (← Meta.inferType e) q(Decidable $A) | failure
+    g.assignIfDefEq q(@Decidable.em $A $e)
+  | .em true n => do
+    let A : Q(Prop) ← liftOption (Γ.find? n)
+    g.assignIfDefEq q(@Classical.em $A)
+  | .decidableElim false n x p₁ p₂ => do
+    let A ← mkFreshExprMVarQ q(Prop)
+    let e : Q(Decidable $A) ← liftOption (Γ.find? n)
+    let .true ← Meta.isDefEq (← Meta.inferType e) q(Decidable $A) | failure
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A -> $B)
+    let t₂ ← mkFreshExprMVarQ q(¬$A -> $B)
+    g.assignIfDefEq q(@dite $B $A $e $t₁ $t₂)
+    let (e, t₁) ← t₁.mvarId!.intro x; t₁.withContext do
+      applyProof t₁ (Γ.insert x (.fvar e)) p₁
+    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
+      applyProof t₂ (Γ.insert x (.fvar e)) p₂
+  | .decidableElim true n x p₁ p₂ => do
+    let A : Q(Prop) ← liftOption (Γ.find? n)
+    let B ← mkFreshExprMVarQ q(Prop)
+    let t₁ ← mkFreshExprMVarQ q($A -> $B)
+    let t₂ ← mkFreshExprMVarQ q(¬$A -> $B)
+    g.assignIfDefEq q(@Classical.byCases $A $B $t₁ $t₂)
+    let (e, t₁) ← t₁.mvarId!.intro x; t₁.withContext do
+      applyProof t₁ (Γ.insert x (.fvar e)) p₁
+    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
+      applyProof t₂ (Γ.insert x (.fvar e)) p₂
+  | .curry .. | .curry₂ .. | .orImpL .. | .orImpR .. | .impImpSimp .. => do
+    let (e, g) ← g.intro1; g.withContext do
+      applyProof g (Γ.insert e.name (.fvar e)) (p.app (.hyp e.name))
 -/
 partial def applyProof (g : MVarId) (Γ : NameMap Expr) (p : Proof) : MetaM Unit :=
   match p with
@@ -1248,7 +1624,51 @@ definition itautoCore
     let (g, t) ← if ← isProp t then pure (g, ← reify t) else pure (← g.exfalso, .false)
     let mut Γ : Except (IProp -> Proof) ITauto.Context := .ok TreeMap.empty
     let mut decs := TreeMap.empty
-    for l
+    for ldecl in ← getLCtx do
+      if !ldecl.isImplementationDetail then
+        let e := ldecl.type
+        if ← isProp e then
+          let A ← reify e
+          let n := ldecl.fvarId.name
+          hs := hs.insert n (Expr.fvar ldecl.fvarId)
+          Γ := do (← Γ).add A (.hyp n)
+        else
+          if let .const ``Decidable _ := e.getAppFn then
+            let p : Q(Prop) := e.appArg!
+            if useDec then
+              let A ← reify p
+              decs := decs.insert A (false, Expr.fvar ldecl.fvarId)
+    let addDec (force : Bool) (decs : TreeMap IProp (Bool × Expr) IProp.cmp) (e : Q(Prop)) := do
+      let A ← reify e
+      let dec_e := q(Decidable $e)
+      let res ← trySynthInstance q(Decidable $e)
+      if !(res matches .some _) && !useClassical then
+        if force then _ ← synthInstance dec_e
+        pure decs
+      else
+        pure (decs.insert A (match res with | .some e => (false, e) | _ => (true, e)))
+    decs ← extraDec.foldlM (addDec true) decs
+    if useDec then
+      let mut decided := TreeSet.empty (cmp := compare)
+      if let .ok Γ' := Γ then
+        decided := Γ'.foldl (init := decided) fun m p _ =>
+          match p with
+          | .var i => m.insert i
+          | .not (.var i) => m.insert i
+          | _ => m
+      let ats := (← get).atoms
+      for e in ats, i in [0:ats.size] do
+        if !decided.contains i then
+          decs ← addDec false decs e
+    for (A, cl, pf) in decs do
+      let n ← mkFreshId
+      hs := hs.insert n pf
+      Γ := return (← Γ).insert (A.or A.not) (.em cl n)
+    let p : Proof :=
+      match Γ with
+      | .ok Γ => (prove Γ t 0).1.2
+      | .error p => p t
+    applyProof g hs p
 
 中文:
 定义 itautoCore
@@ -1260,7 +1680,51 @@ definition itautoCore
     let (g, t) ← if ← isProp t then pure (g, ← reify t) else pure (← g.exfalso, .false)
     let mut Γ : Except (IProp -> Proof) ITauto.Context := .ok TreeMap.empty
     let mut decs := TreeMap.empty
-    for l
+    for ldecl in ← getLCtx do
+      if !ldecl.isImplementationDetail then
+        let e := ldecl.type
+        if ← isProp e then
+          let A ← reify e
+          let n := ldecl.fvarId.name
+          hs := hs.insert n (Expr.fvar ldecl.fvarId)
+          Γ := do (← Γ).add A (.hyp n)
+        else
+          if let .const ``Decidable _ := e.getAppFn then
+            let p : Q(Prop) := e.appArg!
+            if useDec then
+              let A ← reify p
+              decs := decs.insert A (false, Expr.fvar ldecl.fvarId)
+    let addDec (force : Bool) (decs : TreeMap IProp (Bool × Expr) IProp.cmp) (e : Q(Prop)) := do
+      let A ← reify e
+      let dec_e := q(Decidable $e)
+      let res ← trySynthInstance q(Decidable $e)
+      if !(res matches .some _) && !useClassical then
+        if force then _ ← synthInstance dec_e
+        pure decs
+      else
+        pure (decs.insert A (match res with | .some e => (false, e) | _ => (true, e)))
+    decs ← extraDec.foldlM (addDec true) decs
+    if useDec then
+      let mut decided := TreeSet.empty (cmp := compare)
+      if let .ok Γ' := Γ then
+        decided := Γ'.foldl (init := decided) fun m p _ =>
+          match p with
+          | .var i => m.insert i
+          | .not (.var i) => m.insert i
+          | _ => m
+      let ats := (← get).atoms
+      for e in ats, i in [0:ats.size] do
+        if !decided.contains i then
+          decs ← addDec false decs e
+    for (A, cl, pf) in decs do
+      let n ← mkFreshId
+      hs := hs.insert n pf
+      Γ := return (← Γ).insert (A.or A.not) (.em cl n)
+    let p : Proof :=
+      match Γ with
+      | .ok Γ => (prove Γ t 0).1.2
+      | .error p => p t
+    applyProof g hs p
 -/
 def itautoCore (g : MVarId)
     (useDec useClassical : Bool) (extraDec : Array Expr) : MetaM Unit := do

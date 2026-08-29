@@ -57,7 +57,10 @@ theorem not_differentiableAt_norm_zero
   have : DifferentiableAt Real (fun t : Real => ‖t • x‖) 0 := DifferentiableAt.comp _ (by simpa) (by simp)
   have : DifferentiableAt Real (|·|) (0 : Real) := by
     simp_rw [norm_smul, norm_eq_abs] at this
-    have aux : abs = fun 
+    have aux : abs = fun t => (1 / ‖x‖) * (|t| * ‖x‖) := by field_simp
+    rw [aux]
+    exact this.const_mul _
+  exact not_differentiableAt_abs_zero this
 
 中文:
 定理 not_differentiableAt_norm_zero
@@ -68,7 +71,10 @@ theorem not_differentiableAt_norm_zero
   have : DifferentiableAt Real (fun t : Real => ‖t • x‖) 0 := DifferentiableAt.comp _ (by simpa) (by simp)
   have : DifferentiableAt Real (|·|) (0 : Real) := by
     simp_rw [norm_smul, norm_eq_abs] at this
-    have aux : abs = fun 
+    have aux : abs = fun t => (1 / ‖x‖) * (|t| * ‖x‖) := by field_simp
+    rw [aux]
+    exact this.const_mul _
+  exact not_differentiableAt_abs_zero this
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.comp, NormedSpace, NormedSpace.exists_lt_norm, const_mul, exists_lt_norm, norm_eq_abs, norm_smul, not_differentiableAt_abs_zero, simp_rw, this.const_mul
 -/
@@ -96,6 +102,8 @@ theorem ContDiffAt.contDiffAt_norm_smul
   conv at h2 => enter [4]; rw [← one_smul Real x, ← inv_mul_cancel₀ ht, mul_smul]
   convert! h2.comp (t • x) h1 using 1
   ext y
+  simp only [Function.comp_apply]
+  rw [norm_smul]; rw [← mul_assoc]; rw [norm_eq_abs]; rw [← abs_mul]; rw [mul_inv_cancel₀ ht]; rw [abs_one]; rw [one_mul]
 
 中文:
 定理 ContDiffAt.contDiffAt_norm_smul
@@ -106,6 +114,8 @@ theorem ContDiffAt.contDiffAt_norm_smul
   conv at h2 => enter [4]; rw [← one_smul Real x, ← inv_mul_cancel₀ ht, mul_smul]
   convert! h2.comp (t • x) h1 using 1
   ext y
+  simp only [Function.comp_apply]
+  rw [norm_smul]; rw [← mul_assoc]; rw [norm_eq_abs]; rw [← abs_mul]; rw [mul_inv_cancel₀ ht]; rw [abs_one]; rw [one_mul]
 
 Depends on / 依赖: ContDiffAt, Function, Function.comp_apply, abs_mul, abs_one, comp_apply, const_smul, contDiffAt, contDiff_const_smul, convert, h.const_smul, h2.comp, mul_assoc, mul_smul, norm_eq_abs, norm_smul, one_mul, one_smul
 -/
@@ -163,6 +173,8 @@ theorem ContDiffAt.contDiffAt_norm_of_smul
       exact contDiffAt_const
     rw [zero_smul] at h
     by_contra!
+exact not_differentiableAt_norm_zero E h.differentiableAt hn
+.2 h · exact contDiffAt_norm_smul_iff ht
 
 中文:
 定理 ContDiffAt.contDiffAt_norm_of_smul
@@ -177,6 +189,8 @@ theorem ContDiffAt.contDiffAt_norm_of_smul
       exact contDiffAt_const
     rw [zero_smul] at h
     by_contra!
+exact not_differentiableAt_norm_zero E h.differentiableAt hn
+.2 h · exact contDiffAt_norm_smul_iff ht
 
 Depends on / 依赖: Subsingleton, contDiffAt_const, contDiffAt_norm_smul_iff, contDiffAt_zero, continuousOn, continuous_norm, continuous_norm.continuousOn, differentiableAt, eq_const_of_subsingleton, eq_or_ne, h.differentiableAt, not_differentiableAt_norm_zero, univ_mem, zero_smul
 -/
@@ -203,7 +217,12 @@ theorem HasStrictFDerivAt.hasStrictFDerivAt_norm_smul
   have h1 : HasStrictFDerivAt (fun y => t⁻¹ • y) (t⁻¹ • ContinuousLinearMap.id Real E) (t • x) :=
 .const_smul t⁻¹ hasStrictFDerivAt_id (t • x)
   have h2 : HasStrictFDerivAt (fun y => |t| * ‖y‖) (|t| • f) x := h.const_smul |t|
-  conv at h2 => enter [3]; rw [← one_smul Real x, ← inv_mul_cancel₀ ht,
+  conv at h2 => enter [3]; rw [← one_smul Real x, ← inv_mul_cancel₀ ht, mul_smul]
+  convert! h2.comp (t • x) h1 with y
+  · rw [norm_smul, ← mul_assoc, norm_eq_abs, ← abs_mul, mul_inv_cancel₀ ht, abs_one, one_mul]
+  ext y
+  simp only [smul_apply, smul_eq_mul, comp_smulₛₗ, map_inv₀, RingHom.id_apply, comp_id]
+  rw [eq_inv_mul_iff_mul_eq₀ ht]; rw [← mul_assoc]; rw [self_mul_sign]
 
 中文:
 定理 HasStrictFDerivAt.hasStrictFDerivAt_norm_smul
@@ -211,7 +230,12 @@ theorem HasStrictFDerivAt.hasStrictFDerivAt_norm_smul
   have h1 : HasStrictFDerivAt (fun y => t⁻¹ • y) (t⁻¹ • ContinuousLinearMap.id Real E) (t • x) :=
 .const_smul t⁻¹ hasStrictFDerivAt_id (t • x)
   have h2 : HasStrictFDerivAt (fun y => |t| * ‖y‖) (|t| • f) x := h.const_smul |t|
-  conv at h2 => enter [3]; rw [← one_smul Real x, ← inv_mul_cancel₀ ht,
+  conv at h2 => enter [3]; rw [← one_smul Real x, ← inv_mul_cancel₀ ht, mul_smul]
+  convert! h2.comp (t • x) h1 with y
+  · rw [norm_smul, ← mul_assoc, norm_eq_abs, ← abs_mul, mul_inv_cancel₀ ht, abs_one, one_mul]
+  ext y
+  simp only [smul_apply, smul_eq_mul, comp_smulₛₗ, map_inv₀, RingHom.id_apply, comp_id]
+  rw [eq_inv_mul_iff_mul_eq₀ ht]; rw [← mul_assoc]; rw [self_mul_sign]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, HasStrictFDerivAt, abs_mul, abs_one, const_smul, convert, h.const_smul, h2.comp, hasStrictFDerivAt_id, mul_assoc, mul_smul, norm_eq_abs, norm_smul, one_mul, one_smul, smul_apply, smul_eq_mul
 -/
@@ -278,7 +302,12 @@ theorem HasFDerivAt.hasFDerivAt_norm_smul
 .const_smul t⁻¹ hasFDerivAt_id (t • x)
   have h2 : HasFDerivAt (fun y => |t| * ‖y‖) (|t| • f) x := h.const_smul |t|
   conv at h2 => enter [3]; rw [← one_smul Real x, ← inv_mul_cancel₀ ht, mul_smul]
-  conve
+  convert! h2.comp (t • x) h1 using 2 with y
+  · simp only [Function.comp_apply]
+    rw [norm_smul]; rw [← mul_assoc]; rw [norm_eq_abs]; rw [← abs_mul]; rw [mul_inv_cancel₀ ht]; rw [abs_one]; rw [one_mul]
+  · ext y
+    simp only [smul_apply, smul_eq_mul, comp_smulₛₗ, map_inv₀, RingHom.id_apply, comp_id]
+    rw [eq_inv_mul_iff_mul_eq₀ ht]; rw [← mul_assoc]; rw [self_mul_sign]
 
 中文:
 定理 在点处Fréchet可导.hasFDerivAt_norm_smul
@@ -287,7 +316,12 @@ theorem HasFDerivAt.hasFDerivAt_norm_smul
 .const_smul t⁻¹ hasFDerivAt_id (t • x)
   have h2 : HasFDerivAt (fun y => |t| * ‖y‖) (|t| • f) x := h.const_smul |t|
   conv at h2 => enter [3]; rw [← one_smul Real x, ← inv_mul_cancel₀ ht, mul_smul]
-  conve
+  convert! h2.comp (t • x) h1 using 2 with y
+  · simp only [Function.comp_apply]
+    rw [norm_smul]; rw [← mul_assoc]; rw [norm_eq_abs]; rw [← abs_mul]; rw [mul_inv_cancel₀ ht]; rw [abs_one]; rw [one_mul]
+  · ext y
+    simp only [smul_apply, smul_eq_mul, comp_smulₛₗ, map_inv₀, RingHom.id_apply, comp_id]
+    rw [eq_inv_mul_iff_mul_eq₀ ht]; rw [← mul_assoc]; rw [self_mul_sign]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, Function, Function.comp_apply, HasFDerivAt, abs_mul, abs_one, comp_apply, const_smul, convert, h.const_smul, h2.comp, hasFDerivAt_id, mul_assoc, mul_smul, norm_eq_abs, norm_smul, one_mul, one_smul
 -/
@@ -422,7 +456,11 @@ theorem DifferentiableAt.fderiv_norm_self
   simp_rw [this]
   rw [deriv_mul_const]
   · conv_lhs => enter [1, 1]; change _root_.abs ∘ (fun t => 1 + t)
-    rw [deriv_comp
+    rw [deriv_comp]; rw [deriv_abs]; rw [deriv_const_add_id]
+    · simp
+    · exact differentiableAt_abs (by simp)
+    · exact differentiableAt_id.const_add _
+  · exact (differentiableAt_abs (by simp)).comp _ (differentiableAt_id.const_add _)
 
 中文:
 定理 DifferentiableAt.fderiv_norm_self
@@ -434,7 +472,11 @@ theorem DifferentiableAt.fderiv_norm_self
   simp_rw [this]
   rw [deriv_mul_const]
   · conv_lhs => enter [1, 1]; change _root_.abs ∘ (fun t => 1 + t)
-    rw [deriv_comp
+    rw [deriv_comp]; rw [deriv_abs]; rw [deriv_const_add_id]
+    · simp
+    · exact differentiableAt_abs (by simp)
+    · exact differentiableAt_id.const_add _
+  · exact (differentiableAt_abs (by simp)).comp _ (differentiableAt_id.const_add _)
 
 Depends on / 依赖: _root_, _root_.abs, add_smul, const_add, conv_lhs, deriv_abs, deriv_comp, deriv_const_add_id, deriv_mul_const, differentiableAt_abs, differentiableAt_id, differentiableAt_id.const_add, h.lineDeriv_eq_fderiv, lineDeriv, lineDeriv_eq_fderiv, norm_eq_abs, norm_smul, one_smul, simp_rw
 -/
@@ -464,7 +506,11 @@ theorem fderiv_norm_smul
   · by_cases hd : DifferentiableAt Real (‖·‖) x
     · obtain rfl | ht := eq_or_ne t 0
       · simp only [zero_smul, _root_.sign_zero, SignType.coe_zero]
-exact fderiv_zero_of_not_differentiableAt
+exact fderiv_zero_of_not_differentiableAt not_differentiableAt_norm_zero E
+      · rw [(hd.hasFDerivAt.hasFDerivAt_norm_smul ht).fderiv]
+    · rw [fderiv_zero_of_not_differentiableAt hd, fderiv_zero_of_not_differentiableAt]
+      · simp
+      · exact mt DifferentiableAt.differentiableAt_norm_of_smul hd
 
 中文:
 定理 fderiv_norm_smul
@@ -474,7 +520,11 @@ exact fderiv_zero_of_not_differentiableAt
   · by_cases hd : DifferentiableAt Real (‖·‖) x
     · obtain rfl | ht := eq_or_ne t 0
       · simp only [zero_smul, _root_.sign_zero, SignType.coe_zero]
-exact fderiv_zero_of_not_differentiableAt
+exact fderiv_zero_of_not_differentiableAt not_differentiableAt_norm_zero E
+      · rw [(hd.hasFDerivAt.hasFDerivAt_norm_smul ht).fderiv]
+    · rw [fderiv_zero_of_not_differentiableAt hd, fderiv_zero_of_not_differentiableAt]
+      · simp
+      · exact mt DifferentiableAt.differentiableAt_norm_of_smul hd
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.differen, SignType, SignType.coe_zero, _root_, _root_.sign_zero, coe_zero, differen, eq_or_ne, fderiv, fderiv_zero_of_not_differentiableAt, hasFDerivAt, hasFDerivAt_norm_smul, hasFDerivAt_of_subsingleton, hd.hasFDerivAt.hasFDerivAt_norm_smul, not_differentiableAt_norm_zero, sign_zero, simp_rw, smul_zero, subsingleton_or_nontrivial
 -/
@@ -544,7 +594,9 @@ theorem norm_fderiv_norm
   refine le_antisymm (NNReal.coe_one ▸ norm_fderiv_le_of_lipschitz Real lipschitzWith_one_norm) ?_
   apply le_of_mul_le_mul_right _ (norm_pos_iff.2 this)
   calc
-    1 * ‖x‖ = fderiv Real (‖·‖) x x := by rw [one_mul, h.fderiv_n
+    1 * ‖x‖ = fderiv Real (‖·‖) x x := by rw [one_mul, h.fderiv_norm_self]
+    _ <= ‖fderiv Real (‖·‖) x x‖ := le_norm_self _
+    _ <= ‖fderiv Real (‖·‖) x‖ * ‖x‖ := le_opNorm _ _
 
 中文:
 定理 norm_fderiv_norm
@@ -554,7 +606,9 @@ theorem norm_fderiv_norm
   refine le_antisymm (NNReal.coe_one ▸ norm_fderiv_le_of_lipschitz Real lipschitzWith_one_norm) ?_
   apply le_of_mul_le_mul_right _ (norm_pos_iff.2 this)
   calc
-    1 * ‖x‖ = fderiv Real (‖·‖) x x := by rw [one_mul, h.fderiv_n
+    1 * ‖x‖ = fderiv Real (‖·‖) x x := by rw [one_mul, h.fderiv_norm_self]
+    _ <= ‖fderiv Real (‖·‖) x x‖ := le_norm_self _
+    _ <= ‖fderiv Real (‖·‖) x‖ * ‖x‖ := le_opNorm _ _
 
 Depends on / 依赖: NNReal, NNReal.coe_one, coe_one, fderiv, fderiv_norm_self, h.fderiv_norm_self, le_antisymm, le_norm_self, le_of_mul_le_mul_right, le_opNorm, lipschitzWith_one_norm, norm_fderiv_le_of_lipschitz, norm_pos_iff, not_differentiableAt_norm_zero, one_mul
 -/

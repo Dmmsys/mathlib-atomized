@@ -1506,7 +1506,20 @@ instance :
     exact mod_cast hammingDist_triangle
   toUniformSpace := ⊥
   uniformity_dist := uniformity_dist_of_mem_uniformity _ _ fun s => by
-    push_c
+    push_cast
+    constructor
+· refine fun hs => ⟨1, zero_lt_one, fun hab => hs by simpa using hab⟩
+    · rintro ⟨_, hε, hs⟩ ⟨_, _⟩ rfl
+      refine hs (lt_of_eq_of_lt ?_ hε)
+      exact mod_cast hammingDist_self _
+  toBornology := ⟨⊥, bot_le⟩
+  cobounded_sets := by
+    ext
+    push_cast
+    refine iff_of_true (Filter.mem_sets.mpr Filter.mem_bot) ⟨Fintype.card ι, fun _ _ _ _ => ?_⟩
+    exact mod_cast hammingDist_le_card_fintype
+
+@[simp, push_cast]
 
 中文:
 实例 :
@@ -1522,7 +1535,20 @@ instance :
     exact mod_cast hammingDist_triangle
   toUniformSpace := ⊥
   uniformity_dist := uniformity_dist_of_mem_uniformity _ _ fun s => by
-    push_c
+    push_cast
+    constructor
+· refine fun hs => ⟨1, zero_lt_one, fun hab => hs by simpa using hab⟩
+    · rintro ⟨_, hε, hs⟩ ⟨_, _⟩ rfl
+      refine hs (lt_of_eq_of_lt ?_ hε)
+      exact mod_cast hammingDist_self _
+  toBornology := ⟨⊥, bot_le⟩
+  cobounded_sets := by
+    ext
+    push_cast
+    refine iff_of_true (Filter.mem_sets.mpr Filter.mem_bot) ⟨Fintype.card ι, fun _ _ _ _ => ?_⟩
+    exact mod_cast hammingDist_le_card_fintype
+
+@[simp, push_cast]
 
 Depends on / 依赖: bot_le, cobounded_sets, dist_comm, dist_triangle, hammingDist_comm, hammingDist_self, hammingDist_triangle, lt_of_eq_of_lt, mod_cast, toBornology, toUniformSpace, uniformity_dist, uniformity_dist_of_mem_uniformity, zero_lt_one
 -/

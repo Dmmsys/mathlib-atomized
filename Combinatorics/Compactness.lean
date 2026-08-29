@@ -65,7 +65,16 @@ theorem Finset.rado_selection
   let instTop (a : α) : TopologicalSpace (β a) := ⊥
   have instDiscr (a : α) : DiscreteTopology (β a) := discreteTopology_bot _
   let e (s : Finset α) : Set ((a : α) -> β a) := {f | exists t, s subseteq t ∧ forall x in s, f x = g t x}
-  have (s : Finset α) : s.restrict ⁻¹' {f | exists
+  have (s : Finset α) : s.restrict ⁻¹' {f | exists t, s subseteq t ∧ forall x, f x = g t x} = e s := by simp [e]
+  have he' (s : Finset α) : IsClosed (e s) := by
+    rw [← this]
+    exact (isClosed_discrete _).preimage (by fun_prop)
+  have he'' (B : Finset (Finset α)) : (⋂ i in B, e i).Nonempty := by
+    refine ⟨g (B.biUnion id), ?_⟩
+    simp only [Set.mem_iInter, Set.mem_ofPred_eq, e]
+    intro i hi
+    exact ⟨_, subset_biUnion_of_mem id hi, by simp⟩
+  simpa using! CompactSpace.iInter_nonempty he' he''
 
 中文:
 定理 有限集.rado_selection
@@ -75,7 +84,16 @@ theorem Finset.rado_selection
   let instTop (a : α) : TopologicalSpace (β a) := ⊥
   have instDiscr (a : α) : DiscreteTopology (β a) := discreteTopology_bot _
   let e (s : Finset α) : Set ((a : α) -> β a) := {f | exists t, s subseteq t ∧ forall x in s, f x = g t x}
-  have (s : Finset α) : s.restrict ⁻¹' {f | exists
+  have (s : Finset α) : s.restrict ⁻¹' {f | exists t, s subseteq t ∧ forall x, f x = g t x} = e s := by simp [e]
+  have he' (s : Finset α) : IsClosed (e s) := by
+    rw [← this]
+    exact (isClosed_discrete _).preimage (by fun_prop)
+  have he'' (B : Finset (Finset α)) : (⋂ i in B, e i).Nonempty := by
+    refine ⟨g (B.biUnion id), ?_⟩
+    simp only [Set.mem_iInter, Set.mem_ofPred_eq, e]
+    intro i hi
+    exact ⟨_, subset_biUnion_of_mem id hi, by simp⟩
+  simpa using! CompactSpace.iInter_nonempty he' he''
 
 Depends on / 依赖: DiscreteTopology, Finset, IsClosed, TopologicalSpace, classical, discreteTopology_bot, fun_prop, instDiscr, instTop, isClosed_discrete, preimage, restrict, s.restrict, subseteq
 -/

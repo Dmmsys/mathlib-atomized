@@ -349,7 +349,20 @@ lemma composableArrows₃_exact
       τ₂ := 𝟙 _
       τ₃ := K.iCycles j }
   have hS : S.Exact := by
-    rw [ShortComplex.exact_iff_of_epi_of
+    rw [ShortComplex.exact_iff_of_epi_of_isIso_of_mono ι]
+    exact S'.exact_of_f_is_kernel (K.homologyIsKernel i j (c.next_eq' hij))
+  let T := ShortComplex.mk (K.opcyclesToCycles i j) (K.homologyπ j) (by simp)
+  let T' := ShortComplex.mk (K.toCycles i j) (K.homologyπ j) (by simp)
+  let π : T' ⟶ T :=
+    { τ₁ := K.pOpcycles i
+      τ₂ := 𝟙 _
+      τ₃ := 𝟙 _ }
+  have hT : T.Exact := by
+    rw [← ShortComplex.exact_iff_of_epi_of_isIso_of_mono π]
+    exact T'.exact_of_g_is_cokernel (K.homologyIsCokernel i j (c.prev_eq' hij))
+  apply ComposableArrows.exact_of_δ₀
+  · exact hS.exact_toComposableArrows
+  · exact hT.exact_toComposableArrows
 
 中文:
 引理 composableArrows₃_exact
@@ -362,7 +375,20 @@ lemma composableArrows₃_exact
       τ₂ := 𝟙 _
       τ₃ := K.iCycles j }
   have hS : S.Exact := by
-    rw [ShortComplex.exact_iff_of_epi_of
+    rw [ShortComplex.exact_iff_of_epi_of_isIso_of_mono ι]
+    exact S'.exact_of_f_is_kernel (K.homologyIsKernel i j (c.next_eq' hij))
+  let T := ShortComplex.mk (K.opcyclesToCycles i j) (K.homologyπ j) (by simp)
+  let T' := ShortComplex.mk (K.toCycles i j) (K.homologyπ j) (by simp)
+  let π : T' ⟶ T :=
+    { τ₁ := K.pOpcycles i
+      τ₂ := 𝟙 _
+      τ₃ := 𝟙 _ }
+  have hT : T.Exact := by
+    rw [← ShortComplex.exact_iff_of_epi_of_isIso_of_mono π]
+    exact T'.exact_of_g_is_cokernel (K.homologyIsCokernel i j (c.prev_eq' hij))
+  apply ComposableArrows.exact_of_δ₀
+  · exact hS.exact_toComposableArrows
+  · exact hT.exact_toComposableArrows
 
 Depends on / 依赖: K.fromOpcycles, K.homology, K.homologyIsKernel, K.iCycles, K.opcyclesToCycles, K.toCycles, S.Exact, ShortComplex, ShortComplex.exact_iff_of_epi_of_isIso_of_mono, ShortComplex.mk, c.next_eq, exact_iff_of_epi_of_isIso_of_mono, exact_of_f_is_kernel, fromOpcycles, homologyIsKernel, iCycles, next_eq, opcyclesToCycles, toCycles
 -/
@@ -408,7 +434,7 @@ definition composableArrows₃Functor
   body: composableArrows₃ K i j
   map {K L} φ := ComposableArrows.homMk₃ (homologyMap φ i) (opcyclesMap φ i) (cyclesMap φ j)
     -- Disable `Fin.reduceFinMk`, otherwise `Precomp.obj_succ` does not fire. (https://github.com/leanprover-community/mathlib4/issues/27382)
-    (homologyMap φ j) (by simp) (by simp 
+    (homologyMap φ j) (by simp) (by simp [-Fin.reduceFinMk]) (by simp [-Fin.reduceFinMk])
 
 中文:
 定义 composableArrows₃Functor
@@ -416,7 +442,7 @@ definition composableArrows₃Functor
   定义体: composableArrows₃ K i j
   map {K L} φ := ComposableArrows.homMk₃ (homologyMap φ i) (opcyclesMap φ i) (cyclesMap φ j)
     -- Disable `Fin.reduceFinMk`, otherwise `Precomp.obj_succ` does not fire. (https://github.com/leanprover-community/mathlib4/issues/27382)
-    (homologyMap φ j) (by simp) (by simp 
+    (homologyMap φ j) (by simp) (by simp [-Fin.reduceFinMk]) (by simp [-Fin.reduceFinMk])
 -/
 noncomputable def composableArrows₃Functor [CategoryWithHomology C] :
     HomologicalComplex C c ⥤ ComposableArrows C 3 where
@@ -447,7 +473,14 @@ lemma opcycles_right_exact
   apply ShortComplex.exact_of_g_is_cokernel
   refine CokernelCofork.IsColimit.ofπ' _ _ (fun {A} k hk => by
     dsimp at k hk ⊢
-    have H := CokernelCofor
+    have H := CokernelCofork.IsColimit.desc' hj (S.X₂.pOpcycles i ≫ k) (by
+      dsimp
+      rw [← p_opcyclesMap_assoc]; rw [hk]; rw [comp_zero])
+    dsimp at H
+    refine ⟨S.X₃.descOpcycles H.1 _ rfl ?_, ?_⟩
+    · rw [← cancel_epi (S.g.f (c.prev i)), comp_zero, Hom.comm_assoc, H.2,
+        d_pOpcycles_assoc, zero_comp]
+    · rw [← cancel_epi (S.X₂.pOpcycles i), opcyclesMap_comp_descOpcycles, p_descOpcycles, H.2])
 
 中文:
 引理 opcycles_right_exact
@@ -458,7 +491,14 @@ lemma opcycles_right_exact
   apply ShortComplex.exact_of_g_is_cokernel
   refine CokernelCofork.IsColimit.ofπ' _ _ (fun {A} k hk => by
     dsimp at k hk ⊢
-    have H := CokernelCofor
+    have H := CokernelCofork.IsColimit.desc' hj (S.X₂.pOpcycles i ≫ k) (by
+      dsimp
+      rw [← p_opcyclesMap_assoc]; rw [hk]; rw [comp_zero])
+    dsimp at H
+    refine ⟨S.X₃.descOpcycles H.1 _ rfl ?_, ?_⟩
+    · rw [← cancel_epi (S.g.f (c.prev i)), comp_zero, Hom.comm_assoc, H.2,
+        d_pOpcycles_assoc, zero_comp]
+    · rw [← cancel_epi (S.X₂.pOpcycles i), opcyclesMap_comp_descOpcycles, p_descOpcycles, H.2])
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.IsColimit.desc, CokernelCofork.IsColimit.of, HomologicalComplex, HomologicalComplex.eval, IsColimit, S.g.f, ShortComplex, ShortComplex.exact_of_g_is_cokernel, ShortComplex.map, c.prev, cancel_epi, comp_zero, descOpcycles, exact_of_g_is_cokernel, gIsCokernel, hS.map, infer_instance, pOpcycles, p_opcyclesMap_assoc
 -/
@@ -494,7 +534,14 @@ lemma cycles_left_exact
   apply ShortComplex.exact_of_f_is_kernel
   exact KernelFork.IsLimit.ofι' _ _ (fun {A} k hk => by
     dsimp at k hk ⊢
-    have H := KernelFork.IsLimit.lift
+    have H := KernelFork.IsLimit.lift' hi (k ≫ S.X₂.iCycles i) (by
+      dsimp
+      rw [assoc]; rw [← cyclesMap_i]; rw [reassoc_of% hk]; rw [zero_comp])
+    dsimp at H
+    refine ⟨S.X₁.liftCycles H.1 _ rfl ?_, ?_⟩
+    · rw [← cancel_mono (S.f.f _), assoc, zero_comp, ← Hom.comm, reassoc_of% H.2,
+        iCycles_d, comp_zero]
+    · rw [← cancel_mono (S.X₂.iCycles i), liftCycles_comp_cyclesMap, liftCycles_i, H.2])
 
 中文:
 引理 cycles_left_exact
@@ -505,7 +552,14 @@ lemma cycles_left_exact
   apply ShortComplex.exact_of_f_is_kernel
   exact KernelFork.IsLimit.ofι' _ _ (fun {A} k hk => by
     dsimp at k hk ⊢
-    have H := KernelFork.IsLimit.lift
+    have H := KernelFork.IsLimit.lift' hi (k ≫ S.X₂.iCycles i) (by
+      dsimp
+      rw [assoc]; rw [← cyclesMap_i]; rw [reassoc_of% hk]; rw [zero_comp])
+    dsimp at H
+    refine ⟨S.X₁.liftCycles H.1 _ rfl ?_, ?_⟩
+    · rw [← cancel_mono (S.f.f _), assoc, zero_comp, ← Hom.comm, reassoc_of% H.2,
+        iCycles_d, comp_zero]
+    · rw [← cancel_mono (S.X₂.iCycles i), liftCycles_comp_cyclesMap, liftCycles_i, H.2])
 
 Depends on / 依赖: Hom.com, HomologicalComplex, HomologicalComplex.eval, IsLimit, KernelFork, KernelFork.IsLimit.lift, KernelFork.IsLimit.of, S.f.f, ShortComplex, ShortComplex.exact_of_f_is_kernel, ShortComplex.map, cancel_mono, cyclesMap_i, exact_of_f_is_kernel, fIsKernel, hS.map, iCycles, infer_instance, liftCycles, reassoc_of
 -/
@@ -550,7 +604,32 @@ definition snakeInput
   L₂ := (cyclesFunctor C c j).mapShortComplex.obj S
   L₃ := (homologyFunctor C c j).mapShortComplex.obj S
   v₀₁ := S.mapNatTrans (natTransHomologyι C c i)
-  v₁₂ := S.mapNatTrans (natTransOpCyclesToCyc
+  v₁₂ := S.mapNatTrans (natTransOpCyclesToCycles C c i j)
+  v₂₃ := S.mapNatTrans (natTransHomologyπ C c j)
+  h₀ := by
+    apply ShortComplex.isLimitOfIsLimitπ
+    all_goals
+      exact (KernelFork.isLimitMapConeEquiv _ _).symm
+        ((composableArrows₃_exact _ i j hij).exact 0).fIsKernel
+  h₃ := by
+    apply ShortComplex.isColimitOfIsColimitπ
+    all_goals
+      exact (CokernelCofork.isColimitMapCoconeEquiv _ _).symm
+        ((composableArrows₃_exact _ i j hij).exact 1).gIsCokernel
+  L₁_exact := by
+    have := hS.epi_g
+    exact opcycles_right_exact S hS.exact i
+  L₂_exact := by
+    have := hS.mono_f
+    exact cycles_left_exact S hS.exact j
+  epi_L₁_g := by
+    have := hS.epi_g
+    dsimp
+    infer_instance
+  mono_L₂_f := by
+    have := hS.mono_f
+    dsimp
+    infer_instance
 
 中文:
 定义 snakeInput
@@ -560,7 +639,32 @@ definition snakeInput
   L₂ := (cyclesFunctor C c j).mapShortComplex.obj S
   L₃ := (homologyFunctor C c j).mapShortComplex.obj S
   v₀₁ := S.mapNatTrans (natTransHomologyι C c i)
-  v₁₂ := S.mapNatTrans (natTransOpCyclesToCyc
+  v₁₂ := S.mapNatTrans (natTransOpCyclesToCycles C c i j)
+  v₂₃ := S.mapNatTrans (natTransHomologyπ C c j)
+  h₀ := by
+    apply ShortComplex.isLimitOfIsLimitπ
+    all_goals
+      exact (KernelFork.isLimitMapConeEquiv _ _).symm
+        ((composableArrows₃_exact _ i j hij).exact 0).fIsKernel
+  h₃ := by
+    apply ShortComplex.isColimitOfIsColimitπ
+    all_goals
+      exact (CokernelCofork.isColimitMapCoconeEquiv _ _).symm
+        ((composableArrows₃_exact _ i j hij).exact 1).gIsCokernel
+  L₁_exact := by
+    have := hS.epi_g
+    exact opcycles_right_exact S hS.exact i
+  L₂_exact := by
+    have := hS.mono_f
+    exact cycles_left_exact S hS.exact j
+  epi_L₁_g := by
+    have := hS.epi_g
+    dsimp
+    infer_instance
+  mono_L₂_f := by
+    have := hS.mono_f
+    dsimp
+    infer_instance
 
 Depends on / 依赖: epimorphisms, epimorphisms.infer_property, homologyFunctor, infer_property, karoubi, karoubi.retractArrow, mapShortComplex, mapShortComplex.obj, of_retract, retractArrow
 -/
@@ -711,7 +815,11 @@ lemma homology_exact₂
   · have := hS.epi_g
     have : forall (K : HomologicalComplex C c), IsIso (K.homologyι i) :=
       fun K => ShortComplex.isIso_homologyι (K.sc i) (K.shape _ _ h)
-    have e : S.map (HomologicalComplex.homologyFunctor C c 
+    have e : S.map (HomologicalComplex.homologyFunctor C c i) ≅
+        S.map (HomologicalComplex.opcyclesFunctor C c i) :=
+      ShortComplex.isoMk (asIso (S.X₁.homologyι i))
+        (asIso (S.X₂.homologyι i)) (asIso (S.X₃.homologyι i)) (by simp) (by simp)
+    exact ShortComplex.exact_of_iso e.symm (opcycles_right_exact S hS.exact i)
 
 中文:
 引理 homology_exact₂
@@ -722,7 +830,11 @@ lemma homology_exact₂
   · have := hS.epi_g
     have : forall (K : HomologicalComplex C c), IsIso (K.homologyι i) :=
       fun K => ShortComplex.isIso_homologyι (K.sc i) (K.shape _ _ h)
-    have e : S.map (HomologicalComplex.homologyFunctor C c 
+    have e : S.map (HomologicalComplex.homologyFunctor C c i) ≅
+        S.map (HomologicalComplex.opcyclesFunctor C c i) :=
+      ShortComplex.isoMk (asIso (S.X₁.homologyι i))
+        (asIso (S.X₂.homologyι i)) (asIso (S.X₃.homologyι i)) (by simp) (by simp)
+    exact ShortComplex.exact_of_iso e.symm (opcycles_right_exact S hS.exact i)
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.homologyFunctor, HomologicalComplex.opcyclesFunctor, K.homology, K.sc, K.shape, S.map, ShortComplex, ShortComplex.exact_of_iso, ShortComplex.isIso_homology, ShortComplex.isoMk, c.Rel, c.next, e.symm, epi_g, exact_of_iso, hS.epi_g, homologyFunctor, opcyclesFunctor, snakeInput
 -/
@@ -792,7 +904,10 @@ lemma δ_eq
     (x₂ ≫ S.X₂.pOpcycles i) (S.X₁.liftCycles x₁ k hk _)
       (by simp only [assoc, HomologicalComplex.p_opcyclesMap,
         HomologicalComplex.homology_π_ι,
-        HomologicalComplex.
+        HomologicalComplex.liftCycles_i_assoc, reassoc_of% hx₂])
+      (by rw [← cancel_mono (S.X₂.iCycles j), HomologicalComplex.liftCycles_comp_cyclesMap,
+        HomologicalComplex.liftCycles_i, assoc, assoc, opcyclesToCycles_iCycles,
+        HomologicalComplex.p_fromOpcycles, hx₁])
 
 中文:
 引理 δ_eq
@@ -803,7 +918,10 @@ lemma δ_eq
     (x₂ ≫ S.X₂.pOpcycles i) (S.X₁.liftCycles x₁ k hk _)
       (by simp only [assoc, HomologicalComplex.p_opcyclesMap,
         HomologicalComplex.homology_π_ι,
-        HomologicalComplex.
+        HomologicalComplex.liftCycles_i_assoc, reassoc_of% hx₂])
+      (by rw [← cancel_mono (S.X₂.iCycles j), HomologicalComplex.liftCycles_comp_cyclesMap,
+        HomologicalComplex.liftCycles_i, assoc, assoc, opcyclesToCycles_iCycles,
+        HomologicalComplex.p_fromOpcycles, hx₁])
 
 Depends on / 依赖: hS.mono_f, mono_f
 -/

@@ -2166,7 +2166,8 @@ definition coind
     map_smul' _ _ := by simp
 cont := continuous_induced_rng.2 by
       simpa using! (ContinuousMap.mulRight h).continuous_precomp.comp continuous_subtype_val}
-  toMonoidHom.map_one' :=
+  toMonoidHom.map_one' := by ext; simp
+  toMonoidHom.map_mul' h1 h2 := by ext; simp [ContinuousMap.mulRight_mul]
 
 中文:
 定义 coind
@@ -2177,7 +2178,8 @@ cont := continuous_induced_rng.2 by
     map_smul' _ _ := by simp
 cont := continuous_induced_rng.2 by
       simpa using! (ContinuousMap.mulRight h).continuous_precomp.comp continuous_subtype_val}
-  toMonoidHom.map_one' :=
+  toMonoidHom.map_one' := by ext; simp
+  toMonoidHom.map_mul' h1 h2 := by ext; simp [ContinuousMap.mulRight_mul]
 -/
 def coind (π : ContRepresentation R G V) : ContRepresentation R H (π.coindV φ) where
   toMonoidHom.toFun h := {
@@ -2206,7 +2208,7 @@ definition coind₁
   toMonoidHom.map_one' := by ext; simp
   toMonoidHom.map_mul' _ _ := by ext; simp [mul_assoc]
 
-@[si
+@[simp]
 
 中文:
 定义 coind₁
@@ -2220,7 +2222,7 @@ definition coind₁
   toMonoidHom.map_one' := by ext; simp
   toMonoidHom.map_mul' _ _ := by ext; simp [mul_assoc]
 
-@[si
+@[simp]
 -/
 def coind₁ (π : ContRepresentation R G V) :
     ContRepresentation R G C(G, V) where

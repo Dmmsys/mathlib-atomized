@@ -253,7 +253,10 @@ definition lift
       rw [Category.comp_id]
       rfl
     | cons g' p ih =>
-      have : f ≫ Quiver.Path
+      have : f ≫ Quiver.Path.cons g' p = (f ≫ g').cons p := by apply Quiver.Path.comp_cons
+      rw [this]
+      simp only at ih ⊢
+      rw [ih]; rw [Category.assoc]
 
 中文:
 定义 lift
@@ -269,7 +272,10 @@ definition lift
       rw [Category.comp_id]
       rfl
     | cons g' p ih =>
-      have : f ≫ Quiver.Path
+      have : f ≫ Quiver.Path.cons g' p = (f ≫ g').cons p := by apply Quiver.Path.comp_cons
+      rw [this]
+      simp only at ih ⊢
+      rw [ih]; rw [Category.assoc]
 -/
 def lift {C} [Category* C] (φ : V ⥤q C) : Paths V ⥤ C where
   obj := φ.obj
@@ -413,7 +419,11 @@ theorem lift_unique
       apply Functor.map_id
     | cons p f' ih =>
       simp only [Category.comp_id, Category.id_comp] at ih ⊢
-      -- Porting note: Had to
+      -- Porting note: Had to do substitute `p.cons f'` and `f'.toPath` by their fully qualified
+      -- versions in this `have` clause (elsewhere too).
+      have : Φ.map (Quiver.Path.cons p f') = Φ.map p ≫ Φ.map (Quiver.Hom.toPath f') := by
+        convert! Functor.map_comp Φ p (Quiver.Hom.toPath f')
+      rw [this]; rw [ih]
 
 中文:
 定理 lift_unique
@@ -431,7 +441,11 @@ theorem lift_unique
       apply Functor.map_id
     | cons p f' ih =>
       simp only [Category.comp_id, Category.id_comp] at ih ⊢
-      -- Porting note: Had to
+      -- Porting note: Had to do substitute `p.cons f'` and `f'.toPath` by their fully qualified
+      -- versions in this `have` clause (elsewhere too).
+      have : Φ.map (Quiver.Path.cons p f') = Φ.map p ≫ Φ.map (Quiver.Hom.toPath f') := by
+        convert! Functor.map_comp Φ p (Quiver.Hom.toPath f')
+      rw [this]; rw [ih]
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, Functor, Functor.ext, Functor.map_id, comp_id, fapply, id_comp, map_id
 -/
@@ -473,7 +487,7 @@ theorem ext_functor
     | nil => erw [F.map_id, G.map_id, Category.id_comp, eqToHom_trans, eqToHom_refl]
     | cons g e ih =>
       erw [F.map_comp g (Quiver.Hom.toPath e), G.map_comp g (Quiver.Hom.toPath e), ih, h]
-      simp only 
+      simp only [Category.id_comp, eqToHom_refl, eqToHom_trans_assoc, Category.assoc]
 
 中文:
 定理 ext_functor
@@ -487,7 +501,7 @@ theorem ext_functor
     | nil => erw [F.map_id, G.map_id, Category.id_comp, eqToHom_trans, eqToHom_refl]
     | cons g e ih =>
       erw [F.map_comp g (Quiver.Hom.toPath e), G.map_comp g (Quiver.Hom.toPath e), ih, h]
-      simp only 
+      simp only [Category.id_comp, eqToHom_refl, eqToHom_trans_assoc, Category.assoc]
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, F.map_comp, F.map_id, Functor, Functor.ext, G.map_comp, G.map_id, Quiver, Quiver.Hom.toPath, eqToHom_refl, eqToHom_trans, eqToHom_trans_assoc, fapply, h_obj, id_comp, map_comp, map_id, toPath
 -/
@@ -812,7 +826,12 @@ definition quotientPathsEquiv
       (fun X => by cases X; rfl)
       (Quot.ind fun f => by exact Quot.sound (HomRel.CompClosure.of (by simp)))
   counitIso := NatIso.ofComponents (fun _ => Iso.refl _) (fun f => by simp)
-  functor_unitIso_comp X 
+  functor_unitIso_comp X := by
+    cases X
+    simp only [Functor.id_obj,
+               quotientPathsTo_obj, Functor.comp_obj, toQuotientPaths_obj_as,
+               NatIso.ofComponents_hom_app, Iso.refl_hom, quotientPathsTo_map, Category.comp_id]
+    rfl
 
 中文:
 定义 quotientPathsEquiv
@@ -824,7 +843,12 @@ definition quotientPathsEquiv
       (fun X => by cases X; rfl)
       (Quot.ind fun f => by exact Quot.sound (HomRel.CompClosure.of (by simp)))
   counitIso := NatIso.ofComponents (fun _ => Iso.refl _) (fun f => by simp)
-  functor_unitIso_comp X 
+  functor_unitIso_comp X := by
+    cases X
+    simp only [Functor.id_obj,
+               quotientPathsTo_obj, Functor.comp_obj, toQuotientPaths_obj_as,
+               NatIso.ofComponents_hom_app, Iso.refl_hom, quotientPathsTo_map, Category.comp_id]
+    rfl
 
 Depends on / 依赖: quotientPathsTo
 -/

@@ -32,7 +32,17 @@ lemma intervalIntegral_pow_mul_exp_neg_le
   have hint : IntegrableOn (fun x => x ^ ((↑k + 1 : Real) - 1) * rexp (-(c * x))) (Ioi 0) :=
     .of_integral_ne_zero (by rw [key]; positivity)
   rw [intervalIntegral.integral_of_le hM]
-  calc ∫
+  calc ∫ x in Ioc (0 : Real) M, x ^ k * rexp (-(c * x))
+    _ = ∫ x in Ioc (0 : Real) M, x ^ ((↑k + 1 : Real) - 1) * rexp (-(c * x)) := by
+        simp [add_sub_cancel_right, rpow_natCast]
+    _ <= ∫ x in Ioi (0 : Real), x ^ ((↑k + 1 : Real) - 1) * rexp (-(c * x)) := by
+        apply setIntegral_mono_set hint _ Ioc_subset_Ioi_self.eventuallyLE
+        filter_upwards [ae_restrict_mem measurableSet_Ioi] with x hx
+        exact mul_nonneg (rpow_nonneg hx.le _) (exp_nonneg _)
+    _ = k ! / c ^ (k + 1) := by
+        simp_rw [key, Gamma_nat_eq_factorial, div_eq_mul_inv,
+          one_mul, mul_comm, inv_rpow hc.le, ← rpow_natCast]
+        norm_cast
 
 中文:
 引理 interval整数egral_pow_mul_exp_neg_le
@@ -43,7 +53,17 @@ lemma intervalIntegral_pow_mul_exp_neg_le
   have hint : IntegrableOn (fun x => x ^ ((↑k + 1 : Real) - 1) * rexp (-(c * x))) (Ioi 0) :=
     .of_integral_ne_zero (by rw [key]; positivity)
   rw [intervalIntegral.integral_of_le hM]
-  calc ∫
+  calc ∫ x in Ioc (0 : Real) M, x ^ k * rexp (-(c * x))
+    _ = ∫ x in Ioc (0 : Real) M, x ^ ((↑k + 1 : Real) - 1) * rexp (-(c * x)) := by
+        simp [add_sub_cancel_right, rpow_natCast]
+    _ <= ∫ x in Ioi (0 : Real), x ^ ((↑k + 1 : Real) - 1) * rexp (-(c * x)) := by
+        apply setIntegral_mono_set hint _ Ioc_subset_Ioi_self.eventuallyLE
+        filter_upwards [ae_restrict_mem measurableSet_Ioi] with x hx
+        exact mul_nonneg (rpow_nonneg hx.le _) (exp_nonneg _)
+    _ = k ! / c ^ (k + 1) := by
+        simp_rw [key, Gamma_nat_eq_factorial, div_eq_mul_inv,
+          one_mul, mul_comm, inv_rpow hc.le, ← rpow_natCast]
+        norm_cast
 
 Depends on / 依赖: IntegrableOn, add_sub_cancel_right, integral_of_le, integral_rpow_mul_exp_neg_mul_Ioi, intervalIntegral, intervalIntegral.integral_of_le, of_integral_ne_zero, rpow_natCast
 -/
@@ -79,7 +99,20 @@ lemma sum_Ico_pow_mul_exp_neg_le
       (f := fun x => x ^ k) (g := fun x => rexp (- (c * x)))
     · exact Nat.zero_le M
     · intro x hx y hy hxy
-      apply 
+      apply pow_le_pow_left₀ (by simpa using hx.1) hxy
+    · intro x hx y hy hxy
+      apply exp_monotone
+      simp only [neg_le_neg_iff]
+      gcongr
+    · simp
+    · apply exp_nonneg
+  _ <= (k ! / c ^ (k + 1)) * rexp c := by
+    simp only [mul_sub, mul_one, neg_sub, CharP.cast_eq_zero]
+    simp only [sub_eq_add_neg, Real.exp_add, mul_comm (rexp c), ← mul_assoc]
+    rw [intervalIntegral.integral_mul_const]
+    gcongr
+    exact intervalIntegral_pow_mul_exp_neg_le (by simp) hc
+  _ = _ := by ring
 
 中文:
 引理 sum_Ico_pow_mul_exp_neg_le
@@ -91,7 +124,20 @@ lemma sum_Ico_pow_mul_exp_neg_le
       (f := fun x => x ^ k) (g := fun x => rexp (- (c * x)))
     · exact Nat.zero_le M
     · intro x hx y hy hxy
-      apply 
+      apply pow_le_pow_left₀ (by simpa using hx.1) hxy
+    · intro x hx y hy hxy
+      apply exp_monotone
+      simp only [neg_le_neg_iff]
+      gcongr
+    · simp
+    · apply exp_nonneg
+  _ <= (k ! / c ^ (k + 1)) * rexp c := by
+    simp only [mul_sub, mul_one, neg_sub, CharP.cast_eq_zero]
+    simp only [sub_eq_add_neg, Real.exp_add, mul_comm (rexp c), ← mul_assoc]
+    rw [intervalIntegral.integral_mul_const]
+    gcongr
+    exact intervalIntegral_pow_mul_exp_neg_le (by simp) hc
+  _ = _ := by ring
 
 Depends on / 依赖: SemilatticeInf, isCofilteredOrEmpty_of_semilatticeInf
 -/

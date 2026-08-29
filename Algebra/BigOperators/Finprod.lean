@@ -988,7 +988,12 @@ theorem finprod_eq_prod_of_mulSupport_subset
     exact (Equiv.plift.symm.image_eq_preimage_symm _).symm
   have : mulSupport (f ∘ PLift.down) subseteq s.map Equiv.plift.symm.toEmbedding := by
     rw [A]; rw [Finset.coe_map]
-  
+    exact image_mono h
+  rw [finprod_eq_prod_plift_of_mulSupport_subset this]
+  simp only [Finset.prod_map, Equiv.coe_toEmbedding]
+  congr
+
+@[to_additive]
 
 中文:
 定理 finprod_eq_prod_of_mulSupport_subset
@@ -999,7 +1004,12 @@ theorem finprod_eq_prod_of_mulSupport_subset
     exact (Equiv.plift.symm.image_eq_preimage_symm _).symm
   have : mulSupport (f ∘ PLift.down) subseteq s.map Equiv.plift.symm.toEmbedding := by
     rw [A]; rw [Finset.coe_map]
-  
+    exact image_mono h
+  rw [finprod_eq_prod_plift_of_mulSupport_subset this]
+  simp only [Finset.prod_map, Equiv.coe_toEmbedding]
+  congr
+
+@[to_additive]
 
 Depends on / 依赖: Equiv.coe_toEmbedding, Equiv.plift.symm, Equiv.plift.symm.image_eq_preimage_symm, Equiv.plift.symm.toEmbedding, Finset, Finset.coe_map, Finset.prod_map, PLift.down, coe_map, coe_toEmbedding, finprod_eq_prod_plift_of_mulSupport_subset, image_eq_preimage_symm, image_mono, mulSupport, mulSupport_comp_eq_preimage, prod_map, s.map, subseteq, toEmbedding
 -/
@@ -1077,7 +1087,10 @@ theorem finprod_eq_finsetProd_of_mulSupport_subset
 @[deprecated (since := "2026-04-08")]
 alias finsum_eq_finset_sum_of_support_subset := finsum_eq_finsetSum_of_support_subset
 
-@[to_a
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias finprod_eq_finset_prod_of_mulSupport_subset := finprod_eq_finsetProd_of_mulSupport_subset
+
+@[to_additive]
 
 中文:
 定理 finprod_eq_finsetProd_of_mulSupport_subset
@@ -1089,7 +1102,10 @@ alias finsum_eq_finset_sum_of_support_subset := finsum_eq_finsetSum_of_support_s
 @[deprecated (since := "2026-04-08")]
 alias finsum_eq_finset_sum_of_support_subset := finsum_eq_finsetSum_of_support_subset
 
-@[to_a
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias finprod_eq_finset_prod_of_mulSupport_subset := finprod_eq_finsetProd_of_mulSupport_subset
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.coe_subset, Set.coe_toFinset, coe_subset, coe_toFinset, finite_toSet, finprod_eq_prod_of_mulSupport_toFinset_subset, s.finite_toSet.subset, subset, subseteq, toFinset
 -/
@@ -1251,7 +1267,9 @@ theorem hasFiniteSupport_of_finsum_eq_one
     exact one_ne_zero
 
 @[deprecated (since := "2026-03-03")] alias
-  finite_support_of_finsum_eq_one := hasFiniteSupport_of_finsum_eq_
+  finite_support_of_finsum_eq_one := hasFiniteSupport_of_finsum_eq_one
+
+@[to_additive]
 
 中文:
 定理 hasFiniteSupport_of_finsum_eq_one
@@ -1264,7 +1282,9 @@ theorem hasFiniteSupport_of_finsum_eq_one
     exact one_ne_zero
 
 @[deprecated (since := "2026-03-03")] alias
-  finite_support_of_finsum_eq_one := hasFiniteSupport_of_finsum_eq_
+  finite_support_of_finsum_eq_one := hasFiniteSupport_of_finsum_eq_one
+
+@[to_additive]
 
 Depends on / 依赖: HasFiniteSupport, Subsingleton, Subsingleton.support_eq, finite_empty, hasFiniteSupport_of_finsum_ne_zero, one_ne_zero, simp_rw, subsingleton_or_nontrivial, support_eq
 -/
@@ -1442,7 +1462,9 @@ theorem finprod_cond_eq_prod_of_cond_iff
     intro x hx
     exact (h hx.2).1 hx.1
   rw [finprod_mem_def]; rw [finprod_eq_prod_of_mulSupport_subset _ this]
-  refine Fins
+  refine Finset.prod_congr rfl fun x hx => mulIndicator_apply_eq_self.2 fun hxs => ?_
+  contrapose! hxs
+  exact (h hxs).2 hx
 
 中文:
 定理 finprod_cond_eq_prod_of_cond_iff
@@ -1455,7 +1477,9 @@ theorem finprod_cond_eq_prod_of_cond_iff
     intro x hx
     exact (h hx.2).1 hx.1
   rw [finprod_mem_def]; rw [finprod_eq_prod_of_mulSupport_subset _ this]
-  refine Fins
+  refine Finset.prod_congr rfl fun x hx => mulIndicator_apply_eq_self.2 fun hxs => ?_
+  contrapose! hxs
+  exact (h hxs).2 hx
 
 Depends on / 依赖: Finset, Finset.prod_congr, Set.mulSupport_mulIndicator, contrapose, finprod_eq_prod_of_mulSupport_subset, finprod_mem_def, mulIndicator, mulIndicator_apply_eq_self, mulSupport, mulSupport_mulIndicator, prod_congr, s.mulIndicator, subseteq
 -/
@@ -1522,7 +1546,11 @@ theorem finprod_mem_eq_prod_of_inter_mulSupport_eq
     · refine ((mem_inter_iff x t (mulSupport f)).mp ?_).1
       rw [← Set.ext_iff.mp h x]; rw [mem_inter_iff]
       exact ⟨hx, hxf⟩
-    · refine ((mem_inter_iff x s (mulSupp
+    · refine ((mem_inter_iff x s (mulSupport f)).mp ?_).1
+      rw [Set.ext_iff.mp h x]; rw [mem_inter_iff]
+      exact ⟨hx, hxf⟩
+
+@[to_additive]
 
 中文:
 定理 finprod_mem_eq_prod_of_inter_mulSupport_eq
@@ -1534,7 +1562,11 @@ theorem finprod_mem_eq_prod_of_inter_mulSupport_eq
     · refine ((mem_inter_iff x t (mulSupport f)).mp ?_).1
       rw [← Set.ext_iff.mp h x]; rw [mem_inter_iff]
       exact ⟨hx, hxf⟩
-    · refine ((mem_inter_iff x s (mulSupp
+    · refine ((mem_inter_iff x s (mulSupport f)).mp ?_).1
+      rw [Set.ext_iff.mp h x]; rw [mem_inter_iff]
+      exact ⟨hx, hxf⟩
+
+@[to_additive]
 
 Depends on / 依赖: Set.ext_iff.mp, ext_iff, finprod_cond_eq_prod_of_cond_iff, mem_inter_iff, mem_mulSupport, mulSupport
 -/
@@ -2038,7 +2070,8 @@ lemma finprod_le_finprod'
   proof: by
   have : Fintype ↑(f.mulSupport union g.mulSupport) := (hf.union hg).fintype
   let s := (f.mulSupport union g.mulSupport).toFinset
-  rw [finprod_eq_finsetProd_of_mulSupport_subset f (show f.mulSupport subseteq s by grind)]; rw [finprod_eq_finsetProd_of_mulSupport_subset g (show g.mulSupport subse
+  rw [finprod_eq_finsetProd_of_mulSupport_subset f (show f.mulSupport subseteq s by grind)]; rw [finprod_eq_finsetProd_of_mulSupport_subset g (show g.mulSupport subseteq s by grind)]
+  exact Finset.prod_le_prod' fun i _ => h i
 
 中文:
 引理 finprod_le_finprod'
@@ -2046,7 +2079,8 @@ lemma finprod_le_finprod'
   证明: by
   have : Fintype ↑(f.mulSupport union g.mulSupport) := (hf.union hg).fintype
   let s := (f.mulSupport union g.mulSupport).toFinset
-  rw [finprod_eq_finsetProd_of_mulSupport_subset f (show f.mulSupport subseteq s by grind)]; rw [finprod_eq_finsetProd_of_mulSupport_subset g (show g.mulSupport subse
+  rw [finprod_eq_finsetProd_of_mulSupport_subset f (show f.mulSupport subseteq s by grind)]; rw [finprod_eq_finsetProd_of_mulSupport_subset g (show g.mulSupport subseteq s by grind)]
+  exact Finset.prod_le_prod' fun i _ => h i
 
 Depends on / 依赖: Finset, Finset.prod_le_prod, Fintype, f.mulSupport, finprod_eq_finsetProd_of_mulSupport_subset, fintype, g.mulSupport, hf.union, mulSupport, prod_le_prod, subseteq, toFinset
 -/
@@ -2067,7 +2101,8 @@ lemma finprod_le_finprod
   proof: by
   have : Fintype ↑(f.mulSupport union g.mulSupport) := (hf.union hg).fintype
   let s := (f.mulSupport union g.mulSupport).toFinset
-  rw [finprod_eq_finsetProd_of_mulSupport_subset f (show f.mulSupport subseteq s by grind)]; rw [finprod_eq_finsetProd_of_mulSupport_subset g (show g.mulSupport subse
+  rw [finprod_eq_finsetProd_of_mulSupport_subset f (show f.mulSupport subseteq s by grind)]; rw [finprod_eq_finsetProd_of_mulSupport_subset g (show g.mulSupport subseteq s by grind)]
+  exact Finset.prod_le_prod (fun i _ => hf₀ i) fun i _ => h i
 
 中文:
 引理 finprod_le_finprod
@@ -2075,7 +2110,8 @@ lemma finprod_le_finprod
   证明: by
   have : Fintype ↑(f.mulSupport union g.mulSupport) := (hf.union hg).fintype
   let s := (f.mulSupport union g.mulSupport).toFinset
-  rw [finprod_eq_finsetProd_of_mulSupport_subset f (show f.mulSupport subseteq s by grind)]; rw [finprod_eq_finsetProd_of_mulSupport_subset g (show g.mulSupport subse
+  rw [finprod_eq_finsetProd_of_mulSupport_subset f (show f.mulSupport subseteq s by grind)]; rw [finprod_eq_finsetProd_of_mulSupport_subset g (show g.mulSupport subseteq s by grind)]
+  exact Finset.prod_le_prod (fun i _ => hf₀ i) fun i _ => h i
 
 Depends on / 依赖: Finset, Finset.prod_le_prod, Fintype, f.mulSupport, finprod_eq_finsetProd_of_mulSupport_subset, fintype, g.mulSupport, hf.union, mulSupport, prod_le_prod, subseteq, toFinset
 -/
@@ -2144,7 +2180,12 @@ theorem finprod_mul_distrib
     rw [finprod_eq_prod_of_mulSupport_toFinset_subset f hf Finset.subset_union_left]; rw [finprod_eq_prod_of_mulSupport_toFinset_subset g hg Finset.subset_union_right]; rw [←
       Finset.prod_mul_distrib]
     refine finprod_eq_prod_of_mulSupport_subset _ ?_
-    simp only [Finset.coe_
+    simp only [Finset.coe_union, Finite.coe_toFinset, mulSupport_subset_iff,
+      mem_union, mem_mulSupport]
+    intro x
+    contrapose!
+    rintro ⟨hf, hg⟩
+    simp [hf, hg]
 
 中文:
 定理 finprod_mul_distrib
@@ -2154,7 +2195,12 @@ theorem finprod_mul_distrib
     rw [finprod_eq_prod_of_mulSupport_toFinset_subset f hf Finset.subset_union_left]; rw [finprod_eq_prod_of_mulSupport_toFinset_subset g hg Finset.subset_union_right]; rw [←
       Finset.prod_mul_distrib]
     refine finprod_eq_prod_of_mulSupport_subset _ ?_
-    simp only [Finset.coe_
+    simp only [Finset.coe_union, Finite.coe_toFinset, mulSupport_subset_iff,
+      mem_union, mem_mulSupport]
+    intro x
+    contrapose!
+    rintro ⟨hf, hg⟩
+    simp [hf, hg]
 
 Depends on / 依赖: Finite, Finite.coe_toFinset, Finset, Finset.coe_union, Finset.prod_mul_distrib, Finset.subset_union_left, Finset.subset_union_right, classical, coe_toFinset, coe_union, contrapose, finprod_eq_prod_of_mulSupport_subset, finprod_eq_prod_of_mulSupport_toFinset_subset, mem_mulSupport, mem_union, mulSupport_subset_iff, prod_mul_distrib, subset_union_left, subset_union_right
 -/
@@ -2667,7 +2713,7 @@ theorem finprod_mem_union_inter'
   rw [← finprod_mem_inter_mulSupport f s]; rw [← finprod_mem_inter_mulSupport f t]; rw [←
     finprod_mem_union_inter hs ht]; rw [← union_inter_distrib_right]; rw [finprod_mem_inter_mulSupport]; rw [←
     finprod_mem_inter_mulSupport f (s inter t)]
-  rw [inter_left_comm]; rw [inter_assoc]; rw [in
+  rw [inter_left_comm]; rw [inter_assoc]; rw [inter_assoc]; rw [inter_self]; rw [inter_left_comm]
 
 中文:
 定理 finprod_mem_union_inter'
@@ -2676,7 +2722,7 @@ theorem finprod_mem_union_inter'
   rw [← finprod_mem_inter_mulSupport f s]; rw [← finprod_mem_inter_mulSupport f t]; rw [←
     finprod_mem_union_inter hs ht]; rw [← union_inter_distrib_right]; rw [finprod_mem_inter_mulSupport]; rw [←
     finprod_mem_inter_mulSupport f (s inter t)]
-  rw [inter_left_comm]; rw [inter_assoc]; rw [in
+  rw [inter_left_comm]; rw [inter_assoc]; rw [inter_assoc]; rw [inter_self]; rw [inter_left_comm]
 
 Depends on / 依赖: finprod_mem_inter_mulSupport, finprod_mem_union_inter, inter_assoc, inter_left_comm, inter_self, union_inter_distrib_right
 -/
@@ -3027,7 +3073,12 @@ theorem finprod_mem_image'
         simpa only [hs.mem_toFinset]
       have := finprod_mem_eq_prod (comp f g) hs
       unfold Function.comp at this
-      rw [this]; rw 
+      rw [this]; rw [← Finset.prod_image hg]
+      refine finprod_mem_eq_prod_of_inter_mulSupport_eq f ?_
+      rw [Finset.coe_image]; rw [hs.coe_toFinset]; rw [← image_inter_mulSupport_eq]; rw [inter_assoc]; rw [inter_self]
+    · unfold Function.comp at hs
+      rw [finprod_mem_eq_one_of_infinite hs]; rw [finprod_mem_eq_one_of_infinite]
+      rwa [image_inter_mulSupport_eq, infinite_image_iff hg]
 
 中文:
 定理 finprod_mem_image'
@@ -3039,7 +3090,12 @@ theorem finprod_mem_image'
         simpa only [hs.mem_toFinset]
       have := finprod_mem_eq_prod (comp f g) hs
       unfold Function.comp at this
-      rw [this]; rw 
+      rw [this]; rw [← Finset.prod_image hg]
+      refine finprod_mem_eq_prod_of_inter_mulSupport_eq f ?_
+      rw [Finset.coe_image]; rw [hs.coe_toFinset]; rw [← image_inter_mulSupport_eq]; rw [inter_assoc]; rw [inter_self]
+    · unfold Function.comp at hs
+      rw [finprod_mem_eq_one_of_infinite hs]; rw [finprod_mem_eq_one_of_infinite]
+      rwa [image_inter_mulSupport_eq, infinite_image_iff hg]
 
 Depends on / 依赖: Finite, Finset, Finset.coe_image, Finset.prod_image, Function, Function.comp, classical, coe_image, coe_toFinset, finprod_me, finprod_mem_eq_prod, finprod_mem_eq_prod_of_inter_mulSupport_eq, hs.coe_toFinset, hs.mem_toFinset, hs.toFinset, image_inter_mulSupport_eq, inter_assoc, inter_self, mem_toFinset, mulSupport
 -/
@@ -3307,7 +3363,9 @@ theorem finprod_mem_inter_mul_sdiff'
   exacts [h.subset fun x hx => ⟨hx.1.1, hx.2⟩, h.subset fun x hx => ⟨hx.1.1, hx.2⟩]
 
 @[deprecated (since := "2026-06-03")]
-alias finprod_mem_inter_mul_diff' := finprod_mem_inter_mu
+alias finprod_mem_inter_mul_diff' := finprod_mem_inter_mul_sdiff'
+
+@[to_additive]
 
 中文:
 定理 finprod_mem_inter_mul_sdiff'
@@ -3319,7 +3377,9 @@ alias finprod_mem_inter_mul_diff' := finprod_mem_inter_mu
   exacts [h.subset fun x hx => ⟨hx.1.1, hx.2⟩, h.subset fun x hx => ⟨hx.1.1, hx.2⟩]
 
 @[deprecated (since := "2026-06-03")]
-alias finprod_mem_inter_mul_diff' := finprod_mem_inter_mu
+alias finprod_mem_inter_mul_diff' := finprod_mem_inter_mul_sdiff'
+
+@[to_additive]
 
 Depends on / 依赖: disjoint_iff_inf_le, exacts, finprod_mem_union, h.subset, inter_union_sdiff, subset
 -/
@@ -3443,7 +3503,7 @@ theorem finprod_mem_iUnion
   classical
     rw [← biUnion_univ]; rw [← Finset.coe_univ]; rw [← Finset.coe_biUnion]; rw [finprod_mem_coe_finset]; rw [Finset.prod_biUnion]
     · simp only [finprod_mem_coe_finset, finprod_eq_prod_of_fintype]
-    · exact fun x _ y _ 
+    · exact fun x _ y _ hxy => Finset.disjoint_coe.1 (h hxy)
 
 中文:
 定理 finprod_mem_iUnion
@@ -3454,7 +3514,7 @@ theorem finprod_mem_iUnion
   classical
     rw [← biUnion_univ]; rw [← Finset.coe_univ]; rw [← Finset.coe_biUnion]; rw [finprod_mem_coe_finset]; rw [Finset.prod_biUnion]
     · simp only [finprod_mem_coe_finset, finprod_eq_prod_of_fintype]
-    · exact fun x _ y _ 
+    · exact fun x _ y _ hxy => Finset.disjoint_coe.1 (h hxy)
 
 Depends on / 依赖: Finset, Finset.coe_biUnion, Finset.coe_univ, Finset.disjoint_coe, Finset.prod_biUnion, biUnion_univ, classical, coe_biUnion, coe_univ, disjoint_coe, finprod_eq_prod_of_fintype, finprod_mem_coe_finset, nonempty_fintype, prod_biUnion
 -/
@@ -3616,7 +3676,7 @@ lemma finprod_mem_powerset_sdiff_elem
     (notMem_sdiff_of_mem (Set.mem_singleton a))
 
 @[deprecated (since := "2026-06-03")]
-alias finprod_mem_powerset_diff_elem := finprod_mem_pow
+alias finprod_mem_powerset_diff_elem := finprod_mem_powerset_sdiff_elem
 
 中文:
 引理 finprod_mem_powerset_sdiff_elem
@@ -3627,7 +3687,7 @@ alias finprod_mem_powerset_diff_elem := finprod_mem_pow
     (notMem_sdiff_of_mem (Set.mem_singleton a))
 
 @[deprecated (since := "2026-06-03")]
-alias finprod_mem_powerset_diff_elem := finprod_mem_pow
+alias finprod_mem_powerset_diff_elem := finprod_mem_powerset_sdiff_elem
 
 Depends on / 依赖: Set.insert_sdiff_self_of_mem, Set.mem_singleton, Set.sdiff_subset, appearance, finprod_mem_powerset_insert, hidden, hs.subset, insert_sdiff_self_of_mem, mem_singleton, notMem_sdiff_of_mem, notation, nth_rw, sdiff_subset, second, subset
 -/
@@ -3656,7 +3716,12 @@ theorem mul_finprod_cond_ne
       intro x hx
       rw [Finset.mem_sdiff]; rw [Finset.mem_singleton]; rw [Finite.mem_toFinset]; rw [mem_mulSupport]
       grind
-    rw [finprod_cond_eq_prod_of_cond_iff f (f
+    rw [finprod_cond_eq_prod_of_cond_iff f (fun hx => h _ hx)]; rw [Finset.sdiff_singleton_eq_erase]
+    by_cases ha : a in mulSupport f
+    · apply Finset.mul_prod_erase _ _ ((Finite.mem_toFinset _).mpr ha)
+    · rw [mem_mulSupport, not_not] at ha
+      rw [ha]; rw [one_mul]
+      apply Finset.prod_erase _ ha
 
 中文:
 定理 mul_finprod_cond_ne
@@ -3668,7 +3733,12 @@ theorem mul_finprod_cond_ne
       intro x hx
       rw [Finset.mem_sdiff]; rw [Finset.mem_singleton]; rw [Finite.mem_toFinset]; rw [mem_mulSupport]
       grind
-    rw [finprod_cond_eq_prod_of_cond_iff f (f
+    rw [finprod_cond_eq_prod_of_cond_iff f (fun hx => h _ hx)]; rw [Finset.sdiff_singleton_eq_erase]
+    by_cases ha : a in mulSupport f
+    · apply Finset.mul_prod_erase _ _ ((Finite.mem_toFinset _).mpr ha)
+    · rw [mem_mulSupport, not_not] at ha
+      rw [ha]; rw [one_mul]
+      apply Finset.prod_erase _ ha
 
 Depends on / 依赖: Finite, Finite.mem_toFinset, Finset, Finset.mem_sdiff, Finset.mem_singleton, Finset.mul_prod_erase, Finset.prod_, Finset.sdiff_singleton_eq_erase, classical, finprod_cond_eq_prod_of_cond_iff, finprod_eq_prod, hf.toFinset, mem_mulSupport, mem_sdiff, mem_singleton, mem_toFinset, mulSupport, mul_prod_erase, not_not, one_mul
 -/
@@ -3851,7 +3921,14 @@ theorem finprod_prod_comm
     intro x hx
     simp only [exists_prop, mem_iUnion, Ne, mem_mulSupport, Finset.mem_coe]
     contrapose! hx
-    rw [mem
+    rw [mem_mulSupport]; rw [not_not]; rw [Finset.prod_congr rfl hx]; rw [Finset.prod_const_one]
+  rw [finprod_eq_prod_of_mulSupport_subset _ hU]; rw [Finset.prod_comm]
+  refine Finset.prod_congr rfl fun b hb => (finprod_eq_prod_of_mulSupport_subset _ ?_).symm
+  intro a ha
+  simp only [Finite.coe_toFinset, mem_iUnion]
+  exact ⟨b, hb, ha⟩
+
+@[to_additive]
 
 中文:
 定理 finprod_prod_comm
@@ -3864,7 +3941,14 @@ theorem finprod_prod_comm
     intro x hx
     simp only [exists_prop, mem_iUnion, Ne, mem_mulSupport, Finset.mem_coe]
     contrapose! hx
-    rw [mem
+    rw [mem_mulSupport]; rw [not_not]; rw [Finset.prod_congr rfl hx]; rw [Finset.prod_const_one]
+  rw [finprod_eq_prod_of_mulSupport_subset _ hU]; rw [Finset.prod_comm]
+  refine Finset.prod_congr rfl fun b hb => (finprod_eq_prod_of_mulSupport_subset _ ?_).symm
+  intro a ha
+  simp only [Finite.coe_toFinset, mem_iUnion]
+  exact ⟨b, hb, ha⟩
+
+@[to_additive]
 
 Depends on / 依赖: Finite, Finite.coe_toFinset, Finset, Finset.mem_coe, Finset.prod_comm, Finset.prod_congr, Finset.prod_const_one, biUnion, coe_toFinset, contrapose, exists_prop, finite_toSet, finprod_eq_prod_of_mulSupport_subs, finprod_eq_prod_of_mulSupport_subset, mem_coe, mem_iUnion, mem_mulSupport, mulSupport, not_not, prod_comm
 -/
@@ -3924,6 +4008,7 @@ theorem finprod_prod_filter
     rw [mem_mulSupport] at hx
     obtain ⟨a, h, -⟩ := Finset.exists_ne_one_of_prod_ne_one hx
     simp only [Finset.mem_filter, Finset.coe_image, mem_image, SetLike.mem_coe] at h ⊢
+    exact ⟨a, h⟩
 
 中文:
 定理 finprod_prod_filter
@@ -3936,6 +4021,7 @@ theorem finprod_prod_filter
     rw [mem_mulSupport] at hx
     obtain ⟨a, h, -⟩ := Finset.exists_ne_one_of_prod_ne_one hx
     simp only [Finset.mem_filter, Finset.coe_image, mem_image, SetLike.mem_coe] at h ⊢
+    exact ⟨a, h⟩
 
 Depends on / 依赖: Finset, Finset.coe_image, Finset.exists_ne_one_of_prod_ne_one, Finset.mem_filter, Finset.prod_image, SetLike, SetLike.mem_coe, coe_image, exists_ne_one_of_prod_ne_one, finprod_eq_finsetProd_of_mulSupport_subset, mem_coe, mem_filter, mem_image, mem_mulSupport, prod_image
 -/
@@ -4254,7 +4340,12 @@ theorem finprod_mem_finset_product'
         (s.filter (Prod.fst · = a)).prod f := by
     refine Finset.prod_nbij' (fun b => (a, b)) Prod.snd ?_ ?_ ?_ ?_ ?_ <;> aesop
   rw [finprod_mem_finset_eq_prod]
-  simp_rw [finprod_mem_finset_eq_prod, 
+  simp_rw [finprod_mem_finset_eq_prod, this]
+  rw [finprod_eq_prod_of_mulSupport_subset _
+      (s.mulSupport_of_fiberwise_prod_subset_image f Prod.fst)]; rw [← Finset.prod_fiberwise_of_maps_to (t := Finset.image Prod.fst s) _ f]
+  -- `finish` could close the goal here
+  simp only [Finset.mem_image]
+  exact fun x hx => ⟨x, hx, rfl⟩
 
 中文:
 定理 finprod_mem_finset_product'
@@ -4265,7 +4356,12 @@ theorem finprod_mem_finset_product'
         (s.filter (Prod.fst · = a)).prod f := by
     refine Finset.prod_nbij' (fun b => (a, b)) Prod.snd ?_ ?_ ?_ ?_ ?_ <;> aesop
   rw [finprod_mem_finset_eq_prod]
-  simp_rw [finprod_mem_finset_eq_prod, 
+  simp_rw [finprod_mem_finset_eq_prod, this]
+  rw [finprod_eq_prod_of_mulSupport_subset _
+      (s.mulSupport_of_fiberwise_prod_subset_image f Prod.fst)]; rw [← Finset.prod_fiberwise_of_maps_to (t := Finset.image Prod.fst s) _ f]
+  -- `finish` could close the goal here
+  simp only [Finset.mem_image]
+  exact fun x hx => ⟨x, hx, rfl⟩
 
 Depends on / 依赖: Finset, Finset.image, Finset.prod_fiberwise_of_maps_to, Finset.prod_nbij, Prod.fst, Prod.snd, filter, finprod_eq_prod_of_mulSupport_subset, finprod_mem_finset_eq_prod, mulSupport_of_fiberwise_prod_subset_image, prod_fiberwise_of_maps_to, prod_nbij, s.filter, s.mulSupport_of_fiberwise_prod_subset_image, simp_rw
 -/
@@ -4540,7 +4636,7 @@ lemma Nat.cast_finprod'
 fun h => hf h.of_comp cast_one cast_injective
     rw [finprod_of_not_hasFiniteMulSupport hf]; rw [finprod_of_not_hasFiniteMulSupport H]; rw [cast_one]
 
-@[s
+@[simp, norm_cast]
 
 中文:
 引理 自然数.cast_finprod'
@@ -4552,7 +4648,7 @@ fun h => hf h.of_comp cast_one cast_injective
 fun h => hf h.of_comp cast_one cast_injective
     rw [finprod_of_not_hasFiniteMulSupport hf]; rw [finprod_of_not_hasFiniteMulSupport H]; rw [cast_one]
 
-@[s
+@[simp, norm_cast]
 
 Depends on / 依赖: HasFiniteMulSupport, Nat.castRingHom, castRingHom, cast_injective, cast_one, f.HasFiniteMulSupport, finprod_of_not_hasFiniteMulSupport, h.of_comp, map_finprod, of_comp
 -/

@@ -1806,7 +1806,14 @@ theorem prod_prod_eq_prod_triangle_mul
   _ = (∏ i, ∏ j with i <= j.castSucc, f i j) * ∏ i, ∏ j with j.castSucc < i, f i j := by
     simp only [← Finset.prod_mul_distrib, ← not_le, Finset.prod_filter_mul_prod_filter_not]
   _ = (∏ i, ∏ j >= i, f i.castSucc j) * ∏ i, ∏ j <= i, f i.succ j := by
-    rw [Fin.prod_univ_castSucc]; rw [Fin.p
+    rw [Fin.prod_univ_castSucc]; rw [Fin.prod_univ_succ]
+    simp [Finset.filter_le_eq_Ici, Finset.filter_ge_eq_Iic]
+  _ = (∏ i, ∏ j >= i, f i.castSucc j) * ∏ i, ∏ j >= i, f j.succ i := by
+    congr 1
+    apply Finset.prod_comm'
+    simp
+  _ = ∏ i : Fin n, ∏ j >= i, (f i.castSucc j * f j.succ i) := by
+    simp only [Finset.prod_mul_distrib]
 
 中文:
 定理 prod_prod_eq_prod_triangle_mul
@@ -1815,7 +1822,14 @@ theorem prod_prod_eq_prod_triangle_mul
   _ = (∏ i, ∏ j with i <= j.castSucc, f i j) * ∏ i, ∏ j with j.castSucc < i, f i j := by
     simp only [← Finset.prod_mul_distrib, ← not_le, Finset.prod_filter_mul_prod_filter_not]
   _ = (∏ i, ∏ j >= i, f i.castSucc j) * ∏ i, ∏ j <= i, f i.succ j := by
-    rw [Fin.prod_univ_castSucc]; rw [Fin.p
+    rw [Fin.prod_univ_castSucc]; rw [Fin.prod_univ_succ]
+    simp [Finset.filter_le_eq_Ici, Finset.filter_ge_eq_Iic]
+  _ = (∏ i, ∏ j >= i, f i.castSucc j) * ∏ i, ∏ j >= i, f j.succ i := by
+    congr 1
+    apply Finset.prod_comm'
+    simp
+  _ = ∏ i : Fin n, ∏ j >= i, (f i.castSucc j * f j.succ i) := by
+    simp only [Finset.prod_mul_distrib]
 -/
 theorem prod_prod_eq_prod_triangle_mul (f : Fin (n + 1) -> Fin n -> M) :
     ∏ i, ∏ j, f i j = ∏ i : Fin n, ∏ j >= i, (f i.castSucc j * f j.succ i) := calc
@@ -2096,7 +2110,18 @@ lemma partialProd_contractNth
     simp only [Function.comp_apply, succ_succAbove_succ] at *
     rw [partialProd_succ]; rw [partialProd_succ]; rw [hi]
     rcases lt_trichotomy (i : Nat) a with (h | h | h)
-    · rw [succAbove_of_castSucc_lt, contractNth_apply_of_lt _ 
+    · rw [succAbove_of_castSucc_lt, contractNth_apply_of_lt _ _ _ _ h,
+        succAbove_of_castSucc_lt] <;>
+      simp only [lt_def, val_castSucc, val_succ] <;>
+      lia
+    · rw [succAbove_of_castSucc_lt, contractNth_apply_of_eq _ _ _ _ h,
+        succAbove_of_le_castSucc, castSucc_succ, partialProd_succ, mul_assoc] <;>
+      simp only [castSucc_lt_succ_iff, le_def, val_castSucc] <;>
+      lia
+    · rw [succAbove_of_le_castSucc, succAbove_of_le_castSucc, contractNth_apply_of_gt _ _ _ _ h,
+        castSucc_succ] <;>
+      simp only [le_def, val_succ, val_castSucc] <;>
+      lia
 
 中文:
 引理 partialProd_contractNth
@@ -2109,7 +2134,18 @@ lemma partialProd_contractNth
     simp only [Function.comp_apply, succ_succAbove_succ] at *
     rw [partialProd_succ]; rw [partialProd_succ]; rw [hi]
     rcases lt_trichotomy (i : Nat) a with (h | h | h)
-    · rw [succAbove_of_castSucc_lt, contractNth_apply_of_lt _ 
+    · rw [succAbove_of_castSucc_lt, contractNth_apply_of_lt _ _ _ _ h,
+        succAbove_of_castSucc_lt] <;>
+      simp only [lt_def, val_castSucc, val_succ] <;>
+      lia
+    · rw [succAbove_of_castSucc_lt, contractNth_apply_of_eq _ _ _ _ h,
+        succAbove_of_le_castSucc, castSucc_succ, partialProd_succ, mul_assoc] <;>
+      simp only [castSucc_lt_succ_iff, le_def, val_castSucc] <;>
+      lia
+    · rw [succAbove_of_le_castSucc, succAbove_of_le_castSucc, contractNth_apply_of_gt _ _ _ _ h,
+        castSucc_succ] <;>
+      simp only [le_def, val_succ, val_castSucc] <;>
+      lia
 
 Depends on / 依赖: Function, Function.comp_apply, castSucc_succ, comp_apply, contractNth_apply_of_eq, contractNth_apply_of_lt, inductionOn, lt_def, lt_trichotomy, mul_asso, partialProd_succ, succAbove_of_castSucc_lt, succAbove_of_le_castSucc, succ_succAbove_succ, val_castSucc, val_succ
 -/
@@ -2160,7 +2196,17 @@ theorem inv_partialProd_mul_eq_contractNth
     · assumption
     · rw [castSucc_lt_iff_succ_le, succ_le_succ_iff, le_iff_val_le_val]
       exact le_of_lt h
-  · rwa [succAbove_o
+  · rwa [succAbove_of_castSucc_lt, succAbove_of_le_castSucc, partialProd_succ,
+    castSucc_succ, ← mul_assoc,
+      partialProd_right_inv, contractNth_apply_of_eq]
+    · simp [le_iff_val_le_val, ← h]
+    · rw [castSucc_lt_iff_succ_le, succ_le_succ_iff, le_iff_val_le_val]
+      exact le_of_eq h
+  · rwa [succAbove_of_le_castSucc, succAbove_of_le_castSucc, partialProd_succ, partialProd_succ,
+      castSucc_succ, partialProd_succ, inv_mul_cancel_left, contractNth_apply_of_gt]
+    · exact le_iff_val_le_val.2 (le_of_lt h)
+    · rw [le_iff_val_le_val, val_succ]
+      exact Nat.succ_le_of_lt h
 
 中文:
 定理 inv_partialProd_mul_eq_contractNth
@@ -2172,7 +2218,17 @@ theorem inv_partialProd_mul_eq_contractNth
     · assumption
     · rw [castSucc_lt_iff_succ_le, succ_le_succ_iff, le_iff_val_le_val]
       exact le_of_lt h
-  · rwa [succAbove_o
+  · rwa [succAbove_of_castSucc_lt, succAbove_of_le_castSucc, partialProd_succ,
+    castSucc_succ, ← mul_assoc,
+      partialProd_right_inv, contractNth_apply_of_eq]
+    · simp [le_iff_val_le_val, ← h]
+    · rw [castSucc_lt_iff_succ_le, succ_le_succ_iff, le_iff_val_le_val]
+      exact le_of_eq h
+  · rwa [succAbove_of_le_castSucc, succAbove_of_le_castSucc, partialProd_succ, partialProd_succ,
+      castSucc_succ, partialProd_succ, inv_mul_cancel_left, contractNth_apply_of_gt]
+    · exact le_iff_val_le_val.2 (le_of_lt h)
+    · rw [le_iff_val_le_val, val_succ]
+      exact Nat.succ_le_of_lt h
 
 Depends on / 依赖: castSucc_lt_iff_succ_le, castSucc_succ, contractNth_apply_of_eq, contractNth_apply_of_lt, le_iff_v, le_iff_val_le_val, le_of_lt, lt_trichotomy, mul_assoc, partialProd_right_inv, partialProd_succ, succAbove_of_castSucc_lt, succAbove_of_le_castSucc, succ_le_succ_iff
 -/
@@ -2217,7 +2273,27 @@ definition finFunctionFinEquiv
       | succ n ih =>
         cases m
         · exact isEmptyElim (f <| Fin.last _)
-        simp_rw [Fin.sum_univ_castSucc
+        simp_rw [Fin.sum_univ_castSucc, Fin.val_castSucc, Fin.val_last]
+        refine (Nat.add_lt_add_of_lt_of_le (ih _) <| Nat.mul_le_mul_right _
+          (Fin.is_le _)).trans_eq ?_
+        rw [← one_add_mul (_ : Nat)]; rw [add_comm]; rw [pow_succ']⟩)
+    (fun a b => ⟨a / m ^ (b : Nat) % m, by
+      rcases n with - | n
+      · exact b.elim0
+      rcases m with - | m
+      · rw [zero_pow n.succ_ne_zero] at a
+        exact a.elim0
+      · exact Nat.mod_lt _ m.succ_pos⟩)
+    fun a => by
+      dsimp
+      induction n with
+      | zero => subsingleton [(finCongr <| pow_zero _).subsingleton]
+      | succ n ih =>
+        simp_rw [Fin.forall_iff, Fin.ext_iff] at ih
+        ext
+        simp_rw [Fin.sum_univ_succ, Fin.val_zero, Fin.val_succ, pow_zero, Nat.div_one,
+          mul_one, pow_succ', ← Nat.div_div_eq_div_mul, mul_left_comm _ m, ← mul_sum]
+        rw [ih _ (Nat.div_lt_of_lt_mul (a.is_lt.trans_eq (pow_succ' _ _)))]; rw [Nat.mod_add_div]
 
 中文:
 定义 finFunctionFinEquiv
@@ -2229,7 +2305,27 @@ definition finFunctionFinEquiv
       | succ n ih =>
         cases m
         · exact isEmptyElim (f <| Fin.last _)
-        simp_rw [Fin.sum_univ_castSucc
+        simp_rw [Fin.sum_univ_castSucc, Fin.val_castSucc, Fin.val_last]
+        refine (Nat.add_lt_add_of_lt_of_le (ih _) <| Nat.mul_le_mul_right _
+          (Fin.is_le _)).trans_eq ?_
+        rw [← one_add_mul (_ : Nat)]; rw [add_comm]; rw [pow_succ']⟩)
+    (fun a b => ⟨a / m ^ (b : Nat) % m, by
+      rcases n with - | n
+      · exact b.elim0
+      rcases m with - | m
+      · rw [zero_pow n.succ_ne_zero] at a
+        exact a.elim0
+      · exact Nat.mod_lt _ m.succ_pos⟩)
+    fun a => by
+      dsimp
+      induction n with
+      | zero => subsingleton [(finCongr <| pow_zero _).subsingleton]
+      | succ n ih =>
+        simp_rw [Fin.forall_iff, Fin.ext_iff] at ih
+        ext
+        simp_rw [Fin.sum_univ_succ, Fin.val_zero, Fin.val_succ, pow_zero, Nat.div_one,
+          mul_one, pow_succ', ← Nat.div_div_eq_div_mul, mul_left_comm _ m, ← mul_sum]
+        rw [ih _ (Nat.div_lt_of_lt_mul (a.is_lt.trans_eq (pow_succ' _ _)))]; rw [Nat.mod_add_div]
 
 Depends on / 依赖: Equiv.ofRightInverseOfCardLE, Fin.is_le, Fin.last, Fin.sum_univ_castSucc, Fin.val_castSucc, Fin.val_last, Fintype, Fintype.card_fin, Fintype.card_fun, Nat.add_lt_add_of_lt_of_le, Nat.mul_le_mul_right, add_comm, add_lt_add_of_lt_of_le, card_fin, card_fun, isEmptyElim, is_le, le_of_eq, mul_le_mul_right, ofRightInverseOfCardLE
 -/
@@ -2321,7 +2417,45 @@ definition finPiFinEquiv
       | succ m ih =>
       rw [Fin.prod_univ_castSucc]; rw [Fin.sum_univ_castSucc]
       suffices
-     
+        forall (n : Fin m -> Nat) (nn : Nat) (f : forall i : Fin m, Fin (n i)) (fn : Fin nn),
+          ((∑ i : Fin m, ↑(f i) * ∏ j : Fin i, n (Fin.castLE i.prop.le j)) + ↑fn * ∏ j, n j) <
+            (∏ i : Fin m, n i) * nn by
+        solve_by_elim
+      intro n nn f fn
+      cases nn
+      · exact isEmptyElim fn
+      refine (Nat.add_lt_add_of_lt_of_le (ih _) <| Nat.mul_le_mul_right _ (Fin.is_le _)).trans_eq ?_
+      rw [← one_add_mul (_ : Nat)]; rw [mul_comm]; rw [add_comm]⟩)
+    (fun a b => ⟨(a / ∏ j : Fin b, n (Fin.castLE b.is_lt.le j)) % n b, by
+      cases m
+      · exact b.elim0
+      rcases h : n b with nb | nb
+      · rw [prod_eq_zero (Finset.mem_univ _) h] at a
+        exact isEmptyElim a
+      exact Nat.mod_lt _ nb.succ_pos⟩)
+    (by
+      intro a; revert a; dsimp only [Fin.val_mk]
+      refine Fin.consInduction ?_ ?_ n
+      · intro a
+        have : Subsingleton (Fin (∏ i : Fin 0, i.elim0)) :=
+          (finCongr <| prod_empty).subsingleton
+        subsingleton
+      · intro n x xs ih a
+        simp_rw [Fin.forall_iff, Fin.ext_iff] at ih
+        ext
+        simp_rw [Fin.sum_univ_succ, Fin.cons_succ]
+        have := fun i : Fin n =>
+          Fintype.prod_equiv (finCongr <| Fin.val_succ i)
+            (fun j => (Fin.cons x xs : _ -> Nat) (Fin.castLE (Fin.is_lt _).le j))
+            (fun j => (Fin.cons x xs : _ -> Nat) (Fin.castLE (Nat.succ_le_succ (Fin.is_lt _).le) j))
+            fun j => rfl
+        simp_rw [this]
+        clear this
+        simp_rw [Fin.val_zero, Fintype.prod_empty, Nat.div_one, mul_one, Fin.cons_zero,
+          Fin.prod_univ_succ, Fin.castLE_zero, Fin.cons_zero, ← Nat.div_div_eq_div_mul,
+          mul_left_comm (_ % _ : Nat), ← mul_sum]
+        convert! Nat.mod_add_div _ _
+        exact ih (a / x) (Nat.div_lt_of_lt_mul <| a.is_lt.trans_eq (Fin.prod_univ_succ _)))
 
 中文:
 定义 finPiFinEquiv
@@ -2333,7 +2467,45 @@ definition finPiFinEquiv
       | succ m ih =>
       rw [Fin.prod_univ_castSucc]; rw [Fin.sum_univ_castSucc]
       suffices
-     
+        forall (n : Fin m -> Nat) (nn : Nat) (f : forall i : Fin m, Fin (n i)) (fn : Fin nn),
+          ((∑ i : Fin m, ↑(f i) * ∏ j : Fin i, n (Fin.castLE i.prop.le j)) + ↑fn * ∏ j, n j) <
+            (∏ i : Fin m, n i) * nn by
+        solve_by_elim
+      intro n nn f fn
+      cases nn
+      · exact isEmptyElim fn
+      refine (Nat.add_lt_add_of_lt_of_le (ih _) <| Nat.mul_le_mul_right _ (Fin.is_le _)).trans_eq ?_
+      rw [← one_add_mul (_ : Nat)]; rw [mul_comm]; rw [add_comm]⟩)
+    (fun a b => ⟨(a / ∏ j : Fin b, n (Fin.castLE b.is_lt.le j)) % n b, by
+      cases m
+      · exact b.elim0
+      rcases h : n b with nb | nb
+      · rw [prod_eq_zero (Finset.mem_univ _) h] at a
+        exact isEmptyElim a
+      exact Nat.mod_lt _ nb.succ_pos⟩)
+    (by
+      intro a; revert a; dsimp only [Fin.val_mk]
+      refine Fin.consInduction ?_ ?_ n
+      · intro a
+        have : Subsingleton (Fin (∏ i : Fin 0, i.elim0)) :=
+          (finCongr <| prod_empty).subsingleton
+        subsingleton
+      · intro n x xs ih a
+        simp_rw [Fin.forall_iff, Fin.ext_iff] at ih
+        ext
+        simp_rw [Fin.sum_univ_succ, Fin.cons_succ]
+        have := fun i : Fin n =>
+          Fintype.prod_equiv (finCongr <| Fin.val_succ i)
+            (fun j => (Fin.cons x xs : _ -> Nat) (Fin.castLE (Fin.is_lt _).le j))
+            (fun j => (Fin.cons x xs : _ -> Nat) (Fin.castLE (Nat.succ_le_succ (Fin.is_lt _).le) j))
+            fun j => rfl
+        simp_rw [this]
+        clear this
+        simp_rw [Fin.val_zero, Fintype.prod_empty, Nat.div_one, mul_one, Fin.cons_zero,
+          Fin.prod_univ_succ, Fin.castLE_zero, Fin.cons_zero, ← Nat.div_div_eq_div_mul,
+          mul_left_comm (_ % _ : Nat), ← mul_sum]
+        convert! Nat.mod_add_div _ _
+        exact ih (a / x) (Nat.div_lt_of_lt_mul <| a.is_lt.trans_eq (Fin.prod_univ_succ _)))
 
 Depends on / 依赖: Equiv.ofRightInverseOfCardLE, Fin.castLE, Fin.prod_univ_castSucc, Fin.sum_univ_castSucc, Fintype, Fintype.card_fin, Fintype.card_pi, card_fin, card_pi, castLE, i.is_lt.le, i.prop.le, is_lt, le_of_eq, ofRightInverseOfCardLE, prod_univ_castSucc, simp_rw, solve_by_elim, sum_univ_castSucc
 -/
@@ -2443,7 +2615,7 @@ definition finSigmaFinEquiv
       _ ≃ _ := Equiv.sumSigmaDistrib _
       _ ≃ _ := finSigmaFinEquiv.sumCongr (Equiv.uniqueSigma _)
       _ ≃ _ := finSumFinEquiv
-      _ ≃ 
+      _ ≃ _ := finCongr (Fin.sum_univ_castSucc n).symm
 
 中文:
 定义 finSigmaFinEquiv
@@ -2455,7 +2627,7 @@ definition finSigmaFinEquiv
       _ ≃ _ := Equiv.sumSigmaDistrib _
       _ ≃ _ := finSigmaFinEquiv.sumCongr (Equiv.uniqueSigma _)
       _ ≃ _ := finSumFinEquiv
-      _ ≃ 
+      _ ≃ _ := finCongr (Fin.sum_univ_castSucc n).symm
 
 Depends on / 依赖: Equiv.equivOfIsEmpty, Equiv.sumSigmaDistrib, Equiv.uniqueSigma, Fin.isEmpty, Fin.sum_univ_castSucc, Nat.succ, equivOfIsEmpty, finCongr, finSigmaFinEquiv, finSigmaFinEquiv.sumCongr, finSumFinEquiv, isEmpty, sigmaCongrLeft, sigmaCongrLeft.symm, sumCongr, sumSigmaDistrib, sum_univ_castSucc, uniqueSigma
 -/
@@ -2486,7 +2658,16 @@ theorem finSigmaFinEquiv_apply
   unfold finSumFinEquiv
   simp only [Equiv.coe_fn_mk, Equiv.sigmaCongrLeft, Equiv.coe_fn_symm_mk, Equiv.trans_def,
     Equiv.trans_apply, finCongr_apply, Fin.val_cast]
-  by_case
+  by_cases him : iv < m
+  · conv in Sigma.mk _ _ =>
+      equals ⟨Sum.inl ⟨iv, him⟩, j⟩ => simp [Fin.addCases, him]
+    simpa using! ih _
+  · replace him := Nat.eq_of_lt_succ_of_not_lt hi him
+    subst him
+    conv in Sigma.mk _ _ =>
+      equals ⟨Sum.inr 0, j⟩ => simp [Fin.addCases, Fin.natAdd]
+    simp
+    rfl
 
 中文:
 定理 finSigmaFinEquiv_apply
@@ -2500,7 +2681,16 @@ theorem finSigmaFinEquiv_apply
   unfold finSumFinEquiv
   simp only [Equiv.coe_fn_mk, Equiv.sigmaCongrLeft, Equiv.coe_fn_symm_mk, Equiv.trans_def,
     Equiv.trans_apply, finCongr_apply, Fin.val_cast]
-  by_case
+  by_cases him : iv < m
+  · conv in Sigma.mk _ _ =>
+      equals ⟨Sum.inl ⟨iv, him⟩, j⟩ => simp [Fin.addCases, him]
+    simpa using! ih _
+  · replace him := Nat.eq_of_lt_succ_of_not_lt hi him
+    subst him
+    conv in Sigma.mk _ _ =>
+      equals ⟨Sum.inr 0, j⟩ => simp [Fin.addCases, Fin.natAdd]
+    simp
+    rfl
 
 Depends on / 依赖: Equiv.coe_fn_mk, Equiv.coe_fn_symm_mk, Equiv.sigmaCongrLeft, Equiv.trans_apply, Equiv.trans_def, Fin.addCases, Fin.val_cast, Nat.eq_of_lt_succ_of_not_lt, Sigma.mk, Sum.inl, Sum.inr, addCases, coe_fn_mk, coe_fn_symm_mk, eq_of_lt_succ_of_not_lt, equals, finCongr_apply, finSigmaFinEquiv, finSumFinEquiv, k.fst.elim0
 -/
@@ -2571,7 +2761,19 @@ theorem prod_take_ofFn
     · have : i < length (ofFn f) := by rwa [length_ofFn]
       rw [prod_take_succ _ _ this]
       have A : ({j | j.val < i + 1} : Finset (Fin n)) =
-          insert ⟨i, h⟩ ({j | Fin.val j < i} : Finset (Fin n)) := by 
+          insert ⟨i, h⟩ ({j | Fin.val j < i} : Finset (Fin n)) := by grind
+      grind
+    · have A : (ofFn f).take i = (ofFn f).take i.succ := by
+        rw [← length_ofFn (f := f)] at h
+        have : length (ofFn f) <= i := not_lt.mp h
+        rw [take_of_length_le this]; rw [take_of_length_le (le_trans this (Nat.le_succ _))]
+      have B : forall j : Fin n, ((j : Nat) < i.succ) = ((j : Nat) < i) := by
+        intro j
+        have : (j : Nat) < i := lt_of_lt_of_le j.2 (not_lt.mp h)
+        simp [this, lt_trans this (Nat.lt_succ_self _)]
+      simp [← A, B, IH]
+
+@[to_additive]
 
 中文:
 定理 prod_take_ofFn
@@ -2585,7 +2787,19 @@ theorem prod_take_ofFn
     · have : i < length (ofFn f) := by rwa [length_ofFn]
       rw [prod_take_succ _ _ this]
       have A : ({j | j.val < i + 1} : Finset (Fin n)) =
-          insert ⟨i, h⟩ ({j | Fin.val j < i} : Finset (Fin n)) := by 
+          insert ⟨i, h⟩ ({j | Fin.val j < i} : Finset (Fin n)) := by grind
+      grind
+    · have A : (ofFn f).take i = (ofFn f).take i.succ := by
+        rw [← length_ofFn (f := f)] at h
+        have : length (ofFn f) <= i := not_lt.mp h
+        rw [take_of_length_le this]; rw [take_of_length_le (le_trans this (Nat.le_succ _))]
+      have B : forall j : Fin n, ((j : Nat) < i.succ) = ((j : Nat) < i) := by
+        intro j
+        have : (j : Nat) < i := lt_of_lt_of_le j.2 (not_lt.mp h)
+        simp [this, lt_trans this (Nat.lt_succ_self _)]
+      simp [← A, B, IH]
+
+@[to_additive]
 
 Depends on / 依赖: Fin.val, Finset, Nat.le_succ, i.succ, insert, j.val, le_succ, le_trans, length, length_ofFn, not_lt, not_lt.mp, prod_take_succ, take_of_length_le
 -/
@@ -2647,7 +2861,10 @@ theorem alternatingProd_eq_finsetProd
           simp [pow_add]}
 
 @[deprecated (since := "2026-04-08")]
-alias alternatingSum_eq_finset_sum := alternat
+alias alternatingSum_eq_finset_sum := alternatingSum_eq_finsetSum
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias alternatingProd_eq_finset_prod := alternatingProd_eq_finsetProd
 
 中文:
 定理 alternatingProd_eq_finsetProd
@@ -2658,7 +2875,10 @@ alias alternatingSum_eq_finset_sum := alternat
           simp [pow_add]}
 
 @[deprecated (since := "2026-04-08")]
-alias alternatingSum_eq_finset_sum := alternat
+alias alternatingSum_eq_finset_sum := alternatingSum_eq_finsetSum
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias alternatingProd_eq_finset_prod := alternatingProd_eq_finsetProd
 
 Depends on / 依赖: Fin.prod_univ_succ, L.length, alternatingProd_eq_finsetProd, congr_arg, length, mul_assoc, pow_add, prod_univ_succ
 -/
@@ -2699,7 +2919,13 @@ lemma Fin.sum_neg_one_pow_eq_zero
       (-1 : Int) ^ (n + 1) • d (Fin.last (n + 1)) := by
     rw [Fin.sum_univ_succ]; rw [Fin.sum_univ_castSucc]
     simp [add_assoc]
-  have h₂ : ∑ i : Fin
+  have h₂ : ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • (r (Fin.castSucc i) + r (Fin.succ i)) =
+      ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • r (Fin.castSucc i) +
+      ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • r (Fin.succ i) := by
+    simp_rw [zsmul_add, Finset.sum_add_distrib]
+  have h₃ := Fin.sum_univ_castSucc fun i => (-1 : Int) ^ i.val • r i
+  simp_all [Fin.sum_univ_succ, pow_succ']
+  grind
 
 中文:
 引理 有限集.sum_neg_one_pow_eq_zero
@@ -2711,7 +2937,13 @@ lemma Fin.sum_neg_one_pow_eq_zero
       (-1 : Int) ^ (n + 1) • d (Fin.last (n + 1)) := by
     rw [Fin.sum_univ_succ]; rw [Fin.sum_univ_castSucc]
     simp [add_assoc]
-  have h₂ : ∑ i : Fin
+  have h₂ : ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • (r (Fin.castSucc i) + r (Fin.succ i)) =
+      ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • r (Fin.castSucc i) +
+      ∑ i : Fin n, (-1 : Int) ^ (i.val + 1) • r (Fin.succ i) := by
+    simp_rw [zsmul_add, Finset.sum_add_distrib]
+  have h₃ := Fin.sum_univ_castSucc fun i => (-1 : Int) ^ i.val • r i
+  simp_all [Fin.sum_univ_succ, pow_succ']
+  grind
 
 Depends on / 依赖: Fin.castSucc, Fin.last, Fin.succ, Fin.sum_univ_castSucc, Fin.sum_univ_succ, Finset, Finset.sum_add_di, add_assoc, castSucc, i.val, simp_rw, sum_add_di, sum_univ_castSucc, sum_univ_succ, zsmul_add
 -/

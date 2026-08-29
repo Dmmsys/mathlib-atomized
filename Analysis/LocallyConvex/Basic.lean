@@ -670,7 +670,8 @@ theorem Balanced.smul_mono
   · calc
       a • s = b • (b⁻¹ • a) • s := by rw [smul_assoc, smul_inv_smul₀ hb]
 _ subseteq b • s := smul_set_mono hs _ by
-        rw [norm_smul]; rw [norm_inv]; rw 
+        rw [norm_smul]; rw [norm_inv]; rw [← div_eq_inv_mul]
+        exact div_le_one_of_le₀ h (norm_nonneg _)
 
 中文:
 定理 Balanced.smul_mono
@@ -683,7 +684,8 @@ _ subseteq b • s := smul_set_mono hs _ by
   · calc
       a • s = b • (b⁻¹ • a) • s := by rw [smul_assoc, smul_inv_smul₀ hb]
 _ subseteq b • s := smul_set_mono hs _ by
-        rw [norm_smul]; rw [norm_inv]; rw 
+        rw [norm_smul]; rw [norm_inv]; rw [← div_eq_inv_mul]
+        exact div_le_one_of_le₀ h (norm_nonneg _)
 
 Depends on / 依赖: Subset, Subset.rfl, div_eq_inv_mul, eq_or_ne, image_smul, norm_inv, norm_le_zero_iff, norm_nonneg, norm_smul, norm_zero, smul_assoc, smul_set_mono, subseteq, zero_smul
 -/
@@ -711,7 +713,7 @@ theorem Balanced.smul_mem_mono
         refine hs.smul_mem ?_ ha
         rw [norm_smul]; rw [norm_inv]; rw [← div_eq_inv_mul]
         exact div_le_one_of_le₀ hba (norm_nonneg _)
-      (a⁻¹ • b) • a • x = b • x := by rw [smul_comm, smul
+      (a⁻¹ • b) • a • x = b • x := by rw [smul_comm, smul_assoc, smul_inv_smul₀ ha₀]
 
 中文:
 定理 Balanced.smul_mem_mono
@@ -724,7 +726,7 @@ theorem Balanced.smul_mem_mono
         refine hs.smul_mem ?_ ha
         rw [norm_smul]; rw [norm_inv]; rw [← div_eq_inv_mul]
         exact div_le_one_of_le₀ hba (norm_nonneg _)
-      (a⁻¹ • b) • a • x = b • x := by rw [smul_comm, smul
+      (a⁻¹ • b) • a • x = b • x := by rw [smul_comm, smul_assoc, smul_inv_smul₀ ha₀]
 
 Depends on / 依赖: div_eq_inv_mul, eq_or_ne, hs.smul_mem, norm_inv, norm_nonneg, norm_smul, smul_assoc, smul_comm, smul_mem
 -/
@@ -973,7 +975,8 @@ theorem Balanced.convexHull
     refine fun a ha x hx => convexHull_min ?_ this hx a ha
     exact fun y hy a ha => subset_convexHull 𝕜 s (hs ha hy)
   intro x hx y hy u v hu hv huv a ha
-  rw [smul_add]; rw [
+  rw [smul_add]; rw [← smul_comm u]; rw [← smul_comm v]
+  exact convex_convexHull 𝕜 s (hx a ha) (hy a ha) hu hv huv
 
 中文:
 定理 Balanced.convexHull
@@ -985,7 +988,8 @@ theorem Balanced.convexHull
     refine fun a ha x hx => convexHull_min ?_ this hx a ha
     exact fun y hy a ha => subset_convexHull 𝕜 s (hs ha hy)
   intro x hx y hy u v hu hv huv a ha
-  rw [smul_add]; rw [
+  rw [smul_add]; rw [← smul_comm u]; rw [← smul_comm v]
+  exact convex_convexHull 𝕜 s (hx a ha) (hy a ha) hu hv huv
 -/
 protected theorem Balanced.convexHull (hs : Balanced 𝕜 s) : Balanced 𝕜 (convexHull 𝕜 s) := by
   suffices Convex 𝕜 { x | forall a : 𝕜, ‖a‖ <= 1 -> a • x in convexHull 𝕜 s } by
@@ -1094,7 +1098,8 @@ theorem balanced_iff_neg_mem
   refine ⟨fun h x => h.neg_mem_iff.2, fun h a ha => smul_set_subset_iff.2 fun x hx => ?_⟩
   rw [Real.norm_eq_abs]; rw [abs_le] at ha
   rw [show a = -((1 - a) / 2) + (a - -1) / 2 by ring]; rw [add_smul]; rw [neg_smul]; rw [← smul_neg]
-  exact hs (h hx) hx (div_nonneg (sub_nonneg_of_le ha.2) zero_l
+  exact hs (h hx) hx (div_nonneg (sub_nonneg_of_le ha.2) zero_le_two)
+    (div_nonneg (sub_nonneg_of_le ha.1) zero_le_two) (by ring)
 
 中文:
 定理 balanced_iff_neg_mem
@@ -1104,7 +1109,8 @@ theorem balanced_iff_neg_mem
   refine ⟨fun h x => h.neg_mem_iff.2, fun h a ha => smul_set_subset_iff.2 fun x hx => ?_⟩
   rw [Real.norm_eq_abs]; rw [abs_le] at ha
   rw [show a = -((1 - a) / 2) + (a - -1) / 2 by ring]; rw [add_smul]; rw [neg_smul]; rw [← smul_neg]
-  exact hs (h hx) hx (div_nonneg (sub_nonneg_of_le ha.2) zero_l
+  exact hs (h hx) hx (div_nonneg (sub_nonneg_of_le ha.2) zero_le_two)
+    (div_nonneg (sub_nonneg_of_le ha.1) zero_le_two) (by ring)
 
 Depends on / 依赖: Real.norm_eq_abs, abs_le, add_smul, div_nonneg, h.neg_mem_iff, neg_mem_iff, neg_smul, norm_eq_abs, smul_neg, smul_set_subset_iff, sub_nonneg_of_le, zero_le_two
 -/

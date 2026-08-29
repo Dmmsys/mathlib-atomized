@@ -46,7 +46,9 @@ instance Decomposition.baseChange
     ext
     simp
   · ext : 1
-    rw [← LinearMap.cancel_r
+    rw [← LinearMap.cancel_right ((ℳ _).toBaseChange_surjective S)]
+    ext : 3
+    simp
 
 中文:
 实例 分解.baseChange
@@ -60,7 +62,9 @@ instance Decomposition.baseChange
     ext
     simp
   · ext : 1
-    rw [← LinearMap.cancel_r
+    rw [← LinearMap.cancel_right ((ℳ _).toBaseChange_surjective S)]
+    ext : 3
+    simp
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.eq_comp_toLinearMap_symm, LinearMap, LinearMap.cancel_right, baseChange, cancel_right, comp_assoc, decomposeLinearEquiv, directSumRight, eq_comp_toLinearMap_symm, ofLinearMap, simp_rw, toBaseChange, toBaseChange_surjective, toLinearMap
 -/
@@ -88,7 +92,8 @@ theorem toBaseChange_injective
   have := (Function.Bijective.of_comp_iff (lmap (ℳ · |>.toBaseChange S))
     (by rw [← LinearEquiv.coe_trans]; exact LinearEquiv.bijective _)).1
     (decompose (M := S otimes[R] M) fun i => (ℳ i).baseChange S).bijective
-refine of_injective (β := fun i => S otimes[R] ℳ i) i this.injec
+refine of_injective (β := fun i => S otimes[R] ℳ i) i this.injective ?_
+  simpa using congr(of (fun i => (ℳ i).baseChange S) i $h)
 
 中文:
 定理 toBaseChange_injective
@@ -98,7 +103,8 @@ refine of_injective (β := fun i => S otimes[R] ℳ i) i this.injec
   have := (Function.Bijective.of_comp_iff (lmap (ℳ · |>.toBaseChange S))
     (by rw [← LinearEquiv.coe_trans]; exact LinearEquiv.bijective _)).1
     (decompose (M := S otimes[R] M) fun i => (ℳ i).baseChange S).bijective
-refine of_injective (β := fun i => S otimes[R] ℳ i) i this.injec
+refine of_injective (β := fun i => S otimes[R] ℳ i) i this.injective ?_
+  simpa using congr(of (fun i => (ℳ i).baseChange S) i $h)
 
 Depends on / 依赖: Bijective, Function, Function.Bijective.of_comp_iff, LinearEquiv, LinearEquiv.bijective, LinearEquiv.coe_trans, baseChange, bijective, coe_trans, decompose, injective, of_comp_iff, of_injective, otimes, this.injective, toBaseChange
 -/
@@ -313,7 +319,10 @@ lemma coe_decomposeTensor_apply
   | of i x =>
     obtain ⟨-, y, rfl⟩ := x
     have : (rTensor N (lof R ι (fun i => ℳ i) i)) y =
-        (directSumLeft R R (fun i => ℳ i) N).symm ((of (fun i => ℳ i o
+        (directSumLeft R R (fun i => ℳ i) N).symm ((of (fun i => ℳ i otimes[R] N) i) y) :=
+      (TensorProduct.directSumLeft_symm_of R R (M₁ := fun i => ℳ i) y).symm
+    rw [coeAddMonoidHom_of]; rw [LinearEquiv.eq_symm_apply]; rw [LinearEquiv.eq_symm_apply]; rw [← (LinearEquiv.rTensor N _).coe_coe]; rw [LinearEquiv.coe_rTensor]; rw [← rTensor_comp_apply]; rw [decomposeLinearEquiv_comp_subtype]; rw [this]; rw [LinearEquiv.apply_symm_apply]; rw [decomposeTensorEquiv_of_apply]; rw [decomposeTensorEquiv_apply]
+  | add x y hx hy => simp [hx, hy]
 
 中文:
 引理 coe_decomposeTensor_apply
@@ -325,7 +334,10 @@ lemma coe_decomposeTensor_apply
   | of i x =>
     obtain ⟨-, y, rfl⟩ := x
     have : (rTensor N (lof R ι (fun i => ℳ i) i)) y =
-        (directSumLeft R R (fun i => ℳ i) N).symm ((of (fun i => ℳ i o
+        (directSumLeft R R (fun i => ℳ i) N).symm ((of (fun i => ℳ i otimes[R] N) i) y) :=
+      (TensorProduct.directSumLeft_symm_of R R (M₁ := fun i => ℳ i) y).symm
+    rw [coeAddMonoidHom_of]; rw [LinearEquiv.eq_symm_apply]; rw [LinearEquiv.eq_symm_apply]; rw [← (LinearEquiv.rTensor N _).coe_coe]; rw [LinearEquiv.coe_rTensor]; rw [← rTensor_comp_apply]; rw [decomposeLinearEquiv_comp_subtype]; rw [this]; rw [LinearEquiv.apply_symm_apply]; rw [decomposeTensorEquiv_of_apply]; rw [decomposeTensorEquiv_apply]
+  | add x y hx hy => simp [hx, hy]
 
 Depends on / 依赖: DirectSum, DirectSum.induction_on, LinearEquiv, LinearEquiv.eq_symm_apply, LinearEquiv.rTensor, LinearEquiv.symm_rTensor, TensorProduct, TensorProduct.directSumLeft_symm_of, coeAddMonoidHom_of, coe_coe, directSumLeft, directSumLeft_symm_of, eq_symm_apply, induction_on, otimes, rTensor, symm_rTensor
 -/
@@ -356,7 +368,7 @@ definition tensorDecomposition
   body: (DirectSum.congrLinearEquiv <| decomposeTensorEquiv ℳ N)
     (directSumLeft R R (fun i => ℳ i) N <| (DirectSum.decomposeLinearEquiv ℳ).rTensor N x)
   left_inv x := by simp [coe_decomposeTensor_apply ℳ N _, ← LinearEquiv.symm_rTensor]
-  right_inv x := by simp [coe_decomposeTensor_apply ℳ N _, ← Linea
+  right_inv x := by simp [coe_decomposeTensor_apply ℳ N _, ← LinearEquiv.symm_rTensor]
 
 中文:
 定义 tensorDecomposition
@@ -364,7 +376,7 @@ definition tensorDecomposition
   定义体: (DirectSum.congrLinearEquiv <| decomposeTensorEquiv ℳ N)
     (directSumLeft R R (fun i => ℳ i) N <| (DirectSum.decomposeLinearEquiv ℳ).rTensor N x)
   left_inv x := by simp [coe_decomposeTensor_apply ℳ N _, ← LinearEquiv.symm_rTensor]
-  right_inv x := by simp [coe_decomposeTensor_apply ℳ N _, ← Linea
+  right_inv x := by simp [coe_decomposeTensor_apply ℳ N _, ← LinearEquiv.symm_rTensor]
 
 Depends on / 依赖: DirectSum, DirectSum.congrLinearEquiv, congrLinearEquiv, decomposeTensorEquiv
 -/

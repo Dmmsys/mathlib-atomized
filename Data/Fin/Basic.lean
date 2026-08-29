@@ -1253,7 +1253,7 @@ lemma one_le_of_ne_zero
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne n)
   cases n with
   | zero => simp only [Fin.isValue, Fin.zero_le]
-  | succ n => rwa [Fin.le_iff_val_le_val, Fin.val_one, Nat.one_le_iff_ne_zero, val_ne_z
+  | succ n => rwa [Fin.le_iff_val_le_val, Fin.val_one, Nat.one_le_iff_ne_zero, val_ne_zero_iff]
 
 中文:
 引理 one_le_of_ne_zero
@@ -1265,7 +1265,7 @@ lemma one_le_of_ne_zero
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne n)
   cases n with
   | zero => simp only [Fin.isValue, Fin.zero_le]
-  | succ n => rwa [Fin.le_iff_val_le_val, Fin.val_one, Nat.one_le_iff_ne_zero, val_ne_z
+  | succ n => rwa [Fin.le_iff_val_le_val, Fin.val_one, Nat.one_le_iff_ne_zero, val_ne_zero_iff]
 
 Depends on / 依赖: k.neZero, neZero
 -/
@@ -1291,7 +1291,7 @@ lemma val_sub_one_of_ne_zero
   intro hi
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne n)
   rw [Fin.sub_val_of_le (one_le_of_ne_zero hi)]; rw [Fin.val_one']; rw [Nat.mod_eq_of_lt
-    (Nat.succ_le_iff.mpr (nontrivial_iff_two_le.mp <| nontri
+    (Nat.succ_le_iff.mpr (nontrivial_iff_two_le.mp <| nontrivial_of_ne i 0 hi))]
 
 中文:
 引理 val_sub_one_of_ne_zero
@@ -1302,7 +1302,7 @@ lemma val_sub_one_of_ne_zero
   intro hi
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne n)
   rw [Fin.sub_val_of_le (one_le_of_ne_zero hi)]; rw [Fin.val_one']; rw [Nat.mod_eq_of_lt
-    (Nat.succ_le_iff.mpr (nontrivial_iff_two_le.mp <| nontri
+    (Nat.succ_le_iff.mpr (nontrivial_iff_two_le.mp <| nontrivial_of_ne i 0 hi))]
 
 Depends on / 依赖: i.neZero, neZero
 -/
@@ -1701,7 +1701,10 @@ theorem modNat_rev
   calc
     (m * n - (i + 1)) % n = (m * n - ((i / n) * n + i % n + 1)) % n := by rw [Nat.div_add_mod']
     _ = ((m - i / n - 1) * n + (n - (i % n + 1))) % n := by
-      rw [Nat.mul_sub
+      rw [Nat.mul_sub_right_distrib]; rw [Nat.one_mul]; rw [Nat.sub_add_sub_cancel _ H₁]; rw [Nat.mul_sub_right_distrib]; rw [Nat.sub_sub]; rw [Nat.add_assoc]
+exact Nat.le_mul_of_pos_left _ Nat.le_sub_of_add_le' H₂
+    _ = n - (i % n + 1) := by
+      rw [Nat.mul_comm]; rw [Nat.mul_add_mod]; rw [Nat.mod_eq_of_lt]; exact i.modNat.rev.is_lt
 
 中文:
 定理 mod自然数_rev
@@ -1715,7 +1718,10 @@ theorem modNat_rev
   calc
     (m * n - (i + 1)) % n = (m * n - ((i / n) * n + i % n + 1)) % n := by rw [Nat.div_add_mod']
     _ = ((m - i / n - 1) * n + (n - (i % n + 1))) % n := by
-      rw [Nat.mul_sub
+      rw [Nat.mul_sub_right_distrib]; rw [Nat.one_mul]; rw [Nat.sub_add_sub_cancel _ H₁]; rw [Nat.mul_sub_right_distrib]; rw [Nat.sub_sub]; rw [Nat.add_assoc]
+exact Nat.le_mul_of_pos_left _ Nat.le_sub_of_add_le' H₂
+    _ = n - (i % n + 1) := by
+      rw [Nat.mul_comm]; rw [Nat.mul_add_mod]; rw [Nat.mod_eq_of_lt]; exact i.modNat.rev.is_lt
 
 Depends on / 依赖: Nat.add_assoc, Nat.div_add_mod, Nat.le_mul_of_pos_left, Nat.le_sub_of_add_le, Nat.mul_sub_right_distrib, Nat.one_mul, Nat.sub_add_sub_cancel, Nat.sub_sub, add_assoc, divNat, div_add_mod, i.divNat.is_lt, i.modNat.is_lt, is_lt, le_mul_of_pos_left, le_sub_of_add_le, modNat, mul_sub_right_distrib, one_mul, sub_add_sub_cancel
 -/
@@ -1789,7 +1795,7 @@ theorem liftFun_iff_succ
       obtain hij | hij := (le_def.1 hij).eq_or_lt
       · obtain rfl := Fin.ext hij
         exact H _
-      · e
+      · exact _root_.trans (ihj hij) (H j)
 
 中文:
 定理 liftFun_iff_succ
@@ -1805,7 +1811,7 @@ theorem liftFun_iff_succ
       obtain hij | hij := (le_def.1 hij).eq_or_lt
       · obtain rfl := Fin.ext hij
         exact H _
-      · e
+      · exact _root_.trans (ihj hij) (H j)
 
 Depends on / 依赖: Fin.ext, Fin.induction, _root_, _root_.trans, castSucc_lt_succ, eq_or_lt, i.castSucc_lt_succ, le_castSucc_iff, le_def
 -/

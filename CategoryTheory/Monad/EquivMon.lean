@@ -102,7 +102,7 @@ definition ofMon
   right_unit := fun X => by
     simpa [-MonObj.one_mul] using! congrArg (fun t => t.app X) (one_mul M.X)
   assoc := fun X => by
-    simpa [-MonObj.mul_assoc] us
+    simpa [-MonObj.mul_assoc] using! congrArg (fun t => t.app X) (mul_assoc M.X)
 
 中文:
 定义 ofMon
@@ -115,7 +115,7 @@ definition ofMon
   right_unit := fun X => by
     simpa [-MonObj.one_mul] using! congrArg (fun t => t.app X) (one_mul M.X)
   assoc := fun X => by
-    simpa [-MonObj.mul_assoc] us
+    simpa [-MonObj.mul_assoc] using! congrArg (fun t => t.app X) (mul_assoc M.X)
 -/
 def ofMon (M : Mon (C ⥤ C)) : Monad C where
   toFunctor := M.X

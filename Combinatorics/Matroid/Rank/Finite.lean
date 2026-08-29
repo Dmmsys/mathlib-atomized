@@ -650,7 +650,8 @@ lemma IsRkFinite.union
   obtain ⟨J, hJ, hJfin⟩ := hY.exists_finite_isBasis'
   rw [← isRkFinite_inter_ground_iff]
   refine (M.isRkFinite_of_finite (hIfin.union hJfin)).closure.subset ?_
-  rw [closure_union_congr_left hI.closure_eq_closure]; rw [closure_union_congr_rig
+  rw [closure_union_congr_left hI.closure_eq_closure]; rw [closure_union_congr_right hJ.closure_eq_closure]
+  exact inter_ground_subset_closure M (X union Y)
 
 中文:
 引理 IsRkFinite.union
@@ -661,7 +662,8 @@ lemma IsRkFinite.union
   obtain ⟨J, hJ, hJfin⟩ := hY.exists_finite_isBasis'
   rw [← isRkFinite_inter_ground_iff]
   refine (M.isRkFinite_of_finite (hIfin.union hJfin)).closure.subset ?_
-  rw [closure_union_congr_left hI.closure_eq_closure]; rw [closure_union_congr_rig
+  rw [closure_union_congr_left hI.closure_eq_closure]; rw [closure_union_congr_right hJ.closure_eq_closure]
+  exact inter_ground_subset_closure M (X union Y)
 
 Depends on / 依赖: M.isRkFinite_of_finite, closure, closure.subset, closure_eq_closure, closure_union_congr_left, closure_union_congr_right, exists_finite_isBasis, hI.closure_eq_closure, hIfin.union, hJ.closure_eq_closure, hX.exists_finite_isBasis, hY.exists_finite_isBasis, inter_ground_subset_closure, isRkFinite_inter_ground_iff, isRkFinite_of_finite, subset
 -/
@@ -902,7 +904,8 @@ lemma IsRkFinite.iUnion
 have hfin : (⋃ i, Is i).Finite := finite_iUnion fun i => (h i).finite_of_isBasis' (hIs i)
 refine isRkFinite_inter_ground_iff.1 (M.isRkFinite_of_finite hfin).closure.subset ?_
   rw [iUnion_inter]; rw [iUnion_subset_iff]
-exact fun i => (hIs i)
+exact fun i => (hIs i).isBasis_inter_ground.subset_closure.trans M.closure_subset_closure
+    subset_iUnion ..
 
 中文:
 引理 IsRkFinite.iUnion
@@ -912,7 +915,8 @@ exact fun i => (hIs i)
 have hfin : (⋃ i, Is i).Finite := finite_iUnion fun i => (h i).finite_of_isBasis' (hIs i)
 refine isRkFinite_inter_ground_iff.1 (M.isRkFinite_of_finite hfin).closure.subset ?_
   rw [iUnion_inter]; rw [iUnion_subset_iff]
-exact fun i => (hIs i)
+exact fun i => (hIs i).isBasis_inter_ground.subset_closure.trans M.closure_subset_closure
+    subset_iUnion ..
 
 Depends on / 依赖: Finite, M.closure_subset_closure, M.exists_isBasis, M.isRkFinite_of_finite, closure, closure.subset, closure_subset_closure, exists_isBasis, finite_iUnion, finite_of_isBasis, iUnion_inter, iUnion_subset_iff, isBasis_inter_ground, isBasis_inter_ground.subset_closure.trans, isRkFinite_inter_ground_iff, isRkFinite_of_finite, subset, subset_closure, subset_iUnion
 -/

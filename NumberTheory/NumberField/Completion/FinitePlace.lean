@@ -137,7 +137,10 @@ instance :
     simp only [ne_eq, Ideal.ext_iff, Valuation.mem_maximalIdeal_iff, Ideal.mem_bot, Subtype.ext_iff,
       ZeroMemClass.coe_zero, Subtype.forall, Valuation.mem_valuationSubring_iff, not_forall,
       exists_prop]
-    obtain ⟨π, hπ⟩ := v.valuatio
+    obtain ⟨π, hπ⟩ := v.valuation_exists_uniformizer K
+    use (WithVal.equiv (v.valuation K)).symm π
+    simp [hπ, ← exp_zero, -exp_neg,
+      ← (Valued.v : Valuation (v.adicCompletion K) Intᵐ⁰).map_eq_zero_iff]
 
 中文:
 实例 :
@@ -147,7 +150,10 @@ instance :
     simp only [ne_eq, Ideal.ext_iff, Valuation.mem_maximalIdeal_iff, Ideal.mem_bot, Subtype.ext_iff,
       ZeroMemClass.coe_zero, Subtype.forall, Valuation.mem_valuationSubring_iff, not_forall,
       exists_prop]
-    obtain ⟨π, hπ⟩ := v.valuatio
+    obtain ⟨π, hπ⟩ := v.valuation_exists_uniformizer K
+    use (WithVal.equiv (v.valuation K)).symm π
+    simp [hπ, ← exp_zero, -exp_neg,
+      ← (Valued.v : Valuation (v.adicCompletion K) Intᵐ⁰).map_eq_zero_iff]
 
 Depends on / 依赖: HeightOneSpectrum, HeightOneSpectrum.adicCompletionIntegers, Ideal.ext_iff, Ideal.mem_bot, Subtype, Subtype.ext_iff, Subtype.forall, Valuation, Valuation.mem_maximalIdeal_iff, Valuation.mem_valuationSubring_iff, Valued, Valued.v, WithVal, WithVal.equiv, ZeroMemClass, ZeroMemClass.coe_zero, adicCompletion, adicCompletionIntegers, coe_zero, exists_prop
 -/
@@ -786,7 +792,10 @@ lemma HeightOneSpectrum.embedding_mul_absNorm
   rw [maxPowDividing]; rw [map_pow]; rw [Nat.cast_pow]; rw [norm_embedding]; rw [adicAbv_def]; rw [WithZeroMulInt.toNNReal_neg_apply _ ((v.valuation K).ne_zero_iff.mpr
       ((FaithfulSMul.algebraMap_eq_zero_iff R K).not.2 h_x_nezero))]
   push_cast
-  rw [← zpow_natCast]; rw [← zpow_add₀ <| mod_ca
+  rw [← zpow_natCast]; rw [← zpow_add₀ <| mod_cast (zero_lt_one.trans (one_lt_absNorm_nnreal v)).ne']
+  norm_cast
+  rw [zpow_eq_one_iff_right₀ (Nat.cast_nonneg' _) (mod_cast (one_lt_absNorm_nnreal v).ne')]
+  simp [valuation_of_algebraMap, intValuation_if_neg, h_x_nezero]
 
 中文:
 引理 高一谱.embedding_mul_absNorm
@@ -795,7 +804,10 @@ lemma HeightOneSpectrum.embedding_mul_absNorm
   rw [maxPowDividing]; rw [map_pow]; rw [Nat.cast_pow]; rw [norm_embedding]; rw [adicAbv_def]; rw [WithZeroMulInt.toNNReal_neg_apply _ ((v.valuation K).ne_zero_iff.mpr
       ((FaithfulSMul.algebraMap_eq_zero_iff R K).not.2 h_x_nezero))]
   push_cast
-  rw [← zpow_natCast]; rw [← zpow_add₀ <| mod_ca
+  rw [← zpow_natCast]; rw [← zpow_add₀ <| mod_cast (zero_lt_one.trans (one_lt_absNorm_nnreal v)).ne']
+  norm_cast
+  rw [zpow_eq_one_iff_right₀ (Nat.cast_nonneg' _) (mod_cast (one_lt_absNorm_nnreal v).ne')]
+  simp [valuation_of_algebraMap, intValuation_if_neg, h_x_nezero]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_eq_zero_iff, Nat.cast_nonneg, Nat.cast_pow, WithZeroMulInt, WithZeroMulInt.toNNReal_neg_apply, adicAbv_def, algebraMap_eq_zero_iff, cast_nonneg, cast_pow, h_x_ne, h_x_nezero, intValuation_if_neg, map_pow, maxPowDividing, mod_cast, ne_zero_iff, ne_zero_iff.mpr, norm_embedding, one_lt_absNorm_nnreal
 -/
@@ -1144,7 +1156,9 @@ theorem mk_eq_iff
 exact h HeightOneSpectrum.ext_iff.mpr IsMaximal.eq_of_le (isMaximal v₁) IsPrime.ne_top' H
   use x
   simp only [mk_apply]
-
+  rw [← norm_lt_one_iff_mem K] at hx1
+  rw [← norm_eq_one_iff_notMem K] at hx2
+  linarith
 
 中文:
 定理 mk_eq_iff
@@ -1160,7 +1174,9 @@ exact h HeightOneSpectrum.ext_iff.mpr IsMaximal.eq_of_le (isMaximal v₁) IsPrim
 exact h HeightOneSpectrum.ext_iff.mpr IsMaximal.eq_of_le (isMaximal v₁) IsPrime.ne_top' H
   use x
   simp only [mk_apply]
-
+  rw [← norm_lt_one_iff_mem K] at hx1
+  rw [← norm_eq_one_iff_notMem K] at hx2
+  linarith
 
 Depends on / 依赖: DFunLike, DFunLike.ne_iff, HeightOneSpectrum, HeightOneSpectrum.ext_iff.mpr, IsMaximal, IsMaximal.eq_of_le, IsPrime, IsPrime.ne_top, asIdeal, contrapose, eq_of_le, ext_iff, isMaximal, mk_apply, ne_iff, ne_top, norm_eq_one_iff_notMem, norm_lt_one_iff_mem
 -/
@@ -1284,7 +1300,17 @@ theorem hasFiniteMulSupport_int
 ne_iff_lt_iff_le.mpr norm_embedding_eq w x ▸ norm_le_one K w.maximalIdeal x
   simp_rw [Function.HasFiniteMulSupport, Function.mulSupport, this, ← norm_embedding_eq,
     norm_lt_one_iff_mem, ← Ideal.dvd_span_singleton]
-  have h : {v : HeightOneSpe
+  have h : {v : HeightOneSpectrum (𝓞 K) | v.asIdeal ∣ span {x}}.Finite := by
+    apply Ideal.finite_factors
+    simp only [Submodule.zero_eq_bot, ne_eq, span_singleton_eq_bot, h_x_nezero, not_false_eq_true]
+  have h_inj : Set.InjOn FinitePlace.maximalIdeal {w | w.maximalIdeal.asIdeal ∣ span {x}} :=
+    Function.Injective.injOn maximalIdeal_injective
+  refine (h.subset ?_).of_finite_image h_inj
+  simp only [dvd_span_singleton, Set.image_subset_iff, Set.preimage_ofPred_eq, subset_refl]
+
+@[deprecated (since := "2026-03-03")] alias mulSupport_finite_int := hasFiniteMulSupport_int
+
+@[fun_prop]
 
 中文:
 定理 hasFiniteMulSupport_int
@@ -1294,7 +1320,17 @@ ne_iff_lt_iff_le.mpr norm_embedding_eq w x ▸ norm_le_one K w.maximalIdeal x
 ne_iff_lt_iff_le.mpr norm_embedding_eq w x ▸ norm_le_one K w.maximalIdeal x
   simp_rw [Function.HasFiniteMulSupport, Function.mulSupport, this, ← norm_embedding_eq,
     norm_lt_one_iff_mem, ← Ideal.dvd_span_singleton]
-  have h : {v : HeightOneSpe
+  have h : {v : HeightOneSpectrum (𝓞 K) | v.asIdeal ∣ span {x}}.Finite := by
+    apply Ideal.finite_factors
+    simp only [Submodule.zero_eq_bot, ne_eq, span_singleton_eq_bot, h_x_nezero, not_false_eq_true]
+  have h_inj : Set.InjOn FinitePlace.maximalIdeal {w | w.maximalIdeal.asIdeal ∣ span {x}} :=
+    Function.Injective.injOn maximalIdeal_injective
+  refine (h.subset ?_).of_finite_image h_inj
+  simp only [dvd_span_singleton, Set.image_subset_iff, Set.preimage_ofPred_eq, subset_refl]
+
+@[deprecated (since := "2026-03-03")] alias mulSupport_finite_int := hasFiniteMulSupport_int
+
+@[fun_prop]
 
 Depends on / 依赖: Finite, FinitePlace, FinitePlace.maxi, Function, Function.HasFiniteMulSupport, Function.mulSupport, HasFiniteMulSupport, HeightOneSpectrum, Ideal.dvd_span_singleton, Ideal.finite_factors, Set.InjOn, Submodule, Submodule.zero_eq_bot, asIdeal, dvd_span_singleton, finite_factors, h_inj, h_x_nezero, maximalIdeal, mulSupport
 -/
@@ -1328,7 +1364,7 @@ theorem hasFiniteMulSupport
   simp_rw [← RingOfIntegers.coe_eq_algebraMap]
   fun_prop
 
-@[deprecated (since := "2026-03-03")] alia
+@[deprecated (since := "2026-03-03")] alias mulSupport_finite := hasFiniteMulSupport
 
 中文:
 定理 hasFiniteMulSupport
@@ -1340,7 +1376,7 @@ theorem hasFiniteMulSupport
   simp_rw [← RingOfIntegers.coe_eq_algebraMap]
   fun_prop
 
-@[deprecated (since := "2026-03-03")] alia
+@[deprecated (since := "2026-03-03")] alias mulSupport_finite := hasFiniteMulSupport
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_eq_zero_iff, IsFractionRing, IsFractionRing.div_surjective, RingOfIntegers, RingOfIntegers.coe_eq_algebraMap, algebraMap_eq_zero_iff, coe_eq_algebraMap, div_eq_zero_iff, div_surjective, fun_prop, h_x_nezero, ne_eq, not_or, simp_rw
 -/
@@ -1546,7 +1582,10 @@ instance :
   have h_dense : DenseRange Φ := by
     apply (w.denseRange_algebraMap L).mono
     rintro _ ⟨l, rfl⟩
-    exact ⟨1 otimesₜ l, by simp [Φ, Algebra.alg
+    exact ⟨1 otimesₜ l, by simp [Φ, Algebra.algHom]⟩
+  .of_surjective Φ (by
+    rw [← Set.range_eq_univ]; rw [← Φ.coe_range]; rw [← Φ.range.closed_of_finiteDimensional.closure_eq]
+    exact h_dense.closure_range)
 
 中文:
 实例 :
@@ -1556,7 +1595,10 @@ instance :
   have h_dense : DenseRange Φ := by
     apply (w.denseRange_algebraMap L).mono
     rintro _ ⟨l, rfl⟩
-    exact ⟨1 otimesₜ l, by simp [Φ, Algebra.alg
+    exact ⟨1 otimesₜ l, by simp [Φ, Algebra.algHom]⟩
+  .of_surjective Φ (by
+    rw [← Set.range_eq_univ]; rw [← Φ.coe_range]; rw [← Φ.range.closed_of_finiteDimensional.closure_eq]
+    exact h_dense.closure_range)
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lift, Algebra.algHom, DenseRange, Set.range_eq_univ, TensorProduct, algHom, closed_of_finiteDimensional, closure_eq, closure_range, coe_range, denseRange_algebraMap, h_dense, h_dense.closure_range, mul_comm, of_surjective, otimes, range.closed_of_finiteDimensional.closure_eq, range_eq_univ, toLinearMap
 -/

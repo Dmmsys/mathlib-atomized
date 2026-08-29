@@ -298,7 +298,10 @@ theorem wittPolynomial_zmod_self
   simp only [wittPolynomial_eq_sum_C_mul_X_pow]
   rw [sum_range_succ]; rw [← Nat.cast_pow]; rw [CharP.cast_eq_zero (ZMod (p ^ (n + 1))) (p ^ (n + 1))]; rw [C_0]; rw [zero_mul]; rw [add_zero]; rw [map_sum]; rw [sum_congr rfl]
   intro k hk
-  rw [map_mul (expand p)]; rw [map_pow (expand p)]; rw [exp
+  rw [map_mul (expand p)]; rw [map_pow (expand p)]; rw [expand_X]; rw [algHom_C]; rw [← pow_mul]; rw [← pow_succ']
+  congr
+  rw [mem_range] at hk
+  rw [add_comm]; rw [add_tsub_assoc_of_le (Nat.lt_succ_iff.mp hk)]; rw [← add_comm]
 
 中文:
 定理 wittPolynomial_zmod_self
@@ -307,7 +310,10 @@ theorem wittPolynomial_zmod_self
   simp only [wittPolynomial_eq_sum_C_mul_X_pow]
   rw [sum_range_succ]; rw [← Nat.cast_pow]; rw [CharP.cast_eq_zero (ZMod (p ^ (n + 1))) (p ^ (n + 1))]; rw [C_0]; rw [zero_mul]; rw [add_zero]; rw [map_sum]; rw [sum_congr rfl]
   intro k hk
-  rw [map_mul (expand p)]; rw [map_pow (expand p)]; rw [exp
+  rw [map_mul (expand p)]; rw [map_pow (expand p)]; rw [expand_X]; rw [algHom_C]; rw [← pow_mul]; rw [← pow_succ']
+  congr
+  rw [mem_range] at hk
+  rw [add_comm]; rw [add_tsub_assoc_of_le (Nat.lt_succ_iff.mp hk)]; rw [← add_comm]
 
 Depends on / 依赖: CharP.cast_eq_zero, Nat.cast_pow, Nat.lt_succ_iff.mp, add_comm, add_tsub_assoc_of_le, add_zero, algHom_C, cast_eq_zero, cast_pow, expand, expand_X, lt_succ_iff, map_mul, map_pow, map_sum, mem_range, pow_mul, pow_succ, sum_congr, sum_range_succ
 -/
@@ -338,7 +344,11 @@ theorem wittPolynomial_vars
     refine vars_monomial_single i (pow_ne_zero _ hp.1) ?_
     exact_mod_cast pow_ne_zero i hp.1
   rw [wittPolynomial]; rw [vars_sum_of_disjoint]
-  · simp only [this, biUnion_singleton_eq_self
+  · simp only [this, biUnion_singleton_eq_self]
+  · simp only [this]
+    intro a b h
+    apply disjoint_singleton_left.mpr
+    rwa [mem_singleton]
 
 中文:
 定理 wittPolynomial_vars
@@ -350,7 +360,11 @@ theorem wittPolynomial_vars
     refine vars_monomial_single i (pow_ne_zero _ hp.1) ?_
     exact_mod_cast pow_ne_zero i hp.1
   rw [wittPolynomial]; rw [vars_sum_of_disjoint]
-  · simp only [this, biUnion_singleton_eq_self
+  · simp only [this, biUnion_singleton_eq_self]
+  · simp only [this]
+    intro a b h
+    apply disjoint_singleton_left.mpr
+    rwa [mem_singleton]
 
 Depends on / 依赖: Finsupp, Finsupp.single, biUnion_singleton_eq_self, disjoint_singleton_left, disjoint_singleton_left.mpr, mem_singleton, monomial, pow_ne_zero, single, vars_monomial_single, vars_sum_of_disjoint, wittPolynomial
 -/
@@ -460,7 +474,11 @@ theorem constantCoeff_xInTermsOfW
   rw [xInTermsOfW_eq]; rw [mul_comm]; rw [map_mul]; rw [map_sub]; rw [map_sum]; rw [constantCoeff_C]; rw [constantCoeff_X]; rw [zero_sub]; rw [mul_neg]; rw [neg_eq_zero]; rw [sum_eq_zero]; rw [mul_zero]
   intro m H
   rw [mem_range] at H
-  
+  simp only [map_mul, map_pow, map_natCast, IH m H]
+  rw [zero_pow]; rw [mul_zero]
+  exact pow_ne_zero _ hp.1.ne_zero
+
+@[simp]
 
 中文:
 定理 constantCoeff_xInTermsOfW
@@ -470,7 +488,11 @@ theorem constantCoeff_xInTermsOfW
   rw [xInTermsOfW_eq]; rw [mul_comm]; rw [map_mul]; rw [map_sub]; rw [map_sum]; rw [constantCoeff_C]; rw [constantCoeff_X]; rw [zero_sub]; rw [mul_neg]; rw [neg_eq_zero]; rw [sum_eq_zero]; rw [mul_zero]
   intro m H
   rw [mem_range] at H
-  
+  simp only [map_mul, map_pow, map_natCast, IH m H]
+  rw [zero_pow]; rw [mul_zero]
+  exact pow_ne_zero _ hp.1.ne_zero
+
+@[simp]
 
 Depends on / 依赖: Nat.strongRecOn, constantCoeff_C, constantCoeff_X, map_mul, map_natCast, map_pow, map_sub, map_sum, mem_range, mul_comm, mul_neg, mul_zero, ne_zero, neg_eq_zero, pow_ne_zero, strongRecOn, sum_eq_zero, xInTermsOfW_eq, zero_pow, zero_sub
 -/
@@ -522,7 +544,25 @@ theorem xInTermsOfW_vars_aux
   rw [xInTermsOfW_eq]; rw [mul_comm]; rw [vars_C_mul _ (Invertible.ne_zero _)]; rw [vars_sub_of_disjoint]; rw [vars_X]; rw [range_add_one]; rw [insert_eq]
   on_goal 1 =>
     simp only [true_and, true_or, mem_union, mem_singleton]
-    intro
+    intro i
+    rw [mem_union]; rw [mem_union]
+    apply Or.imp id
+  on_goal 2 => rw [vars_X, disjoint_singleton_left]
+  all_goals
+    intro H
+    replace H := vars_sum_subset _ _ H
+    rw [mem_biUnion] at H
+    rcases H with ⟨j, hj, H⟩
+    rw [vars_C_mul] at H
+    swap
+    · apply pow_ne_zero
+      exact mod_cast hp.1.ne_zero
+    rw [mem_range] at hj
+    replace H := (ih j hj).2 (vars_pow _ _ H)
+    rw [mem_range] at H
+  · rw [mem_range]
+    lia
+  · lia
 
 中文:
 定理 xInTermsOfW_vars_aux
@@ -532,7 +572,25 @@ theorem xInTermsOfW_vars_aux
   rw [xInTermsOfW_eq]; rw [mul_comm]; rw [vars_C_mul _ (Invertible.ne_zero _)]; rw [vars_sub_of_disjoint]; rw [vars_X]; rw [range_add_one]; rw [insert_eq]
   on_goal 1 =>
     simp only [true_and, true_or, mem_union, mem_singleton]
-    intro
+    intro i
+    rw [mem_union]; rw [mem_union]
+    apply Or.imp id
+  on_goal 2 => rw [vars_X, disjoint_singleton_left]
+  all_goals
+    intro H
+    replace H := vars_sum_subset _ _ H
+    rw [mem_biUnion] at H
+    rcases H with ⟨j, hj, H⟩
+    rw [vars_C_mul] at H
+    swap
+    · apply pow_ne_zero
+      exact mod_cast hp.1.ne_zero
+    rw [mem_range] at hj
+    replace H := (ih j hj).2 (vars_pow _ _ H)
+    rw [mem_range] at H
+  · rw [mem_range]
+    lia
+  · lia
 
 Depends on / 依赖: Invertible, Invertible.ne_zero, Nat.strongRecOn, Or.imp, all_goals, disjoint_singleton_left, insert_eq, mem_biUnion, mem_singleton, mem_union, mul_comm, ne_zero, on_goal, range_add_one, replace, strongRecOn, true_and, true_or, vars_C_mul, vars_X
 -/
@@ -621,7 +679,9 @@ theorem bind₁_xInTermsOfW_wittPolynomial
   rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [map_sum]
   simp only [map_pow, map_mul, algHom_C, algebraMap_eq]
   rw [sum_range_succ_comm]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [bind₁_X_right]; rw [mul_comm]; rw [← C_pow]; rw [xInTermsOfW_aux]
-  simp only [C_pow, bind₁_X_right, sub_add_
+  simp only [C_pow, bind₁_X_right, sub_add_cancel]
+
+@[simp]
 
 中文:
 定理 bind₁_xInTermsOfW_wittPolynomial
@@ -630,7 +690,9 @@ theorem bind₁_xInTermsOfW_wittPolynomial
   rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [map_sum]
   simp only [map_pow, map_mul, algHom_C, algebraMap_eq]
   rw [sum_range_succ_comm]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [bind₁_X_right]; rw [mul_comm]; rw [← C_pow]; rw [xInTermsOfW_aux]
-  simp only [C_pow, bind₁_X_right, sub_add_
+  simp only [C_pow, bind₁_X_right, sub_add_cancel]
+
+@[simp]
 
 Depends on / 依赖: C_pow, algHom_C, algebraMap_eq, map_mul, map_pow, map_sum, mul_comm, pow_one, pow_zero, sub_add_cancel, sum_range_succ_comm, tsub_self, wittPolynomial_eq_sum_C_mul_X_pow, xInTermsOfW_aux
 -/
@@ -651,7 +713,13 @@ theorem bind₁_wittPolynomial_xInTermsOfW
   proof: by
   induction n using Nat.strongRecOn with | ind n H => ?_
   rw [xInTermsOfW_eq]; rw [map_mul]; rw [map_sub]; rw [bind₁_X_right]; rw [algHom_C]; rw [map_sum]; rw [show X n = (X n * C ((p : R) ^ n)) * C ((⅟p : R) ^ n) by
-      rw [mul_assoc]; rw [← C_mul]; rw [← mul_pow]; rw [mul_invOf_self]; rw [on
+      rw [mul_assoc]; rw [← C_mul]; rw [← mul_pow]; rw [mul_invOf_self]; rw [one_pow]; rw [map_one]; rw [mul_one]]
+  congr 1
+  rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [sum_range_succ_comm]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [mul_comm (X n)]; rw [add_sub_assoc]; rw [add_eq_left]; rw [sub_eq_zero]
+  apply sum_congr rfl
+  intro i h
+  rw [mem_range] at h
+  rw [map_mul]; rw [map_pow (bind₁ _)]; rw [algHom_C]; rw [H i h]; rw [algebraMap_eq]
 
 中文:
 定理 bind₁_wittPolynomial_xInTermsOfW
@@ -659,7 +727,13 @@ theorem bind₁_wittPolynomial_xInTermsOfW
   证明: by
   induction n using Nat.strongRecOn with | ind n H => ?_
   rw [xInTermsOfW_eq]; rw [map_mul]; rw [map_sub]; rw [bind₁_X_right]; rw [algHom_C]; rw [map_sum]; rw [show X n = (X n * C ((p : R) ^ n)) * C ((⅟p : R) ^ n) by
-      rw [mul_assoc]; rw [← C_mul]; rw [← mul_pow]; rw [mul_invOf_self]; rw [on
+      rw [mul_assoc]; rw [← C_mul]; rw [← mul_pow]; rw [mul_invOf_self]; rw [one_pow]; rw [map_one]; rw [mul_one]]
+  congr 1
+  rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [sum_range_succ_comm]; rw [tsub_self]; rw [pow_zero]; rw [pow_one]; rw [mul_comm (X n)]; rw [add_sub_assoc]; rw [add_eq_left]; rw [sub_eq_zero]
+  apply sum_congr rfl
+  intro i h
+  rw [mem_range] at h
+  rw [map_mul]; rw [map_pow (bind₁ _)]; rw [algHom_C]; rw [H i h]; rw [algebraMap_eq]
 
 Depends on / 依赖: C_mul, Nat.strongRecOn, add_eq_lef, add_sub_assoc, algHom_C, map_mul, map_one, map_sub, map_sum, mul_assoc, mul_comm, mul_invOf_self, mul_one, mul_pow, one_pow, pow_one, pow_zero, strongRecOn, sum_range_succ_comm, tsub_self
 -/

@@ -168,7 +168,10 @@ theorem angle_add_eq_arcsin_of_inner_eq_zero
     · exact
         Left.add_pos_of_pos_of_nonneg (mul_self_pos.2 (norm_ne_zero_iff.2 h0)) (mul_self_nonneg _)
     · exact
-       
+        Left.add_pos_of_nonneg_of_pos (mul_self_nonneg _) (mul_self_pos.2 (norm_ne_zero_iff.2 h0))
+  rw [angle_add_eq_arccos_of_inner_eq_zero h]; rw [Real.arccos_eq_arcsin (div_nonneg (norm_nonneg _) (norm_nonneg _))]; rw [div_pow]; rw [one_sub_div hxy]
+  nth_rw 1 [pow_two]
+  rw [norm_add_sq_eq_norm_sq_add_norm_sq_real h]; rw [pow_two]; rw [add_sub_cancel_left]; rw [← pow_two]; rw [← div_pow]; rw [Real.sqrt_sq (div_nonneg (norm_nonneg _) (norm_nonneg _))]
 
 中文:
 定理 angle_add_eq_arcsin_of_inner_eq_zero
@@ -181,7 +184,10 @@ theorem angle_add_eq_arcsin_of_inner_eq_zero
     · exact
         Left.add_pos_of_pos_of_nonneg (mul_self_pos.2 (norm_ne_zero_iff.2 h0)) (mul_self_nonneg _)
     · exact
-       
+        Left.add_pos_of_nonneg_of_pos (mul_self_nonneg _) (mul_self_pos.2 (norm_ne_zero_iff.2 h0))
+  rw [angle_add_eq_arccos_of_inner_eq_zero h]; rw [Real.arccos_eq_arcsin (div_nonneg (norm_nonneg _) (norm_nonneg _))]; rw [div_pow]; rw [one_sub_div hxy]
+  nth_rw 1 [pow_two]
+  rw [norm_add_sq_eq_norm_sq_add_norm_sq_real h]; rw [pow_two]; rw [add_sub_cancel_left]; rw [← pow_two]; rw [← div_pow]; rw [Real.sqrt_sq (div_nonneg (norm_nonneg _) (norm_nonneg _))]
 
 Depends on / 依赖: Left.add_pos_of_nonneg_of_pos, Left.add_pos_of_pos_of_nonneg, Real.arccos_eq_arcsin, add_pos_of_nonneg_of_pos, add_pos_of_pos_of_nonneg, angle_add_eq_arccos_of_inner_eq_zero, arccos_eq_arcsin, div_nonneg, div_pow, mul_self_nonneg, mul_self_pos, ne_comm, ne_of_lt, norm_add_sq_eq_norm_sq_add_norm_sq_real, norm_ne_zero_iff, norm_nonneg, one_sub_di, pow_two
 -/
@@ -209,7 +215,8 @@ theorem angle_add_eq_arctan_of_inner_eq_zero
   rw [angle_add_eq_arcsin_of_inner_eq_zero h (Or.inl h0)]; rw [Real.arctan_eq_arcsin]; rw [←
     div_mul_eq_div_div]; rw [norm_add_eq_sqrt_iff_real_inner_eq_zero.2 h]
   nth_rw 3 [← Real.sqrt_sq (norm_nonneg x)]
-  rw_mod_cast [← Real.sqrt_mul (sq_nonneg _), div_pow, pow_two, pow_two, mul_add, mul_
+  rw_mod_cast [← Real.sqrt_mul (sq_nonneg _), div_pow, pow_two, pow_two, mul_add, mul_one, mul_div,
+    mul_comm (‖x‖ * ‖x‖), ← mul_div, div_self (mul_self_pos.2 (norm_ne_zero_iff.2 h0)).ne', mul_one]
 
 中文:
 定理 angle_add_eq_arctan_of_inner_eq_zero
@@ -218,7 +225,8 @@ theorem angle_add_eq_arctan_of_inner_eq_zero
   rw [angle_add_eq_arcsin_of_inner_eq_zero h (Or.inl h0)]; rw [Real.arctan_eq_arcsin]; rw [←
     div_mul_eq_div_div]; rw [norm_add_eq_sqrt_iff_real_inner_eq_zero.2 h]
   nth_rw 3 [← Real.sqrt_sq (norm_nonneg x)]
-  rw_mod_cast [← Real.sqrt_mul (sq_nonneg _), div_pow, pow_two, pow_two, mul_add, mul_
+  rw_mod_cast [← Real.sqrt_mul (sq_nonneg _), div_pow, pow_two, pow_two, mul_add, mul_one, mul_div,
+    mul_comm (‖x‖ * ‖x‖), ← mul_div, div_self (mul_self_pos.2 (norm_ne_zero_iff.2 h0)).ne', mul_one]
 
 Depends on / 依赖: Or.inl, Real.arctan_eq_arcsin, Real.sqrt_mul, Real.sqrt_sq, angle_add_eq_arcsin_of_inner_eq_zero, arctan_eq_arcsin, div_mul_eq_div_div, div_pow, div_self, mul_add, mul_comm, mul_div, mul_one, mul_self_pos, norm_add_eq_sqrt_iff_real_inner_eq_zero, norm_ne_zero_iff, norm_nonneg, nth_rw, pow_two, rw_mod_cast
 -/
@@ -240,7 +248,8 @@ theorem angle_add_pos_of_inner_eq_zero
   rw [angle_add_eq_arccos_of_inner_eq_zero h]; rw [Real.arccos_pos]; rw [norm_add_eq_sqrt_iff_real_inner_eq_zero.2 h]
   by_cases hx : x = 0; · simp [hx]
   rw [div_lt_one (Real.sqrt_pos.2 (Left.add_pos_of_pos_of_nonneg (mul_self_pos.2
-    (norm_ne_zero_iff.2 hx)) (mul_self_nonneg _)))]; rw [Real.l
+    (norm_ne_zero_iff.2 hx)) (mul_self_nonneg _)))]; rw [Real.lt_sqrt (norm_nonneg _)]; rw [pow_two]
+  simpa [hx] using h0
 
 中文:
 定理 angle_add_pos_of_inner_eq_zero
@@ -249,7 +258,8 @@ theorem angle_add_pos_of_inner_eq_zero
   rw [angle_add_eq_arccos_of_inner_eq_zero h]; rw [Real.arccos_pos]; rw [norm_add_eq_sqrt_iff_real_inner_eq_zero.2 h]
   by_cases hx : x = 0; · simp [hx]
   rw [div_lt_one (Real.sqrt_pos.2 (Left.add_pos_of_pos_of_nonneg (mul_self_pos.2
-    (norm_ne_zero_iff.2 hx)) (mul_self_nonneg _)))]; rw [Real.l
+    (norm_ne_zero_iff.2 hx)) (mul_self_nonneg _)))]; rw [Real.lt_sqrt (norm_nonneg _)]; rw [pow_two]
+  simpa [hx] using h0
 
 Depends on / 依赖: Left.add_pos_of_pos_of_nonneg, Real.arccos_pos, Real.lt_sqrt, Real.sqrt_pos, add_pos_of_pos_of_nonneg, angle_add_eq_arccos_of_inner_eq_zero, arccos_pos, div_lt_one, lt_sqrt, mul_self_nonneg, mul_self_pos, norm_add_eq_sqrt_iff_real_inner_eq_zero, norm_ne_zero_iff, norm_nonneg, pow_two, sqrt_pos
 -/
@@ -322,7 +332,7 @@ theorem cos_angle_add_of_inner_eq_zero
   rw [angle_add_eq_arccos_of_inner_eq_zero h]; rw [Real.cos_arccos (le_trans (by simp) (div_nonneg (norm_nonneg _) (norm_nonneg _)))
       (div_le_one_of_le₀ _ (norm_nonneg _))]
   rw [mul_self_le_mul_self_iff (norm_nonneg _) (norm_nonneg _)]; rw [norm_add_sq_eq_norm_sq_add_norm_sq_real h]
-  exact
+  exact le_add_of_nonneg_right (mul_self_nonneg _)
 
 中文:
 定理 cos_angle_add_of_inner_eq_zero
@@ -331,7 +341,7 @@ theorem cos_angle_add_of_inner_eq_zero
   rw [angle_add_eq_arccos_of_inner_eq_zero h]; rw [Real.cos_arccos (le_trans (by simp) (div_nonneg (norm_nonneg _) (norm_nonneg _)))
       (div_le_one_of_le₀ _ (norm_nonneg _))]
   rw [mul_self_le_mul_self_iff (norm_nonneg _) (norm_nonneg _)]; rw [norm_add_sq_eq_norm_sq_add_norm_sq_real h]
-  exact
+  exact le_add_of_nonneg_right (mul_self_nonneg _)
 
 Depends on / 依赖: Real.cos_arccos, angle_add_eq_arccos_of_inner_eq_zero, cos_arccos, div_nonneg, le_add_of_nonneg_right, le_trans, mul_self_le_mul_self_iff, mul_self_nonneg, norm_add_sq_eq_norm_sq_add_norm_sq_real, norm_nonneg
 -/
@@ -352,7 +362,7 @@ theorem sin_angle_add_of_inner_eq_zero
   rw [angle_add_eq_arcsin_of_inner_eq_zero h h0]; rw [Real.sin_arcsin (le_trans (by simp) (div_nonneg (norm_nonneg _) (norm_nonneg _)))
       (div_le_one_of_le₀ _ (norm_nonneg _))]
   rw [mul_self_le_mul_self_iff (norm_nonneg _) (norm_nonneg _)]; rw [norm_add_sq_eq_norm_sq_add_norm_sq_real h]
-  ex
+  exact le_add_of_nonneg_left (mul_self_nonneg _)
 
 中文:
 定理 sin_angle_add_of_inner_eq_zero
@@ -361,7 +371,7 @@ theorem sin_angle_add_of_inner_eq_zero
   rw [angle_add_eq_arcsin_of_inner_eq_zero h h0]; rw [Real.sin_arcsin (le_trans (by simp) (div_nonneg (norm_nonneg _) (norm_nonneg _)))
       (div_le_one_of_le₀ _ (norm_nonneg _))]
   rw [mul_self_le_mul_self_iff (norm_nonneg _) (norm_nonneg _)]; rw [norm_add_sq_eq_norm_sq_add_norm_sq_real h]
-  ex
+  exact le_add_of_nonneg_left (mul_self_nonneg _)
 
 Depends on / 依赖: Real.sin_arcsin, angle_add_eq_arcsin_of_inner_eq_zero, div_nonneg, le_add_of_nonneg_left, le_trans, mul_self_le_mul_self_iff, mul_self_nonneg, norm_add_sq_eq_norm_sq_add_norm_sq_real, norm_nonneg, sin_arcsin
 -/
@@ -408,7 +418,7 @@ theorem cos_angle_add_mul_norm_of_inner_eq_zero
   · have h' := norm_add_sq_eq_norm_sq_add_norm_sq_real h
     rw [hxy]; rw [zero_mul]; rw [eq_comm]; rw [add_eq_zero_iff_of_nonneg (mul_self_nonneg ‖x‖) (mul_self_nonneg ‖y‖)]; rw [mul_self_eq_zero] at h'
     simp [h'.1]
-  · exac
+  · exact div_mul_cancel₀ _ hxy
 
 中文:
 定理 cos_angle_add_mul_norm_of_inner_eq_zero
@@ -419,7 +429,7 @@ theorem cos_angle_add_mul_norm_of_inner_eq_zero
   · have h' := norm_add_sq_eq_norm_sq_add_norm_sq_real h
     rw [hxy]; rw [zero_mul]; rw [eq_comm]; rw [add_eq_zero_iff_of_nonneg (mul_self_nonneg ‖x‖) (mul_self_nonneg ‖y‖)]; rw [mul_self_eq_zero] at h'
     simp [h'.1]
-  · exac
+  · exact div_mul_cancel₀ _ hxy
 
 Depends on / 依赖: add_eq_zero_iff_of_nonneg, cos_angle_add_of_inner_eq_zero, eq_comm, mul_self_eq_zero, mul_self_nonneg, norm_add_sq_eq_norm_sq_add_norm_sq_real, zero_mul
 -/
@@ -445,7 +455,8 @@ theorem sin_angle_add_mul_norm_of_inner_eq_zero
   rw [← mul_self_ne_zero]; rw [norm_add_sq_eq_norm_sq_add_norm_sq_real h]
   refine (ne_of_lt ?_).symm
   rcases h0 with (h0 | h0)
-  · exact Left.add_pos_of_pos_of_non
+  · exact Left.add_pos_of_pos_of_nonneg (mul_self_pos.2 (norm_ne_zero_iff.2 h0)) (mul_self_nonneg _)
+  · exact Left.add_pos_of_nonneg_of_pos (mul_self_nonneg _) (mul_self_pos.2 (norm_ne_zero_iff.2 h0))
 
 中文:
 定理 sin_angle_add_mul_norm_of_inner_eq_zero
@@ -457,7 +468,8 @@ theorem sin_angle_add_mul_norm_of_inner_eq_zero
   rw [← mul_self_ne_zero]; rw [norm_add_sq_eq_norm_sq_add_norm_sq_real h]
   refine (ne_of_lt ?_).symm
   rcases h0 with (h0 | h0)
-  · exact Left.add_pos_of_pos_of_non
+  · exact Left.add_pos_of_pos_of_nonneg (mul_self_pos.2 (norm_ne_zero_iff.2 h0)) (mul_self_nonneg _)
+  · exact Left.add_pos_of_nonneg_of_pos (mul_self_nonneg _) (mul_self_pos.2 (norm_ne_zero_iff.2 h0))
 
 Depends on / 依赖: Left.add_pos_of_nonneg_of_pos, Left.add_pos_of_pos_of_nonneg, add_pos_of_nonneg_of_pos, add_pos_of_pos_of_nonneg, mul_self_ne_zero, mul_self_nonneg, mul_self_pos, ne_of_lt, norm_add_sq_eq_norm_sq_add_norm_sq_real, norm_ne_zero_iff, not_and_or, sin_angle_add_of_inner_eq_zero
 -/
@@ -1010,7 +1022,7 @@ theorem angle_eq_arccos_of_angle_eq_pi_div_two
   proof: by
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
-  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [a
+  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [angle_add_eq_arccos_of_inner_eq_zero h]
 
 中文:
 定理 angle_eq_arccos_of_angle_eq_pi_div_two
@@ -1018,7 +1030,7 @@ theorem angle_eq_arccos_of_angle_eq_pi_div_two
   证明: by
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
-  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [a
+  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [angle_add_eq_arccos_of_inner_eq_zero h]
 
 Depends on / 依赖: add_comm, angle_add_eq_arccos_of_inner_eq_zero, dist_eq_norm_vsub, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, neg_eq_zero, neg_vsub_eq_vsub_rev, real_inner_comm, vsub_add_vsub_cancel
 -/
@@ -1038,7 +1050,7 @@ theorem angle_eq_arcsin_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [← @vsub_ne_zero V]; rw [@ne_comm _ p₃]; rw [← @vsub_ne_zero V _ _ _ p₂]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [angle_add_eq_arcsin_of_inner_eq_zero h h0]
 
 中文:
 定理 angle_eq_arcsin_of_angle_eq_pi_div_two
@@ -1047,7 +1059,7 @@ theorem angle_eq_arcsin_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [← @vsub_ne_zero V]; rw [@ne_comm _ p₃]; rw [← @vsub_ne_zero V _ _ _ p₂]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [angle_add_eq_arcsin_of_inner_eq_zero h h0]
 
 Depends on / 依赖: add_comm, angle_add_eq_arcsin_of_inner_eq_zero, dist_eq_norm_vsub, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, ne_comm, neg_eq_zero, neg_vsub_eq_vsub_rev, or_comm, real_inner_comm, vsub_add_vsub_cancel, vsub_ne_zero
 -/
@@ -1068,7 +1080,7 @@ theorem angle_eq_arctan_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [ne_comm]; rw [← @vsub_ne_zero V] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_ad
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [angle_add_eq_arctan_of_inner_eq_zero h h0]
 
 中文:
 定理 angle_eq_arctan_of_angle_eq_pi_div_two
@@ -1077,7 +1089,7 @@ theorem angle_eq_arctan_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [ne_comm]; rw [← @vsub_ne_zero V] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_ad
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [angle_add_eq_arctan_of_inner_eq_zero h h0]
 
 Depends on / 依赖: add_comm, angle_add_eq_arctan_of_inner_eq_zero, dist_eq_norm_vsub, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, ne_comm, neg_eq_zero, neg_vsub_eq_vsub_rev, real_inner_comm, vsub_add_vsub_cancel, vsub_ne_zero
 -/
@@ -1098,7 +1110,8 @@ theorem angle_pos_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [← @vsub_ne_zero V]; rw [eq_comm]; rw [← @vsub_eq_zero_iff_eq V]; rw [or_comm] at h0
-  rw [angle]; rw [← vsub_add_vsub_cancel p₁ p₂ 
+  rw [angle]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]
+  exact angle_add_pos_of_inner_eq_zero h h0
 
 中文:
 定理 angle_pos_of_angle_eq_pi_div_two
@@ -1107,7 +1120,8 @@ theorem angle_pos_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [← @vsub_ne_zero V]; rw [eq_comm]; rw [← @vsub_eq_zero_iff_eq V]; rw [or_comm] at h0
-  rw [angle]; rw [← vsub_add_vsub_cancel p₁ p₂ 
+  rw [angle]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]
+  exact angle_add_pos_of_inner_eq_zero h h0
 
 Depends on / 依赖: add_comm, angle_add_pos_of_inner_eq_zero, eq_comm, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, neg_eq_zero, neg_vsub_eq_vsub_rev, or_comm, real_inner_comm, vsub_add_vsub_cancel, vsub_eq_zero_iff_eq, vsub_ne_zero
 -/
@@ -1160,7 +1174,7 @@ theorem angle_lt_pi_div_two_of_angle_eq_pi_div_two
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [ne_comm]; rw [← @vsub_ne_zero V] at h0
   rw [angle]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]
-  exact angle_add_lt_pi_di
+  exact angle_add_lt_pi_div_two_of_inner_eq_zero h h0
 
 中文:
 定理 angle_lt_pi_div_two_of_angle_eq_pi_div_two
@@ -1170,7 +1184,7 @@ theorem angle_lt_pi_div_two_of_angle_eq_pi_div_two
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [ne_comm]; rw [← @vsub_ne_zero V] at h0
   rw [angle]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]
-  exact angle_add_lt_pi_di
+  exact angle_add_lt_pi_div_two_of_inner_eq_zero h h0
 
 Depends on / 依赖: add_comm, angle_add_lt_pi_div_two_of_inner_eq_zero, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, ne_comm, neg_eq_zero, neg_vsub_eq_vsub_rev, real_inner_comm, vsub_add_vsub_cancel, vsub_ne_zero
 -/
@@ -1191,7 +1205,7 @@ theorem cos_angle_of_angle_eq_pi_div_two
   proof: by
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
-  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [c
+  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [cos_angle_add_of_inner_eq_zero h]
 
 中文:
 定理 cos_angle_of_angle_eq_pi_div_two
@@ -1199,7 +1213,7 @@ theorem cos_angle_of_angle_eq_pi_div_two
   证明: by
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
-  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [c
+  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [cos_angle_add_of_inner_eq_zero h]
 
 Depends on / 依赖: add_comm, cos_angle_add_of_inner_eq_zero, dist_eq_norm_vsub, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, neg_eq_zero, neg_vsub_eq_vsub_rev, real_inner_comm, vsub_add_vsub_cancel
 -/
@@ -1219,7 +1233,7 @@ theorem sin_angle_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [← @vsub_ne_zero V]; rw [@ne_comm _ p₃]; rw [← @vsub_ne_zero V _ _ _ p₂]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [sin_angle_add_of_inner_eq_zero h h0]
 
 中文:
 定理 sin_angle_of_angle_eq_pi_div_two
@@ -1228,7 +1242,7 @@ theorem sin_angle_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [← @vsub_ne_zero V]; rw [@ne_comm _ p₃]; rw [← @vsub_ne_zero V _ _ _ p₂]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [sin_angle_add_of_inner_eq_zero h h0]
 
 Depends on / 依赖: add_comm, dist_eq_norm_vsub, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, ne_comm, neg_eq_zero, neg_vsub_eq_vsub_rev, or_comm, real_inner_comm, sin_angle_add_of_inner_eq_zero, vsub_add_vsub_cancel, vsub_ne_zero
 -/
@@ -1248,7 +1262,7 @@ theorem tan_angle_of_angle_eq_pi_div_two
   proof: by
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [t
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [tan_angle_add_of_inner_eq_zero h]
 
 中文:
 定理 tan_angle_of_angle_eq_pi_div_two
@@ -1256,7 +1270,7 @@ theorem tan_angle_of_angle_eq_pi_div_two
   证明: by
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [t
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [tan_angle_add_of_inner_eq_zero h]
 
 Depends on / 依赖: add_comm, dist_eq_norm_vsub, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, neg_eq_zero, neg_vsub_eq_vsub_rev, real_inner_comm, tan_angle_add_of_inner_eq_zero, vsub_add_vsub_cancel
 -/
@@ -1275,7 +1289,7 @@ theorem cos_angle_mul_dist_of_angle_eq_pi_div_two
   proof: by
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
-  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [c
+  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [cos_angle_add_mul_norm_of_inner_eq_zero h]
 
 中文:
 定理 cos_angle_mul_dist_of_angle_eq_pi_div_two
@@ -1283,7 +1297,7 @@ theorem cos_angle_mul_dist_of_angle_eq_pi_div_two
   证明: by
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
-  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [c
+  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [cos_angle_add_mul_norm_of_inner_eq_zero h]
 
 Depends on / 依赖: add_comm, cos_angle_add_mul_norm_of_inner_eq_zero, dist_eq_norm_vsub, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, neg_eq_zero, neg_vsub_eq_vsub_rev, real_inner_comm, vsub_add_vsub_cancel
 -/
@@ -1302,7 +1316,7 @@ theorem sin_angle_mul_dist_of_angle_eq_pi_div_two
   proof: by
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [si
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [sin_angle_add_mul_norm_of_inner_eq_zero h]
 
 中文:
 定理 sin_angle_mul_dist_of_angle_eq_pi_div_two
@@ -1310,7 +1324,7 @@ theorem sin_angle_mul_dist_of_angle_eq_pi_div_two
   证明: by
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [si
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [sin_angle_add_mul_norm_of_inner_eq_zero h]
 
 Depends on / 依赖: add_comm, dist_eq_norm_vsub, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, neg_eq_zero, neg_vsub_eq_vsub_rev, real_inner_comm, sin_angle_add_mul_norm_of_inner_eq_zero, vsub_add_vsub_cancel
 -/
@@ -1330,7 +1344,7 @@ theorem tan_angle_mul_dist_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [ne_comm]; rw [← @vsub_ne_zero V]; rw [← @vsub_eq_zero_iff_eq V]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; r
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [tan_angle_add_mul_norm_of_inner_eq_zero h h0]
 
 中文:
 定理 tan_angle_mul_dist_of_angle_eq_pi_div_two
@@ -1339,7 +1353,7 @@ theorem tan_angle_mul_dist_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [ne_comm]; rw [← @vsub_ne_zero V]; rw [← @vsub_eq_zero_iff_eq V]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; r
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [tan_angle_add_mul_norm_of_inner_eq_zero h h0]
 
 Depends on / 依赖: add_comm, dist_eq_norm_vsub, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, ne_comm, neg_eq_zero, neg_vsub_eq_vsub_rev, or_comm, real_inner_comm, tan_angle_add_mul_norm_of_inner_eq_zero, vsub_add_vsub_cancel, vsub_eq_zero_iff_eq, vsub_ne_zero
 -/
@@ -1360,7 +1374,7 @@ theorem dist_div_cos_angle_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [ne_comm]; rw [← @vsub_ne_zero V]; rw [← @vsub_eq_zero_iff_eq V]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; 
+  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [norm_div_cos_angle_add_of_inner_eq_zero h h0]
 
 中文:
 定理 dist_div_cos_angle_of_angle_eq_pi_div_two
@@ -1369,7 +1383,7 @@ theorem dist_div_cos_angle_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [ne_comm]; rw [← @vsub_ne_zero V]; rw [← @vsub_eq_zero_iff_eq V]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; 
+  rw [angle]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [norm_div_cos_angle_add_of_inner_eq_zero h h0]
 
 Depends on / 依赖: add_comm, dist_eq_norm_vsub, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, ne_comm, neg_eq_zero, neg_vsub_eq_vsub_rev, norm_div_cos_angle_add_of_inner_eq_zero, or_comm, real_inner_comm, vsub_add_vsub_cancel, vsub_eq_zero_iff_eq, vsub_ne_zero
 -/
@@ -1390,7 +1404,7 @@ theorem dist_div_sin_angle_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [eq_comm]; rw [← @vsub_ne_zero V]; rw [← @vsub_eq_zero_iff_eq V]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; r
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [norm_div_sin_angle_add_of_inner_eq_zero h h0]
 
 中文:
 定理 dist_div_sin_angle_of_angle_eq_pi_div_two
@@ -1399,7 +1413,7 @@ theorem dist_div_sin_angle_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [eq_comm]; rw [← @vsub_ne_zero V]; rw [← @vsub_eq_zero_iff_eq V]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; r
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [norm_div_sin_angle_add_of_inner_eq_zero h h0]
 
 Depends on / 依赖: add_comm, dist_eq_norm_vsub, eq_comm, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, neg_eq_zero, neg_vsub_eq_vsub_rev, norm_div_sin_angle_add_of_inner_eq_zero, or_comm, real_inner_comm, vsub_add_vsub_cancel, vsub_eq_zero_iff_eq, vsub_ne_zero
 -/
@@ -1420,7 +1434,7 @@ theorem dist_div_tan_angle_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [eq_comm]; rw [← @vsub_ne_zero V]; rw [← @vsub_eq_zero_iff_eq V]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; r
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [norm_div_tan_angle_add_of_inner_eq_zero h h0]
 
 中文:
 定理 dist_div_tan_angle_of_angle_eq_pi_div_two
@@ -1429,7 +1443,7 @@ theorem dist_div_tan_angle_of_angle_eq_pi_div_two
   rw [angle]; rw [← inner_eq_zero_iff_angle_eq_pi_div_two]; rw [real_inner_comm]; rw [← neg_eq_zero]; rw [←
     inner_neg_left]; rw [neg_vsub_eq_vsub_rev] at h
   rw [eq_comm]; rw [← @vsub_ne_zero V]; rw [← @vsub_eq_zero_iff_eq V]; rw [or_comm] at h0
-  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; r
+  rw [angle]; rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub' V p₃ p₂]; rw [← vsub_add_vsub_cancel p₁ p₂ p₃]; rw [add_comm]; rw [norm_div_tan_angle_add_of_inner_eq_zero h h0]
 
 Depends on / 依赖: add_comm, dist_eq_norm_vsub, eq_comm, inner_eq_zero_iff_angle_eq_pi_div_two, inner_neg_left, neg_eq_zero, neg_vsub_eq_vsub_rev, norm_div_tan_angle_add_of_inner_eq_zero, or_comm, real_inner_comm, vsub_add_vsub_cancel, vsub_eq_zero_iff_eq, vsub_ne_zero
 -/

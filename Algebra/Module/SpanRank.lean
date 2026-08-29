@@ -108,7 +108,13 @@ lemma spanRank_toENat_eq_iInf_encard
     rw [Set.encard]; rw [ENat.card]
     exact toENat.monotone' (ciInf_le' _ (⟨s, hs⟩ : {s : Set M // span R s = p}))
   · have := congrFun toENat_comp_ofENat.{u}.symm (⨅ (s : Set M) (_ : span R s = p), s.encard)
-    rw [id_eq
+    rw [id_eq] at this; rw [this]
+    refine toENat.monotone' (le_ciInf fun s => ?_)
+    have : ofENat.{u} (⨅ (s' : Set M), ⨅ (_ : span R s' = p), s'.encard) <= ofENat s.1.encard :=
+      ofENatHom.monotone' (le_trans (ciInf_le' _ s.1) (ciInf_le' _ s.2))
+    apply le_trans this
+    rw [Set.encard]; rw [ENat.card]
+    exact Cardinal.ofENat_toENat_le _
 
 中文:
 引理 spanRank_toE自然数_eq_iInf_encard
@@ -121,7 +127,13 @@ lemma spanRank_toENat_eq_iInf_encard
     rw [Set.encard]; rw [ENat.card]
     exact toENat.monotone' (ciInf_le' _ (⟨s, hs⟩ : {s : Set M // span R s = p}))
   · have := congrFun toENat_comp_ofENat.{u}.symm (⨅ (s : Set M) (_ : span R s = p), s.encard)
-    rw [id_eq
+    rw [id_eq] at this; rw [this]
+    refine toENat.monotone' (le_ciInf fun s => ?_)
+    have : ofENat.{u} (⨅ (s' : Set M), ⨅ (_ : span R s' = p), s'.encard) <= ofENat s.1.encard :=
+      ofENatHom.monotone' (le_trans (ciInf_le' _ s.1) (ciInf_le' _ s.2))
+    apply le_trans this
+    rw [Set.encard]; rw [ENat.card]
+    exact Cardinal.ofENat_toENat_le _
 
 Depends on / 依赖: ENat.card, Set.encard, ciInf_le, encard, id_eq, le_antisymm, le_ciInf, le_trans, monotone, ofENat, ofENatHom, ofENatHom.monotone, s.encard, spanRank, toENat, toENat.monotone, toENat_comp_ofENat
 -/
@@ -152,7 +164,14 @@ lemma spanRank_toENat_eq_iInf_finset_card
   rcases eq_or_ne (⨅ (s : Set M) (_ : span R s = p), s.encard) ⊤ with (h1 | h2)
   · rw [h1, eq_comm]; simp_rw [iInf_eq_top] at h1 ⊢
     exact fun s => False.elim (Set.encard_ne_top_iff.mpr s.1.finite_toSet (h1 s.1 s.2))
-  · simp_rw [← Set.encard_coe_eq_coe_fi
+  · simp_rw [← Set.encard_coe_eq_coe_finsetCard]
+    apply le_antisymm
+    · exact le_iInf fun s => iInf₂_le (s.1 : Set M) s.2
+    · refine le_iInf fun s => le_iInf fun h => ?_
+      by_cases hs : s.Finite
+      · exact iInf_le_of_le ⟨hs.toFinset, by simpa⟩ (by simp)
+      · rw [Set.Infinite.encard_eq hs]
+        exact OrderTop.le_top _
 
 中文:
 引理 spanRank_toE自然数_eq_iInf_finset_card
@@ -162,7 +181,14 @@ lemma spanRank_toENat_eq_iInf_finset_card
   rcases eq_or_ne (⨅ (s : Set M) (_ : span R s = p), s.encard) ⊤ with (h1 | h2)
   · rw [h1, eq_comm]; simp_rw [iInf_eq_top] at h1 ⊢
     exact fun s => False.elim (Set.encard_ne_top_iff.mpr s.1.finite_toSet (h1 s.1 s.2))
-  · simp_rw [← Set.encard_coe_eq_coe_fi
+  · simp_rw [← Set.encard_coe_eq_coe_finsetCard]
+    apply le_antisymm
+    · exact le_iInf fun s => iInf₂_le (s.1 : Set M) s.2
+    · refine le_iInf fun s => le_iInf fun h => ?_
+      by_cases hs : s.Finite
+      · exact iInf_le_of_le ⟨hs.toFinset, by simpa⟩ (by simp)
+      · rw [Set.Infinite.encard_eq hs]
+        exact OrderTop.le_top _
 
 Depends on / 依赖: False.elim, Finite, Set.encard_coe_eq_coe_finsetCard, Set.encard_ne_top_iff.mpr, encard, encard_coe_eq_coe_finsetCard, encard_ne_top_iff, eq_comm, eq_or_ne, finite_toSet, hs.toFinset, iInf_eq_top, iInf_le_of_le, le_antisymm, le_iInf, s.Finite, s.encard, simp_rw, spanRank_toENat_eq_iInf_encard, toFinset
 -/
@@ -219,7 +245,8 @@ lemma spanRank_finite_iff_fg
       Set.range (fun (s : {s : Set M // span R s = p}) => #s) := csInf_mem ⟨#p, ⟨⟨p, by simp⟩, rfl⟩⟩
     refine ⟨s.1, ?_, s.2⟩
     simpa [← hs] using h
-  · rintro ⟨s, 
+  · rintro ⟨s, hs₁, hs₂⟩
+    exact (ciInf_le' _ ⟨s, hs₂⟩).trans_lt (by simpa)
 
 中文:
 引理 spanRank_finite_iff_fg
@@ -233,7 +260,8 @@ lemma spanRank_finite_iff_fg
       Set.range (fun (s : {s : Set M // span R s = p}) => #s) := csInf_mem ⟨#p, ⟨⟨p, by simp⟩, rfl⟩⟩
     refine ⟨s.1, ?_, s.2⟩
     simpa [← hs] using h
-  · rintro ⟨s, 
+  · rintro ⟨s, hs₁, hs₂⟩
+    exact (ciInf_le' _ ⟨s, hs₂⟩).trans_lt (by simpa)
 
 Depends on / 依赖: Set.range, Submodule, Submodule.fg_def, ciInf_le, csInf_mem, fg_def, spanRank, trans_lt
 -/
@@ -401,7 +429,11 @@ lemma spanRank_span_range_of_linearIndependent
   have : #x.1 = #((Subtype.val : span R (.range v) -> _) ⁻¹' x.1) :=
     (mk_preimage_of_injective_of_subset_range _ _ Subtype.val_injective (by simp [← x.2])).symm
   rw [this]
-  refine le_trans ?_ ((Modu
+  refine le_trans ?_ ((Module.Basis.span hs).le_span (R := R) (J := Subtype.val ⁻¹' x.1) ?_)
+  · rw [mk_range_eq]
+    exact .of_comp (f := Subtype.val) (by convert! hv; ext; simp [Module.Basis.span_apply])
+  · apply map_injective_of_injective (f := (span R _).subtype) (injective_subtype _)
+    simp [map_span, Set.image_preimage_eq_inter_range, Set.inter_eq_self_of_subset_left, ← x.2]
 
 中文:
 引理 spanRank_span_range_of_linearIndependent
@@ -411,7 +443,11 @@ lemma spanRank_span_range_of_linearIndependent
   have : #x.1 = #((Subtype.val : span R (.range v) -> _) ⁻¹' x.1) :=
     (mk_preimage_of_injective_of_subset_range _ _ Subtype.val_injective (by simp [← x.2])).symm
   rw [this]
-  refine le_trans ?_ ((Modu
+  refine le_trans ?_ ((Module.Basis.span hs).le_span (R := R) (J := Subtype.val ⁻¹' x.1) ?_)
+  · rw [mk_range_eq]
+    exact .of_comp (f := Subtype.val) (by convert! hv; ext; simp [Module.Basis.span_apply])
+  · apply map_injective_of_injective (f := (span R _).subtype) (injective_subtype _)
+    simp [map_span, Set.image_preimage_eq_inter_range, Set.inter_eq_self_of_subset_left, ← x.2]
 
 Depends on / 依赖: Module, Module.Basis.span, Module.Basis.span_apply, Subtype, Subtype.val, Subtype.val_injective, convert, le_antisymm, le_ciInf, le_span, le_trans, map_injective_of_injective, mk_preimage_of_injective_of_subset_range, mk_range_eq, mk_range_le, of_comp, spanRank_span_le_card, span_apply, val_injective
 -/
@@ -665,7 +701,9 @@ lemma spanRank_eq_zero_iff_eq_bot
     simp only [nonpos_iff_eq_zero, mk_eq_zero_iff, Set.isEmpty_coe_sort] at hs₁
     simp_all
   · rintro rfl; rw [spanRank]
-    exact Cardinal.iInf_eq_zero_iff.mpr (
+    exact Cardinal.iInf_eq_zero_iff.mpr (Or.inr ⟨⟨∅, by simp⟩, by simp⟩)
+
+@[simp]
 
 中文:
 引理 spanRank_eq_zero_iff_eq_bot
@@ -679,7 +717,9 @@ lemma spanRank_eq_zero_iff_eq_bot
     simp only [nonpos_iff_eq_zero, mk_eq_zero_iff, Set.isEmpty_coe_sort] at hs₁
     simp_all
   · rintro rfl; rw [spanRank]
-    exact Cardinal.iInf_eq_zero_iff.mpr (
+    exact Cardinal.iInf_eq_zero_iff.mpr (Or.inr ⟨⟨∅, by simp⟩, by simp⟩)
+
+@[simp]
 
 Depends on / 依赖: Cardinal, Cardinal.iInf_eq_zero_iff.mpr, FG.spanRank_le_iff_exists_span_set_card_le, Or.inr, Set.isEmpty_coe_sort, iInf_eq_zero_iff, isEmpty_coe_sort, mk_eq_zero_iff, nonpos_iff_eq_zero, spanRank, spanRank_le_iff_exists_span_set_card_le
 -/
@@ -1021,7 +1061,7 @@ lemma spanFinrank_eq_one_iff
     fun ⟨⟨a, ha⟩, _⟩ => ha ▸ spanFinrank_singleton (by simp_all)⟩
   have fg : p.FG := spanRank_finite_iff_fg.1 (by simp_all [spanFinrank])
   obtain ⟨a, ha⟩ : exists a, p.generators = {a} := by simpa [← fg.generators_ncard] using h
-  exact ⟨a,
+  exact ⟨a, ha ▸ (p.span_generators).symm⟩
 
 中文:
 引理 spanFinrank_eq_one_iff
@@ -1032,7 +1072,7 @@ lemma spanFinrank_eq_one_iff
     fun ⟨⟨a, ha⟩, _⟩ => ha ▸ spanFinrank_singleton (by simp_all)⟩
   have fg : p.FG := spanRank_finite_iff_fg.1 (by simp_all [spanFinrank])
   obtain ⟨a, ha⟩ : exists a, p.generators = {a} := by simpa [← fg.generators_ncard] using h
-  exact ⟨a,
+  exact ⟨a, ha ▸ (p.span_generators).symm⟩
 
 Depends on / 依赖: fg.generators_ncard, generators, generators_ncard, p.FG, p.generators, p.span_generators, spanFinrank, spanFinrank_bot, spanFinrank_singleton, spanRank_finite_iff_fg, span_generators
 -/
@@ -1141,7 +1181,8 @@ lemma lift_spanRank_map_eq_of_injective
   obtain ⟨s, hs, e⟩ := (p.map f).exists_span_set_card_eq_spanRank
   obtain ⟨s, rfl⟩ : exists y, f '' y = s := Set.subset_range_iff_exists_image_eq.mp
     ((subset_span.trans e.le).trans LinearMap.map_le_range)
-  obtain rfl : span R s = p := by simpa
+  obtain rfl : span R s = p := by simpa [(map_injective_of_injective hf).eq_iff] using e
+  grw [← hs, Cardinal.mk_image_eq_lift _ _ hf, Cardinal.lift_le, spanRank_span_le_card]
 
 中文:
 引理 lift_spanRank_map_eq_of_injective
@@ -1151,7 +1192,8 @@ lemma lift_spanRank_map_eq_of_injective
   obtain ⟨s, hs, e⟩ := (p.map f).exists_span_set_card_eq_spanRank
   obtain ⟨s, rfl⟩ : exists y, f '' y = s := Set.subset_range_iff_exists_image_eq.mp
     ((subset_span.trans e.le).trans LinearMap.map_le_range)
-  obtain rfl : span R s = p := by simpa
+  obtain rfl : span R s = p := by simpa [(map_injective_of_injective hf).eq_iff] using e
+  grw [← hs, Cardinal.mk_image_eq_lift _ _ hf, Cardinal.lift_le, spanRank_span_le_card]
 
 Depends on / 依赖: Cardinal, Cardinal.lift_le, Cardinal.mk_image_eq_lift, LinearMap, LinearMap.map_le_range, Set.subset_range_iff_exists_image_eq.mp, antisymm, e.le, eq_iff, exists_span_set_card_eq_spanRank, lift_le, lift_spanRank_map_le, map_injective_of_injective, map_le_range, mk_image_eq_lift, p.map, spanRank_span_le_card, subset_range_iff_exists_image_eq, subset_span, subset_span.trans
 -/
@@ -1382,7 +1424,9 @@ lemma Ideal.lift_spanRank_map_le
   refine ⟨f '' I.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun s ⟨r, hr, hfr⟩ =>
 hfr ▸ mem_map_of_mem _ span_generators I ▸ subset_span hr)) ?_⟩
   refine map_le_of_le_comap (fun r hr => ?_)
-  simp o
+  simp only [submodule_span_eq, mem_comap]
+  rw [← map_span]; rw [← submodule_span_eq]; rw [span_generators]
+  exact mem_map_of_mem f hr
 
 中文:
 引理 理想.lift_spanRank_map_le
@@ -1392,7 +1436,9 @@ hfr ▸ mem_map_of_mem _ span_generators I ▸ subset_span hr)) ?_⟩
   refine ⟨f '' I.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun s ⟨r, hr, hfr⟩ =>
 hfr ▸ mem_map_of_mem _ span_generators I ▸ subset_span hr)) ?_⟩
   refine map_le_of_le_comap (fun r hr => ?_)
-  simp o
+  simp only [submodule_span_eq, mem_comap]
+  rw [← map_span]; rw [← submodule_span_eq]; rw [span_generators]
+  exact mem_map_of_mem f hr
 
 Depends on / 依赖: Cardinal, Cardinal.mk_image_le_lift, I.generators, generators, generators_card, le_antisymm, lift_spanRank_le_iff_exists_span_set_card_le, map_le_of_le_comap, map_span, mem_comap, mem_map_of_mem, mk_image_le_lift, span_generators, span_le, submodule_span_eq, subset_span
 -/

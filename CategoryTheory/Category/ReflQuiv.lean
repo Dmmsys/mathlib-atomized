@@ -421,7 +421,7 @@ definition isoOfQuivIso
     exact e.hom_inv_id
   inv_hom_id := by
     apply forgetToQuiv.map_injective
-    exact
+    exact e.inv_hom_id
 
 中文:
 定义 isoOfQuivIso
@@ -434,7 +434,7 @@ definition isoOfQuivIso
     exact e.hom_inv_id
   inv_hom_id := by
     apply forgetToQuiv.map_injective
-    exact
+    exact e.inv_hom_id
 
 Depends on / 依赖: MonoCoprod, MonoCoprod.mono_map, _of_injective, e.hom.obj, mono_iff_injective, mono_map
 -/

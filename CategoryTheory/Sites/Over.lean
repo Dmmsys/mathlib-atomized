@@ -49,7 +49,10 @@ lemma functorPullback_map_overForget
     rw [← hR]; rw [functorPullback_map_functorPullback]
   funext Z f
   obtain ⟨Z, fZ, rfl⟩ := Z.mk_surjective
-  obtain ⟨g : Z ⟶ Y.left, rfl : g ≫ Y.hom = f
+  obtain ⟨g : Z ⟶ Y.left, rfl : g ≫ Y.hom = fZ, rfl⟩ := Over.homMk_surjective f
+  rfl
+
+@[simp]
 
 中文:
 引理 functorPullback_map_overForget
@@ -60,7 +63,10 @@ lemma functorPullback_map_overForget
     rw [← hR]; rw [functorPullback_map_functorPullback]
   funext Z f
   obtain ⟨Z, fZ, rfl⟩ := Z.mk_surjective
-  obtain ⟨g : Z ⟶ Y.left, rfl : g ≫ Y.hom = f
+  obtain ⟨g : Z ⟶ Y.left, rfl : g ≫ Y.hom = fZ, rfl⟩ := Over.homMk_surjective f
+  rfl
+
+@[simp]
 
 Depends on / 依赖: Over.forget, Over.homMk, Over.homMk_surjective, Over.mk, Presieve, R.functorPullback, Y.hom, Y.left, Z.mk_surjective, forget, functorPullback, functorPullback_map_functorPullback, homMk_surjective, mk_surjective
 -/
@@ -234,7 +240,14 @@ definition overEquiv
   right_inv := functorPushforward_functorPullback_overForget
   map_rel_iff' := by
     rw [Equiv.coe_fn_mk]
-    exact ⟨fun h => by simpa using functorPullback_mon
+    exact ⟨fun h => by simpa using functorPullback_monotone _ _ h,
+      fun h => functorPushforward_monotone _ _ h⟩
+
+@[deprecated (since := "2026-07-08")] alias overEquiv_top := map_top
+@[deprecated (since := "2026-07-08")] alias overEquiv_symm_top := map_top
+@[deprecated (since := "2026-07-08")] alias overEquiv_bot := map_bot
+@[deprecated (since := "2026-07-08")] alias overEquiv_symm_bot := map_bot
+@[deprecated (since := "2026-07-08")] alias overEquiv_le_overEquiv_iff := RelIso.map_rel_iff
 
 中文:
 定义 overEquiv
@@ -245,7 +258,14 @@ definition overEquiv
   right_inv := functorPushforward_functorPullback_overForget
   map_rel_iff' := by
     rw [Equiv.coe_fn_mk]
-    exact ⟨fun h => by simpa using functorPullback_mon
+    exact ⟨fun h => by simpa using functorPullback_monotone _ _ h,
+      fun h => functorPushforward_monotone _ _ h⟩
+
+@[deprecated (since := "2026-07-08")] alias overEquiv_top := map_top
+@[deprecated (since := "2026-07-08")] alias overEquiv_symm_top := map_top
+@[deprecated (since := "2026-07-08")] alias overEquiv_bot := map_bot
+@[deprecated (since := "2026-07-08")] alias overEquiv_symm_bot := map_bot
+@[deprecated (since := "2026-07-08")] alias overEquiv_le_overEquiv_iff := RelIso.map_rel_iff
 
 Depends on / 依赖: Over.forget, forget, functorPushforward
 -/
@@ -282,7 +302,10 @@ lemma overEquiv_pullback
   · rintro ⟨W, a, b, h, w⟩
     let T := Over.mk (b ≫ W.hom)
     let c : T ⟶ Y₁ := Over.homMk g (by dsimp [T]; rw [← Over.w a, ← reassoc_of% w, Over.w f])
-    l
+    let d : T ⟶ W := Over.homMk b
+    refine ⟨T, c, 𝟙 Z, ?_, by simp [T, c]⟩
+    rw [show c ≫ f = d ≫ a by ext; exact w]
+    exact S.downward_closed h _
 
 中文:
 引理 overEquiv_pullback
@@ -296,7 +319,10 @@ lemma overEquiv_pullback
   · rintro ⟨W, a, b, h, w⟩
     let T := Over.mk (b ≫ W.hom)
     let c : T ⟶ Y₁ := Over.homMk g (by dsimp [T]; rw [← Over.w a, ← reassoc_of% w, Over.w f])
-    l
+    let d : T ⟶ W := Over.homMk b
+    refine ⟨T, c, 𝟙 Z, ?_, by simp [T, c]⟩
+    rw [show c ≫ f = d ≫ a by ext; exact w]
+    exact S.downward_closed h _
 
 Depends on / 依赖: Over.homMk, Over.mk, Over.w, Presieve, Presieve.functorPushforward, S.downward_closed, W.hom, downward_closed, functorPushforward, overEquiv, reassoc_of
 -/
@@ -459,7 +485,7 @@ lemma overEquiv_generate
     exact ⟨W.left, u.left, v.left, ⟨W, v, 𝟙 _, hv, by simp⟩, congr($(huv).left)⟩
   · rw [generate_le_iff]
     rintro Z g ⟨W, u, v, hu, rfl⟩
-    exact (overEquiv_iff _ _).mpr ⟨W, Over.homMk 
+    exact (overEquiv_iff _ _).mpr ⟨W, Over.homMk v, u, hu, rfl⟩
 
 中文:
 引理 overEquiv_generate
@@ -471,7 +497,7 @@ lemma overEquiv_generate
     exact ⟨W.left, u.left, v.left, ⟨W, v, 𝟙 _, hv, by simp⟩, congr($(huv).left)⟩
   · rw [generate_le_iff]
     rintro Z g ⟨W, u, v, hu, rfl⟩
-    exact (overEquiv_iff _ _).mpr ⟨W, Over.homMk 
+    exact (overEquiv_iff _ _).mpr ⟨W, Over.homMk v, u, hu, rfl⟩
 
 Depends on / 依赖: Over.homMk, W.left, generate_le_iff, le_antisymm, overEquiv_iff, u.left, v.left
 -/
@@ -500,7 +526,7 @@ lemma overEquiv_symm_generate
     ext
     exact hpq
   · rw [generate_le_iff]
-    exact fun Z g hg => le_generate _ _ 
+    exact fun Z g hg => le_generate _ _ _ hg
 
 中文:
 引理 overEquiv_symm_generate
@@ -513,7 +539,7 @@ lemma overEquiv_symm_generate
     ext
     exact hpq
   · rw [generate_le_iff]
-    exact fun Z g hg => le_generate _ _ 
+    exact fun Z g hg => le_generate _ _ _ hg
 
 Depends on / 依赖: Over.homMk, Y.hom, generate_le_iff, le_antisymm, le_generate, overEquiv_symm_iff, reassoc_of
 -/
@@ -588,7 +614,9 @@ lemma overEquiv_functorPullback_map
     ext
     simp [u]
   have : IsIso u :=
-
+    ⟨Over.homMk (𝟙 Z) (by simp), by ext; simp [u], by ext; simp [u]⟩
+  rw [Sieve.overEquiv_iff]; rw [Sieve.overEquiv_iff]
+  simp [Presieve.functorPullback, heq]
 
 中文:
 引理 overEquiv_functorPullback_map
@@ -602,7 +630,9 @@ lemma overEquiv_functorPullback_map
     ext
     simp [u]
   have : IsIso u :=
-
+    ⟨Over.homMk (𝟙 Z) (by simp), by ext; simp [u], by ext; simp [u]⟩
+  rw [Sieve.overEquiv_iff]; rw [Sieve.overEquiv_iff]
+  simp [Presieve.functorPullback, heq]
 
 Depends on / 依赖: Over.homMk, Over.map, Over.mk, Presieve, Presieve.functorPullback, Sieve.overEquiv_iff, U.hom, functorPullback, overEquiv_iff
 -/
@@ -635,7 +665,12 @@ lemma overEquiv_functorPullback_post
   · dsimp [Sieve.overEquiv]
     rw [Sieve.functorPushforward_le_iff_le_functorPullback]; rw [← Sieve.functorPullback_comp]
     simp_rw [← CategoryTheory.Over.post_forget_eq_forget_comp, Sieve.functorPullback_comp]
-    exact Sieve.functorPullback_monotone _ _ (Sieve.le_f
+    exact Sieve.functorPullback_monotone _ _ (Sieve.le_functorPushforward_pullback _ _)
+  · intro Z g hg
+    rw [Sieve.overEquiv_iff]
+    dsimp [Presieve.functorPullback]
+    convert! (Sieve.overEquiv_iff _ _).mp hg
+    simp
 
 中文:
 引理 overEquiv_functorPullback_post
@@ -645,7 +680,12 @@ lemma overEquiv_functorPullback_post
   · dsimp [Sieve.overEquiv]
     rw [Sieve.functorPushforward_le_iff_le_functorPullback]; rw [← Sieve.functorPullback_comp]
     simp_rw [← CategoryTheory.Over.post_forget_eq_forget_comp, Sieve.functorPullback_comp]
-    exact Sieve.functorPullback_monotone _ _ (Sieve.le_f
+    exact Sieve.functorPullback_monotone _ _ (Sieve.le_functorPushforward_pullback _ _)
+  · intro Z g hg
+    rw [Sieve.overEquiv_iff]
+    dsimp [Presieve.functorPullback]
+    convert! (Sieve.overEquiv_iff _ _).mp hg
+    simp
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Over.post_forget_eq_forget_comp, Presieve, Presieve.functorPullback, Sieve.functorPullback_comp, Sieve.functorPullback_monotone, Sieve.functorPushforward_le_iff_le_functorPullback, Sieve.le_functorPushforward_pullback, Sieve.overEquiv, Sieve.overEquiv_iff, convert, functorPullback, functorPullback_comp, functorPullback_monotone, functorPushforward_le_iff_le_functorPullback, le_antisymm, le_functorPushforward_pullback, overEquiv, overEquiv_iff, post_forget_eq_forget_comp
 -/
@@ -707,7 +747,7 @@ definition over
     exact J.pullback_stable _ h₁
   transitive' Y S hS R hR := J.transitive hS _ fun Z f hf => by
     specialize hR ((Sieve.overEquiv_iff _ _).1 hf)
- 
+    rwa [Set.mem_preimage, Sieve.overEquiv_pullback] at hR
 
 中文:
 定义 over
@@ -719,7 +759,7 @@ definition over
     exact J.pullback_stable _ h₁
   transitive' Y S hS R hR := J.transitive hS _ fun Z f hf => by
     specialize hR ((Sieve.overEquiv_iff _ _).1 hf)
- 
+    rwa [Set.mem_preimage, Sieve.overEquiv_pullback] at hR
 
 Depends on / 依赖: Sieve.overEquiv, Y.left, overEquiv
 -/
@@ -894,7 +934,18 @@ lemma over_map_compatiblePreserving
     let g₂' : W' ⟶ Y₂ := Over.homMk f₂.left
       (by simpa using! (Over.forget _).congr_map h.symm =≫ Z.hom)
     let e : (Over.map f).obj W' ≅ W := Over.isoMk (Iso.refl _)
-      (by simpa [W'] using! (O
+      (by simpa [W'] using! (Over.w f₁).symm)
+    convert congr_arg (F.obj.map e.inv.op)
+      (hx g₁' g₂' hg₁ hg₂ (by ext; exact (Over.forget _).congr_map h)) using 1
+    all_goals
+      dsimp [e, W', g₁', g₂']
+      rw [← Functor.map_comp_apply]
+      apply ConcreteCategory.congr_hom
+      congr 1
+      rw [← op_comp]
+      congr 1
+      ext
+      simp
 
 中文:
 引理 over_map_compatiblePreserving
@@ -905,7 +956,18 @@ lemma over_map_compatiblePreserving
     let g₂' : W' ⟶ Y₂ := Over.homMk f₂.left
       (by simpa using! (Over.forget _).congr_map h.symm =≫ Z.hom)
     let e : (Over.map f).obj W' ≅ W := Over.isoMk (Iso.refl _)
-      (by simpa [W'] using! (O
+      (by simpa [W'] using! (Over.w f₁).symm)
+    convert congr_arg (F.obj.map e.inv.op)
+      (hx g₁' g₂' hg₁ hg₂ (by ext; exact (Over.forget _).congr_map h)) using 1
+    all_goals
+      dsimp [e, W', g₁', g₂']
+      rw [← Functor.map_comp_apply]
+      apply ConcreteCategory.congr_hom
+      congr 1
+      rw [← op_comp]
+      congr 1
+      ext
+      simp
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.obj.map, Functor, Functor.map_comp_apply, Iso.refl, Over.forget, Over.homMk, Over.isoMk, Over.map, Over.mk, Over.w, Z.hom, all_goals, congr_arg, congr_hom, congr_map, convert, e.inv.op, forget
 -/
@@ -1442,7 +1504,23 @@ lemma over_toGrothendieck_eq_toGrothendieck_comap_forget
     obtain ⟨(R : Sieve Y), rfl⟩ := (Sieve.overEquiv _).symm.surjective R
     simp only [GrothendieckTopology.mem_over_iff, OrderIso.apply_symm_apply,
       ← Precoverage.toGrothendieck_toCoverage, Coverage.mem_toGrothendieck,
-     
+      Over.left] at hR
+    induction hR with
+    | of Z S hS =>
+      rw [Sieve.overEquiv_symm_generate]
+      exact .of _ _ (by simpa)
+    | top =>
+      simp
+    | transitive Y R S hR H ih ih' =>
+      refine GrothendieckTopology.transitive _ (ih s) _ fun Z g hg => ?_
+      obtain rfl : right = Z.right := Subsingleton.elim _ _
+      rw [← Sieve.overEquiv_symm_pullback]
+      exact ih' hg Z.hom
+  · rw [Precoverage.toGrothendieck_le_iff_le_toPrecoverage]
+    intro Y R hR
+    rw [Precoverage.mem_comap_iff] at hR
+    rw [GrothendieckTopology.mem_toPrecoverage_iff]; rw [GrothendieckTopology.mem_over_iff]; rw [Sieve.overEquiv]; rw [RelIso.coe_fn_mk]; rw [Equiv.coe_fn_mk]; rw [← Sieve.generate_map_eq_functorPushforward]
+    exact Precoverage.Saturate.of _ _ hR
 
 中文:
 引理 over_toGrothendieck_eq_toGrothendieck_comap_forget
@@ -1453,7 +1531,23 @@ lemma over_toGrothendieck_eq_toGrothendieck_comap_forget
     obtain ⟨(R : Sieve Y), rfl⟩ := (Sieve.overEquiv _).symm.surjective R
     simp only [GrothendieckTopology.mem_over_iff, OrderIso.apply_symm_apply,
       ← Precoverage.toGrothendieck_toCoverage, Coverage.mem_toGrothendieck,
-     
+      Over.left] at hR
+    induction hR with
+    | of Z S hS =>
+      rw [Sieve.overEquiv_symm_generate]
+      exact .of _ _ (by simpa)
+    | top =>
+      simp
+    | transitive Y R S hR H ih ih' =>
+      refine GrothendieckTopology.transitive _ (ih s) _ fun Z g hg => ?_
+      obtain rfl : right = Z.right := Subsingleton.elim _ _
+      rw [← Sieve.overEquiv_symm_pullback]
+      exact ih' hg Z.hom
+  · rw [Precoverage.toGrothendieck_le_iff_le_toPrecoverage]
+    intro Y R hR
+    rw [Precoverage.mem_comap_iff] at hR
+    rw [GrothendieckTopology.mem_toPrecoverage_iff]; rw [GrothendieckTopology.mem_over_iff]; rw [Sieve.overEquiv]; rw [RelIso.coe_fn_mk]; rw [Equiv.coe_fn_mk]; rw [← Sieve.generate_map_eq_functorPushforward]
+    exact Precoverage.Saturate.of _ _ hR
 
 Depends on / 依赖: Coverage, Coverage.mem_toGrothendieck, GrothendieckTopology, GrothendieckTopology.mem_over_iff, GrothendieckTopology.transitive, OrderIso, OrderIso.apply_symm_apply, Over.left, Precoverage, Precoverage.toGrothendieck_toCoverage, Sieve.overEquiv, Sieve.overEquiv_symm_generate, apply_symm_apply, le_antisymm, mem_over_iff, mem_toGrothendieck, overEquiv, overEquiv_symm_generate, surjective, symm.surjective
 -/

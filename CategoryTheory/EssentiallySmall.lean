@@ -648,7 +648,11 @@ theorem essentiallySmall_iff
       exact e.skeletonEquiv
     · infer_instance
   · rintro ⟨⟨S, ⟨e⟩⟩, L⟩
-    let e' := (ShrinkHoms.equivalence C).skeletonEqu
+    let e' := (ShrinkHoms.equivalence C).skeletonEquiv.symm
+    exact ⟨⟨InducedCategory _ (e'.trans e).symm, inferInstance,
+      ⟨(ShrinkHoms.equivalence C).trans
+      ((skeletonEquivalence (ShrinkHoms C)).symm.trans
+      (inducedFunctor _).asEquivalence.symm)⟩⟩⟩
 
 中文:
 定理 essentiallySmall_iff
@@ -663,7 +667,11 @@ theorem essentiallySmall_iff
       exact e.skeletonEquiv
     · infer_instance
   · rintro ⟨⟨S, ⟨e⟩⟩, L⟩
-    let e' := (ShrinkHoms.equivalence C).skeletonEqu
+    let e' := (ShrinkHoms.equivalence C).skeletonEquiv.symm
+    exact ⟨⟨InducedCategory _ (e'.trans e).symm, inferInstance,
+      ⟨(ShrinkHoms.equivalence C).trans
+      ((skeletonEquivalence (ShrinkHoms C)).symm.trans
+      (inducedFunctor _).asEquivalence.symm)⟩⟩⟩
 -/
 theorem essentiallySmall_iff (C : Type u) [Category.{v} C] :
     EssentiallySmall.{w} C ↔ Small.{w} (Skeleton C) ∧ LocallySmall.{w} C := by
@@ -852,7 +860,8 @@ instance [Small.{w}
   obtain rfl : s = s' := congr_arg Sigma.fst h
   simp only [Sigma.mk.injEq, heq_eq_eq, true_and, φ] at h
   obtain rfl : t = t' := h.1
-  obtain rfl : f = f' := by s
+  obtain rfl : f = f' := by simpa using h
+  rfl
 
 中文:
 实例 [Small.{w}
@@ -864,7 +873,8 @@ instance [Small.{w}
   obtain rfl : s = s' := congr_arg Sigma.fst h
   simp only [Sigma.mk.injEq, heq_eq_eq, true_and, φ] at h
   obtain rfl : t = t' := h.1
-  obtain rfl : f = f' := by s
+  obtain rfl : f = f' := by simpa using h
+  rfl
 
 Depends on / 依赖: Sigma.fst, Sigma.mk.injEq, congr_arg, f.hom, heq_eq_eq, small_of_injective, true_and
 -/
@@ -890,7 +900,8 @@ instance [Small.{w}
     (fun F G h => Functor.ext (fun X => ?_) (fun X Y f => ?_))
   · exact congr_arg Comma.left (congr_fun h (Arrow.mk (𝟙 X)))
   · have : Arrow.mk (F.map f) = Arrow.mk (G.map f) := congr_fun h (Arrow.mk f)
-    rw [Arro
+    rw [Arrow.mk_eq_mk_iff] at this
+    tauto
 
 中文:
 实例 [Small.{w}
@@ -900,7 +911,8 @@ instance [Small.{w}
     (fun F G h => Functor.ext (fun X => ?_) (fun X Y f => ?_))
   · exact congr_arg Comma.left (congr_fun h (Arrow.mk (𝟙 X)))
   · have : Arrow.mk (F.map f) = Arrow.mk (G.map f) := congr_fun h (Arrow.mk f)
-    rw [Arro
+    rw [Arrow.mk_eq_mk_iff] at this
+    tauto
 
 Depends on / 依赖: Arrow.mk, Arrow.mk_eq_mk_iff, Comma.left, F.map, Functor, Functor.ext, G.map, congr_arg, congr_fun, f.hom, mk_eq_mk_iff, small_of_injective
 -/

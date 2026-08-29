@@ -1996,7 +1996,9 @@ mul_zero _ := Unitization.ext (mul_zero _) by simp
 left_distrib _ _ _ := Unitization.ext (mul_add ..) by
       simp [smul_add, add_smul, mul_add]
       abel
-right
+right_distrib _ _ _ := Unitization.ext (add_mul ..) by
+      simp [smul_add, add_smul, add_mul]
+      abel }
 
 中文:
 实例 instNonAssocSemiring
@@ -2009,7 +2011,9 @@ mul_zero _ := Unitization.ext (mul_zero _) by simp
 left_distrib _ _ _ := Unitization.ext (mul_add ..) by
       simp [smul_add, add_smul, mul_add]
       abel
-right
+right_distrib _ _ _ := Unitization.ext (add_mul ..) by
+      simp [smul_add, add_smul, add_mul]
+      abel }
 
 Depends on / 依赖: Unitization, Unitization.ext, Unitization.instAddCommMonoid, Unitization.instMulOneClass, add_mul, add_smul, fast_instance, instAddCommMonoid, instMulOneClass, left_distrib, mul_add, mul_zero, right_distrib, smul_add, zero_mul
 -/
@@ -2441,7 +2445,12 @@ instance instAlgebra
     induction x with
     | inl_add_inr =>
       change inl (algebraMap S R s) * _ = _ * inl (algebraMap S R s)
-      rw [mul_add]; rw [add_mul]; rw [inl_mul_inl]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [inr_mul_inl]; rw 
+      rw [mul_add]; rw [add_mul]; rw [inl_mul_inl]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [inr_mul_inl]; rw [mul_comm]
+  smul_def' := fun s x => by
+    induction x with
+    | inl_add_inr =>
+      change _ = inl (algebraMap S R s) * _
+      rw [mul_add]; rw [smul_add]; rw [Algebra.algebraMap_eq_smul_one]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [smul_one_mul]; rw [inl_smul]; rw [inr_smul]; rw [smul_one_smul]
 
 中文:
 实例 instAlgebra
@@ -2451,7 +2460,12 @@ instance instAlgebra
     induction x with
     | inl_add_inr =>
       change inl (algebraMap S R s) * _ = _ * inl (algebraMap S R s)
-      rw [mul_add]; rw [add_mul]; rw [inl_mul_inl]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [inr_mul_inl]; rw 
+      rw [mul_add]; rw [add_mul]; rw [inl_mul_inl]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [inr_mul_inl]; rw [mul_comm]
+  smul_def' := fun s x => by
+    induction x with
+    | inl_add_inr =>
+      change _ = inl (algebraMap S R s) * _
+      rw [mul_add]; rw [smul_add]; rw [Algebra.algebraMap_eq_smul_one]; rw [inl_mul_inl]; rw [inl_mul_inr]; rw [smul_one_mul]; rw [inl_smul]; rw [inr_smul]; rw [smul_one_smul]
 
 Depends on / 依赖: Unitization, Unitization.inlRingHom, algebraMap, inlRingHom
 -/
@@ -2751,7 +2765,22 @@ definition _root_.NonUnitalAlgHom.toAlgHom
     | inl_add_inr x_r x_a =>
       induction y with
       | inl_add_inr =>
-        simp only [fst_mul, fst_add, fst_inl, fst_inr, snd_
+        simp only [fst_mul, fst_add, fst_inl, fst_inr, snd_mul, snd_add, snd_inl, snd_inr, add_zero,
+          map_mul, zero_add, map_add, map_smul φ]
+        rw [add_mul]; rw [mul_add]; rw [mul_add]
+        rw [← Algebra.commutes _ (φ x_a)]
+        simp only [Algebra.algebraMap_eq_smul_one, smul_one_mul, add_assoc]
+  map_zero' := by simp only [fst_zero, map_zero, snd_zero, φ.map_zero, add_zero]
+  map_add' := fun x y => by
+    induction x with
+    | inl_add_inr =>
+      induction y with
+      | inl_add_inr =>
+        simp only [fst_add, fst_inl, fst_inr, add_zero, map_add, snd_add, snd_inl, snd_inr,
+          zero_add, φ.map_add]
+        rw [add_add_add_comm]
+  commutes' := fun r => by
+    simp only [algebraMap_eq_inl, fst_inl, snd_inl, φ.map_zero, add_zero]
 
 中文:
 定义 _root_.非幺Alg态射.toAlgHom
@@ -2763,7 +2792,22 @@ definition _root_.NonUnitalAlgHom.toAlgHom
     | inl_add_inr x_r x_a =>
       induction y with
       | inl_add_inr =>
-        simp only [fst_mul, fst_add, fst_inl, fst_inr, snd_
+        simp only [fst_mul, fst_add, fst_inl, fst_inr, snd_mul, snd_add, snd_inl, snd_inr, add_zero,
+          map_mul, zero_add, map_add, map_smul φ]
+        rw [add_mul]; rw [mul_add]; rw [mul_add]
+        rw [← Algebra.commutes _ (φ x_a)]
+        simp only [Algebra.algebraMap_eq_smul_one, smul_one_mul, add_assoc]
+  map_zero' := by simp only [fst_zero, map_zero, snd_zero, φ.map_zero, add_zero]
+  map_add' := fun x y => by
+    induction x with
+    | inl_add_inr =>
+      induction y with
+      | inl_add_inr =>
+        simp only [fst_add, fst_inl, fst_inr, add_zero, map_add, snd_add, snd_inl, snd_inr,
+          zero_add, φ.map_add]
+        rw [add_add_add_comm]
+  commutes' := fun r => by
+    simp only [algebraMap_eq_inl, fst_inl, snd_inl, φ.map_zero, add_zero]
 
 Depends on / 依赖: algebraMap, x.fst, x.snd
 -/

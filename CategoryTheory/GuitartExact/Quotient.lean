@@ -61,7 +61,31 @@ lemma quotient_of_nonempty_leftHomotopy
   let e₀ : T.obj X₀ ≅ Y₀ := T.objObjPreimageIso Y₀
   let S := { f : L.obj X₀ ⟶ X // B.map f = e.inv.app X₀ ≫ R.map e₀.hom ≫ g }
   let Z (s : S) : CostructuredArrowDownwards e.hom g :=
-    CostructuredArrowDo
+    CostructuredArrowDownwards.mk _ _ X₀ e₀.inv s.val (by simp [s.property])
+  have : Nonempty (CostructuredArrowDownwards e.hom g) := by
+    obtain ⟨f, hf⟩ := B.map_surjective (e.inv.app _ ≫ R.map e₀.hom ≫ g)
+    exact ⟨Z ⟨f, hf⟩⟩
+  refine zigzag_isConnected (fun A₀ A₁ => ?_)
+  have H (A : CostructuredArrowDownwards e.hom g) : exists s, Nonempty (Z s ⟶ A) := by
+    obtain ⟨a, ha⟩ := T.map_surjective (e₀.hom ≫ A.left.hom)
+    refine ⟨⟨L.map a ≫ A.hom.right, ?_⟩,
+      ⟨CostructuredArrow.homMk (StructuredArrow.homMk a ?_)⟩⟩
+    · simp [← dsimp% NatIso.naturality_1 e a, ha, dsimp% A.hom.w]
+    · cat_disch
+  obtain ⟨s₀, ⟨f₀⟩⟩ := H A₀
+  obtain ⟨s₁, ⟨f₁⟩⟩ := H A₁
+  obtain ⟨P, hP, ⟨h⟩⟩ := he s₀.val s₁.val (by simp [s₀.property, s₁.property])
+  let Z' : CostructuredArrowDownwards e.hom g :=
+    CostructuredArrowDownwards.mk _ _ P.I (e₀.inv ≫ T.map P.i₀) h.h (by
+      simp [R.map_comp, ← B.map_comp, dsimp% h.h₀, s₀.property,
+        dsimp% e.hom.naturality_assoc P.i₀])
+  calc
+    Zigzag A₀ (Z s₀) := .of_inv f₀
+Zigzag (Z s₀) Z' := .of_hom
+      CostructuredArrow.homMk (StructuredArrow.homMk P.i₀) (by simp [Z, Z', dsimp% h.h₀])
+Zigzag Z' (Z s₁) := .of_inv
+      CostructuredArrow.homMk (StructuredArrow.homMk P.i₁) (by simp [Z, Z', dsimp% h.h₁])
+    Zigzag (Z s₁) A₁ := .of_hom f₁
 
 中文:
 引理 quotient_of_nonempty_leftHomotopy
@@ -73,7 +97,31 @@ lemma quotient_of_nonempty_leftHomotopy
   let e₀ : T.obj X₀ ≅ Y₀ := T.objObjPreimageIso Y₀
   let S := { f : L.obj X₀ ⟶ X // B.map f = e.inv.app X₀ ≫ R.map e₀.hom ≫ g }
   let Z (s : S) : CostructuredArrowDownwards e.hom g :=
-    CostructuredArrowDo
+    CostructuredArrowDownwards.mk _ _ X₀ e₀.inv s.val (by simp [s.property])
+  have : Nonempty (CostructuredArrowDownwards e.hom g) := by
+    obtain ⟨f, hf⟩ := B.map_surjective (e.inv.app _ ≫ R.map e₀.hom ≫ g)
+    exact ⟨Z ⟨f, hf⟩⟩
+  refine zigzag_isConnected (fun A₀ A₁ => ?_)
+  have H (A : CostructuredArrowDownwards e.hom g) : exists s, Nonempty (Z s ⟶ A) := by
+    obtain ⟨a, ha⟩ := T.map_surjective (e₀.hom ≫ A.left.hom)
+    refine ⟨⟨L.map a ≫ A.hom.right, ?_⟩,
+      ⟨CostructuredArrow.homMk (StructuredArrow.homMk a ?_)⟩⟩
+    · simp [← dsimp% NatIso.naturality_1 e a, ha, dsimp% A.hom.w]
+    · cat_disch
+  obtain ⟨s₀, ⟨f₀⟩⟩ := H A₀
+  obtain ⟨s₁, ⟨f₁⟩⟩ := H A₁
+  obtain ⟨P, hP, ⟨h⟩⟩ := he s₀.val s₁.val (by simp [s₀.property, s₁.property])
+  let Z' : CostructuredArrowDownwards e.hom g :=
+    CostructuredArrowDownwards.mk _ _ P.I (e₀.inv ≫ T.map P.i₀) h.h (by
+      simp [R.map_comp, ← B.map_comp, dsimp% h.h₀, s₀.property,
+        dsimp% e.hom.naturality_assoc P.i₀])
+  calc
+    Zigzag A₀ (Z s₀) := .of_inv f₀
+Zigzag (Z s₀) Z' := .of_hom
+      CostructuredArrow.homMk (StructuredArrow.homMk P.i₀) (by simp [Z, Z', dsimp% h.h₀])
+Zigzag Z' (Z s₁) := .of_inv
+      CostructuredArrow.homMk (StructuredArrow.homMk P.i₁) (by simp [Z, Z', dsimp% h.h₁])
+    Zigzag (Z s₁) A₁ := .of_hom f₁
 
 Depends on / 依赖: B.map, B.map_surjective, CostructuredArrowDownwards, CostructuredArrowDownwards.mk, L.obj, Nonempty, R.map, T.obj, T.objObjPreimageIso, T.objPreimage, e.hom, e.inv.app, guitartExact_iff_isConnected_downwards, map_surjective, objObjPreimageIso, objPreimage, property, s.property, s.val, zigzag_isC
 -/

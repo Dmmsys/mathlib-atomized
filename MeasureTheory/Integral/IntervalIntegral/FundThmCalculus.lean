@@ -422,7 +422,11 @@ theorem measure_integral_sub_linear_isLittleO_of_tendsto_ae'
   have A := hf.integral_sub_linear_isLittleO_ae hfm hl (hu.Ioc hv)
   have B := hf.integral_sub_linear_isLittleO_ae hfm hl (hv.Ioc hu)
   simp_rw [integral_const', sub_smul]
-  refine ((A.trans_le fun t => ?_).sub (B.tra
+  refine ((A.trans_le fun t => ?_).sub (B.trans_le fun t => ?_)).congr_left fun t => ?_
+  · cases le_total (u t) (v t) <;> simp [*]
+  · cases le_total (u t) (v t) <;> simp [*]
+  · simp_rw [intervalIntegral]
+    abel
 
 中文:
 定理 measure_integral_sub_linear_isLittleO_of_tendsto_ae'
@@ -433,7 +437,11 @@ theorem measure_integral_sub_linear_isLittleO_of_tendsto_ae'
   have A := hf.integral_sub_linear_isLittleO_ae hfm hl (hu.Ioc hv)
   have B := hf.integral_sub_linear_isLittleO_ae hfm hl (hv.Ioc hu)
   simp_rw [integral_const', sub_smul]
-  refine ((A.trans_le fun t => ?_).sub (B.tra
+  refine ((A.trans_le fun t => ?_).sub (B.trans_le fun t => ?_)).congr_left fun t => ?_
+  · cases le_total (u t) (v t) <;> simp [*]
+  · cases le_total (u t) (v t) <;> simp [*]
+  · simp_rw [intervalIntegral]
+    abel
 
 Depends on / 依赖: A.trans_le, B.trans_le, CompleteSpace, congr_left, hf.integral_sub_linear_isLittleO_ae, hu.Ioc, hv.Ioc, integral, integral_const, integral_sub_linear_isLittleO_ae, intervalIntegral, le_total, simp_rw, sub_smul, trans_le
 -/
@@ -606,7 +614,20 @@ theorem measure_integral_sub_integral_sub_linear_isLittleO_of_tendsto_ae
     ((measure_integral_sub_linear_isLittleO_of_tendsto_ae hmeas_a ha_lim hua hva).neg_left.add_add
           (measure_integral_sub_linear_isLittleO_of_tendsto_ae hmeas_b hb_lim hub hvb)).congr'
       ?_ EventuallyEq.rfl
-  hav
+  have A : forallᶠ t in lt, IntervalIntegrable f μ (ua t) (va t) :=
+    ha_lim.eventually_intervalIntegrable_ae hmeas_a (FTCFilter.finiteAt_inner la) hua hva
+  have A' : forallᶠ t in lt, IntervalIntegrable f μ a (ua t) :=
+    ha_lim.eventually_intervalIntegrable_ae hmeas_a (FTCFilter.finiteAt_inner la)
+      (tendsto_const_pure.mono_right FTCFilter.pure_le) hua
+  have B : forallᶠ t in lt, IntervalIntegrable f μ (ub t) (vb t) :=
+    hb_lim.eventually_intervalIntegrable_ae hmeas_b (FTCFilter.finiteAt_inner lb) hub hvb
+  have B' : forallᶠ t in lt, IntervalIntegrable f μ b (ub t) :=
+    hb_lim.eventually_intervalIntegrable_ae hmeas_b (FTCFilter.finiteAt_inner lb)
+      (tendsto_const_pure.mono_right FTCFilter.pure_le) hub
+  filter_upwards [A, A', B, B'] with _ ua_va a_ua ub_vb b_ub
+  rw [← integral_interval_sub_interval_comm']
+  · abel
+  exacts [ub_vb, ua_va, b_ub.symm.trans <| hab.symm.trans a_ua]
 
 中文:
 定理 measure_integral_sub_integral_sub_linear_isLittleO_of_tendsto_ae
@@ -616,7 +637,20 @@ theorem measure_integral_sub_integral_sub_linear_isLittleO_of_tendsto_ae
     ((measure_integral_sub_linear_isLittleO_of_tendsto_ae hmeas_a ha_lim hua hva).neg_left.add_add
           (measure_integral_sub_linear_isLittleO_of_tendsto_ae hmeas_b hb_lim hub hvb)).congr'
       ?_ EventuallyEq.rfl
-  hav
+  have A : forallᶠ t in lt, IntervalIntegrable f μ (ua t) (va t) :=
+    ha_lim.eventually_intervalIntegrable_ae hmeas_a (FTCFilter.finiteAt_inner la) hua hva
+  have A' : forallᶠ t in lt, IntervalIntegrable f μ a (ua t) :=
+    ha_lim.eventually_intervalIntegrable_ae hmeas_a (FTCFilter.finiteAt_inner la)
+      (tendsto_const_pure.mono_right FTCFilter.pure_le) hua
+  have B : forallᶠ t in lt, IntervalIntegrable f μ (ub t) (vb t) :=
+    hb_lim.eventually_intervalIntegrable_ae hmeas_b (FTCFilter.finiteAt_inner lb) hub hvb
+  have B' : forallᶠ t in lt, IntervalIntegrable f μ b (ub t) :=
+    hb_lim.eventually_intervalIntegrable_ae hmeas_b (FTCFilter.finiteAt_inner lb)
+      (tendsto_const_pure.mono_right FTCFilter.pure_le) hub
+  filter_upwards [A, A', B, B'] with _ ua_va a_ua ub_vb b_ub
+  rw [← integral_interval_sub_interval_comm']
+  · abel
+  exacts [ub_vb, ua_va, b_ub.symm.trans <| hab.symm.trans a_ua]
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.rfl, FTCFilter, FTCFilter.finiteAt_inner, FTCFilter.meas_gen, IntervalIntegrable, add_add, eventual, eventually_intervalIntegrable_ae, finiteAt_inner, ha_lim, ha_lim.eventual, ha_lim.eventually_intervalIntegrable_ae, hb_lim, hmeas_a, hmeas_b, meas_gen, measure_integral_sub_linear_isLittleO_of_tendsto_ae, neg_left, neg_left.add_add
 -/
@@ -884,7 +918,10 @@ theorem integral_hasStrictFDerivAt_of_tendsto_ae
       (continuous_snd.fst.tendsto ((a, b), (a, b)))
       (continuous_fst.fst.tendsto ((a, b), (a, b)))
       (continuous_snd.snd.tendsto ((a, b), (a, b)))
-      (continuous_fst.snd.tendsto ((a, b), (a
+      (continuous_fst.snd.tendsto ((a, b), (a, b)))
+refine .of_isLittleO (this.congr_left ?_).trans_isBigO ?_
+  · simp [sub_smul]
+  · exact isBigO_fst_prod.norm_left.add isBigO_snd_prod.norm_left
 
 中文:
 定理 integral_hasStrictFDerivAt_of_tendsto_ae
@@ -895,7 +932,10 @@ theorem integral_hasStrictFDerivAt_of_tendsto_ae
       (continuous_snd.fst.tendsto ((a, b), (a, b)))
       (continuous_fst.fst.tendsto ((a, b), (a, b)))
       (continuous_snd.snd.tendsto ((a, b), (a, b)))
-      (continuous_fst.snd.tendsto ((a, b), (a
+      (continuous_fst.snd.tendsto ((a, b), (a, b)))
+refine .of_isLittleO (this.congr_left ?_).trans_isBigO ?_
+  · simp [sub_smul]
+  · exact isBigO_fst_prod.norm_left.add isBigO_snd_prod.norm_left
 
 Depends on / 依赖: congr_left, continuous_fst, continuous_fst.fst.tendsto, continuous_fst.snd.tendsto, continuous_snd, continuous_snd.fst.tendsto, continuous_snd.snd.tendsto, hmeas_a, hmeas_b, integral_sub_integral_sub_linear_isLittleO_of_tendsto_ae, isBigO_fst_prod, isBigO_fst_prod.norm_left.add, isBigO_snd_prod, isBigO_snd_prod.norm_left, norm_left, of_isLittleO, sub_smul, tendsto, this.congr_left, trans_isBigO
 -/
@@ -1345,7 +1385,10 @@ theorem integral_hasFDerivWithinAt_of_tendsto_ae
     integral_sub_integral_sub_linear_isLittleO_of_tendsto_ae hf hmeas_a hmeas_b ha hb
       (tendsto_const_pure.mono_right FTCFilter.pure_le : Tendsto _ _ (𝓝[s] a)) tendsto_fst
       (tendsto_const_pure.mono_right FTCFilter.pure_le : Tendsto _ _ (𝓝[t] b)) tendsto_snd
-  rw [← nhdsWithin_
+  rw [← nhdsWithin_prod_eq] at this
+refine .of_isLittleO (this.congr_left ?_).trans_isBigO ?_
+  · simp [sub_smul]
+  · exact isBigO_fst_prod.norm_left.add isBigO_snd_prod.norm_left
 
 中文:
 定理 integral_hasFDerivWithinAt_of_tendsto_ae
@@ -1355,7 +1398,10 @@ theorem integral_hasFDerivWithinAt_of_tendsto_ae
     integral_sub_integral_sub_linear_isLittleO_of_tendsto_ae hf hmeas_a hmeas_b ha hb
       (tendsto_const_pure.mono_right FTCFilter.pure_le : Tendsto _ _ (𝓝[s] a)) tendsto_fst
       (tendsto_const_pure.mono_right FTCFilter.pure_le : Tendsto _ _ (𝓝[t] b)) tendsto_snd
-  rw [← nhdsWithin_
+  rw [← nhdsWithin_prod_eq] at this
+refine .of_isLittleO (this.congr_left ?_).trans_isBigO ?_
+  · simp [sub_smul]
+  · exact isBigO_fst_prod.norm_left.add isBigO_snd_prod.norm_left
 
 Depends on / 依赖: FTCFilter, FTCFilter.pure_le, Tendsto, congr_left, hmeas_a, hmeas_b, integral_sub_integral_sub_linear_isLittleO_of_tendsto_ae, isBigO_fst_prod, isBigO_fst_prod.norm_left.add, isBigO_snd_prod, isBigO_snd_prod.norm_left, mono_right, nhdsWithin_prod_eq, norm_left, of_isLittleO, pure_le, sub_smul, tendsto_const_pure, tendsto_const_pure.mono_right, tendsto_fst
 -/
@@ -1688,7 +1734,85 @@ theorem sub_le_integral_of_hasDeriv_right_of_le_Ico
   -- Bound from above `g'` by a lower-semicontinuous function `G'`.
   rcases exists_lt_lowerSemicontinuous_integral_lt φ φint εpos with
     ⟨G', f_lt_G', G'cont, G'int, G'lt_top, hG'⟩
-  -- we will show by "induction" that `g t - g a ≤ ∫ u in a..t,
+  -- we will show by "induction" that `g t - g a ≤ ∫ u in a..t, G' u` for all `t ∈ [a, b]`.
+  set s := {t | g t - g a <= ∫ u in a..t, (G' u).toReal} inter Icc a b
+  -- the set `s` of points where this property holds is closed.
+  have s_closed : IsClosed s := by
+    have : ContinuousOn (fun t => (g t - g a, ∫ u in a..t, (G' u).toReal)) (Icc a b) := by
+      rw [← uIcc_of_le hab] at G'int hcont ⊢
+      exact (hcont.sub continuousOn_const).prodMk (continuousOn_primitive_interval G'int)
+    simp only [s, inter_comm]
+    exact this.preimage_isClosed_of_isClosed isClosed_Icc OrderClosedTopology.isClosed_le'
+  have main : Icc a b subseteq {t | g t - g a <= ∫ u in a..t, (G' u).toReal} := by
+    -- to show that the set `s` is all `[a, b]`, it suffices to show that any point `t` in `s`
+    -- with `t < b` admits another point in `s` slightly to its right
+    -- (this is a sort of real induction).
+    refine s_closed.Icc_subset_of_forall_exists_gt
+      (by simp only [integral_same, mem_ofPred_eq, sub_self, le_rfl]) fun t ht v t_lt_v => ?_
+    obtain ⟨y, g'_lt_y', y_lt_G'⟩ : exists y : Real, (g' t : EReal) < y ∧ (y : EReal) < G' t :=
+      EReal.lt_iff_exists_real_btwn.1 ((EReal.coe_le_coe_iff.2 (hφg t ht.2)).trans_lt (f_lt_G' t))
+    -- bound from below the increase of `∫ x in a..u, G' x` on the right of `t`, using the lower
+    -- semicontinuity of `G'`.
+    have I1 : forallᶠ u in 𝓝[>] t, (u - t) * y <= ∫ w in t..u, (G' w).toReal := by
+      have B : forallᶠ u in 𝓝 t, (y : EReal) < G' u := G'cont.lowerSemicontinuousAt _ _ y_lt_G'
+      rcases mem_nhds_iff_exists_Ioo_subset.1 B with ⟨m, M, ⟨hm, hM⟩, H⟩
+      have : Ioo t (min M b) in 𝓝[>] t := Ioo_mem_nhdsGT (lt_min hM ht.right.right)
+      filter_upwards [this] with u hu
+      have I : Icc t u subseteq Icc a b := Icc_subset_Icc ht.2.1 (hu.2.le.trans (min_le_right _ _))
+      calc
+        (u - t) * y = ∫ _ in Icc t u, y := by
+          simp only [MeasureTheory.integral_const, MeasurableSet.univ, measureReal_restrict_apply,
+            univ_inter, hu.left.le, Real.volume_real_Icc_of_le, smul_eq_mul]
+        _ <= ∫ w in t..u, (G' w).toReal := by
+          rw [intervalIntegral.integral_of_le hu.1.le]; rw [← integral_Icc_eq_integral_Ioc]
+          apply setIntegral_mono_ae_restrict
+          · simp
+          · exact IntegrableOn.mono_set G'int I
+          · have C1 : forallᵐ x : Real ∂volume.restrict (Icc t u), G' x < ∞ :=
+              ae_mono (Measure.restrict_mono I le_rfl) G'lt_top
+            have C2 : forallᵐ x : Real ∂volume.restrict (Icc t u), x in Icc t u :=
+              ae_restrict_mem measurableSet_Icc
+            filter_upwards [C1, C2] with x G'x hx
+            apply EReal.coe_le_coe_iff.1
+            have : x in Ioo m M := by
+              simp only [hm.trans_le hx.left,
+                (hx.right.trans_lt hu.right).trans_le (min_le_left M b), mem_Ioo, and_self_iff]
+            refine (H this).out.le.trans_eq ?_
+            exact (EReal.coe_toReal G'x.ne (f_lt_G' x).ne_bot).symm
+    -- bound from above the increase of `g u - g a` on the right of `t`, using the derivative at `t`
+    have I2 : forallᶠ u in 𝓝[>] t, g u - g t <= (u - t) * y := by
+      have g'_lt_y : g' t < y := EReal.coe_lt_coe_iff.1 g'_lt_y'
+      filter_upwards [(hderiv t ⟨ht.2.1, ht.2.2⟩).limsup_slope_le' (notMem_Ioi.2 le_rfl) g'_lt_y,
+        self_mem_nhdsWithin] with u hu t_lt_u
+      have := mul_le_mul_of_nonneg_left hu.le (sub_pos.2 t_lt_u.out).le
+      rwa [← smul_eq_mul, sub_smul_slope] at this
+    -- combine the previous two bounds to show that `g u - g a` increases less quickly than
+    -- `∫ x in a..u, G' x`.
+    have I3 : forallᶠ u in 𝓝[>] t, g u - g t <= ∫ w in t..u, (G' w).toReal := by
+      filter_upwards [I1, I2] with u hu1 hu2 using hu2.trans hu1
+have I4 : forallᶠ u in 𝓝[>] t, u in Ioc t (min v b) := Ioc_mem_nhdsGT lt_min t_lt_v ht.2.2
+    -- choose a point `x` slightly to the right of `t` which satisfies the above bound
+    rcases (I3.and I4).exists with ⟨x, hx, h'x⟩
+    -- we check that it belongs to `s`, essentially by construction
+    refine ⟨x, ?_, Ioc_subset_Ioc le_rfl (min_le_left _ _) h'x⟩
+    calc
+      g x - g a = g t - g a + (g x - g t) := by abel
+      _ <= (∫ w in a..t, (G' w).toReal) + ∫ w in t..x, (G' w).toReal := add_le_add ht.1 hx
+      _ = ∫ w in a..x, (G' w).toReal := by
+        apply integral_add_adjacent_intervals
+        · rw [intervalIntegrable_iff_integrableOn_Ioc_of_le ht.2.1]
+          exact IntegrableOn.mono_set G'int
+            (Ioc_subset_Icc_self.trans (Icc_subset_Icc le_rfl ht.2.2.le))
+        · rw [intervalIntegrable_iff_integrableOn_Ioc_of_le h'x.1.le]
+          apply IntegrableOn.mono_set G'int
+          exact Ioc_subset_Icc_self.trans (Icc_subset_Icc ht.2.1 (h'x.2.trans (min_le_right _ _)))
+  -- now that we know that `s` contains `[a, b]`, we get the desired result by applying this to `b`.
+  calc
+    g b - g a <= ∫ y in a..b, (G' y).toReal := main (right_mem_Icc.2 hab)
+    _ <= (∫ y in a..b, φ y) + ε := by
+      convert! hG'.le <;>
+        · rw [intervalIntegral.integral_of_le hab]
+          simp only [integral_Icc_eq_integral_Ioc', Real.volume_singleton]
 
 中文:
 定理 sub_le_integral_of_hasDeriv_right_of_le_Ico
@@ -1698,7 +1822,85 @@ theorem sub_le_integral_of_hasDeriv_right_of_le_Ico
   -- Bound from above `g'` by a lower-semicontinuous function `G'`.
   rcases exists_lt_lowerSemicontinuous_integral_lt φ φint εpos with
     ⟨G', f_lt_G', G'cont, G'int, G'lt_top, hG'⟩
-  -- we will show by "induction" that `g t - g a ≤ ∫ u in a..t,
+  -- we will show by "induction" that `g t - g a ≤ ∫ u in a..t, G' u` for all `t ∈ [a, b]`.
+  set s := {t | g t - g a <= ∫ u in a..t, (G' u).toReal} inter Icc a b
+  -- the set `s` of points where this property holds is closed.
+  have s_closed : IsClosed s := by
+    have : ContinuousOn (fun t => (g t - g a, ∫ u in a..t, (G' u).toReal)) (Icc a b) := by
+      rw [← uIcc_of_le hab] at G'int hcont ⊢
+      exact (hcont.sub continuousOn_const).prodMk (continuousOn_primitive_interval G'int)
+    simp only [s, inter_comm]
+    exact this.preimage_isClosed_of_isClosed isClosed_Icc OrderClosedTopology.isClosed_le'
+  have main : Icc a b subseteq {t | g t - g a <= ∫ u in a..t, (G' u).toReal} := by
+    -- to show that the set `s` is all `[a, b]`, it suffices to show that any point `t` in `s`
+    -- with `t < b` admits another point in `s` slightly to its right
+    -- (this is a sort of real induction).
+    refine s_closed.Icc_subset_of_forall_exists_gt
+      (by simp only [integral_same, mem_ofPred_eq, sub_self, le_rfl]) fun t ht v t_lt_v => ?_
+    obtain ⟨y, g'_lt_y', y_lt_G'⟩ : exists y : Real, (g' t : EReal) < y ∧ (y : EReal) < G' t :=
+      EReal.lt_iff_exists_real_btwn.1 ((EReal.coe_le_coe_iff.2 (hφg t ht.2)).trans_lt (f_lt_G' t))
+    -- bound from below the increase of `∫ x in a..u, G' x` on the right of `t`, using the lower
+    -- semicontinuity of `G'`.
+    have I1 : forallᶠ u in 𝓝[>] t, (u - t) * y <= ∫ w in t..u, (G' w).toReal := by
+      have B : forallᶠ u in 𝓝 t, (y : EReal) < G' u := G'cont.lowerSemicontinuousAt _ _ y_lt_G'
+      rcases mem_nhds_iff_exists_Ioo_subset.1 B with ⟨m, M, ⟨hm, hM⟩, H⟩
+      have : Ioo t (min M b) in 𝓝[>] t := Ioo_mem_nhdsGT (lt_min hM ht.right.right)
+      filter_upwards [this] with u hu
+      have I : Icc t u subseteq Icc a b := Icc_subset_Icc ht.2.1 (hu.2.le.trans (min_le_right _ _))
+      calc
+        (u - t) * y = ∫ _ in Icc t u, y := by
+          simp only [MeasureTheory.integral_const, MeasurableSet.univ, measureReal_restrict_apply,
+            univ_inter, hu.left.le, Real.volume_real_Icc_of_le, smul_eq_mul]
+        _ <= ∫ w in t..u, (G' w).toReal := by
+          rw [intervalIntegral.integral_of_le hu.1.le]; rw [← integral_Icc_eq_integral_Ioc]
+          apply setIntegral_mono_ae_restrict
+          · simp
+          · exact IntegrableOn.mono_set G'int I
+          · have C1 : forallᵐ x : Real ∂volume.restrict (Icc t u), G' x < ∞ :=
+              ae_mono (Measure.restrict_mono I le_rfl) G'lt_top
+            have C2 : forallᵐ x : Real ∂volume.restrict (Icc t u), x in Icc t u :=
+              ae_restrict_mem measurableSet_Icc
+            filter_upwards [C1, C2] with x G'x hx
+            apply EReal.coe_le_coe_iff.1
+            have : x in Ioo m M := by
+              simp only [hm.trans_le hx.left,
+                (hx.right.trans_lt hu.right).trans_le (min_le_left M b), mem_Ioo, and_self_iff]
+            refine (H this).out.le.trans_eq ?_
+            exact (EReal.coe_toReal G'x.ne (f_lt_G' x).ne_bot).symm
+    -- bound from above the increase of `g u - g a` on the right of `t`, using the derivative at `t`
+    have I2 : forallᶠ u in 𝓝[>] t, g u - g t <= (u - t) * y := by
+      have g'_lt_y : g' t < y := EReal.coe_lt_coe_iff.1 g'_lt_y'
+      filter_upwards [(hderiv t ⟨ht.2.1, ht.2.2⟩).limsup_slope_le' (notMem_Ioi.2 le_rfl) g'_lt_y,
+        self_mem_nhdsWithin] with u hu t_lt_u
+      have := mul_le_mul_of_nonneg_left hu.le (sub_pos.2 t_lt_u.out).le
+      rwa [← smul_eq_mul, sub_smul_slope] at this
+    -- combine the previous two bounds to show that `g u - g a` increases less quickly than
+    -- `∫ x in a..u, G' x`.
+    have I3 : forallᶠ u in 𝓝[>] t, g u - g t <= ∫ w in t..u, (G' w).toReal := by
+      filter_upwards [I1, I2] with u hu1 hu2 using hu2.trans hu1
+have I4 : forallᶠ u in 𝓝[>] t, u in Ioc t (min v b) := Ioc_mem_nhdsGT lt_min t_lt_v ht.2.2
+    -- choose a point `x` slightly to the right of `t` which satisfies the above bound
+    rcases (I3.and I4).exists with ⟨x, hx, h'x⟩
+    -- we check that it belongs to `s`, essentially by construction
+    refine ⟨x, ?_, Ioc_subset_Ioc le_rfl (min_le_left _ _) h'x⟩
+    calc
+      g x - g a = g t - g a + (g x - g t) := by abel
+      _ <= (∫ w in a..t, (G' w).toReal) + ∫ w in t..x, (G' w).toReal := add_le_add ht.1 hx
+      _ = ∫ w in a..x, (G' w).toReal := by
+        apply integral_add_adjacent_intervals
+        · rw [intervalIntegrable_iff_integrableOn_Ioc_of_le ht.2.1]
+          exact IntegrableOn.mono_set G'int
+            (Ioc_subset_Icc_self.trans (Icc_subset_Icc le_rfl ht.2.2.le))
+        · rw [intervalIntegrable_iff_integrableOn_Ioc_of_le h'x.1.le]
+          apply IntegrableOn.mono_set G'int
+          exact Ioc_subset_Icc_self.trans (Icc_subset_Icc ht.2.1 (h'x.2.trans (min_le_right _ _)))
+  -- now that we know that `s` contains `[a, b]`, we get the desired result by applying this to `b`.
+  calc
+    g b - g a <= ∫ y in a..b, (G' y).toReal := main (right_mem_Icc.2 hab)
+    _ <= (∫ y in a..b, φ y) + ε := by
+      convert! hG'.le <;>
+        · rw [intervalIntegral.integral_of_le hab]
+          simp only [integral_Icc_eq_integral_Ioc', Real.volume_singleton]
 
 Depends on / 依赖: le_of_forall_pos_le_add
 -/
@@ -1803,7 +2005,21 @@ theorem sub_le_integral_of_hasDeriv_right_of_le
   · simp
   set s := {t | g b - g t <= ∫ u in t..b, φ u} inter Icc a b
   have s_closed : IsClosed s := by
-    have : Continu
+    have : ContinuousOn (fun t => (g b - g t, ∫ u in t..b, φ u)) (Icc a b) := by
+      rw [← uIcc_of_le hab] at hcont φint ⊢
+      exact (continuousOn_const.sub hcont).prodMk (continuousOn_primitive_interval_left φint)
+    simp only [s, inter_comm]
+    exact this.preimage_isClosed_of_isClosed isClosed_Icc isClosed_le_prod
+  have A : closure (Ioc a b) subseteq s := by
+    apply s_closed.closure_subset_iff.2
+    intro t ht
+    refine ⟨?_, ⟨ht.1.le, ht.2⟩⟩
+    exact
+      sub_le_integral_of_hasDeriv_right_of_le_Ico ht.2 (hcont.mono (Icc_subset_Icc ht.1.le le_rfl))
+        (fun x hx => hderiv x ⟨ht.1.trans_le hx.1, hx.2⟩)
+        (φint.mono_set (Icc_subset_Icc ht.1.le le_rfl)) fun x hx => hφg x ⟨ht.1.trans_le hx.1, hx.2⟩
+  rw [closure_Ioc a_lt_b.ne] at A
+  exact (A (left_mem_Icc.2 hab)).1
 
 中文:
 定理 sub_le_integral_of_hasDeriv_right_of_le
@@ -1815,7 +2031,21 @@ theorem sub_le_integral_of_hasDeriv_right_of_le
   · simp
   set s := {t | g b - g t <= ∫ u in t..b, φ u} inter Icc a b
   have s_closed : IsClosed s := by
-    have : Continu
+    have : ContinuousOn (fun t => (g b - g t, ∫ u in t..b, φ u)) (Icc a b) := by
+      rw [← uIcc_of_le hab] at hcont φint ⊢
+      exact (continuousOn_const.sub hcont).prodMk (continuousOn_primitive_interval_left φint)
+    simp only [s, inter_comm]
+    exact this.preimage_isClosed_of_isClosed isClosed_Icc isClosed_le_prod
+  have A : closure (Ioc a b) subseteq s := by
+    apply s_closed.closure_subset_iff.2
+    intro t ht
+    refine ⟨?_, ⟨ht.1.le, ht.2⟩⟩
+    exact
+      sub_le_integral_of_hasDeriv_right_of_le_Ico ht.2 (hcont.mono (Icc_subset_Icc ht.1.le le_rfl))
+        (fun x hx => hderiv x ⟨ht.1.trans_le hx.1, hx.2⟩)
+        (φint.mono_set (Icc_subset_Icc ht.1.le le_rfl)) fun x hx => hφg x ⟨ht.1.trans_le hx.1, hx.2⟩
+  rw [closure_Ioc a_lt_b.ne] at A
+  exact (A (left_mem_Icc.2 hab)).1
 -/
 theorem sub_le_integral_of_hasDeriv_right_of_le (hab : a <= b) (hcont : ContinuousOn g (Icc a b))
     (hderiv : forall x in Ioo a b, HasDerivWithinAt g (g' x) (Ioi x) x) (φint : IntegrableOn φ (Icc a b))
@@ -1914,7 +2144,8 @@ theorem integral_eq_sub_of_hasDeriv_right_of_le
   refine (SeparatingDual.eq_iff_forall_dual_eq (R := Real)).2 fun g => ?_
   rw [← g.intervalIntegral_comp_comm f'int]; rw [g.map_sub]
   exact integral_eq_sub_of_hasDeriv_right_of_le_real hab (g.continuous.comp_continuousOn hcont)
-    (fun x hx => g.hasFDerivAt.comp_hasDerivWithinAt x (hderiv x hx
+    (fun x hx => g.hasFDerivAt.comp_hasDerivWithinAt x (hderiv x hx))
+    (g.integrable_comp ((intervalIntegrable_iff_integrableOn_Icc_of_le hab enorm_ne_top).1 f'int))
 
 中文:
 定理 integral_eq_sub_of_hasDeriv_right_of_le
@@ -1923,7 +2154,8 @@ theorem integral_eq_sub_of_hasDeriv_right_of_le
   refine (SeparatingDual.eq_iff_forall_dual_eq (R := Real)).2 fun g => ?_
   rw [← g.intervalIntegral_comp_comm f'int]; rw [g.map_sub]
   exact integral_eq_sub_of_hasDeriv_right_of_le_real hab (g.continuous.comp_continuousOn hcont)
-    (fun x hx => g.hasFDerivAt.comp_hasDerivWithinAt x (hderiv x hx
+    (fun x hx => g.hasFDerivAt.comp_hasDerivWithinAt x (hderiv x hx))
+    (g.integrable_comp ((intervalIntegrable_iff_integrableOn_Icc_of_le hab enorm_ne_top).1 f'int))
 
 Depends on / 依赖: SeparatingDual, SeparatingDual.eq_iff_forall_dual_eq, comp_continuousOn, comp_hasDerivWithinAt, continuous, enorm_ne_top, eq_iff_forall_dual_eq, g.continuous.comp_continuousOn, g.hasFDerivAt.comp_hasDerivWithinAt, g.integrable_comp, g.intervalIntegral_comp_comm, g.map_sub, hasFDerivAt, hderiv, integrable_comp, integral_eq_sub_of_hasDeriv_right_of_le_real, intervalIntegrable_iff_integrableOn_Icc_of_le, intervalIntegral_comp_comm, map_sub
 -/
@@ -1947,7 +2179,7 @@ theorem integral_eq_sub_of_hasDeriv_right
   · simp only [uIcc_of_le, min_eq_left, max_eq_right, hab] at hcont hderiv hint
     apply integral_eq_sub_of_hasDeriv_right_of_le hab hcont hderiv hint
   · simp only [uIcc_of_ge, min_eq_right, max_eq_left, hab] at hcont hderiv
-    rw [integral_symm]; rw [integ
+    rw [integral_symm]; rw [integral_eq_sub_of_hasDeriv_right_of_le hab hcont hderiv hint.symm]; rw [neg_sub]
 
 中文:
 定理 integral_eq_sub_of_hasDeriv_right
@@ -1957,7 +2189,7 @@ theorem integral_eq_sub_of_hasDeriv_right
   · simp only [uIcc_of_le, min_eq_left, max_eq_right, hab] at hcont hderiv hint
     apply integral_eq_sub_of_hasDeriv_right_of_le hab hcont hderiv hint
   · simp only [uIcc_of_ge, min_eq_right, max_eq_left, hab] at hcont hderiv
-    rw [integral_symm]; rw [integ
+    rw [integral_symm]; rw [integral_eq_sub_of_hasDeriv_right_of_le hab hcont hderiv hint.symm]; rw [neg_sub]
 
 Depends on / 依赖: hderiv, hint.symm, integral_eq_sub_of_hasDeriv_right_of_le, integral_symm, le_total, max_eq_left, max_eq_right, min_eq_left, min_eq_right, neg_sub, uIcc_of_ge, uIcc_of_le
 -/
@@ -2027,7 +2259,15 @@ theorem integral_eq_sub_of_hasDerivAt_of_tendsto
     refine fun x hx => (hderiv x hx).congr_of_eventuallyEq ?_
     filter_upwards [Ioo_mem_nhds hx.1 hx.2] with _ hy
     unfold F
-    rw [update_of_ne hy.2.ne]; rw [update_of_ne hy.1
+    rw [update_of_ne hy.2.ne]; rw [update_of_ne hy.1.ne']
+  have hcont : ContinuousOn F (Icc a b) := by
+    rw [continuousOn_update_iff]; rw [continuousOn_update_iff]; rw [Icc_sdiff_right]; rw [Ico_sdiff_left]
+    refine ⟨⟨fun z hz => (hderiv z hz).continuousAt.continuousWithinAt, ?_⟩, ?_⟩
+    · exact fun _ => ha.mono_left (nhdsWithin_mono _ Ioo_subset_Ioi_self)
+    · rintro -
+      refine (hb.congr' ?_).mono_left (nhdsWithin_mono _ Ico_subset_Iio_self)
+      filter_upwards [Ioo_mem_nhdsLT hab] with _ hz using (update_of_ne hz.1.ne' _ _).symm
+  simpa [F, hab.ne, hab.ne'] using integral_eq_sub_of_hasDerivAt_of_le hab.le hcont Fderiv hint
 
 中文:
 定理 integral_eq_sub_of_hasDerivAt_of_tendsto
@@ -2038,7 +2278,15 @@ theorem integral_eq_sub_of_hasDerivAt_of_tendsto
     refine fun x hx => (hderiv x hx).congr_of_eventuallyEq ?_
     filter_upwards [Ioo_mem_nhds hx.1 hx.2] with _ hy
     unfold F
-    rw [update_of_ne hy.2.ne]; rw [update_of_ne hy.1
+    rw [update_of_ne hy.2.ne]; rw [update_of_ne hy.1.ne']
+  have hcont : ContinuousOn F (Icc a b) := by
+    rw [continuousOn_update_iff]; rw [continuousOn_update_iff]; rw [Icc_sdiff_right]; rw [Ico_sdiff_left]
+    refine ⟨⟨fun z hz => (hderiv z hz).continuousAt.continuousWithinAt, ?_⟩, ?_⟩
+    · exact fun _ => ha.mono_left (nhdsWithin_mono _ Ioo_subset_Ioi_self)
+    · rintro -
+      refine (hb.congr' ?_).mono_left (nhdsWithin_mono _ Ico_subset_Iio_self)
+      filter_upwards [Ioo_mem_nhdsLT hab] with _ hz using (update_of_ne hz.1.ne' _ _).symm
+  simpa [F, hab.ne, hab.ne'] using integral_eq_sub_of_hasDerivAt_of_le hab.le hcont Fderiv hint
 
 Depends on / 依赖: ContinuousOn, Fderiv, HasDerivAt, Icc_sdiff_right, Ico_sdiff_left, Ioo_mem_nhds, congr_of_eventuallyEq, continuousAt, continuousAt.continuousWithinAt, continuousOn_update_iff, continuousWithinAt, filter_upwards, hderiv, update, update_of_ne
 -/
@@ -2118,7 +2366,8 @@ theorem integral_deriv_eq_sub_uIoo
   · simp only [uIcc_of_le, hab, uIoo_of_le] at hcont hderiv
     rw [integral_eq_sub_of_hasDerivAt_of_le hab hcont (fun x hx => (hderiv x hx).hasDerivAt) hint]
   · simp only [uIcc_of_ge, hab, uIoo_of_ge] at hcont hderiv
-    rw [integral_symm]; rw [integral_eq_s
+    rw [integral_symm]; rw [integral_eq_sub_of_hasDerivAt_of_le hab hcont
+        (fun x hx => (hderiv x hx).hasDerivAt) hint.symm]; rw [neg_sub]
 
 中文:
 定理 integral_deriv_eq_sub_uIoo
@@ -2127,7 +2376,8 @@ theorem integral_deriv_eq_sub_uIoo
   · simp only [uIcc_of_le, hab, uIoo_of_le] at hcont hderiv
     rw [integral_eq_sub_of_hasDerivAt_of_le hab hcont (fun x hx => (hderiv x hx).hasDerivAt) hint]
   · simp only [uIcc_of_ge, hab, uIoo_of_ge] at hcont hderiv
-    rw [integral_symm]; rw [integral_eq_s
+    rw [integral_symm]; rw [integral_eq_sub_of_hasDerivAt_of_le hab hcont
+        (fun x hx => (hderiv x hx).hasDerivAt) hint.symm]; rw [neg_sub]
 
 Depends on / 依赖: hasDerivAt, hderiv, hint.symm, integral_eq_sub_of_hasDerivAt_of_le, integral_symm, le_total, neg_sub, uIcc_of_ge, uIcc_of_le, uIoo_of_ge, uIoo_of_le
 -/
@@ -2152,7 +2402,11 @@ lemma integral_unitInterval_deriv_eq_sub
   have hint : IntervalIntegrable (z₁ • (f' ∘ γ)) MeasureTheory.volume 0 1 :=
     (ContinuousOn.const_smul hcont z₁).intervalIntegrable_of_Icc zero_le_one
   have hderiv' (t) (ht : t in Set.uIcc (0 : Real) 1) : HasDerivAt (f ∘ γ) (z₁ • (f' ∘ γ) t) t := by
-refin
+refine (hderiv t <| (Set.uIcc_of_le (α := Real) zero_le_one).symm ▸ ht).scomp t .const_add _ ?_
+    simp [hasDerivAt_iff_isLittleO, sub_smul]
+  convert! (integral_eq_sub_of_hasDerivAt hderiv' hint) using 1
+  · simp_rw [← integral_smul, Function.comp_apply, γ]
+  · simp only [γ, Function.comp_apply, one_smul, zero_smul, add_zero]
 
 中文:
 引理 integral_unit整数erval_deriv_eq_sub
@@ -2162,7 +2416,11 @@ refin
   have hint : IntervalIntegrable (z₁ • (f' ∘ γ)) MeasureTheory.volume 0 1 :=
     (ContinuousOn.const_smul hcont z₁).intervalIntegrable_of_Icc zero_le_one
   have hderiv' (t) (ht : t in Set.uIcc (0 : Real) 1) : HasDerivAt (f ∘ γ) (z₁ • (f' ∘ γ) t) t := by
-refin
+refine (hderiv t <| (Set.uIcc_of_le (α := Real) zero_le_one).symm ▸ ht).scomp t .const_add _ ?_
+    simp [hasDerivAt_iff_isLittleO, sub_smul]
+  convert! (integral_eq_sub_of_hasDerivAt hderiv' hint) using 1
+  · simp_rw [← integral_smul, Function.comp_apply, γ]
+  · simp only [γ, Function.comp_apply, one_smul, zero_smul, add_zero]
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.const_smul, HasDerivAt, IntervalIntegrable, MeasureTheory, MeasureTheory.volume, Set.uIcc, Set.uIcc_of_le, const_add, const_smul, convert, hasDerivAt_iff_isLittleO, hderiv, integral_eq_sub_of_hasDerivAt, intervalIntegrable_of_Icc, simp_rw, sub_smul, uIcc_of_le, volume, zero_le_one
 -/
@@ -2198,7 +2456,29 @@ theorem integrableOn_deriv_right_of_nonneg
   have meas_g' : AEMeasurable g' (volume.restrict (Ioo a b)) := by
     apply (aemeasurable_derivWithin_Ioi g _).congr
     refine (ae_restrict_mem measurableSet_Ioo).mono fun x hx => ?_
-    exact 
+    exact (hderiv x hx).derivWithin (uniqueDiffWithinAt_Ioi _)
+  suffices H : (∫⁻ x in Ioo a b, ‖g' x‖₊) <= ENNReal.ofReal (g b - g a) from
+    ⟨meas_g'.aestronglyMeasurable, H.trans_lt ENNReal.ofReal_lt_top⟩
+  by_contra! H
+  obtain ⟨f, fle, fint, hf⟩ :
+    exists f : SimpleFunc Real Real>=0,
+      (forall x, f x <= ‖g' x‖₊) ∧
+        (∫⁻ x : Real in Ioo a b, f x) < ∞ ∧ ENNReal.ofReal (g b - g a) < ∫⁻ x : Real in Ioo a b, f x :=
+    exists_lt_lintegral_simpleFunc_of_lt_lintegral H
+  let F : Real -> Real := (↑) ∘ f
+  have intF : IntegrableOn F (Ioo a b) := by
+    refine ⟨f.measurable.coe_nnreal_real.aestronglyMeasurable, ?_⟩
+    simpa only [F, hasFiniteIntegral_iff_enorm, comp_apply, NNReal.enorm_eq] using fint
+  have A : ∫⁻ x : Real in Ioo a b, f x = ENNReal.ofReal (∫ x in Ioo a b, F x) :=
+    lintegral_coe_eq_integral _ intF
+  rw [A] at hf
+  have B : (∫ x : Real in Ioo a b, F x) <= g b - g a := by
+    rw [← integral_Ioc_eq_integral_Ioo]; rw [← intervalIntegral.integral_of_le hab.le]
+    refine integral_le_sub_of_hasDeriv_right_of_le hab.le hcont hderiv ?_ fun x hx => ?_
+    · rwa [integrableOn_Icc_iff_integrableOn_Ioo]
+    · convert! NNReal.coe_le_coe.2 (fle x)
+      simp only [Real.norm_of_nonneg (g'pos x hx), coe_nnnorm]
+  exact lt_irrefl _ (hf.trans_le (ENNReal.ofReal_le_ofReal B))
 
 中文:
 定理 integrableOn_deriv_right_of_nonneg
@@ -2210,7 +2490,29 @@ theorem integrableOn_deriv_right_of_nonneg
   have meas_g' : AEMeasurable g' (volume.restrict (Ioo a b)) := by
     apply (aemeasurable_derivWithin_Ioi g _).congr
     refine (ae_restrict_mem measurableSet_Ioo).mono fun x hx => ?_
-    exact 
+    exact (hderiv x hx).derivWithin (uniqueDiffWithinAt_Ioi _)
+  suffices H : (∫⁻ x in Ioo a b, ‖g' x‖₊) <= ENNReal.ofReal (g b - g a) from
+    ⟨meas_g'.aestronglyMeasurable, H.trans_lt ENNReal.ofReal_lt_top⟩
+  by_contra! H
+  obtain ⟨f, fle, fint, hf⟩ :
+    exists f : SimpleFunc Real Real>=0,
+      (forall x, f x <= ‖g' x‖₊) ∧
+        (∫⁻ x : Real in Ioo a b, f x) < ∞ ∧ ENNReal.ofReal (g b - g a) < ∫⁻ x : Real in Ioo a b, f x :=
+    exists_lt_lintegral_simpleFunc_of_lt_lintegral H
+  let F : Real -> Real := (↑) ∘ f
+  have intF : IntegrableOn F (Ioo a b) := by
+    refine ⟨f.measurable.coe_nnreal_real.aestronglyMeasurable, ?_⟩
+    simpa only [F, hasFiniteIntegral_iff_enorm, comp_apply, NNReal.enorm_eq] using fint
+  have A : ∫⁻ x : Real in Ioo a b, f x = ENNReal.ofReal (∫ x in Ioo a b, F x) :=
+    lintegral_coe_eq_integral _ intF
+  rw [A] at hf
+  have B : (∫ x : Real in Ioo a b, F x) <= g b - g a := by
+    rw [← integral_Ioc_eq_integral_Ioo]; rw [← intervalIntegral.integral_of_le hab.le]
+    refine integral_le_sub_of_hasDeriv_right_of_le hab.le hcont hderiv ?_ fun x hx => ?_
+    · rwa [integrableOn_Icc_iff_integrableOn_Ioo]
+    · convert! NNReal.coe_le_coe.2 (fle x)
+      simp only [Real.norm_of_nonneg (g'pos x hx), coe_nnnorm]
+  exact lt_irrefl _ (hf.trans_le (ENNReal.ofReal_le_ofReal B))
 
 Depends on / 依赖: AEMeasurable, ENNReal, ENNReal.ofReal, ENNReal.ofReal_lt_top, H.trans_lt, Ioc_eq_empty, ae_restrict_mem, aemeasurable_derivWithin_Ioi, aestronglyMeasurable, derivWithin, hderiv, integrableOn_Ioc_iff_integrableOn_Ioo, meas_g, measurableSet_Ioo, ofReal, ofReal_lt_top, restrict, trans_lt, uniqueDiffWithinAt_Ioi, volume
 -/
@@ -2278,7 +2580,9 @@ theorem intervalIntegrable_deriv_of_nonneg
   · simp only [uIcc_of_le, min_eq_left, max_eq_right, IntervalIntegrable, hab,
       Ioc_eq_empty_of_le, integrableOn_empty, and_true] at hcont hderiv hpos ⊢
     exact integrableOn_deriv_of_nonneg hcont hderiv hpos
-  · simp only [uIcc_of_ge, min_eq_right, max_
+  · simp only [uIcc_of_ge, min_eq_right, max_eq_left, hab, IntervalIntegrable, Ioc_eq_empty_of_le,
+      integrableOn_empty, true_and] at hcont hderiv hpos ⊢
+    exact integrableOn_deriv_of_nonneg hcont hderiv hpos
 
 中文:
 定理 interval整数egrable_deriv_of_nonneg
@@ -2288,7 +2592,9 @@ theorem intervalIntegrable_deriv_of_nonneg
   · simp only [uIcc_of_le, min_eq_left, max_eq_right, IntervalIntegrable, hab,
       Ioc_eq_empty_of_le, integrableOn_empty, and_true] at hcont hderiv hpos ⊢
     exact integrableOn_deriv_of_nonneg hcont hderiv hpos
-  · simp only [uIcc_of_ge, min_eq_right, max_
+  · simp only [uIcc_of_ge, min_eq_right, max_eq_left, hab, IntervalIntegrable, Ioc_eq_empty_of_le,
+      integrableOn_empty, true_and] at hcont hderiv hpos ⊢
+    exact integrableOn_deriv_of_nonneg hcont hderiv hpos
 
 Depends on / 依赖: IntervalIntegrable, Ioc_eq_empty_of_le, and_true, hderiv, integrableOn_deriv_of_nonneg, integrableOn_empty, le_total, max_eq_left, max_eq_right, min_eq_left, min_eq_right, true_and, uIcc_of_ge, uIcc_of_le
 -/

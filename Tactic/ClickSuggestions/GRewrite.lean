@@ -60,7 +60,34 @@ definition gcongrBackward
   let α ← instantiateMVars α
   let u ← getDecLevel α
   withLocalDeclD `a α fun a => do
-  withLocalDeclD `b 
+  withLocalDeclD `b α fun b => do
+  withNewMCtxDepth do
+  let mut result : Array GrwPos := #[]
+  -- Any relation `r` can be proved from `AntisymmRel r`, so we add this as a possible relation
+  if (← getEnv).contains `AntisymmRel then
+    let antiSymm := mkApp2 (.const `AntisymmRel [u]) α relation
+    result := result.push { relName := `AntisymmRel, relation := antiSymm, symm? := none }
+  -- If `relName` is symmetric, then include the reverse as a possible relation (`symm? := none`)
+  let symm? ← try
+    let dummyVar ← mkFreshExprMVar (mkApp2 relation a b)
+    if let mkApp2 relation' b' a' ← inferType (← dummyVar.applySymm) then
+      if relation' == relation && b == b' && a == a' then
+        pure none
+      else
+        pure symm
+    else
+      pure symm
+    catch _ => pure symm
+  result := result.push { relName, relation, symm? }
+  -- For `≤`, we add the relation `<`.
+  if relName == ``LE.le then
+    if (← getEnv).contains `le_of_lt then
+      let (mvars, _, le) ←
+        forallMetaTelescope (← inferType (← mkConstWithFreshMVarLevels `le_of_lt))
+      if ← isDefEq le.appFn!.appFn! relation then
+        let lt ← instantiateMVars (← inferType mvars.back!).appFn!.appFn!
+        result := result.push { relName := ``LT.lt, relation := lt, symm? := symm }
+  return result
 
 中文:
 定义 gcongrBackward
@@ -73,7 +100,34 @@ definition gcongrBackward
   let α ← instantiateMVars α
   let u ← getDecLevel α
   withLocalDeclD `a α fun a => do
-  withLocalDeclD `b 
+  withLocalDeclD `b α fun b => do
+  withNewMCtxDepth do
+  let mut result : Array GrwPos := #[]
+  -- Any relation `r` can be proved from `AntisymmRel r`, so we add this as a possible relation
+  if (← getEnv).contains `AntisymmRel then
+    let antiSymm := mkApp2 (.const `AntisymmRel [u]) α relation
+    result := result.push { relName := `AntisymmRel, relation := antiSymm, symm? := none }
+  -- If `relName` is symmetric, then include the reverse as a possible relation (`symm? := none`)
+  let symm? ← try
+    let dummyVar ← mkFreshExprMVar (mkApp2 relation a b)
+    if let mkApp2 relation' b' a' ← inferType (← dummyVar.applySymm) then
+      if relation' == relation && b == b' && a == a' then
+        pure none
+      else
+        pure symm
+    else
+      pure symm
+    catch _ => pure symm
+  result := result.push { relName, relation, symm? }
+  -- For `≤`, we add the relation `<`.
+  if relName == ``LE.le then
+    if (← getEnv).contains `le_of_lt then
+      let (mvars, _, le) ←
+        forallMetaTelescope (← inferType (← mkConstWithFreshMVarLevels `le_of_lt))
+      if ← isDefEq le.appFn!.appFn! relation then
+        let lt ← instantiateMVars (← inferType mvars.back!).appFn!.appFn!
+        result := result.push { relName := ``LT.lt, relation := lt, symm? := symm }
+  return result
 -/
 private def gcongrBackward (relName : Name) (relation : Expr) (symm : Bool) :
     MetaM (Array GrwPos) := do
@@ -125,6 +179,14 @@ definition dummyDischarger
   let .const relName _ := relation.getAppFn | throwError "{e} is not a relation"
   if relName matches ``Eq | ``Iff then throwError "{e} is not a generalized relation"
   let symm ←
+    if lhs.cleanupAnnotations == fvar then
+      pure hyp?
+    else if rhs.cleanupAnnotations == fvar then
+      pure !hyp?
+    else
+      throwError "{e} doesn't have {fvar} on either side"
+  ref.set (← gcongrBackward relName relation symm)
+throw .error default "dummyError"
 
 中文:
 定义 dummyDischarger
@@ -135,6 +197,14 @@ definition dummyDischarger
   let .const relName _ := relation.getAppFn | throwError "{e} is not a relation"
   if relName matches ``Eq | ``Iff then throwError "{e} is not a generalized relation"
   let symm ←
+    if lhs.cleanupAnnotations == fvar then
+      pure hyp?
+    else if rhs.cleanupAnnotations == fvar then
+      pure !hyp?
+    else
+      throwError "{e} doesn't have {fvar} on either side"
+  ref.set (← gcongrBackward relName relation symm)
+throw .error default "dummyError"
 -/
 private def dummyDischarger (ref : IO.Ref (Array GrwPos)) (hyp? : Bool) (fvar : Expr)
     (goal : MVarId) : MetaM Bool := do
@@ -165,7 +235,18 @@ definition getGrwPos?
   let dummyGoal ← mkFreshExprMVar imp
   let ref ← IO.mkRef #[]
   try
-.run (mainGoalDischarger :=
+.run (mainGoalDischarger := dummyDischarger ref hyp? fvar) _ ← dummyGoal.mvarId!.gcongr false
+    return #[]
+  catch ex =>
+    if (← ex.toMessageData.toString) != "dummyError" then
+      return #[]
+  let result ← ref.get
+  /- I doubt that this can come up in practice, but we check anyways that the relation
+  that was found doesn't contain any free variables that are now out of scope. -/
+  for { relation, .. } in result do
+    unless (collectFVars {} relation).fvarIds.all (← getLCtx).contains do
+      return #[]
+  return result
 
 中文:
 定义 getGrwPos?
@@ -177,7 +258,18 @@ definition getGrwPos?
   let dummyGoal ← mkFreshExprMVar imp
   let ref ← IO.mkRef #[]
   try
-.run (mainGoalDischarger :=
+.run (mainGoalDischarger := dummyDischarger ref hyp? fvar) _ ← dummyGoal.mvarId!.gcongr false
+    return #[]
+  catch ex =>
+    if (← ex.toMessageData.toString) != "dummyError" then
+      return #[]
+  let result ← ref.get
+  /- I doubt that this can come up in practice, but we check anyways that the relation
+  that was found doesn't contain any free variables that are now out of scope. -/
+  for { relation, .. } in result do
+    unless (collectFVars {} relation).fvarIds.all (← getLCtx).contains do
+      return #[]
+  return result
 -/
 def getGrwPos? (rootExpr subExpr : Expr) (pos : SubExpr.Pos) (hyp? : Bool) :
     MetaM (Array GrwPos) := do
@@ -393,7 +485,66 @@ definition GrwLemma.try
   let mctx ← getMCtx
   (·.getDM do throwError "no suitable `grw` relation was found") =<< i.gpos.findSomeM? fun pos => do
   unless lem.relName == pos.relName && pos.symm?.all (· == lem.symm) do return none
-  let (proof, mvars, binderInfos, rel) ← lem.name.forallMetaTelescope
+  let (proof, mvars, binderInfos, rel) ← lem.name.forallMetaTelescopeReducing
+  let mkApp2 rel lhs rhs := rel.cleanupAnnotations | return none
+  unless ← isDefEq rel pos.relation do setMCtx mctx; return none
+some < > do
+  let e := i.subExpr
+  let (lhs, rhs) := if lem.symm then (rhs, lhs) else (lhs, rhs)
+  let lhsOrig := lhs; let mctxOrig ← getMCtx
+  unless ← isDefEq e lhs do
+    throwError "{lhs} does not unify with {e}"
+  -- just like in `kabstract`, we compare the `HeadIndex` and number of arguments
+  let lhs ← instantiateMVars lhs
+  if lhs.toHeadIndex != e.toHeadIndex || lhs.headNumArgs != e.headNumArgs then
+    throwError "{lhs} and {e} do not match according to the head-constant indexing"
+  synthAppInstances `click_suggestions default mvars binderInfos false false
+  let mut extraGoals := #[]
+  for mvar in mvars do
+    unless ← mvar.mvarId!.isAssigned do
+      extraGoals := extraGoals.push (← instantiateMVars (← inferType mvar))
+
+  let replacement ← instantiateMVars rhs
+  let makesNewMVars :=
+    (replacement.findMVar? (mvars.contains <| .mvar ·)).isSome ||
+    extraGoals.any fun goal => (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
+  let proof ← instantiateMVars proof
+  let isRefl ← isExplicitEq e replacement
+  let justLemmaName ←
+    if i.rwKind matches .hasBVars then pure true
+    else withMCtx mctxOrig do kabstractFindsPositions i.rootExpr lhsOrig (← read).pos
+  let key := {
+    numGoals := extraGoals.size
+    nameLength := lem.name.length
+    replacementSize := (← ppExpr replacement).pretty.length
+    name := lem.name.toString
+    replacement := ← abstractMVars replacement
+  }
+  let tactic ← tacticSyntax lem i proof justLemmaName
+  let isClosing ← (do
+    if extraGoals.isEmpty then
+      if let some rflTarget := i.rflTarget? then
+return ← withoutModifyingMCtx isDefEq replacement rflTarget
+    return false)
+  if isClosing then
+    addSolvedSuggestion tactic
+  let mut htmls := #[← exprToHtml replacement]
+  for goal in extraGoals do
+    htmls := htmls.push
+      <div> <strong className="goal-vdash">⊢ </strong> {← exprToHtml goal} </div>
+  let filtered ←
+    if !isRefl && !makesNewMVars then
+some < > mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+    else
+      pure none
+  htmls := htmls.push <div> {← lem.name.toHtml} </div>
+  let unfiltered ← mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+  let pattern ← do
+    let (_, _, e) ← forallMetaTelescopeReducing (← lem.name.getType)
+    let mkApp2 _ lhs rhs := (← instantiateMVars e).cleanupAnnotations
+      | throwError "Expected relation, not {indentExpr e}"
+exprToHtml if lem.symm then rhs else lhs
+  return { filtered, unfiltered, key, pattern }
 
 中文:
 定义 GrwLemma.try
@@ -403,7 +554,66 @@ definition GrwLemma.try
   let mctx ← getMCtx
   (·.getDM do throwError "no suitable `grw` relation was found") =<< i.gpos.findSomeM? fun pos => do
   unless lem.relName == pos.relName && pos.symm?.all (· == lem.symm) do return none
-  let (proof, mvars, binderInfos, rel) ← lem.name.forallMetaTelescope
+  let (proof, mvars, binderInfos, rel) ← lem.name.forallMetaTelescopeReducing
+  let mkApp2 rel lhs rhs := rel.cleanupAnnotations | return none
+  unless ← isDefEq rel pos.relation do setMCtx mctx; return none
+some < > do
+  let e := i.subExpr
+  let (lhs, rhs) := if lem.symm then (rhs, lhs) else (lhs, rhs)
+  let lhsOrig := lhs; let mctxOrig ← getMCtx
+  unless ← isDefEq e lhs do
+    throwError "{lhs} does not unify with {e}"
+  -- just like in `kabstract`, we compare the `HeadIndex` and number of arguments
+  let lhs ← instantiateMVars lhs
+  if lhs.toHeadIndex != e.toHeadIndex || lhs.headNumArgs != e.headNumArgs then
+    throwError "{lhs} and {e} do not match according to the head-constant indexing"
+  synthAppInstances `click_suggestions default mvars binderInfos false false
+  let mut extraGoals := #[]
+  for mvar in mvars do
+    unless ← mvar.mvarId!.isAssigned do
+      extraGoals := extraGoals.push (← instantiateMVars (← inferType mvar))
+
+  let replacement ← instantiateMVars rhs
+  let makesNewMVars :=
+    (replacement.findMVar? (mvars.contains <| .mvar ·)).isSome ||
+    extraGoals.any fun goal => (goal.findMVar? (mvars.contains <| .mvar ·)).isSome
+  let proof ← instantiateMVars proof
+  let isRefl ← isExplicitEq e replacement
+  let justLemmaName ←
+    if i.rwKind matches .hasBVars then pure true
+    else withMCtx mctxOrig do kabstractFindsPositions i.rootExpr lhsOrig (← read).pos
+  let key := {
+    numGoals := extraGoals.size
+    nameLength := lem.name.length
+    replacementSize := (← ppExpr replacement).pretty.length
+    name := lem.name.toString
+    replacement := ← abstractMVars replacement
+  }
+  let tactic ← tacticSyntax lem i proof justLemmaName
+  let isClosing ← (do
+    if extraGoals.isEmpty then
+      if let some rflTarget := i.rflTarget? then
+return ← withoutModifyingMCtx isDefEq replacement rflTarget
+    return false)
+  if isClosing then
+    addSolvedSuggestion tactic
+  let mut htmls := #[← exprToHtml replacement]
+  for goal in extraGoals do
+    htmls := htmls.push
+      <div> <strong className="goal-vdash">⊢ </strong> {← exprToHtml goal} </div>
+  let filtered ←
+    if !isRefl && !makesNewMVars then
+some < > mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+    else
+      pure none
+  htmls := htmls.push <div> {← lem.name.toHtml} </div>
+  let unfiltered ← mkSuggestion tactic (.element "div" #[] htmls) (isClosing := isClosing)
+  let pattern ← do
+    let (_, _, e) ← forallMetaTelescopeReducing (← lem.name.getType)
+    let mkApp2 _ lhs rhs := (← instantiateMVars e).cleanupAnnotations
+      | throwError "Expected relation, not {indentExpr e}"
+exprToHtml if lem.symm then rhs else lhs
+  return { filtered, unfiltered, key, pattern }
 -/
 def GrwLemma.try (i : GrwInfo) (lem : GrwLemma) : ClickSuggestionsM (Result GrwKey) := do
   withNewMCtxDepth do

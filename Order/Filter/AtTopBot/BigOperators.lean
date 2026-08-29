@@ -43,7 +43,10 @@ theorem Filter.map_atTop_finsetProd_le_of_prod_eq
   simpa [Finset.image_subset_iff] using! hv
 
 @[deprecated (since := "2026-04-08")]
-alias Filter.map_atTop_finset_sum_le_of_sum_eq := Filter.map_atTop_finsetSum_le_of_s
+alias Filter.map_atTop_finset_sum_le_of_sum_eq := Filter.map_atTop_finsetSum_le_of_sum_eq
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias Filter.map_atTop_finset_prod_le_of_prod_eq := Filter.map_atTop_finsetProd_le_of_prod_eq
 
 中文:
 定理 滤子.map_atTop_finsetProd_le_of_prod_eq
@@ -55,7 +58,10 @@ alias Filter.map_atTop_finset_sum_le_of_sum_eq := Filter.map_atTop_finsetSum_le_
   simpa [Finset.image_subset_iff] using! hv
 
 @[deprecated (since := "2026-04-08")]
-alias Filter.map_atTop_finset_sum_le_of_sum_eq := Filter.map_atTop_finsetSum_le_of_s
+alias Filter.map_atTop_finset_sum_le_of_sum_eq := Filter.map_atTop_finsetSum_le_of_sum_eq
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias Filter.map_atTop_finset_prod_le_of_prod_eq := Filter.map_atTop_finsetProd_le_of_prod_eq
 
 Depends on / 依赖: Finset, Finset.image_subset_iff, atTop_basis, atTop_basis.map, h_eq, image_subset_iff, le_basis_iff
 -/
@@ -94,7 +100,20 @@ theorem Function.Injective.map_atTop_finsetProd_eq
   · refine ⟨s.preimage g hg.injOn, fun t ht => ?_⟩
     refine ⟨t.image g union s, Finset.subset_union_right, ?_⟩
     rw [← Finset.prod_image hg.injOn]
-    refine (prod_subset subset_union_lef
+    refine (prod_subset subset_union_left ?_).symm
+    simp only [Finset.mem_union, Finset.mem_image]
+    refine fun y hy hyt => hf y (mt ?_ hyt)
+    rintro ⟨x, rfl⟩
+    exact ⟨x, ht (Finset.mem_preimage.2 <| hy.resolve_left hyt), rfl⟩
+  · refine ⟨s.image g, fun t ht => ?_⟩
+    simp only [← prod_preimage _ _ hg.injOn _ fun x _ => hf x]
+    exact ⟨_, (image_subset_iff_subset_preimage _).1 ht, rfl⟩
+
+@[deprecated (since := "2026-04-08")]
+alias Function.Injective.map_atTop_finset_sum_eq := Function.Injective.map_atTop_finsetSum_eq
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias Function.Injective.map_atTop_finset_prod_eq := Function.Injective.map_atTop_finsetProd_eq
 
 中文:
 定理 函数.单射.map_atTop_finsetProd_eq
@@ -105,7 +124,20 @@ theorem Function.Injective.map_atTop_finsetProd_eq
   · refine ⟨s.preimage g hg.injOn, fun t ht => ?_⟩
     refine ⟨t.image g union s, Finset.subset_union_right, ?_⟩
     rw [← Finset.prod_image hg.injOn]
-    refine (prod_subset subset_union_lef
+    refine (prod_subset subset_union_left ?_).symm
+    simp only [Finset.mem_union, Finset.mem_image]
+    refine fun y hy hyt => hf y (mt ?_ hyt)
+    rintro ⟨x, rfl⟩
+    exact ⟨x, ht (Finset.mem_preimage.2 <| hy.resolve_left hyt), rfl⟩
+  · refine ⟨s.image g, fun t ht => ?_⟩
+    simp only [← prod_preimage _ _ hg.injOn _ fun x _ => hf x]
+    exact ⟨_, (image_subset_iff_subset_preimage _).1 ht, rfl⟩
+
+@[deprecated (since := "2026-04-08")]
+alias Function.Injective.map_atTop_finset_sum_eq := Function.Injective.map_atTop_finsetSum_eq
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias Function.Injective.map_atTop_finset_prod_eq := Function.Injective.map_atTop_finsetProd_eq
 
 Depends on / 依赖: Classical, Classical.decEq, Finset, Finset.mem_image, Finset.mem_preimage, Finset.mem_union, Finset.prod_image, Finset.subset_union_right, hg.injOn, hy.resolve_left, le_antisymm, map_atTop_finsetProd_le_of_prod_eq, mem_image, mem_preimage, mem_union, preimage, prod_image, prod_subset, resolve_left, s.image
 -/

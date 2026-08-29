@@ -217,7 +217,9 @@ theorem edist_nearestPt_le
     · rcases hk.eq_or_lt with (rfl | hk)
       exacts [le_rfl, (h k (Nat.lt_succ_iff.1 hk)).le]
     · push Not at h
-      rca
+      rcases h with ⟨l, hlN, hxl⟩
+      rcases hk.eq_or_lt with (rfl | hk)
+      exacts [(ihN hlN).trans hxl, ihN (Nat.lt_succ_iff.1 hk)]
 
 中文:
 定理 edist_nearestPt_le
@@ -231,7 +233,9 @@ theorem edist_nearestPt_le
     · rcases hk.eq_or_lt with (rfl | hk)
       exacts [le_rfl, (h k (Nat.lt_succ_iff.1 hk)).le]
     · push Not at h
-      rca
+      rcases h with ⟨l, hlN, hxl⟩
+      rcases hk.eq_or_lt with (rfl | hk)
+      exacts [(ihN hlN).trans hxl, ihN (Nat.lt_succ_iff.1 hk)]
 
 Depends on / 依赖: Nat.lt_succ_iff, eq_or_lt, exacts, generalizing, hk.eq_or_lt, le_rfl, lt_succ_iff, map_apply, nearestPt, nearestPtInd_succ, nonpos_iff_eq_zero, split_ifs
 -/
@@ -423,7 +427,10 @@ theorem tendsto_approxOn
   rw [← @Subtype.range_coe _ s]; rw [← image_univ]; rw [← (denseRange_denseSeq s).closure_eq] at hx
   simp -iota only [approxOn, coe_comp]
   refine tendsto_nearestPt (closure_minimal ?_ isClosed_closure hx)
-  simp -iota only [Nat.range_casesOn, closure_union, ran
+  simp -iota only [Nat.range_casesOn, closure_union, range_comp]
+  exact
+    Subset.trans (image_closure_subset_closure_image continuous_subtype_val)
+      subset_union_right
 
 中文:
 定理 tendsto_approxOn
@@ -433,7 +440,10 @@ theorem tendsto_approxOn
   rw [← @Subtype.range_coe _ s]; rw [← image_univ]; rw [← (denseRange_denseSeq s).closure_eq] at hx
   simp -iota only [approxOn, coe_comp]
   refine tendsto_nearestPt (closure_minimal ?_ isClosed_closure hx)
-  simp -iota only [Nat.range_casesOn, closure_union, ran
+  simp -iota only [Nat.range_casesOn, closure_union, range_comp]
+  exact
+    Subset.trans (image_closure_subset_closure_image continuous_subtype_val)
+      subset_union_right
 
 Depends on / 依赖: Nat.range_casesOn, Nonempty, Subset, Subset.trans, Subtype, Subtype.range_coe, approxOn, closure_eq, closure_minimal, closure_union, coe_comp, continuous_subtype_val, denseRange_denseSeq, image_closure_subset_closure_image, image_univ, isClosed_closure, range_casesOn, range_coe, range_comp, subset_union_right
 -/
@@ -547,7 +557,36 @@ lemma HasCompactSupport.exists_simpleFunc_approx_of_prod
       forall x in s, dist (f x) (g x) < ε := by
     intro K hK
     apply IsCompact.induction_on
-      (p := fun t => exists (g : SimpleFunc (X × 
+      (p := fun t => exists (g : SimpleFunc (X × Y) α), exists (s : Set (X × Y)), MeasurableSet s ∧ t subseteq s ∧
+        forall x in s, dist (f x) (g x) < ε) hK
+    · exact ⟨0, ∅, by simp⟩
+    · intro t t' htt' ⟨g, s, s_meas, ts, hg⟩
+      exact ⟨g, s, s_meas, htt'.trans ts, hg⟩
+    · intro t t' ⟨g, s, s_meas, ts, hg⟩ ⟨g', s', s'_meas, t's', hg'⟩
+      refine ⟨g.piecewise s s_meas g', s union s', s_meas.union s'_meas,
+        union_subset_union ts t's', fun p hp => ?_⟩
+      by_cases H : p in s
+      · simpa [H, SimpleFunc.piecewise_apply] using hg p H
+      · simp only [SimpleFunc.piecewise_apply, H, ite_false]
+        apply hg'
+        simpa [H] using (mem_union _ _ _).1 hp
+    · rintro ⟨x, y⟩ -
+      obtain ⟨u, v, hu, xu, hv, yv, huv⟩ : exists u v, IsOpen u ∧ x in u ∧ IsOpen v ∧ y in v ∧
+        u ×ˢ v subseteq {z | dist (f z) (f (x, y)) < ε} :=
+mem_nhds_prod_iff'.1 Metric.continuousAt_iff'.1 hf.continuousAt ε hε
+refine ⟨u ×ˢ v, nhdsWithin_le_nhds (hu.prod hv).mem_nhds (mk_mem_prod xu yv), ?_⟩
+      exact ⟨SimpleFunc.const _ (f (x, y)), u ×ˢ v, hu.measurableSet.prod hv.measurableSet,
+        Subset.rfl, fun z hz => huv hz⟩
+  obtain ⟨g, s, s_meas, fs, hg⟩ : exists (g : SimpleFunc (X × Y) α) (s : Set (X × Y)),
+    MeasurableSet s ∧ tsupport f subseteq s ∧ forall (x : X × Y), x in s -> dist (f x) (g x) < ε := M _ h'f
+  refine ⟨g.piecewise s s_meas 0, fun p => ?_⟩
+  by_cases H : p in s
+  · simpa [H, SimpleFunc.piecewise_apply] using hg p H
+  · have : f p = 0 := by
+      contrapose! H
+      rw [← Function.mem_support] at H
+      exact fs (subset_tsupport _ H)
+    simp [SimpleFunc.piecewise_apply, H, this, hε]
 
 中文:
 引理 HasCompactSupport.存在_simpleFunc_approx_of_prod
@@ -558,7 +597,36 @@ lemma HasCompactSupport.exists_simpleFunc_approx_of_prod
       forall x in s, dist (f x) (g x) < ε := by
     intro K hK
     apply IsCompact.induction_on
-      (p := fun t => exists (g : SimpleFunc (X × 
+      (p := fun t => exists (g : SimpleFunc (X × Y) α), exists (s : Set (X × Y)), MeasurableSet s ∧ t subseteq s ∧
+        forall x in s, dist (f x) (g x) < ε) hK
+    · exact ⟨0, ∅, by simp⟩
+    · intro t t' htt' ⟨g, s, s_meas, ts, hg⟩
+      exact ⟨g, s, s_meas, htt'.trans ts, hg⟩
+    · intro t t' ⟨g, s, s_meas, ts, hg⟩ ⟨g', s', s'_meas, t's', hg'⟩
+      refine ⟨g.piecewise s s_meas g', s union s', s_meas.union s'_meas,
+        union_subset_union ts t's', fun p hp => ?_⟩
+      by_cases H : p in s
+      · simpa [H, SimpleFunc.piecewise_apply] using hg p H
+      · simp only [SimpleFunc.piecewise_apply, H, ite_false]
+        apply hg'
+        simpa [H] using (mem_union _ _ _).1 hp
+    · rintro ⟨x, y⟩ -
+      obtain ⟨u, v, hu, xu, hv, yv, huv⟩ : exists u v, IsOpen u ∧ x in u ∧ IsOpen v ∧ y in v ∧
+        u ×ˢ v subseteq {z | dist (f z) (f (x, y)) < ε} :=
+mem_nhds_prod_iff'.1 Metric.continuousAt_iff'.1 hf.continuousAt ε hε
+refine ⟨u ×ˢ v, nhdsWithin_le_nhds (hu.prod hv).mem_nhds (mk_mem_prod xu yv), ?_⟩
+      exact ⟨SimpleFunc.const _ (f (x, y)), u ×ˢ v, hu.measurableSet.prod hv.measurableSet,
+        Subset.rfl, fun z hz => huv hz⟩
+  obtain ⟨g, s, s_meas, fs, hg⟩ : exists (g : SimpleFunc (X × Y) α) (s : Set (X × Y)),
+    MeasurableSet s ∧ tsupport f subseteq s ∧ forall (x : X × Y), x in s -> dist (f x) (g x) < ε := M _ h'f
+  refine ⟨g.piecewise s s_meas 0, fun p => ?_⟩
+  by_cases H : p in s
+  · simpa [H, SimpleFunc.piecewise_apply] using hg p H
+  · have : f p = 0 := by
+      contrapose! H
+      rw [← Function.mem_support] at H
+      exact fs (subset_tsupport _ H)
+    simp [SimpleFunc.piecewise_apply, H, this, hε]
 
 Depends on / 依赖: IsCompact, IsCompact.induction_on, MeasurableSet, SimpleFunc, induction_on, s_meas, subseteq
 -/
@@ -611,7 +679,16 @@ lemma HasCompactSupport.measurable_of_prod
   let : PseudoMetricSpace α := TopologicalSpace.pseudoMetrizableSpacePseudoMetric α
   obtain ⟨u, -, u_pos, u_lim⟩ : exists u, StrictAnti u ∧ (forall (n : Nat), 0 < u n) ∧ Tendsto u atTop (𝓝 0) :=
     exists_seq_strictAnti_tendsto (0 : Real)
-  have : forall n, exists (g : SimpleFunc (X × Y) α), fo
+  have : forall n, exists (g : SimpleFunc (X × Y) α), forall x, dist (f x) (g x) < u n :=
+    fun n => h'f.exists_simpleFunc_approx_of_prod hf (u_pos n)
+  choose g hg using this
+  have A : forall x, Tendsto (fun n => g n x) atTop (𝓝 (f x)) := by
+    intro x
+    rw [tendsto_iff_dist_tendsto_zero]
+    apply squeeze_zero (fun n => dist_nonneg) (fun n => ?_) u_lim
+    rw [dist_comm]
+    exact (hg n x).le
+  apply measurable_of_tendsto_metrizable (fun n => (g n).measurable) (tendsto_pi_nhds.2 A)
 
 中文:
 引理 HasCompactSupport.measurable_of_prod
@@ -619,7 +696,16 @@ lemma HasCompactSupport.measurable_of_prod
   let : PseudoMetricSpace α := TopologicalSpace.pseudoMetrizableSpacePseudoMetric α
   obtain ⟨u, -, u_pos, u_lim⟩ : exists u, StrictAnti u ∧ (forall (n : Nat), 0 < u n) ∧ Tendsto u atTop (𝓝 0) :=
     exists_seq_strictAnti_tendsto (0 : Real)
-  have : forall n, exists (g : SimpleFunc (X × Y) α), fo
+  have : forall n, exists (g : SimpleFunc (X × Y) α), forall x, dist (f x) (g x) < u n :=
+    fun n => h'f.exists_simpleFunc_approx_of_prod hf (u_pos n)
+  choose g hg using this
+  have A : forall x, Tendsto (fun n => g n x) atTop (𝓝 (f x)) := by
+    intro x
+    rw [tendsto_iff_dist_tendsto_zero]
+    apply squeeze_zero (fun n => dist_nonneg) (fun n => ?_) u_lim
+    rw [dist_comm]
+    exact (hg n x).le
+  apply measurable_of_tendsto_metrizable (fun n => (g n).measurable) (tendsto_pi_nhds.2 A)
 
 Depends on / 依赖: PseudoMetricSpace, SimpleFunc, StrictAnti, Tendsto, TopologicalSpace, TopologicalSpace.pseudoMetrizableSpacePseudoMetric, exists_seq_strictAnti_tendsto, exists_simpleFunc_approx_of_prod, f.exists_simpleFunc_approx_of_prod, pseudoMetrizableSpacePseudoMetric, tendsto_iff_dist, u_lim, u_pos
 -/

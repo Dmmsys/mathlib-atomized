@@ -686,7 +686,8 @@ definition uliftYonedaOpCompCoyoneda
     sheafToPresheafCompCoyonedaCompWhiskeringLeftSheafToPresheaf.symm).trans
     (isoWhiskerRight (NatIso.op (J.uliftYonedaCompSheafToPresheaf.symm))
     (_ ⋙ (whiskeringLeft _ _ _).obj _))).trans
-    (isoWhiskerRight CategoryTheory.uliftYonedaO
+    (isoWhiskerRight CategoryTheory.uliftYonedaOpCompCoyoneda
+    ((whiskeringLeft _ _ _).obj _))
 
 中文:
 定义 uliftYonedaOpCompCoyoneda
@@ -695,7 +696,8 @@ definition uliftYonedaOpCompCoyoneda
     sheafToPresheafCompCoyonedaCompWhiskeringLeftSheafToPresheaf.symm).trans
     (isoWhiskerRight (NatIso.op (J.uliftYonedaCompSheafToPresheaf.symm))
     (_ ⋙ (whiskeringLeft _ _ _).obj _))).trans
-    (isoWhiskerRight CategoryTheory.uliftYonedaO
+    (isoWhiskerRight CategoryTheory.uliftYonedaOpCompCoyoneda
+    ((whiskeringLeft _ _ _).obj _))
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.uliftYonedaOpCompCoyoneda, J.uliftYonedaCompSheafToPresheaf.symm, J.yoneda.op, NatIso, NatIso.op, isoWhiskerLeft, isoWhiskerRight, sheafCompose, sheafToPresheafCompCoyonedaCompWhiskeringLeftSheafToPresheaf, sheafToPresheafCompCoyonedaCompWhiskeringLeftSheafToPresheaf.symm, uliftYonedaCompSheafToPresheaf, uliftYonedaOpCompCoyoneda, whiskeringLeft, yoneda
 -/
@@ -794,7 +796,36 @@ definition isColimitCofanMkYoneda
     by_cases h : i = j
     · subst h
       rw [(cancel_mono _).mp hab]
-    · obtain ⟨h⟩ :=
+    · obtain ⟨h⟩ := hdisj h a b hab
+      have := Types.isTerminalEquivUnique _ (Sheaf.isTerminalOfBotCover s.pt _ (hempty Y h))
+      exact Subsingleton.elim _ _
+  refine Cofan.IsColimit.mk _ (fun s => ⟨?_⟩) (fun s j => ?_) fun s m hm => ?_
+  · refine (s.pt.2.isSheafFor _ H).extend ?_
+    refine ⟨fun Y => ↾fun g => ((s.inj (Sieve.ofArrows.i g.2)).hom.app Y)
+      (Sieve.ofArrows.h g.2), ?_⟩
+    intro ⟨Y⟩ ⟨Z⟩ ⟨(g : Z ⟶ Y)⟩
+    ext u
+    simp only [Sieve.functor_obj, Sieve.generate_apply, Sieve.functor_map, Quiver.Hom.unop_op',
+      TypeCat.Fun.toFun_apply, comp_apply, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
+      ← heq s (g ≫ Sieve.ofArrows.h u.2)
+      (Sieve.ofArrows.h <| Sieve.downward_closed _ u.2 g) (by simp)]
+    exact ConcreteCategory.congr_hom ((s.inj _).hom.naturality g.op) _
+  · ext : 1
+    let u (j : ι) : CategoryTheory.yoneda.obj (X j) ⟶ (Sieve.ofArrows _ c.inj).functor :=
+      (Sieve.ofArrows _ c.inj).toFunctor (c.inj j) (Sieve.ofArrows_mk _ _ j)
+    have (j : ι) : u j ≫ (Sieve.ofArrows _ c.inj).functorInclusion =
+      CategoryTheory.yoneda.map (c.inj j) := rfl
+    dsimp
+    simp only [← this, Category.assoc, Presieve.IsSheafFor.functorInclusion_comp_extend]
+    ext Z (g : Z.unop ⟶ X j)
+    have h : Sieve.ofArrows X c.inj (g ≫ c.inj j) :=
+      Sieve.downward_closed _ (Sieve.ofArrows_mk _ _ j) _
+    exact heq s (Sieve.ofArrows.h h) g (by simp)
+  · ext : 1
+    dsimp
+    apply Presieve.IsSheafFor.unique_extend
+    ext Y ⟨g, hg⟩
+    simp [← hm (Sieve.ofArrows.i hg)]
 
 中文:
 定义 isColimitCofanMkYoneda
@@ -806,7 +837,36 @@ definition isColimitCofanMkYoneda
     by_cases h : i = j
     · subst h
       rw [(cancel_mono _).mp hab]
-    · obtain ⟨h⟩ :=
+    · obtain ⟨h⟩ := hdisj h a b hab
+      have := Types.isTerminalEquivUnique _ (Sheaf.isTerminalOfBotCover s.pt _ (hempty Y h))
+      exact Subsingleton.elim _ _
+  refine Cofan.IsColimit.mk _ (fun s => ⟨?_⟩) (fun s j => ?_) fun s m hm => ?_
+  · refine (s.pt.2.isSheafFor _ H).extend ?_
+    refine ⟨fun Y => ↾fun g => ((s.inj (Sieve.ofArrows.i g.2)).hom.app Y)
+      (Sieve.ofArrows.h g.2), ?_⟩
+    intro ⟨Y⟩ ⟨Z⟩ ⟨(g : Z ⟶ Y)⟩
+    ext u
+    simp only [Sieve.functor_obj, Sieve.generate_apply, Sieve.functor_map, Quiver.Hom.unop_op',
+      TypeCat.Fun.toFun_apply, comp_apply, ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk,
+      ← heq s (g ≫ Sieve.ofArrows.h u.2)
+      (Sieve.ofArrows.h <| Sieve.downward_closed _ u.2 g) (by simp)]
+    exact ConcreteCategory.congr_hom ((s.inj _).hom.naturality g.op) _
+  · ext : 1
+    let u (j : ι) : CategoryTheory.yoneda.obj (X j) ⟶ (Sieve.ofArrows _ c.inj).functor :=
+      (Sieve.ofArrows _ c.inj).toFunctor (c.inj j) (Sieve.ofArrows_mk _ _ j)
+    have (j : ι) : u j ≫ (Sieve.ofArrows _ c.inj).functorInclusion =
+      CategoryTheory.yoneda.map (c.inj j) := rfl
+    dsimp
+    simp only [← this, Category.assoc, Presieve.IsSheafFor.functorInclusion_comp_extend]
+    ext Z (g : Z.unop ⟶ X j)
+    have h : Sieve.ofArrows X c.inj (g ≫ c.inj j) :=
+      Sieve.downward_closed _ (Sieve.ofArrows_mk _ _ j) _
+    exact heq s (Sieve.ofArrows.h h) g (by simp)
+  · ext : 1
+    dsimp
+    apply Presieve.IsSheafFor.unique_extend
+    ext Y ⟨g, hg⟩
+    simp [← hm (Sieve.ofArrows.i hg)]
 
 Depends on / 依赖: Cofan.IsColimit.mk, IsColimit, J.yoneda.obj, Sheaf.isTerminalOfBotCover, Subsingleton, Subsingleton.elim, Types.isTerminalEquivUnique, c.inj, cancel_mono, hempty, hom.app, isShea, isTerminalEquivUnique, isTerminalOfBotCover, s.inj, s.pt, yoneda
 -/
@@ -863,7 +923,8 @@ lemma preservesColimitsOfShape_yoneda_of_ofArrows_inj_mem
   apply (config := { allowSynthFailures := true }) preservesColimitsOfShape_of_discrete
   refine fun X => ⟨fun {c : Cofan X} hc => ⟨(Limits.Cofan.isColimitMapCoconeEquiv _ _ _).symm ?_⟩⟩
   have (i : ι) : Mono (c.inj i) := .of_coproductDisjoint hc _
-  refine isColimitCofanMkYoneda _ _ (hcov hc) ht
+  refine isColimitCofanMkYoneda _ _ (hcov hc) htriv fun hij Y a b hab => ⟨?_⟩
+  exact .ofCoproductDisjointOfCommSq hij hc _ _ hab
 
 中文:
 引理 preservesColimitsOfShape_yoneda_of_ofArrows_inj_mem
@@ -872,7 +933,8 @@ lemma preservesColimitsOfShape_yoneda_of_ofArrows_inj_mem
   apply (config := { allowSynthFailures := true }) preservesColimitsOfShape_of_discrete
   refine fun X => ⟨fun {c : Cofan X} hc => ⟨(Limits.Cofan.isColimitMapCoconeEquiv _ _ _).symm ?_⟩⟩
   have (i : ι) : Mono (c.inj i) := .of_coproductDisjoint hc _
-  refine isColimitCofanMkYoneda _ _ (hcov hc) ht
+  refine isColimitCofanMkYoneda _ _ (hcov hc) htriv fun hij Y a b hab => ⟨?_⟩
+  exact .ofCoproductDisjointOfCommSq hij hc _ _ hab
 
 Depends on / 依赖: Limits, Limits.Cofan.isColimitMapCoconeEquiv, allowSynthFailures, c.inj, config, isColimitCofanMkYoneda, isColimitMapCoconeEquiv, ofCoproductDisjointOfCommSq, of_coproductDisjoint, preservesColimitsOfShape_of_discrete
 -/
@@ -904,7 +966,11 @@ lemma subcanonical_of_full_of_faithful
       exact Equiv.ulift.symm
     · intros
       rfl
-  rw [← isSheaf_iff_isSheaf_of_type]; rw [Presheaf.isSheaf_of_iso_
+  rw [← isSheaf_iff_isSheaf_of_type]; rw [Presheaf.isSheaf_of_iso_iff
+    ((Functor.FullyFaithful.ofFullyFaithful F).compUliftYonedaCompWhiskeringLeft.app Y).symm]
+  refine F.op_comp_isSheaf_of_isSheaf J K _ ?_
+  rw [isSheaf_iff_isSheaf_of_type]
+  apply GrothendieckTopology.Subcanonical.isSheaf_of_isRepresentable
 
 中文:
 引理 subcanonical_of_full_of_faithful
@@ -917,7 +983,11 @@ lemma subcanonical_of_full_of_faithful
       exact Equiv.ulift.symm
     · intros
       rfl
-  rw [← isSheaf_iff_isSheaf_of_type]; rw [Presheaf.isSheaf_of_iso_
+  rw [← isSheaf_iff_isSheaf_of_type]; rw [Presheaf.isSheaf_of_iso_iff
+    ((Functor.FullyFaithful.ofFullyFaithful F).compUliftYonedaCompWhiskeringLeft.app Y).symm]
+  refine F.op_comp_isSheaf_of_isSheaf J K _ ?_
+  rw [isSheaf_iff_isSheaf_of_type]
+  apply GrothendieckTopology.Subcanonical.isSheaf_of_isRepresentable
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.uliftYoneda, Equiv.ulift.symm, F.op_comp_isSheaf_of_isSheaf, FullyFaithful, Functor, Functor.FullyFaithful.ofFullyFaithful, GrothendieckTopology, GrothendieckTopology.Subcanonical.isSheaf_of_isRepre, IsSheaf, Presheaf, Presheaf.isSheaf_of_iso_iff, Presieve, Presieve.IsSheaf, Presieve.isSheaf_iff_of_nat_equiv, Subcanonical, compUliftYonedaCompWhiskeringLeft, compUliftYonedaCompWhiskeringLeft.app, intros, isSheaf_iff_isSheaf_of_type
 -/

@@ -50,7 +50,20 @@ lemma cotangentRestrict_bijective_of_isCompl
   rw [cotangentRestrict]; rw [Finsupp.lcomapDomain_eq_linearProjOfIsCompl _ huv.symm]
   set f : _ ->ₗ[S] (ι ->₀ S) := P.cotangentSpaceBasis.repr ∘ₗ P.toExtension.cotangentComplex
   let g : (ι ->₀ S) ->ₗ[S] (Ω[S⁄R]) := P.toExtension.toKaehler ∘ₗ P.cotangentSpaceBasis.repr.symm
-  have hfg : Functio
+  have hfg : Function.Exact f g := by
+    simp only [f, g, LinearEquiv.conj_exact_iff_exact]
+    exact Extension.exact_cotangentComplex_toKaehler
+  apply LinearMap.linearProjOfIsCompl_comp_bijective_of_exact hfg
+· exact P.cotangentSpaceBasis.repr.injective.comp
+      (Extension.subsingleton_h1Cotangent P.toExtension).mp P.equivH1Cotangent.subsingleton
+  · simp only [disjoint_iff, g]
+    apply Submodule.map_injective_of_injective (f := P.cotangentSpaceBasis.repr.symm.toLinearMap)
+      P.cotangentSpaceBasis.repr.symm.injective
+    rw [Submodule.map_inf P.cotangentSpaceBasis.repr.symm.toLinearMap
+        P.cotangentSpaceBasis.repr.symm.injective]; rw [Submodule.map_span]; rw [← Set.range_comp]; rw [Function.comp_def]; rw [LinearMap.ker_comp]; rw [Submodule.map_comap_eq_of_surjective]
+    · simpa [← disjoint_iff]
+    · exact P.cotangentSpaceBasis.repr.symm.surjective
+  · simpa [g, Submodule.map_comp, Submodule.map_span, ← Set.range_comp, Function.comp_def]
 
 中文:
 引理 cotangentRestrict_bijective_of_isCompl
@@ -58,7 +71,20 @@ lemma cotangentRestrict_bijective_of_isCompl
   rw [cotangentRestrict]; rw [Finsupp.lcomapDomain_eq_linearProjOfIsCompl _ huv.symm]
   set f : _ ->ₗ[S] (ι ->₀ S) := P.cotangentSpaceBasis.repr ∘ₗ P.toExtension.cotangentComplex
   let g : (ι ->₀ S) ->ₗ[S] (Ω[S⁄R]) := P.toExtension.toKaehler ∘ₗ P.cotangentSpaceBasis.repr.symm
-  have hfg : Functio
+  have hfg : Function.Exact f g := by
+    simp only [f, g, LinearEquiv.conj_exact_iff_exact]
+    exact Extension.exact_cotangentComplex_toKaehler
+  apply LinearMap.linearProjOfIsCompl_comp_bijective_of_exact hfg
+· exact P.cotangentSpaceBasis.repr.injective.comp
+      (Extension.subsingleton_h1Cotangent P.toExtension).mp P.equivH1Cotangent.subsingleton
+  · simp only [disjoint_iff, g]
+    apply Submodule.map_injective_of_injective (f := P.cotangentSpaceBasis.repr.symm.toLinearMap)
+      P.cotangentSpaceBasis.repr.symm.injective
+    rw [Submodule.map_inf P.cotangentSpaceBasis.repr.symm.toLinearMap
+        P.cotangentSpaceBasis.repr.symm.injective]; rw [Submodule.map_span]; rw [← Set.range_comp]; rw [Function.comp_def]; rw [LinearMap.ker_comp]; rw [Submodule.map_comap_eq_of_surjective]
+    · simpa [← disjoint_iff]
+    · exact P.cotangentSpaceBasis.repr.symm.surjective
+  · simpa [g, Submodule.map_comp, Submodule.map_span, ← Set.range_comp, Function.comp_def]
 
 Depends on / 依赖: Extension, Extension.exact_cotangentComplex_toKaehler, Finsupp, Finsupp.lcomapDomain_eq_linearProjOfIsCompl, Function, Function.Exact, LinearEquiv, LinearEquiv.conj_exact_iff_exact, LinearMap, LinearMap.linearProjOfIsCompl_comp_bijective_of_exact, P.cotangentSpaceBa, P.cotangentSpaceBasis.repr, P.cotangentSpaceBasis.repr.symm, P.toExtension.cotangentComplex, P.toExtension.toKaehler, conj_exact_iff_exact, cotangentComplex, cotangentRestrict, cotangentSpaceBa, cotangentSpaceBasis
 -/
@@ -99,7 +125,8 @@ lemma disjoint_ker_toKaehler_of_linearIndependent
   obtain ⟨c, rfl⟩ := hxs
   simp only [SetLike.mem_coe, LinearMap.mem_ker, map_finsuppSum, map_smul,
     toKaehler_cotangentSpaceBasis] at hx
-  obtain rf
+  obtain rfl := (linearIndependent_iff.mp h) c hx
+  simp
 
 中文:
 引理 disjoint_ker_toKaehler_of_linearIndependent
@@ -110,7 +137,8 @@ lemma disjoint_ker_toKaehler_of_linearIndependent
   obtain ⟨c, rfl⟩ := hxs
   simp only [SetLike.mem_coe, LinearMap.mem_ker, map_finsuppSum, map_smul,
     toKaehler_cotangentSpaceBasis] at hx
-  obtain rf
+  obtain rfl := (linearIndependent_iff.mp h) c hx
+  simp
 
 Depends on / 依赖: Finsupp, Finsupp.mem_span_range_iff_exists_finsupp, LinearMap, LinearMap.mem_ker, SetLike, SetLike.mem_coe, Submodule, Submodule.eq_bot_iff, disjoint_iff, eq_bot_iff, linearIndependent_iff, linearIndependent_iff.mp, map_finsuppSum, map_smul, mem_coe, mem_ker, mem_span_range_iff_exists_finsupp, toKaehler_cotangentSpaceBasis
 -/
@@ -182,7 +210,13 @@ lemma isUnit_jacobian_of_cotangentRestrict_bijective
       Finsupp.linearEquivFunOnFinite S S _ ∘ P.cotangentRestrict P.map_inj ∘ ⇑b := by
     ext i j
     simp only [Function.comp_apply, hb, Finsupp.linearEquivFunOnFinite_apply, cotangentRestrict_mk]
-  apply P.isUnit_jacobi
+  apply P.isUnit_jacobian_of_linearIndependent_of_span_eq_top
+  · rw [heq]
+    exact (b.linearIndependent.map' _ (LinearMap.ker_eq_bot_of_injective h.injective)).map' _
+      (Finsupp.linearEquivFunOnFinite S S σ).ker
+  · rw [heq, Set.range_comp, Set.range_comp, Submodule.span_image_linearEquiv, ← Submodule.map_span,
+      b.span_eq, Submodule.map_top, LinearMap.range_eq_top_of_surjective _ h.surjective,
+      Submodule.map_top, LinearEquiv.range]
 
 中文:
 引理 isUnit_jacobian_of_cotangentRestrict_bijective
@@ -191,7 +225,13 @@ lemma isUnit_jacobian_of_cotangentRestrict_bijective
       Finsupp.linearEquivFunOnFinite S S _ ∘ P.cotangentRestrict P.map_inj ∘ ⇑b := by
     ext i j
     simp only [Function.comp_apply, hb, Finsupp.linearEquivFunOnFinite_apply, cotangentRestrict_mk]
-  apply P.isUnit_jacobi
+  apply P.isUnit_jacobian_of_linearIndependent_of_span_eq_top
+  · rw [heq]
+    exact (b.linearIndependent.map' _ (LinearMap.ker_eq_bot_of_injective h.injective)).map' _
+      (Finsupp.linearEquivFunOnFinite S S σ).ker
+  · rw [heq, Set.range_comp, Set.range_comp, Submodule.span_image_linearEquiv, ← Submodule.map_span,
+      b.span_eq, Submodule.map_top, LinearMap.range_eq_top_of_surjective _ h.surjective,
+      Submodule.map_top, LinearEquiv.range]
 
 Depends on / 依赖: Finsupp, Finsupp.linearEquivFunOnFinite, Finsupp.linearEquivFunOnFinite_apply, Function, Function.comp_apply, LinearMap, LinearMap.ker_eq_bot_of_injective, P.cotangentRestrict, P.isUnit_jacobian_of_linearIndependent_of_span_eq_top, P.map, P.map_inj, P.relation, P.val, Set.rang, Set.range_comp, b.linearIndependent.map, comp_apply, cotangentRestrict, cotangentRestrict_mk, h.injective
 -/

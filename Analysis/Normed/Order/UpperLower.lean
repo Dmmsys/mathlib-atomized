@@ -198,7 +198,15 @@ theorem IsUpperSet.mem_interior_of_forall_lt
   obtain ⟨z, hz, hxz⟩ := Metric.mem_closure_iff.1 hx _ hε
   rw [dist_pi_lt_iff hε] at hxz
   have hyz : forall i, z i < y i := by
-    refine fun i => (hxy _).trans_le' (sub_le_iff_le_add'.1 <| (le_abs_self _).trans ?
+    refine fun i => (hxy _).trans_le' (sub_le_iff_le_add'.1 <| (le_abs_self _).trans ?_)
+    rw [← Real.norm_eq_abs]; rw [← dist_eq_norm']
+    exact (hxz _).le
+  obtain ⟨δ, hδ, hyz⟩ := Pi.exists_forall_pos_add_lt hyz
+  refine mem_interior.2 ⟨ball y δ, ?_, isOpen_ball, mem_ball_self hδ⟩
+  rintro w hw
+  refine hs (fun i => ?_) hz
+  simp_rw [ball_pi _ hδ, Real.ball_eq_Ioo] at hw
+  exact ((lt_sub_iff_add_lt.2 <| hyz _).trans (hw _ <| mem_univ _).1).le
 
 中文:
 定理 是上集.mem_interior_of_对任意_lt
@@ -209,7 +217,15 @@ theorem IsUpperSet.mem_interior_of_forall_lt
   obtain ⟨z, hz, hxz⟩ := Metric.mem_closure_iff.1 hx _ hε
   rw [dist_pi_lt_iff hε] at hxz
   have hyz : forall i, z i < y i := by
-    refine fun i => (hxy _).trans_le' (sub_le_iff_le_add'.1 <| (le_abs_self _).trans ?
+    refine fun i => (hxy _).trans_le' (sub_le_iff_le_add'.1 <| (le_abs_self _).trans ?_)
+    rw [← Real.norm_eq_abs]; rw [← dist_eq_norm']
+    exact (hxz _).le
+  obtain ⟨δ, hδ, hyz⟩ := Pi.exists_forall_pos_add_lt hyz
+  refine mem_interior.2 ⟨ball y δ, ?_, isOpen_ball, mem_ball_self hδ⟩
+  rintro w hw
+  refine hs (fun i => ?_) hz
+  simp_rw [ball_pi _ hδ, Real.ball_eq_Ioo] at hw
+  exact ((lt_sub_iff_add_lt.2 <| hyz _).trans (hw _ <| mem_univ _).1).le
 
 Depends on / 依赖: Metric, Metric.mem_closure_iff, Pi.exists_forall_pos_add_lt, Real.norm_eq_abs, dist_eq_norm, dist_pi_lt_iff, exists_forall_pos_add_lt, isOpen_ball, le_abs_self, mem_ball_self, mem_closure_iff, mem_interior, nonempty_fintype, norm_eq_abs, sub_le_iff_le_add, trans_le
 -/
@@ -243,7 +259,15 @@ theorem IsLowerSet.mem_interior_of_forall_lt
   rw [dist_pi_lt_iff hε] at hxz
   have hyz : forall i, y i < z i := by
     refine fun i =>
-      (lt_sub_iff_add_lt.2 <| hxy _).trans_le (sub_le_comm.1 <| (l
+      (lt_sub_iff_add_lt.2 <| hxy _).trans_le (sub_le_comm.1 <| (le_abs_self _).trans ?_)
+    rw [← Real.norm_eq_abs]; rw [← dist_eq_norm]
+    exact (hxz _).le
+  obtain ⟨δ, hδ, hyz⟩ := Pi.exists_forall_pos_add_lt hyz
+  refine mem_interior.2 ⟨ball y δ, ?_, isOpen_ball, mem_ball_self hδ⟩
+  rintro w hw
+  refine hs (fun i => ?_) hz
+  simp_rw [ball_pi _ hδ, Real.ball_eq_Ioo] at hw
+  exact ((hw _ <| mem_univ _).2.trans <| hyz _).le
 
 中文:
 定理 是下集.mem_interior_of_对任意_lt
@@ -255,7 +279,15 @@ theorem IsLowerSet.mem_interior_of_forall_lt
   rw [dist_pi_lt_iff hε] at hxz
   have hyz : forall i, y i < z i := by
     refine fun i =>
-      (lt_sub_iff_add_lt.2 <| hxy _).trans_le (sub_le_comm.1 <| (l
+      (lt_sub_iff_add_lt.2 <| hxy _).trans_le (sub_le_comm.1 <| (le_abs_self _).trans ?_)
+    rw [← Real.norm_eq_abs]; rw [← dist_eq_norm]
+    exact (hxz _).le
+  obtain ⟨δ, hδ, hyz⟩ := Pi.exists_forall_pos_add_lt hyz
+  refine mem_interior.2 ⟨ball y δ, ?_, isOpen_ball, mem_ball_self hδ⟩
+  rintro w hw
+  refine hs (fun i => ?_) hz
+  simp_rw [ball_pi _ hδ, Real.ball_eq_Ioo] at hw
+  exact ((hw _ <| mem_univ _).2.trans <| hyz _).le
 
 Depends on / 依赖: Metric, Metric.mem_closure_iff, Pi.exists_forall_pos_add_lt, Real.norm_eq_abs, dist_eq_norm, dist_pi_lt_iff, exists_forall_pos_add_lt, isOpen_ball, le_abs_self, lt_sub_iff_add_lt, mem_ball_self, mem_closure_iff, mem_interior, nonempty_fintype, norm_eq_abs, sub_le_comm, trans_le
 -/
@@ -320,7 +352,7 @@ lemma dist_mono_left_pi
   proof: by
   refine fun y₁ hy₁ y₂ hy₂ hy => NNReal.coe_le_coe.2 (Finset.sup_mono_fun fun i _ => ?_)
   rw [Real.nndist_eq]; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹y <= _› i : y i <= y₁ i))]; rw [Real.nndist_eq]; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹y <= _› i : y i <= y₂ i))]
-  grw [hy i] -- TOD
+  grw [hy i] -- TODO(gcongr): we would like `grw [hy]` to work here
 
 中文:
 引理 dist_mono_left_pi
@@ -328,7 +360,7 @@ lemma dist_mono_left_pi
   证明: by
   refine fun y₁ hy₁ y₂ hy₂ hy => NNReal.coe_le_coe.2 (Finset.sup_mono_fun fun i _ => ?_)
   rw [Real.nndist_eq]; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹y <= _› i : y i <= y₁ i))]; rw [Real.nndist_eq]; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹y <= _› i : y i <= y₂ i))]
-  grw [hy i] -- TOD
+  grw [hy i] -- TODO(gcongr): we would like `grw [hy]` to work here
 
 Depends on / 依赖: Finset, Finset.sup_mono_fun, NNReal, NNReal.coe_le_coe, Real.nnabs_of_nonneg, Real.nndist_eq, coe_le_coe, nnabs_of_nonneg, nndist_eq, sub_nonneg_of_le, sup_mono_fun
 -/
@@ -366,7 +398,7 @@ lemma dist_anti_left_pi
   proof: by
   refine fun y₁ hy₁ y₂ hy₂ hy => NNReal.coe_le_coe.2 (Finset.sup_mono_fun fun i _ => ?_)
   rw [Real.nndist_eq']; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹_ <= y› i : y₂ i <= y i))]; rw [Real.nndist_eq']; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹_ <= y› i : y₁ i <= y i))]
-  exact Real.toNN
+  exact Real.toNNReal_mono (sub_le_sub_left (hy _) _)
 
 中文:
 引理 dist_anti_left_pi
@@ -374,7 +406,7 @@ lemma dist_anti_left_pi
   证明: by
   refine fun y₁ hy₁ y₂ hy₂ hy => NNReal.coe_le_coe.2 (Finset.sup_mono_fun fun i _ => ?_)
   rw [Real.nndist_eq']; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹_ <= y› i : y₂ i <= y i))]; rw [Real.nndist_eq']; rw [Real.nnabs_of_nonneg (sub_nonneg_of_le (‹_ <= y› i : y₁ i <= y i))]
-  exact Real.toNN
+  exact Real.toNNReal_mono (sub_le_sub_left (hy _) _)
 
 Depends on / 依赖: Finset, Finset.sup_mono_fun, NNReal, NNReal.coe_le_coe, Real.nnabs_of_nonneg, Real.nndist_eq, Real.toNNReal_mono, coe_le_coe, nnabs_of_nonneg, nndist_eq, sub_le_sub_left, sub_nonneg_of_le, sup_mono_fun, toNNReal_mono
 -/
@@ -438,7 +470,14 @@ theorem IsUpperSet.exists_subset_ball
     simp [abs_of_nonneg, hδ.le]
     ring
   obtain ⟨y, hy, hxy⟩ := Metric.mem_closure_iff.1 hx _ (div_pos hδ zero_lt_four)
-  refine fun z hz => hs
+  refine fun z hz => hs.mem_interior_of_forall_lt (subset_closure hy) fun i => ?_
+  rw [mem_closedBall]; rw [dist_eq_norm'] at hz
+  rw [dist_eq_norm] at hxy
+  replace hxy := (norm_le_pi_norm _ i).trans hxy.le
+  replace hz := (norm_le_pi_norm _ i).trans hz
+  dsimp at hxy hz
+  rw [abs_sub_le_iff] at hxy hz
+  linarith
 
 中文:
 定理 是上集.存在_subset_ball
@@ -450,7 +489,14 @@ theorem IsUpperSet.exists_subset_ball
     simp [abs_of_nonneg, hδ.le]
     ring
   obtain ⟨y, hy, hxy⟩ := Metric.mem_closure_iff.1 hx _ (div_pos hδ zero_lt_four)
-  refine fun z hz => hs
+  refine fun z hz => hs.mem_interior_of_forall_lt (subset_closure hy) fun i => ?_
+  rw [mem_closedBall]; rw [dist_eq_norm'] at hz
+  rw [dist_eq_norm] at hxy
+  replace hxy := (norm_le_pi_norm _ i).trans hxy.le
+  replace hz := (norm_le_pi_norm _ i).trans hz
+  dsimp at hxy hz
+  rw [abs_sub_le_iff] at hxy hz
+  linarith
 
 Depends on / 依赖: Metric, Metric.mem_closure_iff, abs_of_nonneg, closedBall_subset_closedBall, const_def, dist_eq_norm, dist_self_add_left, div_pos, hs.mem_interior_of_forall_lt, hxy.le, le_of_eq, mem_closedBall, mem_closure_iff, mem_interior_of_forall_lt, norm_le_pi_norm, pi_norm_const_le, replace, subset_closure, zero_lt_four
 -/
@@ -484,7 +530,14 @@ theorem IsLowerSet.exists_subset_ball
     simp [abs_of_nonneg, hδ.le]
     ring
   obtain ⟨y, hy, hxy⟩ := Metric.mem_closure_iff.1 hx _ (div_pos hδ zero_lt_four)
-  refine fun z hz => hs
+  refine fun z hz => hs.mem_interior_of_forall_lt (subset_closure hy) fun i => ?_
+  rw [mem_closedBall]; rw [dist_eq_norm'] at hz
+  rw [dist_eq_norm] at hxy
+  replace hxy := (norm_le_pi_norm _ i).trans hxy.le
+  replace hz := (norm_le_pi_norm _ i).trans hz
+  dsimp at hxy hz
+  rw [abs_sub_le_iff] at hxy hz
+  linarith
 
 中文:
 定理 是下集.存在_subset_ball
@@ -496,7 +549,14 @@ theorem IsLowerSet.exists_subset_ball
     simp [abs_of_nonneg, hδ.le]
     ring
   obtain ⟨y, hy, hxy⟩ := Metric.mem_closure_iff.1 hx _ (div_pos hδ zero_lt_four)
-  refine fun z hz => hs
+  refine fun z hz => hs.mem_interior_of_forall_lt (subset_closure hy) fun i => ?_
+  rw [mem_closedBall]; rw [dist_eq_norm'] at hz
+  rw [dist_eq_norm] at hxy
+  replace hxy := (norm_le_pi_norm _ i).trans hxy.le
+  replace hz := (norm_le_pi_norm _ i).trans hz
+  dsimp at hxy hz
+  rw [abs_sub_le_iff] at hxy hz
+  linarith
 
 Depends on / 依赖: Metric, Metric.mem_closure_iff, abs_of_nonneg, closedBall_subset_closedBall, const_def, dist_eq_norm, dist_self_sub_left, div_pos, hs.mem_interior_of_forall_lt, hxy.le, le_of_eq, mem_closedBall, mem_closure_iff, mem_interior_of_forall_lt, norm_le_pi_norm, pi_norm_const_le, replace, subset_closure, zero_lt_four
 -/
@@ -536,7 +596,8 @@ lemma IsClosed.upperClosure_pi
   obtain ⟨a, ha⟩ := hx.bddAbove_range
   obtain ⟨b, hb, φ, hφ, hbf⟩ := tendsto_subseq_of_bounded (hs'.isBounded_inter bddAbove_Iic) fun n =>
 ⟨hg n, (hgf _).trans ha mem_range_self _⟩
-  exact ⟨b,
+  exact ⟨b, closure_minimal inter_subset_left hs hb,
+    le_of_tendsto_of_tendsto' hbf (hx.comp hφ.tendsto_atTop) fun _ => hgf _⟩
 
 中文:
 引理 是闭集.upperClosure_pi
@@ -548,7 +609,8 @@ lemma IsClosed.upperClosure_pi
   obtain ⟨a, ha⟩ := hx.bddAbove_range
   obtain ⟨b, hb, φ, hφ, hbf⟩ := tendsto_subseq_of_bounded (hs'.isBounded_inter bddAbove_Iic) fun n =>
 ⟨hg n, (hgf _).trans ha mem_range_self _⟩
-  exact ⟨b,
+  exact ⟨b, closure_minimal inter_subset_left hs hb,
+    le_of_tendsto_of_tendsto' hbf (hx.comp hφ.tendsto_atTop) fun _ => hgf _⟩
 -/
 protected lemma IsClosed.upperClosure_pi (hs : IsClosed s) (hs' : BddBelow s) :
     IsClosed (upperClosure s : Set (ι -> Real)) := by
@@ -574,6 +636,9 @@ lemma IsClosed.lowerClosure_pi
   have : BoundedGENhdsClass Real := by infer_instance
   obtain ⟨a, ha⟩ := hx.bddBelow_range
   obtain ⟨b, hb, φ, hφ, hbf⟩ := tendsto_subseq_of_bounded (hs'.isBounded_inter bddBelow_Ici) fun n =>
+⟨hg n, (ha <| mem_range_self _).trans hfg _⟩
+  exact ⟨b, closure_minimal inter_subset_left hs hb,
+    le_of_tendsto_of_tendsto' (hx.comp hφ.tendsto_atTop) hbf fun _ => hfg _⟩
 
 中文:
 引理 是闭集.lowerClosure_pi
@@ -585,6 +650,9 @@ lemma IsClosed.lowerClosure_pi
   have : BoundedGENhdsClass Real := by infer_instance
   obtain ⟨a, ha⟩ := hx.bddBelow_range
   obtain ⟨b, hb, φ, hφ, hbf⟩ := tendsto_subseq_of_bounded (hs'.isBounded_inter bddBelow_Ici) fun n =>
+⟨hg n, (ha <| mem_range_self _).trans hfg _⟩
+  exact ⟨b, closure_minimal inter_subset_left hs hb,
+    le_of_tendsto_of_tendsto' (hx.comp hφ.tendsto_atTop) hbf fun _ => hfg _⟩
 -/
 protected lemma IsClosed.lowerClosure_pi (hs : IsClosed s) (hs' : BddAbove s) :
     IsClosed (lowerClosure s : Set (ι -> Real)) := by

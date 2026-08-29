@@ -927,7 +927,11 @@ definition homotopyCofiber
   d_comp_d' i j k hij hjk := by
     apply homotopyCofiber.ext_from_X φ j i hij
     · simp only [comp_zero, homotopyCofiber.inlX_d_assoc φ i j k hij hjk,
-        add_comp, assoc, homotopyCofibe
+        add_comp, assoc, homotopyCofiber.inrX_d, Hom.comm_assoc, neg_comp]
+      by_cases hk : c.Rel k (c.next k)
+      · simp [homotopyCofiber.inlX_d φ j k _ hjk hk]
+      · simp [homotopyCofiber.inlX_d' φ j k hjk hk]
+    · simp
 
 中文:
 定义 homotopyCofiber
@@ -938,7 +942,11 @@ definition homotopyCofiber
   d_comp_d' i j k hij hjk := by
     apply homotopyCofiber.ext_from_X φ j i hij
     · simp only [comp_zero, homotopyCofiber.inlX_d_assoc φ i j k hij hjk,
-        add_comp, assoc, homotopyCofibe
+        add_comp, assoc, homotopyCofiber.inrX_d, Hom.comm_assoc, neg_comp]
+      by_cases hk : c.Rel k (c.next k)
+      · simp [homotopyCofiber.inlX_d φ j k _ hjk hk]
+      · simp [homotopyCofiber.inlX_d' φ j k hjk hk]
+    · simp
 
 Depends on / 依赖: homotopyCofiber, homotopyCofiber.X
 -/
@@ -992,7 +1000,10 @@ definition inrCompHomotopy
     rw [prevD_eq _ hij]; rw [dif_pos hij]
     by_cases hj : c.Rel j (c.next j)
     · simp only [comp_f, homotopyCofiber_d, zero_f, add_zero,
-        inlX_d φ i j _ hij hj, dNext_eq 
+        inlX_d φ i j _ hij hj, dNext_eq _ hj, dif_pos hj,
+        add_neg_cancel_left, inr_f]
+    · rw [dNext_eq_zero _ _ hj, zero_add, zero_f, add_zero, homotopyCofiber_d,
+        inlX_d' _ _ _ _ hj, comp_f, inr_f]
 
 中文:
 定义 inrCompHomotopy
@@ -1004,7 +1015,10 @@ definition inrCompHomotopy
     rw [prevD_eq _ hij]; rw [dif_pos hij]
     by_cases hj : c.Rel j (c.next j)
     · simp only [comp_f, homotopyCofiber_d, zero_f, add_zero,
-        inlX_d φ i j _ hij hj, dNext_eq 
+        inlX_d φ i j _ hij hj, dNext_eq _ hj, dif_pos hj,
+        add_neg_cancel_left, inr_f]
+    · rw [dNext_eq_zero _ _ hj, zero_add, zero_f, add_zero, homotopyCofiber_d,
+        inlX_d' _ _ _ _ hj, comp_f, inr_f]
 
 Depends on / 依赖: add_neg_cancel_left, add_zero, c.Rel, c.next, comp_f, dNext_eq, dNext_eq_zero, dif_neg, dif_pos, homotopyCofiber_d, inlX_d, inr_f, prevD_eq, zero_add, zero_f
 -/
@@ -1082,7 +1096,11 @@ definition desc
     simp [dif_pos hjk]
     have H := hα.comm (c.next j)
     simp only [comp_f, zero_f, add_zero, prevD_eq _ hjk] at H
-    split_ifs with 
+    split_ifs with hj
+    · simp only [comp_add, d_sndX_assoc _ _ _ hjk, add_comp, assoc, H,
+        d_fstX_assoc _ _ _ _ hjk, neg_comp, dNext, AddMonoidHom.mk'_apply]
+      abel
+    · simp only [d_sndX_assoc _ _ _ hjk, add_comp, assoc, H, dNext_eq_zero _ _ hj, zero_add]
 
 中文:
 定义 desc
@@ -1095,7 +1113,11 @@ definition desc
     simp [dif_pos hjk]
     have H := hα.comm (c.next j)
     simp only [comp_f, zero_f, add_zero, prevD_eq _ hjk] at H
-    split_ifs with 
+    split_ifs with hj
+    · simp only [comp_add, d_sndX_assoc _ _ _ hjk, add_comp, assoc, H,
+        d_fstX_assoc _ _ _ _ hjk, neg_comp, dNext, AddMonoidHom.mk'_apply]
+      abel
+    · simp only [d_sndX_assoc _ _ _ hjk, add_comp, assoc, H, dNext_eq_zero _ _ hj, zero_add]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, _apply, add_comp, add_zero, c.Rel, c.next, c.next_eq, comp_add, comp_f, dNext_eq_zero, d_fstX_assoc, d_sndX_assoc, dif_pos, neg_comp, next_eq, prevD_eq, split_ifs, zero_add, zero_f
 -/
@@ -1560,7 +1582,10 @@ definition mapHomologicalComplexObjXIso
     haveI := preservesBinaryBiproducts_of_preservesBiproducts H
     haveI := HasHomotopyCofiber.hasBinaryBiproduct φ _ _ hi
     haveI := HasHomotopyCofiber.hasBinaryBiproduct ((H.mapHomologicalComplex c).map φ) _ _ hi
-    exact H.mapIso (homotopyCofiber.XIsoBipro
+    exact H.mapIso (homotopyCofiber.XIsoBiprod φ _ _ hi) ≪≫ H.mapBiprod _ _ ≪≫
+      (homotopyCofiber.XIsoBiprod ((H.mapHomologicalComplex c).map φ) _ _ hi).symm
+  else H.mapIso (homotopyCofiber.XIso φ i hi) ≪≫
+    (homotopyCofiber.XIso ((H.mapHomologicalComplex c).map φ) i hi).symm
 
 中文:
 定义 mapHomologicalComplexObjXIso
@@ -1570,7 +1595,10 @@ definition mapHomologicalComplexObjXIso
     haveI := preservesBinaryBiproducts_of_preservesBiproducts H
     haveI := HasHomotopyCofiber.hasBinaryBiproduct φ _ _ hi
     haveI := HasHomotopyCofiber.hasBinaryBiproduct ((H.mapHomologicalComplex c).map φ) _ _ hi
-    exact H.mapIso (homotopyCofiber.XIsoBipro
+    exact H.mapIso (homotopyCofiber.XIsoBiprod φ _ _ hi) ≪≫ H.mapBiprod _ _ ≪≫
+      (homotopyCofiber.XIsoBiprod ((H.mapHomologicalComplex c).map φ) _ _ hi).symm
+  else H.mapIso (homotopyCofiber.XIso φ i hi) ≪≫
+    (homotopyCofiber.XIso ((H.mapHomologicalComplex c).map φ) i hi).symm
 
 Depends on / 依赖: H.mapBiprod, H.mapHomologicalComplex, H.mapIso, HasHomotopyCofiber, HasHomotopyCofiber.hasBinaryBiproduct, XIsoBiprod, c.Rel, c.next, hasBinaryBiproduct, homotopyCofiber, homotopyCofiber.XIso, homotopyCofiber.XIsoBiprod, mapBiprod, mapHomologicalComplex, mapIso, preservesBinaryBiproducts_of_preservesBiproducts
 -/
@@ -1685,7 +1713,8 @@ definition mapHomologicalComplexObjIso
       apply ext_from_X _ _ _ hij
       · by_cases hj : c.Rel j (c.next j)
         · simp [← Functor.map_comp, inlX_d _ _ _ _ _ hj, inlX_d_assoc _ _ _ _ _ hj]
- 
+        · simp [← Functor.map_comp, inlX_d' _ _ _ _ hj, inlX_d'_assoc _ _ _ _ hj]
+      · simp [← Functor.map_comp]))
 
 中文:
 定义 mapHomologicalComplexObjIso
@@ -1697,7 +1726,8 @@ definition mapHomologicalComplexObjIso
       apply ext_from_X _ _ _ hij
       · by_cases hj : c.Rel j (c.next j)
         · simp [← Functor.map_comp, inlX_d _ _ _ _ _ hj, inlX_d_assoc _ _ _ _ _ hj]
- 
+        · simp [← Functor.map_comp, inlX_d' _ _ _ _ hj, inlX_d'_assoc _ _ _ _ hj]
+      · simp [← Functor.map_comp]))
 
 Depends on / 依赖: Functor, Functor.map_comp, HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, Iso.symm, LeftHomologyMapData, LeftHomologyMapData.add_, _assoc, c.Rel, c.next, ext_from_X, inlX_d, inlX_d_assoc, isoOfComponents, leftHomologyMap, mapHomologicalComplexObjXIso, map_comp
 -/
@@ -2096,7 +2126,17 @@ lemma inlX_nullHomotopy_f
   · obtain ⟨k, hjk⟩ := hj
     simp only [assoc, Homotopy.nullHomotopicMap'_f hjk hij, homotopyCofiber_d,
       homotopyCofiber.d_sndX_assoc _ _ _ hij, add_comp, comp_add, homotopyCofiber.inlX_fstX_assoc,
-      homotopyCofiber.i
+      homotopyCofiber.inlX_sndX_assoc, zero_comp, add_zero, comp_sub, inlX_π_assoc, comp_id,
+      zero_sub, ← HomologicalComplex.comp_f_assoc, biprod.lift_snd, neg_f_apply, id_f,
+      neg_comp, id_comp]
+  · simp only [Homotopy.nullHomotopicMap'_f_of_not_rel_right hij hj, homotopyCofiber_d, assoc,
+    comp_sub, comp_id,
+      homotopyCofiber.d_sndX_assoc _ _ _ hij, add_comp, comp_add, zero_comp, add_zero,
+      homotopyCofiber.inlX_fstX_assoc, homotopyCofiber.inlX_sndX_assoc,
+      ← HomologicalComplex.comp_f_assoc, biprod.lift_snd, neg_f_apply, id_f, neg_comp,
+      id_comp, inlX_π_assoc, zero_sub]
+
+include hc
 
 中文:
 引理 inlX_nullHomotopy_f
@@ -2107,7 +2147,17 @@ lemma inlX_nullHomotopy_f
   · obtain ⟨k, hjk⟩ := hj
     simp only [assoc, Homotopy.nullHomotopicMap'_f hjk hij, homotopyCofiber_d,
       homotopyCofiber.d_sndX_assoc _ _ _ hij, add_comp, comp_add, homotopyCofiber.inlX_fstX_assoc,
-      homotopyCofiber.i
+      homotopyCofiber.inlX_sndX_assoc, zero_comp, add_zero, comp_sub, inlX_π_assoc, comp_id,
+      zero_sub, ← HomologicalComplex.comp_f_assoc, biprod.lift_snd, neg_f_apply, id_f,
+      neg_comp, id_comp]
+  · simp only [Homotopy.nullHomotopicMap'_f_of_not_rel_right hij hj, homotopyCofiber_d, assoc,
+    comp_sub, comp_id,
+      homotopyCofiber.d_sndX_assoc _ _ _ hij, add_comp, comp_add, zero_comp, add_zero,
+      homotopyCofiber.inlX_fstX_assoc, homotopyCofiber.inlX_sndX_assoc,
+      ← HomologicalComplex.comp_f_assoc, biprod.lift_snd, neg_f_apply, id_f, neg_comp,
+      id_comp, inlX_π_assoc, zero_sub]
+
+include hc
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.comp_f_assoc, Homotopy, Homotopy.nullHomotopicMap, _f_of_not_rel, add_comp, add_zero, biprod, biprod.lift_snd, c.Rel, comp_add, comp_f_assoc, comp_id, comp_sub, d_sndX_assoc, homotopyCofiber, homotopyCofiber.d_sndX_assoc, homotopyCofiber.inlX_fstX_assoc, homotopyCofiber.inlX_sndX_assoc, homotopyCofiber_d
 -/
@@ -2145,7 +2195,24 @@ lemma inrX_nullHomotopy_f
   dsimp [nullHomotopicMap]
   by_cases hj : exists (k : ι), c.Rel j k
   · obtain ⟨k, hjk⟩ := hj
-    simp only [Homotopy.nullHomotopicMap'_f hij hjk, homotopyCofiber_d
+    simp only [Homotopy.nullHomotopicMap'_f hij hjk, homotopyCofiber_d, assoc, comp_add,
+      homotopyCofiber.inrX_d_assoc, homotopyCofiber.inrX_sndX_assoc, comp_sub,
+      inrX_π_assoc, comp_id, ← Hom.comm_assoc, homotopyCofiber.inlX_d _ _ _ _ _ hjk,
+      comp_neg, add_neg_cancel_left]
+    rw [← cancel_epi (biprodXIso K K j).inv]
+    ext
+    · simp [ι₀]
+    · simp only [inr_biprodXIso_inv_assoc, biprod_inr_snd_f_assoc, comp_sub,
+        biprod_inr_desc_f_assoc, id_f, id_comp, ι₀, comp_f, this,
+        sub_f_apply, sub_comp, homotopyCofiber.inr_f]
+  · simp only [not_exists] at hj
+    simp only [assoc, Homotopy.nullHomotopicMap'_f_of_not_rel_left hij hj,
+      homotopyCofiber_d, homotopyCofiber.inlX_d' _ _ _ _ (hj _), homotopyCofiber.inrX_sndX_assoc,
+      comp_sub, inrX_π_assoc, comp_id, ι₀, comp_f, homotopyCofiber.inr_f]
+    rw [← cancel_epi (biprodXIso K K j).inv]
+    ext
+    · simp
+    · simp [this]
 
 中文:
 引理 inrX_nullHomotopy_f
@@ -2157,7 +2224,24 @@ lemma inrX_nullHomotopy_f
   dsimp [nullHomotopicMap]
   by_cases hj : exists (k : ι), c.Rel j k
   · obtain ⟨k, hjk⟩ := hj
-    simp only [Homotopy.nullHomotopicMap'_f hij hjk, homotopyCofiber_d
+    simp only [Homotopy.nullHomotopicMap'_f hij hjk, homotopyCofiber_d, assoc, comp_add,
+      homotopyCofiber.inrX_d_assoc, homotopyCofiber.inrX_sndX_assoc, comp_sub,
+      inrX_π_assoc, comp_id, ← Hom.comm_assoc, homotopyCofiber.inlX_d _ _ _ _ _ hjk,
+      comp_neg, add_neg_cancel_left]
+    rw [← cancel_epi (biprodXIso K K j).inv]
+    ext
+    · simp [ι₀]
+    · simp only [inr_biprodXIso_inv_assoc, biprod_inr_snd_f_assoc, comp_sub,
+        biprod_inr_desc_f_assoc, id_f, id_comp, ι₀, comp_f, this,
+        sub_f_apply, sub_comp, homotopyCofiber.inr_f]
+  · simp only [not_exists] at hj
+    simp only [assoc, Homotopy.nullHomotopicMap'_f_of_not_rel_left hij hj,
+      homotopyCofiber_d, homotopyCofiber.inlX_d' _ _ _ _ (hj _), homotopyCofiber.inrX_sndX_assoc,
+      comp_sub, inrX_π_assoc, comp_id, ι₀, comp_f, homotopyCofiber.inr_f]
+    rw [← cancel_epi (biprodXIso K K j).inv]
+    ext
+    · simp
+    · simp [this]
 
 Depends on / 依赖: Hom.comm_assoc, Homotopy, Homotopy.nullHomotopicMap, add_neg_cancel_left, biprod, biprod.hom_ext, biprod.inl, biprod.inr, biprod.lift, c.Rel, cancel_epi, comm_assoc, comp_add, comp_id, comp_neg, comp_sub, hom_ext, homotopyCofiber, homotopyCofiber.inlX_d, homotopyCofiber.inrX_d_assoc
 -/

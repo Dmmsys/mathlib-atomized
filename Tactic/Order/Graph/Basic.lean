@@ -167,7 +167,9 @@ definition buildTransitiveLeProofDFS
     let u := edge.dst
     if !(← get).visited.contains u then
       match ← buildTransitiveLeProofDFS g u t tExpr with
-| 
+| some pf => return some ← mkAppM ``le_trans #[edge.proof, pf]
+      | none => continue
+  return none
 
 中文:
 定义 buildTransitiveLeProofDFS
@@ -182,7 +184,9 @@ definition buildTransitiveLeProofDFS
     let u := edge.dst
     if !(← get).visited.contains u then
       match ← buildTransitiveLeProofDFS g u t tExpr with
-| 
+| some pf => return some ← mkAppM ``le_trans #[edge.proof, pf]
+      | none => continue
+  return none
 -/
 partial def buildTransitiveLeProofDFS (g : Graph) (v t : Nat) (tExpr : Expr) :
     StateT DFSState MetaM (Option Expr) := do

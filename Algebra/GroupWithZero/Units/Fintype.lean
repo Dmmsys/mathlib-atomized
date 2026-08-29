@@ -127,7 +127,7 @@ theorem Nat.card_units
   rw [Nat.card_congr unitsEquivNeZero]; rw [eq_comm]; rw [← Nat.card_congr (Equiv.sumCompl (· = (0 : α)))]
   rcases finite_or_infinite {a : α // a != 0}
   · rw [Nat.card_sum, Nat.card_unique, add_tsub_cancel_left]
-  · rw [Nat.card_eq_zero_of_infinite, Nat.card_eq_zero_of_infinite, zer
+  · rw [Nat.card_eq_zero_of_infinite, Nat.card_eq_zero_of_infinite, zero_tsub]
 
 中文:
 定理 自然数.card_units
@@ -137,7 +137,7 @@ theorem Nat.card_units
   rw [Nat.card_congr unitsEquivNeZero]; rw [eq_comm]; rw [← Nat.card_congr (Equiv.sumCompl (· = (0 : α)))]
   rcases finite_or_infinite {a : α // a != 0}
   · rw [Nat.card_sum, Nat.card_unique, add_tsub_cancel_left]
-  · rw [Nat.card_eq_zero_of_infinite, Nat.card_eq_zero_of_infinite, zer
+  · rw [Nat.card_eq_zero_of_infinite, Nat.card_eq_zero_of_infinite, zero_tsub]
 
 Depends on / 依赖: Equiv.sumCompl, Nat.card_congr, Nat.card_eq_zero_of_infinite, Nat.card_sum, Nat.card_unique, add_tsub_cancel_left, card_congr, card_eq_zero_of_infinite, card_sum, card_unique, classical, eq_comm, finite_or_infinite, sumCompl, unitsEquivNeZero, zero_tsub
 -/

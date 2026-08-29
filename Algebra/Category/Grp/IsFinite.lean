@@ -83,7 +83,19 @@ instance :
     simp only [prop_isFinite_iff] at hN ⊢
     exact Finite.of_injective _ hf
   prop_of_epi {M N} f hf hM := by
-    rw [AddCommGrpCat
+    rw [AddCommGrpCat.epi_iff_surjective] at hf
+    simp only [prop_isFinite_iff] at hM ⊢
+    exact Finite.of_surjective _ hf
+  prop_X₂_of_shortExact {S} hS h₁ h₃ := by
+    simp only [prop_isFinite_iff] at h₁ h₃ ⊢
+    have hg := hS.epi_g
+    rw [AddCommGrpCat.epi_iff_surjective] at hg
+    obtain ⟨s, hs⟩ := hg.hasRightInverse
+    have hφ : Function.Surjective (fun (x₁, x₃) => S.f x₁ + s x₃) := fun x₂ => by
+      obtain ⟨x₁, hx₁⟩ := (ShortComplex.ab_exact_iff S).1 hS.exact (x₂ - s (S.g x₂))
+        (by simp [hs (S.g x₂)])
+      exact ⟨⟨x₁, S.g x₂⟩, by simp [hx₁]⟩
+    exact Finite.of_surjective _ hφ
 
 中文:
 实例 :
@@ -95,7 +107,19 @@ instance :
     simp only [prop_isFinite_iff] at hN ⊢
     exact Finite.of_injective _ hf
   prop_of_epi {M N} f hf hM := by
-    rw [AddCommGrpCat
+    rw [AddCommGrpCat.epi_iff_surjective] at hf
+    simp only [prop_isFinite_iff] at hM ⊢
+    exact Finite.of_surjective _ hf
+  prop_X₂_of_shortExact {S} hS h₁ h₃ := by
+    simp only [prop_isFinite_iff] at h₁ h₃ ⊢
+    have hg := hS.epi_g
+    rw [AddCommGrpCat.epi_iff_surjective] at hg
+    obtain ⟨s, hs⟩ := hg.hasRightInverse
+    have hφ : Function.Surjective (fun (x₁, x₃) => S.f x₁ + s x₃) := fun x₂ => by
+      obtain ⟨x₁, hx₁⟩ := (ShortComplex.ab_exact_iff S).1 hS.exact (x₂ - s (S.g x₂))
+        (by simp [hs (S.g x₂)])
+      exact ⟨⟨x₁, S.g x₂⟩, by simp [hx₁]⟩
+    exact Finite.of_surjective _ hφ
 
 Depends on / 依赖: isZero_of_subsingleton
 -/

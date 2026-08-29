@@ -106,7 +106,7 @@ definition IsSplitEqualizer.map
   condition := by rw [← F.map_comp, q.condition, F.map_comp]
   ι_leftRetraction := by rw [← F.map_comp, q.ι_leftRetraction, F.map_id]
   bottom_rightRetraction := by rw [← F.map_comp, q.bottom_rightRetraction, F.map_id]
-  top_rightRe
+  top_rightRetraction := by rw [← F.map_comp, q.top_rightRetraction, F.map_comp]
 
 中文:
 定义 是SplitEqualizer.map
@@ -116,7 +116,7 @@ definition IsSplitEqualizer.map
   condition := by rw [← F.map_comp, q.condition, F.map_comp]
   ι_leftRetraction := by rw [← F.map_comp, q.ι_leftRetraction, F.map_id]
   bottom_rightRetraction := by rw [← F.map_comp, q.bottom_rightRetraction, F.map_id]
-  top_rightRe
+  top_rightRetraction := by rw [← F.map_comp, q.top_rightRetraction, F.map_comp]
 
 Depends on / 依赖: F.map, leftRetraction, q.leftRetraction
 -/

@@ -219,7 +219,10 @@ theorem eventually_uniformity_iterate_comp_subset
   | succ _ ihn =>
     rcases comp_mem_uniformity_sets hs with ⟨t, htU, hts⟩
     refine (ihn htU).mono fun U hU => ?_
-    rw [Function
+    rw [Function.iterate_succ_apply']
+    have := isRefl_of_mem_uniformity htU
+exact ⟨hU.1.trans SetRel.left_subset_comp.trans hts,
+     (SetRel.comp_subset_comp hU.1 hU.2).trans hts⟩
 
 中文:
 定理 eventually_uniformity_iterate_comp_subset
@@ -231,7 +234,10 @@ theorem eventually_uniformity_iterate_comp_subset
   | succ _ ihn =>
     rcases comp_mem_uniformity_sets hs with ⟨t, htU, hts⟩
     refine (ihn htU).mono fun U hU => ?_
-    rw [Function
+    rw [Function.iterate_succ_apply']
+    have := isRefl_of_mem_uniformity htU
+exact ⟨hU.1.trans SetRel.left_subset_comp.trans hts,
+     (SetRel.comp_subset_comp hU.1 hU.2).trans hts⟩
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, SetRel, SetRel.comp_subset_comp, SetRel.left_subset_comp.trans, comp_mem_uniformity_sets, comp_subset_comp, eventually_and, generalizing, isRefl_of_mem_uniformity, iterate_succ_apply, left_subset_comp, smallSets, subseteq
 -/
@@ -396,7 +402,14 @@ theorem nhdset_of_mem_uniformity
 mem_nhds_iff.mp
       show cl_d in 𝓝 (x, y) by
         rw [nhds_eq_uniformity_prod]; rw [mem_lift'_sets]
-        · exact 
+        · exact ⟨d, hd, fun ⟨a, b⟩ ⟨ha, hb⟩ => ⟨x, y, ha, hp, hb⟩⟩
+        · exact fun _ _ h _ h' => ⟨h h'.1, h h'.2⟩
+  choose t ht using this
+  exact ⟨(⋃ p : α × α, ⋃ h : p in s, t p h : SetRel α α),
+    isOpen_iUnion fun p : α × α => isOpen_iUnion fun hp => (ht p hp).right.left,
+    fun ⟨a, b⟩ hp => by
+      simp only [mem_iUnion, Prod.exists]; exact ⟨a, b, hp, (ht (a, b) hp).right.right⟩,
+    iUnion_subset fun p => iUnion_subset fun hp => (ht p hp).left⟩
 
 中文:
 定理 nhdset_of_mem_uniformity
@@ -407,7 +420,14 @@ mem_nhds_iff.mp
 mem_nhds_iff.mp
       show cl_d in 𝓝 (x, y) by
         rw [nhds_eq_uniformity_prod]; rw [mem_lift'_sets]
-        · exact 
+        · exact ⟨d, hd, fun ⟨a, b⟩ ⟨ha, hb⟩ => ⟨x, y, ha, hp, hb⟩⟩
+        · exact fun _ _ h _ h' => ⟨h h'.1, h h'.2⟩
+  choose t ht using this
+  exact ⟨(⋃ p : α × α, ⋃ h : p in s, t p h : SetRel α α),
+    isOpen_iUnion fun p : α × α => isOpen_iUnion fun hp => (ht p hp).right.left,
+    fun ⟨a, b⟩ hp => by
+      simp only [mem_iUnion, Prod.exists]; exact ⟨a, b, hp, (ht (a, b) hp).right.right⟩,
+    iUnion_subset fun p => iUnion_subset fun hp => (ht p hp).left⟩
 
 Depends on / 依赖: IsOpen, SetRel, _sets, cl_d, isOpen_iUnion, mem_lift, mem_nhds_iff, mem_nhds_iff.mp, nhds_eq_uniformity_prod, subseteq
 -/
@@ -443,7 +463,7 @@ theorem nhds_le_uniformity
     exact prod_mem_prod (ball_mem_nhds x w_in) (ball_mem_nhds x w_in)
   apply mem_of_superset this
   rintro ⟨u, v⟩ ⟨u_in, v_in⟩
-  exact w_
+  exact w_sub (mem_comp_of_mem_ball u_in v_in)
 
 中文:
 定理 nhds_le_uniformity
@@ -457,7 +477,7 @@ theorem nhds_le_uniformity
     exact prod_mem_prod (ball_mem_nhds x w_in) (ball_mem_nhds x w_in)
   apply mem_of_superset this
   rintro ⟨u, v⟩ ⟨u_in, v_in⟩
-  exact w_
+  exact w_sub (mem_comp_of_mem_ball u_in v_in)
 
 Depends on / 依赖: V_in, ball_mem_nhds, comp_symm_mem_uniformity_sets, mem_comp_of_mem_ball, mem_of_superset, nhds_prod_eq, prod_mem_prod, u_in, v_in, w_in, w_sub, w_symm
 -/
@@ -578,7 +598,8 @@ theorem uniformity_hasBasis_closed
   refine Subset.trans ?_ r
   rw [closure_eq_uniformity]
   apply iInter_subset_of_subset
-  apply iIn
+  apply iInter_subset
+  exact ⟨w_in, w_symm⟩
 
 中文:
 定理 uniformity_hasBasis_closed
@@ -589,7 +610,8 @@ theorem uniformity_hasBasis_closed
   refine Subset.trans ?_ r
   rw [closure_eq_uniformity]
   apply iInter_subset_of_subset
-  apply iIn
+  apply iInter_subset
+  exact ⟨w_in, w_symm⟩
 
 Depends on / 依赖: Filter, Filter.hasBasis_self, Subset, Subset.trans, closure, closure_eq_uniformity, comp_comp_symm_mem_uniformity_sets, hasBasis_self, iInter_subset, iInter_subset_of_subset, isClosed_closure, mem_of_superset, subset_closure, w_in, w_symm
 -/
@@ -705,7 +727,12 @@ theorem uniformity_eq_uniformity_interior
         calc
           s subseteq t := hst
           _ subseteq interior d :=
-            ht.subset_in
+            ht.subset_interior_iff.mpr fun x (hx : x in t) =>
+              let ⟨x, y, h₁, h₂, h₃⟩ := ht_comp hx
+              hs_comp ⟨x, h₁, y, h₂, h₃⟩
+      have : interior d in 𝓤 α := by filter_upwards [hs] using this
+      simp [this])
+    fun _ hs => ((𝓤 α).lift' interior).sets_of_superset (mem_lift' hs) interior_subset
 
 中文:
 定理 uniformity_eq_uniformity_interior
@@ -718,7 +745,12 @@ theorem uniformity_eq_uniformity_interior
         calc
           s subseteq t := hst
           _ subseteq interior d :=
-            ht.subset_in
+            ht.subset_interior_iff.mpr fun x (hx : x in t) =>
+              let ⟨x, y, h₁, h₂, h₃⟩ := ht_comp hx
+              hs_comp ⟨x, h₁, y, h₂, h₃⟩
+      have : interior d in 𝓤 α := by filter_upwards [hs] using this
+      simp [this])
+    fun _ hs => ((𝓤 α).lift' interior).sets_of_superset (mem_lift' hs) interior_subset
 
 Depends on / 依赖: comp3_mem_uniformity, filter_upwards, hs_comp, ht.subset_interior_iff.mpr, ht_comp, interior, interior_subset, le_antisymm, mem_lift, nhdset_of_mem_uniformity, sets_of_superset, subset_interior_iff, subseteq
 -/
@@ -1052,7 +1084,7 @@ instance :
         symm := le_iInf₂ fun u hu =>
           le_trans (map_mono <| iInf_le_of_le _ <| iInf_le _ hu) u.symm
         comp := le_iInf₂ fun u hu =>
-          le_trans 
+          le_trans (lift'_mono (iInf_le_of_le _ <| iInf_le _ hu) <| le_rfl) u.comp }⟩
 
 中文:
 实例 :
@@ -1064,7 +1096,7 @@ instance :
         symm := le_iInf₂ fun u hu =>
           le_trans (map_mono <| iInf_le_of_le _ <| iInf_le _ hu) u.symm
         comp := le_iInf₂ fun u hu =>
-          le_trans 
+          le_trans (lift'_mono (iInf_le_of_le _ <| iInf_le _ hu) <| le_rfl) u.comp }⟩
 -/
 instance : InfSet (UniformSpace α) :=
   ⟨fun s =>
@@ -1155,7 +1187,8 @@ instance :
       symm := by simp [Tendsto, SetRel.id]
 comp := lift'_le (mem_principal_self _) principal_mono.2 (SetRel.id_comp _).subset
       nhds_eq_comap_uniformity := fun s => by
-        let _ : TopologicalSpace α := ⊥; have := discreteTopology_bot
+        let _ : TopologicalSpace α := ⊥; have := discreteTopology_bot α
+        simp [SetRel.id] }⟩
 
 中文:
 实例 :
@@ -1165,7 +1198,8 @@ comp := lift'_le (mem_principal_self _) principal_mono.2 (SetRel.id_comp _).subs
       symm := by simp [Tendsto, SetRel.id]
 comp := lift'_le (mem_principal_self _) principal_mono.2 (SetRel.id_comp _).subset
       nhds_eq_comap_uniformity := fun s => by
-        let _ : TopologicalSpace α := ⊥; have := discreteTopology_bot
+        let _ : TopologicalSpace α := ⊥; have := discreteTopology_bot α
+        simp [SetRel.id] }⟩
 -/
 instance : Bot (UniformSpace α) :=
   ⟨{ toTopologicalSpace := ⊥
@@ -1188,7 +1222,7 @@ instance :
 comp := (lift'_inf_le _ _ _).trans inf_le_inf u₁.comp u₂.comp
       toTopologicalSpace := u₁.toTopologicalSpace ⊓ u₂.toTopologicalSpace
       nhds_eq_comap_uniformity := fun _ => by
-        rw [@nhds_inf _ u₁.toTopolog
+        rw [@nhds_inf _ u₁.toTopologicalSpace _]; rw [@nhds_eq_comap_uniformity _ u₁]; rw [@nhds_eq_comap_uniformity _ u₂]; rw [comap_inf] }⟩
 
 中文:
 实例 :
@@ -1199,7 +1233,7 @@ comp := (lift'_inf_le _ _ _).trans inf_le_inf u₁.comp u₂.comp
 comp := (lift'_inf_le _ _ _).trans inf_le_inf u₁.comp u₂.comp
       toTopologicalSpace := u₁.toTopologicalSpace ⊓ u₂.toTopologicalSpace
       nhds_eq_comap_uniformity := fun _ => by
-        rw [@nhds_inf _ u₁.toTopolog
+        rw [@nhds_inf _ u₁.toTopologicalSpace _]; rw [@nhds_eq_comap_uniformity _ u₁]; rw [@nhds_eq_comap_uniformity _ u₂]; rw [comap_inf] }⟩
 
 Depends on / 依赖: _inf_le, comap_inf, inf_le_inf, nhds_eq_comap_uniformity, nhds_inf, symm.inf, toTopologicalSpace, uniformity
 -/
@@ -1224,7 +1258,13 @@ instance :
   sup_le _ _ _ h₁ h₂ := UniformSpace.sInf_le ⟨h₁, h₂⟩
   inf := (· ⊓ ·)
   le_inf a _ _ h₁ h₂ := show a.uniformity <= _ from le_inf h₁ h₂
-  inf_le_left 
+  inf_le_left a _ := show _ <= a.uniformity from inf_le_left
+  inf_le_right _ b := show _ <= b.uniformity from inf_le_right
+  le_top a := show a.uniformity <= ⊤ from le_top
+  bot_le u := u.toCore.refl
+  sSup tt := sInf { t | forall t' in tt, t' <= t }
+  isLUB_sSup _ := isGLB_upperBounds.mp UniformSpace.isGLB_sInf
+  isGLB_sInf _ := UniformSpace.isGLB_sInf
 
 中文:
 实例 :
@@ -1235,7 +1275,13 @@ instance :
   sup_le _ _ _ h₁ h₂ := UniformSpace.sInf_le ⟨h₁, h₂⟩
   inf := (· ⊓ ·)
   le_inf a _ _ h₁ h₂ := show a.uniformity <= _ from le_inf h₁ h₂
-  inf_le_left 
+  inf_le_left a _ := show _ <= a.uniformity from inf_le_left
+  inf_le_right _ b := show _ <= b.uniformity from inf_le_right
+  le_top a := show a.uniformity <= ⊤ from le_top
+  bot_le u := u.toCore.refl
+  sSup tt := sInf { t | forall t' in tt, t' <= t }
+  isLUB_sSup _ := isGLB_upperBounds.mp UniformSpace.isGLB_sInf
+  isGLB_sInf _ := UniformSpace.isGLB_sInf
 -/
 instance : CompleteLattice (UniformSpace α) where
   sup a b := sInf { x | a <= x ∧ b <= x }
@@ -1388,7 +1434,11 @@ abbreviation UniformSpace.comap
     (by
       rw [comap_lift'_eq]; rw [comap_lift'_eq2]
       · exact lift'_mono' fun s _ ⟨a₁, a₂⟩ ⟨x, h₁, h₂⟩ => ⟨f x, h₁, h₂⟩
-      · ex
+      · exact monotone_id.relComp monotone_id)
+    (comap_mono u.comp)
+  toTopologicalSpace := u.toTopologicalSpace.induced f
+  nhds_eq_comap_uniformity x := by
+    simp only [nhds_induced, nhds_eq_comap_uniformity, comap_comap, Function.comp_def]
 
 中文:
 缩写 一致空间.comap
@@ -1401,7 +1451,11 @@ abbreviation UniformSpace.comap
     (by
       rw [comap_lift'_eq]; rw [comap_lift'_eq2]
       · exact lift'_mono' fun s _ ⟨a₁, a₂⟩ ⟨x, h₁, h₂⟩ => ⟨f x, h₁, h₂⟩
-      · ex
+      · exact monotone_id.relComp monotone_id)
+    (comap_mono u.comp)
+  toTopologicalSpace := u.toTopologicalSpace.induced f
+  nhds_eq_comap_uniformity x := by
+    simp only [nhds_induced, nhds_eq_comap_uniformity, comap_comap, Function.comp_def]
 -/
 abbrev UniformSpace.comap (f : α -> β) (u : UniformSpace β) : UniformSpace α where
   uniformity := 𝓤[u].comap fun p : α × α => (f p.1, f p.2)
@@ -1970,7 +2024,9 @@ lemma UniformContinuousOn.comp
   apply Tendsto.comp hg
   refine tendsto_inf.2 ⟨hf, tendsto_inf_right ?_⟩
   simp only [tendsto_principal, mem_prod, eventually_principal, and_imp, Prod.forall]
-  exact fun a b ha hb => ⟨hst ha, hst h
+  exact fun a b ha hb => ⟨hst ha, hst hb⟩
+
+@[fun_prop]
 
 中文:
 引理 UniformContinuousOn.comp
@@ -1980,7 +2036,9 @@ lemma UniformContinuousOn.comp
   apply Tendsto.comp hg
   refine tendsto_inf.2 ⟨hf, tendsto_inf_right ?_⟩
   simp only [tendsto_principal, mem_prod, eventually_principal, and_imp, Prod.forall]
-  exact fun a b ha hb => ⟨hst ha, hst h
+  exact fun a b ha hb => ⟨hst ha, hst hb⟩
+
+@[fun_prop]
 
 Depends on / 依赖: Prod.forall, Tendsto, Tendsto.comp, and_imp, eventually_principal, mem_prod, tendsto_inf, tendsto_inf_right, tendsto_principal
 -/
@@ -3425,7 +3483,10 @@ theorem uniformContinuous_inf_dom_left₂
       exact UniformContinuous fun p : α × β => f p.1 p.2 := by
   -- proof essentially copied from `continuous_inf_dom_left₂`
   have ha := @UniformContinuous.inf_dom_left _ _ id ua1 ua2 ua1 (@uniformContinuous_id _ (id _))
-  have hb := @UniformContinuous.inf_dom_left _ _
+  have hb := @UniformContinuous.inf_dom_left _ _ id ub1 ub2 ub1 (@uniformContinuous_id _ (id _))
+  have h_unif_cont_id :=
+    @UniformContinuous.prodMap _ _ _ _ (ua1 ⊓ ua2) (ub1 ⊓ ub2) ua1 ub1 _ _ ha hb
+  exact @UniformContinuous.comp _ _ _ (id _) (id _) _ _ _ h h_unif_cont_id
 
 中文:
 定理 uniformContinuous_inf_dom_left₂
@@ -3434,7 +3495,10 @@ theorem uniformContinuous_inf_dom_left₂
       exact UniformContinuous fun p : α × β => f p.1 p.2 := by
   -- proof essentially copied from `continuous_inf_dom_left₂`
   have ha := @UniformContinuous.inf_dom_left _ _ id ua1 ua2 ua1 (@uniformContinuous_id _ (id _))
-  have hb := @UniformContinuous.inf_dom_left _ _
+  have hb := @UniformContinuous.inf_dom_left _ _ id ub1 ub2 ub1 (@uniformContinuous_id _ (id _))
+  have h_unif_cont_id :=
+    @UniformContinuous.prodMap _ _ _ _ (ua1 ⊓ ua2) (ub1 ⊓ ub2) ua1 ub1 _ _ ha hb
+  exact @UniformContinuous.comp _ _ _ (id _) (id _) _ _ _ h h_unif_cont_id
 
 Depends on / 依赖: UniformContinuous
 -/
@@ -3460,7 +3524,10 @@ theorem uniformContinuous_inf_dom_right₂
       exact UniformContinuous fun p : α × β => f p.1 p.2 := by
   -- proof essentially copied from `continuous_inf_dom_right₂`
   have ha := @UniformContinuous.inf_dom_right _ _ id ua1 ua2 ua2 (@uniformContinuous_id _ (id _))
-  have hb := @UniformContinuous.inf_dom_right 
+  have hb := @UniformContinuous.inf_dom_right _ _ id ub1 ub2 ub2 (@uniformContinuous_id _ (id _))
+  have h_unif_cont_id :=
+    @UniformContinuous.prodMap _ _ _ _ (ua1 ⊓ ua2) (ub1 ⊓ ub2) ua2 ub2 _ _ ha hb
+  exact @UniformContinuous.comp _ _ _ (id _) (id _) _ _ _ h h_unif_cont_id
 
 中文:
 定理 uniformContinuous_inf_dom_right₂
@@ -3469,7 +3536,10 @@ theorem uniformContinuous_inf_dom_right₂
       exact UniformContinuous fun p : α × β => f p.1 p.2 := by
   -- proof essentially copied from `continuous_inf_dom_right₂`
   have ha := @UniformContinuous.inf_dom_right _ _ id ua1 ua2 ua2 (@uniformContinuous_id _ (id _))
-  have hb := @UniformContinuous.inf_dom_right 
+  have hb := @UniformContinuous.inf_dom_right _ _ id ub1 ub2 ub2 (@uniformContinuous_id _ (id _))
+  have h_unif_cont_id :=
+    @UniformContinuous.prodMap _ _ _ _ (ua1 ⊓ ua2) (ub1 ⊓ ub2) ua2 ub2 _ _ ha hb
+  exact @UniformContinuous.comp _ _ _ (id _) (id _) _ _ _ h h_unif_cont_id
 
 Depends on / 依赖: UniformContinuous
 -/
@@ -3496,7 +3566,8 @@ theorem uniformContinuous_sInf_dom₂
   -- proof essentially copied from `continuous_sInf_dom`
   have ha := uniformContinuous_sInf_dom ha uniformContinuous_id
   have hb := uniformContinuous_sInf_dom hb uniformContinuous_id
-  have h_unif_
+  have h_unif_cont_id := @UniformContinuous.prodMap _ _ _ _ (sInf uas) (sInf ubs) ua ub _ _ ha hb
+  exact @UniformContinuous.comp _ _ _ (id _) (id _) _ _ _ hf h_unif_cont_id
 
 中文:
 定理 uniformContinuous_sInf_dom₂
@@ -3506,7 +3577,8 @@ theorem uniformContinuous_sInf_dom₂
   -- proof essentially copied from `continuous_sInf_dom`
   have ha := uniformContinuous_sInf_dom ha uniformContinuous_id
   have hb := uniformContinuous_sInf_dom hb uniformContinuous_id
-  have h_unif_
+  have h_unif_cont_id := @UniformContinuous.prodMap _ _ _ _ (sInf uas) (sInf ubs) ua ub _ _ ha hb
+  exact @UniformContinuous.comp _ _ _ (id _) (id _) _ _ _ hf h_unif_cont_id
 -/
 theorem uniformContinuous_sInf_dom₂ {α β γ} {f : α -> β -> γ} {uas : Set (UniformSpace α)}
     {ubs : Set (UniformSpace β)} {ua : UniformSpace α} {ub : UniformSpace β} {uc : UniformSpace γ}
@@ -3694,7 +3766,14 @@ instance Sum.instUniformSpace
   symm := fun _ hs => ⟨symm_le_uniformity hs.1, symm_le_uniformity hs.2⟩
   comp := fun s hs => by
     rcases comp_mem_uniformity_sets hs.1 with ⟨tα, htα, Htα⟩
-    rcases comp_mem_uniformity_sets hs.
+    rcases comp_mem_uniformity_sets hs.2 with ⟨tβ, htβ, Htβ⟩
+    filter_upwards [mem_lift' (union_mem_sup (image_mem_map htα) (image_mem_map htβ))]
+    rintro ⟨_, _⟩ ⟨z, ⟨⟨a, b⟩, hab, ⟨⟩⟩ | ⟨⟨a, b⟩, hab, ⟨⟩⟩, ⟨⟨_, c⟩, hbc, ⟨⟩⟩ | ⟨⟨_, c⟩, hbc, ⟨⟩⟩⟩
+    exacts [@Htα (_, _) ⟨b, hab, hbc⟩, @Htβ (_, _) ⟨b, hab, hbc⟩]
+  nhds_eq_comap_uniformity x := by
+    ext
+    cases x <;> simp [mem_comap', -mem_comap, nhds_inl, nhds_inr, nhds_eq_comap_uniformity,
+      Prod.ext_iff]
 
 中文:
 实例 和.instUniformSpace
@@ -3704,7 +3783,14 @@ instance Sum.instUniformSpace
   symm := fun _ hs => ⟨symm_le_uniformity hs.1, symm_le_uniformity hs.2⟩
   comp := fun s hs => by
     rcases comp_mem_uniformity_sets hs.1 with ⟨tα, htα, Htα⟩
-    rcases comp_mem_uniformity_sets hs.
+    rcases comp_mem_uniformity_sets hs.2 with ⟨tβ, htβ, Htβ⟩
+    filter_upwards [mem_lift' (union_mem_sup (image_mem_map htα) (image_mem_map htβ))]
+    rintro ⟨_, _⟩ ⟨z, ⟨⟨a, b⟩, hab, ⟨⟩⟩ | ⟨⟨a, b⟩, hab, ⟨⟩⟩, ⟨⟨_, c⟩, hbc, ⟨⟩⟩ | ⟨⟨_, c⟩, hbc, ⟨⟩⟩⟩
+    exacts [@Htα (_, _) ⟨b, hab, hbc⟩, @Htβ (_, _) ⟨b, hab, hbc⟩]
+  nhds_eq_comap_uniformity x := by
+    ext
+    cases x <;> simp [mem_comap', -mem_comap, nhds_inl, nhds_inr, nhds_eq_comap_uniformity,
+      Prod.ext_iff]
 -/
 instance Sum.instUniformSpace : UniformSpace (α oplus β) where
   uniformity := map (fun p : α × α => (inl p.1, inl p.2)) (𝓤 α) ⊔
@@ -4061,7 +4147,19 @@ lemma exists_is_open_mem_uniformity_of_forall_mem_eq
     intro x hx
     obtain ⟨t, ht, htsymm, htr⟩ := comp_symm_mem_uniformity_sets hr
     have A : {z | (f x, f z) in t} in 𝓝 x := (hf x hx).preimage_mem_nhds (mem_nhds_left (f x) ht)
-    have B : {z | (g x,
+    have B : {z | (g x, g z) in t} in 𝓝 x := (hg x hx).preimage_mem_nhds (mem_nhds_left (g x) ht)
+    rcases _root_.mem_nhds_iff.1 (inter_mem A B) with ⟨u, hu, u_open, xu⟩
+    refine ⟨u, u_open, xu, fun y hy => ?_⟩
+    have I1 : (f y, f x) in t := SetRel.symm t (hu hy).1
+    have I2 : (g x, g y) in t := (hu hy).2
+    rw [hfg hx] at I1
+    exact htr (SetRel.prodMk_mem_comp I1 I2)
+  choose! t t_open xt ht using A
+  refine ⟨⋃ x in s, t x, isOpen_biUnion t_open, fun x hx => mem_biUnion hx (xt x hx), ?_⟩
+  rintro x hx
+  simp only [mem_iUnion, exists_prop] at hx
+  rcases hx with ⟨y, ys, hy⟩
+  exact ht y ys x hy
 
 中文:
 引理 存在_is_open_mem_uniformity_of_对任意_mem_eq
@@ -4070,7 +4168,19 @@ lemma exists_is_open_mem_uniformity_of_forall_mem_eq
     intro x hx
     obtain ⟨t, ht, htsymm, htr⟩ := comp_symm_mem_uniformity_sets hr
     have A : {z | (f x, f z) in t} in 𝓝 x := (hf x hx).preimage_mem_nhds (mem_nhds_left (f x) ht)
-    have B : {z | (g x,
+    have B : {z | (g x, g z) in t} in 𝓝 x := (hg x hx).preimage_mem_nhds (mem_nhds_left (g x) ht)
+    rcases _root_.mem_nhds_iff.1 (inter_mem A B) with ⟨u, hu, u_open, xu⟩
+    refine ⟨u, u_open, xu, fun y hy => ?_⟩
+    have I1 : (f y, f x) in t := SetRel.symm t (hu hy).1
+    have I2 : (g x, g y) in t := (hu hy).2
+    rw [hfg hx] at I1
+    exact htr (SetRel.prodMk_mem_comp I1 I2)
+  choose! t t_open xt ht using A
+  refine ⟨⋃ x in s, t x, isOpen_biUnion t_open, fun x hx => mem_biUnion hx (xt x hx), ?_⟩
+  rintro x hx
+  simp only [mem_iUnion, exists_prop] at hx
+  rcases hx with ⟨y, ys, hy⟩
+  exact ht y ys x hy
 
 Depends on / 依赖: IsOpen, _root_, _root_.mem_nhds_iff, comp_symm_mem_uniformity_sets, htsymm, inter_mem, mem_nhds_iff, mem_nhds_left, preimage_mem_nhds, u_open
 -/

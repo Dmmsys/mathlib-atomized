@@ -725,7 +725,7 @@ theorem IsHenstock.card_filter_tag_eq_le
       refine Finset.card_le_card fun J hJ => ?_
       rw [Finset.mem_filter] at hJ ⊢; rcases hJ with ⟨hJ, rfl⟩
       exact ⟨hJ, h J hJ⟩
-    _ <= 2 ^ Fintype.card ι := π.toPrepartition.card_filter_mem_Ic
+    _ <= 2 ^ Fintype.card ι := π.toPrepartition.card_filter_mem_Icc_le x
 
 中文:
 定理 IsHenstock.card_filter_tag_eq_le
@@ -737,7 +737,7 @@ theorem IsHenstock.card_filter_tag_eq_le
       refine Finset.card_le_card fun J hJ => ?_
       rw [Finset.mem_filter] at hJ ⊢; rcases hJ with ⟨hJ, rfl⟩
       exact ⟨hJ, h J hJ⟩
-    _ <= 2 ^ Fintype.card ι := π.toPrepartition.card_filter_mem_Ic
+    _ <= 2 ^ Fintype.card ι := π.toPrepartition.card_filter_mem_Icc_le x
 
 Depends on / 依赖: Box.Icc, Finset, Finset.card_le_card, Finset.mem_filter, Fintype, Fintype.card, card_filter_mem_Icc_le, card_le_card, classical, mem_filter, toPrepartition, toPrepartition.card_filter_mem_Icc_le
 -/

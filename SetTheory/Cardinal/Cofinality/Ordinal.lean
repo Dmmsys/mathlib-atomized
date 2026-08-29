@@ -127,7 +127,10 @@ theorem cof_toType
 @[deprecated (since := "2026-02-18")] alias cof_eq_cof_toType := cof_toType
 @[deprecated (since := "2026-02-18")] alias le_cof_type := le_cof_iff
 @[deprecated (since := "2026-02-18")] alias cof_type_le := cof_le
-@[deprecated (since := "2026-02-18")] a
+@[deprecated (since := "2026-02-18")] alias lt_cof_type := cof_le
+@[deprecated (since := "2026-02-18")] alias cof_eq := Order.cof_eq
+
+@[simp]
 
 中文:
 定理 cof_toType
@@ -139,7 +142,10 @@ theorem cof_toType
 @[deprecated (since := "2026-02-18")] alias cof_eq_cof_toType := cof_toType
 @[deprecated (since := "2026-02-18")] alias le_cof_type := le_cof_iff
 @[deprecated (since := "2026-02-18")] alias cof_type_le := cof_le
-@[deprecated (since := "2026-02-18")] a
+@[deprecated (since := "2026-02-18")] alias lt_cof_type := cof_le
+@[deprecated (since := "2026-02-18")] alias cof_eq := Order.cof_eq
+
+@[simp]
 
 Depends on / 依赖: cof_type, conv_rhs, type_toType
 -/
@@ -659,7 +665,14 @@ theorem exists_ord_cof_eq
   refine ⟨_, ht, (ord_le.2 (cof_le ht)).antisymm' ?_⟩
   rw [← hs']; rw [hr']; rw [type_le_iff']
   refine ⟨.ofMonotone (fun x => ⟨x.1, ?_⟩) fun x y hxy => ?_⟩
-  · 
+  · grind
+  · apply (trichotomous_of r _ _).resolve_right
+    rintro (_ | hxy')
+    · simp_all [Subtype.coe_inj]
+    · obtain ⟨x, z, hz, rfl⟩ := x
+      exact (hz _ hxy').asymm hxy
+
+@[deprecated (since := "2026-05-25")] alias ord_cof_eq := exists_ord_cof_eq
 
 中文:
 定理 存在_ord_cof_eq
@@ -671,7 +684,14 @@ theorem exists_ord_cof_eq
   refine ⟨_, ht, (ord_le.2 (cof_le ht)).antisymm' ?_⟩
   rw [← hs']; rw [hr']; rw [type_le_iff']
   refine ⟨.ofMonotone (fun x => ⟨x.1, ?_⟩) fun x y hxy => ?_⟩
-  · 
+  · grind
+  · apply (trichotomous_of r _ _).resolve_right
+    rintro (_ | hxy')
+    · simp_all [Subtype.coe_inj]
+    · obtain ⟨x, z, hz, rfl⟩ := x
+      exact (hz _ hxy').asymm hxy
+
+@[deprecated (since := "2026-05-25")] alias ord_cof_eq := exists_ord_cof_eq
 
 Depends on / 依赖: Subtype, Subtype.coe_inj, antisymm, coe_inj, cof_le, exists_cof_eq, exists_ord_eq, hs.trans, isCofinal_setOfPred_imp_lt, ofMonotone, ord_le, resolve_right, trichotomous_of, type_le_iff
 -/
@@ -806,7 +826,13 @@ theorem lift_cof_iSup_add_one
   · have := lift_cof_congr_of_strictMono this ?_
     · rw [← Cardinal.lift_inj.{_, max (u + 1) v}, Cardinal.lift_lift.{_, _, v},
         Cardinal.lift_umax.{_, u + 1}, Cardinal.lift_umax.{_, u + 1}, this]
-    
+      simp
+    · intro ⟨b, hb⟩
+      rw [mem_Iio]; rw [Ordinal.lt_iSup_add_one_iff] at hb
+      obtain ⟨i, hi⟩ := hb
+      exact ⟨_, Set.mem_range_self i, hi⟩
+  · rw [mem_Iio]
+exact (lt_add_one _).trans_le le_ciSup bddAbove_of_small _
 
 中文:
 定理 lift_cof_iSup_add_one
@@ -816,7 +842,13 @@ theorem lift_cof_iSup_add_one
   · have := lift_cof_congr_of_strictMono this ?_
     · rw [← Cardinal.lift_inj.{_, max (u + 1) v}, Cardinal.lift_lift.{_, _, v},
         Cardinal.lift_umax.{_, u + 1}, Cardinal.lift_umax.{_, u + 1}, this]
-    
+      simp
+    · intro ⟨b, hb⟩
+      rw [mem_Iio]; rw [Ordinal.lt_iSup_add_one_iff] at hb
+      obtain ⟨i, hi⟩ := hb
+      exact ⟨_, Set.mem_range_self i, hi⟩
+  · rw [mem_Iio]
+exact (lt_add_one _).trans_le le_ciSup bddAbove_of_small _
 
 Depends on / 依赖: Cardinal, Cardinal.lift_inj, Cardinal.lift_lift, Cardinal.lift_umax, Ordinal, Ordinal.lt_iSup_add_one_iff, Set.mem_range_self, StrictMono, bddAbove_of_small, le_ciSup, lift_cof_congr_of_strictMono, lift_inj, lift_lift, lift_umax, lt_add_one, lt_iSup_add_one_iff, mem_Iio, mem_range_self, trans_le
 -/
@@ -991,7 +1023,7 @@ theorem le_cof_map_of_isNormal
   | limit a ha => rw [cof_map_of_isNormal hf ha]
 
 @[deprecated (since := "2026-03-19")]
-alias cof_le_of_isNor
+alias cof_le_of_isNormal := le_cof_map_of_isNormal
 
 中文:
 定理 le_cof_map_of_isNormal
@@ -1006,7 +1038,7 @@ alias cof_le_of_isNor
   | limit a ha => rw [cof_map_of_isNormal hf ha]
 
 @[deprecated (since := "2026-03-19")]
-alias cof_le_of_isNor
+alias cof_le_of_isNormal := le_cof_map_of_isNormal
 
 Depends on / 依赖: Cardinal, Cardinal.one_le_iff_ne_zero, add_one, cof_add_one, cof_eq_zero, cof_eq_zero.ne, cof_map_of_isNormal, hf.strictMono, limitRecOn, lt_succ, ne_zero, one_le_iff_ne_zero, strictMono
 -/
@@ -1034,7 +1066,15 @@ theorem sSup_add_one_lt_of_lt_cof
     refine small_of_injective (β := Iio a) (f := fun x => ⟨f x, hs _ (f x).2⟩) fun _ => ?_
     simp [Subtype.val_inj]
   have : range (fun i => (f i).1 + 1) = (· + 1) '' s := by
-    convert! range_comp
+    convert! range_comp (· + 1) (fun i => (f i).1)
+    rw [range_comp']; rw [f.range_eq]
+    simp
+  rw [← this]; rw [sSup_range]
+  apply lt_of_le_of_ne
+  · simp [hs]
+  · rintro rfl
+    rw [← lift_cof]; rw [← Cardinal.lift_lt.{_]; rw [u + 2}]; rw [Cardinal.lift_lift]; rw [lift_cof_iSup_add_one fun _ => by simp]; rw [cof_Iio]; rw [← lift_cof]; rw [cof_type]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lt] at ha
+    exact ha.not_ge (cof_le_cardinalMk _)
 
 中文:
 定理 sSup_add_one_lt_of_lt_cof
@@ -1045,7 +1085,15 @@ theorem sSup_add_one_lt_of_lt_cof
     refine small_of_injective (β := Iio a) (f := fun x => ⟨f x, hs _ (f x).2⟩) fun _ => ?_
     simp [Subtype.val_inj]
   have : range (fun i => (f i).1 + 1) = (· + 1) '' s := by
-    convert! range_comp
+    convert! range_comp (· + 1) (fun i => (f i).1)
+    rw [range_comp']; rw [f.range_eq]
+    simp
+  rw [← this]; rw [sSup_range]
+  apply lt_of_le_of_ne
+  · simp [hs]
+  · rintro rfl
+    rw [← lift_cof]; rw [← Cardinal.lift_lt.{_]; rw [u + 2}]; rw [Cardinal.lift_lift]; rw [lift_cof_iSup_add_one fun _ => by simp]; rw [cof_Iio]; rw [← lift_cof]; rw [cof_type]; rw [Cardinal.lift_lift]; rw [Cardinal.lift_lt] at ha
+    exact ha.not_ge (cof_le_cardinalMk _)
 
 Depends on / 依赖: Cardinal, Cardinal.lift_, Cardinal.lift_lt, OrderIso, OrderIso.ofRelIsoLT, Subtype, Subtype.val_inj, convert, f.range_eq, lift_, lift_cof, lift_lt, lt_of_le_of_ne, ofRelIsoLT, range_comp, range_eq, sSup_range, small_of_injective, typeLT, val_inj
 -/
@@ -1356,7 +1404,15 @@ theorem cof_eq_sInf_lsub
     exact cof_iSup_add_one_le f
   · rcases Order.cof_eq (α := o.ToType) with ⟨S, hS, hS'⟩
     let f : S -> Ordinal := fun s => typein LT.lt s.val
-    refine ⟨S, f, le_antisymm (l
+    refine ⟨S, f, le_antisymm (lsub_le fun i => typein_lt_self (o := o) i)
+      (le_of_forall_lt fun a ha => ?_), by rwa [cof_toType] at hS'⟩
+    rw [← type_toType o] at ha
+    rcases hS (enum (· < ·) ⟨a, ha⟩) with ⟨b, hb, hb'⟩
+    rw [← not_lt]; rw [← typein_le_typein]; rw [typein_enum] at hb'
+    exact hb'.trans_lt (lt_lsub.{u, u} f ⟨b, hb⟩)
+
+@[deprecated "to build an increasing function with limit o, use the fundamental sequence API."
+(since := "2026-03-27")]
 
 中文:
 定理 cof_eq_sInf_lsub
@@ -1369,7 +1425,15 @@ theorem cof_eq_sInf_lsub
     exact cof_iSup_add_one_le f
   · rcases Order.cof_eq (α := o.ToType) with ⟨S, hS, hS'⟩
     let f : S -> Ordinal := fun s => typein LT.lt s.val
-    refine ⟨S, f, le_antisymm (l
+    refine ⟨S, f, le_antisymm (lsub_le fun i => typein_lt_self (o := o) i)
+      (le_of_forall_lt fun a ha => ?_), by rwa [cof_toType] at hS'⟩
+    rw [← type_toType o] at ha
+    rcases hS (enum (· < ·) ⟨a, ha⟩) with ⟨b, hb, hb'⟩
+    rw [← not_lt]; rw [← typein_le_typein]; rw [typein_enum] at hb'
+    exact hb'.trans_lt (lt_lsub.{u, u} f ⟨b, hb⟩)
+
+@[deprecated "to build an increasing function with limit o, use the fundamental sequence API."
+(since := "2026-03-27")]
 
 Depends on / 依赖: LT.lt, Order.cof_eq, Ordinal, ToType, cof_eq, cof_iSup_add_one_le, cof_lsub_def_nonempty, cof_toType, csInf_le, le_antisymm, le_csInf, le_of_forall_lt, lsub_le, not_lt, o.ToType, s.val, type_toType, typein, typein_le_typein, typein_lt_self
 -/
@@ -2293,7 +2357,21 @@ theorem mk_bounded_subset
   have h' : IsStrongLimit #α := ⟨ha, @h⟩
   have ha := h'.aleph0_le
   apply le_antisymm
-  · hav
+  · have : { s : Set α | Bounded r s } = ⋃ i, 𝒫 { j | r j i } := ofPred_exists _
+    rw [← coe_ofPred]; rw [this]
+    refine mk_iUnion_le_sum_mk.trans ((sum_le_mk_mul_iSup (fun i => #(𝒫 { j | r j i }))).trans
+      ((mul_le_max_of_aleph0_le_left ha).trans ?_))
+    rw [max_eq_left]
+    apply ciSup_le' _
+    intro i
+    rw [mk_powerset]
+    exact (h (card_typein_lt _ hr)).le
+  · refine @mk_le_of_injective α _ (fun x => Subtype.mk {x} ?_) ?_
+    · apply bounded_singleton
+      rw [← hr]
+      apply isSuccLimit_ord ha
+    · intro a b hab
+      simpa [singleton_eq_singleton_iff] using hab
 
 中文:
 定理 mk_bounded_subset
@@ -2309,7 +2387,21 @@ theorem mk_bounded_subset
   have h' : IsStrongLimit #α := ⟨ha, @h⟩
   have ha := h'.aleph0_le
   apply le_antisymm
-  · hav
+  · have : { s : Set α | Bounded r s } = ⋃ i, 𝒫 { j | r j i } := ofPred_exists _
+    rw [← coe_ofPred]; rw [this]
+    refine mk_iUnion_le_sum_mk.trans ((sum_le_mk_mul_iSup (fun i => #(𝒫 { j | r j i }))).trans
+      ((mul_le_max_of_aleph0_le_left ha).trans ?_))
+    rw [max_eq_left]
+    apply ciSup_le' _
+    intro i
+    rw [mk_powerset]
+    exact (h (card_typein_lt _ hr)).le
+  · refine @mk_le_of_injective α _ (fun x => Subtype.mk {x} ?_) ?_
+    · apply bounded_singleton
+      rw [← hr]
+      apply isSuccLimit_ord ha
+    · intro a b hab
+      simpa [singleton_eq_singleton_iff] using hab
 
 Depends on / 依赖: Bounded, IsStrongLimit, aleph0_le, coe_ofPred, eq_or_ne, le_antisymm, mk_eq_zero_iff, mk_iUnion_le_sum_mk, mk_iUnion_le_sum_mk.trans, mul_le_max_of_aleph0_le_left, not_unbounded_iff, ofPred_exists, sum_le_mk_mul_iSup, unbounded_of_isEmpty
 -/
@@ -2358,7 +2450,22 @@ theorem mk_subset_mk_lt_cof
   · conv_rhs => rw [← mk_bounded_subset h hr]
     apply mk_subtype_le_of_subset
     intro s hs
-    rw 
+    rw [hr] at hs
+    contrapose! hs
+    rw [not_bounded_iff] at hs
+    apply cof_le
+    simp_rw [IsCofinal, ← not_lt]
+    exact hs
+  · refine @mk_le_of_injective α _ (fun x => Subtype.mk {x} ?_) ?_
+    · rw [mk_singleton, one_lt_cof_iff]
+      exact isSuccLimit_ord h'.aleph0_le
+    · intro a b hab
+      simpa [singleton_eq_singleton_iff] using hab
+
+@[deprecated (since := "2026-02-25")]
+alias unbounded_of_unbounded_sUnion := isCofinal_of_isCofinal_sUnion
+@[deprecated (since := "2026-02-25")]
+alias unbounded_of_unbounded_iUnion := isCofinal_of_isCofinal_iUnion
 
 中文:
 定理 mk_subset_mk_lt_cof
@@ -2374,7 +2481,22 @@ theorem mk_subset_mk_lt_cof
   · conv_rhs => rw [← mk_bounded_subset h hr]
     apply mk_subtype_le_of_subset
     intro s hs
-    rw 
+    rw [hr] at hs
+    contrapose! hs
+    rw [not_bounded_iff] at hs
+    apply cof_le
+    simp_rw [IsCofinal, ← not_lt]
+    exact hs
+  · refine @mk_le_of_injective α _ (fun x => Subtype.mk {x} ?_) ?_
+    · rw [mk_singleton, one_lt_cof_iff]
+      exact isSuccLimit_ord h'.aleph0_le
+    · intro a b hab
+      simpa [singleton_eq_singleton_iff] using hab
+
+@[deprecated (since := "2026-02-25")]
+alias unbounded_of_unbounded_sUnion := isCofinal_of_isCofinal_sUnion
+@[deprecated (since := "2026-02-25")]
+alias unbounded_of_unbounded_iUnion := isCofinal_of_isCofinal_iUnion
 
 Depends on / 依赖: IsCofinal, IsStrongLimit, Subtype, Subtype.mk, classical, cof_le, contrapose, conv_rhs, eq_or_ne, exists_ord_eq, isSuccLimit_ord, le_antisymm, linearOrderOfSTO, mk_bounded_subset, mk_le_of_injective, mk_singleton, mk_subtype_le_of_subset, not_bounded_iff, not_lt, one_lt_cof_iff
 -/
@@ -2422,7 +2544,12 @@ theorem lt_power_cof_ord
     rw [← isSuccPrelimit_type_lt_iff]; rw [← hα]
     exact (isSuccLimit_ord hc).isSuccPrelimit
   obtain ⟨s, hs, hs'⟩ := exists_ord_cof_eq α
-  rw [hα]; rw [cof_type]; rw 
+  rw [hα]; rw [cof_type]; rw [← card_ord (Order.cof _)]; rw [← hs']; rw [card_type]; rw [← prod_const']
+  refine (mk_iUnion_le_sum_mk.trans' ?_).trans_lt (sum_lt_prod _ _ fun i => mk_Iio_lt i.1 hα)
+  rw [← mk_univ]; rw [← isCofinal_iff_iUnion_Iio_eq_univ.1 hs]; rw [iUnion_coe_set]
+
+@[deprecated (since := "2026-03-30")]
+alias lt_power_cof := lt_power_cof_ord
 
 中文:
 定理 lt_power_cof_ord
@@ -2435,7 +2562,12 @@ theorem lt_power_cof_ord
     rw [← isSuccPrelimit_type_lt_iff]; rw [← hα]
     exact (isSuccLimit_ord hc).isSuccPrelimit
   obtain ⟨s, hs, hs'⟩ := exists_ord_cof_eq α
-  rw [hα]; rw [cof_type]; rw 
+  rw [hα]; rw [cof_type]; rw [← card_ord (Order.cof _)]; rw [← hs']; rw [card_type]; rw [← prod_const']
+  refine (mk_iUnion_le_sum_mk.trans' ?_).trans_lt (sum_lt_prod _ _ fun i => mk_Iio_lt i.1 hα)
+  rw [← mk_univ]; rw [← isCofinal_iff_iUnion_Iio_eq_univ.1 hs]; rw [iUnion_coe_set]
+
+@[deprecated (since := "2026-03-30")]
+alias lt_power_cof := lt_power_cof_ord
 
 Depends on / 依赖: Cardinal, Cardinal.inductionOn, NoMaxOrder, Order.cof, card_ord, card_type, cof_type, exists_ord_cof_eq, exists_ord_eq_type_lt, inductionOn, isCofinal_iff_iUnion_Iio_eq_u, isSuccLimit_ord, isSuccPrelimit, isSuccPrelimit_type_lt_iff, mk_Iio_lt, mk_iUnion_le_sum_mk, mk_iUnion_le_sum_mk.trans, mk_univ, prod_const, sum_lt_prod
 -/

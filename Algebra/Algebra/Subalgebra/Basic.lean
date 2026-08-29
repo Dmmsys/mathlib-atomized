@@ -1175,7 +1175,7 @@ definition toSubmodule
           smul_mem' := fun c {x} hx =>
             (Algebra.smul_def c x).symm ▸ mul_mem (S.range_le ⟨c, rfl⟩) hx }
       inj' := fun _ _ h => ext fun x => SetLike.ext_iff.mp h x }
-  map_rel_iff' := SetLike.coe_subset_coe.symm.trans SetLike
+  map_rel_iff' := SetLike.coe_subset_coe.symm.trans SetLike.coe_subset_coe
 
 中文:
 定义 toSubmodule
@@ -1186,7 +1186,7 @@ definition toSubmodule
           smul_mem' := fun c {x} hx =>
             (Algebra.smul_def c x).symm ▸ mul_mem (S.range_le ⟨c, rfl⟩) hx }
       inj' := fun _ _ h => ext fun x => SetLike.ext_iff.mp h x }
-  map_rel_iff' := SetLike.coe_subset_coe.symm.trans SetLike
+  map_rel_iff' := SetLike.coe_subset_coe.symm.trans SetLike.coe_subset_coe
 
 Depends on / 依赖: Algebra, Algebra.smul_def, S.range_le, SetLike, SetLike.coe_subset_coe, SetLike.coe_subset_coe.symm.trans, SetLike.ext_iff.mp, carrier, coe_subset_coe, ext_iff, map_rel_iff, mul_mem, range_le, smul_def, smul_mem
 -/
@@ -4001,7 +4001,12 @@ definition equalizer
   one_mem' := by simp only [Set.mem_ofPred_eq, map_one]
   add_mem' {x y} (hx : ϕ x = ψ x) (hy : ϕ y = ψ y) := by
     rw [Set.mem_ofPred_eq]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
-  mul_mem' {x y} (hx : ϕ x = ψ x) (hy 
+  mul_mem' {x y} (hx : ϕ x = ψ x) (hy : ϕ y = ψ y) := by
+    rw [Set.mem_ofPred_eq]; rw [map_mul]; rw [map_mul]; rw [hx]; rw [hy]
+  algebraMap_mem' x := by
+    simp only [Set.mem_ofPred_eq, AlgHomClass.commutes]
+
+@[simp]
 
 中文:
 定义 equalizer
@@ -4011,7 +4016,12 @@ definition equalizer
   one_mem' := by simp only [Set.mem_ofPred_eq, map_one]
   add_mem' {x y} (hx : ϕ x = ψ x) (hy : ϕ y = ψ y) := by
     rw [Set.mem_ofPred_eq]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
-  mul_mem' {x y} (hx : ϕ x = ψ x) (hy 
+  mul_mem' {x y} (hx : ϕ x = ψ x) (hy : ϕ y = ψ y) := by
+    rw [Set.mem_ofPred_eq]; rw [map_mul]; rw [map_mul]; rw [hx]; rw [hy]
+  algebraMap_mem' x := by
+    simp only [Set.mem_ofPred_eq, AlgHomClass.commutes]
+
+@[simp]
 -/
 def equalizer (ϕ ψ : A ->ₐ[R] B) : Subalgebra R A where
   carrier := { a | ϕ a = ψ a }

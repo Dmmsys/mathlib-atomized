@@ -144,7 +144,9 @@ lemma iInf_natCast_lt_top
 @[deprecated (since := "2026-07-17")] alias iSup_coe_eq_top := iSup_natCast_eq_top
 @[deprecated (since := "2026-07-17")] alias iSup_coe_ne_top := iSup_natCast_ne_top
 @[deprecated (since := "2026-07-17")] alias iSup_coe_lt_top := iSup_natCast_lt_top
-@[deprecated (since := "20
+@[deprecated (since := "2026-07-17")] alias iInf_coe_eq_top := iInf_natCast_eq_top
+@[deprecated (since := "2026-07-17")] alias iInf_coe_ne_top := iInf_natCast_ne_top
+@[deprecated (since := "2026-07-17")] alias iInf_coe_lt_top := iInf_natCast_lt_top
 
 中文:
 引理 iInf_natCast_lt_top
@@ -154,7 +156,9 @@ lemma iInf_natCast_lt_top
 @[deprecated (since := "2026-07-17")] alias iSup_coe_eq_top := iSup_natCast_eq_top
 @[deprecated (since := "2026-07-17")] alias iSup_coe_ne_top := iSup_natCast_ne_top
 @[deprecated (since := "2026-07-17")] alias iSup_coe_lt_top := iSup_natCast_lt_top
-@[deprecated (since := "20
+@[deprecated (since := "2026-07-17")] alias iInf_coe_eq_top := iInf_natCast_eq_top
+@[deprecated (since := "2026-07-17")] alias iInf_coe_ne_top := iInf_natCast_ne_top
+@[deprecated (since := "2026-07-17")] alias iInf_coe_lt_top := iInf_natCast_lt_top
 
 Depends on / 依赖: WithTop, WithTop.iInf_coe_lt_top, iInf_coe_lt_top
 -/
@@ -475,7 +479,8 @@ apply Finite.subset Finite.Set.finite_image {n : Nat | n <= x} (fun (n : Nat) =>
     intro y hy
     specialize h y hy
     have hxt : y < ⊤ := lt_of_le_of_lt h hx
-    use y.toN
+    use y.toNat
+    simp [toNat_le_of_le_natCast h, LT.lt.ne_top hxt]
 
 中文:
 引理 sSup_eq_top_of_infinite
@@ -492,7 +497,8 @@ apply Finite.subset Finite.Set.finite_image {n : Nat | n <= x} (fun (n : Nat) =>
     intro y hy
     specialize h y hy
     have hxt : y < ⊤ := lt_of_le_of_lt h hx
-    use y.toN
+    use y.toNat
+    simp [toNat_le_of_le_natCast h, LT.lt.ne_top hxt]
 
 Depends on / 依赖: Finite, Finite.Set.finite_image, Finite.subset, LT.lt.ne_top, contrapose, finite_image, lt_of_le_of_lt, ne_top, sSup_eq_top, specialize, subset, toNat_le_of_le_natCast, y.toNat
 -/
@@ -659,7 +665,13 @@ refine (iSup_le fun i => mul_le_mul' rfl.le <| le_iSup_iff.2 fun _ a => a i).ant
   | top => simp
   | coe d =>
   have hlt : ⨆ i, f i < ⊤ := by
-    rw 
+    rw [lt_top_iff_ne_top]
+    intro htop
+    obtain ⟨i, hi : d < f i⟩ := (iSup_eq_top ..).1 htop d (by simp)
+    exact (((h i).trans_lt hi).trans_le (ENat.self_le_mul_left _ hne)).false
+  obtain ⟨j, hj⟩ := exists_eq_iSup_of_lt_top hlt
+  rw [← hj]
+  apply h
 
 中文:
 引理 mul_iSup
@@ -676,7 +688,13 @@ refine (iSup_le fun i => mul_le_mul' rfl.le <| le_iSup_iff.2 fun _ a => a i).ant
   | top => simp
   | coe d =>
   have hlt : ⨆ i, f i < ⊤ := by
-    rw 
+    rw [lt_top_iff_ne_top]
+    intro htop
+    obtain ⟨i, hi : d < f i⟩ := (iSup_eq_top ..).1 htop d (by simp)
+    exact (((h i).trans_lt hi).trans_le (ENat.self_le_mul_left _ hne)).false
+  obtain ⟨j, hj⟩ := exists_eq_iSup_of_lt_top hlt
+  rw [← hj]
+  apply h
 
 Depends on / 依赖: ENat.self_le_mul_left, antisymm, eq_or_ne, exists_eq_iSup_of_lt_top, iSup_eq_top, iSup_le, isEmpty_or_nonempty, le_iSup_iff, lt_top_iff_ne_top, mul_le_mul, rfl.le, self_le_mul_left, trans_le, trans_lt
 -/
@@ -1257,7 +1275,12 @@ lemma sub_iSup
   · rw [tsub_eq_zero_iff_le.2 <| le_iSup_of_le _ hi.le, iInf_eq_bot.2, bot_eq_zero]
     exact fun x hx => ⟨i, by simpa [hi.le, tsub_eq_zero_of_le]⟩
   simp_rw [not_exists, not_lt] at h
-refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..
+refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..) _)
+ENat.le_sub_of_add_le_left (ne_top_of_le_ne_top ha <| iSup_le h)
+add_le_of_le_tsub_right_of_le (iInf_le_of_le (Classical.arbitrary _) tsub_le_self)
+    iSup_le fun i => ?_
+  rw [← ENat.sub_sub_cancel ha (h _)]
+  exact tsub_le_tsub_left (iInf_le (a - f ·) i) _
 
 中文:
 引理 sub_iSup
@@ -1268,7 +1291,12 @@ refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..
   · rw [tsub_eq_zero_iff_le.2 <| le_iSup_of_le _ hi.le, iInf_eq_bot.2, bot_eq_zero]
     exact fun x hx => ⟨i, by simpa [hi.le, tsub_eq_zero_of_le]⟩
   simp_rw [not_exists, not_lt] at h
-refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..
+refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..) _)
+ENat.le_sub_of_add_le_left (ne_top_of_le_ne_top ha <| iSup_le h)
+add_le_of_le_tsub_right_of_le (iInf_le_of_le (Classical.arbitrary _) tsub_le_self)
+    iSup_le fun i => ?_
+  rw [← ENat.sub_sub_cancel ha (h _)]
+  exact tsub_le_tsub_left (iInf_le (a - f ·) i) _
 
 Depends on / 依赖: Classical, Classical.arbitrary, ENat.le_sub_of_add_le_left, ENat.sub_sub_cancel, add_le_of_le_tsub_right_of_le, arbitrary, bot_eq_zero, hi.le, iInf_eq_bot, iInf_le_of_le, iSup_le, le_antisymm, le_iInf, le_iSup, le_iSup_of_le, le_sub_of_add_le_left, ne_top_of_le_ne_top, not_exists, not_lt, simp_rw
 -/
@@ -1384,7 +1412,7 @@ theorem iInf_add_iInf
   calc
     ⨅ a, f a + g a <= ⨅ (a) (a'), f a + g a' :=
       le_iInf₂ fun a a' => let ⟨k, h⟩ := h a a'; iInf_le_of_le k h
-    _ = iInf f + iInf g := by simp_rw [iInf_add, ad
+    _ = iInf f + iInf g := by simp_rw [iInf_add, add_iInf]
 
 中文:
 定理 iInf_add_iInf
@@ -1395,7 +1423,7 @@ theorem iInf_add_iInf
   calc
     ⨅ a, f a + g a <= ⨅ (a) (a'), f a + g a' :=
       le_iInf₂ fun a a' => let ⟨k, h⟩ := h a a'; iInf_le_of_le k h
-    _ = iInf f + iInf g := by simp_rw [iInf_add, ad
+    _ = iInf f + iInf g := by simp_rw [iInf_add, add_iInf]
 
 Depends on / 依赖: add_iInf, add_le_add, iInf_add, iInf_le, iInf_le_of_le, le_antisymm, le_iInf, simp_rw
 -/

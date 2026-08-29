@@ -73,7 +73,7 @@ theorem IsGδ.setOfPred_liouville
   exact isOpen_ball.inter isClosed_singleton.isOpen_compl
 
 @[deprecated (since := "2026-07-09")]
-alias IsGδ.setOf_liouville := Is
+alias IsGδ.setOf_liouville := IsGδ.setOfPred_liouville
 
 中文:
 定理 IsGδ.setOfPred_liouville
@@ -85,7 +85,7 @@ alias IsGδ.setOf_liouville := Is
   exact isOpen_ball.inter isClosed_singleton.isOpen_compl
 
 @[deprecated (since := "2026-07-09")]
-alias IsGδ.setOf_liouville := Is
+alias IsGδ.setOf_liouville := IsGδ.setOfPred_liouville
 
 Depends on / 依赖: IsOpen, IsOpen.isG, iInter, isClosed_singleton, isClosed_singleton.isOpen_compl, isOpen_ball, isOpen_ball.inter, isOpen_compl, isOpen_iUnion, setOfPred_liouville_eq_iInter_iUnion
 -/
@@ -108,7 +108,14 @@ theorem setOfPred_liouville_eq_irrational_inter_iInter_iUnion
   · refine subset_inter (fun x hx => hx.irrational) ?_
     rw [setOfPred_liouville_eq_iInter_iUnion]
     exact iInter_mono fun n => iUnion₂_mono fun a b => iUnion_mono fun _hb => sdiff_subset
-  · simp only [inter_iInter, inter_iUnion, setOfPred_liouville_eq_iInter_i
+  · simp only [inter_iInter, inter_iUnion, setOfPred_liouville_eq_iInter_iUnion]
+    refine iInter_mono fun n => iUnion₂_mono fun a b => iUnion_mono fun hb => ?_
+    rw [inter_comm]
+    exact sdiff_subset_sdiff Subset.rfl (singleton_subset_iff.2 ⟨a / b, by norm_cast⟩)
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_liouville_eq_irrational_inter_iInter_iUnion :=
+  setOfPred_liouville_eq_irrational_inter_iInter_iUnion
 
 中文:
 定理 setOfPred_liouville_eq_irrational_inter_i整数er_iUnion
@@ -117,7 +124,14 @@ theorem setOfPred_liouville_eq_irrational_inter_iInter_iUnion
   · refine subset_inter (fun x hx => hx.irrational) ?_
     rw [setOfPred_liouville_eq_iInter_iUnion]
     exact iInter_mono fun n => iUnion₂_mono fun a b => iUnion_mono fun _hb => sdiff_subset
-  · simp only [inter_iInter, inter_iUnion, setOfPred_liouville_eq_iInter_i
+  · simp only [inter_iInter, inter_iUnion, setOfPred_liouville_eq_iInter_iUnion]
+    refine iInter_mono fun n => iUnion₂_mono fun a b => iUnion_mono fun hb => ?_
+    rw [inter_comm]
+    exact sdiff_subset_sdiff Subset.rfl (singleton_subset_iff.2 ⟨a / b, by norm_cast⟩)
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_liouville_eq_irrational_inter_iInter_iUnion :=
+  setOfPred_liouville_eq_irrational_inter_iInter_iUnion
 
 Depends on / 依赖: Subset, Subset.antisymm, Subset.rfl, antisymm, hx.irrational, iInter_mono, iUnion_mono, inter_comm, inter_iInter, inter_iUnion, irrational, sdiff_subset, sdiff_subset_sdiff, setOfPred_liouville_eq_iInter_iUnion, singleton_subset_iff, subset_inter
 -/
@@ -149,7 +163,20 @@ theorem eventually_residual_liouville
   refine eventually_residual_irrational.and ?_
   refine residual_of_dense_Gδ ?_ (Rat.isDenseEmbedding_coe_real.dense.mono ?_)
 · exact .iInter fun n => IsOpen.isGδ
-          isOpen_iUnion fun a => isOpen_iUnion fu
+          isOpen_iUnion fun a => isOpen_iUnion fun b => isOpen_iUnion fun _hb => isOpen_ball
+  · rintro _ ⟨r, rfl⟩
+    simp only [mem_iInter, mem_iUnion]
+    refine fun n => ⟨r.num * 2, r.den * 2, ?_, ?_⟩
+    · have := r.pos; lia
+    · convert! @mem_ball_self Real _ (r : Real) _ _
+      · push_cast
+        -- Workaround for https://github.com/leanprover/lean4/pull/6438; this eliminates an
+        -- `Expr.mdata` that would cause `norm_cast` to skip a numeral.
+        rw [Eq.refl (2 : Real)]
+        norm_cast
+        simp [Rat.divInt_mul_right (two_ne_zero)]
+      · refine one_div_pos.2 (pow_pos (Int.cast_pos.2 ?_) _)
+        exact mul_pos (Int.natCast_pos.2 r.pos) zero_lt_two
 
 中文:
 定理 eventually_residual_liouville
@@ -159,7 +186,20 @@ theorem eventually_residual_liouville
   refine eventually_residual_irrational.and ?_
   refine residual_of_dense_Gδ ?_ (Rat.isDenseEmbedding_coe_real.dense.mono ?_)
 · exact .iInter fun n => IsOpen.isGδ
-          isOpen_iUnion fun a => isOpen_iUnion fu
+          isOpen_iUnion fun a => isOpen_iUnion fun b => isOpen_iUnion fun _hb => isOpen_ball
+  · rintro _ ⟨r, rfl⟩
+    simp only [mem_iInter, mem_iUnion]
+    refine fun n => ⟨r.num * 2, r.den * 2, ?_, ?_⟩
+    · have := r.pos; lia
+    · convert! @mem_ball_self Real _ (r : Real) _ _
+      · push_cast
+        -- Workaround for https://github.com/leanprover/lean4/pull/6438; this eliminates an
+        -- `Expr.mdata` that would cause `norm_cast` to skip a numeral.
+        rw [Eq.refl (2 : Real)]
+        norm_cast
+        simp [Rat.divInt_mul_right (two_ne_zero)]
+      · refine one_div_pos.2 (pow_pos (Int.cast_pos.2 ?_) _)
+        exact mul_pos (Int.natCast_pos.2 r.pos) zero_lt_two
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually, IsOpen, IsOpen.isG, Rat.isDenseEmbedding_coe_real.dense.mono, convert, eventually_residual_irrational, eventually_residual_irrational.and, iInter, isDenseEmbedding_coe_real, isOpen_ball, isOpen_iUnion, mem_ball_self, mem_iInter, mem_iUnion, r.den, r.num, r.pos, setOfPred_liouville_eq_irrational_inter_iInter_iUnion
 -/

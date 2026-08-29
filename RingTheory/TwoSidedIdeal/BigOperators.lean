@@ -155,7 +155,7 @@ lemma listProd_mem
     simp only [List.mem_cons, exists_eq_or_imp] at hl
     rcases hl with h | hal
     · simpa only [List.map_cons, List.prod_cons] using I.mul_mem_right _ _ h
-· simpa only [List.map_cons, L
+· simpa only [List.map_cons, List.prod_cons] using I.mul_mem_left _ _ ih hal
 
 中文:
 引理 listProd_mem
@@ -167,7 +167,7 @@ lemma listProd_mem
     simp only [List.mem_cons, exists_eq_or_imp] at hl
     rcases hl with h | hal
     · simpa only [List.map_cons, List.prod_cons] using I.mul_mem_right _ _ h
-· simpa only [List.map_cons, L
+· simpa only [List.map_cons, List.prod_cons] using I.mul_mem_left _ _ ih hal
 
 Depends on / 依赖: I.mul_mem_left, I.mul_mem_right, List.map_cons, List.mem_cons, List.not_mem_nil, List.prod_cons, exists_eq_or_imp, exists_false, false_and, map_cons, mem_cons, mul_mem_left, mul_mem_right, not_mem_nil, prod_cons
 -/

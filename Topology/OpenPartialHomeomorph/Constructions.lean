@@ -166,7 +166,8 @@ definition prod
   continuousOn_invFun := eX.continuousOn_symm.prodMap eY.continuousOn_symm
   toPartialEquiv := eX.toPartialEquiv.prod eY.toPartialEquiv
 
-@[deprecated
+@[deprecated "deprecated in favour of `OpenPartialHomeomorph.prod_toPartialHomeomorph`"
+  (since := "2026-06-24")]
 
 中文:
 定义 乘积
@@ -177,7 +178,8 @@ definition prod
   continuousOn_invFun := eX.continuousOn_symm.prodMap eY.continuousOn_symm
   toPartialEquiv := eX.toPartialEquiv.prod eY.toPartialEquiv
 
-@[deprecated
+@[deprecated "deprecated in favour of `OpenPartialHomeomorph.prod_toPartialHomeomorph`"
+  (since := "2026-06-24")]
 
 Depends on / 依赖: eX.open_source.prod, eY.open_source, open_source
 -/
@@ -291,7 +293,8 @@ theorem prod_eq_prod_of_nonempty
   have : Nonempty Y := ⟨y⟩
   have : Nonempty Y' := ⟨eY y⟩
   simp_rw [OpenPartialHomeomorph.ext_iff, prod_apply, prod_symm_apply, prod_source, Prod.ext_iff,
-    Set.prod_eq_prod_iff_of_nonempty h, forall_and, Pr
+    Set.prod_eq_prod_iff_of_nonempty h, forall_and, Prod.forall, forall_const,
+    and_assoc, and_left_comm]
 
 中文:
 定理 prod_eq_prod_of_nonempty
@@ -303,7 +306,8 @@ theorem prod_eq_prod_of_nonempty
   have : Nonempty Y := ⟨y⟩
   have : Nonempty Y' := ⟨eY y⟩
   simp_rw [OpenPartialHomeomorph.ext_iff, prod_apply, prod_symm_apply, prod_source, Prod.ext_iff,
-    Set.prod_eq_prod_iff_of_nonempty h, forall_and, Pr
+    Set.prod_eq_prod_iff_of_nonempty h, forall_and, Prod.forall, forall_const,
+    and_assoc, and_left_comm]
 
 Depends on / 依赖: Nonempty, OpenPartialHomeomorph, OpenPartialHomeomorph.ext_iff, Prod.ext_iff, Prod.forall, Set.prod_eq_prod_iff_of_nonempty, and_assoc, and_left_comm, ext_iff, forall_and, forall_const, prod_apply, prod_eq_prod_iff_of_nonempty, prod_source, prod_symm_apply, simp_rw
 -/
@@ -381,7 +385,9 @@ definition pi
   open_source := isOpen_set_pi finite_univ fun i _ => (ei i).open_source
   open_target := isOpen_set_pi finite_univ fun i _ => (ei i).open_target
   continuousOn_toFun := continuousOn_pi.2 fun i =>
-    (ei i).continuousOn.comp (continuous_apply _).contin
+    (ei i).continuousOn.comp (continuous_apply _).continuousOn fun _f hf => hf i trivial
+  continuousOn_invFun := continuousOn_pi.2 fun i =>
+    (ei i).continuousOn_symm.comp (continuous_apply _).continuousOn fun _f hf => hf i trivial
 
 中文:
 定义 pi
@@ -390,7 +396,9 @@ definition pi
   open_source := isOpen_set_pi finite_univ fun i _ => (ei i).open_source
   open_target := isOpen_set_pi finite_univ fun i _ => (ei i).open_target
   continuousOn_toFun := continuousOn_pi.2 fun i =>
-    (ei i).continuousOn.comp (continuous_apply _).contin
+    (ei i).continuousOn.comp (continuous_apply _).continuousOn fun _f hf => hf i trivial
+  continuousOn_invFun := continuousOn_pi.2 fun i =>
+    (ei i).continuousOn_symm.comp (continuous_apply _).continuousOn fun _f hf => hf i trivial
 
 Depends on / 依赖: PartialEquiv, PartialEquiv.pi, toPartialEquiv
 -/
@@ -431,7 +439,13 @@ definition piecewise
   open_source := e.open_source.ite e'.open_source Hs
   open_target :=
 e.open_target.ite e'.open_target H.frontier.inter_eq_of_inter_eq_of_eqOn H'.frontier Hs Heq
-  continuousOn_toFun := continuousOn_piecewise_ite e.continuousOn e'.continuousOn Hs
+  continuousOn_toFun := continuousOn_piecewise_ite e.continuousOn e'.continuousOn Hs Heq
+  continuousOn_invFun :=
+    continuousOn_piecewise_ite e.continuousOn_symm e'.continuousOn_symm
+      (H.frontier.inter_eq_of_inter_eq_of_eqOn H'.frontier Hs Heq)
+      (H.frontier.symm_eqOn_of_inter_eq_of_eqOn Hs Heq)
+
+@[simp]
 
 中文:
 定义 piecewise
@@ -440,7 +454,13 @@ e.open_target.ite e'.open_target H.frontier.inter_eq_of_inter_eq_of_eqOn H'.fron
   open_source := e.open_source.ite e'.open_source Hs
   open_target :=
 e.open_target.ite e'.open_target H.frontier.inter_eq_of_inter_eq_of_eqOn H'.frontier Hs Heq
-  continuousOn_toFun := continuousOn_piecewise_ite e.continuousOn e'.continuousOn Hs
+  continuousOn_toFun := continuousOn_piecewise_ite e.continuousOn e'.continuousOn Hs Heq
+  continuousOn_invFun :=
+    continuousOn_piecewise_ite e.continuousOn_symm e'.continuousOn_symm
+      (H.frontier.inter_eq_of_inter_eq_of_eqOn H'.frontier Hs Heq)
+      (H.frontier.symm_eqOn_of_inter_eq_of_eqOn Hs Heq)
+
+@[simp]
 
 Depends on / 依赖: e.toPartialEquiv.piecewise, piecewise, toPartialEquiv
 -/
@@ -493,7 +513,9 @@ definition disjointUnion
         (by rw [e.open_source.inter_frontier_eq, (Hs.symm.frontier_right e'.open_source).inter_eq])
         (by
           rw [e.open_source.inter_frontier_eq]
-          exact eq
+          exact eqOn_empty _ _)).replacePartialEquiv
+    (e.toPartialEquiv.disjointUnion e'.toPartialEquiv Hs Ht)
+    (PartialEquiv.disjointUnion_eq_piecewise _ _ _ _).symm
 
 中文:
 定义 disjointUnion
@@ -503,7 +525,9 @@ definition disjointUnion
         (by rw [e.open_source.inter_frontier_eq, (Hs.symm.frontier_right e'.open_source).inter_eq])
         (by
           rw [e.open_source.inter_frontier_eq]
-          exact eq
+          exact eqOn_empty _ _)).replacePartialEquiv
+    (e.toPartialEquiv.disjointUnion e'.toPartialEquiv Hs Ht)
+    (PartialEquiv.disjointUnion_eq_piecewise _ _ _ _).symm
 
 Depends on / 依赖: Hs.symm, Hs.symm.frontier_right, Ht.symm, PartialEquiv, PartialEquiv.disjointUnion_eq_piecewise, disjointUnion, disjointUnion_eq_piecewise, e.isImage_source_target, e.open_source.inter_frontier_eq, e.piecewise, e.source, e.target, e.toPartialEquiv.disjointUnion, eqOn_empty, frontier_right, inter_eq, inter_frontier_eq, isImage_source_target, isImage_source_target_of_disjoint, open_source
 -/
@@ -796,7 +820,15 @@ theorem subtypeRestr_symm_trans_subtypeRestr
   have openness₁ : IsOpen (f.target inter f.symm ⁻¹' s) := f.isOpen_inter_preimage_symm s.2
   rw [← ofSet_trans _ openness₁]; rw [← trans_assoc]; rw [← trans_assoc]
   refine EqOnSource.trans' ?_ (eqOnSource_refl _)
-  -- f' has been eli
+  -- f' has been eliminated !!!
+  have set_identity : f.symm.source inter (f.target inter f.symm ⁻¹' s) = f.symm.source inter f.symm ⁻¹' s := by
+    mfld_set_tac
+  have openness₂ : IsOpen (s : Set X) := s.2
+  rw [ofSet_trans']; rw [set_identity]; rw [← trans_of_set' _ openness₂]; rw [trans_assoc]
+  refine EqOnSource.trans' (eqOnSource_refl _) ?_
+  -- f has been eliminated !!!
+  refine Setoid.trans (symm_trans_self (s.openPartialHomeomorphSubtypeCoe hs)) ?_
+  simp only [mfld_simps, Setoid.refl]
 
 中文:
 定理 subtypeRestr_symm_trans_subtypeRestr
@@ -806,7 +838,15 @@ theorem subtypeRestr_symm_trans_subtypeRestr
   have openness₁ : IsOpen (f.target inter f.symm ⁻¹' s) := f.isOpen_inter_preimage_symm s.2
   rw [← ofSet_trans _ openness₁]; rw [← trans_assoc]; rw [← trans_assoc]
   refine EqOnSource.trans' ?_ (eqOnSource_refl _)
-  -- f' has been eli
+  -- f' has been eliminated !!!
+  have set_identity : f.symm.source inter (f.target inter f.symm ⁻¹' s) = f.symm.source inter f.symm ⁻¹' s := by
+    mfld_set_tac
+  have openness₂ : IsOpen (s : Set X) := s.2
+  rw [ofSet_trans']; rw [set_identity]; rw [← trans_of_set' _ openness₂]; rw [trans_assoc]
+  refine EqOnSource.trans' (eqOnSource_refl _) ?_
+  -- f has been eliminated !!!
+  refine Setoid.trans (symm_trans_self (s.openPartialHomeomorphSubtypeCoe hs)) ?_
+  simp only [mfld_simps, Setoid.refl]
 
 Depends on / 依赖: EqOnSource, EqOnSource.trans, IsOpen, eqOnSource_refl, f.isOpen_inter_preimage_symm, f.symm, f.target, isOpen_inter_preimage_symm, ofSet_trans, subtypeRestr_def, target, trans_assoc, trans_symm_eq_symm_trans_symm
 -/
@@ -893,7 +933,11 @@ theorem subtypeRestr_symm_eqOn_of_le
   have hyV : e.symm y in (V.openPartialHomeomorphSubtypeCoe hV).target := by
     rw [Opens.openPartialHomeomorphSubtypeCoe_target] at hy ⊢
     exact hUV hy.2
-  refine (V.openPartialHomeomorphSubtype
+  refine (V.openPartialHomeomorphSubtypeCoe hV).injOn ?_ trivial ?_
+  · simp
+  · rw [(V.openPartialHomeomorphSubtypeCoe hV).right_inv hyV]
+    change _ = U.openPartialHomeomorphSubtypeCoe hU _
+    rw [(U.openPartialHomeomorphSubtypeCoe hU).right_inv hy.2]
 
 中文:
 定理 subtypeRestr_symm_eqOn_of_le
@@ -905,7 +949,11 @@ theorem subtypeRestr_symm_eqOn_of_le
   have hyV : e.symm y in (V.openPartialHomeomorphSubtypeCoe hV).target := by
     rw [Opens.openPartialHomeomorphSubtypeCoe_target] at hy ⊢
     exact hUV hy.2
-  refine (V.openPartialHomeomorphSubtype
+  refine (V.openPartialHomeomorphSubtypeCoe hV).injOn ?_ trivial ?_
+  · simp
+  · rw [(V.openPartialHomeomorphSubtypeCoe hV).right_inv hyV]
+    change _ = U.openPartialHomeomorphSubtypeCoe hU _
+    rw [(U.openPartialHomeomorphSubtypeCoe hU).right_inv hy.2]
 
 Depends on / 依赖: OpenPartialHomeomorph, OpenPartialHomeomorph.subtypeRestr_def, Opens.openPartialHomeomorphSubtypeCoe_target, Set.inclusion, U.openPartialHomeomorphSubtypeCoe, V.openPartialHomeomorphSubtypeCoe, e.symm, inclusion, openPartialHomeomorphSubtypeCoe, openPartialHomeomorphSubtypeCoe_target, right_inv, subtypeRestr_def, target
 -/
@@ -948,7 +996,33 @@ definition lift_openEmbedding
     rintro x ⟨x₀, hx₀, hxx₀⟩
     rw [← hxx₀]; rw [hf.injective.extend_apply e]
     exact e.map_source' hx₀
-  map_target' z hz := mem_image_of_mem f (e.map_target'
+  map_target' z hz := mem_image_of_mem f (e.map_target' hz)
+  left_inv' := by
+    intro x ⟨x₀, hx₀, hxx₀⟩
+    rw [← hxx₀]; rw [hf.injective.extend_apply e]; rw [comp_apply]
+    congr
+    exact e.left_inv' hx₀
+  right_inv' z hz := by simpa only [comp_apply, hf.injective.extend_apply e] using! e.right_inv' hz
+  open_source := hf.isOpenMap _ e.open_source
+  open_target := e.open_target
+  continuousOn_toFun := by
+    by_cases Nonempty X; swap
+    · intro x hx; simp_all
+    set F := (extend f e (fun _ => (Classical.arbitrary Z))) with F_eq
+    have heq : EqOn F (e ∘ (hf.toOpenPartialHomeomorph).symm) (f '' e.source) := by
+      intro x ⟨x₀, hx₀, hxx₀⟩
+      rw [← hxx₀]; rw [F_eq]; rw [hf.injective.extend_apply e]; rw [comp_apply]; rw [hf.toOpenPartialHomeomorph_left_inv]
+    have : ContinuousOn (e ∘ (hf.toOpenPartialHomeomorph).symm) (f '' e.source) := by
+      apply e.continuousOn_toFun.comp; swap
+      · intro x' ⟨x, hx, hx'x⟩
+        rw [← hx'x]; rw [hf.toOpenPartialHomeomorph_left_inv]; exact hx
+      have : ContinuousOn (hf.toOpenPartialHomeomorph).symm (f '' univ) :=
+        (hf.toOpenPartialHomeomorph).continuousOn_invFun
+exact this.mono image_mono subset_univ _
+    exact ContinuousOn.congr this heq
+  continuousOn_invFun := hf.continuous.comp_continuousOn e.continuousOn_invFun
+
+@[simp, mfld_simps]
 
 中文:
 定义 lift_openEmbedding
@@ -961,7 +1035,33 @@ definition lift_openEmbedding
     rintro x ⟨x₀, hx₀, hxx₀⟩
     rw [← hxx₀]; rw [hf.injective.extend_apply e]
     exact e.map_source' hx₀
-  map_target' z hz := mem_image_of_mem f (e.map_target'
+  map_target' z hz := mem_image_of_mem f (e.map_target' hz)
+  left_inv' := by
+    intro x ⟨x₀, hx₀, hxx₀⟩
+    rw [← hxx₀]; rw [hf.injective.extend_apply e]; rw [comp_apply]
+    congr
+    exact e.left_inv' hx₀
+  right_inv' z hz := by simpa only [comp_apply, hf.injective.extend_apply e] using! e.right_inv' hz
+  open_source := hf.isOpenMap _ e.open_source
+  open_target := e.open_target
+  continuousOn_toFun := by
+    by_cases Nonempty X; swap
+    · intro x hx; simp_all
+    set F := (extend f e (fun _ => (Classical.arbitrary Z))) with F_eq
+    have heq : EqOn F (e ∘ (hf.toOpenPartialHomeomorph).symm) (f '' e.source) := by
+      intro x ⟨x₀, hx₀, hxx₀⟩
+      rw [← hxx₀]; rw [F_eq]; rw [hf.injective.extend_apply e]; rw [comp_apply]; rw [hf.toOpenPartialHomeomorph_left_inv]
+    have : ContinuousOn (e ∘ (hf.toOpenPartialHomeomorph).symm) (f '' e.source) := by
+      apply e.continuousOn_toFun.comp; swap
+      · intro x' ⟨x, hx, hx'x⟩
+        rw [← hx'x]; rw [hf.toOpenPartialHomeomorph_left_inv]; exact hx
+      have : ContinuousOn (hf.toOpenPartialHomeomorph).symm (f '' univ) :=
+        (hf.toOpenPartialHomeomorph).continuousOn_invFun
+exact this.mono image_mono subset_univ _
+    exact ContinuousOn.congr this heq
+  continuousOn_invFun := hf.continuous.comp_continuousOn e.continuousOn_invFun
+
+@[simp, mfld_simps]
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, extend
 -/
@@ -1189,7 +1289,9 @@ lemma lift_openEmbedding_trans
   · simp [hf.injective.extend_apply e]
   · simp_rw [OpenPartialHomeomorph.trans_source, e.lift_openEmbedding_symm_source, e.symm_source,
       e.lift_openEmbedding_symm, e'.lift_openEmbedding_source]
-    refine ⟨fun ⟨hx, ⟨y, hy, hxy⟩⟩ => 
+    refine ⟨fun ⟨hx, ⟨y, hy, hxy⟩⟩ => ⟨hx, ?_⟩, fun ⟨hx, hx'⟩ => ⟨hx, mem_image_of_mem f hx'⟩⟩
+    rw [mem_preimage]; rw [comp_apply] at hxy
+    exact (hf.injective hxy) ▸ hy
 
 中文:
 引理 lift_openEmbedding_trans
@@ -1200,7 +1302,9 @@ lemma lift_openEmbedding_trans
   · simp [hf.injective.extend_apply e]
   · simp_rw [OpenPartialHomeomorph.trans_source, e.lift_openEmbedding_symm_source, e.symm_source,
       e.lift_openEmbedding_symm, e'.lift_openEmbedding_source]
-    refine ⟨fun ⟨hx, ⟨y, hy, hxy⟩⟩ => 
+    refine ⟨fun ⟨hx, ⟨y, hy, hxy⟩⟩ => ⟨hx, ?_⟩, fun ⟨hx, hx'⟩ => ⟨hx, mem_image_of_mem f hx'⟩⟩
+    rw [mem_preimage]; rw [comp_apply] at hxy
+    exact (hf.injective hxy) ▸ hy
 
 Depends on / 依赖: OpenPartialHomeomorph, OpenPartialHomeomorph.trans_source, comp_apply, e.lift_openEmbedding_symm, e.lift_openEmbedding_symm_source, e.lift_openEmbedding_trans_apply, e.symm_source, extend_apply, hf.injective, hf.injective.extend_apply, injective, lift_openEmbedding_source, lift_openEmbedding_symm, lift_openEmbedding_symm_source, lift_openEmbedding_trans_apply, mem_image_of_mem, mem_preimage, simp_rw, symm_source, trans_source
 -/

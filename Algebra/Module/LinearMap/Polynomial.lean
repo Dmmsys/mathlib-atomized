@@ -325,7 +325,7 @@ lemma toMvPolynomial_mul
   simp only [toMvPolynomial, mul_apply, map_sum, Finset.sum_comm (γ := o), bind₁, aeval,
     AlgHom.coe_mk, coe_eval₂Hom, eval₂_monomial, algebraMap_apply, Algebra.algebraMap_self,
     RingHom.id_apply, C_apply, pow_zero, Finsupp.prod_single_index, pow_one, Finset.mul_sum,
-    monomial_mul, zero_
+    monomial_mul, zero_add]
 
 中文:
 引理 toMvPolynomial_mul
@@ -334,7 +334,7 @@ lemma toMvPolynomial_mul
   simp only [toMvPolynomial, mul_apply, map_sum, Finset.sum_comm (γ := o), bind₁, aeval,
     AlgHom.coe_mk, coe_eval₂Hom, eval₂_monomial, algebraMap_apply, Algebra.algebraMap_self,
     RingHom.id_apply, C_apply, pow_zero, Finsupp.prod_single_index, pow_one, Finset.mul_sum,
-    monomial_mul, zero_
+    monomial_mul, zero_add]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_mk, Algebra, Algebra.algebraMap_self, C_apply, Finset, Finset.mul_sum, Finset.sum_comm, Finsupp, Finsupp.prod_single_index, RingHom, RingHom.id_apply, algebraMap_apply, algebraMap_self, coe_mk, id_apply, map_sum, monomial_mul, mul_apply, mul_sum
 -/
@@ -657,7 +657,24 @@ lemma polyCharpolyAux_baseChange
   · intro r
     simp only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, map_C, bind₁_C_right]
   · rintro ij
-    simp only [RingHom
+    simp only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, map_X, bind₁_X_right]
+    rw [toMvPolynomial_comp _ (basis A (Basis.end bₘ))]; rw [← toMvPolynomial_baseChange]
+    suffices toMvPolynomial (M₂ := (Module.End A (TensorProduct R A M)))
+        (basis A bₘ.end) (basis A bₘ).end (tensorProduct R A M M) ij = X ij by
+      rw [this]; rw [bind₁_X_right]
+    simp only [toMvPolynomial, Matrix.toMvPolynomial]
+    suffices forall kl,
+        (toMatrix (basis A bₘ.end) (basis A bₘ).end) (tensorProduct R A M M) ij kl =
+        if kl = ij then 1 else 0 by
+      rw [Finset.sum_eq_single ij]
+      · rw [this, if_pos rfl, X]
+      · rintro kl - H
+        rw [this]; rw [if_neg H]; rw [map_zero]
+      · grind
+    intro kl
+    rw [toMatrix_apply]; rw [tensorProduct]; rw [TensorProduct.AlgebraTensorModule.lift_apply]; rw [basis_apply]; rw [TensorProduct.lift.tmul]; rw [coe_restrictScalars]
+    dsimp only [coe_mk, AddHom.coe_mk, smul_apply, baseChangeHom_apply]
+    rw [one_smul]; rw [Basis.baseChange_end]; rw [Basis.repr_self_apply]
 
 中文:
 引理 polyCharpolyAux_baseChange
@@ -671,7 +688,24 @@ lemma polyCharpolyAux_baseChange
   · intro r
     simp only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, map_C, bind₁_C_right]
   · rintro ij
-    simp only [RingHom
+    simp only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, map_X, bind₁_X_right]
+    rw [toMvPolynomial_comp _ (basis A (Basis.end bₘ))]; rw [← toMvPolynomial_baseChange]
+    suffices toMvPolynomial (M₂ := (Module.End A (TensorProduct R A M)))
+        (basis A bₘ.end) (basis A bₘ).end (tensorProduct R A M M) ij = X ij by
+      rw [this]; rw [bind₁_X_right]
+    simp only [toMvPolynomial, Matrix.toMvPolynomial]
+    suffices forall kl,
+        (toMatrix (basis A bₘ.end) (basis A bₘ).end) (tensorProduct R A M M) ij kl =
+        if kl = ij then 1 else 0 by
+      rw [Finset.sum_eq_single ij]
+      · rw [this, if_pos rfl, X]
+      · rintro kl - H
+        rw [this]; rw [if_neg H]; rw [map_zero]
+      · grind
+    intro kl
+    rw [toMatrix_apply]; rw [tensorProduct]; rw [TensorProduct.AlgebraTensorModule.lift_apply]; rw [basis_apply]; rw [TensorProduct.lift.tmul]; rw [coe_restrictScalars]
+    dsimp only [coe_mk, AddHom.coe_mk, smul_apply, baseChangeHom_apply]
+    rw [one_smul]; rw [Basis.baseChange_end]; rw [Basis.repr_self_apply]
 
 Depends on / 依赖: Basis.end, Function, Function.comp_apply, Module, Module.End, MvPolynomial, MvPolynomial.ringHom_ext, Polynomial, Polynomial.map_map, RingHom, RingHom.coe_coe, RingHom.coe_comp, TensorProduct, algebraMap, charpoly, charpoly.univ_map_map, coe_coe, coe_comp, comp_apply, map_C
 -/
@@ -891,7 +925,13 @@ lemma polyCharpolyAux_basisIndep
     Polynomial.map (MvPolynomial.aeval X).toRingHom
   have hf : Function.Injective f := by
     simp only [f, aeval_X_left, AlgHom.toRingHom_eq_coe, AlgHom.id_toRingHom]
-    exact Polynomial.map_injective (RingHom.id _) Fu
+    exact Polynomial.map_injective (RingHom.id _) Function.injective_id
+  apply hf
+  let _h1 : Module.Finite (MvPolynomial ι R) (TensorProduct R (MvPolynomial ι R) M) :=
+    Module.Finite.of_basis (basis (MvPolynomial ι R) bₘ)
+  let _h2 : Module.Free (MvPolynomial ι R) (TensorProduct R (MvPolynomial ι R) M) :=
+    Module.Free.of_basis (basis (MvPolynomial ι R) bₘ)
+  simp only [f, polyCharpolyAux_map_aeval, polyCharpolyAux_map_aeval]
 
 中文:
 引理 polyCharpolyAux_basisIndep
@@ -901,7 +941,13 @@ lemma polyCharpolyAux_basisIndep
     Polynomial.map (MvPolynomial.aeval X).toRingHom
   have hf : Function.Injective f := by
     simp only [f, aeval_X_left, AlgHom.toRingHom_eq_coe, AlgHom.id_toRingHom]
-    exact Polynomial.map_injective (RingHom.id _) Fu
+    exact Polynomial.map_injective (RingHom.id _) Function.injective_id
+  apply hf
+  let _h1 : Module.Finite (MvPolynomial ι R) (TensorProduct R (MvPolynomial ι R) M) :=
+    Module.Finite.of_basis (basis (MvPolynomial ι R) bₘ)
+  let _h2 : Module.Free (MvPolynomial ι R) (TensorProduct R (MvPolynomial ι R) M) :=
+    Module.Free.of_basis (basis (MvPolynomial ι R) bₘ)
+  simp only [f, polyCharpolyAux_map_aeval, polyCharpolyAux_map_aeval]
 
 Depends on / 依赖: AlgHom, AlgHom.id_toRingHom, AlgHom.toRingHom_eq_coe, Finite, Function, Function.Injective, Function.injective_id, Injective, Module, Module.Finite, Module.Finite.of_basis, Module.Free, MvPolynomial, MvPolynomial.aeval, Polynomial, Polynomial.map, Polynomial.map_injective, RingHom, RingHom.id, TensorP
 -/
@@ -1047,7 +1093,7 @@ lemma polyCharpoly_coeff_isHomogeneous
   rw [polyCharpoly]; rw [polyCharpolyAux]; rw [Polynomial.coeff_map]; rw [← one_mul j]
   apply (charpoly.univ_coeff_isHomogeneous _ _ _ _ hij).eval₂
   · exact fun r => MvPolynomial.isHomogeneous_C _ _
-  · exact LinearMap.toMvPolynomial_isHomogeneous 
+  · exact LinearMap.toMvPolynomial_isHomogeneous _ _ _
 
 中文:
 引理 polyCharpoly_coeff_isHomogeneous
@@ -1057,7 +1103,7 @@ lemma polyCharpoly_coeff_isHomogeneous
   rw [polyCharpoly]; rw [polyCharpolyAux]; rw [Polynomial.coeff_map]; rw [← one_mul j]
   apply (charpoly.univ_coeff_isHomogeneous _ _ _ _ hij).eval₂
   · exact fun r => MvPolynomial.isHomogeneous_C _ _
-  · exact LinearMap.toMvPolynomial_isHomogeneous 
+  · exact LinearMap.toMvPolynomial_isHomogeneous _ _ _
 
 Depends on / 依赖: LinearMap, LinearMap.toMvPolynomial_isHomogeneous, MvPolynomial, MvPolynomial.isHomogeneous_C, Polynomial, Polynomial.coeff_map, charpoly, charpoly.univ_coeff_isHomogeneous, coeff_map, finrank_eq_card_chooseBasisIndex, isHomogeneous_C, one_mul, polyCharpoly, polyCharpolyAux, toMvPolynomial_isHomogeneous, univ_coeff_isHomogeneous
 -/
@@ -1162,6 +1208,8 @@ lemma polyCharpoly_coeff_eq_zero_of_basis
   set g := toMvPolynomial b' b LinearMap.id
   apply_fun (MvPolynomial.bind₁ g) at H
   have : toMvPolynomial b' B φ = fun i => (MvPolynomial.bind₁ g) (toMvPolynomial b B φ i) :=
+funext toMvPolynomial_comp b' b B φ LinearMap.id
+  rwa [map_zero, RingHom.coe_coe, MvPolynomial.bind₁_bind₁, ← this] at H
 
 中文:
 引理 polyCharpoly_coeff_eq_zero_of_basis
@@ -1172,6 +1220,8 @@ lemma polyCharpoly_coeff_eq_zero_of_basis
   set g := toMvPolynomial b' b LinearMap.id
   apply_fun (MvPolynomial.bind₁ g) at H
   have : toMvPolynomial b' B φ = fun i => (MvPolynomial.bind₁ g) (toMvPolynomial b B φ i) :=
+funext toMvPolynomial_comp b' b B φ LinearMap.id
+  rwa [map_zero, RingHom.coe_coe, MvPolynomial.bind₁_bind₁, ← this] at H
 
 Depends on / 依赖: LinearMap, LinearMap.id, Module, Module.Free.chooseBasis, MvPolynomial, MvPolynomial.bind, Polynomial, Polynomial.coeff_map, RingHom, RingHom.coe_coe, apply_fun, chooseBasis, coe_coe, coeff_map, map_zero, polyCharpoly, polyCharpolyAux, toMvPolynomial, toMvPolynomial_comp
 -/
@@ -1545,7 +1595,7 @@ lemma isNilRegular_iff_natTrailingDegree_charpoly_eq_nilRank
   · intro h
     rw [← h]
     apply Polynomial.trailingCoeff_nonzero_iff_nonzero.mpr
-    apply (LinearMap.charpoly_monic _)
+    apply (LinearMap.charpoly_monic _).ne_zero
 
 中文:
 引理 isNilRegular_iff_natTrailingDegree_charpoly_eq_nilRank
@@ -1560,7 +1610,7 @@ lemma isNilRegular_iff_natTrailingDegree_charpoly_eq_nilRank
   · intro h
     rw [← h]
     apply Polynomial.trailingCoeff_nonzero_iff_nonzero.mpr
-    apply (LinearMap.charpoly_monic _)
+    apply (LinearMap.charpoly_monic _).ne_zero
 
 Depends on / 依赖: LinearMap, LinearMap.charpoly_monic, Polynomial, Polynomial.natTrailingDegree_le_of_ne_zero, Polynomial.trailingCoeff_nonzero_iff_nonzero.mpr, charpoly_monic, isNilRegular_def, le_antisymm, natTrailingDegree_le_of_ne_zero, ne_zero, nilRank_le_natTrailingDegree_charpoly, trailingCoeff_nonzero_iff_nonzero
 -/
@@ -1595,7 +1645,15 @@ lemma exists_isNilRegular_of_finrank_le_card
   have aux :
     ((polyCharpoly φ b).coeff (nilRank φ)).IsHomogeneous (n - nilRank φ) :=
     polyCharpoly_coeff_isHomogeneous _ b (nilRank φ) (n - nilRank φ)
-      (by simp [n, nilRank_le_card φ 
+      (by simp [n, nilRank_le_card φ bₘ, finrank_eq_card_chooseBasisIndex])
+  obtain ⟨x, hx⟩ : exists r, eval r ((polyCharpoly _ b).coeff (nilRank φ)) != 0 := by
+    by_contra! h₀
+    apply polyCharpoly_coeff_nilRank_ne_zero φ b
+    apply aux.eq_zero_of_forall_eval_eq_zero_of_le_card h₀ (le_trans _ h)
+    simp only [n, finrank_eq_card_chooseBasisIndex, Nat.cast_le, Nat.sub_le]
+  let c := Finsupp.equivFunOnFinite.symm x
+  use b.repr.symm c
+  rwa [isNilRegular_iff_coeff_polyCharpoly_nilRank_ne_zero _ b, LinearEquiv.apply_symm_apply]
 
 中文:
 引理 存在_isNilRegular_of_finrank_le_card
@@ -1607,7 +1665,15 @@ lemma exists_isNilRegular_of_finrank_le_card
   have aux :
     ((polyCharpoly φ b).coeff (nilRank φ)).IsHomogeneous (n - nilRank φ) :=
     polyCharpoly_coeff_isHomogeneous _ b (nilRank φ) (n - nilRank φ)
-      (by simp [n, nilRank_le_card φ 
+      (by simp [n, nilRank_le_card φ bₘ, finrank_eq_card_chooseBasisIndex])
+  obtain ⟨x, hx⟩ : exists r, eval r ((polyCharpoly _ b).coeff (nilRank φ)) != 0 := by
+    by_contra! h₀
+    apply polyCharpoly_coeff_nilRank_ne_zero φ b
+    apply aux.eq_zero_of_forall_eval_eq_zero_of_le_card h₀ (le_trans _ h)
+    simp only [n, finrank_eq_card_chooseBasisIndex, Nat.cast_le, Nat.sub_le]
+  let c := Finsupp.equivFunOnFinite.symm x
+  use b.repr.symm c
+  rwa [isNilRegular_iff_coeff_polyCharpoly_nilRank_ne_zero _ b, LinearEquiv.apply_symm_apply]
 
 Depends on / 依赖: ChooseBasisIndex, Fintype, Fintype.card, IsHomogeneous, aux.eq_zero_of_forall_eval_eq_zero, chooseBasis, eq_zero_of_forall_eval_eq_zero, finrank_eq_card_chooseBasisIndex, nilRank, nilRank_le_card, polyCharpoly, polyCharpoly_coeff_isHomogeneous, polyCharpoly_coeff_nilRank_ne_zero
 -/

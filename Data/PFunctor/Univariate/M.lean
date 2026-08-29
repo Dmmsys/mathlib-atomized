@@ -605,7 +605,7 @@ definition children
       trans i
       · apply cast_heq
       symm
-      appl
+      apply cast_heq }
 
 中文:
 定义 children
@@ -619,7 +619,7 @@ definition children
       trans i
       · apply cast_heq
       symm
-      appl
+      apply cast_heq }
 
 Depends on / 依赖: agree_children, approx, cast_heq, children, congr_arg, consistent, head_succ
 -/
@@ -855,7 +855,21 @@ theorem mk_dest
   dsimp only [Approx.sMk, dest, head]
   rcases h : x.approx (succ n) with - | ⟨hd, ch⟩
   have h' : hd = head' (x.approx 1) := by
-    rw [← head_succ' n]; r
+    rw [← head_succ' n]; rw [h]; rw [head']
+    apply x.consistent
+  revert ch
+  rw [h']
+  intro ch h
+  congr
+  ext a
+  dsimp only [children]
+  generalize hh : cast _ a = a''
+  rw [cast_eq_iff_heq] at hh
+  revert a''
+  rw [h]
+  intro _ hh
+  cases hh
+  rfl
 
 中文:
 定理 mk_dest
@@ -871,7 +885,21 @@ theorem mk_dest
   dsimp only [Approx.sMk, dest, head]
   rcases h : x.approx (succ n) with - | ⟨hd, ch⟩
   have h' : hd = head' (x.approx 1) := by
-    rw [← head_succ' n]; r
+    rw [← head_succ' n]; rw [h]; rw [head']
+    apply x.consistent
+  revert ch
+  rw [h']
+  intro ch h
+  congr
+  ext a
+  dsimp only [children]
+  generalize hh : cast _ a = a''
+  rw [cast_eq_iff_heq] at hh
+  revert a''
+  rw [h]
+  intro _ hh
+  cases hh
+  rfl
 
 Depends on / 依赖: Approx, Approx.sMk, CofixA, CofixA.instSubsingleton, M.mk, Subsingleton, Subsingleton.elim, approx, cast_eq_iff_heq, children, consistent, generalize, head_succ, instSubsingleton, revert, x.approx, x.consistent
 -/
@@ -1042,7 +1070,27 @@ theorem agree_iff_agree'
       induction y using PFunctor.M.casesOn'
       simp only [approx_mk] at h
       obtain - | ⟨_, _, hagree⟩ := h
-      constructor <;> try rf
+      constructor <;> try rfl
+      intro i
+      apply n_ih
+      apply hagree
+  · induction n generalizing x y with
+    | zero => constructor
+    | succ _ n_ih =>
+      obtain - | @⟨_, a, x', y'⟩ := h
+      induction x using PFunctor.M.casesOn' with | _ x_a x_f
+      induction y using PFunctor.M.casesOn' with | _ y_a y_f
+      simp only [approx_mk]
+      have h_a_1 := mk_inj ‹M.mk ⟨x_a, x_f⟩ = M.mk ⟨a, x'⟩›
+      cases h_a_1
+      replace h_a_2 := mk_inj ‹M.mk ⟨y_a, y_f⟩ = M.mk ⟨a, y'⟩›
+      cases h_a_2
+      constructor
+      intro i
+      apply n_ih
+      simp [*]
+
+@[simp]
 
 中文:
 定理 agree_iff_agree'
@@ -1056,7 +1104,27 @@ theorem agree_iff_agree'
       induction y using PFunctor.M.casesOn'
       simp only [approx_mk] at h
       obtain - | ⟨_, _, hagree⟩ := h
-      constructor <;> try rf
+      constructor <;> try rfl
+      intro i
+      apply n_ih
+      apply hagree
+  · induction n generalizing x y with
+    | zero => constructor
+    | succ _ n_ih =>
+      obtain - | @⟨_, a, x', y'⟩ := h
+      induction x using PFunctor.M.casesOn' with | _ x_a x_f
+      induction y using PFunctor.M.casesOn' with | _ y_a y_f
+      simp only [approx_mk]
+      have h_a_1 := mk_inj ‹M.mk ⟨x_a, x_f⟩ = M.mk ⟨a, x'⟩›
+      cases h_a_1
+      replace h_a_2 := mk_inj ‹M.mk ⟨y_a, y_f⟩ = M.mk ⟨a, y'⟩›
+      cases h_a_2
+      constructor
+      intro i
+      apply n_ih
+      simp [*]
+
+@[simp]
 
 Depends on / 依赖: PFunctor, PFunctor.M.casesOn, approx_mk, casesOn, generalizing, hagree, n_ih
 -/
@@ -1294,7 +1362,15 @@ theorem iselect_eq_default
     simp only [iselect, isubtree] at ps_ih ⊢
     by_cases h'' : a = x_a
     · subst x_a
-     
+      simp only [dif_pos, casesOn_mk']
+      rw [ps_ih]
+      intro h'
+      apply h
+      constructor <;> try rfl
+      apply h'
+    · simp [*]
+
+@[simp]
 
 中文:
 定理 iselect_eq_default
@@ -1311,7 +1387,15 @@ theorem iselect_eq_default
     simp only [iselect, isubtree] at ps_ih ⊢
     by_cases h'' : a = x_a
     · subst x_a
-     
+      simp only [dif_pos, casesOn_mk']
+      rw [ps_ih]
+      intro h'
+      apply h
+      constructor <;> try rfl
+      apply h'
+    · simp [*]
+
+@[simp]
 
 Depends on / 依赖: PFunctor, PFunctor.M.casesOn, casesOn, casesOn_mk, dif_pos, generalizing, iselect, isubtree, ps_hd, ps_ih, ps_tail
 -/
@@ -1540,7 +1624,29 @@ theorem ext_aux
     simp only [iselect_nil] at hrec
     subst hrec
     simp only [approx_mk, heq_iff_eq, CofixA.intro.injEq,
-      eq_iff_true_of_subsin
+      eq_iff_true_of_subsingleton, and_self]
+  | succ n n_ih =>
+    cases hx
+    cases hy
+    induction x using PFunctor.M.casesOn'
+    induction y using PFunctor.M.casesOn'
+    subst z
+    iterate 3 (have := mk_inj ‹_›; cases this)
+    rename_i n_ih a f₃ f₂ hAgree₂ _ _ h₂ _ _ f₁ h₁ hAgree₁ clr
+    simp only [approx_mk]
+    have := mk_inj h₁
+    cases this; clear h₁
+    have := mk_inj h₂
+    cases this; clear h₂
+    congr
+    ext i
+    apply n_ih
+    · solve_by_elim
+    · solve_by_elim
+    introv h
+    specialize hrec (⟨_, i⟩ :: ps) (congr_arg _ h)
+    simp only [iselect_cons] at hrec
+    exact hrec
 
 中文:
 定理 ext_aux
@@ -1554,7 +1660,29 @@ theorem ext_aux
     simp only [iselect_nil] at hrec
     subst hrec
     simp only [approx_mk, heq_iff_eq, CofixA.intro.injEq,
-      eq_iff_true_of_subsin
+      eq_iff_true_of_subsingleton, and_self]
+  | succ n n_ih =>
+    cases hx
+    cases hy
+    induction x using PFunctor.M.casesOn'
+    induction y using PFunctor.M.casesOn'
+    subst z
+    iterate 3 (have := mk_inj ‹_›; cases this)
+    rename_i n_ih a f₃ f₂ hAgree₂ _ _ h₂ _ _ f₁ h₁ hAgree₁ clr
+    simp only [approx_mk]
+    have := mk_inj h₁
+    cases this; clear h₁
+    have := mk_inj h₂
+    cases this; clear h₂
+    congr
+    ext i
+    apply n_ih
+    · solve_by_elim
+    · solve_by_elim
+    introv h
+    specialize hrec (⟨_, i⟩ :: ps) (congr_arg _ h)
+    simp only [iselect_cons] at hrec
+    exact hrec
 
 Depends on / 依赖: CofixA, CofixA.intro.injEq, PFunctor, PFunctor.M.casesOn, and_self, approx_mk, casesOn, eq_iff_true_of_subsingleton, generalizing, heq_iff_eq, iselect_nil, iterate, mk_inj, n_ih, rename_i, specialize
 -/
@@ -1696,7 +1824,19 @@ theorem nth_of_bisim
   | nil =>
     exists rfl, a, f, f', rfl, rfl
     apply bisim.tail h₀
-  | cons i ps ps_ih => ?
+  | cons i ps ps_ih => ?_
+  obtain ⟨a', i⟩ := i
+  obtain rfl : a = a' := by rcases hh with hh | hh <;> cases isPath_cons hh <;> rfl
+  dsimp only [iselect] at ps_ih ⊢
+  have h₁ := bisim.tail h₀ i
+  induction h : f i using PFunctor.M.casesOn' with | _ a₀ f₀
+  induction h' : f' i using PFunctor.M.casesOn' with | _ a₁ f₁
+  simp only [h, h', isubtree_cons] at ps_ih ⊢
+  rw [h]; rw [h'] at h₁
+  obtain rfl : a₀ = a₁ := bisim.head h₁
+  apply ps_ih _ _ _ h₁
+  rw [← h]; rw [← h']
+  apply Or.imp isPath_cons' isPath_cons' hh
 
 中文:
 定理 nth_of_bisim
@@ -1710,7 +1850,19 @@ theorem nth_of_bisim
   | nil =>
     exists rfl, a, f, f', rfl, rfl
     apply bisim.tail h₀
-  | cons i ps ps_ih => ?
+  | cons i ps ps_ih => ?_
+  obtain ⟨a', i⟩ := i
+  obtain rfl : a = a' := by rcases hh with hh | hh <;> cases isPath_cons hh <;> rfl
+  dsimp only [iselect] at ps_ih ⊢
+  have h₁ := bisim.tail h₀ i
+  induction h : f i using PFunctor.M.casesOn' with | _ a₀ f₀
+  induction h' : f' i using PFunctor.M.casesOn' with | _ a₁ f₁
+  simp only [h, h', isubtree_cons] at ps_ih ⊢
+  rw [h]; rw [h'] at h₁
+  obtain rfl : a₀ = a₁ := bisim.head h₁
+  apply ps_ih _ _ _ h₁
+  rw [← h]; rw [← h']
+  apply Or.imp isPath_cons' isPath_cons' hh
 
 Depends on / 依赖: PFunctor, PFunctor.M.casesOn, bisim.head, bisim.tail, casesOn, generalizing, isPath_cons, iselect, ps_ih
 -/
@@ -1854,7 +2006,11 @@ theorem bisim
   · replace h₀ := congr_arg Sigma.fst h₀
     replace h₁ := congr_arg Sigma.fst h₁
     simp only [dest_mk] at h₀ h₁
-    r
+    rw [h₀]; rw [h₁]
+  · simp only [dest_mk] at h₀ h₁
+    cases h₀
+    cases h₁
+    apply h₂
 
 中文:
 定理 bisim
@@ -1867,7 +2023,11 @@ theorem bisim
   · replace h₀ := congr_arg Sigma.fst h₀
     replace h₁ := congr_arg Sigma.fst h₁
     simp only [dest_mk] at h₀ h₁
-    r
+    rw [h₀]; rw [h₁]
+  · simp only [dest_mk] at h₀ h₁
+    cases h₀
+    cases h₁
+    apply h₂
 
 Depends on / 依赖: Inhabited, Inhabited.mk, Sigma.fst, congr_arg, dest_mk, eq_of_bisim, introv, replace, x.head
 -/
@@ -1975,7 +2135,9 @@ theorem corec_unique
   rcases gxeq : g x with ⟨a, f'⟩
   have h₀ : M.dest (f x) = ⟨a, f ∘ f'⟩ := by rw [hyp, gxeq, PFunctor.map_eq]
   have h₁ : M.dest (M.corec g x) = ⟨a, M.corec g ∘ f'⟩ := by rw [dest_corec, gxeq, PFunctor.map_eq]
-  refine ⟨
+  refine ⟨_, _, _, h₀, h₁, ?_⟩
+  intro i
+  exact ⟨f' i, trivial, rfl, rfl⟩
 
 中文:
 定理 corec_unique
@@ -1988,7 +2150,9 @@ theorem corec_unique
   rcases gxeq : g x with ⟨a, f'⟩
   have h₀ : M.dest (f x) = ⟨a, f ∘ f'⟩ := by rw [hyp, gxeq, PFunctor.map_eq]
   have h₁ : M.dest (M.corec g x) = ⟨a, M.corec g ∘ f'⟩ := by rw [dest_corec, gxeq, PFunctor.map_eq]
-  refine ⟨
+  refine ⟨_, _, _, h₀, h₁, ?_⟩
+  intro i
+  exact ⟨f' i, trivial, rfl, rfl⟩
 
 Depends on / 依赖: M.corec, M.dest, PFunctor, PFunctor.map_eq, dest_corec, map_eq
 -/

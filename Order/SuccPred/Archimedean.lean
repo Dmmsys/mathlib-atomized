@@ -260,7 +260,8 @@ lemma le_total_of_codirected
     exact Nat.le_of_not_ge h
   left
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le h
-  rw [Nat.add_comm]; rw [Function.iterate_add]; rw [Function.c
+  rw [Nat.add_comm]; rw [Function.iterate_add]; rw [Function.comp_apply]
+  apply Order.le_succ_iterate
 
 中文:
 引理 le_total_of_codirected
@@ -276,7 +277,8 @@ lemma le_total_of_codirected
     exact Nat.le_of_not_ge h
   left
   obtain ⟨k, rfl⟩ := Nat.exists_eq_add_of_le h
-  rw [Nat.add_comm]; rw [Function.iterate_add]; rw [Function.c
+  rw [Nat.add_comm]; rw [Function.iterate_add]; rw [Function.comp_apply]
+  apply Order.le_succ_iterate
 
 Depends on / 依赖: Function, Function.comp_apply, Function.iterate_add, Nat.add_comm, Nat.exists_eq_add_of_le, Nat.le_of_not_ge, Or.comm, Order.le_succ_iterate, add_comm, comp_apply, exists_eq_add_of_le, exists_succ_iterate, iterate_add, le_of_not_ge, le_succ_iterate
 -/
@@ -480,7 +482,13 @@ have hm' : forall a, f a <= m := fun a => hm Set.mem_range_self _
   suffices forall b, f a₀ <= b -> exists a, b < f a by
     obtain ⟨a, ha⟩ : exists a, m < f a := this m (hm' a₀)
     exact ha.not_ge (hm' a)
-  have h : forall a, exists a', f a < f a' 
+  have h : forall a, exists a', f a < f a' := fun a => (exists_gt a).imp (fun a' h => hf h)
+  apply Succ.rec
+  · exact h a₀
+  rintro b _ ⟨a, hba⟩
+  exact (h a).imp (fun a' => (succ_le_of_lt hba).trans_lt)
+
+@[to_dual]
 
 中文:
 引理 严格递增.not_bddAbove_range_of_isSuccArchimedean
@@ -492,7 +500,13 @@ have hm' : forall a, f a <= m := fun a => hm Set.mem_range_self _
   suffices forall b, f a₀ <= b -> exists a, b < f a by
     obtain ⟨a, ha⟩ : exists a, m < f a := this m (hm' a₀)
     exact ha.not_ge (hm' a)
-  have h : forall a, exists a', f a < f a' 
+  have h : forall a, exists a', f a < f a' := fun a => (exists_gt a).imp (fun a' h => hf h)
+  apply Succ.rec
+  · exact h a₀
+  rintro b _ ⟨a, hba⟩
+  exact (h a).imp (fun a' => (succ_le_of_lt hba).trans_lt)
+
+@[to_dual]
 
 Depends on / 依赖: Nonempty, Set.mem_range_self, Succ.rec, exists_gt, ha.not_ge, mem_range_self, not_ge, succ_le_of_lt, trans_lt
 -/
@@ -610,7 +624,8 @@ lemma SuccOrder.forall_ne_bot_iff
   obtain ⟨j, rfl⟩ := exists_succ_iterate_of_le (bot_le : ⊥ <= i)
   have hj : 0 < j := by apply Nat.pos_of_ne_zero; contrapose hi; simp [hi]
   rw [← Nat.succ_pred_eq_of_pos hj]
-  simp only [Function.iterate_succ', Function.comp_appl
+  simp only [Function.iterate_succ', Function.comp_apply]
+  apply h
 
 中文:
 引理 Succ序.对任意_ne_bot_iff
@@ -619,7 +634,8 @@ lemma SuccOrder.forall_ne_bot_iff
   obtain ⟨j, rfl⟩ := exists_succ_iterate_of_le (bot_le : ⊥ <= i)
   have hj : 0 < j := by apply Nat.pos_of_ne_zero; contrapose hi; simp [hi]
   rw [← Nat.succ_pred_eq_of_pos hj]
-  simp only [Function.iterate_succ', Function.comp_appl
+  simp only [Function.iterate_succ', Function.comp_apply]
+  apply h
 
 Depends on / 依赖: Function, Function.comp_apply, Function.iterate_succ, Nat.pos_of_ne_zero, Nat.succ_pred_eq_of_pos, Order.succ_ne_bot, bot_le, comp_apply, contrapose, exists_succ_iterate_of_le, iterate_succ, pos_of_ne_zero, succ_ne_bot, succ_pred_eq_of_pos
 -/
@@ -656,7 +672,14 @@ lemma BddAbove.exists_isGreatest_of_nonempty
   intro m _ IH hm hn hm'
   rw [mem_upperBounds] at IH hm
   simp_rw [Order.le_succ_iff_eq_or_le] at hm
-  replace hm 
+  replace hm : forall x in S, x <= m := by
+    intro x hx
+    refine (hm x hx).resolve_left ?_
+    rintro rfl
+    exact hm' hx
+  by_cases hmS : m in S
+  · exact ⟨m, hmS, hm⟩
+  · exact IH hm hn hmS
 
 中文:
 引理 BddAbove.存在_isGreatest_of_nonempty
@@ -673,7 +696,14 @@ lemma BddAbove.exists_isGreatest_of_nonempty
   intro m _ IH hm hn hm'
   rw [mem_upperBounds] at IH hm
   simp_rw [Order.le_succ_iff_eq_or_le] at hm
-  replace hm 
+  replace hm : forall x in S, x <= m := by
+    intro x hx
+    refine (hm x hx).resolve_left ?_
+    rintro rfl
+    exact hm' hx
+  by_cases hmS : m in S
+  · exact ⟨m, hmS, hm⟩
+  · exact IH hm hn hmS
 
 Depends on / 依赖: Module, Order.le_succ_iff_eq_or_le, Succ.rec, contextual, le_succ_iff_eq_or_le, maximalIdeal, mem_upperBounds, replace, resolve_left, revert, simp_rw
 -/
@@ -721,7 +751,7 @@ lemma IsSuccArchimedean.of_orderIso
     clear h
     induction n generalizing a with
     | zero => simp
-    | succ n IH => simp only [Function.iterate_succ', Functio
+    | succ n IH => simp only [Function.iterate_succ', Function.comp_apply, IH, f.map_succ]
 
 中文:
 引理 是SuccArchimedean.of_orderIso
@@ -734,7 +764,7 @@ lemma IsSuccArchimedean.of_orderIso
     clear h
     induction n generalizing a with
     | zero => simp
-    | succ n IH => simp only [Function.iterate_succ', Functio
+    | succ n IH => simp only [Function.iterate_succ', Function.comp_apply, IH, f.map_succ]
 
 Depends on / 依赖: Ideal.Quotient.mk_surjective, IsScalarTower, IsScalarTower.toAlgHom, Quotient, mk_surjective, of_surjective, toAlgHom, toLinearMap
 -/
@@ -766,7 +796,7 @@ lemma IsPredArchimedean.of_orderIso
     clear h
     induction n generalizing b with
     | zero => simp
-    | succ n IH => simp only [Function.iterate_succ', Functio
+    | succ n IH => simp only [Function.iterate_succ', Function.comp_apply, IH, f.map_pred]
 
 中文:
 引理 是PredArchimedean.of_orderIso
@@ -779,7 +809,7 @@ lemma IsPredArchimedean.of_orderIso
     clear h
     induction n generalizing b with
     | zero => simp
-    | succ n IH => simp only [Function.iterate_succ', Functio
+    | succ n IH => simp only [Function.iterate_succ', Function.comp_apply, IH, f.map_pred]
 -/
 protected lemma IsPredArchimedean.of_orderIso [PredOrder X] [IsPredArchimedean X] [PredOrder Y]
     (f : X ≃o Y) : IsPredArchimedean Y where
@@ -813,7 +843,20 @@ instance Set.OrdConnected.isPredArchimedean
     | zero => simp_all
     | succ n hi =>
       simp_all only [Function.iterate_succ, Function.comp_apply]
-      change Order.p
+      change Order.pred^[n] (dite ..) = _
+      split_ifs with h
+      · dsimp only at h ⊢
+        apply hi _ _ _ hn
+        · rw [← hn]
+          apply Order.pred_iterate_le
+      · have : Order.pred (⟨c, hc⟩ : s) = ⟨c, hc⟩ := by
+          change dite .. = _
+          simp [h]
+        rw [Function.iterate_fixed]
+        · simp only [Order.pred_eq_iff_isMin] at this
+          apply (this.eq_of_le _).symm
+          exact hbc
+        · exact this
 
 中文:
 实例 集合.序连通.isPredArchimedean
@@ -826,7 +869,20 @@ instance Set.OrdConnected.isPredArchimedean
     | zero => simp_all
     | succ n hi =>
       simp_all only [Function.iterate_succ, Function.comp_apply]
-      change Order.p
+      change Order.pred^[n] (dite ..) = _
+      split_ifs with h
+      · dsimp only at h ⊢
+        apply hi _ _ _ hn
+        · rw [← hn]
+          apply Order.pred_iterate_le
+      · have : Order.pred (⟨c, hc⟩ : s) = ⟨c, hc⟩ := by
+          change dite .. = _
+          simp [h]
+        rw [Function.iterate_fixed]
+        · simp only [Order.pred_eq_iff_isMin] at this
+          apply (this.eq_of_le _).symm
+          exact hbc
+        · exact this
 
 Depends on / 依赖: classical
 -/
@@ -901,7 +957,9 @@ lemma monotoneOn_of_le_succ
     rw [Function.iterate_succ_apply'] at hb ⊢
     have : succ^[n] a in s := hs.1 ha hb ⟨le_succ_iterate .., le_succ _⟩
     by_cases hb' : IsMax (succ^[n] a)
- 
+    · rw [succ_eq_iff_isMax.2 hb']
+      exact hn this
+    · exact (hn this).trans (hf _ hb' this hb)
 
 中文:
 引理 monotoneOn_of_le_succ
@@ -916,7 +974,9 @@ lemma monotoneOn_of_le_succ
     rw [Function.iterate_succ_apply'] at hb ⊢
     have : succ^[n] a in s := hs.1 ha hb ⟨le_succ_iterate .., le_succ _⟩
     by_cases hb' : IsMax (succ^[n] a)
- 
+    · rw [succ_eq_iff_isMax.2 hb']
+      exact hn this
+    · exact (hn this).trans (hf _ hb' this hb)
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, exists_succ_iterate_of_le, iterate_succ_apply, le_succ, le_succ_iterate, succ_eq_iff_isMax
 -/
@@ -970,7 +1030,11 @@ lemma strictMonoOn_of_lt_succ
   | zero => simpa using hf _ hab ha hb
   | succ n hn =>
     rw [Function.iterate_succ_apply'] at hb ⊢
-    have : succ^[n + 1] a in s :
+    have : succ^[n + 1] a in s := hs.1 ha hb ⟨le_succ_iterate .., le_succ _⟩
+    by_cases hb' : IsMax (succ^[n + 1] a)
+    · rw [succ_eq_iff_isMax.2 hb']
+      exact hn this
+    · exact (hn this).trans (hf _ hb' this hb)
 
 中文:
 引理 strictMonoOn_of_lt_succ
@@ -985,7 +1049,11 @@ lemma strictMonoOn_of_lt_succ
   | zero => simpa using hf _ hab ha hb
   | succ n hn =>
     rw [Function.iterate_succ_apply'] at hb ⊢
-    have : succ^[n + 1] a in s :
+    have : succ^[n + 1] a in s := hs.1 ha hb ⟨le_succ_iterate .., le_succ _⟩
+    by_cases hb' : IsMax (succ^[n + 1] a)
+    · rw [succ_eq_iff_isMax.2 hb']
+      exact hn this
+    · exact (hn this).trans (hf _ hb' this hb)
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, exists_succ_iterate_of_le, hab.le, iterate_succ_apply, le_succ, le_succ_iterate, not_isMax_of_lt, succ_eq_iff_isMax
 -/
@@ -1134,7 +1202,9 @@ lemma monotoneOn_of_pred_le
     rw [Function.iterate_succ_apply'] at ha ⊢
     have : pred^[n] b in s := hs.1 ha hb ⟨pred_le _, pred_iterate_le ..⟩
     by_cases ha' : IsMin (pred^[n] b)
- 
+    · rw [pred_eq_iff_isMin.2 ha']
+      exact hn this
+    · exact (hn this).trans' (hf _ ha' this ha)
 
 中文:
 引理 monotoneOn_of_pred_le
@@ -1149,7 +1219,9 @@ lemma monotoneOn_of_pred_le
     rw [Function.iterate_succ_apply'] at ha ⊢
     have : pred^[n] b in s := hs.1 ha hb ⟨pred_le _, pred_iterate_le ..⟩
     by_cases ha' : IsMin (pred^[n] b)
- 
+    · rw [pred_eq_iff_isMin.2 ha']
+      exact hn this
+    · exact (hn this).trans' (hf _ ha' this ha)
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, exists_pred_iterate_of_le, iterate_succ_apply, pred_eq_iff_isMin, pred_iterate_le, pred_le
 -/
@@ -1203,7 +1275,11 @@ lemma strictMonoOn_of_pred_lt
   | zero => simpa using hf _ hab hb ha
   | succ n hn =>
     rw [Function.iterate_succ_apply'] at ha ⊢
-    have : pred^[n + 1] b in s :
+    have : pred^[n + 1] b in s := hs.1 ha hb ⟨pred_le _, pred_iterate_le ..⟩
+    by_cases ha' : IsMin (pred^[n + 1] b)
+    · rw [pred_eq_iff_isMin.2 ha']
+      exact hn this
+    · exact (hn this).trans' (hf _ ha' this ha)
 
 中文:
 引理 strictMonoOn_of_pred_lt
@@ -1218,7 +1294,11 @@ lemma strictMonoOn_of_pred_lt
   | zero => simpa using hf _ hab hb ha
   | succ n hn =>
     rw [Function.iterate_succ_apply'] at ha ⊢
-    have : pred^[n + 1] b in s :
+    have : pred^[n + 1] b in s := hs.1 ha hb ⟨pred_le _, pred_iterate_le ..⟩
+    by_cases ha' : IsMin (pred^[n + 1] b)
+    · rw [pred_eq_iff_isMin.2 ha']
+      exact hn this
+    · exact (hn this).trans' (hf _ ha' this ha)
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, exists_pred_iterate_of_le, hab.le, iterate_succ_apply, not_isMin_of_lt, pred_eq_iff_isMin, pred_iterate_le, pred_le
 -/

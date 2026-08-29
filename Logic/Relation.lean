@@ -3751,6 +3751,16 @@ theorem church_rosser
       induction hdb with
       | refl => exact ⟨e, refl, ReflGen.single hde⟩
       | @tail f b _ hfb ih =>
+        rcases ih with ⟨a, hea, hfa⟩
+        cases hfa with
+        | refl => exact ⟨b, hea.tail hfb, ReflGen.refl⟩
+        | single hfa =>
+          rcases h _ _ _ hfb hfa with ⟨c, hbc, hac⟩
+          exact ⟨c, hea.trans hac, hbc⟩
+    rcases this with ⟨a, hea, hba⟩
+    cases hba with
+    | refl => exact ⟨b, hea, hcb⟩
+    | single hba => exact ⟨a, hea, hcb.tail hba⟩
 
 中文:
 定理 church_rosser
@@ -3765,6 +3775,16 @@ theorem church_rosser
       induction hdb with
       | refl => exact ⟨e, refl, ReflGen.single hde⟩
       | @tail f b _ hfb ih =>
+        rcases ih with ⟨a, hea, hfa⟩
+        cases hfa with
+        | refl => exact ⟨b, hea.tail hfb, ReflGen.refl⟩
+        | single hfa =>
+          rcases h _ _ _ hfb hfa with ⟨c, hbc, hac⟩
+          exact ⟨c, hea.trans hac, hbc⟩
+    rcases this with ⟨a, hea, hba⟩
+    cases hba with
+    | refl => exact ⟨b, hea, hcb⟩
+    | single hba => exact ⟨a, hea, hcb.tail hba⟩
 
 Depends on / 依赖: ReflGen, ReflGen.refl, ReflGen.single, ReflTransGen, hea.tail, hea.trans, single
 -/

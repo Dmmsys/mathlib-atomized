@@ -54,7 +54,7 @@ definition derivative
       simp only [add_mul, forall_const, map_add, zero_mul, map_zero]
   map_smul' a p := by
     dsimp; rw [sum_smul_index] <;>
-      simp only [mul_sum, ← C_mul', mul_assoc, map_mul, forall_const, zero_mul, map_z
+      simp only [mul_sum, ← C_mul', mul_assoc, map_mul, forall_const, zero_mul, map_zero, sum]
 
 中文:
 定义 derivative
@@ -65,7 +65,7 @@ definition derivative
       simp only [add_mul, forall_const, map_add, zero_mul, map_zero]
   map_smul' a p := by
     dsimp; rw [sum_smul_index] <;>
-      simp only [mul_sum, ← C_mul', mul_assoc, map_mul, forall_const, zero_mul, map_z
+      simp only [mul_sum, ← C_mul', mul_assoc, map_mul, forall_const, zero_mul, map_zero, sum]
 
 Depends on / 依赖: p.sum
 -/
@@ -111,7 +111,11 @@ theorem coeff_derivative
     cases b
     · intros
       rw [Nat.cast_zero]; rw [mul_zero]; rw [zero_mul]
-    · int
+    · intro _ H
+      rw [Nat.add_one_sub_one]; rw [if_neg (mt (congr_arg Nat.succ) H.symm)]; rw [mul_zero]
+  · simp_all
+
+@[simp]
 
 中文:
 定理 coeff_derivative
@@ -125,7 +129,11 @@ theorem coeff_derivative
     cases b
     · intros
       rw [Nat.cast_zero]; rw [mul_zero]; rw [zero_mul]
-    · int
+    · intro _ H
+      rw [Nat.add_one_sub_one]; rw [if_neg (mt (congr_arg Nat.succ) H.symm)]; rw [mul_zero]
+  · simp_all
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, H.symm, Nat.add_one_sub_one, Nat.add_succ_sub_one, Nat.cast_zero, Nat.succ, add_one_sub_one, add_succ_sub_one, add_zero, cast_zero, coeff_C_mul, coeff_X_pow, coeff_sum, congr_arg, derivative_apply, if_neg, if_true, intros, mul_one
 -/
@@ -870,7 +878,11 @@ theorem iterate_derivative_eq_zero
   obtain ⟨t, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (pos_of_gt hx).ne'
   rw [Function.iterate_succ_apply]
   by_cases hp : p.natDegree = 0
-  · rw [derivative_of_natDegree_zero hp, iterate_derivative_z
+  · rw [derivative_of_natDegree_zero hp, iterate_derivative_zero]
+  have := natDegree_derivative_lt hp
+  exact ih _ this (this.trans_le <| Nat.le_of_lt_succ hx) rfl
+
+@[simp]
 
 中文:
 定理 iterate_derivative_eq_zero
@@ -881,7 +893,11 @@ theorem iterate_derivative_eq_zero
   obtain ⟨t, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (pos_of_gt hx).ne'
   rw [Function.iterate_succ_apply]
   by_cases hp : p.natDegree = 0
-  · rw [derivative_of_natDegree_zero hp, iterate_derivative_z
+  · rw [derivative_of_natDegree_zero hp, iterate_derivative_zero]
+  have := natDegree_derivative_lt hp
+  exact ih _ this (this.trans_le <| Nat.le_of_lt_succ hx) rfl
+
+@[simp]
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, Nat.exists_eq_succ_of_ne_zero, Nat.le_of_lt_succ, Nat.strong_induction_on, derivative_of_natDegree_zero, exists_eq_succ_of_ne_zero, generalizing, iterate_derivative_zero, iterate_succ_apply, le_of_lt_succ, natDegree, natDegree_derivative_lt, p.natDegree, pos_of_gt, strong_induction_on, this.trans_le, trans_le
 -/
@@ -986,7 +1002,14 @@ theorem derivative_mul
   induction g using Polynomial.induction_on' with
   | add => simp only [mul_add, map_add, add_assoc, add_left_comm, *]
   | monomial n b => ?_
-  simp only [
+  simp only [monomial_mul_monomial, derivative_monomial]
+  simp only [mul_assoc, (Nat.cast_commute _ _).eq, Nat.cast_add, mul_add, map_add]
+  cases m with
+  | zero => simp only [zero_add, Nat.cast_zero, mul_zero, map_zero]
+  | succ m =>
+  cases n with
+  | zero => simp only [add_zero, Nat.cast_zero, mul_zero, map_zero]
+  | succ n => grind
 
 中文:
 定理 derivative_mul
@@ -999,7 +1022,14 @@ theorem derivative_mul
   induction g using Polynomial.induction_on' with
   | add => simp only [mul_add, map_add, add_assoc, add_left_comm, *]
   | monomial n b => ?_
-  simp only [
+  simp only [monomial_mul_monomial, derivative_monomial]
+  simp only [mul_assoc, (Nat.cast_commute _ _).eq, Nat.cast_add, mul_add, map_add]
+  cases m with
+  | zero => simp only [zero_add, Nat.cast_zero, mul_zero, map_zero]
+  | succ m =>
+  cases n with
+  | zero => simp only [add_zero, Nat.cast_zero, mul_zero, map_zero]
+  | succ n => grind
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_commute, Nat.cast_zero, Polynomial, Polynomial.induction_on, add_assoc, add_left_comm, add_mul, cast_add, cast_commute, cast_zero, derivative_monomial, induction_on, map_add, map_zero, monomial, monomial_mul_monomial, mul_add, mul_assoc, mul_zero
 -/
@@ -1056,7 +1086,11 @@ theorem derivative_map
   rw [derivative_apply]; rw [derivative_apply]
   rw [sum_over_range' _ _ (n + 1) ((le_max_left _ _).trans_lt (lt_add_one _))]
   on_goal 1 => rw [sum_over_range' _ _ (n + 1) ((le_max_right _ _).trans_lt (lt_add_one _))]
-  · simp only [Polynomial.map_s
+  · simp only [Polynomial.map_sum, Polynomial.map_mul, Polynomial.map_C, map_mul, coeff_map,
+      map_natCast, Polynomial.map_natCast, Polynomial.map_pow, map_X]
+  all_goals intro n; rw [zero_mul, C_0, zero_mul]
+
+@[simp]
 
 中文:
 定理 derivative_map
@@ -1066,7 +1100,11 @@ theorem derivative_map
   rw [derivative_apply]; rw [derivative_apply]
   rw [sum_over_range' _ _ (n + 1) ((le_max_left _ _).trans_lt (lt_add_one _))]
   on_goal 1 => rw [sum_over_range' _ _ (n + 1) ((le_max_right _ _).trans_lt (lt_add_one _))]
-  · simp only [Polynomial.map_s
+  · simp only [Polynomial.map_sum, Polynomial.map_mul, Polynomial.map_C, map_mul, coeff_map,
+      map_natCast, Polynomial.map_natCast, Polynomial.map_pow, map_X]
+  all_goals intro n; rw [zero_mul, C_0, zero_mul]
+
+@[simp]
 
 Depends on / 依赖: Polynomial, Polynomial.map_C, Polynomial.map_mul, Polynomial.map_natCast, Polynomial.map_pow, Polynomial.map_sum, all_goals, coeff_map, derivative_apply, le_max_left, le_max_right, lt_add_one, map_C, map_X, map_mul, map_natCast, map_pow, map_sum, natDegree, on_goal
 -/
@@ -1169,7 +1207,13 @@ theorem coeff_iterate_derivative
       calc
         (derivative^[k + 1] p).coeff m
         _ = Nat.descFactorial (Nat.succ (m + k)) k • p.coeff (m + k.succ) * (m + 1) := by
-          rw [Function.iterate_succ_apply']; rw [coeff_derivative]; rw [ih m.succ]; rw [N
+          rw [Function.iterate_succ_apply']; rw [coeff_derivative]; rw [ih m.succ]; rw [Nat.succ_add]; rw [Nat.add_succ]
+        _ = ((m + 1) * Nat.descFactorial (Nat.succ (m + k)) k) • p.coeff (m + k.succ) := by
+          rw [← Nat.cast_add_one]; rw [← nsmul_eq_mul']; rw [smul_smul]
+        _ = Nat.descFactorial (m.succ + k) k.succ • p.coeff (m + k.succ) := by
+          rw [← Nat.succ_add]; rw [Nat.descFactorial_succ]; rw [add_tsub_cancel_right]
+        _ = Nat.descFactorial (m + k.succ) k.succ • p.coeff (m + k.succ) := by
+          rw [Nat.succ_add_eq_add_succ]
 
 中文:
 定理 coeff_iterate_derivative
@@ -1181,7 +1225,13 @@ theorem coeff_iterate_derivative
       calc
         (derivative^[k + 1] p).coeff m
         _ = Nat.descFactorial (Nat.succ (m + k)) k • p.coeff (m + k.succ) * (m + 1) := by
-          rw [Function.iterate_succ_apply']; rw [coeff_derivative]; rw [ih m.succ]; rw [N
+          rw [Function.iterate_succ_apply']; rw [coeff_derivative]; rw [ih m.succ]; rw [Nat.succ_add]; rw [Nat.add_succ]
+        _ = ((m + 1) * Nat.descFactorial (Nat.succ (m + k)) k) • p.coeff (m + k.succ) := by
+          rw [← Nat.cast_add_one]; rw [← nsmul_eq_mul']; rw [smul_smul]
+        _ = Nat.descFactorial (m.succ + k) k.succ • p.coeff (m + k.succ) := by
+          rw [← Nat.succ_add]; rw [Nat.descFactorial_succ]; rw [add_tsub_cancel_right]
+        _ = Nat.descFactorial (m + k.succ) k.succ • p.coeff (m + k.succ) := by
+          rw [Nat.succ_add_eq_add_succ]
 
 Depends on / 依赖: Function, Function.iterate_succ_apply, Nat.add_succ, Nat.cast_add_one, Nat.descFactorial, Nat.succ, Nat.succ_add, add_succ, cast_add_one, coeff_derivative, derivative, descFactorial, generalizing, iterate_succ_apply, k.succ, m.succ, nsmul_eq_mul, p.coeff, smul_smul, succ_add
 -/
@@ -1276,7 +1326,38 @@ theorem iterate_derivative_mul
           derivative (∑ k in range n.succ,
               n.choose k • (derivative^[n - k] p * derivative^[k] q)) := by
         rw [Function.iterate_succ_apply']; rw [IH]
-      _ = (
+      _ = (∑ k in range n.succ,
+            n.choose k • (derivative^[n - k + 1] p * derivative^[k] q)) +
+          ∑ k in range n.succ,
+            n.choose k • (derivative^[n - k] p * derivative^[k + 1] q) := by
+        simp only [Nat.succ_eq_add_one, nsmul_eq_mul, derivative_mul, derivative_natCast, zero_mul,
+          derivative_sum, zero_add, Function.iterate_succ', Function.comp_apply]
+        simp_rw [mul_add, sum_add_distrib]
+      _ = (∑ k in range n.succ,
+                n.choose k.succ • (derivative^[n - k] p * derivative^[k + 1] q)) +
+              1 • (derivative^[n + 1] p * derivative^[0] q) +
+            ∑ k in range n.succ, n.choose k • (derivative^[n - k] p * derivative^[k + 1] q) :=
+        ?_
+      _ = ((∑ k in range n.succ, n.choose k • (derivative^[n - k] p * derivative^[k + 1] q)) +
+              ∑ k in range n.succ,
+                n.choose k.succ • (derivative^[n - k] p * derivative^[k + 1] q)) +
+            1 • (derivative^[n + 1] p * derivative^[0] q) := by
+        rw [add_comm]; rw [add_assoc]
+      _ = (∑ i in range n.succ,
+              (n + 1).choose (i + 1) • (derivative^[n + 1 - (i + 1)] p * derivative^[i + 1] q)) +
+            1 • (derivative^[n + 1] p * derivative^[0] q) := by
+        simp_rw [Nat.choose_succ_succ, Nat.succ_sub_succ, add_smul, sum_add_distrib]
+      _ = ∑ k in range n.succ.succ,
+            n.succ.choose k • (derivative^[n.succ - k] p * derivative^[k] q) := by
+        rw [sum_range_succ' _ n.succ]; rw [Nat.choose_zero_right]; rw [tsub_zero]
+    congr
+    refine (sum_range_succ' _ _).trans (congr_arg₂ (· + ·) ?_ ?_)
+    · rw [sum_range_succ, Nat.choose_succ_self, zero_smul, add_zero]
+      refine sum_congr rfl fun k hk => ?_
+      rw [mem_range] at hk
+      congr
+      lia
+    · rw [Nat.choose_zero_right, tsub_zero]
 
 中文:
 定理 iterate_derivative_mul
@@ -1291,7 +1372,38 @@ theorem iterate_derivative_mul
           derivative (∑ k in range n.succ,
               n.choose k • (derivative^[n - k] p * derivative^[k] q)) := by
         rw [Function.iterate_succ_apply']; rw [IH]
-      _ = (
+      _ = (∑ k in range n.succ,
+            n.choose k • (derivative^[n - k + 1] p * derivative^[k] q)) +
+          ∑ k in range n.succ,
+            n.choose k • (derivative^[n - k] p * derivative^[k + 1] q) := by
+        simp only [Nat.succ_eq_add_one, nsmul_eq_mul, derivative_mul, derivative_natCast, zero_mul,
+          derivative_sum, zero_add, Function.iterate_succ', Function.comp_apply]
+        simp_rw [mul_add, sum_add_distrib]
+      _ = (∑ k in range n.succ,
+                n.choose k.succ • (derivative^[n - k] p * derivative^[k + 1] q)) +
+              1 • (derivative^[n + 1] p * derivative^[0] q) +
+            ∑ k in range n.succ, n.choose k • (derivative^[n - k] p * derivative^[k + 1] q) :=
+        ?_
+      _ = ((∑ k in range n.succ, n.choose k • (derivative^[n - k] p * derivative^[k + 1] q)) +
+              ∑ k in range n.succ,
+                n.choose k.succ • (derivative^[n - k] p * derivative^[k + 1] q)) +
+            1 • (derivative^[n + 1] p * derivative^[0] q) := by
+        rw [add_comm]; rw [add_assoc]
+      _ = (∑ i in range n.succ,
+              (n + 1).choose (i + 1) • (derivative^[n + 1 - (i + 1)] p * derivative^[i + 1] q)) +
+            1 • (derivative^[n + 1] p * derivative^[0] q) := by
+        simp_rw [Nat.choose_succ_succ, Nat.succ_sub_succ, add_smul, sum_add_distrib]
+      _ = ∑ k in range n.succ.succ,
+            n.succ.choose k • (derivative^[n.succ - k] p * derivative^[k] q) := by
+        rw [sum_range_succ' _ n.succ]; rw [Nat.choose_zero_right]; rw [tsub_zero]
+    congr
+    refine (sum_range_succ' _ _).trans (congr_arg₂ (· + ·) ?_ ?_)
+    · rw [sum_range_succ, Nat.choose_succ_self, zero_smul, add_zero]
+      refine sum_congr rfl fun k hk => ?_
+      rw [mem_range] at hk
+      congr
+      lia
+    · rw [Nat.choose_zero_right, tsub_zero]
 
 Depends on / 依赖: Finset, Finset.range, Function, Function.iterate_succ_apply, Nat.succ_eq_add_one, derivative, derivative_mul, derivative_natCast, iterate_succ_apply, n.choose, n.succ, nsmul_eq_mul, succ_eq_add_one, zero_mu
 -/
@@ -1591,7 +1703,11 @@ lemma degree_derivative
     apply le_trans (degree_C_mul_X_pow_le _ _) (WithBot.coe_le_coe.2 (tsub_le_tsub_right _ _))
     apply le_natDegree_of_mem_supp _ hn
   · refine le_sup ?_
-    rw [mem_support_der
+    rw [mem_support_derivative]; rw [tsub_add_cancel_of_le (by lia)]; rw [mem_support_iff]; rw [coeff_natDegree]; rw [leadingCoeff_ne_zero]
+    rintro rfl
+    simp at hp
+
+@[simp]
 
 中文:
 引理 degree_derivative
@@ -1605,7 +1721,11 @@ lemma degree_derivative
     apply le_trans (degree_C_mul_X_pow_le _ _) (WithBot.coe_le_coe.2 (tsub_le_tsub_right _ _))
     apply le_natDegree_of_mem_supp _ hn
   · refine le_sup ?_
-    rw [mem_support_der
+    rw [mem_support_derivative]; rw [tsub_add_cancel_of_le (by lia)]; rw [mem_support_iff]; rw [coeff_natDegree]; rw [leadingCoeff_ne_zero]
+    rintro rfl
+    simp at hp
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.sup_le, WithBot, WithBot.coe_le_coe, coe_le_coe, coeff_natDegree, degree_C_mul_X_pow_le, degree_sum_le, derivative_apply, le_antisymm, le_natDegree_of_mem_supp, le_sup, le_trans, leadingCoeff_ne_zero, mem_support_derivative, mem_support_iff, sup_le, tsub_add_cancel_of_le, tsub_le_tsub_right
 -/
@@ -1663,7 +1783,14 @@ lemma derivative_eq_zero
     by_contra! f_nat_degree_pos
     rw [← natDegree_pos_iff_degree_pos] at f_nat_degree_pos
     let m := p.natDegree - 1
-    have hm : m + 1 = p.natDegree := tsub_add_cancel_of_le (by lia
+    have hm : m + 1 = p.natDegree := tsub_add_cancel_of_le (by lia)
+    have h2 := coeff_derivative p m
+    rw [Polynomial.ext_iff] at hp
+    rw [hp m]; rw [coeff_zero]; rw [← Nat.cast_add_one]; rw [← nsmul_eq_mul']; rw [eq_comm]; rw [smul_eq_zero] at h2
+    replace h2 := h2.resolve_left m.succ_ne_zero
+    rw [hm]; rw [← leadingCoeff]; rw [leadingCoeff_eq_zero] at h2
+    exact hp' h2
+  mpr hp := by rw [eq_C_of_natDegree_eq_zero hp, derivative_C]
 
 中文:
 引理 derivative_eq_zero
@@ -1675,7 +1802,14 @@ lemma derivative_eq_zero
     by_contra! f_nat_degree_pos
     rw [← natDegree_pos_iff_degree_pos] at f_nat_degree_pos
     let m := p.natDegree - 1
-    have hm : m + 1 = p.natDegree := tsub_add_cancel_of_le (by lia
+    have hm : m + 1 = p.natDegree := tsub_add_cancel_of_le (by lia)
+    have h2 := coeff_derivative p m
+    rw [Polynomial.ext_iff] at hp
+    rw [hp m]; rw [coeff_zero]; rw [← Nat.cast_add_one]; rw [← nsmul_eq_mul']; rw [eq_comm]; rw [smul_eq_zero] at h2
+    replace h2 := h2.resolve_left m.succ_ne_zero
+    rw [hm]; rw [← leadingCoeff]; rw [leadingCoeff_eq_zero] at h2
+    exact hp' h2
+  mpr hp := by rw [eq_C_of_natDegree_eq_zero hp, derivative_C]
 -/
 @[simp] lemma derivative_eq_zero : p.derivative = 0 ↔ p.natDegree = 0 where
   mp hp := by
@@ -1984,7 +2118,8 @@ theorem iterate_derivative_X_pow_eq_natCast_mul
   | zero =>
     rw [Function.iterate_zero_apply]; rw [tsub_zero]; rw [Nat.descFactorial_zero]; rw [Nat.cast_one]; rw [one_mul]
   | succ k ih =>
-    rw [Function.iterate_succ_apply']; rw [ih]; rw [derivative_natCast_mul]; rw [derivative_X_pow]; rw [C_eq_natCast]; rw [Nat.descFac
+    rw [Function.iterate_succ_apply']; rw [ih]; rw [derivative_natCast_mul]; rw [derivative_X_pow]; rw [C_eq_natCast]; rw [Nat.descFactorial_succ]; rw [Nat.sub_sub]; rw [Nat.cast_mul]
+    simp [mul_assoc, mul_left_comm]
 
 中文:
 定理 iterate_derivative_X_pow_eq_natCast_mul
@@ -1994,7 +2129,8 @@ theorem iterate_derivative_X_pow_eq_natCast_mul
   | zero =>
     rw [Function.iterate_zero_apply]; rw [tsub_zero]; rw [Nat.descFactorial_zero]; rw [Nat.cast_one]; rw [one_mul]
   | succ k ih =>
-    rw [Function.iterate_succ_apply']; rw [ih]; rw [derivative_natCast_mul]; rw [derivative_X_pow]; rw [C_eq_natCast]; rw [Nat.descFac
+    rw [Function.iterate_succ_apply']; rw [ih]; rw [derivative_natCast_mul]; rw [derivative_X_pow]; rw [C_eq_natCast]; rw [Nat.descFactorial_succ]; rw [Nat.sub_sub]; rw [Nat.cast_mul]
+    simp [mul_assoc, mul_left_comm]
 
 Depends on / 依赖: C_eq_natCast, Function, Function.iterate_succ_apply, Function.iterate_zero_apply, Nat.cast_mul, Nat.cast_one, Nat.descFactorial_succ, Nat.descFactorial_zero, Nat.sub_sub, cast_mul, cast_one, derivative_X_pow, derivative_natCast_mul, descFactorial_succ, descFactorial_zero, iterate_succ_apply, iterate_zero_apply, mul_assoc, mul_left_comm, one_mul
 -/
@@ -2140,7 +2276,11 @@ theorem iterate_derivative_mul_X_pow
     norm_cast
     ring
   rw [hsum]
-  
+  refine sum_congr_of_eq_on_inter (fun k hk hk' => ?_) (by simp_all) (by simp)
+  rcases le_or_gt k m with hkm | hkm
+  · replace hk' : n < k := by simpa [hkm] using hk'
+    simp [Nat.choose_eq_zero_of_lt hk']
+  · simp [Nat.descFactorial_eq_zero_iff_lt.mpr hkm]
 
 中文:
 定理 iterate_derivative_mul_X_pow
@@ -2154,7 +2294,11 @@ theorem iterate_derivative_mul_X_pow
     norm_cast
     ring
   rw [hsum]
-  
+  refine sum_congr_of_eq_on_inter (fun k hk hk' => ?_) (by simp_all) (by simp)
+  rcases le_or_gt k m with hkm | hkm
+  · replace hk' : n < k := by simpa [hkm] using hk'
+    simp [Nat.choose_eq_zero_of_lt hk']
+  · simp [Nat.descFactorial_eq_zero_iff_lt.mpr hkm]
 
 Depends on / 依赖: Nat.choose_eq_zero_of_lt, Nat.descFactorial_eq_zero_iff_, choose_eq_zero_of_lt, derivative, descFactorial, descFactorial_eq_zero_iff_, iterate_derivative_X_pow_eq_smul, iterate_derivative_mul, le_or_gt, m.descFactorial, mul_smul, n.choose, n.succ, replace, simp_rw, sum_congr_of_eq_on_inter
 -/
@@ -2235,7 +2379,10 @@ theorem iterate_derivative_derivative_mul_X_sq
   rcases n with rfl | n; · simp
   rcases n with rfl | n; · simp [sum_range_succ, ← mul_assoc]
   suffices ((n + 1 + 1) * (n + 1) / 2) * 2 = (n + 1 + 1) * (n + 1) by
-    simp -implicitDefEqProofs [this, -nsmul_eq_mul, sum_range_succ, Na
+    simp -implicitDefEqProofs [this, -nsmul_eq_mul, sum_range_succ, Nat.choose_two_right]
+    ring
+  rw [mul_comm (n + 1 + 1)]
+  exact Nat.div_mul_cancel (Nat.two_dvd_mul_add_one _)
 
 中文:
 定理 iterate_derivative_derivative_mul_X_sq
@@ -2245,7 +2392,10 @@ theorem iterate_derivative_derivative_mul_X_sq
   rcases n with rfl | n; · simp
   rcases n with rfl | n; · simp [sum_range_succ, ← mul_assoc]
   suffices ((n + 1 + 1) * (n + 1) / 2) * 2 = (n + 1 + 1) * (n + 1) by
-    simp -implicitDefEqProofs [this, -nsmul_eq_mul, sum_range_succ, Na
+    simp -implicitDefEqProofs [this, -nsmul_eq_mul, sum_range_succ, Nat.choose_two_right]
+    ring
+  rw [mul_comm (n + 1 + 1)]
+  exact Nat.div_mul_cancel (Nat.two_dvd_mul_add_one _)
 
 Depends on / 依赖: Nat.choose_two_right, Nat.div_mul_cancel, Nat.two_dvd_mul_add_one, choose_two_right, convert, derivative, div_mul_cancel, implicitDefEqProofs, iterate_derivative_mul_X_pow, mul_assoc, mul_comm, nsmul_eq_mul, sum_range_succ, two_dvd_mul_add_one
 -/
@@ -2305,7 +2455,7 @@ theorem derivative_eval₂_C
     (fun p₁ p₂ ih₁ ih₂ => by
       rw [eval₂_add]; rw [derivative_add]; rw [ih₁]; rw [ih₂]; rw [derivative_add]; rw [eval₂_add]; rw [add_mul])
     fun n r ih => by
-    rw [pow_succ]; rw [← mul_assoc]; rw [eval₂_
+    rw [pow_succ]; rw [← mul_assoc]; rw [eval₂_mul]; rw [eval₂_X]; rw [derivative_mul]; rw [ih]; rw [@derivative_mul _ _ _ X]; rw [derivative_X]; rw [mul_one]; rw [eval₂_add]; rw [@eval₂_mul _ _ _ _ X]; rw [eval₂_X]; rw [add_mul]; rw [mul_right_comm]
 
 中文:
 定理 derivative_eval₂_C
@@ -2314,7 +2464,7 @@ theorem derivative_eval₂_C
     (fun p₁ p₂ ih₁ ih₂ => by
       rw [eval₂_add]; rw [derivative_add]; rw [ih₁]; rw [ih₂]; rw [derivative_add]; rw [eval₂_add]; rw [add_mul])
     fun n r ih => by
-    rw [pow_succ]; rw [← mul_assoc]; rw [eval₂_
+    rw [pow_succ]; rw [← mul_assoc]; rw [eval₂_mul]; rw [eval₂_X]; rw [derivative_mul]; rw [ih]; rw [@derivative_mul _ _ _ X]; rw [derivative_X]; rw [mul_one]; rw [eval₂_add]; rw [@eval₂_mul _ _ _ _ X]; rw [eval₂_X]; rw [add_mul]; rw [mul_right_comm]
 
 Depends on / 依赖: Polynomial, Polynomial.induction_on, add_mul, derivative_C, derivative_X, derivative_add, derivative_mul, induction_on, mul_assoc, mul_one, mul_right_comm, pow_succ, zero_mul
 -/
@@ -2336,7 +2486,13 @@ theorem derivative_prod
   refine Multiset.induction_on s (by simp) fun i s h => ?_
   rw [Multiset.map_cons]; rw [Multiset.prod_cons]; rw [derivative_mul]; rw [Multiset.map_cons _ i s]; rw [Multiset.sum_cons]; rw [Multiset.erase_cons_head]; rw [mul_comm (derivative (f i))]
   congr
-  rw [h]; rw [← AddMonoidHom.coe_mulLeft
+  rw [h]; rw [← AddMonoidHom.coe_mulLeft]; rw [(AddMonoidHom.mulLeft (f i)).map_multiset_sum _]; rw [AddMonoidHom.coe_mulLeft]
+  simp only [Function.comp_apply, Multiset.map_map]
+  refine congr_arg _ (Multiset.map_congr rfl fun j hj => ?_)
+  rw [← mul_assoc]; rw [← Multiset.prod_cons]; rw [← Multiset.map_cons]
+  by_cases hij : i = j
+  · simp [hij, Multiset.cons_erase hj]
+  · simp [hij]
 
 中文:
 定理 derivative_prod
@@ -2345,7 +2501,13 @@ theorem derivative_prod
   refine Multiset.induction_on s (by simp) fun i s h => ?_
   rw [Multiset.map_cons]; rw [Multiset.prod_cons]; rw [derivative_mul]; rw [Multiset.map_cons _ i s]; rw [Multiset.sum_cons]; rw [Multiset.erase_cons_head]; rw [mul_comm (derivative (f i))]
   congr
-  rw [h]; rw [← AddMonoidHom.coe_mulLeft
+  rw [h]; rw [← AddMonoidHom.coe_mulLeft]; rw [(AddMonoidHom.mulLeft (f i)).map_multiset_sum _]; rw [AddMonoidHom.coe_mulLeft]
+  simp only [Function.comp_apply, Multiset.map_map]
+  refine congr_arg _ (Multiset.map_congr rfl fun j hj => ?_)
+  rw [← mul_assoc]; rw [← Multiset.prod_cons]; rw [← Multiset.map_cons]
+  by_cases hij : i = j
+  · simp [hij, Multiset.cons_erase hj]
+  · simp [hij]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_mulLeft, AddMonoidHom.mulLeft, Function, Function.comp_apply, Multiset, Multiset.erase_cons_head, Multiset.induction_on, Multiset.map_congr, Multiset.map_cons, Multiset.map_map, Multiset.prod_cons, Multiset.sum_cons, coe_mulLeft, comp_apply, congr_arg, derivative, derivative_mul, erase_cons_head, induction_on
 -/
@@ -2760,7 +2922,13 @@ case zero => exact degree_eq_bot.mp WithBot.lt_coe_bot.mp h
     case neg hP =>
       rw [Function.iterate_add_apply]; rw [Function.iterate_one]
       by_cases derivative P = 0
-      case pos hP' => s
+      case pos hP' => simp [hP']
+      case neg hP' =>
+        have hP'' : P.natDegree != 0 := by
+          contrapose hP'
+          exact derivative_of_natDegree_zero hP'
+refine ind (natDegree_lt_iff_degree_lt hP').mp ?_
+        linarith [(natDegree_lt_iff_degree_lt hP).mpr h, natDegree_derivative_lt hP'']
 
 中文:
 定理 iterate_derivative_eq_zero_of_degree_lt
@@ -2774,7 +2942,13 @@ case zero => exact degree_eq_bot.mp WithBot.lt_coe_bot.mp h
     case neg hP =>
       rw [Function.iterate_add_apply]; rw [Function.iterate_one]
       by_cases derivative P = 0
-      case pos hP' => s
+      case pos hP' => simp [hP']
+      case neg hP' =>
+        have hP'' : P.natDegree != 0 := by
+          contrapose hP'
+          exact derivative_of_natDegree_zero hP'
+refine ind (natDegree_lt_iff_degree_lt hP').mp ?_
+        linarith [(natDegree_lt_iff_degree_lt hP).mpr h, natDegree_derivative_lt hP'']
 
 Depends on / 依赖: Function, Function.iterate_add_apply, Function.iterate_one, P.natDegree, WithBot, WithBot.lt_coe_bot.mp, contrapose, degree_eq_bot, degree_eq_bot.mp, derivative, derivative_of_natDegree_zero, generalizing, iterate_add_apply, iterate_one, lt_coe_bot, natDegree, natDegree_derivative, natDegree_lt_iff_degree_lt
 -/
@@ -2809,7 +2983,29 @@ theorem iterate_derivative_prod_X_sub_C
   case succ k ind =>
     specialize ind (Nat.le_of_succ_le hk)
     nth_rewrite 1 [add_comm]
-    rw [Function.iterate_add_apply]; rw [Function.iterate_one]; rw [ind]; rw [← nsmul_eq_mul]; rw [derivative_smul]; rw [nsmul_eq_mul]; rw [derivative_sum]; rw
+    rw [Function.iterate_add_apply]; rw [Function.iterate_one]; rw [ind]; rw [← nsmul_eq_mul]; rw [derivative_smul]; rw [nsmul_eq_mul]; rw [derivative_sum]; rw [Nat.factorial_succ]; rw [mul_comm (k + 1)]; rw [Nat.cast_mul]; rw [mul_assoc]
+    congr 1
+    calc
+      ∑ T in S.powersetCard (#S - k), derivative (∏ a in T, (X - C a)) =
+      ∑ T in S.powersetCard (#S - k), ∑ i in T, ∏ a in T.erase i, (X - C a) := by
+        congr! with T hT
+        simp_rw [derivative_prod_finset, derivative_X_sub_C, mul_one]
+      _ = ∑ (T in S.powersetCard (#S - k)) (i in S) with i in T, ∏ a in T.erase i, (X - C a) := by
+        rw [← sum_finset_product']
+        grind
+      _ = ∑ (T in S.powersetCard (#S - (k + 1))) (i in S) with i ∉ T, ∏ a in T, (X - C a) := by
+        apply sum_bij' (fun ⟨T, i⟩ _ => ⟨T.erase i, i⟩) (fun ⟨T, i⟩ _ => ⟨insert i T, i⟩)
+        · intro r hr; dsimp at hr ⊢; congr 1; grind
+        · intro r hr; dsimp at hr ⊢; congr 1; grind
+        all_goals grind
+      _ = ∑ T in S.powersetCard (#S - (k + 1)), ∑ i in S \ T, ∏ a in T, (X - C a) := by
+        rw [← sum_finset_product']
+        grind
+      _ = (k + 1) * ∑ T in S.powersetCard (#S - (k + 1)), ∏ a in T, (X - C a) := by
+        rw [mul_sum]
+        congr! 1 with T hT
+        simp [sum_const, show #(S \ T) = k + 1 by grind]
+      _ = _ := by grind
 
 中文:
 定理 iterate_derivative_prod_X_sub_C
@@ -2821,7 +3017,29 @@ theorem iterate_derivative_prod_X_sub_C
   case succ k ind =>
     specialize ind (Nat.le_of_succ_le hk)
     nth_rewrite 1 [add_comm]
-    rw [Function.iterate_add_apply]; rw [Function.iterate_one]; rw [ind]; rw [← nsmul_eq_mul]; rw [derivative_smul]; rw [nsmul_eq_mul]; rw [derivative_sum]; rw
+    rw [Function.iterate_add_apply]; rw [Function.iterate_one]; rw [ind]; rw [← nsmul_eq_mul]; rw [derivative_smul]; rw [nsmul_eq_mul]; rw [derivative_sum]; rw [Nat.factorial_succ]; rw [mul_comm (k + 1)]; rw [Nat.cast_mul]; rw [mul_assoc]
+    congr 1
+    calc
+      ∑ T in S.powersetCard (#S - k), derivative (∏ a in T, (X - C a)) =
+      ∑ T in S.powersetCard (#S - k), ∑ i in T, ∏ a in T.erase i, (X - C a) := by
+        congr! with T hT
+        simp_rw [derivative_prod_finset, derivative_X_sub_C, mul_one]
+      _ = ∑ (T in S.powersetCard (#S - k)) (i in S) with i in T, ∏ a in T.erase i, (X - C a) := by
+        rw [← sum_finset_product']
+        grind
+      _ = ∑ (T in S.powersetCard (#S - (k + 1))) (i in S) with i ∉ T, ∏ a in T, (X - C a) := by
+        apply sum_bij' (fun ⟨T, i⟩ _ => ⟨T.erase i, i⟩) (fun ⟨T, i⟩ _ => ⟨insert i T, i⟩)
+        · intro r hr; dsimp at hr ⊢; congr 1; grind
+        · intro r hr; dsimp at hr ⊢; congr 1; grind
+        all_goals grind
+      _ = ∑ T in S.powersetCard (#S - (k + 1)), ∑ i in S \ T, ∏ a in T, (X - C a) := by
+        rw [← sum_finset_product']
+        grind
+      _ = (k + 1) * ∑ T in S.powersetCard (#S - (k + 1)), ∏ a in T, (X - C a) := by
+        rw [mul_sum]
+        congr! 1 with T hT
+        simp [sum_const, show #(S \ T) = k + 1 by grind]
+      _ = _ := by grind
 
 Depends on / 依赖: Function, Function.iterate_add_apply, Function.iterate_one, Nat.cast_mul, Nat.factorial_succ, Nat.le_of_succ_le, S.powersetCard, T.erase, add_comm, cast_mul, classical, derivative, derivative_smul, derivative_sum, factorial_succ, iterate_add_apply, iterate_one, le_of_succ_le, mul_assoc, mul_comm
 -/

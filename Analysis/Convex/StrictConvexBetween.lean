@@ -39,7 +39,15 @@ theorem Sbtw.dist_lt_max_dist
   have hp₁p₃ : p₁ -ᵥ p != p₃ -ᵥ p := by simpa using h.left_ne_right
   rw [Sbtw]; rw [← wbtw_vsub_const_iff p]; rw [Wbtw]; rw [affineSegment_eq_segment]; rw [← insert_endpoints_openSegment]; rw [Set.mem_insert_iff]; rw [Set.mem_insert_iff] at h
   rcases h with ⟨h | h | h, hp₂p₁, hp₂p₃⟩
-  · rw [vsu
+  · rw [vsub_left_cancel_iff] at h
+    exact False.elim (hp₂p₁ h)
+  · rw [vsub_left_cancel_iff] at h
+    exact False.elim (hp₂p₃ h)
+  · rw [openSegment_eq_image, Set.mem_image] at h
+    rcases h with ⟨r, ⟨hr0, hr1⟩, hr⟩
+    simp_rw [@dist_eq_norm_vsub V, ← hr]
+    exact
+      norm_combo_lt_of_ne (le_max_left _ _) (le_max_right _ _) hp₁p₃ (sub_pos.2 hr1) hr0 (by abel)
 
 中文:
 定理 Sbtw.dist_lt_max_dist
@@ -48,7 +56,15 @@ theorem Sbtw.dist_lt_max_dist
   have hp₁p₃ : p₁ -ᵥ p != p₃ -ᵥ p := by simpa using h.left_ne_right
   rw [Sbtw]; rw [← wbtw_vsub_const_iff p]; rw [Wbtw]; rw [affineSegment_eq_segment]; rw [← insert_endpoints_openSegment]; rw [Set.mem_insert_iff]; rw [Set.mem_insert_iff] at h
   rcases h with ⟨h | h | h, hp₂p₁, hp₂p₃⟩
-  · rw [vsu
+  · rw [vsub_left_cancel_iff] at h
+    exact False.elim (hp₂p₁ h)
+  · rw [vsub_left_cancel_iff] at h
+    exact False.elim (hp₂p₃ h)
+  · rw [openSegment_eq_image, Set.mem_image] at h
+    rcases h with ⟨r, ⟨hr0, hr1⟩, hr⟩
+    simp_rw [@dist_eq_norm_vsub V, ← hr]
+    exact
+      norm_combo_lt_of_ne (le_max_left _ _) (le_max_right _ _) hp₁p₃ (sub_pos.2 hr1) hr0 (by abel)
 
 Depends on / 依赖: False.elim, Set.mem_image, Set.mem_insert_iff, affineSegment_eq_segment, dist_, h.left_ne_right, insert_endpoints_openSegment, left_ne_right, mem_image, mem_insert_iff, openSegment_eq_image, simp_rw, vsub_left_cancel_iff, wbtw_vsub_const_iff
 -/
@@ -111,7 +127,13 @@ theorem Collinear.wbtw_of_dist_eq_of_dist_le
     have hs : Sbtw Real p₂ p₃ p₁ := ⟨hw, hp₃p₂, hp₁p₃.symm⟩
     have hs' := hs.dist_lt_max_dist p
     rw [hp₁]; rw [hp₃]; rw [lt_max_iff]; rw [lt_self_iff_false]; rw [or_false] at hs'
-
+    exact False.elim (hp₂.not_gt hs')
+  · by_cases hp₁p₂ : p₁ = p₂
+    · simp [hp₁p₂]
+    have hs : Sbtw Real p₃ p₁ p₂ := ⟨hw, hp₁p₃, hp₁p₂⟩
+    have hs' := hs.dist_lt_max_dist p
+    rw [hp₁]; rw [hp₃]; rw [lt_max_iff]; rw [lt_self_iff_false]; rw [false_or] at hs'
+    exact False.elim (hp₂.not_gt hs')
 
 中文:
 定理 Collinear.wbtw_of_dist_eq_of_dist_le
@@ -124,7 +146,13 @@ theorem Collinear.wbtw_of_dist_eq_of_dist_le
     have hs : Sbtw Real p₂ p₃ p₁ := ⟨hw, hp₃p₂, hp₁p₃.symm⟩
     have hs' := hs.dist_lt_max_dist p
     rw [hp₁]; rw [hp₃]; rw [lt_max_iff]; rw [lt_self_iff_false]; rw [or_false] at hs'
-
+    exact False.elim (hp₂.not_gt hs')
+  · by_cases hp₁p₂ : p₁ = p₂
+    · simp [hp₁p₂]
+    have hs : Sbtw Real p₃ p₁ p₂ := ⟨hw, hp₁p₃, hp₁p₂⟩
+    have hs' := hs.dist_lt_max_dist p
+    rw [hp₁]; rw [hp₃]; rw [lt_max_iff]; rw [lt_self_iff_false]; rw [false_or] at hs'
+    exact False.elim (hp₂.not_gt hs')
 
 Depends on / 依赖: False.elim, dist_lt_max_dist, h.wbtw_or_wbtw_or_wbtw, hs.dist_lt_max_dist, lt_max_iff, lt_self_iff_false, not_gt, or_false, wbtw_or_wbtw_or_wbtw
 -/
@@ -197,7 +225,9 @@ lemma dist_add_dist_eq_iff
         b -ᵥ a in segment Real (a -ᵥ a) (c -ᵥ a) := by
     simp only [mem_segment_iff_sameRay, sameRay_iff_norm_add, dist_eq_norm', sub_add_sub_cancel',
       eq_comm]
-  simp_rw [dist_vsub_cancel_right, ← af
+  simp_rw [dist_vsub_cancel_right, ← affineSegment_eq_segment, ← affineSegment_vsub_const_image]
+    at this
+  rwa [(vsub_left_injective _).mem_set_image] at this
 
 中文:
 引理 dist_add_dist_eq_iff
@@ -208,7 +238,9 @@ lemma dist_add_dist_eq_iff
         b -ᵥ a in segment Real (a -ᵥ a) (c -ᵥ a) := by
     simp only [mem_segment_iff_sameRay, sameRay_iff_norm_add, dist_eq_norm', sub_add_sub_cancel',
       eq_comm]
-  simp_rw [dist_vsub_cancel_right, ← af
+  simp_rw [dist_vsub_cancel_right, ← affineSegment_eq_segment, ← affineSegment_vsub_const_image]
+    at this
+  rwa [(vsub_left_injective _).mem_set_image] at this
 
 Depends on / 依赖: affineSegment_eq_segment, affineSegment_vsub_const_image, dist_eq_norm, dist_vsub_cancel_right, eq_comm, mem_segment_iff_sameRay, mem_set_image, sameRay_iff_norm_add, segment, simp_rw, sub_add_sub_cancel, vsub_left_injective
 -/
@@ -259,7 +291,15 @@ lemma eq_lineMap_of_dist_eq_mul_of_dist_eq_mul
   proof: by
   have : y -ᵥ x in [(0 : E) -[Real] z -ᵥ x] := by
     rw [mem_segment_iff_wbtw]; rw [← dist_add_dist_eq_iff]; rw [dist_zero]; rw [dist_vsub_cancel_right]; rw [← dist_eq_norm_vsub']; rw [← dist_eq_norm_vsub']; rw [hxy]; rw [hyz]; rw [← add_mul]; rw [add_sub_cancel]; rw [one_mul]
-  obtain rfl | hne
+  obtain rfl | hne := eq_or_ne x z
+  · obtain rfl : y = x := by simpa
+    simp
+  · rw [← dist_ne_zero] at hne
+    obtain ⟨a, b, _, hb, _, H⟩ := this
+    rw [smul_zero]; rw [zero_add] at H
+    have H' := congr_arg norm H
+    rw [norm_smul]; rw [Real.norm_of_nonneg hb]; rw [← dist_eq_norm_vsub']; rw [← dist_eq_norm_vsub']; rw [hxy]; rw [mul_left_inj' hne] at H'
+    rw [AffineMap.lineMap_apply]; rw [← H']; rw [H]; rw [vsub_vadd]
 
 中文:
 引理 eq_lineMap_of_dist_eq_mul_of_dist_eq_mul
@@ -267,7 +307,15 @@ lemma eq_lineMap_of_dist_eq_mul_of_dist_eq_mul
   证明: by
   have : y -ᵥ x in [(0 : E) -[Real] z -ᵥ x] := by
     rw [mem_segment_iff_wbtw]; rw [← dist_add_dist_eq_iff]; rw [dist_zero]; rw [dist_vsub_cancel_right]; rw [← dist_eq_norm_vsub']; rw [← dist_eq_norm_vsub']; rw [hxy]; rw [hyz]; rw [← add_mul]; rw [add_sub_cancel]; rw [one_mul]
-  obtain rfl | hne
+  obtain rfl | hne := eq_or_ne x z
+  · obtain rfl : y = x := by simpa
+    simp
+  · rw [← dist_ne_zero] at hne
+    obtain ⟨a, b, _, hb, _, H⟩ := this
+    rw [smul_zero]; rw [zero_add] at H
+    have H' := congr_arg norm H
+    rw [norm_smul]; rw [Real.norm_of_nonneg hb]; rw [← dist_eq_norm_vsub']; rw [← dist_eq_norm_vsub']; rw [hxy]; rw [mul_left_inj' hne] at H'
+    rw [AffineMap.lineMap_apply]; rw [← H']; rw [H]; rw [vsub_vadd]
 
 Depends on / 依赖: Real.n, add_mul, add_sub_cancel, congr_arg, dist_add_dist_eq_iff, dist_eq_norm_vsub, dist_ne_zero, dist_vsub_cancel_right, dist_zero, eq_or_ne, mem_segment_iff_wbtw, norm_smul, one_mul, smul_zero, zero_add
 -/
@@ -326,7 +374,9 @@ definition affineIsometryOfStrictConvexSpace
         · rw [hi.dist_eq, hi.dist_eq]
           simp only [dist_left_midpoint, Real.norm_of_nonneg zero_le_two, div_eq_inv_mul]
         · rw [hi.dist_eq, hi.dist_eq]
-          simp only [dist_midpoint_right, R
+          simp only [dist_midpoint_right, Real.norm_of_nonneg zero_le_two, div_eq_inv_mul])
+      hi.continuous with
+    norm_map := fun x => by simp [AffineMap.ofMapMidpoint, ← dist_eq_norm_vsub E, hi.dist_eq] }
 
 中文:
 定义 affineIsometryOfStrictConvexSpace
@@ -337,7 +387,9 @@ definition affineIsometryOfStrictConvexSpace
         · rw [hi.dist_eq, hi.dist_eq]
           simp only [dist_left_midpoint, Real.norm_of_nonneg zero_le_two, div_eq_inv_mul]
         · rw [hi.dist_eq, hi.dist_eq]
-          simp only [dist_midpoint_right, R
+          simp only [dist_midpoint_right, Real.norm_of_nonneg zero_le_two, div_eq_inv_mul])
+      hi.continuous with
+    norm_map := fun x => by simp [AffineMap.ofMapMidpoint, ← dist_eq_norm_vsub E, hi.dist_eq] }
 
 Depends on / 依赖: AffineMap, AffineMap.ofMapMidpoint, Real.norm_of_nonneg, continuous, dist_eq, dist_eq_norm_vsub, dist_left_midpoint, dist_midpoint_right, div_eq_inv_mul, eq_midpoint_of_dist_eq_half, hi.continuous, hi.dist_eq, norm_map, norm_of_nonneg, ofMapMidpoint, zero_le_two
 -/

@@ -204,7 +204,10 @@ definition opParallelPairIso
     (parallelPair f g).op ≅ 𝟭 _ ⋙ (parallelPair f g).op := .refl _
     _ ≅ (walkingParallelPairOpEquiv.inverse ⋙ walkingParallelPairOpEquiv.functor) ⋙ _ :=
       isoWhiskerRight walkingParallelPairOpEquiv.symm.unitIso _
-    _ ≅ walkingParallelPairOpEquiv.inverse ⋙ walkingParallelPairOpEquiv.fun
+    _ ≅ walkingParallelPairOpEquiv.inverse ⋙ walkingParallelPairOpEquiv.functor ⋙ _ :=
+      Functor.associator _ _ _
+    _ ≅ walkingParallelPairOpEquiv.inverse ⋙ parallelPair f.op g.op :=
+      isoWhiskerLeft _ (parallelPairOpIso f g).symm
 
 中文:
 定义 opParallelPairIso
@@ -213,7 +216,10 @@ definition opParallelPairIso
     (parallelPair f g).op ≅ 𝟭 _ ⋙ (parallelPair f g).op := .refl _
     _ ≅ (walkingParallelPairOpEquiv.inverse ⋙ walkingParallelPairOpEquiv.functor) ⋙ _ :=
       isoWhiskerRight walkingParallelPairOpEquiv.symm.unitIso _
-    _ ≅ walkingParallelPairOpEquiv.inverse ⋙ walkingParallelPairOpEquiv.fun
+    _ ≅ walkingParallelPairOpEquiv.inverse ⋙ walkingParallelPairOpEquiv.functor ⋙ _ :=
+      Functor.associator _ _ _
+    _ ≅ walkingParallelPairOpEquiv.inverse ⋙ parallelPair f.op g.op :=
+      isoWhiskerLeft _ (parallelPairOpIso f g).symm
 
 Depends on / 依赖: Functor, Functor.associator, associator, f.op, functor, g.op, inverse, isoWhiskerLeft, isoWhiskerRight, parallelPair, parallelPairOpIso, unitIso, walkingParallelPairOpEquiv, walkingParallelPairOpEquiv.functor, walkingParallelPairOpEquiv.inverse, walkingParallelPairOpEquiv.symm.unitIso
 -/
@@ -855,7 +861,7 @@ definition isColimitEquivIsLimitOp
     exact (IsLimit.postcomposeHomEquiv _ _).invFun ((IsLimit.whiskerEquivalenceEquiv _).toFun h.op)
   · intro h
     exact (IsColimit.equivIsoColimit c.opUnopIso).toFun (((IsLimit.postcomposeHomEquiv _ _).invFun
-      ((IsLimit.whiskerEquivalen
+      ((IsLimit.whiskerEquivalenceEquiv walkingParallelPairOpEquiv.symm).toFun h)).unop)
 
 中文:
 定义 isColimitEquivIsLimitOp
@@ -866,7 +872,7 @@ definition isColimitEquivIsLimitOp
     exact (IsLimit.postcomposeHomEquiv _ _).invFun ((IsLimit.whiskerEquivalenceEquiv _).toFun h.op)
   · intro h
     exact (IsColimit.equivIsoColimit c.opUnopIso).toFun (((IsLimit.postcomposeHomEquiv _ _).invFun
-      ((IsLimit.whiskerEquivalen
+      ((IsLimit.whiskerEquivalenceEquiv walkingParallelPairOpEquiv.symm).toFun h)).unop)
 
 Depends on / 依赖: IsColimit, IsColimit.equivIsoColimit, IsLimit, IsLimit.postcomposeHomEquiv, IsLimit.whiskerEquivalenceEquiv, c.opUnopIso, equivIsoColimit, equivOfSubsingletonOfSubsingleton, h.op, invFun, opUnopIso, postcomposeHomEquiv, walkingParallelPairOpEquiv, walkingParallelPairOpEquiv.symm, whiskerEquivalenceEquiv
 -/
@@ -895,7 +901,7 @@ definition isColimitEquivIsLimitUnop
       ((IsColimit.whiskerEquivalenceEquiv walkingParallelPairOpEquiv.symm).toFun h)).unop
   · intro h
     exact (IsColimit.equivIsoColimit c.unopOpIso).toFun
-      ((IsColimit.precomposeHomE
+      ((IsColimit.precomposeHomEquiv _ _).invFun ((IsColimit.whiskerEquivalenceEquiv _).toFun h.op))
 
 中文:
 定义 isColimitEquivIsLimitUnop
@@ -907,7 +913,7 @@ definition isColimitEquivIsLimitUnop
       ((IsColimit.whiskerEquivalenceEquiv walkingParallelPairOpEquiv.symm).toFun h)).unop
   · intro h
     exact (IsColimit.equivIsoColimit c.unopOpIso).toFun
-      ((IsColimit.precomposeHomE
+      ((IsColimit.precomposeHomEquiv _ _).invFun ((IsColimit.whiskerEquivalenceEquiv _).toFun h.op))
 
 Depends on / 依赖: IsColimit, IsColimit.equivIsoColimit, IsColimit.precomposeHomEquiv, IsColimit.whiskerEquivalenceEquiv, c.unopOpIso, equivIsoColimit, equivOfSubsingletonOfSubsingleton, h.op, invFun, precomposeHomEquiv, unopOpIso, walkingParallelPairOpEquiv, walkingParallelPairOpEquiv.symm, whiskerEquivalenceEquiv
 -/
@@ -1148,7 +1154,11 @@ definition isColimitCoforkPushoutEquivIsColimitForkOpPullback
     pullback.condition (by simp only [← op_comp, pullback.condition]) rfl h) _ (.refl _)
       (pullbackIsoUnopPushout f f).op.symm (.refl _)
         (by simp [← op_comp]) (by simp [← op_comp]) (by simp)
-  invFun h := Cofork.isColimitOfIsos
+  invFun h := Cofork.isColimitOfIsos _ (Fork.isLimitOfιEquivIsColimitUnop f.op f.op
+    pushout.condition (by rw [← unop_comp, ← unop_comp, pushout.condition]) rfl h) _
+      (pullbackIsoUnopPushout f f).symm (.refl _) (.refl _) (by simp) (by simp) (by simp)
+  left_inv := by cat_disch
+  right_inv := by cat_disch
 
 中文:
 定义 isColimitCoforkPushoutEquivIsColimitForkOpPullback
@@ -1156,7 +1166,11 @@ definition isColimitCoforkPushoutEquivIsColimitForkOpPullback
     pullback.condition (by simp only [← op_comp, pullback.condition]) rfl h) _ (.refl _)
       (pullbackIsoUnopPushout f f).op.symm (.refl _)
         (by simp [← op_comp]) (by simp [← op_comp]) (by simp)
-  invFun h := Cofork.isColimitOfIsos
+  invFun h := Cofork.isColimitOfIsos _ (Fork.isLimitOfιEquivIsColimitUnop f.op f.op
+    pushout.condition (by rw [← unop_comp, ← unop_comp, pushout.condition]) rfl h) _
+      (pullbackIsoUnopPushout f f).symm (.refl _) (.refl _) (by simp) (by simp) (by simp)
+  left_inv := by cat_disch
+  right_inv := by cat_disch
 
 Depends on / 依赖: Cofork, Cofork.isColimitOf, Fork.isLimitOfIsos, isLimitOfIsos
 -/
@@ -1185,7 +1199,11 @@ definition isColimitCoforkPushoutEquivIsColimitForkUnopPullback
       (pullbackIsoOpPushout f f).unop.symm (.refl _)
         (by simp [← unop_comp]) (by simp [← unop_comp]) (by simp)
   invFun h :=
-    Cofork.isC
+    Cofork.isColimitOfIsos _ (Fork.isLimitOfιEquivIsColimitOp f.unop f.unop pushout.condition
+      (by rw [← op_comp, ← op_comp, pushout.condition]) rfl h) _
+        (pullbackIsoOpPushout f f).symm (.refl _) (.refl _) (by simp) (by simp) (by simp)
+  left_inv := by cat_disch
+  right_inv := by cat_disch
 
 中文:
 定义 isColimitCoforkPushoutEquivIsColimitForkUnopPullback
@@ -1194,7 +1212,11 @@ definition isColimitCoforkPushoutEquivIsColimitForkUnopPullback
       (pullbackIsoOpPushout f f).unop.symm (.refl _)
         (by simp [← unop_comp]) (by simp [← unop_comp]) (by simp)
   invFun h :=
-    Cofork.isC
+    Cofork.isColimitOfIsos _ (Fork.isLimitOfιEquivIsColimitOp f.unop f.unop pushout.condition
+      (by rw [← op_comp, ← op_comp, pushout.condition]) rfl h) _
+        (pullbackIsoOpPushout f f).symm (.refl _) (.refl _) (by simp) (by simp) (by simp)
+  left_inv := by cat_disch
+  right_inv := by cat_disch
 
 Depends on / 依赖: Cofork, Cofork.isColimitOf, Fork.isLimitOfIsos, condition, isLimitOfIsos, pullback, pullback.condition
 -/
@@ -1228,7 +1250,15 @@ definition isLimitForkPushoutEquivIsColimitForkOpPullback
       ((pushoutIsoUnopPullback f f).op.symm ≪≫ eqToIso rfl) (.refl _) (.refl _)
         (by simp) (by simp) (by simp)
   invFun h := by
-    refine Fork.isLimitOfI
+    refine Fork.isLimitOfIsos _ (Cofork.isColimitOfπEquivIsLimitUnop f.op f.op
+      pullback.condition (by simp only [← unop_comp, pullback.condition]) rfl h) _ (.refl _)
+        ((pushoutIsoUnopPullback f f).symm) (.refl _) ?_ ?_ (by simp)
+    · rw [Iso.symm_hom, ← Quiver.Hom.unop_op (pushoutIsoUnopPullback f f).inv, ← unop_comp,
+        pushoutIsoUnopPullback_inv_fst, Quiver.Hom.unop_op, Iso.refl_hom, Category.id_comp]
+    · rw [Iso.symm_hom, ← Quiver.Hom.unop_op (pushoutIsoUnopPullback f f).inv, ← unop_comp,
+        pushoutIsoUnopPullback_inv_snd, Quiver.Hom.unop_op, Iso.refl_hom, Category.id_comp]
+  left_inv := by cat_disch
+  right_inv := by cat_disch
 
 中文:
 定义 isLimitForkPushoutEquivIsColimitForkOpPullback
@@ -1237,7 +1267,15 @@ definition isLimitForkPushoutEquivIsColimitForkOpPullback
       ((pushoutIsoUnopPullback f f).op.symm ≪≫ eqToIso rfl) (.refl _) (.refl _)
         (by simp) (by simp) (by simp)
   invFun h := by
-    refine Fork.isLimitOfI
+    refine Fork.isLimitOfIsos _ (Cofork.isColimitOfπEquivIsLimitUnop f.op f.op
+      pullback.condition (by simp only [← unop_comp, pullback.condition]) rfl h) _ (.refl _)
+        ((pushoutIsoUnopPullback f f).symm) (.refl _) ?_ ?_ (by simp)
+    · rw [Iso.symm_hom, ← Quiver.Hom.unop_op (pushoutIsoUnopPullback f f).inv, ← unop_comp,
+        pushoutIsoUnopPullback_inv_fst, Quiver.Hom.unop_op, Iso.refl_hom, Category.id_comp]
+    · rw [Iso.symm_hom, ← Quiver.Hom.unop_op (pushoutIsoUnopPullback f f).inv, ← unop_comp,
+        pushoutIsoUnopPullback_inv_snd, Quiver.Hom.unop_op, Iso.refl_hom, Category.id_comp]
+  left_inv := by cat_disch
+  right_inv := by cat_disch
 
 Depends on / 依赖: Cofork, Cofork.isColimitOfIsos, Fork.isLimitOf, isColimitOfIsos
 -/
@@ -1271,7 +1309,15 @@ definition isLimitForkPushoutEquivIsColimitForkUnopPullback
       ((pushoutIsoOpPullback f f).unop.symm ≪≫ eqToIso rfl) (.refl _) (.refl _)
         (by simp) (by simp) (by simp)
   invFun h := by
-    refine Fork.isLimi
+    refine Fork.isLimitOfIsos _ (Cofork.isColimitOfπEquivIsLimitOp f.unop f.unop pullback.condition
+      (by simp only [← op_comp, pullback.condition]) rfl h) _ (.refl _)
+        ((pushoutIsoOpPullback f f).symm) (.refl _) ?_ ?_ (by simp)
+    · rw [Iso.symm_hom, ← Quiver.Hom.op_unop (pushoutIsoOpPullback f f).inv, ← op_comp,
+        pushoutIsoOpPullback_inv_fst, Quiver.Hom.op_unop, Iso.refl_hom, Category.id_comp]
+    · rw [Iso.symm_hom, ← Quiver.Hom.op_unop (pushoutIsoOpPullback f f).inv, ← op_comp,
+        pushoutIsoOpPullback_inv_snd, Quiver.Hom.op_unop, Iso.refl_hom, Category.id_comp]
+  left_inv := by cat_disch
+  right_inv := by cat_disch
 
 中文:
 定义 isLimitForkPushoutEquivIsColimitForkUnopPullback
@@ -1280,7 +1326,15 @@ definition isLimitForkPushoutEquivIsColimitForkUnopPullback
       ((pushoutIsoOpPullback f f).unop.symm ≪≫ eqToIso rfl) (.refl _) (.refl _)
         (by simp) (by simp) (by simp)
   invFun h := by
-    refine Fork.isLimi
+    refine Fork.isLimitOfIsos _ (Cofork.isColimitOfπEquivIsLimitOp f.unop f.unop pullback.condition
+      (by simp only [← op_comp, pullback.condition]) rfl h) _ (.refl _)
+        ((pushoutIsoOpPullback f f).symm) (.refl _) ?_ ?_ (by simp)
+    · rw [Iso.symm_hom, ← Quiver.Hom.op_unop (pushoutIsoOpPullback f f).inv, ← op_comp,
+        pushoutIsoOpPullback_inv_fst, Quiver.Hom.op_unop, Iso.refl_hom, Category.id_comp]
+    · rw [Iso.symm_hom, ← Quiver.Hom.op_unop (pushoutIsoOpPullback f f).inv, ← op_comp,
+        pushoutIsoOpPullback_inv_snd, Quiver.Hom.op_unop, Iso.refl_hom, Category.id_comp]
+  left_inv := by cat_disch
+  right_inv := by cat_disch
 
 Depends on / 依赖: Cofork, Cofork.isColimitOfIsos, Fork.isLimitOf, condition, isColimitOfIsos, pushout, pushout.condition
 -/

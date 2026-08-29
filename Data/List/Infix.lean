@@ -759,7 +759,9 @@ theorem mem_inits
       | [], ⟨_, rfl⟩ => Or.inl rfl
       | b :: s, ⟨r, hr⟩ =>
         (List.noConfusion rfl (heq_of_eq hr)) fun ba (st : s ++ r ≍ t) =>
-Or.inr by rw [eq_of_heq ba]; exact ⟨_, (mem_inits _ _).2 ⟨
+Or.inr by rw [eq_of_heq ba]; exact ⟨_, (mem_inits _ _).2 ⟨_, eq_of_heq st⟩, rfl⟩⟩
+
+@[simp]
 
 中文:
 定理 mem_inits
@@ -771,7 +773,9 @@ Or.inr by rw [eq_of_heq ba]; exact ⟨_, (mem_inits _ _).2 ⟨
       | [], ⟨_, rfl⟩ => Or.inl rfl
       | b :: s, ⟨r, hr⟩ =>
         (List.noConfusion rfl (heq_of_eq hr)) fun ba (st : s ++ r ≍ t) =>
-Or.inr by rw [eq_of_heq ba]; exact ⟨_, (mem_inits _ _).2 ⟨
+Or.inr by rw [eq_of_heq ba]; exact ⟨_, (mem_inits _ _).2 ⟨_, eq_of_heq st⟩, rfl⟩⟩
+
+@[simp]
 
 Depends on / 依赖: mem_inits
 -/

@@ -39,7 +39,10 @@ theorem tendstoUniformlyOn_tsum
   filter_upwards [(tendsto_order.1 (tendsto_tsum_compl_atTop_zero u)).2 _ εpos] with t ht x hx
   have A : Summable fun n => ‖f n x‖ :=
     .of_nonneg_of_le (fun _ => norm_nonneg _) (fun n => hfu n x hx) hu
-  rw [dist_eq_norm]; rw [← A.of_norm.sum
+  rw [dist_eq_norm]; rw [← A.of_norm.sum_add_tsum_subtype_compl t]; rw [add_sub_cancel_left]
+  apply lt_of_le_of_lt _ ht
+  apply (norm_tsum_le_tsum_norm (A.subtype _)).trans
+  exact (A.subtype _).tsum_le_tsum (fun n => hfu _ _ hx) (hu.subtype _)
 
 中文:
 定理 tendstoUniformlyOn_tsum
@@ -49,7 +52,10 @@ theorem tendstoUniformlyOn_tsum
   filter_upwards [(tendsto_order.1 (tendsto_tsum_compl_atTop_zero u)).2 _ εpos] with t ht x hx
   have A : Summable fun n => ‖f n x‖ :=
     .of_nonneg_of_le (fun _ => norm_nonneg _) (fun n => hfu n x hx) hu
-  rw [dist_eq_norm]; rw [← A.of_norm.sum
+  rw [dist_eq_norm]; rw [← A.of_norm.sum_add_tsum_subtype_compl t]; rw [add_sub_cancel_left]
+  apply lt_of_le_of_lt _ ht
+  apply (norm_tsum_le_tsum_norm (A.subtype _)).trans
+  exact (A.subtype _).tsum_le_tsum (fun n => hfu _ _ hx) (hu.subtype _)
 
 Depends on / 依赖: A.of_norm.sum_add_tsum_subtype_compl, A.subtype, Summable, add_sub_cancel_left, dist_eq_norm, filter_upwards, hu.subtype, lt_of_le_of_lt, norm_nonneg, norm_tsum_le_tsum_norm, of_nonneg_of_le, of_norm, subtype, sum_add_tsum_subtype_compl, tendstoUniformlyOn_iff, tendsto_order, tendsto_tsum_compl_atTop_zero, tsum_le_tsum
 -/
@@ -102,7 +108,20 @@ theorem tendstoUniformlyOn_tsum_of_cofinite_eventually
   obtain ⟨t, ht⟩ := this
   rw [eventually_iff_exists_mem] at hfu
   obtain ⟨N, hN, HN⟩ := hfu
-  refine ⟨hN.toFinset union t, fun
+  refine ⟨hN.toFinset union t, fun n hn x hx => ?_⟩
+  have A : Summable fun n => ‖f n x‖ := by
+    apply Summable.add_compl (s := hN.toFinset) Summable.of_finite
+    apply Summable.of_nonneg_of_le (fun _ => norm_nonneg _) _ (hu.subtype _)
+    simp only [comp_apply, Subtype.forall, Set.mem_compl_iff, Finset.mem_coe]
+    aesop
+  rw [dist_eq_norm]; rw [← A.of_norm.sum_add_tsum_subtype_compl n]; rw [add_sub_cancel_left]
+  apply lt_of_le_of_lt _ (ht n (Finset.union_subset_right hn))
+  apply (norm_tsum_le_tsum_norm (A.subtype _)).trans
+  apply (A.subtype _).tsum_le_tsum _ (hu.subtype _)
+  simp only [comp_apply, Subtype.forall]
+  apply fun i hi => HN i ?_ x hx
+  have : i ∉ hN.toFinset := fun hg => hi (Finset.union_subset_left hn hg)
+  simp_all
 
 中文:
 定理 tendstoUniformlyOn_tsum_of_cofinite_eventually
@@ -115,7 +134,20 @@ theorem tendstoUniformlyOn_tsum_of_cofinite_eventually
   obtain ⟨t, ht⟩ := this
   rw [eventually_iff_exists_mem] at hfu
   obtain ⟨N, hN, HN⟩ := hfu
-  refine ⟨hN.toFinset union t, fun
+  refine ⟨hN.toFinset union t, fun n hn x hx => ?_⟩
+  have A : Summable fun n => ‖f n x‖ := by
+    apply Summable.add_compl (s := hN.toFinset) Summable.of_finite
+    apply Summable.of_nonneg_of_le (fun _ => norm_nonneg _) _ (hu.subtype _)
+    simp only [comp_apply, Subtype.forall, Set.mem_compl_iff, Finset.mem_coe]
+    aesop
+  rw [dist_eq_norm]; rw [← A.of_norm.sum_add_tsum_subtype_compl n]; rw [add_sub_cancel_left]
+  apply lt_of_le_of_lt _ (ht n (Finset.union_subset_right hn))
+  apply (norm_tsum_le_tsum_norm (A.subtype _)).trans
+  apply (A.subtype _).tsum_le_tsum _ (hu.subtype _)
+  simp only [comp_apply, Subtype.forall]
+  apply fun i hi => HN i ?_ x hx
+  have : i ∉ hN.toFinset := fun hg => hi (Finset.union_subset_left hn hg)
+  simp_all
 
 Depends on / 依赖: Summable, Summable.add_compl, Summable.of_finite, Summable.of_nonneg_of_le, add_compl, classical, comp_apply, eventually_atTop, eventually_iff_exists_mem, hN.toFinset, hu.subtype, norm_nonneg, of_finite, of_nonneg_of_le, subtype, tendstoUniformlyOn_iff, tendsto_order, tendsto_tsum_compl_atTop_zero, toFinset
 -/

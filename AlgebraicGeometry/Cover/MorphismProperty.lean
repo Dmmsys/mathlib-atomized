@@ -392,7 +392,8 @@ definition Cover.copy
       use i, (e₂ i).inv y
       simp [h]
     · simp_rw [h, MorphismProperty.cancel_left_of_respectsIso]
-      in
+      intro i
+      exact 𝒰.map_prop _
 
 中文:
 定义 Cover.copy
@@ -408,7 +409,8 @@ definition Cover.copy
       use i, (e₂ i).inv y
       simp [h]
     · simp_rw [h, MorphismProperty.cancel_left_of_respectsIso]
-      in
+      intro i
+      exact 𝒰.map_prop _
 -/
 def Cover.copy [P.RespectsIso] {X : Scheme.{u}} (𝒰 : X.Cover (precoverage P))
     (J : Type*) (obj : J -> Scheme)
@@ -666,7 +668,17 @@ abbreviation Cover.Hom
 
 @[deprecated (since := "2026-01-13")] alias Cover.Hom.w := PreZeroHypercover.Hom.w₀
 
-@[d
+@[deprecated (since := "2026-01-13")] alias Cover.Hom.id := PreZeroHypercover.Hom.id
+
+@[deprecated (since := "2026-01-13")] alias Cover.Hom.comp := PreZeroHypercover.Hom.comp
+
+@[deprecated (since := "2026-01-13")] alias Cover.id_idx_apply := PreZeroHypercover.id_s₀
+
+@[deprecated (since := "2026-01-13")] alias Cover.id_app := PreZeroHypercover.id_h₀
+
+@[deprecated (since := "2026-01-13")] alias Cover.comp_idx_apply := PreZeroHypercover.comp_s₀
+
+@[deprecated (since := "2026-01-13")] alias Cover.comp_app := PreZeroHypercover.comp_h₀
 
 中文:
 缩写 Cover.态射
@@ -679,7 +691,17 @@ abbreviation Cover.Hom
 
 @[deprecated (since := "2026-01-13")] alias Cover.Hom.w := PreZeroHypercover.Hom.w₀
 
-@[d
+@[deprecated (since := "2026-01-13")] alias Cover.Hom.id := PreZeroHypercover.Hom.id
+
+@[deprecated (since := "2026-01-13")] alias Cover.Hom.comp := PreZeroHypercover.Hom.comp
+
+@[deprecated (since := "2026-01-13")] alias Cover.id_idx_apply := PreZeroHypercover.id_s₀
+
+@[deprecated (since := "2026-01-13")] alias Cover.id_app := PreZeroHypercover.id_h₀
+
+@[deprecated (since := "2026-01-13")] alias Cover.comp_idx_apply := PreZeroHypercover.comp_s₀
+
+@[deprecated (since := "2026-01-13")] alias Cover.comp_app := PreZeroHypercover.comp_h₀
 
 Depends on / 依赖: Precoverage, Precoverage.ZeroHypercover.Hom, ZeroHypercover
 -/

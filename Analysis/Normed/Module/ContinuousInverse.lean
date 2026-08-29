@@ -474,7 +474,7 @@ lemma of_injective_of_finiteDimensional
   -- because its domain is finite-dimensional.
   obtain ⟨g, hg⟩ :=
     f.toLinearMap.exists_leftInverse_of_injective (f.ker_eq_bot_of_injective hf)
-  exact ⟨⟨g, LinearMap.continuous_of_finiteDimensional _⟩
+  exact ⟨⟨g, LinearMap.continuous_of_finiteDimensional _⟩, fun x => congr($hg x)⟩
 
 中文:
 引理 of_injective_of_finiteDimensional
@@ -484,7 +484,7 @@ lemma of_injective_of_finiteDimensional
   -- because its domain is finite-dimensional.
   obtain ⟨g, hg⟩ :=
     f.toLinearMap.exists_leftInverse_of_injective (f.ker_eq_bot_of_injective hf)
-  exact ⟨⟨g, LinearMap.continuous_of_finiteDimensional _⟩
+  exact ⟨⟨g, LinearMap.continuous_of_finiteDimensional _⟩, fun x => congr($hg x)⟩
 -/
 lemma of_injective_of_finiteDimensional [CompleteSpace 𝕜] [FiniteDimensional 𝕜 F]
     (hf : Injective f) :
@@ -517,7 +517,13 @@ lemma closedComplemented_range
   -- Idea of proof: let g be a left inverse for f. Then ker g is a closed subspace of F,
   -- and a complement to range f.
   -- Mathlib's definition of closed complement takes a continuous projection to f.range instead
-  -- of a complementary subspace: consider `f.comp g` instead, which is contin
+  -- of a complementary subspace: consider `f.comp g` instead, which is continuous as both maps are,
+  -- and idempotent as a continuous left inverse.
+  use (f.comp hf.leftInverse).codRestrict f.range (by intro y; simp)
+  rintro ⟨y, x, rfl⟩
+  ext
+  simp only [coe_coe, coe_codRestrict_apply, comp_apply]
+  rw [hf.leftInverse_leftInverse]
 
 中文:
 引理 closedComplemented_range
@@ -527,7 +533,13 @@ lemma closedComplemented_range
   -- Idea of proof: let g be a left inverse for f. Then ker g is a closed subspace of F,
   -- and a complement to range f.
   -- Mathlib's definition of closed complement takes a continuous projection to f.range instead
-  -- of a complementary subspace: consider `f.comp g` instead, which is contin
+  -- of a complementary subspace: consider `f.comp g` instead, which is continuous as both maps are,
+  -- and idempotent as a continuous left inverse.
+  use (f.comp hf.leftInverse).codRestrict f.range (by intro y; simp)
+  rintro ⟨y, x, rfl⟩
+  ext
+  simp only [coe_coe, coe_codRestrict_apply, comp_apply]
+  rw [hf.leftInverse_leftInverse]
 -/
 lemma closedComplemented_range (hf : f.HasLeftInverse) : Submodule.ClosedComplemented f.range := by
   -- Idea of proof: let g be a left inverse for f. Then ker g is a closed subspace of F,
@@ -654,7 +666,8 @@ lemma of_injective_of_isClosed_range_of_closedComplement_range
     rw [ker_codRestrict]; exact LinearMap.ker_eq_bot.mpr hf
   -- We compose the continuous inverse of `f : E → range f` with the projection `p : F → range f`.
   obtain ⟨p, hp⟩ := hf''
-  refine ⟨(f.leftInverse_of_injective_of_isClosed_range hf hf').comp p, 
+  refine ⟨(f.leftInverse_of_injective_of_isClosed_range hf hf').comp p, fun x => ?_⟩
+  simpa [hp ⟨f x, by simp⟩] using! f.rangeRestrict.leftInverse_apply_of_inj this x
 
 中文:
 引理 of_injective_of_isClosed_range_of_closedComplement_range
@@ -664,7 +677,8 @@ lemma of_injective_of_isClosed_range_of_closedComplement_range
     rw [ker_codRestrict]; exact LinearMap.ker_eq_bot.mpr hf
   -- We compose the continuous inverse of `f : E → range f` with the projection `p : F → range f`.
   obtain ⟨p, hp⟩ := hf''
-  refine ⟨(f.leftInverse_of_injective_of_isClosed_range hf hf').comp p, 
+  refine ⟨(f.leftInverse_of_injective_of_isClosed_range hf hf').comp p, fun x => ?_⟩
+  simpa [hp ⟨f x, by simp⟩] using! f.rangeRestrict.leftInverse_apply_of_inj this x
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot.mpr, f.rangeRestrict, ker_codRestrict, ker_eq_bot, rangeRestrict
 -/
@@ -1019,7 +1033,7 @@ lemma of_surjective_of_finiteDimensional
   -- because its domain is finite-dimensional.
   obtain ⟨g, hg⟩ :=
     f.toLinearMap.exists_rightInverse_of_surjective (f.range_eq_top_of_surjective hf)
-  exact ⟨⟨g, g.continuous_of_finiteDimensional⟩, fun x => c
+  exact ⟨⟨g, g.continuous_of_finiteDimensional⟩, fun x => congr($hg x)⟩
 
 中文:
 引理 of_surjective_of_finiteDimensional
@@ -1029,7 +1043,7 @@ lemma of_surjective_of_finiteDimensional
   -- because its domain is finite-dimensional.
   obtain ⟨g, hg⟩ :=
     f.toLinearMap.exists_rightInverse_of_surjective (f.range_eq_top_of_surjective hf)
-  exact ⟨⟨g, g.continuous_of_finiteDimensional⟩, fun x => c
+  exact ⟨⟨g, g.continuous_of_finiteDimensional⟩, fun x => congr($hg x)⟩
 -/
 lemma of_surjective_of_finiteDimensional [CompleteSpace 𝕜] [FiniteDimensional 𝕜 F]
     (hf : Surjective f) :

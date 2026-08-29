@@ -108,7 +108,7 @@ instance instLieRing
   leibniz_lie x y z := by
     have := LieAdmissibleRing.assoc_def x y z
     simp only [associator_apply] at this
-    grind [Ri
+    grind [Ring.lie_def, mul_sub, sub_mul]
 
 中文:
 实例 instLieRing
@@ -123,7 +123,7 @@ instance instLieRing
   leibniz_lie x y z := by
     have := LieAdmissibleRing.assoc_def x y z
     simp only [associator_apply] at this
-    grind [Ri
+    grind [Ring.lie_def, mul_sub, sub_mul]
 
 Depends on / 依赖: LieAdmissibleRing, LieAdmissibleRing.assoc_def, Ring.lie_def, add_mul, assoc_def, associator_apply, leibniz_lie, lie_add, lie_def, lie_self, mul_add, mul_sub, sub_mul
 -/

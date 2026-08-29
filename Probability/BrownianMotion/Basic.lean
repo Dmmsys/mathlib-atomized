@@ -331,7 +331,33 @@ theorem IsGaussianProcess.isPreBrownianReal_of_covariance
     apply (MeasurableEquiv.toLp 2 (_ -> Real)).map_measurableEquiv_injective
     rw [MeasurableEquiv.coe_toLp]; rw [← PiLp.coe_symm_continuousLinearEquiv 2 Real]
     have := (h1.hasGaussianLaw I).isGaussian_map
-    apply IsGauss
+    apply IsGaussian.ext
+    · rw [integral_map, integral_map, integral_map]
+      · simp only [id_eq]
+        rw [ContinuousLinearEquiv.integral_comp_id_comm]; rw [ContinuousLinearEquiv.integral_comp_comm]
+        simp only [PiLp.continuousLinearEquiv_symm_apply, integral_id_projectiveFamily,
+          WithLp.toLp_zero, WithLp.toLp_eq_zero]
+        congr with i
+        rw [eval_integral]
+        · simpa using h2 _
+        · exact fun _ => (h1.hasGaussianLaw_eval _).integrable
+      any_goals fun_prop
+      exact aemeasurable_pi_lambda _ fun _ => h1.aemeasurable _
+    · rw [← ContinuousLinearMap.toBilinForm_inj]
+      refine LinearMap.BilinForm.ext_of_isSymm isPosSemidef_covarianceBilin.isSymm
+        isPosSemidef_covarianceBilin.isSymm fun x => ?_
+      simp only [ContinuousLinearMap.toBilinForm_apply]
+      rw [PiLp.coe_symm_continuousLinearEquiv]; rw [covarianceBilin_apply_pi]; rw [covarianceBilin_apply_pi]
+      · congrm ∑ i, ∑ j, _ * ?_
+        rw [covariance_eval_projectiveFamily]; rw [covariance_map]
+        · wlog hij : i.1 <= j.1 generalizing i j
+          · rw [covariance_comm, this j i (by grind), min_comm]
+          rw [min_eq_left hij]
+          exact h3 i j hij
+        any_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+        exact aemeasurable_pi_lambda _ (fun _ => h1.aemeasurable _)
+      · exact fun i => (IsGaussian.hasGaussianLaw_id.eval i).memLp_two
+      · exact fun i => ((h1.hasGaussianLaw I).isGaussian_map.hasGaussianLaw_id.eval i).memLp_two
 
 中文:
 定理 IsGaussianProcess.isPreBrownian实数_of_covariance
@@ -341,7 +367,33 @@ theorem IsGaussianProcess.isPreBrownianReal_of_covariance
     apply (MeasurableEquiv.toLp 2 (_ -> Real)).map_measurableEquiv_injective
     rw [MeasurableEquiv.coe_toLp]; rw [← PiLp.coe_symm_continuousLinearEquiv 2 Real]
     have := (h1.hasGaussianLaw I).isGaussian_map
-    apply IsGauss
+    apply IsGaussian.ext
+    · rw [integral_map, integral_map, integral_map]
+      · simp only [id_eq]
+        rw [ContinuousLinearEquiv.integral_comp_id_comm]; rw [ContinuousLinearEquiv.integral_comp_comm]
+        simp only [PiLp.continuousLinearEquiv_symm_apply, integral_id_projectiveFamily,
+          WithLp.toLp_zero, WithLp.toLp_eq_zero]
+        congr with i
+        rw [eval_integral]
+        · simpa using h2 _
+        · exact fun _ => (h1.hasGaussianLaw_eval _).integrable
+      any_goals fun_prop
+      exact aemeasurable_pi_lambda _ fun _ => h1.aemeasurable _
+    · rw [← ContinuousLinearMap.toBilinForm_inj]
+      refine LinearMap.BilinForm.ext_of_isSymm isPosSemidef_covarianceBilin.isSymm
+        isPosSemidef_covarianceBilin.isSymm fun x => ?_
+      simp only [ContinuousLinearMap.toBilinForm_apply]
+      rw [PiLp.coe_symm_continuousLinearEquiv]; rw [covarianceBilin_apply_pi]; rw [covarianceBilin_apply_pi]
+      · congrm ∑ i, ∑ j, _ * ?_
+        rw [covariance_eval_projectiveFamily]; rw [covariance_map]
+        · wlog hij : i.1 <= j.1 generalizing i j
+          · rw [covariance_comm, this j i (by grind), min_comm]
+          rw [min_eq_left hij]
+          exact h3 i j hij
+        any_goals exact Measurable.aestronglyMeasurable (by fun_prop)
+        exact aemeasurable_pi_lambda _ (fun _ => h1.aemeasurable _)
+      · exact fun i => (IsGaussian.hasGaussianLaw_id.eval i).memLp_two
+      · exact fun i => ((h1.hasGaussianLaw I).isGaussian_map.hasGaussianLaw_id.eval i).memLp_two
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.integral_comp_comm, ContinuousLinearEquiv.integral_comp_id_comm, IsGaussian, IsGaussian.ext, MeasurableEquiv, MeasurableEquiv.coe_toLp, MeasurableEquiv.toLp, PiLp.coe_symm_continuousLinearEquiv, PiLp.continuousLinearEquiv_symm_apply, aemeasurable, aemeasurable_pi_lambda, coe_symm_continuousLinearEquiv, coe_toLp, continuousLinearEquiv_symm_apply, h1.aemeasurable, h1.hasGaussianLaw, hasGaussianLaw, id_eq, integral_comp_comm
 -/
@@ -393,7 +445,15 @@ lemma IsPreBrownianReal.hasIndepIncrements
     fun i j hij => ?_
   rw [covariance_fun_sub_fun_sub]
   · simp_rw [hB.covariance_fun_eval]
-    wlog h : i < j genera
+    wlog h : i < j generalizing i j
+    · simp_rw [← this j i hij.symm (by grind), min_comm]
+      grind
+.le have h1 : i.succ <= j.succ := Fin.strictMono_succ h
+    have h2 : i.castSucc <= j.succ := Fin.le_of_lt h1
+    have h3 : i.castSucc <= j.castSucc := Fin.le_castSucc_iff.mpr h1
+    rw [min_eq_left (ht h1)]; rw [min_eq_left (ht h)]; rw [min_eq_left (ht h2)]; rw [min_eq_left (ht h3)]
+    simp
+  all_goals exact (hB.isGaussianProcess.hasGaussianLaw_eval _).memLp_two
 
 中文:
 引理 是PreBrownian实数.hasIndepIncrements
@@ -404,7 +464,15 @@ lemma IsPreBrownianReal.hasIndepIncrements
     fun i j hij => ?_
   rw [covariance_fun_sub_fun_sub]
   · simp_rw [hB.covariance_fun_eval]
-    wlog h : i < j genera
+    wlog h : i < j generalizing i j
+    · simp_rw [← this j i hij.symm (by grind), min_comm]
+      grind
+.le have h1 : i.succ <= j.succ := Fin.strictMono_succ h
+    have h2 : i.castSucc <= j.succ := Fin.le_of_lt h1
+    have h3 : i.castSucc <= j.castSucc := Fin.le_castSucc_iff.mpr h1
+    rw [min_eq_left (ht h1)]; rw [min_eq_left (ht h)]; rw [min_eq_left (ht h2)]; rw [min_eq_left (ht h3)]
+    simp
+  all_goals exact (hB.isGaussianProcess.hasGaussianLaw_eval _).memLp_two
 
 Depends on / 依赖: Fin.le_of_lt, Fin.strictMono_succ, IsProbabilityMeasure, castSucc, covariance_fun_eval, covariance_fun_sub_fun_sub, generalizing, hB.covariance_fun_eval, hB.isGaussianProcess.hasGaussianLaw_increments.iIndepFun_of_covariance_eq_zero, hB.isGaussianProcess.isProbabilityMeasure, hasGaussianLaw_increments, hij.symm, i.castSucc, i.succ, iIndepFun_of_covariance_eq_zero, isGaussianProcess, isProbabilityMeasure, j.castSucc, j.succ, le_of_lt
 -/
@@ -437,7 +505,18 @@ theorem HasIndepIncrements.isPreBrownianReal_of_hasLaw
       exact law 0
   refine IsGaussianProcess.isPreBrownianReal_of_covariance ?_ (fun t => ?_) (fun s t hst => ?_)
   · exact incr.isGaussianProcess (fun t => (law t).hasGaussianLaw) h0
-  
+  · rw [(law t).integral_eq, integral_id_gaussianReal]
+  have h1 := incr.indepFun_eval_sub zero_le hst h0
+  have := (law 0).isProbabilityMeasure
+  have h2 : X t = X t - X s + X s := by simp
+  rw [h2]; rw [covariance_add_right]; rw [h1.covariance_eq_zero]; rw [covariance_self]; rw [(law s).variance_eq]; rw [variance_id_gaussianReal]
+  · simp
+  · exact (law s).aemeasurable
+  · exact (law s).hasGaussianLaw.memLp_two
+  · exact (law t).hasGaussianLaw.memLp_two.sub (law s).hasGaussianLaw.memLp_two
+  · exact (law s).hasGaussianLaw.memLp_two
+  · exact (law t).hasGaussianLaw.memLp_two.sub (law s).hasGaussianLaw.memLp_two
+  · exact (law s).hasGaussianLaw.memLp_two
 
 中文:
 定理 HasIndepIncrements.isPreBrownian实数_of_hasLaw
@@ -448,7 +527,18 @@ theorem HasIndepIncrements.isPreBrownianReal_of_hasLaw
       exact law 0
   refine IsGaussianProcess.isPreBrownianReal_of_covariance ?_ (fun t => ?_) (fun s t hst => ?_)
   · exact incr.isGaussianProcess (fun t => (law t).hasGaussianLaw) h0
-  
+  · rw [(law t).integral_eq, integral_id_gaussianReal]
+  have h1 := incr.indepFun_eval_sub zero_le hst h0
+  have := (law 0).isProbabilityMeasure
+  have h2 : X t = X t - X s + X s := by simp
+  rw [h2]; rw [covariance_add_right]; rw [h1.covariance_eq_zero]; rw [covariance_self]; rw [(law s).variance_eq]; rw [variance_id_gaussianReal]
+  · simp
+  · exact (law s).aemeasurable
+  · exact (law s).hasGaussianLaw.memLp_two
+  · exact (law t).hasGaussianLaw.memLp_two.sub (law s).hasGaussianLaw.memLp_two
+  · exact (law s).hasGaussianLaw.memLp_two
+  · exact (law t).hasGaussianLaw.memLp_two.sub (law s).hasGaussianLaw.memLp_two
+  · exact (law s).hasGaussianLaw.memLp_two
 
 Depends on / 依赖: HasLaw, HasLaw.ae_eq_of_dirac, IsGaussianProcess, IsGaussianProcess.isPreBrownianReal_of_covariance, ae_eq_of_dirac, covariance_add_right, gaussianReal_zero_var, h1.c, hasGaussianLaw, incr.indepFun_eval_sub, incr.isGaussianProcess, indepFun_eval_sub, integral_eq, integral_id_gaussianReal, isGaussianProcess, isPreBrownianReal_of_covariance, isProbabilityMeasure, zero_le
 -/
@@ -519,7 +609,10 @@ lemma IsPreBrownianReal.smul
   · have this t ω : (√c)⁻¹ * B (c * t) ω = (√c)⁻¹ • ((B ∘ (c * ·)) t ω) := rfl
     simp_rw [this]
     exact (hB.isGaussianProcess.comp_right _).smul _
-  · rw [integral_const_mul, hB.integral_eval, mul_
+  · rw [integral_const_mul, hB.integral_eval, mul_zero]
+  · rw [covariance_const_mul_left, covariance_const_mul_right, hB.covariance_eval, min_eq_left]
+    · simp [field]
+    · exact mul_le_mul_right hst c
 
 中文:
 引理 是PreBrownian实数.smul
@@ -529,7 +622,10 @@ lemma IsPreBrownianReal.smul
   · have this t ω : (√c)⁻¹ * B (c * t) ω = (√c)⁻¹ • ((B ∘ (c * ·)) t ω) := rfl
     simp_rw [this]
     exact (hB.isGaussianProcess.comp_right _).smul _
-  · rw [integral_const_mul, hB.integral_eval, mul_
+  · rw [integral_const_mul, hB.integral_eval, mul_zero]
+  · rw [covariance_const_mul_left, covariance_const_mul_right, hB.covariance_eval, min_eq_left]
+    · simp [field]
+    · exact mul_le_mul_right hst c
 
 Depends on / 依赖: IsGaussianProcess, IsGaussianProcess.isPreBrownianReal_of_covariance, NonUnitalSubringClass, NonUnitalSubringClass.addSubgroupClass, addSubgroupClass, comp_right, covariance_const_mul_left, covariance_const_mul_right, covariance_eval, hB.covariance_eval, hB.integral_eval, hB.isGaussianProcess.comp_right, integral_const_mul, integral_eval, isGaussianProcess, isPreBrownianReal_of_covariance, min_eq_left, mul_le_mul_right, mul_zero, simp_rw
 -/
@@ -555,7 +651,11 @@ lemma IsPreBrownianReal.shift
     (fun t => ?_) (fun s t hst => ?_)
   · rw [integral_sub, hB.integral_eval, hB.integral_eval, sub_zero]
     all_goals exact (hB.isGaussianProcess.hasGaussianLaw_eval _).integrable
-  · have := hB.isGaussianProcess.isProbabi
+  · have := hB.isGaussianProcess.isProbabilityMeasure
+    rw [covariance_fun_sub_left]; rw [covariance_fun_sub_right]; rw [covariance_fun_sub_right]; rw [hB.covariance_eval]; rw [hB.covariance_eval]; rw [hB.covariance_eval]; rw [hB.covariance_eval]; rw [← add_min]; rw [min_eq_left hst]; rw [min_eq_right]; rw [min_eq_left]; rw [min_self]
+    any_goals simp
+    any_goals exact (hB.isGaussianProcess.hasGaussianLaw_eval _).memLp_two
+    exact hB.isGaussianProcess.hasGaussianLaw_sub.memLp_two
 
 中文:
 引理 是PreBrownian实数.shift
@@ -565,7 +665,11 @@ lemma IsPreBrownianReal.shift
     (fun t => ?_) (fun s t hst => ?_)
   · rw [integral_sub, hB.integral_eval, hB.integral_eval, sub_zero]
     all_goals exact (hB.isGaussianProcess.hasGaussianLaw_eval _).integrable
-  · have := hB.isGaussianProcess.isProbabi
+  · have := hB.isGaussianProcess.isProbabilityMeasure
+    rw [covariance_fun_sub_left]; rw [covariance_fun_sub_right]; rw [covariance_fun_sub_right]; rw [hB.covariance_eval]; rw [hB.covariance_eval]; rw [hB.covariance_eval]; rw [hB.covariance_eval]; rw [← add_min]; rw [min_eq_left hst]; rw [min_eq_right]; rw [min_eq_left]; rw [min_self]
+    any_goals simp
+    any_goals exact (hB.isGaussianProcess.hasGaussianLaw_eval _).memLp_two
+    exact hB.isGaussianProcess.hasGaussianLaw_sub.memLp_two
 
 Depends on / 依赖: NonUnitalNonAssocRing, add_, all_goals, covariance_eval, covariance_fun_sub_left, covariance_fun_sub_right, fast_instance, hB.covariance_eval, hB.integral_eval, hB.isGaussianProcess.hasGaussianLaw_eval, hB.isGaussianProcess.isProbabilityMeasure, hB.isGaussianProcess.shift, hasGaussianLaw_eval, integrable, integral_eval, integral_sub, isGaussianProcess, isPreBrownianReal_of_covariance, isProbabilityMeasure, sub_zero
 -/
@@ -595,7 +699,18 @@ lemma IsPreBrownianReal.indepFun_shift
     · exact ⟨{t₀, t₀ + t},
         { toFun x := x ⟨t₀ + t, by simp⟩ - x ⟨t₀, by simp⟩
           map_add' x y := by simp; abel
-    
+          map_smul' c x := by simp; ring }, by simp⟩
+    · exact ⟨{t},
+        { toFun x := x ⟨t, by simp⟩
+          map_add' x y := by simp
+          map_smul' c x := by simp }, by simp⟩
+  any_goals fun_prop
+  · rintro s ⟨t, ht : t <= t₀⟩
+    have := hB.isGaussianProcess.isProbabilityMeasure
+    rw [covariance_fun_sub_left]; rw [hB.covariance_eval]; rw [hB.covariance_eval]; rw [min_eq_right]; rw [min_eq_right]; rw [sub_self]
+    · grind
+    · simp [ht, le_add_right]
+    all_goals exact (hB.isGaussianProcess.hasGaussianLaw_eval _).memLp_two
 
 中文:
 引理 是PreBrownian实数.indepFun_shift
@@ -608,7 +723,18 @@ lemma IsPreBrownianReal.indepFun_shift
     · exact ⟨{t₀, t₀ + t},
         { toFun x := x ⟨t₀ + t, by simp⟩ - x ⟨t₀, by simp⟩
           map_add' x y := by simp; abel
-    
+          map_smul' c x := by simp; ring }, by simp⟩
+    · exact ⟨{t},
+        { toFun x := x ⟨t, by simp⟩
+          map_add' x y := by simp
+          map_smul' c x := by simp }, by simp⟩
+  any_goals fun_prop
+  · rintro s ⟨t, ht : t <= t₀⟩
+    have := hB.isGaussianProcess.isProbabilityMeasure
+    rw [covariance_fun_sub_left]; rw [hB.covariance_eval]; rw [hB.covariance_eval]; rw [min_eq_right]; rw [min_eq_right]; rw [sub_self]
+    · grind
+    · simp [ht, le_add_right]
+    all_goals exact (hB.isGaussianProcess.hasGaussianLaw_eval _).memLp_two
 
 Depends on / 依赖: IsGaussianProcess, IsGaussianProcess.indepFun_of_covariance_eq_zero, NonUnitalRing, SetLike, aemeasurable, any_goals, fun_prop, hB.aemeasurable, hB.isGaussianProcess.isProbability, hB.isGaussianProcess.of_isGaussianProcess, indepFun_of_covariance_eq_zero, isGaussianProcess, isProbability, map_add, map_smul, of_isGaussianProcess, toNonUnitalRing
 -/
@@ -645,7 +771,14 @@ lemma IsPreBrownianReal.inv
   · exact (IsGaussianProcess.comp_right hB.isGaussianProcess _).smul _
   · rw [integral_const_mul, hB.integral_eval, mul_zero]
   · have := hB.isGaussianProcess.isProbabilityMeasure
-    rw [covariance_c
+    rw [covariance_const_mul_left]; rw [covariance_const_mul_right]; rw [hB.covariance_eval]
+    obtain rfl | hs := eq_or_ne s 0
+    · simp
+    have : 0 < t := (pos_of_ne_zero hs).trans_le hst
+    rw [min_eq_right]
+    · norm_cast
+      field_simp
+    exact one_div_le_one_div_of_le (pos_of_ne_zero hs) hst
 
 中文:
 引理 是PreBrownian实数.inv
@@ -655,7 +788,14 @@ lemma IsPreBrownianReal.inv
   · exact (IsGaussianProcess.comp_right hB.isGaussianProcess _).smul _
   · rw [integral_const_mul, hB.integral_eval, mul_zero]
   · have := hB.isGaussianProcess.isProbabilityMeasure
-    rw [covariance_c
+    rw [covariance_const_mul_left]; rw [covariance_const_mul_right]; rw [hB.covariance_eval]
+    obtain rfl | hs := eq_or_ne s 0
+    · simp
+    have : 0 < t := (pos_of_ne_zero hs).trans_le hst
+    rw [min_eq_right]
+    · norm_cast
+      field_simp
+    exact one_div_le_one_div_of_le (pos_of_ne_zero hs) hst
 
 Depends on / 依赖: IsGaussianProcess, IsGaussianProcess.comp_right, IsGaussianProcess.isPreBrownianReal_of_covariance, NonUnitalNonAssocCommRing, comp_right, covariance_const_mul_left, covariance_const_mul_right, covariance_eval, eq_or_ne, hB.covariance_eval, hB.integral_eval, hB.isGaussianProcess, hB.isGaussianProcess.isProbabilityMeasure, integral_const_mul, integral_eval, isGaussianProcess, isPreBrownianReal_of_covariance, isProbabilityMeasure, min_eq_right, mul_zero
 -/

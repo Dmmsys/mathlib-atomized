@@ -50,7 +50,7 @@ theorem IsBigO.integrableAtFilter
     (hC.smallSets.and <| hfm.eventually.and hg.eventually).exists_measurable_mem_of_smallSets
   refine ⟨s, hsl, (hg.norm.const_mul C).mono hf ?_⟩
   refine (ae_restrict_mem hsm).mono fun x hx => ?_
-  exact (hfg x hx).trans (le_abs
+  exact (hfg x hx).trans (le_abs_self _)
 
 中文:
 定理 IsBigO.integrableAtFilter
@@ -61,7 +61,7 @@ theorem IsBigO.integrableAtFilter
     (hC.smallSets.and <| hfm.eventually.and hg.eventually).exists_measurable_mem_of_smallSets
   refine ⟨s, hsl, (hg.norm.const_mul C).mono hf ?_⟩
   refine (ae_restrict_mem hsm).mono fun x hx => ?_
-  exact (hfg x hx).trans (le_abs
+  exact (hfg x hx).trans (le_abs_self _)
 
 Depends on / 依赖: ae_restrict_mem, const_mul, eventually, exists_measurable_mem_of_smallSets, hC.smallSets.and, hf.bound, hfm.eventually.and, hg.eventually, hg.norm.const_mul, le_abs_self, smallSets
 -/
@@ -115,7 +115,11 @@ theorem IsBigO.eventually_integrableOn
   obtain ⟨u, hu, v, hv, huv⟩ := Filter.mem_prod_iff.mp htl
   obtain ⟨w, hwl, hw⟩ := hfm.exists_mem
   refine eventually_iff_exists_mem.mpr ⟨w inter v, inter_mem hwl hv, fun x hx => ?_⟩
-  have : IsFiniteMeasure (μ.restrict s) := ⟨M
+  have : IsFiniteMeasure (μ.restrict s) := ⟨Measure.restrict_apply_univ s ▸ hμ⟩
+  refine Integrable.mono' (integrable_const (C * ‖g x‖)) (hw x hx.1) ?_
+  filter_upwards [MeasureTheory.self_mem_ae_restrict hs]
+  intro y hy
+exact ht (y, x) huv ⟨hu hy, hx.2⟩
 
 中文:
 定理 IsBigO.eventually_integrableOn
@@ -126,7 +130,11 @@ theorem IsBigO.eventually_integrableOn
   obtain ⟨u, hu, v, hv, huv⟩ := Filter.mem_prod_iff.mp htl
   obtain ⟨w, hwl, hw⟩ := hfm.exists_mem
   refine eventually_iff_exists_mem.mpr ⟨w inter v, inter_mem hwl hv, fun x hx => ?_⟩
-  have : IsFiniteMeasure (μ.restrict s) := ⟨M
+  have : IsFiniteMeasure (μ.restrict s) := ⟨Measure.restrict_apply_univ s ▸ hμ⟩
+  refine Integrable.mono' (integrable_const (C * ‖g x‖)) (hw x hx.1) ?_
+  filter_upwards [MeasureTheory.self_mem_ae_restrict hs]
+  intro y hy
+exact ht (y, x) huv ⟨hu hy, hx.2⟩
 
 Depends on / 依赖: Filter, Filter.mem_prod_iff.mp, Integrable, Integrable.mono, IsFiniteMeasure, Measure, Measure.restrict_apply_univ, MeasureTheory, MeasureTheory.self_mem_ae_restrict, eventually_iff_exists_mem, eventually_iff_exists_mem.mpr, exists_mem, filter_upwards, hC.exists_mem, hf.bound, hfm.exists_mem, integrable_const, inter_mem, mem_prod_iff, restrict
 -/
@@ -161,7 +169,8 @@ theorem IsBigO.set_integral_isBigO
   refine isBigO_iff.mpr ⟨C * μ.real s, eventually_iff_exists_mem.mpr ⟨v, hv, fun x hx => ?_⟩⟩
   calc
     _ <= C * ‖g x‖ * μ.real s :=
-norm_setIntegral_le_of_norm_le_const hμ fun
+norm_setIntegral_le_of_norm_le_const hμ fun y hy => ht (y, x) huv ⟨hu hy, hx⟩
+    _ = _ := by ring
 
 中文:
 定理 IsBigO.set_integral_isBigO
@@ -173,7 +182,8 @@ norm_setIntegral_le_of_norm_le_const hμ fun
   refine isBigO_iff.mpr ⟨C * μ.real s, eventually_iff_exists_mem.mpr ⟨v, hv, fun x hx => ?_⟩⟩
   calc
     _ <= C * ‖g x‖ * μ.real s :=
-norm_setIntegral_le_of_norm_le_const hμ fun
+norm_setIntegral_le_of_norm_le_const hμ fun y hy => ht (y, x) huv ⟨hu hy, hx⟩
+    _ = _ := by ring
 
 Depends on / 依赖: eventually_iff_exists_mem, eventually_iff_exists_mem.mpr, exists_mem, hC.exists_mem, hf.bound, isBigO_iff, isBigO_iff.mpr, mem_prod_iff, mem_prod_iff.mp, norm_setIntegral_le_of_norm_le_const
 -/
@@ -360,7 +370,12 @@ theorem LocallyIntegrable.integrable_of_isBigO_atTop_of_norm_isNegInvariant
   rw [← integrableOn_univ]; rw [← Iic_union_Ici_of_le le_rfl]; rw [integrableOn_union]
   refine ⟨?_, h_int⟩
   have h_map_neg : (μ.restrict (Ici 0)).map Neg.neg = μ.restrict (Iic 0) := by
-    conv => rhs; rw [← Mea
+    conv => rhs; rw [← Measure.map_neg_eq_self μ, measurableEmbedding_neg.restrict_map]
+    simp
+  rw [IntegrableOn]; rw [← h_map_neg]; rw [measurableEmbedding_neg.integrable_map_iff]
+  refine h_int.congr' ?_ hsymm.restrict
+  refine AEStronglyMeasurable.comp_aemeasurable ?_ measurable_neg.aemeasurable
+  exact h_map_neg ▸ hf.aestronglyMeasurable.restrict
 
 中文:
 定理 Locally整数egrable.integrable_of_isBigO_atTop_of_norm_isNegInvariant
@@ -369,7 +384,12 @@ theorem LocallyIntegrable.integrable_of_isBigO_atTop_of_norm_isNegInvariant
   rw [← integrableOn_univ]; rw [← Iic_union_Ici_of_le le_rfl]; rw [integrableOn_union]
   refine ⟨?_, h_int⟩
   have h_map_neg : (μ.restrict (Ici 0)).map Neg.neg = μ.restrict (Iic 0) := by
-    conv => rhs; rw [← Mea
+    conv => rhs; rw [← Measure.map_neg_eq_self μ, measurableEmbedding_neg.restrict_map]
+    simp
+  rw [IntegrableOn]; rw [← h_map_neg]; rw [measurableEmbedding_neg.integrable_map_iff]
+  refine h_int.congr' ?_ hsymm.restrict
+  refine AEStronglyMeasurable.comp_aemeasurable ?_ measurable_neg.aemeasurable
+  exact h_map_neg ▸ hf.aestronglyMeasurable.restrict
 
 Depends on / 依赖: IsNegInvariant, MeasurableNeg
 -/

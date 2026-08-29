@@ -182,7 +182,18 @@ instance [ConditionallyCompleteLinearOrder
       intro s hs
       have : Set.range untrop = (Set.univ : Set R) := Equiv.range_eq_univ tropEquiv.symm
       simp only [sSup, Set.image_empty, trop_inj_iff]
-      apply csSup_of_not_b
+      apply csSup_of_not_bddAbove
+      contrapose hs
+      change BddAbove (tropOrderIso.symm '' s) at hs
+      exact tropOrderIso.symm.bddAbove_image.1 hs
+    csInf_of_not_bddBelow := by
+      intro s hs
+      have : Set.range untrop = (Set.univ : Set R) := Equiv.range_eq_univ tropEquiv.symm
+      simp only [sInf, Set.image_empty, trop_inj_iff]
+      apply csInf_of_not_bddBelow
+      contrapose hs
+      change BddBelow (tropOrderIso.symm '' s) at hs
+      exact tropOrderIso.symm.bddBelow_image.1 hs }
 
 中文:
 实例 [条件完备线性序
@@ -192,7 +203,18 @@ instance [ConditionallyCompleteLinearOrder
       intro s hs
       have : Set.range untrop = (Set.univ : Set R) := Equiv.range_eq_univ tropEquiv.symm
       simp only [sSup, Set.image_empty, trop_inj_iff]
-      apply csSup_of_not_b
+      apply csSup_of_not_bddAbove
+      contrapose hs
+      change BddAbove (tropOrderIso.symm '' s) at hs
+      exact tropOrderIso.symm.bddAbove_image.1 hs
+    csInf_of_not_bddBelow := by
+      intro s hs
+      have : Set.range untrop = (Set.univ : Set R) := Equiv.range_eq_univ tropEquiv.symm
+      simp only [sInf, Set.image_empty, trop_inj_iff]
+      apply csInf_of_not_bddBelow
+      contrapose hs
+      change BddBelow (tropOrderIso.symm '' s) at hs
+      exact tropOrderIso.symm.bddBelow_image.1 hs }
 
 Depends on / 依赖: BddAbove, Equiv.range_eq_univ, Set.image_empty, Set.range, Set.univ, Tropical, Tropical.instLinearOrderTropical, bddAbove_image, contrapose, csInf_of_not_bddBelow, csSup_of_not_bddAbove, image_empty, instConditionallyCompleteLatticeTropical, instLinearOrderTropical, range_eq_univ, tropEqui, tropEquiv, tropEquiv.symm, tropOrderIso, tropOrderIso.symm
 -/

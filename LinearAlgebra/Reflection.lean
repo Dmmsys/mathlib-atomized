@@ -381,7 +381,13 @@ lemma _root_.Submodule.mem_invtSubmodule_reflection_iff
 · have hx : x != 0 := by rintro rfl; exact two_ne_zero (α := R) by simp [← h]
     suffices f y • x in p by
       have aux : f y • x in p ⊓ R ∙ x := ⟨this, Submodule.mem_span_singleton.mpr ⟨f y, rfl⟩⟩
-      rw [hp.eq_bot]; rw [Submodule.mem_bot]; rw 
+      rw [hp.eq_bot]; rw [Submodule.mem_bot]; rw [smul_eq_zero] at aux
+      exact aux.resolve_right hx
+    specialize h' hy
+    simp only [Submodule.mem_comap, LinearEquiv.coe_coe, reflection_apply] at h'
+    simpa using p.sub_mem h' hy
+  · have hy' : f y = 0 := by simpa using h' hy
+    simpa [reflection_apply, hy']
 
 中文:
 引理 _root_.子模.mem_invtSubmodule_reflection_iff
@@ -391,7 +397,13 @@ lemma _root_.Submodule.mem_invtSubmodule_reflection_iff
 · have hx : x != 0 := by rintro rfl; exact two_ne_zero (α := R) by simp [← h]
     suffices f y • x in p by
       have aux : f y • x in p ⊓ R ∙ x := ⟨this, Submodule.mem_span_singleton.mpr ⟨f y, rfl⟩⟩
-      rw [hp.eq_bot]; rw [Submodule.mem_bot]; rw 
+      rw [hp.eq_bot]; rw [Submodule.mem_bot]; rw [smul_eq_zero] at aux
+      exact aux.resolve_right hx
+    specialize h' hy
+    simp only [Submodule.mem_comap, LinearEquiv.coe_coe, reflection_apply] at h'
+    simpa using p.sub_mem h' hy
+  · have hy' : f y = 0 := by simpa using h' hy
+    simpa [reflection_apply, hy']
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, Submodule, Submodule.mem_bot, Submodule.mem_comap, Submodule.mem_span_singleton.mpr, aux.resolve_right, coe_coe, eq_bot, hp.eq_bot, mem_bot, mem_comap, mem_span_singleton, p.sub_mem, reflection_apply, resolve_right, smul_eq_zero, specialize, sub_mem, two_ne_zero
 -/
@@ -450,7 +462,39 @@ lemma reflection_mul_reflection_pow_apply
     /- Now, let us collect two facts about the evaluations of `S r k`. These easily follow from the
     properties of the `S` polynomials. -/
     have S_eval_t_sub_two (k : Int) :
-        (S R (k - 2)).eval t = t * (S R (k - 1)).eval t - (S R k
+        (S R (k - 2)).eval t = t * (S R (k - 1)).eval t - (S R k).eval t := by
+      simp [S_sub_two]
+    have S_eval_t_sq_add_S_eval_t_sq (k : Int) :
+        (S R k).eval t ^ 2 + (S R (k + 1)).eval t ^ 2 - t * (S R k).eval t * (S R (k + 1)).eval t
+        = 1 := by
+      simpa using congr_arg (Polynomial.eval t) (S_sq_add_S_sq R k)
+    -- Apply the inductive hypothesis.
+    rw [pow_succ']; rw [LinearEquiv.mul_apply]; rw [ih]; rw [LinearEquiv.mul_apply]
+    -- Expand out all the reflections and use `hf`, `hg`.
+    simp only [reflection_apply, map_add, map_sub, map_smul, hf, hg]
+    -- `m` can be written in the form `2 * k + e`, where `e` is `0` or `1`.
+    push_cast
+    rw [← Int.mul_ediv_add_emod m 2]
+    set k : Int := m / 2
+    set e : Int := m % 2
+    simp_rw [add_assoc (2 * k), add_sub_assoc (2 * k), add_comm (2 * k),
+      add_mul_ediv_left _ k (by simp : (2 : Int) != 0)]
+    have he : e = 0 ∨ e = 1 := by lia
+    clear_value e
+    /- Now, equate the coefficients on both sides. These linear combinations were
+    found using `polyrith`. -/
+    match_scalars
+    · rfl
+    · linear_combination (norm := skip) (-g z * f y * (S R (e - 1 + k)).eval t +
+          f z * (S R (e - 1 + k)).eval t) * S_eval_t_sub_two (e + k) +
+          (-g z * f y + f z) * S_eval_t_sq_add_S_eval_t_sq (k - 1)
+      subst ht
+      obtain rfl | rfl : e = 0 ∨ e = 1 := he <;> ring_nf
+    · linear_combination (norm := skip)
+          g z * (S R (e - 1 + k)).eval t * S_eval_t_sub_two (e + k) +
+          g z * S_eval_t_sq_add_S_eval_t_sq (k - 1)
+      subst ht
+      obtain rfl | rfl : e = 0 ∨ e = 1 := he <;> ring_nf
 
 中文:
 引理 reflection_mul_reflection_pow_apply
@@ -462,7 +506,39 @@ lemma reflection_mul_reflection_pow_apply
     /- Now, let us collect two facts about the evaluations of `S r k`. These easily follow from the
     properties of the `S` polynomials. -/
     have S_eval_t_sub_two (k : Int) :
-        (S R (k - 2)).eval t = t * (S R (k - 1)).eval t - (S R k
+        (S R (k - 2)).eval t = t * (S R (k - 1)).eval t - (S R k).eval t := by
+      simp [S_sub_two]
+    have S_eval_t_sq_add_S_eval_t_sq (k : Int) :
+        (S R k).eval t ^ 2 + (S R (k + 1)).eval t ^ 2 - t * (S R k).eval t * (S R (k + 1)).eval t
+        = 1 := by
+      simpa using congr_arg (Polynomial.eval t) (S_sq_add_S_sq R k)
+    -- Apply the inductive hypothesis.
+    rw [pow_succ']; rw [LinearEquiv.mul_apply]; rw [ih]; rw [LinearEquiv.mul_apply]
+    -- Expand out all the reflections and use `hf`, `hg`.
+    simp only [reflection_apply, map_add, map_sub, map_smul, hf, hg]
+    -- `m` can be written in the form `2 * k + e`, where `e` is `0` or `1`.
+    push_cast
+    rw [← Int.mul_ediv_add_emod m 2]
+    set k : Int := m / 2
+    set e : Int := m % 2
+    simp_rw [add_assoc (2 * k), add_sub_assoc (2 * k), add_comm (2 * k),
+      add_mul_ediv_left _ k (by simp : (2 : Int) != 0)]
+    have he : e = 0 ∨ e = 1 := by lia
+    clear_value e
+    /- Now, equate the coefficients on both sides. These linear combinations were
+    found using `polyrith`. -/
+    match_scalars
+    · rfl
+    · linear_combination (norm := skip) (-g z * f y * (S R (e - 1 + k)).eval t +
+          f z * (S R (e - 1 + k)).eval t) * S_eval_t_sub_two (e + k) +
+          (-g z * f y + f z) * S_eval_t_sq_add_S_eval_t_sq (k - 1)
+      subst ht
+      obtain rfl | rfl : e = 0 ∨ e = 1 := he <;> ring_nf
+    · linear_combination (norm := skip)
+          g z * (S R (e - 1 + k)).eval t * S_eval_t_sub_two (e + k) +
+          g z * S_eval_t_sq_add_S_eval_t_sq (k - 1)
+      subst ht
+      obtain rfl | rfl : e = 0 ∨ e = 1 := he <;> ring_nf
 -/
 lemma reflection_mul_reflection_pow_apply (m : Nat) (z : M)
     (t : R := f y * g x - 2) (ht : t = f y * g x - 2 := by rfl) :
@@ -551,7 +627,11 @@ lemma reflection_mul_reflection_zpow_apply
   | nat m => exact_mod_cast reflection_mul_reflection_pow_apply hf hg m z t ht
   | neg _ m =>
     have ht' : t = g x * f y - 2 := by rwa [mul_comm (g x)]
-    rw [zpow_neg]; rw [← inv_zpow]; rw [mul_inv_rev]; rw [reflection_inv]; rw [reflection_inv]; rw [z
+    rw [zpow_neg]; rw [← inv_zpow]; rw [mul_inv_rev]; rw [reflection_inv]; rw [reflection_inv]; rw [zpow_natCast]; rw [reflection_mul_reflection_pow_apply hg hf m z t ht']; rw [add_right_comm z]
+    have aux (a b : Int) (hab : a + b = -3 := by lia) : a / 2 = -(b / 2) - 2 := by lia
+    rw [aux (-m - 3) m]; rw [aux (-m - 2) (m - 1)]; rw [aux (-m - 1) (m - 2)]; rw [aux (-m) (m - 3)]
+    simp only [S_neg_sub_two, Polynomial.eval_neg]
+    ring_nf
 
 中文:
 引理 reflection_mul_reflection_zpow_apply
@@ -561,7 +641,11 @@ lemma reflection_mul_reflection_zpow_apply
   | nat m => exact_mod_cast reflection_mul_reflection_pow_apply hf hg m z t ht
   | neg _ m =>
     have ht' : t = g x * f y - 2 := by rwa [mul_comm (g x)]
-    rw [zpow_neg]; rw [← inv_zpow]; rw [mul_inv_rev]; rw [reflection_inv]; rw [reflection_inv]; rw [z
+    rw [zpow_neg]; rw [← inv_zpow]; rw [mul_inv_rev]; rw [reflection_inv]; rw [reflection_inv]; rw [zpow_natCast]; rw [reflection_mul_reflection_pow_apply hg hf m z t ht']; rw [add_right_comm z]
+    have aux (a b : Int) (hab : a + b = -3 := by lia) : a / 2 = -(b / 2) - 2 := by lia
+    rw [aux (-m - 3) m]; rw [aux (-m - 2) (m - 1)]; rw [aux (-m - 1) (m - 2)]; rw [aux (-m) (m - 3)]
+    simp only [S_neg_sub_two, Polynomial.eval_neg]
+    ring_nf
 -/
 lemma reflection_mul_reflection_zpow_apply (m : Int) (z : M)
     (t : R := f y * g x - 2) (ht : t = f y * g x - 2 := by rfl) :
@@ -622,7 +706,26 @@ lemma reflection_mul_reflection_zpow_apply_self
   have S_eval_t_sub_two (k : Int) :
       (S R (k - 2)).eval t = (f y * g x - 2) * (S R (k - 1)).eval t - (S R k).eval t := by
     simp [S_sub_two, ht]
-  induction
+  induction m with
+  | zero => simp
+  | succ m ih =>
+    -- Apply the inductive hypothesis.
+    rw [add_comm (m : Int) 1]; rw [zpow_one_add]; rw [LinearEquiv.mul_apply]; rw [LinearEquiv.mul_apply]; rw [ih]
+    -- Expand out all the reflections and use `hf`, `hg`.
+    simp only [reflection_apply, map_add, map_sub, map_smul, hf, hg]
+    -- Equate coefficients of `x` and `y`.
+    match_scalars
+    · linear_combination (norm := ring_nf) -S_eval_t_sub_two (m + 1)
+    · ring_nf
+  | pred m ih =>
+    -- Apply the inductive hypothesis.
+    rw [sub_eq_add_neg (-m : Int) 1]; rw [add_comm (-m : Int) (-1)]; rw [zpow_add]; rw [zpow_neg_one]; rw [mul_inv_rev]; rw [reflection_inv]; rw [reflection_inv]; rw [LinearEquiv.mul_apply]; rw [LinearEquiv.mul_apply]; rw [ih]
+    -- Expand out all the reflections and use `hf`, `hg`.
+    simp only [reflection_apply, map_add, map_sub, map_smul, hf, hg]
+    -- Equate coefficients of `x` and `y`.
+    match_scalars
+    · linear_combination (norm := ring_nf) -S_eval_t_sub_two (-m)
+    · linear_combination (norm := ring_nf) g x * S_eval_t_sub_two (-m)
 
 中文:
 引理 reflection_mul_reflection_zpow_apply_self
@@ -633,7 +736,26 @@ lemma reflection_mul_reflection_zpow_apply_self
   have S_eval_t_sub_two (k : Int) :
       (S R (k - 2)).eval t = (f y * g x - 2) * (S R (k - 1)).eval t - (S R k).eval t := by
     simp [S_sub_two, ht]
-  induction
+  induction m with
+  | zero => simp
+  | succ m ih =>
+    -- Apply the inductive hypothesis.
+    rw [add_comm (m : Int) 1]; rw [zpow_one_add]; rw [LinearEquiv.mul_apply]; rw [LinearEquiv.mul_apply]; rw [ih]
+    -- Expand out all the reflections and use `hf`, `hg`.
+    simp only [reflection_apply, map_add, map_sub, map_smul, hf, hg]
+    -- Equate coefficients of `x` and `y`.
+    match_scalars
+    · linear_combination (norm := ring_nf) -S_eval_t_sub_two (m + 1)
+    · ring_nf
+  | pred m ih =>
+    -- Apply the inductive hypothesis.
+    rw [sub_eq_add_neg (-m : Int) 1]; rw [add_comm (-m : Int) (-1)]; rw [zpow_add]; rw [zpow_neg_one]; rw [mul_inv_rev]; rw [reflection_inv]; rw [reflection_inv]; rw [LinearEquiv.mul_apply]; rw [LinearEquiv.mul_apply]; rw [ih]
+    -- Expand out all the reflections and use `hf`, `hg`.
+    simp only [reflection_apply, map_add, map_sub, map_smul, hf, hg]
+    -- Equate coefficients of `x` and `y`.
+    match_scalars
+    · linear_combination (norm := ring_nf) -S_eval_t_sub_two (-m)
+    · linear_combination (norm := ring_nf) g x * S_eval_t_sub_two (-m)
 -/
 lemma reflection_mul_reflection_zpow_apply_self (m : Int)
     (t : R := f y * g x - 2) (ht : t = f y * g x - 2 := by rfl) :
@@ -754,7 +876,26 @@ lemma Dual.eq_of_preReflection_mapsTo
   have hu : u = LinearMap.id (R := R) (M := M) + (f - g).smulRight x := by
     ext y
     simp only [u, reflection_apply, hg₁, two_smul, LinearEquiv.coe_toLinearMap_mul,
-      LinearMap.id_coe, LinearEquiv.
+      LinearMap.id_coe, LinearEquiv.coe_coe, Module.End.mul_apply, LinearMap.add_apply, id_eq,
+      LinearMap.coe_smulRight, LinearMap.sub_apply, map_sub, map_smul, sub_add_cancel_left,
+      smul_neg, sub_neg_eq_add, sub_smul]
+    abel
+  replace hu : forall (n : Nat),
+      ↑(u ^ n) = LinearMap.id (R := R) (M := M) + (n : R) • (f - g).smulRight x := by
+    intro n
+    induction n with
+    | zero => simp
+    | succ n ih =>
+      have : ((f - g).smulRight x).comp ((n : R) • (f - g).smulRight x) = 0 := by
+        ext; simp [hf₁, hg₁]
+      rw [pow_succ']; rw [LinearEquiv.coe_toLinearMap_mul]; rw [ih]; rw [hu]; rw [add_mul]; rw [mul_add]; rw [mul_add]
+      simp_rw [Module.End.mul_eq_comp, LinearMap.comp_id, LinearMap.id_comp, this, add_zero,
+        add_assoc, Nat.cast_succ, add_smul, one_smul]
+  suffices IsOfFinOrder u by
+    obtain ⟨n, hn₀, hn₁⟩ := isOfFinOrder_iff_pow_eq_one.mp this
+    replace hn₁ : (↑(u ^ n) : M ->ₗ[R] M) = LinearMap.id := LinearEquiv.toLinearMap_inj.mpr hn₁
+    simpa [hn₁, hn₀.ne', hx, sub_eq_zero] using hu n
+  exact u.isOfFinOrder_of_finite_of_span_eq_top_of_mapsTo hΦ₁ hΦ₂ (hg₂.comp hf₂)
 
 中文:
 引理 对偶.eq_of_preReflection_mapsTo
@@ -765,7 +906,26 @@ lemma Dual.eq_of_preReflection_mapsTo
   have hu : u = LinearMap.id (R := R) (M := M) + (f - g).smulRight x := by
     ext y
     simp only [u, reflection_apply, hg₁, two_smul, LinearEquiv.coe_toLinearMap_mul,
-      LinearMap.id_coe, LinearEquiv.
+      LinearMap.id_coe, LinearEquiv.coe_coe, Module.End.mul_apply, LinearMap.add_apply, id_eq,
+      LinearMap.coe_smulRight, LinearMap.sub_apply, map_sub, map_smul, sub_add_cancel_left,
+      smul_neg, sub_neg_eq_add, sub_smul]
+    abel
+  replace hu : forall (n : Nat),
+      ↑(u ^ n) = LinearMap.id (R := R) (M := M) + (n : R) • (f - g).smulRight x := by
+    intro n
+    induction n with
+    | zero => simp
+    | succ n ih =>
+      have : ((f - g).smulRight x).comp ((n : R) • (f - g).smulRight x) = 0 := by
+        ext; simp [hf₁, hg₁]
+      rw [pow_succ']; rw [LinearEquiv.coe_toLinearMap_mul]; rw [ih]; rw [hu]; rw [add_mul]; rw [mul_add]; rw [mul_add]
+      simp_rw [Module.End.mul_eq_comp, LinearMap.comp_id, LinearMap.id_comp, this, add_zero,
+        add_assoc, Nat.cast_succ, add_smul, one_smul]
+  suffices IsOfFinOrder u by
+    obtain ⟨n, hn₀, hn₁⟩ := isOfFinOrder_iff_pow_eq_one.mp this
+    replace hn₁ : (↑(u ^ n) : M ->ₗ[R] M) = LinearMap.id := LinearEquiv.toLinearMap_inj.mpr hn₁
+    simpa [hn₁, hn₀.ne', hx, sub_eq_zero] using hu n
+  exact u.isOfFinOrder_of_finite_of_span_eq_top_of_mapsTo hΦ₁ hΦ₂ (hg₂.comp hf₂)
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.coe_toLinearMap_mul, LinearMap, LinearMap.add_apply, LinearMap.coe_smulRight, LinearMap.id, LinearMap.id_coe, LinearMap.sub_apply, Module, Module.End.mul_apply, add_apply, coe_coe, coe_smulRight, coe_toLinearMap_mul, id_coe, id_eq, map_smul, map_sub, mul_apply
 -/
@@ -814,7 +974,16 @@ lemma Dual.eq_of_preReflection_mapsTo'
     simp only [Φ']
     rw [range_inclusion]
     simp
-  let x' : span
+  let x' : span R Φ := ⟨x, hx⟩
+  have : forall {F : Dual R M}, MapsTo (preReflection x F) Φ Φ ->
+      MapsTo (preReflection x' ((span R Φ).subtype.dualMap F)) Φ' Φ' := by
+    intro F hF ⟨y, hy⟩ hy'
+    simp only [Φ'] at hy' ⊢
+    rw [range_inclusion] at hy'
+    simp only [SetLike.coe_sort_coe, mem_ofPred_eq] at hy' ⊢
+    rw [range_inclusion]
+    exact hF hy'
+  exact eq_of_preReflection_mapsTo hΦ'₁ hΦ'₂ hf₁ (this hf₂) hg₁ (this hg₂)
 
 中文:
 引理 对偶.eq_of_preReflection_mapsTo'
@@ -827,7 +996,16 @@ lemma Dual.eq_of_preReflection_mapsTo'
     simp only [Φ']
     rw [range_inclusion]
     simp
-  let x' : span
+  let x' : span R Φ := ⟨x, hx⟩
+  have : forall {F : Dual R M}, MapsTo (preReflection x F) Φ Φ ->
+      MapsTo (preReflection x' ((span R Φ).subtype.dualMap F)) Φ' Φ' := by
+    intro F hF ⟨y, hy⟩ hy'
+    simp only [Φ'] at hy' ⊢
+    rw [range_inclusion] at hy'
+    simp only [SetLike.coe_sort_coe, mem_ofPred_eq] at hy' ⊢
+    rw [range_inclusion]
+    exact hF hy'
+  exact eq_of_preReflection_mapsTo hΦ'₁ hΦ'₂ hf₁ (this hf₂) hg₁ (this hg₂)
 
 Depends on / 依赖: Finite, MapsTo, Submodule, Submodule.subset_span, dualMap, finite_coe_iff, finite_range, inclusion, preReflection, range_inclusion, subset_span, subtype, subtype.dualMap
 -/
@@ -870,7 +1048,10 @@ lemma reflection_reflection_iterate
     have hz : forall z : M, f y • g x • z = 2 • 2 • z := by
       intro z
       rw [smul_smul]; rw [hgxfy]; rw [smul_smul]; rw [← Nat.cast_smul_eq_nsmul R (2 * 2)]; rw [show 2 * 2 = 4 from rfl]; rw [Nat.cast_ofNat]
-    simp only [iterate_succ',
+    simp only [iterate_succ', comp_apply, ih, two_smul, smul_sub, smul_add, map_add,
+      LinearEquiv.trans_apply, reflection_apply_self, map_neg, reflection_apply, neg_sub, map_sub,
+      map_nsmul, map_smul, smul_neg, hz, add_smul]
+    abel
 
 中文:
 引理 reflection_reflection_iterate
@@ -881,7 +1062,10 @@ lemma reflection_reflection_iterate
     have hz : forall z : M, f y • g x • z = 2 • 2 • z := by
       intro z
       rw [smul_smul]; rw [hgxfy]; rw [smul_smul]; rw [← Nat.cast_smul_eq_nsmul R (2 * 2)]; rw [show 2 * 2 = 4 from rfl]; rw [Nat.cast_ofNat]
-    simp only [iterate_succ',
+    simp only [iterate_succ', comp_apply, ih, two_smul, smul_sub, smul_add, map_add,
+      LinearEquiv.trans_apply, reflection_apply_self, map_neg, reflection_apply, neg_sub, map_sub,
+      map_nsmul, map_smul, smul_neg, hz, add_smul]
+    abel
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.trans_apply, Nat.cast_ofNat, Nat.cast_smul_eq_nsmul, add_smul, cast_ofNat, cast_smul_eq_nsmul, comp_apply, iterate_succ, map_add, map_neg, map_nsmul, map_smul, map_sub, neg_sub, reflection_apply, reflection_apply_self, smul_add, smul_neg, smul_smul
 -/
@@ -934,7 +1118,12 @@ lemma eq_of_mapsTo_reflection_of_mem
     exact smul_right_injective _ two_ne_zero h
   contrapose! hΦ
   apply ((infinite_range_reflection_reflection_iterate_iff hfx hgy
-    (by rw [hfy, hgx]; norm_cast))
+    (by rw [hfy, hgx]; norm_cast)).mpr hΦ).mono
+  rw [range_subset_iff]
+  intro n
+  rw [← IsFixedPt.image_iterate ((bijOn_reflection_of_mapsTo hfx hxfΦ).comp
+    (bijOn_reflection_of_mapsTo hgy hygΦ)).image_eq n]
+  exact mem_image_of_mem _ hyΦ
 
 中文:
 引理 eq_of_mapsTo_reflection_of_mem
@@ -945,7 +1134,12 @@ lemma eq_of_mapsTo_reflection_of_mem
     exact smul_right_injective _ two_ne_zero h
   contrapose! hΦ
   apply ((infinite_range_reflection_reflection_iterate_iff hfx hgy
-    (by rw [hfy, hgx]; norm_cast))
+    (by rw [hfy, hgx]; norm_cast)).mpr hΦ).mono
+  rw [range_subset_iff]
+  intro n
+  rw [← IsFixedPt.image_iterate ((bijOn_reflection_of_mapsTo hfx hxfΦ).comp
+    (bijOn_reflection_of_mapsTo hgy hygΦ)).image_eq n]
+  exact mem_image_of_mem _ hyΦ
 
 Depends on / 依赖: IsFixedPt, IsFixedPt.image_iterate, bijOn_reflection_of_mapsTo, contrapose, image_eq, image_iterate, infinite_range_reflection_reflection_iterate_iff, mem_image_of_mem, range_subset_iff, smul_right_injective, two_ne_zero, two_smul, two_zsmul
 -/
@@ -979,7 +1173,9 @@ lemma injOn_dualMap_subtype_span_range_range
   suffices forall k, c i (r k) = c j (r k) by
     rw [← EmbeddingLike.apply_eq_iff_eq r]
     exact eq_of_mapsTo_reflection_of_mem (f := c i) (g := c j) hfin (h_two i) (h_two j)
-      (by rw [← this, h_two]) (by rw [this, h_two]) (h_mapsTo i) (h_mapsTo j)
+      (by rw [← this, h_two]) (by rw [this, h_two]) (h_mapsTo i) (h_mapsTo j) (mem_range_self j)
+  intro k
+  simpa using LinearMap.congr_fun hij ⟨r k, Submodule.subset_span (mem_range_self k)⟩
 
 中文:
 引理 injOn_dualMap_subtype_span_range_range
@@ -990,7 +1186,9 @@ lemma injOn_dualMap_subtype_span_range_range
   suffices forall k, c i (r k) = c j (r k) by
     rw [← EmbeddingLike.apply_eq_iff_eq r]
     exact eq_of_mapsTo_reflection_of_mem (f := c i) (g := c j) hfin (h_two i) (h_two j)
-      (by rw [← this, h_two]) (by rw [this, h_two]) (h_mapsTo i) (h_mapsTo j)
+      (by rw [← this, h_two]) (by rw [this, h_two]) (h_mapsTo i) (h_mapsTo j) (mem_range_self j)
+  intro k
+  simpa using LinearMap.congr_fun hij ⟨r k, Submodule.subset_span (mem_range_self k)⟩
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, LinearMap, LinearMap.congr_fun, Submodule, Submodule.subset_span, apply_eq_iff_eq, congr_fun, eq_of_mapsTo_reflection_of_mem, h_mapsTo, h_two, mem_range_self, subset_span
 -/

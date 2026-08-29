@@ -570,7 +570,8 @@ definition isColimitFreeYonedaCoproductsCokernelCofork
     { τ₁ := fromFreeYonedaCoproduct _
       τ₂ := 𝟙 _
       τ₃ := 𝟙 _ }
-  exact ((ShortComplex.exact_iff_of_epi_of_isIso_of
+  exact ((ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ).2
+    (T.exact_of_f_is_kernel (kernelIsKernel _))).gIsCokernel
 
 中文:
 定义 isColimitFreeYonedaCoproductsCokernelCofork
@@ -582,7 +583,8 @@ definition isColimitFreeYonedaCoproductsCokernelCofork
     { τ₁ := fromFreeYonedaCoproduct _
       τ₂ := 𝟙 _
       τ₃ := 𝟙 _ }
-  exact ((ShortComplex.exact_iff_of_epi_of_isIso_of
+  exact ((ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ).2
+    (T.exact_of_f_is_kernel (kernelIsKernel _))).gIsCokernel
 
 Depends on / 依赖: M.fromFreeYonedaCoproduct, M.toFreeYonedaCoproduct_fromFreeYonedaCoproduct, ShortComplex, ShortComplex.exact_iff_of_epi_of_isIso_of_mono, ShortComplex.mk, T.exact_of_f_is_kernel, condition, exact_iff_of_epi_of_isIso_of_mono, exact_of_f_is_kernel, fromFreeYonedaCoproduct, gIsCokernel, kernel, kernel.condition, kernelIsKernel, toFreeYonedaCoproduct_fromFreeYonedaCoproduct
 -/

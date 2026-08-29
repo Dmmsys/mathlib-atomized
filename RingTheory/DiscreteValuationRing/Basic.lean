@@ -132,7 +132,10 @@ theorem irreducible_of_span_eq_maximalIdeal
   rw [h]; rw [mem_span_singleton'] at ha hb
   rcases ha with ⟨a, rfl⟩
   rcases hb with ⟨b, rfl⟩
- 
+  rw [show a * ϖ * (b * ϖ) = ϖ * (ϖ * (a * b)) by ring] at hab
+  apply hϖ
+  apply eq_zero_of_mul_eq_self_right _ hab.symm
+  exact fun hh => h2 (isUnit_of_dvd_one ⟨_, hh.symm⟩)
 
 中文:
 定理 irreducible_of_span_eq_maximalIdeal
@@ -145,7 +148,10 @@ theorem irreducible_of_span_eq_maximalIdeal
   rw [h]; rw [mem_span_singleton'] at ha hb
   rcases ha with ⟨a, rfl⟩
   rcases hb with ⟨b, rfl⟩
- 
+  rw [show a * ϖ * (b * ϖ) = ϖ * (ϖ * (a * b)) by ring] at hab
+  apply hϖ
+  apply eq_zero_of_mul_eq_self_right _ hab.symm
+  exact fun hh => h2 (isUnit_of_dvd_one ⟨_, hh.symm⟩)
 
 Depends on / 依赖: IsUnit, Submodule, Submodule.mem_span_singleton_self, eq_zero_of_mul_eq_self_right, h.symm, hab.symm, hh.symm, isUnit_of_dvd_one, maximalIdeal, mem_span_singleton, mem_span_singleton_self
 -/
@@ -268,7 +274,20 @@ theorem iff_pid_with_one_nonzero_prime
     · exact ⟨Rlocal, inferInstance⟩
     · rintro Q ⟨hQ1, hQ2⟩
       obtain ⟨q, rfl⟩ := (IsPrincipalIdealRing.principal Q).1
-      have hq : q != 0 := b
+      have hq : q != 0 := by
+        rintro rfl
+        apply hQ1
+        simp
+      rw [submodule_span_eq]; rw [span_singleton_prime hq] at hQ2
+      replace hQ2 := hQ2.irreducible
+      rw [irreducible_iff_uniformizer] at hQ2
+      exact hQ2.symm
+  · rintro ⟨RPID, Punique⟩
+    have : IsLocalRing R := IsLocalRing.of_unique_nonzero_prime Punique
+    refine { not_a_field' := ?_ }
+    rcases Punique with ⟨P, ⟨hP1, hP2⟩, _⟩
+    have hPM : P <= maximalIdeal R := le_maximalIdeal hP2.1
+    order
 
 中文:
 定理 iff_pid_with_one_nonzero_prime
@@ -284,7 +303,20 @@ theorem iff_pid_with_one_nonzero_prime
     · exact ⟨Rlocal, inferInstance⟩
     · rintro Q ⟨hQ1, hQ2⟩
       obtain ⟨q, rfl⟩ := (IsPrincipalIdealRing.principal Q).1
-      have hq : q != 0 := b
+      have hq : q != 0 := by
+        rintro rfl
+        apply hQ1
+        simp
+      rw [submodule_span_eq]; rw [span_singleton_prime hq] at hQ2
+      replace hQ2 := hQ2.irreducible
+      rw [irreducible_iff_uniformizer] at hQ2
+      exact hQ2.symm
+  · rintro ⟨RPID, Punique⟩
+    have : IsLocalRing R := IsLocalRing.of_unique_nonzero_prime Punique
+    refine { not_a_field' := ?_ }
+    rcases Punique with ⟨P, ⟨hP1, hP2⟩, _⟩
+    have hPM : P <= maximalIdeal R := le_maximalIdeal hP2.1
+    order
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.maximalIdeal, IsLocalRing.of_unique, IsPrincipalIdealRing, IsPrincipalIdealRing.principal, Punique, Rlocal, hQ2.irreducible, hQ2.symm, irreducible, irreducible_iff_uniformizer, maximalIdeal, of_unique, principal, replace, span_singleton_prime, submodule_span_eq
 -/
@@ -377,7 +409,19 @@ theorem unique_irreducible
   intro p hp
   obtain ⟨n, hn⟩ := hR hp.ne_zero
   have : Irreducible (ϖ ^ n) := hn.symm.irreducible hp
-  rcases lt_trichotomy n 1 with
+  rcases lt_trichotomy n 1 with (H | rfl | H)
+  · obtain rfl : n = 0 := by
+      clear hn this
+      revert H n
+      decide
+    simp [not_irreducible_one, pow_zero] at this
+  · simpa only [pow_one] using hn.symm
+  · obtain ⟨n, rfl⟩ : exists k, n = 1 + k + 1 := Nat.exists_eq_add_of_lt H
+    rw [pow_succ'] at this
+    rcases this.isUnit_or_isUnit rfl with (H0 | H0)
+    · exact (hϖ.not_isUnit H0).elim
+    · rw [add_comm, pow_succ'] at H0
+      exact (hϖ.not_isUnit (isUnit_of_mul_isUnit_left H0)).elim
 
 中文:
 定理 unique_irreducible
@@ -390,7 +434,19 @@ theorem unique_irreducible
   intro p hp
   obtain ⟨n, hn⟩ := hR hp.ne_zero
   have : Irreducible (ϖ ^ n) := hn.symm.irreducible hp
-  rcases lt_trichotomy n 1 with
+  rcases lt_trichotomy n 1 with (H | rfl | H)
+  · obtain rfl : n = 0 := by
+      clear hn this
+      revert H n
+      decide
+    simp [not_irreducible_one, pow_zero] at this
+  · simpa only [pow_one] using hn.symm
+  · obtain ⟨n, rfl⟩ : exists k, n = 1 + k + 1 := Nat.exists_eq_add_of_lt H
+    rw [pow_succ'] at this
+    rcases this.isUnit_or_isUnit rfl with (H0 | H0)
+    · exact (hϖ.not_isUnit H0).elim
+    · rw [add_comm, pow_succ'] at H0
+      exact (hϖ.not_isUnit (isUnit_of_mul_isUnit_left H0)).elim
 
 Depends on / 依赖: Associated, Associated.trans, Irreducible, Nat.exists_eq_a, exists_eq_a, hn.symm, hn.symm.irreducible, hp.ne_zero, irreducible, lt_trichotomy, ne_zero, not_irreducible_one, pow_one, pow_zero, revert
 -/
@@ -432,7 +488,24 @@ theorem toUniqueFactorizationMonoid
     · intro q hq
       have hpq := Multiset.eq_of_mem_replicate hq
       rw [hpq]
-      r
+      refine ⟨spec.1.ne_zero, spec.1.not_isUnit, ?_⟩
+      intro a b h
+      by_cases ha : a = 0
+      · rw [ha]
+        simp only [true_or, dvd_zero]
+      obtain ⟨m, u, rfl⟩ := spec.2 ha
+      rw [mul_assoc]; rw [mul_left_comm]; rw [Units.dvd_mul_left] at h
+      rw [Units.dvd_mul_right]
+      by_cases hm : m = 0
+      · simp only [hm, one_mul, pow_zero] at h ⊢
+        right
+        exact h
+      left
+      obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hm
+      rw [pow_succ']
+      apply dvd_mul_of_dvd_left dvd_rfl _
+    · rw [Multiset.prod_replicate]
+      exact Classical.choose_spec (spec.2 hx)
 
 中文:
 定理 toUniqueFactorizationMonoid
@@ -445,7 +518,24 @@ theorem toUniqueFactorizationMonoid
     · intro q hq
       have hpq := Multiset.eq_of_mem_replicate hq
       rw [hpq]
-      r
+      refine ⟨spec.1.ne_zero, spec.1.not_isUnit, ?_⟩
+      intro a b h
+      by_cases ha : a = 0
+      · rw [ha]
+        simp only [true_or, dvd_zero]
+      obtain ⟨m, u, rfl⟩ := spec.2 ha
+      rw [mul_assoc]; rw [mul_left_comm]; rw [Units.dvd_mul_left] at h
+      rw [Units.dvd_mul_right]
+      by_cases hm : m = 0
+      · simp only [hm, one_mul, pow_zero] at h ⊢
+        right
+        exact h
+      left
+      obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hm
+      rw [pow_succ']
+      apply dvd_mul_of_dvd_left dvd_rfl _
+    · rw [Multiset.prod_replicate]
+      exact Classical.choose_spec (spec.2 hx)
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, Multiset, Multiset.eq_of_mem_replicate, Multiset.replicate, UniqueFactorizationMonoid, UniqueFactorizationMonoid.of_exists_prime_factors, Units.dvd_mul_left, Units.dvd_mul_r, choose_spec, dvd_mul_left, dvd_mul_r, dvd_zero, eq_of_mem_replicate, mul_assoc, mul_left_comm, ne_zero, not_isUnit, of_exists_prime_factors
 -/
@@ -493,7 +583,14 @@ theorem of_ufd_of_unique_irreducible
   refine ⟨Multiset.card fx, ?_⟩
   have H := hfx.2
   rw [← Associates.mk_eq_mk_iff_associated] at H ⊢
-  rw [← H]; rw [← Associates.prod_mk]; rw [Associates.mk_pow]; rw [← Multiset.prod_re
+  rw [← H]; rw [← Associates.prod_mk]; rw [Associates.mk_pow]; rw [← Multiset.prod_replicate]
+  congr 1
+  symm
+  rw [Multiset.eq_replicate]
+  simp only [true_and, and_imp, Multiset.card_map, Multiset.mem_map, exists_imp]
+  rintro _ q hq rfl
+  rw [Associates.mk_eq_mk_iff_associated]
+  apply h₂ (hfx.1 _ hq) hp
 
 中文:
 定理 of_ufd_of_unique_irreducible
@@ -506,7 +603,14 @@ theorem of_ufd_of_unique_irreducible
   refine ⟨Multiset.card fx, ?_⟩
   have H := hfx.2
   rw [← Associates.mk_eq_mk_iff_associated] at H ⊢
-  rw [← H]; rw [← Associates.prod_mk]; rw [Associates.mk_pow]; rw [← Multiset.prod_re
+  rw [← H]; rw [← Associates.prod_mk]; rw [Associates.mk_pow]; rw [← Multiset.prod_replicate]
+  congr 1
+  symm
+  rw [Multiset.eq_replicate]
+  simp only [true_and, and_imp, Multiset.card_map, Multiset.mem_map, exists_imp]
+  rintro _ q hq rfl
+  rw [Associates.mk_eq_mk_iff_associated]
+  apply h₂ (hfx.1 _ hq) hp
 
 Depends on / 依赖: Associates, Associates.mk_eq_mk_iff_associated, Associates.mk_pow, Associates.prod_mk, Multiset, Multiset.card, Multiset.card_map, Multiset.eq_replicate, Multiset.mem_map, Multiset.prod_replicate, WfDvdMonoid, WfDvdMonoid.exists_factors, and_imp, card_map, eq_replicate, exists_factors, exists_imp, mem_map, mk_eq_mk_iff_associated, mk_pow
 -/
@@ -546,7 +650,25 @@ theorem aux_pid_of_ufd_of_unique_irreducible
     use 0
     simp only [Set.singleton_zero, Submodule.span_zero]
   obtain ⟨x, hxI, hx0⟩ : exists x in I, x != (0 : R) := I.ne_bot_iff.mp I0
-  obtain ⟨p, _, H⟩ := HasUnitMulPowIrreducibleFactorization.of_ufd_of_unique_irreducib
+  obtain ⟨p, _, H⟩ := HasUnitMulPowIrreducibleFactorization.of_ufd_of_unique_irreducible h₁ h₂
+  have ex : exists n : Nat, p ^ n in I := by
+    obtain ⟨n, u, rfl⟩ := H hx0
+    refine ⟨n, ?_⟩
+    simpa only [Units.mul_inv_cancel_right] using I.mul_mem_right (↑u⁻¹) hxI
+  constructor
+  use p ^ Nat.find ex
+  change I = Ideal.span _
+  apply le_antisymm
+  · intro r hr
+    by_cases hr0 : r = 0
+    · simp only [hr0, Submodule.zero_mem]
+    obtain ⟨n, u, rfl⟩ := H hr0
+    simp only [mem_span_singleton, Units.isUnit, IsUnit.dvd_mul_right]
+    apply pow_dvd_pow
+    apply Nat.find_min'
+    simpa only [Units.mul_inv_cancel_right] using I.mul_mem_right (↑u⁻¹) hr
+  · rw [span_singleton_le_iff_mem]
+    exact Nat.find_spec ex
 
 中文:
 定理 aux_pid_of_ufd_of_unique_irreducible
@@ -560,7 +682,25 @@ theorem aux_pid_of_ufd_of_unique_irreducible
     use 0
     simp only [Set.singleton_zero, Submodule.span_zero]
   obtain ⟨x, hxI, hx0⟩ : exists x in I, x != (0 : R) := I.ne_bot_iff.mp I0
-  obtain ⟨p, _, H⟩ := HasUnitMulPowIrreducibleFactorization.of_ufd_of_unique_irreducib
+  obtain ⟨p, _, H⟩ := HasUnitMulPowIrreducibleFactorization.of_ufd_of_unique_irreducible h₁ h₂
+  have ex : exists n : Nat, p ^ n in I := by
+    obtain ⟨n, u, rfl⟩ := H hx0
+    refine ⟨n, ?_⟩
+    simpa only [Units.mul_inv_cancel_right] using I.mul_mem_right (↑u⁻¹) hxI
+  constructor
+  use p ^ Nat.find ex
+  change I = Ideal.span _
+  apply le_antisymm
+  · intro r hr
+    by_cases hr0 : r = 0
+    · simp only [hr0, Submodule.zero_mem]
+    obtain ⟨n, u, rfl⟩ := H hr0
+    simp only [mem_span_singleton, Units.isUnit, IsUnit.dvd_mul_right]
+    apply pow_dvd_pow
+    apply Nat.find_min'
+    simpa only [Units.mul_inv_cancel_right] using I.mul_mem_right (↑u⁻¹) hr
+  · rw [span_singleton_le_iff_mem]
+    exact Nat.find_spec ex
 
 Depends on / 依赖: HasUnitMulPowIrreducibleFactorization, HasUnitMulPowIrreducibleFactorization.of_ufd_of_unique_irreducible, I.mul_mem_right, I.ne_bot_iff.mp, Ideal.span, Nat.find, Set.singleton_zero, Submodule, Submodule.span_zero, Units.mul_inv_cancel_right, classical, mul_inv_cancel_right, mul_mem_right, ne_bot_iff, of_ufd_of_unique_irreducible, singleton_zero, span_zero
 -/
@@ -609,7 +749,14 @@ theorem of_ufd_of_unique_irreducible
   refine ⟨PID, ⟨Ideal.span {p}, ⟨?_, ?_⟩, ?_⟩⟩
   · rw [Submodule.ne_bot_iff]
     exact ⟨p, Ideal.mem_span_singleton.mpr (dvd_refl p), hp.ne_zero⟩
-  · rw
+  · rwa [Ideal.span_singleton_prime hp.ne_zero, ← UniqueFactorizationMonoid.irreducible_iff_prime]
+  · intro I
+    rw [← Submodule.IsPrincipal.span_singleton_generator I]
+    rintro ⟨I0, hI⟩
+    apply span_singleton_eq_span_singleton.mpr
+    apply h₂ _ hp
+    rw [Ne]; rw [Submodule.span_singleton_eq_bot] at I0
+    rwa [UniqueFactorizationMonoid.irreducible_iff_prime, ← Ideal.span_singleton_prime I0]
 
 中文:
 定理 of_ufd_of_unique_irreducible
@@ -621,7 +768,14 @@ theorem of_ufd_of_unique_irreducible
   refine ⟨PID, ⟨Ideal.span {p}, ⟨?_, ?_⟩, ?_⟩⟩
   · rw [Submodule.ne_bot_iff]
     exact ⟨p, Ideal.mem_span_singleton.mpr (dvd_refl p), hp.ne_zero⟩
-  · rw
+  · rwa [Ideal.span_singleton_prime hp.ne_zero, ← UniqueFactorizationMonoid.irreducible_iff_prime]
+  · intro I
+    rw [← Submodule.IsPrincipal.span_singleton_generator I]
+    rintro ⟨I0, hI⟩
+    apply span_singleton_eq_span_singleton.mpr
+    apply h₂ _ hp
+    rw [Ne]; rw [Submodule.span_singleton_eq_bot] at I0
+    rwa [UniqueFactorizationMonoid.irreducible_iff_prime, ← Ideal.span_singleton_prime I0]
 
 Depends on / 依赖: Ideal.mem_span_singleton.mpr, Ideal.span, Ideal.span_singleton_prime, IsPrincipal, IsPrincipalIdealRing, Submodule, Submodule.IsPrincipal.span_singleton_generator, Submodule.ne_bot_iff, UniqueFactorizationMonoid, UniqueFactorizationMonoid.irreducible_iff_prime, aux_pid_of_ufd_of_unique_irreducible, dvd_refl, hp.ne_zero, iff_pid_with_one_nonzero_prime, irreducible_iff_prime, mem_span_singleton, ne_bot_iff, ne_zero, span_singleton_eq_span_singleton, span_singleton_eq_span_singleton.mp
 -/
@@ -686,7 +840,11 @@ theorem RingEquivClass.isDiscreteValuationRing
   not_a_field' := by
     obtain ⟨a, ha⟩ := Submodule.nonzero_mem_of_bot_lt (bot_lt_iff_ne_bot.mpr
  IsDiscreteValuationRing.not_a_field A)
-    rw [Submodule.
+    rw [Submodule.ne_bot_iff]
+    refine ⟨e a, ⟨?_, by simp only [ne_eq, EmbeddingLike.map_eq_zero_iff, ZeroMemClass.coe_eq_zero,
+      ha, not_false_eq_true]⟩⟩
+    rw [IsLocalRing.mem_maximalIdeal]; rw [map_mem_nonunits_iff e]; rw [← IsLocalRing.mem_maximalIdeal]
+    exact a.2
 
 中文:
 定理 环等价类.isDiscreteValuationRing
@@ -697,7 +855,11 @@ theorem RingEquivClass.isDiscreteValuationRing
   not_a_field' := by
     obtain ⟨a, ha⟩ := Submodule.nonzero_mem_of_bot_lt (bot_lt_iff_ne_bot.mpr
  IsDiscreteValuationRing.not_a_field A)
-    rw [Submodule.
+    rw [Submodule.ne_bot_iff]
+    refine ⟨e a, ⟨?_, by simp only [ne_eq, EmbeddingLike.map_eq_zero_iff, ZeroMemClass.coe_eq_zero,
+      ha, not_false_eq_true]⟩⟩
+    rw [IsLocalRing.mem_maximalIdeal]; rw [map_mem_nonunits_iff e]; rw [← IsLocalRing.mem_maximalIdeal]
+    exact a.2
 
 Depends on / 依赖: isPrincipalIdealRing_iff
 -/
@@ -734,7 +896,14 @@ theorem associated_pow_irreducible
   have H := hfx.2
   rw [← Associates.mk_eq_mk_iff_associated] at H ⊢
   rw [← H]; rw [← Associates.prod_mk]; rw [Associates.mk_pow]; rw [← Multiset.prod_replicate]
-  
+  congr 1
+  rw [Multiset.eq_replicate]
+  simp only [true_and, and_imp, Multiset.card_map, Multiset.mem_map, exists_imp]
+  rintro _ _ _ rfl
+  rw [Associates.mk_eq_mk_iff_associated]
+  refine associated_of_irreducible _ ?_ hirr
+  apply hfx.1
+  assumption
 
 中文:
 定理 associated_pow_irreducible
@@ -746,7 +915,14 @@ theorem associated_pow_irreducible
   have H := hfx.2
   rw [← Associates.mk_eq_mk_iff_associated] at H ⊢
   rw [← H]; rw [← Associates.prod_mk]; rw [Associates.mk_pow]; rw [← Multiset.prod_replicate]
-  
+  congr 1
+  rw [Multiset.eq_replicate]
+  simp only [true_and, and_imp, Multiset.card_map, Multiset.mem_map, exists_imp]
+  rintro _ _ _ rfl
+  rw [Associates.mk_eq_mk_iff_associated]
+  refine associated_of_irreducible _ ?_ hirr
+  apply hfx.1
+  assumption
 
 Depends on / 依赖: Associates, Associates.mk_eq_mk_iff_associated, Associates.mk_pow, Associates.prod_mk, IsNoetherianRing, IsNoetherianRing.wfDvdMonoid, Multiset, Multiset.card, Multiset.card_map, Multiset.eq_replicate, Multiset.mem_map, Multiset.prod_replicate, WfDvdMonoid, WfDvdMonoid.exists_factors, and_imp, associated_of_irreducible, card_map, eq_replicate, exists_factors, exists_imp
 -/
@@ -807,7 +983,8 @@ lemma exists_units_eq_smul_zpow_of_irreducible
   obtain ⟨n, u, rfl⟩ := eq_unit_mul_pow_irreducible (x := x) (by simp_all) hϖ
   obtain ⟨m, v, rfl⟩ := eq_unit_mul_pow_irreducible (by simpa using hy) hϖ
   have hϖ' : algebraMap R K ϖ != 0 := by simpa using hϖ.ne_zero
-  refine ⟨n
+  refine ⟨n - m, u / v, ?_⟩
+  simp [hϖ', zpow_sub₀, div_smul_div_comm, Units.smul_def u, Units.smul_def v, Algebra.smul_def]
 
 中文:
 引理 存在_units_eq_smul_zpow_of_irreducible
@@ -816,7 +993,8 @@ lemma exists_units_eq_smul_zpow_of_irreducible
   obtain ⟨n, u, rfl⟩ := eq_unit_mul_pow_irreducible (x := x) (by simp_all) hϖ
   obtain ⟨m, v, rfl⟩ := eq_unit_mul_pow_irreducible (by simpa using hy) hϖ
   have hϖ' : algebraMap R K ϖ != 0 := by simpa using hϖ.ne_zero
-  refine ⟨n
+  refine ⟨n - m, u / v, ?_⟩
+  simp [hϖ', zpow_sub₀, div_smul_div_comm, Units.smul_def u, Units.smul_def v, Algebra.smul_def]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsFractionRing, IsFractionRing.div_surjective, Units.smul_def, algebraMap, div_smul_div_comm, div_surjective, eq_unit_mul_pow_irreducible, ne_zero, smul_def
 -/
@@ -846,7 +1024,8 @@ theorem ideal_eq_span_pow_irreducible
   rcases associated_pow_irreducible gen_ne_zero hirr with ⟨n, u, hnu⟩
   use n
   have : span _ = _ := Ideal.span_singleton_generator s
-  rw [← this]; rw [← hnu]; rw [span_singleton_eq_span_s
+  rw [← this]; rw [← hnu]; rw [span_singleton_eq_span_singleton]
+  use u
 
 中文:
 定理 ideal_eq_span_pow_irreducible
@@ -858,7 +1037,8 @@ theorem ideal_eq_span_pow_irreducible
   rcases associated_pow_irreducible gen_ne_zero hirr with ⟨n, u, hnu⟩
   use n
   have : span _ = _ := Ideal.span_singleton_generator s
-  rw [← this]; rw [← hnu]; rw [span_singleton_eq_span_s
+  rw [← this]; rw [← hnu]; rw [span_singleton_eq_span_singleton]
+  use u
 
 Depends on / 依赖: Ideal.span_singleton_generator, associated_pow_irreducible, eq_bot_iff_generator_eq_zero, gen_ne_zero, generator, span_singleton_eq_span_singleton, span_singleton_generator
 -/
@@ -884,7 +1064,14 @@ theorem unit_mul_pow_congr_pow
     rw [Multiset.prod_replicate]; rw [Multiset.prod_replicate]; rw [Associated]
     refine ⟨u * v⁻¹, ?_⟩
     simp only [Units.val_mul]
-    rw [mul_left_comm]; rw [← mul_assoc]; rw [h]; rw [mul_right_comm]; r
+    rw [mul_left_comm]; rw [← mul_assoc]; rw [h]; rw [mul_right_comm]; rw [Units.mul_inv]; rw [one_mul]
+  have := by
+    refine Multiset.card_eq_card_of_rel (UniqueFactorizationMonoid.factors_unique ?_ ?_ key)
+    all_goals
+      intro x hx
+      obtain rfl := Multiset.eq_of_mem_replicate hx
+      assumption
+  simpa only [Multiset.card_replicate]
 
 中文:
 定理 unit_mul_pow_congr_pow
@@ -894,7 +1081,14 @@ theorem unit_mul_pow_congr_pow
     rw [Multiset.prod_replicate]; rw [Multiset.prod_replicate]; rw [Associated]
     refine ⟨u * v⁻¹, ?_⟩
     simp only [Units.val_mul]
-    rw [mul_left_comm]; rw [← mul_assoc]; rw [h]; rw [mul_right_comm]; r
+    rw [mul_left_comm]; rw [← mul_assoc]; rw [h]; rw [mul_right_comm]; rw [Units.mul_inv]; rw [one_mul]
+  have := by
+    refine Multiset.card_eq_card_of_rel (UniqueFactorizationMonoid.factors_unique ?_ ?_ key)
+    all_goals
+      intro x hx
+      obtain rfl := Multiset.eq_of_mem_replicate hx
+      assumption
+  simpa only [Multiset.card_replicate]
 
 Depends on / 依赖: Associated, Multiset, Multiset.card_eq_card_of_rel, Multiset.eq_of_mem_replicate, Multiset.prod_replicate, Multiset.replicate, UniqueFactorizationMonoid, UniqueFactorizationMonoid.factors_unique, Units.mul_inv, Units.val_mul, all_goals, card_eq_card_of_rel, eq_of_mem_replicate, factors_unique, mul_assoc, mul_inv, mul_left_comm, mul_right_comm, one_mul, prod_replicate
 -/
@@ -983,14 +1177,14 @@ theorem addVal_def
   given: (r : R) (u : Rˣ) {ϖ : R} (hϖ : Irreducible ϖ) (n : Nat) (hr : r = u * ϖ ^ n)
   proof: by
   rw [addVal]; rw [multiplicity_addValuation_apply]; rw [hr]; rw [emultiplicity_eq_of_associated_left
-      (associated_of_irreducible R hϖ (Classical.choose_spec (exists_prime R)).irreducible)]; rw [emultiplicity_eq_of_associated_right (Associated.symm ⟨u]; rw [mul_comm _ _⟩)]; rw [emultiplicity
+      (associated_of_irreducible R hϖ (Classical.choose_spec (exists_prime R)).irreducible)]; rw [emultiplicity_eq_of_associated_right (Associated.symm ⟨u]; rw [mul_comm _ _⟩)]; rw [emultiplicity_pow_self_of_prime (irreducible_iff_prime.1 hϖ)]
 
 中文:
 定理 addVal_def
   条件: (r : R) (u : Rˣ) {ϖ : R} (hϖ : 不可约 ϖ) (n : 自然数) (hr : r = u * ϖ ^ n)
   证明: by
   rw [addVal]; rw [multiplicity_addValuation_apply]; rw [hr]; rw [emultiplicity_eq_of_associated_left
-      (associated_of_irreducible R hϖ (Classical.choose_spec (exists_prime R)).irreducible)]; rw [emultiplicity_eq_of_associated_right (Associated.symm ⟨u]; rw [mul_comm _ _⟩)]; rw [emultiplicity
+      (associated_of_irreducible R hϖ (Classical.choose_spec (exists_prime R)).irreducible)]; rw [emultiplicity_eq_of_associated_right (Associated.symm ⟨u]; rw [mul_comm _ _⟩)]; rw [emultiplicity_pow_self_of_prime (irreducible_iff_prime.1 hϖ)]
 
 Depends on / 依赖: Associated, Associated.symm, Classical, Classical.choose_spec, addVal, associated_of_irreducible, choose_spec, emultiplicity_eq_of_associated_left, emultiplicity_eq_of_associated_right, emultiplicity_pow_self_of_prime, exists_prime, irreducible, irreducible_iff_prime, mul_comm, multiplicity_addValuation_apply
 -/
@@ -1199,7 +1393,10 @@ theorem addVal_le_iff_dvd
       rw [h]
       apply dvd_zero
     obtain ⟨n, ha⟩ := associated_pow_irreducible ha0 hp.irreducible
-    rw [addVal]; rw [multipl
+    rw [addVal]; rw [multiplicity_addValuation_apply]; rw [multiplicity_addValuation_apply]; rw [emultiplicity_le_emultiplicity_iff] at h
+    exact ha.dvd.trans (h n ha.symm.dvd)
+  · rw [addVal, multiplicity_addValuation_apply, multiplicity_addValuation_apply]
+    exact emultiplicity_le_emultiplicity_of_dvd_right h
 
 中文:
 定理 addVal_le_iff_dvd
@@ -1213,7 +1410,10 @@ theorem addVal_le_iff_dvd
       rw [h]
       apply dvd_zero
     obtain ⟨n, ha⟩ := associated_pow_irreducible ha0 hp.irreducible
-    rw [addVal]; rw [multipl
+    rw [addVal]; rw [multiplicity_addValuation_apply]; rw [multiplicity_addValuation_apply]; rw [emultiplicity_le_emultiplicity_iff] at h
+    exact ha.dvd.trans (h n ha.symm.dvd)
+  · rw [addVal, multiplicity_addValuation_apply, multiplicity_addValuation_apply]
+    exact emultiplicity_le_emultiplicity_of_dvd_right h
 
 Depends on / 依赖: Classical, Classical.choose_spec, addVal, addVal_eq_top_iff, addVal_zero, associated_pow_irreducible, choose_spec, dvd_zero, emultiplicity_le_emultiplicity_iff, exists_prime, ha.dvd.trans, ha.symm.dvd, hp.irreducible, irreducible, multiplicity_addValuation_apply, top_le_iff
 -/
@@ -1330,7 +1530,17 @@ lemma addVal_eq_iff_associated
     by_cases hy : y = 0
     · simp_all only [AddValuation.map_zero, associated_zero_iff_eq_zero]
       exact hx (addVal_eq_top_iff.mp h)
-    obtain ⟨ϖ, hϖ⟩ := exist
+    obtain ⟨ϖ, hϖ⟩ := exists_irreducible R
+    obtain ⟨m, α, hx'⟩ := eq_unit_mul_pow_irreducible hx hϖ
+    obtain ⟨n, β, hy'⟩ := eq_unit_mul_pow_irreducible hy hϖ
+    simp only [hx', AddValuation.map_mul, addVal_eq_zero_of_unit, AddValuation.map_pow,
+      nsmul_eq_mul, zero_add, hy', associated_unit_mul_right_iff,
+      associated_unit_mul_left_iff] at h ⊢
+    simp only [addVal_uniformizer hϖ, mul_one, ENat.natCast_inj] at h
+    rw [h]
+    exact Associates.mk_eq_mk_iff_associated.mp rfl
+  · rintro ⟨u, rfl⟩
+    simp_all
 
 中文:
 引理 addVal_eq_iff_associated
@@ -1344,7 +1554,17 @@ lemma addVal_eq_iff_associated
     by_cases hy : y = 0
     · simp_all only [AddValuation.map_zero, associated_zero_iff_eq_zero]
       exact hx (addVal_eq_top_iff.mp h)
-    obtain ⟨ϖ, hϖ⟩ := exist
+    obtain ⟨ϖ, hϖ⟩ := exists_irreducible R
+    obtain ⟨m, α, hx'⟩ := eq_unit_mul_pow_irreducible hx hϖ
+    obtain ⟨n, β, hy'⟩ := eq_unit_mul_pow_irreducible hy hϖ
+    simp only [hx', AddValuation.map_mul, addVal_eq_zero_of_unit, AddValuation.map_pow,
+      nsmul_eq_mul, zero_add, hy', associated_unit_mul_right_iff,
+      associated_unit_mul_left_iff] at h ⊢
+    simp only [addVal_uniformizer hϖ, mul_one, ENat.natCast_inj] at h
+    rw [h]
+    exact Associates.mk_eq_mk_iff_associated.mp rfl
+  · rintro ⟨u, rfl⟩
+    simp_all
 
 Depends on / 依赖: AddValuation, AddValuation.map_mul, AddValuation.map_pow, AddValuation.map_zero, addVal_eq_top_iff, addVal_eq_top_iff.mp, addVal_eq_zero_of_unit, associated_zero_iff_eq_zero, eq_unit_mul_pow_irreducible, exists_irreducible, h.symm, map_mul, map_pow, map_zero, nsmul_eq_mul, zero_add
 -/
@@ -1388,7 +1608,23 @@ definition idealOrderIsoENat
     suffices (addVal R x).recTopCoe ⊥ (fun n => maximalIdeal R ^ n) = span {x} by
       rwa [Ideal.span_singleton_generator] at this
     by_cases hx0 : x = 0
+    · simp [hx0]
+    · obtain ⟨ϖ, hϖ⟩ := exists_irreducible R
+      obtain ⟨n, u, hu⟩ := eq_unit_mul_pow_irreducible hx0 hϖ
+      rw [hu]; rw [addVal_def' u hϖ]; rw [span_singleton_mul_left_unit u.isUnit]; rw [ENat.recTopCoe_natCast]; rw [hϖ.maximalIdeal_eq]; rw [span_singleton_pow]
+  right_inv n := by
+    obtain ⟨k, rfl⟩ := OrderDual.toDual.surjective n
+    dsimp
+    induction k with
+    | top => simp
+    | coe k =>
+      obtain ⟨ϖ, hϖ⟩ := exists_irreducible R
+      rw [OrderDual.toDual_inj]; rw [ENat.recTopCoe_natCast]; rw [hϖ.maximalIdeal_eq]; rw [span_singleton_pow]; rw [← hϖ.addVal_pow k]; rw [addVal_eq_iff_associated]
+      exact associated_generator_span_self (ϖ ^ k)
+  map_rel_iff' {I J} := by
+    simp [addVal_le_iff_dvd, ← span_singleton_le_span_singleton]
 
+@[simp]
 
 中文:
 定义 idealOrderIsoE自然数
@@ -1400,7 +1636,23 @@ definition idealOrderIsoENat
     suffices (addVal R x).recTopCoe ⊥ (fun n => maximalIdeal R ^ n) = span {x} by
       rwa [Ideal.span_singleton_generator] at this
     by_cases hx0 : x = 0
+    · simp [hx0]
+    · obtain ⟨ϖ, hϖ⟩ := exists_irreducible R
+      obtain ⟨n, u, hu⟩ := eq_unit_mul_pow_irreducible hx0 hϖ
+      rw [hu]; rw [addVal_def' u hϖ]; rw [span_singleton_mul_left_unit u.isUnit]; rw [ENat.recTopCoe_natCast]; rw [hϖ.maximalIdeal_eq]; rw [span_singleton_pow]
+  right_inv n := by
+    obtain ⟨k, rfl⟩ := OrderDual.toDual.surjective n
+    dsimp
+    induction k with
+    | top => simp
+    | coe k =>
+      obtain ⟨ϖ, hϖ⟩ := exists_irreducible R
+      rw [OrderDual.toDual_inj]; rw [ENat.recTopCoe_natCast]; rw [hϖ.maximalIdeal_eq]; rw [span_singleton_pow]; rw [← hϖ.addVal_pow k]; rw [addVal_eq_iff_associated]
+      exact associated_generator_span_self (ϖ ^ k)
+  map_rel_iff' {I J} := by
+    simp [addVal_le_iff_dvd, ← span_singleton_le_span_singleton]
 
+@[simp]
 
 Depends on / 依赖: addVal, generator, toDual
 -/
@@ -1652,7 +1904,8 @@ lemma toWithBotNat_le_toWithBotNat_iff
     cases vy with
     | top => rw [addVal_eq_top_iff] at hvy; tauto
     | coe vy =>
-      rw [← addVal_le_iff_dvd]; rw [hvx]; r
+      rw [← addVal_le_iff_dvd]; rw [hvx]; rw [hvy]
+      exact WithBot.coe_le_coe.trans WithTop.coe_le_coe.symm
 
 中文:
 引理 toWithBot自然数_le_toWithBot自然数_iff
@@ -1667,7 +1920,8 @@ lemma toWithBotNat_le_toWithBotNat_iff
     cases vy with
     | top => rw [addVal_eq_top_iff] at hvy; tauto
     | coe vy =>
-      rw [← addVal_le_iff_dvd]; rw [hvx]; r
+      rw [← addVal_le_iff_dvd]; rw [hvx]; rw [hvy]
+      exact WithBot.coe_le_coe.trans WithTop.coe_le_coe.symm
 
 Depends on / 依赖: WithBot, WithBot.coe_le_coe.trans, WithTop, WithTop.coe_le_coe.symm, addVal, addVal_eq_top_iff, addVal_le_iff_dvd, coe_le_coe, generalize, toWithBotNat
 -/
@@ -1734,7 +1988,18 @@ definition toEuclideanDomain
     · rw [h₁]; ring
     · rw [← h₂.choose_spec]; ring
     · ring
-  r 
+  r x y := toWithBotNat x < toWithBotNat y
+  r_wellFounded := WellFounded.onFun wellFounded_lt
+  remainder_lt x y hy := by
+    rw [remainder]
+    split_ifs with hyx
+    · rwa [toWithBotNat_zero, bot_lt_toWithBotNat_iff]
+    · exact lt_iff_not_ge.mpr (mt (dvd_of_toWithBotNat_le_toWithBotNat _ _ hy) hyx)
+  mul_left_not_lt x y hy := by
+    by_cases hx : x = 0
+    · simp [hx]
+    rw [not_lt]; rw [toWithBotNat_le_toWithBotNat_iff hx (mul_ne_zero hx hy)]
+    exact dvd_mul_right _ _
 
 中文:
 定义 toEuclideanDomain
@@ -1749,7 +2014,18 @@ definition toEuclideanDomain
     · rw [h₁]; ring
     · rw [← h₂.choose_spec]; ring
     · ring
-  r 
+  r x y := toWithBotNat x < toWithBotNat y
+  r_wellFounded := WellFounded.onFun wellFounded_lt
+  remainder_lt x y hy := by
+    rw [remainder]
+    split_ifs with hyx
+    · rwa [toWithBotNat_zero, bot_lt_toWithBotNat_iff]
+    · exact lt_iff_not_ge.mpr (mt (dvd_of_toWithBotNat_le_toWithBotNat _ _ hy) hyx)
+  mul_left_not_lt x y hy := by
+    by_cases hx : x = 0
+    · simp [hx]
+    rw [not_lt]; rw [toWithBotNat_le_toWithBotNat_iff hx (mul_ne_zero hx hy)]
+    exact dvd_mul_right _ _
 
 Depends on / 依赖: quotient
 -/
@@ -1808,7 +2084,10 @@ lemma maximalIdeal_eq_setOfPred_le_v_algebraMap
       {y : O | v (algebraMap O K y) <= v (algebraMap O K ϖ)} := by
   let : IsDomain O := hv.hom_inj.isDomain
   intro _ _ h
-  rw [← hv.coe_span_singleton_eq_setOfPred_le
+  rw [← hv.coe_span_singleton_eq_setOfPred_le_v_algebraMap]; rw [← h.maximalIdeal_eq]
+
+@[deprecated (since := "2026-07-09")]
+alias maximalIdeal_eq_setOf_le_v_algebraMap := maximalIdeal_eq_setOfPred_le_v_algebraMap
 
 中文:
 引理 maximalIdeal_eq_setOfPred_le_v_algebraMap
@@ -1818,7 +2097,10 @@ lemma maximalIdeal_eq_setOfPred_le_v_algebraMap
       {y : O | v (algebraMap O K y) <= v (algebraMap O K ϖ)} := by
   let : IsDomain O := hv.hom_inj.isDomain
   intro _ _ h
-  rw [← hv.coe_span_singleton_eq_setOfPred_le
+  rw [← hv.coe_span_singleton_eq_setOfPred_le_v_algebraMap]; rw [← h.maximalIdeal_eq]
+
+@[deprecated (since := "2026-07-09")]
+alias maximalIdeal_eq_setOf_le_v_algebraMap := maximalIdeal_eq_setOfPred_le_v_algebraMap
 
 Depends on / 依赖: hom_inj, hv.hom_inj.isDomain, isDomain
 -/
@@ -1845,7 +2127,12 @@ lemma maximalIdeal_pow_eq_setOfPred_le_v_algebraMap_pow
       {y : O | v (algebraMap O K y) <= v (algebraMap O K ϖ) ^ n} := by
   let : IsDomain O := hv.hom_inj.isDomain
   intro _ ϖ h n
-  have : (v (
+  have : (v (algebraMap O K ϖ)) ^ n = v (algebraMap O K (ϖ ^ n)) := by simp
+  rw [this]; rw [← hv.coe_span_singleton_eq_setOfPred_le_v_algebraMap]; rw [← Ideal.span_singleton_pow]; rw [← h.maximalIdeal_eq]
+
+@[deprecated (since := "2026-07-09")]
+alias maximalIdeal_pow_eq_setOf_le_v_algebraMap_pow :=
+  maximalIdeal_pow_eq_setOfPred_le_v_algebraMap_pow
 
 中文:
 引理 maximalIdeal_pow_eq_setOfPred_le_v_algebraMap_pow
@@ -1855,7 +2142,12 @@ lemma maximalIdeal_pow_eq_setOfPred_le_v_algebraMap_pow
       {y : O | v (algebraMap O K y) <= v (algebraMap O K ϖ) ^ n} := by
   let : IsDomain O := hv.hom_inj.isDomain
   intro _ ϖ h n
-  have : (v (
+  have : (v (algebraMap O K ϖ)) ^ n = v (algebraMap O K (ϖ ^ n)) := by simp
+  rw [this]; rw [← hv.coe_span_singleton_eq_setOfPred_le_v_algebraMap]; rw [← Ideal.span_singleton_pow]; rw [← h.maximalIdeal_eq]
+
+@[deprecated (since := "2026-07-09")]
+alias maximalIdeal_pow_eq_setOf_le_v_algebraMap_pow :=
+  maximalIdeal_pow_eq_setOfPred_le_v_algebraMap_pow
 
 Depends on / 依赖: hom_inj, hv.hom_inj.isDomain, isDomain
 -/

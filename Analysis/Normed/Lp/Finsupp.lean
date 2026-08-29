@@ -50,7 +50,17 @@ instance [PseudoEMetricSpace
     congr 2
     ext i
     simp [edist_comm]
-  edi
+  edist_triangle f g h := by
+    classical
+    have : 0 < p := zero_lt_one.trans_le Fact.out
+    let s := f.ofLp.support union g.ofLp.support union h.ofLp.support
+    rw [sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*]),
+      sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*]),
+      sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*])]
+    simp only [zipWith_apply, ← one_div]
+    grw [← ENNReal.Lp_add_le _ _ _ (mod_cast Fact.out)]
+    gcongr
+    exact edist_triangle ..
 
 中文:
 实例 [PseudoEMetric空间
@@ -64,7 +74,17 @@ instance [PseudoEMetricSpace
     congr 2
     ext i
     simp [edist_comm]
-  edi
+  edist_triangle f g h := by
+    classical
+    have : 0 < p := zero_lt_one.trans_le Fact.out
+    let s := f.ofLp.support union g.ofLp.support union h.ofLp.support
+    rw [sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*]),
+      sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*]),
+      sum_of_support_subset (s := s) _ (by grind [support_zipWith]) _ (by simp [*])]
+    simp only [zipWith_apply, ← one_div]
+    grw [← ENNReal.Lp_add_le _ _ _ (mod_cast Fact.out)]
+    gcongr
+    exact edist_triangle ..
 
 Depends on / 依赖: Fact.out, classical, edist_comm, edist_self, edist_triangle, f.ofLp.support, f.ofLp.zipWith, g.ofLp, g.ofLp.support, h.ofLp.support, sum_of_support_subset, support, support_zipWith, trans_le, zero_lt_one, zero_lt_one.trans_le, zipWith, zipWith_apply
 -/
@@ -136,7 +156,12 @@ instance [PseudoMetricSpace
   body: PseudoEMetricSpace.toPseudoMetricSpaceOfDist
     (fun f g => ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real))
     (fun f g => by dsimp [sum]; positivity) fun f g => by
-      simp only [edist_def, sum, zipWith_apply, ← coe_nnreal_ennreal_nndist, NNReal.zero_l
+      simp only [edist_def, sum, zipWith_apply, ← coe_nnreal_ennreal_nndist, NNReal.zero_le_coe,
+        ← ENNReal.coe_rpow_of_nonneg, ← ENNReal.ofNNReal_finsetSum, inv_nonneg, ← coe_nndist,
+        ← NNReal.coe_rpow, ← NNReal.coe_sum, ENNReal.ofReal_coe_nnreal, ENNReal.coe_inj]
+      congr! 2
+      ext i
+      simp [← coe_nndist, ← coe_nnreal_ennreal_nndist]
 
 中文:
 实例 [伪度量空间
@@ -144,7 +169,12 @@ instance [PseudoMetricSpace
   定义体: PseudoEMetricSpace.toPseudoMetricSpaceOfDist
     (fun f g => ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real))
     (fun f g => by dsimp [sum]; positivity) fun f g => by
-      simp only [edist_def, sum, zipWith_apply, ← coe_nnreal_ennreal_nndist, NNReal.zero_l
+      simp only [edist_def, sum, zipWith_apply, ← coe_nnreal_ennreal_nndist, NNReal.zero_le_coe,
+        ← ENNReal.coe_rpow_of_nonneg, ← ENNReal.ofNNReal_finsetSum, inv_nonneg, ← coe_nndist,
+        ← NNReal.coe_rpow, ← NNReal.coe_sum, ENNReal.ofReal_coe_nnreal, ENNReal.coe_inj]
+      congr! 2
+      ext i
+      simp [← coe_nndist, ← coe_nnreal_ennreal_nndist]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_inj, ENNReal.coe_rpow_of_nonneg, ENNReal.ofNNReal_finsetSum, ENNReal.ofReal_coe_nnreal, NNReal, NNReal.coe_rpow, NNReal.coe_sum, NNReal.zero_le_coe, PseudoEMetricSpace, PseudoEMetricSpace.toPseudoMetricSpaceOfDist, coe_inj, coe_nndist, coe_nnreal_ennreal_nndist, coe_rpow, coe_rpow_of_nonneg, coe_sum, dist_self, edist_def, f.ofLp.zipWith
 -/

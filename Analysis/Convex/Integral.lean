@@ -64,7 +64,24 @@ theorem Convex.integral_mem
     (hgm.isSeparable_range.mono inter_subset_left).separableSpace
   obtain ⟨y₀, h₀⟩ : (range g inter s).Nonempty := by
     rcases (hf.and hfg).exists with ⟨x₀, h₀⟩
-    exact ⟨f x
+    exact ⟨f x₀, by simp only [h₀.2, mem_range_self], h₀.1⟩
+  rw [integral_congr_ae hfg]; rw [integrable_congr hfg] at hfi
+  have hg : forallᵐ x ∂μ, g x in closure (range g inter s) := by
+    filter_upwards [hfg.rw (fun _ y => y in s) hf] with x hx
+    apply subset_closure
+    exact ⟨mem_range_self _, hx⟩
+  set G : Nat -> SimpleFunc α E := SimpleFunc.approxOn _ hgm.measurable (range g inter s) y₀ h₀
+  have : Tendsto (fun n => (G n).integral μ) atTop (𝓝 <| ∫ x, g x ∂μ) :=
+    tendsto_integral_approxOn_of_measurable hfi _ hg _ (integrable_const _)
+  refine hsc.mem_of_tendsto this (Eventually.of_forall fun n => hs.sum_mem ?_ ?_ ?_)
+  · exact fun _ _ => ENNReal.toReal_nonneg
+  · simp_rw [measureReal_def]
+    rw [← ENNReal.toReal_sum]; rw [(G n).sum_range_measure_preimage_singleton]; rw [measure_univ]; rw [ENNReal.toReal_one]
+    finiteness
+  · simp only [SimpleFunc.mem_range, forall_mem_range]
+    intro x
+    apply (range g).inter_subset_right
+    exact SimpleFunc.approxOn_mem hgm.measurable h₀ _ _
 
 中文:
 定理 凸.integral_mem
@@ -76,7 +93,24 @@ theorem Convex.integral_mem
     (hgm.isSeparable_range.mono inter_subset_left).separableSpace
   obtain ⟨y₀, h₀⟩ : (range g inter s).Nonempty := by
     rcases (hf.and hfg).exists with ⟨x₀, h₀⟩
-    exact ⟨f x
+    exact ⟨f x₀, by simp only [h₀.2, mem_range_self], h₀.1⟩
+  rw [integral_congr_ae hfg]; rw [integrable_congr hfg] at hfi
+  have hg : forallᵐ x ∂μ, g x in closure (range g inter s) := by
+    filter_upwards [hfg.rw (fun _ y => y in s) hf] with x hx
+    apply subset_closure
+    exact ⟨mem_range_self _, hx⟩
+  set G : Nat -> SimpleFunc α E := SimpleFunc.approxOn _ hgm.measurable (range g inter s) y₀ h₀
+  have : Tendsto (fun n => (G n).integral μ) atTop (𝓝 <| ∫ x, g x ∂μ) :=
+    tendsto_integral_approxOn_of_measurable hfi _ hg _ (integrable_const _)
+  refine hsc.mem_of_tendsto this (Eventually.of_forall fun n => hs.sum_mem ?_ ?_ ?_)
+  · exact fun _ _ => ENNReal.toReal_nonneg
+  · simp_rw [measureReal_def]
+    rw [← ENNReal.toReal_sum]; rw [(G n).sum_range_measure_preimage_singleton]; rw [measure_univ]; rw [ENNReal.toReal_one]
+    finiteness
+  · simp only [SimpleFunc.mem_range, forall_mem_range]
+    intro x
+    apply (range g).inter_subset_right
+    exact SimpleFunc.approxOn_mem hgm.measurable h₀ _ _
 
 Depends on / 依赖: Nonempty, SeparableSpace, aestronglyMeasurable, borelize, closure, filter_upwards, hf.and, hfg.rw, hfi.aestronglyMeasurable, hgm.isSeparable_range.mono, integrable_congr, integral_congr_ae, inter_subset_left, isSeparable_range, mem_range_self, separableSpace
 -/
@@ -426,7 +460,14 @@ theorem ae_eq_const_or_exists_average_ne_compl
   refine hfi.ae_eq_of_forall_setIntegral_eq _ _ (integrable_const _) fun t ht ht' => ?_; clear ht'
   simp only [const_apply, setIntegral_const]
   by_cases h₀ : μ t = 0
-  · rw [restrict_eq_zero.2 h₀, integral_zero_measure, measureReal_de
+  · rw [restrict_eq_zero.2 h₀, integral_zero_measure, measureReal_def, h₀,
+      ENNReal.toReal_zero, zero_smul]
+  by_cases h₀' : μ tᶜ = 0
+  · rw [← ae_eq_univ] at h₀'
+    rw [restrict_congr_set h₀']; rw [restrict_univ]; rw [measureReal_congr h₀']; rw [measure_smul_average]
+  have := average_mem_openSegment_compl_self ht.nullMeasurableSet h₀ h₀' hfi
+  rw [← H t ht h₀ h₀']; rw [openSegment_same]; rw [mem_singleton_iff] at this
+  rw [this]; rw [measure_smul_setAverage _ (by finiteness)]
 
 中文:
 定理 ae_eq_const_or_存在_average_ne_compl
@@ -436,7 +477,14 @@ theorem ae_eq_const_or_exists_average_ne_compl
   refine hfi.ae_eq_of_forall_setIntegral_eq _ _ (integrable_const _) fun t ht ht' => ?_; clear ht'
   simp only [const_apply, setIntegral_const]
   by_cases h₀ : μ t = 0
-  · rw [restrict_eq_zero.2 h₀, integral_zero_measure, measureReal_de
+  · rw [restrict_eq_zero.2 h₀, integral_zero_measure, measureReal_def, h₀,
+      ENNReal.toReal_zero, zero_smul]
+  by_cases h₀' : μ tᶜ = 0
+  · rw [← ae_eq_univ] at h₀'
+    rw [restrict_congr_set h₀']; rw [restrict_univ]; rw [measureReal_congr h₀']; rw [measure_smul_average]
+  have := average_mem_openSegment_compl_self ht.nullMeasurableSet h₀ h₀' hfi
+  rw [← H t ht h₀ h₀']; rw [openSegment_same]; rw [mem_singleton_iff] at this
+  rw [this]; rw [measure_smul_setAverage _ (by finiteness)]
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_zero, ae_eq_of_forall_setIntegral_eq, ae_eq_univ, average_m, const_apply, hfi.ae_eq_of_forall_setIntegral_eq, integrable_const, integral_zero_measure, measureReal_congr, measureReal_def, measure_smul_average, or_iff_not_imp_right, or_iff_not_imp_right.mpr, restrict_congr_set, restrict_eq_zero, restrict_univ, setIntegral_const, toReal_zero, zero_smul
 -/
@@ -468,7 +516,9 @@ theorem Convex.average_mem_interior_of_set
   · rw [← ae_eq_univ] at h0'
     rwa [restrict_congr_set h0', restrict_univ] at ht
   exact hs.openSegment_interior_closure_subset_interior ht
-      (hs.set_average_me
+      (hs.set_average_mem_closure h0' (by finiteness) (ae_restrict_of_ae hfs) hfi.integrableOn)
+      (average_mem_openSegment_compl_self (measurableSet_toMeasurable μ t).nullMeasurableSet h0
+        h0' hfi)
 
 中文:
 定理 凸.average_mem_interior_of_set
@@ -479,7 +529,9 @@ theorem Convex.average_mem_interior_of_set
   · rw [← ae_eq_univ] at h0'
     rwa [restrict_congr_set h0', restrict_univ] at ht
   exact hs.openSegment_interior_closure_subset_interior ht
-      (hs.set_average_me
+      (hs.set_average_mem_closure h0' (by finiteness) (ae_restrict_of_ae hfs) hfi.integrableOn)
+      (average_mem_openSegment_compl_self (measurableSet_toMeasurable μ t).nullMeasurableSet h0
+        h0' hfi)
 
 Depends on / 依赖: ae_eq_univ, ae_restrict_of_ae, average_mem_openSegment_compl_self, finiteness, hfi.integrableOn, hs.openSegment_interior_closure_subset_interior, hs.set_average_mem_closure, integrableOn, measurableSet_toMeasurable, measure_toMeasurable, nullMeasurableSet, openSegment_interior_closure_subset_interior, restrict_congr_set, restrict_toMeasurable, restrict_univ, set_average_mem_closure, toMeasurable
 -/
@@ -507,7 +559,8 @@ theorem StrictConvex.ae_eq_const_or_average_mem_interior
   refine (ae_eq_const_or_exists_average_ne_compl hfi).imp_right ?_
   rintro ⟨t, hm, h₀, h₀', hne⟩
   exact
-    hs.openSegment_subset (
+    hs.openSegment_subset (this h₀) (this h₀') hne
+      (average_mem_openSegment_compl_self hm.nullMeasurableSet h₀ h₀' hfi)
 
 中文:
 定理 严格凸.ae_eq_const_or_average_mem_interior
@@ -518,7 +571,8 @@ theorem StrictConvex.ae_eq_const_or_average_mem_interior
   refine (ae_eq_const_or_exists_average_ne_compl hfi).imp_right ?_
   rintro ⟨t, hm, h₀, h₀', hne⟩
   exact
-    hs.openSegment_subset (
+    hs.openSegment_subset (this h₀) (this h₀') hne
+      (average_mem_openSegment_compl_self hm.nullMeasurableSet h₀ h₀' hfi)
 
 Depends on / 依赖: ae_eq_const_or_exists_average_ne_compl, ae_restrict_of_ae, average_mem_openSegment_compl_self, convex, finiteness, hfi.integrableOn, hm.nullMeasurableSet, hs.convex.set_average_mem, hs.openSegment_subset, imp_right, integrableOn, nullMeasurableSet, openSegment_subset, set_average_mem
 -/
@@ -544,7 +598,20 @@ theorem StrictConvexOn.ae_eq_const_or_map_average_lt
     fun ht =>
     hg.convexOn.set_average_mem_epigraph hgc hsc ht (by finiteness) (ae_restrict_of_ae hfs)
       hfi.integrableOn hgi.integrableOn
-  refine (ae_eq_const_or_exists_average_ne_c
+  refine (ae_eq_const_or_exists_average_ne_compl hfi).imp_right ?_
+  rintro ⟨t, hm, h₀, h₀', hne⟩
+  rcases average_mem_openSegment_compl_self hm.nullMeasurableSet h₀ h₀' (hfi.prodMk hgi) with
+    ⟨a, b, ha, hb, hab, h_avg⟩
+  rw [average_pair hfi hgi]; rw [average_pair hfi.integrableOn hgi.integrableOn]; rw [average_pair hfi.integrableOn hgi.integrableOn]; rw [Prod.smul_mk]; rw [Prod.smul_mk]; rw [Prod.mk_add_mk]; rw [Prod.mk_inj] at h_avg
+  simp only [Function.comp] at h_avg
+  rw [← h_avg.1]; rw [← h_avg.2]
+  calc
+    g ((a • ⨍ x in t, f x ∂μ) + b • ⨍ x in tᶜ, f x ∂μ) <
+        a * g (⨍ x in t, f x ∂μ) + b * g (⨍ x in tᶜ, f x ∂μ) :=
+      hg.2 (this h₀).1 (this h₀').1 hne ha hb hab
+    _ <= (a * ⨍ x in t, g (f x) ∂μ) + b * ⨍ x in tᶜ, g (f x) ∂μ := by
+      gcongr
+      exacts [(this h₀).2, (this h₀').2]
 
 中文:
 定理 StrictConvexOn.ae_eq_const_or_map_average_lt
@@ -554,7 +621,20 @@ theorem StrictConvexOn.ae_eq_const_or_map_average_lt
     fun ht =>
     hg.convexOn.set_average_mem_epigraph hgc hsc ht (by finiteness) (ae_restrict_of_ae hfs)
       hfi.integrableOn hgi.integrableOn
-  refine (ae_eq_const_or_exists_average_ne_c
+  refine (ae_eq_const_or_exists_average_ne_compl hfi).imp_right ?_
+  rintro ⟨t, hm, h₀, h₀', hne⟩
+  rcases average_mem_openSegment_compl_self hm.nullMeasurableSet h₀ h₀' (hfi.prodMk hgi) with
+    ⟨a, b, ha, hb, hab, h_avg⟩
+  rw [average_pair hfi hgi]; rw [average_pair hfi.integrableOn hgi.integrableOn]; rw [average_pair hfi.integrableOn hgi.integrableOn]; rw [Prod.smul_mk]; rw [Prod.smul_mk]; rw [Prod.mk_add_mk]; rw [Prod.mk_inj] at h_avg
+  simp only [Function.comp] at h_avg
+  rw [← h_avg.1]; rw [← h_avg.2]
+  calc
+    g ((a • ⨍ x in t, f x ∂μ) + b • ⨍ x in tᶜ, f x ∂μ) <
+        a * g (⨍ x in t, f x ∂μ) + b * g (⨍ x in tᶜ, f x ∂μ) :=
+      hg.2 (this h₀).1 (this h₀').1 hne ha hb hab
+    _ <= (a * ⨍ x in t, g (f x) ∂μ) + b * ⨍ x in tᶜ, g (f x) ∂μ := by
+      gcongr
+      exacts [(this h₀).2, (this h₀').2]
 
 Depends on / 依赖: ae_eq_const_or_exists_average_ne_compl, ae_restrict_of_ae, average_mem_openSegment_compl_self, average_pair, convexOn, finiteness, h_avg, hfi.integrableOn, hfi.prodMk, hg.convexOn.set_average_mem_epigraph, hgi.integrableOn, hm.nullMeasurableSet, imp_right, integrableOn, nullMeasurableSet, prodMk, set_average_mem_epigraph
 -/
@@ -620,7 +700,13 @@ theorem ae_eq_const_or_norm_average_lt_of_norm_le_const
     exact Or.inl this
   by_cases hfi : Integrable f μ; swap
   · simp [average_eq, integral_undef hfi, hC0]
-  rcases 
+  rcases (le_top : μ univ <= ∞).eq_or_lt with hμt | hμt
+  · simp [average_eq, measureReal_def, hμt, hC0]
+  have : IsFiniteMeasure μ := ⟨hμt⟩
+  replace h_le : forallᵐ x ∂μ, f x in closedBall (0 : E) C := by simpa only [mem_closedBall_zero_iff]
+  simpa only [interior_closedBall _ hC0.ne', mem_ball_zero_iff] using
+    (strictConvex_closedBall Real (0 : E) C).ae_eq_const_or_average_mem_interior isClosed_closedBall
+      h_le hfi
 
 中文:
 定理 ae_eq_const_or_norm_average_lt_of_norm_le_const
@@ -632,7 +718,13 @@ theorem ae_eq_const_or_norm_average_lt_of_norm_le_const
     exact Or.inl this
   by_cases hfi : Integrable f μ; swap
   · simp [average_eq, integral_undef hfi, hC0]
-  rcases 
+  rcases (le_top : μ univ <= ∞).eq_or_lt with hμt | hμt
+  · simp [average_eq, measureReal_def, hμt, hC0]
+  have : IsFiniteMeasure μ := ⟨hμt⟩
+  replace h_le : forallᵐ x ∂μ, f x in closedBall (0 : E) C := by simpa only [mem_closedBall_zero_iff]
+  simpa only [interior_closedBall _ hC0.ne', mem_ball_zero_iff] using
+    (strictConvex_closedBall Real (0 : E) C).ae_eq_const_or_average_mem_interior isClosed_closedBall
+      h_le hfi
 
 Depends on / 依赖: Integrable, IsFiniteMeasure, Or.inl, Pi.zero_apply, average_congr, average_eq, average_zero, closedBall, eq_or_lt, h_le, h_le.mono, hx.trans, integral_undef, le_or_gt, le_top, measureReal_def, mem_closedBall_, norm_le_zero_iff, replace, zero_apply
 -/
@@ -663,7 +755,8 @@ theorem ae_eq_const_or_norm_integral_lt_of_norm_le_const
   have hμ : 0 < μ.real univ := by
     simp [measureReal_def, ENNReal.toReal_pos_iff, pos_iff_ne_zero, h₀, measure_lt_top]
   refine (ae_eq_const_or_norm_average_lt_of_norm_le_const h_le).imp_right fun H => ?_
-  rwa [average_eq, norm_smu
+  rwa [average_eq, norm_smul, norm_inv, Real.norm_eq_abs, abs_of_pos hμ, ← div_eq_inv_mul,
+    div_lt_iff₀' hμ] at H
 
 中文:
 定理 ae_eq_const_or_norm_integral_lt_of_norm_le_const
@@ -673,7 +766,8 @@ theorem ae_eq_const_or_norm_integral_lt_of_norm_le_const
   have hμ : 0 < μ.real univ := by
     simp [measureReal_def, ENNReal.toReal_pos_iff, pos_iff_ne_zero, h₀, measure_lt_top]
   refine (ae_eq_const_or_norm_average_lt_of_norm_le_const h_le).imp_right fun H => ?_
-  rwa [average_eq, norm_smu
+  rwa [average_eq, norm_smul, norm_inv, Real.norm_eq_abs, abs_of_pos hμ, ← div_eq_inv_mul,
+    div_lt_iff₀' hμ] at H
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_pos_iff, EventuallyEq, Real.norm_eq_abs, abs_of_pos, ae_eq_const_or_norm_average_lt_of_norm_le_const, average_eq, div_eq_inv_mul, eq_or_ne, h_le, imp_right, measureReal_def, measure_lt_top, norm_eq_abs, norm_inv, norm_smul, pos_iff_ne_zero, toReal_pos_iff
 -/

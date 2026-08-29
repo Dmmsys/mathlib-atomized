@@ -42,7 +42,17 @@ theorem eLpNorm'_le_eLpNorm'_mul_rpow_measure_univ
   have hpq : p < q := lt_of_le_of_ne hpq hpq_eq
   let g := fun _ : α => (1 : Real>=0∞)
   have h_rw : (∫⁻ a, ‖f a‖ₑ ^ p ∂μ) = ∫⁻ a, (‖f a‖ₑ * g a) ^ p ∂μ :=
-    linteg
+    lintegral_congr fun a => by simp [g]
+  repeat' rw [eLpNorm'_eq_lintegral_enorm]
+  rw [h_rw]
+  let r := p * q / (q - p)
+  have hpqr : 1 / p = 1 / q + 1 / r := by simp [field]
+  calc
+    (∫⁻ a : α, (‖f a‖ₑ * g a) ^ p ∂μ) ^ (1 / p) <=
+        (∫⁻ a : α, ‖f a‖ₑ ^ q ∂μ) ^ (1 / q) * (∫⁻ a : α, g a ^ r ∂μ) ^ (1 / r) :=
+      ENNReal.lintegral_Lp_mul_le_Lq_mul_Lr hp0_lt hpq hpqr μ hf.enorm aemeasurable_const
+    _ = (∫⁻ a : α, ‖f a‖ₑ ^ q ∂μ) ^ (1 / q) * μ Set.univ ^ (1 / p - 1 / q) := by
+      rw [hpqr]; simp [r, g]
 
 中文:
 定理 eLpNorm'_le_eLpNorm'_mul_rpow_measure_univ
@@ -54,7 +64,17 @@ theorem eLpNorm'_le_eLpNorm'_mul_rpow_measure_univ
   have hpq : p < q := lt_of_le_of_ne hpq hpq_eq
   let g := fun _ : α => (1 : Real>=0∞)
   have h_rw : (∫⁻ a, ‖f a‖ₑ ^ p ∂μ) = ∫⁻ a, (‖f a‖ₑ * g a) ^ p ∂μ :=
-    linteg
+    lintegral_congr fun a => by simp [g]
+  repeat' rw [eLpNorm'_eq_lintegral_enorm]
+  rw [h_rw]
+  let r := p * q / (q - p)
+  have hpqr : 1 / p = 1 / q + 1 / r := by simp [field]
+  calc
+    (∫⁻ a : α, (‖f a‖ₑ * g a) ^ p ∂μ) ^ (1 / p) <=
+        (∫⁻ a : α, ‖f a‖ₑ ^ q ∂μ) ^ (1 / q) * (∫⁻ a : α, g a ^ r ∂μ) ^ (1 / r) :=
+      ENNReal.lintegral_Lp_mul_le_Lq_mul_Lr hp0_lt hpq hpqr μ hf.enorm aemeasurable_const
+    _ = (∫⁻ a : α, ‖f a‖ₑ ^ q ∂μ) ^ (1 / q) * μ Set.univ ^ (1 / p - 1 / q) := by
+      rw [hpqr]; simp [r, g]
 -/
 theorem eLpNorm'_le_eLpNorm'_mul_rpow_measure_univ {p q : Real} (hp0_lt : 0 < p) (hpq : p <= q)
     (hf : AEStronglyMeasurable f μ) :
@@ -88,7 +108,11 @@ theorem eLpNorm'_le_eLpNormEssSup_mul_rpow_measure_univ
     refine lintegral_mono_ae ?_
     have h_nnnorm_le_eLpNorm_ess_sup := enorm_ae_le_eLpNormEssSup f μ
     exact h_nnnorm_le_eLpNorm_ess_sup.mono fun x hx => by gcongr
-  rw [eLpNorm']; rw [← ENNReal.rpow_one (eLpNo
+  rw [eLpNorm']; rw [← ENNReal.rpow_one (eLpNormEssSup f μ)]
+  nth_rw 2 [← mul_inv_cancel₀ (ne_of_lt hq_pos).symm]
+  rw [ENNReal.rpow_mul]; rw [one_div]; rw [← ENNReal.mul_rpow_of_nonneg _ _ (by simp [hq_pos.le] : 0 <= q⁻¹)]
+  gcongr
+  rwa [lintegral_const] at h_le
 
 中文:
 定理 eLpNorm'_le_eLpNormEssSup_mul_rpow_measure_univ
@@ -98,7 +122,11 @@ theorem eLpNorm'_le_eLpNormEssSup_mul_rpow_measure_univ
     refine lintegral_mono_ae ?_
     have h_nnnorm_le_eLpNorm_ess_sup := enorm_ae_le_eLpNormEssSup f μ
     exact h_nnnorm_le_eLpNorm_ess_sup.mono fun x hx => by gcongr
-  rw [eLpNorm']; rw [← ENNReal.rpow_one (eLpNo
+  rw [eLpNorm']; rw [← ENNReal.rpow_one (eLpNormEssSup f μ)]
+  nth_rw 2 [← mul_inv_cancel₀ (ne_of_lt hq_pos).symm]
+  rw [ENNReal.rpow_mul]; rw [one_div]; rw [← ENNReal.mul_rpow_of_nonneg _ _ (by simp [hq_pos.le] : 0 <= q⁻¹)]
+  gcongr
+  rwa [lintegral_const] at h_le
 -/
 theorem eLpNorm'_le_eLpNormEssSup_mul_rpow_measure_univ {q : Real} (hq_pos : 0 < q) :
     eLpNorm' f q μ <= eLpNormEssSup f μ * μ Set.univ ^ (1 / q) := by
@@ -127,7 +155,15 @@ theorem eLpNorm_le_eLpNorm_mul_rpow_measure_univ
     obtain rfl | hp_top := eq_or_ne p ∞
     · simp
     rw [eLpNorm_eq_eLpNorm' hp0 hp_top]
-    hav
+    have hp_pos : 0 < p.toReal := ENNReal.toReal_pos hp0 hp_top
+    refine (eLpNorm'_le_eLpNormEssSup_mul_rpow_measure_univ hp_pos).trans (le_of_eq ?_)
+    congr
+    exact one_div _
+  have hp_lt_top : p < ∞ := hpq.trans_lt (lt_top_iff_ne_top.mpr hq_top)
+  have hp_pos : 0 < p.toReal := ENNReal.toReal_pos hp0 hp_lt_top.ne
+  rw [eLpNorm_eq_eLpNorm' hp0 hp_lt_top.ne]; rw [eLpNorm_eq_eLpNorm' hq0_lt.ne.symm hq_top]
+  have hpq_real : p.toReal <= q.toReal := ENNReal.toReal_mono hq_top hpq
+  exact eLpNorm'_le_eLpNorm'_mul_rpow_measure_univ hp_pos hpq_real hf
 
 中文:
 定理 eLpNorm_le_eLpNorm_mul_rpow_measure_univ
@@ -141,7 +177,15 @@ theorem eLpNorm_le_eLpNorm_mul_rpow_measure_univ
     obtain rfl | hp_top := eq_or_ne p ∞
     · simp
     rw [eLpNorm_eq_eLpNorm' hp0 hp_top]
-    hav
+    have hp_pos : 0 < p.toReal := ENNReal.toReal_pos hp0 hp_top
+    refine (eLpNorm'_le_eLpNormEssSup_mul_rpow_measure_univ hp_pos).trans (le_of_eq ?_)
+    congr
+    exact one_div _
+  have hp_lt_top : p < ∞ := hpq.trans_lt (lt_top_iff_ne_top.mpr hq_top)
+  have hp_pos : 0 < p.toReal := ENNReal.toReal_pos hp0 hp_lt_top.ne
+  rw [eLpNorm_eq_eLpNorm' hp0 hp_lt_top.ne]; rw [eLpNorm_eq_eLpNorm' hq0_lt.ne.symm hq_top]
+  have hpq_real : p.toReal <= q.toReal := ENNReal.toReal_mono hq_top hpq
+  exact eLpNorm'_le_eLpNorm'_mul_rpow_measure_univ hp_pos hpq_real hf
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_pos, ENNReal.toReal_top, _le_eLpNormEssSup_mul_rpow_measure_univ, _root_, _root_.div_zero, div_zero, eLpNorm, eLpNorm_eq_eLpNorm, eq_or_ne, hp0.pos.trans_le, hp_lt_top, hp_pos, hp_top, hpq.trans_lt, hq0_lt, hq_top, le_of_eq, lt_top_iff_ne_top, lt_top_iff_ne_top.mpr
 -/
@@ -239,7 +283,10 @@ theorem eLpNorm'_lt_top_of_eLpNorm'_lt_top_of_exponent_le
   calc
     eLpNorm' f p μ <= eLpNorm' f q μ * μ Set.univ ^ (1 / p - 1 / q) :=
       eLpNorm'_le_eLpNorm'_mul_rpow_measure_univ hp_pos hpq hf
-    _ < ∞
+    _ < ∞ := by
+      rw [ENNReal.mul_lt_top_iff]
+      refine Or.inl ⟨hfq_lt_top, ENNReal.rpow_lt_top_of_nonneg ?_ (by finiteness)⟩
+      rwa [le_sub_comm, sub_zero, one_div, one_div, inv_le_inv₀ hq_pos hp_pos]
 
 中文:
 定理 eLpNorm'_lt_top_of_eLpNorm'_lt_top_of_exponent_le
@@ -252,7 +299,10 @@ theorem eLpNorm'_lt_top_of_eLpNorm'_lt_top_of_exponent_le
   calc
     eLpNorm' f p μ <= eLpNorm' f q μ * μ Set.univ ^ (1 / p - 1 / q) :=
       eLpNorm'_le_eLpNorm'_mul_rpow_measure_univ hp_pos hpq hf
-    _ < ∞
+    _ < ∞ := by
+      rw [ENNReal.mul_lt_top_iff]
+      refine Or.inl ⟨hfq_lt_top, ENNReal.rpow_lt_top_of_nonneg ?_ (by finiteness)⟩
+      rwa [le_sub_comm, sub_zero, one_div, one_div, inv_le_inv₀ hq_pos hp_pos]
 -/
 theorem eLpNorm'_lt_top_of_eLpNorm'_lt_top_of_exponent_le {p q : Real} [IsFiniteMeasure μ]
     (hf : AEStronglyMeasurable f μ) (hfq_lt_top : eLpNorm' f q μ < ∞) (hp_nonneg : 0 <= p)
@@ -285,7 +335,22 @@ theorem MemLp.mono_exponent
   · have hq_top : q = ∞ := by rwa [hp_top, top_le_iff] at hpq
     rw [hp_top]
     rwa [hq_top] at hfq_lt_top
-  have hp_po
+  have hp_pos : 0 < p.toReal := ENNReal.toReal_pos hp0 hp_top
+  by_cases hq_top : q = ∞
+  · rw [eLpNorm_eq_eLpNorm' hp0 hp_top]
+    rw [hq_top]; rw [eLpNorm_exponent_top] at hfq_lt_top
+    refine lt_of_le_of_lt (eLpNorm'_le_eLpNormEssSup_mul_rpow_measure_univ hp_pos) ?_
+    refine ENNReal.mul_lt_top hfq_lt_top ?_
+    exact ENNReal.rpow_lt_top_of_nonneg (by simp [hp_pos.le]) (by finiteness)
+  have hq0 : q != 0 := by
+    by_contra hq_eq_zero
+    obtain rfl : p = 0 := le_antisymm (by rwa [hq_eq_zero] at hpq) zero_le
+    rw [ENNReal.toReal_zero] at hp_pos
+    exact (lt_irrefl _) hp_pos
+  have hpq_real : p.toReal <= q.toReal := ENNReal.toReal_mono hq_top hpq
+  rw [eLpNorm_eq_eLpNorm' hp0 hp_top]
+  rw [eLpNorm_eq_eLpNorm' hq0 hq_top] at hfq_lt_top
+  exact eLpNorm'_lt_top_of_eLpNorm'_lt_top_of_exponent_le hfq_m hfq_lt_top hp_pos.le hpq_real
 
 中文:
 定理 MemLp.mono_exponent
@@ -300,7 +365,22 @@ theorem MemLp.mono_exponent
   · have hq_top : q = ∞ := by rwa [hp_top, top_le_iff] at hpq
     rw [hp_top]
     rwa [hq_top] at hfq_lt_top
-  have hp_po
+  have hp_pos : 0 < p.toReal := ENNReal.toReal_pos hp0 hp_top
+  by_cases hq_top : q = ∞
+  · rw [eLpNorm_eq_eLpNorm' hp0 hp_top]
+    rw [hq_top]; rw [eLpNorm_exponent_top] at hfq_lt_top
+    refine lt_of_le_of_lt (eLpNorm'_le_eLpNormEssSup_mul_rpow_measure_univ hp_pos) ?_
+    refine ENNReal.mul_lt_top hfq_lt_top ?_
+    exact ENNReal.rpow_lt_top_of_nonneg (by simp [hp_pos.le]) (by finiteness)
+  have hq0 : q != 0 := by
+    by_contra hq_eq_zero
+    obtain rfl : p = 0 := le_antisymm (by rwa [hq_eq_zero] at hpq) zero_le
+    rw [ENNReal.toReal_zero] at hp_pos
+    exact (lt_irrefl _) hp_pos
+  have hpq_real : p.toReal <= q.toReal := ENNReal.toReal_mono hq_top hpq
+  rw [eLpNorm_eq_eLpNorm' hp0 hp_top]
+  rw [eLpNorm_eq_eLpNorm' hq0 hq_top] at hfq_lt_top
+  exact eLpNorm'_lt_top_of_eLpNorm'_lt_top_of_exponent_le hfq_m hfq_lt_top hp_pos.le hpq_real
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_pos, _le_eLpNormEssSup_mul_rpow_m, eLpNorm, eLpNorm_eq_eLpNorm, eLpNorm_exponent_top, hfq_lt_top, hfq_m, hp_pos, hp_top, hq_top, lt_of_le_of_lt, memLp_zero_iff_aestronglyMeasurable, p.toReal, toReal, toReal_pos, top_le_iff
 -/
@@ -345,7 +425,8 @@ lemma MemLp.mono_exponent_of_measure_support_ne_top
     contrapose hx
     exact subset_toMeasurable μ s hx
   rw [← this]; rw [memLp_indicator_iff_restrict (measurableSet_toMeasurable μ s)] at hfq ⊢
-  have
+  have : Fact (μ (toMeasurable μ s) < ∞) := ⟨by simpa [lt_top_iff_ne_top] using hs⟩
+  exact hfq.mono_exponent hpq
 
 中文:
 引理 MemLp.mono_exponent_of_measure_support_ne_top
@@ -357,7 +438,8 @@ lemma MemLp.mono_exponent_of_measure_support_ne_top
     contrapose hx
     exact subset_toMeasurable μ s hx
   rw [← this]; rw [memLp_indicator_iff_restrict (measurableSet_toMeasurable μ s)] at hfq ⊢
-  have
+  have : Fact (μ (toMeasurable μ s) < ∞) := ⟨by simpa [lt_top_iff_ne_top] using hs⟩
+  exact hfq.mono_exponent hpq
 
 Depends on / 依赖: Function, Function.support_subset_iff, Set.indicator_eq_self, contrapose, hfq.mono_exponent, indicator, indicator_eq_self, lt_top_iff_ne_top, measurableSet_toMeasurable, memLp_indicator_iff_restrict, mono_exponent, subset_toMeasurable, support_subset_iff, toMeasurable
 -/
@@ -394,7 +476,22 @@ theorem eLpNorm_le_eLpNorm_top_mul_eLpNorm
       eLpNorm_mono_ae_real h
     _ <= c * eLpNorm f ∞ μ * eLpNorm g p μ := ?_
   simp only [smul_mul_assoc, ← Pi.smul_def, eLpNorm_const_smul]
-  rw [Real.enorm_eq_ofReal c.coe_nonneg]; rw [ENNRe
+  rw [Real.enorm_eq_ofReal c.coe_nonneg]; rw [ENNReal.ofReal_coe_nnreal]; rw [mul_assoc]
+  gcongr
+  obtain (rfl | rfl | hp) := ENNReal.trichotomy p
+  · simp
+  · rw [← eLpNorm_norm f, ← eLpNorm_norm g]
+    simp_rw [eLpNorm_exponent_top, eLpNormEssSup_eq_essSup_enorm, enorm_mul, enorm_norm]
+    exact ENNReal.essSup_mul_le (‖f ·‖ₑ) (‖g ·‖ₑ)
+  obtain ⟨hp₁, hp₂⟩ := ENNReal.toReal_pos_iff.mp hp
+  simp_rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp₁.ne' hp₂.ne, eLpNorm_exponent_top,
+    eLpNormEssSup, one_div, ENNReal.rpow_inv_le_iff hp, enorm_mul, enorm_norm]
+  rw [ENNReal.mul_rpow_of_nonneg (hz := hp.le)]; rw [ENNReal.rpow_inv_rpow hp.ne']; rw [← lintegral_const_mul'' _ (by fun_prop)]
+  simp only [← ENNReal.mul_rpow_of_nonneg (hz := hp.le)]
+  apply lintegral_mono_ae
+  filter_upwards [h, enorm_ae_le_eLpNormEssSup f μ] with x hb hf
+  gcongr
+  exact hf
 
 中文:
 定理 eLpNorm_le_eLpNorm_top_mul_eLpNorm
@@ -405,7 +502,22 @@ theorem eLpNorm_le_eLpNorm_top_mul_eLpNorm
       eLpNorm_mono_ae_real h
     _ <= c * eLpNorm f ∞ μ * eLpNorm g p μ := ?_
   simp only [smul_mul_assoc, ← Pi.smul_def, eLpNorm_const_smul]
-  rw [Real.enorm_eq_ofReal c.coe_nonneg]; rw [ENNRe
+  rw [Real.enorm_eq_ofReal c.coe_nonneg]; rw [ENNReal.ofReal_coe_nnreal]; rw [mul_assoc]
+  gcongr
+  obtain (rfl | rfl | hp) := ENNReal.trichotomy p
+  · simp
+  · rw [← eLpNorm_norm f, ← eLpNorm_norm g]
+    simp_rw [eLpNorm_exponent_top, eLpNormEssSup_eq_essSup_enorm, enorm_mul, enorm_norm]
+    exact ENNReal.essSup_mul_le (‖f ·‖ₑ) (‖g ·‖ₑ)
+  obtain ⟨hp₁, hp₂⟩ := ENNReal.toReal_pos_iff.mp hp
+  simp_rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp₁.ne' hp₂.ne, eLpNorm_exponent_top,
+    eLpNormEssSup, one_div, ENNReal.rpow_inv_le_iff hp, enorm_mul, enorm_norm]
+  rw [ENNReal.mul_rpow_of_nonneg (hz := hp.le)]; rw [ENNReal.rpow_inv_rpow hp.ne']; rw [← lintegral_const_mul'' _ (by fun_prop)]
+  simp only [← ENNReal.mul_rpow_of_nonneg (hz := hp.le)]
+  apply lintegral_mono_ae
+  filter_upwards [h, enorm_ae_le_eLpNormEssSup f μ] with x hb hf
+  gcongr
+  exact hf
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_coe_nnreal, ENNReal.trichotomy, Pi.smul_def, Real.enorm_eq_ofReal, c.coe_nonneg, coe_nonneg, eLpNorm, eLpNormEssSup_eq_essSup_enorm, eLpNorm_const_smul, eLpNorm_exponent_top, eLpNorm_mono_ae_real, eLpNorm_norm, enorm_eq_ofReal, enorm_mul, mul_assoc, ofReal_coe_nnreal, simp_rw, smul_def, smul_mul_assoc
 -/
@@ -447,7 +559,7 @@ eLpNorm_le_eLpNorm_top_mul_eLpNorm p g hf (flip b) c by
         convert! h using 3 with x
         simp only [mul_assoc, mul_comm ‖f x‖₊]
     _ = c * eLpNorm f p μ * eLpNorm g ∞ μ := by
-      simp only [mul_assoc]; 
+      simp only [mul_assoc]; rw [mul_comm (eLpNorm _ _ _)]
 
 中文:
 定理 eLpNorm_le_eLpNorm_mul_eLpNorm_top
@@ -458,7 +570,7 @@ eLpNorm_le_eLpNorm_top_mul_eLpNorm p g hf (flip b) c by
         convert! h using 3 with x
         simp only [mul_assoc, mul_comm ‖f x‖₊]
     _ = c * eLpNorm f p μ * eLpNorm g ∞ μ := by
-      simp only [mul_assoc]; 
+      simp only [mul_assoc]; rw [mul_comm (eLpNorm _ _ _)]
 
 Depends on / 依赖: convert, eLpNorm, eLpNorm_le_eLpNorm_top_mul_eLpNorm, mul_assoc, mul_comm
 -/
@@ -490,6 +602,12 @@ refine lintegral_mono_ae h.mono fun a ha => ?_
       gcongr
       simp only [enorm_eq_nnnorm, ENNReal.coe_le_coe]
       simpa using! ha
+    _ <= c * eLpNorm' f p μ * eLpNorm' g q μ := by
+      simp only [smul_mul_assoc, ← Pi.smul_def, eLpNorm'_const_smul _ hro_lt]
+      rw [Real.enorm_eq_ofReal c.coe_nonneg]; rw [ENNReal.ofReal_coe_nnreal]; rw [mul_assoc]
+      gcongr
+      simpa only [eLpNorm', enorm_mul, enorm_norm] using!
+        ENNReal.lintegral_Lp_mul_le_Lq_mul_Lr hro_lt hrp hpqr μ hf.enorm hg.enorm
 
 中文:
 定理 eLpNorm'_le_eLpNorm'_mul_eLpNorm'
@@ -504,6 +622,12 @@ refine lintegral_mono_ae h.mono fun a ha => ?_
       gcongr
       simp only [enorm_eq_nnnorm, ENNReal.coe_le_coe]
       simpa using! ha
+    _ <= c * eLpNorm' f p μ * eLpNorm' g q μ := by
+      simp only [smul_mul_assoc, ← Pi.smul_def, eLpNorm'_const_smul _ hro_lt]
+      rw [Real.enorm_eq_ofReal c.coe_nonneg]; rw [ENNReal.ofReal_coe_nnreal]; rw [mul_assoc]
+      gcongr
+      simpa only [eLpNorm', enorm_mul, enorm_norm] using!
+        ENNReal.lintegral_Lp_mul_le_Lq_mul_Lr hro_lt hrp hpqr μ hf.enorm hg.enorm
 -/
 theorem eLpNorm'_le_eLpNorm'_mul_eLpNorm' {p q r : Real} (hf : AEStronglyMeasurable f μ)
     (hg : AEStronglyMeasurable g μ) (b : E -> F -> G) (c : Real>=0)
@@ -540,7 +664,21 @@ theorem eLpNorm_le_eLpNorm_mul_eLpNorm_of_nnnorm
     exact this ▸ eLpNorm_le_eLpNorm_top_mul_eLpNorm r f hg b c h
   obtain (rfl | rfl | hq) := ENNReal.trichotomy q
   · simp_all
-  · have : r = p := by simpa using 
+  · have : r = p := by simpa using hpqr
+    exact this ▸ eLpNorm_le_eLpNorm_mul_eLpNorm_top p hf g b c h
+  obtain ⟨hp₁, hp₂⟩ := ENNReal.toReal_pos_iff.mp hp
+  obtain ⟨hq₁, hq₂⟩ := ENNReal.toReal_pos_iff.mp hq
+  have hpqr' : 1 / r.toReal = 1 / p.toReal + 1 / q.toReal := by
+    have := congr(ENNReal.toReal $(hpqr))
+    rw [ENNReal.toReal_add (by simpa using hp₁.ne') (by simpa using hq₁.ne')] at this
+    simpa
+have hr : 0 < r.toReal := one_div_pos.mp by rw [hpqr']; positivity
+  obtain ⟨hr₁, hr₂⟩ := ENNReal.toReal_pos_iff.mp hr
+have hrp : r.toReal < p.toReal := lt_of_one_div_lt_one_div hp
+    hpqr' ▸ lt_add_of_pos_right _ (by positivity)
+  rw [eLpNorm_eq_eLpNorm']; rw [eLpNorm_eq_eLpNorm']; rw [eLpNorm_eq_eLpNorm']
+  · exact eLpNorm'_le_eLpNorm'_mul_eLpNorm' hf hg b c h hr hrp hpqr'
+  all_goals first | positivity | finiteness
 
 中文:
 定理 eLpNorm_le_eLpNorm_mul_eLpNorm_of_nnnorm
@@ -553,7 +691,21 @@ theorem eLpNorm_le_eLpNorm_mul_eLpNorm_of_nnnorm
     exact this ▸ eLpNorm_le_eLpNorm_top_mul_eLpNorm r f hg b c h
   obtain (rfl | rfl | hq) := ENNReal.trichotomy q
   · simp_all
-  · have : r = p := by simpa using 
+  · have : r = p := by simpa using hpqr
+    exact this ▸ eLpNorm_le_eLpNorm_mul_eLpNorm_top p hf g b c h
+  obtain ⟨hp₁, hp₂⟩ := ENNReal.toReal_pos_iff.mp hp
+  obtain ⟨hq₁, hq₂⟩ := ENNReal.toReal_pos_iff.mp hq
+  have hpqr' : 1 / r.toReal = 1 / p.toReal + 1 / q.toReal := by
+    have := congr(ENNReal.toReal $(hpqr))
+    rw [ENNReal.toReal_add (by simpa using hp₁.ne') (by simpa using hq₁.ne')] at this
+    simpa
+have hr : 0 < r.toReal := one_div_pos.mp by rw [hpqr']; positivity
+  obtain ⟨hr₁, hr₂⟩ := ENNReal.toReal_pos_iff.mp hr
+have hrp : r.toReal < p.toReal := lt_of_one_div_lt_one_div hp
+    hpqr' ▸ lt_add_of_pos_right _ (by positivity)
+  rw [eLpNorm_eq_eLpNorm']; rw [eLpNorm_eq_eLpNorm']; rw [eLpNorm_eq_eLpNorm']
+  · exact eLpNorm'_le_eLpNorm'_mul_eLpNorm' hf hg b c h hr hrp hpqr'
+  all_goals first | positivity | finiteness
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_pos_iff.mp, ENNReal.trichotomy, eLpNorm_le_eLpNorm_mul_eLpNorm_top, eLpNorm_le_eLpNorm_top_mul_eLpNorm, hpqr.one_div_eq, one_div_eq, p.toReal, q.toR, r.toReal, toReal, toReal_pos_iff, trichotomy
 -/
@@ -834,7 +986,7 @@ lemma MemLp.prod
       simp [MemLp, eLpNormEssSup_const, hμ, aestronglyMeasurable_const, Pi.one_def]
   | cons i s hi ih =>
     rw [prod_cons]
-    exact (ih <| forall_of_forall_cons hf).mul (hf i <| mem_cons_self ..) (hpqr := ⟨by simp
+    exact (ih <| forall_of_forall_cons hf).mul (hf i <| mem_cons_self ..) (hpqr := ⟨by simp⟩)
 
 中文:
 引理 MemLp.乘积
@@ -846,7 +998,7 @@ lemma MemLp.prod
       simp [MemLp, eLpNormEssSup_const, hμ, aestronglyMeasurable_const, Pi.one_def]
   | cons i s hi ih =>
     rw [prod_cons]
-    exact (ih <| forall_of_forall_cons hf).mul (hf i <| mem_cons_self ..) (hpqr := ⟨by simp
+    exact (ih <| forall_of_forall_cons hf).mul (hf i <| mem_cons_self ..) (hpqr := ⟨by simp⟩)
 -/
 protected lemma MemLp.prod (hf : forall i in s, MemLp (f i) (p i) μ) :
     MemLp (∏ i in s, f i) (∑ i in s, (p i)⁻¹)⁻¹ μ := by

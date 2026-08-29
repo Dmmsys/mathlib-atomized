@@ -41,7 +41,10 @@ theorem hasStrictFDerivAt_cpow
   have : (fun x : Complex × Complex => x.1 ^ x.2) =ᶠ[𝓝 p] fun x => exp (log x.1 * x.2) :=
     ((isOpen_ne.preimage continuous_fst).eventually_mem A).mono fun p hp =>
       cpow_def_of_ne_zero hp _
-  rw [cpow_sub _ _ A]; rw [cpow_one]; rw [mul_div_left_c
+  rw [cpow_sub _ _ A]; rw [cpow_one]; rw [mul_div_left_comm]; rw [mul_smul]; rw [mul_smul]
+  refine HasStrictFDerivAt.congr_of_eventuallyEq ?_ this.symm
+  simpa only [cpow_def_of_ne_zero A, div_eq_mul_inv, mul_smul, add_comm, smul_add] using!
+    ((hasStrictFDerivAt_fst.clog hp).mul hasStrictFDerivAt_snd).cexp
 
 中文:
 定理 hasStrictFDerivAt_cpow
@@ -51,7 +54,10 @@ theorem hasStrictFDerivAt_cpow
   have : (fun x : Complex × Complex => x.1 ^ x.2) =ᶠ[𝓝 p] fun x => exp (log x.1 * x.2) :=
     ((isOpen_ne.preimage continuous_fst).eventually_mem A).mono fun p hp =>
       cpow_def_of_ne_zero hp _
-  rw [cpow_sub _ _ A]; rw [cpow_one]; rw [mul_div_left_c
+  rw [cpow_sub _ _ A]; rw [cpow_one]; rw [mul_div_left_comm]; rw [mul_smul]; rw [mul_smul]
+  refine HasStrictFDerivAt.congr_of_eventuallyEq ?_ this.symm
+  simpa only [cpow_def_of_ne_zero A, div_eq_mul_inv, mul_smul, add_comm, smul_add] using!
+    ((hasStrictFDerivAt_fst.clog hp).mul hasStrictFDerivAt_snd).cexp
 
 Depends on / 依赖: HasStrictFDerivAt, HasStrictFDerivAt.congr_of_eventuallyEq, add_comm, congr_of_eventuallyEq, continuous_fst, cpow_def_of_ne_zero, cpow_one, cpow_sub, div_eq_mul_inv, eventually_mem, hasStrictFDerivAt_fst, hasStrictFDerivAt_fst.clog, isOpen_ne, isOpen_ne.preimage, mul_div_left_comm, mul_smul, preimage, slitPlane_ne_zero, smul_add, this.symm
 -/
@@ -101,7 +107,8 @@ theorem hasStrictDerivAt_const_cpow
     rw [log_zero]; rw [mul_zero]
     refine (hasStrictDerivAt_const y 0).congr_of_eventuallyEq ?_
     exact (isOpen_ne.eventually_mem h).mono fun y hy => (zero_cpow hy).symm
-  · simpa only [cpow_def_of_ne_zero hx, mul_one
+  · simpa only [cpow_def_of_ne_zero hx, mul_one] using!
+      ((hasStrictDerivAt_id y).const_mul (log x)).cexp
 
 中文:
 定理 hasStrictDerivAt_const_cpow
@@ -112,7 +119,8 @@ theorem hasStrictDerivAt_const_cpow
     rw [log_zero]; rw [mul_zero]
     refine (hasStrictDerivAt_const y 0).congr_of_eventuallyEq ?_
     exact (isOpen_ne.eventually_mem h).mono fun y hy => (zero_cpow hy).symm
-  · simpa only [cpow_def_of_ne_zero hx, mul_one
+  · simpa only [cpow_def_of_ne_zero hx, mul_one] using!
+      ((hasStrictDerivAt_id y).const_mul (log x)).cexp
 
 Depends on / 依赖: congr_of_eventuallyEq, const_mul, cpow_def_of_ne_zero, eventually_mem, h.neg_resolve_left, hasStrictDerivAt_const, hasStrictDerivAt_id, isOpen_ne, isOpen_ne.eventually_mem, log_zero, mul_one, mul_zero, neg_resolve_left, replace, zero_cpow
 -/
@@ -800,7 +808,11 @@ theorem Complex.derivWithin_const_cpow
       derivWithin_zero_of_not_uniqueDiffWithinAt h, mul_zero, zero_mul]
   by_cases hc : c = 0; swap
   · rw [mul_comm, ← mul_assoc]
-    exact (hf.hasDerivWithinAt.const_cpow (Or.inl hc)).deriv
+    exact (hf.hasDerivWithinAt.const_cpow (Or.inl hc)).derivWithin h
+  rw [uniqueDiffWithinAt_iff_accPt]; rw [accPt_principal_iff_nhdsWithin] at h
+  simp only [hc, log_zero, zero_mul]
+  apply derivWithin_zero_of_frequently_mem {0, 1} (mt Set.Infinite.of_accPt (by simp))
+  simpa [zero_cpow_eq_iff, em']
 
 中文:
 定理 复形.derivWithin_const_cpow
@@ -811,7 +823,11 @@ theorem Complex.derivWithin_const_cpow
       derivWithin_zero_of_not_uniqueDiffWithinAt h, mul_zero, zero_mul]
   by_cases hc : c = 0; swap
   · rw [mul_comm, ← mul_assoc]
-    exact (hf.hasDerivWithinAt.const_cpow (Or.inl hc)).deriv
+    exact (hf.hasDerivWithinAt.const_cpow (Or.inl hc)).derivWithin h
+  rw [uniqueDiffWithinAt_iff_accPt]; rw [accPt_principal_iff_nhdsWithin] at h
+  simp only [hc, log_zero, zero_mul]
+  apply derivWithin_zero_of_frequently_mem {0, 1} (mt Set.Infinite.of_accPt (by simp))
+  simpa [zero_cpow_eq_iff, em']
 
 Depends on / 依赖: Infinite, Or.inl, Set.Infinite.of_accPt, UniqueDiffWithinAt, accPt_principal_iff_nhdsWithin, const_cpow, derivWithin, derivWithin_zero_of_frequently_mem, derivWithin_zero_of_not_uniqueDiffWithinAt, hasDerivWithinAt, hf.hasDerivWithinAt.const_cpow, log_zero, mul_assoc, mul_comm, mul_zero, of_accPt, uniqueDiffWithinAt_iff_accPt, zero_c, zero_mul
 -/
@@ -864,7 +880,36 @@ theorem hasDerivAt_ofReal_cpow_const'
   · -- easy case : `0 < x`
     apply HasDerivAt.comp_ofReal (e := fun y => (y : Complex) ^ (r + 1) / (r + 1))
     convert! HasDerivAt.div_const (𝕜 := Complex) ?_ (r + 1) using 1
-    · exact (m
+    · exact (mul_div_cancel_right₀ _ hr).symm
+    · convert! HasDerivAt.cpow_const ?_ ?_ using 1
+      · rw [add_sub_cancel_right, mul_comm]; exact (mul_one _).symm
+      · exact hasDerivAt_id (x : Complex)
+      · simp [hx]
+  · -- harder case : `x < 0`
+    have : forallᶠ y : Real in 𝓝 x,
+        (y : Complex) ^ (r + 1) / (r + 1) = (-y : Complex) ^ (r + 1) * exp (π * I * (r + 1)) / (r + 1) := by
+      refine Filter.eventually_of_mem (Iio_mem_nhds hx) fun y hy => ?_
+      rw [ofReal_cpow_of_nonpos (le_of_lt hy)]
+    refine HasDerivAt.congr_of_eventuallyEq ?_ this
+    rw [ofReal_cpow_of_nonpos (le_of_lt hx)]
+    suffices HasDerivAt (fun y : Real => (-↑y) ^ (r + 1) * exp (↑π * I * (r + 1)))
+        ((r + 1) * (-↑x) ^ r * exp (↑π * I * r)) x by
+      convert! this.div_const (r + 1) using 1
+      conv_rhs => rw [mul_assoc, mul_comm, mul_div_cancel_right₀ _ hr]
+    rw [mul_add ((π : Complex) * _)]; rw [mul_one]; rw [exp_add]; rw [exp_pi_mul_I]; rw [mul_comm (_ : Complex) (-1 : Complex)]; rw [neg_one_mul]
+    simp_rw [mul_neg, ← neg_mul, ← ofReal_neg]
+    suffices HasDerivAt (fun y : Real => (↑(-y) : Complex) ^ (r + 1)) (-(r + 1) * ↑(-x) ^ r) x by
+      convert! this.neg.mul_const _ using 1; ring
+    suffices HasDerivAt (fun y : Real => (y : Complex) ^ (r + 1)) ((r + 1) * ↑(-x) ^ r) (-x) by
+      convert! @HasDerivAt.scomp Real _ Complex _ _ x Real _ _ _ _ _ _ _ _ this (hasDerivAt_neg x) using 1
+      rw [real_smul]; rw [ofReal_neg 1]; rw [ofReal_one]; ring
+    suffices HasDerivAt (fun y : Complex => y ^ (r + 1)) ((r + 1) * ↑(-x) ^ r) ↑(-x) by
+      exact this.comp_ofReal
+    conv in ↑_ ^ _ => rw [(by ring : r = r + 1 - 1)]
+    convert! HasDerivAt.cpow_const ?_ ?_ using 1
+    · rw [add_sub_cancel_right, add_sub_cancel_right]; exact (mul_one _).symm
+    · exact hasDerivAt_id ((-x : Real) : Complex)
+    · simp [hx]
 
 中文:
 定理 hasDerivAt_of实数_cpow_const'
@@ -875,7 +920,36 @@ theorem hasDerivAt_ofReal_cpow_const'
   · -- easy case : `0 < x`
     apply HasDerivAt.comp_ofReal (e := fun y => (y : Complex) ^ (r + 1) / (r + 1))
     convert! HasDerivAt.div_const (𝕜 := Complex) ?_ (r + 1) using 1
-    · exact (m
+    · exact (mul_div_cancel_right₀ _ hr).symm
+    · convert! HasDerivAt.cpow_const ?_ ?_ using 1
+      · rw [add_sub_cancel_right, mul_comm]; exact (mul_one _).symm
+      · exact hasDerivAt_id (x : Complex)
+      · simp [hx]
+  · -- harder case : `x < 0`
+    have : forallᶠ y : Real in 𝓝 x,
+        (y : Complex) ^ (r + 1) / (r + 1) = (-y : Complex) ^ (r + 1) * exp (π * I * (r + 1)) / (r + 1) := by
+      refine Filter.eventually_of_mem (Iio_mem_nhds hx) fun y hy => ?_
+      rw [ofReal_cpow_of_nonpos (le_of_lt hy)]
+    refine HasDerivAt.congr_of_eventuallyEq ?_ this
+    rw [ofReal_cpow_of_nonpos (le_of_lt hx)]
+    suffices HasDerivAt (fun y : Real => (-↑y) ^ (r + 1) * exp (↑π * I * (r + 1)))
+        ((r + 1) * (-↑x) ^ r * exp (↑π * I * r)) x by
+      convert! this.div_const (r + 1) using 1
+      conv_rhs => rw [mul_assoc, mul_comm, mul_div_cancel_right₀ _ hr]
+    rw [mul_add ((π : Complex) * _)]; rw [mul_one]; rw [exp_add]; rw [exp_pi_mul_I]; rw [mul_comm (_ : Complex) (-1 : Complex)]; rw [neg_one_mul]
+    simp_rw [mul_neg, ← neg_mul, ← ofReal_neg]
+    suffices HasDerivAt (fun y : Real => (↑(-y) : Complex) ^ (r + 1)) (-(r + 1) * ↑(-x) ^ r) x by
+      convert! this.neg.mul_const _ using 1; ring
+    suffices HasDerivAt (fun y : Real => (y : Complex) ^ (r + 1)) ((r + 1) * ↑(-x) ^ r) (-x) by
+      convert! @HasDerivAt.scomp Real _ Complex _ _ x Real _ _ _ _ _ _ _ _ this (hasDerivAt_neg x) using 1
+      rw [real_smul]; rw [ofReal_neg 1]; rw [ofReal_one]; ring
+    suffices HasDerivAt (fun y : Complex => y ^ (r + 1)) ((r + 1) * ↑(-x) ^ r) ↑(-x) by
+      exact this.comp_ofReal
+    conv in ↑_ ^ _ => rw [(by ring : r = r + 1 - 1)]
+    convert! HasDerivAt.cpow_const ?_ ?_ using 1
+    · rw [add_sub_cancel_right, add_sub_cancel_right]; exact (mul_one _).symm
+    · exact hasDerivAt_id ((-x : Real) : Complex)
+    · simp [hx]
 
 Depends on / 依赖: HasDerivAt, HasDerivAt.comp_ofReal, HasDerivAt.cpow_const, HasDerivAt.div_const, add_eq_zero_iff_eq_neg, add_sub_cancel_right, comp_ofReal, convert, cpow_const, div_const, harder, hasDerivAt_id, hx.symm, lt_or_gt_of_ne, mul_comm, mul_one
 -/
@@ -1032,7 +1106,10 @@ theorem isTheta_deriv_ofReal_cpow_const_atTop
     _ =ᶠ[atTop] fun x : Real => c * x ^ (c - 1) := by
       filter_upwards [eventually_ne_atTop 0] with x hx using by rw [deriv_ofReal_cpow_const hx hc]
     _ =Θ[atTop] fun x : Real => ‖(x : Complex) ^ (c - 1)‖ :=
-      (Asymptotics.IsTheta.of_norm_eventuallyEq EventuallyEq.rfl).const_mul_
+      (Asymptotics.IsTheta.of_norm_eventuallyEq EventuallyEq.rfl).const_mul_left hc
+    _ =ᶠ[atTop] fun x => x ^ (c.re - 1) := by
+      filter_upwards [eventually_gt_atTop 0] with x hx
+      rw [norm_cpow_eq_rpow_re_of_pos hx]; rw [sub_re]; rw [one_re]
 
 中文:
 定理 isTheta_deriv_of实数_cpow_const_atTop
@@ -1042,7 +1119,10 @@ theorem isTheta_deriv_ofReal_cpow_const_atTop
     _ =ᶠ[atTop] fun x : Real => c * x ^ (c - 1) := by
       filter_upwards [eventually_ne_atTop 0] with x hx using by rw [deriv_ofReal_cpow_const hx hc]
     _ =Θ[atTop] fun x : Real => ‖(x : Complex) ^ (c - 1)‖ :=
-      (Asymptotics.IsTheta.of_norm_eventuallyEq EventuallyEq.rfl).const_mul_
+      (Asymptotics.IsTheta.of_norm_eventuallyEq EventuallyEq.rfl).const_mul_left hc
+    _ =ᶠ[atTop] fun x => x ^ (c.re - 1) := by
+      filter_upwards [eventually_gt_atTop 0] with x hx
+      rw [norm_cpow_eq_rpow_re_of_pos hx]; rw [sub_re]; rw [one_re]
 
 Depends on / 依赖: Asymptotics, Asymptotics.IsTheta.of_norm_eventuallyEq, EventuallyEq, EventuallyEq.rfl, IsTheta, c.re, const_mul_left, deriv_ofReal_cpow_const, eventually_gt_atTop, eventually_ne_atTop, filter_upwards, norm_cpow_eq_rpow_re_of_pos, of_norm_eventuallyEq, one_re, sub_re
 -/
@@ -1100,7 +1180,8 @@ theorem hasStrictFDerivAt_rpow_of_pos
   have : (fun x : Real × Real => x.1 ^ x.2) =ᶠ[𝓝 p] fun x => exp (log x.1 * x.2) :=
     (continuousAt_fst.eventually (lt_mem_nhds hp)).mono fun p hp => rpow_def_of_pos hp _
   refine HasStrictFDerivAt.congr_of_eventuallyEq ?_ this.symm
-  convert! ((hasStrictFDerivAt_fst.log hp.ne').fun_mul hasStri
+  convert! ((hasStrictFDerivAt_fst.log hp.ne').fun_mul hasStrictFDerivAt_snd).exp using 1
+  rw [rpow_sub_one hp.ne']; rw [← rpow_def_of_pos hp]; rw [smul_add]; rw [smul_smul]; rw [mul_div_left_comm]; rw [div_eq_mul_inv]; rw [smul_smul]; rw [smul_smul]; rw [mul_assoc]; rw [add_comm]
 
 中文:
 定理 hasStrictFDerivAt_rpow_of_pos
@@ -1109,7 +1190,8 @@ theorem hasStrictFDerivAt_rpow_of_pos
   have : (fun x : Real × Real => x.1 ^ x.2) =ᶠ[𝓝 p] fun x => exp (log x.1 * x.2) :=
     (continuousAt_fst.eventually (lt_mem_nhds hp)).mono fun p hp => rpow_def_of_pos hp _
   refine HasStrictFDerivAt.congr_of_eventuallyEq ?_ this.symm
-  convert! ((hasStrictFDerivAt_fst.log hp.ne').fun_mul hasStri
+  convert! ((hasStrictFDerivAt_fst.log hp.ne').fun_mul hasStrictFDerivAt_snd).exp using 1
+  rw [rpow_sub_one hp.ne']; rw [← rpow_def_of_pos hp]; rw [smul_add]; rw [smul_smul]; rw [mul_div_left_comm]; rw [div_eq_mul_inv]; rw [smul_smul]; rw [smul_smul]; rw [mul_assoc]; rw [add_comm]
 
 Depends on / 依赖: HasStrictFDerivAt, HasStrictFDerivAt.congr_of_eventuallyEq, congr_of_eventuallyEq, continuousAt_fst, continuousAt_fst.eventually, convert, div_eq_mul_inv, eventually, fun_mul, hasStrictFDerivAt_fst, hasStrictFDerivAt_fst.log, hasStrictFDerivAt_snd, hp.ne, lt_mem_nhds, mul_assoc, mul_div_left_comm, rpow_def_of_pos, rpow_sub_one, smul_add, smul_smul
 -/
@@ -1134,7 +1216,11 @@ theorem hasStrictFDerivAt_rpow_of_neg
     (continuousAt_fst.eventually (gt_mem_nhds hp)).mono fun p hp => rpow_def_of_neg hp _
   refine HasStrictFDerivAt.congr_of_eventuallyEq ?_ this.symm
   convert!
-    ((hasStrictFDerivAt_fst.log hp.
+    ((hasStrictFDerivAt_fst.log hp.ne).fun_mul hasStrictFDerivAt_snd).exp.fun_mul
+      (hasStrictFDerivAt_snd.mul_const π).cos using 1
+  simp_rw [rpow_sub_one hp.ne, smul_add, ← add_assoc, smul_smul, ← add_smul, ← mul_assoc,
+    mul_comm (cos _), ← rpow_def_of_neg hp]
+  rw [div_eq_mul_inv]; rw [add_comm]; congr 2 <;> ring
 
 中文:
 定理 hasStrictFDerivAt_rpow_of_neg
@@ -1144,7 +1230,11 @@ theorem hasStrictFDerivAt_rpow_of_neg
     (continuousAt_fst.eventually (gt_mem_nhds hp)).mono fun p hp => rpow_def_of_neg hp _
   refine HasStrictFDerivAt.congr_of_eventuallyEq ?_ this.symm
   convert!
-    ((hasStrictFDerivAt_fst.log hp.
+    ((hasStrictFDerivAt_fst.log hp.ne).fun_mul hasStrictFDerivAt_snd).exp.fun_mul
+      (hasStrictFDerivAt_snd.mul_const π).cos using 1
+  simp_rw [rpow_sub_one hp.ne, smul_add, ← add_assoc, smul_smul, ← add_smul, ← mul_assoc,
+    mul_comm (cos _), ← rpow_def_of_neg hp]
+  rw [div_eq_mul_inv]; rw [add_comm]; congr 2 <;> ring
 
 Depends on / 依赖: HasStrictFDerivAt, HasStrictFDerivAt.congr_of_eventuallyEq, add_assoc, add_smul, congr_of_eventuallyEq, continuousAt_fst, continuousAt_fst.eventually, convert, eventually, exp.fun_mul, fun_mul, gt_mem_nhds, hasStrictFDerivAt_fst, hasStrictFDerivAt_fst.log, hasStrictFDerivAt_snd, hasStrictFDerivAt_snd.mul_const, hp.ne, mul_assoc, mul_comm, mul_const
 -/
@@ -1175,7 +1265,8 @@ theorem contDiffAt_rpow_of_ne
     [(((contDiffAt_fst.log hneg.ne).mul contDiffAt_snd).exp.mul
           (contDiffAt_snd.mul contDiffAt_const).cos).congr_of_eventuallyEq
       ((continuousAt_fst.eventually (gt_mem_nhds hneg)).mono fun p hp => rpow_def_of_neg hp _),
-    ((contDiffA
+    ((contDiffAt_fst.log hpos.ne').mul contDiffAt_snd).exp.congr_of_eventuallyEq
+      ((continuousAt_fst.eventually (lt_mem_nhds hpos)).mono fun p hp => rpow_def_of_pos hp _)]
 
 中文:
 定理 contDiffAt_rpow_of_ne
@@ -1186,7 +1277,8 @@ theorem contDiffAt_rpow_of_ne
     [(((contDiffAt_fst.log hneg.ne).mul contDiffAt_snd).exp.mul
           (contDiffAt_snd.mul contDiffAt_const).cos).congr_of_eventuallyEq
       ((continuousAt_fst.eventually (gt_mem_nhds hneg)).mono fun p hp => rpow_def_of_neg hp _),
-    ((contDiffA
+    ((contDiffAt_fst.log hpos.ne').mul contDiffAt_snd).exp.congr_of_eventuallyEq
+      ((continuousAt_fst.eventually (lt_mem_nhds hpos)).mono fun p hp => rpow_def_of_pos hp _)]
 
 Depends on / 依赖: congr_of_eventuallyEq, contDiffAt_const, contDiffAt_fst, contDiffAt_fst.log, contDiffAt_snd, contDiffAt_snd.mul, continuousAt_fst, continuousAt_fst.eventually, eventually, exacts, exp.congr_of_eventuallyEq, exp.mul, gt_mem_nhds, hneg.ne, hp.lt_or_gt, hpos.ne, lt_mem_nhds, lt_or_gt, rpow_def_of_neg, rpow_def_of_pos
 -/
@@ -1334,7 +1426,13 @@ theorem not_differentiableAt_rpow_const_zero
   set y := deriv (fun x => x ^ r) (0 : Real)
   -- If `x ^ r` was differentiable at `0`, then `x ^ (r - 1)` would have a finite limit at `0`.
   have h : Filter.Tendsto (fun t => t ^ (r - 1)) (𝓝[>] 0) (𝓝 y) := by
-    apply tendsto_nhdsWithin_congr _ h.hasDerivAt.tendsto_slope_zero_rig
+    apply tendsto_nhdsWithin_congr _ h.hasDerivAt.tendsto_slope_zero_right
+    intro x (hx : 0 < x)
+    simp only [zero_add, ne_eq, hr', not_false_eq_true, Real.zero_rpow, sub_zero, smul_eq_mul]
+    field_simp
+    nth_rw 1 [← add_sub_cancel 1 r, Real.rpow_add hx]
+    simp
+  exact not_tendsto_nhds_of_tendsto_atTop (tendsto_rpow_neg_nhdsGT_zero (by simp [hr])) y h
 
 中文:
 定理 not_differentiableAt_rpow_const_zero
@@ -1344,7 +1442,13 @@ theorem not_differentiableAt_rpow_const_zero
   set y := deriv (fun x => x ^ r) (0 : Real)
   -- If `x ^ r` was differentiable at `0`, then `x ^ (r - 1)` would have a finite limit at `0`.
   have h : Filter.Tendsto (fun t => t ^ (r - 1)) (𝓝[>] 0) (𝓝 y) := by
-    apply tendsto_nhdsWithin_congr _ h.hasDerivAt.tendsto_slope_zero_rig
+    apply tendsto_nhdsWithin_congr _ h.hasDerivAt.tendsto_slope_zero_right
+    intro x (hx : 0 < x)
+    simp only [zero_add, ne_eq, hr', not_false_eq_true, Real.zero_rpow, sub_zero, smul_eq_mul]
+    field_simp
+    nth_rw 1 [← add_sub_cancel 1 r, Real.rpow_add hx]
+    simp
+  exact not_tendsto_nhds_of_tendsto_atTop (tendsto_rpow_neg_nhdsGT_zero (by simp [hr])) y h
 -/
 theorem not_differentiableAt_rpow_const_zero {r : Real} (hr : r < 1) (hr' : r != 0) :
     ¬ DifferentiableAt Real (fun x => x ^ r) (0 : Real) := by
@@ -1421,7 +1525,8 @@ theorem hasDerivAt_rpow_const
   replace h : 1 <= p := h.neg_resolve_left rfl
   apply hasDerivAt_of_hasDerivAt_of_ne fun x hx =>
     (hasStrictDerivAt_rpow_const_of_ne hx p).hasDerivAt
-  exacts [continuousAt_id.rpow_const (Or.in
+  exacts [continuousAt_id.rpow_const (Or.inr (zero_le_one.trans h)),
+    continuousAt_const.mul (continuousAt_id.rpow_const (Or.inr (sub_nonneg.2 h)))]
 
 中文:
 定理 hasDerivAt_rpow_const
@@ -1432,7 +1537,8 @@ theorem hasDerivAt_rpow_const
   replace h : 1 <= p := h.neg_resolve_left rfl
   apply hasDerivAt_of_hasDerivAt_of_ne fun x hx =>
     (hasStrictDerivAt_rpow_const_of_ne hx p).hasDerivAt
-  exacts [continuousAt_id.rpow_const (Or.in
+  exacts [continuousAt_id.rpow_const (Or.inr (zero_le_one.trans h)),
+    continuousAt_const.mul (continuousAt_id.rpow_const (Or.inr (sub_nonneg.2 h)))]
 
 Depends on / 依赖: Or.inr, continuousAt_const, continuousAt_const.mul, continuousAt_id, continuousAt_id.rpow_const, exacts, h.neg_resolve_left, hasDerivAt, hasDerivAt_of_hasDerivAt_of_ne, hasStrictDerivAt_rpow_const_of_ne, ne_or_eq, neg_resolve_left, replace, rpow_const, sub_nonneg, zero_le_one, zero_le_one.trans
 -/
@@ -1553,7 +1659,9 @@ theorem contDiff_rpow_const_of_le
   | succ n ihn =>
     have h1 : 1 <= p := le_trans (by simp) h
     rw [Nat.cast_add_one]; rw [← le_sub_iff_add_le] at h
-    rw [Nat.cast_add_one]; rw [contDiff_succ_i
+    rw [Nat.cast_add_one]; rw [contDiff_succ_iff_deriv]; rw [deriv_rpow_const' p]
+    simp only [WithTop.natCast_ne_top, analyticOn_univ, IsEmpty.forall_iff, true_and]
+    exact ⟨differentiable_rpow_const h1, contDiff_const.mul (ihn h)⟩
 
 中文:
 定理 contDiff_rpow_const_of_le
@@ -1564,7 +1672,9 @@ theorem contDiff_rpow_const_of_le
   | succ n ihn =>
     have h1 : 1 <= p := le_trans (by simp) h
     rw [Nat.cast_add_one]; rw [← le_sub_iff_add_le] at h
-    rw [Nat.cast_add_one]; rw [contDiff_succ_i
+    rw [Nat.cast_add_one]; rw [contDiff_succ_iff_deriv]; rw [deriv_rpow_const' p]
+    simp only [WithTop.natCast_ne_top, analyticOn_univ, IsEmpty.forall_iff, true_and]
+    exact ⟨differentiable_rpow_const h1, contDiff_const.mul (ihn h)⟩
 
 Depends on / 依赖: IsEmpty, IsEmpty.forall_iff, Nat.cast_add_one, Or.inr, WithTop, WithTop.natCast_ne_top, analyticOn_univ, cast_add_one, contDiff_const, contDiff_const.mul, contDiff_succ_iff_deriv, contDiff_zero, continuous_id, continuous_id.rpow_const, deriv_rpow_const, differentiable_rpow_const, forall_iff, generalizing, le_sub_iff_add_le, le_trans
 -/
@@ -1631,7 +1741,9 @@ theorem iter_deriv_rpow_const
     simp only [Function.iterate_succ', Function.comp_apply, Nat.cast_add, Nat.cast_one, IH]
     ext y
     simp only [deriv_const_mul_field, deriv_rpow_const, ← mul_assoc, descPochhammer_succ_right,
-      Polynomial.eval_mu
+      Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_X, Polynomial.eval_natCast,
+      mul_eq_mul_left_iff, mul_eq_zero]
+    grind
 
 中文:
 定理 iter_deriv_rpow_const
@@ -1644,7 +1756,9 @@ theorem iter_deriv_rpow_const
     simp only [Function.iterate_succ', Function.comp_apply, Nat.cast_add, Nat.cast_one, IH]
     ext y
     simp only [deriv_const_mul_field, deriv_rpow_const, ← mul_assoc, descPochhammer_succ_right,
-      Polynomial.eval_mu
+      Polynomial.eval_mul, Polynomial.eval_sub, Polynomial.eval_X, Polynomial.eval_natCast,
+      mul_eq_mul_left_iff, mul_eq_zero]
+    grind
 
 Depends on / 依赖: Function, Function.comp_apply, Function.iterate_succ, Nat.cast_add, Nat.cast_one, Polynomial, Polynomial.eval_X, Polynomial.eval_mul, Polynomial.eval_natCast, Polynomial.eval_sub, cast_add, cast_one, comp_apply, deriv_const_mul_field, deriv_rpow_const, descPochhammer_succ_right, eval_X, eval_mul, eval_natCast, eval_sub
 -/

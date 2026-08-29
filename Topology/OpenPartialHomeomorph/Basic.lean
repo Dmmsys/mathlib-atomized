@@ -412,7 +412,7 @@ lemma isOpen_symm_image_iff_of_subset_target
     rw [e.symm_image_eq_source_inter_preimage hs]
     apply Set.inter_subset_left
   rw [← e.image_symm_image_of_subset_target hs]
-  exact e.isOpen_image_of_subset_source h h
+  exact e.isOpen_image_of_subset_source h hs'
 
 中文:
 引理 isOpen_symm_image_iff_of_subset_target
@@ -423,7 +423,7 @@ lemma isOpen_symm_image_iff_of_subset_target
     rw [e.symm_image_eq_source_inter_preimage hs]
     apply Set.inter_subset_left
   rw [← e.image_symm_image_of_subset_target hs]
-  exact e.isOpen_image_of_subset_source h h
+  exact e.isOpen_image_of_subset_source h hs'
 
 Depends on / 依赖: Set.inter_subset_left, e.image_symm_image_of_subset_target, e.isOpen_image_of_subset_source, e.source, e.symm, e.symm.isOpen_image_of_subset_source, e.symm_image_eq_source_inter_preimage, image_symm_image_of_subset_target, inter_subset_left, isOpen_image_of_subset_source, source, subseteq, symm_image_eq_source_inter_preimage
 -/

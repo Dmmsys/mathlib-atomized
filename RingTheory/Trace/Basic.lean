@@ -103,7 +103,7 @@ theorem PowerBasis.trace_gen_eq_nextCoeff_minpoly
   have d_pos' : 0 < (minpoly K pb.gen).natDegree := by simpa
   have : Nonempty (Fin pb.dim) := ⟨⟨0, d_pos⟩⟩
   rw [trace_eq_matrix_trace pb.basis]; rw [trace_eq_neg_charpoly_coeff]; rw [charpoly_leftMulMatrix]; rw [←
-    pb.natDegree_minpoly]; rw 
+    pb.natDegree_minpoly]; rw [Fintype.card_fin]; rw [← nextCoeff_of_natDegree_pos d_pos']
 
 中文:
 定理 PowerBasis.trace_gen_eq_nextCoeff_minpoly
@@ -113,7 +113,7 @@ theorem PowerBasis.trace_gen_eq_nextCoeff_minpoly
   have d_pos' : 0 < (minpoly K pb.gen).natDegree := by simpa
   have : Nonempty (Fin pb.dim) := ⟨⟨0, d_pos⟩⟩
   rw [trace_eq_matrix_trace pb.basis]; rw [trace_eq_neg_charpoly_coeff]; rw [charpoly_leftMulMatrix]; rw [←
-    pb.natDegree_minpoly]; rw 
+    pb.natDegree_minpoly]; rw [Fintype.card_fin]; rw [← nextCoeff_of_natDegree_pos d_pos']
 
 Depends on / 依赖: Fintype, Fintype.card_fin, Nonempty, PowerBasis, PowerBasis.dim_pos, card_fin, charpoly_leftMulMatrix, d_pos, dim_pos, minpoly, natDegree, natDegree_minpoly, nextCoeff_of_natDegree_pos, pb.basis, pb.dim, pb.gen, pb.natDegree_minpoly, trace_eq_matrix_trace, trace_eq_neg_charpoly_coeff
 -/
@@ -201,7 +201,9 @@ theorem trace_gen_eq_sum_roots
   by_cases hx : IsIntegral K x; swap
   · simp [minpoly.eq_zero hx, trace_gen_eq_zero hx, aroots_def]
   rw [← adjoin.powerBasis_gen hx]; rw [(adjoin.powerBasis hx).trace_gen_eq_sum_roots] <;>
-    rw [adjoin.powerBasis_gen hx]; rw [← minpoly.algebraMap
+    rw [adjoin.powerBasis_gen hx]; rw [← minpoly.algebraMap_eq injKxL] <;>
+    try simp only [AdjoinSimple.algebraMap_gen _ _]
+  exact hf
 
 中文:
 定理 trace_gen_eq_sum_roots
@@ -211,7 +213,9 @@ theorem trace_gen_eq_sum_roots
   by_cases hx : IsIntegral K x; swap
   · simp [minpoly.eq_zero hx, trace_gen_eq_zero hx, aroots_def]
   rw [← adjoin.powerBasis_gen hx]; rw [(adjoin.powerBasis hx).trace_gen_eq_sum_roots] <;>
-    rw [adjoin.powerBasis_gen hx]; rw [← minpoly.algebraMap
+    rw [adjoin.powerBasis_gen hx]; rw [← minpoly.algebraMap_eq injKxL] <;>
+    try simp only [AdjoinSimple.algebraMap_gen _ _]
+  exact hf
 
 Depends on / 依赖: AdjoinSimple, AdjoinSimple.algebraMap_gen, IsIntegral, adjoin, adjoin.powerBasis, adjoin.powerBasis_gen, algebraMap, algebraMap_eq, algebraMap_gen, aroots_def, eq_zero, injKxL, injective, minpoly, minpoly.algebraMap_eq, minpoly.eq_zero, powerBasis, powerBasis_gen, trace_gen_eq_sum_roots, trace_gen_eq_zero
 -/
@@ -348,7 +352,10 @@ theorem Algebra.isIntegral_trace
   · refine (IsIntegral.multiset_sum ?_).nsmul _
     intro y hy
     rw [mem_roots_map (minpoly.ne_zero hx')] at hy
-    use minpoly R x, minpoly.moni
+    use minpoly R x, minpoly.monic hx
+    rw [← aeval_def] at hy ⊢
+    exact minpoly.aeval_of_isScalarTower R x y hy
+  · apply IsAlgClosed.splits
 
 中文:
 定理 代数.is整数egral_trace
@@ -359,7 +366,10 @@ theorem Algebra.isIntegral_trace
   · refine (IsIntegral.multiset_sum ?_).nsmul _
     intro y hy
     rw [mem_roots_map (minpoly.ne_zero hx')] at hy
-    use minpoly R x, minpoly.moni
+    use minpoly R x, minpoly.monic hx
+    rw [← aeval_def] at hy ⊢
+    exact minpoly.aeval_of_isScalarTower R x y hy
+  · apply IsAlgClosed.splits
 
 Depends on / 依赖: AlgebraicClosure, IsAlgClosed, IsAlgClosed.splits, IsIntegral, IsIntegral.multiset_sum, aeval_def, aeval_of_isScalarTower, algebraMap, hx.tower_top, injective, isIntegral_algebraMap_iff, mem_roots_map, minpoly, minpoly.aeval_of_isScalarTower, minpoly.monic, minpoly.ne_zero, multiset_sum, ne_zero, splits, tower_top
 -/
@@ -413,7 +423,14 @@ lemma Algebra.trace_eq_of_ringEquiv
   · obtain ⟨s, ⟨b⟩⟩ := h
     let : Algebra A B := RingHom.toAlgebra e
     let : IsScalarTower A B C := IsScalarTower.of_algebraMap_eq' he.symm
-    rw [Algebra.trace_eq_matrix_trace b]; rw [Algebra.trace_eq_matrix_trace (b.mapC
+    rw [Algebra.trace_eq_matrix_trace b]; rw [Algebra.trace_eq_matrix_trace (b.mapCoeffs e.symm (by simp [Algebra.smul_def]; rw [← he]))]
+    rw [AddMonoidHom.map_trace]
+    congr
+    ext i j
+    simp [leftMulMatrix_apply, LinearMap.toMatrix_apply]
+  rw [trace_eq_zero_of_not_exists_basis _ h]; rw [trace_eq_zero_of_not_exists_basis]; rw [LinearMap.zero_apply]; rw [LinearMap.zero_apply]; rw [map_zero]
+  intro ⟨s, ⟨b⟩⟩
+  exact h ⟨s, ⟨b.mapCoeffs e (by simp [Algebra.smul_def, ← he])⟩⟩
 
 中文:
 引理 代数.trace_eq_of_ringEquiv
@@ -424,7 +441,14 @@ lemma Algebra.trace_eq_of_ringEquiv
   · obtain ⟨s, ⟨b⟩⟩ := h
     let : Algebra A B := RingHom.toAlgebra e
     let : IsScalarTower A B C := IsScalarTower.of_algebraMap_eq' he.symm
-    rw [Algebra.trace_eq_matrix_trace b]; rw [Algebra.trace_eq_matrix_trace (b.mapC
+    rw [Algebra.trace_eq_matrix_trace b]; rw [Algebra.trace_eq_matrix_trace (b.mapCoeffs e.symm (by simp [Algebra.smul_def]; rw [← he]))]
+    rw [AddMonoidHom.map_trace]
+    congr
+    ext i j
+    simp [leftMulMatrix_apply, LinearMap.toMatrix_apply]
+  rw [trace_eq_zero_of_not_exists_basis _ h]; rw [trace_eq_zero_of_not_exists_basis]; rw [LinearMap.zero_apply]; rw [LinearMap.zero_apply]; rw [map_zero]
+  intro ⟨s, ⟨b⟩⟩
+  exact h ⟨s, ⟨b.mapCoeffs e (by simp [Algebra.smul_def, ← he])⟩⟩
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.map_trace, Algebra, Algebra.smul_def, Algebra.trace_eq_matrix_trace, Finset, IsScalarTower, IsScalarTower.of_algebraMap_eq, LinearMap, LinearMap.toMatrix_apply, Nonempty, RingHom, RingHom.toAlgebra, b.mapCoeffs, classical, e.symm, he.symm, leftMulMatrix_apply, mapCoeffs, map_trace
 -/
@@ -494,7 +518,12 @@ theorem trace_eq_sum_embeddings_gen
   proof: by
   let := Classical.decEq E
   let : Fintype (L ->ₐ[K] E) := PowerBasis.AlgHom.fintype pb
-  rw [pb.trace_gen_eq_sum_roots hE]; rw [Fintype.sum_equiv pb.liftEquiv']; rw [Finset.sum_mem_multiset]; rw [Finset.sum_eq_multiset_sum]; rw [Multiset.toFinset_val]; rw [Multiset.dedup_eq_self.mpr _]; rw [Mult
+  rw [pb.trace_gen_eq_sum_roots hE]; rw [Fintype.sum_equiv pb.liftEquiv']; rw [Finset.sum_mem_multiset]; rw [Finset.sum_eq_multiset_sum]; rw [Multiset.toFinset_val]; rw [Multiset.dedup_eq_self.mpr _]; rw [Multiset.map_id]
+  · exact nodup_roots ((separable_map _).mpr hfx)
+  swap
+  · intro x; rfl
+  · intro σ
+    rw [PowerBasis.liftEquiv'_apply_coe]; rw [id_def]
 
 中文:
 定理 trace_eq_sum_embeddings_gen
@@ -502,7 +531,12 @@ theorem trace_eq_sum_embeddings_gen
   证明: by
   let := Classical.decEq E
   let : Fintype (L ->ₐ[K] E) := PowerBasis.AlgHom.fintype pb
-  rw [pb.trace_gen_eq_sum_roots hE]; rw [Fintype.sum_equiv pb.liftEquiv']; rw [Finset.sum_mem_multiset]; rw [Finset.sum_eq_multiset_sum]; rw [Multiset.toFinset_val]; rw [Multiset.dedup_eq_self.mpr _]; rw [Mult
+  rw [pb.trace_gen_eq_sum_roots hE]; rw [Fintype.sum_equiv pb.liftEquiv']; rw [Finset.sum_mem_multiset]; rw [Finset.sum_eq_multiset_sum]; rw [Multiset.toFinset_val]; rw [Multiset.dedup_eq_self.mpr _]; rw [Multiset.map_id]
+  · exact nodup_roots ((separable_map _).mpr hfx)
+  swap
+  · intro x; rfl
+  · intro σ
+    rw [PowerBasis.liftEquiv'_apply_coe]; rw [id_def]
 
 Depends on / 依赖: AlgHom, Classical, Classical.decEq, Finset, Finset.sum_eq_multiset_sum, Finset.sum_mem_multiset, Fintype, Fintype.sum_equiv, Multiset, Multiset.dedup_eq_self.mpr, Multiset.map_id, Multiset.toFinset_val, PowerBasis, PowerBasis.AlgHom.fintype, PowerBasis.liftEquiv, _apply_coe, dedup_eq_self, fintype, id_def, liftEquiv
 -/
@@ -531,7 +565,14 @@ theorem sum_embeddings_eq_finrank_mul
   have : FiniteDimensional L F := FiniteDimensional.right K L F
   have : Algebra.IsSeparable L F := Algebra.isSeparable_tower_top_of_isSeparable K L F
   let : Fintype (L ->ₐ[K] E) := PowerBasis.AlgHom.fintype pb
-  rw [Fintype.sum_equiv algHomEquivSigma (fun σ : F ->ₐ[K] E => _) fun σ => σ.1 pb.ge
+  rw [Fintype.sum_equiv algHomEquivSigma (fun σ : F ->ₐ[K] E => _) fun σ => σ.1 pb.gen,
+    ← Finset.univ_sigma_univ, Finset.sum_sigma, ← Finset.sum_nsmul]
+  · refine Finset.sum_congr rfl fun σ _ => ?_
+    let : Algebra L E := σ.toRingHom.toAlgebra
+    simp_rw [Finset.sum_const, Finset.card_univ, ← AlgHom.card L F E]
+  · intro σ
+    simp only [algHomEquivSigma, Equiv.coe_fn_mk, AlgHom.domRestrict, AlgHom.comp_apply,
+      IsScalarTower.coe_toAlgHom']
 
 中文:
 定理 sum_embeddings_eq_finrank_mul
@@ -540,7 +581,14 @@ theorem sum_embeddings_eq_finrank_mul
   have : FiniteDimensional L F := FiniteDimensional.right K L F
   have : Algebra.IsSeparable L F := Algebra.isSeparable_tower_top_of_isSeparable K L F
   let : Fintype (L ->ₐ[K] E) := PowerBasis.AlgHom.fintype pb
-  rw [Fintype.sum_equiv algHomEquivSigma (fun σ : F ->ₐ[K] E => _) fun σ => σ.1 pb.ge
+  rw [Fintype.sum_equiv algHomEquivSigma (fun σ : F ->ₐ[K] E => _) fun σ => σ.1 pb.gen,
+    ← Finset.univ_sigma_univ, Finset.sum_sigma, ← Finset.sum_nsmul]
+  · refine Finset.sum_congr rfl fun σ _ => ?_
+    let : Algebra L E := σ.toRingHom.toAlgebra
+    simp_rw [Finset.sum_const, Finset.card_univ, ← AlgHom.card L F E]
+  · intro σ
+    simp only [algHomEquivSigma, Equiv.coe_fn_mk, AlgHom.domRestrict, AlgHom.comp_apply,
+      IsScalarTower.coe_toAlgHom']
 
 Depends on / 依赖: AlgHom, Algebra, Algebra.IsSeparable, Algebra.isSeparable_tower_top_of_isSeparable, FiniteDimensional, FiniteDimensional.right, Finset, Finset.card_univ, Finset.sum_congr, Finset.sum_const, Finset.sum_nsmul, Finset.sum_sigma, Finset.univ_sigma_univ, Fintype, Fintype.sum_equiv, IsSeparable, PowerBasis, PowerBasis.AlgHom.fintype, algHomEquivSigma, card_univ
 -/
@@ -571,7 +619,9 @@ theorem trace_eq_sum_embeddings
   have hx := Algebra.IsSeparable.isIntegral K x
   let pb := adjoin.powerBasis hx
   rw [trace_eq_trace_adjoin K x]; rw [Algebra.smul_def]; rw [map_mul]; rw [← adjoin.powerBasis_gen hx]; rw [trace_eq_sum_embeddings_gen E pb (IsAlgClosed.splits _)]; rw [← Algebra.smul_def]; rw [algebraMap_smul]
-  · 
+  · exact (sum_embeddings_eq_finrank_mul L E pb).symm
+  · have := Algebra.isSeparable_tower_bot_of_isSeparable K K⟮x⟯ L
+    exact Algebra.IsSeparable.isSeparable K _
 
 中文:
 定理 trace_eq_sum_embeddings
@@ -580,7 +630,9 @@ theorem trace_eq_sum_embeddings
   have hx := Algebra.IsSeparable.isIntegral K x
   let pb := adjoin.powerBasis hx
   rw [trace_eq_trace_adjoin K x]; rw [Algebra.smul_def]; rw [map_mul]; rw [← adjoin.powerBasis_gen hx]; rw [trace_eq_sum_embeddings_gen E pb (IsAlgClosed.splits _)]; rw [← Algebra.smul_def]; rw [algebraMap_smul]
-  · 
+  · exact (sum_embeddings_eq_finrank_mul L E pb).symm
+  · have := Algebra.isSeparable_tower_bot_of_isSeparable K K⟮x⟯ L
+    exact Algebra.IsSeparable.isSeparable K _
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isIntegral, Algebra.IsSeparable.isSeparable, Algebra.isSeparable_tower_bot_of_isSeparable, Algebra.smul_def, IsAlgClosed, IsAlgClosed.splits, IsSeparable, adjoin, adjoin.powerBasis, adjoin.powerBasis_gen, algebraMap_smul, isIntegral, isSeparable, isSeparable_tower_bot_of_isSeparable, map_mul, powerBasis, powerBasis_gen, smul_def, splits
 -/
@@ -604,7 +656,10 @@ theorem trace_eq_sum_automorphisms
   rw [_root_.map_sum (algebraMap L (AlgebraicClosure L))]
   rw [← Fintype.sum_equiv (Normal.algHomEquivAut K (AlgebraicClosure L) L)]
   · rw [← trace_eq_sum_embeddings (AlgebraicClosure L) (x := x)]
-    simp only [algebraMap_eq_smul
+    simp only [algebraMap_eq_smul_one, smul_one_smul]
+  · intro σ
+    simp only [Normal.algHomEquivAut, AlgHom.restrictNormal', Equiv.coe_fn_mk,
+      AlgEquiv.coe_ofBijective, AlgHom.restrictNormal_commutes, algebraMap_self, RingHom.id_apply]
 
 中文:
 定理 trace_eq_sum_automorphisms
@@ -614,7 +669,10 @@ theorem trace_eq_sum_automorphisms
   rw [_root_.map_sum (algebraMap L (AlgebraicClosure L))]
   rw [← Fintype.sum_equiv (Normal.algHomEquivAut K (AlgebraicClosure L) L)]
   · rw [← trace_eq_sum_embeddings (AlgebraicClosure L) (x := x)]
-    simp only [algebraMap_eq_smul
+    simp only [algebraMap_eq_smul_one, smul_one_smul]
+  · intro σ
+    simp only [Normal.algHomEquivAut, AlgHom.restrictNormal', Equiv.coe_fn_mk,
+      AlgEquiv.coe_ofBijective, AlgHom.restrictNormal_commutes, algebraMap_self, RingHom.id_apply]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_ofBijective, AlgHom, AlgHom.restrictNormal, AlgHom.restrictNormal_commutes, AlgebraicClosure, Equiv.coe_fn_mk, FaithfulSMul, FaithfulSMul.algebraMap_injective, Fintype, Fintype.sum_equiv, Normal, Normal.algHomEquivAut, RingHom, RingHom.id_apply, _root_, _root_.map_sum, algHomEquivAut, algebraMap, algebraMap_eq_smul_one
 -/
@@ -649,6 +707,41 @@ lemma Algebra.trace_eq_zero_of_not_isSeparable
     exact h₀ (Module.Finite.of_basis b)
   by_cases hx : IsSeparable K x
   · lift x to separableClosure K L using hx
+    rw [← IntermediateField.algebraMap_apply]; rw [← trace_trace (S := separableClosure K L)]; rw [trace_algebraMap]
+    obtain ⟨n, hn⟩ := IsPurelyInseparable.finrank_eq_pow (separableClosure K L) L p
+    cases n with
+    | zero =>
+      rw [pow_zero]; rw [IntermediateField.finrank_eq_one_iff_eq_top]; rw [separableClosure.eq_top_iff] at hn
+      cases H hn
+    | succ n =>
+      cases hp with
+      | zero =>
+        rw [one_pow]; rw [IntermediateField.finrank_eq_one_iff_eq_top]; rw [separableClosure.eq_top_iff] at hn
+        cases H hn
+      | prime hprime =>
+        rw [hn]; rw [pow_succ']; rw [mul_smul]; rw [LinearMap.map_smul_of_tower]; rw [nsmul_eq_mul]; rw [CharP.cast_eq_zero]; rw [zero_mul]; rw [LinearMap.zero_apply]
+  · rw [trace_eq_finrank_mul_minpoly_nextCoeff]
+    obtain ⟨g, hg₁, m, hg₂⟩ :=
+      (minpoly.irreducible (IsIntegral.isIntegral (R := K) x)).hasSeparableContraction p
+    cases m with
+    | zero =>
+      obtain rfl : g = minpoly K x := by simpa using hg₂
+      cases hx hg₁
+    | succ n =>
+      rw [nextCoeff]; rw [if_neg]; rw [← hg₂]; rw [coeff_expand (by positivity)]; rw [if_neg]; rw [neg_zero]; rw [mul_zero]; rw [LinearMap.zero_apply]
+      · rw [natDegree_expand]
+        intro h
+        have := Nat.dvd_sub (dvd_mul_left (p ^ (n + 1)) g.natDegree) h
+        rw [tsub_tsub_cancel_of_le]; rw [Nat.dvd_one] at this
+        · obtain rfl : g = minpoly K x := by simpa [this] using hg₂
+          cases hx hg₁
+        · rw [Nat.one_le_iff_ne_zero]
+          have : g.natDegree != 0 := fun e => by
+            have := congr(natDegree $hg₂)
+            rw [natDegree_expand]; rw [e]; rw [zero_mul] at this
+            exact (minpoly.natDegree_pos (IsIntegral.isIntegral x)).ne this
+          positivity
+      · exact (minpoly.natDegree_pos (IsIntegral.isIntegral x)).ne'
 
 中文:
 引理 代数.trace_eq_zero_of_not_isSeparable
@@ -663,6 +756,41 @@ lemma Algebra.trace_eq_zero_of_not_isSeparable
     exact h₀ (Module.Finite.of_basis b)
   by_cases hx : IsSeparable K x
   · lift x to separableClosure K L using hx
+    rw [← IntermediateField.algebraMap_apply]; rw [← trace_trace (S := separableClosure K L)]; rw [trace_algebraMap]
+    obtain ⟨n, hn⟩ := IsPurelyInseparable.finrank_eq_pow (separableClosure K L) L p
+    cases n with
+    | zero =>
+      rw [pow_zero]; rw [IntermediateField.finrank_eq_one_iff_eq_top]; rw [separableClosure.eq_top_iff] at hn
+      cases H hn
+    | succ n =>
+      cases hp with
+      | zero =>
+        rw [one_pow]; rw [IntermediateField.finrank_eq_one_iff_eq_top]; rw [separableClosure.eq_top_iff] at hn
+        cases H hn
+      | prime hprime =>
+        rw [hn]; rw [pow_succ']; rw [mul_smul]; rw [LinearMap.map_smul_of_tower]; rw [nsmul_eq_mul]; rw [CharP.cast_eq_zero]; rw [zero_mul]; rw [LinearMap.zero_apply]
+  · rw [trace_eq_finrank_mul_minpoly_nextCoeff]
+    obtain ⟨g, hg₁, m, hg₂⟩ :=
+      (minpoly.irreducible (IsIntegral.isIntegral (R := K) x)).hasSeparableContraction p
+    cases m with
+    | zero =>
+      obtain rfl : g = minpoly K x := by simpa using hg₂
+      cases hx hg₁
+    | succ n =>
+      rw [nextCoeff]; rw [if_neg]; rw [← hg₂]; rw [coeff_expand (by positivity)]; rw [if_neg]; rw [neg_zero]; rw [mul_zero]; rw [LinearMap.zero_apply]
+      · rw [natDegree_expand]
+        intro h
+        have := Nat.dvd_sub (dvd_mul_left (p ^ (n + 1)) g.natDegree) h
+        rw [tsub_tsub_cancel_of_le]; rw [Nat.dvd_one] at this
+        · obtain rfl : g = minpoly K x := by simpa [this] using hg₂
+          cases hx hg₁
+        · rw [Nat.one_le_iff_ne_zero]
+          have : g.natDegree != 0 := fun e => by
+            have := congr(natDegree $hg₂)
+            rw [natDegree_expand]; rw [e]; rw [zero_mul] at this
+            exact (minpoly.natDegree_pos (IsIntegral.isIntegral x)).ne this
+          positivity
+      · exact (minpoly.natDegree_pos (IsIntegral.isIntegral x)).ne'
 
 Depends on / 依赖: ExpChar, ExpChar.exists, Finite, FiniteDimensional, IntermediateField, IntermediateField.algebraMap_apply, IsPurelyInseparable, IsPurelyInseparable.finrank_eq_pow, IsSeparable, Module, Module.Finite.of_basis, algebraMap_apply, expChar_ne_zero, finrank_eq_pow, of_basis, separableClosure, trace_algebraMap, trace_eq_zero_of_not_exists_basis, trace_trace
 -/
@@ -790,7 +918,17 @@ theorem traceMatrix_of_matrix_vecMul
   ext (α β)
   rw [traceMatrix_apply]; rw [vecMul]; rw [dotProduct]; rw [vecMul]; rw [dotProduct]; rw [Matrix.mul_apply]; rw [BilinForm.sum_left]; rw [Fintype.sum_congr _ _ fun i : κ =>
       BilinForm.sum_right _ _ (b i * P.map (algebraMap A B) i α) fun y : κ =>
-        b y * P.map (algebraMap A 
+        b y * P.map (algebraMap A B) y β]; rw [sum_comm]
+  congr; ext x
+  rw [Matrix.mul_apply]; rw [sum_mul]
+  congr; ext y
+  rw [map_apply]; rw [traceForm_apply]; rw [mul_comm (b y)]; rw [← smul_def]
+  simp only [smul_eq_mul, RingHom.id_apply, map_apply, transpose_apply, map_smulₛₗ,
+    Algebra.smul_mul_assoc]
+  rw [mul_comm (b x)]; rw [← smul_def]
+  ring_nf
+  rw [mul_assoc]
+  simp [mul_comm]
 
 中文:
 定理 traceMatrix_of_matrix_vecMul
@@ -799,7 +937,17 @@ theorem traceMatrix_of_matrix_vecMul
   ext (α β)
   rw [traceMatrix_apply]; rw [vecMul]; rw [dotProduct]; rw [vecMul]; rw [dotProduct]; rw [Matrix.mul_apply]; rw [BilinForm.sum_left]; rw [Fintype.sum_congr _ _ fun i : κ =>
       BilinForm.sum_right _ _ (b i * P.map (algebraMap A B) i α) fun y : κ =>
-        b y * P.map (algebraMap A 
+        b y * P.map (algebraMap A B) y β]; rw [sum_comm]
+  congr; ext x
+  rw [Matrix.mul_apply]; rw [sum_mul]
+  congr; ext y
+  rw [map_apply]; rw [traceForm_apply]; rw [mul_comm (b y)]; rw [← smul_def]
+  simp only [smul_eq_mul, RingHom.id_apply, map_apply, transpose_apply, map_smulₛₗ,
+    Algebra.smul_mul_assoc]
+  rw [mul_comm (b x)]; rw [← smul_def]
+  ring_nf
+  rw [mul_assoc]
+  simp [mul_comm]
 
 Depends on / 依赖: BilinForm, BilinForm.sum_left, BilinForm.sum_right, Fintype, Fintype.sum_congr, Matrix, Matrix.mul_apply, P.map, RingHom, RingHom.id_apply, algebraMap, dotProduct, id_apply, map_apply, mul_apply, mul_comm, smul_def, smul_eq_mul, sum_comm, sum_congr
 -/
@@ -882,7 +1030,17 @@ theorem traceMatrix_of_basis_mulVec
     congr
     rfl
     ext
-    rw [mul_comm _ (b.equivFun z _)]; rw [← smul_eq_m
+    rw [mul_comm _ (b.equivFun z _)]; rw [← smul_eq_mul]; rw [of_apply]; rw [← map_smul]
+  rw [← _root_.map_sum]
+  congr
+  conv_lhs =>
+    congr
+    rfl
+    ext
+    rw [← mul_smul_comm]
+  rw [← Finset.mul_sum]; rw [mul_comm z]
+  congr
+  rw [b.sum_equivFun]
 
 中文:
 定理 traceMatrix_of_basis_mulVec
@@ -895,7 +1053,17 @@ theorem traceMatrix_of_basis_mulVec
     congr
     rfl
     ext
-    rw [mul_comm _ (b.equivFun z _)]; rw [← smul_eq_m
+    rw [mul_comm _ (b.equivFun z _)]; rw [← smul_eq_mul]; rw [of_apply]; rw [← map_smul]
+  rw [← _root_.map_sum]
+  congr
+  conv_lhs =>
+    congr
+    rfl
+    ext
+    rw [← mul_smul_comm]
+  rw [← Finset.mul_sum]; rw [mul_comm z]
+  congr
+  rw [b.sum_equivFun]
 
 Depends on / 依赖: Finset, Finset.mul_sum, Matrix, Matrix.mul_apply, _root_, _root_.map_sum, b.equivFun, b.sum_equivFun, conv_lhs, equivFun, map_smul, map_sum, mul_apply, mul_comm, mul_smul_comm, mul_sum, of_apply, replicateCol_apply, replicateCol_mulVec, smul_eq_mul
 -/
@@ -1073,7 +1241,14 @@ theorem det_traceMatrix_ne_zero'
     rw [ht]; rw [map_zero]
   have : FiniteDimensional K L := pb.finite
   let e : Fin pb.dim ≃ (L ->ₐ[K] AlgebraicClosure L) := (Fintype.equivFinOfCardEq ?_).symm
-  · rw [RingHom.m
+  · rw [RingHom.map_det, RingHom.mapMatrix_apply,
+      traceMatrix_eq_embeddingsMatrixReindex_mul_trans K _ _ e,
+      embeddingsMatrixReindex_eq_vandermonde, det_mul, det_transpose]
+    refine mt mul_self_eq_zero.mp ?_
+    simp only [det_vandermonde, Finset.prod_eq_zero_iff, not_exists, sub_eq_zero]
+    rintro i ⟨_, j, hij, h⟩
+    exact (Finset.mem_Ioi.mp hij).ne' (e.injective <| pb.algHom_ext h)
+  · rw [AlgHom.card, pb.finrank]
 
 中文:
 定理 det_traceMatrix_ne_zero'
@@ -1085,7 +1260,14 @@ theorem det_traceMatrix_ne_zero'
     rw [ht]; rw [map_zero]
   have : FiniteDimensional K L := pb.finite
   let e : Fin pb.dim ≃ (L ->ₐ[K] AlgebraicClosure L) := (Fintype.equivFinOfCardEq ?_).symm
-  · rw [RingHom.m
+  · rw [RingHom.map_det, RingHom.mapMatrix_apply,
+      traceMatrix_eq_embeddingsMatrixReindex_mul_trans K _ _ e,
+      embeddingsMatrixReindex_eq_vandermonde, det_mul, det_transpose]
+    refine mt mul_self_eq_zero.mp ?_
+    simp only [det_vandermonde, Finset.prod_eq_zero_iff, not_exists, sub_eq_zero]
+    rintro i ⟨_, j, hij, h⟩
+    exact (Finset.mem_Ioi.mp hij).ne' (e.injective <| pb.algHom_ext h)
+  · rw [AlgHom.card, pb.finrank]
 
 Depends on / 依赖: AlgebraicClosure, FiniteDimensional, Fintype, Fintype.equivFinOfCardEq, RingHom, RingHom.mapMatrix_apply, RingHom.map_det, algebraMap, det_mul, det_transpose, det_vandermonde, embeddingsMatrixReindex_eq_vandermonde, equivFinOfCardEq, finite, mapMatrix_apply, map_det, map_zero, mul_self_eq_zero, mul_self_eq_zero.mp, pb.basis
 -/
@@ -1114,7 +1296,21 @@ theorem det_traceForm_ne_zero
   have : FiniteDimensional K L := b.finiteDimensional_of_finite
   let pb : PowerBasis K L := Field.powerBasisOfFiniteOfSeparable _ _
   rw [← LinearMap.BilinForm.toMatrix_mul_basis_toMatrix pb.basis b]; rw [←
-    det_comm' (pb.basis.toMatrix_mul_toMatrix_flip b) _]; rw [← Matrix.mul_assoc]; rw [de
+    det_comm' (pb.basis.toMatrix_mul_toMatrix_flip b) _]; rw [← Matrix.mul_assoc]; rw [det_mul]
+  swap; · apply Basis.toMatrix_mul_toMatrix_flip
+  refine
+    mul_ne_zero
+      (IsUnit.of_mul_eq_one ((b.toMatrix pb.basis)ᵀ * b.toMatrix pb.basis).det ?_).ne_zero ?_
+  · calc
+      (pb.basis.toMatrix b * (pb.basis.toMatrix b)ᵀ).det *
+            ((b.toMatrix pb.basis)ᵀ * b.toMatrix pb.basis).det =
+          (pb.basis.toMatrix b * (b.toMatrix pb.basis * pb.basis.toMatrix b)ᵀ *
+              b.toMatrix pb.basis).det := by
+        simp only [← det_mul, Matrix.mul_assoc, Matrix.transpose_mul]
+      _ = 1 := by
+        simp only [Basis.toMatrix_mul_toMatrix_flip, Matrix.transpose_one, Matrix.mul_one,
+          Matrix.det_one]
+  simpa only [traceMatrix_of_basis] using det_traceMatrix_ne_zero' pb
 
 中文:
 定理 det_traceForm_ne_zero
@@ -1123,7 +1319,21 @@ theorem det_traceForm_ne_zero
   have : FiniteDimensional K L := b.finiteDimensional_of_finite
   let pb : PowerBasis K L := Field.powerBasisOfFiniteOfSeparable _ _
   rw [← LinearMap.BilinForm.toMatrix_mul_basis_toMatrix pb.basis b]; rw [←
-    det_comm' (pb.basis.toMatrix_mul_toMatrix_flip b) _]; rw [← Matrix.mul_assoc]; rw [de
+    det_comm' (pb.basis.toMatrix_mul_toMatrix_flip b) _]; rw [← Matrix.mul_assoc]; rw [det_mul]
+  swap; · apply Basis.toMatrix_mul_toMatrix_flip
+  refine
+    mul_ne_zero
+      (IsUnit.of_mul_eq_one ((b.toMatrix pb.basis)ᵀ * b.toMatrix pb.basis).det ?_).ne_zero ?_
+  · calc
+      (pb.basis.toMatrix b * (pb.basis.toMatrix b)ᵀ).det *
+            ((b.toMatrix pb.basis)ᵀ * b.toMatrix pb.basis).det =
+          (pb.basis.toMatrix b * (b.toMatrix pb.basis * pb.basis.toMatrix b)ᵀ *
+              b.toMatrix pb.basis).det := by
+        simp only [← det_mul, Matrix.mul_assoc, Matrix.transpose_mul]
+      _ = 1 := by
+        simp only [Basis.toMatrix_mul_toMatrix_flip, Matrix.transpose_one, Matrix.mul_one,
+          Matrix.det_one]
+  simpa only [traceMatrix_of_basis] using det_traceMatrix_ne_zero' pb
 
 Depends on / 依赖: Basis.toMatrix_mul_toMatrix_flip, BilinForm, Field.powerBasisOfFiniteOfSeparable, FiniteDimensional, IsUnit, IsUnit.of_mul_eq_one, LinearMap, LinearMap.BilinForm.toMatrix_mul_basis_toMatrix, Matrix, Matrix.mul_assoc, PowerBasis, b.finiteDimensional_of_finite, b.toMatrix, det_comm, det_mul, finiteDimensional_of_finite, mul_assoc, mul_ne_zero, ne_zero, of_mul_eq_one
 -/
@@ -1518,7 +1728,15 @@ lemma Module.Basis.traceDual_powerBasis_eq
   apply (algebraMap K (AlgebraicClosure K)).injective
   have := congr_arg (coeff · i) (sum_smul_minpolyDiv_eq_X_pow (AlgebraicClosure K)
     pb.adjoin_gen_eq_top (r := j) (pb.finrank.symm ▸ j.prop))
-  simp only [Polynomial.ma
+  simp only [Polynomial.map_smul, map_div₀, map_pow, RingHom.coe_coe, finsetSum_coeff, coeff_smul,
+    coeff_map, smul_eq_mul, coeff_X_pow, ← Fin.ext_iff, @eq_comm _ i] at this
+  rw [PowerBasis.coe_basis]
+  simp only [traceForm_apply, MonoidWithZeroHom.map_ite_one_zero]
+  rw [← this]; rw [trace_eq_sum_embeddings (E := AlgebraicClosure K)]
+  apply Finset.sum_congr rfl
+  intro σ _
+  simp only [map_mul, map_div₀, map_pow]
+  ring
 
 中文:
 引理 模.基.traceDual_powerBasis_eq
@@ -1530,7 +1748,15 @@ lemma Module.Basis.traceDual_powerBasis_eq
   apply (algebraMap K (AlgebraicClosure K)).injective
   have := congr_arg (coeff · i) (sum_smul_minpolyDiv_eq_X_pow (AlgebraicClosure K)
     pb.adjoin_gen_eq_top (r := j) (pb.finrank.symm ▸ j.prop))
-  simp only [Polynomial.ma
+  simp only [Polynomial.map_smul, map_div₀, map_pow, RingHom.coe_coe, finsetSum_coeff, coeff_smul,
+    coeff_map, smul_eq_mul, coeff_X_pow, ← Fin.ext_iff, @eq_comm _ i] at this
+  rw [PowerBasis.coe_basis]
+  simp only [traceForm_apply, MonoidWithZeroHom.map_ite_one_zero]
+  rw [← this]; rw [trace_eq_sum_embeddings (E := AlgebraicClosure K)]
+  apply Finset.sum_congr rfl
+  intro σ _
+  simp only [map_mul, map_div₀, map_pow]
+  ring
 
 Depends on / 依赖: AlgebraicClosure, Basis.traceDual_eq_iff, Fin.ext_iff, MonoidWithZeroH, Polynomial, Polynomial.map_smul, PowerBasis, PowerBasis.coe_basis, RingHom, RingHom.coe_coe, adjoin_gen_eq_top, algebraMap, coe_basis, coe_coe, coeff_X_pow, coeff_map, coeff_smul, congr_arg, eq_comm, ext_iff
 -/

@@ -45,7 +45,7 @@ definition ofTypeMonad
   μ := ⟨fun X => ↾(@joinM m _ X), fun _ _ _ => by ext _; exact joinM_map_map _ _⟩
   assoc _ := by ext; exact joinM_map_joinM _
   left_unit _ := by ext; exact joinM_pure _
-  right_
+  right_unit _ := by ext; exact joinM_map_pure _
 
 中文:
 定义 ofTypeMonad
@@ -56,7 +56,7 @@ definition ofTypeMonad
   μ := ⟨fun X => ↾(@joinM m _ X), fun _ _ _ => by ext _; exact joinM_map_map _ _⟩
   assoc _ := by ext; exact joinM_map_joinM _
   left_unit _ := by ext; exact joinM_pure _
-  right_
+  right_unit _ := by ext; exact joinM_map_pure _
 
 Depends on / 依赖: ofTypeFunctor
 -/
@@ -95,7 +95,15 @@ definition kleisliCatEquivKleisli
       map_comp := fun f g => by
         dsimp
         ext t
+        simp [joinM]
+        rfl }
+  unitIso := by
+    refine NatIso.ofComponents (fun X => Iso.refl X) fun f => ?_
+    change f >=> pure = pure >=> f
+    simp [functor_norm]
+  counitIso := NatIso.ofComponents fun X => Iso.refl X
 
+@[deprecated (since := "2026-04-16")] alias eq := kleisliCatEquivKleisli
 
 中文:
 定义 kleisliCatEquivKleisli
@@ -114,7 +122,15 @@ definition kleisliCatEquivKleisli
       map_comp := fun f g => by
         dsimp
         ext t
+        simp [joinM]
+        rfl }
+  unitIso := by
+    refine NatIso.ofComponents (fun X => Iso.refl X) fun f => ?_
+    change f >=> pure = pure >=> f
+    simp [functor_norm]
+  counitIso := NatIso.ofComponents fun X => Iso.refl X
 
+@[deprecated (since := "2026-04-16")] alias eq := kleisliCatEquivKleisli
 
 Depends on / 依赖: Iso.refl, Kleisli, Kleisli.mk, NatIso, NatIso.ofComponents, X.of, counitIso, f.of, functor_norm, inverse, map_comp, map_id, ofComponents, unitIso
 -/

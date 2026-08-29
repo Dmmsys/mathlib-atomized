@@ -72,7 +72,63 @@ theorem norm_volume_sub_integral_face_upper_sub_lower_smul_le
   -- Porting note: Lean fails to find `α` in the next line
   set e : Real -> (Fin n -> Real) -> (Fin (n + 1) -> Real) := i.insertNth (α := fun _ => Real)
   /- **Plan of the proof**. The difference of the integrals of the affine function
-    `fun y ↦ a + f' (y - x)` over the faces `x i = I.upper i
+    `fun y ↦ a + f' (y - x)` over the faces `x i = I.upper i` and `x i = I.lower i` is equal to the
+    volume of `I` multiplied by `f' (Pi.single i 1)`, so it suffices to show that the integral of
+    `f y - a - f' (y - x)` over each of these faces is less than or equal to `ε * c * vol I`. We
+    integrate a function of the norm `≤ ε * diam I.Icc` over a box of volume
+    `∏ j ≠ i, (I.upper j - I.lower j)`. Since `diam I.Icc ≤ c * (I.upper i - I.lower i)`, we get the
+    required estimate. -/
+  have Hl : I.lower i in Icc (I.lower i) (I.upper i) := Set.left_mem_Icc.2 (I.lower_le_upper i)
+  have Hu : I.upper i in Icc (I.lower i) (I.upper i) := Set.right_mem_Icc.2 (I.lower_le_upper i)
+  have Hi : forall x in Icc (I.lower i) (I.upper i),
+      Integrable.{0, u, u} (I.face i) ⊥ (f ∘ e x) BoxAdditiveMap.volume := fun x hx =>
+    integrable_of_continuousOn _ (Box.continuousOn_face_Icc hfc hx) volume
+  /- We start with an estimate: the difference of the values of `f` at the corresponding points
+    of the faces `x i = I.lower i` and `x i = I.upper i` is `(2 * ε * diam I.Icc)`-close to the
+    value of `f'` on `Pi.single i (I.upper i - I.lower i) = lᵢ • eᵢ`, where
+    `lᵢ = I.upper i - I.lower i` is the length of `i`-th edge of `I` and `eᵢ = Pi.single i 1` is the
+    `i`-th unit vector. -/
+  have : forall y in Box.Icc (I.face i),
+      ‖f' (Pi.single i (I.upper i - I.lower i)) -
+          (f (e (I.upper i) y) - f (e (I.lower i) y))‖ <=
+        2 * ε * diam (Box.Icc I) := fun y hy => by
+    set g := fun y => f y - a - f' (y - x) with hg
+    change forall y in (Box.Icc I), ‖g y‖ <= ε * ‖y - x‖ at hε
+    clear_value g; obtain rfl : f = fun y => a + f' (y - x) + g y := by simp [hg]
+    convert_to ‖g (e (I.lower i) y) - g (e (I.upper i) y)‖ <= _
+    · congr 1
+      have := Fin.insertNth_sub_same (α := fun _ => Real) i (I.upper i) (I.lower i) y
+      simp only [← this, f'.map_sub]; abel
+    · have : forall z in Icc (I.lower i) (I.upper i), e z y in (Box.Icc I) := fun z hz =>
+        I.mapsTo_insertNth_face_Icc hz hy
+      replace hε : forall y in (Box.Icc I), ‖g y‖ <= ε * diam (Box.Icc I) := by
+        intro y hy
+        refine (hε y hy).trans (mul_le_mul_of_nonneg_left ?_ h0.le)
+        rw [← dist_eq_norm]
+        exact dist_le_diam_of_mem I.isCompact_Icc.isBounded hy hxI
+      rw [two_mul]; rw [add_mul]
+      exact norm_sub_le_of_le (hε _ (this _ Hl)) (hε _ (this _ Hu))
+  calc
+    ‖(∏ j, (I.upper j - I.lower j)) • f' (Pi.single i 1) -
+            (integral (I.face i) ⊥ (f ∘ e (I.upper i)) BoxAdditiveMap.volume -
+              integral (I.face i) ⊥ (f ∘ e (I.lower i)) BoxAdditiveMap.volume)‖ =
+        ‖integral.{0, u, u} (I.face i) ⊥
+            (fun x : Fin n -> Real =>
+              f' (Pi.single i (I.upper i - I.lower i)) -
+                (f (e (I.upper i) x) - f (e (I.lower i) x)))
+            BoxAdditiveMap.volume‖ := by
+      rw [← integral_sub (Hi _ Hu) (Hi _ Hl)]; rw [← Box.volume_face_mul i]; rw [mul_smul]; rw [← Box.volume_apply]; rw [← BoxAdditiveMap.toSMul_apply]; rw [← integral_const]; rw [← BoxAdditiveMap.volume]; rw [← integral_sub (integrable_const _) ((Hi _ Hu).sub (Hi _ Hl))]
+      simp only [(· ∘ ·), Pi.sub_def, ← f'.map_smul, ← Pi.single_smul', smul_eq_mul, mul_one]
+    _ <= (volume (I.face i : Set (Fin n -> Real))).toReal * (2 * ε * c * (I.upper i - I.lower i)) := by
+      -- The hard part of the estimate was done above, here we just replace `diam I.Icc`
+      -- with `c * (I.upper i - I.lower i)`
+      refine norm_integral_le_of_le_const (fun y hy => (this y hy).trans ?_) volume
+      rw [mul_assoc (2 * ε)]
+      gcongr
+      exact I.diam_Icc_le_of_distortion_le i hc
+    _ = 2 * ε * c * ∏ j, (I.upper j - I.lower j) := by
+      rw [← measureReal_def]; rw [← Measure.toBoxAdditive_apply]; rw [Box.volume_apply]; rw [← I.volume_face_mul i]
+      ac_rfl
 
 中文:
 定理 norm_volume_sub_integral_face_upper_sub_lower_smul_le
@@ -81,7 +137,63 @@ theorem norm_volume_sub_integral_face_upper_sub_lower_smul_le
   -- Porting note: Lean fails to find `α` in the next line
   set e : Real -> (Fin n -> Real) -> (Fin (n + 1) -> Real) := i.insertNth (α := fun _ => Real)
   /- **Plan of the proof**. The difference of the integrals of the affine function
-    `fun y ↦ a + f' (y - x)` over the faces `x i = I.upper i
+    `fun y ↦ a + f' (y - x)` over the faces `x i = I.upper i` and `x i = I.lower i` is equal to the
+    volume of `I` multiplied by `f' (Pi.single i 1)`, so it suffices to show that the integral of
+    `f y - a - f' (y - x)` over each of these faces is less than or equal to `ε * c * vol I`. We
+    integrate a function of the norm `≤ ε * diam I.Icc` over a box of volume
+    `∏ j ≠ i, (I.upper j - I.lower j)`. Since `diam I.Icc ≤ c * (I.upper i - I.lower i)`, we get the
+    required estimate. -/
+  have Hl : I.lower i in Icc (I.lower i) (I.upper i) := Set.left_mem_Icc.2 (I.lower_le_upper i)
+  have Hu : I.upper i in Icc (I.lower i) (I.upper i) := Set.right_mem_Icc.2 (I.lower_le_upper i)
+  have Hi : forall x in Icc (I.lower i) (I.upper i),
+      Integrable.{0, u, u} (I.face i) ⊥ (f ∘ e x) BoxAdditiveMap.volume := fun x hx =>
+    integrable_of_continuousOn _ (Box.continuousOn_face_Icc hfc hx) volume
+  /- We start with an estimate: the difference of the values of `f` at the corresponding points
+    of the faces `x i = I.lower i` and `x i = I.upper i` is `(2 * ε * diam I.Icc)`-close to the
+    value of `f'` on `Pi.single i (I.upper i - I.lower i) = lᵢ • eᵢ`, where
+    `lᵢ = I.upper i - I.lower i` is the length of `i`-th edge of `I` and `eᵢ = Pi.single i 1` is the
+    `i`-th unit vector. -/
+  have : forall y in Box.Icc (I.face i),
+      ‖f' (Pi.single i (I.upper i - I.lower i)) -
+          (f (e (I.upper i) y) - f (e (I.lower i) y))‖ <=
+        2 * ε * diam (Box.Icc I) := fun y hy => by
+    set g := fun y => f y - a - f' (y - x) with hg
+    change forall y in (Box.Icc I), ‖g y‖ <= ε * ‖y - x‖ at hε
+    clear_value g; obtain rfl : f = fun y => a + f' (y - x) + g y := by simp [hg]
+    convert_to ‖g (e (I.lower i) y) - g (e (I.upper i) y)‖ <= _
+    · congr 1
+      have := Fin.insertNth_sub_same (α := fun _ => Real) i (I.upper i) (I.lower i) y
+      simp only [← this, f'.map_sub]; abel
+    · have : forall z in Icc (I.lower i) (I.upper i), e z y in (Box.Icc I) := fun z hz =>
+        I.mapsTo_insertNth_face_Icc hz hy
+      replace hε : forall y in (Box.Icc I), ‖g y‖ <= ε * diam (Box.Icc I) := by
+        intro y hy
+        refine (hε y hy).trans (mul_le_mul_of_nonneg_left ?_ h0.le)
+        rw [← dist_eq_norm]
+        exact dist_le_diam_of_mem I.isCompact_Icc.isBounded hy hxI
+      rw [two_mul]; rw [add_mul]
+      exact norm_sub_le_of_le (hε _ (this _ Hl)) (hε _ (this _ Hu))
+  calc
+    ‖(∏ j, (I.upper j - I.lower j)) • f' (Pi.single i 1) -
+            (integral (I.face i) ⊥ (f ∘ e (I.upper i)) BoxAdditiveMap.volume -
+              integral (I.face i) ⊥ (f ∘ e (I.lower i)) BoxAdditiveMap.volume)‖ =
+        ‖integral.{0, u, u} (I.face i) ⊥
+            (fun x : Fin n -> Real =>
+              f' (Pi.single i (I.upper i - I.lower i)) -
+                (f (e (I.upper i) x) - f (e (I.lower i) x)))
+            BoxAdditiveMap.volume‖ := by
+      rw [← integral_sub (Hi _ Hu) (Hi _ Hl)]; rw [← Box.volume_face_mul i]; rw [mul_smul]; rw [← Box.volume_apply]; rw [← BoxAdditiveMap.toSMul_apply]; rw [← integral_const]; rw [← BoxAdditiveMap.volume]; rw [← integral_sub (integrable_const _) ((Hi _ Hu).sub (Hi _ Hl))]
+      simp only [(· ∘ ·), Pi.sub_def, ← f'.map_smul, ← Pi.single_smul', smul_eq_mul, mul_one]
+    _ <= (volume (I.face i : Set (Fin n -> Real))).toReal * (2 * ε * c * (I.upper i - I.lower i)) := by
+      -- The hard part of the estimate was done above, here we just replace `diam I.Icc`
+      -- with `c * (I.upper i - I.lower i)`
+      refine norm_integral_le_of_le_const (fun y hy => (this y hy).trans ?_) volume
+      rw [mul_assoc (2 * ε)]
+      gcongr
+      exact I.diam_Icc_le_of_distortion_le i hc
+    _ = 2 * ε * c * ∏ j, (I.upper j - I.lower j) := by
+      rw [← measureReal_def]; rw [← Measure.toBoxAdditive_apply]; rw [Box.volume_apply]; rw [← I.volume_face_mul i]
+      ac_rfl
 
 Depends on / 依赖: BoxAdditiveMap, BoxAdditiveMap.volume, I.upper, volume
 -/
@@ -169,7 +281,97 @@ theorem hasIntegral_GP_pderiv
     `J ≤ I`, thus the difference of integrals over `x i = J.upper i` and `x i = J.lower i` is a
     box-additive function of `J ≤ I`. -/
   have Hc : ContinuousOn f (Box.Icc I) := fun x hx => by
-    by_ca
+    by_cases hxs : x in s
+    exacts [Hs x hxs, (Hd x ⟨hx, hxs⟩).continuousWithinAt]
+  set fI : Real -> Box (Fin n) -> E := fun y J =>
+    integral.{0, u, u} J GP (fun x => f (i.insertNth y x)) BoxAdditiveMap.volume
+  set fb : Icc (I.lower i) (I.upper i) -> Fin n ->ᵇᵃ[↑(I.face i)] E := fun x =>
+    (integrable_of_continuousOn GP (Box.continuousOn_face_Icc Hc x.2) volume).toBoxAdditive
+  set F : Fin (n + 1) ->ᵇᵃ[I] E := BoxAdditiveMap.upperSubLower I i fI fb fun x _ J => rfl
+  -- Thus our statement follows from some local estimates.
+  change HasIntegral I GP (fun x => f' x (Pi.single i 1)) _ (F I)
+  refine HasIntegral.of_le_Henstock_of_forall_isLittleO gp_le ?_ ?_ _ s hs ?_ ?_
+  · -- We use the volume as an upper estimate.
+    exact (volume : Measure (Fin (n + 1) -> Real)).toBoxAdditive.restrict _ le_top
+  · exact fun J => ENNReal.toReal_nonneg
+  · intro c x hx ε ε0
+    /- Near `x ∈ s` we choose `δ` so that both vectors are small. `volume J • eᵢ` is small because
+        `volume J ≤ (2 * δ) ^ (n + 1)` is small, and the difference of the integrals is small
+        because each of the integrals is close to `volume (J.face i) • f x`.
+        TODO: there should be a shorter and more readable way to formalize this simple proof. -/
+    have : forallᶠ δ in 𝓝[>] (0 : Real), δ in Ioc (0 : Real) (1 / 2) ∧
+        (forallᵉ (y₁ in closedBall x δ inter (Box.Icc I)) (y₂ in closedBall x δ inter (Box.Icc I)),
+              ‖f y₁ - f y₂‖ <= ε / 2) ∧ (2 * δ) ^ (n + 1) * ‖f' x (Pi.single i 1)‖ <= ε / 2 := by
+      refine .and (Ioc_mem_nhdsGT one_half_pos) (.and ?_ ?_)
+      · rcases ((nhdsWithin_hasBasis nhds_basis_closedBall _).tendsto_iff nhds_basis_closedBall).1
+            (Hs x hx.2) _ (half_pos <| half_pos ε0) with ⟨δ₁, δ₁0, hδ₁⟩
+        filter_upwards [Ioc_mem_nhdsGT δ₁0] with δ hδ y₁ hy₁ y₂ hy₂
+        have : closedBall x δ inter (Box.Icc I) subseteq closedBall x δ₁ inter (Box.Icc I) := by gcongr; exact hδ.2
+        rw [← dist_eq_norm]
+        calc
+          dist (f y₁) (f y₂) <= dist (f y₁) (f x) + dist (f y₂) (f x) := dist_triangle_right _ _ _
+          _ <= ε / 2 / 2 + ε / 2 / 2 := add_le_add (hδ₁ _ <| this hy₁) (hδ₁ _ <| this hy₂)
+          _ = ε / 2 := add_halves _
+      · have : ContinuousWithinAt (fun δ : Real => (2 * δ) ^ (n + 1) * ‖f' x (Pi.single i 1)‖)
+            (Ioi 0) 0 := ((continuousWithinAt_id.const_mul _).pow _).mul_const _
+        refine this.eventually (ge_mem_nhds ?_)
+        simpa using half_pos ε0
+    rcases this.exists with ⟨δ, ⟨hδ0, hδ12⟩, hdfδ, hδ⟩
+    refine ⟨δ, hδ0, fun J hJI hJδ _ _ => add_halves ε ▸ ?_⟩
+    have Hl : J.lower i in Icc (J.lower i) (J.upper i) := Set.left_mem_Icc.2 (J.lower_le_upper i)
+    have Hu : J.upper i in Icc (J.lower i) (J.upper i) := Set.right_mem_Icc.2 (J.lower_le_upper i)
+    have Hi : forall x in Icc (J.lower i) (J.upper i),
+        Integrable.{0, u, u} (J.face i) GP (fun y => f (i.insertNth x y))
+          BoxAdditiveMap.volume := fun x hx =>
+      integrable_of_continuousOn _ (Box.continuousOn_face_Icc (Hc.mono <| Box.le_iff_Icc.1 hJI) hx)
+        volume
+    have hJδ' : Box.Icc J subseteq closedBall x δ inter (Box.Icc I) := subset_inter hJδ (Box.le_iff_Icc.1 hJI)
+    have Hmaps : forall z in Icc (J.lower i) (J.upper i),
+        MapsTo (i.insertNth z) (Box.Icc (J.face i)) (closedBall x δ inter (Box.Icc I)) := fun z hz =>
+      (J.mapsTo_insertNth_face_Icc hz).mono Subset.rfl hJδ'
+    simp only [dist_eq_norm]; dsimp [F]
+    rw [← integral_sub (Hi _ Hu) (Hi _ Hl)]
+    refine (norm_sub_le _ _).trans (add_le_add ?_ ?_)
+    · simp_rw [BoxAdditiveMap.volume_apply, norm_smul, Real.norm_eq_abs, abs_prod]
+      refine (mul_le_mul_of_nonneg_right ?_ <| norm_nonneg _).trans hδ
+      have : forall j, |J.upper j - J.lower j| <= 2 * δ := fun j =>
+        calc
+          dist (J.upper j) (J.lower j) <= dist J.upper J.lower := dist_le_pi_dist _ _ _
+          _ <= dist J.upper x + dist J.lower x := dist_triangle_right _ _ _
+          _ <= δ + δ := add_le_add (hJδ J.upper_mem_Icc) (hJδ J.lower_mem_Icc)
+          _ = 2 * δ := (two_mul δ).symm
+      calc
+        ∏ j, |J.upper j - J.lower j| <= ∏ j : Fin (n + 1), 2 * δ := by
+          gcongr with j _; exact this j
+        _ = (2 * δ) ^ (n + 1) := by simp
+    · refine (norm_integral_le_of_le_const (fun y hy => hdfδ _ (Hmaps _ Hu hy) _
+        (Hmaps _ Hl hy)) volume).trans ?_
+      refine (mul_le_mul_of_nonneg_right ?_ (half_pos ε0).le).trans_eq (one_mul _)
+      rw [Box.coe_eq_pi]; rw [measureReal_def]; rw [Real.volume_pi_Ioc_toReal (Box.lower_le_upper _)]
+      refine prod_le_one (fun _ _ => sub_nonneg.2 <| Box.lower_le_upper _ _) fun j _ => ?_
+      calc
+        J.upper (i.succAbove j) - J.lower (i.succAbove j) <=
+            dist (J.upper (i.succAbove j)) (J.lower (i.succAbove j)) :=
+          le_abs_self _
+        _ <= dist J.upper J.lower := dist_le_pi_dist J.upper J.lower (i.succAbove j)
+        _ <= dist J.upper x + dist J.lower x := dist_triangle_right _ _ _
+        _ <= δ + δ := add_le_add (hJδ J.upper_mem_Icc) (hJδ J.lower_mem_Icc)
+        _ <= 1 / 2 + 1 / 2 := by gcongr
+        _ = 1 := add_halves 1
+  · intro c x hx ε ε0
+    /- At a point `x ∉ s`, we unfold the definition of Fréchet differentiability, then use
+        an estimate we proved earlier in this file. -/
+    rcases exists_pos_mul_lt ε0 (2 * c) with ⟨ε', ε'0, hlt⟩
+    rcases (nhdsWithin_hasBasis nhds_basis_closedBall _).mem_iff.1
+      ((Hd x hx).isLittleO.def ε'0) with ⟨δ, δ0, Hδ⟩
+    refine ⟨δ, δ0, fun J hle hJδ hxJ hJc => ?_⟩
+    simp only [BoxAdditiveMap.volume_apply, dist_eq_norm]
+    refine (norm_volume_sub_integral_face_upper_sub_lower_smul_le _
+      (Hc.mono <| Box.le_iff_Icc.1 hle) hxJ ε'0 (fun y hy => Hδ ?_) (hJc rfl)).trans ?_
+    · exact ⟨hJδ hy, Box.le_iff_Icc.1 hle hy⟩
+    · rw [mul_right_comm (2 : Real), ← Box.volume_apply]
+      gcongr
+      exacts [by dsimp; positivity, by simp]
 
 中文:
 定理 has整数egral_GP_pderiv
@@ -179,7 +381,97 @@ theorem hasIntegral_GP_pderiv
     `J ≤ I`, thus the difference of integrals over `x i = J.upper i` and `x i = J.lower i` is a
     box-additive function of `J ≤ I`. -/
   have Hc : ContinuousOn f (Box.Icc I) := fun x hx => by
-    by_ca
+    by_cases hxs : x in s
+    exacts [Hs x hxs, (Hd x ⟨hx, hxs⟩).continuousWithinAt]
+  set fI : Real -> Box (Fin n) -> E := fun y J =>
+    integral.{0, u, u} J GP (fun x => f (i.insertNth y x)) BoxAdditiveMap.volume
+  set fb : Icc (I.lower i) (I.upper i) -> Fin n ->ᵇᵃ[↑(I.face i)] E := fun x =>
+    (integrable_of_continuousOn GP (Box.continuousOn_face_Icc Hc x.2) volume).toBoxAdditive
+  set F : Fin (n + 1) ->ᵇᵃ[I] E := BoxAdditiveMap.upperSubLower I i fI fb fun x _ J => rfl
+  -- Thus our statement follows from some local estimates.
+  change HasIntegral I GP (fun x => f' x (Pi.single i 1)) _ (F I)
+  refine HasIntegral.of_le_Henstock_of_forall_isLittleO gp_le ?_ ?_ _ s hs ?_ ?_
+  · -- We use the volume as an upper estimate.
+    exact (volume : Measure (Fin (n + 1) -> Real)).toBoxAdditive.restrict _ le_top
+  · exact fun J => ENNReal.toReal_nonneg
+  · intro c x hx ε ε0
+    /- Near `x ∈ s` we choose `δ` so that both vectors are small. `volume J • eᵢ` is small because
+        `volume J ≤ (2 * δ) ^ (n + 1)` is small, and the difference of the integrals is small
+        because each of the integrals is close to `volume (J.face i) • f x`.
+        TODO: there should be a shorter and more readable way to formalize this simple proof. -/
+    have : forallᶠ δ in 𝓝[>] (0 : Real), δ in Ioc (0 : Real) (1 / 2) ∧
+        (forallᵉ (y₁ in closedBall x δ inter (Box.Icc I)) (y₂ in closedBall x δ inter (Box.Icc I)),
+              ‖f y₁ - f y₂‖ <= ε / 2) ∧ (2 * δ) ^ (n + 1) * ‖f' x (Pi.single i 1)‖ <= ε / 2 := by
+      refine .and (Ioc_mem_nhdsGT one_half_pos) (.and ?_ ?_)
+      · rcases ((nhdsWithin_hasBasis nhds_basis_closedBall _).tendsto_iff nhds_basis_closedBall).1
+            (Hs x hx.2) _ (half_pos <| half_pos ε0) with ⟨δ₁, δ₁0, hδ₁⟩
+        filter_upwards [Ioc_mem_nhdsGT δ₁0] with δ hδ y₁ hy₁ y₂ hy₂
+        have : closedBall x δ inter (Box.Icc I) subseteq closedBall x δ₁ inter (Box.Icc I) := by gcongr; exact hδ.2
+        rw [← dist_eq_norm]
+        calc
+          dist (f y₁) (f y₂) <= dist (f y₁) (f x) + dist (f y₂) (f x) := dist_triangle_right _ _ _
+          _ <= ε / 2 / 2 + ε / 2 / 2 := add_le_add (hδ₁ _ <| this hy₁) (hδ₁ _ <| this hy₂)
+          _ = ε / 2 := add_halves _
+      · have : ContinuousWithinAt (fun δ : Real => (2 * δ) ^ (n + 1) * ‖f' x (Pi.single i 1)‖)
+            (Ioi 0) 0 := ((continuousWithinAt_id.const_mul _).pow _).mul_const _
+        refine this.eventually (ge_mem_nhds ?_)
+        simpa using half_pos ε0
+    rcases this.exists with ⟨δ, ⟨hδ0, hδ12⟩, hdfδ, hδ⟩
+    refine ⟨δ, hδ0, fun J hJI hJδ _ _ => add_halves ε ▸ ?_⟩
+    have Hl : J.lower i in Icc (J.lower i) (J.upper i) := Set.left_mem_Icc.2 (J.lower_le_upper i)
+    have Hu : J.upper i in Icc (J.lower i) (J.upper i) := Set.right_mem_Icc.2 (J.lower_le_upper i)
+    have Hi : forall x in Icc (J.lower i) (J.upper i),
+        Integrable.{0, u, u} (J.face i) GP (fun y => f (i.insertNth x y))
+          BoxAdditiveMap.volume := fun x hx =>
+      integrable_of_continuousOn _ (Box.continuousOn_face_Icc (Hc.mono <| Box.le_iff_Icc.1 hJI) hx)
+        volume
+    have hJδ' : Box.Icc J subseteq closedBall x δ inter (Box.Icc I) := subset_inter hJδ (Box.le_iff_Icc.1 hJI)
+    have Hmaps : forall z in Icc (J.lower i) (J.upper i),
+        MapsTo (i.insertNth z) (Box.Icc (J.face i)) (closedBall x δ inter (Box.Icc I)) := fun z hz =>
+      (J.mapsTo_insertNth_face_Icc hz).mono Subset.rfl hJδ'
+    simp only [dist_eq_norm]; dsimp [F]
+    rw [← integral_sub (Hi _ Hu) (Hi _ Hl)]
+    refine (norm_sub_le _ _).trans (add_le_add ?_ ?_)
+    · simp_rw [BoxAdditiveMap.volume_apply, norm_smul, Real.norm_eq_abs, abs_prod]
+      refine (mul_le_mul_of_nonneg_right ?_ <| norm_nonneg _).trans hδ
+      have : forall j, |J.upper j - J.lower j| <= 2 * δ := fun j =>
+        calc
+          dist (J.upper j) (J.lower j) <= dist J.upper J.lower := dist_le_pi_dist _ _ _
+          _ <= dist J.upper x + dist J.lower x := dist_triangle_right _ _ _
+          _ <= δ + δ := add_le_add (hJδ J.upper_mem_Icc) (hJδ J.lower_mem_Icc)
+          _ = 2 * δ := (two_mul δ).symm
+      calc
+        ∏ j, |J.upper j - J.lower j| <= ∏ j : Fin (n + 1), 2 * δ := by
+          gcongr with j _; exact this j
+        _ = (2 * δ) ^ (n + 1) := by simp
+    · refine (norm_integral_le_of_le_const (fun y hy => hdfδ _ (Hmaps _ Hu hy) _
+        (Hmaps _ Hl hy)) volume).trans ?_
+      refine (mul_le_mul_of_nonneg_right ?_ (half_pos ε0).le).trans_eq (one_mul _)
+      rw [Box.coe_eq_pi]; rw [measureReal_def]; rw [Real.volume_pi_Ioc_toReal (Box.lower_le_upper _)]
+      refine prod_le_one (fun _ _ => sub_nonneg.2 <| Box.lower_le_upper _ _) fun j _ => ?_
+      calc
+        J.upper (i.succAbove j) - J.lower (i.succAbove j) <=
+            dist (J.upper (i.succAbove j)) (J.lower (i.succAbove j)) :=
+          le_abs_self _
+        _ <= dist J.upper J.lower := dist_le_pi_dist J.upper J.lower (i.succAbove j)
+        _ <= dist J.upper x + dist J.lower x := dist_triangle_right _ _ _
+        _ <= δ + δ := add_le_add (hJδ J.upper_mem_Icc) (hJδ J.lower_mem_Icc)
+        _ <= 1 / 2 + 1 / 2 := by gcongr
+        _ = 1 := add_halves 1
+  · intro c x hx ε ε0
+    /- At a point `x ∉ s`, we unfold the definition of Fréchet differentiability, then use
+        an estimate we proved earlier in this file. -/
+    rcases exists_pos_mul_lt ε0 (2 * c) with ⟨ε', ε'0, hlt⟩
+    rcases (nhdsWithin_hasBasis nhds_basis_closedBall _).mem_iff.1
+      ((Hd x hx).isLittleO.def ε'0) with ⟨δ, δ0, Hδ⟩
+    refine ⟨δ, δ0, fun J hle hJδ hxJ hJc => ?_⟩
+    simp only [BoxAdditiveMap.volume_apply, dist_eq_norm]
+    refine (norm_volume_sub_integral_face_upper_sub_lower_smul_le _
+      (Hc.mono <| Box.le_iff_Icc.1 hle) hxJ ε'0 (fun y hy => Hδ ?_) (hJc rfl)).trans ?_
+    · exact ⟨hJδ hy, Box.le_iff_Icc.1 hle hy⟩
+    · rw [mul_right_comm (2 : Real), ← Box.volume_apply]
+      gcongr
+      exacts [by dsimp; positivity, by simp]
 -/
 theorem hasIntegral_GP_pderiv (f : (Fin (n + 1) -> Real) -> E)
     (f' : (Fin (n + 1) -> Real) -> (Fin (n + 1) -> Real) ->L[Real] E) (s : Set (Fin (n + 1) -> Real))

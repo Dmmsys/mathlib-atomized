@@ -2573,7 +2573,10 @@ theorem prelimitRecOn_succ_of_not_isMax
   have H := Classical.choose_spec (not_isSuccPrelimit_iff_succ_eq.1 h)
   rw [prelimitRecOn]; rw [WellFounded.fix_eq]; rw [dif_neg h]
   have {a c : α} {ha hc} {x : forall a, motive a} (h : a = c) :
-    cast (congr_arg (motive ∘ Order.succ) h) (succ a ha (x a)
+    cast (congr_arg (motive ∘ Order.succ) h) (succ a ha (x a)) = succ c hc (x c) := by subst h; rfl
+exact this (succ_eq_succ_iff_of_not_isMax H.1 hb).1 H.2
+
+@[to_dual (attr := simp)]
 
 中文:
 定理 prelimitRecOn_succ_of_not_isMax
@@ -2583,7 +2586,10 @@ theorem prelimitRecOn_succ_of_not_isMax
   have H := Classical.choose_spec (not_isSuccPrelimit_iff_succ_eq.1 h)
   rw [prelimitRecOn]; rw [WellFounded.fix_eq]; rw [dif_neg h]
   have {a c : α} {ha hc} {x : forall a, motive a} (h : a = c) :
-    cast (congr_arg (motive ∘ Order.succ) h) (succ a ha (x a)
+    cast (congr_arg (motive ∘ Order.succ) h) (succ a ha (x a)) = succ c hc (x c) := by subst h; rfl
+exact this (succ_eq_succ_iff_of_not_isMax H.1 hb).1 H.2
+
+@[to_dual (attr := simp)]
 
 Depends on / 依赖: Classical, Classical.choose_spec, IsSuccPrelimit, IsSuccPrelimit.isMax, Order.succ, WellFounded, WellFounded.fix_eq, choose_spec, congr_arg, dif_neg, fix_eq, motive, not_isSuccPrelimit_iff_succ_eq, prelimitRecOn, succ_eq_succ_iff_of_not_isMax
 -/

@@ -2343,7 +2343,12 @@ definition mkRingHomOfMulSelfOfTwoNeZero
     map_one' := h_one,
     map_mul' := fun x y => by
       have hxy := h (x + y)
-      rw [mul_add]; rw [add_mul]; rw [add_mul]; rw [f.map_add]; rw [f.map_add]; rw [f.map_add]; rw [f.map_add]; rw [h x]; rw [h y]; rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [← sub_eq_zero]; rw [add_comm (f 
+      rw [mul_add]; rw [add_mul]; rw [add_mul]; rw [f.map_add]; rw [f.map_add]; rw [f.map_add]; rw [f.map_add]; rw [h x]; rw [h y]; rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [← sub_eq_zero]; rw [add_comm (f x * f x + f (y * x))]; rw [← sub_sub]; rw [← sub_sub]; rw [← sub_sub]; rw [mul_comm y x]; rw [mul_comm (f y) (f x)] at hxy
+      simp only [add_assoc, add_sub_assoc, add_sub_cancel] at hxy
+      rw [sub_sub]; rw [← two_mul]; rw [← add_sub_assoc]; rw [← two_mul]; rw [← mul_sub]; rw [mul_eq_zero (M₀ := α)]; rw [sub_eq_zero]; rw [or_iff_not_imp_left] at hxy
+      exact hxy h_two }
+
+@[simp]
 
 中文:
 定义 mkRingHomOfMulSelfOfTwoNeZero
@@ -2352,7 +2357,12 @@ definition mkRingHomOfMulSelfOfTwoNeZero
     map_one' := h_one,
     map_mul' := fun x y => by
       have hxy := h (x + y)
-      rw [mul_add]; rw [add_mul]; rw [add_mul]; rw [f.map_add]; rw [f.map_add]; rw [f.map_add]; rw [f.map_add]; rw [h x]; rw [h y]; rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [← sub_eq_zero]; rw [add_comm (f 
+      rw [mul_add]; rw [add_mul]; rw [add_mul]; rw [f.map_add]; rw [f.map_add]; rw [f.map_add]; rw [f.map_add]; rw [h x]; rw [h y]; rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [← sub_eq_zero]; rw [add_comm (f x * f x + f (y * x))]; rw [← sub_sub]; rw [← sub_sub]; rw [← sub_sub]; rw [mul_comm y x]; rw [mul_comm (f y) (f x)] at hxy
+      simp only [add_assoc, add_sub_assoc, add_sub_cancel] at hxy
+      rw [sub_sub]; rw [← two_mul]; rw [← add_sub_assoc]; rw [← two_mul]; rw [← mul_sub]; rw [mul_eq_zero (M₀ := α)]; rw [sub_eq_zero]; rw [or_iff_not_imp_left] at hxy
+      exact hxy h_two }
+
+@[simp]
 
 Depends on / 依赖: add_assoc, add_comm, add_mul, add_sub_assoc, add_sub_cancel, f.map_add, h_one, map_add, map_mul, map_one, mul_add, mul_comm, sub_eq_zero, sub_sub, two_mul
 -/

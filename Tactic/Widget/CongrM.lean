@@ -38,7 +38,10 @@ definition makeCongrMString
   for pos in subexprPos do
     goalTypeWithMetaVars ← insertMetaVar goalTypeWithMetaVars pos
 
-  let
+  let side := if subexprPos[0]!.toArray[0]! = 0 then 1 else 2
+  let sideExpr := goalTypeWithMetaVars.getAppArgs[side]!
+  let res := "congrm " ++ (toString (← Meta.ppExpr sideExpr)).renameMetaVar
+  return (res, res, none)
 
 中文:
 定义 makeCongrMString
@@ -51,7 +54,10 @@ definition makeCongrMString
   for pos in subexprPos do
     goalTypeWithMetaVars ← insertMetaVar goalTypeWithMetaVars pos
 
-  let
+  let side := if subexprPos[0]!.toArray[0]! = 0 then 1 else 2
+  let sideExpr := goalTypeWithMetaVars.getAppArgs[side]!
+  let res := "congrm " ++ (toString (← Meta.ppExpr sideExpr)).renameMetaVar
+  return (res, res, none)
 -/
 def makeCongrMString (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr)
     (_ : SelectInsertParams) :

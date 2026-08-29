@@ -110,7 +110,38 @@ theorem tendsto_iff_forall_isCompact_tendstoUniformlyOn
     -- Consider a compact set `K`
     intro h K hK
     -- Since `K` is compact, it suffices to prove locally uniform convergence
-    rw [
+    rw [← tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact hK]
+    -- Now choose an entourage `U` in the codomain and a point `x ∈ K`.
+    intro U hU x _
+    -- Choose an open symmetric entourage `V` such that `V ○ V ⊆ U`.
+    rcases comp_open_symm_mem_uniformity_sets hU with ⟨V, hV, hVo, hVsymm, hVU⟩
+    -- Then choose a closed entourage `W ⊆ V`
+    rcases mem_uniformity_isClosed hV with ⟨W, hW, hWc, hWU⟩
+    -- Consider `s = {y ∈ K | (f x, f y) ∈ W}`
+    set s := K inter f ⁻¹' ball (f x) W
+    -- This is a neighbourhood of `x` within `K`, because `W` is an entourage.
+have hnhds : s in 𝓝[K] x := inter_mem_nhdsWithin _ f.continuousAt _ (ball_mem_nhds _ hW)
+    -- This set is compact because it is an intersection of `K`
+    -- with a closed set `{y | (f x, f y) ∈ W} = f ⁻¹' UniformSpace.ball (f x) W`
+have hcomp : IsCompact s := hK.inter_right (isClosed_ball _ hWc).preimage f.continuous
+    -- `f` maps `s` to the open set `ball (f x) V = {z | (f x, z) ∈ V}`
+    have hmaps : MapsTo f s (ball (f x) V) := fun x hx => hWU hx.2
+    use s, hnhds
+    -- Continuous maps `F i` in a neighbourhood of `f` map `s` to `ball (f x) V` as well.
+    refine (h s hcomp _ (isOpen_ball _ hVo) hmaps).mono fun g hg y hy => ?_
+    -- Then for `y ∈ s` we have `(f y, f x) ∈ V` and `(f x, F i y) ∈ V`, thus `(f y, F i y) ∈ U`
+exact hVU ⟨f x, SetRel.symm V hmaps hy, hg hy⟩
+  · -- Now we prove that uniform convergence on compacts
+    -- implies convergence in the compact-open topology
+    -- Consider a compact set `K`, an open set `U`, and a continuous map `f` that maps `K` to `U`
+    intro h K hK U hU hf
+    -- Due to Lebesgue number lemma, there exists an entourage `V`
+    -- such that `U` includes the `V`-thickening of `f '' K`.
+    rcases lebesgue_number_of_compact_open (hK.image (map_continuous f)) hU hf.image_subset
+        with ⟨V, hV, -, hVf⟩
+    -- Then any continuous map that is uniformly `V`-close to `f` on `K`
+    -- maps `K` to `U` as well
+    filter_upwards [h K hK V hV] with g hg x hx using hVf _ (mem_image_of_mem f hx) (hg x hx)
 
 中文:
 定理 tendsto_iff_对任意_isCompact_tendstoUniformlyOn
@@ -122,7 +153,38 @@ theorem tendsto_iff_forall_isCompact_tendstoUniformlyOn
     -- Consider a compact set `K`
     intro h K hK
     -- Since `K` is compact, it suffices to prove locally uniform convergence
-    rw [
+    rw [← tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact hK]
+    -- Now choose an entourage `U` in the codomain and a point `x ∈ K`.
+    intro U hU x _
+    -- Choose an open symmetric entourage `V` such that `V ○ V ⊆ U`.
+    rcases comp_open_symm_mem_uniformity_sets hU with ⟨V, hV, hVo, hVsymm, hVU⟩
+    -- Then choose a closed entourage `W ⊆ V`
+    rcases mem_uniformity_isClosed hV with ⟨W, hW, hWc, hWU⟩
+    -- Consider `s = {y ∈ K | (f x, f y) ∈ W}`
+    set s := K inter f ⁻¹' ball (f x) W
+    -- This is a neighbourhood of `x` within `K`, because `W` is an entourage.
+have hnhds : s in 𝓝[K] x := inter_mem_nhdsWithin _ f.continuousAt _ (ball_mem_nhds _ hW)
+    -- This set is compact because it is an intersection of `K`
+    -- with a closed set `{y | (f x, f y) ∈ W} = f ⁻¹' UniformSpace.ball (f x) W`
+have hcomp : IsCompact s := hK.inter_right (isClosed_ball _ hWc).preimage f.continuous
+    -- `f` maps `s` to the open set `ball (f x) V = {z | (f x, z) ∈ V}`
+    have hmaps : MapsTo f s (ball (f x) V) := fun x hx => hWU hx.2
+    use s, hnhds
+    -- Continuous maps `F i` in a neighbourhood of `f` map `s` to `ball (f x) V` as well.
+    refine (h s hcomp _ (isOpen_ball _ hVo) hmaps).mono fun g hg y hy => ?_
+    -- Then for `y ∈ s` we have `(f y, f x) ∈ V` and `(f x, F i y) ∈ V`, thus `(f y, F i y) ∈ U`
+exact hVU ⟨f x, SetRel.symm V hmaps hy, hg hy⟩
+  · -- Now we prove that uniform convergence on compacts
+    -- implies convergence in the compact-open topology
+    -- Consider a compact set `K`, an open set `U`, and a continuous map `f` that maps `K` to `U`
+    intro h K hK U hU hf
+    -- Due to Lebesgue number lemma, there exists an entourage `V`
+    -- such that `U` includes the `V`-thickening of `f '' K`.
+    rcases lebesgue_number_of_compact_open (hK.image (map_continuous f)) hU hf.image_subset
+        with ⟨V, hV, -, hVf⟩
+    -- Then any continuous map that is uniformly `V`-close to `f` on `K`
+    -- maps `K` to `U` as well
+    filter_upwards [h K hK V hV] with g hg x hx using hVf _ (mem_image_of_mem f hx) (hg x hx)
 
 Depends on / 依赖: compact, convergence, tendsto_nhds_compactOpen, topology
 -/
@@ -235,7 +297,8 @@ instance compactConvergenceUniformSpace
   body: .replaceTopology (.comap toUniformOnFunIsCompact inferInstance) by
     refine TopologicalSpace.ext_nhds fun f => eq_of_forall_le_iff fun l => ?_
     simp_rw [← tendsto_id', tendsto_iff_forall_isCompact_tendstoUniformlyOn,
-      nhds_induced, tendsto_comap_iff, UniformOnFun.tendsto_iff_tendstoUniform
+      nhds_induced, tendsto_comap_iff, UniformOnFun.tendsto_iff_tendstoUniformlyOn]
+    rfl
 
 中文:
 实例 compactConvergenceUniformSpace
@@ -243,7 +306,8 @@ instance compactConvergenceUniformSpace
   定义体: .replaceTopology (.comap toUniformOnFunIsCompact inferInstance) by
     refine TopologicalSpace.ext_nhds fun f => eq_of_forall_le_iff fun l => ?_
     simp_rw [← tendsto_id', tendsto_iff_forall_isCompact_tendstoUniformlyOn,
-      nhds_induced, tendsto_comap_iff, UniformOnFun.tendsto_iff_tendstoUniform
+      nhds_induced, tendsto_comap_iff, UniformOnFun.tendsto_iff_tendstoUniformlyOn]
+    rfl
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.ext_nhds, UniformOnFun, UniformOnFun.tendsto_iff_tendstoUniformlyOn, eq_of_forall_le_iff, ext_nhds, nhds_induced, replaceTopology, simp_rw, tendsto_comap_iff, tendsto_id, tendsto_iff_forall_isCompact_tendstoUniformlyOn, tendsto_iff_tendstoUniformlyOn, toUniformOnFunIsCompact
 -/
@@ -612,7 +676,10 @@ definition _root_.UniformEquiv.arrowCongr
 invFun f := .comp ψ.symm.toHomeomorph f.comp φ
 .trans congrArg f φ.left_inv _ left_inv f := ext fun _ => ψ.left_inv (f _)
 .trans congrArg f φ.right_inv _ right_inv f := ext fun _ => ψ.right_inv (f _)
-.comp uniformContinuous_toFun := uniformContinuous_comp _ ψ.unifo
+.comp uniformContinuous_toFun := uniformContinuous_comp _ ψ.uniformContinuous
+    uniformContinuous_comp_left _
+.comp uniformContinuous_invFun := uniformContinuous_comp _ ψ.symm.uniformContinuous
+    uniformContinuous_comp_left _
 
 中文:
 定义 _root_.一致等价.arrowCongr
@@ -621,7 +688,10 @@ invFun f := .comp ψ.symm.toHomeomorph f.comp φ
 invFun f := .comp ψ.symm.toHomeomorph f.comp φ
 .trans congrArg f φ.left_inv _ left_inv f := ext fun _ => ψ.left_inv (f _)
 .trans congrArg f φ.right_inv _ right_inv f := ext fun _ => ψ.right_inv (f _)
-.comp uniformContinuous_toFun := uniformContinuous_comp _ ψ.unifo
+.comp uniformContinuous_toFun := uniformContinuous_comp _ ψ.uniformContinuous
+    uniformContinuous_comp_left _
+.comp uniformContinuous_invFun := uniformContinuous_comp _ ψ.symm.uniformContinuous
+    uniformContinuous_comp_left _
 -/
 protected def _root_.UniformEquiv.arrowCongr (φ : α ≃ₜ γ) (ψ : β ≃ᵤ δ) :
     C(α, β) ≃ᵤ C(γ, δ) where
@@ -812,7 +882,7 @@ theorem _root_.ContinuousOn.continuous_domRestrict_iff_continuous_uniformOnFun
 
 @[deprecated (since := "2026-07-19")]
 alias _root_.ContinuousOn.continuous_restrict_iff_continuous_uniformOnFun :=
-  _root_.ContinuousOn.continuous_domRestrict_iff_continuou
+  _root_.ContinuousOn.continuous_domRestrict_iff_continuous_uniformOnFun
 
 中文:
 定理 _root_.ContinuousOn.continuous_domRestrict_iff_continuous_uniformOnFun
@@ -822,7 +892,7 @@ alias _root_.ContinuousOn.continuous_restrict_iff_continuous_uniformOnFun :=
 
 @[deprecated (since := "2026-07-19")]
 alias _root_.ContinuousOn.continuous_restrict_iff_continuous_uniformOnFun :=
-  _root_.ContinuousOn.continuous_domRestrict_iff_continuou
+  _root_.ContinuousOn.continuous_domRestrict_iff_continuous_uniformOnFun
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.continuous_iff_continuous_uniformFun, Function, Function.comp_def, UniformOnFun, UniformOnFun.continuous_rng_iff, comp_def, continuous_iff_continuous_uniformFun, continuous_rng_iff
 -/
@@ -852,7 +922,17 @@ theorem uniformSpace_eq_inf_precomp_of_cover
   set 𝔖 : Set (Set α) := {K | IsCompact K}
   set 𝔗₁ : Set (Set δ₁) := {K | IsCompact K}
   set 𝔗₂ : Set (Set δ₂) := {K | IsCompact K}
-  have h_image₁ : MapsTo (φ₁ '' ·) 𝔗₁ 𝔖 := f
+  have h_image₁ : MapsTo (φ₁ '' ·) 𝔗₁ 𝔖 := fun K hK => hK.image φ₁.continuous
+  have h_image₂ : MapsTo (φ₂ '' ·) 𝔗₂ 𝔖 := fun K hK => hK.image φ₂.continuous
+  have h_preimage₁ : MapsTo (φ₁ ⁻¹' ·) 𝔖 𝔗₁ := fun K => h_proper₁.isCompact_preimage
+  have h_preimage₂ : MapsTo (φ₂ ⁻¹' ·) 𝔖 𝔗₂ := fun K => h_proper₂.isCompact_preimage
+  have h_cover' : forall S in 𝔖, S subseteq range φ₁ union range φ₂ := fun S _ => h_cover ▸ subset_univ _
+  -- ... and we just pull it back.
+  simp_rw +zetaDelta [compactConvergenceUniformSpace, replaceTopology_eq,
+    UniformOnFun.uniformSpace_eq_inf_precomp_of_cover _ _ _ _ _
+      h_image₁ h_image₂ h_preimage₁ h_preimage₂ h_cover',
+    UniformSpace.comap_inf, ← UniformSpace.comap_comap]
+  rfl
 
 中文:
 定理 uniformSpace_eq_inf_precomp_of_cover
@@ -863,7 +943,17 @@ theorem uniformSpace_eq_inf_precomp_of_cover
   set 𝔖 : Set (Set α) := {K | IsCompact K}
   set 𝔗₁ : Set (Set δ₁) := {K | IsCompact K}
   set 𝔗₂ : Set (Set δ₂) := {K | IsCompact K}
-  have h_image₁ : MapsTo (φ₁ '' ·) 𝔗₁ 𝔖 := f
+  have h_image₁ : MapsTo (φ₁ '' ·) 𝔗₁ 𝔖 := fun K hK => hK.image φ₁.continuous
+  have h_image₂ : MapsTo (φ₂ '' ·) 𝔗₂ 𝔖 := fun K hK => hK.image φ₂.continuous
+  have h_preimage₁ : MapsTo (φ₁ ⁻¹' ·) 𝔖 𝔗₁ := fun K => h_proper₁.isCompact_preimage
+  have h_preimage₂ : MapsTo (φ₂ ⁻¹' ·) 𝔖 𝔗₂ := fun K => h_proper₂.isCompact_preimage
+  have h_cover' : forall S in 𝔖, S subseteq range φ₁ union range φ₂ := fun S _ => h_cover ▸ subset_univ _
+  -- ... and we just pull it back.
+  simp_rw +zetaDelta [compactConvergenceUniformSpace, replaceTopology_eq,
+    UniformOnFun.uniformSpace_eq_inf_precomp_of_cover _ _ _ _ _
+      h_image₁ h_image₂ h_preimage₁ h_preimage₂ h_cover',
+    UniformSpace.comap_inf, ← UniformSpace.comap_comap]
+  rfl
 -/
 theorem uniformSpace_eq_inf_precomp_of_cover {δ₁ δ₂ : Type*} [TopologicalSpace δ₁]
     [TopologicalSpace δ₂] (φ₁ : C(δ₁, α)) (φ₂ : C(δ₂, α)) (h_proper₁ : IsProperMap φ₁)
@@ -899,7 +989,17 @@ theorem uniformSpace_eq_iInf_precomp_of_cover
   -- `UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover`...
   set 𝔖 : Set (Set α) := {K | IsCompact K}
   set 𝔗 : Π i, Set (Set (δ i)) := fun i => {K | IsCompact K}
-  have h_image : forall i, MapsTo (φ i '' ·) (𝔗 i) 𝔖 := fun i K hK => hK
+  have h_image : forall i, MapsTo (φ i '' ·) (𝔗 i) 𝔖 := fun i K hK => hK.image (φ i).continuous
+  have h_preimage : forall i, MapsTo (φ i ⁻¹' ·) 𝔖 (𝔗 i) := fun i K => (h_proper i).isCompact_preimage
+  have h_cover' : forall S in 𝔖, exists I : Set ι, I.Finite ∧ S subseteq ⋃ i in I, range (φ i) := fun S hS => by
+    refine ⟨{i | (range (φ i) inter S).Nonempty}, h_lf.finite_nonempty_inter_compact hS,
+      inter_eq_right.mp ?_⟩
+    simp_rw [iUnion₂_inter, mem_ofPred, iUnion_nonempty_self, ← iUnion_inter, h_cover, univ_inter]
+  -- ... and we just pull it back.
+  simp_rw +zetaDelta [compactConvergenceUniformSpace, replaceTopology_eq,
+    UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover _ _ _ h_image h_preimage h_cover',
+    UniformSpace.comap_iInf, ← UniformSpace.comap_comap]
+  rfl
 
 中文:
 定理 uniformSpace_eq_iInf_precomp_of_cover
@@ -909,7 +1009,17 @@ theorem uniformSpace_eq_iInf_precomp_of_cover
   -- `UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover`...
   set 𝔖 : Set (Set α) := {K | IsCompact K}
   set 𝔗 : Π i, Set (Set (δ i)) := fun i => {K | IsCompact K}
-  have h_image : forall i, MapsTo (φ i '' ·) (𝔗 i) 𝔖 := fun i K hK => hK
+  have h_image : forall i, MapsTo (φ i '' ·) (𝔗 i) 𝔖 := fun i K hK => hK.image (φ i).continuous
+  have h_preimage : forall i, MapsTo (φ i ⁻¹' ·) 𝔖 (𝔗 i) := fun i K => (h_proper i).isCompact_preimage
+  have h_cover' : forall S in 𝔖, exists I : Set ι, I.Finite ∧ S subseteq ⋃ i in I, range (φ i) := fun S hS => by
+    refine ⟨{i | (range (φ i) inter S).Nonempty}, h_lf.finite_nonempty_inter_compact hS,
+      inter_eq_right.mp ?_⟩
+    simp_rw [iUnion₂_inter, mem_ofPred, iUnion_nonempty_self, ← iUnion_inter, h_cover, univ_inter]
+  -- ... and we just pull it back.
+  simp_rw +zetaDelta [compactConvergenceUniformSpace, replaceTopology_eq,
+    UniformOnFun.uniformSpace_eq_iInf_precomp_of_cover _ _ _ h_image h_preimage h_cover',
+    UniformSpace.comap_iInf, ← UniformSpace.comap_comap]
+  rfl
 -/
 theorem uniformSpace_eq_iInf_precomp_of_cover {δ : ι -> Type*} [forall i, TopologicalSpace (δ i)]
     (φ : Π i, C(δ i, α)) (h_proper : forall i, IsProperMap (φ i))
@@ -980,7 +1090,16 @@ theorem isComplete_setOfPred_eqOn
   have := hlc.1
   have H₁ : forall x in s, Inseparable (f x) (f' x) := fun x hx => by
     refine tendsto_nhds_unique_inseparable ?_ ((continuous_eval_const x).continuousAt.mono_left hf')
-refine tendsto_const_nhds.con
+refine tendsto_const_nhds.congr' .filter_mono ?_ hlf
+    exact fun _ h => (h hx).symm
+  have H₂ (x) : Inseparable (s.piecewise f f' x) (f' x) := by
+    by_cases hx : x in s <;> simp [hx, H₁, Inseparable.refl]
+  set g : C(α, β) :=
+⟨s.piecewise f f', (continuous_congr_of_inseparable H₂).mpr map_continuous f'⟩
+  refine ⟨g, Set.piecewise_eqOn _ _ _, hf'.trans_eq ?_⟩
+  rwa [eq_comm, ← Inseparable, ← inseparable_coe, inseparable_pi]
+
+@[deprecated (since := "2026-07-09")] alias isComplete_setOf_eqOn := isComplete_setOfPred_eqOn
 
 中文:
 定理 isComplete_setOfPred_eqOn
@@ -992,7 +1111,16 @@ refine tendsto_const_nhds.con
   have := hlc.1
   have H₁ : forall x in s, Inseparable (f x) (f' x) := fun x hx => by
     refine tendsto_nhds_unique_inseparable ?_ ((continuous_eval_const x).continuousAt.mono_left hf')
-refine tendsto_const_nhds.con
+refine tendsto_const_nhds.congr' .filter_mono ?_ hlf
+    exact fun _ h => (h hx).symm
+  have H₂ (x) : Inseparable (s.piecewise f f' x) (f' x) := by
+    by_cases hx : x in s <;> simp [hx, H₁, Inseparable.refl]
+  set g : C(α, β) :=
+⟨s.piecewise f f', (continuous_congr_of_inseparable H₂).mpr map_continuous f'⟩
+  refine ⟨g, Set.piecewise_eqOn _ _ _, hf'.trans_eq ?_⟩
+  rwa [eq_comm, ← Inseparable, ← inseparable_coe, inseparable_pi]
+
+@[deprecated (since := "2026-07-09")] alias isComplete_setOf_eqOn := isComplete_setOfPred_eqOn
 
 Depends on / 依赖: CompleteSpace, CompleteSpace.complete, Inseparable, Inseparable.refl, classical, complete, continuousAt, continuousAt.mono_left, continuous_eval_const, filter_mono, mono_left, piecewise, s.piecewise, tendsto_const_nhds, tendsto_const_nhds.congr, tendsto_nhds_unique_inseparable
 -/

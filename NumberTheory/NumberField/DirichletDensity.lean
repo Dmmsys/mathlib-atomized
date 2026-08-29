@@ -313,7 +313,9 @@ theorem HasDirichletDensity.le_one
   refine le_of_tendsto h (Eventually.of_forall fun s => ?_)
   rw [primeIdealZetaSum_def]; rw [primeIdealZetaSum_def]; rw [tsum_univ fun 𝔭 : HeightOneSpectrum (𝓞 K) => (𝔭.asIdeal.absNorm : Real) ^ (-s)]
   by_cases hs : Summable fun 𝔭 : HeightOneSpectrum (𝓞 K) => (𝔭.asIdeal.absNorm : Real) ^ (-s)
- 
+  · exact div_le_one_of_le₀ (hs.tsum_subtype_le _ S (fun _ => by positivity))
+      (tsum_nonneg fun _ => by positivity)
+  · grw [tsum_eq_zero_of_not_summable hs, div_zero, zero_le_one]
 
 中文:
 定理 HasDirichletDensity.le_one
@@ -322,7 +324,9 @@ theorem HasDirichletDensity.le_one
   refine le_of_tendsto h (Eventually.of_forall fun s => ?_)
   rw [primeIdealZetaSum_def]; rw [primeIdealZetaSum_def]; rw [tsum_univ fun 𝔭 : HeightOneSpectrum (𝓞 K) => (𝔭.asIdeal.absNorm : Real) ^ (-s)]
   by_cases hs : Summable fun 𝔭 : HeightOneSpectrum (𝓞 K) => (𝔭.asIdeal.absNorm : Real) ^ (-s)
- 
+  · exact div_le_one_of_le₀ (hs.tsum_subtype_le _ S (fun _ => by positivity))
+      (tsum_nonneg fun _ => by positivity)
+  · grw [tsum_eq_zero_of_not_summable hs, div_zero, zero_le_one]
 
 Depends on / 依赖: Eventually, Eventually.of_forall, HeightOneSpectrum, Summable, absNorm, asIdeal, asIdeal.absNorm, div_zero, hs.tsum_subtype_le, le_of_tendsto, of_forall, primeIdealZetaSum_def, tsum_eq_zero_of_not_summable, tsum_nonneg, tsum_subtype_le, tsum_univ, zero_le_one
 -/

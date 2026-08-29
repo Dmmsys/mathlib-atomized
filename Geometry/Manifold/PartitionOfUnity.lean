@@ -432,7 +432,7 @@ theorem contMDiffAt_finsum
   by_cases hx : x₀ in tsupport (f i)
   · exact ContMDiffAt.smul ((f i).contMDiff.of_le (mod_cast le_top)).contMDiffAt (hφ i hx)
   · exact contMDiffAt_of_notMem (compl_subset_compl.mpr
-      (tsupport_smul_subset_left (f 
+      (tsupport_smul_subset_left (f i) (g i)) hx) n
 
 中文:
 定理 contMDiffAt_finsum
@@ -442,7 +442,7 @@ theorem contMDiffAt_finsum
   by_cases hx : x₀ in tsupport (f i)
   · exact ContMDiffAt.smul ((f i).contMDiff.of_le (mod_cast le_top)).contMDiffAt (hφ i hx)
   · exact contMDiffAt_of_notMem (compl_subset_compl.mpr
-      (tsupport_smul_subset_left (f 
+      (tsupport_smul_subset_left (f i) (g i)) hx) n
 
 Depends on / 依赖: ContMDiffAt, ContMDiffAt.smul, _root_, _root_.contMDiffAt_finsum, compl_subset_compl, compl_subset_compl.mpr, contMDiff, contMDiff.of_le, contMDiffAt, contMDiffAt_finsum, contMDiffAt_of_notMem, f.locallyFinite.smul_left, le_top, locallyFinite, mod_cast, of_le, smul_left, tsupport, tsupport_smul_subset_left
 -/
@@ -986,7 +986,20 @@ theorem exists_isSubordinate
   have : LocallyCompactSpace H := I.locallyCompactSpace
   have : LocallyCompactSpace M := ChartedSpace.locallyCompactSpace H M
   -- Next we choose a covering by supports of smooth bump functions
-  have hB := fun x hx => SmoothBumpFunction.nhds_basis_sup
+  have hB := fun x hx => SmoothBumpFunction.nhds_basis_support (I := I) (hU x hx)
+  rcases refinement_of_locallyCompact_sigmaCompact_of_nhds_basis_set hs hB with
+    ⟨ι, c, f, hf, hsub', hfin⟩
+  choose hcs hfU using hf
+  -- Then we use the shrinking lemma to get a covering by smaller open
+  rcases exists_subset_iUnion_closed_subset hs (fun i => (f i).isOpen_support)
+    (fun x _ => hfin.point_finite x) hsub' with ⟨V, hsV, hVc, hVf⟩
+  choose r hrR hr using fun i => (f i).exists_r_pos_lt_subset_ball (hVc i) (hVf i)
+  refine ⟨ι, ⟨c, fun i => (f i).updateRIn (r i) (hrR i), hcs, ?_, fun x hx => ?_⟩, fun i => ?_⟩
+  · simpa only [SmoothBumpFunction.support_updateRIn]
+  · refine (mem_iUnion.1 <| hsV hx).imp fun i hi => ?_
+    exact ((f i).updateRIn _ _).eventuallyEq_one_of_dist_lt
+      ((f i).support_subset_source <| hVf _ hi) (hr i hi).2
+  · simpa only [SmoothBumpFunction.support_updateRIn, tsupport] using hfU i
 
 中文:
 定理 存在_isSubordinate
@@ -996,7 +1009,20 @@ theorem exists_isSubordinate
   have : LocallyCompactSpace H := I.locallyCompactSpace
   have : LocallyCompactSpace M := ChartedSpace.locallyCompactSpace H M
   -- Next we choose a covering by supports of smooth bump functions
-  have hB := fun x hx => SmoothBumpFunction.nhds_basis_sup
+  have hB := fun x hx => SmoothBumpFunction.nhds_basis_support (I := I) (hU x hx)
+  rcases refinement_of_locallyCompact_sigmaCompact_of_nhds_basis_set hs hB with
+    ⟨ι, c, f, hf, hsub', hfin⟩
+  choose hcs hfU using hf
+  -- Then we use the shrinking lemma to get a covering by smaller open
+  rcases exists_subset_iUnion_closed_subset hs (fun i => (f i).isOpen_support)
+    (fun x _ => hfin.point_finite x) hsub' with ⟨V, hsV, hVc, hVf⟩
+  choose r hrR hr using fun i => (f i).exists_r_pos_lt_subset_ball (hVc i) (hVf i)
+  refine ⟨ι, ⟨c, fun i => (f i).updateRIn (r i) (hrR i), hcs, ?_, fun x hx => ?_⟩, fun i => ?_⟩
+  · simpa only [SmoothBumpFunction.support_updateRIn]
+  · refine (mem_iUnion.1 <| hsV hx).imp fun i hi => ?_
+    exact ((f i).updateRIn _ _).eventuallyEq_one_of_dist_lt
+      ((f i).support_subset_source <| hVf _ hi) (hr i hi).2
+  · simpa only [SmoothBumpFunction.support_updateRIn, tsupport] using hfU i
 -/
 theorem exists_isSubordinate [T2Space M] [SigmaCompactSpace M] (hs : IsClosed s)
     (hU : forall x in s, U x in 𝓝 x) :
@@ -1465,7 +1491,11 @@ theorem exists_contMDiffMap_zero_one_of_isClosed
   rcases SmoothBumpCovering.exists_isSubordinate I ht this with ⟨ι, f, hf⟩
   set g := f.toSmoothPartitionOfUnity
   refine
-    ⟨⟨_, g.contMDiff_sum.of_le (by simp)⟩, fun x hx => ?_, fun x => g.sum_eq
+    ⟨⟨_, g.contMDiff_sum.of_le (by simp)⟩, fun x hx => ?_, fun x => g.sum_eq_one, fun x =>
+      ⟨g.sum_nonneg x, g.sum_le_one x⟩⟩
+  suffices forall i, g i x = 0 by simp only [this, ContMDiffMap.coeFn_mk, finsum_zero, Pi.zero_apply]
+  refine fun i => f.toSmoothPartitionOfUnity_zero_of_zero ?_
+  exact notMem_support.1 (subset_compl_comm.1 (hf.support_subset i) hx)
 
 中文:
 定理 存在_contMDiffMap_zero_one_of_isClosed
@@ -1475,7 +1505,11 @@ theorem exists_contMDiffMap_zero_one_of_isClosed
   rcases SmoothBumpCovering.exists_isSubordinate I ht this with ⟨ι, f, hf⟩
   set g := f.toSmoothPartitionOfUnity
   refine
-    ⟨⟨_, g.contMDiff_sum.of_le (by simp)⟩, fun x hx => ?_, fun x => g.sum_eq
+    ⟨⟨_, g.contMDiff_sum.of_le (by simp)⟩, fun x hx => ?_, fun x => g.sum_eq_one, fun x =>
+      ⟨g.sum_nonneg x, g.sum_le_one x⟩⟩
+  suffices forall i, g i x = 0 by simp only [this, ContMDiffMap.coeFn_mk, finsum_zero, Pi.zero_apply]
+  refine fun i => f.toSmoothPartitionOfUnity_zero_of_zero ?_
+  exact notMem_support.1 (subset_compl_comm.1 (hf.support_subset i) hx)
 
 Depends on / 依赖: ContMDiffMap, ContMDiffMap.coeFn_mk, Pi.zero_apply, SmoothBumpCovering, SmoothBumpCovering.exists_isSubordinate, coeFn_mk, contMDiff_sum, disjoint_right, exists_isSubordinate, f.toSmoothPartitionOfUnity, f.toSmoothPartitionOfUnity_zero_of_zero, finsum_zero, g.contMDiff_sum.of_le, g.sum_eq_one, g.sum_le_one, g.sum_nonneg, hs.isOpen_compl.mem_nhds, isOpen_compl, mem_nhds, of_le
 -/
@@ -1502,7 +1536,11 @@ theorem exists_contMDiffMap_zero_one_nhds_of_isClosed
     (subset_compl_iff_disjoint_left.mpr hd.symm)
   obtain ⟨v, v_op, htv, hvu⟩ := normal_exists_closure_subset ht isClosed_closure.isOpen_compl
     (subset_compl_comm.mp hut)
-  obtain ⟨f, hfu, hfv, hf⟩ := exists_contMD
+  obtain ⟨f, hfu, hfv, hf⟩ := exists_contMDiffMap_zero_one_of_isClosed I isClosed_closure
+    isClosed_closure (subset_compl_iff_disjoint_left.mp hvu) (n := n)
+  refine ⟨f, ?_, ?_, hf⟩
+  · exact eventually_of_mem (mem_of_superset (u_op.mem_nhdsSet.mpr hsu) subset_closure) hfu
+  · exact eventually_of_mem (mem_of_superset (v_op.mem_nhdsSet.mpr htv) subset_closure) hfv
 
 中文:
 定理 存在_contMDiffMap_zero_one_nhds_of_isClosed
@@ -1511,7 +1549,11 @@ theorem exists_contMDiffMap_zero_one_nhds_of_isClosed
     (subset_compl_iff_disjoint_left.mpr hd.symm)
   obtain ⟨v, v_op, htv, hvu⟩ := normal_exists_closure_subset ht isClosed_closure.isOpen_compl
     (subset_compl_comm.mp hut)
-  obtain ⟨f, hfu, hfv, hf⟩ := exists_contMD
+  obtain ⟨f, hfu, hfv, hf⟩ := exists_contMDiffMap_zero_one_of_isClosed I isClosed_closure
+    isClosed_closure (subset_compl_iff_disjoint_left.mp hvu) (n := n)
+  refine ⟨f, ?_, ?_, hf⟩
+  · exact eventually_of_mem (mem_of_superset (u_op.mem_nhdsSet.mpr hsu) subset_closure) hfu
+  · exact eventually_of_mem (mem_of_superset (v_op.mem_nhdsSet.mpr htv) subset_closure) hfv
 
 Depends on / 依赖: eventually_of_mem, exists_contMDiffMap_zero_one_of_isClosed, hd.symm, ht.isOpen_compl, isClosed_closure, isClosed_closure.isOpen_compl, isOpen_compl, mem_nhdsSet, mem_of_superset, normal_exists_closure_subset, subset_c, subset_compl_comm, subset_compl_comm.mp, subset_compl_iff_disjoint_left, subset_compl_iff_disjoint_left.mp, subset_compl_iff_disjoint_left.mpr, u_op, u_op.mem_nhdsSet.mpr, v_op
 -/
@@ -1574,7 +1616,7 @@ definition single
     rcases eq_or_ne j i with (rfl | h)
     · simp only [contMDiff_one, ContinuousMap.coe_one, BumpCovering.coe_single, Pi.single_eq_same]
     · simp only [contMDiff_zero, BumpCovering.coe_single, Pi.single_eq_of_ne h,
-     
+        ContinuousMap.coe_zero]
 
 中文:
 定义 single
@@ -1584,7 +1626,7 @@ definition single
     rcases eq_or_ne j i with (rfl | h)
     · simp only [contMDiff_one, ContinuousMap.coe_one, BumpCovering.coe_single, Pi.single_eq_same]
     · simp only [contMDiff_zero, BumpCovering.coe_single, Pi.single_eq_of_ne h,
-     
+        ContinuousMap.coe_zero]
 
 Depends on / 依赖: BumpCovering, BumpCovering.coe_single, BumpCovering.single, ContinuousMap, ContinuousMap.coe_one, ContinuousMap.coe_zero, Pi.single_eq_of_ne, Pi.single_eq_same, classical, coe_one, coe_single, coe_zero, contMDiff_one, contMDiff_zero, eq_or_ne, single, single_eq_of_ne, single_eq_same, toSmoothPartitionOfUnity
 -/
@@ -1627,7 +1669,12 @@ theorem exists_isSubordinate
   have : LocallyCompactSpace M := ChartedSpace.locallyCompactSpace H M
   -- porting note(https://github.com/leanprover-community/batteries/issues/116):
   -- split `rcases` into `have` + `rcases`
-  have := BumpCovering.exists_isSubordinate_of
+  have := BumpCovering.exists_isSubordinate_of_prop (ContMDiff I 𝓘(Real) ∞) ?_ hs U ho hU
+  · rcases this with ⟨f, hf, hfU⟩
+    exact ⟨f.toSmoothPartitionOfUnity hf, hfU.toSmoothPartitionOfUnity hf⟩
+  · intro s t hs ht hd
+    rcases exists_contMDiffMap_zero_one_of_isClosed I hs ht hd with ⟨f, hf⟩
+    exact ⟨f, f.contMDiff, hf⟩
 
 中文:
 定理 存在_isSubordinate
@@ -1637,7 +1684,12 @@ theorem exists_isSubordinate
   have : LocallyCompactSpace M := ChartedSpace.locallyCompactSpace H M
   -- porting note(https://github.com/leanprover-community/batteries/issues/116):
   -- split `rcases` into `have` + `rcases`
-  have := BumpCovering.exists_isSubordinate_of
+  have := BumpCovering.exists_isSubordinate_of_prop (ContMDiff I 𝓘(Real) ∞) ?_ hs U ho hU
+  · rcases this with ⟨f, hf, hfU⟩
+    exact ⟨f.toSmoothPartitionOfUnity hf, hfU.toSmoothPartitionOfUnity hf⟩
+  · intro s t hs ht hd
+    rcases exists_contMDiffMap_zero_one_of_isClosed I hs ht hd with ⟨f, hf⟩
+    exact ⟨f, f.contMDiff, hf⟩
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.locallyCompactSpace, I.locallyCompactSpace, LocallyCompactSpace, locallyCompactSpace
 -/
@@ -1718,7 +1770,32 @@ theorem exists_contMDiffSection_forall_mem_convex_of_local
   have hU_covers_univ : univ subseteq ⋃ x, U x := by
     intro x_pt _
     simp only [mem_iUnion]
-    exact ⟨x_pt, mem_interior_
+    exact ⟨x_pt, mem_interior_iff_mem_nhds.mpr (h_nhds x_pt)⟩
+  -- Obtain a smooth partition of unity subordinate to this open cover.
+  obtain ⟨ρ, hρU⟩ : exists ρ : SmoothPartitionOfUnity M I M univ, ρ.IsSubordinate U :=
+    SmoothPartitionOfUnity.exists_isSubordinate
+      I isClosed_univ U (fun x => isOpen_interior) hU_covers_univ
+  -- Define the global section `s` by taking a weighted sum of the local sections.
+  let s x : V x := ∑ᶠ j, (ρ j x) • s_loc j x
+  -- Prove that `s`, when viewed as a map to the total space, is smooth.
+  have (j : M) : CMDiff n (T% (fun x => (ρ j x) • (s_loc j x))) := by
+    refine ContMDiffOn.smul_section_of_tsupport ?_ isOpen_interior (hρU j)
+      ((s_smooth j).mono interior_subset)
+.contMDiffOn exact ((ρ j).contMDiff).of_le (sup_eq_left.mp rfl)
+  have hs : CMDiff n (T% s) := by
+    apply ContMDiff.finsum_section_of_locallyFinite ?_ this
+    -- Future: can grind do this?
+    apply ρ.locallyFinite.subset fun i x hx => ?_
+    rw [support]
+    rw [mem_ofPred_eq] at hx ⊢
+    exact left_ne_zero_of_smul hx
+  -- Construct the smooth section and prove it lies in the convex sets `t x`.
+  refine ⟨⟨s, hs⟩, fun x => ?_⟩
+  apply (ht_conv x).finsum_mem (ρ.nonneg · x) (ρ.sum_eq_one (mem_univ x))
+  intro j h_ρjx_ne_zero
+  have h_x_in_tsupport_ρj : x in tsupport (ρ j) := subset_closure (mem_support.mpr h_ρjx_ne_zero)
+  have h_x_in_Umap_j : x in W j := interior_subset (hρU j h_x_in_tsupport_ρj)
+  exact h_mem_t j x h_x_in_Umap_j
 
 中文:
 定理 存在_contMDiffSection_对任意_mem_convex_of_local
@@ -1729,7 +1806,32 @@ theorem exists_contMDiffSection_forall_mem_convex_of_local
   have hU_covers_univ : univ subseteq ⋃ x, U x := by
     intro x_pt _
     simp only [mem_iUnion]
-    exact ⟨x_pt, mem_interior_
+    exact ⟨x_pt, mem_interior_iff_mem_nhds.mpr (h_nhds x_pt)⟩
+  -- Obtain a smooth partition of unity subordinate to this open cover.
+  obtain ⟨ρ, hρU⟩ : exists ρ : SmoothPartitionOfUnity M I M univ, ρ.IsSubordinate U :=
+    SmoothPartitionOfUnity.exists_isSubordinate
+      I isClosed_univ U (fun x => isOpen_interior) hU_covers_univ
+  -- Define the global section `s` by taking a weighted sum of the local sections.
+  let s x : V x := ∑ᶠ j, (ρ j x) • s_loc j x
+  -- Prove that `s`, when viewed as a map to the total space, is smooth.
+  have (j : M) : CMDiff n (T% (fun x => (ρ j x) • (s_loc j x))) := by
+    refine ContMDiffOn.smul_section_of_tsupport ?_ isOpen_interior (hρU j)
+      ((s_smooth j).mono interior_subset)
+.contMDiffOn exact ((ρ j).contMDiff).of_le (sup_eq_left.mp rfl)
+  have hs : CMDiff n (T% s) := by
+    apply ContMDiff.finsum_section_of_locallyFinite ?_ this
+    -- Future: can grind do this?
+    apply ρ.locallyFinite.subset fun i x hx => ?_
+    rw [support]
+    rw [mem_ofPred_eq] at hx ⊢
+    exact left_ne_zero_of_smul hx
+  -- Construct the smooth section and prove it lies in the convex sets `t x`.
+  refine ⟨⟨s, hs⟩, fun x => ?_⟩
+  apply (ht_conv x).finsum_mem (ρ.nonneg · x) (ρ.sum_eq_one (mem_univ x))
+  intro j h_ρjx_ne_zero
+  have h_x_in_tsupport_ρj : x in tsupport (ρ j) := subset_closure (mem_support.mpr h_ρjx_ne_zero)
+  have h_x_in_Umap_j : x in W j := interior_subset (hρU j h_x_in_tsupport_ρj)
+  exact h_mem_t j x h_x_in_Umap_j
 
 Depends on / 依赖: h_mem_t, h_nhds, s_loc, s_smooth
 -/
@@ -1840,7 +1942,9 @@ theorem Metric.exists_contMDiffMap_forall_closedEBall_subset
       Metric.exists_forall_closedEBall_subset_aux₂
       (Metric.exists_forall_closedEBall_subset_aux₁ hK hU hKU hfin)
 
-@[deprecated (since := "20
+@[deprecated (since := "2026-01-24")]
+alias Emetric.exists_contMDiffMap_forall_closedBall_subset :=
+  Metric.exists_contMDiffMap_forall_closedEBall_subset
 
 中文:
 定理 Metric.存在_contMDiffMap_对任意_closedEBall_subset
@@ -1850,7 +1954,9 @@ theorem Metric.exists_contMDiffMap_forall_closedEBall_subset
       Metric.exists_forall_closedEBall_subset_aux₂
       (Metric.exists_forall_closedEBall_subset_aux₁ hK hU hKU hfin)
 
-@[deprecated (since := "20
+@[deprecated (since := "2026-01-24")]
+alias Emetric.exists_contMDiffMap_forall_closedBall_subset :=
+  Metric.exists_contMDiffMap_forall_closedEBall_subset
 
 Depends on / 依赖: Metric, Metric.exists_forall_closedEBall_subset_aux, exists_contMDiffMap_forall_mem_convex_of_local_const, forall_and, forall_comm, mem_iInter, mem_inter_iff, mem_preimage
 -/
@@ -1914,7 +2020,9 @@ lemma IsOpen.exists_contMDiff_support_eq_aux
   rcases h's.exists_contDiff_support_eq with ⟨f, f_supp, f_diff, f_range⟩
   refine ⟨f ∘ I, ?_, ?_, ?_⟩
   · rw [support_comp_eq_preimage, f_supp, ← preimage_comp]
-    simp only [ModelWithCorners.symm_comp_self, preimage_i
+    simp only [ModelWithCorners.symm_comp_self, preimage_id_eq, id_eq]
+  · exact f_diff.comp_contMDiff I.contMDiff
+  · exact Subset.trans (range_comp_subset_range _ _) f_range
 
 中文:
 引理 是开集.存在_contMDiff_support_eq_aux
@@ -1924,7 +2032,9 @@ lemma IsOpen.exists_contMDiff_support_eq_aux
   rcases h's.exists_contDiff_support_eq with ⟨f, f_supp, f_diff, f_range⟩
   refine ⟨f ∘ I, ?_, ?_, ?_⟩
   · rw [support_comp_eq_preimage, f_supp, ← preimage_comp]
-    simp only [ModelWithCorners.symm_comp_self, preimage_i
+    simp only [ModelWithCorners.symm_comp_self, preimage_id_eq, id_eq]
+  · exact f_diff.comp_contMDiff I.contMDiff
+  · exact Subset.trans (range_comp_subset_range _ _) f_range
 
 Depends on / 依赖: I.contMDiff, I.continuous_symm.isOpen_preimage, I.symm, IsOpen, ModelWithCorners, ModelWithCorners.symm_comp_self, Subset, Subset.trans, comp_contMDiff, contMDiff, continuous_symm, exists_contDiff_support_eq, f_diff, f_diff.comp_contMDiff, f_range, f_supp, id_eq, isOpen_preimage, preimage_comp, preimage_id_eq
 -/
@@ -1950,7 +2060,45 @@ theorem IsOpen.exists_contMDiff_support_eq
       g.support = (chartAt H c).target inter (chartAt H c).symm ⁻¹' s ∧
       CMDiff n g ∧ Set.range g subseteq Set.Icc 0 1 := by
     intro i
-    apply IsOpen.exis
+    apply IsOpen.exists_contMDiff_support_eq_aux
+    exact OpenPartialHomeomorph.isOpen_inter_preimage_symm _ hs
+  choose g g_supp g_diff hg using A
+  have h'g : forall c x, 0 <= g c x := fun c x => (hg c (mem_range_self (f := g c) x)).1
+  have h''g : forall c x, 0 <= f c x * g c (chartAt H c x) :=
+    fun c x => mul_nonneg (f.nonneg c x) (h'g c _)
+  refine ⟨fun x => ∑ᶠ c, f c x * g c (chartAt H c x), ?_, ?_, ?_⟩
+  · refine support_eq_iff.2 ⟨fun x hx => ?_, fun x hx => ?_⟩
+    · apply ne_of_gt
+      have B : exists c, 0 < f c x * g c (chartAt H c x) := by
+        obtain ⟨c, hc⟩ : exists c, 0 < f c x := f.exists_pos_of_mem (mem_univ x)
+        refine ⟨c, mul_pos hc ?_⟩
+        apply lt_of_le_of_ne (h'g _ _) (Ne.symm _)
+        rw [← mem_support]; rw [g_supp]; rw [← mem_preimage]; rw [preimage_inter]
+        have Hx : x in tsupport (f c) := subset_tsupport _ (ne_of_gt hc)
+        simp [(chartAt H c).left_inv (hf c Hx), hx, (chartAt H c).map_source (hf c Hx)]
+      apply finsum_pos (fun c => h''g c x) B
+      apply (f.locallyFinite.point_finite x).subset
+      apply compl_subset_compl.2
+      rintro c (hc : f c x = 0)
+      simpa only [mul_eq_zero] using! Or.inl hc
+    · apply finsum_eq_zero_of_forall_eq_zero
+      intro c
+      by_cases Hx : x in tsupport (f c)
+      · suffices g c (chartAt H c x) = 0 by simp only [this, mul_zero]
+        rw [← notMem_support]; rw [g_supp]; rw [← mem_preimage]; rw [preimage_inter]
+        contrapose hx
+        simp only [mem_inter_iff, mem_preimage, (chartAt H c).left_inv (hf c Hx)] at hx
+        exact hx.2
+      · have : x ∉ support (f c) := by contrapose Hx; exact subset_tsupport _ Hx
+        rw [notMem_support] at this
+        simp [this]
+  · apply SmoothPartitionOfUnity.contMDiff_finsum_smul
+    intro c x hx
+    apply (g_diff c (chartAt H c x)).comp
+    exact contMDiffAt_of_mem_maximalAtlas (IsManifold.chart_mem_maximalAtlas _)
+      (hf c hx)
+  · intro x
+    apply finsum_nonneg (fun c => h''g c x)
 
 中文:
 定理 是开集.存在_contMDiff_support_eq
@@ -1961,7 +2109,45 @@ theorem IsOpen.exists_contMDiff_support_eq
       g.support = (chartAt H c).target inter (chartAt H c).symm ⁻¹' s ∧
       CMDiff n g ∧ Set.range g subseteq Set.Icc 0 1 := by
     intro i
-    apply IsOpen.exis
+    apply IsOpen.exists_contMDiff_support_eq_aux
+    exact OpenPartialHomeomorph.isOpen_inter_preimage_symm _ hs
+  choose g g_supp g_diff hg using A
+  have h'g : forall c x, 0 <= g c x := fun c x => (hg c (mem_range_self (f := g c) x)).1
+  have h''g : forall c x, 0 <= f c x * g c (chartAt H c x) :=
+    fun c x => mul_nonneg (f.nonneg c x) (h'g c _)
+  refine ⟨fun x => ∑ᶠ c, f c x * g c (chartAt H c x), ?_, ?_, ?_⟩
+  · refine support_eq_iff.2 ⟨fun x hx => ?_, fun x hx => ?_⟩
+    · apply ne_of_gt
+      have B : exists c, 0 < f c x * g c (chartAt H c x) := by
+        obtain ⟨c, hc⟩ : exists c, 0 < f c x := f.exists_pos_of_mem (mem_univ x)
+        refine ⟨c, mul_pos hc ?_⟩
+        apply lt_of_le_of_ne (h'g _ _) (Ne.symm _)
+        rw [← mem_support]; rw [g_supp]; rw [← mem_preimage]; rw [preimage_inter]
+        have Hx : x in tsupport (f c) := subset_tsupport _ (ne_of_gt hc)
+        simp [(chartAt H c).left_inv (hf c Hx), hx, (chartAt H c).map_source (hf c Hx)]
+      apply finsum_pos (fun c => h''g c x) B
+      apply (f.locallyFinite.point_finite x).subset
+      apply compl_subset_compl.2
+      rintro c (hc : f c x = 0)
+      simpa only [mul_eq_zero] using! Or.inl hc
+    · apply finsum_eq_zero_of_forall_eq_zero
+      intro c
+      by_cases Hx : x in tsupport (f c)
+      · suffices g c (chartAt H c x) = 0 by simp only [this, mul_zero]
+        rw [← notMem_support]; rw [g_supp]; rw [← mem_preimage]; rw [preimage_inter]
+        contrapose hx
+        simp only [mem_inter_iff, mem_preimage, (chartAt H c).left_inv (hf c Hx)] at hx
+        exact hx.2
+      · have : x ∉ support (f c) := by contrapose Hx; exact subset_tsupport _ Hx
+        rw [notMem_support] at this
+        simp [this]
+  · apply SmoothPartitionOfUnity.contMDiff_finsum_smul
+    intro c x hx
+    apply (g_diff c (chartAt H c x)).comp
+    exact contMDiffAt_of_mem_maximalAtlas (IsManifold.chart_mem_maximalAtlas _)
+      (hf c hx)
+  · intro x
+    apply finsum_nonneg (fun c => h''g c x)
 
 Depends on / 依赖: CMDiff, IsOpen, IsOpen.exists_contMDiff_support_eq_aux, OpenPartialHomeomorph, OpenPartialHomeomorph.isOpen_inter_preimage_symm, Set.Icc, Set.range, SmoothPartitionOfUnity, SmoothPartitionOfUnity.exists_isSubordinate_chartAt_source, chartAt, exists_contMDiff_support_eq_aux, exists_isSubordinate_chartAt_source, g.support, g_diff, g_supp, isOpen_inter_preimage_symm, mem_range_self, subseteq, support, target
 -/
@@ -2021,7 +2207,31 @@ theorem exists_contMDiff_support_eq_eq_one_iff
   /- Take `f` with support equal to `s`, and `g` with support equal to `tᶜ`. Then `f / (f + g)`
   satisfies the conclusion of the theorem. -/
   rcases hs.exists_contMDiff_support_eq I with ⟨f, f_supp, f_diff, f_pos⟩
-  rcases ht.isOpen_compl.exists_contMDiff_support_eq I with ⟨g, g_supp, g_diff, g
+  rcases ht.isOpen_compl.exists_contMDiff_support_eq I with ⟨g, g_supp, g_diff, g_pos⟩
+  have A : forall x, 0 < f x + g x := by
+    intro x
+    by_cases xs : x in support f
+    · have : 0 < f x := lt_of_le_of_ne (f_pos x) (Ne.symm xs)
+      linarith [g_pos x]
+    · have : 0 < g x := by
+        apply lt_of_le_of_ne (g_pos x) (Ne.symm ?_)
+        rw [← mem_support]; rw [g_supp]
+        contrapose xs
+        exact h.trans f_supp.symm.subset (by simpa using xs)
+      linarith [f_pos x]
+  refine ⟨fun x => f x / (f x + g x), ?_, ?_, ?_, ?_⟩
+  -- show that `f / (f + g)` is smooth
+  · exact f_diff.div₀ (f_diff.add g_diff) (fun x => ne_of_gt (A x))
+  -- show that the range is included in `[0, 1]`
+  · refine range_subset_iff.2 (fun x => ⟨div_nonneg (f_pos x) (A x).le, ?_⟩)
+    apply div_le_one_of_le₀ _ (A x).le
+    simpa only [le_add_iff_nonneg_right] using g_pos x
+  -- show that the support is `s`
+  · have B : support (fun x => f x + g x) = univ := eq_univ_of_forall (fun x => (A x).ne')
+    simp only [support_div, f_supp, B, inter_univ]
+  -- show that the function equals one exactly on `t`
+  · intro x
+    simp [div_eq_one_iff_eq (A x).ne', left_eq_add, ← notMem_support, g_supp]
 
 中文:
 定理 存在_contMDiff_support_eq_eq_one_iff
@@ -2029,7 +2239,31 @@ theorem exists_contMDiff_support_eq_eq_one_iff
   /- Take `f` with support equal to `s`, and `g` with support equal to `tᶜ`. Then `f / (f + g)`
   satisfies the conclusion of the theorem. -/
   rcases hs.exists_contMDiff_support_eq I with ⟨f, f_supp, f_diff, f_pos⟩
-  rcases ht.isOpen_compl.exists_contMDiff_support_eq I with ⟨g, g_supp, g_diff, g
+  rcases ht.isOpen_compl.exists_contMDiff_support_eq I with ⟨g, g_supp, g_diff, g_pos⟩
+  have A : forall x, 0 < f x + g x := by
+    intro x
+    by_cases xs : x in support f
+    · have : 0 < f x := lt_of_le_of_ne (f_pos x) (Ne.symm xs)
+      linarith [g_pos x]
+    · have : 0 < g x := by
+        apply lt_of_le_of_ne (g_pos x) (Ne.symm ?_)
+        rw [← mem_support]; rw [g_supp]
+        contrapose xs
+        exact h.trans f_supp.symm.subset (by simpa using xs)
+      linarith [f_pos x]
+  refine ⟨fun x => f x / (f x + g x), ?_, ?_, ?_, ?_⟩
+  -- show that `f / (f + g)` is smooth
+  · exact f_diff.div₀ (f_diff.add g_diff) (fun x => ne_of_gt (A x))
+  -- show that the range is included in `[0, 1]`
+  · refine range_subset_iff.2 (fun x => ⟨div_nonneg (f_pos x) (A x).le, ?_⟩)
+    apply div_le_one_of_le₀ _ (A x).le
+    simpa only [le_add_iff_nonneg_right] using g_pos x
+  -- show that the support is `s`
+  · have B : support (fun x => f x + g x) = univ := eq_univ_of_forall (fun x => (A x).ne')
+    simp only [support_div, f_supp, B, inter_univ]
+  -- show that the function equals one exactly on `t`
+  · intro x
+    simp [div_eq_one_iff_eq (A x).ne', left_eq_add, ← notMem_support, g_supp]
 -/
 theorem exists_contMDiff_support_eq_eq_one_iff
     {s t : Set M} (hs : IsOpen s) (ht : IsClosed t) (h : t subseteq s) :

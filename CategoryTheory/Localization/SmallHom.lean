@@ -443,7 +443,7 @@ lemma equiv_comp
   obtain ⟨β, rfl⟩ := (equivShrink _).surjective β
   dsimp [equiv, comp]
   rw [Equiv.symm_apply_apply]
-  simp only [homEquiv_refl, homEquiv_co
+  simp only [homEquiv_refl, homEquiv_comp]
 
 中文:
 引理 equiv_comp
@@ -455,7 +455,7 @@ lemma equiv_comp
   obtain ⟨β, rfl⟩ := (equivShrink _).surjective β
   dsimp [equiv, comp]
   rw [Equiv.symm_apply_apply]
-  simp only [homEquiv_refl, homEquiv_co
+  simp only [homEquiv_refl, homEquiv_comp]
 
 Depends on / 依赖: Equiv.symm_apply_apply, equivShrink, homEquiv_comp, homEquiv_refl, small_of_hasSmallLocalizedHom, surjective, symm_apply_apply
 -/
@@ -746,7 +746,28 @@ lemma equiv_smallHomMap
   let β := CatCommSq.iso Φ.functor W₁.Q W₂.Q G'
   let E₁ := (uniq W₁.Q L₁ W₁).functor
   let α₁ : W₁.Q ⋙ E₁ ≅ L₁ := compUniqFunctor W₁.Q L₁ W₁
+  let E₂ := (uniq W₂.Q L₂ W₂).functor
+  let α₂ : W₂.Q ⋙ E₂ ≅ L₂ := compUniqFunctor W₂.Q L₂ W₂
+  rw [SmallHom.equiv_equiv_symm W₁ W₁.Q L₁ E₁ α₁]; rw [SmallHom.equiv_equiv_symm W₂ W₂.Q L₂ E₂ α₂]
+  change α₂.inv.app _ ≫ E₂.map (β.hom.app X ≫ G'.map g ≫ β.inv.app Y) ≫ _ = _
+  let γ : G' ⋙ E₂ ≅ E₁ ⋙ G := liftNatIso W₁.Q W₁ (W₁.Q ⋙ G' ⋙ E₂) (W₁.Q ⋙ E₁ ⋙ G) _ _
+    ((Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight β.symm E₂ ≪≫
+      Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ α₂ ≪≫ e ≪≫
+      Functor.isoWhiskerRight α₁.symm G ≪≫ Functor.associator _ _ _)
+  have hγ : forall (X : C₁), γ.hom.app (W₁.Q.obj X) =
+      E₂.map (β.inv.app X) ≫ α₂.hom.app (Φ.functor.obj X) ≫
+        e.hom.app X ≫ G.map (α₁.inv.app X) := fun X => by
+    simp [γ, id_comp, comp_id]
+  simp only [Functor.map_comp, ← NatIso.naturality_1 γ, ← Functor.comp_map,
+    ← cancel_epi (e.inv.app X), ← cancel_epi (G.map (α₁.hom.app X)),
+    ← cancel_epi (γ.hom.app (W₁.Q.obj X)), assoc, Iso.inv_hom_id_app_assoc,
+    ← Functor.map_comp_assoc, Iso.hom_inv_id_app, Functor.map_id, id_comp,
+    Iso.hom_inv_id_app_assoc]
+  simp only [hγ, assoc, ← Functor.map_comp_assoc, Iso.inv_hom_id_app,
+    Functor.map_id, id_comp, Iso.hom_inv_id_app_assoc,
+    Iso.hom_inv_id_app, Functor.comp_obj, comp_id]
 
+@[simp]
 
 中文:
 引理 equiv_smallHomMap
@@ -758,7 +779,28 @@ lemma equiv_smallHomMap
   let β := CatCommSq.iso Φ.functor W₁.Q W₂.Q G'
   let E₁ := (uniq W₁.Q L₁ W₁).functor
   let α₁ : W₁.Q ⋙ E₁ ≅ L₁ := compUniqFunctor W₁.Q L₁ W₁
+  let E₂ := (uniq W₂.Q L₂ W₂).functor
+  let α₂ : W₂.Q ⋙ E₂ ≅ L₂ := compUniqFunctor W₂.Q L₂ W₂
+  rw [SmallHom.equiv_equiv_symm W₁ W₁.Q L₁ E₁ α₁]; rw [SmallHom.equiv_equiv_symm W₂ W₂.Q L₂ E₂ α₂]
+  change α₂.inv.app _ ≫ E₂.map (β.hom.app X ≫ G'.map g ≫ β.inv.app Y) ≫ _ = _
+  let γ : G' ⋙ E₂ ≅ E₁ ⋙ G := liftNatIso W₁.Q W₁ (W₁.Q ⋙ G' ⋙ E₂) (W₁.Q ⋙ E₁ ⋙ G) _ _
+    ((Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight β.symm E₂ ≪≫
+      Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ α₂ ≪≫ e ≪≫
+      Functor.isoWhiskerRight α₁.symm G ≪≫ Functor.associator _ _ _)
+  have hγ : forall (X : C₁), γ.hom.app (W₁.Q.obj X) =
+      E₂.map (β.inv.app X) ≫ α₂.hom.app (Φ.functor.obj X) ≫
+        e.hom.app X ≫ G.map (α₁.inv.app X) := fun X => by
+    simp [γ, id_comp, comp_id]
+  simp only [Functor.map_comp, ← NatIso.naturality_1 γ, ← Functor.comp_map,
+    ← cancel_epi (e.inv.app X), ← cancel_epi (G.map (α₁.hom.app X)),
+    ← cancel_epi (γ.hom.app (W₁.Q.obj X)), assoc, Iso.inv_hom_id_app_assoc,
+    ← Functor.map_comp_assoc, Iso.hom_inv_id_app, Functor.map_id, id_comp,
+    Iso.hom_inv_id_app_assoc]
+  simp only [hγ, assoc, ← Functor.map_comp_assoc, Iso.inv_hom_id_app,
+    Functor.map_id, id_comp, Iso.hom_inv_id_app_assoc,
+    Iso.hom_inv_id_app, Functor.comp_obj, comp_id]
 
+@[simp]
 
 Depends on / 依赖: CatCommSq, CatCommSq.iso, Equiv.apply_symm_apply, SmallHom, SmallHom.equiv, SmallHom.equiv_equiv_symm, apply_symm_apply, compUniqFunctor, equiv_equiv_symm, functor, inv.app, localizedFunctor, smallHomMap, surjective, symm.surjective
 -/
@@ -878,7 +920,7 @@ definition smallHomMap'
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm (Iso.refl Y')
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Y')
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ (Iso.refl X') eX.symm
-  (SmallHom.mk _ eX.inv).comp ((
+  (SmallHom.mk _ eX.inv).comp ((Φ.smallHomMap f).comp (SmallHom.mk _ eY.hom))
 
 中文:
 定义 smallHomMap'
@@ -887,7 +929,7 @@ definition smallHomMap'
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm (Iso.refl Y')
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Y')
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ (Iso.refl X') eX.symm
-  (SmallHom.mk _ eX.inv).comp ((
+  (SmallHom.mk _ eX.inv).comp ((Φ.smallHomMap f).comp (SmallHom.mk _ eY.hom))
 
 Depends on / 依赖: Iso.refl, SmallHom, SmallHom.mk, eX.inv, eX.symm, eY.hom, eY.symm, hasSmallLocalizedHom_of_isos, smallHomMap
 -/
@@ -974,7 +1016,12 @@ lemma smallHomMap'_comp
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Y')
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm (Iso.refl Z')
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm eZ.symm
-  have := hasSmallLocalizedHom_of
+  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Z')
+  have := hasSmallLocalizedHom_of_isos.{w'} W₂ (Iso.refl Y') eY.symm
+  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm eY.symm
+  simp only [smallHomMap', smallHomMap_comp, SmallHom.comp_assoc]
+  congr 2
+  rw [← SmallHom.comp_assoc]; rw [SmallHom.mk_comp_mk]; rw [eY.hom_inv_id]; rw [SmallHom.mk_id_comp]
 
 中文:
 引理 smallHomMap'_comp
@@ -984,7 +1031,12 @@ lemma smallHomMap'_comp
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Y')
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ eX.symm (Iso.refl Z')
   have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm eZ.symm
-  have := hasSmallLocalizedHom_of
+  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm (Iso.refl Z')
+  have := hasSmallLocalizedHom_of_isos.{w'} W₂ (Iso.refl Y') eY.symm
+  have := hasSmallLocalizedHom_of_isos.{w'} W₂ eY.symm eY.symm
+  simp only [smallHomMap', smallHomMap_comp, SmallHom.comp_assoc]
+  congr 2
+  rw [← SmallHom.comp_assoc]; rw [SmallHom.mk_comp_mk]; rw [eY.hom_inv_id]; rw [SmallHom.mk_id_comp]
 -/
 lemma smallHomMap'_comp (f : SmallHom.{w} W₁ X Y) (g : SmallHom.{w} W₁ Y Z) :
     Φ.smallHomMap' eX eZ (f.comp g) =

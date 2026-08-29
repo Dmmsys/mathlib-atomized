@@ -303,7 +303,30 @@ definition tensorObj
             (whiskerRightIso (X.2.β U) Y.1) ≪≫ α_ _ _ _
       monoidal := fun U U' => by
         dsimp only [Iso.trans_hom, whiskerLeftIso_hom, Iso.symm_hom, whiskerRightIso_hom]
- 
+        simp only [HalfBraiding.monoidal]
+        -- We'd like to commute `X.1 ◁ U ◁ (HalfBraiding.β Y.2 U').hom`
+        -- and `((HalfBraiding.β X.2 U).hom ▷ U' ▷ Y.1)` past each other.
+        -- We do this with the help of the monoidal composition `⊗≫` and the `coherence` tactic.
+        calc
+          _ = 𝟙 _ otimes≫
+            X.1 ◁ (HalfBraiding.β Y.2 U).hom ▷ U' otimes≫
+              (_ ◁ (HalfBraiding.β Y.2 U').hom ≫
+                (HalfBraiding.β X.2 U).hom ▷ _) otimes≫
+                  U ◁ (HalfBraiding.β X.2 U').hom ▷ Y.1 otimes≫ 𝟙 _ := by monoidal
+          _ = _ := by rw [whisker_exchange]; monoidal
+      naturality := fun {U U'} f => by
+        dsimp only [Iso.trans_hom, whiskerLeftIso_hom, Iso.symm_hom, whiskerRightIso_hom]
+        calc
+          _ = 𝟙 _ otimes≫
+            (X.1 ◁ (Y.1 ◁ f ≫ (HalfBraiding.β Y.2 U').hom)) otimes≫
+              (HalfBraiding.β X.2 U').hom ▷ Y.1 otimes≫ 𝟙 _ := by monoidal
+          _ = 𝟙 _ otimes≫
+            X.1 ◁ (HalfBraiding.β Y.2 U).hom otimes≫
+              (X.1 ◁ f ≫ (HalfBraiding.β X.2 U').hom) ▷ Y.1 otimes≫ 𝟙 _ := by
+            rw [HalfBraiding.naturality]; monoidal
+          _ = _ := by rw [HalfBraiding.naturality]; monoidal }⟩
+
+#adaptation_note
 
 中文:
 定义 tensorObj
@@ -315,7 +338,30 @@ definition tensorObj
             (whiskerRightIso (X.2.β U) Y.1) ≪≫ α_ _ _ _
       monoidal := fun U U' => by
         dsimp only [Iso.trans_hom, whiskerLeftIso_hom, Iso.symm_hom, whiskerRightIso_hom]
- 
+        simp only [HalfBraiding.monoidal]
+        -- We'd like to commute `X.1 ◁ U ◁ (HalfBraiding.β Y.2 U').hom`
+        -- and `((HalfBraiding.β X.2 U).hom ▷ U' ▷ Y.1)` past each other.
+        -- We do this with the help of the monoidal composition `⊗≫` and the `coherence` tactic.
+        calc
+          _ = 𝟙 _ otimes≫
+            X.1 ◁ (HalfBraiding.β Y.2 U).hom ▷ U' otimes≫
+              (_ ◁ (HalfBraiding.β Y.2 U').hom ≫
+                (HalfBraiding.β X.2 U).hom ▷ _) otimes≫
+                  U ◁ (HalfBraiding.β X.2 U').hom ▷ Y.1 otimes≫ 𝟙 _ := by monoidal
+          _ = _ := by rw [whisker_exchange]; monoidal
+      naturality := fun {U U'} f => by
+        dsimp only [Iso.trans_hom, whiskerLeftIso_hom, Iso.symm_hom, whiskerRightIso_hom]
+        calc
+          _ = 𝟙 _ otimes≫
+            (X.1 ◁ (Y.1 ◁ f ≫ (HalfBraiding.β Y.2 U').hom)) otimes≫
+              (HalfBraiding.β X.2 U').hom ▷ Y.1 otimes≫ 𝟙 _ := by monoidal
+          _ = 𝟙 _ otimes≫
+            X.1 ◁ (HalfBraiding.β Y.2 U).hom otimes≫
+              (X.1 ◁ f ≫ (HalfBraiding.β X.2 U').hom) ▷ Y.1 otimes≫ 𝟙 _ := by
+            rw [HalfBraiding.naturality]; monoidal
+          _ = _ := by rw [HalfBraiding.naturality]; monoidal }⟩
+
+#adaptation_note
 
 Depends on / 依赖: HalfBraiding, HalfBraiding.monoidal, Iso.symm_hom, Iso.trans_hom, monoidal, otimes, symm_hom, trans_hom, whiskerLeftIso, whiskerLeftIso_hom, whiskerRightIso, whiskerRightIso_hom
 -/
@@ -368,7 +414,11 @@ theorem whiskerLeft_comm
     _ = 𝟙 _ otimes≫
       X.fst ◁ (f.f ▷ U ≫ (HalfBraiding.β Y₂.snd U).hom) otimes≫
         (HalfBraiding.β X.snd U).hom ▷ Y₂.fst otimes≫ 𝟙 _ := by monoidal
-    _ = 𝟙 _ o
+    _ = 𝟙 _ otimes≫
+      X.fst ◁ (HalfBraiding.β Y₁.snd U).hom otimes≫
+        ((X.fst otimes U) ◁ f.f ≫ (HalfBraiding.β X.snd U).hom ▷ Y₂.fst) otimes≫ 𝟙 _ := by
+      rw [f.comm]; monoidal
+    _ = _ := by rw [whisker_exchange]; monoidal
 
 中文:
 定理 whiskerLeft_comm
@@ -380,7 +430,11 @@ theorem whiskerLeft_comm
     _ = 𝟙 _ otimes≫
       X.fst ◁ (f.f ▷ U ≫ (HalfBraiding.β Y₂.snd U).hom) otimes≫
         (HalfBraiding.β X.snd U).hom ▷ Y₂.fst otimes≫ 𝟙 _ := by monoidal
-    _ = 𝟙 _ o
+    _ = 𝟙 _ otimes≫
+      X.fst ◁ (HalfBraiding.β Y₁.snd U).hom otimes≫
+        ((X.fst otimes U) ◁ f.f ≫ (HalfBraiding.β X.snd U).hom ▷ Y₂.fst) otimes≫ 𝟙 _ := by
+      rw [f.comm]; monoidal
+    _ = _ := by rw [whisker_exchange]; monoidal
 
 Depends on / 依赖: HalfBraiding, Iso.symm_hom, Iso.trans_hom, X.fst, X.snd, f.comm, monoidal, otimes, symm_hom, tensorObj_fst, trans_hom, whiskerLeftIso_hom, whiskerRightIso_hom, whisker_exchange
 -/
@@ -434,7 +488,12 @@ theorem whiskerRight_comm
   calc
     _ = 𝟙 _ otimes≫
       (f.f ▷ (Y.fst otimes U) ≫ X₂.fst ◁ (HalfBraiding.β Y.snd U).hom) otimes≫
-        (HalfBraiding.β X₂.snd U).hom ▷ Y.fst otimes≫ 𝟙 _ := by monoida
+        (HalfBraiding.β X₂.snd U).hom ▷ Y.fst otimes≫ 𝟙 _ := by monoidal
+    _ = 𝟙 _ otimes≫
+      X₁.fst ◁ (HalfBraiding.β Y.snd U).hom otimes≫
+        (f.f ▷ U ≫ (HalfBraiding.β X₂.snd U).hom) ▷ Y.fst otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; monoidal
+    _ = _ := by rw [f.comm]; monoidal
 
 中文:
 定理 whiskerRight_comm
@@ -445,7 +504,12 @@ theorem whiskerRight_comm
   calc
     _ = 𝟙 _ otimes≫
       (f.f ▷ (Y.fst otimes U) ≫ X₂.fst ◁ (HalfBraiding.β Y.snd U).hom) otimes≫
-        (HalfBraiding.β X₂.snd U).hom ▷ Y.fst otimes≫ 𝟙 _ := by monoida
+        (HalfBraiding.β X₂.snd U).hom ▷ Y.fst otimes≫ 𝟙 _ := by monoidal
+    _ = 𝟙 _ otimes≫
+      X₁.fst ◁ (HalfBraiding.β Y.snd U).hom otimes≫
+        (f.f ▷ U ≫ (HalfBraiding.β X₂.snd U).hom) ▷ Y.fst otimes≫ 𝟙 _ := by
+      rw [← whisker_exchange]; monoidal
+    _ = _ := by rw [f.comm]; monoidal
 
 Depends on / 依赖: HalfBraiding, Iso.symm_hom, Iso.trans_hom, Y.fst, Y.snd, f.comm, monoidal, otimes, symm_hom, tensorObj_fst, trans_hom, whiskerLeftIso_hom, whiskerRightIso_hom, whisker_exchange
 -/

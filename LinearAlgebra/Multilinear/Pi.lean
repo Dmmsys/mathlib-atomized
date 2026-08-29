@@ -56,7 +56,8 @@ theorem pi_ext
   rw [funext (fun i => Eq.symm (Finset.univ_sum_single (x i)))]
   simp_rw [MultilinearMap.map_sum_finset]
   congr! 1 with p
-  simp_rw
+  simp_rw [MultilinearMap.ext_iff] at h
+  exact h _ _
 
 中文:
 定理 pi_ext
@@ -70,7 +71,8 @@ theorem pi_ext
   rw [funext (fun i => Eq.symm (Finset.univ_sum_single (x i)))]
   simp_rw [MultilinearMap.map_sum_finset]
   congr! 1 with p
-  simp_rw
+  simp_rw [MultilinearMap.ext_iff] at h
+  exact h _ _
 
 Depends on / 依赖: Classical, Classical.decEq, Eq.symm, Finset, Finset.univ_sum_single, MultilinearMap, MultilinearMap.ext_iff, MultilinearMap.map_sum_finset, ext_iff, map_sum_finset, nonempty_fintype, simp_rw, univ_sum_single
 -/
@@ -119,7 +121,7 @@ definition piFamily
     simp_rw [Function.apply_update (fun i m => m (p i)) m, Pi.add_apply, (f p).map_update_add]
   map_update_smul' {dec} m i c x := funext fun p => by
     dsimp
-    simp_rw [Function.apply_update (fun i 
+    simp_rw [Function.apply_update (fun i m => m (p i)) m, Pi.smul_apply, (f p).map_update_smul]
 
 中文:
 定义 piFamily
@@ -130,7 +132,7 @@ definition piFamily
     simp_rw [Function.apply_update (fun i m => m (p i)) m, Pi.add_apply, (f p).map_update_add]
   map_update_smul' {dec} m i c x := funext fun p => by
     dsimp
-    simp_rw [Function.apply_update (fun i 
+    simp_rw [Function.apply_update (fun i m => m (p i)) m, Pi.smul_apply, (f p).map_update_smul]
 -/
 def piFamily (f : Π (p : Π i, κ i), MultilinearMap R (fun i => M i (p i)) (N p)) :
     MultilinearMap R (fun i => Π j : κ i, M i j) (Π t : Π i, κ i, N t) where

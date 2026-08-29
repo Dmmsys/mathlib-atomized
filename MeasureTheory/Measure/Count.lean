@@ -213,7 +213,9 @@ theorem count_apply_infinite
     (#t : Real>=0∞) = ∑ i in t, 1 := by simp
     _ = ∑' i : (t : Set α), 1 := (t.tsum_subtype 1).symm
     _ <= count (t : Set α) := le_count_apply
-    _ <= co
+    _ <= count s := measure_mono ht
+
+@[simp]
 
 中文:
 定理 count_apply_infinite
@@ -226,7 +228,9 @@ theorem count_apply_infinite
     (#t : Real>=0∞) = ∑ i in t, 1 := by simp
     _ = ∑' i : (t : Set α), 1 := (t.tsum_subtype 1).symm
     _ <= count (t : Set α) := le_count_apply
-    _ <= co
+    _ <= count s := measure_mono ht
+
+@[simp]
 
 Depends on / 依赖: ENNReal, ENNReal.tendsto_nat_nhds_top, exists_subset_card_eq, hs.exists_subset_card_eq, le_count_apply, le_of_tendsto, measure_mono, t.tsum_subtype, tendsto_nat_nhds_top, top_unique, tsum_subtype
 -/
@@ -571,7 +575,8 @@ theorem count_injective_image'
     rw [← Finset.coe_image]; rw [count_apply_finset' _]; rw [count_apply_finset' s_mble]; rw [s.card_image_of_injective hf]
     simpa only [Finset.coe_image] using fs_mble
   · rw [count_apply_infinite hs]
-    rw [← finite_image_
+    rw [← finite_image_iff hf.injOn] at hs
+    rw [count_apply_infinite hs]
 
 中文:
 定理 count_injective_image'
@@ -583,7 +588,8 @@ theorem count_injective_image'
     rw [← Finset.coe_image]; rw [count_apply_finset' _]; rw [count_apply_finset' s_mble]; rw [s.card_image_of_injective hf]
     simpa only [Finset.coe_image] using fs_mble
   · rw [count_apply_infinite hs]
-    rw [← finite_image_
+    rw [← finite_image_iff hf.injOn] at hs
+    rw [count_apply_infinite hs]
 
 Depends on / 依赖: Finite, Finset, Finset.coe_image, card_image_of_injective, classical, coe_image, count_apply_finset, count_apply_infinite, finite_image_iff, fs_mble, hf.injOn, s.Finite, s.card_image_of_injective, s_mble
 -/

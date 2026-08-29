@@ -143,7 +143,12 @@ abbreviation ringEquiv_mixedSpace
     (RingEquiv.prodCongr
       (RingEquiv.piCongrRight (fun ⟨_, hv⟩ => Completion.ringEquivRealOfIsReal hv))
       (RingEquiv.trans
-        (RingEquiv.piCong
+        (RingEquiv.piCongrRight (fun v => Completion.ringEquivComplexOfIsComplex
+          ((not_isReal_iff_isComplex.1 v.2))))
+        (RingEquiv.piCongrLeft (fun _ => Complex) <|
+          Equiv.subtypeEquivRight (fun _ => not_isReal_iff_isComplex))))
+
+@[simp]
 
 中文:
 缩写 ringEquiv_mixedSpace
@@ -154,7 +159,12 @@ abbreviation ringEquiv_mixedSpace
     (RingEquiv.prodCongr
       (RingEquiv.piCongrRight (fun ⟨_, hv⟩ => Completion.ringEquivRealOfIsReal hv))
       (RingEquiv.trans
-        (RingEquiv.piCong
+        (RingEquiv.piCongrRight (fun v => Completion.ringEquivComplexOfIsComplex
+          ((not_isReal_iff_isComplex.1 v.2))))
+        (RingEquiv.piCongrLeft (fun _ => Complex) <|
+          Equiv.subtypeEquivRight (fun _ => not_isReal_iff_isComplex))))
+
+@[simp]
 
 Depends on / 依赖: Completion, Completion.ringEquivComplexOfIsComplex, Completion.ringEquivRealOfIsReal, Equiv.subtypeEquivRight, InfinitePlace, IsReal, RingEquiv, RingEquiv.piCongrLeft, RingEquiv.piCongrRight, RingEquiv.piEquivPiSubtypeProd, RingEquiv.prodCongr, RingEquiv.trans, not_isReal_iff_isComplex, piCongrLeft, piCongrRight, piEquivPiSubtypeProd, prodCongr, ringEquivComplexOfIsComplex, ringEquivRealOfIsReal, subtypeEquivRight
 -/

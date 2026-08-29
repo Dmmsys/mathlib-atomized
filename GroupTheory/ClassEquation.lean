@@ -97,7 +97,21 @@ theorem Group.nat_card_center_add_sum_card_noncenter_eq_card
   simp only [Nat.card_eq_fintype_card, Set.toFinset_card]
   congr 1
   swap
-  · convert! finsum_cond_eq_sum_of_
+  · convert! finsum_cond_eq_sum_of_cond_iff _ _
+    simp [Set.mem_toFinset]
+  calc
+    Fintype.card (Subgroup.center G) = Fintype.card ((noncenter G)ᶜ : Set _) :=
+      Fintype.card_congr ((mk_bijOn G).equiv _)
+    _ = Finset.card (Finset.univ \ (noncenter G).toFinset) := by
+      rw [← Set.toFinset_card]; rw [Set.toFinset_compl]; rw [Finset.compl_eq_univ_sdiff]
+    _ = _ := ?_
+  rw [Finset.card_eq_sum_ones]
+  refine Finset.sum_congr rfl ?_
+  rintro ⟨g⟩ hg
+  simp only [noncenter, Set.toFinset_ofPred, Finset.mem_univ, true_and,
+             Finset.mem_sdiff, Finset.mem_filter, Set.not_nontrivial_iff] at hg
+  rw [eq_comm]; rw [← Set.toFinset_card]; rw [Finset.card_eq_one]
+exact ⟨g, Finset.coe_injective by simpa using hg.eq_singleton_of_mem mem_carrier_mk⟩
 
 中文:
 定理 群.nat_card_center_add_sum_card_noncenter_eq_card
@@ -110,7 +124,21 @@ theorem Group.nat_card_center_add_sum_card_noncenter_eq_card
   simp only [Nat.card_eq_fintype_card, Set.toFinset_card]
   congr 1
   swap
-  · convert! finsum_cond_eq_sum_of_
+  · convert! finsum_cond_eq_sum_of_cond_iff _ _
+    simp [Set.mem_toFinset]
+  calc
+    Fintype.card (Subgroup.center G) = Fintype.card ((noncenter G)ᶜ : Set _) :=
+      Fintype.card_congr ((mk_bijOn G).equiv _)
+    _ = Finset.card (Finset.univ \ (noncenter G).toFinset) := by
+      rw [← Set.toFinset_card]; rw [Set.toFinset_compl]; rw [Finset.compl_eq_univ_sdiff]
+    _ = _ := ?_
+  rw [Finset.card_eq_sum_ones]
+  refine Finset.sum_congr rfl ?_
+  rintro ⟨g⟩ hg
+  simp only [noncenter, Set.toFinset_ofPred, Finset.mem_univ, true_and,
+             Finset.mem_sdiff, Finset.mem_filter, Set.not_nontrivial_iff] at hg
+  rw [eq_comm]; rw [← Set.toFinset_card]; rw [Finset.card_eq_one]
+exact ⟨g, Finset.coe_injective by simpa using hg.eq_singleton_of_mem mem_carrier_mk⟩
 
 Depends on / 依赖: ConjClasses, ConjClasses.noncenter, Finset, Finset.card, Finset.sum_sdiff, Finset.univ, Fintype, Fintype.card, Fintype.card_congr, Nat.card_eq_fintype_card, Set.mem_toFinset, Set.toFinset_card, Subgroup, Subgroup.center, card_congr, card_eq_fintype_card, center, classical, convert, finsum_cond_eq_sum_of_cond_iff
 -/

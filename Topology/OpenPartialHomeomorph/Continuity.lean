@@ -306,7 +306,8 @@ theorem map_nhdsWithin_eq
       congr_arg (map e) (e.nhdsWithin_source_inter hx _).symm
     _ = 𝓝[e '' (e.source inter s)] e x :=
       (e.leftInvOn.mono inter_subset_left).map_nhdsWithin_eq (e.left_inv hx)
-        (e.continuousAt_symm (e.map_source hx)).continuousWi
+        (e.continuousAt_symm (e.map_source hx)).continuousWithinAt
+        (e.continuousAt hx).continuousWithinAt
 
 中文:
 定理 map_nhdsWithin_eq
@@ -316,7 +317,8 @@ theorem map_nhdsWithin_eq
       congr_arg (map e) (e.nhdsWithin_source_inter hx _).symm
     _ = 𝓝[e '' (e.source inter s)] e x :=
       (e.leftInvOn.mono inter_subset_left).map_nhdsWithin_eq (e.left_inv hx)
-        (e.continuousAt_symm (e.map_source hx)).continuousWi
+        (e.continuousAt_symm (e.map_source hx)).continuousWithinAt
+        (e.continuousAt hx).continuousWithinAt
 
 Depends on / 依赖: congr_arg, continuousAt, continuousAt_symm, continuousWithinAt, e.continuousAt, e.continuousAt_symm, e.leftInvOn.mono, e.left_inv, e.map_source, e.nhdsWithin_source_inter, e.source, inter_subset_left, leftInvOn, left_inv, map_nhdsWithin_eq, map_source, nhdsWithin_source_inter, source
 -/
@@ -463,7 +465,7 @@ theorem preimage_eventuallyEq_target_inter_preimage_inter
     mem_nhdsWithin_iff_eventually.mp (hf.preimage_mem_nhdsWithin ht)]
   intro y hy hyu
   simp_rw [mem_inter_iff, mem_preimage, mem_inter_iff, e.mapsTo hy, true_and, iff_self_and,
-    e.left_inv hy,
+    e.left_inv hy, iff_true_intro hyu]
 
 中文:
 定理 preimage_eventuallyEq_target_inter_preimage_inter
@@ -474,7 +476,7 @@ theorem preimage_eventuallyEq_target_inter_preimage_inter
     mem_nhdsWithin_iff_eventually.mp (hf.preimage_mem_nhdsWithin ht)]
   intro y hy hyu
   simp_rw [mem_inter_iff, mem_preimage, mem_inter_iff, e.mapsTo hy, true_and, iff_self_and,
-    e.left_inv hy,
+    e.left_inv hy, iff_true_intro hyu]
 
 Depends on / 依赖: e.eventually_nhds, e.left_inv, e.mapsTo, e.open_source.mem_nhds, eventuallyEq_set, eventually_nhds, filter_upwards, hf.preimage_mem_nhdsWithin, iff_self_and, iff_true_intro, left_inv, mapsTo, mem_inter_iff, mem_nhds, mem_nhdsWithin_iff_eventually, mem_nhdsWithin_iff_eventually.mp, mem_preimage, open_source, preimage_mem_nhdsWithin, simp_rw
 -/
@@ -547,7 +549,7 @@ theorem continuousOn_iff_continuousOn_comp_right
   simp only [← e.symm_image_eq_source_inter_preimage h, ContinuousOn, forall_mem_image]
   refine forall₂_congr fun x hx => ?_
   rw [e.continuousWithinAt_iff_continuousWithinAt_comp_right (h hx)]; rw [e.symm_image_eq_source_inter_preimage h]; rw [inter_comm]; rw [continuousWithinAt_inter]
-  exact 
+  exact IsOpen.mem_nhds e.open_source (e.map_target (h hx))
 
 中文:
 定理 continuousOn_iff_continuousOn_comp_right
@@ -556,7 +558,7 @@ theorem continuousOn_iff_continuousOn_comp_right
   simp only [← e.symm_image_eq_source_inter_preimage h, ContinuousOn, forall_mem_image]
   refine forall₂_congr fun x hx => ?_
   rw [e.continuousWithinAt_iff_continuousWithinAt_comp_right (h hx)]; rw [e.symm_image_eq_source_inter_preimage h]; rw [inter_comm]; rw [continuousWithinAt_inter]
-  exact 
+  exact IsOpen.mem_nhds e.open_source (e.map_target (h hx))
 
 Depends on / 依赖: ContinuousOn, IsOpen, IsOpen.mem_nhds, continuousWithinAt_iff_continuousWithinAt_comp_right, continuousWithinAt_inter, e.continuousWithinAt_iff_continuousWithinAt_comp_right, e.map_target, e.open_source, e.symm_image_eq_source_inter_preimage, forall_mem_image, inter_comm, map_target, mem_nhds, open_source, symm_image_eq_source_inter_preimage
 -/
@@ -578,7 +580,9 @@ theorem continuousWithinAt_iff_continuousWithinAt_comp_left
   rw [← continuousWithinAt_inter' h] at fe_cont ⊢
   have : ContinuousWithinAt (e.symm ∘ e ∘ f) (s inter f ⁻¹' e.source) x :=
     haveI : ContinuousWithinAt e.symm univ (e (f x)) :=
-      (e.continuousAt_symm (e.map_source h
+      (e.continuousAt_symm (e.map_source hx)).continuousWithinAt
+    ContinuousWithinAt.comp this fe_cont (subset_univ _)
+  exact this.congr (fun y hy => by simp [e.left_inv hy.2]) (by simp [e.left_inv hx])
 
 中文:
 定理 continuousWithinAt_iff_continuousWithinAt_comp_left
@@ -588,7 +592,9 @@ theorem continuousWithinAt_iff_continuousWithinAt_comp_left
   rw [← continuousWithinAt_inter' h] at fe_cont ⊢
   have : ContinuousWithinAt (e.symm ∘ e ∘ f) (s inter f ⁻¹' e.source) x :=
     haveI : ContinuousWithinAt e.symm univ (e (f x)) :=
-      (e.continuousAt_symm (e.map_source h
+      (e.continuousAt_symm (e.map_source hx)).continuousWithinAt
+    ContinuousWithinAt.comp this fe_cont (subset_univ _)
+  exact this.congr (fun y hy => by simp [e.left_inv hy.2]) (by simp [e.left_inv hx])
 
 Depends on / 依赖: ContinuousWithinAt, ContinuousWithinAt.comp, comp_continuousWithinAt, continuousAt, continuousAt_symm, continuousWithinAt, continuousWithinAt_inter, e.continuousAt, e.continuousAt_symm, e.left_inv, e.map_source, e.source, e.symm, fe_cont, left_inv, map_source, source, subset_univ, this.congr
 -/

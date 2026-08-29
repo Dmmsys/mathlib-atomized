@@ -303,7 +303,8 @@ lemma Presheaf.IsSheaf.section_ext
     ((Presheaf.isSheaf_iff_isSheaf_forget (C := Opens X) (A' := A) _ F (forget _)).mp hF)
   choose V hV hxV H using fun x : U.unop => hst x.1 x.2
   refine (this.isSheafFor (.ofArrows V fun x => homOfLE (hV x)) ?_).isSeparatedFor.ext ?_
-  · exact fun 
+  · exact fun x hx => ⟨V ⟨x, hx⟩, homOfLE (hV _), Sieve.ofArrows_mk _ _ _, hxV _⟩
+  · rintro _ _ ⟨x⟩; exact H x
 
 中文:
 引理 预层.是层.section_ext
@@ -313,7 +314,8 @@ lemma Presheaf.IsSheaf.section_ext
     ((Presheaf.isSheaf_iff_isSheaf_forget (C := Opens X) (A' := A) _ F (forget _)).mp hF)
   choose V hV hxV H using fun x : U.unop => hst x.1 x.2
   refine (this.isSheafFor (.ofArrows V fun x => homOfLE (hV x)) ?_).isSeparatedFor.ext ?_
-  · exact fun 
+  · exact fun x hx => ⟨V ⟨x, hx⟩, homOfLE (hV _), Sieve.ofArrows_mk _ _ _, hxV _⟩
+  · rintro _ _ ⟨x⟩; exact H x
 
 Depends on / 依赖: Presheaf, Presheaf.isSheaf_iff_isSheaf_forget, Sieve.ofArrows_mk, U.unop, forget, homOfLE, isSeparatedFor, isSeparatedFor.ext, isSheafFor, isSheaf_iff_isSheaf_forget, isSheaf_iff_isSheaf_of_type, ofArrows, ofArrows_mk, this.isSheafFor
 -/

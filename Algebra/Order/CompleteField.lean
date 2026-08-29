@@ -291,7 +291,12 @@ theorem cutMap_add
     refine ⟨q₁, by rwa [coe_mem_cutMap_iff], q - q₁, ?_, add_sub_cancel _ _⟩
     norm_cast
     rw [coe_mem_cutMap_iff]
-    exact mod_cast s
+    exact mod_cast sub_lt_comm.mp hq₁q
+  · rintro _ ⟨_, ⟨qa, ha, rfl⟩, _, ⟨qb, hb, rfl⟩, rfl⟩
+    -- After https://github.com/leanprover/lean4/pull/2734, `norm_cast` needs help with beta reduction.
+    refine ⟨qa + qb, ?_, by beta_reduce; norm_cast⟩
+    rw [mem_ofPred_eq]; rw [cast_add]
+    exact add_lt_add ha hb
 
 中文:
 定理 cutMap_add
@@ -304,7 +309,12 @@ theorem cutMap_add
     refine ⟨q₁, by rwa [coe_mem_cutMap_iff], q - q₁, ?_, add_sub_cancel _ _⟩
     norm_cast
     rw [coe_mem_cutMap_iff]
-    exact mod_cast s
+    exact mod_cast sub_lt_comm.mp hq₁q
+  · rintro _ ⟨_, ⟨qa, ha, rfl⟩, _, ⟨qb, hb, rfl⟩, rfl⟩
+    -- After https://github.com/leanprover/lean4/pull/2734, `norm_cast` needs help with beta reduction.
+    refine ⟨qa + qb, ?_, by beta_reduce; norm_cast⟩
+    rw [mem_ofPred_eq]; rw [cast_add]
+    exact add_lt_add ha hb
 
 Depends on / 依赖: add_sub_cancel, antisymm, coe_mem_cutMap_iff, exists_rat_btwn, image_subset_iff, mem_ofPred_eq, mod_cast, sub_lt_comm, sub_lt_comm.mp, sub_lt_iff_lt_add
 -/
@@ -398,7 +408,7 @@ theorem inducedMap_rat
     rw [cutMap_coe]
     exact ⟨q', ⟨_, hq, rfl⟩, hwq⟩
 
-@[simp
+@[simp]
 
 中文:
 定理 inducedMap_rat
@@ -414,7 +424,7 @@ theorem inducedMap_rat
     rw [cutMap_coe]
     exact ⟨q', ⟨_, hq, rfl⟩, hwq⟩
 
-@[simp
+@[simp]
 
 Depends on / 依赖: csSup_eq_of_forall_le_of_forall_lt_exists_gt, cutMap_coe, cutMap_nonempty, exists_rat_btwn, le_of_lt
 -/
@@ -662,7 +672,7 @@ theorem le_inducedMap_mul_self_of_mem_cutMap
   · rw [pow_two] at hqa ⊢
     exact mul_self_le_mul_self (mod_cast hq'.le)
       (le_csSup (cutMap_bddAbove β a) <|
-coe_mem_cutMa
+coe_mem_cutMap_iff.2 lt_of_mul_self_lt_mul_self₀ ha.le hqa)
 
 中文:
 定理 le_inducedMap_mul_self_of_mem_cutMap
@@ -675,7 +685,7 @@ coe_mem_cutMa
   · rw [pow_two] at hqa ⊢
     exact mul_self_le_mul_self (mod_cast hq'.le)
       (le_csSup (cutMap_bddAbove β a) <|
-coe_mem_cutMa
+coe_mem_cutMap_iff.2 lt_of_mul_self_lt_mul_self₀ ha.le hqa)
 
 Depends on / 依赖: coe_mem_cutMap_iff, cutMap_bddAbove, exists_rat_pow_btwn, ha.le, ha.ne, le_csSup, mod_cast, mul_self_le_mul_self, mul_self_pos, pow_two, two_ne_zero
 -/
@@ -703,7 +713,12 @@ theorem exists_mem_cutMap_mul_self_of_lt_inducedMap_mul_self
     exact mul_self_pos.2 ha.ne'
   obtain ⟨q, hq, hbq, hqa⟩ := exists_rat_pow_btwn two_ne_zero hba (hb.trans_lt hba)
   rw [← cast_pow] at hbq
-  refine ⟨(q ^ 2 : Rat), coe_m
+  refine ⟨(q ^ 2 : Rat), coe_mem_cutMap_iff.2 ?_, hbq⟩
+  rw [pow_two] at hqa ⊢
+  push_cast
+  obtain ⟨q', hq', hqa'⟩ := lt_inducedMap_iff.1 (lt_of_mul_self_lt_mul_self₀
+    (inducedMap_nonneg ha.le) hqa)
+  exact mul_self_lt_mul_self (mod_cast hq.le) (hqa'.trans' <| by assumption_mod_cast)
 
 中文:
 定理 存在_mem_cutMap_mul_self_of_lt_inducedMap_mul_self
@@ -715,7 +730,12 @@ theorem exists_mem_cutMap_mul_self_of_lt_inducedMap_mul_self
     exact mul_self_pos.2 ha.ne'
   obtain ⟨q, hq, hbq, hqa⟩ := exists_rat_pow_btwn two_ne_zero hba (hb.trans_lt hba)
   rw [← cast_pow] at hbq
-  refine ⟨(q ^ 2 : Rat), coe_m
+  refine ⟨(q ^ 2 : Rat), coe_mem_cutMap_iff.2 ?_, hbq⟩
+  rw [pow_two] at hqa ⊢
+  push_cast
+  obtain ⟨q', hq', hqa'⟩ := lt_inducedMap_iff.1 (lt_of_mul_self_lt_mul_self₀
+    (inducedMap_nonneg ha.le) hqa)
+  exact mul_self_lt_mul_self (mod_cast hq.le) (hqa'.trans' <| by assumption_mod_cast)
 
 Depends on / 依赖: Rat.cast_zero, cast_pow, cast_zero, coe_mem_cutMap_iff, exists_rat_pow_btwn, ha.le, ha.ne, hb.trans_lt, hq.le, inducedMap_nonneg, lt_inducedMap_iff, lt_or_ge, mod_cast, mul_self_lt_mul_self, mul_self_pos, pow_two, trans_lt, two_ne_zero
 -/
@@ -767,7 +787,17 @@ definition inducedOrderRingHom
         intro x
         obtain h | rfl | h := lt_trichotomy x 0
         · convert! this (-x) (neg_pos.2 h) using 1
-         
+          · rw [neg_mul, mul_neg, neg_neg]
+          · simp_rw [map_neg, neg_mul, mul_neg, neg_neg]
+        · simp only [mul_zero, map_zero]
+        · exact this x h
+        -- prove that the (Sup of rationals less than x) ^ 2 is the Sup of the set of rationals less
+        -- than (x ^ 2) by showing it is an upper bound and any smaller number is not an upper bound
+      refine fun x hx => csSup_eq_of_forall_le_of_forall_lt_exists_gt (cutMap_nonempty β _) ?_ ?_
+      · exact le_inducedMap_mul_self_of_mem_cutMap hx
+      · exact exists_mem_cutMap_mul_self_of_lt_inducedMap_mul_self hx)
+          two_ne_zero (inducedMap_one _ _) with
+    monotone' := inducedMap_mono _ _ }
 
 中文:
 定义 inducedOrderRingHom
@@ -777,7 +807,17 @@ definition inducedOrderRingHom
         intro x
         obtain h | rfl | h := lt_trichotomy x 0
         · convert! this (-x) (neg_pos.2 h) using 1
-         
+          · rw [neg_mul, mul_neg, neg_neg]
+          · simp_rw [map_neg, neg_mul, mul_neg, neg_neg]
+        · simp only [mul_zero, map_zero]
+        · exact this x h
+        -- prove that the (Sup of rationals less than x) ^ 2 is the Sup of the set of rationals less
+        -- than (x ^ 2) by showing it is an upper bound and any smaller number is not an upper bound
+      refine fun x hx => csSup_eq_of_forall_le_of_forall_lt_exists_gt (cutMap_nonempty β _) ?_ ?_
+      · exact le_inducedMap_mul_self_of_mem_cutMap hx
+      · exact exists_mem_cutMap_mul_self_of_lt_inducedMap_mul_self hx)
+          two_ne_zero (inducedMap_one _ _) with
+    monotone' := inducedMap_mono _ _ }
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mkRingHomOfMulSelfOfTwoNeZero, convert, inducedAddHom, lt_trichotomy, map_neg, map_zero, mkRingHomOfMulSelfOfTwoNeZero, mul_neg, mul_zero, neg_mul, neg_neg, neg_pos, simp_rw
 -/
@@ -814,7 +854,11 @@ definition inducedOrderRingIso
       dsimp
       refine ⟨fun h => ?_, fun h => inducedMap_mono _ _ h⟩
       convert! inducedMap_mono γ β h <;>
-      · rw [inducedOr
+      · rw [inducedOrderRingHom, AddMonoidHom.coe_fn_mkRingHomOfMulSelfOfTwoNeZero, inducedAddHom]
+        dsimp
+        rw [inducedMap_inv_self β γ _] }
+
+@[simp]
 
 中文:
 定义 inducedOrderRingIso
@@ -827,7 +871,11 @@ definition inducedOrderRingIso
       dsimp
       refine ⟨fun h => ?_, fun h => inducedMap_mono _ _ h⟩
       convert! inducedMap_mono γ β h <;>
-      · rw [inducedOr
+      · rw [inducedOrderRingHom, AddMonoidHom.coe_fn_mkRingHomOfMulSelfOfTwoNeZero, inducedAddHom]
+        dsimp
+        rw [inducedMap_inv_self β γ _] }
+
+@[simp]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_fn_mkRingHomOfMulSelfOfTwoNeZero, coe_fn_mkRingHomOfMulSelfOfTwoNeZero, convert, inducedAddHom, inducedMap, inducedMap_inv_self, inducedMap_mono, inducedOrderRingHom, invFun, left_inv, map_le_map_iff, right_inv
 -/

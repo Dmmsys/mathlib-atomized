@@ -358,7 +358,9 @@ lemma length_injective_iff
     · next ih _ _ =>
       congr
       · subsingleton
-      · apply ih; simpa using
+      · apply ih; simpa using hl
+
+@[simp default + 1] -- Raise priority above `length_injective_iff`.
 
 中文:
 引理 length_injective_iff
@@ -374,7 +376,9 @@ lemma length_injective_iff
     · next ih _ _ =>
       congr
       · subsingleton
-      · apply ih; simpa using
+      · apply ih; simpa using hl
+
+@[simp default + 1] -- Raise priority above `length_injective_iff`.
 -/
 @[simp] lemma length_injective_iff : Injective (List.length : List α -> Nat) ↔ Subsingleton α := by
   constructor

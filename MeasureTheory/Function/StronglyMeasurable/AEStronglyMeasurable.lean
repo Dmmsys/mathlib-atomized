@@ -358,6 +358,16 @@ lemma aestronglyMeasurable_id_of_isSeparable
     Filter.mem_of_superset h2 (fun x hx => by simp [subset_closure hx])⟩
   have h : StronglyMeasurable ((↑) : closure s -> α) := by
     have := h1.closure.secondCountableTopology
+    exact continuous_subtype_val.stronglyMeasurable
+  have : (closure s).piecewise id (fun _ => a) =
+      ((↑) : closure s -> α).extend ((↑) : closure s -> α) (fun _ => a) := by
+    ext x
+    by_cases hx : x in closure s
+    · simp [Function.extend_val_apply, hx]
+    · simp [hx]
+  rw [this]
+  exact (MeasurableEmbedding.subtype_coe isClosed_closure.measurableSet).stronglyMeasurable_extend
+    h stronglyMeasurable_const
 
 中文:
 引理 aestronglyMeasurable_id_of_isSeparable
@@ -370,6 +380,16 @@ lemma aestronglyMeasurable_id_of_isSeparable
     Filter.mem_of_superset h2 (fun x hx => by simp [subset_closure hx])⟩
   have h : StronglyMeasurable ((↑) : closure s -> α) := by
     have := h1.closure.secondCountableTopology
+    exact continuous_subtype_val.stronglyMeasurable
+  have : (closure s).piecewise id (fun _ => a) =
+      ((↑) : closure s -> α).extend ((↑) : closure s -> α) (fun _ => a) := by
+    ext x
+    by_cases hx : x in closure s
+    · simp [Function.extend_val_apply, hx]
+    · simp [hx]
+  rw [this]
+  exact (MeasurableEmbedding.subtype_coe isClosed_closure.measurableSet).stronglyMeasurable_extend
+    h stronglyMeasurable_const
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, Functio, StronglyMeasurable, classical, closure, continuous_subtype_val, continuous_subtype_val.stronglyMeasurable, exists_pair_ne, extend, h1.closure.secondCountableTopology, mem_of_superset, nontriviality, piecewise, secondCountableTopology, stronglyMeasurable, subset_closure
 -/
@@ -873,7 +893,10 @@ refine Filter.EventuallyEq.trans ?_
     by_cases hxs : x in s
     · simp [hxs, hx]
     · simp [hxs]
-  suffices StronglyMeasurable
+  suffices StronglyMeasurable[m'] (s.indicator (hf.mk f)) from
+    this.aestronglyMeasurable.congr h_ind_eq
+  exact (hf.stronglyMeasurable_mk.indicator hs_m).stronglyMeasurable_of_measurableSpace_le_on hs_m
+    hs fun x hxs => Set.indicator_of_notMem hxs _
 
 中文:
 引理 of_measurableSpace_le_on
@@ -886,7 +909,10 @@ refine Filter.EventuallyEq.trans ?_
     by_cases hxs : x in s
     · simp [hxs, hx]
     · simp [hxs]
-  suffices StronglyMeasurable
+  suffices StronglyMeasurable[m'] (s.indicator (hf.mk f)) from
+    this.aestronglyMeasurable.congr h_ind_eq
+  exact (hf.stronglyMeasurable_mk.indicator hs_m).stronglyMeasurable_of_measurableSpace_le_on hs_m
+    hs fun x hxs => Set.indicator_of_notMem hxs _
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.trans, Set.indicator_of_notMem, StronglyMeasurable, ae_eq_mk, aestronglyMeasurable, filter_upwards, h_ind_eq, hf.ae_eq_mk, hf.mk, hf.stronglyMeasurable_mk.indicator, hf_zero, hs_m, indicator, indicator_ae_eq_of_restrict_compl_ae_eq_zero, indicator_of_notMem, s.indicator, stronglyMeasurable_mk, stronglyMeasurable_of_measurableSpace_le_on
 -/
@@ -1185,7 +1211,7 @@ alias const_smul' := AEStronglyMeasurable.fun_const_smul
 @[deprecated (since := "2026-06-26")]
 alias const_vadd' := AEStronglyMeasurable.fun_const_vadd
 
-@[to_additive (attr := fun_p
+@[to_additive (attr := fun_prop)]
 
 中文:
 定理 const_smul
@@ -1198,7 +1224,7 @@ alias const_smul' := AEStronglyMeasurable.fun_const_smul
 @[deprecated (since := "2026-06-26")]
 alias const_vadd' := AEStronglyMeasurable.fun_const_vadd
 
-@[to_additive (attr := fun_p
+@[to_additive (attr := fun_prop)]
 -/
 protected theorem const_smul {𝕜} [SMul 𝕜 β] [ContinuousConstSMul 𝕜 β]
     (hf : AEStronglyMeasurable[m] f μ) (c : 𝕜) : AEStronglyMeasurable[m] (c • f) μ :=
@@ -1754,7 +1780,10 @@ theorem _root_.aestronglyMeasurable_indicator_iff
   · intro h
     refine ⟨indicator s (h.mk f), h.stronglyMeasurable_mk.indicator hs, ?_⟩
     have A : s.indicator f =ᵐ[μ.restrict s] s.indicator (h.mk f) :=
-      (indicator_ae_eq_rest
+      (indicator_ae_eq_restrict hs).trans (h.ae_eq_mk.trans <| (indicator_ae_eq_restrict hs).symm)
+    have B : s.indicator f =ᵐ[μ.restrict sᶜ] s.indicator (h.mk f) :=
+      (indicator_ae_eq_restrict_compl hs).trans (indicator_ae_eq_restrict_compl hs).symm
+    exact ae_of_ae_restrict_of_ae_restrict_compl _ A B
 
 中文:
 定理 _root_.aestronglyMeasurable_indicator_iff
@@ -1766,7 +1795,10 @@ theorem _root_.aestronglyMeasurable_indicator_iff
   · intro h
     refine ⟨indicator s (h.mk f), h.stronglyMeasurable_mk.indicator hs, ?_⟩
     have A : s.indicator f =ᵐ[μ.restrict s] s.indicator (h.mk f) :=
-      (indicator_ae_eq_rest
+      (indicator_ae_eq_restrict hs).trans (h.ae_eq_mk.trans <| (indicator_ae_eq_restrict hs).symm)
+    have B : s.indicator f =ᵐ[μ.restrict sᶜ] s.indicator (h.mk f) :=
+      (indicator_ae_eq_restrict_compl hs).trans (indicator_ae_eq_restrict_compl hs).symm
+    exact ae_of_ae_restrict_of_ae_restrict_compl _ A B
 
 Depends on / 依赖: Measure, Measure.restrict_le_self, ae_eq_mk, h.ae_eq_mk.trans, h.mk, h.mono_measure, h.stronglyMeasurable_mk.indicator, indicator, indicator_ae_eq_restrict, indicator_ae_eq_restrict_compl, mono_measure, restrict, restrict_le_self, s.indicator, stronglyMeasurable_mk
 -/
@@ -2131,7 +2163,10 @@ theorem _root_.aestronglyMeasurable_iff_aemeasurable_separable
   · simp only [mem_empty_iff_false, eventually_false_iff_eq_bot, ae_eq_bot] at ht
     rw [ht]
     exact aestronglyMeasurable_zero_measure f
-  · obtain ⟨g, 
+  · obtain ⟨g, g_meas, gt, fg⟩ : exists g : α -> β, Measurable g ∧ range g subseteq t ∧ f =ᵐ[μ] g :=
+      H.exists_ae_eq_range_subset ht h₀
+    refine ⟨g, ?_, fg⟩
+    exact stronglyMeasurable_iff_measurable_separable.2 ⟨g_meas, t_sep.mono gt⟩
 
 中文:
 定理 _root_.aestronglyMeasurable_iff_aemeasurable_separable
@@ -2143,7 +2178,10 @@ theorem _root_.aestronglyMeasurable_iff_aemeasurable_separable
   · simp only [mem_empty_iff_false, eventually_false_iff_eq_bot, ae_eq_bot] at ht
     rw [ht]
     exact aestronglyMeasurable_zero_measure f
-  · obtain ⟨g, 
+  · obtain ⟨g, g_meas, gt, fg⟩ : exists g : α -> β, Measurable g ∧ range g subseteq t ∧ f =ᵐ[μ] g :=
+      H.exists_ae_eq_range_subset ht h₀
+    refine ⟨g, ?_, fg⟩
+    exact stronglyMeasurable_iff_measurable_separable.2 ⟨g_meas, t_sep.mono gt⟩
 
 Depends on / 依赖: H.aemeasurable, H.exists_ae_eq_range_subset, H.isSeparable_ae_range, Measurable, ae_eq_bot, aemeasurable, aestronglyMeasurable_zero_measure, eq_empty_or_nonempty, eventually_false_iff_eq_bot, exists_ae_eq_range_subset, g_meas, isSeparable_ae_range, mem_empty_iff_false, stronglyMeasurable_iff_measurable_separable, subseteq, t_sep, t_sep.mono
 -/
@@ -2235,7 +2273,12 @@ theorem _root_.Topology.IsEmbedding.aestronglyMeasurable_comp_iff
       hg.continuous.comp_aestronglyMeasurable H⟩
   · let G : β -> range g := rangeFactorization g
     have hG : IsClosedEmbedding G :=
-      { hg
+      { hg.codRestrict _ _ with
+        isClosed_range := by rw [rangeFactorization_surjective.range_eq]; exact isClosed_univ }
+    have : AEMeasurable (G ∘ f) μ := AEMeasurable.subtype_mk H.aemeasurable
+    exact hG.measurableEmbedding.aemeasurable_comp_iff.1 this
+  · rcases (aestronglyMeasurable_iff_aemeasurable_separable.1 H).2 with ⟨t, ht, h't⟩
+    exact ⟨g ⁻¹' t, hg.isSeparable_preimage ht, h't⟩
 
 中文:
 定理 _root_.拓扑.是嵌入.aestronglyMeasurable_comp_iff
@@ -2248,7 +2291,12 @@ theorem _root_.Topology.IsEmbedding.aestronglyMeasurable_comp_iff
       hg.continuous.comp_aestronglyMeasurable H⟩
   · let G : β -> range g := rangeFactorization g
     have hG : IsClosedEmbedding G :=
-      { hg
+      { hg.codRestrict _ _ with
+        isClosed_range := by rw [rangeFactorization_surjective.range_eq]; exact isClosed_univ }
+    have : AEMeasurable (G ∘ f) μ := AEMeasurable.subtype_mk H.aemeasurable
+    exact hG.measurableEmbedding.aemeasurable_comp_iff.1 this
+  · rcases (aestronglyMeasurable_iff_aemeasurable_separable.1 H).2 with ⟨t, ht, h't⟩
+    exact ⟨g ⁻¹' t, hg.isSeparable_preimage ht, h't⟩
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.subtype_mk, H.aemeasurable, IsClosedEmbedding, aemeasurable, aemeasurable_comp, aestronglyMeasurable_iff_aemeasurable_separable, borelize, codRestrict, comp_aestronglyMeasurable, continuous, hG.measurableEmbedding.aemeasurable_comp, hg.codRestrict, hg.continuous.comp_aestronglyMeasurable, isClosed_range, isClosed_univ, measurableEmbedding, pseudoMetrizableSpacePseudoMetric, rangeFactorization, rangeFactorization_surjective
 -/
@@ -2280,7 +2328,13 @@ theorem _root_.aestronglyMeasurable_of_tendsto_ae
   refine aestronglyMeasurable_iff_aemeasurable_separable.2 ⟨?_, ?_⟩
   · exact aemeasurable_of_tendsto_metrizable_ae _ (fun n => (hf n).aemeasurable) lim
   · rcases u.exists_seq_tendsto with ⟨v, hv⟩
-    have : forall n : Nat, exists t : Set β, IsSeparable t ∧ f (v n) ⁻¹' t in ae μ := 
+    have : forall n : Nat, exists t : Set β, IsSeparable t ∧ f (v n) ⁻¹' t in ae μ := fun n =>
+      (aestronglyMeasurable_iff_aemeasurable_separable.1 (hf (v n))).2
+    choose t t_sep ht using this
+refine ⟨closure (⋃ i, t i), .closure .iUnion t_sep, ?_⟩
+    filter_upwards [ae_all_iff.2 ht, lim] with x hx h'x
+    apply mem_closure_of_tendsto (h'x.comp hv)
+    filter_upwards with n using mem_iUnion_of_mem n (hx n)
 
 中文:
 定理 _root_.aestronglyMeasurable_of_tendsto_ae
@@ -2290,7 +2344,13 @@ theorem _root_.aestronglyMeasurable_of_tendsto_ae
   refine aestronglyMeasurable_iff_aemeasurable_separable.2 ⟨?_, ?_⟩
   · exact aemeasurable_of_tendsto_metrizable_ae _ (fun n => (hf n).aemeasurable) lim
   · rcases u.exists_seq_tendsto with ⟨v, hv⟩
-    have : forall n : Nat, exists t : Set β, IsSeparable t ∧ f (v n) ⁻¹' t in ae μ := 
+    have : forall n : Nat, exists t : Set β, IsSeparable t ∧ f (v n) ⁻¹' t in ae μ := fun n =>
+      (aestronglyMeasurable_iff_aemeasurable_separable.1 (hf (v n))).2
+    choose t t_sep ht using this
+refine ⟨closure (⋃ i, t i), .closure .iUnion t_sep, ?_⟩
+    filter_upwards [ae_all_iff.2 ht, lim] with x hx h'x
+    apply mem_closure_of_tendsto (h'x.comp hv)
+    filter_upwards with n using mem_iUnion_of_mem n (hx n)
 
 Depends on / 依赖: IsSeparable, ae_all_iff, aemeasurable, aemeasurable_of_tendsto_metrizable_ae, aestronglyMeasurable_iff_aemeasurable_separable, borelize, closure, exists_seq_tendsto, filter_upwards, iUnion, t_sep, u.exists_seq_tendsto
 -/
@@ -2321,7 +2381,10 @@ theorem _root_.exists_stronglyMeasurable_limit_of_tendsto_ae
   obtain ⟨g, _, hg⟩ :
     exists g : α -> β, Measurable g ∧ forallᵐ x ∂μ, Tendsto (fun n => f n x) atTop (𝓝 (g x)) :=
     measurable_limit_of_tendsto_metrizable_ae (fun n => (hf n).aemeasurable) h_ae_tendsto
-  have Hg : AEStronglyMeasurable g μ := aestronglyMeasurable_of_tendsto_ae _
+  have Hg : AEStronglyMeasurable g μ := aestronglyMeasurable_of_tendsto_ae _ hf hg
+  refine ⟨Hg.mk g, Hg.stronglyMeasurable_mk, ?_⟩
+  filter_upwards [hg, Hg.ae_eq_mk] with x hx h'x
+  rwa [h'x] at hx
 
 中文:
 定理 _root_.存在_stronglyMeasurable_limit_of_tendsto_ae
@@ -2331,7 +2394,10 @@ theorem _root_.exists_stronglyMeasurable_limit_of_tendsto_ae
   obtain ⟨g, _, hg⟩ :
     exists g : α -> β, Measurable g ∧ forallᵐ x ∂μ, Tendsto (fun n => f n x) atTop (𝓝 (g x)) :=
     measurable_limit_of_tendsto_metrizable_ae (fun n => (hf n).aemeasurable) h_ae_tendsto
-  have Hg : AEStronglyMeasurable g μ := aestronglyMeasurable_of_tendsto_ae _
+  have Hg : AEStronglyMeasurable g μ := aestronglyMeasurable_of_tendsto_ae _ hf hg
+  refine ⟨Hg.mk g, Hg.stronglyMeasurable_mk, ?_⟩
+  filter_upwards [hg, Hg.ae_eq_mk] with x hx h'x
+  rwa [h'x] at hx
 
 Depends on / 依赖: AEStronglyMeasurable, Hg.ae_eq_mk, Hg.mk, Hg.stronglyMeasurable_mk, Measurable, Tendsto, ae_eq_mk, aemeasurable, aestronglyMeasurable_of_tendsto_ae, borelize, filter_upwards, h_ae_tendsto, measurable_limit_of_tendsto_metrizable_ae, stronglyMeasurable_mk
 -/
@@ -2362,7 +2428,11 @@ lemma exists_stronglyMeasurable_range_subset
   case meas => exact hf'.piecewise (hf'.measurable hs) stronglyMeasurable_const
   case subset =>
     rw [← Set.range_subset_iff]
-    simpa [Set.range_piecewise] using! 
+    simpa [Set.range_piecewise] using! fun _ _ => h_nonempty.some_mem
+  case ae_eq =>
+    apply hff'.trans
+    filter_upwards [h_mem, hff'] with x hx hx'
+exact Eq.symm (f' ⁻¹' s).piecewise_eq_of_mem f' _ (by simpa [hx'] using! hx)
 
 中文:
 引理 存在_stronglyMeasurable_range_subset
@@ -2374,7 +2444,11 @@ lemma exists_stronglyMeasurable_range_subset
   case meas => exact hf'.piecewise (hf'.measurable hs) stronglyMeasurable_const
   case subset =>
     rw [← Set.range_subset_iff]
-    simpa [Set.range_piecewise] using! 
+    simpa [Set.range_piecewise] using! fun _ _ => h_nonempty.some_mem
+  case ae_eq =>
+    apply hff'.trans
+    filter_upwards [h_mem, hff'] with x hx hx'
+exact Eq.symm (f' ⁻¹' s).piecewise_eq_of_mem f' _ (by simpa [hx'] using! hx)
 
 Depends on / 依赖: Eq.symm, Set.range_piecewise, Set.range_subset_iff, ae_eq, classical, filter_upwards, h_mem, h_nonempty, h_nonempty.some, h_nonempty.some_mem, measurable, piecewise, piecewise_eq_of_mem, range_piecewise, range_subset_iff, some_mem, stronglyMeasurable_const, subset
 -/
@@ -2407,7 +2481,19 @@ theorem piecewise
   refine ae_of_ae_restrict_of_ae_restrict_compl s ?_ ?_
   · have h := hf.ae_eq_mk
     rw [Filter.EventuallyEq]; rw [ae_restrict_iff' hs] at h
-    rw [ae_restrict_i
+    rw [ae_restrict_iff' hs]
+    filter_upwards [h] with x hx
+    intro hx_mem
+    simp only [hx_mem, Set.piecewise_eq_of_mem, hx hx_mem]
+  · have h := hg.ae_eq_mk
+    rw [Filter.EventuallyEq]; rw [ae_restrict_iff' hs.compl] at h
+    rw [ae_restrict_iff' hs.compl]
+    filter_upwards [h] with x hx
+    intro hx_mem
+    rw [Set.mem_compl_iff] at hx_mem
+    simp only [hx_mem, not_false_eq_true, Set.piecewise_eq_of_notMem, hx hx_mem]
+
+@[fun_prop]
 
 中文:
 定理 piecewise
@@ -2418,7 +2504,19 @@ theorem piecewise
   refine ae_of_ae_restrict_of_ae_restrict_compl s ?_ ?_
   · have h := hf.ae_eq_mk
     rw [Filter.EventuallyEq]; rw [ae_restrict_iff' hs] at h
-    rw [ae_restrict_i
+    rw [ae_restrict_iff' hs]
+    filter_upwards [h] with x hx
+    intro hx_mem
+    simp only [hx_mem, Set.piecewise_eq_of_mem, hx hx_mem]
+  · have h := hg.ae_eq_mk
+    rw [Filter.EventuallyEq]; rw [ae_restrict_iff' hs.compl] at h
+    rw [ae_restrict_iff' hs.compl]
+    filter_upwards [h] with x hx
+    intro hx_mem
+    rw [Set.mem_compl_iff] at hx_mem
+    simp only [hx_mem, not_false_eq_true, Set.piecewise_eq_of_notMem, hx hx_mem]
+
+@[fun_prop]
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq, Set.piecewise_eq_of_mem, StronglyMeasurable, StronglyMeasurable.piecewise, ae_eq_mk, ae_of_ae_restrict_of_ae_restrict_compl, ae_restrict_iff, filter_upwards, hf.ae_eq_mk, hf.mk, hf.stronglyMeasurable_mk, hg.ae_eq_mk, hg.mk, hg.stronglyMeasurable_mk, hs.com, hs.compl, hx_mem, piecewise
 -/
@@ -2457,7 +2555,14 @@ theorem sum_measure
       ⟨AEMeasurable.sum_measure fun i => (h i).aemeasurable, ?_⟩
   have A : forall i : ι, exists t : Set β, IsSeparable t ∧ f ⁻¹' t in ae (μ i) := fun i =>
     (aestronglyMeasurable_iff_aemeasurable_separable.1 (h i)).2
- 
+  choose t t_sep ht using A
+  refine ⟨⋃ i, t i, .iUnion t_sep, ?_⟩
+  simp only [Measure.ae_sum_eq, mem_iUnion, eventually_iSup]
+  intro i
+  filter_upwards [ht i] with x hx
+  exact ⟨i, hx⟩
+
+@[simp]
 
 中文:
 定理 sum_measure
@@ -2469,7 +2574,14 @@ theorem sum_measure
       ⟨AEMeasurable.sum_measure fun i => (h i).aemeasurable, ?_⟩
   have A : forall i : ι, exists t : Set β, IsSeparable t ∧ f ⁻¹' t in ae (μ i) := fun i =>
     (aestronglyMeasurable_iff_aemeasurable_separable.1 (h i)).2
- 
+  choose t t_sep ht using A
+  refine ⟨⋃ i, t i, .iUnion t_sep, ?_⟩
+  simp only [Measure.ae_sum_eq, mem_iUnion, eventually_iSup]
+  intro i
+  filter_upwards [ht i] with x hx
+  exact ⟨i, hx⟩
+
+@[simp]
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.sum_measure, IsSeparable, Measure, Measure.ae_sum_eq, ae_sum_eq, aemeasurable, aestronglyMeasurable_iff_aemeasurable_separable, borelize, eventually_iSup, filter_upwards, iUnion, mem_iUnion, sum_measure, t_sep
 -/
@@ -2727,7 +2839,7 @@ nonrec theorem _root_.IsUnit.aestronglyMeasurable_const_smul_iff [ContinuousCons
     (hc : IsUnit c) :
     AEStronglyMeasurable (fun x => c • f x) μ ↔ AEStronglyMeasurable f μ :=
   let ⟨u, hu⟩ := hc
-  hu ▸ 
+  hu ▸ aestronglyMeasurable_const_smul_iff u
 
 中文:
 定理 _root_.aestronglyMeasurable_smul_iff
@@ -2738,7 +2850,7 @@ nonrec theorem _root_.IsUnit.aestronglyMeasurable_const_smul_iff [ContinuousCons
     (hc : IsUnit c) :
     AEStronglyMeasurable (fun x => c • f x) μ ↔ AEStronglyMeasurable f μ :=
   let ⟨u, hu⟩ := hc
-  hu ▸ 
+  hu ▸ aestronglyMeasurable_const_smul_iff u
 
 Depends on / 依赖: fun_inv, fun_smul, hc.fun_inv.fun_smul, hc.fun_smul
 -/

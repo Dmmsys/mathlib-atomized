@@ -176,7 +176,22 @@ lemma ext
     simp only [root_reflectionPerm, reflection_apply, coroot']
     simp only [hr, he, hc']
   suffices P₁.coroot = P₂.coroot by
-    obtain ⟨p₁⟩ 
+    obtain ⟨p₁⟩ := P₁; obtain ⟨p₂⟩ := P₂
+    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was: `grind` -/
+    simp_all
+  have : IsAddTorsionFree M := .of_isTorsionFree R M
+  ext i
+  apply P₁.injOn_dualMap_subtype_span_root_coroot (mem_range_self i) (hc ▸ mem_range_self i)
+  simp only [LinearMap.coe_comp, comp_apply]
+  apply Dual.eq_of_preReflection_mapsTo' (finite_range P₁.root)
+  · exact Submodule.subset_span (mem_range_self i)
+  · exact P₁.coroot_root_two i
+  · exact P₁.mapsTo_reflection_root i
+  · exact hr ▸ he ▸ P₂.coroot_root_two i
+  · exact hr ▸ he ▸ P₂.mapsTo_reflection_root i
 
 中文:
 引理 ext
@@ -189,7 +204,22 @@ lemma ext
     simp only [root_reflectionPerm, reflection_apply, coroot']
     simp only [hr, he, hc']
   suffices P₁.coroot = P₂.coroot by
-    obtain ⟨p₁⟩ 
+    obtain ⟨p₁⟩ := P₁; obtain ⟨p₂⟩ := P₂
+    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
+    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
+    It is not yet clear whether this is due to defeq abuse in Mathlib or a problem in the new
+    canonicalizer; a minimization would help. The original proof was: `grind` -/
+    simp_all
+  have : IsAddTorsionFree M := .of_isTorsionFree R M
+  ext i
+  apply P₁.injOn_dualMap_subtype_span_root_coroot (mem_range_self i) (hc ▸ mem_range_self i)
+  simp only [LinearMap.coe_comp, comp_apply]
+  apply Dual.eq_of_preReflection_mapsTo' (finite_range P₁.root)
+  · exact Submodule.subset_span (mem_range_self i)
+  · exact P₁.coroot_root_two i
+  · exact P₁.mapsTo_reflection_root i
+  · exact hr ▸ he ▸ P₂.coroot_root_two i
+  · exact hr ▸ he ▸ P₂.mapsTo_reflection_root i
 -/
 protected lemma ext [CharZero R] [IsDomain R] [IsTorsionFree R M]
     {P₁ P₂ : RootPairing ι R M N}
@@ -237,7 +267,26 @@ lemma coroot_eq_coreflection_of_root_eq'
   let sα' := preReflection α' (p α)
   have hij : preReflection (sα β) (p.flip (sα' β')) = sα ∘ₗ sβ ∘ₗ sα := by
     ext
-    have hpi : (p.fl
+    have hpi : (p.flip (coroot i)) (root i) = 2 := by simp [hp i]
+    simp [α, β, α', β', sα, sβ, sα', ← preReflection_preReflection β (p.flip β') hpi,
+      preReflection_apply]
+  obtain ⟨l, hl⟩ := hc i (mem_range_self j)
+  rw [← hl]
+  have hkl : (p.flip (coroot l)) (root k) = 2 := by
+    simp only [hl, preReflection_apply, map_sub, map_smul, hk, LinearMap.flip_apply,
+      LinearMap.sub_apply, hp j, LinearMap.smul_apply, smul_eq_mul, hp i, mul_two,
+      sub_add_cancel_right, mul_neg, sub_neg_eq_add, sα, α, α', β]
+    rw [mul_comm (p (root i) (coroot j))]
+    abel
+  suffices p.flip (coroot k) = p.flip (coroot l) from p.flip.toPerfPair.injective this
+  have : IsAddTorsionFree M := .of_isTorsionFree R M
+  have := injOn_dualMap_subtype_span_range_range (finite_range root)
+    (c := p.flip ∘ coroot) hp hr
+  apply this (mem_range_self k) (mem_range_self l)
+  refine Dual.eq_of_preReflection_mapsTo' (finite_range root)
+    (Submodule.subset_span <| mem_range_self k) (hp k) (hr k) hkl ?_
+  rw [comp_apply]; rw [hl]; rw [hk]; rw [hij]
+exact (hr i).comp (hr j).comp (hr i)
 
 中文:
 引理 coroot_eq_coreflection_of_root_eq'
@@ -252,7 +301,26 @@ lemma coroot_eq_coreflection_of_root_eq'
   let sα' := preReflection α' (p α)
   have hij : preReflection (sα β) (p.flip (sα' β')) = sα ∘ₗ sβ ∘ₗ sα := by
     ext
-    have hpi : (p.fl
+    have hpi : (p.flip (coroot i)) (root i) = 2 := by simp [hp i]
+    simp [α, β, α', β', sα, sβ, sα', ← preReflection_preReflection β (p.flip β') hpi,
+      preReflection_apply]
+  obtain ⟨l, hl⟩ := hc i (mem_range_self j)
+  rw [← hl]
+  have hkl : (p.flip (coroot l)) (root k) = 2 := by
+    simp only [hl, preReflection_apply, map_sub, map_smul, hk, LinearMap.flip_apply,
+      LinearMap.sub_apply, hp j, LinearMap.smul_apply, smul_eq_mul, hp i, mul_two,
+      sub_add_cancel_right, mul_neg, sub_neg_eq_add, sα, α, α', β]
+    rw [mul_comm (p (root i) (coroot j))]
+    abel
+  suffices p.flip (coroot k) = p.flip (coroot l) from p.flip.toPerfPair.injective this
+  have : IsAddTorsionFree M := .of_isTorsionFree R M
+  have := injOn_dualMap_subtype_span_range_range (finite_range root)
+    (c := p.flip ∘ coroot) hp hr
+  apply this (mem_range_self k) (mem_range_self l)
+  refine Dual.eq_of_preReflection_mapsTo' (finite_range root)
+    (Submodule.subset_span <| mem_range_self k) (hp k) (hr k) hkl ?_
+  rw [comp_apply]; rw [hl]; rw [hk]; rw [hij]
+exact (hr i).comp (hr j).comp (hr i)
 -/
 private lemma coroot_eq_coreflection_of_root_eq' [CharZero R] [IsDomain R] [IsTorsionFree R M]
     (p : M ->ₗ[R] N ->ₗ[R] R) [p.IsPerfPair]
@@ -308,7 +376,8 @@ definition mk'
   reflectionPerm_root i j := by
     simp [(exist_eq_reflection_of_mapsTo p root coroot i j hr).choose_spec, preReflection_apply]
   reflectionPerm_coroot i j := by
-    r
+    refine (coroot_eq_coreflection_of_root_eq' p root coroot hp hr hc ?_).symm
+    rw [equiv_of_mapsTo_apply]; rw [(exist_eq_reflection_of_mapsTo p root coroot i j hr).choose_spec]
 
 中文:
 定义 mk'
@@ -321,7 +390,8 @@ definition mk'
   reflectionPerm_root i j := by
     simp [(exist_eq_reflection_of_mapsTo p root coroot i j hr).choose_spec, preReflection_apply]
   reflectionPerm_coroot i j := by
-    r
+    refine (coroot_eq_coreflection_of_root_eq' p root coroot hp hr hc ?_).symm
+    rw [equiv_of_mapsTo_apply]; rw [(exist_eq_reflection_of_mapsTo p root coroot i j hr).choose_spec]
 -/
 def mk' [CharZero R] [IsDomain R] [IsTorsionFree R M]
     (p : M ->ₗ[R] N ->ₗ[R] R) [p.IsPerfPair]
@@ -355,7 +425,18 @@ lemma IsRootSystem.ext
       P₁.toLinearMap = P₂.toLinearMap -> P₁.root = P₂.root -> range P₁.coroot subseteq range P₂.coroot by
     have h₁ := this P₁ P₂ he hr
     have h₂ := this P₂ P₁ he.symm hr.symm
-    exact RootPairing.ext he hr 
+    exact RootPairing.ext he hr (le_antisymm h₁ h₂)
+  clear! P₁ P₂
+  rintro P₁ P₂ hP₁ hP₂ he hr - ⟨i, rfl⟩
+  use i
+  apply P₁.flip.toPerfPair.injective
+  apply Dual.eq_of_preReflection_mapsTo (finite_range P₁.root) IsRootSystem.span_root_eq_top
+  · exact hr ▸ he ▸ P₂.coroot_root_two i
+  · change MapsTo (preReflection _ (P₁.toLinearMap.flip.toPerfPair _)) _ _
+    simp_rw [hr, he]
+    exact P₂.mapsTo_reflection_root i
+  · exact P₁.coroot_root_two i
+  · exact P₁.mapsTo_reflection_root i
 
 中文:
 引理 是RootSystem.ext
@@ -365,7 +446,18 @@ lemma IsRootSystem.ext
       P₁.toLinearMap = P₂.toLinearMap -> P₁.root = P₂.root -> range P₁.coroot subseteq range P₂.coroot by
     have h₁ := this P₁ P₂ he hr
     have h₂ := this P₂ P₁ he.symm hr.symm
-    exact RootPairing.ext he hr 
+    exact RootPairing.ext he hr (le_antisymm h₁ h₂)
+  clear! P₁ P₂
+  rintro P₁ P₂ hP₁ hP₂ he hr - ⟨i, rfl⟩
+  use i
+  apply P₁.flip.toPerfPair.injective
+  apply Dual.eq_of_preReflection_mapsTo (finite_range P₁.root) IsRootSystem.span_root_eq_top
+  · exact hr ▸ he ▸ P₂.coroot_root_two i
+  · change MapsTo (preReflection _ (P₁.toLinearMap.flip.toPerfPair _)) _ _
+    simp_rw [hr, he]
+    exact P₂.mapsTo_reflection_root i
+  · exact P₁.coroot_root_two i
+  · exact P₁.mapsTo_reflection_root i
 -/
 protected lemma IsRootSystem.ext [CharZero R] [IsDomain R] [IsTorsionFree R M]
     {P₁ P₂ : RootPairing ι R M N} [P₁.IsRootSystem] [P₂.IsRootSystem]
@@ -405,7 +497,16 @@ lemma coroot_eq_coreflection_of_root_eq_of_span_eq_top
   let sα' := preReflection α' (p α)
   have hij : preReflection (sα β) (p.flip (sα' β')) = sα ∘ₗ sβ ∘ₗ sα := by
     ext
-    have hpi : (p.fl
+    have hpi : (p.flip (coroot i)) (root i) = 2 := by simp [hp i]
+    simp [α, β, α', β', sα, sβ, sα', ← preReflection_preReflection β (p.flip β') hpi,
+      preReflection_apply] -- v4.7.0-rc1 issues
+  apply p.flip.toPerfPair.injective
+  apply Dual.eq_of_preReflection_mapsTo (finite_range root) hsp (hp k) (hs k)
+  · simp [map_sub, α, β, α', β', sα, hk, preReflection_apply, hp i, hp j,
+      mul_comm (p α β')]
+    ring -- v4.7.0-rc1 issues
+  · rw [hk, LinearMap.toLinearMap_toPerfPair, hij]
+exact (hs i).comp (hs j).comp (hs i)
 
 中文:
 引理 coroot_eq_coreflection_of_root_eq_of_span_eq_top
@@ -420,7 +521,16 @@ lemma coroot_eq_coreflection_of_root_eq_of_span_eq_top
   let sα' := preReflection α' (p α)
   have hij : preReflection (sα β) (p.flip (sα' β')) = sα ∘ₗ sβ ∘ₗ sα := by
     ext
-    have hpi : (p.fl
+    have hpi : (p.flip (coroot i)) (root i) = 2 := by simp [hp i]
+    simp [α, β, α', β', sα, sβ, sα', ← preReflection_preReflection β (p.flip β') hpi,
+      preReflection_apply] -- v4.7.0-rc1 issues
+  apply p.flip.toPerfPair.injective
+  apply Dual.eq_of_preReflection_mapsTo (finite_range root) hsp (hp k) (hs k)
+  · simp [map_sub, α, β, α', β', sα, hk, preReflection_apply, hp i, hp j,
+      mul_comm (p α β')]
+    ring -- v4.7.0-rc1 issues
+  · rw [hk, LinearMap.toLinearMap_toPerfPair, hij]
+exact (hs i).comp (hs j).comp (hs i)
 -/
 private lemma coroot_eq_coreflection_of_root_eq_of_span_eq_top [CharZero R] [IsDomain R]
     [IsTorsionFree R M] (p : M ->ₗ[R] N ->ₗ[R] R) [p.IsPerfPair]
@@ -471,7 +581,7 @@ definition mk''
     rintro i - ⟨j, rfl⟩
     use RootPairing.equiv_of_mapsTo p root coroot i hs hp j
     refine (coroot_eq_coreflection_of_root_eq_of_span_eq_top p root coroot hp hs hsp ?_)
-    rw [equiv_of_mapsTo_apply]; rw [(exist_eq_reflection_of_mapsTo p root coroot i j hs).choose_spe
+    rw [equiv_of_mapsTo_apply]; rw [(exist_eq_reflection_of_mapsTo p root coroot i j hs).choose_spec]
 
 中文:
 定义 mk''
@@ -480,7 +590,7 @@ definition mk''
     rintro i - ⟨j, rfl⟩
     use RootPairing.equiv_of_mapsTo p root coroot i hs hp j
     refine (coroot_eq_coreflection_of_root_eq_of_span_eq_top p root coroot hp hs hsp ?_)
-    rw [equiv_of_mapsTo_apply]; rw [(exist_eq_reflection_of_mapsTo p root coroot i j hs).choose_spe
+    rw [equiv_of_mapsTo_apply]; rw [(exist_eq_reflection_of_mapsTo p root coroot i j hs).choose_spec]
 
 Depends on / 依赖: RootPairing, RootPairing.equiv_of_mapsTo, choose_spec, coroot, coroot_eq_coreflection_of_root_eq_of_span_eq_top, equiv_of_mapsTo, equiv_of_mapsTo_apply, exist_eq_reflection_of_mapsTo
 -/

@@ -43,7 +43,15 @@ lemma MonotoneOn.insert_of_continuousWithinAt
     · exact le_rfl
     simp only [ContinuousWithinAt] at h'x
     apply ge_of_tendsto h'x
-    have : s inter Ioi b in 𝓝[s] x := inter_mem_nhdsWithin _ (
+    have : s inter Ioi b in 𝓝[s] x := inter_mem_nhdsWithin _ (Ioi_mem_nhds hbx)
+    filter_upwards [this] with y hy using hf hb hy.1 (le_of_lt hy.2)
+  · rcases hxb.eq_or_lt with rfl | hxb
+    · exact le_rfl
+    simp only [ContinuousWithinAt] at h'x
+    apply le_of_tendsto h'x
+    have : s inter Iio b in 𝓝[s] x := inter_mem_nhdsWithin _ (Iio_mem_nhds hxb)
+    filter_upwards [this] with y hy
+    exact hf hy.1 hb (le_of_lt hy.2)
 
 中文:
 引理 MonotoneOn.insert_of_continuousWithinAt
@@ -55,7 +63,15 @@ lemma MonotoneOn.insert_of_continuousWithinAt
     · exact le_rfl
     simp only [ContinuousWithinAt] at h'x
     apply ge_of_tendsto h'x
-    have : s inter Ioi b in 𝓝[s] x := inter_mem_nhdsWithin _ (
+    have : s inter Ioi b in 𝓝[s] x := inter_mem_nhdsWithin _ (Ioi_mem_nhds hbx)
+    filter_upwards [this] with y hy using hf hb hy.1 (le_of_lt hy.2)
+  · rcases hxb.eq_or_lt with rfl | hxb
+    · exact le_rfl
+    simp only [ContinuousWithinAt] at h'x
+    apply le_of_tendsto h'x
+    have : s inter Iio b in 𝓝[s] x := inter_mem_nhdsWithin _ (Iio_mem_nhds hxb)
+    filter_upwards [this] with y hy
+    exact hf hy.1 hb (le_of_lt hy.2)
 
 Depends on / 依赖: ContinuousWithinAt, Ioi_mem_nhds, eq_or_lt, filter_upwards, ge_of_tendsto, hbx.eq_or_lt, hxb.eq_or_lt, inter_mem_nhdsWithin, le_of_lt, le_of_tendsto, le_rfl, monotoneOn_insert_iff
 -/
@@ -90,7 +106,33 @@ lemma MonotoneOn.countable_setOfPred_two_preimages
   have : forall c in t, exists x, exists y, x in s ∧ y in s ∧ x < y ∧ f x = c ∧ f y = c := fun c hc => hc
   choose! x y hxs hys hxy hfx hfy using this
   let u := x '' t
-  suffices H : Set.Countable 
+  suffices H : Set.Countable (x '' t) by
+    have : Set.InjOn x t := by
+      intro c hc d hd hcd
+      have : f (x c) = f (x d) := by simp [hcd]
+      rwa [hfx _ hc, hfx _ hd] at this
+    exact countable_of_injective_of_countable_image this H
+  apply Set.PairwiseDisjoint.countable_of_Ioo (y := fun a => y (f a)); swap
+  · rintro a ⟨c, hc, rfl⟩
+    rw [hfx _ hc]
+    exact hxy _ hc
+  simp only [PairwiseDisjoint, Set.Pairwise, mem_image, onFun, forall_exists_index, and_imp,
+    forall_apply_eq_imp_iff₂]
+  intro c hc d hd hcd
+  wlog H : c < d generalizing c d with h
+  · apply (h d hd c hc hcd.symm ?_).symm
+    have : c != d := fun h => hcd (congrArg x h)
+    order
+  simp only [disjoint_iff_forall_ne, mem_Ioo, ne_eq, and_imp]
+  rintro a xca ayc b xda ayd rfl
+  rw [hfx _ hc] at ayc
+  have : x d <= y c := (xda.trans ayc).le
+  have : f (x d) <= f (y c) := hf (hxs _ hd) (hys _ hc) this
+  rw [hfx _ hd]; rw [hfy _ hc] at this
+  exact not_le.2 H this
+
+@[deprecated (since := "2026-07-09")] alias MonotoneOn.countable_setOf_two_preimages :=
+  MonotoneOn.countable_setOfPred_two_preimages
 
 中文:
 引理 MonotoneOn.countable_setOfPred_two_preimages
@@ -101,7 +143,33 @@ lemma MonotoneOn.countable_setOfPred_two_preimages
   have : forall c in t, exists x, exists y, x in s ∧ y in s ∧ x < y ∧ f x = c ∧ f y = c := fun c hc => hc
   choose! x y hxs hys hxy hfx hfy using this
   let u := x '' t
-  suffices H : Set.Countable 
+  suffices H : Set.Countable (x '' t) by
+    have : Set.InjOn x t := by
+      intro c hc d hd hcd
+      have : f (x c) = f (x d) := by simp [hcd]
+      rwa [hfx _ hc, hfx _ hd] at this
+    exact countable_of_injective_of_countable_image this H
+  apply Set.PairwiseDisjoint.countable_of_Ioo (y := fun a => y (f a)); swap
+  · rintro a ⟨c, hc, rfl⟩
+    rw [hfx _ hc]
+    exact hxy _ hc
+  simp only [PairwiseDisjoint, Set.Pairwise, mem_image, onFun, forall_exists_index, and_imp,
+    forall_apply_eq_imp_iff₂]
+  intro c hc d hd hcd
+  wlog H : c < d generalizing c d with h
+  · apply (h d hd c hc hcd.symm ?_).symm
+    have : c != d := fun h => hcd (congrArg x h)
+    order
+  simp only [disjoint_iff_forall_ne, mem_Ioo, ne_eq, and_imp]
+  rintro a xca ayc b xda ayd rfl
+  rw [hfx _ hc] at ayc
+  have : x d <= y c := (xda.trans ayc).le
+  have : f (x d) <= f (y c) := hf (hxs _ hd) (hys _ hc) this
+  rw [hfx _ hd]; rw [hfy _ hc] at this
+  exact not_le.2 H this
+
+@[deprecated (since := "2026-07-09")] alias MonotoneOn.countable_setOf_two_preimages :=
+  MonotoneOn.countable_setOfPred_two_preimages
 
 Depends on / 依赖: Countable, PairwiseDisjo, Set.Countable, Set.InjOn, Set.PairwiseDisjo, countable_of_injective_of_countable_image, nontriviality
 -/
@@ -250,7 +318,12 @@ theorem MonotoneOn.countable_not_continuousWithinAt_Ioi
   contrapose! hx
   refine tendsto_order.2 ⟨fun m hm => ?_, fun u hu => ?_⟩
   · filter_upwards [@self_mem_nhdsWithin _ _ x (s inter Ioi x)] with y hy
-  
+    exact hm.trans_le (hf xs hy.1 (le_of_lt hy.2))
+  rcases hx xs u hu with ⟨v, vs, xv, fvu⟩
+  have : s inter Ioo x v in 𝓝[s inter Ioi x] x := by simp [nhdsWithin_inter, mem_inf_of_left,
+    self_mem_nhdsWithin, mem_inf_of_right, Ioo_mem_nhdsGT xv]
+  filter_upwards [this] with y hy
+  exact (hf hy.1 vs hy.2.2.le).trans_lt fvu
 
 中文:
 定理 MonotoneOn.countable_not_continuousWithinAt_Ioi
@@ -262,7 +335,12 @@ theorem MonotoneOn.countable_not_continuousWithinAt_Ioi
   contrapose! hx
   refine tendsto_order.2 ⟨fun m hm => ?_, fun u hu => ?_⟩
   · filter_upwards [@self_mem_nhdsWithin _ _ x (s inter Ioi x)] with y hy
-  
+    exact hm.trans_le (hf xs hy.1 (le_of_lt hy.2))
+  rcases hx xs u hu with ⟨v, vs, xv, fvu⟩
+  have : s inter Ioo x v in 𝓝[s inter Ioi x] x := by simp [nhdsWithin_inter, mem_inf_of_left,
+    self_mem_nhdsWithin, mem_inf_of_right, Ioo_mem_nhdsGT xv]
+  filter_upwards [this] with y hy
+  exact (hf hy.1 vs hy.2.2.le).trans_lt fvu
 
 Depends on / 依赖: ContinuousWithinAt, contrapose, countable_image_lt_image_Ioi_within, filter_upwards, hm.trans_le, le_of_lt, mem_inf_of_left, mem_inf_of_rig, mem_ofPred_eq, nhdsWithin_inter, self_mem_nhdsWithin, tendsto_order, trans_le
 -/
@@ -313,7 +391,7 @@ theorem MonotoneOn.countable_not_continuousWithinAt
   rintro x ⟨hx, h'x⟩
   simp only [mem_compl_iff, mem_ofPred_eq, not_and, not_not] at hx h'x ⊢
   intro xs
-  exact continuousWithinAt_iff_c
+  exact continuousWithinAt_iff_continuous_left'_right'.2 ⟨h'x xs, hx xs⟩
 
 中文:
 定理 MonotoneOn.countable_not_continuousWithinAt
@@ -325,7 +403,7 @@ theorem MonotoneOn.countable_not_continuousWithinAt
   rintro x ⟨hx, h'x⟩
   simp only [mem_compl_iff, mem_ofPred_eq, not_and, not_not] at hx h'x ⊢
   intro xs
-  exact continuousWithinAt_iff_c
+  exact continuousWithinAt_iff_continuous_left'_right'.2 ⟨h'x xs, hx xs⟩
 
 Depends on / 依赖: _right, compl_subset_compl, compl_union, continuousWithinAt_iff_continuous_left, countable_not_continuousWithinAt_Iio, countable_not_continuousWithinAt_Ioi, hf.countable_not_continuousWithinAt_Iio, hf.countable_not_continuousWithinAt_Ioi.union, mem_compl_iff, mem_ofPred_eq, not_and, not_not
 -/
@@ -1201,7 +1279,11 @@ lemma MonotoneOn.tendsto_nhdsWithin_Ioo_left
   · obtain ⟨z, ⟨yz, zx⟩, lz⟩ : exists a : α, a in Ioo y x ∧ l < f a := by
       simpa only [mem_image, exists_prop, exists_exists_and_eq_and] using
         exists_lt_of_lt_csSup (h_nonempty.image _) hl
-    filter_upwards [Ioo_mem_nhdsLT zx
+    filter_upwards [Ioo_mem_nhdsLT zx] with w hw
+exact lz.trans_le Mf ⟨yz, zx⟩ ⟨yz.trans_le hw.1.le, hw.2⟩ hw.1.le
+  · rcases h_nonempty with ⟨_, hy, hx⟩
+    filter_upwards [Ioo_mem_nhdsLT (hy.trans hx)] with w hw
+    exact (le_csSup h_bdd (mem_image_of_mem _ hw)).trans_lt hm
 
 中文:
 引理 MonotoneOn.tendsto_nhdsWithin_Ioo_left
@@ -1211,7 +1293,11 @@ lemma MonotoneOn.tendsto_nhdsWithin_Ioo_left
   · obtain ⟨z, ⟨yz, zx⟩, lz⟩ : exists a : α, a in Ioo y x ∧ l < f a := by
       simpa only [mem_image, exists_prop, exists_exists_and_eq_and] using
         exists_lt_of_lt_csSup (h_nonempty.image _) hl
-    filter_upwards [Ioo_mem_nhdsLT zx
+    filter_upwards [Ioo_mem_nhdsLT zx] with w hw
+exact lz.trans_le Mf ⟨yz, zx⟩ ⟨yz.trans_le hw.1.le, hw.2⟩ hw.1.le
+  · rcases h_nonempty with ⟨_, hy, hx⟩
+    filter_upwards [Ioo_mem_nhdsLT (hy.trans hx)] with w hw
+    exact (le_csSup h_bdd (mem_image_of_mem _ hw)).trans_lt hm
 
 Depends on / 依赖: Ioo_mem_nhdsLT, exists_exists_and_eq_and, exists_lt_of_lt_csSup, exists_prop, filter_upwards, h_bdd, h_nonempty, h_nonempty.image, hy.trans, le_csSup, lz.trans_le, mem_image, mem_image_of_mem, tendsto_order, trans_le, yz.trans_le
 -/
@@ -1242,7 +1328,10 @@ lemma MonotoneOn.tendsto_nhdsWithin_Ioo_right
     filter_upwards [Ioo_mem_nhdsGT (hy.trans hx)] with w hw
 exact hl.trans_le csInf_le h_bdd (mem_image_of_mem _ hw)
   · obtain ⟨z, ⟨xz, zy⟩, zm⟩ : exists a : α, a in Ioo x y ∧ f a < m := by
-      sim
+      simpa [mem_image, exists_prop, exists_exists_and_eq_and] using
+        exists_lt_of_csInf_lt (h_nonempty.image _) hm
+    filter_upwards [Ioo_mem_nhdsGT xz] with w hw
+    exact (Mf ⟨hw.1, hw.2.trans zy⟩ ⟨xz, zy⟩ hw.2.le).trans_lt zm
 
 中文:
 引理 MonotoneOn.tendsto_nhdsWithin_Ioo_right
@@ -1253,7 +1342,10 @@ exact hl.trans_le csInf_le h_bdd (mem_image_of_mem _ hw)
     filter_upwards [Ioo_mem_nhdsGT (hy.trans hx)] with w hw
 exact hl.trans_le csInf_le h_bdd (mem_image_of_mem _ hw)
   · obtain ⟨z, ⟨xz, zy⟩, zm⟩ : exists a : α, a in Ioo x y ∧ f a < m := by
-      sim
+      simpa [mem_image, exists_prop, exists_exists_and_eq_and] using
+        exists_lt_of_csInf_lt (h_nonempty.image _) hm
+    filter_upwards [Ioo_mem_nhdsGT xz] with w hw
+    exact (Mf ⟨hw.1, hw.2.trans zy⟩ ⟨xz, zy⟩ hw.2.le).trans_lt zm
 
 Depends on / 依赖: Ioo_mem_nhdsGT, csInf_le, exists_exists_and_eq_and, exists_lt_of_csInf_lt, exists_prop, filter_upwards, h_bdd, h_nonempty, h_nonempty.image, hl.trans_le, hy.trans, mem_image, mem_image_of_mem, tendsto_order, trans_le, trans_lt
 -/
@@ -1283,7 +1375,10 @@ lemma MonotoneOn.tendsto_nhdsLT
   refine tendsto_order.2 ⟨fun l hl => ?_, fun m hm => ?_⟩
   · obtain ⟨z, zx, lz⟩ : exists a : α, a < x ∧ l < f a := by
       simpa only [mem_image, exists_prop, exists_exists_and_eq_and] using!
-        exists_lt_of_lt_csSup (h.image _
+        exists_lt_of_lt_csSup (h.image _) hl
+    filter_upwards [Ioo_mem_nhdsLT zx] with y hy using lz.trans_le (Mf zx hy.2 hy.1.le)
+  · refine mem_of_superset self_mem_nhdsWithin fun y hy => lt_of_le_of_lt ?_ hm
+    exact le_csSup h_bdd (mem_image_of_mem _ hy)
 
 中文:
 引理 MonotoneOn.tendsto_nhdsLT
@@ -1293,7 +1388,10 @@ lemma MonotoneOn.tendsto_nhdsLT
   refine tendsto_order.2 ⟨fun l hl => ?_, fun m hm => ?_⟩
   · obtain ⟨z, zx, lz⟩ : exists a : α, a < x ∧ l < f a := by
       simpa only [mem_image, exists_prop, exists_exists_and_eq_and] using!
-        exists_lt_of_lt_csSup (h.image _
+        exists_lt_of_lt_csSup (h.image _) hl
+    filter_upwards [Ioo_mem_nhdsLT zx] with y hy using lz.trans_le (Mf zx hy.2 hy.1.le)
+  · refine mem_of_superset self_mem_nhdsWithin fun y hy => lt_of_le_of_lt ?_ hm
+    exact le_csSup h_bdd (mem_image_of_mem _ hy)
 
 Depends on / 依赖: Ioo_mem_nhdsLT, eq_empty_or_nonempty, exists_exists_and_eq_and, exists_lt_of_lt_csSup, exists_prop, filter_upwards, h.image, h_bdd, le_csSup, lt_of_le_of_lt, lz.trans_le, mem_image, mem_image_of_mem, mem_of_superset, self_mem_nhdsWithin, tendsto_order, trans_le
 -/

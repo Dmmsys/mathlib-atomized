@@ -138,7 +138,8 @@ lemma semivariation_le_variation
   suffices (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation <= μ.variation from this s
   apply variation_le_of_forall_enorm_le (fun t ht => ?_)
   simp only [mapRange_apply, AddMonoidHom.coe_coe]
-  apply le_trans ?_ (enorm_measure_le_variat
+  apply le_trans ?_ (enorm_measure_le_variation _ _)
+  exact (ContinuousLinearMap.le_opENorm _ _).trans (mul_le_of_le_one_left (by positivity) hℓ)
 
 中文:
 引理 semivariation_le_variation
@@ -149,7 +150,8 @@ lemma semivariation_le_variation
   suffices (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation <= μ.variation from this s
   apply variation_le_of_forall_enorm_le (fun t ht => ?_)
   simp only [mapRange_apply, AddMonoidHom.coe_coe]
-  apply le_trans ?_ (enorm_measure_le_variat
+  apply le_trans ?_ (enorm_measure_le_variation _ _)
+  exact (ContinuousLinearMap.le_opENorm _ _).trans (mul_le_of_le_one_left (by positivity) hℓ)
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_coe, ContinuousLinearMap, ContinuousLinearMap.le_opENorm, coe_coe, continuous, enorm_measure_le_variation, iSup_le_iff, le_opENorm, le_trans, mapRange, mapRange_apply, mul_le_of_le_one_left, semivariation, variation, variation_le_of_forall_enorm_le
 -/
@@ -175,7 +177,11 @@ lemma enorm_apply_le_semivariation
   obtain ⟨ℓ, ℓ_norm, hℓ⟩ : exists ℓ : StrongDual Real E, ‖ℓ‖ <= 1 ∧ ℓ (μ s) = ‖μ s‖ :=
     exists_dual_vector'' _ _
   have h'ℓ : ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1} := by
-    simp [enorm_eq_nnnorm, ← NNReal.coe_le_one, ℓ_nor
+    simp [enorm_eq_nnnorm, ← NNReal.coe_le_one, ℓ_norm]
+  calc ‖μ s‖ₑ
+  _ = ‖(μ.mapRange (ℓ : E ->+ Real) ℓ.continuous) s‖ₑ := by simp [← ofReal_norm, hℓ]
+  _ <= (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s := enorm_measure_le_variation _ _
+  _ <= μ.semivariation s := by apply le_biSup _ h'ℓ
 
 中文:
 引理 enorm_apply_le_semivariation
@@ -186,7 +192,11 @@ lemma enorm_apply_le_semivariation
   obtain ⟨ℓ, ℓ_norm, hℓ⟩ : exists ℓ : StrongDual Real E, ‖ℓ‖ <= 1 ∧ ℓ (μ s) = ‖μ s‖ :=
     exists_dual_vector'' _ _
   have h'ℓ : ℓ in {ℓ : StrongDual Real E | ‖ℓ‖ₑ <= 1} := by
-    simp [enorm_eq_nnnorm, ← NNReal.coe_le_one, ℓ_nor
+    simp [enorm_eq_nnnorm, ← NNReal.coe_le_one, ℓ_norm]
+  calc ‖μ s‖ₑ
+  _ = ‖(μ.mapRange (ℓ : E ->+ Real) ℓ.continuous) s‖ₑ := by simp [← ofReal_norm, hℓ]
+  _ <= (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s := enorm_measure_le_variation _ _
+  _ <= μ.semivariation s := by apply le_biSup _ h'ℓ
 
 Depends on / 依赖: MeasurableSet, NNReal, NNReal.coe_le_one, StrongDual, coe_le_one, continuous, enorm_eq_nnnorm, enorm_measure_le_variation, exists_dual_vector, mapRange, not_measurable, ofReal_norm, semivariation, variation
 -/
@@ -232,7 +242,10 @@ lemma exists_subset_lt_enorm_apply_of_lt_semivariation
     a < (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s := lt_biSup_iff.1 ha
   obtain ⟨t, ts, t_meas, ht⟩ :
       exists t subseteq s, MeasurableSet t ∧ a < 2 * ‖μ.mapRange (ℓ : E ->+ Real) ℓ.continuous t‖ₑ :=
-    Sig
+    SignedMeasure.exists_subset_lt_enorm_apply_of_lt_variation _ hs h'ℓ
+  refine ⟨t, ts, t_meas, ht.trans_le ?_⟩
+  gcongr
+  exact (ContinuousLinearMap.le_opENorm _ _).trans (mul_le_of_le_one_left (by positivity) hℓ)
 
 中文:
 引理 存在_subset_lt_enorm_apply_of_lt_semivariation
@@ -242,7 +255,10 @@ lemma exists_subset_lt_enorm_apply_of_lt_semivariation
     a < (μ.mapRange (ℓ : E ->+ Real) ℓ.continuous).variation s := lt_biSup_iff.1 ha
   obtain ⟨t, ts, t_meas, ht⟩ :
       exists t subseteq s, MeasurableSet t ∧ a < 2 * ‖μ.mapRange (ℓ : E ->+ Real) ℓ.continuous t‖ₑ :=
-    Sig
+    SignedMeasure.exists_subset_lt_enorm_apply_of_lt_variation _ hs h'ℓ
+  refine ⟨t, ts, t_meas, ht.trans_le ?_⟩
+  gcongr
+  exact (ContinuousLinearMap.le_opENorm _ _).trans (mul_le_of_le_one_left (by positivity) hℓ)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.le_opENorm, MeasurableSet, SignedMeasure, SignedMeasure.exists_subset_lt_enorm_apply_of_lt_variation, StrongDual, continuous, exists_subset_lt_enorm_apply_of_lt_variation, ht.trans_le, le_opENorm, lt_biSup_iff, mapRange, mul_le_of_le_one_left, subseteq, t_meas, trans_le, variation
 -/
@@ -269,7 +285,24 @@ lemma exists_one_le_enorm_apply_of_semivariation_eq_top
     rw [h's]
     finiteness
   have h't : 1 + ‖μ s‖ₑ <= ‖μ t‖ₑ := by
-    apply (ENNReal.mul_le_mul_iff_right (a := 2) (by simp) (by 
+    apply (ENNReal.mul_le_mul_iff_right (a := 2) (by simp) (by simp)).1
+    rw [mul_add]; rw [add_comm]; rw [mul_one]
+    exact ht.le
+  have I : ∞ <= μ.semivariation t + μ.semivariation (s \ t) := by
+    rw [← h's]
+    apply le_trans (semivariation_mono (by simp)) semivariation_union_le
+  simp only [top_le_iff, ENNReal.add_eq_top] at I
+  rcases I with hI | hI
+  · refine ⟨t, t_meas, ts, hI, ?_⟩
+    have : 1 + ‖μ s‖ₑ <= ‖μ (s \ t)‖ₑ + ‖μ s‖ₑ := by
+      apply h't.trans
+      have : μ t = μ s - μ (s \ t) := by rw [← of_add_of_sdiff t_meas hs ts]; abel
+      rw [this]; rw [add_comm]
+      exact enorm_sub_le
+    rwa [ENNReal.add_le_add_iff_right (by simp)] at this
+  · refine ⟨s \ t, hs.diff t_meas, sdiff_subset, hI, ?_⟩
+    simp only [_root_.sdiff_sdiff_right_self, ts, inf_of_le_right]
+    exact le_trans (by simp) h't
 
 中文:
 引理 存在_one_le_enorm_apply_of_semivariation_eq_top
@@ -279,7 +312,24 @@ lemma exists_one_le_enorm_apply_of_semivariation_eq_top
     rw [h's]
     finiteness
   have h't : 1 + ‖μ s‖ₑ <= ‖μ t‖ₑ := by
-    apply (ENNReal.mul_le_mul_iff_right (a := 2) (by simp) (by 
+    apply (ENNReal.mul_le_mul_iff_right (a := 2) (by simp) (by simp)).1
+    rw [mul_add]; rw [add_comm]; rw [mul_one]
+    exact ht.le
+  have I : ∞ <= μ.semivariation t + μ.semivariation (s \ t) := by
+    rw [← h's]
+    apply le_trans (semivariation_mono (by simp)) semivariation_union_le
+  simp only [top_le_iff, ENNReal.add_eq_top] at I
+  rcases I with hI | hI
+  · refine ⟨t, t_meas, ts, hI, ?_⟩
+    have : 1 + ‖μ s‖ₑ <= ‖μ (s \ t)‖ₑ + ‖μ s‖ₑ := by
+      apply h't.trans
+      have : μ t = μ s - μ (s \ t) := by rw [← of_add_of_sdiff t_meas hs ts]; abel
+      rw [this]; rw [add_comm]
+      exact enorm_sub_le
+    rwa [ENNReal.add_le_add_iff_right (by simp)] at this
+  · refine ⟨s \ t, hs.diff t_meas, sdiff_subset, hI, ?_⟩
+    simp only [_root_.sdiff_sdiff_right_self, ts, inf_of_le_right]
+    exact le_trans (by simp) h't
 -/
 private lemma exists_one_le_enorm_apply_of_semivariation_eq_top
     (hs : MeasurableSet s) (h's : μ.semivariation s = ∞) :
@@ -319,7 +369,34 @@ lemma semivariation_univ_lt_top
   have A (s : Set X) (hs : MeasurableSet s) (h's : μ.semivariation s = ∞) :
       exists t, MeasurableSet t ∧ t subseteq s ∧ μ.semivariation t = ∞ ∧ 1 <= ‖μ (s \ t)‖ₑ :=
     exists_one_le_enorm_apply_of_semivariation_eq_top hs h's
-  choose! t t_meas t_subs t_var ht
+  choose! t t_meas t_subs t_var ht using A
+  let s n := t^[n] univ
+  have hs n : MeasurableSet (s n) ∧ μ.semivariation (s n) = ∞ := by
+    induction n with
+    | zero => simp [s, h]
+    | succ n ih =>
+      simp only [Function.iterate_succ', Function.comp_apply, s]
+      exact ⟨t_meas _ ih.1 ih.2, t_var _ ih.1 ih.2⟩
+  let u n := s n \ s (n + 1)
+  have hu n : 1 <= ‖μ (u n)‖ₑ := by
+    simp only [Function.iterate_succ', Function.comp_apply, u, s]
+    exact ht _ (hs n).1 (hs n).2
+  have s_anti : Antitone s := by
+    apply antitone_nat_of_succ_le (fun n => ?_)
+    simp only [Function.iterate_succ', Function.comp_apply, s]
+    apply t_subs _ (hs n).1 (hs n).2
+  have u_disj : Pairwise (Disjoint on u) := by
+    apply (pairwise_disjoint_on _).2 (fun m n hmn => ?_)
+    have : Disjoint (u m) (s (m + 1)) := by simp [u, disjoint_sdiff_left]
+    apply this.mono_right
+    simp only [sdiff_le_iff, sup_eq_union, u]
+    exact Subset.trans (s_anti (by grind)) subset_union_right
+  have : HasSum (fun i => μ (u i)) (μ (⋃ i, u i)) :=
+    hasSum_of_disjoint_iUnion (fun n => (hs n).1.diff (hs (n + 1)).1) u_disj
+  have : Tendsto (fun x => ‖μ (u x)‖ₑ) atTop (𝓝 0) :=
+    tendsto_zero_iff_enorm_tendsto_zero.1 this.summable.tendsto_atTop_zero
+  obtain ⟨n, hn⟩ : exists n, ‖μ (u n)‖ₑ < 1 := ((tendsto_order.1 this).2 _ zero_lt_one).exists
+  order [hu n]
 
 中文:
 引理 semivariation_univ_lt_top
@@ -329,7 +406,34 @@ lemma semivariation_univ_lt_top
   have A (s : Set X) (hs : MeasurableSet s) (h's : μ.semivariation s = ∞) :
       exists t, MeasurableSet t ∧ t subseteq s ∧ μ.semivariation t = ∞ ∧ 1 <= ‖μ (s \ t)‖ₑ :=
     exists_one_le_enorm_apply_of_semivariation_eq_top hs h's
-  choose! t t_meas t_subs t_var ht
+  choose! t t_meas t_subs t_var ht using A
+  let s n := t^[n] univ
+  have hs n : MeasurableSet (s n) ∧ μ.semivariation (s n) = ∞ := by
+    induction n with
+    | zero => simp [s, h]
+    | succ n ih =>
+      simp only [Function.iterate_succ', Function.comp_apply, s]
+      exact ⟨t_meas _ ih.1 ih.2, t_var _ ih.1 ih.2⟩
+  let u n := s n \ s (n + 1)
+  have hu n : 1 <= ‖μ (u n)‖ₑ := by
+    simp only [Function.iterate_succ', Function.comp_apply, u, s]
+    exact ht _ (hs n).1 (hs n).2
+  have s_anti : Antitone s := by
+    apply antitone_nat_of_succ_le (fun n => ?_)
+    simp only [Function.iterate_succ', Function.comp_apply, s]
+    apply t_subs _ (hs n).1 (hs n).2
+  have u_disj : Pairwise (Disjoint on u) := by
+    apply (pairwise_disjoint_on _).2 (fun m n hmn => ?_)
+    have : Disjoint (u m) (s (m + 1)) := by simp [u, disjoint_sdiff_left]
+    apply this.mono_right
+    simp only [sdiff_le_iff, sup_eq_union, u]
+    exact Subset.trans (s_anti (by grind)) subset_union_right
+  have : HasSum (fun i => μ (u i)) (μ (⋃ i, u i)) :=
+    hasSum_of_disjoint_iUnion (fun n => (hs n).1.diff (hs (n + 1)).1) u_disj
+  have : Tendsto (fun x => ‖μ (u x)‖ₑ) atTop (𝓝 0) :=
+    tendsto_zero_iff_enorm_tendsto_zero.1 this.summable.tendsto_atTop_zero
+  obtain ⟨n, hn⟩ : exists n, ‖μ (u n)‖ₑ < 1 := ((tendsto_order.1 this).2 _ zero_lt_one).exists
+  order [hu n]
 -/
 private lemma semivariation_univ_lt_top : μ.semivariation univ < ∞ := by
   apply Ne.lt_top (fun h => ?_)

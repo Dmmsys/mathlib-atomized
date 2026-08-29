@@ -203,7 +203,8 @@ instance :
     obtain ⟨hzH, x, hxP, u, rfl⟩ := hz
     exact subset_closure ⟨by aesop, g * x * g⁻¹, by aesop, g * u * g⁻¹, by group⟩
   | one => simp
-  | mu
+  | mul _ _ _ _ IHa IHb => simpa using mul_mem IHa IHb
+  | inv _ _ IH => simpa [mul_assoc] using inv_mem IH
 
 中文:
 实例 :
@@ -216,7 +217,8 @@ instance :
     obtain ⟨hzH, x, hxP, u, rfl⟩ := hz
     exact subset_closure ⟨by aesop, g * x * g⁻¹, by aesop, g * u * g⁻¹, by group⟩
   | one => simp
-  | mu
+  | mul _ _ _ _ IHa IHb => simpa using mul_mem IHa IHb
+  | inv _ _ IH => simpa [mul_assoc] using inv_mem IH
 
 Depends on / 依赖: closure_induction, focalSubgroupOf_def, focalSubgroup_le, inv_mem, mul_assoc, mul_mem, normal_subgroupOf_iff, subset_closure
 -/
@@ -449,7 +451,7 @@ theorem transferFocal_eq_pow
   rw [transferFocal]; rw [index_eq_sum_minimalPeriod H x]; rw [← Finset.prod_pow_eq_pow_sum]; rw [MonoidHom.transfer_eq_prod_quotient_orbitRel_zpowers_quot]
   apply Finset.prod_congr rfl
   intros
-
+  apply focalSubgroupOf.mk'_conj_eq H
 
 中文:
 定理 transferFocal_eq_pow
@@ -460,7 +462,7 @@ theorem transferFocal_eq_pow
   rw [transferFocal]; rw [index_eq_sum_minimalPeriod H x]; rw [← Finset.prod_pow_eq_pow_sum]; rw [MonoidHom.transfer_eq_prod_quotient_orbitRel_zpowers_quot]
   apply Finset.prod_congr rfl
   intros
-
+  apply focalSubgroupOf.mk'_conj_eq H
 
 Depends on / 依赖: Finset, Finset.prod_congr, Finset.prod_pow_eq_pow_sum, Fintype, Fintype.ofFinite, MonoidHom, MonoidHom.transfer_eq_prod_quotient_orbitRel_zpowers_quot, MulAction, MulAction.orbitRel, Quotient, _conj_eq, focalSubgroupOf, focalSubgroupOf.mk, index_eq_sum_minimalPeriod, intros, ofFinite, orbitRel, prod_congr, prod_pow_eq_pow_sum, transferFocal
 -/

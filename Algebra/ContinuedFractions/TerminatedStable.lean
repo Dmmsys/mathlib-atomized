@@ -111,7 +111,11 @@ theorem convs'Aux_stable_step_of_terminated
     cases s_head_eq : s.head with
     | none => simp only [convs'Aux, s_head_eq]
     | some gp_head =>
-      have : s.tail.TerminatedAt
+      have : s.tail.TerminatedAt n := by
+        simp only [Stream'.Seq.TerminatedAt, s.get?_tail, terminatedAt_n]
+      have := IH this
+      rw [convs'Aux] at this
+      simp [this, convs'Aux, s_head_eq]
 
 中文:
 定理 convs'Aux_stable_step_of_terminated
@@ -124,7 +128,11 @@ theorem convs'Aux_stable_step_of_terminated
     cases s_head_eq : s.head with
     | none => simp only [convs'Aux, s_head_eq]
     | some gp_head =>
-      have : s.tail.TerminatedAt
+      have : s.tail.TerminatedAt n := by
+        simp only [Stream'.Seq.TerminatedAt, s.get?_tail, terminatedAt_n]
+      have := IH this
+      rw [convs'Aux] at this
+      simp [this, convs'Aux, s_head_eq]
 -/
 theorem convs'Aux_stable_step_of_terminated {s : Stream'.Seq <| Pair K}
     (terminatedAt_n : s.TerminatedAt n) : convs'Aux s (n + 1) = convs'Aux s n := by

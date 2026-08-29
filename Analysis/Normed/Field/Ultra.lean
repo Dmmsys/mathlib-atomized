@@ -53,7 +53,7 @@ lemma isUltrametricDist_of_forall_norm_add_one_le_max_norm_one
   · simpa only [add_zero] using le_max_left _ _
   · have p : 0 < ‖y‖ := norm_pos_iff.mpr hy
     simpa only [div_add_one hy, norm_div, div_le_iff₀ p, max_mul_of_nonneg _ _ p.le, one_mul,
- 
+      div_mul_cancel₀ _ p.ne'] using h (x / y)
 
 中文:
 引理 isUltrametricDist_of_对任意_norm_add_one_le_max_norm_one
@@ -63,7 +63,7 @@ lemma isUltrametricDist_of_forall_norm_add_one_le_max_norm_one
   · simpa only [add_zero] using le_max_left _ _
   · have p : 0 < ‖y‖ := norm_pos_iff.mpr hy
     simpa only [div_add_one hy, norm_div, div_le_iff₀ p, max_mul_of_nonneg _ _ p.le, one_mul,
- 
+      div_mul_cancel₀ _ p.ne'] using h (x / y)
 
 Depends on / 依赖: add_zero, div_add_one, eq_or_ne, isUltrametricDist_of_forall_norm_add_le_max_norm, le_max_left, max_mul_of_nonneg, norm_div, norm_pos_iff, norm_pos_iff.mpr, one_mul, p.le, p.ne
 -/
@@ -86,7 +86,9 @@ lemma isUltrametricDist_of_forall_norm_add_one_of_norm_le_one
   rcases le_or_gt ‖x‖ 1 with H | H
   · exact (h _ H).trans (le_max_right _ _)
   · suffices ‖x + 1‖ <= ‖x‖ from this.trans (le_max_left _ _)
-    rw [← div_le_one (by positivity)]; rw [← norm_div]; rw [add_div]; rw [div_s
+    rw [← div_le_one (by positivity)]; rw [← norm_div]; rw [add_div]; rw [div_self (by simpa using H.trans' zero_lt_one)]; rw [add_comm]
+    apply h
+    simp [inv_le_one_iff₀, H.le]
 
 中文:
 引理 isUltrametricDist_of_对任意_norm_add_one_of_norm_le_one
@@ -95,7 +97,9 @@ lemma isUltrametricDist_of_forall_norm_add_one_of_norm_le_one
   rcases le_or_gt ‖x‖ 1 with H | H
   · exact (h _ H).trans (le_max_right _ _)
   · suffices ‖x + 1‖ <= ‖x‖ from this.trans (le_max_left _ _)
-    rw [← div_le_one (by positivity)]; rw [← norm_div]; rw [add_div]; rw [div_s
+    rw [← div_le_one (by positivity)]; rw [← norm_div]; rw [add_div]; rw [div_self (by simpa using H.trans' zero_lt_one)]; rw [add_comm]
+    apply h
+    simp [inv_le_one_iff₀, H.le]
 
 Depends on / 依赖: H.le, H.trans, add_comm, add_div, div_le_one, div_self, isUltrametricDist_of_forall_norm_add_one_le_max_norm_one, le_max_left, le_max_right, le_or_gt, norm_div, this.trans, zero_lt_one
 -/
@@ -143,7 +147,27 @@ lemma isUltrametricDist_of_forall_pow_norm_le_nsmul_pow_max_one_norm
   -- it will suffice to prove that `‖x + 1‖ ≤ max 1 ‖x‖`
   refine isUltrametricDist_of_forall_norm_add_one_le_max_norm_one fun x => ?_
   -- Morally, we want to deduce this from the hypothesis `h` by taking an `m`-th root and showing
-  -- that `(m + 1) ^ (1 / m)` gets arbitrarily close to 1, altho
+  -- that `(m + 1) ^ (1 / m)` gets arbitrarily close to 1, although we will formalise this in a way
+  -- that avoids explicitly mentioning `m`-th roots.
+  -- First note it suffices to show that `‖x + 1‖ ≤ a` for all `a : ℝ` with `max ‖x‖ 1 < a`.
+  rw [max_comm]
+  refine le_of_forall_gt_imp_ge_of_dense fun a ha => ?_
+  have ha' : 1 < a := (max_lt_iff.mp ha).left
+  -- `max 1 ‖x‖ < a`, so there must be some `m : ℕ` such that `m + 1 < (a / max 1 ‖x‖) ^ m`
+  -- by the virtue of exponential growth being faster than linear growth
+  obtain ⟨m, hm⟩ : exists m : Nat, ((m + 1) : Nat) < (a / (max 1 ‖x‖)) ^ m := by
+    apply_mod_cast Real.exists_natCast_add_one_lt_pow_of_one_lt
+    rwa [one_lt_div (by positivity)]
+  -- and we rearrange again to get `(m + 1) • max 1 ‖x‖ ^ m < a ^ m`
+  rw [div_pow]; rw [lt_div_iff₀ (by positivity)]; rw [← nsmul_eq_mul] at hm
+  -- which squeezes down to get our `‖x + 1‖ ≤ a` using our to-be-proven hypothesis of
+  -- `‖x + 1‖ ^ m ≤ (m + 1) • max 1 ‖x‖ ^ m`, so we're done
+  -- we can distribute powers into the right term of `max`
+  have hp : max 1 ‖x‖ ^ m = max 1 (‖x‖ ^ m) := by
+    rw [pow_left_monotoneOn.map_max (by simp [zero_le_one]) (norm_nonneg x), one_pow]
+  rw [hp] at hm
+  refine le_of_pow_le_pow_left₀ (fun h => ?_) (zero_lt_one.trans ha').le ((h _ _).trans hm.le)
+  simp only [h, zero_add, pow_zero, max_self, one_smul, lt_self_iff_false] at hm
 
 中文:
 引理 isUltrametricDist_of_对任意_pow_norm_le_nsmul_pow_max_one_norm
@@ -151,7 +175,27 @@ lemma isUltrametricDist_of_forall_pow_norm_le_nsmul_pow_max_one_norm
   -- it will suffice to prove that `‖x + 1‖ ≤ max 1 ‖x‖`
   refine isUltrametricDist_of_forall_norm_add_one_le_max_norm_one fun x => ?_
   -- Morally, we want to deduce this from the hypothesis `h` by taking an `m`-th root and showing
-  -- that `(m + 1) ^ (1 / m)` gets arbitrarily close to 1, altho
+  -- that `(m + 1) ^ (1 / m)` gets arbitrarily close to 1, although we will formalise this in a way
+  -- that avoids explicitly mentioning `m`-th roots.
+  -- First note it suffices to show that `‖x + 1‖ ≤ a` for all `a : ℝ` with `max ‖x‖ 1 < a`.
+  rw [max_comm]
+  refine le_of_forall_gt_imp_ge_of_dense fun a ha => ?_
+  have ha' : 1 < a := (max_lt_iff.mp ha).left
+  -- `max 1 ‖x‖ < a`, so there must be some `m : ℕ` such that `m + 1 < (a / max 1 ‖x‖) ^ m`
+  -- by the virtue of exponential growth being faster than linear growth
+  obtain ⟨m, hm⟩ : exists m : Nat, ((m + 1) : Nat) < (a / (max 1 ‖x‖)) ^ m := by
+    apply_mod_cast Real.exists_natCast_add_one_lt_pow_of_one_lt
+    rwa [one_lt_div (by positivity)]
+  -- and we rearrange again to get `(m + 1) • max 1 ‖x‖ ^ m < a ^ m`
+  rw [div_pow]; rw [lt_div_iff₀ (by positivity)]; rw [← nsmul_eq_mul] at hm
+  -- which squeezes down to get our `‖x + 1‖ ≤ a` using our to-be-proven hypothesis of
+  -- `‖x + 1‖ ^ m ≤ (m + 1) • max 1 ‖x‖ ^ m`, so we're done
+  -- we can distribute powers into the right term of `max`
+  have hp : max 1 ‖x‖ ^ m = max 1 (‖x‖ ^ m) := by
+    rw [pow_left_monotoneOn.map_max (by simp [zero_le_one]) (norm_nonneg x), one_pow]
+  rw [hp] at hm
+  refine le_of_pow_le_pow_left₀ (fun h => ?_) (zero_lt_one.trans ha').le ((h _ _).trans hm.le)
+  simp only [h, zero_add, pow_zero, max_self, one_smul, lt_self_iff_false] at hm
 -/
 lemma isUltrametricDist_of_forall_pow_norm_le_nsmul_pow_max_one_norm
     (h : forall (x : R) (m : Nat), ‖x + 1‖ ^ m <= (m + 1) • max 1 (‖x‖ ^ m)) :
@@ -191,7 +235,32 @@ lemma isUltrametricDist_of_forall_norm_natCast_le_one
   -- `‖x + 1‖ ^ m ≤ (m + 1) • max 1 ‖x‖ ^ m`
   refine isUltrametricDist_of_forall_pow_norm_le_nsmul_pow_max_one_norm (fun x m => ?_)
   -- we first use our hypothesis about the norm of naturals to have that multiplication by
- 
+  -- naturals keeps the norm small
+  replace h (x : R) (n : Nat) : ‖n • x‖ <= ‖x‖ := by
+    rw [nsmul_eq_mul]; rw [norm_mul]
+    rcases (norm_nonneg x).eq_or_lt with hx | hx
+    · simp only [← hx, mul_zero, le_refl]
+    · simpa only [mul_le_iff_le_one_left hx] using h _
+  -- we expand the LHS using the binomial theorem, and apply the hypothesis to bound each term by
+  -- a power of ‖x‖
+  transitivity ∑ k in Finset.range (m + 1), ‖x‖ ^ k
+  · simpa only [← norm_pow, (Commute.one_right x).add_pow, one_pow, mul_one, nsmul_eq_mul,
+      Nat.cast_comm] using (norm_sum_le _ _).trans (Finset.sum_le_sum fun _ _ => h _ _)
+  -- the nature of the norm means that one of `1` and `‖x‖ ^ m` is the largest of the two, so the
+  -- other terms in the binomial expansion are bounded by the max of these, and the number of terms
+  -- in the sum is precisely `m + 1`
+  rw [← Finset.card_range (m + 1)]; rw [← Finset.sum_const]; rw [Finset.card_range]
+  rcases max_cases 1 (‖x‖ ^ m) with (⟨hm, hx⟩ | ⟨hm, hx⟩) <;> rw [hm] <;>
+  -- which we show by comparing the terms in the sum one by one
+  gcongr with i hi
+  · rcases eq_or_ne m 0 with rfl | hm
+    · simp only [pow_zero, le_refl,
+        show i = 0 by simpa only [zero_add, Finset.range_one, Finset.mem_singleton] using hi]
+    · rw [pow_le_one_iff_of_nonneg (norm_nonneg _) hm] at hx
+      exact pow_le_one₀ (norm_nonneg _) hx
+  · contrapose! hx
+    exact pow_le_one₀ (norm_nonneg _) hx.le
+  · simpa [Nat.lt_succ_iff] using hi
 
 中文:
 引理 isUltrametricDist_of_对任意_norm_natCast_le_one
@@ -200,7 +269,32 @@ lemma isUltrametricDist_of_forall_norm_natCast_le_one
   -- `‖x + 1‖ ^ m ≤ (m + 1) • max 1 ‖x‖ ^ m`
   refine isUltrametricDist_of_forall_pow_norm_le_nsmul_pow_max_one_norm (fun x m => ?_)
   -- we first use our hypothesis about the norm of naturals to have that multiplication by
- 
+  -- naturals keeps the norm small
+  replace h (x : R) (n : Nat) : ‖n • x‖ <= ‖x‖ := by
+    rw [nsmul_eq_mul]; rw [norm_mul]
+    rcases (norm_nonneg x).eq_or_lt with hx | hx
+    · simp only [← hx, mul_zero, le_refl]
+    · simpa only [mul_le_iff_le_one_left hx] using h _
+  -- we expand the LHS using the binomial theorem, and apply the hypothesis to bound each term by
+  -- a power of ‖x‖
+  transitivity ∑ k in Finset.range (m + 1), ‖x‖ ^ k
+  · simpa only [← norm_pow, (Commute.one_right x).add_pow, one_pow, mul_one, nsmul_eq_mul,
+      Nat.cast_comm] using (norm_sum_le _ _).trans (Finset.sum_le_sum fun _ _ => h _ _)
+  -- the nature of the norm means that one of `1` and `‖x‖ ^ m` is the largest of the two, so the
+  -- other terms in the binomial expansion are bounded by the max of these, and the number of terms
+  -- in the sum is precisely `m + 1`
+  rw [← Finset.card_range (m + 1)]; rw [← Finset.sum_const]; rw [Finset.card_range]
+  rcases max_cases 1 (‖x‖ ^ m) with (⟨hm, hx⟩ | ⟨hm, hx⟩) <;> rw [hm] <;>
+  -- which we show by comparing the terms in the sum one by one
+  gcongr with i hi
+  · rcases eq_or_ne m 0 with rfl | hm
+    · simp only [pow_zero, le_refl,
+        show i = 0 by simpa only [zero_add, Finset.range_one, Finset.mem_singleton] using hi]
+    · rw [pow_le_one_iff_of_nonneg (norm_nonneg _) hm] at hx
+      exact pow_le_one₀ (norm_nonneg _) hx
+  · contrapose! hx
+    exact pow_le_one₀ (norm_nonneg _) hx.le
+  · simpa [Nat.lt_succ_iff] using hi
 -/
 lemma isUltrametricDist_of_forall_norm_natCast_le_one
     (h : forall n : Nat, ‖(n : R)‖ <= 1) : IsUltrametricDist R := by

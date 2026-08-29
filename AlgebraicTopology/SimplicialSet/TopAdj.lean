@@ -560,7 +560,14 @@ lemma δ_one_toSSetObjI
   congr 2
   have : stdSimplexHomeomorphUnitInterval (⦋1⦌.toTopHomeo
       (((toTop.{u}.map (stdSimplex.δ 1)).hom) default)) = 0 := by
-    rw
+    rw [← stdSimplexHomeomorphUnitInterval_zero]
+    congr 1
+    refine (SimplexCategory.toTopHomeo_naturality_apply _ _).trans ?_
+    rw [Subsingleton.elim (⦋0⦌.toTopHomeo default) (stdSimplex.vertex 0)]; rw [stdSimplex.map_vertex]
+    rfl
+  exact congr_arg ULift.up.{u} this
+
+@[simp]
 
 中文:
 引理 δ_one_toSSetObjI
@@ -570,7 +577,14 @@ lemma δ_one_toSSetObjI
   congr 2
   have : stdSimplexHomeomorphUnitInterval (⦋1⦌.toTopHomeo
       (((toTop.{u}.map (stdSimplex.δ 1)).hom) default)) = 0 := by
-    rw
+    rw [← stdSimplexHomeomorphUnitInterval_zero]
+    congr 1
+    refine (SimplexCategory.toTopHomeo_naturality_apply _ _).trans ?_
+    rw [Subsingleton.elim (⦋0⦌.toTopHomeo default) (stdSimplex.vertex 0)]; rw [stdSimplex.map_vertex]
+    rfl
+  exact congr_arg ULift.up.{u} this
+
+@[simp]
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_left, SimplexCategory, SimplexCategory.toTopHomeo_naturality_apply, Subsingleton, Subsingleton.elim, TopCat, TopCat.stdSimplexHomeomorphI, homEquiv_naturality_left, map_vertex, sSetTopAdj_homEquiv_stdSimplex_zero, stdSimplex, stdSimplex.map_vertex, stdSimplex.vertex, stdSimplexHomeomorphI, stdSimplexHomeomorphUnitInterval, stdSimplexHomeomorphUnitInterval_zero, toSSetObjI, toTopHomeo, toTopHomeo_naturality_apply
 -/
@@ -600,7 +614,14 @@ lemma δ_zero_toSSetObjI
   congr 2
   have : stdSimplexHomeomorphUnitInterval (⦋1⦌.toTopHomeo
       (((toTop.{u}.map (stdSimplex.δ 0)).hom) default)) = 1 := by
-    rw
+    rw [← stdSimplexHomeomorphUnitInterval_one]
+    congr 1
+    refine (SimplexCategory.toTopHomeo_naturality_apply _ _).trans ?_
+    rw [Subsingleton.elim (⦋0⦌.toTopHomeo default) (stdSimplex.vertex 0)]; rw [stdSimplex.map_vertex]
+    rfl
+  exact congr_arg ULift.up.{u} this
+
+@[simp]
 
 中文:
 引理 δ_zero_toSSetObjI
@@ -610,7 +631,14 @@ lemma δ_zero_toSSetObjI
   congr 2
   have : stdSimplexHomeomorphUnitInterval (⦋1⦌.toTopHomeo
       (((toTop.{u}.map (stdSimplex.δ 0)).hom) default)) = 1 := by
-    rw
+    rw [← stdSimplexHomeomorphUnitInterval_one]
+    congr 1
+    refine (SimplexCategory.toTopHomeo_naturality_apply _ _).trans ?_
+    rw [Subsingleton.elim (⦋0⦌.toTopHomeo default) (stdSimplex.vertex 0)]; rw [stdSimplex.map_vertex]
+    rfl
+  exact congr_arg ULift.up.{u} this
+
+@[simp]
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_left, SimplexCategory, SimplexCategory.toTopHomeo_naturality_apply, Subsingleton, Subsingleton.elim, TopCat, TopCat.stdSimplexHomeomorphI, homEquiv_naturality_left, map_vertex, sSetTopAdj_homEquiv_stdSimplex_zero, stdSimplex, stdSimplex.map_vertex, stdSimplex.vertex, stdSimplexHomeomorphI, stdSimplexHomeomorphUnitInterval, stdSimplexHomeomorphUnitInterval_one, toSSetObjI, toTopHomeo, toTopHomeo_naturality_apply
 -/

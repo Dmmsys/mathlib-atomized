@@ -63,7 +63,19 @@ theorem Complex.norm_eventually_eq_of_mdifferentiableAt_of_isLocalMax
   have H₁ : 𝓝[range I] (e c) = 𝓝 (e c) := by rw [hI, nhdsWithin_univ]
   have H₂ : map e.symm (𝓝 (e c)) = 𝓝 c := by
     rw [← map_extChartAt_symm_nhdsWithin_range (I := I) c]; rw [H₁]
-  rw [← H₂]; r
+  rw [← H₂]; rw [eventually_map]
+  replace hd : forallᶠ y in 𝓝 (e c), DifferentiableAt Complex (f ∘ e.symm) y := by
+    have : e.target in 𝓝 (e c) := H₁ ▸ extChartAt_target_mem_nhdsWithin c
+    filter_upwards [this, Tendsto.eventually H₂.le hd] with y hyt hy₂
+    have hys : e.symm y in (chartAt H c).source := by
+      rw [← extChartAt_source I c]
+      exact (extChartAt I c).map_target hyt
+    have hfy : f (e.symm y) in (chartAt F (0 : F)).source := mem_univ _
+    rw [mdifferentiableAt_iff_of_mem_source hys hfy]; rw [hI]; rw [differentiableWithinAt_univ]; rw [e.right_inv hyt] at hy₂
+    exact hy₂.2
+  convert! norm_eventually_eq_of_isLocalMax hd _
+  · exact congr_arg f (extChartAt_to_inv _).symm
+  · simpa only [e, IsLocalMax, IsMaxFilter, ← H₂, (· ∘ ·), extChartAt_to_inv] using! hc
 
 中文:
 定理 复形.norm_eventually_eq_of_mdifferentiableAt_of_isLocalMax
@@ -74,7 +86,19 @@ theorem Complex.norm_eventually_eq_of_mdifferentiableAt_of_isLocalMax
   have H₁ : 𝓝[range I] (e c) = 𝓝 (e c) := by rw [hI, nhdsWithin_univ]
   have H₂ : map e.symm (𝓝 (e c)) = 𝓝 c := by
     rw [← map_extChartAt_symm_nhdsWithin_range (I := I) c]; rw [H₁]
-  rw [← H₂]; r
+  rw [← H₂]; rw [eventually_map]
+  replace hd : forallᶠ y in 𝓝 (e c), DifferentiableAt Complex (f ∘ e.symm) y := by
+    have : e.target in 𝓝 (e c) := H₁ ▸ extChartAt_target_mem_nhdsWithin c
+    filter_upwards [this, Tendsto.eventually H₂.le hd] with y hyt hy₂
+    have hys : e.symm y in (chartAt H c).source := by
+      rw [← extChartAt_source I c]
+      exact (extChartAt I c).map_target hyt
+    have hfy : f (e.symm y) in (chartAt F (0 : F)).source := mem_univ _
+    rw [mdifferentiableAt_iff_of_mem_source hys hfy]; rw [hI]; rw [differentiableWithinAt_univ]; rw [e.right_inv hyt] at hy₂
+    exact hy₂.2
+  convert! norm_eventually_eq_of_isLocalMax hd _
+  · exact congr_arg f (extChartAt_to_inv _).symm
+  · simpa only [e, IsLocalMax, IsMaxFilter, ← H₂, (· ∘ ·), extChartAt_to_inv] using! hc
 
 Depends on / 依赖: Boundaryless, DifferentiableAt, ModelWithCorners, ModelWithCorners.Boundaryless.range_eq_univ, Tendsto, Tendsto.eventually, e.symm, e.target, eventually, eventually_map, extChartAt, extChartAt_target_mem_nhdsWithin, filter_upwards, map_extChartAt_symm_nhdsWithin_range, nhdsWithin_univ, range_eq_univ, replace, target
 -/
@@ -118,7 +142,17 @@ theorem norm_eqOn_of_isPreconnected_of_isMaxOn
   have hVo : IsOpen V := by
     refine isOpen_iff_mem_nhds.2 fun x hx => inter_mem (ho.mem_nhds hx.1) ?_
     replace hm : IsLocalMax (‖f ·‖) x :=
-      mem_of_superset (ho.mem_nhds hx.1) fun z hz => (hm hz).o
+      mem_of_superset (ho.mem_nhds hx.1) fun z hz => (hm hz).out.trans_eq hx.2.symm
+    replace hd : forallᶠ y in 𝓝 x, MDiffAt f y :=
+      (eventually_mem_nhds_iff.2 (ho.mem_nhds hx.1)).mono fun z => hd.mdifferentiableAt
+    exact (Complex.norm_eventually_eq_of_mdifferentiableAt_of_isLocalMax hd hm).mono fun _ =>
+      (Eq.trans · hx.2)
+  have hVne : (U inter V).Nonempty := ⟨c, hcU, hcU, rfl⟩
+  set W := U inter {z | ‖f z‖ = ‖f c‖}ᶜ
+  have hWo : IsOpen W := hd.continuousOn.norm.isOpen_inter_preimage ho isOpen_ne
+  have hdVW : Disjoint V W := disjoint_compl_right.mono inf_le_right inf_le_right
+  have hUVW : U subseteq V union W := fun x hx => (eq_or_ne ‖f x‖ ‖f c‖).imp (.intro hx) (.intro hx)
+  exact hc.subset_left_of_subset_union hVo hWo hdVW hUVW hVne
 
 中文:
 定理 norm_eqOn_of_isPreconnected_of_isMaxOn
@@ -129,7 +163,17 @@ theorem norm_eqOn_of_isPreconnected_of_isMaxOn
   have hVo : IsOpen V := by
     refine isOpen_iff_mem_nhds.2 fun x hx => inter_mem (ho.mem_nhds hx.1) ?_
     replace hm : IsLocalMax (‖f ·‖) x :=
-      mem_of_superset (ho.mem_nhds hx.1) fun z hz => (hm hz).o
+      mem_of_superset (ho.mem_nhds hx.1) fun z hz => (hm hz).out.trans_eq hx.2.symm
+    replace hd : forallᶠ y in 𝓝 x, MDiffAt f y :=
+      (eventually_mem_nhds_iff.2 (ho.mem_nhds hx.1)).mono fun z => hd.mdifferentiableAt
+    exact (Complex.norm_eventually_eq_of_mdifferentiableAt_of_isLocalMax hd hm).mono fun _ =>
+      (Eq.trans · hx.2)
+  have hVne : (U inter V).Nonempty := ⟨c, hcU, hcU, rfl⟩
+  set W := U inter {z | ‖f z‖ = ‖f c‖}ᶜ
+  have hWo : IsOpen W := hd.continuousOn.norm.isOpen_inter_preimage ho isOpen_ne
+  have hdVW : Disjoint V W := disjoint_compl_right.mono inf_le_right inf_le_right
+  have hUVW : U subseteq V union W := fun x hx => (eq_or_ne ‖f x‖ ‖f c‖).imp (.intro hx) (.intro hx)
+  exact hc.subset_left_of_subset_union hVo hWo hdVW hUVW hVne
 
 Depends on / 依赖: Complex.norm_eventually_eq_of_mdifferentiableAt_of_isLocalMax, IsLocalMax, IsOpen, MDiffAt, eventually_mem_nhds_iff, hd.mdifferentiableAt, ho.mem_nhds, inter_mem, isOpen_iff_mem_nhds, mdifferentiableAt, mem_nhds, mem_of_superset, norm_eventually_eq_of_mdifferentiableAt_of_isLocalMax, out.trans_eq, replace, subseteq, trans_eq
 -/
@@ -164,7 +208,7 @@ theorem eqOn_of_isPreconnected_of_isMaxOn_norm
   have hd' : MDiff[U] (f · + f c) := hd.add mdifferentiableOn_const
   have H₂ : ‖f x + f c‖ = ‖f c + f c‖ :=
     hd'.norm_eqOn_of_isPreconnected_of_isMaxOn hc ho hcU hm.norm_add_self hx
-eq_of_norm_eq_o
+eq_of_norm_eq_of_norm_add_eq H₁ by simp only [H₂, SameRay.rfl.norm_add, H₁, Function.const]
 
 中文:
 定理 eqOn_of_isPreconnected_of_isMaxOn_norm
@@ -174,7 +218,7 @@ eq_of_norm_eq_o
   have hd' : MDiff[U] (f · + f c) := hd.add mdifferentiableOn_const
   have H₂ : ‖f x + f c‖ = ‖f c + f c‖ :=
     hd'.norm_eqOn_of_isPreconnected_of_isMaxOn hc ho hcU hm.norm_add_self hx
-eq_of_norm_eq_o
+eq_of_norm_eq_of_norm_add_eq H₁ by simp only [H₂, SameRay.rfl.norm_add, H₁, Function.const]
 -/
 theorem eqOn_of_isPreconnected_of_isMaxOn_norm [StrictConvexSpace Real F] {f : M -> F} {U : Set M}
     {c : M} (hd : MDiff[U] f) (hc : IsPreconnected U) (ho : IsOpen U)
@@ -197,7 +241,11 @@ theorem apply_eq_of_isPreconnected_isCompact_isOpen
   -- TODO: Add `MDifferentiableOn.sub` etc
   · have hd' : MDiff[U] (f · - f b) := fun x hx =>
       ⟨(hd x hx).1.sub continuousWithinAt_const, (hd x hx).2.sub_const _⟩
-    simpa [sub_eq_zero]
+    simpa [sub_eq_zero] using this hd' (sub_self _)
+  rcases hc.exists_isMaxOn ⟨a, ha⟩ hd.continuousOn.norm with ⟨c, hcU, hc⟩
+  have : forall x in U, ‖f x‖ = ‖f c‖ :=
+    norm_eqOn_of_isPreconnected_of_isMaxOn hd hpc ho hcU hc
+  rw [hb₀]; rw [← norm_eq_zero]; rw [this a ha]; rw [← this b hb]; rw [hb₀]; rw [norm_zero]
 
 中文:
 定理 apply_eq_of_isPreconnected_isCompact_isOpen
@@ -208,7 +256,11 @@ theorem apply_eq_of_isPreconnected_isCompact_isOpen
   -- TODO: Add `MDifferentiableOn.sub` etc
   · have hd' : MDiff[U] (f · - f b) := fun x hx =>
       ⟨(hd x hx).1.sub continuousWithinAt_const, (hd x hx).2.sub_const _⟩
-    simpa [sub_eq_zero]
+    simpa [sub_eq_zero] using this hd' (sub_self _)
+  rcases hc.exists_isMaxOn ⟨a, ha⟩ hd.continuousOn.norm with ⟨c, hcU, hc⟩
+  have : forall x in U, ‖f x‖ = ‖f c‖ :=
+    norm_eqOn_of_isPreconnected_of_isMaxOn hd hpc ho hcU hc
+  rw [hb₀]; rw [← norm_eq_zero]; rw [this a ha]; rw [← this b hb]; rw [hb₀]; rw [norm_zero]
 -/
 theorem apply_eq_of_isPreconnected_isCompact_isOpen {f : M -> F} {U : Set M} {a b : M}
     (hd : MDiff[U] f) (hpc : IsPreconnected U) (hc : IsCompact U)
@@ -249,7 +301,8 @@ theorem isLocallyConstant
   proof: haveI : LocallyConnectedSpace H := I.toHomeomorph.locallyConnectedSpace
   haveI : LocallyConnectedSpace M := ChartedSpace.locallyConnectedSpace H M
   IsLocallyConstant.of_constant_on_preconnected_clopens fun _ hpc hclo _a ha _b hb =>
-    hf.mdifferentiableOn.apply_eq_of_isPreconnected_isCompact_isOp
+    hf.mdifferentiableOn.apply_eq_of_isPreconnected_isCompact_isOpen hpc
+      hclo.isClosed.isCompact hclo.isOpen hb ha
 
 中文:
 定理 isLocallyConstant
@@ -257,7 +310,8 @@ theorem isLocallyConstant
   证明: haveI : LocallyConnectedSpace H := I.toHomeomorph.locallyConnectedSpace
   haveI : LocallyConnectedSpace M := ChartedSpace.locallyConnectedSpace H M
   IsLocallyConstant.of_constant_on_preconnected_clopens fun _ hpc hclo _a ha _b hb =>
-    hf.mdifferentiableOn.apply_eq_of_isPreconnected_isCompact_isOp
+    hf.mdifferentiableOn.apply_eq_of_isPreconnected_isCompact_isOpen hpc
+      hclo.isClosed.isCompact hclo.isOpen hb ha
 -/
 protected theorem isLocallyConstant {f : M -> F} (hf : MDiff f) :
     IsLocallyConstant f :=

@@ -173,7 +173,16 @@ theorem mem_finsuppAntidiag_insert
     · rw [update_erase_eq_update, Finsupp.update_self]
     · apply sum_congr rfl
       intro x hx
-      rw [Finsupp.erase_ne (
+      rw [Finsupp.erase_ne (ne_of_mem_of_not_mem hx h)]
+    · rwa [support_erase, ← subset_insert_iff]
+  · rintro ⟨n1, n2, rfl, g, rfl, rfl, hgsupp⟩
+    refine ⟨?_, (support_update_subset _ _).trans (insert_subset_insert a hgsupp)⟩
+    simp only [coe_update]
+    apply congr_arg₂
+    · rw [Function.update_self]
+    · apply sum_congr rfl
+      intro x hx
+      rw [update_of_ne (ne_of_mem_of_not_mem hx h) n1 ⇑g]
 
 中文:
 定理 mem_finsuppAntidiag_insert
@@ -186,7 +195,16 @@ theorem mem_finsuppAntidiag_insert
     · rw [update_erase_eq_update, Finsupp.update_self]
     · apply sum_congr rfl
       intro x hx
-      rw [Finsupp.erase_ne (
+      rw [Finsupp.erase_ne (ne_of_mem_of_not_mem hx h)]
+    · rwa [support_erase, ← subset_insert_iff]
+  · rintro ⟨n1, n2, rfl, g, rfl, rfl, hgsupp⟩
+    refine ⟨?_, (support_update_subset _ _).trans (insert_subset_insert a hgsupp)⟩
+    simp only [coe_update]
+    apply congr_arg₂
+    · rw [Function.update_self]
+    · apply sum_congr rfl
+      intro x hx
+      rw [update_of_ne (ne_of_mem_of_not_mem hx h) n1 ⇑g]
 
 Depends on / 依赖: Finsupp, Finsupp.erase, Finsupp.erase_ne, Finsupp.update_self, Prod.exists, coe_update, congr_a, erase_ne, hgsupp, insert_subset_insert, mem_antidiagonal, mem_finsuppAntidiag, ne_of_mem_of_not_mem, subset_insert_iff, sum_congr, sum_insert, support_erase, support_update_subset, update_erase_eq_update, update_self
 -/
@@ -309,7 +327,8 @@ lemma mapRange_finsuppAntidiag_subset
   simp only [AddEquiv.toEquiv_eq_coe, mapRange.addEquiv_toEquiv, Equiv.coe_toEmbedding,
     mapRange.equiv_apply, EquivLike.coe_coe]
   constructor
-  · rw [sum_mapRange_index (fun _ => rfl), ← hsum, _root_.map_f
+  · rw [sum_mapRange_index (fun _ => rfl), ← hsum, _root_.map_finsuppSum]
+  · exact subset_trans (support_mapRange) hsupp
 
 中文:
 引理 mapRange_finsuppAntidiag_subset
@@ -321,7 +340,8 @@ lemma mapRange_finsuppAntidiag_subset
   simp only [AddEquiv.toEquiv_eq_coe, mapRange.addEquiv_toEquiv, Equiv.coe_toEmbedding,
     mapRange.equiv_apply, EquivLike.coe_coe]
   constructor
-  · rw [sum_mapRange_index (fun _ => rfl), ← hsum, _root_.map_f
+  · rw [sum_mapRange_index (fun _ => rfl), ← hsum, _root_.map_finsuppSum]
+  · exact subset_trans (support_mapRange) hsupp
 
 Depends on / 依赖: AddEquiv, AddEquiv.toEquiv_eq_coe, Equiv.coe_toEmbedding, EquivLike, EquivLike.coe_coe, _root_, _root_.map_finsuppSum, addEquiv_toEquiv, coe_coe, coe_toEmbedding, equiv_apply, mapRange, mapRange.addEquiv_toEquiv, mapRange.equiv_apply, map_finsuppSum, mem_finsuppAntidiag, mem_map, subset_trans, sum_mapRange_index, support_mapRange
 -/
@@ -352,7 +372,10 @@ lemma mapRange_finsuppAntidiag_eq
     rw [mem_map_equiv]; rw [this]
     apply mapRange_finsuppAntidiag_subset
     rw [← mem_map_equiv]
-  
+    convert! hf
+    rw [map_map]; rw [hh]
+    convert! map_refl
+    apply Function.Embedding.equiv_symm_toEmbedding_trans_toEmbedding
 
 中文:
 引理 mapRange_finsuppAntidiag_eq
@@ -367,7 +390,10 @@ lemma mapRange_finsuppAntidiag_eq
     rw [mem_map_equiv]; rw [this]
     apply mapRange_finsuppAntidiag_subset
     rw [← mem_map_equiv]
-  
+    convert! hf
+    rw [map_map]; rw [hh]
+    convert! map_refl
+    apply Function.Embedding.equiv_symm_toEmbedding_trans_toEmbedding
 
 Depends on / 依赖: AddEquiv, AddEquiv.eq_symm_apply, Embedding, Function, Function.Embedding.equiv_symm_toEmbedding_trans_toEmbedding, addEquiv, convert, e.symm, eq_symm_apply, equiv_symm_toEmbedding_trans_toEmbedding, mapRange, mapRange.addEquiv, mapRange_finsuppAntidiag_subset, map_map, map_refl, mem_map_equiv, toEquiv
 -/

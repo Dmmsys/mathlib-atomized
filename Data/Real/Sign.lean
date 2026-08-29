@@ -236,7 +236,7 @@ theorem sign_intCast
   · rw [sign_of_neg (Int.cast_lt_zero.mpr hn), Int.sign_eq_neg_one_of_neg hn, Int.cast_neg,
       Int.cast_one]
   · rw [Int.cast_zero, sign_zero, Int.sign_zero, Int.cast_zero]
-  · rw [sign_of_pos (Int.cast_pos.mpr hp), Int.sign_eq_one_of_pos hp,
+  · rw [sign_of_pos (Int.cast_pos.mpr hp), Int.sign_eq_one_of_pos hp, Int.cast_one]
 
 中文:
 定理 sign_intCast
@@ -247,7 +247,7 @@ theorem sign_intCast
   · rw [sign_of_neg (Int.cast_lt_zero.mpr hn), Int.sign_eq_neg_one_of_neg hn, Int.cast_neg,
       Int.cast_one]
   · rw [Int.cast_zero, sign_zero, Int.sign_zero, Int.cast_zero]
-  · rw [sign_of_pos (Int.cast_pos.mpr hp), Int.sign_eq_one_of_pos hp,
+  · rw [sign_of_pos (Int.cast_pos.mpr hp), Int.sign_eq_one_of_pos hp, Int.cast_one]
 
 Depends on / 依赖: Int.cast_lt_zero.mpr, Int.cast_neg, Int.cast_one, Int.cast_pos.mpr, Int.cast_zero, Int.sign_eq_neg_one_of_neg, Int.sign_eq_one_of_pos, Int.sign_zero, cast_lt_zero, cast_neg, cast_one, cast_pos, cast_zero, lt_trichotomy, sign_eq_neg_one_of_neg, sign_eq_one_of_pos, sign_of_neg, sign_of_pos, sign_zero
 -/

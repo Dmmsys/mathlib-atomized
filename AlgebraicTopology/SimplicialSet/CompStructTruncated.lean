@@ -259,7 +259,8 @@ lemma exists_of_simplex
     .mk _ ?_ ?_, .mk _ ?_ ?_, .mk _ ?_ ?_, .mk s rfl rfl rfl, rfl⟩
   all_goals
   · rw [← Functor.map_comp_apply, ← op_comp]
-  
+    apply congr_fun; congr
+    decide
 
 中文:
 引理 存在_of_simplex
@@ -271,7 +272,8 @@ lemma exists_of_simplex
     .mk _ ?_ ?_, .mk _ ?_ ?_, .mk _ ?_ ?_, .mk s rfl rfl rfl, rfl⟩
   all_goals
   · rw [← Functor.map_comp_apply, ← op_comp]
-  
+    apply congr_fun; congr
+    decide
 
 Depends on / 依赖: Functor, Functor.map_comp_apply, Hom.tr, SimplexCategory, SimplexCategory.const, X.map, all_goals, congr_fun, map_comp_apply, op_comp
 -/
@@ -301,7 +303,8 @@ definition idComp
     rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_zero_comp_σ₂_zero]
     simp
   d₁ := by
-    rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_one_comp_σ₂_zer
+    rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_one_comp_σ₂_zero]
+    simp
 
 中文:
 定义 idComp
@@ -314,7 +317,8 @@ definition idComp
     rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_zero_comp_σ₂_zero]
     simp
   d₁ := by
-    rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_one_comp_σ₂_zer
+    rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_one_comp_σ₂_zero]
+    simp
 
 Depends on / 依赖: X.map, e.edge
 -/
@@ -346,7 +350,7 @@ definition compId
     simp
   d₁ := by
     rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_one_comp_σ₂_one]
-
+    simp
 
 中文:
 定义 compId
@@ -360,7 +364,7 @@ definition compId
     simp
   d₁ := by
     rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_one_comp_σ₂_one]
-
+    simp
 
 Depends on / 依赖: X.map, e.edge
 -/

@@ -1174,7 +1174,7 @@ lemma map_top_eq_top_of_essSurj_of_full
   refine ⟨F.objPreimage X, F.objPreimage Y, F.preimage ?_, ⟨⟨⟩, ⟨?_⟩⟩⟩
   · exact (Functor.objObjPreimageIso F X).hom ≫ f ≫ (Functor.objObjPreimageIso F Y).inv
   · exact Arrow.isoMk' _ _ (Functor.objObjPreimageIso F X) (Functor.objObjPreimageIso F Y)
-      (by sim
+      (by simp)
 
 中文:
 引理 map_top_eq_top_of_essSurj_of_full
@@ -1185,7 +1185,7 @@ lemma map_top_eq_top_of_essSurj_of_full
   refine ⟨F.objPreimage X, F.objPreimage Y, F.preimage ?_, ⟨⟨⟩, ⟨?_⟩⟩⟩
   · exact (Functor.objObjPreimageIso F X).hom ≫ f ≫ (Functor.objObjPreimageIso F Y).inv
   · exact Arrow.isoMk' _ _ (Functor.objObjPreimageIso F X) (Functor.objObjPreimageIso F Y)
-      (by sim
+      (by simp)
 
 Depends on / 依赖: Arrow.isoMk, F.objPreimage, F.preimage, Functor, Functor.objObjPreimageIso, eq_top_iff, objObjPreimageIso, objPreimage, preimage
 -/
@@ -2133,7 +2133,7 @@ instance isoClosure_respectsIso
   body: fun e (he : IsIso e) f ⟨_, _, f', hf', ⟨iso⟩⟩ => ⟨_, _, f', hf',
       ⟨Arrow.isoMk (asIso iso.hom.left ≪≫ asIso (inv e)) (asIso iso.hom.right) (by simp)⟩⟩
   postcomp := fun e (he : IsIso e) f ⟨_, _, f', hf', ⟨iso⟩⟩ => ⟨_, _, f', hf',
-      ⟨Arrow.isoMk (asIso iso.hom.left) (asIso iso.hom.right ≪≫ a
+      ⟨Arrow.isoMk (asIso iso.hom.left) (asIso iso.hom.right ≪≫ asIso e) (by simp)⟩⟩
 
 中文:
 实例 isoClosure_respectsIso
@@ -2141,7 +2141,7 @@ instance isoClosure_respectsIso
   定义体: fun e (he : IsIso e) f ⟨_, _, f', hf', ⟨iso⟩⟩ => ⟨_, _, f', hf',
       ⟨Arrow.isoMk (asIso iso.hom.left ≪≫ asIso (inv e)) (asIso iso.hom.right) (by simp)⟩⟩
   postcomp := fun e (he : IsIso e) f ⟨_, _, f', hf', ⟨iso⟩⟩ => ⟨_, _, f', hf',
-      ⟨Arrow.isoMk (asIso iso.hom.left) (asIso iso.hom.right ≪≫ a
+      ⟨Arrow.isoMk (asIso iso.hom.left) (asIso iso.hom.right ≪≫ asIso e) (by simp)⟩⟩
 -/
 instance isoClosure_respectsIso (P : MorphismProperty C) :
     RespectsIso P.isoClosure where
@@ -2709,7 +2709,7 @@ lemma inverseImage_equivalence_inverse_eq_map_functor
   · rw [map_le_iff]
     intro X Y f hf
     exact (P.arrow_mk_iso_iff
-      (((Functor.mapArrowFunctor _ _).mapIso E.counitIso).app (Arrow.mk f))).
+      (((Functor.mapArrowFunctor _ _).mapIso E.counitIso).app (Arrow.mk f))).2 hf
 
 中文:
 引理 inverseImage_equivalence_inverse_eq_map_functor
@@ -2721,7 +2721,7 @@ lemma inverseImage_equivalence_inverse_eq_map_functor
   · rw [map_le_iff]
     intro X Y f hf
     exact (P.arrow_mk_iso_iff
-      (((Functor.mapArrowFunctor _ _).mapIso E.counitIso).app (Arrow.mk f))).
+      (((Functor.mapArrowFunctor _ _).mapIso E.counitIso).app (Arrow.mk f))).2 hf
 
 Depends on / 依赖: Arrow.mk, E.counitIso, E.unitIso.symm, Functor, Functor.mapArrowFunctor, P.arrow_mk_iso_iff, arrow_mk_iso_iff, counitIso, le_antisymm, mapArrowFunctor, mapIso, map_le_iff, unitIso
 -/

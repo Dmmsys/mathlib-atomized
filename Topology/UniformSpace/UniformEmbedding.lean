@@ -723,7 +723,7 @@ theorem comap_uniformity_of_spaced_out
     comap (Prod.map f f) (𝓤 β) <= comap (Prod.map f f) (𝓟 s) := comap_mono (le_principal_iff.2 hs)
     _ = 𝓟 (Prod.map f f ⁻¹' s) := comap_principal
     _ <= 𝓟 SetRel.id := principal_mono.2 ?_
-  rintro ⟨x, y⟩; simpa [
+  rintro ⟨x, y⟩; simpa [not_imp_not] using @hf x y
 
 中文:
 定理 comap_uniformity_of_spaced_out
@@ -734,7 +734,7 @@ theorem comap_uniformity_of_spaced_out
     comap (Prod.map f f) (𝓤 β) <= comap (Prod.map f f) (𝓟 s) := comap_mono (le_principal_iff.2 hs)
     _ = 𝓟 (Prod.map f f ⁻¹' s) := comap_principal
     _ <= 𝓟 SetRel.id := principal_mono.2 ?_
-  rintro ⟨x, y⟩; simpa [
+  rintro ⟨x, y⟩; simpa [not_imp_not] using @hf x y
 
 Depends on / 依赖: Prod.map, SetRel, SetRel.id, UniformSpace, UniformSpace.comap, comap_mono, comap_principal, le_antisymm, le_principal_iff, not_imp_not, principal_mono, refl_le_uniformity
 -/
@@ -851,7 +851,13 @@ theorem closure_image_mem_nhds_of_isUniformInducing
   obtain ⟨U, ⟨hU, hUo, hsymm⟩, hs⟩ :
     exists U, (U in 𝓤 β ∧ IsOpen U ∧ SetRel.IsSymm U) ∧ Prod.map e e ⁻¹' U subseteq s := by
       rwa [← he₁.comap_uniformity, (uniformity_hasBasis_open_symmetric.comap _).mem_iff] at hs
-  rcases he₂.dense.mem_nhds (UniformSpace.ball_mem_nhds b hU) with ⟨a, ha
+  rcases he₂.dense.mem_nhds (UniformSpace.ball_mem_nhds b hU) with ⟨a, ha⟩
+  refine ⟨a, mem_of_superset ?_ (closure_mono <| image_mono <| UniformSpace.ball_mono hs a)⟩
+  have ho : IsOpen (UniformSpace.ball (e a) U) := UniformSpace.isOpen_ball (e a) hUo
+  refine mem_of_superset (ho.mem_nhds <| UniformSpace.mem_ball_symmetry.2 ha) fun y hy => ?_
+  refine mem_closure_iff_nhds.2 fun V hV => ?_
+  rcases he₂.dense.mem_nhds (inter_mem hV (ho.mem_nhds hy)) with ⟨x, hxV, hxU⟩
+  exact ⟨e x, hxV, mem_image_of_mem e hxU⟩
 
 中文:
 定理 closure_image_mem_nhds_of_isUniformInducing
@@ -860,7 +866,13 @@ theorem closure_image_mem_nhds_of_isUniformInducing
   obtain ⟨U, ⟨hU, hUo, hsymm⟩, hs⟩ :
     exists U, (U in 𝓤 β ∧ IsOpen U ∧ SetRel.IsSymm U) ∧ Prod.map e e ⁻¹' U subseteq s := by
       rwa [← he₁.comap_uniformity, (uniformity_hasBasis_open_symmetric.comap _).mem_iff] at hs
-  rcases he₂.dense.mem_nhds (UniformSpace.ball_mem_nhds b hU) with ⟨a, ha
+  rcases he₂.dense.mem_nhds (UniformSpace.ball_mem_nhds b hU) with ⟨a, ha⟩
+  refine ⟨a, mem_of_superset ?_ (closure_mono <| image_mono <| UniformSpace.ball_mono hs a)⟩
+  have ho : IsOpen (UniformSpace.ball (e a) U) := UniformSpace.isOpen_ball (e a) hUo
+  refine mem_of_superset (ho.mem_nhds <| UniformSpace.mem_ball_symmetry.2 ha) fun y hy => ?_
+  refine mem_closure_iff_nhds.2 fun V hV => ?_
+  rcases he₂.dense.mem_nhds (inter_mem hV (ho.mem_nhds hy)) with ⟨x, hxV, hxU⟩
+  exact ⟨e x, hxV, mem_image_of_mem e hxU⟩
 
 Depends on / 依赖: IsOpen, IsSymm, Prod.map, SetRel, SetRel.IsSymm, UniformSpace, UniformSpace.ball, UniformSpace.ball_mem_nhds, UniformSpace.ball_mono, UniformSpace.isOpen_ball, ball_mem_nhds, ball_mono, closure_mono, comap_uniformity, dense.mem_nhds, ho.mem_nhds, image_mono, isOpen_ball, mem_iff, mem_nhds
 -/
@@ -939,7 +951,7 @@ theorem isComplete_image_iff
 .filter_map_Iic have fact1 : SurjOn (map m) (Iic <| 𝓟 s) (Iic <| 𝓟 <| m '' s) := surjOn_image ..
 .filter_map_Iic have fact2 : MapsTo (map m) (Iic <| 𝓟 s) (Iic <| 𝓟 <| m '' s) := mapsTo_image ..
   simp_rw [IsComplete, imp.swap (a := Cauchy _), ← mem_Iic (b := 𝓟 _), fact1.forall fact2,
-    hm.cauch
+    hm.cauchy_map_iff, exists_mem_image, map_le_iff_le_comap, hm.isInducing.nhds_eq_comap]
 
 中文:
 定理 isComplete_image_iff
@@ -948,7 +960,7 @@ theorem isComplete_image_iff
 .filter_map_Iic have fact1 : SurjOn (map m) (Iic <| 𝓟 s) (Iic <| 𝓟 <| m '' s) := surjOn_image ..
 .filter_map_Iic have fact2 : MapsTo (map m) (Iic <| 𝓟 s) (Iic <| 𝓟 <| m '' s) := mapsTo_image ..
   simp_rw [IsComplete, imp.swap (a := Cauchy _), ← mem_Iic (b := 𝓟 _), fact1.forall fact2,
-    hm.cauch
+    hm.cauchy_map_iff, exists_mem_image, map_le_iff_le_comap, hm.isInducing.nhds_eq_comap]
 
 Depends on / 依赖: Cauchy, IsComplete, MapsTo, SurjOn, cauchy_map_iff, exists_mem_image, fact1.forall, filter_map_Iic, hm.cauchy_map_iff, hm.isInducing.nhds_eq_comap, imp.swap, isInducing, map_le_iff_le_comap, mapsTo_image, mem_Iic, nhds_eq_comap, simp_rw, surjOn_image
 -/
@@ -1234,7 +1246,46 @@ theorem completeSpace_extension
     let p : Set (α × α) -> Set α -> Set α := fun s t => { y : α | exists x : α, x in t ∧ (x, y) in s }
     let g := (𝓤 α).lift fun s => f.lift' (p s)
     have mp₀ : Monotone p := fun _ _ h _ _ ⟨x, xs, xa⟩ => ⟨x, xs, h xa⟩
-    have mp₁ : forall {s}, Monotone (p 
+    have mp₁ : forall {s}, Monotone (p s) := fun h _ ⟨y, ya, yxs⟩ => ⟨y, h ya, yxs⟩
+    have : f <= g := le_iInf₂ fun _ hs => le_iInf₂ fun _ ht =>
+le_principal_iff.mpr mem_of_superset ht fun x hx => ⟨x, hx, refl_mem_uniformity hs⟩
+    have : NeBot g := hf.left.mono this
+    have : NeBot (comap m g) :=
+      comap_neBot fun _ ht =>
+        let ⟨t', ht', ht_mem⟩ := (mem_lift_sets <| monotone_lift' monotone_const mp₀).mp ht
+        let ⟨_, ht'', ht'_sub⟩ := (mem_lift'_sets mp₁).mp ht_mem
+        let ⟨x, hx⟩ := hf.left.nonempty_of_mem ht''
+        have h₀ : NeBot (𝓝[range m] x) := dense.nhdsWithin_neBot x
+        have h₁ : { y | (x, y) in t' } in 𝓝[range m] x :=
+@mem_inf_of_left α (𝓝 x) (𝓟 (range m)) _ mem_nhds_left x ht'
+        have h₂ : range m in 𝓝[range m] x :=
+@mem_inf_of_right α (𝓝 x) (𝓟 (range m)) _ Subset.refl _
+        have : { y | (x, y) in t' } inter range m in 𝓝[range m] x := @inter_mem α (𝓝[range m] x) _ _ h₁ h₂
+        let ⟨_, xyt', b, b_eq⟩ := h₀.nonempty_of_mem this
+        ⟨b, b_eq.symm ▸ ht'_sub ⟨x, hx, xyt'⟩⟩
+    have : Cauchy g :=
+      ⟨‹NeBot g›, fun _ hs =>
+        let ⟨s₁, hs₁, comp_s₁⟩ := comp_mem_uniformity_sets hs
+        let ⟨s₂, hs₂, comp_s₂⟩ := comp_mem_uniformity_sets hs₁
+        let ⟨t, ht, (prod_t : t ×ˢ t subseteq s₂)⟩ := mem_prod_same_iff.mp (hf.right hs₂)
+        have hg₁ : p (preimage Prod.swap s₁) t in g :=
+mem_lift (symm_le_uniformity hs₁) @mem_lift' α α f _ t ht
+have hg₂ : p s₂ t in g := mem_lift hs₂ @mem_lift' α α f _ t ht
+        have hg : p (Prod.swap ⁻¹' s₁) t ×ˢ p s₂ t in g ×ˢ g := @prod_mem_prod α α _ _ g g hg₁ hg₂
+        (g ×ˢ g).sets_of_superset hg fun ⟨_, _⟩ ⟨⟨c₁, c₁t, hc₁⟩, ⟨c₂, c₂t, hc₂⟩⟩ =>
+          have : (c₁, c₂) in t ×ˢ t := ⟨c₁t, c₂t⟩
+comp_s₁ SetRel.prodMk_mem_comp hc₁ comp_s₂
+            SetRel.prodMk_mem_comp (prod_t this) hc₂⟩
+    have : Cauchy (Filter.comap m g) := ‹Cauchy g›.comap' (le_of_eq hm.comap_uniformity) ‹_›
+    let ⟨x, (hx : map m (Filter.comap m g) <= 𝓝 x)⟩ := h _ this
+    have : ClusterPt x (map m (Filter.comap m g)) :=
+      (le_nhds_iff_adhp_of_cauchy (this.map hm.uniformContinuous)).mp hx
+    have : ClusterPt x g := this.mono map_comap_le
+    ⟨x,
+      calc
+        f <= g := by assumption
+        _ <= 𝓝 x := le_nhds_of_cauchy_adhp ‹Cauchy g› this
+        ⟩⟩
 
 中文:
 定理 completeSpace_extension
@@ -1243,7 +1294,46 @@ theorem completeSpace_extension
     let p : Set (α × α) -> Set α -> Set α := fun s t => { y : α | exists x : α, x in t ∧ (x, y) in s }
     let g := (𝓤 α).lift fun s => f.lift' (p s)
     have mp₀ : Monotone p := fun _ _ h _ _ ⟨x, xs, xa⟩ => ⟨x, xs, h xa⟩
-    have mp₁ : forall {s}, Monotone (p 
+    have mp₁ : forall {s}, Monotone (p s) := fun h _ ⟨y, ya, yxs⟩ => ⟨y, h ya, yxs⟩
+    have : f <= g := le_iInf₂ fun _ hs => le_iInf₂ fun _ ht =>
+le_principal_iff.mpr mem_of_superset ht fun x hx => ⟨x, hx, refl_mem_uniformity hs⟩
+    have : NeBot g := hf.left.mono this
+    have : NeBot (comap m g) :=
+      comap_neBot fun _ ht =>
+        let ⟨t', ht', ht_mem⟩ := (mem_lift_sets <| monotone_lift' monotone_const mp₀).mp ht
+        let ⟨_, ht'', ht'_sub⟩ := (mem_lift'_sets mp₁).mp ht_mem
+        let ⟨x, hx⟩ := hf.left.nonempty_of_mem ht''
+        have h₀ : NeBot (𝓝[range m] x) := dense.nhdsWithin_neBot x
+        have h₁ : { y | (x, y) in t' } in 𝓝[range m] x :=
+@mem_inf_of_left α (𝓝 x) (𝓟 (range m)) _ mem_nhds_left x ht'
+        have h₂ : range m in 𝓝[range m] x :=
+@mem_inf_of_right α (𝓝 x) (𝓟 (range m)) _ Subset.refl _
+        have : { y | (x, y) in t' } inter range m in 𝓝[range m] x := @inter_mem α (𝓝[range m] x) _ _ h₁ h₂
+        let ⟨_, xyt', b, b_eq⟩ := h₀.nonempty_of_mem this
+        ⟨b, b_eq.symm ▸ ht'_sub ⟨x, hx, xyt'⟩⟩
+    have : Cauchy g :=
+      ⟨‹NeBot g›, fun _ hs =>
+        let ⟨s₁, hs₁, comp_s₁⟩ := comp_mem_uniformity_sets hs
+        let ⟨s₂, hs₂, comp_s₂⟩ := comp_mem_uniformity_sets hs₁
+        let ⟨t, ht, (prod_t : t ×ˢ t subseteq s₂)⟩ := mem_prod_same_iff.mp (hf.right hs₂)
+        have hg₁ : p (preimage Prod.swap s₁) t in g :=
+mem_lift (symm_le_uniformity hs₁) @mem_lift' α α f _ t ht
+have hg₂ : p s₂ t in g := mem_lift hs₂ @mem_lift' α α f _ t ht
+        have hg : p (Prod.swap ⁻¹' s₁) t ×ˢ p s₂ t in g ×ˢ g := @prod_mem_prod α α _ _ g g hg₁ hg₂
+        (g ×ˢ g).sets_of_superset hg fun ⟨_, _⟩ ⟨⟨c₁, c₁t, hc₁⟩, ⟨c₂, c₂t, hc₂⟩⟩ =>
+          have : (c₁, c₂) in t ×ˢ t := ⟨c₁t, c₂t⟩
+comp_s₁ SetRel.prodMk_mem_comp hc₁ comp_s₂
+            SetRel.prodMk_mem_comp (prod_t this) hc₂⟩
+    have : Cauchy (Filter.comap m g) := ‹Cauchy g›.comap' (le_of_eq hm.comap_uniformity) ‹_›
+    let ⟨x, (hx : map m (Filter.comap m g) <= 𝓝 x)⟩ := h _ this
+    have : ClusterPt x (map m (Filter.comap m g)) :=
+      (le_nhds_iff_adhp_of_cauchy (this.map hm.uniformContinuous)).mp hx
+    have : ClusterPt x g := this.mono map_comap_le
+    ⟨x,
+      calc
+        f <= g := by assumption
+        _ <= 𝓝 x := le_nhds_of_cauchy_adhp ‹Cauchy g› this
+        ⟩⟩
 
 Depends on / 依赖: Cauchy, Filter, Monotone, f.lift, hf.left.mo, le_principal_iff, le_principal_iff.mpr, mem_of_superset, refl_mem_uniformity
 -/
@@ -1307,7 +1397,8 @@ lemma Filter.totallyBounded_map_iff
   rcases exists_subset_image_finite_and.1 (hs.exists_subset_of_mem (F.image_mem_map F.univ_mem) ht)
     with ⟨u, -, hfin, h⟩
   use u, hfin
-  simp_rw
+  simp_rw [SetRel.preimage, exists_mem_image] at h
+  exact h
 
 中文:
 引理 滤子.totallyBounded_map_iff
@@ -1319,7 +1410,8 @@ lemma Filter.totallyBounded_map_iff
   rcases exists_subset_image_finite_and.1 (hs.exists_subset_of_mem (F.image_mem_map F.univ_mem) ht)
     with ⟨u, -, hfin, h⟩
   use u, hfin
-  simp_rw
+  simp_rw [SetRel.preimage, exists_mem_image] at h
+  exact h
 
 Depends on / 依赖: F.image_mem_map, F.univ_mem, SetRel, SetRel.preimage, basis_sets, basis_uniformity, exists_mem_image, exists_subset_image_finite_and, exists_subset_of_mem, filter_totallyBounded_iff, h.map, hf.basis_uniformity, hf.uniformContinuous, hs.exists_subset_of_mem, image_mem_map, preimage, simp_rw, uniformContinuous, univ_mem
 -/
@@ -1573,7 +1665,15 @@ theorem uniform_extend_subtype
   have ue' : IsUniformEmbedding (IsDenseEmbedding.subtypeEmb p e) :=
     isUniformEmbedding_subtypeEmb _ he de
   have : b in closure (e '' { x | p x }) :=
-    (
+    (closure_mono <| monotone_image <| hp) (mem_of_mem_nhds hb)
+  let ⟨c, hc⟩ := uniformly_extend_exists ue'.isUniformInducing de'.dense hf ⟨b, this⟩
+  replace hc : Tendsto (f ∘ Subtype.val (p := p)) (((𝓝 b).comap e).comap Subtype.val) (𝓝 c) := by
+    simpa only [nhds_subtype_eq_comap, comap_comap, IsDenseEmbedding.subtypeEmb_coe] using! hc
+  refine ⟨c, (tendsto_comap'_iff ?_).1 hc⟩
+  rw [Subtype.range_coe_subtype]
+  exact ⟨_, hb, by rwa [← de.isInducing.closure_eq_preimage_closure_image, hs.closure_eq]⟩
+
+include h_e h_f in
 
 中文:
 定理 uniform_extend_subtype
@@ -1584,7 +1684,15 @@ theorem uniform_extend_subtype
   have ue' : IsUniformEmbedding (IsDenseEmbedding.subtypeEmb p e) :=
     isUniformEmbedding_subtypeEmb _ he de
   have : b in closure (e '' { x | p x }) :=
-    (
+    (closure_mono <| monotone_image <| hp) (mem_of_mem_nhds hb)
+  let ⟨c, hc⟩ := uniformly_extend_exists ue'.isUniformInducing de'.dense hf ⟨b, this⟩
+  replace hc : Tendsto (f ∘ Subtype.val (p := p)) (((𝓝 b).comap e).comap Subtype.val) (𝓝 c) := by
+    simpa only [nhds_subtype_eq_comap, comap_comap, IsDenseEmbedding.subtypeEmb_coe] using! hc
+  refine ⟨c, (tendsto_comap'_iff ?_).1 hc⟩
+  rw [Subtype.range_coe_subtype]
+  exact ⟨_, hb, by rwa [← de.isInducing.closure_eq_preimage_closure_image, hs.closure_eq]⟩
+
+include h_e h_f in
 
 Depends on / 依赖: IsDenseEmbedding, IsDenseEmbedding.subtypeEmb, IsUniformEmbedding, Subtype, Subtype.val, Tendsto, closure, closure_mono, de.subtype, he.isDenseEmbedding, isDenseEmbedding, isUniformEmbedding_subtypeEmb, isUniformInducing, mem_of_mem_nhds, monotone_image, replace, subtype, subtypeEmb, uniformly_extend_exists
 -/
@@ -1649,7 +1757,25 @@ theorem uniformContinuous_uniformly_extend
     fun {a m} hm =>
     have nb : NeBot (map f (comap e (𝓝 a))) :=
       ((h_e.isDenseInducing h_dense).comap_nhds_neBot _).map _
-    have
+    have :
+      f '' (e ⁻¹' m) inter ({ c | (c, ψ a) in s } inter { c | (ψ a, c) in s }) in map f (comap e (𝓝 a)) :=
+      inter_mem (image_mem_map <| preimage_mem_comap <| hm)
+        (uniformly_extend_spec h_e h_dense h_f _
+          (inter_mem (mem_nhds_right _ hs) (mem_nhds_left _ hs)))
+    nb.nonempty_of_mem this
+  have : (Prod.map f f) ⁻¹' s in 𝓤 β := h_f hs
+  have : (Prod.map f f) ⁻¹' s in comap (Prod.map e e) (𝓤 α) := by
+    rwa [← h_e.comap_uniformity] at this
+  let ⟨t, ht, ts⟩ := this
+  show (Prod.map ψ ψ) ⁻¹' d in 𝓤 α from
+    mem_of_superset (interior_mem_uniformity ht) fun ⟨x₁, x₂⟩ hx_t => by
+      have : interior t in 𝓝 (x₁, x₂) := isOpen_interior.mem_nhds hx_t
+      let ⟨m₁, hm₁, m₂, hm₂, (hm : m₁ ×ˢ m₂ subseteq interior t)⟩ := mem_nhds_prod_iff.mp this
+      obtain ⟨_, ⟨a, ha₁, rfl⟩, _, ha₂⟩ := h_pnt hm₁
+      obtain ⟨_, ⟨b, hb₁, rfl⟩, hb₂, _⟩ := h_pnt hm₂
+      have : Prod.map f f (a, b) in s :=
+ts mem_preimage.2 interior_subset (@hm (e a, e b) ⟨ha₁, hb₁⟩)
+      exact hs_comp ⟨f a, ha₂, ⟨f b, this, hb₂⟩⟩
 
 中文:
 定理 uniformContinuous_uniformly_extend
@@ -1661,7 +1787,25 @@ theorem uniformContinuous_uniformly_extend
     fun {a m} hm =>
     have nb : NeBot (map f (comap e (𝓝 a))) :=
       ((h_e.isDenseInducing h_dense).comap_nhds_neBot _).map _
-    have
+    have :
+      f '' (e ⁻¹' m) inter ({ c | (c, ψ a) in s } inter { c | (ψ a, c) in s }) in map f (comap e (𝓝 a)) :=
+      inter_mem (image_mem_map <| preimage_mem_comap <| hm)
+        (uniformly_extend_spec h_e h_dense h_f _
+          (inter_mem (mem_nhds_right _ hs) (mem_nhds_left _ hs)))
+    nb.nonempty_of_mem this
+  have : (Prod.map f f) ⁻¹' s in 𝓤 β := h_f hs
+  have : (Prod.map f f) ⁻¹' s in comap (Prod.map e e) (𝓤 α) := by
+    rwa [← h_e.comap_uniformity] at this
+  let ⟨t, ht, ts⟩ := this
+  show (Prod.map ψ ψ) ⁻¹' d in 𝓤 α from
+    mem_of_superset (interior_mem_uniformity ht) fun ⟨x₁, x₂⟩ hx_t => by
+      have : interior t in 𝓝 (x₁, x₂) := isOpen_interior.mem_nhds hx_t
+      let ⟨m₁, hm₁, m₂, hm₂, (hm : m₁ ×ˢ m₂ subseteq interior t)⟩ := mem_nhds_prod_iff.mp this
+      obtain ⟨_, ⟨a, ha₁, rfl⟩, _, ha₂⟩ := h_pnt hm₁
+      obtain ⟨_, ⟨b, hb₁, rfl⟩, hb₂, _⟩ := h_pnt hm₂
+      have : Prod.map f f (a, b) in s :=
+ts mem_preimage.2 interior_subset (@hm (e a, e b) ⟨ha₁, hb₁⟩)
+      exact hs_comp ⟨f a, ha₂, ⟨f b, this, hb₂⟩⟩
 -/
 theorem uniformContinuous_uniformly_extend [CompleteSpace γ] : UniformContinuous ψ := fun d hd =>
   let ⟨s, hs, hs_comp⟩ := comp3_mem_uniformity hd
@@ -1938,7 +2082,46 @@ lemma IsDenseInducing.isUniformInducing_extend
     isClosed_closure.isComplete.completeSpace_coe
   let ff : α -> closure (range sf) := inclusion subset_closure ∘ rangeFactorization sf
   have hgu : IsUniformInducing ff :=
-    (isUniformEmbedding_set_inclusion 
+    (isUniformEmbedding_set_inclusion subset_closure).isUniformInducing.comp
+      (SeparationQuotient.isUniformInducing_mk.comp h).rangeFactorization
+  have hgd : DenseRange ff :=
+    ((denseRange_inclusion_iff subset_closure).2 subset_rfl).comp
+      rangeFactorization_surjective.denseRange (continuous_inclusion subset_closure)
+  have hg : IsDenseInducing ff := hgu.isDenseInducing hgd
+  let fwd := hid.extend ff
+  have hfwd : UniformContinuous fwd :=
+    uniformContinuous_uniformly_extend hi hid.dense hgu.uniformContinuous
+  have hg' : UniformContinuous (hg.extend i) :=
+    uniformContinuous_uniformly_extend hgu hgd hi.uniformContinuous
+  have key : SeparationQuotient.mk ∘ hg.extend i ∘ fwd = SeparationQuotient.mk := by
+    ext x
+    induction x using isClosed_property hid.dense
+    · exact isClosed_eq (SeparationQuotient.continuous_mk.comp (hg'.comp hfwd).continuous)
+        SeparationQuotient.continuous_mk
+    · simpa [fwd, hid.extend_eq hgu.uniformContinuous.continuous]
+        using hg.inseparable_extend hi.uniformContinuous.continuous.continuousAt
+  have hfu : IsUniformInducing fwd := by
+    refine IsUniformInducing.of_comp hfwd (SeparationQuotient.uniformContinuous_mk.comp hg') ?_
+    rw [Function.comp_assoc]; rw [key]
+    exact SeparationQuotient.isUniformInducing_mk
+  have hrr : range (SeparationQuotient.mk ∘ hid.extend f) subseteq
+      closure (range (SeparationQuotient.mk ∘ f)) := by
+    refine ((SeparationQuotient.continuous_mk.comp (uniformContinuous_uniformly_extend hi hid.dense
+      h.uniformContinuous).continuous).range_subset_closure_image_dense hid.dense).trans
+      (closure_mono (subset_of_eq ?_))
+    rw [← range_comp]
+    apply congrArg range
+    funext x
+    simpa using (hid.inseparable_extend h.uniformContinuous.continuous.continuousAt)
+  suffices Subtype.val ∘ fwd = SeparationQuotient.mk ∘ hid.extend f by
+    rw [← SeparationQuotient.isUniformInducing_mk.of_comp_iff]; rw [← this]
+    exact (isUniformInducing_val _).comp hfu
+  rw [← coe_comp_rangeFactorization (SeparationQuotient.mk ∘ hid.extend f)]; rw [← val_comp_inclusion hrr]; rw [Function.comp_assoc]; rw [Subtype.val_injective.comp_left.eq_iff]
+  refine hid.extend_unique ?_ ?_
+  · simp [ff, hid.inseparable_extend h.uniformContinuous.continuous.continuousAt, sf]
+  · exact (continuous_inclusion hrr).comp
+      (SeparationQuotient.continuous_mk.comp (uniformContinuous_uniformly_extend hi hid.dense
+        h.uniformContinuous).continuous).rangeFactorization
 
 中文:
 引理 是DenseInducing.isUniformInducing_extend
@@ -1949,7 +2132,46 @@ lemma IsDenseInducing.isUniformInducing_extend
     isClosed_closure.isComplete.completeSpace_coe
   let ff : α -> closure (range sf) := inclusion subset_closure ∘ rangeFactorization sf
   have hgu : IsUniformInducing ff :=
-    (isUniformEmbedding_set_inclusion 
+    (isUniformEmbedding_set_inclusion subset_closure).isUniformInducing.comp
+      (SeparationQuotient.isUniformInducing_mk.comp h).rangeFactorization
+  have hgd : DenseRange ff :=
+    ((denseRange_inclusion_iff subset_closure).2 subset_rfl).comp
+      rangeFactorization_surjective.denseRange (continuous_inclusion subset_closure)
+  have hg : IsDenseInducing ff := hgu.isDenseInducing hgd
+  let fwd := hid.extend ff
+  have hfwd : UniformContinuous fwd :=
+    uniformContinuous_uniformly_extend hi hid.dense hgu.uniformContinuous
+  have hg' : UniformContinuous (hg.extend i) :=
+    uniformContinuous_uniformly_extend hgu hgd hi.uniformContinuous
+  have key : SeparationQuotient.mk ∘ hg.extend i ∘ fwd = SeparationQuotient.mk := by
+    ext x
+    induction x using isClosed_property hid.dense
+    · exact isClosed_eq (SeparationQuotient.continuous_mk.comp (hg'.comp hfwd).continuous)
+        SeparationQuotient.continuous_mk
+    · simpa [fwd, hid.extend_eq hgu.uniformContinuous.continuous]
+        using hg.inseparable_extend hi.uniformContinuous.continuous.continuousAt
+  have hfu : IsUniformInducing fwd := by
+    refine IsUniformInducing.of_comp hfwd (SeparationQuotient.uniformContinuous_mk.comp hg') ?_
+    rw [Function.comp_assoc]; rw [key]
+    exact SeparationQuotient.isUniformInducing_mk
+  have hrr : range (SeparationQuotient.mk ∘ hid.extend f) subseteq
+      closure (range (SeparationQuotient.mk ∘ f)) := by
+    refine ((SeparationQuotient.continuous_mk.comp (uniformContinuous_uniformly_extend hi hid.dense
+      h.uniformContinuous).continuous).range_subset_closure_image_dense hid.dense).trans
+      (closure_mono (subset_of_eq ?_))
+    rw [← range_comp]
+    apply congrArg range
+    funext x
+    simpa using (hid.inseparable_extend h.uniformContinuous.continuous.continuousAt)
+  suffices Subtype.val ∘ fwd = SeparationQuotient.mk ∘ hid.extend f by
+    rw [← SeparationQuotient.isUniformInducing_mk.of_comp_iff]; rw [← this]
+    exact (isUniformInducing_val _).comp hfu
+  rw [← coe_comp_rangeFactorization (SeparationQuotient.mk ∘ hid.extend f)]; rw [← val_comp_inclusion hrr]; rw [Function.comp_assoc]; rw [Subtype.val_injective.comp_left.eq_iff]
+  refine hid.extend_unique ?_ ?_
+  · simp [ff, hid.inseparable_extend h.uniformContinuous.continuous.continuousAt, sf]
+  · exact (continuous_inclusion hrr).comp
+      (SeparationQuotient.continuous_mk.comp (uniformContinuous_uniformly_extend hi hid.dense
+        h.uniformContinuous).continuous).rangeFactorization
 
 Depends on / 依赖: CompleteSpace, DenseRange, IsUniformInducing, SeparationQuotient, SeparationQuotient.isUniformInducing_mk.comp, SeparationQuotient.mk, closure, completeSpace_coe, denseRange_inclusion_iff, inclusion, isClosed_closure, isClosed_closure.isComplete.completeSpace_coe, isComplete, isUniformEmbedding_set_inclusion, isUniformInducing, isUniformInducing.comp, isUniformInducing_mk, rangeFactorization, rangeFactorization_, subset_closure
 -/

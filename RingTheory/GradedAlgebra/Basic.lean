@@ -726,7 +726,26 @@ definition GradedRing.projZeroRingHom
   map_zero' := by rw [decompose_zero, zero_apply, ZeroMemClass.coe_zero]
   map_add' _ _ := by rw [decompose_add, add_apply, AddMemClass.coe_add]
   map_mul' := by
-    refine DirectSum.Decomposition.inductionOn 𝒜 (fun x =>
+    refine DirectSum.Decomposition.inductionOn 𝒜 (fun x => ?_) ?_ ?_
+    · simp only [zero_mul, decompose_zero, zero_apply, ZeroMemClass.coe_zero]
+    · rintro i ⟨c, hc⟩
+      refine DirectSum.Decomposition.inductionOn 𝒜 ?_ ?_ ?_
+      · simp only [mul_zero, decompose_zero, zero_apply, ZeroMemClass.coe_zero]
+      · rintro j ⟨c', hc'⟩
+        simp only
+        by_cases h : i + j = 0
+        · rw [decompose_of_mem_same 𝒜
+              (show c * c' in 𝒜 0 from h ▸ SetLike.GradedMul.mul_mem hc hc'),
+            decompose_of_mem_same 𝒜 (show c in 𝒜 0 from (add_eq_zero.mp h).1 ▸ hc),
+            decompose_of_mem_same 𝒜 (show c' in 𝒜 0 from (add_eq_zero.mp h).2 ▸ hc')]
+        · rw [decompose_of_mem_ne 𝒜 (SetLike.GradedMul.mul_mem hc hc') h]
+          rcases show i != 0 ∨ j != 0 by rwa [add_eq_zero, not_and_or] at h with h' | h'
+          · simp only [decompose_of_mem_ne 𝒜 hc h', zero_mul]
+          · simp only [decompose_of_mem_ne 𝒜 hc' h', mul_zero]
+      · intro _ _ hd he
+        simp only [mul_add, decompose_add, add_apply, AddMemClass.coe_add, hd, he]
+    · rintro _ _ ha hb _
+      simp only [add_mul, decompose_add, add_apply, AddMemClass.coe_add, ha, hb]
 
 中文:
 定义 分次环.projZeroRingHom
@@ -736,7 +755,26 @@ definition GradedRing.projZeroRingHom
   map_zero' := by rw [decompose_zero, zero_apply, ZeroMemClass.coe_zero]
   map_add' _ _ := by rw [decompose_add, add_apply, AddMemClass.coe_add]
   map_mul' := by
-    refine DirectSum.Decomposition.inductionOn 𝒜 (fun x =>
+    refine DirectSum.Decomposition.inductionOn 𝒜 (fun x => ?_) ?_ ?_
+    · simp only [zero_mul, decompose_zero, zero_apply, ZeroMemClass.coe_zero]
+    · rintro i ⟨c, hc⟩
+      refine DirectSum.Decomposition.inductionOn 𝒜 ?_ ?_ ?_
+      · simp only [mul_zero, decompose_zero, zero_apply, ZeroMemClass.coe_zero]
+      · rintro j ⟨c', hc'⟩
+        simp only
+        by_cases h : i + j = 0
+        · rw [decompose_of_mem_same 𝒜
+              (show c * c' in 𝒜 0 from h ▸ SetLike.GradedMul.mul_mem hc hc'),
+            decompose_of_mem_same 𝒜 (show c in 𝒜 0 from (add_eq_zero.mp h).1 ▸ hc),
+            decompose_of_mem_same 𝒜 (show c' in 𝒜 0 from (add_eq_zero.mp h).2 ▸ hc')]
+        · rw [decompose_of_mem_ne 𝒜 (SetLike.GradedMul.mul_mem hc hc') h]
+          rcases show i != 0 ∨ j != 0 by rwa [add_eq_zero, not_and_or] at h with h' | h'
+          · simp only [decompose_of_mem_ne 𝒜 hc h', zero_mul]
+          · simp only [decompose_of_mem_ne 𝒜 hc' h', mul_zero]
+      · intro _ _ hd he
+        simp only [mul_add, decompose_add, add_apply, AddMemClass.coe_add, hd, he]
+    · rintro _ _ ha hb _
+      simp only [add_mul, decompose_add, add_apply, AddMemClass.coe_add, ha, hb]
 
 Depends on / 依赖: decompose
 -/

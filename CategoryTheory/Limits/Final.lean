@@ -242,7 +242,10 @@ theorem final_of_adjunction
         Relation.ReflTransGen.trans
           (Relation.ReflTransGen.single
             (show Zag f u from
-              Or.inr ⟨StructuredArrow.homMk ((adj.homEqui
+              Or.inr ⟨StructuredArrow.homMk ((adj.homEquiv c f.right).symm f.hom) (by simp [u])⟩))
+          (Relation.ReflTransGen.single
+            (show Zag u g from
+              Or.inl ⟨StructuredArrow.homMk ((adj.homEquiv c g.right).symm g.hom) (by simp [u])⟩)) }
 
 中文:
 定理 final_of_adjunction
@@ -254,7 +257,10 @@ theorem final_of_adjunction
         Relation.ReflTransGen.trans
           (Relation.ReflTransGen.single
             (show Zag f u from
-              Or.inr ⟨StructuredArrow.homMk ((adj.homEqui
+              Or.inr ⟨StructuredArrow.homMk ((adj.homEquiv c f.right).symm f.hom) (by simp [u])⟩))
+          (Relation.ReflTransGen.single
+            (show Zag u g from
+              Or.inl ⟨StructuredArrow.homMk ((adj.homEquiv c g.right).symm g.hom) (by simp [u])⟩)) }
 
 Depends on / 依赖: Or.inl, Or.inr, ReflTransGen, Relation, Relation.ReflTransGen.single, Relation.ReflTransGen.trans, StructuredArrow, StructuredArrow.homMk, StructuredArrow.mk, adj.homEquiv, adj.unit.app, f.hom, f.right, g.hom, g.right, homEquiv, single, zigzag_isConnected
 -/
@@ -284,7 +290,10 @@ theorem initial_of_adjunction
         Relation.ReflTransGen.trans
           (Relation.ReflTransGen.single
             (show Zag f u from
-              Or.inl ⟨CostructuredArrow.homMk (adj.
+              Or.inl ⟨CostructuredArrow.homMk (adj.homEquiv f.left d f.hom) (by simp [u])⟩))
+          (Relation.ReflTransGen.single
+            (show Zag u g from
+              Or.inr ⟨CostructuredArrow.homMk (adj.homEquiv g.left d g.hom) (by simp [u])⟩)) }
 
 中文:
 定理 initial_of_adjunction
@@ -296,7 +305,10 @@ theorem initial_of_adjunction
         Relation.ReflTransGen.trans
           (Relation.ReflTransGen.single
             (show Zag f u from
-              Or.inl ⟨CostructuredArrow.homMk (adj.
+              Or.inl ⟨CostructuredArrow.homMk (adj.homEquiv f.left d f.hom) (by simp [u])⟩))
+          (Relation.ReflTransGen.single
+            (show Zag u g from
+              Or.inr ⟨CostructuredArrow.homMk (adj.homEquiv g.left d g.hom) (by simp [u])⟩)) }
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.mk, Or.inl, Or.inr, ReflTransGen, Relation, Relation.ReflTransGen.single, Relation.ReflTransGen.trans, adj.counit.app, adj.homEquiv, counit, f.hom, f.left, g.hom, g.left, homEquiv, single, zigzag_isConnected
 -/
@@ -501,7 +513,17 @@ definition extendCocone
           naturality := fun X Y f => by
             dsimp; simp only [Category.comp_id]
             -- This would be true if we'd chosen `lift F X` to be `lift F Y`
-            -- and `homToLift F X` to be `
+            -- and `homToLift F X` to be `f ≫ homToLift F Y`.
+            apply
+              induction F fun Z k =>
+                G.map f ≫ G.map (homToLift F Y) ≫ c.ι.app (lift F Y) = G.map k ≫ c.ι.app Z
+            · intro Z₁ Z₂ k₁ k₂ g a z
+              rw [← a]; rw [Functor.map_comp]; rw [Category.assoc]; rw [← Functor.comp_map]; rw [c.w]; rw [z]
+            · intro Z₁ Z₂ k₁ k₂ g a z
+              rw [← a]; rw [Functor.map_comp]; rw [Category.assoc]; rw [← Functor.comp_map]; rw [c.w] at z
+              rw [z]
+            · rw [← Functor.map_comp_assoc] } }
+  map f := { hom := f.hom }
 
 中文:
 定义 extendCocone
@@ -512,7 +534,17 @@ definition extendCocone
           naturality := fun X Y f => by
             dsimp; simp only [Category.comp_id]
             -- This would be true if we'd chosen `lift F X` to be `lift F Y`
-            -- and `homToLift F X` to be `
+            -- and `homToLift F X` to be `f ≫ homToLift F Y`.
+            apply
+              induction F fun Z k =>
+                G.map f ≫ G.map (homToLift F Y) ≫ c.ι.app (lift F Y) = G.map k ≫ c.ι.app Z
+            · intro Z₁ Z₂ k₁ k₂ g a z
+              rw [← a]; rw [Functor.map_comp]; rw [Category.assoc]; rw [← Functor.comp_map]; rw [c.w]; rw [z]
+            · intro Z₁ Z₂ k₁ k₂ g a z
+              rw [← a]; rw [Functor.map_comp]; rw [Category.assoc]; rw [← Functor.comp_map]; rw [c.w] at z
+              rw [z]
+            · rw [← Functor.map_comp_assoc] } }
+  map f := { hom := f.hom }
 
 Depends on / 依赖: Category, Category.comp_id, G.map, Nonempty, Nonempty.intro, WeakLimitCone, WeakLimitCone.ofLimitCone, c.pt, comp_id, getLimitCone, homToLift, naturality, ofLimitCone
 -/
@@ -593,7 +625,11 @@ theorem colimit_cocone_comp_aux
     rw [← w]
     rw [← s.w f] at h
     simpa using! h
-  · intro 
+  · intro j₁ j₂ k₁ k₂ f w h
+    rw [← w] at h
+    rw [← s.w f]
+    simpa using! h
+  · exact s.w (𝟙 _)
 
 中文:
 定理 colimit_cocone_comp_aux
@@ -606,7 +642,11 @@ theorem colimit_cocone_comp_aux
     rw [← w]
     rw [← s.w f] at h
     simpa using! h
-  · intro 
+  · intro j₁ j₂ k₁ k₂ f w h
+    rw [← w] at h
+    rw [← s.w f]
+    simpa using! h
+  · exact s.w (𝟙 _)
 -/
 theorem colimit_cocone_comp_aux (s : Cocone (F ⋙ G)) (j : C) :
     G.map (homToLift F (F.obj j)) ≫ s.ι.app (lift F (F.obj j)) = s.ι.app j := by
@@ -862,7 +902,7 @@ definition colimIso
       colim_map, colimitIso_hom]
     ext
     simp only [comp_obj, ι_colimMap_assoc, whiskerLeft_app, colimit.ι_pre, colimit.ι_pre_assoc,
-      ι_col
+      ι_colimMap]
 
 中文:
 定义 colimIso
@@ -872,7 +912,7 @@ definition colimIso
       colim_map, colimitIso_hom]
     ext
     simp only [comp_obj, ι_colimMap_assoc, whiskerLeft_app, colimit.ι_pre, colimit.ι_pre_assoc,
-      ι_col
+      ι_colimMap]
 -/
 def colimIso [HasColimitsOfShape D E] [HasColimitsOfShape C E] :
     (whiskeringLeft _ _ _).obj F ⋙ colim ≅ colim (J := D) (C := E) :=
@@ -1018,7 +1058,10 @@ definition createsColimitOfComp
   lifts {c} hc := by
     refine ⟨(extendCocone (F := F)).obj (liftColimit ((isColimitWhiskerEquiv F _).symm hc)), ?_⟩
     let i := liftedColimitMapsToOriginal (K := (F ⋙ G)) ((isColimitWhiskerEquiv F _).symm hc)
-    refine ?_ ≪≫ ((extendCocone (F := F)).mapIso i)
+    refine ?_ ≪≫ ((extendCocone (F := F)).mapIso i) ≪≫ ((coconesEquiv F (G ⋙ H)).counitIso.app _)
+    exact Cocone.ext (Iso.refl _)
+
+include F in
 
 中文:
 定义 createsColimitOfComp
@@ -1027,7 +1070,10 @@ definition createsColimitOfComp
   lifts {c} hc := by
     refine ⟨(extendCocone (F := F)).obj (liftColimit ((isColimitWhiskerEquiv F _).symm hc)), ?_⟩
     let i := liftedColimitMapsToOriginal (K := (F ⋙ G)) ((isColimitWhiskerEquiv F _).symm hc)
-    refine ?_ ≪≫ ((extendCocone (F := F)).mapIso i)
+    refine ?_ ≪≫ ((extendCocone (F := F)).mapIso i) ≪≫ ((coconesEquiv F (G ⋙ H)).counitIso.app _)
+    exact Cocone.ext (Iso.refl _)
+
+include F in
 
 Depends on / 依赖: reflects, reflectsColimit_of_comp
 -/
@@ -1212,7 +1258,14 @@ theorem final_of_colimit_comp_coyoneda_iso_pUnit
       exact ⟨StructuredArrow.mk y⟩
     apply zigzag_isConnected
     rintro ⟨⟨⟨⟩⟩, X₁, f₁⟩ ⟨⟨⟨⟩⟩, X₂, f₂⟩
-    let y₁ := colimit.ι (F
+    let y₁ := colimit.ι (F ⋙ coyoneda.obj (op d)) X₁ f₁
+    let y₂ := colimit.ι (F ⋙ coyoneda.obj (op d)) X₂ f₂
+    have e : y₁ = y₂ := by
+      apply (I d).toEquiv.injective
+      ext
+    have t := Types.colimit_eq.{v, v} e
+    clear e y₁ y₂
+    exact Final.zigzag_of_eqvGen_colimitTypeRel t⟩
 
 中文:
 定理 final_of_colimit_comp_coyoneda_iso_pUnit
@@ -1223,7 +1276,14 @@ theorem final_of_colimit_comp_coyoneda_iso_pUnit
       exact ⟨StructuredArrow.mk y⟩
     apply zigzag_isConnected
     rintro ⟨⟨⟨⟩⟩, X₁, f₁⟩ ⟨⟨⟨⟩⟩, X₂, f₂⟩
-    let y₁ := colimit.ι (F
+    let y₁ := colimit.ι (F ⋙ coyoneda.obj (op d)) X₁ f₁
+    let y₂ := colimit.ι (F ⋙ coyoneda.obj (op d)) X₂ f₂
+    have e : y₁ = y₂ := by
+      apply (I d).toEquiv.injective
+      ext
+    have t := Types.colimit_eq.{v, v} e
+    clear e y₁ y₂
+    exact Final.zigzag_of_eqvGen_colimitTypeRel t⟩
 
 Depends on / 依赖: Final.zigzag_of_eqvGen_colimitTypeRel, Limits, Limits.Types.jointly_surjective, Nonempty, PUnit.unit, StructuredArrow, StructuredArrow.mk, Types.colimit_eq, colimit, colimit_eq, coyoneda, coyoneda.obj, injective, jointly_surjective, toEquiv, toEquiv.injective, zigzag_isConnected, zigzag_of_eqvGen_colimitTypeRel
 -/
@@ -1384,7 +1444,8 @@ definition induction
     simp
   · intro j₁ j₂ f a
     fapply h₂ _ _ _ _ f.left _ a
-    convert
+    convert! f.w
+    simp
 
 中文:
 定义 induction
@@ -1400,7 +1461,8 @@ definition induction
     simp
   · intro j₁ j₂ f a
     fapply h₂ _ _ _ _ f.left _ a
-    convert
+    convert! f.w
+    simp
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, Nonempty, Nonempty.some, Y.hom, Y.left, convert, f.left, fapply, isPreconnected_induction
 -/
@@ -1444,7 +1506,18 @@ definition extendCone
           naturality := fun X Y f => by
             dsimp; simp only [Category.id_comp, Category.assoc]
             -- This would be true if we'd chosen `lift F Y` to be `lift F X`
-            -- and `homToL
+            -- and `homToLift F Y` to be `homToLift F X ≫ f`.
+            apply
+              induction F fun Z k =>
+                (c.π.app Z ≫ G.map k : c.pt ⟶ _) =
+                  c.π.app (lift F X) ≫ G.map (homToLift F X) ≫ G.map f
+            · intro Z₁ Z₂ k₁ k₂ g a z
+              rw [← a]; rw [Functor.map_comp]; rw [← Functor.comp_map]; rw [← Category.assoc]; rw [← Category.assoc]; rw [c.w] at z
+              rw [z]; rw [Category.assoc]
+            · intro Z₁ Z₂ k₁ k₂ g a z
+              rw [← a]; rw [Functor.map_comp]; rw [← Functor.comp_map]; rw [← Category.assoc]; rw [← Category.assoc]; rw [c.w]; rw [z]; rw [Category.assoc]
+            · rw [← Functor.map_comp] } }
+  map f := { hom := f.hom }
 
 中文:
 定义 extendCone
@@ -1455,7 +1528,18 @@ definition extendCone
           naturality := fun X Y f => by
             dsimp; simp only [Category.id_comp, Category.assoc]
             -- This would be true if we'd chosen `lift F Y` to be `lift F X`
-            -- and `homToL
+            -- and `homToLift F Y` to be `homToLift F X ≫ f`.
+            apply
+              induction F fun Z k =>
+                (c.π.app Z ≫ G.map k : c.pt ⟶ _) =
+                  c.π.app (lift F X) ≫ G.map (homToLift F X) ≫ G.map f
+            · intro Z₁ Z₂ k₁ k₂ g a z
+              rw [← a]; rw [Functor.map_comp]; rw [← Functor.comp_map]; rw [← Category.assoc]; rw [← Category.assoc]; rw [c.w] at z
+              rw [z]; rw [Category.assoc]
+            · intro Z₁ Z₂ k₁ k₂ g a z
+              rw [← a]; rw [Functor.map_comp]; rw [← Functor.comp_map]; rw [← Category.assoc]; rw [← Category.assoc]; rw [c.w]; rw [z]; rw [Category.assoc]
+            · rw [← Functor.map_comp] } }
+  map f := { hom := f.hom }
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, G.map, c.pt, homToLift, id_comp, naturality
 -/
@@ -1533,7 +1617,11 @@ theorem limit_cone_comp_aux
     rw [← s.w f]
     rw [← w] at h
     simpa using h
-  · intro j
+  · intro j₁ j₂ k₁ k₂ f w h
+    rw [← s.w f] at h
+    rw [← w]
+    simpa using h
+  · exact s.w (𝟙 _)
 
 中文:
 定理 limit_cone_comp_aux
@@ -1546,7 +1634,11 @@ theorem limit_cone_comp_aux
     rw [← s.w f]
     rw [← w] at h
     simpa using h
-  · intro j
+  · intro j₁ j₂ k₁ k₂ f w h
+    rw [← s.w f] at h
+    rw [← w]
+    simpa using h
+  · exact s.w (𝟙 _)
 -/
 theorem limit_cone_comp_aux (s : Cone (F ⋙ G)) (j : C) :
     s.π.app (lift F (F.obj j)) ≫ G.map (homToLift F (F.obj j)) = s.π.app j := by
@@ -1905,7 +1997,10 @@ definition createsLimitOfComp
   lifts {c} hc := by
     refine ⟨(extendCone (F := F)).obj (liftLimit ((isLimitWhiskerEquiv F _).symm hc)), ?_⟩
     let i := liftedLimitMapsToOriginal (K := (F ⋙ G)) ((isLimitWhiskerEquiv F _).symm hc)
-    refine ?_ ≪≫ ((extendCone (F := F)).mapIso i) ≪≫ ((conesEqu
+    refine ?_ ≪≫ ((extendCone (F := F)).mapIso i) ≪≫ ((conesEquiv F (G ⋙ H)).counitIso.app _)
+    exact Cone.ext (Iso.refl _)
+
+include F in
 
 中文:
 定义 createsLimitOfComp
@@ -1914,7 +2009,10 @@ definition createsLimitOfComp
   lifts {c} hc := by
     refine ⟨(extendCone (F := F)).obj (liftLimit ((isLimitWhiskerEquiv F _).symm hc)), ?_⟩
     let i := liftedLimitMapsToOriginal (K := (F ⋙ G)) ((isLimitWhiskerEquiv F _).symm hc)
-    refine ?_ ≪≫ ((extendCone (F := F)).mapIso i) ≪≫ ((conesEqu
+    refine ?_ ≪≫ ((extendCone (F := F)).mapIso i) ≪≫ ((conesEquiv F (G ⋙ H)).counitIso.app _)
+    exact Cone.ext (Iso.refl _)
+
+include F in
 
 Depends on / 依赖: reflects, reflectsLimit_of_comp
 -/
@@ -2293,7 +2391,14 @@ instance final_comp
   let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} D := AsSmall.equiv
   let s₃ : E ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} E := AsSmall.equiv
   let i : s₁.inverse ⋙ (F ⋙ G) ⋙ s₃.functor ≅
-      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G
+      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G ⋙ s₃.functor) :=
+    isoWhiskerLeft (s₁.inverse ⋙ F) (isoWhiskerRight s₂.unitIso (G ⋙ s₃.functor))
+  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_natIso_iff i]; rw [final_iff_isIso_colimit_pre]
+  rw [final_iff_comp_equivalence F s₂.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_iff_isIso_colimit_pre] at hF
+  rw [final_iff_comp_equivalence G s₃.functor]; rw [final_iff_equivalence_comp s₂.inverse]; rw [final_iff_isIso_colimit_pre] at hG
+  intro H
+  rw [← colimit.pre_pre]
+  infer_instance
 
 中文:
 实例 final_comp
@@ -2303,7 +2408,14 @@ instance final_comp
   let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} D := AsSmall.equiv
   let s₃ : E ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} E := AsSmall.equiv
   let i : s₁.inverse ⋙ (F ⋙ G) ⋙ s₃.functor ≅
-      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G
+      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G ⋙ s₃.functor) :=
+    isoWhiskerLeft (s₁.inverse ⋙ F) (isoWhiskerRight s₂.unitIso (G ⋙ s₃.functor))
+  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_natIso_iff i]; rw [final_iff_isIso_colimit_pre]
+  rw [final_iff_comp_equivalence F s₂.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_iff_isIso_colimit_pre] at hF
+  rw [final_iff_comp_equivalence G s₃.functor]; rw [final_iff_equivalence_comp s₂.inverse]; rw [final_iff_isIso_colimit_pre] at hG
+  intro H
+  rw [← colimit.pre_pre]
+  infer_instance
 
 Depends on / 依赖: AsSmall, AsSmall.equiv, final_iff_comp_equivalence, final_iff_equivalence_comp, final_natIso_iff, functor, inverse, isoWhiskerLeft, isoWhiskerRight, unitIso
 -/
@@ -2356,7 +2468,15 @@ theorem final_of_final_comp
   let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} D := AsSmall.equiv
   let s₃ : E ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} E := AsSmall.equiv
   let _i : s₁.inverse ⋙ (F ⋙ G) ⋙ s₃.functor ≅
-      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ 
+      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G ⋙ s₃.functor) :=
+    isoWhiskerLeft (s₁.inverse ⋙ F) (isoWhiskerRight s₂.unitIso (G ⋙ s₃.functor))
+  rw [final_iff_comp_equivalence G s₃.functor]; rw [final_iff_equivalence_comp s₂.inverse]; rw [final_iff_isIso_colimit_pre]
+  rw [final_iff_comp_equivalence F s₂.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_iff_isIso_colimit_pre] at hF
+  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_natIso_iff _i]; rw [final_iff_isIso_colimit_pre] at hFG
+  intro H
+  replace hFG := hFG H
+  rw [← colimit.pre_pre] at hFG
+  exact IsIso.of_isIso_comp_left (colimit.pre _ (s₁.inverse ⋙ F ⋙ s₂.functor)) _
 
 中文:
 定理 final_of_final_comp
@@ -2367,7 +2487,15 @@ theorem final_of_final_comp
   let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} D := AsSmall.equiv
   let s₃ : E ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} E := AsSmall.equiv
   let _i : s₁.inverse ⋙ (F ⋙ G) ⋙ s₃.functor ≅
-      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ 
+      (s₁.inverse ⋙ F ⋙ s₂.functor) ⋙ (s₂.inverse ⋙ G ⋙ s₃.functor) :=
+    isoWhiskerLeft (s₁.inverse ⋙ F) (isoWhiskerRight s₂.unitIso (G ⋙ s₃.functor))
+  rw [final_iff_comp_equivalence G s₃.functor]; rw [final_iff_equivalence_comp s₂.inverse]; rw [final_iff_isIso_colimit_pre]
+  rw [final_iff_comp_equivalence F s₂.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_iff_isIso_colimit_pre] at hF
+  rw [final_iff_comp_equivalence (F ⋙ G) s₃.functor]; rw [final_iff_equivalence_comp s₁.inverse]; rw [final_natIso_iff _i]; rw [final_iff_isIso_colimit_pre] at hFG
+  intro H
+  replace hFG := hFG H
+  rw [← colimit.pre_pre] at hFG
+  exact IsIso.of_isIso_comp_left (colimit.pre _ (s₁.inverse ⋙ F ⋙ s₂.functor)) _
 
 Depends on / 依赖: AsSmall, AsSmall.equiv, final_iff_comp_equivalence, final_iff_equivalence_comp, final_iff_isIso_colimit, functor, inverse, isoWhiskerLeft, isoWhiskerRight, unitIso
 -/
@@ -2617,7 +2745,9 @@ instance [HasTerminal
   body: have : (fromPUnit.{0} (⊤_ C)).Final := final_fromPUnit_of_isTerminal terminalIsTerminal
   have : (fromPUnit.{0} (F.obj (⊤_ C))).Final := final_fromPUnit_of_isTerminal
     (terminalIsTerminal.isTerminalObj F (⊤_ C))
-  have : ((fromPUnit.{0} (⊤_ C)) ⋙ F).Final := final_of_natIso (F := fromPUnit.{0} (F
+  have : ((fromPUnit.{0} (⊤_ C)) ⋙ F).Final := final_of_natIso (F := fromPUnit.{0} (F.obj (⊤_ C)))
+    (Discrete.natIso (fun _ => Iso.refl _))
+  final_of_final_comp (fromPUnit.{0} (⊤_ C)) F
 
 中文:
 实例 [有终止
@@ -2625,7 +2755,9 @@ instance [HasTerminal
   定义体: have : (fromPUnit.{0} (⊤_ C)).Final := final_fromPUnit_of_isTerminal terminalIsTerminal
   have : (fromPUnit.{0} (F.obj (⊤_ C))).Final := final_fromPUnit_of_isTerminal
     (terminalIsTerminal.isTerminalObj F (⊤_ C))
-  have : ((fromPUnit.{0} (⊤_ C)) ⋙ F).Final := final_of_natIso (F := fromPUnit.{0} (F
+  have : ((fromPUnit.{0} (⊤_ C)) ⋙ F).Final := final_of_natIso (F := fromPUnit.{0} (F.obj (⊤_ C)))
+    (Discrete.natIso (fun _ => Iso.refl _))
+  final_of_final_comp (fromPUnit.{0} (⊤_ C)) F
 
 Depends on / 依赖: Discrete, Discrete.natIso, F.obj, Iso.refl, final_fromPUnit_of_isTerminal, final_of_final_comp, final_of_natIso, fromPUnit, isTerminalObj, natIso, terminalIsTerminal, terminalIsTerminal.isTerminalObj
 -/
@@ -2648,7 +2780,8 @@ instance [HasInitial
   have : (fromPUnit.{0} (F.obj (⊥_ C))).Initial := initial_fromPUnit_of_isInitial
     (initialIsInitial.isInitialObj F (⊥_ C))
   have : ((fromPUnit.{0} (⊥_ C)) ⋙ F).Initial := initial_of_natIso
-    (F := fromPUn
+    (F := fromPUnit.{0} (F.obj (⊥_ C))) (Discrete.natIso (fun _ => Iso.refl _))
+  initial_of_initial_comp (fromPUnit.{0} (⊥_ C)) F
 
 中文:
 实例 [HasInitial
@@ -2657,7 +2790,8 @@ instance [HasInitial
   have : (fromPUnit.{0} (F.obj (⊥_ C))).Initial := initial_fromPUnit_of_isInitial
     (initialIsInitial.isInitialObj F (⊥_ C))
   have : ((fromPUnit.{0} (⊥_ C)) ⋙ F).Initial := initial_of_natIso
-    (F := fromPUn
+    (F := fromPUnit.{0} (F.obj (⊥_ C))) (Discrete.natIso (fun _ => Iso.refl _))
+  initial_of_initial_comp (fromPUnit.{0} (⊥_ C)) F
 
 Depends on / 依赖: Discrete, Discrete.natIso, F.obj, Initial, Iso.refl, fromPUnit, initialIsInitial, initialIsInitial.isInitialObj, initial_fromPUnit_of_isInitial, initial_of_initial_comp, initial_of_natIso, isInitialObj, natIso
 -/
@@ -2710,7 +2844,21 @@ theorem IsFilteredOrEmpty.of_final
     Final.homToLift F X ≫ F.map (IsFiltered.leftToMax _ _),
     ⟨Final.homToLift F Y ≫ F.map (IsFiltered.rightToMax _ _), trivial⟩⟩
   cocone_maps {X Y} f g := by
-    let P : StructuredArrow X F -> Prop := fun h => exists (Z : C) (q₁ : h.righ
+    let P : StructuredArrow X F -> Prop := fun h => exists (Z : C) (q₁ : h.right ⟶ Z)
+      (q₂ : Final.lift F Y ⟶ Z), h.hom ≫ F.map q₁ = f ≫ Final.homToLift F Y ≫ F.map q₂
+    rsuffices ⟨Z, q₁, q₂, h⟩ : Nonempty (P (StructuredArrow.mk (g ≫ Final.homToLift F Y)))
+    · refine ⟨F.obj (IsFiltered.coeq q₁ q₂),
+        Final.homToLift F Y ≫ F.map (q₁ ≫ IsFiltered.coeqHom q₁ q₂), ?_⟩
+      conv_lhs => rw [IsFiltered.coeq_condition]
+      simp only [F.map_comp, ← reassoc_of% h, StructuredArrow.mk_hom_eq_self, Category.assoc]
+    have h₀ : P (StructuredArrow.mk (f ≫ Final.homToLift F Y)) := ⟨_, 𝟙 _, 𝟙 _, by simp⟩
+    refine isPreconnected_induction P ?_ ?_ h₀ _
+    · rintro U V h ⟨Z, q₁, q₂, hq⟩
+      obtain ⟨W, q₃, q₄, hq'⟩ := IsFiltered.span q₁ h.right
+      refine ⟨W, q₄, q₂ ≫ q₃, ?_⟩
+      rw [F.map_comp]; rw [← reassoc_of% hq]; rw [← F.map_comp]; rw [hq']; rw [F.map_comp]; rw [StructuredArrow.w_assoc]
+    · rintro U V h ⟨Z, q₁, q₂, hq⟩
+      exact ⟨Z, h.right ≫ q₁, q₂, by simp only [F.map_comp, StructuredArrow.w_assoc, hq]⟩
 
 中文:
 定理 是FilteredOrEmpty.of_final
@@ -2719,7 +2867,21 @@ theorem IsFilteredOrEmpty.of_final
     Final.homToLift F X ≫ F.map (IsFiltered.leftToMax _ _),
     ⟨Final.homToLift F Y ≫ F.map (IsFiltered.rightToMax _ _), trivial⟩⟩
   cocone_maps {X Y} f g := by
-    let P : StructuredArrow X F -> Prop := fun h => exists (Z : C) (q₁ : h.righ
+    let P : StructuredArrow X F -> Prop := fun h => exists (Z : C) (q₁ : h.right ⟶ Z)
+      (q₂ : Final.lift F Y ⟶ Z), h.hom ≫ F.map q₁ = f ≫ Final.homToLift F Y ≫ F.map q₂
+    rsuffices ⟨Z, q₁, q₂, h⟩ : Nonempty (P (StructuredArrow.mk (g ≫ Final.homToLift F Y)))
+    · refine ⟨F.obj (IsFiltered.coeq q₁ q₂),
+        Final.homToLift F Y ≫ F.map (q₁ ≫ IsFiltered.coeqHom q₁ q₂), ?_⟩
+      conv_lhs => rw [IsFiltered.coeq_condition]
+      simp only [F.map_comp, ← reassoc_of% h, StructuredArrow.mk_hom_eq_self, Category.assoc]
+    have h₀ : P (StructuredArrow.mk (f ≫ Final.homToLift F Y)) := ⟨_, 𝟙 _, 𝟙 _, by simp⟩
+    refine isPreconnected_induction P ?_ ?_ h₀ _
+    · rintro U V h ⟨Z, q₁, q₂, hq⟩
+      obtain ⟨W, q₃, q₄, hq'⟩ := IsFiltered.span q₁ h.right
+      refine ⟨W, q₄, q₂ ≫ q₃, ?_⟩
+      rw [F.map_comp]; rw [← reassoc_of% hq]; rw [← F.map_comp]; rw [hq']; rw [F.map_comp]; rw [StructuredArrow.w_assoc]
+    · rintro U V h ⟨Z, q₁, q₂, hq⟩
+      exact ⟨Z, h.right ≫ q₁, q₂, by simp only [F.map_comp, StructuredArrow.w_assoc, hq]⟩
 
 Depends on / 依赖: F.obj, Final.lift, IsFiltered, IsFiltered.max
 -/
@@ -2900,7 +3062,11 @@ definition Grothendieck.structuredArrowToStructuredArrowPre
     (Grothendieck.Hom.mk (by exact g.right)
       (eqToHom (by
         dsimp +instances
-        rw [← StructuredArrow.w
+        rw [← StructuredArrow.w g]; rw [map_comp]; rw [Cat.Hom.comp_obj])))
+    (by
+      simp only [StructuredArrow.mk_right]
+      generalize_proofs
+      apply Grothendieck.ext <;> simp)
 
 中文:
 定义 Grothendieck.structuredArrowToStructuredArrowPre
@@ -2911,7 +3077,11 @@ definition Grothendieck.structuredArrowToStructuredArrowPre
     (Grothendieck.Hom.mk (by exact g.right)
       (eqToHom (by
         dsimp +instances
-        rw [← StructuredArrow.w
+        rw [← StructuredArrow.w g]; rw [map_comp]; rw [Cat.Hom.comp_obj])))
+    (by
+      simp only [StructuredArrow.mk_right]
+      generalize_proofs
+      apply Grothendieck.ext <;> simp)
 
 Depends on / 依赖: F.map, StructuredArrow, StructuredArrow.mk, X.hom, X.right, toFunctor, toFunctor.obj
 -/
@@ -2944,7 +3114,18 @@ instance Grothendieck.final_pre
   let : Nonempty (StructuredArrow ⟨d, f⟩ (pre F G)) :=
     ⟨u, ⟨c, (F.map g).toFunctor.obj f⟩, ⟨(by exact g), (by exact 𝟙 _)⟩⟩
   apply zigzag_isConnected
-  rintro ⟨⟨⟨⟩⟩, ⟨bi, fi⟩, ⟨gbi, gfi⟩⟩ ⟨⟨⟨⟩⟩, ⟨b
+  rintro ⟨⟨⟨⟩⟩, ⟨bi, fi⟩, ⟨gbi, gfi⟩⟩ ⟨⟨⟨⟩⟩, ⟨bj, fj⟩, ⟨gbj, gfj⟩⟩
+  dsimp +instances at fj fi gfi gbi gbj gfj
+  apply Zigzag.trans (j₂ := StructuredArrow.mk (Y := ⟨bi, ((F.map gbi).toFunctor.obj f)⟩)
+      (Grothendieck.Hom.mk gbi (𝟙 _)))
+    (.of_zag (.inr ⟨StructuredArrow.homMk (Grothendieck.Hom.mk (by dsimp; exact 𝟙 _)
+      (eqToHom (by simp) ≫ gfi)) (by apply Grothendieck.ext <;> simp)⟩))
+  refine Zigzag.trans (j₂ := StructuredArrow.mk (Y := ⟨bj, ((F.map gbj).toFunctor.obj f)⟩)
+      (Grothendieck.Hom.mk gbj (𝟙 _))) ?_
+    (.of_zag (.inl ⟨StructuredArrow.homMk (Grothendieck.Hom.mk (by dsimp; exact 𝟙 _)
+      (eqToHom (by simp) ≫ gfj)) (by apply Grothendieck.ext <;> simp)⟩))
+  exact zigzag_prefunctor_obj_of_zigzag (Grothendieck.structuredArrowToStructuredArrowPre F G d f)
+    (isPreconnected_zigzag (.mk gbi) (.mk gbj))
 
 中文:
 实例 Grothendieck.final_pre
@@ -2956,7 +3137,18 @@ instance Grothendieck.final_pre
   let : Nonempty (StructuredArrow ⟨d, f⟩ (pre F G)) :=
     ⟨u, ⟨c, (F.map g).toFunctor.obj f⟩, ⟨(by exact g), (by exact 𝟙 _)⟩⟩
   apply zigzag_isConnected
-  rintro ⟨⟨⟨⟩⟩, ⟨bi, fi⟩, ⟨gbi, gfi⟩⟩ ⟨⟨⟨⟩⟩, ⟨b
+  rintro ⟨⟨⟨⟩⟩, ⟨bi, fi⟩, ⟨gbi, gfi⟩⟩ ⟨⟨⟨⟩⟩, ⟨bj, fj⟩, ⟨gbj, gfj⟩⟩
+  dsimp +instances at fj fi gfi gbi gbj gfj
+  apply Zigzag.trans (j₂ := StructuredArrow.mk (Y := ⟨bi, ((F.map gbi).toFunctor.obj f)⟩)
+      (Grothendieck.Hom.mk gbi (𝟙 _)))
+    (.of_zag (.inr ⟨StructuredArrow.homMk (Grothendieck.Hom.mk (by dsimp; exact 𝟙 _)
+      (eqToHom (by simp) ≫ gfi)) (by apply Grothendieck.ext <;> simp)⟩))
+  refine Zigzag.trans (j₂ := StructuredArrow.mk (Y := ⟨bj, ((F.map gbj).toFunctor.obj f)⟩)
+      (Grothendieck.Hom.mk gbj (𝟙 _))) ?_
+    (.of_zag (.inl ⟨StructuredArrow.homMk (Grothendieck.Hom.mk (by dsimp; exact 𝟙 _)
+      (eqToHom (by simp) ≫ gfj)) (by apply Grothendieck.ext <;> simp)⟩))
+  exact zigzag_prefunctor_obj_of_zigzag (Grothendieck.structuredArrowToStructuredArrowPre F G d f)
+    (isPreconnected_zigzag (.mk gbi) (.mk gbj))
 
 Depends on / 依赖: F.map, Grothendieck, Grothendieck.Hom.mk, Nonempty, StructuredArrow, StructuredArrow.h, StructuredArrow.mk, Zigzag, Zigzag.trans, instances, of_zag, toFunctor, toFunctor.obj, zigzag_isConnected
 -/
@@ -2996,7 +3188,17 @@ definition Grothendieck.fiberwiseColimitMapCompEquivalence
         isoWhiskerRight (ιCompMap α X) H ≪≫ Functor.associator _ _ _) ≪≫
       Final.colimitIso (α.app X).toFunctor (ι G X ⋙ H))
     (fun f => colimit.hom_ext <| fun d => by
-      simp only [map, Cat.H
+      simp only [map, Cat.Hom.comp_toFunctor, comp_obj, ι_obj,
+        fiberwiseColimit_map, ιNatTrans, ιCompMap, Iso.trans_hom, Category.assoc, ι_colimMap_assoc,
+        NatTrans.comp_app, whiskerRight_app, Functor.comp_map, Cat.Hom₂.eqToHom_toNatTrans,
+        eqToHom_app, map_id, Category.comp_id, associator_hom_app, colimit.ι_pre_assoc,
+        HasColimit.isoOfNatIso_ι_hom_assoc, Iso.symm_hom, isoWhiskerRight_hom, associator_inv_app,
+        NatIso.ofComponents_hom_app, Iso.refl_hom, Final.ι_colimitIso_hom, Category.id_comp,
+        Final.ι_colimitIso_hom_assoc, colimit.ι_pre]
+      have := Functor.congr_obj congr($(α.naturality f).toFunctor) d
+      dsimp at this
+      congr
+      apply eqToHom_heq_id_dom)
 
 中文:
 定义 Grothendieck.fiberwiseColimitMapCompEquivalence
@@ -3007,7 +3209,17 @@ definition Grothendieck.fiberwiseColimitMapCompEquivalence
         isoWhiskerRight (ιCompMap α X) H ≪≫ Functor.associator _ _ _) ≪≫
       Final.colimitIso (α.app X).toFunctor (ι G X ⋙ H))
     (fun f => colimit.hom_ext <| fun d => by
-      simp only [map, Cat.H
+      simp only [map, Cat.Hom.comp_toFunctor, comp_obj, ι_obj,
+        fiberwiseColimit_map, ιNatTrans, ιCompMap, Iso.trans_hom, Category.assoc, ι_colimMap_assoc,
+        NatTrans.comp_app, whiskerRight_app, Functor.comp_map, Cat.Hom₂.eqToHom_toNatTrans,
+        eqToHom_app, map_id, Category.comp_id, associator_hom_app, colimit.ι_pre_assoc,
+        HasColimit.isoOfNatIso_ι_hom_assoc, Iso.symm_hom, isoWhiskerRight_hom, associator_inv_app,
+        NatIso.ofComponents_hom_app, Iso.refl_hom, Final.ι_colimitIso_hom, Category.id_comp,
+        Final.ι_colimitIso_hom_assoc, colimit.ι_pre]
+      have := Functor.congr_obj congr($(α.naturality f).toFunctor) d
+      dsimp at this
+      congr
+      apply eqToHom_heq_id_dom)
 
 Depends on / 依赖: Cat.Hom, Cat.Hom.comp_toFunctor, Category, Category.assoc, Final.colimitIso, Functor, Functor.associator, Functor.comp_map, HasColimit, HasColimit.isoOfNatIso, Iso.trans_hom, NatIso, NatIso.ofComponents, NatTrans, NatTrans.comp_app, associator, colimit, colimit.hom_ext, colimitIso, comp_app
 -/
@@ -3048,7 +3260,7 @@ lemma Grothendieck.final_map_small
   convert! Iso.isIso_hom i
   apply colimit.hom_ext
   intro X
-  simp [i, fiberwiseColimitMapCompEquival
+  simp [i, fiberwiseColimitMapCompEquivalence]
 
 中文:
 引理 Grothendieck.final_map_small
@@ -3061,7 +3273,7 @@ lemma Grothendieck.final_map_small
   convert! Iso.isIso_hom i
   apply colimit.hom_ext
   intro X
-  simp [i, fiberwiseColimitMapCompEquival
+  simp [i, fiberwiseColimitMapCompEquivalence]
 -/
 private lemma Grothendieck.final_map_small {C : Type u₁} [SmallCategory C] {F G : C ⥤ Cat.{u₁, u₁}}
     (α : F ⟶ G) [hα : forall X, Final (α.app X).toFunctor] : Final (map α) := by
@@ -3087,7 +3299,15 @@ lemma Grothendieck.final_map
   let F' : AsSmall C ⥤ Cat := sC.inverse ⋙ F ⋙ Cat.asSmallFunctor.{max v₁ u₁ v₂ u₂}
   let G' : AsSmall C ⥤ Cat := sC.inverse ⋙ G ⋙ Cat.asSmallFunctor.{max v₁ u₁ v₂ u₂}
   let α' : F' ⟶ G' := whiskerLeft _ (whiskerRight α _)
-  have : foral
+  have : forall X, Final (α'.app X).toFunctor := fun X =>
+    inferInstanceAs (AsSmall.equiv.inverse ⋙ _ ⋙ AsSmall.equiv.functor).Final
+  have hα' : (map α').Final := final_map_small _
+  dsimp only [α', ← Equivalence.symm_functor] at hα'
+  have i := mapWhiskerLeftIsoConjPreMap sC.symm (whiskerRight α Cat.asSmallFunctor)
+    ≪≫ isoWhiskerLeft _ (isoWhiskerRight (mapWhiskerRightAsSmallFunctor α) _)
+  have := final_of_natIso i
+  rwa [← final_iff_equivalence_comp, ← final_iff_comp_equivalence,
+    ← final_iff_equivalence_comp, ← final_iff_comp_equivalence] at this
 
 中文:
 引理 Grothendieck.final_map
@@ -3097,7 +3317,15 @@ lemma Grothendieck.final_map
   let F' : AsSmall C ⥤ Cat := sC.inverse ⋙ F ⋙ Cat.asSmallFunctor.{max v₁ u₁ v₂ u₂}
   let G' : AsSmall C ⥤ Cat := sC.inverse ⋙ G ⋙ Cat.asSmallFunctor.{max v₁ u₁ v₂ u₂}
   let α' : F' ⟶ G' := whiskerLeft _ (whiskerRight α _)
-  have : foral
+  have : forall X, Final (α'.app X).toFunctor := fun X =>
+    inferInstanceAs (AsSmall.equiv.inverse ⋙ _ ⋙ AsSmall.equiv.functor).Final
+  have hα' : (map α').Final := final_map_small _
+  dsimp only [α', ← Equivalence.symm_functor] at hα'
+  have i := mapWhiskerLeftIsoConjPreMap sC.symm (whiskerRight α Cat.asSmallFunctor)
+    ≪≫ isoWhiskerLeft _ (isoWhiskerRight (mapWhiskerRightAsSmallFunctor α) _)
+  have := final_of_natIso i
+  rwa [← final_iff_equivalence_comp, ← final_iff_comp_equivalence,
+    ← final_iff_equivalence_comp, ← final_iff_comp_equivalence] at this
 
 Depends on / 依赖: AsSmall, AsSmall.equiv, AsSmall.equiv.functor, AsSmall.equiv.inverse, Cat.asSmallFunctor, Equivalence, Equivalence.symm_functor, asSmallFunctor, final_map_small, functor, inverse, sC.inverse, symm_functor, toFunctor, whiskerLeft, whiskerRight
 -/
@@ -3179,7 +3407,9 @@ theorem initial_ι
   · have : Nonempty (CostructuredArrow P.ι d) := ⟨⟨d, hd⟩, ⟨⟨⟩⟩, 𝟙 _⟩
     refine zigzag_isConnected (fun j₁ j₂ => Zigzag.trans
       (j₂ := by exact CostructuredArrow.mk (Y := ⟨d, hd⟩) (𝟙 _)) (.of_hom ?_) (.of_inv ?_))
-    · exact CostructuredArrow.homMk (InducedC
+    · exact CostructuredArrow.homMk (InducedCategory.homMk j₁.hom)
+    · exact CostructuredArrow.homMk (InducedCategory.homMk j₂.hom)
+  · exact h d hd
 
 中文:
 定理 initial_ι
@@ -3189,7 +3419,9 @@ theorem initial_ι
   · have : Nonempty (CostructuredArrow P.ι d) := ⟨⟨d, hd⟩, ⟨⟨⟩⟩, 𝟙 _⟩
     refine zigzag_isConnected (fun j₁ j₂ => Zigzag.trans
       (j₂ := by exact CostructuredArrow.mk (Y := ⟨d, hd⟩) (𝟙 _)) (.of_hom ?_) (.of_inv ?_))
-    · exact CostructuredArrow.homMk (InducedC
+    · exact CostructuredArrow.homMk (InducedCategory.homMk j₁.hom)
+    · exact CostructuredArrow.homMk (InducedCategory.homMk j₂.hom)
+  · exact h d hd
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, CostructuredArrow.mk, InducedCategory, InducedCategory.homMk, Nonempty, Zigzag, Zigzag.trans, of_hom, of_inv, zigzag_isConnected
 -/
@@ -3224,6 +3456,10 @@ definition Limits.IsLimit.overPost
     (Functor.whiskerRight (Over.forgetCocone j).ι D ≫ (Functor.constComp _ _ _).hom)
     (c.whisker (CategoryTheory.Over.forget j)) (c.π.app j) (by cat_disch)
   letI hc'' : IsLimit c'' :=
+Over.isLimitLiftCone _ _ _ _ _ (Functor.Initial.isLimitWhiskerEquiv _ _).symm hc
+  refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ hc''
+  · exact NatIso.ofComponents (fun k => CategoryTheory.Over.isoMk (Iso.refl _))
+  · exact Cone.ext (Iso.refl _)
 
 中文:
 定义 Limits.是极限.overPost
@@ -3234,6 +3470,10 @@ definition Limits.IsLimit.overPost
     (Functor.whiskerRight (Over.forgetCocone j).ι D ≫ (Functor.constComp _ _ _).hom)
     (c.whisker (CategoryTheory.Over.forget j)) (c.π.app j) (by cat_disch)
   letI hc'' : IsLimit c'' :=
+Over.isLimitLiftCone _ _ _ _ _ (Functor.Initial.isLimitWhiskerEquiv _ _).symm hc
+  refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ hc''
+  · exact NatIso.ofComponents (fun k => CategoryTheory.Over.isoMk (Iso.refl _))
+  · exact Cone.ext (Iso.refl _)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Over.forget, CategoryTheory.Over.isoMk, D.obj, Functor, Functor.Initial.isLimitWhiskerEquiv, Functor.constComp, Functor.whiskerRight, Initial, IsLimit, IsLimit.equivOfNatIsoOfIso, Iso.refl, NatIso, NatIso.ofComponents, Nonempty, Over.forget, Over.forgetCocone, Over.isLimitLiftCone, Over.liftCone, Over.mk
 -/
@@ -3261,7 +3501,12 @@ definition Limits.IsColimit.underPost
   haveI : Nonempty (Under j) := ⟨CategoryTheory.Under.mk (𝟙 j)⟩
   letI c'' := Under.liftCocone (CategoryTheory.Under.forget j ⋙ D) (X := D.obj j)
     ((Functor.constComp _ _ _).inv ≫ Functor.whiskerRight ((Under.forgetCone j).π) D)
-    (c.whisker (CategoryTheory.Under.forget j)) (c.ι.app j) (by c
+    (c.whisker (CategoryTheory.Under.forget j)) (c.ι.app j) (by cat_disch)
+  letI hc'' : IsColimit c'' :=
+Under.isColimitLiftCocone _ _ _ _ _ (Functor.Final.isColimitWhiskerEquiv _ _).symm hc
+  refine IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_ hc''
+  · exact NatIso.ofComponents (fun k => CategoryTheory.Under.isoMk (Iso.refl _))
+  · exact Cocone.ext (Iso.refl _)
 
 中文:
 定义 Limits.是余极限.underPost
@@ -3270,7 +3515,12 @@ definition Limits.IsColimit.underPost
   haveI : Nonempty (Under j) := ⟨CategoryTheory.Under.mk (𝟙 j)⟩
   letI c'' := Under.liftCocone (CategoryTheory.Under.forget j ⋙ D) (X := D.obj j)
     ((Functor.constComp _ _ _).inv ≫ Functor.whiskerRight ((Under.forgetCone j).π) D)
-    (c.whisker (CategoryTheory.Under.forget j)) (c.ι.app j) (by c
+    (c.whisker (CategoryTheory.Under.forget j)) (c.ι.app j) (by cat_disch)
+  letI hc'' : IsColimit c'' :=
+Under.isColimitLiftCocone _ _ _ _ _ (Functor.Final.isColimitWhiskerEquiv _ _).symm hc
+  refine IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_ hc''
+  · exact NatIso.ofComponents (fun k => CategoryTheory.Under.isoMk (Iso.refl _))
+  · exact Cocone.ext (Iso.refl _)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Under.forget, CategoryTheory.Under.mk, D.obj, Functor, Functor.Final.isColimitWhiskerEquiv, Functor.constComp, Functor.whiskerRight, IsColimit, IsColimit.equivOfNatIsoOfIso, NatIso, NatIso.ofComponents, Nonempty, Under.forgetCone, Under.isColimitLiftCocone, Under.liftCocone, c.whisker, cat_disch, constComp, equivOfNatIsoOfIso
 -/

@@ -84,7 +84,9 @@ lemma injective_germ_basicOpen
   intro t ht
   have := hU.isLocalization_basicOpen f
   obtain ⟨t, s, rfl⟩ := IsLocalization.exists_mk'_eq (.powers f) t
-  rw [← RingHom.mem_ker]; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [Ideal.mul_unit_mem_iff_
+  rw [← RingHom.mem_ker]; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [Ideal.mul_unit_mem_iff_mem]; rw [RingHom.mem_ker]; rw [RingHom.algebraMap_toAlgebra]; rw [TopCat.Presheaf.germ_res_apply] at ht
+  swap; · exact @isUnit_of_invertible _ _ _ (@IsLocalization.invertible_mk'_one ..)
+  rw [H _ ht]; rw [IsLocalization.mk'_zero]
 
 中文:
 引理 injective_germ_basicOpen
@@ -94,7 +96,9 @@ lemma injective_germ_basicOpen
   intro t ht
   have := hU.isLocalization_basicOpen f
   obtain ⟨t, s, rfl⟩ := IsLocalization.exists_mk'_eq (.powers f) t
-  rw [← RingHom.mem_ker]; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [Ideal.mul_unit_mem_iff_
+  rw [← RingHom.mem_ker]; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [Ideal.mul_unit_mem_iff_mem]; rw [RingHom.mem_ker]; rw [RingHom.algebraMap_toAlgebra]; rw [TopCat.Presheaf.germ_res_apply] at ht
+  swap; · exact @isUnit_of_invertible _ _ _ (@IsLocalization.invertible_mk'_one ..)
+  rw [H _ ht]; rw [IsLocalization.mk'_zero]
 
 Depends on / 依赖: Ideal.mul_unit_mem_iff_mem, IsLoca, IsLocalization, IsLocalization.exists_mk, IsLocalization.invertible_mk, IsLocalization.mk, Presheaf, RingHom, RingHom.algebraMap_toAlgebra, RingHom.injective_iff_ker_eq_bot, RingHom.ker_eq_bot_iff_eq_zero, RingHom.mem_ker, TopCat, TopCat.Presheaf.germ_res_apply, _eq_mul_mk, _one, algebraMap_toAlgebra, exists_mk, germ_res_apply, hU.isLocalization_basicOpen
 -/
@@ -184,7 +188,15 @@ lemma isGermInjectiveAt_iff_of_isOpenImmersion
   obtain ⟨U, hxU, hU, hU', H⟩ :=
     Y.exists_le_and_germ_injective (f x) (V := f.opensRange) ⟨x, rfl⟩
   obtain ⟨V, hV⟩ := (IsOpenImmersion.affineOpensEquiv f).surjective ⟨⟨U, hU⟩, hU'⟩
-  obtain rfl : f ''ᵁ V = U := Subtype.ext_iff.mp (Subtype.ext_if
+  obtain rfl : f ''ᵁ V = U := Subtype.ext_iff.mp (Subtype.ext_iff.mp hV)
+  obtain ⟨y, hy, e : f y = f x⟩ := hxU
+  obtain rfl := f.isOpenEmbedding.injective e
+  refine ⟨V, hy, V.2, ?_⟩
+  replace H := ((MorphismProperty.injective CommRingCat).cancel_right_of_respectsIso _
+    (f.stalkMap y)).mpr H
+  replace H := ((MorphismProperty.injective CommRingCat).cancel_left_of_respectsIso
+    (f.appIso V).inv _).mpr H
+  simpa using! H
 
 中文:
 引理 isGermInjectiveAt_iff_of_isOpenImmersion
@@ -194,7 +206,15 @@ lemma isGermInjectiveAt_iff_of_isOpenImmersion
   obtain ⟨U, hxU, hU, hU', H⟩ :=
     Y.exists_le_and_germ_injective (f x) (V := f.opensRange) ⟨x, rfl⟩
   obtain ⟨V, hV⟩ := (IsOpenImmersion.affineOpensEquiv f).surjective ⟨⟨U, hU⟩, hU'⟩
-  obtain rfl : f ''ᵁ V = U := Subtype.ext_iff.mp (Subtype.ext_if
+  obtain rfl : f ''ᵁ V = U := Subtype.ext_iff.mp (Subtype.ext_iff.mp hV)
+  obtain ⟨y, hy, e : f y = f x⟩ := hxU
+  obtain rfl := f.isOpenEmbedding.injective e
+  refine ⟨V, hy, V.2, ?_⟩
+  replace H := ((MorphismProperty.injective CommRingCat).cancel_right_of_respectsIso _
+    (f.stalkMap y)).mpr H
+  replace H := ((MorphismProperty.injective CommRingCat).cancel_left_of_respectsIso
+    (f.appIso V).inv _).mpr H
+  simpa using! H
 
 Depends on / 依赖: CommRingCat, IsOpenImmersion, IsOpenImmersion.affineOpensEquiv, MorphismProperty, MorphismProperty.injective, Subtype, Subtype.ext_iff.mp, Y.exists_le_and_germ_injective, affineOpensEquiv, cancel_right_of_respectsIso, exists_le_and_germ_injective, ext_iff, f.isOpenEmbedding.injective, f.opensRange, f.stalkMap, injective, isOpenEmbedding, opensRange, replace, stalkMap
 -/
@@ -271,7 +291,18 @@ lemma Scheme.IsGermInjective.Spec
     exact (isAffineOpen_top (Spec R)).basicOpen _
   rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero]
   intro x hx
-  obtain ⟨x,
+  obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq
+    (S := ((Spec.structureSheaf R).obj.obj (.op <| PrimeSpectrum.basicOpen f))) (.powers f) x
+  rw [← RingHom.mem_ker]; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [Ideal.mul_unit_mem_iff_mem]; rw [RingHom.mem_ker] at hx
+  swap; · exact @isUnit_of_invertible _ _ _ (@IsLocalization.invertible_mk'_one ..)
+  -- There is an `Opposite.unop (Opposite.op _)` in `hx` which doesn't seem removable using
+  -- `simp`/`rw`.
+  erw [elementwise_of% StructureSheaf.algebraMap_germ] at hx
+  obtain ⟨⟨y, hy⟩, hy'⟩ := (IsLocalization.map_eq_zero_iff p.asIdeal.primeCompl
+    ((Spec.structureSheaf R).presheaf.stalk p) _).mp hx
+  obtain ⟨n, hn⟩ := H x y hy' hy
+  refine (@IsLocalization.mk'_eq_zero_iff ..).mpr ?_
+  exact ⟨⟨_, n, rfl⟩, hn⟩
 
 中文:
 引理 概形.IsGermInjective.Spec
@@ -283,7 +314,18 @@ lemma Scheme.IsGermInjective.Spec
     exact (isAffineOpen_top (Spec R)).basicOpen _
   rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero]
   intro x hx
-  obtain ⟨x,
+  obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq
+    (S := ((Spec.structureSheaf R).obj.obj (.op <| PrimeSpectrum.basicOpen f))) (.powers f) x
+  rw [← RingHom.mem_ker]; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [Ideal.mul_unit_mem_iff_mem]; rw [RingHom.mem_ker] at hx
+  swap; · exact @isUnit_of_invertible _ _ _ (@IsLocalization.invertible_mk'_one ..)
+  -- There is an `Opposite.unop (Opposite.op _)` in `hx` which doesn't seem removable using
+  -- `simp`/`rw`.
+  erw [elementwise_of% StructureSheaf.algebraMap_germ] at hx
+  obtain ⟨⟨y, hy⟩, hy'⟩ := (IsLocalization.map_eq_zero_iff p.asIdeal.primeCompl
+    ((Spec.structureSheaf R).presheaf.stalk p) _).mp hx
+  obtain ⟨n, hn⟩ := H x y hy' hy
+  refine (@IsLocalization.mk'_eq_zero_iff ..).mpr ?_
+  exact ⟨⟨_, n, rfl⟩, hn⟩
 
 Depends on / 依赖: Ideal.mul_unit_mem_, IsLocalization, IsLocalization.exists_mk, IsLocalization.mk, PrimeSpectrum, PrimeSpectrum.basicOpen, RingHom, RingHom.injective_iff_ker_eq_bot, RingHom.ker_eq_bot_iff_eq_zero, RingHom.mem_ker, Spec.structureSheaf, _eq_mul_mk, _one, asIdeal, basicOpen, basicOpen_eq_of_affine, exists_mk, injective_iff_ker_eq_bot, isAffineOpen_top, ker_eq_bot_iff_eq_zero
 -/
@@ -364,7 +406,22 @@ lemma spread_out_unique_of_isGermInjective
   have hxV' : g x in V := e ▸ hxV
   obtain ⟨U, hxU, _, hUV, HU⟩ := X.exists_le_and_germ_injective x (f ⁻¹ᵁ V ⊓ g ⁻¹ᵁ V) ⟨hxV, hxV'⟩
   refine ⟨U, hxU, ?_⟩
-  rw [← Sc
+  rw [← Scheme.Hom.resLE_comp_ι _ (hUV.trans inf_le_left)]; rw [← Scheme.Hom.resLE_comp_ι _ (hUV.trans inf_le_right)]
+  congr 1
+  have : IsAffine V := hV
+  suffices forall (U₀ V₀) (eU : U = U₀) (eV : V = V₀),
+      f.appLE V₀ U₀ (eU ▸ eV ▸ hUV.trans inf_le_left) =
+        g.appLE V₀ U₀ (eU ▸ eV ▸ hUV.trans inf_le_right) by
+    rw [← cancel_mono V.toScheme.isoSpec.hom]
+    simp only [Scheme.isoSpec, asIso_hom, Scheme.toSpecΓ_naturality,
+      Scheme.Hom.app_eq_appLE, Scheme.Hom.resLE_appLE]
+    congr 2
+    apply this <;> simp
+  rintro U V rfl rfl
+  have := ConcreteCategory.mono_of_injective _ HU
+  rw [← cancel_mono (X.presheaf.germ U x hxU)]
+  simp only [Scheme.Hom.appLE, Category.assoc, X.presheaf.germ_res', ← Scheme.Hom.germ_stalkMap, H]
+  simp only [TopCat.Presheaf.germ_stalkSpecializes_assoc, Scheme.Hom.germ_stalkMap]
 
 中文:
 引理 spread_out_unique_of_isGermInjective
@@ -375,7 +432,22 @@ lemma spread_out_unique_of_isGermInjective
   have hxV' : g x in V := e ▸ hxV
   obtain ⟨U, hxU, _, hUV, HU⟩ := X.exists_le_and_germ_injective x (f ⁻¹ᵁ V ⊓ g ⁻¹ᵁ V) ⟨hxV, hxV'⟩
   refine ⟨U, hxU, ?_⟩
-  rw [← Sc
+  rw [← Scheme.Hom.resLE_comp_ι _ (hUV.trans inf_le_left)]; rw [← Scheme.Hom.resLE_comp_ι _ (hUV.trans inf_le_right)]
+  congr 1
+  have : IsAffine V := hV
+  suffices forall (U₀ V₀) (eU : U = U₀) (eV : V = V₀),
+      f.appLE V₀ U₀ (eU ▸ eV ▸ hUV.trans inf_le_left) =
+        g.appLE V₀ U₀ (eU ▸ eV ▸ hUV.trans inf_le_right) by
+    rw [← cancel_mono V.toScheme.isoSpec.hom]
+    simp only [Scheme.isoSpec, asIso_hom, Scheme.toSpecΓ_naturality,
+      Scheme.Hom.app_eq_appLE, Scheme.Hom.resLE_appLE]
+    congr 2
+    apply this <;> simp
+  rintro U V rfl rfl
+  have := ConcreteCategory.mono_of_injective _ HU
+  rw [← cancel_mono (X.presheaf.germ U x hxU)]
+  simp only [Scheme.Hom.appLE, Category.assoc, X.presheaf.germ_res', ← Scheme.Hom.germ_stalkMap, H]
+  simp only [TopCat.Presheaf.germ_stalkSpecializes_assoc, Scheme.Hom.germ_stalkMap]
 
 Depends on / 依赖: IsAffine, Scheme, Scheme.Hom.resLE_comp_, Set.mem_univ, X.exists_le_and_germ_injective, Y.Opens, Y.isBasis_affineOpens.exists_subset_of_mem_open, exists_le_and_germ_injective, exists_subset_of_mem_open, f.appLE, hUV.trans, inf_le_left, inf_le_right, isBasis_affineOpens, isOpen_univ, mem_univ
 -/
@@ -454,7 +526,20 @@ lemma exists_lift_of_germInjective_aux
   choose W hxW f hf using fun t => X.presheaf.exists_germ_eq (φ t)
   have H : x in s.inf W ⊓ U := by
     rw [← SetLike.mem_coe]; rw [TopologicalSpace.Opens.coe_inf]; rw [TopologicalSpace.Opens.coe_finset_inf]
-    exact ⟨by simpa using fun x _ =>
+    exact ⟨by simpa using fun x _ => hxW x, hxU⟩
+  refine ⟨s.inf W ⊓ U, H, inf_le_right, ?_⟩
+  let := φRX.hom.toAlgebra
+  let := (φRX ≫ X.presheaf.germ U x hxU).hom.toAlgebra
+  let := (φRX ≫ X.presheaf.map (homOfLE (inf_le_right (a := s.inf W))).op).hom.toAlgebra
+  let φ' : A ->ₐ[R] X.presheaf.stalk x :=
+    { φ.hom with commutes' := DFunLike.congr_fun (congr_arg CommRingCat.Hom.hom e) }
+  let ψ : Γ(X, s.inf W ⊓ U) ->ₐ[R] X.presheaf.stalk x :=
+    { (X.presheaf.germ _ x H).hom with commutes' := fun x => X.presheaf.germ_res_apply _ _ _ _ }
+  change AlgHom.range φ' <= AlgHom.range ψ
+  rw [← Algebra.map_top]; rw [← hs]; rw [AlgHom.map_adjoin]; rw [Algebra.adjoin_le_iff]
+  rintro _ ⟨i, hi, rfl : φ i = _⟩
+  refine ⟨X.presheaf.map (homOfLE (inf_le_left.trans (Finset.inf_le hi))).op (f i), ?_⟩
+  exact (X.presheaf.germ_res_apply _ _ _ _).trans (hf _)
 
 中文:
 引理 存在_lift_of_germInjective_aux
@@ -465,7 +550,20 @@ lemma exists_lift_of_germInjective_aux
   choose W hxW f hf using fun t => X.presheaf.exists_germ_eq (φ t)
   have H : x in s.inf W ⊓ U := by
     rw [← SetLike.mem_coe]; rw [TopologicalSpace.Opens.coe_inf]; rw [TopologicalSpace.Opens.coe_finset_inf]
-    exact ⟨by simpa using fun x _ =>
+    exact ⟨by simpa using fun x _ => hxW x, hxU⟩
+  refine ⟨s.inf W ⊓ U, H, inf_le_right, ?_⟩
+  let := φRX.hom.toAlgebra
+  let := (φRX ≫ X.presheaf.germ U x hxU).hom.toAlgebra
+  let := (φRX ≫ X.presheaf.map (homOfLE (inf_le_right (a := s.inf W))).op).hom.toAlgebra
+  let φ' : A ->ₐ[R] X.presheaf.stalk x :=
+    { φ.hom with commutes' := DFunLike.congr_fun (congr_arg CommRingCat.Hom.hom e) }
+  let ψ : Γ(X, s.inf W ⊓ U) ->ₐ[R] X.presheaf.stalk x :=
+    { (X.presheaf.germ _ x H).hom with commutes' := fun x => X.presheaf.germ_res_apply _ _ _ _ }
+  change AlgHom.range φ' <= AlgHom.range ψ
+  rw [← Algebra.map_top]; rw [← hs]; rw [AlgHom.map_adjoin]; rw [Algebra.adjoin_le_iff]
+  rintro _ ⟨i, hi, rfl : φ i = _⟩
+  refine ⟨X.presheaf.map (homOfLE (inf_le_left.trans (Finset.inf_le hi))).op (f i), ?_⟩
+  exact (X.presheaf.germ_res_apply _ _ _ _).trans (hf _)
 
 Depends on / 依赖: RA.hom.toAlgebra, RX.hom.toAlgebra, SetLike, SetLike.mem_coe, TopologicalSpace, TopologicalSpace.Opens.coe_finset_inf, TopologicalSpace.Opens.coe_inf, X.presheaf.exists_germ_eq, X.presheaf.germ, X.presheaf.map, coe_finset_inf, coe_inf, exists_germ_eq, hom.toAlge, hom.toAlgebra, homOfLE, inf_le_right, mem_coe, presheaf, s.inf
 -/
@@ -506,7 +604,23 @@ lemma exists_lift_of_germInjective
   obtain ⟨V', hxV', hV', iV'V, H⟩ := X.exists_le_and_germ_injective x V hxV
   let f := X.presheaf.germ V' x hxV'
   have hf' : RingHom.range (X.presheaf.germ V x hxV).hom <= RingHom.range f.hom := by
-    rw [← X.pr
+    rw [← X.presheaf.germ_res iV'V.hom _ hxV']
+    exact Set.range_comp_subset_range (X.presheaf.map iV'V.hom.op) f
+  let e := RingEquiv.ofLeftInverse H.hasLeftInverse.choose_spec
+  refine ⟨V', hxV', CommRingCat.ofHom (e.symm.toRingHom.comp
+    (φ.hom.codRestrict _ (fun x => hf' (hV ⟨x, rfl⟩)))), iV'V.trans iVU, hV', ?_, ?_⟩
+  · ext a
+    change φ a = (e (e.symm _)).1
+    simp only [RingEquiv.apply_symm_apply]
+    rfl
+  · ext a
+    apply e.injective
+    change e _ = e (e.symm _)
+    rw [RingEquiv.apply_symm_apply]
+    ext
+    change X.presheaf.germ _ _ _ (X.presheaf.map _ _) = (φRA ≫ φ) a
+    rw [TopCat.Presheaf.germ_res_apply]; rw [‹φRA ≫ φ = _›]
+    rfl
 
 中文:
 引理 存在_lift_of_germInjective
@@ -516,7 +630,23 @@ lemma exists_lift_of_germInjective
   obtain ⟨V', hxV', hV', iV'V, H⟩ := X.exists_le_and_germ_injective x V hxV
   let f := X.presheaf.germ V' x hxV'
   have hf' : RingHom.range (X.presheaf.germ V x hxV).hom <= RingHom.range f.hom := by
-    rw [← X.pr
+    rw [← X.presheaf.germ_res iV'V.hom _ hxV']
+    exact Set.range_comp_subset_range (X.presheaf.map iV'V.hom.op) f
+  let e := RingEquiv.ofLeftInverse H.hasLeftInverse.choose_spec
+  refine ⟨V', hxV', CommRingCat.ofHom (e.symm.toRingHom.comp
+    (φ.hom.codRestrict _ (fun x => hf' (hV ⟨x, rfl⟩)))), iV'V.trans iVU, hV', ?_, ?_⟩
+  · ext a
+    change φ a = (e (e.symm _)).1
+    simp only [RingEquiv.apply_symm_apply]
+    rfl
+  · ext a
+    apply e.injective
+    change e _ = e (e.symm _)
+    rw [RingEquiv.apply_symm_apply]
+    ext
+    change X.presheaf.germ _ _ _ (X.presheaf.map _ _) = (φRA ≫ φ) a
+    rw [TopCat.Presheaf.germ_res_apply]; rw [‹φRA ≫ φ = _›]
+    rfl
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, H.hasLeftInverse.choose_spec, RingEquiv, RingEquiv.ofLeftInverse, RingHom, RingHom.range, Set.range_comp_subset_range, V.hom, V.hom.op, X.exists_le_and_germ_injective, X.presheaf.germ, X.presheaf.germ_res, X.presheaf.map, choose_spec, e.symm.toRingHo, exists_le_and_germ_injective, exists_lift_of_germInjective_aux, f.hom, germ_res
 -/
@@ -585,7 +715,20 @@ lemma spread_out_of_isGermInjective
   have hyU : sY y in U := e ▸ hxU
   obtain ⟨_, ⟨V : Y.Opens, hV, rfl⟩, hyV, iVU⟩ :=
     Y.isBasis_affineOpens.exists_subset_of_mem_open hyU (sY ⁻¹ᵁ U).2
-  have : sY.appLE U 
+  have : sY.appLE U V iVU ≫ Y.presheaf.germ V y hyV ≫ φ =
+      sX.app U ≫ X.presheaf.germ (sX ⁻¹ᵁ U) x hxU := by
+    rw [Scheme.Hom.appLE]; rw [Category.assoc]; rw [Y.presheaf.germ_res_assoc]; rw [← Scheme.Hom.germ_stalkMap_assoc]; rw [h]
+    simp
+  obtain ⟨W, hxW, φ', i, hW, h₁, h₂⟩ :=
+    exists_lift_of_germInjective (R := Γ(S, U)) (A := Γ(Y, V)) (U := sX ⁻¹ᵁ U) (x := x) hxU
+    (Y.presheaf.germ _ y hyV ≫ φ) (sY.appLE U V iVU) (sX.app U)
+    (sY.finiteType_appLE hU hV _) this
+  refine ⟨W, hxW, W.toSpecΓ ≫ Spec.map φ' ≫ hV.fromSpec, ?_, ?_⟩
+  · rw [W.fromSpecStalkOfMem_toSpecΓ_assoc x hxW, ← Spec.map_comp_assoc, ← h₁,
+      Spec.map_comp, Category.assoc, ← IsAffineOpen.fromSpecStalk,
+      IsAffineOpen.fromSpecStalk_eq_fromSpecStalk]
+  · simp only [Category.assoc]
+    rw [← IsAffineOpen.SpecMap_appLE_fromSpec sY hU hV iVU]; rw [← Spec.map_comp_assoc]; rw [← h₂]; rw [← Scheme.Hom.appLE]; rw [← hW.isoSpec_hom]; rw [IsAffineOpen.SpecMap_appLE_fromSpec sX hU hW i]; rw [← Iso.eq_inv_comp]; rw [IsAffineOpen.isoSpec_inv_ι_assoc]
 
 中文:
 引理 spread_out_of_isGermInjective
@@ -596,7 +739,20 @@ lemma spread_out_of_isGermInjective
   have hyU : sY y in U := e ▸ hxU
   obtain ⟨_, ⟨V : Y.Opens, hV, rfl⟩, hyV, iVU⟩ :=
     Y.isBasis_affineOpens.exists_subset_of_mem_open hyU (sY ⁻¹ᵁ U).2
-  have : sY.appLE U 
+  have : sY.appLE U V iVU ≫ Y.presheaf.germ V y hyV ≫ φ =
+      sX.app U ≫ X.presheaf.germ (sX ⁻¹ᵁ U) x hxU := by
+    rw [Scheme.Hom.appLE]; rw [Category.assoc]; rw [Y.presheaf.germ_res_assoc]; rw [← Scheme.Hom.germ_stalkMap_assoc]; rw [h]
+    simp
+  obtain ⟨W, hxW, φ', i, hW, h₁, h₂⟩ :=
+    exists_lift_of_germInjective (R := Γ(S, U)) (A := Γ(Y, V)) (U := sX ⁻¹ᵁ U) (x := x) hxU
+    (Y.presheaf.germ _ y hyV ≫ φ) (sY.appLE U V iVU) (sX.app U)
+    (sY.finiteType_appLE hU hV _) this
+  refine ⟨W, hxW, W.toSpecΓ ≫ Spec.map φ' ≫ hV.fromSpec, ?_, ?_⟩
+  · rw [W.fromSpecStalkOfMem_toSpecΓ_assoc x hxW, ← Spec.map_comp_assoc, ← h₁,
+      Spec.map_comp, Category.assoc, ← IsAffineOpen.fromSpecStalk,
+      IsAffineOpen.fromSpecStalk_eq_fromSpecStalk]
+  · simp only [Category.assoc]
+    rw [← IsAffineOpen.SpecMap_appLE_fromSpec sY hU hV iVU]; rw [← Spec.map_comp_assoc]; rw [← h₂]; rw [← Scheme.Hom.appLE]; rw [← hW.isoSpec_hom]; rw [IsAffineOpen.SpecMap_appLE_fromSpec sX hU hW i]; rw [← Iso.eq_inv_comp]; rw [IsAffineOpen.isoSpec_inv_ι_assoc]
 
 Depends on / 依赖: Category, Category.assoc, S.isBasis_affineOpens.exists_subset_of_mem_open, Scheme, Scheme.Hom.appLE, Scheme.Hom.germ_stalkMap_assoc, Set.mem_univ, X.presheaf.germ, Y.Opens, Y.isBasis_affineOpens.exists_subset_of_mem_open, Y.presheaf.germ, Y.presheaf.germ_res_assoc, exists_subset_of_mem_open, germ_res_assoc, germ_stalkMap_assoc, isBasis_affineOpens, isOpen_univ, mem_univ, presheaf, sX.app
 -/
@@ -639,7 +795,10 @@ lemma spread_out_of_isGermInjective'
   · simpa only [Scheme.Spec_stalkClosedPointTo_fromSpecStalk] using this
   · rw [← Scheme.Hom.comp_apply, h, Scheme.Hom.comp_apply, Scheme.fromSpecStalk_closedPoint]
   · apply Spec.map_injective
-    rw [← cancel_mon
+    rw [← cancel_mono (S.fromSpecStalk _)]
+    simpa only [Spec.map_comp, Category.assoc, Scheme.SpecMap_stalkMap_fromSpecStalk,
+      Scheme.Spec_stalkClosedPointTo_fromSpecStalk_assoc,
+      Scheme.SpecMap_stalkSpecializes_fromSpecStalk]
 
 中文:
 引理 spread_out_of_isGermInjective'
@@ -649,7 +808,10 @@ lemma spread_out_of_isGermInjective'
   · simpa only [Scheme.Spec_stalkClosedPointTo_fromSpecStalk] using this
   · rw [← Scheme.Hom.comp_apply, h, Scheme.Hom.comp_apply, Scheme.fromSpecStalk_closedPoint]
   · apply Spec.map_injective
-    rw [← cancel_mon
+    rw [← cancel_mono (S.fromSpecStalk _)]
+    simpa only [Spec.map_comp, Category.assoc, Scheme.SpecMap_stalkMap_fromSpecStalk,
+      Scheme.Spec_stalkClosedPointTo_fromSpecStalk_assoc,
+      Scheme.SpecMap_stalkSpecializes_fromSpecStalk]
 
 Depends on / 依赖: Category, Category.assoc, S.fromSpecStalk, Scheme, Scheme.Hom.comp_apply, Scheme.SpecMap_stalkMap_fromSpecStalk, Scheme.SpecMap_stalkSpecializes_fromSpecStalk, Scheme.Spec_stalkClosedPointTo_fromSpecStalk, Scheme.Spec_stalkClosedPointTo_fromSpecStalk_assoc, Scheme.fromSpecStalk_closedPoint, Scheme.stalkClosedPointTo, Spec.map_comp, Spec.map_injective, SpecMap_stalkMap_fromSpecStalk, SpecMap_stalkSpecializes_fromSpecStalk, Spec_stalkClosedPointTo_fromSpecStalk, Spec_stalkClosedPointTo_fromSpecStalk_assoc, cancel_mono, comp_apply, fromSpecStalk
 -/

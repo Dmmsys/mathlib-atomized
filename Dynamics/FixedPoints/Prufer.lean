@@ -41,7 +41,11 @@ theorem smul_eq_self_of_preimage_zpow_eq_self
     conv_lhs => rw [← smul_inv_smul g s]
     replace hg : g⁻¹ ^ n ^ j = 1 := by rw [inv_zpow, hg, inv_one]
     simp only [smul_set_subset_smul_set_iff, this hg]
-  rw [(IsFixedPt.preimage_iter
+  rw [(IsFixedPt.preimage_iterate hs j : (zpowGroupHom n)^[j] ⁻¹' s = s).symm]
+  rintro g' hg' - ⟨y, hy, rfl⟩
+  change (zpowGroupHom n)^[j] (g' * y) in s
+  replace hg' : (zpowGroupHom n)^[j] g' = 1 := by simpa [zpowGroupHom]
+  rwa [iterate_map_mul, hg', one_mul]
 
 中文:
 定理 smul_eq_self_of_preimage_zpow_eq_self
@@ -52,7 +56,11 @@ theorem smul_eq_self_of_preimage_zpow_eq_self
     conv_lhs => rw [← smul_inv_smul g s]
     replace hg : g⁻¹ ^ n ^ j = 1 := by rw [inv_zpow, hg, inv_one]
     simp only [smul_set_subset_smul_set_iff, this hg]
-  rw [(IsFixedPt.preimage_iter
+  rw [(IsFixedPt.preimage_iterate hs j : (zpowGroupHom n)^[j] ⁻¹' s = s).symm]
+  rintro g' hg' - ⟨y, hy, rfl⟩
+  change (zpowGroupHom n)^[j] (g' * y) in s
+  replace hg' : (zpowGroupHom n)^[j] g' = 1 := by simpa [zpowGroupHom]
+  rwa [iterate_map_mul, hg', one_mul]
 
 Depends on / 依赖: IsFixedPt, IsFixedPt.preimage_iterate, conv_lhs, inv_one, inv_zpow, iterate_map_mul, le_antisymm, one_, preimage_iterate, replace, smul_inv_smul, smul_set_subset_smul_set_iff, subseteq, zpowGroupHom
 -/

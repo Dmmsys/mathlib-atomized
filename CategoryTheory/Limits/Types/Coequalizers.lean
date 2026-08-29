@@ -41,7 +41,7 @@ definition coequalizerColimit
       (fun s => ↾(Function.Coequalizer.desc f g s.π
         (by ext x; exact ConcreteCategory.congr_hom s.condition x)))
       (fun _ => rfl)
-      (fun _
+      (fun _ _ hm => by ext x; exact Quot.inductionOn x (congr_hom hm))
 
 中文:
 定义 coequalizerColimit
@@ -53,7 +53,7 @@ definition coequalizerColimit
       (fun s => ↾(Function.Coequalizer.desc f g s.π
         (by ext x; exact ConcreteCategory.congr_hom s.condition x)))
       (fun _ => rfl)
-      (fun _
+      (fun _ _ hm => by ext x; exact Quot.inductionOn x (congr_hom hm))
 
 Depends on / 依赖: Coequalizer, Cofork, Cofork.IsColimit.mk, Cofork.of, ConcreteCategory, ConcreteCategory.congr_hom, Function, Function.Coequalizer.condition, Function.Coequalizer.desc, Function.Coequalizer.mk, IsColimit, Quot.inductionOn, condition, congr_hom, inductionOn, isColimit, s.condition
 -/
@@ -83,7 +83,20 @@ theorem coequalizer_preimage_image_eq_of_preimage_eq
     aesop (add safe constructors _root_.Equivalence)
   ext
   constructor
-  · r
+  · rw [←
+      show _ = π from
+        h.comp_coconePointUniqueUpToIso_inv (coequalizerColimit f g).2
+          WalkingParallelPair.one]
+    rintro ⟨y, hy, e'⟩
+    dsimp at e'
+    have e'' :=
+      (mono_iff_injective
+            (h.coconePointUniqueUpToIso (coequalizerColimit f g).isColimit).inv).mp
+        inferInstance
+    refine (eqv.eqvGen_iff.mp (Relation.EqvGen.mono lem y _ (Quot.eqvGen_exact ?_))).mp hy
+    apply e''
+    convert! e'
+  · exact fun hx => ⟨_, hx, rfl⟩
 
 中文:
 定理 coequalizer_preimage_image_eq_of_preimage_eq
@@ -97,7 +110,20 @@ theorem coequalizer_preimage_image_eq_of_preimage_eq
     aesop (add safe constructors _root_.Equivalence)
   ext
   constructor
-  · r
+  · rw [←
+      show _ = π from
+        h.comp_coconePointUniqueUpToIso_inv (coequalizerColimit f g).2
+          WalkingParallelPair.one]
+    rintro ⟨y, hy, e'⟩
+    dsimp at e'
+    have e'' :=
+      (mono_iff_injective
+            (h.coconePointUniqueUpToIso (coequalizerColimit f g).isColimit).inv).mp
+        inferInstance
+    refine (eqv.eqvGen_iff.mp (Relation.EqvGen.mono lem y _ (Quot.eqvGen_exact ?_))).mp hy
+    apply e''
+    convert! e'
+  · exact fun hx => ⟨_, hx, rfl⟩
 
 Depends on / 依赖: Coequalizer, Equivalence, Function, Function.Coequalizer.Rel, WalkingParallelPair, WalkingParallelPair.one, _root_, _root_.Equivalence, coconePointUniqueUpToIso, coequalizerColimit, comp_coconePointUniqueUpToIso_inv, constructors, h.coconePointUniqueUpToIso, h.comp_coconePointUniqueUpToIso_inv, mono_iff_injective
 -/

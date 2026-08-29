@@ -189,7 +189,12 @@ lemma reflectionPerm_mem_rootSet_iff
   intro γ δ hδ
   simp only [mem_rootSet] at hδ ⊢
   by_cases hp : S.pairing δ γ = 0
-  · rwa [S.reflectionPerm_eq_of_p
+  · rwa [S.reflectionPerm_eq_of_pairing_eq_zero hp]
+  · have hγ := I.rootSpace_le_of_apply_coroot_ne_zero hδ
+      (mt S.pairing_eq_zero_iff.mpr hp)
+    have h_neg : S.pairing (S.reflectionPerm γ δ) γ != 0 := by
+      rwa [← S.pairing_reflectionPerm γ δ γ, S.pairing_reflectionPerm_self_right, neg_ne_zero]
+    exact I.rootSpace_le_of_apply_coroot_ne_zero hγ h_neg
 
 中文:
 引理 reflectionPerm_mem_rootSet_iff
@@ -201,7 +206,12 @@ lemma reflectionPerm_mem_rootSet_iff
   intro γ δ hδ
   simp only [mem_rootSet] at hδ ⊢
   by_cases hp : S.pairing δ γ = 0
-  · rwa [S.reflectionPerm_eq_of_p
+  · rwa [S.reflectionPerm_eq_of_pairing_eq_zero hp]
+  · have hγ := I.rootSpace_le_of_apply_coroot_ne_zero hδ
+      (mt S.pairing_eq_zero_iff.mpr hp)
+    have h_neg : S.pairing (S.reflectionPerm γ δ) γ != 0 := by
+      rwa [← S.pairing_reflectionPerm γ δ γ, S.pairing_reflectionPerm_self_right, neg_ne_zero]
+    exact I.rootSpace_le_of_apply_coroot_ne_zero hγ h_neg
 
 Depends on / 依赖: H.root, I.rootSet, I.rootSpace_le_of_apply_coroot_ne_zero, S.pairing, S.pairing_, S.pairing_eq_zero_iff.mpr, S.pairing_reflectionPerm, S.reflectionPerm, S.reflectionPerm_eq_of_pairing_eq_zero, S.reflectionPerm_self, h_neg, mem_rootSet, pairing, pairing_, pairing_eq_zero_iff, pairing_reflectionPerm, reflectionPerm, reflectionPerm_eq_of_pairing_eq_zero, reflectionPerm_self, rootSet
 -/
@@ -232,7 +242,7 @@ lemma rootSpan_mem_invtRootSubmodule
   rw [Module.End.mem_invtSubmodule]; rw [rootSpan]; rw [Submodule.span_le]
   rintro - ⟨α, hα, rfl⟩
   rw [SetLike.mem_coe]; rw [Submodule.mem_comap]; rw [LinearEquiv.coe_coe]; rw [← RootPairing.root_reflectionPerm]
-  exact Submodule.subset_spa
+  exact Submodule.subset_span ⟨_, (I.reflectionPerm_mem_rootSet_iff α β).mpr hα, rfl⟩
 
 中文:
 引理 rootSpan_mem_invtRootSubmodule
@@ -243,7 +253,7 @@ lemma rootSpan_mem_invtRootSubmodule
   rw [Module.End.mem_invtSubmodule]; rw [rootSpan]; rw [Submodule.span_le]
   rintro - ⟨α, hα, rfl⟩
   rw [SetLike.mem_coe]; rw [Submodule.mem_comap]; rw [LinearEquiv.coe_coe]; rw [← RootPairing.root_reflectionPerm]
-  exact Submodule.subset_spa
+  exact Submodule.subset_span ⟨_, (I.reflectionPerm_mem_rootSet_iff α β).mpr hα, rfl⟩
 
 Depends on / 依赖: I.reflectionPerm_mem_rootSet_iff, LinearEquiv, LinearEquiv.coe_coe, Module, Module.End.mem_invtSubmodule, RootPairing, RootPairing.mem_invtRootSubmodule_iff, RootPairing.root_reflectionPerm, SetLike, SetLike.mem_coe, Submodule, Submodule.mem_comap, Submodule.span_le, Submodule.subset_span, coe_coe, mem_coe, mem_comap, mem_invtRootSubmodule_iff, mem_invtSubmodule, reflectionPerm_mem_rootSet_iff
 -/
@@ -353,7 +363,8 @@ lemma rootSet_apply_coroot_eq_zero_of_notMem_rootSet
     I.root_apply_eq_zero_of_notMem_rootSet
       (I.corootSubmodule_le hα (coe_coroot_mem_corootSubmodule _)) hβ
   change coroot (β : Weight K H L) in (α : Weight K H L).ker
-  rw [← orthogonal_span_coroot_eq_ker]; rw [LinearMap
+  rw [← orthogonal_span_coroot_eq_ker]; rw [LinearMap.BilinForm.orthogonal_span_singleton_eq_toLin_ker]; rw [LinearMap.mem_ker]
+  exact traceForm_eq_zero_of_mem_ker_of_mem_span_coroot h_ker (Submodule.mem_span_singleton_self _)
 
 中文:
 引理 rootSet_apply_coroot_eq_zero_of_notMem_rootSet
@@ -363,7 +374,8 @@ lemma rootSet_apply_coroot_eq_zero_of_notMem_rootSet
     I.root_apply_eq_zero_of_notMem_rootSet
       (I.corootSubmodule_le hα (coe_coroot_mem_corootSubmodule _)) hβ
   change coroot (β : Weight K H L) in (α : Weight K H L).ker
-  rw [← orthogonal_span_coroot_eq_ker]; rw [LinearMap
+  rw [← orthogonal_span_coroot_eq_ker]; rw [LinearMap.BilinForm.orthogonal_span_singleton_eq_toLin_ker]; rw [LinearMap.mem_ker]
+  exact traceForm_eq_zero_of_mem_ker_of_mem_span_coroot h_ker (Submodule.mem_span_singleton_self _)
 
 Depends on / 依赖: BilinForm, I.corootSubmodule_le, I.root_apply_eq_zero_of_notMem_rootSet, LinearMap, LinearMap.BilinForm.orthogonal_span_singleton_eq_toLin_ker, LinearMap.mem_ker, Submodule, Submodule.mem_span_singleton_self, Weight, coe_coroot_mem_corootSubmodule, coroot, corootSubmodule_le, h_ker, mem_ker, mem_span_singleton_self, orthogonal_span_coroot_eq_ker, orthogonal_span_singleton_eq_toLin_ker, root_apply_eq_zero_of_notMem_rootSet, traceForm_eq_zero_of_mem_ker_of_mem_span_coroot
 -/
@@ -391,7 +403,46 @@ lemma restr_inf_cartan_eq_biSup_corootSubmodule
   intro x ⟨hxI, hxH⟩
   let f : H.root -> LieIdeal K H := fun α => corootSpace α.1
   set span_I_roots := ⨆ α in I.rootSet, f α
-  set span_compl_roots := ⨆ (β : H.root) (_ : β ∉ I.rootSet), 
+  set span_compl_roots := ⨆ (β : H.root) (_ : β ∉ I.rootSet), f β
+  have h_split : span_I_roots ⊔ span_compl_roots = ⨆ α, f α :=
+    (iSup_split f (· in I.rootSet)).symm
+  have h_top : span_I_roots ⊔ span_compl_roots = ⊤ := by
+    rw [h_split]; rw [eq_top_iff]; rw [← biSup_corootSpace_eq_top]
+    exact iSup₂_le fun α hα => le_iSup_of_le ⟨α, by simpa [LieSubalgebra.root] using hα⟩ le_rfl
+  have hspan_I_roots_incl : LieSubmodule.map H.toLieSubmodule.incl span_I_roots =
+      ⨆ α in I.rootSet, corootSubmodule α.1 := by
+    change LieSubmodule.map _ (⨆ α in I.rootSet, f α) = ⨆ α in I.rootSet, _
+    simp_rw [LieSubmodule.map_iSup]; rfl
+  have hspan_compl_roots_vanish (μ : H.root) (hμ : μ in I.rootSet) :
+      span_compl_roots.toSubmodule <= μ.1.ker := by
+    have : span_compl_roots.toSubmodule = ⨆ β ∉ I.rootSet, (f β).toSubmodule := by
+      simp_rw [span_compl_roots, LieSubmodule.iSup_toSubmodule]
+    rw [this]
+    exact iSup₂_le fun γ hγ => by
+      rw [coe_corootSpace_eq_span_singleton]; rw [Submodule.span_singleton_le_iff_mem]; rw [LinearMap.mem_ker]
+      exact I.rootSet_apply_coroot_eq_zero_of_notMem_rootSet hμ hγ
+  have hx_top : (⟨x, hxH⟩ : H) in span_I_roots ⊔ span_compl_roots := h_top ▸ trivial
+  obtain ⟨a, ha, b, hb, hab⟩ := Submodule.mem_sup.mp hx_top
+  have haI : (a : L) in I :=
+    (iSup₂_le (fun _ hα => I.corootSubmodule_le hα) :
+      ⨆ α in I.rootSet, corootSubmodule α.1 <= _)
+      (hspan_I_roots_incl ▸ LieSubmodule.mem_map_of_mem ha)
+  have hbI : (b : L) in I := by
+    have h_sum : (a : L) + b = x := congr_arg Subtype.val hab
+    have h_b_eq : (b : L) = x - a := by rw [← h_sum, add_sub_cancel_left]
+    rw [h_b_eq]; exact I.toSubmodule.sub_mem hxI haI
+  suffices b = 0 by
+    subst this; simp only [add_zero] at hab; subst hab
+    exact hspan_I_roots_incl ▸ LieSubmodule.mem_map_of_mem ha
+  suffices b in ⨅ α : Weight K H L, α.ker by simpa [iInf_ker_weight_eq_bot] using this
+  refine (Submodule.mem_iInf _).mpr fun μ => ?_
+  by_cases hμ : μ.IsNonZero
+  · have hμ_root : μ in H.root := by simpa [LieSubalgebra.root] using hμ
+    by_cases hμI : (⟨μ, hμ_root⟩ : H.root) in I.rootSet
+    · exact hspan_compl_roots_vanish ⟨μ, hμ_root⟩ hμI hb
+    · exact I.root_apply_eq_zero_of_notMem_rootSet hbI hμI
+  · simp only [Weight.IsNonZero, not_not] at hμ
+    exact LinearMap.mem_ker.mpr (congr_fun hμ b)
 
 中文:
 引理 restr_inf_cartan_eq_biSup_corootSubmodule
@@ -402,7 +453,46 @@ lemma restr_inf_cartan_eq_biSup_corootSubmodule
   intro x ⟨hxI, hxH⟩
   let f : H.root -> LieIdeal K H := fun α => corootSpace α.1
   set span_I_roots := ⨆ α in I.rootSet, f α
-  set span_compl_roots := ⨆ (β : H.root) (_ : β ∉ I.rootSet), 
+  set span_compl_roots := ⨆ (β : H.root) (_ : β ∉ I.rootSet), f β
+  have h_split : span_I_roots ⊔ span_compl_roots = ⨆ α, f α :=
+    (iSup_split f (· in I.rootSet)).symm
+  have h_top : span_I_roots ⊔ span_compl_roots = ⊤ := by
+    rw [h_split]; rw [eq_top_iff]; rw [← biSup_corootSpace_eq_top]
+    exact iSup₂_le fun α hα => le_iSup_of_le ⟨α, by simpa [LieSubalgebra.root] using hα⟩ le_rfl
+  have hspan_I_roots_incl : LieSubmodule.map H.toLieSubmodule.incl span_I_roots =
+      ⨆ α in I.rootSet, corootSubmodule α.1 := by
+    change LieSubmodule.map _ (⨆ α in I.rootSet, f α) = ⨆ α in I.rootSet, _
+    simp_rw [LieSubmodule.map_iSup]; rfl
+  have hspan_compl_roots_vanish (μ : H.root) (hμ : μ in I.rootSet) :
+      span_compl_roots.toSubmodule <= μ.1.ker := by
+    have : span_compl_roots.toSubmodule = ⨆ β ∉ I.rootSet, (f β).toSubmodule := by
+      simp_rw [span_compl_roots, LieSubmodule.iSup_toSubmodule]
+    rw [this]
+    exact iSup₂_le fun γ hγ => by
+      rw [coe_corootSpace_eq_span_singleton]; rw [Submodule.span_singleton_le_iff_mem]; rw [LinearMap.mem_ker]
+      exact I.rootSet_apply_coroot_eq_zero_of_notMem_rootSet hμ hγ
+  have hx_top : (⟨x, hxH⟩ : H) in span_I_roots ⊔ span_compl_roots := h_top ▸ trivial
+  obtain ⟨a, ha, b, hb, hab⟩ := Submodule.mem_sup.mp hx_top
+  have haI : (a : L) in I :=
+    (iSup₂_le (fun _ hα => I.corootSubmodule_le hα) :
+      ⨆ α in I.rootSet, corootSubmodule α.1 <= _)
+      (hspan_I_roots_incl ▸ LieSubmodule.mem_map_of_mem ha)
+  have hbI : (b : L) in I := by
+    have h_sum : (a : L) + b = x := congr_arg Subtype.val hab
+    have h_b_eq : (b : L) = x - a := by rw [← h_sum, add_sub_cancel_left]
+    rw [h_b_eq]; exact I.toSubmodule.sub_mem hxI haI
+  suffices b = 0 by
+    subst this; simp only [add_zero] at hab; subst hab
+    exact hspan_I_roots_incl ▸ LieSubmodule.mem_map_of_mem ha
+  suffices b in ⨅ α : Weight K H L, α.ker by simpa [iInf_ker_weight_eq_bot] using this
+  refine (Submodule.mem_iInf _).mpr fun μ => ?_
+  by_cases hμ : μ.IsNonZero
+  · have hμ_root : μ in H.root := by simpa [LieSubalgebra.root] using hμ
+    by_cases hμI : (⟨μ, hμ_root⟩ : H.root) in I.rootSet
+    · exact hspan_compl_roots_vanish ⟨μ, hμ_root⟩ hμI hb
+    · exact I.root_apply_eq_zero_of_notMem_rootSet hbI hμI
+  · simp only [Weight.IsNonZero, not_not] at hμ
+    exact LinearMap.mem_ker.mpr (congr_fun hμ b)
 
 Depends on / 依赖: H.root, I.corootSubmodule_le, I.rootSet, LieIdeal, LieSubmodule, LieSubmodule.map_incl_le, biSup_corootSpace_eq, corootSpace, corootSubmodule_le, eq_top_iff, h_split, h_top, iSup_split, le_antisymm, le_inf, map_incl_le, rootSet, span_I_roots, span_compl_roots
 -/
@@ -466,7 +556,11 @@ lemma mem_rootSet_of_mem_rootSpan
   have : I.rootSpan <= LinearMap.ker (Dual.eval K H (coroot (α : Weight K H L))) := by
     rw [LieIdeal.rootSpan]; rw [Submodule.span_le]
     rintro _ ⟨γ, hγ, rfl⟩
-    simp only [SetLike.mem_coe, LinearMap.mem_ker, Dual.eval_apply, rootSys
+    simp only [SetLike.mem_coe, LinearMap.mem_ker, Dual.eval_apply, rootSystem_root_apply]
+    exact I.rootSet_apply_coroot_eq_zero_of_notMem_rootSet hγ hα_not
+  have := LinearMap.mem_ker.mp (this hα_span)
+  simp only [Dual.eval_apply, Weight.toLinear_apply, root_apply_coroot hα_nz] at this
+  exact absurd this two_ne_zero
 
 中文:
 引理 mem_rootSet_of_mem_rootSpan
@@ -477,7 +571,11 @@ lemma mem_rootSet_of_mem_rootSpan
   have : I.rootSpan <= LinearMap.ker (Dual.eval K H (coroot (α : Weight K H L))) := by
     rw [LieIdeal.rootSpan]; rw [Submodule.span_le]
     rintro _ ⟨γ, hγ, rfl⟩
-    simp only [SetLike.mem_coe, LinearMap.mem_ker, Dual.eval_apply, rootSys
+    simp only [SetLike.mem_coe, LinearMap.mem_ker, Dual.eval_apply, rootSystem_root_apply]
+    exact I.rootSet_apply_coroot_eq_zero_of_notMem_rootSet hγ hα_not
+  have := LinearMap.mem_ker.mp (this hα_span)
+  simp only [Dual.eval_apply, Weight.toLinear_apply, root_apply_coroot hα_nz] at this
+  exact absurd this two_ne_zero
 
 Depends on / 依赖: Dual.eval, Dual.eval_apply, H.isNonZero_coe_root, I.rootSet_apply_coroot_eq_zero_of_notMem_rootSet, I.rootSpan, LieIdeal, LieIdeal.rootSpan, LinearMap, LinearMap.ker, LinearMap.mem_ker, LinearMap.mem_ker.mp, SetLike, SetLike.mem_coe, Submodule, Submodule.span_le, Weight, Weight.toLinear_apply, coroot, eval_apply, isNonZero_coe_root
 -/
@@ -507,7 +605,15 @@ lemma restr_eq_iSup_sl2SubmoduleOfRoot
     apply sup_le
     · exact iSup₂_le fun β hβ => le_iSup₂_of_le β hβ
         (by rw [sl2SubmoduleOfRoot_eq_sup]; exact le_sup_right)
-    · exact iSup₂_le fun α hα => le_iSup₂_of_le 
+    · exact iSup₂_le fun α hα => le_iSup₂_of_le α hα
+        (by rw [sl2SubmoduleOfRoot_eq_sup]; exact le_sup_of_le_left le_sup_left)
+  · exact iSup₂_le fun α hα => by
+      rw [sl2SubmoduleOfRoot_eq_sup]
+      refine sup_le (sup_le ?_ ?_) ?_
+      · exact hα
+      · apply I.rootSpace_le_of_apply_coroot_ne_zero hα
+        simp [Pi.neg_apply, root_apply_coroot (H.isNonZero_coe_root α)]
+      · exact I.corootSubmodule_le hα
 
 中文:
 引理 restr_eq_iSup_sl2SubmoduleOfRoot
@@ -518,7 +624,15 @@ lemma restr_eq_iSup_sl2SubmoduleOfRoot
     apply sup_le
     · exact iSup₂_le fun β hβ => le_iSup₂_of_le β hβ
         (by rw [sl2SubmoduleOfRoot_eq_sup]; exact le_sup_right)
-    · exact iSup₂_le fun α hα => le_iSup₂_of_le 
+    · exact iSup₂_le fun α hα => le_iSup₂_of_le α hα
+        (by rw [sl2SubmoduleOfRoot_eq_sup]; exact le_sup_of_le_left le_sup_left)
+  · exact iSup₂_le fun α hα => by
+      rw [sl2SubmoduleOfRoot_eq_sup]
+      refine sup_le (sup_le ?_ ?_) ?_
+      · exact hα
+      · apply I.rootSpace_le_of_apply_coroot_ne_zero hα
+        simp [Pi.neg_apply, root_apply_coroot (H.isNonZero_coe_root α)]
+      · exact I.corootSubmodule_le hα
 
 Depends on / 依赖: I.rootSpace_le_of_apply_coroot_n, le_antisymm, le_sup_left, le_sup_of_le_left, le_sup_right, lieIdeal_eq_inf_cartan_sup_biSup_rootSpace, restr_inf_cartan_eq_biSup_corootSubmodule, rootSpace_le_of_apply_coroot_n, sl2SubmoduleOfRoot_eq_sup, sup_le
 -/
@@ -583,7 +697,38 @@ theorem chi_in_q_aux
     have h_zero_weight : H.toLieSubmodule.incl y in genWeightSpace L (0 : H -> K) := by
       apply toLieSubmodule_le_rootSpace_zero
       exact y.property
-    convert! lie_mem_genWeightSpace_of_mem_genWeightSpace hx_χ h_zero_wei
+    convert! lie_mem_genWeightSpace_of_mem_genWeightSpace hx_χ h_zero_weight
+    ext h; simp
+  have h_bracket_decomp : ⁅x_χ, m_α⁆ in
+      genWeightSpace L (χ.toLinear + α.toLinear) ⊔
+      genWeightSpace L (χ.toLinear - α.toLinear) ⊔ genWeightSpace L χ := by
+    rw [h_bracket_sum]
+    exact add_mem (add_mem
+      (Submodule.mem_sup_left (Submodule.mem_sup_left h_pos_containment))
+      (Submodule.mem_sup_left (Submodule.mem_sup_right h_neg_containment)))
+      (Submodule.mem_sup_right h_h_containment)
+  let I := ⨆ β : {β : Weight K H L // ↑β in q ∧ β.IsNonZero}, sl2SubmoduleOfRoot β.2.2
+  have genWeightSpace_le_I (β_lin : H ->ₗ[K] K) (hβ_in_q : β_lin in q)
+      (hβ_ne_zero : β_lin != 0) : genWeightSpace L β_lin <= I := by
+    by_cases h_trivial : genWeightSpace L β_lin = ⊥
+    · simp [h_trivial]
+    · let β : Weight K H L := ⟨β_lin, h_trivial⟩
+      have hβ_nonzero : β.IsNonZero := Weight.coe_toLinear_ne_zero_iff.mp hβ_ne_zero
+      refine le_trans ?_ (le_iSup _ ⟨β, hβ_in_q, hβ_nonzero⟩)
+      rw [sl2SubmoduleOfRoot_eq_sup]
+      exact le_sup_of_le_left (le_sup_of_le_left le_rfl)
+  have h_plus_contain : genWeightSpace L (χ.toLinear + α.toLinear) <= I :=
+    genWeightSpace_le_I _ (q.add_mem h_chi_in_q hαq) w_plus
+  have h_minus_contain : genWeightSpace L (χ.toLinear - α.toLinear) <= I :=
+    genWeightSpace_le_I _ (by
+      have : -α.toLinear = (-1 : K) • α.toLinear := by simp
+      rw [sub_eq_add_neg]; rw [this]
+      exact q.add_mem h_chi_in_q (q.smul_mem (-1) hαq)) w_minus
+  have h_chi_contain : genWeightSpace L χ.toLinear <= I :=
+    genWeightSpace_le_I _ h_chi_in_q (fun h_eq => (w_chi h_eq).elim)
+  exact sup_le (sup_le h_plus_contain h_minus_contain) h_chi_contain h_bracket_decomp
+
+include hq hα₀ hy
 
 中文:
 定理 chi_in_q_aux
@@ -593,7 +738,38 @@ theorem chi_in_q_aux
     have h_zero_weight : H.toLieSubmodule.incl y in genWeightSpace L (0 : H -> K) := by
       apply toLieSubmodule_le_rootSpace_zero
       exact y.property
-    convert! lie_mem_genWeightSpace_of_mem_genWeightSpace hx_χ h_zero_wei
+    convert! lie_mem_genWeightSpace_of_mem_genWeightSpace hx_χ h_zero_weight
+    ext h; simp
+  have h_bracket_decomp : ⁅x_χ, m_α⁆ in
+      genWeightSpace L (χ.toLinear + α.toLinear) ⊔
+      genWeightSpace L (χ.toLinear - α.toLinear) ⊔ genWeightSpace L χ := by
+    rw [h_bracket_sum]
+    exact add_mem (add_mem
+      (Submodule.mem_sup_left (Submodule.mem_sup_left h_pos_containment))
+      (Submodule.mem_sup_left (Submodule.mem_sup_right h_neg_containment)))
+      (Submodule.mem_sup_right h_h_containment)
+  let I := ⨆ β : {β : Weight K H L // ↑β in q ∧ β.IsNonZero}, sl2SubmoduleOfRoot β.2.2
+  have genWeightSpace_le_I (β_lin : H ->ₗ[K] K) (hβ_in_q : β_lin in q)
+      (hβ_ne_zero : β_lin != 0) : genWeightSpace L β_lin <= I := by
+    by_cases h_trivial : genWeightSpace L β_lin = ⊥
+    · simp [h_trivial]
+    · let β : Weight K H L := ⟨β_lin, h_trivial⟩
+      have hβ_nonzero : β.IsNonZero := Weight.coe_toLinear_ne_zero_iff.mp hβ_ne_zero
+      refine le_trans ?_ (le_iSup _ ⟨β, hβ_in_q, hβ_nonzero⟩)
+      rw [sl2SubmoduleOfRoot_eq_sup]
+      exact le_sup_of_le_left (le_sup_of_le_left le_rfl)
+  have h_plus_contain : genWeightSpace L (χ.toLinear + α.toLinear) <= I :=
+    genWeightSpace_le_I _ (q.add_mem h_chi_in_q hαq) w_plus
+  have h_minus_contain : genWeightSpace L (χ.toLinear - α.toLinear) <= I :=
+    genWeightSpace_le_I _ (by
+      have : -α.toLinear = (-1 : K) • α.toLinear := by simp
+      rw [sub_eq_add_neg]; rw [this]
+      exact q.add_mem h_chi_in_q (q.smul_mem (-1) hαq)) w_minus
+  have h_chi_contain : genWeightSpace L χ.toLinear <= I :=
+    genWeightSpace_le_I _ h_chi_in_q (fun h_eq => (w_chi h_eq).elim)
+  exact sup_le (sup_le h_plus_contain h_minus_contain) h_chi_contain h_bracket_decomp
+
+include hq hα₀ hy
 
 Depends on / 依赖: IsStablyFree, IsStablyFree.exist_free_prod, LinearMap, LinearMap.ext, LinearMap.fst, LinearMap.inl, Projective, Projective.of_split, exist_free_prod, of_split
 -/
@@ -648,7 +824,79 @@ theorem chi_not_in_q_aux
     ⟨⟨γ, by simpa [LieSubalgebra.root]⟩, rfl⟩
   have h_plus_bot : genWeightSpace L (χ.toLinear + α.toLinear) = ⊥ := by
     by_contra h_plus_ne_bot
-    let γ : Weight K H L := ⟨χ.toL
+    let γ : Weight K H L := ⟨χ.toLinear + α.toLinear, h_plus_ne_bot⟩
+    have hγ_nonzero : γ.IsNonZero := Weight.coe_toLinear_ne_zero_iff.mp w_plus
+    obtain ⟨i, hi⟩ := exists_root_index χ (Weight.coe_toLinear_ne_zero_iff.mp w_chi)
+    obtain ⟨j, hj⟩ := exists_root_index α hα₀
+    have h_sum_in_range : S.root i + S.root j in Set.range S.root := by
+      rw [hi]; rw [hj]
+      exact ⟨⟨γ, by simpa [LieSubalgebra.root]⟩, rfl⟩
+    have h_equiv := RootPairing.root_mem_submodule_iff_of_add_mem_invtSubmodule
+      ⟨q, by rw [RootPairing.mem_invtRootSubmodule_iff]; exact hq⟩ h_sum_in_range
+    rw [hi] at h_equiv
+    exact h_chi_not_in_q (h_equiv.mpr (by rw [hj]; exact hαq))
+  have h_minus_bot : genWeightSpace L (χ.toLinear - α.toLinear) = ⊥ := by
+    by_contra h_minus_ne_bot
+    let γ : Weight K H L := ⟨χ.toLinear - α.toLinear, h_minus_ne_bot⟩
+    have hγ_nonzero : γ.IsNonZero := Weight.coe_toLinear_ne_zero_iff.mp w_minus
+    obtain ⟨i, hi⟩ := exists_root_index χ (Weight.coe_toLinear_ne_zero_iff.mp w_chi)
+    obtain ⟨j, hj⟩ := exists_root_index (-α) (Weight.IsNonZero.neg hα₀)
+    have h_sum_in_range : S.root i + S.root j in Set.range S.root := by
+      rw [hi]; rw [hj]; rw [Weight.toLinear_neg]; rw [← sub_eq_add_neg]
+      exact ⟨⟨γ, by simpa [LieSubalgebra.root]⟩, rfl⟩
+    have h_equiv := RootPairing.root_mem_submodule_iff_of_add_mem_invtSubmodule
+      ⟨q, by rw [RootPairing.mem_invtRootSubmodule_iff]; exact hq⟩ h_sum_in_range
+    rw [hi] at h_equiv
+    exact h_chi_not_in_q (h_equiv.mpr (by
+      rw [hj]; rw [Weight.toLinear_neg]
+      convert q.smul_mem (-1) hαq
+      rw [neg_smul]; rw [one_smul]))
+  obtain ⟨i, hi⟩ := exists_root_index χ (Weight.coe_toLinear_ne_zero_iff.mp w_chi)
+  obtain ⟨j, hj⟩ := exists_root_index α hα₀
+  have h_pairing_zero : S.pairing i j = 0 := by
+    apply RootPairing.pairing_eq_zero_of_add_notMem_of_sub_notMem S
+    · intro h_eq; exact w_minus (by rw [← hi, ← hj, h_eq, sub_self])
+    · intro h_eq; exact w_plus (by rw [← hi, ← hj, h_eq, neg_add_cancel])
+    · intro ⟨idx, hidx⟩
+      have : genWeightSpace L (S.root idx) != ⊥ := idx.val.genWeightSpace_ne_bot
+      rw [hidx]; rw [hi]; rw [hj] at this
+      exact this h_plus_bot
+    · intro ⟨idx, hidx⟩
+      have : genWeightSpace L (S.root idx) != ⊥ := idx.val.genWeightSpace_ne_bot
+      rw [hidx]; rw [hi]; rw [hj] at this
+      exact this h_minus_bot
+  have h_pos_zero : ⁅x_χ, m_pos⁆ = 0 := by
+    have h_in_bot : ⁅x_χ, m_pos⁆ in (⊥ : LieSubmodule K H L) := by
+      rw [← h_plus_bot]
+      exact h_pos_containment
+    rwa [LieSubmodule.mem_bot] at h_in_bot
+  have h_neg_zero : ⁅x_χ, m_neg⁆ = 0 := by
+    have h_in_bot : ⁅x_χ, m_neg⁆ in (⊥ : LieSubmodule K H L) := by
+      rw [← h_minus_bot]
+      exact h_neg_containment
+    rwa [LieSubmodule.mem_bot] at h_in_bot
+  have h_bracket_zero : ⁅x_χ, (y : L)⁆ = 0 := by
+    have h_chi_coroot_zero : χ (coroot α) = 0 := by
+      have h_pairing_eq : S.pairing i j = i.1 (coroot j.1) := by
+        rw [rootSystem_pairing_apply]
+      rw [h_pairing_zero] at h_pairing_eq
+      have w_eq {w₁ w₂ : Weight K H L} (h : w₁.toLinear = w₂.toLinear) : w₁ = w₂ := by
+        apply Weight.ext; intro x; exact LinearMap.ext_iff.mp h x
+      have hi_val : i.1 = χ := w_eq (by rw [← hi]; rfl)
+      have hj_val : j.1 = α := w_eq (by rw [← hj]; rfl)
+      rw [hi_val]; rw [hj_val] at h_pairing_eq
+      exact h_pairing_eq.symm
+    have h_lie_eq_smul : ⁅(y : L), x_χ⁆ = χ y • x_χ := lie_eq_smul_of_mem_rootSpace hx_χ y
+    have h_chi_h_zero : χ y = 0 := by
+obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.mp by
+        rw [← coe_corootSpace_eq_span_singleton α]; rw [LieSubmodule.mem_toSubmodule]
+        exact hy
+      rw [← hc]; rw [map_smul]; rw [h_chi_coroot_zero]; rw [smul_zero]
+    have h_bracket_elem : ⁅x_χ, (y : L)⁆ = 0 := by
+      rw [← lie_skew]; rw [h_lie_eq_smul]; rw [h_chi_h_zero]; rw [zero_smul]; rw [neg_zero]
+    exact h_bracket_elem
+  rw [h_bracket_sum]; rw [h_pos_zero]; rw [h_neg_zero]; rw [h_bracket_zero]
+  simp only [add_zero, zero_mem]
 
 中文:
 定理 chi_not_in_q_aux
@@ -659,7 +907,79 @@ theorem chi_not_in_q_aux
     ⟨⟨γ, by simpa [LieSubalgebra.root]⟩, rfl⟩
   have h_plus_bot : genWeightSpace L (χ.toLinear + α.toLinear) = ⊥ := by
     by_contra h_plus_ne_bot
-    let γ : Weight K H L := ⟨χ.toL
+    let γ : Weight K H L := ⟨χ.toLinear + α.toLinear, h_plus_ne_bot⟩
+    have hγ_nonzero : γ.IsNonZero := Weight.coe_toLinear_ne_zero_iff.mp w_plus
+    obtain ⟨i, hi⟩ := exists_root_index χ (Weight.coe_toLinear_ne_zero_iff.mp w_chi)
+    obtain ⟨j, hj⟩ := exists_root_index α hα₀
+    have h_sum_in_range : S.root i + S.root j in Set.range S.root := by
+      rw [hi]; rw [hj]
+      exact ⟨⟨γ, by simpa [LieSubalgebra.root]⟩, rfl⟩
+    have h_equiv := RootPairing.root_mem_submodule_iff_of_add_mem_invtSubmodule
+      ⟨q, by rw [RootPairing.mem_invtRootSubmodule_iff]; exact hq⟩ h_sum_in_range
+    rw [hi] at h_equiv
+    exact h_chi_not_in_q (h_equiv.mpr (by rw [hj]; exact hαq))
+  have h_minus_bot : genWeightSpace L (χ.toLinear - α.toLinear) = ⊥ := by
+    by_contra h_minus_ne_bot
+    let γ : Weight K H L := ⟨χ.toLinear - α.toLinear, h_minus_ne_bot⟩
+    have hγ_nonzero : γ.IsNonZero := Weight.coe_toLinear_ne_zero_iff.mp w_minus
+    obtain ⟨i, hi⟩ := exists_root_index χ (Weight.coe_toLinear_ne_zero_iff.mp w_chi)
+    obtain ⟨j, hj⟩ := exists_root_index (-α) (Weight.IsNonZero.neg hα₀)
+    have h_sum_in_range : S.root i + S.root j in Set.range S.root := by
+      rw [hi]; rw [hj]; rw [Weight.toLinear_neg]; rw [← sub_eq_add_neg]
+      exact ⟨⟨γ, by simpa [LieSubalgebra.root]⟩, rfl⟩
+    have h_equiv := RootPairing.root_mem_submodule_iff_of_add_mem_invtSubmodule
+      ⟨q, by rw [RootPairing.mem_invtRootSubmodule_iff]; exact hq⟩ h_sum_in_range
+    rw [hi] at h_equiv
+    exact h_chi_not_in_q (h_equiv.mpr (by
+      rw [hj]; rw [Weight.toLinear_neg]
+      convert q.smul_mem (-1) hαq
+      rw [neg_smul]; rw [one_smul]))
+  obtain ⟨i, hi⟩ := exists_root_index χ (Weight.coe_toLinear_ne_zero_iff.mp w_chi)
+  obtain ⟨j, hj⟩ := exists_root_index α hα₀
+  have h_pairing_zero : S.pairing i j = 0 := by
+    apply RootPairing.pairing_eq_zero_of_add_notMem_of_sub_notMem S
+    · intro h_eq; exact w_minus (by rw [← hi, ← hj, h_eq, sub_self])
+    · intro h_eq; exact w_plus (by rw [← hi, ← hj, h_eq, neg_add_cancel])
+    · intro ⟨idx, hidx⟩
+      have : genWeightSpace L (S.root idx) != ⊥ := idx.val.genWeightSpace_ne_bot
+      rw [hidx]; rw [hi]; rw [hj] at this
+      exact this h_plus_bot
+    · intro ⟨idx, hidx⟩
+      have : genWeightSpace L (S.root idx) != ⊥ := idx.val.genWeightSpace_ne_bot
+      rw [hidx]; rw [hi]; rw [hj] at this
+      exact this h_minus_bot
+  have h_pos_zero : ⁅x_χ, m_pos⁆ = 0 := by
+    have h_in_bot : ⁅x_χ, m_pos⁆ in (⊥ : LieSubmodule K H L) := by
+      rw [← h_plus_bot]
+      exact h_pos_containment
+    rwa [LieSubmodule.mem_bot] at h_in_bot
+  have h_neg_zero : ⁅x_χ, m_neg⁆ = 0 := by
+    have h_in_bot : ⁅x_χ, m_neg⁆ in (⊥ : LieSubmodule K H L) := by
+      rw [← h_minus_bot]
+      exact h_neg_containment
+    rwa [LieSubmodule.mem_bot] at h_in_bot
+  have h_bracket_zero : ⁅x_χ, (y : L)⁆ = 0 := by
+    have h_chi_coroot_zero : χ (coroot α) = 0 := by
+      have h_pairing_eq : S.pairing i j = i.1 (coroot j.1) := by
+        rw [rootSystem_pairing_apply]
+      rw [h_pairing_zero] at h_pairing_eq
+      have w_eq {w₁ w₂ : Weight K H L} (h : w₁.toLinear = w₂.toLinear) : w₁ = w₂ := by
+        apply Weight.ext; intro x; exact LinearMap.ext_iff.mp h x
+      have hi_val : i.1 = χ := w_eq (by rw [← hi]; rfl)
+      have hj_val : j.1 = α := w_eq (by rw [← hj]; rfl)
+      rw [hi_val]; rw [hj_val] at h_pairing_eq
+      exact h_pairing_eq.symm
+    have h_lie_eq_smul : ⁅(y : L), x_χ⁆ = χ y • x_χ := lie_eq_smul_of_mem_rootSpace hx_χ y
+    have h_chi_h_zero : χ y = 0 := by
+obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.mp by
+        rw [← coe_corootSpace_eq_span_singleton α]; rw [LieSubmodule.mem_toSubmodule]
+        exact hy
+      rw [← hc]; rw [map_smul]; rw [h_chi_coroot_zero]; rw [smul_zero]
+    have h_bracket_elem : ⁅x_χ, (y : L)⁆ = 0 := by
+      rw [← lie_skew]; rw [h_lie_eq_smul]; rw [h_chi_h_zero]; rw [zero_smul]; rw [neg_zero]
+    exact h_bracket_elem
+  rw [h_bracket_sum]; rw [h_pos_zero]; rw [h_neg_zero]; rw [h_bracket_zero]
+  simp only [add_zero, zero_mem]
 -/
 private theorem chi_not_in_q_aux (h_chi_not_in_q : ↑χ ∉ q) :
     ⁅x_χ, m_α⁆ in ⨆ α : {α : Weight K H L // ↑α in q ∧ α.IsNonZero}, sl2SubmoduleOfRoot α.2.2 := by
@@ -757,7 +1077,53 @@ theorem invtSubmoduleToLieIdeal_aux
   rw [sl2SubmoduleOfRoot_eq_sup] at hm_α
   obtain ⟨m_αneg, hm_αneg, m_h, hm_h, hm_eq⟩ := Submodule.mem_sup.mp hm_α
   obtain ⟨m_pos, hm_pos, m_neg, hm_neg, hm_αneg_eq⟩ := Submodule.mem_sup.mp hm_αneg
-  have hm_α_decomp : m_α = m_pos + m_
+  have hm_α_decomp : m_α = m_pos + m_neg + m_h := by
+    rw [← hm_eq]; rw [← hm_αneg_eq]
+  have h_bracket_sum : ⁅x_χ, m_α⁆ = ⁅x_χ, m_pos⁆ + ⁅x_χ, m_neg⁆ + ⁅x_χ, m_h⁆ := by
+    rw [hm_α_decomp]; rw [lie_add]; rw [lie_add]
+  by_cases w_plus : χ.toLinear + α.toLinear = 0
+  · apply LieSubmodule.mem_iSup_of_mem ⟨α, hαq, hα₀⟩
+    have hx_χ_in_sl2 : x_χ in sl2SubalgebraOfRoot hα₀ := by
+      obtain ⟨h, e, f, ht, he, hf⟩ := exists_isSl2Triple_of_weight_isNonZero hα₀
+      rw [mem_sl2SubalgebraOfRoot_iff hα₀ ht he hf]
+      have hx_χ_neg : x_χ in genWeightSpace L (-α.toLinear) := by
+        rw [← (add_eq_zero_iff_eq_neg.mp w_plus)]
+        exact hx_χ
+      obtain ⟨c, hc⟩ := (finrank_eq_one_iff_of_nonzero' ⟨f, hf⟩ (by simp [ht.f_ne_zero])).mp
+        (finrank_rootSpace_eq_one (-α) (by simpa using hα₀)) ⟨x_χ, hx_χ_neg⟩
+      exact ⟨0, c, 0, by simpa using hc.symm⟩
+    apply LieSubalgebra.lie_mem <;> [exact hx_χ_in_sl2; exact hm_α_original]
+  by_cases w_minus : χ.toLinear - α.toLinear = 0
+  · apply LieSubmodule.mem_iSup_of_mem ⟨α, hαq, hα₀⟩
+    have hx_χ_in_sl2 : x_χ in sl2SubalgebraOfRoot hα₀ := by
+      obtain ⟨h, e, f, ht, he, hf⟩ := exists_isSl2Triple_of_weight_isNonZero hα₀
+      rw [mem_sl2SubalgebraOfRoot_iff hα₀ ht he hf]
+      have hx_χ_pos : x_χ in genWeightSpace L α.toLinear := by
+        rw [← (sub_eq_zero.mp w_minus)]
+        exact hx_χ
+      obtain ⟨c, hc⟩ := (finrank_eq_one_iff_of_nonzero' ⟨e, he⟩ (by simp [ht.e_ne_zero])).mp
+        (finrank_rootSpace_eq_one α hα₀) ⟨x_χ, hx_χ_pos⟩
+      exact ⟨c, 0, 0, by simpa using hc.symm⟩
+    apply LieSubalgebra.lie_mem <;> [exact hx_χ_in_sl2; exact hm_α_original]
+  by_cases w_chi : χ.toLinear = 0
+  · have hx_χ_in_H : x_χ in H.toLieSubmodule := by
+      rw [← rootSpace_zero_eq K L H]
+      convert! hx_χ; ext h; simp only [Pi.zero_apply]
+      have h_apply : (χ.toLinear : H -> K) h = 0 := by rw [w_chi, LinearMap.zero_apply]
+      exact h_apply.symm
+    apply LieSubmodule.mem_iSup_of_mem ⟨α, hαq, hα₀⟩
+    rw [← (by rfl : ⁅(⟨x_χ]; rw [hx_χ_in_H⟩ : H)]; rw [m_α⁆ = ⁅x_χ]; rw [m_α⁆)]
+    exact (sl2SubmoduleOfRoot hα₀).lie_mem hm_α_original
+  have h_pos_containment : ⁅x_χ, m_pos⁆ in genWeightSpace L (χ.toLinear + α.toLinear) :=
+    lie_mem_genWeightSpace_of_mem_genWeightSpace hx_χ hm_pos
+  have h_neg_containment : ⁅x_χ, m_neg⁆ in genWeightSpace L (χ.toLinear - α.toLinear) := by
+    rw [sub_eq_add_neg]; exact lie_mem_genWeightSpace_of_mem_genWeightSpace hx_χ hm_neg
+  obtain ⟨y, hy, rfl⟩ := hm_h
+  by_cases h_chi_in_q : ↑χ in q
+  · exact chi_in_q_aux q χ x_χ m_α hx_χ α hαq w_plus w_minus w_chi m_pos m_neg y h_bracket_sum
+      h_pos_containment h_neg_containment h_chi_in_q
+  · exact chi_not_in_q_aux q hq χ x_χ m_α hx_χ α hαq hα₀ w_plus w_minus w_chi m_pos m_neg y hy
+      h_bracket_sum h_pos_containment h_neg_containment h_chi_in_q
 
 中文:
 定理 invtSubmoduleToLieIdeal_aux
@@ -767,7 +1133,53 @@ theorem invtSubmoduleToLieIdeal_aux
   rw [sl2SubmoduleOfRoot_eq_sup] at hm_α
   obtain ⟨m_αneg, hm_αneg, m_h, hm_h, hm_eq⟩ := Submodule.mem_sup.mp hm_α
   obtain ⟨m_pos, hm_pos, m_neg, hm_neg, hm_αneg_eq⟩ := Submodule.mem_sup.mp hm_αneg
-  have hm_α_decomp : m_α = m_pos + m_
+  have hm_α_decomp : m_α = m_pos + m_neg + m_h := by
+    rw [← hm_eq]; rw [← hm_αneg_eq]
+  have h_bracket_sum : ⁅x_χ, m_α⁆ = ⁅x_χ, m_pos⁆ + ⁅x_χ, m_neg⁆ + ⁅x_χ, m_h⁆ := by
+    rw [hm_α_decomp]; rw [lie_add]; rw [lie_add]
+  by_cases w_plus : χ.toLinear + α.toLinear = 0
+  · apply LieSubmodule.mem_iSup_of_mem ⟨α, hαq, hα₀⟩
+    have hx_χ_in_sl2 : x_χ in sl2SubalgebraOfRoot hα₀ := by
+      obtain ⟨h, e, f, ht, he, hf⟩ := exists_isSl2Triple_of_weight_isNonZero hα₀
+      rw [mem_sl2SubalgebraOfRoot_iff hα₀ ht he hf]
+      have hx_χ_neg : x_χ in genWeightSpace L (-α.toLinear) := by
+        rw [← (add_eq_zero_iff_eq_neg.mp w_plus)]
+        exact hx_χ
+      obtain ⟨c, hc⟩ := (finrank_eq_one_iff_of_nonzero' ⟨f, hf⟩ (by simp [ht.f_ne_zero])).mp
+        (finrank_rootSpace_eq_one (-α) (by simpa using hα₀)) ⟨x_χ, hx_χ_neg⟩
+      exact ⟨0, c, 0, by simpa using hc.symm⟩
+    apply LieSubalgebra.lie_mem <;> [exact hx_χ_in_sl2; exact hm_α_original]
+  by_cases w_minus : χ.toLinear - α.toLinear = 0
+  · apply LieSubmodule.mem_iSup_of_mem ⟨α, hαq, hα₀⟩
+    have hx_χ_in_sl2 : x_χ in sl2SubalgebraOfRoot hα₀ := by
+      obtain ⟨h, e, f, ht, he, hf⟩ := exists_isSl2Triple_of_weight_isNonZero hα₀
+      rw [mem_sl2SubalgebraOfRoot_iff hα₀ ht he hf]
+      have hx_χ_pos : x_χ in genWeightSpace L α.toLinear := by
+        rw [← (sub_eq_zero.mp w_minus)]
+        exact hx_χ
+      obtain ⟨c, hc⟩ := (finrank_eq_one_iff_of_nonzero' ⟨e, he⟩ (by simp [ht.e_ne_zero])).mp
+        (finrank_rootSpace_eq_one α hα₀) ⟨x_χ, hx_χ_pos⟩
+      exact ⟨c, 0, 0, by simpa using hc.symm⟩
+    apply LieSubalgebra.lie_mem <;> [exact hx_χ_in_sl2; exact hm_α_original]
+  by_cases w_chi : χ.toLinear = 0
+  · have hx_χ_in_H : x_χ in H.toLieSubmodule := by
+      rw [← rootSpace_zero_eq K L H]
+      convert! hx_χ; ext h; simp only [Pi.zero_apply]
+      have h_apply : (χ.toLinear : H -> K) h = 0 := by rw [w_chi, LinearMap.zero_apply]
+      exact h_apply.symm
+    apply LieSubmodule.mem_iSup_of_mem ⟨α, hαq, hα₀⟩
+    rw [← (by rfl : ⁅(⟨x_χ]; rw [hx_χ_in_H⟩ : H)]; rw [m_α⁆ = ⁅x_χ]; rw [m_α⁆)]
+    exact (sl2SubmoduleOfRoot hα₀).lie_mem hm_α_original
+  have h_pos_containment : ⁅x_χ, m_pos⁆ in genWeightSpace L (χ.toLinear + α.toLinear) :=
+    lie_mem_genWeightSpace_of_mem_genWeightSpace hx_χ hm_pos
+  have h_neg_containment : ⁅x_χ, m_neg⁆ in genWeightSpace L (χ.toLinear - α.toLinear) := by
+    rw [sub_eq_add_neg]; exact lie_mem_genWeightSpace_of_mem_genWeightSpace hx_χ hm_neg
+  obtain ⟨y, hy, rfl⟩ := hm_h
+  by_cases h_chi_in_q : ↑χ in q
+  · exact chi_in_q_aux q χ x_χ m_α hx_χ α hαq w_plus w_minus w_chi m_pos m_neg y h_bracket_sum
+      h_pos_containment h_neg_containment h_chi_in_q
+  · exact chi_not_in_q_aux q hq χ x_χ m_α hx_χ α hαq hα₀ w_plus w_minus w_chi m_pos m_neg y hy
+      h_bracket_sum h_pos_containment h_neg_containment h_chi_in_q
 -/
 private theorem invtSubmoduleToLieIdeal_aux (hm_α : m_α in sl2SubmoduleOfRoot hα₀) :
     ⁅x_χ, m_α⁆ in ⨆ α : {α : Weight K H L // ↑α in q ∧ α.IsNonZero}, sl2SubmoduleOfRoot α.2.2 := by
@@ -837,7 +1249,19 @@ definition invtSubmoduleToLieIdeal
     have hx : x in ⨆ χ : Weight K H L, genWeightSpace L χ := by
       simp [LieModule.iSup_genWeightSpace_eq_top']
     induction hx using LieSubmodule.iSup_induction' with
-    | mem χ x_χ hx_
+    | mem χ x_χ hx_χ =>
+      induction hm using LieSubmodule.iSup_induction' with
+      | mem α m_α hm_α => exact invtSubmoduleToLieIdeal_aux q hq χ x_χ m_α hx_χ α.1 α.2.1 α.2.2 hm_α
+      | zero =>
+        simp only [Submodule.carrier_eq_coe, lie_zero, SetLike.mem_coe, zero_mem]
+      | add m₁ m₂ _ _ ih₁ ih₂ =>
+        simp only [lie_add, Submodule.carrier_eq_coe, SetLike.mem_coe] at ih₁ ih₂ ⊢
+        exact add_mem ih₁ ih₂
+    | zero =>
+      simp only [Submodule.carrier_eq_coe, zero_lie, SetLike.mem_coe, zero_mem]
+    | add x₁ x₂ _ _ ih₁ ih₂ =>
+      simp only [add_lie, Submodule.carrier_eq_coe, SetLike.mem_coe] at ih₁ ih₂ ⊢
+      exact add_mem ih₁ ih₂
 
 中文:
 定义 invtSubmoduleToLieIdeal
@@ -848,7 +1272,19 @@ definition invtSubmoduleToLieIdeal
     have hx : x in ⨆ χ : Weight K H L, genWeightSpace L χ := by
       simp [LieModule.iSup_genWeightSpace_eq_top']
     induction hx using LieSubmodule.iSup_induction' with
-    | mem χ x_χ hx_
+    | mem χ x_χ hx_χ =>
+      induction hm using LieSubmodule.iSup_induction' with
+      | mem α m_α hm_α => exact invtSubmoduleToLieIdeal_aux q hq χ x_χ m_α hx_χ α.1 α.2.1 α.2.2 hm_α
+      | zero =>
+        simp only [Submodule.carrier_eq_coe, lie_zero, SetLike.mem_coe, zero_mem]
+      | add m₁ m₂ _ _ ih₁ ih₂ =>
+        simp only [lie_add, Submodule.carrier_eq_coe, SetLike.mem_coe] at ih₁ ih₂ ⊢
+        exact add_mem ih₁ ih₂
+    | zero =>
+      simp only [Submodule.carrier_eq_coe, zero_lie, SetLike.mem_coe, zero_mem]
+    | add x₁ x₂ _ _ ih₁ ih₂ =>
+      simp only [add_lie, Submodule.carrier_eq_coe, SetLike.mem_coe] at ih₁ ih₂ ⊢
+      exact add_mem ih₁ ih₂
 
 Depends on / 依赖: IsNonZero, Weight, sl2SubmoduleOfRoot
 -/
@@ -927,7 +1363,27 @@ lemma mem_rootSet_invtSubmoduleToLieIdeal
     by_contra hα_not
     have hα_nz := H.isNonZero_coe_root α
     have hne (χ : Weight K H L) (hχ : ↑χ in q) : (χ : H -> K) != ((α : Weight K H L) : H -> K) :=
-      fun heq => hα_not (by simpa [rootSystem_root_apply] using DF
+      fun heq => hα_not (by simpa [rootSystem_root_apply] using DFunLike.coe_injective heq ▸ hχ)
+    have h_le : J.restr H <= ⨆ (χ : H -> K) (_ : χ != (α : Weight K H L)), genWeightSpace L χ := by
+      refine iSup_le fun ⟨β, hβ_mem, hβ_nz⟩ => ?_
+      rw [sl2SubmoduleOfRoot_eq_sup]
+      refine sup_le (sup_le ?_ ?_) ?_
+      · exact le_iSup₂_of_le _ (hne β hβ_mem) le_rfl
+      · have : ↑(-β) in q := by rw [Weight.toLinear_neg]; exact q.neg_mem hβ_mem
+        exact le_iSup₂_of_le _ (hne (-β) this) le_rfl
+      · apply (LieSubmodule.map_incl_le.trans (rootSpace_zero_eq K L H).symm.le).trans
+        exact le_iSup₂_of_le 0 (fun h => hα_nz h.symm) le_rfl
+    have h_disj := ((iSupIndep_genWeightSpace K H L _).mono_right h_le).mono_right hα_mem
+    exact (α : Weight K H L).genWeightSpace_ne_bot L (disjoint_self.mp h_disj)
+  · intro hα
+    calc rootSpace H (α : Weight K H L)
+        <= sl2SubmoduleOfRoot (H.isNonZero_coe_root α) := by
+          rw [sl2SubmoduleOfRoot_eq_sup]; exact le_sup_of_le_left le_sup_left
+      _ <= ⨆ x : {β : Weight K H L // ↑β in q ∧ β.IsNonZero}, sl2SubmoduleOfRoot x.2.2 :=
+          le_iSup_of_le ⟨↑α, hα, H.isNonZero_coe_root α⟩ le_rfl
+      _ = J.restr H := (restr_invtSubmoduleToLieIdeal_eq_iSup q hq).symm
+
+@[gcongr]
 
 中文:
 引理 mem_rootSet_invtSubmoduleToLieIdeal
@@ -939,7 +1395,27 @@ lemma mem_rootSet_invtSubmoduleToLieIdeal
     by_contra hα_not
     have hα_nz := H.isNonZero_coe_root α
     have hne (χ : Weight K H L) (hχ : ↑χ in q) : (χ : H -> K) != ((α : Weight K H L) : H -> K) :=
-      fun heq => hα_not (by simpa [rootSystem_root_apply] using DF
+      fun heq => hα_not (by simpa [rootSystem_root_apply] using DFunLike.coe_injective heq ▸ hχ)
+    have h_le : J.restr H <= ⨆ (χ : H -> K) (_ : χ != (α : Weight K H L)), genWeightSpace L χ := by
+      refine iSup_le fun ⟨β, hβ_mem, hβ_nz⟩ => ?_
+      rw [sl2SubmoduleOfRoot_eq_sup]
+      refine sup_le (sup_le ?_ ?_) ?_
+      · exact le_iSup₂_of_le _ (hne β hβ_mem) le_rfl
+      · have : ↑(-β) in q := by rw [Weight.toLinear_neg]; exact q.neg_mem hβ_mem
+        exact le_iSup₂_of_le _ (hne (-β) this) le_rfl
+      · apply (LieSubmodule.map_incl_le.trans (rootSpace_zero_eq K L H).symm.le).trans
+        exact le_iSup₂_of_le 0 (fun h => hα_nz h.symm) le_rfl
+    have h_disj := ((iSupIndep_genWeightSpace K H L _).mono_right h_le).mono_right hα_mem
+    exact (α : Weight K H L).genWeightSpace_ne_bot L (disjoint_self.mp h_disj)
+  · intro hα
+    calc rootSpace H (α : Weight K H L)
+        <= sl2SubmoduleOfRoot (H.isNonZero_coe_root α) := by
+          rw [sl2SubmoduleOfRoot_eq_sup]; exact le_sup_of_le_left le_sup_left
+      _ <= ⨆ x : {β : Weight K H L // ↑β in q ∧ β.IsNonZero}, sl2SubmoduleOfRoot x.2.2 :=
+          le_iSup_of_le ⟨↑α, hα, H.isNonZero_coe_root α⟩ le_rfl
+      _ = J.restr H := (restr_invtSubmoduleToLieIdeal_eq_iSup q hq).symm
+
+@[gcongr]
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, H.isNonZero_coe_root, J.restr, Weight, coe_injective, genWeightSpace, h_le, iSup_le, invtSubmoduleToLieIdeal, isNonZero_coe_root, rootSystem_root_apply, sl2SubmoduleOfRoot_eq_sup, sup_le
 -/
@@ -1011,7 +1487,13 @@ lemma lieIdealOrderIso_left_inv
     ((rootSystem H).mem_invtRootSubmodule_iff.mp I.rootSpan_mem_invtRootSubmodule)
   have h_eq : forall α : H.root, α in J.rootSet ↔ α in I.rootSet := fun α => by
     rw [mem_rootSet_invtSubmoduleToLieIdeal]; rw [rootSystem_root_apply]
-    exact ⟨I.me
+    exact ⟨I.mem_rootSet_of_mem_rootSpan, fun h => Submodule.subset_span ⟨α, h, rfl⟩⟩
+  have h_restr : J.restr H = I.restr H := by
+    rw [J.restr_eq_iSup_sl2SubmoduleOfRoot]; rw [I.restr_eq_iSup_sl2SubmoduleOfRoot]
+    exact le_antisymm
+      (iSup₂_le fun α hα => le_iSup₂_of_le α ((h_eq α).1 hα) le_rfl)
+      (iSup₂_le fun α hα => le_iSup₂_of_le α ((h_eq α).2 hα) le_rfl)
+  rw [← LieSubmodule.toSubmodule_inj]; rw [← LieSubmodule.restr_toSubmodule J H]; rw [← LieSubmodule.restr_toSubmodule I H]; rw [h_restr]
 
 中文:
 引理 lieIdealOrderIso_left_inv
@@ -1021,7 +1503,13 @@ lemma lieIdealOrderIso_left_inv
     ((rootSystem H).mem_invtRootSubmodule_iff.mp I.rootSpan_mem_invtRootSubmodule)
   have h_eq : forall α : H.root, α in J.rootSet ↔ α in I.rootSet := fun α => by
     rw [mem_rootSet_invtSubmoduleToLieIdeal]; rw [rootSystem_root_apply]
-    exact ⟨I.me
+    exact ⟨I.mem_rootSet_of_mem_rootSpan, fun h => Submodule.subset_span ⟨α, h, rfl⟩⟩
+  have h_restr : J.restr H = I.restr H := by
+    rw [J.restr_eq_iSup_sl2SubmoduleOfRoot]; rw [I.restr_eq_iSup_sl2SubmoduleOfRoot]
+    exact le_antisymm
+      (iSup₂_le fun α hα => le_iSup₂_of_le α ((h_eq α).1 hα) le_rfl)
+      (iSup₂_le fun α hα => le_iSup₂_of_le α ((h_eq α).2 hα) le_rfl)
+  rw [← LieSubmodule.toSubmodule_inj]; rw [← LieSubmodule.restr_toSubmodule J H]; rw [← LieSubmodule.restr_toSubmodule I H]; rw [h_restr]
 
 Depends on / 依赖: H.root, I.mem_rootSet_of_mem_rootSpan, I.rootSet, I.rootSpan, I.rootSpan_mem_invtRootSubmodule, J.res, J.rootSet, Submodule, Submodule.subset_span, h_eq, h_restr, invtSubmoduleToLieIdeal, mem_invtRootSubmodule_iff, mem_invtRootSubmodule_iff.mp, mem_rootSet_invtSubmoduleToLieIdeal, mem_rootSet_of_mem_rootSpan, rootSet, rootSpan, rootSpan_mem_invtRootSubmodule, rootSystem
 -/
@@ -1086,7 +1574,8 @@ definition lieIdealOrderIso
   right_inv := lieIdealOrderIso_right_inv
   map_rel_iff' {I J} := by
     refine ⟨fun h => ?_, LieIdeal.toInvtRootSubmodule_mono⟩
-    rw [← 
+    rw [← lieIdealOrderIso_left_inv (H := H) I]; rw [← lieIdealOrderIso_left_inv (H := H) J]
+    exact invtSubmoduleToLieIdeal_mono _ _ h
 
 中文:
 定义 lieIdealOrderIso
@@ -1097,7 +1586,8 @@ definition lieIdealOrderIso
   right_inv := lieIdealOrderIso_right_inv
   map_rel_iff' {I J} := by
     refine ⟨fun h => ?_, LieIdeal.toInvtRootSubmodule_mono⟩
-    rw [← 
+    rw [← lieIdealOrderIso_left_inv (H := H) I]; rw [← lieIdealOrderIso_left_inv (H := H) J]
+    exact invtSubmoduleToLieIdeal_mono _ _ h
 
 Depends on / 依赖: LieIdeal, LieIdeal.toInvtRootSubmodule, toInvtRootSubmodule
 -/

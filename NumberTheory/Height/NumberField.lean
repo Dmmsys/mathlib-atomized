@@ -131,7 +131,9 @@ lemma prod_multisetInfinitePlace_eq
   rw [Finset.prod_multiset_map_count]
   exact Finset.prod_bij' (fun w hw => ⟨w, mem_multisetInfinitePlace.mp <| Multiset.mem_dedup.mp hw⟩)
     (fun v _ => v.val) (fun _ _ => Finset.mem_univ _) (fun v _ => by simp [v.isInfinitePlace])
-    (fun _ _ => rfl) (fun _ _ => rfl) fun w hw => b
+    (fun _ _ => rfl) (fun _ _ => rfl) fun w hw => by rw [count_multisetInfinitePlace_eq_mult ⟨w, _⟩]
+
+noncomputable
 
 中文:
 引理 prod_multisetInfinitePlace_eq
@@ -141,7 +143,9 @@ lemma prod_multisetInfinitePlace_eq
   rw [Finset.prod_multiset_map_count]
   exact Finset.prod_bij' (fun w hw => ⟨w, mem_multisetInfinitePlace.mp <| Multiset.mem_dedup.mp hw⟩)
     (fun v _ => v.val) (fun _ _ => Finset.mem_univ _) (fun v _ => by simp [v.isInfinitePlace])
-    (fun _ _ => rfl) (fun _ _ => rfl) fun w hw => b
+    (fun _ _ => rfl) (fun _ _ => rfl) fun w hw => by rw [count_multisetInfinitePlace_eq_mult ⟨w, _⟩]
+
+noncomputable
 -/
 private lemma prod_multisetInfinitePlace_eq {M : Type*} [CommMonoid M] (f : AbsoluteValue K Real -> M) :
     ((multisetInfinitePlace K).map f).prod = ∏ v : InfinitePlace K, f v.val ^ v.mult := by
@@ -234,7 +238,8 @@ lemma sum_archAbsVal_eq
   exact sum_bij' (⟨·, mem_multisetInfinitePlace.mp <| mem_dedup.mp ·⟩)
     _ (by simp) (by simp [InfinitePlace.isInfinitePlace, archAbsVal]) (by simp) (fun _ _ => rfl)
     fun w hw => by
-      simp only [archAbsVal, mem_toFinset, mem_multisetInfinitePlace
+      simp only [archAbsVal, mem_toFinset, mem_multisetInfinitePlace] at hw ⊢
+      simp [count_multisetInfinitePlace_eq_mult ⟨w, hw⟩]
 
 中文:
 引理 sum_archAbsVal_eq
@@ -245,7 +250,8 @@ lemma sum_archAbsVal_eq
   exact sum_bij' (⟨·, mem_multisetInfinitePlace.mp <| mem_dedup.mp ·⟩)
     _ (by simp) (by simp [InfinitePlace.isInfinitePlace, archAbsVal]) (by simp) (fun _ _ => rfl)
     fun w hw => by
-      simp only [archAbsVal, mem_toFinset, mem_multisetInfinitePlace
+      simp only [archAbsVal, mem_toFinset, mem_multisetInfinitePlace] at hw ⊢
+      simp [count_multisetInfinitePlace_eq_mult ⟨w, hw⟩]
 
 Depends on / 依赖: InfinitePlace, InfinitePlace.isInfinitePlace, archAbsVal, classical, count_multisetInfinitePlace_eq_mult, isInfinitePlace, mem_dedup, mem_dedup.mp, mem_multisetInfinitePlace, mem_multisetInfinitePlace.mp, mem_toFinset, sum_bij, sum_multiset_map_count
 -/
@@ -498,7 +504,17 @@ lemma absNorm_mul_finprod_finitePlace_eq_one_aux
   have H j : span {x j} != ⊥ := mt span_singleton_eq_bot.mp (hx j)
   have hx' : ⨆ i, span {x i} != ⊥ :=
 iSup_eq_bot.not.mpr not_forall.mpr ⟨Classical.ofNonempty, H _⟩
-  rw [span_range_eq_iSup]; rw [← finprod_finitePlace_pow_multiplicity hx']; rw [map_finprod _ hasFiniteMulSupport_fun_pow_multipli
+  rw [span_range_eq_iSup]; rw [← finprod_finitePlace_pow_multiplicity hx']; rw [map_finprod _ hasFiniteMulSupport_fun_pow_multiplicity hx' (·)]; rw [Nat.cast_finprod']; rw [← finprod_mul_distrib ?hf .iSup (FinitePlace.hasFiniteMulSupport <| mod_cast hx ·)]
+  case hf =>
+    simp only [map_pow, Nat.cast_pow]
+    exact hasFiniteMulSupport_fun_pow_multiplicity hx' fun v => (v.absNorm : Real)
+  refine finprod_eq_one_of_forall_eq_one fun v => ?_
+  have hn := absNorm_eq_zero_iff.not.mpr v.maximalIdeal.ne_bot
+  have h {m : Nat} : (0 : Real) < ↑(absNorm v.maximalIdeal.asIdeal ^ m) := by positivity
+  rw [multiplicity_iSup _ H]; rw [map_pow]; rw [mul_eq_one_iff_inv_eq₀ h.ne']; rw [map_iInf_of_monotone (fun _ => multiplicity ..) (pow_right_monotone <| by lia)]; rw [map_iInf_of_monotone _ Nat.mono_cast]; rw [map_iInf_of_antitoneOn antitoneOn_inv_pos fun _ => Set.mem_ofPred.mpr h]
+  refine iSup_congr fun i => ?_
+  rw [← mul_eq_one_iff_inv_eq₀ h.ne']; rw [mul_comm]; rw [Nat.cast_pow]
+  exact apply_mul_absNorm_pow_eq_one v (hx i)
 
 中文:
 引理 absNorm_mul_finprod_finitePlace_eq_one_aux
@@ -507,7 +523,17 @@ iSup_eq_bot.not.mpr not_forall.mpr ⟨Classical.ofNonempty, H _⟩
   have H j : span {x j} != ⊥ := mt span_singleton_eq_bot.mp (hx j)
   have hx' : ⨆ i, span {x i} != ⊥ :=
 iSup_eq_bot.not.mpr not_forall.mpr ⟨Classical.ofNonempty, H _⟩
-  rw [span_range_eq_iSup]; rw [← finprod_finitePlace_pow_multiplicity hx']; rw [map_finprod _ hasFiniteMulSupport_fun_pow_multipli
+  rw [span_range_eq_iSup]; rw [← finprod_finitePlace_pow_multiplicity hx']; rw [map_finprod _ hasFiniteMulSupport_fun_pow_multiplicity hx' (·)]; rw [Nat.cast_finprod']; rw [← finprod_mul_distrib ?hf .iSup (FinitePlace.hasFiniteMulSupport <| mod_cast hx ·)]
+  case hf =>
+    simp only [map_pow, Nat.cast_pow]
+    exact hasFiniteMulSupport_fun_pow_multiplicity hx' fun v => (v.absNorm : Real)
+  refine finprod_eq_one_of_forall_eq_one fun v => ?_
+  have hn := absNorm_eq_zero_iff.not.mpr v.maximalIdeal.ne_bot
+  have h {m : Nat} : (0 : Real) < ↑(absNorm v.maximalIdeal.asIdeal ^ m) := by positivity
+  rw [multiplicity_iSup _ H]; rw [map_pow]; rw [mul_eq_one_iff_inv_eq₀ h.ne']; rw [map_iInf_of_monotone (fun _ => multiplicity ..) (pow_right_monotone <| by lia)]; rw [map_iInf_of_monotone _ Nat.mono_cast]; rw [map_iInf_of_antitoneOn antitoneOn_inv_pos fun _ => Set.mem_ofPred.mpr h]
+  refine iSup_congr fun i => ?_
+  rw [← mul_eq_one_iff_inv_eq₀ h.ne']; rw [mul_comm]; rw [Nat.cast_pow]
+  exact apply_mul_absNorm_pow_eq_one v (hx i)
 -/
 private lemma absNorm_mul_finprod_finitePlace_eq_one_aux [Nonempty ι] (hx : forall i, x i != 0) :
     (span <| Set.range x).absNorm * ∏ᶠ v : FinitePlace K, ⨆ i, v (x i) = 1 := by
@@ -540,7 +566,9 @@ lemma absNorm_mul_finprod_finitePlace_eq_one
   have : Nonempty _ := .intro i'
   have hI : span (Set.range x) = span (Set.range fun i : { j // (x j : K) != 0 } => x i.val) := by
     convert span_range_eq_span_range_support x <;> norm_cast
-  h
+  have hx₀ : (fun i => (x i : K)) != 0 := Function.ne_iff.mpr ⟨_, i'.prop⟩
+  simp_rw [Finite.iSup_eq_iSup_subtype hx₀, hI]
+  exact absNorm_mul_finprod_finitePlace_eq_one_aux fun j => mod_cast j.prop
 
 中文:
 引理 absNorm_mul_finprod_finitePlace_eq_one
@@ -551,7 +579,9 @@ lemma absNorm_mul_finprod_finitePlace_eq_one
   have : Nonempty _ := .intro i'
   have hI : span (Set.range x) = span (Set.range fun i : { j // (x j : K) != 0 } => x i.val) := by
     convert span_range_eq_span_range_support x <;> norm_cast
-  h
+  have hx₀ : (fun i => (x i : K)) != 0 := Function.ne_iff.mpr ⟨_, i'.prop⟩
+  simp_rw [Finite.iSup_eq_iSup_subtype hx₀, hI]
+  exact absNorm_mul_finprod_finitePlace_eq_one_aux fun j => mod_cast j.prop
 
 Depends on / 依赖: Finite, Finite.iSup_eq_iSup_subtype, Function, Function.ne_iff.mp, Function.ne_iff.mpr, Nonempty, Set.range, absNorm_mul_finprod_finitePlace_eq_one_aux, convert, i.val, iSup_eq_iSup_subtype, j.prop, mod_cast, ne_iff, simp_rw, span_range_eq_span_range_support
 -/
@@ -607,7 +637,10 @@ lemma relIndex_span_span_nat_mul
     (injective_iff_map_eq_zero f).mpr fun _ _ => by simp_all [f]
   have H₁ : span {(n * m : 𝓞 K)} = Submodule.map f (span {↑m}) := by
     simp [LinearMap.map_span, f]
-  have H₂ : span {↑(n * m), n * a} 
+  have H₂ : span {↑(n * m), n * a} = Submodule.map f (span {↑m, a}) := by
+    simp [LinearMap.map_span, f, Set.image_pair]
+  rw [H₁]; rw [H₂]
+.symm exact AddSubgroup.relIndex_map_map_of_injective _ _ hf
 
 中文:
 引理 relIndex_span_span_nat_mul
@@ -618,7 +651,10 @@ lemma relIndex_span_span_nat_mul
     (injective_iff_map_eq_zero f).mpr fun _ _ => by simp_all [f]
   have H₁ : span {(n * m : 𝓞 K)} = Submodule.map f (span {↑m}) := by
     simp [LinearMap.map_span, f]
-  have H₂ : span {↑(n * m), n * a} 
+  have H₂ : span {↑(n * m), n * a} = Submodule.map f (span {↑m, a}) := by
+    simp [LinearMap.map_span, f, Set.image_pair]
+  rw [H₁]; rw [H₂]
+.symm exact AddSubgroup.relIndex_map_map_of_injective _ _ hf
 -/
 private lemma relIndex_span_span_nat_mul (m : Nat) {n : Nat} (hn : n != 0) (a : 𝓞 K) :
     (span {(m : 𝓞 K)}).toAddSubgroup.relIndex (span {↑m, a}).toAddSubgroup =
@@ -672,6 +708,19 @@ lemma exists_nat_ne_zero_exists_integer_mul_eq_and_absNorm_span_eq_pow
   obtain ⟨m, r, hm, hmr⟩ := hx.exists_nsmul_eq (𝓞 K)
   rw [← RingOfIntegers.coe_eq_algebraMap r] at hmr
   set n := (span {(m : 𝓞 K)}).toAddSubgroup.relIndex (span {(m : 𝓞 K), r}).toAddSubgroup with hndef
+.relIndex_ne_zero have hn : n != 0 := isFiniteRelIndex (by simp [hm]) _
+  obtain ⟨a, ha'⟩ : exists a, m * a = n * r := by
+    have : n • r in span {(m : 𝓞 K)} :=
+(span {(m : 𝓞 K)}).toAddSubgroup.nsmul_relIndex_mem Submodule.mem_span_of_mem by grind
+    simpa [mem_span_singleton', mul_comm] using this
+  have ha : n * x = a := by
+    refine mul_left_cancel₀ (mod_cast hm : (m : K) != 0) ?_
+    rw [mul_left_comm]; rw [← nsmul_eq_mul m]; rw [hmr]
+    exact_mod_cast ha'.symm
+  refine ⟨n, hn, a, ha, mul_left_cancel₀ hn ?_⟩
+  nth_rewrite 1 [hndef]
+  rw [absNorm_eq_index]; rw [mul_pow_sub_one finrank_pos.ne']; rw [← RingOfIntegers.rank]; rw [← absNorm_span_natCast]; rw [absNorm_eq_index]; rw [← relIndex_span_span_eq_relIndex_span_span hn hm ha']
+exact relIndex_mul_index Submodule.toAddSubgroup_mono span_mono by grind
 
 中文:
 引理 存在_nat_ne_zero_存在_integer_mul_eq_and_absNorm_span_eq_pow
@@ -681,6 +730,19 @@ lemma exists_nat_ne_zero_exists_integer_mul_eq_and_absNorm_span_eq_pow
   obtain ⟨m, r, hm, hmr⟩ := hx.exists_nsmul_eq (𝓞 K)
   rw [← RingOfIntegers.coe_eq_algebraMap r] at hmr
   set n := (span {(m : 𝓞 K)}).toAddSubgroup.relIndex (span {(m : 𝓞 K), r}).toAddSubgroup with hndef
+.relIndex_ne_zero have hn : n != 0 := isFiniteRelIndex (by simp [hm]) _
+  obtain ⟨a, ha'⟩ : exists a, m * a = n * r := by
+    have : n • r in span {(m : 𝓞 K)} :=
+(span {(m : 𝓞 K)}).toAddSubgroup.nsmul_relIndex_mem Submodule.mem_span_of_mem by grind
+    simpa [mem_span_singleton', mul_comm] using this
+  have ha : n * x = a := by
+    refine mul_left_cancel₀ (mod_cast hm : (m : K) != 0) ?_
+    rw [mul_left_comm]; rw [← nsmul_eq_mul m]; rw [hmr]
+    exact_mod_cast ha'.symm
+  refine ⟨n, hn, a, ha, mul_left_cancel₀ hn ?_⟩
+  nth_rewrite 1 [hndef]
+  rw [absNorm_eq_index]; rw [mul_pow_sub_one finrank_pos.ne']; rw [← RingOfIntegers.rank]; rw [← absNorm_span_natCast]; rw [absNorm_eq_index]; rw [← relIndex_span_span_eq_relIndex_span_span hn hm ha']
+exact relIndex_mul_index Submodule.toAddSubgroup_mono span_mono by grind
 
 Depends on / 依赖: IsAlgebraic, IsFractionRing, IsFractionRing.isAlgebraic_iff, RingOfIntegers, RingOfIntegers.coe_eq_algebraMap, coe_eq_algebraMap, exists_nsmul_eq, hx.exists_nsmul_eq, isAlgebraic_iff, isFiniteRelIndex, nsmul_relIndex_m, of_finite, relIndex, relIndex_ne_zero, toAddSubgroup, toAddSubgroup.nsmul_relIndex_m, toAddSubgroup.relIndex
 -/
@@ -717,7 +779,9 @@ lemma one_le_pow_totalWeight_mul_finprod
   rw_mod_cast [totalWeight_eq_finrank, ← RingOfIntegers.rank, ← absNorm_span_natCast] at Hw ⊢
   rw [← absNorm_mul_finprod_finitePlace_eq_one (show ![a]; rw [n] != 0 by simp [hn])]
   gcongr
-  · exact finprod_nonneg fun _ => Real.iSup_nonn
+  · exact finprod_nonneg fun _ => Real.iSup_nonneg_of_nonnegHomClass ..
+· exact Nat.le_of_dvd Hw absNorm_dvd_absNorm_of_le span_mono by simp
+  · apply le_of_eq; congr; ext; congr; ext i; fin_cases i <;> simp
 
 中文:
 引理 one_le_pow_totalWeight_mul_finprod
@@ -727,7 +791,9 @@ lemma one_le_pow_totalWeight_mul_finprod
   rw_mod_cast [totalWeight_eq_finrank, ← RingOfIntegers.rank, ← absNorm_span_natCast] at Hw ⊢
   rw [← absNorm_mul_finprod_finitePlace_eq_one (show ![a]; rw [n] != 0 by simp [hn])]
   gcongr
-  · exact finprod_nonneg fun _ => Real.iSup_nonn
+  · exact finprod_nonneg fun _ => Real.iSup_nonneg_of_nonnegHomClass ..
+· exact Nat.le_of_dvd Hw absNorm_dvd_absNorm_of_le span_mono by simp
+  · apply le_of_eq; congr; ext; congr; ext i; fin_cases i <;> simp
 -/
 private lemma one_le_pow_totalWeight_mul_finprod {n : Nat} (hn : n != 0) (a : 𝓞 K) :
     1 <= (n ^ totalWeight K : Real) * ∏ᶠ (v : FinitePlace K), ⨆ i, v (![↑a, ↑n] i) := by
@@ -759,7 +825,13 @@ lemma exists_nat_le_mulHeight₁
   refine ⟨n, hn, ?_, ha₁ ▸ a.isIntegral_coe⟩
   rw [← totalWeight_eq_finrank] at ha₂
   have hv (i : Fin 2) : (![a, n] i : K) = ![(a : K), n] i := by fin_cases i <;> rfl
-  rw [← mul_div_cancel_left₀ 
+  rw [← mul_div_cancel_left₀ x (mod_cast hn : (n : K) != 0)]; rw [ha₁]; rw [mulHeight₁_div_eq_mulHeight]; rw [mulHeight_eq (by simp [hn])]
+  refine le_of_mul_le_mul_left ?_ (show (0 : Real) < n ^ (totalWeight K - 1) by positivity)
+  have : n ^ (totalWeight K - 1) * ∏ᶠ (v : FinitePlace K), ⨆ i, v (![(a : K), n] i) = 1 := by
+    simpa [ha₂, hv] using absNorm_mul_finprod_finitePlace_eq_one (show ![a, n] != 0 by simp [hn])
+  rw [pow_sub_one_mul (totalWeight_pos K).ne']; rw [mul_left_comm]; rw [this]; rw [mul_one]; rw [totalWeight_eq_sum_mult]; rw [← prod_pow_eq_pow_sum univ]
+  gcongr
+exact Finite.le_ciSup_of_le 1 by simp
 
 中文:
 引理 存在_nat_le_mulHeight₁
@@ -769,7 +841,13 @@ lemma exists_nat_le_mulHeight₁
   refine ⟨n, hn, ?_, ha₁ ▸ a.isIntegral_coe⟩
   rw [← totalWeight_eq_finrank] at ha₂
   have hv (i : Fin 2) : (![a, n] i : K) = ![(a : K), n] i := by fin_cases i <;> rfl
-  rw [← mul_div_cancel_left₀ 
+  rw [← mul_div_cancel_left₀ x (mod_cast hn : (n : K) != 0)]; rw [ha₁]; rw [mulHeight₁_div_eq_mulHeight]; rw [mulHeight_eq (by simp [hn])]
+  refine le_of_mul_le_mul_left ?_ (show (0 : Real) < n ^ (totalWeight K - 1) by positivity)
+  have : n ^ (totalWeight K - 1) * ∏ᶠ (v : FinitePlace K), ⨆ i, v (![(a : K), n] i) = 1 := by
+    simpa [ha₂, hv] using absNorm_mul_finprod_finitePlace_eq_one (show ![a, n] != 0 by simp [hn])
+  rw [pow_sub_one_mul (totalWeight_pos K).ne']; rw [mul_left_comm]; rw [this]; rw [mul_one]; rw [totalWeight_eq_sum_mult]; rw [← prod_pow_eq_pow_sum univ]
+  gcongr
+exact Finite.le_ciSup_of_le 1 by simp
 
 Depends on / 依赖: a.isIntegral_coe, exists_nat_ne_zero_exists_integer_mul_eq_and_absNorm_span_eq_pow, fin_cases, isIntegral_coe, le_of_mul_le_mul_left, mod_cast, mulHeight_eq, totalWeight, totalWeight_eq_finrank
 -/
@@ -823,7 +901,14 @@ lemma infinitePlace_apply_le_of_prod_le
     _ <= n ^ (totalWeight K - 1) * ⨆ i, v (![(x : K), n] i) := by
       gcongr; exact Finite.le_ciSup_of_le 0 le_rfl
     _ <= (∏ v' in univ.erase v, (⨆ i, v' (![↑x, ↑n] i)) ^ v'.mult) *
-         (⨆ i, v (![↑x, ↑n] i)) ^ (v.mult - 1) * ⨆ i, v 
+         (⨆ i, v (![↑x, ↑n] i)) ^ (v.mult - 1) * ⨆ i, v (![(x : K), n] i) := by
+      rw [pow_totalWeight_sub_one_eq hn]
+      gcongr
+      · exact Real.iSup_nonneg_of_nonnegHomClass ..
+      · exact prod_nonneg fun _ _ => pow_nonneg (Real.iSup_nonneg_of_nonnegHomClass ..) _
+all_goals exact Finite.le_ciSup_of_le 1 by simp
+    _ <= B := by
+      rwa [mul_assoc, pow_sub_one_mul v.mult_ne_zero, prod_erase_mul _ _ (mem_univ v)]
 
 中文:
 引理 infinitePlace_apply_le_of_prod_le
@@ -835,7 +920,14 @@ lemma infinitePlace_apply_le_of_prod_le
     _ <= n ^ (totalWeight K - 1) * ⨆ i, v (![(x : K), n] i) := by
       gcongr; exact Finite.le_ciSup_of_le 0 le_rfl
     _ <= (∏ v' in univ.erase v, (⨆ i, v' (![↑x, ↑n] i)) ^ v'.mult) *
-         (⨆ i, v (![↑x, ↑n] i)) ^ (v.mult - 1) * ⨆ i, v 
+         (⨆ i, v (![↑x, ↑n] i)) ^ (v.mult - 1) * ⨆ i, v (![(x : K), n] i) := by
+      rw [pow_totalWeight_sub_one_eq hn]
+      gcongr
+      · exact Real.iSup_nonneg_of_nonnegHomClass ..
+      · exact prod_nonneg fun _ _ => pow_nonneg (Real.iSup_nonneg_of_nonnegHomClass ..) _
+all_goals exact Finite.le_ciSup_of_le 1 by simp
+    _ <= B := by
+      rwa [mul_assoc, pow_sub_one_mul v.mult_ne_zero, prod_erase_mul _ _ (mem_univ v)]
 -/
 private lemma infinitePlace_apply_le_of_prod_le {n : Nat} (hn : n != 0) (B : Real) {x : 𝓞 K}
     (h : ∏ v : InfinitePlace K, (⨆ i, v (![(x : K), n] i)) ^ v.mult <= B) (v : InfinitePlace K) :
@@ -868,7 +960,15 @@ lemma finite_setOfPred_prod_infinitePlace_iSup_le
   suffices Set.BijOn ((↑) : 𝓞 K -> K) {x | forall (v : InfinitePlace K), v x <= B'}
       {x | IsIntegral Int x ∧ forall (φ : K ->+* Complex), ‖φ x‖ <= B'} from
 .subset this.finite_iff_finite.mpr (Embeddings.finite_of_norm_le K Complex B')
-      fun _ _ => 
+      fun _ _ => by grind [infinitePlace_apply_le_of_prod_le hn B]
+  refine .mk (fun x hx => ?_) (fun _ _ _ _ => RingOfIntegers.ext) fun a ha => ?_ <;>
+    simp only [Set.mem_image, Set.mem_ofPred_eq] at *
+· exact ⟨x.isIntegral_coe, fun φ => hx .mk φ⟩
+  · rw [← mem_integralClosure_iff Int K] at ha
+    exact ⟨⟨a, ha.1⟩, fun v => v.norm_embedding_eq a ▸ ha.2 v.embedding, rfl⟩
+
+@[deprecated (since := "2026-07-09")]
+alias finite_setOf_prod_infinitePlace_iSup_le := finite_setOfPred_prod_infinitePlace_iSup_le
 
 中文:
 引理 finite_setOfPred_prod_infinitePlace_iSup_le
@@ -878,7 +978,15 @@ lemma finite_setOfPred_prod_infinitePlace_iSup_le
   suffices Set.BijOn ((↑) : 𝓞 K -> K) {x | forall (v : InfinitePlace K), v x <= B'}
       {x | IsIntegral Int x ∧ forall (φ : K ->+* Complex), ‖φ x‖ <= B'} from
 .subset this.finite_iff_finite.mpr (Embeddings.finite_of_norm_le K Complex B')
-      fun _ _ => 
+      fun _ _ => by grind [infinitePlace_apply_le_of_prod_le hn B]
+  refine .mk (fun x hx => ?_) (fun _ _ _ _ => RingOfIntegers.ext) fun a ha => ?_ <;>
+    simp only [Set.mem_image, Set.mem_ofPred_eq] at *
+· exact ⟨x.isIntegral_coe, fun φ => hx .mk φ⟩
+  · rw [← mem_integralClosure_iff Int K] at ha
+    exact ⟨⟨a, ha.1⟩, fun v => v.norm_embedding_eq a ▸ ha.2 v.embedding, rfl⟩
+
+@[deprecated (since := "2026-07-09")]
+alias finite_setOf_prod_infinitePlace_iSup_le := finite_setOfPred_prod_infinitePlace_iSup_le
 
 Depends on / 依赖: Embeddings, Embeddings.finite_of_norm_le, InfinitePlace, IsIntegral, RingOfIntegers, RingOfIntegers.ext, Set.BijOn, Set.mem_image, Set.mem_ofPred_eq, finite_iff_finite, finite_of_norm_le, infinitePlace_apply_le_of_prod_le, isIntegral_coe, mem_image, mem_ofPred_eq, subset, this.finite_iff_finite.mpr, totalWeight, x.isIntegral_coe
 -/
@@ -909,7 +1017,13 @@ lemma finite_setOfPred_mulHeight_nat_le
       {a | ∏ v : InfinitePlace K, (⨆ i, v (![(a : K), n] i)) ^ v.mult <= n ^ totalWeight K * B} from
     (finite_setOfPred_prod_infinitePlace_iSup_le hn _).subset this
   refine Set.ofPred_subset_ofPred_of_imp fun a ha => ?_
-  rw [mulHei
+  rw [mulHeight_eq <| by simp [hn], mul_comm] at ha
+  grw [← ha, ← mul_assoc, ← one_le_pow_totalWeight_mul_finprod hn, one_mul]
+  -- nonnegativity side goal
+  exact Finset.prod_nonneg fun _ _ => pow_nonneg (Real.iSup_nonneg_of_nonnegHomClass ..) _
+
+@[deprecated (since := "2026-07-09")]
+alias finite_setOf_mulHeight_nat_le := finite_setOfPred_mulHeight_nat_le
 
 中文:
 引理 finite_setOfPred_mulHeight_nat_le
@@ -919,7 +1033,13 @@ lemma finite_setOfPred_mulHeight_nat_le
       {a | ∏ v : InfinitePlace K, (⨆ i, v (![(a : K), n] i)) ^ v.mult <= n ^ totalWeight K * B} from
     (finite_setOfPred_prod_infinitePlace_iSup_le hn _).subset this
   refine Set.ofPred_subset_ofPred_of_imp fun a ha => ?_
-  rw [mulHei
+  rw [mulHeight_eq <| by simp [hn], mul_comm] at ha
+  grw [← ha, ← mul_assoc, ← one_le_pow_totalWeight_mul_finprod hn, one_mul]
+  -- nonnegativity side goal
+  exact Finset.prod_nonneg fun _ _ => pow_nonneg (Real.iSup_nonneg_of_nonnegHomClass ..) _
+
+@[deprecated (since := "2026-07-09")]
+alias finite_setOf_mulHeight_nat_le := finite_setOfPred_mulHeight_nat_le
 
 Depends on / 依赖: InfinitePlace, Set.ofPred_subset_ofPred_of_imp, finite_setOfPred_prod_infinitePlace_iSup_le, mulHeight, mulHeight_eq, mul_assoc, mul_comm, ofPred_subset_ofPred_of_imp, one_le_pow_totalWeight_mul_finprod, one_mul, subset, subseteq, totalWeight, v.mult
 -/
@@ -949,7 +1069,15 @@ lemma finite_setOfPred_isIntegral_nat_mul_and_mulHeight₁_le
   suffices Set.BijOn (fun a : 𝓞 K => (a / n : K)) {a | mulHeight ![(a : K), n] <= B}
       {x | IsIntegral Int (n * x) ∧ mulHeight₁ x <= B} from
 this.finite_iff_finite.mp finite_setOfPred_mulHeight_nat_le hn B
-  refine .mk (fun a ha => ?_) (fun a _ b _ h =
+  refine .mk (fun a ha => ?_) (fun a _ b _ h => ?_) fun x ⟨hx₁, hx₂⟩ => ?_
+  · simp only [Set.mem_ofPred_eq] at ha ⊢
+    rw [mul_div_cancel₀ (a : K) hn']; rw [mulHeight₁_div_eq_mulHeight]
+    exact ⟨a.isIntegral_coe, ha⟩
+  · rwa [div_left_inj' hn', RingOfIntegers.eq_iff] at h
+  · simp only [Set.mem_ofPred_eq, Set.mem_image]
+    obtain ⟨a, ha⟩ : exists a : 𝓞 K, n * x = a := ⟨⟨_, hx₁⟩, rfl⟩
+    refine ⟨a, ?_, (EuclideanDomain.eq_div_of_mul_eq_right hn' ha).symm⟩
+    rwa [← ha, ← mulHeight₁_div_eq_mulHeight, mul_div_cancel_left₀ x hn']
 
 中文:
 引理 finite_setOfPred_is整数egral_nat_mul_and_mulHeight₁_le
@@ -959,7 +1087,15 @@ this.finite_iff_finite.mp finite_setOfPred_mulHeight_nat_le hn B
   suffices Set.BijOn (fun a : 𝓞 K => (a / n : K)) {a | mulHeight ![(a : K), n] <= B}
       {x | IsIntegral Int (n * x) ∧ mulHeight₁ x <= B} from
 this.finite_iff_finite.mp finite_setOfPred_mulHeight_nat_le hn B
-  refine .mk (fun a ha => ?_) (fun a _ b _ h =
+  refine .mk (fun a ha => ?_) (fun a _ b _ h => ?_) fun x ⟨hx₁, hx₂⟩ => ?_
+  · simp only [Set.mem_ofPred_eq] at ha ⊢
+    rw [mul_div_cancel₀ (a : K) hn']; rw [mulHeight₁_div_eq_mulHeight]
+    exact ⟨a.isIntegral_coe, ha⟩
+  · rwa [div_left_inj' hn', RingOfIntegers.eq_iff] at h
+  · simp only [Set.mem_ofPred_eq, Set.mem_image]
+    obtain ⟨a, ha⟩ : exists a : 𝓞 K, n * x = a := ⟨⟨_, hx₁⟩, rfl⟩
+    refine ⟨a, ?_, (EuclideanDomain.eq_div_of_mul_eq_right hn' ha).symm⟩
+    rwa [← ha, ← mulHeight₁_div_eq_mulHeight, mul_div_cancel_left₀ x hn']
 -/
 private lemma finite_setOfPred_isIntegral_nat_mul_and_mulHeight₁_le {n : Nat} (hn : n != 0) (B : Real) :
     {x : K | IsIntegral Int (n * x) ∧ mulHeight₁ x <= B}.Finite := by
@@ -991,7 +1127,14 @@ theorem finite_setOfPred_mulHeight₁_le
     ext x : 1
     obtain ⟨n, hn₀, hn₁, hn⟩ := exists_nat_le_mulHeight₁ x
     simp only [Set.mem_ofPred_eq, Set.mem_iUnion, exists_and_right, iff_and_self]
-    refine fun
+    refine fun h => ⟨⟨n - 1, by grind [Nat.le_floor <| hn₁.trans h]⟩, ?_⟩
+    rwa [← Nat.cast_add_one, Nat.sub_one_add_one hn₀]
+  rw [H]
+  exact Set.finite_iUnion fun n =>
+    mod_cast finite_setOfPred_isIntegral_nat_mul_and_mulHeight₁_le K (Nat.zero_ne_add_one n).symm B
+
+@[deprecated (since := "2026-07-09")]
+alias finite_setOf_mulHeight₁_le := finite_setOfPred_mulHeight₁_le
 
 中文:
 定理 finite_setOfPred_mulHeight₁_le
@@ -1003,7 +1146,14 @@ theorem finite_setOfPred_mulHeight₁_le
     ext x : 1
     obtain ⟨n, hn₀, hn₁, hn⟩ := exists_nat_le_mulHeight₁ x
     simp only [Set.mem_ofPred_eq, Set.mem_iUnion, exists_and_right, iff_and_self]
-    refine fun
+    refine fun h => ⟨⟨n - 1, by grind [Nat.le_floor <| hn₁.trans h]⟩, ?_⟩
+    rwa [← Nat.cast_add_one, Nat.sub_one_add_one hn₀]
+  rw [H]
+  exact Set.finite_iUnion fun n =>
+    mod_cast finite_setOfPred_isIntegral_nat_mul_and_mulHeight₁_le K (Nat.zero_ne_add_one n).symm B
+
+@[deprecated (since := "2026-07-09")]
+alias finite_setOf_mulHeight₁_le := finite_setOfPred_mulHeight₁_le
 
 Depends on / 依赖: IsIntegral, Nat.cast_add_one, Nat.le_floor, Nat.sub_one_add_one, Nat.zero, Set.finite_iUnion, Set.mem_iUnion, Set.mem_ofPred_eq, cast_add_one, exists_and_right, finite_iUnion, iff_and_self, le_floor, mem_iUnion, mem_ofPred_eq, mod_cast, sub_one_add_one
 -/
@@ -1124,7 +1274,11 @@ lemma iSup_finitePlace_apply_eq_one_of_gcd_eq_one
   obtain ⟨f, hf⟩ := Finset.gcd_eq_sum_mul .univ x
   apply_fun v at hf
   simp_rw [hx, Int.cast_one, map_one, Int.cast_sum, Int.cast_mul] at hf
-  replace hf := hf.tra
+  replace hf := hf.trans_le hv.apply_sum_univ_le
+  obtain ⟨i, hi⟩ := exists_eq_ciSup_of_finite (f := fun i => v (x i * f i))
+  rw [← hi]; rw [map_mul] at hf
+replace hf : 1 <= v (x i) := hf.trans mul_le_of_le_one_right (apply_nonneg v _) (H _)
+exact le_antisymm (ciSup_le (H <| x ·)) Finite.le_ciSup_of_le i hf
 
 中文:
 引理 iSup_finitePlace_apply_eq_one_of_gcd_eq_one
@@ -1135,7 +1289,11 @@ lemma iSup_finitePlace_apply_eq_one_of_gcd_eq_one
   obtain ⟨f, hf⟩ := Finset.gcd_eq_sum_mul .univ x
   apply_fun v at hf
   simp_rw [hx, Int.cast_one, map_one, Int.cast_sum, Int.cast_mul] at hf
-  replace hf := hf.tra
+  replace hf := hf.trans_le hv.apply_sum_univ_le
+  obtain ⟨i, hi⟩ := exists_eq_ciSup_of_finite (f := fun i => v (x i * f i))
+  rw [← hi]; rw [map_mul] at hf
+replace hf : 1 <= v (x i) := hf.trans mul_le_of_le_one_right (apply_nonneg v _) (H _)
+exact le_antisymm (ciSup_le (H <| x ·)) Finite.le_ciSup_of_le i hf
 
 Depends on / 依赖: FinitePlace, FinitePlace.add_le, Finset, Finset.gcd_eq_sum_mul, Int.cast_mul, Int.cast_one, Int.cast_sum, IsNonarchimedean, IsNonarchimedean.apply_intCast_le_one, add_le, apply_fun, apply_intCast_le_one, apply_nonneg, apply_sum_univ_le, cast_mul, cast_one, cast_sum, exists_eq_ciSup_of_finite, gcd_eq_sum_mul, hf.trans
 -/
@@ -1165,7 +1323,9 @@ lemma mulHeight_eq_max_abs_of_gcd_eq_one
     rw [Function.comp_eq_zero_iff x intCast_injective Rat.intCast_zero] at hx
     rw [hx]; rw [Finset.gcd_eq_zero_iff.mpr (by simp)]
     exact zero_ne_one
-  simp_rw [Finite.map_iSup_of_monotone _ Int.cast_mono, NumberField.mulHe
+  simp_rw [Finite.map_iSup_of_monotone _ Int.cast_mono, NumberField.mulHeight_eq hx₀,
+    infinitePlace_apply]
+  simp [finprod_eq_one_of_forall_eq_one (iSup_finitePlace_apply_eq_one_of_gcd_eq_one · hx)]
 
 中文:
 引理 mulHeight_eq_max_abs_of_gcd_eq_one
@@ -1176,7 +1336,9 @@ lemma mulHeight_eq_max_abs_of_gcd_eq_one
     rw [Function.comp_eq_zero_iff x intCast_injective Rat.intCast_zero] at hx
     rw [hx]; rw [Finset.gcd_eq_zero_iff.mpr (by simp)]
     exact zero_ne_one
-  simp_rw [Finite.map_iSup_of_monotone _ Int.cast_mono, NumberField.mulHe
+  simp_rw [Finite.map_iSup_of_monotone _ Int.cast_mono, NumberField.mulHeight_eq hx₀,
+    infinitePlace_apply]
+  simp [finprod_eq_one_of_forall_eq_one (iSup_finitePlace_apply_eq_one_of_gcd_eq_one · hx)]
 
 Depends on / 依赖: Finite, Finite.map_iSup_of_monotone, Finset, Finset.gcd_eq_zero_iff.mpr, Function, Function.comp_eq_zero_iff, Int.cast, Int.cast_mono, NumberField, NumberField.mulHeight_eq, Rat.intCast_zero, cast_mono, comp_eq_zero_iff, contrapose, finprod_eq_one_of_forall_eq_one, gcd_eq_zero_iff, iSup_finitePlace_apply_eq_one_of_gcd_eq_one, infinitePlace_apply, intCast_injective, intCast_zero
 -/
@@ -1255,7 +1417,15 @@ lemma mulHeight₁_eq_max
   rw [mulHeight₁_eq_mulHeight]; rw [mulHeight_self_one_eq_mulHeight_num_den]; rw [← intCast_natCast q.den]
   have : (.univ : Finset (Fin 2)).gcd ![q.num, q.den] = 1 := by
     simpa [Finset.univ_fin2, Int.normalize_coe_nat, ← Int.coe_gcd q.num q.den] using
-Int.isCoprime_iff_gcd_eq_one.mp isCoprime
+Int.isCoprime_iff_gcd_eq_one.mp isCoprime_num_den q
+  convert! mulHeight_eq_max_abs_of_gcd_eq_one this
+  · ext i; fin_cases i <;> simp
+  · rw [← Int.cast_natCast, Int.cast_inj]
+    push_cast
+refine le_antisymm (max_le ?_ ?_) ciSup_le fun i => ?_
+· exact Finite.le_ciSup_of_le 0 by simp
+· exact Finite.le_ciSup_of_le 1 by simp
+    · fin_cases i <;> simp
 
 中文:
 引理 mulHeight₁_eq_max
@@ -1265,7 +1435,15 @@ Int.isCoprime_iff_gcd_eq_one.mp isCoprime
   rw [mulHeight₁_eq_mulHeight]; rw [mulHeight_self_one_eq_mulHeight_num_den]; rw [← intCast_natCast q.den]
   have : (.univ : Finset (Fin 2)).gcd ![q.num, q.den] = 1 := by
     simpa [Finset.univ_fin2, Int.normalize_coe_nat, ← Int.coe_gcd q.num q.den] using
-Int.isCoprime_iff_gcd_eq_one.mp isCoprime
+Int.isCoprime_iff_gcd_eq_one.mp isCoprime_num_den q
+  convert! mulHeight_eq_max_abs_of_gcd_eq_one this
+  · ext i; fin_cases i <;> simp
+  · rw [← Int.cast_natCast, Int.cast_inj]
+    push_cast
+refine le_antisymm (max_le ?_ ?_) ciSup_le fun i => ?_
+· exact Finite.le_ciSup_of_le 0 by simp
+· exact Finite.le_ciSup_of_le 1 by simp
+    · fin_cases i <;> simp
 
 Depends on / 依赖: Finset, Finset.univ_fin2, Int.cast_inj, Int.cast_natCast, Int.coe_gcd, Int.isCoprime_iff_gcd_eq_one.mp, Int.normalize_coe_nat, cast_inj, cast_natCast, ciSup_le, coe_gcd, convert, fin_cases, intCast_natCast, isCoprime_iff_gcd_eq_one, isCoprime_num_den, le_antisymm, max_le, mulHeight_eq_max_abs_of_gcd_eq_one, mulHeight_self_one_eq_mulHeight_num_den
 -/

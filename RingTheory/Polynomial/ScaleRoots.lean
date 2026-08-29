@@ -428,7 +428,7 @@ lemma scaleRoots_zero
   · exact (h₁ h₂.ge).elim
   · rfl
 
-@[
+@[simp]
 
 中文:
 引理 scaleRoots_zero
@@ -443,7 +443,7 @@ lemma scaleRoots_zero
   · exact (h₁ h₂.ge).elim
   · rfl
 
-@[
+@[simp]
 
 Depends on / 依赖: Ne.symm, coeff_X_pow, coeff_eq_zero_of_natDegree_lt, coeff_scaleRoots, coeff_smul, lt_of_le_of_ne, mul_ite, mul_one, mul_zero, smul_eq_mul, split_ifs, tsub_eq_zero_iff_le, zero_pow_eq
 -/
@@ -523,7 +523,17 @@ theorem scaleRoots_eval₂_mul_of_commute
           f (coeff p i * s ^ (p.natDegree - i)) * (f s * a) ^ i := by
       simp [eval₂_eq_sum, sum_def]
     _ = p.support.sum fun i => f (coeff p i * s ^ (p.natDegree - i)) * (f s * a) ^ i :=
-      (Finset.sum_subset (support_scaleRoots_le p s
+      (Finset.sum_subset (support_scaleRoots_le p s) fun i _hi hi' => by
+        let : coeff p i * s ^ (p.natDegree - i) = 0 := by simpa using hi'
+        simp [this])
+    _ = p.support.sum fun i : Nat => f (p.coeff i) * f s ^ (p.natDegree - i + i) * a ^ i :=
+      (Finset.sum_congr rfl fun i _hi => by
+        simp_rw [f.map_mul, f.map_pow, pow_add, hsa.mul_pow, mul_assoc])
+    _ = p.support.sum fun i : Nat => f s ^ p.natDegree * (f (p.coeff i) * a ^ i) :=
+      Finset.sum_congr rfl fun i hi => by
+        rw [mul_assoc]; rw [← map_pow]; rw [(hf _ _).left_comm]; rw [map_pow]; rw [tsub_add_cancel_of_le]
+        exact le_natDegree_of_ne_zero (Polynomial.mem_support_iff.mp hi)
+    _ = f s ^ p.natDegree * eval₂ f a p := by simp [← Finset.mul_sum, eval₂_eq_sum, sum_def]
 
 中文:
 定理 scaleRoots_eval₂_mul_of_commute
@@ -534,7 +544,17 @@ theorem scaleRoots_eval₂_mul_of_commute
           f (coeff p i * s ^ (p.natDegree - i)) * (f s * a) ^ i := by
       simp [eval₂_eq_sum, sum_def]
     _ = p.support.sum fun i => f (coeff p i * s ^ (p.natDegree - i)) * (f s * a) ^ i :=
-      (Finset.sum_subset (support_scaleRoots_le p s
+      (Finset.sum_subset (support_scaleRoots_le p s) fun i _hi hi' => by
+        let : coeff p i * s ^ (p.natDegree - i) = 0 := by simpa using hi'
+        simp [this])
+    _ = p.support.sum fun i : Nat => f (p.coeff i) * f s ^ (p.natDegree - i + i) * a ^ i :=
+      (Finset.sum_congr rfl fun i _hi => by
+        simp_rw [f.map_mul, f.map_pow, pow_add, hsa.mul_pow, mul_assoc])
+    _ = p.support.sum fun i : Nat => f s ^ p.natDegree * (f (p.coeff i) * a ^ i) :=
+      Finset.sum_congr rfl fun i hi => by
+        rw [mul_assoc]; rw [← map_pow]; rw [(hf _ _).left_comm]; rw [map_pow]; rw [tsub_add_cancel_of_le]
+        exact le_natDegree_of_ne_zero (Polynomial.mem_support_iff.mp hi)
+    _ = f s ^ p.natDegree * eval₂ f a p := by simp [← Finset.mul_sum, eval₂_eq_sum, sum_def]
 
 Depends on / 依赖: Finset, Finset.sum_congr, Finset.sum_subset, natDegree, p.coeff, p.natDegree, p.support.sum, scaleRoots, simp_, sum_congr, sum_def, sum_subset, support, support.sum, support_scaleRoots_le
 -/
@@ -650,7 +670,7 @@ theorem scaleRoots_eval₂_eq_zero_of_eval₂_div_eq_zero
   nontriviality S using Subsingleton.eq_zero (α := S)
   convert! @scaleRoots_eval₂_eq_zero _ _ _ _ p f _ s hr
   rw [← mul_div_assoc]; rw [mul_comm]; rw [mul_div_cancel_right₀]
-  exact map_ne_zero_of_mem_nonZeroDivisors _ h
+  exact map_ne_zero_of_mem_nonZeroDivisors _ hf hs
 
 中文:
 定理 scaleRoots_eval₂_eq_zero_of_eval₂_div_eq_zero
@@ -660,7 +680,7 @@ theorem scaleRoots_eval₂_eq_zero_of_eval₂_div_eq_zero
   nontriviality S using Subsingleton.eq_zero (α := S)
   convert! @scaleRoots_eval₂_eq_zero _ _ _ _ p f _ s hr
   rw [← mul_div_assoc]; rw [mul_comm]; rw [mul_div_cancel_right₀]
-  exact map_ne_zero_of_mem_nonZeroDivisors _ h
+  exact map_ne_zero_of_mem_nonZeroDivisors _ hf hs
 -/
 theorem scaleRoots_eval₂_eq_zero_of_eval₂_div_eq_zero {p : S[X]} {f : S ->+* K}
     (hf : Function.Injective f) {r s : S} (hr : eval₂ f (f r / f s) p = 0)
@@ -728,7 +748,21 @@ lemma mul_scaleRoots
     r ^ (natDegree p + natDegree q - n)
   · rw [← coeff_mul]
     cases lt_or_ge (natDegree (p * q)) n with
-    | inl h => simp only [coeff_eq_zero_of_natDegree_lt h, 
+    | inl h => simp only [coeff_eq_zero_of_natDegree_lt h, zero_mul, mul_zero]
+    | inr h =>
+      rw [mul_comm]; rw [mul_assoc]; rw [← pow_add]; rw [add_comm]; rw [tsub_add_tsub_cancel natDegree_mul_le h]
+  · rw [coeff_mul, Finset.sum_mul]
+    apply Finset.sum_congr rfl
+    simp only [Finset.mem_antidiagonal, coeff_scaleRoots, Prod.forall]
+    intro a b e
+    cases lt_or_ge (natDegree p) a with
+    | inl h => simp only [coeff_eq_zero_of_natDegree_lt h, zero_mul]
+    | inr ha =>
+      cases lt_or_ge (natDegree q) b with
+      | inl h => simp only [coeff_eq_zero_of_natDegree_lt h, zero_mul, mul_zero]
+      | inr hb =>
+        simp only [← e, mul_assoc, mul_comm (r ^ (_ - a)), ← pow_add]
+        rw [add_comm (_ - _)]; rw [tsub_add_tsub_comm ha hb]
 
 中文:
 引理 mul_scaleRoots
@@ -739,7 +773,21 @@ lemma mul_scaleRoots
     r ^ (natDegree p + natDegree q - n)
   · rw [← coeff_mul]
     cases lt_or_ge (natDegree (p * q)) n with
-    | inl h => simp only [coeff_eq_zero_of_natDegree_lt h, 
+    | inl h => simp only [coeff_eq_zero_of_natDegree_lt h, zero_mul, mul_zero]
+    | inr h =>
+      rw [mul_comm]; rw [mul_assoc]; rw [← pow_add]; rw [add_comm]; rw [tsub_add_tsub_cancel natDegree_mul_le h]
+  · rw [coeff_mul, Finset.sum_mul]
+    apply Finset.sum_congr rfl
+    simp only [Finset.mem_antidiagonal, coeff_scaleRoots, Prod.forall]
+    intro a b e
+    cases lt_or_ge (natDegree p) a with
+    | inl h => simp only [coeff_eq_zero_of_natDegree_lt h, zero_mul]
+    | inr ha =>
+      cases lt_or_ge (natDegree q) b with
+      | inl h => simp only [coeff_eq_zero_of_natDegree_lt h, zero_mul, mul_zero]
+      | inr hb =>
+        simp only [← e, mul_assoc, mul_comm (r ^ (_ - a)), ← pow_add]
+        rw [add_comm (_ - _)]; rw [tsub_add_tsub_comm ha hb]
 
 Depends on / 依赖: Finset, Finset.antidiagonal, Finset.me, Finset.sum_congr, Finset.sum_mul, add_comm, antidiagonal, coeff_eq_zero_of_natDegree_lt, coeff_mul, coeff_scaleRoots, coeff_smul, lt_or_ge, mul_assoc, mul_comm, mul_zero, natDegree, natDegree_mul_le, pow_add, smul_eq_mul, sum_congr
 -/
@@ -900,7 +948,11 @@ lemma add_scaleRoots_of_natDegree_eq
   #adaptation_note /-- v4.7.0-rc1
   Previously `mul_assoc` was part of the `simp only` above, and this `rw` was not needed.
   but this now causes a max rec depth error. -/
-  rw [mul_ass
+  rw [mul_assoc]; rw [← pow_add]
+  cases lt_or_ge (natDegree (p + q)) n with
+  | inl hn => simp only [← coeff_add, coeff_eq_zero_of_natDegree_lt hn, zero_mul]
+  | inr hn =>
+      rw [add_comm (_ - n)]; rw [tsub_add_tsub_cancel (natDegree_add_le_of_degree_le le_rfl h.ge) hn]
 
 中文:
 引理 add_scaleRoots_of_natDegree_eq
@@ -911,7 +963,11 @@ lemma add_scaleRoots_of_natDegree_eq
   #adaptation_note /-- v4.7.0-rc1
   Previously `mul_assoc` was part of the `simp only` above, and this `rw` was not needed.
   but this now causes a max rec depth error. -/
-  rw [mul_ass
+  rw [mul_assoc]; rw [← pow_add]
+  cases lt_or_ge (natDegree (p + q)) n with
+  | inl hn => simp only [← coeff_add, coeff_eq_zero_of_natDegree_lt hn, zero_mul]
+  | inr hn =>
+      rw [add_comm (_ - n)]; rw [tsub_add_tsub_cancel (natDegree_add_le_of_degree_le le_rfl h.ge) hn]
 
 Depends on / 依赖: Previously, adaptation_note, add_comm, add_mul, causes, coeff_add, coeff_eq_zero_of_natDegree_lt, coeff_scaleRoots, coeff_smul, lt_or_ge, mul_assoc, mul_comm, natDegree, natDegree_a, needed, pow_add, smul_eq_mul, tsub_add_tsub_cancel, zero_mul
 -/
@@ -1029,7 +1085,12 @@ lemma isCoprime_scaleRoots
     apply natDegree_eq_of_natDegree_add_eq_zero
     rw [e]; rw [natDegree_one]
   use s ^ natDegree (a * p) • s ^ (natDegree a + natDegree p - natDegree (a * p)) • a.scaleRoots r
-  use s ^ natDeg
+  use s ^ natDegree (a * p) • s ^ (natDegree b + natDegree q - natDegree (b * q)) • b.scaleRoots r
+  simp only [smul_smul, smul_mul_assoc, ← mul_scaleRoots, mul_assoc, ← mul_pow, IsUnit.val_inv_mul,
+    one_pow, mul_one, ← smul_add, ← add_scaleRoots_of_natDegree_eq _ _ _ this, e, natDegree_one,
+    Nat.sub_zero, one_scaleRoots, one_smul, s]
+
+alias _root_.IsCoprime.scaleRoots := isCoprime_scaleRoots
 
 中文:
 引理 isCoprime_scaleRoots
@@ -1041,7 +1102,12 @@ lemma isCoprime_scaleRoots
     apply natDegree_eq_of_natDegree_add_eq_zero
     rw [e]; rw [natDegree_one]
   use s ^ natDegree (a * p) • s ^ (natDegree a + natDegree p - natDegree (a * p)) • a.scaleRoots r
-  use s ^ natDeg
+  use s ^ natDegree (a * p) • s ^ (natDegree b + natDegree q - natDegree (b * q)) • b.scaleRoots r
+  simp only [smul_smul, smul_mul_assoc, ← mul_scaleRoots, mul_assoc, ← mul_pow, IsUnit.val_inv_mul,
+    one_pow, mul_one, ← smul_add, ← add_scaleRoots_of_natDegree_eq _ _ _ this, e, natDegree_one,
+    Nat.sub_zero, one_scaleRoots, one_smul, s]
+
+alias _root_.IsCoprime.scaleRoots := isCoprime_scaleRoots
 
 Depends on / 依赖: IsUnit, IsUnit.val_inv_mul, a.scaleRoots, add_s, b.scaleRoots, hr.unit, mul_assoc, mul_one, mul_pow, mul_scaleRoots, natDegree, natDegree_eq_of_natDegree_add_eq_zero, natDegree_one, one_pow, scaleRoots, smul_add, smul_mul_assoc, smul_smul, val_inv_mul
 -/
@@ -1075,7 +1141,15 @@ lemma Splits.scaleRoots
   rw [hm]; rw [mul_scaleRoots']; rw [scaleRoots_C]
   · clear hm
     refine .mul (.C _) ?_
-    induction m using Mul
+    induction m using Multiset.induction_on with
+    | empty => simp
+    | cons a s IH =>
+      rw [Multiset.map_cons]; rw [Multiset.prod_cons]; rw [mul_scaleRoots']; rw [X_add_C_scaleRoots]
+      · exact .mul (.X_add_C _) IH
+      · simp only [leadingCoeff_X_add_C, one_mul, ne_eq, leadingCoeff_eq_zero]
+        exact (monic_multiset_prod_of_monic _ _ fun a _ => monic_X_add_C _).ne_zero
+  · rw [(monic_multiset_prod_of_monic _ _ fun a _ => monic_X_add_C _).leadingCoeff]
+    simpa
 
 中文:
 引理 Splits.scaleRoots
@@ -1089,7 +1163,15 @@ lemma Splits.scaleRoots
   rw [hm]; rw [mul_scaleRoots']; rw [scaleRoots_C]
   · clear hm
     refine .mul (.C _) ?_
-    induction m using Mul
+    induction m using Multiset.induction_on with
+    | empty => simp
+    | cons a s IH =>
+      rw [Multiset.map_cons]; rw [Multiset.prod_cons]; rw [mul_scaleRoots']; rw [X_add_C_scaleRoots]
+      · exact .mul (.X_add_C _) IH
+      · simp only [leadingCoeff_X_add_C, one_mul, ne_eq, leadingCoeff_eq_zero]
+        exact (monic_multiset_prod_of_monic _ _ fun a _ => monic_X_add_C _).ne_zero
+  · rw [(monic_multiset_prod_of_monic _ _ fun a _ => monic_X_add_C _).leadingCoeff]
+    simpa
 
 Depends on / 依赖: Multiset, Multiset.induction_on, Multiset.map_cons, Multiset.prod_cons, Subsingleton, Subsingleton.elim, X_add_C, X_add_C_scaleRoots, eq_or_ne, induction_on, leadingCoeff_X_add_C, map_cons, mul_scaleRoots, one_mu, p.scaleRoots, prod_cons, scaleRoots, scaleRoots_C, splits_iff_exists_multiset, subsingleton_or_nontrivial
 -/
@@ -1162,7 +1244,14 @@ lemma rootMultiplicity_scaleRoots
   obtain ⟨q, e, hq⟩ := exists_eq_pow_rootMultiplicity_mul_and_not_dvd p hp a
   have hq0 : q != 0 := by contrapose hp; simp_all
   conv_lhs => rw [e]
-  rw [mul_scaleRoots']; rw [pow_scal
+  rw [mul_scaleRoots']; rw [pow_scaleRoots']; rw [X_sub_C_scaleRoots]; rw [mul_comm]; rw [mul_comm _ (q.scaleRoots r)]; rw [rootMultiplicity_mul_X_sub_C_pow (q.scaleRoots_ne_zero hq0 _)]
+  · rw [dvd_iff_isRoot, IsRoot.def] at hq
+    simp only [Nat.add_eq_right, rootMultiplicity_eq_zero_iff, IsRoot.def]
+    rw [mul_comm]; rw [scaleRoots_eval_mul]; rw [(hr.pow q.natDegree).mul_left_eq_zero_iff]
+    tauto
+  · simp
+  · rwa [leadingCoeff_pow' (by simp), leadingCoeff_X_sub_C,
+      one_pow, one_mul, ne_eq, leadingCoeff_eq_zero]
 
 中文:
 引理 rootMultiplicity_scaleRoots
@@ -1175,7 +1264,14 @@ lemma rootMultiplicity_scaleRoots
   obtain ⟨q, e, hq⟩ := exists_eq_pow_rootMultiplicity_mul_and_not_dvd p hp a
   have hq0 : q != 0 := by contrapose hp; simp_all
   conv_lhs => rw [e]
-  rw [mul_scaleRoots']; rw [pow_scal
+  rw [mul_scaleRoots']; rw [pow_scaleRoots']; rw [X_sub_C_scaleRoots]; rw [mul_comm]; rw [mul_comm _ (q.scaleRoots r)]; rw [rootMultiplicity_mul_X_sub_C_pow (q.scaleRoots_ne_zero hq0 _)]
+  · rw [dvd_iff_isRoot, IsRoot.def] at hq
+    simp only [Nat.add_eq_right, rootMultiplicity_eq_zero_iff, IsRoot.def]
+    rw [mul_comm]; rw [scaleRoots_eval_mul]; rw [(hr.pow q.natDegree).mul_left_eq_zero_iff]
+    tauto
+  · simp
+  · rwa [leadingCoeff_pow' (by simp), leadingCoeff_X_sub_C,
+      one_pow, one_mul, ne_eq, leadingCoeff_eq_zero]
 
 Depends on / 依赖: IsRoot, IsRoot.def, Nat.add_eq_rig, Subsingleton, Subsingleton.elim, X_sub_C_scaleRoots, add_eq_rig, contrapose, conv_lhs, dvd_iff_isRoot, eq_or_ne, exists_eq_pow_rootMultiplicity_mul_and_not_dvd, mul_comm, mul_scaleRoots, pow_scaleRoots, q.scaleRoots, q.scaleRoots_ne_zero, rootMultiplicity_mul_X_sub_C_pow, scaleRoots, scaleRoots_ne_zero
 -/

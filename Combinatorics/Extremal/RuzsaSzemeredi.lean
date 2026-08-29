@@ -461,7 +461,12 @@ instance :
     linear_combination 2 * h₁.symm - h₂.symm
   inj₁ := by
     simp only [mem_triangleIndices, Prod.mk_inj, forall_exists_index, and_imp]
-    rintro _ _ _ _ x a ha 
+    rintro _ _ _ _ x a ha rfl rfl rfl y b hb rfl rfl h
+    simpa [(Fact.out (p := IsUnit (2 : α))).mul_right_inj, eq_comm] using h
+  inj₂ := by
+    simp only [mem_triangleIndices, Prod.mk_inj, forall_exists_index, and_imp]
+    rintro _ _ _ _ x a ha rfl rfl rfl y b hb rfl h rfl
+    simpa [(Fact.out (p := IsUnit (2 : α))).mul_right_inj, eq_comm] using h
 
 中文:
 实例 :
@@ -472,7 +477,12 @@ instance :
     linear_combination 2 * h₁.symm - h₂.symm
   inj₁ := by
     simp only [mem_triangleIndices, Prod.mk_inj, forall_exists_index, and_imp]
-    rintro _ _ _ _ x a ha 
+    rintro _ _ _ _ x a ha rfl rfl rfl y b hb rfl rfl h
+    simpa [(Fact.out (p := IsUnit (2 : α))).mul_right_inj, eq_comm] using h
+  inj₂ := by
+    simp only [mem_triangleIndices, Prod.mk_inj, forall_exists_index, and_imp]
+    rintro _ _ _ _ x a ha rfl rfl rfl y b hb rfl h rfl
+    simpa [(Fact.out (p := IsUnit (2 : α))).mul_right_inj, eq_comm] using h
 -/
 private instance : ExplicitDisjoint (triangleIndices s : Finset (α × α × α)) where
   inj₀ := by
@@ -573,7 +583,14 @@ lemma rothNumberNat_le_ruzsaSzemerediNumberNat
   open scoped Fin.CommRing in
   calc
     (2 * n + 1) * rothNumberNat n
-    _ = Fintype.card α * addRothNumber (Iio (⟨n,
+    _ = Fintype.card α * addRothNumber (Iio (⟨n, by lia⟩ : α)) := by
+      rw [Fin.addRothNumber_eq_rothNumberNat (by simp)]; rw [Fintype.card_fin]
+    _ <= Fintype.card α * addRothNumber (univ : Finset α) := by
+      gcongr; exact subset_univ _
+    _ <= ruzsaSzemerediNumber (Sum α (Sum α α)) := addRothNumber_le_ruzsaSzemerediNumber _
+    _ = ruzsaSzemerediNumberNat (6 * n + 3) := by
+      simp_rw [← ruzsaSzemerediNumberNat_card, Fintype.card_sum, α, Fintype.card_fin]
+      ring_nf
 
 中文:
 引理 rothNumber自然数_le_ruzsaSzemerediNumber自然数
@@ -586,7 +603,14 @@ lemma rothNumberNat_le_ruzsaSzemerediNumberNat
   open scoped Fin.CommRing in
   calc
     (2 * n + 1) * rothNumberNat n
-    _ = Fintype.card α * addRothNumber (Iio (⟨n,
+    _ = Fintype.card α * addRothNumber (Iio (⟨n, by lia⟩ : α)) := by
+      rw [Fin.addRothNumber_eq_rothNumberNat (by simp)]; rw [Fintype.card_fin]
+    _ <= Fintype.card α * addRothNumber (univ : Finset α) := by
+      gcongr; exact subset_univ _
+    _ <= ruzsaSzemerediNumber (Sum α (Sum α α)) := addRothNumber_le_ruzsaSzemerediNumber _
+    _ = ruzsaSzemerediNumberNat (6 * n + 3) := by
+      simp_rw [← ruzsaSzemerediNumberNat_card, Fintype.card_sum, α, Fintype.card_fin]
+      ring_nf
 
 Depends on / 依赖: CommRing, Coprime, Fin.CommRing, Fin.addRothNumber_eq_rothNumberNat, Finset, Fintype, Fintype.card, Fintype.card_fin, IsUnit, Nat.Coprime, ZMod.unitOfCoprime, addRothNumber, addRothNumber_eq_rothNumberNat, card_fin, isUnit, rothNumberNat, ruzsaSzemerediNumber, scoped, subset_univ, unitOfCoprime
 -/
@@ -617,7 +641,12 @@ theorem rothNumberNat_le_ruzsaSzemerediNumberNat'
       _ <= (ruzsaSzemerediNumberNat (6 * (n / 6) + 3) : Real) := ?_
       _ <= _ := by grw [Nat.mul_div_le]
     · simp only [cast_add, cast_ofNat, cast_mul, cast_one, tsub_le_iff_right]
-      rw [← div_add_one (three_ne_zero' Real)]; rw [← le_sub_iff
+      rw [← div_add_one (three_ne_zero' Real)]; rw [← le_sub_iff_add_le]; rw [div_le_iff₀ (zero_lt_three' Real)]; rw [add_assoc]; rw [add_sub_assoc]; rw [add_mul]; rw [mul_right_comm]; rw [add_sub_cancel_left]
+      norm_cast
+      rw [← mul_add_one]
+      exact (Nat.lt_mul_div_succ _ <| by simp).le
+    · norm_cast
+      exact rothNumberNat_le_ruzsaSzemerediNumberNat _
 
 中文:
 定理 rothNumber自然数_le_ruzsaSzemerediNumber自然数'
@@ -625,7 +654,12 @@ theorem rothNumberNat_le_ruzsaSzemerediNumberNat'
       _ <= (ruzsaSzemerediNumberNat (6 * (n / 6) + 3) : Real) := ?_
       _ <= _ := by grw [Nat.mul_div_le]
     · simp only [cast_add, cast_ofNat, cast_mul, cast_one, tsub_le_iff_right]
-      rw [← div_add_one (three_ne_zero' Real)]; rw [← le_sub_iff
+      rw [← div_add_one (three_ne_zero' Real)]; rw [← le_sub_iff_add_le]; rw [div_le_iff₀ (zero_lt_three' Real)]; rw [add_assoc]; rw [add_sub_assoc]; rw [add_mul]; rw [mul_right_comm]; rw [add_sub_cancel_left]
+      norm_cast
+      rw [← mul_add_one]
+      exact (Nat.lt_mul_div_succ _ <| by simp).le
+    · norm_cast
+      exact rothNumberNat_le_ruzsaSzemerediNumberNat _
 
 Depends on / 依赖: Nat.cast_nonneg, Nat.lt_mul_div_succ, Nat.mul_div_le, add_assoc, add_mul, add_sub_assoc, add_sub_cancel_left, cast_add, cast_mul, cast_nonneg, cast_ofNat, cast_one, div_add_one, le_sub_iff_add_le, lt_mul_div_succ, mul_add_one, mul_div_le, mul_le_mul_of_nonneg_right, mul_right_comm, ruzsaSzemerediNumberNat
 -/
@@ -700,7 +734,25 @@ theorem ruzsaSzemerediNumberNat_asymptotic_lower_bound
       · simp_rw [div_eq_inv_mul]
         exact (isBigO_refl ..).const_mul_right (by simp)
       refine IsLittleO.right_isBigO_sub ?_
-  
+      simpa [div_eq_inv_mul, Function.comp_def] using
+        .atTop_of_const_mul₀ zero_lt_three (by simp [tendsto_natCast_atTop_atTop])
+    · rw [IsBigO_def]
+      refine ⟨12, ?_⟩
+      simp only [IsBigOWith, norm_natCast, eventually_atTop]
+      exact ⟨15, fun x hx => by norm_cast; lia⟩
+    · rw [isBigO_exp_comp_exp_comp]
+      refine ⟨0, ?_⟩
+      simp only [neg_mul, eventually_map, Pi.sub_apply, sub_neg_eq_add, neg_add_le_iff_le_add,
+        add_zero, eventually_atTop]
+      refine ⟨9, fun x hx => ?_⟩
+      gcongr
+      · simp
+        lia
+      · lia
+  · refine .of_norm_eventuallyLE ?_
+    filter_upwards [eventually_ge_atTop 6] with n hn
+    have : (0 : Real) <= n / 3 - 2 := by rify at hn; linarith
+    simpa [neg_mul, abs_mul, abs_of_nonneg this] using ruzsaSzemerediNumberNat_lower_bound n
 
 中文:
 定理 ruzsaSzemerediNumber自然数_asymptotic_lower_bound
@@ -712,7 +764,25 @@ theorem ruzsaSzemerediNumberNat_asymptotic_lower_bound
       · simp_rw [div_eq_inv_mul]
         exact (isBigO_refl ..).const_mul_right (by simp)
       refine IsLittleO.right_isBigO_sub ?_
-  
+      simpa [div_eq_inv_mul, Function.comp_def] using
+        .atTop_of_const_mul₀ zero_lt_three (by simp [tendsto_natCast_atTop_atTop])
+    · rw [IsBigO_def]
+      refine ⟨12, ?_⟩
+      simp only [IsBigOWith, norm_natCast, eventually_atTop]
+      exact ⟨15, fun x hx => by norm_cast; lia⟩
+    · rw [isBigO_exp_comp_exp_comp]
+      refine ⟨0, ?_⟩
+      simp only [neg_mul, eventually_map, Pi.sub_apply, sub_neg_eq_add, neg_add_le_iff_le_add,
+        add_zero, eventually_atTop]
+      refine ⟨9, fun x hx => ?_⟩
+      gcongr
+      · simp
+        lia
+      · lia
+  · refine .of_norm_eventuallyLE ?_
+    filter_upwards [eventually_ge_atTop 6] with n hn
+    have : (0 : Real) <= n / 3 - 2 := by rify at hn; linarith
+    simpa [neg_mul, abs_mul, abs_of_nonneg this] using ruzsaSzemerediNumberNat_lower_bound n
 
 Depends on / 依赖: Function, Function.comp_def, IsBigO, IsBigO.mul, IsBigOWith, IsBigO_def, IsLittleO, IsLittleO.right_isBigO_sub, comp_def, const_mul_right, div_eq_inv_mul, eventually_atTop, isBigO_refl, norm_natCast, right_isBigO_sub, simp_rw, tendsto_natCast_atTop_atTop, zero_lt_three
 -/

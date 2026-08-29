@@ -75,7 +75,9 @@ theorem cauchy_iff
   have := B.isUniformAddGroup
   suffices F ×ˢ F <= uniformity G ↔ forall U in B, exists M in F, forallᵉ (x in M) (y in M), y - x in U by
     constructor <;> rintro ⟨h', h⟩ <;> refine ⟨h', ?_⟩ <;> [rwa [← this]; rwa [this]]
-  rw [uniformity_eq_comap_nhds_zero G]; rw [← map_
+  rw [uniformity_eq_comap_nhds_zero G]; rw [← map_le_iff_le_comap]
+  change Tendsto _ _ _ ↔ _
+  simp [(basis_sets F).prod_self.tendsto_iff B.nhds_zero_hasBasis, @forall_comm (_ in _) G]
 
 中文:
 定理 cauchy_iff
@@ -85,7 +87,9 @@ theorem cauchy_iff
   have := B.isUniformAddGroup
   suffices F ×ˢ F <= uniformity G ↔ forall U in B, exists M in F, forallᵉ (x in M) (y in M), y - x in U by
     constructor <;> rintro ⟨h', h⟩ <;> refine ⟨h', ?_⟩ <;> [rwa [← this]; rwa [this]]
-  rw [uniformity_eq_comap_nhds_zero G]; rw [← map_
+  rw [uniformity_eq_comap_nhds_zero G]; rw [← map_le_iff_le_comap]
+  change Tendsto _ _ _ ↔ _
+  simp [(basis_sets F).prod_self.tendsto_iff B.nhds_zero_hasBasis, @forall_comm (_ in _) G]
 
 Depends on / 依赖: B.isUniformAddGroup, B.nhds_zero_hasBasis, B.uniformSpace, Tendsto, basis_sets, forall_comm, isUniformAddGroup, map_le_iff_le_comap, nhds_zero_hasBasis, prod_self, prod_self.tendsto_iff, tendsto_iff, uniformSpace, uniformity, uniformity_eq_comap_nhds_zero
 -/

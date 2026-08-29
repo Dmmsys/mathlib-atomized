@@ -193,7 +193,15 @@ haveI : a =Q 0 := ⟨⟩
 haveI : b =Q Nat.succ b' := ⟨⟩
     return ⟨q(nat_lit 0), q(zero_natPow)⟩
   else if a.natLit! = 1 then
-haveI 
+haveI : a =Q 1 := ⟨⟩
+    return ⟨q(nat_lit 1), q(one_natPow)⟩
+  else if b.natLit! = 1 then
+haveI : b =Q 1 := ⟨⟩
+    return ⟨a, q(natPow_one)⟩
+  else
+guard ← Lean.checkExponent b.natLit!
+    let ⟨c, p⟩ := go b.natLit!.log2 a q(nat_lit 1) a b _ .rfl
+    return ⟨c, q(($p).run)⟩
 
 中文:
 定义 eval自然数Pow
@@ -208,7 +216,15 @@ haveI : a =Q 0 := ⟨⟩
 haveI : b =Q Nat.succ b' := ⟨⟩
     return ⟨q(nat_lit 0), q(zero_natPow)⟩
   else if a.natLit! = 1 then
-haveI 
+haveI : a =Q 1 := ⟨⟩
+    return ⟨q(nat_lit 1), q(one_natPow)⟩
+  else if b.natLit! = 1 then
+haveI : b =Q 1 := ⟨⟩
+    return ⟨a, q(natPow_one)⟩
+  else
+guard ← Lean.checkExponent b.natLit!
+    let ⟨c, p⟩ := go b.natLit!.log2 a q(nat_lit 1) a b _ .rfl
+    return ⟨c, q(($p).run)⟩
 -/
 partial def evalNatPow (a b : Q(Nat)) : OptionT CoreM ((c : Q(Nat)) × Q(Nat.pow $a $b = $c)) := do
   if b.natLit! = 0 then
@@ -336,7 +352,18 @@ have : a =Q .ofNat a' := ⟨⟩
 have : a =Q .negOfNat a' := ⟨⟩
     let b' := b.natLit!
     have b₀ : Q(Nat) := mkRawNatLit (b' >>> 1)
-    let ⟨c₀, p⟩ ← ev
+    let ⟨c₀, p⟩ ← evalNatPow a' b₀
+    let c' := c₀.natLit!
+    if b' &&& 1 == 0 then
+      have c : Q(Nat) := mkRawNatLit (c' * c')
+      have pc : Q($c₀ * $c₀ = $c) := (q(Eq.refl $c) : Expr)
+      have pb : Q(2 * $b₀ = $b) := (q(Eq.refl $b) : Expr)
+      return ⟨c.natLit!, q(.ofNat $c), q(intPow_negOfNat_bit0 $p $pb $pc)⟩
+    else
+      have c : Q(Nat) := mkRawNatLit (c' * (c' * a'.natLit!))
+      have pc : Q($c₀ * ($c₀ * $a') = $c) := (q(Eq.refl $c) : Expr)
+      have pb : Q(2 * $b₀ + 1 = $b) := (q(Eq.refl $b) : Expr)
+      return ⟨-c.natLit!, q(.negOfNat $c), q(intPow_negOfNat_bit1 $p $pb $pc)⟩
 
 中文:
 定义 eval整数Pow
@@ -351,7 +378,18 @@ have : a =Q .ofNat a' := ⟨⟩
 have : a =Q .negOfNat a' := ⟨⟩
     let b' := b.natLit!
     have b₀ : Q(Nat) := mkRawNatLit (b' >>> 1)
-    let ⟨c₀, p⟩ ← ev
+    let ⟨c₀, p⟩ ← evalNatPow a' b₀
+    let c' := c₀.natLit!
+    if b' &&& 1 == 0 then
+      have c : Q(Nat) := mkRawNatLit (c' * c')
+      have pc : Q($c₀ * $c₀ = $c) := (q(Eq.refl $c) : Expr)
+      have pb : Q(2 * $b₀ = $b) := (q(Eq.refl $b) : Expr)
+      return ⟨c.natLit!, q(.ofNat $c), q(intPow_negOfNat_bit0 $p $pb $pc)⟩
+    else
+      have c : Q(Nat) := mkRawNatLit (c' * (c' * a'.natLit!))
+      have pc : Q($c₀ * ($c₀ * $a') = $c) := (q(Eq.refl $c) : Expr)
+      have pb : Q(2 * $b₀ + 1 = $b) := (q(Eq.refl $b) : Expr)
+      return ⟨-c.natLit!, q(.negOfNat $c), q(intPow_negOfNat_bit1 $p $pb $pc)⟩
 -/
 partial def evalIntPow (za : Int) (a : Q(Int)) (b : Q(Nat)) :
     OptionT CoreM (Int × (c : Q(Int)) × Q(Int.pow $a $b = $c)) := do
@@ -494,7 +532,22 @@ haveI' : f =Q HPow.hPow := ⟨⟩
     let ⟨c, r⟩ ← evalNatPow na nb
     return .isNat sα c q(isNat_pow (f := $f) (.refl $f) $pa $pb $r)
   | .isNegNat rα .. =>
-    assumeInstancesCommu
+    assumeInstancesCommute
+let ⟨za, na, pa⟩ ← OptionT.mk pure (ra.toInt rα)
+    let ⟨zc, c, r⟩ ← evalIntPow za na nb
+    return .isInt rα c zc q(isInt_pow (f := $f) (.refl $f) $pa $pb $r)
+  | .isNNRat dα _qa na da pa =>
+    assumeInstancesCommute
+    let ⟨nc, r1⟩ ← evalNatPow na nb
+    let ⟨dc, r2⟩ ← evalNatPow da nb
+    let qc := mkRat nc.natLit! dc.natLit!
+    return .isNNRat dα qc nc dc q(isNNRat_pow (f := $f) (.refl $f) $pa $pb $r1 $r2)
+  | .isNegNNRat dα qa na da pa =>
+    assumeInstancesCommute
+    let ⟨zc, nc, r1⟩ ← evalIntPow qa.num q(Int.negOfNat $na) nb
+    let ⟨dc, r2⟩ ← evalNatPow da nb
+    let qc := mkRat zc dc.natLit!
+    return .isRat dα qc nc dc q(isRat_pow (f := $f) (.refl $f) $pa $pb $r1 $r2)
 
 中文:
 定义 evalPow.core
@@ -509,7 +562,22 @@ haveI' : f =Q HPow.hPow := ⟨⟩
     let ⟨c, r⟩ ← evalNatPow na nb
     return .isNat sα c q(isNat_pow (f := $f) (.refl $f) $pa $pb $r)
   | .isNegNat rα .. =>
-    assumeInstancesCommu
+    assumeInstancesCommute
+let ⟨za, na, pa⟩ ← OptionT.mk pure (ra.toInt rα)
+    let ⟨zc, c, r⟩ ← evalIntPow za na nb
+    return .isInt rα c zc q(isInt_pow (f := $f) (.refl $f) $pa $pb $r)
+  | .isNNRat dα _qa na da pa =>
+    assumeInstancesCommute
+    let ⟨nc, r1⟩ ← evalNatPow na nb
+    let ⟨dc, r2⟩ ← evalNatPow da nb
+    let qc := mkRat nc.natLit! dc.natLit!
+    return .isNNRat dα qc nc dc q(isNNRat_pow (f := $f) (.refl $f) $pa $pb $r1 $r2)
+  | .isNegNNRat dα qa na da pa =>
+    assumeInstancesCommute
+    let ⟨zc, nc, r1⟩ ← evalIntPow qa.num q(Int.negOfNat $na) nb
+    let ⟨dc, r2⟩ ← evalNatPow da nb
+    let qc := mkRat zc dc.natLit!
+    return .isRat dα qc nc dc q(isRat_pow (f := $f) (.refl $f) $pa $pb $r1 $r2)
 -/
 def evalPow.core {u : Level} {α : Q(Type u)} (e : Q(«$α»)) (f : Q(«$α» -> Nat -> «$α»)) (a : Q(«$α»))
     (b nb : Q(Nat)) (pb : Q(IsNat «$b» «$nb»)) (sα : Q(Semiring «$α»)) (ra : Result a) :
@@ -556,7 +624,10 @@ definition evalPow
   let ra ← derive a
 guard ← withDefault withNewMCtxDepth isDefEq f q(HPow.hPow (α := $α))
 haveI' : e =Q a ^ b := ⟨⟩
-haveI' : 
+haveI' : f =Q HPow.hPow := ⟨⟩
+  let .some r ←
+liftM OptionT.run (evalPow.core q($e) q($f) q($a) q($b) q($nb) q($pb) q($sα) ra) | failure
+  return r
 
 中文:
 定义 evalPow
@@ -568,7 +639,10 @@ haveI' :
   let ra ← derive a
 guard ← withDefault withNewMCtxDepth isDefEq f q(HPow.hPow (α := $α))
 haveI' : e =Q a ^ b := ⟨⟩
-haveI' : 
+haveI' : f =Q HPow.hPow := ⟨⟩
+  let .some r ←
+liftM OptionT.run (evalPow.core q($e) q($f) q($a) q($b) q($nb) q($pb) q($sα) ra) | failure
+  return r
 -/
 def evalPow : NormNumExt where eval {u α} e := do
   let .app (.app (f : Q($α -> Nat -> $α)) (a : Q($α))) (b : Q(Nat)) ← whnfR e | failure
@@ -804,7 +878,42 @@ definition evalZPow
   match rb with
   | .isBool .. | .isNNRat _ .. | .isNegNNRat _ .. => failure
   | .isNat sβ nb pb =>
-have h : e =Q (HPow.hPow (
+have h : e =Q (HPow.hPow (γ := $α) $a $b) := ⟨⟩
+    h.check
+    match ← derive q($a ^ $nb) with
+    | .isBool .. => failure
+    | .isNat sα' ne' pe' =>
+      assumeInstancesCommute
+      return .isNat sα' ne' q(isNat_zpow_pos $pb $pe')
+    | .isNegNat sα' ne' pe' =>
+      let _c ← synthInstanceQ q(DivisionRing $α)
+      assumeInstancesCommute
+      return .isNegNat sα' ne' q(isInt_zpow_pos $pb $pe')
+    | .isNNRat dsα' qe' nume' dene' pe' =>
+      assumeInstancesCommute
+      return .isNNRat dsα' qe' nume' dene' q(isNNRat_zpow_pos $pb $pe')
+    | .isNegNNRat dα' qe' nume' dene' pe' =>
+      assumeInstancesCommute
+      let proof := q(isRat_zpow_pos $pb $pe')
+      return .isRat dα' qe' nume' dene' proof
+  | .isNegNat sβ nb pb =>
+have h : e =Q (HPow.hPow (γ := $α) $a $b) := ⟨⟩
+    h.check
+    match ← derive q(($a ^ $nb)⁻¹) with
+    | .isBool .. => failure
+    | .isNat sα' ne' pe' =>
+      assumeInstancesCommute
+      return .isNat sα' ne' q(isNat_zpow_neg $pb $pe')
+    | .isNegNat sα' ne' pe' =>
+      let _c ← synthInstanceQ q(DivisionRing $α)
+      assumeInstancesCommute
+      return .isNegNat sα' ne' q(isInt_zpow_neg $pb $pe')
+    | .isNNRat dsα' qe' nume' dene' pe' =>
+      assumeInstancesCommute
+      return .isNNRat dsα' qe' nume' dene' q(isNNRat_zpow_neg $pb $pe')
+    | .isNegNNRat dα' qe' nume' dene' pe' =>
+      assumeInstancesCommute
+      return .isRat dα' qe' q(.negOfNat $nume') dene' q(isRat_zpow_neg $pb $pe')
 
 中文:
 定义 evalZPow
@@ -816,7 +925,42 @@ have h : e =Q (HPow.hPow (
   match rb with
   | .isBool .. | .isNNRat _ .. | .isNegNNRat _ .. => failure
   | .isNat sβ nb pb =>
-have h : e =Q (HPow.hPow (
+have h : e =Q (HPow.hPow (γ := $α) $a $b) := ⟨⟩
+    h.check
+    match ← derive q($a ^ $nb) with
+    | .isBool .. => failure
+    | .isNat sα' ne' pe' =>
+      assumeInstancesCommute
+      return .isNat sα' ne' q(isNat_zpow_pos $pb $pe')
+    | .isNegNat sα' ne' pe' =>
+      let _c ← synthInstanceQ q(DivisionRing $α)
+      assumeInstancesCommute
+      return .isNegNat sα' ne' q(isInt_zpow_pos $pb $pe')
+    | .isNNRat dsα' qe' nume' dene' pe' =>
+      assumeInstancesCommute
+      return .isNNRat dsα' qe' nume' dene' q(isNNRat_zpow_pos $pb $pe')
+    | .isNegNNRat dα' qe' nume' dene' pe' =>
+      assumeInstancesCommute
+      let proof := q(isRat_zpow_pos $pb $pe')
+      return .isRat dα' qe' nume' dene' proof
+  | .isNegNat sβ nb pb =>
+have h : e =Q (HPow.hPow (γ := $α) $a $b) := ⟨⟩
+    h.check
+    match ← derive q(($a ^ $nb)⁻¹) with
+    | .isBool .. => failure
+    | .isNat sα' ne' pe' =>
+      assumeInstancesCommute
+      return .isNat sα' ne' q(isNat_zpow_neg $pb $pe')
+    | .isNegNat sα' ne' pe' =>
+      let _c ← synthInstanceQ q(DivisionRing $α)
+      assumeInstancesCommute
+      return .isNegNat sα' ne' q(isInt_zpow_neg $pb $pe')
+    | .isNNRat dsα' qe' nume' dene' pe' =>
+      assumeInstancesCommute
+      return .isNNRat dsα' qe' nume' dene' q(isNNRat_zpow_neg $pb $pe')
+    | .isNegNNRat dα' qe' nume' dene' pe' =>
+      assumeInstancesCommute
+      return .isRat dα' qe' q(.negOfNat $nume') dene' q(isRat_zpow_neg $pb $pe')
 -/
 def evalZPow : NormNumExt where eval {u α} e := do
   let .app (.app (f : Q($α -> Int -> $α)) (a : Q($α))) (b : Q(Int)) ← whnfR e | failure

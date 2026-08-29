@@ -70,7 +70,7 @@ theorem exists_primitive_element_of_finite_top
     exact F⟮α.val⟯.zero_mem
   · obtain ⟨n, hn⟩ := Set.mem_range.mp (hα (Units.mk0 x hx))
     rw [show x = α ^ n by norm_cast; rw [hn]; rw [Units.val_mk0]]
-    exact zpow_
+    exact zpow_mem (mem_adjoin_simple_self F (E := E) ↑α) n
 
 中文:
 定理 存在_primitive_element_of_finite_top
@@ -86,7 +86,7 @@ theorem exists_primitive_element_of_finite_top
     exact F⟮α.val⟯.zero_mem
   · obtain ⟨n, hn⟩ := Set.mem_range.mp (hα (Units.mk0 x hx))
     rw [show x = α ^ n by norm_cast; rw [hn]; rw [Units.val_mk0]]
-    exact zpow_
+    exact zpow_mem (mem_adjoin_simple_self F (E := E) ↑α) n
 
 Depends on / 依赖: IsCyclic, IsCyclic.exists_generator, Set.mem_range.mp, Units.mk0, Units.val_mk0, eq_top_iff, exists_generator, mem_adjoin_simple_self, mem_range, val_mk0, zero_mem, zpow_mem
 -/
@@ -147,7 +147,10 @@ theorem primitive_element_inf_aux_exists_c
   let s := (sf.bind fun α' => sg.map fun β' => -(α' - α) / (β' - β)).toFinset
   let s' := s.preimage ϕ fun x _ y _ h => ϕ.injective h
   obtain ⟨c, hc⟩ := Infinite.exists_notMem_finset s'
-  simp_rw [s', s, Finset.mem_preimage, Mul
+  simp_rw [s', s, Finset.mem_preimage, Multiset.mem_toFinset, Multiset.mem_bind, Multiset.mem_map]
+    at hc
+  push Not at hc
+  exact ⟨c, hc⟩
 
 中文:
 定理 primitive_element_inf_aux_存在_c
@@ -159,7 +162,10 @@ theorem primitive_element_inf_aux_exists_c
   let s := (sf.bind fun α' => sg.map fun β' => -(α' - α) / (β' - β)).toFinset
   let s' := s.preimage ϕ fun x _ y _ h => ϕ.injective h
   obtain ⟨c, hc⟩ := Infinite.exists_notMem_finset s'
-  simp_rw [s', s, Finset.mem_preimage, Mul
+  simp_rw [s', s, Finset.mem_preimage, Multiset.mem_toFinset, Multiset.mem_bind, Multiset.mem_map]
+    at hc
+  push Not at hc
+  exact ⟨c, hc⟩
 
 Depends on / 依赖: Finset, Finset.mem_preimage, Infinite, Infinite.exists_notMem_finset, Multiset, Multiset.mem_bind, Multiset.mem_map, Multiset.mem_toFinset, classical, exists_notMem_finset, f.map, g.map, injective, mem_bind, mem_map, mem_preimage, mem_toFinset, preimage, s.preimage, sf.bind
 -/
@@ -193,7 +199,65 @@ theorem primitive_element_inf_aux
   let g := minpoly F β
   let ιFE := algebraMap F E
   let ιEE' := algebraMap E (SplittingField (g.map ιFE))
-  obtain ⟨c, hc⟩ := primitive_element_inf_aux_exists_c (ιEE'.comp ιFE) 
+  obtain ⟨c, hc⟩ := primitive_element_inf_aux_exists_c (ιEE'.comp ιFE) (ιEE' α) (ιEE' β) f g
+  let γ := α + c • β
+  suffices β_in_Fγ : β in F⟮γ⟯ by
+    use γ
+    apply le_antisymm
+    · rw [adjoin_le_iff]
+      have α_in_Fγ : α in F⟮γ⟯ := by
+        rw [← add_sub_cancel_right α (c • β)]
+        exact F⟮γ⟯.sub_mem (mem_adjoin_simple_self F γ) (F⟮γ⟯.toSubalgebra.smul_mem β_in_Fγ c)
+      rintro x (rfl | rfl) <;> assumption
+    · rw [adjoin_simple_le_iff]
+      have α_in_Fαβ : α in F⟮α, β⟯ := subset_adjoin F {α, β} (Set.mem_insert α {β})
+      have β_in_Fαβ : β in F⟮α, β⟯ := subset_adjoin F {α, β} (Set.mem_insert_of_mem α rfl)
+      exact F⟮α, β⟯.add_mem α_in_Fαβ (F⟮α, β⟯.smul_mem β_in_Fαβ)
+  classical
+  let p := EuclideanDomain.gcd ((f.map (algebraMap F F⟮γ⟯)).comp
+    (C (AdjoinSimple.gen F γ) - (C ↑c : F⟮γ⟯[X]) * X)) (g.map (algebraMap F F⟮γ⟯))
+  let h := EuclideanDomain.gcd ((f.map ιFE).comp (C γ - C (ιFE c) * X)) (g.map ιFE)
+  have map_g_ne_zero : g.map ιFE != 0 := map_ne_zero (minpoly.ne_zero hβ)
+  have h_ne_zero : h != 0 :=
+    mt EuclideanDomain.gcd_eq_zero_iff.mp (not_and.mpr fun _ => map_g_ne_zero)
+  suffices p_linear : p.map (algebraMap F⟮γ⟯ E) = C h.leadingCoeff * (X - C β) by
+    have finale : β = algebraMap F⟮γ⟯ E (-p.coeff 0 / p.coeff 1) := by
+      simp [map_div₀, map_neg, ← coeff_map, ← coeff_map, p_linear,
+        mul_sub, coeff_C, mul_div_cancel_left₀ β (mt leadingCoeff_eq_zero.mp h_ne_zero)]
+    rw [finale]
+    exact Subtype.mem (-p.coeff 0 / p.coeff 1)
+  have h_sep : h.Separable := separable_gcd_right _ (.map (Algebra.IsSeparable.isSeparable F β))
+  have h_root : h.eval β = 0 := by
+    apply eval_gcd_eq_zero
+    · rw [eval_comp, eval_sub, eval_mul, eval_C, eval_C, eval_X, eval_map_algebraMap, ←
+        Algebra.smul_def, add_sub_cancel_right, minpoly.aeval]
+    · rw [eval_map_algebraMap, minpoly.aeval]
+  have h_splits : Splits (h.map ιEE') := by
+    rw [← Polynomial.gcd_map]
+    exact (SplittingField.splits _).of_dvd (map_ne_zero map_g_ne_zero)
+      (EuclideanDomain.gcd_dvd_right _ _)
+  have h_roots : forall x in (h.map ιEE').roots, x = ιEE' β := by
+    intro x hx
+    rw [mem_roots_map h_ne_zero] at hx
+    specialize hc (ιEE' γ - ιEE' (ιFE c) * x) (by
+      have f_root := root_left_of_root_gcd hx
+      rw [eval₂_comp]; rw [eval₂_sub]; rw [eval₂_mul]; rw [eval₂_C]; rw [eval₂_C]; rw [eval₂_X]; rw [eval₂_map] at f_root
+      exact (mem_roots_map (minpoly.ne_zero hα)).mpr f_root)
+    specialize hc x (by
+      rw [mem_roots_map (minpoly.ne_zero hβ)]; rw [← eval₂_map]
+      exact root_right_of_root_gcd hx)
+    by_contra a
+    apply hc
+    apply (div_eq_iff (sub_ne_zero.mpr a)).mpr
+    simp only [γ, Algebra.smul_def, map_add, map_mul, RingHom.comp_apply]
+    ring
+  rw [← eq_X_sub_C_of_separable_of_root_eq h_sep h_root h_splits h_roots]
+  trans EuclideanDomain.gcd (?_ : E[X]) (?_ : E[X])
+  · dsimp only [γ]
+    convert! (gcd_map (algebraMap F⟮γ⟯ E)).symm
+  · simp only [map_comp, Polynomial.map_map, ← IsScalarTower.algebraMap_eq, Polynomial.map_sub,
+      map_C, AdjoinSimple.algebraMap_gen, Polynomial.map_mul, map_X]
+    congr
 
 中文:
 定理 primitive_element_inf_aux
@@ -206,7 +270,65 @@ theorem primitive_element_inf_aux
   let g := minpoly F β
   let ιFE := algebraMap F E
   let ιEE' := algebraMap E (SplittingField (g.map ιFE))
-  obtain ⟨c, hc⟩ := primitive_element_inf_aux_exists_c (ιEE'.comp ιFE) 
+  obtain ⟨c, hc⟩ := primitive_element_inf_aux_exists_c (ιEE'.comp ιFE) (ιEE' α) (ιEE' β) f g
+  let γ := α + c • β
+  suffices β_in_Fγ : β in F⟮γ⟯ by
+    use γ
+    apply le_antisymm
+    · rw [adjoin_le_iff]
+      have α_in_Fγ : α in F⟮γ⟯ := by
+        rw [← add_sub_cancel_right α (c • β)]
+        exact F⟮γ⟯.sub_mem (mem_adjoin_simple_self F γ) (F⟮γ⟯.toSubalgebra.smul_mem β_in_Fγ c)
+      rintro x (rfl | rfl) <;> assumption
+    · rw [adjoin_simple_le_iff]
+      have α_in_Fαβ : α in F⟮α, β⟯ := subset_adjoin F {α, β} (Set.mem_insert α {β})
+      have β_in_Fαβ : β in F⟮α, β⟯ := subset_adjoin F {α, β} (Set.mem_insert_of_mem α rfl)
+      exact F⟮α, β⟯.add_mem α_in_Fαβ (F⟮α, β⟯.smul_mem β_in_Fαβ)
+  classical
+  let p := EuclideanDomain.gcd ((f.map (algebraMap F F⟮γ⟯)).comp
+    (C (AdjoinSimple.gen F γ) - (C ↑c : F⟮γ⟯[X]) * X)) (g.map (algebraMap F F⟮γ⟯))
+  let h := EuclideanDomain.gcd ((f.map ιFE).comp (C γ - C (ιFE c) * X)) (g.map ιFE)
+  have map_g_ne_zero : g.map ιFE != 0 := map_ne_zero (minpoly.ne_zero hβ)
+  have h_ne_zero : h != 0 :=
+    mt EuclideanDomain.gcd_eq_zero_iff.mp (not_and.mpr fun _ => map_g_ne_zero)
+  suffices p_linear : p.map (algebraMap F⟮γ⟯ E) = C h.leadingCoeff * (X - C β) by
+    have finale : β = algebraMap F⟮γ⟯ E (-p.coeff 0 / p.coeff 1) := by
+      simp [map_div₀, map_neg, ← coeff_map, ← coeff_map, p_linear,
+        mul_sub, coeff_C, mul_div_cancel_left₀ β (mt leadingCoeff_eq_zero.mp h_ne_zero)]
+    rw [finale]
+    exact Subtype.mem (-p.coeff 0 / p.coeff 1)
+  have h_sep : h.Separable := separable_gcd_right _ (.map (Algebra.IsSeparable.isSeparable F β))
+  have h_root : h.eval β = 0 := by
+    apply eval_gcd_eq_zero
+    · rw [eval_comp, eval_sub, eval_mul, eval_C, eval_C, eval_X, eval_map_algebraMap, ←
+        Algebra.smul_def, add_sub_cancel_right, minpoly.aeval]
+    · rw [eval_map_algebraMap, minpoly.aeval]
+  have h_splits : Splits (h.map ιEE') := by
+    rw [← Polynomial.gcd_map]
+    exact (SplittingField.splits _).of_dvd (map_ne_zero map_g_ne_zero)
+      (EuclideanDomain.gcd_dvd_right _ _)
+  have h_roots : forall x in (h.map ιEE').roots, x = ιEE' β := by
+    intro x hx
+    rw [mem_roots_map h_ne_zero] at hx
+    specialize hc (ιEE' γ - ιEE' (ιFE c) * x) (by
+      have f_root := root_left_of_root_gcd hx
+      rw [eval₂_comp]; rw [eval₂_sub]; rw [eval₂_mul]; rw [eval₂_C]; rw [eval₂_C]; rw [eval₂_X]; rw [eval₂_map] at f_root
+      exact (mem_roots_map (minpoly.ne_zero hα)).mpr f_root)
+    specialize hc x (by
+      rw [mem_roots_map (minpoly.ne_zero hβ)]; rw [← eval₂_map]
+      exact root_right_of_root_gcd hx)
+    by_contra a
+    apply hc
+    apply (div_eq_iff (sub_ne_zero.mpr a)).mpr
+    simp only [γ, Algebra.smul_def, map_add, map_mul, RingHom.comp_apply]
+    ring
+  rw [← eq_X_sub_C_of_separable_of_root_eq h_sep h_root h_splits h_roots]
+  trans EuclideanDomain.gcd (?_ : E[X]) (?_ : E[X])
+  · dsimp only [γ]
+    convert! (gcd_map (algebraMap F⟮γ⟯ E)).symm
+  · simp only [map_comp, Polynomial.map_map, ← IsScalarTower.algebraMap_eq, Polynomial.map_sub,
+      map_C, AdjoinSimple.algebraMap_gen, Polynomial.map_mul, map_X]
+    congr
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isIntegral, IsSeparable, SplittingField, add_sub_cancel_right, adjoin_le_iff, algebraMap, g.map, isIntegral, le_antisymm, mem_adj, minpoly, primitive_element_inf_aux_exists_c, sub_mem
 -/
@@ -293,7 +415,21 @@ theorem primitive_element_inf_aux_of_finite_intermediateField
   apply le_antisymm
   · rw [adjoin_le_iff]
     have αxβ_in_K : α + x • β in F⟮α + x • β⟯ := mem_adjoin_simple_self F _
-    have αyβ_in_K : α + y • β in
+    have αyβ_in_K : α + y • β in F⟮α + y • β⟯ := mem_adjoin_simple_self F _
+    dsimp [f] at *
+    simp only [← heq] at αyβ_in_K
+    have β_in_K := sub_mem αxβ_in_K αyβ_in_K
+    rw [show (α + x • β) - (α + y • β) = (x - y) • β by rw [sub_smul]; abel1] at β_in_K
+    replace β_in_K := smul_mem _ β_in_K (x := (x - y)⁻¹)
+    rw [smul_smul]; rw [inv_mul_eq_div]; rw [div_self (sub_ne_zero.2 hneq)]; rw [one_smul] at β_in_K
+    have α_in_K : α in F⟮α + x • β⟯ := by
+      convert! ← sub_mem αxβ_in_K (smul_mem _ β_in_K)
+      apply add_sub_cancel_right
+    rintro x (rfl | rfl) <;> assumption
+  · rw [adjoin_simple_le_iff]
+    have α_in_Fαβ : α in F⟮α, β⟯ := subset_adjoin F {α, β} (Set.mem_insert α {β})
+    have β_in_Fαβ : β in F⟮α, β⟯ := subset_adjoin F {α, β} (Set.mem_insert_of_mem α rfl)
+    exact F⟮α, β⟯.add_mem α_in_Fαβ (F⟮α, β⟯.smul_mem β_in_Fαβ)
 
 中文:
 定理 primitive_element_inf_aux_of_finite_intermediateField
@@ -304,7 +440,21 @@ theorem primitive_element_inf_aux_of_finite_intermediateField
   apply le_antisymm
   · rw [adjoin_le_iff]
     have αxβ_in_K : α + x • β in F⟮α + x • β⟯ := mem_adjoin_simple_self F _
-    have αyβ_in_K : α + y • β in
+    have αyβ_in_K : α + y • β in F⟮α + y • β⟯ := mem_adjoin_simple_self F _
+    dsimp [f] at *
+    simp only [← heq] at αyβ_in_K
+    have β_in_K := sub_mem αxβ_in_K αyβ_in_K
+    rw [show (α + x • β) - (α + y • β) = (x - y) • β by rw [sub_smul]; abel1] at β_in_K
+    replace β_in_K := smul_mem _ β_in_K (x := (x - y)⁻¹)
+    rw [smul_smul]; rw [inv_mul_eq_div]; rw [div_self (sub_ne_zero.2 hneq)]; rw [one_smul] at β_in_K
+    have α_in_K : α in F⟮α + x • β⟯ := by
+      convert! ← sub_mem αxβ_in_K (smul_mem _ β_in_K)
+      apply add_sub_cancel_right
+    rintro x (rfl | rfl) <;> assumption
+  · rw [adjoin_simple_le_iff]
+    have α_in_Fαβ : α in F⟮α, β⟯ := subset_adjoin F {α, β} (Set.mem_insert α {β})
+    have β_in_Fαβ : β in F⟮α, β⟯ := subset_adjoin F {α, β} (Set.mem_insert_of_mem α rfl)
+    exact F⟮α, β⟯.add_mem α_in_Fαβ (F⟮α, β⟯.smul_mem β_in_Fαβ)
 -/
 private theorem primitive_element_inf_aux_of_finite_intermediateField
     [Finite (IntermediateField F E)] : exists γ : E, F⟮α, β⟯ = F⟮γ⟯ := by
@@ -353,7 +503,14 @@ theorem exists_primitive_element
   · let P : IntermediateField F E -> Prop := fun K => exists α : E, F⟮α⟯ = K
     have base : P ⊥ := ⟨0, adjoin_zero⟩
     have ih : forall (K : IntermediateField F E) (x : E), P K -> P (K⟮x⟯.restrictScalars F) := by
-      intro K
+      intro K β hK
+      obtain ⟨α, hK⟩ := hK
+      rw [← hK]; rw [adjoin_simple_adjoin_simple]
+      have : Infinite F := isEmpty_fintype.mp F_inf
+      obtain ⟨γ, hγ⟩ := primitive_element_inf_aux F α β
+      exact ⟨γ, hγ.symm⟩
+    exact induction_on_adjoin P base ih ⊤
+  · exact exists_primitive_element_of_finite_bot F E
 
 中文:
 定理 存在_primitive_element
@@ -363,7 +520,14 @@ theorem exists_primitive_element
   · let P : IntermediateField F E -> Prop := fun K => exists α : E, F⟮α⟯ = K
     have base : P ⊥ := ⟨0, adjoin_zero⟩
     have ih : forall (K : IntermediateField F E) (x : E), P K -> P (K⟮x⟯.restrictScalars F) := by
-      intro K
+      intro K β hK
+      obtain ⟨α, hK⟩ := hK
+      rw [← hK]; rw [adjoin_simple_adjoin_simple]
+      have : Infinite F := isEmpty_fintype.mp F_inf
+      obtain ⟨γ, hγ⟩ := primitive_element_inf_aux F α β
+      exact ⟨γ, hγ.symm⟩
+    exact induction_on_adjoin P base ih ⊤
+  · exact exists_primitive_element_of_finite_bot F E
 
 Depends on / 依赖: F_finite, F_inf, Fintype, Infinite, IntermediateField, adjoin_simple_adjoin_simple, adjoin_zero, induction_on_adjoin, isEmpty_fintype, isEmpty_fintype.mp, isEmpty_or_nonempty, primitive_element_inf_aux, restrictScalars
 -/
@@ -426,7 +590,28 @@ theorem isAlgebraic_of_adjoin_eq_adjoin
   · rw [hm] at heq hmn
     simp only [pow_zero, adjoin_one] at heq
     obtain ⟨y, h⟩ := mem_bot.1 (heq.symm ▸ mem_adjoin_simple_self F (α ^ n))
-    refine ⟨X ^ n - C y, X_pow_sub_C_ne_z
+    refine ⟨X ^ n - C y, X_pow_sub_C_ne_zero hmn y, ?_⟩
+    simp only [map_sub, map_pow, aeval_X, aeval_C, h, sub_self]
+  obtain ⟨r, s, h⟩ := (mem_adjoin_simple_iff F _).1 (heq ▸ mem_adjoin_simple_self F (α ^ m))
+  by_cases hzero : aeval (α ^ n) s = 0
+  · simp only [hzero, div_zero, pow_eq_zero_iff hm] at h
+    exact h.symm ▸ isAlgebraic_zero
+  replace hm : 0 < m := Nat.pos_of_ne_zero hm
+  rw [eq_div_iff hzero]; rw [← sub_eq_zero] at h
+  replace hzero : s != 0 := by rintro rfl; simp only [map_zero, not_true_eq_false] at hzero
+  let f : F[X] := X ^ m * expand F n s - expand F n r
+  refine ⟨f, ?_, ?_⟩
+  · have : f.coeff (n * s.natDegree + m) != 0 := by
+      have hn : 0 < n := by linarith only [hm, hmn]
+      have hndvd : ¬ n ∣ n * s.natDegree + m := by
+        rw [← Nat.dvd_add_iff_right (n.dvd_mul_right s.natDegree)]
+        exact Nat.not_dvd_of_pos_of_lt hm hmn
+      simp only [f, coeff_sub, coeff_X_pow_mul, s.coeff_expand_mul' hn, coeff_natDegree,
+        coeff_expand hn r, hndvd, ite_false, sub_zero]
+      exact leadingCoeff_ne_zero.2 hzero
+    intro h
+    simp only [h, coeff_zero, ne_eq, not_true_eq_false] at this
+  · simp only [f, map_sub, map_mul, map_pow, aeval_X, expand_aeval, h]
 
 中文:
 定理 isAlgebraic_of_adjoin_eq_adjoin
@@ -438,7 +623,28 @@ theorem isAlgebraic_of_adjoin_eq_adjoin
   · rw [hm] at heq hmn
     simp only [pow_zero, adjoin_one] at heq
     obtain ⟨y, h⟩ := mem_bot.1 (heq.symm ▸ mem_adjoin_simple_self F (α ^ n))
-    refine ⟨X ^ n - C y, X_pow_sub_C_ne_z
+    refine ⟨X ^ n - C y, X_pow_sub_C_ne_zero hmn y, ?_⟩
+    simp only [map_sub, map_pow, aeval_X, aeval_C, h, sub_self]
+  obtain ⟨r, s, h⟩ := (mem_adjoin_simple_iff F _).1 (heq ▸ mem_adjoin_simple_self F (α ^ m))
+  by_cases hzero : aeval (α ^ n) s = 0
+  · simp only [hzero, div_zero, pow_eq_zero_iff hm] at h
+    exact h.symm ▸ isAlgebraic_zero
+  replace hm : 0 < m := Nat.pos_of_ne_zero hm
+  rw [eq_div_iff hzero]; rw [← sub_eq_zero] at h
+  replace hzero : s != 0 := by rintro rfl; simp only [map_zero, not_true_eq_false] at hzero
+  let f : F[X] := X ^ m * expand F n s - expand F n r
+  refine ⟨f, ?_, ?_⟩
+  · have : f.coeff (n * s.natDegree + m) != 0 := by
+      have hn : 0 < n := by linarith only [hm, hmn]
+      have hndvd : ¬ n ∣ n * s.natDegree + m := by
+        rw [← Nat.dvd_add_iff_right (n.dvd_mul_right s.natDegree)]
+        exact Nat.not_dvd_of_pos_of_lt hm hmn
+      simp only [f, coeff_sub, coeff_X_pow_mul, s.coeff_expand_mul' hn, coeff_natDegree,
+        coeff_expand hn r, hndvd, ite_false, sub_zero]
+      exact leadingCoeff_ne_zero.2 hzero
+    intro h
+    simp only [h, coeff_zero, ne_eq, not_true_eq_false] at this
+  · simp only [f, map_sub, map_mul, map_pow, aeval_X, expand_aeval, h]
 
 Depends on / 依赖: X_pow_sub_C_ne_zero, adjoin_one, aeval_C, aeval_X, heq.symm, hneq.lt_or_gt.resolve_left, hneq.symm, lt_or_gt, map_pow, map_sub, mem_adjoin_simple_iff, mem_adjoin_simple_self, mem_bot, pow_zero, resolve_left, sub_self
 -/
@@ -503,7 +709,11 @@ theorem FiniteDimensional.of_finite_intermediateField
   have := isAlgebraic_of_finite_intermediateField F E
   have : forall K : IF, FiniteDimensional F K.1 := fun ⟨_, x, rfl⟩ => adjoin.finiteDimensional
     (Algebra.IsIntegral.isIntegral _)
-  have hfin := finiteDimensional_iSup_of_finit
+  have hfin := finiteDimensional_iSup_of_finite (t := fun K : IF => K.1)
+  have htop : ⨆ K : IF, K.1 = ⊤ := le_top.antisymm fun x _ =>
+le_iSup (fun K : IF => K.1) ⟨F⟮x⟯, x, rfl⟩ mem_adjoin_simple_self F x
+  rw [htop] at hfin
+  exact topEquiv.toLinearEquiv.finiteDimensional
 
 中文:
 定理 有限维.of_finite_intermediateField
@@ -512,7 +722,11 @@ theorem FiniteDimensional.of_finite_intermediateField
   have := isAlgebraic_of_finite_intermediateField F E
   have : forall K : IF, FiniteDimensional F K.1 := fun ⟨_, x, rfl⟩ => adjoin.finiteDimensional
     (Algebra.IsIntegral.isIntegral _)
-  have hfin := finiteDimensional_iSup_of_finit
+  have hfin := finiteDimensional_iSup_of_finite (t := fun K : IF => K.1)
+  have htop : ⨆ K : IF, K.1 = ⊤ := le_top.antisymm fun x _ =>
+le_iSup (fun K : IF => K.1) ⟨F⟮x⟯, x, rfl⟩ mem_adjoin_simple_self F x
+  rw [htop] at hfin
+  exact topEquiv.toLinearEquiv.finiteDimensional
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, FiniteDimensional, IntermediateField, IsIntegral, adjoin, adjoin.finiteDimensional, antisymm, finiteDi, finiteDimensional, finiteDimensional_iSup_of_finite, isAlgebraic_of_finite_intermediateField, isIntegral, le_iSup, le_top, le_top.antisymm, mem_adjoin_simple_self, toLinearEquiv, topEquiv, topEquiv.toLinearEquiv.finiteDi
 -/
@@ -538,7 +752,10 @@ theorem exists_primitive_element_of_finite_intermediateField
   rcases finite_or_infinite F with (_ | _)
   · obtain ⟨α, h⟩ := exists_primitive_element_of_finite_bot F K
     exact ⟨α, by simpa only [lift_adjoin_simple, lift_top] using congr_arg lift h⟩
-  · apply induction_on_adjoin (fun K => exists 
+  · apply induction_on_adjoin (fun K => exists α : E, F⟮α⟯ = K) ⟨0, adjoin_zero⟩
+    rintro K β ⟨α, rfl⟩
+    simp_rw [adjoin_simple_adjoin_simple, eq_comm]
+    exact primitive_element_inf_aux_of_finite_intermediateField F α β
 
 中文:
 定理 存在_primitive_element_of_finite_intermediateField
@@ -547,7 +764,10 @@ theorem exists_primitive_element_of_finite_intermediateField
   rcases finite_or_infinite F with (_ | _)
   · obtain ⟨α, h⟩ := exists_primitive_element_of_finite_bot F K
     exact ⟨α, by simpa only [lift_adjoin_simple, lift_top] using congr_arg lift h⟩
-  · apply induction_on_adjoin (fun K => exists 
+  · apply induction_on_adjoin (fun K => exists α : E, F⟮α⟯ = K) ⟨0, adjoin_zero⟩
+    rintro K β ⟨α, rfl⟩
+    simp_rw [adjoin_simple_adjoin_simple, eq_comm]
+    exact primitive_element_inf_aux_of_finite_intermediateField F α β
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.of_finite_intermediateField, adjoin_simple_adjoin_simple, adjoin_zero, congr_arg, eq_comm, exists_primitive_element_of_finite_bot, finite_or_infinite, induction_on_adjoin, lift_adjoin_simple, lift_top, of_finite_intermediateField, primitive_element_inf_aux_of_finite_intermediateField, simp_rw
 -/
@@ -606,7 +826,21 @@ theorem finite_intermediateField_of_exists_primitive_element
   let f : F[X] := minpoly F α
   let G := { g : E[X] // g.Monic ∧ g ∣ f.map (algebraMap F E) }
   -- Then `f` has only finitely many monic factors
-have h
+have hfin : Finite G := @Finite.of_fintype _ fintypeSubtypeMonicDvd
+(f.map (algebraMap F E)) map_ne_zero (minpoly.ne_zero_of_finite F α)
+  -- If `K` is an intermediate field of `E/F`, let `g` be the minimal polynomial of `α` over `K`
+  -- which is a monic factor of `f`
+  let g : IntermediateField F E -> G := fun K =>
+    ⟨(minpoly K α).map (algebraMap K E), (minpoly.monic <| .of_finite K α).map _, by
+      convert! Polynomial.map_dvd (algebraMap K E) (minpoly.dvd_map_of_isScalarTower F K α)
+      rw [Polynomial.map_map]; rfl⟩
+  -- The map `K ↦ g` is injective
+  have hinj : Function.Injective g := fun K K' heq => by
+    rw [Subtype.mk.injEq] at heq
+    apply_fun fun f : E[X] => adjoin F (f.coeffs : Set E) at heq
+    simpa only [adjoin_minpoly_coeff_of_exists_primitive_element F hprim] using heq
+  -- Therefore there are only finitely many intermediate fields
+  exact Finite.of_injective g hinj
 
 中文:
 定理 finite_intermediateField_of_存在_primitive_element
@@ -618,7 +852,21 @@ have h
   let f : F[X] := minpoly F α
   let G := { g : E[X] // g.Monic ∧ g ∣ f.map (algebraMap F E) }
   -- Then `f` has only finitely many monic factors
-have h
+have hfin : Finite G := @Finite.of_fintype _ fintypeSubtypeMonicDvd
+(f.map (algebraMap F E)) map_ne_zero (minpoly.ne_zero_of_finite F α)
+  -- If `K` is an intermediate field of `E/F`, let `g` be the minimal polynomial of `α` over `K`
+  -- which is a monic factor of `f`
+  let g : IntermediateField F E -> G := fun K =>
+    ⟨(minpoly K α).map (algebraMap K E), (minpoly.monic <| .of_finite K α).map _, by
+      convert! Polynomial.map_dvd (algebraMap K E) (minpoly.dvd_map_of_isScalarTower F K α)
+      rw [Polynomial.map_map]; rfl⟩
+  -- The map `K ↦ g` is injective
+  have hinj : Function.Injective g := fun K K' heq => by
+    rw [Subtype.mk.injEq] at heq
+    apply_fun fun f : E[X] => adjoin F (f.coeffs : Set E) at heq
+    simpa only [adjoin_minpoly_coeff_of_exists_primitive_element F hprim] using heq
+  -- Therefore there are only finitely many intermediate fields
+  exact Finite.of_injective g hinj
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.of_exists_primitive_element, of_exists_primitive_element
 -/
@@ -831,7 +1079,8 @@ theorem primitive_element_iff_algHom_eq_of_eval'
   simp_rw [primitive_element_iff_minpoly_natDegree_eq, ← card_rootSet_eq_natDegree (K := A)
     (Algebra.IsSeparable.isSeparable F α) (hA _), ← toFinset_card,
     ← (Algebra.IsAlgebraic.of_finite F E).range_eval_eq_rootSet_minpoly_of_splits _ hA α,
-    ← AlgHom.card_of_splits F E A hA
+    ← AlgHom.card_of_splits F E A hA, Fintype.card, toFinset_range, Finset.card_image_iff,
+    Finset.coe_univ, injOn_univ]
 
 中文:
 定理 primitive_element_iff_algHom_eq_of_eval'
@@ -841,7 +1090,8 @@ theorem primitive_element_iff_algHom_eq_of_eval'
   simp_rw [primitive_element_iff_minpoly_natDegree_eq, ← card_rootSet_eq_natDegree (K := A)
     (Algebra.IsSeparable.isSeparable F α) (hA _), ← toFinset_card,
     ← (Algebra.IsAlgebraic.of_finite F E).range_eval_eq_rootSet_minpoly_of_splits _ hA α,
-    ← AlgHom.card_of_splits F E A hA
+    ← AlgHom.card_of_splits F E A hA, Fintype.card, toFinset_range, Finset.card_image_iff,
+    Finset.coe_univ, injOn_univ]
 
 Depends on / 依赖: AlgHom, AlgHom.card_of_splits, Algebra, Algebra.IsAlgebraic.of_finite, Algebra.IsSeparable.isSeparable, Finset, Finset.card_image_iff, Finset.coe_univ, Fintype, Fintype.card, IsAlgebraic, IsSeparable, card_image_iff, card_of_splits, card_rootSet_eq_natDegree, classical, coe_univ, injOn_univ, isSeparable, of_finite
 -/
@@ -865,7 +1115,9 @@ theorem primitive_element_iff_algHom_eq_of_eval
     fun h => eq_of_le_of_finrank_eq' le_top ?_⟩
   let : Algebra F⟮α⟯ A := (φ.comp F⟮α⟯.val).toAlgebra
   rw [IntermediateField.finrank_top]; rw [← AlgHom.card_of_splits _ _ A]; rw [Fintype.card_eq_one_iff]
-·
+· exact ⟨{ __ := φ, commutes' := fun _ => rfl }, fun ψ => AlgHom.restrictScalars_injective F
+Eq.symm h _ (ψ.commutes <| AdjoinSimple.gen F α).symm⟩
+  · exact fun x => (IsIntegral.of_finite F x).minpoly_splits_tower_top (hA x)
 
 中文:
 定理 primitive_element_iff_algHom_eq_of_eval
@@ -875,7 +1127,9 @@ theorem primitive_element_iff_algHom_eq_of_eval
     fun h => eq_of_le_of_finrank_eq' le_top ?_⟩
   let : Algebra F⟮α⟯ A := (φ.comp F⟮α⟯.val).toAlgebra
   rw [IntermediateField.finrank_top]; rw [← AlgHom.card_of_splits _ _ A]; rw [Fintype.card_eq_one_iff]
-·
+· exact ⟨{ __ := φ, commutes' := fun _ => rfl }, fun ψ => AlgHom.restrictScalars_injective F
+Eq.symm h _ (ψ.commutes <| AdjoinSimple.gen F α).symm⟩
+  · exact fun x => (IsIntegral.of_finite F x).minpoly_splits_tower_top (hA x)
 
 Depends on / 依赖: AdjoinSimple, AdjoinSimple.gen, AlgHom, AlgHom.card_of_splits, AlgHom.restrictScalars_injective, Algebra, Eq.symm, Field.primitive_element_iff_algHom_eq_of_eval, Fintype, Fintype.card_eq_one_iff, IntermediateField, IntermediateField.finrank_top, IsIntegral, IsIntegral.of_finite, card_eq_one_iff, card_of_splits, commutes, eq_of_le_of_finrank_eq, finrank_top, le_top
 -/

@@ -1389,7 +1389,17 @@ definition isColimitCofanMapObjComp
         (fun ⟨i, (hi : p i = j)⟩ => s.inj ⟨i, by
           simp only [Set.mem_preimage, Set.mem_singleton_iff, ← hpqr, hi, hj]⟩)))
     (fun s ⟨i, (hi : r i = k)⟩ => by simp)
- 
+    (fun s m hm => by
+      apply Cofan.IsColimit.hom_ext hc'
+      rintro ⟨j, rfl : q j = k⟩
+      apply Cofan.IsColimit.hom_ext (hc j rfl)
+      rintro ⟨i, rfl : p i = j⟩
+      dsimp
+      rw [Cofan.IsColimit.fac]; rw [Cofan.IsColimit.fac]; rw [← hm]
+      dsimp
+      rw [assoc])
+
+include hpqr in
 
 中文:
 定义 isColimitCofanMapObjComp
@@ -1400,7 +1410,17 @@ definition isColimitCofanMapObjComp
         (fun ⟨i, (hi : p i = j)⟩ => s.inj ⟨i, by
           simp only [Set.mem_preimage, Set.mem_singleton_iff, ← hpqr, hi, hj]⟩)))
     (fun s ⟨i, (hi : r i = k)⟩ => by simp)
- 
+    (fun s m hm => by
+      apply Cofan.IsColimit.hom_ext hc'
+      rintro ⟨j, rfl : q j = k⟩
+      apply Cofan.IsColimit.hom_ext (hc j rfl)
+      rintro ⟨i, rfl : p i = j⟩
+      dsimp
+      rw [Cofan.IsColimit.fac]; rw [Cofan.IsColimit.fac]; rw [← hm]
+      dsimp
+      rw [assoc])
+
+include hpqr in
 
 Depends on / 依赖: Cofan.IsColimit.desc, Cofan.IsColimit.fac, Cofan.IsColimit.hom_ext, Cofan.IsColimit.mk, IsColimit, Set.mem_preimage, Set.mem_singleton_iff, hom_ext, mem_preimage, mem_singleton_iff, s.inj
 -/

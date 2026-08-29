@@ -128,7 +128,36 @@ theorem stronglyMeasurable_piecewise
   · refine ⟨fun n => simpleFunc_piecewise hs hm (fun i => (hf i).approx n), fun x => ?_⟩
     simp [simpleFunc_piecewise, piecewise_apply, StronglyMeasurable.tendsto_approx]
   simp only [not_finite_iff_infinite] at Fi
-  obtain ⟨e, -⟩ := exists_true_iff_nonempty.mpr (nonemp
+  obtain ⟨e, -⟩ := exists_true_iff_nonempty.mpr (nonempty_equiv_of_countable (α := Nat) (β := ι))
+  classical
+  let g (n : Nat) (i : ι) : Fin (n + 1) :=
+    if hi : exists m < n, i = e m then ⟨hi.choose, by grind⟩ else Fin.last n
+  have sg (n : Nat) : (g n).Surjective := by
+    intro b
+    unfold g
+    refine ⟨e b, ?_⟩
+    by_cases hb : b < n
+    · have : exists m < n, e b = e m := ⟨b, ⟨hb, rfl⟩⟩
+      simpa only [this, Fin.ext_iff] using! e.injective this.choose_spec.2.symm
+    · simp [hb]
+      grind
+  have G (n : Nat) := hs.coarserPartition (g n) (sg n)
+  refine ⟨fun n => (G n).simpleFunc_piecewise (fun i => ?_) (fun i => (hf (e i)).approx n),
+    fun x => ?_⟩
+  · exact .biUnion (to_countable _) fun _ _ => hm _
+  simp only [simpleFunc_piecewise, SimpleFunc.coe_mk, piecewise_apply]
+  have : forallᶠ n in atTop, e ((G n).index x) = hs.index x := by
+    obtain ⟨y, hy⟩ := e.bijective.2 (hs.index x)
+    refine eventually_atTop.mpr ⟨y + 1, fun b hb => ?_⟩
+    have : y = (⟨y, by lia⟩ : Fin (b + 1)).1 := rfl
+    rw [← hy]; rw [EmbeddingLike.apply_eq_iff_eq]; rw [this]; rw [← Fin.ext_iff]; rw [← (G b).mem_iff_index_eq]
+    have : exists m < b, hs.index x = e m := ⟨y, ⟨by lia, hy.symm⟩⟩
+    simpa [g, hs.mem_iff_index_eq, this] using! e.injective (hy.trans this.choose_spec.2).symm
+  have : forallᶠ n in atTop, (hf (hs.index x)).approx n x = (hf (e ((G n).index x))).approx n x := by
+    filter_upwards [this] with n hn using by rw [hn]
+  exact (Filter.tendsto_congr' this).mp (by simp [StronglyMeasurable.tendsto_approx])
+
+@[fun_prop]
 
 中文:
 定理 stronglyMeasurable_piecewise
@@ -138,7 +167,36 @@ theorem stronglyMeasurable_piecewise
   · refine ⟨fun n => simpleFunc_piecewise hs hm (fun i => (hf i).approx n), fun x => ?_⟩
     simp [simpleFunc_piecewise, piecewise_apply, StronglyMeasurable.tendsto_approx]
   simp only [not_finite_iff_infinite] at Fi
-  obtain ⟨e, -⟩ := exists_true_iff_nonempty.mpr (nonemp
+  obtain ⟨e, -⟩ := exists_true_iff_nonempty.mpr (nonempty_equiv_of_countable (α := Nat) (β := ι))
+  classical
+  let g (n : Nat) (i : ι) : Fin (n + 1) :=
+    if hi : exists m < n, i = e m then ⟨hi.choose, by grind⟩ else Fin.last n
+  have sg (n : Nat) : (g n).Surjective := by
+    intro b
+    unfold g
+    refine ⟨e b, ?_⟩
+    by_cases hb : b < n
+    · have : exists m < n, e b = e m := ⟨b, ⟨hb, rfl⟩⟩
+      simpa only [this, Fin.ext_iff] using! e.injective this.choose_spec.2.symm
+    · simp [hb]
+      grind
+  have G (n : Nat) := hs.coarserPartition (g n) (sg n)
+  refine ⟨fun n => (G n).simpleFunc_piecewise (fun i => ?_) (fun i => (hf (e i)).approx n),
+    fun x => ?_⟩
+  · exact .biUnion (to_countable _) fun _ _ => hm _
+  simp only [simpleFunc_piecewise, SimpleFunc.coe_mk, piecewise_apply]
+  have : forallᶠ n in atTop, e ((G n).index x) = hs.index x := by
+    obtain ⟨y, hy⟩ := e.bijective.2 (hs.index x)
+    refine eventually_atTop.mpr ⟨y + 1, fun b hb => ?_⟩
+    have : y = (⟨y, by lia⟩ : Fin (b + 1)).1 := rfl
+    rw [← hy]; rw [EmbeddingLike.apply_eq_iff_eq]; rw [this]; rw [← Fin.ext_iff]; rw [← (G b).mem_iff_index_eq]
+    have : exists m < b, hs.index x = e m := ⟨y, ⟨by lia, hy.symm⟩⟩
+    simpa [g, hs.mem_iff_index_eq, this] using! e.injective (hy.trans this.choose_spec.2).symm
+  have : forallᶠ n in atTop, (hf (hs.index x)).approx n x = (hf (e ((G n).index x))).approx n x := by
+    filter_upwards [this] with n hn using by rw [hn]
+  exact (Filter.tendsto_congr' this).mp (by simp [StronglyMeasurable.tendsto_approx])
+
+@[fun_prop]
 
 Depends on / 依赖: Fin.last, Finite, StronglyMeasurable, StronglyMeasurable.tendsto_approx, Surjective, approx, classical, exists_true_iff_nonempty, exists_true_iff_nonempty.mpr, hi.choose, nonempty_equiv_of_countable, not_finite_iff_infinite, piecewise_apply, simpleFunc_piecewise, tendsto_approx
 -/

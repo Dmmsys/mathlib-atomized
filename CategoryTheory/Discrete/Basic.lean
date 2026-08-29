@@ -944,7 +944,10 @@ definition piEquivalenceFunctorDiscrete
   unitIso := Iso.refl _
   counitIso := NatIso.ofComponents (fun F => (NatIso.ofComponents (fun _ => Iso.refl _)
     (by
-
+      rintro ⟨x⟩ ⟨y⟩ f
+      obtain rfl : x = y := Discrete.eq_of_hom f
+      obtain rfl : f = 𝟙 _ := rfl
+      simp))) (by cat_disch)
 
 中文:
 定义 piEquivalenceFunctorDiscrete
@@ -957,7 +960,10 @@ definition piEquivalenceFunctorDiscrete
   unitIso := Iso.refl _
   counitIso := NatIso.ofComponents (fun F => (NatIso.ofComponents (fun _ => Iso.refl _)
     (by
-
+      rintro ⟨x⟩ ⟨y⟩ f
+      obtain rfl : x = y := Discrete.eq_of_hom f
+      obtain rfl : f = 𝟙 _ := rfl
+      simp))) (by cat_disch)
 
 Depends on / 依赖: Discrete, Discrete.eq_of_hom, Discrete.functor, Discrete.natTrans, F.obj, Iso.refl, NatIso, NatIso.ofComponents, cat_disch, counitIso, eq_of_hom, f.app, functor, inverse, j.as, natTrans, ofComponents, unitIso
 -/

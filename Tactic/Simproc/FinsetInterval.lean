@@ -317,7 +317,15 @@ have : em =Q en := ⟨⟩
     return ⟨q({$em}), q(Icc_self _)⟩
   -- If `m < n`, then `Icc m n = insert m (Icc (m + 1) n)`.
   else if m < n then
-    let hmn : Q(N
+    let hmn : Q(Nat.ble $em $en = true) := (q(Eq.refl true) :)
+    have em' : Q(Nat) := mkNatLitQ (m + 1)
+have : em' =Q em + 1 := ⟨⟩
+    let ⟨s, hs⟩ ← evalFinsetIccNat (m + 1) n em' en
+    return ⟨q(insert $em $s), q(Nat.Icc_eq_insert_of_Icc_succ_eq $hmn $hs)⟩
+  -- Else `n < m` and `Icc m n = ∅`.
+  else
+    let hnm : Q(Nat.blt $en $em = true) := (q(Eq.refl true) :)
+    return ⟨q(∅), q(Nat.Icc_eq_empty_of_lt $hnm)⟩
 
 中文:
 定义 evalFinsetIcc自然数
@@ -330,7 +338,15 @@ have : em =Q en := ⟨⟩
     return ⟨q({$em}), q(Icc_self _)⟩
   -- If `m < n`, then `Icc m n = insert m (Icc (m + 1) n)`.
   else if m < n then
-    let hmn : Q(N
+    let hmn : Q(Nat.ble $em $en = true) := (q(Eq.refl true) :)
+    have em' : Q(Nat) := mkNatLitQ (m + 1)
+have : em' =Q em + 1 := ⟨⟩
+    let ⟨s, hs⟩ ← evalFinsetIccNat (m + 1) n em' en
+    return ⟨q(insert $em $s), q(Nat.Icc_eq_insert_of_Icc_succ_eq $hmn $hs)⟩
+  -- Else `n < m` and `Icc m n = ∅`.
+  else
+    let hnm : Q(Nat.blt $en $em = true) := (q(Eq.refl true) :)
+    return ⟨q(∅), q(Nat.Icc_eq_empty_of_lt $hnm)⟩
 -/
 def evalFinsetIccNat (m n : Nat) (em en : Q(Nat)) :
     MetaM ((s : Q(Finset Nat)) × Q(.Icc $em $en = $s)) := do
@@ -365,7 +381,15 @@ have : em =Q en := ⟨⟩
     return ⟨q({$em}), q(Icc_self _)⟩
   -- If `m < n`, then `Icc m n = insert m (Icc m n)`.
   else if m < n then
-    let hmn ← mkDecideP
+    let hmn ← mkDecideProofQ q($em <= $en)
+    have em' : Q(Int) := mkIntLitQ (m + 1)
+have : em' =Q em + 1 := ⟨⟩
+    let ⟨s, hs⟩ ← evalFinsetIccInt (m + 1) n em' en
+    return ⟨q(insert $em $s), q(Int.Icc_eq_insert_of_Icc_succ_eq $hmn $hs)⟩
+  -- Else `n < m` and `Icc m n = ∅`.
+  else
+    let hnm ← mkDecideProofQ q($en < $em)
+    return ⟨q(∅), q(Icc_eq_empty_of_lt $hnm)⟩
 
 中文:
 定义 evalFinsetIcc整数
@@ -378,7 +402,15 @@ have : em =Q en := ⟨⟩
     return ⟨q({$em}), q(Icc_self _)⟩
   -- If `m < n`, then `Icc m n = insert m (Icc m n)`.
   else if m < n then
-    let hmn ← mkDecideP
+    let hmn ← mkDecideProofQ q($em <= $en)
+    have em' : Q(Int) := mkIntLitQ (m + 1)
+have : em' =Q em + 1 := ⟨⟩
+    let ⟨s, hs⟩ ← evalFinsetIccInt (m + 1) n em' en
+    return ⟨q(insert $em $s), q(Int.Icc_eq_insert_of_Icc_succ_eq $hmn $hs)⟩
+  -- Else `n < m` and `Icc m n = ∅`.
+  else
+    let hnm ← mkDecideProofQ q($en < $em)
+    return ⟨q(∅), q(Icc_eq_empty_of_lt $hnm)⟩
 -/
 partial def evalFinsetIccInt (m n : Int) (em en : Q(Int)) :
     MetaM ((s : Q(Finset Int)) × Q(.Icc $em $en = $s)) := do

@@ -572,7 +572,7 @@ alias ⟨IsBlock.smul_eq_smul_of_nonempty, _⟩ := isBlock_iff_smul_eq_smul_of_n
 @[to_additive]
 alias ⟨IsBlock.pairwiseDisjoint_range_smul, _⟩ := isBlock_iff_pairwiseDisjoint_range_smul
 @[to_additive]
-alias ⟨IsBlock.smul_eq_smul_or_disjoint, _⟩
+alias ⟨IsBlock.smul_eq_smul_or_disjoint, _⟩ := isBlock_iff_smul_eq_smul_or_disjoint
 
 中文:
 引理 IsBlock.disjoint_smul_smul_set
@@ -584,7 +584,7 @@ alias ⟨IsBlock.smul_eq_smul_of_nonempty, _⟩ := isBlock_iff_smul_eq_smul_of_n
 @[to_additive]
 alias ⟨IsBlock.pairwiseDisjoint_range_smul, _⟩ := isBlock_iff_pairwiseDisjoint_range_smul
 @[to_additive]
-alias ⟨IsBlock.smul_eq_smul_or_disjoint, _⟩
+alias ⟨IsBlock.smul_eq_smul_or_disjoint, _⟩ := isBlock_iff_smul_eq_smul_or_disjoint
 
 Depends on / 依赖: disjoint_smul_set_smul, hB.disjoint_smul_set_smul
 -/
@@ -845,7 +845,8 @@ lemma isBlock_iff_smul_eq_of_mem
 
 @[to_additive] alias ⟨IsBlock.disjoint_smul_of_ne, _⟩ := isBlock_iff_disjoint_smul_of_ne
 @[to_additive] alias ⟨IsBlock.smul_eq_of_nonempty, _⟩ := isBlock_iff_smul_eq_of_nonempty
-@[to_additive] alias ⟨IsBlock.smul_eq_or_disjoint
+@[to_additive] alias ⟨IsBlock.smul_eq_or_disjoint, _⟩ := isBlock_iff_smul_eq_or_disjoint
+@[to_additive] alias ⟨IsBlock.smul_eq_of_mem, _⟩ := isBlock_iff_smul_eq_of_mem
 
 中文:
 引理 isBlock_iff_smul_eq_of_mem
@@ -854,7 +855,8 @@ lemma isBlock_iff_smul_eq_of_mem
 
 @[to_additive] alias ⟨IsBlock.disjoint_smul_of_ne, _⟩ := isBlock_iff_disjoint_smul_of_ne
 @[to_additive] alias ⟨IsBlock.smul_eq_of_nonempty, _⟩ := isBlock_iff_smul_eq_of_nonempty
-@[to_additive] alias ⟨IsBlock.smul_eq_or_disjoint
+@[to_additive] alias ⟨IsBlock.smul_eq_or_disjoint, _⟩ := isBlock_iff_smul_eq_or_disjoint
+@[to_additive] alias ⟨IsBlock.smul_eq_of_mem, _⟩ := isBlock_iff_smul_eq_of_mem
 
 Depends on / 依赖: Nonempty, Set.Nonempty, isBlock_iff_smul_eq_of_nonempty, mem_smul_set
 -/
@@ -1253,7 +1255,11 @@ theorem IsBlock.of_subgroup_of_conjugate
   suffices h' • g • B = g • h • B by
     simp only [this]
     apply (hB.smul_eq_or_disjoint ⟨h, hH⟩).imp
-    · intro; 
+    · intro; congr
+    · exact Set.disjoint_image_of_injective (MulAction.injective g)
+  suffices (h' : G) • g • B = g • h • B by
+    rw [← this]; rfl
+  rw [← hh]; rw [smul_smul (g * h * g⁻¹) g B]; rw [smul_smul g h B]; rw [inv_mul_cancel_right]
 
 中文:
 定理 IsBlock.of_subgroup_of_conjugate
@@ -1266,7 +1272,11 @@ theorem IsBlock.of_subgroup_of_conjugate
   suffices h' • g • B = g • h • B by
     simp only [this]
     apply (hB.smul_eq_or_disjoint ⟨h, hH⟩).imp
-    · intro; 
+    · intro; congr
+    · exact Set.disjoint_image_of_injective (MulAction.injective g)
+  suffices (h' : G) • g • B = g • h • B by
+    rw [← this]; rfl
+  rw [← hh]; rw [smul_smul (g * h * g⁻¹) g B]; rw [smul_smul g h B]; rw [inv_mul_cancel_right]
 
 Depends on / 依赖: MulAction, MulAction.injective, MulAut, MulAut.conj_apply, MulEquiv, MulEquiv.coe_toMonoidHom, Set.disjoint_image_of_injective, SetLike, SetLike.coe_mem, Subgroup, Subgroup.mem_map.mp, coe_mem, coe_toMonoidHom, conj_apply, disjoint_image_of_injective, hB.smul_eq_or_disjoint, injective, inv_mul_cancel_right, isBlock_iff_smul_eq_or_disjoint, mem_map
 -/
@@ -1359,7 +1369,12 @@ theorem IsBlock.isBlockSystem
     simpa only [Set.smul_set_eq_empty] using hg
   · intro a
     obtain ⟨b : X, hb : b in B⟩ := hBe
-    obtain ⟨
+    obtain ⟨g, rfl⟩ := exists_smul_eq G b a
+    use g • B
+    simp only [Set.smul_mem_smul_set_iff, hb, Set.mem_range,
+      exists_apply_eq_apply, and_imp, forall_exists_index,
+      forall_apply_eq_imp_iff, true_and]
+    exact fun g' ha => hB.smul_eq_smul_of_nonempty ⟨g • b, ha, ⟨b, hb, rfl⟩⟩
 
 中文:
 定理 IsBlock.isBlockSystem
@@ -1373,7 +1388,12 @@ theorem IsBlock.isBlockSystem
     simpa only [Set.smul_set_eq_empty] using hg
   · intro a
     obtain ⟨b : X, hb : b in B⟩ := hBe
-    obtain ⟨
+    obtain ⟨g, rfl⟩ := exists_smul_eq G b a
+    use g • B
+    simp only [Set.smul_mem_smul_set_iff, hb, Set.mem_range,
+      exists_apply_eq_apply, and_imp, forall_exists_index,
+      forall_apply_eq_imp_iff, true_and]
+    exact fun g' ha => hB.smul_eq_smul_of_nonempty ⟨g • b, ha, ⟨b, hb, rfl⟩⟩
 
 Depends on / 依赖: Set.mem_range, Set.smul_mem_smul_set_iff, Set.smul_set_eq_empty, and_imp, exists_apply_eq_apply, exists_smul_eq, forall_apply_eq_imp_iff, forall_exists_index, hB.smul_eq_smul_of_non, hB.translate, hBe.ne_empty, mem_blocks, mem_range, ne_empty, nonempty, not_exists, smul_eq_smul_of_non, smul_mem_smul_set_iff, smul_set_eq_empty, translate
 -/
@@ -1414,7 +1434,9 @@ lemma smul_orbit_eq_orbit_smul
     simp only [Subgroup.mk_smul]
     rw [smul_smul]; rw [inv_mul_cancel_right]; rw [← smul_smul]
   · rintro ⟨⟨k, hk⟩, rfl⟩
-    use ⟨g⁻¹ * k *
+    use ⟨g⁻¹ * k * g, nN.conj_mem' k hk g⟩
+    simp only [Subgroup.mk_smul]
+    simp only [← smul_smul, smul_inv_smul]
 
 中文:
 引理 smul_orbit_eq_orbit_smul
@@ -1429,7 +1451,9 @@ lemma smul_orbit_eq_orbit_smul
     simp only [Subgroup.mk_smul]
     rw [smul_smul]; rw [inv_mul_cancel_right]; rw [← smul_smul]
   · rintro ⟨⟨k, hk⟩, rfl⟩
-    use ⟨g⁻¹ * k *
+    use ⟨g⁻¹ * k * g, nN.conj_mem' k hk g⟩
+    simp only [Subgroup.mk_smul]
+    simp only [← smul_smul, smul_inv_smul]
 
 Depends on / 依赖: Set.mem_range, Set.smul_set_range, Subgroup, Subgroup.mk_smul, conj_mem, inv_mul_cancel_right, mem_range, mk_smul, nN.conj_mem, smul_inv_smul, smul_set_range, smul_smul
 -/
@@ -1624,7 +1648,7 @@ theorem IsBlock.of_orbit
     rw [← Subgroup.coe_mk H g this]; rw [← H.toSubmonoid.smul_def]; rw [smul_orbit (⟨g]; rw [this⟩ : H) a]
   rw [← mul_mem_cancel_left h₂⁻¹.2]; rw [← mul_mem_cancel_right h₁.2]
   apply hH
-  simp
+  simpa only [mem_stabilizer_iff, InvMemClass.coe_inv, mul_smul, inv_smul_eq_iff]
 
 中文:
 定理 IsBlock.of_orbit
@@ -1636,7 +1660,7 @@ theorem IsBlock.of_orbit
     rw [← Subgroup.coe_mk H g this]; rw [← H.toSubmonoid.smul_def]; rw [smul_orbit (⟨g]; rw [this⟩ : H) a]
   rw [← mul_mem_cancel_left h₂⁻¹.2]; rw [← mul_mem_cancel_right h₁.2]
   apply hH
-  simp
+  simpa only [mem_stabilizer_iff, InvMemClass.coe_inv, mul_smul, inv_smul_eq_iff]
 
 Depends on / 依赖: H.toSubmonoid.smul_def, InvMemClass, InvMemClass.coe_inv, Subgroup, Subgroup.coe_mk, coe_inv, coe_mk, inv_smul_eq_iff, isBlock_iff_smul_eq_of_nonempty, mem_stabilizer_iff, mul_mem_cancel_left, mul_mem_cancel_right, mul_smul, smul_def, smul_orbit, toSubmonoid
 -/
@@ -1738,7 +1762,8 @@ theorem stabilizer_orbit_eq
     simp_rw [H.toSubmonoid.smul_def, ← mul_smul, ← mem_stabilizer_iff] at h
     exact (mul_mem_cancel_right b.2).mp (hH h)
   · intro hg
-    rw [mem_stabilizer_iff]; rw [← Subgroup.coe_mk H g hg]; rw [← Su
+    rw [mem_stabilizer_iff]; rw [← Subgroup.coe_mk H g hg]; rw [← Submonoid.smul_def (S := H.toSubmonoid)]
+    apply smul_orbit (G := H)
 
 中文:
 定理 stabilizer_orbit_eq
@@ -1751,7 +1776,8 @@ theorem stabilizer_orbit_eq
     simp_rw [H.toSubmonoid.smul_def, ← mul_smul, ← mem_stabilizer_iff] at h
     exact (mul_mem_cancel_right b.2).mp (hH h)
   · intro hg
-    rw [mem_stabilizer_iff]; rw [← Subgroup.coe_mk H g hg]; rw [← Su
+    rw [mem_stabilizer_iff]; rw [← Subgroup.coe_mk H g hg]; rw [← Submonoid.smul_def (S := H.toSubmonoid)]
+    apply smul_orbit (G := H)
 
 Depends on / 依赖: H.toSubmonoid, H.toSubmonoid.smul_def, Subgroup, Subgroup.coe_mk, Submonoid, Submonoid.smul_def, coe_mk, hg.symm, mem_orbit_self, mem_stabilizer_iff, mul_mem_cancel_right, mul_smul, simp_rw, smul_def, smul_orbit, toSubmonoid
 -/
@@ -1786,7 +1812,19 @@ definition block_stabilizerOrderIso
   left_inv := fun ⟨_, ha, hB⟩ =>
     (id (propext Subtype.mk_eq_mk)).mpr (hB.orbit_stabilizer_eq ha)
   right_inv := fun ⟨_, hH⟩ =>
-    (id (p
+    (id (propext Subtype.mk_eq_mk)).mpr (stabilizer_orbit_eq hH)
+  map_rel_iff' := by
+    rintro ⟨B, ha, hB⟩; rintro ⟨B', ha', hB'⟩
+    simp only [Equiv.coe_fn_mk, Subtype.mk_le_mk]
+    constructor
+    · rintro hBB' b hb
+      obtain ⟨k, rfl⟩ := htGX.exists_smul_eq a b
+      suffices k in stabilizer G B' by
+        exact this.symm ▸ (Set.smul_mem_smul_set ha')
+      exact hBB' (hB.smul_eq_of_mem ha hb)
+    · intro hBB' g hgB
+      apply hB'.smul_eq_of_mem ha'
+exact hBB' hgB.symm ▸ (Set.smul_mem_smul_set ha)
 
 中文:
 定义 block_stabilizerOrderIso
@@ -1797,7 +1835,19 @@ definition block_stabilizerOrderIso
   left_inv := fun ⟨_, ha, hB⟩ =>
     (id (propext Subtype.mk_eq_mk)).mpr (hB.orbit_stabilizer_eq ha)
   right_inv := fun ⟨_, hH⟩ =>
-    (id (p
+    (id (propext Subtype.mk_eq_mk)).mpr (stabilizer_orbit_eq hH)
+  map_rel_iff' := by
+    rintro ⟨B, ha, hB⟩; rintro ⟨B', ha', hB'⟩
+    simp only [Equiv.coe_fn_mk, Subtype.mk_le_mk]
+    constructor
+    · rintro hBB' b hb
+      obtain ⟨k, rfl⟩ := htGX.exists_smul_eq a b
+      suffices k in stabilizer G B' by
+        exact this.symm ▸ (Set.smul_mem_smul_set ha')
+      exact hBB' (hB.smul_eq_of_mem ha hb)
+    · intro hBB' g hgB
+      apply hB'.smul_eq_of_mem ha'
+exact hBB' hgB.symm ▸ (Set.smul_mem_smul_set ha)
 
 Depends on / 依赖: hB.stabilizer_le, stabilizer, stabilizer_le
 -/
@@ -2052,7 +2102,10 @@ theorem eq_univ_of_card_lt
   have key := hB.ncard_block_mul_ncard_orbit_eq hB_ne
   rw [← key]; rw [mul_lt_mul_iff_of_pos_left (by rwa [Set.ncard_pos])] at hB'
   interval_cases (orbit G B).ncard
-  · rw [mul_zero, eq_comm, Nat.card_eq_zero, or_iff_left hX.n
+  · rw [mul_zero, eq_comm, Nat.card_eq_zero, or_iff_left hX.not_infinite] at key
+    exact (IsEmpty.exists_iff.mp hB_ne).elim
+  · rw [mul_one, ← Set.ncard_univ] at key
+    rw [Set.eq_of_subset_of_ncard_le (Set.subset_univ B) key.ge]
 
 中文:
 定理 eq_univ_of_card_lt
@@ -2063,7 +2116,10 @@ theorem eq_univ_of_card_lt
   have key := hB.ncard_block_mul_ncard_orbit_eq hB_ne
   rw [← key]; rw [mul_lt_mul_iff_of_pos_left (by rwa [Set.ncard_pos])] at hB'
   interval_cases (orbit G B).ncard
-  · rw [mul_zero, eq_comm, Nat.card_eq_zero, or_iff_left hX.n
+  · rw [mul_zero, eq_comm, Nat.card_eq_zero, or_iff_left hX.not_infinite] at key
+    exact (IsEmpty.exists_iff.mp hB_ne).elim
+  · rw [mul_one, ← Set.ncard_univ] at key
+    rw [Set.eq_of_subset_of_ncard_le (Set.subset_univ B) key.ge]
 
 Depends on / 依赖: IsEmpty, IsEmpty.exists_iff.mp, Nat.card_eq_zero, Set.eq_empty_or_nonempty, Set.eq_of_subset_of_ncard_le, Set.ncard_pos, Set.ncard_univ, Set.subset_univ, card_eq_zero, eq_comm, eq_empty_or_nonempty, eq_of_subset_of_ncard_le, exists_iff, hB.ncard_block_mul_ncard_orbit_eq, hB_ne, hX.not_infinite, interval_cases, key.ge, mul_lt_mul_iff_of_pos_left, mul_one
 -/
@@ -2144,7 +2200,32 @@ theorem of_subset
     intro k hk
     exact Set.biInter_subset_of_mem hk
   have hfB' : B'.Finite := by
-    obtain ⟨b, hb : b in B⟩ :
+    obtain ⟨b, hb : b in B⟩ := hfB_ne
+    obtain ⟨k, hk : k • b = a⟩ := exists_smul_eq G b a
+    apply Set.Finite.subset (Set.Finite.map _ hfB) (hB'₀ k ⟨b, hb, hk⟩)
+  have hag : forall g : G, a in g • B' -> B' <= g • B' := by
+    intro g hg x hx
+    -- a = g • b; b ∈ B'; a ∈ k • B → b ∈ k • B
+    simp only [B', Set.mem_iInter, Set.mem_smul_set_iff_inv_smul_mem,
+      smul_smul, ← mul_inv_rev] at hg hx ⊢
+    exact fun _ => hx _ ∘ hg _
+  have hag' (g : G) (hg : a in g • B') : B' = g • B' := by
+    rw [eq_comm]; rw [← mem_stabilizer_iff]; rw [mem_stabilizer_set_iff_subset_smul_set hfB']
+    exact hag g hg
+  rw [isBlock_iff_smul_eq_of_nonempty]
+  rintro g ⟨b : X, hb' : b in g • B', hb : b in B'⟩
+  obtain ⟨k : G, hk : k • a = b⟩ := exists_smul_eq G a b
+  have hak : a in k⁻¹ • B' := by
+    refine ⟨b, hb, ?_⟩
+    simp only [← hk, inv_smul_smul]
+  have hagk : a in (k⁻¹ * g) • B' := by
+    rw [mul_smul]; rw [Set.mem_smul_set_iff_inv_smul_mem]; rw [inv_inv]; rw [hk]
+    exact hb'
+  have hkB' : B' = k⁻¹ • B' := hag' k⁻¹ hak
+  have hgkB' : B' = (k⁻¹ * g) • B' := hag' (k⁻¹ * g) hagk
+  rw [mul_smul] at hgkB'
+  rw [← smul_eq_iff_eq_inv_smul] at hkB' hgkB'
+  rw [← hgkB']; rw [hkB']
 
 中文:
 定理 of_subset
@@ -2157,7 +2238,32 @@ theorem of_subset
     intro k hk
     exact Set.biInter_subset_of_mem hk
   have hfB' : B'.Finite := by
-    obtain ⟨b, hb : b in B⟩ :
+    obtain ⟨b, hb : b in B⟩ := hfB_ne
+    obtain ⟨k, hk : k • b = a⟩ := exists_smul_eq G b a
+    apply Set.Finite.subset (Set.Finite.map _ hfB) (hB'₀ k ⟨b, hb, hk⟩)
+  have hag : forall g : G, a in g • B' -> B' <= g • B' := by
+    intro g hg x hx
+    -- a = g • b; b ∈ B'; a ∈ k • B → b ∈ k • B
+    simp only [B', Set.mem_iInter, Set.mem_smul_set_iff_inv_smul_mem,
+      smul_smul, ← mul_inv_rev] at hg hx ⊢
+    exact fun _ => hx _ ∘ hg _
+  have hag' (g : G) (hg : a in g • B') : B' = g • B' := by
+    rw [eq_comm]; rw [← mem_stabilizer_iff]; rw [mem_stabilizer_set_iff_subset_smul_set hfB']
+    exact hag g hg
+  rw [isBlock_iff_smul_eq_of_nonempty]
+  rintro g ⟨b : X, hb' : b in g • B', hb : b in B'⟩
+  obtain ⟨k : G, hk : k • a = b⟩ := exists_smul_eq G a b
+  have hak : a in k⁻¹ • B' := by
+    refine ⟨b, hb, ?_⟩
+    simp only [← hk, inv_smul_smul]
+  have hagk : a in (k⁻¹ * g) • B' := by
+    rw [mul_smul]; rw [Set.mem_smul_set_iff_inv_smul_mem]; rw [inv_inv]; rw [hk]
+    exact hb'
+  have hkB' : B' = k⁻¹ • B' := hag' k⁻¹ hak
+  have hgkB' : B' = (k⁻¹ * g) • B' := hag' (k⁻¹ * g) hagk
+  rw [mul_smul] at hgkB'
+  rw [← smul_eq_iff_eq_inv_smul] at hkB' hgkB'
+  rw [← hgkB']; rw [hkB']
 
 Depends on / 依赖: Finite, Set.Finite.map, Set.Finite.subset, Set.biInter_subset_of_mem, Set.eq_empty_or_nonempty, biInter_subset_of_mem, eq_empty_or_nonempty, exists_smul_eq, hfB_e, hfB_ne, subset
 -/

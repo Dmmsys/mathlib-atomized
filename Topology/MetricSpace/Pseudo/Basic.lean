@@ -41,7 +41,9 @@ theorem dist_le_Ico_sum_dist
   | succ n hle ihn =>
     calc
       dist (f m) (f (n + 1)) <= dist (f m) (f n) + dist (f n) (f (n + 1)) := dist_triangle _ _ _
-      _ <= (∑ i in Finset.Ico m n, _) + _ := add_le_add ihn le
+      _ <= (∑ i in Finset.Ico m n, _) + _ := add_le_add ihn le_rfl
+      _ = ∑ i in Finset.Ico m (n + 1), _ := by
+        rw [← Finset.insert_Ico_right_eq_Ico_add_one hle]; rw [Finset.sum_insert]; rw [add_comm]; simp
 
 中文:
 定理 dist_le_Ico_sum_dist
@@ -52,7 +54,9 @@ theorem dist_le_Ico_sum_dist
   | succ n hle ihn =>
     calc
       dist (f m) (f (n + 1)) <= dist (f m) (f n) + dist (f n) (f (n + 1)) := dist_triangle _ _ _
-      _ <= (∑ i in Finset.Ico m n, _) + _ := add_le_add ihn le
+      _ <= (∑ i in Finset.Ico m n, _) + _ := add_le_add ihn le_rfl
+      _ = ∑ i in Finset.Ico m (n + 1), _ := by
+        rw [← Finset.insert_Ico_right_eq_Ico_add_one hle]; rw [Finset.sum_insert]; rw [add_comm]; simp
 
 Depends on / 依赖: Finset, Finset.Ico, Finset.Ico_self, Finset.insert_Ico_right_eq_Ico_add_one, Finset.sum_empty, Finset.sum_insert, Ico_self, Nat.le_induction, add_comm, add_le_add, dist_self, dist_triangle, insert_Ico_right_eq_Ico_add_one, le_induction, le_rfl, sum_empty, sum_insert
 -/
@@ -226,7 +230,11 @@ theorem totallyBounded_of_finite_discretization
   refine totallyBounded_iff.2 fun ε ε0 => ?_
   rcases H ε ε0 with ⟨β, fβ, F, hF⟩
   let Finv := Function.invFun F
-  refine ⟨range (Subtype.val ∘ Fi
+  refine ⟨range (Subtype.val ∘ Finv), finite_range _, fun x xs => ?_⟩
+  let x' := Finv (F ⟨x, xs⟩)
+  have : F x' = F ⟨x, xs⟩ := Function.invFun_eq ⟨⟨x, xs⟩, rfl⟩
+  simp only [Set.mem_iUnion, Set.mem_range]
+  exact ⟨_, ⟨F ⟨x, xs⟩, rfl⟩, hF _ _ this.symm⟩
 
 中文:
 定理 totallyBounded_of_finite_discretization
@@ -240,7 +248,11 @@ theorem totallyBounded_of_finite_discretization
   refine totallyBounded_iff.2 fun ε ε0 => ?_
   rcases H ε ε0 with ⟨β, fβ, F, hF⟩
   let Finv := Function.invFun F
-  refine ⟨range (Subtype.val ∘ Fi
+  refine ⟨range (Subtype.val ∘ Finv), finite_range _, fun x xs => ?_⟩
+  let x' := Finv (F ⟨x, xs⟩)
+  have : F x' = F ⟨x, xs⟩ := Function.invFun_eq ⟨⟨x, xs⟩, rfl⟩
+  simp only [Set.mem_iUnion, Set.mem_range]
+  exact ⟨_, ⟨F ⟨x, xs⟩, rfl⟩, hF _ _ this.symm⟩
 
 Depends on / 依赖: Function, Function.invFun, Function.invFun_eq, Inhabited, Set.mem_iUnion, Set.mem_range, Subtype, Subtype.val, eq_empty_or_nonempty, finite_range, invFun, invFun_eq, mem_iUnion, mem_range, s.eq_empty_or_nonempty, this.symm, totallyBounded_empty, totallyBounded_iff
 -/
@@ -603,7 +615,10 @@ lemma IsInducing.isSeparable_preimage
   have := pseudoMetrizableSpaceUniformity_countably_generated
   have : SeparableSpace s := hs.separableSpace
   have : SecondCountableTopology s := UniformSpace.secondCountable_of_separable _
-  have : IsInducing ((mapsTo_
+  have : IsInducing ((mapsTo_preimage f s).restrict _ _ _) :=
+    (hf.comp IsInducing.subtypeVal).codRestrict _
+  have := this.secondCountableTopology
+  exact .of_subtype _
 
 中文:
 引理 是Inducing.isSeparable_preimage
@@ -613,7 +628,10 @@ lemma IsInducing.isSeparable_preimage
   have := pseudoMetrizableSpaceUniformity_countably_generated
   have : SeparableSpace s := hs.separableSpace
   have : SecondCountableTopology s := UniformSpace.secondCountable_of_separable _
-  have : IsInducing ((mapsTo_
+  have : IsInducing ((mapsTo_preimage f s).restrict _ _ _) :=
+    (hf.comp IsInducing.subtypeVal).codRestrict _
+  have := this.secondCountableTopology
+  exact .of_subtype _
 -/
 protected lemma IsInducing.isSeparable_preimage {α : Type*} [TopologicalSpace α]
     [PseudoMetrizableSpace α] {f : β -> α} [TopologicalSpace β]
@@ -752,7 +770,7 @@ lemma exists_finite_cover_balls_of_isCompact_closure
   obtain ⟨t, hst⟩ := hs.elim_finite_subcover (fun x : s => ball x ε) (fun _ => isOpen_ball) fun x hx =>
     let ⟨y, hy, hxy⟩ := Metric.mem_closure_iff.1 hx _ hε; mem_iUnion.2 ⟨⟨y, hy⟩, hxy⟩
   refine ⟨t.map ⟨Subtype.val, Subtype.val_injective⟩, by simp, Finset.finite_toSet _, ?_⟩
-  simpa using sub
+  simpa using subset_closure.trans hst
 
 中文:
 引理 存在_finite_cover_balls_of_isCompact_closure
@@ -761,7 +779,7 @@ lemma exists_finite_cover_balls_of_isCompact_closure
   obtain ⟨t, hst⟩ := hs.elim_finite_subcover (fun x : s => ball x ε) (fun _ => isOpen_ball) fun x hx =>
     let ⟨y, hy, hxy⟩ := Metric.mem_closure_iff.1 hx _ hε; mem_iUnion.2 ⟨⟨y, hy⟩, hxy⟩
   refine ⟨t.map ⟨Subtype.val, Subtype.val_injective⟩, by simp, Finset.finite_toSet _, ?_⟩
-  simpa using sub
+  simpa using subset_closure.trans hst
 
 Depends on / 依赖: Finset, Finset.finite_toSet, Metric, Metric.mem_closure_iff, Subtype, Subtype.val, Subtype.val_injective, elim_finite_subcover, finite_toSet, hs.elim_finite_subcover, isOpen_ball, mem_closure_iff, mem_iUnion, subset_closure, subset_closure.trans, t.map, val_injective
 -/

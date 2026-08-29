@@ -46,7 +46,8 @@ instance :
   choose f hf using fun c => Archimedean.exists_orderAddMonoidHom_real_injective (strata.stratum c)
   refine ⟨strata, fun c => (f c).toRatLinearMap, fun c => ?_⟩
   apply Monotone.strictMono_of_injective
-  · simp
+  · simpa using OrderHomClass.monotone (f c)
+  · simpa using hf c
 
 中文:
 实例 :
@@ -56,7 +57,8 @@ instance :
   choose f hf using fun c => Archimedean.exists_orderAddMonoidHom_real_injective (strata.stratum c)
   refine ⟨strata, fun c => (f c).toRatLinearMap, fun c => ?_⟩
   apply Monotone.strictMono_of_injective
-  · simp
+  · simpa using OrderHomClass.monotone (f c)
+  · simpa using hf c
 
 Depends on / 依赖: Archimedean, Archimedean.exists_orderAddMonoidHom_real_injective, ArchimedeanStrata, HahnEmbedding, HahnEmbedding.ArchimedeanStrata, Monotone, Monotone.strictMono_of_injective, Nonempty, OrderHomClass, OrderHomClass.monotone, exists_orderAddMonoidHom_real_injective, monotone, strata, strata.stratum, stratum, strictMono_of_injective, toRatLinearMap
 -/
@@ -105,7 +107,36 @@ theorem hahnEmbedding_isOrderedAddMonoid
   `f₁` ↓+o ↓o~
       `D-Hull M` `ArchimedeanClass (D-Hull M)`
   `f₂` ↓+o ↓o~
-      `Lex ℝ⟦F-A-Class (D-Hull M)⟧` `WithTop (F-A-Clas
+      `Lex ℝ⟦F-A-Class (D-Hull M)⟧` `WithTop (F-A-Class (D-Hull M))`
+  `f₃` ↓+o(~) ↓o~
+      `Lex ℝ⟦F-A-Class M⟧` `WithTop (F-A-Class M)`
+  -/
+  let f₁ := DivisibleHull.coeOrderAddMonoidHom M
+  have hf₁ : Function.Injective f₁ := DivisibleHull.coe_injective
+  have hf₁class (a : M) : mk a = (DivisibleHull.archimedeanClassOrderIso M).symm (mk (f₁ a)) := by
+    simp [f₁]
+  obtain ⟨f₂', hf₂', hf₂class'⟩ := hahnEmbedding_isOrderedModule_rat (DivisibleHull M)
+  let f₂ := OrderAddMonoidHom.mk f₂'.toAddMonoidHom hf₂'.monotone
+  have hf₂ : Function.Injective f₂ := hf₂'.injective
+  have hf₂class (a : DivisibleHull M) :
+      mk a = (FiniteArchimedeanClass.withTopOrderIso (DivisibleHull M)) (ofLex (f₂ a)).orderTop :=
+    hf₂class' a
+  let f₃ : Lex Real⟦FiniteArchimedeanClass (DivisibleHull M)⟧ ->+o Lex Real⟦FiniteArchimedeanClass M⟧ :=
+    HahnSeries.embDomainOrderAddMonoidHom
+    (FiniteArchimedeanClass.congrOrderIso (DivisibleHull.archimedeanClassOrderIso M).symm)
+  have hf₃ : Function.Injective f₃ := HahnSeries.embDomainOrderAddMonoidHom_injective _
+  have hf₃class (a : Lex Real⟦FiniteArchimedeanClass (DivisibleHull M)⟧) :
+      (ofLex a).orderTop = OrderIso.withTopCongr
+      ((FiniteArchimedeanClass.congrOrderIso (DivisibleHull.archimedeanClassOrderIso M)))
+      (ofLex (f₃ a)).orderTop := by
+    rw [← OrderIso.symm_apply_eq]
+    simp [f₃, ← OrderIso.withTopCongr_symm]
+  refine ⟨f₃.comp (f₂.comp f₁), hf₃.comp (hf₂.comp hf₁), ?_⟩
+  intro a
+  simp_rw [hf₁class, hf₂class, hf₃class, OrderAddMonoidHom.comp_apply]
+  cases (ofLex (f₃ (f₂ (f₁ a)))).orderTop with
+  | top => simp
+  | coe x => simp [-DivisibleHull.archimedeanClassOrderIso_apply]
 
 中文:
 定理 hahnEmbedding_isOrderedAddMonoid
@@ -119,7 +150,36 @@ theorem hahnEmbedding_isOrderedAddMonoid
   `f₁` ↓+o ↓o~
       `D-Hull M` `ArchimedeanClass (D-Hull M)`
   `f₂` ↓+o ↓o~
-      `Lex ℝ⟦F-A-Class (D-Hull M)⟧` `WithTop (F-A-Clas
+      `Lex ℝ⟦F-A-Class (D-Hull M)⟧` `WithTop (F-A-Class (D-Hull M))`
+  `f₃` ↓+o(~) ↓o~
+      `Lex ℝ⟦F-A-Class M⟧` `WithTop (F-A-Class M)`
+  -/
+  let f₁ := DivisibleHull.coeOrderAddMonoidHom M
+  have hf₁ : Function.Injective f₁ := DivisibleHull.coe_injective
+  have hf₁class (a : M) : mk a = (DivisibleHull.archimedeanClassOrderIso M).symm (mk (f₁ a)) := by
+    simp [f₁]
+  obtain ⟨f₂', hf₂', hf₂class'⟩ := hahnEmbedding_isOrderedModule_rat (DivisibleHull M)
+  let f₂ := OrderAddMonoidHom.mk f₂'.toAddMonoidHom hf₂'.monotone
+  have hf₂ : Function.Injective f₂ := hf₂'.injective
+  have hf₂class (a : DivisibleHull M) :
+      mk a = (FiniteArchimedeanClass.withTopOrderIso (DivisibleHull M)) (ofLex (f₂ a)).orderTop :=
+    hf₂class' a
+  let f₃ : Lex Real⟦FiniteArchimedeanClass (DivisibleHull M)⟧ ->+o Lex Real⟦FiniteArchimedeanClass M⟧ :=
+    HahnSeries.embDomainOrderAddMonoidHom
+    (FiniteArchimedeanClass.congrOrderIso (DivisibleHull.archimedeanClassOrderIso M).symm)
+  have hf₃ : Function.Injective f₃ := HahnSeries.embDomainOrderAddMonoidHom_injective _
+  have hf₃class (a : Lex Real⟦FiniteArchimedeanClass (DivisibleHull M)⟧) :
+      (ofLex a).orderTop = OrderIso.withTopCongr
+      ((FiniteArchimedeanClass.congrOrderIso (DivisibleHull.archimedeanClassOrderIso M)))
+      (ofLex (f₃ a)).orderTop := by
+    rw [← OrderIso.symm_apply_eq]
+    simp [f₃, ← OrderIso.withTopCongr_symm]
+  refine ⟨f₃.comp (f₂.comp f₁), hf₃.comp (hf₂.comp hf₁), ?_⟩
+  intro a
+  simp_rw [hf₁class, hf₂class, hf₃class, OrderAddMonoidHom.comp_apply]
+  cases (ofLex (f₃ (f₂ (f₁ a)))).orderTop with
+  | top => simp
+  | coe x => simp [-DivisibleHull.archimedeanClassOrderIso_apply]
 -/
 theorem hahnEmbedding_isOrderedAddMonoid :
     exists f : M ->+o Lex Real⟦FiniteArchimedeanClass M⟧, Function.Injective f ∧

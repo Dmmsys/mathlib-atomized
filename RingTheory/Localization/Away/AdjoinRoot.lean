@@ -33,7 +33,7 @@ definition Localization.awayEquivAdjoin
         IsLocalization.Away.lift_eq r (.of_mul_eq_one _ <| root_isInv r) }
     (liftAlgHom _ (Algebra.ofId _ _) (IsLocalization.Away.invSelf r) <| show aeval _ _ = _ by simp)
     (Subsingleton.elim _ _)
-    (Subsingleton.elim (h := IsLoc
+    (Subsingleton.elim (h := IsLocalization.algHom_subsingleton (Submonoid.powers r)) _ _)
 
 中文:
 定义 Localization.awayEquivAdjoin
@@ -44,7 +44,7 @@ definition Localization.awayEquivAdjoin
         IsLocalization.Away.lift_eq r (.of_mul_eq_one _ <| root_isInv r) }
     (liftAlgHom _ (Algebra.ofId _ _) (IsLocalization.Away.invSelf r) <| show aeval _ _ = _ by simp)
     (Subsingleton.elim _ _)
-    (Subsingleton.elim (h := IsLoc
+    (Subsingleton.elim (h := IsLocalization.algHom_subsingleton (Submonoid.powers r)) _ _)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, Algebra, Algebra.ofId, IsLocalization, IsLocalization.Away.invSelf, IsLocalization.Away.lift_eq, IsLocalization.algHom_subsingleton, Submonoid, Submonoid.powers, Subsingleton, Subsingleton.elim, algHom_subsingleton, awayLift, commutes, invSelf, liftAlgHom, lift_eq, ofAlgHom, of_mul_eq_one
 -/

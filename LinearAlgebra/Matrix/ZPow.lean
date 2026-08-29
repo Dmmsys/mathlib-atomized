@@ -125,7 +125,12 @@ theorem pow_inv_comm'
     rcases nonsing_inv_cancel_or_zero A with ⟨h, h'⟩ | h
     · calc
         A⁻¹ ^ (m + 1) * A ^ (n + 1) = A⁻¹ ^ m * (A⁻¹ * A) * A ^ n := by
-          simp only [pow_succ A⁻¹, pow_succ' A, Matrix
+          simp only [pow_succ A⁻¹, pow_succ' A, Matrix.mul_assoc]
+        _ = A ^ n * A⁻¹ ^ m := by simp only [h, Matrix.mul_one, IH m]
+        _ = A ^ n * (A * A⁻¹) * A⁻¹ ^ m := by simp only [h', Matrix.mul_one]
+        _ = A ^ (n + 1) * A⁻¹ ^ (m + 1) := by
+          simp only [pow_succ A, pow_succ' A⁻¹, Matrix.mul_assoc]
+    · simp [h]
 
 中文:
 定理 pow_inv_comm'
@@ -140,7 +145,12 @@ theorem pow_inv_comm'
     rcases nonsing_inv_cancel_or_zero A with ⟨h, h'⟩ | h
     · calc
         A⁻¹ ^ (m + 1) * A ^ (n + 1) = A⁻¹ ^ m * (A⁻¹ * A) * A ^ n := by
-          simp only [pow_succ A⁻¹, pow_succ' A, Matrix
+          simp only [pow_succ A⁻¹, pow_succ' A, Matrix.mul_assoc]
+        _ = A ^ n * A⁻¹ ^ m := by simp only [h, Matrix.mul_one, IH m]
+        _ = A ^ n * (A * A⁻¹) * A⁻¹ ^ m := by simp only [h', Matrix.mul_one]
+        _ = A ^ (n + 1) * A⁻¹ ^ (m + 1) := by
+          simp only [pow_succ A, pow_succ' A⁻¹, Matrix.mul_assoc]
+    · simp [h]
 
 Depends on / 依赖: Matrix, Matrix.mul_assoc, Matrix.mul_one, generalizing, mul_assoc, mul_one, nonsing_inv_cancel_or_zero, pow_succ
 -/
@@ -342,7 +352,8 @@ theorem isUnit_det_zpow_iff
     rw [← Int.natCast_succ]; rw [zpow_natCast]; rw [det_pow]; rw [isUnit_pow_succ_iff]; rw [← Int.ofNat_zero]; rw [Int.ofNat_inj]
     simp
   | pred z =>
-    rw [← neg_add']; rw [← Int.natCast_succ]; rw [zpow_neg_natCast]; rw [isUnit_nonsing_inv_de
+    rw [← neg_add']; rw [← Int.natCast_succ]; rw [zpow_neg_natCast]; rw [isUnit_nonsing_inv_det_iff]; rw [det_pow]; rw [isUnit_pow_succ_iff]; rw [neg_eq_zero]; rw [← Int.ofNat_zero]; rw [Int.ofNat_inj]
+    simp
 
 中文:
 定理 isUnit_det_zpow_iff
@@ -355,7 +366,8 @@ theorem isUnit_det_zpow_iff
     rw [← Int.natCast_succ]; rw [zpow_natCast]; rw [det_pow]; rw [isUnit_pow_succ_iff]; rw [← Int.ofNat_zero]; rw [Int.ofNat_inj]
     simp
   | pred z =>
-    rw [← neg_add']; rw [← Int.natCast_succ]; rw [zpow_neg_natCast]; rw [isUnit_nonsing_inv_de
+    rw [← neg_add']; rw [← Int.natCast_succ]; rw [zpow_neg_natCast]; rw [isUnit_nonsing_inv_det_iff]; rw [det_pow]; rw [isUnit_pow_succ_iff]; rw [neg_eq_zero]; rw [← Int.ofNat_zero]; rw [Int.ofNat_inj]
+    simp
 
 Depends on / 依赖: Int.natCast_succ, Int.ofNat_inj, Int.ofNat_zero, det_pow, isUnit_nonsing_inv_det_iff, isUnit_pow_succ_iff, natCast_succ, neg_add, neg_eq_zero, ofNat_inj, ofNat_zero, zpow_natCast, zpow_neg_natCast
 -/
@@ -423,7 +435,7 @@ theorem zpow_add_one
       _ = (A * A ^ n)⁻¹ * A := by
         rw [mul_inv_rev]; rw [Matrix.mul_assoc]; rw [nonsing_inv_mul _ h]; rw [Matrix.mul_one]
       _ = A ^ (-(n + 1 : Int)) * A := by
-        rw [zpow_neg h]; rw [← Int.natCast_
+        rw [zpow_neg h]; rw [← Int.natCast_succ]; rw [zpow_natCast]; rw [pow_succ']
 
 中文:
 定理 zpow_add_one
@@ -434,7 +446,7 @@ theorem zpow_add_one
       _ = (A * A ^ n)⁻¹ * A := by
         rw [mul_inv_rev]; rw [Matrix.mul_assoc]; rw [nonsing_inv_mul _ h]; rw [Matrix.mul_one]
       _ = A ^ (-(n + 1 : Int)) * A := by
-        rw [zpow_neg h]; rw [← Int.natCast_
+        rw [zpow_neg h]; rw [← Int.natCast_succ]; rw [zpow_natCast]; rw [pow_succ']
 
 Depends on / 依赖: Int.natCast_succ, Matrix, Matrix.mul_assoc, Matrix.mul_one, mul_assoc, mul_inv_rev, mul_one, natCast_succ, neg_add, neg_add_cancel_right, nonsing_inv_mul, pow_succ, zpow_natCast, zpow_neg
 -/
@@ -604,7 +616,9 @@ theorem SemiconjBy.zpow_right
       rw [det_pow]
       exact hy.pow n.succ
     rw [zpow_negSucc]; rw [zpow_negSucc]; rw [nonsing_inv_apply _ hx']; rw [nonsing_inv_apply _ hy']; rw [SemiconjBy]
-    refine (isRegular_of_isLeftRegular_det h
+    refine (isRegular_of_isLeftRegular_det hy'.isRegular.left).left ?_
+    dsimp only
+    rw [← mul_assoc]; rw [← (h.pow_right n.succ).eq]; rw [mul_assoc]; rw [Matrix.mul_smul]; rw [mul_adjugate]; rw [← Matrix.mul_assoc]; rw [Matrix.mul_smul (Y ^ _) (↑hy'.unit⁻¹ : R)]; rw [mul_adjugate]; rw [smul_smul]; rw [smul_smul]; rw [hx'.val_inv_mul]; rw [hy'.val_inv_mul]; rw [one_smul]; rw [Matrix.mul_one]; rw [Matrix.one_mul]
 
 中文:
 定理 SemiconjBy.zpow_right
@@ -616,7 +630,9 @@ theorem SemiconjBy.zpow_right
       rw [det_pow]
       exact hy.pow n.succ
     rw [zpow_negSucc]; rw [zpow_negSucc]; rw [nonsing_inv_apply _ hx']; rw [nonsing_inv_apply _ hy']; rw [SemiconjBy]
-    refine (isRegular_of_isLeftRegular_det h
+    refine (isRegular_of_isLeftRegular_det hy'.isRegular.left).left ?_
+    dsimp only
+    rw [← mul_assoc]; rw [← (h.pow_right n.succ).eq]; rw [mul_assoc]; rw [Matrix.mul_smul]; rw [mul_adjugate]; rw [← Matrix.mul_assoc]; rw [Matrix.mul_smul (Y ^ _) (↑hy'.unit⁻¹ : R)]; rw [mul_adjugate]; rw [smul_smul]; rw [smul_smul]; rw [hx'.val_inv_mul]; rw [hy'.val_inv_mul]; rw [one_smul]; rw [Matrix.mul_one]; rw [Matrix.one_mul]
 
 Depends on / 依赖: IsUnit, Matrix, Matrix.mul_assoc, Matrix.mul_smul, SemiconjBy, det_pow, h.pow_right, hx.pow, hy.pow, isRegular, isRegular.left, isRegular_of_isLeftRegular_det, mul_adjugate, mul_assoc, mul_smul, n.succ, nonsing_inv_apply, pow_right, zpow_negSucc
 -/

@@ -192,7 +192,7 @@ instance :
     apply Subtype.val_inj.mp
     change map _ Q.1 = map _ (map _ Q.1)
     rw [map_mul]
-    exact (Q.1.map_map
+    exact (Q.1.map_map ((galRestrict A K L B) τ).toRingHom ((galRestrict A K L B) σ).toRingHom).symm
 
 中文:
 实例 :
@@ -206,7 +206,7 @@ instance :
     apply Subtype.val_inj.mp
     change map _ Q.1 = map _ (map _ Q.1)
     rw [map_mul]
-    exact (Q.1.map_map
+    exact (Q.1.map_map ((galRestrict A K L B) τ).toRingHom ((galRestrict A K L B) σ).toRingHom).symm
 
 Depends on / 依赖: galRestrict, hf_indep, hf_indep.indepFun_mul_left, hf_meas, hij.symm, hik.symm, indepFun_mul_left, primesOver, primesOver.mk
 -/
@@ -550,7 +550,10 @@ theorem ramificationIdxIn_mul_ramificationIdxIn
   proof: by
   obtain ⟨⟨Q, _, hQ⟩⟩ := (inferInstance : Nonempty (primesOver P C))
   have : Q.LiesOver p := LiesOver.trans Q P p
-  rw [ramificationIdxIn_eq_ramificationIdx p P G]; rw [ramificationIdxIn_eq_ramificationIdx p Q GAC]; rw [ramificationIdxIn_eq_ramificationIdx P Q GBC]; rw [← ramificationIdx_tower P
+  rw [ramificationIdxIn_eq_ramificationIdx p P G]; rw [ramificationIdxIn_eq_ramificationIdx p Q GAC]; rw [ramificationIdxIn_eq_ramificationIdx P Q GBC]; rw [← ramificationIdx_tower P Q]
+
+@[deprecated (since := "2026-06-18")] alias ramificationIdxIn_mul_ramificationIdxIn' :=
+  ramificationIdxIn_mul_ramificationIdxIn
 
 中文:
 定理 ramificationIdxIn_mul_ramificationIdxIn
@@ -558,7 +561,10 @@ theorem ramificationIdxIn_mul_ramificationIdxIn
   证明: by
   obtain ⟨⟨Q, _, hQ⟩⟩ := (inferInstance : Nonempty (primesOver P C))
   have : Q.LiesOver p := LiesOver.trans Q P p
-  rw [ramificationIdxIn_eq_ramificationIdx p P G]; rw [ramificationIdxIn_eq_ramificationIdx p Q GAC]; rw [ramificationIdxIn_eq_ramificationIdx P Q GBC]; rw [← ramificationIdx_tower P
+  rw [ramificationIdxIn_eq_ramificationIdx p P G]; rw [ramificationIdxIn_eq_ramificationIdx p Q GAC]; rw [ramificationIdxIn_eq_ramificationIdx P Q GBC]; rw [← ramificationIdx_tower P Q]
+
+@[deprecated (since := "2026-06-18")] alias ramificationIdxIn_mul_ramificationIdxIn' :=
+  ramificationIdxIn_mul_ramificationIdxIn
 
 Depends on / 依赖: Finset, Finset.notMem_range_self, LiesOver, LiesOver.trans, Nonempty, Q.LiesOver, hf_Indep, hf_Indep.indepFun_finsetProd_of_notMem, hf_meas, indepFun_finsetProd_of_notMem, notMem_range_self, primesOver, ramificationIdxIn_eq_ramificationIdx, ramificationIdx_tower
 -/
@@ -591,7 +597,7 @@ theorem ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn
   rw [← smul_eq_mul]; rw [← Set.fintypeCard_eq_ncard]; rw [← Finset.card_univ]; rw [← Finset.sum_const]; rw [← sum_ramification_inertia_eq_card p B]
   apply Finset.sum_congr rfl
   intro P hp
-  rw [ramificationIdxIn_eq_
+  rw [ramificationIdxIn_eq_ramificationIdx p P G]; rw [inertiaDegIn_eq_inertiaDeg p P G]
 
 中文:
 定理 ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn
@@ -600,7 +606,7 @@ theorem ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn
   rw [← smul_eq_mul]; rw [← Set.fintypeCard_eq_ncard]; rw [← Finset.card_univ]; rw [← Finset.sum_const]; rw [← sum_ramification_inertia_eq_card p B]
   apply Finset.sum_congr rfl
   intro P hp
-  rw [ramificationIdxIn_eq_
+  rw [ramificationIdxIn_eq_ramificationIdx p P G]; rw [inertiaDegIn_eq_inertiaDeg p P G]
 
 Depends on / 依赖: Finset, Finset.card_univ, Finset.notMem_range_self, Finset.sum_congr, Finset.sum_const, Fintype, QuasiFinite, QuasiFinite.finite_primesOver, Set.fintypeCard_eq_ncard, card_univ, finite_primesOver, fintype, fintypeCard_eq_ncard, hf_Indep, hf_Indep.indepFun_finsetProd_of_notMem, hf_meas, inertiaDegIn_eq_inertiaDeg, notMem_range_self, primesOver, ramificationIdxIn_eq_ramificationIdx
 -/
@@ -636,7 +642,25 @@ theorem ncard_primesOver_mul_ncard_primesOver
   let f := restrictHom GAC G A B C
   let H := (stabilizer G P).comap f
   have key (Q Q' : Ideal C) [Q.LiesOver P] [Q'.LiesOver P] g (hg : g • Q = Q') : g in H := by
-
+    simpa [← restrictHom_smul_under GAC G A, ← over_def _ P, H] using congr_arg (under B) hg
+  obtain ⟨Q, _, _⟩ := (inferInstance : Nonempty (P.primesOver C))
+  have : Q.LiesOver p := .trans Q P p
+  have orbit_eq : orbit H Q = P.primesOver C := by
+    ext Q'
+    constructor
+    · rintro ⟨g, rfl : g • Q = Q'⟩
+      refine ⟨inferInstance, ?_⟩
+      rw [liesOver_iff]; rw [H.smul_def]; rw [← restrictHom_smul_under GAC G A B C]; rw [← Q.over_def P]
+      exact g.2.symm
+    · rintro ⟨_, _⟩
+      have : Q'.LiesOver p := .trans Q' P p
+      obtain ⟨g, hg⟩ :=
+        IsInvariant.exists_smul_of_under_eq A C GAC Q Q' ((Q.over_def p).symm.trans (Q'.over_def p))
+      exact ⟨⟨g, key Q Q' g hg.symm⟩, by simpa [Subgroup.smul_def] using hg.symm⟩
+  have stabilizer_eq : stabilizer H Q = (stabilizer GAC Q).subgroupOf H := by
+    simp [Subgroup.ext_iff, Subgroup.mem_subgroupOf]
+  rw [← IsInvariant.orbit_eq_primesOver A B G p P]; rw [← index_stabilizer]; rw [← orbit_eq]; rw [← index_stabilizer]; rw [stabilizer_eq]; rw [← Subgroup.relIndex]; rw [← IsInvariant.orbit_eq_primesOver A C GAC p Q]; rw [← index_stabilizer]; rw [← (stabilizer G P).index_comap_of_surjective (restrictHom_surjective GAC G A B C)]; rw [mul_comm]; rw [Subgroup.relIndex_mul_index]
+  exact key Q Q
 
 中文:
 定理 ncard_primesOver_mul_ncard_primesOver
@@ -646,7 +670,25 @@ theorem ncard_primesOver_mul_ncard_primesOver
   let f := restrictHom GAC G A B C
   let H := (stabilizer G P).comap f
   have key (Q Q' : Ideal C) [Q.LiesOver P] [Q'.LiesOver P] g (hg : g • Q = Q') : g in H := by
-
+    simpa [← restrictHom_smul_under GAC G A, ← over_def _ P, H] using congr_arg (under B) hg
+  obtain ⟨Q, _, _⟩ := (inferInstance : Nonempty (P.primesOver C))
+  have : Q.LiesOver p := .trans Q P p
+  have orbit_eq : orbit H Q = P.primesOver C := by
+    ext Q'
+    constructor
+    · rintro ⟨g, rfl : g • Q = Q'⟩
+      refine ⟨inferInstance, ?_⟩
+      rw [liesOver_iff]; rw [H.smul_def]; rw [← restrictHom_smul_under GAC G A B C]; rw [← Q.over_def P]
+      exact g.2.symm
+    · rintro ⟨_, _⟩
+      have : Q'.LiesOver p := .trans Q' P p
+      obtain ⟨g, hg⟩ :=
+        IsInvariant.exists_smul_of_under_eq A C GAC Q Q' ((Q.over_def p).symm.trans (Q'.over_def p))
+      exact ⟨⟨g, key Q Q' g hg.symm⟩, by simpa [Subgroup.smul_def] using hg.symm⟩
+  have stabilizer_eq : stabilizer H Q = (stabilizer GAC Q).subgroupOf H := by
+    simp [Subgroup.ext_iff, Subgroup.mem_subgroupOf]
+  rw [← IsInvariant.orbit_eq_primesOver A B G p P]; rw [← index_stabilizer]; rw [← orbit_eq]; rw [← index_stabilizer]; rw [stabilizer_eq]; rw [← Subgroup.relIndex]; rw [← IsInvariant.orbit_eq_primesOver A C GAC p Q]; rw [← index_stabilizer]; rw [← (stabilizer G P).index_comap_of_surjective (restrictHom_surjective GAC G A B C)]; rw [mul_comm]; rw [Subgroup.relIndex_mul_index]
+  exact key Q Q
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral, Algebra.IsIntegral.tower_top, IsIntegral, LiesOver, MeasurableSet, MeasurableSet.empty, MeasurableSet.ite, MeasurableSet.union, Nonempty, P.primesOver, Q.LiesOver, Set.indicator_const_preimage_eq_union, Set.mem_singleton, classical, congr_arg, generateFrom, hsi.compl, iIndepFun_iff_measure_inter_preimage_eq_mul, indicator_const_preimage_eq_union
 -/
@@ -701,7 +743,16 @@ theorem card_stabilizer_eq_card_inertia_mul_finrank
       (algebraMap p.ResidueField P.ResidueField).comp (algebraMap (R ⧸ p) p.ResidueField) := by
     ext
     simp [← IsScalarTower.algebraMap_apply]
-  let := ((a
+  let := ((algebraMap (S ⧸ P) P.ResidueField).comp (algebraMap (R ⧸ p) (S ⧸ P))).toAlgebra
+  have : IsScalarTower (R ⧸ p) (S ⧸ P) P.ResidueField := .of_algebraMap_eq' rfl
+  have : IsScalarTower (R ⧸ p) p.ResidueField P.ResidueField := .of_algebraMap_eq' heq
+  have : IsGalois p.ResidueField P.ResidueField :=
+    { __ := Ideal.IsFractionRing.normal G p P p.ResidueField P.ResidueField }
+  have : Module.Finite p.ResidueField P.ResidueField :=
+    Ideal.IsFractionRing.finite_of_isInvariant G p P p.ResidueField P.ResidueField
+  have : Subgroup.index _ = _ := Nat.card_congr
+    (IsFractionRing.stabilizerQuotientInertiaEquiv G p P p.ResidueField P.ResidueField).toEquiv
+  rw [inertiaDeg_eq p P]; rw [← IsGalois.card_aut_eq_finrank p.ResidueField P.ResidueField]; rw [← this]; rw [← ((inertia G P).subgroupOf (MulAction.stabilizer G P)).card_mul_index]; rw [Nat.card_congr (Subgroup.subgroupOfEquivOfLe (inertia_le_stabilizer (M := G) P)).toEquiv]; rw [AddSubgroup.subgroupOf_inertia]
 
 中文:
 定理 card_stabilizer_eq_card_inertia_mul_finrank
@@ -712,7 +763,16 @@ theorem card_stabilizer_eq_card_inertia_mul_finrank
       (algebraMap p.ResidueField P.ResidueField).comp (algebraMap (R ⧸ p) p.ResidueField) := by
     ext
     simp [← IsScalarTower.algebraMap_apply]
-  let := ((a
+  let := ((algebraMap (S ⧸ P) P.ResidueField).comp (algebraMap (R ⧸ p) (S ⧸ P))).toAlgebra
+  have : IsScalarTower (R ⧸ p) (S ⧸ P) P.ResidueField := .of_algebraMap_eq' rfl
+  have : IsScalarTower (R ⧸ p) p.ResidueField P.ResidueField := .of_algebraMap_eq' heq
+  have : IsGalois p.ResidueField P.ResidueField :=
+    { __ := Ideal.IsFractionRing.normal G p P p.ResidueField P.ResidueField }
+  have : Module.Finite p.ResidueField P.ResidueField :=
+    Ideal.IsFractionRing.finite_of_isInvariant G p P p.ResidueField P.ResidueField
+  have : Subgroup.index _ = _ := Nat.card_congr
+    (IsFractionRing.stabilizerQuotientInertiaEquiv G p P p.ResidueField P.ResidueField).toEquiv
+  rw [inertiaDeg_eq p P]; rw [← IsGalois.card_aut_eq_finrank p.ResidueField P.ResidueField]; rw [← this]; rw [← ((inertia G P).subgroupOf (MulAction.stabilizer G P)).card_mul_index]; rw [Nat.card_congr (Subgroup.subgroupOfEquivOfLe (inertia_le_stabilizer (M := G) P)).toEquiv]; rw [AddSubgroup.subgroupOf_inertia]
 
 Depends on / 依赖: AtPrime, IsScalarTower, IsScalarTower.algebraMap_apply, Localization, Localization.AtPrime.algebraOfLiesOver, P.ResidueField, ResidueField, algebraMap, algebraMap_apply, algebraOfLiesOver, of_algebraMap_eq, p.ResidueField, toAlgebra
 -/
@@ -771,7 +831,8 @@ lemma card_inertia_eq_ramificationIdxIn
   rw [← inertiaDegIn_eq_inertiaDeg p P G] at H
   have h1 : (p.primesOver S).ncard != 0 := by grind [Nat.card_pos]
   have h2 : p.inertiaDegIn S != 0 := by grind [Nat.card_pos]
-  rwa [← ncard_primesOver_mul_ramificationIdxIn_mul
+  rwa [← ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn p S G,
+    mul_assoc, mul_right_inj' h1, mul_left_inj' h2] at H
 
 中文:
 引理 card_inertia_eq_ramificationIdxIn
@@ -781,7 +842,8 @@ lemma card_inertia_eq_ramificationIdxIn
   rw [← inertiaDegIn_eq_inertiaDeg p P G] at H
   have h1 : (p.primesOver S).ncard != 0 := by grind [Nat.card_pos]
   have h2 : p.inertiaDegIn S != 0 := by grind [Nat.card_pos]
-  rwa [← ncard_primesOver_mul_ramificationIdxIn_mul
+  rwa [← ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn p S G,
+    mul_assoc, mul_right_inj' h1, mul_left_inj' h2] at H
 
 Depends on / 依赖: Nat.card_pos, card_pos, inertiaDegIn, inertiaDegIn_eq_inertiaDeg, mul_assoc, mul_left_inj, mul_right_inj, ncard_primesOver_mul_card_inertia_mul_finrank, ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn, p.inertiaDegIn, p.primesOver, primesOver
 -/
@@ -842,7 +904,12 @@ lemma exists_comap_galRestrict_eq
   have := hP₁.1
   have := hP₁.2
   have := hP₂.1
-  have := 
+  have := hP₂.2
+  have : IsFractionRing S L := IsIntegralClosure.isFractionRing_of_finite_extension R K L S
+  let : MulSemiringAction Gal(L/K) S := IsIntegralClosure.MulSemiringAction R K L S
+  have : IsGaloisGroup Gal(L/K) R S := IsGaloisGroup.of_isFractionRing _ _ _ K L
+  obtain ⟨σ, rfl⟩ := exists_smul_eq_of_isGaloisGroup p P₂ P₁ Gal(L/K)
+  exact ⟨σ, comap_map_of_bijective _ ((galRestrict R K L S σ).bijective)⟩
 
 中文:
 引理 存在_comap_galRestrict_eq
@@ -855,7 +922,12 @@ lemma exists_comap_galRestrict_eq
   have := hP₁.1
   have := hP₁.2
   have := hP₂.1
-  have := 
+  have := hP₂.2
+  have : IsFractionRing S L := IsIntegralClosure.isFractionRing_of_finite_extension R K L S
+  let : MulSemiringAction Gal(L/K) S := IsIntegralClosure.MulSemiringAction R K L S
+  have : IsGaloisGroup Gal(L/K) R S := IsGaloisGroup.of_isFractionRing _ _ _ K L
+  obtain ⟨σ, rfl⟩ := exists_smul_eq_of_isGaloisGroup p P₂ P₁ Gal(L/K)
+  exact ⟨σ, comap_map_of_bijective _ ((galRestrict R K L S σ).bijective)⟩
 
 Depends on / 依赖: Finite, IsDomain, IsFractionRing, IsGaloisGroup, IsIntegralClosure, IsIntegralClosure.MulSemiringAction, IsIntegralClosure.equiv, IsIntegralClosure.finite, IsIntegralClosure.isDedekindDomain, IsIntegralClosure.isFractionRing_of_finite_extension, Module, Module.Finite, MulSemiringAction, finite, integralClosure, isDedekindDomain, isDomain, isFractionRing_of_finite_extension, toMulEquiv, toMulEquiv.isDomain
 -/

@@ -80,7 +80,13 @@ definition filterComparisons
       match tp.not? with
       | some p => match (← p.ineq?).1 with
         | .le => return [← mkAppM ``lt_of_not_ge #[h]]
-        | .lt => return [← mkAppM ``le_of_not_gt #[h]
+        | .lt => return [← mkAppM ``le_of_not_gt #[h]]
+        | .eq => return []
+      | none =>
+        _ ← tp.ineq?
+        return [h]
+    catch _ =>
+      return []
 
 中文:
 定义 filterComparisons
@@ -92,7 +98,13 @@ definition filterComparisons
       match tp.not? with
       | some p => match (← p.ineq?).1 with
         | .le => return [← mkAppM ``lt_of_not_ge #[h]]
-        | .lt => return [← mkAppM ``le_of_not_gt #[h]
+        | .lt => return [← mkAppM ``le_of_not_gt #[h]]
+        | .eq => return []
+      | none =>
+        _ ← tp.ineq?
+        return [h]
+    catch _ =>
+      return []
 -/
 partial def filterComparisons : Preprocessor where
   description := "filter terms that are not proofs of comparisons"
@@ -167,7 +179,9 @@ definition getNatComparisons
   | none => match e.getAppFnArgs with
     | (``HAdd.hAdd, #[_, _, _, _, a, b]) => getNatComparisons a ++ getNatComparisons b
     | (``HMul.hMul, #[_, _, _, _, a, b]) => getNatComparisons a ++ getNatComparisons b
-    | (``HSub.hSub, #[_, _, _, _, a, b]) => getN
+    | (``HSub.hSub, #[_, _, _, _, a, b]) => getNatComparisons a ++ getNatComparisons b
+    | (``Neg.neg, #[_, _, a]) => getNatComparisons a
+    | _ => []
 
 中文:
 定义 get自然数Comparisons
@@ -177,7 +191,9 @@ definition getNatComparisons
   | none => match e.getAppFnArgs with
     | (``HAdd.hAdd, #[_, _, _, _, a, b]) => getNatComparisons a ++ getNatComparisons b
     | (``HMul.hMul, #[_, _, _, _, a, b]) => getNatComparisons a ++ getNatComparisons b
-    | (``HSub.hSub, #[_, _, _, _, a, b]) => getN
+    | (``HSub.hSub, #[_, _, _, _, a, b]) => getNatComparisons a ++ getNatComparisons b
+    | (``Neg.neg, #[_, _, a]) => getNatComparisons a
+    | _ => []
 -/
 partial def getNatComparisons (e : Expr) : List (Expr × Expr) :=
   match isNatCoe e with
@@ -238,7 +254,30 @@ definition natToInt
       if ← isNatProp t then
         let (some (h', t'), _) ← Term.TermElabM.run' (run_for g (zifyProof none h t))
           | throwError "zifyProof failed on {h}"
-       
+        if ← succeeds t'.ineqOrNotIneq? then
+          pure h'
+        else
+          -- `zifyProof` turned our comparison into something that wasn't a comparison
+          -- probably replacing `n = n` with `True`, because of
+          -- https://github.com/leanprover-community/mathlib4/issues/741
+          -- so we just keep the original hypothesis.
+          pure h
+      else
+        pure h
+withNewMCtxDepth AtomM.run .reducible do
+    let nonnegs ← l.foldlM (init := ∅) fun (es : TreeSet (Nat × Nat) lexOrd.compare) h => do
+      try
+        let (_, _, a, b) ← (← inferType h).ineq?
+        let getIndices (p : Expr × Expr) : AtomM (Nat × Nat) := do
+          return ((← AtomM.addAtom p.1).1, (← AtomM.addAtom p.2).1)
+        let indices_a ← (getNatComparisons a).mapM getIndices
+        let indices_b ← (getNatComparisons b).mapM getIndices
+pure (es.insertMany indices_a).insertMany indices_b
+      catch _ => pure es
+    let atoms : Array Expr := (← get).atoms
+    let nonnegProofs : List Expr ← nonnegs.toList.filterMapM fun p => do
+      mkNatCastNonnegProof? (atoms[p.1]!, atoms[p.2]!)
+    pure [(g, nonnegProofs ++ l)]
 
 中文:
 定义 natTo整数
@@ -250,7 +289,30 @@ definition natToInt
       if ← isNatProp t then
         let (some (h', t'), _) ← Term.TermElabM.run' (run_for g (zifyProof none h t))
           | throwError "zifyProof failed on {h}"
-       
+        if ← succeeds t'.ineqOrNotIneq? then
+          pure h'
+        else
+          -- `zifyProof` turned our comparison into something that wasn't a comparison
+          -- probably replacing `n = n` with `True`, because of
+          -- https://github.com/leanprover-community/mathlib4/issues/741
+          -- so we just keep the original hypothesis.
+          pure h
+      else
+        pure h
+withNewMCtxDepth AtomM.run .reducible do
+    let nonnegs ← l.foldlM (init := ∅) fun (es : TreeSet (Nat × Nat) lexOrd.compare) h => do
+      try
+        let (_, _, a, b) ← (← inferType h).ineq?
+        let getIndices (p : Expr × Expr) : AtomM (Nat × Nat) := do
+          return ((← AtomM.addAtom p.1).1, (← AtomM.addAtom p.2).1)
+        let indices_a ← (getNatComparisons a).mapM getIndices
+        let indices_b ← (getNatComparisons b).mapM getIndices
+pure (es.insertMany indices_a).insertMany indices_b
+      catch _ => pure es
+    let atoms : Array Expr := (← get).atoms
+    let nonnegProofs : List Expr ← nonnegs.toList.filterMapM fun p => do
+      mkNatCastNonnegProof? (atoms[p.1]!, atoms[p.2]!)
+    pure [(g, nonnegProofs ++ l)]
 -/
 def natToInt : GlobalBranchingPreprocessor where
   description := "move nats to ints"
@@ -300,7 +362,11 @@ definition mkNonstrictIntProof?
   | (true, Ineq.lt, .const ``Int [], a, b) =>
     return mkApp (← mkAppM ``Iff.mpr #[← mkAppOptM ``Int.add_one_le_iff #[a, b]]) pf
   | (false, Ineq.le, .const ``Int [], a, b) =>
-    return mkApp (← mkAppM ``Iff.mpr #[← mkAppOptM ``Int.add_one_le_iff 
+    return mkApp (← mkAppM ``Iff.mpr #[← mkAppOptM ``Int.add_one_le_iff #[b, a]])
+      (← mkAppM ``lt_of_not_ge #[pf])
+  | _ => return none
+
+@[deprecated (since := "2026-05-27")] alias mkNonstrictIntProof := mkNonstrictIntProof?
 
 中文:
 定义 mkNonstrict整数Proof?
@@ -310,7 +376,11 @@ definition mkNonstrictIntProof?
   | (true, Ineq.lt, .const ``Int [], a, b) =>
     return mkApp (← mkAppM ``Iff.mpr #[← mkAppOptM ``Int.add_one_le_iff #[a, b]]) pf
   | (false, Ineq.le, .const ``Int [], a, b) =>
-    return mkApp (← mkAppM ``Iff.mpr #[← mkAppOptM ``Int.add_one_le_iff 
+    return mkApp (← mkAppM ``Iff.mpr #[← mkAppOptM ``Int.add_one_le_iff #[b, a]])
+      (← mkAppM ``lt_of_not_ge #[pf])
+  | _ => return none
+
+@[deprecated (since := "2026-05-27")] alias mkNonstrictIntProof := mkNonstrictIntProof?
 -/
 def mkNonstrictIntProof? (pf : Expr) : MetaM (Option Expr) := do
   match ← (← inferType pf).ineqOrNotIneq? with
@@ -360,7 +430,7 @@ definition rearrangeComparison?
 | (Ineq.lt, _) => try? mkAppM ``Linarith.sub_neg_of_lt #[e]
 | (Ineq.eq, _) => try? mkAppM ``sub_eq_zero_of_eq #[e]
 
-@[deprecated (since := "2026-05-27")] alias rearrangeComparison := rearrangeCompa
+@[deprecated (since := "2026-05-27")] alias rearrangeComparison := rearrangeComparison?
 
 中文:
 定义 rearrangeComparison?
@@ -371,7 +441,7 @@ definition rearrangeComparison?
 | (Ineq.lt, _) => try? mkAppM ``Linarith.sub_neg_of_lt #[e]
 | (Ineq.eq, _) => try? mkAppM ``sub_eq_zero_of_eq #[e]
 
-@[deprecated (since := "2026-05-27")] alias rearrangeComparison := rearrangeCompa
+@[deprecated (since := "2026-05-27")] alias rearrangeComparison := rearrangeComparison?
 -/
 partial def rearrangeComparison? (e : Expr) : MetaM (Option Expr) := do
   match ← (← inferType e).ineq? with
@@ -442,7 +512,11 @@ definition normalizeDenominatorsLHS
     lhs' ← mkAppM ``without_one_mul #[lhs']
   let (_, h'') ← mkSingleCompZeroOf v h
   try
-  
+    h''.rewriteType lhs'
+  catch e =>
+    dbg_trace
+      s!"Error in Linarith.normalizeDenominatorsLHS: {← e.toMessageData.toString}"
+    throw e
 
 中文:
 定义 normalizeDenominatorsLHS
@@ -455,7 +529,11 @@ definition normalizeDenominatorsLHS
     lhs' ← mkAppM ``without_one_mul #[lhs']
   let (_, h'') ← mkSingleCompZeroOf v h
   try
-  
+    h''.rewriteType lhs'
+  catch e =>
+    dbg_trace
+      s!"Error in Linarith.normalizeDenominatorsLHS: {← e.toMessageData.toString}"
+    throw e
 -/
 def normalizeDenominatorsLHS (h lhs : Expr) : MetaM Expr := do
   let mut (v, lhs') ← CancelDenoms.derive lhs
@@ -518,7 +596,25 @@ definition findSquares
   body: -- Completely traversing the expression is non-ideal,
   -- as we can descend into expressions that could not possibly be seen by `linarith`.
   -- As a result we visit expressions with bvars, which then cause panics.
-  -- Ideally this preprocessor would be reimplemented so it only visits things that 
+  -- Ideally this preprocessor would be reimplemented so it only visits things that could be atoms.
+  -- In the meantime we just bail out if we ever encounter loose bvars.
+  if e.hasLooseBVars then return s else
+  match e.getAppFnArgs with
+  | (``HPow.hPow, #[_, _, _, _, a, b]) => match b.numeral? with
+    | some 2 => do
+      let s ← findSquares s a
+      let (ai, _) ← AtomM.addAtom a
+      return (s.insert (ai, true))
+    | _ => e.foldlM findSquares s
+  | (``HMul.hMul, #[_, _, _, _, a, b]) => do
+    let (ai, _) ← AtomM.addAtom a
+    let (bi, _) ← AtomM.addAtom b
+    if ai = bi then do
+      let s ← findSquares s a
+      return (s.insert (ai, false))
+    else
+      e.foldlM findSquares s
+  | _ => e.foldlM findSquares s
 
 中文:
 定义 findSquares
@@ -526,7 +622,25 @@ definition findSquares
   定义体: -- Completely traversing the expression is non-ideal,
   -- as we can descend into expressions that could not possibly be seen by `linarith`.
   -- As a result we visit expressions with bvars, which then cause panics.
-  -- Ideally this preprocessor would be reimplemented so it only visits things that 
+  -- Ideally this preprocessor would be reimplemented so it only visits things that could be atoms.
+  -- In the meantime we just bail out if we ever encounter loose bvars.
+  if e.hasLooseBVars then return s else
+  match e.getAppFnArgs with
+  | (``HPow.hPow, #[_, _, _, _, a, b]) => match b.numeral? with
+    | some 2 => do
+      let s ← findSquares s a
+      let (ai, _) ← AtomM.addAtom a
+      return (s.insert (ai, true))
+    | _ => e.foldlM findSquares s
+  | (``HMul.hMul, #[_, _, _, _, a, b]) => do
+    let (ai, _) ← AtomM.addAtom a
+    let (bi, _) ← AtomM.addAtom b
+    if ai = bi then do
+      let s ← findSquares s a
+      return (s.insert (ai, false))
+    else
+      e.foldlM findSquares s
+  | _ => e.foldlM findSquares s
 -/
 partial def findSquares (s : TreeSet (Nat × Bool) lexOrd.compare) (e : Expr) :
     AtomM (TreeSet (Nat × Bool) lexOrd.compare) :=
@@ -563,7 +677,13 @@ definition nlinarithGetSquareProofs
   -- find the squares in `AtomM` to ensure deterministic behavior
   let s ← AtomM.run .reducible do
     let si ← ls.foldrM (fun h s' => do findSquares s' (← instantiateMVars (← inferType h))) ∅
-    si.toList.mapM fun (i, is_sq) => ret
+    si.toList.mapM fun (i, is_sq) => return ((← get).atoms[i]!, is_sq)
+  let new_es ← s.filterMapM fun (e, is_sq) =>
+observing? mkAppM (if is_sq then ``sq_nonneg else ``mul_self_nonneg) #[e]
+  let new_es ← compWithZero.globalize.transform new_es
+  trace[linarith] "found:{indentD <| toMessageData s}"
+  linarithTraceProofs "so we added proofs" new_es
+  return new_es
 
 中文:
 定义 nlinarithGetSquareProofs
@@ -572,7 +692,13 @@ definition nlinarithGetSquareProofs
   -- find the squares in `AtomM` to ensure deterministic behavior
   let s ← AtomM.run .reducible do
     let si ← ls.foldrM (fun h s' => do findSquares s' (← instantiateMVars (← inferType h))) ∅
-    si.toList.mapM fun (i, is_sq) => ret
+    si.toList.mapM fun (i, is_sq) => return ((← get).atoms[i]!, is_sq)
+  let new_es ← s.filterMapM fun (e, is_sq) =>
+observing? mkAppM (if is_sq then ``sq_nonneg else ``mul_self_nonneg) #[e]
+  let new_es ← compWithZero.globalize.transform new_es
+  trace[linarith] "found:{indentD <| toMessageData s}"
+  linarithTraceProofs "so we added proofs" new_es
+  return new_es
 -/
 private def nlinarithGetSquareProofs (ls : List Expr) : MetaM (List Expr) :=
   withTraceNode `linarith (fun _ => return m!" finding squares") do
@@ -600,7 +726,21 @@ definition nlinarithGetProductsProofs
       let ⟨ine, _⟩ ← parseCompAndExpr tp
       pure (ine, e)
     catch _ => pure (Ineq.lt, e))
-  let products ← with_comps.mapDiagM fun (⟨posa, a⟩ : Ineq × 
+  let products ← with_comps.mapDiagM fun (⟨posa, a⟩ : Ineq × Expr) ⟨posb, b⟩ =>
+    try
+      (some <$> match posa, posb with
+        | Ineq.eq, _ => mkAppM ``zero_mul_eq #[a, b]
+        | _, Ineq.eq => mkAppM ``mul_zero_eq #[a, b]
+        | Ineq.lt, Ineq.lt => mkAppM ``mul_pos_of_neg_of_neg #[a, b]
+        | Ineq.lt, Ineq.le => do
+            let a ← mkAppM ``le_of_lt #[a]
+            mkAppM ``mul_nonneg_of_nonpos_of_nonpos #[a, b]
+        | Ineq.le, Ineq.lt => do
+            let b ← mkAppM ``le_of_lt #[b]
+            mkAppM ``mul_nonneg_of_nonpos_of_nonpos #[a, b]
+        | Ineq.le, Ineq.le => mkAppM ``mul_nonneg_of_nonpos_of_nonpos #[a, b])
+    catch _ => pure none
+  compWithZero.globalize.transform products.reduceOption
 
 中文:
 定义 nlinarithGetProductsProofs
@@ -612,7 +752,21 @@ definition nlinarithGetProductsProofs
       let ⟨ine, _⟩ ← parseCompAndExpr tp
       pure (ine, e)
     catch _ => pure (Ineq.lt, e))
-  let products ← with_comps.mapDiagM fun (⟨posa, a⟩ : Ineq × 
+  let products ← with_comps.mapDiagM fun (⟨posa, a⟩ : Ineq × Expr) ⟨posb, b⟩ =>
+    try
+      (some <$> match posa, posb with
+        | Ineq.eq, _ => mkAppM ``zero_mul_eq #[a, b]
+        | _, Ineq.eq => mkAppM ``mul_zero_eq #[a, b]
+        | Ineq.lt, Ineq.lt => mkAppM ``mul_pos_of_neg_of_neg #[a, b]
+        | Ineq.lt, Ineq.le => do
+            let a ← mkAppM ``le_of_lt #[a]
+            mkAppM ``mul_nonneg_of_nonpos_of_nonpos #[a, b]
+        | Ineq.le, Ineq.lt => do
+            let b ← mkAppM ``le_of_lt #[b]
+            mkAppM ``mul_nonneg_of_nonpos_of_nonpos #[a, b]
+        | Ineq.le, Ineq.le => mkAppM ``mul_nonneg_of_nonpos_of_nonpos #[a, b])
+    catch _ => pure none
+  compWithZero.globalize.transform products.reduceOption
 -/
 private def nlinarithGetProductsProofs (ls : List Expr) : MetaM (List Expr) :=
   withTraceNode `linarith (fun _ => return m!" adding product terms") do
@@ -682,7 +836,16 @@ definition removeNeAux
     let some (α, a, b) := (← instantiateMVars (← inferType e)).ne?' | return none
     unless (← synthInstance? (← mkAppM ``LinearOrder #[α])).isSome do return none
     return some (e, α, a, b)) | return [(g, hs)]
-  let [ng1, 
+  let [ng1, ng2] ← g.apply (← mkAppOptM ``Or.elim #[none, none, ← g.getType,
+      ← mkAppOptM ``lt_or_gt_of_ne #[α, none, a, b, e]]) | failure
+  let do_goal : MVarId -> MetaM (List Branch) := fun g => do
+    let (f, h) ← g.intro1
+    h.withContext do
+let ls ← removeNeAux h hs.removeAll [e]
+      return ls.map (fun b : Branch => (b.1, (.fvar f)::b.2))
+  return ((← do_goal ng1) ++ (← do_goal ng2))
+
+@[deprecated (since := "2026-06-06")] alias removeNe_aux := removeNeAux
 
 中文:
 定义 removeNeAux
@@ -692,7 +855,16 @@ definition removeNeAux
     let some (α, a, b) := (← instantiateMVars (← inferType e)).ne?' | return none
     unless (← synthInstance? (← mkAppM ``LinearOrder #[α])).isSome do return none
     return some (e, α, a, b)) | return [(g, hs)]
-  let [ng1, 
+  let [ng1, ng2] ← g.apply (← mkAppOptM ``Or.elim #[none, none, ← g.getType,
+      ← mkAppOptM ``lt_or_gt_of_ne #[α, none, a, b, e]]) | failure
+  let do_goal : MVarId -> MetaM (List Branch) := fun g => do
+    let (f, h) ← g.intro1
+    h.withContext do
+let ls ← removeNeAux h hs.removeAll [e]
+      return ls.map (fun b : Branch => (b.1, (.fvar f)::b.2))
+  return ((← do_goal ng1) ++ (← do_goal ng2))
+
+@[deprecated (since := "2026-06-06")] alias removeNe_aux := removeNeAux
 -/
 partial def removeNeAux : MVarId -> List Expr -> MetaM (List Branch) := fun g hs => do
   let some (e, α, a, b) ← hs.findSomeM? (fun e : Expr => do

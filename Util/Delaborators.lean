@@ -94,7 +94,26 @@ definition delabPi
   | `(forall ($i:ident : $_), $j:ident in $s -> $body) =>
     if i == j then `(forall $i:ident in $s, $body) else pure stx
   | `(forall ($x:ident : $_), $y:ident > $z -> $body) =>
-    if x 
+    if x == y then `(forall $x:ident > $z, $body) else pure stx
+  | `(forall ($x:ident : $_), $y:ident < $z -> $body) =>
+    if x == y then `(forall $x:ident < $z, $body) else pure stx
+  | `(forall ($x:ident : $_), $y:ident >= $z -> $body) =>
+    if x == y then `(forall $x:ident >= $z, $body) else pure stx
+  | `(forall ($x:ident : $_), $y:ident <= $z -> $body) =>
+    if x == y then `(forall $x:ident <= $z, $body) else pure stx
+  | `(Π ($i:ident : $_), $j:ident in $s -> $body) =>
+    if i == j then `(Π $i:ident in $s, $body) else pure stx
+  | `(forall ($i:ident : $_), $j:ident ∉ $s -> $body) =>
+    if i == j then `(forall $i:ident ∉ $s, $body) else pure stx
+  | `(forall ($i:ident : $_), $j:ident subseteq $s -> $body) =>
+    if i == j then `(forall $i:ident subseteq $s, $body) else pure stx
+  | `(forall ($i:ident : $_), $j:ident ⊂ $s -> $body) =>
+    if i == j then `(forall $i:ident ⊂ $s, $body) else pure stx
+  | `(forall ($i:ident : $_), $j:ident ⊇ $s -> $body) =>
+    if i == j then `(forall $i:ident ⊇ $s, $body) else pure stx
+  | `(forall ($i:ident : $_), $j:ident ⊃ $s -> $body) =>
+    if i == j then `(forall $i:ident ⊃ $s, $body) else pure stx
+  | _ => pure stx
 
 中文:
 定义 delabPi
@@ -105,7 +124,26 @@ definition delabPi
   | `(forall ($i:ident : $_), $j:ident in $s -> $body) =>
     if i == j then `(forall $i:ident in $s, $body) else pure stx
   | `(forall ($x:ident : $_), $y:ident > $z -> $body) =>
-    if x 
+    if x == y then `(forall $x:ident > $z, $body) else pure stx
+  | `(forall ($x:ident : $_), $y:ident < $z -> $body) =>
+    if x == y then `(forall $x:ident < $z, $body) else pure stx
+  | `(forall ($x:ident : $_), $y:ident >= $z -> $body) =>
+    if x == y then `(forall $x:ident >= $z, $body) else pure stx
+  | `(forall ($x:ident : $_), $y:ident <= $z -> $body) =>
+    if x == y then `(forall $x:ident <= $z, $body) else pure stx
+  | `(Π ($i:ident : $_), $j:ident in $s -> $body) =>
+    if i == j then `(Π $i:ident in $s, $body) else pure stx
+  | `(forall ($i:ident : $_), $j:ident ∉ $s -> $body) =>
+    if i == j then `(forall $i:ident ∉ $s, $body) else pure stx
+  | `(forall ($i:ident : $_), $j:ident subseteq $s -> $body) =>
+    if i == j then `(forall $i:ident subseteq $s, $body) else pure stx
+  | `(forall ($i:ident : $_), $j:ident ⊂ $s -> $body) =>
+    if i == j then `(forall $i:ident ⊂ $s, $body) else pure stx
+  | `(forall ($i:ident : $_), $j:ident ⊇ $s -> $body) =>
+    if i == j then `(forall $i:ident ⊇ $s, $body) else pure stx
+  | `(forall ($i:ident : $_), $j:ident ⊃ $s -> $body) =>
+    if i == j then `(forall $i:ident ⊃ $s, $body) else pure stx
+  | _ => pure stx
 
 Depends on / 依赖: Lean.getPPNotation, getPPBinderPredicates, getPPNotation, whenPPOption
 -/
@@ -155,7 +193,10 @@ let stx ← delabPi > delabForall
     match stx with
     | `($group:bracketedBinder -> $body) => `(Π $group:bracketedBinder, $body)
     | _ => pure stx
-  
+  -- Merging
+  match stx with
+  | `(Π $group, Π $groups*, $body) => `(Π $group $groups*, $body)
+  | _ => pure stx
 
 中文:
 定义 delabPi'
@@ -168,7 +209,10 @@ let stx ← delabPi > delabForall
     match stx with
     | `($group:bracketedBinder -> $body) => `(Π $group:bracketedBinder, $body)
     | _ => pure stx
-  
+  -- Merging
+  match stx with
+  | `(Π $group, Π $groups*, $body) => `(Π $group $groups*, $body)
+  | _ => pure stx
 
 Depends on / 依赖: Lean.getPPNotation, getPPNotation, whenPPOption
 -/
@@ -206,7 +250,58 @@ definition exists_delab
   let dep := f.bindingBody!.hasLooseBVar 0
   let ppTypes ← getPPOption getPPFunBinderTypes
   let stx ← SubExpr.withAppArg do
-    let dom ← SubExpr.wi
+    let dom ← SubExpr.withBindingDomain delab
+    withBindingBodyUnusedName fun x => do
+      let x : TSyntax `ident := .mk x
+      let body ← delab
+      if prop && !dep then
+        `(exists (_ : $dom), $body)
+      else if prop || ppTypes then
+        `(exists ($x:ident : $dom), $body)
+      else
+        `(exists $x:ident, $body)
+  -- Cute binders
+  let stx : Term ←
+    if ← getPPOption Mathlib.getPPBinderPredicates then
+      match stx with
+      | `(exists $i:ident, $j:ident in $s ∧ $body)
+      | `(exists ($i:ident : $_), $j:ident in $s ∧ $body) =>
+        if i == j then `(exists $i:ident in $s, $body) else pure stx
+      | `(exists $x:ident, $y:ident > $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident > $z ∧ $body) =>
+        if x == y then `(exists $x:ident > $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident < $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident < $z ∧ $body) =>
+        if x == y then `(exists $x:ident < $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident >= $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident >= $z ∧ $body) =>
+        if x == y then `(exists $x:ident >= $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident <= $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident <= $z ∧ $body) =>
+        if x == y then `(exists $x:ident <= $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident ∉ $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident ∉ $z ∧ $body) => do
+        if x == y then `(exists $x:ident ∉ $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident subseteq $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident subseteq $z ∧ $body) =>
+        if x == y then `(exists $x:ident subseteq $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident ⊂ $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident ⊂ $z ∧ $body) =>
+        if x == y then `(exists $x:ident ⊂ $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident ⊇ $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident ⊇ $z ∧ $body) =>
+        if x == y then `(exists $x:ident ⊇ $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident ⊃ $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident ⊃ $z ∧ $body) =>
+        if x == y then `(exists $x:ident ⊃ $z, $body) else pure stx
+      | _ => pure stx
+    else
+      pure stx
+  match stx with
+  | `(exists $group:bracketedExplicitBinders, exists $[$groups:bracketedExplicitBinders]*, $body) =>
+    `(exists $group $groups*, $body)
+  | `(exists $b:binderIdent, exists $[$bs:binderIdent]*, $body) => `(exists $b:binderIdent $[$bs]*, $body)
+  | _ => pure stx
 
 中文:
 定义 存在_delab
@@ -218,7 +313,58 @@ definition exists_delab
   let dep := f.bindingBody!.hasLooseBVar 0
   let ppTypes ← getPPOption getPPFunBinderTypes
   let stx ← SubExpr.withAppArg do
-    let dom ← SubExpr.wi
+    let dom ← SubExpr.withBindingDomain delab
+    withBindingBodyUnusedName fun x => do
+      let x : TSyntax `ident := .mk x
+      let body ← delab
+      if prop && !dep then
+        `(exists (_ : $dom), $body)
+      else if prop || ppTypes then
+        `(exists ($x:ident : $dom), $body)
+      else
+        `(exists $x:ident, $body)
+  -- Cute binders
+  let stx : Term ←
+    if ← getPPOption Mathlib.getPPBinderPredicates then
+      match stx with
+      | `(exists $i:ident, $j:ident in $s ∧ $body)
+      | `(exists ($i:ident : $_), $j:ident in $s ∧ $body) =>
+        if i == j then `(exists $i:ident in $s, $body) else pure stx
+      | `(exists $x:ident, $y:ident > $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident > $z ∧ $body) =>
+        if x == y then `(exists $x:ident > $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident < $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident < $z ∧ $body) =>
+        if x == y then `(exists $x:ident < $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident >= $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident >= $z ∧ $body) =>
+        if x == y then `(exists $x:ident >= $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident <= $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident <= $z ∧ $body) =>
+        if x == y then `(exists $x:ident <= $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident ∉ $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident ∉ $z ∧ $body) => do
+        if x == y then `(exists $x:ident ∉ $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident subseteq $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident subseteq $z ∧ $body) =>
+        if x == y then `(exists $x:ident subseteq $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident ⊂ $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident ⊂ $z ∧ $body) =>
+        if x == y then `(exists $x:ident ⊂ $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident ⊇ $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident ⊇ $z ∧ $body) =>
+        if x == y then `(exists $x:ident ⊇ $z, $body) else pure stx
+      | `(exists $x:ident, $y:ident ⊃ $z ∧ $body)
+      | `(exists ($x:ident : $_), $y:ident ⊃ $z ∧ $body) =>
+        if x == y then `(exists $x:ident ⊃ $z, $body) else pure stx
+      | _ => pure stx
+    else
+      pure stx
+  match stx with
+  | `(exists $group:bracketedExplicitBinders, exists $[$groups:bracketedExplicitBinders]*, $body) =>
+    `(exists $group $groups*, $body)
+  | `(exists $b:binderIdent, exists $[$bs:binderIdent]*, $body) => `(exists $b:binderIdent $[$bs]*, $body)
+  | _ => pure stx
 
 Depends on / 依赖: Lean.getPPNotation, getPPNotation, whenPPOption
 -/

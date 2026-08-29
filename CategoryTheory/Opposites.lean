@@ -2989,7 +2989,7 @@ definition opUnopEquiv
         rw [show f = f.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
         congr 1
         cat_disch)
-  counitIso := NatIso.ofComponents f
+  counitIso := NatIso.ofComponents fun F => F.unopOpIso
 
 中文:
 定义 opUnopEquiv
@@ -3004,7 +3004,7 @@ definition opUnopEquiv
         rw [show f = f.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
         congr 1
         cat_disch)
-  counitIso := NatIso.ofComponents f
+  counitIso := NatIso.ofComponents fun F => F.unopOpIso
 -/
 def opUnopEquiv : (C ⥤ D)ᵒᵖ ≌ Cᵒᵖ ⥤ Dᵒᵖ where
   functor := opHom _ _
@@ -3039,7 +3039,10 @@ definition leftOpRightOpEquiv
       (by
         intro F G η
         dsimp
-        rw [show 
+        rw [show η = η.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
+        congr 1
+        cat_disch)
+  counitIso := NatIso.ofComponents fun F => F.leftOpRightOpIso
 
 中文:
 定义 leftOpRightOpEquiv
@@ -3054,7 +3057,10 @@ definition leftOpRightOpEquiv
       (by
         intro F G η
         dsimp
-        rw [show 
+        rw [show η = η.unop.op by simp]; rw [← op_comp]; rw [← op_comp]
+        congr 1
+        cat_disch)
+  counitIso := NatIso.ofComponents fun F => F.leftOpRightOpIso
 
 Depends on / 依赖: F.leftOp, F.leftOpRightOpIso, F.unop.rightOp, F.unop.rightOpLeftOpIso.op, NatIso, NatIso.ofComponents, NatTrans, NatTrans.rightOp, cat_disch, counitIso, inverse, leftOp, leftOp.op, leftOpRightOpIso, ofComponents, op_comp, rightOp, rightOpLeftOpIso, unitIso, unop.op
 -/

@@ -110,7 +110,19 @@ instance subcanonical_zariskiTopology
   rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange]
   rintro Y S hS x hx
   obtain ⟨(𝓤 : OpenCover Y), rfl⟩ := exists_cover_of_mem_pretopology hS
-let e : Y ⟶ X := 𝓤.glueMorphisms (fun j => x (𝓤.f _) (.mk
+let e : Y ⟶ X := 𝓤.glueMorphisms (fun j => x (𝓤.f _) (.mk _)) by
+    intro i j
+    apply hx
+    exact Limits.pullback.condition
+  refine ⟨e, ?_, ?_⟩
+  · rintro Z e ⟨j⟩
+    dsimp [e]
+    rw [𝓤.ι_glueMorphisms]
+  · intro e' h
+    apply 𝓤.hom_ext
+    intro j
+    rw [𝓤.ι_glueMorphisms]
+    exact h (𝓤.f j) (.mk j)
 
 中文:
 实例 subcanonical_zariskiTopology
@@ -121,7 +133,19 @@ let e : Y ⟶ X := 𝓤.glueMorphisms (fun j => x (𝓤.f _) (.mk
   rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange]
   rintro Y S hS x hx
   obtain ⟨(𝓤 : OpenCover Y), rfl⟩ := exists_cover_of_mem_pretopology hS
-let e : Y ⟶ X := 𝓤.glueMorphisms (fun j => x (𝓤.f _) (.mk
+let e : Y ⟶ X := 𝓤.glueMorphisms (fun j => x (𝓤.f _) (.mk _)) by
+    intro i j
+    apply hx
+    exact Limits.pullback.condition
+  refine ⟨e, ?_, ?_⟩
+  · rintro Z e ⟨j⟩
+    dsimp [e]
+    rw [𝓤.ι_glueMorphisms]
+  · intro e' h
+    apply 𝓤.hom_ext
+    intro j
+    rw [𝓤.ι_glueMorphisms]
+    exact h (𝓤.f j) (.mk j)
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj, Limits, Limits.pullback.condition, OpenCover, Precoverage, Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange, Subcanonical, condition, exists_cover_of_mem_pretopology, glueMorphisms, hom_ext, isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange, of_isSheaf_yoneda_obj, pullback
 -/
@@ -157,7 +181,12 @@ instance :
     refine ⟨fun _ _ hR => ⟨fun _ _ f _ hf _ => ?_⟩⟩
     have : IsOpenImmersion f := hR.2 hf
     infer_instance
-  apply Functor.isContinuous_toGrothendieck_of_pullbacksPr
+  apply Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy
+  rw [TopCat.precoverage]; rw [Precoverage.comap_inf]; rw [precoverage]
+  gcongr
+  · rw [← Precoverage.comap_comp, forgetToTop_comp_forget]
+  · rw [MorphismProperty.comap_precoverage]
+    exact MorphismProperty.precoverage_monotone fun X Y f hf => f.isOpenEmbedding
 
 中文:
 实例 :
@@ -168,7 +197,12 @@ instance :
     refine ⟨fun _ _ hR => ⟨fun _ _ f _ hf _ => ?_⟩⟩
     have : IsOpenImmersion f := hR.2 hf
     infer_instance
-  apply Functor.isContinuous_toGrothendieck_of_pullbacksPr
+  apply Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy
+  rw [TopCat.precoverage]; rw [Precoverage.comap_inf]; rw [precoverage]
+  gcongr
+  · rw [← Precoverage.comap_comp, forgetToTop_comp_forget]
+  · rw [MorphismProperty.comap_precoverage]
+    exact MorphismProperty.precoverage_monotone fun X Y f hf => f.isOpenEmbedding
 
 Depends on / 依赖: Functor, Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy, IsOpenImmersion, MorphismProperty, MorphismProperty.comap_precoverage, MorphismProperty.precovera, Precoverage, Precoverage.comap_comp, Precoverage.comap_inf, PullbacksPreservedBy, TopCat, TopCat.precoverage, comap_comp, comap_inf, comap_precoverage, forgetToTop, forgetToTop_comp_forget, grothendieckTopology, infer_instance, isContinuous_toGrothendieck_of_pullbacksPreservedBy
 -/
@@ -234,7 +268,16 @@ lemma preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology
   have (i : ι) : Mono (Cofan.inj (Sigma.cocone (Discrete.functor <| unop ∘ X)) i) :=
 inferInstanceAs Mono (Sigma.ι _ _)
   refine Presieve.preservesProduct_of_isSheafFor F ?_ initialIsInitial
-      (Sig
+      (Sigma.cocone (Discrete.functor <| unop ∘ X)) (coproductIsCoproduct' _) ?_ ?_
+  · apply hF.isSheafFor
+    convert! (⊥_ Scheme).bot_mem_grothendieckTopology
+    rw [eq_bot_iff]
+    rintro Y f ⟨g, _, _, ⟨i⟩, _⟩
+    exact i.elim
+  · intro i j
+    exact CoproductDisjoint.isPullback_of_isInitial
+      (coproductIsCoproduct' <| Discrete.functor <| unop ∘ X) initialIsInitial
+  · exact hF.isSheafFor _ (sigmaOpenCover _).mem_grothendieckTopology
 
 中文:
 引理 preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology
@@ -245,7 +288,16 @@ inferInstanceAs Mono (Sigma.ι _ _)
   have (i : ι) : Mono (Cofan.inj (Sigma.cocone (Discrete.functor <| unop ∘ X)) i) :=
 inferInstanceAs Mono (Sigma.ι _ _)
   refine Presieve.preservesProduct_of_isSheafFor F ?_ initialIsInitial
-      (Sig
+      (Sigma.cocone (Discrete.functor <| unop ∘ X)) (coproductIsCoproduct' _) ?_ ?_
+  · apply hF.isSheafFor
+    convert! (⊥_ Scheme).bot_mem_grothendieckTopology
+    rw [eq_bot_iff]
+    rintro Y f ⟨g, _, _, ⟨i⟩, _⟩
+    exact i.elim
+  · intro i j
+    exact CoproductDisjoint.isPullback_of_isInitial
+      (coproductIsCoproduct' <| Discrete.functor <| unop ∘ X) initialIsInitial
+  · exact hF.isSheafFor _ (sigmaOpenCover _).mem_grothendieckTopology
 
 Depends on / 依赖: Cofan.inj, Discrete, Discrete.functor, Presieve, Presieve.preservesProduct_of_isSheafFor, Scheme, Sigma.cocone, allowSynthFailures, bot_mem_grothendieckTopology, cocone, config, convert, coproductIsCoproduct, eq_bot_iff, functor, hF.isSheafFor, i.elim, initialIsInitial, isSheafFor, preservesLimitsOfShape_of_discrete
 -/
@@ -280,7 +332,9 @@ lemma ofArrows_ι_mem_zariskiTopology_of_isColimit
   apply GrothendieckTopology.superset_covering _ ?_ ?_
   · exact Sieve.ofArrows _ (colimit.ι F)
   · rw [Sieve.ofArrows, Sieve.generate_le_iff]
- 
+    rintro - - ⟨i⟩
+    exact ⟨_, 𝟙 _, c.ι.app i, ⟨i⟩, by simp [iso]⟩
+  · exact (Scheme.IsLocallyDirected.openCover F).mem_grothendieckTopology
 
 中文:
 引理 ofArrows_ι_mem_zariskiTopology_of_isColimit
@@ -291,7 +345,9 @@ lemma ofArrows_ι_mem_zariskiTopology_of_isColimit
   apply GrothendieckTopology.superset_covering _ ?_ ?_
   · exact Sieve.ofArrows _ (colimit.ι F)
   · rw [Sieve.ofArrows, Sieve.generate_le_iff]
- 
+    rintro - - ⟨i⟩
+    exact ⟨_, 𝟙 _, c.ι.app i, ⟨i⟩, by simp [iso]⟩
+  · exact (Scheme.IsLocallyDirected.openCover F).mem_grothendieckTopology
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.pullback_mem_iff_of_isIso, GrothendieckTopology.superset_covering, IsLocallyDirected, Scheme, Scheme.IsLocallyDirected.openCover, Sieve.generate_le_iff, Sieve.ofArrows, c.pt, coconePointUniqueUpToIso, colimit, colimit.isColimit, generate_le_iff, hc.coconePointUniqueUpToIso, isColimit, iso.inv, mem_grothendieckTopology, ofArrows, openCover, pullback_mem_iff_of_isIso
 -/
@@ -323,7 +379,11 @@ lemma Scheme.Cover.isSheafFor_sigma_iff
   have : PreservesLimitsOfShape (Discrete 𝒰.I₀) F :=
     preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology hF
   let c : Cofan 𝒰.X := Cofan.mk _ (Sigma.ι 𝒰.X)
-  
+  rw [← Presieve.isSheafFor_sigmaDesc_iff 𝒰.f (coproductIsCoproduct _)
+    (FinitaryExtensive.isVanKampen_finiteCoproducts (coproductIsCoproduct _)).isUniversal]
+  congr!
+  rw [← PreZeroHypercover.presieve₀]; rw [𝒰.presieve₀_sigma]
+  rfl
 
 中文:
 引理 概形.Cover.isSheafFor_sigma_iff
@@ -334,7 +394,11 @@ lemma Scheme.Cover.isSheafFor_sigma_iff
   have : PreservesLimitsOfShape (Discrete 𝒰.I₀) F :=
     preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology hF
   let c : Cofan 𝒰.X := Cofan.mk _ (Sigma.ι 𝒰.X)
-  
+  rw [← Presieve.isSheafFor_sigmaDesc_iff 𝒰.f (coproductIsCoproduct _)
+    (FinitaryExtensive.isVanKampen_finiteCoproducts (coproductIsCoproduct _)).isUniversal]
+  congr!
+  rw [← PreZeroHypercover.presieve₀]; rw [𝒰.presieve₀_sigma]
+  rfl
 
 Depends on / 依赖: Cofan.mk, Discrete, FinitaryExtensive, FinitaryExtensive.isVanKampen_finiteCoproducts, PreZeroHypercover, PreZeroHypercover.presieve, PreservesLimitsOfShape, Presieve, Presieve.isSheafFor_sigmaDesc_iff, coproductIsCoproduct, isSheafFor_sigmaDesc_iff, isUniversal, isVanKampen_finiteCoproducts, preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology
 -/

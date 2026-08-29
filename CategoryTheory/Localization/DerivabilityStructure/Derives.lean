@@ -105,7 +105,10 @@ lemma isIso_of_isRightDerivedFunctor
   let eG := Localization.Lifting.iso W₁.Q W₁ (Φ.functor ⋙ F) G
   have := Functor.isRightDerivedFunctor_of_inverts W₁ G eG
   have := (Φ.functor ⋙ F).hasPointwiseRightDerivedFunctor_of_inverts h
-  rw [← Φ.isIso_iff_of_isRight
+  rw [← Φ.isIso_iff_of_isRightDerivabilityStructure W₁.Q L₂ F G eG.inv RF α]
+  infer_instance
+
+@[deprecated (since := "2026-06-22")] alias isIso := isIso_of_isRightDerivedFunctor
 
 中文:
 引理 isIso_of_isRightDerivedFunctor
@@ -115,7 +118,10 @@ lemma isIso_of_isRightDerivedFunctor
   let eG := Localization.Lifting.iso W₁.Q W₁ (Φ.functor ⋙ F) G
   have := Functor.isRightDerivedFunctor_of_inverts W₁ G eG
   have := (Φ.functor ⋙ F).hasPointwiseRightDerivedFunctor_of_inverts h
-  rw [← Φ.isIso_iff_of_isRight
+  rw [← Φ.isIso_iff_of_isRightDerivabilityStructure W₁.Q L₂ F G eG.inv RF α]
+  infer_instance
+
+@[deprecated (since := "2026-06-22")] alias isIso := isIso_of_isRightDerivedFunctor
 
 Depends on / 依赖: Functor, Functor.isRightDerivedFunctor_of_inverts, Lifting, Localization, Localization.Lifting.iso, Localization.lift, eG.inv, functor, hasPointwiseRightDerivedFunctor_of_inverts, infer_instance, isIso_iff_of_isRightDerivabilityStructure, isRightDerivedFunctor_of_inverts
 -/
@@ -142,7 +148,18 @@ lemma isRightDerivedFunctor_of_isIso
   have := h.isIso_of_isRightDerivedFunctor (F.totalRightDerivedUnit L₂ W₂)
   have := Φ.essSurj_of_hasRightResolutions L₂
   let φ := (F.totalRightDerived L₂ W₂).rightDerivedDesc (F.totalRightDerivedUnit L₂ W₂) W₂ RF α
-  have hφ : F.totalRightDerivedUnit 
+  have hφ : F.totalRightDerivedUnit L₂ W₂ ≫ Functor.whiskerLeft L₂ φ = α :=
+    (F.totalRightDerived L₂ W₂).rightDerived_fac (F.totalRightDerivedUnit L₂ W₂) W₂ RF α
+  have : IsIso φ := by
+    rw [NatTrans.isIso_iff_isIso_app]
+    intro Y₂
+    rw [NatTrans.isIso_app_iff_of_iso φ ((Φ.functor ⋙ L₂).objObjPreimageIso Y₂).symm]
+    dsimp
+    simp only [← hφ, NatTrans.comp_app, Functor.whiskerLeft_app, isIso_comp_left_iff] at hα
+    infer_instance
+  rw [← Functor.isRightDerivedFunctor_iff_of_iso (F.totalRightDerivedUnit L₂ W₂) α W₂
+    (asIso φ) (by cat_disch)]
+  infer_instance
 
 中文:
 引理 isRightDerivedFunctor_of_isIso
@@ -152,7 +169,18 @@ lemma isRightDerivedFunctor_of_isIso
   have := h.isIso_of_isRightDerivedFunctor (F.totalRightDerivedUnit L₂ W₂)
   have := Φ.essSurj_of_hasRightResolutions L₂
   let φ := (F.totalRightDerived L₂ W₂).rightDerivedDesc (F.totalRightDerivedUnit L₂ W₂) W₂ RF α
-  have hφ : F.totalRightDerivedUnit 
+  have hφ : F.totalRightDerivedUnit L₂ W₂ ≫ Functor.whiskerLeft L₂ φ = α :=
+    (F.totalRightDerived L₂ W₂).rightDerived_fac (F.totalRightDerivedUnit L₂ W₂) W₂ RF α
+  have : IsIso φ := by
+    rw [NatTrans.isIso_iff_isIso_app]
+    intro Y₂
+    rw [NatTrans.isIso_app_iff_of_iso φ ((Φ.functor ⋙ L₂).objObjPreimageIso Y₂).symm]
+    dsimp
+    simp only [← hφ, NatTrans.comp_app, Functor.whiskerLeft_app, isIso_comp_left_iff] at hα
+    infer_instance
+  rw [← Functor.isRightDerivedFunctor_iff_of_iso (F.totalRightDerivedUnit L₂ W₂) α W₂
+    (asIso φ) (by cat_disch)]
+  infer_instance
 
 Depends on / 依赖: F.totalRightDerived, F.totalRightDerivedUnit, Functor, Functor.whiskerLeft, NatTrans, NatTrans.isIso_ap, NatTrans.isIso_iff_isIso_app, essSurj_of_hasRightResolutions, h.hasPointwiseRightDerivedFunctor, h.isIso_of_isRightDerivedFunctor, hasPointwiseRightDerivedFunctor, isIso_ap, isIso_iff_isIso_app, isIso_of_isRightDerivedFunctor, rightDerivedDesc, rightDerived_fac, totalRightDerived, totalRightDerivedUnit, whiskerLeft
 -/

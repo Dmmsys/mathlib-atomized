@@ -486,7 +486,7 @@ theorem span_induction
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       zero_mem' := ⟨_, zero⟩
       smul_mem' := fun r => fun ⟨_, hpx⟩ => ⟨_, smul r _ _ hpx⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨subset_span hy, mem y hy⟩) 
+.elim fun _ => id .mpr (fun y hy => ⟨subset_span hy, mem y hy⟩) hx exact span_le (p := p)
 
 中文:
 定理 span_induction
@@ -497,7 +497,7 @@ theorem span_induction
       add_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, add _ _ _ _ hpx hpy⟩
       zero_mem' := ⟨_, zero⟩
       smul_mem' := fun r => fun ⟨_, hpx⟩ => ⟨_, smul r _ _ hpx⟩ }
-.elim fun _ => id .mpr (fun y hy => ⟨subset_span hy, mem y hy⟩) 
+.elim fun _ => id .mpr (fun y hy => ⟨subset_span hy, mem y hy⟩) hx exact span_le (p := p)
 
 Depends on / 依赖: Submodule, add_mem, carrier, smul_mem, span_le, subset_span, zero_mem
 -/
@@ -527,7 +527,9 @@ theorem span_induction₂
     | zero => exact zero_left _ _
     | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
     | smul _ _ _ h => exact smul_left _ _ _ _ _ h
-  | zero => exact
+  | zero => exact zero_right a ha
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+  | smul _ _ _ h => exact smul_right _ _ _ _ _ h
 
 中文:
 定理 span_induction₂
@@ -539,7 +541,9 @@ theorem span_induction₂
     | zero => exact zero_left _ _
     | add _ _ _ _ h₁ h₂ => exact add_left _ _ _ _ _ _ h₁ h₂
     | smul _ _ _ h => exact smul_left _ _ _ _ _ h
-  | zero => exact
+  | zero => exact zero_right a ha
+  | add _ _ _ _ h₁ h₂ => exact add_right _ _ _ _ _ _ h₁ h₂
+  | smul _ _ _ h => exact smul_right _ _ _ _ _ h
 
 Depends on / 依赖: add_left, add_right, mem_mem, smul_left, smul_right, span_induction, zero_left, zero_right
 -/
@@ -577,7 +581,19 @@ theorem span_eq_closure
     induction hx using span_induction with
     | mem x hx => exact subset_closure ⟨1, trivial, x, hx, one_smul R x⟩
     | zero => exact zero_mem _
-    | add _ _ _ _ h₁ h₂ => exact
+    | add _ _ _ _ h₁ h₂ => exact add_mem h₁ h₂
+    | smul r₁ y _h hy =>
+      clear _h
+      induction hy using closure_induction with
+      | mem _ h =>
+        obtain ⟨r₂, -, x, hx, rfl⟩ := h
+        exact subset_closure ⟨r₁ * r₂, trivial, x, hx, mul_smul ..⟩
+      | zero => simp only [smul_zero, zero_mem]
+      | add _ _ _ _ h₁ h₂ => simpa only [smul_add] using add_mem h₁ h₂
+  case of_mem_closure =>
+    refine closure_le.2 ?_ hx
+    rintro - ⟨r, -, x, hx, rfl⟩
+    exact smul_mem _ _ (subset_span hx)
 
 中文:
 定理 span_eq_closure
@@ -589,7 +605,19 @@ theorem span_eq_closure
     induction hx using span_induction with
     | mem x hx => exact subset_closure ⟨1, trivial, x, hx, one_smul R x⟩
     | zero => exact zero_mem _
-    | add _ _ _ _ h₁ h₂ => exact
+    | add _ _ _ _ h₁ h₂ => exact add_mem h₁ h₂
+    | smul r₁ y _h hy =>
+      clear _h
+      induction hy using closure_induction with
+      | mem _ h =>
+        obtain ⟨r₂, -, x, hx, rfl⟩ := h
+        exact subset_closure ⟨r₁ * r₂, trivial, x, hx, mul_smul ..⟩
+      | zero => simp only [smul_zero, zero_mem]
+      | add _ _ _ _ h₁ h₂ => simpa only [smul_add] using add_mem h₁ h₂
+  case of_mem_closure =>
+    refine closure_le.2 ?_ hx
+    rintro - ⟨r, -, x, hx, rfl⟩
+    exact smul_mem _ _ (subset_span hx)
 
 Depends on / 依赖: add_mem, closure_induction, le_antisymm, mul_smul, of_mem_closure, of_mem_span, one_smul, smul_ze, span_induction, subset_closure, zero_mem
 -/
@@ -1336,7 +1364,10 @@ theorem coe_iSup_of_directed
       smul_mem' := fun r _ hx => have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
         Set.mem_iUnion.mpr ⟨i, (S i).smul_mem' r hi⟩ }
   have : iSup S = s := le_antisymm
-    (iSup_le fun i => le_iSup (fun i =
+    (iSup_le fun i => le_iSup (fun i => (S i : Set M)) i) (Set.iUnion_subset fun _ => le_iSup S _)
+  this.symm ▸ rfl
+
+@[simp]
 
 中文:
 定理 coe_iSup_of_directed
@@ -1346,7 +1377,10 @@ theorem coe_iSup_of_directed
       smul_mem' := fun r _ hx => have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
         Set.mem_iUnion.mpr ⟨i, (S i).smul_mem' r hi⟩ }
   have : iSup S = s := le_antisymm
-    (iSup_le fun i => le_iSup (fun i =
+    (iSup_le fun i => le_iSup (fun i => (S i : Set M)) i) (Set.iUnion_subset fun _ => le_iSup S _)
+  this.symm ▸ rfl
+
+@[simp]
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.coe_iSup_of_directed, AddSubmonoid.copy, Set.iUnion_subset, Set.mem_iUnion.mp, Set.mem_iUnion.mpr, Submodule, coe_iSup_of_directed, iSup_le, iUnion_subset, le_antisymm, le_iSup, mem_iUnion, smul_mem, this.symm
 -/
@@ -1479,7 +1513,13 @@ theorem mem_sup
       · exact ⟨y, h, 0, by simp, by simp⟩
       · exact ⟨0, by simp, y, h, by simp⟩
     · exact ⟨0, by simp, 0, by simp⟩
-    · rintro _ _ - - ⟨y₁, hy₁, z₁, hz₁,
+    · rintro _ _ - - ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
+      exact ⟨_, add_mem hy₁ hy₂, _, add_mem hz₁ hz₂, by
+        rw [add_assoc]; rw [add_assoc]; rw [← add_assoc y₂]; rw [← add_assoc z₁]; rw [add_comm y₂]⟩
+    · rintro a - _ ⟨y, hy, z, hz, rfl⟩
+      exact ⟨_, smul_mem _ a hy, _, smul_mem _ a hz, by simp [smul_add]⟩, by
+    rintro ⟨y, hy, z, hz, rfl⟩
+    exact add_mem ((le_sup_left : p <= p ⊔ p') hy) ((le_sup_right : p' <= p ⊔ p') hz)⟩
 
 中文:
 定理 mem_sup
@@ -1491,7 +1531,13 @@ theorem mem_sup
       · exact ⟨y, h, 0, by simp, by simp⟩
       · exact ⟨0, by simp, y, h, by simp⟩
     · exact ⟨0, by simp, 0, by simp⟩
-    · rintro _ _ - - ⟨y₁, hy₁, z₁, hz₁,
+    · rintro _ _ - - ⟨y₁, hy₁, z₁, hz₁, rfl⟩ ⟨y₂, hy₂, z₂, hz₂, rfl⟩
+      exact ⟨_, add_mem hy₁ hy₂, _, add_mem hz₁ hz₂, by
+        rw [add_assoc]; rw [add_assoc]; rw [← add_assoc y₂]; rw [← add_assoc z₁]; rw [add_comm y₂]⟩
+    · rintro a - _ ⟨y, hy, z, hz, rfl⟩
+      exact ⟨_, smul_mem _ a hy, _, smul_mem _ a hz, by simp [smul_add]⟩, by
+    rintro ⟨y, hy, z, hz, rfl⟩
+    exact add_mem ((le_sup_left : p <= p ⊔ p') hy) ((le_sup_right : p' <= p ⊔ p') hz)⟩
 
 Depends on / 依赖: add_assoc, add_comm, add_mem, smul_mem, span_eq, span_induction, span_union
 -/
@@ -1756,7 +1802,7 @@ theorem mem_span_singleton
       exact ⟨a + b, by simp [add_smul]⟩
     · rintro a _ - ⟨b, rfl⟩
       exact ⟨a * b, by simp [smul_smul]⟩, by
-    rintro ⟨a, y
+    rintro ⟨a, y, rfl⟩; exact smul_mem _ _ (subset_span <| by simp)⟩
 
 中文:
 定理 mem_span_singleton
@@ -1771,7 +1817,7 @@ theorem mem_span_singleton
       exact ⟨a + b, by simp [add_smul]⟩
     · rintro a _ - ⟨b, rfl⟩
       exact ⟨a * b, by simp [smul_smul]⟩, by
-    rintro ⟨a, y
+    rintro ⟨a, y, rfl⟩; exact smul_mem _ _ (subset_span <| by simp)⟩
 
 Depends on / 依赖: add_smul, smul_mem, smul_smul, span_induction, subset_span
 -/
@@ -2332,7 +2378,7 @@ theorem submodule_eq_sSup_le_nonzero_spans
     · exact @le_sSup _ _ S _ ⟨m, ⟨hm, ⟨h, rfl⟩⟩⟩ m (mem_span_singleton_self m)
   · rw [sSup_le_iff]
     rintro S ⟨_, ⟨_, ⟨_, rfl⟩⟩⟩
-    rwa [
+    rwa [span_singleton_le_iff_mem]
 
 中文:
 定理 submodule_eq_sSup_le_nonzero_spans
@@ -2347,7 +2393,7 @@ theorem submodule_eq_sSup_le_nonzero_spans
     · exact @le_sSup _ _ S _ ⟨m, ⟨hm, ⟨h, rfl⟩⟩⟩ m (mem_span_singleton_self m)
   · rw [sSup_le_iff]
     rintro S ⟨_, ⟨_, ⟨_, rfl⟩⟩⟩
-    rwa [
+    rwa [span_singleton_le_iff_mem]
 
 Depends on / 依赖: Submodule, le_antisymm, le_sSup, mem_span_singleton_self, sSup_le_iff, span_singleton_le_iff_mem
 -/
@@ -2444,7 +2490,13 @@ theorem mem_span_finite_of_mem_span
   · use ∅
     simp
   · rintro x y - - ⟨X, hX, hxX⟩ ⟨Y, hY, hyY⟩
-    
+    refine ⟨X union Y, ?_, ?_⟩
+    · rw [Finset.coe_union]
+      exact Set.union_subset hX hY
+    rw [Finset.coe_union]; rw [span_union]; rw [mem_sup]
+    exact ⟨x, hxX, y, hyY, rfl⟩
+  · rintro a x - ⟨T, hT, h2⟩
+    exact ⟨T, hT, smul_mem _ _ h2⟩
 
 中文:
 定理 mem_span_finite_of_mem_span
@@ -2459,7 +2511,13 @@ theorem mem_span_finite_of_mem_span
   · use ∅
     simp
   · rintro x y - - ⟨X, hX, hxX⟩ ⟨Y, hY, hyY⟩
-    
+    refine ⟨X union Y, ?_, ?_⟩
+    · rw [Finset.coe_union]
+      exact Set.union_subset hX hY
+    rw [Finset.coe_union]; rw [span_union]; rw [mem_sup]
+    exact ⟨x, hxX, y, hyY, rfl⟩
+  · rintro a x - ⟨T, hT, h2⟩
+    exact ⟨T, hT, smul_mem _ _ h2⟩
 
 Depends on / 依赖: Finset, Finset.coe_singleton, Finset.coe_union, Set.singleton_subset_iff, Set.union_subset, Submodule, Submodule.mem_span_singleton_self, classical, coe_singleton, coe_union, mem_span_singleton_self, mem_sup, singleton_subset_iff, smul_mem, span_induction, span_union, union_subset
 -/
@@ -2495,7 +2553,9 @@ theorem subset_span_finite_of_subset_span
   | insert a t hat IH =>
     obtain ⟨T, hTs, htT⟩ := IH (by simp_all [Set.insert_subset_iff])
     obtain ⟨T', hT's, haT'⟩ := mem_span_finite_of_mem_span (ht (Finset.mem_insert_self _ _))
-    refine ⟨T union T
+    refine ⟨T union T', by simp_all, ?_⟩
+    simp only [Finset.coe_insert, Finset.coe_union, span_union, insert_subset_iff, SetLike.mem_coe]
+    exact ⟨mem_sup_right haT', htT.trans (le_sup_left (a := span R _))⟩
 
 中文:
 定理 subset_span_finite_of_subset_span
@@ -2507,7 +2567,9 @@ theorem subset_span_finite_of_subset_span
   | insert a t hat IH =>
     obtain ⟨T, hTs, htT⟩ := IH (by simp_all [Set.insert_subset_iff])
     obtain ⟨T', hT's, haT'⟩ := mem_span_finite_of_mem_span (ht (Finset.mem_insert_self _ _))
-    refine ⟨T union T
+    refine ⟨T union T', by simp_all, ?_⟩
+    simp only [Finset.coe_insert, Finset.coe_union, span_union, insert_subset_iff, SetLike.mem_coe]
+    exact ⟨mem_sup_right haT', htT.trans (le_sup_left (a := span R _))⟩
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.coe_union, Finset.induction_on, Finset.mem_insert_self, Set.insert_subset_iff, SetLike, SetLike.mem_coe, classical, coe_insert, coe_union, htT.trans, induction_on, insert, insert_subset_iff, le_sup_left, mem_coe, mem_insert_self, mem_span_finite_of_mem_span, mem_sup_right
 -/
@@ -2603,7 +2665,10 @@ lemma span_range_update_add_smul
   · rw [update_self]
 exact add_mem (subset_span ⟨j, rfl⟩) smul_mem _ _ subset_span ⟨i, rfl⟩
   · exact subset_span ⟨k, (update_of_ne hjk.symm ..).symm⟩
-  ·
+  · nth_rw 2 [← add_sub_cancel_right (v j) (r • v i)]
+    exact sub_mem (subset_span ⟨j, update_self ..⟩)
+      (smul_mem _ _ (subset_span ⟨i, update_of_ne hij ..⟩))
+  · exact subset_span ⟨k, update_of_ne hjk.symm ..⟩
 
 中文:
 引理 span_range_update_add_smul
@@ -2614,7 +2679,10 @@ exact add_mem (subset_span ⟨j, rfl⟩) smul_mem _ _ subset_span ⟨i, rfl⟩
   · rw [update_self]
 exact add_mem (subset_span ⟨j, rfl⟩) smul_mem _ _ subset_span ⟨i, rfl⟩
   · exact subset_span ⟨k, (update_of_ne hjk.symm ..).symm⟩
-  ·
+  · nth_rw 2 [← add_sub_cancel_right (v j) (r • v i)]
+    exact sub_mem (subset_span ⟨j, update_self ..⟩)
+      (smul_mem _ _ (subset_span ⟨i, update_of_ne hij ..⟩))
+  · exact subset_span ⟨k, update_of_ne hjk.symm ..⟩
 
 Depends on / 依赖: Set.range_subset_iff, SetLike, SetLike.mem_coe, add_mem, add_sub_cancel_right, eq_or_ne, hjk.symm, le_antisymm, mem_coe, nth_rw, range_subset_iff, smul_mem, span_le, sub_mem, subset_span, update_of_ne, update_self
 -/
@@ -2703,7 +2771,9 @@ theorem Module.isPrincipal_submodule_iff
 · refine ⟨a, le_antisymm (fun m hm => ?_) (span_singleton_le_iff_mem ..).mpr a.2⟩
     have ⟨r, hr⟩ := mem_span_singleton.mp (ha ▸ (trivial : (⟨m, hm⟩ : p) in ⊤))
     exact mem_span_singleton.mpr ⟨r, congr($hr)⟩
-· refine ⟨⟨a
+· refine ⟨⟨a, ha ▸ mem_span_singleton_self a⟩, .symm top_unique fun x _ => ?_⟩
+    have ⟨r, hr⟩ := mem_span_singleton.mp (ha.le x.2)
+    exact mem_span_singleton.mpr ⟨r, Subtype.ext hr⟩
 
 中文:
 定理 模.isPrincipal_submodule_iff
@@ -2714,7 +2784,9 @@ theorem Module.isPrincipal_submodule_iff
 · refine ⟨a, le_antisymm (fun m hm => ?_) (span_singleton_le_iff_mem ..).mpr a.2⟩
     have ⟨r, hr⟩ := mem_span_singleton.mp (ha ▸ (trivial : (⟨m, hm⟩ : p) in ⊤))
     exact mem_span_singleton.mpr ⟨r, congr($hr)⟩
-· refine ⟨⟨a
+· refine ⟨⟨a, ha ▸ mem_span_singleton_self a⟩, .symm top_unique fun x _ => ?_⟩
+    have ⟨r, hr⟩ := mem_span_singleton.mp (ha.le x.2)
+    exact mem_span_singleton.mpr ⟨r, Subtype.ext hr⟩
 
 Depends on / 依赖: IsPrincipal, Subtype, Subtype.ext, ha.le, isPrincipal_iff, le_antisymm, mem_span_singleton, mem_span_singleton.mp, mem_span_singleton.mpr, mem_span_singleton_self, simp_rw, span_singleton_le_iff_mem, top_unique
 -/

@@ -598,7 +598,11 @@ definition projectiveResolutions
   map_id X := by
     rw [← (HomotopyCategory.quotient _ _).map_id]
     apply HomotopyCategory.eq_of_homotopy
-    apply ProjectiveResolution.liftIdHomo
+    apply ProjectiveResolution.liftIdHomotopy
+  map_comp f g := by
+    rw [← (HomotopyCategory.quotient _ _).map_comp]
+    apply HomotopyCategory.eq_of_homotopy
+    apply ProjectiveResolution.liftCompHomotopy
 
 中文:
 定义 projectiveResolutions
@@ -608,7 +612,11 @@ definition projectiveResolutions
   map_id X := by
     rw [← (HomotopyCategory.quotient _ _).map_id]
     apply HomotopyCategory.eq_of_homotopy
-    apply ProjectiveResolution.liftIdHomo
+    apply ProjectiveResolution.liftIdHomotopy
+  map_comp f g := by
+    rw [← (HomotopyCategory.quotient _ _).map_comp]
+    apply HomotopyCategory.eq_of_homotopy
+    apply ProjectiveResolution.liftCompHomotopy
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.quotient, complex, projectiveResolution, quotient
 -/
@@ -824,7 +832,10 @@ lemma ofComplex_exactAt_succ
   rw [HomologicalComplex.exactAt_iff' _ (n + 1 + 1) (n + 1) n (by simp) (by simp)]
   simp only [HomologicalComplex.sc', HomologicalComplex.shortComplexFunctor', ofComplex,
     ChainComplex.mk', ChainComplex.mk, ChainComplex.of_d]
-  -- TODO: this should just be apply exact_d_f so something is miss
+  -- TODO: this should just be apply exact_d_f so something is missing
+  match n with
+  | 0 => apply exact_d_f
+  | n + 1 => apply exact_d_f
 
 中文:
 引理 ofComplex_exactAt_succ
@@ -833,7 +844,10 @@ lemma ofComplex_exactAt_succ
   rw [HomologicalComplex.exactAt_iff' _ (n + 1 + 1) (n + 1) n (by simp) (by simp)]
   simp only [HomologicalComplex.sc', HomologicalComplex.shortComplexFunctor', ofComplex,
     ChainComplex.mk', ChainComplex.mk, ChainComplex.of_d]
-  -- TODO: this should just be apply exact_d_f so something is miss
+  -- TODO: this should just be apply exact_d_f so something is missing
+  match n with
+  | 0 => apply exact_d_f
+  | n + 1 => apply exact_d_f
 
 Depends on / 依赖: ChainComplex, ChainComplex.mk, ChainComplex.of_d, HomologicalComplex, HomologicalComplex.exactAt_iff, HomologicalComplex.sc, HomologicalComplex.shortComplexFunctor, exactAt_iff, ofComplex, of_d, shortComplexFunctor
 -/

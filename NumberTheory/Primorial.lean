@@ -313,7 +313,8 @@ theorem primorial_add_dvd
 mul_dvd_mul_left _
         prod_primes_dvd _ (fun _ hk => (mem_filter.1 hk).2.prime) fun p hp => by
           rw [mem_filter]; rw [mem_Ico] at hp
-          exact hp.2.dvd_cho
+          exact hp.2.dvd_choose_add hp.1.1 (h.trans_lt (m.lt_succ_self.trans_le hp.1.1))
+              (Nat.lt_succ_iff.1 hp.1.2)
 
 中文:
 定理 primorial_add_dvd
@@ -325,7 +326,8 @@ mul_dvd_mul_left _
 mul_dvd_mul_left _
         prod_primes_dvd _ (fun _ hk => (mem_filter.1 hk).2.prime) fun p hp => by
           rw [mem_filter]; rw [mem_Ico] at hp
-          exact hp.2.dvd_cho
+          exact hp.2.dvd_choose_add hp.1.1 (h.trans_lt (m.lt_succ_self.trans_le hp.1.1))
+              (Nat.lt_succ_iff.1 hp.1.2)
 
 Depends on / 依赖: Nat.lt_succ_iff, dvd_choose_add, h.trans_lt, iIndep, iIndep.precomp, lt_succ_iff, lt_succ_self, m.lt_succ_self.trans_le, mem_Ico, mem_filter, mul_dvd_mul_left, p.Prime, precomp, primorial_add, prod_primes_dvd, trans_le, trans_lt
 -/
@@ -454,7 +456,8 @@ lemma lt_primorial_self
   have : n < q := by
     by_contra! h1
     replace h1 : q ∣ n# := (minFac_prime (by lia)).dvd_primorial_iff.2 h1
-    grind [minFac_eq_one_iff, dvd_one, dvd_sub_iff_right, mi
+    grind [minFac_eq_one_iff, dvd_one, dvd_sub_iff_right, minFac_dvd]
+  grind [Nat.minFac_le]
 
 中文:
 引理 lt_primorial_self
@@ -466,7 +469,8 @@ lemma lt_primorial_self
   have : n < q := by
     by_contra! h1
     replace h1 : q ∣ n# := (minFac_prime (by lia)).dvd_primorial_iff.2 h1
-    grind [minFac_eq_one_iff, dvd_one, dvd_sub_iff_right, mi
+    grind [minFac_eq_one_iff, dvd_one, dvd_sub_iff_right, minFac_dvd]
+  grind [Nat.minFac_le]
 
 Depends on / 依赖: Nat.minFac_le, Prime.pos, dvd_one, dvd_primorial_iff, dvd_sub_iff_right, minFac, minFac_dvd, minFac_eq_one_iff, minFac_le, minFac_prime, prime_three, replace, single_le_prod
 -/
@@ -522,7 +526,17 @@ theorem primorial_lt_four_pow
     · decide
     calc
       (m + m + 1)# = (m + 1 + m)# := by rw [add_right_comm]
-      _ <= (m + 1)# * choose (m + 1 + 
+      _ <= (m + 1)# * choose (m + 1 + m) (m + 1) := primorial_add_le m.le_succ
+      _ = (m + 1)# * choose (2 * m + 1) m := by rw [choose_symm_add, two_mul, add_right_comm]
+      _ < 4 ^ (m + 1) * 4 ^ m :=
+        Nat.mul_lt_mul_of_lt_of_le (ihn _ (by lia) (by lia)) (choose_middle_le_pow _) (by simp)
+      _ <= 4 ^ (m + m + 1) := by rw [← pow_add, add_right_comm]
+  · rcases Decidable.eq_or_ne n 1 with rfl | hn
+    · decide
+    · calc
+        (n + 1)# = n# := primorial_succ hn ho
+        _ < 4 ^ n := ihn n n.lt_succ_self (by grind)
+        _ <= 4 ^ (n + 1) := Nat.pow_le_pow_right four_pos n.le_succ
 
 中文:
 定理 primorial_lt_four_pow
@@ -536,7 +550,17 @@ theorem primorial_lt_four_pow
     · decide
     calc
       (m + m + 1)# = (m + 1 + m)# := by rw [add_right_comm]
-      _ <= (m + 1)# * choose (m + 1 + 
+      _ <= (m + 1)# * choose (m + 1 + m) (m + 1) := primorial_add_le m.le_succ
+      _ = (m + 1)# * choose (2 * m + 1) m := by rw [choose_symm_add, two_mul, add_right_comm]
+      _ < 4 ^ (m + 1) * 4 ^ m :=
+        Nat.mul_lt_mul_of_lt_of_le (ihn _ (by lia) (by lia)) (choose_middle_le_pow _) (by simp)
+      _ <= 4 ^ (m + m + 1) := by rw [← pow_add, add_right_comm]
+  · rcases Decidable.eq_or_ne n 1 with rfl | hn
+    · decide
+    · calc
+        (n + 1)# = n# := primorial_succ hn ho
+        _ < 4 ^ n := ihn n n.lt_succ_self (by grind)
+        _ <= 4 ^ (n + 1) := Nat.pow_le_pow_right four_pos n.le_succ
 
 Depends on / 依赖: Nat.mul_lt_mul_of_lt_of_le, Nat.strong_induction_on, add_right_comm, choose_middle_le_p, choose_symm_add, eq_zero_or_pos, even_or_odd, le_succ, m.eq_zero_or_pos, m.le_succ, mul_lt_mul_of_lt_of_le, n.even_or_odd, primorial_add_le, strong_induction_on, two_mul
 -/

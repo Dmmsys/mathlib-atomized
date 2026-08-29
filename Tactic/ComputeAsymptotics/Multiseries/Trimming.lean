@@ -225,7 +225,8 @@ theorem trimmed_iff_seq_trimmed
       convert Trimmed.nil (f := ms.toFun)
       simp [hs]
     | @cons _ _ exp coef tl _ h_trimmed h_ne_zero =>
-      convert Trimmed.cons h_trimmed h_ne_zero (exp := exp) (tl := t
+      convert Trimmed.cons h_trimmed h_ne_zero (exp := exp) (tl := tl) (f := ms.toFun)
+      simp only [ms_eq_mk_iff, hs, and_true]
 
 中文:
 定理 trimmed_iff_seq_trimmed
@@ -239,7 +240,8 @@ theorem trimmed_iff_seq_trimmed
       convert Trimmed.nil (f := ms.toFun)
       simp [hs]
     | @cons _ _ exp coef tl _ h_trimmed h_ne_zero =>
-      convert Trimmed.cons h_trimmed h_ne_zero (exp := exp) (tl := t
+      convert Trimmed.cons h_trimmed h_ne_zero (exp := exp) (tl := tl) (f := ms.toFun)
+      simp only [ms_eq_mk_iff, hs, and_true]
 
 Depends on / 依赖: Trimmed, Trimmed.cons, Trimmed.nil, and_true, convert, generalize, h_ne_zero, h_trimmed, ms.seq, ms.toFun, ms_eq_mk_iff
 -/

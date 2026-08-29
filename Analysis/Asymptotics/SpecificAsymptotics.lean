@@ -303,7 +303,9 @@ theorem Asymptotics.IsEquivalent.rpow
     rw [← Real.one_rpow r]
     exact Tendsto.comp (Real.continuousAt_rpow_const _ _ (by left; norm_num)) hφ
   use (· ^ r) ∘ φ, hφr
-  conv => enter
+  conv => enter [3]; change fun x => φ x ^ r * v x ^ r
+  filter_upwards [Tendsto.eventually_const_lt (zero_lt_one) hφ, huφv] with x hφ_pos huv'
+  simp [← Real.mul_rpow (le_of_lt hφ_pos) (hv x), huv']
 
 中文:
 定理 Asymptotics.IsEquivalent.rpow
@@ -315,7 +317,9 @@ theorem Asymptotics.IsEquivalent.rpow
     rw [← Real.one_rpow r]
     exact Tendsto.comp (Real.continuousAt_rpow_const _ _ (by left; norm_num)) hφ
   use (· ^ r) ∘ φ, hφr
-  conv => enter
+  conv => enter [3]; change fun x => φ x ^ r * v x ^ r
+  filter_upwards [Tendsto.eventually_const_lt (zero_lt_one) hφ, huφv] with x hφ_pos huv'
+  simp [← Real.mul_rpow (le_of_lt hφ_pos) (hv x), huv']
 
 Depends on / 依赖: IsEquivalent, IsEquivalent.exists_eq_mul, Real.continuousAt_rpow_const, Real.mul_rpow, Real.one_rpow, Tendsto, Tendsto.comp, Tendsto.eventually_const_lt, continuousAt_rpow_const, eventually_const_lt, exists_eq_mul, filter_upwards, isEquivalent_iff_exists_eq_mul, le_of_lt, mul_rpow, one_rpow, zero_lt_one
 -/
@@ -344,7 +348,10 @@ theorem Asymptotics.IsEquivalent.log
   rw [isEquivalent_iff_tendsto_one hg] at hfg
 .congr' by have := hfg.log (by norm_num)
     filter_upwards [hf, hg] with n hf hg using Real.log_div hf hg
-exact IsLittleO.isEquivalent cal
+exact IsLittleO.isEquivalent calc
+    (fun n => Real.log (f n) - Real.log (g n)) =o[l] fun _ => (1 : Real) := by simpa
+.mpr _ =o[l] fun n => Real.log (g n) := isLittleO_one_left_iff Real
+tendsto_norm_atTop_atTop.comp Real.tendsto_log_atTop.comp g_tendsto
 
 中文:
 定理 Asymptotics.IsEquivalent.log
@@ -355,7 +362,10 @@ exact IsLittleO.isEquivalent cal
   rw [isEquivalent_iff_tendsto_one hg] at hfg
 .congr' by have := hfg.log (by norm_num)
     filter_upwards [hf, hg] with n hf hg using Real.log_div hf hg
-exact IsLittleO.isEquivalent cal
+exact IsLittleO.isEquivalent calc
+    (fun n => Real.log (f n) - Real.log (g n)) =o[l] fun _ => (1 : Real) := by simpa
+.mpr _ =o[l] fun n => Real.log (g n) := isLittleO_one_left_iff Real
+tendsto_norm_atTop_atTop.comp Real.tendsto_log_atTop.comp g_tendsto
 
 Depends on / 依赖: IsLittleO, IsLittleO.isEquivalent, Real.log, Real.log_div, Real.tendsto_log_atTop.comp, eventually_ne_atTop, filter_upwards, g_tendsto, g_tendsto.eventually_ne_atTop, hfg.log, hfg.symm.tendsto_atTop, isEquivalent, isEquivalent_iff_tendsto_one, isLittleO_one_left_iff, log_div, tendsto_atTop, tendsto_log_atTop, tendsto_norm_atTop_atTop, tendsto_norm_atTop_atTop.comp
 -/
@@ -386,7 +396,27 @@ theorem Asymptotics.IsLittleO.sum_range
     rwa [Real.norm_eq_abs, abs_sum_of_nonneg']
   apply isLittleO_iff.2 fun ε εpos => _
   intro ε εpos
-  obtain ⟨N, hN⟩ : exists N : Nat, forall b
+  obtain ⟨N, hN⟩ : exists N : Nat, forall b : Nat, N <= b -> ‖f b‖ <= ε / 2 * g b := by
+    simpa only [A, eventually_atTop] using isLittleO_iff.mp h (half_pos εpos)
+  have : (fun _ : Nat => ∑ i in range N, f i) =o[atTop] fun n : Nat => ∑ i in range n, g i := by
+    apply isLittleO_const_left.2
+    exact Or.inr (h'g.congr fun n => (B n).symm)
+  filter_upwards [isLittleO_iff.1 this (half_pos εpos), Ici_mem_atTop N] with n hn Nn
+  calc
+    ‖∑ i in range n, f i‖ = ‖(∑ i in range N, f i) + ∑ i in Ico N n, f i‖ := by
+      rw [sum_range_add_sum_Ico _ Nn]
+    _ <= ‖∑ i in range N, f i‖ + ‖∑ i in Ico N n, f i‖ := norm_add_le _ _
+    _ <= ‖∑ i in range N, f i‖ + ∑ i in Ico N n, ε / 2 * g i :=
+      (add_le_add le_rfl (norm_sum_le_of_le _ fun i hi => hN _ (mem_Ico.1 hi).1))
+    _ <= ‖∑ i in range N, f i‖ + ∑ i in range n, ε / 2 * g i := by
+      gcongr
+      · exact fun i _ _ => mul_nonneg (half_pos εpos).le (hg i)
+      · rw [range_eq_Ico]
+        exact Ico_subset_Ico zero_le le_rfl
+    _ <= ε / 2 * ‖∑ i in range n, g i‖ + ε / 2 * ∑ i in range n, g i := by rw [← mul_sum]; gcongr
+    _ = ε * ‖∑ i in range n, g i‖ := by
+      simp only [B]
+      ring
 
 中文:
 定理 Asymptotics.IsLittleO.sum_range
@@ -397,7 +427,27 @@ theorem Asymptotics.IsLittleO.sum_range
     rwa [Real.norm_eq_abs, abs_sum_of_nonneg']
   apply isLittleO_iff.2 fun ε εpos => _
   intro ε εpos
-  obtain ⟨N, hN⟩ : exists N : Nat, forall b
+  obtain ⟨N, hN⟩ : exists N : Nat, forall b : Nat, N <= b -> ‖f b‖ <= ε / 2 * g b := by
+    simpa only [A, eventually_atTop] using isLittleO_iff.mp h (half_pos εpos)
+  have : (fun _ : Nat => ∑ i in range N, f i) =o[atTop] fun n : Nat => ∑ i in range n, g i := by
+    apply isLittleO_const_left.2
+    exact Or.inr (h'g.congr fun n => (B n).symm)
+  filter_upwards [isLittleO_iff.1 this (half_pos εpos), Ici_mem_atTop N] with n hn Nn
+  calc
+    ‖∑ i in range n, f i‖ = ‖(∑ i in range N, f i) + ∑ i in Ico N n, f i‖ := by
+      rw [sum_range_add_sum_Ico _ Nn]
+    _ <= ‖∑ i in range N, f i‖ + ‖∑ i in Ico N n, f i‖ := norm_add_le _ _
+    _ <= ‖∑ i in range N, f i‖ + ∑ i in Ico N n, ε / 2 * g i :=
+      (add_le_add le_rfl (norm_sum_le_of_le _ fun i hi => hN _ (mem_Ico.1 hi).1))
+    _ <= ‖∑ i in range N, f i‖ + ∑ i in range n, ε / 2 * g i := by
+      gcongr
+      · exact fun i _ _ => mul_nonneg (half_pos εpos).le (hg i)
+      · rw [range_eq_Ico]
+        exact Ico_subset_Ico zero_le le_rfl
+    _ <= ε / 2 * ‖∑ i in range n, g i‖ + ε / 2 * ∑ i in range n, g i := by rw [← mul_sum]; gcongr
+    _ = ε * ‖∑ i in range n, g i‖ := by
+      simp only [B]
+      ring
 
 Depends on / 依赖: Real.norm_eq_abs, Real.norm_of_nonneg, abs_sum_of_nonneg, eventually_atTop, half_pos, isLittleO_iff, isLittleO_iff.mp, norm_eq_abs, norm_of_nonneg
 -/
@@ -470,7 +520,12 @@ theorem Filter.Tendsto.cesaro_smul
   have := Asymptotics.isLittleO_sum_range_of_tendsto_zero (tendsto_sub_nhds_zero_iff.2 h)
   apply ((isBigO_refl (fun n : Nat => (n : Real)⁻¹) atTop).smul_isLittleO this).congr' _ _
   · filter_upwards [Ici_mem_atTop 1] with n npos
- 
+    have nposReal : (0 : Real) < n := Nat.cast_pos.2 npos
+    simp only [smul_sub, sum_sub_distrib, sum_const, card_range, sub_right_inj]
+    rw [← Nat.cast_smul_eq_nsmul Real]; rw [smul_smul]; rw [inv_mul_cancel₀ nposReal.ne']; rw [one_smul]
+  · filter_upwards [Ici_mem_atTop 1] with n npos
+    have nposReal : (0 : Real) < n := Nat.cast_pos.2 npos
+    rw [smul_eq_mul]; rw [inv_mul_cancel₀ nposReal.ne']
 
 中文:
 定理 滤子.收敛.cesaro_smul
@@ -480,7 +535,12 @@ theorem Filter.Tendsto.cesaro_smul
   have := Asymptotics.isLittleO_sum_range_of_tendsto_zero (tendsto_sub_nhds_zero_iff.2 h)
   apply ((isBigO_refl (fun n : Nat => (n : Real)⁻¹) atTop).smul_isLittleO this).congr' _ _
   · filter_upwards [Ici_mem_atTop 1] with n npos
- 
+    have nposReal : (0 : Real) < n := Nat.cast_pos.2 npos
+    simp only [smul_sub, sum_sub_distrib, sum_const, card_range, sub_right_inj]
+    rw [← Nat.cast_smul_eq_nsmul Real]; rw [smul_smul]; rw [inv_mul_cancel₀ nposReal.ne']; rw [one_smul]
+  · filter_upwards [Ici_mem_atTop 1] with n npos
+    have nposReal : (0 : Real) < n := Nat.cast_pos.2 npos
+    rw [smul_eq_mul]; rw [inv_mul_cancel₀ nposReal.ne']
 
 Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_sum_range_of_tendsto_zero, Ici_mem_atTop, Nat.cast_pos, Nat.cast_smul_eq_nsmul, card_range, cast_pos, cast_smul_eq_nsmul, filter_upwards, isBigO_refl, isLittleO_one_iff, isLittleO_sum_range_of_tendsto_zero, nposRea, nposReal, smul_isLittleO, smul_smul, smul_sub, sub_right_inj, sum_const, sum_sub_distrib
 -/
@@ -593,7 +653,17 @@ theorem Continuous.isBounded_range_iff_isBigO
     use c
     apply Eventually.of_forall
     simpa using hc
-  · simp_rw [isBigO_iff, Filter.Eventually
+  · simp_rw [isBigO_iff, Filter.Eventually, Filter.mem_cocompact] at h
+    simp only [Pi.one_apply, norm_one, mul_one] at h
+    obtain ⟨c, t, hcompact, h⟩ := h
+    rw [← Set.image_union_image_compl_eq_range (s := t)]
+    apply IsBounded.union
+    · apply (IsCompact.image hcompact hf).isBounded
+    · rw [isBounded_iff_forall_norm_le]
+      refine ⟨c, fun x hx => ?_⟩
+      rw [Set.mem_image] at hx
+      obtain ⟨y, hy, rfl⟩ := hx
+      simpa using mem_of_mem_of_subset hy h
 
 中文:
 定理 连续.isBounded_range_iff_isBigO
@@ -607,7 +677,17 @@ theorem Continuous.isBounded_range_iff_isBigO
     use c
     apply Eventually.of_forall
     simpa using hc
-  · simp_rw [isBigO_iff, Filter.Eventually
+  · simp_rw [isBigO_iff, Filter.Eventually, Filter.mem_cocompact] at h
+    simp only [Pi.one_apply, norm_one, mul_one] at h
+    obtain ⟨c, t, hcompact, h⟩ := h
+    rw [← Set.image_union_image_compl_eq_range (s := t)]
+    apply IsBounded.union
+    · apply (IsCompact.image hcompact hf).isBounded
+    · rw [isBounded_iff_forall_norm_le]
+      refine ⟨c, fun x hx => ?_⟩
+      rw [Set.mem_image] at hx
+      obtain ⟨y, hy, rfl⟩ := hx
+      simpa using mem_of_mem_of_subset hy h
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Filter, Filter.Eventually, Filter.mem_cocompact, IsBounded, IsBounded.union, IsCompact, IsCompact.image, Pi.one_apply, Set.image_union_image_compl_eq_range, Set.mem_range, forall_apply_eq_imp_iff, forall_exists_index, hcompact, image_union_image_compl_eq_range, isBigO_iff, isBound, isBounded_iff_forall_norm_le, mem_cocompact
 -/

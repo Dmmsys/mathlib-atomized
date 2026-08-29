@@ -965,7 +965,8 @@ abbreviation divisionRing
   __ := hf.groupWithZero f zero one mul inv div npow zpow
   __ := hf.divisionSemiring f zero one add mul inv div nsmul nnqsmul npow zpow natCast nnratCast
 ratCast_def q := hf by rw [ratCast, div, intCast, natCast, Rat.cast_def]
-  qs
+  qsmul := (· • ·)
+qsmul_def q a := hf by rw [qsmul, mul, Rat.smul_def, ratCast]
 
 中文:
 缩写 divisionRing
@@ -974,7 +975,8 @@ ratCast_def q := hf by rw [ratCast, div, intCast, natCast, Rat.cast_def]
   __ := hf.groupWithZero f zero one mul inv div npow zpow
   __ := hf.divisionSemiring f zero one add mul inv div nsmul nnqsmul npow zpow natCast nnratCast
 ratCast_def q := hf by rw [ratCast, div, intCast, natCast, Rat.cast_def]
-  qs
+  qsmul := (· • ·)
+qsmul_def q a := hf by rw [qsmul, mul, Rat.smul_def, ratCast]
 -/
 protected abbrev divisionRing [DivisionRing L] (zero : f 0 = 0) (one : f 1 = 1)
     (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y)

@@ -333,7 +333,13 @@ instance lieQuotientHasBracket
     apply (Submodule.Quotient.eq I.toSubmodule).2
     rw [Submodule.quotientRel_def] at h₁ h₂
     have h : ⁅x₁, x₂⁆ - ⁅y₁, y₂⁆ = ⁅x₁, x₂ - y₂⁆ + ⁅x₁ - y₁, y₂⁆ := by
-      simp [-lie_skew, sub_eq_ad
+      simp [-lie_skew, sub_eq_add_neg, add_assoc]
+    rw [h]
+    apply Submodule.add_mem
+    · apply lie_mem_right R L I x₁ (x₂ - y₂) h₂
+    · apply lie_mem_left R L I (x₁ - y₁) y₂ h₁⟩
+
+@[simp]
 
 中文:
 实例 lieQuotientHasBracket
@@ -345,7 +351,13 @@ instance lieQuotientHasBracket
     apply (Submodule.Quotient.eq I.toSubmodule).2
     rw [Submodule.quotientRel_def] at h₁ h₂
     have h : ⁅x₁, x₂⁆ - ⁅y₁, y₂⁆ = ⁅x₁, x₂ - y₂⁆ + ⁅x₁ - y₁, y₂⁆ := by
-      simp [-lie_skew, sub_eq_ad
+      simp [-lie_skew, sub_eq_add_neg, add_assoc]
+    rw [h]
+    apply Submodule.add_mem
+    · apply lie_mem_right R L I x₁ (x₂ - y₂) h₂
+    · apply lie_mem_left R L I (x₁ - y₁) y₂ h₁⟩
+
+@[simp]
 
 Depends on / 依赖: I.toSubmodule, Quotient, Quotient.liftOn, RingHomInvPair, Submodule, Submodule.Quotient.eq, Submodule.add_mem, Submodule.quotientRel_def, add_assoc, add_mem, lie_mem_left, lie_mem_right, lie_skew, quotientRel_def, sub_eq_add_neg, toSubmodule
 -/
@@ -397,7 +409,25 @@ instance lieQuotientLieRing
       | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
     apply congr_arg; apply add_lie
   lie_add x' y' z' := by
-    induction x', y', z' using 
+    induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
+    repeat'
+      first
+      | rw [is_quotient_mk]
+      | rw [← mk_bracket]
+      | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
+    apply congr_arg; apply lie_add
+  lie_self x' := by
+    induction x' using Quotient.inductionOn' with | _ x
+    rw [is_quotient_mk]; rw [← mk_bracket]
+    apply congr_arg; apply lie_self
+  leibniz_lie x' y' z' := by
+    induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
+    repeat'
+      first
+      | rw [is_quotient_mk]
+      | rw [← mk_bracket]
+      | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
+    apply congr_arg; apply leibniz_lie
 
 中文:
 实例 lieQuotientLieRing
@@ -411,7 +441,25 @@ instance lieQuotientLieRing
       | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
     apply congr_arg; apply add_lie
   lie_add x' y' z' := by
-    induction x', y', z' using 
+    induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
+    repeat'
+      first
+      | rw [is_quotient_mk]
+      | rw [← mk_bracket]
+      | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
+    apply congr_arg; apply lie_add
+  lie_self x' := by
+    induction x' using Quotient.inductionOn' with | _ x
+    rw [is_quotient_mk]; rw [← mk_bracket]
+    apply congr_arg; apply lie_self
+  leibniz_lie x' y' z' := by
+    induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
+    repeat'
+      first
+      | rw [is_quotient_mk]
+      | rw [← mk_bracket]
+      | rw [← Submodule.Quotient.mk_add (R := R) (M := L)]
+    apply congr_arg; apply leibniz_lie
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, Submodule, Submodule.Quotient.mk_add, add_lie, congr_arg, inductionOn, is_quotient_mk, lie_add, lie_self, mk_add, mk_bracket, repeat
 -/
@@ -707,7 +755,9 @@ definition quotKerEquivRange
       intro x y
       induction x using Submodule.Quotient.induction_on
       induction y using Submodule.Quotient.induction_on
-      rw [← SetLike.coe_eq_coe]; rw [LieSubalgebra.coe_bracke
+      rw [← SetLike.coe_eq_coe]; rw [LieSubalgebra.coe_bracket f.range]
+      simp only [← LieSubmodule.Quotient.mk_bracket, LinearMap.quotKerEquivRange_apply_mk,
+        coe_toLinearMap, map_lie] }
 
 中文:
 定义 quotKerEquivRange
@@ -718,7 +768,9 @@ definition quotKerEquivRange
       intro x y
       induction x using Submodule.Quotient.induction_on
       induction y using Submodule.Quotient.induction_on
-      rw [← SetLike.coe_eq_coe]; rw [LieSubalgebra.coe_bracke
+      rw [← SetLike.coe_eq_coe]; rw [LieSubalgebra.coe_bracket f.range]
+      simp only [← LieSubmodule.Quotient.mk_bracket, LinearMap.quotKerEquivRange_apply_mk,
+        coe_toLinearMap, map_lie] }
 
 Depends on / 依赖: LieSubalgebra, LieSubalgebra.coe_bracket, LieSubmodule, LieSubmodule.Quotient.mk_bracket, LinearMap, LinearMap.quotKerEquivRange_apply_mk, Quotient, SetLike, SetLike.coe_eq_coe, Submodule, Submodule.Quotient.induction_on, coe_bracket, coe_eq_coe, coe_toLinearMap, f.range, induction_on, map_lie, mk_bracket, quotKerEquivRange, quotKerEquivRange_apply_mk
 -/

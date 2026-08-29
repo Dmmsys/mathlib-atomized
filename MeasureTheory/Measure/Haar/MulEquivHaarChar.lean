@@ -101,7 +101,9 @@ lemma mulEquivHaarChar_eq
     enter [1, 2, 2]
     rw [smul]
   simp_rw [MeasureTheory.Measure.map_smul]
-  exact haarScalarFactor_smul_smul _ _ (haarScalarFactor_pos_of_isHaarMeasure haar 
+  exact haarScalarFactor_smul_smul _ _ (haarScalarFactor_pos_of_isHaarMeasure haar μ).ne'
+
+@[to_additive addEquivAddHaarChar_smul_map]
 
 中文:
 引理 mulEquivHaarChar_eq
@@ -116,7 +118,9 @@ lemma mulEquivHaarChar_eq
     enter [1, 2, 2]
     rw [smul]
   simp_rw [MeasureTheory.Measure.map_smul]
-  exact haarScalarFactor_smul_smul _ _ (haarScalarFactor_pos_of_isHaarMeasure haar 
+  exact haarScalarFactor_smul_smul _ _ (haarScalarFactor_pos_of_isHaarMeasure haar μ).ne'
+
+@[to_additive addEquivAddHaarChar_smul_map]
 
 Depends on / 依赖: Measure, MeasureTheory, MeasureTheory.Measure.map_smul, haarScalarFactor_pos_of_isHaarMeasure, haarScalarFactor_smul_smul, isMulLeftInvariant_eq_smul_of_regular, map_smul, mulEquivHaarChar, simp_rw
 -/
@@ -181,7 +185,9 @@ lemma mulEquivHaarChar_smul_eq_comap
   rw [← mulEquivHaarChar_smul_map (map φ.symm μ) φ]; rw [map_map]
   · simp
   · fun_prop
-  · fun_pr
+  · fun_prop
+
+@[to_additive addEquivAddHaarChar_smul_integral_map]
 
 中文:
 引理 mulEquivHaarChar_smul_eq_comap
@@ -193,7 +199,9 @@ lemma mulEquivHaarChar_smul_eq_comap
   rw [← mulEquivHaarChar_smul_map (map φ.symm μ) φ]; rw [map_map]
   · simp
   · fun_prop
-  · fun_pr
+  · fun_prop
+
+@[to_additive addEquivAddHaarChar_smul_integral_map]
 
 Depends on / 依赖: Regular, Regular.map, e.map_symm, e.symm, fun_prop, map_map, map_symm, mulEquivHaarChar_smul_map, symm.toHomeomorph, toHomeomorph, toHomeomorph.toMeasurableEquiv, toMeasurableEquiv
 -/
@@ -250,7 +258,12 @@ lemma integral_comap_eq_mulEquivHaarChar_smul
   change ∫ a, f a ∂(comap e μ) = mulEquivHaarChar φ • ∫ a, f a ∂μ
   have : (map (e.symm) μ).IsHaarMeasure := φ.symm.isHaarMeasure_map μ
   have : (map (e.symm) μ).Regular := Regular.map φ.symm.toHomeomorph
-  rw [← e.map_symm]; rw [← mulEquivHaarChar_smul
+  rw [← e.map_symm]; rw [← mulEquivHaarChar_smul_integral_map (map e.symm μ) φ]; rw [map_map (by exact φ.toHomeomorph.toMeasurableEquiv.measurable) e.symm.measurable]
+  -- congr -- breaks to_additive
+  rw [show ⇑φ ∘ ⇑e.symm = id by ext; simp [e]]
+  simp
+
+@[to_additive addEquivAddHaarChar_smul_preimage]
 
 中文:
 引理 integral_comap_eq_mulEquivHaarChar_smul
@@ -260,7 +273,12 @@ lemma integral_comap_eq_mulEquivHaarChar_smul
   change ∫ a, f a ∂(comap e μ) = mulEquivHaarChar φ • ∫ a, f a ∂μ
   have : (map (e.symm) μ).IsHaarMeasure := φ.symm.isHaarMeasure_map μ
   have : (map (e.symm) μ).Regular := Regular.map φ.symm.toHomeomorph
-  rw [← e.map_symm]; rw [← mulEquivHaarChar_smul
+  rw [← e.map_symm]; rw [← mulEquivHaarChar_smul_integral_map (map e.symm μ) φ]; rw [map_map (by exact φ.toHomeomorph.toMeasurableEquiv.measurable) e.symm.measurable]
+  -- congr -- breaks to_additive
+  rw [show ⇑φ ∘ ⇑e.symm = id by ext; simp [e]]
+  simp
+
+@[to_additive addEquivAddHaarChar_smul_preimage]
 
 Depends on / 依赖: IsHaarMeasure, Regular, Regular.map, e.map_symm, e.symm, e.symm.measurable, isHaarMeasure_map, map_map, map_symm, measurable, mulEquivHaarChar, mulEquivHaarChar_smul_integral_map, symm.isHaarMeasure_map, symm.toHomeomorph, toHomeomorph, toHomeomorph.toMeasurableEquiv, toHomeomorph.toMeasurableEquiv.measurable, toMeasurableEquiv
 -/
@@ -344,7 +362,9 @@ lemma mulEquivHaarChar_trans
   have hψ : Measurable ψ := by fun_prop
   simp_rw [ContinuousMulEquiv.coe_trans, ← map_map hφ hψ]
   have h_reg : (haar.map ψ).Regular := Regular.map ψ.toHomeomorph
-  rw [MeasureThe
+  rw [MeasureTheory.Measure.haarScalarFactor_eq_mul haar (haar.map ψ)]; rw [← mulEquivHaarChar_eq (haar.map ψ)]
+
+@[to_additive]
 
 中文:
 引理 mulEquivHaarChar_trans
@@ -355,7 +375,9 @@ lemma mulEquivHaarChar_trans
   have hψ : Measurable ψ := by fun_prop
   simp_rw [ContinuousMulEquiv.coe_trans, ← map_map hφ hψ]
   have h_reg : (haar.map ψ).Regular := Regular.map ψ.toHomeomorph
-  rw [MeasureThe
+  rw [MeasureTheory.Measure.haarScalarFactor_eq_mul haar (haar.map ψ)]; rw [← mulEquivHaarChar_eq (haar.map ψ)]
+
+@[to_additive]
 
 Depends on / 依赖: ContinuousMulEquiv, ContinuousMulEquiv.coe_trans, Measurable, Measure, MeasureTheory, MeasureTheory.Measure.haarScalarFactor_eq_mul, Regular, Regular.map, coe_trans, fun_prop, h_reg, haar.map, haarScalarFactor_eq_mul, map_map, mulEquivHaarChar_eq, simp_rw, toHomeomorph
 -/
@@ -410,7 +432,12 @@ lemma mulEquivHaarChar_eq_one_of_compactSpace
   rw [mulEquivHaarChar_eq μ]
   suffices (μ.haarScalarFactor (map φ μ) : Real>=0∞) = 1 by exact_mod_cast this
   calc
-    _ = μ.haarScalarFactor (map φ μ) • (1 : Real>=0∞) := b
+    _ = μ.haarScalarFactor (map φ μ) • (1 : Real>=0∞) := by rw [ENNReal.smul_def, smul_eq_mul, mul_one]
+    _ = μ.haarScalarFactor (map φ μ) • (map φ μ univ) := by
+          rw [map_apply (map_continuous φ).measurable .univ]; rw [Set.preimage_univ]; rw [hμ]
+    _ = μ univ := by
+          conv_rhs => rw [isMulInvariant_eq_smul_of_compactSpace μ (map φ μ), Measure.smul_apply]
+    _ = 1 := hμ
 
 中文:
 引理 mulEquivHaarChar_eq_one_of_compactSpace
@@ -421,7 +448,12 @@ lemma mulEquivHaarChar_eq_one_of_compactSpace
   rw [mulEquivHaarChar_eq μ]
   suffices (μ.haarScalarFactor (map φ μ) : Real>=0∞) = 1 by exact_mod_cast this
   calc
-    _ = μ.haarScalarFactor (map φ μ) • (1 : Real>=0∞) := b
+    _ = μ.haarScalarFactor (map φ μ) • (1 : Real>=0∞) := by rw [ENNReal.smul_def, smul_eq_mul, mul_one]
+    _ = μ.haarScalarFactor (map φ μ) • (map φ μ univ) := by
+          rw [map_apply (map_continuous φ).measurable .univ]; rw [Set.preimage_univ]; rw [hμ]
+    _ = μ univ := by
+          conv_rhs => rw [isMulInvariant_eq_smul_of_compactSpace μ (map φ μ), Measure.smul_apply]
+    _ = 1 := hμ
 
 Depends on / 依赖: ENNReal, ENNReal.smul_def, PositiveCompacts, Set.preimage_univ, conv_rhs, haarMeasure, haarMeasure_self, haarScalarFactor, isCompact_univ, map_apply, map_continuous, measurable, mulEquivHaarChar_eq, mul_one, preimage_univ, smul_def, smul_eq_mul
 -/

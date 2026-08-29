@@ -45,7 +45,7 @@ theorem hasStrictDerivAt_sin
           I).mul_const
       (2 : Complex)⁻¹ using 1
   simp only [id]
-  rw [sub_mul]; rw [mul_assoc]; rw [mul_assoc]; rw [I
+  rw [sub_mul]; rw [mul_assoc]; rw [mul_assoc]; rw [I_mul_I]; rw [neg_one_mul]; rw [neg_neg]; rw [mul_one]; rw [one_mul]; rw [mul_assoc]; rw [I_mul_I]; rw [mul_neg_one]; rw [sub_neg_eq_add]; rw [add_comm]
 
 中文:
 定理 hasStrictDerivAt_sin
@@ -59,7 +59,7 @@ theorem hasStrictDerivAt_sin
           I).mul_const
       (2 : Complex)⁻¹ using 1
   simp only [id]
-  rw [sub_mul]; rw [mul_assoc]; rw [mul_assoc]; rw [I
+  rw [sub_mul]; rw [mul_assoc]; rw [mul_assoc]; rw [I_mul_I]; rw [neg_one_mul]; rw [neg_neg]; rw [mul_one]; rw [one_mul]; rw [mul_assoc]; rw [I_mul_I]; rw [mul_neg_one]; rw [sub_neg_eq_add]; rw [add_comm]
 
 Depends on / 依赖: I_mul_I, add_comm, cexp.sub, convert, div_eq_mul_inv, fun_neg, fun_neg.mul_const, hasStrictDerivAt_id, mul_assoc, mul_const, mul_neg_one, mul_one, neg_neg, neg_one_mul, one_mul, sub_mul, sub_neg_eq_add
 -/

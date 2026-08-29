@@ -227,14 +227,14 @@ instance :
   signature: NatTrans.IsMonoidal e.inv
   body: by rw [← NatTrans.IsMonoidal.unit (τ := e.hom), assoc, hom_inv_id_app, comp_id]
   tensor X Y := by
-    rw [← cancel_mono (e.hom.app (X otimes Y))]; rw [assoc]; rw [assoc]; rw [inv_hom_id_app]; rw [comp_id]; rw [NatTrans.IsMonoidal.tensor]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [in
+    rw [← cancel_mono (e.hom.app (X otimes Y))]; rw [assoc]; rw [assoc]; rw [inv_hom_id_app]; rw [comp_id]; rw [NatTrans.IsMonoidal.tensor]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [inv_hom_id_app]; rw [inv_hom_id_app]; rw [tensorHom_id]; rw [id_whiskerRight]; rw [id_comp]
 
 中文:
 实例 :
   签名: 自然变换.是幺半群 e.inv
   定义体: by rw [← NatTrans.IsMonoidal.unit (τ := e.hom), assoc, hom_inv_id_app, comp_id]
   tensor X Y := by
-    rw [← cancel_mono (e.hom.app (X otimes Y))]; rw [assoc]; rw [assoc]; rw [inv_hom_id_app]; rw [comp_id]; rw [NatTrans.IsMonoidal.tensor]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [in
+    rw [← cancel_mono (e.hom.app (X otimes Y))]; rw [assoc]; rw [assoc]; rw [inv_hom_id_app]; rw [comp_id]; rw [NatTrans.IsMonoidal.tensor]; rw [MonoidalCategory.tensorHom_comp_tensorHom_assoc]; rw [inv_hom_id_app]; rw [inv_hom_id_app]; rw [tensorHom_id]; rw [id_whiskerRight]; rw [id_comp]
 
 Depends on / 依赖: IsMonoidal, MonoidalCategory, MonoidalCategory.tensorHom_comp_tensorHom_assoc, NatTrans, NatTrans.IsMonoidal.tensor, NatTrans.IsMonoidal.unit, cancel_mono, comp_id, e.hom, e.hom.app, hom_inv_id_app, id_comp, id_whiskerRight, inv_hom_id_app, otimes, tensor, tensorHom_comp_tensorHom_assoc, tensorHom_id
 -/

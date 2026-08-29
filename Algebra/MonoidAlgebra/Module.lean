@@ -1096,7 +1096,9 @@ lemma mem_closure_of_mem_span_closure
     simpa [← AddSubmonoid.toSubmonoid_closure]
   let s' := @Submonoid.closure (Multiplicative M) Multiplicative.mulOneClass s
   have h' : Submonoid.map (of R M) s' = Submonoid.closure (of R M '' s) :=
-    Monoi
+    MonoidHom.map_mclosure _ _
+  rw [Set.image_congr' (show forall x]; rw [of' R M x = of R M x from fun x => of'_eq_of x)]; rw [← h'] at h
+  simpa using! of'_mem_span.1 h
 
 中文:
 引理 mem_closure_of_mem_span_closure
@@ -1106,7 +1108,9 @@ lemma mem_closure_of_mem_span_closure
     simpa [← AddSubmonoid.toSubmonoid_closure]
   let s' := @Submonoid.closure (Multiplicative M) Multiplicative.mulOneClass s
   have h' : Submonoid.map (of R M) s' = Submonoid.closure (of R M '' s) :=
-    Monoi
+    MonoidHom.map_mclosure _ _
+  rw [Set.image_congr' (show forall x]; rw [of' R M x = of R M x from fun x => of'_eq_of x)]; rw [← h'] at h
+  simpa using! of'_mem_span.1 h
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.toSubmonoid_closure, MonoidHom, MonoidHom.map_mclosure, Multiplicative, Multiplicative.mulOneClass, Multiplicative.ofAdd, Multiplicative.toAdd, Set.image_congr, Submonoid, Submonoid.closure, Submonoid.map, _eq_of, _mem_span, closure, image_congr, map_mclosure, mulOneClass, toSubmonoid_closure
 -/

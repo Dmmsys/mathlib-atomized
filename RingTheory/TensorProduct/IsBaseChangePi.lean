@@ -147,7 +147,8 @@ instance prodMap
   apply IsBaseChange.prodMap
   · rw [← isLocalizedModule_iff_isBaseChange S]
     infer_instance
-  · rw
+  · rw [← isLocalizedModule_iff_isBaseChange S]
+    infer_instance
 
 中文:
 实例 prodMap
@@ -159,7 +160,8 @@ instance prodMap
   apply IsBaseChange.prodMap
   · rw [← isLocalizedModule_iff_isBaseChange S]
     infer_instance
-  · rw
+  · rw [← isLocalizedModule_iff_isBaseChange S]
+    infer_instance
 
 Depends on / 依赖: IsBaseChange, IsBaseChange.prodMap, IsLocalizedModule, IsLocalizedModule.module, Localization, Module, infer_instance, isLocalizedModule_iff_isBaseChange, module, prodMap
 -/
@@ -299,7 +301,7 @@ apply of_equiv
   intro x
   rw [LinearEquiv.trans_apply]; rw [Finsupp.mapRange.linearMap_apply]; rw [LinearEquiv.symm_apply_eq]
   ext
-  simp [L
+  simp [LinearEquiv.baseChange_tmul, IsBaseChange.equiv_tmul, lmap_finsuppLEquivDirectSum_eq]
 
 中文:
 定理 finsuppPow
@@ -312,7 +314,7 @@ apply of_equiv
   intro x
   rw [LinearEquiv.trans_apply]; rw [Finsupp.mapRange.linearMap_apply]; rw [LinearEquiv.symm_apply_eq]
   ext
-  simp [L
+  simp [LinearEquiv.baseChange_tmul, IsBaseChange.equiv_tmul, lmap_finsuppLEquivDirectSum_eq]
 
 Depends on / 依赖: Finsupp, Finsupp.mapRange.linearMap_apply, IsBaseChange, IsBaseChange.equiv_tmul, LinearEquiv, LinearEquiv.baseChange, LinearEquiv.baseChange_tmul, LinearEquiv.symm_apply_eq, LinearEquiv.trans_apply, baseChange, baseChange_tmul, classical, directSum, equiv_tmul, finsuppLEquivDirectSum, linearMap_apply, lmap_finsuppLEquivDirectSum_eq, mapRange, of_equiv, symm_apply_eq
 -/

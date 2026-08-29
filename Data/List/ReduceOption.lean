@@ -221,7 +221,10 @@ theorem reduceOption_eq_singleton_iff
     apply eq_replicate_of_mem at hl₁
     apply eq_replicate_of_mem at hl₂
     rw [h]; rw [hl₁]; rw [hl₂]
-    use l₁.length, l₂.len
+    use l₁.length, l₂.length
+  · intro ⟨_, _, h⟩
+    simp only [h, filterMap_append, filterMap_cons_some, filterMap_replicate_of_none, id_eq,
+      nil_append, Option.some.injEq]
 
 中文:
 定理 reduceOption_eq_singleton_iff
@@ -236,7 +239,10 @@ theorem reduceOption_eq_singleton_iff
     apply eq_replicate_of_mem at hl₁
     apply eq_replicate_of_mem at hl₂
     rw [h]; rw [hl₁]; rw [hl₂]
-    use l₁.length, l₂.len
+    use l₁.length, l₂.length
+  · intro ⟨_, _, h⟩
+    simp only [h, filterMap_append, filterMap_cons_some, filterMap_replicate_of_none, id_eq,
+      nil_append, Option.some.injEq]
 
 Depends on / 依赖: Option.some.injEq, eq_replicate_of_mem, filterMap_append, filterMap_cons_some, filterMap_eq_cons_iff, filterMap_eq_nil_iff, filterMap_replicate_of_none, id_eq, length, nil_append, reduceOption
 -/
@@ -296,7 +302,10 @@ theorem reduceOption_eq_concat_iff
     rw [reduceOption_eq_singleton_iff] at hl₂
     obtain ⟨m, n, hl₂⟩ := hl₂
     use l₁ ++ replicate m none, replicate n none
-    simp_rw [h, reduceOption_append, reduceO
+    simp_rw [h, reduceOption_append, reduceOption_replicate_none, append_assoc, append_nil, hl₁,
+      hl₂, and_self]
+  · intro ⟨_, _, h, hl₁, hl₂⟩
+    rw [h]; rw [reduceOption_append]; rw [reduceOption_cons_of_some]; rw [hl₁]; rw [hl₂]
 
 中文:
 定理 reduceOption_eq_concat_iff
@@ -310,7 +319,10 @@ theorem reduceOption_eq_concat_iff
     rw [reduceOption_eq_singleton_iff] at hl₂
     obtain ⟨m, n, hl₂⟩ := hl₂
     use l₁ ++ replicate m none, replicate n none
-    simp_rw [h, reduceOption_append, reduceO
+    simp_rw [h, reduceOption_append, reduceOption_replicate_none, append_assoc, append_nil, hl₁,
+      hl₂, and_self]
+  · intro ⟨_, _, h, hl₁, hl₂⟩
+    rw [h]; rw [reduceOption_append]; rw [reduceOption_cons_of_some]; rw [hl₁]; rw [hl₂]
 
 Depends on / 依赖: and_self, append_assoc, append_nil, concat_eq_append, reduceOption_append, reduceOption_cons_of_some, reduceOption_eq_append_iff, reduceOption_eq_singleton_iff, reduceOption_replicate_none, replicate, simp_rw
 -/

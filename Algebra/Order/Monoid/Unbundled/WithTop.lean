@@ -1237,7 +1237,7 @@ instance addMonoid
   nsmul_zero a := by simp_rw [HSMul.hSMul, SMul.smul]; cases a <;> simp [zero_nsmul]
   nsmul_succ n a := by
     simp_rw [HSMul.hSMul, SMul.smul]
-    case
+    cases a <;> cases n <;> simp [succ_nsmul, coe_add]
 
 中文:
 实例 addMonoid
@@ -1251,7 +1251,7 @@ instance addMonoid
   nsmul_zero a := by simp_rw [HSMul.hSMul, SMul.smul]; cases a <;> simp [zero_nsmul]
   nsmul_succ n a := by
     simp_rw [HSMul.hSMul, SMul.smul]
-    case
+    cases a <;> cases n <;> simp [succ_nsmul, coe_add]
 
 Depends on / 依赖: WithTop, WithTop.addSemigroup, addSemigroup
 -/

@@ -287,7 +287,16 @@ theorem uniformContinuousOn_inv₀
   rcases NormedAddGroup.nhds_zero_basis_norm_lt.mem_iff.mp hs with ⟨r, hr₀, hr⟩
   simp only [Set.subset_compl_comm (t := s), Set.compl_ofPred, not_lt] at hr
 have hs₀ : forall x in s, x != 0 := fun x hx => norm_pos_iff.mp hr₀.trans_le (hr hx)
- 
+  refine ⟨ε * r ^ 2, by positivity, fun x hx y hy hxy => ?_⟩
+  calc
+    dist x⁻¹ y⁻¹ = ‖x‖⁻¹ * dist y x * ‖y‖⁻¹ := by
+      simp [dist_eq_norm, inv_sub_inv' (hs₀ x hx) (hs₀ y hy)]
+    _ <= r⁻¹ * (ε * r ^ 2) * r⁻¹ := by
+      rw [dist_comm]
+      gcongr <;> exact hr ‹_›
+    _ = ε := by field_simp
+
+@[to_fun]
 
 中文:
 定理 uniformContinuousOn_inv₀
@@ -298,7 +307,16 @@ have hs₀ : forall x in s, x != 0 := fun x hx => norm_pos_iff.mp hr₀.trans_le
   rcases NormedAddGroup.nhds_zero_basis_norm_lt.mem_iff.mp hs with ⟨r, hr₀, hr⟩
   simp only [Set.subset_compl_comm (t := s), Set.compl_ofPred, not_lt] at hr
 have hs₀ : forall x in s, x != 0 := fun x hx => norm_pos_iff.mp hr₀.trans_le (hr hx)
- 
+  refine ⟨ε * r ^ 2, by positivity, fun x hx y hy hxy => ?_⟩
+  calc
+    dist x⁻¹ y⁻¹ = ‖x‖⁻¹ * dist y x * ‖y‖⁻¹ := by
+      simp [dist_eq_norm, inv_sub_inv' (hs₀ x hx) (hs₀ y hy)]
+    _ <= r⁻¹ * (ε * r ^ 2) * r⁻¹ := by
+      rw [dist_comm]
+      gcongr <;> exact hr ‹_›
+    _ = ε := by field_simp
+
+@[to_fun]
 
 Depends on / 依赖: Metric, Metric.uniformContinuousOn_iff_le, NormedAddGroup, NormedAddGroup.nhds_zero_basis_norm_lt.mem_iff.mp, Set.compl_ofPred, Set.subset_compl_comm, compl_ofPred, dist_eq_norm, inv_sub_inv, mem_iff, nhds_zero_basis_norm_lt, norm_pos_iff, norm_pos_iff.mp, not_lt, subset_compl_comm, trans_le, uniformContinuousOn_iff_le
 -/
@@ -386,7 +404,15 @@ theorem TendstoLocallyUniformlyOn.inv₀_of_disjoint
 .disjoint_iff nhds_basis_ball .map _ rcases basis_sets _
 .mp (hf x hx) with ⟨U, hUx, r, hr₀, hr⟩
   refine Tendsto.comp (uniformContinuousOn_inv₀ (s := (closedBall (0 : α) (r / 2))ᶜ)
-    (by simp [closedBall_mem_nhds, hr₀])) <| 
+    (by simp [closedBall_mem_nhds, hr₀])) <| tendsto_inf.mpr ⟨hF x hx, tendsto_principal.mpr ?_⟩
+  filter_upwards [hF x hx (dist_mem_uniformity (half_pos hr₀)), tendsto_snd hUx] with y hy₁ hy₂
+  have : r <= ‖f y.2‖ := by simp_all [Set.disjoint_left]
+  have : r / 2 < ‖F y.1 y.2‖ := by
+    simp [dist_eq_norm_sub] at hy₁
+    linarith [hy₁, norm_sub_norm_le (f y.2) (F y.1 y.2)]
+  simp_all [(half_lt_self hr₀).trans_le]
+
+@[to_fun]
 
 中文:
 定理 TendstoLocallyUniformlyOn.inv₀_of_disjoint
@@ -397,7 +423,15 @@ theorem TendstoLocallyUniformlyOn.inv₀_of_disjoint
 .disjoint_iff nhds_basis_ball .map _ rcases basis_sets _
 .mp (hf x hx) with ⟨U, hUx, r, hr₀, hr⟩
   refine Tendsto.comp (uniformContinuousOn_inv₀ (s := (closedBall (0 : α) (r / 2))ᶜ)
-    (by simp [closedBall_mem_nhds, hr₀])) <| 
+    (by simp [closedBall_mem_nhds, hr₀])) <| tendsto_inf.mpr ⟨hF x hx, tendsto_principal.mpr ?_⟩
+  filter_upwards [hF x hx (dist_mem_uniformity (half_pos hr₀)), tendsto_snd hUx] with y hy₁ hy₂
+  have : r <= ‖f y.2‖ := by simp_all [Set.disjoint_left]
+  have : r / 2 < ‖F y.1 y.2‖ := by
+    simp [dist_eq_norm_sub] at hy₁
+    linarith [hy₁, norm_sub_norm_le (f y.2) (F y.1 y.2)]
+  simp_all [(half_lt_self hr₀).trans_le]
+
+@[to_fun]
 
 Depends on / 依赖: Set.disjoint_left, Tendsto, Tendsto.comp, basis_sets, closedBall, closedBall_mem_nhds, disjoint_iff, disjoint_left, dist_mem_uniformity, filter_upwards, half_pos, nhds_basis_ball, tendstoLocallyUniformlyOn_iff_forall_tendsto, tendsto_inf, tendsto_inf.mpr, tendsto_principal, tendsto_principal.mpr, tendsto_snd
 -/
@@ -640,7 +674,9 @@ lemma discreteTopology_or_nontriviallyNormedField
              sub_zero]
     refine Or.inl ⟨1, zero_lt_one, ?_⟩
     contrapose! H
-    
+    refine H.imp ?_
+    -- contextual to reuse the `a ≠ 0` hypothesis in the proof of `a ≠ 0 ∧ ‖a‖ ≠ 1`
+    simp +contextual [ne_of_lt]
 
 中文:
 引理 discreteTopology_or_nontriviallyNormedField
@@ -652,7 +688,9 @@ lemma discreteTopology_or_nontriviallyNormedField
              sub_zero]
     refine Or.inl ⟨1, zero_lt_one, ?_⟩
     contrapose! H
-    
+    refine H.imp ?_
+    -- contextual to reuse the `a ≠ 0` hypothesis in the proof of `a ≠ 0 ∧ ‖a‖ ≠ 1`
+    simp +contextual [ne_of_lt]
 
 Depends on / 依赖: H.imp, Metric, Metric.isOpen_singleton_iff, NontriviallyNormedField, NontriviallyNormedField.ofNormNeOne, Or.inl, Or.inr, contrapose, discreteTopology_iff_isOpen_singleton_zero, dist_eq_norm, isOpen_singleton_iff, ofNormNeOne, simp_rw, sub_zero, zero_lt_one
 -/
@@ -852,7 +890,22 @@ lemma NormedField.completeSpace_iff_isComplete_closedBall
   rcases NormedField.discreteTopology_or_nontriviallyNormedField K with _ | ⟨_, rfl⟩
   · rwa [completeSpace_iff_isComplete_univ,
          ← NormedDivisionRing.unitClosedBall_eq_univ_of_discrete]
-  refine Metric.complete_of_
+  refine Metric.complete_of_cauchySeq_tendsto fun u hu => ?_
+  obtain ⟨k, hk⟩ := hu.norm_bddAbove
+  have kpos : 0 <= k := (_root_.norm_nonneg (u 0)).trans (hk (by simp))
+  obtain ⟨x, hx⟩ := NormedField.exists_lt_norm K k
+  have hu' : CauchySeq ((· / x) ∘ u) := (uniformContinuous_div_const' x).comp_cauchySeq hu
+  have hb : forall n, ((· / x) ∘ u) n in Metric.closedBall 0 1 := by
+    intro
+    simp only [Function.comp_apply, Metric.mem_closedBall, dist_zero_right, norm_div]
+    rw [div_le_one (kpos.trans_lt hx)]
+    exact hx.le.trans' (hk (by simp))
+  obtain ⟨a, -, ha'⟩ := cauchySeq_tendsto_of_isComplete h hb hu'
+  refine ⟨a * x, (((continuous_mul_const x).tendsto a).comp ha').congr ?_⟩
+  have hx' : x != 0 := by
+    contrapose! hx
+    simp [hx, kpos]
+  simp [div_mul_cancel₀ _ hx']
 
 中文:
 引理 赋范域.completeSpace_iff_isComplete_closedBall
@@ -863,7 +916,22 @@ lemma NormedField.completeSpace_iff_isComplete_closedBall
   rcases NormedField.discreteTopology_or_nontriviallyNormedField K with _ | ⟨_, rfl⟩
   · rwa [completeSpace_iff_isComplete_univ,
          ← NormedDivisionRing.unitClosedBall_eq_univ_of_discrete]
-  refine Metric.complete_of_
+  refine Metric.complete_of_cauchySeq_tendsto fun u hu => ?_
+  obtain ⟨k, hk⟩ := hu.norm_bddAbove
+  have kpos : 0 <= k := (_root_.norm_nonneg (u 0)).trans (hk (by simp))
+  obtain ⟨x, hx⟩ := NormedField.exists_lt_norm K k
+  have hu' : CauchySeq ((· / x) ∘ u) := (uniformContinuous_div_const' x).comp_cauchySeq hu
+  have hb : forall n, ((· / x) ∘ u) n in Metric.closedBall 0 1 := by
+    intro
+    simp only [Function.comp_apply, Metric.mem_closedBall, dist_zero_right, norm_div]
+    rw [div_le_one (kpos.trans_lt hx)]
+    exact hx.le.trans' (hk (by simp))
+  obtain ⟨a, -, ha'⟩ := cauchySeq_tendsto_of_isComplete h hb hu'
+  refine ⟨a * x, (((continuous_mul_const x).tendsto a).comp ha').congr ?_⟩
+  have hx' : x != 0 := by
+    contrapose! hx
+    simp [hx, kpos]
+  simp [div_mul_cancel₀ _ hx']
 
 Depends on / 依赖: CauchySeq, Metric, Metric.complete_of_cauchySeq_tendsto, Metric.isClosed_closedBall.isComplete, NormedDivisionRing, NormedDivisionRing.unitClosedBall_eq_univ_of_discrete, NormedField, NormedField.discreteTopology_or_nontriviallyNormedField, NormedField.exists_lt_norm, _root_, _root_.norm_nonneg, completeSpace_iff_isComplete_univ, complete_of_cauchySeq_tendsto, discreteTopology_or_nontriviallyNormedField, exists_lt_norm, hu.norm_bddAbove, isClosed_closedBall, isComplete, norm_bddAbove, norm_nonneg
 -/

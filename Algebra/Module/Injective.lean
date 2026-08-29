@@ -310,7 +310,8 @@ instance :
           rcases hx with ⟨x, rfl⟩
           refine ⟨X1.le (Set.mem_range_self _), X2.le (Set.mem_range_self _), ?_⟩
           rw [← X1.is_extension x]; rw [← X2.is_extension x] :
-          x in X1.toLinearPMap.eqLocus X2.to
+          x in X1.toLinearPMap.eqLocus X2.toLinearPMap)
+      is_extension := fun _ => X1.is_extension _ }
 
 中文:
 实例 :
@@ -321,7 +322,8 @@ instance :
           rcases hx with ⟨x, rfl⟩
           refine ⟨X1.le (Set.mem_range_self _), X2.le (Set.mem_range_self _), ?_⟩
           rw [← X1.is_extension x]; rw [← X2.is_extension x] :
-          x in X1.toLinearPMap.eqLocus X2.to
+          x in X1.toLinearPMap.eqLocus X2.toLinearPMap)
+      is_extension := fun _ => X1.is_extension _ }
 
 Depends on / 依赖: Set.mem_range_self, X1.is_extension, X1.le, X1.toLinearPMap, X1.toLinearPMap.eqLocus, X2.is_extension, X2.le, X2.toLinearPMap, eqLocus, is_extension, mem_range_self, toLinearPMap
 -/
@@ -415,7 +417,12 @@ refine le_trans hnonempty.some.le
         (LinearPMap.le_sSup _ <|
             (Set.mem_image _ _ _).mpr ⟨hnonempty.some, hnonempty.choose_spec, rfl⟩).1
     is_extension := fun m => by
-  
+      refine Eq.trans (hnonempty.some.is_extension m) ?_
+      symm
+      generalize_proofs _ _ h1
+      exact
+        LinearPMap.sSup_apply (IsChain.directedOn <| chain_linearPMap_of_chain_extensionOf hchain)
+          ((Set.mem_image _ _ _).mpr ⟨hnonempty.some, hnonempty.choose_spec, rfl⟩) ⟨i m, h1⟩ }
 
 中文:
 定义 扩张.最大值
@@ -427,7 +434,12 @@ refine le_trans hnonempty.some.le
         (LinearPMap.le_sSup _ <|
             (Set.mem_image _ _ _).mpr ⟨hnonempty.some, hnonempty.choose_spec, rfl⟩).1
     is_extension := fun m => by
-  
+      refine Eq.trans (hnonempty.some.is_extension m) ?_
+      symm
+      generalize_proofs _ _ h1
+      exact
+        LinearPMap.sSup_apply (IsChain.directedOn <| chain_linearPMap_of_chain_extensionOf hchain)
+          ((Set.mem_image _ _ _).mpr ⟨hnonempty.some, hnonempty.choose_spec, rfl⟩) ⟨i m, h1⟩ }
 
 Depends on / 依赖: Eq.trans, IsChain, IsChain.directedOn, LinearPMap, LinearPMap.le_sSup, LinearPMap.sSup, LinearPMap.sSup_apply, Set.mem_image, chain_linearPMap_of_chain_extensionOf, choose_spec, directedOn, generalize_proofs, hchain, hnonempty, hnonempty.choo, hnonempty.choose_spec, hnonempty.some, hnonempty.some.is_extension, hnonempty.some.le, is_extension
 -/
@@ -485,7 +497,19 @@ instance ExtensionOf.inhabited
             have eq1 : _ + _ = (x + y).1 := congr_arg₂ (· + ·) x.2.choose_spec y.2.choose_spec
             rw [← map_add]; rw [← (x + y).2.choose_spec] at eq1
             dsimp
- 
+            rw [← Fact.out (p := Function.Injective i) eq1]; rw [map_add]
+          map_smul' := fun r x => by
+            have eq1 : r • _ = (r • x).1 := congr_arg (r • ·) x.2.choose_spec
+            rw [← map_smul]; rw [← (r • x).2.choose_spec] at eq1
+            dsimp
+            rw [← Fact.out (p := Function.Injective i) eq1]; rw [map_smul] }
+      le := le_refl _
+      is_extension := fun m => by
+        simp only [LinearPMap.mk_apply, LinearMap.coe_mk]
+        dsimp
+        apply congrArg
+        exact Fact.out (p := Function.Injective i)
+          (⟨i m, ⟨_, rfl⟩⟩ : LinearMap.range i).2.choose_spec.symm }
 
 中文:
 实例 扩张.inhabited
@@ -497,7 +521,19 @@ instance ExtensionOf.inhabited
             have eq1 : _ + _ = (x + y).1 := congr_arg₂ (· + ·) x.2.choose_spec y.2.choose_spec
             rw [← map_add]; rw [← (x + y).2.choose_spec] at eq1
             dsimp
- 
+            rw [← Fact.out (p := Function.Injective i) eq1]; rw [map_add]
+          map_smul' := fun r x => by
+            have eq1 : r • _ = (r • x).1 := congr_arg (r • ·) x.2.choose_spec
+            rw [← map_smul]; rw [← (r • x).2.choose_spec] at eq1
+            dsimp
+            rw [← Fact.out (p := Function.Injective i) eq1]; rw [map_smul] }
+      le := le_refl _
+      is_extension := fun m => by
+        simp only [LinearPMap.mk_apply, LinearMap.coe_mk]
+        dsimp
+        apply congrArg
+        exact Fact.out (p := Function.Injective i)
+          (⟨i m, ⟨_, rfl⟩⟩ : LinearMap.range i).2.choose_spec.symm }
 
 Depends on / 依赖: Fact.out, Function, Function.Injective, Injective, LinearMap, LinearMap.range, choose_spec, congr_arg, domain, map_add, map_smul
 -/
@@ -715,7 +751,9 @@ definition ExtensionOfMaxAdjoin.idealTo
     congr
     apply add_smul
   map_smul' z1 (z2 : {x // x in ideal i f y}) := by
-    simp_rw [← (extensionOfMax i f).toLinearPMap.ma
+    simp_rw [← (extensionOfMax i f).toLinearPMap.map_smul]
+    congr 2
+    apply mul_smul
 
 中文:
 定义 ExtensionOfMaxAdjoin.idealTo
@@ -726,7 +764,9 @@ definition ExtensionOfMaxAdjoin.idealTo
     congr
     apply add_smul
   map_smul' z1 (z2 : {x // x in ideal i f y}) := by
-    simp_rw [← (extensionOfMax i f).toLinearPMap.ma
+    simp_rw [← (extensionOfMax i f).toLinearPMap.map_smul]
+    congr 2
+    apply mul_smul
 
 Depends on / 依赖: extensionOfMax, toLinearPMap, z.prop
 -/
@@ -792,7 +832,7 @@ theorem ExtensionOfMaxAdjoin.extendIdealTo_wd'
     apply Submodule.zero_mem _
   rw [ExtensionOfMaxAdjoin.extendIdealTo_is_extension i f h y r this]
   dsimp [ExtensionOfMaxAdjoin.idealTo]
-  simp only [eq1, ← ZeroMemClass.zero_def, (exten
+  simp only [eq1, ← ZeroMemClass.zero_def, (extensionOfMax i f).toLinearPMap.map_zero]
 
 中文:
 定理 ExtensionOfMaxAdjoin.extendIdealTo_wd'
@@ -804,7 +844,7 @@ theorem ExtensionOfMaxAdjoin.extendIdealTo_wd'
     apply Submodule.zero_mem _
   rw [ExtensionOfMaxAdjoin.extendIdealTo_is_extension i f h y r this]
   dsimp [ExtensionOfMaxAdjoin.idealTo]
-  simp only [eq1, ← ZeroMemClass.zero_def, (exten
+  simp only [eq1, ← ZeroMemClass.zero_def, (extensionOfMax i f).toLinearPMap.map_zero]
 
 Depends on / 依赖: ExtensionOfMaxAdjoin, ExtensionOfMaxAdjoin.extendIdealTo_is_extension, ExtensionOfMaxAdjoin.idealTo, Submodule, Submodule.zero_mem, ZeroMemClass, ZeroMemClass.zero_def, domain, extendIdealTo_is_extension, extensionOfMax, idealTo, map_zero, toLinearPMap, toLinearPMap.domain, toLinearPMap.map_zero, zero_def, zero_mem
 -/
@@ -907,7 +947,16 @@ theorem ExtensionOfMaxAdjoin.extensionToFun_wd
     rwa [ExtensionOfMaxAdjoin.eqn, ← sub_eq_zero, ← sub_sub_sub_eq, sub_eq_zero, ← sub_smul]
       at eq1
   have eq3 :=
-    ExtensionOfMaxAd
+    ExtensionOfMaxAdjoin.extendIdealTo_eq i f h (r - ExtensionOfMaxAdjoin.snd i x)
+      (by rw [← eq2]; exact Submodule.sub_mem _ (ExtensionOfMaxAdjoin.fst i x).2 ha)
+  simp only [map_sub, sub_smul, sub_eq_iff_eq_add] at eq3
+  unfold ExtensionOfMaxAdjoin.extensionToFun
+  rw [eq3]; rw [← add_assoc]; rw [← (extensionOfMax i f).toLinearPMap.map_add]; rw [AddMemClass.mk_add_mk]
+  congr
+  ext
+  dsimp
+  rw [Subtype.coe_mk]; rw [add_sub]; rw [← eq1]
+  exact eq_sub_of_add_eq (ExtensionOfMaxAdjoin.eqn i x).symm
 
 中文:
 定理 ExtensionOfMaxAdjoin.extensionToFun_wd
@@ -920,7 +969,16 @@ theorem ExtensionOfMaxAdjoin.extensionToFun_wd
     rwa [ExtensionOfMaxAdjoin.eqn, ← sub_eq_zero, ← sub_sub_sub_eq, sub_eq_zero, ← sub_smul]
       at eq1
   have eq3 :=
-    ExtensionOfMaxAd
+    ExtensionOfMaxAdjoin.extendIdealTo_eq i f h (r - ExtensionOfMaxAdjoin.snd i x)
+      (by rw [← eq2]; exact Submodule.sub_mem _ (ExtensionOfMaxAdjoin.fst i x).2 ha)
+  simp only [map_sub, sub_smul, sub_eq_iff_eq_add] at eq3
+  unfold ExtensionOfMaxAdjoin.extensionToFun
+  rw [eq3]; rw [← add_assoc]; rw [← (extensionOfMax i f).toLinearPMap.map_add]; rw [AddMemClass.mk_add_mk]
+  congr
+  ext
+  dsimp
+  rw [Subtype.coe_mk]; rw [add_sub]; rw [← eq1]
+  exact eq_sub_of_add_eq (ExtensionOfMaxAdjoin.eqn i x).symm
 
 Depends on / 依赖: ExtensionOfMaxAdjoin, ExtensionOfMaxAdjoin.eqn, ExtensionOfMaxAdjoin.ex, ExtensionOfMaxAdjoin.extendIdealTo_eq, ExtensionOfMaxAdjoin.fst, ExtensionOfMaxAdjoin.snd, Submodule, Submodule.sub_mem, extendIdealTo_eq, map_sub, sub_eq_iff_eq_add, sub_eq_zero, sub_mem, sub_smul, sub_sub_sub_eq
 -/
@@ -960,7 +1018,26 @@ definition extensionOfMaxAdjoin
       map_add' := fun a b => by
         have eq1 :
           ↑a + ↑b =
-            ↑(Extensi
+            ↑(ExtensionOfMaxAdjoin.fst i a + ExtensionOfMaxAdjoin.fst i b) +
+              (ExtensionOfMaxAdjoin.snd i a + ExtensionOfMaxAdjoin.snd i b) • y := by
+          rw [ExtensionOfMaxAdjoin.eqn]; rw [ExtensionOfMaxAdjoin.eqn]; rw [add_smul]; rw [Submodule.coe_add]
+          ac_rfl
+        rw [ExtensionOfMaxAdjoin.extensionToFun_wd (y := y) i f h (a + b) _ _ eq1]; rw [LinearPMap.map_add]; rw [map_add]
+        unfold ExtensionOfMaxAdjoin.extensionToFun
+        abel
+      map_smul' := fun r a => by
+        dsimp
+        have eq1 :
+          r • (a : N) =
+            ↑(r • ExtensionOfMaxAdjoin.fst i a) + (r • ExtensionOfMaxAdjoin.snd i a) • y := by
+          rw [ExtensionOfMaxAdjoin.eqn]; rw [smul_add]; rw [smul_eq_mul]; rw [mul_smul]
+          rfl
+        rw [ExtensionOfMaxAdjoin.extensionToFun_wd i f h (r • a :) _ _ eq1]; rw [map_smul]; rw [LinearPMap.map_smul]; rw [← smul_add]
+        congr }
+  is_extension m := by
+    dsimp
+    rw [(extensionOfMax i f).is_extension]; rw [ExtensionOfMaxAdjoin.extensionToFun_wd i f h _ ⟨i m]; rw [_⟩ 0 _]; rw [map_zero]; rw [add_zero]
+    simp
 
 中文:
 定义 extensionOfMaxAdjoin
@@ -972,7 +1049,26 @@ definition extensionOfMaxAdjoin
       map_add' := fun a b => by
         have eq1 :
           ↑a + ↑b =
-            ↑(Extensi
+            ↑(ExtensionOfMaxAdjoin.fst i a + ExtensionOfMaxAdjoin.fst i b) +
+              (ExtensionOfMaxAdjoin.snd i a + ExtensionOfMaxAdjoin.snd i b) • y := by
+          rw [ExtensionOfMaxAdjoin.eqn]; rw [ExtensionOfMaxAdjoin.eqn]; rw [add_smul]; rw [Submodule.coe_add]
+          ac_rfl
+        rw [ExtensionOfMaxAdjoin.extensionToFun_wd (y := y) i f h (a + b) _ _ eq1]; rw [LinearPMap.map_add]; rw [map_add]
+        unfold ExtensionOfMaxAdjoin.extensionToFun
+        abel
+      map_smul' := fun r a => by
+        dsimp
+        have eq1 :
+          r • (a : N) =
+            ↑(r • ExtensionOfMaxAdjoin.fst i a) + (r • ExtensionOfMaxAdjoin.snd i a) • y := by
+          rw [ExtensionOfMaxAdjoin.eqn]; rw [smul_add]; rw [smul_eq_mul]; rw [mul_smul]
+          rfl
+        rw [ExtensionOfMaxAdjoin.extensionToFun_wd i f h (r • a :) _ _ eq1]; rw [map_smul]; rw [LinearPMap.map_smul]; rw [← smul_add]
+        congr }
+  is_extension m := by
+    dsimp
+    rw [(extensionOfMax i f).is_extension]; rw [ExtensionOfMaxAdjoin.extensionToFun_wd i f h _ ⟨i m]; rw [_⟩ 0 _]; rw [map_zero]; rw [add_zero]
+    simp
 
 Depends on / 依赖: Submodule, Submodule.span, domain, extensionOfMax, supExtensionOfMaxSingleton
 -/
@@ -1074,7 +1170,8 @@ theorem extension_property
     { toFun := ((extensionOfMax f g).toLinearPMap
         ⟨·, (extensionOfMax_to_submodule_eq_top f g h).symm ▸ ⟨⟩⟩)
       map_add' := fun x y => by rw [← LinearPMap.map_add]; congr
-      map_smul' := fun r x => by rw [← LinearPMap.map_smul]
+      map_smul' := fun r x => by rw [← LinearPMap.map_smul]; dsimp } <|
+    LinearMap.ext fun x => ((extensionOfMax f g).is_extension x).symm
 
 中文:
 定理 extension_property
@@ -1084,7 +1181,8 @@ theorem extension_property
     { toFun := ((extensionOfMax f g).toLinearPMap
         ⟨·, (extensionOfMax_to_submodule_eq_top f g h).symm ▸ ⟨⟩⟩)
       map_add' := fun x y => by rw [← LinearPMap.map_add]; congr
-      map_smul' := fun r x => by rw [← LinearPMap.map_smul]
+      map_smul' := fun r x => by rw [← LinearPMap.map_smul]; dsimp } <|
+    LinearMap.ext fun x => ((extensionOfMax f g).is_extension x).symm
 -/
 protected theorem extension_property (h : Module.Baer R Q)
     (f : M ->ₗ[R] N) (hf : Function.Injective f) (g : M ->ₗ[R] Q) : exists h, h ∘ₗ f = g :=
@@ -1155,7 +1253,7 @@ theorem of_injective
   let eR := Shrink.linearEquiv R R
   obtain ⟨g', hg'⟩ := Module.Injective.out (eR.symm.toLinearMap ∘ₗ I.subtype ∘ₗ eI.toLinearMap)
     (eR.symm.injective.comp <| Subtype.val_injective.comp eI.injective) (g ∘ₗ eI.toLinearMap)
-  exact ⟨g' ∘ₗ eR.symm.to
+  exact ⟨g' ∘ₗ eR.symm.toLinearMap, fun x mx => by simpa [eI, eR] using hg' (equivShrink I ⟨x, mx⟩)⟩
 
 中文:
 定理 of_injective
@@ -1167,7 +1265,7 @@ theorem of_injective
   let eR := Shrink.linearEquiv R R
   obtain ⟨g', hg'⟩ := Module.Injective.out (eR.symm.toLinearMap ∘ₗ I.subtype ∘ₗ eI.toLinearMap)
     (eR.symm.injective.comp <| Subtype.val_injective.comp eI.injective) (g ∘ₗ eI.toLinearMap)
-  exact ⟨g' ∘ₗ eR.symm.to
+  exact ⟨g' ∘ₗ eR.symm.toLinearMap, fun x mx => by simpa [eI, eR] using hg' (equivShrink I ⟨x, mx⟩)⟩
 
 Depends on / 依赖: DivisionSemiring, DivisionSemiring.to_moduleIsTorsionFree, IsTorsionFree, to_moduleIsTorsionFree
 -/
@@ -1236,14 +1334,18 @@ lemma Module.injective_of_ulift_injective
   proof: let eX := ULift.moduleEquiv.{_, _, v'} (R := R) (M := X)
     have ⟨g', hg'⟩ := inj.out (ULift.moduleEquiv.{_, _, v'}.symm.toLinearMap ∘ₗ f ∘ₗ eX.toLinearMap)
       (by exact ULift.moduleEquiv.symm.injective.comp <| hf.comp eX.injective)
-      (ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ eX.toLinearMa
+      (ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ eX.toLinearMap)
+    ⟨ULift.moduleEquiv.toLinearMap ∘ₗ g' ∘ₗ ULift.moduleEquiv.symm.toLinearMap,
+      fun x => by exact congr(ULift.down $(hg' ⟨x⟩))⟩
 
 中文:
 引理 模.injective_of_ulift_injective
   证明: let eX := ULift.moduleEquiv.{_, _, v'} (R := R) (M := X)
     have ⟨g', hg'⟩ := inj.out (ULift.moduleEquiv.{_, _, v'}.symm.toLinearMap ∘ₗ f ∘ₗ eX.toLinearMap)
       (by exact ULift.moduleEquiv.symm.injective.comp <| hf.comp eX.injective)
-      (ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ eX.toLinearMa
+      (ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ eX.toLinearMap)
+    ⟨ULift.moduleEquiv.toLinearMap ∘ₗ g' ∘ₗ ULift.moduleEquiv.symm.toLinearMap,
+      fun x => by exact congr(ULift.down $(hg' ⟨x⟩))⟩
 
 Depends on / 依赖: ULift.down, ULift.moduleEquiv, ULift.moduleEquiv.symm.injective.comp, ULift.moduleEquiv.symm.toLinearMap, ULift.moduleEquiv.toLinearMap, eX.injective, eX.toLinearMap, hf.comp, inj.out, injective, moduleEquiv, symm.toLinearMap, toLinearMap
 -/
@@ -1359,7 +1461,9 @@ theorem Module.Injective.of_ringEquiv
   let I' := Submodule.map e₁.symm.toSemilinearEquiv.toLinearMap I
   let e : I' ≃ₛₗ[RingHomClass.toRingHom e₁] I := (e₁.symm.toSemilinearEquiv.submoduleMap I).symm
   let f : I' ->ₗ[R] M := e₂.symm.toLinearMap.comp (g.comp e.toLinearMap)
-  have hf (x) (
+  have hf (x) (hx : x in I') : f ⟨x, hx⟩ = e₂.symm (g ⟨e₁ x, by simp_all [I']⟩) := rfl
+  obtain ⟨f', hf'⟩ := Module.Baer.of_injective ‹_› I' f
+  exact ⟨e₂.toLinearMap ∘ₛₗ f' ∘ₛₗ e₁.toSemilinearEquiv.symm.toLinearMap, by simp_all [I']⟩
 
 中文:
 定理 模.单射.of_ringEquiv
@@ -1369,7 +1473,9 @@ theorem Module.Injective.of_ringEquiv
   let I' := Submodule.map e₁.symm.toSemilinearEquiv.toLinearMap I
   let e : I' ≃ₛₗ[RingHomClass.toRingHom e₁] I := (e₁.symm.toSemilinearEquiv.submoduleMap I).symm
   let f : I' ->ₗ[R] M := e₂.symm.toLinearMap.comp (g.comp e.toLinearMap)
-  have hf (x) (
+  have hf (x) (hx : x in I') : f ⟨x, hx⟩ = e₂.symm (g ⟨e₁ x, by simp_all [I']⟩) := rfl
+  obtain ⟨f', hf'⟩ := Module.Baer.of_injective ‹_› I' f
+  exact ⟨e₂.toLinearMap ∘ₛₗ f' ∘ₛₗ e₁.toSemilinearEquiv.symm.toLinearMap, by simp_all [I']⟩
 
 Depends on / 依赖: Module, Module.Baer.injective, Module.Baer.of_injective, RingHomClass, RingHomClass.toRingHom, Submodule, Submodule.map, e.toLinearMap, g.comp, injective, of_injective, submoduleMap, symm.toLinearMap.comp, symm.toSemilinearEquiv.submoduleMap, symm.toSemilinearEquiv.toLinearMap, toLinearMap, toRingHom, toSemilinearEquiv, toSemilinearEquiv.symm.toLinearMap
 -/

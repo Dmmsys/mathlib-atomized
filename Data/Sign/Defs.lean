@@ -438,7 +438,9 @@ definition fin3Equiv
     match a with
     | ⟨0, _⟩ => by simp
     | ⟨1, _⟩ => by simp
-    | ⟨2, _
+    | ⟨2, _⟩ => by simp
+  map_mul' a b := by
+    cases a <;> cases b <;> rfl
 
 中文:
 定义 fin3Equiv
@@ -457,7 +459,9 @@ definition fin3Equiv
     match a with
     | ⟨0, _⟩ => by simp
     | ⟨1, _⟩ => by simp
-    | ⟨2, _
+    | ⟨2, _⟩ => by simp
+  map_mul' a b := by
+    cases a <;> cases b <;> rfl
 
 Depends on / 依赖: invFun, left_inv, map_mul, right_inv
 -/

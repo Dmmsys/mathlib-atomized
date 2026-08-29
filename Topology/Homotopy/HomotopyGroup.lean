@@ -480,7 +480,7 @@ definition congr
   invFun p := ⟨p.1.comp ⟨fun t n => t (e.symm n), by fun_prop⟩, fun y ⟨m, hm⟩ => by
     simpa using p.2 _ ⟨e m, by simpa using hm⟩⟩
   left_inv p := by ext t; simp
-  right_inv p := by
+  right_inv p := by ext t; simp
 
 中文:
 定义 congr
@@ -490,7 +490,7 @@ definition congr
   invFun p := ⟨p.1.comp ⟨fun t n => t (e.symm n), by fun_prop⟩, fun y ⟨m, hm⟩ => by
     simpa using p.2 _ ⟨e m, by simpa using hm⟩⟩
   left_inv p := by ext t; simp
-  right_inv p := by
+  right_inv p := by ext t; simp
 
 Depends on / 依赖: fun_prop
 -/
@@ -588,7 +588,7 @@ definition currySum
       fun _ hm => q.2 _ (Cube.boundary_sum_iff.mpr (Or.inr hm))⟩
   continuous_toFun := Continuous.subtype_mk (q.1.comp
     ⟨sumArrowHomeomorphProdArrow.invFun,
-      sumArrowHomeomorphP
+      sumArrowHomeomorphProdArrow.continuous_invFun⟩).curry.continuous_toFun _
 
 中文:
 定义 currySum
@@ -598,7 +598,7 @@ definition currySum
       fun _ hm => q.2 _ (Cube.boundary_sum_iff.mpr (Or.inr hm))⟩
   continuous_toFun := Continuous.subtype_mk (q.1.comp
     ⟨sumArrowHomeomorphProdArrow.invFun,
-      sumArrowHomeomorphP
+      sumArrowHomeomorphProdArrow.continuous_invFun⟩).curry.continuous_toFun _
 
 Depends on / 依赖: invFun, sumArrowHomeomorphProdArrow, sumArrowHomeomorphProdArrow.invFun
 -/
@@ -708,7 +708,10 @@ definition genLoopGenLoopEquiv
   invFun q :=
     ⟨currySum x q, fun _ hm => by ext n; exact q.2 _ (Cube.boundary_sum_iff.mpr (Or.inl hm))⟩
   left_inv p := by ext; simp; rfl
-  right_inv p := 
+  right_inv p := by ext; simp
+  continuous_toFun := ((ContinuousMap.continuous_uncurry.comp' ((ContinuousMap.continuous_postcomp
+    ⟨_, continuous_subtype_val⟩).comp continuous_subtype_val)).compCM
+      continuous_const).subtype_mk _
 
 中文:
 定义 genLoopGenLoopEquiv
@@ -718,7 +721,10 @@ definition genLoopGenLoopEquiv
   invFun q :=
     ⟨currySum x q, fun _ hm => by ext n; exact q.2 _ (Cube.boundary_sum_iff.mpr (Or.inl hm))⟩
   left_inv p := by ext; simp; rfl
-  right_inv p := 
+  right_inv p := by ext; simp
+  continuous_toFun := ((ContinuousMap.continuous_uncurry.comp' ((ContinuousMap.continuous_postcomp
+    ⟨_, continuous_subtype_val⟩).comp continuous_subtype_val)).compCM
+      continuous_const).subtype_mk _
 
 Depends on / 依赖: GenLoop, GenLoop.uncurry, sumArrowHomeomorphProdArrow, sumArrowHomeomorphProdArrow.toFun, uncurry
 -/
@@ -855,7 +861,7 @@ definition toLoop
   body: ⟨(p.val.comp (Cube.insertAt i)).curry t, fun y yH =>
       p.property (Cube.insertAt i (t, y)) (Cube.insertAt_boundary i <| Or.inr yH)⟩
   source' := by ext t; refine p.property (Cube.insertAt i (0, t)) ⟨i, Or.inl ?_⟩; simp
-  target' := by ext t; refine p.property (Cube.insertAt i (1, t)) ⟨i, Or.inr 
+  target' := by ext t; refine p.property (Cube.insertAt i (1, t)) ⟨i, Or.inr ?_⟩; simp
 
 中文:
 定义 toLoop
@@ -863,7 +869,7 @@ definition toLoop
   定义体: ⟨(p.val.comp (Cube.insertAt i)).curry t, fun y yH =>
       p.property (Cube.insertAt i (t, y)) (Cube.insertAt_boundary i <| Or.inr yH)⟩
   source' := by ext t; refine p.property (Cube.insertAt i (0, t)) ⟨i, Or.inl ?_⟩; simp
-  target' := by ext t; refine p.property (Cube.insertAt i (1, t)) ⟨i, Or.inr 
+  target' := by ext t; refine p.property (Cube.insertAt i (1, t)) ⟨i, Or.inr ?_⟩; simp
 
 Depends on / 依赖: Cube.insertAt, Cube.insertAt_boundary, Or.inl, Or.inr, insertAt, insertAt_boundary, p.property, p.val.comp, property, source, target
 -/
@@ -931,7 +937,9 @@ definition fromLoop
     simp only [ContinuousMap.comp_apply,
       funSplitAt_apply, ContinuousMap.uncurry_apply, ContinuousMap.coe_mk,
       Function.uncurry_apply_pair]
-    obtain rfl | Hn
+    obtain rfl | Hne := eq_or_ne j i
+    · rcases Hj with Hj | Hj <;> simp only [Hj, p.coe_toContinuousMap, p.source, p.target] <;> rfl
+    · exact GenLoop.boundary _ _ ⟨⟨j, Hne⟩, Hj⟩⟩
 
 中文:
 定义 fromLoop
@@ -943,7 +951,9 @@ definition fromLoop
     simp only [ContinuousMap.comp_apply,
       funSplitAt_apply, ContinuousMap.uncurry_apply, ContinuousMap.coe_mk,
       Function.uncurry_apply_pair]
-    obtain rfl | Hn
+    obtain rfl | Hne := eq_or_ne j i
+    · rcases Hj with Hj | Hj <;> simp only [Hj, p.coe_toContinuousMap, p.source, p.target] <;> rfl
+    · exact GenLoop.boundary _ _ ⟨⟨j, Hne⟩, Hj⟩⟩
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, ContinuousMap.comp, ContinuousMap.comp_apply, ContinuousMap.uncurry_apply, Cube.splitAt, Function, Function.uncurry_apply_pair, GenLoop, GenLoop.boundary, Subtype, Subtype.val, boundary, coe_mk, coe_toContinuousMap, comp_apply, eq_or_ne, funSplitAt_apply, fun_prop, p.coe_toContinuousMap
 -/
@@ -1166,7 +1176,16 @@ theorem homotopicTo
     intro
     ext
     dsimp
-    rw [homotopyTo_app
+    rw [homotopyTo_apply]; rw [toLoop_apply]
+    swap
+  · apply H.apply_zero
+  · apply H.apply_one
+  intro t y yH
+  ext
+  dsimp
+  rw [homotopyTo_apply]
+  apply H.eq_fst; use i
+  rw [funSplitAt_symm_apply]; rw [dif_pos rfl]; exact yH
 
 中文:
 定理 homotopicTo
@@ -1181,7 +1200,16 @@ theorem homotopicTo
     intro
     ext
     dsimp
-    rw [homotopyTo_app
+    rw [homotopyTo_apply]; rw [toLoop_apply]
+    swap
+  · apply H.apply_zero
+  · apply H.apply_one
+  intro t y yH
+  ext
+  dsimp
+  rw [homotopyTo_apply]
+  apply H.eq_fst; use i
+  rw [funSplitAt_symm_apply]; rw [dif_pos rfl]; exact yH
 
 Depends on / 依赖: Cube.insertAt_boundary, H.apply_one, H.apply_zero, H.eq_fst, Nonempty, Nonempty.map, all_goals, apply_one, apply_zero, dif_pos, eq_fst, funSplitAt_symm_apply, fun_prop, homotopyTo, homotopyTo_apply, insertAt_boundary, iterate, toLoop_apply
 -/
@@ -1244,7 +1272,18 @@ theorem homotopicFrom
     obtain rfl | h := eq_or_ne j i
     · simp only [Prod.map_apply, id_eq, funSplitAt_apply, Function.uncurry_apply_pair]
       rw [H.eq_fst]
-      exacts [congr_arg p
+      exacts [congr_arg p ((Cube.splitAt j).left_inv _), jH]
+    · rw [p.2 _ ⟨j, jH⟩]; apply boundary; exact ⟨⟨j, h⟩, jH⟩
+  all_goals
+    intro
+    apply (homotopyFrom_apply _ _ _).trans
+    simp only [Prod.map_apply, id_eq, funSplitAt_apply,
+      Function.uncurry_apply_pair, ContinuousMap.HomotopyWith.apply_zero,
+      ContinuousMap.HomotopyWith.apply_one, ne_eq, Path.coe_toContinuousMap]
+    first
+    | apply congr_arg p
+    | apply congr_arg q
+    apply (Cube.splitAt i).left_inv
 
 中文:
 定理 homotopicFrom
@@ -1257,7 +1296,18 @@ theorem homotopicFrom
     obtain rfl | h := eq_or_ne j i
     · simp only [Prod.map_apply, id_eq, funSplitAt_apply, Function.uncurry_apply_pair]
       rw [H.eq_fst]
-      exacts [congr_arg p
+      exacts [congr_arg p ((Cube.splitAt j).left_inv _), jH]
+    · rw [p.2 _ ⟨j, jH⟩]; apply boundary; exact ⟨⟨j, h⟩, jH⟩
+  all_goals
+    intro
+    apply (homotopyFrom_apply _ _ _).trans
+    simp only [Prod.map_apply, id_eq, funSplitAt_apply,
+      Function.uncurry_apply_pair, ContinuousMap.HomotopyWith.apply_zero,
+      ContinuousMap.HomotopyWith.apply_one, ne_eq, Path.coe_toContinuousMap]
+    first
+    | apply congr_arg p
+    | apply congr_arg q
+    apply (Cube.splitAt i).left_inv
 
 Depends on / 依赖: Cube.splitAt, Function, Function.uncurry_apply_pair, H.eq_fst, Nonempty, Nonempty.map, Prod.map_apply, all_goals, boundary, congr_arg, eq_fst, eq_or_ne, exacts, funSplitAt_apply, homotopyFrom, homotopyFrom_apply, id_eq, left_inv, map_apply, pick_goal
 -/
@@ -1296,7 +1346,12 @@ definition transAt
       else g (Function.update t i <| Set.projIcc 0 1 zero_le_one (2 * t i - 1)))
     (by
       ext1; symm
-      dsimp only [Path.tr
+      dsimp only [Path.trans, fromLoop, Path.coe_mk_mk, Function.comp_apply, mk_apply,
+        ContinuousMap.comp_apply, ContinuousMap.coe_coe, funSplitAt_apply,
+        ContinuousMap.uncurry_apply, ContinuousMap.coe_mk, Function.uncurry_apply_pair]
+      split_ifs
+      · change f _ = _; congr 1
+      · change g _ = _; congr 1)
 
 中文:
 定义 transAt
@@ -1307,7 +1362,12 @@ definition transAt
       else g (Function.update t i <| Set.projIcc 0 1 zero_le_one (2 * t i - 1)))
     (by
       ext1; symm
-      dsimp only [Path.tr
+      dsimp only [Path.trans, fromLoop, Path.coe_mk_mk, Function.comp_apply, mk_apply,
+        ContinuousMap.comp_apply, ContinuousMap.coe_coe, funSplitAt_apply,
+        ContinuousMap.uncurry_apply, ContinuousMap.coe_mk, Function.uncurry_apply_pair]
+      split_ifs
+      · change f _ = _; congr 1
+      · change g _ = _; congr 1)
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_coe, ContinuousMap.coe_mk, ContinuousMap.comp_apply, ContinuousMap.uncurry_apply, Function, Function.comp_apply, Function.uncurry_apply_pair, Function.update, Path.coe_mk_mk, Path.trans, Set.projIcc, coe_coe, coe_mk, coe_mk_mk, comp_apply, fromLoop, funSplitAt_apply, mk_apply, projIcc
 -/
@@ -1541,7 +1601,11 @@ definition homotopyGroupEquivZerothHomotopyOfIsEmpty
       exacts
         [⟨{ toFun := fun t => H ⟨t, isEmptyElim⟩
             source' := (H.apply_zero _).trans (congr_arg a₁ <| Subsingleton.elim _ _)
-            
+            target' := (H.apply_one _).trans (congr_arg a₂ <| Subsingleton.elim _ _) }⟩,
+        ⟨{ toFun := fun t0 => H t0.fst
+            map_zero_left := fun _ => H.source.trans (congr_arg a₁ <| Subsingleton.elim _ _)
+            map_one_left := fun _ => H.target.trans (congr_arg a₂ <| Subsingleton.elim _ _)
+            prop' := fun _ _ ⟨i, _⟩ => isEmptyElim i }⟩])
 
 中文:
 定义 homotopyGroupEquivZerothHomotopyOfIsEmpty
@@ -1554,7 +1618,11 @@ definition homotopyGroupEquivZerothHomotopyOfIsEmpty
       exacts
         [⟨{ toFun := fun t => H ⟨t, isEmptyElim⟩
             source' := (H.apply_zero _).trans (congr_arg a₁ <| Subsingleton.elim _ _)
-            
+            target' := (H.apply_one _).trans (congr_arg a₂ <| Subsingleton.elim _ _) }⟩,
+        ⟨{ toFun := fun t0 => H t0.fst
+            map_zero_left := fun _ => H.source.trans (congr_arg a₁ <| Subsingleton.elim _ _)
+            map_one_left := fun _ => H.target.trans (congr_arg a₂ <| Subsingleton.elim _ _)
+            prop' := fun _ _ ⟨i, _⟩ => isEmptyElim i }⟩])
 
 Depends on / 依赖: Quotient, Quotient.congr, genLoopHomeoOfIsEmpty, toEquiv
 -/
@@ -1604,7 +1672,9 @@ definition genLoopEquivOfUnique
   invFun p :=
     ⟨⟨fun c => p (c default), by fun_prop⟩,
       by
-      rintro y ⟨i, iH | iH⟩ <;> cases Unique.eq_default i <;> ap
+      rintro y ⟨i, iH | iH⟩ <;> cases Unique.eq_default i <;> apply (congr_arg p iH).trans
+      exacts [p.source, p.target]⟩
+  left_inv p := by ext y; exact congr_arg p (eq_const_of_unique y).symm
 
 中文:
 定义 genLoopEquivOfUnique
@@ -1615,7 +1685,9 @@ definition genLoopEquivOfUnique
   invFun p :=
     ⟨⟨fun c => p (c default), by fun_prop⟩,
       by
-      rintro y ⟨i, iH | iH⟩ <;> cases Unique.eq_default i <;> ap
+      rintro y ⟨i, iH | iH⟩ <;> cases Unique.eq_default i <;> apply (congr_arg p iH).trans
+      exacts [p.source, p.target]⟩
+  left_inv p := by ext y; exact congr_arg p (eq_const_of_unique y).symm
 
 Depends on / 依赖: GenLoop, GenLoop.boundary, Or.inl, Or.inr, Path.mk, Unique, Unique.eq_default, boundary, congr_arg, eq_const_of_unique, eq_default, exacts, fun_prop, invFun, left_inv, p.source, p.target, source, target
 -/
@@ -1647,7 +1719,15 @@ definition homotopyGroupEquivFundamentalGroupOfUnique
         ⟨{ toFun := fun tx => H (tx.fst, fun _ => tx.snd)
             map_zero_left := fun _ => H.apply_zero _
             map_one_left := fun _ => H.apply_one _
-            prop' := fun t y iH => H.pr
+            prop' := fun t y iH => H.prop' _ _ ⟨default, iH⟩ }⟩
+    refine
+      ⟨⟨⟨⟨fun tx => H (tx.fst, tx.snd default), H.continuous.comp ?_⟩, fun y => ?_, fun y => ?_⟩, ?_⟩⟩
+    · fun_prop
+    · exact (H.apply_zero _).trans (congr_arg a₁ (eq_const_of_unique y).symm)
+    · exact (H.apply_one _).trans (congr_arg a₂ (eq_const_of_unique y).symm)
+    · rintro t y ⟨i, iH⟩
+      cases Unique.eq_default i
+      exact (H.eq_fst _ iH).trans (congr_arg a₁ (eq_const_of_unique y).symm)
 
 中文:
 定义 homotopyGroupEquivFundamentalGroupOfUnique
@@ -1658,7 +1738,15 @@ definition homotopyGroupEquivFundamentalGroupOfUnique
         ⟨{ toFun := fun tx => H (tx.fst, fun _ => tx.snd)
             map_zero_left := fun _ => H.apply_zero _
             map_one_left := fun _ => H.apply_one _
-            prop' := fun t y iH => H.pr
+            prop' := fun t y iH => H.prop' _ _ ⟨default, iH⟩ }⟩
+    refine
+      ⟨⟨⟨⟨fun tx => H (tx.fst, tx.snd default), H.continuous.comp ?_⟩, fun y => ?_, fun y => ?_⟩, ?_⟩⟩
+    · fun_prop
+    · exact (H.apply_zero _).trans (congr_arg a₁ (eq_const_of_unique y).symm)
+    · exact (H.apply_one _).trans (congr_arg a₂ (eq_const_of_unique y).symm)
+    · rintro t y ⟨i, iH⟩
+      cases Unique.eq_default i
+      exact (H.eq_fst _ iH).trans (congr_arg a₁ (eq_const_of_unique y).symm)
 
 Depends on / 依赖: H.apply_one, H.apply_zero, H.continuous.comp, H.prop, Quotient, Quotient.congr, apply_one, apply_zero, congr_a, congr_arg, continuous, eq_const_of_unique, fun_prop, genLoopEquivOfUnique, map_one_left, map_zero_left, tx.fst, tx.snd
 -/
@@ -1812,7 +1900,7 @@ theorem auxGroup_indep
   change Quotient.mk' _ = _
   apply congr_arg Quotient.mk'
   simp only [fromLoop_trans_toLoop, transAt_distrib h, coe_toEquiv, loopHomeo_apply,
-    coe_sym
+    coe_symm_toEquiv, loopHomeo_symm_apply]
 
 中文:
 定理 auxGroup_indep
@@ -1825,7 +1913,7 @@ theorem auxGroup_indep
   change Quotient.mk' _ = _
   apply congr_arg Quotient.mk'
   simp only [fromLoop_trans_toLoop, transAt_distrib h, coe_toEquiv, loopHomeo_apply,
-    coe_sym
+    coe_symm_toEquiv, loopHomeo_symm_apply]
 
 Depends on / 依赖: EckmannHilton, EckmannHilton.mul, Group.ext, Quotient, Quotient.mk, coe_symm_toEquiv, coe_toEquiv, congr_arg, fromLoop_trans_toLoop, isUnital_auxGroup, loopHomeo_apply, loopHomeo_symm_apply, transAt_distrib
 -/
@@ -1977,7 +2065,8 @@ instance commGroup
     (by
       rintro ⟨a⟩ ⟨b⟩ ⟨c⟩ ⟨d⟩
       apply congr_arg Quotient.mk'
-      simp only [fromLoop_trans_toLoop, transAt_distrib <| Classical.
+      simp only [fromLoop_trans_toLoop, transAt_distrib <| Classical.choose_spec h, coe_toEquiv,
+        loopHomeo_apply, coe_symm_toEquiv, loopHomeo_symm_apply])
 
 中文:
 实例 commGroup
@@ -1988,7 +2077,8 @@ instance commGroup
     (by
       rintro ⟨a⟩ ⟨b⟩ ⟨c⟩ ⟨d⟩
       apply congr_arg Quotient.mk'
-      simp only [fromLoop_trans_toLoop, transAt_distrib <| Classical.
+      simp only [fromLoop_trans_toLoop, transAt_distrib <| Classical.choose_spec h, coe_toEquiv,
+        loopHomeo_apply, coe_symm_toEquiv, loopHomeo_symm_apply])
 
 Depends on / 依赖: Classical, Classical.arbitrary, Classical.choose, Classical.choose_spec, EckmannHilton, EckmannHilton.commGroup, HomotopyGroup, Quotient, Quotient.mk, arbitrary, choose_spec, coe_symm_toEquiv, coe_toEquiv, commGroup, congr_arg, exists_ne, fast_instance, fromLoop_trans_toLoop, isUnital_auxGroup, loopHomeo_apply
 -/

@@ -47,7 +47,7 @@ theorem le_coeff_eq_iff_le_sub_coeff_eq_zero
     · rw [← coeff_truncate x ⟨i, hi⟩, ← coeff_truncate y ⟨i, hi⟩, h]
   _ ↔ (x - y).truncate n = 0 := by
     simp only [map_sub, sub_eq_zero]
-  _ ↔ _ := by simp only [← mem_ker_tr
+  _ ↔ _ := by simp only [← mem_ker_truncate, RingHom.mem_ker]
 
 中文:
 定理 le_coeff_eq_iff_le_sub_coeff_eq_zero
@@ -61,7 +61,7 @@ theorem le_coeff_eq_iff_le_sub_coeff_eq_zero
     · rw [← coeff_truncate x ⟨i, hi⟩, ← coeff_truncate y ⟨i, hi⟩, h]
   _ ↔ (x - y).truncate n = 0 := by
     simp only [map_sub, sub_eq_zero]
-  _ ↔ _ := by simp only [← mem_ker_tr
+  _ ↔ _ := by simp only [← mem_ker_truncate, RingHom.mem_ker]
 
 Depends on / 依赖: RingHom, RingHom.mem_ker, coeff_truncate, map_sub, mem_ker, mem_ker_truncate, sub_eq_zero, truncate, x.truncate, y.truncate
 -/
@@ -120,7 +120,8 @@ theorem mem_span_p_iff_coeff_zero_eq_zero
     calc
     _ = verschiebung (x.shift 1) := by
       simpa using eq_iterate_verschiebung (n := 1) (by simp [h])
-    _ 
+    _ = _ := by
+      rw [← verschiebung_frobenius]; rw [← frobeniusEquiv_apply]; rw [RingEquiv.apply_symm_apply (frobeniusEquiv p k) _]
 
 中文:
 定理 mem_span_p_iff_coeff_zero_eq_zero
@@ -133,7 +134,8 @@ theorem mem_span_p_iff_coeff_zero_eq_zero
     calc
     _ = verschiebung (x.shift 1) := by
       simpa using eq_iterate_verschiebung (n := 1) (by simp [h])
-    _ 
+    _ = _ := by
+      rw [← verschiebung_frobenius]; rw [← frobeniusEquiv_apply]; rw [RingEquiv.apply_symm_apply (frobeniusEquiv p k) _]
 
 Depends on / 依赖: Ideal.mem_span_singleton, RingEquiv, RingEquiv.apply_symm_apply, apply_symm_apply, dvd_def, eq_iterate_verschiebung, frobeniusEquiv, frobeniusEquiv_apply, mem_span_singleton, mul_charP_coeff_zero, mul_comm, simp_rw, verschiebung, verschiebung_frobenius, x.shift
 -/
@@ -163,6 +165,14 @@ theorem mem_span_p_pow_iff_le_coeff_eq_zero
     rw [← iterate_verschiebung_iterate_frobenius]
     calc
     _ = verschiebung^[n] (x.shift n) := by
+      simpa using eq_iterate_verschiebung (x := x) (n := n) h
+    _ = _ := by
+      congr
+      rw [← Function.comp_apply (f := frobenius^[n]), ← Function.Commute.comp_iterate]
+      · rw [← WittVector.frobeniusEquiv_apply, ← RingEquiv.coe_trans]
+        simp
+      · rw [Function.Commute, Function.Semiconj, ← WittVector.frobeniusEquiv_apply]
+        simp only [RingEquiv.apply_symm_apply, RingEquiv.symm_apply_apply, implies_true]
 
 中文:
 定理 mem_span_p_pow_iff_le_coeff_eq_zero
@@ -175,6 +185,14 @@ theorem mem_span_p_pow_iff_le_coeff_eq_zero
     rw [← iterate_verschiebung_iterate_frobenius]
     calc
     _ = verschiebung^[n] (x.shift n) := by
+      simpa using eq_iterate_verschiebung (x := x) (n := n) h
+    _ = _ := by
+      congr
+      rw [← Function.comp_apply (f := frobenius^[n]), ← Function.Commute.comp_iterate]
+      · rw [← WittVector.frobeniusEquiv_apply, ← RingEquiv.coe_trans]
+        simp
+      · rw [Function.Commute, Function.Semiconj, ← WittVector.frobeniusEquiv_apply]
+        simp only [RingEquiv.apply_symm_apply, RingEquiv.symm_apply_apply, implies_true]
 
 Depends on / 依赖: Commute, Function, Function.Commute.comp_iterate, Function.comp_apply, Ideal.mem_span_singleton, RingEquiv, RingEquiv.coe_trans, WittVector, WittVector.frobeniusEquiv_apply, coe_trans, comp_apply, comp_iterate, dvd_def, eq_iterate_verschiebung, frobenius, frobeniusEquiv, frobeniusEquiv_apply, iterate_verschiebung_iterate_frobenius, mem_span_singleton, mul_comm
 -/
@@ -278,7 +296,13 @@ instance isAdicCompleteIdealSpanP
     simpa using this n
   prec' := by
     intro x h
-    -- construct the limit Witt vector w diag
+    -- construct the limit Witt vector w diagonally
+    use .mk p (fun n => (x (n + 1)).coeff n)
+    intro n
+    simp only [Ideal.span_singleton_pow, smul_eq_mul, Ideal.mul_top, SModEq.sub_mem,
+      mem_span_p_pow_iff_le_coeff_eq_zero, ← le_coeff_eq_iff_le_sub_coeff_eq_zero] at h ⊢
+    intro i hi
+    exact (h hi i (Nat.lt_succ_self i)).symm
 
 中文:
 实例 isAdicCompleteIdealSpanP
@@ -293,7 +317,13 @@ instance isAdicCompleteIdealSpanP
     simpa using this n
   prec' := by
     intro x h
-    -- construct the limit Witt vector w diag
+    -- construct the limit Witt vector w diagonally
+    use .mk p (fun n => (x (n + 1)).coeff n)
+    intro n
+    simp only [Ideal.span_singleton_pow, smul_eq_mul, Ideal.mul_top, SModEq.sub_mem,
+      mem_span_p_pow_iff_le_coeff_eq_zero, ← le_coeff_eq_iff_le_sub_coeff_eq_zero] at h ⊢
+    intro i hi
+    exact (h hi i (Nat.lt_succ_self i)).symm
 
 Depends on / 依赖: Ideal.mul_top, Ideal.span_singleton_pow, SModEq, SModEq.zero, mem_span_p_pow_iff_le_coeff_eq_zero, mul_top, smul_eq_mul, span_singleton_pow
 -/

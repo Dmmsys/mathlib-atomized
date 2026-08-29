@@ -649,7 +649,8 @@ theorem continuous_inf_dom_left₂
   proof: ta1 ⊓ ta2; haveI := tb1 ⊓ tb2; exact Continuous fun p : X × Y => f p.1 p.2 := by
   have ha := @continuous_inf_dom_left _ _ id ta1 ta2 ta1 (@continuous_id _ (id _))
   have hb := @continuous_inf_dom_left _ _ id tb1 tb2 tb1 (@continuous_id _ (id _))
-  have h_continuous_id := @Continuous.prodMap _ _ _ _
+  have h_continuous_id := @Continuous.prodMap _ _ _ _ ta1 tb1 (ta1 ⊓ ta2) (tb1 ⊓ tb2) _ _ ha hb
+  exact @Continuous.comp _ _ _ (id _) (id _) _ _ _ h h_continuous_id
 
 中文:
 定理 continuous_inf_dom_left₂
@@ -657,7 +658,8 @@ theorem continuous_inf_dom_left₂
   证明: ta1 ⊓ ta2; haveI := tb1 ⊓ tb2; exact Continuous fun p : X × Y => f p.1 p.2 := by
   have ha := @continuous_inf_dom_left _ _ id ta1 ta2 ta1 (@continuous_id _ (id _))
   have hb := @continuous_inf_dom_left _ _ id tb1 tb2 tb1 (@continuous_id _ (id _))
-  have h_continuous_id := @Continuous.prodMap _ _ _ _
+  have h_continuous_id := @Continuous.prodMap _ _ _ _ ta1 tb1 (ta1 ⊓ ta2) (tb1 ⊓ tb2) _ _ ha hb
+  exact @Continuous.comp _ _ _ (id _) (id _) _ _ _ h h_continuous_id
 
 Depends on / 依赖: Continuous, Continuous.comp, Continuous.prodMap, continuous_id, continuous_inf_dom_left, h_continuous_id, prodMap
 -/
@@ -679,7 +681,8 @@ theorem continuous_inf_dom_right₂
   proof: ta1 ⊓ ta2; haveI := tb1 ⊓ tb2; exact Continuous fun p : X × Y => f p.1 p.2 := by
   have ha := @continuous_inf_dom_right _ _ id ta1 ta2 ta2 (@continuous_id _ (id _))
   have hb := @continuous_inf_dom_right _ _ id tb1 tb2 tb2 (@continuous_id _ (id _))
-  have h_continuous_id := @Continuous.prodMap _ _ _
+  have h_continuous_id := @Continuous.prodMap _ _ _ _ ta2 tb2 (ta1 ⊓ ta2) (tb1 ⊓ tb2) _ _ ha hb
+  exact @Continuous.comp _ _ _ (id _) (id _) _ _ _ h h_continuous_id
 
 中文:
 定理 continuous_inf_dom_right₂
@@ -687,7 +690,8 @@ theorem continuous_inf_dom_right₂
   证明: ta1 ⊓ ta2; haveI := tb1 ⊓ tb2; exact Continuous fun p : X × Y => f p.1 p.2 := by
   have ha := @continuous_inf_dom_right _ _ id ta1 ta2 ta2 (@continuous_id _ (id _))
   have hb := @continuous_inf_dom_right _ _ id tb1 tb2 tb2 (@continuous_id _ (id _))
-  have h_continuous_id := @Continuous.prodMap _ _ _
+  have h_continuous_id := @Continuous.prodMap _ _ _ _ ta2 tb2 (ta1 ⊓ ta2) (tb1 ⊓ tb2) _ _ ha hb
+  exact @Continuous.comp _ _ _ (id _) (id _) _ _ _ h h_continuous_id
 
 Depends on / 依赖: Continuous, Continuous.comp, Continuous.prodMap, continuous_id, continuous_inf_dom_right, h_continuous_id, prodMap
 -/
@@ -711,7 +715,7 @@ theorem continuous_sInf_dom₂
   have hX := continuous_sInf_dom hX continuous_id
   have hY := continuous_sInf_dom hY continuous_id
   have h_continuous_id := @Continuous.prodMap _ _ _ _ tX tY (sInf tas) (sInf tbs) _ _ hX hY
-  exact @Continu
+  exact @Continuous.comp _ _ _ (id _) (id _) _ _ _ hf h_continuous_id
 
 中文:
 定理 continuous_sInf_dom₂
@@ -721,7 +725,7 @@ theorem continuous_sInf_dom₂
   have hX := continuous_sInf_dom hX continuous_id
   have hY := continuous_sInf_dom hY continuous_id
   have h_continuous_id := @Continuous.prodMap _ _ _ _ tX tY (sInf tas) (sInf tbs) _ _ hX hY
-  exact @Continu
+  exact @Continuous.comp _ _ _ (id _) (id _) _ _ _ hf h_continuous_id
 -/
 theorem continuous_sInf_dom₂ {X Y Z} {f : X -> Y -> Z} {tas : Set (TopologicalSpace X)}
     {tbs : Set (TopologicalSpace Y)} {tX : TopologicalSpace X} {tY : TopologicalSpace Y}
@@ -1215,7 +1219,10 @@ theorem isOpen_setOfPred_disjoint_nhds_nhds
   intro x y h
   obtain ⟨U, hU, V, hV, hd⟩ := ((nhds_basis_opens x).disjoint_iff (nhds_basis_opens y)).mp h
   exact mem_nhds_prod_iff'.mpr ⟨U, V, hU.2, hU.1, hV.2, hV.1, fun ⟨x', y'⟩ ⟨hx', hy'⟩ =>
-    disjoint_of_disjoint_of_mem hd (hU.
+    disjoint_of_disjoint_of_mem hd (hU.2.mem_nhds hx') (hV.2.mem_nhds hy')⟩
+
+@[deprecated (since := "2026-07-09")]
+alias isOpen_setOf_disjoint_nhds_nhds := isOpen_setOfPred_disjoint_nhds_nhds
 
 中文:
 定理 isOpen_setOfPred_disjoint_nhds_nhds
@@ -1225,7 +1232,10 @@ theorem isOpen_setOfPred_disjoint_nhds_nhds
   intro x y h
   obtain ⟨U, hU, V, hV, hd⟩ := ((nhds_basis_opens x).disjoint_iff (nhds_basis_opens y)).mp h
   exact mem_nhds_prod_iff'.mpr ⟨U, V, hU.2, hU.1, hV.2, hV.1, fun ⟨x', y'⟩ ⟨hx', hy'⟩ =>
-    disjoint_of_disjoint_of_mem hd (hU.
+    disjoint_of_disjoint_of_mem hd (hU.2.mem_nhds hx') (hV.2.mem_nhds hy')⟩
+
+@[deprecated (since := "2026-07-09")]
+alias isOpen_setOf_disjoint_nhds_nhds := isOpen_setOfPred_disjoint_nhds_nhds
 
 Depends on / 依赖: Prod.forall, disjoint_iff, disjoint_of_disjoint_of_mem, isOpen_iff_mem_nhds, mem_nhds, mem_nhds_prod_iff, mem_ofPred_eq, nhds_basis_opens
 -/
@@ -1621,7 +1631,24 @@ theorem prod_generateFrom_generateFrom_eq
         @IsOpen.prod _ _ (generateFrom s) (generateFrom t) _ _ (GenerateOpen.basic _ hu)
           (GenerateOpen.basic _ hv))
     (le_inf
-      (coinduced_le_iff_le_induced.
+      (coinduced_le_iff_le_induced.mp <|
+        le_generateFrom fun u hu =>
+          have : ⋃ v in t, u ×ˢ v = Prod.fst ⁻¹' u := by
+            simp_rw [← prod_iUnion, ← sUnion_eq_biUnion, ht, prod_univ]
+          show G.IsOpen (Prod.fst ⁻¹' u) by
+            rw [← this]
+            exact
+              isOpen_iUnion fun v =>
+                isOpen_iUnion fun hv => GenerateOpen.basic _ ⟨_, hu, _, hv, rfl⟩)
+      (coinduced_le_iff_le_induced.mp <|
+        le_generateFrom fun v hv =>
+          have : ⋃ u in s, u ×ˢ v = Prod.snd ⁻¹' v := by
+            simp_rw [← iUnion_prod_const, ← sUnion_eq_biUnion, hs, univ_prod]
+          show G.IsOpen (Prod.snd ⁻¹' v) by
+            rw [← this]
+            exact
+              isOpen_iUnion fun u =>
+                isOpen_iUnion fun hu => GenerateOpen.basic _ ⟨_, hu, _, hv, rfl⟩))
 
 中文:
 定理 prod_generateFrom_generateFrom_eq
@@ -1633,7 +1660,24 @@ theorem prod_generateFrom_generateFrom_eq
         @IsOpen.prod _ _ (generateFrom s) (generateFrom t) _ _ (GenerateOpen.basic _ hu)
           (GenerateOpen.basic _ hv))
     (le_inf
-      (coinduced_le_iff_le_induced.
+      (coinduced_le_iff_le_induced.mp <|
+        le_generateFrom fun u hu =>
+          have : ⋃ v in t, u ×ˢ v = Prod.fst ⁻¹' u := by
+            simp_rw [← prod_iUnion, ← sUnion_eq_biUnion, ht, prod_univ]
+          show G.IsOpen (Prod.fst ⁻¹' u) by
+            rw [← this]
+            exact
+              isOpen_iUnion fun v =>
+                isOpen_iUnion fun hv => GenerateOpen.basic _ ⟨_, hu, _, hv, rfl⟩)
+      (coinduced_le_iff_le_induced.mp <|
+        le_generateFrom fun v hv =>
+          have : ⋃ u in s, u ×ˢ v = Prod.snd ⁻¹' v := by
+            simp_rw [← iUnion_prod_const, ← sUnion_eq_biUnion, hs, univ_prod]
+          show G.IsOpen (Prod.snd ⁻¹' v) by
+            rw [← this]
+            exact
+              isOpen_iUnion fun u =>
+                isOpen_iUnion fun hu => GenerateOpen.basic _ ⟨_, hu, _, hv, rfl⟩))
 
 Depends on / 依赖: G.IsOpen, GenerateOpen, GenerateOpen.basic, IsOpen, IsOpen.prod, Prod.fst, coinduced_le_iff_le_induced, coinduced_le_iff_le_induced.mp, g_eq, g_eq.symm, generateFrom, image2, isOpen_iUnion, le_antisymm, le_generateFrom, le_inf, prod_iUnion, prod_univ, sUnion_eq_biUnion, simp_rw
 -/
@@ -1677,7 +1721,7 @@ theorem prod_eq_generateFrom
       (coinduced_le_iff_le_induced.mp fun U hU =>
         .basic _ ⟨U, univ, hU, isOpen_univ, prod_univ.symm⟩)
       (coinduced_le_iff_le_induced.mp fun U hU =>
-        .basic _ ⟨univ, U, isOpen_univ, hU, 
+        .basic _ ⟨univ, U, isOpen_univ, hU, univ_prod.symm⟩))
 
 中文:
 定理 prod_eq_generateFrom
@@ -1686,7 +1730,7 @@ theorem prod_eq_generateFrom
       (coinduced_le_iff_le_induced.mp fun U hU =>
         .basic _ ⟨U, univ, hU, isOpen_univ, prod_univ.symm⟩)
       (coinduced_le_iff_le_induced.mp fun U hU =>
-        .basic _ ⟨univ, U, isOpen_univ, hU, 
+        .basic _ ⟨univ, U, isOpen_univ, hU, univ_prod.symm⟩))
 
 Depends on / 依赖: coinduced_le_iff_le_induced, coinduced_le_iff_le_induced.mp, g_eq, g_eq.symm, hs.prod, isOpen_univ, le_antisymm, le_generateFrom, le_inf, prod_univ, prod_univ.symm, univ_prod, univ_prod.symm
 -/
@@ -1782,7 +1826,10 @@ theorem map_fst_nhdsWithin
   rcases x with ⟨x, y⟩
   rw [mem_map]; rw [nhdsWithin]; rw [mem_inf_principal]; rw [mem_nhds_prod_iff] at hs
   rcases hs with ⟨u, hu, v, hv, H⟩
-  simp only [prod_subset_iff, mem_singleton_iff, mem_ofPred_eq, mem_preimage
+  simp only [prod_subset_iff, mem_singleton_iff, mem_ofPred_eq, mem_preimage] at H
+  exact mem_of_superset hu fun z hz => H _ hz _ (mem_of_mem_nhds hv) rfl
+
+@[simp]
 
 中文:
 定理 map_fst_nhdsWithin
@@ -1793,7 +1840,10 @@ theorem map_fst_nhdsWithin
   rcases x with ⟨x, y⟩
   rw [mem_map]; rw [nhdsWithin]; rw [mem_inf_principal]; rw [mem_nhds_prod_iff] at hs
   rcases hs with ⟨u, hu, v, hv, H⟩
-  simp only [prod_subset_iff, mem_singleton_iff, mem_ofPred_eq, mem_preimage
+  simp only [prod_subset_iff, mem_singleton_iff, mem_ofPred_eq, mem_preimage] at H
+  exact mem_of_superset hu fun z hz => H _ hz _ (mem_of_mem_nhds hv) rfl
+
+@[simp]
 
 Depends on / 依赖: continuousAt_fst, continuousAt_fst.mono_left, inf_le_left, le_antisymm, mem_inf_principal, mem_map, mem_nhds_prod_iff, mem_ofPred_eq, mem_of_mem_nhds, mem_of_superset, mem_preimage, mem_singleton_iff, mono_left, nhdsWithin, prod_subset_iff
 -/
@@ -1856,7 +1906,10 @@ theorem map_snd_nhdsWithin
   rcases x with ⟨x, y⟩
   rw [mem_map]; rw [nhdsWithin]; rw [mem_inf_principal]; rw [mem_nhds_prod_iff] at hs
   rcases hs with ⟨u, hu, v, hv, H⟩
-  simp only [prod_subset_iff, mem_singleton_iff, mem_ofPred_eq, mem_preimage
+  simp only [prod_subset_iff, mem_singleton_iff, mem_ofPred_eq, mem_preimage] at H
+  exact mem_of_superset hv fun z hz => H _ (mem_of_mem_nhds hu) _ hz rfl
+
+@[simp]
 
 中文:
 定理 map_snd_nhdsWithin
@@ -1867,7 +1920,10 @@ theorem map_snd_nhdsWithin
   rcases x with ⟨x, y⟩
   rw [mem_map]; rw [nhdsWithin]; rw [mem_inf_principal]; rw [mem_nhds_prod_iff] at hs
   rcases hs with ⟨u, hu, v, hv, H⟩
-  simp only [prod_subset_iff, mem_singleton_iff, mem_ofPred_eq, mem_preimage
+  simp only [prod_subset_iff, mem_singleton_iff, mem_ofPred_eq, mem_preimage] at H
+  exact mem_of_superset hv fun z hz => H _ (mem_of_mem_nhds hu) _ hz rfl
+
+@[simp]
 
 Depends on / 依赖: continuousAt_snd, continuousAt_snd.mono_left, inf_le_left, le_antisymm, mem_inf_principal, mem_map, mem_nhds_prod_iff, mem_ofPred_eq, mem_of_mem_nhds, mem_of_superset, mem_preimage, mem_singleton_iff, mono_left, nhdsWithin, prod_subset_iff
 -/
@@ -1932,7 +1988,10 @@ theorem isOpen_prod_iff'
     · intro (H : IsOpen (s ×ˢ t))
       refine Or.inl ⟨?_, ?_⟩
       · simpa only [fst_image_prod _ st.2] using isOpenMap_fst _ H
-  
+      · simpa only [snd_image_prod st.1 t] using isOpenMap_snd _ H
+    · intro H
+      simp only [st.1.ne_empty, st.2.ne_empty, or_false] at H
+      exact H.1.prod H.2
 
 中文:
 定理 isOpen_prod_iff'
@@ -1945,7 +2004,10 @@ theorem isOpen_prod_iff'
     · intro (H : IsOpen (s ×ˢ t))
       refine Or.inl ⟨?_, ?_⟩
       · simpa only [fst_image_prod _ st.2] using isOpenMap_fst _ H
-  
+      · simpa only [snd_image_prod st.1 t] using isOpenMap_snd _ H
+    · intro H
+      simp only [st.1.ne_empty, st.2.ne_empty, or_false] at H
+      exact H.1.prod H.2
 
 Depends on / 依赖: IsOpen, Nonempty, Or.inl, eq_empty_or_nonempty, fst_image_prod, isOpenMap_fst, isOpenMap_snd, ne_empty, or_false, prod_eq_empty_iff, prod_nonempty_iff, s.Nonempty, snd_image_prod, t.Nonempty
 -/
@@ -4213,7 +4275,14 @@ theorem Topology.IsInducing.sumElim
   intro x
   apply le_antisymm ((hf.continuous.sumElim hg.continuous).tendsto x).le_comap
   obtain x | x := x <;>
-  simp only [comap_sumElim_eq, nhds_inl, nhds_inr, elim_inl, elim_inr, 
+  simp only [comap_sumElim_eq, nhds_inl, nhds_inr, elim_inl, elim_inr, ← hf.nhds_eq_comap,
+    ← hg.nhds_eq_comap, sup_le_iff, le_rfl, true_and, and_true] <;>
+  convert! bot_le (α := Filter (X oplus Y)) <;>
+  rw [map_eq_bot_iff]; rw [comap_eq_bot_iff_compl_range]
+  · rw [← disjoint_principal_right]
+    exact hfG.mono_left (nhds_le_nhdsSet (mem_range_self x))
+  · rw [← disjoint_principal_left]
+    exact hFg.mono_right (nhds_le_nhdsSet (mem_range_self x))
 
 中文:
 定理 拓扑.是Inducing.sumElim
@@ -4225,7 +4294,14 @@ theorem Topology.IsInducing.sumElim
   intro x
   apply le_antisymm ((hf.continuous.sumElim hg.continuous).tendsto x).le_comap
   obtain x | x := x <;>
-  simp only [comap_sumElim_eq, nhds_inl, nhds_inr, elim_inl, elim_inr, 
+  simp only [comap_sumElim_eq, nhds_inl, nhds_inr, elim_inl, elim_inr, ← hf.nhds_eq_comap,
+    ← hg.nhds_eq_comap, sup_le_iff, le_rfl, true_and, and_true] <;>
+  convert! bot_le (α := Filter (X oplus Y)) <;>
+  rw [map_eq_bot_iff]; rw [comap_eq_bot_iff_compl_range]
+  · rw [← disjoint_principal_right]
+    exact hfG.mono_left (nhds_le_nhdsSet (mem_range_self x))
+  · rw [← disjoint_principal_left]
+    exact hFg.mono_right (nhds_le_nhdsSet (mem_range_self x))
 
 Depends on / 依赖: Filter, and_true, bot_le, comap_eq_bot_iff_compl_range, comap_sumElim_eq, continuous, convert, disjoint_nhdsSet_principal, disjoint_principal_nhdsSet, disjoint_principal_ri, elim_inl, elim_inr, hf.continuous.sumElim, hf.nhds_eq_comap, hg.continuous, hg.nhds_eq_comap, isInducing_iff_nhds, le_antisymm, le_comap, le_rfl
 -/
@@ -4258,7 +4334,9 @@ theorem Topology.IsInducing.disjoint_of_sumElim_aux
   have A : closure (range f) subseteq C := by
     rw [C_closed.closure_subset_iff]; rw [← elim_comp_inl f g]; rw [range_comp]; rw [image_subset_iff]; rw [hC]
   have B : Disjoint C (range g) := by
-    rw [← image_univ]; rw [disjo
+    rw [← image_univ]; rw [disjoint_image_right]; rw [← elim_comp_inr f g]; rw [preimage_comp]; rw [hC]; rw [← disjoint_image_right]; rw [← image_univ]
+    exact disjoint_image_inl_image_inr
+  exact B.mono_left A
 
 中文:
 定理 拓扑.是Inducing.disjoint_of_sumElim_aux
@@ -4268,7 +4346,9 @@ theorem Topology.IsInducing.disjoint_of_sumElim_aux
   have A : closure (range f) subseteq C := by
     rw [C_closed.closure_subset_iff]; rw [← elim_comp_inl f g]; rw [range_comp]; rw [image_subset_iff]; rw [hC]
   have B : Disjoint C (range g) := by
-    rw [← image_univ]; rw [disjo
+    rw [← image_univ]; rw [disjoint_image_right]; rw [← elim_comp_inr f g]; rw [preimage_comp]; rw [hC]; rw [← disjoint_image_right]; rw [← image_univ]
+    exact disjoint_image_inl_image_inr
+  exact B.mono_left A
 
 Depends on / 依赖: B.mono_left, C_closed, C_closed.closure_subset_iff, Disjoint, closure, closure_subset_iff, disjoint_image_inl_image_inr, disjoint_image_right, elim_comp_inl, elim_comp_inr, h.isClosed_iff.mp, image_subset_iff, image_univ, isClosed_iff, isClosed_range_inl, mono_left, preimage_comp, range_comp, subseteq
 -/
@@ -4412,7 +4492,7 @@ theorem isEmbedding_sumElim
     exact ⟨⟨hf₁, hf₂⟩, ⟨hg₁, hg₂⟩, hFg, hfG⟩
   · intro ⟨⟨hf₁, hf₂⟩, ⟨hg₁, hg₂⟩, hFg, hfG⟩
     refine ⟨⟨hf₁, hg₁, hFg, hfG⟩, ⟨hf₂, hg₂, ?_⟩⟩
-    exact fun a b => h
+    exact fun a b => hfG.ne_of_mem (mem_range_self a) (subset_closure (mem_range_self b))
 
 中文:
 定理 isEmbedding_sumElim
@@ -4423,7 +4503,7 @@ theorem isEmbedding_sumElim
     exact ⟨⟨hf₁, hf₂⟩, ⟨hg₁, hg₂⟩, hFg, hfG⟩
   · intro ⟨⟨hf₁, hf₂⟩, ⟨hg₁, hg₂⟩, hFg, hfG⟩
     refine ⟨⟨hf₁, hg₁, hFg, hfG⟩, ⟨hf₂, hg₂, ?_⟩⟩
-    exact fun a b => h
+    exact fun a b => hfG.ne_of_mem (mem_range_self a) (subset_closure (mem_range_self b))
 
 Depends on / 依赖: Sum.elim_injective, elim_injective, f_ne_g, hfG.ne_of_mem, isEmbedding_iff, isInducing_sumElim, mem_range_self, ne_of_mem, simp_rw, subset_closure
 -/

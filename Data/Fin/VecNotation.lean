@@ -1178,7 +1178,12 @@ theorem vecAlt1_vecAppend
     split_ifs with h <;> congr
     · simp [Nat.mod_eq_of_lt, h]
     · rw [Fin.val_mk, not_lt] at h
-      s
+      simp only [Nat.mod_add_mod,
+        Nat.mod_eq_sub_mod h, show 1 % (n + 2) = 1 from Nat.mod_eq_of_lt (by lia)]
+      refine (Nat.mod_eq_of_lt ?_).symm
+      lia
+
+@[simp]
 
 中文:
 定理 vecAlt1_vecAppend
@@ -1194,7 +1199,12 @@ theorem vecAlt1_vecAppend
     split_ifs with h <;> congr
     · simp [Nat.mod_eq_of_lt, h]
     · rw [Fin.val_mk, not_lt] at h
-      s
+      simp only [Nat.mod_add_mod,
+        Nat.mod_eq_sub_mod h, show 1 % (n + 2) = 1 from Nat.mod_eq_of_lt (by lia)]
+      refine (Nat.mod_eq_of_lt ?_).symm
+      lia
+
+@[simp]
 
 Depends on / 依赖: Fin.val_mk, Function, Function.comp, Nat.lt_one_iff, Nat.mod_add_mod, Nat.mod_eq_of_lt, Nat.mod_eq_sub_mod, Nat.zero_add, lt_one_iff, mod_add_mod, mod_eq_of_lt, mod_eq_sub_mod, not_lt, simp_rw, split_ifs, val_mk, vecAlt1, vecAppend_eq_ite, zero_add
 -/
@@ -1472,7 +1482,7 @@ lemma cons_cons_comp_swap_zero_one
   | ⟨i + 2, h⟩ =>
     have h' : (⟨i + 2, h⟩ : Fin n.succ.succ) = Fin.succ (Fin.succ ⟨i, by lia⟩) := by grind
     simp only [Nat.succ_eq_add_one, h', Function.comp_apply,
-      Equiv.swap_apply_of_ne_of_ne (Fin.succ_ne_zero _) (Fin.succ_succ_n
+      Equiv.swap_apply_of_ne_of_ne (Fin.succ_ne_zero _) (Fin.succ_succ_ne_one _), cons_val_succ]
 
 中文:
 引理 cons_cons_comp_swap_zero_one
@@ -1485,7 +1495,7 @@ lemma cons_cons_comp_swap_zero_one
   | ⟨i + 2, h⟩ =>
     have h' : (⟨i + 2, h⟩ : Fin n.succ.succ) = Fin.succ (Fin.succ ⟨i, by lia⟩) := by grind
     simp only [Nat.succ_eq_add_one, h', Function.comp_apply,
-      Equiv.swap_apply_of_ne_of_ne (Fin.succ_ne_zero _) (Fin.succ_succ_n
+      Equiv.swap_apply_of_ne_of_ne (Fin.succ_ne_zero _) (Fin.succ_succ_ne_one _), cons_val_succ]
 
 Depends on / 依赖: Equiv.swap_apply_of_ne_of_ne, Fin.succ, Fin.succ_ne_zero, Fin.succ_succ_ne_one, Function, Function.comp_apply, Nat.succ_eq_add_one, comp_apply, cons_val_succ, n.succ.succ, succ_eq_add_one, succ_ne_zero, succ_succ_ne_one, swap_apply_of_ne_of_ne
 -/
@@ -1515,7 +1525,7 @@ lemma cons_swap
   rcases eq_or_ne k j.succ with rfl | hkj
   · simp
   have hk : k = Fin.succ ⟨k - 1, by lia⟩ := by grind
- 
+  rw [Function.comp_apply]; rw [Equiv.swap_apply_of_ne_of_ne hki hkj]; rw [hk]; rw [cons_val_succ]; rw [Function.comp_apply]; rw [cons_val_succ]; rw [Equiv.swap_apply_of_ne_of_ne (by grind) (by grind)]
 
 中文:
 引理 cons_swap
@@ -1529,7 +1539,7 @@ lemma cons_swap
   rcases eq_or_ne k j.succ with rfl | hkj
   · simp
   have hk : k = Fin.succ ⟨k - 1, by lia⟩ := by grind
- 
+  rw [Function.comp_apply]; rw [Equiv.swap_apply_of_ne_of_ne hki hkj]; rw [hk]; rw [cons_val_succ]; rw [Function.comp_apply]; rw [cons_val_succ]; rw [Equiv.swap_apply_of_ne_of_ne (by grind) (by grind)]
 
 Depends on / 依赖: Equiv.swap_apply_of_ne_of_ne, Fin.succ, Fin.succ_ne_zero, Function, Function.comp_apply, comp_apply, cons_val_succ, eq_or_ne, i.succ, j.succ, succ_ne_zero, swap_apply_of_ne_of_ne
 -/

@@ -414,7 +414,11 @@ theorem dist_lt_of_sbtw_of_inner_eq_zero
   have hb : b -ᵥ a = t • (c -ᵥ a) := by simp [← hb_eq, AffineMap.lineMap_apply]
   have hpc : ⟪p -ᵥ a, c -ᵥ a⟫ = 0 := by simpa [ht0.ne', hb, inner_smul_right] using h_inner
   have h_sq_ineq : dist p b ^ 2 < dist p c ^ 2 := by
-    rw [← hb_eq]
+    rw [← hb_eq]; rw [dist_sq_lineMap_of_inner_eq_zero t hpc]; rw [dist_sq_of_inner_eq_zero hpc]
+    have hv_pos : 0 < dist a c ^ 2 := sq_pos_of_pos (dist_pos.mpr h_sbtw.left_ne_right)
+.mpr ht1 have ht_sq_lt : t ^ 2 < 1 := sq_lt_one_iff₀ ht0.le
+    nlinarith [sq_nonneg (dist p a), sq_nonneg (dist a c)]
+  simpa only [Real.sqrt_sq dist_nonneg] using Real.sqrt_lt_sqrt (sq_nonneg _) h_sq_ineq
 
 中文:
 定理 dist_lt_of_sbtw_of_inner_eq_zero
@@ -424,7 +428,11 @@ theorem dist_lt_of_sbtw_of_inner_eq_zero
   have hb : b -ᵥ a = t • (c -ᵥ a) := by simp [← hb_eq, AffineMap.lineMap_apply]
   have hpc : ⟪p -ᵥ a, c -ᵥ a⟫ = 0 := by simpa [ht0.ne', hb, inner_smul_right] using h_inner
   have h_sq_ineq : dist p b ^ 2 < dist p c ^ 2 := by
-    rw [← hb_eq]
+    rw [← hb_eq]; rw [dist_sq_lineMap_of_inner_eq_zero t hpc]; rw [dist_sq_of_inner_eq_zero hpc]
+    have hv_pos : 0 < dist a c ^ 2 := sq_pos_of_pos (dist_pos.mpr h_sbtw.left_ne_right)
+.mpr ht1 have ht_sq_lt : t ^ 2 < 1 := sq_lt_one_iff₀ ht0.le
+    nlinarith [sq_nonneg (dist p a), sq_nonneg (dist a c)]
+  simpa only [Real.sqrt_sq dist_nonneg] using Real.sqrt_lt_sqrt (sq_nonneg _) h_sq_ineq
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap_apply, dist_pos, dist_pos.mpr, dist_sq_lineMap_of_inner_eq_zero, dist_sq_of_inner_eq_zero, h_inner, h_sbtw, h_sbtw.left_ne_right, h_sbtw.mem_image_Ioo, h_sq_ineq, hb_eq, ht0.ne, ht_sq_lt, hv_pos, inner_smul_right, left_ne_right, lineMap_apply, mem_image_Ioo, sq_lt_one
 -/
@@ -453,7 +461,8 @@ theorem dist_le_of_wbtw_of_inner_eq_zero
   have h_sq_ineq : dist p b ^ 2 <= dist p c ^ 2 := by
     rw [← hb_eq]; rw [dist_sq_lineMap_of_inner_eq_zero t h_inner]; rw [dist_sq_of_inner_eq_zero h_inner]
 .mpr ht1 have ht_sq_le : t ^ 2 <= 1 := sq_le_one_iff₀ ht0
-    nlinarith [sq_nonneg (dist p a), s
+    nlinarith [sq_nonneg (dist p a), sq_nonneg (dist a c)]
+  simpa only [Real.sqrt_sq dist_nonneg] using Real.sqrt_le_sqrt h_sq_ineq
 
 中文:
 定理 dist_le_of_wbtw_of_inner_eq_zero
@@ -463,7 +472,8 @@ theorem dist_le_of_wbtw_of_inner_eq_zero
   have h_sq_ineq : dist p b ^ 2 <= dist p c ^ 2 := by
     rw [← hb_eq]; rw [dist_sq_lineMap_of_inner_eq_zero t h_inner]; rw [dist_sq_of_inner_eq_zero h_inner]
 .mpr ht1 have ht_sq_le : t ^ 2 <= 1 := sq_le_one_iff₀ ht0
-    nlinarith [sq_nonneg (dist p a), s
+    nlinarith [sq_nonneg (dist p a), sq_nonneg (dist a c)]
+  simpa only [Real.sqrt_sq dist_nonneg] using Real.sqrt_le_sqrt h_sq_ineq
 
 Depends on / 依赖: Real.sqrt_le_sqrt, Real.sqrt_sq, dist_nonneg, dist_sq_lineMap_of_inner_eq_zero, dist_sq_of_inner_eq_zero, h_inner, h_sq_ineq, h_wbtw, hb_eq, ht_sq_le, sq_nonneg, sqrt_le_sqrt, sqrt_sq
 -/
@@ -515,7 +525,7 @@ theorem dist_le_of_wbtw_of_mem_perpBisector
   proof: dist_le_of_wbtw_of_inner_eq_zero
 (h_wbtw.trans_left_right (wbtw_midpoint Real a b)) by
     rcases h_wbtw.right_mem_image_Ici_of_left_ne hab with ⟨s, -, rfl⟩
-    rw [← vsub_add_vsub_cancel (AffineMap.lineMap a b s) a]; rw [AffineMap.lineMap_vsub_left]; rw [left_vsub_midpoint]; rw [← neg_vsub_eq_vsub_
+    rw [← vsub_add_vsub_cancel (AffineMap.lineMap a b s) a]; rw [AffineMap.lineMap_vsub_left]; rw [left_vsub_midpoint]; rw [← neg_vsub_eq_vsub_rev b a]; rw [smul_neg]; rw [← sub_eq_add_neg]; rw [inner_sub_right]; rw [inner_smul_right]; rw [inner_smul_right]; rw [mem_perpBisector_iff_inner_eq_zero.mp hp]; rw [mul_zero]; rw [mul_zero]; rw [sub_self]
 
 中文:
 定理 dist_le_of_wbtw_of_mem_perpBisector
@@ -523,7 +533,7 @@ theorem dist_le_of_wbtw_of_mem_perpBisector
   证明: dist_le_of_wbtw_of_inner_eq_zero
 (h_wbtw.trans_left_right (wbtw_midpoint Real a b)) by
     rcases h_wbtw.right_mem_image_Ici_of_left_ne hab with ⟨s, -, rfl⟩
-    rw [← vsub_add_vsub_cancel (AffineMap.lineMap a b s) a]; rw [AffineMap.lineMap_vsub_left]; rw [left_vsub_midpoint]; rw [← neg_vsub_eq_vsub_
+    rw [← vsub_add_vsub_cancel (AffineMap.lineMap a b s) a]; rw [AffineMap.lineMap_vsub_left]; rw [left_vsub_midpoint]; rw [← neg_vsub_eq_vsub_rev b a]; rw [smul_neg]; rw [← sub_eq_add_neg]; rw [inner_sub_right]; rw [inner_smul_right]; rw [inner_smul_right]; rw [mem_perpBisector_iff_inner_eq_zero.mp hp]; rw [mul_zero]; rw [mul_zero]; rw [sub_self]
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap, AffineMap.lineMap_vsub_left, dist_le_of_wbtw_of_inner_eq_zero, h_wbtw, h_wbtw.right_mem_image_Ici_of_left_ne, h_wbtw.trans_left_right, inner_smul_right, inner_sub_right, left_vsub_midpoint, lineMap, lineMap_vsub_left, mem_perpBisector_iff_inner_eq_zero, mem_perpBisector_iff_inner_eq_zero.mp, mul_zero, neg_vsub_eq_vsub_rev, right_mem_image_Ici_of_left_ne, smul_neg, sub_eq_add_neg, sub_self
 -/

@@ -63,7 +63,17 @@ instance [LocallyCompactSpace
   have hVn : forall n x, x in Vn n ↔ |Complex.arg x| < π / 2 ^ (n + 1) :=
     fun n x => Circle.mem_centeredArc (z := x)
       (div_le_self pi_nonneg (one_le_pow₀ one_le_two))
-  refine ContinuousMonoidHom.locallyCompact
+  refine ContinuousMonoidHom.locallyCompactSpace_of_hasBasis Vn ?_ ?_
+  · intro n x h1 h2
+    rw [hVn] at h1 h2 ⊢
+    rwa [Circle.coe_mul, Complex.arg_mul x.coe_ne_zero x.coe_ne_zero,
+      ← two_mul, abs_mul, abs_two, ← lt_div_iff₀' two_pos, div_div, ← pow_succ] at h2
+    apply Set.Ioo_subset_Ioc_self
+    rw [← two_mul]; rw [Set.mem_Ioo]; rw [← abs_lt]; rw [abs_mul]; rw [abs_two]; rw [← lt_div_iff₀' two_pos]
+    refine h1.trans_le ?_
+    gcongr
+    exact le_self_pow₀ one_le_two n.succ_ne_zero
+  · simpa [Vn] using Circle.hasBasis_centeredArc_div_two_pow
 
 中文:
 实例 [局部紧空间
@@ -73,7 +83,17 @@ instance [LocallyCompactSpace
   have hVn : forall n x, x in Vn n ↔ |Complex.arg x| < π / 2 ^ (n + 1) :=
     fun n x => Circle.mem_centeredArc (z := x)
       (div_le_self pi_nonneg (one_le_pow₀ one_le_two))
-  refine ContinuousMonoidHom.locallyCompact
+  refine ContinuousMonoidHom.locallyCompactSpace_of_hasBasis Vn ?_ ?_
+  · intro n x h1 h2
+    rw [hVn] at h1 h2 ⊢
+    rwa [Circle.coe_mul, Complex.arg_mul x.coe_ne_zero x.coe_ne_zero,
+      ← two_mul, abs_mul, abs_two, ← lt_div_iff₀' two_pos, div_div, ← pow_succ] at h2
+    apply Set.Ioo_subset_Ioc_self
+    rw [← two_mul]; rw [Set.mem_Ioo]; rw [← abs_lt]; rw [abs_mul]; rw [abs_two]; rw [← lt_div_iff₀' two_pos]
+    refine h1.trans_le ?_
+    gcongr
+    exact le_self_pow₀ one_le_two n.succ_ne_zero
+  · simpa [Vn] using Circle.hasBasis_centeredArc_div_two_pow
 
 Depends on / 依赖: Circle, Circle.centeredArc, Circle.coe_mul, Circle.mem_centeredArc, Complex.arg, Complex.arg_mul, ContinuousMonoidHom, ContinuousMonoidHom.locallyCompactSpace_of_hasBasis, abs_mul, abs_two, arg_mul, centeredArc, coe_mul, coe_ne_zero, div_div, div_le_self, locallyCompactSpace_of_hasBasis, mem_centeredArc, one_le_two, pi_nonneg
 -/
@@ -198,7 +218,17 @@ instance [CompactSpace
     dsimp only [V]
     exact isOpen_induced (ContinuousMap.isOpen_setOfPred_mapsTo isCompact_univ
       (Circle.isOpen_centeredArc (π / 2)))
-  have hVeq : V = ({1} : Set (Po
+  have hVeq : V = ({1} : Set (PontryaginDual A)) := by
+    ext ψ
+    rw [Set.mem_singleton_iff]
+    refine ⟨fun hψ => ?_, ?_⟩
+    · ext1 a
+      refine Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two fun n hn => ?_
+      simpa using hψ (Set.mem_univ (a ^ n))
+    · rintro rfl _ _
+      rw [Circle.mem_centeredArc (by linarith [pi_pos])]
+      simp [pi_pos]
+  exact discreteTopology_of_isOpen_singleton_one (by simpa [hVeq] using hVopen)
 
 中文:
 实例 [紧空间
@@ -209,7 +239,17 @@ instance [CompactSpace
     dsimp only [V]
     exact isOpen_induced (ContinuousMap.isOpen_setOfPred_mapsTo isCompact_univ
       (Circle.isOpen_centeredArc (π / 2)))
-  have hVeq : V = ({1} : Set (Po
+  have hVeq : V = ({1} : Set (PontryaginDual A)) := by
+    ext ψ
+    rw [Set.mem_singleton_iff]
+    refine ⟨fun hψ => ?_, ?_⟩
+    · ext1 a
+      refine Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two fun n hn => ?_
+      simpa using hψ (Set.mem_univ (a ^ n))
+    · rintro rfl _ _
+      rw [Circle.mem_centeredArc (by linarith [pi_pos])]
+      simp [pi_pos]
+  exact discreteTopology_of_isOpen_singleton_one (by simpa [hVeq] using hVopen)
 
 Depends on / 依赖: Circle, Circle.centeredArc, Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two, Circle.isOpen_centeredArc, ContinuousMap, ContinuousMap.isOpen_setOfPred_mapsTo, IsOpen, MapsTo, PontryaginDual, Set.MapsTo, Set.mem_singleton_iff, Set.mem_univ, Set.univ, centeredArc, eq_one_of_forall_pow_mem_centeredArc_pi_div_two, hVopen, isCompact_univ, isOpen_centeredArc, isOpen_induced, isOpen_setOfPred_mapsTo
 -/

@@ -717,7 +717,18 @@ theorem card_torsion_le_of_isSMulRegular
     rw [Set.mem_ofPred]; rw [← mk_nsmul]; rw [eq_zero_iff] at hx
     have ⟨m', hm⟩ := hx
     have : NeZero n := ⟨h0⟩
-    rw [← (I
+    rw [← (Int.divModEquiv n).symm_apply_apply m']; rw [Int.divModEquiv_symm_apply] at hm
+    set m := m'.divModEquiv n
+    use m.2, y - m.1 • p
+    simp_rw [mk_sub, mk_zsmul, sub_eq_self, coe_period, smul_zero]
+    rw [smul_sub]; rw [sub_eq_iff_eq_add]; rw [← hm]; rw [add_comm]
+    simp [add_smul, mul_comm, mul_smul]
+  choose f hf using this
+  refine (ENat.card_le_card_of_injective (f := f) fun x x' eq => Subtype.ext ?_).trans (by simp)
+  have ⟨y, hyx, hy⟩ := hf x
+  have ⟨y', hyx', hy'⟩ := hf x'
+  rw [eq]; rw [← hy']; rw [hn.eq_iff] at hy
+  rw [← hyx]; rw [hy]; rw [hyx']
 
 中文:
 定理 card_torsion_le_of_isSMulRegular
@@ -729,7 +740,18 @@ theorem card_torsion_le_of_isSMulRegular
     rw [Set.mem_ofPred]; rw [← mk_nsmul]; rw [eq_zero_iff] at hx
     have ⟨m', hm⟩ := hx
     have : NeZero n := ⟨h0⟩
-    rw [← (I
+    rw [← (Int.divModEquiv n).symm_apply_apply m']; rw [Int.divModEquiv_symm_apply] at hm
+    set m := m'.divModEquiv n
+    use m.2, y - m.1 • p
+    simp_rw [mk_sub, mk_zsmul, sub_eq_self, coe_period, smul_zero]
+    rw [smul_sub]; rw [sub_eq_iff_eq_add]; rw [← hm]; rw [add_comm]
+    simp [add_smul, mul_comm, mul_smul]
+  choose f hf using this
+  refine (ENat.card_le_card_of_injective (f := f) fun x x' eq => Subtype.ext ?_).trans (by simp)
+  have ⟨y, hyx, hy⟩ := hf x
+  have ⟨y', hyx', hy'⟩ := hf x'
+  rw [eq]; rw [← hy']; rw [hn.eq_iff] at hy
+  rw [← hyx]; rw [hy]; rw [hyx']
 
 Depends on / 依赖: AddCircle, Int.divModEquiv, Int.divModEquiv_symm_apply, NeZero, Set.mem_ofPred, coe_period, divModEquiv, divModEquiv_symm_apply, eq_zero_iff, mem_ofPred, mk_nsmul, mk_sub, mk_surjective, mk_zsmul, simp_rw, smul_sub, smul_zero, sub_eq_iff_eq_add, sub_eq_self, symm_apply_apply
 -/
@@ -909,7 +931,7 @@ theorem coe_eq_zero_of_pos_iff
       contrapose! hx
       simpa only [← neg_nonneg, ← zsmul_neg, zsmul_neg'] using zsmul_nonneg hp.le (neg_nonneg.2 hx)
     exact ⟨n.toNat, by rw [← natCast_zsmul, Int.toNat_of_nonneg hx.le]⟩
-  · exact ⟨(n : In
+  · exact ⟨(n : Int), by simp⟩
 
 中文:
 定理 coe_eq_zero_of_pos_iff
@@ -921,7 +943,7 @@ theorem coe_eq_zero_of_pos_iff
       contrapose! hx
       simpa only [← neg_nonneg, ← zsmul_neg, zsmul_neg'] using zsmul_nonneg hp.le (neg_nonneg.2 hx)
     exact ⟨n.toNat, by rw [← natCast_zsmul, Int.toNat_of_nonneg hx.le]⟩
-  · exact ⟨(n : In
+  · exact ⟨(n : Int), by simp⟩
 
 Depends on / 依赖: Int.toNat_of_nonneg, coe_eq_zero_iff, contrapose, hp.le, hx.le, n.toNat, natCast_zsmul, neg_nonneg, replace, toNat_of_nonneg, zsmul_neg, zsmul_nonneg
 -/
@@ -1523,7 +1545,17 @@ definition openPartialHomeomorphCoe
       (left_mem_Ico.mpr (lt_add_of_pos_right a hp.out))).mp hx')
   map_target' := by
     intro x hx
-    e
+    exact (eq_left_or_mem_Ioo_of_mem_Ico (equivIco p a x).2).resolve_left
+      (hx ∘ ((equivIco p a).symm_apply_apply x).symm.trans ∘ congrArg _)
+  left_inv' :=
+    fun x hx => congrArg _ ((equivIco p a).apply_symm_apply ⟨x, Ioo_subset_Ico_self hx⟩)
+  right_inv' := fun x _ => (equivIco p a).symm_apply_apply x
+  open_source := isOpen_Ioo
+  open_target := isOpen_compl_singleton
+  continuousOn_toFun := (AddCircle.continuous_mk' p).continuousOn
+  continuousOn_invFun := by
+    exact continuousOn_of_forall_continuousAt
+      (fun _ => continuousAt_subtype_val.comp ∘ continuousAt_equivIco p a)
 
 中文:
 定义 openPartialHomeomorphCoe
@@ -1538,7 +1570,17 @@ definition openPartialHomeomorphCoe
       (left_mem_Ico.mpr (lt_add_of_pos_right a hp.out))).mp hx')
   map_target' := by
     intro x hx
-    e
+    exact (eq_left_or_mem_Ioo_of_mem_Ico (equivIco p a x).2).resolve_left
+      (hx ∘ ((equivIco p a).symm_apply_apply x).symm.trans ∘ congrArg _)
+  left_inv' :=
+    fun x hx => congrArg _ ((equivIco p a).apply_symm_apply ⟨x, Ioo_subset_Ico_self hx⟩)
+  right_inv' := fun x _ => (equivIco p a).symm_apply_apply x
+  open_source := isOpen_Ioo
+  open_target := isOpen_compl_singleton
+  continuousOn_toFun := (AddCircle.continuous_mk' p).continuousOn
+  continuousOn_invFun := by
+    exact continuousOn_of_forall_continuousAt
+      (fun _ => continuousAt_subtype_val.comp ∘ continuousAt_equivIco p a)
 -/
 @[simps] def openPartialHomeomorphCoe [DiscreteTopology (zmultiples p)] :
     OpenPartialHomeomorph 𝕜 (AddCircle p) where
@@ -1708,6 +1750,7 @@ definition equivAddCircle
   body: QuotientAddGroup.congr _ _ (AddAut.mulRight <| (Units.mk0 p hp)⁻¹ * Units.mk0 q hq) by
     rw [AddMonoidHom.map_zmultiples]; rw [AddMonoidHom.coe_coe]; rw [AddAut.mulRight_apply]; rw [Units.val_mul]; rw [Units.val_mk0]; rw [Units.val_inv_eq_inv_val]; rw [Units.val_mk0]; rw [mul_inv_cancel_left₀ hp]
 
+@[simp]
 
 中文:
 定义 equivAddCircle
@@ -1715,6 +1758,7 @@ definition equivAddCircle
   定义体: QuotientAddGroup.congr _ _ (AddAut.mulRight <| (Units.mk0 p hp)⁻¹ * Units.mk0 q hq) by
     rw [AddMonoidHom.map_zmultiples]; rw [AddMonoidHom.coe_coe]; rw [AddAut.mulRight_apply]; rw [Units.val_mul]; rw [Units.val_mk0]; rw [Units.val_inv_eq_inv_val]; rw [Units.val_mk0]; rw [mul_inv_cancel_left₀ hp]
 
+@[simp]
 
 Depends on / 依赖: AddAut, AddAut.mulRight, AddAut.mulRight_apply, AddMonoidHom, AddMonoidHom.coe_coe, AddMonoidHom.map_zmultiples, QuotientAddGroup, QuotientAddGroup.congr, Units.mk0, Units.val_inv_eq_inv_val, Units.val_mk0, Units.val_mul, coe_coe, map_zmultiples, mulRight, mulRight_apply, val_inv_eq_inv_val, val_mk0, val_mul
 -/
@@ -1913,7 +1957,10 @@ instance :
   div_cancel {n} x hn := by
     replace hn : (n : 𝕜) != 0 := by norm_cast
     change n • QuotientAddGroup.mk' _ ((n : 𝕜)⁻¹ * ↑(equivIco p 0 x)) = x
-    rw [← map_zsmul]; rw [← smul_mul_assoc]; rw [zsmul_eq_mul]; rw [mul_inv_
+    rw [← map_zsmul]; rw [← smul_mul_assoc]; rw [zsmul_eq_mul]; rw [mul_inv_cancel₀ hn]; rw [one_mul]
+    exact (equivIco p 0).symm_apply_apply x
+
+omit [IsStrictOrderedRing 𝕜] in
 
 中文:
 实例 :
@@ -1923,7 +1970,10 @@ instance :
   div_cancel {n} x hn := by
     replace hn : (n : 𝕜) != 0 := by norm_cast
     change n • QuotientAddGroup.mk' _ ((n : 𝕜)⁻¹ * ↑(equivIco p 0 x)) = x
-    rw [← map_zsmul]; rw [← smul_mul_assoc]; rw [zsmul_eq_mul]; rw [mul_inv_
+    rw [← map_zsmul]; rw [← smul_mul_assoc]; rw [zsmul_eq_mul]; rw [mul_inv_cancel₀ hn]; rw [one_mul]
+    exact (equivIco p 0).symm_apply_apply x
+
+omit [IsStrictOrderedRing 𝕜] in
 
 Depends on / 依赖: AddCircle, equivIco
 -/
@@ -1976,7 +2026,9 @@ theorem addOrderOf_period_div
   refine ⟨?_, fun m hn h0 => ?_⟩ <;> simp only [Ne, ← coe_nsmul, nsmul_eq_mul]
   · rw [mul_div_cancel₀ _ h.ne', coe_period]
   rw [coe_eq_zero_of_pos_iff p hp.out (mul_pos (Nat.cast_pos.2 h0) <| div_pos hp.out h)]
-  rintro ⟨k
+  rintro ⟨k, hk⟩
+  rw [mul_div]; rw [eq_div_iff h.ne']; rw [nsmul_eq_mul]; rw [mul_right_comm]; rw [← Nat.cast_mul]; rw [(mul_left_injective₀ hp.out.ne').eq_iff]; rw [Nat.cast_inj]; rw [mul_comm] at hk
+  exact (Nat.le_of_dvd h0 ⟨_, hk.symm⟩).not_gt hn
 
 中文:
 定理 addOrderOf_period_div
@@ -1988,7 +2040,9 @@ theorem addOrderOf_period_div
   refine ⟨?_, fun m hn h0 => ?_⟩ <;> simp only [Ne, ← coe_nsmul, nsmul_eq_mul]
   · rw [mul_div_cancel₀ _ h.ne', coe_period]
   rw [coe_eq_zero_of_pos_iff p hp.out (mul_pos (Nat.cast_pos.2 h0) <| div_pos hp.out h)]
-  rintro ⟨k
+  rintro ⟨k, hk⟩
+  rw [mul_div]; rw [eq_div_iff h.ne']; rw [nsmul_eq_mul]; rw [mul_right_comm]; rw [← Nat.cast_mul]; rw [(mul_left_injective₀ hp.out.ne').eq_iff]; rw [Nat.cast_inj]; rw [mul_comm] at hk
+  exact (Nat.le_of_dvd h0 ⟨_, hk.symm⟩).not_gt hn
 
 Depends on / 依赖: Nat.cast_inj, Nat.cast_mul, Nat.cast_pos, Nat.le_of_dvd, addOrderOf_eq_iff, cast_inj, cast_mul, cast_pos, coe_eq_zero_of_pos_iff, coe_nsmul, coe_period, div_pos, eq_div_iff, eq_iff, h.ne, hp.out, hp.out.ne, le_of_dvd, mul_comm, mul_div
 -/
@@ -2135,7 +2189,11 @@ theorem nsmul_eq_zero_iff
     exact gcd_mul_addOrderOf_div_eq p m h
   rw [← coe_nsmul]; rw [coe_eq_zero_iff] at hk
   obtain ⟨a, ha⟩ := hk
-  refine ⟨a.natM
+  refine ⟨a.natMod n, Int.natMod_lt h.ne', ?_⟩
+  have h0 : (n : 𝕜) != 0 := Nat.cast_ne_zero.2 h.ne'
+  rw [nsmul_eq_mul]; rw [mul_comm]; rw [← div_eq_iff h0]; rw [← a.ediv_mul_add_emod n]; rw [add_smul]; rw [add_div]; rw [zsmul_eq_mul]; rw [Int.cast_mul]; rw [Int.cast_natCast]; rw [mul_assoc]; rw [← mul_div]; rw [mul_comm _ p]; rw [mul_div_cancel_right₀ p h0] at ha
+  rw [← ha]; rw [coe_add]; rw [← Int.cast_natCast]; rw [Int.natMod]; rw [Int.toNat_of_nonneg]; rw [zsmul_eq_mul]; rw [mul_div_right_comm]; rw [eq_comm]; rw [add_eq_right]; rw [← zsmul_eq_mul]; rw [coe_zsmul]; rw [coe_period]; rw [smul_zero]
+  exact Int.emod_nonneg _ (by exact_mod_cast h.ne')
 
 中文:
 定理 nsmul_eq_zero_iff
@@ -2148,7 +2206,11 @@ theorem nsmul_eq_zero_iff
     exact gcd_mul_addOrderOf_div_eq p m h
   rw [← coe_nsmul]; rw [coe_eq_zero_iff] at hk
   obtain ⟨a, ha⟩ := hk
-  refine ⟨a.natM
+  refine ⟨a.natMod n, Int.natMod_lt h.ne', ?_⟩
+  have h0 : (n : 𝕜) != 0 := Nat.cast_ne_zero.2 h.ne'
+  rw [nsmul_eq_mul]; rw [mul_comm]; rw [← div_eq_iff h0]; rw [← a.ediv_mul_add_emod n]; rw [add_smul]; rw [add_div]; rw [zsmul_eq_mul]; rw [Int.cast_mul]; rw [Int.cast_natCast]; rw [mul_assoc]; rw [← mul_div]; rw [mul_comm _ p]; rw [mul_div_cancel_right₀ p h0] at ha
+  rw [← ha]; rw [coe_add]; rw [← Int.cast_natCast]; rw [Int.natMod]; rw [Int.toNat_of_nonneg]; rw [zsmul_eq_mul]; rw [mul_div_right_comm]; rw [eq_comm]; rw [add_eq_right]; rw [← zsmul_eq_mul]; rw [coe_zsmul]; rw [coe_period]; rw [smul_zero]
+  exact Int.emod_nonneg _ (by exact_mod_cast h.ne')
 -/
 protected theorem nsmul_eq_zero_iff {u : AddCircle p} {n : Nat} (h : 0 < n) :
     n • u = 0 ↔ exists m < n, ↑(↑m / ↑n * p) = u := by
@@ -2179,7 +2241,9 @@ theorem addOrderOf_eq_pos_iff
   obtain ⟨m, hm, hk⟩ := (AddCircle.nsmul_eq_zero_iff h).mp
     (addOrderOf_nsmul_eq_zero (k : AddCircle p))
   refine ⟨m, hm, mul_right_cancel₀ h.ne' ?_, hk⟩
-  co
+  convert! gcd_mul_addOrderOf_div_eq p m h using 1
+  · rw [hk]
+  · apply one_mul
 
 中文:
 定理 addOrderOf_eq_pos_iff
@@ -2192,7 +2256,9 @@ theorem addOrderOf_eq_pos_iff
   obtain ⟨m, hm, hk⟩ := (AddCircle.nsmul_eq_zero_iff h).mp
     (addOrderOf_nsmul_eq_zero (k : AddCircle p))
   refine ⟨m, hm, mul_right_cancel₀ h.ne' ?_, hk⟩
-  co
+  convert! gcd_mul_addOrderOf_div_eq p m h using 1
+  · rw [hk]
+  · apply one_mul
 
 Depends on / 依赖: AddCircle, AddCircle.nsmul_eq_zero_iff, QuotientAddGroup, QuotientAddGroup.induction_on, addOrderOf_div_of_gcd_eq_one, addOrderOf_nsmul_eq_zero, convert, gcd_mul_addOrderOf_div_eq, h.ne, induction_on, nsmul_eq_zero_iff, one_mul
 -/
@@ -2296,7 +2362,12 @@ definition setAddOrderOfEquiv
       (by
         refine ⟨fun m₁ m₂ h => Subtype.ext ?_, fun u => ?_⟩
         · simp_rw [Subtype.mk_eq_mk, natCast_div_mul_eq_nsmul] at h
-          refine nsmul_injOn_Iio_addOrderOf ?_ ?_ h <;>
+          refine nsmul_injOn_Iio_addOrderOf ?_ ?_ h <;> rw [addOrderOf_period_div hn]
+          exacts [m₁.2.1, m₂.2.1]
+        · obtain ⟨m, hmn, hg, he⟩ := (addOrderOf_eq_pos_iff hn).mp u.2
+          exact ⟨⟨m, hmn, hg⟩, Subtype.ext he⟩)
+
+@[simp]
 
 中文:
 定义 setAddOrderOfEquiv
@@ -2306,7 +2377,12 @@ definition setAddOrderOfEquiv
       (by
         refine ⟨fun m₁ m₂ h => Subtype.ext ?_, fun u => ?_⟩
         · simp_rw [Subtype.mk_eq_mk, natCast_div_mul_eq_nsmul] at h
-          refine nsmul_injOn_Iio_addOrderOf ?_ ?_ h <;>
+          refine nsmul_injOn_Iio_addOrderOf ?_ ?_ h <;> rw [addOrderOf_period_div hn]
+          exacts [m₁.2.1, m₂.2.1]
+        · obtain ⟨m, hmn, hg, he⟩ := (addOrderOf_eq_pos_iff hn).mp u.2
+          exact ⟨⟨m, hmn, hg⟩, Subtype.ext he⟩)
+
+@[simp]
 
 Depends on / 依赖: Equiv.ofBijective, Equiv.symm, Subtype, Subtype.ext, Subtype.mk_eq_mk, addOrderOf_div_of_gcd_eq_one, addOrderOf_eq_pos_iff, addOrderOf_period_div, exacts, m.prop, mk_eq_mk, natCast_div_mul_eq_nsmul, nsmul_injOn_Iio_addOrderOf, ofBijective, simp_rw
 -/
@@ -2335,7 +2411,13 @@ theorem card_addOrderOf_eq_totient
     rcases em (exists u : AddCircle p, ¬IsOfFinAddOrder u) with (⟨u, hu⟩ | h)
     · have : Infinite { u : AddCircle p // ¬IsOfFinAddOrder u } := by
         rw [← coe_ofPred]; rw [infinite_coe_iff]
- 
+        exact infinite_not_isOfFinAddOrder hu
+      exact Nat.card_eq_zero_of_infinite
+    · have : IsEmpty { u : AddCircle p // ¬IsOfFinAddOrder u } := by simpa [isEmpty_subtype] using h
+      exact Nat.card_of_isEmpty
+  · rw [← coe_ofPred, Nat.card_congr (setAddOrderOfEquiv p hn),
+      n.totient_eq_card_lt_and_coprime]
+    simp only [Nat.gcd_comm]
 
 中文:
 定理 card_addOrderOf_eq_totient
@@ -2346,7 +2428,13 @@ theorem card_addOrderOf_eq_totient
     rcases em (exists u : AddCircle p, ¬IsOfFinAddOrder u) with (⟨u, hu⟩ | h)
     · have : Infinite { u : AddCircle p // ¬IsOfFinAddOrder u } := by
         rw [← coe_ofPred]; rw [infinite_coe_iff]
- 
+        exact infinite_not_isOfFinAddOrder hu
+      exact Nat.card_eq_zero_of_infinite
+    · have : IsEmpty { u : AddCircle p // ¬IsOfFinAddOrder u } := by simpa [isEmpty_subtype] using h
+      exact Nat.card_of_isEmpty
+  · rw [← coe_ofPred, Nat.card_congr (setAddOrderOfEquiv p hn),
+      n.totient_eq_card_lt_and_coprime]
+    simp only [Nat.gcd_comm]
 
 Depends on / 依赖: AddCircle, Infinite, IsEmpty, IsOfFinAddOrder, Nat.c, Nat.card_eq_zero_of_infinite, Nat.card_of_isEmpty, Nat.totient_zero, addOrderOf_eq_zero_iff, card_eq_zero_of_infinite, card_of_isEmpty, coe_ofPred, eq_zero_or_pos, infinite_coe_iff, infinite_not_isOfFinAddOrder, isEmpty_subtype, n.eq_zero_or_pos, totient_zero
 -/
@@ -2422,7 +2510,18 @@ Quot.liftOn x (↑) by
 Quot.ind by
       rintro ⟨x, hx⟩
       rcases ne_or_eq x (a + p) with (h | rfl)
-      · 
+      · revert x
+        dsimp only
+        intro x hx h
+        congr
+        ext1
+        apply congr_arg Subtype.val ((equivIco p a).right_inv ⟨x, hx.1, hx.2.lt_of_ne h⟩)
+      · rw [← Quot.sound EndpointIdent.mk]
+        dsimp only
+        congr
+        ext1
+        apply congr_arg Subtype.val
+          ((equivIco p a).right_inv ⟨a, le_refl a, lt_add_of_pos_right a hp.out⟩)
 
 中文:
 定义 equivIccQuot
@@ -2437,7 +2536,18 @@ Quot.liftOn x (↑) by
 Quot.ind by
       rintro ⟨x, hx⟩
       rcases ne_or_eq x (a + p) with (h | rfl)
-      · 
+      · revert x
+        dsimp only
+        intro x hx h
+        congr
+        ext1
+        apply congr_arg Subtype.val ((equivIco p a).right_inv ⟨x, hx.1, hx.2.lt_of_ne h⟩)
+      · rw [← Quot.sound EndpointIdent.mk]
+        dsimp only
+        congr
+        ext1
+        apply congr_arg Subtype.val
+          ((equivIco p a).right_inv ⟨a, le_refl a, lt_add_of_pos_right a hp.out⟩)
 
 Depends on / 依赖: Ico_subset_Icc_self, Quot.mk, equivIco, inclusion
 -/
@@ -2528,7 +2638,14 @@ definition homeoIccQuot
       continuousAt_iff_continuous_left_right]
     intro x; constructor
     on_goal 1 => erw [equivIccQuot_comp_mk_eq_toIocMod]
-    on_goal 2 => erw [equivIccQuot_comp_mk_eq_
+    on_goal 2 => erw [equivIccQuot_comp_mk_eq_toIcoMod]
+    all_goals
+      apply continuous_quot_mk.continuousAt.comp_continuousWithinAt
+      rw [IsInducing.subtypeVal.continuousWithinAt_iff]
+    · apply continuousWithinAt_toIocMod_Iic
+    · apply continuousWithinAt_toIcoMod_Ici
+  continuous_invFun :=
+    continuous_quot_lift _ ((AddCircle.continuous_mk' p).comp continuous_subtype_val)
 
 中文:
 定义 homeoIccQuot
@@ -2539,7 +2656,14 @@ definition homeoIccQuot
       continuousAt_iff_continuous_left_right]
     intro x; constructor
     on_goal 1 => erw [equivIccQuot_comp_mk_eq_toIocMod]
-    on_goal 2 => erw [equivIccQuot_comp_mk_eq_
+    on_goal 2 => erw [equivIccQuot_comp_mk_eq_toIcoMod]
+    all_goals
+      apply continuous_quot_mk.continuousAt.comp_continuousWithinAt
+      rw [IsInducing.subtypeVal.continuousWithinAt_iff]
+    · apply continuousWithinAt_toIocMod_Iic
+    · apply continuousWithinAt_toIcoMod_Ici
+  continuous_invFun :=
+    continuous_quot_lift _ ((AddCircle.continuous_mk' p).comp continuous_subtype_val)
 
 Depends on / 依赖: equivIccQuot
 -/
@@ -2578,7 +2702,7 @@ theorem liftIoc_eq_liftIco
   rw [liftIco_coe_apply hx]
   obtain (⟨rfl, -⟩ | h) := by rwa [mem_Ico, le_iff_eq_or_lt, or_and_right] at hx
   · rw [← coe_add_period, liftIoc_coe_apply (by simp [hp.out]), hf]
-  · exact liftIoc_coe
+  · exact liftIoc_coe_apply ⟨h.1, h.2.le⟩
 
 中文:
 定理 liftIoc_eq_liftIco
@@ -2589,7 +2713,7 @@ theorem liftIoc_eq_liftIco
   rw [liftIco_coe_apply hx]
   obtain (⟨rfl, -⟩ | h) := by rwa [mem_Ico, le_iff_eq_or_lt, or_and_right] at hx
   · rw [← coe_add_period, liftIoc_coe_apply (by simp [hp.out]), hf]
-  · exact liftIoc_coe
+  · exact liftIoc_coe_apply ⟨h.1, h.2.le⟩
 
 Depends on / 依赖: coe_add_period, coe_image_Ico_eq, hp.out, le_iff_eq_or_lt, liftIco_coe_apply, liftIoc_coe_apply, mem_Ico, mem_image, mem_univ, or_and_right
 -/

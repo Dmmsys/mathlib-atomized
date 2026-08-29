@@ -569,7 +569,11 @@ lemma iInf_iSup_eq'
       simp_rw [iInf_subtype, iInf_range, iSup_subtype, iSup_range]
     _ = _ := minAx.iInf_iSup_eq _
     _ <= _ := iSup_le fun g => by
-refine le_trans ?_ le_iSup _ fun a => Classical.choose (g ⟨_,
+refine le_trans ?_ le_iSup _ fun a => Classical.choose (g ⟨_, a, rfl⟩).2
+      refine le_iInf fun a => le_trans (iInf_le _ ⟨range (f a), a, rfl⟩) ?_
+      rw [← Classical.choose_spec (g ⟨_]; rw [a]; rw [rfl⟩).2]
+
+@[to_dual existing iInf_iSup_eq']
 
 中文:
 引理 iInf_iSup_eq'
@@ -581,7 +585,11 @@ refine le_trans ?_ le_iSup _ fun a => Classical.choose (g ⟨_,
       simp_rw [iInf_subtype, iInf_range, iSup_subtype, iSup_range]
     _ = _ := minAx.iInf_iSup_eq _
     _ <= _ := iSup_le fun g => by
-refine le_trans ?_ le_iSup _ fun a => Classical.choose (g ⟨_,
+refine le_trans ?_ le_iSup _ fun a => Classical.choose (g ⟨_, a, rfl⟩).2
+      refine le_iInf fun a => le_trans (iInf_le _ ⟨range (f a), a, rfl⟩) ?_
+      rw [← Classical.choose_spec (g ⟨_]; rw [a]; rw [rfl⟩).2]
+
+@[to_dual existing iInf_iSup_eq']
 -/
 private lemma iInf_iSup_eq' [CompleteLattice α] (minAx : MinimalAxioms α) (f : forall a, κ a -> α) :
     ⨅ i, ⨆ j, f i j = ⨆ g : forall i, κ i, ⨅ i, f i (g i) := by
@@ -611,7 +619,10 @@ lemma iSup_iInf_eq
     choose h hh using h
     have := hh _ h rfl
     contradiction
-  refine le_trans ?_ (le_iSup _ a
+  refine le_trans ?_ (le_iSup _ a)
+  refine le_iInf fun b => ?_
+  obtain ⟨h, rfl, rfl⟩ := ha b
+  exact iInf_le _ _
 
 中文:
 引理 iSup_iInf_eq
@@ -625,7 +636,10 @@ lemma iSup_iInf_eq
     choose h hh using h
     have := hh _ h rfl
     contradiction
-  refine le_trans ?_ (le_iSup _ a
+  refine le_trans ?_ (le_iSup _ a)
+  refine le_iInf fun b => ?_
+  obtain ⟨h, rfl, rfl⟩ := ha b
+  exact iInf_le _ _
 -/
 private lemma iSup_iInf_eq [CompleteLattice α] (minAx : MinimalAxioms α) (f : forall i, κ i -> α) :
     ⨆ i, ⨅ j, f i j = ⨅ g : forall i, κ i, ⨆ i, f i (g i) := by
@@ -655,7 +669,17 @@ theorem toCompleteDistribLattice
           | .up true => a
           | .up false => j := by simp [sSup_eq_iSup', iSup_unique, iInf_bool_eq]
       _ <= _ := by
-        simp only [minAx.iInf_iSup_eq, iIn
+        simp only [minAx.iInf_iSup_eq, iInf_ulift, iInf_bool_eq, iSup_le_iff]
+        exact fun x => le_biSup _ (x (.up false)).2
+  iInf_sup_le_sup_sInf a s := by
+    calc
+      _ <= ⨆ i : ULift.{u} Bool, ⨅ j : match i with | .up true => PUnit.{u + 1} | .up false => s,
+          match i with
+          | .up true => a
+          | .up false => j := by
+        simp only [minAx.iSup_iInf_eq, iSup_ulift, iSup_bool_eq, le_iInf_iff]
+        exact fun x => biInf_le _ (x (.up false)).2
+      _ = _ := by simp [sInf_eq_iInf', iInf_unique, iSup_bool_eq]
 
 中文:
 定理 toCompleteDistribLattice
@@ -667,7 +691,17 @@ theorem toCompleteDistribLattice
           | .up true => a
           | .up false => j := by simp [sSup_eq_iSup', iSup_unique, iInf_bool_eq]
       _ <= _ := by
-        simp only [minAx.iInf_iSup_eq, iIn
+        simp only [minAx.iInf_iSup_eq, iInf_ulift, iInf_bool_eq, iSup_le_iff]
+        exact fun x => le_biSup _ (x (.up false)).2
+  iInf_sup_le_sup_sInf a s := by
+    calc
+      _ <= ⨆ i : ULift.{u} Bool, ⨅ j : match i with | .up true => PUnit.{u + 1} | .up false => s,
+          match i with
+          | .up true => a
+          | .up false => j := by
+        simp only [minAx.iSup_iInf_eq, iSup_ulift, iSup_bool_eq, le_iInf_iff]
+        exact fun x => biInf_le _ (x (.up false)).2
+      _ = _ := by simp [sInf_eq_iInf', iInf_unique, iSup_bool_eq]
 
 Depends on / 依赖: iInf_bool_eq, iInf_iSup_eq, iInf_sup_le_sup_sInf, iInf_ulift, iSup_le_iff, iSup_unique, le_biSup, minAx.iInf_iSup_eq, sSup_eq_iSup
 -/
@@ -770,7 +804,12 @@ theorem biSup_iInter_of_pairwise_disjoint
     (iSup₂_le fun i hi => le_iSup₂_of_le (fun _ => i) hi (le_iInf fun _ => le_rfl))
     (iSup₂_le fun I hI => ?_)
   by_cases! H : forall k, I k = I j
-  · exact le_iSup₂_of_le (I j) (fun k => (H k) ▸ (hI k)) (iInf_le _ 
+  · exact le_iSup₂_of_le (I j) (fun k => (H k) ▸ (hI k)) (iInf_le _ _)
+  · rcases H with ⟨k, hk⟩
+    calc ⨅ l, f (I l)
+    _ <= f (I k) ⊓ f (I j) := le_inf (iInf_le _ _) (iInf_le _ _)
+    _ = ⊥ := (h hk).eq_bot
+    _ <= _ := bot_le
 
 中文:
 定理 biSup_i整数er_of_pairwise_disjoint
@@ -782,7 +821,12 @@ theorem biSup_iInter_of_pairwise_disjoint
     (iSup₂_le fun i hi => le_iSup₂_of_le (fun _ => i) hi (le_iInf fun _ => le_rfl))
     (iSup₂_le fun I hI => ?_)
   by_cases! H : forall k, I k = I j
-  · exact le_iSup₂_of_le (I j) (fun k => (H k) ▸ (hI k)) (iInf_le _ 
+  · exact le_iSup₂_of_le (I j) (fun k => (H k) ▸ (hI k)) (iInf_le _ _)
+  · rcases H with ⟨k, hk⟩
+    calc ⨅ l, f (I l)
+    _ <= f (I k) ⊓ f (I j) := le_inf (iInf_le _ _) (iInf_le _ _)
+    _ = ⊥ := (h hk).eq_bot
+    _ <= _ := bot_le
 
 Depends on / 依赖: bot_le, eq_bot, iInf_iSup_eq, iInf_le, le_antisymm, le_iInf, le_inf, le_rfl, mem_iInter, simp_rw
 -/
@@ -2494,7 +2538,8 @@ abbreviation Function.Injective.completelyDistribLattice
   __ := hf.biheytingAlgebra f
     le lt map_sup map_inf map_top map_bot map_compl map_hnot map_himp map_sdiff
 iInf_iSup_eq g := hf by
-    simp_rw [iInf, map_sInf, iInf_range, iSup, map_sSup, iSup_range, map_sInf, iInf_range
+    simp_rw [iInf, map_sInf, iInf_range, iSup, map_sSup, iSup_range, map_sInf, iInf_range,
+      iInf_iSup_eq]
 
 中文:
 缩写 函数.单射.completelyDistribLattice
@@ -2503,7 +2548,8 @@ iInf_iSup_eq g := hf by
   __ := hf.biheytingAlgebra f
     le lt map_sup map_inf map_top map_bot map_compl map_hnot map_himp map_sdiff
 iInf_iSup_eq g := hf by
-    simp_rw [iInf, map_sInf, iInf_range, iSup, map_sSup, iSup_range, map_sInf, iInf_range
+    simp_rw [iInf, map_sInf, iInf_range, iSup, map_sSup, iSup_range, map_sInf, iInf_range,
+      iInf_iSup_eq]
 -/
 protected abbrev Function.Injective.completelyDistribLattice [Max α] [Min α]
     [LE α] [LT α] [SupSet α] [InfSet α] [Top α] [Bot α] [Compl α] [HImp α] [HNot α] [SDiff α]

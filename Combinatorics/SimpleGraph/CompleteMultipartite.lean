@@ -163,7 +163,7 @@ definition IsCompleteMultipartite.iso
     simp_rw [Equiv.coe_fn_mk, comap_adj, top_adj, ne_eq, Quotient.eq]
     intros
     change ¬¬ G.Adj _ _ ↔ _
-    
+    rw [not_not]
 
 中文:
 定义 IsCompleteMultipartite.iso
@@ -175,7 +175,7 @@ definition IsCompleteMultipartite.iso
     simp_rw [Equiv.coe_fn_mk, comap_adj, top_adj, ne_eq, Quotient.eq]
     intros
     change ¬¬ G.Adj _ _ ↔ _
-    
+    rw [not_not]
 
 Depends on / 依赖: Quotient, Quotient.mk_out, mk_out
 -/
@@ -446,7 +446,11 @@ definition IsPathGraph3Compl.pathGraph3ComplEmbedding
     intro _ _
     simp_rw [Embedding.coeFn_mk, compl_adj, ne_eq, pathGraph_adj, not_or]
     have := h.adj
-    
+    have := h.adj.symm
+    have h1 := h.not_adj_fst
+    have h2 := h.not_adj_snd
+    have ⟨_, _⟩ : ¬ G.Adj w₁ v ∧ ¬ G.Adj w₂ v := by rw [adj_comm] at h1 h2; exact ⟨h1, h2⟩
+    aesop
 
 中文:
 定义 是PathGraph3Compl.pathGraph3ComplEmbedding
@@ -466,7 +470,11 @@ definition IsPathGraph3Compl.pathGraph3ComplEmbedding
     intro _ _
     simp_rw [Embedding.coeFn_mk, compl_adj, ne_eq, pathGraph_adj, not_or]
     have := h.adj
-    
+    have := h.adj.symm
+    have h1 := h.not_adj_fst
+    have h2 := h.not_adj_snd
+    have ⟨_, _⟩ : ¬ G.Adj w₁ v ∧ ¬ G.Adj w₂ v := by rw [adj_comm] at h1 h2; exact ⟨h1, h2⟩
+    aesop
 -/
 def IsPathGraph3Compl.pathGraph3ComplEmbedding {v w₁ w₂ : α} (h : G.IsPathGraph3Compl v w₁ w₂) :
     (pathGraph 3)ᶜ ↪g G where
@@ -644,7 +652,24 @@ definition completeEquipartiteGraph.turanGraph
       rw [← Nat.sub_one_add_one_eq_of_pos v.2.pos]; rw [Nat.mul_add_one]; rw [mul_comm r (t - 1)]
     exact add_lt_add_of_le_of_lt (Nat.mul_le_mul_right r (Nat.le_pred_of_lt v.2.prop)) v.1.prop
   invFun := by
-    refine fun v => (⟨v % r, ?_⟩
+    refine fun v => (⟨v % r, ?_⟩, ⟨v / r, ?_⟩)
+    · have ⟨hr, _⟩ := CanonicallyOrderedAdd.mul_pos.mp v.pos
+      exact Nat.mod_lt v hr
+    · exact Nat.div_lt_of_lt_mul v.prop
+  left_inv v := by
+    refine Prod.ext (Fin.ext ?_) (Fin.ext ?_)
+    · conv =>
+        enter [1, 1, 1, 1, 1]
+        rw [Nat.mul_add_mod_self_right]
+      exact Nat.mod_eq_of_lt v.1.prop
+    · apply le_antisymm
+      · rw [Nat.div_le_iff_le_mul_add_pred v.1.pos, mul_comm r ↑v.2]
+        exact Nat.add_le_add_left (Nat.le_pred_of_lt v.1.prop) (↑v.2 * r)
+      · rw [Nat.le_div_iff_mul_le v.1.pos]
+        exact Nat.le_add_right (↑v.2 * r) ↑v.1
+  right_inv v := Fin.ext (Nat.div_add_mod' v r)
+  map_rel_iff' {v w} := by
+    rw [turanGraph_adj]; rw [Equiv.coe_fn_mk]; rw [Nat.mul_add_mod_self_right]; rw [Nat.mod_eq_of_lt v.1.prop]; rw [Nat.mul_add_mod_self_right]; rw [Nat.mod_eq_of_lt w.1.prop]; rw [← Fin.ext_iff.ne]; rw [← completeEquipartiteGraph_adj]
 
 中文:
 定义 completeEquipartiteGraph.turanGraph
@@ -655,7 +680,24 @@ definition completeEquipartiteGraph.turanGraph
       rw [← Nat.sub_one_add_one_eq_of_pos v.2.pos]; rw [Nat.mul_add_one]; rw [mul_comm r (t - 1)]
     exact add_lt_add_of_le_of_lt (Nat.mul_le_mul_right r (Nat.le_pred_of_lt v.2.prop)) v.1.prop
   invFun := by
-    refine fun v => (⟨v % r, ?_⟩
+    refine fun v => (⟨v % r, ?_⟩, ⟨v / r, ?_⟩)
+    · have ⟨hr, _⟩ := CanonicallyOrderedAdd.mul_pos.mp v.pos
+      exact Nat.mod_lt v hr
+    · exact Nat.div_lt_of_lt_mul v.prop
+  left_inv v := by
+    refine Prod.ext (Fin.ext ?_) (Fin.ext ?_)
+    · conv =>
+        enter [1, 1, 1, 1, 1]
+        rw [Nat.mul_add_mod_self_right]
+      exact Nat.mod_eq_of_lt v.1.prop
+    · apply le_antisymm
+      · rw [Nat.div_le_iff_le_mul_add_pred v.1.pos, mul_comm r ↑v.2]
+        exact Nat.add_le_add_left (Nat.le_pred_of_lt v.1.prop) (↑v.2 * r)
+      · rw [Nat.le_div_iff_mul_le v.1.pos]
+        exact Nat.le_add_right (↑v.2 * r) ↑v.1
+  right_inv v := Fin.ext (Nat.div_add_mod' v r)
+  map_rel_iff' {v w} := by
+    rw [turanGraph_adj]; rw [Equiv.coe_fn_mk]; rw [Nat.mul_add_mod_self_right]; rw [Nat.mod_eq_of_lt v.1.prop]; rw [Nat.mul_add_mod_self_right]; rw [Nat.mod_eq_of_lt w.1.prop]; rw [← Fin.ext_iff.ne]; rw [← completeEquipartiteGraph_adj]
 
 Depends on / 依赖: CanonicallyOrderedAdd, CanonicallyOrderedAdd.mul_pos.mp, Fin.ext, Nat.div_lt_of_lt_mul, Nat.le_pred_of_lt, Nat.mod_lt, Nat.mul_add_one, Nat.mul_le_mul_right, Nat.sub_one_add_one_eq_of_pos, Prod.ext, add_lt_add_of_le_of_lt, conv_rhs, div_lt_of_lt_mul, invFun, le_pred_of_lt, left_inv, mod_lt, mul_add_one, mul_comm, mul_le_mul_right
 -/
@@ -696,7 +738,11 @@ lemma completeEquipartiteGraph_eq_bot_iff
   rw [← edgeSet_nonempty]; rw [← Nat.succ_le_iff]; rw [← Fin.nontrivial_iff_two_le]; rw [← Nat.pos_iff_ne_zero]; rw [Fin.pos_iff_nonempty]
   refine ⟨fun ⟨e, he⟩ => ?_, fun ⟨⟨i₁, i₂, hv⟩, ⟨x⟩⟩ => ?_⟩
   · induction e with | _ v₁ v₂
-    rw [mem_edgeSet]; rw [completeEquipartiteGraph_ad
+    rw [mem_edgeSet]; rw [completeEquipartiteGraph_adj] at he
+    exact ⟨⟨v₁.1, v₂.1, he⟩, ⟨v₁.2⟩⟩
+  · use s((i₁, x), (i₂, x))
+    rw [mem_edgeSet]; rw [completeEquipartiteGraph_adj]
+    exact hv
 
 中文:
 引理 completeEquipartiteGraph_eq_bot_iff
@@ -705,7 +751,11 @@ lemma completeEquipartiteGraph_eq_bot_iff
   rw [← edgeSet_nonempty]; rw [← Nat.succ_le_iff]; rw [← Fin.nontrivial_iff_two_le]; rw [← Nat.pos_iff_ne_zero]; rw [Fin.pos_iff_nonempty]
   refine ⟨fun ⟨e, he⟩ => ?_, fun ⟨⟨i₁, i₂, hv⟩, ⟨x⟩⟩ => ?_⟩
   · induction e with | _ v₁ v₂
-    rw [mem_edgeSet]; rw [completeEquipartiteGraph_ad
+    rw [mem_edgeSet]; rw [completeEquipartiteGraph_adj] at he
+    exact ⟨⟨v₁.1, v₂.1, he⟩, ⟨v₁.2⟩⟩
+  · use s((i₁, x), (i₂, x))
+    rw [mem_edgeSet]; rw [completeEquipartiteGraph_adj]
+    exact hv
 
 Depends on / 依赖: Fin.nontrivial_iff_two_le, Fin.pos_iff_nonempty, Nat.pos_iff_ne_zero, Nat.succ_le_iff, completeEquipartiteGraph_adj, contrapose, edgeSet_nonempty, mem_edgeSet, nontrivial_iff_two_le, pos_iff_ne_zero, pos_iff_nonempty, succ_le_iff
 -/
@@ -733,7 +783,8 @@ theorem completeEquipartiteGraph.isCompleteMultipartite
   · rw [isCompleteMultipartite_iff]
     use (Fin r), const (Fin r) (Fin t)
     simp_rw [const_apply, exists_prop]
-    exact ⟨const (Fin r) (Fin.pos_
+    exact ⟨const (Fin r) (Fin.pos_iff_nonempty.mp ht_pos),
+      ⟨completeEquipartiteGraph.completeMultipartiteGraph⟩⟩
 
 中文:
 定理 completeEquipartiteGraph.isCompleteMultipartite
@@ -744,7 +795,8 @@ theorem completeEquipartiteGraph.isCompleteMultipartite
   · rw [isCompleteMultipartite_iff]
     use (Fin r), const (Fin r) (Fin t)
     simp_rw [const_apply, exists_prop]
-    exact ⟨const (Fin r) (Fin.pos_
+    exact ⟨const (Fin r) (Fin.pos_iff_nonempty.mp ht_pos),
+      ⟨completeEquipartiteGraph.completeMultipartiteGraph⟩⟩
 
 Depends on / 依赖: Fin.pos_iff_nonempty.mp, Or.inr, bot_isCompleteMultipartite, completeEquipartiteGraph, completeEquipartiteGraph.completeMultipartiteGraph, completeEquipartiteGraph_eq_bot_iff, completeEquipartiteGraph_eq_bot_iff.mpr, completeMultipartiteGraph, const_apply, eq_zero_or_pos, exists_prop, ht_eq0, ht_pos, isCompleteMultipartite_iff, pos_iff_nonempty, simp_rw, t.eq_zero_or_pos
 -/
@@ -834,7 +886,8 @@ theorem card_edgeFinset_completeEquipartiteGraph
     rw [degree_completeEquipartiteGraph v]
   rw [sum_const]; rw [smul_eq_mul]; rw [card_univ]; rw [card_prod]; rw [Fintype.card_fin]; rw [Fintype.card_fin]
   conv_rhs =>
-    rw [← Nat.mul_as
+    rw [← Nat.mul_assoc]; rw [Nat.choose_two_right]; rw [Nat.mul_div_cancel' r.even_mul_pred_self.two_dvd]
+  rw [← mul_assoc]; rw [mul_comm r _]; rw [mul_assoc t _ _]; rw [mul_comm t]; rw [mul_assoc _ t]; rw [← pow_two]
 
 中文:
 定理 card_edgeFinset_completeEquipartiteGraph
@@ -845,7 +898,8 @@ theorem card_edgeFinset_completeEquipartiteGraph
     rw [degree_completeEquipartiteGraph v]
   rw [sum_const]; rw [smul_eq_mul]; rw [card_univ]; rw [card_prod]; rw [Fintype.card_fin]; rw [Fintype.card_fin]
   conv_rhs =>
-    rw [← Nat.mul_as
+    rw [← Nat.mul_assoc]; rw [Nat.choose_two_right]; rw [Nat.mul_div_cancel' r.even_mul_pred_self.two_dvd]
+  rw [← mul_assoc]; rw [mul_comm r _]; rw [mul_assoc t _ _]; rw [mul_comm t]; rw [mul_assoc _ t]; rw [← pow_two]
 
 Depends on / 依赖: Fintype, Fintype.card_fin, Nat.choose_two_right, Nat.mul_assoc, Nat.mul_div_cancel, card_fin, card_prod, card_univ, choose_two_right, conv_lhs, conv_rhs, degree_completeEquipartiteGraph, even_mul_pred_self, mul_assoc, mul_comm, mul_div_cancel, mul_right_inj, pow_two, r.even_mul_pred_self.two_dvd, smul_eq_mul
 -/
@@ -874,7 +928,18 @@ theorem isContained_completeEquipartiteGraph_of_colorable
     exact h c
   have F (c : Fin n) := Classical.arbitrary (C.colorClass c ↪ Fin t)
   have hF {c₁ c₂ v₁ v₂} (hc : c₁ = c₂) (hv : F c₁ v₁ = F c₂ v₂) : v₁.val = v₂.val := by
-  
+    let v₁' : C.colorClass c₂ := ⟨v₁, by simp [← hc]⟩
+    have hv' : F c₁ v₁ = F c₂ v₁' := by
+      apply congr_heq
+      · rw [hc]
+      · rw [Subtype.heq_iff_coe_eq]
+        simp [hc]
+    rw [hv'] at hv
+    simpa [Subtype.ext_iff] using (F c₂).injective hv
+  use ⟨fun v => (C v, F (C v) ⟨v, C.mem_colorClass v⟩), C.valid⟩
+  intro v w h
+  rw [Prod.mk.injEq] at h
+  exact hF h.1 h.2
 
 中文:
 定理 isContained_completeEquipartiteGraph_of_colorable
@@ -885,7 +950,18 @@ theorem isContained_completeEquipartiteGraph_of_colorable
     exact h c
   have F (c : Fin n) := Classical.arbitrary (C.colorClass c ↪ Fin t)
   have hF {c₁ c₂ v₁ v₂} (hc : c₁ = c₂) (hv : F c₁ v₁ = F c₂ v₂) : v₁.val = v₂.val := by
-  
+    let v₁' : C.colorClass c₂ := ⟨v₁, by simp [← hc]⟩
+    have hv' : F c₁ v₁ = F c₂ v₁' := by
+      apply congr_heq
+      · rw [hc]
+      · rw [Subtype.heq_iff_coe_eq]
+        simp [hc]
+    rw [hv'] at hv
+    simpa [Subtype.ext_iff] using (F c₂).injective hv
+  use ⟨fun v => (C v, F (C v) ⟨v, C.mem_colorClass v⟩), C.valid⟩
+  intro v w h
+  rw [Prod.mk.injEq] at h
+  exact hF h.1 h.2
 
 Depends on / 依赖: C.colorClass, Classical, Classical.arbitrary, Embedding, Embedding.nonempty_iff_card_le, Fintype, Fintype.card_fin, Nonempty, Subtype, Subtype.ext_iff, Subtype.heq_iff_coe_eq, arbitrary, card_fin, colorClass, congr_heq, ext_iff, heq_iff_coe_eq, injective, nonempty_iff_card_le
 -/
@@ -1072,7 +1148,25 @@ definition toCopy
     have : IsEmpty (Fin r × Fin t) := by simp [ht, Fin.isEmpty]
     exact Copy.bot .ofIsEmpty
   · have : Nonempty (Fin r ↪ K.parts) := by
-      rw [Embedding.nonempty_iff_card_le]; rw [Fintype.card_fin]; rw [card_co
+      rw [Embedding.nonempty_iff_card_le]; rw [Fintype.card_fin]; rw [card_coe]; rw [K.card_parts.resolve_right ht]
+    let fᵣ : Fin r ↪ K.parts := Classical.arbitrary (Fin r ↪ K.parts)
+    have (p : K.parts) : Nonempty (Fin t ↪ p) := by
+      rw [Embedding.nonempty_iff_card_le]; rw [Fintype.card_fin]; rw [card_coe]; rw [K.card_mem_parts p.prop]
+    let fₜ (p : K.parts) : Fin t ↪ p :=
+      Classical.arbitrary (Fin t ↪ p)
+    let f : (Fin r) × (Fin t) ↪ V := by
+      use fun (i, j) => fₜ (fᵣ i) j
+      intro (i₁, j₁) (i₂, j₂) heq
+      rw [Prod.mk.injEq]
+      contrapose! heq with hne
+      rcases eq_or_ne i₁ i₂ with heq | hne
+      · rw [heq, ← Subtype.ext_iff.ne]
+        exact (fₜ _).injective.ne (hne heq)
+      · refine (K.isCompleteBetween (fᵣ _).prop (fᵣ _).prop ?_ (fₜ _ _).prop (fₜ _ _).prop).ne
+exact Subtype.ext_iff.ne.mp fᵣ.injective.ne hne
+    refine ⟨⟨f, fun hne => ?_⟩, f.injective⟩
+    refine K.isCompleteBetween (fᵣ _).prop (fᵣ _).prop ?_ (fₜ _ _).prop (fₜ _ _).prop
+exact Subtype.ext_iff.ne.mp fᵣ.injective.ne hne
 
 中文:
 定义 toCopy
@@ -1083,7 +1177,25 @@ definition toCopy
     have : IsEmpty (Fin r × Fin t) := by simp [ht, Fin.isEmpty]
     exact Copy.bot .ofIsEmpty
   · have : Nonempty (Fin r ↪ K.parts) := by
-      rw [Embedding.nonempty_iff_card_le]; rw [Fintype.card_fin]; rw [card_co
+      rw [Embedding.nonempty_iff_card_le]; rw [Fintype.card_fin]; rw [card_coe]; rw [K.card_parts.resolve_right ht]
+    let fᵣ : Fin r ↪ K.parts := Classical.arbitrary (Fin r ↪ K.parts)
+    have (p : K.parts) : Nonempty (Fin t ↪ p) := by
+      rw [Embedding.nonempty_iff_card_le]; rw [Fintype.card_fin]; rw [card_coe]; rw [K.card_mem_parts p.prop]
+    let fₜ (p : K.parts) : Fin t ↪ p :=
+      Classical.arbitrary (Fin t ↪ p)
+    let f : (Fin r) × (Fin t) ↪ V := by
+      use fun (i, j) => fₜ (fᵣ i) j
+      intro (i₁, j₁) (i₂, j₂) heq
+      rw [Prod.mk.injEq]
+      contrapose! heq with hne
+      rcases eq_or_ne i₁ i₂ with heq | hne
+      · rw [heq, ← Subtype.ext_iff.ne]
+        exact (fₜ _).injective.ne (hne heq)
+      · refine (K.isCompleteBetween (fᵣ _).prop (fᵣ _).prop ?_ (fₜ _ _).prop (fₜ _ _).prop).ne
+exact Subtype.ext_iff.ne.mp fᵣ.injective.ne hne
+    refine ⟨⟨f, fun hne => ?_⟩, f.injective⟩
+    refine K.isCompleteBetween (fᵣ _).prop (fᵣ _).prop ?_ (fₜ _ _).prop (fₜ _ _).prop
+exact Subtype.ext_iff.ne.mp fᵣ.injective.ne hne
 
 Depends on / 依赖: Classical, Classical.arbitrary, Copy.bot, Embedding, Embedding.nonempty_iff_card_le, Fin.isEmpty, Fintype, Fintype.card_fin, IsEmpty, K.card_parts.resolve_right, K.parts, Nonempty, arbitrary, card_coe, card_fin, card_parts, completeEquipartiteGraph_eq_bot_iff, completeEquipartiteGraph_eq_bot_iff.mpr, isEmpty, nonempty_iff_card_le
 -/
@@ -1127,7 +1239,28 @@ definition ofCopy
       ?_, fun h => ?_, fun _ h₁ _ h₂ hne _ h₁' _ h₂' => ?_⟩
     · simpa using f.injective h
     · simp_rw [Finset.ext_iff] at h
-      ha
+      have : NeZero t := ⟨ht⟩
+obtain ⟨_, heq⟩ : exists j, f (i₁, j) = f (i₂, 0) := by simpa using h f (i₂, 0)
+      apply f.injective at heq
+      rw [Prod.mk.injEq] at heq
+      exact heq.left
+    · simp
+    · simp_rw [mem_map, mem_univ, Embedding.coeFn_mk, true_and] at h
+      replace ⟨_, h⟩ := h
+      simp [← h]
+    · simp_rw [coe_map, Embedding.coeFn_mk, coe_univ, Set.image_univ, Set.mem_range] at h₁ h₂
+      replace ⟨_, h₁⟩ := h₁
+      replace ⟨_, h₂⟩ := h₂
+      rw [← h₁] at h₁'
+      rw [← h₂] at h₂'
+      simp_rw [coe_map, Embedding.coeFn_mk, coe_univ, Set.image_univ, Set.mem_range] at h₁' h₂'
+      replace ⟨_, h₁'⟩ := h₁'
+      replace ⟨_, h₂'⟩ := h₂'
+      rw [← h₁']; rw [← h₂']
+      apply f.toHom.map_adj
+      simp_rw [completeEquipartiteGraph_adj]
+      contrapose hne with heq
+      simp_rw [← h₁, ← h₂, heq]
 
 中文:
 定义 ofCopy
@@ -1139,7 +1272,28 @@ definition ofCopy
       ?_, fun h => ?_, fun _ h₁ _ h₂ hne _ h₁' _ h₂' => ?_⟩
     · simpa using f.injective h
     · simp_rw [Finset.ext_iff] at h
-      ha
+      have : NeZero t := ⟨ht⟩
+obtain ⟨_, heq⟩ : exists j, f (i₁, j) = f (i₂, 0) := by simpa using h f (i₂, 0)
+      apply f.injective at heq
+      rw [Prod.mk.injEq] at heq
+      exact heq.left
+    · simp
+    · simp_rw [mem_map, mem_univ, Embedding.coeFn_mk, true_and] at h
+      replace ⟨_, h⟩ := h
+      simp [← h]
+    · simp_rw [coe_map, Embedding.coeFn_mk, coe_univ, Set.image_univ, Set.mem_range] at h₁ h₂
+      replace ⟨_, h₁⟩ := h₁
+      replace ⟨_, h₂⟩ := h₂
+      rw [← h₁] at h₁'
+      rw [← h₂] at h₂'
+      simp_rw [coe_map, Embedding.coeFn_mk, coe_univ, Set.image_univ, Set.mem_range] at h₁' h₂'
+      replace ⟨_, h₁'⟩ := h₁'
+      replace ⟨_, h₂'⟩ := h₂'
+      rw [← h₁']; rw [← h₂']
+      apply f.toHom.map_adj
+      simp_rw [completeEquipartiteGraph_adj]
+      contrapose hne with heq
+      simp_rw [← h₁, ← h₂, heq]
 
 Depends on / 依赖: Embedding, Embedding.coeFn_mk, Finset, Finset.ext_iff, NeZero, Prod.mk.injEq, coeFn_mk, ext_iff, f.injective, heq.left, injective, mem_map, mem_univ, simp_rw, univ.map
 -/
@@ -1203,7 +1357,37 @@ theorem completeEquipartiteGraph_succ_isContained_iff
   · have (r' : Nat) : IsEmpty (Fin r' × Fin t) := by simp [ht, Fin.isEmpty]
     have h_bot (r' : Nat) : completeEquipartiteGraph r' t = ⊥ :=
 completeEquipartiteGraph_eq_bot_iff.mpr .inr ht
-    simp_rw [h_bot (r + 1), ht, Finset.card_eq_zero, exists_eq_left, IsCom
+    simp_rw [h_bot (r + 1), ht, Finset.card_eq_zero, exists_eq_left, IsCompleteBetween, mem_coe,
+      notMem_empty, IsEmpty.forall_iff, implies_true, exists_true_iff_nonempty]
+    exact ⟨fun _ => CompleteEquipartiteSubgraph.nonempty_of_eq_zero_or_eq_zero (.inr ht),
+      fun _ => ⟨Copy.bot .ofIsEmpty⟩⟩
+  · rw [completeEquipartiteGraph_isContained_iff]
+    refine ⟨fun ⟨K'⟩ => ?_, fun ⟨K, s, hs, hadj⟩ => ?_⟩
+    · obtain ⟨parts, hparts_sub, hparts_card⟩ := K'.parts.exists_subset_card_eq (Nat.pred_le _)
+      let K : G.CompleteEquipartiteSubgraph r t := by
+        refine ⟨parts, ?_, fun h => K'.card_mem_parts (hparts_sub h),
+          fun _ h₁ _ h₂ hne => K'.isCompleteBetween (hparts_sub h₁) (hparts_sub h₂) hne⟩
+        rw [hparts_card]; rw [K'.card_parts.resolve_right ht]
+        exact .inl (Nat.pred_succ r)
+      obtain ⟨s, nhs_mem, hs⟩ : exists s ∉ K.parts, insert s K.parts = K'.parts := by
+        refine exists_eq_insert_iff.mpr ⟨hparts_sub, ?_⟩
+        rw [K.card_parts.resolve_right ht]; rw [K'.card_parts.resolve_right ht]
+      have hs_mem : s in K'.parts := by simp [← hs]
+      exact ⟨K, s, K'.card_mem_parts hs_mem,
+        fun _ h => K'.isCompleteBetween (hparts_sub h) hs_mem (ne_of_mem_of_not_mem h nhs_mem)⟩
+    · refine ⟨K.parts.cons s ?_, ?_, ?_, ?_⟩
+      · intro hs_mem
+        obtain ⟨v, hv⟩ : s.Nonempty := by
+          rw [← Finset.card_pos]; rw [hs]
+          exact Nat.pos_of_ne_zero ht
+exact G.irrefl hadj s hs_mem hv hv
+      · rw [Finset.card_cons, K.card_parts.resolve_right ht]
+        exact .inl rfl
+      · simp_rw [mem_cons, forall_eq_or_imp]
+        exact ⟨hs, fun p => K.card_mem_parts⟩
+      · rw [coe_cons]
+        have : Std.Symm G.IsCompleteBetween := by simp [symm_def, isCompleteBetween_comm]
+.symm exact K.isCompleteBetween.insert_of_symm fun p hp _ => hadj p hp
 
 中文:
 定理 completeEquipartiteGraph_succ_isContained_iff
@@ -1213,7 +1397,37 @@ completeEquipartiteGraph_eq_bot_iff.mpr .inr ht
   · have (r' : Nat) : IsEmpty (Fin r' × Fin t) := by simp [ht, Fin.isEmpty]
     have h_bot (r' : Nat) : completeEquipartiteGraph r' t = ⊥ :=
 completeEquipartiteGraph_eq_bot_iff.mpr .inr ht
-    simp_rw [h_bot (r + 1), ht, Finset.card_eq_zero, exists_eq_left, IsCom
+    simp_rw [h_bot (r + 1), ht, Finset.card_eq_zero, exists_eq_left, IsCompleteBetween, mem_coe,
+      notMem_empty, IsEmpty.forall_iff, implies_true, exists_true_iff_nonempty]
+    exact ⟨fun _ => CompleteEquipartiteSubgraph.nonempty_of_eq_zero_or_eq_zero (.inr ht),
+      fun _ => ⟨Copy.bot .ofIsEmpty⟩⟩
+  · rw [completeEquipartiteGraph_isContained_iff]
+    refine ⟨fun ⟨K'⟩ => ?_, fun ⟨K, s, hs, hadj⟩ => ?_⟩
+    · obtain ⟨parts, hparts_sub, hparts_card⟩ := K'.parts.exists_subset_card_eq (Nat.pred_le _)
+      let K : G.CompleteEquipartiteSubgraph r t := by
+        refine ⟨parts, ?_, fun h => K'.card_mem_parts (hparts_sub h),
+          fun _ h₁ _ h₂ hne => K'.isCompleteBetween (hparts_sub h₁) (hparts_sub h₂) hne⟩
+        rw [hparts_card]; rw [K'.card_parts.resolve_right ht]
+        exact .inl (Nat.pred_succ r)
+      obtain ⟨s, nhs_mem, hs⟩ : exists s ∉ K.parts, insert s K.parts = K'.parts := by
+        refine exists_eq_insert_iff.mpr ⟨hparts_sub, ?_⟩
+        rw [K.card_parts.resolve_right ht]; rw [K'.card_parts.resolve_right ht]
+      have hs_mem : s in K'.parts := by simp [← hs]
+      exact ⟨K, s, K'.card_mem_parts hs_mem,
+        fun _ h => K'.isCompleteBetween (hparts_sub h) hs_mem (ne_of_mem_of_not_mem h nhs_mem)⟩
+    · refine ⟨K.parts.cons s ?_, ?_, ?_, ?_⟩
+      · intro hs_mem
+        obtain ⟨v, hv⟩ : s.Nonempty := by
+          rw [← Finset.card_pos]; rw [hs]
+          exact Nat.pos_of_ne_zero ht
+exact G.irrefl hadj s hs_mem hv hv
+      · rw [Finset.card_cons, K.card_parts.resolve_right ht]
+        exact .inl rfl
+      · simp_rw [mem_cons, forall_eq_or_imp]
+        exact ⟨hs, fun p => K.card_mem_parts⟩
+      · rw [coe_cons]
+        have : Std.Symm G.IsCompleteBetween := by simp [symm_def, isCompleteBetween_comm]
+.symm exact K.isCompleteBetween.insert_of_symm fun p hp _ => hadj p hp
 
 Depends on / 依赖: CompleteEquipartiteSubgraph, CompleteEquipartiteSubgraph.nonempty_of_eq_zero_or_eq_zero, Copy.bot, Fin.isEmpty, Finset, Finset.card_eq_zero, IsCompleteBetween, IsEmpty, IsEmpty.forall_iff, card_eq_zero, classical, completeEquipartiteGraph, completeEquipartiteGraph_eq_bot_iff, completeEquipartiteGraph_eq_bot_iff.mpr, exists_eq_left, exists_true_iff_nonempty, forall_iff, h_bot, implies_true, isEmpty
 -/

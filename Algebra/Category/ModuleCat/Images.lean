@@ -135,7 +135,15 @@ definition image.lift
       · infer_instance
       rw [map_add]
       change (F'.e ≫ F'.m) _ = (F'.e ≫ F'.m) _ + (F'.e ≫ F'.m) _
-      simp_rw [F'.fac, (Clas
+      simp_rw [F'.fac, (Classical.indefiniteDescription (fun z => f z = _) _).2]
+      rfl
+    map_smul' := fun c x => by
+      apply (mono_iff_injective F'.m).1
+      · infer_instance
+      rw [map_smul]
+      change (F'.e ≫ F'.m) _ = _ • (F'.e ≫ F'.m) _
+      simp_rw [F'.fac, (Classical.indefiniteDescription (fun z => f z = _) _).2]
+      rfl }
 
 中文:
 定义 像.lift
@@ -147,7 +155,15 @@ definition image.lift
       · infer_instance
       rw [map_add]
       change (F'.e ≫ F'.m) _ = (F'.e ≫ F'.m) _ + (F'.e ≫ F'.m) _
-      simp_rw [F'.fac, (Clas
+      simp_rw [F'.fac, (Classical.indefiniteDescription (fun z => f z = _) _).2]
+      rfl
+    map_smul' := fun c x => by
+      apply (mono_iff_injective F'.m).1
+      · infer_instance
+      rw [map_smul]
+      change (F'.e ≫ F'.m) _ = _ • (F'.e ≫ F'.m) _
+      simp_rw [F'.fac, (Classical.indefiniteDescription (fun z => f z = _) _).2]
+      rfl }
 -/
 noncomputable def image.lift (F' : MonoFactorisation f) : image f ⟶ F'.I :=
   ofHom

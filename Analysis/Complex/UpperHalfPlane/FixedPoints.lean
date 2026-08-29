@@ -75,7 +75,9 @@ theorem gl_smul_eq_self_iff_re_eq
     intro h₀
     simpa [Matrix.det_fin_two, hc, h₀] using g.det_ne_zero
   have h : g.val.det < 0 := by simp [Matrix.det_fin_two, *]
-  simp [gl_smul_eq_iff_num_eq, Complex.ext_iff, htrace, hc, num, deno
+  simp [gl_smul_eq_iff_num_eq, Complex.ext_iff, htrace, hc, num, denom, σ, h.not_gt, mul_comm,
+    eq_div_iff, h₀]
+  grind
 
 中文:
 定理 gl_smul_eq_self_iff_re_eq
@@ -86,7 +88,9 @@ theorem gl_smul_eq_self_iff_re_eq
     intro h₀
     simpa [Matrix.det_fin_two, hc, h₀] using g.det_ne_zero
   have h : g.val.det < 0 := by simp [Matrix.det_fin_two, *]
-  simp [gl_smul_eq_iff_num_eq, Complex.ext_iff, htrace, hc, num, deno
+  simp [gl_smul_eq_iff_num_eq, Complex.ext_iff, htrace, hc, num, denom, σ, h.not_gt, mul_comm,
+    eq_div_iff, h₀]
+  grind
 
 Depends on / 依赖: Complex.ext_iff, Matrix, Matrix.det_fin_two, Matrix.trace_fin_two, add_eq_zero_iff_eq_neg, det_fin_two, det_ne_zero, eq_div_iff, ext_iff, g.det_ne_zero, g.val.det, gl_smul_eq_iff_num_eq, h.not_gt, htrace, mul_comm, not_gt, trace_fin_two
 -/
@@ -110,7 +114,8 @@ theorem gl_smul_eq_self_iff_dist_sq_eq
   proof: by
   rw [Matrix.trace_fin_two]; rw [← eq_neg_iff_add_eq_zero] at htrace
   rw [eq_div_iff (by positivity)]; rw [dist_eq_norm]; rw [← Complex.normSq_eq_norm_sq]; rw [Complex.normSq_apply]; rw [gl_smul_eq_iff_num_eq]; rw [σ]; rw [g.val_det_apply]; rw [if_neg h.not_gt]
-  simp [num, denom, Complex.ext_if
+  simp [num, denom, Complex.ext_iff, htrace, Matrix.det_fin_two, field]
+  grind
 
 中文:
 定理 gl_smul_eq_self_iff_dist_sq_eq
@@ -118,7 +123,8 @@ theorem gl_smul_eq_self_iff_dist_sq_eq
   证明: by
   rw [Matrix.trace_fin_two]; rw [← eq_neg_iff_add_eq_zero] at htrace
   rw [eq_div_iff (by positivity)]; rw [dist_eq_norm]; rw [← Complex.normSq_eq_norm_sq]; rw [Complex.normSq_apply]; rw [gl_smul_eq_iff_num_eq]; rw [σ]; rw [g.val_det_apply]; rw [if_neg h.not_gt]
-  simp [num, denom, Complex.ext_if
+  simp [num, denom, Complex.ext_iff, htrace, Matrix.det_fin_two, field]
+  grind
 
 Depends on / 依赖: Complex.ext_iff, Complex.normSq_apply, Complex.normSq_eq_norm_sq, Matrix, Matrix.det_fin_two, Matrix.trace_fin_two, det_fin_two, dist_eq_norm, eq_div_iff, eq_neg_iff_add_eq_zero, ext_iff, g.val_det_apply, gl_smul_eq_iff_num_eq, h.not_gt, htrace, if_neg, normSq_apply, normSq_eq_norm_sq, not_gt, trace_fin_two
 -/
@@ -167,7 +173,10 @@ theorem exists_gl_smul_eq_self_iff_trace_eq_zero
   · intro hadd
     by_cases hc : g 1 0 = 0
     · use ⟨⟨g 0 1 / (2 * g 1 1), 1⟩, one_pos⟩
-    
+      simp [gl_smul_eq_self_iff_re_eq, *]
+    · use ⟨⟨-g 1 1 / g 1 0, √(-g.val.det) / |g 1 0|⟩, by simp [*]⟩
+      simp [gl_smul_eq_self_iff_dist_sq_eq, *, dist_eq_norm, ← Complex.normSq_eq_norm_sq,
+        Complex.normSq_apply, ← pow_two, div_pow, h.le]
 
 中文:
 定理 存在_gl_smul_eq_self_iff_trace_eq_zero
@@ -181,7 +190,10 @@ theorem exists_gl_smul_eq_self_iff_trace_eq_zero
   · intro hadd
     by_cases hc : g 1 0 = 0
     · use ⟨⟨g 0 1 / (2 * g 1 1), 1⟩, one_pos⟩
-    
+      simp [gl_smul_eq_self_iff_re_eq, *]
+    · use ⟨⟨-g 1 1 / g 1 0, √(-g.val.det) / |g 1 0|⟩, by simp [*]⟩
+      simp [gl_smul_eq_self_iff_dist_sq_eq, *, dist_eq_norm, ← Complex.normSq_eq_norm_sq,
+        Complex.normSq_apply, ← pow_two, div_pow, h.le]
 
 Depends on / 依赖: Complex.normSq_apply, Complex.normSq_eq_norm_sq, Matrix, Matrix.trace_fin_two, dist_eq_norm, div_pow, g.val.det, gl_smul_eq_iff_num_eq, gl_smul_eq_iff_num_eq.mp, gl_smul_eq_self_iff_dist_sq_eq, gl_smul_eq_self_iff_re_eq, h.le, h.not_gt, im_ne_zero, linear_combination, normSq_apply, normSq_eq_norm_sq, not_gt, one_pos, pow_two
 -/
@@ -238,7 +250,14 @@ theorem isElliptic_of_exists_smul_eq_self
     simp [gl_smul_eq_iff_num_eq, Complex.ext_iff, σ, h, num, denom, hc, mul_comm, z.im_ne_zero]
       at hz
     grind
-  refine lt_of_
+  refine lt_of_not_ge fun hge => ?_
+  have hd : discrim (g 1 0 : Complex) (g 1 1 - g 0 0) (-g 0 1) = √g.val.discr * √g.val.discr := by
+    rw [← Complex.ofReal_mul]; rw [Real.mul_self_sqrt hge]
+    simp [discrim, Matrix.discr_fin_two, Matrix.trace_fin_two, Matrix.det_fin_two]
+    ring
+  rw [gl_smul_eq_self_iff_quadratic h]; rw [quadratic_eq_zero_iff (mod_cast hc) hd] at hz
+  norm_cast at hz
+  simp only [z.ne_ofReal, false_or] at hz
 
 中文:
 定理 isElliptic_of_存在_smul_eq_self
@@ -251,7 +270,14 @@ theorem isElliptic_of_exists_smul_eq_self
     simp [gl_smul_eq_iff_num_eq, Complex.ext_iff, σ, h, num, denom, hc, mul_comm, z.im_ne_zero]
       at hz
     grind
-  refine lt_of_
+  refine lt_of_not_ge fun hge => ?_
+  have hd : discrim (g 1 0 : Complex) (g 1 1 - g 0 0) (-g 0 1) = √g.val.discr * √g.val.discr := by
+    rw [← Complex.ofReal_mul]; rw [Real.mul_self_sqrt hge]
+    simp [discrim, Matrix.discr_fin_two, Matrix.trace_fin_two, Matrix.det_fin_two]
+    ring
+  rw [gl_smul_eq_self_iff_quadratic h]; rw [quadratic_eq_zero_iff (mod_cast hc) hd] at hz
+  norm_cast at hz
+  simp only [z.ne_ofReal, false_or] at hz
 
 Depends on / 依赖: Complex.ext_iff, Complex.ofReal_mul, GeneralLinearGroup, GeneralLinearGroup.mem_center_iff_val_mem_range_scalar, Matrix, Matrix.discr_fin_two, Matrix.ext_iff, Matrix.trace_fin_t, Real.mul_self_sqrt, discr_fin_two, discrim, ext_iff, g.val.discr, gl_smul_eq_iff_num_eq, im_ne_zero, lt_of_not_ge, mem_center_iff_val_mem_range_scalar, mul_comm, mul_self_sqrt, ofReal_mul
 -/
@@ -337,7 +363,18 @@ theorem gl_smul_eq_self_iff_eq_fixedPt
   · replace hc := hell.c_ne_zero.lt_or_gt.resolve_right hc
     simpa using @this (-g) (by simpa [Matrix.det_neg]) hell.neg (by simpa)
   have hd : discrim (g 1 0 : Complex) (g 1 1 - g 0 0) (-g 0 1) = (.I * √(-g.val.discr)) ^ 2 := by
-    rw [mul_pow]; rw [← Comp
+    rw [mul_pow]; rw [← Complex.ofReal_pow]; rw [Real.sq_sqrt]
+    · simp [discrim, Matrix.discr_fin_two, Matrix.trace_fin_two, Matrix.det_fin_two]
+      grind
+    · simpa using hell.le
+  rw [gl_smul_eq_self_iff_quadratic hpos]; rw [quadratic_eq_zero_iff (mod_cast hell.c_ne_zero)
+    (hd.trans (pow_two _))]
+  rw [or_iff_left]
+  · simp [fixedPt, UpperHalfPlane.ext_iff, abs_of_pos hc, field]
+  · intro h
+    refine z.im_pos.not_ge ?_
+    rw [← coe_im]; rw [h]
+    simp [Complex.div_im, div_nonpos_iff, hc.le, mul_nonneg]
 
 中文:
 定理 gl_smul_eq_self_iff_eq_fixedPt
@@ -347,7 +384,18 @@ theorem gl_smul_eq_self_iff_eq_fixedPt
   · replace hc := hell.c_ne_zero.lt_or_gt.resolve_right hc
     simpa using @this (-g) (by simpa [Matrix.det_neg]) hell.neg (by simpa)
   have hd : discrim (g 1 0 : Complex) (g 1 1 - g 0 0) (-g 0 1) = (.I * √(-g.val.discr)) ^ 2 := by
-    rw [mul_pow]; rw [← Comp
+    rw [mul_pow]; rw [← Complex.ofReal_pow]; rw [Real.sq_sqrt]
+    · simp [discrim, Matrix.discr_fin_two, Matrix.trace_fin_two, Matrix.det_fin_two]
+      grind
+    · simpa using hell.le
+  rw [gl_smul_eq_self_iff_quadratic hpos]; rw [quadratic_eq_zero_iff (mod_cast hell.c_ne_zero)
+    (hd.trans (pow_two _))]
+  rw [or_iff_left]
+  · simp [fixedPt, UpperHalfPlane.ext_iff, abs_of_pos hc, field]
+  · intro h
+    refine z.im_pos.not_ge ?_
+    rw [← coe_im]; rw [h]
+    simp [Complex.div_im, div_nonpos_iff, hc.le, mul_nonneg]
 
 Depends on / 依赖: Complex.ofReal_pow, Matrix, Matrix.det_fin_two, Matrix.det_neg, Matrix.discr_fin_two, Matrix.trace_fin_two, Real.sq_sqrt, c_ne_zero, det_fin_two, det_neg, discr_fin_two, discrim, g.val.discr, generalizing, gl_smul_eq_self_iff_quadratic, hell.c_ne_zero.lt_or_gt.resolve_right, hell.le, hell.neg, lt_or_gt, mul_pow
 -/
@@ -432,7 +480,17 @@ theorem forall_smul_eq_self_iff_mem_center
     · obtain ⟨ha, hb⟩ := (gl_smul_I_eq_I_iff_of_neg hlt).mp (hg _)
       rw [eq_neg_iff_add_eq_zero]; rw [← Matrix.trace_fin_two] at ha
       rcases eq_or_ne (g 1 0) 0 with hc | hc
-      · specialize hg
+      · specialize hg ⟨1 + .I, by simp⟩
+        rw [gl_smul_eq_self_iff_re_eq ha hc] at hg
+        simp_all
+      · have : 0 < 1 + √(-g.val.det) / |g 1 0| := by simp [add_pos, *]
+        specialize hg ⟨⟨-g 1 1 / g 1 0, 1 + √(-g.val.det) / |g 1 0|⟩, this⟩
+        simp [gl_smul_eq_self_iff_dist_eq hlt ha hc, Complex.dist_eq_re_im, Real.sqrt_sq this.le]
+          at hg
+    · have := isElliptic_of_exists_smul_eq_self hgt hgc ⟨.I, hg _⟩
+      contrapose! hg
+      simp [gl_smul_eq_self_iff_eq_fixedPt hgt this, exists_ne]
+  · aesop (add simp GeneralLinearGroup.center_eq_range_scalar)
 
 中文:
 定理 对任意_smul_eq_self_iff_mem_center
@@ -445,7 +503,17 @@ theorem forall_smul_eq_self_iff_mem_center
     · obtain ⟨ha, hb⟩ := (gl_smul_I_eq_I_iff_of_neg hlt).mp (hg _)
       rw [eq_neg_iff_add_eq_zero]; rw [← Matrix.trace_fin_two] at ha
       rcases eq_or_ne (g 1 0) 0 with hc | hc
-      · specialize hg
+      · specialize hg ⟨1 + .I, by simp⟩
+        rw [gl_smul_eq_self_iff_re_eq ha hc] at hg
+        simp_all
+      · have : 0 < 1 + √(-g.val.det) / |g 1 0| := by simp [add_pos, *]
+        specialize hg ⟨⟨-g 1 1 / g 1 0, 1 + √(-g.val.det) / |g 1 0|⟩, this⟩
+        simp [gl_smul_eq_self_iff_dist_eq hlt ha hc, Complex.dist_eq_re_im, Real.sqrt_sq this.le]
+          at hg
+    · have := isElliptic_of_exists_smul_eq_self hgt hgc ⟨.I, hg _⟩
+      contrapose! hg
+      simp [gl_smul_eq_self_iff_eq_fixedPt hgt this, exists_ne]
+  · aesop (add simp GeneralLinearGroup.center_eq_range_scalar)
 
 Depends on / 依赖: Matrix, Matrix.trace_fin_two, add_pos, det_ne_zero, eq_neg_iff_add_eq_zero, eq_or_ne, g.det_ne_zero.lt_or_gt, g.val.det, gl_smul_I_eq_I_iff_of_neg, gl_smul_eq_self_iff_dist, gl_smul_eq_self_iff_re_eq, lt_or_gt, specialize, trace_fin_two
 -/

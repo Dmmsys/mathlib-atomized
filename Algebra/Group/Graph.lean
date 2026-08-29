@@ -135,7 +135,8 @@ lemma exists_mrange_eq_mgraph
     map_mul' := by
       simp_rw [hf₁.forall]
       rintro g₁ g₂
-      exact (hf
+      exact (hf' _ _).1 ⟨g₁ * g₂, by simp [Prod.ext_iff, (hf' (f _).1 _).1 ⟨_, rfl⟩]⟩ }
+  simpa [SetLike.ext_iff] using hf'
 
 中文:
 引理 存在_mrange_eq_mgraph
@@ -149,7 +150,8 @@ lemma exists_mrange_eq_mgraph
     map_mul' := by
       simp_rw [hf₁.forall]
       rintro g₁ g₂
-      exact (hf
+      exact (hf' _ _).1 ⟨g₁ * g₂, by simp [Prod.ext_iff, (hf' (f _).1 _).1 ⟨_, rfl⟩]⟩ }
+  simpa [SetLike.ext_iff] using hf'
 
 Depends on / 依赖: Prod.ext_iff, Prod.forall, Set.ext_iff, Set.mem_range, SetLike, SetLike.ext_iff, exists_range_eq_graphOn_univ, ext_iff, map_mul, map_one, mem_graphOn, mem_range, mem_univ, simp_rw, true_and
 -/
@@ -191,7 +193,13 @@ obtain ⟨e₂, he₂⟩ := (MulEquiv.prodComm.toMonoidHom.comp f).exists_mrange
     by simp [hf]
   have he₁₂ h i : e₁ h = i ↔ e₂ i = h := by
     rw [SetLike.ext_iff] at he₁ he₂
-    aesop (add simp [Prod.swap_e
+    aesop (add simp [Prod.swap_eq_iff_eq_swap])
+  exact ⟨
+  { toFun := e₁
+    map_mul' := e₁.map_mul'
+    invFun := e₂
+    left_inv := fun h => by rw [← he₁₂]
+    right_inv := fun i => by rw [he₁₂] }, he₁⟩
 
 中文:
 引理 存在_mulEquiv_mrange_eq_mgraph
@@ -202,7 +210,13 @@ obtain ⟨e₂, he₂⟩ := (MulEquiv.prodComm.toMonoidHom.comp f).exists_mrange
     by simp [hf]
   have he₁₂ h i : e₁ h = i ↔ e₂ i = h := by
     rw [SetLike.ext_iff] at he₁ he₂
-    aesop (add simp [Prod.swap_e
+    aesop (add simp [Prod.swap_eq_iff_eq_swap])
+  exact ⟨
+  { toFun := e₁
+    map_mul' := e₁.map_mul'
+    invFun := e₂
+    left_inv := fun h => by rw [← he₁₂]
+    right_inv := fun i => by rw [he₁₂] }, he₁⟩
 
 Depends on / 依赖: MulEquiv, MulEquiv.prodComm.toMonoidHom.comp, Prod.swap_eq_iff_eq_swap, SetLike, SetLike.ext_iff, exists_mrange_eq_mgraph, ext_iff, f.exists_mrange_eq_mgraph, invFun, left_inv, map_mul, prodComm, right_inv, swap_eq_iff_eq_swap, toMonoidHom
 -/

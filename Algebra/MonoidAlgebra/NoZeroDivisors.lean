@@ -82,7 +82,13 @@ theorem coeff_mul_mul_of_uniqueMul
   refine (Finset.sum_eq_single (a0, b0) ?_ ?_).trans (if_pos rfl) <;> simp_rw [Finset.mem_product]
   · refine fun ab hab hne => if_neg (fun he => hne <| Prod.ext ?_ ?_)
     exacts [(h hab.1 hab.2 he).1, (h hab.1 hab.2 he).2]
-  · refine
+  · refine fun hnotMem => ite_eq_right_iff.mpr (fun _ => ?_)
+    rcases not_and_or.mp hnotMem with af | bg
+    · rw [notMem_support_iff.mp af, zero_mul]
+    · rw [notMem_support_iff.mp bg, mul_zero]
+
+@[deprecated (since := "2026-06-18")]
+alias mul_apply_mul_eq_mul_of_uniqueMul := coeff_mul_mul_of_uniqueMul
 
 中文:
 定理 coeff_mul_mul_of_uniqueMul
@@ -93,7 +99,13 @@ theorem coeff_mul_mul_of_uniqueMul
   refine (Finset.sum_eq_single (a0, b0) ?_ ?_).trans (if_pos rfl) <;> simp_rw [Finset.mem_product]
   · refine fun ab hab hne => if_neg (fun he => hne <| Prod.ext ?_ ?_)
     exacts [(h hab.1 hab.2 he).1, (h hab.1 hab.2 he).2]
-  · refine
+  · refine fun hnotMem => ite_eq_right_iff.mpr (fun _ => ?_)
+    rcases not_and_or.mp hnotMem with af | bg
+    · rw [notMem_support_iff.mp af, zero_mul]
+    · rw [notMem_support_iff.mp bg, mul_zero]
+
+@[deprecated (since := "2026-06-18")]
+alias mul_apply_mul_eq_mul_of_uniqueMul := coeff_mul_mul_of_uniqueMul
 
 Depends on / 依赖: Finset, Finset.mem_product, Finset.sum_eq_single, Finset.sum_product, Prod.ext, classical, coeff_mul, exacts, hnotMem, if_neg, if_pos, ite_eq_right_iff, ite_eq_right_iff.mpr, mem_product, mul_zero, notMem_support_iff, notMem_support_iff.mp, not_and_or, not_and_or.mp, simp_rw
 -/
@@ -129,7 +141,7 @@ instance [NoZeroDivisors
     rw [mem_support_iff] at a0 b0 ⊢
     exact coeff_mul_mul_of_uniqueMul h ▸ mul_ne_zero a0 b0
 
-@[to
+@[to_additive (dont_translate := R)]
 
 中文:
 实例 [无零因子
@@ -142,7 +154,7 @@ instance [NoZeroDivisors
     rw [mem_support_iff] at a0 b0 ⊢
     exact coeff_mul_mul_of_uniqueMul h ▸ mul_ne_zero a0 b0
 
-@[to
+@[to_additive (dont_translate := R)]
 
 Depends on / 依赖: UniqueProds, UniqueProds.uniqueMul_of_nonempty, coeff_eq_zero, coeff_mul_mul_of_uniqueMul, contrapose, mem_support_iff, mul_ne_zero, ne_eq, support_nonempty_iff, uniqueMul_of_nonempty
 -/
@@ -170,7 +182,17 @@ instance [IsCancelAdd
     obtain h | h := s.eq_empty_or_nonempty <;> subst s
     · simp_all
     simp only [ne_eq, ← coeff_eq_zero, ← support_nonempty_iff] at hf
-    obtain 
+    obtain ⟨af, haf, ag, hag, uniq⟩ := UniqueProds.uniqueMul_of_nonempty hf h
+    have h := coeff_mul_mul_of_uniqueMul (uniq.mono subset_rfl Finset.subset_union_left)
+    dsimp only at eq
+    rw [eq]; rw [coeff_mul_mul_of_uniqueMul (uniq.mono subset_rfl Finset.subset_union_right)] at h
+    have := mul_left_cancel₀ (mem_support_iff.mp haf) h
+    rw [← g₁.erase_add_single ag]; rw [← g₂.erase_add_single ag]; rw [this] at eq ⊢
+    simp_rw [mul_add, add_right_cancel_iff] at eq
+    rw [ih ag hag eq]
+    simp [Finset.erase_union_distrib]
+
+@[to_additive (dont_translate := R)]
 
 中文:
 实例 [是消去加法
@@ -183,7 +205,17 @@ instance [IsCancelAdd
     obtain h | h := s.eq_empty_or_nonempty <;> subst s
     · simp_all
     simp only [ne_eq, ← coeff_eq_zero, ← support_nonempty_iff] at hf
-    obtain 
+    obtain ⟨af, haf, ag, hag, uniq⟩ := UniqueProds.uniqueMul_of_nonempty hf h
+    have h := coeff_mul_mul_of_uniqueMul (uniq.mono subset_rfl Finset.subset_union_left)
+    dsimp only at eq
+    rw [eq]; rw [coeff_mul_mul_of_uniqueMul (uniq.mono subset_rfl Finset.subset_union_right)] at h
+    have := mul_left_cancel₀ (mem_support_iff.mp haf) h
+    rw [← g₁.erase_add_single ag]; rw [← g₂.erase_add_single ag]; rw [this] at eq ⊢
+    simp_rw [mul_add, add_right_cancel_iff] at eq
+    rw [ih ag hag eq]
+    simp [Finset.erase_union_distrib]
+
+@[to_additive (dont_translate := R)]
 
 Depends on / 依赖: Finset, Finset.eraseInduction, Finset.subset_union_left, UniqueProds, UniqueProds.uniqueMul_of_nonempty, classical, coeff.support, coeff_eq_zero, coeff_mul_mul_of_uniqueMul, eq_empty_or_nonempty, eraseInduction, generalizing, ne_eq, s.eq_empty_or_nonempty, subset_rfl, subset_union_left, support, support_nonempty_iff, uniq.mono, uniqueMul_of_nonempty
 -/

@@ -57,7 +57,20 @@ lemma antitoneOn_extremalNumber_div_choose_two
     rw [← Fintype.card_fin (n + 1)]
   rw [div_le_iff₀ (mod_cast Nat.choose_pos (by linarith))]; rw [extremalNumber_le_iff_of_nonneg H (by positivity)]
   intro G _ h
-  rw [mul_comm]; rw [← mul_div_assoc]; rw [le_div_
+  rw [mul_comm]; rw [← mul_div_assoc]; rw [le_div_iff₀' (mod_cast Nat.choose_pos hn)]; rw [Nat.cast_choose_two]; rw [Nat.cast_choose_two]; rw [Nat.cast_add_one]; rw [add_sub_cancel_right (n : Real) 1]; rw [mul_comm _ (n - 1 : Real)]; rw [← mul_div (n - 1 : Real)]; rw [mul_comm _ (n / 2 : Real)]; rw [mul_assoc]; rw [mul_comm (n - 1 : Real)]; rw [← mul_div (n + 1 : Real)]; rw [mul_comm _ (n / 2 : Real)]; rw [mul_assoc]; rw [mul_le_mul_iff_right₀ (by positivity)]; rw [← Nat.cast_pred (by positivity)]; rw [← Nat.cast_mul]; rw [← Nat.cast_add_one]; rw [← Nat.cast_mul]; rw [Nat.cast_le]
+  conv_rhs =>
+    rw [← Fintype.card_fin (n + 1)]; rw [← card_univ]
+  -- double counting `(v, e) ↦ v ∉ e`
+  apply card_nsmul_le_card_nsmul' (r := fun v e => v ∉ e)
+  -- counting `e`
+  · intro e he
+    simp_rw [← Sym2.mem_toFinset, bipartiteBelow, filter_not, filter_mem_eq_inter, univ_inter,
+      ← compl_eq_univ_sdiff, card_compl, Fintype.card_fin, card_toFinset_mem_edgeFinset ⟨e, he⟩,
+      Nat.cast_id, Nat.reduceSubDiff, le_refl]
+  -- counting `v`
+  · intro v hv
+    simpa [edgeFinset_deleteIncidenceSet_eq_filter]
+      using! card_edgeFinset_deleteIncidenceSet_le_extremalNumber h v
 
 中文:
 引理 antitoneOn_extremalNumber_div_choose_two
@@ -70,7 +83,20 @@ lemma antitoneOn_extremalNumber_div_choose_two
     rw [← Fintype.card_fin (n + 1)]
   rw [div_le_iff₀ (mod_cast Nat.choose_pos (by linarith))]; rw [extremalNumber_le_iff_of_nonneg H (by positivity)]
   intro G _ h
-  rw [mul_comm]; rw [← mul_div_assoc]; rw [le_div_
+  rw [mul_comm]; rw [← mul_div_assoc]; rw [le_div_iff₀' (mod_cast Nat.choose_pos hn)]; rw [Nat.cast_choose_two]; rw [Nat.cast_choose_two]; rw [Nat.cast_add_one]; rw [add_sub_cancel_right (n : Real) 1]; rw [mul_comm _ (n - 1 : Real)]; rw [← mul_div (n - 1 : Real)]; rw [mul_comm _ (n / 2 : Real)]; rw [mul_assoc]; rw [mul_comm (n - 1 : Real)]; rw [← mul_div (n + 1 : Real)]; rw [mul_comm _ (n / 2 : Real)]; rw [mul_assoc]; rw [mul_le_mul_iff_right₀ (by positivity)]; rw [← Nat.cast_pred (by positivity)]; rw [← Nat.cast_mul]; rw [← Nat.cast_add_one]; rw [← Nat.cast_mul]; rw [Nat.cast_le]
+  conv_rhs =>
+    rw [← Fintype.card_fin (n + 1)]; rw [← card_univ]
+  -- double counting `(v, e) ↦ v ∉ e`
+  apply card_nsmul_le_card_nsmul' (r := fun v e => v ∉ e)
+  -- counting `e`
+  · intro e he
+    simp_rw [← Sym2.mem_toFinset, bipartiteBelow, filter_not, filter_mem_eq_inter, univ_inter,
+      ← compl_eq_univ_sdiff, card_compl, Fintype.card_fin, card_toFinset_mem_edgeFinset ⟨e, he⟩,
+      Nat.cast_id, Nat.reduceSubDiff, le_refl]
+  -- counting `v`
+  · intro v hv
+    simpa [edgeFinset_deleteIncidenceSet_eq_filter]
+      using! card_edgeFinset_deleteIncidenceSet_le_extremalNumber h v
 
 Depends on / 依赖: Fintype, Fintype.card_fin, Nat.cast_add_one, Nat.cast_choose_two, Nat.choose_pos, add_sub_cancel_right, antitoneOn_nat_Ici_of_succ_le, card_fin, cast_add_one, cast_choose_two, choose_pos, conv_lhs, extremalNumber_le_iff_of_nonneg, mod_cast, mul_comm, mul_div, mul_div_assoc
 -/
@@ -129,7 +155,9 @@ theorem isGLB_turanDensity
     positivity
   refine Real.isGLB_of_tendsto_antitoneOn_bddBelow_nat_Ici ?_
     (antitoneOn_extremalNumber_div_choose_two H) h_bdd
-  have h_tto := Real
+  have h_tto := Real.tendsto_atTop_csInf_of_antitoneOn_bddBelow_nat_Ici
+    (antitoneOn_extremalNumber_div_choose_two H) h_bdd
+  rwa [← h_tto.limUnder_eq] at h_tto
 
 中文:
 定理 isGLB_turanDensity
@@ -141,7 +169,9 @@ theorem isGLB_turanDensity
     positivity
   refine Real.isGLB_of_tendsto_antitoneOn_bddBelow_nat_Ici ?_
     (antitoneOn_extremalNumber_div_choose_two H) h_bdd
-  have h_tto := Real
+  have h_tto := Real.tendsto_atTop_csInf_of_antitoneOn_bddBelow_nat_Ici
+    (antitoneOn_extremalNumber_div_choose_two H) h_bdd
+  rwa [← h_tto.limUnder_eq] at h_tto
 
 Depends on / 依赖: BddBelow, Real.isGLB_of_tendsto_antitoneOn_bddBelow_nat_Ici, Real.tendsto_atTop_csInf_of_antitoneOn_bddBelow_nat_Ici, Set.Ici, antitoneOn_extremalNumber_div_choose_two, extremalNumber, h_bdd, h_tto, h_tto.limUnder_eq, isGLB_of_tendsto_antitoneOn_bddBelow_nat_Ici, limUnder_eq, n.choose, tendsto_atTop_csInf_of_antitoneOn_bddBelow_nat_Ici
 -/
@@ -219,6 +249,8 @@ theorem isEquivalent_extremalNumber
   have hz : forallᶠ (x : Nat) in atTop, turanDensity H * x.choose 2 != 0 := by
     rw [eventually_atTop]
     refine ⟨2, fun n hn => ?_⟩
+    simpa [h, Nat.choose_eq_zero_iff]
+  simpa [isEquivalent_iff_tendsto_one hz] using! hπ
 
 中文:
 定理 isEquivalent_extremalNumber
@@ -230,6 +262,8 @@ theorem isEquivalent_extremalNumber
   have hz : forallᶠ (x : Nat) in atTop, turanDensity H * x.choose 2 != 0 := by
     rw [eventually_atTop]
     refine ⟨2, fun n hn => ?_⟩
+    simpa [h, Nat.choose_eq_zero_iff]
+  simpa [isEquivalent_iff_tendsto_one hz] using! hπ
 
 Depends on / 依赖: Nat.choose_eq_zero_iff, Tendsto, Tendsto.const_mul, choose_eq_zero_iff, const_mul, div_mul_div_comm, eventually_atTop, isEquivalent_iff_tendsto_one, one_div_mul_cancel, one_mul, simp_rw, tendsto_turanDensity, turanDensity, x.choose
 -/
@@ -259,7 +293,15 @@ apply lt_of_lt_of_le lt_add_of_pos_right (turanDensity H) hε_pos
   · rw [← Set.image, Set.image_nonempty]
     exact Set.nonempty_Ici
   rw [← hx]
-  have ⟨n, hn, 
+  have ⟨n, hn, G, _, hcard_edges, h_free⟩ := h m
+  replace h_free : H.Free G := not_nonempty_iff.mpr h_free
+  trans (extremalNumber n H / n.choose 2)
+  · rw [le_div_iff₀ <| mod_cast Nat.choose_pos (hm.trans hn)]
+    conv =>
+      enter [2, 1, 1]
+      rw [← Fintype.card_fin n]
+    exact hcard_edges.trans (mod_cast card_edgeFinset_le_extremalNumber h_free)
+  · exact antitoneOn_extremalNumber_div_choose_two H hm (hm.trans hn) hn
 
 中文:
 定理 eventually_isContained_of_card_edgeFinset
@@ -273,7 +315,15 @@ apply lt_of_lt_of_le lt_add_of_pos_right (turanDensity H) hε_pos
   · rw [← Set.image, Set.image_nonempty]
     exact Set.nonempty_Ici
   rw [← hx]
-  have ⟨n, hn, 
+  have ⟨n, hn, G, _, hcard_edges, h_free⟩ := h m
+  replace h_free : H.Free G := not_nonempty_iff.mpr h_free
+  trans (extremalNumber n H / n.choose 2)
+  · rw [le_div_iff₀ <| mod_cast Nat.choose_pos (hm.trans hn)]
+    conv =>
+      enter [2, 1, 1]
+      rw [← Fintype.card_fin n]
+    exact hcard_edges.trans (mod_cast card_edgeFinset_le_extremalNumber h_free)
+  · exact antitoneOn_extremalNumber_div_choose_two H hm (hm.trans hn) hn
 
 Depends on / 依赖: H.Free, Nat.choose_pos, Set.image, Set.image_nonempty, Set.nonempty_Ici, choose_pos, contrapose, eventually_atTop, extremalNumber, h_free, hcard_edges, hm.trans, image_nonempty, le_csInf, lt_add_of_pos_right, lt_of_lt_of_le, mod_cast, n.choose, nonempty_Ici, not_nonempty_iff
 -/

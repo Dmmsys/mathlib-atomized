@@ -112,7 +112,12 @@ definition restrictionCyclesIso
   body: K.liftCycles ((K.restriction e).iCycles j ≫ (K.restrictionXIso e hj').hom) _ hk'' (by
       rw [assoc]; rw [← cancel_mono (K.restrictionXIso e hk').inv]; rw [assoc]; rw [assoc]; rw [← restriction_d_eq]; rw [iCycles_d]; rw [zero_comp])
   inv :=
-    (K.restriction e).liftCycles (K.iCycles j' ≫ (K.rest
+    (K.restriction e).liftCycles (K.iCycles j' ≫ (K.restrictionXIso e hj').inv) _ hk (by
+      rw [assoc]; rw [restriction_d_eq _ _ hj' hk']; rw [Iso.inv_hom_id_assoc]; rw [iCycles_d_assoc]; rw [zero_comp])
+  hom_inv_id := by simp [← cancel_mono ((K.restriction e).iCycles j)]
+  inv_hom_id := by simp [← cancel_mono (K.iCycles j')]
+
+@[reassoc (attr := simp)]
 
 中文:
 定义 restrictionCyclesIso
@@ -120,7 +125,12 @@ definition restrictionCyclesIso
   定义体: K.liftCycles ((K.restriction e).iCycles j ≫ (K.restrictionXIso e hj').hom) _ hk'' (by
       rw [assoc]; rw [← cancel_mono (K.restrictionXIso e hk').inv]; rw [assoc]; rw [assoc]; rw [← restriction_d_eq]; rw [iCycles_d]; rw [zero_comp])
   inv :=
-    (K.restriction e).liftCycles (K.iCycles j' ≫ (K.rest
+    (K.restriction e).liftCycles (K.iCycles j' ≫ (K.restrictionXIso e hj').inv) _ hk (by
+      rw [assoc]; rw [restriction_d_eq _ _ hj' hk']; rw [Iso.inv_hom_id_assoc]; rw [iCycles_d_assoc]; rw [zero_comp])
+  hom_inv_id := by simp [← cancel_mono ((K.restriction e).iCycles j)]
+  inv_hom_id := by simp [← cancel_mono (K.iCycles j')]
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Iso.inv_hom_id_assoc, K.iCycles, K.liftCycles, K.restriction, K.restrictionXIso, cancel_mono, hom_inv_id, iCycles, iCycles_d, iCycles_d_assoc, inv_hom_id_assoc, liftCycles, restriction, restrictionXIso, restriction_d_eq, zero_comp
 -/
@@ -190,7 +200,12 @@ definition restrictionOpcyclesIso
   body: (K.restriction e).descOpcycles ((K.restrictionXIso e hj').hom ≫ K.pOpcycles j') _ hi (by
       rw [restriction_d_eq _ _ hi' hj']; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [d_pOpcycles]; rw [comp_zero])
   inv :=
-    K.descOpcycles ((K.restrictionXIso e hj').inv ≫ (K.restriction e).pOpcyc
+    K.descOpcycles ((K.restrictionXIso e hj').inv ≫ (K.restriction e).pOpcycles j) _ hi'' (by
+      rw [← cancel_epi (K.restrictionXIso e hi').hom]; rw [← restriction_d_eq_assoc]; rw [comp_zero]; rw [d_pOpcycles])
+  hom_inv_id := by simp [← cancel_epi ((K.restriction e).pOpcycles j)]
+  inv_hom_id := by simp [← cancel_epi (K.pOpcycles j')]
+
+@[reassoc (attr := simp)]
 
 中文:
 定义 restrictionOpcyclesIso
@@ -198,7 +213,12 @@ definition restrictionOpcyclesIso
   定义体: (K.restriction e).descOpcycles ((K.restrictionXIso e hj').hom ≫ K.pOpcycles j') _ hi (by
       rw [restriction_d_eq _ _ hi' hj']; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [d_pOpcycles]; rw [comp_zero])
   inv :=
-    K.descOpcycles ((K.restrictionXIso e hj').inv ≫ (K.restriction e).pOpcyc
+    K.descOpcycles ((K.restrictionXIso e hj').inv ≫ (K.restriction e).pOpcycles j) _ hi'' (by
+      rw [← cancel_epi (K.restrictionXIso e hi').hom]; rw [← restriction_d_eq_assoc]; rw [comp_zero]; rw [d_pOpcycles])
+  hom_inv_id := by simp [← cancel_epi ((K.restriction e).pOpcycles j)]
+  inv_hom_id := by simp [← cancel_epi (K.pOpcycles j')]
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: Iso.inv_hom_id_assoc, K.descOpcycles, K.pOpcycles, K.restriction, K.restrictionXIso, cancel_epi, comp_zero, d_pOpcycles, descOpcycles, hom_inv_id, inv_hom_id, inv_hom_id_assoc, pOpcycles, restriction, restrictionXIso, restriction_d_eq, restriction_d_eq_assoc
 -/
@@ -269,7 +289,7 @@ definition restrictionHomologyIso
   have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
   (K.restriction e).homologyIsoSc' i j k hi hk ≪≫
     ShortComplex.homologyMapIso (restriction.sc'Iso K e i j k hi' hj' hk' hi'' hk'') ≪≫
-    (K.homo
+    (K.homologyIsoSc' i' j' k' hi'' hk'').symm
 
 中文:
 定义 restrictionHomologyIso
@@ -278,7 +298,7 @@ definition restrictionHomologyIso
   have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
   (K.restriction e).homologyIsoSc' i j k hi hk ≪≫
     ShortComplex.homologyMapIso (restriction.sc'Iso K e i j k hi' hj' hk' hi'' hk'') ≪≫
-    (K.homo
+    (K.homologyIsoSc' i' j' k' hi'' hk'').symm
 
 Depends on / 依赖: HasHomology, K.homologyIsoSc, K.restriction, K.sc, ShortComplex, ShortComplex.homologyMapIso, homologyIsoSc, homologyMapIso, restriction, restriction.sc
 -/
@@ -302,7 +322,16 @@ lemma homologyπ_restrictionHomologyIso_hom
   have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
   have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
   dsimp [restrictionHomologyIso, homologyIsoSc']
-  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [← cancel_mono
+  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [← cancel_mono (K.sc j').homologyι]; rw [assoc]; rw [assoc]
+  apply (ShortComplex.π_homologyMap_ι _).trans
+  dsimp
+  rw [comp_id]; rw [id_comp]
+  apply (K.restrictionCyclesIso_hom_iCycles_assoc e j k hk hj' hk' hk'' _).symm.trans
+  congr 1
+  symm
+  apply ShortComplex.homology_π_ι
+
+@[reassoc]
 
 中文:
 引理 homologyπ_restrictionHomologyIso_hom
@@ -310,7 +339,16 @@ lemma homologyπ_restrictionHomologyIso_hom
   have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
   have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
   dsimp [restrictionHomologyIso, homologyIsoSc']
-  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [← cancel_mono
+  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [← cancel_mono (K.sc j').homologyι]; rw [assoc]; rw [assoc]
+  apply (ShortComplex.π_homologyMap_ι _).trans
+  dsimp
+  rw [comp_id]; rw [id_comp]
+  apply (K.restrictionCyclesIso_hom_iCycles_assoc e j k hk hj' hk' hk'' _).symm.trans
+  congr 1
+  symm
+  apply ShortComplex.homology_π_ι
+
+@[reassoc]
 
 Depends on / 依赖: HasHomology, K.restriction, K.restrictionCyclesIso_hom_iCycles_assoc, K.sc, ShortComplex, ShortComplex.homologyMap_comp, cancel_mono, comp_id, homologyIsoSc, homologyMap_comp, id_comp, restriction, restrictionCyclesIso_hom_iCycles_assoc, restrictionHomologyIso, symm.trans
 -/
@@ -363,7 +401,15 @@ lemma restrictionHomologyIso_inv_homologyι
   have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
   have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
   dsimp [restrictionHomologyIso, homologyIsoSc']
-  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [assoc]; rw [←
+  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [assoc]; rw [← cancel_epi (K.sc j').homologyπ]
+  apply (ShortComplex.π_homologyMap_ι _).trans
+  dsimp
+  rw [comp_id]; rw [id_comp]
+  refine ((ShortComplex.homology_π_ι_assoc _ _).trans ?_).symm
+  congr 1
+  apply pOpcycles_restrictionOpcyclesIso_inv
+
+@[reassoc (attr := simp)]
 
 中文:
 引理 restrictionHomologyIso_inv_homologyι
@@ -371,7 +417,15 @@ lemma restrictionHomologyIso_inv_homologyι
   have : ((K.restriction e).sc' i j k).HasHomology := by subst hi hk; assumption
   have : (K.sc' i' j' k').HasHomology := by subst hi'' hk''; assumption
   dsimp [restrictionHomologyIso, homologyIsoSc']
-  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [assoc]; rw [←
+  rw [← ShortComplex.homologyMap_comp]; rw [← ShortComplex.homologyMap_comp]; rw [assoc]; rw [← cancel_epi (K.sc j').homologyπ]
+  apply (ShortComplex.π_homologyMap_ι _).trans
+  dsimp
+  rw [comp_id]; rw [id_comp]
+  refine ((ShortComplex.homology_π_ι_assoc _ _).trans ?_).symm
+  congr 1
+  apply pOpcycles_restrictionOpcyclesIso_inv
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: HasHomology, K.restriction, K.sc, ShortComplex, ShortComplex.homologyMap_comp, ShortComplex.homology_, cancel_epi, comp_id, homologyIsoSc, homologyMap_comp, id_comp, pOpcycles_restrictionO, restriction, restrictionHomologyIso
 -/

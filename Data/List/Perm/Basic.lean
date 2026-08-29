@@ -204,7 +204,16 @@ theorem perm_insertIdx_iff
     rw [insertIdx_of_length_lt hn₁]
     cases Nat.lt_or_ge (length l₂) n with
     | inl hn₂ => rw [insertIdx_of_length_lt hn₂]
- 
+    | inr hn₂ =>
+      apply iff_of_false
+      · intro h
+        rw [h.length_eq] at hn₁
+        grind
+      · grind [Perm.length_eq]
+  | inr hn₁ =>
+    exact perm_insertIdx_iff_of_le hn₁ (Nat.le_trans hn₁ hle) _
+
+@[gcongr]
 
 中文:
 定理 perm_insertIdx_iff
@@ -217,7 +226,16 @@ theorem perm_insertIdx_iff
     rw [insertIdx_of_length_lt hn₁]
     cases Nat.lt_or_ge (length l₂) n with
     | inl hn₂ => rw [insertIdx_of_length_lt hn₂]
- 
+    | inr hn₂ =>
+      apply iff_of_false
+      · intro h
+        rw [h.length_eq] at hn₁
+        grind
+      · grind [Perm.length_eq]
+  | inr hn₁ =>
+    exact perm_insertIdx_iff_of_le hn₁ (Nat.le_trans hn₁ hle) _
+
+@[gcongr]
 
 Depends on / 依赖: Nat.le_of_not_ge, Nat.le_trans, Nat.lt_or_ge, Perm.length_eq, generalizing, h.length_eq, iff_of_false, insertIdx_of_length_lt, le_of_not_ge, le_trans, length, length_eq, lt_or_ge, perm_comm, perm_insertIdx_iff_of_le
 -/
@@ -270,7 +288,12 @@ theorem perm_eraseIdx_of_getElem?_eq
     cases h with
     | intro hn hnm =>
       rw [← perm_cons l₁[m], rel_congr_left (getElem_cons_eraseIdx_perm ..), ← hnm,
-        rel_congr_right (getElem_cons_eraseI
+        rel_congr_right (getElem_cons_eraseIdx_perm ..)]
+  | inr hm =>
+    rw [getElem?_eq_none hm]; rw [eq_comm]; rw [getElem?_eq_none_iff] at h
+    rw [eraseIdx_of_length_le h]; rw [eraseIdx_of_length_le hm]
+
+alias ⟨_, Perm.eraseIdx_of_getElem?_eq⟩ := perm_eraseIdx_of_getElem?_eq
 
 中文:
 定理 perm_eraseIdx_of_getElem?_eq
@@ -282,7 +305,12 @@ theorem perm_eraseIdx_of_getElem?_eq
     cases h with
     | intro hn hnm =>
       rw [← perm_cons l₁[m], rel_congr_left (getElem_cons_eraseIdx_perm ..), ← hnm,
-        rel_congr_right (getElem_cons_eraseI
+        rel_congr_right (getElem_cons_eraseIdx_perm ..)]
+  | inr hm =>
+    rw [getElem?_eq_none hm]; rw [eq_comm]; rw [getElem?_eq_none_iff] at h
+    rw [eraseIdx_of_length_le h]; rw [eraseIdx_of_length_le hm]
+
+alias ⟨_, Perm.eraseIdx_of_getElem?_eq⟩ := perm_eraseIdx_of_getElem?_eq
 
 Depends on / 依赖: Nat.lt_or_ge, _eq_getElem, _eq_none, _eq_none_iff, _eq_some_iff, eq_comm, eraseIdx_of_length_le, getElem, getElem_cons_eraseIdx_perm, length, lt_or_ge, perm_cons, rel_congr_left, rel_congr_right
 -/
@@ -353,7 +381,12 @@ theorem perm_comp_forall₂
     exact ⟨_ :: l₂, Forall₂.cons hab h₁₂, h₂₃.cons _⟩
   | swap a₁ a₂ h₂₃ =>
     obtain - | ⟨h₁, hr₂₃⟩ := huv
- 
+    obtain - | ⟨h₂, h₁₂⟩ := hr₂₃
+    exact ⟨_, Forall₂.cons h₂ (Forall₂.cons h₁ h₁₂), Perm.swap _ _ _⟩
+  | trans _ _ ih₁ ih₂ =>
+    rcases ih₂ huv with ⟨lb₂, hab₂, h₂₃⟩
+    rcases ih₁ hab₂ with ⟨lb₁, hab₁, h₁₂⟩
+    exact ⟨lb₁, hab₁, Perm.trans h₁₂ h₂₃⟩
 
 中文:
 定理 perm_comp_对任意₂
@@ -367,7 +400,12 @@ theorem perm_comp_forall₂
     exact ⟨_ :: l₂, Forall₂.cons hab h₁₂, h₂₃.cons _⟩
   | swap a₁ a₂ h₂₃ =>
     obtain - | ⟨h₁, hr₂₃⟩ := huv
- 
+    obtain - | ⟨h₂, h₁₂⟩ := hr₂₃
+    exact ⟨_, Forall₂.cons h₂ (Forall₂.cons h₁ h₁₂), Perm.swap _ _ _⟩
+  | trans _ _ ih₁ ih₂ =>
+    rcases ih₂ huv with ⟨lb₂, hab₂, h₂₃⟩
+    rcases ih₁ hab₂ with ⟨lb₁, hab₁, h₁₂⟩
+    exact ⟨lb₁, hab₁, Perm.trans h₁₂ h₂₃⟩
 
 Depends on / 依赖: Perm.nil, Perm.swap, Perm.trans, _hlu, generalizing
 -/
@@ -466,7 +504,8 @@ theorem rel_perm_imp
   have : ((flip (Forall₂ r) ∘r Forall₂ r) ∘r Perm) b d := by
     rwa [← forall₂_comp_perm_eq_perm_comp_forall₂, ← Relation.comp_assoc] at this
   let ⟨b', ⟨_, hbc, hcb⟩, hbd⟩ := this
-  have : b' = b := ri
+  have : b' = b := right_unique_forall₂' hr hcb hbc
+  this ▸ hbd
 
 中文:
 定理 rel_perm_imp
@@ -477,7 +516,8 @@ theorem rel_perm_imp
   have : ((flip (Forall₂ r) ∘r Forall₂ r) ∘r Perm) b d := by
     rwa [← forall₂_comp_perm_eq_perm_comp_forall₂, ← Relation.comp_assoc] at this
   let ⟨b', ⟨_, hbc, hcb⟩, hbd⟩ := this
-  have : b' = b := ri
+  have : b' = b := right_unique_forall₂' hr hcb hbc
+  this ▸ hbd
 
 Depends on / 依赖: Relation, Relation.comp_assoc, comp_assoc
 -/
@@ -692,7 +732,8 @@ theorem perm_replicate_append_replicate
   suffices l subseteq [a, b] ↔ forall c, c != b -> c != a -> c ∉ l by
     simp +contextual [count_replicate, h, this, count_eq_zero, Ne.symm]
   trans forall c, c in l -> c = b ∨ c = a
-  · simp [subset_def, o
+  · simp [subset_def, or_comm]
+  · exact forall_congr' fun _ => by rw [← and_imp, ← not_or, not_imp_not]
 
 中文:
 定理 perm_replicate_append_replicate
@@ -701,7 +742,8 @@ theorem perm_replicate_append_replicate
   suffices l subseteq [a, b] ↔ forall c, c != b -> c != a -> c ∉ l by
     simp +contextual [count_replicate, h, this, count_eq_zero, Ne.symm]
   trans forall c, c in l -> c = b ∨ c = a
-  · simp [subset_def, o
+  · simp [subset_def, or_comm]
+  · exact forall_congr' fun _ => by rw [← and_imp, ← not_or, not_imp_not]
 
 Depends on / 依赖: Decidable, Decidable.and_forall_ne, Ne.symm, and_forall_ne, and_imp, contextual, count_eq_zero, count_replicate, forall_congr, not_imp_not, not_or, or_comm, perm_iff_count, subset_def, subseteq
 -/

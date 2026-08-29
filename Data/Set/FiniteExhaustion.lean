@@ -176,7 +176,9 @@ definition _root_.Set.Countable.finiteExhaustion
     refine ⟨fun n => (Subtype.val ∘ f) '' {i | i <= n}, ?_, ?_, ?_⟩
     · exact fun n => Finite.image _ (finite_le_nat n)
     · grind
-    · simp [← image_image, ← image_iUnion, iUnion_le_nat, ra
+    · simp [← image_image, ← image_iUnion, iUnion_le_nat, range_eq_univ.mpr hf]
+  · refine ⟨fun _ => ∅, by simp [Finite.to_subtype], fun n => by simp, ?_⟩
+    simp [Set.not_nonempty_iff_eq_empty'.mp h]
 
 中文:
 定义 _root_.集合.可数.finiteExhaustion
@@ -188,7 +190,9 @@ definition _root_.Set.Countable.finiteExhaustion
     refine ⟨fun n => (Subtype.val ∘ f) '' {i | i <= n}, ?_, ?_, ?_⟩
     · exact fun n => Finite.image _ (finite_le_nat n)
     · grind
-    · simp [← image_image, ← image_iUnion, iUnion_le_nat, ra
+    · simp [← image_image, ← image_iUnion, iUnion_le_nat, range_eq_univ.mpr hf]
+  · refine ⟨fun _ => ∅, by simp [Finite.to_subtype], fun n => by simp, ?_⟩
+    simp [Set.not_nonempty_iff_eq_empty'.mp h]
 
 Depends on / 依赖: Classical, Classical.choice, Finite, Finite.image, Finite.to_subtype, Nonempty, Set.not_nonempty_iff_eq_empty, Subtype, Subtype.val, choice, exists_surjective_nat, finite_le_nat, iUnion_le_nat, image_iUnion, image_image, not_nonempty_iff_eq_empty, range_eq_univ, range_eq_univ.mpr, to_subtype
 -/

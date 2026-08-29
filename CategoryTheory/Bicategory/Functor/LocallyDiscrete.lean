@@ -125,7 +125,7 @@ definition oplaxFunctorOfIsLocallyDiscrete
     simp
   mapComp_naturality_right _ _ _ η := by
     obtain rfl := obj_ext_of_isDiscrete η
-
+    simp
 
 中文:
 定义 oplaxFunctorOfIsLocallyDiscrete
@@ -141,7 +141,7 @@ definition oplaxFunctorOfIsLocallyDiscrete
     simp
   mapComp_naturality_right _ _ _ η := by
     obtain rfl := obj_ext_of_isDiscrete η
-
+    simp
 
 Depends on / 依赖: cat_disch, eqToHom, fun_, mapComp, mapComp_naturality_left, obj_e, obj_ext_of_isDiscrete
 -/
@@ -196,7 +196,7 @@ definition Functor.toPseudofunctor
     (fun ⟨X⟩ => eqToIso (by simp [CategoryStruct.id]))
     (fun ⟨f⟩ ⟨g⟩ => eqToIso (by simp [CategoryStruct.comp]))
 
-@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor := Functor.toPseudofu
+@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor := Functor.toPseudofunctor
 
 中文:
 定义 函子.toPseudofunctor
@@ -206,7 +206,7 @@ definition Functor.toPseudofunctor
     (fun ⟨X⟩ => eqToIso (by simp [CategoryStruct.id]))
     (fun ⟨f⟩ ⟨g⟩ => eqToIso (by simp [CategoryStruct.comp]))
 
-@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor := Functor.toPseudofu
+@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor := Functor.toPseudofunctor
 
 Depends on / 依赖: CategoryStruct, CategoryStruct.comp, CategoryStruct.id, F.map, F.obj, eqToIso, pseudofunctorOfIsLocallyDiscrete
 -/
@@ -268,7 +268,7 @@ definition Functor.toPseudofunctor'
     (fun ⟨X⟩ => eqToIso (by simp [CategoryStruct.id]))
     (fun f g => eqToIso (by obtain ⟨f⟩ := f; obtain ⟨g⟩ := g; simp [CategoryStruct.comp]))
 
-@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor' := Fu
+@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor' := Functor.toPseudofunctor'
 
 中文:
 定义 函子.toPseudofunctor'
@@ -278,7 +278,7 @@ definition Functor.toPseudofunctor'
     (fun ⟨X⟩ => eqToIso (by simp [CategoryStruct.id]))
     (fun f g => eqToIso (by obtain ⟨f⟩ := f; obtain ⟨g⟩ := g; simp [CategoryStruct.comp]))
 
-@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor' := Fu
+@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor' := Functor.toPseudofunctor'
 
 Depends on / 依赖: CategoryStruct, CategoryStruct.comp, CategoryStruct.id, F.map, F.obj, eqToIso, pseudofunctorOfIsLocallyDiscrete
 -/

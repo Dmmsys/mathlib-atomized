@@ -214,7 +214,15 @@ theorem dist_cons_cons
     simpa
   rw [Subtype.dist_eq]; rw [Subtype.dist_eq]; rw [PiNat.dist_eq_of_ne (Subtype.coe_ne_coe.mpr h)]; rw [PiNat.dist_eq_of_ne (Subtype.coe_ne_coe.mpr h')]
   simp only [show (1 / 2 : Real) = 2⁻¹ by simp, ← pow_succ']
-
+  congr
+  simp only [val_cons, PiNat.firstDiff, ne_eq, Classical.dite_not, Subtype.coe_ne_coe.mpr h,
+    not_false_eq_true, ↓reduceDIte, val_eq_get]
+  split_ifs with h_if
+  · contrapose! h'
+    apply_fun Subtype.val using Subtype.val_injective
+    simpa
+  · convert! Nat.find_comp_succ _ _ _
+    simp [Stream'.cons]
 
 中文:
 定理 dist_cons_cons
@@ -227,7 +235,15 @@ theorem dist_cons_cons
     simpa
   rw [Subtype.dist_eq]; rw [Subtype.dist_eq]; rw [PiNat.dist_eq_of_ne (Subtype.coe_ne_coe.mpr h)]; rw [PiNat.dist_eq_of_ne (Subtype.coe_ne_coe.mpr h')]
   simp only [show (1 / 2 : Real) = 2⁻¹ by simp, ← pow_succ']
-
+  congr
+  simp only [val_cons, PiNat.firstDiff, ne_eq, Classical.dite_not, Subtype.coe_ne_coe.mpr h,
+    not_false_eq_true, ↓reduceDIte, val_eq_get]
+  split_ifs with h_if
+  · contrapose! h'
+    apply_fun Subtype.val using Subtype.val_injective
+    simpa
+  · convert! Nat.find_comp_succ _ _ _
+    simp [Stream'.cons]
 
 Depends on / 依赖: Classical, Classical.dite_not, PiNat.dist_eq_of_ne, PiNat.firstDiff, Subtype, Subtype.coe_ne_coe.mpr, Subtype.dist_eq, Subtype.val, apply_fun, coe_ne_coe, contrapose, dist_eq, dist_eq_of_ne, dite_not, firstDiff, h_if, ne_eq, not_false_eq_true, pow_succ, reduceDIte
 -/
@@ -690,7 +706,43 @@ theorem FriendlyOperation.exists_fixed_point
     intro f g
     rw [UniformFun.dist_le (by positivity)]
     intro b
+    simp only [UniformFun.toFun, UniformFun.ofFun, Equiv.coe_fn_symm_mk, NNReal.coe_inv,
+      NNReal.coe_ofNat, T]
+    cases F b with
+    | none => simp
+    | some v =>
+      obtain ⟨a, c, b'⟩ := v
+      simp
+      calc
+        _ <= dist (f b') (g b') := by
+          have := h.friend c
+          rw [FriendlyOperation]; rw [lipschitzWith_iff_dist_le_mul] at this
+          specialize this (f b') (g b')
+          simpa using this
+        _ <= _ := by
+          simp only [UniformFun.dist_def]
+          apply le_ciSup (f := fun b => dist (f b) (g b))
+          have : exists C, forall (a b : Seq α), dist a b <= C := by
+            rw [← Metric.boundedSpace_iff]
+            infer_instance
+          obtain ⟨C, hC⟩ := this
+          use C
+          simp [upperBounds]
+          grind
+  obtain ⟨f, hf⟩ := exists_fixed_point_of_contractible T hT
+  use f
+  intro b
+  rw [← hf]
+  simp only [T]
+  cases hb : F b with
+  | none =>
     simp
+  | some v =>
+    obtain ⟨a, c, b'⟩ := v
+    simp only [cons_eq_cons, true_and]
+    congr
+    change f b' = T f b'
+    rw [hf]
 
 中文:
 定理 FriendlyOperation.存在_fixed_point
@@ -705,7 +757,43 @@ theorem FriendlyOperation.exists_fixed_point
     intro f g
     rw [UniformFun.dist_le (by positivity)]
     intro b
+    simp only [UniformFun.toFun, UniformFun.ofFun, Equiv.coe_fn_symm_mk, NNReal.coe_inv,
+      NNReal.coe_ofNat, T]
+    cases F b with
+    | none => simp
+    | some v =>
+      obtain ⟨a, c, b'⟩ := v
+      simp
+      calc
+        _ <= dist (f b') (g b') := by
+          have := h.friend c
+          rw [FriendlyOperation]; rw [lipschitzWith_iff_dist_le_mul] at this
+          specialize this (f b') (g b')
+          simpa using this
+        _ <= _ := by
+          simp only [UniformFun.dist_def]
+          apply le_ciSup (f := fun b => dist (f b) (g b))
+          have : exists C, forall (a b : Seq α), dist a b <= C := by
+            rw [← Metric.boundedSpace_iff]
+            infer_instance
+          obtain ⟨C, hC⟩ := this
+          use C
+          simp [upperBounds]
+          grind
+  obtain ⟨f, hf⟩ := exists_fixed_point_of_contractible T hT
+  use f
+  intro b
+  rw [← hf]
+  simp only [T]
+  cases hb : F b with
+  | none =>
     simp
+  | some v =>
+    obtain ⟨a, c, b'⟩ := v
+    simp only [cons_eq_cons, true_and]
+    congr
+    change f b' = T f b'
+    rw [hf]
 
 Depends on / 依赖: Equiv.coe_fn_symm_mk, Friend, LipschitzWith, NNReal, NNReal.coe_inv, NNReal.coe_ofNat, Seq.cons, UniformFun, UniformFun.dist_le, UniformFun.ofFun, UniformFun.toFun, coe_fn_symm_mk, coe_inv, coe_ofNat, dist_le, friend, h.friend, lipschitzWith_iff_dist_le_mul
 -/
@@ -934,7 +1022,8 @@ theorem FriendlyOperation.op_cons_head_eq
     simp
   rw [dist_le_half_iff] at h
   generalize op (Seq.cons a s) = s' at *
-  generalize o
+  generalize op (Seq.cons a t) = t' at *
+  obtain ⟨rfl, rfl⟩ | ⟨hd, s_tl, t_tl, rfl, rfl⟩ := h <;> rfl
 
 中文:
 定理 FriendlyOperation.op_cons_head_eq
@@ -948,7 +1037,8 @@ theorem FriendlyOperation.op_cons_head_eq
     simp
   rw [dist_le_half_iff] at h
   generalize op (Seq.cons a s) = s' at *
-  generalize o
+  generalize op (Seq.cons a t) = t' at *
+  obtain ⟨rfl, rfl⟩ | ⟨hd, s_tl, t_tl, rfl, rfl⟩ := h <;> rfl
 
 Depends on / 依赖: Seq.cons, dist_cons_cons, dist_le_half_iff, friendlyOperation_iff_dist_le_dist, generalize, h.trans, replace, s_tl, specialize, t_tl
 -/
@@ -981,7 +1071,7 @@ definition FriendlyOperation.unfold
     match (op <| .cons s_hd nil).destruct with
     | none => none
     | some (t_hd, _) =>
-      some (t_hd, ⟨fun s_tl
+      some (t_hd, ⟨fun s_tl => (op (.cons s_hd s_tl)).tail, FriendlyOperation.cons_tail h⟩)
 
 中文:
 定义 FriendlyOperation.unfold
@@ -996,7 +1086,7 @@ definition FriendlyOperation.unfold
     match (op <| .cons s_hd nil).destruct with
     | none => none
     | some (t_hd, _) =>
-      some (t_hd, ⟨fun s_tl
+      some (t_hd, ⟨fun s_tl => (op (.cons s_hd s_tl)).tail, FriendlyOperation.cons_tail h⟩)
 
 Depends on / 依赖: FriendlyOperation, FriendlyOperation.cons_tail, FriendlyOperation.const, cons_tail, destruct, s_hd, s_tl, t_hd, t_tl
 -/
@@ -1032,7 +1122,16 @@ theorem FriendlyOperation.destruct_apply_eq_unfold
     generalize ht0 : op (.cons s_hd nil) = t0 at *
     generalize ht : op (.cons s_hd s_tl) = t at *
     have : t0.head = t.head := by
-      
+      rw [← ht0]; rw [← ht]; rw [FriendlyOperation.op_cons_head_eq h]
+    cases t0 with
+    | nil =>
+      cases t with
+      | nil => simp
+      | cons => simp at this
+    | cons =>
+      cases t with
+      | nil => simp at this
+      | cons => simp_all
 
 中文:
 定理 FriendlyOperation.destruct_apply_eq_unfold
@@ -1048,7 +1147,16 @@ theorem FriendlyOperation.destruct_apply_eq_unfold
     generalize ht0 : op (.cons s_hd nil) = t0 at *
     generalize ht : op (.cons s_hd s_tl) = t at *
     have : t0.head = t.head := by
-      
+      rw [← ht0]; rw [← ht]; rw [FriendlyOperation.op_cons_head_eq h]
+    cases t0 with
+    | nil =>
+      cases t with
+      | nil => simp
+      | cons => simp at this
+    | cons =>
+      cases t with
+      | nil => simp at this
+      | cons => simp_all
 
 Depends on / 依赖: FriendlyOperation, FriendlyOperation.op_cons_head_eq, Seq.head_cons, Seq.tail_cons, generalize, head_cons, op_cons_head_eq, s_hd, s_tl, t.head, t0.head, tail_cons
 -/
@@ -1161,7 +1269,23 @@ theorem FriendlyOperation.coind
     have h_head : s.head = t.head := by
       replace hn : dist s t <= 2⁻¹ := by
         apply hn.trans
-        simp only [pow_succ, inv_pos, Nat.
+        simp only [pow_succ, inv_pos, Nat.ofNat_pos, mul_le_iff_le_one_left]
+        apply pow_le_one₀ <;> norm_num
+      rw [dist_le_half_iff] at hn
+      obtain ⟨rfl, rfl⟩ | ⟨hd, s_tl, t_tl, rfl, rfl⟩ := hn <;> rfl
+    have hs := hT s
+    have ht := hT t
+    cases hT_head : T s.head with
+    | none =>
+      simp only [hT_head, Option.map_none, ← h_head] at hs ht
+      simp [hs, ht, destruct_eq_none]
+    | some v =>
+      obtain ⟨hd, op', h_next⟩ := v
+      simp only [hT_head, Option.map_some, ← h_head] at hs ht
+      simp only [destruct_eq_cons hs, destruct_eq_cons ht, dist_cons_cons, pow_succ', inv_pos,
+        Nat.ofNat_pos, mul_le_mul_iff_right₀, ge_iff_le]
+      apply ih h_next
+      simpa [dist_eq_half_of_head h_head, pow_succ'] using hn
 
 中文:
 定理 FriendlyOperation.coind
@@ -1176,7 +1300,23 @@ theorem FriendlyOperation.coind
     have h_head : s.head = t.head := by
       replace hn : dist s t <= 2⁻¹ := by
         apply hn.trans
-        simp only [pow_succ, inv_pos, Nat.
+        simp only [pow_succ, inv_pos, Nat.ofNat_pos, mul_le_iff_le_one_left]
+        apply pow_le_one₀ <;> norm_num
+      rw [dist_le_half_iff] at hn
+      obtain ⟨rfl, rfl⟩ | ⟨hd, s_tl, t_tl, rfl, rfl⟩ := hn <;> rfl
+    have hs := hT s
+    have ht := hT t
+    cases hT_head : T s.head with
+    | none =>
+      simp only [hT_head, Option.map_none, ← h_head] at hs ht
+      simp [hs, ht, destruct_eq_none]
+    | some v =>
+      obtain ⟨hd, op', h_next⟩ := v
+      simp only [hT_head, Option.map_some, ← h_head] at hs ht
+      simp only [destruct_eq_cons hs, destruct_eq_cons ht, dist_cons_cons, pow_succ', inv_pos,
+        Nat.ofNat_pos, mul_le_mul_iff_right₀, ge_iff_le]
+      apply ih h_next
+      simpa [dist_eq_half_of_head h_head, pow_succ'] using hn
 
 Depends on / 依赖: Nat.ofNat_pos, dist_le_half_iff, generalizing, hT_head, h_base, h_head, h_step, hn.trans, inv_pos, mul_le_iff_le_one_left, ofNat_pos, of_dist_le_pow, pow_succ, replace, s.head, s_tl, t.head, t_tl
 -/
@@ -1227,7 +1367,34 @@ theorem FriendlyOperation.coind_comp_friend_left
   · exact ⟨_root_.id, op, rfl, FriendlyOperation.id, h_base⟩
   rintro _ ⟨opf, op, rfl, h_opf, h_op⟩
   obtain ⟨T, hT⟩ := h_step _ h_op
-  use
+  use fun hd? =>
+    match (T hd?) with
+    | none => (h_opf.unfold none).map fun (hd, opf') =>
+      (hd, ⟨_, fun _ => opf'.val nil, op, rfl, FriendlyOperation.const, h_op⟩)
+    | some (hd, opf', op') => (h_opf.unfold (some hd)).map fun (hd', opf'') =>
+      (hd', ⟨_, opf''.val ∘ opf'.val, op'.val, rfl,
+        FriendlyOperation.comp opf''.prop opf'.prop, op'.prop⟩)
+  intro s
+  specialize hT s
+  simp only [Function.comp_apply]
+  generalize op s = s' at *
+  cases s' with
+  | nil =>
+    symm at hT
+    simp at hT
+    simp [hT, destruct_apply_eq_unfold h_opf]
+    rfl
+  | cons s_hd s_tl =>
+    simp only [destruct_cons] at hT
+    simp only [destruct_apply_eq_unfold h_opf, Seq.tail_cons, Seq.head_cons]
+    generalize T s.head = t? at *
+    cases t? with
+    | none => simp at hT
+    | some v =>
+      obtain ⟨hd, opf', op'⟩ := v
+      simp at hT
+      simp [hT]
+      rfl
 
 中文:
 定理 FriendlyOperation.coind_comp_friend_left
@@ -1239,7 +1406,34 @@ theorem FriendlyOperation.coind_comp_friend_left
   · exact ⟨_root_.id, op, rfl, FriendlyOperation.id, h_base⟩
   rintro _ ⟨opf, op, rfl, h_opf, h_op⟩
   obtain ⟨T, hT⟩ := h_step _ h_op
-  use
+  use fun hd? =>
+    match (T hd?) with
+    | none => (h_opf.unfold none).map fun (hd, opf') =>
+      (hd, ⟨_, fun _ => opf'.val nil, op, rfl, FriendlyOperation.const, h_op⟩)
+    | some (hd, opf', op') => (h_opf.unfold (some hd)).map fun (hd', opf'') =>
+      (hd', ⟨_, opf''.val ∘ opf'.val, op'.val, rfl,
+        FriendlyOperation.comp opf''.prop opf'.prop, op'.prop⟩)
+  intro s
+  specialize hT s
+  simp only [Function.comp_apply]
+  generalize op s = s' at *
+  cases s' with
+  | nil =>
+    symm at hT
+    simp at hT
+    simp [hT, destruct_apply_eq_unfold h_opf]
+    rfl
+  | cons s_hd s_tl =>
+    simp only [destruct_cons] at hT
+    simp only [destruct_apply_eq_unfold h_opf, Seq.tail_cons, Seq.head_cons]
+    generalize T s.head = t? at *
+    cases t? with
+    | none => simp at hT
+    | some v =>
+      obtain ⟨hd, opf', op'⟩ := v
+      simp at hT
+      simp [hT]
+      rfl
 
 Depends on / 依赖: FriendlyOperation, FriendlyOperation.coind, FriendlyOperation.const, FriendlyOperation.id, _root_, _root_.id, h_base, h_op, h_opf, h_opf.unfold, h_step, motive
 -/
@@ -1299,7 +1493,38 @@ theorem FriendlyOperation.coind_comp_friend_right
   · exact ⟨_root_.id, op, rfl, FriendlyOperation.id, h_base⟩
   clear h_base op
   rintro _ ⟨opf, op, rfl, h_opf, h_op⟩
-  obtain ⟨T, hT⟩ := h
+  obtain ⟨T, hT⟩ := h_step _ h_op
+  use fun hd? =>
+    match (h_opf.unfold hd?) with
+    | none => (T none).map fun (hd, opf', op') =>
+      (hd, ⟨_, fun _ => opf'.val nil, op', rfl, FriendlyOperation.const, op'.prop⟩)
+    | some (hd, opf') => (T (some hd)).map fun (hd', opf'', op') =>
+      (hd', ⟨_, opf''.val ∘ opf'.val, op'.val, rfl,
+        FriendlyOperation.comp opf''.prop opf'.prop, op'.prop⟩)
+  intro s
+  simp only [Function.comp_apply]
+  have hF := h_opf.destruct_apply_eq_unfold (s := s)
+  generalize opf s = s' at *
+  cases s' with
+  | nil =>
+    symm at hF
+    simp only [destruct_nil, Option.map_eq_none_iff] at hF
+    simp only [hF, Option.map_map]
+    specialize hT nil
+    simp only [tail_nil, head_nil] at hT
+    simp [hT]
+    rfl
+  | cons s_hd s_tl =>
+  simp only [destruct_cons] at hF
+  generalize h_opf.unfold s.head = t? at *
+  cases t? with
+  | none => simp at hF
+  | some v =>
+  obtain ⟨hd, opf', op'⟩ := v
+  simp only [Option.map_some, Option.some.injEq, Prod.mk.injEq] at hF
+  simp only [hF, Option.map_map]
+  rw [hT]
+  rfl
 
 中文:
 定理 FriendlyOperation.coind_comp_friend_right
@@ -1311,7 +1536,38 @@ theorem FriendlyOperation.coind_comp_friend_right
   · exact ⟨_root_.id, op, rfl, FriendlyOperation.id, h_base⟩
   clear h_base op
   rintro _ ⟨opf, op, rfl, h_opf, h_op⟩
-  obtain ⟨T, hT⟩ := h
+  obtain ⟨T, hT⟩ := h_step _ h_op
+  use fun hd? =>
+    match (h_opf.unfold hd?) with
+    | none => (T none).map fun (hd, opf', op') =>
+      (hd, ⟨_, fun _ => opf'.val nil, op', rfl, FriendlyOperation.const, op'.prop⟩)
+    | some (hd, opf') => (T (some hd)).map fun (hd', opf'', op') =>
+      (hd', ⟨_, opf''.val ∘ opf'.val, op'.val, rfl,
+        FriendlyOperation.comp opf''.prop opf'.prop, op'.prop⟩)
+  intro s
+  simp only [Function.comp_apply]
+  have hF := h_opf.destruct_apply_eq_unfold (s := s)
+  generalize opf s = s' at *
+  cases s' with
+  | nil =>
+    symm at hF
+    simp only [destruct_nil, Option.map_eq_none_iff] at hF
+    simp only [hF, Option.map_map]
+    specialize hT nil
+    simp only [tail_nil, head_nil] at hT
+    simp [hT]
+    rfl
+  | cons s_hd s_tl =>
+  simp only [destruct_cons] at hF
+  generalize h_opf.unfold s.head = t? at *
+  cases t? with
+  | none => simp at hF
+  | some v =>
+  obtain ⟨hd, opf', op'⟩ := v
+  simp only [Option.map_some, Option.some.injEq, Prod.mk.injEq] at hF
+  simp only [hF, Option.map_map]
+  rw [hT]
+  rfl
 
 Depends on / 依赖: FriendlyOperation, FriendlyOperation.coind, FriendlyOperation.const, FriendlyOperation.id, _root_, _root_.id, h_base, h_op, h_opf, h_opf.unfold, h_step, motive
 -/
@@ -1377,7 +1633,18 @@ theorem FriendlyOperationClass.eq_of_bisim
     · simp
   intro n
   induction n generalizing s t with
-  | ze
+  | zero => simp
+  | succ n ih =>
+    obtain step | ⟨hd, u, v, c, rfl, rfl, h_next⟩ := step s t base
+    · simp [step]
+    simp only [dist_cons_cons]
+    specialize ih h_next
+    calc
+      _ <= 2⁻¹ * dist u v := by
+        gcongr
+        exact (FriendlyOperationClass.friend _).dist_le
+      _ <= _ := by
+        grw [ih, pow_succ']
 
 中文:
 定理 FriendlyOperation类.eq_of_bisim
@@ -1392,7 +1659,18 @@ theorem FriendlyOperationClass.eq_of_bisim
     · simp
   intro n
   induction n generalizing s t with
-  | ze
+  | zero => simp
+  | succ n ih =>
+    obtain step | ⟨hd, u, v, c, rfl, rfl, h_next⟩ := step s t base
+    · simp [step]
+    simp only [dist_cons_cons]
+    specialize ih h_next
+    calc
+      _ <= 2⁻¹ * dist u v := by
+        gcongr
+        exact (FriendlyOperationClass.friend _).dist_le
+      _ <= _ := by
+        grw [ih, pow_succ']
 
 Depends on / 依赖: Filter, Filter.atTop, FriendlyOperationClass, FriendlyOperationClass.friend, dist_, dist_cons_cons, eq_of_le_of_ge, friend, ge_of_tendsto, generalizing, h_next, specialize, tendsto_pow_atTop_nhds_zero_iff
 -/

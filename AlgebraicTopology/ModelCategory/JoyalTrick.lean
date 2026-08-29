@@ -47,7 +47,16 @@ lemma hasLiftingProperty_of_joyalTrick
       (pushout.desc p g sq.w)
     have sq' : CommSq (𝟙 X) (pushout.inl _ _ ≫ h.i) p h.p := .mk
     have h₁ : WeakEquivalence ((pushout.inl f i ≫ h.i) ≫ h.p) := by simpa
-    have h₂ := comp_mem _ _ _ ((cofibrations C).of_isPusho
+    have h₂ := comp_mem _ _ _ ((cofibrations C).of_isPushout
+      (IsPushout.of_hasPushout f i) (mem_cofibrations i)) h.hi
+    rw [← cofibration_iff] at h₂
+    have : WeakEquivalence (pushout.inl f i ≫ h.i) := by
+      rw [weakEquivalence_iff] at h₁ ⊢
+      exact of_postcomp _ _ _ h.hp.2 h₁
+    exact ⟨⟨{ l := pushout.inr f i ≫ h.i ≫ sq'.lift
+              fac_left := by
+                simpa only [assoc, comp_id, pushout.condition_assoc] using
+                  f ≫= sq'.fac_left }⟩⟩
 
 中文:
 引理 hasLiftingProperty_of_joyalTrick
@@ -56,7 +65,16 @@ lemma hasLiftingProperty_of_joyalTrick
       (pushout.desc p g sq.w)
     have sq' : CommSq (𝟙 X) (pushout.inl _ _ ≫ h.i) p h.p := .mk
     have h₁ : WeakEquivalence ((pushout.inl f i ≫ h.i) ≫ h.p) := by simpa
-    have h₂ := comp_mem _ _ _ ((cofibrations C).of_isPusho
+    have h₂ := comp_mem _ _ _ ((cofibrations C).of_isPushout
+      (IsPushout.of_hasPushout f i) (mem_cofibrations i)) h.hi
+    rw [← cofibration_iff] at h₂
+    have : WeakEquivalence (pushout.inl f i ≫ h.i) := by
+      rw [weakEquivalence_iff] at h₁ ⊢
+      exact of_postcomp _ _ _ h.hp.2 h₁
+    exact ⟨⟨{ l := pushout.inr f i ≫ h.i ≫ sq'.lift
+              fac_left := by
+                simpa only [assoc, comp_id, pushout.condition_assoc] using
+                  f ≫= sq'.fac_left }⟩⟩
 
 Depends on / 依赖: CommSq, IsPushout, IsPushout.of_hasPushout, WeakEquivalence, cofibration_iff, cofibrations, comp_mem, factorizationData, h.hi, h.hp, mem_cofibrations, of_hasPushout, of_isPushout, of_postcomp, pushout, pushout.desc, pushout.inl, sq.w, trivialFibrations, weakEquivalence_iff
 -/
@@ -95,7 +113,15 @@ lemma hasLiftingProperty_of_joyalTrickDual
       (pullback.lift f i sq.w)
     have sq' : CommSq h.i i (h.p ≫ pullback.snd _ _) (𝟙 B) := .mk
     have h₁ : WeakEquivalence (h.i ≫ h.p ≫ pullback.snd p g) := by simpa
-    have h₂ := comp_mem _ _ _ h.hp ((fibrations C).of_isP
+    have h₂ := comp_mem _ _ _ h.hp ((fibrations C).of_isPullback
+      (IsPullback.of_hasPullback p g) (mem_fibrations p))
+    rw [← fibration_iff] at h₂
+    have : WeakEquivalence (h.p ≫ pullback.snd p g) := by
+      rw [weakEquivalence_iff] at h₁ ⊢
+      exact of_precomp _ _ _ h.hi.2 h₁
+    exact ⟨⟨{ l := sq'.lift ≫ h.p ≫ pullback.fst p g
+              fac_right := by
+                rw [assoc]; rw [assoc]; rw [pullback.condition]; rw [reassoc_of% sq'.fac_right] }⟩⟩
 
 中文:
 引理 hasLiftingProperty_of_joyalTrickDual
@@ -104,7 +130,15 @@ lemma hasLiftingProperty_of_joyalTrickDual
       (pullback.lift f i sq.w)
     have sq' : CommSq h.i i (h.p ≫ pullback.snd _ _) (𝟙 B) := .mk
     have h₁ : WeakEquivalence (h.i ≫ h.p ≫ pullback.snd p g) := by simpa
-    have h₂ := comp_mem _ _ _ h.hp ((fibrations C).of_isP
+    have h₂ := comp_mem _ _ _ h.hp ((fibrations C).of_isPullback
+      (IsPullback.of_hasPullback p g) (mem_fibrations p))
+    rw [← fibration_iff] at h₂
+    have : WeakEquivalence (h.p ≫ pullback.snd p g) := by
+      rw [weakEquivalence_iff] at h₁ ⊢
+      exact of_precomp _ _ _ h.hi.2 h₁
+    exact ⟨⟨{ l := sq'.lift ≫ h.p ≫ pullback.fst p g
+              fac_right := by
+                rw [assoc]; rw [assoc]; rw [pullback.condition]; rw [reassoc_of% sq'.fac_right] }⟩⟩
 
 Depends on / 依赖: CommSq, IsPullback, IsPullback.of_hasPullback, WeakEquivalence, comp_mem, factorizationData, fibration_iff, fibrations, h.hi, h.hp, mem_fibrations, of_hasPullback, of_isPullback, of_precomp, pullback, pullback.lift, pullback.snd, sq.w, trivialCofibrations, weakEquivalence_iff
 -/

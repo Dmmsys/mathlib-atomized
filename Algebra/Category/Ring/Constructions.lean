@@ -56,7 +56,10 @@ definition pushoutCocone
 · exact ofHom Algebra.TensorProduct.includeRight.toRingHom (A := B)
   · ext r
     trans algebraMap R (A otimes[R] B) r
-    · exact Algebra.TensorProduct.includ
+    · exact Algebra.TensorProduct.includeLeft.commutes (R := R) r
+    · exact (Algebra.TensorProduct.includeRight.commutes (R := R) r).symm
+
+@[simp]
 
 中文:
 定义 pushoutCocone
@@ -68,7 +71,10 @@ definition pushoutCocone
 · exact ofHom Algebra.TensorProduct.includeRight.toRingHom (A := B)
   · ext r
     trans algebraMap R (A otimes[R] B) r
-    · exact Algebra.TensorProduct.includ
+    · exact Algebra.TensorProduct.includeLeft.commutes (R := R) r
+    · exact (Algebra.TensorProduct.includeRight.commutes (R := R) r).symm
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeLeft.commutes, Algebra.TensorProduct.includeLeftRingHom, Algebra.TensorProduct.includeRight.commutes, Algebra.TensorProduct.includeRight.toRingHom, CommRingCat, CommRingCat.of, Limits, Limits.PushoutCocone.mk, PushoutCocone, TensorProduct, algebraMap, commutes, fapply, includeLeft, includeLeftRingHom, includeRight, otimes, toRingHom
 -/
@@ -155,7 +161,38 @@ definition pushoutCoconeIsColimit
         commutes' := fun r => rfl }
     let g' : B ->ₐ[R] s.pt :=
       { s.inr.hom with
-commutes' := DFunLike.congr_fun congrArg Hom.
+commutes' := DFunLike.congr_fun congrArg Hom.hom
+          ((s.ι.naturality Limits.WalkingSpan.Hom.snd).trans
+            (s.ι.naturality Limits.WalkingSpan.Hom.fst).symm) }
+    letI : Algebra R (pushoutCocone R A B).pt := show Algebra R (A otimes[R] B) by infer_instance
+    -- The factor map is a ⊗ b ↦ f(a) * g(b).
+    use ofHom (AlgHom.toRingHom (Algebra.TensorProduct.productMap f' g'))
+    simp only [pushoutCocone_inl, pushoutCocone_inr]
+    constructor
+    · ext x
+      exact Algebra.TensorProduct.productMap_left_apply (A := A) _ _ x
+    constructor
+    · ext x
+      exact Algebra.TensorProduct.productMap_right_apply (B := B) _ _ x
+    intro h eq1 eq2
+    let h' : A otimes[R] B ->ₐ[R] s.pt :=
+      { h.hom with
+        commutes' := fun r => by
+          change h (algebraMap R A r otimesₜ[R] 1) = s.inl (algebraMap R A r)
+          rw [← eq1]
+          simp only [pushoutCocone_pt, coe_of]
+          rfl }
+    suffices h' = Algebra.TensorProduct.productMap f' g' by
+      ext x
+      change h' x = Algebra.TensorProduct.productMap f' g' x
+      rw [this]
+    apply Algebra.TensorProduct.ext'
+    intro a b
+    simp only [f', g', ← eq1, pushoutCocone_pt, ← eq2, AlgHom.toRingHom_eq_coe,
+      Algebra.TensorProduct.productMap_apply_tmul, AlgHom.coe_mk]
+    change _ = h (a otimesₜ 1) * h (1 otimesₜ b)
+    rw [← h.hom.map_mul]; rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_one]; rw [one_mul]
+    rfl
 
 中文:
 定义 pushoutCoconeIsColimit
@@ -167,7 +204,38 @@ commutes' := DFunLike.congr_fun congrArg Hom.
         commutes' := fun r => rfl }
     let g' : B ->ₐ[R] s.pt :=
       { s.inr.hom with
-commutes' := DFunLike.congr_fun congrArg Hom.
+commutes' := DFunLike.congr_fun congrArg Hom.hom
+          ((s.ι.naturality Limits.WalkingSpan.Hom.snd).trans
+            (s.ι.naturality Limits.WalkingSpan.Hom.fst).symm) }
+    letI : Algebra R (pushoutCocone R A B).pt := show Algebra R (A otimes[R] B) by infer_instance
+    -- The factor map is a ⊗ b ↦ f(a) * g(b).
+    use ofHom (AlgHom.toRingHom (Algebra.TensorProduct.productMap f' g'))
+    simp only [pushoutCocone_inl, pushoutCocone_inr]
+    constructor
+    · ext x
+      exact Algebra.TensorProduct.productMap_left_apply (A := A) _ _ x
+    constructor
+    · ext x
+      exact Algebra.TensorProduct.productMap_right_apply (B := B) _ _ x
+    intro h eq1 eq2
+    let h' : A otimes[R] B ->ₐ[R] s.pt :=
+      { h.hom with
+        commutes' := fun r => by
+          change h (algebraMap R A r otimesₜ[R] 1) = s.inl (algebraMap R A r)
+          rw [← eq1]
+          simp only [pushoutCocone_pt, coe_of]
+          rfl }
+    suffices h' = Algebra.TensorProduct.productMap f' g' by
+      ext x
+      change h' x = Algebra.TensorProduct.productMap f' g' x
+      rw [this]
+    apply Algebra.TensorProduct.ext'
+    intro a b
+    simp only [f', g', ← eq1, pushoutCocone_pt, ← eq2, AlgHom.toRingHom_eq_coe,
+      Algebra.TensorProduct.productMap_apply_tmul, AlgHom.coe_mk]
+    change _ = h (a otimesₜ 1) * h (1 otimesₜ b)
+    rw [← h.hom.map_mul]; rw [Algebra.TensorProduct.tmul_mul_tmul]; rw [mul_one]; rw [one_mul]
+    rfl
 
 Depends on / 依赖: Algebra, DFunLike, DFunLike.congr_fun, Hom.hom, Limits, Limits.PushoutCocone.isColimitAux, Limits.WalkingSpan.Hom.fst, Limits.WalkingSpan.Hom.snd, PushoutCocone, RingHom, RingHom.toAlgebra, WalkingSpan, algebraMap, commutes, congr_fun, infer_instance, isColimitAux, naturality, otimes, pushoutCocone
 -/
@@ -284,7 +352,21 @@ lemma isPushout_iff_isPushout
   let e : R' otimes[R] S ≃+* S' := ((CommRingCat.isPushout_tensorProduct R R' S).isoPushout ≪≫
       h.isoPushout.symm).commRingCatIsoToRingEquiv
   have h2 (r : R') : (CommRingCat.isPushout_tensorProduct R R' S).isoPushout.hom
-      (r ot
+      (r otimesₜ 1) = (pushout.inl (ofHom _) (ofHom _)) r :=
+    congr($((CommRingCat.isPushout_tensorProduct R R' S).inl_isoPushout_hom).hom r)
+  have h3 (x : R') := congr($(h.inl_isoPushout_inv) x)
+  dsimp only [hom_comp, RingHom.coe_comp, Function.comp_apply, hom_ofHom] at h3
+  let e' : R' otimes[R] S ≃ₐ[R'] S' := {
+    __ := e
+    commutes' r := by simp [Iso.commRingCatIsoToRingEquiv, h2, e, h3] }
+  refine Algebra.IsPushout.of_equiv e' ?_
+  ext s
+  have h1 : (CommRingCat.isPushout_tensorProduct R R' S).isoPushout.hom
+      (algebraMap S (R' otimes[R] S) s) = (pushout.inr (ofHom _) (ofHom _)) s :=
+    congr($((CommRingCat.isPushout_tensorProduct R R' S).inr_isoPushout_hom).hom s)
+  have h4 (x : S) := congr($(h.inr_isoPushout_inv) x)
+  dsimp only [hom_comp, RingHom.coe_comp, Function.comp_apply, hom_ofHom] at h4
+  simp [Iso.commRingCatIsoToRingEquiv, h1, e', e, h4]
 
 中文:
 引理 isPushout_iff_isPushout
@@ -294,7 +376,21 @@ lemma isPushout_iff_isPushout
   let e : R' otimes[R] S ≃+* S' := ((CommRingCat.isPushout_tensorProduct R R' S).isoPushout ≪≫
       h.isoPushout.symm).commRingCatIsoToRingEquiv
   have h2 (r : R') : (CommRingCat.isPushout_tensorProduct R R' S).isoPushout.hom
-      (r ot
+      (r otimesₜ 1) = (pushout.inl (ofHom _) (ofHom _)) r :=
+    congr($((CommRingCat.isPushout_tensorProduct R R' S).inl_isoPushout_hom).hom r)
+  have h3 (x : R') := congr($(h.inl_isoPushout_inv) x)
+  dsimp only [hom_comp, RingHom.coe_comp, Function.comp_apply, hom_ofHom] at h3
+  let e' : R' otimes[R] S ≃ₐ[R'] S' := {
+    __ := e
+    commutes' r := by simp [Iso.commRingCatIsoToRingEquiv, h2, e, h3] }
+  refine Algebra.IsPushout.of_equiv e' ?_
+  ext s
+  have h1 : (CommRingCat.isPushout_tensorProduct R R' S).isoPushout.hom
+      (algebraMap S (R' otimes[R] S) s) = (pushout.inr (ofHom _) (ofHom _)) s :=
+    congr($((CommRingCat.isPushout_tensorProduct R R' S).inr_isoPushout_hom).hom s)
+  have h4 (x : S) := congr($(h.inr_isoPushout_inv) x)
+  dsimp only [hom_comp, RingHom.coe_comp, Function.comp_apply, hom_ofHom] at h4
+  simp [Iso.commRingCatIsoToRingEquiv, h1, e', e, h4]
 
 Depends on / 依赖: CommRingCat, CommRingCat.isPushout_tensorProduct, RingHom, RingHom.coe_c, coe_c, commRingCatIsoToRingEquiv, h.inl_isoPushout_inv, h.isoPushout.symm, hom_comp, inl_isoPushout_hom, inl_isoPushout_inv, isPushout_of_isPushout, isPushout_tensorProduct, isoPushout, isoPushout.hom, otimes, pushout, pushout.inl
 -/
@@ -365,14 +461,20 @@ lemma closure_range_union_range_eq_top_of_isPushout
   proof: by
   algebraize [f.hom, g.hom]
   let e := ((isPushout_tensorProduct R A B).isoIsPushout A B H).commRingCatIsoToRingEquiv
-  rw [← Subring.comap_map_eq_self_of_injective e.symm.injective (.closure _)]; rw [RingHom.map_closure]; rw [← top_le_iff]; rw [← Subring.map_le_iff_le_comap]; rw [Set.image_union
+  rw [← Subring.comap_map_eq_self_of_injective e.symm.injective (.closure _)]; rw [RingHom.map_closure]; rw [← top_le_iff]; rw [← Subring.map_le_iff_le_comap]; rw [Set.image_union]
+  simp only [AlgHom.toRingHom_eq_coe, ← Set.range_comp, ← RingHom.coe_comp]
+  rw [← hom_comp]; rw [← hom_comp]; rw [IsPushout.inl_isoIsPushout_inv]; rw [IsPushout.inr_isoIsPushout_inv]; rw [hom_ofHom]; rw [hom_ofHom]
+  exact le_top.trans (Algebra.TensorProduct.closure_range_union_range_eq_top R A B).ge
 
 中文:
 引理 closure_range_union_range_eq_top_of_isPushout
   证明: by
   algebraize [f.hom, g.hom]
   let e := ((isPushout_tensorProduct R A B).isoIsPushout A B H).commRingCatIsoToRingEquiv
-  rw [← Subring.comap_map_eq_self_of_injective e.symm.injective (.closure _)]; rw [RingHom.map_closure]; rw [← top_le_iff]; rw [← Subring.map_le_iff_le_comap]; rw [Set.image_union
+  rw [← Subring.comap_map_eq_self_of_injective e.symm.injective (.closure _)]; rw [RingHom.map_closure]; rw [← top_le_iff]; rw [← Subring.map_le_iff_le_comap]; rw [Set.image_union]
+  simp only [AlgHom.toRingHom_eq_coe, ← Set.range_comp, ← RingHom.coe_comp]
+  rw [← hom_comp]; rw [← hom_comp]; rw [IsPushout.inl_isoIsPushout_inv]; rw [IsPushout.inr_isoIsPushout_inv]; rw [hom_ofHom]; rw [hom_ofHom]
+  exact le_top.trans (Algebra.TensorProduct.closure_range_union_range_eq_top R A B).ge
 
 Depends on / 依赖: AlgHom, AlgHom.toRingHom_eq_coe, IsPushout, IsPushout.inl_isoIsPushout_inv, IsPushout.inr_isoIsPushout_inv, RingHom, RingHom.coe_comp, RingHom.map_closure, Set.image_union, Set.range_comp, Subring, Subring.comap_map_eq_self_of_injective, Subring.map_le_iff_le_comap, algebraize, closure, coe_comp, comap_map_eq_self_of_injective, commRingCatIsoToRingEquiv, e.symm.injective, f.hom
 -/
@@ -476,7 +578,16 @@ definition coproductCoconeIsColimit
   fac (s : BinaryCofan A B) := fun ⟨j⟩ => by cases j <;> ext a <;> simp
   uniq (s : BinaryCofan A B) := by
     rintro ⟨m : A otimes[Int] B ->+* s.pt⟩ hm
-    apply CommRing
+    apply CommRingCat.hom_ext
+    apply RingHom.toIntAlgHom_injective
+    apply Algebra.TensorProduct.liftEquiv.symm.injective
+    apply Subtype.ext
+    rw [Algebra.TensorProduct.liftEquiv_symm_apply_coe]; rw [Prod.mk.injEq]
+    constructor
+    · ext a
+      simp [map_one, mul_one, ← hm (Discrete.mk WalkingPair.left)]
+    · ext b
+      simp [map_one, ← hm (Discrete.mk WalkingPair.right)]
 
 中文:
 定义 coproductCoconeIsColimit
@@ -486,7 +597,16 @@ definition coproductCoconeIsColimit
   fac (s : BinaryCofan A B) := fun ⟨j⟩ => by cases j <;> ext a <;> simp
   uniq (s : BinaryCofan A B) := by
     rintro ⟨m : A otimes[Int] B ->+* s.pt⟩ hm
-    apply CommRing
+    apply CommRingCat.hom_ext
+    apply RingHom.toIntAlgHom_injective
+    apply Algebra.TensorProduct.liftEquiv.symm.injective
+    apply Subtype.ext
+    rw [Algebra.TensorProduct.liftEquiv_symm_apply_coe]; rw [Prod.mk.injEq]
+    constructor
+    · ext a
+      simp [map_one, mul_one, ← hm (Discrete.mk WalkingPair.left)]
+    · ext b
+      simp [map_one, ← hm (Discrete.mk WalkingPair.right)]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lift, Algebra.TensorProduct.liftEquiv.symm.injective, Algebra.TensorProduct.liftEquiv_symm_apply_coe, BinaryCofan, CommRingCat, CommRingCat.hom_ext, Commute, Commute.all, Prod.mk.injEq, RingHom, RingHom.toIntAlgHom_injective, Subtype, Subtype.ext, TensorProduct, hom_ext, injective, liftEquiv, liftEquiv_symm_apply_coe, otimes
 -/
@@ -567,7 +687,8 @@ instance commRingCat_hasStrictTerminalObjects
     have e : (0 : X) = 1 := by
       rw [← f.hom.map_one]; rw [← f.hom.map_zero]
     replace e : 0 * x = 1 * x := congr_arg (· * x) e
-    rw [one_
+    rw [one_mul]; rw [zero_mul]; rw [← f.hom.map_zero] at e
+    exact e
 
 中文:
 实例 commRingCat_hasStrictTerminalObjects
@@ -581,7 +702,8 @@ instance commRingCat_hasStrictTerminalObjects
     have e : (0 : X) = 1 := by
       rw [← f.hom.map_one]; rw [← f.hom.map_zero]
     replace e : 0 * x = 1 * x := congr_arg (· * x) e
-    rw [one_
+    rw [one_mul]; rw [zero_mul]; rw [← f.hom.map_zero] at e
+    exact e
 
 Depends on / 依赖: CommRingCat, CommRingCat.of, congr_arg, f.hom.map_one, f.hom.map_zero, hasStrictTerminalObjects_of_terminal_is_strict, map_one, map_zero, one_mul, replace, zero_mul
 -/
@@ -652,7 +774,7 @@ definition isInitial
       ext : 1
       rw [← RingHom.cancel_right (f := (ULift.ringEquiv.{0]; rw [u} (R := Int)).symm.toRingHom)
         (hf := ULift.ringEquiv.symm.surjective)]
-      apply RingHom.ext_int
+      apply RingHom.ext_int⟩)
 
 中文:
 定义 isInitial
@@ -662,7 +784,7 @@ definition isInitial
       ext : 1
       rw [← RingHom.cancel_right (f := (ULift.ringEquiv.{0]; rw [u} (R := Int)).symm.toRingHom)
         (hf := ULift.ringEquiv.symm.surjective)]
-      apply RingHom.ext_int
+      apply RingHom.ext_int⟩)
 
 Depends on / 依赖: Int.castRingHom, IsInitial, IsInitial.ofUnique, RingHom, RingHom.cancel_right, RingHom.ext_int, ULift.ringEquiv, ULift.ringEquiv.symm.surjective, ULift.ringEquiv.toRingHom, cancel_right, castRingHom, ext_int, ofUnique, ringEquiv, surjective, symm.toRingHom, toRingHom
 -/
@@ -715,7 +837,13 @@ definition prodFanIsLimit
     simp only [pair_obj_left, prodFan_pt, BinaryFan.π_app_left, BinaryFan.π_app_right] <;> rfl
   uniq s m h := by
     ext x
-    change m x = (BinaryFan.fst s x, Bi
+    change m x = (BinaryFan.fst s x, BinaryFan.snd s x)
+    have eq1 : (m ≫ (A.prodFan B).fst) x = (BinaryFan.fst s) x :=
+      ConcreteCategory.congr_hom (h ⟨WalkingPair.left⟩) x
+    have eq2 : (m ≫ (A.prodFan B).snd) x = (BinaryFan.snd s) x :=
+      ConcreteCategory.congr_hom (h ⟨WalkingPair.right⟩) x
+    rw [← eq1]; rw [← eq2]
+    simp [prodFan]
 
 中文:
 定义 prodFanIsLimit
@@ -727,7 +855,13 @@ definition prodFanIsLimit
     simp only [pair_obj_left, prodFan_pt, BinaryFan.π_app_left, BinaryFan.π_app_right] <;> rfl
   uniq s m h := by
     ext x
-    change m x = (BinaryFan.fst s x, Bi
+    change m x = (BinaryFan.fst s x, BinaryFan.snd s x)
+    have eq1 : (m ≫ (A.prodFan B).fst) x = (BinaryFan.fst s) x :=
+      ConcreteCategory.congr_hom (h ⟨WalkingPair.left⟩) x
+    have eq2 : (m ≫ (A.prodFan B).snd) x = (BinaryFan.snd s) x :=
+      ConcreteCategory.congr_hom (h ⟨WalkingPair.right⟩) x
+    rw [← eq1]; rw [← eq2]
+    simp [prodFan]
 
 Depends on / 依赖: RingHom, RingHom.prod, WalkingPair, WalkingPair.left, WalkingPair.right
 -/
@@ -860,7 +994,20 @@ theorem isUnit_iff_forall_isUnit
   have map_inv {j k : J} (f : j ⟶ k) : F.map f (inv j) = inv k := by
     have h := congr(F.map f $(h_inv j))
     have : F.map f (c.π.app j r) = c.π.app k r :=
-      DFunLike.congr_fun 
+      DFunLike.congr_fun (congr(Hom.hom $(c.w f))) r
+    rw [map_mul]; rw [map_one]; rw [this] at h
+    rw [← mul_one (F.map f (inv j))]; rw [← h_inv k]; rw [← mul_assoc]
+    nth_rw 2 [mul_comm]; rw [h, one_mul]
+  let inv_r : Cone F := .mk (CommRingCat.of (FreeCommRing PUnit)) {
+    app j := ConcreteCategory.ofHom (FreeCommRing.lift (fun _ => inv j))
+    naturality j k f := by
+      ext1; change FreeCommRing.lift (fun _ => inv k) = _
+      ext; simp [map_inv f] }
+  use hc.lift inv_r (FreeCommRing.of PUnit.unit)
+  refine Concrete.isLimit_ext _ hc _ _ fun j => ?_
+  rw [RingHom.map_mul]; rw [RingHom.map_one]; convert h_inv j
+  change (hc.lift inv_r ≫ c.π.app j) (FreeCommRing.of PUnit.unit) = inv j
+  rw [IsLimit.fac]; exact FreeCommRing.lift_of ..
 
 中文:
 定理 isUnit_iff_对任意_isUnit
@@ -873,7 +1020,20 @@ theorem isUnit_iff_forall_isUnit
   have map_inv {j k : J} (f : j ⟶ k) : F.map f (inv j) = inv k := by
     have h := congr(F.map f $(h_inv j))
     have : F.map f (c.π.app j r) = c.π.app k r :=
-      DFunLike.congr_fun 
+      DFunLike.congr_fun (congr(Hom.hom $(c.w f))) r
+    rw [map_mul]; rw [map_one]; rw [this] at h
+    rw [← mul_one (F.map f (inv j))]; rw [← h_inv k]; rw [← mul_assoc]
+    nth_rw 2 [mul_comm]; rw [h, one_mul]
+  let inv_r : Cone F := .mk (CommRingCat.of (FreeCommRing PUnit)) {
+    app j := ConcreteCategory.ofHom (FreeCommRing.lift (fun _ => inv j))
+    naturality j k f := by
+      ext1; change FreeCommRing.lift (fun _ => inv k) = _
+      ext; simp [map_inv f] }
+  use hc.lift inv_r (FreeCommRing.of PUnit.unit)
+  refine Concrete.isLimit_ext _ hc _ _ fun j => ?_
+  rw [RingHom.map_mul]; rw [RingHom.map_one]; convert h_inv j
+  change (hc.lift inv_r ≫ c.π.app j) (FreeCommRing.of PUnit.unit) = inv j
+  rw [IsLimit.fac]; exact FreeCommRing.lift_of ..
 
 Depends on / 依赖: CommRingCat, CommRingCat.of, DFunLike, DFunLike.congr_fun, F.map, Hom.hom, congr_fun, h.map, h_inv, infer_instance, inv_r, isUnit_iff_exists_inv, map_inv, map_mul, map_one, mul_assoc, mul_comm, mul_one, nth_rw, one_mul
 -/
@@ -1067,7 +1227,7 @@ instance equalizer_ι_isLocalHom
   · exact ⟨zero, 𝟙 _, 𝟙 _, inferInstance, by simp⟩
   · refine ⟨one, 𝟙 _, left, inferInstance, ?_⟩
     simp only [CategoryTheory.Functor.map_id, hom_id, limit.cone_x, limit.cone_π, RingHom.id_apply]
-    ex
+    exact (limit.w_apply F left x).symm
 
 中文:
 实例 equalizer_ι_isLocalHom
@@ -1078,7 +1238,7 @@ instance equalizer_ι_isLocalHom
   · exact ⟨zero, 𝟙 _, 𝟙 _, inferInstance, by simp⟩
   · refine ⟨one, 𝟙 _, left, inferInstance, ?_⟩
     simp only [CategoryTheory.Functor.map_id, hom_id, limit.cone_x, limit.cone_π, RingHom.id_apply]
-    ex
+    exact (limit.w_apply F left x).symm
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, Functor, IsFinitePresentation, IsFinitePresentation.exists_quasicoherentData, Limits, RingHom, RingHom.id_apply, cone_x, exists_quasicoherentData, hom_id, id_apply, isLimit, limit.cone_, limit.cone_x, limit.isLimit, limit.w_apply, map_id, w_apply
 -/
@@ -1122,7 +1282,8 @@ instance equalizer_ι_isLocalHom'
   · refine ⟨op zero, 𝟙 _, op left, inferInstance, ?_⟩
     simp only [CategoryTheory.Functor.map_id, hom_id, limit.cone_x, limit.cone_π,
       RingHom.id_apply]
-    exact (limit.w_apply F (op left) x).
+    exact (limit.w_apply F (op left) x).symm
+  · exact ⟨op one, 𝟙 _, 𝟙 _, inferInstance, by simp⟩
 
 中文:
 实例 equalizer_ι_isLocalHom'
@@ -1133,7 +1294,8 @@ instance equalizer_ι_isLocalHom'
   · refine ⟨op zero, 𝟙 _, op left, inferInstance, ?_⟩
     simp only [CategoryTheory.Functor.map_id, hom_id, limit.cone_x, limit.cone_π,
       RingHom.id_apply]
-    exact (limit.w_apply F (op left) x).
+    exact (limit.w_apply F (op left) x).symm
+  · exact ⟨op one, 𝟙 _, 𝟙 _, inferInstance, by simp⟩
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, Functor, Limits, RingHom, RingHom.id_apply, cone_x, hom_id, id_apply, isLimit, limit.cone_, limit.cone_x, limit.isLimit, limit.w_apply, map_id, w_apply
 -/
@@ -1165,7 +1327,10 @@ definition pullbackCone
         (RingHom.eqLocus (f.hom.comp (RingHom.fst A B)) (g.hom.comp (RingHom.snd A B))).subtype)
     (CommRingCat.ofHom <|
       (RingHom.snd A B).comp
-        (RingHom.eqLocus (f.hom.comp (RingHom.fst A B)) (g.hom.comp (RingHom.
+        (RingHom.eqLocus (f.hom.comp (RingHom.fst A B)) (g.hom.comp (RingHom.snd A B))).subtype)
+    (by
+      ext ⟨x, e⟩
+      simpa [CommRingCat.ofHom] using e)
 
 中文:
 定义 pullbackCone
@@ -1176,7 +1341,10 @@ definition pullbackCone
         (RingHom.eqLocus (f.hom.comp (RingHom.fst A B)) (g.hom.comp (RingHom.snd A B))).subtype)
     (CommRingCat.ofHom <|
       (RingHom.snd A B).comp
-        (RingHom.eqLocus (f.hom.comp (RingHom.fst A B)) (g.hom.comp (RingHom.
+        (RingHom.eqLocus (f.hom.comp (RingHom.fst A B)) (g.hom.comp (RingHom.snd A B))).subtype)
+    (by
+      ext ⟨x, e⟩
+      simpa [CommRingCat.ofHom] using e)
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, PullbackCone, PullbackCone.mk, RingHom, RingHom.eqLocus, RingHom.fst, RingHom.snd, eqLocus, f.hom.comp, g.hom.comp, subtype
 -/
@@ -1211,7 +1379,12 @@ definition pullbackConeIsLimit
     ext x
     rfl
   · intro s m e₁ e₂
-refine hom_ext Ri
+refine hom_ext RingHom.ext fun (x : s.pt) => Subtype.ext ?_
+    change (m x).1 = (_, _)
+    have eq1 := (congr_arg (fun f : s.pt ->+* A => f x) (congrArg Hom.hom e₁) :)
+    have eq2 := (congr_arg (fun f : s.pt ->+* B => f x) (congrArg Hom.hom e₂) :)
+    rw [← eq1]; rw [← eq2]
+    rfl
 
 中文:
 定义 pullbackConeIsLimit
@@ -1229,7 +1402,12 @@ refine hom_ext Ri
     ext x
     rfl
   · intro s m e₁ e₂
-refine hom_ext Ri
+refine hom_ext RingHom.ext fun (x : s.pt) => Subtype.ext ?_
+    change (m x).1 = (_, _)
+    have eq1 := (congr_arg (fun f : s.pt ->+* A => f x) (congrArg Hom.hom e₁) :)
+    have eq2 := (congr_arg (fun f : s.pt ->+* B => f x) (congrArg Hom.hom e₂) :)
+    rw [← eq1]; rw [← eq2]
+    rfl
 
 Depends on / 依赖: Hom.hom, IsLimit, PullbackCone, PullbackCone.IsLimit.mk, RingHom, RingHom.ext, Subtype, Subtype.ext, codRestrict, condition, congr_arg, fapply, hom_ext, s.condition, s.fst.hom.prod, s.pt, s.snd.hom
 -/
@@ -1268,7 +1446,7 @@ instance pullbackFst_isLocalHom
   · exact ⟨one, 𝟙 _, Hom.inl, inferInstance, by simp; rfl⟩
   · exact ⟨left, 𝟙 _, 𝟙 _, inferInstance, by simp⟩
   · refine ⟨one, Hom.inr, Hom.inl, ‹_›, ?_⟩
-.symm exact DFunLike.congr_fun (congr(Hom.hom 
+.symm exact DFunLike.congr_fun (congr(Hom.hom $(pullback.condition (f := f) (g := g)))) x
 
 中文:
 实例 pullbackFst_isLocalHom
@@ -1279,7 +1457,7 @@ instance pullbackFst_isLocalHom
   · exact ⟨one, 𝟙 _, Hom.inl, inferInstance, by simp; rfl⟩
   · exact ⟨left, 𝟙 _, 𝟙 _, inferInstance, by simp⟩
   · refine ⟨one, Hom.inr, Hom.inl, ‹_›, ?_⟩
-.symm exact DFunLike.congr_fun (congr(Hom.hom 
+.symm exact DFunLike.congr_fun (congr(Hom.hom $(pullback.condition (f := f) (g := g)))) x
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, Hom.hom, Hom.inl, Hom.inr, Limits, condition, congr_fun, isLimit, limit.isLimit, pullback, pullback.condition
 -/

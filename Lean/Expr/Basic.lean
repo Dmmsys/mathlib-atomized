@@ -214,7 +214,7 @@ definition isBlackListed
 pure declName.isInternalDetail
    || isAuxRecursor env declName
    || isNoConfusion env declName
- isRec declName isMat
+ isRec declName isMatcher declName
 
 中文:
 定义 isBlackListed
@@ -227,7 +227,7 @@ pure declName.isInternalDetail
 pure declName.isInternalDetail
    || isAuxRecursor env declName
    || isNoConfusion env declName
- isRec declName isMat
+ isRec declName isMatcher declName
 -/
 def isBlackListed {m} [Monad m] [MonadEnv m] (declName : Name) : m Bool := do
   if declName == ``sorryAx then return true
@@ -753,7 +753,10 @@ definition numeral?
     if !f.isConst then none
     else
       let fName := f.constName!
-      if fName == ``Nat.succ && e.getAppNumArgs == 1 then (numeral? 
+      if fName == ``Nat.succ && e.getAppNumArgs == 1 then (numeral? e.appArg!).map Nat.succ
+      else if fName == ``OfNat.ofNat && e.getAppNumArgs == 3 then numeral? (e.getArg! 1)
+      else if fName == ``Nat.zero && e.getAppNumArgs == 0 then some 0
+      else none
 
 中文:
 定义 numeral?
@@ -765,7 +768,10 @@ definition numeral?
     if !f.isConst then none
     else
       let fName := f.constName!
-      if fName == ``Nat.succ && e.getAppNumArgs == 1 then (numeral? 
+      if fName == ``Nat.succ && e.getAppNumArgs == 1 then (numeral? e.appArg!).map Nat.succ
+      else if fName == ``OfNat.ofNat && e.getAppNumArgs == 3 then numeral? (e.getArg! 1)
+      else if fName == ``Nat.zero && e.getAppNumArgs == 0 then some 0
+      else none
 -/
 partial def numeral? (e : Expr) : Option Nat :=
   if let some n := e.rawNatLit? then n
@@ -1056,7 +1062,9 @@ definition renameBVar
   | lam n ty bd bi =>
     lam (if n == old then new else n) (ty.renameBVar old new) (bd.renameBVar old new) bi
   | forallE n ty bd bi =>
-    forallE (if n == old then new else n) (ty.renameBVar old new) (bd.renameBVa
+    forallE (if n == old then new else n) (ty.renameBVar old new) (bd.renameBVar old new) bi
+  | mdata d e' => mdata d (e'.renameBVar old new)
+  | e => e
 
 中文:
 定义 renameBVar
@@ -1066,7 +1074,9 @@ definition renameBVar
   | lam n ty bd bi =>
     lam (if n == old then new else n) (ty.renameBVar old new) (bd.renameBVar old new) bi
   | forallE n ty bd bi =>
-    forallE (if n == old then new else n) (ty.renameBVar old new) (bd.renameBVa
+    forallE (if n == old then new else n) (ty.renameBVar old new) (bd.renameBVar old new) bi
+  | mdata d e' => mdata d (e'.renameBVar old new)
+  | e => e
 
 Depends on / 依赖: arg.renameBVar, bd.renameBVar, fn.renameBVar, forallE, renameBVar, ty.renameBVar
 -/
@@ -1131,7 +1141,7 @@ definition mkDirectProjection
   let .const structName us := type.getAppFn | throwError "{e} doesn't have a structure as type"
   let some projName := getProjFnForField? (← getEnv) structName fieldName |
     throwError "{structName} doesn't have field {fieldName}"
-  return mkAppN (.const projNa
+  return mkAppN (.const projName us) (type.getAppArgs.push e)
 
 中文:
 定义 mkDirectProjection
@@ -1141,7 +1151,7 @@ definition mkDirectProjection
   let .const structName us := type.getAppFn | throwError "{e} doesn't have a structure as type"
   let some projName := getProjFnForField? (← getEnv) structName fieldName |
     throwError "{structName} doesn't have field {fieldName}"
-  return mkAppN (.const projNa
+  return mkAppN (.const projName us) (type.getAppArgs.push e)
 -/
 def mkDirectProjection (e : Expr) (fieldName : Name) : MetaM Expr := do
   let type ← whnf (← inferType e)
@@ -1162,7 +1172,11 @@ definition mkProjection
   let some baseStruct := findField? (← getEnv) structName fieldName |
     throwError "No parent of {structName} has field {fieldName}"
   let mut e := e
-  for projName in (getPath
+  for projName in (getPathToBaseStructure? (← getEnv) baseStruct structName).get! do
+    let type ← whnf (← inferType e)
+    let .const _structName us := type.getAppFn | throwError "{e} doesn't have a structure as type"
+    e := mkAppN (.const projName us) (type.getAppArgs.push e)
+  mkDirectProjection e fieldName
 
 中文:
 定义 mkProjection
@@ -1173,7 +1187,11 @@ definition mkProjection
   let some baseStruct := findField? (← getEnv) structName fieldName |
     throwError "No parent of {structName} has field {fieldName}"
   let mut e := e
-  for projName in (getPath
+  for projName in (getPathToBaseStructure? (← getEnv) baseStruct structName).get! do
+    let type ← whnf (← inferType e)
+    let .const _structName us := type.getAppFn | throwError "{e} doesn't have a structure as type"
+    e := mkAppN (.const projName us) (type.getAppArgs.push e)
+  mkDirectProjection e fieldName
 -/
 def mkProjection (e : Expr) (fieldName : Name) : MetaM Expr := do
   let .const structName _ := (← whnf (← inferType e)).getAppFn |
@@ -1199,7 +1217,20 @@ definition reduceProjStruct?
   let args := e.getAppArgs
   if ha : args.size = pinfo.numParams + 1 then
     -- The last argument of a projection is the structure.
-    let sarg := args[pinfo.numParams]'(ha ▸ pinfo.numPa
+    let sarg := args[pinfo.numParams]'(ha ▸ pinfo.numParams.lt_succ_self)
+    -- Check that the structure is a constructor expression.
+    unless sarg.getAppFn.isConstOf pinfo.ctorName do
+      return none
+    let sfields := sarg.getAppArgs
+    -- The ith projection extracts the ith field of the constructor
+    let sidx := pinfo.numParams + pinfo.i
+    if hs : sidx < sfields.size then
+      return some (sfields[sidx]'hs)
+    else
+      throwError m!"ill-formed expression, {cname} is the {pinfo.i + 1}-th projection function \
+        but {sarg} does not have enough arguments"
+  else
+    return none
 
 中文:
 定义 reduceProjStruct?
@@ -1210,7 +1241,20 @@ definition reduceProjStruct?
   let args := e.getAppArgs
   if ha : args.size = pinfo.numParams + 1 then
     -- The last argument of a projection is the structure.
-    let sarg := args[pinfo.numParams]'(ha ▸ pinfo.numPa
+    let sarg := args[pinfo.numParams]'(ha ▸ pinfo.numParams.lt_succ_self)
+    -- Check that the structure is a constructor expression.
+    unless sarg.getAppFn.isConstOf pinfo.ctorName do
+      return none
+    let sfields := sarg.getAppArgs
+    -- The ith projection extracts the ith field of the constructor
+    let sidx := pinfo.numParams + pinfo.i
+    if hs : sidx < sfields.size then
+      return some (sfields[sidx]'hs)
+    else
+      throwError m!"ill-formed expression, {cname} is the {pinfo.i + 1}-th projection function \
+        but {sarg} does not have enough arguments"
+  else
+    return none
 -/
 def reduceProjStruct? (e : Expr) : MetaM (Option Expr) := do
   let .const cname _ := e.getAppFn | return none

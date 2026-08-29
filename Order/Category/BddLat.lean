@@ -764,7 +764,20 @@ definition latToBddLatForgetAdjunction
             { toFun := f ∘ some ∘ some
               map_sup' := fun a b => (congr_arg f <| by rfl).trans (f.hom.map_sup' _ _)
               map_inf' := fun a b => (congr_arg f <| by rfl).trans (f.hom.map_inf' _ _) }
-invFun
+invFun f := BddLat.ofHom LatticeHom.withTopWithBot' f.hom
+          left_inv := fun f =>
+            BddLat.ext fun a =>
+              match a with
+              | none => f.hom.map_top'.symm
+              | some none => f.hom.map_bot'.symm
+              | some (some _) => rfl }
+      homEquiv_naturality_left_symm := fun _ _ =>
+        BddLat.ext fun a =>
+          match a with
+          | none => rfl
+          | some none => rfl
+          | some (some _) => rfl
+      homEquiv_naturality_right := fun _ _ => Lat.ext fun _ => rfl }
 
 中文:
 定义 latToBddLatForgetAdjunction
@@ -775,7 +788,20 @@ invFun
             { toFun := f ∘ some ∘ some
               map_sup' := fun a b => (congr_arg f <| by rfl).trans (f.hom.map_sup' _ _)
               map_inf' := fun a b => (congr_arg f <| by rfl).trans (f.hom.map_inf' _ _) }
-invFun
+invFun f := BddLat.ofHom LatticeHom.withTopWithBot' f.hom
+          left_inv := fun f =>
+            BddLat.ext fun a =>
+              match a with
+              | none => f.hom.map_top'.symm
+              | some none => f.hom.map_bot'.symm
+              | some (some _) => rfl }
+      homEquiv_naturality_left_symm := fun _ _ =>
+        BddLat.ext fun a =>
+          match a with
+          | none => rfl
+          | some none => rfl
+          | some (some _) => rfl
+      homEquiv_naturality_right := fun _ _ => Lat.ext fun _ => rfl }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, BddLat, BddLat.ext, BddLat.ofHom, Lat.ofHom, LatticeHom, LatticeHom.withTopWithBot, congr_arg, f.hom, f.hom.map_bot, f.hom.map_inf, f.hom.map_sup, f.hom.map_top, homEquiv, homEquiv_naturality_left_symm, invFun, left_inv, map_bot, map_inf
 -/

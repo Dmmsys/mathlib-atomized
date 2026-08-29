@@ -186,7 +186,11 @@ theorem Commute.minimalPeriod_of_comp_eq_mul_of_coprime
       Commute f g ->
         Coprime (minimalPeriod f x) (minimalPeriod g x) ->
           minimalPeriod f x ∣ minimalPeriod (f ∘ g) x from
-    hco.mul_dvd_of_dvd_of_dvd (this h hco) (h.comp_eq.symm ▸ this h.symm hc
+    hco.mul_dvd_of_dvd_of_dvd (this h hco) (h.comp_eq.symm ▸ this h.symm hco.symm)
+  intro f g h hco
+  refine hco.dvd_of_dvd_mul_left (IsPeriodicPt.left_of_comp h ?_ ?_).minimalPeriod_dvd
+  · exact (isPeriodicPt_minimalPeriod _ _).const_mul _
+  · exact (isPeriodicPt_minimalPeriod _ _).mul_const _
 
 中文:
 定理 Commute.minimalPeriod_of_comp_eq_mul_of_coprime
@@ -197,7 +201,11 @@ theorem Commute.minimalPeriod_of_comp_eq_mul_of_coprime
       Commute f g ->
         Coprime (minimalPeriod f x) (minimalPeriod g x) ->
           minimalPeriod f x ∣ minimalPeriod (f ∘ g) x from
-    hco.mul_dvd_of_dvd_of_dvd (this h hco) (h.comp_eq.symm ▸ this h.symm hc
+    hco.mul_dvd_of_dvd_of_dvd (this h hco) (h.comp_eq.symm ▸ this h.symm hco.symm)
+  intro f g h hco
+  refine hco.dvd_of_dvd_mul_left (IsPeriodicPt.left_of_comp h ?_ ?_).minimalPeriod_dvd
+  · exact (isPeriodicPt_minimalPeriod _ _).const_mul _
+  · exact (isPeriodicPt_minimalPeriod _ _).mul_const _
 
 Depends on / 依赖: Commute, Coprime, IsPeriodicPt, IsPeriodicPt.left_of_comp, antisymm, comp_eq, const_mul, dvd_of_dvd_mul_left, h.comp_eq.symm, h.minimalPeriod_of_comp_dvd_mul.antisymm, h.symm, hco.dvd_of_dvd_mul_left, hco.mul_dvd_of_dvd_of_dvd, hco.symm, isPeriodicPt_minimalPeriod, left_of_comp, minimalPeriod, minimalPeriod_dvd, minimalPeriod_of_comp_dvd_mul, mul_const
 -/
@@ -303,7 +311,7 @@ theorem Injective.mem_periodicPts
     simpa [Injective] using not_injective_infinite_finite (f^[·] x)
   rcases lt_or_gt_of_ne hne with hlt | hlt
   · exact mk_mem_periodicPts (by lia) (iterate_cancel h heq.symm)
-  · exact mk_mem_periodicPts (by lia) (iterate_
+  · exact mk_mem_periodicPts (by lia) (iterate_cancel h heq)
 
 中文:
 定理 单射.mem_periodicPts
@@ -314,7 +322,7 @@ theorem Injective.mem_periodicPts
     simpa [Injective] using not_injective_infinite_finite (f^[·] x)
   rcases lt_or_gt_of_ne hne with hlt | hlt
   · exact mk_mem_periodicPts (by lia) (iterate_cancel h heq.symm)
-  · exact mk_mem_periodicPts (by lia) (iterate_
+  · exact mk_mem_periodicPts (by lia) (iterate_cancel h heq)
 
 Depends on / 依赖: Injective, heq.symm, iterate_cancel, lt_or_gt_of_ne, mk_mem_periodicPts, not_injective_infinite_finite
 -/

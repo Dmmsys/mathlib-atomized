@@ -197,14 +197,14 @@ lemma num_div_den
   given: (A : Matrix m n Rat) (i : m) (j : n)
   proof: by
   obtain ⟨k, hk⟩ := den_dvd_iff.mp (dvd_refl A.den) i j
-  rw [Matrix.num]; rw [map_apply]; rw [smul_apply]; rw [smul_eq_mul]; rw [mul_comm]; rw [div_eq_iff Nat.cast_ne_zero.mpr A.den_ne_zero]; rw [hk]; rw [Nat.cast_mul]; rw [← mul_assoc]; rw [Rat.mul_den_eq_num]; rw [← Int.cast_natCast k]; rw [← 
+  rw [Matrix.num]; rw [map_apply]; rw [smul_apply]; rw [smul_eq_mul]; rw [mul_comm]; rw [div_eq_iff Nat.cast_ne_zero.mpr A.den_ne_zero]; rw [hk]; rw [Nat.cast_mul]; rw [← mul_assoc]; rw [Rat.mul_den_eq_num]; rw [← Int.cast_natCast k]; rw [← Int.cast_mul]; rw [Rat.num_intCast]
 
 中文:
 引理 num_div_den
   条件: (A : 矩阵 m n 有理数) (i : m) (j : n)
   证明: by
   obtain ⟨k, hk⟩ := den_dvd_iff.mp (dvd_refl A.den) i j
-  rw [Matrix.num]; rw [map_apply]; rw [smul_apply]; rw [smul_eq_mul]; rw [mul_comm]; rw [div_eq_iff Nat.cast_ne_zero.mpr A.den_ne_zero]; rw [hk]; rw [Nat.cast_mul]; rw [← mul_assoc]; rw [Rat.mul_den_eq_num]; rw [← Int.cast_natCast k]; rw [← 
+  rw [Matrix.num]; rw [map_apply]; rw [smul_apply]; rw [smul_eq_mul]; rw [mul_comm]; rw [div_eq_iff Nat.cast_ne_zero.mpr A.den_ne_zero]; rw [hk]; rw [Nat.cast_mul]; rw [← mul_assoc]; rw [Rat.mul_den_eq_num]; rw [← Int.cast_natCast k]; rw [← Int.cast_mul]; rw [Rat.num_intCast]
 
 Depends on / 依赖: A.den, A.den_ne_zero, Int.cast_mul, Int.cast_natCast, Matrix, Matrix.num, Nat.cast_mul, Nat.cast_ne_zero.mpr, Rat.mul_den_eq_num, Rat.num_intCast, cast_mul, cast_natCast, cast_ne_zero, den_dvd_iff, den_dvd_iff.mp, den_ne_zero, div_eq_iff, dvd_refl, map_apply, mul_assoc
 -/

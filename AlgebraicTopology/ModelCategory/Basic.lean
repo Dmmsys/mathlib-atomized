@@ -194,7 +194,14 @@ lemma mk'.cm3a_aux
     rw [← cofibrations_rlp]
     infer_instance
   have sq : CommSq h.r.left hw.i f (hw.p ≫ h.r.right) := ⟨by simp⟩
-  have hf : fibrations C f := by rwa [← fibration_if
+  have hf : fibrations C f := by rwa [← fibration_iff]
+  have : HasLiftingProperty hw.i f := hasLiftingProperty_of_wfs _ _ hw.hi hf
+  have : RetractArrow f hw.p :=
+    { i := Arrow.homMk (h.i.left ≫ hw.i) h.i.right
+      r := Arrow.homMk sq.lift h.r.right }
+  have h' : trivialFibrations C hw.p :=
+    ⟨hw.hp, (weakEquivalence_iff _).1 (weakEquivalence_of_precomp_of_fac hw.fac)⟩
+  simpa only [weakEquivalence_iff] using (of_retract this h').2
 
 中文:
 引理 mk'.cm3a_aux
@@ -205,7 +212,14 @@ lemma mk'.cm3a_aux
     rw [← cofibrations_rlp]
     infer_instance
   have sq : CommSq h.r.left hw.i f (hw.p ≫ h.r.right) := ⟨by simp⟩
-  have hf : fibrations C f := by rwa [← fibration_if
+  have hf : fibrations C f := by rwa [← fibration_iff]
+  have : HasLiftingProperty hw.i f := hasLiftingProperty_of_wfs _ _ hw.hi hf
+  have : RetractArrow f hw.p :=
+    { i := Arrow.homMk (h.i.left ≫ hw.i) h.i.right
+      r := Arrow.homMk sq.lift h.r.right }
+  have h' : trivialFibrations C hw.p :=
+    ⟨hw.hp, (weakEquivalence_iff _).1 (weakEquivalence_of_precomp_of_fac hw.fac)⟩
+  simpa only [weakEquivalence_iff] using (of_retract this h').2
 -/
 private lemma mk'.cm3a_aux [CategoryWithFibrations C] [CategoryWithCofibrations C]
     [CategoryWithWeakEquivalences C]
@@ -245,7 +259,26 @@ definition mk'
     have : Cofibration hf.i := by
       simpa only [cofibration_iff] using hf.hi.1
     have : WeakEquivalence hf.i := by
-      simpa only [weakEquivalence_iff]
+      simpa only [weakEquivalence_iff] using hf.hi.2
+    let φ : pushout hf.i h.i.left ⟶ Y :=
+      pushout.desc (hf.p ≫ h.i.right) w (by simp)
+    have : Fibration hf.p := by simpa only [fibration_iff] using hf.hp
+    have : WeakEquivalence (pushout.inr _ _ ≫ φ) := by simpa [φ]
+    have := weakEquivalence_of_precomp (pushout.inr _ _) φ
+    have hp : RetractArrow hf.p φ :=
+      { i := Arrow.homMk (pushout.inl _ _) h.i.right
+        r := Arrow.homMk (pushout.desc (𝟙 _) (h.r.left ≫ hf.i) (by simp)) h.r.right }
+    have := mk'.cm3a_aux hp
+    rw [← weakEquivalence_iff]; rw [← hf.fac]
+    infer_instance⟩
+  cm3b := by
+    rw [← rlp_eq_of_wfs (trivialCofibrations C) (fibrations C)]
+    infer_instance
+  cm3c := by
+    rw [← llp_eq_of_wfs (cofibrations C) (trivialFibrations C)]
+    infer_instance
+  cm4a i p _ _ _ := hasLiftingProperty_of_wfs i p (mem_trivialCofibrations i) (mem_fibrations p)
+  cm4b i p _ _ _ := hasLiftingProperty_of_wfs i p (mem_cofibrations i) (mem_trivialFibrations p)
 
 中文:
 定义 mk'
@@ -256,7 +289,26 @@ definition mk'
     have : Cofibration hf.i := by
       simpa only [cofibration_iff] using hf.hi.1
     have : WeakEquivalence hf.i := by
-      simpa only [weakEquivalence_iff]
+      simpa only [weakEquivalence_iff] using hf.hi.2
+    let φ : pushout hf.i h.i.left ⟶ Y :=
+      pushout.desc (hf.p ≫ h.i.right) w (by simp)
+    have : Fibration hf.p := by simpa only [fibration_iff] using hf.hp
+    have : WeakEquivalence (pushout.inr _ _ ≫ φ) := by simpa [φ]
+    have := weakEquivalence_of_precomp (pushout.inr _ _) φ
+    have hp : RetractArrow hf.p φ :=
+      { i := Arrow.homMk (pushout.inl _ _) h.i.right
+        r := Arrow.homMk (pushout.desc (𝟙 _) (h.r.left ≫ hf.i) (by simp)) h.r.right }
+    have := mk'.cm3a_aux hp
+    rw [← weakEquivalence_iff]; rw [← hf.fac]
+    infer_instance⟩
+  cm3b := by
+    rw [← rlp_eq_of_wfs (trivialCofibrations C) (fibrations C)]
+    infer_instance
+  cm3c := by
+    rw [← llp_eq_of_wfs (cofibrations C) (trivialFibrations C)]
+    infer_instance
+  cm4a i p _ _ _ := hasLiftingProperty_of_wfs i p (mem_trivialCofibrations i) (mem_fibrations p)
+  cm4b i p _ _ _ := hasLiftingProperty_of_wfs i p (mem_cofibrations i) (mem_trivialFibrations p)
 
 Depends on / 依赖: Cofibration, Fibration, WeakEquivalence, cofibration_iff, factorizationData, fibration_iff, fibrations, h.i.left, h.i.right, hf.hi, hf.hp, hf.i, hf.p, pushout, pushout.desc, pushout.inr, trivialCofibrations, weakEquivalence_iff
 -/

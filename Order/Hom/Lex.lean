@@ -652,7 +652,7 @@ definition prodLexAssoc
   map_rel_iff' := by
     simp only [Prod.Lex.le_iff, Prod.Lex.lt_iff, Equiv.trans_apply, Equiv.prodCongr_apply,
       Equiv.prodAssoc_apply]
-    grind [EmbeddingLike.apply_eq_iff_eq,
+    grind [EmbeddingLike.apply_eq_iff_eq, ofLex_toLex]
 
 中文:
 定义 prodLexAssoc
@@ -662,7 +662,7 @@ definition prodLexAssoc
   map_rel_iff' := by
     simp only [Prod.Lex.le_iff, Prod.Lex.lt_iff, Equiv.trans_apply, Equiv.prodCongr_apply,
       Equiv.prodAssoc_apply]
-    grind [EmbeddingLike.apply_eq_iff_eq,
+    grind [EmbeddingLike.apply_eq_iff_eq, ofLex_toLex]
 
 Depends on / 依赖: Cotangent, Module, Module.compHom, P.Cotangent, algebraMap, compHom, prodCongr
 -/

@@ -325,7 +325,12 @@ theorem continuousOn_iff_continuous_domRestrict
   intro h x xs
   exact (continuousWithinAt_iff_continuousAt_domRestrict f xs).mpr (h ⟨x, xs⟩)
 
-alias ⟨ContinuousOn.domRestrict, _⟩ :
+alias ⟨ContinuousOn.domRestrict, _⟩ := continuousOn_iff_continuous_domRestrict
+
+@[deprecated (since := "2026-07-19")]
+alias continuousOn_iff_continuous_restrict := continuousOn_iff_continuous_domRestrict
+@[deprecated (since := "2026-07-19")]
+alias ContinuousOn.restrict := ContinuousOn.domRestrict
 
 中文:
 定理 continuousOn_iff_continuous_domRestrict
@@ -336,7 +341,12 @@ alias ⟨ContinuousOn.domRestrict, _⟩ :
   intro h x xs
   exact (continuousWithinAt_iff_continuousAt_domRestrict f xs).mpr (h ⟨x, xs⟩)
 
-alias ⟨ContinuousOn.domRestrict, _⟩ :
+alias ⟨ContinuousOn.domRestrict, _⟩ := continuousOn_iff_continuous_domRestrict
+
+@[deprecated (since := "2026-07-19")]
+alias continuousOn_iff_continuous_restrict := continuousOn_iff_continuous_domRestrict
+@[deprecated (since := "2026-07-19")]
+alias ContinuousOn.restrict := ContinuousOn.domRestrict
 
 Depends on / 依赖: ContinuousOn, continuousWithinAt_iff_continuousAt_domRestrict, continuous_iff_continuousAt
 -/
@@ -385,7 +395,9 @@ theorem continuousOn_iff'
     rw [isOpen_induced_iff]; rw [Set.domRestrict_eq]; rw [Set.preimage_comp]
     simp only [Subtype.preimage_coe_eq_preimage_coe_iff]
     constructor <;>
-      · rintro ⟨
+      · rintro ⟨u, ou, useq⟩
+        exact ⟨u, ou, by simpa only [Set.inter_comm, eq_comm] using useq⟩
+  rw [continuousOn_iff_continuous_domRestrict]; rw [continuous_def]; simp only [this]
 
 中文:
 定理 continuousOn_iff'
@@ -395,7 +407,9 @@ theorem continuousOn_iff'
     rw [isOpen_induced_iff]; rw [Set.domRestrict_eq]; rw [Set.preimage_comp]
     simp only [Subtype.preimage_coe_eq_preimage_coe_iff]
     constructor <;>
-      · rintro ⟨
+      · rintro ⟨u, ou, useq⟩
+        exact ⟨u, ou, by simpa only [Set.inter_comm, eq_comm] using useq⟩
+  rw [continuousOn_iff_continuous_domRestrict]; rw [continuous_def]; simp only [this]
 
 Depends on / 依赖: IsOpen, Set.domRestrict_eq, Set.inter_comm, Set.preimage_comp, Subtype, Subtype.preimage_coe_eq_preimage_coe_iff, continuousOn_iff_continuous_domRestrict, continuous_def, domRestrict, domRestrict_eq, eq_comm, inter_comm, isOpen_induced_iff, preimage_coe_eq_preimage_coe_iff, preimage_comp, s.domRestrict
 -/
@@ -460,7 +474,7 @@ theorem continuousOn_iff_isClosed
     intro t
     rw [isClosed_induced_iff]; rw [Set.domRestrict_eq]; rw [Set.preimage_comp]
     simp only [Subtype.preimage_coe_eq_preimage_coe_iff, eq_comm, Set.inter_comm s]
-  r
+  rw [continuousOn_iff_continuous_domRestrict]; rw [continuous_iff_isClosed]; simp only [this]
 
 中文:
 定理 continuousOn_iff_isClosed
@@ -469,7 +483,7 @@ theorem continuousOn_iff_isClosed
     intro t
     rw [isClosed_induced_iff]; rw [Set.domRestrict_eq]; rw [Set.preimage_comp]
     simp only [Subtype.preimage_coe_eq_preimage_coe_iff, eq_comm, Set.inter_comm s]
-  r
+  rw [continuousOn_iff_continuous_domRestrict]; rw [continuous_iff_isClosed]; simp only [this]
 
 Depends on / 依赖: IsClosed, Set.domRestrict_eq, Set.inter_comm, Set.preimage_comp, Subtype, Subtype.preimage_coe_eq_preimage_coe_iff, continuousOn_iff_continuous_domRestrict, continuous_iff_isClosed, domRestrict, domRestrict_eq, eq_comm, inter_comm, isClosed_induced_iff, preimage_coe_eq_preimage_coe_iff, preimage_comp, s.domRestrict
 -/
@@ -3177,7 +3191,7 @@ theorem Set.LeftInvOn.map_nhdsWithin_eq
   · have A : g ∘ f =ᶠ[𝓝[g '' s] g x] id :=
       h.rightInvOn_image.eqOn.eventuallyEq_of_mem self_mem_nhdsWithin
     refine le_map_of_right_inverse A ?_
-    simpa only [hx] using hf.tendsto_nhdsWithin (h.mapsTo (surjOn_image _
+    simpa only [hx] using hf.tendsto_nhdsWithin (h.mapsTo (surjOn_image _ _))
 
 中文:
 定理 集合.LeftInvOn.map_nhdsWithin_eq
@@ -3188,7 +3202,7 @@ theorem Set.LeftInvOn.map_nhdsWithin_eq
   · have A : g ∘ f =ᶠ[𝓝[g '' s] g x] id :=
       h.rightInvOn_image.eqOn.eventuallyEq_of_mem self_mem_nhdsWithin
     refine le_map_of_right_inverse A ?_
-    simpa only [hx] using hf.tendsto_nhdsWithin (h.mapsTo (surjOn_image _
+    simpa only [hx] using hf.tendsto_nhdsWithin (h.mapsTo (surjOn_image _ _))
 
 Depends on / 依赖: eventuallyEq_of_mem, h.mapsTo, h.rightInvOn_image.eqOn.eventuallyEq_of_mem, hf.tendsto_nhdsWithin, hg.tendsto_nhdsWithin, le_antisymm, le_map_of_right_inverse, mapsTo, mapsTo_image, rightInvOn_image, self_mem_nhdsWithin, surjOn_image, tendsto_nhdsWithin
 -/
@@ -3684,7 +3698,9 @@ theorem ContinuousOn.tendsto_nhdsSet
     ⟨V inter f ⁻¹' U, ?_, fun _ => ?_⟩
   · exact ⟨(hf.mono hVs').isOpen_inter_preimage hV hU.1,
       subset_inter hsV (hst.mono Subset.rfl hU.2)⟩
-  · intr
+  · intro h
+    rw [← mem_preimage]
+    exact mem_of_mem_inter_right h
 
 中文:
 定理 ContinuousOn.tendsto_nhdsSet
@@ -3695,7 +3711,9 @@ theorem ContinuousOn.tendsto_nhdsSet
     ⟨V inter f ⁻¹' U, ?_, fun _ => ?_⟩
   · exact ⟨(hf.mono hVs').isOpen_inter_preimage hV hU.1,
       subset_inter hsV (hst.mono Subset.rfl hU.2)⟩
-  · intr
+  · intro h
+    rw [← mem_preimage]
+    exact mem_of_mem_inter_right h
 
 Depends on / 依赖: Subset, Subset.rfl, hasBasis_nhdsSet, hf.mono, hst.mono, isOpen_inter_preimage, mem_nhdsSet_iff_exists, mem_nhdsSet_iff_exists.mp, mem_of_mem_inter_right, mem_preimage, subset_inter, tendsto_iff
 -/
@@ -3764,7 +3782,8 @@ lemma ContinuousOn.preimage_mem_nhdsSetWithin
   refine mem_nhdsSetWithin.2 ⟨w, hw.1, ?_, ?_⟩
 · exact (inter_comm _ _).trans_subset (inter_subset_inter_left _ <| preimage_mono hv.2.1).trans
       (hw.2.trans_subset inter_subset_left)
-  · rw [← inter_assoc,
+  · rw [← inter_assoc, ← hw.2, inter_comm _ s, inter_assoc, ← preimage_inter]
+exact inter_subset_right.trans preimage_mono hv.2.2
 
 中文:
 引理 ContinuousOn.preimage_mem_nhdsSetWithin
@@ -3775,7 +3794,8 @@ lemma ContinuousOn.preimage_mem_nhdsSetWithin
   refine mem_nhdsSetWithin.2 ⟨w, hw.1, ?_, ?_⟩
 · exact (inter_comm _ _).trans_subset (inter_subset_inter_left _ <| preimage_mono hv.2.1).trans
       (hw.2.trans_subset inter_subset_left)
-  · rw [← inter_assoc,
+  · rw [← inter_assoc, ← hw.2, inter_comm _ s, inter_assoc, ← preimage_inter]
+exact inter_subset_right.trans preimage_mono hv.2.2
 
 Depends on / 依赖: continuousOn_iff, inter_assoc, inter_comm, inter_subset_inter_left, inter_subset_left, inter_subset_right, inter_subset_right.trans, mem_nhdsSetWithin, preimage_inter, preimage_mono, trans_subset
 -/

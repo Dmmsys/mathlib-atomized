@@ -39,7 +39,30 @@ abbreviation Ring.ofMinimalAxioms
     have h₁ : (1 + 1 : R) * (a + b) = a + (a + b) + b := by
       rw [left_distrib]
       simp only [right_distrib, one_mul, add_assoc]
-    have h₂ : (1 + 1 : R) * (a + b)
+    have h₂ : (1 + 1 : R) * (a + b) = a + (b + a) + b := by
+      rw [right_distrib]
+      simp only [left_distrib, one_mul, add_assoc]
+    have := h₁.symm.trans h₂
+    rwa [add_left_inj, add_right_inj] at this
+  haveI zero_mul : forall a, (0 : R) * a = 0 := fun a => by
+    have : 0 * a = 0 * a + 0 * a :=
+      calc 0 * a = (0 + 0) * a := by rw [zero_add]
+      _ = 0 * a + 0 * a := by rw [right_distrib]
+    rwa [left_eq_add] at this
+  haveI mul_zero : forall a, a * (0 : R) = 0 := fun a => by
+    have : a * 0 = a * 0 + a * 0 :=
+      calc a * 0 = a * (0 + 0) := by rw [zero_add]
+      _ = a * 0 + a * 0 := by rw [left_distrib]
+    rwa [left_eq_add] at this
+  { add_comm := add_comm
+    left_distrib := left_distrib
+    right_distrib := right_distrib
+    zero_mul := zero_mul
+    mul_zero := mul_zero
+    mul_assoc := mul_assoc
+    one_mul := one_mul
+    mul_one := mul_one
+    neg_add_cancel := neg_add_cancel }
 
 中文:
 缩写 环.ofMinimalAxioms
@@ -50,7 +73,30 @@ abbreviation Ring.ofMinimalAxioms
     have h₁ : (1 + 1 : R) * (a + b) = a + (a + b) + b := by
       rw [left_distrib]
       simp only [right_distrib, one_mul, add_assoc]
-    have h₂ : (1 + 1 : R) * (a + b)
+    have h₂ : (1 + 1 : R) * (a + b) = a + (b + a) + b := by
+      rw [right_distrib]
+      simp only [left_distrib, one_mul, add_assoc]
+    have := h₁.symm.trans h₂
+    rwa [add_left_inj, add_right_inj] at this
+  haveI zero_mul : forall a, (0 : R) * a = 0 := fun a => by
+    have : 0 * a = 0 * a + 0 * a :=
+      calc 0 * a = (0 + 0) * a := by rw [zero_add]
+      _ = 0 * a + 0 * a := by rw [right_distrib]
+    rwa [left_eq_add] at this
+  haveI mul_zero : forall a, a * (0 : R) = 0 := fun a => by
+    have : a * 0 = a * 0 + a * 0 :=
+      calc a * 0 = a * (0 + 0) := by rw [zero_add]
+      _ = a * 0 + a * 0 := by rw [left_distrib]
+    rwa [left_eq_add] at this
+  { add_comm := add_comm
+    left_distrib := left_distrib
+    right_distrib := right_distrib
+    zero_mul := zero_mul
+    mul_zero := mul_zero
+    mul_assoc := mul_assoc
+    one_mul := one_mul
+    mul_one := mul_one
+    neg_add_cancel := neg_add_cancel }
 
 Depends on / 依赖: AddGroup, AddGroup.ofLeftAxioms, add_assoc, add_comm, add_left_inj, add_right_inj, left_distrib, neg_add_cancel, ofLeftAxioms, one_mul, right_distrib, symm.trans, zero_add, zero_mul
 -/
@@ -105,7 +151,9 @@ abbreviation CommRing.ofMinimalAxioms
     rw [mul_comm]; rw [one_mul]
   haveI right_distrib : forall a b c : R, (a + b) * c = a * c + b * c := fun a b c => by
     rw [mul_comm]; rw [left_distrib]; rw [mul_comm]; rw [mul_comm b c]
-  letI := Ring.ofMinimalAxioms add_assoc zero_add neg
+  letI := Ring.ofMinimalAxioms add_assoc zero_add neg_add_cancel mul_assoc
+    one_mul mul_one left_distrib right_distrib
+  { mul_comm := mul_comm }
 
 中文:
 缩写 交换环.ofMinimalAxioms
@@ -114,7 +162,9 @@ abbreviation CommRing.ofMinimalAxioms
     rw [mul_comm]; rw [one_mul]
   haveI right_distrib : forall a b c : R, (a + b) * c = a * c + b * c := fun a b c => by
     rw [mul_comm]; rw [left_distrib]; rw [mul_comm]; rw [mul_comm b c]
-  letI := Ring.ofMinimalAxioms add_assoc zero_add neg
+  letI := Ring.ofMinimalAxioms add_assoc zero_add neg_add_cancel mul_assoc
+    one_mul mul_one left_distrib right_distrib
+  { mul_comm := mul_comm }
 
 Depends on / 依赖: Ring.ofMinimalAxioms, add_assoc, left_distrib, mul_assoc, mul_comm, mul_one, neg_add_cancel, ofMinimalAxioms, one_mul, right_distrib, zero_add
 -/

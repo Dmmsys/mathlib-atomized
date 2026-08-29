@@ -54,7 +54,18 @@ definition extendRCLike
     simp only [fc, smul_add, map_add, mul_add]
     abel
   have A (c : Real) (x : F) : (fr ((c : 𝕜) • x) : 𝕜) = (c : 𝕜) * (fr x : 𝕜) := by simp
-  have smul_Real (c : Real) (x : F) : 
+  have smul_Real (c : Real) (x : F) : fc ((c : 𝕜) • x) = (c : 𝕜) * fc x := by
+    simp only [fc, A, smul_comm I, mul_comm I, mul_sub, mul_assoc]
+  have smul_I (x : F) : fc ((I : 𝕜) • x) = (I : 𝕜) * fc x := by
+    obtain (h | h) := @I_mul_I_ax 𝕜 _
+    · simp [fc, h]
+    · simp [fc, mul_sub, ← mul_assoc, smul_smul, h, add_comm]
+  have smul_𝕜 (c : 𝕜) (x : F) : fc (c • x) = c • fc x := by
+    rw [← re_add_im c]
+    simp only [add_smul, ← smul_smul, add, smul_Real, smul_I, ← mul_assoc, smul_eq_mul, add_mul]
+  { toFun := fc
+    map_add' := add
+    map_smul' := smul_𝕜 }
 
 中文:
 定义 extendRCLike
@@ -64,7 +75,18 @@ definition extendRCLike
     simp only [fc, smul_add, map_add, mul_add]
     abel
   have A (c : Real) (x : F) : (fr ((c : 𝕜) • x) : 𝕜) = (c : 𝕜) * (fr x : 𝕜) := by simp
-  have smul_Real (c : Real) (x : F) : 
+  have smul_Real (c : Real) (x : F) : fc ((c : 𝕜) • x) = (c : 𝕜) * fc x := by
+    simp only [fc, A, smul_comm I, mul_comm I, mul_sub, mul_assoc]
+  have smul_I (x : F) : fc ((I : 𝕜) • x) = (I : 𝕜) * fc x := by
+    obtain (h | h) := @I_mul_I_ax 𝕜 _
+    · simp [fc, h]
+    · simp [fc, mul_sub, ← mul_assoc, smul_smul, h, add_comm]
+  have smul_𝕜 (c : 𝕜) (x : F) : fc (c • x) = c • fc x := by
+    rw [← re_add_im c]
+    simp only [add_smul, ← smul_smul, add, smul_Real, smul_I, ← mul_assoc, smul_eq_mul, add_mul]
+  { toFun := fc
+    map_add' := add
+    map_smul' := smul_𝕜 }
 
 Depends on / 依赖: I_mul_I_ax, map_add, mul_add, mul_assoc, mul_comm, mul_sub, smul_I, smul_Real, smul_add, smul_comm
 -/
@@ -200,7 +222,7 @@ definition extendRCLikeₗ
   left_inv f := by ext; simp
   right_inv f := by ext; apply RCLike.ext <;> simp
   map_add' := by intros; ext; simp [extendRCLike_apply]; ring
-  map_smul' := by intros; ext; simp [extendRCLike_apply, real_smul_eq_coe_mul]; 
+  map_smul' := by intros; ext; simp [extendRCLike_apply, real_smul_eq_coe_mul]; ring
 
 中文:
 定义 extendRCLikeₗ
@@ -210,7 +232,7 @@ definition extendRCLikeₗ
   left_inv f := by ext; simp
   right_inv f := by ext; apply RCLike.ext <;> simp
   map_add' := by intros; ext; simp [extendRCLike_apply]; ring
-  map_smul' := by intros; ext; simp [extendRCLike_apply, real_smul_eq_coe_mul]; 
+  map_smul' := by intros; ext; simp [extendRCLike_apply, real_smul_eq_coe_mul]; ring
 
 Depends on / 依赖: extendRCLike
 -/
@@ -343,7 +365,9 @@ definition extendRCLikeₗ
   left_inv f := by ext; simp
   right_inv f := by ext; apply RCLike.ext <;> simp [extendRCLike_apply]
   map_add' := by intros; ext; simp [extendRCLike_apply]; ring
-  map_smul' := by intros; ext; simp [extendRCLi
+  map_smul' := by intros; ext; simp [extendRCLike_apply, real_smul_eq_coe_mul]; ring
+
+@[deprecated (since := "2026-02-24")] alias _root_.RCLike.extendTo𝕜ₗ := extendRCLikeₗ
 
 中文:
 定义 extendRCLikeₗ
@@ -353,7 +377,9 @@ definition extendRCLikeₗ
   left_inv f := by ext; simp
   right_inv f := by ext; apply RCLike.ext <;> simp [extendRCLike_apply]
   map_add' := by intros; ext; simp [extendRCLike_apply]; ring
-  map_smul' := by intros; ext; simp [extendRCLi
+  map_smul' := by intros; ext; simp [extendRCLike_apply, real_smul_eq_coe_mul]; ring
+
+@[deprecated (since := "2026-02-24")] alias _root_.RCLike.extendTo𝕜ₗ := extendRCLikeₗ
 
 Depends on / 依赖: StrongDual, StrongDual.extendRCLike, extendRCLike
 -/

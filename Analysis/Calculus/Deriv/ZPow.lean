@@ -48,7 +48,19 @@ theorem hasStrictDerivAt_zpow
     simp only [zpow_natCast, Int.cast_natCast]
     convert hasStrictDerivAt_pow m x
     rw [← Int.ofNat_one]; rw [← Int.ofNat_sub]; rw [zpow_natCast]
-    norm_cast 
+    norm_cast at hm
+  rcases lt_trichotomy m 0 with (hm | hm | hm)
+  · have hx : x != 0 := h.resolve_right hm.not_ge
+    have := (hasStrictDerivAt_inv ?_).scomp _ (this (-m) (neg_pos.2 hm)) <;>
+      [skip; exact zpow_ne_zero _ hx]
+    simp only [Function.comp_def, zpow_neg, inv_inv, smul_eq_mul] at this
+    convert! this using 1
+    rw [sq]; rw [mul_inv]; rw [inv_inv]; rw [Int.cast_neg]; rw [neg_mul]; rw [neg_mul_neg]; rw [← zpow_add₀ hx]; rw [mul_assoc]; rw [←
+      zpow_add₀ hx]
+    congr
+    abel
+  · simp only [hm, zpow_zero, Int.cast_zero, zero_mul, hasStrictDerivAt_const]
+  · exact this m hm
 
 中文:
 定理 hasStrictDerivAt_zpow
@@ -59,7 +71,19 @@ theorem hasStrictDerivAt_zpow
     simp only [zpow_natCast, Int.cast_natCast]
     convert hasStrictDerivAt_pow m x
     rw [← Int.ofNat_one]; rw [← Int.ofNat_sub]; rw [zpow_natCast]
-    norm_cast 
+    norm_cast at hm
+  rcases lt_trichotomy m 0 with (hm | hm | hm)
+  · have hx : x != 0 := h.resolve_right hm.not_ge
+    have := (hasStrictDerivAt_inv ?_).scomp _ (this (-m) (neg_pos.2 hm)) <;>
+      [skip; exact zpow_ne_zero _ hx]
+    simp only [Function.comp_def, zpow_neg, inv_inv, smul_eq_mul] at this
+    convert! this using 1
+    rw [sq]; rw [mul_inv]; rw [inv_inv]; rw [Int.cast_neg]; rw [neg_mul]; rw [neg_mul_neg]; rw [← zpow_add₀ hx]; rw [mul_assoc]; rw [←
+      zpow_add₀ hx]
+    congr
+    abel
+  · simp only [hm, zpow_zero, Int.cast_zero, zero_mul, hasStrictDerivAt_const]
+  · exact this m hm
 
 Depends on / 依赖: Functio, HasStrictDerivAt, Int.cast_natCast, Int.ofNat_one, Int.ofNat_sub, cast_natCast, convert, h.resolve_right, hasStrictDerivAt_inv, hasStrictDerivAt_pow, hm.le, hm.not_ge, lt_trichotomy, neg_pos, not_ge, ofNat_one, ofNat_sub, resolve_right, zpow_natCast, zpow_ne_zero
 -/
@@ -279,7 +303,8 @@ theorem iter_deriv_zpow'
     simp only [one_mul, Int.ofNat_zero, id, sub_zero, Finset.prod_range_zero, Function.iterate_zero]
   | succ k ihk =>
     simp only [Function.iterate_succ_apply', ihk, deriv_const_mul_field', deriv_zpow',
-      Finset.prod_range_succ, Int.natCast_succ, ← sub_sub, I
+      Finset.prod_range_succ, Int.natCast_succ, ← sub_sub, Int.cast_sub, Int.cast_natCast,
+      mul_assoc]
 
 中文:
 定理 iter_deriv_zpow'
@@ -290,7 +315,8 @@ theorem iter_deriv_zpow'
     simp only [one_mul, Int.ofNat_zero, id, sub_zero, Finset.prod_range_zero, Function.iterate_zero]
   | succ k ihk =>
     simp only [Function.iterate_succ_apply', ihk, deriv_const_mul_field', deriv_zpow',
-      Finset.prod_range_succ, Int.natCast_succ, ← sub_sub, I
+      Finset.prod_range_succ, Int.natCast_succ, ← sub_sub, Int.cast_sub, Int.cast_natCast,
+      mul_assoc]
 
 Depends on / 依赖: Finset, Finset.prod_range_succ, Finset.prod_range_zero, Function, Function.iterate_succ_apply, Function.iterate_zero, Int.cast_natCast, Int.cast_sub, Int.natCast_succ, Int.ofNat_zero, cast_natCast, cast_sub, deriv_const_mul_field, deriv_zpow, iterate_succ_apply, iterate_zero, mul_assoc, natCast_succ, ofNat_zero, one_mul
 -/
@@ -396,7 +422,10 @@ theorem iter_deriv_inv
   _ = (∏ i in Finset.range k, (-1 - i : 𝕜)) * x ^ (-1 - k : Int) := mod_cast iter_deriv_zpow (-1) x k
   _ = (-1) ^ k * k ! * x ^ (-1 - k : Int) := by
     simp only [← neg_add', Finset.prod_neg, ← Finset.prod_Ico_id_eq_factorial,
-  
+      Finset.prod_Ico_eq_prod_range]
+    simp
+
+@[simp]
 
 中文:
 定理 iter_deriv_inv
@@ -406,7 +435,10 @@ theorem iter_deriv_inv
   _ = (∏ i in Finset.range k, (-1 - i : 𝕜)) * x ^ (-1 - k : Int) := mod_cast iter_deriv_zpow (-1) x k
   _ = (-1) ^ k * k ! * x ^ (-1 - k : Int) := by
     simp only [← neg_add', Finset.prod_neg, ← Finset.prod_Ico_id_eq_factorial,
-  
+      Finset.prod_Ico_eq_prod_range]
+    simp
+
+@[simp]
 -/
 theorem iter_deriv_inv (k : Nat) (x : 𝕜) :
     deriv^[k] Inv.inv x = (-1) ^ k * k ! * x ^ (-1 - k : Int) := calc
@@ -453,7 +485,15 @@ theorem iter_deriv_inv_linear
     simp only [Int.reduceNeg, iterate_one, deriv_const_mul_field', cast_add, cast_one]
     by_cases hd : c = 0
     · simp [hd]
-    · have := deriv_comp_add_
+    · have := deriv_comp_add_const (fun x => (c * x) ^ (-1 - k : Int)) (d / c) z
+      have h0 : (fun x => (c * (x + d / c)) ^ (-1 - (k : Int))) =
+        (fun x => (c * x + d) ^ (-1 - (k : Int))) := by
+        ext y
+        field_simp
+      rw [h0]; rw [deriv_comp_mul_left c (fun x => (x) ^ (-1 - k : Int)) (z + d / c)] at this
+      simp [this]
+      field_simp
+      ring_nf
 
 中文:
 定理 iter_deriv_inv_linear
@@ -467,7 +507,15 @@ theorem iter_deriv_inv_linear
     simp only [Int.reduceNeg, iterate_one, deriv_const_mul_field', cast_add, cast_one]
     by_cases hd : c = 0
     · simp [hd]
-    · have := deriv_comp_add_
+    · have := deriv_comp_add_const (fun x => (c * x) ^ (-1 - k : Int)) (d / c) z
+      have h0 : (fun x => (c * (x + d / c)) ^ (-1 - (k : Int))) =
+        (fun x => (c * x + d) ^ (-1 - (k : Int))) := by
+        ext y
+        field_simp
+      rw [h0]; rw [deriv_comp_mul_left c (fun x => (x) ^ (-1 - k : Int)) (z + d / c)] at this
+      simp [this]
+      field_simp
+      ring_nf
 
 Depends on / 依赖: Int.reduceNeg, add_comm, cast_add, cast_one, deriv_comp_add_const, deriv_comp_mul_left, deriv_const_mul_field, factorial_succ, iterate_add_apply, iterate_one, reduceNeg
 -/

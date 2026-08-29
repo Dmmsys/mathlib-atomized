@@ -347,7 +347,12 @@ definition exportLevel
     | .succ l =>
       let i ← alloc L; IO.println s!"{i} #US {← exportLevel l}"; pure i
     | .max l₁ l₂ =>
-      let i ← alloc L; IO.println s!"{i} #UM {← exportLevel l₁} {← exportLevel l₂}";
+      let i ← alloc L; IO.println s!"{i} #UM {← exportLevel l₁} {← exportLevel l₂}"; pure i
+    | .imax l₁ l₂ =>
+      let i ← alloc L; IO.println s!"{i} #UIM {← exportLevel l₁} {← exportLevel l₂}"; pure i
+    | .param n =>
+      let i ← alloc L; IO.println s!"{i} #UP {← exportName n}"; pure i
+    | .mvar _ => unreachable!
 
 中文:
 定义 exportLevel
@@ -360,7 +365,12 @@ definition exportLevel
     | .succ l =>
       let i ← alloc L; IO.println s!"{i} #US {← exportLevel l}"; pure i
     | .max l₁ l₂ =>
-      let i ← alloc L; IO.println s!"{i} #UM {← exportLevel l₁} {← exportLevel l₂}";
+      let i ← alloc L; IO.println s!"{i} #UM {← exportLevel l₁} {← exportLevel l₂}"; pure i
+    | .imax l₁ l₂ =>
+      let i ← alloc L; IO.println s!"{i} #UIM {← exportLevel l₁} {← exportLevel l₂}"; pure i
+    | .param n =>
+      let i ← alloc L; IO.println s!"{i} #UP {← exportName n}"; pure i
+    | .mvar _ => unreachable!
 -/
 def exportLevel (L : Level) : ExportM Nat := do
   match (← get).levels.map[L]? with
@@ -411,7 +421,28 @@ definition exportExpr
     | .fvar _ => unreachable!
     | .mvar _ => unreachable!
     | .sort l => let i ← alloc E; IO.println s!"{i} #ES {← exportLevel l}"; pure i
-    
+    | .const n ls =>
+      exportDef n
+      let i ← alloc E
+      let mut s := s!"{i} #EC {← exportName n}"
+      for l in ls do s := s ++ s!" {← exportLevel l}"
+      IO.println s; pure i
+    | .app e₁ e₂ =>
+      let i ← alloc E; IO.println s!"{i} #EA {← exportExpr e₁} {← exportExpr e₂}"; pure i
+    | .lam _ e₁ e₂ d =>
+      let i ← alloc E
+      IO.println s!"{i} #EL {biStr d} {← exportExpr e₁} {← exportExpr e₂}"; pure i
+    | .forallE _ e₁ e₂ d =>
+      let i ← alloc E
+      IO.println s!"{i} #EP {biStr d} {← exportExpr e₁} {← exportExpr e₂}"; pure i
+    | .letE _ e₁ e₂ e₃ _ =>
+      let i ← alloc E
+      IO.println s!"{i} #EP {← exportExpr e₁} {← exportExpr e₂} {← exportExpr e₃}"; pure i
+    | .lit (.natVal n) => let i ← alloc E; IO.println s!"{i} #EN {n}"; pure i
+    | .lit (.strVal s) => let i ← alloc E; IO.println s!"{i} #ET {s}"; pure i
+    | .mdata _ _ => unreachable!
+    | .proj n k e =>
+      let i ← alloc E; IO.println s!"{i} #EJ {← exportName n} {k} {← exportExpr e}"; pure i
 
 中文:
 定义 exportExpr
@@ -424,7 +455,28 @@ definition exportExpr
     | .fvar _ => unreachable!
     | .mvar _ => unreachable!
     | .sort l => let i ← alloc E; IO.println s!"{i} #ES {← exportLevel l}"; pure i
-    
+    | .const n ls =>
+      exportDef n
+      let i ← alloc E
+      let mut s := s!"{i} #EC {← exportName n}"
+      for l in ls do s := s ++ s!" {← exportLevel l}"
+      IO.println s; pure i
+    | .app e₁ e₂ =>
+      let i ← alloc E; IO.println s!"{i} #EA {← exportExpr e₁} {← exportExpr e₂}"; pure i
+    | .lam _ e₁ e₂ d =>
+      let i ← alloc E
+      IO.println s!"{i} #EL {biStr d} {← exportExpr e₁} {← exportExpr e₂}"; pure i
+    | .forallE _ e₁ e₂ d =>
+      let i ← alloc E
+      IO.println s!"{i} #EP {biStr d} {← exportExpr e₁} {← exportExpr e₂}"; pure i
+    | .letE _ e₁ e₂ e₃ _ =>
+      let i ← alloc E
+      IO.println s!"{i} #EP {← exportExpr e₁} {← exportExpr e₂} {← exportExpr e₃}"; pure i
+    | .lit (.natVal n) => let i ← alloc E; IO.println s!"{i} #EN {n}"; pure i
+    | .lit (.strVal s) => let i ← alloc E; IO.println s!"{i} #ET {s}"; pure i
+    | .mdata _ _ => unreachable!
+    | .proj n k e =>
+      let i ← alloc E; IO.println s!"{i} #EJ {← exportName n} {k} {← exportExpr e}"; pure i
 -/
 partial def exportExpr (E : Expr) : ExportM Nat := do
   match (← get).exprs.map[E]? with
@@ -471,7 +523,16 @@ definition exportDef
       exportDef c
   match ci with
   | axiomInfo val => axdef "#AX" val.name val.type val.levelParams
-  | defnInfo val => defn "#DEF" val.name val.type 
+  | defnInfo val => defn "#DEF" val.name val.type val.value val.levelParams
+  | thmInfo val => defn "#THM" val.name val.type val.value val.levelParams
+  | opaqueInfo val => defn "#CN" val.name val.type val.value val.levelParams
+  | quotInfo _ =>
+    IO.println "#QUOT"
+    for n in [``Quot, ``Quot.mk, ``Quot.lift, ``Quot.ind] do
+      insert n
+  | inductInfo val => ind val.all
+  | ctorInfo val => ind (← getConstInfoInduct val.induct).all
+  | recInfo val => ind val.all
 
 中文:
 定义 exportDef
@@ -484,7 +545,16 @@ definition exportDef
       exportDef c
   match ci with
   | axiomInfo val => axdef "#AX" val.name val.type val.levelParams
-  | defnInfo val => defn "#DEF" val.name val.type 
+  | defnInfo val => defn "#DEF" val.name val.type val.value val.levelParams
+  | thmInfo val => defn "#THM" val.name val.type val.value val.levelParams
+  | opaqueInfo val => defn "#CN" val.name val.type val.value val.levelParams
+  | quotInfo _ =>
+    IO.println "#QUOT"
+    for n in [``Quot, ``Quot.mk, ``Quot.lift, ``Quot.ind] do
+      insert n
+  | inductInfo val => ind val.all
+  | ctorInfo val => ind (← getConstInfoInduct val.induct).all
+  | recInfo val => ind val.all
 -/
 partial def exportDef (n : Name) : ExportM Unit := do
   if (← get).defs.contains n then return

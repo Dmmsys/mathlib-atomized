@@ -957,7 +957,14 @@ instance hasNPowNat
         | succ n ih =>
           rw [pow_succ']
           exact (congr_arg f.toEnd ih).trans (f.map_mul_left' _ _)
-      map_mul_right' := fun a b =
+      map_mul_right' := fun a b => by
+        induction n with
+        | zero => rfl
+        | succ n ih =>
+          rw [pow_succ']
+          exact (congr_arg f.toEnd ih).trans (f.map_mul_right' _ _)}⟩
+
+@[simp, norm_cast]
 
 中文:
 实例 hasNPow自然数
@@ -970,7 +977,14 @@ instance hasNPowNat
         | succ n ih =>
           rw [pow_succ']
           exact (congr_arg f.toEnd ih).trans (f.map_mul_left' _ _)
-      map_mul_right' := fun a b =
+      map_mul_right' := fun a b => by
+        induction n with
+        | zero => rfl
+        | succ n ih =>
+          rw [pow_succ']
+          exact (congr_arg f.toEnd ih).trans (f.map_mul_right' _ _)}⟩
+
+@[simp, norm_cast]
 
 Depends on / 依赖: AddMonoid, AddMonoid.End, congr_arg, f.map_mul_left, f.map_mul_right, f.toEnd, map_mul_left, map_mul_right, pow_succ, toAddMonoidHom
 -/
@@ -1726,7 +1740,9 @@ lemma centroid_eq_centralizer_mulLeftRight
     · exact AddMonoidHom.ext fun b => (map_mul_left f a b).symm
     · exact AddMonoidHom.ext fun a => (map_mul_right f a b).symm
   · rw [Subsemiring.mem_centralizer_iff] at h
-    refine ⟨⟨T, fun a b => ?_, fun a b => ?
+    refine ⟨⟨T, fun a b => ?_, fun a b => ?_⟩, rfl⟩
+    · exact congr($(h (L a) (.inl ⟨a, rfl⟩)) b).symm
+    · exact congr($(h (R b) (.inr ⟨b, rfl⟩)) a).symm
 
 中文:
 引理 centroid_eq_centralizer_mulLeftRight
@@ -1737,7 +1753,9 @@ lemma centroid_eq_centralizer_mulLeftRight
     · exact AddMonoidHom.ext fun b => (map_mul_left f a b).symm
     · exact AddMonoidHom.ext fun a => (map_mul_right f a b).symm
   · rw [Subsemiring.mem_centralizer_iff] at h
-    refine ⟨⟨T, fun a b => ?_, fun a b => ?
+    refine ⟨⟨T, fun a b => ?_, fun a b => ?_⟩, rfl⟩
+    · exact congr($(h (L a) (.inl ⟨a, rfl⟩)) b).symm
+    · exact congr($(h (R b) (.inr ⟨b, rfl⟩)) a).symm
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, Subsemiring, Subsemiring.mem_centralizer_iff, map_mul_left, map_mul_right, mem_centralizer_iff
 -/
@@ -1769,7 +1787,11 @@ definition centerToCentroidCenter
   map_zero' := by
     simp only [ZeroMemClass.coe_zero, map_zero]
     exact rfl
-  map_add' := fun
+  map_add' := fun _ _ => by
+    dsimp
+    simp only [map_add]
+    rfl
+  map_mul' z₁ z₂ := by ext a; exact (z₁.prop.left_assoc z₂ a).symm
 
 中文:
 定义 centerToCentroidCenter
@@ -1784,7 +1806,11 @@ definition centerToCentroidCenter
   map_zero' := by
     simp only [ZeroMemClass.coe_zero, map_zero]
     exact rfl
-  map_add' := fun
+  map_add' := fun _ _ => by
+    dsimp
+    simp only [map_add]
+    rfl
+  map_mul' z₁ z₂ := by ext a; exact (z₁.prop.left_assoc z₂ a).symm
 
 Depends on / 依赖: Subsemiring, Subsemiring.mem_center_iff, ZeroMemClass, ZeroMemClass.coe_zero, coe_zero, left_assoc, left_comm, map_add, map_mul, map_mul_left, map_zero, mem_center_iff, prop.left_assoc, property, z.prop.left_assoc, z.prop.left_comm
 -/
@@ -1910,7 +1936,9 @@ lemma _root_.NonUnitalNonAssocSemiring.mem_center_iff
     have e1 (d : α) : T d = a * d := congr($hT d)
     have e2 (d : α) : T d = d * a := congr($(hT.trans hc.symm) d)
     constructor
-    case co
+    case comm => exact (congr($hc.symm ·))
+    case left_assoc => simpa [e1] using (map_mul_right T · ·)
+    case right_assoc => simpa [e2] using (map_mul_left T · ·)
 
 中文:
 引理 _root_.非幺非结合半环.mem_center_iff
@@ -1923,7 +1951,9 @@ lemma _root_.NonUnitalNonAssocSemiring.mem_center_iff
     have e1 (d : α) : T d = a * d := congr($hT d)
     have e2 (d : α) : T d = d * a := congr($(hT.trans hc.symm) d)
     constructor
-    case co
+    case comm => exact (congr($hc.symm ·))
+    case left_assoc => simpa [e1] using (map_mul_right T · ·)
+    case right_assoc => simpa [e2] using (map_mul_left T · ·)
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, IsMulCentral, IsMulCentral.comm, centerToCentroid, hT.trans, hc.symm, left_assoc, map_mul_left, map_mul_right, right_assoc
 -/
@@ -1993,7 +2023,8 @@ definition centerIsoCentroid
       ⟨T 1, by constructor <;> simp [commute_iff_eq, ← map_mul_left, ← map_mul_right]⟩
 left_inv := fun z => Subtype.ext by simp only [MulHom.toFun_eq_coe,
       NonUnitalRingHom.coe_toMulHom, centerToCentroid_apply, mul_one]
-right_inv := fun T => Centro
+right_inv := fun T => CentroidHom.ext fun _ => by rw [MulHom.toFun_eq_coe,
+      NonUnitalRingHom.coe_toMulHom, centerToCentroid_apply, ← map_mul_right, one_mul] }
 
 中文:
 定义 centerIsoCentroid
@@ -2003,7 +2034,8 @@ right_inv := fun T => Centro
       ⟨T 1, by constructor <;> simp [commute_iff_eq, ← map_mul_left, ← map_mul_right]⟩
 left_inv := fun z => Subtype.ext by simp only [MulHom.toFun_eq_coe,
       NonUnitalRingHom.coe_toMulHom, centerToCentroid_apply, mul_one]
-right_inv := fun T => Centro
+right_inv := fun T => CentroidHom.ext fun _ => by rw [MulHom.toFun_eq_coe,
+      NonUnitalRingHom.coe_toMulHom, centerToCentroid_apply, ← map_mul_right, one_mul] }
 
 Depends on / 依赖: CentroidHom, CentroidHom.ext, MulHom, MulHom.toFun_eq_coe, NonUnitalRingHom, NonUnitalRingHom.coe_toMulHom, Subtype, Subtype.ext, centerToCentroid, centerToCentroid_apply, coe_toMulHom, commute_iff_eq, invFun, left_inv, map_mul_left, map_mul_right, mul_one, one_mul, right_inv, toFun_eq_coe
 -/

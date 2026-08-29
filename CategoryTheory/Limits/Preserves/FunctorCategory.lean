@@ -59,7 +59,13 @@ lemma FunctorCategory.prod_preservesColimits
             apply evaluationJointlyReflectsColimits _ fun {k} => ?_
             change IsColimit ((prod.functor.obj F ⋙ (evaluation _ _).obj k).mapCocone c)
             let :=
-   
+              isColimitOfPreserves ((evaluation C D).obj k ⋙ prod.functor.obj (F.obj k)) t
+            apply IsColimit.mapCoconeEquiv _ this
+            apply (NatIso.ofComponents _ _).symm
+            · intro G
+              apply asIso (prodComparison ((evaluation C D).obj k) F G)
+            · intro G G'
+              apply prodComparison_natural ((evaluation C D).obj k) (𝟙 F)⟩ }) }
 
 中文:
 引理 FunctorCategory.prod_preservesColimits
@@ -70,7 +76,13 @@ lemma FunctorCategory.prod_preservesColimits
             apply evaluationJointlyReflectsColimits _ fun {k} => ?_
             change IsColimit ((prod.functor.obj F ⋙ (evaluation _ _).obj k).mapCocone c)
             let :=
-   
+              isColimitOfPreserves ((evaluation C D).obj k ⋙ prod.functor.obj (F.obj k)) t
+            apply IsColimit.mapCoconeEquiv _ this
+            apply (NatIso.ofComponents _ _).symm
+            · intro G
+              apply asIso (prodComparison ((evaluation C D).obj k) F G)
+            · intro G G'
+              apply prodComparison_natural ((evaluation C D).obj k) (𝟙 F)⟩ }) }
 
 Depends on / 依赖: Cocone, F.obj, IsColimit, IsColimit.mapCoconeEquiv, NatIso, NatIso.ofComponents, evaluation, evaluationJointlyReflectsColimits, functor, isColimitOfPreserves, mapCocone, mapCoconeEquiv, ofComponents, preserves, preservesColimit, prod.functor.obj, prodComparison, prodComparison_n
 -/
@@ -571,7 +583,10 @@ instance :
     let i : (colim : (K ⥤ D ⥤ C) ⥤ _) ⋙ (evaluation D C).obj d ≅
         colimit ((whiskeringRight K (D ⥤ C) C).obj ((evaluation D C).obj d)).flip :=
       NatIso.ofComponents (fun X => (colimitObjIsoColimitCompEvaluation _ _) ≪≫
-          (by exact
+          (by exact HasColimit.isoOfNatIso (Iso.refl _)) ≪≫
+          (colimitObjIsoColimitCompEvaluation _ _).symm)
+        (fun {F G} η => colimit_obj_ext (fun j => by simp [← NatTrans.comp_app_assoc]))
+    preservesLimitsOfShape_of_natIso (i ≪≫ colimitFlipIsoCompColim _).symm)
 
 中文:
 实例 :
@@ -580,7 +595,10 @@ instance :
     let i : (colim : (K ⥤ D ⥤ C) ⥤ _) ⋙ (evaluation D C).obj d ≅
         colimit ((whiskeringRight K (D ⥤ C) C).obj ((evaluation D C).obj d)).flip :=
       NatIso.ofComponents (fun X => (colimitObjIsoColimitCompEvaluation _ _) ≪≫
-          (by exact
+          (by exact HasColimit.isoOfNatIso (Iso.refl _)) ≪≫
+          (colimitObjIsoColimitCompEvaluation _ _).symm)
+        (fun {F G} η => colimit_obj_ext (fun j => by simp [← NatTrans.comp_app_assoc]))
+    preservesLimitsOfShape_of_natIso (i ≪≫ colimitFlipIsoCompColim _).symm)
 
 Depends on / 依赖: HasColimit, HasColimit.isoOfNatIso, Iso.refl, NatIso, NatIso.ofComponents, NatTrans, NatTrans.comp_app_assoc, colimit, colimitFlipIsoCompCol, colimitObjIsoColimitCompEvaluation, colimit_obj_ext, comp_app_assoc, evaluation, isoOfNatIso, ofComponents, preservesLimitsOfShape_of_evaluation, preservesLimitsOfShape_of_natIso, whiskeringRight
 -/
@@ -612,7 +630,10 @@ instance :
     let i : (lim : (K ⥤ D ⥤ C) ⥤ _) ⋙ (evaluation D C).obj d ≅
         limit ((whiskeringRight K (D ⥤ C) C).obj ((evaluation D C).obj d)).flip :=
       NatIso.ofComponents (fun X => (limitObjIsoLimitCompEvaluation _ _) ≪≫
-          (by exact HasLi
+          (by exact HasLimit.isoOfNatIso (Iso.refl _)) ≪≫
+          (limitObjIsoLimitCompEvaluation _ _).symm)
+        (fun {F G} η => limit_obj_ext (fun j => by simp [← NatTrans.comp_app]))
+    preservesColimitsOfShape_of_natIso (i ≪≫ limitFlipIsoCompLim _).symm)
 
 中文:
 实例 :
@@ -621,7 +642,10 @@ instance :
     let i : (lim : (K ⥤ D ⥤ C) ⥤ _) ⋙ (evaluation D C).obj d ≅
         limit ((whiskeringRight K (D ⥤ C) C).obj ((evaluation D C).obj d)).flip :=
       NatIso.ofComponents (fun X => (limitObjIsoLimitCompEvaluation _ _) ≪≫
-          (by exact HasLi
+          (by exact HasLimit.isoOfNatIso (Iso.refl _)) ≪≫
+          (limitObjIsoLimitCompEvaluation _ _).symm)
+        (fun {F G} η => limit_obj_ext (fun j => by simp [← NatTrans.comp_app]))
+    preservesColimitsOfShape_of_natIso (i ≪≫ limitFlipIsoCompLim _).symm)
 
 Depends on / 依赖: HasLimit, HasLimit.isoOfNatIso, Iso.refl, NatIso, NatIso.ofComponents, NatTrans, NatTrans.comp_app, comp_app, evaluation, isoOfNatIso, limitFlipIsoCompLim, limitObjIsoLimitCompEvaluation, limit_obj_ext, ofComponents, preservesColimitsOfShape_of_evaluation, preservesColimitsOfShape_of_natIso, whiskeringRight
 -/

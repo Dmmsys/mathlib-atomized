@@ -150,7 +150,8 @@ definition Quot.desc
   rw [eq]
   simp only [SetLike.mem_coe, AddMonoidHom.mem_ker, map_sub, DFinsupp.sumAddHom_single]
   change (F.map _ ≫ c.ι.app _) _ - _ = 0
-  rw [c.ι.n
+  rw [c.ι.naturality]
+  simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id, sub_self]
 
 中文:
 定义 商.desc
@@ -163,7 +164,8 @@ definition Quot.desc
   rw [eq]
   simp only [SetLike.mem_coe, AddMonoidHom.mem_ker, map_sub, DFinsupp.sumAddHom_single]
   change (F.map _ ≫ c.ι.app _) _ - _ = 0
-  rw [c.ι.n
+  rw [c.ι.naturality]
+  simp only [Functor.const_obj_obj, Functor.const_obj_map, Category.comp_id, sub_self]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mem_ker, AddSubgroup, AddSubgroup.closure_le, Category, Category.comp_id, DFinsupp, DFinsupp.sumAddHom, DFinsupp.sumAddHom_single, F.map, Functor, Functor.const_obj_map, Functor.const_obj_obj, QuotientAddGroup, QuotientAddGroup.lift, SetLike, SetLike.mem_coe, closure_le, comp_id, const_obj_map
 -/
@@ -260,7 +262,11 @@ definition quotToQuotUlift
   rw [AddSubgroup.closure_le]
   intro _ hx
   obtain ⟨j, j', u, a, rfl⟩ := hx
-  rw [SetLike.mem_coe]; rw [AddMonoidHom.mem_ker]; rw [map_sub]; rw [DFinsupp.sumAd
+  rw [SetLike.mem_coe]; rw [AddMonoidHom.mem_ker]; rw [map_sub]; rw [DFinsupp.sumAddHom_single]; rw [DFinsupp.sumAddHom_single]
+  change Quot.ι (F ⋙ uliftFunctor) j' ((F ⋙ uliftFunctor).map u (AddEquiv.ulift.symm a)) - _ = _
+  rw [Quot.map_ι]
+  dsimp
+  rw [sub_self]
 
 中文:
 定义 quotToQuotUlift
@@ -271,7 +277,11 @@ definition quotToQuotUlift
   rw [AddSubgroup.closure_le]
   intro _ hx
   obtain ⟨j, j', u, a, rfl⟩ := hx
-  rw [SetLike.mem_coe]; rw [AddMonoidHom.mem_ker]; rw [map_sub]; rw [DFinsupp.sumAd
+  rw [SetLike.mem_coe]; rw [AddMonoidHom.mem_ker]; rw [map_sub]; rw [DFinsupp.sumAddHom_single]; rw [DFinsupp.sumAddHom_single]
+  change Quot.ι (F ⋙ uliftFunctor) j' ((F ⋙ uliftFunctor).map u (AddEquiv.ulift.symm a)) - _ = _
+  rw [Quot.map_ι]
+  dsimp
+  rw [sub_self]
 
 Depends on / 依赖: AddEquiv, AddEquiv.ulift.symm, AddEquiv.ulift.symm.toAddMonoidHom, AddMonoidHom, AddMonoidHom.mem_ker, AddSubgroup, AddSubgroup.closure_le, DFinsupp, DFinsupp.sumAddHom, DFinsupp.sumAddHom_single, Quot.map_, QuotientAddGroup, QuotientAddGroup.lift, Relations, SetLike, SetLike.mem_coe, closure_le, map_sub, mem_coe, mem_ker
 -/
@@ -369,7 +379,8 @@ lemma quotUliftToQuot_ι
   conv_lhs => erw [AddMonoidHom.comp_apply (QuotientAddGroup.mk' (Relations (F ⋙ uliftFunctor)))
     (DFinsupp.singleAddHom _ j), QuotientAddGroup.lift_mk']
   simp only [DFinsupp.singleAddHom_apply,
-    DFinsupp.sumAddHom_single, AddMonoidHom.coe_comp, Function.c
+    DFinsupp.sumAddHom_single, AddMonoidHom.coe_comp, Function.comp_apply]
+  rfl
 
 中文:
 引理 quotUliftToQuot_ι
@@ -379,7 +390,8 @@ lemma quotUliftToQuot_ι
   conv_lhs => erw [AddMonoidHom.comp_apply (QuotientAddGroup.mk' (Relations (F ⋙ uliftFunctor)))
     (DFinsupp.singleAddHom _ j), QuotientAddGroup.lift_mk']
   simp only [DFinsupp.singleAddHom_apply,
-    DFinsupp.sumAddHom_single, AddMonoidHom.coe_comp, Function.c
+    DFinsupp.sumAddHom_single, AddMonoidHom.coe_comp, Function.comp_apply]
+  rfl
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_comp, AddMonoidHom.comp_apply, DFinsupp, DFinsupp.singleAddHom, DFinsupp.singleAddHom_apply, DFinsupp.sumAddHom_single, Function, Function.comp_apply, QuotientAddGroup, QuotientAddGroup.lift_mk, QuotientAddGroup.mk, Relations, coe_comp, comp_apply, conv_lhs, lift_mk, quotUliftToQuot, singleAddHom, singleAddHom_apply
 -/
@@ -409,7 +421,14 @@ definition quotQuotUliftAddEquiv
     conv_rhs => rw [← AddMonoidHom.id_apply _ x]
     rw [← AddMonoidHom.comp_apply]; rw [Quot.addMonoidHom_ext F (f := (quotUliftToQuot F).comp
       (quotToQuotUlift F)) (fun j a => ?_)]
-    rw [AddMonoidHom.comp_apply]; rw [AddMono
+    rw [AddMonoidHom.comp_apply]; rw [AddMonoidHom.id_apply]; rw [quotToQuotUlift_ι]; rw [quotUliftToQuot_ι]
+  right_inv x := by
+    conv_rhs => rw [← AddMonoidHom.id_apply _ x]
+    rw [← AddMonoidHom.comp_apply]; rw [Quot.addMonoidHom_ext _ (f := (quotToQuotUlift F).comp
+      (quotUliftToQuot F)) (fun j a => ?_)]
+    rw [AddMonoidHom.comp_apply]; rw [AddMonoidHom.id_apply]; rw [quotUliftToQuot_ι]; rw [quotToQuotUlift_ι]
+    rfl
+  map_add' _ _ := by simp
 
 中文:
 定义 quotQuotUliftAddEquiv
@@ -420,7 +439,14 @@ definition quotQuotUliftAddEquiv
     conv_rhs => rw [← AddMonoidHom.id_apply _ x]
     rw [← AddMonoidHom.comp_apply]; rw [Quot.addMonoidHom_ext F (f := (quotUliftToQuot F).comp
       (quotToQuotUlift F)) (fun j a => ?_)]
-    rw [AddMonoidHom.comp_apply]; rw [AddMono
+    rw [AddMonoidHom.comp_apply]; rw [AddMonoidHom.id_apply]; rw [quotToQuotUlift_ι]; rw [quotUliftToQuot_ι]
+  right_inv x := by
+    conv_rhs => rw [← AddMonoidHom.id_apply _ x]
+    rw [← AddMonoidHom.comp_apply]; rw [Quot.addMonoidHom_ext _ (f := (quotToQuotUlift F).comp
+      (quotUliftToQuot F)) (fun j a => ?_)]
+    rw [AddMonoidHom.comp_apply]; rw [AddMonoidHom.id_apply]; rw [quotUliftToQuot_ι]; rw [quotToQuotUlift_ι]
+    rfl
+  map_add' _ _ := by simp
 
 Depends on / 依赖: quotToQuotUlift
 -/
@@ -582,7 +608,15 @@ definition isColimit_of_bijective_desc
     dsimp
     conv_lhs => erw [← Quot.ι_desc F c j x]
     rw [← AddEquiv.ofBijective_apply _ h]; rw [AddEquiv.symm_apply_apply]
-    simp only [Quot.ι_desc, Functor.co
+    simp only [Quot.ι_desc, Functor.const_obj_obj]
+  uniq s m hm := by
+    ext x
+    obtain ⟨x, rfl⟩ := h.2 x
+    dsimp
+    rw [← AddEquiv.ofBijective_apply _ h]; rw [AddEquiv.symm_apply_apply]
+    suffices eq : m.hom.comp (AddEquiv.ofBijective (Quot.desc F c) h) = Quot.desc F s by
+      rw [← eq]; rfl
+    exact Quot.addMonoidHom_ext F (by simp [← hm])
 
 中文:
 定义 isColimit_of_bijective_desc
@@ -594,7 +628,15 @@ definition isColimit_of_bijective_desc
     dsimp
     conv_lhs => erw [← Quot.ι_desc F c j x]
     rw [← AddEquiv.ofBijective_apply _ h]; rw [AddEquiv.symm_apply_apply]
-    simp only [Quot.ι_desc, Functor.co
+    simp only [Quot.ι_desc, Functor.const_obj_obj]
+  uniq s m hm := by
+    ext x
+    obtain ⟨x, rfl⟩ := h.2 x
+    dsimp
+    rw [← AddEquiv.ofBijective_apply _ h]; rw [AddEquiv.symm_apply_apply]
+    suffices eq : m.hom.comp (AddEquiv.ofBijective (Quot.desc F c) h) = Quot.desc F s by
+      rw [← eq]; rfl
+    exact Quot.addMonoidHom_ext F (by simp [← hm])
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ofHom, AddEquiv, AddEquiv.ofBijective, Quot.desc, ofBijective
 -/
@@ -831,7 +873,13 @@ QuotientAddGroup.lift _ (cokernel.π f).hom by
       exact cokernel.condition_apply f x
   hom_inv_id := by
     refine coequalizer.hom_ext ?_
-    simp only [coequalizer_as_cokernel, cokernel.π_desc_assoc
+    simp only [coequalizer_as_cokernel, cokernel.π_desc_assoc, Category.comp_id]
+    rfl
+  inv_hom_id := by
+    ext x
+    dsimp only [hom_comp, hom_ofHom, hom_zero, AddMonoidHom.coe_comp, coe_mk',
+      Function.comp_apply, AddMonoidHom.zero_apply, id_eq, lift_mk, hom_id, AddMonoidHom.coe_id]
+exact QuotientAddGroup.induction_on (α := H) x cokernel.π_desc_apply f _ _
 
 中文:
 定义 cokernelIsoQuotient
@@ -845,7 +893,13 @@ QuotientAddGroup.lift _ (cokernel.π f).hom by
       exact cokernel.condition_apply f x
   hom_inv_id := by
     refine coequalizer.hom_ext ?_
-    simp only [coequalizer_as_cokernel, cokernel.π_desc_assoc
+    simp only [coequalizer_as_cokernel, cokernel.π_desc_assoc, Category.comp_id]
+    rfl
+  inv_hom_id := by
+    ext x
+    dsimp only [hom_comp, hom_ofHom, hom_zero, AddMonoidHom.coe_comp, coe_mk',
+      Function.comp_apply, AddMonoidHom.zero_apply, id_eq, lift_mk, hom_id, AddMonoidHom.coe_id]
+exact QuotientAddGroup.induction_on (α := H) x cokernel.π_desc_apply f _ _
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_comp, AddMonoidHom.coe_id, AddMonoidHom.zero_apply, Category, Category.comp_id, Function, Function.comp_apply, QuotientAddGroup, QuotientAddGroup.in, QuotientAddGroup.lift, coe_comp, coe_id, coe_mk, coequalizer, coequalizer.hom_ext, coequalizer_as_cokernel, cokernel, cokernel.condition_apply, cokernel.desc
 -/

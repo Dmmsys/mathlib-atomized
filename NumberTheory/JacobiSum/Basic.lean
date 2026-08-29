@@ -167,7 +167,9 @@ lemma jacobiSum_eq_aux
     rw [show forall x y : R]; rw [x * y = x + y - 1 + (x - 1) * (y - 1) by intros; ring]
   rw [sum_add_distrib]; rw [sum_sub_distrib]; rw [sum_add_distrib]
   conv => enter [1, 1, 1, 2, 2, x]; rw [← Equiv.subLeft_apply 1]
-  rw [(Equiv.subLeft 1).sum_c
+  rw [(Equiv.subLeft 1).sum_comp ψ]; rw [Fintype.card_eq_sum_ones]; rw [Nat.cast_sum]; rw [Nat.cast_one]; rw [sum_sdiff_eq_sub (subset_univ _)]; rw [← sub_zero (_ - _ + _)]; rw [add_sub_assoc]
+  congr
+  rw [sum_pair zero_ne_one]; rw [sub_zero]; rw [ψ.map_one]; rw [χ.map_one]; rw [sub_self]; rw [mul_zero]; rw [zero_mul]; rw [add_zero]
 
 中文:
 引理 jacobiSum_eq_aux
@@ -179,7 +181,9 @@ lemma jacobiSum_eq_aux
     rw [show forall x y : R]; rw [x * y = x + y - 1 + (x - 1) * (y - 1) by intros; ring]
   rw [sum_add_distrib]; rw [sum_sub_distrib]; rw [sum_add_distrib]
   conv => enter [1, 1, 1, 2, 2, x]; rw [← Equiv.subLeft_apply 1]
-  rw [(Equiv.subLeft 1).sum_c
+  rw [(Equiv.subLeft 1).sum_comp ψ]; rw [Fintype.card_eq_sum_ones]; rw [Nat.cast_sum]; rw [Nat.cast_one]; rw [sum_sdiff_eq_sub (subset_univ _)]; rw [← sub_zero (_ - _ + _)]; rw [add_sub_assoc]
+  congr
+  rw [sum_pair zero_ne_one]; rw [sub_zero]; rw [ψ.map_one]; rw [χ.map_one]; rw [sub_self]; rw [mul_zero]; rw [zero_mul]; rw [add_zero]
 -/
 private lemma jacobiSum_eq_aux (χ ψ : MulChar F R) :
     jacobiSum χ ψ = ∑ x : F, χ x + ∑ x : F, ψ x - Fintype.card F +
@@ -211,7 +215,13 @@ theorem jacobiSum_trivial_trivial
   have : forall x in univ \ {0, 1}, (MulChar.trivial F R) x * (MulChar.trivial F R) (1 - x) = 1 := by
     intro x hx
     rw [← map_mul]; rw [MulChar.trivial_apply]; rw [if_pos]
-    simp only [mem_sdiff, mem_univ, mem_insert, mem_singleton, not_or, ← ne_eq
+    simp only [mem_sdiff, mem_univ, mem_insert, mem_singleton, not_or, ← ne_eq, true_and] at hx
+    simpa only [isUnit_iff_ne_zero, mul_ne_zero_iff, ne_eq, sub_eq_zero, @eq_comm _ _ x] using hx
+  calc ∑ x in univ \ {0, 1}, (MulChar.trivial F R) x * (MulChar.trivial F R) (1 - x)
+  _ = ∑ _ in univ \ {0, 1}, 1 := sum_congr rfl this
+  _ = #(univ \ {0, 1}) := (cast_card _).symm
+  _ = Fintype.card F - 2 := by
+    rw [card_sdiff_of_subset (subset_univ _)]; rw [card_univ]; rw [card_pair zero_ne_one]; rw [Nat.cast_sub Nat.add_one_le_of_lt Fintype.one_lt_card]; rw [Nat.cast_two]
 
 中文:
 定理 jacobiSum_trivial_trivial
@@ -221,7 +231,13 @@ theorem jacobiSum_trivial_trivial
   have : forall x in univ \ {0, 1}, (MulChar.trivial F R) x * (MulChar.trivial F R) (1 - x) = 1 := by
     intro x hx
     rw [← map_mul]; rw [MulChar.trivial_apply]; rw [if_pos]
-    simp only [mem_sdiff, mem_univ, mem_insert, mem_singleton, not_or, ← ne_eq
+    simp only [mem_sdiff, mem_univ, mem_insert, mem_singleton, not_or, ← ne_eq, true_and] at hx
+    simpa only [isUnit_iff_ne_zero, mul_ne_zero_iff, ne_eq, sub_eq_zero, @eq_comm _ _ x] using hx
+  calc ∑ x in univ \ {0, 1}, (MulChar.trivial F R) x * (MulChar.trivial F R) (1 - x)
+  _ = ∑ _ in univ \ {0, 1}, 1 := sum_congr rfl this
+  _ = #(univ \ {0, 1}) := (cast_card _).symm
+  _ = Fintype.card F - 2 := by
+    rw [card_sdiff_of_subset (subset_univ _)]; rw [card_univ]; rw [card_pair zero_ne_one]; rw [Nat.cast_sub Nat.add_one_le_of_lt Fintype.one_lt_card]; rw [Nat.cast_two]
 
 Depends on / 依赖: MulChar, MulChar.trivial, MulChar.trivial_apply, classical, eq_comm, if_pos, isUnit_iff_ne_zero, jacobiSum_eq_sum_sdiff, map_mul, mem_insert, mem_sdiff, mem_singleton, mem_univ, mul_ne_zero_iff, ne_eq, not_or, sub_eq_zero, trivial_apply, true_and
 -/
@@ -273,7 +289,10 @@ theorem jacobiSum_one_nontrivial
     apply Finset.sum_eq_zero
     simp +contextual only [mem_sdiff, mem_univ, mem_insert, mem_singleton,
       not_or, ← isUnit_iff_ne_zero, true_and, MulChar.one_apply, sub_self, zero_mul,
-      impli
+      implies_true]
+  simp only [jacobiSum_eq_aux, MulChar.sum_one_eq_card_units, MulChar.sum_eq_zero_of_ne_one hχ,
+    add_zero, Fintype.card_eq_card_units_add_one (α := F), Nat.cast_add, Nat.cast_one,
+    sub_add_cancel_left, this]
 
 中文:
 定理 jacobiSum_one_nontrivial
@@ -285,7 +304,10 @@ theorem jacobiSum_one_nontrivial
     apply Finset.sum_eq_zero
     simp +contextual only [mem_sdiff, mem_univ, mem_insert, mem_singleton,
       not_or, ← isUnit_iff_ne_zero, true_and, MulChar.one_apply, sub_self, zero_mul,
-      impli
+      implies_true]
+  simp only [jacobiSum_eq_aux, MulChar.sum_one_eq_card_units, MulChar.sum_eq_zero_of_ne_one hχ,
+    add_zero, Fintype.card_eq_card_units_add_one (α := F), Nat.cast_add, Nat.cast_one,
+    sub_add_cancel_left, this]
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, Fintype, Fintype.card_eq_card_units_add_one, MulChar, MulChar.one_apply, MulChar.sum_eq_zero_of_ne_one, MulChar.sum_one_eq_card_units, Nat.cast_add, Nat.cast_one, add_zero, card_eq_card_units_add_one, cast_add, cast_one, classical, contextual, implies_true, isUnit_iff_ne_zero, jacobiSum_eq_aux, mem_insert
 -/
@@ -312,7 +334,23 @@ theorem jacobiSum_nontrivial_inv
   rw [jacobiSum]
   conv => enter [1, 2, x]; rw [MulChar.inv_apply', ← map_mul, ← div_eq_mul_inv]
   rw [sum_eq_sum_sdiff_singleton_add (mem_univ (1 : F))]; rw [sub_self]; rw [div_zero]; rw [χ.map_zero]; rw [add_zero]
-  have : ∑ x in univ \ {1}, χ (x / (1 - x)) = ∑ x in univ \ {-1}, χ x
+  have : ∑ x in univ \ {1}, χ (x / (1 - x)) = ∑ x in univ \ {-1}, χ x := by
+    refine sum_bij' (fun a _ => a / (1 - a)) (fun b _ => b / (1 + b)) (fun x hx => ?_)
+      (fun y hy => ?_) (fun x hx => ?_) (fun y hy => ?_) (fun _ _ => rfl)
+    · simp only [mem_sdiff, mem_univ, mem_singleton, true_and] at hx ⊢
+      rw [div_eq_iff <| sub_ne_zero.mpr ((ne_eq ..).symm ▸ hx).symm]; rw [mul_sub]; rw [mul_one]; rw [neg_one_mul]; rw [sub_neg_eq_add]; rw [right_eq_add]; rw [neg_eq_zero]
+      exact one_ne_zero
+    · simp only [mem_sdiff, mem_univ, mem_singleton, true_and] at hy ⊢
+      rw [div_eq_iff fun h => hy <| eq_neg_of_add_eq_zero_right h]; rw [one_mul]; rw [right_eq_add]
+      exact one_ne_zero
+    · simp only [mem_sdiff, mem_univ, mem_singleton, true_and] at hx
+      rw [eq_comm]; rw [← sub_eq_zero] at hx
+      simp [field]
+    · simp only [mem_sdiff, mem_univ, mem_singleton, true_and] at hy
+      rw [eq_comm]; rw [neg_eq_iff_eq_neg]; rw [← sub_eq_zero]; rw [sub_neg_eq_add] at hy
+      simp [field]
+  rw [this]; rw [← add_eq_zero_iff_eq_neg]; rw [← sum_eq_sum_sdiff_singleton_add (mem_univ (-1 : F))]
+  exact MulChar.sum_eq_zero_of_ne_one hχ
 
 中文:
 定理 jacobiSum_nontrivial_inv
@@ -323,7 +361,23 @@ theorem jacobiSum_nontrivial_inv
   rw [jacobiSum]
   conv => enter [1, 2, x]; rw [MulChar.inv_apply', ← map_mul, ← div_eq_mul_inv]
   rw [sum_eq_sum_sdiff_singleton_add (mem_univ (1 : F))]; rw [sub_self]; rw [div_zero]; rw [χ.map_zero]; rw [add_zero]
-  have : ∑ x in univ \ {1}, χ (x / (1 - x)) = ∑ x in univ \ {-1}, χ x
+  have : ∑ x in univ \ {1}, χ (x / (1 - x)) = ∑ x in univ \ {-1}, χ x := by
+    refine sum_bij' (fun a _ => a / (1 - a)) (fun b _ => b / (1 + b)) (fun x hx => ?_)
+      (fun y hy => ?_) (fun x hx => ?_) (fun y hy => ?_) (fun _ _ => rfl)
+    · simp only [mem_sdiff, mem_univ, mem_singleton, true_and] at hx ⊢
+      rw [div_eq_iff <| sub_ne_zero.mpr ((ne_eq ..).symm ▸ hx).symm]; rw [mul_sub]; rw [mul_one]; rw [neg_one_mul]; rw [sub_neg_eq_add]; rw [right_eq_add]; rw [neg_eq_zero]
+      exact one_ne_zero
+    · simp only [mem_sdiff, mem_univ, mem_singleton, true_and] at hy ⊢
+      rw [div_eq_iff fun h => hy <| eq_neg_of_add_eq_zero_right h]; rw [one_mul]; rw [right_eq_add]
+      exact one_ne_zero
+    · simp only [mem_sdiff, mem_univ, mem_singleton, true_and] at hx
+      rw [eq_comm]; rw [← sub_eq_zero] at hx
+      simp [field]
+    · simp only [mem_sdiff, mem_univ, mem_singleton, true_and] at hy
+      rw [eq_comm]; rw [neg_eq_iff_eq_neg]; rw [← sub_eq_zero]; rw [sub_neg_eq_add] at hy
+      simp [field]
+  rw [this]; rw [← add_eq_zero_iff_eq_neg]; rw [← sum_eq_sum_sdiff_singleton_add (mem_univ (-1 : F))]
+  exact MulChar.sum_eq_zero_of_ne_one hχ
 
 Depends on / 依赖: MulChar, MulChar.inv_apply, add_zero, classical, div_eq_mul_inv, div_zero, inv_apply, jacobiSum, map_mul, map_zero, mem_sdiff, mem_singleton, mem_univ, sub_self, sum_bij, sum_eq_sum_sdiff_singleton_add
 -/
@@ -362,7 +416,16 @@ theorem jacobiSum_mul_nontrivial
   conv =>
     enter [2, 2, 2, x]
     rw [zero_sub]; rw [neg_eq_neg_one_mul x]; rw [map_mul]; rw [mul_left_comm (χ x) (φ (-1))]; rw [← MulChar.mul_apply]; rw [ψ.map_zero_eq_one]; rw [mul_one]
-  rw [← mul_
+  rw [← mul_sum _ _ (φ (-1))]; rw [MulChar.sum_eq_zero_of_ne_one h]; rw [mul_zero]; rw [add_zero]
+  have sum_eq : forall t in univ \ {0}, (∑ x : F, χ x * φ (t - x)) * ψ t =
+      (∑ y : F, χ (t * y) * φ (t - (t * y))) * ψ t := by
+    intro t ht
+    simp only [mem_sdiff, mem_univ, mem_singleton, true_and] at ht
+    exact congrArg (· * ψ t) (Equiv.sum_comp (Equiv.mulLeft₀ t ht) _).symm
+  simp_rw [← sum_mul, sum_congr rfl sum_eq, ← mul_one_sub, map_mul, mul_assoc]
+  conv => enter [2, 2, t, 1, 2, x, 2]; rw [← mul_assoc, mul_comm (χ x) (φ t)]
+  simp_rw [← mul_assoc, ← MulChar.mul_apply, mul_assoc, ← mul_sum, mul_right_comm]
+  rw [← jacobiSum]; rw [← sum_mul]; rw [gaussSum]; rw [sum_eq_sum_sdiff_singleton_add (mem_univ (0 : F))]; rw [(χ * φ).map_zero]; rw [zero_mul]; rw [add_zero]
 
 中文:
 定理 jacobiSum_mul_nontrivial
@@ -373,7 +436,16 @@ theorem jacobiSum_mul_nontrivial
   conv =>
     enter [2, 2, 2, x]
     rw [zero_sub]; rw [neg_eq_neg_one_mul x]; rw [map_mul]; rw [mul_left_comm (χ x) (φ (-1))]; rw [← MulChar.mul_apply]; rw [ψ.map_zero_eq_one]; rw [mul_one]
-  rw [← mul_
+  rw [← mul_sum _ _ (φ (-1))]; rw [MulChar.sum_eq_zero_of_ne_one h]; rw [mul_zero]; rw [add_zero]
+  have sum_eq : forall t in univ \ {0}, (∑ x : F, χ x * φ (t - x)) * ψ t =
+      (∑ y : F, χ (t * y) * φ (t - (t * y))) * ψ t := by
+    intro t ht
+    simp only [mem_sdiff, mem_univ, mem_singleton, true_and] at ht
+    exact congrArg (· * ψ t) (Equiv.sum_comp (Equiv.mulLeft₀ t ht) _).symm
+  simp_rw [← sum_mul, sum_congr rfl sum_eq, ← mul_one_sub, map_mul, mul_assoc]
+  conv => enter [2, 2, t, 1, 2, x, 2]; rw [← mul_assoc, mul_comm (χ x) (φ t)]
+  simp_rw [← mul_assoc, ← MulChar.mul_apply, mul_assoc, ← mul_sum, mul_right_comm]
+  rw [← jacobiSum]; rw [← sum_mul]; rw [gaussSum]; rw [sum_eq_sum_sdiff_singleton_add (mem_univ (0 : F))]; rw [(χ * φ).map_zero]; rw [zero_mul]; rw [add_zero]
 
 Depends on / 依赖: MulChar, MulChar.mul_apply, MulChar.sum_eq_zero_of_ne_one, add_zero, classical, gaussSum_mul, map_mul, map_zero_eq_one, mem_univ, mul_apply, mul_left_comm, mul_one, mul_sum, mul_zero, neg_eq_neg_one_mul, sum_eq, sum_eq_sum_sdiff_singleton_add, sum_eq_zero_of_ne_one, zero_sub
 -/
@@ -440,7 +512,27 @@ lemma jacobiSum_mul_jacobiSum_inv
   -- the target field of `ψ`
   let FF' := CyclotomicField ψ.n F'
   -- Consider `χ` and `φ` as characters `F → FF'`.
-  let χ' := χ.ringHomComp
+  let χ' := χ.ringHomComp (algebraMap F' FF')
+  let φ' := φ.ringHomComp (algebraMap F' FF')
+  have hinj := (algebraMap F' FF').injective
+  apply hinj
+  rw [map_mul]; rw [← jacobiSum_ringHomComp]; rw [← jacobiSum_ringHomComp]
+  have Hχφ : χ' * φ' != 1 := by
+    rw [← ringHomComp_mul]
+    exact (MulChar.ringHomComp_ne_one_iff hinj).mpr hχφ
+  have Hχφ' : χ'⁻¹ * φ'⁻¹ != 1 := by
+    rwa [← mul_inv, inv_ne_one]
+  have Hχ : χ' != 1 := (MulChar.ringHomComp_ne_one_iff hinj).mpr hχ
+  have Hφ : φ' != 1 := (MulChar.ringHomComp_ne_one_iff hinj).mpr hφ
+  have Hcard : (Fintype.card F : FF') != 0 := by
+    intro H
+    simp only [hc, Nat.cast_pow, ne_eq, PNat.ne_zero, not_false_eq_true, pow_eq_zero_iff] at H
+exact h (Algebra.ringChar_eq F' FF').trans CharP.ringChar_of_prime_eq_zero hp H
+  have H := (gaussSum_mul_gaussSum_eq_card Hχφ ψ.prim).trans_ne Hcard
+  apply_fun (gaussSum (χ' * φ') ψ.char * gaussSum (χ' * φ')⁻¹ ψ.char⁻¹ * ·)
+    using mul_right_injective₀ H
+  simp only
+  rw [mul_mul_mul_comm]; rw [jacobiSum_mul_nontrivial Hχφ]; rw [mul_inv]; rw [← ringHomComp_inv]; rw [← ringHomComp_inv]; rw [jacobiSum_mul_nontrivial Hχφ']; rw [map_natCast]; rw [← mul_mul_mul_comm]; rw [gaussSum_mul_gaussSum_eq_card Hχ ψ.prim]; rw [gaussSum_mul_gaussSum_eq_card Hφ ψ.prim]; rw [← mul_inv]; rw [gaussSum_mul_gaussSum_eq_card Hχφ ψ.prim]
 
 中文:
 引理 jacobiSum_mul_jacobiSum_inv
@@ -452,7 +544,27 @@ lemma jacobiSum_mul_jacobiSum_inv
   -- the target field of `ψ`
   let FF' := CyclotomicField ψ.n F'
   -- Consider `χ` and `φ` as characters `F → FF'`.
-  let χ' := χ.ringHomComp
+  let χ' := χ.ringHomComp (algebraMap F' FF')
+  let φ' := φ.ringHomComp (algebraMap F' FF')
+  have hinj := (algebraMap F' FF').injective
+  apply hinj
+  rw [map_mul]; rw [← jacobiSum_ringHomComp]; rw [← jacobiSum_ringHomComp]
+  have Hχφ : χ' * φ' != 1 := by
+    rw [← ringHomComp_mul]
+    exact (MulChar.ringHomComp_ne_one_iff hinj).mpr hχφ
+  have Hχφ' : χ'⁻¹ * φ'⁻¹ != 1 := by
+    rwa [← mul_inv, inv_ne_one]
+  have Hχ : χ' != 1 := (MulChar.ringHomComp_ne_one_iff hinj).mpr hχ
+  have Hφ : φ' != 1 := (MulChar.ringHomComp_ne_one_iff hinj).mpr hφ
+  have Hcard : (Fintype.card F : FF') != 0 := by
+    intro H
+    simp only [hc, Nat.cast_pow, ne_eq, PNat.ne_zero, not_false_eq_true, pow_eq_zero_iff] at H
+exact h (Algebra.ringChar_eq F' FF').trans CharP.ringChar_of_prime_eq_zero hp H
+  have H := (gaussSum_mul_gaussSum_eq_card Hχφ ψ.prim).trans_ne Hcard
+  apply_fun (gaussSum (χ' * φ') ψ.char * gaussSum (χ' * φ')⁻¹ ψ.char⁻¹ * ·)
+    using mul_right_injective₀ H
+  simp only
+  rw [mul_mul_mul_comm]; rw [jacobiSum_mul_nontrivial Hχφ]; rw [mul_inv]; rw [← ringHomComp_inv]; rw [← ringHomComp_inv]; rw [jacobiSum_mul_nontrivial Hχφ']; rw [map_natCast]; rw [← mul_mul_mul_comm]; rw [gaussSum_mul_gaussSum_eq_card Hχ ψ.prim]; rw [gaussSum_mul_gaussSum_eq_card Hφ ψ.prim]; rw [← mul_inv]; rw [gaussSum_mul_gaussSum_eq_card Hχφ ψ.prim]
 
 Depends on / 依赖: FiniteField, FiniteField.card, ringChar
 -/
@@ -544,7 +656,11 @@ lemma MulChar.exists_apply_sub_one_mul_apply_sub_one
   · exact ⟨0, Subalgebra.zero_mem _, by rw [sub_zero, ψ.map_one, sub_self, mul_zero, zero_mul]⟩
   rcases eq_or_ne x 1 with rfl | hx₁
   · exact ⟨0, Subalgebra.zero_mem _, by rw [χ.map_one, sub_self, zero_mul, zero_mul]⟩
-  obtain ⟨z₁, hz₁, Hz₁⟩ := MulChar.exists
+  obtain ⟨z₁, hz₁, Hz₁⟩ := MulChar.exists_apply_sub_one_eq_mul_sub_one hχ hμ hx₀
+  obtain ⟨z₂, hz₂, Hz₂⟩ :=
+    MulChar.exists_apply_sub_one_eq_mul_sub_one hψ hμ (sub_ne_zero_of_ne hx₁.symm)
+  rewrite [Hz₁, Hz₂, sq]
+  exact ⟨z₁ * z₂, Subalgebra.mul_mem _ hz₁ hz₂, mul_mul_mul_comm ..⟩
 
 中文:
 引理 乘法特征.存在_apply_sub_one_mul_apply_sub_one
@@ -554,7 +670,11 @@ lemma MulChar.exists_apply_sub_one_mul_apply_sub_one
   · exact ⟨0, Subalgebra.zero_mem _, by rw [sub_zero, ψ.map_one, sub_self, mul_zero, zero_mul]⟩
   rcases eq_or_ne x 1 with rfl | hx₁
   · exact ⟨0, Subalgebra.zero_mem _, by rw [χ.map_one, sub_self, zero_mul, zero_mul]⟩
-  obtain ⟨z₁, hz₁, Hz₁⟩ := MulChar.exists
+  obtain ⟨z₁, hz₁, Hz₁⟩ := MulChar.exists_apply_sub_one_eq_mul_sub_one hχ hμ hx₀
+  obtain ⟨z₂, hz₂, Hz₂⟩ :=
+    MulChar.exists_apply_sub_one_eq_mul_sub_one hψ hμ (sub_ne_zero_of_ne hx₁.symm)
+  rewrite [Hz₁, Hz₂, sq]
+  exact ⟨z₁ * z₂, Subalgebra.mul_mem _ hz₁ hz₂, mul_mul_mul_comm ..⟩
 
 Depends on / 依赖: MulChar, MulChar.exists_apply_sub_one_eq_mul_sub_one, Subalgebra, Subalgebra.mul_mem, Subalgebra.zero_mem, eq_or_ne, exists_apply_sub_one_eq_mul_sub_one, map_one, mul_mem, mul_zero, rewrite, sub_ne_zero_of_ne, sub_self, sub_zero, zero_mem, zero_mul
 -/
@@ -614,7 +734,24 @@ lemma exists_jacobiSum_eq_neg_one_add
   by_cases hχ₀ : χ = 1 <;> by_cases hψ₀ : ψ = 1
   · rw [hχ₀, hψ₀, jacobiSum_one_one]
     refine ⟨q * z₁, Subalgebra.mul_mem _ (Subalgebra.natCast_mem _ q) hz₁, ?_⟩
-
+    rw [hq]; rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [Hz₁]
+    ring
+  · refine ⟨0, Subalgebra.zero_mem _, ?_⟩
+    rw [hχ₀]; rw [jacobiSum_one_nontrivial hψ₀]; rw [zero_mul]; rw [add_zero]
+  · refine ⟨0, Subalgebra.zero_mem _, ?_⟩
+    rw [jacobiSum_comm]; rw [hψ₀]; rw [jacobiSum_one_nontrivial hχ₀]; rw [zero_mul]; rw [add_zero]
+  · classical
+    rw [jacobiSum_eq_aux]; rw [MulChar.sum_eq_zero_of_ne_one hχ₀]; rw [MulChar.sum_eq_zero_of_ne_one hψ₀]; rw [hq]
+    have : NeZero n := ⟨by lia⟩
+    have H := MulChar.exists_apply_sub_one_mul_apply_sub_one hχ hψ hμ
+    have Hcs x := (H x).choose_spec
+    refine ⟨-q * z₁ + ∑ x in (univ \ {0, 1} : Finset F), (H x).choose, ?_, ?_⟩
+    · refine Subalgebra.add_mem _ (Subalgebra.mul_mem _ (Subalgebra.neg_mem _ ?_) hz₁) ?_
+      · exact Subalgebra.natCast_mem ..
+      · exact Subalgebra.sum_mem _ fun x _ => (Hcs x).1
+    · conv => enter [1, 2, 2, x]; rw [(Hcs x).2]
+      rw [← Finset.sum_mul]; rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [Hz₁]
+      ring
 
 中文:
 引理 存在_jacobiSum_eq_neg_one_add
@@ -626,7 +763,24 @@ lemma exists_jacobiSum_eq_neg_one_add
   by_cases hχ₀ : χ = 1 <;> by_cases hψ₀ : ψ = 1
   · rw [hχ₀, hψ₀, jacobiSum_one_one]
     refine ⟨q * z₁, Subalgebra.mul_mem _ (Subalgebra.natCast_mem _ q) hz₁, ?_⟩
-
+    rw [hq]; rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [Hz₁]
+    ring
+  · refine ⟨0, Subalgebra.zero_mem _, ?_⟩
+    rw [hχ₀]; rw [jacobiSum_one_nontrivial hψ₀]; rw [zero_mul]; rw [add_zero]
+  · refine ⟨0, Subalgebra.zero_mem _, ?_⟩
+    rw [jacobiSum_comm]; rw [hψ₀]; rw [jacobiSum_one_nontrivial hχ₀]; rw [zero_mul]; rw [add_zero]
+  · classical
+    rw [jacobiSum_eq_aux]; rw [MulChar.sum_eq_zero_of_ne_one hχ₀]; rw [MulChar.sum_eq_zero_of_ne_one hψ₀]; rw [hq]
+    have : NeZero n := ⟨by lia⟩
+    have H := MulChar.exists_apply_sub_one_mul_apply_sub_one hχ hψ hμ
+    have Hcs x := (H x).choose_spec
+    refine ⟨-q * z₁ + ∑ x in (univ \ {0, 1} : Finset F), (H x).choose, ?_, ?_⟩
+    · refine Subalgebra.add_mem _ (Subalgebra.mul_mem _ (Subalgebra.neg_mem _ ?_) hz₁) ?_
+      · exact Subalgebra.natCast_mem ..
+      · exact Subalgebra.sum_mem _ fun x _ => (Hcs x).1
+    · conv => enter [1, 2, 2, x]; rw [(Hcs x).2]
+      rw [← Finset.sum_mul]; rw [Nat.cast_add]; rw [Nat.cast_mul]; rw [Hz₁]
+      ring
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_mul, Nat.sub_eq_iff_eq_add, NeZero, NeZero.one_le, Subalgebra, Subalgebra.mul_mem, Subalgebra.natCast_mem, Subalgebra.zero_mem, add_zero, cast_add, cast_mul, jacobiSum_one_nontrivial, jacobiSum_one_one, mul_mem, natCast_mem, one_le, self_sub_one_pow_dvd_order, sub_eq_iff_eq_add, zero_mem
 -/
@@ -677,7 +831,13 @@ lemma gaussSum_pow_eq_prod_jacobiSum_aux
   | succ n hn ih =>
 specialize ih lt_trans (Nat.lt_succ_self n) hn₂
       have gauss_rw : gaussSum (χ ^ n) ψ * gaussSum χ ψ =
-            jacobiSum χ (χ ^ n) * gaussSum
+            jacobiSum χ (χ ^ n) * gaussSum (χ ^ (n + 1)) ψ := by
+        have hχn : χ * (χ ^ n) != 1 :=
+          pow_succ' χ n ▸ pow_ne_one_of_lt_orderOf n.add_one_ne_zero hn₂
+        rw [mul_comm]; rw [← jacobiSum_mul_nontrivial hχn]; rw [mul_comm]; rw [← pow_succ']
+      apply_fun (· * gaussSum χ ψ) at ih
+      rw [mul_right_comm]; rw [← pow_succ]; rw [gauss_rw] at ih
+      rw [ih]; rw [Finset.prod_Ico_succ_top hn]; rw [mul_rotate]; rw [mul_assoc]
 
 中文:
 引理 gaussSum_pow_eq_prod_jacobiSum_aux
@@ -688,7 +848,13 @@ specialize ih lt_trans (Nat.lt_succ_self n) hn₂
   | succ n hn ih =>
 specialize ih lt_trans (Nat.lt_succ_self n) hn₂
       have gauss_rw : gaussSum (χ ^ n) ψ * gaussSum χ ψ =
-            jacobiSum χ (χ ^ n) * gaussSum
+            jacobiSum χ (χ ^ n) * gaussSum (χ ^ (n + 1)) ψ := by
+        have hχn : χ * (χ ^ n) != 1 :=
+          pow_succ' χ n ▸ pow_ne_one_of_lt_orderOf n.add_one_ne_zero hn₂
+        rw [mul_comm]; rw [← jacobiSum_mul_nontrivial hχn]; rw [mul_comm]; rw [← pow_succ']
+      apply_fun (· * gaussSum χ ψ) at ih
+      rw [mul_right_comm]; rw [← pow_succ]; rw [gauss_rw] at ih
+      rw [ih]; rw [Finset.prod_Ico_succ_top hn]; rw [mul_rotate]; rw [mul_assoc]
 
 Depends on / 依赖: Ico_eq_empty_of_le, Nat.le_induction, Nat.lt_succ_self, add_one_ne_zero, apply_fun, gaussSum, gauss_rw, jacobiSum, jacobiSum_mul_nontrivial, le_induction, le_refl, lt_succ_self, lt_trans, mul_comm, mul_one, n.add_one_ne_zero, pow_ne_one_of_lt_orderOf, pow_one, pow_succ, prod_empty
 -/
@@ -719,7 +885,8 @@ theorem gaussSum_pow_eq_prod_jacobiSum
   apply_fun (gaussSum χ ψ * ·) at this
   rw [← pow_succ']; rw [Nat.sub_one_add_one_eq_of_pos (by lia)] at this
   have hχ₁ : χ != 1 :=
-    fun h => ((orderOf_one (G := MulChar F R) ▸ h ▸ hχ).trans_lt Nat.one_lt
+    fun h => ((orderOf_one (G := MulChar F R) ▸ h ▸ hχ).trans_lt Nat.one_lt_two).false
+  rw [this]; rw [← mul_assoc]; rw [gaussSum_mul_gaussSum_pow_orderOf_sub_one hχ₁ hψ]
 
 中文:
 定理 gaussSum_pow_eq_prod_jacobiSum
@@ -729,7 +896,8 @@ theorem gaussSum_pow_eq_prod_jacobiSum
   apply_fun (gaussSum χ ψ * ·) at this
   rw [← pow_succ']; rw [Nat.sub_one_add_one_eq_of_pos (by lia)] at this
   have hχ₁ : χ != 1 :=
-    fun h => ((orderOf_one (G := MulChar F R) ▸ h ▸ hχ).trans_lt Nat.one_lt
+    fun h => ((orderOf_one (G := MulChar F R) ▸ h ▸ hχ).trans_lt Nat.one_lt_two).false
+  rw [this]; rw [← mul_assoc]; rw [gaussSum_mul_gaussSum_pow_orderOf_sub_one hχ₁ hψ]
 
 Depends on / 依赖: MulChar, Nat.one_lt_two, Nat.sub_one_add_one_eq_of_pos, apply_fun, gaussSum, gaussSum_mul_gaussSum_pow_orderOf_sub_one, gaussSum_pow_eq_prod_jacobiSum_aux, mul_assoc, one_lt_two, orderOf, orderOf_one, pow_succ, sub_one_add_one_eq_of_pos, trans_lt
 -/

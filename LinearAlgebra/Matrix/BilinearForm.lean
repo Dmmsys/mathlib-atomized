@@ -2007,7 +2007,7 @@ lemma Nondegenerate.ofSeparatingLeft
   have : Fintype ι := Fintype.ofFinite ι
   have : DecidableEq ι := Classical.decEq ι
   rwa [← BilinForm.nondegenerate_toMatrix_iff b, Matrix.nondegenerate_iff_det_ne_zero,
-    ← Matrix.separatingLe
+    ← Matrix.separatingLeft_iff_det_ne_zero, separatingLeft_toMatrix_iff]
 
 中文:
 引理 非退化.ofSeparatingLeft
@@ -2019,7 +2019,7 @@ lemma Nondegenerate.ofSeparatingLeft
   have : Fintype ι := Fintype.ofFinite ι
   have : DecidableEq ι := Classical.decEq ι
   rwa [← BilinForm.nondegenerate_toMatrix_iff b, Matrix.nondegenerate_iff_det_ne_zero,
-    ← Matrix.separatingLe
+    ← Matrix.separatingLeft_iff_det_ne_zero, separatingLeft_toMatrix_iff]
 
 Depends on / 依赖: BilinForm, BilinForm.nondegenerate_toMatrix_iff, Classical, Classical.decEq, DecidableEq, Finite, Fintype, Fintype.ofFinite, Matrix, Matrix.nondegenerate_iff_det_ne_zero, Matrix.separatingLeft_iff_det_ne_zero, Module, Module.Finite.finite_basis, Module.Free.exists_basis, exists_basis, finite_basis, nondegenerate_iff_det_ne_zero, nondegenerate_toMatrix_iff, ofFinite, separatingLeft_iff_det_ne_zero
 -/

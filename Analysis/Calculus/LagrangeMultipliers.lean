@@ -51,7 +51,8 @@ theorem IsLocalExtrOn.range_ne_top_of_hasStrictFDerivAt
   have A : map φ (𝓝[f ⁻¹' {f x₀}] x₀) = 𝓝 (φ x₀) := by
     change map (Prod.snd ∘ fφ) (𝓝[fφ ⁻¹' {p | p.1 = f x₀}] x₀) = 𝓝 (φ x₀)
     rw [← map_map]; rw [nhdsWithin]; rw [map_inf_principal_preimage]; rw [(hf'.prodMk hφ').map_nhds_eq_of_surj htop]
-    ex
+    exact map_snd_nhdsWithin _
+  exact hextr.not_nhds_le_map A.ge
 
 中文:
 定理 IsLocalExtrOn.range_ne_top_of_hasStrictFDerivAt
@@ -61,7 +62,8 @@ theorem IsLocalExtrOn.range_ne_top_of_hasStrictFDerivAt
   have A : map φ (𝓝[f ⁻¹' {f x₀}] x₀) = 𝓝 (φ x₀) := by
     change map (Prod.snd ∘ fφ) (𝓝[fφ ⁻¹' {p | p.1 = f x₀}] x₀) = 𝓝 (φ x₀)
     rw [← map_map]; rw [nhdsWithin]; rw [map_inf_principal_preimage]; rw [(hf'.prodMk hφ').map_nhds_eq_of_surj htop]
-    ex
+    exact map_snd_nhdsWithin _
+  exact hextr.not_nhds_le_map A.ge
 
 Depends on / 依赖: A.ge, CStarRing, CStarRing.norm_self_mul_star, MulOpposite, MulOpposite.unop, Prod.snd, hextr.not_nhds_le_map, map_inf_principal_preimage, map_map, map_nhds_eq_of_surj, map_snd_nhdsWithin, nhdsWithin, norm_self_mul_star, not_nhds_le_map, prodMk
 -/
@@ -86,7 +88,19 @@ theorem IsLocalExtrOn.exists_linear_map_of_hasStrictFDerivAt
       (lt_top_iff_ne_top.2 <| hextr.range_ne_top_of_hasStrictFDerivAt hf' hφ') with
     ⟨Λ', h0, hΛ'⟩
   set e : ((F ->ₗ[Real] Real) × Real) ≃ₗ[Real] F × Real ->ₗ[Real] Real :=
-    ((LinearEquiv.refl Real (F ->ₗ[Real] Real)).prodCongr (LinearMap.ringLma
+    ((LinearEquiv.refl Real (F ->ₗ[Real] Real)).prodCongr (LinearMap.ringLmapEquivSelf Real Real Real).symm).trans
+      (LinearMap.coprodEquiv Real)
+  rcases e.surjective Λ' with ⟨⟨Λ, Λ₀⟩, rfl⟩
+  refine ⟨Λ, Λ₀, e.map_ne_zero_iff.1 h0, fun x => ?_⟩
+  convert! LinearMap.congr_fun (LinearMap.range_le_ker_iff.1 hΛ') x using 1
+    -- squeezed `simp [mul_comm]` to speed up elaboration
+
+  -- squeezed `simp [mul_comm]` to speed up elaboration
+  simp only [e, smul_eq_mul, LinearEquiv.trans_apply, LinearEquiv.prodCongr_apply,
+    LinearEquiv.refl_apply, LinearMap.ringLmapEquivSelf_symm_apply, LinearMap.coprodEquiv_apply,
+    ContinuousLinearMap.coe_prod, LinearMap.coprod_comp_prod, LinearMap.add_apply,
+    LinearMap.coe_comp, ContinuousLinearMap.coe_coe, Function.comp_apply, LinearMap.coe_smulRight,
+    Module.End.one_apply, mul_comm]
 
 中文:
 定理 IsLocalExtrOn.存在_linear_map_of_hasStrictFDerivAt
@@ -95,7 +109,19 @@ theorem IsLocalExtrOn.exists_linear_map_of_hasStrictFDerivAt
       (lt_top_iff_ne_top.2 <| hextr.range_ne_top_of_hasStrictFDerivAt hf' hφ') with
     ⟨Λ', h0, hΛ'⟩
   set e : ((F ->ₗ[Real] Real) × Real) ≃ₗ[Real] F × Real ->ₗ[Real] Real :=
-    ((LinearEquiv.refl Real (F ->ₗ[Real] Real)).prodCongr (LinearMap.ringLma
+    ((LinearEquiv.refl Real (F ->ₗ[Real] Real)).prodCongr (LinearMap.ringLmapEquivSelf Real Real Real).symm).trans
+      (LinearMap.coprodEquiv Real)
+  rcases e.surjective Λ' with ⟨⟨Λ, Λ₀⟩, rfl⟩
+  refine ⟨Λ, Λ₀, e.map_ne_zero_iff.1 h0, fun x => ?_⟩
+  convert! LinearMap.congr_fun (LinearMap.range_le_ker_iff.1 hΛ') x using 1
+    -- squeezed `simp [mul_comm]` to speed up elaboration
+
+  -- squeezed `simp [mul_comm]` to speed up elaboration
+  simp only [e, smul_eq_mul, LinearEquiv.trans_apply, LinearEquiv.prodCongr_apply,
+    LinearEquiv.refl_apply, LinearMap.ringLmapEquivSelf_symm_apply, LinearMap.coprodEquiv_apply,
+    ContinuousLinearMap.coe_prod, LinearMap.coprod_comp_prod, LinearMap.add_apply,
+    LinearMap.coe_comp, ContinuousLinearMap.coe_coe, Function.comp_apply, LinearMap.coe_smulRight,
+    Module.End.one_apply, mul_comm]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.refl, LinearMap, LinearMap.congr_fun, LinearMap.coprodEquiv, LinearMap.range_le_ker_if, LinearMap.ringLmapEquivSelf, Submodule, Submodule.exists_le_ker_of_lt_top, congr_fun, convert, coprodEquiv, e.map_ne_zero_iff, e.surjective, exists_le_ker_of_lt_top, hextr.range_ne_top_of_hasStrictFDerivAt, lt_top_iff_ne_top, map_ne_zero_iff, prodCongr, range_le_ker_if
 -/
@@ -135,7 +161,10 @@ theorem IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt_1d
     refine ⟨LinearMap.ext fun x => ?_, hΛ.2⟩
     simpa [hΛ.1] using Λ.map_smul x 1
   · ext x
-    have H₁ : Λ (f' x) = f' x * Λ 1 :
+    have H₁ : Λ (f' x) = f' x * Λ 1 := by
+      simpa only [mul_one, smul_eq_mul] using Λ.map_smul (f' x) 1
+    have H₂ : f' x * Λ 1 + Λ₀ * φ' x = 0 := by simpa only [smul_eq_mul, H₁] using hfΛ x
+    simpa [mul_comm] using H₂
 
 中文:
 定理 IsLocalExtrOn.存在_multipliers_of_hasStrictFDerivAt_1d
@@ -148,7 +177,10 @@ theorem IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt_1d
     refine ⟨LinearMap.ext fun x => ?_, hΛ.2⟩
     simpa [hΛ.1] using Λ.map_smul x 1
   · ext x
-    have H₁ : Λ (f' x) = f' x * Λ 1 :
+    have H₁ : Λ (f' x) = f' x * Λ 1 := by
+      simpa only [mul_one, smul_eq_mul] using Λ.map_smul (f' x) 1
+    have H₂ : f' x * Λ 1 + Λ₀ * φ' x = 0 := by simpa only [smul_eq_mul, H₁] using hfΛ x
+    simpa [mul_comm] using H₂
 
 Depends on / 依赖: LinearMap, LinearMap.ext, Nontrivial, NormOneClass, Prod.mk_eq_zero, contrapose, exists_linear_map_of_hasStrictFDerivAt, hextr.exists_linear_map_of_hasStrictFDerivAt, map_smul, mk_eq_zero, mul_comm, mul_one, smul_eq_mul
 -/
@@ -180,7 +212,10 @@ theorem IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt
   rcases hextr.exists_linear_map_of_hasStrictFDerivAt (hasStrictFDerivAt_pi.2 fun i => hf' i)
       hφ' with
     ⟨Λ, Λ₀, h0, hsum⟩
-  rcases (Linea
+  rcases (LinearEquiv.piRing Real Real ι Real).symm.surjective Λ with ⟨Λ, rfl⟩
+  refine ⟨Λ, Λ₀, ?_, ?_⟩
+  · simpa only [Ne, Prod.ext_iff, LinearEquiv.map_eq_zero_iff, Prod.fst_zero] using! h0
+  · ext x; simpa [mul_comm] using hsum x
 
 中文:
 定理 IsLocalExtrOn.存在_multipliers_of_hasStrictFDerivAt
@@ -192,7 +227,10 @@ theorem IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt
   rcases hextr.exists_linear_map_of_hasStrictFDerivAt (hasStrictFDerivAt_pi.2 fun i => hf' i)
       hφ' with
     ⟨Λ, Λ₀, h0, hsum⟩
-  rcases (Linea
+  rcases (LinearEquiv.piRing Real Real ι Real).symm.surjective Λ with ⟨Λ, rfl⟩
+  refine ⟨Λ, Λ₀, ?_, ?_⟩
+  · simpa only [Ne, Prod.ext_iff, LinearEquiv.map_eq_zero_iff, Prod.fst_zero] using! h0
+  · ext x; simpa [mul_comm] using hsum x
 
 Depends on / 依赖: Classical, Classical.decEq, IsLocalExtrOn, LinearEquiv, LinearEquiv.map_eq_zero_iff, LinearEquiv.piRing, Prod.ext_iff, Prod.fst_zero, exists_linear_map_of_hasStrictFDerivAt, ext_iff, fst_zero, funext_iff, hasStrictFDerivAt_pi, hextr.exists_linear_map_of_hasStrictFDerivAt, map_eq_zero_iff, mul_comm, piRing, replace, surjective, symm.surjective
 -/
@@ -223,7 +261,8 @@ theorem IsLocalExtrOn.linear_dependent_of_hasStrictFDerivAt
   rcases hextr.exists_multipliers_of_hasStrictFDerivAt hf' hφ' with ⟨Λ, Λ₀, hΛ, hΛf⟩
   refine ⟨Option.elim' Λ₀ Λ, ?_, ?_⟩
   · simpa [add_comm] using hΛf
-  · simpa only [funext_iff, not_and_or, or_comm, Option.exists, Prod.m
+  · simpa only [funext_iff, not_and_or, or_comm, Option.exists, Prod.mk_eq_zero, Ne,
+      not_forall] using! hΛ
 
 中文:
 定理 IsLocalExtrOn.linear_dependent_of_hasStrictFDerivAt
@@ -234,7 +273,8 @@ theorem IsLocalExtrOn.linear_dependent_of_hasStrictFDerivAt
   rcases hextr.exists_multipliers_of_hasStrictFDerivAt hf' hφ' with ⟨Λ, Λ₀, hΛ, hΛf⟩
   refine ⟨Option.elim' Λ₀ Λ, ?_, ?_⟩
   · simpa [add_comm] using hΛf
-  · simpa only [funext_iff, not_and_or, or_comm, Option.exists, Prod.m
+  · simpa only [funext_iff, not_and_or, or_comm, Option.exists, Prod.mk_eq_zero, Ne,
+      not_forall] using! hΛ
 
 Depends on / 依赖: Fintype, Fintype.linearIndependent_iff, Option.elim, Option.exists, Prod.mk_eq_zero, add_comm, exists_multipliers_of_hasStrictFDerivAt, funext_iff, hextr.exists_multipliers_of_hasStrictFDerivAt, linearIndependent_iff, mk_eq_zero, nonempty_fintype, not_and_or, not_forall, or_comm
 -/

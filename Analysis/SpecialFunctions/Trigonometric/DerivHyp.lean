@@ -2063,7 +2063,10 @@ theorem sinh_sub_id_strictMono
   refine strictMonoOn_of_deriv_pos (convex_Ici _) ?_ fun x hx => ?_
   · exact (continuous_sinh.sub continuous_id).continuousOn
   · rw [interior_Ici, mem_Ioi] at hx
-    rw [deriv_fun_sub]; rw [deriv_sinh]; rw [deriv_id'']; 
+    rw [deriv_fun_sub]; rw [deriv_sinh]; rw [deriv_id'']; rw [sub_pos]; rw [one_lt_cosh]
+    exacts [hx.ne', differentiableAt_sinh, differentiableAt_id]
+
+@[simp]
 
 中文:
 定理 sinh_sub_id_strictMono
@@ -2073,7 +2076,10 @@ theorem sinh_sub_id_strictMono
   refine strictMonoOn_of_deriv_pos (convex_Ici _) ?_ fun x hx => ?_
   · exact (continuous_sinh.sub continuous_id).continuousOn
   · rw [interior_Ici, mem_Ioi] at hx
-    rw [deriv_fun_sub]; rw [deriv_sinh]; rw [deriv_id'']; 
+    rw [deriv_fun_sub]; rw [deriv_sinh]; rw [deriv_id'']; rw [sub_pos]; rw [one_lt_cosh]
+    exacts [hx.ne', differentiableAt_sinh, differentiableAt_id]
+
+@[simp]
 
 Depends on / 依赖: continuousOn, continuous_id, continuous_sinh, continuous_sinh.sub, convex_Ici, deriv_fun_sub, deriv_id, deriv_sinh, differentiableAt_id, differentiableAt_sinh, exacts, hx.ne, interior_Ici, mem_Ioi, one_lt_cosh, strictMonoOn_of_deriv_pos, strictMono_of_odd_strictMonoOn_nonneg, sub_pos
 -/

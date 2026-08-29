@@ -325,7 +325,9 @@ lemma antidiagonal_filter_snd_le_of_le
   · rw [add_comm, tsub_add_eq_add_tsub h, ← hi.1, add_assoc, Nat.add_sub_of_le hi.2,
       add_tsub_cancel_right]
   · rintro ⟨l, hl, rfl⟩
-  
+    refine ⟨?_, hl ▸ Nat.le_add_left j l⟩
+    rw [add_assoc]; rw [add_comm]; rw [add_assoc]; rw [add_comm j l]; rw [hl]
+    exact Nat.sub_add_cancel h
 
 中文:
 引理 antidiagonal_filter_snd_le_of_le
@@ -337,7 +339,9 @@ lemma antidiagonal_filter_snd_le_of_le
   · rw [add_comm, tsub_add_eq_add_tsub h, ← hi.1, add_assoc, Nat.add_sub_of_le hi.2,
       add_tsub_cancel_right]
   · rintro ⟨l, hl, rfl⟩
-  
+    refine ⟨?_, hl ▸ Nat.le_add_left j l⟩
+    rw [add_assoc]; rw [add_comm]; rw [add_assoc]; rw [add_comm j l]; rw [hl]
+    exact Nat.sub_add_cancel h
 -/
 @[simp] lemma antidiagonal_filter_snd_le_of_le {n k : Nat} (h : k <= n) :
     {a in antidiagonal n | a.snd <= k} = (antidiagonal k).map
@@ -362,7 +366,11 @@ lemma antidiagonal_filter_fst_le_of_le
   have aux₁ : fun a => a.fst <= k = (fun a => a.snd <= k) ∘ (Equiv.prodComm Nat Nat).symm := rfl
   have aux₂ : forall i j, (exists a b, a + b = k ∧ b = i ∧ a + (n - k) = j) ↔
                       exists a b, a + b = k ∧ a = i ∧ b + (n - k) = j :=
-    fun i j => by rw [exists_comm]; exact exists₂
+    fun i j => by rw [exists_comm]; exact exists₂_congr (fun a b => by rw [add_comm])
+  rw [← map_prodComm_antidiagonal]
+  simp_rw [aux₁, ← map_filter, antidiagonal_filter_snd_le_of_le h, map_map]
+  ext ⟨i, j⟩
+  simpa using aux₂ i j
 
 中文:
 引理 antidiagonal_filter_fst_le_of_le
@@ -371,7 +379,11 @@ lemma antidiagonal_filter_fst_le_of_le
   have aux₁ : fun a => a.fst <= k = (fun a => a.snd <= k) ∘ (Equiv.prodComm Nat Nat).symm := rfl
   have aux₂ : forall i j, (exists a b, a + b = k ∧ b = i ∧ a + (n - k) = j) ↔
                       exists a b, a + b = k ∧ a = i ∧ b + (n - k) = j :=
-    fun i j => by rw [exists_comm]; exact exists₂
+    fun i j => by rw [exists_comm]; exact exists₂_congr (fun a b => by rw [add_comm])
+  rw [← map_prodComm_antidiagonal]
+  simp_rw [aux₁, ← map_filter, antidiagonal_filter_snd_le_of_le h, map_map]
+  ext ⟨i, j⟩
+  simpa using aux₂ i j
 -/
 @[simp] lemma antidiagonal_filter_fst_le_of_le {n k : Nat} (h : k <= n) :
     {a in antidiagonal n | a.fst <= k} = (antidiagonal k).map
@@ -399,7 +411,7 @@ lemma antidiagonal_filter_le_fst_of_le
   · rintro ⟨l, hl, rfl⟩
     refine ⟨?_, Nat.le_add_left k l⟩
     rw [add_right_comm]; rw [hl]
-    exact
+    exact tsub_add_cancel_of_le h
 
 中文:
 引理 antidiagonal_filter_le_fst_of_le
@@ -412,7 +424,7 @@ lemma antidiagonal_filter_le_fst_of_le
   · rintro ⟨l, hl, rfl⟩
     refine ⟨?_, Nat.le_add_left k l⟩
     rw [add_right_comm]; rw [hl]
-    exact
+    exact tsub_add_cancel_of_le h
 -/
 @[simp] lemma antidiagonal_filter_le_fst_of_le {n k : Nat} (h : k <= n) :
     {a in antidiagonal n | k <= a.fst} = (antidiagonal (n - k)).map
@@ -436,7 +448,12 @@ lemma antidiagonal_filter_le_snd_of_le
   have aux₁ : fun a => k <= a.snd = (fun a => k <= a.fst) ∘ (Equiv.prodComm Nat Nat).symm := rfl
   have aux₂ : forall i j, (exists a b, a + b = n - k ∧ b = i ∧ a + k = j) ↔
                       exists a b, a + b = n - k ∧ a = i ∧ b + k = j :=
-    fun i j => by rw [exists_comm]; exact exists₂_con
+    fun i j => by rw [exists_comm]; exact exists₂_congr (fun a b => by rw [add_comm])
+  rw [← map_prodComm_antidiagonal]
+  simp_rw [aux₁, ← map_filter, antidiagonal_filter_le_fst_of_le h,
+    map_map]
+  ext ⟨i, j⟩
+  simpa using aux₂ i j
 
 中文:
 引理 antidiagonal_filter_le_snd_of_le
@@ -445,7 +462,12 @@ lemma antidiagonal_filter_le_snd_of_le
   have aux₁ : fun a => k <= a.snd = (fun a => k <= a.fst) ∘ (Equiv.prodComm Nat Nat).symm := rfl
   have aux₂ : forall i j, (exists a b, a + b = n - k ∧ b = i ∧ a + k = j) ↔
                       exists a b, a + b = n - k ∧ a = i ∧ b + k = j :=
-    fun i j => by rw [exists_comm]; exact exists₂_con
+    fun i j => by rw [exists_comm]; exact exists₂_congr (fun a b => by rw [add_comm])
+  rw [← map_prodComm_antidiagonal]
+  simp_rw [aux₁, ← map_filter, antidiagonal_filter_le_fst_of_le h,
+    map_map]
+  ext ⟨i, j⟩
+  simpa using aux₂ i j
 -/
 @[simp] lemma antidiagonal_filter_le_snd_of_le {n k : Nat} (h : k <= n) :
     {a in antidiagonal n | k <= a.snd} = (antidiagonal (n - k)).map

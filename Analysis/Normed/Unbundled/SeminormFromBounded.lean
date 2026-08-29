@@ -195,7 +195,11 @@ theorem seminormFromBounded_aux
       specialize f_mul x 1
       rw [mul_one]; rw [show c * f x * f 1 = c * f 1 * f x by ring]; rw [le_mul_iff_one_le_left hx] at f_mul
       replace f_nonneg : 0 <= f 1 := f_nonneg 1
-  
+      rcases f_nonneg.eq_or_lt' with h1 | h1
+      · linarith [show (1 : Real) <= 0 by simpa [h1] using f_mul]
+      · rw [← div_le_iff₀ h1] at f_mul
+        linarith [one_div_pos.mpr h1]
+    positivity
 
 中文:
 定理 seminormFromBounded_aux
@@ -208,7 +212,11 @@ theorem seminormFromBounded_aux
       specialize f_mul x 1
       rw [mul_one]; rw [show c * f x * f 1 = c * f 1 * f x by ring]; rw [le_mul_iff_one_le_left hx] at f_mul
       replace f_nonneg : 0 <= f 1 := f_nonneg 1
-  
+      rcases f_nonneg.eq_or_lt' with h1 | h1
+      · linarith [show (1 : Real) <= 0 by simpa [h1] using f_mul]
+      · rw [← div_le_iff₀ h1] at f_mul
+        linarith [one_div_pos.mpr h1]
+    positivity
 
 Depends on / 依赖: eq_or_lt, f_mul, f_nonneg, f_nonneg.eq_or_lt, le_mul_iff_one_le_left, mul_one, one_div_pos, one_div_pos.mpr, replace, specialize
 -/
@@ -309,7 +317,7 @@ theorem seminormFromBounded_ge
     rw [hx0]; rw [h1]; rw [zero_mul]
   · rw [mul_comm, ← div_le_iff₀ (lt_of_le_of_ne' (f_nonneg _) h1)]
     conv_lhs => rw [← mul_one x]
-    exa
+    exact le_ciSup (seminormFromBounded_bddAbove_range f_nonneg f_mul x) (1 : R)
 
 中文:
 定理 seminormFromBounded_ge
@@ -322,7 +330,7 @@ theorem seminormFromBounded_ge
     rw [hx0]; rw [h1]; rw [zero_mul]
   · rw [mul_comm, ← div_le_iff₀ (lt_of_le_of_ne' (f_nonneg _) h1)]
     conv_lhs => rw [← mul_one x]
-    exa
+    exact le_ciSup (seminormFromBounded_bddAbove_range f_nonneg f_mul x) (1 : R)
 
 Depends on / 依赖: antisymm, conv_lhs, f_mul, f_mul.antisymm, f_nonneg, le_ciSup, lt_of_le_of_ne, mul_comm, mul_one, mul_zero, seminormFromBounded_bddAbove_range, specialize, zero_mul
 -/
@@ -375,7 +383,7 @@ theorem seminormFromBounded_eq_zero_iff
   · have hf : seminormFromBounded' f x <= c * f x :=
       seminormFromBounded_le f_nonneg f_mul x
     rw [h]; rw [mul_zero] at hf
-    exac
+    exact hf.antisymm (seminormFromBounded_nonneg f_nonneg f_mul x)
 
 中文:
 定理 seminormFromBounded_eq_zero_iff
@@ -388,7 +396,7 @@ theorem seminormFromBounded_eq_zero_iff
   · have hf : seminormFromBounded' f x <= c * f x :=
       seminormFromBounded_le f_nonneg f_mul x
     rw [h]; rw [mul_zero] at hf
-    exac
+    exact hf.antisymm (seminormFromBounded_nonneg f_nonneg f_mul x)
 
 Depends on / 依赖: antisymm, f_mul, f_nonneg, hf.antisymm, mul_zero, seminormFromBounded, seminormFromBounded_ge, seminormFromBounded_le, seminormFromBounded_nonneg
 -/
@@ -446,7 +454,24 @@ theorem seminormFromBounded_mul
   · rw [seminormFromBounded_eq_zero_iff f_nonneg f_mul] at hy
     intro z
     rw [mul_comm x y]; rw [mul_assoc]; rw [map_mul_zero_of_map_zero f_nonneg f_mul hy (x * z)]; rw [zero_div]
-    exact mul_nonneg (seminormFromBounded_nonneg f_
+    exact mul_nonneg (seminormFromBounded_nonneg f_nonneg f_mul x)
+      (seminormFromBounded_nonneg f_nonneg f_mul y)
+  · intro z
+    rw [← div_le_iff₀ (lt_of_le_of_ne' (seminormFromBounded_nonneg f_nonneg f_mul _) hy)]
+    apply le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul x) z
+    rw [div_le_iff₀ (lt_of_le_of_ne' (seminormFromBounded_nonneg f_nonneg f_mul _) hy)]; rw [div_mul_eq_mul_div]
+    by_cases hz : f z = 0
+    · have hxyz : f (z * (x * y)) = 0 := map_mul_zero_of_map_zero f_nonneg f_mul hz _
+      simp_rw [mul_comm, hxyz, zero_div]
+      exact div_nonneg (mul_nonneg (seminormFromBounded_nonneg f_nonneg f_mul y) (f_nonneg _))
+        (f_nonneg _)
+    · rw [div_le_div_iff_of_pos_right (lt_of_le_of_ne' (f_nonneg _) hz), mul_comm (f (x * z))]
+      by_cases hxz : f (x * z) = 0
+      · rw [mul_comm x y, mul_assoc, mul_comm y, map_mul_zero_of_map_zero f_nonneg f_mul hxz y]
+        exact mul_nonneg (seminormFromBounded_nonneg f_nonneg f_mul y) (f_nonneg _)
+      · rw [← div_le_iff₀ (lt_of_le_of_ne' (f_nonneg _) hxz)]
+        apply le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul y) (x * z)
+        rw [div_le_div_iff_of_pos_right (lt_of_le_of_ne' (f_nonneg _) hxz)]; rw [mul_comm x y]; rw [mul_assoc]
 
 中文:
 定理 seminormFromBounded_mul
@@ -457,7 +482,24 @@ theorem seminormFromBounded_mul
   · rw [seminormFromBounded_eq_zero_iff f_nonneg f_mul] at hy
     intro z
     rw [mul_comm x y]; rw [mul_assoc]; rw [map_mul_zero_of_map_zero f_nonneg f_mul hy (x * z)]; rw [zero_div]
-    exact mul_nonneg (seminormFromBounded_nonneg f_
+    exact mul_nonneg (seminormFromBounded_nonneg f_nonneg f_mul x)
+      (seminormFromBounded_nonneg f_nonneg f_mul y)
+  · intro z
+    rw [← div_le_iff₀ (lt_of_le_of_ne' (seminormFromBounded_nonneg f_nonneg f_mul _) hy)]
+    apply le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul x) z
+    rw [div_le_iff₀ (lt_of_le_of_ne' (seminormFromBounded_nonneg f_nonneg f_mul _) hy)]; rw [div_mul_eq_mul_div]
+    by_cases hz : f z = 0
+    · have hxyz : f (z * (x * y)) = 0 := map_mul_zero_of_map_zero f_nonneg f_mul hz _
+      simp_rw [mul_comm, hxyz, zero_div]
+      exact div_nonneg (mul_nonneg (seminormFromBounded_nonneg f_nonneg f_mul y) (f_nonneg _))
+        (f_nonneg _)
+    · rw [div_le_div_iff_of_pos_right (lt_of_le_of_ne' (f_nonneg _) hz), mul_comm (f (x * z))]
+      by_cases hxz : f (x * z) = 0
+      · rw [mul_comm x y, mul_assoc, mul_comm y, map_mul_zero_of_map_zero f_nonneg f_mul hxz y]
+        exact mul_nonneg (seminormFromBounded_nonneg f_nonneg f_mul y) (f_nonneg _)
+      · rw [← div_le_iff₀ (lt_of_le_of_ne' (f_nonneg _) hxz)]
+        apply le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul y) (x * z)
+        rw [div_le_div_iff_of_pos_right (lt_of_le_of_ne' (f_nonneg _) hxz)]; rw [mul_comm x y]; rw [mul_assoc]
 
 Depends on / 依赖: ciSup_le, f_mul, f_nonneg, le_ciSup_of_le, lt_of_le_of_ne, map_mul_zero_of_map_zero, mul_assoc, mul_comm, mul_nonneg, seminormFromBounded, seminormFromBounded_bddAbove_range, seminormFromBounded_eq_zero_iff, seminormFromBounded_nonneg, zero_div
 -/
@@ -502,7 +544,13 @@ theorem seminormFromBounded_one
     · rw [hx, div_zero]; exact zero_le_one
     · rw [div_self hx]
   · rw [← div_self (map_one_ne_zero f_ne_zero f_nonneg f_mul)]
-    have h_bdd : BddAbove (Set.range fun y => 
+    have h_bdd : BddAbove (Set.range fun y => f y / f y) := by
+      use (1 : Real)
+      rintro r ⟨y, rfl⟩
+      by_cases hy : f y = 0
+      · simp only [hy, div_zero, zero_le_one]
+      · simp only [div_self hy, le_refl]
+    exact le_ciSup h_bdd (1 : R)
 
 中文:
 定理 seminormFromBounded_one
@@ -515,7 +563,13 @@ theorem seminormFromBounded_one
     · rw [hx, div_zero]; exact zero_le_one
     · rw [div_self hx]
   · rw [← div_self (map_one_ne_zero f_ne_zero f_nonneg f_mul)]
-    have h_bdd : BddAbove (Set.range fun y => 
+    have h_bdd : BddAbove (Set.range fun y => f y / f y) := by
+      use (1 : Real)
+      rintro r ⟨y, rfl⟩
+      by_cases hy : f y = 0
+      · simp only [hy, div_zero, zero_le_one]
+      · simp only [div_self hy, le_refl]
+    exact le_ciSup h_bdd (1 : R)
 
 Depends on / 依赖: BddAbove, Set.range, ciSup_le, div_self, div_zero, f_mul, f_ne_zero, f_nonneg, h_bdd, le_antisymm, le_ciSup, le_refl, map_one_ne_zero, one_mul, seminormFromBounded, simp_rw, zero_le_one
 -/
@@ -582,7 +636,11 @@ theorem seminormFromBounded_add
   suffices hf : f ((x + y) * z) / f z <= f (x * z) / f z + f (y * z) / f z by
     exact le_trans hf (add_le_add
       (le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul x) z (le_refl _))
-      (le_ciSup_of_le (seminormFromBounded_bddAbove_range f_no
+      (le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul y) z (le_refl _)))
+  by_cases hz : f z = 0
+  · simp only [hz, div_zero, zero_add, le_refl]
+  · rw [← add_div, div_le_div_iff_of_pos_right (lt_of_le_of_ne' (f_nonneg _) hz), add_mul]
+    exact f_add _ _
 
 中文:
 定理 seminormFromBounded_add
@@ -592,7 +650,11 @@ theorem seminormFromBounded_add
   suffices hf : f ((x + y) * z) / f z <= f (x * z) / f z + f (y * z) / f z by
     exact le_trans hf (add_le_add
       (le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul x) z (le_refl _))
-      (le_ciSup_of_le (seminormFromBounded_bddAbove_range f_no
+      (le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul y) z (le_refl _)))
+  by_cases hz : f z = 0
+  · simp only [hz, div_zero, zero_add, le_refl]
+  · rw [← add_div, div_le_div_iff_of_pos_right (lt_of_le_of_ne' (f_nonneg _) hz), add_mul]
+    exact f_add _ _
 
 Depends on / 依赖: add_div, add_le_add, add_mul, ciSup_le, div_le_div_iff_of_pos_right, div_zero, f_add, f_mul, f_nonneg, le_ciSup_of_le, le_refl, le_trans, lt_of_le_of_ne, seminormFromBounded_bddAbove_range, zero_add
 -/
@@ -655,7 +717,12 @@ theorem seminormFromBounded_isNonarchimedean
   suffices hf : f ((x + y) * z) / f z <= f (x * z) / f z ∨ f ((x + y) * z) / f z <= f (y * z) / f z by
     rcases hf with hfx | hfy
 · exact Or.inl le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul x) z hfx
-· exact Or.inr
+· exact Or.inr le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul y) z hfy
+  by_cases hz : f z = 0
+  · simp only [hz, div_zero, le_refl, or_self_iff]
+  · rw [div_le_div_iff_of_pos_right (lt_of_le_of_ne' (f_nonneg _) hz),
+      div_le_div_iff_of_pos_right (lt_of_le_of_ne' (f_nonneg _) hz), add_mul, ← le_max_iff]
+    exact hna _ _
 
 中文:
 定理 seminormFromBounded_isNonarchimedean
@@ -666,7 +733,12 @@ theorem seminormFromBounded_isNonarchimedean
   suffices hf : f ((x + y) * z) / f z <= f (x * z) / f z ∨ f ((x + y) * z) / f z <= f (y * z) / f z by
     rcases hf with hfx | hfy
 · exact Or.inl le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul x) z hfx
-· exact Or.inr
+· exact Or.inr le_ciSup_of_le (seminormFromBounded_bddAbove_range f_nonneg f_mul y) z hfy
+  by_cases hz : f z = 0
+  · simp only [hz, div_zero, le_refl, or_self_iff]
+  · rw [div_le_div_iff_of_pos_right (lt_of_le_of_ne' (f_nonneg _) hz),
+      div_le_div_iff_of_pos_right (lt_of_le_of_ne' (f_nonneg _) hz), add_mul, ← le_max_iff]
+    exact hna _ _
 
 Depends on / 依赖: Or.inl, Or.inr, ciSup_le, div_le_div_iff_of_pos_right, div_zero, f_mul, f_nonneg, le_ciSup_of_le, le_max_iff, le_refl, lt_of_le_of_ne, or_self_iff, seminormFromBounded_bddAbove_range
 -/
@@ -700,7 +772,15 @@ theorem seminormFromBounded_of_mul_apply
     · rw [div_self hx, mul_one]
   · by_cases! f_ne_zero : f != 0
     · conv_lhs => rw [← mul_one (f x)]
-      
+      rw [← div_self (map_one_ne_zero f_ne_zero f_nonneg f_mul)]
+      have h_bdd : BddAbove (Set.range fun y => f x * (f y / f y)) := by
+        use f x
+        rintro r ⟨y, rfl⟩
+        by_cases hy0 : f y = 0
+        · simp only [hy0, div_zero, mul_zero]; exact f_nonneg _
+        · simp only [div_self hy0, mul_one, le_refl]
+      exact le_ciSup h_bdd (1 : R)
+    · simp_rw [f_ne_zero, Pi.zero_apply, zero_div, zero_mul, ciSup_const]; rfl
 
 中文:
 定理 seminormFromBounded_of_mul_apply
@@ -714,7 +794,15 @@ theorem seminormFromBounded_of_mul_apply
     · rw [div_self hx, mul_one]
   · by_cases! f_ne_zero : f != 0
     · conv_lhs => rw [← mul_one (f x)]
-      
+      rw [← div_self (map_one_ne_zero f_ne_zero f_nonneg f_mul)]
+      have h_bdd : BddAbove (Set.range fun y => f x * (f y / f y)) := by
+        use f x
+        rintro r ⟨y, rfl⟩
+        by_cases hy0 : f y = 0
+        · simp only [hy0, div_zero, mul_zero]; exact f_nonneg _
+        · simp only [div_self hy0, mul_one, le_refl]
+      exact le_ciSup h_bdd (1 : R)
+    · simp_rw [f_ne_zero, Pi.zero_apply, zero_div, zero_mul, ciSup_const]; rfl
 
 Depends on / 依赖: BddAbove, Set.range, ciSup_le, conv_lhs, div_self, div_zero, f_mul, f_ne_zero, f_nonneg, h_bdd, le_antisymm, map_one_ne_zero, mul_div_assoc, mul_one, mul_zero, seminormFromBounded, simp_rw
 -/
@@ -753,7 +841,23 @@ theorem seminormFromBounded_of_mul_le
     · rw [hy, div_zero]; exact f_nonneg _
     · rw [div_le_iff₀ (lt_of_le_of_ne' (f_nonneg _) hy)]; exact hx _
   · have h_bdd : BddAbove (Set.range fun y => f (x * y) / f y) := by
-    
+      use f x
+      rintro r ⟨y, rfl⟩
+      by_cases hy0 : f y = 0
+      · simp only [hy0, div_zero]
+        exact f_nonneg _
+      · rw [← mul_one (f x), ← div_self hy0, ← mul_div_assoc,
+          div_le_iff₀ (lt_of_le_of_ne' (f_nonneg _) hy0), mul_div_assoc, div_self hy0, mul_one]
+        exact hx y
+    convert! le_ciSup h_bdd (1 : R)
+    by_cases h0 : f x = 0
+    · rw [mul_one, h0, zero_div]
+    · have heq : f 1 = 1 := by
+        apply h_one.antisymm
+        specialize hx 1
+        rw [mul_one]; rw [le_mul_iff_one_le_right (lt_of_le_of_ne (f_nonneg _) (Ne.symm h0))] at hx
+        exact hx
+      rw [heq]; rw [mul_one]; rw [div_one]
 
 中文:
 定理 seminormFromBounded_of_mul_le
@@ -766,7 +870,23 @@ theorem seminormFromBounded_of_mul_le
     · rw [hy, div_zero]; exact f_nonneg _
     · rw [div_le_iff₀ (lt_of_le_of_ne' (f_nonneg _) hy)]; exact hx _
   · have h_bdd : BddAbove (Set.range fun y => f (x * y) / f y) := by
-    
+      use f x
+      rintro r ⟨y, rfl⟩
+      by_cases hy0 : f y = 0
+      · simp only [hy0, div_zero]
+        exact f_nonneg _
+      · rw [← mul_one (f x), ← div_self hy0, ← mul_div_assoc,
+          div_le_iff₀ (lt_of_le_of_ne' (f_nonneg _) hy0), mul_div_assoc, div_self hy0, mul_one]
+        exact hx y
+    convert! le_ciSup h_bdd (1 : R)
+    by_cases h0 : f x = 0
+    · rw [mul_one, h0, zero_div]
+    · have heq : f 1 = 1 := by
+        apply h_one.antisymm
+        specialize hx 1
+        rw [mul_one]; rw [le_mul_iff_one_le_right (lt_of_le_of_ne (f_nonneg _) (Ne.symm h0))] at hx
+        exact hx
+      rw [heq]; rw [mul_one]; rw [div_one]
 
 Depends on / 依赖: BddAbove, Set.range, ciSup_le, div_self, div_zero, f_nonneg, h_bdd, le_antisymm, lt_of_le_of_ne, mul_div_assoc, mul_one, seminormFromBounded, simp_rw
 -/
@@ -868,7 +988,9 @@ theorem seminormFromBounded_is_norm_iff
     ext x
     simp only [Set.mem_preimage, Set.mem_singleton_iff]
     exact ⟨fun h => h0 x h, fun h => by rw [h]; exact seminormFromBounded_zero f_zero⟩
-  · rw [← Set.mem_singleton_iff, ← h_ker, Set.me
+  · rw [← Set.mem_singleton_iff, ← h_ker, Set.mem_preimage, Set.mem_singleton_iff,
+      ← seminormFromBounded_eq_zero_iff f_nonneg f_mul x]
+    exact hx
 
 中文:
 定理 seminormFromBounded_is_norm_iff
@@ -879,7 +1001,9 @@ theorem seminormFromBounded_is_norm_iff
     ext x
     simp only [Set.mem_preimage, Set.mem_singleton_iff]
     exact ⟨fun h => h0 x h, fun h => by rw [h]; exact seminormFromBounded_zero f_zero⟩
-  · rw [← Set.mem_singleton_iff, ← h_ker, Set.me
+  · rw [← Set.mem_singleton_iff, ← h_ker, Set.mem_preimage, Set.mem_singleton_iff,
+      ← seminormFromBounded_eq_zero_iff f_nonneg f_mul x]
+    exact hx
 
 Depends on / 依赖: Set.mem_preimage, Set.mem_singleton_iff, f_mul, f_nonneg, f_zero, h_ker, mem_preimage, mem_singleton_iff, seminormFromBounded_eq_zero_iff, seminormFromBounded_ker, seminormFromBounded_zero
 -/

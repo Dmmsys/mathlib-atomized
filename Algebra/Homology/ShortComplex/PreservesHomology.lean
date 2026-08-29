@@ -226,7 +226,25 @@ definition map
   have wi : F.map h.i ≫ F.map S.g = 0 := by rw [← F.map_comp, h.wi, F.map_zero]
   have hi := KernelFork.mapIsLimit _ h.hi F
   let f' : F.obj S.X₁ ⟶ F.obj h.K := hi.lift (KernelFork.ofι (S.map F).f (S.map F).zero)
-  have hf' : f' = F.m
+  have hf' : f' = F.map h.f' := Fork.IsLimit.hom_ext hi (by
+    rw [Fork.IsLimit.lift_ι hi]
+    simp only [KernelFork.map_ι, Fork.ι_ofι, map_f, ← F.map_comp, f'_i])
+  have wπ : f' ≫ F.map h.π = 0 := by rw [hf', ← F.map_comp, f'_π, F.map_zero]
+  have hπ : IsColimit (CokernelCofork.ofπ (F.map h.π) wπ) := by
+    let e : parallelPair f' 0 ≅ parallelPair (F.map h.f') 0 :=
+      parallelPair.ext (Iso.refl _) (Iso.refl _) (by simpa using hf') (by simp)
+    refine IsColimit.precomposeInvEquiv e _
+      (IsColimit.ofIsoColimit (CokernelCofork.mapIsColimit _ h.hπ' F) ?_)
+    exact Cofork.ext (Iso.refl _) (by simp [e])
+  exact
+    { K := F.obj h.K
+      H := F.obj h.H
+      i := F.map h.i
+      π := F.map h.π
+      wi := wi
+      hi := hi
+      wπ := wπ
+      hπ := hπ }
 
 中文:
 定义 map
@@ -237,7 +255,25 @@ definition map
   have wi : F.map h.i ≫ F.map S.g = 0 := by rw [← F.map_comp, h.wi, F.map_zero]
   have hi := KernelFork.mapIsLimit _ h.hi F
   let f' : F.obj S.X₁ ⟶ F.obj h.K := hi.lift (KernelFork.ofι (S.map F).f (S.map F).zero)
-  have hf' : f' = F.m
+  have hf' : f' = F.map h.f' := Fork.IsLimit.hom_ext hi (by
+    rw [Fork.IsLimit.lift_ι hi]
+    simp only [KernelFork.map_ι, Fork.ι_ofι, map_f, ← F.map_comp, f'_i])
+  have wπ : f' ≫ F.map h.π = 0 := by rw [hf', ← F.map_comp, f'_π, F.map_zero]
+  have hπ : IsColimit (CokernelCofork.ofπ (F.map h.π) wπ) := by
+    let e : parallelPair f' 0 ≅ parallelPair (F.map h.f') 0 :=
+      parallelPair.ext (Iso.refl _) (Iso.refl _) (by simpa using hf') (by simp)
+    refine IsColimit.precomposeInvEquiv e _
+      (IsColimit.ofIsoColimit (CokernelCofork.mapIsColimit _ h.hπ' F) ?_)
+    exact Cofork.ext (Iso.refl _) (by simp [e])
+  exact
+    { K := F.obj h.K
+      H := F.obj h.H
+      i := F.map h.i
+      π := F.map h.π
+      wi := wi
+      hi := hi
+      wπ := wπ
+      hπ := hπ }
 
 Depends on / 依赖: F.map, F.map_comp, F.map_zero, F.obj, Fork.IsLimit.hom_ext, Fork.IsLimit.lift_, IsLimit, IsPreservedBy, IsPreservedBy.hf, IsPreservedBy.hg, KernelFork, KernelFork.mapIsLimit, KernelFork.map_, KernelFork.of, S.map, h.hi, h.wi, hi.lift, hom_ext, mapIsLimit
 -/
@@ -435,7 +471,26 @@ definition map
   have wp : F.map S.f ≫ F.map h.p = 0 := by rw [← F.map_comp, h.wp, F.map_zero]
   have hp := CokernelCofork.mapIsColimit _ h.hp F
   let g' : F.obj h.Q ⟶ F.obj S.X₃ := hp.desc (CokernelCofork.ofπ (S.map F).g (S.map F).zero)
-  have hg' 
+  have hg' : g' = F.map h.g' := by
+    apply Cofork.IsColimit.hom_ext hp
+    rw [Cofork.IsColimit.π_desc hp]
+    simp only [Cofork.π_ofπ, CokernelCofork.map_π, map_g, ← F.map_comp, p_g']
+  have wι : F.map h.ι ≫ g' = 0 := by rw [hg', ← F.map_comp, ι_g', F.map_zero]
+  have hι : IsLimit (KernelFork.ofι (F.map h.ι) wι) := by
+    let e : parallelPair g' 0 ≅ parallelPair (F.map h.g') 0 :=
+      parallelPair.ext (Iso.refl _) (Iso.refl _) (by simpa using hg') (by simp)
+    refine IsLimit.postcomposeHomEquiv e _
+      (IsLimit.ofIsoLimit (KernelFork.mapIsLimit _ h.hι' F) ?_)
+    exact Fork.ext (Iso.refl _) (by simp [e])
+  exact
+    { Q := F.obj h.Q
+      H := F.obj h.H
+      p := F.map h.p
+      ι := F.map h.ι
+      wp := wp
+      hp := hp
+      wι := wι
+      hι := hι }
 
 中文:
 定义 map
@@ -446,7 +501,26 @@ definition map
   have wp : F.map S.f ≫ F.map h.p = 0 := by rw [← F.map_comp, h.wp, F.map_zero]
   have hp := CokernelCofork.mapIsColimit _ h.hp F
   let g' : F.obj h.Q ⟶ F.obj S.X₃ := hp.desc (CokernelCofork.ofπ (S.map F).g (S.map F).zero)
-  have hg' 
+  have hg' : g' = F.map h.g' := by
+    apply Cofork.IsColimit.hom_ext hp
+    rw [Cofork.IsColimit.π_desc hp]
+    simp only [Cofork.π_ofπ, CokernelCofork.map_π, map_g, ← F.map_comp, p_g']
+  have wι : F.map h.ι ≫ g' = 0 := by rw [hg', ← F.map_comp, ι_g', F.map_zero]
+  have hι : IsLimit (KernelFork.ofι (F.map h.ι) wι) := by
+    let e : parallelPair g' 0 ≅ parallelPair (F.map h.g') 0 :=
+      parallelPair.ext (Iso.refl _) (Iso.refl _) (by simpa using hg') (by simp)
+    refine IsLimit.postcomposeHomEquiv e _
+      (IsLimit.ofIsoLimit (KernelFork.mapIsLimit _ h.hι' F) ?_)
+    exact Fork.ext (Iso.refl _) (by simp [e])
+  exact
+    { Q := F.obj h.Q
+      H := F.obj h.H
+      p := F.map h.p
+      ι := F.map h.ι
+      wp := wp
+      hp := hp
+      wι := wι
+      hι := hι }
 
 Depends on / 依赖: Cofork, Cofork.IsColimit, Cofork.IsColimit.hom_ext, CokernelCofork, CokernelCofork.mapIsColimit, CokernelCofork.map_, CokernelCofork.of, F.map, F.map_comp, F.map_zero, F.obj, IsColimit, IsPreservedBy, IsPreservedBy.hf, IsPreservedBy.hg, S.map, h.hp, h.wp, hom_ext, hp.desc
 -/
@@ -615,7 +689,8 @@ lemma map_leftRightHomologyComparison'
   · simp [← Functor.map_comp]
   trans (hₗ.map F).π ≫ ShortComplex.leftRightHomologyComparison'
     (hₗ.map F) (hᵣ.map F) ≫ (hᵣ.map F).ι
-  · rw [ShortComplex.π_leftRightHomologyCom
+  · rw [ShortComplex.π_leftRightHomologyComparison'_ι]; simp
+  · simp
 
 中文:
 引理 map_leftRightHomologyComparison'
@@ -627,7 +702,8 @@ lemma map_leftRightHomologyComparison'
   · simp [← Functor.map_comp]
   trans (hₗ.map F).π ≫ ShortComplex.leftRightHomologyComparison'
     (hₗ.map F) (hᵣ.map F) ≫ (hᵣ.map F).ι
-  · rw [ShortComplex.π_leftRightHomologyCom
+  · rw [ShortComplex.π_leftRightHomologyComparison'_ι]; simp
+  · simp
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.hom_ext, F.map, Fork.IsLimit.hom_ext, Functor, Functor.map_comp, IsColimit, IsLimit, ShortComplex, ShortComplex.leftRightHomologyComparison, hom_ext, leftRightHomologyComparison, map_comp
 -/
@@ -733,7 +809,8 @@ lemma PreservesLeftHomologyOf.mk'
         have := ShortComplex.LeftHomologyData.IsPreservedBy.hf' h F
         let e : parallelPair h.f' 0 ≅ parallelPair h'.f' 0 :=
           parallelPair.ext (Iso.refl _) (ShortComplex.cyclesMapIso' (Iso.refl S) h h')
-          
+            (by simp) (by simp)
+        exact preservesColimit_of_iso_diagram F e }
 
 中文:
 引理 保持LeftHomologyOf.mk'
@@ -743,7 +820,8 @@ lemma PreservesLeftHomologyOf.mk'
         have := ShortComplex.LeftHomologyData.IsPreservedBy.hf' h F
         let e : parallelPair h.f' 0 ≅ parallelPair h'.f' 0 :=
           parallelPair.ext (Iso.refl _) (ShortComplex.cyclesMapIso' (Iso.refl S) h h')
-          
+            (by simp) (by simp)
+        exact preservesColimit_of_iso_diagram F e }
 
 Depends on / 依赖: IsPreservedBy, Iso.refl, LeftHomologyData, ShortComplex, ShortComplex.LeftHomologyData.IsPreservedBy.hf, ShortComplex.LeftHomologyData.IsPreservedBy.hg, ShortComplex.cyclesMapIso, cyclesMapIso, parallelPair, parallelPair.ext, preservesColimit_of_iso_diagram
 -/
@@ -769,7 +847,8 @@ lemma PreservesRightHomologyOf.mk'
         have := ShortComplex.RightHomologyData.IsPreservedBy.hg' h F
         let e : parallelPair h.g' 0 ≅ parallelPair h'.g' 0 :=
           parallelPair.ext (ShortComplex.opcyclesMapIso' (Iso.refl S) h h') (Iso.refl _)
-      
+            (by simp) (by simp)
+        exact preservesLimit_of_iso_diagram F e }
 
 中文:
 引理 保持RightHomologyOf.mk'
@@ -779,7 +858,8 @@ lemma PreservesRightHomologyOf.mk'
         have := ShortComplex.RightHomologyData.IsPreservedBy.hg' h F
         let e : parallelPair h.g' 0 ≅ parallelPair h'.g' 0 :=
           parallelPair.ext (ShortComplex.opcyclesMapIso' (Iso.refl S) h h') (Iso.refl _)
-      
+            (by simp) (by simp)
+        exact preservesLimit_of_iso_diagram F e }
 
 Depends on / 依赖: IsPreservedBy, Iso.refl, RightHomologyData, ShortComplex, ShortComplex.RightHomologyData.IsPreservedBy.hf, ShortComplex.RightHomologyData.IsPreservedBy.hg, ShortComplex.opcyclesMapIso, opcyclesMapIso, parallelPair, parallelPair.ext, preservesLimit_of_iso_diagram
 -/
@@ -1703,7 +1783,7 @@ lemma mapHomologyIso_hom_naturality
     Iso.symm, Iso.trans, Iso.refl]
   simp only [LeftHomologyData.map_leftHomologyMap', ← leftHomologyMap'_comp, comp_id, id_comp]
 
-@[r
+@[reassoc]
 
 中文:
 引理 mapHomologyIso_hom_naturality
@@ -1714,7 +1794,7 @@ lemma mapHomologyIso_hom_naturality
     Iso.symm, Iso.trans, Iso.refl]
   simp only [LeftHomologyData.map_leftHomologyMap', ← leftHomologyMap'_comp, comp_id, id_comp]
 
-@[r
+@[reassoc]
 
 Depends on / 依赖: Iso.refl, Iso.symm, Iso.trans, LeftHomologyData, LeftHomologyData.homologyIso, LeftHomologyData.leftHomologyIso, LeftHomologyData.map_leftHomologyMap, _comp, comp_id, homologyIso, homologyMap, id_comp, leftHomologyIso, leftHomologyMap, leftHomologyMapIso, mapHomologyIso, map_leftHomologyMap
 -/
@@ -1767,7 +1847,10 @@ lemma mapHomologyIso'_hom_naturality
   simp only [← RightHomologyData.rightHomologyIso_hom_naturality_assoc _
     ((homologyData S₁).right.map F) ((homologyData S₂).right.map F), assoc,
     ← RightHomologyData.map_rightHomologyMap', ← F.map_comp,
-    RightHomologyDa
+    RightHomologyData.rightHomologyIso_inv_naturality _
+      (homologyData S₁).right (homologyData S₂).right]
+
+@[reassoc]
 
 中文:
 引理 mapHomologyIso'_hom_naturality
@@ -1777,7 +1860,10 @@ lemma mapHomologyIso'_hom_naturality
   simp only [← RightHomologyData.rightHomologyIso_hom_naturality_assoc _
     ((homologyData S₁).right.map F) ((homologyData S₂).right.map F), assoc,
     ← RightHomologyData.map_rightHomologyMap', ← F.map_comp,
-    RightHomologyDa
+    RightHomologyData.rightHomologyIso_inv_naturality _
+      (homologyData S₁).right (homologyData S₂).right]
+
+@[reassoc]
 -/
 lemma mapHomologyIso'_hom_naturality [S₁.HasHomology] [S₂.HasHomology]
     [(S₁.map F).HasHomology] [(S₂.map F).HasHomology]
@@ -1829,7 +1915,17 @@ lemma mapHomologyIso'_eq_mapHomologyIso
   rw [S.homologyData.left.mapHomologyIso_eq F]; rw [S.homologyData.right.mapHomologyIso'_eq F]
   dsimp only [Iso.trans, Iso.symm, Iso.refl, Functor.mapIso, RightHomologyData.homologyIso,
     rightHomologyIso, RightHomologyData.rightHomologyIso, LeftHomologyData.homologyIso,
-    leftHomology
+    leftHomologyIso, LeftHomologyData.leftHomologyIso]
+  simp only [RightHomologyData.map_H, rightHomologyMapIso'_inv, rightHomologyMapIso'_hom, assoc,
+    Functor.map_comp, RightHomologyData.map_rightHomologyMap', Functor.mapShortComplex_obj,
+    Functor.map_id, LeftHomologyData.map_H, leftHomologyMapIso'_inv, leftHomologyMapIso'_hom,
+    LeftHomologyData.map_leftHomologyMap', ← rightHomologyMap'_comp_assoc, ← leftHomologyMap'_comp,
+    id_comp]
+  have γ : HomologyMapData (𝟙 (S.map F)) (map S F).homologyData (S.homologyData.map F) := default
+  have eq := γ.comm
+  rw [← γ.left.leftHomologyMap'_eq]; rw [← γ.right.rightHomologyMap'_eq] at eq
+  dsimp at eq
+  simp only [← reassoc_of% eq, ← F.map_comp, Iso.hom_inv_id, F.map_id, comp_id]
 
 中文:
 引理 mapHomologyIso'_eq_mapHomologyIso
@@ -1839,7 +1935,17 @@ lemma mapHomologyIso'_eq_mapHomologyIso
   rw [S.homologyData.left.mapHomologyIso_eq F]; rw [S.homologyData.right.mapHomologyIso'_eq F]
   dsimp only [Iso.trans, Iso.symm, Iso.refl, Functor.mapIso, RightHomologyData.homologyIso,
     rightHomologyIso, RightHomologyData.rightHomologyIso, LeftHomologyData.homologyIso,
-    leftHomology
+    leftHomologyIso, LeftHomologyData.leftHomologyIso]
+  simp only [RightHomologyData.map_H, rightHomologyMapIso'_inv, rightHomologyMapIso'_hom, assoc,
+    Functor.map_comp, RightHomologyData.map_rightHomologyMap', Functor.mapShortComplex_obj,
+    Functor.map_id, LeftHomologyData.map_H, leftHomologyMapIso'_inv, leftHomologyMapIso'_hom,
+    LeftHomologyData.map_leftHomologyMap', ← rightHomologyMap'_comp_assoc, ← leftHomologyMap'_comp,
+    id_comp]
+  have γ : HomologyMapData (𝟙 (S.map F)) (map S F).homologyData (S.homologyData.map F) := default
+  have eq := γ.comm
+  rw [← γ.left.leftHomologyMap'_eq]; rw [← γ.right.rightHomologyMap'_eq] at eq
+  dsimp at eq
+  simp only [← reassoc_of% eq, ← F.map_comp, Iso.hom_inv_id, F.map_id, comp_id]
 -/
 lemma mapHomologyIso'_eq_mapHomologyIso [S.HasHomology] [F.PreservesLeftHomologyOf S]
     [F.PreservesRightHomologyOf S] :

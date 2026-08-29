@@ -40,7 +40,9 @@ definition getMemType
     | (``List, #[α]) => return α
     | (``Multiset, #[α]) => return α
     | (``Finset, #[α]) => return α
-    | _ => throwError "Hypothesis must be of type `x in (A : List α)`, `x in (A : Fi
+    | _ => throwError "Hypothesis must be of type `x in (A : List α)`, `x in (A : Finset α)`, \
+                       or `x in (A : Multiset α)`"
+  | _ => return none
 
 中文:
 定义 getMemType
@@ -52,7 +54,9 @@ definition getMemType
     | (``List, #[α]) => return α
     | (``Multiset, #[α]) => return α
     | (``Finset, #[α]) => return α
-    | _ => throwError "Hypothesis must be of type `x in (A : List α)`, `x in (A : Fi
+    | _ => throwError "Hypothesis must be of type `x in (A : List α)`, `x in (A : Finset α)`, \
+                       or `x in (A : Multiset α)`"
+  | _ => return none
 -/
 def getMemType {m : Type -> Type} [Monad m] [MonadError m] (e : Expr) : m (Option Expr) := do
   match e.getAppFnArgs with
@@ -115,7 +119,11 @@ definition finCasesAt
   | none =>
     -- Deal with `x : A`, where `[Fintype A]` is available:
     let inst ← synthInstance (← mkAppM ``Fintype #[type])
-    let elems ← 
+    let elems ← mkAppOptM ``Fintype.elems #[type, inst]
+    let t ← mkAppM ``Membership.mem #[elems, .fvar hyp]
+    let v ← mkAppOptM ``Fintype.complete #[type, inst, Expr.fvar hyp]
+    let (fvar, g) ← (← g.assert `this t v).intro1P
+    finCasesAt g fvar
 
 中文:
 定义 finCasesAt
@@ -127,7 +135,11 @@ definition finCasesAt
   | none =>
     -- Deal with `x : A`, where `[Fintype A]` is available:
     let inst ← synthInstance (← mkAppM ``Fintype #[type])
-    let elems ← 
+    let elems ← mkAppOptM ``Fintype.elems #[type, inst]
+    let t ← mkAppM ``Membership.mem #[elems, .fvar hyp]
+    let v ← mkAppOptM ``Fintype.complete #[type, inst, Expr.fvar hyp]
+    let (fvar, g) ← (← g.assert `this t v).intro1P
+    finCasesAt g fvar
 -/
 partial def finCasesAt (g : MVarId) (hyp : FVarId) : MetaM (List MVarId) := g.withContext do
   let type ← hyp.getType >>= instantiateMVars

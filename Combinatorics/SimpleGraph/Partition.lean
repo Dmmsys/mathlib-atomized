@@ -361,7 +361,10 @@ theorem partitionable_iff_colorable
   · rintro ⟨C⟩
     refine ⟨C.toPartition, C.colorClasses_finite, le_trans ?_ (Fintype.card_fin n).le⟩
     generalize_proofs h
-    change Set.Finit
+    change Set.Finite (Coloring.colorClasses C) at h
+    have : Fintype C.colorClasses := C.colorClasses_finite.fintype
+    rw [h.card_toFinset]
+    exact C.card_colorClasses_le
 
 中文:
 定理 partitionable_iff_colorable
@@ -376,7 +379,10 @@ theorem partitionable_iff_colorable
   · rintro ⟨C⟩
     refine ⟨C.toPartition, C.colorClasses_finite, le_trans ?_ (Fintype.card_fin n).le⟩
     generalize_proofs h
-    change Set.Finit
+    change Set.Finite (Coloring.colorClasses C) at h
+    have : Fintype C.colorClasses := C.colorClasses_finite.fintype
+    rw [h.card_toFinset]
+    exact C.card_colorClasses_le
 
 Depends on / 依赖: C.card_colorClasses_le, C.colorClasses, C.colorClasses_finite, C.colorClasses_finite.fintype, C.toPartition, Coloring, Coloring.colorClasses, Finite, Fintype, Fintype.card_fin, P.colorable.mono, P.parts, Set.Finite, Set.Finite.card_toFinset, card_colorClasses_le, card_fin, card_toFinset, colorClasses, colorClasses_finite, colorable
 -/

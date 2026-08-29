@@ -89,7 +89,7 @@ instance instLinearOrder
   toDecidableLE := decLe
   toDecidableLT := decLt
 
-protected alias ⟨eq_zero_or_eq_zero_of_mul_eq_zero, _⟩ := Int.mul
+protected alias ⟨eq_zero_or_eq_zero_of_mul_eq_zero, _⟩ := Int.mul_eq_zero
 
 中文:
 实例 instLinearOrder
@@ -103,7 +103,7 @@ protected alias ⟨eq_zero_or_eq_zero_of_mul_eq_zero, _⟩ := Int.mul
   toDecidableLE := decLe
   toDecidableLT := decLt
 
-protected alias ⟨eq_zero_or_eq_zero_of_mul_eq_zero, _⟩ := Int.mul
+protected alias ⟨eq_zero_or_eq_zero_of_mul_eq_zero, _⟩ := Int.mul_eq_zero
 
 Depends on / 依赖: Int.le_refl, le_refl
 -/

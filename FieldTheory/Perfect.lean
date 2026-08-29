@@ -994,7 +994,11 @@ theorem MonoidHom.map_iterate_frobeniusEquiv_symm
   · simp only [coe_frobeniusEquiv, ← map_iterate_frobenius]
     · rw [← Function.comp_apply (f := (⇑(frobenius R p))^[n]),
           ← Function.comp_apply (f := (⇑(frobenius S p))^[n]),
-          ← Function.Commute.comp_iterate, ← Function.Commute.comp_iterate
+          ← Function.Commute.comp_iterate, ← Function.Commute.comp_iterate]
+      · simp
+      all_goals rw [← coe_frobeniusEquiv]; simp [Function.Commute, Function.Semiconj]
+  apply Function.Injective.iterate
+  simp
 
 中文:
 定理 幺半群态射.map_iterate_frobeniusEquiv_symm
@@ -1004,7 +1008,11 @@ theorem MonoidHom.map_iterate_frobeniusEquiv_symm
   · simp only [coe_frobeniusEquiv, ← map_iterate_frobenius]
     · rw [← Function.comp_apply (f := (⇑(frobenius R p))^[n]),
           ← Function.comp_apply (f := (⇑(frobenius S p))^[n]),
-          ← Function.Commute.comp_iterate, ← Function.Commute.comp_iterate
+          ← Function.Commute.comp_iterate, ← Function.Commute.comp_iterate]
+      · simp
+      all_goals rw [← coe_frobeniusEquiv]; simp [Function.Commute, Function.Semiconj]
+  apply Function.Injective.iterate
+  simp
 
 Depends on / 依赖: Commute, Function, Function.Commute, Function.Commute.comp_iterate, Function.Injective.iterate, Function.Semiconj, Function.comp_apply, Injective, Semiconj, all_goals, apply_fun, coe_frobeniusEquiv, comp_apply, comp_iterate, frobenius, frobeniusEquiv, iterate, map_iterate_frobenius
 -/
@@ -1252,7 +1260,7 @@ instance toPerfectRing
   apply mt (X_pow_sub_C_irreducible_of_prime hp)
   apply mt separable_of_irreducible
   simp [separable_def, isCoprime_zero_right, isUnit_iff_degree_eq_zero,
-    derivative_X_pow,
+    derivative_X_pow, degree_X_pow_sub_C hp.pos, hp.ne_zero]
 
 中文:
 实例 toPerfectRing
@@ -1265,7 +1273,7 @@ instance toPerfectRing
   apply mt (X_pow_sub_C_irreducible_of_prime hp)
   apply mt separable_of_irreducible
   simp [separable_def, isCoprime_zero_right, isUnit_iff_degree_eq_zero,
-    derivative_X_pow,
+    derivative_X_pow, degree_X_pow_sub_C hp.pos, hp.ne_zero]
 
 Depends on / 依赖: PerfectRing, PerfectRing.ofSurjective, X_pow_sub_C_irreducible_of_prime, degree_X_pow_sub_C, derivative_X_pow, frobenius, hp.ne_zero, hp.pos, isCoprime_zero_right, isUnit_iff_degree_eq_zero, ne_zero, not_forall_not, ofSurjective, separable_def, separable_of_irreducible
 -/
@@ -1291,7 +1299,8 @@ theorem separable_iff_squarefree
   rintro p (h : Irreducible p) ⟨q, rfl⟩ (dvd : p ∣ derivative (p * q))
   replace dvd : p ∣ q := by
     rw [derivative_mul]; rw [dvd_add_left (dvd_mul_right p _)] at dvd
-    exact (separable_of_irreducibl
+    exact (separable_of_irreducible h).dvd_of_dvd_mul_left dvd
+  exact (h.1 : ¬ IsUnit p) (sqf _ <| mul_dvd_mul_left _ dvd)
 
 中文:
 定理 separable_iff_squarefree
@@ -1302,7 +1311,8 @@ theorem separable_iff_squarefree
   rintro p (h : Irreducible p) ⟨q, rfl⟩ (dvd : p ∣ derivative (p * q))
   replace dvd : p ∣ q := by
     rw [derivative_mul]; rw [dvd_add_left (dvd_mul_right p _)] at dvd
-    exact (separable_of_irreducibl
+    exact (separable_of_irreducible h).dvd_of_dvd_mul_left dvd
+  exact (h.1 : ¬ IsUnit p) (sqf _ <| mul_dvd_mul_left _ dvd)
 
 Depends on / 依赖: Irreducible, IsUnit, Separable, Separable.squarefree, derivative, derivative_mul, dvd_add_left, dvd_mul_right, dvd_of_dvd_mul_left, isCoprime_of_irreducible_dvd, mul_dvd_mul_left, ne_zero, replace, separable_of_irreducible, sqf.ne_zero, squarefree
 -/
@@ -1402,7 +1412,10 @@ theorem roots_expand_pow_map_iterateFrobenius_le
   · obtain ⟨s, rfl⟩ := h
     simp_rw [count_nsmul, count_roots, ← rootMultiplicity_expand_pow, ← count_roots, count_map,
       count_eq_card_filter_eq]
-    exact card_le_card (monotone_filter_right _ fun _ h =>
+    exact card_le_card (monotone_filter_right _ fun _ h => iterateFrobenius_inj R p n h)
+  convert! Nat.zero_le _
+  simp_rw [count_map, card_eq_zero]
+  exact ext' fun t => count_zero t ▸ count_filter_of_neg fun h' => h ⟨t, h'⟩
 
 中文:
 定理 roots_expand_pow_map_iterateFrobenius_le
@@ -1413,7 +1426,10 @@ theorem roots_expand_pow_map_iterateFrobenius_le
   · obtain ⟨s, rfl⟩ := h
     simp_rw [count_nsmul, count_roots, ← rootMultiplicity_expand_pow, ← count_roots, count_map,
       count_eq_card_filter_eq]
-    exact card_le_card (monotone_filter_right _ fun _ h =>
+    exact card_le_card (monotone_filter_right _ fun _ h => iterateFrobenius_inj R p n h)
+  convert! Nat.zero_le _
+  simp_rw [count_map, card_eq_zero]
+  exact ext' fun t => count_zero t ▸ count_filter_of_neg fun h' => h ⟨t, h'⟩
 
 Depends on / 依赖: Nat.zero_le, card_eq_zero, card_le_card, classical, convert, count_eq_card_filter_eq, count_filter_of_neg, count_map, count_nsmul, count_roots, count_zero, iterateFrobenius_inj, le_iff_count, monotone_filter_right, rootMultiplicity_expand_pow, simp_rw, zero_le
 -/

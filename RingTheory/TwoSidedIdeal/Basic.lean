@@ -98,7 +98,10 @@ instance setLike
     refine RingCon.ext fun a b => ⟨fun H => ?_, fun H => ?_⟩
     · have H' : a - b in {x | t₁ x 0} := sub_self b ▸ t₁.sub H (t₁.refl b)
       rw [h] at H'
-      convert! t₂.add H' (t₂.refl b) using 1 <
+      convert! t₂.add H' (t₂.refl b) using 1 <;> abel
+    · have H' : a - b in {x | t₂ x 0} := sub_self b ▸ t₂.sub H (t₂.refl b)
+      rw [← h] at H'
+      convert! t₁.add H' (t₁.refl b) using 1 <;> abel
 
 中文:
 实例 setLike
@@ -110,7 +113,10 @@ instance setLike
     refine RingCon.ext fun a b => ⟨fun H => ?_, fun H => ?_⟩
     · have H' : a - b in {x | t₁ x 0} := sub_self b ▸ t₁.sub H (t₁.refl b)
       rw [h] at H'
-      convert! t₂.add H' (t₂.refl b) using 1 <
+      convert! t₂.add H' (t₂.refl b) using 1 <;> abel
+    · have H' : a - b in {x | t₂ x 0} := sub_self b ▸ t₂.sub H (t₂.refl b)
+      rw [← h] at H'
+      convert! t₁.add H' (t₁.refl b) using 1 <;> abel
 
 Depends on / 依赖: ringCon, t.ringCon
 -/
@@ -661,7 +667,14 @@ definition mk'
         symm := fun h => by simpa using neg_mem h
         trans := fun {x y z} h1 h2 => by
           simpa only [show x - z = (x - y) + (y - z) by abel] using add_mem h1 h2 }
-      mul' := fun {a b c d
+      mul' := fun {a b c d} (h1 : a - b in carrier) (h2 : c - d in carrier) => show _ in carrier by
+        rw [show a * c - b * d = a * (c - d) + (a - b) * d by rw [mul_sub]; rw [sub_mul]; abel]
+        exact add_mem (mul_mem_left h2) (mul_mem_right h1)
+      add' := fun {a b c d} (h1 : a - b in carrier) (h2 : c - d in carrier) => show _ in carrier by
+        rw [show a + c - (b + d) = (a - b) + (c - d) by abel]
+        exact add_mem h1 h2 }
+
+@[simp]
 
 中文:
 定义 mk'
@@ -672,7 +685,14 @@ definition mk'
         symm := fun h => by simpa using neg_mem h
         trans := fun {x y z} h1 h2 => by
           simpa only [show x - z = (x - y) + (y - z) by abel] using add_mem h1 h2 }
-      mul' := fun {a b c d
+      mul' := fun {a b c d} (h1 : a - b in carrier) (h2 : c - d in carrier) => show _ in carrier by
+        rw [show a * c - b * d = a * (c - d) + (a - b) * d by rw [mul_sub]; rw [sub_mul]; abel]
+        exact add_mem (mul_mem_left h2) (mul_mem_right h1)
+      add' := fun {a b c d} (h1 : a - b in carrier) (h2 : c - d in carrier) => show _ in carrier by
+        rw [show a + c - (b + d) = (a - b) + (c - d) by abel]
+        exact add_mem h1 h2 }
+
+@[simp]
 
 Depends on / 依赖: add_mem, carrier, mul_mem_left, mul_mem_right, mul_sub, neg_mem, sub_mul, zero_mem
 -/

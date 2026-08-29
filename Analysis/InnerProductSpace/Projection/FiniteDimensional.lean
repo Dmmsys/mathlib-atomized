@@ -89,7 +89,15 @@ theorem det_reflection
   · rw [finrank_of_infinite_dimensional hK, pow_zero, LinearMap.det_eq_one_of_finrank_eq_zero]
     exact finrank_of_infinite_dimensional fun h => hK (h.finiteDimensional_submodule _)
   let e := K.prodEquivOfIsCompl _ K.isCompl_orthogonal
-  let b := (f
+  let b := (finBasis 𝕜 K).prod (finBasis 𝕜 Kᗮ)
+  have : LinearMap.toMatrix b b (e.symm ∘ₗ K.reflection.toLinearMap ∘ₗ e.symm.symm) =
+      Matrix.fromBlocks 1 0 0 (-1) := by
+    ext (_ | _) (_ | _) <;>
+    simp [LinearMap.toMatrix_apply, b, Matrix.one_apply, Finsupp.single_apply, e, eq_comm,
+      reflection_mem_subspace_eq_self, reflection_mem_subspace_orthogonalComplement_eq_neg]
+  rw [← LinearMap.det_conj _ e.symm]; rw [← LinearMap.det_toMatrix b]; rw [this]; rw [Matrix.det_fromBlocks_zero₂₁]; rw [Matrix.det_one]; rw [one_mul]; rw [Matrix.det_neg]; rw [Fintype.card_fin]; rw [Matrix.det_one]; rw [mul_one]
+
+@[simp]
 
 中文:
 定理 det_reflection
@@ -100,7 +108,15 @@ theorem det_reflection
   · rw [finrank_of_infinite_dimensional hK, pow_zero, LinearMap.det_eq_one_of_finrank_eq_zero]
     exact finrank_of_infinite_dimensional fun h => hK (h.finiteDimensional_submodule _)
   let e := K.prodEquivOfIsCompl _ K.isCompl_orthogonal
-  let b := (f
+  let b := (finBasis 𝕜 K).prod (finBasis 𝕜 Kᗮ)
+  have : LinearMap.toMatrix b b (e.symm ∘ₗ K.reflection.toLinearMap ∘ₗ e.symm.symm) =
+      Matrix.fromBlocks 1 0 0 (-1) := by
+    ext (_ | _) (_ | _) <;>
+    simp [LinearMap.toMatrix_apply, b, Matrix.one_apply, Finsupp.single_apply, e, eq_comm,
+      reflection_mem_subspace_eq_self, reflection_mem_subspace_orthogonalComplement_eq_neg]
+  rw [← LinearMap.det_conj _ e.symm]; rw [← LinearMap.det_toMatrix b]; rw [this]; rw [Matrix.det_fromBlocks_zero₂₁]; rw [Matrix.det_one]; rw [one_mul]; rw [Matrix.det_neg]; rw [Fintype.card_fin]; rw [Matrix.det_one]; rw [mul_one]
+
+@[simp]
 
 Depends on / 依赖: FiniteDimensional, K.isCompl_orthogonal, K.prodEquivOfIsCompl, K.reflection.toLinearMap, LinearMap, LinearMap.det_eq_one_of_finrank_eq_zero, LinearMap.toMatrix, LinearMap.toMatrix_apply, Matrix, Matrix.fromBlocks, det_eq_one_of_finrank_eq_zero, e.symm, e.symm.symm, finBasis, finiteDimensional_submodule, finrank_of_infinite_dimensional, fromBlocks, h.finiteDimensional_submodule, isCompl_orthogonal, pow_zero
 -/
@@ -160,7 +176,9 @@ theorem finrank_add_inf_finrank_orthogonal
   proof: by
   have : FiniteDimensional 𝕜 K₁ := Submodule.finiteDimensional_of_le h
   have hd := Submodule.finrank_sup_add_finrank_inf_eq K₁ (K₁ᗮ ⊓ K₂)
-  rw [← inf_assoc]; rw [(Submodule.orthogonal_disjoint K₁).eq_bot]; rw [bot_inf_eq]; rw [finrank_bot]; rw [Submodule.sup_orthogonal_inf_of_hasOrthogonalProjec
+  rw [← inf_assoc]; rw [(Submodule.orthogonal_disjoint K₁).eq_bot]; rw [bot_inf_eq]; rw [finrank_bot]; rw [Submodule.sup_orthogonal_inf_of_hasOrthogonalProjection h] at hd
+  rw [add_zero] at hd
+  exact hd.symm
 
 中文:
 定理 finrank_add_inf_finrank_orthogonal
@@ -168,7 +186,9 @@ theorem finrank_add_inf_finrank_orthogonal
   证明: by
   have : FiniteDimensional 𝕜 K₁ := Submodule.finiteDimensional_of_le h
   have hd := Submodule.finrank_sup_add_finrank_inf_eq K₁ (K₁ᗮ ⊓ K₂)
-  rw [← inf_assoc]; rw [(Submodule.orthogonal_disjoint K₁).eq_bot]; rw [bot_inf_eq]; rw [finrank_bot]; rw [Submodule.sup_orthogonal_inf_of_hasOrthogonalProjec
+  rw [← inf_assoc]; rw [(Submodule.orthogonal_disjoint K₁).eq_bot]; rw [bot_inf_eq]; rw [finrank_bot]; rw [Submodule.sup_orthogonal_inf_of_hasOrthogonalProjection h] at hd
+  rw [add_zero] at hd
+  exact hd.symm
 
 Depends on / 依赖: FiniteDimensional, Submodule, Submodule.finiteDimensional_of_le, Submodule.finrank_sup_add_finrank_inf_eq, Submodule.orthogonal_disjoint, Submodule.sup_orthogonal_inf_of_hasOrthogonalProjection, add_zero, bot_inf_eq, eq_bot, finiteDimensional_of_le, finrank_bot, finrank_sup_add_finrank_inf_eq, hd.symm, inf_assoc, orthogonal_disjoint, sup_orthogonal_inf_of_hasOrthogonalProjection
 -/
@@ -294,7 +314,7 @@ theorem mem_span_singleton_of_inner_eq_zero_of_inner_eq_zero
   suffices heq : (𝕜 ∙ v)ᗮ = 𝕜 ∙ w by rwa [← heq, mem_orthogonal_singleton_iff_inner_right]
   exact eq_span_singleton_of_mem_of_finrank_eq_one
     (finrank_orthogonal_span_singleton (n := 1) hv)
-    (mem_orthogonal_singleton_iff_inner_ri
+    (mem_orthogonal_singleton_iff_inner_right.mpr hwv) hw
 
 中文:
 定理 mem_span_singleton_of_inner_eq_zero_of_inner_eq_zero
@@ -303,7 +323,7 @@ theorem mem_span_singleton_of_inner_eq_zero_of_inner_eq_zero
   suffices heq : (𝕜 ∙ v)ᗮ = 𝕜 ∙ w by rwa [← heq, mem_orthogonal_singleton_iff_inner_right]
   exact eq_span_singleton_of_mem_of_finrank_eq_one
     (finrank_orthogonal_span_singleton (n := 1) hv)
-    (mem_orthogonal_singleton_iff_inner_ri
+    (mem_orthogonal_singleton_iff_inner_right.mpr hwv) hw
 
 Depends on / 依赖: FiniteDimensional, eq_span_singleton_of_mem_of_finrank_eq_one, finrank_orthogonal_span_singleton, mem_orthogonal_singleton_iff_inner_right, mem_orthogonal_singleton_iff_inner_right.mpr, of_fact_finrank_eq_succ
 -/
@@ -332,7 +352,72 @@ theorem LinearIsometryEquiv.reflections_generate_dim_aux
   -- fixed subspace of the endomorphism `φ`
   induction n generalizing φ with
   | zero => -- Base case: `n = 0`, the fixed subspace is the whole space, so `φ = id`
-    refine ⟨[], rfl.le, show φ = 1 f
+    refine ⟨[], rfl.le, show φ = 1 from ?_⟩
+    have : (ContinuousLinearMap.id Real F - φ).ker = ⊤ := by
+      rwa [le_zero_iff, finrank_eq_zero, orthogonal_eq_bot_iff] at hn
+    symm
+    ext x
+    have := LinearMap.congr_fun (LinearMap.ker_eq_top.mp this) x
+    simpa only [sub_eq_zero, ContinuousLinearMap.toLinearMap_sub, LinearMap.sub_apply,
+      LinearMap.zero_apply] using! this
+  | succ n IH =>
+    -- Inductive step. Let `W` be the fixed subspace of `φ`. We suppose its complement to have
+    -- dimension at most n + 1.
+    let W := (ContinuousLinearMap.id Real F - φ).ker
+    have hW : forall w in W, φ w = w := fun w hw => (sub_eq_zero.mp hw).symm
+    by_cases hn' : finrank Real Wᗮ <= n
+    · obtain ⟨V, hV₁, hV₂⟩ := IH φ hn'
+      exact ⟨V, hV₁.trans n.le_succ, hV₂⟩
+    -- Take a nonzero element `v` of the orthogonal complement of `W`.
+    have : Nontrivial Wᗮ := nontrivial_of_finrank_pos (by lia : 0 < finrank Real Wᗮ)
+    obtain ⟨v, hv⟩ := exists_ne (0 : Wᗮ)
+    have hφv : φ v in Wᗮ := by
+      intro w hw
+      rw [← hW w hw]; rw [LinearIsometryEquiv.inner_map_map]
+      exact v.prop w hw
+    have hv' : (v : F) ∉ W := by
+      intro h
+      exact hv ((mem_left_iff_eq_zero_of_disjoint W.orthogonal_disjoint).mp h)
+    -- Let `ρ` be the reflection in `v - φ v`; this is designed to swap `v` and `φ v`
+    let x : F := v - φ v
+    let ρ := (Real ∙ x)ᗮ.reflection
+    -- Notation: Let `V` be the fixed subspace of `φ.trans ρ`
+    let V := (ContinuousLinearMap.id Real F - φ.trans ρ).ker
+    have hV : forall w, ρ (φ w) = w -> w in V := by
+      intro w hw
+      change w - ρ (φ w) = 0
+      rw [sub_eq_zero]; rw [hw]
+    -- Everything fixed by `φ` is fixed by `φ.trans ρ`
+    have H₂V : W <= V := by
+      intro w hw
+      apply hV
+      rw [hW w hw]
+      refine reflection_mem_subspace_eq_self ?_
+      rw [mem_orthogonal_singleton_iff_inner_left]
+      exact Submodule.sub_mem _ v.prop hφv _ hw
+    -- `v` is also fixed by `φ.trans ρ`
+    have H₁V : (v : F) in V := by
+      apply hV
+      have : ρ v = φ v := reflection_sub (φ.norm_map v).symm
+      rw [← this]
+      exact reflection_reflection _ _
+    -- By dimension-counting, the complement of the fixed subspace of `φ.trans ρ` has dimension at
+    -- most `n`
+    have : finrank Real Vᗮ <= n := by
+      change finrank Real Wᗮ <= n + 1 at hn
+      have : finrank Real W + 1 <= finrank Real V :=
+        finrank_lt_finrank_of_lt ((SetLike.lt_iff_le_and_exists (B := F)).2 ⟨H₂V, v, H₁V, hv'⟩)
+      have : finrank Real V + finrank Real Vᗮ = finrank Real F := V.finrank_add_finrank_orthogonal
+      have : finrank Real W + finrank Real Wᗮ = finrank Real F := W.finrank_add_finrank_orthogonal
+      lia
+    -- So apply the inductive hypothesis to `φ.trans ρ`
+    obtain ⟨l, hl, hφl⟩ := IH (ρ * φ) this
+    -- Prepend `ρ` to the factorization into reflections obtained for `φ.trans ρ`; this gives a
+    -- factorization into reflections for `φ`.
+    refine ⟨x::l, Nat.succ_le_succ hl, ?_⟩
+    rw [List.map_cons]; rw [List.prod_cons]
+    have := congr_arg (ρ * ·) hφl
+    rwa [← mul_assoc, reflection_mul_reflection, one_mul] at this
 
 中文:
 定理 线性等距等价.reflections_generate_dim_aux
@@ -342,7 +427,72 @@ theorem LinearIsometryEquiv.reflections_generate_dim_aux
   -- fixed subspace of the endomorphism `φ`
   induction n generalizing φ with
   | zero => -- Base case: `n = 0`, the fixed subspace is the whole space, so `φ = id`
-    refine ⟨[], rfl.le, show φ = 1 f
+    refine ⟨[], rfl.le, show φ = 1 from ?_⟩
+    have : (ContinuousLinearMap.id Real F - φ).ker = ⊤ := by
+      rwa [le_zero_iff, finrank_eq_zero, orthogonal_eq_bot_iff] at hn
+    symm
+    ext x
+    have := LinearMap.congr_fun (LinearMap.ker_eq_top.mp this) x
+    simpa only [sub_eq_zero, ContinuousLinearMap.toLinearMap_sub, LinearMap.sub_apply,
+      LinearMap.zero_apply] using! this
+  | succ n IH =>
+    -- Inductive step. Let `W` be the fixed subspace of `φ`. We suppose its complement to have
+    -- dimension at most n + 1.
+    let W := (ContinuousLinearMap.id Real F - φ).ker
+    have hW : forall w in W, φ w = w := fun w hw => (sub_eq_zero.mp hw).symm
+    by_cases hn' : finrank Real Wᗮ <= n
+    · obtain ⟨V, hV₁, hV₂⟩ := IH φ hn'
+      exact ⟨V, hV₁.trans n.le_succ, hV₂⟩
+    -- Take a nonzero element `v` of the orthogonal complement of `W`.
+    have : Nontrivial Wᗮ := nontrivial_of_finrank_pos (by lia : 0 < finrank Real Wᗮ)
+    obtain ⟨v, hv⟩ := exists_ne (0 : Wᗮ)
+    have hφv : φ v in Wᗮ := by
+      intro w hw
+      rw [← hW w hw]; rw [LinearIsometryEquiv.inner_map_map]
+      exact v.prop w hw
+    have hv' : (v : F) ∉ W := by
+      intro h
+      exact hv ((mem_left_iff_eq_zero_of_disjoint W.orthogonal_disjoint).mp h)
+    -- Let `ρ` be the reflection in `v - φ v`; this is designed to swap `v` and `φ v`
+    let x : F := v - φ v
+    let ρ := (Real ∙ x)ᗮ.reflection
+    -- Notation: Let `V` be the fixed subspace of `φ.trans ρ`
+    let V := (ContinuousLinearMap.id Real F - φ.trans ρ).ker
+    have hV : forall w, ρ (φ w) = w -> w in V := by
+      intro w hw
+      change w - ρ (φ w) = 0
+      rw [sub_eq_zero]; rw [hw]
+    -- Everything fixed by `φ` is fixed by `φ.trans ρ`
+    have H₂V : W <= V := by
+      intro w hw
+      apply hV
+      rw [hW w hw]
+      refine reflection_mem_subspace_eq_self ?_
+      rw [mem_orthogonal_singleton_iff_inner_left]
+      exact Submodule.sub_mem _ v.prop hφv _ hw
+    -- `v` is also fixed by `φ.trans ρ`
+    have H₁V : (v : F) in V := by
+      apply hV
+      have : ρ v = φ v := reflection_sub (φ.norm_map v).symm
+      rw [← this]
+      exact reflection_reflection _ _
+    -- By dimension-counting, the complement of the fixed subspace of `φ.trans ρ` has dimension at
+    -- most `n`
+    have : finrank Real Vᗮ <= n := by
+      change finrank Real Wᗮ <= n + 1 at hn
+      have : finrank Real W + 1 <= finrank Real V :=
+        finrank_lt_finrank_of_lt ((SetLike.lt_iff_le_and_exists (B := F)).2 ⟨H₂V, v, H₁V, hv'⟩)
+      have : finrank Real V + finrank Real Vᗮ = finrank Real F := V.finrank_add_finrank_orthogonal
+      have : finrank Real W + finrank Real Wᗮ = finrank Real F := W.finrank_add_finrank_orthogonal
+      lia
+    -- So apply the inductive hypothesis to `φ.trans ρ`
+    obtain ⟨l, hl, hφl⟩ := IH (ρ * φ) this
+    -- Prepend `ρ` to the factorization into reflections obtained for `φ.trans ρ`; this gives a
+    -- factorization into reflections for `φ`.
+    refine ⟨x::l, Nat.succ_le_succ hl, ?_⟩
+    rw [List.map_cons]; rw [List.prod_cons]
+    have := congr_arg (ρ * ·) hφl
+    rwa [← mul_assoc, reflection_mul_reflection, one_mul] at this
 -/
 theorem LinearIsometryEquiv.reflections_generate_dim_aux [FiniteDimensional Real F] {n : Nat}
     (φ : F ≃ₗᵢ[Real] F) (hn : finrank Real (ContinuousLinearMap.id Real F - φ).kerᗮ <= n) :
@@ -550,7 +700,13 @@ theorem OrthogonalFamily.sum_projection_of_mem_iSup
     refine
       (Finset.sum_eq_single_of_mem i (Finset.mem_univ _) fun j _ hij => ?_).trans
         (starProjection_eq_self_iff.mpr hx)
-    rw [starProjection_apply]; rw [orthogonalProjectionOnto_apply_of_mem_orthogonal]; rw [Submodule.
+    rw [starProjection_apply]; rw [orthogonalProjectionOnto_apply_of_mem_orthogonal]; rw [Submodule.coe_zero]
+    exact hV.isOrtho hij.symm hx
+  | zero =>
+    simp_rw [map_zero, Finset.sum_const_zero]
+  | add x y _ _ hx hy =>
+    simp_rw [map_add, Finset.sum_add_distrib]
+    exact congr_arg₂ (· + ·) hx hy
 
 中文:
 定理 OrthogonalFamily.sum_projection_of_mem_iSup
@@ -561,7 +717,13 @@ theorem OrthogonalFamily.sum_projection_of_mem_iSup
     refine
       (Finset.sum_eq_single_of_mem i (Finset.mem_univ _) fun j _ hij => ?_).trans
         (starProjection_eq_self_iff.mpr hx)
-    rw [starProjection_apply]; rw [orthogonalProjectionOnto_apply_of_mem_orthogonal]; rw [Submodule.
+    rw [starProjection_apply]; rw [orthogonalProjectionOnto_apply_of_mem_orthogonal]; rw [Submodule.coe_zero]
+    exact hV.isOrtho hij.symm hx
+  | zero =>
+    simp_rw [map_zero, Finset.sum_const_zero]
+  | add x y _ _ hx hy =>
+    simp_rw [map_add, Finset.sum_add_distrib]
+    exact congr_arg₂ (· + ·) hx hy
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum_add_distrib, Finset.sum_const_zero, Finset.sum_eq_single_of_mem, Submodule, Submodule.coe_zero, coe_zero, hV.isOrtho, hij.symm, iSup_induction, isOrtho, map_add, map_zero, mem_univ, orthogonalProjectionOnto_apply_of_mem_orthogonal, simp_rw, starProjection_apply, starProjection_eq_self_iff, starProjection_eq_self_iff.mpr
 -/
@@ -596,7 +758,12 @@ theorem OrthogonalFamily.projection_directSum_coeAddHom
       -- Need to unfold `DirectSum` to see through the defeq abuse.
       DirectSum, DFinsupp.singleAddHom_apply]
     obtain rfl | hij := Decidable.eq_or_ne i j
-
+    · rw [orthogonalProjectionOnto_mem_subspace_eq_self, DFinsupp.single_eq_same]
+    · rw [orthogonalProjectionOnto_apply_of_mem_orthogonal, DFinsupp.single_eq_of_ne hij]
+      exact hV.isOrtho hij.symm x.prop
+  | add x y hx hy =>
+    simp_rw [map_add]
+    exact congr_arg₂ (· + ·) hx hy
 
 中文:
 定理 OrthogonalFamily.projection_directSum_coeAddHom
@@ -609,7 +776,12 @@ theorem OrthogonalFamily.projection_directSum_coeAddHom
       -- Need to unfold `DirectSum` to see through the defeq abuse.
       DirectSum, DFinsupp.singleAddHom_apply]
     obtain rfl | hij := Decidable.eq_or_ne i j
-
+    · rw [orthogonalProjectionOnto_mem_subspace_eq_self, DFinsupp.single_eq_same]
+    · rw [orthogonalProjectionOnto_apply_of_mem_orthogonal, DFinsupp.single_eq_of_ne hij]
+      exact hV.isOrtho hij.symm x.prop
+  | add x y hx hy =>
+    simp_rw [map_add]
+    exact congr_arg₂ (· + ·) hx hy
 
 Depends on / 依赖: DirectSum, DirectSum.coeAddMonoidHom_of, DirectSum.induction_on, DirectSum.of, coeAddMonoidHom_of, induction_on, simp_rw
 -/
@@ -642,7 +814,15 @@ abbreviation OrthogonalFamily.decomposition
     dsimp only
     let := fun i => Classical.decEq (V i)
     rw [DirectSum.coeAddMonoidHom]; rw [DirectSum.toAddMonoid]; rw [DFinsupp.liftAddHom_apply]
-    -- This used to be `rw`, but we need `erw` after ht
+    -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
+    erw [DFinsupp.sumAddHom_apply]; rw [DFinsupp.sum_eq_sum_fintype]
+    · simp_rw [Equiv.apply_symm_apply, AddSubmonoidClass.coe_subtype]
+      exact hV.sum_projection_of_mem_iSup _ ((h.ge :) Submodule.mem_top)
+    · intro i
+      exact map_zero _
+  right_inv x := by
+    dsimp only
+    simp_rw [hV.projection_directSum_coeAddHom, DFinsupp.equivFunOnFintype_symm_coe]
 
 中文:
 缩写 OrthogonalFamily.decomposition
@@ -651,7 +831,15 @@ abbreviation OrthogonalFamily.decomposition
     dsimp only
     let := fun i => Classical.decEq (V i)
     rw [DirectSum.coeAddMonoidHom]; rw [DirectSum.toAddMonoid]; rw [DFinsupp.liftAddHom_apply]
-    -- This used to be `rw`, but we need `erw` after ht
+    -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
+    erw [DFinsupp.sumAddHom_apply]; rw [DFinsupp.sum_eq_sum_fintype]
+    · simp_rw [Equiv.apply_symm_apply, AddSubmonoidClass.coe_subtype]
+      exact hV.sum_projection_of_mem_iSup _ ((h.ge :) Submodule.mem_top)
+    · intro i
+      exact map_zero _
+  right_inv x := by
+    dsimp only
+    simp_rw [hV.projection_directSum_coeAddHom, DFinsupp.equivFunOnFintype_symm_coe]
 
 Depends on / 依赖: DFinsupp, DFinsupp.equivFunOnFintype.symm, equivFunOnFintype, orthogonalProjectionOnto
 -/
@@ -697,7 +885,52 @@ theorem maximal_orthonormal_iff_orthogonalComplement_eq_bot
     -- take a nonzero vector and normalize it
     let e := (‖x‖⁻¹ : 𝕜) • x
     have he : ‖e‖ = 1 := by simp [e, norm_smul_inv_norm hx]
-    hav
+    have he' : e in (span 𝕜 v)ᗮ := smul_mem' _ _ hx'
+    have he'' : e ∉ v := by
+      intro hev
+      have : e = 0 := by
+        have : e in span 𝕜 v ⊓ (span 𝕜 v)ᗮ := ⟨subset_span hev, he'⟩
+        simpa [(span 𝕜 v).inf_orthogonal_eq_bot] using this
+      have : e != 0 := hv.ne_zero ⟨e, hev⟩
+      contradiction
+    -- put this together with `v` to provide a candidate orthonormal basis for the whole space
+    refine ⟨insert e v, v.subset_insert e, ⟨?_, ?_⟩, (ne_insert_of_notMem v he'').symm⟩
+    · -- show that the elements of `insert e v` have unit length
+      rintro ⟨a, ha'⟩
+      rcases eq_or_mem_of_mem_insert ha' with ha | ha
+      · simp [ha, he]
+      · exact hv.1 ⟨a, ha⟩
+    · -- show that the elements of `insert e v` are orthogonal
+      have h_end : forall a in v, ⟪a, e⟫ = 0 := by
+        intro a ha
+        exact he' a (Submodule.subset_span ha)
+      rintro ⟨a, ha'⟩
+      rcases eq_or_mem_of_mem_insert ha' with ha | ha
+      · rintro ⟨b, hb'⟩ hab'
+        have hb : b in v := by grind
+        rw [inner_eq_zero_symm]
+        simpa [ha] using h_end b hb
+      rintro ⟨b, hb'⟩ hab'
+      rcases eq_or_mem_of_mem_insert hb' with hb | hb
+      · simpa [hb] using h_end a ha
+      have : (⟨a, ha⟩ : v) != ⟨b, hb⟩ := by
+        intro hab''
+        apply hab'
+        simpa using hab''
+      exact hv.2 this
+  · -- ** direction 2: empty orthogonal complement implies maximal
+    simp only [Subset.antisymm_iff]
+    rintro h u (huv : v subseteq u) hu
+    refine ⟨?_, huv⟩
+    intro x hxu
+    refine ((mt (h x)) (hu.ne_zero ⟨x, hxu⟩)).imp_symm ?_
+    intro hxv y hy
+    have hxv' : (⟨x, hxu⟩ : u) ∉ ((↑) ⁻¹' v : Set u) := by simp [hxv]
+    obtain ⟨l, hl, rfl⟩ :
+      exists l in supported 𝕜 𝕜 ((↑) ⁻¹' v : Set u), (linearCombination 𝕜 ((↑) : u -> E)) l = y := by
+      rw [← Finsupp.mem_span_image_iff_linearCombination]
+      simp [huv, inter_eq_self_of_subset_right, hy]
+    exact hu.inner_finsupp_eq_zero hxv' hl
 
 中文:
 定理 maximal_orthonormal_iff_orthogonalComplement_eq_bot
@@ -711,7 +944,52 @@ theorem maximal_orthonormal_iff_orthogonalComplement_eq_bot
     -- take a nonzero vector and normalize it
     let e := (‖x‖⁻¹ : 𝕜) • x
     have he : ‖e‖ = 1 := by simp [e, norm_smul_inv_norm hx]
-    hav
+    have he' : e in (span 𝕜 v)ᗮ := smul_mem' _ _ hx'
+    have he'' : e ∉ v := by
+      intro hev
+      have : e = 0 := by
+        have : e in span 𝕜 v ⊓ (span 𝕜 v)ᗮ := ⟨subset_span hev, he'⟩
+        simpa [(span 𝕜 v).inf_orthogonal_eq_bot] using this
+      have : e != 0 := hv.ne_zero ⟨e, hev⟩
+      contradiction
+    -- put this together with `v` to provide a candidate orthonormal basis for the whole space
+    refine ⟨insert e v, v.subset_insert e, ⟨?_, ?_⟩, (ne_insert_of_notMem v he'').symm⟩
+    · -- show that the elements of `insert e v` have unit length
+      rintro ⟨a, ha'⟩
+      rcases eq_or_mem_of_mem_insert ha' with ha | ha
+      · simp [ha, he]
+      · exact hv.1 ⟨a, ha⟩
+    · -- show that the elements of `insert e v` are orthogonal
+      have h_end : forall a in v, ⟪a, e⟫ = 0 := by
+        intro a ha
+        exact he' a (Submodule.subset_span ha)
+      rintro ⟨a, ha'⟩
+      rcases eq_or_mem_of_mem_insert ha' with ha | ha
+      · rintro ⟨b, hb'⟩ hab'
+        have hb : b in v := by grind
+        rw [inner_eq_zero_symm]
+        simpa [ha] using h_end b hb
+      rintro ⟨b, hb'⟩ hab'
+      rcases eq_or_mem_of_mem_insert hb' with hb | hb
+      · simpa [hb] using h_end a ha
+      have : (⟨a, ha⟩ : v) != ⟨b, hb⟩ := by
+        intro hab''
+        apply hab'
+        simpa using hab''
+      exact hv.2 this
+  · -- ** direction 2: empty orthogonal complement implies maximal
+    simp only [Subset.antisymm_iff]
+    rintro h u (huv : v subseteq u) hu
+    refine ⟨?_, huv⟩
+    intro x hxu
+    refine ((mt (h x)) (hu.ne_zero ⟨x, hxu⟩)).imp_symm ?_
+    intro hxv y hy
+    have hxv' : (⟨x, hxu⟩ : u) ∉ ((↑) ⁻¹' v : Set u) := by simp [hxv]
+    obtain ⟨l, hl, rfl⟩ :
+      exists l in supported 𝕜 𝕜 ((↑) ⁻¹' v : Set u), (linearCombination 𝕜 ((↑) : u -> E)) l = y := by
+      rw [← Finsupp.mem_span_image_iff_linearCombination]
+      simp [huv, inter_eq_self_of_subset_right, hy]
+    exact hu.inner_finsupp_eq_zero hxv' hl
 
 Depends on / 依赖: Submodule, Submodule.eq_bot_iff, contrapose, eq_bot_iff
 -/
@@ -788,7 +1066,7 @@ theorem maximal_orthonormal_iff_basis_of_finiteDimensional
   · refine fun h => ⟨Basis.mk hv.linearIndependent _, Basis.coe_mk _ ?_⟩
     convert! h.ge
   · rintro ⟨h, coe_h⟩
-    rw [← h.span_
+    rw [← h.span_eq]; rw [coe_h]; rw [hv_coe]
 
 中文:
 定理 maximal_orthonormal_iff_basis_of_finiteDimensional
@@ -801,7 +1079,7 @@ theorem maximal_orthonormal_iff_basis_of_finiteDimensional
   · refine fun h => ⟨Basis.mk hv.linearIndependent _, Basis.coe_mk _ ?_⟩
     convert! h.ge
   · rintro ⟨h, coe_h⟩
-    rw [← h.span_
+    rw [← h.span_eq]; rw [coe_h]; rw [hv_coe]
 
 Depends on / 依赖: Basis.coe_mk, Basis.mk, Submodule, Submodule.orthogonal_eq_bot_iff, coe_h, coe_mk, convert, h.ge, h.span_eq, hv.linearIndependent, hv_coe, linearIndependent, maximal_orthonormal_iff_orthogonalComplement_eq_bot, orthogonal_eq_bot_iff, span_eq
 -/

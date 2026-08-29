@@ -70,7 +70,13 @@ theorem IsGδ.baireSpace_of_t2Space_locallyCompactSpace
   have : BaireSpace (closure s) := .of_t2Space_locallyCompactSpace
   have : BaireSpace ((↑) ⁻¹' s : Set (closure s)) :=
     (hG.preimage continuous_subtype_val).baireSpace_of_dense
-    (by simp [Subtype.dense_iff, in
+    (by simp [Subtype.dense_iff, inter_eq_right.mpr subset_closure])
+  have h_homeo : Homeomorph ((↑) ⁻¹' s : Set (closure s)) s := ⟨⟨fun x => ⟨x, x.2⟩,
+    fun x => ⟨⟨x, subset_closure x.2⟩, x.2⟩, by grind, by grind⟩, by fun_prop, by fun_prop⟩
+  exact h_homeo.baireSpace
+
+@[deprecated (since := "2026-06-04")]
+alias IsGδ.of_t2Space_locallyCompactSpace := IsGδ.baireSpace_of_t2Space_locallyCompactSpace
 
 中文:
 定理 IsGδ.baireSpace_of_t2Space_locallyCompactSpace
@@ -81,7 +87,13 @@ theorem IsGδ.baireSpace_of_t2Space_locallyCompactSpace
   have : BaireSpace (closure s) := .of_t2Space_locallyCompactSpace
   have : BaireSpace ((↑) ⁻¹' s : Set (closure s)) :=
     (hG.preimage continuous_subtype_val).baireSpace_of_dense
-    (by simp [Subtype.dense_iff, in
+    (by simp [Subtype.dense_iff, inter_eq_right.mpr subset_closure])
+  have h_homeo : Homeomorph ((↑) ⁻¹' s : Set (closure s)) s := ⟨⟨fun x => ⟨x, x.2⟩,
+    fun x => ⟨⟨x, subset_closure x.2⟩, x.2⟩, by grind, by grind⟩, by fun_prop, by fun_prop⟩
+  exact h_homeo.baireSpace
+
+@[deprecated (since := "2026-06-04")]
+alias IsGδ.of_t2Space_locallyCompactSpace := IsGδ.baireSpace_of_t2Space_locallyCompactSpace
 
 Depends on / 依赖: BaireSpace, Homeomorph, LocallyCompactSpace, Subtype, Subtype.dense_iff, baireSpace_of_dense, closure, continuous_subtype_val, dense_iff, fun_prop, hG.preimage, h_ho, h_homeo, inter_eq_right, inter_eq_right.mpr, isClosed_closure, isClosed_closure.locallyCompactSpace, locallyCompactSpace, of_t2Space_locallyCompactSpace, preimage
 -/

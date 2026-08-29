@@ -324,7 +324,7 @@ lemma tendsto_smul_atImInfty
     simpa [atImInfty, Function.comp_def, im_smul, num, denom, hg, abs_div, abs_mul,
       abs_of_pos (UpperHalfPlane.im_pos _), mul_div_right_comm]
   apply tendsto_comap.const_mul_atTop
-  simpa [Matrix.det_fin_two, hg] using 
+  simpa [Matrix.det_fin_two, hg] using g.det_ne_zero
 
 中文:
 引理 tendsto_smul_atImInfty
@@ -334,7 +334,7 @@ lemma tendsto_smul_atImInfty
     simpa [atImInfty, Function.comp_def, im_smul, num, denom, hg, abs_div, abs_mul,
       abs_of_pos (UpperHalfPlane.im_pos _), mul_div_right_comm]
   apply tendsto_comap.const_mul_atTop
-  simpa [Matrix.det_fin_two, hg] using 
+  simpa [Matrix.det_fin_two, hg] using g.det_ne_zero
 
 Depends on / 依赖: Function, Function.comp_def, Matrix, Matrix.det_fin_two, Tendsto, UpperHalfPlane, UpperHalfPlane.im_pos, abs_div, abs_mul, abs_of_pos, atImInfty, comp_def, const_mul_atTop, det_fin_two, det_ne_zero, g.det_ne_zero, im_pos, im_smul, mul_div_right_comm, tendsto_comap
 -/

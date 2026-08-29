@@ -372,7 +372,8 @@ definition whiskerIso
         _ = 𝟙 _ := by simp [Iso.hom_inv_id])
     (StructuredArrow.hom_ext _ _ <|
       calc
-        _ = (i.inv ≫ i.hom).right ▷ h := by s
+        _ = (i.inv ≫ i.hom).right ▷ h := by simp [-Iso.inv_hom_id]
+        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
 
 中文:
 定义 whiskerIso
@@ -384,7 +385,8 @@ definition whiskerIso
         _ = 𝟙 _ := by simp [Iso.hom_inv_id])
     (StructuredArrow.hom_ext _ _ <|
       calc
-        _ = (i.inv ≫ i.hom).right ▷ h := by s
+        _ = (i.inv ≫ i.hom).right ▷ h := by simp [-Iso.inv_hom_id]
+        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
 
 Depends on / 依赖: Iso.hom_inv_id, Iso.inv_hom_id, Iso.mk, StructuredArrow, StructuredArrow.hom_ext, hom_ext, hom_inv_id, i.hom, i.inv, inv_hom_id, whiskerHom
 -/
@@ -760,7 +762,8 @@ definition whiskerIso
         _ = 𝟙 _ := by simp [Iso.hom_inv_id])
     (StructuredArrow.hom_ext _ _ <|
       calc
-        _ = h ◁ (i.inv ≫ i.hom).right := by s
+        _ = h ◁ (i.inv ≫ i.hom).right := by simp [-Iso.inv_hom_id]
+        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
 
 中文:
 定义 whiskerIso
@@ -772,7 +775,8 @@ definition whiskerIso
         _ = 𝟙 _ := by simp [Iso.hom_inv_id])
     (StructuredArrow.hom_ext _ _ <|
       calc
-        _ = h ◁ (i.inv ≫ i.hom).right := by s
+        _ = h ◁ (i.inv ≫ i.hom).right := by simp [-Iso.inv_hom_id]
+        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
 
 Depends on / 依赖: Iso.hom_inv_id, Iso.inv_hom_id, Iso.mk, StructuredArrow, StructuredArrow.hom_ext, hom_ext, hom_inv_id, i.hom, i.inv, inv_hom_id, whiskerHom
 -/
@@ -1299,7 +1303,8 @@ definition whiskerIso
         _ = 𝟙 _ := by simp [Iso.hom_inv_id])
     (CostructuredArrow.hom_ext _ _ <|
       calc
-        _ = h ◁ (i.inv ≫ i.hom).left := by
+        _ = h ◁ (i.inv ≫ i.hom).left := by simp [-Iso.inv_hom_id]
+        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
 
 中文:
 定义 whiskerIso
@@ -1311,7 +1316,8 @@ definition whiskerIso
         _ = 𝟙 _ := by simp [Iso.hom_inv_id])
     (CostructuredArrow.hom_ext _ _ <|
       calc
-        _ = h ◁ (i.inv ≫ i.hom).left := by
+        _ = h ◁ (i.inv ≫ i.hom).left := by simp [-Iso.inv_hom_id]
+        _ = 𝟙 _ := by simp [Iso.inv_hom_id])
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.hom_ext, Iso.hom_inv_id, Iso.inv_hom_id, Iso.mk, hom_ext, hom_inv_id, i.hom, i.inv, inv_hom_id, whiskerHom
 -/

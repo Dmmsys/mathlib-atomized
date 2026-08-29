@@ -277,7 +277,27 @@ theorem denseRange_zpow_iff_surjective
   · simp only [← range_eq_univ, DenseRange] at *
     rcases ha₀.eq_or_lt with rfl | hlt
     · simpa only [one_zpow, range_const, dense_iff_closure_eq, closure_singleton] using h
-    · have H : range (a⁻¹ ^ · : Int ->
+    · have H : range (a⁻¹ ^ · : Int -> G) = range (a ^ · : Int -> G) := by
+        simpa only [← inv_zpow, zpow_neg, comp_def] using neg_surjective.range_comp (a ^ · : Int -> G)
+      rw [← H]
+      apply this <;> simpa only [H, one_lt_inv']
+  intro b
+  obtain ⟨m, hm, hm'⟩ : exists m : Int, a ^ m in Ioo b (b * a * a) := by
+    have hne : (Ioo b (b * a * a)).Nonempty := ⟨b * a, by simpa⟩
+    simpa using h.exists_mem_open isOpen_Ioo hne
+  rcases eq_or_ne b (a ^ (m - 1)) with rfl | hne; · simp
+  suffices (Ioo (a ^ m) (a ^ (m + 1))).Nonempty by
+    rcases h.exists_mem_open isOpen_Ioo this with ⟨l, hl⟩
+    have : m < l ∧ l < m + 1 := by simpa [zpow_lt_zpow_iff_right ha₀] using hl
+    lia
+  rcases hne.lt_or_gt with hlt | hlt
+  · refine ⟨b * a * a, hm', ?_⟩
+    simpa only [zpow_add, zpow_sub, zpow_one, ← div_eq_mul_inv, lt_div_iff_mul_lt,
+      mul_lt_mul_iff_right] using hlt
+  · use b * a
+    simp only [mem_Ioo, zpow_add, zpow_sub, zpow_one, ← div_eq_mul_inv,
+      mul_lt_mul_iff_right] at hlt ⊢
+    exact ⟨div_lt_iff_lt_mul.1 hlt, hm⟩
 
 中文:
 定理 denseRange_zpow_iff_surjective
@@ -288,7 +308,27 @@ theorem denseRange_zpow_iff_surjective
   · simp only [← range_eq_univ, DenseRange] at *
     rcases ha₀.eq_or_lt with rfl | hlt
     · simpa only [one_zpow, range_const, dense_iff_closure_eq, closure_singleton] using h
-    · have H : range (a⁻¹ ^ · : Int ->
+    · have H : range (a⁻¹ ^ · : Int -> G) = range (a ^ · : Int -> G) := by
+        simpa only [← inv_zpow, zpow_neg, comp_def] using neg_surjective.range_comp (a ^ · : Int -> G)
+      rw [← H]
+      apply this <;> simpa only [H, one_lt_inv']
+  intro b
+  obtain ⟨m, hm, hm'⟩ : exists m : Int, a ^ m in Ioo b (b * a * a) := by
+    have hne : (Ioo b (b * a * a)).Nonempty := ⟨b * a, by simpa⟩
+    simpa using h.exists_mem_open isOpen_Ioo hne
+  rcases eq_or_ne b (a ^ (m - 1)) with rfl | hne; · simp
+  suffices (Ioo (a ^ m) (a ^ (m + 1))).Nonempty by
+    rcases h.exists_mem_open isOpen_Ioo this with ⟨l, hl⟩
+    have : m < l ∧ l < m + 1 := by simpa [zpow_lt_zpow_iff_right ha₀] using hl
+    lia
+  rcases hne.lt_or_gt with hlt | hlt
+  · refine ⟨b * a * a, hm', ?_⟩
+    simpa only [zpow_add, zpow_sub, zpow_one, ← div_eq_mul_inv, lt_div_iff_mul_lt,
+      mul_lt_mul_iff_right] using hlt
+  · use b * a
+    simp only [mem_Ioo, zpow_add, zpow_sub, zpow_one, ← div_eq_mul_inv,
+      mul_lt_mul_iff_right] at hlt ⊢
+    exact ⟨div_lt_iff_lt_mul.1 hlt, hm⟩
 
 Depends on / 依赖: DenseRange, closure_singleton, comp_def, denseRange, dense_iff_closure_eq, eq_or_lt, generalizing, h.denseRange, inv_zpow, neg_surjective, neg_surjective.range_comp, one_lt_inv, one_zpow, range_comp, range_const, range_eq_univ, zpow_neg
 -/

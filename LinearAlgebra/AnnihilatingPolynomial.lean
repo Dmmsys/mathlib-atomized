@@ -160,7 +160,9 @@ theorem span_singleton_annIdealGenerator
   · rw [annIdealGenerator, Ideal.span_singleton_mul_right_unit, Ideal.span_singleton_generator]
     apply Polynomial.isUnit_C.mpr
     apply IsUnit.mk0
-    apply inv_eq_zero
+    apply inv_eq_zero.not.mpr
+    apply Polynomial.leadingCoeff_eq_zero.not.mpr
+    apply (mul_ne_zero_iff.mp h).1
 
 中文:
 定理 span_singleton_annIdealGenerator
@@ -171,7 +173,9 @@ theorem span_singleton_annIdealGenerator
   · rw [annIdealGenerator, Ideal.span_singleton_mul_right_unit, Ideal.span_singleton_generator]
     apply Polynomial.isUnit_C.mpr
     apply IsUnit.mk0
-    apply inv_eq_zero
+    apply inv_eq_zero.not.mpr
+    apply Polynomial.leadingCoeff_eq_zero.not.mpr
+    apply (mul_ne_zero_iff.mp h).1
 
 Depends on / 依赖: Ideal.span_singleton_generator, Ideal.span_singleton_mul_right_unit, Ideal.span_zero, IsUnit, IsUnit.mk0, Polynomial, Polynomial.isUnit_C.mpr, Polynomial.leadingCoeff_eq_zero.not.mpr, Set.singleton_zero, annIdealGenerator, annIdealGenerator_eq_zero_iff, annIdealGenerator_eq_zero_iff.mp, inv_eq_zero, inv_eq_zero.not.mpr, isUnit_C, leadingCoeff_eq_zero, mul_ne_zero_iff, mul_ne_zero_iff.mp, singleton_zero, span_singleton_generator
 -/
@@ -325,7 +329,10 @@ theorem annIdealGenerator_eq_minpoly
     rintro ⟨p, p_monic, hp : aeval a p = 0⟩
     refine p_monic.ne_zero (Ideal.mem_bot.mp ?_)
     simpa only [annIdealGenerator_eq_zero_iff.mp h] using mem_annIdeal_iff_aeval_eq_zero.mpr hp
-  · exact minpoly.unique _ _ (monic_ann
+  · exact minpoly.unique _ _ (monic_annIdealGenerator _ _ h) (annIdealGenerator_aeval_eq_zero _ _)
+      fun q q_monic hq =>
+        degree_annIdealGenerator_le_of_mem a q (mem_annIdeal_iff_aeval_eq_zero.mpr hq)
+          q_monic.ne_zero
 
 中文:
 定理 annIdealGenerator_eq_minpoly
@@ -337,7 +344,10 @@ theorem annIdealGenerator_eq_minpoly
     rintro ⟨p, p_monic, hp : aeval a p = 0⟩
     refine p_monic.ne_zero (Ideal.mem_bot.mp ?_)
     simpa only [annIdealGenerator_eq_zero_iff.mp h] using mem_annIdeal_iff_aeval_eq_zero.mpr hp
-  · exact minpoly.unique _ _ (monic_ann
+  · exact minpoly.unique _ _ (monic_annIdealGenerator _ _ h) (annIdealGenerator_aeval_eq_zero _ _)
+      fun q q_monic hq =>
+        degree_annIdealGenerator_le_of_mem a q (mem_annIdeal_iff_aeval_eq_zero.mpr hq)
+          q_monic.ne_zero
 
 Depends on / 依赖: Ideal.mem_bot.mp, annIdealGenerator, annIdealGenerator_aeval_eq_zero, annIdealGenerator_eq_zero_iff, annIdealGenerator_eq_zero_iff.mp, degree_annIdealGenerator_le_of_mem, eq_zero, mem_annIdeal_iff_aeval_eq_zero, mem_annIdeal_iff_aeval_eq_zero.mpr, mem_bot, minpoly, minpoly.eq_zero, minpoly.unique, monic_annIdealGenerator, ne_zero, p_monic, p_monic.ne_zero, q_monic, q_monic.ne_zero, unique
 -/
@@ -364,7 +374,7 @@ theorem monic_generator_eq_minpoly
   · rw [← span_singleton_annIdealGenerator, Ideal.span_singleton_eq_span_singleton] at p_gen
     rw [eq_comm]
     apply eq_of_monic_of_associated p_monic _ p_gen
-    apply monic_annIdealGener
+    apply monic_annIdealGenerator _ _ ((Associated.ne_zero_iff p_gen).mp h)
 
 中文:
 定理 monic_generator_eq_minpoly
@@ -375,7 +385,7 @@ theorem monic_generator_eq_minpoly
   · rw [← span_singleton_annIdealGenerator, Ideal.span_singleton_eq_span_singleton] at p_gen
     rw [eq_comm]
     apply eq_of_monic_of_associated p_monic _ p_gen
-    apply monic_annIdealGener
+    apply monic_annIdealGenerator _ _ ((Associated.ne_zero_iff p_gen).mp h)
 
 Depends on / 依赖: Associated, Associated.ne_zero_iff, Ideal.span_singleton_eq_bot.mpr, Ideal.span_singleton_eq_span_singleton, annIdealGenerator_eq_zero_iff, eq_comm, eq_of_monic_of_associated, monic_annIdealGenerator, ne_zero_iff, p_gen, p_monic, span_singleton_annIdealGenerator, span_singleton_eq_bot, span_singleton_eq_span_singleton
 -/

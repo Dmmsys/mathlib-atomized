@@ -70,7 +70,13 @@ theorem derivative_rootMultiplicity_of_root_of_mem_nonZeroDivisors
   obtain ⟨g, hp, hndvd⟩ := p.exists_eq_pow_rootMultiplicity_mul_and_not_dvd h t
   set m := p.rootMultiplicity t
 have hm : m - 1 + 1 = m := Nat.sub_add_cancel (rootMultiplicity_pos h).2 hpt
-  have hndvd : ¬(X - C t) ^ m ∣ deri
+  have hndvd : ¬(X - C t) ^ m ∣ derivative p := by
+    rw [hp]; rw [derivative_mul]; rw [dvd_add_left (dvd_mul_right _ _)]; rw [derivative_X_sub_C_pow]; rw [← hm]; rw [pow_succ]; rw [hm]; rw [mul_comm (C _)]; rw [mul_assoc]; rw [dvd_cancel_left_mem_nonZeroDivisors (monic_X_sub_C t |>.pow _ |>.mem_nonZeroDivisors)]
+    rw [dvd_iff_isRoot]; rw [IsRoot] at hndvd ⊢
+    rwa [eval_mul, eval_C, mul_left_mem_nonZeroDivisors_eq_zero_iff hnzd]
+  have hnezero : derivative p != 0 := fun h => hndvd (by rw [h]; exact dvd_zero _)
+  exact le_antisymm (by rwa [rootMultiplicity_le_iff hnezero, hm])
+    (rootMultiplicity_sub_one_le_derivative_rootMultiplicity_of_ne_zero _ t hnezero)
 
 中文:
 定理 derivative_rootMultiplicity_of_root_of_mem_nonZeroDivisors
@@ -80,7 +86,13 @@ have hm : m - 1 + 1 = m := Nat.sub_add_cancel (rootMultiplicity_pos h).2 hpt
   obtain ⟨g, hp, hndvd⟩ := p.exists_eq_pow_rootMultiplicity_mul_and_not_dvd h t
   set m := p.rootMultiplicity t
 have hm : m - 1 + 1 = m := Nat.sub_add_cancel (rootMultiplicity_pos h).2 hpt
-  have hndvd : ¬(X - C t) ^ m ∣ deri
+  have hndvd : ¬(X - C t) ^ m ∣ derivative p := by
+    rw [hp]; rw [derivative_mul]; rw [dvd_add_left (dvd_mul_right _ _)]; rw [derivative_X_sub_C_pow]; rw [← hm]; rw [pow_succ]; rw [hm]; rw [mul_comm (C _)]; rw [mul_assoc]; rw [dvd_cancel_left_mem_nonZeroDivisors (monic_X_sub_C t |>.pow _ |>.mem_nonZeroDivisors)]
+    rw [dvd_iff_isRoot]; rw [IsRoot] at hndvd ⊢
+    rwa [eval_mul, eval_C, mul_left_mem_nonZeroDivisors_eq_zero_iff hnzd]
+  have hnezero : derivative p != 0 := fun h => hndvd (by rw [h]; exact dvd_zero _)
+  exact le_antisymm (by rwa [rootMultiplicity_le_iff hnezero, hm])
+    (rootMultiplicity_sub_one_le_derivative_rootMultiplicity_of_ne_zero _ t hnezero)
 
 Depends on / 依赖: Nat.sub_add_cancel, derivative, derivative_X_sub_C_pow, derivative_mul, dvd_add_left, dvd_cancel_left_mem_n, dvd_mul_right, exists_eq_pow_rootMultiplicity_mul_and_not_dvd, map_zero, mul_assoc, mul_comm, p.exists_eq_pow_rootMultiplicity_mul_and_not_dvd, p.rootMultiplicity, pow_succ, rootMultiplicity, rootMultiplicity_pos, rootMultiplicity_zero, sub_add_cancel
 -/
@@ -134,7 +146,10 @@ theorem eval_iterate_derivative_rootMultiplicity
   set m := p.rootMultiplicity t with hm
   conv_lhs => rw [← p.pow_mul_divByMonic_rootMultiplicity_eq t, ← hm]
   rw [iterate_derivative_mul]; rw [eval_finsetSum]; rw [sum_eq_single_of_mem _ (mem_range.mpr m.succ_pos)]
-  · rw [m.choose_zero_right, one_smul, eval_mul, m.sub_zero, iterate_derivative_
+  · rw [m.choose_zero_right, one_smul, eval_mul, m.sub_zero, iterate_derivative_X_sub_pow_self,
+      eval_natCast, nsmul_eq_mul]; rfl
+  · intro b hb hb0
+    rw [iterate_derivative_X_sub_pow]; rw [eval_smul]; rw [eval_mul]; rw [eval_smul]; rw [eval_pow]; rw [Nat.sub_sub_self (mem_range_succ_iff.mp hb)]; rw [eval_sub]; rw [eval_X]; rw [eval_C]; rw [sub_self]; rw [zero_pow hb0]; rw [smul_zero]; rw [zero_mul]; rw [smul_zero]
 
 中文:
 定理 eval_iterate_derivative_rootMultiplicity
@@ -143,7 +158,10 @@ theorem eval_iterate_derivative_rootMultiplicity
   set m := p.rootMultiplicity t with hm
   conv_lhs => rw [← p.pow_mul_divByMonic_rootMultiplicity_eq t, ← hm]
   rw [iterate_derivative_mul]; rw [eval_finsetSum]; rw [sum_eq_single_of_mem _ (mem_range.mpr m.succ_pos)]
-  · rw [m.choose_zero_right, one_smul, eval_mul, m.sub_zero, iterate_derivative_
+  · rw [m.choose_zero_right, one_smul, eval_mul, m.sub_zero, iterate_derivative_X_sub_pow_self,
+      eval_natCast, nsmul_eq_mul]; rfl
+  · intro b hb hb0
+    rw [iterate_derivative_X_sub_pow]; rw [eval_smul]; rw [eval_mul]; rw [eval_smul]; rw [eval_pow]; rw [Nat.sub_sub_self (mem_range_succ_iff.mp hb)]; rw [eval_sub]; rw [eval_X]; rw [eval_C]; rw [sub_self]; rw [zero_pow hb0]; rw [smul_zero]; rw [zero_mul]; rw [smul_zero]
 
 Depends on / 依赖: Nat.sub_sub_self, choose_zero_right, conv_lhs, eval_finsetSum, eval_mul, eval_natCast, eval_pow, eval_smul, iterate_derivative_X_sub_pow, iterate_derivative_X_sub_pow_self, iterate_derivative_mul, m.choose_zero_right, m.sub_zero, m.succ_pos, mem_range, mem_range.mpr, mem_range_succ_iff, mem_range_succ_iff.mp, nsmul_eq_mul, one_smul
 -/
@@ -169,7 +187,8 @@ theorem lt_rootMultiplicity_of_isRoot_iterate_derivative_of_mem_nonZeroDivisors
   simp only [IsRoot, eval_iterate_derivative_rootMultiplicity] at hroot
   obtain ⟨q, hq⟩ : ((rootMultiplicity t p)! : R) ∣ n ! := by gcongr
   rw [hq]; rw [mul_mem_nonZeroDivisors] at hnzd
-  rw [nsmul_eq_mul]; rw [mul_left_mem_nonZeroDivisors_eq_zero_i
+  rw [nsmul_eq_mul]; rw [mul_left_mem_nonZeroDivisors_eq_zero_iff hnzd.1] at hroot
+  exact eval_divByMonic_pow_rootMultiplicity_ne_zero t h hroot
 
 中文:
 定理 lt_rootMultiplicity_of_isRoot_iterate_derivative_of_mem_nonZeroDivisors
@@ -179,7 +198,8 @@ theorem lt_rootMultiplicity_of_isRoot_iterate_derivative_of_mem_nonZeroDivisors
   simp only [IsRoot, eval_iterate_derivative_rootMultiplicity] at hroot
   obtain ⟨q, hq⟩ : ((rootMultiplicity t p)! : R) ∣ n ! := by gcongr
   rw [hq]; rw [mul_mem_nonZeroDivisors] at hnzd
-  rw [nsmul_eq_mul]; rw [mul_left_mem_nonZeroDivisors_eq_zero_i
+  rw [nsmul_eq_mul]; rw [mul_left_mem_nonZeroDivisors_eq_zero_iff hnzd.1] at hroot
+  exact eval_divByMonic_pow_rootMultiplicity_ne_zero t h hroot
 
 Depends on / 依赖: IsRoot, eval_divByMonic_pow_rootMultiplicity_ne_zero, eval_iterate_derivative_rootMultiplicity, mul_left_mem_nonZeroDivisors_eq_zero_iff, mul_mem_nonZeroDivisors, nsmul_eq_mul, replace, rootMultiplicity
 -/
@@ -209,7 +229,8 @@ theorem lt_rootMultiplicity_of_isRoot_iterate_derivative_of_mem_nonZeroDivisors'
     simp only [Nat.factorial_zero, Nat.cast_one]
     exact Submonoid.one_mem _
   | succ n ih =>
-    rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [mul_mem_nonZeroD
+    rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [mul_mem_nonZeroDivisors]
+    exact ⟨hnzd _ le_rfl n.succ_ne_zero, ih fun m h => hnzd m (h.trans n.le_succ)⟩
 
 中文:
 定理 lt_rootMultiplicity_of_isRoot_iterate_derivative_of_mem_nonZeroDivisors'
@@ -221,7 +242,8 @@ theorem lt_rootMultiplicity_of_isRoot_iterate_derivative_of_mem_nonZeroDivisors'
     simp only [Nat.factorial_zero, Nat.cast_one]
     exact Submonoid.one_mem _
   | succ n ih =>
-    rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [mul_mem_nonZeroD
+    rw [Nat.factorial_succ]; rw [Nat.cast_mul]; rw [mul_mem_nonZeroDivisors]
+    exact ⟨hnzd _ le_rfl n.succ_ne_zero, ih fun m h => hnzd m (h.trans n.le_succ)⟩
 
 Depends on / 依赖: Nat.cast_mul, Nat.cast_one, Nat.factorial_succ, Nat.factorial_zero, Submonoid, Submonoid.one_mem, cast_mul, cast_one, factorial_succ, factorial_zero, h.trans, le_rfl, le_succ, lt_rootMultiplicity_of_isRoot_iterate_derivative_of_mem_nonZeroDivisors, mul_mem_nonZeroDivisors, n.le_succ, n.succ_ne_zero, one_mem, succ_ne_zero
 -/
@@ -476,7 +498,10 @@ theorem isRoot_of_isRoot_of_dvd_derivative_mul
 exact not_isRoot_C _ _ C_ne_zero.mp hf0
   by_contra hg
   have hdfg0 : f.derivative * g != 0 := mul_ne_zero hdf0 (by rintro rfl; simp at hg)
-  have hr' := congr_arg (
+  have hr' := congr_arg (rootMultiplicity a) hr
+  have : IsDomain R := {}
+  rw [rootMultiplicity_mul hdfg0]; rw [derivative_rootMultiplicity_of_root haf]; rw [rootMultiplicity_eq_zero hg]; rw [add_zero]; rw [rootMultiplicity_mul (hr ▸ hdfg0)]; rw [add_comm]; rw [Nat.sub_eq_iff_eq_add (Nat.succ_le_iff.2 ((rootMultiplicity_pos hf0).2 haf))] at hr'
+  lia
 
 中文:
 定理 isRoot_of_isRoot_of_dvd_derivative_mul
@@ -489,7 +514,10 @@ exact not_isRoot_C _ _ C_ne_zero.mp hf0
 exact not_isRoot_C _ _ C_ne_zero.mp hf0
   by_contra hg
   have hdfg0 : f.derivative * g != 0 := mul_ne_zero hdf0 (by rintro rfl; simp at hg)
-  have hr' := congr_arg (
+  have hr' := congr_arg (rootMultiplicity a) hr
+  have : IsDomain R := {}
+  rw [rootMultiplicity_mul hdfg0]; rw [derivative_rootMultiplicity_of_root haf]; rw [rootMultiplicity_eq_zero hg]; rw [add_zero]; rw [rootMultiplicity_mul (hr ▸ hdfg0)]; rw [add_comm]; rw [Nat.sub_eq_iff_eq_add (Nat.succ_le_iff.2 ((rootMultiplicity_pos hf0).2 haf))] at hr'
+  lia
 
 Depends on / 依赖: C_ne_zero, C_ne_zero.mp, IsDomain, add_zero, congr_arg, contrapose, derivative, derivative_rootMultiplicity_of_root, eq_C_of_derivative_eq_zero, f.derivative, mul_ne_zero, not_isRoot_C, rootMultiplicity, rootMultiplicity_eq_zero, rootMultiplicity_mul
 -/
@@ -519,7 +547,10 @@ instance instNormalizationMonoid
   normUnit_zero := Units.ext (by simp)
   normUnit_one := Units.ext (by simp)
 normUnit_mul_units u h := Units.ext by
-    dsimp only [Units.val_m
+    dsimp only [Units.val_mul]
+    obtain ⟨_, ⟨w, rfl⟩, h2⟩ := isUnit_iff.1 ⟨u, rfl⟩
+    rw [leadingCoeff_mul]; rw [← h2]; rw [leadingCoeff_C]; rw [normUnit_mul_units _ (leadingCoeff_ne_zero.2 h)]; rw [Units.eq_inv_mul_iff_mul_eq]; rw [Units.val_mul]; rw [C_mul]; rw [← mul_assoc]; rw [← h2]; rw [← C_mul]
+    simp
 
 中文:
 实例 instNormalizationMonoid
@@ -529,7 +560,10 @@ normUnit_mul_units u h := Units.ext by
   normUnit_zero := Units.ext (by simp)
   normUnit_one := Units.ext (by simp)
 normUnit_mul_units u h := Units.ext by
-    dsimp only [Units.val_m
+    dsimp only [Units.val_mul]
+    obtain ⟨_, ⟨w, rfl⟩, h2⟩ := isUnit_iff.1 ⟨u, rfl⟩
+    rw [leadingCoeff_mul]; rw [← h2]; rw [leadingCoeff_C]; rw [normUnit_mul_units _ (leadingCoeff_ne_zero.2 h)]; rw [Units.eq_inv_mul_iff_mul_eq]; rw [Units.val_mul]; rw [C_mul]; rw [← mul_assoc]; rw [← h2]; rw [← C_mul]
+    simp
 
 Depends on / 依赖: Units.eq_inv_mul_iff_mul_eq, Units.ext, Units.inv_mul, Units.mul_inv, Units.val_mul, eq_inv_mul_iff_mul_eq, inv_mul, isUnit_iff, leadingCoeff, leadingCoeff_C, leadingCoeff_mul, leadingCoeff_ne_zero, map_mul, mul_inv, normUnit, normUnit_mul_units, normUnit_one, normUnit_zero, p.leadingCoeff, val_mul
 -/
@@ -928,7 +962,8 @@ theorem isUnit_iff_degree_eq_zero
       rw [eq_C_of_degree_le_zero this]; rw [hc] at h; simp only [map_zero] at h; contradiction
     isUnit_iff_dvd_one.2
       ⟨C (coeff p 0)⁻¹, by
-        conv in p => rw [eq_C_of
+        conv in p => rw [eq_C_of_degree_le_zero this]
+        rw [← C_mul]; rw [mul_inv_cancel₀ hc]; rw [C_1]⟩⟩
 
 中文:
 定理 isUnit_iff_degree_eq_zero
@@ -939,7 +974,8 @@ theorem isUnit_iff_degree_eq_zero
       rw [eq_C_of_degree_le_zero this]; rw [hc] at h; simp only [map_zero] at h; contradiction
     isUnit_iff_dvd_one.2
       ⟨C (coeff p 0)⁻¹, by
-        conv in p => rw [eq_C_of
+        conv in p => rw [eq_C_of_degree_le_zero this]
+        rw [← C_mul]; rw [mul_inv_cancel₀ hc]; rw [C_1]⟩⟩
 
 Depends on / 依赖: C_mul, degree, degree_eq_zero_of_isUnit, eq_C_of_degree_le_zero, isUnit_iff_dvd_one, map_zero
 -/
@@ -1214,7 +1250,8 @@ instance instEuclideanDomain
     r := _
     r_wellFounded := degree_lt_wf
     quotient_mul_add_remainder_eq := private quotient_mul_add_remainder_eq_aux
-    remainder_lt := private fun _ 
+    remainder_lt := private fun _ _ hq => remainder_lt_aux _ hq
+    mul_left_not_lt := fun _ _ hq => not_lt_of_ge (degree_le_mul_left _ hq) }
 
 中文:
 实例 instEuclideanDomain
@@ -1227,7 +1264,8 @@ instance instEuclideanDomain
     r := _
     r_wellFounded := degree_lt_wf
     quotient_mul_add_remainder_eq := private quotient_mul_add_remainder_eq_aux
-    remainder_lt := private fun _ 
+    remainder_lt := private fun _ _ hq => remainder_lt_aux _ hq
+    mul_left_not_lt := fun _ _ hq => not_lt_of_ge (degree_le_mul_left _ hq) }
 
 Depends on / 依赖: Polynomial, Polynomial.commRing, Polynomial.nontrivial, commRing, degree_le_mul_left, degree_lt_wf, div_def, mul_left_not_lt, nontrivial, not_lt_of_ge, private, quotient, quotient_mul_add_remainder_eq, quotient_mul_add_remainder_eq_aux, quotient_zero, r_wellFounded, remainder, remainder_lt, remainder_lt_aux
 -/
@@ -1256,7 +1294,7 @@ not_le_of_gt by rwa [degree_mul_leadingCoeff_inv q hq0]
     rw [mod_def]; rw [modByMonic]; rw [dif_pos (monic_mul_leadingCoeff_inv hq0)]
     unfold divModByMonicAux
     dsimp
-    simp
+    simp only [this, false_and, if_false]⟩
 
 中文:
 定理 mod_eq_self_iff
@@ -1268,7 +1306,7 @@ not_le_of_gt by rwa [degree_mul_leadingCoeff_inv q hq0]
     rw [mod_def]; rw [modByMonic]; rw [dif_pos (monic_mul_leadingCoeff_inv hq0)]
     unfold divModByMonicAux
     dsimp
-    simp
+    simp only [this, false_and, if_false]⟩
 
 Depends on / 依赖: EuclideanDomain, EuclideanDomain.mod_lt, degree, degree_mul_leadingCoeff_inv, dif_pos, divModByMonicAux, false_and, if_false, leadingCoeff, modByMonic, mod_def, mod_lt, monic_mul_leadingCoeff_inv, not_le_of_gt
 -/
@@ -1294,7 +1332,8 @@ theorem div_eq_zero_iff
   fun h => by
     have hlt : degree p < degree (q * C (leadingCoeff q)⁻¹) := by
       rwa [degree_mul_leadingCoeff_inv q hq0]
-    have hm : Monic (q * C (leadingCoeff q)⁻¹) := monic
+    have hm : Monic (q * C (leadingCoeff q)⁻¹) := monic_mul_leadingCoeff_inv hq0
+    rw [div_def]; rw [(divByMonic_eq_zero_iff hm).2 hlt]; rw [mul_zero]⟩
 
 中文:
 定理 div_eq_zero_iff
@@ -1306,7 +1345,8 @@ theorem div_eq_zero_iff
   fun h => by
     have hlt : degree p < degree (q * C (leadingCoeff q)⁻¹) := by
       rwa [degree_mul_leadingCoeff_inv q hq0]
-    have hm : Monic (q * C (leadingCoeff q)⁻¹) := monic
+    have hm : Monic (q * C (leadingCoeff q)⁻¹) := monic_mul_leadingCoeff_inv hq0
+    rw [div_def]; rw [(divByMonic_eq_zero_iff hm).2 hlt]; rw [mul_zero]⟩
 -/
 protected theorem div_eq_zero_iff (hq0 : q != 0) : p / q = 0 ↔ degree p < degree q :=
   ⟨fun h => by
@@ -1330,7 +1370,7 @@ theorem degree_add_div
       degree (p % q) < degree q := EuclideanDomain.mod_lt _ hq0
       _ <= _ := degree_le_mul_left _ (mt (Polynomial.div_eq_zero_iff hq0).1 (not_lt_of_ge hpq))
   conv_rhs =>
-    rw [← EuclideanDomain.div_add_mod p q]; rw [degree_add_eq_le
+    rw [← EuclideanDomain.div_add_mod p q]; rw [degree_add_eq_left_of_degree_lt this]; rw [degree_mul]
 
 中文:
 定理 degree_add_div
@@ -1341,7 +1381,7 @@ theorem degree_add_div
       degree (p % q) < degree q := EuclideanDomain.mod_lt _ hq0
       _ <= _ := degree_le_mul_left _ (mt (Polynomial.div_eq_zero_iff hq0).1 (not_lt_of_ge hpq))
   conv_rhs =>
-    rw [← EuclideanDomain.div_add_mod p q]; rw [degree_add_eq_le
+    rw [← EuclideanDomain.div_add_mod p q]; rw [degree_add_eq_left_of_degree_lt this]; rw [degree_mul]
 
 Depends on / 依赖: EuclideanDomain, EuclideanDomain.div_add_mod, EuclideanDomain.mod_lt, Polynomial, Polynomial.div_eq_zero_iff, conv_rhs, degree, degree_add_eq_left_of_degree_lt, degree_le_mul_left, degree_mul, div_add_mod, div_eq_zero_iff, mod_lt, not_lt_of_ge
 -/
@@ -1510,7 +1550,9 @@ lemma natDegree_mod_lt
   · refine monic_mul_C_of_leadingCoeff_mul_eq_one ?_
     rw [mul_inv_eq_one₀ hq']
   · contrapose hq
-    rw [← natDegree_mul_C_
+    rw [← natDegree_mul_C_eq_of_mul_eq_one ((inv_mul_eq_one₀ hq').mpr rfl)]
+    simp [hq]
+  · exact natDegree_mul_C_le q q.leadingCoeff⁻¹
 
 中文:
 引理 natDegree_mod_lt
@@ -1525,7 +1567,9 @@ lemma natDegree_mod_lt
   · refine monic_mul_C_of_leadingCoeff_mul_eq_one ?_
     rw [mul_inv_eq_one₀ hq']
   · contrapose hq
-    rw [← natDegree_mul_C_
+    rw [← natDegree_mul_C_eq_of_mul_eq_one ((inv_mul_eq_one₀ hq').mpr rfl)]
+    simp [hq]
+  · exact natDegree_mul_C_le q q.leadingCoeff⁻¹
 
 Depends on / 依赖: contrapose, leadingCoeff, leadingCoeff_ne_zero, mod_def, monic_mul_C_of_leadingCoeff_mul_eq_one, natDegree_modByMonic_lt, natDegree_mul_C_eq_of_mul_eq_one, natDegree_mul_C_le, q.leadingCoeff, trans_le
 -/
@@ -2049,7 +2093,9 @@ theorem coeff_inv_units
   rw [eq_C_of_degree_eq_zero (degree_coe_units u)]; rw [eq_C_of_degree_eq_zero (degree_coe_units u⁻¹)]; rw [coeff_C]; rw [coeff_C]; rw [inv_eq_one_div]
   split_ifs
   · rw [div_eq_iff_mul_eq (coeff_coe_units_zero_ne_zero u), coeff_zero_eq_eval_zero,
-        coeff_zero_eq_eval_zero, ← eval_mul, ← U
+        coeff_zero_eq_eval_zero, ← eval_mul, ← Units.val_mul, inv_mul_cancel]
+    simp
+  · simp
 
 中文:
 定理 coeff_inv_units
@@ -2059,7 +2105,9 @@ theorem coeff_inv_units
   rw [eq_C_of_degree_eq_zero (degree_coe_units u)]; rw [eq_C_of_degree_eq_zero (degree_coe_units u⁻¹)]; rw [coeff_C]; rw [coeff_C]; rw [inv_eq_one_div]
   split_ifs
   · rw [div_eq_iff_mul_eq (coeff_coe_units_zero_ne_zero u), coeff_zero_eq_eval_zero,
-        coeff_zero_eq_eval_zero, ← eval_mul, ← U
+        coeff_zero_eq_eval_zero, ← eval_mul, ← Units.val_mul, inv_mul_cancel]
+    simp
+  · simp
 
 Depends on / 依赖: Units.val_mul, coeff_C, coeff_coe_units_zero_ne_zero, coeff_zero_eq_eval_zero, degree_coe_units, div_eq_iff_mul_eq, eq_C_of_degree_eq_zero, eval_mul, inv_eq_one_div, inv_mul_cancel, split_ifs, val_mul
 -/
@@ -2311,7 +2359,11 @@ theorem map_dvd_map'
   · rw [H, Polynomial.map_zero, zero_dvd_iff, zero_dvd_iff, Polynomial.map_eq_zero]
   · classical
     rw [← normalize_dvd_iff]; rw [← @normalize_dvd_iff R[X], normalize_apply, normalize_apply,
-      coe_normUnit_of_ne_zero H, coe_normUnit_of_ne_zero (mt (Polynomial.map_eq_zer
+      coe_normUnit_of_ne_zero H, coe_normUnit_of_ne_zero (mt (Polynomial.map_eq_zero f).1 H),
+      leadingCoeff_map, ← map_inv₀ f, ← map_C, ← Polynomial.map_mul,
+      map_dvd_map _ f.injective (monic_mul_leadingCoeff_inv H)]
+
+@[simp]
 
 中文:
 定理 map_dvd_map'
@@ -2322,7 +2374,11 @@ theorem map_dvd_map'
   · rw [H, Polynomial.map_zero, zero_dvd_iff, zero_dvd_iff, Polynomial.map_eq_zero]
   · classical
     rw [← normalize_dvd_iff]; rw [← @normalize_dvd_iff R[X], normalize_apply, normalize_apply,
-      coe_normUnit_of_ne_zero H, coe_normUnit_of_ne_zero (mt (Polynomial.map_eq_zer
+      coe_normUnit_of_ne_zero H, coe_normUnit_of_ne_zero (mt (Polynomial.map_eq_zero f).1 H),
+      leadingCoeff_map, ← map_inv₀ f, ← map_C, ← Polynomial.map_mul,
+      map_dvd_map _ f.injective (monic_mul_leadingCoeff_inv H)]
+
+@[simp]
 
 Depends on / 依赖: Polynomial, Polynomial.map_eq_zero, Polynomial.map_mul, Polynomial.map_zero, classical, coe_normUnit_of_ne_zero, f.injective, injective, leadingCoeff_map, map_C, map_dvd_map, map_eq_zero, map_mul, map_zero, monic_mul_leadingCoeff_inv, normalize_apply, normalize_dvd_iff, zero_dvd_iff
 -/
@@ -2558,7 +2614,8 @@ theorem isCoprime_of_is_root_of_eval_derivative_ne_zero
         (irreducible_of_degree_eq_one (Polynomial.degree_X_sub_C a))) ?_
   contrapose hf' with h
   have : X - C a ∣ derivative f := X_sub_C_dvd_derivative_of_X_sub_C_dvd_divByMonic f h
-  rw [← modByMonic_eq_
+  rw [← modByMonic_eq_zero_iff_dvd (monic_X_sub_C _)]; rw [modByMonic_X_sub_C_eq_C_eval] at this
+  rwa [← C_inj, C_0]
 
 中文:
 定理 isCoprime_of_is_root_of_eval_derivative_ne_zero
@@ -2569,7 +2626,8 @@ theorem isCoprime_of_is_root_of_eval_derivative_ne_zero
         (irreducible_of_degree_eq_one (Polynomial.degree_X_sub_C a))) ?_
   contrapose hf' with h
   have : X - C a ∣ derivative f := X_sub_C_dvd_derivative_of_X_sub_C_dvd_divByMonic f h
-  rw [← modByMonic_eq_
+  rw [← modByMonic_eq_zero_iff_dvd (monic_X_sub_C _)]; rw [modByMonic_X_sub_C_eq_C_eval] at this
+  rwa [← C_inj, C_0]
 
 Depends on / 依赖: C_inj, EuclideanDomain, EuclideanDomain.dvd_or_coprime, Or.resolve_left, Polynomial, Polynomial.degree_X_sub_C, X_sub_C_dvd_derivative_of_X_sub_C_dvd_divByMonic, contrapose, degree_X_sub_C, derivative, dvd_or_coprime, irreducible_of_degree_eq_one, modByMonic_X_sub_C_eq_C_eval, modByMonic_eq_zero_iff_dvd, monic_X_sub_C, resolve_left
 -/
@@ -2625,7 +2683,7 @@ theorem irreducible_iff_lt_natDegree_lt
     exact .of_mul_eq_one _ hpu
   rw [← irreducible_mul_leadingCoeff_inv]; rw [(monic_mul_leadingCoeff_inv hp0).irreducible_iff_lt_natDegree_lt this]; rw [natDegree_mul_leadingCoeff_inv _ hp0]
   simp only [IsUnit.dvd_mul_right
-    (is
+    (isUnit_C.mpr (IsUnit.mk0 (leadingCoeff p)⁻¹ (inv_ne_zero (leadingCoeff_ne_zero.mpr hp0))))]
 
 中文:
 定理 irreducible_iff_lt_natDegree_lt
@@ -2636,7 +2694,7 @@ theorem irreducible_iff_lt_natDegree_lt
     exact .of_mul_eq_one _ hpu
   rw [← irreducible_mul_leadingCoeff_inv]; rw [(monic_mul_leadingCoeff_inv hp0).irreducible_iff_lt_natDegree_lt this]; rw [natDegree_mul_leadingCoeff_inv _ hp0]
   simp only [IsUnit.dvd_mul_right
-    (is
+    (isUnit_C.mpr (IsUnit.mk0 (leadingCoeff p)⁻¹ (inv_ne_zero (leadingCoeff_ne_zero.mpr hp0))))]
 
 Depends on / 依赖: IsUnit, IsUnit.dvd_mul_right, IsUnit.mk0, contrapose, dvd_mul_right, inv_ne_zero, irreducible_iff_lt_natDegree_lt, irreducible_mul_leadingCoeff_inv, isUnit_C, isUnit_C.mpr, leadingCoeff, leadingCoeff_ne_zero, leadingCoeff_ne_zero.mpr, monic_mul_leadingCoeff_inv, natDegree_mul_leadingCoeff_inv, of_mul_eq_one
 -/

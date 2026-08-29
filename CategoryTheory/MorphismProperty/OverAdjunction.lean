@@ -230,7 +230,8 @@ definition Over.pullbackComp
     Over.pullback P Q fg ≅ Over.pullback P Q g ⋙ Over.pullback P Q f :=
   haveI : P.HasPullbacksAlong fg := by subst hfg; infer_instance
   NatIso.ofComponents fun X =>
-    haveI : HasPullback X
+    haveI : HasPullback X.hom fg := HasPullbacksAlong.hasPullback _ X.prop
+    Over.isoMk (pullback.congrHom rfl hfg ≪≫ (pullbackLeftPullbackSndIso X.hom g f).symm) (by simp)
 
 中文:
 定义 Over.pullbackComp
@@ -240,7 +241,8 @@ definition Over.pullbackComp
     Over.pullback P Q fg ≅ Over.pullback P Q g ⋙ Over.pullback P Q f :=
   haveI : P.HasPullbacksAlong fg := by subst hfg; infer_instance
   NatIso.ofComponents fun X =>
-    haveI : HasPullback X
+    haveI : HasPullback X.hom fg := HasPullbacksAlong.hasPullback _ X.prop
+    Over.isoMk (pullback.congrHom rfl hfg ≪≫ (pullbackLeftPullbackSndIso X.hom g f).symm) (by simp)
 
 Depends on / 依赖: cat_disch
 -/
@@ -292,7 +294,8 @@ definition Over.pullbackCongr
     Over.pullback P Q f ≅ Over.pullback P Q g :=
   haveI : P.HasPullbacksAlong g := by subst h; infer_instance
   NatIso.ofComponents fun X =>
-    haveI : HasPullback X.hom g := HasPullbacksAlong.has
+    haveI : HasPullback X.hom g := HasPullbacksAlong.hasPullback _ X.prop
+    Over.isoMk (pullback.congrHom rfl h)
 
 中文:
 定义 Over.pullbackCongr
@@ -302,7 +305,8 @@ definition Over.pullbackCongr
     Over.pullback P Q f ≅ Over.pullback P Q g :=
   haveI : P.HasPullbacksAlong g := by subst h; infer_instance
   NatIso.ofComponents fun X =>
-    haveI : HasPullback X.hom g := HasPullbacksAlong.has
+    haveI : HasPullback X.hom g := HasPullbacksAlong.hasPullback _ X.prop
+    Over.isoMk (pullback.congrHom rfl h)
 
 Depends on / 依赖: HasPullback, HasPullbacksAlong, HasPullbacksAlong.hasPullback, IsStableUnderBaseChangeAlong, NatIso, NatIso.ofComponents, Over.isoMk, Over.pullback, P.HasPullbacksAlong, P.IsStableUnderBaseChangeAlong, X.hom, X.prop, congrHom, hasPullback, infer_instance, ofComponents, pullback, pullback.congrHom
 -/
@@ -434,7 +438,7 @@ definition Over.mapPullbackAdj
     · exact Q.pullback_fst _ _ hQf
     · simpa using Q.of_isIso _
   unit.naturality A B g := by ext; apply pullback.hom_ext <;> simp
-  counit.app A := Over.homMk (pullback.fst _ _) pullback.condition (Q.p
+  counit.app A := Over.homMk (pullback.fst _ _) pullback.condition (Q.pullback_fst _ _ hQf)
 
 中文:
 定义 Over.mapPullbackAdj
@@ -444,7 +448,7 @@ definition Over.mapPullbackAdj
     · exact Q.pullback_fst _ _ hQf
     · simpa using Q.of_isIso _
   unit.naturality A B g := by ext; apply pullback.hom_ext <;> simp
-  counit.app A := Over.homMk (pullback.fst _ _) pullback.condition (Q.p
+  counit.app A := Over.homMk (pullback.fst _ _) pullback.condition (Q.pullback_fst _ _ hQf)
 
 Depends on / 依赖: A.hom, Over.homMk, Q.of_isIso, Q.of_postcomp, Q.pullback_fst, condition, counit, counit.app, hom_ext, naturality, of_isIso, of_postcomp, pullback, pullback.condition, pullback.fst, pullback.hom_ext, pullback.lift, pullback_fst, unit.naturality
 -/
@@ -647,7 +651,7 @@ definition Under.pushout
   map {A B} g := Under.homMk (pushout.desc (g.right ≫ pushout.inl _ _)
     (pushout.inr _ _) (by simp [pushout.condition])) (by simp)
     (pushoutDesc_inl_inr _ (by simp) g.prop_hom_right)
-  map_comp _ _ := by ext; apply pushou
+  map_comp _ _ := by ext; apply pushout.hom_ext <;> simp
 
 中文:
 定义 Under.pushout
@@ -657,7 +661,7 @@ definition Under.pushout
   map {A B} g := Under.homMk (pushout.desc (g.right ≫ pushout.inl _ _)
     (pushout.inr _ _) (by simp [pushout.condition])) (by simp)
     (pushoutDesc_inl_inr _ (by simp) g.prop_hom_right)
-  map_comp _ _ := by ext; apply pushou
+  map_comp _ _ := by ext; apply pushout.hom_ext <;> simp
 
 Depends on / 依赖: A.hom, Limits, Limits.pushout.inr, Under.mk, pushout
 -/
@@ -688,7 +692,8 @@ definition Under.pushoutComp
     Under.pushout P Q fg ≅ Under.pushout P Q f ⋙ Under.pushout P Q g :=
   haveI : P.HasPushoutsAlong fg := by subst hfg; infer_instance
   NatIso.ofComponents fun X =>
-    haveI : HasPushout X
+    haveI : HasPushout X.hom fg := HasPushoutsAlong.hasPushout _ X.prop
+    Under.isoMk (pushout.congrHom rfl hfg ≪≫ (pushoutLeftPushoutInrIso X.hom f g).symm) (by simp)
 
 中文:
 定义 Under.pushoutComp
@@ -698,7 +703,8 @@ definition Under.pushoutComp
     Under.pushout P Q fg ≅ Under.pushout P Q f ⋙ Under.pushout P Q g :=
   haveI : P.HasPushoutsAlong fg := by subst hfg; infer_instance
   NatIso.ofComponents fun X =>
-    haveI : HasPushout X
+    haveI : HasPushout X.hom fg := HasPushoutsAlong.hasPushout _ X.prop
+    Under.isoMk (pushout.congrHom rfl hfg ≪≫ (pushoutLeftPushoutInrIso X.hom f g).symm) (by simp)
 
 Depends on / 依赖: cat_disch
 -/
@@ -727,7 +733,8 @@ definition Under.pushoutCongr
     Under.pushout P Q f ≅ Under.pushout P Q g :=
   haveI : P.HasPushoutsAlong g := by subst h; infer_instance
   NatIso.ofComponents fun X =>
-    haveI : HasPushout X.hom g := HasPushoutsAlong.hasP
+    haveI : HasPushout X.hom g := HasPushoutsAlong.hasPushout _ X.prop
+    Under.isoMk (pushout.congrHom rfl h)
 
 中文:
 定义 Under.pushoutCongr
@@ -737,7 +744,8 @@ definition Under.pushoutCongr
     Under.pushout P Q f ≅ Under.pushout P Q g :=
   haveI : P.HasPushoutsAlong g := by subst h; infer_instance
   NatIso.ofComponents fun X =>
-    haveI : HasPushout X.hom g := HasPushoutsAlong.hasP
+    haveI : HasPushout X.hom g := HasPushoutsAlong.hasPushout _ X.prop
+    Under.isoMk (pushout.congrHom rfl h)
 
 Depends on / 依赖: HasPushout, HasPushoutsAlong, HasPushoutsAlong.hasPushout, IsStableUnderCobaseChangeAlong, NatIso, NatIso.ofComponents, P.HasPushoutsAlong, P.IsStableUnderCobaseChangeAlong, Under.isoMk, Under.pushout, X.hom, X.prop, congrHom, hasPushout, infer_instance, ofComponents, pushout, pushout.congrHom
 -/
@@ -830,7 +838,7 @@ counit.app A := Under.homMk (pushout.desc (𝟙 _) A.hom (by simp)) (by simp) by
     apply Q.of_precomp (W' := Q)
     · exact Q.pushout_inl _ _ hQf
     · simpa using Q.of_isIso _
-  counit.naturality A B g := by ext; apply pushout.h
+  counit.naturality A B g := by ext; apply pushout.hom_ext <;> simp
 
 中文:
 定义 Under.mapPushoutAdj
@@ -840,7 +848,7 @@ counit.app A := Under.homMk (pushout.desc (𝟙 _) A.hom (by simp)) (by simp) by
     apply Q.of_precomp (W' := Q)
     · exact Q.pushout_inl _ _ hQf
     · simpa using Q.of_isIso _
-  counit.naturality A B g := by ext; apply pushout.h
+  counit.naturality A B g := by ext; apply pushout.hom_ext <;> simp
 
 Depends on / 依赖: Q.pushout_inl, Under.homMk, condition, pushout, pushout.condition, pushout.inl, pushout_inl
 -/

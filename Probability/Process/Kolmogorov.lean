@@ -453,7 +453,8 @@ lemma IsAEKolmogorovProcess.edist_eq_zero
     simpa [hX.p_pos, not_lt_of_gt hX.p_pos] using hω
   rw [← lintegral_eq_zero_iff' (hX.aemeasurable_edist.pow_const p)]; rw [← nonpos_iff_eq_zero]
   calc ∫⁻ ω, edist (X s ω) (X t ω) ^ p ∂P
-  _ <= M * e
+  _ <= M * edist s t ^ q := hX.kolmogorovCondition s t
+  _ = 0 := by simp [h, hX.q_pos]
 
 中文:
 引理 IsAEKolmogorovProcess.edist_eq_zero
@@ -464,7 +465,8 @@ lemma IsAEKolmogorovProcess.edist_eq_zero
     simpa [hX.p_pos, not_lt_of_gt hX.p_pos] using hω
   rw [← lintegral_eq_zero_iff' (hX.aemeasurable_edist.pow_const p)]; rw [← nonpos_iff_eq_zero]
   calc ∫⁻ ω, edist (X s ω) (X t ω) ^ p ∂P
-  _ <= M * e
+  _ <= M * edist s t ^ q := hX.kolmogorovCondition s t
+  _ = 0 := by simp [h, hX.q_pos]
 
 Depends on / 依赖: aemeasurable_edist, filter_upwards, hX.aemeasurable_edist.pow_const, hX.kolmogorovCondition, hX.p_pos, hX.q_pos, kolmogorovCondition, lintegral_eq_zero_iff, nonpos_iff_eq_zero, not_lt_of_gt, p_pos, pow_const, q_pos
 -/
@@ -511,7 +513,8 @@ lemma IsAEKolmogorovProcess.edist_eq_zero_of_const_eq_zero
     simpa [hX.p_pos, not_lt_of_gt hX.p_pos] using hω
   rw [← lintegral_eq_zero_iff' (hX.aemeasurable_edist.pow_const p)]; rw [← nonpos_iff_eq_zero]
   calc ∫⁻ ω, edist (X s ω) (X t ω) ^ p ∂P
-  _ <= 0 * e
+  _ <= 0 * edist s t ^ q := hX.kolmogorovCondition s t
+  _ = 0 := by simp
 
 中文:
 引理 IsAEKolmogorovProcess.edist_eq_zero_of_const_eq_zero
@@ -522,7 +525,8 @@ lemma IsAEKolmogorovProcess.edist_eq_zero_of_const_eq_zero
     simpa [hX.p_pos, not_lt_of_gt hX.p_pos] using hω
   rw [← lintegral_eq_zero_iff' (hX.aemeasurable_edist.pow_const p)]; rw [← nonpos_iff_eq_zero]
   calc ∫⁻ ω, edist (X s ω) (X t ω) ^ p ∂P
-  _ <= 0 * e
+  _ <= 0 * edist s t ^ q := hX.kolmogorovCondition s t
+  _ = 0 := by simp
 
 Depends on / 依赖: aemeasurable_edist, filter_upwards, hX.aemeasurable_edist.pow_const, hX.kolmogorovCondition, hX.p_pos, kolmogorovCondition, lintegral_eq_zero_iff, nonpos_iff_eq_zero, not_lt_of_gt, p_pos, pow_const
 -/

@@ -596,7 +596,18 @@ theorem restr_symm_trans
   · simp only [trans_toPartialEquiv, symm_toPartialEquiv, restr_toPartialEquiv,
       PartialEquiv.trans_source, PartialEquiv.symm_source, PartialEquiv.restr_target,
       coe_toPartialEquiv_symm, PartialEquiv.restr_coe_symm, PartialEquiv.restr_source]
-    rw [interior_eq_iff_is
+    rw [interior_eq_iff_isOpen.mpr hs']; rw [interior_eq_iff_isOpen.mpr hs]
+    -- Get rid of the middle term, which is merely distracting.
+    rw [inter_assoc]; rw [inter_assoc]; rw [inter_comm _ (e '' s)]; rw [← inter_assoc]; rw [← inter_assoc]
+    congr 1
+    -- Now, just a bunch of rewrites: should this be a separate lemma?
+    rw [← image_source_inter_eq']; rw [← image_source_eq_target]
+    refine image_inter_on ?_
+    intro x hx y hy h
+    rw [← left_inv e hy]; rw [← left_inv e (hs'' hx)]; rw [h]
+  · simp_rw [coe_trans, restr_symm_apply, restr_apply, coe_trans]
+    intro x hx
+    simp
 
 中文:
 定理 restr_symm_trans
@@ -606,7 +617,18 @@ theorem restr_symm_trans
   · simp only [trans_toPartialEquiv, symm_toPartialEquiv, restr_toPartialEquiv,
       PartialEquiv.trans_source, PartialEquiv.symm_source, PartialEquiv.restr_target,
       coe_toPartialEquiv_symm, PartialEquiv.restr_coe_symm, PartialEquiv.restr_source]
-    rw [interior_eq_iff_is
+    rw [interior_eq_iff_isOpen.mpr hs']; rw [interior_eq_iff_isOpen.mpr hs]
+    -- Get rid of the middle term, which is merely distracting.
+    rw [inter_assoc]; rw [inter_assoc]; rw [inter_comm _ (e '' s)]; rw [← inter_assoc]; rw [← inter_assoc]
+    congr 1
+    -- Now, just a bunch of rewrites: should this be a separate lemma?
+    rw [← image_source_inter_eq']; rw [← image_source_eq_target]
+    refine image_inter_on ?_
+    intro x hx y hy h
+    rw [← left_inv e hy]; rw [← left_inv e (hs'' hx)]; rw [h]
+  · simp_rw [coe_trans, restr_symm_apply, restr_apply, coe_trans]
+    intro x hx
+    simp
 
 Depends on / 依赖: PartialEquiv, PartialEquiv.restr_coe_symm, PartialEquiv.restr_source, PartialEquiv.restr_target, PartialEquiv.symm_source, PartialEquiv.trans_source, coe_toPartialEquiv_symm, interior_eq_iff_isOpen, interior_eq_iff_isOpen.mpr, restr_coe_symm, restr_source, restr_target, restr_toPartialEquiv, symm_source, symm_toPartialEquiv, trans_source, trans_toPartialEquiv
 -/
@@ -642,7 +664,14 @@ theorem symm_trans_restr
     exact isOpen_image_source_inter e' hs
   refine ⟨?_, ?_⟩
   · simp only [trans_toPartialEquiv, symm_toPartialEquiv, restr_toPartialEquiv,
-      PartialEquiv.trans_source, PartialEquiv.symm_source, coe_toP
+      PartialEquiv.trans_source, PartialEquiv.symm_source, coe_toPartialEquiv_symm,
+      PartialEquiv.restr_source, preimage_inter]
+    -- Shuffle the intersections, pull e'.target into the interior and use interior_inter.
+    rw [interior_eq_iff_isOpen.mpr hs]; rw [← inter_assoc]; rw [inter_comm e'.target]; rw [inter_assoc]; rw [inter_assoc]
+    congr 1
+    nth_rw 2 [← interior_eq_iff_isOpen.mpr e'.open_target]
+    rw [← interior_inter]; rw [← inter_assoc]; rw [inter_self]; rw [interior_eq_iff_isOpen.mpr ht]
+  · simp [Set.eqOn_refl]
 
 中文:
 定理 symm_trans_restr
@@ -653,7 +682,14 @@ theorem symm_trans_restr
     exact isOpen_image_source_inter e' hs
   refine ⟨?_, ?_⟩
   · simp only [trans_toPartialEquiv, symm_toPartialEquiv, restr_toPartialEquiv,
-      PartialEquiv.trans_source, PartialEquiv.symm_source, coe_toP
+      PartialEquiv.trans_source, PartialEquiv.symm_source, coe_toPartialEquiv_symm,
+      PartialEquiv.restr_source, preimage_inter]
+    -- Shuffle the intersections, pull e'.target into the interior and use interior_inter.
+    rw [interior_eq_iff_isOpen.mpr hs]; rw [← inter_assoc]; rw [inter_comm e'.target]; rw [inter_assoc]; rw [inter_assoc]
+    congr 1
+    nth_rw 2 [← interior_eq_iff_isOpen.mpr e'.open_target]
+    rw [← interior_inter]; rw [← inter_assoc]; rw [inter_self]; rw [interior_eq_iff_isOpen.mpr ht]
+  · simp [Set.eqOn_refl]
 
 Depends on / 依赖: IsOpen, PartialEquiv, PartialEquiv.restr_source, PartialEquiv.symm_source, PartialEquiv.trans_source, coe_toPartialEquiv_symm, image_source_inter_eq, isOpen_image_source_inter, preimage_inter, restr_source, restr_toPartialEquiv, symm_source, symm_toPartialEquiv, target, trans_source, trans_toPartialEquiv
 -/

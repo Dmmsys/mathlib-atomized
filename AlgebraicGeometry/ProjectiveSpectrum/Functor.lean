@@ -117,7 +117,9 @@ lemma isLocallyFraction_comapStructureSheafFun
   refine ⟨W.comap (ProjectiveSpectrum.comap f hf) ⊓ V, ⟨m, hpV⟩, Opens.infLERight _ _, i,
     f.gradedAddHom i a, f.gradedAddHom i b, fun ⟨q, ⟨hqW, hqV⟩⟩ => hb ⟨_, hqW⟩,
     fun ⟨q, ⟨hqW, hqV⟩⟩ => ?_⟩
-  e
+  ext
+  specialize h_frac ⟨_, hqW⟩
+  simp_all [comapStructureSheafFun]
 
 中文:
 引理 isLocallyFraction_comapStructureSheafFun
@@ -127,7 +129,9 @@ lemma isLocallyFraction_comapStructureSheafFun
   refine ⟨W.comap (ProjectiveSpectrum.comap f hf) ⊓ V, ⟨m, hpV⟩, Opens.infLERight _ _, i,
     f.gradedAddHom i a, f.gradedAddHom i b, fun ⟨q, ⟨hqW, hqV⟩⟩ => hb ⟨_, hqW⟩,
     fun ⟨q, ⟨hqW, hqV⟩⟩ => ?_⟩
-  e
+  ext
+  specialize h_frac ⟨_, hqW⟩
+  simp_all [comapStructureSheafFun]
 
 Depends on / 依赖: Opens.infLERight, ProjectiveSpectrum, ProjectiveSpectrum.comap, W.comap, comapStructureSheafFun, f.gradedAddHom, gradedAddHom, h_frac, infLERight, specialize
 -/
@@ -155,7 +159,7 @@ definition comapStructureSheaf
   map_one' := by ext; simp [comapStructureSheafFun]
   map_zero' := by ext; simp [comapStructureSheafFun]
   map_add' x y := by ext; simp [comapStructureSheafFun]
-  map_mul' x y := by ext; simp [
+  map_mul' x y := by ext; simp [comapStructureSheafFun]
 
 中文:
 定义 comapStructureSheaf
@@ -165,7 +169,7 @@ definition comapStructureSheaf
   map_one' := by ext; simp [comapStructureSheafFun]
   map_zero' := by ext; simp [comapStructureSheafFun]
   map_add' x y := by ext; simp [comapStructureSheafFun]
-  map_mul' x y := by ext; simp [
+  map_mul' x y := by ext; simp [comapStructureSheafFun]
 
 Depends on / 依赖: comapStructureSheafFun
 -/
@@ -272,7 +276,15 @@ theorem localRingHom_comp_stalkIso
     RingEquiv.toCommRingCatIso_hom, CommRingCat.hom_comp]
   ext x : 2
   obtain ⟨c, rfl⟩ := x.mk_surjective
-  simp only [val_localRingHom, val_mk, RingHom.comp_app
+  simp only [val_localRingHom, val_mk, RingHom.comp_apply]
+  simp only [GradedRingHom.toRingHom_eq_toRingHom, Localization.localRingHom_mk,
+    GradedRingHom.coe_toRingHom]
+  -- I sincerely apologise for your eyes.
+  erw [stalkIso'_symm_mk]
+  erw [PresheafedSpace.stalkMap_germ_apply]
+  erw [germ_map_sectionInBasicOpen]
+  erw [stalkIso'_germ]
+  simp
 
 中文:
 定理 localRingHom_comp_stalkIso
@@ -284,7 +296,15 @@ theorem localRingHom_comp_stalkIso
     RingEquiv.toCommRingCatIso_hom, CommRingCat.hom_comp]
   ext x : 2
   obtain ⟨c, rfl⟩ := x.mk_surjective
-  simp only [val_localRingHom, val_mk, RingHom.comp_app
+  simp only [val_localRingHom, val_mk, RingHom.comp_apply]
+  simp only [GradedRingHom.toRingHom_eq_toRingHom, Localization.localRingHom_mk,
+    GradedRingHom.coe_toRingHom]
+  -- I sincerely apologise for your eyes.
+  erw [stalkIso'_symm_mk]
+  erw [PresheafedSpace.stalkMap_germ_apply]
+  erw [germ_map_sectionInBasicOpen]
+  erw [stalkIso'_germ]
+  simp
 -/
 @[elementwise] theorem localRingHom_comp_stalkIso (p : ProjectiveSpectrum ℬ) :
     (stalkIso 𝒜 (ProjectiveSpectrum.comap f hf p)).hom ≫
@@ -320,7 +340,10 @@ definition map
     simp only [CommRingCat.hom_comp, CommRingCat.hom_ofHom, RingHom.coe_comp,
       Function.comp_apply] at hx
     have : IsLocalHom (stalkIso ℬ p).inv.hom := isLocalHom_of_isIso _
-    replace hx :=
+    replace hx := (isUnit_map_iff _ _).mp hx
+    replace hx := IsLocalHom.map_nonunit _ hx
+    have : IsLocalHom (stalkIso 𝒜 (p.comap f hf)).hom.hom := isLocalHom_of_isIso _
+    exact (isUnit_map_iff _ _).mp hx
 
 中文:
 定义 map
@@ -331,7 +354,10 @@ definition map
     simp only [CommRingCat.hom_comp, CommRingCat.hom_ofHom, RingHom.coe_comp,
       Function.comp_apply] at hx
     have : IsLocalHom (stalkIso ℬ p).inv.hom := isLocalHom_of_isIso _
-    replace hx :=
+    replace hx := (isUnit_map_iff _ _).mp hx
+    replace hx := IsLocalHom.map_nonunit _ hx
+    have : IsLocalHom (stalkIso 𝒜 (p.comap f hf)).hom.hom := isLocalHom_of_isIso _
+    exact (isUnit_map_iff _ _).mp hx
 
 Depends on / 依赖: sheafedSpaceMap
 -/
@@ -438,7 +464,7 @@ theorem awayι_comp_map
   congr 1
   rw [Iso.inv_comp_eq]; rw [← Category.assoc]; rw [Iso.eq_comp_inv]
 refine ext_to_Spec (cancel_mono (basicOpen ℬ (f s)).topIso.hom).mp ?_
-  simp [basicOpenIsoSpec_hom, basicOpenT
+  simp [basicOpenIsoSpec_hom, basicOpenToSpec_app_top, awayToSection_comp_appLE _ _ hs]
 
 中文:
 定理 awayι_comp_map
@@ -448,7 +474,7 @@ refine ext_to_Spec (cancel_mono (basicOpen ℬ (f s)).topIso.hom).mp ?_
   congr 1
   rw [Iso.inv_comp_eq]; rw [← Category.assoc]; rw [Iso.eq_comp_inv]
 refine ext_to_Spec (cancel_mono (basicOpen ℬ (f s)).topIso.hom).mp ?_
-  simp [basicOpenIsoSpec_hom, basicOpenT
+  simp [basicOpenIsoSpec_hom, basicOpenToSpec_app_top, awayToSection_comp_appLE _ _ hs]
 -/
 @[reassoc] theorem awayι_comp_map {i : Nat} (hi : 0 < i) (s : A) (hs : s in 𝒜 i) :
     awayι ℬ (f s) (f.2 hs) hi ≫ map f hf =
@@ -495,7 +521,7 @@ theorem map_comp
   refine (mapAffineOpenCover _ <| irrelevant_le_map_comp hf hg).openCover.hom_ext _ _ fun s => ?_
   simp only [Scheme.AffineOpenCover.openCover_f, mapAffineOpenCover_f,
     awayι_comp_map (g.comp f) _ s.1.2 _ s.2.2]
-  simp [awayι_comp_map_assoc _ _ _ _ (map_mem f s.2.2), awayι_comp_map _ _ _ _ s.
+  simp [awayι_comp_map_assoc _ _ _ _ (map_mem f s.2.2), awayι_comp_map _ _ _ _ s.2.2]
 
 中文:
 定理 map_comp
@@ -504,7 +530,7 @@ theorem map_comp
   refine (mapAffineOpenCover _ <| irrelevant_le_map_comp hf hg).openCover.hom_ext _ _ fun s => ?_
   simp only [Scheme.AffineOpenCover.openCover_f, mapAffineOpenCover_f,
     awayι_comp_map (g.comp f) _ s.1.2 _ s.2.2]
-  simp [awayι_comp_map_assoc _ _ _ _ (map_mem f s.2.2), awayι_comp_map _ _ _ _ s.
+  simp [awayι_comp_map_assoc _ _ _ _ (map_mem f s.2.2), awayι_comp_map _ _ _ _ s.2.2]
 
 Depends on / 依赖: AffineOpenCover, Scheme, Scheme.AffineOpenCover.openCover_f, g.comp, hom_ext, irrelevant_le_map_comp, mapAffineOpenCover, mapAffineOpenCover_f, map_mem, openCover, openCover.hom_ext, openCover_f
 -/

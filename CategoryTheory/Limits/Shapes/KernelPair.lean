@@ -216,7 +216,12 @@ theorem cancel_right
         let s' : PullbackCone (f₁ ≫ f₂) (f₁ ≫ f₂) :=
           PullbackCone.mk s.fst s.snd (s.condition_assoc _)
         refine ⟨big_k.isLimit.lift s', big_k.isLimit.fac _ WalkingCospan.left,
-          big_k.isLimit.fac _ Walk
+          big_k.isLimit.fac _ WalkingCospan.right, fun m₁ m₂ => ?_⟩
+        apply big_k.isLimit.hom_ext
+        refine (PullbackCone.mk a b ?_ : PullbackCone (f₁ ≫ f₂) _).equalizer_ext ?_ ?_
+        · apply reassoc_of% comm
+        · apply m₁.trans (big_k.isLimit.fac s' WalkingCospan.left).symm
+        · apply m₂.trans (big_k.isLimit.fac s' WalkingCospan.right).symm⟩ }
 
 中文:
 定理 cancel_right
@@ -227,7 +232,12 @@ theorem cancel_right
         let s' : PullbackCone (f₁ ≫ f₂) (f₁ ≫ f₂) :=
           PullbackCone.mk s.fst s.snd (s.condition_assoc _)
         refine ⟨big_k.isLimit.lift s', big_k.isLimit.fac _ WalkingCospan.left,
-          big_k.isLimit.fac _ Walk
+          big_k.isLimit.fac _ WalkingCospan.right, fun m₁ m₂ => ?_⟩
+        apply big_k.isLimit.hom_ext
+        refine (PullbackCone.mk a b ?_ : PullbackCone (f₁ ≫ f₂) _).equalizer_ext ?_ ?_
+        · apply reassoc_of% comm
+        · apply m₁.trans (big_k.isLimit.fac s' WalkingCospan.left).symm
+        · apply m₂.trans (big_k.isLimit.fac s' WalkingCospan.right).symm⟩ }
 
 Depends on / 依赖: PullbackCone, PullbackCone.isLimitAux, PullbackCone.mk, WalkingCospan, WalkingCospan.left, WalkingCospan.right, big_k, big_k.isLimit.fac, big_k.isLimit.hom_ext, big_k.isLimit.lift, condition_assoc, equalizer_ext, hom_ext, isLimit, isLimitAux, reassoc_of, s.condition_assoc, s.fst, s.snd
 -/
@@ -279,7 +289,9 @@ theorem comp_of_mono
         (by simp) (by simp) ?_
       intro s m hm
       apply small_k.isLimit.hom_ext
-      apply PullbackCone.e
+      apply PullbackCone.equalizer_ext small_k.cone _ _
+      · exact (hm WalkingCospan.left).trans (by simp)
+      · exact (hm WalkingCospan.right).trans (by simp)⟩ }
 
 中文:
 定理 comp_of_mono
@@ -291,7 +303,9 @@ theorem comp_of_mono
         (by simp) (by simp) ?_
       intro s m hm
       apply small_k.isLimit.hom_ext
-      apply PullbackCone.e
+      apply PullbackCone.equalizer_ext small_k.cone _ _
+      · exact (hm WalkingCospan.left).trans (by simp)
+      · exact (hm WalkingCospan.right).trans (by simp)⟩ }
 
 Depends on / 依赖: PullbackCone, PullbackCone.equalizer_ext, PullbackCone.isLimitAux, WalkingCospan, WalkingCospan.left, WalkingCospan.right, cancel_mono, condition, equalizer_ext, hom_ext, isLimit, isLimitAux, s.condition, s.fst, s.snd, small_k, small_k.cone, small_k.isLimit.hom_ext, small_k.lift, small_k.w_assoc
 -/
@@ -321,7 +335,11 @@ definition toCoequalizer
   have kt : t ≫ b = r.right := k.isLimit.fac _ WalkingCospan.right
   refine Cofork.IsColimit.mk _
     (fun s => Cofork.IsColimit.desc r.isColimit s.π
-      (by rw [← ht, assoc, s.c
+      (by rw [← ht, assoc, s.condition, reassoc_of% kt]))
+    (fun s => ?_) (fun s m w => ?_)
+  · apply Cofork.IsColimit.π_desc' r.isColimit
+  · apply Cofork.IsColimit.hom_ext r.isColimit
+    exact w.trans (Cofork.IsColimit.π_desc' r.isColimit _ _).symm
 
 中文:
 定义 toCoequalizer
@@ -332,7 +350,11 @@ definition toCoequalizer
   have kt : t ≫ b = r.right := k.isLimit.fac _ WalkingCospan.right
   refine Cofork.IsColimit.mk _
     (fun s => Cofork.IsColimit.desc r.isColimit s.π
-      (by rw [← ht, assoc, s.c
+      (by rw [← ht, assoc, s.condition, reassoc_of% kt]))
+    (fun s => ?_) (fun s m w => ?_)
+  · apply Cofork.IsColimit.π_desc' r.isColimit
+  · apply Cofork.IsColimit.hom_ext r.isColimit
+    exact w.trans (Cofork.IsColimit.π_desc' r.isColimit _ _).symm
 
 Depends on / 依赖: Cofork, Cofork.IsColimit, Cofork.IsColimit.desc, Cofork.IsColimit.hom_ext, Cofork.IsColimit.mk, IsColimit, PullbackCone, PullbackCone.mk, WalkingCospan, WalkingCospan.left, WalkingCospan.right, condition, hom_ext, isColimit, isLimit, k.isLimit.fac, k.isLimit.lift, r.isColimit, r.left, r.right
 -/
@@ -379,7 +401,18 @@ theorem pullback
   refine ⟨⟨by rw [pullback.lift_fst, pullback.lift_fst]⟩, ⟨PullbackCone.isLimitAux _
     (fun s => pullback.lift (s.fst ≫ pullback.fst _ _)
       (h.lift (s.fst ≫ pullback.snd _ _) (s.snd ≫ pullback.snd _ _) ?_ ) ?_) (fun s => ?_)
-        (fun s => ?_) (fun s (m : _ ⟶ pullback f (a₁ ≫ g)) hm => ?
+        (fun s => ?_) (fun s (m : _ ⟶ pullback f (a₁ ≫ g)) hm => ?_)⟩⟩
+  · simp_rw [Category.assoc, ← pullback.condition, ← Category.assoc, s.condition]
+  · simp only [assoc, lift_fst_assoc, pullback.condition]
+  · ext <;> simp
+  · ext
+    · simp [s.condition]
+    · simp
+  · apply pullback.hom_ext
+    · simpa using hm WalkingCospan.left =≫ pullback.fst f g
+    · apply PullbackCone.IsLimit.hom_ext h.isLimit
+      · simpa using hm WalkingCospan.left =≫ pullback.snd f g
+      · simpa using hm WalkingCospan.right =≫ pullback.snd f g
 
 中文:
 定理 pullback
@@ -388,7 +421,18 @@ theorem pullback
   refine ⟨⟨by rw [pullback.lift_fst, pullback.lift_fst]⟩, ⟨PullbackCone.isLimitAux _
     (fun s => pullback.lift (s.fst ≫ pullback.fst _ _)
       (h.lift (s.fst ≫ pullback.snd _ _) (s.snd ≫ pullback.snd _ _) ?_ ) ?_) (fun s => ?_)
-        (fun s => ?_) (fun s (m : _ ⟶ pullback f (a₁ ≫ g)) hm => ?
+        (fun s => ?_) (fun s (m : _ ⟶ pullback f (a₁ ≫ g)) hm => ?_)⟩⟩
+  · simp_rw [Category.assoc, ← pullback.condition, ← Category.assoc, s.condition]
+  · simp only [assoc, lift_fst_assoc, pullback.condition]
+  · ext <;> simp
+  · ext
+    · simp [s.condition]
+    · simp
+  · apply pullback.hom_ext
+    · simpa using hm WalkingCospan.left =≫ pullback.fst f g
+    · apply PullbackCone.IsLimit.hom_ext h.isLimit
+      · simpa using hm WalkingCospan.left =≫ pullback.snd f g
+      · simpa using hm WalkingCospan.right =≫ pullback.snd f g
 -/
 protected theorem pullback {X Y Z A : C} {g : Y ⟶ Z} {a₁ a₂ : A ⟶ Y} (h : IsKernelPair g a₁ a₂)
     (f : X ⟶ Z) [HasPullback f g] [HasPullback f (a₁ ≫ g)] :
@@ -425,7 +469,8 @@ theorem mono_of_isIso_fst
   rw [h₁]; rw [IsIso.inv_comp_eq]; rw [Category.comp_id] at h₂
   constructor
   intro Z g₁ g₂ e
-  obtain ⟨l', rfl, rfl⟩ := Lim
+  obtain ⟨l', rfl, rfl⟩ := Limits.PullbackCone.IsLimit.lift' h.isLimit _ _ e
+  rw [IsPullback.cone_fst]; rw [h₂]
 
 中文:
 定理 mono_of_isIso_fst
@@ -437,7 +482,8 @@ theorem mono_of_isIso_fst
   rw [h₁]; rw [IsIso.inv_comp_eq]; rw [Category.comp_id] at h₂
   constructor
   intro Z g₁ g₂ e
-  obtain ⟨l', rfl, rfl⟩ := Lim
+  obtain ⟨l', rfl, rfl⟩ := Limits.PullbackCone.IsLimit.lift' h.isLimit _ _ e
+  rw [IsPullback.cone_fst]; rw [h₂]
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, IsIso.eq_comp_inv, IsIso.inv_comp_eq, IsLimit, IsPullback, IsPullback.cone_fst, Limits, Limits.PullbackCone.IsLimit.lift, PullbackCone, comp_id, cone_fst, eq_comp_inv, h.isLimit, id_comp, inv_comp_eq, isLimit
 -/

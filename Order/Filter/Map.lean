@@ -1348,7 +1348,9 @@ nonrec theorem _root_.Function.RightInverse.filter_map {f : α -> β} {g : β ->
     (hfg : RightInverse g f) : RightInverse (map g) (map f) :=
   hfg.filter_map
 
-nonrec theorem _root_.Function.RightInverse.filter_comap {f : α -> β} 
+nonrec theorem _root_.Function.RightInverse.filter_comap {f : α -> β} {g : β -> α}
+    (hfg : RightInverse g f) : LeftInverse (comap g) (comap f) :=
+  hfg.filter_comap
 
 中文:
 定理 _root_.函数.左逆.filter_comap
@@ -1360,7 +1362,9 @@ nonrec theorem _root_.Function.RightInverse.filter_map {f : α -> β} {g : β ->
     (hfg : RightInverse g f) : RightInverse (map g) (map f) :=
   hfg.filter_map
 
-nonrec theorem _root_.Function.RightInverse.filter_comap {f : α -> β} 
+nonrec theorem _root_.Function.RightInverse.filter_comap {f : α -> β} {g : β -> α}
+    (hfg : RightInverse g f) : LeftInverse (comap g) (comap f) :=
+  hfg.filter_comap
 
 Depends on / 依赖: comap_comap, comap_id, comp_eq_id, hfg.comp_eq_id
 -/
@@ -1387,7 +1391,8 @@ theorem _root_.Set.LeftInvOn.filter_map_Iic
   rw [map_map]; rw [map_congr (this.filter_mono hF)]; rw [map_id]
 
 nonrec theorem _root_.Set.RightInvOn.filter_map_Iic {f : α -> β} {g : β -> α}
-    (hfg : RightInvOn g f t) : RightInvOn (map
+    (hfg : RightInvOn g f t) : RightInvOn (map g) (map f) (Iic <| 𝓟 t) :=
+  hfg.filter_map_Iic
 
 中文:
 定理 _root_.集合.LeftInvOn.filter_map_Iic
@@ -1397,7 +1402,8 @@ nonrec theorem _root_.Set.RightInvOn.filter_map_Iic {f : α -> β} {g : β -> α
   rw [map_map]; rw [map_congr (this.filter_mono hF)]; rw [map_id]
 
 nonrec theorem _root_.Set.RightInvOn.filter_map_Iic {f : α -> β} {g : β -> α}
-    (hfg : RightInvOn g f t) : RightInvOn (map
+    (hfg : RightInvOn g f t) : RightInvOn (map g) (map f) (Iic <| 𝓟 t) :=
+  hfg.filter_map_Iic
 
 Depends on / 依赖: eventuallyEq_principal, filter_mono, map_congr, map_id, map_map, this.filter_mono
 -/
@@ -1427,7 +1433,8 @@ definition kernMap
     refine ⟨s union m ⁻¹' t, mem_of_superset hs subset_union_left, ?_⟩
     rw [kernImage_union_preimage]; rw [union_eq_right.mpr hst]
   inter_sets := by
- 
+    rintro _ _ ⟨s₁, h₁, rfl⟩ ⟨s₂, h₂, rfl⟩
+    exact ⟨s₁ inter s₂, f.inter_sets h₁ h₂, Set.preimage_kernImage.u_inf⟩
 
 中文:
 定义 kernMap
@@ -1439,7 +1446,8 @@ definition kernMap
     refine ⟨s union m ⁻¹' t, mem_of_superset hs subset_union_left, ?_⟩
     rw [kernImage_union_preimage]; rw [union_eq_right.mpr hst]
   inter_sets := by
- 
+    rintro _ _ ⟨s₁, h₁, rfl⟩ ⟨s₂, h₂, rfl⟩
+    exact ⟨s₁ inter s₂, f.inter_sets h₁ h₂, Set.preimage_kernImage.u_inf⟩
 
 Depends on / 依赖: f.sets, kernImage
 -/
@@ -3253,7 +3261,9 @@ theorem sInter_comap_sets
       mem_preimage, exists_imp]
   constructor
   · intro h U U_in
-    simpa 
+    simpa only [Subset.rfl, forall_prop_of_true, mem_preimage] using h (f ⁻¹' U) U U_in
+  · intro h V U U_in f_U_V
+    exact f_U_V (h U U_in)
 
 中文:
 定理 s整数er_comap_sets
@@ -3267,7 +3277,9 @@ theorem sInter_comap_sets
       mem_preimage, exists_imp]
   constructor
   · intro h U U_in
-    simpa 
+    simpa only [Subset.rfl, forall_prop_of_true, mem_preimage] using h (f ⁻¹' U) U U_in
+  · intro h V U U_in f_U_V
+    exact f_U_V (h U U_in)
 
 Depends on / 依赖: Filter, Filter.mem_sets, Subset, Subset.rfl, U_in, and_imp, exists_imp, f_U_V, forall_prop_of_true, mem_comap, mem_iInter, mem_preimage, mem_sInter, mem_sets, subseteq
 -/
@@ -3638,7 +3650,10 @@ theorem push_pull
   · rintro U ⟨V, V_in, W, ⟨Z, Z_in, hZ⟩, h⟩
     apply mem_inf_of_inter (image_mem_map V_in) Z_in
     calc
-      f '' V inter Z 
+      f '' V inter Z = f '' (V inter f ⁻¹' Z) := by rw [image_inter_preimage]
+      _ subseteq f '' (V inter W) := by gcongr
+      _ = f '' f ⁻¹' U := by rw [h]
+      _ subseteq U := image_preimage_subset f U
 
 中文:
 定理 push_pull
@@ -3651,7 +3666,10 @@ theorem push_pull
   · rintro U ⟨V, V_in, W, ⟨Z, Z_in, hZ⟩, h⟩
     apply mem_inf_of_inter (image_mem_map V_in) Z_in
     calc
-      f '' V inter Z 
+      f '' V inter Z = f '' (V inter f ⁻¹' Z) := by rw [image_inter_preimage]
+      _ subseteq f '' (V inter W) := by gcongr
+      _ = f '' f ⁻¹' U := by rw [h]
+      _ subseteq U := image_preimage_subset f U
 -/
 protected theorem push_pull (f : α -> β) (F : Filter α) (G : Filter β) :
     map f (F ⊓ comap f G) = map f F ⊓ G := by
@@ -4192,7 +4210,10 @@ theorem seq_assoc
     grw [← hs, ← hu]
     rw [← Set.seq_seq]
     exact seq_mem_seq hw (seq_mem_seq hv ht)
-  · rcases mem_seq_
+  · rcases mem_seq_iff.1 ht with ⟨u, hu, v, hv, ht⟩
+    grw [← ht]
+    rw [Set.seq_seq]
+    exact seq_mem_seq (seq_mem_seq (image_mem_map hs) hu) hv
 
 中文:
 定理 seq_assoc
@@ -4204,7 +4225,10 @@ theorem seq_assoc
     grw [← hs, ← hu]
     rw [← Set.seq_seq]
     exact seq_mem_seq hw (seq_mem_seq hv ht)
-  · rcases mem_seq_
+  · rcases mem_seq_iff.1 ht with ⟨u, hu, v, hv, ht⟩
+    grw [← ht]
+    rw [Set.seq_seq]
+    exact seq_mem_seq (seq_mem_seq (image_mem_map hs) hu) hv
 
 Depends on / 依赖: Set.seq_seq, image_mem_map, le_antisymm, le_seq, mem_map_iff_exists_image, mem_seq_iff, seq_mem_seq, seq_seq
 -/
@@ -4234,7 +4258,9 @@ theorem prod_map_seq_comm
     rw [← Set.prod_image_seq_comm]
     exact seq_mem_seq (image_mem_map ht) hu
   · rcases mem_map_iff_exists_image.1 hs with ⟨u, hu, hs⟩
-    grw 
+    grw [← hs]
+    rw [Set.prod_image_seq_comm]
+    exact seq_mem_seq (image_mem_map ht) hu
 
 中文:
 定理 prod_map_seq_comm
@@ -4246,7 +4272,9 @@ theorem prod_map_seq_comm
     rw [← Set.prod_image_seq_comm]
     exact seq_mem_seq (image_mem_map ht) hu
   · rcases mem_map_iff_exists_image.1 hs with ⟨u, hu, hs⟩
-    grw 
+    grw [← hs]
+    rw [Set.prod_image_seq_comm]
+    exact seq_mem_seq (image_mem_map ht) hu
 
 Depends on / 依赖: Set.prod_image_seq_comm, image_mem_map, le_antisymm, le_seq, mem_map_iff_exists_image, prod_image_seq_comm, seq_mem_seq
 -/
@@ -4617,7 +4645,7 @@ theorem Filter.map_surjOn_Iic_iff_le_map
     exact map_mono hHF
   · have : RightInvOn (F ⊓ comap m ·) (map m) (Iic G) :=
       fun H (hHG : H <= G) => by simpa [Filter.push_pull] using hHG.trans hm
-    exact this.surjOn fun H _ => mem_Iic.mpr 
+    exact this.surjOn fun H _ => mem_Iic.mpr inf_le_left
 
 中文:
 定理 滤子.map_surjOn_Iic_iff_le_map
@@ -4628,7 +4656,7 @@ theorem Filter.map_surjOn_Iic_iff_le_map
     exact map_mono hHF
   · have : RightInvOn (F ⊓ comap m ·) (map m) (Iic G) :=
       fun H (hHG : H <= G) => by simpa [Filter.push_pull] using hHG.trans hm
-    exact this.surjOn fun H _ => mem_Iic.mpr 
+    exact this.surjOn fun H _ => mem_Iic.mpr inf_le_left
 
 Depends on / 依赖: Filter, Filter.push_pull, RightInvOn, hHG.trans, inf_le_left, map_mono, mem_Iic, mem_Iic.mpr, push_pull, self_mem_Iic, surjOn, this.surjOn
 -/
@@ -4680,7 +4708,7 @@ theorem Filter.filter_injOn_Iic_iff_injOn
       at hxy <;> rwa [mem_Iic, pure_le_principal]
   · simp [map_eq_map_iff_of_injOn (le_principal_iff.mp hF) (le_principal_iff.mp hG) hm]
 
-alia
+alias ⟨_, Set.InjOn.filter_map_Iic⟩ := Filter.filter_injOn_Iic_iff_injOn
 
 中文:
 定理 滤子.filter_injOn_Iic_iff_injOn
@@ -4691,7 +4719,7 @@ alia
       at hxy <;> rwa [mem_Iic, pure_le_principal]
   · simp [map_eq_map_iff_of_injOn (le_principal_iff.mp hF) (le_principal_iff.mp hG) hm]
 
-alia
+alias ⟨_, Set.InjOn.filter_map_Iic⟩ := Filter.filter_injOn_Iic_iff_injOn
 
 Depends on / 依赖: eq_iff, hm.eq_iff, le_principal_iff, le_principal_iff.mp, map_eq_map_iff_of_injOn, map_pure, mem_Iic, pure_injective, pure_injective.eq_iff, pure_le_principal
 -/

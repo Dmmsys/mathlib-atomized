@@ -109,7 +109,11 @@ lemma prod_apply
   · simp only [h's, not_false_eq_true, not_measurable, _root_.map_zero, _root_.zero_apply]
     rw [not_measurable]
     simp [measurableSet_prod, hs, ht, h's]
-  by_cases
+  by_cases h't : MeasurableSet t; swap
+  · simp only [h't, not_false_eq_true, not_measurable, _root_.map_zero]
+    rw [not_measurable]
+    simp [measurableSet_prod, hs, ht, h't]
+  simpa [prod, h] using h.exists_prod.choose_spec s t h's h't
 
 中文:
 引理 prod_apply
@@ -123,7 +127,11 @@ lemma prod_apply
   · simp only [h's, not_false_eq_true, not_measurable, _root_.map_zero, _root_.zero_apply]
     rw [not_measurable]
     simp [measurableSet_prod, hs, ht, h's]
-  by_cases
+  by_cases h't : MeasurableSet t; swap
+  · simp only [h't, not_false_eq_true, not_measurable, _root_.map_zero]
+    rw [not_measurable]
+    simp [measurableSet_prod, hs, ht, h't]
+  simpa [prod, h] using h.exists_prod.choose_spec s t h's h't
 -/
 @[simp] lemma prod_apply [h : HasProd μ ν B] {s : Set X} {t : Set Y} :
     μ.prod ν B (s ×ˢ t) = B (μ s) (ν t) := by
@@ -206,7 +214,18 @@ theorem stronglyMeasurable_vectorMeasure_prodMk_left
   | basic s hs =>
     obtain ⟨s, hs, t, -, rfl⟩ := hs
     classical
-    simpa [mk_preimage_prod_right_eq_if, of_if] using stronglyMeasurable_cons
+    simpa [mk_preimage_prod_right_eq_if, of_if] using stronglyMeasurable_const.indicator hs
+  | compl s hs ihs =>
+    simp_rw [preimage_compl, VectorMeasure.of_compl (measurable_prodMk_left hs)]
+    exact stronglyMeasurable_const.sub ihs
+  | iUnion f hfd hfm ihf =>
+    have (a : X) : HasSum (fun i => ν (Prod.mk a ⁻¹' f i)) (ν (Prod.mk a ⁻¹' ⋃ i, f i)) := by
+      rw [preimage_iUnion]
+      apply hasSum_of_disjoint_iUnion
+      exacts [fun i => measurable_prodMk_left (hfm i), hfd.mono fun _ _ => .preimage _]
+    exact StronglyMeasurable.hasSum ihf this
+
+omit [NormedSpace Real E] in
 
 中文:
 定理 stronglyMeasurable_vectorMeasure_prodMk_left
@@ -218,7 +237,18 @@ theorem stronglyMeasurable_vectorMeasure_prodMk_left
   | basic s hs =>
     obtain ⟨s, hs, t, -, rfl⟩ := hs
     classical
-    simpa [mk_preimage_prod_right_eq_if, of_if] using stronglyMeasurable_cons
+    simpa [mk_preimage_prod_right_eq_if, of_if] using stronglyMeasurable_const.indicator hs
+  | compl s hs ihs =>
+    simp_rw [preimage_compl, VectorMeasure.of_compl (measurable_prodMk_left hs)]
+    exact stronglyMeasurable_const.sub ihs
+  | iUnion f hfd hfm ihf =>
+    have (a : X) : HasSum (fun i => ν (Prod.mk a ⁻¹' f i)) (ν (Prod.mk a ⁻¹' ⋃ i, f i)) := by
+      rw [preimage_iUnion]
+      apply hasSum_of_disjoint_iUnion
+      exacts [fun i => measurable_prodMk_left (hfm i), hfd.mono fun _ _ => .preimage _]
+    exact StronglyMeasurable.hasSum ihf this
+
+omit [NormedSpace Real E] in
 
 Depends on / 依赖: HasSum, MeasurableSpace, MeasurableSpace.induction_on_inter, Prod.mk, VectorMeasure, VectorMeasure.of_compl, classical, generateFrom_prod, generateFrom_prod.symm, iUnion, indicator, induction_on_inter, isPiSystem_prod, measurable_prodMk_left, mk_preimage_prod_right_eq_if, of_compl, of_if, preimage_compl, simp_rw, stronglyMeasurable_const
 -/
@@ -282,7 +312,27 @@ definition noncomputable
   not_measurable' := by simp +contextual
   m_iUnion' f f_meas f_disj := by
     simp only [f_meas, ↓reduceIte, implies_true, MeasurableSet.iUnion, preimage_iUnion,
-      HasSum, Summ
+      HasSum, SummationFilter.unconditional_filter]
+    have A (a : Finset Nat) : ∑ y in a, ∫ᵛ x, ν (Prod.mk x ⁻¹' f y) ∂[B.flip; μ]
+        = ∫ᵛ x, ∑ y in a, ν (Prod.mk x ⁻¹' f y) ∂[B.flip; μ] := by
+      rw [integral_finsetSum _ (fun i hi => integrable_vectorMeasure_prodMk_left (f_meas i))]
+    simp_rw [A]
+    apply tendsto_integral_filter_of_dominated_convergence (bound := fun x => ν.bound)
+    · apply Eventually.of_forall (fun a => ?_)
+      apply StronglyMeasurable.aestronglyMeasurable
+      apply Finset.stronglyMeasurable_fun_sum _ (fun i hi => ?_)
+      apply stronglyMeasurable_vectorMeasure_prodMk_left (f_meas i)
+    · filter_upwards with a
+      filter_upwards with x
+      rw [← VectorMeasure.of_biUnion_finset]
+      · apply norm_apply_le_bound
+      · exact fun i hi j hj hij => (f_disj hij).preimage _
+      · exact fun i hi => measurable_prodMk_left (f_meas i)
+    · apply integrable_const
+    · filter_upwards with x
+      apply hasSum_of_disjoint_iUnion
+      · exact fun i => measurable_prodMk_left (f_meas i)
+      · exact fun i j hij => (f_disj hij).preimage _
 
 中文:
 定义 noncomputable
@@ -293,7 +343,27 @@ definition noncomputable
   not_measurable' := by simp +contextual
   m_iUnion' f f_meas f_disj := by
     simp only [f_meas, ↓reduceIte, implies_true, MeasurableSet.iUnion, preimage_iUnion,
-      HasSum, Summ
+      HasSum, SummationFilter.unconditional_filter]
+    have A (a : Finset Nat) : ∑ y in a, ∫ᵛ x, ν (Prod.mk x ⁻¹' f y) ∂[B.flip; μ]
+        = ∫ᵛ x, ∑ y in a, ν (Prod.mk x ⁻¹' f y) ∂[B.flip; μ] := by
+      rw [integral_finsetSum _ (fun i hi => integrable_vectorMeasure_prodMk_left (f_meas i))]
+    simp_rw [A]
+    apply tendsto_integral_filter_of_dominated_convergence (bound := fun x => ν.bound)
+    · apply Eventually.of_forall (fun a => ?_)
+      apply StronglyMeasurable.aestronglyMeasurable
+      apply Finset.stronglyMeasurable_fun_sum _ (fun i hi => ?_)
+      apply stronglyMeasurable_vectorMeasure_prodMk_left (f_meas i)
+    · filter_upwards with a
+      filter_upwards with x
+      rw [← VectorMeasure.of_biUnion_finset]
+      · apply norm_apply_le_bound
+      · exact fun i hi j hj hij => (f_disj hij).preimage _
+      · exact fun i hi => measurable_prodMk_left (f_meas i)
+    · apply integrable_const
+    · filter_upwards with x
+      apply hasSum_of_disjoint_iUnion
+      · exact fun i => measurable_prodMk_left (f_meas i)
+      · exact fun i j hij => (f_disj hij).preimage _
 -/
 private noncomputable def prodOfIsFiniteMeasureLeft
     (μ : VectorMeasure X E) (ν : VectorMeasure Y F) (B : E ->L[Real] F ->L[Real] G)
@@ -420,7 +490,9 @@ lemma prod_apply_eq_integral
     classical
     apply prod_eq_of_forall_apply_prod (fun s t hs ht => ?_)
     simp [prodOfIsFiniteMeasureLeft, hs.prod ht, ↓reduceIte, mk_preimage_prod_right_eq_if,
-      of_if, integral_indicator hs, ContinuousLinearMap.flip_apply, res
+      of_if, integral_indicator hs, ContinuousLinearMap.flip_apply, restrict_apply, hs]
+  rw [this]
+  simp [prodOfIsFiniteMeasureLeft, hs]
 
 中文:
 引理 prod_apply_eq_integral
@@ -430,7 +502,9 @@ lemma prod_apply_eq_integral
     classical
     apply prod_eq_of_forall_apply_prod (fun s t hs ht => ?_)
     simp [prodOfIsFiniteMeasureLeft, hs.prod ht, ↓reduceIte, mk_preimage_prod_right_eq_if,
-      of_if, integral_indicator hs, ContinuousLinearMap.flip_apply, res
+      of_if, integral_indicator hs, ContinuousLinearMap.flip_apply, restrict_apply, hs]
+  rw [this]
+  simp [prodOfIsFiniteMeasureLeft, hs]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.flip_apply, classical, flip_apply, hs.prod, integral_indicator, mk_preimage_prod_right_eq_if, of_if, prodOfIsFiniteMeasureLeft, prod_eq_of_forall_apply_prod, reduceIte, restrict_apply
 -/

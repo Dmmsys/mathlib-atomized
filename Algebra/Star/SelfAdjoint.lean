@@ -1255,7 +1255,7 @@ definition skewAdjoint
   zero_mem' := show star (0 : R) = -0 by simp only [star_zero, neg_zero]
   add_mem' := @fun x y (hx : star x = -x) (hy : star y = -y) =>
     show star (x + y) = -(x + y) by rw [star_add x y, hx, hy, neg_add]
-  neg_mem' := @fun x (hx : star x = -x) => show star (-x) = - -x by simp
+  neg_mem' := @fun x (hx : star x = -x) => show star (-x) = - -x by simp only [hx, star_neg]
 
 中文:
 定义 skewAdjoint
@@ -1264,7 +1264,7 @@ definition skewAdjoint
   zero_mem' := show star (0 : R) = -0 by simp only [star_zero, neg_zero]
   add_mem' := @fun x y (hx : star x = -x) (hy : star y = -y) =>
     show star (x + y) = -(x + y) by rw [star_add x y, hx, hy, neg_add]
-  neg_mem' := @fun x (hx : star x = -x) => show star (-x) = - -x by simp
+  neg_mem' := @fun x (hx : star x = -x) => show star (-x) = - -x by simp only [hx, star_neg]
 -/
 def skewAdjoint [AddCommGroup R] [StarAddMonoid R] : AddSubgroup R where
   carrier := { x | star x = -x }
@@ -1884,7 +1884,7 @@ instance instField
   body: Subtype.coe_injective.field _ (selfAdjoint R).coe_zero val_one
     (selfAdjoint R).coe_add val_mul (selfAdjoint R).coe_neg (selfAdjoint R).coe_sub
     val_inv val_div (swap (selfAdjoint R).coe_nsmul) (by intros; rfl) val_nnqsmul
-    val_qsmul val_pow val_zpow (fun _ => rfl) (fun _ => rfl) val_nnratC
+    val_qsmul val_pow val_zpow (fun _ => rfl) (fun _ => rfl) val_nnratCast val_ratCast
 
 中文:
 实例 instField
@@ -1892,7 +1892,7 @@ instance instField
   定义体: Subtype.coe_injective.field _ (selfAdjoint R).coe_zero val_one
     (selfAdjoint R).coe_add val_mul (selfAdjoint R).coe_neg (selfAdjoint R).coe_sub
     val_inv val_div (swap (selfAdjoint R).coe_nsmul) (by intros; rfl) val_nnqsmul
-    val_qsmul val_pow val_zpow (fun _ => rfl) (fun _ => rfl) val_nnratC
+    val_qsmul val_pow val_zpow (fun _ => rfl) (fun _ => rfl) val_nnratCast val_ratCast
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.field, coe_add, coe_injective, coe_neg, coe_nsmul, coe_sub, coe_zero, intros, selfAdjoint, val_div, val_inv, val_mul, val_nnqsmul, val_nnratCast, val_one, val_pow, val_qsmul, val_ratCast, val_zpow
 -/

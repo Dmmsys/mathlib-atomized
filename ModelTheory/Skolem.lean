@@ -73,7 +73,12 @@ theorem card_functions_sum_skolem₁
   rw [add_comm]; rw [add_eq_max]; rw [max_eq_left]
   · gcongr with n
     rw [← lift_le.{_]; rw [max u v}]; rw [lift_lift]; rw [lift_mk_le.{v}]
-    refine ⟨⟨fun f => 
+    refine ⟨⟨fun f => (func f default).bdEqual (func f default), fun f g h => ?_⟩⟩
+    rcases h with ⟨rfl, ⟨rfl⟩⟩
+    rfl
+  · rw [← mk_sigma]
+    exact infinite_iff.1 (Infinite.of_injective (fun n => ⟨n, ⊥⟩) fun x y xy =>
+      (Sigma.mk.inj_iff.1 xy).1)
 
 中文:
 定理 card_functions_sum_skolem₁
@@ -83,7 +88,12 @@ theorem card_functions_sum_skolem₁
   rw [add_comm]; rw [add_eq_max]; rw [max_eq_left]
   · gcongr with n
     rw [← lift_le.{_]; rw [max u v}]; rw [lift_lift]; rw [lift_mk_le.{v}]
-    refine ⟨⟨fun f => 
+    refine ⟨⟨fun f => (func f default).bdEqual (func f default), fun f g h => ?_⟩⟩
+    rcases h with ⟨rfl, ⟨rfl⟩⟩
+    rfl
+  · rw [← mk_sigma]
+    exact infinite_iff.1 (Infinite.of_injective (fun n => ⟨n, ⊥⟩) fun x y xy =>
+      (Sigma.mk.inj_iff.1 xy).1)
 
 Depends on / 依赖: Infinite, Infinite.of_injective, Sigma.mk.inj_iff, add_comm, add_eq_max, bdEqual, card_functions_sum, conv_lhs, infinite_iff, inj_iff, lift_id, lift_le, lift_lift, lift_mk_le, max_eq_left, mk_sigma, of_injective, sum_add_distrib
 -/
@@ -114,7 +124,8 @@ theorem card_functions_sum_skolem₁_le
       ⟨⟨Sigma.map Nat.succ fun _ => id,
           Nat.succ_injective.sigma_map fun _ => Function.injective_id⟩⟩
   · refine _root_.trans BoundedFormula.card_le (lift_le.{max u v}.1 ?_)
-    simp only [mk_empty, lif
+    simp only [mk_empty, lift_zero, lift_uzero, zero_add]
+    rfl
 
 中文:
 定理 card_functions_sum_skolem₁_le
@@ -126,7 +137,8 @@ theorem card_functions_sum_skolem₁_le
       ⟨⟨Sigma.map Nat.succ fun _ => id,
           Nat.succ_injective.sigma_map fun _ => Function.injective_id⟩⟩
   · refine _root_.trans BoundedFormula.card_le (lift_le.{max u v}.1 ?_)
-    simp only [mk_empty, lif
+    simp only [mk_empty, lift_zero, lift_uzero, zero_add]
+    rfl
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.card_le, Function, Function.injective_id, L.BoundedFormula, Nat.succ, Nat.succ_injective.sigma_map, Sigma.map, _root_, _root_.trans, card_le, injective_id, lift_le, lift_uzero, lift_zero, mk_empty, sigma_map, succ_injective, zero_add
 -/
@@ -175,7 +187,9 @@ theorem skolem₁_reduct_isElementary
   let φ' : (L.sum L.skolem₁).Functions n := LHom.sumInr.onFunction φ
   use ⟨funMap φ' ((↑) ∘ x), ?_⟩
   · exact Classical.epsilon_spec (p := fun a => BoundedFormula.Realize φ default
-          (Fin.snoc (Subtype.va
+          (Fin.snoc (Subtype.val ∘ x) a)) ⟨a, h⟩
+  · exact S.fun_mem (LHom.sumInr.onFunction φ) ((↑) ∘ x) (by
+      exact fun i => (x i).2)
 
 中文:
 定理 skolem₁_reduct_isElementary
@@ -186,7 +200,9 @@ theorem skolem₁_reduct_isElementary
   let φ' : (L.sum L.skolem₁).Functions n := LHom.sumInr.onFunction φ
   use ⟨funMap φ' ((↑) ∘ x), ?_⟩
   · exact Classical.epsilon_spec (p := fun a => BoundedFormula.Realize φ default
-          (Fin.snoc (Subtype.va
+          (Fin.snoc (Subtype.val ∘ x) a)) ⟨a, h⟩
+  · exact S.fun_mem (LHom.sumInr.onFunction φ) ((↑) ∘ x) (by
+      exact fun i => (x i).2)
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.Realize, Classical, Classical.epsilon_spec, Fin.snoc, Functions, L.skolem, L.sum, LHom.sumInl.substructureReduct, LHom.sumInr.onFunction, Realize, S.fun_mem, Subtype, Subtype.val, epsilon_spec, funMap, fun_mem, isElementary_of_exists, onFunction, substructureReduct
 -/
@@ -312,7 +328,27 @@ theorem exists_elementarySubstructure_card_eq
   have : Nonempty M := nonempty_ulift.1 (Cardinal.mk_ne_zero_iff.1
     (aleph0_pos.trans_le (h1.trans (Cardinal.mk_subtype_le _))).ne')
   refine
-    ⟨elementarySkolem₁Reduct 
+    ⟨elementarySkolem₁Reduct (closure (L.sum L.skolem₁) (s union Equiv.ulift '' s')),
+      (s.subset_union_left).trans subset_closure, ?_⟩
+  have h := mk_image_eq_lift _ s' Equiv.ulift.injective
+  rw [lift_umax.{w]; rw [w'}]; rw [lift_id'.{w]; rw [w'}] at h
+  rw [coeSort_elementarySkolem₁Reduct]; rw [← h]; rw [lift_inj]
+  refine
+    le_antisymm (lift_le.1 (lift_card_closure_le.trans ?_))
+      (mk_le_mk_of_subset ((s.subset_union_right).trans subset_closure))
+  rw [max_le_iff]; rw [aleph0_le_lift]; rw [← aleph0_le_lift.{_]; rw [w'}]; rw [h]; rw [add_eq_max]; rw [max_le_iff]; rw [lift_le]
+  · refine ⟨h1, (mk_union_le _ _).trans ?_, (lift_le.2 card_functions_sum_skolem₁_le).trans ?_⟩
+    · rw [← lift_le, lift_add, h, add_comm, add_eq_max h1]
+      exact max_le le_rfl h2
+    · rw [lift_max, lift_aleph0, max_le_iff, aleph0_le_lift, and_comm, ← lift_le.{w'},
+        lift_lift, lift_lift, ← aleph0_le_lift, h]
+      refine ⟨?_, h1⟩
+      rw [← lift_lift.{w']; rw [w}]
+      refine _root_.trans (lift_le.{w}.2 h3) ?_
+      rw [lift_lift]; rw [← lift_lift.{w]; rw [max u v}]; rw [← hs']; rw [← h]; rw [lift_lift]
+  · refine _root_.trans ?_ (lift_le.2 (mk_le_mk_of_subset Set.subset_union_right))
+    rw [aleph0_le_lift]; rw [← aleph0_le_lift]; rw [h]
+    exact h1
 
 中文:
 定理 存在_elementarySubstructure_card_eq
@@ -324,7 +360,27 @@ theorem exists_elementarySubstructure_card_eq
   have : Nonempty M := nonempty_ulift.1 (Cardinal.mk_ne_zero_iff.1
     (aleph0_pos.trans_le (h1.trans (Cardinal.mk_subtype_le _))).ne')
   refine
-    ⟨elementarySkolem₁Reduct 
+    ⟨elementarySkolem₁Reduct (closure (L.sum L.skolem₁) (s union Equiv.ulift '' s')),
+      (s.subset_union_left).trans subset_closure, ?_⟩
+  have h := mk_image_eq_lift _ s' Equiv.ulift.injective
+  rw [lift_umax.{w]; rw [w'}]; rw [lift_id'.{w]; rw [w'}] at h
+  rw [coeSort_elementarySkolem₁Reduct]; rw [← h]; rw [lift_inj]
+  refine
+    le_antisymm (lift_le.1 (lift_card_closure_le.trans ?_))
+      (mk_le_mk_of_subset ((s.subset_union_right).trans subset_closure))
+  rw [max_le_iff]; rw [aleph0_le_lift]; rw [← aleph0_le_lift.{_]; rw [w'}]; rw [h]; rw [add_eq_max]; rw [max_le_iff]; rw [lift_le]
+  · refine ⟨h1, (mk_union_le _ _).trans ?_, (lift_le.2 card_functions_sum_skolem₁_le).trans ?_⟩
+    · rw [← lift_le, lift_add, h, add_comm, add_eq_max h1]
+      exact max_le le_rfl h2
+    · rw [lift_max, lift_aleph0, max_le_iff, aleph0_le_lift, and_comm, ← lift_le.{w'},
+        lift_lift, lift_lift, ← aleph0_le_lift, h]
+      refine ⟨?_, h1⟩
+      rw [← lift_lift.{w']; rw [w}]
+      refine _root_.trans (lift_le.{w}.2 h3) ?_
+      rw [lift_lift]; rw [← lift_lift.{w]; rw [max u v}]; rw [← hs']; rw [← h]; rw [lift_lift]
+  · refine _root_.trans ?_ (lift_le.2 (mk_le_mk_of_subset Set.subset_union_right))
+    rw [aleph0_le_lift]; rw [← aleph0_le_lift]; rw [h]
+    exact h1
 
 Depends on / 依赖: Cardinal, Cardinal.le_mk_iff_exists_set, Cardinal.mk_ne_zero_iff, Cardinal.mk_subtype_le, Equiv.ulift, Equiv.ulift.injective, L.skolem, L.sum, Nonempty, aleph0_le_lift, aleph0_pos, aleph0_pos.trans_le, closure, h1.trans, injective, le_mk_iff_exists_set, lift_id, lift_umax, mk_image_eq_lift, mk_ne_zero_iff
 -/

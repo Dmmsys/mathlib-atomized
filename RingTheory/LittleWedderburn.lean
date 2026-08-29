@@ -106,7 +106,71 @@ theorem center_eq_top
   by_contra! hZ
   let : Field Z := hD.field hZ.lt_top
   set q := card Z with card_Z
-  have hq : 1 < q := by rw [card_Z]; exact one_lt_ca
+  have hq : 1 < q := by rw [card_Z]; exact one_lt_card
+  let n := finrank Z D
+  have card_D : card D = q ^ n := Module.card_eq_pow_finrank
+  have h1qn : 1 <= q ^ n := by rw [← card_D]; exact card_pos
+  -- We go about this by looking at the class equation for `Dˣ`:
+  -- `q ^ n - 1 = q - 1 + ∑ x : conjugacy classes (D ∖ Dˣ), |x|`.
+  -- The next few lines gets the equation into basically this form over `ℤ`.
+  have key := Group.card_center_add_sum_card_noncenter_eq_card (Dˣ)
+  rw [card_congr (show _ ≃* Zˣ from Subgroup.centerUnitsEquivUnitsCenter D).toEquiv]; rw [card_units]; rw [← card_Z]; rw [card_units]; rw [card_D] at key
+  -- By properties of the cyclotomic function, we have that `Φₙ(q) ∣ q ^ n - 1`; however, when
+  -- `n ≠ 1`, then `¬Φₙ(q) | q - 1`; so if the sum over the conjugacy classes is divisible by
+  -- `Φₙ(q)`, then `n = 1`, and therefore the vector space is trivial, as desired.
+  let Φₙ := cyclotomic n Int
+  apply_fun (Nat.cast : Nat -> Int) at key
+  rw [Nat.cast_add]; rw [Nat.cast_sub h1qn]; rw [Nat.cast_sub hq.le]; rw [Nat.cast_one]; rw [Nat.cast_pow] at key
+  suffices Φₙ.eval ↑q ∣ ↑(∑ x in (ConjClasses.noncenter Dˣ).toFinset, x.carrier.toFinset.card) by
+    have contra : Φₙ.eval _ ∣ _ := eval_dvd (cyclotomic.dvd_X_pow_sub_one n Int) (x := (q : Int))
+    rw [eval_sub]; rw [eval_X_pow]; rw [eval_one]; rw [← key]; rw [Int.dvd_add_left this] at contra
+    refine (Nat.le_of_dvd ?_ ?_).not_gt (sub_one_lt_natAbs_cyclotomic_eval (n := n) ?_ hq.ne')
+    · exact tsub_pos_of_lt hq
+    · convert! Int.natAbs_dvd_natAbs.mpr contra
+      clear_value q
+      simp only [eq_comm, Int.natAbs_eq_iff, Nat.cast_sub hq.le, Nat.cast_one, neg_sub, true_or]
+    · by_contra! h
+      obtain ⟨x, hx⟩ := finrank_le_one_iff.mp h
+      refine not_le_of_gt hZ.lt_top (fun y _ => Subring.mem_center_iff.mpr fun z => ?_)
+      obtain ⟨r, rfl⟩ := hx y
+      obtain ⟨s, rfl⟩ := hx z
+      rw [smul_mul_smul_comm]; rw [smul_mul_smul_comm]; rw [mul_comm]
+  rw [Nat.cast_sum]
+  apply Finset.dvd_sum
+  rintro ⟨x⟩ hx
+  simp -zeta only [ConjClasses.quot_mk_eq_mk, Set.mem_toFinset] at hx ⊢
+  set Zx := Subring.centralizer ({↑x} : Set D)
+  -- The key thing is then to note that for all conjugacy classes `x`, `|x|` is given by
+  -- `|Dˣ| / |Zxˣ|`, where `Zx` is the centralizer of `x`; but `Zx` is an algebra over `Z`, and
+  -- therefore `|Zxˣ| = q ^ d - 1`, where `d` is the dimension of `D` as a vector space over `Z`.
+  -- We therefore get that `|x| = (q ^ n - 1) / (q ^ d - 1)`, and as `d` is a strict divisor of `n`,
+  -- we do have that `Φₙ(q) | (q ^ n - 1) / (q ^ d - 1)`; extending this over the whole sum
+  -- gives us the desired contradiction..
+  rw [Set.toFinset_card]; rw [ConjClasses.card_carrier]; rw [← card_congr
+        (show Zxˣ ≃* _ from unitsCentralizerEquiv _ x).toEquiv]; rw [card_units]; rw [card_D]
+  have hZx : Zx != ⊤ := by
+    by_contra! hZx
+    refine (ConjClasses.mk_bijOn (Dˣ)).mapsTo (Set.subset_center_units ?_) hx
+exact Subring.centralizer_eq_top_iff_subset.mp hZx Set.mem_singleton _
+  let : Field Zx := hD.field hZx.lt_top
+  let : Algebra Z Zx := (Subring.inclusion <| Subring.center_le_centralizer {(x : D)}).toAlgebra
+  let d := finrank Z Zx
+  have card_Zx : card Zx = q ^ d := Module.card_eq_pow_finrank
+  have h1qd : 1 <= q ^ d := by rw [← card_Zx]; exact card_pos
+  have : IsScalarTower Z Zx D := ⟨fun x y z => mul_assoc _ _ _⟩
+  rw [card_units]; rw [card_Zx]
+  push_cast [h1qd, h1qn]
+  apply Int.dvd_div_of_mul_dvd
+  have aux : forall {k : Nat}, ((X : Int[X]) ^ k - 1).eval ↑q = (q : Int) ^ k - 1 := by
+    simp only [eval_X, eval_one, eval_pow, eval_sub, forall_const]
+  rw [← aux]; rw [← aux]; rw [← eval_mul]
+  refine map_dvd (evalRingHom ↑q) (X_pow_sub_one_mul_cyclotomic_dvd_X_pow_sub_one_of_dvd Int ?_)
+  refine Nat.mem_properDivisors.mpr ⟨⟨_, (finrank_mul_finrank Z Zx D).symm⟩, ?_⟩
+  rw [← Nat.pow_lt_pow_iff_right hq]; rw [← card_D]; rw [← card_Zx]
+  obtain ⟨b, -, hb⟩ := SetLike.exists_of_lt hZx.lt_top
+  refine card_lt_of_injective_of_notMem _ Subtype.val_injective (?_ : b ∉ _)
+  rintro ⟨b, rfl⟩
+  exact hb b.2
 
 中文:
 定理 center_eq_top
@@ -120,7 +184,71 @@ theorem center_eq_top
   by_contra! hZ
   let : Field Z := hD.field hZ.lt_top
   set q := card Z with card_Z
-  have hq : 1 < q := by rw [card_Z]; exact one_lt_ca
+  have hq : 1 < q := by rw [card_Z]; exact one_lt_card
+  let n := finrank Z D
+  have card_D : card D = q ^ n := Module.card_eq_pow_finrank
+  have h1qn : 1 <= q ^ n := by rw [← card_D]; exact card_pos
+  -- We go about this by looking at the class equation for `Dˣ`:
+  -- `q ^ n - 1 = q - 1 + ∑ x : conjugacy classes (D ∖ Dˣ), |x|`.
+  -- The next few lines gets the equation into basically this form over `ℤ`.
+  have key := Group.card_center_add_sum_card_noncenter_eq_card (Dˣ)
+  rw [card_congr (show _ ≃* Zˣ from Subgroup.centerUnitsEquivUnitsCenter D).toEquiv]; rw [card_units]; rw [← card_Z]; rw [card_units]; rw [card_D] at key
+  -- By properties of the cyclotomic function, we have that `Φₙ(q) ∣ q ^ n - 1`; however, when
+  -- `n ≠ 1`, then `¬Φₙ(q) | q - 1`; so if the sum over the conjugacy classes is divisible by
+  -- `Φₙ(q)`, then `n = 1`, and therefore the vector space is trivial, as desired.
+  let Φₙ := cyclotomic n Int
+  apply_fun (Nat.cast : Nat -> Int) at key
+  rw [Nat.cast_add]; rw [Nat.cast_sub h1qn]; rw [Nat.cast_sub hq.le]; rw [Nat.cast_one]; rw [Nat.cast_pow] at key
+  suffices Φₙ.eval ↑q ∣ ↑(∑ x in (ConjClasses.noncenter Dˣ).toFinset, x.carrier.toFinset.card) by
+    have contra : Φₙ.eval _ ∣ _ := eval_dvd (cyclotomic.dvd_X_pow_sub_one n Int) (x := (q : Int))
+    rw [eval_sub]; rw [eval_X_pow]; rw [eval_one]; rw [← key]; rw [Int.dvd_add_left this] at contra
+    refine (Nat.le_of_dvd ?_ ?_).not_gt (sub_one_lt_natAbs_cyclotomic_eval (n := n) ?_ hq.ne')
+    · exact tsub_pos_of_lt hq
+    · convert! Int.natAbs_dvd_natAbs.mpr contra
+      clear_value q
+      simp only [eq_comm, Int.natAbs_eq_iff, Nat.cast_sub hq.le, Nat.cast_one, neg_sub, true_or]
+    · by_contra! h
+      obtain ⟨x, hx⟩ := finrank_le_one_iff.mp h
+      refine not_le_of_gt hZ.lt_top (fun y _ => Subring.mem_center_iff.mpr fun z => ?_)
+      obtain ⟨r, rfl⟩ := hx y
+      obtain ⟨s, rfl⟩ := hx z
+      rw [smul_mul_smul_comm]; rw [smul_mul_smul_comm]; rw [mul_comm]
+  rw [Nat.cast_sum]
+  apply Finset.dvd_sum
+  rintro ⟨x⟩ hx
+  simp -zeta only [ConjClasses.quot_mk_eq_mk, Set.mem_toFinset] at hx ⊢
+  set Zx := Subring.centralizer ({↑x} : Set D)
+  -- The key thing is then to note that for all conjugacy classes `x`, `|x|` is given by
+  -- `|Dˣ| / |Zxˣ|`, where `Zx` is the centralizer of `x`; but `Zx` is an algebra over `Z`, and
+  -- therefore `|Zxˣ| = q ^ d - 1`, where `d` is the dimension of `D` as a vector space over `Z`.
+  -- We therefore get that `|x| = (q ^ n - 1) / (q ^ d - 1)`, and as `d` is a strict divisor of `n`,
+  -- we do have that `Φₙ(q) | (q ^ n - 1) / (q ^ d - 1)`; extending this over the whole sum
+  -- gives us the desired contradiction..
+  rw [Set.toFinset_card]; rw [ConjClasses.card_carrier]; rw [← card_congr
+        (show Zxˣ ≃* _ from unitsCentralizerEquiv _ x).toEquiv]; rw [card_units]; rw [card_D]
+  have hZx : Zx != ⊤ := by
+    by_contra! hZx
+    refine (ConjClasses.mk_bijOn (Dˣ)).mapsTo (Set.subset_center_units ?_) hx
+exact Subring.centralizer_eq_top_iff_subset.mp hZx Set.mem_singleton _
+  let : Field Zx := hD.field hZx.lt_top
+  let : Algebra Z Zx := (Subring.inclusion <| Subring.center_le_centralizer {(x : D)}).toAlgebra
+  let d := finrank Z Zx
+  have card_Zx : card Zx = q ^ d := Module.card_eq_pow_finrank
+  have h1qd : 1 <= q ^ d := by rw [← card_Zx]; exact card_pos
+  have : IsScalarTower Z Zx D := ⟨fun x y z => mul_assoc _ _ _⟩
+  rw [card_units]; rw [card_Zx]
+  push_cast [h1qd, h1qn]
+  apply Int.dvd_div_of_mul_dvd
+  have aux : forall {k : Nat}, ((X : Int[X]) ^ k - 1).eval ↑q = (q : Int) ^ k - 1 := by
+    simp only [eval_X, eval_one, eval_pow, eval_sub, forall_const]
+  rw [← aux]; rw [← aux]; rw [← eval_mul]
+  refine map_dvd (evalRingHom ↑q) (X_pow_sub_one_mul_cyclotomic_dvd_X_pow_sub_one_of_dvd Int ?_)
+  refine Nat.mem_properDivisors.mpr ⟨⟨_, (finrank_mul_finrank Z Zx D).symm⟩, ?_⟩
+  rw [← Nat.pow_lt_pow_iff_right hq]; rw [← card_D]; rw [← card_Zx]
+  obtain ⟨b, -, hb⟩ := SetLike.exists_of_lt hZx.lt_top
+  refine card_lt_of_injective_of_notMem _ Subtype.val_injective (?_ : b ∉ _)
+  rintro ⟨b, rfl⟩
+  exact hb b.2
 -/
 private theorem center_eq_top [Finite D] (hD : InductionHyp D) : Subring.center D = ⊤ := by
   classical
@@ -213,7 +341,12 @@ theorem center_eq_top
   intro R hR x y hx hy
   suffices (⟨y, hy⟩ : R) in Subring.center R by
     rw [Subring.mem_center_iff] at this
-    simpa using this 
+    simpa using this ⟨x, hx⟩
+  let R_dr : DivisionRing R := Fintype.divisionRingOfIsDomain R
+  rw [IH (Fintype.card R) _ R inferInstance rfl]
+  · trivial
+  rw [← hn]; rw [← Subring.card_top D]
+  convert! Set.card_lt_card hR
 
 中文:
 定理 center_eq_top
@@ -227,7 +360,12 @@ theorem center_eq_top
   intro R hR x y hx hy
   suffices (⟨y, hy⟩ : R) in Subring.center R by
     rw [Subring.mem_center_iff] at this
-    simpa using this 
+    simpa using this ⟨x, hx⟩
+  let R_dr : DivisionRing R := Fintype.divisionRingOfIsDomain R
+  rw [IH (Fintype.card R) _ R inferInstance rfl]
+  · trivial
+  rw [← hn]; rw [← Subring.card_top D]
+  convert! Set.card_lt_card hR
 -/
 private theorem center_eq_top [Finite D] : Subring.center D = ⊤ := by
   classical

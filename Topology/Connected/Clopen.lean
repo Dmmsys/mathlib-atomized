@@ -67,7 +67,9 @@ theorem Sigma.isConnected_iff
     have : s subseteq range (Sigma.mk i) :=
       hs.isPreconnected.subset_isClopen isClopen_range_sigmaMk ⟨⟨i, x⟩, hx, x, rfl⟩
     exact ⟨i, Sigma.mk i ⁻¹' s, hs.preimage_of_isOpenMap sigma_mk_injective isOpenMap_sigmaMk this,
-  
+      (Set.image_preimage_eq_of_subset this).symm⟩
+  · rintro ⟨i, t, ht, rfl⟩
+    exact ht.image _ continuous_sigmaMk.continuousOn
 
 中文:
 定理 依赖和类型.isConnected_iff
@@ -78,7 +80,9 @@ theorem Sigma.isConnected_iff
     have : s subseteq range (Sigma.mk i) :=
       hs.isPreconnected.subset_isClopen isClopen_range_sigmaMk ⟨⟨i, x⟩, hx, x, rfl⟩
     exact ⟨i, Sigma.mk i ⁻¹' s, hs.preimage_of_isOpenMap sigma_mk_injective isOpenMap_sigmaMk this,
-  
+      (Set.image_preimage_eq_of_subset this).symm⟩
+  · rintro ⟨i, t, ht, rfl⟩
+    exact ht.image _ continuous_sigmaMk.continuousOn
 
 Depends on / 依赖: Set.image_preimage_eq_of_subset, Sigma.mk, continuousOn, continuous_sigmaMk, continuous_sigmaMk.continuousOn, hs.isPreconnected.subset_isClopen, hs.nonempty, hs.preimage_of_isOpenMap, ht.image, image_preimage_eq_of_subset, isClopen_range_sigmaMk, isOpenMap_sigmaMk, isPreconnected, nonempty, preimage_of_isOpenMap, sigma_mk_injective, subset_isClopen, subseteq
 -/
@@ -106,7 +110,7 @@ theorem Sigma.isPreconnected_iff
     · obtain ⟨a, t, ht, rfl⟩ := Sigma.isConnected_iff.1 ⟨h, hs⟩
       exact ⟨a, t, ht.isPreconnected, rfl⟩
   · rintro ⟨a, t, ht, rfl⟩
-    e
+    exact ht.image _ continuous_sigmaMk.continuousOn
 
 中文:
 定理 依赖和类型.isPreconnected_iff
@@ -118,7 +122,7 @@ theorem Sigma.isPreconnected_iff
     · obtain ⟨a, t, ht, rfl⟩ := Sigma.isConnected_iff.1 ⟨h, hs⟩
       exact ⟨a, t, ht.isPreconnected, rfl⟩
   · rintro ⟨a, t, ht, rfl⟩
-    e
+    exact ht.image _ continuous_sigmaMk.continuousOn
 
 Depends on / 依赖: Classical, Classical.choice, Set.image_empty, Sigma.isConnected_iff, choice, continuousOn, continuous_sigmaMk, continuous_sigmaMk.continuousOn, eq_empty_or_nonempty, ht.image, ht.isPreconnected, image_empty, isConnected_iff, isPreconnected, isPreconnected_empty, s.eq_empty_or_nonempty
 -/
@@ -144,7 +148,16 @@ theorem Sum.isConnected_iff
     · have h : s subseteq range Sum.inl :=
         hs.isPreconnected.subset_isClopen isClopen_range_inl ⟨.inl x, hx, x, rfl⟩
       refine Or.inl ⟨Sum.inl ⁻¹' s, ?_, ?_⟩
-      · exact hs.preimage_of_isOpenMap Sum.inl_injective isOpe
+      · exact hs.preimage_of_isOpenMap Sum.inl_injective isOpenMap_inl h
+      · exact (image_preimage_eq_of_subset h).symm
+    · have h : s subseteq range Sum.inr :=
+        hs.isPreconnected.subset_isClopen isClopen_range_inr ⟨.inr x, hx, x, rfl⟩
+      refine Or.inr ⟨Sum.inr ⁻¹' s, ?_, ?_⟩
+      · exact hs.preimage_of_isOpenMap Sum.inr_injective isOpenMap_inr h
+      · exact (image_preimage_eq_of_subset h).symm
+  · rintro (⟨t, ht, rfl⟩ | ⟨t, ht, rfl⟩)
+    · exact ht.image _ continuous_inl.continuousOn
+    · exact ht.image _ continuous_inr.continuousOn
 
 中文:
 定理 和.isConnected_iff
@@ -155,7 +168,16 @@ theorem Sum.isConnected_iff
     · have h : s subseteq range Sum.inl :=
         hs.isPreconnected.subset_isClopen isClopen_range_inl ⟨.inl x, hx, x, rfl⟩
       refine Or.inl ⟨Sum.inl ⁻¹' s, ?_, ?_⟩
-      · exact hs.preimage_of_isOpenMap Sum.inl_injective isOpe
+      · exact hs.preimage_of_isOpenMap Sum.inl_injective isOpenMap_inl h
+      · exact (image_preimage_eq_of_subset h).symm
+    · have h : s subseteq range Sum.inr :=
+        hs.isPreconnected.subset_isClopen isClopen_range_inr ⟨.inr x, hx, x, rfl⟩
+      refine Or.inr ⟨Sum.inr ⁻¹' s, ?_, ?_⟩
+      · exact hs.preimage_of_isOpenMap Sum.inr_injective isOpenMap_inr h
+      · exact (image_preimage_eq_of_subset h).symm
+  · rintro (⟨t, ht, rfl⟩ | ⟨t, ht, rfl⟩)
+    · exact ht.image _ continuous_inl.continuousOn
+    · exact ht.image _ continuous_inr.continuousOn
 
 Depends on / 依赖: Or.inl, Or.inr, Sum.inl, Sum.inl_injective, Sum.inr, hs.isPreconnected.subset_isClopen, hs.nonempty, hs.preimage_o, hs.preimage_of_isOpenMap, image_preimage_eq_of_subset, inl_injective, isClopen_range_inl, isClopen_range_inr, isOpenMap_inl, isPreconnected, nonempty, preimage_o, preimage_of_isOpenMap, subset_isClopen, subseteq
 -/
@@ -190,7 +212,10 @@ theorem Sum.isPreconnected_iff
     · exact Or.inl ⟨∅, isPreconnected_empty, (Set.image_empty _).symm⟩
     obtain ⟨t, ht, rfl⟩ | ⟨t, ht, rfl⟩ := Sum.isConnected_iff.1 ⟨h, hs⟩
     · exact Or.inl ⟨t, ht.isPreconnected, rfl⟩
-    · exact Or.inr ⟨t, ht.isPrecon
+    · exact Or.inr ⟨t, ht.isPreconnected, rfl⟩
+  · rintro (⟨t, ht, rfl⟩ | ⟨t, ht, rfl⟩)
+    · exact ht.image _ continuous_inl.continuousOn
+    · exact ht.image _ continuous_inr.continuousOn
 
 中文:
 定理 和.isPreconnected_iff
@@ -201,7 +226,10 @@ theorem Sum.isPreconnected_iff
     · exact Or.inl ⟨∅, isPreconnected_empty, (Set.image_empty _).symm⟩
     obtain ⟨t, ht, rfl⟩ | ⟨t, ht, rfl⟩ := Sum.isConnected_iff.1 ⟨h, hs⟩
     · exact Or.inl ⟨t, ht.isPreconnected, rfl⟩
-    · exact Or.inr ⟨t, ht.isPrecon
+    · exact Or.inr ⟨t, ht.isPreconnected, rfl⟩
+  · rintro (⟨t, ht, rfl⟩ | ⟨t, ht, rfl⟩)
+    · exact ht.image _ continuous_inl.continuousOn
+    · exact ht.image _ continuous_inr.continuousOn
 
 Depends on / 依赖: Or.inl, Or.inr, Set.image_empty, Sum.isConnected_iff, continuousOn, continuous_inl, continuous_inl.continuousOn, continuous_inr, continuous_inr.continuousOn, eq_empty_or_nonempty, ht.image, ht.isPreconnected, image_empty, isConnected_iff, isPreconnected, isPreconnected_empty, s.eq_empty_or_nonempty
 -/
@@ -230,7 +258,7 @@ theorem Continuous.exists_lift_sigma
     exact ⟨i, hs.trans_subset (image_subset_range _ _)⟩
   rcases range_subset_range_iff_exists_comp.1 hi with ⟨g, rfl⟩
   refine ⟨i, g, ?_, rfl⟩
-  rwa [← I
+  rwa [← IsEmbedding.sigmaMk.continuous_iff] at hf
 
 中文:
 定理 连续.存在_lift_sigma
@@ -241,7 +269,7 @@ theorem Continuous.exists_lift_sigma
     exact ⟨i, hs.trans_subset (image_subset_range _ _)⟩
   rcases range_subset_range_iff_exists_comp.1 hi with ⟨g, rfl⟩
   refine ⟨i, g, ?_, rfl⟩
-  rwa [← I
+  rwa [← IsEmbedding.sigmaMk.continuous_iff] at hf
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.sigmaMk.continuous_iff, Sigma.isConnected_iff, continuous_iff, hs.trans_subset, image_subset_range, isConnected_iff, isConnected_range, range_subset_range_iff_exists_comp, sigmaMk, subseteq, trans_subset
 -/
@@ -342,7 +370,7 @@ lemma isClopen_preimage_val
   refine isClosed_induced_iff.mpr ⟨closure u, isClosed_closure, ?_⟩
   apply image_val_injective
   simp only [Subtype.image_preimage_coe]
-  rw [closure_eq_self_union_frontier]; rw [inter_union_distrib_left]; rw [inter_comm _ (frontier u)]; rw [hu
+  rw [closure_eq_self_union_frontier]; rw [inter_union_distrib_left]; rw [inter_comm _ (frontier u)]; rw [huv.inter_eq]; rw [union_empty]
 
 中文:
 引理 isClopen_preimage_val
@@ -352,7 +380,7 @@ lemma isClopen_preimage_val
   refine isClosed_induced_iff.mpr ⟨closure u, isClosed_closure, ?_⟩
   apply image_val_injective
   simp only [Subtype.image_preimage_coe]
-  rw [closure_eq_self_union_frontier]; rw [inter_union_distrib_left]; rw [inter_comm _ (frontier u)]; rw [hu
+  rw [closure_eq_self_union_frontier]; rw [inter_union_distrib_left]; rw [inter_comm _ (frontier u)]; rw [huv.inter_eq]; rw [union_empty]
 
 Depends on / 依赖: Subtype, Subtype.image_preimage_coe, Subtype.val, closure, closure_eq_self_union_frontier, frontier, huv.inter_eq, image_preimage_coe, image_val_injective, inter_comm, inter_eq, inter_union_distrib_left, isClosed_closure, isClosed_induced_iff, isClosed_induced_iff.mpr, isOpen_induced, union_empty
 -/
@@ -382,7 +410,8 @@ lemma subsingleton_of_disjoint_isClopen
     simpa only [← bot_eq_empty, eq_bot_iff, ← inf_eq_inter, ← disjoint_iff_inf_le] using h_disj h_ne
   rcases isClopen_iff.mp (h_clopen i) with hi | hi
   · exact (h_nonempty i).ne_empty hi
- 
+  · rw [hi, univ_inter] at h_ne
+    exact (h_nonempty j).ne_empty h_ne
 
 中文:
 引理 subsingleton_of_disjoint_isClopen
@@ -393,7 +422,8 @@ lemma subsingleton_of_disjoint_isClopen
     simpa only [← bot_eq_empty, eq_bot_iff, ← inf_eq_inter, ← disjoint_iff_inf_le] using h_disj h_ne
   rcases isClopen_iff.mp (h_clopen i) with hi | hi
   · exact (h_nonempty i).ne_empty hi
- 
+  · rw [hi, univ_inter] at h_ne
+    exact (h_nonempty j).ne_empty h_ne
 
 Depends on / 依赖: bot_eq_empty, disjoint_iff_inf_le, eq_bot_iff, h_clopen, h_disj, h_ne, h_nonempty, inf_eq_inter, isClopen_iff, isClopen_iff.mp, ne_empty, not_nontrivial_iff_subsingleton, replace, univ_inter
 -/
@@ -420,7 +450,7 @@ lemma subsingleton_of_disjoint_isOpen_iUnion_eq_univ
   refine isOpen_iUnion (fun j => ?_)
   rcases eq_or_ne i j with rfl | h_ne
   · simp
-  · simpa only [(h_disj h_ne.symm).sdif
+  · simpa only [(h_disj h_ne.symm).sdiff_eq_left] using h_open j
 
 中文:
 引理 subsingleton_of_disjoint_isOpen_iUnion_eq_univ
@@ -430,7 +460,7 @@ lemma subsingleton_of_disjoint_isOpen_iUnion_eq_univ
   refine isOpen_iUnion (fun j => ?_)
   rcases eq_or_ne i j with rfl | h_ne
   · simp
-  · simpa only [(h_disj h_ne.symm).sdif
+  · simpa only [(h_disj h_ne.symm).sdiff_eq_left] using h_open j
 
 Depends on / 依赖: compl_eq_univ_sdiff, eq_or_ne, h_Union, h_disj, h_ne, h_ne.symm, h_nonempty, h_open, iUnion_sdiff, isOpen_compl_iff, isOpen_iUnion, sdiff_eq_left, subsingleton_of_disjoint_isClopen
 -/
@@ -456,7 +486,7 @@ lemma subsingleton_of_disjoint_isClosed_iUnion_eq_univ
   refine isClosed_iUnion_of_finite (fun j => ?_)
   rcases eq_or_ne i j with rfl | h_ne
   · simp
-  · simpa only [(h_disj
+  · simpa only [(h_disj h_ne.symm).sdiff_eq_left] using h_closed j
 
 中文:
 引理 subsingleton_of_disjoint_isClosed_iUnion_eq_univ
@@ -467,7 +497,7 @@ lemma subsingleton_of_disjoint_isClosed_iUnion_eq_univ
   refine isClosed_iUnion_of_finite (fun j => ?_)
   rcases eq_or_ne i j with rfl | h_ne
   · simp
-  · simpa only [(h_disj
+  · simpa only [(h_disj h_ne.symm).sdiff_eq_left] using h_closed j
 
 Depends on / 依赖: compl_eq_univ_sdiff, eq_or_ne, h_Union, h_closed, h_disj, h_ne, h_ne.symm, h_nonempty, iUnion_sdiff, isClosed_compl_iff, isClosed_iUnion_of_finite, sdiff_eq_left, subsingleton_of_disjoint_isClopen
 -/
@@ -538,7 +568,11 @@ lemma PreconnectedSpace.induction₂'
   have B : IsOpen u := by
     apply isOpen_iff_mem_nhds.2 (fun z hz => ?_)
     filter_upwards [h z] with t ht
-    exact h'.tr
+    exact h'.trans x z t hz ht.1
+  have C : u.Nonempty := ⟨x, (mem_of_mem_nhds (h x)).1⟩
+  have D : u = Set.univ := IsClopen.eq_univ ⟨A, B⟩ C
+  change y in u
+  simp [D]
 
 中文:
 引理 预连通空间.induction₂'
@@ -552,7 +586,11 @@ lemma PreconnectedSpace.induction₂'
   have B : IsOpen u := by
     apply isOpen_iff_mem_nhds.2 (fun z hz => ?_)
     filter_upwards [h z] with t ht
-    exact h'.tr
+    exact h'.trans x z t hz ht.1
+  have C : u.Nonempty := ⟨x, (mem_of_mem_nhds (h x)).1⟩
+  have D : u = Set.univ := IsClopen.eq_univ ⟨A, B⟩ C
+  change y in u
+  simp [D]
 
 Depends on / 依赖: IsClopen, IsClopen.eq_univ, IsClosed, IsOpen, Nonempty, Set.univ, eq_univ, filter_upwards, isClosed_iff_nhds, isOpen_iff_mem_nhds, mem_of_mem_nhds, u.Nonempty
 -/
@@ -614,7 +652,7 @@ lemma IsPreconnected.induction₂'
   · rintro ⟨x, hx⟩
     have Z := h x hx
     rwa [nhdsWithin_eq_map_subtype_coe] at Z
-  · exact ⟨fun ⟨a, ha⟩ ⟨b, hb⟩ ⟨c, hc⟩ =>
+  · exact ⟨fun ⟨a, ha⟩ ⟨b, hb⟩ ⟨c, hc⟩ => h' a b c ha hb hc⟩
 
 中文:
 引理 是预连通.induction₂'
@@ -627,7 +665,7 @@ lemma IsPreconnected.induction₂'
   · rintro ⟨x, hx⟩
     have Z := h x hx
     rwa [nhdsWithin_eq_map_subtype_coe] at Z
-  · exact ⟨fun ⟨a, ha⟩ ⟨b, hb⟩ ⟨c, hc⟩ =>
+  · exact ⟨fun ⟨a, ha⟩ ⟨b, hb⟩ ⟨c, hc⟩ => h' a b c ha hb hc⟩
 
 Depends on / 依赖: PreconnectedSpace, PreconnectedSpace.induction, Subtype, Subtype.preconnectedSpace, nhdsWithin_eq_map_subtype_coe, preconnectedSpace
 -/
@@ -688,7 +726,17 @@ theorem isPreconnected_iff_subset_of_disjoint
     simp only [not_subset] at huv
     rcases huv with ⟨⟨x, hxs, hxu⟩, ⟨y, hys, hyv⟩⟩
     have hxv : x in v := or_iff_not_imp_left.mp (hs hxs) hxu
-    have hyu : y in u := or_iff_not_imp_right.mp
+    have hyu : y in u := or_iff_not_imp_right.mp (hs hys) hyv
+    exact h ⟨y, hys, hyu⟩ ⟨x, hxs, hxv⟩
+  · intro u v hu hv hs hsu hsv
+    by_contra H
+    specialize h u v hu hv hs (Set.not_nonempty_iff_eq_empty.mp H)
+    apply H
+    rcases h with h | h
+    · rcases hsv with ⟨x, hxs, hxv⟩
+      exact ⟨x, hxs, ⟨h hxs, hxv⟩⟩
+    · rcases hsu with ⟨x, hxs, hxu⟩
+      exact ⟨x, hxs, ⟨hxu, h hxs⟩⟩
 
 中文:
 定理 isPreconnected_iff_subset_of_disjoint
@@ -701,7 +749,17 @@ theorem isPreconnected_iff_subset_of_disjoint
     simp only [not_subset] at huv
     rcases huv with ⟨⟨x, hxs, hxu⟩, ⟨y, hys, hyv⟩⟩
     have hxv : x in v := or_iff_not_imp_left.mp (hs hxs) hxu
-    have hyu : y in u := or_iff_not_imp_right.mp
+    have hyu : y in u := or_iff_not_imp_right.mp (hs hys) hyv
+    exact h ⟨y, hys, hyu⟩ ⟨x, hxs, hxv⟩
+  · intro u v hu hv hs hsu hsv
+    by_contra H
+    specialize h u v hu hv hs (Set.not_nonempty_iff_eq_empty.mp H)
+    apply H
+    rcases h with h | h
+    · rcases hsv with ⟨x, hxs, hxv⟩
+      exact ⟨x, hxs, ⟨h hxs, hxv⟩⟩
+    · rcases hsu with ⟨x, hxs, hxu⟩
+      exact ⟨x, hxs, ⟨hxu, h hxs⟩⟩
 
 Depends on / 依赖: Set.not_nonempty_iff_eq_empty.mp, contrapose, not_nonempty_iff_eq_empty, not_subset, or_iff_not_imp_left, or_iff_not_imp_left.mp, or_iff_not_imp_right, or_iff_not_imp_right.mp, specialize
 -/
@@ -739,7 +797,16 @@ theorem isConnected_iff_sUnion_disjoint_open
   · induction U using Finset.induction_on with
     | empty => exact absurd (by simpa using hsU) hne.not_subset_empty
     | insert u U uU IH =>
-    
+      simp only [← forall_cond_comm, Finset.forall_mem_insert, Finset.exists_mem_insert,
+        Finset.coe_insert, sUnion_insert, implies_true, true_and] at *
+      refine (h _ hUo.1 (⋃₀ ↑U) (isOpen_sUnion hUo.2) hsU ?_).imp_right ?_
+      · refine subset_empty_iff.1 fun x ⟨hxs, hxu, v, hvU, hxv⟩ => ?_
+        exact ne_of_mem_of_not_mem hvU uU (hU.1 v hvU ⟨x, hxs, hxu, hxv⟩).symm
+      · exact IH (fun u hu => (hU.2 u hu).2) hUo.2
+  · simpa [subset_empty_iff, nonempty_iff_ne_empty] using h ∅
+  · rw [← not_nonempty_iff_eq_empty] at hsuv
+    have := hsuv; rw [inter_comm u] at this
+    simpa [*, or_imp, forall_and] using h {u, v}
 
 中文:
 定理 isConnected_iff_sUnion_disjoint_open
@@ -750,7 +817,16 @@ theorem isConnected_iff_sUnion_disjoint_open
   · induction U using Finset.induction_on with
     | empty => exact absurd (by simpa using hsU) hne.not_subset_empty
     | insert u U uU IH =>
-    
+      simp only [← forall_cond_comm, Finset.forall_mem_insert, Finset.exists_mem_insert,
+        Finset.coe_insert, sUnion_insert, implies_true, true_and] at *
+      refine (h _ hUo.1 (⋃₀ ↑U) (isOpen_sUnion hUo.2) hsU ?_).imp_right ?_
+      · refine subset_empty_iff.1 fun x ⟨hxs, hxu, v, hvU, hxv⟩ => ?_
+        exact ne_of_mem_of_not_mem hvU uU (hU.1 v hvU ⟨x, hxs, hxu, hxv⟩).symm
+      · exact IH (fun u hu => (hU.2 u hu).2) hUo.2
+  · simpa [subset_empty_iff, nonempty_iff_ne_empty] using h ∅
+  · rw [← not_nonempty_iff_eq_empty] at hsuv
+    have := hsuv; rw [inter_comm u] at this
+    simpa [*, or_imp, forall_and] using h {u, v}
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.exists_mem_insert, Finset.forall_mem_insert, Finset.induction_on, IsConnected, absurd, coe_insert, exists_mem_insert, forall_cond_comm, forall_mem_insert, hne.not_subset_empty, imp_right, implies_true, induction_on, insert, isOpen_sUnion, isPreconnected_iff_subset_of_disjoint, not_subset_empty, sUnion_insert
 -/
@@ -807,7 +883,18 @@ theorem isPreconnected_iff_subset_of_disjoint_closed
     simp only [not_subset] at huv
     rcases huv with ⟨⟨x, hxs, hxu⟩, ⟨y, hys, hyv⟩⟩
     have hxv : x in v := or_iff_not_imp_left.mp (hs hxs) hxu
-    have
+    have hyu : y in u := or_iff_not_imp_right.mp (hs hys) hyv
+    exact h ⟨y, hys, hyu⟩ ⟨x, hxs, hxv⟩
+  · rw [isPreconnected_closed_iff]
+    intro u v hu hv hs hsu hsv
+    by_contra H
+    specialize h u v hu hv hs (Set.not_nonempty_iff_eq_empty.mp H)
+    apply H
+    rcases h with h | h
+    · rcases hsv with ⟨x, hxs, hxv⟩
+      exact ⟨x, hxs, ⟨h hxs, hxv⟩⟩
+    · rcases hsu with ⟨x, hxs, hxu⟩
+      exact ⟨x, hxs, ⟨hxu, h hxs⟩⟩
 
 中文:
 定理 isPreconnected_iff_subset_of_disjoint_closed
@@ -820,7 +907,18 @@ theorem isPreconnected_iff_subset_of_disjoint_closed
     simp only [not_subset] at huv
     rcases huv with ⟨⟨x, hxs, hxu⟩, ⟨y, hys, hyv⟩⟩
     have hxv : x in v := or_iff_not_imp_left.mp (hs hxs) hxu
-    have
+    have hyu : y in u := or_iff_not_imp_right.mp (hs hys) hyv
+    exact h ⟨y, hys, hyu⟩ ⟨x, hxs, hxv⟩
+  · rw [isPreconnected_closed_iff]
+    intro u v hu hv hs hsu hsv
+    by_contra H
+    specialize h u v hu hv hs (Set.not_nonempty_iff_eq_empty.mp H)
+    apply H
+    rcases h with h | h
+    · rcases hsv with ⟨x, hxs, hxv⟩
+      exact ⟨x, hxs, ⟨h hxs, hxv⟩⟩
+    · rcases hsu with ⟨x, hxs, hxu⟩
+      exact ⟨x, hxs, ⟨hxu, h hxs⟩⟩
 
 Depends on / 依赖: Set.not_nonempty_iff_eq_empty.mp, contrapose, isPreconnected_closed_iff, not_nonempty_iff_eq_empty, not_subset, or_iff_not_imp_left, or_iff_not_imp_left.mp, or_iff_not_imp_right, or_iff_not_imp_right.mp, specialize
 -/
@@ -860,7 +958,11 @@ theorem isPreconnected_iff_subset_of_fully_disjoint_closed
     rw [huv.inter_eq]; rw [inter_empty]
   have H1 := H (u inter s) (v inter s)
   rw [subset_inter_iff]; rw [subset_inter_iff] at H1
-  simp only [Subset.refl, and_true] at H
+  simp only [Subset.refl, and_true] at H1
+  apply H1 (hu.inter hs) (hv.inter hs)
+  · rw [← union_inter_distrib_right]
+    exact subset_inter hss Subset.rfl
+  · rwa [disjoint_iff_inter_eq_empty, ← inter_inter_distrib_right, inter_comm]
 
 中文:
 定理 isPreconnected_iff_subset_of_fully_disjoint_closed
@@ -871,7 +973,11 @@ theorem isPreconnected_iff_subset_of_fully_disjoint_closed
     rw [huv.inter_eq]; rw [inter_empty]
   have H1 := H (u inter s) (v inter s)
   rw [subset_inter_iff]; rw [subset_inter_iff] at H1
-  simp only [Subset.refl, and_true] at H
+  simp only [Subset.refl, and_true] at H1
+  apply H1 (hu.inter hs) (hv.inter hs)
+  · rw [← union_inter_distrib_right]
+    exact subset_inter hss Subset.rfl
+  · rwa [disjoint_iff_inter_eq_empty, ← inter_inter_distrib_right, inter_comm]
 
 Depends on / 依赖: Subset, Subset.refl, Subset.rfl, and_true, disjoint_iff_inter_eq_empty, hu.inter, huv.inter_eq, hv.inter, inter_comm, inter_empty, inter_eq, inter_inter_distrib_right, isPreconnected_iff_subset_of_disjoint_closed, isPreconnected_iff_subset_of_disjoint_closed.trans, subset_inter, subset_inter_iff, union_inter_distrib_right
 -/
@@ -902,7 +1008,11 @@ lemma IsClopen.isPreconnected_iff
     exact (H a b ha.isOpen hb.isOpen subset_rfl (by rwa [union_inter_cancel_left])
       (by rwa [union_inter_cancel_right])).ne_empty (by grind)
   · rw [nonempty_iff_ne_empty]
-    in
+    intro h
+    exact H (s inter a) (s inter b)
+      (isClopen_inter_of_disjoint_cover_clopen' hs hsab ha hb (by grind))
+      (isClopen_inter_of_disjoint_cover_clopen' hs (by grind) hb ha (by grind))
+      hsa hsb (by grind [Set.disjoint_iff_inter_eq_empty]) (by grind)
 
 中文:
 引理 IsClopen.isPreconnected_iff
@@ -914,7 +1024,11 @@ lemma IsClopen.isPreconnected_iff
     exact (H a b ha.isOpen hb.isOpen subset_rfl (by rwa [union_inter_cancel_left])
       (by rwa [union_inter_cancel_right])).ne_empty (by grind)
   · rw [nonempty_iff_ne_empty]
-    in
+    intro h
+    exact H (s inter a) (s inter b)
+      (isClopen_inter_of_disjoint_cover_clopen' hs hsab ha hb (by grind))
+      (isClopen_inter_of_disjoint_cover_clopen' hs (by grind) hb ha (by grind))
+      hsa hsb (by grind [Set.disjoint_iff_inter_eq_empty]) (by grind)
 
 Depends on / 依赖: Set.disjoint_iff_inter_eq, contrapose, disjoint_iff_inter_eq, ha.isOpen, hb.isOpen, isClopen_inter_of_disjoint_cover_clopen, isOpen, ne_empty, nonempty_iff_ne_empty, subset_rfl, union_inter_cancel_left, union_inter_cancel_right
 -/
@@ -1029,7 +1143,8 @@ lemma IsClopen.biUnion_connectedComponentIn
   nth_rw 1 [this]
   congr! 2 with x hx
   simp only [← connectedComponentIn_eq_image]
-exact
+exact le_antisymm (iUnion_subset fun _ => le_rfl)
+    iUnion_subset fun hx => subset_iUnion₂_of_subset (huv₁ hx) hx le_rfl
 
 中文:
 引理 IsClopen.biUnion_connectedComponentIn
@@ -1041,7 +1156,8 @@ exact
   nth_rw 1 [this]
   congr! 2 with x hx
   simp only [← connectedComponentIn_eq_image]
-exact
+exact le_antisymm (iUnion_subset fun _ => le_rfl)
+    iUnion_subset fun hx => subset_iUnion₂_of_subset (huv₁ hx) hx le_rfl
 
 Depends on / 依赖: Subtype, Subtype.image_preimage_coe, biUnion_connectedComponent_eq, connectedComponentIn_eq_image, hu.biUnion_connectedComponent_eq.symm, iUnion_coe_set, iUnion_subset, image_preimage_coe, image_val_iUnion, inter_eq_right, inter_eq_right.mpr, le_antisymm, le_rfl, mem_preimage, nth_rw
 -/
@@ -1098,6 +1214,71 @@ theorem Topology.IsCoinducing.isConnected_preimage_of_isClosed
   have hf : Surjective f := Surjective.of_comp fun t : β => (connected_fibers t).1
   refine ⟨Nonempty.preimage ht'.nonempty hf, ?_⟩
   have hT : IsClosed (f ⁻¹' t) :=
+    hcl.isClosed_preimage.mpr ht
+  -- To show it's preconnected we decompose (f ⁻¹' t) as a subset of two
+  -- closed disjoint sets in α. We want to show that it's a subset of either.
+  rw [isPreconnected_iff_subset_of_fully_disjoint_closed hT]
+  intro u v hu hv huv uv_disj
+  -- To do this we decompose t into T₁ and T₂
+  -- we will show that t is a subset of either and hence
+  -- (f ⁻¹' t) is a subset of u or v
+  let T₁ := { t' in t | f ⁻¹' {t'} subseteq u }
+  let T₂ := { t' in t | f ⁻¹' {t'} subseteq v }
+  have fiber_decomp : forall t' in t, f ⁻¹' {t'} subseteq u ∨ f ⁻¹' {t'} subseteq v := by
+    intro t' ht'
+    apply isPreconnected_iff_subset_of_disjoint_closed.1 (connected_fibers t').2 u v hu hv
+    · exact Subset.trans (preimage_mono (singleton_subset_iff.2 ht')) huv
+    rw [uv_disj.inter_eq]; rw [inter_empty]
+  have T₁_u : f ⁻¹' T₁ = f ⁻¹' t inter u := by
+    apply eq_of_subset_of_subset
+    · rw [← biUnion_preimage_singleton]
+      refine iUnion₂_subset fun t' ht' => subset_inter ?_ ht'.2
+      rw [hf.preimage_subset_preimage_iff]; rw [singleton_subset_iff]
+      exact ht'.1
+    rintro a ⟨hat, hau⟩
+    constructor
+    · exact mem_preimage.1 hat
+    refine (fiber_decomp (f a) (mem_preimage.1 hat)).resolve_right fun h => ?_
+    exact uv_disj.subset_compl_right hau (h rfl)
+  -- This proof is exactly the same as the above (modulo some symmetry)
+  have T₂_v : f ⁻¹' T₂ = f ⁻¹' t inter v := by
+    apply eq_of_subset_of_subset
+    · rw [← biUnion_preimage_singleton]
+      refine iUnion₂_subset fun t' ht' => subset_inter ?_ ht'.2
+      rw [hf.preimage_subset_preimage_iff]; rw [singleton_subset_iff]
+      exact ht'.1
+    rintro a ⟨hat, hav⟩
+    constructor
+    · exact mem_preimage.1 hat
+    · refine (fiber_decomp (f a) (mem_preimage.1 hat)).resolve_left fun h => ?_
+      exact uv_disj.subset_compl_left hav (h rfl)
+  -- Now we show T₁, T₂ are closed, cover t and are disjoint.
+  have hT₁ : IsClosed T₁ := hcl.isClosed_preimage.mp (T₁_u.symm ▸ IsClosed.inter hT hu)
+  have hT₂ : IsClosed T₂ := hcl.isClosed_preimage.mp (T₂_v.symm ▸ IsClosed.inter hT hv)
+  have T_decomp : t subseteq T₁ union T₂ := fun t' ht' => by
+    rw [mem_union t' T₁ T₂]
+    rcases fiber_decomp t' ht' with htu | htv
+    · left; exact ⟨ht', htu⟩
+    · right; exact ⟨ht', htv⟩
+  have T_disjoint : Disjoint T₁ T₂ := by
+    refine Disjoint.of_preimage hf ?_
+    rw [T₁_u]; rw [T₂_v]; rw [disjoint_iff_inter_eq_empty]; rw [← inter_inter_distrib_left]; rw [uv_disj.inter_eq]; rw [inter_empty]
+  -- Now we do cases on whether t is a subset of T₁ or T₂ to show
+  -- that the preimage is a subset of u or v.
+  rcases (isPreconnected_iff_subset_of_fully_disjoint_closed ht).1
+    ht'.isPreconnected T₁ T₂ hT₁ hT₂ T_decomp T_disjoint with h | h
+  · left
+    rw [Subset.antisymm_iff] at T₁_u
+    suffices f ⁻¹' t subseteq f ⁻¹' T₁
+      from (this.trans T₁_u.1).trans inter_subset_right
+    exact preimage_mono h
+  · right
+    rw [Subset.antisymm_iff] at T₂_v
+    suffices f ⁻¹' t subseteq f ⁻¹' T₂
+      from (this.trans T₂_v.1).trans inter_subset_right
+    exact preimage_mono h
+
+@[deprecated Topology.IsCoinducing.isConnected_preimage_of_isClosed (since := "2026-04-01")]
 
 中文:
 定理 拓扑.是余inducing.isConnected_preimage_of_isClosed
@@ -1107,6 +1288,71 @@ theorem Topology.IsCoinducing.isConnected_preimage_of_isClosed
   have hf : Surjective f := Surjective.of_comp fun t : β => (connected_fibers t).1
   refine ⟨Nonempty.preimage ht'.nonempty hf, ?_⟩
   have hT : IsClosed (f ⁻¹' t) :=
+    hcl.isClosed_preimage.mpr ht
+  -- To show it's preconnected we decompose (f ⁻¹' t) as a subset of two
+  -- closed disjoint sets in α. We want to show that it's a subset of either.
+  rw [isPreconnected_iff_subset_of_fully_disjoint_closed hT]
+  intro u v hu hv huv uv_disj
+  -- To do this we decompose t into T₁ and T₂
+  -- we will show that t is a subset of either and hence
+  -- (f ⁻¹' t) is a subset of u or v
+  let T₁ := { t' in t | f ⁻¹' {t'} subseteq u }
+  let T₂ := { t' in t | f ⁻¹' {t'} subseteq v }
+  have fiber_decomp : forall t' in t, f ⁻¹' {t'} subseteq u ∨ f ⁻¹' {t'} subseteq v := by
+    intro t' ht'
+    apply isPreconnected_iff_subset_of_disjoint_closed.1 (connected_fibers t').2 u v hu hv
+    · exact Subset.trans (preimage_mono (singleton_subset_iff.2 ht')) huv
+    rw [uv_disj.inter_eq]; rw [inter_empty]
+  have T₁_u : f ⁻¹' T₁ = f ⁻¹' t inter u := by
+    apply eq_of_subset_of_subset
+    · rw [← biUnion_preimage_singleton]
+      refine iUnion₂_subset fun t' ht' => subset_inter ?_ ht'.2
+      rw [hf.preimage_subset_preimage_iff]; rw [singleton_subset_iff]
+      exact ht'.1
+    rintro a ⟨hat, hau⟩
+    constructor
+    · exact mem_preimage.1 hat
+    refine (fiber_decomp (f a) (mem_preimage.1 hat)).resolve_right fun h => ?_
+    exact uv_disj.subset_compl_right hau (h rfl)
+  -- This proof is exactly the same as the above (modulo some symmetry)
+  have T₂_v : f ⁻¹' T₂ = f ⁻¹' t inter v := by
+    apply eq_of_subset_of_subset
+    · rw [← biUnion_preimage_singleton]
+      refine iUnion₂_subset fun t' ht' => subset_inter ?_ ht'.2
+      rw [hf.preimage_subset_preimage_iff]; rw [singleton_subset_iff]
+      exact ht'.1
+    rintro a ⟨hat, hav⟩
+    constructor
+    · exact mem_preimage.1 hat
+    · refine (fiber_decomp (f a) (mem_preimage.1 hat)).resolve_left fun h => ?_
+      exact uv_disj.subset_compl_left hav (h rfl)
+  -- Now we show T₁, T₂ are closed, cover t and are disjoint.
+  have hT₁ : IsClosed T₁ := hcl.isClosed_preimage.mp (T₁_u.symm ▸ IsClosed.inter hT hu)
+  have hT₂ : IsClosed T₂ := hcl.isClosed_preimage.mp (T₂_v.symm ▸ IsClosed.inter hT hv)
+  have T_decomp : t subseteq T₁ union T₂ := fun t' ht' => by
+    rw [mem_union t' T₁ T₂]
+    rcases fiber_decomp t' ht' with htu | htv
+    · left; exact ⟨ht', htu⟩
+    · right; exact ⟨ht', htv⟩
+  have T_disjoint : Disjoint T₁ T₂ := by
+    refine Disjoint.of_preimage hf ?_
+    rw [T₁_u]; rw [T₂_v]; rw [disjoint_iff_inter_eq_empty]; rw [← inter_inter_distrib_left]; rw [uv_disj.inter_eq]; rw [inter_empty]
+  -- Now we do cases on whether t is a subset of T₁ or T₂ to show
+  -- that the preimage is a subset of u or v.
+  rcases (isPreconnected_iff_subset_of_fully_disjoint_closed ht).1
+    ht'.isPreconnected T₁ T₂ hT₁ hT₂ T_decomp T_disjoint with h | h
+  · left
+    rw [Subset.antisymm_iff] at T₁_u
+    suffices f ⁻¹' t subseteq f ⁻¹' T₁
+      from (this.trans T₁_u.1).trans inter_subset_right
+    exact preimage_mono h
+  · right
+    rw [Subset.antisymm_iff] at T₂_v
+    suffices f ⁻¹' t subseteq f ⁻¹' T₂
+      from (this.trans T₂_v.1).trans inter_subset_right
+    exact preimage_mono h
+
+@[deprecated Topology.IsCoinducing.isConnected_preimage_of_isClosed (since := "2026-04-01")]
 -/
 theorem Topology.IsCoinducing.isConnected_preimage_of_isClosed
     (connected_fibers : forall t : β, IsConnected (f ⁻¹' {t}))
@@ -1622,7 +1868,27 @@ definition equivOfIsClopen
     rw [← connectedComponentIn_eq_image hx]; rw [(hclopen i).connectedComponentIn_eq hx]
 refine .symm .ofBijective
       (fun ⟨i, x⟩ =>
-        x.lift (ConnectedComponents.mk ∘ S
+        x.lift (ConnectedComponents.mk ∘ Subtype.val)
+          (fun x y (hxy : connectedComponent x = connectedComponent y) => by
+            simp [← heq x.2, ← heq y.2, hxy]))
+      ⟨fun ⟨i, x⟩ ⟨j, y⟩ => ?_, fun x => ?_⟩
+  · intro hxy
+    obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe x
+    obtain ⟨y, rfl⟩ := ConnectedComponents.surjective_coe y
+    replace hxy : ConnectedComponents.mk x.val = ConnectedComponents.mk y.val := hxy
+    rw [ConnectedComponents.coe_eq_coe] at hxy
+    obtain rfl : i = j := by
+      apply hdisj.eq
+      rw [Set.not_disjoint_iff]
+      exact ⟨x, x.2, (hclopen j).connectedComponent_subset y.2 (hxy ▸ mem_connectedComponent)⟩
+    simp [← Set.image_val_inj, heq, hxy]
+  · obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe x
+    obtain ⟨i, hi⟩ := Set.iUnion_eq_univ_iff.mp hunion x
+    simp only [Sigma.exists]
+    use i, .mk ⟨x, hi⟩
+    rfl
+
+@[simp]
 
 中文:
 定义 equivOfIsClopen
@@ -1633,7 +1899,27 @@ refine .symm .ofBijective
     rw [← connectedComponentIn_eq_image hx]; rw [(hclopen i).connectedComponentIn_eq hx]
 refine .symm .ofBijective
       (fun ⟨i, x⟩ =>
-        x.lift (ConnectedComponents.mk ∘ S
+        x.lift (ConnectedComponents.mk ∘ Subtype.val)
+          (fun x y (hxy : connectedComponent x = connectedComponent y) => by
+            simp [← heq x.2, ← heq y.2, hxy]))
+      ⟨fun ⟨i, x⟩ ⟨j, y⟩ => ?_, fun x => ?_⟩
+  · intro hxy
+    obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe x
+    obtain ⟨y, rfl⟩ := ConnectedComponents.surjective_coe y
+    replace hxy : ConnectedComponents.mk x.val = ConnectedComponents.mk y.val := hxy
+    rw [ConnectedComponents.coe_eq_coe] at hxy
+    obtain rfl : i = j := by
+      apply hdisj.eq
+      rw [Set.not_disjoint_iff]
+      exact ⟨x, x.2, (hclopen j).connectedComponent_subset y.2 (hxy ▸ mem_connectedComponent)⟩
+    simp [← Set.image_val_inj, heq, hxy]
+  · obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe x
+    obtain ⟨i, hi⟩ := Set.iUnion_eq_univ_iff.mp hunion x
+    simp only [Sigma.exists]
+    use i, .mk ⟨x, hi⟩
+    rfl
+
+@[simp]
 
 Depends on / 依赖: ConnectedComponents, ConnectedComponents.mk, ConnectedComponents.surjective_coe, Subtype, Subtype.val, connectedComponent, connectedComponentIn_eq, connectedComponentIn_eq_image, hclopen, ofBijective, surjective_coe, x.lift
 -/
@@ -1775,7 +2061,23 @@ lemma exists_fun_isClopen_of_infinite
   | zero => exact ⟨![.univ], by simp [isClopen_univ, Set.iUnion_fin_add_one_eq_iUnion_succ]⟩
   | succ n IH =>
     obtain ⟨U, h₁, h₂, h₃, h₄⟩ := IH
- 
+    obtain ⟨i, hi⟩ : exists i, ¬ IsConnected (U i) := by
+      simp_rw [isConnected_iff_connectedSpace, ← not_forall]
+      exact fun _ => not_finite_iff_infinite.mpr ‹_› (.of_equiv _ (equivOfIsClopen h₁ h₃ h₄).symm)
+    obtain ⟨U, rfl⟩ := (Equiv.piCongrLeft (fun _ => Set α) (Equiv.swap 0 i)).symm.surjective U
+    cases U using Fin.consCases with | cons s U =>
+    simp only [Equiv.piCongrLeft_symm_apply, Equiv.swap_apply_right, Fin.cons_zero] at *
+    obtain ⟨a, b, ha, hb, ha', hb', hab, rfl⟩ := (show IsClopen s by simpa using h₁ i)
+.not_isPreconnected_iff.mp (mt (⟨by simpa using h₂ i, ·⟩) hi)
+    refine ⟨Fin.cons a (Fin.cons b U), ?_, ?_, ?_, ?_⟩
+    · simpa [Fin.forall_iff_succ, *] using fun x => h₁ (Equiv.swap 0 i (.succ x))
+    · simpa [Fin.forall_iff_succ, *] using fun x => h₂ (Equiv.swap 0 i (.succ x))
+    · have h₃' (j : _) : Disjoint (U j) a ∧ Disjoint (U j) b := by
+        simpa [onFun] using h₃ ((Equiv.swap 0 i).injective.ne (Fin.succ_ne_zero j))
+      simpa [Pairwise, Fin.forall_iff_succ, onFun, hab, disjoint_comm (a := a),
+        disjoint_comm (a := b), h₃'] using
+        h₃.comp_of_injective ((Equiv.swap 0 i).injective.comp (Fin.succ_injective _))
+    · simpa [← union_assoc, (Equiv.surjective _).iUnion_comp] using h₄
 
 中文:
 引理 存在_fun_isClopen_of_infinite
@@ -1790,7 +2092,23 @@ lemma exists_fun_isClopen_of_infinite
   | zero => exact ⟨![.univ], by simp [isClopen_univ, Set.iUnion_fin_add_one_eq_iUnion_succ]⟩
   | succ n IH =>
     obtain ⟨U, h₁, h₂, h₃, h₄⟩ := IH
- 
+    obtain ⟨i, hi⟩ : exists i, ¬ IsConnected (U i) := by
+      simp_rw [isConnected_iff_connectedSpace, ← not_forall]
+      exact fun _ => not_finite_iff_infinite.mpr ‹_› (.of_equiv _ (equivOfIsClopen h₁ h₃ h₄).symm)
+    obtain ⟨U, rfl⟩ := (Equiv.piCongrLeft (fun _ => Set α) (Equiv.swap 0 i)).symm.surjective U
+    cases U using Fin.consCases with | cons s U =>
+    simp only [Equiv.piCongrLeft_symm_apply, Equiv.swap_apply_right, Fin.cons_zero] at *
+    obtain ⟨a, b, ha, hb, ha', hb', hab, rfl⟩ := (show IsClopen s by simpa using h₁ i)
+.not_isPreconnected_iff.mp (mt (⟨by simpa using h₂ i, ·⟩) hi)
+    refine ⟨Fin.cons a (Fin.cons b U), ?_, ?_, ?_, ?_⟩
+    · simpa [Fin.forall_iff_succ, *] using fun x => h₁ (Equiv.swap 0 i (.succ x))
+    · simpa [Fin.forall_iff_succ, *] using fun x => h₂ (Equiv.swap 0 i (.succ x))
+    · have h₃' (j : _) : Disjoint (U j) a ∧ Disjoint (U j) b := by
+        simpa [onFun] using h₃ ((Equiv.swap 0 i).injective.ne (Fin.succ_ne_zero j))
+      simpa [Pairwise, Fin.forall_iff_succ, onFun, hab, disjoint_comm (a := a),
+        disjoint_comm (a := b), h₃'] using
+        h₃.comp_of_injective ((Equiv.swap 0 i).injective.comp (Fin.succ_injective _))
+    · simpa [← union_assoc, (Equiv.surjective _).iUnion_comp] using h₄
 
 Depends on / 依赖: ConnectedComponents, IsConnected, Set.iUnion_fin_add_one_eq_iUnion_succ, equivOfIsClopen, iUnion_fin_add_one_eq_iUnion_succ, isClopen_univ, isConnected_iff_connectedSpace, isEmpty_or_nonempty, not_finite, not_finite_iff_infinite, not_finite_iff_infinite.mpr, not_forall, of_equiv, simp_rw
 -/
@@ -1906,7 +2224,12 @@ theorem isPreconnected_of_forall_constant
   by_contra! ⟨u, v, u_op, v_op, hsuv, ⟨x, x_in_s, x_in_u⟩, ⟨y, y_in_s, y_in_v⟩, H⟩
   have hy : y ∉ u := fun y_in_u => eq_empty_iff_forall_notMem.mp H y ⟨y_in_s, ⟨y_in_u, y_in_v⟩⟩
   have : ContinuousOn u.boolIndicator s := by
-    apply (continuousOn_boolIndicator_iff_isClop
+    apply (continuousOn_boolIndicator_iff_isClopen _ _).mpr ⟨_, _⟩
+    · rw [preimage_subtype_coe_eq_compl hsuv H]
+      exact (v_op.preimage continuous_subtype_val).isClosed_compl
+    · exact u_op.preimage continuous_subtype_val
+  simpa [(u.mem_iff_boolIndicator _).mp x_in_u, (u.notMem_iff_boolIndicator _).mp hy] using
+    hs _ this x x_in_s y y_in_s
 
 中文:
 定理 isPreconnected_of_对任意_constant
@@ -1916,7 +2239,12 @@ theorem isPreconnected_of_forall_constant
   by_contra! ⟨u, v, u_op, v_op, hsuv, ⟨x, x_in_s, x_in_u⟩, ⟨y, y_in_s, y_in_v⟩, H⟩
   have hy : y ∉ u := fun y_in_u => eq_empty_iff_forall_notMem.mp H y ⟨y_in_s, ⟨y_in_u, y_in_v⟩⟩
   have : ContinuousOn u.boolIndicator s := by
-    apply (continuousOn_boolIndicator_iff_isClop
+    apply (continuousOn_boolIndicator_iff_isClopen _ _).mpr ⟨_, _⟩
+    · rw [preimage_subtype_coe_eq_compl hsuv H]
+      exact (v_op.preimage continuous_subtype_val).isClosed_compl
+    · exact u_op.preimage continuous_subtype_val
+  simpa [(u.mem_iff_boolIndicator _).mp x_in_u, (u.notMem_iff_boolIndicator _).mp hy] using
+    hs _ this x x_in_s y y_in_s
 
 Depends on / 依赖: ContinuousOn, IsPreconnected, boolIndicator, continuousOn_boolIndicator_iff_isClopen, continuous_subtype_val, eq_empty_iff_forall_notMem, eq_empty_iff_forall_notMem.mp, isClosed_compl, mem_iff_boolIndicator, preimage, preimage_subtype_coe_eq_compl, u.boolIndicator, u.mem_iff_boolIndicator, u_op, u_op.preimage, v_op, v_op.preimage, x_in_s, x_in_u, y_in_s
 -/
@@ -1963,7 +2291,7 @@ theorem preconnectedSpace_iff_clopen
   refine preconnectedSpace_of_forall_constant fun f hf x y => ?_
   have : f ⁻¹' {false} = (f ⁻¹' {true})ᶜ := by
     rw [← Set.preimage_compl]; rw [Bool.compl_singleton]; rw [Bool.not_true]
-  obtain (h | h) := h _ ((isClopen_discrete {true}).preim
+  obtain (h | h) := h _ ((isClopen_discrete {true}).preimage hf) <;> simp_all
 
 中文:
 定理 preconnectedSpace_iff_clopen
@@ -1972,7 +2300,7 @@ theorem preconnectedSpace_iff_clopen
   refine preconnectedSpace_of_forall_constant fun f hf x y => ?_
   have : f ⁻¹' {false} = (f ⁻¹' {true})ᶜ := by
     rw [← Set.preimage_compl]; rw [Bool.compl_singleton]; rw [Bool.not_true]
-  obtain (h | h) := h _ ((isClopen_discrete {true}).preim
+  obtain (h | h) := h _ ((isClopen_discrete {true}).preimage hf) <;> simp_all
 
 Depends on / 依赖: Bool.compl_singleton, Bool.not_true, Set.preimage_compl, compl_singleton, isClopen_discrete, isClopen_iff, isClopen_iff.mp, not_true, preconnectedSpace_of_forall_constant, preimage, preimage_compl
 -/

@@ -79,7 +79,41 @@ lemma modularCharacterFun_eq_haarScalarFactor
   obtain ⟨⟨f, f_cont⟩, f_comp, f_nonneg, f_one⟩ :
     exists f : C(G, Real), HasCompactSupport f ∧ 0 <= f ∧ f 1 != 0 := exists_continuous_nonneg_pos 1
   have int_f_ne_zero (μ₀ : Measure G) [IsHaarMeasure μ₀] : ∫ x, f x ∂μ₀ != 0 :=
-    ne_of_gt (f_con
+    ne_of_gt (f_cont.integral_pos_of_hasCompactSupport_nonneg_nonzero f_comp f_nonneg f_one)
+  apply NNReal.coe_injective
+  have t : (∫ x, f (x * g) ∂ν) = (∫ x, f (x * g) ∂(haarScalarFactor ν μ • μ)) := by
+    refine integral_isMulLeftInvariant_eq_smul_of_hasCompactSupport ν μ ?_ ?_
+    · exact Continuous.comp' f_cont (continuous_mul_const g)
+    · have j : (fun x => f (x * g)) = (f ∘ (Homeomorph.mulRight g)) := rfl
+      rw [j]
+      exact HasCompactSupport.comp_homeomorph f_comp _
+  have r : (haarScalarFactor ν μ : Real) / (haarScalarFactor ν μ) = 1 := by
+    refine div_self ?_
+    rw [NNReal.coe_ne_zero]
+    apply (ne_of_lt (haarScalarFactor_pos_of_isHaarMeasure _ _)).symm
+  calc
+  ↑(modularCharacterFun g) = ↑(haarScalarFactor (map (· * g) ν) ν) := by borelize G; rfl
+  _ = (∫ x, f x ∂(map (· * g) ν)) / ∫ x, f x ∂ν :=
+    haarScalarFactor_eq_integral_div _ _ f_cont f_comp (int_f_ne_zero ν)
+  _ = (∫ x, f (x * g) ∂ν) / ∫ x, f x ∂ν := by
+    rw [integral_map (AEMeasurable.mul_const aemeasurable_id' _)
+    (Continuous.aestronglyMeasurable f_cont)]
+  _ = (∫ x, f (x * g) ∂(haarScalarFactor ν μ • μ)) / ∫ x, f x ∂ν := by rw [t]
+  _ = (∫ x, f (x * g) ∂(haarScalarFactor ν μ • μ)) / ∫ x, f x ∂(haarScalarFactor ν μ • μ) := by
+    rw [integral_isMulLeftInvariant_eq_smul_of_hasCompactSupport ν μ f_cont f_comp]
+  _ = (haarScalarFactor ν μ • ∫ x, f (x * g) ∂μ) / (haarScalarFactor ν μ • ∫ x, f x ∂μ) := by
+    rw [integral_smul_nnreal_measure]; rw [integral_smul_nnreal_measure]
+  _ = (haarScalarFactor ν μ / haarScalarFactor ν μ) * ((∫ x, f (x * g) ∂μ) / ∫ x, f x ∂μ) :=
+    mul_div_mul_comm _ _ _ _
+  _ = 1 * ((∫ x, f (x * g) ∂μ) / ∫ x, f x ∂μ) := by rw [r]
+  _ = (∫ x, f (x * g) ∂μ) / ∫ x, f x ∂μ := by rw [one_mul]
+  _ = (∫ x, f x ∂(map (· * g) μ)) / ∫ x, f x ∂μ := by
+    rw [integral_map (AEMeasurable.mul_const aemeasurable_id' _)
+    (Continuous.aestronglyMeasurable f_cont)]
+  _ = haarScalarFactor (map (· * g) μ) μ :=
+    (haarScalarFactor_eq_integral_div _ _ f_cont f_comp (int_f_ne_zero μ)).symm
+
+@[to_additive]
 
 中文:
 引理 modularCharacterFun_eq_haarScalarFactor
@@ -89,7 +123,41 @@ lemma modularCharacterFun_eq_haarScalarFactor
   obtain ⟨⟨f, f_cont⟩, f_comp, f_nonneg, f_one⟩ :
     exists f : C(G, Real), HasCompactSupport f ∧ 0 <= f ∧ f 1 != 0 := exists_continuous_nonneg_pos 1
   have int_f_ne_zero (μ₀ : Measure G) [IsHaarMeasure μ₀] : ∫ x, f x ∂μ₀ != 0 :=
-    ne_of_gt (f_con
+    ne_of_gt (f_cont.integral_pos_of_hasCompactSupport_nonneg_nonzero f_comp f_nonneg f_one)
+  apply NNReal.coe_injective
+  have t : (∫ x, f (x * g) ∂ν) = (∫ x, f (x * g) ∂(haarScalarFactor ν μ • μ)) := by
+    refine integral_isMulLeftInvariant_eq_smul_of_hasCompactSupport ν μ ?_ ?_
+    · exact Continuous.comp' f_cont (continuous_mul_const g)
+    · have j : (fun x => f (x * g)) = (f ∘ (Homeomorph.mulRight g)) := rfl
+      rw [j]
+      exact HasCompactSupport.comp_homeomorph f_comp _
+  have r : (haarScalarFactor ν μ : Real) / (haarScalarFactor ν μ) = 1 := by
+    refine div_self ?_
+    rw [NNReal.coe_ne_zero]
+    apply (ne_of_lt (haarScalarFactor_pos_of_isHaarMeasure _ _)).symm
+  calc
+  ↑(modularCharacterFun g) = ↑(haarScalarFactor (map (· * g) ν) ν) := by borelize G; rfl
+  _ = (∫ x, f x ∂(map (· * g) ν)) / ∫ x, f x ∂ν :=
+    haarScalarFactor_eq_integral_div _ _ f_cont f_comp (int_f_ne_zero ν)
+  _ = (∫ x, f (x * g) ∂ν) / ∫ x, f x ∂ν := by
+    rw [integral_map (AEMeasurable.mul_const aemeasurable_id' _)
+    (Continuous.aestronglyMeasurable f_cont)]
+  _ = (∫ x, f (x * g) ∂(haarScalarFactor ν μ • μ)) / ∫ x, f x ∂ν := by rw [t]
+  _ = (∫ x, f (x * g) ∂(haarScalarFactor ν μ • μ)) / ∫ x, f x ∂(haarScalarFactor ν μ • μ) := by
+    rw [integral_isMulLeftInvariant_eq_smul_of_hasCompactSupport ν μ f_cont f_comp]
+  _ = (haarScalarFactor ν μ • ∫ x, f (x * g) ∂μ) / (haarScalarFactor ν μ • ∫ x, f x ∂μ) := by
+    rw [integral_smul_nnreal_measure]; rw [integral_smul_nnreal_measure]
+  _ = (haarScalarFactor ν μ / haarScalarFactor ν μ) * ((∫ x, f (x * g) ∂μ) / ∫ x, f x ∂μ) :=
+    mul_div_mul_comm _ _ _ _
+  _ = 1 * ((∫ x, f (x * g) ∂μ) / ∫ x, f x ∂μ) := by rw [r]
+  _ = (∫ x, f (x * g) ∂μ) / ∫ x, f x ∂μ := by rw [one_mul]
+  _ = (∫ x, f x ∂(map (· * g) μ)) / ∫ x, f x ∂μ := by
+    rw [integral_map (AEMeasurable.mul_const aemeasurable_id' _)
+    (Continuous.aestronglyMeasurable f_cont)]
+  _ = haarScalarFactor (map (· * g) μ) μ :=
+    (haarScalarFactor_eq_integral_div _ _ f_cont f_comp (int_f_ne_zero μ)).symm
+
+@[to_additive]
 
 Depends on / 依赖: HasCompactSupport, IsHaarMeasure, Measure, MeasureTheory, MeasureTheory.Measure.haar, NNReal, NNReal.coe_injective, coe_injective, exists_continuous_nonneg_pos, f_comp, f_cont, f_cont.integral_pos_of_hasCompactSupport_nonneg_nonzero, f_nonneg, f_one, haarScalarFactor, int_f_ne_zero, integral_isMulLeftInvari, integral_pos_of_hasCompactSupport_nonneg_nonzero, ne_of_gt
 -/
@@ -236,7 +304,14 @@ lemma modularCharacterFun_map_mul
   symm
   calc
     modularCharacterFun g * modularCharacterFun h =
-      m
+      modularCharacterFun h * modularCharacterFun g := mul_comm _ _
+    _ = haarScalarFactor (map (· * h) (map (· * g) ν)) (map (· * g) ν) *
+      modularCharacterFun g := by
+      rw [modularCharacterFun_eq_haarScalarFactor (map (· * g) ν) _]
+    _ = haarScalarFactor (map (· * h) (map (· * g) ν)) (map (· * g) ν) *
+      haarScalarFactor (map (· * g) ν) ν := rfl
+    _ = haarScalarFactor (map (· * (g * h)) ν) ν := by simp only [map_map mul_h_meas mul_g_meas,
+      comp_mul_right, ← haarScalarFactor_eq_mul]
 
 中文:
 引理 modularCharacterFun_map_mul
@@ -250,7 +325,14 @@ lemma modularCharacterFun_map_mul
   symm
   calc
     modularCharacterFun g * modularCharacterFun h =
-      m
+      modularCharacterFun h * modularCharacterFun g := mul_comm _ _
+    _ = haarScalarFactor (map (· * h) (map (· * g) ν)) (map (· * g) ν) *
+      modularCharacterFun g := by
+      rw [modularCharacterFun_eq_haarScalarFactor (map (· * g) ν) _]
+    _ = haarScalarFactor (map (· * h) (map (· * g) ν)) (map (· * g) ν) *
+      haarScalarFactor (map (· * g) ν) ν := rfl
+    _ = haarScalarFactor (map (· * (g * h)) ν) ν := by simp only [map_map mul_h_meas mul_g_meas,
+      comp_mul_right, ← haarScalarFactor_eq_mul]
 
 Depends on / 依赖: Measurable, Measurable.mul_const, Measure, MeasureTheory, MeasureTheory.Measure.haar, borelize, haarScalarFactor, modularCharacterFun, modularCharacterFun_eq_haarScalarFactor, mul_comm, mul_const, mul_g_meas, mul_h_meas
 -/

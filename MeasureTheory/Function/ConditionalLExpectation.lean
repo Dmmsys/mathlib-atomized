@@ -194,7 +194,9 @@ theorem measurable_condLExp
       · simp [condLExp_eq_self hm, hX]
       simp [condLExp_of_not_sub_sigma_measurable hm _ hX, measurable_rnDeriv]
     simp [condLExp_of_not_sigmaFinite hm hσ, measurable_zero]
-  simp [condL
+  simp [condLExp_of_not_le hm, measurable_zero]
+
+@[fun_prop]
 
 中文:
 定理 measurable_condLExp
@@ -206,7 +208,9 @@ theorem measurable_condLExp
       · simp [condLExp_eq_self hm, hX]
       simp [condLExp_of_not_sub_sigma_measurable hm _ hX, measurable_rnDeriv]
     simp [condLExp_of_not_sigmaFinite hm hσ, measurable_zero]
-  simp [condL
+  simp [condLExp_of_not_le hm, measurable_zero]
+
+@[fun_prop]
 
 Depends on / 依赖: Measurable, P.trim, SigmaFinite, condLExp_eq_self, condLExp_of_not_le, condLExp_of_not_sigmaFinite, condLExp_of_not_sub_sigma_measurable, measurable_rnDeriv, measurable_zero
 -/
@@ -261,7 +265,7 @@ theorem setLIntegral_condLExp
   · simp [condLExp_eq_self hm _ hX]
   have h := AbsolutelyContinuous.trim (withDensity_absolutelyContinuous P X) hm
   have : SFinite ((P.withDensity X).trim hm) := sFinite_of_absolutelyContinuous h
-  rw [condLExp_of_not_sub_sigma_measurable hm _ hX]; rw [← lintegr
+  rw [condLExp_of_not_sub_sigma_measurable hm _ hX]; rw [← lintegral_indicator (hm s hs)]; rw [← lintegral_trim hm (by measurability)]; rw [lintegral_indicator hs]; rw [setLIntegral_rnDeriv' h hs]; rw [trim_measurableSet_eq hm hs]; rw [withDensity_apply _ (hm s hs)]
 
 中文:
 定理 setL整数egral_condLExp
@@ -271,7 +275,7 @@ theorem setLIntegral_condLExp
   · simp [condLExp_eq_self hm _ hX]
   have h := AbsolutelyContinuous.trim (withDensity_absolutelyContinuous P X) hm
   have : SFinite ((P.withDensity X).trim hm) := sFinite_of_absolutelyContinuous h
-  rw [condLExp_of_not_sub_sigma_measurable hm _ hX]; rw [← lintegr
+  rw [condLExp_of_not_sub_sigma_measurable hm _ hX]; rw [← lintegral_indicator (hm s hs)]; rw [← lintegral_trim hm (by measurability)]; rw [lintegral_indicator hs]; rw [setLIntegral_rnDeriv' h hs]; rw [trim_measurableSet_eq hm hs]; rw [withDensity_apply _ (hm s hs)]
 
 Depends on / 依赖: AbsolutelyContinuous, AbsolutelyContinuous.trim, Measurable, P.withDensity, SFinite, condLExp_eq_self, condLExp_of_not_sub_sigma_measurable, lintegral_indicator, lintegral_trim, measurability, sFinite_of_absolutelyContinuous, setLIntegral_rnDeriv, trim_measurableSet_eq, withDensity, withDensity_absolutelyContinuous, withDensity_apply
 -/
@@ -474,7 +478,10 @@ theorem condLExp_congr_ae
       rw [setLIntegral_condLExp _ _ _ hs]
       apply setLIntegral_congr_fun_ae (hm s hs)
       filter_upwards [hXY] with _ h _ using h
-    simp [cond
+    simp [condLExp_of_not_sigmaFinite hm hσ]
+  simp [condLExp_of_not_le hm]
+
+@[simp]
 
 中文:
 定理 condLExp_congr_ae
@@ -486,7 +493,10 @@ theorem condLExp_congr_ae
       rw [setLIntegral_condLExp _ _ _ hs]
       apply setLIntegral_congr_fun_ae (hm s hs)
       filter_upwards [hXY] with _ h _ using h
-    simp [cond
+    simp [condLExp_of_not_sigmaFinite hm hσ]
+  simp [condLExp_of_not_le hm]
+
+@[simp]
 
 Depends on / 依赖: P.trim, SigmaFinite, ae_eq_condLExp, condLExp_of_not_le, condLExp_of_not_sigmaFinite, filter_upwards, measurable_condLExp, setLIntegral_condLExp, setLIntegral_congr_fun_ae
 -/
@@ -600,7 +610,11 @@ theorem condLExp_bot'
     rw [not_isFiniteMeasure_iff] at hP
     rw [condLExp_of_not_sigmaFinite bot_le hσ]
     simp [hP, Pi.zero_def]
-  obtain ⟨c, h_eq⟩ := eq_const_of_measurable_bot (measurable_con
+  obtain ⟨c, h_eq⟩ := eq_const_of_measurable_bot (measurable_condLExp ⊥ P X)
+  ext _
+  rw [← lintegral_condLExp bot_le]
+  simp [h_eq, mul_comm, mul_assoc, ENNReal.mul_inv_cancel
+    (NeZero.ne (P .univ)) (measure_ne_top _ _)]
 
 中文:
 定理 condLExp_bot'
@@ -611,7 +625,11 @@ theorem condLExp_bot'
     rw [not_isFiniteMeasure_iff] at hP
     rw [condLExp_of_not_sigmaFinite bot_le hσ]
     simp [hP, Pi.zero_def]
-  obtain ⟨c, h_eq⟩ := eq_const_of_measurable_bot (measurable_con
+  obtain ⟨c, h_eq⟩ := eq_const_of_measurable_bot (measurable_condLExp ⊥ P X)
+  ext _
+  rw [← lintegral_condLExp bot_le]
+  simp [h_eq, mul_comm, mul_assoc, ENNReal.mul_inv_cancel
+    (NeZero.ne (P .univ)) (measure_ne_top _ _)]
 
 Depends on / 依赖: ENNReal, ENNReal.mul_inv_cancel, IsFiniteMeasure, NeZero, NeZero.ne, P.trim, Pi.zero_def, SigmaFinite, bot_le, condLExp_of_not_sigmaFinite, eq_const_of_measurable_bot, h_eq, lintegral_condLExp, measurable_condLExp, measure_ne_top, mul_assoc, mul_comm, mul_inv_cancel, not_isFiniteMeasure_iff, sigmaFinite_trim_bot_iff
 -/
@@ -686,7 +704,11 @@ theorem condLExp_mono
   by_cases hσ : SigmaFinite (P.trim hm)
   swap; · simp_rw [condLExp_of_not_sigmaFinite hm hσ, Filter.EventuallyLE.rfl]
   apply ae_le_of_ae_le_trim
-  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ
+  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ := P.trim hm) (by fun_prop)
+  intro s hs _
+  repeat rw [setLIntegral_condLExp_trim hm _ _ hs]
+  apply setLIntegral_mono_ae' (hm s hs)
+  filter_upwards [hXY] using fun _ h _ => h
 
 中文:
 定理 condLExp_mono
@@ -697,7 +719,11 @@ theorem condLExp_mono
   by_cases hσ : SigmaFinite (P.trim hm)
   swap; · simp_rw [condLExp_of_not_sigmaFinite hm hσ, Filter.EventuallyLE.rfl]
   apply ae_le_of_ae_le_trim
-  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ
+  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ := P.trim hm) (by fun_prop)
+  intro s hs _
+  repeat rw [setLIntegral_condLExp_trim hm _ _ hs]
+  apply setLIntegral_mono_ae' (hm s hs)
+  filter_upwards [hXY] using fun _ h _ => h
 
 Depends on / 依赖: EventuallyLE, Filter, Filter.EventuallyLE.rfl, P.trim, SigmaFinite, ae_le_of_ae_le_trim, ae_le_of_forall_setLIntegral_le_of_sigmaFinite, condLExp_of_not_le, condLExp_of_not_sigmaFinite, filter_upwards, fun_prop, repeat, setLIntegral_condLExp_trim, setLIntegral_mono_ae, simp_rw
 -/
@@ -726,7 +752,13 @@ theorem condLExp_add_le
   by_cases hσ : SigmaFinite (P.trim hm); swap
   · simp_rw [condLExp_of_not_sigmaFinite hm hσ]; filter_upwards; simp
   apply ae_le_of_ae_le_trim
-  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ := P.
+  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ := P.trim hm) (by fun_prop)
+  intro s hs _
+  simp only [Pi.add_apply]
+  rw [lintegral_add_left (by fun_prop)]
+  repeat rw [setLIntegral_condLExp_trim hm _ _ hs]
+  grw [le_lintegral_add]
+  simp
 
 中文:
 定理 condLExp_add_le
@@ -737,7 +769,13 @@ theorem condLExp_add_le
   by_cases hσ : SigmaFinite (P.trim hm); swap
   · simp_rw [condLExp_of_not_sigmaFinite hm hσ]; filter_upwards; simp
   apply ae_le_of_ae_le_trim
-  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ := P.
+  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ := P.trim hm) (by fun_prop)
+  intro s hs _
+  simp only [Pi.add_apply]
+  rw [lintegral_add_left (by fun_prop)]
+  repeat rw [setLIntegral_condLExp_trim hm _ _ hs]
+  grw [le_lintegral_add]
+  simp
 
 Depends on / 依赖: P.trim, Pi.add_apply, SigmaFinite, add_apply, ae_le_of_ae_le_trim, ae_le_of_forall_setLIntegral_le_of_sigmaFinite, condLExp_of_not_le, condLExp_of_not_sigmaFinite, filter_upwards, fun_prop, le_lintegral_add, lintegral_add_left, repeat, setLIntegral_condLExp_trim, simp_rw
 -/
@@ -770,7 +808,9 @@ theorem condLExp_add_left
   refine (ae_eq_condLExp _ _ _ (by fun_prop) ?_).symm
   intro s hs
   simp only [Pi.add_apply]
-  rw [lintegral_add_left (by 
+  rw [lintegral_add_left (by measurability)]
+  repeat rw [setLIntegral_condLExp hm _ _ hs]
+  rw [lintegral_add_left' (by fun_prop)]
 
 中文:
 定理 condLExp_add_left
@@ -783,7 +823,9 @@ theorem condLExp_add_left
   refine (ae_eq_condLExp _ _ _ (by fun_prop) ?_).symm
   intro s hs
   simp only [Pi.add_apply]
-  rw [lintegral_add_left (by 
+  rw [lintegral_add_left (by measurability)]
+  repeat rw [setLIntegral_condLExp hm _ _ hs]
+  rw [lintegral_add_left' (by fun_prop)]
 
 Depends on / 依赖: P.trim, Pi.add_apply, SigmaFinite, add_apply, ae_eq_condLExp, condLExp_of_not_le, condLExp_of_not_sigmaFinite, fun_prop, lintegral_add_left, measurability, repeat, setLIntegral_condLExp, simp_rw
 -/
@@ -838,7 +880,8 @@ theorem condLExp_smul
   refine (ae_eq_condLExp _ _ _ (by fun_prop) ?_).symm
   intro s hs
   simp only [Pi.smul_apply, smul_eq_mul]
-  rw [lintegral_const_mul]; rw [l
+  rw [lintegral_const_mul]; rw [lintegral_const_mul'']; rw [setLIntegral_condLExp _ _ _ hs]
+  all_goals fun_prop
 
 中文:
 定理 condLExp_smul
@@ -851,7 +894,8 @@ theorem condLExp_smul
   refine (ae_eq_condLExp _ _ _ (by fun_prop) ?_).symm
   intro s hs
   simp only [Pi.smul_apply, smul_eq_mul]
-  rw [lintegral_const_mul]; rw [l
+  rw [lintegral_const_mul]; rw [lintegral_const_mul'']; rw [setLIntegral_condLExp _ _ _ hs]
+  all_goals fun_prop
 
 Depends on / 依赖: P.trim, Pi.smul_apply, SigmaFinite, ae_eq_condLExp, all_goals, condLExp_of_not_le, condLExp_of_not_sigmaFinite, fun_prop, lintegral_const_mul, setLIntegral_condLExp, smul_apply, smul_eq_mul
 -/
@@ -879,7 +923,10 @@ theorem condLExp_smul_le
   by_cases hσ : SigmaFinite (P.trim hm); swap
   · simp_rw [condLExp_of_not_sigmaFinite hm hσ]; filter_upwards; simp
   apply ae_le_of_ae_le_trim
-  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ := P.
+  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ := P.trim hm) (by fun_prop)
+  intro s hs _
+  simp [setLIntegral_condLExp_trim _ _ _ hs, lintegral_const_mul _ (measurable_condLExp _ P X),
+    lintegral_const_mul_le]
 
 中文:
 定理 condLExp_smul_le
@@ -890,7 +937,10 @@ theorem condLExp_smul_le
   by_cases hσ : SigmaFinite (P.trim hm); swap
   · simp_rw [condLExp_of_not_sigmaFinite hm hσ]; filter_upwards; simp
   apply ae_le_of_ae_le_trim
-  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ := P.
+  apply ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ := P.trim hm) (by fun_prop)
+  intro s hs _
+  simp [setLIntegral_condLExp_trim _ _ _ hs, lintegral_const_mul _ (measurable_condLExp _ P X),
+    lintegral_const_mul_le]
 
 Depends on / 依赖: P.trim, SigmaFinite, ae_le_of_ae_le_trim, ae_le_of_forall_setLIntegral_le_of_sigmaFinite, condLExp_of_not_le, condLExp_of_not_sigmaFinite, filter_upwards, fun_prop, lintegral_const_mul, lintegral_const_mul_le, measurable_condLExp, setLIntegral_condLExp_trim, simp_rw
 -/
@@ -920,7 +970,7 @@ theorem condLExp_smul'
   refine (ae_eq_condLExp _ _ _ (by fun_prop) ?_).symm
   intro s hs
   simp only [Pi.smul_apply, smul_eq_mul]
-  rw [lintegral_const_mul' _ _ hc
+  rw [lintegral_const_mul' _ _ hc]; rw [lintegral_const_mul' _ _ hc]; rw [setLIntegral_condLExp _ _ _ hs]
 
 中文:
 定理 condLExp_smul'
@@ -933,7 +983,7 @@ theorem condLExp_smul'
   refine (ae_eq_condLExp _ _ _ (by fun_prop) ?_).symm
   intro s hs
   simp only [Pi.smul_apply, smul_eq_mul]
-  rw [lintegral_const_mul' _ _ hc
+  rw [lintegral_const_mul' _ _ hc]; rw [lintegral_const_mul' _ _ hc]; rw [setLIntegral_condLExp _ _ _ hs]
 
 Depends on / 依赖: P.trim, Pi.smul_apply, SigmaFinite, ae_eq_condLExp, condLExp_of_not_le, condLExp_of_not_sigmaFinite, fun_prop, lintegral_const_mul, setLIntegral_condLExp, smul_apply, smul_eq_mul
 -/
@@ -965,7 +1015,10 @@ theorem condLExp_tsum
   · simp_rw [condLExp_of_not_sigmaFinite hm hσ]; filter_upwards; simp
   refine (ae_eq_condLExp _ _ _ (by fun_prop) ?_).symm
   intro s hs
-  simp only [ENNReal.tsu
+  simp only [ENNReal.tsum_apply]
+  repeat rw [lintegral_tsum (by measurability)]
+  congr with i
+  exact setLIntegral_condLExp hm P (X i) hs
 
 中文:
 定理 condLExp_tsum
@@ -977,7 +1030,10 @@ theorem condLExp_tsum
   · simp_rw [condLExp_of_not_sigmaFinite hm hσ]; filter_upwards; simp
   refine (ae_eq_condLExp _ _ _ (by fun_prop) ?_).symm
   intro s hs
-  simp only [ENNReal.tsu
+  simp only [ENNReal.tsum_apply]
+  repeat rw [lintegral_tsum (by measurability)]
+  congr with i
+  exact setLIntegral_condLExp hm P (X i) hs
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_apply, P.trim, SigmaFinite, ae_eq_condLExp, condLExp_of_not_le, condLExp_of_not_sigmaFinite, filter_upwards, fun_prop, lintegral_tsum, measurability, repeat, setLIntegral_condLExp, simp_rw, tsum_apply
 -/

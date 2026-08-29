@@ -50,7 +50,8 @@ theorem det_le
     _ <= ∑ σ : Perm n, abv (Perm.sign σ • ∏ i, A (σ i) i) := abv.sum_le _ _
     _ = ∑ σ : Perm n, ∏ i, abv (A (σ i) i) :=
       sum_congr rfl fun σ _ => by rw [abv.map_units_int_smul, abv.map_prod]
- 
+    _ <= ∑ _σ : Perm n, ∏ _i : n, x := by gcongr; simp [hx]
+    _ = (Fintype.card n)! • x ^ Fintype.card n := by simp [Fintype.card_perm]
 
 中文:
 定理 det_le
@@ -60,7 +61,8 @@ theorem det_le
     _ <= ∑ σ : Perm n, abv (Perm.sign σ • ∏ i, A (σ i) i) := abv.sum_le _ _
     _ = ∑ σ : Perm n, ∏ i, abv (A (σ i) i) :=
       sum_congr rfl fun σ _ => by rw [abv.map_units_int_smul, abv.map_prod]
- 
+    _ <= ∑ _σ : Perm n, ∏ _i : n, x := by gcongr; simp [hx]
+    _ = (Fintype.card n)! • x ^ Fintype.card n := by simp [Fintype.card_perm]
 
 Depends on / 依赖: A.det, Fintype, Fintype.card, Fintype.card_perm, Perm.sign, abv.map_prod, abv.map_units_int_smul, abv.sum_le, card_perm, congr_arg, det_apply, map_prod, map_units_int_smul, sum_congr, sum_le
 -/

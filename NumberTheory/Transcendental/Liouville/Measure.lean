@@ -43,7 +43,37 @@ theorem setOfPred_liouvilleWith_subset_aux
   rcases exists_nat_one_div_lt (sub_pos.2 hp) with ⟨n, hn⟩
   rw [lt_sub_iff_add_lt'] at hn
   suffices forall y : Real, LiouvilleWith p y -> y in Ico (0 : Real) 1 -> existsᶠ b : Nat in atTop,
-      exists a in Finset.Icc (0 : Int) b, |y - a / b| < 1 / (b : Real) ^ (2 + 1 / 
+      exists a in Finset.Icc (0 : Int) b, |y - a / b| < 1 / (b : Real) ^ (2 + 1 / (n + 1 : Nat) : Real) by
+    simp only [mem_iUnion, mem_preimage]
+    have hx : x + ↑(-⌊x⌋) in Ico (0 : Real) 1 := by
+      simp only [Int.floor_le, Int.lt_floor_add_one, add_neg_lt_iff_le_add', zero_add, and_self_iff,
+        mem_Ico, Int.cast_neg, le_add_neg_iff_add_le]
+    exact ⟨-⌊x⌋, n + 1, n.succ_pos, this _ (hxp.add_int _) hx⟩
+  clear hxp x; intro x hxp hx01
+  refine ((hxp.frequently_lt_rpow_neg hn).and_eventually (eventually_ge_atTop 1)).mono ?_
+  rintro b ⟨⟨a, -, hlt⟩, hb⟩
+  rw [rpow_neg b.cast_nonneg]; rw [← one_div]; rw [← Nat.cast_succ] at hlt
+  refine ⟨a, ?_, hlt⟩
+  replace hb : (1 : Real) <= b := Nat.one_le_cast.2 hb
+  have hb0 : (0 : Real) < b := zero_lt_one.trans_le hb
+  replace hlt : |x - a / b| < 1 / b := by
+    refine hlt.trans_le (one_div_le_one_div_of_le hb0 ?_)
+    calc
+      (b : Real) = (b : Real) ^ (1 : Real) := (rpow_one _).symm
+      _ <= (b : Real) ^ (2 + 1 / (n + 1 : Nat) : Real) :=
+        rpow_le_rpow_of_exponent_le hb (one_le_two.trans ?_)
+    simpa using n.cast_add_one_pos.le
+  rw [sub_div' hb0.ne']; rw [abs_div]; rw [abs_of_pos hb0]; rw [div_lt_div_iff_of_pos_right hb0]; rw [abs_sub_lt_iff]; rw [sub_lt_iff_lt_add]; rw [sub_lt_iff_lt_add]; rw [← sub_lt_iff_lt_add'] at hlt
+  rw [Finset.mem_Icc]; rw [← Int.lt_add_one_iff]; rw [← Int.lt_add_one_iff]; rw [← neg_lt_iff_pos_add]; rw [add_comm]; rw [←
+    @Int.cast_lt Real]; rw [← @Int.cast_lt Real]
+  push_cast
+  refine ⟨lt_of_le_of_lt ?_ hlt.1, hlt.2.trans_le ?_⟩
+  · simp only [mul_nonneg hx01.left b.cast_nonneg, neg_le_sub_iff_le_add, le_add_iff_nonneg_left]
+  · rw [add_le_add_iff_left]
+    exact mul_le_of_le_one_left hb0.le hx01.2.le
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_liouvilleWith_subset_aux := setOfPred_liouvilleWith_subset_aux
 
 中文:
 定理 setOfPred_liouvilleWith_subset_aux
@@ -52,7 +82,37 @@ theorem setOfPred_liouvilleWith_subset_aux
   rcases exists_nat_one_div_lt (sub_pos.2 hp) with ⟨n, hn⟩
   rw [lt_sub_iff_add_lt'] at hn
   suffices forall y : Real, LiouvilleWith p y -> y in Ico (0 : Real) 1 -> existsᶠ b : Nat in atTop,
-      exists a in Finset.Icc (0 : Int) b, |y - a / b| < 1 / (b : Real) ^ (2 + 1 / 
+      exists a in Finset.Icc (0 : Int) b, |y - a / b| < 1 / (b : Real) ^ (2 + 1 / (n + 1 : Nat) : Real) by
+    simp only [mem_iUnion, mem_preimage]
+    have hx : x + ↑(-⌊x⌋) in Ico (0 : Real) 1 := by
+      simp only [Int.floor_le, Int.lt_floor_add_one, add_neg_lt_iff_le_add', zero_add, and_self_iff,
+        mem_Ico, Int.cast_neg, le_add_neg_iff_add_le]
+    exact ⟨-⌊x⌋, n + 1, n.succ_pos, this _ (hxp.add_int _) hx⟩
+  clear hxp x; intro x hxp hx01
+  refine ((hxp.frequently_lt_rpow_neg hn).and_eventually (eventually_ge_atTop 1)).mono ?_
+  rintro b ⟨⟨a, -, hlt⟩, hb⟩
+  rw [rpow_neg b.cast_nonneg]; rw [← one_div]; rw [← Nat.cast_succ] at hlt
+  refine ⟨a, ?_, hlt⟩
+  replace hb : (1 : Real) <= b := Nat.one_le_cast.2 hb
+  have hb0 : (0 : Real) < b := zero_lt_one.trans_le hb
+  replace hlt : |x - a / b| < 1 / b := by
+    refine hlt.trans_le (one_div_le_one_div_of_le hb0 ?_)
+    calc
+      (b : Real) = (b : Real) ^ (1 : Real) := (rpow_one _).symm
+      _ <= (b : Real) ^ (2 + 1 / (n + 1 : Nat) : Real) :=
+        rpow_le_rpow_of_exponent_le hb (one_le_two.trans ?_)
+    simpa using n.cast_add_one_pos.le
+  rw [sub_div' hb0.ne']; rw [abs_div]; rw [abs_of_pos hb0]; rw [div_lt_div_iff_of_pos_right hb0]; rw [abs_sub_lt_iff]; rw [sub_lt_iff_lt_add]; rw [sub_lt_iff_lt_add]; rw [← sub_lt_iff_lt_add'] at hlt
+  rw [Finset.mem_Icc]; rw [← Int.lt_add_one_iff]; rw [← Int.lt_add_one_iff]; rw [← neg_lt_iff_pos_add]; rw [add_comm]; rw [←
+    @Int.cast_lt Real]; rw [← @Int.cast_lt Real]
+  push_cast
+  refine ⟨lt_of_le_of_lt ?_ hlt.1, hlt.2.trans_le ?_⟩
+  · simp only [mul_nonneg hx01.left b.cast_nonneg, neg_le_sub_iff_le_add, le_add_iff_nonneg_left]
+  · rw [add_le_add_iff_left]
+    exact mul_le_of_le_one_left hb0.le hx01.2.le
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_liouvilleWith_subset_aux := setOfPred_liouvilleWith_subset_aux
 
 Depends on / 依赖: Finset, Finset.Icc, Int.floor_le, Int.lt_floor_add_one, LiouvilleWith, add_neg_lt_iff_le_add, and_self_iff, exists_nat_one_div_lt, floor_le, lt_floor_add_one, lt_sub_iff_add_lt, mem_Ico, mem_iUnion, mem_preimage, sub_pos, zero_add
 -/
@@ -110,7 +170,32 @@ theorem volume_iUnion_setOfPred_liouvilleWith
   refine measure_mono_null setOfPred_liouvilleWith_subset_aux ?_
   rw [measure_iUnion_null_iff]; intro m; rw [measure_preimage_add_right]; clear m
   refine (measure_biUnion_null_iff <| to_countable _).2 fun n (hn : 1 <= n) => ?_
-  generalize hr : (2 + 1 
+  generalize hr : (2 + 1 / n : Real) = r
+  replace hr : 2 < r := by simp [← hr, zero_lt_one.trans_le hn]
+  clear hn n
+  refine measure_setOfPred_frequently_eq_zero ?_
+  simp only [ofPred_exists, ← exists_prop, ← Real.dist_eq, ← mem_ball, ofPred_mem_eq]
+  set B : Int -> Nat -> Set Real := fun a b => ball (a / b) (1 / (b : Real) ^ r)
+  have hB : forall a b, volume (B a b) = ↑((2 : Real>=0) / (b : Real>=0) ^ r) := fun a b => by
+    rw [Real.volume_ball]; rw [mul_one_div]; rw [← NNReal.coe_two]; rw [← NNReal.coe_natCast]; rw [← NNReal.coe_rpow]; rw [← NNReal.coe_div]; rw [ENNReal.ofReal_coe_nnreal]
+  have : forall b : Nat, volume (⋃ a in Finset.Icc (0 : Int) b, B a b) <=
+      ↑(2 * ((b : Real>=0) ^ (1 - r) + (b : Real>=0) ^ (-r))) := fun b =>
+    calc
+      volume (⋃ a in Finset.Icc (0 : Int) b, B a b) <= ∑ a in Finset.Icc (0 : Int) b, volume (B a b) :=
+        measure_biUnion_finset_le _ _
+      _ = ↑((b + 1) * (2 / (b : Real>=0) ^ r)) := by
+        simp only [hB, Int.card_Icc, Finset.sum_const, nsmul_eq_mul, sub_zero,
+          Int.toNat_natCast, ← Nat.cast_succ, ENNReal.coe_mul, ENNReal.coe_natCast]
+      _ = _ := by
+        have : 1 - r != 0 := by linarith
+        rw [ENNReal.coe_inj]
+        simp [add_mul, div_eq_mul_inv, NNReal.rpow_neg, NNReal.rpow_sub' this, mul_add,
+          mul_left_comm]
+  refine ne_top_of_le_ne_top (ENNReal.tsum_coe_ne_top_iff_summable.2 ?_) (ENNReal.tsum_le_tsum this)
+  refine (Summable.add ?_ ?_).mul_left _ <;> simp only [NNReal.summable_rpow] <;> linarith
+
+@[deprecated (since := "2026-07-09")]
+alias volume_iUnion_setOf_liouvilleWith := volume_iUnion_setOfPred_liouvilleWith
 
 中文:
 定理 volume_iUnion_setOfPred_liouvilleWith
@@ -119,7 +204,32 @@ theorem volume_iUnion_setOfPred_liouvilleWith
   refine measure_mono_null setOfPred_liouvilleWith_subset_aux ?_
   rw [measure_iUnion_null_iff]; intro m; rw [measure_preimage_add_right]; clear m
   refine (measure_biUnion_null_iff <| to_countable _).2 fun n (hn : 1 <= n) => ?_
-  generalize hr : (2 + 1 
+  generalize hr : (2 + 1 / n : Real) = r
+  replace hr : 2 < r := by simp [← hr, zero_lt_one.trans_le hn]
+  clear hn n
+  refine measure_setOfPred_frequently_eq_zero ?_
+  simp only [ofPred_exists, ← exists_prop, ← Real.dist_eq, ← mem_ball, ofPred_mem_eq]
+  set B : Int -> Nat -> Set Real := fun a b => ball (a / b) (1 / (b : Real) ^ r)
+  have hB : forall a b, volume (B a b) = ↑((2 : Real>=0) / (b : Real>=0) ^ r) := fun a b => by
+    rw [Real.volume_ball]; rw [mul_one_div]; rw [← NNReal.coe_two]; rw [← NNReal.coe_natCast]; rw [← NNReal.coe_rpow]; rw [← NNReal.coe_div]; rw [ENNReal.ofReal_coe_nnreal]
+  have : forall b : Nat, volume (⋃ a in Finset.Icc (0 : Int) b, B a b) <=
+      ↑(2 * ((b : Real>=0) ^ (1 - r) + (b : Real>=0) ^ (-r))) := fun b =>
+    calc
+      volume (⋃ a in Finset.Icc (0 : Int) b, B a b) <= ∑ a in Finset.Icc (0 : Int) b, volume (B a b) :=
+        measure_biUnion_finset_le _ _
+      _ = ↑((b + 1) * (2 / (b : Real>=0) ^ r)) := by
+        simp only [hB, Int.card_Icc, Finset.sum_const, nsmul_eq_mul, sub_zero,
+          Int.toNat_natCast, ← Nat.cast_succ, ENNReal.coe_mul, ENNReal.coe_natCast]
+      _ = _ := by
+        have : 1 - r != 0 := by linarith
+        rw [ENNReal.coe_inj]
+        simp [add_mul, div_eq_mul_inv, NNReal.rpow_neg, NNReal.rpow_sub' this, mul_add,
+          mul_left_comm]
+  refine ne_top_of_le_ne_top (ENNReal.tsum_coe_ne_top_iff_summable.2 ?_) (ENNReal.tsum_le_tsum this)
+  refine (Summable.add ?_ ?_).mul_left _ <;> simp only [NNReal.summable_rpow] <;> linarith
+
+@[deprecated (since := "2026-07-09")]
+alias volume_iUnion_setOf_liouvilleWith := volume_iUnion_setOfPred_liouvilleWith
 
 Depends on / 依赖: Real.dist_eq, dist_eq, exists_prop, generalize, measure_biUnion_null_iff, measure_iUnion_null_iff, measure_mono_null, measure_preimage_add_right, measure_setOfPred_frequently_eq_zero, mem_ball, ofPred_exists, replace, setOfPred_liouvilleWith_subset_aux, to_countable, trans_le, zero_lt_one, zero_lt_one.trans_le
 -/

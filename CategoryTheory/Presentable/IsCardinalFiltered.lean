@@ -99,7 +99,7 @@ definition cocone
   have := locallySmall_of_small_arrow.{w} A
   let e := (Shrink.equivalence.{w} A).trans (ShrinkHoms.equivalence.{w} (Shrink.{w} A))
   exact (Cocone.equivalenceOfReindexing e.symm (Iso.refl _)).inverse.obj
-    (nonempty_cocone (κ := κ) (e.inv
+    (nonempty_cocone (κ := κ) (e.inverse ⋙ F) (by simpa)).some
 
 中文:
 定义 cocone
@@ -110,7 +110,7 @@ definition cocone
   have := locallySmall_of_small_arrow.{w} A
   let e := (Shrink.equivalence.{w} A).trans (ShrinkHoms.equivalence.{w} (Shrink.{w} A))
   exact (Cocone.equivalenceOfReindexing e.symm (Iso.refl _)).inverse.obj
-    (nonempty_cocone (κ := κ) (e.inv
+    (nonempty_cocone (κ := κ) (e.inverse ⋙ F) (by simpa)).some
 
 Depends on / 依赖: Cocone, Cocone.equivalenceOfReindexing, Iso.refl, Shrink, Shrink.equivalence, ShrinkHoms, ShrinkHoms.equivalence, e.inverse, e.symm, equivalence, equivalenceOfReindexing, hA.small, inverse, inverse.obj, locallySmall_of_small_arrow, nonempty_cocone, small_of_small_arrow
 -/
@@ -513,7 +513,15 @@ instance isCardinalFiltered_under
       IsFiltered.rightToMax j₀ c.pt
     have hκ' : HasCardinalLT A κ := hasCardinalLT_of_hasCardinalLT_arrow hA
     exact
- 
+      { pt := Under.mk (toCoeq x hκ')
+        ι :=
+          { app a := Under.homMk (c.ι.app a ≫ IsFiltered.rightToMax j₀ c.pt ≫ coeqHom x hκ')
+              (by simpa [x] using coeq_condition x hκ' a)
+            naturality a b f := by
+              ext
+              have := c.w f
+              dsimp at this ⊢
+              simp only [reassoc_of% this, Category.comp_id] } }⟩
 
 中文:
 实例 isCardinalFiltered_under
@@ -524,7 +532,15 @@ instance isCardinalFiltered_under
       IsFiltered.rightToMax j₀ c.pt
     have hκ' : HasCardinalLT A κ := hasCardinalLT_of_hasCardinalLT_arrow hA
     exact
- 
+      { pt := Under.mk (toCoeq x hκ')
+        ι :=
+          { app a := Under.homMk (c.ι.app a ≫ IsFiltered.rightToMax j₀ c.pt ≫ coeqHom x hκ')
+              (by simpa [x] using coeq_condition x hκ' a)
+            naturality a b f := by
+              ext
+              have := c.w f
+              dsimp at this ⊢
+              simp only [reassoc_of% this, Category.comp_id] } }⟩
 
 Depends on / 依赖: F.obj, HasCardinalLT, IsFiltered, IsFiltered.max, IsFiltered.rightToMax, Under.forget, Under.homMk, Under.mk, c.pt, cocone, coeqHom, coeq_condition, forget, hasCardinalLT_of_hasCardinalLT_arrow, isFiltered_of_isCardinalFiltered, naturality, rightToMax, toCoeq
 -/
@@ -695,7 +711,10 @@ lemma isCardinalFiltered_iff_aux₂
     obtain ⟨l, a, b, hl⟩ := h₂ (Sum.elim (fun (_ : PUnit.{w + 1}) => f₁ i)
       (fun (_ : PUnit.{w + 1}) => f₂ i))
         (hasCardinalLT_of_finite _ _ (Cardinal.IsRegular.aleph0_le Fact.out))
-    exact ⟨l, a, (hl (Sum.inl .u
+    exact ⟨l, a, (hl (Sum.inl .unit)).trans (hl (Sum.inr .unit)).symm⟩
+  choose l p hp using this
+  obtain ⟨l, a, b, h⟩ := isCardinalFiltered_iff_aux₁ h₁ h₂ p hι
+  exact ⟨l, b, fun i => by grind⟩
 
 中文:
 引理 isCardinalFiltered_iff_aux₂
@@ -705,7 +724,10 @@ lemma isCardinalFiltered_iff_aux₂
     obtain ⟨l, a, b, hl⟩ := h₂ (Sum.elim (fun (_ : PUnit.{w + 1}) => f₁ i)
       (fun (_ : PUnit.{w + 1}) => f₂ i))
         (hasCardinalLT_of_finite _ _ (Cardinal.IsRegular.aleph0_le Fact.out))
-    exact ⟨l, a, (hl (Sum.inl .u
+    exact ⟨l, a, (hl (Sum.inl .unit)).trans (hl (Sum.inr .unit)).symm⟩
+  choose l p hp using this
+  obtain ⟨l, a, b, h⟩ := isCardinalFiltered_iff_aux₁ h₁ h₂ p hι
+  exact ⟨l, b, fun i => by grind⟩
 
 Depends on / 依赖: Cardinal, Cardinal.IsRegular.aleph0_le, Fact.out, IsRegular, Sum.elim, Sum.inl, Sum.inr, aleph0_le, hasCardinalLT_of_finite
 -/
@@ -734,7 +756,13 @@ lemma isCardinalFiltered_iff
     fun ⟨h₁, h₂⟩ => ⟨fun {A _} F hA => ?_⟩⟩
   obtain ⟨j, hj⟩ := h₁ F.obj (hasCardinalLT_of_hasCardinalLT_arrow hA)
   let a (i : A) : F.obj i ⟶ j := (hj i).some
-  obtain ⟨l, b, hb
+  obtain ⟨l, b, hb⟩ := isCardinalFiltered_iff_aux₂ h₁ h₂
+    (fun (f : Arrow A) => F.map f.hom ≫ a f.right)
+    (fun (f : Arrow A) => a f.left) hA
+  exact ⟨{
+    pt := l
+    ι.app i := a i ≫ b
+    ι.naturality _ _ f := by simpa using hb (Arrow.mk f) }⟩
 
 中文:
 引理 isCardinalFiltered_iff
@@ -744,7 +772,13 @@ lemma isCardinalFiltered_iff
     fun ⟨h₁, h₂⟩ => ⟨fun {A _} F hA => ?_⟩⟩
   obtain ⟨j, hj⟩ := h₁ F.obj (hasCardinalLT_of_hasCardinalLT_arrow hA)
   let a (i : A) : F.obj i ⟶ j := (hj i).some
-  obtain ⟨l, b, hb
+  obtain ⟨l, b, hb⟩ := isCardinalFiltered_iff_aux₂ h₁ h₂
+    (fun (f : Arrow A) => F.map f.hom ≫ a f.right)
+    (fun (f : Arrow A) => a f.left) hA
+  exact ⟨{
+    pt := l
+    ι.app i := a i ≫ b
+    ι.naturality _ _ f := by simpa using hb (Arrow.mk f) }⟩
 
 Depends on / 依赖: Arrow.mk, F.map, F.obj, coeq_condition, f.hom, f.left, f.right, hasCardinalLT_of_hasCardinalLT_arrow, naturality
 -/
@@ -812,7 +846,21 @@ lemma IsCardinalFiltered.of_final
   refine ⟨fun ι j hι => ?_, fun ι j k f hι => ?_⟩
   · choose a ha using fun i => h₁ (j i)
     exact ⟨F.obj (IsCardinalFiltered.max a hι),
-      fu
+      fun i => ⟨(ha i).some ≫ F.map (toMax a hι i)⟩⟩
+  · by_cases h : Nonempty ι
+    · obtain ⟨l, ⟨a⟩⟩ := h₁ k
+      choose m b hb using fun (i : ι × ι) => h₂ (f i.1 ≫ a) (f i.2 ≫ a)
+      simp only [Category.assoc, Prod.forall] at hb
+      obtain ⟨n, c, d, hn⟩ := wideSpan b
+        (hasCardinalLT_prod (Cardinal.IsRegular.aleph0_le Fact.out) hι hι)
+      let i₀ : ι := Classical.arbitrary _
+      exact ⟨F.obj n, a ≫ F.map d, f i₀ ≫ a ≫ F.map d,
+        fun i => by rw [← hn (i₀, i), Functor.map_comp, reassoc_of% (hb i₀ i)]⟩
+    · simp only [not_nonempty_iff] at h
+      obtain ⟨j', ⟨a⟩⟩ := h₁ j
+      obtain ⟨k', ⟨b⟩⟩ := h₁ k
+      exact ⟨F.obj (IsFiltered.max j' k'), b ≫ F.map (IsFiltered.rightToMax _ _),
+        a ≫ F.map (IsFiltered.leftToMax _ _), by simp⟩
 
 中文:
 引理 是CardinalFiltered.of_final
@@ -823,7 +871,21 @@ lemma IsCardinalFiltered.of_final
   refine ⟨fun ι j hι => ?_, fun ι j k f hι => ?_⟩
   · choose a ha using fun i => h₁ (j i)
     exact ⟨F.obj (IsCardinalFiltered.max a hι),
-      fu
+      fun i => ⟨(ha i).some ≫ F.map (toMax a hι i)⟩⟩
+  · by_cases h : Nonempty ι
+    · obtain ⟨l, ⟨a⟩⟩ := h₁ k
+      choose m b hb using fun (i : ι × ι) => h₂ (f i.1 ≫ a) (f i.2 ≫ a)
+      simp only [Category.assoc, Prod.forall] at hb
+      obtain ⟨n, c, d, hn⟩ := wideSpan b
+        (hasCardinalLT_prod (Cardinal.IsRegular.aleph0_le Fact.out) hι hι)
+      let i₀ : ι := Classical.arbitrary _
+      exact ⟨F.obj n, a ≫ F.map d, f i₀ ≫ a ≫ F.map d,
+        fun i => by rw [← hn (i₀, i), Functor.map_comp, reassoc_of% (hb i₀ i)]⟩
+    · simp only [not_nonempty_iff] at h
+      obtain ⟨j', ⟨a⟩⟩ := h₁ j
+      obtain ⟨k', ⟨b⟩⟩ := h₁ k
+      exact ⟨F.obj (IsFiltered.max j' k'), b ≫ F.map (IsFiltered.rightToMax _ _),
+        a ≫ F.map (IsFiltered.leftToMax _ _), by simp⟩
 
 Depends on / 依赖: Category, Category.assoc, F.map, F.obj, Functor, Functor.final_iff_of_isFiltered, IsCardinalFiltered, IsCardinalFiltered.max, Nonempty, Prod.forall, final_iff_of_isFiltered, isCardinalFiltered_iff, isFiltered_of_isCardinalFiltered
 -/

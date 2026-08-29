@@ -174,7 +174,10 @@ lemma CovBySMul.trans
       _ <= K * L := by gcongr
   · calc
       A subseteq (F₁ : Set M) • B := hFAB
-      _ subs
+      _ subseteq (F₁ : Set M) • (F₂ : Set N) • C := by gcongr
+      _ = (↑(F₁ • F₂) : Set N) • C := by simp
+
+@[to_additive]
 
 中文:
 引理 CovBySMul.trans
@@ -190,7 +193,10 @@ lemma CovBySMul.trans
       _ <= K * L := by gcongr
   · calc
       A subseteq (F₁ : Set M) • B := hFAB
-      _ subs
+      _ subseteq (F₁ : Set M) • (F₂ : Set N) • C := by gcongr
+      _ = (↑(F₁ • F₂) : Set N) • C := by simp
+
+@[to_additive]
 -/
 @[to_additive] lemma CovBySMul.trans [SMul M N] [IsScalarTower M N X]
     (hAB : CovBySMul M K A B) (hBC : CovBySMul N L B C) : CovBySMul N (K * L) A C := by

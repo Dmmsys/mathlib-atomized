@@ -421,7 +421,8 @@ have ⟨C⟩ := ‹Nonempty G.Coloring α›
 .mp inferInstance have ⟨c, hc⟩ := nontrivial_iff_exists_ne (C v)
   refine ⟨(Iso.completeGraph <| Equiv.swap (C v) c).toHom.comp C, C, fun h => hc ?_⟩
   have := congrFun (congrArg RelHom.toFun h) v
-  dsimp [Iso.completeGrap
+  dsimp [Iso.completeGraph] at this
+  grind
 
 中文:
 实例 [非空
@@ -433,7 +434,8 @@ have ⟨C⟩ := ‹Nonempty G.Coloring α›
 .mp inferInstance have ⟨c, hc⟩ := nontrivial_iff_exists_ne (C v)
   refine ⟨(Iso.completeGraph <| Equiv.swap (C v) c).toHom.comp C, C, fun h => hc ?_⟩
   have := congrFun (congrArg RelHom.toFun h) v
-  dsimp [Iso.completeGrap
+  dsimp [Iso.completeGraph] at this
+  grind
 
 Depends on / 依赖: Coloring, Equiv.swap, G.Coloring, Iso.completeGraph, Nonempty, RelHom, RelHom.toFun, classical, completeGraph, nontrivial_iff_exists_ne, toHom.comp
 -/
@@ -1099,7 +1101,9 @@ theorem colorable_iff_exists_bdd_nat_coloring
   · rintro ⟨C, Cf⟩
     refine ⟨Coloring.mk ?_ ?_⟩
     · exact fun v => ⟨C v, Cf v⟩
-    ·
+    · rintro v w hvw
+      simp only [Fin.mk_eq_mk, Ne]
+      exact C.valid hvw
 
 中文:
 定理 colorable_iff_存在_bdd_nat_coloring
@@ -1115,7 +1119,9 @@ theorem colorable_iff_exists_bdd_nat_coloring
   · rintro ⟨C, Cf⟩
     refine ⟨Coloring.mk ?_ ?_⟩
     · exact fun v => ⟨C v, Cf v⟩
-    ·
+    · rintro v w hvw
+      simp only [Fin.mk_eq_mk, Ne]
+      exact C.valid hvw
 
 Depends on / 依赖: C.valid, Coloring, Coloring.mk, Embedding, Embedding.completeGraph, Fin.is_lt, Fin.mk_eq_mk, Fin.valEmbedding, G.Coloring, completeGraph, f.toHom.comp, hc.toColoring, is_lt, mk_eq_mk, toColoring, valEmbedding
 -/
@@ -1268,7 +1274,9 @@ theorem chromaticNumber_le_iff_colorable
   rw [chromaticNumber_ne_top_iff_exists] at this
   obtain ⟨m, hm⟩ := this
   rw [hm.chromaticNumber_eq_sInf]; rw [Nat.cast_le] at h
-  have := Nat.sInf_mem (⟨m, hm⟩ : {n' | G
+  have := Nat.sInf_mem (⟨m, hm⟩ : {n' | G.Colorable n'}.Nonempty)
+  rw [Set.mem_ofPred_eq] at this
+  exact this.mono h
 
 中文:
 定理 chromaticNumber_le_iff_colorable
@@ -1280,7 +1288,9 @@ theorem chromaticNumber_le_iff_colorable
   rw [chromaticNumber_ne_top_iff_exists] at this
   obtain ⟨m, hm⟩ := this
   rw [hm.chromaticNumber_eq_sInf]; rw [Nat.cast_le] at h
-  have := Nat.sInf_mem (⟨m, hm⟩ : {n' | G
+  have := Nat.sInf_mem (⟨m, hm⟩ : {n' | G.Colorable n'}.Nonempty)
+  rw [Set.mem_ofPred_eq] at this
+  exact this.mono h
 
 Depends on / 依赖: Colorable, Colorable.chromaticNumber_le, ENat.natCast_lt_top, G.Colorable, G.chromaticNumber, Nat.cast_le, Nat.sInf_mem, Nonempty, Set.mem_ofPred_eq, cast_le, chromaticNumber, chromaticNumber_eq_sInf, chromaticNumber_le, chromaticNumber_ne_top_iff_exists, hm.chromaticNumber_eq_sInf, mem_ofPred_eq, natCast_lt_top, sInf_mem, this.mono
 -/
@@ -1414,7 +1424,9 @@ theorem Colorable.chromaticNumber_pos
   simp only [not_le] at h'
   obtain ⟨i, hi⟩ := hm.some (Classical.arbitrary V)
   have h₁ : i < 0 := lt_of_lt_of_le hi (Nat.le_of_lt_succ h')
-  exact Nat.not_l
+  exact Nat.not_lt_zero _ h₁
+
+@[deprecated (since := "2026-05-20")] alias chromaticNumber_pos := Colorable.chromaticNumber_pos
 
 中文:
 定理 Colorable.chromaticNumber_pos
@@ -1427,7 +1439,9 @@ theorem Colorable.chromaticNumber_pos
   simp only [not_le] at h'
   obtain ⟨i, hi⟩ := hm.some (Classical.arbitrary V)
   have h₁ : i < 0 := lt_of_lt_of_le hi (Nat.le_of_lt_succ h')
-  exact Nat.not_l
+  exact Nat.not_lt_zero _ h₁
+
+@[deprecated (since := "2026-05-20")] alias chromaticNumber_pos := Colorable.chromaticNumber_pos
 
 Depends on / 依赖: Classical, Classical.arbitrary, Nat.cast_pos, Nat.le_of_lt_succ, Nat.not_lt_zero, arbitrary, cast_pos, chromaticNumber_eq_sInf, colorable_set_nonempty_of_colorable, hc.chromaticNumber_eq_sInf, hm.some, le_csInf, le_of_lt_succ, lt_of_lt_of_le, not_le, not_lt_zero
 -/
@@ -1578,7 +1592,14 @@ lemma card_le_chromaticNumber_iff_forall_surjective
     by_contra! hi
     let D : G.Coloring {a // a != i} := ⟨fun v => ⟨C v, hi v⟩, (C.valid · <| congr_arg Subtype.val ·)⟩
     classical
-    exact Nat.notMem_of_lt_sInf ((Nat.sub_one_lt_
+    exact Nat.notMem_of_lt_sInf ((Nat.sub_one_lt_of_lt <| card_pos_iff.2 ⟨i⟩).trans_le h)
+      ⟨G.recolorOfEquiv (equivOfCardEq <| by simp) D⟩
+  · simp only [chromaticNumber, Set.mem_ofPred_eq, le_iInf_iff, Nat.cast_le]
+    rintro i ⟨C⟩
+    contrapose! h
+    refine ⟨G.recolorOfCardLE (by simpa using h.le) C, fun hC => ?_⟩
+    dsimp at hC
+    simpa [h.not_ge] using Fintype.card_le_of_surjective _ hC.of_comp
 
 中文:
 引理 card_le_chromaticNumber_iff_对任意_surjective
@@ -1590,7 +1611,14 @@ lemma card_le_chromaticNumber_iff_forall_surjective
     by_contra! hi
     let D : G.Coloring {a // a != i} := ⟨fun v => ⟨C v, hi v⟩, (C.valid · <| congr_arg Subtype.val ·)⟩
     classical
-    exact Nat.notMem_of_lt_sInf ((Nat.sub_one_lt_
+    exact Nat.notMem_of_lt_sInf ((Nat.sub_one_lt_of_lt <| card_pos_iff.2 ⟨i⟩).trans_le h)
+      ⟨G.recolorOfEquiv (equivOfCardEq <| by simp) D⟩
+  · simp only [chromaticNumber, Set.mem_ofPred_eq, le_iInf_iff, Nat.cast_le]
+    rintro i ⟨C⟩
+    contrapose! h
+    refine ⟨G.recolorOfCardLE (by simpa using h.le) C, fun hC => ?_⟩
+    dsimp at hC
+    simpa [h.not_ge] using Fintype.card_le_of_surjective _ hC.of_comp
 
 Depends on / 依赖: C.colorable.chromaticNumber_eq_sInf, C.valid, Coloring, G.Coloring, G.recolorOfCardLE, G.recolorOfEquiv, Nat.cast_le, Nat.notMem_of_lt_sInf, Nat.sub_one_lt_of_lt, Set.mem_ofPred_eq, Subtype, Subtype.val, card_pos_iff, cast_le, chromaticNumber, chromaticNumber_eq_sInf, classical, colorable, congr_arg, contrapose
 -/
@@ -1813,7 +1841,11 @@ theorem eq_top_of_chromaticNumber_eq_card
     obtain ⟨a, b, hne, _⟩ := ne_top_iff_exists_not_adj.mp hh
     apply chromaticNumber_le_iff_colorable.mpr
     suffices G.Coloring (Finset.univ.erase b) by simpa using Coloring.colorable this
-    apply Coloring.mk
+    apply Coloring.mk (fun x => if h' : x != b then ⟨x, by simp [h']⟩ else ⟨a, by simp [hne]⟩)
+    grind [Adj.ne', adj_symm]
+  rw [h]; rw [← ENat.natCast_one]; rw [← ENat.natCast_sub]; rw [ENat.natCast_le_natCast] at this
+have := Fintype.one_lt_card_iff_nontrivial.mpr SimpleGraph.nontrivial_iff.mp ⟨_, _, hh⟩
+  grind
 
 中文:
 定理 eq_top_of_chromaticNumber_eq_card
@@ -1825,7 +1857,11 @@ theorem eq_top_of_chromaticNumber_eq_card
     obtain ⟨a, b, hne, _⟩ := ne_top_iff_exists_not_adj.mp hh
     apply chromaticNumber_le_iff_colorable.mpr
     suffices G.Coloring (Finset.univ.erase b) by simpa using Coloring.colorable this
-    apply Coloring.mk
+    apply Coloring.mk (fun x => if h' : x != b then ⟨x, by simp [h']⟩ else ⟨a, by simp [hne]⟩)
+    grind [Adj.ne', adj_symm]
+  rw [h]; rw [← ENat.natCast_one]; rw [← ENat.natCast_sub]; rw [ENat.natCast_le_natCast] at this
+have := Fintype.one_lt_card_iff_nontrivial.mpr SimpleGraph.nontrivial_iff.mp ⟨_, _, hh⟩
+  grind
 
 Depends on / 依赖: Adj.ne, Coloring, Coloring.colorable, Coloring.mk, ENat.natCast_le_natCast, ENat.natCast_one, ENat.natCast_sub, Finset, Finset.univ.erase, Fintype, Fintype.card, Fintype.one_lt_card, G.Coloring, G.chromaticNumber, adj_symm, chromaticNumber, chromaticNumber_le_iff_colorable, chromaticNumber_le_iff_colorable.mpr, classical, colorable
 -/
@@ -2069,7 +2105,12 @@ theorem CompleteBipartiteGraph.chromaticNumber
   intro C b
   have v := Classical.arbitrary V
   have w := Classical.arbitrary W
-  have h : (completeBipartiteGraph V W).Adj (Sum.inl v) (Sum.inr w) := by sim
+  have h : (completeBipartiteGraph V W).Adj (Sum.inl v) (Sum.inr w) := by simp
+  by_cases he : C (Sum.inl v) = b
+  · exact ⟨_, he⟩
+  by_cases he' : C (Sum.inr w) = b
+  · exact ⟨_, he'⟩
+  · simpa using two_lt_card_iff.2 ⟨_, _, _, C.valid h, he, he'⟩
 
 中文:
 定理 CompleteBipartiteGraph.chromaticNumber
@@ -2080,7 +2121,12 @@ theorem CompleteBipartiteGraph.chromaticNumber
   intro C b
   have v := Classical.arbitrary V
   have w := Classical.arbitrary W
-  have h : (completeBipartiteGraph V W).Adj (Sum.inl v) (Sum.inr w) := by sim
+  have h : (completeBipartiteGraph V W).Adj (Sum.inl v) (Sum.inr w) := by simp
+  by_cases he : C (Sum.inl v) = b
+  · exact ⟨_, he⟩
+  by_cases he' : C (Sum.inr w) = b
+  · exact ⟨_, he'⟩
+  · simpa using two_lt_card_iff.2 ⟨_, _, _, C.valid h, he, he'⟩
 
 Depends on / 依赖: C.valid, Classical, Classical.arbitrary, CompleteBipartiteGraph, CompleteBipartiteGraph.bicoloring, Nat.cast_two, Sum.inl, Sum.inr, arbitrary, bicoloring, cast_two, chromaticNumber_eq_iff_forall_surjective, colorable, completeBipartiteGraph, two_lt_card_iff
 -/

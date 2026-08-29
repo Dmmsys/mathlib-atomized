@@ -58,7 +58,10 @@ definition eraseUnivs
   | .app fn arg => e.updateApp! (eraseUnivs fn) (eraseUnivs arg)
   | .lam _ t b _ => e.updateLambdaE! (eraseUnivs t) (eraseUnivs b)
   | .forallE _ t b _ => e.updateForallE! (eraseUnivs t) (eraseUnivs b)
-  | .letE _ t v b
+  | .letE _ t v b _ => e.updateLetE! (eraseUnivs t) (eraseUnivs v) (eraseUnivs b)
+  | .mdata _ expr => e.updateMData! (eraseUnivs expr)
+  | .proj _ _ s => e.updateProj! (eraseUnivs s)
+  | e => e
 
 中文:
 定义 eraseUnivs
@@ -69,7 +72,10 @@ definition eraseUnivs
   | .app fn arg => e.updateApp! (eraseUnivs fn) (eraseUnivs arg)
   | .lam _ t b _ => e.updateLambdaE! (eraseUnivs t) (eraseUnivs b)
   | .forallE _ t b _ => e.updateForallE! (eraseUnivs t) (eraseUnivs b)
-  | .letE _ t v b
+  | .letE _ t v b _ => e.updateLetE! (eraseUnivs t) (eraseUnivs v) (eraseUnivs b)
+  | .mdata _ expr => e.updateMData! (eraseUnivs expr)
+  | .proj _ _ s => e.updateProj! (eraseUnivs s)
+  | e => e
 -/
 partial def eraseUnivs (e : Expr) : Expr :=
   match e with
@@ -96,7 +102,23 @@ definition sortBinders
   let mut remainingTypes ← fvars.mapM (return some <| eraseUnivs <| ← inferType ·)
   let mut e := eraseUnivs e
   let mut sortedTypes := #[]
-  for _ i
+  for _ in *...n do
+    let mut minType? : Option (Fin n × Expr) := none
+    for h : i in 0...n do
+      if let some type := remainingTypes[i] then
+        if !type.hasFVar then
+          if let some (minIdx, minType) := minType? then
+            if type.quickLt minType then
+              continue
+          minType? := some (⟨i, by get_elem_tactic⟩, type)
+    let some (minIdx, minType) := minType? |
+      panic! s!"All types have fvars: {remainingTypes.toArray}"
+    sortedTypes := sortedTypes.push minType
+    remainingTypes := remainingTypes.set minIdx none
+    let abstractFVar (e : Expr) := (e.liftLooseBVars 0 1).abstract #[fvars[minIdx]]
+    remainingTypes := remainingTypes.map (·.map abstractFVar)
+    e := abstractFVar e
+  return sortedTypes.foldr (init := e) fun type e => .forallE `_ type e .default
 
 中文:
 定义 sortBinders
@@ -108,7 +130,23 @@ definition sortBinders
   let mut remainingTypes ← fvars.mapM (return some <| eraseUnivs <| ← inferType ·)
   let mut e := eraseUnivs e
   let mut sortedTypes := #[]
-  for _ i
+  for _ in *...n do
+    let mut minType? : Option (Fin n × Expr) := none
+    for h : i in 0...n do
+      if let some type := remainingTypes[i] then
+        if !type.hasFVar then
+          if let some (minIdx, minType) := minType? then
+            if type.quickLt minType then
+              continue
+          minType? := some (⟨i, by get_elem_tactic⟩, type)
+    let some (minIdx, minType) := minType? |
+      panic! s!"All types have fvars: {remainingTypes.toArray}"
+    sortedTypes := sortedTypes.push minType
+    remainingTypes := remainingTypes.set minIdx none
+    let abstractFVar (e : Expr) := (e.liftLooseBVars 0 1).abstract #[fvars[minIdx]]
+    remainingTypes := remainingTypes.map (·.map abstractFVar)
+    e := abstractFVar e
+  return sortedTypes.foldr (init := e) fun type e => .forallE `_ type e .default
 -/
 def sortBinders (e : Expr) : MetaM Expr := do
   (if e.isLambda then lambdaTelescope else forallTelescope) e fun fvars e => do
@@ -183,7 +221,31 @@ definition duplicateDeclarations
     if name.isInternalDetail
       || name.isMetaprogramming
       || !allowCompletion env name
-      || Linter.isDepreca
+      || Linter.isDeprecated env name
+      || isAlias cinfo then continue
+    if ← isProp cinfo.type then
+      unless cfg matches .theorems do continue
+    else
+      match cfg with
+      | .theorems => continue
+      | .instances => if (← isClass? cinfo.type).isNone then continue
+      | .defs =>
+        if (← isClass? cinfo.type).isNone then
+          if let some value := cinfo.value? then
+            let normValue ← sortBinders value
+            let normType ← sortBinders cinfo.type
+            let key := .app normValue normType
+            if let some name' := visited[key]? then
+              dups := dups.alter key (·.getD #[name'] |>.push name)
+            else
+              visited := visited.insert key name
+        continue
+    let normType ← sortBinders cinfo.type
+    if let some name' := visited[normType]? then
+      dups := dups.alter normType (·.getD #[name'] |>.push name)
+    else
+      visited := visited.insert normType name
+  return dups.valuesArray
 
 中文:
 定义 duplicateDeclarations
@@ -196,7 +258,31 @@ definition duplicateDeclarations
     if name.isInternalDetail
       || name.isMetaprogramming
       || !allowCompletion env name
-      || Linter.isDepreca
+      || Linter.isDeprecated env name
+      || isAlias cinfo then continue
+    if ← isProp cinfo.type then
+      unless cfg matches .theorems do continue
+    else
+      match cfg with
+      | .theorems => continue
+      | .instances => if (← isClass? cinfo.type).isNone then continue
+      | .defs =>
+        if (← isClass? cinfo.type).isNone then
+          if let some value := cinfo.value? then
+            let normValue ← sortBinders value
+            let normType ← sortBinders cinfo.type
+            let key := .app normValue normType
+            if let some name' := visited[key]? then
+              dups := dups.alter key (·.getD #[name'] |>.push name)
+            else
+              visited := visited.insert key name
+        continue
+    let normType ← sortBinders cinfo.type
+    if let some name' := visited[normType]? then
+      dups := dups.alter normType (·.getD #[name'] |>.push name)
+    else
+      visited := visited.insert normType name
+  return dups.valuesArray
 
 Depends on / 依赖: MetaM.run
 -/
@@ -367,7 +453,7 @@ definition sortedDuplicateDeclarations
   for names in dups do
 .max?.get! let moduleKey := names.map (mkModuleKey! · env)
     result := result.alter moduleKey (·.getD #[] |>.push (names.qsort Name.lt))
-  return 
+  return result.toArray.map fun (a, dups) => (a.2, dups)
 
 中文:
 定义 sortedDuplicateDeclarations
@@ -379,7 +465,7 @@ definition sortedDuplicateDeclarations
   for names in dups do
 .max?.get! let moduleKey := names.map (mkModuleKey! · env)
     result := result.alter moduleKey (·.getD #[] |>.push (names.qsort Name.lt))
-  return 
+  return result.toArray.map fun (a, dups) => (a.2, dups)
 -/
 def sortedDuplicateDeclarations (cfg : Target) :
     CoreM (Array (String × Array (Array Name))) := do

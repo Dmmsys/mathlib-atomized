@@ -181,7 +181,7 @@ theorem dist_triangle
       apply_rules [Completion.continuous_dist, Continuous.fst, Continuous.snd, continuous_id]
   · intro a b c
     rw [Completion.dist_eq]; rw [Completion.dist_eq]; rw [Completion.dist_eq]
-    exact dist_triang
+    exact dist_triangle a b c
 
 中文:
 定理 dist_triangle
@@ -193,7 +193,7 @@ theorem dist_triangle
       apply_rules [Completion.continuous_dist, Continuous.fst, Continuous.snd, continuous_id]
   · intro a b c
     rw [Completion.dist_eq]; rw [Completion.dist_eq]; rw [Completion.dist_eq]
-    exact dist_triang
+    exact dist_triangle a b c
 -/
 protected theorem dist_triangle (x y z : Completion α) : dist x z <= dist x y + dist y z := by
   refine induction_on₃ x y z ?_ ?_
@@ -213,7 +213,50 @@ theorem mem_uniformity_dist
   constructor
   · /- Start from an entourage `s`. It contains a closed entourage `t`. Its pullback in `α` is an
       entourage, so it contains an `ε`-neighborhood of the diagonal by definition of the entourages
-      in metric spaces. Then `t` contains an `ε`-neighborhood of the diagonal in `Com
+      in metric spaces. Then `t` contains an `ε`-neighborhood of the diagonal in `Completion α`, as
+      closed properties pass to the completion. -/
+    intro hs
+    rcases mem_uniformity_isClosed hs with ⟨t, ht, ⟨tclosed, ts⟩⟩
+    have A : { x : α × α | (↑x.1, ↑x.2) in t } in uniformity α :=
+      uniformContinuous_def.1 (uniformContinuous_coe α) t ht
+    rcases mem_uniformity_dist.1 A with ⟨ε, εpos, hε⟩
+    refine ⟨ε, εpos, @fun x y hxy => ?_⟩
+    have : ε <= dist x y ∨ (x, y) in t := by
+      refine induction_on₂ x y ?_ ?_
+      · have : { x : Completion α × Completion α | ε <= dist x.fst x.snd ∨ (x.fst, x.snd) in t } =
+               { p : Completion α × Completion α | ε <= dist p.1 p.2 } union t := by ext; simp
+        rw [this]
+        apply IsClosed.union _ tclosed
+        exact isClosed_le continuous_const Completion.uniformContinuous_dist.continuous
+      · intro x y
+        rw [Completion.dist_eq]
+        by_cases! h : ε <= dist x y
+        · exact Or.inl h
+        · have Z := hε h
+          simp only [Set.mem_ofPred_eq] at Z
+          exact Or.inr Z
+    simp only [not_le.mpr hxy, false_or] at this
+    exact ts this
+  · /- Start from a set `s` containing an ε-neighborhood of the diagonal in `Completion α`. To show
+        that it is an entourage, we use the fact that `dist` is uniformly continuous on
+        `Completion α × Completion α` (this is a general property of the extension of uniformly
+        continuous functions). Therefore, the preimage of the ε-neighborhood of the diagonal in ℝ
+        is an entourage in `Completion α × Completion α`. Massaging this property, it follows that
+        the ε-neighborhood of the diagonal is an entourage in `Completion α`, and therefore this is
+        also the case of `s`. -/
+    rintro ⟨ε, εpos, hε⟩
+    let r : Set (Real × Real) := { p | dist p.1 p.2 < ε }
+    have : r in uniformity Real := Metric.dist_mem_uniformity εpos
+    have T := uniformContinuous_def.1 (@Completion.uniformContinuous_dist α _) r this
+    simp only [uniformity_prod_eq_prod, mem_prod_iff, Filter.mem_map] at T
+    rcases T with ⟨t1, ht1, t2, ht2, ht⟩
+    refine mem_of_superset ht1 ?_
+    have A : forall a b : Completion α, (a, b) in t1 -> dist a b < ε := by
+      intro a b hab
+      have : ((a, b), (a, a)) in t1 ×ˢ t2 := ⟨hab, refl_mem_uniformity ht2⟩
+      exact lt_of_le_of_lt (le_abs_self _)
+        (by simpa [r, Completion.dist_self, Real.dist_eq, Completion.dist_comm] using ht this)
+    grind
 
 中文:
 定理 mem_uniformity_dist
@@ -222,7 +265,50 @@ theorem mem_uniformity_dist
   constructor
   · /- Start from an entourage `s`. It contains a closed entourage `t`. Its pullback in `α` is an
       entourage, so it contains an `ε`-neighborhood of the diagonal by definition of the entourages
-      in metric spaces. Then `t` contains an `ε`-neighborhood of the diagonal in `Com
+      in metric spaces. Then `t` contains an `ε`-neighborhood of the diagonal in `Completion α`, as
+      closed properties pass to the completion. -/
+    intro hs
+    rcases mem_uniformity_isClosed hs with ⟨t, ht, ⟨tclosed, ts⟩⟩
+    have A : { x : α × α | (↑x.1, ↑x.2) in t } in uniformity α :=
+      uniformContinuous_def.1 (uniformContinuous_coe α) t ht
+    rcases mem_uniformity_dist.1 A with ⟨ε, εpos, hε⟩
+    refine ⟨ε, εpos, @fun x y hxy => ?_⟩
+    have : ε <= dist x y ∨ (x, y) in t := by
+      refine induction_on₂ x y ?_ ?_
+      · have : { x : Completion α × Completion α | ε <= dist x.fst x.snd ∨ (x.fst, x.snd) in t } =
+               { p : Completion α × Completion α | ε <= dist p.1 p.2 } union t := by ext; simp
+        rw [this]
+        apply IsClosed.union _ tclosed
+        exact isClosed_le continuous_const Completion.uniformContinuous_dist.continuous
+      · intro x y
+        rw [Completion.dist_eq]
+        by_cases! h : ε <= dist x y
+        · exact Or.inl h
+        · have Z := hε h
+          simp only [Set.mem_ofPred_eq] at Z
+          exact Or.inr Z
+    simp only [not_le.mpr hxy, false_or] at this
+    exact ts this
+  · /- Start from a set `s` containing an ε-neighborhood of the diagonal in `Completion α`. To show
+        that it is an entourage, we use the fact that `dist` is uniformly continuous on
+        `Completion α × Completion α` (this is a general property of the extension of uniformly
+        continuous functions). Therefore, the preimage of the ε-neighborhood of the diagonal in ℝ
+        is an entourage in `Completion α × Completion α`. Massaging this property, it follows that
+        the ε-neighborhood of the diagonal is an entourage in `Completion α`, and therefore this is
+        also the case of `s`. -/
+    rintro ⟨ε, εpos, hε⟩
+    let r : Set (Real × Real) := { p | dist p.1 p.2 < ε }
+    have : r in uniformity Real := Metric.dist_mem_uniformity εpos
+    have T := uniformContinuous_def.1 (@Completion.uniformContinuous_dist α _) r this
+    simp only [uniformity_prod_eq_prod, mem_prod_iff, Filter.mem_map] at T
+    rcases T with ⟨t1, ht1, t2, ht2, ht⟩
+    refine mem_of_superset ht1 ?_
+    have A : forall a b : Completion α, (a, b) in t1 -> dist a b < ε := by
+      intro a b hab
+      have : ((a, b), (a, a)) in t1 ×ˢ t2 := ⟨hab, refl_mem_uniformity ht2⟩
+      exact lt_of_le_of_lt (le_abs_self _)
+        (by simpa [r, Completion.dist_self, Real.dist_eq, Completion.dist_comm] using ht this)
+    grind
 -/
 protected theorem mem_uniformity_dist (s : Set (Completion α × Completion α)) :
     s in 𝓤 (Completion α) ↔ exists ε > 0, forall {a b}, dist a b < ε -> (a, b) in s := by
@@ -600,7 +686,7 @@ theorem Isometry.isometry_mapRingHom
     induction x, y using induction_on₂ with
     | hp => exact isClosed_eq (continuous_dist.comp₂ (continuous_map.comp continuous_fst)
         (continuous_map.comp continuous_snd)) (by fun_prop)
-    | ih x y => simp only [Completion.dist_eq, mapRingHom_coe, h.dist_eq
+    | ih x y => simp only [Completion.dist_eq, mapRingHom_coe, h.dist_eq]
 
 中文:
 定理 等距.isometry_mapRingHom
@@ -610,7 +696,7 @@ theorem Isometry.isometry_mapRingHom
     induction x, y using induction_on₂ with
     | hp => exact isClosed_eq (continuous_dist.comp₂ (continuous_map.comp continuous_fst)
         (continuous_map.comp continuous_snd)) (by fun_prop)
-    | ih x y => simp only [Completion.dist_eq, mapRingHom_coe, h.dist_eq
+    | ih x y => simp only [Completion.dist_eq, mapRingHom_coe, h.dist_eq]
 
 Depends on / 依赖: Completion, Completion.dist_eq, Isometry, Isometry.of_dist_eq, continuous_dist, continuous_dist.comp, continuous_fst, continuous_map, continuous_map.comp, continuous_snd, dist_eq, fun_prop, h.dist_eq, isClosed_eq, mapRingHom_coe, of_dist_eq
 -/

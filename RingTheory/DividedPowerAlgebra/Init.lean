@@ -569,7 +569,9 @@ lemma prod_dp
   | empty =>
     simp only [prod_empty, multinomial_empty, cast_one, sum_empty, one_mul, dp_zero]
   | insert _ _ hi hrec =>
-    rw [prod_insert hi]; rw [hrec]; rw [← mul_assoc]; rw [mul_comm (dp R (n _) m)]; rw [mul_assoc]; rw [dp_mul]; rw [← 
+    rw [prod_insert hi]; rw [hrec]; rw [← mul_assoc]; rw [mul_comm (dp R (n _) m)]; rw [mul_assoc]; rw [dp_mul]; rw [← sum_insert hi]; rw [nsmul_eq_mul]; rw [← mul_assoc]
+    congr 1
+    rw [multinomial_insert hi]; rw [mul_comm]; rw [cast_mul]; rw [sum_insert hi]
 
 中文:
 引理 prod_dp
@@ -580,7 +582,9 @@ lemma prod_dp
   | empty =>
     simp only [prod_empty, multinomial_empty, cast_one, sum_empty, one_mul, dp_zero]
   | insert _ _ hi hrec =>
-    rw [prod_insert hi]; rw [hrec]; rw [← mul_assoc]; rw [mul_comm (dp R (n _) m)]; rw [mul_assoc]; rw [dp_mul]; rw [← 
+    rw [prod_insert hi]; rw [hrec]; rw [← mul_assoc]; rw [mul_comm (dp R (n _) m)]; rw [mul_assoc]; rw [dp_mul]; rw [← sum_insert hi]; rw [nsmul_eq_mul]; rw [← mul_assoc]
+    congr 1
+    rw [multinomial_insert hi]; rw [mul_comm]; rw [cast_mul]; rw [sum_insert hi]
 
 Depends on / 依赖: Finset, Finset.induction, cast_mul, cast_one, classical, dp_mul, dp_zero, insert, mul_assoc, mul_comm, multinomial_empty, multinomial_insert, nsmul_eq_mul, one_mul, prod_empty, prod_insert, sum_empty, sum_insert
 -/
@@ -748,7 +752,33 @@ theorem submodule_span_prod_dp_eq_top
     exact smul_mem _ _ (subset_span ⟨0, by simp⟩)
   | add x y hx hy => exact Submodule.add_mem _ hx hy
   | dp x k m hx =>
-    have hm : m i
+    have hm : m in span R (Set.range v) := by simp [hv, mem_top]
+    induction hm using span_induction generalizing x k with
+    | zero => rw [dp_null]; split_ifs <;> simp [hx]
+    | smul r m hm h => simp [dp_smul, smul_mem _ _ (h x k hx)]
+    | mem y hy =>
+      obtain ⟨i, rfl⟩ := hy
+      induction hx using span_induction with
+      | zero => simp
+      | mem x hx =>
+        obtain ⟨n, rfl⟩ := hx
+        simp only
+        rw [← n.mul_prod_erase' i _ (fun i => dp_zero (m := v i))]; rw [mul_comm]; rw [← mul_assoc]; rw [dp_mul]; rw [nsmul_eq_mul]; rw [mul_assoc]; rw [← nsmul_eq_mul]
+        refine smul_of_tower_mem _ _ (mem_span_of_mem ⟨Finsupp.single i k + n, ?_⟩)
+        simp only
+        rw [← (Finsupp.single i k + n).mul_prod_erase' i _ (fun i => dp_zero (m := v i))]
+        simp
+      | add x y hxmem hymem hx hy =>
+        rw [add_mul]
+        exact Submodule.add_mem _ hx hy
+      | smul r x hxmem hx =>
+        rw [smul_mul_assoc]
+        exact smul_mem _ _ hx
+    | add m n hm_mem hn_mem hm hn =>
+      rw [dp_add]; rw [mul_sum]
+      apply sum_mem (fun c hc => ?_)
+      rw [← mul_assoc]
+      exact hn (x * dp R c.1 m) c.2 (hm x c.1 hx)
 
 中文:
 定理 submodule_span_prod_dp_eq_top
@@ -763,7 +793,33 @@ theorem submodule_span_prod_dp_eq_top
     exact smul_mem _ _ (subset_span ⟨0, by simp⟩)
   | add x y hx hy => exact Submodule.add_mem _ hx hy
   | dp x k m hx =>
-    have hm : m i
+    have hm : m in span R (Set.range v) := by simp [hv, mem_top]
+    induction hm using span_induction generalizing x k with
+    | zero => rw [dp_null]; split_ifs <;> simp [hx]
+    | smul r m hm h => simp [dp_smul, smul_mem _ _ (h x k hx)]
+    | mem y hy =>
+      obtain ⟨i, rfl⟩ := hy
+      induction hx using span_induction with
+      | zero => simp
+      | mem x hx =>
+        obtain ⟨n, rfl⟩ := hx
+        simp only
+        rw [← n.mul_prod_erase' i _ (fun i => dp_zero (m := v i))]; rw [mul_comm]; rw [← mul_assoc]; rw [dp_mul]; rw [nsmul_eq_mul]; rw [mul_assoc]; rw [← nsmul_eq_mul]
+        refine smul_of_tower_mem _ _ (mem_span_of_mem ⟨Finsupp.single i k + n, ?_⟩)
+        simp only
+        rw [← (Finsupp.single i k + n).mul_prod_erase' i _ (fun i => dp_zero (m := v i))]
+        simp
+      | add x y hxmem hymem hx hy =>
+        rw [add_mul]
+        exact Submodule.add_mem _ hx hy
+      | smul r x hxmem hx =>
+        rw [smul_mul_assoc]
+        exact smul_mem _ _ hx
+    | add m n hm_mem hn_mem hm hn =>
+      rw [dp_add]; rw [mul_sum]
+      apply sum_mem (fun c hc => ?_)
+      rw [← mul_assoc]
+      exact hn (x * dp R c.1 m) c.2 (hm x c.1 hx)
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, DividedPowerAlgebra, DividedPowerAlgebra.induction_on, Set.range, Submodule, Submodule.add_mem, add_mem, algebraMap_eq_smul_one, dp_null, dp_smul, eq_top_iff, generalizing, induction_on, mem_top, smul_mem, span_induction, split_ifs, subset_span
 -/
@@ -962,7 +1018,9 @@ definition lift
     (fun m => hI.dpow_zero (hg m))
     (fun n r m => by
       dsimp only
-      rw [LinearMap.map_smulₛₗ]; rw [RingHom.id_apply]; rw [← algebraMap_smul A r (g m)]; rw [smul_eq_mul]; rw [hI.dpow_mul (hg m)]; rw [← smul_eq_mul]; rw [← map_pow]; rw [algebraMa
+      rw [LinearMap.map_smulₛₗ]; rw [RingHom.id_apply]; rw [← algebraMap_smul A r (g m)]; rw [smul_eq_mul]; rw [hI.dpow_mul (hg m)]; rw [← smul_eq_mul]; rw [← map_pow]; rw [algebraMap_smul])
+    (fun n p m => by rw [hI.mul_dpow (hg m), ← nsmul_eq_mul])
+    (fun n u v => by simp [hI.dpow_add (hg u) (hg v)])
 
 中文:
 定义 lift
@@ -971,7 +1029,9 @@ definition lift
     (fun m => hI.dpow_zero (hg m))
     (fun n r m => by
       dsimp only
-      rw [LinearMap.map_smulₛₗ]; rw [RingHom.id_apply]; rw [← algebraMap_smul A r (g m)]; rw [smul_eq_mul]; rw [hI.dpow_mul (hg m)]; rw [← smul_eq_mul]; rw [← map_pow]; rw [algebraMa
+      rw [LinearMap.map_smulₛₗ]; rw [RingHom.id_apply]; rw [← algebraMap_smul A r (g m)]; rw [smul_eq_mul]; rw [hI.dpow_mul (hg m)]; rw [← smul_eq_mul]; rw [← map_pow]; rw [algebraMap_smul])
+    (fun n p m => by rw [hI.mul_dpow (hg m), ← nsmul_eq_mul])
+    (fun n u v => by simp [hI.dpow_add (hg u) (hg v)])
 
 Depends on / 依赖: LinearMap, LinearMap.map_smul, RingHom, RingHom.id_apply, algebraMap_smul, dpow_add, dpow_mul, dpow_zero, hI.dpow, hI.dpow_add, hI.dpow_mul, hI.dpow_zero, hI.mul_dpow, id_apply, map_pow, mul_dpow, nsmul_eq_mul, smul_eq_mul
 -/
@@ -1336,14 +1396,28 @@ theorem lift_surjective
   given: {f : M ->ₗ[R] N} (hf : Function.Surjective f)
   proof: by
   rw [← AlgHom.range_eq_top]; rw [← Algebra.map_top (map R f)]; rw [eq_top_iff]; rw [← (AlgHom.range_eq_top (RingCon.mkₐ R (ringCon R N))).mpr mkAlgHom_surjective]; rw [← Algebra.map_top]; rw [(Subalgebra.gc_map_comap _).le_iff_le]; rw [← MvPolynomial.adjoin_range_X]; rw [Algebra.adjoin_le_iff]
- 
+  intro
+  simp only [Set.mem_range, Prod.exists]
+  rintro ⟨n, m, rfl⟩
+  obtain ⟨l, rfl⟩ := hf m
+  simp only [Algebra.map_top, Subalgebra.coe_comap, AlgHom.coe_range, Set.mem_preimage,
+    Set.mem_range, RingCon.mkₐ_apply]
+  use dp R n l
+  rw [map_apply_dp]; rw [dp]
 
 中文:
 定理 lift_surjective
   条件: {f : M ->ₗ[R] N} (hf : 函数.满射 f)
   证明: by
   rw [← AlgHom.range_eq_top]; rw [← Algebra.map_top (map R f)]; rw [eq_top_iff]; rw [← (AlgHom.range_eq_top (RingCon.mkₐ R (ringCon R N))).mpr mkAlgHom_surjective]; rw [← Algebra.map_top]; rw [(Subalgebra.gc_map_comap _).le_iff_le]; rw [← MvPolynomial.adjoin_range_X]; rw [Algebra.adjoin_le_iff]
- 
+  intro
+  simp only [Set.mem_range, Prod.exists]
+  rintro ⟨n, m, rfl⟩
+  obtain ⟨l, rfl⟩ := hf m
+  simp only [Algebra.map_top, Subalgebra.coe_comap, AlgHom.coe_range, Set.mem_preimage,
+    Set.mem_range, RingCon.mkₐ_apply]
+  use dp R n l
+  rw [map_apply_dp]; rw [dp]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_range, AlgHom.range_eq_top, Algebra, Algebra.adjoin_le_iff, Algebra.map_top, MvPolynomial, MvPolynomial.adjoin_range_X, Prod.exists, RingCon, RingCon.mk, Set.mem_preimage, Set.mem_range, Subalgebra, Subalgebra.coe_comap, Subalgebra.gc_map_comap, adjoin_le_iff, adjoin_range_X, coe_comap, coe_range
 -/

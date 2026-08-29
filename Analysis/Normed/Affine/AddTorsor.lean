@@ -905,7 +905,8 @@ definition AffineMap.ofMapMidpoint
   AffineMap.mk' f (↑((AddMonoidHom.ofMapMidpoint Real Real
     ((AffineEquiv.vaddConst Real (f <| c)).symm ∘ f ∘ AffineEquiv.vaddConst Real c) (by simp)
     fun x y => by simp [h]).toRealLinearMap <| by
-        apply_rules [Continuous.vadd, Continuous.vsub, continuous_
+        apply_rules [Continuous.vadd, Continuous.vsub, continuous_const, hfc.comp, continuous_id]))
+    c fun p => by simp
 
 中文:
 定义 仿射映射.ofMapMidpoint
@@ -914,7 +915,8 @@ definition AffineMap.ofMapMidpoint
   AffineMap.mk' f (↑((AddMonoidHom.ofMapMidpoint Real Real
     ((AffineEquiv.vaddConst Real (f <| c)).symm ∘ f ∘ AffineEquiv.vaddConst Real c) (by simp)
     fun x y => by simp [h]).toRealLinearMap <| by
-        apply_rules [Continuous.vadd, Continuous.vsub, continuous_
+        apply_rules [Continuous.vadd, Continuous.vsub, continuous_const, hfc.comp, continuous_id]))
+    c fun p => by simp
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ofMapMidpoint, AffineEquiv, AffineEquiv.vaddConst, AffineMap, AffineMap.mk, Classical, Classical.arbitrary, Continuous, Continuous.vadd, Continuous.vsub, apply_rules, arbitrary, continuous_const, continuous_id, hfc.comp, ofMapMidpoint, toRealLinearMap, vaddConst
 -/
@@ -952,7 +954,7 @@ definition DilationEquiv.smulTorsor
   right_inv p := by simp [smul_inv_smul₀ hk]
   edist_eq' := ⟨‖k‖₊, nnnorm_ne_zero_iff.mpr hk, fun x y => by
     rw [show edist (k • x +ᵥ c) (k • y +ᵥ c) = _ from (IsometryEquiv.vaddConst c).isometry ..]
-    exact edi
+    exact edist_smul₀ ..⟩
 
 中文:
 定义 Dilation等价.smulTorsor
@@ -963,7 +965,7 @@ definition DilationEquiv.smulTorsor
   right_inv p := by simp [smul_inv_smul₀ hk]
   edist_eq' := ⟨‖k‖₊, nnnorm_ne_zero_iff.mpr hk, fun x y => by
     rw [show edist (k • x +ᵥ c) (k • y +ᵥ c) = _ from (IsometryEquiv.vaddConst c).isometry ..]
-    exact edi
+    exact edist_smul₀ ..⟩
 -/
 def DilationEquiv.smulTorsor (c : P) {k : 𝕜} (hk : k != 0) : E ≃ᵈ P where
   toFun := (k • · +ᵥ c)

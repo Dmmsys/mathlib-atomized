@@ -46,7 +46,8 @@ definition trivialRel
   vle_add _ _ := by split_ifs; simp_all
   mul_vle_mul_left _ _ := by split_ifs at * <;> simp_all
   vle_mul_cancel _ := by split_ifs <;> simp_all
-  not_vle_one_zero := by split_ifs <;>
+  not_vle_one_zero := by split_ifs <;> simp_all
+  vle_mul_comm {_ _} := by simpa using Or.symm
 
 中文:
 定义 trivialRel
@@ -57,7 +58,8 @@ definition trivialRel
   vle_add _ _ := by split_ifs; simp_all
   mul_vle_mul_left _ _ := by split_ifs at * <;> simp_all
   vle_mul_cancel _ := by split_ifs <;> simp_all
-  not_vle_one_zero := by split_ifs <;>
+  not_vle_one_zero := by split_ifs <;> simp_all
+  vle_mul_comm {_ _} := by simpa using Or.symm
 -/
 def trivialRel {R : Type} [Semiring R] [DecidableEq R] [IsDomain R] : ValuativeRel R where
   vle x y := if y = 0 then x = 0 else True
@@ -137,7 +139,8 @@ lemma subsingleton_units_valueGroupWithZero_of_trivialRel
   have : (valuation R).IsEquiv (1 : Valuation R Γ) := isEquiv _ _
   obtain ⟨r, s, hr⟩ := exists_valuation_posSubmonoid_div_valuation_posSubmonoid_eq a
   obtain ⟨t, u, ht⟩ := exists_valuation_posSubmonoid_div_valuation_posSubmonoid_eq b
-  rw [Units.ext_iff]; rw [← hr]; rw
+  rw [Units.ext_iff]; rw [← hr]; rw [← ht]; rw [div_eq_div_iff]; rw [← map_mul]; rw [← map_mul]; rw [this.eq_iff] <;>
+  simp [one_apply_posSubmonoid]
 
 中文:
 引理 subsingleton_units_valueGroupWithZero_of_trivialRel
@@ -148,7 +151,8 @@ lemma subsingleton_units_valueGroupWithZero_of_trivialRel
   have : (valuation R).IsEquiv (1 : Valuation R Γ) := isEquiv _ _
   obtain ⟨r, s, hr⟩ := exists_valuation_posSubmonoid_div_valuation_posSubmonoid_eq a
   obtain ⟨t, u, ht⟩ := exists_valuation_posSubmonoid_div_valuation_posSubmonoid_eq b
-  rw [Units.ext_iff]; rw [← hr]; rw
+  rw [Units.ext_iff]; rw [← hr]; rw [← ht]; rw [div_eq_div_iff]; rw [← map_mul]; rw [← map_mul]; rw [this.eq_iff] <;>
+  simp [one_apply_posSubmonoid]
 
 Depends on / 依赖: IsEquiv, Units.ext_iff, Valuation, div_eq_div_iff, eq_iff, exists_valuation_posSubmonoid_div_valuation_posSubmonoid_eq, ext_iff, isEquiv, map_mul, one_apply_posSubmonoid, this.eq_iff, valuation
 -/

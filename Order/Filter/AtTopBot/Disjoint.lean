@@ -115,7 +115,7 @@ theorem disjoint_atBot_atTop
   · refine disjoint_of_disjoint_of_mem ?_ (Iic_mem_atBot x) (Ici_mem_atTop y)
     exact Iic_disjoint_Ici.2 (hle.lt_of_ne hne).not_ge
   · refine disjoint_of_disjoint_of_mem ?_ (Iic_mem_atBot y) (Ici_mem_atTop x)
-    exact Iic_disjo
+    exact Iic_disjoint_Ici.2 hle
 
 中文:
 定理 disjoint_atBot_atTop
@@ -126,7 +126,7 @@ theorem disjoint_atBot_atTop
   · refine disjoint_of_disjoint_of_mem ?_ (Iic_mem_atBot x) (Ici_mem_atTop y)
     exact Iic_disjoint_Ici.2 (hle.lt_of_ne hne).not_ge
   · refine disjoint_of_disjoint_of_mem ?_ (Iic_mem_atBot y) (Ici_mem_atTop x)
-    exact Iic_disjo
+    exact Iic_disjoint_Ici.2 hle
 
 Depends on / 依赖: Ici_mem_atTop, Iic_disjoint_Ici, Iic_mem_atBot, disjoint_of_disjoint_of_mem, exists_pair_ne, hle.lt_of_ne, lt_of_ne, not_ge
 -/

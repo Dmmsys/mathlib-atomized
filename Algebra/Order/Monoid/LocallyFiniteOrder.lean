@@ -54,7 +54,12 @@ lemma Finset.card_Ico_mul_right
     constructor
     · rintro ⟨h₁, h₂⟩
       obtain ⟨d, rfl⟩ := exists_mul_of_le h₁
-      exact ⟨a * d, ⟨by simpa using h₁, by simpa [mul_right_comm a c d]
+      exact ⟨a * d, ⟨by simpa using h₁, by simpa [mul_right_comm a c d] using h₂⟩,
+        by simp_rw [mul_assoc, mul_comm]⟩
+    · aesop
+  simp [this]
+
+@[to_additive]
 
 中文:
 引理 有限集.card_Ico_mul_right
@@ -66,7 +71,12 @@ lemma Finset.card_Ico_mul_right
     constructor
     · rintro ⟨h₁, h₂⟩
       obtain ⟨d, rfl⟩ := exists_mul_of_le h₁
-      exact ⟨a * d, ⟨by simpa using h₁, by simpa [mul_right_comm a c d]
+      exact ⟨a * d, ⟨by simpa using h₁, by simpa [mul_right_comm a c d] using h₂⟩,
+        by simp_rw [mul_assoc, mul_comm]⟩
+    · aesop
+  simp [this]
+
+@[to_additive]
 
 Depends on / 依赖: exists_mul_of_le, mem_Ico, mem_map, mulRightEmbedding, mulRightEmbedding_apply, mul_assoc, mul_comm, mul_right_comm, simp_rw
 -/
@@ -134,7 +144,22 @@ definition LocallyFiniteOrder.addMonoidHom
     wlog hab : a <= b generalizing a b
     · convert! this b a (le_of_not_ge hab) using 1 <;> simp only [add_comm]
     obtain ha | ha := le_total 0 a <;> obtain hb | hb := le_total 0 b
-    · have : -b <= a := by trans 0 <;> simp 
+    · have : -b <= a := by trans 0 <;> simp [ha, hb]
+      simp [ha, hb, card_Ico_zero_add, this]
+    · obtain rfl := hb.antisymm (ha.trans hab)
+      obtain rfl := ha.antisymm hab
+      simp
+    · simp only [neg_add_rev, ha, Ico_eq_empty_of_le, card_empty, Nat.cast_zero, zero_sub,
+        Left.neg_nonpos_iff, hb, sub_zero]
+      obtain ⟨b, rfl⟩ : exists r, b = r - a := ⟨a + b, by abel⟩
+      simp only [add_sub_cancel, neg_sub, sub_add_eq_add_sub, add_neg_cancel, zero_sub]
+      obtain hb' | hb' := le_total 0 b
+      · simp [hb', neg_add_eq_sub, eq_sub_iff_add_eq, ← Nat.cast_add,
+          ← card_Ico_zero_add, ha, ← sub_eq_add_neg]
+      · simp [hb', neg_add_eq_sub, eq_sub_iff_add_eq, sub_eq_iff_eq_add,
+          ← Nat.cast_add, ← card_Ico_zero_add, hb, sub_add_eq_add_sub]
+    · have : ¬0 < a + b := by simpa using add_nonpos ha hb
+      simp [ha, hb, card_Ico_zero_add, Ico_eq_empty, this]
 
 中文:
 定义 局部有限序.addMonoidHom
@@ -145,7 +170,22 @@ definition LocallyFiniteOrder.addMonoidHom
     wlog hab : a <= b generalizing a b
     · convert! this b a (le_of_not_ge hab) using 1 <;> simp only [add_comm]
     obtain ha | ha := le_total 0 a <;> obtain hb | hb := le_total 0 b
-    · have : -b <= a := by trans 0 <;> simp 
+    · have : -b <= a := by trans 0 <;> simp [ha, hb]
+      simp [ha, hb, card_Ico_zero_add, this]
+    · obtain rfl := hb.antisymm (ha.trans hab)
+      obtain rfl := ha.antisymm hab
+      simp
+    · simp only [neg_add_rev, ha, Ico_eq_empty_of_le, card_empty, Nat.cast_zero, zero_sub,
+        Left.neg_nonpos_iff, hb, sub_zero]
+      obtain ⟨b, rfl⟩ : exists r, b = r - a := ⟨a + b, by abel⟩
+      simp only [add_sub_cancel, neg_sub, sub_add_eq_add_sub, add_neg_cancel, zero_sub]
+      obtain hb' | hb' := le_total 0 b
+      · simp [hb', neg_add_eq_sub, eq_sub_iff_add_eq, ← Nat.cast_add,
+          ← card_Ico_zero_add, ha, ← sub_eq_add_neg]
+      · simp [hb', neg_add_eq_sub, eq_sub_iff_add_eq, sub_eq_iff_eq_add,
+          ← Nat.cast_add, ← card_Ico_zero_add, hb, sub_add_eq_add_sub]
+    · have : ¬0 < a + b := by simpa using add_nonpos ha hb
+      simp [ha, hb, card_Ico_zero_add, Ico_eq_empty, this]
 -/
 def LocallyFiniteOrder.addMonoidHom :
     G ->+ Int where
@@ -284,7 +324,22 @@ lemma LocallyFiniteOrder.orderAddMonoidHom_bijective
     obtain ⟨x, hx⟩ := this
     exact fun a => ⟨a • x, by simp_all⟩
   have ⟨a, ha⟩ := exists_zero_lt (α := G)
-  obtain ⟨b, hb⟩ := exists_covBy_of_wellFoundedLT (α := Icc 0 a) (a := ⟨0, by simpa usi
+  obtain ⟨b, hb⟩ := exists_covBy_of_wellFoundedLT (α := Icc 0 a) (a := ⟨0, by simpa using! ha.le⟩)
+    (fun H => ha.not_ge (@H ⟨a, by simpa using! ha.le⟩ ha.le))
+  use b.1
+  have : 0 <= b.1 := hb.1.le
+  suffices Ico 0 b.1 = {0} by simpa [orderAddMonoidHom, addMonoidHom, this]
+  ext x
+  simp only [mem_Ico, mem_singleton]
+  constructor
+  · rintro ⟨h₁, h₂⟩
+    by_contra hx'
+    have := b.2
+    simp only [Finset.mem_Icc] at this
+    exact hb.2 (c := ⟨x, by simpa [h₁] using! h₂.le.trans this.2⟩)
+      (lt_of_le_of_ne h₁ (by simpa using! Ne.symm hx')) h₂
+  · rintro rfl
+    simpa using! hb.1
 
 中文:
 引理 局部有限序.orderAddMonoidHom_bijective
@@ -295,7 +350,22 @@ lemma LocallyFiniteOrder.orderAddMonoidHom_bijective
     obtain ⟨x, hx⟩ := this
     exact fun a => ⟨a • x, by simp_all⟩
   have ⟨a, ha⟩ := exists_zero_lt (α := G)
-  obtain ⟨b, hb⟩ := exists_covBy_of_wellFoundedLT (α := Icc 0 a) (a := ⟨0, by simpa usi
+  obtain ⟨b, hb⟩ := exists_covBy_of_wellFoundedLT (α := Icc 0 a) (a := ⟨0, by simpa using! ha.le⟩)
+    (fun H => ha.not_ge (@H ⟨a, by simpa using! ha.le⟩ ha.le))
+  use b.1
+  have : 0 <= b.1 := hb.1.le
+  suffices Ico 0 b.1 = {0} by simpa [orderAddMonoidHom, addMonoidHom, this]
+  ext x
+  simp only [mem_Ico, mem_singleton]
+  constructor
+  · rintro ⟨h₁, h₂⟩
+    by_contra hx'
+    have := b.2
+    simp only [Finset.mem_Icc] at this
+    exact hb.2 (c := ⟨x, by simpa [h₁] using! h₂.le.trans this.2⟩)
+      (lt_of_le_of_ne h₁ (by simpa using! Ne.symm hx')) h₂
+  · rintro rfl
+    simpa using! hb.1
 
 Depends on / 依赖: addMonoidHom, exists_covBy_of_wellFoundedLT, exists_zero_lt, ha.le, ha.not_ge, injective, mem_Ico, mem_single, not_ge, orderAddMonoidHom, orderAddMonoidHom_strictMono, orderAddMonoidHom_strictMono.injective
 -/
@@ -338,7 +408,8 @@ definition LocallyFiniteOrder.orderAddMonoidEquiv
     obtain ⟨b, rfl⟩ := add_left_surjective a b
     suffices 0 <= orderAddMonoidHom G b ↔ 0 <= b by simpa
     obtain hb | hb := le_total 0 b
-    · simp [orderAddMonoidHom, 
+    · simp [orderAddMonoidHom, addMonoidHom, hb]
+    · simp [orderAddMonoidHom, addMonoidHom, hb]
 
 中文:
 定义 局部有限序.orderAddMonoidEquiv
@@ -349,7 +420,8 @@ definition LocallyFiniteOrder.orderAddMonoidEquiv
     obtain ⟨b, rfl⟩ := add_left_surjective a b
     suffices 0 <= orderAddMonoidHom G b ↔ 0 <= b by simpa
     obtain hb | hb := le_total 0 b
-    · simp [orderAddMonoidHom, 
+    · simp [orderAddMonoidHom, addMonoidHom, hb]
+    · simp [orderAddMonoidHom, addMonoidHom, hb]
 
 Depends on / 依赖: orderAddMonoidHom
 -/

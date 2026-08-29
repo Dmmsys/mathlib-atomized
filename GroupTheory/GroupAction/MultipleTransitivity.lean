@@ -171,7 +171,7 @@ theorem Function.Bijective.mulActionHom_embedding_isBijective
   use ⟨g ∘ y, hfg.injective.comp (EmbeddingLike.injective y)⟩
   ext
   simp only [hf.injective.mulActionHom_embedding_apply, coeFn_mk, comp_apply]
-  exact hfg (
+  exact hfg (y _)
 
 中文:
 定理 函数.双射.mulActionHom_embedding_isBijective
@@ -183,7 +183,7 @@ theorem Function.Bijective.mulActionHom_embedding_isBijective
   use ⟨g ∘ y, hfg.injective.comp (EmbeddingLike.injective y)⟩
   ext
   simp only [hf.injective.mulActionHom_embedding_apply, coeFn_mk, comp_apply]
-  exact hfg (
+  exact hfg (y _)
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.injective, Function, Function.bijective_iff_has_inverse.mp, bijective_iff_has_inverse, coeFn_mk, comp_apply, hf.injective.mulActionHom_embedding_apply, hf.injective.mulActionHom_embedding_isInjective, hfg.injective.comp, injective, mulActionHom_embedding_apply, mulActionHom_embedding_isInjective
 -/
@@ -271,7 +271,13 @@ theorem IsPretransitive.of_embedding
       simp only [trans_apply, aux]
       apply Function.surjInv_eq
     obtain ⟨g, hg⟩ := exists_smul_eq (M := G) (aux x) (aux y)
-    
+    use σ g
+    ext i
+    rw [DFunLike.ext_iff] at hg
+    rw [smul_apply]
+    simp [← aux_apply, ← hg, MulActionHom.map_smul']
+
+@[to_additive]
 
 中文:
 定理 是Pretransitive.of_embedding
@@ -283,7 +289,13 @@ theorem IsPretransitive.of_embedding
       simp only [trans_apply, aux]
       apply Function.surjInv_eq
     obtain ⟨g, hg⟩ := exists_smul_eq (M := G) (aux x) (aux y)
-    
+    use σ g
+    ext i
+    rw [DFunLike.ext_iff] at hg
+    rw [smul_apply]
+    simp [← aux_apply, ← hg, MulActionHom.map_smul']
+
+@[to_additive]
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, Embedding, Function, Function.Embedding.ofSurjective, Function.surjInv_eq, MulActionHom, MulActionHom.map_smul, aux_apply, exists_smul_eq, ext_iff, f.toFun, map_smul, ofSurjective, smul_apply, surjInv_eq, trans_apply, x.trans
 -/
@@ -469,7 +481,15 @@ theorem is_two_pretransitive_iff
       by rw [← embFinTwo_apply_zero h, ← smul_apply, e, embFinTwo_apply_zero],
       by rw [← embFinTwo_apply_one h, ← smul_apply, e, embFinTwo_apply_one]⟩
   · intro H
-  
+    constructor
+    intro j j'
+    obtain ⟨g, h, h'⟩ :=
+      H (j.injective.ne_iff.mpr Fin.zero_ne_one) (j'.injective.ne_iff.mpr Fin.zero_ne_one)
+    use g
+    ext i
+    by_cases hi : i = 0
+    · simp [hi, h]
+    · simp [eq_one_of_ne_zero i hi, h']
 
 中文:
 定理 is_two_pretransitive_iff
@@ -481,7 +501,15 @@ theorem is_two_pretransitive_iff
       by rw [← embFinTwo_apply_zero h, ← smul_apply, e, embFinTwo_apply_zero],
       by rw [← embFinTwo_apply_one h, ← smul_apply, e, embFinTwo_apply_one]⟩
   · intro H
-  
+    constructor
+    intro j j'
+    obtain ⟨g, h, h'⟩ :=
+      H (j.injective.ne_iff.mpr Fin.zero_ne_one) (j'.injective.ne_iff.mpr Fin.zero_ne_one)
+    use g
+    ext i
+    by_cases hi : i = 0
+    · simp [hi, h]
+    · simp [eq_one_of_ne_zero i hi, h']
 
 Depends on / 依赖: Fin.zero_ne_one, embFinTwo, embFinTwo_apply_one, embFinTwo_apply_zero, eq_one_of_ne_zero, exists_smul_eq, injective, injective.ne_iff.mpr, j.injective.ne_iff.mpr, ne_iff, smul_apply, zero_ne_one
 -/
@@ -557,7 +585,13 @@ theorem isPreprimitive_of_is_two_pretransitive
     obtain ⟨a, ha, b, hb, h⟩ := h
     rw [← top_eq_univ]; rw [eq_top_iff]
     intro c _
-    by_cases h' : 
+    by_cases h' : a = c
+    · rw [← h']; exact ha
+    · rw [is_two_pretransitive_iff] at h2
+      obtain ⟨g, hga, hgb⟩ := h2 h h'
+      rw [MulAction.isBlock_iff_smul_eq_of_mem] at hB
+      rw [← hB (g := g) ha (by rw [hga]; exact ha), ← hgb]
+      exact smul_mem_smul_set hb
 
 中文:
 定理 isPreprimitive_of_is_two_pretransitive
@@ -572,7 +606,13 @@ theorem isPreprimitive_of_is_two_pretransitive
     obtain ⟨a, ha, b, hb, h⟩ := h
     rw [← top_eq_univ]; rw [eq_top_iff]
     intro c _
-    by_cases h' : 
+    by_cases h' : a = c
+    · rw [← h']; exact ha
+    · rw [is_two_pretransitive_iff] at h2
+      obtain ⟨g, hga, hgb⟩ := h2 h h'
+      rw [MulAction.isBlock_iff_smul_eq_of_mem] at hB
+      rw [← hB (g := g) ha (by rw [hga]; exact ha), ← hgb]
+      exact smul_mem_smul_set hb
 
 Depends on / 依赖: B.subsingleton_or_nontrivial, IsPreprimitive, IsPreprimitive.mk, IsPretransitive, MulAction, MulAction.isBlock_iff_smul_eq_of_mem, eq_top_iff, isBlock_iff_smul_eq_of_mem, isPretransitive_of_is_two_pretransitive, is_two_pretransitive_iff, smul_mem_smul_set, subsingleton_or_nontrivial, top_eq_univ
 -/
@@ -834,7 +874,25 @@ theorem isMultiplyPretransitive
       rw [DFunLike.ext_iff] at hgxy
       convert! hgxy (last n)
       simp [ofStabilizer.snoc_last]
-    use
+    use ⟨g, hg⟩
+    ext i
+    simp only [smul_apply, SubMulAction.val_smul_of_tower, subgroup_smul_def]
+    rw [← ofStabilizer.snoc_castSucc x]; rw [← smul_apply]; rw [hgxy]; rw [ofStabilizer.snoc_castSucc]
+  · -- gx • x = x1 :: a
+    obtain ⟨gx, x1, hgx⟩ := exists_smul_of_last_eq G a x
+    -- gy • y = y1 :: a
+    obtain ⟨gy, y1, hgy⟩ := exists_smul_of_last_eq G a y
+    -- g • x1 = y1,
+    obtain ⟨g, hg⟩ := hn.exists_smul_eq x1 y1
+    use gy⁻¹ * g * gx
+    ext i
+    simp only [mul_smul, smul_apply, inv_smul_eq_iff]
+    simp only [← smul_apply _ _ i, hgy, hgx]
+    simp only [smul_apply]
+    rcases Fin.eq_castSucc_or_eq_last i with ⟨i, rfl⟩ | ⟨rfl⟩
+    · simp [ofStabilizer.snoc_castSucc, ← hg, SetLike.val_smul, subgroup_smul_def]
+    · simp only [ofStabilizer.snoc_last, ← hg]
+      exact g.prop
 
 中文:
 定理 isMultiplyPretransitive
@@ -846,7 +904,25 @@ theorem isMultiplyPretransitive
       rw [DFunLike.ext_iff] at hgxy
       convert! hgxy (last n)
       simp [ofStabilizer.snoc_last]
-    use
+    use ⟨g, hg⟩
+    ext i
+    simp only [smul_apply, SubMulAction.val_smul_of_tower, subgroup_smul_def]
+    rw [← ofStabilizer.snoc_castSucc x]; rw [← smul_apply]; rw [hgxy]; rw [ofStabilizer.snoc_castSucc]
+  · -- gx • x = x1 :: a
+    obtain ⟨gx, x1, hgx⟩ := exists_smul_of_last_eq G a x
+    -- gy • y = y1 :: a
+    obtain ⟨gy, y1, hgy⟩ := exists_smul_of_last_eq G a y
+    -- g • x1 = y1,
+    obtain ⟨g, hg⟩ := hn.exists_smul_eq x1 y1
+    use gy⁻¹ * g * gx
+    ext i
+    simp only [mul_smul, smul_apply, inv_smul_eq_iff]
+    simp only [← smul_apply _ _ i, hgy, hgx]
+    simp only [smul_apply]
+    rcases Fin.eq_castSucc_or_eq_last i with ⟨i, rfl⟩ | ⟨rfl⟩
+    · simp [ofStabilizer.snoc_castSucc, ← hg, SetLike.val_smul, subgroup_smul_def]
+    · simp only [ofStabilizer.snoc_last, ← hg]
+      exact g.prop
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, SubMulAction, SubMulAction.val_smul_of_tower, convert, exists_smul_eq, ext_iff, ofStabilizer, ofStabilizer.snoc, ofStabilizer.snoc_castSucc, ofStabilizer.snoc_last, smul_apply, snoc_castSucc, snoc_last, stabilizer, subgroup_smul_def, val_smul_of_tower
 -/
@@ -902,7 +978,18 @@ theorem isMultiplyPretransitive
       Finite.card_eq.mp (by simp [Nat.card_coe_set_eq])
     set x' := ofFixingSubgroup.append x with hx
     set y' := ofFixingSubgroup.append y with hy
-    obtain ⟨g, 
+    obtain ⟨g, hg⟩ := exists_smul_eq G x' y'
+    suffices g in fixingSubgroup G s by
+      use ⟨g, this⟩
+      ext i
+      rw [smul_apply]; rw [SetLike.val_smul]; rw [Subgroup.mk_smul]
+      simp [← ofFixingSubgroup.append_right, ← smul_apply, ← hx, ← hy, hg]
+    intro a
+    set i := (Classical.choice Hs).symm a
+    have ha : (Classical.choice Hs) i = a := by simp [i]
+    rw [← ha]
+    nth_rewrite 1 [← ofFixingSubgroup.append_left x i]
+    rw [← ofFixingSubgroup.append_left y i]; rw [← hy]; rw [← hg]; rw [smul_apply]; rw [← hx]
 
 中文:
 定理 isMultiplyPretransitive
@@ -913,7 +1000,18 @@ theorem isMultiplyPretransitive
       Finite.card_eq.mp (by simp [Nat.card_coe_set_eq])
     set x' := ofFixingSubgroup.append x with hx
     set y' := ofFixingSubgroup.append y with hy
-    obtain ⟨g, 
+    obtain ⟨g, hg⟩ := exists_smul_eq G x' y'
+    suffices g in fixingSubgroup G s by
+      use ⟨g, this⟩
+      ext i
+      rw [smul_apply]; rw [SetLike.val_smul]; rw [Subgroup.mk_smul]
+      simp [← ofFixingSubgroup.append_right, ← smul_apply, ← hx, ← hy, hg]
+    intro a
+    set i := (Classical.choice Hs).symm a
+    have ha : (Classical.choice Hs) i = a := by simp [i]
+    rw [← ha]
+    nth_rewrite 1 [← ofFixingSubgroup.append_left x i]
+    rw [← ofFixingSubgroup.append_left y i]; rw [← hy]; rw [← hg]; rw [smul_apply]; rw [← hx]
 
 Depends on / 依赖: Finite, Finite.card_eq.mp, IsMultiplyPretransitive, Nat.card_coe_set_eq, Nonempty, SetLike, SetLike.val_smul, Subgroup, Subgroup.mk_smul, append, append_right, card_coe_set_eq, card_eq, exists_smul_eq, fixingSubgroup, infer_instance, mk_smul, ofFixingSubgroup, ofFixingSubgroup.append, ofFixingSubgroup.append_right
 -/
@@ -991,7 +1089,43 @@ theorem IsMultiplyPretransitive.index_of_fixingSubgroup_mul
     have hGX : IsPretransitive G α := by
       rw [← is_one_pretransitive_iff]
       apply isMultiplyPretransitive_of_le (n := k + 1)
-      · rw [Nat.succ_le_succ_iff]; apply Nat.zero
+      · rw [Nat.succ_le_succ_iff]; apply Nat.zero_le
+      · rw [← hs, ← Set.ncard_univ]
+        exact ncard_le_ncard s.subset_univ finite_univ
+    have : s.Nonempty := by
+      rw [← Set.ncard_pos]; rw [hs]
+      exact succ_pos k
+    obtain ⟨a, has⟩ := this
+    let t : Set (SubMulAction.ofStabilizer G a) := Subtype.val ⁻¹' s
+    have hat : Subtype.val '' t = s \ {a} := by
+      rw [Set.image_preimage_eq_inter_range]
+      simp only [Subtype.range_coe_subtype]
+      rw [Set.sdiff_eq_compl_inter]; rw [Set.inter_comm]
+      congr
+    have hat' : s = insert a (Subtype.val '' t) := by
+      rw [hat]; rw [Set.insert_sdiff_singleton]; rw [Set.insert_eq_of_mem has]
+    have hfs := SubMulAction.fixingSubgroup_of_insert a t
+    rw [← hat'] at hfs
+    rw [hfs]; rw [Subgroup.index_map]; rw [MonoidHom.ker_eq_bot (stabilizer G a).subtype
+        (by simp only [Subgroup.coe_subtype]; rw [Subtype.coe_injective])]
+    simp only [sup_bot_eq, Subgroup.range_subtype]
+    have htcard : t.ncard = k := by
+      rw [← Nat.succ_inj]; rw [Nat.succ_eq_add_one]; rw [Nat.succ_eq_add_one]; rw [← hs]; rw [hat']; rw [eq_comm]
+      suffices ¬ a in (Subtype.val '' t) by
+        convert! Set.ncard_insert_of_notMem this ?_
+        · rw [Set.ncard_image_of_injective _ Subtype.coe_injective]
+        apply Set.toFinite
+      intro h
+      obtain ⟨⟨b, hb⟩, _, hb'⟩ := h
+      apply hb
+      simp only [← hb', Set.mem_singleton_iff]
+    suffices (fixingSubgroup (stabilizer G a) t).index *
+      (Nat.card α - 1 - k).factorial =
+        (Nat.card α - 1).factorial by
+      rw [add_comm k]; rw [Nat.mul_right_comm]; rw [← Nat.sub_sub]; rw [this]; rw [mul_comm]; rw [index_stabilizer_of_transitive G a]
+      exact Nat.mul_factorial_pred (card_ne_zero.mpr ⟨⟨a⟩, inferInstance⟩)
+    convert! hrec (ofStabilizer.isMultiplyPretransitive.mp Hk) htcard
+    all_goals { rw [nat_card_ofStabilizer_eq G a] }
 
 中文:
 定理 IsMultiplyPretransitive.index_of_fixingSubgroup_mul
@@ -1004,7 +1138,43 @@ theorem IsMultiplyPretransitive.index_of_fixingSubgroup_mul
     have hGX : IsPretransitive G α := by
       rw [← is_one_pretransitive_iff]
       apply isMultiplyPretransitive_of_le (n := k + 1)
-      · rw [Nat.succ_le_succ_iff]; apply Nat.zero
+      · rw [Nat.succ_le_succ_iff]; apply Nat.zero_le
+      · rw [← hs, ← Set.ncard_univ]
+        exact ncard_le_ncard s.subset_univ finite_univ
+    have : s.Nonempty := by
+      rw [← Set.ncard_pos]; rw [hs]
+      exact succ_pos k
+    obtain ⟨a, has⟩ := this
+    let t : Set (SubMulAction.ofStabilizer G a) := Subtype.val ⁻¹' s
+    have hat : Subtype.val '' t = s \ {a} := by
+      rw [Set.image_preimage_eq_inter_range]
+      simp only [Subtype.range_coe_subtype]
+      rw [Set.sdiff_eq_compl_inter]; rw [Set.inter_comm]
+      congr
+    have hat' : s = insert a (Subtype.val '' t) := by
+      rw [hat]; rw [Set.insert_sdiff_singleton]; rw [Set.insert_eq_of_mem has]
+    have hfs := SubMulAction.fixingSubgroup_of_insert a t
+    rw [← hat'] at hfs
+    rw [hfs]; rw [Subgroup.index_map]; rw [MonoidHom.ker_eq_bot (stabilizer G a).subtype
+        (by simp only [Subgroup.coe_subtype]; rw [Subtype.coe_injective])]
+    simp only [sup_bot_eq, Subgroup.range_subtype]
+    have htcard : t.ncard = k := by
+      rw [← Nat.succ_inj]; rw [Nat.succ_eq_add_one]; rw [Nat.succ_eq_add_one]; rw [← hs]; rw [hat']; rw [eq_comm]
+      suffices ¬ a in (Subtype.val '' t) by
+        convert! Set.ncard_insert_of_notMem this ?_
+        · rw [Set.ncard_image_of_injective _ Subtype.coe_injective]
+        apply Set.toFinite
+      intro h
+      obtain ⟨⟨b, hb⟩, _, hb'⟩ := h
+      apply hb
+      simp only [← hb', Set.mem_singleton_iff]
+    suffices (fixingSubgroup (stabilizer G a) t).index *
+      (Nat.card α - 1 - k).factorial =
+        (Nat.card α - 1).factorial by
+      rw [add_comm k]; rw [Nat.mul_right_comm]; rw [← Nat.sub_sub]; rw [this]; rw [mul_comm]; rw [index_stabilizer_of_transitive G a]
+      exact Nat.mul_factorial_pred (card_ne_zero.mpr ⟨⟨a⟩, inferInstance⟩)
+    convert! hrec (ofStabilizer.isMultiplyPretransitive.mp Hk) htcard
+    all_goals { rw [nat_card_ofStabilizer_eq G a] }
 
 Depends on / 依赖: IsPretransitive, Nat.succ_le_succ_iff, Nat.zero_le, Nonempty, Set.ncard_eq_zero, Set.ncard_pos, Set.ncard_univ, SubMulAction, SubMulAction.ofStabilizer, Subtype, Subtype.val, finite_univ, generalizing, isMultiplyPretransitive_of_le, is_one_pretransitive_iff, ncard_eq_zero, ncard_le_ncard, ncard_pos, ncard_univ, ofStabilizer
 -/
@@ -1179,7 +1349,35 @@ theorem eq_top_of_isMultiplyPretransitive
     (Fin.castLEEmb ((Fintype.card α).sub_le 1))
   rw [eq_top_iff]
   intro k _
-  let x : Fin (Fintype.card α) ↪ α := (Fintype.equivFinOfCardEq rfl).symm.toEmbeddi
+  let x : Fin (Fintype.card α) ↪ α := (Fintype.equivFinOfCardEq rfl).symm.toEmbedding
+  let x' := j.trans x
+  obtain ⟨g, hg'⟩ := exists_smul_eq G x' (k • x')
+  suffices k = g by rw [this]; exact SetLike.coe_mem g
+  have hx (x : Fin (Fintype.card α) ↪ α) : Function.Surjective x.toFun := by
+    apply Function.Bijective.surjective
+    rw [Fintype.bijective_iff_injective_and_card]
+    exact ⟨EmbeddingLike.injective x, Fintype.card_fin (Fintype.card α)⟩
+  have hgk' (i : Fin (Fintype.card α)) (hi : i.val < Fintype.card α - 1) :
+      (g • x) i = (k • x) i :=
+    Function.Embedding.ext_iff.mp hg' ⟨i.val, hi⟩
+  have hgk (i : Fin (Fintype.card α)) : (g • x) i = (k • x) i := by
+    rcases lt_or_eq_of_le (le_sub_one_of_lt i.prop) with hi | hi
+    · exact hgk' i hi
+    · obtain ⟨j, hxj : (k • x) j = (g • x) i⟩ := hx (k • x) ((g • x) i)
+      rcases lt_or_eq_of_le (le_sub_one_of_lt j.prop) with hj | hj
+      · suffices i = j by
+          rw [← this]; rw [← hi] at hj
+          exact (lt_irrefl _ hj).elim
+        apply EmbeddingLike.injective (g • x)
+        rw [hgk' j hj]; rw [hxj]
+      · rw [← hxj]
+        apply congr_arg
+        rw [Fin.ext_iff]; rw [hi]; rw [hj]
+  ext a
+  obtain ⟨i, rfl⟩ := (hx x) a
+  specialize hgk i
+  simp only [Function.Embedding.smul_apply, Equiv.Perm.smul_def] at hgk
+  simp [← hgk, Subgroup.smul_def, Perm.smul_def]
 
 中文:
 定理 eq_top_of_isMultiplyPretransitive
@@ -1191,7 +1389,35 @@ theorem eq_top_of_isMultiplyPretransitive
     (Fin.castLEEmb ((Fintype.card α).sub_le 1))
   rw [eq_top_iff]
   intro k _
-  let x : Fin (Fintype.card α) ↪ α := (Fintype.equivFinOfCardEq rfl).symm.toEmbeddi
+  let x : Fin (Fintype.card α) ↪ α := (Fintype.equivFinOfCardEq rfl).symm.toEmbedding
+  let x' := j.trans x
+  obtain ⟨g, hg'⟩ := exists_smul_eq G x' (k • x')
+  suffices k = g by rw [this]; exact SetLike.coe_mem g
+  have hx (x : Fin (Fintype.card α) ↪ α) : Function.Surjective x.toFun := by
+    apply Function.Bijective.surjective
+    rw [Fintype.bijective_iff_injective_and_card]
+    exact ⟨EmbeddingLike.injective x, Fintype.card_fin (Fintype.card α)⟩
+  have hgk' (i : Fin (Fintype.card α)) (hi : i.val < Fintype.card α - 1) :
+      (g • x) i = (k • x) i :=
+    Function.Embedding.ext_iff.mp hg' ⟨i.val, hi⟩
+  have hgk (i : Fin (Fintype.card α)) : (g • x) i = (k • x) i := by
+    rcases lt_or_eq_of_le (le_sub_one_of_lt i.prop) with hi | hi
+    · exact hgk' i hi
+    · obtain ⟨j, hxj : (k • x) j = (g • x) i⟩ := hx (k • x) ((g • x) i)
+      rcases lt_or_eq_of_le (le_sub_one_of_lt j.prop) with hj | hj
+      · suffices i = j by
+          rw [← this]; rw [← hi] at hj
+          exact (lt_irrefl _ hj).elim
+        apply EmbeddingLike.injective (g • x)
+        rw [hgk' j hj]; rw [hxj]
+      · rw [← hxj]
+        apply congr_arg
+        rw [Fin.ext_iff]; rw [hi]; rw [hj]
+  ext a
+  obtain ⟨i, rfl⟩ := (hx x) a
+  specialize hgk i
+  simp only [Function.Embedding.smul_apply, Equiv.Perm.smul_def] at hgk
+  simp [← hgk, Subgroup.smul_def, Perm.smul_def]
 
 Depends on / 依赖: Fin.castLEEmb, Fintype, Fintype.card, Fintype.equivFinOfCardEq, Fintype.ofFinite, Function, Function.Bi, Function.Surjective, Nat.card_eq_fintype_card, SetLike, SetLike.coe_mem, Surjective, card_eq_fintype_card, castLEEmb, coe_mem, eq_top_iff, equivFinOfCardEq, exists_smul_eq, j.trans, ofFinite
 -/
@@ -1250,7 +1476,20 @@ theorem isMultiplyPretransitive
     apply is_zero_pretransitive
   have h2le : Nat.card α - 2 <= Nat.card α := sub_le (Nat.card α) 2
   have := Equiv.Perm.isMultiplyPretransitive α (Nat.card α)
-  have : IsMultiplyPretransitive (Equiv.Perm α
+  have : IsMultiplyPretransitive (Equiv.Perm α) α (Nat.card α - 2) :=
+    MulAction.isMultiplyPretransitive_of_le h2le le_rfl
+  refine ⟨fun x y => ?_⟩
+  obtain ⟨g, hg⟩ := exists_smul_eq (Equiv.Perm α) x y
+  rcases Int.units_eq_one_or (Equiv.Perm.sign g) with h | h
+  · exact ⟨⟨g, h⟩, hg⟩
+  · have : (Finset.univ.image x)ᶜ.card = 2 := by
+      rw [Finset.card_compl]; rw [Finset.univ.card_image_of_injective (by exact x.2)]; rw [Finset.card_univ]; rw [← Nat.card_eq_fintype_card]; rw [Fintype.card_fin]; rw [tsub_tsub_cancel_of_le h2]
+    obtain ⟨a, b, hab, hs⟩ := Finset.card_eq_two.mp this
+    refine ⟨⟨g * Equiv.swap a b, by simp [h, hab]⟩, ?_⟩
+    ext i
+    have h : x i in Finset.univ.image x := Finset.mem_image.mpr ⟨i, Finset.mem_univ i, rfl⟩
+    rw [← Finset.notMem_compl]; rw [hs]; rw [Finset.mem_insert]; rw [Finset.mem_singleton]; rw [not_or] at h
+    simp [Equiv.swap_apply_of_ne_of_ne h.1 h.2, ← hg]
 
 中文:
 定理 isMultiplyPretransitive
@@ -1260,7 +1499,20 @@ theorem isMultiplyPretransitive
     apply is_zero_pretransitive
   have h2le : Nat.card α - 2 <= Nat.card α := sub_le (Nat.card α) 2
   have := Equiv.Perm.isMultiplyPretransitive α (Nat.card α)
-  have : IsMultiplyPretransitive (Equiv.Perm α
+  have : IsMultiplyPretransitive (Equiv.Perm α) α (Nat.card α - 2) :=
+    MulAction.isMultiplyPretransitive_of_le h2le le_rfl
+  refine ⟨fun x y => ?_⟩
+  obtain ⟨g, hg⟩ := exists_smul_eq (Equiv.Perm α) x y
+  rcases Int.units_eq_one_or (Equiv.Perm.sign g) with h | h
+  · exact ⟨⟨g, h⟩, hg⟩
+  · have : (Finset.univ.image x)ᶜ.card = 2 := by
+      rw [Finset.card_compl]; rw [Finset.univ.card_image_of_injective (by exact x.2)]; rw [Finset.card_univ]; rw [← Nat.card_eq_fintype_card]; rw [Fintype.card_fin]; rw [tsub_tsub_cancel_of_le h2]
+    obtain ⟨a, b, hab, hs⟩ := Finset.card_eq_two.mp this
+    refine ⟨⟨g * Equiv.swap a b, by simp [h, hab]⟩, ?_⟩
+    ext i
+    have h : x i in Finset.univ.image x := Finset.mem_image.mpr ⟨i, Finset.mem_univ i, rfl⟩
+    rw [← Finset.notMem_compl]; rw [hs]; rw [Finset.mem_insert]; rw [Finset.mem_singleton]; rw [not_or] at h
+    simp [Equiv.swap_apply_of_ne_of_ne h.1 h.2, ← hg]
 
 Depends on / 依赖: Equiv.Perm, Equiv.Perm.isMultiplyPretransitive, Equiv.Perm.sign, Int.units_eq_one_or, IsMultiplyPretransitive, MulAction, MulAction.isMultiplyPretransitive_of_le, Nat.card, Nat.sub_eq_zero_of_le, exists_smul_eq, isMultiplyPretransitive, isMultiplyPretransitive_of_le, is_zero_pretransitive, le_of_lt, le_rfl, lt_or_ge, sub_eq_zero_of_le, sub_le, units_eq_one_or
 -/
@@ -1300,7 +1552,16 @@ theorem _root_.IsMultiplyPretransitive.alternatingGroup_le
   apply Equiv.Perm.alternatingGroup_le_of_index_le_two
   -- one picks up a set of cardinality (card α - 2)
   obtain ⟨s, _, hs⟩ :=
-    Set.exists_subs
+    Set.exists_subset_card_eq (s := (Set.univ : Set α)) (n := Nat.card α - 2)
+      (by rw [Set.ncard_univ]; exact sub_le (Nat.card α) 2)
+  rw [← hs] at hmt
+  -- The index of (fixingSubgroup G s) is (card α)!/2
+  have := hmt.index_of_fixingSubgroup_mul rfl
+  rw [hs]; rw [Nat.sub_sub_self hα]; rw [factorial_two] at this
+  -- conclude
+  rw [← mul_le_mul_iff_of_pos_left (a := Nat.card G) card_pos]; rw [Subgroup.card_mul_index]; rw [← (fixingSubgroup G s).index_mul_card]; rw [mul_assoc]; rw [mul_comm _ 2]; rw [← mul_assoc]
+  rw [this]; rw [Nat.card_perm]
+  refine Nat.le_mul_of_pos_right (Nat.card α)! card_pos
 
 中文:
 定理 _root_.IsMultiplyPretransitive.alternatingGroup_le
@@ -1313,7 +1574,16 @@ theorem _root_.IsMultiplyPretransitive.alternatingGroup_le
   apply Equiv.Perm.alternatingGroup_le_of_index_le_two
   -- one picks up a set of cardinality (card α - 2)
   obtain ⟨s, _, hs⟩ :=
-    Set.exists_subs
+    Set.exists_subset_card_eq (s := (Set.univ : Set α)) (n := Nat.card α - 2)
+      (by rw [Set.ncard_univ]; exact sub_le (Nat.card α) 2)
+  rw [← hs] at hmt
+  -- The index of (fixingSubgroup G s) is (card α)!/2
+  have := hmt.index_of_fixingSubgroup_mul rfl
+  rw [hs]; rw [Nat.sub_sub_self hα]; rw [factorial_two] at this
+  -- conclude
+  rw [← mul_le_mul_iff_of_pos_left (a := Nat.card G) card_pos]; rw [Subgroup.card_mul_index]; rw [← (fixingSubgroup G s).index_mul_card]; rw [mul_assoc]; rw [mul_comm _ 2]; rw [← mul_assoc]
+  rw [this]; rw [Nat.card_perm]
+  refine Nat.le_mul_of_pos_right (Nat.card α)! card_pos
 
 Depends on / 依赖: Nat.card, Nat.lt_or_ge, bot_le, eq_bot_of_card_le_two, lt_or_ge
 -/
@@ -1382,7 +1652,15 @@ theorem isTrivialBlock_of_isBlock
   rcases le_or_gt (Nat.card α) 3 with h3 | h4
   · replace h3 : Nat.card α = 3 := le_antisymm h3 h2
     have : IsPretransitive (alternatingGroup α) α := isPretransitive_of_three_le_card α h3.ge
-    have : Is
+    have : IsPreprimitive (alternatingGroup α) α := IsPreprimitive.of_prime_card (h3 ▸ prime_three)
+    exact this.isTrivialBlock_of_isBlock hB
+  -- IsTrivialBlock hB, for 4 ≤ Nat.card α
+  suffices IsPreprimitive (alternatingGroup α) α by
+    apply IsPreprimitive.isTrivialBlock_of_isBlock hB
+  apply isPreprimitive_of_is_two_pretransitive
+  let := isMultiplyPretransitive α
+  apply isMultiplyPretransitive_of_le (n := Nat.card α - 2) _ (sub_le _ _)
+  rwa [← add_le_add_iff_right 2, Nat.sub_add_cancel (le_of_lt h2)]
 
 中文:
 定理 isTrivialBlock_of_isBlock
@@ -1393,7 +1671,15 @@ theorem isTrivialBlock_of_isBlock
   rcases le_or_gt (Nat.card α) 3 with h3 | h4
   · replace h3 : Nat.card α = 3 := le_antisymm h3 h2
     have : IsPretransitive (alternatingGroup α) α := isPretransitive_of_three_le_card α h3.ge
-    have : Is
+    have : IsPreprimitive (alternatingGroup α) α := IsPreprimitive.of_prime_card (h3 ▸ prime_three)
+    exact this.isTrivialBlock_of_isBlock hB
+  -- IsTrivialBlock hB, for 4 ≤ Nat.card α
+  suffices IsPreprimitive (alternatingGroup α) α by
+    apply IsPreprimitive.isTrivialBlock_of_isBlock hB
+  apply isPreprimitive_of_is_two_pretransitive
+  let := isMultiplyPretransitive α
+  apply isMultiplyPretransitive_of_le (n := Nat.card α - 2) _ (sub_le _ _)
+  rwa [← add_le_add_iff_right 2, Nat.sub_add_cancel (le_of_lt h2)]
 
 Depends on / 依赖: IsPreprimitive, IsPreprimitive.of_prime_card, IsPretransitive, Nat.card, alternatingGroup, h3.ge, isPretransitive_of_three_le_card, isTrivialBlock_of_card_le_two, isTrivialBlock_of_isBlock, le_antisymm, le_or_gt, of_prime_card, prime_three, replace, this.isTrivialBlock_of_isBlock
 -/

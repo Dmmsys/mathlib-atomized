@@ -312,7 +312,16 @@ lemma mor_precomp
   proof: by
   dsimp
   rw [mor_eq _ _ _ _ _ (r ≫ q ≫ f i) (r ≫ a ≫ p' j)]; rw [mor_eq _ _ _ _ _ _ _ rfl rfl]; rw [← D₁.pullHom_hom r (q ≫ f i) _ rfl q (a ≫ p' j) rfl (by cat_disch) r' _ hr' rfl]; rw [← D₂.pullHom_hom r (q ≫ f i) _ rfl (a ≫ p' j) q (by cat_disch) rfl _ r' rfl hr']
-  have := F.mapComp'_naturali
+  have := F.mapComp'_naturality_2 a.op.toLoc r.op.toLoc a'.op.toLoc (by cat_disch) (φ.hom j)
+  dsimp [pullHom] at this ⊢
+  simp only [Category.assoc, Functor.map_comp, ← this,
+    Cat.Hom.inv_hom_id_toNatTrans_app_assoc,
+    mapComp'₀₁₃_hom_comp_whiskerLeft_mapComp'_hom_app_assoc F
+    (p' j).op.toLoc a.op.toLoc r.op.toLoc ((p' j).op.toLoc ≫ a.op.toLoc) a'.op.toLoc
+      (((p' j).op.toLoc ≫ a.op.toLoc) ≫ r.op.toLoc) rfl (by grind) (by grind),
+    ← mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app_assoc F
+    (p' j).op.toLoc a.op.toLoc r.op.toLoc ((p' j).op.toLoc ≫ a.op.toLoc) a'.op.toLoc
+      (((p' j).op.toLoc ≫ a.op.toLoc) ≫ r.op.toLoc) rfl (by grind) (by grind)]
 
 中文:
 引理 mor_precomp
@@ -321,7 +330,16 @@ lemma mor_precomp
   证明: by
   dsimp
   rw [mor_eq _ _ _ _ _ (r ≫ q ≫ f i) (r ≫ a ≫ p' j)]; rw [mor_eq _ _ _ _ _ _ _ rfl rfl]; rw [← D₁.pullHom_hom r (q ≫ f i) _ rfl q (a ≫ p' j) rfl (by cat_disch) r' _ hr' rfl]; rw [← D₂.pullHom_hom r (q ≫ f i) _ rfl (a ≫ p' j) q (by cat_disch) rfl _ r' rfl hr']
-  have := F.mapComp'_naturali
+  have := F.mapComp'_naturality_2 a.op.toLoc r.op.toLoc a'.op.toLoc (by cat_disch) (φ.hom j)
+  dsimp [pullHom] at this ⊢
+  simp only [Category.assoc, Functor.map_comp, ← this,
+    Cat.Hom.inv_hom_id_toNatTrans_app_assoc,
+    mapComp'₀₁₃_hom_comp_whiskerLeft_mapComp'_hom_app_assoc F
+    (p' j).op.toLoc a.op.toLoc r.op.toLoc ((p' j).op.toLoc ≫ a.op.toLoc) a'.op.toLoc
+      (((p' j).op.toLoc ≫ a.op.toLoc) ≫ r.op.toLoc) rfl (by grind) (by grind),
+    ← mapComp'_inv_whiskerRight_mapComp'₀₂₃_inv_app_assoc F
+    (p' j).op.toLoc a.op.toLoc r.op.toLoc ((p' j).op.toLoc ≫ a.op.toLoc) a'.op.toLoc
+      (((p' j).op.toLoc ≫ a.op.toLoc) ≫ r.op.toLoc) rfl (by grind) (by grind)]
 
 Depends on / 依赖: F.mapComp, F.presheafHom, Over.homMk, _naturality_2, a.op.toLoc, cat_disch, mapComp, mor_eq, op.toLoc, presheafHom, pullHom_hom, r.op.toLoc
 -/
@@ -355,7 +373,13 @@ lemma mor_unique
   proof: by
   have := φ.comm (q ≫ f i) a₁ a₂ fac₁ fac₂
   dsimp at this
-  rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ f i) (a₁ ≫ p' j₁) (a₂ ≫ p' j₂) rfl]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ f i) (a₁ ≫ p' j₁) (a₂ ≫ p' j₂) rfl]; rw [map_eq_pullHom _ _ _ _ (by exact rfl) rfl]; rw [map_eq_pullHom _ _ _ _ rfl rfl
+  rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ f i) (a₁ ≫ p' j₁) (a₂ ≫ p' j₂) rfl]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ f i) (a₁ ≫ p' j₁) (a₂ ≫ p' j₂) rfl]; rw [map_eq_pullHom _ _ _ _ (by exact rfl) rfl]; rw [map_eq_pullHom _ _ _ _ rfl rfl] at this
+  dsimp at this
+  simp only [Category.assoc, Cat.Hom.hom_inv_id_toNatTrans_app_assoc, cancel_epi] at this
+  simp only [← Category.assoc, cancel_mono] at this
+  rw [← cancel_mono (D₂.hom (q ≫ f i) (a₂ ≫ p' j₂) q)]; rw [Category.assoc]; rw [D₂.hom_comp] at this
+  rw [mor_eq _ _ _ _ _ _ _ rfl rfl]; rw [mor_eq _ _ _ _ _ _ _ rfl rfl]; rw [this]
+  simp
 
 中文:
 引理 mor_unique
@@ -364,7 +388,13 @@ lemma mor_unique
   证明: by
   have := φ.comm (q ≫ f i) a₁ a₂ fac₁ fac₂
   dsimp at this
-  rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ f i) (a₁ ≫ p' j₁) (a₂ ≫ p' j₂) rfl]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ f i) (a₁ ≫ p' j₁) (a₂ ≫ p' j₂) rfl]; rw [map_eq_pullHom _ _ _ _ (by exact rfl) rfl]; rw [map_eq_pullHom _ _ _ _ rfl rfl
+  rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ f i) (a₁ ≫ p' j₁) (a₂ ≫ p' j₂) rfl]; rw [pullFunctorObjHom_eq _ _ _ _ _ (q ≫ f i) (a₁ ≫ p' j₁) (a₂ ≫ p' j₂) rfl]; rw [map_eq_pullHom _ _ _ _ (by exact rfl) rfl]; rw [map_eq_pullHom _ _ _ _ rfl rfl] at this
+  dsimp at this
+  simp only [Category.assoc, Cat.Hom.hom_inv_id_toNatTrans_app_assoc, cancel_epi] at this
+  simp only [← Category.assoc, cancel_mono] at this
+  rw [← cancel_mono (D₂.hom (q ≫ f i) (a₂ ≫ p' j₂) q)]; rw [Category.assoc]; rw [D₂.hom_comp] at this
+  rw [mor_eq _ _ _ _ _ _ _ rfl rfl]; rw [mor_eq _ _ _ _ _ _ _ rfl rfl]; rw [this]
+  simp
 
 Depends on / 依赖: Cat.Hom.hom_inv_id_toNatTrans_app_assoc, Category, Category.assoc, cancel_epi, cat_disch, hom_inv_id_toNatTrans_app_assoc, map_eq_pullHom, pullFunctorObjHom_eq
 -/
@@ -451,7 +481,13 @@ lemma compatible_familyOfElements
   obtain rfl : f₂ = Over.homMk Y₂.hom := by ext; simpa using Over.w f₂
   obtain ⟨g₁, hg₁, rfl⟩ := Over.homMk_surjective g₁
   obtain ⟨g₂, hg₂, rfl⟩ := Over.homMk_surjective g₂
-  obtain ⟨_, 
+  obtain ⟨_, a₁, _, ⟨j₁⟩, fac₁⟩ := h₁
+  obtain ⟨_, a₂, _, ⟨j₂⟩, fac₂⟩ := h₂
+  dsimp at *
+  rw [familyOfElements_eq _ _ _ _ fac₁]; rw [familyOfElements_eq _ _ _ _ fac₂]; rw [← dsimp% mor_precomp w φ Y₁.hom a₁ fac₁ _ _ _ hg₁ rfl]; rw [← dsimp% mor_precomp w φ Y₂.hom a₂ fac₂ _ _ _ hg₂ rfl]
+  apply mor_unique
+
+include hf' in
 
 中文:
 引理 compatible_familyOfElements
@@ -462,7 +498,13 @@ lemma compatible_familyOfElements
   obtain rfl : f₂ = Over.homMk Y₂.hom := by ext; simpa using Over.w f₂
   obtain ⟨g₁, hg₁, rfl⟩ := Over.homMk_surjective g₁
   obtain ⟨g₂, hg₂, rfl⟩ := Over.homMk_surjective g₂
-  obtain ⟨_, 
+  obtain ⟨_, a₁, _, ⟨j₁⟩, fac₁⟩ := h₁
+  obtain ⟨_, a₂, _, ⟨j₂⟩, fac₂⟩ := h₂
+  dsimp at *
+  rw [familyOfElements_eq _ _ _ _ fac₁]; rw [familyOfElements_eq _ _ _ _ fac₂]; rw [← dsimp% mor_precomp w φ Y₁.hom a₁ fac₁ _ _ _ hg₁ rfl]; rw [← dsimp% mor_precomp w φ Y₂.hom a₂ fac₂ _ _ _ hg₂ rfl]
+  apply mor_unique
+
+include hf' in
 
 Depends on / 依赖: Over.homMk, Over.homMk_surjective, Over.w, familyOfElements_eq, homMk_surjective, mor_precomp
 -/
@@ -524,7 +566,12 @@ lemma map_hom
       (by simpa using sieve_mem _ hf' i)) _
         (compatible_familyOfElements w φ i)
   have hs : (familyOfElements w φ i).IsAmalgamation s :=
-    Presieve.IsSheafFor.isA
+    Presieve.IsSheafFor.isAmalgamation
+      (((isSheaf_iff_isSheaf_of_type _ _).1 (IsPrestack.isSheaf J _ _)).isSheafFor _
+        (by simpa using sieve_mem _ hf' i)) (compatible_familyOfElements w φ i)
+  simpa [hom, familyOfElements_eq w φ (Z := Over.mk q) _ a fac,
+    presheafHomObjHomEquiv, pullHom, mapComp'_id_comp_hom_app,
+    mapComp'_id_comp_inv_app] using hs _ (mem_sieve _ _ fac)
 
 中文:
 引理 map_hom
@@ -536,7 +583,12 @@ lemma map_hom
       (by simpa using sieve_mem _ hf' i)) _
         (compatible_familyOfElements w φ i)
   have hs : (familyOfElements w φ i).IsAmalgamation s :=
-    Presieve.IsSheafFor.isA
+    Presieve.IsSheafFor.isAmalgamation
+      (((isSheaf_iff_isSheaf_of_type _ _).1 (IsPrestack.isSheaf J _ _)).isSheafFor _
+        (by simpa using sieve_mem _ hf' i)) (compatible_familyOfElements w φ i)
+  simpa [hom, familyOfElements_eq w φ (Z := Over.mk q) _ a fac,
+    presheafHomObjHomEquiv, pullHom, mapComp'_id_comp_hom_app,
+    mapComp'_id_comp_inv_app] using hs _ (mem_sieve _ _ fac)
 
 Depends on / 依赖: F.map, IsAmalgamation, IsPrestack, IsPrestack.isSheaf, IsSheafFor, Presieve, Presieve.IsSheafFor.amalgamate, Presieve.IsSheafFor.isAmalgamation, amalgamate, cat_disch, compatible_f, compatible_familyOfElements, familyOfElements, isAmalgamation, isSheaf, isSheafFor, isSheaf_iff_isSheaf_of_type, q.op.toLoc, sieve_mem, toFunctor
 -/
@@ -568,7 +620,19 @@ lemma comm
   rw [← cancel_mono (D₂.hom q f₂ f₁)]; rw [Category.assoc]; rw [Category.assoc]; rw [DescentData.hom_comp]; rw [D₂.hom_self _ _ hf₁]; rw [Category.comp_id]
   have H : (Sieve.overEquiv (Over.mk f₁)).symm
       (Sieve.pullback q (Sieve.ofArrows X' f')) in J.over _ _ := by
-    rw [J.mem_over_iff]; r
+    rw [J.mem_over_iff]; rw [OrderIso.apply_symm_apply]
+    exact J.pullback_stable _ hf'
+  refine ((isSheaf_iff_isSheaf_of_type _ _).1
+    (IsPrestack.isSheaf J (D₁.obj i₁) (D₂.obj i₁)) _ H).isSeparatedFor.ext ?_
+  rintro T p ⟨_, g, _, ⟨j⟩, fac⟩
+  obtain ⟨T, t, rfl⟩ := T.mk_surjective
+  obtain ⟨p, hp, rfl⟩ := Over.homMk_surjective p
+  dsimp [pullHom] at t g p hp fac ⊢
+  subst hp
+  simp only [mapComp'_inv_naturality, Cat.Hom.comp_toFunctor, Functor.comp_obj,
+    Cat.Hom.hom_inv_id_toNatTrans_app_assoc, Functor.map_comp, Category.assoc]
+  rw [← F.mapComp'_naturality_1 f₂.op.toLoc p.op.toLoc (p ≫ f₂).op.toLoc (by grind)]; rw [map_hom _ _ _ _ g (by grind)]; rw [map_hom _ _ _ _ g (by grind)]; rw [mor_eq _ _ _ _ (by grind) (p ≫ q) _ (by grind) rfl]; rw [mor_eq _ _ _ _ (by grind) (p ≫ q) _ (by grind) rfl]; rw [map_eq_pullHom _ _ _ _ rfl rfl]; rw [map_eq_pullHom _ _ _ _ rfl rfl]; rw [pullHom_hom _ _ _ _ rfl _ _ hf₁ hf₂ _ _ rfl rfl]; rw [pullHom_hom _ _ _ _ rfl _ _ hf₂ hf₁ _ _ rfl rfl]
+  simp
 
 中文:
 引理 comm
@@ -578,7 +642,19 @@ lemma comm
   rw [← cancel_mono (D₂.hom q f₂ f₁)]; rw [Category.assoc]; rw [Category.assoc]; rw [DescentData.hom_comp]; rw [D₂.hom_self _ _ hf₁]; rw [Category.comp_id]
   have H : (Sieve.overEquiv (Over.mk f₁)).symm
       (Sieve.pullback q (Sieve.ofArrows X' f')) in J.over _ _ := by
-    rw [J.mem_over_iff]; r
+    rw [J.mem_over_iff]; rw [OrderIso.apply_symm_apply]
+    exact J.pullback_stable _ hf'
+  refine ((isSheaf_iff_isSheaf_of_type _ _).1
+    (IsPrestack.isSheaf J (D₁.obj i₁) (D₂.obj i₁)) _ H).isSeparatedFor.ext ?_
+  rintro T p ⟨_, g, _, ⟨j⟩, fac⟩
+  obtain ⟨T, t, rfl⟩ := T.mk_surjective
+  obtain ⟨p, hp, rfl⟩ := Over.homMk_surjective p
+  dsimp [pullHom] at t g p hp fac ⊢
+  subst hp
+  simp only [mapComp'_inv_naturality, Cat.Hom.comp_toFunctor, Functor.comp_obj,
+    Cat.Hom.hom_inv_id_toNatTrans_app_assoc, Functor.map_comp, Category.assoc]
+  rw [← F.mapComp'_naturality_1 f₂.op.toLoc p.op.toLoc (p ≫ f₂).op.toLoc (by grind)]; rw [map_hom _ _ _ _ g (by grind)]; rw [map_hom _ _ _ _ g (by grind)]; rw [mor_eq _ _ _ _ (by grind) (p ≫ q) _ (by grind) rfl]; rw [mor_eq _ _ _ _ (by grind) (p ≫ q) _ (by grind) rfl]; rw [map_eq_pullHom _ _ _ _ rfl rfl]; rw [map_eq_pullHom _ _ _ _ rfl rfl]; rw [pullHom_hom _ _ _ _ rfl _ _ hf₁ hf₂ _ _ rfl rfl]; rw [pullHom_hom _ _ _ _ rfl _ _ hf₂ hf₁ _ _ rfl rfl]
+  simp
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, DescentData, DescentData.hom_comp, F.map, J.mem_over_iff, J.over, OrderIso, OrderIso.apply_s, Over.mk, Sieve.ofArrows, Sieve.overEquiv, Sieve.pullback, apply_s, cancel_mono, cat_disch, comp_id, hom_comp, hom_self
 -/
@@ -619,14 +695,14 @@ lemma full_pullFunctor
   proof: ⟨{ hom := fun i => full_pullFunctor.hom w hf' φ i, comm := comm _ _ _ }, by
       ext i
       dsimp
-      rw [map_hom _ _ _ _ (𝟙 _) (by cat_disch)]; rw [mor_eq _ _ _ _ _ (f' i) (p' i)]; rw [pullHom_id]; rw [D₁.hom_self _ _ (by cat_disch)]; rw [D₂.hom_self _ _ (by cat_disch)]; rw [Category.id_comp]; 
+      rw [map_hom _ _ _ _ (𝟙 _) (by cat_disch)]; rw [mor_eq _ _ _ _ _ (f' i) (p' i)]; rw [pullHom_id]; rw [D₁.hom_self _ _ (by cat_disch)]; rw [D₂.hom_self _ _ (by cat_disch)]; rw [Category.id_comp]; rw [Category.comp_id]⟩
 
 中文:
 引理 full_pullFunctor
   证明: ⟨{ hom := fun i => full_pullFunctor.hom w hf' φ i, comm := comm _ _ _ }, by
       ext i
       dsimp
-      rw [map_hom _ _ _ _ (𝟙 _) (by cat_disch)]; rw [mor_eq _ _ _ _ _ (f' i) (p' i)]; rw [pullHom_id]; rw [D₁.hom_self _ _ (by cat_disch)]; rw [D₂.hom_self _ _ (by cat_disch)]; rw [Category.id_comp]; 
+      rw [map_hom _ _ _ _ (𝟙 _) (by cat_disch)]; rw [mor_eq _ _ _ _ _ (f' i) (p' i)]; rw [pullHom_id]; rw [D₁.hom_self _ _ (by cat_disch)]; rw [D₂.hom_self _ _ (by cat_disch)]; rw [Category.id_comp]; rw [Category.comp_id]⟩
 
 Depends on / 依赖: cat_disch
 -/
@@ -677,7 +753,17 @@ lemma isEquivalence_toDescentData_of_sieve_le
   choose α p hp using H
   obtain ⟨H, h, ⟨e⟩⟩ :
       exists (H : _ ⥤ _) (_ : H.FullyFaithful),
-        Nonempty (F.toDescentData f 
+        Nonempty (F.toDescentData f ⋙ H ≅ F.toDescentData f') := by
+    refine ⟨pullFunctor F (p := 𝟙 _) (p' := p) (by cat_disch), ?_, ?_⟩
+    · exact fullyFaithfulPullFunctor F hp h₁
+    · exact ⟨toDescentDataCompPullFunctorIso _ _ ≪≫
+          (Functor.isoWhiskerRight (Cat.Hom.toNatIso (F.mapId _)) _) ≪≫
+            Functor.leftUnitor _⟩
+  have := (F.fullyFaithfulToDescentData _ (J.superset_covering h₂ h₁)).faithful
+  have := (F.fullyFaithfulToDescentData _ (J.superset_covering h₂ h₁)).full
+  have : (F.toDescentData f).EssSurj := ⟨fun D =>
+    ⟨_, ⟨h.preimageIso (e.app _ ≪≫ (F.toDescentData f').objObjPreimageIso (H.obj D))⟩⟩⟩
+  exact { }
 
 中文:
 引理 isEquivalence_toDescentData_of_sieve_le
@@ -688,7 +774,17 @@ lemma isEquivalence_toDescentData_of_sieve_le
   choose α p hp using H
   obtain ⟨H, h, ⟨e⟩⟩ :
       exists (H : _ ⥤ _) (_ : H.FullyFaithful),
-        Nonempty (F.toDescentData f 
+        Nonempty (F.toDescentData f ⋙ H ≅ F.toDescentData f') := by
+    refine ⟨pullFunctor F (p := 𝟙 _) (p' := p) (by cat_disch), ?_, ?_⟩
+    · exact fullyFaithfulPullFunctor F hp h₁
+    · exact ⟨toDescentDataCompPullFunctorIso _ _ ≪≫
+          (Functor.isoWhiskerRight (Cat.Hom.toNatIso (F.mapId _)) _) ≪≫
+            Functor.leftUnitor _⟩
+  have := (F.fullyFaithfulToDescentData _ (J.superset_covering h₂ h₁)).faithful
+  have := (F.fullyFaithfulToDescentData _ (J.superset_covering h₂ h₁)).full
+  have : (F.toDescentData f).EssSurj := ⟨fun D =>
+    ⟨_, ⟨h.preimageIso (e.app _ ≪≫ (F.toDescentData f').objObjPreimageIso (H.obj D))⟩⟩⟩
+  exact { }
 
 Depends on / 依赖: Cat.Hom.toNatI, F.toDescentData, FullyFaithful, Functor, Functor.isoWhiskerRight, H.FullyFaithful, Nonempty, Sieve.ofArrows_mk, cat_disch, fullyFaithfulPullFunctor, isoWhiskerRight, ofArrows_mk, pullFunctor, toDescentData, toDescentDataCompPullFunctorIso, toNatI
 -/
@@ -791,7 +887,12 @@ lemma IsPrestack.of_precoverage
     rw [isSheaf_iff_isSheaf_of_type]; rw [over_toGrothendieck_eq_toGrothendieck_comap_forget]; rw [← Precoverage.toGrothendieck_toPretopology_eq_toGrothendieck]; rw [Presieve.isSheaf_pretopology]
     intro X R hR
     simp only [Precoverage.toPretopology_toPrecoverage, Precoverage.mem_comap_iff,
- 
+      Over.forget_obj] at hR
+    obtain ⟨R', hR'⟩ := (Sieve.overEquiv _).symm.surjective (Sieve.generate R)
+    rw [Presieve.isSheafFor_iff_generate]
+    apply IsPrestackFor.isSheafFor'
+    simpa [Sieve.overEquiv_generate, ← Sieve.arrows_generate_map_eq_functorPushforward]
+      using hF _ _ hR
 
 中文:
 引理 是Prestack.of_precoverage
@@ -799,7 +900,12 @@ lemma IsPrestack.of_precoverage
     rw [isSheaf_iff_isSheaf_of_type]; rw [over_toGrothendieck_eq_toGrothendieck_comap_forget]; rw [← Precoverage.toGrothendieck_toPretopology_eq_toGrothendieck]; rw [Presieve.isSheaf_pretopology]
     intro X R hR
     simp only [Precoverage.toPretopology_toPrecoverage, Precoverage.mem_comap_iff,
- 
+      Over.forget_obj] at hR
+    obtain ⟨R', hR'⟩ := (Sieve.overEquiv _).symm.surjective (Sieve.generate R)
+    rw [Presieve.isSheafFor_iff_generate]
+    apply IsPrestackFor.isSheafFor'
+    simpa [Sieve.overEquiv_generate, ← Sieve.arrows_generate_map_eq_functorPushforward]
+      using hF _ _ hR
 
 Depends on / 依赖: IsPrestackFor, IsPrestackFor.isSheafFor, Over.forget_obj, Precoverage, Precoverage.mem_comap_iff, Precoverage.toGrothendieck_toPretopology_eq_toGrothendieck, Precoverage.toPretopology_toPrecoverage, Presieve, Presieve.isSheafFor_iff_generate, Presieve.isSheaf_pretopology, Sieve.arro, Sieve.generate, Sieve.overEquiv, Sieve.overEquiv_generate, forget_obj, generate, isSheafFor, isSheafFor_iff_generate, isSheaf_iff_isSheaf_of_type, isSheaf_pretopology
 -/
@@ -828,7 +934,7 @@ lemma IsStack.of_precoverage
   rw [← J.toGrothendieck_toPretopology_eq_toGrothendieck] at hR
   obtain ⟨R', hR', h⟩ := hR
   dsimp at hR'
-  exact (hF _ _ hR').of_le _ (Precoverage.generate_mem_toGrothe
+  exact (hF _ _ hR').of_le _ (Precoverage.generate_mem_toGrothendieck hR') h
 
 中文:
 引理 是Stack.of_precoverage
@@ -838,7 +944,7 @@ lemma IsStack.of_precoverage
   rw [← J.toGrothendieck_toPretopology_eq_toGrothendieck] at hR
   obtain ⟨R', hR', h⟩ := hR
   dsimp at hR'
-  exact (hF _ _ hR').of_le _ (Precoverage.generate_mem_toGrothe
+  exact (hF _ _ hR').of_le _ (Precoverage.generate_mem_toGrothendieck hR') h
 
 Depends on / 依赖: IsPrestack, IsPrestack.of_precoverage, IsStackFor, IsStackFor.essSurj, J.toGrothendieck_toPretopology_eq_toGrothendieck, Precoverage, Precoverage.generate_mem_toGrothendieck, essSurj, generate_mem_toGrothendieck, isPrestackFor, of_le, of_precoverage, toGrothendieck_toPretopology_eq_toGrothendieck
 -/

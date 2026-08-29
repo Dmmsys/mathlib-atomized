@@ -169,7 +169,11 @@ lemma idealOfVars_eq_restrictSupportIdeal
   · simp [idealOfVars, Ideal.span_le, Set.range_subset_iff, restrictSupportIdeal, X]
   · simp only [SetLike.le_def, restrictSupportIdeal, Submodule.mem_mk, Submodule.mem_toAddSubmonoid,
       ← Submodule.restrictScalars_mem R (idealOfVars σ R)]
-    rw [← SetLike.le_def]; rw [r
+    rw [← SetLike.le_def]; rw [restrictSupport_eq_span]; rw [Submodule.span_le]; rw [Set.image_subset_iff]
+    intro x hx
+    obtain ⟨i, hi⟩ : x.support.Nonempty := by aesop
+    obtain ⟨c, rfl⟩ := le_iff_exists_add'.mp (show single i 1 <= x by simp_all; lia)
+    simpa [monomial_add_single] using Ideal.mul_mem_left _ _ (Ideal.subset_span (by simp))
 
 中文:
 引理 idealOfVars_eq_restrictSupportIdeal
@@ -178,7 +182,11 @@ lemma idealOfVars_eq_restrictSupportIdeal
   · simp [idealOfVars, Ideal.span_le, Set.range_subset_iff, restrictSupportIdeal, X]
   · simp only [SetLike.le_def, restrictSupportIdeal, Submodule.mem_mk, Submodule.mem_toAddSubmonoid,
       ← Submodule.restrictScalars_mem R (idealOfVars σ R)]
-    rw [← SetLike.le_def]; rw [r
+    rw [← SetLike.le_def]; rw [restrictSupport_eq_span]; rw [Submodule.span_le]; rw [Set.image_subset_iff]
+    intro x hx
+    obtain ⟨i, hi⟩ : x.support.Nonempty := by aesop
+    obtain ⟨c, rfl⟩ := le_iff_exists_add'.mp (show single i 1 <= x by simp_all; lia)
+    simpa [monomial_add_single] using Ideal.mul_mem_left _ _ (Ideal.subset_span (by simp))
 
 Depends on / 依赖: Ideal.span_le, Nonempty, Set.image_subset_iff, Set.range_subset_iff, SetLike, SetLike.le_def, Submodule, Submodule.mem_mk, Submodule.mem_toAddSubmonoid, Submodule.restrictScalars_mem, Submodule.span_le, idealOfVars, image_subset_iff, le_antisymm, le_def, le_iff_exists_add, mem_mk, mem_toAddSubmonoid, range_subset_iff, restrictScalars_mem
 -/
@@ -479,7 +487,10 @@ lemma span_leadingTerm_eq_span_monomial
   · rw [Set.mem_preimage, SetLike.mem_coe, ← C_mul_leadingCoeff_monomial_degree]
     exact Ideal.mul_mem_left _ _ (Ideal.subset_span ⟨_, hp, rfl⟩)
   · rw [Set.mem_preimage, SetLike.mem_coe]
-    conver
+    convert!
+(span <| m.leadingTerm '' B).mul_mem_left (MvPolynomial.C (hB p hp).unit⁻¹.val)
+        subset_span ⟨p, hp, rfl⟩
+    rw [← C_mul_leadingCoeff_monomial_degree]; rw [← mul_assoc]; rw [← map_mul]; rw [IsUnit.val_inv_mul]; rw [MvPolynomial.C_1]; rw [one_mul]
 
 中文:
 引理 span_leadingTerm_eq_span_monomial
@@ -492,7 +503,10 @@ lemma span_leadingTerm_eq_span_monomial
   · rw [Set.mem_preimage, SetLike.mem_coe, ← C_mul_leadingCoeff_monomial_degree]
     exact Ideal.mul_mem_left _ _ (Ideal.subset_span ⟨_, hp, rfl⟩)
   · rw [Set.mem_preimage, SetLike.mem_coe]
-    conver
+    convert!
+(span <| m.leadingTerm '' B).mul_mem_left (MvPolynomial.C (hB p hp).unit⁻¹.val)
+        subset_span ⟨p, hp, rfl⟩
+    rw [← C_mul_leadingCoeff_monomial_degree]; rw [← mul_assoc]; rw [← map_mul]; rw [IsUnit.val_inv_mul]; rw [MvPolynomial.C_1]; rw [one_mul]
 
 Depends on / 依赖: C_mul_leadingCoeff_monomial_degree, Ideal.mul_mem_left, Ideal.span_le, Ideal.subset_span, IsUnit, IsUnit.val_inv_mul, MvPolynomi, MvPolynomial, MvPolynomial.C, Set.image_subset_iff, Set.mem_preimage, SetLike, SetLike.mem_coe, all_goals, convert, image_subset_iff, le_antisymm, leadingTerm, m.leadingTerm, map_mul
 -/

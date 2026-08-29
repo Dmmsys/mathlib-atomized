@@ -451,7 +451,8 @@ instance instMonoid
   one_mul x := by
     rw [mul_def]; rw [mulHom_apply]; rw [auxEquiv_one]; rw [one_gradedMul]; rw [LinearEquiv.symm_apply_apply]
   mul_assoc x y z := by
-    simp_rw [mul_def, mulHom_apply,
+    simp_rw [mul_def, mulHom_apply, LinearEquiv.apply_symm_apply]
+    rw [gradedMul_assoc]
 
 中文:
 实例 instMonoid
@@ -461,7 +462,8 @@ instance instMonoid
   one_mul x := by
     rw [mul_def]; rw [mulHom_apply]; rw [auxEquiv_one]; rw [one_gradedMul]; rw [LinearEquiv.symm_apply_apply]
   mul_assoc x y z := by
-    simp_rw [mul_def, mulHom_apply,
+    simp_rw [mul_def, mulHom_apply, LinearEquiv.apply_symm_apply]
+    rw [gradedMul_assoc]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.apply_symm_apply, LinearEquiv.symm_apply_apply, apply_symm_apply, auxEquiv_one, gradedMul_assoc, gradedMul_one, mulHom_apply, mul_assoc, mul_def, one_gradedMul, one_mul, simp_rw, symm_apply_apply
 -/
@@ -514,7 +516,11 @@ theorem tmul_coe_mul_coe_tmul
   simp_rw [← lof_eq_of R]
   rw [tmul_of_gradedMul_of_tmul]
   simp_rw [lof_eq_of R]
-  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specialize `map_smul` 
+  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specialize `map_smul` to `LinearEquiv.map_smul`
+  rw [@Units.smul_def _ _ (_) (_)]; rw [← Int.cast_smul_eq_zsmul R]; rw [LinearEquiv.map_smul]; rw [map_smul]; rw [Int.cast_smul_eq_zsmul R]; rw [← @Units.smul_def _ _ (_) (_)]
+  rw [congr_symm_tmul]
+  dsimp
+  simp_rw [decompose_symm_mul, decompose_symm_of, Equiv.symm_apply_apply]
 
 中文:
 定理 tmul_coe_mul_coe_tmul
@@ -526,7 +532,11 @@ theorem tmul_coe_mul_coe_tmul
   simp_rw [← lof_eq_of R]
   rw [tmul_of_gradedMul_of_tmul]
   simp_rw [lof_eq_of R]
-  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specialize `map_smul` 
+  -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to specialize `map_smul` to `LinearEquiv.map_smul`
+  rw [@Units.smul_def _ _ (_) (_)]; rw [← Int.cast_smul_eq_zsmul R]; rw [LinearEquiv.map_smul]; rw [map_smul]; rw [Int.cast_smul_eq_zsmul R]; rw [← @Units.smul_def _ _ (_) (_)]
+  rw [congr_symm_tmul]
+  dsimp
+  simp_rw [decompose_symm_mul, decompose_symm_of, Equiv.symm_apply_apply]
 
 Depends on / 依赖: auxEquiv, decompose_coe, lof_eq_of, mulHom_apply, mul_def, of_symm_of, simp_rw, tmul_of_gradedMul_of_tmul
 -/
@@ -688,7 +698,7 @@ definition includeLeftRingHom
     simp_rw [tmul, sum_tmul, map_sum, Finset.mul_sum]
     congr
     ext i
-    rw [← Set
+    rw [← SetLike.coe_gOne ℬ]; rw [tmul_coe_mul_coe_tmul]; rw [zero_mul]; rw [uzpow_zero]; rw [one_smul]; rw [SetLike.coe_gOne]; rw [one_mul]
 
 中文:
 定义 includeLeftRingHom
@@ -703,7 +713,7 @@ definition includeLeftRingHom
     simp_rw [tmul, sum_tmul, map_sum, Finset.mul_sum]
     congr
     ext i
-    rw [← Set
+    rw [← SetLike.coe_gOne ℬ]; rw [tmul_coe_mul_coe_tmul]; rw [zero_mul]; rw [uzpow_zero]; rw [one_smul]; rw [SetLike.coe_gOne]; rw [one_mul]
 -/
 def includeLeftRingHom : A ->+* 𝒜 ᵍotimes[R] ℬ where
   toFun a := a ᵍotimesₜ 1
@@ -731,7 +741,11 @@ instance instAlgebra
     simp_rw [DirectSum.decompose_algebraMap, DirectSum.decompose_one, algebraMap_gradedMul,
       gradedMul_algebraMap]
   smul_def' r x := by
-    dsimp [mul_def, mulHom_apply, auxEqu
+    dsimp [mul_def, mulHom_apply, auxEquiv_tmul]
+    simp_rw [DirectSum.decompose_algebraMap, DirectSum.decompose_one, algebraMap_gradedMul]
+    -- Qualified `map_smul` to avoid a TC timeout https://github.com/leanprover-community/mathlib4/pull/8386
+    rw [LinearEquiv.map_smul]
+    simp
 
 中文:
 实例 instAlgebra
@@ -742,7 +756,11 @@ instance instAlgebra
     simp_rw [DirectSum.decompose_algebraMap, DirectSum.decompose_one, algebraMap_gradedMul,
       gradedMul_algebraMap]
   smul_def' r x := by
-    dsimp [mul_def, mulHom_apply, auxEqu
+    dsimp [mul_def, mulHom_apply, auxEquiv_tmul]
+    simp_rw [DirectSum.decompose_algebraMap, DirectSum.decompose_one, algebraMap_gradedMul]
+    -- Qualified `map_smul` to avoid a TC timeout https://github.com/leanprover-community/mathlib4/pull/8386
+    rw [LinearEquiv.map_smul]
+    simp
 
 Depends on / 依赖: algebraMap, includeLeftRingHom
 -/
@@ -854,7 +872,11 @@ definition includeRight
        map_smul' := by simp [tmul, TensorProduct.tmul_smul] })
     (map_one := rfl)
     (map_mul := by
-      rw [LinearMap.map_mul_if
+      rw [LinearMap.map_mul_iff]
+      refine DirectSum.decompose_lhom_ext ℬ fun i₁ => ?_
+      ext b₁ b₂ : 2
+      dsimp
+      rw [tmul_coe_mul_one_tmul])
 
 中文:
 定义 includeRight
@@ -866,7 +888,11 @@ definition includeRight
        map_smul' := by simp [tmul, TensorProduct.tmul_smul] })
     (map_one := rfl)
     (map_mul := by
-      rw [LinearMap.map_mul_if
+      rw [LinearMap.map_mul_iff]
+      refine DirectSum.decompose_lhom_ext ℬ fun i₁ => ?_
+      ext b₁ b₂ : 2
+      dsimp
+      rw [tmul_coe_mul_one_tmul])
 
 Depends on / 依赖: AlgHom, AlgHom.ofLinearMap, DirectSum, DirectSum.decompose_lhom_ext, LinearMap, LinearMap.map_mul_iff, TensorProduct, TensorProduct.tmul_add, TensorProduct.tmul_smul, decompose_lhom_ext, map_add, map_mul, map_mul_iff, map_one, map_smul, ofLinearMap, tmul_add, tmul_coe_mul_one_tmul, tmul_smul
 -/
@@ -922,7 +948,21 @@ definition lift
       simp only [map_one, mul_one])
     (by
       rw [LinearMap.map_mul_iff]
-     
+      ext a₁ : 3
+      refine DirectSum.decompose_lhom_ext ℬ fun j₁ => ?_
+      ext b₁ : 3
+      refine DirectSum.decompose_lhom_ext 𝒜 fun i₂ => ?_
+      ext a₂ b₂ : 2
+      dsimp
+      rw [tmul_coe_mul_coe_tmul]
+      rw [@Units.smul_def _ _ (_) (_)]; rw [← Int.cast_smul_eq_zsmul R]; rw [map_smul]; rw [map_smul]; rw [map_smul]
+      rw [Int.cast_smul_eq_zsmul R]; rw [← @Units.smul_def _ _ (_) (_)]
+      rw [of_symm_of]; rw [map_tmul]; rw [LinearMap.mul'_apply]
+      simp_rw [AlgHom.toLinearMap_apply, map_mul]
+      simp_rw [mul_assoc (f a₁), ← mul_assoc _ _ (g b₂), h_anti_commutes, mul_smul_comm,
+        smul_mul_assoc, smul_smul, Int.units_mul_self, one_smul])
+
+@[simp]
 
 中文:
 定义 lift
@@ -936,7 +976,21 @@ definition lift
       simp only [map_one, mul_one])
     (by
       rw [LinearMap.map_mul_iff]
-     
+      ext a₁ : 3
+      refine DirectSum.decompose_lhom_ext ℬ fun j₁ => ?_
+      ext b₁ : 3
+      refine DirectSum.decompose_lhom_ext 𝒜 fun i₂ => ?_
+      ext a₂ b₂ : 2
+      dsimp
+      rw [tmul_coe_mul_coe_tmul]
+      rw [@Units.smul_def _ _ (_) (_)]; rw [← Int.cast_smul_eq_zsmul R]; rw [map_smul]; rw [map_smul]; rw [map_smul]
+      rw [Int.cast_smul_eq_zsmul R]; rw [← @Units.smul_def _ _ (_) (_)]
+      rw [of_symm_of]; rw [map_tmul]; rw [LinearMap.mul'_apply]
+      simp_rw [AlgHom.toLinearMap_apply, map_mul]
+      simp_rw [mul_assoc (f a₁), ← mul_assoc _ _ (g b₂), h_anti_commutes, mul_smul_comm,
+        smul_mul_assoc, smul_smul, Int.units_mul_self, one_smul])
+
+@[simp]
 
 Depends on / 依赖: AlgHom, AlgHom.ofLinearMap, Algebra, Algebra.TensorProduct.one_def, DirectSum, DirectSum.decompose_lhom_ext, Int.cast_smul_eq_zsmul, LinearMap, LinearMap.map_mul_iff, LinearMap.mul, TensorProduct, TensorProduct.map, Units.smul_def, cast_smul_eq_zsmul, decompose_lhom_ext, f.toLinearMap, g.toLinearMap, map_mul_iff, map_one, map_s
 -/
@@ -996,7 +1050,13 @@ definition liftEquiv
   body: lift 𝒜 ℬ _ _ fg.prop
   invFun F := ⟨(F.comp (includeLeft 𝒜 ℬ), F.comp (includeRight 𝒜 ℬ)), fun i j a b => by
     dsimp
-    rw [← map_mul]; rw [← map_mul F]; rw [tmul_coe_mul_coe_tmul]; rw [one_mul]; rw [mul_one]; rw [AlgHom.map_smul_of_tower]; rw [tmul_one_mul_one_tmul]; rw [smul_smul]; rw [Int.unit
+    rw [← map_mul]; rw [← map_mul F]; rw [tmul_coe_mul_coe_tmul]; rw [one_mul]; rw [mul_one]; rw [AlgHom.map_smul_of_tower]; rw [tmul_one_mul_one_tmul]; rw [smul_smul]; rw [Int.units_mul_self]; rw [one_smul]⟩
+  left_inv fg := by ext <;> (dsimp; simp only [map_one, mul_one, one_mul])
+  right_inv F := by
+    apply AlgHom.toLinearMap_injective
+    ext
+    dsimp
+    rw [← map_mul]; rw [tmul_one_mul_one_tmul]
 
 中文:
 定义 liftEquiv
@@ -1004,7 +1064,13 @@ definition liftEquiv
   定义体: lift 𝒜 ℬ _ _ fg.prop
   invFun F := ⟨(F.comp (includeLeft 𝒜 ℬ), F.comp (includeRight 𝒜 ℬ)), fun i j a b => by
     dsimp
-    rw [← map_mul]; rw [← map_mul F]; rw [tmul_coe_mul_coe_tmul]; rw [one_mul]; rw [mul_one]; rw [AlgHom.map_smul_of_tower]; rw [tmul_one_mul_one_tmul]; rw [smul_smul]; rw [Int.unit
+    rw [← map_mul]; rw [← map_mul F]; rw [tmul_coe_mul_coe_tmul]; rw [one_mul]; rw [mul_one]; rw [AlgHom.map_smul_of_tower]; rw [tmul_one_mul_one_tmul]; rw [smul_smul]; rw [Int.units_mul_self]; rw [one_smul]⟩
+  left_inv fg := by ext <;> (dsimp; simp only [map_one, mul_one, one_mul])
+  right_inv F := by
+    apply AlgHom.toLinearMap_injective
+    ext
+    dsimp
+    rw [← map_mul]; rw [tmul_one_mul_one_tmul]
 
 Depends on / 依赖: fg.prop
 -/
@@ -1062,7 +1128,7 @@ definition comm
     (fun x y => by
       dsimp
       simp_rw [auxEquiv_mul, gradedComm_gradedMul, LinearEquiv.symm_apply_eq,
-        ← grade
+        ← gradedComm_gradedMul, auxEquiv_mul, LinearEquiv.apply_symm_apply, gradedComm_gradedMul])
 
 中文:
 定义 comm
@@ -1075,7 +1141,7 @@ definition comm
     (fun x y => by
       dsimp
       simp_rw [auxEquiv_mul, gradedComm_gradedMul, LinearEquiv.symm_apply_eq,
-        ← grade
+        ← gradedComm_gradedMul, auxEquiv_mul, LinearEquiv.apply_symm_apply, gradedComm_gradedMul])
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofLinearEquiv, LinearEquiv, LinearEquiv.apply_symm_apply, LinearEquiv.symm_apply_eq, apply_symm_apply, auxEquiv, auxEquiv_mul, auxEquiv_one, auxEquiv_symm_one, gradedComm, gradedComm_gradedMul, gradedComm_one, ofLinearEquiv, simp_rw, symm_apply_eq
 -/
@@ -1119,7 +1185,8 @@ lemma comm_coe_tmul_coe
     simp_rw [auxEquiv_comm, auxEquiv_tmul, decompose_coe, ← lof_eq_of R, gradedComm_of_tmul_of,
       @Units.smul_def _ _ (_) (_), ← Int.cast_smul_eq_zsmul R]
     -- Qualified `map_smul` to avoid a TC timeout https://github.com/leanprover-community/mathlib4/pull/8386
-  
+    rw [LinearEquiv.map_smul]; rw [auxEquiv_tmul]
+    simp_rw [decompose_coe, lof_eq_of]
 
 中文:
 引理 comm_coe_tmul_coe
@@ -1128,7 +1195,8 @@ lemma comm_coe_tmul_coe
     simp_rw [auxEquiv_comm, auxEquiv_tmul, decompose_coe, ← lof_eq_of R, gradedComm_of_tmul_of,
       @Units.smul_def _ _ (_) (_), ← Int.cast_smul_eq_zsmul R]
     -- Qualified `map_smul` to avoid a TC timeout https://github.com/leanprover-community/mathlib4/pull/8386
-  
+    rw [LinearEquiv.map_smul]; rw [auxEquiv_tmul]
+    simp_rw [decompose_coe, lof_eq_of]
 -/
 @[simp] lemma comm_coe_tmul_coe {i j : ι} (a : 𝒜 i) (b : ℬ j) :
     comm 𝒜 ℬ (a ᵍotimesₜ b) = (-1 : Intˣ) ^ (j * i) • (b ᵍotimesₜ a : ℬ ᵍotimes[R] 𝒜) :=

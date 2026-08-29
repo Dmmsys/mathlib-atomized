@@ -87,7 +87,14 @@ theorem locally_lipschitz_exp
     exact mul_le_mul hyx.le le_rfl (norm_nonneg _) hr_nonneg
   have h_sq : forall z, ‖z‖ <= 1 -> ‖exp (x + z) - exp x‖ <= ‖z‖ * ‖exp x‖ + ‖exp x‖ * ‖z‖ ^ 2 := by
     intro z hz
-    have 
+    have : ‖exp (x + z) - exp x - z • exp x‖ <= ‖exp x‖ * ‖z‖ ^ 2 := exp_bound_sq x z hz
+    rw [← sub_le_iff_le_add']; rw [← norm_smul z]
+    exact (norm_sub_norm_le _ _).trans this
+  calc
+    ‖exp y - exp x‖ = ‖exp (x + (y - x)) - exp x‖ := by nth_rw 1 [hy_eq]
+    _ <= ‖y - x‖ * ‖exp x‖ + ‖exp x‖ * ‖y - x‖ ^ 2 := h_sq (y - x) (hyx.le.trans hr_le)
+    _ <= ‖y - x‖ * ‖exp x‖ + ‖exp x‖ * (r * ‖y - x‖) := by grw [hyx_sq_le]
+    _ = (1 + r) * ‖exp x‖ * ‖y - x‖ := by ring
 
 中文:
 定理 locally_lipschitz_exp
@@ -99,7 +106,14 @@ theorem locally_lipschitz_exp
     exact mul_le_mul hyx.le le_rfl (norm_nonneg _) hr_nonneg
   have h_sq : forall z, ‖z‖ <= 1 -> ‖exp (x + z) - exp x‖ <= ‖z‖ * ‖exp x‖ + ‖exp x‖ * ‖z‖ ^ 2 := by
     intro z hz
-    have 
+    have : ‖exp (x + z) - exp x - z • exp x‖ <= ‖exp x‖ * ‖z‖ ^ 2 := exp_bound_sq x z hz
+    rw [← sub_le_iff_le_add']; rw [← norm_smul z]
+    exact (norm_sub_norm_le _ _).trans this
+  calc
+    ‖exp y - exp x‖ = ‖exp (x + (y - x)) - exp x‖ := by nth_rw 1 [hy_eq]
+    _ <= ‖y - x‖ * ‖exp x‖ + ‖exp x‖ * ‖y - x‖ ^ 2 := h_sq (y - x) (hyx.le.trans hr_le)
+    _ <= ‖y - x‖ * ‖exp x‖ + ‖exp x‖ * (r * ‖y - x‖) := by grw [hyx_sq_le]
+    _ = (1 + r) * ‖exp x‖ * ‖y - x‖ := by ring
 
 Depends on / 依赖: exp_bound_sq, h_sq, hr_nonneg, hy_eq, hyx.le, hyx_sq_le, le_rfl, mul_le_mul, norm_nonneg, norm_smul, norm_sub_norm_le, pow_two, sub_le_iff_le_add
 -/
@@ -182,7 +196,8 @@ lemma exp_sub_sum_range_isBigO_pow
   · refine .of_bound (n.succ / (n ! * n)) ?_
     rw [NormedAddGroup.nhds_zero_basis_norm_lt.eventually_iff]
     refine ⟨1, one_pos, fun x hx => ?_⟩
-    convert! exp_bound hx.out.le hn using 
+    convert! exp_bound hx.out.le hn using 1
+    simp [field]
 
 中文:
 引理 exp_sub_sum_range_isBigO_pow
@@ -193,7 +208,8 @@ lemma exp_sub_sum_range_isBigO_pow
   · refine .of_bound (n.succ / (n ! * n)) ?_
     rw [NormedAddGroup.nhds_zero_basis_norm_lt.eventually_iff]
     refine ⟨1, one_pos, fun x hx => ?_⟩
-    convert! exp_bound hx.out.le hn using 
+    convert! exp_bound hx.out.le hn using 1
+    simp [field]
 
 Depends on / 依赖: NormedAddGroup, NormedAddGroup.nhds_zero_basis_norm_lt.eventually_iff, continuousAt, continuous_exp, continuous_exp.continuousAt.norm.isBoundedUnder_le, convert, eq_zero_or_pos, eventually_iff, exp_bound, hx.out.le, isBoundedUnder_le, n.succ, nhds_zero_basis_norm_lt, of_bound, one_pos
 -/
@@ -364,7 +380,22 @@ lemma UniformContinuousOn.cexp
   intro ε hε
   simp only [gt_iff_lt, Pi.sub_apply, Pi.one_apply, dist_sub_eq_dist_add_right,
     sub_add_cancel] at this
-  have ha : 0 < ε / (2 * R
+  have ha : 0 < ε / (2 * Real.exp a) := by positivity
+  have H := this 0 (ε / (2 * Real.exp a)) ha
+  rw [Metric.eventually_nhds_iff] at H
+  obtain ⟨δ, hδ⟩ := H
+  refine ⟨δ, hδ.1, ?_⟩
+  intro x _ y hy hxy
+  have h3 := hδ.2 (y := x - y) (by simpa only [dist_eq_norm, sub_zero] using hxy)
+  rw [dist_eq_norm]; rw [exp_zero] at *
+  have : cexp x - cexp y = cexp y * (cexp (x - y) - 1) := by
+    rw [mul_sub_one]; rw [← exp_add]
+    ring_nf
+  rw [this]; rw [mul_comm]
+  have hya : ‖cexp y‖ <= Real.exp a := by simpa only [norm_exp, Real.exp_le_exp]
+  simp only [gt_iff_lt, dist_zero_right, Set.mem_ofPred_eq, norm_mul, Complex.norm_exp] at *
+  apply lt_of_le_of_lt (mul_le_mul h3.le hya (Real.exp_nonneg y.re) ha.le)
+  simp [field]
 
 中文:
 引理 UniformContinuousOn.cexp
@@ -376,7 +407,22 @@ lemma UniformContinuousOn.cexp
   intro ε hε
   simp only [gt_iff_lt, Pi.sub_apply, Pi.one_apply, dist_sub_eq_dist_add_right,
     sub_add_cancel] at this
-  have ha : 0 < ε / (2 * R
+  have ha : 0 < ε / (2 * Real.exp a) := by positivity
+  have H := this 0 (ε / (2 * Real.exp a)) ha
+  rw [Metric.eventually_nhds_iff] at H
+  obtain ⟨δ, hδ⟩ := H
+  refine ⟨δ, hδ.1, ?_⟩
+  intro x _ y hy hxy
+  have h3 := hδ.2 (y := x - y) (by simpa only [dist_eq_norm, sub_zero] using hxy)
+  rw [dist_eq_norm]; rw [exp_zero] at *
+  have : cexp x - cexp y = cexp y * (cexp (x - y) - 1) := by
+    rw [mul_sub_one]; rw [← exp_add]
+    ring_nf
+  rw [this]; rw [mul_comm]
+  have hya : ‖cexp y‖ <= Real.exp a := by simpa only [norm_exp, Real.exp_le_exp]
+  simp only [gt_iff_lt, dist_zero_right, Set.mem_ofPred_eq, norm_mul, Complex.norm_exp] at *
+  apply lt_of_le_of_lt (mul_le_mul h3.le hya (Real.exp_nonneg y.re) ha.le)
+  simp [field]
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.congr_fun, ConcreteCategory, ConcreteCategory.comp_apply, ConcreteCategory.ext_apply, ConcreteCategory.hom, ConcreteCategory.hom_ofHom, ConcreteCategory.id_apply, ConcreteCategory.ofHom, ConcreteCategory.ofHom_hom, Continuous, Continuous.sub, Metric, Metric.continuous_iff, Metric.eventually_nhds_iff, Metric.uniformContinuousOn_iff, Pi.one_apply, Pi.sub_apply, Real.exp, comp_apply
 -/
@@ -840,7 +886,19 @@ theorem tendsto_exp_div_pow_atTop
   have hC₀ : 0 < C := zero_lt_one.trans_le hC₁
   have : 0 < (exp 1 * C)⁻¹ := inv_pos.2 (mul_pos (exp_pos _) hC₀)
   obtain ⟨N, hN⟩ : exists N : Nat, forall k >= N, (↑k : Real) ^ n / exp 1 ^ k < (exp 1 * C)⁻¹ :=
-    eventuall
+    eventually_atTop.1
+      ((tendsto_pow_const_div_const_pow_of_one_lt n (one_lt_exp_iff.2 zero_lt_one)).eventually
+        (gt_mem_nhds this))
+  simp only [← exp_nat_mul, mul_one, div_lt_iff₀, exp_pos, ← div_eq_inv_mul] at hN
+  refine ⟨N, trivial, fun x hx => ?_⟩
+  rw [Set.mem_Ioi] at hx
+  have hx₀ : 0 < x := (Nat.cast_nonneg N).trans_lt hx
+  rw [Set.mem_Ici]; rw [le_div_iff₀ (pow_pos hx₀ _)]; rw [← le_div_iff₀' hC₀]
+  calc
+    x ^ n <= ⌈x⌉₊ ^ n := by gcongr; exact Nat.le_ceil _
+    _ <= exp ⌈x⌉₊ / (exp 1 * C) := mod_cast (hN _ (Nat.lt_ceil.2 hx).le).le
+    _ <= exp (x + 1) / (exp 1 * C) := by gcongr; exact (Nat.ceil_lt_add_one hx₀.le).le
+    _ = exp x / C := by rw [add_comm, exp_add, mul_div_mul_left _ _ (exp_pos _).ne']
 
 中文:
 定理 tendsto_exp_div_pow_atTop
@@ -851,7 +909,19 @@ theorem tendsto_exp_div_pow_atTop
   have hC₀ : 0 < C := zero_lt_one.trans_le hC₁
   have : 0 < (exp 1 * C)⁻¹ := inv_pos.2 (mul_pos (exp_pos _) hC₀)
   obtain ⟨N, hN⟩ : exists N : Nat, forall k >= N, (↑k : Real) ^ n / exp 1 ^ k < (exp 1 * C)⁻¹ :=
-    eventuall
+    eventually_atTop.1
+      ((tendsto_pow_const_div_const_pow_of_one_lt n (one_lt_exp_iff.2 zero_lt_one)).eventually
+        (gt_mem_nhds this))
+  simp only [← exp_nat_mul, mul_one, div_lt_iff₀, exp_pos, ← div_eq_inv_mul] at hN
+  refine ⟨N, trivial, fun x hx => ?_⟩
+  rw [Set.mem_Ioi] at hx
+  have hx₀ : 0 < x := (Nat.cast_nonneg N).trans_lt hx
+  rw [Set.mem_Ici]; rw [le_div_iff₀ (pow_pos hx₀ _)]; rw [← le_div_iff₀' hC₀]
+  calc
+    x ^ n <= ⌈x⌉₊ ^ n := by gcongr; exact Nat.le_ceil _
+    _ <= exp ⌈x⌉₊ / (exp 1 * C) := mod_cast (hN _ (Nat.lt_ceil.2 hx).le).le
+    _ <= exp (x + 1) / (exp 1 * C) := by gcongr; exact (Nat.ceil_lt_add_one hx₀.le).le
+    _ = exp x / C := by rw [add_comm, exp_add, mul_div_mul_left _ _ (exp_pos _).ne']
 
 Depends on / 依赖: atTop_basis, atTop_basis_Ioi, atTop_basis_Ioi.tendsto_iff, div_eq_inv_mul, eventually, eventually_atTop, exp_nat_mul, exp_pos, gt_mem_nhds, inv_pos, mul_one, mul_pos, one_lt_exp_iff, tendsto_iff, tendsto_pow_const_div_const_pow_of_one_lt, trans_le, zero_lt_one, zero_lt_one.trans_le
 -/
@@ -909,7 +979,7 @@ theorem tendsto_mul_exp_add_div_pow_atTop
   simp only [add_div, mul_div_assoc]
   exact
     ((tendsto_exp_div_pow_atTop n).const_mul_atTop hb).atTop_add
-      (tendsto_const_nhds.div_atTop (
+      (tendsto_const_nhds.div_atTop (tendsto_pow_atTop hn))
 
 中文:
 定理 tendsto_mul_exp_add_div_pow_atTop
@@ -921,7 +991,7 @@ theorem tendsto_mul_exp_add_div_pow_atTop
   simp only [add_div, mul_div_assoc]
   exact
     ((tendsto_exp_div_pow_atTop n).const_mul_atTop hb).atTop_add
-      (tendsto_const_nhds.div_atTop (
+      (tendsto_const_nhds.div_atTop (tendsto_pow_atTop hn))
 
 Depends on / 依赖: CoeFun, add_div, atTop_add, const_mul_atTop, div_atTop, div_one, eq_or_ne, mul_div_assoc, pow_zero, tendsto_const_nhds, tendsto_const_nhds.div_atTop, tendsto_exp_atTop, tendsto_exp_atTop.const_mul_atTop, tendsto_exp_div_pow_atTop, tendsto_pow_atTop
 -/
@@ -949,7 +1019,11 @@ theorem tendsto_div_pow_mul_exp_add_atTop
     simp
   rcases lt_or_gt_of_ne hb with h | h
   · exact H b c h
-  · convert! (H (-b
+  · convert! (H (-b) (-c) (neg_pos.mpr h)).neg using 1
+    · ext x
+      field_simp
+      rw [← neg_add (b * exp x) c]; rw [div_neg]; rw [neg_neg]
+    · rw [neg_zero]
 
 中文:
 定理 tendsto_div_pow_mul_exp_add_atTop
@@ -962,7 +1036,11 @@ theorem tendsto_div_pow_mul_exp_add_atTop
     simp
   rcases lt_or_gt_of_ne hb with h | h
   · exact H b c h
-  · convert! (H (-b
+  · convert! (H (-b) (-c) (neg_pos.mpr h)).neg using 1
+    · ext x
+      field_simp
+      rw [← neg_add (b * exp x) c]; rw [div_neg]; rw [neg_neg]
+    · rw [neg_zero]
 
 Depends on / 依赖: Tendsto, convert, div_neg, inv_tendsto_atTop, lt_or_gt_of_ne, neg_add, neg_neg, neg_pos, neg_pos.mpr, neg_zero, tendsto_mul_exp_add_div_pow_atTop
 -/

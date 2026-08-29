@@ -114,7 +114,16 @@ theorem sq_dvd_add_pow_sub_sub
   · simp only [pow_zero, Nat.cast_zero, sub_zero, sub_self, dvd_zero, mul_zero]
   · simp only [add_pow, sum_range_succ, add_tsub_cancel_left, pow_one, Nat.choose_succ_self_right,
       Nat.cast_succ, tsub_self, pow_zero, mul_one, Nat.choose_self, Nat.cast_zero, zero_add,
-   
+      Nat.succ_sub_succ_eq_sub, Nat.sub_zero]
+    suffices p ^ 2 ∣ ∑ i in range n, x ^ i * p ^ (n + 1 - i) * ↑((n + 1).choose i) by
+      convert! this; abel
+    apply Finset.dvd_sum
+    intro y hy
+    calc
+      p ^ 2 ∣ p ^ (n + 1 - y) :=
+        pow_dvd_pow p (le_tsub_of_add_le_left (by linarith [Finset.mem_range.mp hy]))
+      _ ∣ x ^ y * p ^ (n + 1 - y) * ↑((n + 1).choose y) :=
+        dvd_mul_of_dvd_left (dvd_mul_left _ _) _
 
 中文:
 定理 sq_dvd_add_pow_sub_sub
@@ -124,7 +133,16 @@ theorem sq_dvd_add_pow_sub_sub
   · simp only [pow_zero, Nat.cast_zero, sub_zero, sub_self, dvd_zero, mul_zero]
   · simp only [add_pow, sum_range_succ, add_tsub_cancel_left, pow_one, Nat.choose_succ_self_right,
       Nat.cast_succ, tsub_self, pow_zero, mul_one, Nat.choose_self, Nat.cast_zero, zero_add,
-   
+      Nat.succ_sub_succ_eq_sub, Nat.sub_zero]
+    suffices p ^ 2 ∣ ∑ i in range n, x ^ i * p ^ (n + 1 - i) * ↑((n + 1).choose i) by
+      convert! this; abel
+    apply Finset.dvd_sum
+    intro y hy
+    calc
+      p ^ 2 ∣ p ^ (n + 1 - y) :=
+        pow_dvd_pow p (le_tsub_of_add_le_left (by linarith [Finset.mem_range.mp hy]))
+      _ ∣ x ^ y * p ^ (n + 1 - y) * ↑((n + 1).choose y) :=
+        dvd_mul_of_dvd_left (dvd_mul_left _ _) _
 
 Depends on / 依赖: Finset, Finset.dvd_sum, Nat.cast_succ, Nat.cast_zero, Nat.choose_self, Nat.choose_succ_self_right, Nat.sub_zero, Nat.succ_sub_succ_eq_sub, add_pow, add_tsub_cancel_left, cast_succ, cast_zero, choose_self, choose_succ_self_right, convert, dvd_sum, dvd_zero, mul_one, mul_zero, pow_dvd_p
 -/
@@ -182,7 +200,61 @@ theorem odd_sq_dvd_geom_sum₂_sub
     calc
       ↑p ^ 2 ∣ (↑p * b) ^ 2 := by simp only [mul_pow, dvd_mul_right]
       _ ∣ (a + ↑p * b) ^ i - (a ^ (i - 1) * (↑p * b) * ↑i + a ^ i) := by
-        simp only [sq_
+        simp only [sq_dvd_add_pow_sub_sub (↑p * b) a i, ← sub_sub]
+  simp_rw [← mem_span_singleton, ← Ideal.Quotient.eq] at *
+  let s : R := (p : R) ^ 2
+  calc
+    (Ideal.Quotient.mk (span {s})) (∑ i in range p, (a + (p : R) * b) ^ i * a ^ (p - 1 - i)) =
+        ∑ i in Finset.range p,
+        mk (span {s}) ((a ^ (i - 1) * (↑p * b) * ↑i + a ^ i) * a ^ (p - 1 - i)) := by
+      simp_rw [s, RingHom.map_geom_sum₂, ← map_pow, h1, ← map_mul]
+    _ =
+        mk (span {s})
+            (∑ x in Finset.range p, a ^ (x - 1) * (a ^ (p - 1 - x) * (↑p * (b * ↑x)))) +
+          mk (span {s}) (∑ x in Finset.range p, a ^ (x + (p - 1 - x))) := by
+      ring_nf
+      simp_rw [← map_sum, sum_add_distrib, map_add]
+    _ =
+        mk (span {s})
+            (∑ x in Finset.range p, a ^ (x - 1) * (a ^ (p - 1 - x) * (↑p * (b * ↑x)))) +
+          mk (span {s}) (∑ _x in Finset.range p, a ^ (p - 1)) := by
+      rw [add_right_inj]
+      have : forall (x : Nat), (hx : x in range p) -> a ^ (x + (p - 1 - x)) = a ^ (p - 1) := by
+        intro x hx
+        rw [← Nat.add_sub_assoc _ x]; rw [Nat.add_sub_cancel_left]
+        exact Nat.le_sub_one_of_lt (Finset.mem_range.mp hx)
+      rw [Finset.sum_congr rfl this]
+    _ =
+        mk (span {s})
+            (∑ x in Finset.range p, a ^ (x - 1) * (a ^ (p - 1 - x) * (↑p * (b * ↑x)))) +
+          mk (span {s}) (↑p * a ^ (p - 1)) := by
+      simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+    _ =
+        mk (span {s}) (↑p * b * ∑ x in Finset.range p, a ^ (p - 2) * x) +
+          mk (span {s}) (↑p * a ^ (p - 1)) := by
+      simp only [Finset.mul_sum, ← mul_assoc, ← pow_add]
+      rw [Finset.sum_congr rfl]
+      rintro (⟨⟩ | ⟨x⟩) hx
+      · rw [Nat.cast_zero, mul_zero, mul_zero]
+      · have : x.succ - 1 + (p - 1 - x.succ) = p - 2 := by
+          rw [← Nat.add_sub_assoc (Nat.le_sub_one_of_lt (Finset.mem_range.mp hx))]
+          exact congr_arg Nat.pred (Nat.add_sub_cancel_left _ _)
+        rw [this]
+        ring1
+    _ = mk (span {s}) (↑p * a ^ (p - 1)) := by
+      have : Finset.sum (range p) (fun (x : Nat) => (x : R)) =
+          ((Finset.sum (range p) (fun (x : Nat) => (x : Nat)))) := by simp only [Nat.cast_sum]
+      simp only [add_eq_right, ← Finset.mul_sum, this]
+      norm_cast
+      simp only [Finset.sum_range_id]
+      norm_cast
+      simp only [Nat.cast_mul, map_mul,
+          Nat.mul_div_assoc p (even_iff_two_dvd.mp (Nat.Odd.sub_odd hp odd_one))]
+      ring_nf
+      rw [mul_assoc]; rw [mul_assoc]
+      refine mul_eq_zero_of_left ?_ _
+      refine Ideal.Quotient.eq_zero_iff_mem.mpr ?_
+      simp [s]
 
 中文:
 定理 odd_sq_dvd_geom_sum₂_sub
@@ -194,7 +266,61 @@ theorem odd_sq_dvd_geom_sum₂_sub
     calc
       ↑p ^ 2 ∣ (↑p * b) ^ 2 := by simp only [mul_pow, dvd_mul_right]
       _ ∣ (a + ↑p * b) ^ i - (a ^ (i - 1) * (↑p * b) * ↑i + a ^ i) := by
-        simp only [sq_
+        simp only [sq_dvd_add_pow_sub_sub (↑p * b) a i, ← sub_sub]
+  simp_rw [← mem_span_singleton, ← Ideal.Quotient.eq] at *
+  let s : R := (p : R) ^ 2
+  calc
+    (Ideal.Quotient.mk (span {s})) (∑ i in range p, (a + (p : R) * b) ^ i * a ^ (p - 1 - i)) =
+        ∑ i in Finset.range p,
+        mk (span {s}) ((a ^ (i - 1) * (↑p * b) * ↑i + a ^ i) * a ^ (p - 1 - i)) := by
+      simp_rw [s, RingHom.map_geom_sum₂, ← map_pow, h1, ← map_mul]
+    _ =
+        mk (span {s})
+            (∑ x in Finset.range p, a ^ (x - 1) * (a ^ (p - 1 - x) * (↑p * (b * ↑x)))) +
+          mk (span {s}) (∑ x in Finset.range p, a ^ (x + (p - 1 - x))) := by
+      ring_nf
+      simp_rw [← map_sum, sum_add_distrib, map_add]
+    _ =
+        mk (span {s})
+            (∑ x in Finset.range p, a ^ (x - 1) * (a ^ (p - 1 - x) * (↑p * (b * ↑x)))) +
+          mk (span {s}) (∑ _x in Finset.range p, a ^ (p - 1)) := by
+      rw [add_right_inj]
+      have : forall (x : Nat), (hx : x in range p) -> a ^ (x + (p - 1 - x)) = a ^ (p - 1) := by
+        intro x hx
+        rw [← Nat.add_sub_assoc _ x]; rw [Nat.add_sub_cancel_left]
+        exact Nat.le_sub_one_of_lt (Finset.mem_range.mp hx)
+      rw [Finset.sum_congr rfl this]
+    _ =
+        mk (span {s})
+            (∑ x in Finset.range p, a ^ (x - 1) * (a ^ (p - 1 - x) * (↑p * (b * ↑x)))) +
+          mk (span {s}) (↑p * a ^ (p - 1)) := by
+      simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+    _ =
+        mk (span {s}) (↑p * b * ∑ x in Finset.range p, a ^ (p - 2) * x) +
+          mk (span {s}) (↑p * a ^ (p - 1)) := by
+      simp only [Finset.mul_sum, ← mul_assoc, ← pow_add]
+      rw [Finset.sum_congr rfl]
+      rintro (⟨⟩ | ⟨x⟩) hx
+      · rw [Nat.cast_zero, mul_zero, mul_zero]
+      · have : x.succ - 1 + (p - 1 - x.succ) = p - 2 := by
+          rw [← Nat.add_sub_assoc (Nat.le_sub_one_of_lt (Finset.mem_range.mp hx))]
+          exact congr_arg Nat.pred (Nat.add_sub_cancel_left _ _)
+        rw [this]
+        ring1
+    _ = mk (span {s}) (↑p * a ^ (p - 1)) := by
+      have : Finset.sum (range p) (fun (x : Nat) => (x : R)) =
+          ((Finset.sum (range p) (fun (x : Nat) => (x : Nat)))) := by simp only [Nat.cast_sum]
+      simp only [add_eq_right, ← Finset.mul_sum, this]
+      norm_cast
+      simp only [Finset.sum_range_id]
+      norm_cast
+      simp only [Nat.cast_mul, map_mul,
+          Nat.mul_div_assoc p (even_iff_two_dvd.mp (Nat.Odd.sub_odd hp odd_one))]
+      ring_nf
+      rw [mul_assoc]; rw [mul_assoc]
+      refine mul_eq_zero_of_left ?_ _
+      refine Ideal.Quotient.eq_zero_iff_mem.mpr ?_
+      simp [s]
 
 Depends on / 依赖: Finset, Ideal.Quotient.eq, Ideal.Quotient.mk, Quotient, dvd_mul_right, mem_span_singleton, mul_pow, simp_rw, sq_dvd_add_pow_sub_sub, sub_sub
 -/
@@ -304,7 +430,9 @@ theorem emultiplicity_geom_sum₂_eq_one
   rw [dvd_iff_dvd_of_dvd_sub hxy] at hx
   obtain ⟨k, hk⟩ := hxy
   rw [one_add_one_eq_two]; rw [eq_add_of_sub_eq' hk]
-  refine mt (dvd_iff_dvd_of_dvd_sub (@odd_sq_dvd_geom_sum₂_sub _ _ 
+  refine mt (dvd_iff_dvd_of_dvd_sub (@odd_sq_dvd_geom_sum₂_sub _ _ y k _ hp1)).mp ?_
+  rw [pow_two]; rw [mul_dvd_mul_iff_left hp.ne_zero]
+  exact mt hp.dvd_of_dvd_pow hx
 
 中文:
 定理 emultiplicity_geom_sum₂_eq_one
@@ -316,7 +444,9 @@ theorem emultiplicity_geom_sum₂_eq_one
   rw [dvd_iff_dvd_of_dvd_sub hxy] at hx
   obtain ⟨k, hk⟩ := hxy
   rw [one_add_one_eq_two]; rw [eq_add_of_sub_eq' hk]
-  refine mt (dvd_iff_dvd_of_dvd_sub (@odd_sq_dvd_geom_sum₂_sub _ _ 
+  refine mt (dvd_iff_dvd_of_dvd_sub (@odd_sq_dvd_geom_sum₂_sub _ _ y k _ hp1)).mp ?_
+  rw [pow_two]; rw [mul_dvd_mul_iff_left hp.ne_zero]
+  exact mt hp.dvd_of_dvd_pow hx
 
 Depends on / 依赖: Nat.cast_one, cast_one, dvd_iff_dvd_of_dvd_sub, dvd_of_dvd_pow, emultiplicity_eq_coe, eq_add_of_sub_eq, hp.dvd_of_dvd_pow, hp.ne_zero, mul_dvd_mul_iff_left, ne_zero, one_add_one_eq_two, pow_one, pow_two
 -/
@@ -364,7 +494,9 @@ theorem emultiplicity_pow_prime_pow_sub_pow_prime_pow
   | succ a h_ind =>
     rw [Nat.cast_add]; rw [Nat.cast_one]; rw [← add_assoc]; rw [← h_ind]; rw [pow_succ]; rw [pow_mul]; rw [pow_mul]
     apply emultiplicity_pow_prime_sub_pow_prime hp hp1
-    · rw [← geom_s
+    · rw [← geom_sum₂_mul]
+      exact dvd_mul_of_dvd_right hxy _
+    · exact fun h => hx (hp.dvd_of_dvd_pow h)
 
 中文:
 定理 emultiplicity_pow_prime_pow_sub_pow_prime_pow
@@ -375,7 +507,9 @@ theorem emultiplicity_pow_prime_pow_sub_pow_prime_pow
   | succ a h_ind =>
     rw [Nat.cast_add]; rw [Nat.cast_one]; rw [← add_assoc]; rw [← h_ind]; rw [pow_succ]; rw [pow_mul]; rw [pow_mul]
     apply emultiplicity_pow_prime_sub_pow_prime hp hp1
-    · rw [← geom_s
+    · rw [← geom_sum₂_mul]
+      exact dvd_mul_of_dvd_right hxy _
+    · exact fun h => hx (hp.dvd_of_dvd_pow h)
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_assoc, add_zero, cast_add, cast_one, cast_zero, dvd_mul_of_dvd_right, dvd_of_dvd_pow, emultiplicity_pow_prime_sub_pow_prime, h_ind, hp.dvd_of_dvd_pow, pow_mul, pow_one, pow_succ, pow_zero
 -/
@@ -408,7 +542,17 @@ theorem Int.emultiplicity_pow_sub_pow
   · simp only [emultiplicity_zero, add_top, pow_zero, sub_self]
   have h : FiniteMultiplicity _ _ := Nat.finiteMultiplicity_iff.mpr ⟨hp.ne_one, n.succ_pos⟩
   simp only [Nat.succ_eq_add_one] at h
-  rcases emultiplicity_eq_coe.mp h.emultiplicity_eq_multiplicity with ⟨⟨k, hk⟩, 
+  rcases emultiplicity_eq_coe.mp h.emultiplicity_eq_multiplicity with ⟨⟨k, hk⟩, hpn⟩
+  conv_lhs => rw [hk, pow_mul, pow_mul]
+  rw [Nat.prime_iff_prime_int] at hp
+  rw [emultiplicity_pow_sub_pow_of_prime hp]; rw [emultiplicity_pow_prime_pow_sub_pow_prime_pow hp hp1 hxy hx]; rw [h.emultiplicity_eq_multiplicity]
+  · rw [← geom_sum₂_mul]
+    exact dvd_mul_of_dvd_right hxy
+  · exact fun h => hx (hp.dvd_of_dvd_pow h)
+  · rw [Int.natCast_dvd_natCast]
+    rintro ⟨c, rfl⟩
+    refine hpn ⟨c, ?_⟩
+    rwa [pow_succ, mul_assoc]
 
 中文:
 定理 整数.emultiplicity_pow_sub_pow
@@ -418,7 +562,17 @@ theorem Int.emultiplicity_pow_sub_pow
   · simp only [emultiplicity_zero, add_top, pow_zero, sub_self]
   have h : FiniteMultiplicity _ _ := Nat.finiteMultiplicity_iff.mpr ⟨hp.ne_one, n.succ_pos⟩
   simp only [Nat.succ_eq_add_one] at h
-  rcases emultiplicity_eq_coe.mp h.emultiplicity_eq_multiplicity with ⟨⟨k, hk⟩, 
+  rcases emultiplicity_eq_coe.mp h.emultiplicity_eq_multiplicity with ⟨⟨k, hk⟩, hpn⟩
+  conv_lhs => rw [hk, pow_mul, pow_mul]
+  rw [Nat.prime_iff_prime_int] at hp
+  rw [emultiplicity_pow_sub_pow_of_prime hp]; rw [emultiplicity_pow_prime_pow_sub_pow_prime_pow hp hp1 hxy hx]; rw [h.emultiplicity_eq_multiplicity]
+  · rw [← geom_sum₂_mul]
+    exact dvd_mul_of_dvd_right hxy
+  · exact fun h => hx (hp.dvd_of_dvd_pow h)
+  · rw [Int.natCast_dvd_natCast]
+    rintro ⟨c, rfl⟩
+    refine hpn ⟨c, ?_⟩
+    rwa [pow_succ, mul_assoc]
 
 Depends on / 依赖: FiniteMultiplicity, Nat.finiteMultiplicity_iff.mpr, Nat.prime_iff_prime_int, Nat.succ_eq_add_one, add_top, conv_lhs, emultiplicity_eq, emultiplicity_eq_coe, emultiplicity_eq_coe.mp, emultiplicity_eq_multiplicity, emultiplicity_pow_prime_pow_sub_pow_prime_pow, emultiplicity_pow_sub_pow_of_prime, emultiplicity_zero, finiteMultiplicity_iff, h.emultiplicity_eq, h.emultiplicity_eq_multiplicity, hp.ne_one, n.succ_pos, ne_one, pow_mul
 -/
@@ -482,7 +636,8 @@ theorem Nat.emultiplicity_pow_sub_pow
     rw [Int.natCast_sub hyx] at *
     push_cast at *
     exact Int.emultiplicity_pow_sub_pow hp hp1 hxy hx n
-  · simp o
+  · simp only [Nat.sub_eq_zero_iff_le.mpr (Nat.pow_le_pow_left hyx n), emultiplicity_zero,
+    Nat.sub_eq_zero_iff_le.mpr hyx, top_add]
 
 中文:
 定理 自然数.emultiplicity_pow_sub_pow
@@ -495,7 +650,8 @@ theorem Nat.emultiplicity_pow_sub_pow
     rw [Int.natCast_sub hyx] at *
     push_cast at *
     exact Int.emultiplicity_pow_sub_pow hp hp1 hxy hx n
-  · simp o
+  · simp only [Nat.sub_eq_zero_iff_le.mpr (Nat.pow_le_pow_left hyx n), emultiplicity_zero,
+    Nat.sub_eq_zero_iff_le.mpr hyx, top_add]
 
 Depends on / 依赖: Int.emultiplicity_pow_sub_pow, Int.natCast_dvd_natCast, Int.natCast_emultiplicity, Int.natCast_sub, Int.ofNat_sub, Nat.pow_le_pow_left, Nat.sub_eq_zero_iff_le.mpr, emultiplicity_pow_sub_pow, emultiplicity_zero, iterate, le_total, natCast_dvd_natCast, natCast_emultiplicity, natCast_sub, ofNat_sub, pow_le_pow_left, sub_eq_zero_iff_le, top_add
 -/
@@ -557,7 +713,9 @@ theorem pow_two_pow_sub_pow_two_pow
   | zero => simp only [pow_zero, pow_one, range_zero, prod_empty, one_mul]
   | succ d hd =>
     suffices x ^ 2 ^ d.succ - y ^ 2 ^ d.succ = (x ^ 2 ^ d + y ^ 2 ^ d) * (x ^ 2 ^ d - y ^ 2 ^ d) by
-      rw [this]; rw [hd]; rw [Finset.prod_range_succ]; rw [← mul_assoc]; rw [mul_comm 
+      rw [this]; rw [hd]; rw [Finset.prod_range_succ]; rw [← mul_assoc]; rw [mul_comm (x ^ 2 ^ d + y ^ 2 ^ d)]
+    rw [Nat.succ_eq_add_one]
+    ring
 
 中文:
 定理 pow_two_pow_sub_pow_two_pow
@@ -567,7 +725,9 @@ theorem pow_two_pow_sub_pow_two_pow
   | zero => simp only [pow_zero, pow_one, range_zero, prod_empty, one_mul]
   | succ d hd =>
     suffices x ^ 2 ^ d.succ - y ^ 2 ^ d.succ = (x ^ 2 ^ d + y ^ 2 ^ d) * (x ^ 2 ^ d - y ^ 2 ^ d) by
-      rw [this]; rw [hd]; rw [Finset.prod_range_succ]; rw [← mul_assoc]; rw [mul_comm 
+      rw [this]; rw [hd]; rw [Finset.prod_range_succ]; rw [← mul_assoc]; rw [mul_comm (x ^ 2 ^ d + y ^ 2 ^ d)]
+    rw [Nat.succ_eq_add_one]
+    ring
 
 Depends on / 依赖: Finset, Finset.prod_range_succ, Nat.succ_eq_add_one, d.succ, mul_assoc, mul_comm, one_mul, pow_one, pow_zero, prod_empty, prod_range_succ, range_zero, succ_eq_add_one
 -/
@@ -685,7 +845,15 @@ theorem Int.two_pow_two_pow_add_two_pow_two_pow
   have hxy_even : Even (x - y) := even_iff_two_dvd.mpr (dvd_trans (by decide) hxy)
   have hy_odd : Odd y := by simpa using hx_odd.sub_even hxy_even
   refine emultiplicity_eq_coe.mpr ⟨?_, ?_⟩
-  · rw [pow_one, ← even_iff_two
+  · rw [pow_one, ← even_iff_two_dvd]
+    exact hx_odd.pow.add_odd hy_odd.pow
+  rcases i with - | i
+  · grind
+  suffices forall x : Int, Odd x -> x ^ 2 ^ (i + 1) % 4 = 1 by
+    rw [show (2 ^ (1 + 1) : Int) = 4 by simp]; rw [Int.dvd_iff_emod_eq_zero]; rw [Int.add_emod]; rw [this _ hx_odd]; rw [this _ hy_odd]
+    decide
+  intro x hx
+  rw [pow_succ']; rw [mul_comm]; rw [pow_mul]; rw [Int.sq_mod_four_eq_one_of_odd hx.pow]
 
 中文:
 定理 整数.two_pow_two_pow_add_two_pow_two_pow
@@ -695,7 +863,15 @@ theorem Int.two_pow_two_pow_add_two_pow_two_pow
   have hxy_even : Even (x - y) := even_iff_two_dvd.mpr (dvd_trans (by decide) hxy)
   have hy_odd : Odd y := by simpa using hx_odd.sub_even hxy_even
   refine emultiplicity_eq_coe.mpr ⟨?_, ?_⟩
-  · rw [pow_one, ← even_iff_two
+  · rw [pow_one, ← even_iff_two_dvd]
+    exact hx_odd.pow.add_odd hy_odd.pow
+  rcases i with - | i
+  · grind
+  suffices forall x : Int, Odd x -> x ^ 2 ^ (i + 1) % 4 = 1 by
+    rw [show (2 ^ (1 + 1) : Int) = 4 by simp]; rw [Int.dvd_iff_emod_eq_zero]; rw [Int.add_emod]; rw [this _ hx_odd]; rw [this _ hy_odd]
+    decide
+  intro x hx
+  rw [pow_succ']; rw [mul_comm]; rw [pow_mul]; rw [Int.sq_mod_four_eq_one_of_odd hx.pow]
 
 Depends on / 依赖: Int.dvd_iff_emod_eq_zero, Int.not_even_iff_odd, add_odd, dvd_iff_emod_eq_zero, dvd_trans, emultiplicity_eq_coe, emultiplicity_eq_coe.mpr, even_iff_two_dvd, even_iff_two_dvd.mpr, hx_odd, hx_odd.pow.add_odd, hx_odd.sub_even, hxy_even, hy_odd, hy_odd.pow, not_even_iff_odd, pow_one, sub_even
 -/
@@ -753,7 +929,21 @@ theorem Int.two_pow_sub_pow'
   have hxy_even : Even (x - y) := even_iff_two_dvd.mpr (dvd_trans (by decide) hxy)
   have hy_odd : Odd y := by simpa using hx_odd.sub_even hxy_even
   rcases n with - | n
-  · simp only [pow_zero, sub_self, emultiplicity_zer
+  · simp only [pow_zero, sub_self, emultiplicity_zero, Int.ofNat_zero, add_top]
+  have h : FiniteMultiplicity 2 n.succ := Nat.finiteMultiplicity_iff.mpr ⟨by simp, n.succ_pos⟩
+  simp only [Nat.succ_eq_add_one] at h
+  rcases emultiplicity_eq_coe.mp h.emultiplicity_eq_multiplicity with ⟨⟨k, hk⟩, hpn⟩
+  rw [hk]; rw [pow_mul]; rw [pow_mul]; rw [emultiplicity_pow_sub_pow_of_prime]; rw [Int.two_pow_two_pow_sub_pow_two_pow _ hxy hx]; rw [← hk]
+  · norm_cast
+    rw [h.emultiplicity_eq_multiplicity]
+  · exact Int.prime_two
+  · simpa only [even_iff_two_dvd] using hx_odd.pow.sub_odd hy_odd.pow
+  · simpa only [even_iff_two_dvd, ← Int.not_even_iff_odd] using hx_odd.pow
+  norm_cast
+  contrapose hpn
+  rw [pow_succ]
+  conv_rhs => rw [hk]
+  exact mul_dvd_mul_left _ hpn
 
 中文:
 定理 整数.two_pow_sub_pow'
@@ -763,7 +953,21 @@ theorem Int.two_pow_sub_pow'
   have hxy_even : Even (x - y) := even_iff_two_dvd.mpr (dvd_trans (by decide) hxy)
   have hy_odd : Odd y := by simpa using hx_odd.sub_even hxy_even
   rcases n with - | n
-  · simp only [pow_zero, sub_self, emultiplicity_zer
+  · simp only [pow_zero, sub_self, emultiplicity_zero, Int.ofNat_zero, add_top]
+  have h : FiniteMultiplicity 2 n.succ := Nat.finiteMultiplicity_iff.mpr ⟨by simp, n.succ_pos⟩
+  simp only [Nat.succ_eq_add_one] at h
+  rcases emultiplicity_eq_coe.mp h.emultiplicity_eq_multiplicity with ⟨⟨k, hk⟩, hpn⟩
+  rw [hk]; rw [pow_mul]; rw [pow_mul]; rw [emultiplicity_pow_sub_pow_of_prime]; rw [Int.two_pow_two_pow_sub_pow_two_pow _ hxy hx]; rw [← hk]
+  · norm_cast
+    rw [h.emultiplicity_eq_multiplicity]
+  · exact Int.prime_two
+  · simpa only [even_iff_two_dvd] using hx_odd.pow.sub_odd hy_odd.pow
+  · simpa only [even_iff_two_dvd, ← Int.not_even_iff_odd] using hx_odd.pow
+  norm_cast
+  contrapose hpn
+  rw [pow_succ]
+  conv_rhs => rw [hk]
+  exact mul_dvd_mul_left _ hpn
 
 Depends on / 依赖: FiniteMultiplicity, Int.not_even_iff_odd, Int.ofNat_zero, Nat.finiteMultiplicity_iff.mpr, Nat.succ_eq_add_one, add_top, dvd_trans, emultiplicity_eq_coe, emultiplicity_eq_coe.mp, emultiplicity_eq_mu, emultiplicity_zero, even_iff_two_dvd, even_iff_two_dvd.mpr, finiteMultiplicity_iff, h.emultiplicity_eq_mu, hx_odd, hx_odd.sub_even, hxy_even, hy_odd, n.succ
 -/
@@ -804,7 +1008,18 @@ theorem Int.two_pow_sub_pow
   obtain ⟨d, rfl⟩ := hn
   simp only [← two_mul, pow_mul]
   have hxy4 : 4 ∣ x ^ 2 - y ^ 2 := by
- 
+    rw [Int.dvd_iff_emod_eq_zero]; rw [Int.sub_emod]; rw [Int.sq_mod_four_eq_one_of_odd _]; rw [Int.sq_mod_four_eq_one_of_odd hy]
+    · simp
+    · simp only [← Int.not_even_iff_odd, even_iff_two_dvd, hx, not_false_iff]
+  rw [Int.two_pow_sub_pow' d hxy4 _]; rw [sq_sub_sq]; rw [← Int.ofNat_mul_ofNat]; rw [emultiplicity_mul Int.prime_two]; rw [emultiplicity_mul Int.prime_two]
+  · suffices emultiplicity (2 : Int) ↑(2 : Nat) = 1 by rw [this, add_comm 1, ← add_assoc]
+    norm_cast
+    rw [FiniteMultiplicity.emultiplicity_self]
+    rw [Nat.finiteMultiplicity_iff]
+    decide
+  · rw [← even_iff_two_dvd, Int.not_even_iff_odd]
+    apply Odd.pow
+    simp only [← Int.not_even_iff_odd, even_iff_two_dvd, hx, not_false_iff]
 
 中文:
 定理 整数.two_pow_sub_pow
@@ -818,7 +1033,18 @@ theorem Int.two_pow_sub_pow
   obtain ⟨d, rfl⟩ := hn
   simp only [← two_mul, pow_mul]
   have hxy4 : 4 ∣ x ^ 2 - y ^ 2 := by
- 
+    rw [Int.dvd_iff_emod_eq_zero]; rw [Int.sub_emod]; rw [Int.sq_mod_four_eq_one_of_odd _]; rw [Int.sq_mod_four_eq_one_of_odd hy]
+    · simp
+    · simp only [← Int.not_even_iff_odd, even_iff_two_dvd, hx, not_false_iff]
+  rw [Int.two_pow_sub_pow' d hxy4 _]; rw [sq_sub_sq]; rw [← Int.ofNat_mul_ofNat]; rw [emultiplicity_mul Int.prime_two]; rw [emultiplicity_mul Int.prime_two]
+  · suffices emultiplicity (2 : Int) ↑(2 : Nat) = 1 by rw [this, add_comm 1, ← add_assoc]
+    norm_cast
+    rw [FiniteMultiplicity.emultiplicity_self]
+    rw [Nat.finiteMultiplicity_iff]
+    decide
+  · rw [← even_iff_two_dvd, Int.not_even_iff_odd]
+    apply Odd.pow
+    simp only [← Int.not_even_iff_odd, even_iff_two_dvd, hx, not_false_iff]
 
 Depends on / 依赖: Even.add_odd, Int.dvd_iff_emod_eq_zero, Int.not_even_iff_odd, Int.sq_mod_four_eq_one_of_odd, Int.sub_emod, Int.two_pow_su, add_odd, convert, dvd_iff_emod_eq_zero, even_iff_two_dvd, even_iff_two_dvd.mpr, even_neg, not_even_iff_odd, not_false_iff, pow_mul, replace, sq_mod_four_eq_one_of_odd, sub_emod, two_mul, two_pow_su
 -/
@@ -858,7 +1084,13 @@ theorem Nat.two_pow_sub_pow
     simp only [Int.ofNat_sub hyx, Int.ofNat_sub (pow_le_pow_left' hyx _), Int.natCast_add,
       Int.natCast_pow]
     rw [← Int.natCast_dvd_natCast] at hx
-    rw [← Int.natCast_dvd_natCast]; rw [Int.ofNat_sub hyx] a
+    rw [← Int.natCast_dvd_natCast]; rw [Int.ofNat_sub hyx] at hxy
+    convert! Int.two_pow_sub_pow hxy hx hn using 2
+    rw [← Int.natCast_emultiplicity]
+    rfl
+  · simp only [Nat.sub_eq_zero_iff_le.mpr hyx,
+      Nat.sub_eq_zero_iff_le.mpr (pow_le_pow_left' hyx n), emultiplicity_zero,
+      top_add, add_top]
 
 中文:
 定理 自然数.two_pow_sub_pow
@@ -869,7 +1101,13 @@ theorem Nat.two_pow_sub_pow
     simp only [Int.ofNat_sub hyx, Int.ofNat_sub (pow_le_pow_left' hyx _), Int.natCast_add,
       Int.natCast_pow]
     rw [← Int.natCast_dvd_natCast] at hx
-    rw [← Int.natCast_dvd_natCast]; rw [Int.ofNat_sub hyx] a
+    rw [← Int.natCast_dvd_natCast]; rw [Int.ofNat_sub hyx] at hxy
+    convert! Int.two_pow_sub_pow hxy hx hn using 2
+    rw [← Int.natCast_emultiplicity]
+    rfl
+  · simp only [Nat.sub_eq_zero_iff_le.mpr hyx,
+      Nat.sub_eq_zero_iff_le.mpr (pow_le_pow_left' hyx n), emultiplicity_zero,
+      top_add, add_top]
 
 Depends on / 依赖: Int.natCast_add, Int.natCast_dvd_natCast, Int.natCast_emultiplicity, Int.natCast_pow, Int.ofNat_sub, Int.two_pow_sub_pow, Nat.sub_eq_zero_iff_le.mpr, add_t, convert, emultiplicity_zero, iterate, le_total, natCast_add, natCast_dvd_natCast, natCast_emultiplicity, natCast_pow, ofNat_sub, pow_le_pow_left, sub_eq_zero_iff_le, top_add
 -/

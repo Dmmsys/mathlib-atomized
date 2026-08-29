@@ -116,7 +116,17 @@ lemma rank_eq_zero_iff
     rw [← Cardinal.one_le_iff_ne_zero]
     have : LinearIndependent R (fun _ : Unit => x) :=
       linearIndependent_iff.mpr (fun l hl => Finsupp.unique_ext <| not_not.mp fun H =>
-        hx _ H ((Finsupp.linearCombination_unique 
+        hx _ H ((Finsupp.linearCombination_unique _ _ _).symm.trans hl))
+    simpa using this.cardinal_lift_le_rank
+  · intro h
+    rw [← nonpos_iff_eq_zero]; rw [Module.rank_def]
+    apply ciSup_le'
+    intro ⟨s, hs⟩
+    rw [nonpos_iff_eq_zero]; rw [Cardinal.mk_eq_zero_iff]; rw [← not_nonempty_iff]
+    rintro ⟨i : s⟩
+    obtain ⟨a, ha, ha'⟩ := h i
+    apply ha
+    simpa using DFunLike.congr_fun (linearIndependent_iff.mp hs (Finsupp.single i a) (by simpa)) i
 
 中文:
 引理 rank_eq_zero_iff
@@ -129,7 +139,17 @@ lemma rank_eq_zero_iff
     rw [← Cardinal.one_le_iff_ne_zero]
     have : LinearIndependent R (fun _ : Unit => x) :=
       linearIndependent_iff.mpr (fun l hl => Finsupp.unique_ext <| not_not.mp fun H =>
-        hx _ H ((Finsupp.linearCombination_unique 
+        hx _ H ((Finsupp.linearCombination_unique _ _ _).symm.trans hl))
+    simpa using this.cardinal_lift_le_rank
+  · intro h
+    rw [← nonpos_iff_eq_zero]; rw [Module.rank_def]
+    apply ciSup_le'
+    intro ⟨s, hs⟩
+    rw [nonpos_iff_eq_zero]; rw [Cardinal.mk_eq_zero_iff]; rw [← not_nonempty_iff]
+    rintro ⟨i : s⟩
+    obtain ⟨a, ha, ha'⟩ := h i
+    apply ha
+    simpa using DFunLike.congr_fun (linearIndependent_iff.mp hs (Finsupp.single i a) (by simpa)) i
 
 Depends on / 依赖: Cardinal, Cardinal.mk_eq_zero_iff, Cardinal.one_le_iff_ne_zero, Finsupp, Finsupp.linearCombination_unique, Finsupp.unique_ext, LinearIndependent, Module, Module.rank_def, cardinal_lift_le_rank, ciSup_le, contrapose, linearCombination_unique, linearIndependent_iff, linearIndependent_iff.mpr, mk_eq_zero_iff, nonpos_iff_eq_zero, nontriviality, not_nonempty_iff, not_not
 -/
@@ -589,7 +609,16 @@ lemma exists_finset_linearIndependent_of_le_rank
   · obtain ⟨⟨s, hs⟩, hs'⟩ := exists_eq_ciSup_of_not_isSuccLimit
       Cardinal.bddAbove_of_small (h.trans (Module.rank_def R M) ▸ not_isSuccLimit_natCast n)
     rw [← Module.rank_def]; rw [← h] at hs'
-    have : Finite s := lt_aleph0_iff_finite.mp (hs' ▸ natCast_lt
+    have : Finite s := lt_aleph0_iff_finite.mp (hs' ▸ natCast_lt_aleph0)
+    cases nonempty_fintype s
+    refine ⟨s.toFinset, by simpa using hs', by simpa⟩
+  · obtain ⟨s, hs, hs'⟩ := exists_set_linearIndependent_of_lt_rank h
+    have : Finite s := lt_aleph0_iff_finite.mp (hs ▸ natCast_lt_aleph0)
+    cases nonempty_fintype s
+    exact ⟨s.toFinset, by simpa using hs, by simpa⟩
+
+@[deprecated (since := "2026-04-13")]
+alias exists_set_linearIndependent_of_lt_rank := Module.exists_set_linearIndependent_of_lt_rank
 
 中文:
 引理 存在_finset_linearIndependent_of_le_rank
@@ -599,7 +628,16 @@ lemma exists_finset_linearIndependent_of_le_rank
   · obtain ⟨⟨s, hs⟩, hs'⟩ := exists_eq_ciSup_of_not_isSuccLimit
       Cardinal.bddAbove_of_small (h.trans (Module.rank_def R M) ▸ not_isSuccLimit_natCast n)
     rw [← Module.rank_def]; rw [← h] at hs'
-    have : Finite s := lt_aleph0_iff_finite.mp (hs' ▸ natCast_lt
+    have : Finite s := lt_aleph0_iff_finite.mp (hs' ▸ natCast_lt_aleph0)
+    cases nonempty_fintype s
+    refine ⟨s.toFinset, by simpa using hs', by simpa⟩
+  · obtain ⟨s, hs, hs'⟩ := exists_set_linearIndependent_of_lt_rank h
+    have : Finite s := lt_aleph0_iff_finite.mp (hs ▸ natCast_lt_aleph0)
+    cases nonempty_fintype s
+    exact ⟨s.toFinset, by simpa using hs, by simpa⟩
+
+@[deprecated (since := "2026-04-13")]
+alias exists_set_linearIndependent_of_lt_rank := Module.exists_set_linearIndependent_of_lt_rank
 
 Depends on / 依赖: Cardinal, Cardinal.bddAbove_of_small, Finite, Module, Module.rank_def, bddAbove_of_small, eq_or_lt, exists_eq_ciSup_of_not_isSuccLimit, exists_set_linearIndependent_of_lt_rank, h.mono, h.trans, hg.mono, hn.eq_or_lt, le_abs_self, le_trans, lt_aleph0_iff_finite, lt_aleph0_iff_finite.mp, natCast_lt_aleph0, nonempty_fintype, not_isSuccLimit_natCast
 -/
@@ -778,7 +816,7 @@ theorem iSupIndep.subtype_ne_bot_le_rank
     exact i.prop
   choose v hvV hv using hI
   have : LinearIndependent R v := (hV.comp Subtype.coe_injective).linearIndependent _ hvV hv
-  exact this.cardinal
+  exact this.cardinal_lift_le_rank
 
 中文:
 定理 iSupIndep.subtype_ne_bot_le_rank
@@ -791,7 +829,7 @@ theorem iSupIndep.subtype_ne_bot_le_rank
     exact i.prop
   choose v hvV hv using hI
   have : LinearIndependent R v := (hV.comp Subtype.coe_injective).linearIndependent _ hvV hv
-  exact this.cardinal
+  exact this.cardinal_lift_le_rank
 
 Depends on / 依赖: LinearIndependent, Submodule, Submodule.ne_bot_iff, Subtype, Subtype.coe_injective, cardinal_lift_le_rank, coe_injective, hV.comp, i.prop, linearIndependent, ne_bot_iff, this.cardinal_lift_le_rank
 -/
@@ -819,7 +857,8 @@ theorem iSupIndep.subtype_ne_bot_le_finrank_aux
   calc
     Cardinal.lift.{v} #{ i // p i != ⊥ } <= Cardinal.lift.{w} (Module.rank R M) :=
       hp.subtype_ne_bot_le_rank
-    _ = Cardinal.lift.{w} (finrank R M 
+    _ = Cardinal.lift.{w} (finrank R M : Cardinal.{v}) := by rw [finrank_eq_rank]
+    _ = Cardinal.lift.{v} (finrank R M : Cardinal.{w}) := by simp
 
 中文:
 定理 iSupIndep.subtype_ne_bot_le_finrank_aux
@@ -829,7 +868,8 @@ theorem iSupIndep.subtype_ne_bot_le_finrank_aux
   calc
     Cardinal.lift.{v} #{ i // p i != ⊥ } <= Cardinal.lift.{w} (Module.rank R M) :=
       hp.subtype_ne_bot_le_rank
-    _ = Cardinal.lift.{w} (finrank R M 
+    _ = Cardinal.lift.{w} (finrank R M : Cardinal.{v}) := by rw [finrank_eq_rank]
+    _ = Cardinal.lift.{v} (finrank R M : Cardinal.{w}) := by simp
 
 Depends on / 依赖: Cardinal, Cardinal.lift, Cardinal.lift_le, Module, Module.rank, finrank, finrank_eq_rank, hp.subtype_ne_bot_le_rank, lift_le, subtype_ne_bot_le_rank
 -/
@@ -915,7 +955,7 @@ theorem Module.exists_nontrivial_relation_of_finrank_lt_card
   obtain ⟨g, sum, z, nonzero⟩ := Fintype.not_linearIndependent_iff.mp
     (mt LinearIndependent.finset_card_le_finrank h.not_ge)
   refine ⟨Subtype.val.extend g 0, ?_, z, z.2, by rwa [Subtype.val_injective.extend_apply]⟩
-  rw [← Finset.sum_finset_coe]; convert! sum; apply Subtype.val_injective.ext
+  rw [← Finset.sum_finset_coe]; convert! sum; apply Subtype.val_injective.extend_apply
 
 中文:
 定理 模.存在_nontrivial_relation_of_finrank_lt_card
@@ -924,7 +964,7 @@ theorem Module.exists_nontrivial_relation_of_finrank_lt_card
   obtain ⟨g, sum, z, nonzero⟩ := Fintype.not_linearIndependent_iff.mp
     (mt LinearIndependent.finset_card_le_finrank h.not_ge)
   refine ⟨Subtype.val.extend g 0, ?_, z, z.2, by rwa [Subtype.val_injective.extend_apply]⟩
-  rw [← Finset.sum_finset_coe]; convert! sum; apply Subtype.val_injective.ext
+  rw [← Finset.sum_finset_coe]; convert! sum; apply Subtype.val_injective.extend_apply
 
 Depends on / 依赖: Finset, Finset.sum_finset_coe, Fintype, Fintype.not_linearIndependent_iff.mp, LinearIndependent, LinearIndependent.finset_card_le_finrank, Subtype, Subtype.val.extend, Subtype.val_injective.extend_apply, convert, extend, extend_apply, finset_card_le_finrank, h.not_ge, nonzero, not_ge, not_linearIndependent_iff, sum_finset_coe, val_injective
 -/
@@ -948,7 +988,27 @@ theorem Module.exists_nontrivial_relation_sum_zero_of_finrank_succ_lt_card
   classical
   let t' := (t.erase x₀).map shift
   have h' : finrank R M < t'.card := by
-    rw [card_
+    rw [card_map]; rw [card_erase_of_mem x₀_mem]
+    exact Nat.lt_pred_iff.mpr h
+  -- to obtain a function `g`.
+  obtain ⟨g, gsum, x₁, x₁_mem, nz⟩ := exists_nontrivial_relation_of_finrank_lt_card h'
+  -- Then obtain `f` by translating back by `x₀`,
+  -- and setting the value of `f` at `x₀` to ensure `∑ e ∈ t, f e = 0`.
+  let f : M -> R := fun z => if z = x₀ then -∑ z in t.erase x₀, g (z - x₀) else g (z - x₀)
+  refine ⟨f, ?_, ?_, ?_⟩
+  -- After this, it's a matter of verifying the properties,
+  -- based on the corresponding properties for `g`.
+  · rw [sum_map, Embedding.coeFn_mk] at gsum
+    simp_rw [f, ← t.sum_erase_add _ x₀_mem, if_pos, neg_smul, sum_smul,
+             ← sub_eq_add_neg, ← sum_sub_distrib, ← gsum, smul_sub]
+    refine sum_congr rfl fun x x_mem => ?_
+    rw [if_neg (mem_erase.mp x_mem).1]
+  · simp_rw [f, ← t.sum_erase_add _ x₀_mem, if_pos, add_neg_eq_zero]
+    exact sum_congr rfl fun x x_mem => if_neg (mem_erase.mp x_mem).1
+  · obtain ⟨x₁, x₁_mem', rfl⟩ := Finset.mem_map.mp x₁_mem
+    have := mem_erase.mp x₁_mem'
+    exact ⟨x₁, by
+      simpa only [f, Embedding.coeFn_mk, sub_add_cancel, this.2, true_and, if_neg this.1]⟩
 
 中文:
 定理 模.存在_nontrivial_relation_sum_zero_of_finrank_succ_lt_card
@@ -960,7 +1020,27 @@ theorem Module.exists_nontrivial_relation_sum_zero_of_finrank_succ_lt_card
   classical
   let t' := (t.erase x₀).map shift
   have h' : finrank R M < t'.card := by
-    rw [card_
+    rw [card_map]; rw [card_erase_of_mem x₀_mem]
+    exact Nat.lt_pred_iff.mpr h
+  -- to obtain a function `g`.
+  obtain ⟨g, gsum, x₁, x₁_mem, nz⟩ := exists_nontrivial_relation_of_finrank_lt_card h'
+  -- Then obtain `f` by translating back by `x₀`,
+  -- and setting the value of `f` at `x₀` to ensure `∑ e ∈ t, f e = 0`.
+  let f : M -> R := fun z => if z = x₀ then -∑ z in t.erase x₀, g (z - x₀) else g (z - x₀)
+  refine ⟨f, ?_, ?_, ?_⟩
+  -- After this, it's a matter of verifying the properties,
+  -- based on the corresponding properties for `g`.
+  · rw [sum_map, Embedding.coeFn_mk] at gsum
+    simp_rw [f, ← t.sum_erase_add _ x₀_mem, if_pos, neg_smul, sum_smul,
+             ← sub_eq_add_neg, ← sum_sub_distrib, ← gsum, smul_sub]
+    refine sum_congr rfl fun x x_mem => ?_
+    rw [if_neg (mem_erase.mp x_mem).1]
+  · simp_rw [f, ← t.sum_erase_add _ x₀_mem, if_pos, add_neg_eq_zero]
+    exact sum_congr rfl fun x x_mem => if_neg (mem_erase.mp x_mem).1
+  · obtain ⟨x₁, x₁_mem', rfl⟩ := Finset.mem_map.mp x₁_mem
+    have := mem_erase.mp x₁_mem'
+    exact ⟨x₁, by
+      simpa only [f, Embedding.coeFn_mk, sub_add_cancel, this.2, true_and, if_neg this.1]⟩
 -/
 theorem Module.exists_nontrivial_relation_sum_zero_of_finrank_succ_lt_card
     {t : Finset M} (h : finrank R M + 1 < t.card) :
@@ -1694,7 +1774,11 @@ lemma finite_finsupp_iff
     exact ⟨.of_surjective (Finsupp.lapply (R := R) (M := M) i) (Finsupp.apply_surjective i),
        finite_of_span_finite_eq_top_finsupp s.finite_toSet hs⟩
   mpr
-  |
+  | .inl _ => inferInstance
+| .inr .inl h => inferInstance
+| .inr .inr h => by cases h; infer_instance
+
+@[simp high]
 
 中文:
 引理 finite_finsupp_iff
@@ -1705,7 +1789,11 @@ lemma finite_finsupp_iff
     exact ⟨.of_surjective (Finsupp.lapply (R := R) (M := M) i) (Finsupp.apply_surjective i),
        finite_of_span_finite_eq_top_finsupp s.finite_toSet hs⟩
   mpr
-  |
+  | .inl _ => inferInstance
+| .inr .inl h => inferInstance
+| .inr .inr h => by cases h; infer_instance
+
+@[simp high]
 -/
 @[simp] lemma finite_finsupp_iff :
     Module.Finite R (ι ->₀ M) ↔ IsEmpty ι ∨ Subsingleton M ∨ Module.Finite R M ∧ Finite ι where

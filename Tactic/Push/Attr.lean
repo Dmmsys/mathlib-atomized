@@ -115,7 +115,9 @@ definition isPullThm
     let some (lhs, rhs) := type.eqOrIff? | return none
     let (lhs, rhs) := if inv then (rhs, lhs) else (lhs, rhs)
     let some head := Head.ofExpr? rhs | return none
-    if Head.ofExpr? lhs != some head && contain
+    if Head.ofExpr? lhs != some head && containsHead lhs head then
+      return head
+    return none
 
 中文:
 定义 isPullThm
@@ -126,7 +128,9 @@ definition isPullThm
     let some (lhs, rhs) := type.eqOrIff? | return none
     let (lhs, rhs) := if inv then (rhs, lhs) else (lhs, rhs)
     let some head := Head.ofExpr? rhs | return none
-    if Head.ofExpr? lhs != some head && contain
+    if Head.ofExpr? lhs != some head && containsHead lhs head then
+      return head
+    return none
 -/
 def isPullThm (declName : Name) (inv : Bool) : MetaM (Option Head) := do
   let cinfo ← getConstInfo declName

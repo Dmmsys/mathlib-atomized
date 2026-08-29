@@ -368,7 +368,7 @@ lemma neg_add_eq_mul_invOf_mul_same_iff
       ↔ -a = b + a * ⅟b * a := ⟨by grind, fun h => by simp [h]⟩
     _ ↔ -a = a * ⅟a * b + a * ⅟b * a := by rw [mul_invOf_self, one_mul]
     _ ↔ -a = a * (⅟a * b + ⅟b * a) := by simp only [mul_add, mul_assoc]
-    _ ↔ -1 = ⅟a * b + ⅟b * a := ⟨fun h => by simpa using congr_ar
+    _ ↔ -1 = ⅟a * b + ⅟b * a := ⟨fun h => by simpa using congr_arg (⅟a * ·) h, fun h => by simp [← h]⟩
 
 中文:
 引理 neg_add_eq_mul_invOf_mul_same_iff
@@ -377,7 +377,7 @@ lemma neg_add_eq_mul_invOf_mul_same_iff
       ↔ -a = b + a * ⅟b * a := ⟨by grind, fun h => by simp [h]⟩
     _ ↔ -a = a * ⅟a * b + a * ⅟b * a := by rw [mul_invOf_self, one_mul]
     _ ↔ -a = a * (⅟a * b + ⅟b * a) := by simp only [mul_add, mul_assoc]
-    _ ↔ -1 = ⅟a * b + ⅟b * a := ⟨fun h => by simpa using congr_ar
+    _ ↔ -1 = ⅟a * b + ⅟b * a := ⟨fun h => by simpa using congr_arg (⅟a * ·) h, fun h => by simp [← h]⟩
 
 Depends on / 依赖: congr_arg, mul_add, mul_assoc, mul_invOf_self, one_mul
 -/
@@ -399,7 +399,12 @@ lemma neg_one_eq_invOf_mul_add_invOf_mul_iff
   calc ⅟(a + b) = ⅟a + ⅟b
       ↔ ⅟(a + b) * (a + b) = (⅟a + ⅟b) * (a + b) := by rw [mul_left_inj_of_invertible]
     _ ↔ 1 = ⅟a * a + ⅟b * a + (⅟a * b + ⅟b * b) := by rw [invOf_mul_self, mul_add, add_mul, add_mul]
-    _ ↔ 1 = 1 + ⅟b * a + (1 + ⅟a * b) := by rw [invOf_mul_self, invOf_mul_self, add
+    _ ↔ 1 = 1 + ⅟b * a + (1 + ⅟a * b) := by rw [invOf_mul_self, invOf_mul_self, add_comm _ 1]
+    _ ↔ 1 = 1 + 1 + ⅟b * a + ⅟a * b := by rw [← add_assoc, add_comm _ 1, ← add_assoc]
+    _ ↔ -2 + 1 = -2 + (2 + ⅟b * a + ⅟a * b) := by rw [one_add_one_eq_two, add_right_inj]
+    _ ↔ -2 + 1 = ⅟b * a + ⅟a * b := by rw [← add_assoc, ← add_assoc, neg_add_cancel, zero_add]
+    _ ↔ -1 + 0 = ⅟b * a + ⅟a * b := by rw [← one_add_one_eq_two, neg_add, add_assoc, neg_add_cancel]
+    _ ↔ -1 = ⅟a * b + ⅟b * a := by rw [add_zero, add_comm]
 
 中文:
 引理 neg_one_eq_invOf_mul_add_invOf_mul_iff
@@ -408,7 +413,12 @@ lemma neg_one_eq_invOf_mul_add_invOf_mul_iff
   calc ⅟(a + b) = ⅟a + ⅟b
       ↔ ⅟(a + b) * (a + b) = (⅟a + ⅟b) * (a + b) := by rw [mul_left_inj_of_invertible]
     _ ↔ 1 = ⅟a * a + ⅟b * a + (⅟a * b + ⅟b * b) := by rw [invOf_mul_self, mul_add, add_mul, add_mul]
-    _ ↔ 1 = 1 + ⅟b * a + (1 + ⅟a * b) := by rw [invOf_mul_self, invOf_mul_self, add
+    _ ↔ 1 = 1 + ⅟b * a + (1 + ⅟a * b) := by rw [invOf_mul_self, invOf_mul_self, add_comm _ 1]
+    _ ↔ 1 = 1 + 1 + ⅟b * a + ⅟a * b := by rw [← add_assoc, add_comm _ 1, ← add_assoc]
+    _ ↔ -2 + 1 = -2 + (2 + ⅟b * a + ⅟a * b) := by rw [one_add_one_eq_two, add_right_inj]
+    _ ↔ -2 + 1 = ⅟b * a + ⅟a * b := by rw [← add_assoc, ← add_assoc, neg_add_cancel, zero_add]
+    _ ↔ -1 + 0 = ⅟b * a + ⅟a * b := by rw [← one_add_one_eq_two, neg_add, add_assoc, neg_add_cancel]
+    _ ↔ -1 = ⅟a * b + ⅟b * a := by rw [add_zero, add_comm]
 
 Depends on / 依赖: add_assoc, add_comm, add_mul, add_right_inj, invOf_mul_self, mul_add, mul_left_inj_of_invertible, one_add_one_eq_two
 -/
@@ -436,7 +446,7 @@ theorem eq_of_invOf_add_eq_invOf_add_invOf
   have h_b_ainv_b : -(a + b) = b * ⅟a * b := by
     rw [add_comm] at h'
     exact neg_add_eq_mul_invOf_mul_same_iff.mpr h'
-  rw [← h_a_binv_a]; rw [← h_b_
+  rw [← h_a_binv_a]; rw [← h_b_ainv_b]; rw [add_comm]
 
 中文:
 定理 eq_of_invOf_add_eq_invOf_add_invOf
@@ -447,7 +457,7 @@ theorem eq_of_invOf_add_eq_invOf_add_invOf
   have h_b_ainv_b : -(a + b) = b * ⅟a * b := by
     rw [add_comm] at h'
     exact neg_add_eq_mul_invOf_mul_same_iff.mpr h'
-  rw [← h_a_binv_a]; rw [← h_b_
+  rw [← h_a_binv_a]; rw [← h_b_ainv_b]; rw [add_comm]
 
 Depends on / 依赖: add_comm, h_a_binv_a, h_b_ainv_b, neg_add_eq_mul_invOf_mul_same_iff, neg_add_eq_mul_invOf_mul_same_iff.mpr, neg_one_eq_invOf_mul_add_invOf_mul_iff, neg_one_eq_invOf_mul_add_invOf_mul_iff.mp
 -/

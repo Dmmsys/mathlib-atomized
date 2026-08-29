@@ -90,7 +90,8 @@ theorem PowerBasis.norm_gen_eq_prod_roots
   proof: by
   have := Module.nontrivial R F
   have := minpoly.monic pb.isIntegral_gen
-  rw [PowerBasis.norm_gen_eq_coeff_zero_minpoly]; rw [← pb.natDegree_minpoly]; rw [map_mul]; rw [← coeff_map]; rw [hf.coeff_zero_eq_prod_roots_of_monic (this.map _)]; rw [this.natDegree_map]; rw [map_pow]; rw [← mul_assoc];
+  rw [PowerBasis.norm_gen_eq_coeff_zero_minpoly]; rw [← pb.natDegree_minpoly]; rw [map_mul]; rw [← coeff_map]; rw [hf.coeff_zero_eq_prod_roots_of_monic (this.map _)]; rw [this.natDegree_map]; rw [map_pow]; rw [← mul_assoc]; rw [← mul_pow]
+  simp only [map_neg, map_one, neg_mul, neg_neg, one_pow, one_mul]
 
 中文:
 定理 PowerBasis.norm_gen_eq_prod_roots
@@ -98,7 +99,8 @@ theorem PowerBasis.norm_gen_eq_prod_roots
   证明: by
   have := Module.nontrivial R F
   have := minpoly.monic pb.isIntegral_gen
-  rw [PowerBasis.norm_gen_eq_coeff_zero_minpoly]; rw [← pb.natDegree_minpoly]; rw [map_mul]; rw [← coeff_map]; rw [hf.coeff_zero_eq_prod_roots_of_monic (this.map _)]; rw [this.natDegree_map]; rw [map_pow]; rw [← mul_assoc];
+  rw [PowerBasis.norm_gen_eq_coeff_zero_minpoly]; rw [← pb.natDegree_minpoly]; rw [map_mul]; rw [← coeff_map]; rw [hf.coeff_zero_eq_prod_roots_of_monic (this.map _)]; rw [this.natDegree_map]; rw [map_pow]; rw [← mul_assoc]; rw [← mul_pow]
+  simp only [map_neg, map_one, neg_mul, neg_neg, one_pow, one_mul]
 
 Depends on / 依赖: Module, Module.nontrivial, PowerBasis, PowerBasis.norm_gen_eq_coeff_zero_minpoly, coeff_map, coeff_zero_eq_prod_roots_of_monic, hf.coeff_zero_eq_prod_roots_of_monic, isIntegral_gen, map_mul, map_neg, map_one, map_pow, minpoly, minpoly.monic, mul_assoc, mul_pow, natDegree_map, natDegree_minpoly, neg_mul, neg_neg
 -/
@@ -161,7 +163,12 @@ theorem norm_eq_zero_iff
     let decEq := Classical.decEq (Module.Free.ChooseBasisIndex R S)
     rw [norm_eq_matrix_det b]; rw [← Matrix.exists_mulVec_eq_zero_iff]
     rintro ⟨v, v_ne, hv⟩
-    rw [← b.equivFun.apply_symm_apply v
+    rw [← b.equivFun.apply_symm_apply v]; rw [b.equivFun_symm_apply]; rw [b.equivFun_apply]; rw [leftMulMatrix_mulVec_repr] at hv
+    refine (mul_eq_zero.mp (b.ext_elem fun i => ?_)).resolve_right (show ∑ i, v i • b i != 0 from ?_)
+    · simpa only [map_zero, Pi.zero_apply] using! congr_fun hv i
+    · contrapose v_ne with sum_eq
+      apply b.equivFun.symm.injective
+      rw [b.equivFun_symm_apply]; rw [sum_eq]; rw [map_zero]
 
 中文:
 定理 norm_eq_zero_iff
@@ -174,7 +181,12 @@ theorem norm_eq_zero_iff
     let decEq := Classical.decEq (Module.Free.ChooseBasisIndex R S)
     rw [norm_eq_matrix_det b]; rw [← Matrix.exists_mulVec_eq_zero_iff]
     rintro ⟨v, v_ne, hv⟩
-    rw [← b.equivFun.apply_symm_apply v
+    rw [← b.equivFun.apply_symm_apply v]; rw [b.equivFun_symm_apply]; rw [b.equivFun_apply]; rw [leftMulMatrix_mulVec_repr] at hv
+    refine (mul_eq_zero.mp (b.ext_elem fun i => ?_)).resolve_right (show ∑ i, v i • b i != 0 from ?_)
+    · simpa only [map_zero, Pi.zero_apply] using! congr_fun hv i
+    · contrapose v_ne with sum_eq
+      apply b.equivFun.symm.injective
+      rw [b.equivFun_symm_apply]; rw [sum_eq]; rw [map_zero]
 
 Depends on / 依赖: ChooseBasisIndex, Classical, Classical.decEq, Matrix, Matrix.exists_mulVec_eq_zero_iff, Module, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, Pi.zero_app, apply_symm_apply, b.equivFun.apply_symm_apply, b.equivFun_apply, b.equivFun_symm_apply, b.ext_elem, chooseBasis, equivFun, equivFun_apply, equivFun_symm_apply, exists_mulVec_eq_zero_iff, ext_elem
 -/
@@ -385,7 +397,8 @@ theorem _root_.IntermediateField.AdjoinSimple.norm_gen_eq_prod_roots
   by_cases hx : IsIntegral K x; swap
   · simp [minpoly.eq_zero hx, IntermediateField.AdjoinSimple.norm_gen_eq_one hx, aroots_def]
   rw [← adjoin.powerBasis_gen hx]; rw [PowerBasis.norm_gen_eq_prod_roots] <;>
-    rw [adjoin.powerBasis_gen hx]; rw [← m
+    rw [adjoin.powerBasis_gen hx]; rw [← minpoly.algebraMap_eq injKxL] <;>
+    simp only [AdjoinSimple.algebraMap_gen _ _, hf]
 
 中文:
 定理 _root_.中间域.AdjoinSimple.norm_gen_eq_prod_roots
@@ -395,7 +408,8 @@ theorem _root_.IntermediateField.AdjoinSimple.norm_gen_eq_prod_roots
   by_cases hx : IsIntegral K x; swap
   · simp [minpoly.eq_zero hx, IntermediateField.AdjoinSimple.norm_gen_eq_one hx, aroots_def]
   rw [← adjoin.powerBasis_gen hx]; rw [PowerBasis.norm_gen_eq_prod_roots] <;>
-    rw [adjoin.powerBasis_gen hx]; rw [← m
+    rw [adjoin.powerBasis_gen hx]; rw [← minpoly.algebraMap_eq injKxL] <;>
+    simp only [AdjoinSimple.algebraMap_gen _ _, hf]
 
 Depends on / 依赖: AdjoinSimple, AdjoinSimple.algebraMap_gen, IntermediateField, IntermediateField.AdjoinSimple.norm_gen_eq_one, IsIntegral, PowerBasis, PowerBasis.norm_gen_eq_prod_roots, adjoin, adjoin.powerBasis_gen, algebraMap, algebraMap_eq, algebraMap_gen, aroots_def, eq_zero, injKxL, injective, minpoly, minpoly.algebraMap_eq, minpoly.eq_zero, norm_gen_eq_one
 -/
@@ -430,7 +444,10 @@ theorem norm_eq_prod_embeddings_gen
   rw [@Fintype.prod_equiv (S ->ₐ[R] F) _ _ (PowerBasis.AlgHom.fintype pb) _ _ pb.liftEquiv'
     (fun σ => σ pb.gen) (fun x => x) ?_]
   · rw [Finset.prod_mem_multiset, Finset.prod_eq_multiset_prod, Multiset.toFinset_val,
-   
+      Multiset.dedup_eq_self.mpr, Multiset.map_id]
+    · exact nodup_roots (.map hfx)
+    · intro x; rfl
+  · intro σ; simp only [PowerBasis.liftEquiv'_apply_coe]
 
 中文:
 定理 norm_eq_prod_embeddings_gen
@@ -441,7 +458,10 @@ theorem norm_eq_prod_embeddings_gen
   rw [@Fintype.prod_equiv (S ->ₐ[R] F) _ _ (PowerBasis.AlgHom.fintype pb) _ _ pb.liftEquiv'
     (fun σ => σ pb.gen) (fun x => x) ?_]
   · rw [Finset.prod_mem_multiset, Finset.prod_eq_multiset_prod, Multiset.toFinset_val,
-   
+      Multiset.dedup_eq_self.mpr, Multiset.map_id]
+    · exact nodup_roots (.map hfx)
+    · intro x; rfl
+  · intro σ; simp only [PowerBasis.liftEquiv'_apply_coe]
 
 Depends on / 依赖: AlgHom, Classical, Classical.decEq, Finset, Finset.prod_eq_multiset_prod, Finset.prod_mem_multiset, Fintype, Fintype.prod_equiv, Multiset, Multiset.dedup_eq_self.mpr, Multiset.map_id, Multiset.toFinset_val, PowerBasis, PowerBasis.AlgHom.fintype, PowerBasis.liftEquiv, PowerBasis.norm_gen_eq_prod_roots, _apply_coe, dedup_eq_self, fintype, liftEquiv
 -/
@@ -469,7 +489,16 @@ theorem prod_embeddings_eq_finrank_pow
   have : FiniteDimensional L F := FiniteDimensional.right K L F
   have : Algebra.IsSeparable L F := Algebra.isSeparable_tower_top_of_isSeparable K L F
   let : Fintype (L ->ₐ[K] E) := PowerBasis.AlgHom.fintype pb
-  rw [Fintype.prod_equiv algHomEquivSigma (fun σ : F ->ₐ[K] E => _) fun σ => σ.1 pb.g
+  rw [Fintype.prod_equiv algHomEquivSigma (fun σ : F ->ₐ[K] E => _) fun σ => σ.1 pb.gen,
+    ← Finset.univ_sigma_univ, Finset.prod_sigma, ← Finset.prod_pow]
+  · refine Finset.prod_congr rfl fun σ _ => ?_
+    let : Algebra L E := σ.toRingHom.toAlgebra
+    simp_rw [Finset.prod_const]
+    congr
+    exact AlgHom.card L F E
+  · intro σ
+    simp only [algHomEquivSigma, Equiv.coe_fn_mk, AlgHom.domRestrict, AlgHom.comp_apply,
+      IsScalarTower.coe_toAlgHom']
 
 中文:
 定理 prod_embeddings_eq_finrank_pow
@@ -478,7 +507,16 @@ theorem prod_embeddings_eq_finrank_pow
   have : FiniteDimensional L F := FiniteDimensional.right K L F
   have : Algebra.IsSeparable L F := Algebra.isSeparable_tower_top_of_isSeparable K L F
   let : Fintype (L ->ₐ[K] E) := PowerBasis.AlgHom.fintype pb
-  rw [Fintype.prod_equiv algHomEquivSigma (fun σ : F ->ₐ[K] E => _) fun σ => σ.1 pb.g
+  rw [Fintype.prod_equiv algHomEquivSigma (fun σ : F ->ₐ[K] E => _) fun σ => σ.1 pb.gen,
+    ← Finset.univ_sigma_univ, Finset.prod_sigma, ← Finset.prod_pow]
+  · refine Finset.prod_congr rfl fun σ _ => ?_
+    let : Algebra L E := σ.toRingHom.toAlgebra
+    simp_rw [Finset.prod_const]
+    congr
+    exact AlgHom.card L F E
+  · intro σ
+    simp only [algHomEquivSigma, Equiv.coe_fn_mk, AlgHom.domRestrict, AlgHom.comp_apply,
+      IsScalarTower.coe_toAlgHom']
 
 Depends on / 依赖: AlgHom, AlgHom.card, Algebra, Algebra.IsSeparable, Algebra.isSeparable_tower_top_of_isSeparable, FiniteDimensional, FiniteDimensional.right, Finset, Finset.prod_congr, Finset.prod_const, Finset.prod_pow, Finset.prod_sigma, Finset.univ_sigma_univ, Fintype, Fintype.prod_equiv, IsSeparable, PowerBasis, PowerBasis.AlgHom.fintype, algHomEquivSigma, fintype
 -/
@@ -535,7 +573,14 @@ lemma norm_eq_of_ringEquiv
   · obtain ⟨s, ⟨b⟩⟩ := h
     let : Algebra A B := RingHom.toAlgebra e
     let : IsScalarTower A B C := IsScalarTower.of_algebraMap_eq' he.symm
-    rw [Algebra.norm_eq_matrix_det b]; rw [Algebra.norm_eq_matrix_det (b.mapCoeffs 
+    rw [Algebra.norm_eq_matrix_det b]; rw [Algebra.norm_eq_matrix_det (b.mapCoeffs e.symm (by simp [Algebra.smul_def]; rw [← he])),
+      e.map_det]
+    congr
+    ext i j
+    simp [leftMulMatrix_apply, LinearMap.toMatrix_apply]
+  rw [norm_eq_one_of_not_exists_basis _ h]; rw [norm_eq_one_of_not_exists_basis]; rw [map_one]
+  intro ⟨s, ⟨b⟩⟩
+  exact h ⟨s, ⟨b.mapCoeffs e (by simp [Algebra.smul_def, ← he])⟩⟩
 
 中文:
 引理 norm_eq_of_ringEquiv
@@ -546,7 +591,14 @@ lemma norm_eq_of_ringEquiv
   · obtain ⟨s, ⟨b⟩⟩ := h
     let : Algebra A B := RingHom.toAlgebra e
     let : IsScalarTower A B C := IsScalarTower.of_algebraMap_eq' he.symm
-    rw [Algebra.norm_eq_matrix_det b]; rw [Algebra.norm_eq_matrix_det (b.mapCoeffs 
+    rw [Algebra.norm_eq_matrix_det b]; rw [Algebra.norm_eq_matrix_det (b.mapCoeffs e.symm (by simp [Algebra.smul_def]; rw [← he])),
+      e.map_det]
+    congr
+    ext i j
+    simp [leftMulMatrix_apply, LinearMap.toMatrix_apply]
+  rw [norm_eq_one_of_not_exists_basis _ h]; rw [norm_eq_one_of_not_exists_basis]; rw [map_one]
+  intro ⟨s, ⟨b⟩⟩
+  exact h ⟨s, ⟨b.mapCoeffs e (by simp [Algebra.smul_def, ← he])⟩⟩
 
 Depends on / 依赖: Algebra, Algebra.norm_eq_matrix_det, Algebra.smul_def, Finset, IsScalarTower, IsScalarTower.of_algebraMap_eq, LinearMap, LinearMap.toMatrix_apply, Nonempty, RingHom, RingHom.toAlgebra, b.mapCoeffs, classical, e.map_det, e.symm, he.symm, leftMulMatrix_apply, mapCoeffs, map_det, map_one
 -/
@@ -581,7 +633,8 @@ lemma norm_eq_of_equiv_equiv
     simp [e']
   intro c x
   apply e₂.symm.injective
-  simp only [RingH
+  simp only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, map_mul,
+    RingEquiv.symm_apply_apply, commutes]
 
 中文:
 引理 norm_eq_of_equiv_equiv
@@ -593,7 +646,8 @@ lemma norm_eq_of_equiv_equiv
     simp [e']
   intro c x
   apply e₂.symm.injective
-  simp only [RingH
+  simp only [RingHom.coe_comp, RingHom.coe_coe, Function.comp_apply, map_mul,
+    RingEquiv.symm_apply_apply, commutes]
 
 Depends on / 依赖: Algebra, Algebra.norm_eq_of_algEquiv, Algebra.norm_eq_of_ringEquiv, Function, Function.comp_apply, RingEquiv, RingEquiv.symm_apply_apply, RingHom, RingHom.coe_coe, RingHom.coe_comp, RingHom.comp, algebraMap, coe_coe, coe_comp, commutes, comp_apply, injective, map_mul, norm_eq_of_algEquiv, norm_eq_of_ringEquiv
 -/

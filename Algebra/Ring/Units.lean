@@ -430,7 +430,7 @@ theorem divp_add_divp
   simp only [divp, add_mul, mul_inv_rev, val_mul]
   rw [mul_comm (↑u₁ * b)]; rw [mul_comm b]
   rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_assoc a]; rw [mul_assoc (↑u₂⁻¹ : α)]; rw [mul_inv]; rw [inv_mul]; rw [mul_one]; rw [mul_one]
-  -- Porting note: `assoc_rw` not ported: `assoc_rw [mul_inv, mul
+  -- Porting note: `assoc_rw` not ported: `assoc_rw [mul_inv, mul_inv, mul_one, mul_one]`
 
 中文:
 定理 divp_add_divp
@@ -439,7 +439,7 @@ theorem divp_add_divp
   simp only [divp, add_mul, mul_inv_rev, val_mul]
   rw [mul_comm (↑u₁ * b)]; rw [mul_comm b]
   rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_assoc a]; rw [mul_assoc (↑u₂⁻¹ : α)]; rw [mul_inv]; rw [inv_mul]; rw [mul_one]; rw [mul_one]
-  -- Porting note: `assoc_rw` not ported: `assoc_rw [mul_inv, mul
+  -- Porting note: `assoc_rw` not ported: `assoc_rw [mul_inv, mul_inv, mul_one, mul_one]`
 
 Depends on / 依赖: add_mul, inv_mul, mul_assoc, mul_comm, mul_inv, mul_inv_rev, mul_one, val_mul
 -/

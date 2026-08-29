@@ -44,7 +44,10 @@ lemma exists_isClosed_singleton_of_isJacobsonRing
   have := hs'.ne_empty
   contrapose! this
   simp_rw [not_imp_not] at this
-  rw [← Set.compl_univ]; rw [eq_compl_comm]
+  rw [← Set.compl_univ]; rw [eq_compl_comm]; rw [hI']; rw [eq_comm]; rw [← zeroLocus_bot]; rw [zeroLocus_eq_iff]; rw [Ideal.radical_eq_jacobson]; rw [Ideal.radical_eq_jacobson]
+  refine le_antisymm (le_sInf ?_) (Ideal.jacobson_mono bot_le)
+  rintro x ⟨-, hx⟩
+  exact sInf_le ⟨this ⟨x, hx.isPrime⟩ hx, hx⟩
 
 中文:
 引理 存在_isClosed_singleton_of_isJacobsonRing
@@ -56,7 +59,10 @@ lemma exists_isClosed_singleton_of_isJacobsonRing
   have := hs'.ne_empty
   contrapose! this
   simp_rw [not_imp_not] at this
-  rw [← Set.compl_univ]; rw [eq_compl_comm]
+  rw [← Set.compl_univ]; rw [eq_compl_comm]; rw [hI']; rw [eq_comm]; rw [← zeroLocus_bot]; rw [zeroLocus_eq_iff]; rw [Ideal.radical_eq_jacobson]; rw [Ideal.radical_eq_jacobson]
+  refine le_antisymm (le_sInf ?_) (Ideal.jacobson_mono bot_le)
+  rintro x ⟨-, hx⟩
+  exact sInf_le ⟨this ⟨x, hx.isPrime⟩ hx, hx⟩
 
 Depends on / 依赖: Ideal.jacobson_mono, Ideal.radical_eq_jacobson, Set.compl_univ, Set.notMem_compl_iff, bot_le, compl_univ, contrapose, eq_comm, eq_compl_comm, hs.isClosed_compl, isClosed_compl, isClosed_iff_zeroLocus_ideal, isClosed_singleton_iff_isMaximal, jacobson_mono, le_antisymm, le_sInf, mem_zeroLocus, ne_empty, notMem_compl_iff, not_imp_not
 -/
@@ -86,7 +92,11 @@ instance [IsJacobsonRing
   simp only [← isClosed_compl_iff, isClosed_iff_zeroLocus_ideal, @compl_eq_comm _ U] at hU hZ
   obtain ⟨⟨I, rfl⟩, ⟨J, rfl⟩⟩ := And.intro hU hZ
   simp only [Set.nonempty_iff_ne_empty, ne_eq, Set.inter_assoc,
-    ← Set.disjoin
+    ← Set.disjoint_iff_inter_eq_empty, Set.disjoint_compl_left_iff_subset,
+    zeroLocus_subset_zeroLocus_iff, Ideal.radical_eq_jacobson, Ideal.jacobson, le_sInf_iff] at hS ⊢
+  contrapose hS
+  rintro x ⟨hJx, hx⟩
+  exact @hS ⟨x, hx.isPrime⟩ ⟨hJx, (isClosed_singleton_iff_isMaximal _).mpr hx⟩
 
 中文:
 实例 [是Jacobson环
@@ -97,7 +107,11 @@ instance [IsJacobsonRing
   simp only [← isClosed_compl_iff, isClosed_iff_zeroLocus_ideal, @compl_eq_comm _ U] at hU hZ
   obtain ⟨⟨I, rfl⟩, ⟨J, rfl⟩⟩ := And.intro hU hZ
   simp only [Set.nonempty_iff_ne_empty, ne_eq, Set.inter_assoc,
-    ← Set.disjoin
+    ← Set.disjoint_iff_inter_eq_empty, Set.disjoint_compl_left_iff_subset,
+    zeroLocus_subset_zeroLocus_iff, Ideal.radical_eq_jacobson, Ideal.jacobson, le_sInf_iff] at hS ⊢
+  contrapose hS
+  rintro x ⟨hJx, hx⟩
+  exact @hS ⟨x, hx.isPrime⟩ ⟨hJx, (isClosed_singleton_iff_isMaximal _).mpr hx⟩
 
 Depends on / 依赖: And.intro, Ideal.jacobson, Ideal.radical_eq_jacobson, Set.disjoint_compl_left_iff_subset, Set.disjoint_iff_inter_eq_empty, Set.inter_assoc, Set.nonempty_iff_ne_empty, compl_eq_comm, contrapose, disjoint_compl_left_iff_subset, disjoint_iff_inter_eq_empty, hx.isPrime, inter_assoc, isClosed_compl_iff, isClosed_iff_zeroLocus_ideal, isPrime, jacobson, jacobsonSpace_iff_locallyClosed, le_sInf_iff, ne_eq
 -/
@@ -124,7 +138,10 @@ lemma isJacobsonRing_iff_jacobsonSpace
   conv_rhs => rw [← hI.radical]
   simp_rw [← vanishingIdeal_zeroLocus_eq_radical]
   apply vanishingIdeal_anti_mono
-  rw [← H.1 (isClosed_zeroLocus I)]; rw [(isClosed_ze
+  rw [← H.1 (isClosed_zeroLocus I)]; rw [(isClosed_zeroLocus _).closure_subset_iff]
+  rintro x ⟨hx : I <= x.asIdeal, hx'⟩
+  change jacobson I <= x.asIdeal
+  exact sInf_le ⟨hx, (isClosed_singleton_iff_isMaximal _).mp hx'⟩
 
 中文:
 引理 isJacobsonRing_iff_jacobsonSpace
@@ -134,7 +151,10 @@ lemma isJacobsonRing_iff_jacobsonSpace
   conv_rhs => rw [← hI.radical]
   simp_rw [← vanishingIdeal_zeroLocus_eq_radical]
   apply vanishingIdeal_anti_mono
-  rw [← H.1 (isClosed_zeroLocus I)]; rw [(isClosed_ze
+  rw [← H.1 (isClosed_zeroLocus I)]; rw [(isClosed_zeroLocus _).closure_subset_iff]
+  rintro x ⟨hx : I <= x.asIdeal, hx'⟩
+  change jacobson I <= x.asIdeal
+  exact sInf_le ⟨hx, (isClosed_singleton_iff_isMaximal _).mp hx'⟩
 
 Depends on / 依赖: I.isRadical_jacobson.radical, Ideal.le_jacobson, asIdeal, closure_subset_iff, conv_rhs, hI.radical, isClosed_singleton_iff_isMaximal, isClosed_zeroLocus, isRadical_jacobson, jacobson, le_antisymm, le_jacobson, radical, sInf_le, simp_rw, vanishingIdeal_anti_mono, vanishingIdeal_zeroLocus_eq_radical, x.asIdeal
 -/
@@ -165,7 +185,24 @@ lemma isOpen_singleton_tfae_of_isNoetherian_of_isJacobsonRing
   | h => ⟨h.isClosed, h.isOpen.stableUnderGeneralization⟩
   tfae_have 3 -> 1
   | ⟨h₁, h₂⟩ => by
-    rw [isClosed_si
+    rw [isClosed_singleton_iff_isMaximal]; rw [← isMax_iff] at h₁
+    suffices {x} = (⋃ p in { p : PrimeSpectrum R | IsMin p ∧ p != x }, closure {p})ᶜ by
+      rw [this]; rw [isOpen_compl_iff]
+      refine Set.Finite.isClosed_biUnion ?_ (fun _ _ => isClosed_closure)
+      exact (finite_setOfPred_isMin R).subset fun x h => h.1
+    ext p
+    simp only [Set.mem_singleton_iff, ne_eq, Set.mem_ofPred_eq, Set.compl_iUnion, Set.mem_iInter,
+      Set.mem_compl_iff, and_imp, ← specializes_iff_mem_closure, ← le_iff_specializes,
+      not_imp_not]
+    constructor
+    · rintro rfl _ _
+      rw [stableUnderGeneralization_singleton]; rw [← isMin_iff] at h₂
+      exact h₂.eq_of_le
+    · intro hp
+      apply h₁.eq_of_ge
+      obtain ⟨q, hq, hq'⟩ := Ideal.exists_minimalPrimes_le (J := p.asIdeal) bot_le
+      exact (hp ⟨q, hq.1.1⟩ (isMin_iff.mpr hq) hq').ge.trans hq'
+  tfae_finish
 
 中文:
 引理 isOpen_singleton_tfae_of_isNoetherian_of_isJacobsonRing
@@ -179,7 +216,24 @@ lemma isOpen_singleton_tfae_of_isNoetherian_of_isJacobsonRing
   | h => ⟨h.isClosed, h.isOpen.stableUnderGeneralization⟩
   tfae_have 3 -> 1
   | ⟨h₁, h₂⟩ => by
-    rw [isClosed_si
+    rw [isClosed_singleton_iff_isMaximal]; rw [← isMax_iff] at h₁
+    suffices {x} = (⋃ p in { p : PrimeSpectrum R | IsMin p ∧ p != x }, closure {p})ᶜ by
+      rw [this]; rw [isOpen_compl_iff]
+      refine Set.Finite.isClosed_biUnion ?_ (fun _ _ => isClosed_closure)
+      exact (finite_setOfPred_isMin R).subset fun x h => h.1
+    ext p
+    simp only [Set.mem_singleton_iff, ne_eq, Set.mem_ofPred_eq, Set.compl_iUnion, Set.mem_iInter,
+      Set.mem_compl_iff, and_imp, ← specializes_iff_mem_closure, ← le_iff_specializes,
+      not_imp_not]
+    constructor
+    · rintro rfl _ _
+      rw [stableUnderGeneralization_singleton]; rw [← isMin_iff] at h₂
+      exact h₂.eq_of_le
+    · intro hp
+      apply h₁.eq_of_ge
+      obtain ⟨q, hq, hq'⟩ := Ideal.exists_minimalPrimes_le (J := p.asIdeal) bot_le
+      exact (hp ⟨q, hq.1.1⟩ (isMin_iff.mpr hq) hq').ge.trans hq'
+  tfae_finish
 
 Depends on / 依赖: Finite, PrimeSpectrum, Set.Finite.isClosed_biUnion, Set.mem_singleton, closure, exists_isClosed_singleton_of_isJacobsonRing, h.isClosed, h.isOpen.stableUnderGeneralization, isClosed, isClosed_biUnion, isClosed_closure, isClosed_singleton_iff_isMaximal, isMax_iff, isOpen, isOpen_compl_iff, mem_singleton, stableUnderGeneralization, tfae_have
 -/

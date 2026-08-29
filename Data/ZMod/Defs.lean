@@ -64,7 +64,10 @@ theorem val_intCast
     split <;> rename_i h
     · rw [← Int.natCast_dvd] at h
       rw [Int.emod_eq_zero_of_dvd h]; rw [Int.toNat_zero]
-    · rw [Int.emod_natAbs_of
+    · rw [Int.emod_natAbs_of_neg (by lia) (NeZero.ne n),
+        if_neg (by rwa [← Int.natCast_dvd] at h)]
+      have : x % n < n := Int.emod_lt_of_pos x (by have := NeZero.ne n; lia)
+      lia
 
 中文:
 定理 val_intCast
@@ -77,7 +80,10 @@ theorem val_intCast
     split <;> rename_i h
     · rw [← Int.natCast_dvd] at h
       rw [Int.emod_eq_zero_of_dvd h]; rw [Int.toNat_zero]
-    · rw [Int.emod_natAbs_of
+    · rw [Int.emod_natAbs_of_neg (by lia) (NeZero.ne n),
+        if_neg (by rwa [← Int.natCast_dvd] at h)]
+      have : x % n < n := Int.emod_lt_of_pos x (by have := NeZero.ne n; lia)
+      lia
 
 Depends on / 依赖: mapsTo_smul_orbit, restrict
 -/
@@ -443,7 +449,57 @@ instance commRing
   add_assoc := Nat.casesOn n (@add_assoc Int _) fun n => @add_assoc (Fin n.succ) _
   zero := Nat.casesOn n (0 : Int) fun n => (0 : Fin n.succ)
   zero_add := Nat.casesOn n (@zero_add Int _) fun n => @zero_add (Fin n.succ) _
-  add_zero :=
+  add_zero := Nat.casesOn n (@add_zero Int _) fun n => @add_zero (Fin n.succ) _
+  neg := Nat.casesOn n (@Neg.neg Int _) fun n => @Neg.neg (Fin n.succ) _
+  sub := Nat.casesOn n (@Sub.sub Int _) fun n => @Sub.sub (Fin n.succ) _
+  sub_eq_add_neg := Nat.casesOn n (@sub_eq_add_neg Int _) fun n => @sub_eq_add_neg (Fin n.succ) _
+  zsmul := Nat.casesOn n
+    ((inferInstance : CommRing Int)).zsmul fun n => ((inferInstance : CommRing (Fin n.succ))).zsmul
+  zsmul_zero' := Nat.casesOn n
+    ((inferInstance : CommRing Int)).zsmul_zero'
+    fun n => ((inferInstance : CommRing (Fin n.succ))).zsmul_zero'
+  zsmul_succ' := Nat.casesOn n
+    ((inferInstance : CommRing Int)).zsmul_succ'
+    fun n => ((inferInstance : CommRing (Fin n.succ))).zsmul_succ'
+  zsmul_neg' := Nat.casesOn n
+    ((inferInstance : CommRing Int)).zsmul_neg'
+    fun n => ((inferInstance : CommRing (Fin n.succ))).zsmul_neg'
+  nsmul := Nat.casesOn n
+    ((inferInstance : CommRing Int)).nsmul fun n => ((inferInstance : CommRing (Fin n.succ))).nsmul
+  nsmul_zero := Nat.casesOn n
+    ((inferInstance : CommRing Int)).nsmul_zero
+    fun n => ((inferInstance : CommRing (Fin n.succ))).nsmul_zero
+  nsmul_succ := Nat.casesOn n
+    ((inferInstance : CommRing Int)).nsmul_succ
+    fun n => ((inferInstance : CommRing (Fin n.succ))).nsmul_succ
+  neg_add_cancel := Nat.casesOn n (@neg_add_cancel Int _) fun n => @neg_add_cancel (Fin n.succ) _
+  add_comm := Nat.casesOn n (@add_comm Int _) fun n => @add_comm (Fin n.succ) _
+  mul := Nat.casesOn n (@Mul.mul Int _) fun n => @Mul.mul (Fin n.succ) _
+  mul_assoc := Nat.casesOn n (@mul_assoc Int _) fun n => @mul_assoc (Fin n.succ) _
+  one := Nat.casesOn n (1 : Int) fun n => (1 : Fin n.succ)
+  one_mul := Nat.casesOn n (@one_mul Int _) fun n => @one_mul (Fin n.succ) _
+  mul_one := Nat.casesOn n (@mul_one Int _) fun n => @mul_one (Fin n.succ) _
+  natCast := Nat.casesOn n ((↑) : Nat -> Int) fun n => ((↑) : Nat -> Fin n.succ)
+  natCast_zero := Nat.casesOn n (@Nat.cast_zero Int _) fun n => @Nat.cast_zero (Fin n.succ) _
+  natCast_succ := Nat.casesOn n (@Nat.cast_succ Int _) fun n => @Nat.cast_succ (Fin n.succ) _
+  intCast := Nat.casesOn n ((↑) : Int -> Int) fun n => ((↑) : Int -> Fin n.succ)
+  intCast_ofNat := Nat.casesOn n (@Int.cast_natCast Int _) fun n => @Int.cast_natCast (Fin n.succ) _
+  intCast_negSucc :=
+    Nat.casesOn n (@Int.cast_negSucc Int _) fun n => @Int.cast_negSucc (Fin n.succ) _
+  left_distrib := Nat.casesOn n (@left_distrib Int _ _ _) fun n => @left_distrib (Fin n.succ) _ _ _
+  right_distrib :=
+    Nat.casesOn n (@right_distrib Int _ _ _) fun n => @right_distrib (Fin n.succ) _ _ _
+  mul_comm := Nat.casesOn n (@mul_comm Int _) fun n => @mul_comm (Fin n.succ) _
+  zero_mul := Nat.casesOn n (@zero_mul Int _) fun n => @zero_mul (Fin n.succ) _
+  mul_zero := Nat.casesOn n (@mul_zero Int _) fun n => @mul_zero (Fin n.succ) _
+  npow := Nat.casesOn n
+    ((inferInstance : CommRing Int)).npow fun n => ((inferInstance : CommRing (Fin n.succ))).npow
+  npow_zero := Nat.casesOn n
+    ((inferInstance : CommRing Int)).npow_zero
+    fun n => ((inferInstance : CommRing (Fin n.succ))).npow_zero
+  npow_succ := Nat.casesOn n
+    ((inferInstance : CommRing Int)).npow_succ
+    fun n => ((inferInstance : CommRing (Fin n.succ))).npow_succ
 
 中文:
 实例 commRing
@@ -452,7 +508,57 @@ instance commRing
   add_assoc := Nat.casesOn n (@add_assoc Int _) fun n => @add_assoc (Fin n.succ) _
   zero := Nat.casesOn n (0 : Int) fun n => (0 : Fin n.succ)
   zero_add := Nat.casesOn n (@zero_add Int _) fun n => @zero_add (Fin n.succ) _
-  add_zero :=
+  add_zero := Nat.casesOn n (@add_zero Int _) fun n => @add_zero (Fin n.succ) _
+  neg := Nat.casesOn n (@Neg.neg Int _) fun n => @Neg.neg (Fin n.succ) _
+  sub := Nat.casesOn n (@Sub.sub Int _) fun n => @Sub.sub (Fin n.succ) _
+  sub_eq_add_neg := Nat.casesOn n (@sub_eq_add_neg Int _) fun n => @sub_eq_add_neg (Fin n.succ) _
+  zsmul := Nat.casesOn n
+    ((inferInstance : CommRing Int)).zsmul fun n => ((inferInstance : CommRing (Fin n.succ))).zsmul
+  zsmul_zero' := Nat.casesOn n
+    ((inferInstance : CommRing Int)).zsmul_zero'
+    fun n => ((inferInstance : CommRing (Fin n.succ))).zsmul_zero'
+  zsmul_succ' := Nat.casesOn n
+    ((inferInstance : CommRing Int)).zsmul_succ'
+    fun n => ((inferInstance : CommRing (Fin n.succ))).zsmul_succ'
+  zsmul_neg' := Nat.casesOn n
+    ((inferInstance : CommRing Int)).zsmul_neg'
+    fun n => ((inferInstance : CommRing (Fin n.succ))).zsmul_neg'
+  nsmul := Nat.casesOn n
+    ((inferInstance : CommRing Int)).nsmul fun n => ((inferInstance : CommRing (Fin n.succ))).nsmul
+  nsmul_zero := Nat.casesOn n
+    ((inferInstance : CommRing Int)).nsmul_zero
+    fun n => ((inferInstance : CommRing (Fin n.succ))).nsmul_zero
+  nsmul_succ := Nat.casesOn n
+    ((inferInstance : CommRing Int)).nsmul_succ
+    fun n => ((inferInstance : CommRing (Fin n.succ))).nsmul_succ
+  neg_add_cancel := Nat.casesOn n (@neg_add_cancel Int _) fun n => @neg_add_cancel (Fin n.succ) _
+  add_comm := Nat.casesOn n (@add_comm Int _) fun n => @add_comm (Fin n.succ) _
+  mul := Nat.casesOn n (@Mul.mul Int _) fun n => @Mul.mul (Fin n.succ) _
+  mul_assoc := Nat.casesOn n (@mul_assoc Int _) fun n => @mul_assoc (Fin n.succ) _
+  one := Nat.casesOn n (1 : Int) fun n => (1 : Fin n.succ)
+  one_mul := Nat.casesOn n (@one_mul Int _) fun n => @one_mul (Fin n.succ) _
+  mul_one := Nat.casesOn n (@mul_one Int _) fun n => @mul_one (Fin n.succ) _
+  natCast := Nat.casesOn n ((↑) : Nat -> Int) fun n => ((↑) : Nat -> Fin n.succ)
+  natCast_zero := Nat.casesOn n (@Nat.cast_zero Int _) fun n => @Nat.cast_zero (Fin n.succ) _
+  natCast_succ := Nat.casesOn n (@Nat.cast_succ Int _) fun n => @Nat.cast_succ (Fin n.succ) _
+  intCast := Nat.casesOn n ((↑) : Int -> Int) fun n => ((↑) : Int -> Fin n.succ)
+  intCast_ofNat := Nat.casesOn n (@Int.cast_natCast Int _) fun n => @Int.cast_natCast (Fin n.succ) _
+  intCast_negSucc :=
+    Nat.casesOn n (@Int.cast_negSucc Int _) fun n => @Int.cast_negSucc (Fin n.succ) _
+  left_distrib := Nat.casesOn n (@left_distrib Int _ _ _) fun n => @left_distrib (Fin n.succ) _ _ _
+  right_distrib :=
+    Nat.casesOn n (@right_distrib Int _ _ _) fun n => @right_distrib (Fin n.succ) _ _ _
+  mul_comm := Nat.casesOn n (@mul_comm Int _) fun n => @mul_comm (Fin n.succ) _
+  zero_mul := Nat.casesOn n (@zero_mul Int _) fun n => @zero_mul (Fin n.succ) _
+  mul_zero := Nat.casesOn n (@mul_zero Int _) fun n => @mul_zero (Fin n.succ) _
+  npow := Nat.casesOn n
+    ((inferInstance : CommRing Int)).npow fun n => ((inferInstance : CommRing (Fin n.succ))).npow
+  npow_zero := Nat.casesOn n
+    ((inferInstance : CommRing Int)).npow_zero
+    fun n => ((inferInstance : CommRing (Fin n.succ))).npow_zero
+  npow_succ := Nat.casesOn n
+    ((inferInstance : CommRing Int)).npow_succ
+    fun n => ((inferInstance : CommRing (Fin n.succ))).npow_succ
 
 Depends on / 依赖: Add.add, Nat.casesOn, Submonoid, Submonoid.smul_def, casesOn, n.succ, simp_rw, smul_def, smul_eq_mul, smul_mul
 -/

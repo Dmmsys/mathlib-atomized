@@ -315,7 +315,14 @@ theorem eLpNorm_inner_lt_top
       ‖⟪f x, g x⟫‖ <= ‖f x‖ * ‖g x‖ := norm_inner_le_norm _ _
       _ <= 2 * ‖f x‖ * ‖g x‖ := by
         gcongr
- 
+        exact le_mul_of_one_le_left (norm_nonneg _) one_le_two
+      -- TODO(kmill): the type ascription is getting around an elaboration error
+      _ <= ‖(‖f x‖ ^ 2 + ‖g x‖ ^ 2 : Real)‖ := (two_mul_le_add_sq _ _).trans (le_abs_self _)
+  refine (eLpNorm_mono_ae (ae_of_all _ h)).trans_lt ((eLpNorm_add_le ?_ ?_ le_rfl).trans_lt ?_)
+  · exact ((Lp.aestronglyMeasurable f).norm.aemeasurable.pow_const _).aestronglyMeasurable
+  · exact ((Lp.aestronglyMeasurable g).norm.aemeasurable.pow_const _).aestronglyMeasurable
+  rw [ENNReal.add_lt_top]
+  exact ⟨eLpNorm_rpow_two_norm_lt_top f, eLpNorm_rpow_two_norm_lt_top g⟩
 
 中文:
 定理 eLpNorm_inner_lt_top
@@ -329,7 +336,14 @@ theorem eLpNorm_inner_lt_top
       ‖⟪f x, g x⟫‖ <= ‖f x‖ * ‖g x‖ := norm_inner_le_norm _ _
       _ <= 2 * ‖f x‖ * ‖g x‖ := by
         gcongr
- 
+        exact le_mul_of_one_le_left (norm_nonneg _) one_le_two
+      -- TODO(kmill): the type ascription is getting around an elaboration error
+      _ <= ‖(‖f x‖ ^ 2 + ‖g x‖ ^ 2 : Real)‖ := (two_mul_le_add_sq _ _).trans (le_abs_self _)
+  refine (eLpNorm_mono_ae (ae_of_all _ h)).trans_lt ((eLpNorm_add_le ?_ ?_ le_rfl).trans_lt ?_)
+  · exact ((Lp.aestronglyMeasurable f).norm.aemeasurable.pow_const _).aestronglyMeasurable
+  · exact ((Lp.aestronglyMeasurable g).norm.aemeasurable.pow_const _).aestronglyMeasurable
+  rw [ENNReal.add_lt_top]
+  exact ⟨eLpNorm_rpow_two_norm_lt_top f, eLpNorm_rpow_two_norm_lt_top g⟩
 
 Depends on / 依赖: Nat.cast_two, Real.rpow_natCast, cast_two, le_mul_of_one_le_left, norm_inner_le_norm, norm_nonneg, one_le_two, rpow_natCast
 -/
@@ -405,7 +419,10 @@ theorem integral_inner_eq_sq_eLpNorm
   · exact ((Lp.aestronglyMeasurable f).norm.aemeasurable.pow_const _).aestronglyMeasurable
   congr
   ext1 x
-  have h_two : (2 : Rea
+  have h_two : (2 : Real) = ((2 : Nat) : Real) := by simp
+  rw [← Real.rpow_natCast _ 2]; rw [← h_two]; rw [←
+    ENNReal.ofReal_rpow_of_nonneg (norm_nonneg _) zero_le_two]; rw [ofReal_norm]
+  norm_cast
 
 中文:
 定理 integral_inner_eq_sq_eLpNorm
@@ -419,7 +436,10 @@ theorem integral_inner_eq_sq_eLpNorm
   · exact ((Lp.aestronglyMeasurable f).norm.aemeasurable.pow_const _).aestronglyMeasurable
   congr
   ext1 x
-  have h_two : (2 : Rea
+  have h_two : (2 : Real) = ((2 : Nat) : Real) := by simp
+  rw [← Real.rpow_natCast _ 2]; rw [← h_two]; rw [←
+    ENNReal.ofReal_rpow_of_nonneg (norm_nonneg _) zero_le_two]; rw [ofReal_norm]
+  norm_cast
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_rpow_of_nonneg, Eventually, Filter, Filter.Eventually.of_forall, Lp.aestronglyMeasurable, Real.rpow_natCast, aemeasurable, aestronglyMeasurable, h_two, inner_self_eq_norm_sq_to_K, integral_eq_lintegral_of_nonneg_ae, norm.aemeasurable.pow_const, norm_nonneg, ofReal_norm, ofReal_rpow_of_nonneg, of_forall, pow_const, rotate_left, rpow_natCast
 -/
@@ -448,7 +468,12 @@ theorem norm_sq_eq_re_inner
   proof: by
   have h_two : (2 : Real>=0∞).toReal = 2 := by simp
   rw [inner_def]; rw [integral_inner_eq_sq_eLpNorm]; rw [norm_def]; rw [← ENNReal.toReal_pow]; rw [RCLike.ofReal_re]; rw [ENNReal.toReal_eq_toReal_iff' (ENNReal.pow_ne_top (Lp.eLpNorm_ne_top f)) _]
-  · rw [← ENNReal.rpow_natCast, eLpNorm_eq_eLpN
+  · rw [← ENNReal.rpow_natCast, eLpNorm_eq_eLpNorm' two_ne_zero ENNReal.ofNat_ne_top, eLpNorm', ←
+      ENNReal.rpow_mul, one_div, h_two]
+    simp [enorm_eq_nnnorm]
+  · refine (lintegral_rpow_enorm_lt_top_of_eLpNorm'_lt_top zero_lt_two (ε := E) ?_).ne
+    rw [← h_two]; rw [← eLpNorm_eq_eLpNorm' two_ne_zero ENNReal.ofNat_ne_top]
+    finiteness
 
 中文:
 定理 norm_sq_eq_re_inner
@@ -457,7 +482,12 @@ theorem norm_sq_eq_re_inner
   证明: by
   have h_two : (2 : Real>=0∞).toReal = 2 := by simp
   rw [inner_def]; rw [integral_inner_eq_sq_eLpNorm]; rw [norm_def]; rw [← ENNReal.toReal_pow]; rw [RCLike.ofReal_re]; rw [ENNReal.toReal_eq_toReal_iff' (ENNReal.pow_ne_top (Lp.eLpNorm_ne_top f)) _]
-  · rw [← ENNReal.rpow_natCast, eLpNorm_eq_eLpN
+  · rw [← ENNReal.rpow_natCast, eLpNorm_eq_eLpNorm' two_ne_zero ENNReal.ofNat_ne_top, eLpNorm', ←
+      ENNReal.rpow_mul, one_div, h_two]
+    simp [enorm_eq_nnnorm]
+  · refine (lintegral_rpow_enorm_lt_top_of_eLpNorm'_lt_top zero_lt_two (ε := E) ?_).ne
+    rw [← h_two]; rw [← eLpNorm_eq_eLpNorm' two_ne_zero ENNReal.ofNat_ne_top]
+    finiteness
 -/
 private theorem norm_sq_eq_re_inner (f : α ->₂[μ] E) : ‖f‖ ^ 2 = RCLike.re ⟪f, f⟫ := by
   have h_two : (2 : Real>=0∞).toReal = 2 := by simp

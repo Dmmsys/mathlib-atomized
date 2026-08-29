@@ -1956,7 +1956,8 @@ theorem derivWithin_Ioi_eq_Ici
     have B := (differentiableWithinAt_Ioi_iff_Ici.1 H).hasDerivWithinAt
     simpa using (uniqueDiffOn_Ici x).eq self_mem_Ici A B
   · rw [derivWithin_zero_of_not_differentiableWithinAt H,
-      deriv
+      derivWithin_zero_of_not_differentiableWithinAt]
+    rwa [differentiableWithinAt_Ioi_iff_Ici] at H
 
 中文:
 定理 derivWithin_Ioi_eq_Ici
@@ -1967,7 +1968,8 @@ theorem derivWithin_Ioi_eq_Ici
     have B := (differentiableWithinAt_Ioi_iff_Ici.1 H).hasDerivWithinAt
     simpa using (uniqueDiffOn_Ici x).eq self_mem_Ici A B
   · rw [derivWithin_zero_of_not_differentiableWithinAt H,
-      deriv
+      derivWithin_zero_of_not_differentiableWithinAt]
+    rwa [differentiableWithinAt_Ioi_iff_Ici] at H
 
 Depends on / 依赖: DifferentiableWithinAt, H.hasDerivWithinAt.Ici_of_Ioi, Ici_of_Ioi, derivWithin_zero_of_not_differentiableWithinAt, differentiableWithinAt_Ioi_iff_Ici, hasDerivWithinAt, self_mem_Ici, uniqueDiffOn_Ici
 -/
@@ -3762,7 +3764,7 @@ lemma HasDerivAt.comp_semilinear
   convert! HasFDerivAt.comp_semilinear L R (f' := toSpanSingleton 𝕜 f') ?_
   · ext
     simp [R]
-  · rwa [← hasDeriv
+  · rwa [← hasDerivAt_iff_hasFDerivAt, hR, RingHomInvPair.comp_apply_eq]
 
 中文:
 引理 在点处可导.comp_semilinear
@@ -3775,7 +3777,7 @@ lemma HasDerivAt.comp_semilinear
   convert! HasFDerivAt.comp_semilinear L R (f' := toSpanSingleton 𝕜 f') ?_
   · ext
     simp [R]
-  · rwa [← hasDeriv
+  · rwa [← hasDerivAt_iff_hasFDerivAt, hR, RingHomInvPair.comp_apply_eq]
 
 Depends on / 依赖: HasFDerivAt, HasFDerivAt.comp_semilinear, RingHomInvPair, RingHomInvPair.comp_apply_eq, RingHomIsometric, comp_apply_eq, comp_semilinear, continuous, convert, hasDerivAt_iff_hasFDerivAt, isometry, isometry.continuous, toSemilinearMap, toSpanSingleton
 -/

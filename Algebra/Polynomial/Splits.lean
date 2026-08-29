@@ -427,7 +427,8 @@ theorem Splits.of_natDegree_le_one_of_invertible
     rw [← mul_invOf_cancel_left a b]; rw [C_mul]; rw [← mul_add]
     exact (Splits.C a).mul (Splits.X_add_C _)
 
-@[depre
+@[deprecated (since := "2026-06-06")]
+alias splits_of_natDegree_le_one_of_invertible := Splits.of_natDegree_le_one_of_invertible
 
 中文:
 定理 Splits.of_natDegree_le_one_of_invertible
@@ -440,7 +441,8 @@ theorem Splits.of_natDegree_le_one_of_invertible
     rw [← mul_invOf_cancel_left a b]; rw [C_mul]; rw [← mul_add]
     exact (Splits.C a).mul (Splits.X_add_C _)
 
-@[depre
+@[deprecated (since := "2026-06-06")]
+alias splits_of_natDegree_le_one_of_invertible := Splits.of_natDegree_le_one_of_invertible
 
 Depends on / 依赖: C_mul, Invertible, Splits, Splits.C, Splits.X_add_C, X_add_C, eq_or_ne, exists_eq_X_add_C_of_natDegree_le_one, leadingCoeff, mul_add, mul_invOf_cancel_left, replace
 -/
@@ -626,7 +628,16 @@ theorem splits_iff_exists_multiset'
     have hS : S = {C a | a : R} := MonoidHom.coe_mrange C
     rw [Splits]; rw [Submonoid.closure_union]; rw [← hS]; rw [Submonoid.closure_eq]; rw [Submonoid.mem_sup] at hf
     obtain ⟨-, ⟨a, rfl⟩, g, hg, rfl⟩ := hf
-    o
+    obtain ⟨mg, hmg, rfl⟩ := Submonoid.exists_multiset_of_mem_closure hg
+    choose! j hj using hmg
+    have hmg : mg = (mg.map j).map (X + C ·) := by simp [Multiset.map_congr rfl hj]
+    rw [hmg]; rw [leadingCoeff_mul_monic]; rw [leadingCoeff_C]
+    · use mg.map j
+    · rw [hmg]
+      apply monic_multiset_prod_of_monic
+      simp [monic_X_add_C]
+  · rintro ⟨m, hm⟩
+    exact hm ▸ (Splits.C _).mul (.multisetProd (by simp [Splits.X_add_C]))
 
 中文:
 定理 splits_iff_存在_multiset'
@@ -637,7 +648,16 @@ theorem splits_iff_exists_multiset'
     have hS : S = {C a | a : R} := MonoidHom.coe_mrange C
     rw [Splits]; rw [Submonoid.closure_union]; rw [← hS]; rw [Submonoid.closure_eq]; rw [Submonoid.mem_sup] at hf
     obtain ⟨-, ⟨a, rfl⟩, g, hg, rfl⟩ := hf
-    o
+    obtain ⟨mg, hmg, rfl⟩ := Submonoid.exists_multiset_of_mem_closure hg
+    choose! j hj using hmg
+    have hmg : mg = (mg.map j).map (X + C ·) := by simp [Multiset.map_congr rfl hj]
+    rw [hmg]; rw [leadingCoeff_mul_monic]; rw [leadingCoeff_C]
+    · use mg.map j
+    · rw [hmg]
+      apply monic_multiset_prod_of_monic
+      simp [monic_X_add_C]
+  · rintro ⟨m, hm⟩
+    exact hm ▸ (Splits.C _).mul (.multisetProd (by simp [Splits.X_add_C]))
 
 Depends on / 依赖: MonoidHom, MonoidHom.coe_mrange, MonoidHom.mrange, Multiset, Multiset.map_congr, Splits, Submonoid, Submonoid.closure_eq, Submonoid.closure_union, Submonoid.exists_multiset_of_mem_closure, Submonoid.mem_sup, closure_eq, closure_union, coe_mrange, exists_multiset_of_mem_closure, leadin, leadingCoeff_mul_monic, map_congr, mem_sup, mg.map
 -/
@@ -674,7 +694,11 @@ theorem Splits.natDegree_le_one_of_irreducible
   · obtain ⟨m, rfl⟩ := Multiset.exists_cons_of_mem ha
     rw [Multiset.map_cons]; rw [Multiset.prod_cons] at hm
     rw [hm] at h
-    simp only [irreducibl
+    simp only [irreducible_mul_iff, IsUnit.mul_iff, not_isUnit_X_add_C, false_and, and_false,
+      or_false, false_or, ← Multiset.prod_toList, List.prod_isUnit_iff] at h
+    have : m = 0 := by simpa [not_isUnit_X_add_C, ← Multiset.eq_zero_iff_forall_notMem] using h.1.2
+    grw [hm, this, natDegree_mul_le]
+    simp
 
 中文:
 定理 Splits.natDegree_le_one_of_irreducible
@@ -688,7 +712,11 @@ theorem Splits.natDegree_le_one_of_irreducible
   · obtain ⟨m, rfl⟩ := Multiset.exists_cons_of_mem ha
     rw [Multiset.map_cons]; rw [Multiset.prod_cons] at hm
     rw [hm] at h
-    simp only [irreducibl
+    simp only [irreducible_mul_iff, IsUnit.mul_iff, not_isUnit_X_add_C, false_and, and_false,
+      or_false, false_or, ← Multiset.prod_toList, List.prod_isUnit_iff] at h
+    have : m = 0 := by simpa [not_isUnit_X_add_C, ← Multiset.eq_zero_iff_forall_notMem] using h.1.2
+    grw [hm, this, natDegree_mul_le]
+    simp
 
 Depends on / 依赖: IsUnit, IsUnit.mul_iff, List.prod_isUnit_iff, Multiset, Multiset.eq_zero_iff_forall_notMem, Multiset.exists_cons_of_mem, Multiset.map_cons, Multiset.prod_cons, Multiset.prod_toList, and_false, empty_or_exists_mem, eq_zero_iff_forall_notMem, exists_cons_of_mem, false_and, false_or, irreducible_mul_iff, m.empty_or_exists_mem, map_cons, mul_iff, nontriviality
 -/
@@ -740,7 +768,11 @@ theorem Splits.comp_of_natDegree_le_one_of_invertible
   obtain ⟨m, hm⟩ := splits_iff_exists_multiset'.mp hf
   rw [hm]; rw [mul_comp]; rw [C_comp]; rw [multiset_prod_comp]
   refine (Splits.C _).mul (multisetProd ?_)
-  simp only [Multiset.mem_map
+  simp only [Multiset.mem_map]
+  rintro - ⟨-, ⟨a, -, rfl⟩, rfl⟩
+  apply of_natDegree_le_one_of_invertible (by simpa)
+  rw [leadingCoeff]; rw [hg] at h
+  simpa [leadingCoeff, hg]
 
 中文:
 定理 Splits.comp_of_natDegree_le_one_of_invertible
@@ -752,7 +784,11 @@ theorem Splits.comp_of_natDegree_le_one_of_invertible
   obtain ⟨m, hm⟩ := splits_iff_exists_multiset'.mp hf
   rw [hm]; rw [mul_comp]; rw [C_comp]; rw [multiset_prod_comp]
   refine (Splits.C _).mul (multisetProd ?_)
-  simp only [Multiset.mem_map
+  simp only [Multiset.mem_map]
+  rintro - ⟨-, ⟨a, -, rfl⟩, rfl⟩
+  apply of_natDegree_le_one_of_invertible (by simpa)
+  rw [leadingCoeff]; rw [hg] at h
+  simpa [leadingCoeff, hg]
 
 Depends on / 依赖: C_comp, Multiset, Multiset.mem_map, Nat.lt_one_iff.mp, Splits, Splits.C, eq_C_of_natDegree_eq_zero, leadingCoeff, lt_one_iff, lt_or_eq_of_le, mem_map, mul_comp, multisetProd, multiset_prod_comp, of_natDegree_le_one_of_invertible, splits_iff_exists_multiset
 -/
@@ -1053,7 +1089,8 @@ theorem Splits.exists_eval_eq_zero
   obtain rfl | ⟨a, ha⟩ := m.empty_or_exists_mem
   · rw [hm, Multiset.map_zero, Multiset.prod_zero, mul_one, degree_C hf₀] at hf0
     contradiction
-  obtain ⟨m, rfl⟩ := M
+  obtain ⟨m, rfl⟩ := Multiset.exists_cons_of_mem ha
+  exact ⟨a, by rw [hm]; simp⟩
 
 中文:
 定理 Splits.存在_eval_eq_zero
@@ -1065,7 +1102,8 @@ theorem Splits.exists_eval_eq_zero
   obtain rfl | ⟨a, ha⟩ := m.empty_or_exists_mem
   · rw [hm, Multiset.map_zero, Multiset.prod_zero, mul_one, degree_C hf₀] at hf0
     contradiction
-  obtain ⟨m, rfl⟩ := M
+  obtain ⟨m, rfl⟩ := Multiset.exists_cons_of_mem ha
+  exact ⟨a, by rw [hm]; simp⟩
 
 Depends on / 依赖: Multiset, Multiset.exists_cons_of_mem, Multiset.map_zero, Multiset.prod_zero, degree_C, empty_or_exists_mem, exists_cons_of_mem, f.leadingCoeff, leadingCoeff, leadingCoeff_eq_zero, leadingCoeff_eq_zero.mp, m.empty_or_exists_mem, map_zero, mul_one, prod_zero, splits_iff_exists_multiset, splits_iff_exists_multiset.mp
 -/
@@ -1692,7 +1730,9 @@ theorem splits_X_sub_C_mul_iff
   by_cases hf₀ : f = 0
   · aesop
   have := hf.eq_prod_roots
-  rw [leadingCoeff_mul]; rw [leadingCoeff_X_sub_C]; rw [one_mul]; rw [roots_mul (mul_ne_zero (X_sub_C_ne_zero _) hf₀)]; rw [roots_X_sub_C]; rw [Multiset.singleton_add]; rw [Multiset.map
+  rw [leadingCoeff_mul]; rw [leadingCoeff_X_sub_C]; rw [one_mul]; rw [roots_mul (mul_ne_zero (X_sub_C_ne_zero _) hf₀)]; rw [roots_X_sub_C]; rw [Multiset.singleton_add]; rw [Multiset.map_cons]; rw [Multiset.prod_cons]; rw [mul_left_comm] at this
+  rw [mul_left_cancel₀ (X_sub_C_ne_zero _) this]
+  aesop
 
 中文:
 定理 splits_X_sub_C_mul_iff
@@ -1703,7 +1743,9 @@ theorem splits_X_sub_C_mul_iff
   by_cases hf₀ : f = 0
   · aesop
   have := hf.eq_prod_roots
-  rw [leadingCoeff_mul]; rw [leadingCoeff_X_sub_C]; rw [one_mul]; rw [roots_mul (mul_ne_zero (X_sub_C_ne_zero _) hf₀)]; rw [roots_X_sub_C]; rw [Multiset.singleton_add]; rw [Multiset.map
+  rw [leadingCoeff_mul]; rw [leadingCoeff_X_sub_C]; rw [one_mul]; rw [roots_mul (mul_ne_zero (X_sub_C_ne_zero _) hf₀)]; rw [roots_X_sub_C]; rw [Multiset.singleton_add]; rw [Multiset.map_cons]; rw [Multiset.prod_cons]; rw [mul_left_comm] at this
+  rw [mul_left_cancel₀ (X_sub_C_ne_zero _) this]
+  aesop
 
 Depends on / 依赖: Multiset, Multiset.map_cons, Multiset.prod_cons, Multiset.singleton_add, Splits, Splits.X_sub_C, X_sub_C, X_sub_C_ne_zero, eq_prod_roots, hf.eq_prod_roots, leadingCoeff_X_sub_C, leadingCoeff_mul, map_cons, mul_left_comm, mul_ne_zero, one_mul, prod_cons, roots_X_sub_C, roots_mul, singleton_add
 -/
@@ -1729,7 +1771,21 @@ theorem splits_mul
   induction n generalizing p f g with
   | zero =>
     rw [← hp]; rw [natDegree_mul hf₀ hg₀]; rw [Nat.add_eq_zero_iff] at hn
-    exact ⟨.of_natDegree_eq_zero hn.1, .of_natDegree_eq_zero hn.2
+    exact ⟨.of_natDegree_eq_zero hn.1, .of_natDegree_eq_zero hn.2⟩
+  | succ n ih =>
+    obtain ⟨a, ha⟩ := Splits.exists_eval_eq_zero h (degree_ne_of_natDegree_ne <| hn ▸ by simp)
+    have := dvd_iff_isRoot.mpr ha
+    rw [← hp]; rw [(prime_X_sub_C a).dvd_mul] at this
+    wlog hf : X - C a ∣ f with hf2
+· exact .symm hf2 n ih hg₀ hf₀ p ((mul_comm g f).trans hp) h hn a ha this.symm
+        this.resolve_left hf
+    obtain ⟨f, rfl⟩ := hf
+    rw [mul_assoc] at hp; subst hp
+    rw [natDegree_mul (by aesop) (by aesop)]; rw [natDegree_X_sub_C]; rw [add_comm]; rw [Nat.succ_inj] at hn
+    have := ih (by aesop) hg₀ (f * g) rfl (splits_X_sub_C_mul_iff.mp h) hn
+    aesop
+
+@[deprecated (since := "2026-06-08")] alias splits_mul_iff := splits_mul
 
 中文:
 定理 splits_mul
@@ -1741,7 +1797,21 @@ theorem splits_mul
   induction n generalizing p f g with
   | zero =>
     rw [← hp]; rw [natDegree_mul hf₀ hg₀]; rw [Nat.add_eq_zero_iff] at hn
-    exact ⟨.of_natDegree_eq_zero hn.1, .of_natDegree_eq_zero hn.2
+    exact ⟨.of_natDegree_eq_zero hn.1, .of_natDegree_eq_zero hn.2⟩
+  | succ n ih =>
+    obtain ⟨a, ha⟩ := Splits.exists_eval_eq_zero h (degree_ne_of_natDegree_ne <| hn ▸ by simp)
+    have := dvd_iff_isRoot.mpr ha
+    rw [← hp]; rw [(prime_X_sub_C a).dvd_mul] at this
+    wlog hf : X - C a ∣ f with hf2
+· exact .symm hf2 n ih hg₀ hf₀ p ((mul_comm g f).trans hp) h hn a ha this.symm
+        this.resolve_left hf
+    obtain ⟨f, rfl⟩ := hf
+    rw [mul_assoc] at hp; subst hp
+    rw [natDegree_mul (by aesop) (by aesop)]; rw [natDegree_X_sub_C]; rw [add_comm]; rw [Nat.succ_inj] at hn
+    have := ih (by aesop) hg₀ (f * g) rfl (splits_X_sub_C_mul_iff.mp h) hn
+    aesop
+
+@[deprecated (since := "2026-06-08")] alias splits_mul_iff := splits_mul
 
 Depends on / 依赖: Nat.add_eq_zero_iff, Splits, Splits.exists_eval_eq_zero, add_eq_zero_iff, and_imp, and_imp.mpr, degree_ne_of_natDegree_ne, dvd_iff_isRoot, dvd_iff_isRoot.mpr, dvd_mul, exists_eval_eq_zero, generalize, generalizing, natDegree, natDegree_mul, of_natDegree_eq_zero, p.natDegree, prime_X_sub_C
 -/
@@ -2421,7 +2491,11 @@ theorem splits_iff_comp_splits_of_natDegree_eq_one
   obtain ⟨a, b, rfl⟩ := exists_eq_X_add_C_of_natDegree_le_one hg.le
   have ha : a != 0 := by contrapose! hg; simp [hg]
   have : f = (f.comp (C a * X + C b)).comp ((C a⁻¹ * (X - C b))) := by
-    simp only [comp_assoc, add_comp, m
+    simp only [comp_assoc, add_comp, mul_comp, C_comp, X_comp]
+    rw [← mul_assoc]; rw [← C_mul]; rw [mul_inv_cancel₀ ha]; rw [C_1]; rw [one_mul]; rw [sub_add_cancel]; rw [comp_X]
+  rw [this]
+  refine Splits.comp_of_natDegree_le_one hf ?_
+  rw [natDegree_C_mul (mt inv_eq_zero.mp ha)]; rw [natDegree_X_sub_C]
 
 中文:
 定理 splits_iff_comp_splits_of_natDegree_eq_one
@@ -2431,7 +2505,11 @@ theorem splits_iff_comp_splits_of_natDegree_eq_one
   obtain ⟨a, b, rfl⟩ := exists_eq_X_add_C_of_natDegree_le_one hg.le
   have ha : a != 0 := by contrapose! hg; simp [hg]
   have : f = (f.comp (C a * X + C b)).comp ((C a⁻¹ * (X - C b))) := by
-    simp only [comp_assoc, add_comp, m
+    simp only [comp_assoc, add_comp, mul_comp, C_comp, X_comp]
+    rw [← mul_assoc]; rw [← C_mul]; rw [mul_inv_cancel₀ ha]; rw [C_1]; rw [one_mul]; rw [sub_add_cancel]; rw [comp_X]
+  rw [this]
+  refine Splits.comp_of_natDegree_le_one hf ?_
+  rw [natDegree_C_mul (mt inv_eq_zero.mp ha)]; rw [natDegree_X_sub_C]
 
 Depends on / 依赖: C_comp, C_mul, Splits, Splits.comp_of_natDegree_le_one, X_comp, add_comp, comp_X, comp_assoc, comp_of_natDegree_le_one, contrapose, exists_eq_X_add_C_of_natDegree_le_one, f.comp, hf.comp_of_natDegree_le_one, hg.le, mul_assoc, mul_comp, natDegree_C_mu, one_mul, sub_add_cancel
 -/
@@ -2649,7 +2727,8 @@ theorem splits_iff_splits
   · simp [hf0]
   obtain ⟨u, hu⟩ := factors_prod hf0
   rw [← hu]
-  refine (Splits.multisetProd fun g hg => ?_).mul u.isUni
+  refine (Splits.multisetProd fun g hg => ?_).mul u.isUnit.splits
+  exact Splits.of_degree_eq_one (hf (irreducible_of_factor g hg) (dvd_of_mem_factors hg))
 
 中文:
 定理 splits_iff_splits
@@ -2663,7 +2742,8 @@ theorem splits_iff_splits
   · simp [hf0]
   obtain ⟨u, hu⟩ := factors_prod hf0
   rw [← hu]
-  refine (Splits.multisetProd fun g hg => ?_).mul u.isUni
+  refine (Splits.multisetProd fun g hg => ?_).mul u.isUnit.splits
+  exact Splits.of_degree_eq_one (hf (irreducible_of_factor g hg) (dvd_of_mem_factors hg))
 
 Depends on / 依赖: Splits, Splits.multisetProd, Splits.of_degree_eq_one, degree_eq_one_of_irreducible, dvd_of_mem_factors, factors_prod, hf.of_dvd, irreducible_of_factor, isUnit, multisetProd, of_degree_eq_one, of_dvd, or_iff_not_imp_left, or_iff_not_imp_left.mpr, splits, u.isUnit.splits
 -/

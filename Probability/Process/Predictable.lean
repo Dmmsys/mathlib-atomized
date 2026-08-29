@@ -127,7 +127,7 @@ lemma measurableSet_predictable_Ioc_prod
   · rw [← Set.Ioi_sdiff_Ioi, (by simp : (Set.Ioi i \ Set.Ioi j) ×ˢ s
       = Set.Ioi i ×ˢ (s \ s) union (Set.Ioi i \ Set.Ioi j) ×ˢ s), ← Set.prod_sdiff_prod]
     exact (measurableSet_predictable_Ioi_prod hs).diff
-      (measurableSet_predictable_I
+      (measurableSet_predictable_Ioi_prod <| 𝓕.mono hij _ hs)
 
 中文:
 引理 measurableSet_predictable_Ioc_prod
@@ -138,7 +138,7 @@ lemma measurableSet_predictable_Ioc_prod
   · rw [← Set.Ioi_sdiff_Ioi, (by simp : (Set.Ioi i \ Set.Ioi j) ×ˢ s
       = Set.Ioi i ×ˢ (s \ s) union (Set.Ioi i \ Set.Ioi j) ×ˢ s), ← Set.prod_sdiff_prod]
     exact (measurableSet_predictable_Ioi_prod hs).diff
-      (measurableSet_predictable_I
+      (measurableSet_predictable_Ioi_prod <| 𝓕.mono hij _ hs)
 
 Depends on / 依赖: Ioi_sdiff_Ioi, Set.Ioi, Set.Ioi_sdiff_Ioi, Set.prod_sdiff_prod, le_total, measurableSet_predictable_Ioi_prod, prod_sdiff_prod
 -/
@@ -194,7 +194,35 @@ lemma measurableSet_prodMk_add_one_of_predictable
   rw [(by aesop : {ω | (n + 1]; rw [ω) in s} = (Prod.mk (α := Set.singleton (n + 1)) (β := Ω)
       ⟨n + 1]; rw [rfl⟩) ⁻¹' ((fun (p : Set.singleton (n + 1) × Ω) => ((p.1 : Nat)]; rw [p.2)) ⁻¹' s))]
   refine measurableSet_preimage (mβ := Subtype.instMeasurableSpace.prod (𝓕 n))
-measurable_prodMk_le
+measurable_prodMk_left measurableSet_preimage ?_ hs
+  rw [measurable_iff_comap_le]; rw [MeasurableSpace.comap_le_iff_le_map]
+  refine MeasurableSpace.generateFrom_le ?_
+  rintro - (⟨A, hA, rfl⟩ | ⟨i, A, hA, rfl⟩)
+  · rw [MeasurableSpace.map_def,
+      (_ : (fun (p : Set.singleton (n + 1) × Ω) => ((p.1 : Nat), p.2)) ⁻¹' ({⊥} ×ˢ A) = ∅)]
+    · simp
+    · ext p
+      simp only [Nat.bot_eq_zero, Set.mem_preimage, Set.mem_prod, Set.mem_singleton_iff,
+        Set.mem_empty_iff_false, iff_false, not_and]
+exact fun hp1 => False.elim Nat.succ_ne_zero n (hp1 ▸ p.1.2.symm)
+  · rw [MeasurableSpace.map_def]
+    obtain hni | hin := lt_or_ge n i
+    · rw [(_ : (fun (p : Set.singleton (n + 1) × Ω) => ((p.1 : Nat), p.2)) ⁻¹' (Set.Ioi i ×ˢ A) = ∅)]
+      · simp
+      · ext p
+        simp only [Set.mem_preimage, Set.mem_prod, Set.mem_Ioi, Set.mem_empty_iff_false,
+          iff_false, not_and]
+        rw [p.1.2]
+        grind
+    · rw [(_ : (fun (p : Set.singleton (n + 1) × Ω) => ((p.1 : Nat), p.2)) ⁻¹' (Set.Ioi i ×ˢ A)
+          = {⟨n + 1, rfl⟩} ×ˢ A)]
+      · exact MeasurableSet.prod (MeasurableSet.of_subtype_image trivial) (𝓕.mono hin _ hA)
+      · ext p
+        simp only [Set.mem_preimage, Set.mem_prod, Set.mem_Ioi, Set.mem_singleton_iff,
+          and_congr_left_iff]
+        intro hp2
+        rw [p.1.2]
+        exact ⟨fun _ => by aesop, fun _ => lt_add_one_iff.2 hin⟩
 
 中文:
 引理 measurableSet_prodMk_add_one_of_predictable
@@ -203,7 +231,35 @@ measurable_prodMk_le
   rw [(by aesop : {ω | (n + 1]; rw [ω) in s} = (Prod.mk (α := Set.singleton (n + 1)) (β := Ω)
       ⟨n + 1]; rw [rfl⟩) ⁻¹' ((fun (p : Set.singleton (n + 1) × Ω) => ((p.1 : Nat)]; rw [p.2)) ⁻¹' s))]
   refine measurableSet_preimage (mβ := Subtype.instMeasurableSpace.prod (𝓕 n))
-measurable_prodMk_le
+measurable_prodMk_left measurableSet_preimage ?_ hs
+  rw [measurable_iff_comap_le]; rw [MeasurableSpace.comap_le_iff_le_map]
+  refine MeasurableSpace.generateFrom_le ?_
+  rintro - (⟨A, hA, rfl⟩ | ⟨i, A, hA, rfl⟩)
+  · rw [MeasurableSpace.map_def,
+      (_ : (fun (p : Set.singleton (n + 1) × Ω) => ((p.1 : Nat), p.2)) ⁻¹' ({⊥} ×ˢ A) = ∅)]
+    · simp
+    · ext p
+      simp only [Nat.bot_eq_zero, Set.mem_preimage, Set.mem_prod, Set.mem_singleton_iff,
+        Set.mem_empty_iff_false, iff_false, not_and]
+exact fun hp1 => False.elim Nat.succ_ne_zero n (hp1 ▸ p.1.2.symm)
+  · rw [MeasurableSpace.map_def]
+    obtain hni | hin := lt_or_ge n i
+    · rw [(_ : (fun (p : Set.singleton (n + 1) × Ω) => ((p.1 : Nat), p.2)) ⁻¹' (Set.Ioi i ×ˢ A) = ∅)]
+      · simp
+      · ext p
+        simp only [Set.mem_preimage, Set.mem_prod, Set.mem_Ioi, Set.mem_empty_iff_false,
+          iff_false, not_and]
+        rw [p.1.2]
+        grind
+    · rw [(_ : (fun (p : Set.singleton (n + 1) × Ω) => ((p.1 : Nat), p.2)) ⁻¹' (Set.Ioi i ×ˢ A)
+          = {⟨n + 1, rfl⟩} ×ˢ A)]
+      · exact MeasurableSet.prod (MeasurableSet.of_subtype_image trivial) (𝓕.mono hin _ hA)
+      · ext p
+        simp only [Set.mem_preimage, Set.mem_prod, Set.mem_Ioi, Set.mem_singleton_iff,
+          and_congr_left_iff]
+        intro hp2
+        rw [p.1.2]
+        exact ⟨fun _ => by aesop, fun _ => lt_add_one_iff.2 hin⟩
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.comap_le_iff_le_map, MeasurableSpace.generateFrom_le, MeasurableSpace.m, Prod.mk, Set.singleton, Subtype, Subtype.instMeasurableSpace.prod, comap_le_iff_le_map, generateFrom_le, instMeasurableSpace, measurableSet_preimage, measurable_iff_comap_le, measurable_prodMk_left, singleton
 -/
@@ -289,7 +345,14 @@ refine MeasurableSpace.comap_le_iff_le_map.2
   · intros A hA
     simp only [MeasurableSpace.map_def,
       (by aesop : (fun (p : Set.Iic i × Ω) => ((p.1 : ι), p.2)) ⁻¹' ({⊥} ×ˢ A) = {⊥} ×ˢ A)]
-exact (measurab
+exact (measurableSet_singleton _).prod 𝓕.mono bot_le _ hA
+  · intros j A hA
+    simp only [MeasurableSpace.map_def]
+    obtain hji | hij := le_total j i
+    · rw [(by grind : (fun (p : Set.Iic i × Ω) => ((p.1 : ι), p.2)) ⁻¹' Set.Ioi j ×ˢ A
+        = (Subtype.val ⁻¹' (Set.Ioc j i)) ×ˢ A)]
+      exact (measurable_subtype_coe measurableSet_Ioc).prod (𝓕.mono hji _ hA)
+    · simp [(by grind : (fun (p : Set.Iic i × Ω) => ((p.1 : ι), p.2)) ⁻¹' Set.Ioi j ×ˢ A = ∅)]
 
 中文:
 引理 measurable_inclusion_predictable
@@ -301,7 +364,14 @@ refine MeasurableSpace.comap_le_iff_le_map.2
   · intros A hA
     simp only [MeasurableSpace.map_def,
       (by aesop : (fun (p : Set.Iic i × Ω) => ((p.1 : ι), p.2)) ⁻¹' ({⊥} ×ˢ A) = {⊥} ×ˢ A)]
-exact (measurab
+exact (measurableSet_singleton _).prod 𝓕.mono bot_le _ hA
+  · intros j A hA
+    simp only [MeasurableSpace.map_def]
+    obtain hji | hij := le_total j i
+    · rw [(by grind : (fun (p : Set.Iic i × Ω) => ((p.1 : ι), p.2)) ⁻¹' Set.Ioi j ×ˢ A
+        = (Subtype.val ⁻¹' (Set.Ioc j i)) ×ˢ A)]
+      exact (measurable_subtype_coe measurableSet_Ioc).prod (𝓕.mono hji _ hA)
+    · simp [(by grind : (fun (p : Set.Iic i × Ω) => ((p.1 : ι), p.2)) ⁻¹' Set.Ioi j ×ˢ A = ∅)]
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.comap_le_iff_le_map, MeasurableSpace.map_def, Set.Iic, Set.Ioi, bot_le, comap_le_iff_le_map, intros, le_total, map_def, measurableSet_singleton, measurableSpace_le_predictable_of_measurableSet, measurable_iff_comap_le
 -/
@@ -365,7 +435,9 @@ lemma isStronglyProgressive
   let : MeasurableSpace (Set.Iic i × Ω) := Subtype.instMeasurableSpace.prod (𝓕 i)
   let X m (x : Set.Iic i × Ω) := h𝓕.approx m ⟨x.1, x.2⟩
   refine ⟨fun m => SimpleFunc.mk (X m) ?_ ?_, ?_⟩
-· exact fun e => measurable_inclusion_predictable 
+· exact fun e => measurable_inclusion_predictable (h𝓕.approx m).measurableSet_fiber e
+  · exact Set.Finite.subset (h𝓕.approx m).finite_range (by grind)
+  · exact fun n => by apply h𝓕.tendsto_approx
 
 中文:
 引理 isStronglyProgressive
@@ -376,7 +448,9 @@ lemma isStronglyProgressive
   let : MeasurableSpace (Set.Iic i × Ω) := Subtype.instMeasurableSpace.prod (𝓕 i)
   let X m (x : Set.Iic i × Ω) := h𝓕.approx m ⟨x.1, x.2⟩
   refine ⟨fun m => SimpleFunc.mk (X m) ?_ ?_, ?_⟩
-· exact fun e => measurable_inclusion_predictable 
+· exact fun e => measurable_inclusion_predictable (h𝓕.approx m).measurableSet_fiber e
+  · exact Set.Finite.subset (h𝓕.approx m).finite_range (by grind)
+  · exact fun n => by apply h𝓕.tendsto_approx
 
 Depends on / 依赖: Finite, MeasurableSpace, Set.Finite.subset, Set.Iic, SimpleFunc, SimpleFunc.mk, Subtype, Subtype.instMeasurableSpace.prod, approx, finite_range, instMeasurableSpace, measurableSet_fiber, measurable_inclusion_predictable, predictable, subset, tendsto_approx
 -/
@@ -424,7 +498,12 @@ lemma measurable_add_one
   let X m := (Function.curry (h𝓕.approx m) (n + 1))
   refine ⟨(fun m => SimpleFunc.mk (X m) ?_ ?_), (fun ω => h𝓕.tendsto_approx ⟨(n + 1), ω⟩)⟩
   · intro s
-    rw [(by aesop : X m ⁻¹' {s} = {ω | (n + 1]; rw [ω) in 
+    rw [(by aesop : X m ⁻¹' {s} = {ω | (n + 1]; rw [ω) in h𝓕.approx m ⁻¹' {s}})]
+    apply measurableSet_prodMk_add_one_of_predictable
+    apply (h𝓕.approx m).measurableSet_fiber
+  · apply (h𝓕.approx m).finite_range.subset
+    rw [Set.range_subset_iff]
+    aesop
 
 中文:
 引理 measurable_add_one
@@ -435,7 +514,12 @@ lemma measurable_add_one
   let X m := (Function.curry (h𝓕.approx m) (n + 1))
   refine ⟨(fun m => SimpleFunc.mk (X m) ?_ ?_), (fun ω => h𝓕.tendsto_approx ⟨(n + 1), ω⟩)⟩
   · intro s
-    rw [(by aesop : X m ⁻¹' {s} = {ω | (n + 1]; rw [ω) in 
+    rw [(by aesop : X m ⁻¹' {s} = {ω | (n + 1]; rw [ω) in h𝓕.approx m ⁻¹' {s}})]
+    apply measurableSet_prodMk_add_one_of_predictable
+    apply (h𝓕.approx m).measurableSet_fiber
+  · apply (h𝓕.approx m).finite_range.subset
+    rw [Set.range_subset_iff]
+    aesop
 
 Depends on / 依赖: Function, Function.curry, MeasurableSpace, Set.range_subset_iff, SimpleFunc, SimpleFunc.mk, approx, finite_range, finite_range.subset, measurableSet_fiber, measurableSet_prodMk_add_one_of_predictable, predictable, range_subset_iff, subset, tendsto_approx
 -/
@@ -466,7 +550,39 @@ lemma of_measurable_add_one
     | 0 => h₀.approx m x.2
     | n + 1 => (h n).approx m x.2
   -- second layer of approximation (to ensure the whole process has finite range)
-  let Y m (x : Nat × Ω) := 
+  let Y m (x : Nat × Ω) := if x.1 <= m then X m x else X m ⟨0, x.2⟩
+  refine ⟨fun m => SimpleFunc.mk (Y m) ?_ ?_, ?_⟩
+  · intro s
+    rw [(by aesop : Y m ⁻¹' {s} = ⋃ n : Nat]; rw [{n} ×ˢ ((Function.curry (Y m) n) ⁻¹' {s}))]
+refine MeasurableSet.iUnion fun n => ?_
+    rcases n with rfl | n
+    · apply measurableSet_predictable_singleton_bot_prod
+      let : MeasurableSpace Ω := 𝓕 0
+      exact (h₀.approx m).measurableSet_fiber s
+    · apply measurableSet_predictable_singleton_prod
+      by_cases! hmk : n + 1 <= m
+      · rw [(by aesop : Function.curry (Y m) (n + 1) = Function.curry (X m) (n + 1))]
+        let : MeasurableSpace Ω := 𝓕 n
+        exact ((h n).approx m).measurableSet_fiber s
+      · rw [(by aesop : Function.curry (Y m) (n + 1) = Function.curry (X m) 0)]
+        apply 𝓕.mono (i := 0) (by simp)
+        let : MeasurableSpace Ω := 𝓕 0
+        exact (h₀.approx m).measurableSet_fiber s
+  · apply Set.Finite.subset (s := ⋃ k in Finset.range (m + 1), Set.range (Function.curry (X m) k))
+    · refine Set.Finite.biUnion' (by aesop) (fun n hn => ?_)
+      rcases n with rfl | n
+      · exact @(h₀.approx m).finite_range
+      · exact @((h n).approx m).finite_range
+    · intro e he
+      obtain ⟨⟨n, ω⟩, hnω⟩ := Set.mem_range.mp he
+      simp_rw [Set.mem_iUnion, Set.mem_range]
+      exact ⟨if n <= m then n else 0, by aesop, ω, by aesop⟩
+  · intro ⟨n, ω⟩
+    rw [tendsto_congr' (f₂ := fun m => X m ⟨n]; rw [ω⟩)]
+    · rcases n with rfl | n
+      · exact h₀.tendsto_approx ω
+      · exact (h n).tendsto_approx ω
+    · filter_upwards [eventually_ge_atTop n] with m hm using by simp; grind
 
 中文:
 引理 of_measurable_add_one
@@ -478,7 +594,39 @@ lemma of_measurable_add_one
     | 0 => h₀.approx m x.2
     | n + 1 => (h n).approx m x.2
   -- second layer of approximation (to ensure the whole process has finite range)
-  let Y m (x : Nat × Ω) := 
+  let Y m (x : Nat × Ω) := if x.1 <= m then X m x else X m ⟨0, x.2⟩
+  refine ⟨fun m => SimpleFunc.mk (Y m) ?_ ?_, ?_⟩
+  · intro s
+    rw [(by aesop : Y m ⁻¹' {s} = ⋃ n : Nat]; rw [{n} ×ˢ ((Function.curry (Y m) n) ⁻¹' {s}))]
+refine MeasurableSet.iUnion fun n => ?_
+    rcases n with rfl | n
+    · apply measurableSet_predictable_singleton_bot_prod
+      let : MeasurableSpace Ω := 𝓕 0
+      exact (h₀.approx m).measurableSet_fiber s
+    · apply measurableSet_predictable_singleton_prod
+      by_cases! hmk : n + 1 <= m
+      · rw [(by aesop : Function.curry (Y m) (n + 1) = Function.curry (X m) (n + 1))]
+        let : MeasurableSpace Ω := 𝓕 n
+        exact ((h n).approx m).measurableSet_fiber s
+      · rw [(by aesop : Function.curry (Y m) (n + 1) = Function.curry (X m) 0)]
+        apply 𝓕.mono (i := 0) (by simp)
+        let : MeasurableSpace Ω := 𝓕 0
+        exact (h₀.approx m).measurableSet_fiber s
+  · apply Set.Finite.subset (s := ⋃ k in Finset.range (m + 1), Set.range (Function.curry (X m) k))
+    · refine Set.Finite.biUnion' (by aesop) (fun n hn => ?_)
+      rcases n with rfl | n
+      · exact @(h₀.approx m).finite_range
+      · exact @((h n).approx m).finite_range
+    · intro e he
+      obtain ⟨⟨n, ω⟩, hnω⟩ := Set.mem_range.mp he
+      simp_rw [Set.mem_iUnion, Set.mem_range]
+      exact ⟨if n <= m then n else 0, by aesop, ω, by aesop⟩
+  · intro ⟨n, ω⟩
+    rw [tendsto_congr' (f₂ := fun m => X m ⟨n]; rw [ω⟩)]
+    · rcases n with rfl | n
+      · exact h₀.tendsto_approx ω
+      · exact (h n).tendsto_approx ω
+    · filter_upwards [eventually_ge_atTop n] with m hm using by simp; grind
 
 Depends on / 依赖: MeasurableSpace, predictable
 -/
@@ -570,7 +718,17 @@ alias IsPredictable := IsStronglyPredictable
 @[deprecated (since := "2026-04-24")]
 alias IsPredictable.progMeasurable := IsStronglyPredictable.isStronglyProgressive
 
-@[deprecated 
+@[deprecated (since := "2026-04-24")]
+alias IsPredictable.adapted := IsStronglyPredictable.stronglyAdapted
+
+@[deprecated (since := "2026-04-24")]
+alias IsPredictable.measurable_add_one := IsStronglyPredictable.measurable_add_one
+
+@[deprecated (since := "2026-04-24")]
+alias IsPredictable.of_measurable_add_one := IsStronglyPredictable.of_measurable_add_one
+
+@[deprecated (since := "2026-04-24")]
+alias IsPredictable.iff_measurable_add_one := IsStronglyPredictable.iff_measurable_add_one
 
 中文:
 定理 Predictable.stronglyAdapted
@@ -586,7 +744,17 @@ alias IsPredictable := IsStronglyPredictable
 @[deprecated (since := "2026-04-24")]
 alias IsPredictable.progMeasurable := IsStronglyPredictable.isStronglyProgressive
 
-@[deprecated 
+@[deprecated (since := "2026-04-24")]
+alias IsPredictable.adapted := IsStronglyPredictable.stronglyAdapted
+
+@[deprecated (since := "2026-04-24")]
+alias IsPredictable.measurable_add_one := IsStronglyPredictable.measurable_add_one
+
+@[deprecated (since := "2026-04-24")]
+alias IsPredictable.of_measurable_add_one := IsStronglyPredictable.of_measurable_add_one
+
+@[deprecated (since := "2026-04-24")]
+alias IsPredictable.iff_measurable_add_one := IsStronglyPredictable.iff_measurable_add_one
 -/
 theorem Predictable.stronglyAdapted {β : Type*} [TopologicalSpace β] {f : Filtration Nat m}
     {u : Nat -> Ω -> β} (hu : StronglyAdapted f fun n => u (n + 1))

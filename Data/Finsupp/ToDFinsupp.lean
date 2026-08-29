@@ -750,7 +750,17 @@ definition sigmaFinsuppEquivDFinsupp
     haveI := Classical.decEq ι
     haveI := fun i => Classical.decEq (η i ->₀ N)
     refine
-      onFinset (Finset.sigma 
+      onFinset (Finset.sigma f.support fun j => (f j).support) (fun ji => f ji.1 ji.2) fun g hg =>
+        Finset.mem_sigma.mpr ⟨?_, mem_support_iff.mpr hg⟩
+    simp only [Ne, DFinsupp.mem_support_toFun]
+    intro h
+    dsimp at hg
+    rw [h] at hg
+    simp only [coe_zero, Pi.zero_apply, not_true] at hg
+  left_inv f := by ext; simp [split]
+  right_inv f := by ext; simp [split]
+
+@[simp]
 
 中文:
 定义 sigmaFinsuppEquivDFinsupp
@@ -762,7 +772,17 @@ definition sigmaFinsuppEquivDFinsupp
     haveI := Classical.decEq ι
     haveI := fun i => Classical.decEq (η i ->₀ N)
     refine
-      onFinset (Finset.sigma 
+      onFinset (Finset.sigma f.support fun j => (f j).support) (fun ji => f ji.1 ji.2) fun g hg =>
+        Finset.mem_sigma.mpr ⟨?_, mem_support_iff.mpr hg⟩
+    simp only [Ne, DFinsupp.mem_support_toFun]
+    intro h
+    dsimp at hg
+    rw [h] at hg
+    simp only [coe_zero, Pi.zero_apply, not_true] at hg
+  left_inv f := by ext; simp [split]
+  right_inv f := by ext; simp [split]
+
+@[simp]
 
 Depends on / 依赖: Classical, Classical.decEq, DFinsupp, DFinsupp.mem_support_toFun, Finset, Finset.mem_def, Finset.mem_sigma.mpr, Finset.sigma, Pi.zero_apply, Trunc.mk, coe_zero, f.support, invFun, mem_def, mem_sigma, mem_splitSupport_iff_nonzero, mem_support_iff, mem_support_iff.mpr, mem_support_toFun, not_true
 -/
@@ -876,7 +896,7 @@ theorem sigmaFinsuppEquivDFinsupp_single
     classical simp [split_apply, Finsupp.single_apply]
   suffices Finsupp.single (⟨i, a⟩ : Σ i, η i) n ⟨j, b⟩ = 0 by simp [split_apply, dif_neg h, this]
   have H : (⟨i, a⟩ : Σ i, η i) != ⟨j, b⟩ := by simp [h]
-  classical rw [Finsupp.
+  classical rw [Finsupp.single_apply, if_neg H]
 
 中文:
 定理 sigmaFinsuppEquivDFinsupp_single
@@ -889,7 +909,7 @@ theorem sigmaFinsuppEquivDFinsupp_single
     classical simp [split_apply, Finsupp.single_apply]
   suffices Finsupp.single (⟨i, a⟩ : Σ i, η i) n ⟨j, b⟩ = 0 by simp [split_apply, dif_neg h, this]
   have H : (⟨i, a⟩ : Σ i, η i) != ⟨j, b⟩ := by simp [h]
-  classical rw [Finsupp.
+  classical rw [Finsupp.single_apply, if_neg H]
 
 Depends on / 依赖: Finsupp, Finsupp.single, Finsupp.single_apply, classical, dif_neg, if_neg, single, single_apply, split_apply
 -/

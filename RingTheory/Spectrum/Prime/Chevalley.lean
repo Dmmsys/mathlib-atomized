@@ -65,7 +65,12 @@ lemma isConstructible_comap_image
     (fun _ _ _ _ f => forall s, IsConstructible s -> IsConstructible (comap f '' s))
     (fun _ _ _ => isConstructible_comap_C) ?_ ?_ f s hs
   · intro R _ S _ f hf hf' s hs
-    re
+    refine hs.image_of_isClosedEmbedding (isClosedEmbedding_comap_of_surjective _ f hf) ?_
+    rw [range_comap_of_surjective _ f hf]
+    exact isRetrocompact_zeroLocus_compl_of_fg hf'
+  · intro R _ S _ T _ f g H₁ H₂ s hs
+    simp only [comap_comp, Set.image_comp]
+    exact H₁ _ (H₂ _ hs)
 
 中文:
 引理 isConstructible_comap_image
@@ -75,7 +80,12 @@ lemma isConstructible_comap_image
     (fun _ _ _ _ f => forall s, IsConstructible s -> IsConstructible (comap f '' s))
     (fun _ _ _ => isConstructible_comap_C) ?_ ?_ f s hs
   · intro R _ S _ f hf hf' s hs
-    re
+    refine hs.image_of_isClosedEmbedding (isClosedEmbedding_comap_of_surjective _ f hf) ?_
+    rw [range_comap_of_surjective _ f hf]
+    exact isRetrocompact_zeroLocus_compl_of_fg hf'
+  · intro R _ S _ T _ f g H₁ H₂ s hs
+    simp only [comap_comp, Set.image_comp]
+    exact H₁ _ (H₂ _ hs)
 
 Depends on / 依赖: IsConstructible, hf.polynomial_induction, hs.image_of_isClosedEmbedding, image_of_isClosedEmbedding, isClosedEmbedding_comap_of_surjective, isConstructible_comap_C, isRetrocompact_zeroLocus_compl_of_fg, polynomial_induction, range_comap_of_surjective
 -/
@@ -130,7 +140,8 @@ lemma isOpenMap_comap_of_hasGoingDown_of_finitePresentation
   exact isOpen_of_stableUnderGeneralization_of_isConstructible
     ((basicOpen f).2.stableUnderGeneralization.image
       (Algebra.HasGoingDown.iff_generalizingMap_primeSpectrumComap.mp ‹_›))
-    (isConstructible_comap_image (
+    (isConstructible_comap_image (RingHom.finitePresentation_algebraMap.mpr ‹_›)
+      isConstructible_basicOpen)
 
 中文:
 引理 isOpenMap_comap_of_hasGoingDown_of_finitePresentation
@@ -140,7 +151,8 @@ lemma isOpenMap_comap_of_hasGoingDown_of_finitePresentation
   exact isOpen_of_stableUnderGeneralization_of_isConstructible
     ((basicOpen f).2.stableUnderGeneralization.image
       (Algebra.HasGoingDown.iff_generalizingMap_primeSpectrumComap.mp ‹_›))
-    (isConstructible_comap_image (
+    (isConstructible_comap_image (RingHom.finitePresentation_algebraMap.mpr ‹_›)
+      isConstructible_basicOpen)
 
 Depends on / 依赖: Algebra, Algebra.HasGoingDown.iff_generalizingMap_primeSpectrumComap.mp, HasGoingDown, RingHom, RingHom.finitePresentation_algebraMap.mpr, basicOpen, finitePresentation_algebraMap, iff_generalizingMap_primeSpectrumComap, isBasis_basic_opens, isBasis_basic_opens.isOpenMap_iff, isConstructible_basicOpen, isConstructible_comap_image, isOpenMap_iff, isOpen_of_stableUnderGeneralization_of_isConstructible, stableUnderGeneralization, stableUnderGeneralization.image
 -/
@@ -168,7 +180,28 @@ theorem isOpenMap_comap_algebraMap_tensorProduct_of_field
   · rw [eq_biUnion_of_isOpen hU, Set.image_iUnion₂]
     exact isOpen_iUnion fun _ => isOpen_iUnion fun _ => this _ (basicOpen _).isOpen ⟨_, rfl⟩
   obtain ⟨f, rfl⟩ := hU'
-  obtain ⟨B', hB, f, rfl⟩ := exists_fg_and_mem
+  obtain ⟨B', hB, f, rfl⟩ := exists_fg_and_mem_baseChange f
+  have : Algebra.FinitePresentation K B' :=
+    Algebra.FinitePresentation.of_finiteType.mp ⟨B'.fg_top.mpr hB⟩
+  convert!
+    isOpenMap_comap_of_hasGoingDown_of_finitePresentation (R := A) (S := A otimes[K] B') _
+      (basicOpen f).isOpen using 1
+  ext x
+  rw [PrimeSpectrum.mem_image_comap_basicOpen]; rw [PrimeSpectrum.mem_image_comap_basicOpen]; rw [not_iff_not]
+  let ψ := Algebra.TensorProduct.map
+    (Algebra.TensorProduct.map (.id A A) B'.val) (.id A x.asIdeal.ResidueField)
+  have hψeq : ψ = (Algebra.TensorProduct.comm _ _ _ |>.toAlgHom.comp <|
+.symm.toAlgHom.comp Algebra.TensorProduct.cancelBaseChange K A A _ B
+.comp Algebra.TensorProduct.map (.id _ _) B'.val
+.toAlgHom.comp Algebra.TensorProduct.cancelBaseChange K A A _ B'
+    (Algebra.TensorProduct.comm _ _ _).toAlgHom) := by ext; simp [ψ]
+  have hψ : Function.Injective ψ := by
+    rw [hψeq]
+    dsimp
+    simp_rw [EmbeddingLike.comp_injective, ← Function.comp_assoc, EquivLike.injective_comp]
+    exact Module.Flat.lTensor_preserves_injective_linearMap _ Subtype.val_injective
+  rw [← IsNilpotent.map_iff hψ]
+  rfl
 
 中文:
 定理 isOpenMap_comap_algebraMap_tensorProduct_of_field
@@ -178,7 +211,28 @@ theorem isOpenMap_comap_algebraMap_tensorProduct_of_field
   · rw [eq_biUnion_of_isOpen hU, Set.image_iUnion₂]
     exact isOpen_iUnion fun _ => isOpen_iUnion fun _ => this _ (basicOpen _).isOpen ⟨_, rfl⟩
   obtain ⟨f, rfl⟩ := hU'
-  obtain ⟨B', hB, f, rfl⟩ := exists_fg_and_mem
+  obtain ⟨B', hB, f, rfl⟩ := exists_fg_and_mem_baseChange f
+  have : Algebra.FinitePresentation K B' :=
+    Algebra.FinitePresentation.of_finiteType.mp ⟨B'.fg_top.mpr hB⟩
+  convert!
+    isOpenMap_comap_of_hasGoingDown_of_finitePresentation (R := A) (S := A otimes[K] B') _
+      (basicOpen f).isOpen using 1
+  ext x
+  rw [PrimeSpectrum.mem_image_comap_basicOpen]; rw [PrimeSpectrum.mem_image_comap_basicOpen]; rw [not_iff_not]
+  let ψ := Algebra.TensorProduct.map
+    (Algebra.TensorProduct.map (.id A A) B'.val) (.id A x.asIdeal.ResidueField)
+  have hψeq : ψ = (Algebra.TensorProduct.comm _ _ _ |>.toAlgHom.comp <|
+.symm.toAlgHom.comp Algebra.TensorProduct.cancelBaseChange K A A _ B
+.comp Algebra.TensorProduct.map (.id _ _) B'.val
+.toAlgHom.comp Algebra.TensorProduct.cancelBaseChange K A A _ B'
+    (Algebra.TensorProduct.comm _ _ _).toAlgHom) := by ext; simp [ψ]
+  have hψ : Function.Injective ψ := by
+    rw [hψeq]
+    dsimp
+    simp_rw [EmbeddingLike.comp_injective, ← Function.comp_assoc, EquivLike.injective_comp]
+    exact Module.Flat.lTensor_preserves_injective_linearMap _ Subtype.val_injective
+  rw [← IsNilpotent.map_iff hψ]
+  rfl
 
 Depends on / 依赖: Algebra, Algebra.FinitePresentation, Algebra.FinitePresentation.of_finiteType.mp, FinitePresentation, Set.image_iUnion, SetLike, SetLike.coe, basicOpen, convert, eq_biUnion_of_isOpen, exists_fg_and_mem_baseChange, fg_top, fg_top.mpr, generalizing, isOpen, isOpenMap_comap_of_hasGoingDown_of_finitePresentation, isOpen_iUnion, of_finiteType, otimes
 -/

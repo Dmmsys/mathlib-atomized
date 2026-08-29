@@ -92,7 +92,22 @@ theorem normal_of_index_eq_minFac_card
     exact normal_of_index_eq_one hHp
   suffices H.normalCore.relIndex H = 1 by
     convert! H.normalCore_normal
-    exact le_antisy
+    exact le_antisymm (relIndex_eq_one.mp this) (normalCore_le H)
+  have : Finite G := finite_of_card_ne_zero hG0
+  have index_ne_zero : H.index != 0 := index_ne_zero_of_finite
+  rw [← mul_left_inj' index_ne_zero]; rw [one_mul]; rw [relIndex_mul_index H.normalCore_le]
+  have hp : Nat.Prime H.index := hHp ▸ minFac_prime hG1
+  have h : H.normalCore.index ∣ H.index ! := by
+    rw [normalCore_eq_ker]; rw [index_ker]; rw [index_eq_card]; rw [← Nat.card_perm]
+    exact card_subgroup_dvd_card (toPermHom G (G ⧸ H)).range
+  apply dvd_antisymm _ (index_dvd_of_le H.normalCore_le)
+  rwa [← Coprime.dvd_mul_right, mul_factorial_pred hp.ne_zero]
+have hr1 : H.normalCore.index != 1 := fun hr1 => hp.ne_one
+    Nat.eq_one_of_dvd_one (hr1 ▸ H.normalCore.index_dvd_of_le H.normalCore_le)
+  rw [Nat.coprime_factorial_iff hr1]
+exact lt_of_lt_of_le (Nat.sub_one_lt hp.ne_zero)
+    hHp ▸ minFac_le_of_dvd (Nat.minFac_prime hr1).two_le
+      (dvd_trans (minFac_dvd H.normalCore.index) (H.normalCore.index_dvd_card))
 
 中文:
 定理 normal_of_index_eq_minFac_card
@@ -106,7 +121,22 @@ theorem normal_of_index_eq_minFac_card
     exact normal_of_index_eq_one hHp
   suffices H.normalCore.relIndex H = 1 by
     convert! H.normalCore_normal
-    exact le_antisy
+    exact le_antisymm (relIndex_eq_one.mp this) (normalCore_le H)
+  have : Finite G := finite_of_card_ne_zero hG0
+  have index_ne_zero : H.index != 0 := index_ne_zero_of_finite
+  rw [← mul_left_inj' index_ne_zero]; rw [one_mul]; rw [relIndex_mul_index H.normalCore_le]
+  have hp : Nat.Prime H.index := hHp ▸ minFac_prime hG1
+  have h : H.normalCore.index ∣ H.index ! := by
+    rw [normalCore_eq_ker]; rw [index_ker]; rw [index_eq_card]; rw [← Nat.card_perm]
+    exact card_subgroup_dvd_card (toPermHom G (G ⧸ H)).range
+  apply dvd_antisymm _ (index_dvd_of_le H.normalCore_le)
+  rwa [← Coprime.dvd_mul_right, mul_factorial_pred hp.ne_zero]
+have hr1 : H.normalCore.index != 1 := fun hr1 => hp.ne_one
+    Nat.eq_one_of_dvd_one (hr1 ▸ H.normalCore.index_dvd_of_le H.normalCore_le)
+  rw [Nat.coprime_factorial_iff hr1]
+exact lt_of_lt_of_le (Nat.sub_one_lt hp.ne_zero)
+    hHp ▸ minFac_le_of_dvd (Nat.minFac_prime hr1).two_le
+      (dvd_trans (minFac_dvd H.normalCore.index) (H.normalCore.index_dvd_card))
 
 Depends on / 依赖: Finite, H.index, H.normalCore.relIndex, H.normalCore_normal, Nat.card, convert, finite_of_card_ne_zero, index_ne_zero, index_ne_zero_of_finite, le_antisymm, minFac_one, minFac_zero, mul_left_inj, normalCore, normalCore_le, normalCore_normal, normal_of_index_eq_one, normal_of_index_eq_two, one_mul, relIndex
 -/

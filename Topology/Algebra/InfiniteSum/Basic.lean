@@ -511,7 +511,7 @@ theorem multipliable_of_hasFiniteMulSupport
 @[deprecated (since := "2026-03-03")] alias
   summable_of_finite_support := summable_of_hasFiniteSupport
 
-@[to_add
+@[to_additive]
 
 中文:
 定理 multipliable_of_hasFiniteMulSupport
@@ -525,7 +525,7 @@ theorem multipliable_of_hasFiniteMulSupport
 @[deprecated (since := "2026-03-03")] alias
   summable_of_finite_support := summable_of_hasFiniteSupport
 
-@[to_add
+@[to_additive]
 
 Depends on / 依赖: h.toFinset, multipliable_of_ne_finset_one, toFinset
 -/
@@ -1019,7 +1019,14 @@ lemma Topology.IsClosedEmbedding.map_tprod
     · rw [tprod_eq_one_of_not_multipliable h, tprod_eq_one_of_not_multipliable, map_one]
       contrapose h
       -- need to show `g ∘ f` multipliable implies `g` multipliable
-      simp only [Multi
+      simp only [Multipliable, HasProd] at h ⊢
+      obtain ⟨b, hb⟩ := h
+      obtain ⟨a, ha⟩ : b in Set.range g :=
+        hge.isClosed_range.mem_of_tendsto hb (.of_forall <| by simp [← _root_.map_prod])
+      use a
+      simp [hge.tendsto_nhds_iff, Function.comp_def, ha, hb]
+  · simpa [tprod_bot hL] using
+      (MonoidHomClass.toMonoidHom g).map_finprod_of_injective hge.injective _
 
 中文:
 引理 拓扑.是闭嵌入.map_tprod
@@ -1031,7 +1038,14 @@ lemma Topology.IsClosedEmbedding.map_tprod
     · rw [tprod_eq_one_of_not_multipliable h, tprod_eq_one_of_not_multipliable, map_one]
       contrapose h
       -- need to show `g ∘ f` multipliable implies `g` multipliable
-      simp only [Multi
+      simp only [Multipliable, HasProd] at h ⊢
+      obtain ⟨b, hb⟩ := h
+      obtain ⟨a, ha⟩ : b in Set.range g :=
+        hge.isClosed_range.mem_of_tendsto hb (.of_forall <| by simp [← _root_.map_prod])
+      use a
+      simp [hge.tendsto_nhds_iff, Function.comp_def, ha, hb]
+  · simpa [tprod_bot hL] using
+      (MonoidHomClass.toMonoidHom g).map_finprod_of_injective hge.injective _
 
 Depends on / 依赖: L.NeBot, Multipliable, continuous, contrapose, h.map_tprod, hge.continuous, map_one, map_tprod, tprod_eq_one_of_not_multipliable
 -/
@@ -1100,7 +1114,12 @@ lemma Topology.IsInducing.multipliable_iff_tprod_comp_mem_range
       · exact ⟨_, hf.map_tprod g hg.continuous⟩
       · by_cases hfs : (mulSupport fun x => g (f x)).Finite
         · simp [tprod_bot hL, finprod_eq_prod _ hfs, ← _root_.map_prod]
-        · e
+        · exact ⟨1, by simp [tprod_bot hL, finprod_of_infinite_mulSupport hfs]⟩
+  · rintro ⟨hgf, a, ha⟩
+    use a
+    have := hgf.hasProd
+    simp_rw [comp_apply, ← ha] at this
+    exact (hg.hasProd_iff f a).mp this
 
 中文:
 引理 拓扑.是Inducing.multipliable_iff_tprod_comp_mem_range
@@ -1114,7 +1133,12 @@ lemma Topology.IsInducing.multipliable_iff_tprod_comp_mem_range
       · exact ⟨_, hf.map_tprod g hg.continuous⟩
       · by_cases hfs : (mulSupport fun x => g (f x)).Finite
         · simp [tprod_bot hL, finprod_eq_prod _ hfs, ← _root_.map_prod]
-        · e
+        · exact ⟨1, by simp [tprod_bot hL, finprod_of_infinite_mulSupport hfs]⟩
+  · rintro ⟨hgf, a, ha⟩
+    use a
+    have := hgf.hasProd
+    simp_rw [comp_apply, ← ha] at this
+    exact (hg.hasProd_iff f a).mp this
 
 Depends on / 依赖: Finite, L.NeBot, _root_, _root_.map_prod, comp_apply, continuous, finprod_eq_prod, finprod_of_infinite_mulSupport, hasProd, hasProd_iff, hf.map, hf.map_tprod, hg.continuous, hg.hasProd_iff, hgf.hasProd, map_prod, map_tprod, mulSupport, simp_rw, tprod_bot
 -/
@@ -1564,7 +1588,9 @@ theorem HasProd.update'
     split_ifs with hb'
     · simpa only [Function.update_apply, hb', eq_self_iff_true] using! mul_comm (f b) x
     · simp only [Function.update_apply, hb', if_false]
-  have h := hf.mul (hasProd
+  have h := hf.mul (hasProd_ite_eq b x L)
+  simp_rw [this] at h
+  exact HasProd.unique h (hf'.mul (hasProd_ite_eq b (f b) L))
 
 中文:
 定理 有积类型.update'
@@ -1575,7 +1601,9 @@ theorem HasProd.update'
     split_ifs with hb'
     · simpa only [Function.update_apply, hb', eq_self_iff_true] using! mul_comm (f b) x
     · simp only [Function.update_apply, hb', if_false]
-  have h := hf.mul (hasProd
+  have h := hf.mul (hasProd_ite_eq b x L)
+  simp_rw [this] at h
+  exact HasProd.unique h (hf'.mul (hasProd_ite_eq b (f b) L))
 
 Depends on / 依赖: Function, Function.update_apply, HasProd, HasProd.unique, eq_self_iff_true, hasProd_ite_eq, hf.mul, if_false, mul_comm, simp_rw, split_ifs, unique, update, update_apply
 -/
@@ -2145,7 +2173,20 @@ theorem Function.Injective.tprod_eq
   rw [← Function.comp_def]
   by_cases hf_fin : (mulSupport f).Finite
   · have hfg_fin : (mulSupport (f ∘ g)).Finite := hf_fin.preimage hg.injOn
-    lift g to
+    lift g to γ ↪ β using hg
+    simp_rw [tprod_eq_prod' hf_fin.coe_toFinset.ge, tprod_eq_prod' hfg_fin.coe_toFinset.ge,
+      comp_apply, ← Finset.prod_map]
+    refine Finset.prod_congr (Finset.coe_injective ?_) fun _ _ => rfl
+    simp [this]
+  · have hf_fin' : ¬ Set.Finite (mulSupport (f ∘ g)) := by
+      rwa [this, Set.finite_image_iff hg.injOn] at hf_fin
+    simp_rw [tprod_def, SummationFilter.support_eq_univ, Set.inter_univ,
+      show (unconditional β).HasSupport by infer_instance,
+      show (unconditional γ).HasSupport by infer_instance, true_and,
+      if_neg hf_fin, if_neg hf_fin', Multipliable]
+    simp [hg.hasProd_iff (mulSupport_subset_iff'.1 hf)]
+
+@[to_additive]
 
 中文:
 定理 函数.单射.tprod_eq
@@ -2157,7 +2198,20 @@ theorem Function.Injective.tprod_eq
   rw [← Function.comp_def]
   by_cases hf_fin : (mulSupport f).Finite
   · have hfg_fin : (mulSupport (f ∘ g)).Finite := hf_fin.preimage hg.injOn
-    lift g to
+    lift g to γ ↪ β using hg
+    simp_rw [tprod_eq_prod' hf_fin.coe_toFinset.ge, tprod_eq_prod' hfg_fin.coe_toFinset.ge,
+      comp_apply, ← Finset.prod_map]
+    refine Finset.prod_congr (Finset.coe_injective ?_) fun _ _ => rfl
+    simp [this]
+  · have hf_fin' : ¬ Set.Finite (mulSupport (f ∘ g)) := by
+      rwa [this, Set.finite_image_iff hg.injOn] at hf_fin
+    simp_rw [tprod_def, SummationFilter.support_eq_univ, Set.inter_univ,
+      show (unconditional β).HasSupport by infer_instance,
+      show (unconditional γ).HasSupport by infer_instance, true_and,
+      if_neg hf_fin, if_neg hf_fin', Multipliable]
+    simp [hg.hasProd_iff (mulSupport_subset_iff'.1 hf)]
+
+@[to_additive]
 
 Depends on / 依赖: Finite, Finset, Finset.coe_injective, Finset.prod_congr, Finset.prod_map, Function, Function.comp_def, Set.image_preimage_eq_iff, classical, coe_injective, coe_toFinset, comp_apply, comp_def, hf_fin, hf_fin.coe_toFinset.ge, hf_fin.preimage, hfg_fin, hfg_fin.coe_toFinset.ge, hg.injOn, image_preimage_eq_iff
 -/
@@ -2912,6 +2966,13 @@ theorem Multipliable.tprod_eq_mul_tprod_ite'
       tprod_congr fun n => by split_ifs with h <;> simp [h]
     _ = (∏'[L] x, ite (x = b) (f x) 1) * ∏'[L] x, update f b 1 x :=
       Multipliable.tprod_mul ⟨ite (b = b) (f b) 1, hasProd_single b (fun _ hb => if_neg hb) L⟩ hf
+    _ = ite (b = b) (f b) 1 * ∏'[L] x, update f b 1 x := by
+      congr
+      exact tprod_eq_mulSingle b fun b' hb' => if_neg hb'
+    _ = f b * ∏'[L] x, ite (x = b) 1 (f x) := by
+      simp only [update, if_true, eq_rec_constant, dite_eq_ite]
+
+@[to_additive]
 
 中文:
 定理 Multipliable.tprod_eq_mul_tprod_ite'
@@ -2921,6 +2982,13 @@ theorem Multipliable.tprod_eq_mul_tprod_ite'
       tprod_congr fun n => by split_ifs with h <;> simp [h]
     _ = (∏'[L] x, ite (x = b) (f x) 1) * ∏'[L] x, update f b 1 x :=
       Multipliable.tprod_mul ⟨ite (b = b) (f b) 1, hasProd_single b (fun _ hb => if_neg hb) L⟩ hf
+    _ = ite (b = b) (f b) 1 * ∏'[L] x, update f b 1 x := by
+      congr
+      exact tprod_eq_mulSingle b fun b' hb' => if_neg hb'
+    _ = f b * ∏'[L] x, ite (x = b) 1 (f x) := by
+      simp only [update, if_true, eq_rec_constant, dite_eq_ite]
+
+@[to_additive]
 -/
 protected theorem Multipliable.tprod_eq_mul_tprod_ite' [DecidableEq β] [L.LeAtTop] [L.NeBot]
     {f : β -> α} (b : β) (hf : Multipliable (update f b 1) L) :

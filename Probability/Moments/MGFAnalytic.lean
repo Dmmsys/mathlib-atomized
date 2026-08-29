@@ -48,7 +48,13 @@ lemma hasDerivAt_integral_pow_mul_exp_real
       (∫ ω, X ω ^ n * Complex.exp (t * X ω) ∂μ).re = ∫ ω, X ω ^ n * exp (t * X ω) ∂μ := by
     rw [← RCLike.re_eq_complex_re]; rw [← integral_re]
     · norm_cast
-    · refine integrable_pow_mul_cexp_of_re_mem_interior_integrabl
+    · refine integrable_pow_mul_cexp_of_re_mem_interior_integrableExpSet ?_ n
+      simpa using ht'
+  have h_re n : forallᶠ t' : Real in 𝓝 t, (∫ ω, X ω ^ n * Complex.exp (t' * X ω) ∂μ).re
+      = ∫ ω, X ω ^ n * exp (t' * X ω) ∂μ := by
+    filter_upwards [isOpen_interior.eventually_mem ht] with t ht' using h_re_of_mem n t ht'
+  rw [← EventuallyEq.hasDerivAt_iff (h_re _)]; rw [← h_re_of_mem _ t ht]
+  exact (hasDerivAt_integral_pow_mul_exp (by simp [ht]) n).real_of_complex
 
 中文:
 引理 hasDerivAt_integral_pow_mul_exp_real
@@ -58,7 +64,13 @@ lemma hasDerivAt_integral_pow_mul_exp_real
       (∫ ω, X ω ^ n * Complex.exp (t * X ω) ∂μ).re = ∫ ω, X ω ^ n * exp (t * X ω) ∂μ := by
     rw [← RCLike.re_eq_complex_re]; rw [← integral_re]
     · norm_cast
-    · refine integrable_pow_mul_cexp_of_re_mem_interior_integrabl
+    · refine integrable_pow_mul_cexp_of_re_mem_interior_integrableExpSet ?_ n
+      simpa using ht'
+  have h_re n : forallᶠ t' : Real in 𝓝 t, (∫ ω, X ω ^ n * Complex.exp (t' * X ω) ∂μ).re
+      = ∫ ω, X ω ^ n * exp (t' * X ω) ∂μ := by
+    filter_upwards [isOpen_interior.eventually_mem ht] with t ht' using h_re_of_mem n t ht'
+  rw [← EventuallyEq.hasDerivAt_iff (h_re _)]; rw [← h_re_of_mem _ t ht]
+  exact (hasDerivAt_integral_pow_mul_exp (by simp [ht]) n).real_of_complex
 
 Depends on / 依赖: Complex.exp, RCLike, RCLike.re_eq_complex_re, eventually_mem, filter_upwards, h_re, h_re_of_mem, integrableExpSet, integrable_pow_mul_cexp_of_re_mem_interior_integrableExpSet, integral_re, interior, isOpen_interior, isOpen_interior.eventually_mem, re_eq_complex_re
 -/
@@ -119,7 +131,11 @@ lemma hasDerivAt_iteratedDeriv_mgf
     rw [iteratedDeriv_succ]
     have : deriv (iteratedDeriv n (mgf X μ))
         =ᶠ[𝓝 t] fun t => μ[fun ω => X ω ^ (n + 1) * exp (t * X ω)] := by
-      have h_mem : forallᶠ y in 𝓝 t, y in interior (integrableE
+      have h_mem : forallᶠ y in 𝓝 t, y in interior (integrableExpSet X μ) :=
+        isOpen_interior.eventually_mem ht
+      filter_upwards [h_mem] with y hy using HasDerivAt.deriv (hn hy)
+    rw [EventuallyEq.hasDerivAt_iff this]
+    exact hasDerivAt_integral_pow_mul_exp_real ht (n + 1)
 
 中文:
 引理 hasDerivAt_iteratedDeriv_mgf
@@ -131,7 +147,11 @@ lemma hasDerivAt_iteratedDeriv_mgf
     rw [iteratedDeriv_succ]
     have : deriv (iteratedDeriv n (mgf X μ))
         =ᶠ[𝓝 t] fun t => μ[fun ω => X ω ^ (n + 1) * exp (t * X ω)] := by
-      have h_mem : forallᶠ y in 𝓝 t, y in interior (integrableE
+      have h_mem : forallᶠ y in 𝓝 t, y in interior (integrableExpSet X μ) :=
+        isOpen_interior.eventually_mem ht
+      filter_upwards [h_mem] with y hy using HasDerivAt.deriv (hn hy)
+    rw [EventuallyEq.hasDerivAt_iff this]
+    exact hasDerivAt_integral_pow_mul_exp_real ht (n + 1)
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.hasDerivAt_iff, HasDerivAt, HasDerivAt.deriv, eventually_mem, filter_upwards, generalizing, h_mem, hasDerivAt_iff, hasDerivAt_integral_pow_mul_exp_real, hasDerivAt_mgf, integrableExpSet, interior, isOpen_interior, isOpen_interior.eventually_mem, iteratedDeriv, iteratedDeriv_succ
 -/
@@ -594,6 +614,9 @@ lemma deriv_cgf
     exact deriv_const v 0
   have hv : Integrable (fun ω => exp (v * X ω)) μ := interior_subset (s := integrableExpSet X μ) h
   calc deriv (fun x => log (mgf X μ x)) v
+  _ = deriv (mgf X μ) v / mgf X μ v := by
+    rw [deriv.log (differentiableAt_mgf h) ((mgf_pos' hμ hv).ne')]
+  _ = μ[fun ω => X ω * exp (v * X ω)] / mgf X μ v := by rw [deriv_mgf h]
 
 中文:
 引理 deriv_cgf
@@ -605,6 +628,9 @@ lemma deriv_cgf
     exact deriv_const v 0
   have hv : Integrable (fun ω => exp (v * X ω)) μ := interior_subset (s := integrableExpSet X μ) h
   calc deriv (fun x => log (mgf X μ x)) v
+  _ = deriv (mgf X μ) v / mgf X μ v := by
+    rw [deriv.log (differentiableAt_mgf h) ((mgf_pos' hμ hv).ne')]
+  _ = μ[fun ω => X ω * exp (v * X ω)] / mgf X μ v := by rw [deriv_mgf h]
 
 Depends on / 依赖: Integrable, Pi.zero_apply, cgf_zero_measure, deriv.log, deriv_const, deriv_mgf, differentiableAt_mgf, div_zero, integrableExpSet, integral_zero_measure, interior_subset, mgf_pos, mgf_zero_measure, zero_apply
 -/
@@ -651,7 +677,32 @@ lemma iteratedDeriv_two_cgf
   have h_mem : forallᶠ y in 𝓝 v, y in interior (integrableExpSet X μ) :=
     isOpen_interior.eventually_mem h
   have h_d_cgf : deriv (cgf X μ) =ᶠ[𝓝 v] fun u => μ[fun ω => X ω * exp (u * X ω)] / mgf X μ u := by
- 
+    filter_upwards [h_mem] with u hu using deriv_cgf hu
+  have h_d_mgf : deriv (mgf X μ) =ᶠ[𝓝 v] fun u => μ[fun ω => X ω * exp (u * X ω)] := by
+    filter_upwards [h_mem] with u hu using deriv_mgf hu
+  rw [h_d_cgf.deriv_eq]
+  calc deriv (fun u => (∫ ω, X ω * exp (u * X ω) ∂μ) / mgf X μ u) v
+  _ = (deriv (fun u => ∫ ω, X ω * exp (u * X ω) ∂μ) v * mgf X μ v -
+      (∫ ω, X ω * exp (v * X ω) ∂μ) * deriv (mgf X μ) v) / mgf X μ v ^ 2 := by
+    rw [deriv_fun_div]
+    · rw [h_d_mgf.symm.differentiableAt_iff, ← iteratedDeriv_one]
+      exact differentiableAt_iteratedDeriv_mgf h 1
+    · exact differentiableAt_mgf h
+    · exact (mgf_pos' hμ (interior_subset (s := integrableExpSet X μ) h)).ne'
+  _ = (deriv (fun u => ∫ ω, X ω * exp (u * X ω) ∂μ) v * mgf X μ v -
+      (∫ ω, X ω * exp (v * X ω) ∂μ) * ∫ ω, X ω * exp (v * X ω) ∂μ) / mgf X μ v ^ 2 := by
+    rw [deriv_mgf h]
+  _ = deriv (fun u => ∫ ω, X ω * exp (u * X ω) ∂μ) v / mgf X μ v - deriv (cgf X μ) v ^ 2 := by
+    rw [sub_div]
+    congr 1
+    · rw [pow_two, div_mul_eq_div_div, mul_div_assoc, div_self, mul_one]
+      exact (mgf_pos' hμ (interior_subset (s := integrableExpSet X μ) h)).ne'
+    · rw [deriv_cgf h]
+      ring
+  _ = (∫ ω, (X ω) ^ 2 * exp (v * X ω) ∂μ) / mgf X μ v - deriv (cgf X μ) v ^ 2 := by
+    congr
+    convert! (hasDerivAt_integral_pow_mul_exp_real h 1).deriv using 1
+    simp
 
 中文:
 引理 iteratedDeriv_two_cgf
@@ -663,7 +714,32 @@ lemma iteratedDeriv_two_cgf
   have h_mem : forallᶠ y in 𝓝 v, y in interior (integrableExpSet X μ) :=
     isOpen_interior.eventually_mem h
   have h_d_cgf : deriv (cgf X μ) =ᶠ[𝓝 v] fun u => μ[fun ω => X ω * exp (u * X ω)] / mgf X μ u := by
- 
+    filter_upwards [h_mem] with u hu using deriv_cgf hu
+  have h_d_mgf : deriv (mgf X μ) =ᶠ[𝓝 v] fun u => μ[fun ω => X ω * exp (u * X ω)] := by
+    filter_upwards [h_mem] with u hu using deriv_mgf hu
+  rw [h_d_cgf.deriv_eq]
+  calc deriv (fun u => (∫ ω, X ω * exp (u * X ω) ∂μ) / mgf X μ u) v
+  _ = (deriv (fun u => ∫ ω, X ω * exp (u * X ω) ∂μ) v * mgf X μ v -
+      (∫ ω, X ω * exp (v * X ω) ∂μ) * deriv (mgf X μ) v) / mgf X μ v ^ 2 := by
+    rw [deriv_fun_div]
+    · rw [h_d_mgf.symm.differentiableAt_iff, ← iteratedDeriv_one]
+      exact differentiableAt_iteratedDeriv_mgf h 1
+    · exact differentiableAt_mgf h
+    · exact (mgf_pos' hμ (interior_subset (s := integrableExpSet X μ) h)).ne'
+  _ = (deriv (fun u => ∫ ω, X ω * exp (u * X ω) ∂μ) v * mgf X μ v -
+      (∫ ω, X ω * exp (v * X ω) ∂μ) * ∫ ω, X ω * exp (v * X ω) ∂μ) / mgf X μ v ^ 2 := by
+    rw [deriv_mgf h]
+  _ = deriv (fun u => ∫ ω, X ω * exp (u * X ω) ∂μ) v / mgf X μ v - deriv (cgf X μ) v ^ 2 := by
+    rw [sub_div]
+    congr 1
+    · rw [pow_two, div_mul_eq_div_div, mul_div_assoc, div_self, mul_one]
+      exact (mgf_pos' hμ (interior_subset (s := integrableExpSet X μ) h)).ne'
+    · rw [deriv_cgf h]
+      ring
+  _ = (∫ ω, (X ω) ^ 2 * exp (v * X ω) ∂μ) / mgf X μ v - deriv (cgf X μ) v ^ 2 := by
+    congr
+    convert! (hasDerivAt_integral_pow_mul_exp_real h 1).deriv using 1
+    simp
 
 Depends on / 依赖: deriv_cgf, deriv_eq, deriv_mgf, eventually_mem, filter_upwards, h_d_cgf, h_d_cgf.deriv_eq, h_d_mgf, h_mem, integrableExpSet, interior, isOpen_interior, isOpen_interior.eventually_mem, iteratedDeriv_one, iteratedDeriv_succ
 -/
@@ -715,7 +791,36 @@ lemma iteratedDeriv_two_cgf_eq_integral
   rw [iteratedDeriv_two_cgf h]
   calc (∫ ω, (X ω) ^ 2 * exp (v * X ω) ∂μ) / mgf X μ v - deriv (cgf X μ) v ^ 2
   _ = (∫ ω, (X ω) ^ 2 * exp (v * X ω) ∂μ - 2 * (∫ ω, X ω * exp (v * X ω) ∂μ) * deriv (cgf X μ) v
-      + deriv (cgf X μ) v ^ 2 * mgf X μ v) / mgf X μ v
+      + deriv (cgf X μ) v ^ 2 * mgf X μ v) / mgf X μ v := by
+    rw [add_div]; rw [sub_div]; rw [sub_add]
+    congr 1
+    rw [mul_div_cancel_right₀]; rw [deriv_cgf h]
+    · ring
+    · exact (mgf_pos' hμ (interior_subset (s := integrableExpSet X μ) h)).ne'
+  _ = (∫ ω, ((X ω) ^ 2 - 2 * X ω * deriv (cgf X μ) v + deriv (cgf X μ) v ^ 2) * exp (v * X ω) ∂μ)
+      / mgf X μ v := by
+    congr 1
+    simp_rw [add_mul, sub_mul]
+    have h_int : Integrable (fun ω => 2 * X ω * deriv (cgf X μ) v * exp (v * X ω)) μ := by
+      simp_rw [mul_assoc, mul_comm (deriv (cgf X μ) v)]
+      refine Integrable.const_mul ?_ _
+      simp_rw [← mul_assoc]
+      refine Integrable.mul_const ?_ _
+      convert! integrable_pow_mul_exp_of_mem_interior_integrableExpSet h 1
+      simp
+    rw [integral_add]
+    rotate_left
+    · exact (integrable_pow_mul_exp_of_mem_interior_integrableExpSet h 2).sub h_int
+    · exact (interior_subset (s := integrableExpSet X μ) h).const_mul _
+    rw [integral_sub (integrable_pow_mul_exp_of_mem_interior_integrableExpSet h 2) h_int]
+    congr
+    · rw [← integral_const_mul, ← integral_mul_const]
+      congr with ω
+      ring
+    · rw [integral_const_mul, mgf]
+  _ = (∫ ω, (X ω - deriv (cgf X μ) v) ^ 2 * exp (v * X ω) ∂μ) / mgf X μ v := by
+    congr with ω
+    ring
 
 中文:
 引理 iteratedDeriv_two_cgf_eq_integral
@@ -726,7 +831,36 @@ lemma iteratedDeriv_two_cgf_eq_integral
   rw [iteratedDeriv_two_cgf h]
   calc (∫ ω, (X ω) ^ 2 * exp (v * X ω) ∂μ) / mgf X μ v - deriv (cgf X μ) v ^ 2
   _ = (∫ ω, (X ω) ^ 2 * exp (v * X ω) ∂μ - 2 * (∫ ω, X ω * exp (v * X ω) ∂μ) * deriv (cgf X μ) v
-      + deriv (cgf X μ) v ^ 2 * mgf X μ v) / mgf X μ v
+      + deriv (cgf X μ) v ^ 2 * mgf X μ v) / mgf X μ v := by
+    rw [add_div]; rw [sub_div]; rw [sub_add]
+    congr 1
+    rw [mul_div_cancel_right₀]; rw [deriv_cgf h]
+    · ring
+    · exact (mgf_pos' hμ (interior_subset (s := integrableExpSet X μ) h)).ne'
+  _ = (∫ ω, ((X ω) ^ 2 - 2 * X ω * deriv (cgf X μ) v + deriv (cgf X μ) v ^ 2) * exp (v * X ω) ∂μ)
+      / mgf X μ v := by
+    congr 1
+    simp_rw [add_mul, sub_mul]
+    have h_int : Integrable (fun ω => 2 * X ω * deriv (cgf X μ) v * exp (v * X ω)) μ := by
+      simp_rw [mul_assoc, mul_comm (deriv (cgf X μ) v)]
+      refine Integrable.const_mul ?_ _
+      simp_rw [← mul_assoc]
+      refine Integrable.mul_const ?_ _
+      convert! integrable_pow_mul_exp_of_mem_interior_integrableExpSet h 1
+      simp
+    rw [integral_add]
+    rotate_left
+    · exact (integrable_pow_mul_exp_of_mem_interior_integrableExpSet h 2).sub h_int
+    · exact (interior_subset (s := integrableExpSet X μ) h).const_mul _
+    rw [integral_sub (integrable_pow_mul_exp_of_mem_interior_integrableExpSet h 2) h_int]
+    congr
+    · rw [← integral_const_mul, ← integral_mul_const]
+      congr with ω
+      ring
+    · rw [integral_const_mul, mgf]
+  _ = (∫ ω, (X ω - deriv (cgf X μ) v) ^ 2 * exp (v * X ω) ∂μ) / mgf X μ v := by
+    congr with ω
+    ring
 
 Depends on / 依赖: add_div, deriv_cgf, integrableExpSet, interior_subset, iteratedDeriv_two_cgf, mgf_pos, sub_add, sub_div
 -/
@@ -782,7 +916,12 @@ lemma exists_cgf_eq_iteratedDeriv_two_cgf_mul
   rw [← Set.uIoo_of_lt ht]
   convert! taylor_mean_remainder_lagrange_iteratedDeriv ht.ne ?_
   · have hd : derivWithin (cgf X μ) (Set.Icc 0 t) 0 = 0 := by
-      convert! (anal
+      convert! (analyticAt_cgf (hs ⟨le_refl 0, le_of_lt ht⟩)).differentiableAt.derivWithin _
+      · simpa [hc] using (deriv_cgf_zero (hs ⟨le_refl 0, le_of_lt ht⟩)).symm
+      · exact hu 0 ⟨le_refl 0, le_of_lt ht⟩
+    simp [hd, Set.uIcc_of_lt ht]
+  · rw [Set.uIcc_of_lt ht]
+    exact (analyticOn_cgf.mono hs).contDiffOn hu
 
 中文:
 引理 存在_cgf_eq_iteratedDeriv_two_cgf_mul
@@ -794,7 +933,12 @@ lemma exists_cgf_eq_iteratedDeriv_two_cgf_mul
   rw [← Set.uIoo_of_lt ht]
   convert! taylor_mean_remainder_lagrange_iteratedDeriv ht.ne ?_
   · have hd : derivWithin (cgf X μ) (Set.Icc 0 t) 0 = 0 := by
-      convert! (anal
+      convert! (analyticAt_cgf (hs ⟨le_refl 0, le_of_lt ht⟩)).differentiableAt.derivWithin _
+      · simpa [hc] using (deriv_cgf_zero (hs ⟨le_refl 0, le_of_lt ht⟩)).symm
+      · exact hu 0 ⟨le_refl 0, le_of_lt ht⟩
+    simp [hd, Set.uIcc_of_lt ht]
+  · rw [Set.uIcc_of_lt ht]
+    exact (analyticOn_cgf.mono hs).contDiffOn hu
 
 Depends on / 依赖: Set.Icc, Set.uIcc_of_lt, Set.uIoo_of_lt, UniqueDiffOn, analyticAt_cgf, convert, derivWithin, deriv_cgf_zero, differentiableAt, differentiableAt.derivWithin, ht.ne, le_of_lt, le_refl, nth_rw, sub_zero, taylor_mean_remainder_lagrange_iteratedDeriv, uIcc_of_lt, uIoo_of_lt, uniqueDiffOn_Icc
 -/

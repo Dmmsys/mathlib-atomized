@@ -52,7 +52,17 @@ instance EnrichedCategory.opposite
   id_comp _ _ := by
     simp only [braiding_naturality_left_assoc, braiding_tensorUnit_left,
       Category.assoc, Iso.inv_hom_id_assoc]
-    exact E
+    exact EnrichedCategory.comp_id _ _
+  comp_id _ _ := by
+    simp only [braiding_naturality_right_assoc, braiding_tensorUnit_right,
+      Category.assoc, Iso.inv_hom_id_assoc]
+    exact EnrichedCategory.id_comp _ _
+  assoc _ _ _ _ := by
+    simp only [braiding_naturality_left_assoc,
+      MonoidalCategory.whiskerLeft_comp, Category.assoc]
+    rw [← EnrichedCategory.assoc]
+    simp only [braiding_tensor_left_hom, Category.assoc, Iso.inv_hom_id_assoc,
+      braiding_naturality_right_assoc, braiding_tensor_right_hom]
 
 中文:
 实例 Enriched范畴.opposite
@@ -63,7 +73,17 @@ instance EnrichedCategory.opposite
   id_comp _ _ := by
     simp only [braiding_naturality_left_assoc, braiding_tensorUnit_left,
       Category.assoc, Iso.inv_hom_id_assoc]
-    exact E
+    exact EnrichedCategory.comp_id _ _
+  comp_id _ _ := by
+    simp only [braiding_naturality_right_assoc, braiding_tensorUnit_right,
+      Category.assoc, Iso.inv_hom_id_assoc]
+    exact EnrichedCategory.id_comp _ _
+  assoc _ _ _ _ := by
+    simp only [braiding_naturality_left_assoc,
+      MonoidalCategory.whiskerLeft_comp, Category.assoc]
+    rw [← EnrichedCategory.assoc]
+    simp only [braiding_tensor_left_hom, Category.assoc, Iso.inv_hom_id_assoc,
+      braiding_naturality_right_assoc, braiding_tensor_right_hom]
 
 Depends on / 依赖: EnrichedCategory, EnrichedCategory.Hom, x.unop, y.unop
 -/
@@ -187,7 +207,11 @@ definition forgetEnrichmentOppositeEquivalence.inverse
     have : g.unop ≫ f.unop = homTo V (g.unop ≫ f.unop) := rfl
     dsimp
     rw [this]; rw [ForgetEnrichment.homTo_comp]; rw [Category.assoc]; rw [unitors_inv_equal]; rw [← leftUnitor_inv_braiding_assoc]
-    have : (β_ _ _).hom ≫ (homTo V g.unop 
+    have : (β_ _ _).hom ≫ (homTo V g.unop otimesₘ homTo V f.unop) ≫
+      eComp V («to» V z.unop) («to» V y.unop) («to» V x.unop) =
+      ((homTo V f.unop) otimesₘ (homTo V g.unop)) ≫ eComp V x y z := (tensorHom_eComp_op_eq V _ _).symm
+    rw [this]; rw [← Category.assoc]
+    congr 1
 
 中文:
 定义 forgetEnrichmentOppositeEquivalence.inverse
@@ -198,7 +222,11 @@ definition forgetEnrichmentOppositeEquivalence.inverse
     have : g.unop ≫ f.unop = homTo V (g.unop ≫ f.unop) := rfl
     dsimp
     rw [this]; rw [ForgetEnrichment.homTo_comp]; rw [Category.assoc]; rw [unitors_inv_equal]; rw [← leftUnitor_inv_braiding_assoc]
-    have : (β_ _ _).hom ≫ (homTo V g.unop 
+    have : (β_ _ _).hom ≫ (homTo V g.unop otimesₘ homTo V f.unop) ≫
+      eComp V («to» V z.unop) («to» V y.unop) («to» V x.unop) =
+      ((homTo V f.unop) otimesₘ (homTo V g.unop)) ≫ eComp V x y z := (tensorHom_eComp_op_eq V _ _).symm
+    rw [this]; rw [← Category.assoc]
+    congr 1
 -/
 def forgetEnrichmentOppositeEquivalence.inverse :
     (ForgetEnrichment V C)ᵒᵖ ⥤ ForgetEnrichment V Cᵒᵖ where

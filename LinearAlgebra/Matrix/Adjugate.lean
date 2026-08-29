@@ -208,7 +208,8 @@ theorem cramer_transpose_row_self
     simp only [updateCol_transpose, det_transpose, updateRow_eq_self]
   · -- i ≠ j: this entry should be 0
     rw [updateCol_transpose]; rw [det_transpose]
-    apply det_zer
+    apply det_zero_of_row_eq h
+    rw [updateRow_self]; rw [updateRow_ne (Ne.symm h)]
 
 中文:
 定理 cramer_transpose_row_self
@@ -223,7 +224,8 @@ theorem cramer_transpose_row_self
     simp only [updateCol_transpose, det_transpose, updateRow_eq_self]
   · -- i ≠ j: this entry should be 0
     rw [updateCol_transpose]; rw [det_transpose]
-    apply det_zer
+    apply det_zero_of_row_eq h
+    rw [updateRow_self]; rw [updateRow_ne (Ne.symm h)]
 
 Depends on / 依赖: A.det, Ne.symm, Pi.single_apply, cramer_apply, det_transpose, det_zero_of_row_eq, should, single_apply, split_ifs, updateCol_transpose, updateRow_eq_self, updateRow_ne, updateRow_self
 -/
@@ -563,7 +565,26 @@ theorem adjugate_transpose
   intro σ _
   congr 1
   by_cases h : i = σ j
-  · -- Everything except `(i, j)` (= `(σ j, j)`) is given by A, and
+  · -- Everything except `(i, j)` (= `(σ j, j)`) is given by A, and the rest is a single `1`.
+    congr
+    ext j'
+    subst h
+    have : σ j' = σ j ↔ j' = j := σ.injective.eq_iff
+    rw [updateRow_apply]; rw [updateCol_apply]
+    simp_rw [this]
+    rw [← dite_eq_ite]; rw [← dite_eq_ite]
+    congr 1 with rfl
+    rw [Pi.single_eq_same]; rw [Pi.single_eq_same]
+  · -- Otherwise, we need to show that there is a `0` somewhere in the product.
+    have : (∏ j' : n, updateCol A j (Pi.single i 1) (σ j') j') = 0 := by
+      apply prod_eq_zero (mem_univ j)
+      rw [updateCol_self]; rw [Pi.single_eq_of_ne' h]
+    rw [this]
+    apply prod_eq_zero (mem_univ (σ⁻¹ i))
+    simp only [Perm.coe_inv, apply_symm_apply, updateRow_self]
+    apply Pi.single_eq_of_ne
+    intro h'
+    exact h ((symm_apply_eq σ).mp h')
 
 中文:
 定理 adjugate_transpose
@@ -577,7 +598,26 @@ theorem adjugate_transpose
   intro σ _
   congr 1
   by_cases h : i = σ j
-  · -- Everything except `(i, j)` (= `(σ j, j)`) is given by A, and
+  · -- Everything except `(i, j)` (= `(σ j, j)`) is given by A, and the rest is a single `1`.
+    congr
+    ext j'
+    subst h
+    have : σ j' = σ j ↔ j' = j := σ.injective.eq_iff
+    rw [updateRow_apply]; rw [updateCol_apply]
+    simp_rw [this]
+    rw [← dite_eq_ite]; rw [← dite_eq_ite]
+    congr 1 with rfl
+    rw [Pi.single_eq_same]; rw [Pi.single_eq_same]
+  · -- Otherwise, we need to show that there is a `0` somewhere in the product.
+    have : (∏ j' : n, updateCol A j (Pi.single i 1) (σ j') j') = 0 := by
+      apply prod_eq_zero (mem_univ j)
+      rw [updateCol_self]; rw [Pi.single_eq_of_ne' h]
+    rw [this]
+    apply prod_eq_zero (mem_univ (σ⁻¹ i))
+    simp only [Perm.coe_inv, apply_symm_apply, updateRow_self]
+    apply Pi.single_eq_of_ne
+    intro h'
+    exact h ((symm_apply_eq σ).mp h')
 
 Depends on / 依赖: Everything, Finset, Finset.sum_congr, adjugate_apply, det_apply, det_transpose, dite_eq_ite, eq_iff, except, injective, injective.eq_iff, simp_rw, single, sum_congr, transpose_apply, updateCol_apply, updateRow_apply, updateRow_transpose
 -/
@@ -702,7 +742,7 @@ theorem cramer_eq_adjugate_mulVec
   conv_lhs =>
     rw [this]
   ext k
-  simp [mulVec, dotProduct, mu
+  simp [mulVec, dotProduct, mul_comm]
 
 中文:
 定理 cramer_eq_adjugate_mulVec
@@ -717,7 +757,7 @@ theorem cramer_eq_adjugate_mulVec
   conv_lhs =>
     rw [this]
   ext k
-  simp [mulVec, dotProduct, mu
+  simp [mulVec, dotProduct, mul_comm]
 
 Depends on / 依赖: A.transpose_transpose, Pi.single, Pi.single_apply, adjugate_def, adjugate_transpose, conv_lhs, dotProduct, eq_comm, mulVec, mul_comm, nth_rw, pi_eq_sum_univ, single, single_apply, transpose_transpose
 -/
@@ -1016,6 +1056,10 @@ theorem adjugate_diagonal
   · rw [diagonal_apply_eq, diagonal_updateCol_single, det_diagonal,
       prod_update_of_mem (Finset.mem_univ _), sdiff_singleton_eq_erase, one_mul]
   · rw [diagonal_apply_ne _ hij]
+    refine det_eq_zero_of_row_eq_zero j fun k => ?_
+    obtain rfl | hjk := eq_or_ne k j
+    · rw [updateCol_self, Pi.single_eq_of_ne' hij]
+    · rw [updateCol_ne hjk, diagonal_apply_ne' _ hjk]
 
 中文:
 定理 adjugate_diagonal
@@ -1027,6 +1071,10 @@ theorem adjugate_diagonal
   · rw [diagonal_apply_eq, diagonal_updateCol_single, det_diagonal,
       prod_update_of_mem (Finset.mem_univ _), sdiff_singleton_eq_erase, one_mul]
   · rw [diagonal_apply_ne _ hij]
+    refine det_eq_zero_of_row_eq_zero j fun k => ?_
+    obtain rfl | hjk := eq_or_ne k j
+    · rw [updateCol_self, Pi.single_eq_of_ne' hij]
+    · rw [updateCol_ne hjk, diagonal_apply_ne' _ hjk]
 
 Depends on / 依赖: Finset, Finset.mem_univ, Pi.single_eq_of_ne, adjugate_def, cramer_apply, det_diagonal, det_eq_zero_of_row_eq_zero, diagonal_apply_eq, diagonal_apply_ne, diagonal_transpose, diagonal_updateCol_single, eq_or_ne, mem_univ, of_apply, one_mul, prod_update_of_mem, sdiff_singleton_eq_erase, single_eq_of_ne, updateCol_ne, updateCol_self
 -/
@@ -1055,7 +1103,7 @@ theorem _root_.RingHom.map_adjugate
     rw [← f.map_one]
     exact Pi.single_op (fun _ => f) (fun _ => f.map_zero) i (1 : R)
   rw [adjugate_apply]; rw [RingHom.mapMatrix_apply]; rw [map_apply]; rw [RingHom.mapMatrix_apply]; rw [this]; rw [←
-    map_updateRow]; rw [← R
+    map_updateRow]; rw [← RingHom.mapMatrix_apply]; rw [← RingHom.map_det]; rw [← adjugate_apply]
 
 中文:
 定理 _root_.环态射.map_adjugate
@@ -1066,7 +1114,7 @@ theorem _root_.RingHom.map_adjugate
     rw [← f.map_one]
     exact Pi.single_op (fun _ => f) (fun _ => f.map_zero) i (1 : R)
   rw [adjugate_apply]; rw [RingHom.mapMatrix_apply]; rw [map_apply]; rw [RingHom.mapMatrix_apply]; rw [this]; rw [←
-    map_updateRow]; rw [← R
+    map_updateRow]; rw [← RingHom.mapMatrix_apply]; rw [← RingHom.map_det]; rw [← adjugate_apply]
 
 Depends on / 依赖: Pi.single, Pi.single_op, RingHom, RingHom.mapMatrix_apply, RingHom.map_det, adjugate_apply, f.map_one, f.map_zero, mapMatrix_apply, map_apply, map_det, map_one, map_updateRow, map_zero, single, single_op
 -/
@@ -1111,7 +1159,20 @@ theorem det_adjugate
   rcases (Fintype.card n).eq_zero_or_pos with h_card | h_card
   · have : IsEmpty n := Fintype.card_eq_zero_iff.mp h_card
     rw [h_card]; rw [Nat.zero_sub]; rw [pow_zero]; rw [adjugate_subsingleton]; rw [det_one]
-  replace h_card := tsub_add_cancel_of_le h_card.nat_succ_
+  replace h_card := tsub_add_cancel_of_le h_card.nat_succ_le
+  -- express `A` as an evaluation of a polynomial in n^2 variables, and solve in the polynomial ring
+  -- where `A'.det` is non-zero.
+  let A' := mvPolynomialX n n Int
+  suffices A'.adjugate.det = A'.det ^ (Fintype.card n - 1) by
+    rw [← mvPolynomialX_mapMatrix_aeval Int A]; rw [← AlgHom.map_adjugate]; rw [← AlgHom.map_det]; rw [←
+      AlgHom.map_det]; rw [← map_pow]; rw [this]
+  apply mul_left_cancel₀ (show A'.det != 0 from det_mvPolynomialX_ne_zero n Int)
+  calc
+    A'.det * A'.adjugate.det = (A' * adjugate A').det := (det_mul _ _).symm
+    _ = A'.det ^ Fintype.card n := by rw [mul_adjugate A', det_smul, det_one, mul_one]
+    _ = A'.det * A'.det ^ (Fintype.card n - 1) := by rw [← pow_succ', h_card]
+
+@[simp]
 
 中文:
 定理 det_adjugate
@@ -1122,7 +1183,20 @@ theorem det_adjugate
   rcases (Fintype.card n).eq_zero_or_pos with h_card | h_card
   · have : IsEmpty n := Fintype.card_eq_zero_iff.mp h_card
     rw [h_card]; rw [Nat.zero_sub]; rw [pow_zero]; rw [adjugate_subsingleton]; rw [det_one]
-  replace h_card := tsub_add_cancel_of_le h_card.nat_succ_
+  replace h_card := tsub_add_cancel_of_le h_card.nat_succ_le
+  -- express `A` as an evaluation of a polynomial in n^2 variables, and solve in the polynomial ring
+  -- where `A'.det` is non-zero.
+  let A' := mvPolynomialX n n Int
+  suffices A'.adjugate.det = A'.det ^ (Fintype.card n - 1) by
+    rw [← mvPolynomialX_mapMatrix_aeval Int A]; rw [← AlgHom.map_adjugate]; rw [← AlgHom.map_det]; rw [←
+      AlgHom.map_det]; rw [← map_pow]; rw [this]
+  apply mul_left_cancel₀ (show A'.det != 0 from det_mvPolynomialX_ne_zero n Int)
+  calc
+    A'.det * A'.adjugate.det = (A' * adjugate A').det := (det_mul _ _).symm
+    _ = A'.det ^ Fintype.card n := by rw [mul_adjugate A', det_smul, det_one, mul_one]
+    _ = A'.det * A'.det ^ (Fintype.card n - 1) := by rw [← pow_succ', h_card]
+
+@[simp]
 -/
 theorem det_adjugate (A : Matrix n n α) : (adjugate A).det = A.det ^ (Fintype.card n - 1) := by
   -- get rid of the `- 1`
@@ -1339,7 +1413,11 @@ theorem det_eq_sum_mul_adjugate_row
   obtain ⟨e⟩ := Fintype.truncEquivFinOfCardEq hn'
   let A' := reindex e e A
   suffices det A' = ∑ j : Fin n'.succ, A' (e i) j * adjugate A' j (e i) by
-    simp_rw [A', det_r
+    simp_rw [A', det_reindex_self, adjugate_reindex, reindex_apply, submatrix_apply, ← e.sum_comp,
+      Equiv.symm_apply_apply] at this
+    exact this
+  rw [det_succ_row A' (e i)]
+  simp_rw [mul_assoc, mul_left_comm _ (A' _ _), ← adjugate_fin_succ_eq_det_submatrix]
 
 中文:
 定理 det_eq_sum_mul_adjugate_row
@@ -1350,7 +1428,11 @@ theorem det_eq_sum_mul_adjugate_row
   obtain ⟨e⟩ := Fintype.truncEquivFinOfCardEq hn'
   let A' := reindex e e A
   suffices det A' = ∑ j : Fin n'.succ, A' (e i) j * adjugate A' j (e i) by
-    simp_rw [A', det_r
+    simp_rw [A', det_reindex_self, adjugate_reindex, reindex_apply, submatrix_apply, ← e.sum_comp,
+      Equiv.symm_apply_apply] at this
+    exact this
+  rw [det_succ_row A' (e i)]
+  simp_rw [mul_assoc, mul_left_comm _ (A' _ _), ← adjugate_fin_succ_eq_det_submatrix]
 
 Depends on / 依赖: Equiv.symm_apply_apply, Fintype, Fintype.card, Fintype.card_ne_zero, Fintype.truncEquivFinOfCardEq, Nat.exists_eq_succ_of_ne_zero, Nonempty, adjugate, adjugate_fin_succ_e, adjugate_reindex, card_ne_zero, det_reindex_self, det_succ_row, e.sum_comp, exists_eq_succ_of_ne_zero, mul_assoc, mul_left_comm, reindex, reindex_apply, simp_rw
 -/
@@ -1430,7 +1512,10 @@ theorem isRegular_of_isLeftRegular_det
     rw [← Matrix.one_mul B]; rw [← Matrix.one_mul C]; rw [← Matrix.smul_mul]; rw [← Matrix.smul_mul]; rw [←
       adjugate_mul]; rw [Matrix.mul_assoc]; rw [Matrix.mul_assoc]; rw [h]
   · intro B C (h : B * A = C * A)
-    re
+    refine hA.matrix ?_
+    simp only
+    rw [← Matrix.mul_one B]; rw [← Matrix.mul_one C]; rw [← Matrix.mul_smul]; rw [← Matrix.mul_smul]; rw [←
+      mul_adjugate]; rw [← Matrix.mul_assoc]; rw [← Matrix.mul_assoc]; rw [h]
 
 中文:
 定理 isRegular_of_isLeftRegular_det
@@ -1443,7 +1528,10 @@ theorem isRegular_of_isLeftRegular_det
     rw [← Matrix.one_mul B]; rw [← Matrix.one_mul C]; rw [← Matrix.smul_mul]; rw [← Matrix.smul_mul]; rw [←
       adjugate_mul]; rw [Matrix.mul_assoc]; rw [Matrix.mul_assoc]; rw [h]
   · intro B C (h : B * A = C * A)
-    re
+    refine hA.matrix ?_
+    simp only
+    rw [← Matrix.mul_one B]; rw [← Matrix.mul_one C]; rw [← Matrix.mul_smul]; rw [← Matrix.mul_smul]; rw [←
+      mul_adjugate]; rw [← Matrix.mul_assoc]; rw [← Matrix.mul_assoc]; rw [h]
 
 Depends on / 依赖: Matrix, Matrix.mul_assoc, Matrix.mul_one, Matrix.mul_smul, Matrix.one_mul, Matrix.smul_mul, adjugate_mul, hA.matrix, matrix, mul_adjugate, mul_assoc, mul_one, mul_smul, one_mul, smul_mul
 -/
@@ -1473,7 +1561,7 @@ theorem adjugate_mul_distrib_aux
     exact hA.mul hB
   refine (isRegular_of_isLeftRegular_det hAB).left ?_
   simp only
-  rw [mul_adjugate]; rw [Matrix.mul_assoc]; rw [← Matrix.mul_assoc B]; rw [mul_adjugate]; rw [smul_mul]; rw [Matrix.one_mul]; rw [Matrix.mul_smul]; r
+  rw [mul_adjugate]; rw [Matrix.mul_assoc]; rw [← Matrix.mul_assoc B]; rw [mul_adjugate]; rw [smul_mul]; rw [Matrix.one_mul]; rw [Matrix.mul_smul]; rw [mul_adjugate]; rw [smul_smul]; rw [mul_comm]; rw [← det_mul]
 
 中文:
 定理 adjugate_mul_distrib_aux
@@ -1484,7 +1572,7 @@ theorem adjugate_mul_distrib_aux
     exact hA.mul hB
   refine (isRegular_of_isLeftRegular_det hAB).left ?_
   simp only
-  rw [mul_adjugate]; rw [Matrix.mul_assoc]; rw [← Matrix.mul_assoc B]; rw [mul_adjugate]; rw [smul_mul]; rw [Matrix.one_mul]; rw [Matrix.mul_smul]; r
+  rw [mul_adjugate]; rw [Matrix.mul_assoc]; rw [← Matrix.mul_assoc B]; rw [mul_adjugate]; rw [smul_mul]; rw [Matrix.one_mul]; rw [Matrix.mul_smul]; rw [mul_adjugate]; rw [smul_smul]; rw [mul_comm]; rw [← det_mul]
 
 Depends on / 依赖: IsLeftRegular, Matrix, Matrix.mul_assoc, Matrix.mul_smul, Matrix.one_mul, det_mul, hA.mul, isRegular_of_isLeftRegular_det, mul_adjugate, mul_assoc, mul_comm, mul_smul, one_mul, smul_mul, smul_smul
 -/
@@ -1512,7 +1600,20 @@ theorem adjugate_mul_distrib
     intro
     ext
     simp [f', g]
-  have 
+  have f'_adj : forall M : Matrix n n α, f' (adjugate (g M)) = adjugate M := by
+    intro
+    rw [RingHom.map_adjugate]; rw [f'_inv]
+  have f'_g_mul : forall M N : Matrix n n α, f' (g M * g N) = M * N := by
+    intro M N
+    rw [map_mul]; rw [f'_inv]; rw [f'_inv]
+  have hu : forall M : Matrix n n α, IsRegular (g M).det := by
+    intro M
+    refine Polynomial.Monic.isRegular ?_
+    simp only [g, Polynomial.Monic.def, ← Polynomial.leadingCoeff_det_X_one_add_C M, add_comm]
+  rw [← f'_adj]; rw [← f'_adj]; rw [← f'_adj]; rw [← f'.map_mul]; rw [←
+    adjugate_mul_distrib_aux _ _ (hu A).left (hu B).left]; rw [RingHom.map_adjugate]; rw [RingHom.map_adjugate]; rw [f'_inv]; rw [f'_g_mul]
+
+@[simp]
 
 中文:
 定理 adjugate_mul_distrib
@@ -1526,7 +1627,20 @@ theorem adjugate_mul_distrib
     intro
     ext
     simp [f', g]
-  have 
+  have f'_adj : forall M : Matrix n n α, f' (adjugate (g M)) = adjugate M := by
+    intro
+    rw [RingHom.map_adjugate]; rw [f'_inv]
+  have f'_g_mul : forall M N : Matrix n n α, f' (g M * g N) = M * N := by
+    intro M N
+    rw [map_mul]; rw [f'_inv]; rw [f'_inv]
+  have hu : forall M : Matrix n n α, IsRegular (g M).det := by
+    intro M
+    refine Polynomial.Monic.isRegular ?_
+    simp only [g, Polynomial.Monic.def, ← Polynomial.leadingCoeff_det_X_one_add_C M, add_comm]
+  rw [← f'_adj]; rw [← f'_adj]; rw [← f'_adj]; rw [← f'.map_mul]; rw [←
+    adjugate_mul_distrib_aux _ _ (hu A).left (hu B).left]; rw [RingHom.map_adjugate]; rw [RingHom.map_adjugate]; rw [f'_inv]; rw [f'_g_mul]
+
+@[simp]
 
 Depends on / 依赖: M.map, Matrix, Polynomial, Polynomial.C, Polynomial.X, Polynomial.evalRingHom, RingHom, RingHom.map_adjugate, _adj, _g_mul, _inv, adjugate, evalRingHom, mapMatrix, map_adjugate, map_mul
 -/
@@ -1590,7 +1704,8 @@ theorem det_smul_adjugate_adjugate
   have : A * (A.adjugate * A.adjugate.adjugate) =
       A * (A.det ^ (Fintype.card n - 1) • (1 : Matrix n n α)) := by
     rw [← adjugate_mul_distrib]; rw [adjugate_mul]; rw [adjugate_smul]; rw [adjugate_one]
-  rwa [← Matrix.mul_assoc, mul_adjugate, Matrix.mul_smul, Matrix.mul_one, Matrix.smul_mul
+  rwa [← Matrix.mul_assoc, mul_adjugate, Matrix.mul_smul, Matrix.mul_one, Matrix.smul_mul,
+    Matrix.one_mul] at this
 
 中文:
 定理 det_smul_adjugate_adjugate
@@ -1599,7 +1714,8 @@ theorem det_smul_adjugate_adjugate
   have : A * (A.adjugate * A.adjugate.adjugate) =
       A * (A.det ^ (Fintype.card n - 1) • (1 : Matrix n n α)) := by
     rw [← adjugate_mul_distrib]; rw [adjugate_mul]; rw [adjugate_smul]; rw [adjugate_one]
-  rwa [← Matrix.mul_assoc, mul_adjugate, Matrix.mul_smul, Matrix.mul_one, Matrix.smul_mul
+  rwa [← Matrix.mul_assoc, mul_adjugate, Matrix.mul_smul, Matrix.mul_one, Matrix.smul_mul,
+    Matrix.one_mul] at this
 
 Depends on / 依赖: A.adjugate, A.adjugate.adjugate, A.det, Fintype, Fintype.card, Matrix, Matrix.mul_assoc, Matrix.mul_one, Matrix.mul_smul, Matrix.one_mul, Matrix.smul_mul, adjugate, adjugate_mul, adjugate_mul_distrib, adjugate_one, adjugate_smul, mul_adjugate, mul_assoc, mul_one, mul_smul
 -/
@@ -1625,7 +1741,16 @@ theorem adjugate_adjugate
   · exact (h h_card).elim
   rw [← h_card]
   -- express `A` as an evaluation of a polynomial in n^2 variables, and solve in the polynomial ring
-  -- where `A'.det
+  -- where `A'.det` is non-zero.
+  let A' := mvPolynomialX n n Int
+  suffices adjugate (adjugate A') = det A' ^ (Fintype.card n - 2) • A' by
+    rw [← mvPolynomialX_mapMatrix_aeval Int A]; rw [← AlgHom.map_adjugate]; rw [← AlgHom.map_adjugate]; rw [this]; rw [← AlgHom.map_det]; rw [← map_pow (MvPolynomial.aeval fun p : n × n => A p.1 p.2)]; rw [AlgHom.mapMatrix_apply]; rw [AlgHom.mapMatrix_apply]; rw [Matrix.map_smul' _ _ _ (map_mul _)]
+  have h_card' : Fintype.card n - 2 + 1 = Fintype.card n - 1 := by simp [h_card]
+  have is_reg : IsSMulRegular (MvPolynomial (n × n) Int) (det A') := fun x y =>
+    mul_left_cancel₀ (det_mvPolynomialX_ne_zero n Int)
+  apply is_reg.matrix
+  simp only
+  rw [smul_smul]; rw [← pow_succ']; rw [h_card']; rw [det_smul_adjugate_adjugate]
 
 中文:
 定理 adjugate_adjugate
@@ -1638,7 +1763,16 @@ theorem adjugate_adjugate
   · exact (h h_card).elim
   rw [← h_card]
   -- express `A` as an evaluation of a polynomial in n^2 variables, and solve in the polynomial ring
-  -- where `A'.det
+  -- where `A'.det` is non-zero.
+  let A' := mvPolynomialX n n Int
+  suffices adjugate (adjugate A') = det A' ^ (Fintype.card n - 2) • A' by
+    rw [← mvPolynomialX_mapMatrix_aeval Int A]; rw [← AlgHom.map_adjugate]; rw [← AlgHom.map_adjugate]; rw [this]; rw [← AlgHom.map_det]; rw [← map_pow (MvPolynomial.aeval fun p : n × n => A p.1 p.2)]; rw [AlgHom.mapMatrix_apply]; rw [AlgHom.mapMatrix_apply]; rw [Matrix.map_smul' _ _ _ (map_mul _)]
+  have h_card' : Fintype.card n - 2 + 1 = Fintype.card n - 1 := by simp [h_card]
+  have is_reg : IsSMulRegular (MvPolynomial (n × n) Int) (det A') := fun x y =>
+    mul_left_cancel₀ (det_mvPolynomialX_ne_zero n Int)
+  apply is_reg.matrix
+  simp only
+  rw [smul_smul]; rw [← pow_succ']; rw [h_card']; rw [det_smul_adjugate_adjugate]
 -/
 theorem adjugate_adjugate (A : Matrix n n α) (h : Fintype.card n != 1) :
     adjugate (adjugate A) = det A ^ (Fintype.card n - 2) • A := by

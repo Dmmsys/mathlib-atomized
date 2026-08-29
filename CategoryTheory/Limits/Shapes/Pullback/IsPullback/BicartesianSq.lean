@@ -492,7 +492,8 @@ theorem zero_right
             have c :=
               @PushoutCocone.coequalizer_ext _ _ _ _ _ _ _ s _ 0 (𝟙 _)
                 (by simp [eq_iff_true_of_subsingleton]) (by simpa using PushoutCocone.condition s)
-            dsimp 
+            dsimp at c
+            simpa using c }⟩ }
 
 中文:
 定理 zero_right
@@ -505,7 +506,8 @@ theorem zero_right
             have c :=
               @PushoutCocone.coequalizer_ext _ _ _ _ _ _ _ s _ 0 (𝟙 _)
                 (by simp [eq_iff_true_of_subsingleton]) (by simpa using PushoutCocone.condition s)
-            dsimp 
+            dsimp at c
+            simpa using c }⟩ }
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.coequalizer_ext, PushoutCocone.condition, coequalizer_ext, condition, eq_iff_true_of_subsingleton, isColimit
 -/

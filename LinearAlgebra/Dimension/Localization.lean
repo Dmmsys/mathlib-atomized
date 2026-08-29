@@ -53,7 +53,9 @@ lemma IsLocalizedModule.lift_rank_eq
     rw [Module.rank_def]; rw [lift_iSup bddAbove_of_small] <;>
     apply ciSup_le' <;>
     intro ⟨s, hs⟩
-  exacts [(IsLocalizedModule.linearIndependent_lift p f hs).choose_spec.cardinal_lift_l
+  exacts [(IsLocalizedModule.linearIndependent_lift p f hs).choose_spec.cardinal_lift_le_rank,
+    hs.of_isLocalizedModule_of_isRegular p f (le_nonZeroDivisors_iff_isRegular.mp hp)
+.cardinal_lift_le_rank]
 
 中文:
 引理 是Localized模.lift_rank_eq
@@ -64,7 +66,9 @@ lemma IsLocalizedModule.lift_rank_eq
     rw [Module.rank_def]; rw [lift_iSup bddAbove_of_small] <;>
     apply ciSup_le' <;>
     intro ⟨s, hs⟩
-  exacts [(IsLocalizedModule.linearIndependent_lift p f hs).choose_spec.cardinal_lift_l
+  exacts [(IsLocalizedModule.linearIndependent_lift p f hs).choose_spec.cardinal_lift_le_rank,
+    hs.of_isLocalizedModule_of_isRegular p f (le_nonZeroDivisors_iff_isRegular.mp hp)
+.cardinal_lift_le_rank]
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.linearIndependent_lift, Module, Module.rank_def, bddAbove_of_small, cardinal_lift_le_rank, choose_spec, choose_spec.cardinal_lift_le_rank, ciSup_le, exacts, hs.of_isLocalizedModule_of_isRegular, le_antisymm, le_nonZeroDivisors_iff_isRegular, le_nonZeroDivisors_iff_isRegular.mp, lift_iSup, lift_one, linearIndependent_lift, of_isLocalizedModule_of_isRegular, rank_def, rank_subsingleton
 -/
@@ -135,7 +139,9 @@ lemma IsLocalization.rank_eq
   have inj := IsLocalization.injective S hp
   apply le_antisymm <;> (rw [Module.rank]; apply ciSup_le'; intro ⟨s, hs⟩)
   · have := (faithfulSMul_iff_algebraMap_injective R S).mpr inj
-
+    exact (hs.restrict_scalars' R).cardinal_le_rank
+  · have := inj.nontrivial
+    exact (hs.localization S p).cardinal_le_rank
 
 中文:
 引理 是Localization.rank_eq
@@ -146,7 +152,9 @@ lemma IsLocalization.rank_eq
   have inj := IsLocalization.injective S hp
   apply le_antisymm <;> (rw [Module.rank]; apply ciSup_le'; intro ⟨s, hs⟩)
   · have := (faithfulSMul_iff_algebraMap_injective R S).mpr inj
-
+    exact (hs.restrict_scalars' R).cardinal_le_rank
+  · have := inj.nontrivial
+    exact (hs.localization S p).cardinal_le_rank
 
 Depends on / 依赖: IsLocalization, IsLocalization.injective, Module, Module.rank, algebraMap, cardinal_le_rank, ciSup_le, codomain_trivial, faithfulSMul_iff_algebraMap_injective, hs.localization, hs.restrict_scalars, inj.nontrivial, injective, le_antisymm, localization, nontrivial, rank_subsingleton, restrict_scalars, subsingleton_or_nontrivial
 -/
@@ -196,7 +204,9 @@ theorem IsLocalization.linearIndepOn_finsetIntegerMultiple
   intro f h
   rw [s.smul_finset_def]; rw [s.forall_mem_image]
   apply hs
-  have inj := (IsLocalization.smul_bijective A (commonDe
+  have inj := (IsLocalization.smul_bijective A (commonDenomOfFinset M s)).injective
+  rw [← inj.eq_iff]; rw [smul_zero]; rw [s.smul_sum]; rw [← h]; rw [s.smul_finset_def]; rw [s.sum_image inj.injOn]
+  exact s.sum_congr rfl fun x hx => smul_comm ..
 
 中文:
 定理 是Localization.linearIndepOn_finset整数egerMultiple
@@ -208,7 +218,9 @@ theorem IsLocalization.linearIndepOn_finsetIntegerMultiple
   intro f h
   rw [s.smul_finset_def]; rw [s.forall_mem_image]
   apply hs
-  have inj := (IsLocalization.smul_bijective A (commonDe
+  have inj := (IsLocalization.smul_bijective A (commonDenomOfFinset M s)).injective
+  rw [← inj.eq_iff]; rw [smul_zero]; rw [s.smul_sum]; rw [← h]; rw [s.smul_finset_def]; rw [s.sum_image inj.injOn]
+  exact s.sum_congr rfl fun x hx => smul_comm ..
 
 Depends on / 依赖: IsLocalization, IsLocalization.smul_bijective, LinearIndepOn, LinearIndepOn.id_image_algebraMap_iff, classical, coe_smul_finset, commonDenomOfFinset, eq_iff, finsetIntegerMultiple_image, forall_mem_image, id_image_algebraMap_iff, inj.eq_iff, inj.injOn, injective, linearIndepOn_finset_iff, s.coe_smul_finset, s.forall_mem_image, s.smul_finset_def, s.smul_sum, s.sum_congr
 -/
@@ -286,7 +298,10 @@ theorem IsFractionRing.finrank_left_eq
   · rintro ⟨s, rfl, hs⟩
     let f : S ↪ A := ⟨algebraMap S A, FaithfulSMul.algebraMap_injective S A⟩
     exact ⟨s.map f, s.card_map f,
-     
+      (linearIndependent_equiv (s.equivMap f)).mp (LinearIndependent.algebraMap_comp_iff.mpr hs)⟩
+  · rintro ⟨s, rfl, hs⟩
+    exact ⟨finsetIntegerMultiple S⁰ s, card_finsetIntegerMultiple S⁰ s,
+      linearIndepOn_finsetIntegerMultiple S⁰ hs⟩
 
 中文:
 定理 IsFractionRing.finrank_left_eq
@@ -301,7 +316,10 @@ theorem IsFractionRing.finrank_left_eq
   · rintro ⟨s, rfl, hs⟩
     let f : S ↪ A := ⟨algebraMap S A, FaithfulSMul.algebraMap_injective S A⟩
     exact ⟨s.map f, s.card_map f,
-     
+      (linearIndependent_equiv (s.equivMap f)).mp (LinearIndependent.algebraMap_comp_iff.mpr hs)⟩
+  · rintro ⟨s, rfl, hs⟩
+    exact ⟨finsetIntegerMultiple S⁰ s, card_finsetIntegerMultiple S⁰ s,
+      linearIndepOn_finsetIntegerMultiple S⁰ hs⟩
 
 Depends on / 依赖: Cardinal, Cardinal.toNat_eq_of_forall_le_iff, FaithfulSMul, FaithfulSMul.algebraMap_injective, LinearIndepOn, LinearIndependent, LinearIndependent.algebraMap_comp_iff.mpr, Module, Module.le_rank_iff_exists_finset, algebraMap, algebraMap_comp_iff, algebraMap_injective, card_finsetIntegerMultiple, card_map, classical, equivMap, finsetIntegerMultiple, le_rank_iff_exists_finset, linearIndepOn_finsetIntegerMultiple, linearIndependent_equiv
 -/
@@ -353,7 +371,8 @@ IsLocalizedModule.linearIndependent_lift R⁰ (LocalizedModule.mkLinearMap R⁰ 
       Module.Free.chooseBasis (FractionRing R) (LocalizedModule R⁰ M)
 .linearIndependent.restrict_scalars' _
   refine ⟨Set.range w, ?_, (linearIndepOn_id_range_iff hw.injective).mpr hw⟩
-  apply Card
+  apply Cardinal.lift_injective.{max uR uM}
+  rw [Cardinal.mk_range_eq_of_injective hw.injective]; rw [← Module.Free.rank_eq_card_chooseBasisIndex]; rw [IsLocalization.rank_eq (FractionRing R) R⁰ le_rfl]; rw [IsLocalizedModule.lift_rank_eq R⁰ (LocalizedModule.mkLinearMap R⁰ M) le_rfl]
 
 中文:
 定理 存在_set_linearIndependent_of_isDomain
@@ -364,7 +383,8 @@ IsLocalizedModule.linearIndependent_lift R⁰ (LocalizedModule.mkLinearMap R⁰ 
       Module.Free.chooseBasis (FractionRing R) (LocalizedModule R⁰ M)
 .linearIndependent.restrict_scalars' _
   refine ⟨Set.range w, ?_, (linearIndepOn_id_range_iff hw.injective).mpr hw⟩
-  apply Card
+  apply Cardinal.lift_injective.{max uR uM}
+  rw [Cardinal.mk_range_eq_of_injective hw.injective]; rw [← Module.Free.rank_eq_card_chooseBasisIndex]; rw [IsLocalization.rank_eq (FractionRing R) R⁰ le_rfl]; rw [IsLocalizedModule.lift_rank_eq R⁰ (LocalizedModule.mkLinearMap R⁰ M) le_rfl]
 
 Depends on / 依赖: Cardinal, Cardinal.lift_injective, Cardinal.mk_range_eq_of_injective, FractionRing, IsLocalization, IsLocalization.rank_eq, IsLocalizedModule, IsLocalizedModule.linearIndependent_lift, LocalizedModule, LocalizedModule.mkLinearMap, Module, Module.Free.chooseBasis, Module.Free.rank_eq_card_chooseBasisIndex, Set.range, chooseBasis, hw.injective, injective, le_rfl, lift_injective, linearIndepOn_id_range_iff
 -/
@@ -389,7 +409,10 @@ theorem rank_quotient_add_rank_of_isDomain
   simp_rw [lift_add, ← IsLocalizedModule.lift_rank_eq R⁰ (M'.toLocalized R⁰) le_rfl,
     ← IsLocalizedModule.lift_rank_eq R⁰ (LocalizedModule.mkLinearMap R⁰ M) le_rfl,
     ← IsLocalizedModule.lift_rank_eq R⁰ (M'.toLocalizedQuotient R⁰) le_rfl,
-    ← IsLocalizati
+    ← IsLocalization.rank_eq (FractionRing R) R⁰ le_rfl,
+    ← lift_add, rank_quotient_add_rank_of_divisionRing]
+
+universe w in
 
 中文:
 定理 rank_quotient_add_rank_of_isDomain
@@ -399,7 +422,10 @@ theorem rank_quotient_add_rank_of_isDomain
   simp_rw [lift_add, ← IsLocalizedModule.lift_rank_eq R⁰ (M'.toLocalized R⁰) le_rfl,
     ← IsLocalizedModule.lift_rank_eq R⁰ (LocalizedModule.mkLinearMap R⁰ M) le_rfl,
     ← IsLocalizedModule.lift_rank_eq R⁰ (M'.toLocalizedQuotient R⁰) le_rfl,
-    ← IsLocalizati
+    ← IsLocalization.rank_eq (FractionRing R) R⁰ le_rfl,
+    ← lift_add, rank_quotient_add_rank_of_divisionRing]
+
+universe w in
 
 Depends on / 依赖: FractionRing, IsLocalization, IsLocalization.rank_eq, IsLocalizedModule, IsLocalizedModule.lift_rank_eq, LocalizedModule, LocalizedModule.mkLinearMap, le_rfl, lift_add, lift_injective, lift_rank_eq, mkLinearMap, rank_eq, rank_quotient_add_rank_of_divisionRing, simp_rw, toLocalized, toLocalizedQuotient
 -/
@@ -457,7 +483,14 @@ theorem lift_rank_eq_of_le_nonZeroDivisors
   let ST := S otimes[R] T
   conv_rhs => rw [← lift_lift.{uN, max uS uT uP}, ← IsLocalizedModule.lift_rank_eq p f hp,
     ← IsLocalization.rank_eq S p hp, lift_lift, ← lift_lift.{max uS uT, max uM uP},
-    ← rank_baseChange (
+    ← rank_baseChange (R := ST), ← lift_id'.{max uS uT, max uS uT uN} (Module.rank ..),
+    lift_lift, ← lift_lift.{max uS uT uP, uM}]
+  let _ : Algebra T ST := Algebra.TensorProduct.rightAlgebra
+  set pT := Algebra.algebraMapSubmonoid T p
+  rw [← lift_lift.{max uS uT]; rw [max uM uN}]; rw [← lift_umax.{uP}]; rw [← IsLocalizedModule.lift_rank_eq pT (mk T ST P 1) hpT]; rw [← IsLocalization.rank_eq ST pT hpT]; rw [lift_id'.{uP]; rw [max uS uT}]; rw [← lift_id'.{max uS uT]; rw [max uS uT uP} (Module.rank ..)]; rw [lift_lift]; rw [← lift_lift.{max uS uT uN]; rw [uM}]; rw [lift_inj]
+exact LinearEquiv.lift_rank_eq AlgebraTensorModule.congr (.refl ST ST) bc.equiv.symm ≪≫ₗ
+    AlgebraTensorModule.cancelBaseChange .. ≪≫ₗ (AlgebraTensorModule.cancelBaseChange ..).symm ≪≫ₗ
+    AlgebraTensorModule.congr (.refl ..) ((isLocalizedModule_iff_isBaseChange p S f).mp ‹_›).equiv
 
 中文:
 定理 lift_rank_eq_of_le_nonZeroDivisors
@@ -466,7 +499,14 @@ theorem lift_rank_eq_of_le_nonZeroDivisors
   let ST := S otimes[R] T
   conv_rhs => rw [← lift_lift.{uN, max uS uT uP}, ← IsLocalizedModule.lift_rank_eq p f hp,
     ← IsLocalization.rank_eq S p hp, lift_lift, ← lift_lift.{max uS uT, max uM uP},
-    ← rank_baseChange (
+    ← rank_baseChange (R := ST), ← lift_id'.{max uS uT, max uS uT uN} (Module.rank ..),
+    lift_lift, ← lift_lift.{max uS uT uP, uM}]
+  let _ : Algebra T ST := Algebra.TensorProduct.rightAlgebra
+  set pT := Algebra.algebraMapSubmonoid T p
+  rw [← lift_lift.{max uS uT]; rw [max uM uN}]; rw [← lift_umax.{uP}]; rw [← IsLocalizedModule.lift_rank_eq pT (mk T ST P 1) hpT]; rw [← IsLocalization.rank_eq ST pT hpT]; rw [lift_id'.{uP]; rw [max uS uT}]; rw [← lift_id'.{max uS uT]; rw [max uS uT uP} (Module.rank ..)]; rw [lift_lift]; rw [← lift_lift.{max uS uT uN]; rw [uM}]; rw [lift_inj]
+exact LinearEquiv.lift_rank_eq AlgebraTensorModule.congr (.refl ST ST) bc.equiv.symm ≪≫ₗ
+    AlgebraTensorModule.cancelBaseChange .. ≪≫ₗ (AlgebraTensorModule.cancelBaseChange ..).symm ≪≫ₗ
+    AlgebraTensorModule.congr (.refl ..) ((isLocalizedModule_iff_isBaseChange p S f).mp ‹_›).equiv
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.rightAlgebra, Algebra.algebraMapSubmonoid, IsLocalization, IsLocalization.rank_eq, IsLocalizedModule, IsLocalizedModule.lift_rank_eq, Module, Module.rank, TensorProduct, algebraMapSubmonoid, conv_rhs, lift_id, lift_inj, lift_lift, lift_rank_eq, otimes, rank_baseChange, rank_eq, rightAlgebra
 -/
@@ -551,7 +591,19 @@ theorem lift_rank_eq
   cases subsingleton_or_nontrivial R
   · have := (algebraMap R T).codomain_trivial; simp only [rank_subsingleton, lift_one]
   have := (isDomain_iff_noZeroDivisors_and_nontrivial T).mpr
-    
+    ⟨‹_›, (FaithfulSMul.algebraMap_injective R T).nontrivial⟩
+  let FR := FractionRing R
+  let FT := FractionRing T
+  replace inj : Function.Injective (algebraMap R FT) := (IsFractionRing.injective T _).comp inj
+  let g := TensorProduct.mk T FT P 1
+  have : IsLocalizedModule R⁰ (TensorProduct.mk R FR FT 1) := inferInstance
+  let _ : Algebra FT (FR otimes[R] FT) := Algebra.TensorProduct.rightAlgebra
+.symm.isField .atUnits _ _ ?_ let _ := isLocalizedModule_iff_isLocalization.mp this
+.toField (Field.toIsField FT)
+  on_goal 2 => rintro _ ⟨_, mem, rfl⟩; exact (map_ne_zero_of_mem_nonZeroDivisors _ inj mem).isUnit
+  have := bc.comp_iff.2 ((isLocalizedModule_iff_isBaseChange T⁰ FT g).1 inferInstance)
+  rw [← lift_inj.{_]; rw [max uT uP}]; rw [lift_lift]; rw [lift_lift]; rw [← lift_lift.{max uT uP]; rw [uM}]; rw [← IsLocalizedModule.lift_rank_eq T⁰ g le_rfl]; rw [lift_lift]; rw [← lift_lift.{uM}]; rw [← IsLocalization.rank_eq FT T⁰ le_rfl]; rw [lift_rank_eq_of_le_nonZeroDivisors FR (LocalizedModule.mkLinearMap R⁰ M) le_rfl
+      (map_le_nonZeroDivisors_of_injective _ inj le_rfl) this]; rw [lift_lift]
 
 中文:
 定理 lift_rank_eq
@@ -561,7 +613,19 @@ theorem lift_rank_eq
   cases subsingleton_or_nontrivial R
   · have := (algebraMap R T).codomain_trivial; simp only [rank_subsingleton, lift_one]
   have := (isDomain_iff_noZeroDivisors_and_nontrivial T).mpr
-    
+    ⟨‹_›, (FaithfulSMul.algebraMap_injective R T).nontrivial⟩
+  let FR := FractionRing R
+  let FT := FractionRing T
+  replace inj : Function.Injective (algebraMap R FT) := (IsFractionRing.injective T _).comp inj
+  let g := TensorProduct.mk T FT P 1
+  have : IsLocalizedModule R⁰ (TensorProduct.mk R FR FT 1) := inferInstance
+  let _ : Algebra FT (FR otimes[R] FT) := Algebra.TensorProduct.rightAlgebra
+.symm.isField .atUnits _ _ ?_ let _ := isLocalizedModule_iff_isLocalization.mp this
+.toField (Field.toIsField FT)
+  on_goal 2 => rintro _ ⟨_, mem, rfl⟩; exact (map_ne_zero_of_mem_nonZeroDivisors _ inj mem).isUnit
+  have := bc.comp_iff.2 ((isLocalizedModule_iff_isBaseChange T⁰ FT g).1 inferInstance)
+  rw [← lift_inj.{_]; rw [max uT uP}]; rw [lift_lift]; rw [lift_lift]; rw [← lift_lift.{max uT uP]; rw [uM}]; rw [← IsLocalizedModule.lift_rank_eq T⁰ g le_rfl]; rw [lift_lift]; rw [← lift_lift.{uM}]; rw [← IsLocalization.rank_eq FT T⁰ le_rfl]; rw [lift_rank_eq_of_le_nonZeroDivisors FR (LocalizedModule.mkLinearMap R⁰ M) le_rfl
+      (map_le_nonZeroDivisors_of_injective _ inj le_rfl) this]; rw [lift_lift]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, FractionRing, Function, Function.Injective, Injective, IsFractionRing, IsFractionRing.injective, algebraMap, algebraMap_injective, codomain_trivial, inj.noZeroDivisors, injective, isDomain_iff_noZeroDivisors_and_nontrivial, lift_one, map_mul, map_zero, noZeroDivisors, nontrivial, rank_subsingleton
 -/
@@ -650,7 +714,24 @@ lemma aleph0_le_rank_of_isEmpty_oreSet
   refine Cardinal.aleph0_le.mpr fun n => ?_
   suffices LinearIndependent R (fun (i : Fin n) => r * s ^ (i : Nat)) by
     simpa using this.cardinal_lift_le_rank
-  s
+  suffices forall (g : Nat -> R) (x), (∑ i in Finset.range n, g i • (r * s ^ (i + x))) = 0 ->
+      forall i < n, g i = 0 by
+    refine Fintype.linearIndependent_iff.mpr fun g hg i => ?_
+    simpa only [dif_pos i.prop] using this (fun i => if h : i < n then g ⟨i, h⟩ else 0) 0
+      (by simp [← Fin.sum_univ_eq_sum_range, ← hg]) i i.prop
+  intro g x hg i hin
+  induction n generalizing g x i with
+  | zero => contradiction
+  | succ n IH =>
+    rw [Finset.sum_range_succ'] at hg
+    by_cases hg0 : g 0 = 0
+    · simp only [hg0, zero_smul, add_zero, add_assoc] at hg
+      cases i; exacts [hg0, IH _ _ hg _ (Nat.succ_lt_succ_iff.mp hin)]
+    simp only [zero_add, pow_add _ _ x,
+      ← mul_assoc, pow_succ, ← Finset.sum_mul, smul_eq_mul] at hg
+    rw [← neg_eq_iff_add_eq_zero]; rw [← neg_mul]; rw [← neg_mul] at hg
+    have := mul_right_cancel₀ (mem_nonZeroDivisors_iff_ne_zero.mp (s ^ x).prop) hg
+    exact (h _ ⟨(g 0), mem_nonZeroDivisors_iff_ne_zero.mpr (by simpa)⟩ this.symm).elim
 
 中文:
 引理 aleph0_le_rank_of_isEmpty_oreSet
@@ -662,7 +743,24 @@ lemma aleph0_le_rank_of_isEmpty_oreSet
   refine Cardinal.aleph0_le.mpr fun n => ?_
   suffices LinearIndependent R (fun (i : Fin n) => r * s ^ (i : Nat)) by
     simpa using this.cardinal_lift_le_rank
-  s
+  suffices forall (g : Nat -> R) (x), (∑ i in Finset.range n, g i • (r * s ^ (i + x))) = 0 ->
+      forall i < n, g i = 0 by
+    refine Fintype.linearIndependent_iff.mpr fun g hg i => ?_
+    simpa only [dif_pos i.prop] using this (fun i => if h : i < n then g ⟨i, h⟩ else 0) 0
+      (by simp [← Fin.sum_univ_eq_sum_range, ← hg]) i i.prop
+  intro g x hg i hin
+  induction n generalizing g x i with
+  | zero => contradiction
+  | succ n IH =>
+    rw [Finset.sum_range_succ'] at hg
+    by_cases hg0 : g 0 = 0
+    · simp only [hg0, zero_smul, add_zero, add_assoc] at hg
+      cases i; exacts [hg0, IH _ _ hg _ (Nat.succ_lt_succ_iff.mp hin)]
+    simp only [zero_add, pow_add _ _ x,
+      ← mul_assoc, pow_succ, ← Finset.sum_mul, smul_eq_mul] at hg
+    rw [← neg_eq_iff_add_eq_zero]; rw [← neg_mul]; rw [← neg_mul] at hg
+    have := mul_right_cancel₀ (mem_nonZeroDivisors_iff_ne_zero.mp (s ^ x).prop) hg
+    exact (h _ ⟨(g 0), mem_nonZeroDivisors_iff_ne_zero.mpr (by simpa)⟩ this.symm).elim
 
 Depends on / 依赖: Cardinal, Cardinal.aleph0_le.mpr, Finset, Finset.range, Fintype, Fintype.linearIndependent_iff.mpr, LinearIndependent, OreLocalization, OreLocalization.nonempty_oreSet_iff_of_noZeroDivisors, aleph0_le, cardinal_lift_le_rank, dif_pos, i.prop, linearIndependent_iff, nonempty_oreSet_iff_of_noZeroDivisors, not_nonempty_iff, this.cardinal_lift_le_rank
 -/

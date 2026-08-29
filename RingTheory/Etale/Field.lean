@@ -58,7 +58,39 @@ theorem of_isSeparable_aux
   -- IsSeparable + EssFiniteType => FormallyUnramified + Finite
   have := FormallyUnramified.of_isSeparable K L
   have := FormallyUnramified.finite_of_free (R := K) (S := L)
-  -- We shall show that any `f : L → B/I` can be lifted to `L → B` if `I^2 =
+  -- We shall show that any `f : L → B/I` can be lifted to `L → B` if `I^2 = ⊥`
+  refine FormallyEtale.iff_comp_bijective.mpr fun B _ _ I h => ?_
+  refine ⟨FormallyUnramified.iff_comp_injective_of_small.mp
+    (FormallyUnramified.of_isSeparable K L) I h, ?_⟩
+  intro f
+  -- By separability and finiteness, we may assume `L = K(α)` with `p` the minpoly of `α`.
+  let pb := Field.powerBasisOfFiniteOfSeparable K L
+  -- Let `x : B` such that `f(α) = x` in `B / I`.
+  obtain ⟨x, hx⟩ := Ideal.Quotient.mk_surjective (f pb.gen)
+  have helper : forall x, IsScalarTower.toAlgHom K B (B ⧸ I) x = Ideal.Quotient.mk I x := fun _ => rfl
+  -- Then `p(x) = 0 mod I`, and the goal is to find some `ε ∈ I` such that
+  -- `p(x + ε) = p(x) + ε p'(x) = 0`, and we will get our lift into `B`.
+  have hx' : Ideal.Quotient.mk I (aeval x (minpoly K pb.gen)) = 0 := by
+    rw [← helper]; rw [← aeval_algHom_apply]; rw [helper]; rw [hx]; rw [aeval_algHom_apply]; rw [minpoly.aeval]; rw [map_zero]
+  -- Since `p` is separable, `-p'(x)` is invertible in `B ⧸ I`,
+  obtain ⟨u, hu⟩ : exists u, (aeval x) (derivative (minpoly K pb.gen)) * u + 1 in I := by
+    have := (isUnit_iff_ne_zero.mpr ((Algebra.IsSeparable.isSeparable K
+      pb.gen).aeval_derivative_ne_zero (minpoly.aeval K _))).map f
+    rw [← aeval_algHom_apply]; rw [← hx]; rw [← helper]; rw [aeval_algHom_apply]; rw [helper] at this
+    obtain ⟨u, hu⟩ := Ideal.Quotient.mk_surjective (-this.unit⁻¹ : B ⧸ I)
+    use u
+    rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [map_add]; rw [map_mul]; rw [map_one]; rw [hu]; rw [mul_neg]; rw [IsUnit.mul_val_inv]; rw [neg_add_cancel]
+  -- And `ε = p(x)/(-p'(x))` works.
+  use pb.liftEquiv.symm ⟨x + u * aeval x (minpoly K pb.gen), ?_⟩
+  · apply pb.algHom_ext
+    simp [hx, hx']
+  · rw [← eval_map_algebraMap, Polynomial.eval_add_of_sq_eq_zero, derivative_map,
+      ← one_mul (eval x _), eval_map_algebraMap, eval_map_algebraMap, ← mul_assoc, ← add_mul,
+      ← Ideal.mem_bot, ← h, pow_two, add_comm]
+    · exact Ideal.mul_mem_mul hu (Ideal.Quotient.eq_zero_iff_mem.mp hx')
+    rw [← Ideal.mem_bot]; rw [← h]
+    apply Ideal.pow_mem_pow
+    rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [map_mul]; rw [hx']; rw [mul_zero]
 
 中文:
 定理 of_isSeparable_aux
@@ -68,7 +100,39 @@ theorem of_isSeparable_aux
   -- IsSeparable + EssFiniteType => FormallyUnramified + Finite
   have := FormallyUnramified.of_isSeparable K L
   have := FormallyUnramified.finite_of_free (R := K) (S := L)
-  -- We shall show that any `f : L → B/I` can be lifted to `L → B` if `I^2 =
+  -- We shall show that any `f : L → B/I` can be lifted to `L → B` if `I^2 = ⊥`
+  refine FormallyEtale.iff_comp_bijective.mpr fun B _ _ I h => ?_
+  refine ⟨FormallyUnramified.iff_comp_injective_of_small.mp
+    (FormallyUnramified.of_isSeparable K L) I h, ?_⟩
+  intro f
+  -- By separability and finiteness, we may assume `L = K(α)` with `p` the minpoly of `α`.
+  let pb := Field.powerBasisOfFiniteOfSeparable K L
+  -- Let `x : B` such that `f(α) = x` in `B / I`.
+  obtain ⟨x, hx⟩ := Ideal.Quotient.mk_surjective (f pb.gen)
+  have helper : forall x, IsScalarTower.toAlgHom K B (B ⧸ I) x = Ideal.Quotient.mk I x := fun _ => rfl
+  -- Then `p(x) = 0 mod I`, and the goal is to find some `ε ∈ I` such that
+  -- `p(x + ε) = p(x) + ε p'(x) = 0`, and we will get our lift into `B`.
+  have hx' : Ideal.Quotient.mk I (aeval x (minpoly K pb.gen)) = 0 := by
+    rw [← helper]; rw [← aeval_algHom_apply]; rw [helper]; rw [hx]; rw [aeval_algHom_apply]; rw [minpoly.aeval]; rw [map_zero]
+  -- Since `p` is separable, `-p'(x)` is invertible in `B ⧸ I`,
+  obtain ⟨u, hu⟩ : exists u, (aeval x) (derivative (minpoly K pb.gen)) * u + 1 in I := by
+    have := (isUnit_iff_ne_zero.mpr ((Algebra.IsSeparable.isSeparable K
+      pb.gen).aeval_derivative_ne_zero (minpoly.aeval K _))).map f
+    rw [← aeval_algHom_apply]; rw [← hx]; rw [← helper]; rw [aeval_algHom_apply]; rw [helper] at this
+    obtain ⟨u, hu⟩ := Ideal.Quotient.mk_surjective (-this.unit⁻¹ : B ⧸ I)
+    use u
+    rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [map_add]; rw [map_mul]; rw [map_one]; rw [hu]; rw [mul_neg]; rw [IsUnit.mul_val_inv]; rw [neg_add_cancel]
+  -- And `ε = p(x)/(-p'(x))` works.
+  use pb.liftEquiv.symm ⟨x + u * aeval x (minpoly K pb.gen), ?_⟩
+  · apply pb.algHom_ext
+    simp [hx, hx']
+  · rw [← eval_map_algebraMap, Polynomial.eval_add_of_sq_eq_zero, derivative_map,
+      ← one_mul (eval x _), eval_map_algebraMap, eval_map_algebraMap, ← mul_assoc, ← add_mul,
+      ← Ideal.mem_bot, ← h, pow_two, add_comm]
+    · exact Ideal.mul_mem_mul hu (Ideal.Quotient.eq_zero_iff_mem.mp hx')
+    rw [← Ideal.mem_bot]; rw [← h]
+    apply Ideal.pow_mem_pow
+    rw [← Ideal.Quotient.eq_zero_iff_mem]; rw [map_mul]; rw [hx']; rw [mul_zero]
 -/
 theorem of_isSeparable_aux [Algebra.IsSeparable K L] [EssFiniteType K L] :
     FormallyEtale K L := by
@@ -122,7 +186,61 @@ lemma of_isSeparable
   -- We shall show that any `f : L → B/I` can be lifted to `L → B` if `I^2 = ⊥`.
   refine FormallyEtale.iff_comp_bijective.mpr fun B _ _ I h => ?_
   -- But we already know that there exists a unique lift for every finite subfield of `L`
-  -- by `of_isSeparable_aux`, so we can glue them all togeth
+  -- by `of_isSeparable_aux`, so we can glue them all together.
+  refine ⟨FormallyUnramified.iff_comp_injective_of_small.mp
+    (FormallyUnramified.of_isSeparable K L) I h, ?_⟩
+  intro f
+  have : forall k : L, exists! g : K⟮k⟯ ->ₐ[K] B,
+      (Ideal.Quotient.mkₐ K I).comp g = f.comp (IsScalarTower.toAlgHom K _ L) := by
+    intro k
+    have := IsSeparable.of_algHom _ _ (IsScalarTower.toAlgHom K (K⟮k⟯) L)
+    have := IntermediateField.adjoin.finiteDimensional
+      (Algebra.IsSeparable.isSeparable K k).isIntegral
+    have := FormallyEtale.of_isSeparable_aux K (K⟮k⟯)
+    have := FormallyEtale.comp_bijective (R := K) (A := K⟮k⟯) I h
+    exact this.existsUnique _
+  choose g hg₁ hg₂ using this
+  have hg₃ : forall x y (h : x in K⟮y⟯), g y ⟨x, h⟩ = g x (IntermediateField.AdjoinSimple.gen K x) := by
+    intro x y h
+    have e : K⟮x⟯ <= K⟮y⟯ := by
+      rw [IntermediateField.adjoin_le_iff]
+      rintro _ rfl
+      exact h
+    rw [← hg₂ _ ((g _).comp (IntermediateField.inclusion e))]
+    · rfl
+    apply AlgHom.ext
+    rw [← AlgHom.comp_assoc]; rw [hg₁]; rw [AlgHom.comp_assoc]
+    simp
+  have H : forall x y : L, exists α : L, x in K⟮α⟯ ∧ y in K⟮α⟯ := by
+    intro x y
+    have : FiniteDimensional K K⟮x, y⟯ := by
+      apply IntermediateField.finiteDimensional_adjoin
+      intro x _; exact (Algebra.IsSeparable.isSeparable K x).isIntegral
+    have := IsSeparable.of_algHom _ _ (IsScalarTower.toAlgHom K (K⟮x, y⟯) L)
+    obtain ⟨⟨α, hα⟩, e⟩ := Field.exists_primitive_element K K⟮x, y⟯
+    apply_fun (IntermediateField.map (IntermediateField.val _)) at e
+    rw [IntermediateField.adjoin_map]; rw [← AlgHom.fieldRange_eq_map] at e
+    simp only [IntermediateField.coe_val, Set.image_singleton,
+      IntermediateField.fieldRange_val] at e
+    have hx : x in K⟮α⟯ := e ▸ IntermediateField.subset_adjoin K {x, y} (by simp)
+    have hy : y in K⟮α⟯ := e ▸ IntermediateField.subset_adjoin K {x, y} (by simp)
+    exact ⟨α, hx, hy⟩
+  refine ⟨⟨⟨⟨⟨fun x => g x (IntermediateField.AdjoinSimple.gen K x), ?_⟩, ?_⟩, ?_, ?_⟩, ?_⟩, ?_⟩
+  · change g 1 1 = 1; rw [map_one]
+  · intro x y
+    obtain ⟨α, hx, hy⟩ := H x y
+    simp only [← hg₃ _ _ hx, ← hg₃ _ _ hy, ← map_mul, ← hg₃ _ _ (mul_mem hx hy)]
+    rfl
+  · change g 0 0 = 0; rw [map_zero]
+  · intro x y
+    obtain ⟨α, hx, hy⟩ := H x y
+    simp only [← hg₃ _ _ hx, ← hg₃ _ _ hy, ← map_add, ← hg₃ _ _ (add_mem hx hy)]
+    rfl
+  · intro r
+    change g _ (algebraMap K _ r) = _
+    rw [AlgHom.commutes]
+  · ext x
+    simpa using AlgHom.congr_fun (hg₁ x) (IntermediateField.AdjoinSimple.gen K x)
 
 中文:
 引理 of_isSeparable
@@ -132,7 +250,61 @@ lemma of_isSeparable
   -- We shall show that any `f : L → B/I` can be lifted to `L → B` if `I^2 = ⊥`.
   refine FormallyEtale.iff_comp_bijective.mpr fun B _ _ I h => ?_
   -- But we already know that there exists a unique lift for every finite subfield of `L`
-  -- by `of_isSeparable_aux`, so we can glue them all togeth
+  -- by `of_isSeparable_aux`, so we can glue them all together.
+  refine ⟨FormallyUnramified.iff_comp_injective_of_small.mp
+    (FormallyUnramified.of_isSeparable K L) I h, ?_⟩
+  intro f
+  have : forall k : L, exists! g : K⟮k⟯ ->ₐ[K] B,
+      (Ideal.Quotient.mkₐ K I).comp g = f.comp (IsScalarTower.toAlgHom K _ L) := by
+    intro k
+    have := IsSeparable.of_algHom _ _ (IsScalarTower.toAlgHom K (K⟮k⟯) L)
+    have := IntermediateField.adjoin.finiteDimensional
+      (Algebra.IsSeparable.isSeparable K k).isIntegral
+    have := FormallyEtale.of_isSeparable_aux K (K⟮k⟯)
+    have := FormallyEtale.comp_bijective (R := K) (A := K⟮k⟯) I h
+    exact this.existsUnique _
+  choose g hg₁ hg₂ using this
+  have hg₃ : forall x y (h : x in K⟮y⟯), g y ⟨x, h⟩ = g x (IntermediateField.AdjoinSimple.gen K x) := by
+    intro x y h
+    have e : K⟮x⟯ <= K⟮y⟯ := by
+      rw [IntermediateField.adjoin_le_iff]
+      rintro _ rfl
+      exact h
+    rw [← hg₂ _ ((g _).comp (IntermediateField.inclusion e))]
+    · rfl
+    apply AlgHom.ext
+    rw [← AlgHom.comp_assoc]; rw [hg₁]; rw [AlgHom.comp_assoc]
+    simp
+  have H : forall x y : L, exists α : L, x in K⟮α⟯ ∧ y in K⟮α⟯ := by
+    intro x y
+    have : FiniteDimensional K K⟮x, y⟯ := by
+      apply IntermediateField.finiteDimensional_adjoin
+      intro x _; exact (Algebra.IsSeparable.isSeparable K x).isIntegral
+    have := IsSeparable.of_algHom _ _ (IsScalarTower.toAlgHom K (K⟮x, y⟯) L)
+    obtain ⟨⟨α, hα⟩, e⟩ := Field.exists_primitive_element K K⟮x, y⟯
+    apply_fun (IntermediateField.map (IntermediateField.val _)) at e
+    rw [IntermediateField.adjoin_map]; rw [← AlgHom.fieldRange_eq_map] at e
+    simp only [IntermediateField.coe_val, Set.image_singleton,
+      IntermediateField.fieldRange_val] at e
+    have hx : x in K⟮α⟯ := e ▸ IntermediateField.subset_adjoin K {x, y} (by simp)
+    have hy : y in K⟮α⟯ := e ▸ IntermediateField.subset_adjoin K {x, y} (by simp)
+    exact ⟨α, hx, hy⟩
+  refine ⟨⟨⟨⟨⟨fun x => g x (IntermediateField.AdjoinSimple.gen K x), ?_⟩, ?_⟩, ?_, ?_⟩, ?_⟩, ?_⟩
+  · change g 1 1 = 1; rw [map_one]
+  · intro x y
+    obtain ⟨α, hx, hy⟩ := H x y
+    simp only [← hg₃ _ _ hx, ← hg₃ _ _ hy, ← map_mul, ← hg₃ _ _ (mul_mem hx hy)]
+    rfl
+  · change g 0 0 = 0; rw [map_zero]
+  · intro x y
+    obtain ⟨α, hx, hy⟩ := H x y
+    simp only [← hg₃ _ _ hx, ← hg₃ _ _ hy, ← map_add, ← hg₃ _ _ (add_mem hx hy)]
+    rfl
+  · intro r
+    change g _ (algebraMap K _ r) = _
+    rw [AlgHom.commutes]
+  · ext x
+    simpa using AlgHom.congr_fun (hg₁ x) (IntermediateField.AdjoinSimple.gen K x)
 -/
 lemma of_isSeparable [Algebra.IsSeparable K L] : FormallyEtale K L := by
   -- We shall show that any `f : L → B/I` can be lifted to `L → B` if `I^2 = ⊥`.
@@ -225,7 +397,10 @@ instance [EssFiniteType
   have := Algebra.FormallyUnramified.isReduced_of_field K A
   let := Ideal.Quotient.field p
   rw [← Algebra.FormallyEtale.iff_isSeparable]
-  have : Algebra.FormallyEtale K (Π (
+  have : Algebra.FormallyEtale K (Π (m : MaximalSpectrum A), (A ⧸ m.asIdeal)) :=
+    .of_equiv ((IsArtinianRing.equivPi _).restrictScalars K)
+  rw [Algebra.FormallyEtale.pi_iff] at this
+  exact this ⟨p, inferInstance⟩
 
 中文:
 实例 [EssFiniteType
@@ -236,7 +411,10 @@ instance [EssFiniteType
   have := Algebra.FormallyUnramified.isReduced_of_field K A
   let := Ideal.Quotient.field p
   rw [← Algebra.FormallyEtale.iff_isSeparable]
-  have : Algebra.FormallyEtale K (Π (
+  have : Algebra.FormallyEtale K (Π (m : MaximalSpectrum A), (A ⧸ m.asIdeal)) :=
+    .of_equiv ((IsArtinianRing.equivPi _).restrictScalars K)
+  rw [Algebra.FormallyEtale.pi_iff] at this
+  exact this ⟨p, inferInstance⟩
 
 Depends on / 依赖: Algebra, Algebra.FormallyEtale, Algebra.FormallyEtale.iff_isSeparable, Algebra.FormallyEtale.pi_iff, Algebra.FormallyUnramified.finite_of_free, Algebra.FormallyUnramified.isReduced_of_field, FormallyEtale, FormallyUnramified, Ideal.Quotient.field, IsArtinianRing, IsArtinianRing.equivPi, MaximalSpectrum, Quotient, asIdeal, equivPi, finite_of_free, iff_isSeparable, isArtinian_of_tower, isReduced_of_field, m.asIdeal
 -/
@@ -265,7 +443,7 @@ lemma of_formallyUnramified_of_field
   have (I : MaximalSpectrum A) : FormallyEtale K (A ⧸ I.asIdeal) := by
     rw [FormallyEtale.iff_isSeparable]; rw [← FormallyUnramified.iff_isSeparable]
     infer_instance
-  exact .of_equiv ((IsArtinia
+  exact .of_equiv ((IsArtinianRing.equivPi A).restrictScalars K).symm
 
 中文:
 引理 of_formallyUnramified_of_field
@@ -276,7 +454,7 @@ lemma of_formallyUnramified_of_field
   have (I : MaximalSpectrum A) : FormallyEtale K (A ⧸ I.asIdeal) := by
     rw [FormallyEtale.iff_isSeparable]; rw [← FormallyUnramified.iff_isSeparable]
     infer_instance
-  exact .of_equiv ((IsArtinia
+  exact .of_equiv ((IsArtinianRing.equivPi A).restrictScalars K).symm
 
 Depends on / 依赖: FormallyEtale, FormallyEtale.iff_isSeparable, FormallyUnramified, FormallyUnramified.iff_isSeparable, FormallyUnramified.isReduced_of_field, I.asIdeal, IsArtinianRing, IsArtinianRing.equivPi, MaximalSpectrum, asIdeal, equivPi, iff_isSeparable, infer_instance, isReduced_of_field, of_equiv, of_finite, restrictScalars
 -/
@@ -324,6 +502,12 @@ theorem iff_exists_algEquiv_prod
     have := FormallyUnramified.isReduced_of_field K A
     have : IsArtinianRing A := isArtinian_of_tower K inferInstance
     let v (i : MaximalSpectrum A) : A := (IsArtinianRing.equivPi A).symm (Pi.single i 1)
+    rw [FormallyEtale.iff_of_equiv ((IsArtinianRing.equivPi A).restrictScalars K)]; rw [FormallyEtale.pi_iff] at H
+    exact ⟨_, inferInstance, _, _, _, (IsArtinianRing.equivPi A).restrictScalars K,
+      fun I => (iff_isSeparable _ _).mp inferInstance⟩
+  · intro ⟨I, _, Ai, _, _, e, _⟩
+    rw [FormallyEtale.iff_of_equiv e]; rw [FormallyEtale.pi_iff]
+    exact fun I => of_isSeparable K (Ai I)
 
 中文:
 定理 iff_存在_algEquiv_prod
@@ -336,6 +520,12 @@ theorem iff_exists_algEquiv_prod
     have := FormallyUnramified.isReduced_of_field K A
     have : IsArtinianRing A := isArtinian_of_tower K inferInstance
     let v (i : MaximalSpectrum A) : A := (IsArtinianRing.equivPi A).symm (Pi.single i 1)
+    rw [FormallyEtale.iff_of_equiv ((IsArtinianRing.equivPi A).restrictScalars K)]; rw [FormallyEtale.pi_iff] at H
+    exact ⟨_, inferInstance, _, _, _, (IsArtinianRing.equivPi A).restrictScalars K,
+      fun I => (iff_isSeparable _ _).mp inferInstance⟩
+  · intro ⟨I, _, Ai, _, _, e, _⟩
+    rw [FormallyEtale.iff_of_equiv e]; rw [FormallyEtale.pi_iff]
+    exact fun I => of_isSeparable K (Ai I)
 
 Depends on / 依赖: FormallyEtale, FormallyEtale.iff_of_equiv, FormallyEtale.pi_iff, FormallyUnramified, FormallyUnramified.finite_of_free, FormallyUnramified.isReduced_of_field, IsArtinianRing, IsArtinianRing.equivPi, MaximalSpectrum, Pi.single, classical, equivPi, finite_of_free, iff_isSeparable, iff_of_equiv, isArtinian_of_tower, isReduced_of_field, pi_iff, restrictScalars, single
 -/
@@ -372,7 +562,10 @@ definition equivPiOfIsSepClosed
   haveI := FormallyUnramified.isReduced_of_field K A
   letI _ (m : MaximalSpectrum A) : Field (A ⧸ m.asIdeal) :=
     Ideal.Quotient.field m.asIdeal
-((IsArtinianRing.equivPi _).res
+((IsArtinianRing.equivPi _).restrictScalars K).trans
+    (AlgEquiv.piCongrRight fun _ => (AlgEquiv.ofBijective (Algebra.ofId K _)
+      (IsSepClosed.algebraMap_bijective _ _)).symm).trans <|
+    (AlgEquiv.piCongrLeft _ (fun _ => K) IsArtinianRing.primeSpectrumEquivMaximalSpectrum).symm
 
 中文:
 定义 equivPiOfIsSepClosed
@@ -382,7 +575,10 @@ definition equivPiOfIsSepClosed
   haveI := FormallyUnramified.isReduced_of_field K A
   letI _ (m : MaximalSpectrum A) : Field (A ⧸ m.asIdeal) :=
     Ideal.Quotient.field m.asIdeal
-((IsArtinianRing.equivPi _).res
+((IsArtinianRing.equivPi _).restrictScalars K).trans
+    (AlgEquiv.piCongrRight fun _ => (AlgEquiv.ofBijective (Algebra.ofId K _)
+      (IsSepClosed.algebraMap_bijective _ _)).symm).trans <|
+    (AlgEquiv.piCongrLeft _ (fun _ => K) IsArtinianRing.primeSpectrumEquivMaximalSpectrum).symm
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, AlgEquiv.piCongrLeft, AlgEquiv.piCongrRight, Algebra, Algebra.FormallyUnramified.finite_of_free, Algebra.ofId, FormallyUnramified, FormallyUnramified.isReduced_of_field, Ideal.Quotient.field, IsArtinianRing, IsArtinianRing.equivPi, IsArtinianRing.primeSpe, IsSepClosed, IsSepClosed.algebraMap_bijective, MaximalSpectrum, Quotient, algebraMap_bijective, asIdeal, equivPi
 -/
@@ -413,7 +609,8 @@ lemma equivPiOfIsSepClosed_self_apply
   simp only [Equiv.piCongrLeft_symm_apply, AlgEquiv.piCongrRight_apply,
     IsArtinianRing.primeSpectrumEquivMaximalSpectrum_apply_asIdeal, IsArtinianRing.equivPi_apply]
   apply (AlgEquiv.ofBijective (ofId K (K ⧸ p.asIdeal))
- 
+    (IsSepClosed.algebraMap_bijective _ _)).injective
+  simp
 
 中文:
 引理 equivPiOfIsSepClosed_self_apply
@@ -424,7 +621,8 @@ lemma equivPiOfIsSepClosed_self_apply
   simp only [Equiv.piCongrLeft_symm_apply, AlgEquiv.piCongrRight_apply,
     IsArtinianRing.primeSpectrumEquivMaximalSpectrum_apply_asIdeal, IsArtinianRing.equivPi_apply]
   apply (AlgEquiv.ofBijective (ofId K (K ⧸ p.asIdeal))
- 
+    (IsSepClosed.algebraMap_bijective _ _)).injective
+  simp
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, AlgEquiv.piCongrRight_apply, Equiv.piCongrLeft_symm_apply, Ideal.Quotient.field, IsArtinianRing, IsArtinianRing.equivPi_apply, IsArtinianRing.primeSpectrumEquivMaximalSpectrum_apply_asIdeal, IsSepClosed, IsSepClosed.algebraMap_bijective, Quotient, algebraMap_bijective, asIdeal, equivPiOfIsSepClosed, equivPi_apply, injective, ofBijective, p.asIdeal, piCongrLeft_symm_apply, piCongrRight_apply
 -/
@@ -453,7 +651,16 @@ lemma equivPiOfIsSepClosed_comap
   simp only [Equiv.piCongrLeft_symm_apply, AlgEquiv.piCongrRight_apply,
     IsArtinianRing.primeSpectrumEquivMaximalSpectrum_apply_asIdeal, PrimeSpectrum.comap_asIdeal,
     IsArtinianRing.equivPi_apply]
-  have heq : ofId K (B ⧸ p.asIdeal) = (Ideal.quotientMapₐ p.asI
+  have heq : ofId K (B ⧸ p.asIdeal) = (Ideal.quotientMapₐ p.asIdeal f le_rfl).comp (ofId _ _) := by
+    simp
+  suffices h : Ideal.quotientMapₐ p.asIdeal f le_rfl x = f x by
+    apply FaithfulSMul.algebraMap_injective K (B ⧸ p.asIdeal)
+    rw [← ofId_apply]; rw [← ofId_apply]
+    nth_rw 1 [heq]
+    simp only [AlgHom.coe_comp, Function.comp_apply, AlgEquiv.ofBijective_apply_symm_apply]
+    convert h
+    apply AlgEquiv.ofBijective_apply_symm_apply
+  simp
 
 中文:
 引理 equivPiOfIsSepClosed_comap
@@ -463,7 +670,16 @@ lemma equivPiOfIsSepClosed_comap
   simp only [Equiv.piCongrLeft_symm_apply, AlgEquiv.piCongrRight_apply,
     IsArtinianRing.primeSpectrumEquivMaximalSpectrum_apply_asIdeal, PrimeSpectrum.comap_asIdeal,
     IsArtinianRing.equivPi_apply]
-  have heq : ofId K (B ⧸ p.asIdeal) = (Ideal.quotientMapₐ p.asI
+  have heq : ofId K (B ⧸ p.asIdeal) = (Ideal.quotientMapₐ p.asIdeal f le_rfl).comp (ofId _ _) := by
+    simp
+  suffices h : Ideal.quotientMapₐ p.asIdeal f le_rfl x = f x by
+    apply FaithfulSMul.algebraMap_injective K (B ⧸ p.asIdeal)
+    rw [← ofId_apply]; rw [← ofId_apply]
+    nth_rw 1 [heq]
+    simp only [AlgHom.coe_comp, Function.comp_apply, AlgEquiv.ofBijective_apply_symm_apply]
+    convert h
+    apply AlgEquiv.ofBijective_apply_symm_apply
+  simp
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.piCongrRight_apply, Equiv.piCongrLeft_symm_apply, FaithfulSMul, FaithfulSMul.algebraMap_injective, Ideal.quotientMap, IsArtinianRing, IsArtinianRing.equivPi_apply, IsArtinianRing.primeSpectrumEquivMaximalSpectrum_apply_asIdeal, PrimeSpectrum, PrimeSpectrum.comap_asIdeal, algebraMap_injective, asIdeal, comap_asIdeal, equivPiOfIsSepClosed, equivPi_apply, le_rfl, nth_rw, ofId_apply, p.asIdeal
 -/
@@ -499,7 +715,12 @@ theorem Algebra.Etale.iff_exists_algEquiv_prod
     obtain ⟨I, _, Ai, _, _, e, _⟩ := (FormallyEtale.iff_exists_algEquiv_prod K A).mp inferInstance
     have := FormallyUnramified.finite_of_free K A
     exact ⟨_, ‹_›, _, _, _, e, fun i => ⟨.of_surjective ((LinearMap.proj i).comp e.toLinearMap)
-      ((Function.surjectiv
+      ((Function.surjective_eval i).comp e.surjective), inferInstance⟩⟩
+  · intro ⟨I, _, Ai, _, _, e, H⟩
+    choose h₁ h₂ using H
+    have := Module.Finite.of_surjective e.symm.toLinearMap e.symm.surjective
+    refine ⟨?_, FinitePresentation.of_finiteType.mp inferInstance⟩
+    exact (FormallyEtale.iff_exists_algEquiv_prod K A).mpr ⟨_, inferInstance, _, _, _, e, h₂⟩
 
 中文:
 定理 代数.平展.iff_存在_algEquiv_prod
@@ -509,7 +730,12 @@ theorem Algebra.Etale.iff_exists_algEquiv_prod
     obtain ⟨I, _, Ai, _, _, e, _⟩ := (FormallyEtale.iff_exists_algEquiv_prod K A).mp inferInstance
     have := FormallyUnramified.finite_of_free K A
     exact ⟨_, ‹_›, _, _, _, e, fun i => ⟨.of_surjective ((LinearMap.proj i).comp e.toLinearMap)
-      ((Function.surjectiv
+      ((Function.surjective_eval i).comp e.surjective), inferInstance⟩⟩
+  · intro ⟨I, _, Ai, _, _, e, H⟩
+    choose h₁ h₂ using H
+    have := Module.Finite.of_surjective e.symm.toLinearMap e.symm.surjective
+    refine ⟨?_, FinitePresentation.of_finiteType.mp inferInstance⟩
+    exact (FormallyEtale.iff_exists_algEquiv_prod K A).mpr ⟨_, inferInstance, _, _, _, e, h₂⟩
 
 Depends on / 依赖: Finite, FinitePresentation, FinitePresentation.of_finiteType.mp, FormallyEtale, FormallyEtale.iff_exists_algEquiv_prod, FormallyUnramified, FormallyUnramified.finite_of_free, Function, Function.surjective_eval, LinearMap, LinearMap.proj, Module, Module.Finite.of_surjective, e.surjective, e.symm.surjective, e.symm.toLinearMap, e.toLinearMap, finite_of_free, iff_exists_algEquiv_prod, of_finiteType
 -/

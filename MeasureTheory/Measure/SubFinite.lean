@@ -49,7 +49,13 @@ lemma sub_le_iff_le_add
   have h_le_s : μ.restrict s <= ξ.restrict s + ν.restrict s :=
     hs.le_on.trans (Measure.le_add_left le_rfl)
   have h_le_s_compl : μ.restrict sᶜ <= ξ.restrict sᶜ + ν.restrict sᶜ := by
-    refine (sub_le_
+    refine (sub_le_iff_le_add_of_le hs.ge_on_compl).mp ?_
+    rw [← restrict_sub_eq_restrict_sub_restrict hs.measurableSet.compl]
+    exact restrict_mono subset_rfl h
+  rw [← restrict_add_restrict_compl (μ := μ) hs.measurableSet]; rw [← restrict_add_restrict_compl (μ := ξ) hs.measurableSet]; rw [← restrict_add_restrict_compl (μ := ν) hs.measurableSet]
+  suffices μ.restrict s + μ.restrict sᶜ <=
+    ξ.restrict s + ν.restrict s + (ξ.restrict sᶜ + ν.restrict sᶜ) from this.trans_eq (by abel)
+  gcongr
 
 中文:
 引理 sub_le_iff_le_add
@@ -61,7 +67,13 @@ lemma sub_le_iff_le_add
   have h_le_s : μ.restrict s <= ξ.restrict s + ν.restrict s :=
     hs.le_on.trans (Measure.le_add_left le_rfl)
   have h_le_s_compl : μ.restrict sᶜ <= ξ.restrict sᶜ + ν.restrict sᶜ := by
-    refine (sub_le_
+    refine (sub_le_iff_le_add_of_le hs.ge_on_compl).mp ?_
+    rw [← restrict_sub_eq_restrict_sub_restrict hs.measurableSet.compl]
+    exact restrict_mono subset_rfl h
+  rw [← restrict_add_restrict_compl (μ := μ) hs.measurableSet]; rw [← restrict_add_restrict_compl (μ := ξ) hs.measurableSet]; rw [← restrict_add_restrict_compl (μ := ν) hs.measurableSet]
+  suffices μ.restrict s + μ.restrict sᶜ <=
+    ξ.restrict s + ν.restrict s + (ξ.restrict sᶜ + ν.restrict sᶜ) from this.trans_eq (by abel)
+  gcongr
 
 Depends on / 依赖: Measure, Measure.le_add_left, exists_isHahnDecomposition, ge_on_compl, h_le_s, h_le_s_compl, hs.ge_on_compl, hs.le_on.trans, hs.measurableSet, hs.measurableSet.compl, le_add_left, le_on, le_rfl, measurableSet, restrict, restrict_add_restrict_compl, restrict_mono, restrict_sub_eq_restrict_sub_restrict, sub_le_iff_le_add_of_le, sub_le_of_le_add
 -/
@@ -121,7 +133,26 @@ lemma withDensity_sub
   · let t := {x | f x <= g x}
     have ht : MeasurableSet t := measurableSet_le hf hg
     rw [← restrict_add_restrict_compl (μ := μ.withDensity (f - g)) ht]; rw [← restrict_add_restrict_compl (μ := μ.withDensity f - μ.withDensity g) ht]
-    have h_zero : (μ.withDensity 
+    have h_zero : (μ.withDensity (f - g)).restrict t = 0 := by
+      simp only [restrict_eq_zero]
+      rw [withDensity_apply _ ht]; rw [lintegral_eq_zero_iff (by fun_prop)]
+      refine ae_restrict_of_forall_mem ht fun x hx => ?_
+      simpa [tsub_eq_zero_iff_le]
+    rw [h_zero]; rw [zero_add]
+    suffices (μ.withDensity (f - g)).restrict tᶜ <=
+      (μ.withDensity f - μ.withDensity g).restrict tᶜ from this.trans (Measure.le_add_left le_rfl)
+    rw [restrict_sub_eq_restrict_sub_restrict ht.compl]
+    simp_rw [restrict_withDensity ht.compl]
+    have : IsFiniteMeasure ((μ.restrict tᶜ).withDensity g) := by
+      rw [← restrict_withDensity ht.compl]
+      infer_instance
+    rw [withDensity_sub_of_le hg]
+    refine ae_restrict_of_forall_mem ht.compl fun x hx => ?_
+    simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_le, t] at hx
+    exact hx.le
+  · refine sub_le_of_le_add ?_
+    rw [← withDensity_add_right _ hg]
+    exact withDensity_mono (ae_of_all _ fun x => le_tsub_add)
 
 中文:
 引理 withDensity_sub
@@ -131,7 +162,26 @@ lemma withDensity_sub
   · let t := {x | f x <= g x}
     have ht : MeasurableSet t := measurableSet_le hf hg
     rw [← restrict_add_restrict_compl (μ := μ.withDensity (f - g)) ht]; rw [← restrict_add_restrict_compl (μ := μ.withDensity f - μ.withDensity g) ht]
-    have h_zero : (μ.withDensity 
+    have h_zero : (μ.withDensity (f - g)).restrict t = 0 := by
+      simp only [restrict_eq_zero]
+      rw [withDensity_apply _ ht]; rw [lintegral_eq_zero_iff (by fun_prop)]
+      refine ae_restrict_of_forall_mem ht fun x hx => ?_
+      simpa [tsub_eq_zero_iff_le]
+    rw [h_zero]; rw [zero_add]
+    suffices (μ.withDensity (f - g)).restrict tᶜ <=
+      (μ.withDensity f - μ.withDensity g).restrict tᶜ from this.trans (Measure.le_add_left le_rfl)
+    rw [restrict_sub_eq_restrict_sub_restrict ht.compl]
+    simp_rw [restrict_withDensity ht.compl]
+    have : IsFiniteMeasure ((μ.restrict tᶜ).withDensity g) := by
+      rw [← restrict_withDensity ht.compl]
+      infer_instance
+    rw [withDensity_sub_of_le hg]
+    refine ae_restrict_of_forall_mem ht.compl fun x hx => ?_
+    simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_le, t] at hx
+    exact hx.le
+  · refine sub_le_of_le_add ?_
+    rw [← withDensity_add_right _ hg]
+    exact withDensity_mono (ae_of_all _ fun x => le_tsub_add)
 
 Depends on / 依赖: MeasurableSet, ae_restrict_of_forall_mem, fun_prop, h_ze, h_zero, le_antisymm, lintegral_eq_zero_iff, measurableSet_le, restrict, restrict_add_restrict_compl, restrict_eq_zero, tsub_eq_zero_iff_le, withDensity, withDensity_apply
 -/

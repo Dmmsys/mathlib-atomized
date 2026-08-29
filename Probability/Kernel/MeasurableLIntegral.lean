@@ -46,7 +46,38 @@ theorem measurable_kernel_prodMk_left_of_finite
   -- by boxes to prove the result by induction.
   induction t, ht
     using MeasurableSpace.induction_on_inter generateFrom_prod.symm isPiSystem_prod with
-  | empty => simp only [preimage_empty, me
+  | empty => simp only [preimage_empty, measure_empty, measurable_const]
+  | basic t ht =>
+    simp only [Set.mem_image2, Set.mem_ofPred_eq] at ht
+    obtain ⟨t₁, ht₁, t₂, ht₂, rfl⟩ := ht
+    classical
+    simp_rw [mk_preimage_prod_right_eq_if]
+    have h_eq_ite : (fun a => κ a (ite (a in t₁) t₂ ∅)) = fun a => ite (a in t₁) (κ a t₂) 0 := by
+      ext1 a
+      split_ifs
+      exacts [rfl, measure_empty]
+    rw [h_eq_ite]
+    exact Measurable.ite ht₁ (Kernel.measurable_coe κ ht₂) measurable_const
+  | compl t htm iht =>
+    have h_eq_sdiff : forall a, Prod.mk a ⁻¹' tᶜ = Set.univ \ Prod.mk a ⁻¹' t := by
+      intro a
+      ext1 b
+      simp only [mem_compl_iff, mem_preimage, Set.mem_sdiff, mem_univ, true_and]
+    simp_rw [h_eq_sdiff]
+    have : (fun a => κ a (Set.univ \ Prod.mk a ⁻¹' t)) =
+        fun a => κ a Set.univ - κ a (Prod.mk a ⁻¹' t) := by
+      ext1 a
+      rw [← Set.sdiff_inter_self_eq_sdiff]; rw [Set.inter_univ]; rw [measure_sdiff (Set.subset_univ _)]
+      · exact (measurable_prodMk_left htm).nullMeasurableSet
+      · exact measure_ne_top _ _
+    rw [this]
+    exact Measurable.sub (Kernel.measurable_coe κ MeasurableSet.univ) iht
+  | iUnion f h_disj hf_meas hf =>
+    have (a : α) : κ a (Prod.mk a ⁻¹' ⋃ i, f i) = ∑' i, κ a (Prod.mk a ⁻¹' f i) := by
+      rw [preimage_iUnion]; rw [measure_iUnion]
+      · exact h_disj.mono fun _ _ => .preimage _
+      · exact fun i => measurable_prodMk_left (hf_meas i)
+    simpa only [this] using Measurable.tsum hf
 
 中文:
 定理 measurable_kernel_prodMk_left_of_finite
@@ -56,7 +87,38 @@ theorem measurable_kernel_prodMk_left_of_finite
   -- by boxes to prove the result by induction.
   induction t, ht
     using MeasurableSpace.induction_on_inter generateFrom_prod.symm isPiSystem_prod with
-  | empty => simp only [preimage_empty, me
+  | empty => simp only [preimage_empty, measure_empty, measurable_const]
+  | basic t ht =>
+    simp only [Set.mem_image2, Set.mem_ofPred_eq] at ht
+    obtain ⟨t₁, ht₁, t₂, ht₂, rfl⟩ := ht
+    classical
+    simp_rw [mk_preimage_prod_right_eq_if]
+    have h_eq_ite : (fun a => κ a (ite (a in t₁) t₂ ∅)) = fun a => ite (a in t₁) (κ a t₂) 0 := by
+      ext1 a
+      split_ifs
+      exacts [rfl, measure_empty]
+    rw [h_eq_ite]
+    exact Measurable.ite ht₁ (Kernel.measurable_coe κ ht₂) measurable_const
+  | compl t htm iht =>
+    have h_eq_sdiff : forall a, Prod.mk a ⁻¹' tᶜ = Set.univ \ Prod.mk a ⁻¹' t := by
+      intro a
+      ext1 b
+      simp only [mem_compl_iff, mem_preimage, Set.mem_sdiff, mem_univ, true_and]
+    simp_rw [h_eq_sdiff]
+    have : (fun a => κ a (Set.univ \ Prod.mk a ⁻¹' t)) =
+        fun a => κ a Set.univ - κ a (Prod.mk a ⁻¹' t) := by
+      ext1 a
+      rw [← Set.sdiff_inter_self_eq_sdiff]; rw [Set.inter_univ]; rw [measure_sdiff (Set.subset_univ _)]
+      · exact (measurable_prodMk_left htm).nullMeasurableSet
+      · exact measure_ne_top _ _
+    rw [this]
+    exact Measurable.sub (Kernel.measurable_coe κ MeasurableSet.univ) iht
+  | iUnion f h_disj hf_meas hf =>
+    have (a : α) : κ a (Prod.mk a ⁻¹' ⋃ i, f i) = ∑' i, κ a (Prod.mk a ⁻¹' f i) := by
+      rw [preimage_iUnion]; rw [measure_iUnion]
+      · exact h_disj.mono fun _ _ => .preimage _
+      · exact fun i => measurable_prodMk_left (hf_meas i)
+    simpa only [this] using Measurable.tsum hf
 -/
 theorem measurable_kernel_prodMk_left_of_finite {t : Set (α × β)} (ht : MeasurableSet t)
     (hκs : forall a, IsFiniteMeasure (κ a)) : Measurable fun a => κ a (Prod.mk a ⁻¹' t) := by
@@ -110,7 +172,7 @@ theorem measurable_kernel_prodMk_left
     Kernel.sum_apply' _ _ (measurable_prodMk_left ht)
   simp_rw [this]
   refine Measurable.tsum fun n => ?_
-  exact measurable_kernel_prodMk_left_of_
+  exact measurable_kernel_prodMk_left_of_finite ht inferInstance
 
 中文:
 定理 measurable_kernel_prodMk_left
@@ -122,7 +184,7 @@ theorem measurable_kernel_prodMk_left
     Kernel.sum_apply' _ _ (measurable_prodMk_left ht)
   simp_rw [this]
   refine Measurable.tsum fun n => ?_
-  exact measurable_kernel_prodMk_left_of_
+  exact measurable_kernel_prodMk_left_of_finite ht inferInstance
 
 Depends on / 依赖: Kernel, Kernel.kernel_sum_seq, Kernel.seq, Kernel.sum, Kernel.sum_apply, Measurable, Measurable.tsum, Prod.mk, kernel_sum_seq, measurable_kernel_prodMk_left_of_finite, measurable_prodMk_left, simp_rw, sum_apply
 -/
@@ -235,7 +297,30 @@ theorem _root_.Measurable.lintegral_kernel_prod_right
   have h : forall a, ⨆ n, F n a = uncurry f a := SimpleFunc.iSup_eapprox_apply hf
   simp only [Prod.forall, uncurry_apply_pair] at h
   simp_rw [← h]
-  have : forall a, (∫⁻ b, ⨆ n, F n (a, b) ∂κ a) = ⨆ n, ∫⁻ b, F n (a, 
+  have : forall a, (∫⁻ b, ⨆ n, F n (a, b) ∂κ a) = ⨆ n, ∫⁻ b, F n (a, b) ∂κ a := by
+    intro a
+    rw [lintegral_iSup]
+    · exact fun n => (F n).measurable.comp measurable_prodMk_left
+    · exact fun i j hij b => SimpleFunc.monotone_eapprox (uncurry f) hij _
+  simp_rw [this]
+  refine .iSup fun n => ?_
+  refine SimpleFunc.induction
+    (motive := fun f => Measurable (fun (a : α) => ∫⁻ (b : β), f (a, b) ∂κ a)) ?_ ?_ (F n)
+  · intro c t ht
+    simp only [SimpleFunc.const_zero, SimpleFunc.coe_piecewise, SimpleFunc.coe_const,
+      SimpleFunc.coe_zero, Set.piecewise_eq_indicator]
+    exact Kernel.measurable_lintegral_indicator_const (κ := κ) ht c
+  · intro g₁ g₂ _ hm₁ hm₂
+    simp only [SimpleFunc.coe_add, Pi.add_apply]
+    have h_add :
+      (fun a => ∫⁻ b, g₁ (a, b) + g₂ (a, b) ∂κ a) =
+        (fun a => ∫⁻ b, g₁ (a, b) ∂κ a) + fun a => ∫⁻ b, g₂ (a, b) ∂κ a := by
+      ext1 a
+      rw [Pi.add_apply]; rw [lintegral_add_left (by fun_prop)]
+    rw [h_add]
+    exact Measurable.add hm₁ hm₂
+
+@[fun_prop]
 
 中文:
 定理 _root_.可测.lintegral_kernel_prod_right
@@ -245,7 +330,30 @@ theorem _root_.Measurable.lintegral_kernel_prod_right
   have h : forall a, ⨆ n, F n a = uncurry f a := SimpleFunc.iSup_eapprox_apply hf
   simp only [Prod.forall, uncurry_apply_pair] at h
   simp_rw [← h]
-  have : forall a, (∫⁻ b, ⨆ n, F n (a, b) ∂κ a) = ⨆ n, ∫⁻ b, F n (a, 
+  have : forall a, (∫⁻ b, ⨆ n, F n (a, b) ∂κ a) = ⨆ n, ∫⁻ b, F n (a, b) ∂κ a := by
+    intro a
+    rw [lintegral_iSup]
+    · exact fun n => (F n).measurable.comp measurable_prodMk_left
+    · exact fun i j hij b => SimpleFunc.monotone_eapprox (uncurry f) hij _
+  simp_rw [this]
+  refine .iSup fun n => ?_
+  refine SimpleFunc.induction
+    (motive := fun f => Measurable (fun (a : α) => ∫⁻ (b : β), f (a, b) ∂κ a)) ?_ ?_ (F n)
+  · intro c t ht
+    simp only [SimpleFunc.const_zero, SimpleFunc.coe_piecewise, SimpleFunc.coe_const,
+      SimpleFunc.coe_zero, Set.piecewise_eq_indicator]
+    exact Kernel.measurable_lintegral_indicator_const (κ := κ) ht c
+  · intro g₁ g₂ _ hm₁ hm₂
+    simp only [SimpleFunc.coe_add, Pi.add_apply]
+    have h_add :
+      (fun a => ∫⁻ b, g₁ (a, b) + g₂ (a, b) ∂κ a) =
+        (fun a => ∫⁻ b, g₁ (a, b) ∂κ a) + fun a => ∫⁻ b, g₂ (a, b) ∂κ a := by
+      ext1 a
+      rw [Pi.add_apply]; rw [lintegral_add_left (by fun_prop)]
+    rw [h_add]
+    exact Measurable.add hm₁ hm₂
+
+@[fun_prop]
 
 Depends on / 依赖: Prod.forall, SimpleFunc, SimpleFunc.eapprox, SimpleFunc.iSup_eapprox_apply, SimpleFunc.monotone_eapprox, eapprox, iSup_eapprox_apply, lintegral_iSup, measurable, measurable.comp, measurable_prodMk_left, monotone_eapprox, simp_rw, uncurry, uncurry_apply_pair
 -/
@@ -315,7 +423,7 @@ theorem _root_.Measurable.lintegral_kernel_prod_right''
   -- Porting note: specified `κ`, `f`.
   refine (Measurable.lintegral_kernel_prod_right' (κ := η)
     (f := (fun u => f (u.fst.snd, u.snd))) ?_).comp measurable_prodMk_left
-  fun
+  fun_prop
 
 中文:
 定理 _root_.可测.lintegral_kernel_prod_right''
@@ -327,7 +435,7 @@ theorem _root_.Measurable.lintegral_kernel_prod_right''
   -- Porting note: specified `κ`, `f`.
   refine (Measurable.lintegral_kernel_prod_right' (κ := η)
     (f := (fun u => f (u.fst.snd, u.snd))) ?_).comp measurable_prodMk_left
-  fun
+  fun_prop
 
 Depends on / 依赖: Measurable
 -/

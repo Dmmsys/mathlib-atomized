@@ -41,7 +41,16 @@ lemma toReal_condLExp
   swap; · simp [condLExp_of_not_le hm, condExp_of_not_le hm]; rfl
   by_cases hμ : SigmaFinite (μ.trim hm)
   swap; · simp [condLExp_of_not_sigmaFinite hm hμ, condExp_of_not_sigmaFinite hm hμ]; rfl
-  refine ae_eq_condExp_of_forall_setIntegral_eq hm (E := Real) ?_ ?_ ?_ ?_ (μ
+  refine ae_eq_condExp_of_forall_setIntegral_eq hm (E := Real) ?_ ?_ ?_ ?_ (μ := μ)
+  · rwa [integrable_toReal_iff (by fun_prop)]
+    filter_upwards [ae_lt_top' (by fun_prop) hf] with x hx using hx.ne
+  · refine fun s hs hsμ => Integrable.integrableOn ?_
+    rwa [integrable_toReal_iff (by fun_prop) (condLExp_ne_top hf), lintegral_condLExp]
+  · intro s hs hsμ
+    rw [integral_toReal (by fun_prop)]; rw [integral_toReal (by fun_prop)]; rw [setLIntegral_condLExp _ _ _ hs]
+    · exact ae_lt_top' hf_meas.restrict ((setLIntegral_le_lintegral _ _).trans_lt hf.lt_top).ne
+    · exact ae_restrict_of_ae (condLExp_lt_top hf)
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
 
 中文:
 引理 to实数_condLExp
@@ -51,7 +60,16 @@ lemma toReal_condLExp
   swap; · simp [condLExp_of_not_le hm, condExp_of_not_le hm]; rfl
   by_cases hμ : SigmaFinite (μ.trim hm)
   swap; · simp [condLExp_of_not_sigmaFinite hm hμ, condExp_of_not_sigmaFinite hm hμ]; rfl
-  refine ae_eq_condExp_of_forall_setIntegral_eq hm (E := Real) ?_ ?_ ?_ ?_ (μ
+  refine ae_eq_condExp_of_forall_setIntegral_eq hm (E := Real) ?_ ?_ ?_ ?_ (μ := μ)
+  · rwa [integrable_toReal_iff (by fun_prop)]
+    filter_upwards [ae_lt_top' (by fun_prop) hf] with x hx using hx.ne
+  · refine fun s hs hsμ => Integrable.integrableOn ?_
+    rwa [integrable_toReal_iff (by fun_prop) (condLExp_ne_top hf), lintegral_condLExp]
+  · intro s hs hsμ
+    rw [integral_toReal (by fun_prop)]; rw [integral_toReal (by fun_prop)]; rw [setLIntegral_condLExp _ _ _ hs]
+    · exact ae_lt_top' hf_meas.restrict ((setLIntegral_le_lintegral _ _).trans_lt hf.lt_top).ne
+    · exact ae_restrict_of_ae (condLExp_lt_top hf)
+  · exact StronglyMeasurable.aestronglyMeasurable (by fun_prop)
 
 Depends on / 依赖: Integrable, Integrable.integrableOn, SigmaFinite, ae_eq_condExp_of_forall_setIntegral_eq, ae_lt_top, condExp_of_not_le, condExp_of_not_sigmaFinite, condLExp_of_not_le, condLExp_of_not_sigmaFinite, filter_upwards, fun_prop, hx.ne, integrableOn, integrable_toReal_iff
 -/
@@ -85,6 +103,24 @@ lemma condLExp_ofReal
   by_cases hμ : SigmaFinite (μ.trim hm)
   swap; · simp [condLExp_of_not_sigmaFinite hm hμ, condExp_of_not_sigmaFinite hm hμ]; rfl
   have A : μ[fun x => (ENNReal.ofReal (f x)).toReal | m] =ᵐ[μ] μ[f | m] := by
+    apply condExp_congr_ae
+    filter_upwards [h'f] with x hx using ENNReal.toReal_ofReal hx
+  have B : 0 <=ᵐ[μ] μ[f | m] := condExp_nonneg h'f
+  let g x := ENNReal.ofReal (f x)
+  have I : ∫⁻ x, g x ∂μ != ∞ := by
+    have : ∫⁻ x, g x ∂μ = ∫⁻ x, ‖f x‖ₑ ∂μ := by
+      apply lintegral_congr_ae
+      filter_upwards [h'f] with x hx using by simp [g, Real.enorm_eq_ofReal hx]
+    rw [this]
+    exact hf.2.ne
+  have J : forallᵐ x ∂μ, μ⁻[g | m] x < ∞ := by
+    apply ae_lt_top (by fun_prop)
+    convert I using 1
+    exact lintegral_condLExp _ _ _
+  filter_upwards [toReal_condLExp m (f := g) (by fun_prop) I, h'f, A, B, J]
+    with a ha h'a h''a h'''a C
+  rw [← ENNReal.toReal_eq_toReal_iff' C.ne]; rw [ENNReal.toReal_ofReal h'''a]; rw [ha]; rw [h''a]
+  simp
 
 中文:
 引理 condLExp_of实数
@@ -95,6 +131,24 @@ lemma condLExp_ofReal
   by_cases hμ : SigmaFinite (μ.trim hm)
   swap; · simp [condLExp_of_not_sigmaFinite hm hμ, condExp_of_not_sigmaFinite hm hμ]; rfl
   have A : μ[fun x => (ENNReal.ofReal (f x)).toReal | m] =ᵐ[μ] μ[f | m] := by
+    apply condExp_congr_ae
+    filter_upwards [h'f] with x hx using ENNReal.toReal_ofReal hx
+  have B : 0 <=ᵐ[μ] μ[f | m] := condExp_nonneg h'f
+  let g x := ENNReal.ofReal (f x)
+  have I : ∫⁻ x, g x ∂μ != ∞ := by
+    have : ∫⁻ x, g x ∂μ = ∫⁻ x, ‖f x‖ₑ ∂μ := by
+      apply lintegral_congr_ae
+      filter_upwards [h'f] with x hx using by simp [g, Real.enorm_eq_ofReal hx]
+    rw [this]
+    exact hf.2.ne
+  have J : forallᵐ x ∂μ, μ⁻[g | m] x < ∞ := by
+    apply ae_lt_top (by fun_prop)
+    convert I using 1
+    exact lintegral_condLExp _ _ _
+  filter_upwards [toReal_condLExp m (f := g) (by fun_prop) I, h'f, A, B, J]
+    with a ha h'a h''a h'''a C
+  rw [← ENNReal.toReal_eq_toReal_iff' C.ne]; rw [ENNReal.toReal_ofReal h'''a]; rw [ha]; rw [h''a]
+  simp
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ENNReal.toReal_ofReal, SigmaFinite, condExp_congr_ae, condExp_nonneg, condExp_of_not_le, condExp_of_not_sigmaFinite, condLExp_of_not_le, condLExp_of_not_sigmaFinite, filter_upwards, ofReal, toReal, toReal_ofReal
 -/
@@ -136,7 +190,7 @@ lemma condLExp_enorm
     apply condLExp_congr_ae
     filter_upwards [h'f] with x hx using by simp [Real.enorm_eq_ofReal hx]
   grw [← A, condLExp_ofReal m hf h'f]
-  filter_upwards [condExp_nonneg h'f (m := m)] with x hx using by simp 
+  filter_upwards [condExp_nonneg h'f (m := m)] with x hx using by simp [Real.enorm_eq_ofReal hx]
 
 中文:
 引理 condLExp_enorm
@@ -146,7 +200,7 @@ lemma condLExp_enorm
     apply condLExp_congr_ae
     filter_upwards [h'f] with x hx using by simp [Real.enorm_eq_ofReal hx]
   grw [← A, condLExp_ofReal m hf h'f]
-  filter_upwards [condExp_nonneg h'f (m := m)] with x hx using by simp 
+  filter_upwards [condExp_nonneg h'f (m := m)] with x hx using by simp [Real.enorm_eq_ofReal hx]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, Real.enorm_eq_ofReal, condExp_nonneg, condLExp_congr_ae, condLExp_ofReal, enorm_eq_ofReal, filter_upwards, ofReal
 -/
@@ -171,7 +225,10 @@ lemma lintegral_enorm_condExp_indicator
     · apply (integrable_indicator_iff hs).2
       apply integrableOn_const h's
     · filter_upwards with x
-      simp only [Pi.zero_apply, Set.indicator, P
+      simp only [Pi.zero_apply, Set.indicator, Pi.one_apply]
+      grind
+  _ = μ s := by
+    simp [lintegral_condLExp hm, enorm_indicator_eq_indicator_enorm, lintegral_indicator hs]
 
 中文:
 引理 lintegral_enorm_condExp_indicator
@@ -182,7 +239,10 @@ lemma lintegral_enorm_condExp_indicator
     · apply (integrable_indicator_iff hs).2
       apply integrableOn_const h's
     · filter_upwards with x
-      simp only [Pi.zero_apply, Set.indicator, P
+      simp only [Pi.zero_apply, Set.indicator, Pi.one_apply]
+      grind
+  _ = μ s := by
+    simp [lintegral_condLExp hm, enorm_indicator_eq_indicator_enorm, lintegral_indicator hs]
 
 Depends on / 依赖: Pi.one_apply, Pi.zero_apply, Set.indicator, condLExp_enorm, enorm_indicator_eq_indicator_enorm, filter_upwards, finiteness, indicator, integrableOn_const, integrable_indicator_iff, lintegral_condLExp, lintegral_congr_ae, lintegral_indicator, one_apply, s.indicator, zero_apply
 -/

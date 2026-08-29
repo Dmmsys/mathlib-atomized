@@ -214,7 +214,9 @@ theorem exists_eq_pow_of_isSquare
     · rcases even with ⟨m, hm⟩
       rcases hx with ⟨s, hs⟩
       rcases isSquare_or_isSquare_neg s with (h | h) <;>
-        rcases ih m (by lia) h (by lia) with ⟨r, hr⟩ <;
+        rcases ih m (by lia) h (by lia) with ⟨r, hr⟩ <;>
+        exact ⟨r, by simp [hm, pow_add, ← hr, hs]⟩
+    · exact exists_eq_pow_of_odd x odd
 
 中文:
 定理 存在_eq_pow_of_isSquare
@@ -226,7 +228,9 @@ theorem exists_eq_pow_of_isSquare
     · rcases even with ⟨m, hm⟩
       rcases hx with ⟨s, hs⟩
       rcases isSquare_or_isSquare_neg s with (h | h) <;>
-        rcases ih m (by lia) h (by lia) with ⟨r, hr⟩ <;
+        rcases ih m (by lia) h (by lia) with ⟨r, hr⟩ <;>
+        exact ⟨r, by simp [hm, pow_add, ← hr, hs]⟩
+    · exact exists_eq_pow_of_odd x odd
 
 Depends on / 依赖: Nat.even_or_odd, Nat.strong_induction_on, even_or_odd, exists_eq_pow_of_odd, generalizing, isSquare_or_isSquare_neg, pow_add, strong_induction_on
 -/

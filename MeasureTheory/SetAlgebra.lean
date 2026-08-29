@@ -309,7 +309,12 @@ theorem generateFrom_generateSetAlgebra_eq
     clear h
     induction ht with
     | base u u_mem => exact measurableSet_generateFrom u_mem
-    | empty => exact @MeasurableSet.empty _ 
+    | empty => exact @MeasurableSet.empty _ (generateFrom 𝒜)
+    | compl u _ mu => exact mu.compl
+    | union u v _ _ mu mv => exact MeasurableSet.union mu mv
+  | empty => exact MeasurableSpace.measurableSet_empty _
+  | compl t _ ht => exact ht.compl
+  | iUnion t _ ht => exact .iUnion ht
 
 中文:
 定理 generateFrom_generateSetAlgebra_eq
@@ -320,7 +325,12 @@ theorem generateFrom_generateSetAlgebra_eq
     clear h
     induction ht with
     | base u u_mem => exact measurableSet_generateFrom u_mem
-    | empty => exact @MeasurableSet.empty _ 
+    | empty => exact @MeasurableSet.empty _ (generateFrom 𝒜)
+    | compl u _ mu => exact mu.compl
+    | union u v _ _ mu mv => exact MeasurableSet.union mu mv
+  | empty => exact MeasurableSpace.measurableSet_empty _
+  | compl t _ ht => exact ht.compl
+  | iUnion t _ ht => exact .iUnion ht
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.empty, MeasurableSet.union, MeasurableSpace, MeasurableSpace.measurableSet_empty, generateFrom, generateFrom_induction, generateFrom_mono, ht.compl, iUnion, le_antisymm, measurableSet_empty, measurableSet_generateFrom, mu.compl, self_subset_generateSetAlgebra, u_mem
 -/
@@ -351,7 +361,7 @@ theorem generateSetAlgebra_mono
   | base t t_mem => exact self_subset_generateSetAlgebra (h t_mem)
   | empty => exact isSetAlgebra_generateSetAlgebra.empty_mem
   | compl t _ t_mem => exact isSetAlgebra_generateSetAlgebra.compl_mem t_mem
-  | union t u _ _ t_mem u_mem => exact isSetAlgebra_generat
+  | union t u _ _ t_mem u_mem => exact isSetAlgebra_generateSetAlgebra.union_mem t_mem u_mem
 
 中文:
 定理 generateSetAlgebra_mono
@@ -362,7 +372,7 @@ theorem generateSetAlgebra_mono
   | base t t_mem => exact self_subset_generateSetAlgebra (h t_mem)
   | empty => exact isSetAlgebra_generateSetAlgebra.empty_mem
   | compl t _ t_mem => exact isSetAlgebra_generateSetAlgebra.compl_mem t_mem
-  | union t u _ _ t_mem u_mem => exact isSetAlgebra_generat
+  | union t u _ _ t_mem u_mem => exact isSetAlgebra_generateSetAlgebra.union_mem t_mem u_mem
 
 Depends on / 依赖: compl_mem, empty_mem, isSetAlgebra_generateSetAlgebra, isSetAlgebra_generateSetAlgebra.compl_mem, isSetAlgebra_generateSetAlgebra.empty_mem, isSetAlgebra_generateSetAlgebra.union_mem, self_subset_generateSetAlgebra, t_mem, u_mem, union_mem
 -/
@@ -467,7 +477,37 @@ theorem mem_generateSetAlgebra_elim
       fun a ha t ht => ?_, by simp⟩
     rw [eq_of_mem_singleton ha]; rw [ha]; rw [eq_of_mem_singleton ht]; rw [ht] at *
     exact Or.inl u_mem
-  | emp
+  | empty => exact ⟨∅, finite_empty, fun _ h => (notMem_empty _ h).elim,
+    fun _ ha _ _ => (notMem_empty _ ha).elim, by simp⟩
+  | compl u _ u_ind =>
+    rcases u_ind with ⟨A, A_fin, mem_A, hA, u_eq⟩
+    have := finite_coe_iff.2 A_fin
+have := fun a : A => finite_coe_iff.2 mem_A a.1 a.2
+    refine ⟨{{(f a).1ᶜ | a : A} | f : (Π a : A, ↑a)}, finite_coe_iff.1 inferInstance,
+      fun a ⟨f, hf⟩ => hf ▸ finite_coe_iff.1 inferInstance, fun a ha t ht => ?_, ?_⟩
+    · rcases ha with ⟨f, rfl⟩
+      rcases ht with ⟨a, rfl⟩
+      rw [compl_compl]; rw [or_comm]
+      exact hA a.1 a.2 (f a).1 (f a).2
+    · ext x
+      simp only [u_eq, compl_iUnion, compl_iInter, mem_iInter, mem_iUnion, mem_compl_iff,
+        exists_prop, Subtype.exists, mem_ofPred_eq, iUnion_exists, iUnion_iUnion_eq',
+        iInter_exists]
+      constructor <;> intro hx
+      · choose f hf using hx
+        exact ⟨fun ⟨a, ha⟩ => ⟨f a ha, (hf a ha).1⟩, fun _ a ha h => by rw [← h]; exact (hf a ha).2⟩
+      · rcases hx with ⟨f, hf⟩
+        exact fun a ha => ⟨f ⟨a, ha⟩, (f ⟨a, ha⟩).2, hf (f ⟨a, ha⟩)ᶜ a ha rfl⟩
+  | union u v _ _ u_ind v_ind =>
+    rcases u_ind with ⟨Au, Au_fin, mem_Au, hAu, u_eq⟩
+    rcases v_ind with ⟨Av, Av_fin, mem_Av, hAv, v_eq⟩
+    refine ⟨Au union Av, Au_fin.union Av_fin, ?_, ?_, by rw [u_eq, v_eq, ← biUnion_union]⟩
+    · rintro a (ha | ha)
+      · exact mem_Au a ha
+      · exact mem_Av a ha
+    · rintro a (ha | ha) t ht
+      · exact hAu a ha t ht
+      · exact hAv a ha t ht
 
 中文:
 定理 mem_generateSetAlgebra_elim
@@ -480,7 +520,37 @@ theorem mem_generateSetAlgebra_elim
       fun a ha t ht => ?_, by simp⟩
     rw [eq_of_mem_singleton ha]; rw [ha]; rw [eq_of_mem_singleton ht]; rw [ht] at *
     exact Or.inl u_mem
-  | emp
+  | empty => exact ⟨∅, finite_empty, fun _ h => (notMem_empty _ h).elim,
+    fun _ ha _ _ => (notMem_empty _ ha).elim, by simp⟩
+  | compl u _ u_ind =>
+    rcases u_ind with ⟨A, A_fin, mem_A, hA, u_eq⟩
+    have := finite_coe_iff.2 A_fin
+have := fun a : A => finite_coe_iff.2 mem_A a.1 a.2
+    refine ⟨{{(f a).1ᶜ | a : A} | f : (Π a : A, ↑a)}, finite_coe_iff.1 inferInstance,
+      fun a ⟨f, hf⟩ => hf ▸ finite_coe_iff.1 inferInstance, fun a ha t ht => ?_, ?_⟩
+    · rcases ha with ⟨f, rfl⟩
+      rcases ht with ⟨a, rfl⟩
+      rw [compl_compl]; rw [or_comm]
+      exact hA a.1 a.2 (f a).1 (f a).2
+    · ext x
+      simp only [u_eq, compl_iUnion, compl_iInter, mem_iInter, mem_iUnion, mem_compl_iff,
+        exists_prop, Subtype.exists, mem_ofPred_eq, iUnion_exists, iUnion_iUnion_eq',
+        iInter_exists]
+      constructor <;> intro hx
+      · choose f hf using hx
+        exact ⟨fun ⟨a, ha⟩ => ⟨f a ha, (hf a ha).1⟩, fun _ a ha h => by rw [← h]; exact (hf a ha).2⟩
+      · rcases hx with ⟨f, hf⟩
+        exact fun a ha => ⟨f ⟨a, ha⟩, (f ⟨a, ha⟩).2, hf (f ⟨a, ha⟩)ᶜ a ha rfl⟩
+  | union u v _ _ u_ind v_ind =>
+    rcases u_ind with ⟨Au, Au_fin, mem_Au, hAu, u_eq⟩
+    rcases v_ind with ⟨Av, Av_fin, mem_Av, hAv, v_eq⟩
+    refine ⟨Au union Av, Au_fin.union Av_fin, ?_, ?_, by rw [u_eq, v_eq, ← biUnion_union]⟩
+    · rintro a (ha | ha)
+      · exact mem_Au a ha
+      · exact mem_Av a ha
+    · rintro a (ha | ha) t ht
+      · exact hAu a ha t ht
+      · exact hAv a ha t ht
 
 Depends on / 依赖: A_fin, Or.inl, eq_of_mem_singleton, finite_coe_iff, finite_empty, finite_singleton, mem_A, notMem_empty, s_mem, u_eq, u_ind, u_mem
 -/
@@ -540,7 +610,16 @@ theorem countable_generateSetAlgebra
       ext s
       simpa using ⟨fun ⟨x, x_mem, hx⟩ => by simp [← hx, x_mem], fun hs => ⟨sᶜ, hs, by simp⟩⟩
     exact this ▸ h.image compl
-  let f : Set (Set (
+  let f : Set (Set (Set α)) -> Set α := fun A => ⋃ a in A, ⋂ t in a, t
+  let 𝒞 := {a | a.Finite ∧ a subseteq ℬ}
+  have count_𝒞 : 𝒞.Countable := countable_ofPred_finite_subset (countable_coe_iff.1 count_ℬ)
+  let 𝒟 := {A | A.Finite ∧ A subseteq 𝒞}
+  have count_𝒟 : 𝒟.Countable := countable_ofPred_finite_subset (countable_coe_iff.1 count_𝒞)
+  have : generateSetAlgebra 𝒜 subseteq f '' 𝒟 := by
+    intro s s_mem
+    rcases mem_generateSetAlgebra_elim s_mem with ⟨A, A_fin, mem_A, hA, rfl⟩
+    exact ⟨A, ⟨A_fin, fun a ha => ⟨mem_A a ha, hA a ha⟩⟩, rfl⟩
+  exact (count_𝒟.image f).mono this
 
 中文:
 定理 countable_generateSetAlgebra
@@ -553,7 +632,16 @@ theorem countable_generateSetAlgebra
       ext s
       simpa using ⟨fun ⟨x, x_mem, hx⟩ => by simp [← hx, x_mem], fun hs => ⟨sᶜ, hs, by simp⟩⟩
     exact this ▸ h.image compl
-  let f : Set (Set (
+  let f : Set (Set (Set α)) -> Set α := fun A => ⋃ a in A, ⋂ t in a, t
+  let 𝒞 := {a | a.Finite ∧ a subseteq ℬ}
+  have count_𝒞 : 𝒞.Countable := countable_ofPred_finite_subset (countable_coe_iff.1 count_ℬ)
+  let 𝒟 := {A | A.Finite ∧ A subseteq 𝒞}
+  have count_𝒟 : 𝒟.Countable := countable_ofPred_finite_subset (countable_coe_iff.1 count_𝒞)
+  have : generateSetAlgebra 𝒜 subseteq f '' 𝒟 := by
+    intro s s_mem
+    rcases mem_generateSetAlgebra_elim s_mem with ⟨A, A_fin, mem_A, hA, rfl⟩
+    exact ⟨A, ⟨A_fin, fun a ha => ⟨mem_A a ha, hA a ha⟩⟩, rfl⟩
+  exact (count_𝒟.image f).mono this
 
 Depends on / 依赖: A.Finite, Countable, Finite, a.Finite, countable_coe_iff, countable_ofPred_finite_subset, h.image, h.union, subseteq, x_mem
 -/

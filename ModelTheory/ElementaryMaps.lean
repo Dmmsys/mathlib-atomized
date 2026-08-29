@@ -125,7 +125,12 @@ theorem map_boundedFormula
     have h :=
       f.map_formula' ((φ.restrictFreeVar id).toFormula.relabel (Fintype.equivFin _))
         (Sum.elim (v ∘ (↑)) xs ∘ (Fintype.equivFin _).symm)
-    simp only [Formula.realize_rel
+    simp only [Formula.realize_relabel, BoundedFormula.realize_toFormula] at h
+    rw [← Function.comp_assoc _ _ (Fintype.equivFin _).symm]; rw [Function.comp_assoc _ (Fintype.equivFin _).symm (Fintype.equivFin _)]; rw [_root_.Equiv.symm_comp_self]; rw [Function.comp_id]; rw [Function.comp_assoc]; rw [Sum.elim_comp_inl]; rw [Function.comp_assoc _ _ Sum.inr]; rw [Sum.elim_comp_inr]; rw [← Function.comp_assoc] at h
+    refine h.trans ?_
+    rw [Function.comp_assoc _ _ (Fintype.equivFin _)]; rw [_root_.Equiv.symm_comp_self]; rw [Function.comp_id]; rw [Sum.elim_comp_inl]; rw [Sum.elim_comp_inr (v ∘ Subtype.val) xs]; rw [BoundedFormula.realize_restrictFreeVar v (by simp)]
+
+@[simp]
 
 中文:
 定理 map_boundedFormula
@@ -136,7 +141,12 @@ theorem map_boundedFormula
     have h :=
       f.map_formula' ((φ.restrictFreeVar id).toFormula.relabel (Fintype.equivFin _))
         (Sum.elim (v ∘ (↑)) xs ∘ (Fintype.equivFin _).symm)
-    simp only [Formula.realize_rel
+    simp only [Formula.realize_relabel, BoundedFormula.realize_toFormula] at h
+    rw [← Function.comp_assoc _ _ (Fintype.equivFin _).symm]; rw [Function.comp_assoc _ (Fintype.equivFin _).symm (Fintype.equivFin _)]; rw [_root_.Equiv.symm_comp_self]; rw [Function.comp_id]; rw [Function.comp_assoc]; rw [Sum.elim_comp_inl]; rw [Function.comp_assoc _ _ Sum.inr]; rw [Sum.elim_comp_inr]; rw [← Function.comp_assoc] at h
+    refine h.trans ?_
+    rw [Function.comp_assoc _ _ (Fintype.equivFin _)]; rw [_root_.Equiv.symm_comp_self]; rw [Function.comp_id]; rw [Sum.elim_comp_inl]; rw [Sum.elim_comp_inr (v ∘ Subtype.val) xs]; rw [BoundedFormula.realize_restrictFreeVar v (by simp)]
+
+@[simp]
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.realize_restrictFreeVar, BoundedFormula.realize_toFormula, Fintype, Fintype.equivFin, Formula, Formula.realize_relabel, Function, Function.com, Function.comp_assoc, Set.Subset.rfl, Set.inclusion_eq_id, Subset, Sum.elim, _root_, _root_.Equiv.symm_comp_self, classical, comp_assoc, equivFin, f.map_formula
 -/
@@ -685,7 +695,10 @@ definition liftWithConstants
       ↑A oplus Fin n -> f.toEmbedding.withConstants A) =
     f ∘ Sum.elim (fun a => ↑(L.con a)) x :=
     (Sum.comp_elim _ _ _).symm
-  simpa only [Formula.Realize, ← BoundedFormula.realize_constantsVarsEquiv, 
+  simpa only [Formula.Realize, ← BoundedFormula.realize_constantsVarsEquiv, h] using!
+    f.map_formula
+      (BoundedFormula.constantsVarsEquiv φ)
+      (Sum.elim (fun a => ↑(L.con a)) x)
 
 中文:
 定义 liftWithConstants
@@ -698,7 +711,10 @@ definition liftWithConstants
       ↑A oplus Fin n -> f.toEmbedding.withConstants A) =
     f ∘ Sum.elim (fun a => ↑(L.con a)) x :=
     (Sum.comp_elim _ _ _).symm
-  simpa only [Formula.Realize, ← BoundedFormula.realize_constantsVarsEquiv, 
+  simpa only [Formula.Realize, ← BoundedFormula.realize_constantsVarsEquiv, h] using!
+    f.map_formula
+      (BoundedFormula.constantsVarsEquiv φ)
+      (Sum.elim (fun a => ↑(L.con a)) x)
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.constantsVarsEquiv, BoundedFormula.realize_constantsVarsEquiv, Formula, Formula.Realize, L.con, Realize, Sum.comp_elim, Sum.elim, comp_elim, constantsVarsEquiv, f.map_formula, f.toEmbedding.withConstants, map_formula, realize_constantsVarsEquiv, toEmbedding, withConstants
 -/
@@ -755,7 +771,12 @@ definition ElementaryEmbedding.ofModelsElementaryDiagram
               (((L.lhomWithConstants M).onBoundedFormula φ).subst
                   (Constants.term ∘ Sum.inr ∘ x)).alls).trans
           ?_)
-    · simp_rw [Se
+    · simp_rw [Sentence.Realize, BoundedFormula.realize_alls, BoundedFormula.realize_subst,
+        LHom.realize_onBoundedFormula, Formula.Realize, Unique.forall_iff, Function.comp_def,
+        Term.realize_constants]
+    · simp_rw [Sentence.Realize, BoundedFormula.realize_alls, BoundedFormula.realize_subst,
+        LHom.realize_onBoundedFormula, Formula.Realize, Unique.forall_iff]
+      rfl⟩
 
 中文:
 定义 Elementary嵌入.ofModelsElementaryDiagram
@@ -767,7 +788,12 @@ definition ElementaryEmbedding.ofModelsElementaryDiagram
               (((L.lhomWithConstants M).onBoundedFormula φ).subst
                   (Constants.term ∘ Sum.inr ∘ x)).alls).trans
           ?_)
-    · simp_rw [Se
+    · simp_rw [Sentence.Realize, BoundedFormula.realize_alls, BoundedFormula.realize_subst,
+        LHom.realize_onBoundedFormula, Formula.Realize, Unique.forall_iff, Function.comp_def,
+        Term.realize_constants]
+    · simp_rw [Sentence.Realize, BoundedFormula.realize_alls, BoundedFormula.realize_subst,
+        LHom.realize_onBoundedFormula, Formula.Realize, Unique.forall_iff]
+      rfl⟩
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.realiz, BoundedFormula.realize_alls, BoundedFormula.realize_subst, Constants, Constants.term, Formula, Formula.Realize, Function, Function.comp_def, L.lhomWithConstants, LHom.realize_onBoundedFormula, Realize, Sentence, Sentence.Realize, Sum.inr, Term.realize_constants, Unique, Unique.forall_iff, _root_
 -/
@@ -802,7 +828,30 @@ theorem isElementary_of_exists
       φ.Realize (f ∘ default) (f ∘ xs) ↔ φ.Realize default xs by
     intro n φ x
     exact φ.realize_relabel_sumInr.symm.trans (_root_.trans (h n _ _) φ.realize_relabel_sumInr)
-  refine fun n φ => φ.recOn ?_ ?_ ?_ ?
+  refine fun n φ => φ.recOn ?_ ?_ ?_ ?_ ?_
+  · exact fun {_} _ => Iff.rfl
+  · intros
+    simp [BoundedFormula.Realize, ← Sum.comp_elim, HomClass.realize_term]
+  · intro _ _ R ts xs
+    simp only [BoundedFormula.Realize, ← Sum.comp_elim, HomClass.realize_term]
+    simp_rw [← Function.comp_apply (f := (f : M -> N)),
+      ← Function.comp_apply (f := Term.realize (Sum.elim default xs)),
+      ← Function.comp_apply (f := (f : M -> N) ∘ Term.realize (Sum.elim default xs))]
+    rw [Function.comp_assoc]; rw [map_rel f]
+  · intro _ _ _ ih1 ih2 _
+    simp [ih1, ih2]
+  · intro n φ ih xs
+    simp only [BoundedFormula.realize_all]
+    refine ⟨fun h a => ?_, ?_⟩
+    · rw [← ih, Fin.comp_snoc]
+      exact h (f a)
+    · contrapose!
+      rintro ⟨a, ha⟩
+      obtain ⟨b, hb⟩ := htv n φ.not xs a (by
+          rw [BoundedFormula.realize_not]; rw [← Unique.eq_default (f ∘ default)]
+          exact ha)
+      refine ⟨b, fun h => hb (Eq.mp ?_ ((ih _).2 h))⟩
+      rw [Unique.eq_default (f ∘ default)]; rw [Fin.comp_snoc]
 
 中文:
 定理 isElementary_of_存在
@@ -812,7 +861,30 @@ theorem isElementary_of_exists
       φ.Realize (f ∘ default) (f ∘ xs) ↔ φ.Realize default xs by
     intro n φ x
     exact φ.realize_relabel_sumInr.symm.trans (_root_.trans (h n _ _) φ.realize_relabel_sumInr)
-  refine fun n φ => φ.recOn ?_ ?_ ?_ ?
+  refine fun n φ => φ.recOn ?_ ?_ ?_ ?_ ?_
+  · exact fun {_} _ => Iff.rfl
+  · intros
+    simp [BoundedFormula.Realize, ← Sum.comp_elim, HomClass.realize_term]
+  · intro _ _ R ts xs
+    simp only [BoundedFormula.Realize, ← Sum.comp_elim, HomClass.realize_term]
+    simp_rw [← Function.comp_apply (f := (f : M -> N)),
+      ← Function.comp_apply (f := Term.realize (Sum.elim default xs)),
+      ← Function.comp_apply (f := (f : M -> N) ∘ Term.realize (Sum.elim default xs))]
+    rw [Function.comp_assoc]; rw [map_rel f]
+  · intro _ _ _ ih1 ih2 _
+    simp [ih1, ih2]
+  · intro n φ ih xs
+    simp only [BoundedFormula.realize_all]
+    refine ⟨fun h a => ?_, ?_⟩
+    · rw [← ih, Fin.comp_snoc]
+      exact h (f a)
+    · contrapose!
+      rintro ⟨a, ha⟩
+      obtain ⟨b, hb⟩ := htv n φ.not xs a (by
+          rw [BoundedFormula.realize_not]; rw [← Unique.eq_default (f ∘ default)]
+          exact ha)
+      refine ⟨b, fun h => hb (Eq.mp ?_ ((ih _).2 h))⟩
+      rw [Unique.eq_default (f ∘ default)]; rw [Fin.comp_snoc]
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.Realize, HomClass, HomClass.realize_term, Iff.rfl, L.BoundedFormula, Realize, Sum.comp_elim, _root_, _root_.trans, comp_elim, intros, realize_relabel_sumInr, realize_relabel_sumInr.symm.trans, realize_term, simp_rw
 -/

@@ -170,7 +170,8 @@ lemma fromSum_bijective
       rfl
   · intro n
     obtain ⟨i₁, rfl⟩ | ⟨i₂, rfl⟩ := ac.union n
-    · exact ⟨Sum.i
+    · exact ⟨Sum.inl i₁, rfl⟩
+    · exact ⟨Sum.inr i₂, rfl⟩
 
 中文:
 引理 fromSum_bijective
@@ -186,7 +187,8 @@ lemma fromSum_bijective
       rfl
   · intro n
     obtain ⟨i₁, rfl⟩ | ⟨i₂, rfl⟩ := ac.union n
-    · exact ⟨Sum.i
+    · exact ⟨Sum.inl i₁, rfl⟩
+    · exact ⟨Sum.inr i₂, rfl⟩
 
 Depends on / 依赖: Sum.inl, Sum.inr, ac.disjoint, ac.union, disjoint, h.symm, injective_f
 -/
@@ -867,7 +869,9 @@ definition equiv
     exact fst_inj h'' h'
   right_inv := fun ⟨i₂, h⟩ => by
     ext
-    have h' := of_
+    have h' := of_boundaryGE ac h
+    have h'' := of_boundaryLE ac h'.fst
+    exact snd_inj h'' h'
 
 中文:
 定义 equiv
@@ -881,7 +885,9 @@ definition equiv
     exact fst_inj h'' h'
   right_inv := fun ⟨i₂, h⟩ => by
     ext
-    have h' := of_
+    have h' := of_boundaryGE ac h
+    have h'' := of_boundaryLE ac h'.fst
+    exact snd_inj h'' h'
 
 Depends on / 依赖: of_boundaryLE
 -/
@@ -1006,7 +1012,11 @@ instance :
     · have h₁ := ((ac.isSupportedOutside₁_iff (K.truncGE e₂)).2 inferInstance).exactAt i₁
       have h₂ := (K.shortComplexTruncLE_X₃_isSupportedOutside e₁).exactAt i₁
       simpa only [quasiIsoAt_iff_exactAt _ _ h₂] using h₁
-    · have := quasiIsoAt_
+    · have := quasiIsoAt_shortComplexTruncLE_g K e₁ (e₂.f i₂) (fun _ => ac.disjoint _ _)
+      rw [← quasiIsoAt_iff_comp_left (K.shortComplexTruncLE e₁).g
+        (K.shortComplexTruncLEX₃ToTruncGE ac)]; rw [g_shortComplexTruncLEX₃ToTruncGE]
+      dsimp
+      infer_instance
 
 中文:
 实例 :
@@ -1016,7 +1026,11 @@ instance :
     · have h₁ := ((ac.isSupportedOutside₁_iff (K.truncGE e₂)).2 inferInstance).exactAt i₁
       have h₂ := (K.shortComplexTruncLE_X₃_isSupportedOutside e₁).exactAt i₁
       simpa only [quasiIsoAt_iff_exactAt _ _ h₂] using h₁
-    · have := quasiIsoAt_
+    · have := quasiIsoAt_shortComplexTruncLE_g K e₁ (e₂.f i₂) (fun _ => ac.disjoint _ _)
+      rw [← quasiIsoAt_iff_comp_left (K.shortComplexTruncLE e₁).g
+        (K.shortComplexTruncLEX₃ToTruncGE ac)]; rw [g_shortComplexTruncLEX₃ToTruncGE]
+      dsimp
+      infer_instance
 
 Depends on / 依赖: K.shortComplexTruncLE, K.shortComplexTruncLEX, K.shortComplexTruncLE_X, K.truncGE, ac.disjoint, ac.isSupportedOutside, ac.union, disjoint, exactAt, infer_instance, quasiIsoAt_iff_comp_left, quasiIsoAt_iff_exactAt, quasiIsoAt_shortComplexTruncLE_g, shortComplexTruncLE, truncGE
 -/

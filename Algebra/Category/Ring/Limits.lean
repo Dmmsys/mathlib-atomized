@@ -136,7 +136,11 @@ definition limitπRingHom
     forget₂ AddCommMonCat AddMonCat
   let _ : Small.{u} (Functor.sections ((F ⋙ forget₂ _ MonCat) ⋙ forget MonCat)) :=
 inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget SemiRingCat.{u}))
-  let _ : Small.{u} (Functor.s
+  let _ : Small.{u} (Functor.sections (f ⋙ forget AddMonCat)) :=
+inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget SemiRingCat.{u}))
+  { AddMonCat.limitπAddMonoidHom f j,
+    MonCat.limitπMonoidHom (F ⋙ forget₂ SemiRingCat MonCat.{u}) j with
+    toFun := (Types.Small.limitCone (F ⋙ forget SemiRingCat)).π.app j }
 
 中文:
 定义 limitπRingHom
@@ -145,7 +149,11 @@ inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget SemiRingCat.{u}))
     forget₂ AddCommMonCat AddMonCat
   let _ : Small.{u} (Functor.sections ((F ⋙ forget₂ _ MonCat) ⋙ forget MonCat)) :=
 inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget SemiRingCat.{u}))
-  let _ : Small.{u} (Functor.s
+  let _ : Small.{u} (Functor.sections (f ⋙ forget AddMonCat)) :=
+inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget SemiRingCat.{u}))
+  { AddMonCat.limitπAddMonoidHom f j,
+    MonCat.limitπMonoidHom (F ⋙ forget₂ SemiRingCat MonCat.{u}) j with
+    toFun := (Types.Small.limitCone (F ⋙ forget SemiRingCat)).π.app j }
 
 Depends on / 依赖: AddCommMonCat, AddMonCat, AddMonCat.limit, Functor, Functor.sections, MonCat, MonCat.limit, SemiRingCat, forget, sections
 -/
@@ -218,6 +226,9 @@ definition limitConeIsLimit
     rfl
   · simp
     rfl
+  · intro x y
+    simp [← equivShrink_add]
+    rfl
 
 中文:
 定义 limitConeIsLimit
@@ -232,6 +243,9 @@ definition limitConeIsLimit
     simp [← equivShrink_mul]
     rfl
   · simp
+    rfl
+  · intro x y
+    simp [← equivShrink_add]
     rfl
 
 Depends on / 依赖: IsLimit, IsLimit.ofFaithful, SemiRingCat, Types.Small.limitConeIsLimit, equivShrink_add, equivShrink_mul, forget, limitConeIsLimit, map_add, map_mul, map_one, map_zero, ofFaithful
@@ -570,7 +584,22 @@ instance :
   -- instance is added.
   let _ : (forget₂ CommSemiRingCat.{u} SemiRingCat.{u}).ReflectsIsomorphisms :=
     CategoryTheory.reflectsIsomorphisms_forget₂ CommSemiRingCat.{u} SemiRingCat.{u}
-  let _ : Small.{
+  let _ : Small.{u} (Functor.sections ((F ⋙ forget₂ _ SemiRingCat) ⋙ forget _)) :=
+inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget CommSemiRingCat))
+  let c : Cone F :=
+    { pt := CommSemiRingCat.of (Types.Small.limitCone (F ⋙ forget _)).pt
+      π :=
+        { app := fun j => CommSemiRingCat.ofHom <| SemiRingCat.limitπRingHom.{v, u} (J := J)
+            (F ⋙ forget₂ CommSemiRingCat.{u} SemiRingCat.{u}) j
+naturality := fun _ _ f => hom_ext congrArg SemiRingCat.Hom.hom
+            (SemiRingCat.HasLimits.limitCone.{v, u}
+            (F ⋙ forget₂ CommSemiRingCat.{u} SemiRingCat.{u})).π.naturality f } }
+  createsLimitOfReflectsIso fun c' t =>
+    { liftedCone := c
+      validLift := IsLimit.uniqueUpToIso (SemiRingCat.HasLimits.limitConeIsLimit.{v, u} _) t
+      makesLimit := by
+        refine IsLimit.ofFaithful (forget₂ CommSemiRingCat.{u} SemiRingCat.{u})
+          (SemiRingCat.HasLimits.limitConeIsLimit.{v, u} _) (fun s => _) fun s => rfl }
 
 中文:
 实例 :
@@ -578,7 +607,22 @@ instance :
   -- instance is added.
   let _ : (forget₂ CommSemiRingCat.{u} SemiRingCat.{u}).ReflectsIsomorphisms :=
     CategoryTheory.reflectsIsomorphisms_forget₂ CommSemiRingCat.{u} SemiRingCat.{u}
-  let _ : Small.{
+  let _ : Small.{u} (Functor.sections ((F ⋙ forget₂ _ SemiRingCat) ⋙ forget _)) :=
+inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget CommSemiRingCat))
+  let c : Cone F :=
+    { pt := CommSemiRingCat.of (Types.Small.limitCone (F ⋙ forget _)).pt
+      π :=
+        { app := fun j => CommSemiRingCat.ofHom <| SemiRingCat.limitπRingHom.{v, u} (J := J)
+            (F ⋙ forget₂ CommSemiRingCat.{u} SemiRingCat.{u}) j
+naturality := fun _ _ f => hom_ext congrArg SemiRingCat.Hom.hom
+            (SemiRingCat.HasLimits.limitCone.{v, u}
+            (F ⋙ forget₂ CommSemiRingCat.{u} SemiRingCat.{u})).π.naturality f } }
+  createsLimitOfReflectsIso fun c' t =>
+    { liftedCone := c
+      validLift := IsLimit.uniqueUpToIso (SemiRingCat.HasLimits.limitConeIsLimit.{v, u} _) t
+      makesLimit := by
+        refine IsLimit.ofFaithful (forget₂ CommSemiRingCat.{u} SemiRingCat.{u})
+          (SemiRingCat.HasLimits.limitConeIsLimit.{v, u} _) (fun s => _) fun s => rfl }
 -/
 instance :
     CreatesLimit F (forget₂ CommSemiRingCat.{u} SemiRingCat.{u}) :=
@@ -831,7 +875,7 @@ definition sectionsSubring
   let g : J ⥤ SemiRingCat.{u} := F ⋙ forget₂ RingCat.{u} SemiRingCat.{u}
   { AddGrpCat.sectionsAddSubgroup (J := J) f,
     SemiRingCat.sectionsSubsemiring (J := J) g with
-    carr
+    carrier := (F ⋙ forget RingCat.{u}).sections }
 
 中文:
 定义 sectionsSubring
@@ -842,7 +886,7 @@ definition sectionsSubring
   let g : J ⥤ SemiRingCat.{u} := F ⋙ forget₂ RingCat.{u} SemiRingCat.{u}
   { AddGrpCat.sectionsAddSubgroup (J := J) f,
     SemiRingCat.sectionsSubsemiring (J := J) g with
-    carr
+    carrier := (F ⋙ forget RingCat.{u}).sections }
 
 Depends on / 依赖: AddCommGrpCat, AddGrpCat, AddGrpCat.sectionsAddSubgroup, RingCat, SemiRingCat, SemiRingCat.sectionsSubsemiring, carrier, forget, sections, sectionsAddSubgroup, sectionsSubsemiring
 -/
@@ -889,7 +933,18 @@ instance :
   have : Small.{u} (Functor.sections ((F ⋙ forget₂ _ SemiRingCat) ⋙ forget _)) :=
 inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
   let c : Cone F :=
-  { pt := RingCat.of (Typ
+  { pt := RingCat.of (Types.Small.limitCone (F ⋙ forget _)).pt
+    π :=
+      { app := fun x => ofHom <| SemiRingCat.limitπRingHom.{v, u} (F ⋙ forget₂ _ SemiRingCat) x
+        naturality _ _ f := by
+          ext
+          simpa using! (Types.Small.limitCone (F ⋙ forget _)).π.naturality_apply f _ } }
+  createsLimitOfReflectsIso fun c' t =>
+    { liftedCone := c
+      validLift := by apply IsLimit.uniqueUpToIso (SemiRingCat.HasLimits.limitConeIsLimit _) t
+      makesLimit :=
+        IsLimit.ofFaithful (forget₂ RingCat SemiRingCat.{u})
+          (by apply SemiRingCat.HasLimits.limitConeIsLimit _) (fun _ => _) fun _ => rfl }
 
 中文:
 实例 :
@@ -899,7 +954,18 @@ inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
   have : Small.{u} (Functor.sections ((F ⋙ forget₂ _ SemiRingCat) ⋙ forget _)) :=
 inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
   let c : Cone F :=
-  { pt := RingCat.of (Typ
+  { pt := RingCat.of (Types.Small.limitCone (F ⋙ forget _)).pt
+    π :=
+      { app := fun x => ofHom <| SemiRingCat.limitπRingHom.{v, u} (F ⋙ forget₂ _ SemiRingCat) x
+        naturality _ _ f := by
+          ext
+          simpa using! (Types.Small.limitCone (F ⋙ forget _)).π.naturality_apply f _ } }
+  createsLimitOfReflectsIso fun c' t =>
+    { liftedCone := c
+      validLift := by apply IsLimit.uniqueUpToIso (SemiRingCat.HasLimits.limitConeIsLimit _) t
+      makesLimit :=
+        IsLimit.ofFaithful (forget₂ RingCat SemiRingCat.{u})
+          (by apply SemiRingCat.HasLimits.limitConeIsLimit _) (fun _ => _) fun _ => rfl }
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.reflectsIsomorphisms_forget, Functor, Functor.sections, ReflectsIsomorphisms, RingCat, RingCat.of, SemiRingCat, SemiRingCat.limit, Types.Small.limitCone, forget, limitCone, naturality, sections
 -/
@@ -1257,7 +1323,30 @@ instance :
     but it seems this would introduce additional identity morphisms in `limit.π`.
     -/
     -- Porting note: need to add these instances manually
-    have 
+    have : (forget₂ CommRingCat.{u} RingCat.{u}).ReflectsIsomorphisms :=
+      CategoryTheory.reflectsIsomorphisms_forget₂ _ _
+    have : Small.{u} (Functor.sections ((F ⋙ forget₂ CommRingCat RingCat) ⋙ forget RingCat)) :=
+inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
+    let F' := F ⋙ forget₂ CommRingCat.{u} RingCat.{u} ⋙ forget₂ RingCat.{u} SemiRingCat.{u}
+    have : Small.{u} (Functor.sections (F' ⋙ forget _)) :=
+inferInstanceAs Small.{u} (F ⋙ forget _).sections
+    let c : Cone F :=
+    { pt := CommRingCat.of (Types.Small.limitCone (F ⋙ forget _)).pt
+      π :=
+        { app := fun x => ofHom <| SemiRingCat.limitπRingHom.{v, u} F' x
+          naturality _ _ f := by
+            ext
+            simpa using! (Types.Small.limitCone (F ⋙ forget _)).π.naturality_apply f _ } }
+    createsLimitOfReflectsIso fun _ t =>
+    { liftedCone := c
+      validLift := IsLimit.uniqueUpToIso (RingCat.limitConeIsLimit.{v, u} _) t
+      makesLimit :=
+        IsLimit.ofFaithful (forget₂ _ RingCat.{u})
+          (RingCat.limitConeIsLimit.{v, u} (F ⋙ forget₂ CommRingCat.{u} RingCat.{u}))
+          (fun s : Cone F => CommRingCat.ofHom <|
+              (RingCat.limitConeIsLimit.{v, u}
+                (F ⋙ forget₂ CommRingCat.{u} RingCat.{u})).lift
+.hom) fun _ => rfl } ((forget₂ _ RingCat.{u}).mapCone s)
 
 中文:
 实例 :
@@ -1270,7 +1359,30 @@ instance :
     but it seems this would introduce additional identity morphisms in `limit.π`.
     -/
     -- Porting note: need to add these instances manually
-    have 
+    have : (forget₂ CommRingCat.{u} RingCat.{u}).ReflectsIsomorphisms :=
+      CategoryTheory.reflectsIsomorphisms_forget₂ _ _
+    have : Small.{u} (Functor.sections ((F ⋙ forget₂ CommRingCat RingCat) ⋙ forget RingCat)) :=
+inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget _))
+    let F' := F ⋙ forget₂ CommRingCat.{u} RingCat.{u} ⋙ forget₂ RingCat.{u} SemiRingCat.{u}
+    have : Small.{u} (Functor.sections (F' ⋙ forget _)) :=
+inferInstanceAs Small.{u} (F ⋙ forget _).sections
+    let c : Cone F :=
+    { pt := CommRingCat.of (Types.Small.limitCone (F ⋙ forget _)).pt
+      π :=
+        { app := fun x => ofHom <| SemiRingCat.limitπRingHom.{v, u} F' x
+          naturality _ _ f := by
+            ext
+            simpa using! (Types.Small.limitCone (F ⋙ forget _)).π.naturality_apply f _ } }
+    createsLimitOfReflectsIso fun _ t =>
+    { liftedCone := c
+      validLift := IsLimit.uniqueUpToIso (RingCat.limitConeIsLimit.{v, u} _) t
+      makesLimit :=
+        IsLimit.ofFaithful (forget₂ _ RingCat.{u})
+          (RingCat.limitConeIsLimit.{v, u} (F ⋙ forget₂ CommRingCat.{u} RingCat.{u}))
+          (fun s : Cone F => CommRingCat.ofHom <|
+              (RingCat.limitConeIsLimit.{v, u}
+                (F ⋙ forget₂ CommRingCat.{u} RingCat.{u})).lift
+.hom) fun _ => rfl } ((forget₂ _ RingCat.{u}).mapCone s)
 -/
 instance : CreatesLimit F (forget₂ CommRingCat.{u} RingCat.{u}) :=
   /-

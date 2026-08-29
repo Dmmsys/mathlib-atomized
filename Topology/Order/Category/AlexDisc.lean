@@ -268,7 +268,8 @@ definition alexDiscEquivPreord
   inverse.map f := ConcreteCategory.ofHom (WithUpperSet.map f.hom)
 unitIso := NatIso.ofComponents fun X => AlexDisc.Iso.mk by
     dsimp; exact homeoWithUpperSetTopologyorderIso X
-counitIso := NatIso.ofComponents fun X => Preor
+counitIso := NatIso.ofComponents fun X => Preord.Iso.mk by
+    dsimp; exact (orderIsoSpecializationWithUpperSetTopology X).symm
 
 中文:
 定义 alexDiscEquivPreord
@@ -278,7 +279,8 @@ counitIso := NatIso.ofComponents fun X => Preor
   inverse.map f := ConcreteCategory.ofHom (WithUpperSet.map f.hom)
 unitIso := NatIso.ofComponents fun X => AlexDisc.Iso.mk by
     dsimp; exact homeoWithUpperSetTopologyorderIso X
-counitIso := NatIso.ofComponents fun X => Preor
+counitIso := NatIso.ofComponents fun X => Preord.Iso.mk by
+    dsimp; exact (orderIsoSpecializationWithUpperSetTopology X).symm
 
 Depends on / 依赖: topToPreord
 -/

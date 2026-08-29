@@ -48,7 +48,13 @@ lemma exists_fac_of_etale_of_isSepClosed
   algebraize [m, a.hom]
   let b : X.residueField x ->ₐ[S.residueField (f x)] Ω :=
     IsSepClosed.lift
-  have : f.resid
+  have : f.residueFieldMap x ≫ CommRingCat.ofHom b.toRingHom = a := by
+    ext1; exact b.comp_algebraMap
+  refine ⟨Spec.map (CommRingCat.ofHom b.toRingHom) ≫ X.fromSpecResidueField x, ?_, ?_⟩
+  · simp [SpecToEquivOfField, ← this]
+    rfl
+  · dsimp
+    apply fromSpecResidueField_apply
 
 中文:
 引理 存在_fac_of_etale_of_isSepClosed
@@ -61,7 +67,13 @@ lemma exists_fac_of_etale_of_isSepClosed
   algebraize [m, a.hom]
   let b : X.residueField x ->ₐ[S.residueField (f x)] Ω :=
     IsSepClosed.lift
-  have : f.resid
+  have : f.residueFieldMap x ≫ CommRingCat.ofHom b.toRingHom = a := by
+    ext1; exact b.comp_algebraMap
+  refine ⟨Spec.map (CommRingCat.ofHom b.toRingHom) ≫ X.fromSpecResidueField x, ?_, ?_⟩
+  · simp [SpecToEquivOfField, ← this]
+    rfl
+  · dsimp
+    apply fromSpecResidueField_apply
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, IsSepClosed, IsSepClosed.lift, S.residueField, Spec.map, SpecToEquivOfField, X.fromSpecResidueField, X.residueField, a.hom, algebraize, b.comp_algebraMap, b.toRingHom, comp_algebraMap, f.residueFieldMap, fromSpecResidueField, residueField, residueFieldMap, surjective, symm.surjective
 -/
@@ -119,7 +131,28 @@ definition pointSmallEtale
       (Functor.Elements.precomp (AffineEtale.Spec S)
         (Etale.forget S ⋙ coyoneda.obj (op (Over.mk s)))).essImage (by
       rintro ⟨X, x⟩
-      cases X with |
+      cases X with | _ Y f
+      obtain ⟨y, hy, rfl⟩ := Over.homMk_surjective x
+      dsimp at y hy
+      obtain ⟨R, j, _, y', rfl⟩ : exists (R : CommRingCat) (j : Spec (.of R) ⟶ Y)
+          (_ : IsOpenImmersion j) (y' : _ ⟶ _), y' ≫ j = y := by
+        obtain ⟨R, j, _, hj, _⟩ := exists_affine_mem_range_and_range_subset
+          (x := y.base default) (U := ⊤) (by simp)
+        refine ⟨R, j, inferInstance, _, IsOpenImmersion.lift_fac j y ?_⟩
+        rintro _ ⟨a, rfl⟩
+        rwa [Subsingleton.elim a default]
+      exact ⟨_,
+        ⟨Functor.elementsMk _ (AffineEtale.mk (j ≫ f)) (Over.homMk y'), ⟨Iso.refl _⟩⟩,
+        ⟨⟨MorphismProperty.Over.homMk j rfl (by simp), by cat_disch⟩⟩⟩)
+  jointly_surjective {X} R hR φ := by
+    cases X with | _ X f
+    obtain ⟨φ : Spec (.of Ω) ⟶ X, rfl : φ ≫ f = s, rfl⟩ := Over.homMk_surjective φ
+    obtain ⟨𝒰, h, _, le⟩ := (mem_smallGrothendieckTopology _ _).1 hR
+    obtain ⟨i, y, hy⟩ := 𝒰.exists_eq (φ default)
+    obtain ⟨l, hl₁, hl₂⟩ := exists_fac_of_etale_of_isSepClosed (𝒰.f i) φ _ hy
+    have : 𝒰.f i ≫ f = 𝒰.X i ↘ S := HomIsOver.comp_over (f := 𝒰.f i) (S := S)
+    exact ⟨(𝒰.X i).asOverProp S inferInstance,
+      MorphismProperty.Over.homMk (𝒰.f i), le _ _ ⟨i⟩, Over.homMk l, by cat_disch⟩
 
 中文:
 定义 pointSmallEtale
@@ -130,7 +163,28 @@ definition pointSmallEtale
       (Functor.Elements.precomp (AffineEtale.Spec S)
         (Etale.forget S ⋙ coyoneda.obj (op (Over.mk s)))).essImage (by
       rintro ⟨X, x⟩
-      cases X with |
+      cases X with | _ Y f
+      obtain ⟨y, hy, rfl⟩ := Over.homMk_surjective x
+      dsimp at y hy
+      obtain ⟨R, j, _, y', rfl⟩ : exists (R : CommRingCat) (j : Spec (.of R) ⟶ Y)
+          (_ : IsOpenImmersion j) (y' : _ ⟶ _), y' ≫ j = y := by
+        obtain ⟨R, j, _, hj, _⟩ := exists_affine_mem_range_and_range_subset
+          (x := y.base default) (U := ⊤) (by simp)
+        refine ⟨R, j, inferInstance, _, IsOpenImmersion.lift_fac j y ?_⟩
+        rintro _ ⟨a, rfl⟩
+        rwa [Subsingleton.elim a default]
+      exact ⟨_,
+        ⟨Functor.elementsMk _ (AffineEtale.mk (j ≫ f)) (Over.homMk y'), ⟨Iso.refl _⟩⟩,
+        ⟨⟨MorphismProperty.Over.homMk j rfl (by simp), by cat_disch⟩⟩⟩)
+  jointly_surjective {X} R hR φ := by
+    cases X with | _ X f
+    obtain ⟨φ : Spec (.of Ω) ⟶ X, rfl : φ ≫ f = s, rfl⟩ := Over.homMk_surjective φ
+    obtain ⟨𝒰, h, _, le⟩ := (mem_smallGrothendieckTopology _ _).1 hR
+    obtain ⟨i, y, hy⟩ := 𝒰.exists_eq (φ default)
+    obtain ⟨l, hl₁, hl₂⟩ := exists_fac_of_etale_of_isSepClosed (𝒰.f i) φ _ hy
+    have : 𝒰.f i ≫ f = 𝒰.X i ↘ S := HomIsOver.comp_over (f := 𝒰.f i) (S := S)
+    exact ⟨(𝒰.X i).asOverProp S inferInstance,
+      MorphismProperty.Over.homMk (𝒰.f i), le _ _ ⟨i⟩, Over.homMk l, by cat_disch⟩
 
 Depends on / 依赖: Etale.forget, Over.mk, coyoneda, coyoneda.obj, forget
 -/
@@ -215,7 +269,9 @@ lemma pointSmallEtaleFiberObjToPreimage_surjective
   obtain ⟨⟨t, a⟩, rfl⟩ := (Scheme.SpecToEquivOfField Ω _).symm.surjective s
   obtain rfl : t = s₀ := by simp [SpecToEquivOfField, ← hs₀]
   obtain ⟨l, hl, rfl⟩ := exists_fac_of_etale_of_isSepClosed
-    (X.hom.fiberToSpecResidueField
+    (X.hom.fiberToSpecResidueField _) (Spec.map a) y (by subsingleton)
+  refine ⟨Over.homMk (l ≫ X.hom.fiberι t) ?_, rfl⟩
+  simp [X.hom.fiber_fac, reassoc_of% hl]
 
 中文:
 引理 pointSmallEtaleFiberObjToPreimage_surjective
@@ -226,7 +282,9 @@ lemma pointSmallEtaleFiberObjToPreimage_surjective
   obtain ⟨⟨t, a⟩, rfl⟩ := (Scheme.SpecToEquivOfField Ω _).symm.surjective s
   obtain rfl : t = s₀ := by simp [SpecToEquivOfField, ← hs₀]
   obtain ⟨l, hl, rfl⟩ := exists_fac_of_etale_of_isSepClosed
-    (X.hom.fiberToSpecResidueField
+    (X.hom.fiberToSpecResidueField _) (Spec.map a) y (by subsingleton)
+  refine ⟨Over.homMk (l ≫ X.hom.fiberι t) ?_, rfl⟩
+  simp [X.hom.fiber_fac, reassoc_of% hl]
 
 Depends on / 依赖: Over.homMk, Scheme, Scheme.SpecToEquivOfField, Spec.map, SpecToEquivOfField, X.hom.fiber, X.hom.fiberHomeo, X.hom.fiberToSpecResidueField, X.hom.fiber_fac, exists_fac_of_etale_of_isSepClosed, fiberHomeo, fiberToSpecResidueField, fiber_fac, reassoc_of, subsingleton, surjective, symm.surjective
 -/
@@ -254,7 +312,16 @@ lemma isConservative_pointSmallEtale
     simp only [Set.mem_iUnion, Set.mem_range, Set.mem_univ, iff_true]
     obtain ⟨i, hi⟩ : exists i, s i default = X.hom x := by
       have := Set.mem_univ (X.hom x)
-      
+      simp only [← hs, Functor.id_obj, Set.mem_iUnion, Set.mem_range] at this
+      obtain ⟨i, y, hy⟩ := this
+      obtain rfl := Subsingleton.elim y default
+      exact ⟨i, hy⟩
+    obtain ⟨x', hx'⟩ := pointSmallEtaleFiberObjToPreimage_surjective (s i) hi X ⟨x, by simp⟩
+    rw [Subtype.ext_iff] at hx'
+    simp only [Functor.id_obj, pointSmallEtaleFiberObjToPreimage_coe, Etale.forget_obj_left] at hx'
+    subst hx'
+    obtain ⟨W, g, ⟨Z, p, _, ⟨a⟩, rfl⟩, y, rfl⟩ := hR ⟨_, ⟨i⟩⟩ x'
+    exact ⟨a, (pointSmallEtaleFiberObjToPreimage (s i) hi (y ≫ p.hom)).1, rfl⟩)
 
 中文:
 引理 isConservative_pointSmallEtale
@@ -265,7 +332,16 @@ lemma isConservative_pointSmallEtale
     simp only [Set.mem_iUnion, Set.mem_range, Set.mem_univ, iff_true]
     obtain ⟨i, hi⟩ : exists i, s i default = X.hom x := by
       have := Set.mem_univ (X.hom x)
-      
+      simp only [← hs, Functor.id_obj, Set.mem_iUnion, Set.mem_range] at this
+      obtain ⟨i, y, hy⟩ := this
+      obtain rfl := Subsingleton.elim y default
+      exact ⟨i, hy⟩
+    obtain ⟨x', hx'⟩ := pointSmallEtaleFiberObjToPreimage_surjective (s i) hi X ⟨x, by simp⟩
+    rw [Subtype.ext_iff] at hx'
+    simp only [Functor.id_obj, pointSmallEtaleFiberObjToPreimage_coe, Etale.forget_obj_left] at hx'
+    subst hx'
+    obtain ⟨W, g, ⟨Z, p, _, ⟨a⟩, rfl⟩, y, rfl⟩ := hR ⟨_, ⟨i⟩⟩ x'
+    exact ⟨a, (pointSmallEtaleFiberObjToPreimage (s i) hi (y ≫ p.hom)).1, rfl⟩)
 
 Depends on / 依赖: Functor, Functor.id_obj, R.exists_eq_ofArrows, Set.mem_iUnion, Set.mem_range, Set.mem_univ, Subsingleton, Subsingleton.elim, X.hom, exists_eq_ofArrows, id_obj, iff_true, mem_iUnion, mem_range, mem_univ, ofArrows_mem_smallEtaleTopology_iff, pointSmallEtaleFiberObjToPreimage_surjective
 -/

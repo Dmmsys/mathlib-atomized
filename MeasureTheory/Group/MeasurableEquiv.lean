@@ -802,7 +802,9 @@ instance :
     · simp [Function.comp_def, mul_smul]
     · exact measurable_const_smul ..
     · exact measurable_const_smul ..
-  smul_zero g := show (0 : Measure A
+  smul_zero g := show (0 : Measure A).map _ = 0 by simp
+  smul_add g μ ν := show (μ + ν).map _ = μ.map _ + ν.map _ by
+    rw [Measure.map_add]; exact measurable_const_smul ..
 
 中文:
 实例 :
@@ -814,7 +816,9 @@ instance :
     · simp [Function.comp_def, mul_smul]
     · exact measurable_const_smul ..
     · exact measurable_const_smul ..
-  smul_zero g := show (0 : Measure A
+  smul_zero g := show (0 : Measure A).map _ = 0 by simp
+  smul_add g μ ν := show (μ + ν).map _ = μ.map _ + ν.map _ by
+    rw [Measure.map_add]; exact measurable_const_smul ..
 
 Depends on / 依赖: DomMulAct, DomMulAct.mk.symm, Nontrivial, Quotient, Quotient.nontrivial_of_liesOver_of_isPrime, _algebraMap, finrank_pos, finrank_pos.trans_eq, inertiaDeg, nontrivial_of_liesOver_of_isPrime, trans_eq
 -/

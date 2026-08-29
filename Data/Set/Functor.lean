@@ -255,7 +255,11 @@ instance :
   seq_pure _ _ := Set.seq_singleton
   seq_assoc _ _ _ := Set.seq_seq
   map_failure _ := Set.image_empty _
- 
+  failure_seq _ := Set.image2_empty_left
+  orElse_failure _ := Set.union_empty _
+  failure_orElse _ := Set.empty_union _
+.symm orElse_assoc _ _ _ := Set.union_assoc _ _ _
+  map_orElse _ _ _ := Set.image_union _ _ _
 
 中文:
 实例 :
@@ -267,7 +271,11 @@ instance :
   seq_pure _ _ := Set.seq_singleton
   seq_assoc _ _ _ := Set.seq_seq
   map_failure _ := Set.image_empty _
- 
+  failure_seq _ := Set.image2_empty_left
+  orElse_failure _ := Set.union_empty _
+  failure_orElse _ := Set.empty_union _
+.symm orElse_assoc _ _ _ := Set.union_assoc _ _ _
+  map_orElse _ _ _ := Set.image_union _ _ _
 
 Depends on / 依赖: Set.singleton_seq, singleton_seq
 -/

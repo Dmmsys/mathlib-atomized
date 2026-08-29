@@ -334,7 +334,8 @@ lemma range_cfc_nnreal
   apply subset_antisymm (range_cfc_nnreal_subset a ha)
   rw [range_cfc_nnreal_eq_image_cfc_real a ha]; rw [Set.ofPred_and]; rw [SetLike.setOfPred_mem_eq]; rw [← range_cfc _ ha.isSelfAdjoint]; rw [Set.inter_comm]; rw [← Set.image_preimage_eq_inter_range]
   rintro _ ⟨f, hf, rfl⟩
-  exact cfc_cases _
+  exact cfc_cases _ a f ⟨0, by simp, by simp⟩ fun hf' ha' =>
+    ⟨f, (cfc_nonneg_iff f a hf' ha').mp (by simpa), by simp [cfc_apply f a ha' hf']⟩
 
 中文:
 引理 range_cfc_nnreal
@@ -342,7 +343,8 @@ lemma range_cfc_nnreal
   apply subset_antisymm (range_cfc_nnreal_subset a ha)
   rw [range_cfc_nnreal_eq_image_cfc_real a ha]; rw [Set.ofPred_and]; rw [SetLike.setOfPred_mem_eq]; rw [← range_cfc _ ha.isSelfAdjoint]; rw [Set.inter_comm]; rw [← Set.image_preimage_eq_inter_range]
   rintro _ ⟨f, hf, rfl⟩
-  exact cfc_cases _
+  exact cfc_cases _ a f ⟨0, by simp, by simp⟩ fun hf' ha' =>
+    ⟨f, (cfc_nonneg_iff f a hf' ha').mp (by simpa), by simp [cfc_apply f a ha' hf']⟩
 
 Depends on / 依赖: Set.image_preimage_eq_inter_range, Set.inter_comm, Set.ofPred_and, SetLike, SetLike.setOfPred_mem_eq, StarAlgebra, StarAlgebra.elemental, cfc_apply, cfc_cases, cfc_nonneg_iff, elemental, ha.isSelfAdjoint, image_preimage_eq_inter_range, inter_comm, isSelfAdjoint, ofPred_and, range_cfc, range_cfc_nnreal_eq_image_cfc_real, range_cfc_nnreal_subset, setOfPred_mem_eq
 -/
@@ -381,7 +383,8 @@ theorem range_cfcₙHom
   proof: by
   rw [← NonUnitalStarAlgebra.map_top]; rw [← ContinuousMapZero.elemental_eq_top]; rw [NonUnitalStarAlgebra.elemental]; rw [← NonUnitalStarSubalgebra.topologicalClosure_map _
     (cfcₙHom_isClosedEmbedding ha (R := 𝕜)).isClosedMap (cfcₙHom_continuous ha)]; rw [NonUnitalStarAlgHom.map_adjoin]
-  con
+  congr
+  simpa using cfcₙHom_id ha
 
 中文:
 定理 range_cfcₙHom
@@ -389,7 +392,8 @@ theorem range_cfcₙHom
   证明: by
   rw [← NonUnitalStarAlgebra.map_top]; rw [← ContinuousMapZero.elemental_eq_top]; rw [NonUnitalStarAlgebra.elemental]; rw [← NonUnitalStarSubalgebra.topologicalClosure_map _
     (cfcₙHom_isClosedEmbedding ha (R := 𝕜)).isClosedMap (cfcₙHom_continuous ha)]; rw [NonUnitalStarAlgHom.map_adjoin]
-  con
+  congr
+  simpa using cfcₙHom_id ha
 
 Depends on / 依赖: ContinuousMapZero, ContinuousMapZero.elemental_eq_top, NonUnitalStarAlgHom, NonUnitalStarAlgHom.map_adjoin, NonUnitalStarAlgebra, NonUnitalStarAlgebra.elemental, NonUnitalStarAlgebra.map_top, NonUnitalStarSubalgebra, NonUnitalStarSubalgebra.topologicalClosure_map, elemental, elemental_eq_top, isClosedMap, map_adjoin, map_top, topologicalClosure_map
 -/
@@ -656,6 +660,15 @@ lemma range_cfcₙ_nnreal
   rw [range_cfcₙ_nnreal_eq_image_cfcₙ_real a ha]; rw [Set.ofPred_and]; rw [SetLike.setOfPred_mem_eq]; rw [← range_cfcₙ _ ha.isSelfAdjoint]; rw [Set.inter_comm]; rw [← Set.image_preimage_eq_inter_range]
   refine Set.Subset.antisymm (Set.image_mono (fun _ => cfcₙ_nonneg)) ?_
   rintro _ ⟨f, hf, rfl⟩
+  simp only [Set.preimage_ofPred_eq, Set.mem_ofPred_eq, Set.mem_image] at hf ⊢
+  obtain (⟨h₁, h₂, h₃⟩ | h | h | h) := by
+    simpa only [not_and_or] using
+      em (ContinuousOn f (quasispectrum Real a) ∧ f 0 = 0 ∧ IsSelfAdjoint a)
+  · refine ⟨f, ?_, rfl⟩
+    rwa [cfcₙ_nonneg_iff f a] at hf
+  · exact ⟨0, by simp, by simp [cfcₙ_apply_of_not_continuousOn a h]⟩
+  · exact ⟨0, by simp, by simp [cfcₙ_apply_of_not_map_zero a h]⟩
+  · exact ⟨0, by simp, by simp [cfcₙ_apply_of_not_predicate a h]⟩
 
 中文:
 引理 range_cfcₙ_nnreal
@@ -664,6 +677,15 @@ lemma range_cfcₙ_nnreal
   rw [range_cfcₙ_nnreal_eq_image_cfcₙ_real a ha]; rw [Set.ofPred_and]; rw [SetLike.setOfPred_mem_eq]; rw [← range_cfcₙ _ ha.isSelfAdjoint]; rw [Set.inter_comm]; rw [← Set.image_preimage_eq_inter_range]
   refine Set.Subset.antisymm (Set.image_mono (fun _ => cfcₙ_nonneg)) ?_
   rintro _ ⟨f, hf, rfl⟩
+  simp only [Set.preimage_ofPred_eq, Set.mem_ofPred_eq, Set.mem_image] at hf ⊢
+  obtain (⟨h₁, h₂, h₃⟩ | h | h | h) := by
+    simpa only [not_and_or] using
+      em (ContinuousOn f (quasispectrum Real a) ∧ f 0 = 0 ∧ IsSelfAdjoint a)
+  · refine ⟨f, ?_, rfl⟩
+    rwa [cfcₙ_nonneg_iff f a] at hf
+  · exact ⟨0, by simp, by simp [cfcₙ_apply_of_not_continuousOn a h]⟩
+  · exact ⟨0, by simp, by simp [cfcₙ_apply_of_not_map_zero a h]⟩
+  · exact ⟨0, by simp, by simp [cfcₙ_apply_of_not_predicate a h]⟩
 
 Depends on / 依赖: NonUnitalStarAlgebra, NonUnitalStarAlgebra.elemental, Set.Subset.antisymm, Set.image_mono, Set.image_preimage_eq_inter_range, Set.inter_comm, Set.mem_image, Set.mem_ofPred_eq, Set.ofPred_and, Set.preimage_ofPred_eq, Set.range, SetLike, SetLike.setOfPred_mem_eq, Subset, antisymm, cfc_tac, elemental, ha.isSelfAdjoint, image_mono, image_preimage_eq_inter_range
 -/

@@ -352,7 +352,16 @@ lemma norm_eq_one_iff_ne_zero_of_discrete
     obtain ⟨ε, εpos, h'⟩ := this
     wlog! h : ‖x‖ < 1 generalizing 𝕜 with H
     · rcases h.eq_or_lt with h | h
+      · rw [h]
+      replace h := norm_inv x ▸ inv_lt_one_of_one_lt₀ h
+      rw [← inv_inj]; rw [inv_one]; rw [← norm_inv]
+      exact H (by simpa) h' h
+    obtain ⟨k, hk⟩ : exists k : Nat, ‖x‖ ^ k < ε := exists_pow_lt_of_lt_one εpos h
+    rw [← norm_pow] at hk
+    specialize h' _ hk
+    simp [hx] at h'
 
+@[simp]
 
 中文:
 引理 norm_eq_one_iff_ne_zero_of_discrete
@@ -367,7 +376,16 @@ lemma norm_eq_one_iff_ne_zero_of_discrete
     obtain ⟨ε, εpos, h'⟩ := this
     wlog! h : ‖x‖ < 1 generalizing 𝕜 with H
     · rcases h.eq_or_lt with h | h
+      · rw [h]
+      replace h := norm_inv x ▸ inv_lt_one_of_one_lt₀ h
+      rw [← inv_inj]; rw [inv_one]; rw [← norm_inv]
+      exact H (by simpa) h' h
+    obtain ⟨k, hk⟩ : exists k : Nat, ‖x‖ ^ k < ε := exists_pow_lt_of_lt_one εpos h
+    rw [← norm_pow] at hk
+    specialize h' _ hk
+    simp [hx] at h'
 
+@[simp]
 
 Depends on / 依赖: IsOpen, Metric, Metric.isOpen_singleton_iff, contrapose, dist_eq_norm, eq_or_lt, exists_pow_lt_of_lt_one, generalizing, h.eq_or_lt, inv_inj, inv_one, isOpen_discrete, isOpen_singleton_iff, norm_inv, norm_pow, replace, simp_rw, sub_zero
 -/

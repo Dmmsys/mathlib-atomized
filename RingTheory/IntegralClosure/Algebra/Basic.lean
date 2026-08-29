@@ -272,7 +272,30 @@ theorem isIntegral_of_smul_mem_submodule
     { carrier := { x | forall n in N, x • n in N }
       mul_mem' := fun {a b} ha hb n hn => smul_smul a b n ▸ ha _ (hb _ hn)
       one_mem' := fun n hn => (one_smul A n).symm ▸ hn
-      add_mem' := fun {a b} ha hb n hn => (add_smul a b n).symm ▸ N.add_mem (ha _ hn) (
+      add_mem' := fun {a b} ha hb n hn => (add_smul a b n).symm ▸ N.add_mem (ha _ hn) (hb _ hn)
+      zero_mem' := fun n _hn => (zero_smul A n).symm ▸ N.zero_mem
+      algebraMap_mem' := fun r n hn => (algebraMap_smul A r n).symm ▸ N.smul_mem r hn }
+  let f : A' ->ₐ[R] Module.End R N :=
+    AlgHom.ofLinearMap
+      { toFun := fun x => (DistribSMul.toLinearMap R M x).restrict x.prop
+        map_add' := by intro x y; ext; exact add_smul _ _ _
+        map_smul' := by intro r s; ext; apply smul_assoc }
+      (by ext; apply one_smul)
+      (by intro x y; ext; apply mul_smul)
+  obtain ⟨a, ha₁, ha₂⟩ : exists a in N, a != (0 : M) := by
+    by_contra! h'
+    apply hN
+    rwa [eq_bot_iff]
+  have : Function.Injective f := by
+    change Function.Injective f.toLinearMap
+    rw [← LinearMap.ker_eq_bot]; rw [eq_bot_iff]
+    intro s hs
+    have : s.1 • a = 0 := congr_arg Subtype.val (LinearMap.congr_fun hs ⟨a, ha₁⟩)
+    exact Subtype.ext ((smul_eq_zero_iff_left ha₂).1 this)
+  change IsIntegral R (A'.val ⟨x, hx⟩)
+  rw [isIntegral_algHom_iff A'.val Subtype.val_injective]; rw [← isIntegral_algHom_iff f this]
+  have : Module.Finite R N := by rwa [Module.Finite.iff_fg]
+  apply Algebra.IsIntegral.isIntegral
 
 中文:
 定理 is整数egral_of_smul_mem_submodule
@@ -282,7 +305,30 @@ theorem isIntegral_of_smul_mem_submodule
     { carrier := { x | forall n in N, x • n in N }
       mul_mem' := fun {a b} ha hb n hn => smul_smul a b n ▸ ha _ (hb _ hn)
       one_mem' := fun n hn => (one_smul A n).symm ▸ hn
-      add_mem' := fun {a b} ha hb n hn => (add_smul a b n).symm ▸ N.add_mem (ha _ hn) (
+      add_mem' := fun {a b} ha hb n hn => (add_smul a b n).symm ▸ N.add_mem (ha _ hn) (hb _ hn)
+      zero_mem' := fun n _hn => (zero_smul A n).symm ▸ N.zero_mem
+      algebraMap_mem' := fun r n hn => (algebraMap_smul A r n).symm ▸ N.smul_mem r hn }
+  let f : A' ->ₐ[R] Module.End R N :=
+    AlgHom.ofLinearMap
+      { toFun := fun x => (DistribSMul.toLinearMap R M x).restrict x.prop
+        map_add' := by intro x y; ext; exact add_smul _ _ _
+        map_smul' := by intro r s; ext; apply smul_assoc }
+      (by ext; apply one_smul)
+      (by intro x y; ext; apply mul_smul)
+  obtain ⟨a, ha₁, ha₂⟩ : exists a in N, a != (0 : M) := by
+    by_contra! h'
+    apply hN
+    rwa [eq_bot_iff]
+  have : Function.Injective f := by
+    change Function.Injective f.toLinearMap
+    rw [← LinearMap.ker_eq_bot]; rw [eq_bot_iff]
+    intro s hs
+    have : s.1 • a = 0 := congr_arg Subtype.val (LinearMap.congr_fun hs ⟨a, ha₁⟩)
+    exact Subtype.ext ((smul_eq_zero_iff_left ha₂).1 this)
+  change IsIntegral R (A'.val ⟨x, hx⟩)
+  rw [isIntegral_algHom_iff A'.val Subtype.val_injective]; rw [← isIntegral_algHom_iff f this]
+  have : Module.Finite R N := by rwa [Module.Finite.iff_fg]
+  apply Algebra.IsIntegral.isIntegral
 
 Depends on / 依赖: AlgHom, AlgHom.ofLinearMap, Module, Module.End, N.add_mem, N.smul_mem, N.zero_mem, Subalgebra, add_mem, add_smul, algebraMap_mem, algebraMap_smul, carrier, mul_mem, ofLinearMap, one_mem, one_smul, smul_mem, smul_smul, zero_mem
 -/
@@ -364,7 +410,11 @@ theorem RingHom.IsIntegralElem.of_mem_closure
   rw [← Algebra.adjoin_union_coe_submodule]; rw [Set.singleton_union] at this
   exact
     IsIntegral.of_mem_of_fg (Algebra.adjoin R {x, y}) this z
-      (Algebra.mem_adjoin_iff
+      (Algebra.mem_adjoin_iff.2 <| Subring.closure_mono Set.subset_union_right hz)
+
+nonrec theorem IsIntegral.of_mem_closure {x y z : A} (hx : IsIntegral R x) (hy : IsIntegral R y)
+    (hz : z in Subring.closure ({x, y} : Set A)) : IsIntegral R z :=
+  hx.of_mem_closure (algebraMap R A) hy hz
 
 中文:
 定理 环态射.Is整数egralElem.of_mem_closure
@@ -375,7 +425,11 @@ theorem RingHom.IsIntegralElem.of_mem_closure
   rw [← Algebra.adjoin_union_coe_submodule]; rw [Set.singleton_union] at this
   exact
     IsIntegral.of_mem_of_fg (Algebra.adjoin R {x, y}) this z
-      (Algebra.mem_adjoin_iff
+      (Algebra.mem_adjoin_iff.2 <| Subring.closure_mono Set.subset_union_right hz)
+
+nonrec theorem IsIntegral.of_mem_closure {x y z : A} (hx : IsIntegral R x) (hy : IsIntegral R y)
+    (hz : z in Subring.closure ({x, y} : Set A)) : IsIntegral R z :=
+  hx.of_mem_closure (algebraMap R A) hy hz
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_union_coe_submodule, Algebra.mem_adjoin_iff, IsIntegral, IsIntegral.fg_adjoin_singleton, IsIntegral.of_mem_of_fg, Set.singleton_union, Set.subset_union_right, Subring, Subring.closure_mono, adjoin, adjoin_union_coe_submodule, closure_mono, f.toAlgebra, fg_adjoin_singleton, mem_adjoin_iff, of_mem_of_fg, singleton_union, subset_union_right
 -/
@@ -858,7 +912,10 @@ instance :
   mul_smul g h x := by ext; exact mul_smul g h (x : K)
   smul_zero g := by ext; exact smul_zero g
   smul_add g x y := by ext; exact smul_add g (x : K) (y : K)
-  smul_one g := by ext;
+  smul_one g := by ext; exact smul_one g
+  smul_mul g x y := by ext; exact smul_mul' g (x : K) (y : K)
+
+@[simp]
 
 中文:
 实例 :
@@ -868,7 +925,10 @@ instance :
   mul_smul g h x := by ext; exact mul_smul g h (x : K)
   smul_zero g := by ext; exact smul_zero g
   smul_add g x y := by ext; exact smul_add g (x : K) (y : K)
-  smul_one g := by ext;
+  smul_one g := by ext; exact smul_one g
+  smul_mul g x y := by ext; exact smul_mul' g (x : K) (y : K)
+
+@[simp]
 
 Depends on / 依赖: MulSemiringAction, MulSemiringAction.toAlgHom, toAlgHom
 -/

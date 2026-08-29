@@ -396,7 +396,9 @@ theorem coeSubmodule_isPrincipal
   · have x_mem : x in coeSubmodule S I := hx.symm ▸ Submodule.mem_span_singleton_self x
     obtain ⟨x, _, rfl⟩ := (mem_coeSubmodule _ _).mp x_mem
     refine ⟨⟨x, coeSubmodule_injective S h ?_⟩⟩
-    rw [Ideal.submodule_span_eq]; rw [hx]; rw [coeSubmodule_span_sin
+    rw [Ideal.submodule_span_eq]; rw [hx]; rw [coeSubmodule_span_singleton]
+  · refine ⟨⟨algebraMap R S x, ?_⟩⟩
+    rw [hx]; rw [Ideal.submodule_span_eq]; rw [coeSubmodule_span_singleton]
 
 中文:
 定理 coeSubmodule_isPrincipal
@@ -406,7 +408,9 @@ theorem coeSubmodule_isPrincipal
   · have x_mem : x in coeSubmodule S I := hx.symm ▸ Submodule.mem_span_singleton_self x
     obtain ⟨x, _, rfl⟩ := (mem_coeSubmodule _ _).mp x_mem
     refine ⟨⟨x, coeSubmodule_injective S h ?_⟩⟩
-    rw [Ideal.submodule_span_eq]; rw [hx]; rw [coeSubmodule_span_sin
+    rw [Ideal.submodule_span_eq]; rw [hx]; rw [coeSubmodule_span_singleton]
+  · refine ⟨⟨algebraMap R S x, ?_⟩⟩
+    rw [hx]; rw [Ideal.submodule_span_eq]; rw [coeSubmodule_span_singleton]
 
 Depends on / 依赖: Ideal.submodule_span_eq, Submodule, Submodule.mem_span_singleton_self, algebraMap, coeSubmodule, coeSubmodule_injective, coeSubmodule_span_singleton, hx.symm, mem_coeSubmodule, mem_span_singleton_self, submodule_span_eq, x_mem
 -/
@@ -437,7 +441,21 @@ theorem mem_span_iff
     · rintro x hx
       exact ⟨x, Submodule.subset_span hx, 1, by rw [mk'_one, map_one, one_smul]⟩
     · exact ⟨0, Submodule.zero_mem _, 1, by rw [mk'_one, map_one, one_smul]⟩
-    · rintro _ _ _ _ ⟨y, hy, z, rfl⟩ ⟨y', hy'
+    · rintro _ _ _ _ ⟨y, hy, z, rfl⟩ ⟨y', hy', z', rfl⟩
+      refine
+        ⟨(z' : R) • y + (z : R) • y',
+          Submodule.add_mem _ (Submodule.smul_mem _ _ hy) (Submodule.smul_mem _ _ hy'), z * z', ?_⟩
+      rw [smul_add]; rw [← IsScalarTower.algebraMap_smul S (z : R)]; rw [←
+        IsScalarTower.algebraMap_smul S (z' : R)]; rw [smul_smul]; rw [smul_smul]
+      congr 1
+      · rw [← mul_one (1 : R), mk'_mul, mul_assoc, mk'_spec, map_one, mul_one, mul_one]
+      · rw [← mul_one (1 : R), mk'_mul, mul_right_comm, mk'_spec, map_one, mul_one, one_mul]
+    · rintro a _ _ ⟨y, hy, z, rfl⟩
+      obtain ⟨y', z', rfl⟩ := exists_mk'_eq M a
+      refine ⟨y' • y, Submodule.smul_mem _ _ hy, z' * z, ?_⟩
+      rw [← IsScalarTower.algebraMap_smul S y']; rw [smul_smul]; rw [← mk'_mul]; rw [smul_smul]; rw [mul_comm (mk' S _ _)]; rw [mul_mk'_eq_mk'_of_mul]
+  · rintro ⟨y, hy, z, rfl⟩
+    exact Submodule.smul_mem _ _ (Submodule.span_subset_span R S _ hy)
 
 中文:
 定理 mem_span_iff
@@ -449,7 +467,21 @@ theorem mem_span_iff
     · rintro x hx
       exact ⟨x, Submodule.subset_span hx, 1, by rw [mk'_one, map_one, one_smul]⟩
     · exact ⟨0, Submodule.zero_mem _, 1, by rw [mk'_one, map_one, one_smul]⟩
-    · rintro _ _ _ _ ⟨y, hy, z, rfl⟩ ⟨y', hy'
+    · rintro _ _ _ _ ⟨y, hy, z, rfl⟩ ⟨y', hy', z', rfl⟩
+      refine
+        ⟨(z' : R) • y + (z : R) • y',
+          Submodule.add_mem _ (Submodule.smul_mem _ _ hy) (Submodule.smul_mem _ _ hy'), z * z', ?_⟩
+      rw [smul_add]; rw [← IsScalarTower.algebraMap_smul S (z : R)]; rw [←
+        IsScalarTower.algebraMap_smul S (z' : R)]; rw [smul_smul]; rw [smul_smul]
+      congr 1
+      · rw [← mul_one (1 : R), mk'_mul, mul_assoc, mk'_spec, map_one, mul_one, mul_one]
+      · rw [← mul_one (1 : R), mk'_mul, mul_right_comm, mk'_spec, map_one, mul_one, one_mul]
+    · rintro a _ _ ⟨y, hy, z, rfl⟩
+      obtain ⟨y', z', rfl⟩ := exists_mk'_eq M a
+      refine ⟨y' • y, Submodule.smul_mem _ _ hy, z' * z, ?_⟩
+      rw [← IsScalarTower.algebraMap_smul S y']; rw [smul_smul]; rw [← mk'_mul]; rw [smul_smul]; rw [mul_comm (mk' S _ _)]; rw [mul_mk'_eq_mk'_of_mul]
+  · rintro ⟨y, hy, z, rfl⟩
+    exact Submodule.smul_mem _ _ (Submodule.span_subset_span R S _ hy)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.algeb, IsScalarTower.algebraMap_smul, Submodule, Submodule.add_mem, Submodule.smul_mem, Submodule.span_induction, Submodule.subset_span, Submodule.zero_mem, _one, add_mem, algebraMap_smul, map_one, one_smul, smul_add, smul_mem, span_induction, subset_span, zero_mem
 -/
@@ -492,7 +524,8 @@ theorem mem_span_map
     refine ⟨y, hy, z, ?_⟩
     rw [hz]; rw [Algebra.linearMap_apply]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_mk'_eq_mk'_of_mul]; rw [mul_one]
   · rintro ⟨y, hy, z, hz⟩
-    refine ⟨al
+    refine ⟨algebraMap R S y, Submodule.map_mem_span_algebraMap_image _ _ hy, z, ?_⟩
+    rw [hz]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_mk'_eq_mk'_of_mul]; rw [mul_one]
 
 中文:
 定理 mem_span_map
@@ -505,7 +538,8 @@ theorem mem_span_map
     refine ⟨y, hy, z, ?_⟩
     rw [hz]; rw [Algebra.linearMap_apply]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_mk'_eq_mk'_of_mul]; rw [mul_one]
   · rintro ⟨y, hy, z, hz⟩
-    refine ⟨al
+    refine ⟨algebraMap R S y, Submodule.map_mem_span_algebraMap_image _ _ hy, z, ?_⟩
+    rw [hz]; rw [smul_eq_mul]; rw [mul_comm]; rw [mul_mk'_eq_mk'_of_mul]; rw [mul_one]
 
 Depends on / 依赖: Algebra, Algebra.linearMap_apply, Submodule, Submodule.map_mem_span_algebraMap_image, _eq_mk, _of_mul, algebraMap, coeSubmodule_span, linearMap_apply, map_mem_span_algebraMap_image, mem_span_iff, mul_comm, mul_mk, mul_one, smul_eq_mul
 -/

@@ -236,7 +236,8 @@ abbreviation functorMap
     by rintro _ ⟨k, hk, rfl⟩; exact f.monotone (I.le_right k hk)⟩
   map f := ⟨⟨⟨Set.image_mono f.1.1.1⟩⟩⟩
 
-@[deprecated "No replacement, was using a bad instance
+@[deprecated "No replacement, was using a bad instance" (since := "01-12-2026")]
+alias orderHom := functorMap
 
 中文:
 缩写 functorMap
@@ -246,7 +247,8 @@ abbreviation functorMap
     by rintro _ ⟨k, hk, rfl⟩; exact f.monotone (I.le_right k hk)⟩
   map f := ⟨⟨⟨Set.image_mono f.1.1.1⟩⟩⟩
 
-@[deprecated "No replacement, was using a bad instance
+@[deprecated "No replacement, was using a bad instance" (since := "01-12-2026")]
+alias orderHom := functorMap
 
 Depends on / 依赖: I.left, I.right, Set.mem_image_of_mem, mem_image_of_mem
 -/
@@ -389,7 +391,14 @@ definition SimplicialNerve
   map_id i := by
     ext
     change EnrichedFunctor.comp SSet (SimplicialThickening.functor OrderHom.id) _ = _
-    rw [Simplicia
+    rw [SimplicialThickening.functor_id]
+    rfl
+  map_comp f g := by
+    ext
+    change EnrichedFunctor.comp SSet (SimplicialThickening.functor
+      (f.unop.toOrderHom.uliftMap.comp g.unop.toOrderHom.uliftMap)) _ = _
+    rw [SimplicialThickening.functor_comp]
+    rfl
 
 中文:
 定义 SimplicialNerve
@@ -400,7 +409,14 @@ definition SimplicialNerve
   map_id i := by
     ext
     change EnrichedFunctor.comp SSet (SimplicialThickening.functor OrderHom.id) _ = _
-    rw [Simplicia
+    rw [SimplicialThickening.functor_id]
+    rfl
+  map_comp f g := by
+    ext
+    change EnrichedFunctor.comp SSet (SimplicialThickening.functor
+      (f.unop.toOrderHom.uliftMap.comp g.unop.toOrderHom.uliftMap)) _ = _
+    rw [SimplicialThickening.functor_comp]
+    rfl
 
 Depends on / 依赖: EnrichedFunctor, SimplicialThickening, n.unop.len
 -/

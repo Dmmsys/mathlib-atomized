@@ -598,7 +598,8 @@ theorem liftR_iff
       rfl
     intro i j
     exact (f i j).property
-  rintro ⟨a, f₀, f₁, xeq, yeq,
+  rintro ⟨a, f₀, f₁, xeq, yeq, h⟩
+  exact ⟨⟨a, fun i j => ⟨(f₀ i j, f₁ i j), h i j⟩⟩, xeq.symm, yeq.symm⟩
 
 中文:
 定理 liftR_iff
@@ -616,7 +617,8 @@ theorem liftR_iff
       rfl
     intro i j
     exact (f i j).property
-  rintro ⟨a, f₀, f₁, xeq, yeq,
+  rintro ⟨a, f₀, f₁, xeq, yeq, h⟩
+  exact ⟨⟨a, fun i j => ⟨(f₀ i j, f₁ i j), h i j⟩⟩, xeq.symm, yeq.symm⟩
 
 Depends on / 依赖: property, val.fst, val.snd, xeq.symm, yeq.symm
 -/

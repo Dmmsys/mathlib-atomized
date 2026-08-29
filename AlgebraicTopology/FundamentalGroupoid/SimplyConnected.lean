@@ -232,7 +232,17 @@ theorem simply_connected_iff_loops_nullhomotopic
     exact ⟨hpc, fun x γ => hall γ (Path.refl x)⟩
   · -- Backward: all loops null-homotopic implies all paths homotopic
     intro ⟨hpc, hloops⟩
-    
+    refine ⟨hpc, fun {x y} p₁ p₂ => ?_⟩
+    -- Work in the quotient where structural steps can be done by simp
+    rw [← eq]
+    replace hloops : forall (x : Y) (γ : Path x x),
+        (⟦γ⟧ : Path.Homotopic.Quotient x x) = ⟦Path.refl x⟧ :=
+      fun x γ => Quotient.sound (hloops x γ)
+    have h : trans ⟦p₁⟧ (symm ⟦p₂⟧) = refl x := by
+      simpa using hloops x (p₁.trans p₂.symm)
+    calc ⟦p₁⟧
+      _ = trans (trans ⟦p₁⟧ (symm ⟦p₂⟧)) ⟦p₂⟧ := by simp
+      _ = ⟦p₂⟧ := by grind
 
 中文:
 定理 simply_connected_iff_loops_nullhomotopic
@@ -244,7 +254,17 @@ theorem simply_connected_iff_loops_nullhomotopic
     exact ⟨hpc, fun x γ => hall γ (Path.refl x)⟩
   · -- Backward: all loops null-homotopic implies all paths homotopic
     intro ⟨hpc, hloops⟩
-    
+    refine ⟨hpc, fun {x y} p₁ p₂ => ?_⟩
+    -- Work in the quotient where structural steps can be done by simp
+    rw [← eq]
+    replace hloops : forall (x : Y) (γ : Path x x),
+        (⟦γ⟧ : Path.Homotopic.Quotient x x) = ⟦Path.refl x⟧ :=
+      fun x γ => Quotient.sound (hloops x γ)
+    have h : trans ⟦p₁⟧ (symm ⟦p₂⟧) = refl x := by
+      simpa using hloops x (p₁.trans p₂.symm)
+    calc ⟦p₁⟧
+      _ = trans (trans ⟦p₁⟧ (symm ⟦p₂⟧)) ⟦p₂⟧ := by simp
+      _ = ⟦p₂⟧ := by grind
 
 Depends on / 依赖: Backward, Forward, Path.refl, hloops, homotopic, simply_connected_iff_paths_homotopic
 -/
@@ -432,7 +452,16 @@ theorem isSimplyConnected_iff_exists_homotopy_refl_forall_mem
     rcases h x {
       toFun := fun t => ⟨p t, hp t⟩
       source' := by simp
- 
+      target' := by simp
+    } with ⟨F⟩
+    exact ⟨F.map (.restrict s (.id _)), fun t => (F t).2⟩
+  · rcases h x (p.map continuous_subtype_val) (fun t => (p t).2) with ⟨F, hF⟩
+    exact ⟨{
+      toFun t := ⟨F t, hF t⟩
+      map_zero_left := by simp
+      map_one_left := by simp
+      prop' := by simp
+    }⟩
 
 中文:
 定理 isSimplyConnected_iff_存在_homotopy_refl_对任意_mem
@@ -444,7 +473,16 @@ theorem isSimplyConnected_iff_exists_homotopy_refl_forall_mem
     rcases h x {
       toFun := fun t => ⟨p t, hp t⟩
       source' := by simp
- 
+      target' := by simp
+    } with ⟨F⟩
+    exact ⟨F.map (.restrict s (.id _)), fun t => (F t).2⟩
+  · rcases h x (p.map continuous_subtype_val) (fun t => (p t).2) with ⟨F, hF⟩
+    exact ⟨{
+      toFun t := ⟨F t, hF t⟩
+      map_zero_left := by simp
+      map_one_left := by simp
+      prop' := by simp
+    }⟩
 
 Depends on / 依赖: F.map, IsSimplyConnected, continuous_subtype_val, isPathConnected_iff_pathConnectedSpace, map_on, map_zero_left, p.map, restrict, simply_connected_iff_loops_nullhomotopic, source, target
 -/

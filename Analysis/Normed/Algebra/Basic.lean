@@ -86,7 +86,7 @@ instance [ProperSpace
     intro φ hφ
     rw [Set.mem_preimage]; rw [mem_closedBall_zero_iff]
     exact (norm_le_norm_one ⟨φ, ⟨hφ.1, hφ.2⟩⟩ :)
-  exact (isCompact_closedBall 0 _).of_isClosed_su
+  exact (isCompact_closedBall 0 _).of_isClosed_subset CharacterSpace.isClosed h
 
 中文:
 实例 [真空间
@@ -97,7 +97,7 @@ instance [ProperSpace
     intro φ hφ
     rw [Set.mem_preimage]; rw [mem_closedBall_zero_iff]
     exact (norm_le_norm_one ⟨φ, ⟨hφ.1, hφ.2⟩⟩ :)
-  exact (isCompact_closedBall 0 _).of_isClosed_su
+  exact (isCompact_closedBall 0 _).of_isClosed_subset CharacterSpace.isClosed h
 
 Depends on / 依赖: CharacterSpace, CharacterSpace.isClosed, Metric, Metric.closedBall, Set.mem_preimage, characterSpace, closedBall, isClosed, isCompact_closedBall, isCompact_iff_compactSpace, mem_closedBall_zero_iff, mem_preimage, norm_le_norm_one, of_isClosed_subset, subseteq, toStrongDual
 -/

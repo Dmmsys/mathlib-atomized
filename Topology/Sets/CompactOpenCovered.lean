@@ -154,7 +154,15 @@ lemma iff_isCompactOpenCovered_sigmaMk
       by_cases h : i in s
       · simpa [h] using (V _ _).2
       · simp [h]
-
+    · dsimp only
+      exact Set.isCompact_sigma hs fun i => (by simp_all)
+    · aesop
+  · obtain ⟨s, t, hs, hc, heq'⟩ := hc.sigma_exists_finite_sigma_eq
+    have (i : ι) (hi : i in s) : IsOpen (t i) := by
+      rw [← Set.mk_preimage_sigma (t := t) hi]
+      exact isOpen_sigma_iff.mp (heq' ▸ V.2) i
+    refine ⟨s, hs, fun i hi => ⟨t i, this i hi⟩, fun i _ => hc i, ?_⟩
+    simp_rw [coe_mk, ← heq, ← heq', Set.image_sigma_eq_iUnion, Function.comp_apply]
 
 中文:
 引理 iff_isCompactOpenCovered_sigmaMk
@@ -167,7 +175,15 @@ lemma iff_isCompactOpenCovered_sigmaMk
       by_cases h : i in s
       · simpa [h] using (V _ _).2
       · simp [h]
-
+    · dsimp only
+      exact Set.isCompact_sigma hs fun i => (by simp_all)
+    · aesop
+  · obtain ⟨s, t, hs, hc, heq'⟩ := hc.sigma_exists_finite_sigma_eq
+    have (i : ι) (hi : i in s) : IsOpen (t i) := by
+      rw [← Set.mk_preimage_sigma (t := t) hi]
+      exact isOpen_sigma_iff.mp (heq' ▸ V.2) i
+    refine ⟨s, hs, fun i hi => ⟨t i, this i hi⟩, fun i _ => hc i, ?_⟩
+    simp_rw [coe_mk, ← heq, ← heq', Set.image_sigma_eq_iUnion, Function.comp_apply]
 
 Depends on / 依赖: IsOpen, Set.isCompact_sigma, Set.mk_preimage_sigma, classical, hc.sigma_exists_finite_sigma_eq, iff_of_unique, isCompact_sigma, isOpen_sigma_iff, isOpen_sigma_iff.mpr, mk_preimage_sigma, s.sigma, sigma_exists_finite_sigma_eq
 -/
@@ -203,7 +219,7 @@ lemma of_iUnion_eq_of_finite
   have (i : κ) : exists (V : Opens (Σ i, X i)), IsCompact V.1 ∧ (f _ ·.snd) '' V.1 = s i := by
     convert! H i; rw [iff_isCompactOpenCovered_sigmaMk, iff_of_unique]
   choose V hVeq hVc using this
-  exact ⟨⨆ i, V i, by simpa using isComp
+  exact ⟨⨆ i, V i, by simpa using isCompact_iUnion hVeq, by simp_all [Set.image_iUnion, ← hs]⟩
 
 中文:
 引理 of_iUnion_eq_of_finite
@@ -213,7 +229,7 @@ lemma of_iUnion_eq_of_finite
   have (i : κ) : exists (V : Opens (Σ i, X i)), IsCompact V.1 ∧ (f _ ·.snd) '' V.1 = s i := by
     convert! H i; rw [iff_isCompactOpenCovered_sigmaMk, iff_of_unique]
   choose V hVeq hVc using this
-  exact ⟨⨆ i, V i, by simpa using isComp
+  exact ⟨⨆ i, V i, by simpa using isCompact_iUnion hVeq, by simp_all [Set.image_iUnion, ← hs]⟩
 
 Depends on / 依赖: IsCompact, Set.image_iUnion, convert, iff_isCompactOpenCovered_sigmaMk, iff_of_unique, image_iUnion, isCompact_iUnion
 -/
@@ -260,7 +276,8 @@ lemma of_biUnion_eq_of_isCompact
   obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun V : s => V.1) (fun V => V.1.2) (by simp [← hs])
   refine of_biUnion_eq_of_finite (SetLike.coe '' (t.image Subtype.val : Set (Opens S))) ?_ ?_ ?_
   · exact subset_antisymm (fun x h => by aesop) (subset_trans ht <| by simp)
-  · exact Set.
+  · exact Set.toFinite _
+  · grind
 
 中文:
 引理 of_biUnion_eq_of_isCompact
@@ -270,7 +287,8 @@ lemma of_biUnion_eq_of_isCompact
   obtain ⟨t, ht⟩ := hU.elim_finite_subcover (fun V : s => V.1) (fun V => V.1.2) (by simp [← hs])
   refine of_biUnion_eq_of_finite (SetLike.coe '' (t.image Subtype.val : Set (Opens S))) ?_ ?_ ?_
   · exact subset_antisymm (fun x h => by aesop) (subset_trans ht <| by simp)
-  · exact Set.
+  · exact Set.toFinite _
+  · grind
 
 Depends on / 依赖: Set.toFinite, SetLike, SetLike.coe, Subtype, Subtype.val, classical, elim_finite_subcover, hU.elim_finite_subcover, of_biUnion_eq_of_finite, subset_antisymm, subset_trans, t.image, toFinite
 -/
@@ -375,7 +393,23 @@ lemma exists_mem_of_isBasis
       (forall i, V i in B (a i)) ∧ (forall i, IsCompact (V i).1) ∧ ⋃ i, f (a i) '' V i = U by
     obtain ⟨κ, _, a, V, hB, hc, hU⟩ := h
     cases nonempty_fintype κ
-    refine ⟨Fintype.card κ, a ∘ (Fint
+    refine ⟨Fintype.card κ, a ∘ (Fintype.equivFin κ).symm, fun i => V _, fun i => hB _, ?_⟩
+    simp [← hU, ← (Fintype.equivFin κ).symm.surjective.iUnion_comp, Function.comp_apply]
+  obtain ⟨s, hs, V, hc, hunion⟩ := hU
+  choose Us UsB hUsf hUs using fun i : s => (hB i.1).exists_finite_of_isCompact (hc i i.2)
+  let σ := Σ i : s, Us i
+  have : Finite s := hs
+  have (i : _) : Finite (Us i) := hUsf i
+  refine ⟨σ, inferInstance, fun i => i.1.1, fun i => i.2.1, fun i => UsB _ (by simp),
+      fun _ => hBc _ _ (UsB _ (by simp)), ?_⟩
+  rw [← hunion]
+  ext x
+  simp_rw [Set.mem_iUnion]
+  refine ⟨fun ⟨i, hi, o, ho⟩ => by aesop, fun ⟨i, hi, h, hmem, heq⟩ => ?_⟩
+  rw [hUs ⟨i]; rw [hi⟩]; rw [coe_sSup]; rw [Set.mem_iUnion] at hmem
+  obtain ⟨a, ha⟩ := hmem
+  simp only [Set.mem_iUnion, SetLike.mem_coe, exists_prop] at ha
+  use ⟨⟨i, hi⟩, ⟨a, ha.1⟩⟩, h, ha.2, heq
 
 中文:
 引理 存在_mem_of_isBasis
@@ -385,7 +419,23 @@ lemma exists_mem_of_isBasis
       (forall i, V i in B (a i)) ∧ (forall i, IsCompact (V i).1) ∧ ⋃ i, f (a i) '' V i = U by
     obtain ⟨κ, _, a, V, hB, hc, hU⟩ := h
     cases nonempty_fintype κ
-    refine ⟨Fintype.card κ, a ∘ (Fint
+    refine ⟨Fintype.card κ, a ∘ (Fintype.equivFin κ).symm, fun i => V _, fun i => hB _, ?_⟩
+    simp [← hU, ← (Fintype.equivFin κ).symm.surjective.iUnion_comp, Function.comp_apply]
+  obtain ⟨s, hs, V, hc, hunion⟩ := hU
+  choose Us UsB hUsf hUs using fun i : s => (hB i.1).exists_finite_of_isCompact (hc i i.2)
+  let σ := Σ i : s, Us i
+  have : Finite s := hs
+  have (i : _) : Finite (Us i) := hUsf i
+  refine ⟨σ, inferInstance, fun i => i.1.1, fun i => i.2.1, fun i => UsB _ (by simp),
+      fun _ => hBc _ _ (UsB _ (by simp)), ?_⟩
+  rw [← hunion]
+  ext x
+  simp_rw [Set.mem_iUnion]
+  refine ⟨fun ⟨i, hi, o, ho⟩ => by aesop, fun ⟨i, hi, h, hmem, heq⟩ => ?_⟩
+  rw [hUs ⟨i]; rw [hi⟩]; rw [coe_sSup]; rw [Set.mem_iUnion] at hmem
+  obtain ⟨a, ha⟩ := hmem
+  simp only [Set.mem_iUnion, SetLike.mem_coe, exists_prop] at ha
+  use ⟨⟨i, hi⟩, ⟨a, ha.1⟩⟩, h, ha.2, heq
 
 Depends on / 依赖: Finite, Fintype, Fintype.card, Fintype.equivFin, Function, Function.comp_apply, IsCompact, comp_apply, equivFin, hunion, iUnion_comp, nonempty_fintype, surjective, symm.surjective.iUnion_comp
 -/
@@ -493,7 +543,14 @@ lemma of_comp
     ext
     simp [hge, p, Sigma.map]
   have hp : Continuous p := Continuous.sigma_map ht
-  have hf : Continuou
+  have hf : Continuous (fun p : Σ i, X i => f p.1 p.2) := by simp [hf]
+  obtain ⟨V, hV, heq⟩ := hU
+  obtain ⟨K, hK, ho, hVK, hKU⟩ := PrespectralSpace.exists_isCompact_and_isOpen_between
+(hV.image hp) (ho.preimage hf) by
+    simp [← heq, ← Set.preimage_comp, hcomp, Set.subset_preimage_image]
+  refine ⟨⟨K, ho⟩, hK, subset_antisymm (by simpa) ?_⟩
+  rw [← heq]; rw [← hcomp]; rw [Set.image_comp]
+  exact subset_trans (Set.image_mono hVK) (by simp)
 
 中文:
 引理 of_comp
@@ -505,7 +562,14 @@ lemma of_comp
     ext
     simp [hge, p, Sigma.map]
   have hp : Continuous p := Continuous.sigma_map ht
-  have hf : Continuou
+  have hf : Continuous (fun p : Σ i, X i => f p.1 p.2) := by simp [hf]
+  obtain ⟨V, hV, heq⟩ := hU
+  obtain ⟨K, hK, ho, hVK, hKU⟩ := PrespectralSpace.exists_isCompact_and_isOpen_between
+(hV.image hp) (ho.preimage hf) by
+    simp [← heq, ← Set.preimage_comp, hcomp, Set.subset_preimage_image]
+  refine ⟨⟨K, ho⟩, hK, subset_antisymm (by simpa) ?_⟩
+  rw [← heq]; rw [← hcomp]; rw [Set.image_comp]
+  exact subset_trans (Set.image_mono hVK) (by simp)
 
 Depends on / 依赖: Continuous, Continuous.sigma_map, PrespectralSpace, PrespectralSpace.exists_isCompact_and_isOpen_between, Set.prei, Sigma.map, exists_isCompact_and_isOpen_between, hV.image, ho.preimage, iff_isCompactOpenCovered_sigmaMk, iff_of_unique, preimage, sigma_map
 -/

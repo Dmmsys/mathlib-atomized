@@ -247,7 +247,7 @@ theorem Subalgebra.isAlgebraic_iff
   refine forall_congr' fun x => exists_congr fun p => and_congr Iff.rfl ?_
   have h : Function.Injective S.val := Subtype.val_injective
   conv_rhs => rw [← h.eq_iff, map_zero]
-  rw [← aeval_algHom_apply]; rw [S.va
+  rw [← aeval_algHom_apply]; rw [S.val_apply]
 
 中文:
 定理 子代数.isAlgebraic_iff
@@ -258,7 +258,7 @@ theorem Subalgebra.isAlgebraic_iff
   refine forall_congr' fun x => exists_congr fun p => and_congr Iff.rfl ?_
   have h : Function.Injective S.val := Subtype.val_injective
   conv_rhs => rw [← h.eq_iff, map_zero]
-  rw [← aeval_algHom_apply]; rw [S.va
+  rw [← aeval_algHom_apply]; rw [S.val_apply]
 
 Depends on / 依赖: Algebra, Algebra.isAlgebraic_def, Function, Function.Injective, Iff.rfl, Injective, IsAlgebraic, S.val, S.val_apply, Subalgebra, Subalgebra.IsAlgebraic, Subtype, Subtype.forall, Subtype.val_injective, aeval_algHom_apply, and_congr, conv_rhs, eq_iff, exists_congr, forall_congr
 -/

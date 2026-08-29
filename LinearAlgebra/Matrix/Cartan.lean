@@ -304,7 +304,8 @@ definition D
     else if i.val + 1 = j.val ∧ j.val + 2 < n then -1
     else if j.val + 1 = i.val ∧ i.val + 2 < n then -1
     else if i.val + 3 = n ∧ (j.val + 2 = n ∨ j.val + 1 = n) then -1
-    else if j.val + 3 = n ∧ (i.val + 2 = n ∨ i.val + 1 = 
+    else if j.val + 3 = n ∧ (i.val + 2 = n ∨ i.val + 1 = n) then -1
+    else 0
 
 中文:
 定义 D
@@ -315,7 +316,8 @@ definition D
     else if i.val + 1 = j.val ∧ j.val + 2 < n then -1
     else if j.val + 1 = i.val ∧ i.val + 2 < n then -1
     else if i.val + 3 = n ∧ (j.val + 2 = n ∨ j.val + 1 = n) then -1
-    else if j.val + 3 = n ∧ (i.val + 2 = n ∨ i.val + 1 = 
+    else if j.val + 3 = n ∧ (i.val + 2 = n ∨ i.val + 1 = n) then -1
+    else 0
 
 Depends on / 依赖: Matrix, Matrix.of, i.val, j.val
 -/

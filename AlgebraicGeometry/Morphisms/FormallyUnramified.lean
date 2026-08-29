@@ -255,7 +255,21 @@ instance isOpenImmersion_diagonal
     let 𝒰X (j : (Y.affineCover.pullback₁ f).I₀) :
         ((Y.affineCover.pullback₁ f).X j).OpenCover := Scheme.affineCover _
     apply IsZariskiLocalAtTarget.of_range_subset_iSup _
-      (Scheme.Pullback.range_
+      (Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange f 𝒰Y 𝒰X)
+    intro ⟨i, j⟩
+    rw [arrow_mk_iso_iff (P := @IsOpenImmersion)
+      (Scheme.Pullback.diagonalRestrictIsoDiagonal f 𝒰Y 𝒰X i j)]
+    have hu : FormallyUnramified ((𝒰X i).f j ≫ pullback.snd f (𝒰Y.f i)) :=
+      comp_mem _ _ _ inferInstance (pullback_snd _ _ inferInstance)
+    have hfin : LocallyOfFiniteType ((𝒰X i).f j ≫ pullback.snd f (𝒰Y.f i)) :=
+      comp_mem _ _ _ inferInstance (pullback_snd _ _ inferInstance)
+    exact this _ ⟨⟨_, rfl⟩, ⟨_, rfl⟩⟩
+  obtain ⟨⟨S, rfl⟩, R, rfl⟩ := hX
+  obtain ⟨f, rfl⟩ := Spec.map_surjective f
+  rw [HasRingHomProperty.Spec_iff (P := @FormallyUnramified)]; rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFiniteType)] at *
+  algebraize [f.hom]
+  rw [show f = CommRingCat.ofHom (algebraMap R S) from rfl]; rw [diagonal_SpecMap R S]; rw [cancel_right_of_respectsIso (P := @IsOpenImmersion)]
+  infer_instance
 
 中文:
 实例 isOpenImmersion_diagonal
@@ -266,7 +280,21 @@ instance isOpenImmersion_diagonal
     let 𝒰X (j : (Y.affineCover.pullback₁ f).I₀) :
         ((Y.affineCover.pullback₁ f).X j).OpenCover := Scheme.affineCover _
     apply IsZariskiLocalAtTarget.of_range_subset_iSup _
-      (Scheme.Pullback.range_
+      (Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange f 𝒰Y 𝒰X)
+    intro ⟨i, j⟩
+    rw [arrow_mk_iso_iff (P := @IsOpenImmersion)
+      (Scheme.Pullback.diagonalRestrictIsoDiagonal f 𝒰Y 𝒰X i j)]
+    have hu : FormallyUnramified ((𝒰X i).f j ≫ pullback.snd f (𝒰Y.f i)) :=
+      comp_mem _ _ _ inferInstance (pullback_snd _ _ inferInstance)
+    have hfin : LocallyOfFiniteType ((𝒰X i).f j ≫ pullback.snd f (𝒰Y.f i)) :=
+      comp_mem _ _ _ inferInstance (pullback_snd _ _ inferInstance)
+    exact this _ ⟨⟨_, rfl⟩, ⟨_, rfl⟩⟩
+  obtain ⟨⟨S, rfl⟩, R, rfl⟩ := hX
+  obtain ⟨f, rfl⟩ := Spec.map_surjective f
+  rw [HasRingHomProperty.Spec_iff (P := @FormallyUnramified)]; rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFiniteType)] at *
+  algebraize [f.hom]
+  rw [show f = CommRingCat.ofHom (algebraMap R S) from rfl]; rw [diagonal_SpecMap R S]; rw [cancel_right_of_respectsIso (P := @IsOpenImmersion)]
+  infer_instance
 
 Depends on / 依赖: FormallyUnramified, IsOpenImmersion, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.of_range_subset_iSup, OpenCover, Pullback, Scheme, Scheme.Pullback.diagonalRestrictIsoDiagonal, Scheme.Pullback.range_diagonal_subset_diagonalCoverDiagonalRange, Scheme.affineCover, Y.affineCover, Y.affineCover.pullback, affineCover, arrow_mk_iso_iff, diagonalRestrictIsoDiagonal, of_range_subset_iSup, pullback, pullback.snd, range_diagonal_subset_diagonalCoverDiagonalRange
 -/
@@ -336,7 +364,20 @@ instance [FormallyUnramified
   algebraize [(f.stalkMap x).hom]
   have : IsLocalHom (algebraMap (Y.presheaf.stalk (f x)) (X.presheaf.stalk x)) :=
 inferInstanceAs IsLocalHom (f.stalkMap x).hom
-  suffices h : Algebra.Is
+  suffices h : Algebra.IsSeparable
+      (IsLocalRing.ResidueField <| Y.presheaf.stalk (f x))
+      (IsLocalRing.ResidueField <| X.presheaf.stalk x) by
+    convert! h
+    refine Algebra.algebra_ext _ _ fun x => ?_
+    obtain ⟨x, rfl⟩ := IsLocalRing.residue_surjective x
+    rfl
+  have : Algebra.EssFiniteType (Y.presheaf.stalk (f x)) (X.presheaf.stalk x) := by
+    rw [← RingHom.essFiniteType_algebraMap]; rw [RingHom.algebraMap_toAlgebra]
+    exact LocallyOfFiniteType.stalkMap f x
+  have : Algebra.FormallyUnramified (Y.presheaf.stalk (f x)) (X.presheaf.stalk x) := by
+    rw [← RingHom.formallyUnramified_algebraMap]; rw [RingHom.algebraMap_toAlgebra]
+    exact stalkMap f x
+  infer_instance
 
 中文:
 实例 [形式非分歧
@@ -346,7 +387,20 @@ inferInstanceAs IsLocalHom (f.stalkMap x).hom
   algebraize [(f.stalkMap x).hom]
   have : IsLocalHom (algebraMap (Y.presheaf.stalk (f x)) (X.presheaf.stalk x)) :=
 inferInstanceAs IsLocalHom (f.stalkMap x).hom
-  suffices h : Algebra.Is
+  suffices h : Algebra.IsSeparable
+      (IsLocalRing.ResidueField <| Y.presheaf.stalk (f x))
+      (IsLocalRing.ResidueField <| X.presheaf.stalk x) by
+    convert! h
+    refine Algebra.algebra_ext _ _ fun x => ?_
+    obtain ⟨x, rfl⟩ := IsLocalRing.residue_surjective x
+    rfl
+  have : Algebra.EssFiniteType (Y.presheaf.stalk (f x)) (X.presheaf.stalk x) := by
+    rw [← RingHom.essFiniteType_algebraMap]; rw [RingHom.algebraMap_toAlgebra]
+    exact LocallyOfFiniteType.stalkMap f x
+  have : Algebra.FormallyUnramified (Y.presheaf.stalk (f x)) (X.presheaf.stalk x) := by
+    rw [← RingHom.formallyUnramified_algebraMap]; rw [RingHom.algebraMap_toAlgebra]
+    exact stalkMap f x
+  infer_instance
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable, Algebra.algebra_ext, IsLocalHom, IsLocalRing, IsLocalRing.ResidueField, IsLocalRing.residue_su, IsSeparable, ResidueField, X.presheaf.stalk, X.residueField, Y.presheaf.stalk, Y.residueField, algebraMap, algebra_ext, algebraize, convert, f.base, f.residueFieldMap, f.stalkMap
 -/
@@ -397,7 +451,31 @@ lemma hom_ext
     rw [isDominant_iff]; rw [denseRange_iff_closure_range]; rw [← i.support_ker]; rw [← i.ker.support_pow (n + 1) (by simp)]; rw [pow_succ]; rw [hn]
     simp
   refine Scheme.hom_ext_of_forall _ _ fun x => ?_
-  obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :
+  obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
+    Y.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ (f (g₁ x))) isOpen_univ
+  obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU : V <= f ⁻¹ᵁ U⟩ :=
+    X.isBasis_affineOpens.exists_subset_of_mem_open hxU (f ⁻¹ᵁ U).isOpen
+  have : g₁.base = g₂.base := by ext x; obtain ⟨x, rfl⟩ := i.surjective x; exact congr($hig x)
+  obtain ⟨_, ⟨W, hW, rfl⟩, hxW, hWV : W <= _⟩ := Z.isBasis_affineOpens.exists_subset_of_mem_open
+    (And.intro hxV (by simpa [← this])) (g₁ ⁻¹ᵁ V ⊓ g₂ ⁻¹ᵁ V).isOpen
+  refine ⟨W, hxW, ?_⟩
+  have := f.formallyUnramified_appLE hU hV hVU
+  algebraize [(f.appLE U V hVU).hom,
+    ((g₁ ≫ f).appLE U W (by grw [hWV, inf_le_left, hVU]; rfl)).hom]
+  let ψ₁ : Γ(X, V) ->ₐ[Γ(Y, U)] Γ(Z, W) := ⟨(g₁.appLE _ _ (hWV.trans inf_le_left)).hom, fun r => by
+    simp [RingHom.algebraMap_toAlgebra, ← CategoryTheory.comp_apply, -CommRingCat.hom_comp,
+      Scheme.Hom.appLE_comp_appLE]⟩
+  let ψ₂ : Γ(X, V) ->ₐ[Γ(Y, U)] Γ(Z, W) := ⟨(g₂.appLE _ _ (hWV.trans inf_le_right)).hom, fun r => by
+    simp [RingHom.algebraMap_toAlgebra, ← CategoryTheory.comp_apply, -CommRingCat.hom_comp,
+      Scheme.Hom.appLE_comp_appLE, hgf, -Scheme.Hom.comp_appLE]⟩
+  suffices ψ₁ = ψ₂ by
+    simpa [ψ₁, ψ₂, -Iso.cancel_iso_hom_left, IsAffineOpen.isoSpec_hom] using
+      congr(hW.isoSpec.hom ≫ Spec.map (CommRingCat.ofHom ($this).toRingHom) ≫ hV.fromSpec)
+  refine Algebra.FormallyUnramified.ext' (i.app W).hom ?_ ψ₁ ψ₂ ?_
+  · obtain ⟨n, hn⟩ := hi
+    exact ⟨n, by simpa using congr(($hn).ideal ⟨W, hW⟩)⟩
+  · simp [ψ₁, ψ₂, ← CategoryTheory.comp_apply, -CommRingCat.hom_comp, hig,
+      Scheme.Hom.app_eq_appLE, Scheme.Hom.appLE_comp_appLE, -Scheme.Hom.comp_appLE]
 
 中文:
 引理 hom_ext
@@ -408,7 +486,31 @@ lemma hom_ext
     rw [isDominant_iff]; rw [denseRange_iff_closure_range]; rw [← i.support_ker]; rw [← i.ker.support_pow (n + 1) (by simp)]; rw [pow_succ]; rw [hn]
     simp
   refine Scheme.hom_ext_of_forall _ _ fun x => ?_
-  obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :
+  obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
+    Y.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ (f (g₁ x))) isOpen_univ
+  obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU : V <= f ⁻¹ᵁ U⟩ :=
+    X.isBasis_affineOpens.exists_subset_of_mem_open hxU (f ⁻¹ᵁ U).isOpen
+  have : g₁.base = g₂.base := by ext x; obtain ⟨x, rfl⟩ := i.surjective x; exact congr($hig x)
+  obtain ⟨_, ⟨W, hW, rfl⟩, hxW, hWV : W <= _⟩ := Z.isBasis_affineOpens.exists_subset_of_mem_open
+    (And.intro hxV (by simpa [← this])) (g₁ ⁻¹ᵁ V ⊓ g₂ ⁻¹ᵁ V).isOpen
+  refine ⟨W, hxW, ?_⟩
+  have := f.formallyUnramified_appLE hU hV hVU
+  algebraize [(f.appLE U V hVU).hom,
+    ((g₁ ≫ f).appLE U W (by grw [hWV, inf_le_left, hVU]; rfl)).hom]
+  let ψ₁ : Γ(X, V) ->ₐ[Γ(Y, U)] Γ(Z, W) := ⟨(g₁.appLE _ _ (hWV.trans inf_le_left)).hom, fun r => by
+    simp [RingHom.algebraMap_toAlgebra, ← CategoryTheory.comp_apply, -CommRingCat.hom_comp,
+      Scheme.Hom.appLE_comp_appLE]⟩
+  let ψ₂ : Γ(X, V) ->ₐ[Γ(Y, U)] Γ(Z, W) := ⟨(g₂.appLE _ _ (hWV.trans inf_le_right)).hom, fun r => by
+    simp [RingHom.algebraMap_toAlgebra, ← CategoryTheory.comp_apply, -CommRingCat.hom_comp,
+      Scheme.Hom.appLE_comp_appLE, hgf, -Scheme.Hom.comp_appLE]⟩
+  suffices ψ₁ = ψ₂ by
+    simpa [ψ₁, ψ₂, -Iso.cancel_iso_hom_left, IsAffineOpen.isoSpec_hom] using
+      congr(hW.isoSpec.hom ≫ Spec.map (CommRingCat.ofHom ($this).toRingHom) ≫ hV.fromSpec)
+  refine Algebra.FormallyUnramified.ext' (i.app W).hom ?_ ψ₁ ψ₂ ?_
+  · obtain ⟨n, hn⟩ := hi
+    exact ⟨n, by simpa using congr(($hn).ideal ⟨W, hW⟩)⟩
+  · simp [ψ₁, ψ₂, ← CategoryTheory.comp_apply, -CommRingCat.hom_comp, hig,
+      Scheme.Hom.app_eq_appLE, Scheme.Hom.appLE_comp_appLE, -Scheme.Hom.comp_appLE]
 -/
 protected lemma hom_ext {Z' Z : Scheme} (i : Z' ⟶ Z) (hi : IsNilpotent i.ker) [IsClosedImmersion i]
     (f : X ⟶ Y) [FormallyUnramified f]
@@ -455,7 +557,16 @@ lemma of_hom_ext
   let := (f.appLE U V hVU).hom.toAlgebra
   refine Algebra.FormallyUnramified.iff_comp_injective.mpr fun R _ _ I hI g₁ g₂ hg₁g₂ => ?_
   have hg₁ : f.appLE U V hVU ≫ CommRingCat.ofHom g₁ = CommRingCat.ofHom (algebraMap _ R) :=
-    CommRingCat.hom_ext g₁.comp_alg
+    CommRingCat.hom_ext g₁.comp_algebraMap
+  have hg₂ : f.appLE U V hVU ≫ CommRingCat.ofHom g₂ = CommRingCat.ofHom (algebraMap _ R) :=
+    CommRingCat.hom_ext g₂.comp_algebraMap
+  have := H (.of R) (.of (R ⧸ I)) (CommRingCat.ofHom (Ideal.Quotient.mkₐ Γ(Y, U) I))
+    Ideal.Quotient.mk_surjective (by simpa)
+    (Spec.map (CommRingCat.ofHom g₁) ≫ hV.fromSpec) (Spec.map (CommRingCat.ofHom g₂) ≫ hV.fromSpec)
+    (by simp only [← Spec.map_comp_assoc, ← CommRingCat.ofHom_comp, ← AlgHom.comp_toRingHom, *])
+    (by simp only [Category.assoc, ← hU.SpecMap_appLE_fromSpec f hV hVU, ← Spec.map_comp_assoc, *])
+  rw [cancel_mono]; rw [Spec.map_inj] at this
+  exact AlgHom.ext fun x => congr($this x)
 
 中文:
 引理 of_hom_ext
@@ -465,7 +576,16 @@ lemma of_hom_ext
   let := (f.appLE U V hVU).hom.toAlgebra
   refine Algebra.FormallyUnramified.iff_comp_injective.mpr fun R _ _ I hI g₁ g₂ hg₁g₂ => ?_
   have hg₁ : f.appLE U V hVU ≫ CommRingCat.ofHom g₁ = CommRingCat.ofHom (algebraMap _ R) :=
-    CommRingCat.hom_ext g₁.comp_alg
+    CommRingCat.hom_ext g₁.comp_algebraMap
+  have hg₂ : f.appLE U V hVU ≫ CommRingCat.ofHom g₂ = CommRingCat.ofHom (algebraMap _ R) :=
+    CommRingCat.hom_ext g₂.comp_algebraMap
+  have := H (.of R) (.of (R ⧸ I)) (CommRingCat.ofHom (Ideal.Quotient.mkₐ Γ(Y, U) I))
+    Ideal.Quotient.mk_surjective (by simpa)
+    (Spec.map (CommRingCat.ofHom g₁) ≫ hV.fromSpec) (Spec.map (CommRingCat.ofHom g₂) ≫ hV.fromSpec)
+    (by simp only [← Spec.map_comp_assoc, ← CommRingCat.ofHom_comp, ← AlgHom.comp_toRingHom, *])
+    (by simp only [Category.assoc, ← hU.SpecMap_appLE_fromSpec f hV hVU, ← Spec.map_comp_assoc, *])
+  rw [cancel_mono]; rw [Spec.map_inj] at this
+  exact AlgHom.ext fun x => congr($this x)
 
 Depends on / 依赖: Finite, X.obj, Y.obj
 -/

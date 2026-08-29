@@ -71,7 +71,8 @@ theorem formPerm_disjoint_iff
   · intro h x
     by_cases hx : x in l
     on_goal 1 => by_cases hx' : x in l'
-  
+    · exact (h hx hx').elim
+    all_goals have := List.formPerm_apply_of_notMem ‹_›; tauto
 
 中文:
 定理 formPerm_disjoint_iff
@@ -86,7 +87,8 @@ theorem formPerm_disjoint_iff
   · intro h x
     by_cases hx : x in l
     on_goal 1 => by_cases hx' : x in l'
-  
+    · exact (h hx hx').elim
+    all_goals have := List.formPerm_apply_of_notMem ‹_›; tauto
 
 Depends on / 依赖: Disjoint, List.Disjoint, List.formPerm_apply_of_notMem, all_goals, disjoint_iff_eq_or_eq, formPerm_apply_mem_eq_self_iff, formPerm_apply_of_notMem, on_goal, specialize
 -/
@@ -122,7 +124,9 @@ theorem isCycle_formPerm
     · rwa [formPerm_apply_mem_ne_self_iff _ hl _ mem_cons_self]
     · intro w hw
       have : w in x::y::l := mem_of_formPerm_apply_ne hw
-      obtai
+      obtain ⟨k, hk, rfl⟩ := getElem_of_mem this
+      use k
+      simp only [zpow_natCast, formPerm_pow_apply_head _ _ hl k, Nat.mod_eq_of_lt hk]
 
 中文:
 定理 isCycle_formPerm
@@ -139,7 +143,9 @@ theorem isCycle_formPerm
     · rwa [formPerm_apply_mem_ne_self_iff _ hl _ mem_cons_self]
     · intro w hw
       have : w in x::y::l := mem_of_formPerm_apply_ne hw
-      obtai
+      obtain ⟨k, hk, rfl⟩ := getElem_of_mem this
+      use k
+      simp only [zpow_natCast, formPerm_pow_apply_head _ _ hl k, Nat.mod_eq_of_lt hk]
 
 Depends on / 依赖: Nat.mod_eq_of_lt, formPerm_apply_mem_ne_self_iff, formPerm_pow_apply_head, generalizing, getElem_of_mem, mem_cons_self, mem_of_formPerm_apply_ne, mod_eq_of_lt, zpow_natCast
 -/
@@ -230,7 +236,8 @@ theorem cycleType_formPerm
     · intro x h
       simp [h] at hn
   · simp
-  · simpa using
+  · simpa using isCycle_formPerm hl hn
+  · simp
 
 中文:
 定理 cycleType_formPerm
@@ -245,7 +252,8 @@ theorem cycleType_formPerm
     · intro x h
       simp [h] at hn
   · simp
-  · simpa using
+  · simpa using isCycle_formPerm hl hn
+  · simp
 
 Depends on / 依赖: Function, Function.comp_apply, attach, card_toFinset, comp_apply, cycleType_eq, dedup_eq_self, dedup_eq_self.mpr, formPerm, isCycle_formPerm, l.attach.formPerm, length_attach, nodup_attach, support_formPerm_of_nodup
 -/
@@ -761,7 +769,29 @@ theorem nodup_toList
   rw [nodup_iff_injective_getElem]
   intro ⟨n, hn⟩ ⟨m, hm⟩
   rw [length_toList]; rw [← hc.orderOf] at hm hn
-  rw [← cycleOf_apply_self]; rw [← Ne]; 
+  rw [← cycleOf_apply_self]; rw [← Ne]; rw [← mem_support] at hx
+  simp only [Fin.mk.injEq]
+  rw [getElem_toList]; rw [getElem_toList]; rw [← cycleOf_pow_apply_self p x n]; rw [←
+    cycleOf_pow_apply_self p x m]
+  rcases n with - | n <;> rcases m with - | m
+  · simp
+  · rw [← hc.support_pow_of_pos_of_lt_orderOf m.zero_lt_succ hm, mem_support,
+      cycleOf_pow_apply_self] at hx
+    simp [hx.symm]
+  · rw [← hc.support_pow_of_pos_of_lt_orderOf n.zero_lt_succ hn, mem_support,
+      cycleOf_pow_apply_self] at hx
+    simp [hx]
+  intro h
+  have hn' : ¬orderOf (p.cycleOf x) ∣ n.succ := Nat.not_dvd_of_pos_of_lt n.zero_lt_succ hn
+  have hm' : ¬orderOf (p.cycleOf x) ∣ m.succ := Nat.not_dvd_of_pos_of_lt m.zero_lt_succ hm
+  rw [← hc.support_pow_eq_iff] at hn' hm'
+  rw [← Nat.mod_eq_of_lt hn]; rw [← Nat.mod_eq_of_lt hm]; rw [← pow_inj_mod]
+  refine support_congr ?_ ?_
+  · rw [hm', hn']
+  · rw [hm']
+    intro y hy
+    obtain ⟨k, rfl⟩ := hc.exists_pow_eq (mem_support.mp hx) (mem_support.mp hy)
+    rw [← mul_apply]; rw [(Commute.pow_pow_self _ _ _).eq]; rw [mul_apply]; rw [h]; rw [← mul_apply]; rw [← mul_apply]; rw [(Commute.pow_pow_self _ _ _).eq]
 
 中文:
 定理 nodup_toList
@@ -775,7 +805,29 @@ theorem nodup_toList
   rw [nodup_iff_injective_getElem]
   intro ⟨n, hn⟩ ⟨m, hm⟩
   rw [length_toList]; rw [← hc.orderOf] at hm hn
-  rw [← cycleOf_apply_self]; rw [← Ne]; 
+  rw [← cycleOf_apply_self]; rw [← Ne]; rw [← mem_support] at hx
+  simp only [Fin.mk.injEq]
+  rw [getElem_toList]; rw [getElem_toList]; rw [← cycleOf_pow_apply_self p x n]; rw [←
+    cycleOf_pow_apply_self p x m]
+  rcases n with - | n <;> rcases m with - | m
+  · simp
+  · rw [← hc.support_pow_of_pos_of_lt_orderOf m.zero_lt_succ hm, mem_support,
+      cycleOf_pow_apply_self] at hx
+    simp [hx.symm]
+  · rw [← hc.support_pow_of_pos_of_lt_orderOf n.zero_lt_succ hn, mem_support,
+      cycleOf_pow_apply_self] at hx
+    simp [hx]
+  intro h
+  have hn' : ¬orderOf (p.cycleOf x) ∣ n.succ := Nat.not_dvd_of_pos_of_lt n.zero_lt_succ hn
+  have hm' : ¬orderOf (p.cycleOf x) ∣ m.succ := Nat.not_dvd_of_pos_of_lt m.zero_lt_succ hm
+  rw [← hc.support_pow_eq_iff] at hn' hm'
+  rw [← Nat.mod_eq_of_lt hn]; rw [← Nat.mod_eq_of_lt hm]; rw [← pow_inj_mod]
+  refine support_congr ?_ ?_
+  · rw [hm', hn']
+  · rw [hm']
+    intro y hy
+    obtain ⟨k, rfl⟩ := hc.exists_pow_eq (mem_support.mp hx) (mem_support.mp hy)
+    rw [← mul_apply]; rw [(Commute.pow_pow_self _ _ _).eq]; rw [mul_apply]; rw [h]; rw [← mul_apply]; rw [← mul_apply]; rw [(Commute.pow_pow_self _ _ _).eq]
 
 Depends on / 依赖: Fin.mk.injEq, IsCycle, cycleOf, cycleOf_apply_self, cycleOf_pow_apply_self, getElem_toList, hc.orderOf, isCycle_cycleOf, length_toList, mem_support, nodup_iff_injective_getElem, notMem_support, orderOf, toList_eq_nil_iff
 -/
@@ -823,7 +875,9 @@ theorem next_toList_eq_apply
   rw [← getElem_toList p x k (by simpa using hk)] at hk'
   simp_rw [← hk']
   rw [next_getElem _ (nodup_toList _ _)]; rw [getElem_toList]; rw [getElem_toList]; rw [← mul_apply]; rw [← pow_succ']
-  si
+  simp_rw [length_toList]
+  rw [← pow_mod_orderOf_cycleOf_apply p (k + 1)]; rw [IsCycle.orderOf]
+  exact isCycle_cycleOf _ (mem_support.mp hy.right)
 
 中文:
 定理 next_toList_eq_apply
@@ -834,7 +888,9 @@ theorem next_toList_eq_apply
   rw [← getElem_toList p x k (by simpa using hk)] at hk'
   simp_rw [← hk']
   rw [next_getElem _ (nodup_toList _ _)]; rw [getElem_toList]; rw [getElem_toList]; rw [← mul_apply]; rw [← pow_succ']
-  si
+  simp_rw [length_toList]
+  rw [← pow_mod_orderOf_cycleOf_apply p (k + 1)]; rw [IsCycle.orderOf]
+  exact isCycle_cycleOf _ (mem_support.mp hy.right)
 
 Depends on / 依赖: IsCycle, IsCycle.orderOf, exists_pow_eq_of_mem_support, getElem_toList, hy.left.exists_pow_eq_of_mem_support, hy.right, isCycle_cycleOf, length_toList, mem_support, mem_support.mp, mem_toList_iff, mul_apply, next_getElem, nodup_toList, orderOf, pow_mod_orderOf_cycleOf_apply, pow_succ, simp_rw
 -/
@@ -893,7 +949,8 @@ theorem SameCycle.toList_isRotated
       simp [hy, IsRotated.refl]
     use k.succ
     rw [← toList_pow_apply_eq_rotate]; rw [hy]
-  · rw [toList_eq
+  · rw [toList_eq_nil_iff.mpr hx, isRotated_nil_iff', eq_comm, toList_eq_nil_iff]
+    rwa [← h.mem_support_iff]
 
 中文:
 定理 SameCycle.toList_isRotated
@@ -906,7 +963,8 @@ theorem SameCycle.toList_isRotated
       simp [hy, IsRotated.refl]
     use k.succ
     rw [← toList_pow_apply_eq_rotate]; rw [hy]
-  · rw [toList_eq
+  · rw [toList_eq_nil_iff.mpr hx, isRotated_nil_iff', eq_comm, toList_eq_nil_iff]
+    rwa [← h.mem_support_iff]
 
 Depends on / 依赖: coe_one, exists_pow_eq_of_mem_support, f.support, h.exists_pow_eq_of_mem_support, pow_zero, support
 -/
@@ -997,6 +1055,10 @@ theorem toList_formPerm_nontrivial
     rintro _ rfl
     simp at hl
   rw [toList]; rw [hc.cycleOf_eq (mem_support.mp _)]; rw [hs]; rw [card_toFinset]; rw [dedup_eq_self.mpr hn]
+  · refine ext_getElem (by simp) fun k hk hk' => ?_
+    simp only [get_eq_getElem, getElem_iterate, iterate_eq_pow, formPerm_pow_apply_getElem _ hn,
+      zero_add, Nat.mod_eq_of_lt hk']
+  · simp [hs]
 
 中文:
 定理 toList_formPerm_nontrivial
@@ -1008,6 +1070,10 @@ theorem toList_formPerm_nontrivial
     rintro _ rfl
     simp at hl
   rw [toList]; rw [hc.cycleOf_eq (mem_support.mp _)]; rw [hs]; rw [card_toFinset]; rw [dedup_eq_self.mpr hn]
+  · refine ext_getElem (by simp) fun k hk hk' => ?_
+    simp only [get_eq_getElem, getElem_iterate, iterate_eq_pow, formPerm_pow_apply_getElem _ hn,
+      zero_add, Nat.mod_eq_of_lt hk']
+  · simp [hs]
 
 Depends on / 依赖: IsCycle, List.isCycle_formPerm, Nat.mod_eq_of_lt, card_toFinset, cycleOf_eq, dedup_eq_self, dedup_eq_self.mpr, ext_getElem, formPerm, formPerm_pow_apply_getElem, getElem_iterate, get_eq_getElem, hc.cycleOf_eq, isCycle_formPerm, iterate_eq_pow, l.formPerm.IsCycle, l.formPerm.support, l.toFinset, mem_support, mem_support.mp
 -/
@@ -1039,7 +1105,7 @@ theorem toList_formPerm_isRotated_self
   rw [toList_formPerm_nontrivial]
   · simp
   · simpa using hl
-
+  · simpa using hn
 
 中文:
 定理 toList_formPerm_isRotated_self
@@ -1053,7 +1119,7 @@ theorem toList_formPerm_isRotated_self
   rw [toList_formPerm_nontrivial]
   · simp
   · simpa using hl
-
+  · simpa using hn
 
 Depends on / 依赖: Nat.mod_eq_of_lt, Nat.mod_self, formPerm_eq_of_isRotated, get_eq_get_rotate, get_of_mem, l.rotate, le_of_lt, mod_eq_of_lt, mod_self, rotate, toList_formPerm_nontrivial, tsub_add_cancel_of_le
 -/
@@ -1083,7 +1149,11 @@ theorem formPerm_toList
   ext y
   by_cases hy : SameCycle f x y
   · obtain ⟨k, _, rfl⟩ := hy.exists_pow_eq_of_mem_support (mem_support.mpr hx)
-    rw [cycleOf_apply_apply_pow_self]; rw [List.
+    rw [cycleOf_apply_apply_pow_self]; rw [List.formPerm_apply_mem_eq_next (nodup_toList f x)]; rw [next_toList_eq_apply]; rw [pow_succ']; rw [mul_apply]
+    rw [mem_toList_iff]
+    exact ⟨⟨k, rfl⟩, mem_support.mpr hx⟩
+  · rw [cycleOf_apply_of_not_sameCycle hy, formPerm_apply_of_notMem]
+    simp [mem_toList_iff, hy]
 
 中文:
 定理 formPerm_toList
@@ -1096,7 +1166,11 @@ theorem formPerm_toList
   ext y
   by_cases hy : SameCycle f x y
   · obtain ⟨k, _, rfl⟩ := hy.exists_pow_eq_of_mem_support (mem_support.mpr hx)
-    rw [cycleOf_apply_apply_pow_self]; rw [List.
+    rw [cycleOf_apply_apply_pow_self]; rw [List.formPerm_apply_mem_eq_next (nodup_toList f x)]; rw [next_toList_eq_apply]; rw [pow_succ']; rw [mul_apply]
+    rw [mem_toList_iff]
+    exact ⟨⟨k, rfl⟩, mem_support.mpr hx⟩
+  · rw [cycleOf_apply_of_not_sameCycle hy, formPerm_apply_of_notMem]
+    simp [mem_toList_iff, hy]
 
 Depends on / 依赖: List.formPerm_apply_mem_eq_next, SameCycle, cycleOf_apply_apply_pow_self, cycleOf_apply_of_not_sameCycle, cycleOf_eq_one_iff, exists_pow_eq_of_mem_support, formPerm_apply_mem_eq_next, formPerm_apply_o, formPerm_nil, hy.exists_pow_eq_of_mem_support, mem_support, mem_support.mpr, mem_toList_iff, mul_apply, next_toList_eq_apply, nodup_toList, notMem_support, notMem_support.mpr, pow_succ, toList_eq_nil_iff
 -/
@@ -1126,7 +1200,7 @@ definition toCycle
       refine heq_of_eq ?_
       split_ifs with hx hy hy <;> try rfl
       have hc : SameCycle f x y := IsCycle.sameCycle hf hx hy
-      exact Quotient.sound' hc
+      exact Quotient.sound' hc.toList_isRotated)
 
 中文:
 定义 toCycle
@@ -1138,7 +1212,7 @@ definition toCycle
       refine heq_of_eq ?_
       split_ifs with hx hy hy <;> try rfl
       have hc : SameCycle f x y := IsCycle.sameCycle hf hx hy
-      exact Quotient.sound' hc
+      exact Quotient.sound' hc.toList_isRotated)
 
 Depends on / 依赖: Finset, Finset.univ, IsCycle, IsCycle.sameCycle, Multiset, Multiset.recOn, Quot.mk, Quotient, Quotient.sound, SameCycle, hc.toList_isRotated, heq_of_eq, sameCycle, split_ifs, toList, toList_isRotated
 -/
@@ -1270,7 +1344,11 @@ theorem mem_toCycle_iff_support
     have ⟨h1, h2⟩ := mem_toList_iff.mp h
     exact ((isCycle_iff_sameCycle (mem_support.mp h2)).mp (y := x) hf).mp h1
   · intro h
-    simp only [toCycle_eq_toList f hf x h, Cycle.
+    simp only [toCycle_eq_toList f hf x h, Cycle.mem_coe_iff, toList, mem_iterate, iterate_eq_pow]
+    use 0
+    exact ⟨by simpa, by simp⟩
+
+@[simp]
 
 中文:
 定理 mem_toCycle_iff_support
@@ -1284,7 +1362,11 @@ theorem mem_toCycle_iff_support
     have ⟨h1, h2⟩ := mem_toList_iff.mp h
     exact ((isCycle_iff_sameCycle (mem_support.mp h2)).mp (y := x) hf).mp h1
   · intro h
-    simp only [toCycle_eq_toList f hf x h, Cycle.
+    simp only [toCycle_eq_toList f hf x h, Cycle.mem_coe_iff, toList, mem_iterate, iterate_eq_pow]
+    use 0
+    exact ⟨by simpa, by simp⟩
+
+@[simp]
 
 Depends on / 依赖: Cycle.mem_coe_iff, exists_toCycle_toList, isCycle_iff_sameCycle, iterate_eq_pow, mem_coe_iff, mem_iterate, mem_support, mem_support.mp, mem_toList_iff, mem_toList_iff.mp, ne_eq, toCycle_eq_toList, toList
 -/
@@ -1340,7 +1422,23 @@ definition isoCycle
   invFun s := ⟨(s : Cycle α).formPerm s.prop.left, (s : Cycle α).isCycle_formPerm _ s.prop.right⟩
   left_inv f := by
     obtain ⟨x, hx, -⟩ := id f.prop
-    simpa [toCycle_eq_toList (f : Perm α) f.prop x
+    simpa [toCycle_eq_toList (f : Perm α) f.prop x hx, formPerm_toList, Subtype.ext_iff] using
+      f.prop.cycleOf_eq hx
+  right_inv s := by
+    rcases s with ⟨⟨s⟩, hn, ht⟩
+    obtain ⟨x, -, -, hx, -⟩ := id ht
+    have hl : 2 <= s.length := by simpa using Cycle.length_nontrivial ht
+    simp only [Cycle.mk_eq_coe, Cycle.nodup_coe_iff, Cycle.mem_coe_iff,
+      Cycle.formPerm_coe] at hn hx ⊢
+    apply Subtype.ext
+    dsimp
+    rw [toCycle_eq_toList _ _ x]
+    · refine Quotient.sound' ?_
+      exact toList_formPerm_isRotated_self _ hl hn _ hx
+    · rw [← mem_support, support_formPerm_of_nodup _ hn]
+      · simpa using hx
+      · rintro _ rfl
+        simp at hl
 
 中文:
 定义 isoCycle
@@ -1350,7 +1448,23 @@ definition isoCycle
   invFun s := ⟨(s : Cycle α).formPerm s.prop.left, (s : Cycle α).isCycle_formPerm _ s.prop.right⟩
   left_inv f := by
     obtain ⟨x, hx, -⟩ := id f.prop
-    simpa [toCycle_eq_toList (f : Perm α) f.prop x
+    simpa [toCycle_eq_toList (f : Perm α) f.prop x hx, formPerm_toList, Subtype.ext_iff] using
+      f.prop.cycleOf_eq hx
+  right_inv s := by
+    rcases s with ⟨⟨s⟩, hn, ht⟩
+    obtain ⟨x, -, -, hx, -⟩ := id ht
+    have hl : 2 <= s.length := by simpa using Cycle.length_nontrivial ht
+    simp only [Cycle.mk_eq_coe, Cycle.nodup_coe_iff, Cycle.mem_coe_iff,
+      Cycle.formPerm_coe] at hn hx ⊢
+    apply Subtype.ext
+    dsimp
+    rw [toCycle_eq_toList _ _ x]
+    · refine Quotient.sound' ?_
+      exact toList_formPerm_isRotated_self _ hl hn _ hx
+    · rw [← mem_support, support_formPerm_of_nodup _ hn]
+      · simpa using hx
+      · rintro _ rfl
+        simp at hl
 
 Depends on / 依赖: f.prop, nodup_toCycle, toCycle
 -/
@@ -1398,7 +1512,14 @@ theorem IsCycle.existsUnique_cycle
   · simp [formPerm_toList, hf.cycleOf_eq hx]
   · rintro ⟨l⟩ ⟨hn, rfl⟩
     simp only [Cycle.mk_eq_coe, Cycle.coe_eq_coe, Cycle.formPerm_coe]
-    refine (toList_formPerm_isRotated_self _ ?_ hn
+    refine (toList_formPerm_isRotated_self _ ?_ hn _ ?_).symm
+    · contrapose! hx
+      suffices formPerm l = 1 by simp [this]
+      rw [formPerm_eq_one_iff _ hn]
+      exact Nat.le_of_lt_succ hx
+    · rw [← mem_toFinset]
+      refine support_formPerm_le l ?_
+      simpa using hx
 
 中文:
 定理 是环.存在Unique_cycle
@@ -1410,7 +1531,14 @@ theorem IsCycle.existsUnique_cycle
   · simp [formPerm_toList, hf.cycleOf_eq hx]
   · rintro ⟨l⟩ ⟨hn, rfl⟩
     simp only [Cycle.mk_eq_coe, Cycle.coe_eq_coe, Cycle.formPerm_coe]
-    refine (toList_formPerm_isRotated_self _ ?_ hn
+    refine (toList_formPerm_isRotated_self _ ?_ hn _ ?_).symm
+    · contrapose! hx
+      suffices formPerm l = 1 by simp [this]
+      rw [formPerm_eq_one_iff _ hn]
+      exact Nat.le_of_lt_succ hx
+    · rw [← mem_toFinset]
+      refine support_formPerm_le l ?_
+      simpa using hx
 
 Depends on / 依赖: Cycle.coe_eq_coe, Cycle.formPerm_coe, Cycle.mk_eq_coe, Nat.le_of_lt_succ, coe_eq_coe, contrapose, cycleOf_eq, f.toList, formPerm, formPerm_coe, formPerm_eq_one_iff, formPerm_toList, hf.cycleOf_eq, le_of_lt_succ, mem_toFinset, mk_eq_coe, nodup_toList, nonempty_fintype, support_formPerm_le, toList
 -/
@@ -1523,7 +1651,12 @@ definition isoCycle'
     fun s => ⟨(s : Cycle α).formPerm s.prop.left, (s : Cycle α).isCycle_formPerm _ s.prop.right⟩
   { toFun := Fintype.bijInv (show Function.Bijective f by
       rw [Function.bijective_iff_existsUnique]
-      rintro ⟨
+      rintro ⟨f, hf⟩
+      simp only [Subtype.ext_iff]
+      exact hf.existsUnique_cycle_nontrivial_subtype)
+    invFun := f
+    left_inv := Fintype.rightInverse_bijInv _
+    right_inv := Fintype.leftInverse_bijInv _ }
 
 中文:
 定义 isoCycle'
@@ -1532,7 +1665,12 @@ definition isoCycle'
     fun s => ⟨(s : Cycle α).formPerm s.prop.left, (s : Cycle α).isCycle_formPerm _ s.prop.right⟩
   { toFun := Fintype.bijInv (show Function.Bijective f by
       rw [Function.bijective_iff_existsUnique]
-      rintro ⟨
+      rintro ⟨f, hf⟩
+      simp only [Subtype.ext_iff]
+      exact hf.existsUnique_cycle_nontrivial_subtype)
+    invFun := f
+    left_inv := Fintype.rightInverse_bijInv _
+    right_inv := Fintype.leftInverse_bijInv _ }
 
 Depends on / 依赖: Bijective, Fintype, Fintype.bijInv, Fintype.leftInverse_bijInv, Fintype.rightInverse_bijInv, Function, Function.Bijective, Function.bijective_iff_existsUnique, IsCycle, Nontrivial, Subtype, Subtype.ext_iff, bijInv, bijective_iff_existsUnique, existsUnique_cycle_nontrivial_subtype, ext_iff, formPerm, hf.existsUnique_cycle_nontrivial_subtype, invFun, isCycle_formPerm
 -/

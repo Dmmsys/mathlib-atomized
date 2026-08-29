@@ -49,7 +49,8 @@ lemma colim.map_mono'
     (IsColimit.coconePointUniqueUpToIso hc₁ (colimit.isColimit _))
     (IsColimit.coconePointUniqueUpToIso hc₂ (colimit.isColimit _))
     (hc₁.hom_ext (fun j => by
-  
+      dsimp
+      rw [IsColimit.comp_coconePointUniqueUpToIso_hom_assoc]; rw [colimit.cocone_ι]; rw [ι_colimMap]; rw [reassoc_of% (hf j)]; rw [IsColimit.comp_coconePointUniqueUpToIso_hom]; rw [colimit.cocone_ι]))
 
 中文:
 引理 colim.map_mono'
@@ -61,7 +62,8 @@ lemma colim.map_mono'
     (IsColimit.coconePointUniqueUpToIso hc₁ (colimit.isColimit _))
     (IsColimit.coconePointUniqueUpToIso hc₂ (colimit.isColimit _))
     (hc₁.hom_ext (fun j => by
-  
+      dsimp
+      rw [IsColimit.comp_coconePointUniqueUpToIso_hom_assoc]; rw [colimit.cocone_ι]; rw [ι_colimMap]; rw [reassoc_of% (hf j)]; rw [IsColimit.comp_coconePointUniqueUpToIso_hom]; rw [colimit.cocone_ι]))
 
 Depends on / 依赖: Arrow.isoMk, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.comp_coconePointUniqueUpToIso_hom, IsColimit.comp_coconePointUniqueUpToIso_hom_assoc, MorphismProperty, MorphismProperty.monomorphisms, arrow_mk_iso_iff, coconePointUniqueUpToIso, colim.map, colimit, colimit.cocone_, colimit.isColimit, comp_coconePointUniqueUpToIso_hom, comp_coconePointUniqueUpToIso_hom_assoc, hom_ext, isColimit, monomorphisms, reassoc_of
 -/
@@ -119,7 +121,7 @@ lemma IsColimit.mono_ι_app_of_isFiltered
         simp only [Category.id_comp, ← X.map_comp, Under.w] }
   have := NatTrans.mono_of_mono_app f
   exact colim.map_mono' f (isColimitConstCocone _ _)
-    ((
+    ((Functor.Final.isColimitWhiskerEquiv _ _).symm hc) (c.ι.app j₀) (by cat_disch)
 
 中文:
 引理 是余极限.mono_ι_app_of_isFiltered
@@ -131,7 +133,7 @@ lemma IsColimit.mono_ι_app_of_isFiltered
         simp only [Category.id_comp, ← X.map_comp, Under.w] }
   have := NatTrans.mono_of_mono_app f
   exact colim.map_mono' f (isColimitConstCocone _ _)
-    ((
+    ((Functor.Final.isColimitWhiskerEquiv _ _).symm hc) (c.ι.app j₀) (by cat_disch)
 
 Depends on / 依赖: Category, Category.id_comp, Functor, Functor.Final.isColimitWhiskerEquiv, Functor.const, NatTrans, NatTrans.mono_of_mono_app, Under.forget, Under.w, X.map, X.map_comp, X.obj, cat_disch, colim.map_mono, forget, id_comp, isColimitConstCocone, isColimitWhiskerEquiv, j.hom, map_comp
 -/
@@ -203,7 +205,11 @@ lemma colim.exact_mapShortComplex
     (IsColimit.coconePointUniqueUpToIso hc₁ (colimit.isColimit _))
     (IsColimit.coconePointUniqueUpToIso hc₂ (colimit.isColimit _))
     (IsColimit.coconePointUniqueUpToIso hc₃ (colimit.isColimit _))
-    (hc
+    (hc₁.hom_ext (fun j => ?_)) (hc₂.hom_ext (fun j => ?_))
+  · dsimp
+    rw [IsColimit.comp_coconePointUniqueUpToIso_hom_assoc]; rw [colimit.cocone_ι]; rw [ι_colimMap]; rw [reassoc_of% (hf j)]; rw [IsColimit.comp_coconePointUniqueUpToIso_hom]; rw [colimit.cocone_ι]
+  · dsimp
+    rw [IsColimit.comp_coconePointUniqueUpToIso_hom_assoc]; rw [colimit.cocone_ι]; rw [ι_colimMap]; rw [reassoc_of% (hg j)]; rw [IsColimit.comp_coconePointUniqueUpToIso_hom]; rw [colimit.cocone_ι]
 
 中文:
 引理 colim.exact_mapShortComplex
@@ -213,7 +219,11 @@ lemma colim.exact_mapShortComplex
     (IsColimit.coconePointUniqueUpToIso hc₁ (colimit.isColimit _))
     (IsColimit.coconePointUniqueUpToIso hc₂ (colimit.isColimit _))
     (IsColimit.coconePointUniqueUpToIso hc₃ (colimit.isColimit _))
-    (hc
+    (hc₁.hom_ext (fun j => ?_)) (hc₂.hom_ext (fun j => ?_))
+  · dsimp
+    rw [IsColimit.comp_coconePointUniqueUpToIso_hom_assoc]; rw [colimit.cocone_ι]; rw [ι_colimMap]; rw [reassoc_of% (hf j)]; rw [IsColimit.comp_coconePointUniqueUpToIso_hom]; rw [colimit.cocone_ι]
+  · dsimp
+    rw [IsColimit.comp_coconePointUniqueUpToIso_hom_assoc]; rw [colimit.cocone_ι]; rw [ι_colimMap]; rw [reassoc_of% (hg j)]; rw [IsColimit.comp_coconePointUniqueUpToIso_hom]; rw [colimit.cocone_ι]
 
 Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.comp_coconePointUniqueUp, IsColimit.comp_coconePointUniqueUpToIso_hom_assoc, ShortComplex, ShortComplex.exact_iff_of_iso, ShortComplex.isoMk, coconePointUniqueUpToIso, colimit, colimit.cocone_, colimit.isColimit, comp_coconePointUniqueUp, comp_coconePointUniqueUpToIso_hom_assoc, exact_iff_of_iso, hS.map, hom_ext, isColimit, reassoc_of
 -/

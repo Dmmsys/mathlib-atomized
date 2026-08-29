@@ -192,7 +192,8 @@ theorem coeff_bdd_of_norm_le
       (IsAlgClosed.splits _) (minpoly.natDegree_le x) (fun z hz => ?_) i
   classical
   rw [← Multiset.mem_toFinset] at hz
-  obtain
+  obtain ⟨φ, rfl⟩ := (range_eval_eq_rootSet_minpoly K A x).symm.subset hz
+  exact h φ
 
 中文:
 定理 coeff_bdd_of_norm_le
@@ -204,7 +205,8 @@ theorem coeff_bdd_of_norm_le
       (IsAlgClosed.splits _) (minpoly.natDegree_le x) (fun z hz => ?_) i
   classical
   rw [← Multiset.mem_toFinset] at hz
-  obtain
+  obtain ⟨φ, rfl⟩ := (range_eval_eq_rootSet_minpoly K A x).symm.subset hz
+  exact h φ
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isIntegral, IsAlgClosed, IsAlgClosed.splits, IsSeparable, Multiset, Multiset.mem_toFinset, algebraMap, classical, coeff_bdd_of_roots_le, coeff_map, isIntegral, mem_toFinset, minpoly, minpoly.monic, minpoly.natDegree_le, natDegree_le, norm_algebraMap, range_eval_eq_rootSet_minpoly, splits
 -/
@@ -233,7 +235,13 @@ theorem finite_of_norm_le
   let C := Nat.ceil (max B 1 ^ finrank Rat K * (finrank Rat K).choose (finrank Rat K / 2))
   have := bUnion_roots_finite (algebraMap Int K) (finrank Rat K) (finite_Icc (-C : Int) C)
   refine this.subset fun x hx => ?_; simp_rw [mem_iUnion]
-  have h_map_Rat_minpoly := minpoly.isIntegra
+  have h_map_Rat_minpoly := minpoly.isIntegrallyClosed_eq_field_fractions' Rat hx.1
+  refine ⟨_, ⟨?_, fun i => ?_⟩, mem_rootSet.2 ⟨minpoly.ne_zero hx.1, minpoly.aeval Int x⟩⟩
+  · rw [← (minpoly.monic hx.1).natDegree_map (algebraMap Int Rat), ← h_map_Rat_minpoly]
+    exact minpoly.natDegree_le x
+  rw [mem_Icc]; rw [← abs_le]; rw [← @Int.cast_le Real]
+  refine (Eq.trans_le ?_ <| coeff_bdd_of_norm_le hx.2 i).trans (Nat.le_ceil _)
+  rw [h_map_Rat_minpoly]; rw [coeff_map]; rw [eq_intCast]; rw [Int.norm_cast_rat]; rw [Int.norm_eq_abs]; rw [Int.cast_abs]
 
 中文:
 定理 finite_of_norm_le
@@ -244,7 +252,13 @@ theorem finite_of_norm_le
   let C := Nat.ceil (max B 1 ^ finrank Rat K * (finrank Rat K).choose (finrank Rat K / 2))
   have := bUnion_roots_finite (algebraMap Int K) (finrank Rat K) (finite_Icc (-C : Int) C)
   refine this.subset fun x hx => ?_; simp_rw [mem_iUnion]
-  have h_map_Rat_minpoly := minpoly.isIntegra
+  have h_map_Rat_minpoly := minpoly.isIntegrallyClosed_eq_field_fractions' Rat hx.1
+  refine ⟨_, ⟨?_, fun i => ?_⟩, mem_rootSet.2 ⟨minpoly.ne_zero hx.1, minpoly.aeval Int x⟩⟩
+  · rw [← (minpoly.monic hx.1).natDegree_map (algebraMap Int Rat), ← h_map_Rat_minpoly]
+    exact minpoly.natDegree_le x
+  rw [mem_Icc]; rw [← abs_le]; rw [← @Int.cast_le Real]
+  refine (Eq.trans_le ?_ <| coeff_bdd_of_norm_le hx.2 i).trans (Nat.le_ceil _)
+  rw [h_map_Rat_minpoly]; rw [coeff_map]; rw [eq_intCast]; rw [Int.norm_cast_rat]; rw [Int.norm_eq_abs]; rw [Int.cast_abs]
 
 Depends on / 依赖: Nat.ceil, algebraMap, bUnion_roots_finite, classical, finite_Icc, finrank, h_map_Rat_minpo, h_map_Rat_minpoly, isIntegrallyClosed_eq_field_fractions, mem_iUnion, mem_rootSet, minpoly, minpoly.aeval, minpoly.isIntegrallyClosed_eq_field_fractions, minpoly.monic, minpoly.ne_zero, natDegree_map, ne_zero, simp_rw, subset
 -/
@@ -273,7 +287,11 @@ theorem pow_eq_one_of_norm_le_one
       (fun a _ => mem_ofPred.mpr <|
         ⟨hxi.pow a, fun φ => by simp [pow_le_one₀ (norm_nonneg (φ x)) <| hx φ]⟩)
       (finite_of_norm_le K A (1 : Real))
-  wlog hlt : b <
+  wlog hlt : b < a
+  · exact this K A hx₀ hxi hx b a habne.symm h.symm (habne.lt_or_gt.resolve_right hlt)
+  refine ⟨a - b, tsub_pos_of_lt hlt, ?_⟩
+  rw [← Nat.sub_add_cancel hlt.le]; rw [pow_add]; rw [mul_left_eq_self₀] at h
+  refine h.resolve_right fun hp => hx₀ (eq_zero_of_pow_eq_zero hp)
 
 中文:
 定理 pow_eq_one_of_norm_le_one
@@ -284,7 +302,11 @@ theorem pow_eq_one_of_norm_le_one
       (fun a _ => mem_ofPred.mpr <|
         ⟨hxi.pow a, fun φ => by simp [pow_le_one₀ (norm_nonneg (φ x)) <| hx φ]⟩)
       (finite_of_norm_le K A (1 : Real))
-  wlog hlt : b <
+  wlog hlt : b < a
+  · exact this K A hx₀ hxi hx b a habne.symm h.symm (habne.lt_or_gt.resolve_right hlt)
+  refine ⟨a - b, tsub_pos_of_lt hlt, ?_⟩
+  rw [← Nat.sub_add_cancel hlt.le]; rw [pow_add]; rw [mul_left_eq_self₀] at h
+  refine h.resolve_right fun hp => hx₀ (eq_zero_of_pow_eq_zero hp)
 
 Depends on / 依赖: Infinite, Nat.sub_add_cancel, Set.Infinite.exists_ne_map_eq_of_mapsTo, Set.infinite_univ, exists_ne_map_eq_of_mapsTo, finite_of_norm_le, h.resolve_right, h.symm, habne.lt_or_gt.resolve_right, habne.symm, hlt.le, hxi.pow, infinite_univ, lt_or_gt, mem_ofPred, mem_ofPred.mpr, norm_nonneg, pow_add, resolve_right, sub_add_cancel
 -/
@@ -637,7 +659,9 @@ definition IsReal.embedding
     simp only [Complex.conj_eq_iff_im.mp (RingHom.congr_fun hφ _), map_mul, mul_re,
       mul_zero, tsub_zero, forall_const]
   map_zero' := by simp only [map_zero, zero_re]
-  map_add' := by simp only [map_add, add_re, forall_cons
+  map_add' := by simp only [map_add, add_re, forall_const]
+
+@[simp]
 
 中文:
 定义 Is实数.embedding
@@ -648,7 +672,9 @@ definition IsReal.embedding
     simp only [Complex.conj_eq_iff_im.mp (RingHom.congr_fun hφ _), map_mul, mul_re,
       mul_zero, tsub_zero, forall_const]
   map_zero' := by simp only [map_zero, zero_re]
-  map_add' := by simp only [map_add, add_re, forall_cons
+  map_add' := by simp only [map_add, add_re, forall_const]
+
+@[simp]
 -/
 def IsReal.embedding {φ : K ->+* Complex} (hφ : IsReal φ) : K ->+* Real where
   toFun x := (φ x).re
@@ -740,7 +766,7 @@ lemma exists_comp_symm_eq_of_comp_eq
   let ψ' : K ->ₐ[k] Complex := { ψ with commutes' := fun r => (RingHom.congr_fun h r).symm }
   use (AlgHom.restrictNormal' ψ' K).symm
   ext1 x
-  exact AlgHom
+  exact AlgHom.restrictNormal_commutes ψ' K x
 
 中文:
 引理 存在_comp_symm_eq_of_comp_eq
@@ -752,7 +778,7 @@ lemma exists_comp_symm_eq_of_comp_eq
   let ψ' : K ->ₐ[k] Complex := { ψ with commutes' := fun r => (RingHom.congr_fun h r).symm }
   use (AlgHom.restrictNormal' ψ' K).symm
   ext1 x
-  exact AlgHom
+  exact AlgHom.restrictNormal_commutes ψ' K x
 
 Depends on / 依赖: AlgHom, AlgHom.restrictNormal, AlgHom.restrictNormal_commutes, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.congr_fun, algebraMap, commutes, congr_fun, of_algebraMap_eq, restrictNormal, restrictNormal_commutes, toAlgebra
 -/

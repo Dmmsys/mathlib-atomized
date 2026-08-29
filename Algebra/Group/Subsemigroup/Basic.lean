@@ -207,7 +207,10 @@ instance :
     top := ⊤
     le_top := fun _ x _ => mem_top x
     inf := (· ⊓ ·)
-    sInf := InfSet.sIn
+    sInf := InfSet.sInf
+    le_inf := fun _ _ _ ha hb _ hx => ⟨ha hx, hb hx⟩
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 中文:
 实例 :
@@ -221,7 +224,10 @@ instance :
     top := ⊤
     le_top := fun _ x _ => mem_top x
     inf := (· ⊓ ·)
-    sInf := InfSet.sIn
+    sInf := InfSet.sInf
+    le_inf := fun _ _ _ ha hb _ hx => ⟨ha hx, hb hx⟩
+    inf_le_left := fun _ _ _ => And.left
+    inf_le_right := fun _ _ _ => And.right }
 
 Depends on / 依赖: And.left, And.right, InfSet, InfSet.sInf, IsGLB.of_image, SetLike, SetLike.coe_subset_coe, Subsemigroup, bot_le, coe_subset_coe, completeLatticeOfInf, inf_le_left, inf_le_right, isGLB_biInf, le_inf, le_top, mem_top, notMem_bot, of_image
 -/

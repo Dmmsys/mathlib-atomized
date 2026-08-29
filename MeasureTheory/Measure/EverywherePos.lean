@@ -109,7 +109,16 @@ lemma exists_isOpen_everywherePosSubset_eq_sdiff
   intro x ⟨n, ns, hx⟩
   rcases mem_nhdsWithin_iff_exists_mem_nhds_inter.1 ns with ⟨v, vx, hv⟩
   rcases mem_nhds_iff.1 vx with ⟨w, wv, w_open, xw⟩
-  have A : w subsete
+  have A : w subseteq {x | exists n in 𝓝[s] x, μ n = 0} := by
+    intro y yw
+    refine ⟨s inter w, inter_mem_nhdsWithin _ (w_open.mem_nhds yw), measure_mono_null ?_ hx⟩
+    rw [inter_comm]
+    exact (inter_subset_inter_left _ wv).trans hv
+  have B : w in 𝓝 x := w_open.mem_nhds xw
+  exact mem_of_superset B A
+
+@[deprecated (since := "2026-06-03")]
+alias exists_isOpen_everywherePosSubset_eq_diff := exists_isOpen_everywherePosSubset_eq_sdiff
 
 中文:
 引理 存在_isOpen_everywherePosSubset_eq_sdiff
@@ -120,7 +129,16 @@ lemma exists_isOpen_everywherePosSubset_eq_sdiff
   intro x ⟨n, ns, hx⟩
   rcases mem_nhdsWithin_iff_exists_mem_nhds_inter.1 ns with ⟨v, vx, hv⟩
   rcases mem_nhds_iff.1 vx with ⟨w, wv, w_open, xw⟩
-  have A : w subsete
+  have A : w subseteq {x | exists n in 𝓝[s] x, μ n = 0} := by
+    intro y yw
+    refine ⟨s inter w, inter_mem_nhdsWithin _ (w_open.mem_nhds yw), measure_mono_null ?_ hx⟩
+    rw [inter_comm]
+    exact (inter_subset_inter_left _ wv).trans hv
+  have B : w in 𝓝 x := w_open.mem_nhds xw
+  exact mem_of_superset B A
+
+@[deprecated (since := "2026-06-03")]
+alias exists_isOpen_everywherePosSubset_eq_diff := exists_isOpen_everywherePosSubset_eq_sdiff
 
 Depends on / 依赖: everywherePosSubset, inter_comm, inter_mem_nhdsWithin, inter_subset_inter_left, isOpen_iff_mem_nhds, measure_mono_null, mem_nhds, mem_nhdsWithin_iff_exists_mem_nhds_inter, mem_nhds_iff, pos_iff_ne_zero, subseteq, w_open, w_open.mem_nhds
 -/
@@ -232,7 +250,8 @@ lemma measure_eq_zero_of_subset_sdiff_everywherePosSubset
   · exact fun s t hs ht => measure_union_null hs ht
   · intro x hx
     obtain ⟨u, ux, hu⟩ : exists u in 𝓝[s] x, μ u = 0 := by
-      simpa [everywherePosSubset, (h'k hx).1] 
+      simpa [everywherePosSubset, (h'k hx).1] using (h'k hx).2
+    exact ⟨u, nhdsWithin_mono x (h'k.trans sdiff_subset) ux, hu⟩
 
 中文:
 引理 measure_eq_zero_of_subset_sdiff_everywherePosSubset
@@ -243,7 +262,8 @@ lemma measure_eq_zero_of_subset_sdiff_everywherePosSubset
   · exact fun s t hs ht => measure_union_null hs ht
   · intro x hx
     obtain ⟨u, ux, hu⟩ : exists u in 𝓝[s] x, μ u = 0 := by
-      simpa [everywherePosSubset, (h'k hx).1] 
+      simpa [everywherePosSubset, (h'k hx).1] using (h'k hx).2
+    exact ⟨u, nhdsWithin_mono x (h'k.trans sdiff_subset) ux, hu⟩
 
 Depends on / 依赖: everywherePosSubset, hk.induction_on, induction_on, k.trans, measure_empty, measure_mono_null, measure_union_null, nhdsWithin_mono, sdiff_subset
 -/
@@ -298,7 +318,9 @@ lemma everywherePosSubset_ae_eq_of_measure_ne_top
     ((measure_mono sdiff_subset).trans_lt h's.lt_top).ne
   simp only [ae_eq_set, sdiff_eq_empty.mpr (everywherePosSubset_subset μ s), measure_empty,
     true_and, (hs.diff hs.everywherePosSubset).measure_eq_iSup_isCompact_of_ne_top A,
-    ENNReal
+    ENNReal.iSup_eq_zero]
+  intro k hk h'k
+  exact measure_eq_zero_of_subset_sdiff_everywherePosSubset h'k hk
 
 中文:
 引理 everywherePosSubset_ae_eq_of_measure_ne_top
@@ -307,7 +329,9 @@ lemma everywherePosSubset_ae_eq_of_measure_ne_top
     ((measure_mono sdiff_subset).trans_lt h's.lt_top).ne
   simp only [ae_eq_set, sdiff_eq_empty.mpr (everywherePosSubset_subset μ s), measure_empty,
     true_and, (hs.diff hs.everywherePosSubset).measure_eq_iSup_isCompact_of_ne_top A,
-    ENNReal
+    ENNReal.iSup_eq_zero]
+  intro k hk h'k
+  exact measure_eq_zero_of_subset_sdiff_everywherePosSubset h'k hk
 
 Depends on / 依赖: ENNReal, ENNReal.iSup_eq_zero, ae_eq_set, everywherePosSubset, everywherePosSubset_subset, hs.diff, hs.everywherePosSubset, iSup_eq_zero, lt_top, measure_empty, measure_eq_iSup_isCompact_of_ne_top, measure_eq_zero_of_subset_sdiff_everywherePosSubset, measure_mono, s.lt_top, sdiff_eq_empty, sdiff_eq_empty.mpr, sdiff_subset, trans_lt, true_and
 -/
@@ -333,7 +357,10 @@ lemma isEverywherePos_everywherePosSubset
   have A : 0 < μ (u inter s) := by
     have : u inter s in 𝓝[s] x := by rw [inter_comm]; exact inter_mem_nhdsWithin s u_mem
     exact hx.2 _ this
-  have B : (u inter μ.everywherePosSubset s : Set α) =ᵐ[μ]
+  have B : (u inter μ.everywherePosSubset s : Set α) =ᵐ[μ] (u inter s : Set α) :=
+    ae_eq_set_inter (ae_eq_refl _) (everywherePosSubset_ae_eq hs)
+  rw [← B.measure_eq] at A
+  exact A.trans_le (measure_mono hu)
 
 中文:
 引理 isEverywherePos_everywherePosSubset
@@ -343,7 +370,10 @@ lemma isEverywherePos_everywherePosSubset
   have A : 0 < μ (u inter s) := by
     have : u inter s in 𝓝[s] x := by rw [inter_comm]; exact inter_mem_nhdsWithin s u_mem
     exact hx.2 _ this
-  have B : (u inter μ.everywherePosSubset s : Set α) =ᵐ[μ]
+  have B : (u inter μ.everywherePosSubset s : Set α) =ᵐ[μ] (u inter s : Set α) :=
+    ae_eq_set_inter (ae_eq_refl _) (everywherePosSubset_ae_eq hs)
+  rw [← B.measure_eq] at A
+  exact A.trans_le (measure_mono hu)
 
 Depends on / 依赖: A.trans_le, B.measure_eq, ae_eq_refl, ae_eq_set_inter, everywherePosSubset, everywherePosSubset_ae_eq, inter_comm, inter_mem_nhdsWithin, measure_eq, measure_mono, mem_nhdsWithin_iff_exists_mem_nhds_inter, trans_le, u_mem
 -/
@@ -371,7 +401,10 @@ lemma isEverywherePos_everywherePosSubset_of_measure_ne_top
   have A : 0 < μ (u inter s) := by
     have : u inter s in 𝓝[s] x := by rw [inter_comm]; exact inter_mem_nhdsWithin s u_mem
     exact hx.2 _ this
-  have B : (u inter μ.everywherePosSubset s : Set α) =ᵐ[μ]
+  have B : (u inter μ.everywherePosSubset s : Set α) =ᵐ[μ] (u inter s : Set α) :=
+    ae_eq_set_inter (ae_eq_refl _) (everywherePosSubset_ae_eq_of_measure_ne_top hs h's)
+  rw [← B.measure_eq] at A
+  exact A.trans_le (measure_mono hu)
 
 中文:
 引理 isEverywherePos_everywherePosSubset_of_measure_ne_top
@@ -381,7 +414,10 @@ lemma isEverywherePos_everywherePosSubset_of_measure_ne_top
   have A : 0 < μ (u inter s) := by
     have : u inter s in 𝓝[s] x := by rw [inter_comm]; exact inter_mem_nhdsWithin s u_mem
     exact hx.2 _ this
-  have B : (u inter μ.everywherePosSubset s : Set α) =ᵐ[μ]
+  have B : (u inter μ.everywherePosSubset s : Set α) =ᵐ[μ] (u inter s : Set α) :=
+    ae_eq_set_inter (ae_eq_refl _) (everywherePosSubset_ae_eq_of_measure_ne_top hs h's)
+  rw [← B.measure_eq] at A
+  exact A.trans_le (measure_mono hu)
 
 Depends on / 依赖: A.trans_le, B.measure_eq, ae_eq_refl, ae_eq_set_inter, everywherePosSubset, everywherePosSubset_ae_eq_of_measure_ne_top, inter_comm, inter_mem_nhdsWithin, measure_eq, measure_mono, mem_nhdsWithin_iff_exists_mem_nhds_inter, trans_le, u_mem
 -/
@@ -556,7 +592,55 @@ lemma IsEverywherePos.IsGdelta_of_isMulLeftInvariant
   /- Consider a decreasing sequence of open neighborhoods `Vₙ` of the identity, such that `g k \ k`
   has small measure for all `g ∈ Vₙ`. We claim that `k = ⋂ Vₙ k`, which proves
   the lemma as the sets on the right are open. The inclusion `⊆` is trivial.
-  Let us show the converse. Take `x` in t
+  Let us show the converse. Take `x` in the intersection. For each `n`, write `x = vₙ yₙ` with
+  `vₙ ∈ Vₙ` and `yₙ ∈ k`. Let `z ∈ k` be a cluster value of `yₙ`, by compactness. As multiplication
+  by `vₙ = x yₙ⁻¹ ∈ Vₙ` changes the measure of `k` by very little, passing to the limit we get
+  `μ (x z⁻¹ k \ k) = 0`. By invariance of the measure under `z x ⁻¹`, we get `μ (k \ z x⁻¹ k) = 0`.
+  Assume `x ∉ k`. Then `z ∈ k \ z x⁻¹ k`. Even more, this set is a neighborhood of `z` within `k`
+  (as `z x⁻¹ k` is closed), and it has zero measure. This contradicts the fact that `k` has
+  positive measure around the point `z`. -/
+  obtain ⟨u, -, u_mem, u_lim⟩ : exists u, StrictAnti u ∧ (forall (n : Nat), u n in Ioo 0 1)
+    ∧ Tendsto u atTop (𝓝 0) := exists_seq_strictAnti_tendsto' (zero_lt_one : (0 : Real>=0∞) < 1)
+  have : forall n, exists (W : Set G), IsOpen W ∧ 1 in W ∧ forall g in W * W, μ ((g • k) \ k) < u n :=
+    fun n => exists_open_nhds_one_mul_subset
+      (eventually_nhds_one_measure_smul_sdiff_lt hk h'k (u_mem n).1.ne')
+  choose W W_open mem_W hW using this
+  let V n := ⋂ i in Finset.range n, W i
+  suffices ⋂ n, V n * k subseteq k by
+    replace : k = ⋂ n, V n * k := by
+      apply Subset.antisymm (subset_iInter_iff.2 (fun n => ?_)) this
+      exact subset_mul_right k (by simp [V, mem_W])
+    rw [this]
+    refine .iInter_of_isOpen fun n => ?_
+    exact .mul_right (isOpen_biInter_finset (fun i _hi => W_open i))
+  intro x hx
+  choose v hv y hy hvy using mem_iInter.1 hx
+  obtain ⟨z, zk, hz⟩ : exists z in k, MapClusterPt z atTop y := hk.exists_mapClusterPt (by simp [hy])
+  have A n : μ (((x * z⁻¹) • k) \ k) <= u n := by
+    apply le_of_lt (hW _ _ ?_)
+    have : W n * {z} in 𝓝 z := (IsOpen.mul_right (W_open n)).mem_nhds (by simp [mem_W])
+    obtain ⟨i, hi, ni⟩ : exists i, y i in W n * {z} ∧ n < i :=
+      ((hz.frequently this).and_eventually (eventually_gt_atTop n)).exists
+    refine ⟨x * (y i) ⁻¹, ?_, y i * z⁻¹, by simpa using hi, by group⟩
+    have I : V i subseteq W n := iInter₂_subset n (by simp [ni])
+    have J : x * (y i)⁻¹ in V i := by simpa [← hvy i] using hv i
+    exact I J
+  have B : μ (((x * z⁻¹) • k) \ k) = 0 :=
+    le_antisymm (ge_of_tendsto u_lim (Eventually.of_forall A)) bot_le
+  have C : μ (k \ (z * x⁻¹) • k) = 0 := by
+    have : μ ((z * x⁻¹) • (((x * z⁻¹) • k) \ k)) = 0 := by rwa [measure_smul]
+    rw [← this]; rw [smul_set_sdiff]; rw [smul_smul]
+    group
+    simp
+  by_contra H
+  have : k inter ((z * x⁻¹) • k)ᶜ in 𝓝[k] z := by
+    apply inter_mem_nhdsWithin k
+    apply IsOpen.mem_nhds (by simpa using h'k.smul _)
+    push _ in _
+    contrapose H
+    simpa [mem_smul_set_iff_inv_smul_mem] using H
+  have : 0 < μ (k \ ((z * x⁻¹) • k)) := h z zk _ this
+  exact lt_irrefl _ (C.le.trans_lt this)
 
 中文:
 引理 IsEverywherePos.IsGdelta_of_isMulLeftInvariant
@@ -564,7 +648,55 @@ lemma IsEverywherePos.IsGdelta_of_isMulLeftInvariant
   /- Consider a decreasing sequence of open neighborhoods `Vₙ` of the identity, such that `g k \ k`
   has small measure for all `g ∈ Vₙ`. We claim that `k = ⋂ Vₙ k`, which proves
   the lemma as the sets on the right are open. The inclusion `⊆` is trivial.
-  Let us show the converse. Take `x` in t
+  Let us show the converse. Take `x` in the intersection. For each `n`, write `x = vₙ yₙ` with
+  `vₙ ∈ Vₙ` and `yₙ ∈ k`. Let `z ∈ k` be a cluster value of `yₙ`, by compactness. As multiplication
+  by `vₙ = x yₙ⁻¹ ∈ Vₙ` changes the measure of `k` by very little, passing to the limit we get
+  `μ (x z⁻¹ k \ k) = 0`. By invariance of the measure under `z x ⁻¹`, we get `μ (k \ z x⁻¹ k) = 0`.
+  Assume `x ∉ k`. Then `z ∈ k \ z x⁻¹ k`. Even more, this set is a neighborhood of `z` within `k`
+  (as `z x⁻¹ k` is closed), and it has zero measure. This contradicts the fact that `k` has
+  positive measure around the point `z`. -/
+  obtain ⟨u, -, u_mem, u_lim⟩ : exists u, StrictAnti u ∧ (forall (n : Nat), u n in Ioo 0 1)
+    ∧ Tendsto u atTop (𝓝 0) := exists_seq_strictAnti_tendsto' (zero_lt_one : (0 : Real>=0∞) < 1)
+  have : forall n, exists (W : Set G), IsOpen W ∧ 1 in W ∧ forall g in W * W, μ ((g • k) \ k) < u n :=
+    fun n => exists_open_nhds_one_mul_subset
+      (eventually_nhds_one_measure_smul_sdiff_lt hk h'k (u_mem n).1.ne')
+  choose W W_open mem_W hW using this
+  let V n := ⋂ i in Finset.range n, W i
+  suffices ⋂ n, V n * k subseteq k by
+    replace : k = ⋂ n, V n * k := by
+      apply Subset.antisymm (subset_iInter_iff.2 (fun n => ?_)) this
+      exact subset_mul_right k (by simp [V, mem_W])
+    rw [this]
+    refine .iInter_of_isOpen fun n => ?_
+    exact .mul_right (isOpen_biInter_finset (fun i _hi => W_open i))
+  intro x hx
+  choose v hv y hy hvy using mem_iInter.1 hx
+  obtain ⟨z, zk, hz⟩ : exists z in k, MapClusterPt z atTop y := hk.exists_mapClusterPt (by simp [hy])
+  have A n : μ (((x * z⁻¹) • k) \ k) <= u n := by
+    apply le_of_lt (hW _ _ ?_)
+    have : W n * {z} in 𝓝 z := (IsOpen.mul_right (W_open n)).mem_nhds (by simp [mem_W])
+    obtain ⟨i, hi, ni⟩ : exists i, y i in W n * {z} ∧ n < i :=
+      ((hz.frequently this).and_eventually (eventually_gt_atTop n)).exists
+    refine ⟨x * (y i) ⁻¹, ?_, y i * z⁻¹, by simpa using hi, by group⟩
+    have I : V i subseteq W n := iInter₂_subset n (by simp [ni])
+    have J : x * (y i)⁻¹ in V i := by simpa [← hvy i] using hv i
+    exact I J
+  have B : μ (((x * z⁻¹) • k) \ k) = 0 :=
+    le_antisymm (ge_of_tendsto u_lim (Eventually.of_forall A)) bot_le
+  have C : μ (k \ (z * x⁻¹) • k) = 0 := by
+    have : μ ((z * x⁻¹) • (((x * z⁻¹) • k) \ k)) = 0 := by rwa [measure_smul]
+    rw [← this]; rw [smul_set_sdiff]; rw [smul_smul]
+    group
+    simp
+  by_contra H
+  have : k inter ((z * x⁻¹) • k)ᶜ in 𝓝[k] z := by
+    apply inter_mem_nhdsWithin k
+    apply IsOpen.mem_nhds (by simpa using h'k.smul _)
+    push _ in _
+    contrapose H
+    simpa [mem_smul_set_iff_inv_smul_mem] using H
+  have : 0 < μ (k \ ((z * x⁻¹) • k)) := h z zk _ this
+  exact lt_irrefl _ (C.le.trans_lt this)
 -/
 lemma IsEverywherePos.IsGdelta_of_isMulLeftInvariant
     {k : Set G} (h : μ.IsEverywherePos k) (hk : IsCompact k) (h'k : IsClosed k) :
@@ -637,7 +769,26 @@ theorem innerRegularWRT_preimage_one_hasCompactSupport_measure_ne_top_of_group
   /- First, approximate a measurable set from inside by a compact closed set `K`. Then notice that
   the everywhere positive subset of `K` is a Gδ,
   by Lemma `IsEverywherePos.IsGdelta_of_isMulLeftInvariant`, and therefore the level set of a
-  continuous compactly supported function. Moreover, it
+  continuous compactly supported function. Moreover, it has the same measure as `K`. -/
+  apply InnerRegularWRT.trans _ innerRegularWRT_isCompact_isClosed_measure_ne_top_of_group
+  intro K ⟨K_comp, K_closed⟩ r hr
+  let L := μ.everywherePosSubset K
+  have L_comp : IsCompact L := K_comp.everywherePosSubset
+  have L_closed : IsClosed L := K_closed.everywherePosSubset
+  refine ⟨L, everywherePosSubset_subset μ K, ?_, ?_⟩
+  · have : μ.IsEverywherePos L :=
+      isEverywherePos_everywherePosSubset_of_measure_ne_top K_closed.measurableSet
+      K_comp.measure_lt_top.ne
+    have L_Gδ : IsGδ L := this.IsGdelta_of_isMulLeftInvariant L_comp L_closed
+    obtain ⟨⟨f, f_cont⟩, Lf, -, f_comp, -⟩ : exists f : C(G, Real), L = f ⁻¹' {1} ∧ EqOn f 0 ∅
+        ∧ HasCompactSupport f ∧ forall x, f x in Icc (0 : Real) 1 :=
+      exists_continuous_one_zero_of_isCompact_of_isGδ L_comp L_Gδ isClosed_empty
+        (disjoint_empty L)
+    exact ⟨f, f_cont, f_comp, Lf⟩
+  · convert! hr using 1
+    apply measure_congr
+    exact everywherePosSubset_ae_eq_of_measure_ne_top K_closed.measurableSet
+      K_comp.measure_lt_top.ne
 
 中文:
 定理 innerRegularWRT_preimage_one_hasCompactSupport_measure_ne_top_of_group
@@ -645,7 +796,26 @@ theorem innerRegularWRT_preimage_one_hasCompactSupport_measure_ne_top_of_group
   /- First, approximate a measurable set from inside by a compact closed set `K`. Then notice that
   the everywhere positive subset of `K` is a Gδ,
   by Lemma `IsEverywherePos.IsGdelta_of_isMulLeftInvariant`, and therefore the level set of a
-  continuous compactly supported function. Moreover, it
+  continuous compactly supported function. Moreover, it has the same measure as `K`. -/
+  apply InnerRegularWRT.trans _ innerRegularWRT_isCompact_isClosed_measure_ne_top_of_group
+  intro K ⟨K_comp, K_closed⟩ r hr
+  let L := μ.everywherePosSubset K
+  have L_comp : IsCompact L := K_comp.everywherePosSubset
+  have L_closed : IsClosed L := K_closed.everywherePosSubset
+  refine ⟨L, everywherePosSubset_subset μ K, ?_, ?_⟩
+  · have : μ.IsEverywherePos L :=
+      isEverywherePos_everywherePosSubset_of_measure_ne_top K_closed.measurableSet
+      K_comp.measure_lt_top.ne
+    have L_Gδ : IsGδ L := this.IsGdelta_of_isMulLeftInvariant L_comp L_closed
+    obtain ⟨⟨f, f_cont⟩, Lf, -, f_comp, -⟩ : exists f : C(G, Real), L = f ⁻¹' {1} ∧ EqOn f 0 ∅
+        ∧ HasCompactSupport f ∧ forall x, f x in Icc (0 : Real) 1 :=
+      exists_continuous_one_zero_of_isCompact_of_isGδ L_comp L_Gδ isClosed_empty
+        (disjoint_empty L)
+    exact ⟨f, f_cont, f_comp, Lf⟩
+  · convert! hr using 1
+    apply measure_congr
+    exact everywherePosSubset_ae_eq_of_measure_ne_top K_closed.measurableSet
+      K_comp.measure_lt_top.ne
 -/
 theorem innerRegularWRT_preimage_one_hasCompactSupport_measure_ne_top_of_group :
     InnerRegularWRT μ (fun s => exists (f : G -> Real), Continuous f ∧ HasCompactSupport f ∧ s = f ⁻¹' {1})

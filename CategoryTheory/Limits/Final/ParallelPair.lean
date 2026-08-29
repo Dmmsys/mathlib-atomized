@@ -39,7 +39,9 @@ lemma parallelPair_initial_mk'
       (mk (Y := zero) (h₁ Z).some) := by
         rintro ⟨(_ | _), ⟨⟩, φ⟩
         · apply h₂
-        · refine Zigzag.trans ?_ 
+        · refine Zigzag.trans ?_ (h₂ (f ≫ φ) _)
+          exact Zigzag.of_inv (homMk left)
+    exact zigzag_isConnected (fun x y => (this x).trans (this y).symm)
 
 中文:
 引理 parallelPair_initial_mk'
@@ -51,7 +53,9 @@ lemma parallelPair_initial_mk'
       (mk (Y := zero) (h₁ Z).some) := by
         rintro ⟨(_ | _), ⟨⟩, φ⟩
         · apply h₂
-        · refine Zigzag.trans ?_ 
+        · refine Zigzag.trans ?_ (h₂ (f ≫ φ) _)
+          exact Zigzag.of_inv (homMk left)
+    exact zigzag_isConnected (fun x y => (this x).trans (this y).symm)
 
 Depends on / 依赖: CostructuredArrow, parallelPair
 -/
@@ -83,6 +87,8 @@ lemma parallelPair_initial_mk
     let f₁ : (mk (Y := zero) (f ≫ a) : CostructuredArrow (parallelPair f g) Z) ⟶ mk (Y := one) a :=
       homMk left
     let f₂ : (mk (Y := zero) (g ≫ a) : CostructuredArrow (parallelPair f g) Z) ⟶ mk (Y := one) a :=
+      homMk right
+    exact Zigzag.of_hom_inv f₁ f₂)
 
 中文:
 引理 parallelPair_initial_mk
@@ -92,6 +98,8 @@ lemma parallelPair_initial_mk
     let f₁ : (mk (Y := zero) (f ≫ a) : CostructuredArrow (parallelPair f g) Z) ⟶ mk (Y := one) a :=
       homMk left
     let f₂ : (mk (Y := zero) (g ≫ a) : CostructuredArrow (parallelPair f g) Z) ⟶ mk (Y := one) a :=
+      homMk right
+    exact Zigzag.of_hom_inv f₁ f₂)
 
 Depends on / 依赖: CostructuredArrow, Zigzag, Zigzag.of_hom_inv, of_hom_inv, parallelPair, parallelPair_initial_mk
 -/

@@ -57,7 +57,19 @@ theorem exists_isNilpotent_isSemisimple_of_separable_of_dvd_pow
     rw [← map_pow]; rw [Subtype.ext_iff]
     simp [ff, hq]
   have sep' : IsUnit (aeval ff P') := by
-    obtain ⟨a, b, h⟩ : IsCopr
+    obtain ⟨a, b, h⟩ : IsCoprime (P ^ k) P' := sep.pow_left
+    replace h : (aeval f b) * (aeval f P') = 1 := by
+      simpa only [map_add, map_mul, map_one, minpoly.dvd_iff.mp nil, mul_zero, zero_add]
+        using (aeval f).congr_arg h
+    refine .of_mul_eq_one_right (aeval ff b) (Subtype.ext_iff.mpr ?_)
+    simpa [ff, coe_aeval_mk_apply] using h
+  obtain ⟨⟨s, mem⟩, ⟨⟨k, hk⟩, hss⟩, -⟩ := existsUnique_nilpotent_sub_and_aeval_eq_zero nil' sep'
+  refine ⟨f - s, ?_, s, mem, ⟨k, ?_⟩, ?_, (sub_add_cancel f s).symm⟩
+  · exact sub_mem (self_mem_adjoin_singleton K f) mem
+  · rw [Subtype.ext_iff] at hk
+    simpa using hk
+  · replace hss : aeval s P = 0 := by rwa [Subtype.ext_iff, coe_aeval_mk_apply] at hss
+    exact isSemisimple_of_squarefree_aeval_eq_zero sep.squarefree hss
 
 中文:
 定理 存在_isNilpotent_isSemisimple_of_separable_of_dvd_pow
@@ -71,7 +83,19 @@ theorem exists_isNilpotent_isSemisimple_of_separable_of_dvd_pow
     rw [← map_pow]; rw [Subtype.ext_iff]
     simp [ff, hq]
   have sep' : IsUnit (aeval ff P') := by
-    obtain ⟨a, b, h⟩ : IsCopr
+    obtain ⟨a, b, h⟩ : IsCoprime (P ^ k) P' := sep.pow_left
+    replace h : (aeval f b) * (aeval f P') = 1 := by
+      simpa only [map_add, map_mul, map_one, minpoly.dvd_iff.mp nil, mul_zero, zero_add]
+        using (aeval f).congr_arg h
+    refine .of_mul_eq_one_right (aeval ff b) (Subtype.ext_iff.mpr ?_)
+    simpa [ff, coe_aeval_mk_apply] using h
+  obtain ⟨⟨s, mem⟩, ⟨⟨k, hk⟩, hss⟩, -⟩ := existsUnique_nilpotent_sub_and_aeval_eq_zero nil' sep'
+  refine ⟨f - s, ?_, s, mem, ⟨k, ?_⟩, ?_, (sub_add_cancel f s).symm⟩
+  · exact sub_mem (self_mem_adjoin_singleton K f) mem
+  · rw [Subtype.ext_iff] at hk
+    simpa using hk
+  · replace hss : aeval s P = 0 := by rwa [Subtype.ext_iff, coe_aeval_mk_apply] at hss
+    exact isSemisimple_of_squarefree_aeval_eq_zero sep.squarefree hss
 
 Depends on / 依赖: IsCoprime, IsNilpotent, IsUnit, Subtype, Subtype.ext_iff, adjoin, congr_arg, derivative, dvd_iff, ext_iff, map_add, map_mul, map_one, map_pow, minpoly, minpoly.dvd_iff.mp, mul_zero, of_mul_eq_one_right, pow_left, replace
 -/
@@ -139,7 +163,14 @@ theorem isNilpotent_isSemisimple_unique
   obtain ⟨n₀, hn₀, s₀, hs₀, hn₀_nil, hs₀_ss, h₀⟩ := (n₁ + s₁).exists_isNilpotent_isSemisimple
   suffices forall {n s}, IsNilpotent n -> s.IsSemisimple -> Commute n s -> n₁ + s₁ = n + s -> s = s₀ by grind
   intro n s hn hs hc heq
-  have hsf : Commute s (n₁ + s₁) := heq ▸ hc.symm.add_right (Commute
+  have hsf : Commute s (n₁ + s₁) := heq ▸ hc.symm.add_right (Commute.refl s)
+  have hnf : Commute n (n₁ + s₁) := heq ▸ (Commute.refl n).add_right hc
+  have hnil : IsNilpotent (s - s₀) := by
+    rw [show s - s₀ = n₀ - n by grind]
+    exact (commute_of_mem_adjoin_singleton_of_commute hn₀ hnf).symm.isNilpotent_sub hn₀_nil hn
+  have hss : (s - s₀).IsSemisimple :=
+    hs.sub_of_commute (commute_of_mem_adjoin_singleton_of_commute hs₀ hsf) hs₀_ss
+  grind [eq_zero_of_isNilpotent_isSemisimple hnil hss]
 
 中文:
 定理 isNilpotent_isSemisimple_unique
@@ -148,7 +179,14 @@ theorem isNilpotent_isSemisimple_unique
   obtain ⟨n₀, hn₀, s₀, hs₀, hn₀_nil, hs₀_ss, h₀⟩ := (n₁ + s₁).exists_isNilpotent_isSemisimple
   suffices forall {n s}, IsNilpotent n -> s.IsSemisimple -> Commute n s -> n₁ + s₁ = n + s -> s = s₀ by grind
   intro n s hn hs hc heq
-  have hsf : Commute s (n₁ + s₁) := heq ▸ hc.symm.add_right (Commute
+  have hsf : Commute s (n₁ + s₁) := heq ▸ hc.symm.add_right (Commute.refl s)
+  have hnf : Commute n (n₁ + s₁) := heq ▸ (Commute.refl n).add_right hc
+  have hnil : IsNilpotent (s - s₀) := by
+    rw [show s - s₀ = n₀ - n by grind]
+    exact (commute_of_mem_adjoin_singleton_of_commute hn₀ hnf).symm.isNilpotent_sub hn₀_nil hn
+  have hss : (s - s₀).IsSemisimple :=
+    hs.sub_of_commute (commute_of_mem_adjoin_singleton_of_commute hs₀ hsf) hs₀_ss
+  grind [eq_zero_of_isNilpotent_isSemisimple hnil hss]
 
 Depends on / 依赖: Commute, Commute.refl, IsNilpotent, IsSemisimple, add_right, commute_of_mem_adjoin_singleton_of_commute, exists_isNilpotent_isSemisimple, hc.symm.add_right, s.IsSemisimple
 -/

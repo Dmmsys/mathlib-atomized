@@ -1308,7 +1308,7 @@ theorem mem_darts_iff_infix_support
   · have := h 0
     have := h 1
     convert! p.darts.getElem_mem (n := i) (by grind)
- 
+      <;> grind [fst_darts_getElem, snd_darts_getElem]
 
 中文:
 定理 mem_darts_iff_infix_support
@@ -1320,7 +1320,7 @@ theorem mem_darts_iff_infix_support
   · have := h 0
     have := h 1
     convert! p.darts.getElem_mem (n := i) (by grind)
- 
+      <;> grind [fst_darts_getElem, snd_darts_getElem]
 
 Depends on / 依赖: List.getElem_of_mem, List.infix_iff_getElem, convert, fst_darts_getElem, getElem_mem, getElem_of_mem, infix_iff_getElem, p.darts.getElem_mem, snd_darts_getElem
 -/

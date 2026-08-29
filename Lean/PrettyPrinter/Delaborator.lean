@@ -76,7 +76,7 @@ definition annotateGoToDef
   let stx ← annotateCurPos stx
   let location := { module, range := range.selectionRange }
   addDelabTermInfo (← getPos) stx (← getExpr) (location? := some location)
- 
+  return stx
 
 中文:
 定义 annotateGoToDef
@@ -87,7 +87,7 @@ definition annotateGoToDef
   let stx ← annotateCurPos stx
   let location := { module, range := range.selectionRange }
   addDelabTermInfo (← getPos) stx (← getExpr) (location? := some location)
- 
+  return stx
 -/
 def annotateGoToDef (stx : Term) (target : Name) : DelabM Term := do
   let module := (← findModuleOf? target).getD (← getEnv).mainModule

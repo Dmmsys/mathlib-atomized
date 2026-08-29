@@ -187,7 +187,9 @@ lemma schnirelmannDensity_le_of_notMem
   rw [← one_div]; rw [one_sub_div (Nat.cast_pos.2 hk').ne']
   gcongr
   rw [← Nat.cast_pred hk']; rw [Nat.cast_le]
-  suffices {a in Ioc 0 k | a in A} subseteq Ioo 0 k 
+  suffices {a in Ioc 0 k | a in A} subseteq Ioo 0 k from (card_le_card this).trans_eq (by simp)
+  rw [← Ioo_insert_right hk']; rw [filter_insert]; rw [if_neg hk]
+  exact filter_subset _ _
 
 中文:
 引理 schnirelmannDensity_le_of_notMem
@@ -199,7 +201,9 @@ lemma schnirelmannDensity_le_of_notMem
   rw [← one_div]; rw [one_sub_div (Nat.cast_pos.2 hk').ne']
   gcongr
   rw [← Nat.cast_pred hk']; rw [Nat.cast_le]
-  suffices {a in Ioc 0 k | a in A} subseteq Ioo 0 k 
+  suffices {a in Ioc 0 k | a in A} subseteq Ioo 0 k from (card_le_card this).trans_eq (by simp)
+  rw [← Ioo_insert_right hk']; rw [filter_insert]; rw [if_neg hk]
+  exact filter_subset _ _
 
 Depends on / 依赖: Ioo_insert_right, Nat.cast_le, Nat.cast_pos, Nat.cast_pred, card_le_card, cast_le, cast_pos, cast_pred, eq_zero_or_pos, filter_insert, filter_subset, if_neg, k.eq_zero_or_pos, one_div, one_sub_div, schnirelmannDensity_le_of_le, schnirelmannDensity_le_one, subseteq, trans_eq
 -/
@@ -267,7 +271,12 @@ lemma schnirelmannDensity_eq_one_iff
     simp only [Set.not_subset, forall_exists_index, and_imp]
     intro x hx hx'
     apply (schnirelmannDensity_le_of_notMem hx').trans_lt
-    simpa only [one_div, sub_lt_self_iff, in
+    simpa only [one_div, sub_lt_self_iff, inv_pos, Nat.cast_pos, pos_iff_ne_zero] using! hx
+  · intro h
+    refine le_ciInf fun ⟨n, hn⟩ => ?_
+    rw [one_le_div (Nat.cast_pos.2 hn)]; rw [Nat.cast_le]; rw [filter_true_of_mem]; rw [Nat.card_Ioc]; rw [Nat.sub_zero]
+    rintro x hx
+    exact h (mem_Ioc.1 hx).1.ne'
 
 中文:
 引理 schnirelmannDensity_eq_one_iff
@@ -279,7 +288,12 @@ lemma schnirelmannDensity_eq_one_iff
     simp only [Set.not_subset, forall_exists_index, and_imp]
     intro x hx hx'
     apply (schnirelmannDensity_le_of_notMem hx').trans_lt
-    simpa only [one_div, sub_lt_self_iff, in
+    simpa only [one_div, sub_lt_self_iff, inv_pos, Nat.cast_pos, pos_iff_ne_zero] using! hx
+  · intro h
+    refine le_ciInf fun ⟨n, hn⟩ => ?_
+    rw [one_le_div (Nat.cast_pos.2 hn)]; rw [Nat.cast_le]; rw [filter_true_of_mem]; rw [Nat.card_Ioc]; rw [Nat.sub_zero]
+    rintro x hx
+    exact h (mem_Ioc.1 hx).1.ne'
 
 Depends on / 依赖: Nat.card_Ioc, Nat.cast_le, Nat.cast_pos, Nat.sub_zero, Set.not_subset, and_iff_right, and_imp, card_Ioc, cast_le, cast_pos, filter_true_of_mem, forall_exists_index, inv_pos, le_antisymm_iff, le_ciInf, not_imp_not, not_le, not_subset, one_div, one_le_div
 -/
@@ -549,7 +563,10 @@ lemma schnirelmannDensity_finset
   · obtain ⟨n, hn, hn'⟩ := this 1 zero_lt_one le_rfl
     exact ⟨n, hn, hn'.trans_le (le_of_not_ge hε₁)⟩
   let n : Nat := ⌊#A / ε⌋₊ + 1
-  hav
+  have hn : 0 < n := Nat.succ_pos _
+  use n, hn
+  rw [div_lt_iff₀ (Nat.cast_pos.2 hn)]; rw [← div_lt_iff₀' hε]; rw [Nat.cast_add_one]
+exact (Nat.lt_floor_add_one _).trans_le' by gcongr; simp [subset_iff]
 
 中文:
 引理 schnirelmannDensity_finset
@@ -563,7 +580,10 @@ lemma schnirelmannDensity_finset
   · obtain ⟨n, hn, hn'⟩ := this 1 zero_lt_one le_rfl
     exact ⟨n, hn, hn'.trans_le (le_of_not_ge hε₁)⟩
   let n : Nat := ⌊#A / ε⌋₊ + 1
-  hav
+  have hn : 0 < n := Nat.succ_pos _
+  use n, hn
+  rw [div_lt_iff₀ (Nat.cast_pos.2 hn)]; rw [← div_lt_iff₀' hε]; rw [Nat.cast_add_one]
+exact (Nat.lt_floor_add_one _).trans_le' by gcongr; simp [subset_iff]
 
 Depends on / 依赖: Nat.cast_add_one, Nat.cast_pos, Nat.lt_floor_add_one, Nat.succ_pos, cast_add_one, cast_pos, generalizing, le_antisymm, le_of_not_ge, le_rfl, lt_floor_add_one, schnirelmannDensity_le_iff_forall, schnirelmannDensity_nonneg, subset_iff, succ_pos, trans_le, zero_add, zero_lt_one
 -/
@@ -683,7 +703,33 @@ lemma schnirelmannDensity_setOfPred_mod_eq_one
   apply le_antisymm (schnirelmannDensity_le_of_le m hm'.ne' _) _
   · rw [← one_div, ← @Nat.cast_one Real]
     gcongr
-    simp only [Set.mem_ofPred_eq, card_le_one_iff
+    simp only [Set.mem_ofPred_eq, card_le_one_iff_subset_singleton, subset_iff,
+      mem_filter, mem_Ioc, mem_singleton, and_imp]
+    use 1
+    intro x _ hxm h
+    rcases eq_or_lt_of_le hxm with rfl | hxm'
+    · simp at h
+    rwa [Nat.mod_eq_of_lt hxm'] at h
+  rw [le_schnirelmannDensity_iff]
+  intro n hn
+  simp only [Set.mem_ofPred_eq]
+  have : (Icc 0 ((n - 1) / m)).image (· * m + 1) subseteq {x in Ioc 0 n | x % m = 1} := by
+    simp only [subset_iff, mem_image, forall_exists_index, mem_filter, mem_Ioc, mem_Icc, and_imp]
+    rintro _ y _ hy' rfl
+    have hm : 2 <= m := hm.lt_of_le' hm'
+    simp only [Nat.mul_add_mod', Nat.mod_eq_of_lt hm, add_pos_iff, or_true, and_true, true_and,
+      ← Nat.le_sub_iff_add_le hn, zero_lt_one]
+    exact Nat.mul_le_of_le_div _ _ _ hy'
+  rw [le_div_iff₀ (Nat.cast_pos.2 hn)]; rw [mul_comm]; rw [← div_eq_mul_inv]
+  apply (Nat.cast_le.2 (card_le_card this)).trans'
+  rw [card_image_of_injective]; rw [Nat.card_Icc]; rw [Nat.sub_zero]; rw [div_le_iff₀ (Nat.cast_pos.2 hm')]; rw [← Nat.cast_mul]; rw [Nat.cast_le]; rw [add_one_mul (α := Nat)]
+  · have := @Nat.lt_div_mul_add n.pred m hm'
+    rwa [← Nat.succ_le_iff, Nat.succ_pred hn.ne'] at this
+  intro a b
+  simp [hm'.ne']
+
+@[deprecated (since := "2026-07-09")]
+alias schnirelmannDensity_setOf_mod_eq_one := schnirelmannDensity_setOfPred_mod_eq_one
 
 中文:
 引理 schnirelmannDensity_setOfPred_mod_eq_one
@@ -696,7 +742,33 @@ lemma schnirelmannDensity_setOfPred_mod_eq_one
   apply le_antisymm (schnirelmannDensity_le_of_le m hm'.ne' _) _
   · rw [← one_div, ← @Nat.cast_one Real]
     gcongr
-    simp only [Set.mem_ofPred_eq, card_le_one_iff
+    simp only [Set.mem_ofPred_eq, card_le_one_iff_subset_singleton, subset_iff,
+      mem_filter, mem_Ioc, mem_singleton, and_imp]
+    use 1
+    intro x _ hxm h
+    rcases eq_or_lt_of_le hxm with rfl | hxm'
+    · simp at h
+    rwa [Nat.mod_eq_of_lt hxm'] at h
+  rw [le_schnirelmannDensity_iff]
+  intro n hn
+  simp only [Set.mem_ofPred_eq]
+  have : (Icc 0 ((n - 1) / m)).image (· * m + 1) subseteq {x in Ioc 0 n | x % m = 1} := by
+    simp only [subset_iff, mem_image, forall_exists_index, mem_filter, mem_Ioc, mem_Icc, and_imp]
+    rintro _ y _ hy' rfl
+    have hm : 2 <= m := hm.lt_of_le' hm'
+    simp only [Nat.mul_add_mod', Nat.mod_eq_of_lt hm, add_pos_iff, or_true, and_true, true_and,
+      ← Nat.le_sub_iff_add_le hn, zero_lt_one]
+    exact Nat.mul_le_of_le_div _ _ _ hy'
+  rw [le_div_iff₀ (Nat.cast_pos.2 hn)]; rw [mul_comm]; rw [← div_eq_mul_inv]
+  apply (Nat.cast_le.2 (card_le_card this)).trans'
+  rw [card_image_of_injective]; rw [Nat.card_Icc]; rw [Nat.sub_zero]; rw [div_le_iff₀ (Nat.cast_pos.2 hm')]; rw [← Nat.cast_mul]; rw [Nat.cast_le]; rw [add_one_mul (α := Nat)]
+  · have := @Nat.lt_div_mul_add n.pred m hm'
+    rwa [← Nat.succ_le_iff, Nat.succ_pred hn.ne'] at this
+  intro a b
+  simp [hm'.ne']
+
+@[deprecated (since := "2026-07-09")]
+alias schnirelmannDensity_setOf_mod_eq_one := schnirelmannDensity_setOfPred_mod_eq_one
 
 Depends on / 依赖: Nat.cast_one, Nat.cast_zero, Nat.mod_eq_of_lt, Set.mem_ofPred_eq, and_imp, card_le_one_iff_subset_singleton, cast_one, cast_zero, eq_or_lt_of_le, eq_zero_or_pos, inv_zero, le_antisymm, le_schnirelmannDensity_iff, m.eq_zero_or_pos, mem_Ioc, mem_filter, mem_ofPred_eq, mem_singleton, mod_eq_of_lt, one_div
 -/
@@ -831,7 +903,19 @@ theorem add_eq_univ_of_one_le_schirelmannDensity_add_schnirelmannDensity
   let f : Nat oplus Nat -> Nat
     | .inl x => x
     | .inr y => n - y
-  
+  let sA := {a in Ioc 0 n | a in A}
+  let sB := {b in Ioc 0 n | b in B}
+  have hc : #(image f (disjSum sA sB)) < #(disjSum sA sB) := calc
+    #(image f (disjSum sA sB)) <= #(Ioo 0 n) := by gcongr; grind [mem_disjSum]
+    _ < n := by simp [Nat.card_Ioo, n]
+    _ <= #(disjSum sA sB) := by
+      rw [card_disjSum]
+      rify
+      nlinarith [@schnirelmannDensity_mul_le_card_filter A _ n,
+        @schnirelmannDensity_mul_le_card_filter B _ n]
+  obtain ⟨a | b, ha, a | b, hb, _, hxy⟩ := exists_ne_map_eq_of_card_image_lt hc <;>
+  simp only [sA, sB, inl_mem_disjSum, mem_filter, mem_Ioc, inr_mem_disjSum] at ha hb <;>
+  first | grind [inr_mem_disjSum] | exact ⟨a, by simp [*], b, by simp [*], by grind⟩
 
 中文:
 定理 add_eq_univ_of_one_le_schirelmannDensity_add_schnirelmannDensity
@@ -848,7 +932,19 @@ theorem add_eq_univ_of_one_le_schirelmannDensity_add_schnirelmannDensity
   let f : Nat oplus Nat -> Nat
     | .inl x => x
     | .inr y => n - y
-  
+  let sA := {a in Ioc 0 n | a in A}
+  let sB := {b in Ioc 0 n | b in B}
+  have hc : #(image f (disjSum sA sB)) < #(disjSum sA sB) := calc
+    #(image f (disjSum sA sB)) <= #(Ioo 0 n) := by gcongr; grind [mem_disjSum]
+    _ < n := by simp [Nat.card_Ioo, n]
+    _ <= #(disjSum sA sB) := by
+      rw [card_disjSum]
+      rify
+      nlinarith [@schnirelmannDensity_mul_le_card_filter A _ n,
+        @schnirelmannDensity_mul_le_card_filter B _ n]
+  obtain ⟨a | b, ha, a | b, hb, _, hxy⟩ := exists_ne_map_eq_of_card_image_lt hc <;>
+  simp only [sA, sB, inl_mem_disjSum, mem_filter, mem_Ioc, inr_mem_disjSum] at ha hb <;>
+  first | grind [inr_mem_disjSum] | exact ⟨a, by simp [*], b, by simp [*], by grind⟩
 
 Depends on / 依赖: Set.eq_univ_iff_forall, disjSum, eq_univ_iff_forall, mem_disjSum
 -/

@@ -54,7 +54,12 @@ theorem quotient
     map_natCast (Ideal.Quotient.mk (Ideal.span {(p : R)} : Ideal R)) p ▸
       Ideal.Quotient.eq_zero_iff_mem.2 (Ideal.subset_span <| Set.mem_singleton _)
 ringChar.of_eq
-    Or.resolve_left ((Nat.dvd_prime hp1.1).1 <| ringChar.dvd hp0) fun
+    Or.resolve_left ((Nat.dvd_prime hp1.1).1 <| ringChar.dvd hp0) fun h1 =>
+hp2
+isUnit_iff_dvd_one.2
+Ideal.mem_span_singleton.1
+Ideal.Quotient.eq_zero_iff_mem.1
+              @Subsingleton.elim _ (@CharOne.subsingleton _ _ (ringChar.of_eq h1)) _ _
 
 中文:
 定理 quotient
@@ -63,7 +68,12 @@ ringChar.of_eq
     map_natCast (Ideal.Quotient.mk (Ideal.span {(p : R)} : Ideal R)) p ▸
       Ideal.Quotient.eq_zero_iff_mem.2 (Ideal.subset_span <| Set.mem_singleton _)
 ringChar.of_eq
-    Or.resolve_left ((Nat.dvd_prime hp1.1).1 <| ringChar.dvd hp0) fun
+    Or.resolve_left ((Nat.dvd_prime hp1.1).1 <| ringChar.dvd hp0) fun h1 =>
+hp2
+isUnit_iff_dvd_one.2
+Ideal.mem_span_singleton.1
+Ideal.Quotient.eq_zero_iff_mem.1
+              @Subsingleton.elim _ (@CharOne.subsingleton _ _ (ringChar.of_eq h1)) _ _
 
 Depends on / 依赖: CharOne, CharOne.subsingleton, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk, Ideal.mem_span_singleton, Ideal.span, Ideal.subset_span, Nat.dvd_prime, Or.resolve_left, Quotient, Set.mem_singleton, Subsingleton, Subsingleton.elim, dvd_prime, eq_zero_iff_mem, isUnit_iff_dvd_one, map_natCast, mem_singleton, mem_span_singleton, of_eq
 -/

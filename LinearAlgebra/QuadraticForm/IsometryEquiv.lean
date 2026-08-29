@@ -640,7 +640,9 @@ definition isometryEquivWeightedSumSquaresWeightedSumSquares
     simp only [Pi.smul_apply', Pi.smul_apply, RingHom.id_apply, smul_comm]
   map_app' x := by
     simp only [weightedSumSquares_apply, Pi.smul_apply']
-    refine Fin
+    refine Finset.sum_congr rfl fun j hj => ?_
+    rw [smul_mul_smul]; rw [Units.smul_def]; rw [smul_smul]; rw [← pow_two]; rw [← h]
+    simp
 
 中文:
 定义 isometryEquivWeightedSumSquaresWeightedSumSquares
@@ -655,7 +657,9 @@ definition isometryEquivWeightedSumSquaresWeightedSumSquares
     simp only [Pi.smul_apply', Pi.smul_apply, RingHom.id_apply, smul_comm]
   map_app' x := by
     simp only [weightedSumSquares_apply, Pi.smul_apply']
-    refine Fin
+    refine Finset.sum_congr rfl fun j hj => ?_
+    rw [smul_mul_smul]; rw [Units.smul_def]; rw [smul_smul]; rw [← pow_two]; rw [← h]
+    simp
 -/
 def isometryEquivWeightedSumSquaresWeightedSumSquares (u : ι -> Sˣ) (h : forall i, w' i * u i ^ 2 = w i) :
     IsometryEquiv (weightedSumSquares R w) (weightedSumSquares R w') where

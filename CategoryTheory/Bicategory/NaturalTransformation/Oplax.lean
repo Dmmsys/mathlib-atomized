@@ -199,7 +199,11 @@ theorem vComp_naturality_naturality
       bicategory
     _ = 𝟙 _ otimes≫ η.app a ◁ (θ.naturality f ≫ G.map₂ β ▷ θ.app b) otimes≫
           η.naturality g ▷ θ.app b otimes≫ 𝟙 _ := by
-      rw [naturality
+      rw [naturality_naturality]
+      bicategory
+    _ = _ := by
+      rw [naturality_naturality]
+      bicategory
 
 中文:
 定理 vComp_naturality_naturality
@@ -210,7 +214,11 @@ theorem vComp_naturality_naturality
       bicategory
     _ = 𝟙 _ otimes≫ η.app a ◁ (θ.naturality f ≫ G.map₂ β ▷ θ.app b) otimes≫
           η.naturality g ▷ θ.app b otimes≫ 𝟙 _ := by
-      rw [naturality
+      rw [naturality_naturality]
+      bicategory
+    _ = _ := by
+      rw [naturality_naturality]
+      bicategory
 
 Depends on / 依赖: F.map, G.map, bicategory, naturality, naturality_naturality, otimes
 -/
@@ -243,7 +251,9 @@ theorem vComp_naturality_id
     _ = 𝟙 _ otimes≫ η.app a ◁ (θ.naturality (𝟙 a) ≫ G.mapId a ▷ θ.app a) otimes≫ 𝟙 _ := by
       rw [η.naturality_id]
       bicategory
-
+    _ = _ := by
+      rw [θ.naturality_id]
+      bicategory
 
 中文:
 定理 vComp_naturality_id
@@ -256,7 +266,9 @@ theorem vComp_naturality_id
     _ = 𝟙 _ otimes≫ η.app a ◁ (θ.naturality (𝟙 a) ≫ G.mapId a ▷ θ.app a) otimes≫ 𝟙 _ := by
       rw [η.naturality_id]
       bicategory
-
+    _ = _ := by
+      rw [θ.naturality_id]
+      bicategory
 
 Depends on / 依赖: F.mapId, G.mapId, bicategory, naturality, naturality_id, otimes
 -/
@@ -286,7 +298,17 @@ theorem vComp_naturality_comp
           (η.naturality (f ≫ g) ≫ F.mapComp f g ▷ η.app c) ▷ θ.app c otimes≫ 𝟙 _ := by
       bicategory
     _ = 𝟙 _ otimes≫ η.app a ◁ (θ.naturality (f ≫ g) ≫ G.mapComp f g ▷ θ.app c) otimes≫
-          (η.naturality f ▷ G.map g otim
+          (η.naturality f ▷ G.map g otimes≫ F.map f ◁ η.naturality g) ▷ θ.app c otimes≫ 𝟙 _ := by
+      rw [η.naturality_comp]
+      bicategory
+    _ = 𝟙 _ otimes≫ η.app a ◁ (θ.app a ◁ H.mapComp f g otimes≫ θ.naturality f ▷ H.map g) otimes≫
+          ((η.app a ≫ G.map f) ◁ θ.naturality g ≫ η.naturality f ▷ (G.map g ≫ θ.app c)) otimes≫
+            F.map f ◁ η.naturality g ▷ θ.app c otimes≫ 𝟙 _ := by
+      rw [θ.naturality_comp]
+      bicategory
+    _ = _ := by
+      rw [whisker_exchange]
+      bicategory
 
 中文:
 定理 vComp_naturality_comp
@@ -297,7 +319,17 @@ theorem vComp_naturality_comp
           (η.naturality (f ≫ g) ≫ F.mapComp f g ▷ η.app c) ▷ θ.app c otimes≫ 𝟙 _ := by
       bicategory
     _ = 𝟙 _ otimes≫ η.app a ◁ (θ.naturality (f ≫ g) ≫ G.mapComp f g ▷ θ.app c) otimes≫
-          (η.naturality f ▷ G.map g otim
+          (η.naturality f ▷ G.map g otimes≫ F.map f ◁ η.naturality g) ▷ θ.app c otimes≫ 𝟙 _ := by
+      rw [η.naturality_comp]
+      bicategory
+    _ = 𝟙 _ otimes≫ η.app a ◁ (θ.app a ◁ H.mapComp f g otimes≫ θ.naturality f ▷ H.map g) otimes≫
+          ((η.app a ≫ G.map f) ◁ θ.naturality g ≫ η.naturality f ▷ (G.map g ≫ θ.app c)) otimes≫
+            F.map f ◁ η.naturality g ▷ θ.app c otimes≫ 𝟙 _ := by
+      rw [θ.naturality_comp]
+      bicategory
+    _ = _ := by
+      rw [whisker_exchange]
+      bicategory
 
 Depends on / 依赖: F.map, F.mapComp, G.map, G.mapComp, H.map, H.mapComp, bicategory, mapComp, naturalit, naturality, naturality_comp, otimes
 -/
@@ -642,7 +674,16 @@ definition vcomp
       _ =
         (α_ _ _ _).inv ≫
           F.mapComp f g ▷ η.app c ▷ θ.app c ≫
-            (α_ _ _ _)
+            (α_ _ _ _).hom ▷ _ ≫ (α_ _ _ _).hom ≫
+              F.map f ◁ η.naturality g ▷ θ.app c ≫
+                _ ◁ (α_ _ _ _).hom ≫ (α_ _ _ _).inv ≫
+                  (F.map f ≫ η.app b) ◁ θ.naturality g ≫
+                    η.naturality f ▷ (θ.app b ≫ H.map g) ≫
+                      (α_ _ _ _).hom ≫ _ ◁ (α_ _ _ _).inv ≫
+                        η.app a ◁ θ.naturality f ▷ H.map g ≫
+                          _ ◁ (α_ _ _ _).hom ≫ (α_ _ _ _).inv := by
+        rw [whisker_exchange_assoc]; simp
+      _ = _ := by simp
 
 中文:
 定义 vcomp
@@ -656,7 +697,16 @@ definition vcomp
       _ =
         (α_ _ _ _).inv ≫
           F.mapComp f g ▷ η.app c ▷ θ.app c ≫
-            (α_ _ _ _)
+            (α_ _ _ _).hom ▷ _ ≫ (α_ _ _ _).hom ≫
+              F.map f ◁ η.naturality g ▷ θ.app c ≫
+                _ ◁ (α_ _ _ _).hom ≫ (α_ _ _ _).inv ≫
+                  (F.map f ≫ η.app b) ◁ θ.naturality g ≫
+                    η.naturality f ▷ (θ.app b ≫ H.map g) ≫
+                      (α_ _ _ _).hom ≫ _ ◁ (α_ _ _ _).inv ≫
+                        η.app a ◁ θ.naturality f ▷ H.map g ≫
+                          _ ◁ (α_ _ _ _).hom ≫ (α_ _ _ _).inv := by
+        rw [whisker_exchange_assoc]; simp
+      _ = _ := by simp
 -/
 def vcomp : OplaxTrans F H where
   app a := η.app a ≫ θ.app a

@@ -89,14 +89,22 @@ lemma strictMono_eulerMascheroniSeq
   statement: StrictMono eulerMascheroniSeq
   proof: by
   refine strictMono_nat_of_lt_succ (fun n => ?_)
-  rw [eulerMascheroniSeq]; rw [eulerMascheroniSeq]; rw [← sub_pos]; rw [sub_sub_sub_comm]; rw [harmonic_succ]; rw [add_comm]; rw [Rat.cast_add]; rw [add_sub_cancel_right]; rw [← log_div (by positivity) (by positivity)]; rw [add_div]; rw [Nat.cast_a
+  rw [eulerMascheroniSeq]; rw [eulerMascheroniSeq]; rw [← sub_pos]; rw [sub_sub_sub_comm]; rw [harmonic_succ]; rw [add_comm]; rw [Rat.cast_add]; rw [add_sub_cancel_right]; rw [← log_div (by positivity) (by positivity)]; rw [add_div]; rw [Nat.cast_add_one]; rw [Nat.cast_add_one]; rw [div_self (by positivity)]; rw [sub_pos]; rw [one_div]; rw [Rat.cast_inv]; rw [Rat.cast_add]; rw [Rat.cast_one]; rw [Rat.cast_natCast]
+  refine (log_lt_sub_one_of_pos ?_ (ne_of_gt <| lt_add_of_pos_right _ ?_)).trans_le (le_of_eq ?_)
+  · positivity
+  · positivity
+  · simp only [add_sub_cancel_left]
 
 中文:
 引理 strictMono_eulerMascheroniSeq
   结论: 严格递增 eulerMascheroniSeq
   证明: by
   refine strictMono_nat_of_lt_succ (fun n => ?_)
-  rw [eulerMascheroniSeq]; rw [eulerMascheroniSeq]; rw [← sub_pos]; rw [sub_sub_sub_comm]; rw [harmonic_succ]; rw [add_comm]; rw [Rat.cast_add]; rw [add_sub_cancel_right]; rw [← log_div (by positivity) (by positivity)]; rw [add_div]; rw [Nat.cast_a
+  rw [eulerMascheroniSeq]; rw [eulerMascheroniSeq]; rw [← sub_pos]; rw [sub_sub_sub_comm]; rw [harmonic_succ]; rw [add_comm]; rw [Rat.cast_add]; rw [add_sub_cancel_right]; rw [← log_div (by positivity) (by positivity)]; rw [add_div]; rw [Nat.cast_add_one]; rw [Nat.cast_add_one]; rw [div_self (by positivity)]; rw [sub_pos]; rw [one_div]; rw [Rat.cast_inv]; rw [Rat.cast_add]; rw [Rat.cast_one]; rw [Rat.cast_natCast]
+  refine (log_lt_sub_one_of_pos ?_ (ne_of_gt <| lt_add_of_pos_right _ ?_)).trans_le (le_of_eq ?_)
+  · positivity
+  · positivity
+  · simp only [add_sub_cancel_left]
 
 Depends on / 依赖: Nat.cast_add_one, Rat.cast_add, Rat.cast_inv, Rat.cast_natCast, Rat.cast_one, add_comm, add_div, add_sub_cancel_right, cast_add, cast_add_one, cast_inv, cast_natCast, cast_one, div_self, eulerMascheroniSeq, harmonic_succ, log_div, log_lt_sub_one_of_pos, one_div, strictMono_nat_of_lt_succ
 -/
@@ -120,7 +128,8 @@ lemma one_half_lt_eulerMascheroniSeq_six
     norm_num
   rw [this]; rw [lt_sub_iff_add_lt]; rw [← lt_sub_iff_add_lt']; rw [log_lt_iff_lt_exp (by positivity)]
   refine lt_of_lt_of_le ?_ (Real.sum_le_exp_of_nonneg (by norm_num) 7)
-  simp_rw [Finset.sum_range_
+  simp_rw [Finset.sum_range_succ, Nat.factorial_succ]
+  norm_num
 
 中文:
 引理 one_half_lt_eulerMascheroniSeq_six
@@ -131,7 +140,8 @@ lemma one_half_lt_eulerMascheroniSeq_six
     norm_num
   rw [this]; rw [lt_sub_iff_add_lt]; rw [← lt_sub_iff_add_lt']; rw [log_lt_iff_lt_exp (by positivity)]
   refine lt_of_lt_of_le ?_ (Real.sum_le_exp_of_nonneg (by norm_num) 7)
-  simp_rw [Finset.sum_range_
+  simp_rw [Finset.sum_range_succ, Nat.factorial_succ]
+  norm_num
 
 Depends on / 依赖: Finset, Finset.sum_range_succ, Nat.factorial_succ, Real.sum_le_exp_of_nonneg, eulerMascheroniSeq, factorial_succ, log_lt_iff_lt_exp, lt_of_lt_of_le, lt_sub_iff_add_lt, simp_rw, sum_le_exp_of_nonneg, sum_range_succ
 -/
@@ -195,7 +205,11 @@ lemma strictAnti_eulerMascheroniSeq'
   rcases Nat.eq_zero_or_pos n with rfl | hn
   · simp [eulerMascheroniSeq']
   simp_rw [eulerMascheroniSeq', eq_false_intro hn.ne', reduceCtorEq, if_false]
-  rw [← sub_pos]; rw [sub_sub_sub_comm]; rw [harmonic_succ]; rw [Rat.cast_add]; rw [← sub_sub]
+  rw [← sub_pos]; rw [sub_sub_sub_comm]; rw [harmonic_succ]; rw [Rat.cast_add]; rw [← sub_sub]; rw [sub_self]; rw [zero_sub]; rw [sub_eq_add_neg]; rw [neg_sub]; rw [← sub_eq_neg_add]; rw [sub_pos]; rw [← log_div (by positivity) (by positivity)]; rw [← neg_lt_neg_iff]; rw [← log_inv]
+  refine (log_lt_sub_one_of_pos ?_ ?_).trans_le (le_of_eq ?_)
+  · positivity
+  · simp [field]
+  · simp [field]
 
 中文:
 引理 strictAnti_eulerMascheroniSeq'
@@ -205,7 +219,11 @@ lemma strictAnti_eulerMascheroniSeq'
   rcases Nat.eq_zero_or_pos n with rfl | hn
   · simp [eulerMascheroniSeq']
   simp_rw [eulerMascheroniSeq', eq_false_intro hn.ne', reduceCtorEq, if_false]
-  rw [← sub_pos]; rw [sub_sub_sub_comm]; rw [harmonic_succ]; rw [Rat.cast_add]; rw [← sub_sub]
+  rw [← sub_pos]; rw [sub_sub_sub_comm]; rw [harmonic_succ]; rw [Rat.cast_add]; rw [← sub_sub]; rw [sub_self]; rw [zero_sub]; rw [sub_eq_add_neg]; rw [neg_sub]; rw [← sub_eq_neg_add]; rw [sub_pos]; rw [← log_div (by positivity) (by positivity)]; rw [← neg_lt_neg_iff]; rw [← log_inv]
+  refine (log_lt_sub_one_of_pos ?_ ?_).trans_le (le_of_eq ?_)
+  · positivity
+  · simp [field]
+  · simp [field]
 
 Depends on / 依赖: Nat.eq_zero_or_pos, Rat.cast_add, cast_add, eq_false_intro, eq_zero_or_pos, eulerMascheroniSeq, harmonic_succ, hn.ne, if_false, log_div, log_inv, log_lt_sub_o, neg_lt_neg_iff, neg_sub, reduceCtorEq, simp_rw, strictAnti_nat_of_succ_lt, sub_eq_add_neg, sub_eq_neg_add, sub_pos
 -/
@@ -233,6 +251,11 @@ lemma eulerMascheroniSeq'_six_lt_two_thirds
   rw [h1]; rw [sub_lt_iff_lt_add]; rw [← sub_lt_iff_lt_add']; rw [lt_log_iff_exp_lt (by positivity)]
   norm_num
   have := rpow_lt_rpow (exp_pos _).le exp_one_lt_d9 (by simp : (0 : Real) < 107 / 60)
+  rw [exp_one_rpow] at this
+  refine lt_trans this ?_
+  rw [← rpow_lt_rpow_iff (z := 60)]; rw [← rpow_mul]; rw [div_mul_cancel₀]; rw [← Nat.cast_ofNat]; rw [← Nat.cast_ofNat]; rw [rpow_natCast]; rw [Nat.cast_ofNat]; rw [← Nat.cast_ofNat (n := 60)]; rw [rpow_natCast]
+  · norm_num
+  all_goals positivity
 
 中文:
 引理 eulerMascheroniSeq'_six_lt_two_thirds
@@ -244,6 +267,11 @@ lemma eulerMascheroniSeq'_six_lt_two_thirds
   rw [h1]; rw [sub_lt_iff_lt_add]; rw [← sub_lt_iff_lt_add']; rw [lt_log_iff_exp_lt (by positivity)]
   norm_num
   have := rpow_lt_rpow (exp_pos _).le exp_one_lt_d9 (by simp : (0 : Real) < 107 / 60)
+  rw [exp_one_rpow] at this
+  refine lt_trans this ?_
+  rw [← rpow_lt_rpow_iff (z := 60)]; rw [← rpow_mul]; rw [div_mul_cancel₀]; rw [← Nat.cast_ofNat]; rw [← Nat.cast_ofNat]; rw [rpow_natCast]; rw [Nat.cast_ofNat]; rw [← Nat.cast_ofNat (n := 60)]; rw [rpow_natCast]
+  · norm_num
+  all_goals positivity
 -/
 lemma eulerMascheroniSeq'_six_lt_two_thirds : eulerMascheroniSeq' 6 < 2 / 3 := by
   have h1 : eulerMascheroniSeq' 6 = 49 / 20 - log 6 := by
@@ -271,7 +299,8 @@ lemma eulerMascheroniSeq_lt_eulerMascheroniSeq'
     simp only [eulerMascheroniSeq, eulerMascheroniSeq', hr.ne', if_false]
     gcongr
     linarith
-  apply (strictMono_eulerMascheron
+  apply (strictMono_eulerMascheroniSeq.monotone (le_max_left m n)).trans_lt
+  exact (this _).trans_le (strictAnti_eulerMascheroniSeq'.antitone (le_max_right m n))
 
 中文:
 引理 eulerMascheroniSeq_lt_eulerMascheroniSeq'
@@ -283,7 +312,8 @@ lemma eulerMascheroniSeq_lt_eulerMascheroniSeq'
     simp only [eulerMascheroniSeq, eulerMascheroniSeq', hr.ne', if_false]
     gcongr
     linarith
-  apply (strictMono_eulerMascheron
+  apply (strictMono_eulerMascheroniSeq.monotone (le_max_left m n)).trans_lt
+  exact (this _).trans_le (strictAnti_eulerMascheroniSeq'.antitone (le_max_right m n))
 
 Depends on / 依赖: antitone, eq_zero_or_pos, eulerMascheroniSeq, hr.ne, if_false, le_max_left, le_max_right, monotone, strictAnti_eulerMascheroniSeq, strictMono_eulerMascheroniSeq, strictMono_eulerMascheroniSeq.monotone, trans_le, trans_lt
 -/
@@ -369,7 +399,9 @@ lemma tendsto_eulerMascheroniSeq'
     simpa using this.add tendsto_eulerMascheroniSeq
   suffices Tendsto (fun x : Real => log (x + 1) - log x) atTop (𝓝 0) by
     apply (this.comp tendsto_natCast_atTop_atTop).congr'
-    filter_upwards [eventu
+    filter_upwards [eventually_ne_atTop 0] with n hn
+    simp [eulerMascheroniSeq, eulerMascheroniSeq', eq_false_intro hn]
+  exact tendsto_log_comp_add_sub_log 1
 
 中文:
 引理 tendsto_eulerMascheroniSeq'
@@ -378,7 +410,9 @@ lemma tendsto_eulerMascheroniSeq'
     simpa using this.add tendsto_eulerMascheroniSeq
   suffices Tendsto (fun x : Real => log (x + 1) - log x) atTop (𝓝 0) by
     apply (this.comp tendsto_natCast_atTop_atTop).congr'
-    filter_upwards [eventu
+    filter_upwards [eventually_ne_atTop 0] with n hn
+    simp [eulerMascheroniSeq, eulerMascheroniSeq', eq_false_intro hn]
+  exact tendsto_log_comp_add_sub_log 1
 
 Depends on / 依赖: Tendsto, eq_false_intro, eulerMascheroniSeq, eventually_ne_atTop, filter_upwards, tendsto_eulerMascheroniSeq, tendsto_log_comp_add_sub_log, tendsto_natCast_atTop_atTop, this.add, this.comp
 -/

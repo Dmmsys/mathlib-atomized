@@ -358,7 +358,10 @@ definition mkInjThms
     let indVal := ctx.typeInfos[i]!
     let header ← mkHeader ``Countable 2 indVal
     let body ← mkInjThmMatch ctx header indVal
-  
+    let f := mkIdent toNatFnName
+    let t1 := mkIdent header.targetNames[0]!
+    let t2 := mkIdent header.targetNames[1]!
+res := res.push ← `(
 
 中文:
 定义 mkInjThms
@@ -371,7 +374,10 @@ definition mkInjThms
     let indVal := ctx.typeInfos[i]!
     let header ← mkHeader ``Countable 2 indVal
     let body ← mkInjThmMatch ctx header indVal
-  
+    let f := mkIdent toNatFnName
+    let t1 := mkIdent header.targetNames[0]!
+    let t2 := mkIdent header.targetNames[1]!
+res := res.push ← `(
 -/
 def mkInjThms (ctx : Deriving.Context) (toNatFnNames : Array Name) :
     TermElabM (TSyntax `command) := do
@@ -410,7 +416,13 @@ definition mkCountableInstanceCmds
       let auxFunName := ctx.auxFunNames[i]!
       let argNames ← mkInductArgNames indVal
       let binders ← mkImplicitBinders argNames
-      let binders :
+      let binders := binders ++ (← mkInstImplicitBinders ``Countable indVal argNames)
+      let indType ← mkInductiveApp indVal argNames
+      let type ← `($(mkCIdent ``Countable) $indType)
+      let mut val := mkIdent auxFunName
+      let instCmd ← `(instance $binders:implicitBinder* : $type := ⟨_, $val⟩)
+      instances := instances.push instCmd
+  return instances
 
 中文:
 定义 mkCountableInstanceCmds
@@ -423,7 +435,13 @@ definition mkCountableInstanceCmds
       let auxFunName := ctx.auxFunNames[i]!
       let argNames ← mkInductArgNames indVal
       let binders ← mkImplicitBinders argNames
-      let binders :
+      let binders := binders ++ (← mkInstImplicitBinders ``Countable indVal argNames)
+      let indType ← mkInductiveApp indVal argNames
+      let type ← `($(mkCIdent ``Countable) $indType)
+      let mut val := mkIdent auxFunName
+      let instCmd ← `(instance $binders:implicitBinder* : $type := ⟨_, $val⟩)
+      instances := instances.push instCmd
+  return instances
 -/
 private def mkCountableInstanceCmds (ctx : Deriving.Context) (typeNames : Array Name) :
     TermElabM (Array Command) := do
@@ -453,7 +471,10 @@ definition mkCountableCmds
   let toNatFunNames : Array Name ← ctx.auxFunNames.mapM fun name => do
     let .str n' s := name.eraseMacroScopes | unreachable!
 mkFreshUserName .str n' (s ++ "ToNat")
-  let cmds := #[← mkToNatFuns ctx toNatFunNames, ← mkInjThms ctx toNatF
+  let cmds := #[← mkToNatFuns ctx toNatFunNames, ← mkInjThms ctx toNatFunNames]
+    ++ (← mkCountableInstanceCmds ctx declNames)
+  trace[Mathlib.Deriving.countable] "\n{cmds}"
+  return cmds
 
 中文:
 定义 mkCountableCmds
@@ -463,7 +484,10 @@ mkFreshUserName .str n' (s ++ "ToNat")
   let toNatFunNames : Array Name ← ctx.auxFunNames.mapM fun name => do
     let .str n' s := name.eraseMacroScopes | unreachable!
 mkFreshUserName .str n' (s ++ "ToNat")
-  let cmds := #[← mkToNatFuns ctx toNatFunNames, ← mkInjThms ctx toNatF
+  let cmds := #[← mkToNatFuns ctx toNatFunNames, ← mkInjThms ctx toNatFunNames]
+    ++ (← mkCountableInstanceCmds ctx declNames)
+  trace[Mathlib.Deriving.countable] "\n{cmds}"
+  return cmds
 -/
 private def mkCountableCmds (indVal : InductiveVal) (declNames : Array Name) :
     TermElabM (Array Syntax) := do
@@ -492,7 +516,13 @@ definition mkCountableInstance
     let indVal ← getConstInfoInduct declName
     if indVal.isNested || indVal.isReflexive then
       return false -- not supported yet
-    seen :
+    seen := seen.append (NameSet.ofList indVal.all)
+    toVisit := toVisit.push indVal
+  for indVal in toVisit do
+let cmds ← liftTermElabM mkCountableCmds indVal (declNames.filter indVal.all.contains)
+    withEnableInfoTree false do
+elabCommand mkNullNode cmds
+  return true
 
 中文:
 定义 mkCountableInstance
@@ -505,7 +535,13 @@ definition mkCountableInstance
     let indVal ← getConstInfoInduct declName
     if indVal.isNested || indVal.isReflexive then
       return false -- not supported yet
-    seen :
+    seen := seen.append (NameSet.ofList indVal.all)
+    toVisit := toVisit.push indVal
+  for indVal in toVisit do
+let cmds ← liftTermElabM mkCountableCmds indVal (declNames.filter indVal.all.contains)
+    withEnableInfoTree false do
+elabCommand mkNullNode cmds
+  return true
 -/
 def mkCountableInstance (declNames : Array Name) : CommandElabM Bool := do
   let mut seen : NameSet := {}

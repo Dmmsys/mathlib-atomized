@@ -1280,7 +1280,13 @@ nonrec theorem IsLocalMinOn.congr {f g : α -> β} {a : α} (h : IsLocalMinOn f 
     (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalMinOn g s a :=
 h.congr heq heq.eq_of_nhdsWithin hmem
 
-nonrec theorem Filter.EventuallyEq.isLocalMinOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝
+nonrec theorem Filter.EventuallyEq.isLocalMinOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
+    (hmem : a in s) : IsLocalMinOn f s a ↔ IsLocalMinOn g s a :=
+heq.isMinFilter_iff heq.eq_of_nhdsWithin hmem
+
+nonrec theorem IsLocalExtrOn.congr {f g : α -> β} {a : α} (h : IsLocalExtrOn f s a)
+    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalExtrOn g s a :=
+h.congr heq heq.eq_of_nhdsWithin hmem
 
 中文:
 定理 滤子.EventuallyLE.isLocalMinOn
@@ -1291,7 +1297,13 @@ nonrec theorem IsLocalMinOn.congr {f g : α -> β} {a : α} (h : IsLocalMinOn f 
     (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalMinOn g s a :=
 h.congr heq heq.eq_of_nhdsWithin hmem
 
-nonrec theorem Filter.EventuallyEq.isLocalMinOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝
+nonrec theorem Filter.EventuallyEq.isLocalMinOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
+    (hmem : a in s) : IsLocalMinOn f s a ↔ IsLocalMinOn g s a :=
+heq.isMinFilter_iff heq.eq_of_nhdsWithin hmem
+
+nonrec theorem IsLocalExtrOn.congr {f g : α -> β} {a : α} (h : IsLocalExtrOn f s a)
+    (heq : f =ᶠ[𝓝[s] a] g) (hmem : a in s) : IsLocalExtrOn g s a :=
+h.congr heq heq.eq_of_nhdsWithin hmem
 
 Depends on / 依赖: hle.isMinFilter, isMinFilter
 -/

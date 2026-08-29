@@ -65,7 +65,8 @@ definition FormalMultilinearSeries.iteratedFDerivSeries
   | 0 => (continuousMultilinearCurryFin0 𝕜 E F).symm
 .toContinuousLinearEquiv.toContinuousLinearMap.compFormalMultilinearSeries p
   | (k + 1) => (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (k + 1) => E) F).symm
-.toContinuousLinearEquiv.toContinuousLinearMap.compFormalMultilinear
+.toContinuousLinearEquiv.toContinuousLinearMap.compFormalMultilinearSeries
+      (p.iteratedFDerivSeries k).derivSeries
 
 中文:
 定义 FormalMultilinearSeries.iteratedFDerivSeries
@@ -73,7 +74,8 @@ definition FormalMultilinearSeries.iteratedFDerivSeries
   | 0 => (continuousMultilinearCurryFin0 𝕜 E F).symm
 .toContinuousLinearEquiv.toContinuousLinearMap.compFormalMultilinearSeries p
   | (k + 1) => (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (k + 1) => E) F).symm
-.toContinuousLinearEquiv.toContinuousLinearMap.compFormalMultilinear
+.toContinuousLinearEquiv.toContinuousLinearMap.compFormalMultilinearSeries
+      (p.iteratedFDerivSeries k).derivSeries
 
 Depends on / 依赖: compFormalMultilinearSeries, continuousMultilinearCurryFin0, continuousMultilinearCurryLeftEquiv, derivSeries, iteratedFDerivSeries, p.iteratedFDerivSeries, toContinuousLinearEquiv, toContinuousLinearEquiv.toContinuousLinearMap.compFormalMultilinearSeries, toContinuousLinearMap
 -/
@@ -99,7 +101,9 @@ theorem HasFPowerSeriesWithinOnBall.iteratedFDerivWithin
 .toContinuousLinearEquiv.toContinuousLinearMap.comp_hasFPowerSeriesWithinOnBall h
   | succ k ih =>
     rw [iteratedFDerivWithin_succ_eq_comp_left]
-    apply (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (k 
+    apply (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (k + 1) => E) F).symm
+.toContinuousLinearEquiv.toContinuousLinearMap.comp_hasFPowerSeriesWithinOnBall
+        (ih.fderivWithin_of_mem_of_analyticOn (h'.iteratedFDerivWithin hs _) hs hx)
 
 中文:
 定理 有FPowerSeriesWithinOnBall.iteratedFDerivWithin
@@ -110,7 +114,9 @@ theorem HasFPowerSeriesWithinOnBall.iteratedFDerivWithin
 .toContinuousLinearEquiv.toContinuousLinearMap.comp_hasFPowerSeriesWithinOnBall h
   | succ k ih =>
     rw [iteratedFDerivWithin_succ_eq_comp_left]
-    apply (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (k 
+    apply (continuousMultilinearCurryLeftEquiv 𝕜 (fun _ : Fin (k + 1) => E) F).symm
+.toContinuousLinearEquiv.toContinuousLinearMap.comp_hasFPowerSeriesWithinOnBall
+        (ih.fderivWithin_of_mem_of_analyticOn (h'.iteratedFDerivWithin hs _) hs hx)
 -/
 protected theorem HasFPowerSeriesWithinOnBall.iteratedFDerivWithin
     (h : HasFPowerSeriesWithinOnBall f p s x r) (h' : AnalyticOn 𝕜 f s)
@@ -142,7 +148,11 @@ lemma FormalMultilinearSeries.iteratedFDerivSeries_eq_zero
   | succ k ih =>
     ext
     simp only [iteratedFDerivSeries, Nat.succ_eq_add_one,
-      ContinuousLinearMap.compFormalMultilinearSeries_app
+      ContinuousLinearMap.compFormalMultilinearSeries_apply,
+      ContinuousLinearMap.compContinuousMultilinearMap_coe, ContinuousLinearEquiv.coe_coe,
+      LinearIsometryEquiv.coe_toContinuousLinearEquiv, Function.comp_apply,
+      continuousMultilinearCurryLeftEquiv_symm_apply, _root_.zero_apply,
+      derivSeries_eq_zero _ (ih (p.congr_zero (Nat.succ_add_eq_add_succ _ _).symm h))]
 
 中文:
 引理 FormalMultilinearSeries.iteratedFDerivSeries_eq_zero
@@ -156,7 +166,11 @@ lemma FormalMultilinearSeries.iteratedFDerivSeries_eq_zero
   | succ k ih =>
     ext
     simp only [iteratedFDerivSeries, Nat.succ_eq_add_one,
-      ContinuousLinearMap.compFormalMultilinearSeries_app
+      ContinuousLinearMap.compFormalMultilinearSeries_apply,
+      ContinuousLinearMap.compContinuousMultilinearMap_coe, ContinuousLinearEquiv.coe_coe,
+      LinearIsometryEquiv.coe_toContinuousLinearEquiv, Function.comp_apply,
+      continuousMultilinearCurryLeftEquiv_symm_apply, _root_.zero_apply,
+      derivSeries_eq_zero _ (ih (p.congr_zero (Nat.succ_add_eq_add_succ _ _).symm h))]
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.coe_coe, ContinuousLinearMap, ContinuousLinearMap.compContinuousMultilinearMap_coe, ContinuousLinearMap.compFormalMultilinearSeries_apply, FormalMultilinearSeries, FormalMultilinearSeries.iteratedFDerivSeries, Function, Function.comp_apply, LinearIsometryEquiv, LinearIsometryEquiv.coe_toContinuousLinearEquiv, Nat.succ_eq_add_one, _root_, _root_.zero_apply, coe_coe, coe_toContinuousLinearEquiv, compContinuousMultilinearMap_coe, compFormalMultilinearSeries_apply, comp_apply, congr_zero
 -/
@@ -213,7 +227,14 @@ lemma ContinuousMultilinearMap.iteratedFDeriv_comp_diagonal
   let g : E ->L[𝕜] (Fin n -> E) := ContinuousLinearMap.pi (fun i => ContinuousLinearMap.id 𝕜 E)
   change iteratedFDeriv 𝕜 n (f ∘ g) x v = _
   rw [ContinuousLinearMap.iteratedFDeriv_comp_right _ f.contDiff _ le_rfl]; rw [f.iteratedFDeriv_eq]
-  simp only
+  simp only [ContinuousMultilinearMap.iteratedFDeriv,
+    ContinuousMultilinearMap.compContinuousLinearMap_apply, sum_apply,
+    ContinuousMultilinearMap.iteratedFDerivComponent_apply, Set.mem_range, Pi.compRightL_apply]
+  rw [← sum_comp (Equiv.embeddingEquivOfFinite (Fin n))]
+  congr with σ
+  congr with i
+  obtain ⟨y, rfl⟩ := σ.equivOfFiniteSelfEmbedding.surjective i
+  simp [Function.Embedding.equivOfFiniteSelfEmbedding, g]
 
 中文:
 引理 连续多重线性映射.iteratedFDeriv_comp_diagonal
@@ -222,7 +243,14 @@ lemma ContinuousMultilinearMap.iteratedFDeriv_comp_diagonal
   let g : E ->L[𝕜] (Fin n -> E) := ContinuousLinearMap.pi (fun i => ContinuousLinearMap.id 𝕜 E)
   change iteratedFDeriv 𝕜 n (f ∘ g) x v = _
   rw [ContinuousLinearMap.iteratedFDeriv_comp_right _ f.contDiff _ le_rfl]; rw [f.iteratedFDeriv_eq]
-  simp only
+  simp only [ContinuousMultilinearMap.iteratedFDeriv,
+    ContinuousMultilinearMap.compContinuousLinearMap_apply, sum_apply,
+    ContinuousMultilinearMap.iteratedFDerivComponent_apply, Set.mem_range, Pi.compRightL_apply]
+  rw [← sum_comp (Equiv.embeddingEquivOfFinite (Fin n))]
+  congr with σ
+  congr with i
+  obtain ⟨y, rfl⟩ := σ.equivOfFiniteSelfEmbedding.surjective i
+  simp [Function.Embedding.equivOfFiniteSelfEmbedding, g]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, ContinuousLinearMap.iteratedFDeriv_comp_right, ContinuousLinearMap.pi, ContinuousMultilinearMap, ContinuousMultilinearMap.compContinuousLinearMap_apply, ContinuousMultilinearMap.iteratedFDeriv, ContinuousMultilinearMap.iteratedFDerivComponent_apply, Equiv.inv, Pi.compRightL_apply, Set.mem_range, compContinuousLinearMap_apply, compRightL_apply, contDiff, f.contDiff, f.iteratedFDeriv_eq, iteratedFDeriv, iteratedFDerivComponent_apply, iteratedFDeriv_comp_right, iteratedFDeriv_eq
 -/
@@ -256,7 +284,40 @@ lemma HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset
     apply AnalyticOn.contDiffOn _ hs
     simpa [I] using h'
   let g : E -> F := fun z => p n (fun _ => z - x)
-  have gcont : ContDif
+  have gcont : ContDiff 𝕜 ω g := by
+    apply (p n).contDiff.comp
+    exact contDiff_pi.2 (fun i => contDiff_id.sub contDiff_const)
+  let q : FormalMultilinearSeries 𝕜 E F := fun k => if h : n = k then (h ▸ p n) else 0
+  have A : HasFiniteFPowerSeriesOnBall g q x (n + 1) r := by
+    apply HasFiniteFPowerSeriesOnBall.mk' _ h.r_pos
+    · intro y hy
+      rw [Finset.sum_eq_single_of_mem n]
+      · simp [q, g]
+      · simp
+      · intro i hi h'i
+        simp [q, h'i.symm]
+    · intro m hm
+      have : n != m := by lia
+      simp [q, this]
+  have B : HasFPowerSeriesWithinOnBall g q s x r :=
+    A.toHasFPowerSeriesOnBall.hasFPowerSeriesWithinOnBall
+  have J1 : iteratedFDerivWithin 𝕜 n f s x =
+      iteratedFDerivWithin 𝕜 n g s x + iteratedFDerivWithin 𝕜 n (f - g) s x := by
+    have : f = g + (f - g) := by abel
+    nth_rewrite 1 [this]
+    rw [iteratedFDerivWithin_add_apply (gcont.of_le le_top).contDiffWithinAt
+      (by exact (fcont _ hx).sub (gcont.of_le le_top).contDiffWithinAt) hs hx]
+  have J2 : iteratedFDerivWithin 𝕜 n (f - g) s x = 0 := by
+    apply (h.sub B).iteratedFDerivWithin_eq_zero (h'.sub ?_) hs hx
+    · simp [q]
+    · apply gcont.contDiffOn.analyticOn
+  have J3 : iteratedFDerivWithin 𝕜 n g s x = iteratedFDeriv 𝕜 n g x :=
+    iteratedFDerivWithin_eq_iteratedFDeriv hs (gcont.of_le le_top).contDiffAt hx
+  simp only [J1, J3, J2, add_zero]
+  let g' : E -> F := fun z => p n (fun _ => z)
+  have : g = fun z => g' (z - x) := rfl
+  rw [this]; rw [iteratedFDeriv_comp_sub]
+  exact (p n).iteratedFDeriv_comp_diagonal _ v
 
 中文:
 引理 有FPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset
@@ -268,7 +329,40 @@ lemma HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset
     apply AnalyticOn.contDiffOn _ hs
     simpa [I] using h'
   let g : E -> F := fun z => p n (fun _ => z - x)
-  have gcont : ContDif
+  have gcont : ContDiff 𝕜 ω g := by
+    apply (p n).contDiff.comp
+    exact contDiff_pi.2 (fun i => contDiff_id.sub contDiff_const)
+  let q : FormalMultilinearSeries 𝕜 E F := fun k => if h : n = k then (h ▸ p n) else 0
+  have A : HasFiniteFPowerSeriesOnBall g q x (n + 1) r := by
+    apply HasFiniteFPowerSeriesOnBall.mk' _ h.r_pos
+    · intro y hy
+      rw [Finset.sum_eq_single_of_mem n]
+      · simp [q, g]
+      · simp
+      · intro i hi h'i
+        simp [q, h'i.symm]
+    · intro m hm
+      have : n != m := by lia
+      simp [q, this]
+  have B : HasFPowerSeriesWithinOnBall g q s x r :=
+    A.toHasFPowerSeriesOnBall.hasFPowerSeriesWithinOnBall
+  have J1 : iteratedFDerivWithin 𝕜 n f s x =
+      iteratedFDerivWithin 𝕜 n g s x + iteratedFDerivWithin 𝕜 n (f - g) s x := by
+    have : f = g + (f - g) := by abel
+    nth_rewrite 1 [this]
+    rw [iteratedFDerivWithin_add_apply (gcont.of_le le_top).contDiffWithinAt
+      (by exact (fcont _ hx).sub (gcont.of_le le_top).contDiffWithinAt) hs hx]
+  have J2 : iteratedFDerivWithin 𝕜 n (f - g) s x = 0 := by
+    apply (h.sub B).iteratedFDerivWithin_eq_zero (h'.sub ?_) hs hx
+    · simp [q]
+    · apply gcont.contDiffOn.analyticOn
+  have J3 : iteratedFDerivWithin 𝕜 n g s x = iteratedFDeriv 𝕜 n g x :=
+    iteratedFDerivWithin_eq_iteratedFDeriv hs (gcont.of_le le_top).contDiffAt hx
+  simp only [J1, J3, J2, add_zero]
+  let g' : E -> F := fun z => p n (fun _ => z)
+  have : g = fun z => g' (z - x) := rfl
+  rw [this]; rw [iteratedFDeriv_comp_sub]
+  exact (p n).iteratedFDeriv_comp_diagonal _ v
 -/
 private lemma HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset
     (h : HasFPowerSeriesWithinOnBall f p s x r) (h' : AnalyticOn 𝕜 f s)
@@ -328,7 +422,11 @@ theorem HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum
     (iteratedFDerivWithin_inter_open Metric.isOpen_eball (Metric.mem_eball_self h.r_pos)).symm
   rw [this]
   apply HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset
-  · exact
+  · exact h.mono inter_subset_left
+  · exact h'.mono inter_subset_left
+  · exact hs.inter Metric.isOpen_eball
+  · exact ⟨hx, Metric.mem_eball_self h.r_pos⟩
+  · exact inter_subset_right
 
 中文:
 定理 有FPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum
@@ -338,7 +436,11 @@ theorem HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum
     (iteratedFDerivWithin_inter_open Metric.isOpen_eball (Metric.mem_eball_self h.r_pos)).symm
   rw [this]
   apply HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset
-  · exact
+  · exact h.mono inter_subset_left
+  · exact h'.mono inter_subset_left
+  · exact hs.inter Metric.isOpen_eball
+  · exact ⟨hx, Metric.mem_eball_self h.r_pos⟩
+  · exact inter_subset_right
 
 Depends on / 依赖: HasFPowerSeriesWithinOnBall, HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset, Metric, Metric.eball, Metric.isOpen_eball, Metric.mem_eball_self, h.mono, h.r_pos, hs.inter, inter_subset_left, inter_subset_right, isOpen_eball, iteratedFDerivWithin, iteratedFDerivWithin_eq_sum_of_subset, iteratedFDerivWithin_inter_open, mem_eball_self, r_pos
 -/
@@ -392,7 +494,12 @@ theorem HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_completeSpace
     (iteratedFDerivWithin_inter_open Metric.isOpen_eball (Metric.mem_eball_self h.r_pos)).symm
   rw [this]
   apply HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset
-  · exact
+  · exact h.mono inter_subset_left
+  · apply h.analyticOn.mono
+    rw [insert_eq_of_mem hx]
+  · exact hs.inter Metric.isOpen_eball
+  · exact ⟨hx, Metric.mem_eball_self h.r_pos⟩
+  · exact inter_subset_right
 
 中文:
 定理 有FPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_completeSpace
@@ -403,7 +510,12 @@ theorem HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_completeSpace
     (iteratedFDerivWithin_inter_open Metric.isOpen_eball (Metric.mem_eball_self h.r_pos)).symm
   rw [this]
   apply HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset
-  · exact
+  · exact h.mono inter_subset_left
+  · apply h.analyticOn.mono
+    rw [insert_eq_of_mem hx]
+  · exact hs.inter Metric.isOpen_eball
+  · exact ⟨hx, Metric.mem_eball_self h.r_pos⟩
+  · exact inter_subset_right
 
 Depends on / 依赖: HasFPowerSeriesWithinOnBall, HasFPowerSeriesWithinOnBall.iteratedFDerivWithin_eq_sum_of_subset, Metric, Metric.eball, Metric.isOpen_eball, Metric.mem_eball_self, analyticOn, h.analyticOn.mono, h.mono, h.r_pos, hs.inter, insert_eq_of_mem, inter_subset_left, inter_subset_right, isOpen_eball, iteratedFDerivWithin, iteratedFDerivWithin_eq_sum_of_subset, iteratedFDerivWithin_inter_open, mem_eball_self, r_pos
 -/
@@ -512,7 +624,7 @@ theorem ContDiffWithinAt.iteratedFDerivWithin_comp_perm
   have : iteratedFDerivWithin 𝕜 n f (s inter u) x = iteratedFDerivWithin 𝕜 n f s x :=
     iteratedFDerivWithin_inter_open u_open xu
   rw [← this]
-  exact AnalyticOn.iteratedFDerivWithin_comp_perm hu.
+  exact AnalyticOn.iteratedFDerivWithin_comp_perm hu.analyticOn (hs.inter u_open) ⟨hx, xu⟩ _ _
 
 中文:
 定理 ContDiffWithinAt.iteratedFDerivWithin_comp_perm
@@ -522,7 +634,7 @@ theorem ContDiffWithinAt.iteratedFDerivWithin_comp_perm
   have : iteratedFDerivWithin 𝕜 n f (s inter u) x = iteratedFDerivWithin 𝕜 n f s x :=
     iteratedFDerivWithin_inter_open u_open xu
   rw [← this]
-  exact AnalyticOn.iteratedFDerivWithin_comp_perm hu.
+  exact AnalyticOn.iteratedFDerivWithin_comp_perm hu.analyticOn (hs.inter u_open) ⟨hx, xu⟩ _ _
 
 Depends on / 依赖: AnalyticOn, AnalyticOn.iteratedFDerivWithin_comp_perm, analyticOn, contDiffOn, h.contDiffOn, hs.inter, hu.analyticOn, insert_eq_of_mem, iteratedFDerivWithin, iteratedFDerivWithin_comp_perm, iteratedFDerivWithin_inter_open, le_rfl, u_open
 -/

@@ -49,7 +49,9 @@ theorem ContinuousAlternatingMap.hasStrictFDerivAt_toContinuousMultilinearMap_co
     refine Asymptotics.IsBigOTVS.trans_isLittleOTVS ?_ h
     simp only [Function.comp_apply, ← toContinuousMultilinearMapCLM_apply 𝕜,
       ContinuousLinearMap.comp_apply, ← map_sub]
-    apply 
+    apply LinearMap.isBigOTVS_rev_comp
+    simp [isEmbedding_toContinuousMultilinearMap.nhds_eq_comap]
+  · exact (toContinuousMultilinearMapCLM 𝕜).hasStrictFDerivAt.comp x h
 
 中文:
 定理 余ntinuousAlternating映射.hasStrictFDerivAt_toContinuousMultilinearMap_comp_iff
@@ -61,7 +63,9 @@ theorem ContinuousAlternatingMap.hasStrictFDerivAt_toContinuousMultilinearMap_co
     refine Asymptotics.IsBigOTVS.trans_isLittleOTVS ?_ h
     simp only [Function.comp_apply, ← toContinuousMultilinearMapCLM_apply 𝕜,
       ContinuousLinearMap.comp_apply, ← map_sub]
-    apply 
+    apply LinearMap.isBigOTVS_rev_comp
+    simp [isEmbedding_toContinuousMultilinearMap.nhds_eq_comap]
+  · exact (toContinuousMultilinearMapCLM 𝕜).hasStrictFDerivAt.comp x h
 
 Depends on / 依赖: Asymptotics, Asymptotics.IsBigOTVS.trans_isLittleOTVS, ContinuousLinearMap, ContinuousLinearMap.comp_apply, Function, Function.comp_apply, IsBigOTVS, LinearMap, LinearMap.isBigOTVS_rev_comp, comp_apply, hasStrictFDerivAt, hasStrictFDerivAt.comp, hasStrictFDerivAt_iff_isLittleOTVS, isBigOTVS_rev_comp, isEmbedding_toContinuousMultilinearMap, isEmbedding_toContinuousMultilinearMap.nhds_eq_comap, map_sub, nhds_eq_comap, nonempty_fintype, toContinuousMultilinearMapCLM
 -/
@@ -92,7 +96,8 @@ theorem ContinuousAlternatingMap.hasStrictFDerivAt_compContinuousLinearMap
   have H₁ := ContinuousMultilinearMap.hasStrictFDerivAt_compContinuousLinearMap
     (fg.1.1, fun _ : ι => fg.2)
   have H₂ := ((toContinuousMultilinearMapCLM 𝕜).hasStrictFDerivAt (x := fg.1))
-  have H₃ := hasStrictFDerivAt_pi.mpr fun i
+  have H₃ := hasStrictFDerivAt_pi.mpr fun i : ι => hasStrictFDerivAt_id (𝕜 := 𝕜) fg.2
+  exact H₁.comp fg (H₂.prodMap fg H₃)
 
 中文:
 定理 余ntinuousAlternating映射.hasStrictFDerivAt_compContinuousLinearMap
@@ -101,7 +106,8 @@ theorem ContinuousAlternatingMap.hasStrictFDerivAt_compContinuousLinearMap
   have H₁ := ContinuousMultilinearMap.hasStrictFDerivAt_compContinuousLinearMap
     (fg.1.1, fun _ : ι => fg.2)
   have H₂ := ((toContinuousMultilinearMapCLM 𝕜).hasStrictFDerivAt (x := fg.1))
-  have H₃ := hasStrictFDerivAt_pi.mpr fun i
+  have H₃ := hasStrictFDerivAt_pi.mpr fun i : ι => hasStrictFDerivAt_id (𝕜 := 𝕜) fg.2
+  exact H₁.comp fg (H₂.prodMap fg H₃)
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.hasStrictFDerivAt_compContinuousLinearMap, hasStrictFDerivAt, hasStrictFDerivAt_compContinuousLinearMap, hasStrictFDerivAt_id, hasStrictFDerivAt_pi, hasStrictFDerivAt_pi.mpr, hasStrictFDerivAt_toContinuousMultilinearMap_comp_iff, prodMap, toContinuousMultilinearMapCLM
 -/

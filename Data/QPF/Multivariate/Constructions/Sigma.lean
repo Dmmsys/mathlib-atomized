@@ -171,7 +171,7 @@ instance :
   repr {α} := @Sigma.repr _ _ F _ α
   abs_repr := by rintro α ⟨x, f⟩; simp only [Sigma.abs, Sigma.repr, Sigma.eta, abs_repr]
   abs_map := by rintro α β f ⟨x, g⟩; simp only [Sigma.abs, MvPFunctor.map_eq]
-                simp only [(· <$$> ·), ← abs_map, ← M
+                simp only [(· <$$> ·), ← abs_map, ← MvPFunctor.map_eq]
 
 中文:
 实例 :
@@ -181,7 +181,7 @@ instance :
   repr {α} := @Sigma.repr _ _ F _ α
   abs_repr := by rintro α ⟨x, f⟩; simp only [Sigma.abs, Sigma.repr, Sigma.eta, abs_repr]
   abs_map := by rintro α β f ⟨x, g⟩; simp only [Sigma.abs, MvPFunctor.map_eq]
-                simp only [(· <$$> ·), ← abs_map, ← M
+                simp only [(· <$$> ·), ← abs_map, ← MvPFunctor.map_eq]
 
 Depends on / 依赖: Sigma.P
 -/

@@ -298,13 +298,29 @@ English:
 theorem cotangentComplex_comp_h1CotangentEquivCotangent
   given: (P : Extension.{w} R S)
   proof: by
-  rw [h1CotangentEquivCotangent]; rw [LinearEquiv.coe_trans]; rw [LinearEquiv.coe_trans]; rw [h1CotangentEquivOfSurjective_toLinearMap]; rw [← LinearMap.comp_assoc]; rw [← LinearMap.comp_assoc]; rw [LinearEquiv.comp_toLinearMap_symm_eq]; rw [LinearMap.comp_assoc]; rw [h1CotangentExtendScalarsEqui
+  rw [h1CotangentEquivCotangent]; rw [LinearEquiv.coe_trans]; rw [LinearEquiv.coe_trans]; rw [h1CotangentEquivOfSurjective_toLinearMap]; rw [← LinearMap.comp_assoc]; rw [← LinearMap.comp_assoc]; rw [LinearEquiv.comp_toLinearMap_symm_eq]; rw [LinearMap.comp_assoc]; rw [h1CotangentExtendScalarsEquiv_toLinearMap]
+  ext ⟨x, _⟩
+  obtain ⟨⟨x : P.Ring, x_in : x in P.ker⟩, rfl⟩ := Cotangent.mk_surjective x
+  trans 1 otimesₜ[P.Ring] D R P.Ring x; · exact cotangentComplex_mk P ⟨x, x_in⟩
+  let u : (Generators.self P.Ring S).toExtension.ker :=
+    ⟨algebraMap P.Ring (Generators.self P.Ring S).toExtension.Ring x, by
+      rwa [← Ideal.mem_comap, RingHom.comap_ker, ← IsScalarTower.algebraMap_eq]⟩
+  rw [← Generators.H1Cotangent.δ_C _ _ u.prop]
+  congr
 
 中文:
 定理 cotangentComplex_comp_h1CotangentEquivCotangent
   条件: (P : 扩张.{w} R S)
   证明: by
-  rw [h1CotangentEquivCotangent]; rw [LinearEquiv.coe_trans]; rw [LinearEquiv.coe_trans]; rw [h1CotangentEquivOfSurjective_toLinearMap]; rw [← LinearMap.comp_assoc]; rw [← LinearMap.comp_assoc]; rw [LinearEquiv.comp_toLinearMap_symm_eq]; rw [LinearMap.comp_assoc]; rw [h1CotangentExtendScalarsEqui
+  rw [h1CotangentEquivCotangent]; rw [LinearEquiv.coe_trans]; rw [LinearEquiv.coe_trans]; rw [h1CotangentEquivOfSurjective_toLinearMap]; rw [← LinearMap.comp_assoc]; rw [← LinearMap.comp_assoc]; rw [LinearEquiv.comp_toLinearMap_symm_eq]; rw [LinearMap.comp_assoc]; rw [h1CotangentExtendScalarsEquiv_toLinearMap]
+  ext ⟨x, _⟩
+  obtain ⟨⟨x : P.Ring, x_in : x in P.ker⟩, rfl⟩ := Cotangent.mk_surjective x
+  trans 1 otimesₜ[P.Ring] D R P.Ring x; · exact cotangentComplex_mk P ⟨x, x_in⟩
+  let u : (Generators.self P.Ring S).toExtension.ker :=
+    ⟨algebraMap P.Ring (Generators.self P.Ring S).toExtension.Ring x, by
+      rwa [← Ideal.mem_comap, RingHom.comap_ker, ← IsScalarTower.algebraMap_eq]⟩
+  rw [← Generators.H1Cotangent.δ_C _ _ u.prop]
+  congr
 
 Depends on / 依赖: Cotangent, Cotangent.mk_surjective, Generators, Generators.sel, LinearEquiv, LinearEquiv.coe_trans, LinearEquiv.comp_toLinearMap_symm_eq, LinearMap, LinearMap.comp_assoc, P.Ring, P.ker, coe_trans, comp_assoc, comp_toLinearMap_symm_eq, cotangentComplex_mk, h1CotangentEquivCotangent, h1CotangentEquivOfSurjective_toLinearMap, h1CotangentExtendScalarsEquiv_toLinearMap, mk_surjective, x_in
 -/
@@ -329,13 +345,13 @@ English:
 theorem h1CotangentEquivCotangent_comp_map
   given: (P : Extension.{w} R S)
   proof: by
-  rw [h1CotangentEquivCotangent]; rw [LinearEquiv.coe_trans]; rw [LinearEquiv.coe_trans]; rw [h1CotangentExtendScalarsEquiv_symm_toLinearMap]; rw [h1CotangentEquivOfSurjective_toLinearMap]; rw [LinearMap.comp_assoc]; rw [LinearMap.comp_assoc]; rw [Algebra.H1Cotangent.map]; rw [← (H1Cotangent.map 
+  rw [h1CotangentEquivCotangent]; rw [LinearEquiv.coe_trans]; rw [LinearEquiv.coe_trans]; rw [h1CotangentExtendScalarsEquiv_symm_toLinearMap]; rw [h1CotangentEquivOfSurjective_toLinearMap]; rw [LinearMap.comp_assoc]; rw [LinearMap.comp_assoc]; rw [Algebra.H1Cotangent.map]; rw [← (H1Cotangent.map P.extendScalars.defaultHom).restrictScalars_self]; rw [← H1Cotangent.map_comp]; rw [eq_comm]; rw [← LinearEquiv.toLinearMap_symm_comp_eq]; rw [cotangentExtendScalarsEquiv_symm_toLinearMap]; rw [← LinearMap.comp_assoc]; rw [Cotangent.map_comp_h1Cotangentι]; rw [LinearMap.restrictScalars_self]; rw [LinearMap.comp_assoc]; rw [← (H1Cotangent.map P.toExtendScalars).restrictScalars_self]; rw [← H1Cotangent.map_comp]; rw [H1Cotangent.map_eq]
 
 中文:
 定理 h1CotangentEquivCotangent_comp_map
   条件: (P : 扩张.{w} R S)
   证明: by
-  rw [h1CotangentEquivCotangent]; rw [LinearEquiv.coe_trans]; rw [LinearEquiv.coe_trans]; rw [h1CotangentExtendScalarsEquiv_symm_toLinearMap]; rw [h1CotangentEquivOfSurjective_toLinearMap]; rw [LinearMap.comp_assoc]; rw [LinearMap.comp_assoc]; rw [Algebra.H1Cotangent.map]; rw [← (H1Cotangent.map 
+  rw [h1CotangentEquivCotangent]; rw [LinearEquiv.coe_trans]; rw [LinearEquiv.coe_trans]; rw [h1CotangentExtendScalarsEquiv_symm_toLinearMap]; rw [h1CotangentEquivOfSurjective_toLinearMap]; rw [LinearMap.comp_assoc]; rw [LinearMap.comp_assoc]; rw [Algebra.H1Cotangent.map]; rw [← (H1Cotangent.map P.extendScalars.defaultHom).restrictScalars_self]; rw [← H1Cotangent.map_comp]; rw [eq_comm]; rw [← LinearEquiv.toLinearMap_symm_comp_eq]; rw [cotangentExtendScalarsEquiv_symm_toLinearMap]; rw [← LinearMap.comp_assoc]; rw [Cotangent.map_comp_h1Cotangentι]; rw [LinearMap.restrictScalars_self]; rw [LinearMap.comp_assoc]; rw [← (H1Cotangent.map P.toExtendScalars).restrictScalars_self]; rw [← H1Cotangent.map_comp]; rw [H1Cotangent.map_eq]
 
 Depends on / 依赖: Algebra, Algebra.H1Cotangent.map, H1Cotangent, H1Cotangent.map, H1Cotangent.map_comp, Linear, LinearEquiv, LinearEquiv.coe_trans, LinearEquiv.toLinearMap_symm_comp_eq, LinearMap, LinearMap.comp_assoc, P.extendScalars.defaultHom, coe_trans, comp_assoc, cotangentExtendScalarsEquiv_symm_toLinearMap, defaultHom, eq_comm, extendScalars, h1CotangentEquivCotangent, h1CotangentEquivOfSurjective_toLinearMap
 -/
@@ -351,13 +367,17 @@ English:
 theorem H1Cotangent.map_defaultHom_surjective
   given: (P : Extension.{w} R S)
   proof: by
-  rw [← LinearMap.range_eq_top]; rw [← (Submodule.map_injective_of_injective h1Cotangentι_injective).eq_iff]; rw [← LinearMap.range_comp]; rw [← P.h1CotangentEquivCotangent_comp_map]; rw [LinearMap.range_comp]; rw [← (Algebra.H1Cotangent.exact_map_δ R P.Ring S).linearMap_ker_eq]; rw [Submodule.ma
+  rw [← LinearMap.range_eq_top]; rw [← (Submodule.map_injective_of_injective h1Cotangentι_injective).eq_iff]; rw [← LinearMap.range_comp]; rw [← P.h1CotangentEquivCotangent_comp_map]; rw [LinearMap.range_comp]; rw [← (Algebra.H1Cotangent.exact_map_δ R P.Ring S).linearMap_ker_eq]; rw [Submodule.map_top]; rw [← exact_hCotangentι_cotangentComplex.linearMap_ker_eq]; rw [Submodule.map_equiv_eq_comap_symm]; rw [LinearMap.ker]; rw [LinearMap.ker]; rw [← Submodule.comap_comp]
+  congr
+  rw [LinearEquiv.comp_toLinearMap_symm_eq]; rw [P.cotangentComplex_comp_h1CotangentEquivCotangent]
 
 中文:
 定理 H1Cotangent.map_defaultHom_surjective
   条件: (P : 扩张.{w} R S)
   证明: by
-  rw [← LinearMap.range_eq_top]; rw [← (Submodule.map_injective_of_injective h1Cotangentι_injective).eq_iff]; rw [← LinearMap.range_comp]; rw [← P.h1CotangentEquivCotangent_comp_map]; rw [LinearMap.range_comp]; rw [← (Algebra.H1Cotangent.exact_map_δ R P.Ring S).linearMap_ker_eq]; rw [Submodule.ma
+  rw [← LinearMap.range_eq_top]; rw [← (Submodule.map_injective_of_injective h1Cotangentι_injective).eq_iff]; rw [← LinearMap.range_comp]; rw [← P.h1CotangentEquivCotangent_comp_map]; rw [LinearMap.range_comp]; rw [← (Algebra.H1Cotangent.exact_map_δ R P.Ring S).linearMap_ker_eq]; rw [Submodule.map_top]; rw [← exact_hCotangentι_cotangentComplex.linearMap_ker_eq]; rw [Submodule.map_equiv_eq_comap_symm]; rw [LinearMap.ker]; rw [LinearMap.ker]; rw [← Submodule.comap_comp]
+  congr
+  rw [LinearEquiv.comp_toLinearMap_symm_eq]; rw [P.cotangentComplex_comp_h1CotangentEquivCotangent]
 
 Depends on / 依赖: Algebra, Algebra.H1Cotangent.exact_map_, H1Cotangent, LinearEquiv, LinearEquiv.comp, LinearMap, LinearMap.ker, LinearMap.range_comp, LinearMap.range_eq_top, P.Ring, P.h1CotangentEquivCotangent_comp_map, Submodule, Submodule.comap_comp, Submodule.map_equiv_eq_comap_symm, Submodule.map_injective_of_injective, Submodule.map_top, _cotangentComplex.linearMap_ker_eq, comap_comp, eq_iff, h1CotangentEquivCotangent_comp_map
 -/

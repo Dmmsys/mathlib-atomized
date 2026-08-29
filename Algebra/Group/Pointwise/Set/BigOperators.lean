@@ -130,7 +130,28 @@ theorem mem_finsetProd
       exact ⟨fun h => ⟨fun _ => a, fun hi => False.elim (Finset.notMem_empty _ hi), h.symm⟩,
         fun ⟨_, _, hf⟩ => hf.symm⟩
     | insert i is hi ih => ?_
-   
+    rw [Finset.prod_insert hi]; rw [Set.mem_mul]
+    simp_rw [Finset.prod_insert hi]
+    simp_rw [ih]
+    constructor
+    · rintro ⟨x, y, hx, ⟨g, hg, rfl⟩, rfl⟩
+      refine ⟨Function.update g i x, ?_, ?_⟩
+      · intro j hj
+        obtain rfl | hj := Finset.mem_insert.mp hj
+        · rwa [Function.update_self]
+        · rw [update_of_ne (ne_of_mem_of_not_mem hj hi)]
+          exact hg hj
+      · rw [Finset.prod_update_of_notMem hi, Function.update_self]
+    · rintro ⟨g, hg, rfl⟩
+      exact ⟨g i, hg (is.mem_insert_self _), is.prod g,
+        ⟨⟨g, fun hi => hg (Finset.mem_insert_of_mem hi), rfl⟩, rfl⟩⟩
+
+@[deprecated (since := "2026-04-08")] alias mem_finset_sum := mem_finsetSum
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias mem_finset_prod := mem_finsetProd
+
+@[to_additive]
 
 中文:
 定理 mem_finsetProd
@@ -143,7 +164,28 @@ theorem mem_finsetProd
       exact ⟨fun h => ⟨fun _ => a, fun hi => False.elim (Finset.notMem_empty _ hi), h.symm⟩,
         fun ⟨_, _, hf⟩ => hf.symm⟩
     | insert i is hi ih => ?_
-   
+    rw [Finset.prod_insert hi]; rw [Set.mem_mul]
+    simp_rw [Finset.prod_insert hi]
+    simp_rw [ih]
+    constructor
+    · rintro ⟨x, y, hx, ⟨g, hg, rfl⟩, rfl⟩
+      refine ⟨Function.update g i x, ?_, ?_⟩
+      · intro j hj
+        obtain rfl | hj := Finset.mem_insert.mp hj
+        · rwa [Function.update_self]
+        · rw [update_of_ne (ne_of_mem_of_not_mem hj hi)]
+          exact hg hj
+      · rw [Finset.prod_update_of_notMem hi, Function.update_self]
+    · rintro ⟨g, hg, rfl⟩
+      exact ⟨g i, hg (is.mem_insert_self _), is.prod g,
+        ⟨⟨g, fun hi => hg (Finset.mem_insert_of_mem hi), rfl⟩, rfl⟩⟩
+
+@[deprecated (since := "2026-04-08")] alias mem_finset_sum := mem_finsetSum
+
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias mem_finset_prod := mem_finsetProd
+
+@[to_additive]
 
 Depends on / 依赖: False.elim, Finset, Finset.induction_on, Finset.mem_insert.mp, Finset.notMem_empty, Finset.prod_empty, Finset.prod_insert, Function, Function.update, Set.mem_mul, Set.mem_one, classical, generalizing, h.symm, hf.symm, induction_on, insert, mem_insert, mem_mul, mem_one
 -/

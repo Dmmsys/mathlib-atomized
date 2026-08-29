@@ -600,7 +600,17 @@ definition irreducibleSetEquivPoints
   left_inv s := by
     refine TopologicalSpace.IrreducibleCloseds.ext ?_
     simp only [IsIrreducible.genericPoint_closure_eq, TopologicalSpace.IrreducibleCloseds.coe_mk,
-      closure_eq_iff_is
+      closure_eq_iff_isClosed.mpr s.3]
+    rfl
+  right_inv x := isIrreducible_singleton.closure.isGenericPoint_genericPoint_closure.eq
+      (by rw [closure_closure]; exact isGenericPoint_closure)
+  map_rel_iff' := by
+    rintro ⟨s, hs, hs'⟩ ⟨t, ht, ht'⟩
+    refine specializes_iff_closure_subset.trans ?_
+    simp
+    rfl
+
+@[simp]
 
 中文:
 定义 irreducibleSetEquivPoints
@@ -610,7 +620,17 @@ definition irreducibleSetEquivPoints
   left_inv s := by
     refine TopologicalSpace.IrreducibleCloseds.ext ?_
     simp only [IsIrreducible.genericPoint_closure_eq, TopologicalSpace.IrreducibleCloseds.coe_mk,
-      closure_eq_iff_is
+      closure_eq_iff_isClosed.mpr s.3]
+    rfl
+  right_inv x := isIrreducible_singleton.closure.isGenericPoint_genericPoint_closure.eq
+      (by rw [closure_closure]; exact isGenericPoint_closure)
+  map_rel_iff' := by
+    rintro ⟨s, hs, hs'⟩ ⟨t, ht, ht'⟩
+    refine specializes_iff_closure_subset.trans ?_
+    simp
+    rfl
+
+@[simp]
 
 Depends on / 依赖: genericPoint
 -/
@@ -698,7 +718,19 @@ theorem Topology.IsOpenEmbedding.quasiSober
     rw [image_preimage_eq_inter_range] at hx hS''
     have hxT : x in T := by
       rw [← hT.closure_eq]
-      e
+      exact closure_mono inter_subset_left hx.mem
+    obtain ⟨y, rfl⟩ : x in range f := by
+      rw [hx.mem_open_set_iff hf.isOpen_range]
+      refine Nonempty.mono ?_ hS''.1
+      simpa using subset_closure
+    use y
+    change _ = _
+    rw [hf.isEmbedding.closure_eq_preimage_closure_image]; rw [image_singleton]; rw [show _ = _ from hx]
+    apply image_injective.mpr hf.injective
+    ext z
+    simp only [image_preimage_eq_inter_range, mem_inter_iff, and_congr_left_iff]
+    exact fun hy => ⟨fun h => hT.closure_eq ▸ closure_mono inter_subset_left h,
+      fun h => subset_closure ⟨h, hy⟩⟩
 
 中文:
 定理 拓扑.是开嵌入.quasiSober
@@ -710,7 +742,19 @@ theorem Topology.IsOpenEmbedding.quasiSober
     rw [image_preimage_eq_inter_range] at hx hS''
     have hxT : x in T := by
       rw [← hT.closure_eq]
-      e
+      exact closure_mono inter_subset_left hx.mem
+    obtain ⟨y, rfl⟩ : x in range f := by
+      rw [hx.mem_open_set_iff hf.isOpen_range]
+      refine Nonempty.mono ?_ hS''.1
+      simpa using subset_closure
+    use y
+    change _ = _
+    rw [hf.isEmbedding.closure_eq_preimage_closure_image]; rw [image_singleton]; rw [show _ = _ from hx]
+    apply image_injective.mpr hf.injective
+    ext z
+    simp only [image_preimage_eq_inter_range, mem_inter_iff, and_congr_left_iff]
+    exact fun hy => ⟨fun h => hT.closure_eq ▸ closure_mono inter_subset_left h,
+      fun h => subset_closure ⟨h, hy⟩⟩
 
 Depends on / 依赖: Nonempty, Nonempty.mono, QuasiSober, QuasiSober.sober, closure, closure_eq, closure_eq_prei, closure_mono, continuous, continuousOn, hS.image, hT.closure_eq, hf.continuous.continuousOn, hf.isEmbedding.closure_eq_prei, hf.isInducing.isClosed_iff.mp, hf.isOpen_range, hx.mem, hx.mem_open_set_iff, image_preimage_eq_inter_range, inter_subset_left
 -/
@@ -750,7 +794,13 @@ lemma TopologicalSpace.IsOpenCover.quasiSober_iff_forall
     have H : IsIrreducible ((↑) ⁻¹' t : Set (U i)) :=
       ⟨⟨⟨x, hi⟩, hx⟩, h.preimage (U i).isOpenEmbedding'⟩
     use H.genericPoint
-  
+    apply le_antisymm
+    · simpa [h'.closure_subset_iff, h'.closure_eq] using!
+        continuous_subtype_val.closure_preimage_subset _ H.isGenericPoint_genericPoint_closure.mem
+    rw [← image_singleton]; rw [← closure_image_closure continuous_subtype_val]; rw [H.isGenericPoint_genericPoint_closure.def]
+    refine (subset_closure_inter_of_isPreirreducible_of_isOpen h (U i).isOpen ⟨x, ⟨hx, hi⟩⟩).trans
+      (closure_mono ?_)
+    simpa only [inter_comm t, ← Subtype.image_preimage_coe] using! Set.image_mono subset_closure
 
 中文:
 引理 拓扑空间.IsOpenCover.quasiSober_iff_对任意
@@ -762,7 +812,13 @@ lemma TopologicalSpace.IsOpenCover.quasiSober_iff_forall
     have H : IsIrreducible ((↑) ⁻¹' t : Set (U i)) :=
       ⟨⟨⟨x, hi⟩, hx⟩, h.preimage (U i).isOpenEmbedding'⟩
     use H.genericPoint
-  
+    apply le_antisymm
+    · simpa [h'.closure_subset_iff, h'.closure_eq] using!
+        continuous_subtype_val.closure_preimage_subset _ H.isGenericPoint_genericPoint_closure.mem
+    rw [← image_singleton]; rw [← closure_image_closure continuous_subtype_val]; rw [H.isGenericPoint_genericPoint_closure.def]
+    refine (subset_closure_inter_of_isPreirreducible_of_isOpen h (U i).isOpen ⟨x, ⟨hx, hi⟩⟩).trans
+      (closure_mono ?_)
+    simpa only [inter_comm t, ← Subtype.image_preimage_coe] using! Set.image_mono subset_closure
 
 Depends on / 依赖: H.genericPoint, H.isGenericPoint_genericPoint_closure.mem, IsIrreducible, closure_eq, closure_image_closure, closure_preimage_subset, closure_subset_iff, continuou, continuous_subtype_val, continuous_subtype_val.closure_preimage_subset, exists_mem, genericPoint, h.preimage, hU.exists_mem, image_singleton, isGenericPoint_genericPoint_closure, isOpenEmbedding, le_antisymm, preimage, quasiSober
 -/

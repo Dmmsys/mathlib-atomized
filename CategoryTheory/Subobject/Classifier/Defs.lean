@@ -139,7 +139,7 @@ definition mkOfTerminalΩ₀
   uniq m _ χ₀' χ' hχ' := uniq m χ' ((t.hom_ext χ₀' (t.from _)) ▸ hχ')
 
 @[deprecated (since := "2026-03-06")]
-alias _root_.CategoryTheory.Classifier.mkOfTerminalΩ₀ := mkOfTerminal
+alias _root_.CategoryTheory.Classifier.mkOfTerminalΩ₀ := mkOfTerminalΩ₀
 
 中文:
 定义 mkOfTerminalΩ₀
@@ -153,7 +153,7 @@ alias _root_.CategoryTheory.Classifier.mkOfTerminalΩ₀ := mkOfTerminal
   uniq m _ χ₀' χ' hχ' := uniq m χ' ((t.hom_ext χ₀' (t.from _)) ▸ hχ')
 
 @[deprecated (since := "2026-03-06")]
-alias _root_.CategoryTheory.Classifier.mkOfTerminalΩ₀ := mkOfTerminal
+alias _root_.CategoryTheory.Classifier.mkOfTerminalΩ₀ := mkOfTerminalΩ₀
 -/
 def mkOfTerminalΩ₀
     (Ω₀ : C)
@@ -754,7 +754,12 @@ lemma χ_pullback_obj_mk_truth_arrow
     (underlyingIso _).symm (Iso.refl _) (Iso.refl _) (Iso.refl _)
     ?_ (𝒞.isTerminalΩ₀.hom_ext _ _) (by simp) (by simp)
   dsimp
+  rw [Iso.eq_inv_comp]; rw [comp_id]; rw [underlyingIso_hom_comp_eq_mk]
+  rfl
 
+@[deprecated (since := "2026-03-06")]
+alias _root_.CategoryTheory.Classifier.χ_pullback_obj_mk_truth_arrow :=
+  χ_pullback_obj_mk_truth_arrow
 
 中文:
 引理 χ_pullback_obj_mk_truth_arrow
@@ -766,7 +771,12 @@ lemma χ_pullback_obj_mk_truth_arrow
     (underlyingIso _).symm (Iso.refl _) (Iso.refl _) (Iso.refl _)
     ?_ (𝒞.isTerminalΩ₀.hom_ext _ _) (by simp) (by simp)
   dsimp
+  rw [Iso.eq_inv_comp]; rw [comp_id]; rw [underlyingIso_hom_comp_eq_mk]
+  rfl
 
+@[deprecated (since := "2026-03-06")]
+alias _root_.CategoryTheory.Classifier.χ_pullback_obj_mk_truth_arrow :=
+  χ_pullback_obj_mk_truth_arrow
 
 Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, Iso.eq_inv_comp, Iso.refl, comp_id, eq_inv_comp, flip.of_iso, hom_ext, of_hasPullback, of_iso, underlyingIso, underlyingIso_hom_comp_eq_mk
 -/
@@ -802,7 +812,7 @@ definition representableBy
 
 @[deprecated (since := "2026-03-06")]
 alias _root_.CategoryTheory.Classifier.representableBy :=
-  repr
+  representableBy
 
 中文:
 定义 representableBy
@@ -817,7 +827,7 @@ alias _root_.CategoryTheory.Classifier.representableBy :=
 
 @[deprecated (since := "2026-03-06")]
 alias _root_.CategoryTheory.Classifier.representableBy :=
-  repr
+  representableBy
 -/
 noncomputable def representableBy :
     (Subobject.presheaf C).RepresentableBy 𝒞.Ω where
@@ -1179,7 +1189,8 @@ definition isTerminalΩ₀
     have : IsPullback (𝟙 X) π' (π' ≫ h.Ω₀.arrow) h.Ω₀.arrow :=
       { isLimit' := ⟨PullbackCone.IsLimit.mk _ (fun s => s.fst) (by simp)
           (fun s => by rw [← cancel_mono h.Ω₀.arrow, ← s.condition, Category.assoc])
-          (fun s m
+          (fun s m hm _ => by simpa using hm) ⟩ }
+    rw [← cancel_mono h.Ω₀.arrow]; rw [h.uniq this]; rw [← (h.isPullback (𝟙 X)).w]; rw [Category.id_comp])
 
 中文:
 定义 isTerminalΩ₀
@@ -1188,7 +1199,8 @@ definition isTerminalΩ₀
     have : IsPullback (𝟙 X) π' (π' ≫ h.Ω₀.arrow) h.Ω₀.arrow :=
       { isLimit' := ⟨PullbackCone.IsLimit.mk _ (fun s => s.fst) (by simp)
           (fun s => by rw [← cancel_mono h.Ω₀.arrow, ← s.condition, Category.assoc])
-          (fun s m
+          (fun s m hm _ => by simpa using hm) ⟩ }
+    rw [← cancel_mono h.Ω₀.arrow]; rw [h.uniq this]; rw [← (h.isPullback (𝟙 X)).w]; rw [Category.id_comp])
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, IsLimit, IsPullback, IsTerminal, IsTerminal.ofUniqueHom, PullbackCone, PullbackCone.IsLimit.mk, cancel_mono, condition, h.isPullback, h.uniq, id_comp, isLimit, isPullback, ofUniqueHom, s.condition, s.fst
 -/
@@ -1294,6 +1306,11 @@ definition classifier
   isPullback m _ :=
     (h.isPullback m).of_iso (Iso.refl _) (Iso.refl _) h.isoΩ₀ (Iso.refl _)
       (by simp) (Subsingleton.elim _ _) (by simp) (by simp)
+  uniq {U X} m _ χ₀ χ' sq := by
+    have : IsPullback m (h.χ₀ U) χ' h.Ω₀.arrow :=
+      sq.of_iso (Iso.refl _) (Iso.refl _) (h.isoΩ₀.symm) (Iso.refl _)
+        (by simp) (h.isTerminalΩ₀.hom_ext _ _) (by simp) (by simp)
+    exact h.uniq this
 
 中文:
 定义 classifier
@@ -1307,6 +1324,11 @@ definition classifier
   isPullback m _ :=
     (h.isPullback m).of_iso (Iso.refl _) (Iso.refl _) h.isoΩ₀ (Iso.refl _)
       (by simp) (Subsingleton.elim _ _) (by simp) (by simp)
+  uniq {U X} m _ χ₀ χ' sq := by
+    have : IsPullback m (h.χ₀ U) χ' h.Ω₀.arrow :=
+      sq.of_iso (Iso.refl _) (Iso.refl _) (h.isoΩ₀.symm) (Iso.refl _)
+        (by simp) (h.isTerminalΩ₀.hom_ext _ _) (by simp) (by simp)
+    exact h.uniq this
 -/
 noncomputable def classifier : Subobject.Classifier C where
   Ω₀ := ⊤_ C
@@ -1351,7 +1373,7 @@ theorem hasSubobjectClassifier_iff_isRepresentable
     exact SubobjectRepresentableBy.classifier h
 
 @[deprecated (since := "2026-03-06")]
-alias isRepresentable_hasClassifier_if
+alias isRepresentable_hasClassifier_iff := hasSubobjectClassifier_iff_isRepresentable
 
 中文:
 定理 hasSubobjectClassifier_iff_isRepresentable
@@ -1366,7 +1388,7 @@ alias isRepresentable_hasClassifier_if
     exact SubobjectRepresentableBy.classifier h
 
 @[deprecated (since := "2026-03-06")]
-alias isRepresentable_hasClassifier_if
+alias isRepresentable_hasClassifier_iff := hasSubobjectClassifier_iff_isRepresentable
 
 Depends on / 依赖: RepresentableBy, RepresentableBy.isRepresentable, SubobjectRepresentableBy, SubobjectRepresentableBy.classifier, classifier, isRepresentable, representableBy
 -/
@@ -1594,7 +1616,15 @@ definition ofIso
   isPullback {F G} m _ := by
     rw [eΩ₀.comp_inv_eq.mp (Subsingleton.elim (from' F ≫ eΩ₀.inv) (𝒞.χ₀ F))]
     exact (𝒞.isPullback m).paste_vert (IsPullback.of_vert_isIso_mono (by simp [ht]))
-  u
+  uniq {F G} m _ := by
+    intro χ₀' χ' hχ'
+    have : χ' ≫ eΩ.inv = 𝒞.χ m := by
+      apply 𝒞.uniq m (χ₀' := χ₀' ≫ eΩ₀.inv)
+      exact hχ'.paste_vert (IsPullback.of_vert_isIso_mono (by simp [ht]))
+    simpa using this =≫ eΩ.hom
+
+@[deprecated (since := "2026-03-06")]
+alias _root_.CategoryTheory.Classifier.ofIso := ofIso
 
 中文:
 定义 ofIso
@@ -1608,7 +1638,15 @@ definition ofIso
   isPullback {F G} m _ := by
     rw [eΩ₀.comp_inv_eq.mp (Subsingleton.elim (from' F ≫ eΩ₀.inv) (𝒞.χ₀ F))]
     exact (𝒞.isPullback m).paste_vert (IsPullback.of_vert_isIso_mono (by simp [ht]))
-  u
+  uniq {F G} m _ := by
+    intro χ₀' χ' hχ'
+    have : χ' ≫ eΩ.inv = 𝒞.χ m := by
+      apply 𝒞.uniq m (χ₀' := χ₀' ≫ eΩ₀.inv)
+      exact hχ'.paste_vert (IsPullback.of_vert_isIso_mono (by simp [ht]))
+    simpa using this =≫ eΩ.hom
+
+@[deprecated (since := "2026-03-06")]
+alias _root_.CategoryTheory.Classifier.ofIso := ofIso
 
 Depends on / 依赖: Classifier, IsPullback, IsPullback.of_vert_isIso_mono, Subsingleton, Subsingleton.elim, cat_disch, comp_inv_eq, comp_inv_eq.mp, isPullback, mono_truth, of_vert_isIso_mono, paste_vert
 -/
@@ -1656,7 +1694,17 @@ definition ofEquivalence
   χ₀ Y := e.counitInv.app Y ≫ e.functor.map (𝒞₁.χ₀ (e.inverse.obj Y))
   χ m := e.counitInv.app _ ≫ e.functor.map (𝒞₁.χ (e.inverse.map m))
   isPullback {F G} m _ := by
-    apply ((𝒞₁.isPullback (e.inverse.map m)).map e.fu
+    apply ((𝒞₁.isPullback (e.inverse.map m)).map e.functor).of_iso (e.counitIso.app _)
+      (e.counitIso.app _) (.refl _) (.refl _) <;> simp
+  uniq {F G} m _ := by
+    intro χ₀' χ' hχ'
+    have : e.inverse.map χ' ≫ e.unitInv.app _ = 𝒞₁.χ (e.inverse.map m) := by
+      apply 𝒞₁.uniq (e.inverse.map m) (χ₀' := e.inverse.map χ₀' ≫ e.unitInv.app _)
+exact (hχ'.map e.inverse).paste_vert IsPullback.of_vert_isIso_mono .mk
+    simpa using congr(e.counitInv.app G ≫ e.functor.map $this)
+
+@[deprecated (since := "2026-03-06")]
+alias _root_.CategoryTheory.Classifier.ofEquivalence := ofEquivalence
 
 中文:
 定义 ofEquivalence
@@ -1667,7 +1715,17 @@ definition ofEquivalence
   χ₀ Y := e.counitInv.app Y ≫ e.functor.map (𝒞₁.χ₀ (e.inverse.obj Y))
   χ m := e.counitInv.app _ ≫ e.functor.map (𝒞₁.χ (e.inverse.map m))
   isPullback {F G} m _ := by
-    apply ((𝒞₁.isPullback (e.inverse.map m)).map e.fu
+    apply ((𝒞₁.isPullback (e.inverse.map m)).map e.functor).of_iso (e.counitIso.app _)
+      (e.counitIso.app _) (.refl _) (.refl _) <;> simp
+  uniq {F G} m _ := by
+    intro χ₀' χ' hχ'
+    have : e.inverse.map χ' ≫ e.unitInv.app _ = 𝒞₁.χ (e.inverse.map m) := by
+      apply 𝒞₁.uniq (e.inverse.map m) (χ₀' := e.inverse.map χ₀' ≫ e.unitInv.app _)
+exact (hχ'.map e.inverse).paste_vert IsPullback.of_vert_isIso_mono .mk
+    simpa using congr(e.counitInv.app G ≫ e.functor.map $this)
+
+@[deprecated (since := "2026-03-06")]
+alias _root_.CategoryTheory.Classifier.ofEquivalence := ofEquivalence
 
 Depends on / 依赖: e.functor.obj, functor
 -/

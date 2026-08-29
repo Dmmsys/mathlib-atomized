@@ -87,7 +87,9 @@ definition sheafification
     rfl
   map_comp _ _ := by
     ext1
-  
+    apply (toPresheaf _).map_injective
+    simp
+    rfl
 
 中文:
 定义 sheafification
@@ -103,7 +105,9 @@ definition sheafification
     rfl
   map_comp _ _ := by
     ext1
-  
+    apply (toPresheaf _).map_injective
+    simp
+    rfl
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.toSheafify, presheaf, sheafify, toSheafify
 -/
@@ -274,7 +278,12 @@ definition sheafificationAdjunction
       homEquiv_naturality_left_symm := fun {P₀ Q₀ N} f g => by
         apply (SheafOfModules.toSheaf _).map_injective
         simp only [Functor.comp_obj, Functor.map_comp]
-        rw [toSheaf_map_sheafificationHomEquiv_sy
+        rw [toSheaf_map_sheafificationHomEquiv_symm α (f ≫ g)]; rw [toSheaf_map_sheafificationHomEquiv_symm α g]; rw [Functor.map_comp]
+        apply (CategoryTheory.sheafificationAdjunction J
+          AddCommGrpCat.{v}).homEquiv_naturality_left_symm
+      homEquiv_naturality_right := fun {P₀ M N} f g => by
+        apply (toPresheaf _).map_injective
+        erw [toPresheaf_map_sheafificationHomEquiv] }
 
 中文:
 定义 sheafificationAdjunction
@@ -284,7 +293,12 @@ definition sheafificationAdjunction
       homEquiv_naturality_left_symm := fun {P₀ Q₀ N} f g => by
         apply (SheafOfModules.toSheaf _).map_injective
         simp only [Functor.comp_obj, Functor.map_comp]
-        rw [toSheaf_map_sheafificationHomEquiv_sy
+        rw [toSheaf_map_sheafificationHomEquiv_symm α (f ≫ g)]; rw [toSheaf_map_sheafificationHomEquiv_symm α g]; rw [Functor.map_comp]
+        apply (CategoryTheory.sheafificationAdjunction J
+          AddCommGrpCat.{v}).homEquiv_naturality_left_symm
+      homEquiv_naturality_right := fun {P₀ M N} f g => by
+        apply (toPresheaf _).map_injective
+        erw [toPresheaf_map_sheafificationHomEquiv] }
 
 Depends on / 依赖: AddCommGrpCat, Adjunction, Adjunction.mkOfHomEquiv, CategoryTheory, CategoryTheory.sheafificationAdjunction, Functor, Functor.comp_obj, Functor.map_comp, SheafOfModules, SheafOfModules.toSheaf, comp_obj, homEquiv, homEquiv_naturality_left_symm, homEquiv_naturality_right, map_comp, map_injective, mkOfHomEquiv, sheafificationAdjunction, sheafificationHomEquiv, toSheaf
 -/

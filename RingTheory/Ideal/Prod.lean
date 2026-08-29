@@ -235,7 +235,10 @@ theorem ideal_prod_eq
   rintro ⟨r, s⟩
   rw [mem_prod]; rw [mem_map_iff_of_surjective (RingHom.fst R S) Prod.fst_surjective]; rw [mem_map_iff_of_surjective (RingHom.snd R S) Prod.snd_surjective]
   refine ⟨fun h => ⟨⟨_, ⟨h, rfl⟩⟩, ⟨_, ⟨h, rfl⟩⟩⟩, ?_⟩
-  rintro ⟨⟨⟨r, s'⟩, ⟨h₁, rfl⟩⟩, ⟨⟨r', s⟩, ⟨h₂, rfl⟩⟩
+  rintro ⟨⟨⟨r, s'⟩, ⟨h₁, rfl⟩⟩, ⟨⟨r', s⟩, ⟨h₂, rfl⟩⟩⟩
+  simpa using I.add_mem (I.mul_mem_left (1, 0) h₁) (I.mul_mem_left (0, 1) h₂)
+
+@[simp]
 
 中文:
 定理 ideal_prod_eq
@@ -245,7 +248,10 @@ theorem ideal_prod_eq
   rintro ⟨r, s⟩
   rw [mem_prod]; rw [mem_map_iff_of_surjective (RingHom.fst R S) Prod.fst_surjective]; rw [mem_map_iff_of_surjective (RingHom.snd R S) Prod.snd_surjective]
   refine ⟨fun h => ⟨⟨_, ⟨h, rfl⟩⟩, ⟨_, ⟨h, rfl⟩⟩⟩, ?_⟩
-  rintro ⟨⟨⟨r, s'⟩, ⟨h₁, rfl⟩⟩, ⟨⟨r', s⟩, ⟨h₂, rfl⟩⟩
+  rintro ⟨⟨⟨r, s'⟩, ⟨h₁, rfl⟩⟩, ⟨⟨r', s⟩, ⟨h₂, rfl⟩⟩⟩
+  simpa using I.add_mem (I.mul_mem_left (1, 0) h₁) (I.mul_mem_left (0, 1) h₂)
+
+@[simp]
 
 Depends on / 依赖: I.add_mem, I.mul_mem_left, Ideal.ext, Prod.fst_surjective, Prod.snd_surjective, RingHom, RingHom.fst, RingHom.snd, add_mem, fst_surjective, mem_map_iff_of_surjective, mem_prod, mul_mem_left, snd_surjective
 -/
@@ -379,7 +385,10 @@ definition idealProdEquiv
   map_rel_iff' {I J} := by
     simp only [Equiv.coe_fn_mk, Prod.mk_le_mk]
     refine ⟨fun h => ?_, fun h => ⟨map_mono h, map_mono h⟩⟩
-    rw [idea
+    rw [ideal_prod_eq I]; rw [ideal_prod_eq J]
+    exact inf_le_inf (comap_mono h.1) (comap_mono h.2)
+
+@[simp]
 
 中文:
 定义 idealProdEquiv
@@ -391,7 +400,10 @@ definition idealProdEquiv
   map_rel_iff' {I J} := by
     simp only [Equiv.coe_fn_mk, Prod.mk_le_mk]
     refine ⟨fun h => ?_, fun h => ⟨map_mono h, map_mono h⟩⟩
-    rw [idea
+    rw [ideal_prod_eq I]; rw [ideal_prod_eq J]
+    exact inf_le_inf (comap_mono h.1) (comap_mono h.2)
+
+@[simp]
 
 Depends on / 依赖: RingHom, RingHom.fst, RingHom.snd
 -/
@@ -468,7 +480,10 @@ theorem span_prod
     · rw [Ideal.map_span]
       simp [Set.fst_image_prod _ ht]
     · rw [Ideal.map_span]
-      simp [Set.sn
+      simp [Set.snd_image_prod hs]
+  · simp
+
+@[simp]
 
 中文:
 定理 span_prod
@@ -481,7 +496,10 @@ theorem span_prod
     · rw [Ideal.map_span]
       simp [Set.fst_image_prod _ ht]
     · rw [Ideal.map_span]
-      simp [Set.sn
+      simp [Set.snd_image_prod hs]
+  · simp
+
+@[simp]
 
 Depends on / 依赖: Ideal.ideal_prod_eq, Ideal.map_span, Ideal.span, Set.fst_image_prod, Set.not_nonempty_iff_eq_empty, Set.snd_image_prod, conv_lhs, fst_image_prod, ideal_prod_eq, iff_iff_and_or_not_and_not, map_span, not_nonempty_iff_eq_empty, simp_rw, snd_image_prod
 -/
@@ -744,7 +762,9 @@ theorem ideal_prod_prime
     · left
       rw [h] at hI ⊢
       exact ⟨_, ⟨isPrime_of_isPrime_prod_top hI, rfl⟩⟩
-  · rintro (⟨p, ⟨h, r
+  · rintro (⟨p, ⟨h, rfl⟩⟩ | ⟨p, ⟨h, rfl⟩⟩)
+    · exact isPrime_ideal_prod_top
+    · exact isPrime_ideal_prod_top'
 
 中文:
 定理 ideal_prod_prime
@@ -760,7 +780,9 @@ theorem ideal_prod_prime
     · left
       rw [h] at hI ⊢
       exact ⟨_, ⟨isPrime_of_isPrime_prod_top hI, rfl⟩⟩
-  · rintro (⟨p, ⟨h, r
+  · rintro (⟨p, ⟨h, rfl⟩⟩ | ⟨p, ⟨h, rfl⟩⟩)
+    · exact isPrime_ideal_prod_top
+    · exact isPrime_ideal_prod_top'
 
 Depends on / 依赖: ideal_prod_eq, ideal_prod_prime_aux, isPrime_ideal_prod_top, isPrime_of_isPrime_prod_top
 -/

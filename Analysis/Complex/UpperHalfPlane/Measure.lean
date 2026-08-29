@@ -289,7 +289,9 @@ lemma volume_eq_lintegral
   have : MeasurePreserving UpperHalfPlane.coe (volume.comap UpperHalfPlane.coe)
       (volume.restrict (.range UpperHalfPlane.coe)) :=
     ⟨measurable_coe, by rw [measurableEmbedding_coe.map_comap]⟩
-  rw [volume_def]; rw [withDensity_apply']; rw [← Set.inter_eq_self_of_subset_left (Set.image_subs
+  rw [volume_def]; rw [withDensity_apply']; rw [← Set.inter_eq_self_of_subset_left (Set.image_subset_range _ _)]; rw [← Measure.restrict_restrict']; rw [← this.setLIntegral_comp_emb measurableEmbedding_coe]
+  · simp [Real.nnnorm_of_nonneg (im_pos _).le]
+  · exact measurableEmbedding_coe.measurableSet_range
 
 中文:
 引理 volume_eq_lintegral
@@ -298,7 +300,9 @@ lemma volume_eq_lintegral
   have : MeasurePreserving UpperHalfPlane.coe (volume.comap UpperHalfPlane.coe)
       (volume.restrict (.range UpperHalfPlane.coe)) :=
     ⟨measurable_coe, by rw [measurableEmbedding_coe.map_comap]⟩
-  rw [volume_def]; rw [withDensity_apply']; rw [← Set.inter_eq_self_of_subset_left (Set.image_subs
+  rw [volume_def]; rw [withDensity_apply']; rw [← Set.inter_eq_self_of_subset_left (Set.image_subset_range _ _)]; rw [← Measure.restrict_restrict']; rw [← this.setLIntegral_comp_emb measurableEmbedding_coe]
+  · simp [Real.nnnorm_of_nonneg (im_pos _).le]
+  · exact measurableEmbedding_coe.measurableSet_range
 
 Depends on / 依赖: Measure, Measure.restrict_restrict, MeasurePreserving, Real.nnnorm_of_nonneg, Set.image_subset_range, Set.inter_eq_self_of_subset_left, UpperHalfPlane, UpperHalfPlane.coe, im_pos, image_subset_range, inter_eq_self_of_subset_left, map_comap, measurableEmbedding_coe, measurableEmbedding_coe.map_comap, measurableEmbedding_coe.measurableSet_range, measurableSet_range, measurable_coe, nnnorm_of_nonneg, restrict, restrict_restrict
 -/
@@ -321,7 +325,28 @@ instance :
   -- It suffices to show `volume (g • s) = volume s` for measurable sets `s`. First
   -- we write this as a lintegral over subsets of `ℂ`.
   refine ((smulInvariantMeasure_tfae _ _).out 2 0).mp fun g s hs => ?_
-  rw [volume_eq_lintegral]; rw [volume_eq_lintegral]; rw [← Set.image_smul]; rw [Set.im
+  rw [volume_eq_lintegral]; rw [volume_eq_lintegral]; rw [← Set.image_smul]; rw [Set.image_image]
+  -- We want to apply the Jacobian change-of-variable formula.
+  have hinj : Set.InjOn (fun z => ↑(g • ofComplex z) : Complex -> Complex) (UpperHalfPlane.coe '' s) :=
+.image_of_comp by simp
+  have main := MeasureTheory.lintegral_image_eq_lintegral_abs_det_fderiv_mul
+      volume (measurableEmbedding_coe.measurableSet_image.mpr hs)
+      (Set.forall_mem_image.mpr fun z hz =>
+        (hasStrictFDerivAt_smul g _).hasFDerivAt.hasFDerivWithinAt)
+      hinj
+      (fun z => ↑((1 / ‖z.im‖₊) ^ 2 : NNReal))
+  convert! main using 1
+  · simp [Set.image_image]
+  · apply setLIntegral_congr_fun (measurableEmbedding_coe.measurableSet_image.mpr hs)
+    rintro _ ⟨τ, -, rfl⟩
+    simp only [← Real.enorm_eq_ofReal_abs, enorm_eq_nnnorm]
+    have : ‖(SignType.sign g.val.det : Real)‖₊ = 1 := by
+      rcases g.det_ne_zero.lt_or_gt with h | h <;> simp [h]
+    have := g.det_ne_zero
+    have := denom_ne_zero g τ
+    norm_cast
+    ext
+    simp [det_smulFDeriv, *, im_smul_eq_div_normSq, Complex.normSq_eq_norm_sq, field]
 
 中文:
 实例 :
@@ -330,7 +355,28 @@ instance :
   -- It suffices to show `volume (g • s) = volume s` for measurable sets `s`. First
   -- we write this as a lintegral over subsets of `ℂ`.
   refine ((smulInvariantMeasure_tfae _ _).out 2 0).mp fun g s hs => ?_
-  rw [volume_eq_lintegral]; rw [volume_eq_lintegral]; rw [← Set.image_smul]; rw [Set.im
+  rw [volume_eq_lintegral]; rw [volume_eq_lintegral]; rw [← Set.image_smul]; rw [Set.image_image]
+  -- We want to apply the Jacobian change-of-variable formula.
+  have hinj : Set.InjOn (fun z => ↑(g • ofComplex z) : Complex -> Complex) (UpperHalfPlane.coe '' s) :=
+.image_of_comp by simp
+  have main := MeasureTheory.lintegral_image_eq_lintegral_abs_det_fderiv_mul
+      volume (measurableEmbedding_coe.measurableSet_image.mpr hs)
+      (Set.forall_mem_image.mpr fun z hz =>
+        (hasStrictFDerivAt_smul g _).hasFDerivAt.hasFDerivWithinAt)
+      hinj
+      (fun z => ↑((1 / ‖z.im‖₊) ^ 2 : NNReal))
+  convert! main using 1
+  · simp [Set.image_image]
+  · apply setLIntegral_congr_fun (measurableEmbedding_coe.measurableSet_image.mpr hs)
+    rintro _ ⟨τ, -, rfl⟩
+    simp only [← Real.enorm_eq_ofReal_abs, enorm_eq_nnnorm]
+    have : ‖(SignType.sign g.val.det : Real)‖₊ = 1 := by
+      rcases g.det_ne_zero.lt_or_gt with h | h <;> simp [h]
+    have := g.det_ne_zero
+    have := denom_ne_zero g τ
+    norm_cast
+    ext
+    simp [det_smulFDeriv, *, im_smul_eq_div_normSq, Complex.normSq_eq_norm_sq, field]
 -/
 instance : SMulInvariantMeasure (GL (Fin 2) Real) ℍ volume := by
   -- It suffices to show `volume (g • s) = volume s` for measurable sets `s`. First

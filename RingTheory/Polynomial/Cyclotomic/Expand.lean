@@ -46,7 +46,35 @@ theorem cyclotomic_expand_eq_cyclotomic_mul
   · simp
   have := NeZero.of_pos hnpos
   suffices expand Int p (cyclotomic n Int) = cyclotomic (n * p) Int * cyclotomic n Int by
-    rw [← map_cyclotomic_int]; rw [← map_expand]; rw [this]; rw [Polynomial.map_mul]; rw [map_cyclotomic_int]; rw [map_
+    rw [← map_cyclotomic_int]; rw [← map_expand]; rw [this]; rw [Polynomial.map_mul]; rw [map_cyclotomic_int]; rw [map_cyclotomic]
+  refine eq_of_monic_of_dvd_of_natDegree_le ((cyclotomic.monic _ Int).mul (cyclotomic.monic _ Int))
+    ((cyclotomic.monic n Int).expand hp.pos) ?_ ?_
+  · refine (IsPrimitive.Int.dvd_iff_map_cast_dvd_map_cast _ _
+      ((cyclotomic.isPrimitive (n * p) Int).mul (cyclotomic.isPrimitive n Int))).2 ?_
+    rw [Polynomial.map_mul]; rw [map_cyclotomic_int]; rw [map_cyclotomic_int]; rw [map_expand]; rw [map_cyclotomic_int]
+    refine IsCoprime.mul_dvd (cyclotomic.isCoprime_rat fun h => ?_) ?_ ?_
+    · replace h : n * p = n * 1 := by simp [h]
+      exact Nat.Prime.ne_one hp (mul_left_cancel₀ hnpos.ne' h)
+    · have hpos : 0 < n * p := mul_pos hnpos hp.pos
+      have hprim := Complex.isPrimitiveRoot_exp _ hpos.ne'
+      rw [cyclotomic_eq_minpoly_rat hprim hpos]
+      refine minpoly.dvd Rat _ ?_
+      rw [← eval_map_algebraMap]; rw [map_expand]; rw [map_cyclotomic]; rw [expand_eval]; rw [← IsRoot.def]; rw [@isRoot_cyclotomic_iff]
+      convert! IsPrimitiveRoot.pow_of_dvd hprim hp.ne_zero (dvd_mul_left p n)
+      rw [Nat.mul_div_cancel _ (Nat.Prime.pos hp)]
+    · have hprim := Complex.isPrimitiveRoot_exp _ hnpos.ne.symm
+      rw [cyclotomic_eq_minpoly_rat hprim hnpos]
+      refine minpoly.dvd Rat _ ?_
+      rw [← eval_map_algebraMap]; rw [map_expand]; rw [expand_eval]; rw [← IsRoot.def]; rw [←
+        cyclotomic_eq_minpoly_rat hprim hnpos]; rw [map_cyclotomic]; rw [@isRoot_cyclotomic_iff]
+      exact IsPrimitiveRoot.pow_of_prime hprim hp hdiv
+  · rw [natDegree_expand, natDegree_cyclotomic,
+      natDegree_mul (cyclotomic_ne_zero _ Int) (cyclotomic_ne_zero _ Int), natDegree_cyclotomic,
+      natDegree_cyclotomic, mul_comm n,
+      Nat.totient_mul ((Nat.Prime.coprime_iff_not_dvd hp).2 hdiv), Nat.totient_prime hp,
+      mul_comm (p - 1), ← Nat.mul_succ, Nat.sub_one, Nat.succ_pred_eq_of_pos hp.pos]
+
+@[simp]
 
 中文:
 定理 cyclotomic_expand_eq_cyclotomic_mul
@@ -56,7 +84,35 @@ theorem cyclotomic_expand_eq_cyclotomic_mul
   · simp
   have := NeZero.of_pos hnpos
   suffices expand Int p (cyclotomic n Int) = cyclotomic (n * p) Int * cyclotomic n Int by
-    rw [← map_cyclotomic_int]; rw [← map_expand]; rw [this]; rw [Polynomial.map_mul]; rw [map_cyclotomic_int]; rw [map_
+    rw [← map_cyclotomic_int]; rw [← map_expand]; rw [this]; rw [Polynomial.map_mul]; rw [map_cyclotomic_int]; rw [map_cyclotomic]
+  refine eq_of_monic_of_dvd_of_natDegree_le ((cyclotomic.monic _ Int).mul (cyclotomic.monic _ Int))
+    ((cyclotomic.monic n Int).expand hp.pos) ?_ ?_
+  · refine (IsPrimitive.Int.dvd_iff_map_cast_dvd_map_cast _ _
+      ((cyclotomic.isPrimitive (n * p) Int).mul (cyclotomic.isPrimitive n Int))).2 ?_
+    rw [Polynomial.map_mul]; rw [map_cyclotomic_int]; rw [map_cyclotomic_int]; rw [map_expand]; rw [map_cyclotomic_int]
+    refine IsCoprime.mul_dvd (cyclotomic.isCoprime_rat fun h => ?_) ?_ ?_
+    · replace h : n * p = n * 1 := by simp [h]
+      exact Nat.Prime.ne_one hp (mul_left_cancel₀ hnpos.ne' h)
+    · have hpos : 0 < n * p := mul_pos hnpos hp.pos
+      have hprim := Complex.isPrimitiveRoot_exp _ hpos.ne'
+      rw [cyclotomic_eq_minpoly_rat hprim hpos]
+      refine minpoly.dvd Rat _ ?_
+      rw [← eval_map_algebraMap]; rw [map_expand]; rw [map_cyclotomic]; rw [expand_eval]; rw [← IsRoot.def]; rw [@isRoot_cyclotomic_iff]
+      convert! IsPrimitiveRoot.pow_of_dvd hprim hp.ne_zero (dvd_mul_left p n)
+      rw [Nat.mul_div_cancel _ (Nat.Prime.pos hp)]
+    · have hprim := Complex.isPrimitiveRoot_exp _ hnpos.ne.symm
+      rw [cyclotomic_eq_minpoly_rat hprim hnpos]
+      refine minpoly.dvd Rat _ ?_
+      rw [← eval_map_algebraMap]; rw [map_expand]; rw [expand_eval]; rw [← IsRoot.def]; rw [←
+        cyclotomic_eq_minpoly_rat hprim hnpos]; rw [map_cyclotomic]; rw [@isRoot_cyclotomic_iff]
+      exact IsPrimitiveRoot.pow_of_prime hprim hp hdiv
+  · rw [natDegree_expand, natDegree_cyclotomic,
+      natDegree_mul (cyclotomic_ne_zero _ Int) (cyclotomic_ne_zero _ Int), natDegree_cyclotomic,
+      natDegree_cyclotomic, mul_comm n,
+      Nat.totient_mul ((Nat.Prime.coprime_iff_not_dvd hp).2 hdiv), Nat.totient_prime hp,
+      mul_comm (p - 1), ← Nat.mul_succ, Nat.sub_one, Nat.succ_pred_eq_of_pos hp.pos]
+
+@[simp]
 
 Depends on / 依赖: IsPrimitive, IsPrimitive.Int.dvd_iff_map_cast_dvd_map_cast, Nat.eq_zero_or_pos, NeZero, NeZero.of_pos, Polynomial, Polynomial.map_mul, cyclotomic, cyclotomic.monic, dvd_iff_map_cast_dvd_map_cast, eq_of_monic_of_dvd_of_natDegree_le, eq_zero_or_pos, expand, hp.pos, map_cyclotomic, map_cyclotomic_int, map_expand, map_mul, of_pos
 -/
@@ -148,7 +204,17 @@ theorem cyclotomic_expand_eq_cyclotomic
   have := NeZero.of_pos hzero
   suffices expand Int p (cyclotomic n Int) = cyclotomic (n * p) Int by
     rw [← map_cyclotomic_int]; rw [← map_expand]; rw [this]; rw [map_cyclotomic_int]
-  refine eq_of_monic_of_dvd_of_natDegree_le (cyclotomic.m
+  refine eq_of_monic_of_dvd_of_natDegree_le (cyclotomic.monic _ Int)
+    ((cyclotomic.monic n Int).expand hp.pos) ?_ ?_
+  · have hpos := Nat.mul_pos hzero hp.pos
+    have hprim := Complex.isPrimitiveRoot_exp _ hpos.ne.symm
+    rw [cyclotomic_eq_minpoly hprim hpos]
+    refine minpoly.isIntegrallyClosed_dvd (hprim.isIntegral hpos) ?_
+    rw [← eval_map_algebraMap]; rw [map_expand]; rw [map_cyclotomic]; rw [expand_eval]; rw [← IsRoot.def]; rw [@isRoot_cyclotomic_iff]
+    convert! IsPrimitiveRoot.pow_of_dvd hprim hp.ne_zero (dvd_mul_left p n)
+    rw [Nat.mul_div_cancel _ hp.pos]
+  · rw [natDegree_expand, natDegree_cyclotomic, natDegree_cyclotomic, mul_comm n,
+      Nat.totient_mul_of_prime_of_dvd hp hdiv, mul_comm]
 
 中文:
 定理 cyclotomic_expand_eq_cyclotomic
@@ -159,7 +225,17 @@ theorem cyclotomic_expand_eq_cyclotomic
   have := NeZero.of_pos hzero
   suffices expand Int p (cyclotomic n Int) = cyclotomic (n * p) Int by
     rw [← map_cyclotomic_int]; rw [← map_expand]; rw [this]; rw [map_cyclotomic_int]
-  refine eq_of_monic_of_dvd_of_natDegree_le (cyclotomic.m
+  refine eq_of_monic_of_dvd_of_natDegree_le (cyclotomic.monic _ Int)
+    ((cyclotomic.monic n Int).expand hp.pos) ?_ ?_
+  · have hpos := Nat.mul_pos hzero hp.pos
+    have hprim := Complex.isPrimitiveRoot_exp _ hpos.ne.symm
+    rw [cyclotomic_eq_minpoly hprim hpos]
+    refine minpoly.isIntegrallyClosed_dvd (hprim.isIntegral hpos) ?_
+    rw [← eval_map_algebraMap]; rw [map_expand]; rw [map_cyclotomic]; rw [expand_eval]; rw [← IsRoot.def]; rw [@isRoot_cyclotomic_iff]
+    convert! IsPrimitiveRoot.pow_of_dvd hprim hp.ne_zero (dvd_mul_left p n)
+    rw [Nat.mul_div_cancel _ hp.pos]
+  · rw [natDegree_expand, natDegree_cyclotomic, natDegree_cyclotomic, mul_comm n,
+      Nat.totient_mul_of_prime_of_dvd hp hdiv, mul_comm]
 
 Depends on / 依赖: Complex.isPrimitiveRoot_exp, Nat.mul_pos, NeZero, NeZero.of_pos, cyclotomic, cyclotomic.monic, cyclotomic_eq_minpoly, eq_of_monic_of_dvd_of_natDegree_le, eq_zero_or_pos, expand, hp.pos, hpos.ne.symm, isPrimitiveRoot_exp, map_cyclotomic_int, map_expand, minpoly, minpoly.isInt, mul_pos, n.eq_zero_or_pos, of_pos
 -/
@@ -196,7 +272,8 @@ theorem cyclotomic_irreducible_pow_of_irreducible_pow
   | zero => simpa using h
   | succ k hk =>
     have : m + k != 0 := (add_pos_of_pos_of_nonneg hm k.zero_le).ne'
-    rw [Nat.add_succ]; rw [pow_
+    rw [Nat.add_succ]; rw [pow_succ]; rw [← cyclotomic_expand_eq_cyclotomic hp <| dvd_pow_self p this] at h
+    exact hk (by lia) (of_irreducible_expand hp.ne_zero h)
 
 中文:
 定理 cyclotomic_irreducible_pow_of_irreducible_pow
@@ -209,7 +286,8 @@ theorem cyclotomic_irreducible_pow_of_irreducible_pow
   | zero => simpa using h
   | succ k hk =>
     have : m + k != 0 := (add_pos_of_pos_of_nonneg hm k.zero_le).ne'
-    rw [Nat.add_succ]; rw [pow_
+    rw [Nat.add_succ]; rw [pow_succ]; rw [← cyclotomic_expand_eq_cyclotomic hp <| dvd_pow_self p this] at h
+    exact hk (by lia) (of_irreducible_expand hp.ne_zero h)
 
 Depends on / 依赖: Nat.add_succ, Nat.exists_eq_add_of_le, add_pos_of_pos_of_nonneg, add_succ, cyclotomic_expand_eq_cyclotomic, dvd_pow_self, eq_zero_or_pos, exists_eq_add_of_le, hp.ne_zero, irreducible_X_sub_C, k.zero_le, m.eq_zero_or_pos, ne_zero, of_irreducible_expand, pow_succ, zero_le
 -/
@@ -258,7 +336,10 @@ theorem cyclotomic_mul_prime_eq_pow_of_not_dvd
   let : Algebra (ZMod p) R := ZMod.algebra _ _
   suffices cyclotomic (n * p) (ZMod p) = cyclotomic n (ZMod p) ^ (p - 1) by
     rw [← map_cyclotomic _ (algebraMap (ZMod p) R)]; rw [← map_cyclotomic _ (algebraMap (ZMod p) R)]; rw [this]; rw [Polynomial.map_pow]
-  apply mul_right_injective₀ (cycloto
+  apply mul_right_injective₀ (cyclotomic_ne_zero n <| ZMod p); dsimp
+  rw [← pow_succ']; rw [tsub_add_cancel_of_le hp.out.one_lt.le]; rw [mul_comm]; rw [← ZMod.expand_card]
+  conv_rhs => rw [← map_cyclotomic_int]
+  rw [← map_expand]; rw [cyclotomic_expand_eq_cyclotomic_mul hp.out hn]; rw [Polynomial.map_mul]; rw [map_cyclotomic]; rw [map_cyclotomic]
 
 中文:
 定理 cyclotomic_mul_prime_eq_pow_of_not_dvd
@@ -267,7 +348,10 @@ theorem cyclotomic_mul_prime_eq_pow_of_not_dvd
   let : Algebra (ZMod p) R := ZMod.algebra _ _
   suffices cyclotomic (n * p) (ZMod p) = cyclotomic n (ZMod p) ^ (p - 1) by
     rw [← map_cyclotomic _ (algebraMap (ZMod p) R)]; rw [← map_cyclotomic _ (algebraMap (ZMod p) R)]; rw [this]; rw [Polynomial.map_pow]
-  apply mul_right_injective₀ (cycloto
+  apply mul_right_injective₀ (cyclotomic_ne_zero n <| ZMod p); dsimp
+  rw [← pow_succ']; rw [tsub_add_cancel_of_le hp.out.one_lt.le]; rw [mul_comm]; rw [← ZMod.expand_card]
+  conv_rhs => rw [← map_cyclotomic_int]
+  rw [← map_expand]; rw [cyclotomic_expand_eq_cyclotomic_mul hp.out hn]; rw [Polynomial.map_mul]; rw [map_cyclotomic]; rw [map_cyclotomic]
 
 Depends on / 依赖: Algebra, Polynomial, Polynomial.map_pow, ZMod.algebra, ZMod.expand_card, algebra, algebraMap, conv_rhs, cyclotomic, cyclotomic_expa, cyclotomic_ne_zero, expand_card, hp.out.one_lt.le, map_cyclotomic, map_cyclotomic_int, map_expand, map_pow, mul_comm, one_lt, pow_succ
 -/
@@ -291,7 +375,7 @@ theorem cyclotomic_mul_prime_dvd_eq_pow
   let : Algebra (ZMod p) R := ZMod.algebra _ _
   suffices cyclotomic (n * p) (ZMod p) = cyclotomic n (ZMod p) ^ p by
     rw [← map_cyclotomic _ (algebraMap (ZMod p) R)]; rw [← map_cyclotomic _ (algebraMap (ZMod p) R)]; rw [this]; rw [Polynomial.map_pow]
-  rw [← ZMod.expand_card]; rw [← map_cyclot
+  rw [← ZMod.expand_card]; rw [← map_cyclotomic_int n]; rw [← map_expand]; rw [cyclotomic_expand_eq_cyclotomic hp.out hn]; rw [map_cyclotomic]
 
 中文:
 定理 cyclotomic_mul_prime_dvd_eq_pow
@@ -300,7 +384,7 @@ theorem cyclotomic_mul_prime_dvd_eq_pow
   let : Algebra (ZMod p) R := ZMod.algebra _ _
   suffices cyclotomic (n * p) (ZMod p) = cyclotomic n (ZMod p) ^ p by
     rw [← map_cyclotomic _ (algebraMap (ZMod p) R)]; rw [← map_cyclotomic _ (algebraMap (ZMod p) R)]; rw [this]; rw [Polynomial.map_pow]
-  rw [← ZMod.expand_card]; rw [← map_cyclot
+  rw [← ZMod.expand_card]; rw [← map_cyclotomic_int n]; rw [← map_expand]; rw [cyclotomic_expand_eq_cyclotomic hp.out hn]; rw [map_cyclotomic]
 
 Depends on / 依赖: Algebra, Polynomial, Polynomial.map_pow, ZMod.algebra, ZMod.expand_card, algebra, algebraMap, cyclotomic, cyclotomic_expand_eq_cyclotomic, expand_card, hp.out, map_cyclotomic, map_cyclotomic_int, map_expand, map_pow
 -/
@@ -320,7 +404,8 @@ theorem cyclotomic_mul_prime_pow_eq
   proof: ⟨p ^ a * m, by rw [← mul_assoc, pow_succ']⟩
     rw [pow_succ']; rw [mul_assoc]; rw [mul_comm]; rw [cyclotomic_mul_prime_dvd_eq_pow R hdiv]; rw [cyclotomic_mul_prime_pow_eq _ _ a.succ_pos]; rw [← pow_mul]
     · simp only [Nat.succ_sub_succ_eq_sub, Nat.sub_zero]
-      rw [Nat.mul_sub_right_distrib]; r
+      rw [Nat.mul_sub_right_distrib]; rw [mul_comm]; rw [pow_succ]
+    · assumption
 
 中文:
 定理 cyclotomic_mul_prime_pow_eq
@@ -328,7 +413,8 @@ theorem cyclotomic_mul_prime_pow_eq
   证明: ⟨p ^ a * m, by rw [← mul_assoc, pow_succ']⟩
     rw [pow_succ']; rw [mul_assoc]; rw [mul_comm]; rw [cyclotomic_mul_prime_dvd_eq_pow R hdiv]; rw [cyclotomic_mul_prime_pow_eq _ _ a.succ_pos]; rw [← pow_mul]
     · simp only [Nat.succ_sub_succ_eq_sub, Nat.sub_zero]
-      rw [Nat.mul_sub_right_distrib]; r
+      rw [Nat.mul_sub_right_distrib]; rw [mul_comm]; rw [pow_succ]
+    · assumption
 
 Depends on / 依赖: mul_assoc, pow_succ
 -/
@@ -356,7 +442,10 @@ theorem isRoot_cyclotomic_prime_pow_mul_iff_of_charP
   · rw [IsRoot.def, cyclotomic_mul_prime_pow_eq R (NeZero.not_char_dvd R p m) hk, eval_pow]
       at h
     replace h := eq_zero_of_pow_eq_zero h
-    rwa [← IsRoot.def, i
+    rwa [← IsRoot.def, isRoot_cyclotomic_iff] at h
+  · rw [← isRoot_cyclotomic_iff, IsRoot.def] at h
+    rw [cyclotomic_mul_prime_pow_eq R (NeZero.not_char_dvd R p m) hk]; rw [IsRoot.def]; rw [eval_pow]; rw [h]; rw [zero_pow]
+exact Nat.sub_ne_zero_of_lt pow_right_strictMono₀ hp.out.one_lt Nat.pred_lt hk.ne'
 
 中文:
 定理 isRoot_cyclotomic_prime_pow_mul_iff_of_charP
@@ -368,7 +457,10 @@ theorem isRoot_cyclotomic_prime_pow_mul_iff_of_charP
   · rw [IsRoot.def, cyclotomic_mul_prime_pow_eq R (NeZero.not_char_dvd R p m) hk, eval_pow]
       at h
     replace h := eq_zero_of_pow_eq_zero h
-    rwa [← IsRoot.def, i
+    rwa [← IsRoot.def, isRoot_cyclotomic_iff] at h
+  · rw [← isRoot_cyclotomic_iff, IsRoot.def] at h
+    rw [cyclotomic_mul_prime_pow_eq R (NeZero.not_char_dvd R p m) hk]; rw [IsRoot.def]; rw [eval_pow]; rw [h]; rw [zero_pow]
+exact Nat.sub_ne_zero_of_lt pow_right_strictMono₀ hp.out.one_lt Nat.pred_lt hk.ne'
 
 Depends on / 依赖: IsRoot, IsRoot.def, Nat.sub_ne_zero_of_l, NeZero, NeZero.not_char_dvd, cyclotomic_mul_prime_pow_eq, eq_zero_of_pow_eq_zero, eq_zero_or_pos, eval_pow, isRoot_cyclotomic_iff, k.eq_zero_or_pos, not_char_dvd, one_mul, pow_zero, replace, sub_ne_zero_of_l, zero_pow
 -/

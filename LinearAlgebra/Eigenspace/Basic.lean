@@ -97,7 +97,8 @@ lemma mem_genEigenspace
   have : Nonempty {l : Nat // l <= k} := ⟨⟨0, zero_le⟩⟩
   have : Directed (ι := { i : Nat // i <= k }) (· <= ·) fun i => LinearMap.ker ((f - μ • 1) ^ (i : Nat)) :=
     Monotone.directed_le fun m n h => by simpa using (f - μ • 1).iterateKer.monotone h
-  simp_rw [genEigenspace, OrderHom.coe_mk, Lin
+  simp_rw [genEigenspace, OrderHom.coe_mk, LinearMap.mem_ker, iSup_subtype',
+    Submodule.mem_iSup_of_directed _ this, LinearMap.mem_ker, Subtype.exists, exists_prop]
 
 中文:
 引理 mem_genEigenspace
@@ -106,7 +107,8 @@ lemma mem_genEigenspace
   have : Nonempty {l : Nat // l <= k} := ⟨⟨0, zero_le⟩⟩
   have : Directed (ι := { i : Nat // i <= k }) (· <= ·) fun i => LinearMap.ker ((f - μ • 1) ^ (i : Nat)) :=
     Monotone.directed_le fun m n h => by simpa using (f - μ • 1).iterateKer.monotone h
-  simp_rw [genEigenspace, OrderHom.coe_mk, Lin
+  simp_rw [genEigenspace, OrderHom.coe_mk, LinearMap.mem_ker, iSup_subtype',
+    Submodule.mem_iSup_of_directed _ this, LinearMap.mem_ker, Subtype.exists, exists_prop]
 
 Depends on / 依赖: Directed, LinearMap, LinearMap.ker, LinearMap.mem_ker, Monotone, Monotone.directed_le, Nonempty, OrderHom, OrderHom.coe_mk, Submodule, Submodule.mem_iSup_of_directed, Subtype, Subtype.exists, coe_mk, directed_le, exists_prop, genEigenspace, iSup_subtype, iterateKer, iterateKer.monotone
 -/
@@ -754,7 +756,8 @@ lemma genEigenspace_div
     genEigenspace f (a / b) 1 = genEigenspace f (b⁻¹ * a) 1 := by rw [div_eq_mul_inv, mul_comm]
     _ = LinearMap.ker (f - (b⁻¹ * a) • 1) := by rw [genEigenspace_one]
     _ = LinearMap.ker (f - b⁻¹ • a • 1) := by rw [smul_smul]
-    _ = LinearMap.ker (b • (f - b⁻¹ • a • 1)) := by rw [LinearMap.k
+    _ = LinearMap.ker (b • (f - b⁻¹ • a • 1)) := by rw [LinearMap.ker_smul _ b hb]
+    _ = LinearMap.ker (b • f - a • 1) := by rw [smul_sub, smul_inv_smul₀ hb]
 
 中文:
 引理 genEigenspace_div
@@ -763,7 +766,8 @@ lemma genEigenspace_div
     genEigenspace f (a / b) 1 = genEigenspace f (b⁻¹ * a) 1 := by rw [div_eq_mul_inv, mul_comm]
     _ = LinearMap.ker (f - (b⁻¹ * a) • 1) := by rw [genEigenspace_one]
     _ = LinearMap.ker (f - b⁻¹ • a • 1) := by rw [smul_smul]
-    _ = LinearMap.ker (b • (f - b⁻¹ • a • 1)) := by rw [LinearMap.k
+    _ = LinearMap.ker (b • (f - b⁻¹ • a • 1)) := by rw [LinearMap.ker_smul _ b hb]
+    _ = LinearMap.ker (b • f - a • 1) := by rw [smul_sub, smul_inv_smul₀ hb]
 
 Depends on / 依赖: LinearMap, LinearMap.ker, LinearMap.ker_smul, div_eq_mul_inv, genEigenspace, genEigenspace_one, ker_smul, mul_comm, smul_smul, smul_sub
 -/
@@ -894,7 +898,9 @@ have := WellFoundedGT.iSup_eq_monotonicSequenceLimit
   convert! this using 1
   simp only [genEigenspace, OrderHom.coe_mk, le_top, iSup_pos, OrderHom.comp_coe,
     Function.comp_def]
-  rw [iSup_prod']; rw [iSup_subtype']; rw [← sSup_range]; r
+  rw [iSup_prod']; rw [iSup_subtype']; rw [← sSup_range]; rw [← sSup_range]
+  congr 1
+  aesop
 
 中文:
 引理 genEigenspace_top_eq_maxUnifEigenspaceIndex
@@ -905,7 +911,9 @@ have := WellFoundedGT.iSup_eq_monotonicSequenceLimit
   convert! this using 1
   simp only [genEigenspace, OrderHom.coe_mk, le_top, iSup_pos, OrderHom.comp_coe,
     Function.comp_def]
-  rw [iSup_prod']; rw [iSup_subtype']; rw [← sSup_range]; r
+  rw [iSup_prod']; rw [iSup_subtype']; rw [← sSup_range]; rw [← sSup_range]
+  congr 1
+  aesop
 
 Depends on / 依赖: Function, Function.comp_def, OrderHom, OrderHom.coe_mk, OrderHom.comp_coe, WellFoundedGT, WellFoundedGT.iSup_eq_monotonicSequenceLimit, WithTop, WithTop.coeOrderHom.toOrderHom, coeOrderHom, coe_mk, comp_coe, comp_def, convert, f.genEigenspace, genEigenspace, iSup_eq_monotonicSequenceLimit, iSup_pos, iSup_prod, iSup_subtype
 -/
@@ -1017,7 +1025,8 @@ lemma HasUnifEigenvalue.lt
   rw [mem_genEigenspace] at hx
   rcases hx with ⟨l, -, hx⟩
   rwa [LinearMap.ker_eq_bot.mpr] at hx
-  rw [Module.
+  rw [Module.End.coe_pow (f - μ • 1) l]
+  exact Function.Injective.iterate contra l
 
 中文:
 引理 HasUnifEigenvalue.lt
@@ -1031,7 +1040,8 @@ lemma HasUnifEigenvalue.lt
   rw [mem_genEigenspace] at hx
   rcases hx with ⟨l, -, hx⟩
   rwa [LinearMap.ker_eq_bot.mpr] at hx
-  rw [Module.
+  rw [Module.End.coe_pow (f - μ • 1) l]
+  exact Function.Injective.iterate contra l
 
 Depends on / 依赖: Function, Function.Injective.iterate, HasUnifEigenvalue, HasUnifEigenvalue.le, Injective, LinearMap, LinearMap.ker_eq_bot, LinearMap.ker_eq_bot.mpr, Module, Module.End.coe_pow, Order.one_le_iff_pos.mpr, coe_pow, contra, eq_bot_iff, genEigenspace_one, iterate, ker_eq_bot, mem_genEigenspace, one_le_iff_pos
 -/
@@ -1181,7 +1191,7 @@ lemma mapsTo_genEigenspace_of_comm
   replace h : Commute ((f - μ • (1 : End R M)) ^ l) g :=
     (h.sub_left <| Algebra.commute_algebraMap_left μ g).pow_left l
   use l, hl
-  rw [← LinearMap.comp_apply]; rw [← Module
+  rw [← LinearMap.comp_apply]; rw [← Module.End.mul_eq_comp]; rw [h.eq]; rw [Module.End.mul_eq_comp]; rw [LinearMap.comp_apply]; rw [hx]; rw [map_zero]
 
 中文:
 引理 mapsTo_genEigenspace_of_comm
@@ -1193,7 +1203,7 @@ lemma mapsTo_genEigenspace_of_comm
   replace h : Commute ((f - μ • (1 : End R M)) ^ l) g :=
     (h.sub_left <| Algebra.commute_algebraMap_left μ g).pow_left l
   use l, hl
-  rw [← LinearMap.comp_apply]; rw [← Module
+  rw [← LinearMap.comp_apply]; rw [← Module.End.mul_eq_comp]; rw [h.eq]; rw [Module.End.mul_eq_comp]; rw [LinearMap.comp_apply]; rw [hx]; rw [map_zero]
 
 Depends on / 依赖: Algebra, Algebra.commute_algebraMap_left, Commute, LinearMap, LinearMap.comp_apply, LinearMap.mem_ker, Module, Module.End.mul_eq_comp, SetLike, SetLike.mem_coe, commute_algebraMap_left, comp_apply, h.eq, h.sub_left, map_zero, mem_coe, mem_genEigenspace, mem_ker, mul_eq_comp, pow_left
 -/
@@ -1643,7 +1653,7 @@ theorem genEigenspace_mem_invtSubmodule
   case zero => simp_all
   case succ k ih =>
     rw [pow_succ]; rw [mul_apply] at hx ⊢
-    simpa using ih (le_trans (by simp) hk
+    simpa using ih (le_trans (by simp) hk) hx
 
 中文:
 定理 genEigenspace_mem_invtSubmodule
@@ -1657,7 +1667,7 @@ theorem genEigenspace_mem_invtSubmodule
   case zero => simp_all
   case succ k ih =>
     rw [pow_succ]; rw [mul_apply] at hx ⊢
-    simpa using ih (le_trans (by simp) hk
+    simpa using ih (le_trans (by simp) hk) hx
 
 Depends on / 依赖: LinearMap, LinearMap.mem_ker, Submodule, Submodule.mem_comap, generalizing, le_trans, mem_comap, mem_genEigenspace, mem_ker, mul_apply, pow_succ
 -/
@@ -2261,7 +2271,27 @@ lemma disjoint_genEigenspace
   rintro ⟨k, -⟩ ⟨l, -⟩
   nontriviality M
   rw [disjoint_iff]
-  set p := f.genEigenspace μ₁ k ⊓ f.genEigens
+  set p := f.genEigenspace μ₁ k ⊓ f.genEigenspace μ₂ l
+  by_contra hp
+  replace hp : Nontrivial p := Submodule.nontrivial_iff_ne_bot.mpr hp
+let f₁ : End R p := (f - algebraMap R (End R M) μ₁).restrict MapsTo.inter_inter
+    (mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f μ₁) μ₁ k)
+    (mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f μ₁) μ₂ l)
+let f₂ : End R p := (f - algebraMap R (End R M) μ₂).restrict MapsTo.inter_inter
+    (mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f μ₂) μ₁ k)
+    (mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f μ₂) μ₂ l)
+  have : IsNilpotent (f₂ - f₁) := by
+    apply Commute.isNilpotent_sub (x := f₂) (y := f₁) _
+      (isNilpotent_restrict_of_le inf_le_right _)
+      (isNilpotent_restrict_of_le inf_le_left _)
+    · ext; simp [f₁, f₂, smul_sub, sub_sub, smul_comm μ₁, add_sub_left_comm]
+    · apply mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f _)
+    · apply isNilpotent_restrict_genEigenspace_nat
+    · apply mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f _)
+    apply isNilpotent_restrict_genEigenspace_nat
+  have hf₁₂ : f₂ - f₁ = algebraMap R (End R p) (μ₁ - μ₂) := by ext; simp [f₁, f₂]
+  rw [hf₁₂]; rw [IsNilpotent.map_iff (FaithfulSMul.algebraMap_injective R (End R p))]; rw [isNilpotent_iff_eq_zero]; rw [sub_eq_zero] at this
+  contradiction
 
 中文:
 引理 disjoint_genEigenspace
@@ -2272,7 +2302,27 @@ lemma disjoint_genEigenspace
   rintro ⟨k, -⟩ ⟨l, -⟩
   nontriviality M
   rw [disjoint_iff]
-  set p := f.genEigenspace μ₁ k ⊓ f.genEigens
+  set p := f.genEigenspace μ₁ k ⊓ f.genEigenspace μ₂ l
+  by_contra hp
+  replace hp : Nontrivial p := Submodule.nontrivial_iff_ne_bot.mpr hp
+let f₁ : End R p := (f - algebraMap R (End R M) μ₁).restrict MapsTo.inter_inter
+    (mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f μ₁) μ₁ k)
+    (mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f μ₁) μ₂ l)
+let f₂ : End R p := (f - algebraMap R (End R M) μ₂).restrict MapsTo.inter_inter
+    (mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f μ₂) μ₁ k)
+    (mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f μ₂) μ₂ l)
+  have : IsNilpotent (f₂ - f₁) := by
+    apply Commute.isNilpotent_sub (x := f₂) (y := f₁) _
+      (isNilpotent_restrict_of_le inf_le_right _)
+      (isNilpotent_restrict_of_le inf_le_left _)
+    · ext; simp [f₁, f₂, smul_sub, sub_sub, smul_comm μ₁, add_sub_left_comm]
+    · apply mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f _)
+    · apply isNilpotent_restrict_genEigenspace_nat
+    · apply mapsTo_genEigenspace_of_comm (Algebra.mul_sub_algebraMap_commutes f _)
+    apply isNilpotent_restrict_genEigenspace_nat
+  have hf₁₂ : f₂ - f₁ = algebraMap R (End R p) (μ₁ - μ₂) := by ext; simp [f₁, f₂]
+  rw [hf₁₂]; rw [IsNilpotent.map_iff (FaithfulSMul.algebraMap_injective R (End R p))]; rw [isNilpotent_iff_eq_zero]; rw [sub_eq_zero] at this
+  contradiction
 
 Depends on / 依赖: Algebra, Algebra.mu, MapsTo, MapsTo.inter_inter, Nontrivial, Submodule, Submodule.nontrivial_iff_ne_bot.mpr, algebraMap, disjoint_iSup_left, disjoint_iSup_right, disjoint_iff, f.genEigenspace, genEigenspace, genEigenspace_directed, genEigenspace_directed.disjoint_iSup_left, genEigenspace_directed.disjoint_iSup_right, genEigenspace_eq_iSup_genEigenspace_nat, inter_inter, mapsTo_genEigenspace_of_comm, nontrivial_iff_ne_bot
 -/
@@ -2369,7 +2419,36 @@ theorem independent_genEigenspace
       Finset.supIndep_iff_disjoint_erase]
     exact fun s μ _ => this _ _ (s.notMem_erase μ)
   intro μ₁ s
-  induction s using
+  induction s using Finset.induction_on with
+  | empty => simp
+  | insert μ₂ s _ ih =>
+  intro hμ₁₂
+  obtain ⟨hμ₁₂ : μ₁ != μ₂, hμ₁ : μ₁ ∉ s⟩ := by rwa [Finset.mem_insert, not_or] at hμ₁₂
+  specialize ih hμ₁
+  rw [Finset.sup_insert]; rw [disjoint_iff]; rw [Submodule.eq_bot_iff]
+  rintro x ⟨hx, hx'⟩
+  simp only [SetLike.mem_coe] at hx hx'
+  suffices x in genEigenspace f μ₂ k by
+    rw [← Submodule.mem_bot (R := R)]; rw [← (f.disjoint_genEigenspace hμ₁₂ k k).eq_bot]
+    exact ⟨hx, this⟩
+  obtain ⟨y, hy, z, hz, rfl⟩ := Submodule.mem_sup.mp hx'; clear hx'
+  let g := f - μ₂ • 1
+  simp_rw [mem_genEigenspace, ← exists_prop] at hy ⊢
+  peel hy with l hlk hl
+  simp only [LinearMap.mem_ker] at hl
+  have hyz : (g ^ l) (y + z) in
+      (f.genEigenspace μ₁ k) ⊓ s.sup fun μ => f.genEigenspace μ k := by
+    refine ⟨f.mapsTo_genEigenspace_of_comm (g := g ^ l) ?_ μ₁ k hx, ?_⟩
+    · exact Algebra.mul_sub_algebraMap_pow_commutes f μ₂ l
+    · rw [SetLike.mem_coe, map_add, hl, zero_add]
+      suffices (s.sup fun μ => f.genEigenspace μ k).map (g ^ l) <=
+          s.sup fun μ => f.genEigenspace μ k by exact this (Submodule.mem_map_of_mem hz)
+      simp_rw [Finset.sup_eq_iSup, Submodule.map_iSup (ι := R), Submodule.map_iSup (ι := _ in s)]
+      refine iSup₂_mono fun μ _ => ?_
+      rintro - ⟨u, hu, rfl⟩
+      refine f.mapsTo_genEigenspace_of_comm ?_ μ k hu
+      exact Algebra.mul_sub_algebraMap_pow_commutes f μ₂ l
+  rwa [ih.eq_bot, Submodule.mem_bot] at hyz
 
 中文:
 定理 independent_genEigenspace
@@ -2382,7 +2461,36 @@ theorem independent_genEigenspace
       Finset.supIndep_iff_disjoint_erase]
     exact fun s μ _ => this _ _ (s.notMem_erase μ)
   intro μ₁ s
-  induction s using
+  induction s using Finset.induction_on with
+  | empty => simp
+  | insert μ₂ s _ ih =>
+  intro hμ₁₂
+  obtain ⟨hμ₁₂ : μ₁ != μ₂, hμ₁ : μ₁ ∉ s⟩ := by rwa [Finset.mem_insert, not_or] at hμ₁₂
+  specialize ih hμ₁
+  rw [Finset.sup_insert]; rw [disjoint_iff]; rw [Submodule.eq_bot_iff]
+  rintro x ⟨hx, hx'⟩
+  simp only [SetLike.mem_coe] at hx hx'
+  suffices x in genEigenspace f μ₂ k by
+    rw [← Submodule.mem_bot (R := R)]; rw [← (f.disjoint_genEigenspace hμ₁₂ k k).eq_bot]
+    exact ⟨hx, this⟩
+  obtain ⟨y, hy, z, hz, rfl⟩ := Submodule.mem_sup.mp hx'; clear hx'
+  let g := f - μ₂ • 1
+  simp_rw [mem_genEigenspace, ← exists_prop] at hy ⊢
+  peel hy with l hlk hl
+  simp only [LinearMap.mem_ker] at hl
+  have hyz : (g ^ l) (y + z) in
+      (f.genEigenspace μ₁ k) ⊓ s.sup fun μ => f.genEigenspace μ k := by
+    refine ⟨f.mapsTo_genEigenspace_of_comm (g := g ^ l) ?_ μ₁ k hx, ?_⟩
+    · exact Algebra.mul_sub_algebraMap_pow_commutes f μ₂ l
+    · rw [SetLike.mem_coe, map_add, hl, zero_add]
+      suffices (s.sup fun μ => f.genEigenspace μ k).map (g ^ l) <=
+          s.sup fun μ => f.genEigenspace μ k by exact this (Submodule.mem_map_of_mem hz)
+      simp_rw [Finset.sup_eq_iSup, Submodule.map_iSup (ι := R), Submodule.map_iSup (ι := _ in s)]
+      refine iSup₂_mono fun μ _ => ?_
+      rintro - ⟨u, hu, rfl⟩
+      refine f.mapsTo_genEigenspace_of_comm ?_ μ k hu
+      exact Algebra.mul_sub_algebraMap_pow_commutes f μ₂ l
+  rwa [ih.eq_bot, Submodule.mem_bot] at hyz
 
 Depends on / 依赖: Disjoint, Finset, Finset.induction_on, Finset.mem_insert, Finset.supIndep_iff_disjoint_erase, Finset.sup_insert, classical, disjoint_iff, f.genEigenspace, genEigenspace, iSupIndep_iff_supIndep, induction_on, insert, mem_insert, notMem_erase, not_or, s.notMem_erase, s.sup, simp_rw, specialize
 -/
@@ -2523,7 +2631,7 @@ theorem genEigenspace_restrict
     simp_rw [mem_genEigenspace, ← mem_genEigenspace_nat, this,
       Submodule.mem_comap, mem_genEigenspace (k := k), mem_genEigenspace_nat]
   intro l
-  rw [g
+  rw [genEigenspace_nat]; rw [genEigenspace_nat]; rw [← LinearMap.restrict_smul_one μ]; rw [LinearMap.restrict_sub hfp]; rw [Module.End.pow_restrict _]; rw [← LinearMap.ker_comp_of_ker_eq_bot _ (Submodule.ker_subtype p)]; rw [LinearMap.subtype_comp_restrict]; rw [LinearMap.domRestrict]; rw [← LinearMap.ker_comp]
 
 中文:
 定理 genEigenspace_restrict
@@ -2535,7 +2643,7 @@ theorem genEigenspace_restrict
     simp_rw [mem_genEigenspace, ← mem_genEigenspace_nat, this,
       Submodule.mem_comap, mem_genEigenspace (k := k), mem_genEigenspace_nat]
   intro l
-  rw [g
+  rw [genEigenspace_nat]; rw [genEigenspace_nat]; rw [← LinearMap.restrict_smul_one μ]; rw [LinearMap.restrict_sub hfp]; rw [Module.End.pow_restrict _]; rw [← LinearMap.ker_comp_of_ker_eq_bot _ (Submodule.ker_subtype p)]; rw [LinearMap.subtype_comp_restrict]; rw [LinearMap.domRestrict]; rw [← LinearMap.ker_comp]
 
 Depends on / 依赖: LinearMap, LinearMap.ker_comp_of_ker_eq_bot, LinearMap.restrict, LinearMap.restrict_smul_one, LinearMap.restrict_sub, Module, Module.End.pow_restrict, Submodule, Submodule.comap, Submodule.ker_subtype, Submodule.mem_comap, f.genEigenspace, genEigenspace, genEigenspace_nat, ker_comp_of_ker_eq_bot, ker_subtype, mem_comap, mem_genEigenspace, mem_genEigenspace_nat, p.subtype
 -/
@@ -2650,7 +2758,13 @@ theorem generalized_eigenvec_disjoint_range_ker
         (f.genEigenspace μ (finrank K V)) =
           LinearMap.ker ((f - algebraMap _ _ μ) ^ finrank K V *
             (f - algebraMap K (End K V) μ) ^ finrank K V) := by
-              rw [genEigenspace_nat]; rw [← LinearMap.
+              rw [genEigenspace_nat]; rw [← LinearMap.ker_comp]; rfl
+      _ = f.genEigenspace μ (finrank K V + finrank K V : Nat) := by
+              simp_rw [← pow_add, genEigenspace_nat]; rfl
+      _ = f.genEigenspace μ (finrank K V) := by
+              rw [genEigenspace_eq_genEigenspace_finrank_of_le]; lia
+  rw [disjoint_iff_inf_le]; rw [genEigenrange_nat]; rw [LinearMap.range_eq_map]; rw [Submodule.map_inf_eq_map_inf_comap]; rw [top_inf_eq]; rw [h]; rw [genEigenspace_nat]
+  apply Submodule.map_comap_le
 
 中文:
 定理 generalized_eigenvec_disjoint_range_ker
@@ -2662,7 +2776,13 @@ theorem generalized_eigenvec_disjoint_range_ker
         (f.genEigenspace μ (finrank K V)) =
           LinearMap.ker ((f - algebraMap _ _ μ) ^ finrank K V *
             (f - algebraMap K (End K V) μ) ^ finrank K V) := by
-              rw [genEigenspace_nat]; rw [← LinearMap.
+              rw [genEigenspace_nat]; rw [← LinearMap.ker_comp]; rfl
+      _ = f.genEigenspace μ (finrank K V + finrank K V : Nat) := by
+              simp_rw [← pow_add, genEigenspace_nat]; rfl
+      _ = f.genEigenspace μ (finrank K V) := by
+              rw [genEigenspace_eq_genEigenspace_finrank_of_le]; lia
+  rw [disjoint_iff_inf_le]; rw [genEigenrange_nat]; rw [LinearMap.range_eq_map]; rw [Submodule.map_inf_eq_map_inf_comap]; rw [top_inf_eq]; rw [h]; rw [genEigenspace_nat]
+  apply Submodule.map_comap_le
 
 Depends on / 依赖: LinearMap, LinearMap.ker, LinearMap.ker_comp, Submodule, Submodule.comap, algebraMap, disjoint_iff_inf_le, f.genEigenspace, finrank, genEigen, genEigenspace, genEigenspace_eq_genEigenspace_finrank_of_le, genEigenspace_nat, ker_comp, pow_add, simp_rw
 -/
@@ -2720,7 +2840,7 @@ theorem pos_finrank_genEigenspace_of_hasEigenvalue
     0 = finrank K (⊥ : Submodule K V) := by rw [finrank_bot]
     _ < finrank K (f.eigenspace μ) := Submodule.finrank_lt_finrank_of_lt (bot_lt_iff_ne_bot.2 hx)
     _ <= finrank K (f.genEigenspace μ k) :=
-      Submodule.finrank_mono ((f.genEigenspace μ).monotone (by simpa using Nat.succ_le_of_lt
+      Submodule.finrank_mono ((f.genEigenspace μ).monotone (by simpa using Nat.succ_le_of_lt hk))
 
 中文:
 定理 pos_finrank_genEigenspace_of_hasEigenvalue
@@ -2729,7 +2849,7 @@ theorem pos_finrank_genEigenspace_of_hasEigenvalue
     0 = finrank K (⊥ : Submodule K V) := by rw [finrank_bot]
     _ < finrank K (f.eigenspace μ) := Submodule.finrank_lt_finrank_of_lt (bot_lt_iff_ne_bot.2 hx)
     _ <= finrank K (f.genEigenspace μ k) :=
-      Submodule.finrank_mono ((f.genEigenspace μ).monotone (by simpa using Nat.succ_le_of_lt
+      Submodule.finrank_mono ((f.genEigenspace μ).monotone (by simpa using Nat.succ_le_of_lt hk))
 
 Depends on / 依赖: Nat.succ_le_of_lt, Submodule, Submodule.finrank_lt_finrank_of_lt, Submodule.finrank_mono, bot_lt_iff_ne_bot, eigenspace, f.eigenspace, f.genEigenspace, finrank, finrank_bot, finrank_lt_finrank_of_lt, finrank_mono, genEigenspace, monotone, succ_le_of_lt
 -/
@@ -2754,7 +2874,8 @@ theorem map_genEigenrange_le
         rw [genEigenrange_nat]; exact (LinearMap.range_comp _ _).symm
     _ = LinearMap.range ((f - algebraMap _ _ μ) ^ n * f) := by
         rw [Algebra.mul_sub_algebraMap_pow_commutes]
-    
+    _ = Submodule.map ((f - algebraMap _ _ μ) ^ n) (LinearMap.range f) := LinearMap.range_comp _ _
+    _ <= f.genEigenrange μ n := by rw [genEigenrange_nat]; apply LinearMap.map_le_range
 
 中文:
 定理 map_genEigenrange_le
@@ -2765,7 +2886,8 @@ theorem map_genEigenrange_le
         rw [genEigenrange_nat]; exact (LinearMap.range_comp _ _).symm
     _ = LinearMap.range ((f - algebraMap _ _ μ) ^ n * f) := by
         rw [Algebra.mul_sub_algebraMap_pow_commutes]
-    
+    _ = Submodule.map ((f - algebraMap _ _ μ) ^ n) (LinearMap.range f) := LinearMap.range_comp _ _
+    _ <= f.genEigenrange μ n := by rw [genEigenrange_nat]; apply LinearMap.map_le_range
 
 Depends on / 依赖: Algebra, Algebra.mul_sub_algebraMap_pow_commutes, LinearMap, LinearMap.map_le_range, LinearMap.range, LinearMap.range_comp, Submodule, Submodule.map, algebraMap, f.genEigenrange, genEigenrange, genEigenrange_nat, map_le_range, mul_sub_algebraMap_pow_commutes, range_comp
 -/
@@ -2822,7 +2944,19 @@ lemma genEigenspace_inf_le_add
   use l₁ + l₂
   have : f₁ + f₂ - (μ₁ + μ₂) • 1 = (f₁ - μ₁ • 1) + (f₂ - μ₂ • 1) := by
     rw [add_smul]; exact add_sub_add_comm f₁ f₂ (μ₁ • 1) (μ₂ • 1)
-  rep
+  replace h : Commute (f₁ - μ₁ • 1) (f₂ - μ₂ • 1) :=
+    (h.sub_right <| Algebra.commute_algebraMap_right μ₂ f₁).sub_left
+      (Algebra.commute_algebraMap_left μ₁ _)
+  rw [this]; rw [h.add_pow']; rw [LinearMap.coe_sum]; rw [Finset.sum_apply]
+  constructor
+  · simpa only [Nat.cast_add] using add_le_add hlk₁ hlk₂
+  refine Finset.sum_eq_zero fun ⟨i, j⟩ hij => ?_
+  suffices (((f₁ - μ₁ • 1) ^ i) * ((f₂ - μ₂ • 1) ^ j)) m = 0 by
+    rw [LinearMap.smul_apply]; rw [this]; rw [smul_zero]
+  rw [Finset.mem_antidiagonal] at hij
+  obtain hi | hj : l₁ <= i ∨ l₂ <= j := by lia
+  · rw [(h.pow_pow i j).eq, Module.End.mul_apply, Module.End.pow_map_zero_of_le hi hl₁, map_zero]
+  · rw [Module.End.mul_apply, Module.End.pow_map_zero_of_le hj hl₂, map_zero]
 
 中文:
 引理 genEigenspace_inf_le_add
@@ -2833,7 +2967,19 @@ lemma genEigenspace_inf_le_add
   use l₁ + l₂
   have : f₁ + f₂ - (μ₁ + μ₂) • 1 = (f₁ - μ₁ • 1) + (f₂ - μ₂ • 1) := by
     rw [add_smul]; exact add_sub_add_comm f₁ f₂ (μ₁ • 1) (μ₂ • 1)
-  rep
+  replace h : Commute (f₁ - μ₁ • 1) (f₂ - μ₂ • 1) :=
+    (h.sub_right <| Algebra.commute_algebraMap_right μ₂ f₁).sub_left
+      (Algebra.commute_algebraMap_left μ₁ _)
+  rw [this]; rw [h.add_pow']; rw [LinearMap.coe_sum]; rw [Finset.sum_apply]
+  constructor
+  · simpa only [Nat.cast_add] using add_le_add hlk₁ hlk₂
+  refine Finset.sum_eq_zero fun ⟨i, j⟩ hij => ?_
+  suffices (((f₁ - μ₁ • 1) ^ i) * ((f₂ - μ₂ • 1) ^ j)) m = 0 by
+    rw [LinearMap.smul_apply]; rw [this]; rw [smul_zero]
+  rw [Finset.mem_antidiagonal] at hij
+  obtain hi | hj : l₁ <= i ∨ l₂ <= j := by lia
+  · rw [(h.pow_pow i j).eq, Module.End.mul_apply, Module.End.pow_map_zero_of_le hi hl₁, map_zero]
+  · rw [Module.End.mul_apply, Module.End.pow_map_zero_of_le hj hl₂, map_zero]
 
 Depends on / 依赖: Algebra, Algebra.commute_algebraMap_left, Algebra.commute_algebraMap_right, Commute, Finset, Finset.s, LinearMap, LinearMap.coe_sum, LinearMap.mem_ker, Submodule, Submodule.mem_inf, add_pow, add_smul, add_sub_add_comm, coe_sum, commute_algebraMap_left, commute_algebraMap_right, h.add_pow, h.sub_right, mem_genEigenspace
 -/
@@ -2872,7 +3018,9 @@ lemma map_smul_of_iInf_genEigenspace_ne_bot
   let g : L -> Submodule R M := fun x => (f x).genEigenspace (μ x) k
   have : ⨅ x, g x <= g x ⊓ g (t • x) := le_inf_iff.mpr ⟨iInf_le g x, iInf_le g (t • x)⟩
 refine h_ne eq_bot_iff.mpr (le_trans this (disjoint_iff_inf_le.mp ?_))
-  apply Disjoint.mono_left (genEigenspace_le_smul 
+  apply Disjoint.mono_left (genEigenspace_le_smul (f x) (μ x) t k)
+  simp only [g, map_smul]
+  exact disjoint_genEigenspace (t • f x) (Ne.symm contra) k k
 
 中文:
 引理 map_smul_of_iInf_genEigenspace_ne_bot
@@ -2882,7 +3030,9 @@ refine h_ne eq_bot_iff.mpr (le_trans this (disjoint_iff_inf_le.mp ?_))
   let g : L -> Submodule R M := fun x => (f x).genEigenspace (μ x) k
   have : ⨅ x, g x <= g x ⊓ g (t • x) := le_inf_iff.mpr ⟨iInf_le g x, iInf_le g (t • x)⟩
 refine h_ne eq_bot_iff.mpr (le_trans this (disjoint_iff_inf_le.mp ?_))
-  apply Disjoint.mono_left (genEigenspace_le_smul 
+  apply Disjoint.mono_left (genEigenspace_le_smul (f x) (μ x) t k)
+  simp only [g, map_smul]
+  exact disjoint_genEigenspace (t • f x) (Ne.symm contra) k k
 
 Depends on / 依赖: Disjoint, Disjoint.mono_left, Ne.symm, Submodule, contra, disjoint_genEigenspace, disjoint_iff_inf_le, disjoint_iff_inf_le.mp, eq_bot_iff, eq_bot_iff.mpr, genEigenspace, genEigenspace_le_smul, h_ne, iInf_le, le_inf_iff, le_inf_iff.mpr, le_trans, map_smul, mono_left
 -/
@@ -2911,7 +3061,9 @@ lemma map_add_of_iInf_genEigenspace_ne_bot_of_commute
   have : ⨅ x, g x <= (g x ⊓ g y) ⊓ g (x + y) :=
     le_inf_iff.mpr ⟨le_inf_iff.mpr ⟨iInf_le g x, iInf_le g y⟩, iInf_le g (x + y)⟩
 refine h_ne eq_bot_iff.mpr (le_trans this (disjoint_iff_inf_le.mp ?_))
-  apply 
+  apply Disjoint.mono_left (genEigenspace_inf_le_add (f x) (f y) (μ x) (μ y) k k (h x y))
+  simp only [g, map_add]
+  exact disjoint_genEigenspace (f x + f y) (Ne.symm contra) _ k
 
 中文:
 引理 map_add_of_iInf_genEigenspace_ne_bot_of_commute
@@ -2922,7 +3074,9 @@ refine h_ne eq_bot_iff.mpr (le_trans this (disjoint_iff_inf_le.mp ?_))
   have : ⨅ x, g x <= (g x ⊓ g y) ⊓ g (x + y) :=
     le_inf_iff.mpr ⟨le_inf_iff.mpr ⟨iInf_le g x, iInf_le g y⟩, iInf_le g (x + y)⟩
 refine h_ne eq_bot_iff.mpr (le_trans this (disjoint_iff_inf_le.mp ?_))
-  apply 
+  apply Disjoint.mono_left (genEigenspace_inf_le_add (f x) (f y) (μ x) (μ y) k k (h x y))
+  simp only [g, map_add]
+  exact disjoint_genEigenspace (f x + f y) (Ne.symm contra) _ k
 
 Depends on / 依赖: Disjoint, Disjoint.mono_left, Ne.symm, Submodule, contra, disjoint_genEigenspace, disjoint_iff_inf_le, disjoint_iff_inf_le.mp, eq_bot_iff, eq_bot_iff.mpr, genEigenspace, genEigenspace_inf_le_add, h_ne, iInf_le, le_inf_iff, le_inf_iff.mpr, le_trans, map_add, mono_left
 -/

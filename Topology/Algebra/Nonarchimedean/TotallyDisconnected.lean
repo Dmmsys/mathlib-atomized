@@ -51,7 +51,13 @@ lemma exists_openSubgroup_separating
   simp only [Disjoint, Set.bot_eq_empty, Set.subset_empty_iff]
   intro x mem_aV mem_bV
   by_contra! ⟨s, hs⟩
-  have hsa : s in a • (V : Set
+  have hsa : s in a • (V : Set G) := mem_aV hs
+  have hsb : s in b • (V : Set G) := mem_bV hs
+  rw [mem_leftCoset_iff] at hsa hsb
+  refine dis.subset_compl_right mem_u (hV ?_)
+  simpa [mul_assoc] using mul_mem hsa (inv_mem hsb)
+
+@[to_additive]
 
 中文:
 引理 存在_openSubgroup_separating
@@ -63,7 +69,13 @@ lemma exists_openSubgroup_separating
   simp only [Disjoint, Set.bot_eq_empty, Set.subset_empty_iff]
   intro x mem_aV mem_bV
   by_contra! ⟨s, hs⟩
-  have hsa : s in a • (V : Set
+  have hsa : s in a • (V : Set G) := mem_aV hs
+  have hsb : s in b • (V : Set G) := mem_bV hs
+  rw [mem_leftCoset_iff] at hsa hsb
+  refine dis.subset_compl_right mem_u (hV ?_)
+  simpa [mul_assoc] using mul_mem hsa (inv_mem hsb)
+
+@[to_additive]
 
 Depends on / 依赖: Disjoint, Set.bot_eq_empty, Set.subset_empty_iff, bot_eq_empty, dis.subset_compl_right, inv_mem, inv_mul_eq_one, inv_mul_eq_one.mp, is_nonarchimedean, mem_aV, mem_bV, mem_leftCoset_iff, mem_nhds, mem_u, mem_v, mul_assoc, mul_mem, open_v, open_v.mem_nhds, subset_compl_right
 -/

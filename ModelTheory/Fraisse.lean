@@ -383,7 +383,7 @@ theorem age.jointEmbedding
     ⟨(fg_iff_structure_fg _).1 ((hN.1.range hN.2.some.toHom).sup (hP.1.range hP.2.some.toHom)),
       ⟨Substructure.subtype _⟩⟩,
     ⟨Embedding.comp (inclusion le_sup_left) hN.2.some.equivRange.toEmbedding⟩,
-    ⟨Embe
+    ⟨Embedding.comp (inclusion le_sup_right) hP.2.some.equivRange.toEmbedding⟩⟩
 
 中文:
 定理 age.jointEmbedding
@@ -393,7 +393,7 @@ theorem age.jointEmbedding
     ⟨(fg_iff_structure_fg _).1 ((hN.1.range hN.2.some.toHom).sup (hP.1.range hP.2.some.toHom)),
       ⟨Substructure.subtype _⟩⟩,
     ⟨Embedding.comp (inclusion le_sup_left) hN.2.some.equivRange.toEmbedding⟩,
-    ⟨Embe
+    ⟨Embedding.comp (inclusion le_sup_right) hP.2.some.equivRange.toEmbedding⟩⟩
 -/
 theorem age.jointEmbedding : JointEmbedding (L.age M) := fun _ hN _ hP =>
   ⟨Bundled.of (↥(hN.2.some.toHom.range ⊔ hP.2.some.toHom.range)),
@@ -465,7 +465,12 @@ theorem age.countable_quotient
   constructor
   · rintro ⟨s, hs⟩
     use Bundled.of (closure L (s : Set M))
-    exact ⟨⟨(fg_iff_structure_fg _).1 (fg_closure s.finit
+    exact ⟨⟨(fg_iff_structure_fg _).1 (fg_closure s.finite_toSet), ⟨Substructure.subtype _⟩⟩, hs⟩
+  · simp only [mem_range, Quotient.eq]
+    rintro ⟨P, ⟨⟨s, hs⟩, ⟨PM⟩⟩, hP2⟩
+refine ⟨s.image PM, Setoid.trans (b := P) ?_ Quotient.exact hP2⟩
+    rw [← Embedding.coe_toHom]; rw [Finset.coe_image]; rw [closure_image PM.toHom]; rw [hs]; rw [← Hom.range_eq_map]
+    exact ⟨PM.equivRange.symm⟩
 
 中文:
 定理 age.countable_quotient
@@ -478,7 +483,12 @@ theorem age.countable_quotient
   constructor
   · rintro ⟨s, hs⟩
     use Bundled.of (closure L (s : Set M))
-    exact ⟨⟨(fg_iff_structure_fg _).1 (fg_closure s.finit
+    exact ⟨⟨(fg_iff_structure_fg _).1 (fg_closure s.finite_toSet), ⟨Substructure.subtype _⟩⟩, hs⟩
+  · simp only [mem_range, Quotient.eq]
+    rintro ⟨P, ⟨⟨s, hs⟩, ⟨PM⟩⟩, hP2⟩
+refine ⟨s.image PM, Setoid.trans (b := P) ?_ Quotient.exact hP2⟩
+    rw [← Embedding.coe_toHom]; rw [Finset.coe_image]; rw [closure_image PM.toHom]; rw [hs]; rw [← Hom.range_eq_map]
+    exact ⟨PM.equivRange.symm⟩
 
 Depends on / 依赖: Bundled, Bundled.of, Embedding, Embedding.coe_toHom, Finset, Finset.coe_i, Quotient, Quotient.eq, Quotient.exact, Quotient.forall, Set.ext, Setoid, Setoid.trans, Substructure, Substructure.subtype, classical, closure, coe_i, coe_toHom, congr_arg
 -/
@@ -513,7 +523,14 @@ theorem age_directLimit
     obtain ⟨s, hs⟩ := Mfg.range e.toHom
     let out := @Quotient.out _ (DirectLimit.setoid G f)
     obtain ⟨i, hi⟩ := Finset.exists_le (s.image (Sigma.fst ∘ out))
-    have e' := (DirectLimit.of L ι G f i).equivRange.
+    have e' := (DirectLimit.of L ι G f i).equivRange.symm.toEmbedding
+    refine ⟨i, Mfg, ⟨e'.comp ((Substructure.inclusion ?_).comp e.equivRange.toEmbedding)⟩⟩
+    rw [← hs]; rw [closure_le]
+    intro x hx
+    refine ⟨f (out x).1 i (hi (out x).1 (Finset.mem_image_of_mem _ hx)) (out x).2, ?_⟩
+    rw [Embedding.coe_toHom]; rw [DirectLimit.of_apply]; rw [@Quotient.mk_eq_iff_out _ (_)]; rw [DirectLimit.equiv_iff G f (le_refl _) (hi (out x).1 (Finset.mem_image_of_mem _ hx))]; rw [DirectedSystem.map_self]
+  · rintro ⟨i, Mfg, ⟨e⟩⟩
+    exact ⟨Mfg, ⟨Embedding.comp (DirectLimit.of L ι G f i) e⟩⟩
 
 中文:
 定理 age_directLimit
@@ -527,7 +544,14 @@ theorem age_directLimit
     obtain ⟨s, hs⟩ := Mfg.range e.toHom
     let out := @Quotient.out _ (DirectLimit.setoid G f)
     obtain ⟨i, hi⟩ := Finset.exists_le (s.image (Sigma.fst ∘ out))
-    have e' := (DirectLimit.of L ι G f i).equivRange.
+    have e' := (DirectLimit.of L ι G f i).equivRange.symm.toEmbedding
+    refine ⟨i, Mfg, ⟨e'.comp ((Substructure.inclusion ?_).comp e.equivRange.toEmbedding)⟩⟩
+    rw [← hs]; rw [closure_le]
+    intro x hx
+    refine ⟨f (out x).1 i (hi (out x).1 (Finset.mem_image_of_mem _ hx)) (out x).2, ?_⟩
+    rw [Embedding.coe_toHom]; rw [DirectLimit.of_apply]; rw [@Quotient.mk_eq_iff_out _ (_)]; rw [DirectLimit.equiv_iff G f (le_refl _) (hi (out x).1 (Finset.mem_image_of_mem _ hx))]; rw [DirectedSystem.map_self]
+  · rintro ⟨i, Mfg, ⟨e⟩⟩
+    exact ⟨Mfg, ⟨Embedding.comp (DirectLimit.of L ι G f i) e⟩⟩
 
 Depends on / 依赖: DirectLimit, DirectLimit.of, DirectLimit.setoid, Finset, Finset.exists_le, Finset.mem_image_of_mem, Mfg.range, Quotient, Quotient.out, Sigma.fst, Substructure, Substructure.inclusion, classical, closure_le, e.equivRange.toEmbedding, e.toHom, equivRange, equivRange.symm.toEmbedding, exists_le, inclusion
 -/
@@ -564,7 +588,24 @@ theorem exists_cg_is_age_of
   have hF' : forall n : Nat, (F n).out in K := by
     intro n
     obtain ⟨P, hP1, hP2⟩ := (hF (F n).out).2 ⟨n, Setoid.refl _⟩
-    -- 
+    -- Porting note: fix hP2 because `Quotient.out (Quotient.mk' x) ≈ a` was not simplified
+    -- to `x ≈ a` in hF
+    replace hP2 := Setoid.trans (Setoid.symm (Quotient.mk_out P)) hP2
+    exact (hp.is_equiv_invariant_of_fg fg _ _ hP2).1 hP1
+  choose P hPK hP hFP using fun (N : K) (n : Nat) => jep N N.2 (F (n + 1)).out (hF' _)
+  let G : Nat -> K := @Nat.rec (fun _ => K) ⟨(F 0).out, hF' 0⟩ fun n N => ⟨P N n, hPK N n⟩
+  let f : forall (i j : Nat), i <= j -> (G i).val ↪[L] (G j).val :=
+    DirectedSystem.natLERec fun n => (hP _ n).some
+  refine ⟨Bundled.of (@DirectLimit L _ _ (fun n => (G n).val) _ f _ _), ?_, ?_⟩
+  · exact DirectLimit.cg _ (fun n => (fg _ (G n).2).cg)
+  · refine (age_directLimit (fun n => (G n).val) f).trans
+      (subset_antisymm (iUnion_subset fun n N hN => hp (G n).val (G n).2 hN) fun N KN => ?_)
+    have : Quotient.out (Quotient.mk' N) ≈ N := Quotient.eq_mk_iff_out.mp rfl
+    obtain ⟨n, ⟨e⟩⟩ := (hF N).1 ⟨N, KN, this⟩
+    refine mem_iUnion_of_mem n ⟨fg _ KN, ⟨Embedding.comp ?_ e.symm.toEmbedding⟩⟩
+    rcases n with - | n
+    · dsimp [G]; exact Embedding.refl _ _
+    · dsimp [G]; exact (hFP _ n).some
 
 中文:
 定理 存在_cg_is_age_of
@@ -576,7 +617,24 @@ theorem exists_cg_is_age_of
   have hF' : forall n : Nat, (F n).out in K := by
     intro n
     obtain ⟨P, hP1, hP2⟩ := (hF (F n).out).2 ⟨n, Setoid.refl _⟩
-    -- 
+    -- Porting note: fix hP2 because `Quotient.out (Quotient.mk' x) ≈ a` was not simplified
+    -- to `x ≈ a` in hF
+    replace hP2 := Setoid.trans (Setoid.symm (Quotient.mk_out P)) hP2
+    exact (hp.is_equiv_invariant_of_fg fg _ _ hP2).1 hP1
+  choose P hPK hP hFP using fun (N : K) (n : Nat) => jep N N.2 (F (n + 1)).out (hF' _)
+  let G : Nat -> K := @Nat.rec (fun _ => K) ⟨(F 0).out, hF' 0⟩ fun n N => ⟨P N n, hPK N n⟩
+  let f : forall (i j : Nat), i <= j -> (G i).val ↪[L] (G j).val :=
+    DirectedSystem.natLERec fun n => (hP _ n).some
+  refine ⟨Bundled.of (@DirectLimit L _ _ (fun n => (G n).val) _ f _ _), ?_, ?_⟩
+  · exact DirectLimit.cg _ (fun n => (fg _ (G n).2).cg)
+  · refine (age_directLimit (fun n => (G n).val) f).trans
+      (subset_antisymm (iUnion_subset fun n N hN => hp (G n).val (G n).2 hN) fun N KN => ?_)
+    have : Quotient.out (Quotient.mk' N) ≈ N := Quotient.eq_mk_iff_out.mp rfl
+    obtain ⟨n, ⟨e⟩⟩ := (hF N).1 ⟨N, KN, this⟩
+    refine mem_iUnion_of_mem n ⟨fg _ KN, ⟨Embedding.comp ?_ e.symm.toEmbedding⟩⟩
+    rcases n with - | n
+    · dsimp [G]; exact Embedding.refl _ _
+    · dsimp [G]; exact (hFP _ n).some
 
 Depends on / 依赖: Quotient, Quotient.eq_mk_iff_out, Quotient.forall, Set.ext_iff, Setoid, Setoid.refl, eq_mk_iff_out, exists_eq_range, ext_iff, hc.exists_eq_range, hn.image, mem_image, mem_range, simp_rw
 -/
@@ -622,7 +680,7 @@ theorem exists_countable_is_age_of_iff
       age.hereditary M, age.jointEmbedding M⟩
   · rintro ⟨Kn, _, cq, hfg, hp, jep⟩
     obtain ⟨M, hM, rfl⟩ := exists_cg_is_age_of Kn cq hfg hp jep
-    exac
+    exact ⟨M, Structure.cg_iff_countable.1 hM, rfl⟩
 
 中文:
 定理 存在_countable_is_age_of_iff
@@ -634,7 +692,7 @@ theorem exists_countable_is_age_of_iff
       age.hereditary M, age.jointEmbedding M⟩
   · rintro ⟨Kn, _, cq, hfg, hp, jep⟩
     obtain ⟨M, hM, rfl⟩ := exists_cg_is_age_of Kn cq hfg hp jep
-    exac
+    exact ⟨M, Structure.cg_iff_countable.1 hM, rfl⟩
 
 Depends on / 依赖: Structure, Structure.cg_iff_countable, age.countable_quotient, age.hereditary, age.is_equiv_invariant, age.jointEmbedding, age.nonempty, cg_iff_countable, countable_quotient, exists_cg_is_age_of, hereditary, is_equiv_invariant, jointEmbedding, nonempty
 -/
@@ -713,7 +771,12 @@ theorem IsUltrahomogeneous.extend_embedding
   change _ = t.toEmbedding.comp s
   ext x
   have eq' := congr_fun (congr_arg DFunLike.coe eq) ⟨s x, Hom.mem_range.2 ⟨x, rfl⟩⟩
-  simp onl
+  simp only [Embedding.comp_apply,
+    coe_subtype] at eq'
+  simp only [Embedding.comp_apply, ← eq', Equiv.coe_toEmbedding, EmbeddingLike.apply_eq_iff_eq]
+  apply (Embedding.equivRange (Embedding.comp r g)).injective
+  ext
+  simp only [Equiv.apply_symm_apply, Embedding.equivRange_apply, s]
 
 中文:
 定理 IsUltrahomogeneous.extend_embedding
@@ -726,7 +789,12 @@ theorem IsUltrahomogeneous.extend_embedding
   change _ = t.toEmbedding.comp s
   ext x
   have eq' := congr_fun (congr_arg DFunLike.coe eq) ⟨s x, Hom.mem_range.2 ⟨x, rfl⟩⟩
-  simp onl
+  simp only [Embedding.comp_apply,
+    coe_subtype] at eq'
+  simp only [Embedding.comp_apply, ← eq', Equiv.coe_toEmbedding, EmbeddingLike.apply_eq_iff_eq]
+  apply (Embedding.equivRange (Embedding.comp r g)).injective
+  ext
+  simp only [Equiv.apply_symm_apply, Embedding.equivRange_apply, s]
 
 Depends on / 依赖: DFunLike, DFunLike.coe, Embedding, Embedding.comp, Embedding.comp_apply, Embedding.equivRange, EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, Equiv.coe_toEmbedding, Hom.mem_range, M_homog, S_FG, S_FG.range, apply_eq_iff_eq, coe_subtype, coe_toEmbedding, comp_apply, congr_arg, congr_fun, equivRange
 -/
@@ -762,7 +830,19 @@ theorem isUltrahomogeneous_iff_IsExtensionPair
     have dom_le_S : f.dom <= S := le_sup_left
     let ⟨f', eq_f'⟩ := M_homog.extend_embedding (f.dom.fg_iff_structure_fg.1 f_FG)
       ((subtype _).comp f.toEquiv.toEmbedding) (inclusion dom_le_S) (h := ⟨subtype _⟩)
-  
+    refine ⟨⟨⟨S, f'.toHom.range, f'.equivRange⟩, f_FG.sup (fg_closure_singleton _)⟩,
+      subset_closure.trans (le_sup_right : _ <= S) (mem_singleton m), ⟨dom_le_S, ?_⟩⟩
+    ext
+    simp only [Embedding.comp_apply, Equiv.coe_toEmbedding, coe_subtype, eq_f',
+      Embedding.equivRange_apply, Substructure.coe_inclusion]
+  · intro h S S_FG f
+    let ⟨g, ⟨dom_le_dom, eq⟩⟩ :=
+      equiv_between_cg M_CG M_CG ⟨⟨S, f.toHom.range, f.equivRange⟩, S_FG⟩ h h
+    use g
+    simp only [Embedding.subtype_equivRange] at eq
+    rw [← eq]
+    ext
+    rfl
 
 中文:
 定理 isUltrahomogeneous_iff_IsExtensionPair
@@ -775,7 +855,19 @@ theorem isUltrahomogeneous_iff_IsExtensionPair
     have dom_le_S : f.dom <= S := le_sup_left
     let ⟨f', eq_f'⟩ := M_homog.extend_embedding (f.dom.fg_iff_structure_fg.1 f_FG)
       ((subtype _).comp f.toEquiv.toEmbedding) (inclusion dom_le_S) (h := ⟨subtype _⟩)
-  
+    refine ⟨⟨⟨S, f'.toHom.range, f'.equivRange⟩, f_FG.sup (fg_closure_singleton _)⟩,
+      subset_closure.trans (le_sup_right : _ <= S) (mem_singleton m), ⟨dom_le_S, ?_⟩⟩
+    ext
+    simp only [Embedding.comp_apply, Equiv.coe_toEmbedding, coe_subtype, eq_f',
+      Embedding.equivRange_apply, Substructure.coe_inclusion]
+  · intro h S S_FG f
+    let ⟨g, ⟨dom_le_dom, eq⟩⟩ :=
+      equiv_between_cg M_CG M_CG ⟨⟨S, f.toHom.range, f.equivRange⟩, S_FG⟩ h h
+    use g
+    simp only [Embedding.subtype_equivRange] at eq
+    rw [← eq]
+    ext
+    rfl
 
 Depends on / 依赖: Embedding, Embedding.comp_apply, Equiv.coe_toEmbedding, M_homog, M_homog.extend_embedding, closure, coe_toEmbedding, comp_apply, dom_le_S, eq_f, equivRange, extend_embedding, f.dom, f.dom.fg_iff_structure_fg, f.toEquiv.toEmbedding, f_FG, f_FG.sup, fg_closure_singleton, fg_iff_structure_fg, inclusion
 -/
@@ -814,7 +906,22 @@ theorem IsUltrahomogeneous.amalgamation_age
     ((QM.comp NQ).comp (PM.comp NP).equivRange.symm.toEmbedding)
   let s := (g.toHom.comp PM.toHom).range ⊔ QM.toHom.range
   refine ⟨Bundled.of s,
-    Embedding.comp (Substructure.
+    Embedding.comp (Substructure.inclusion le_sup_left)
+      (g.toEmbedding.comp PM).equivRange.toEmbedding,
+    Embedding.comp (Substructure.inclusion le_sup_right) QM.equivRange.toEmbedding,
+    ⟨(fg_iff_structure_fg _).1 (FG.sup (Pfg.range _) (Qfg.range _)), ⟨Substructure.subtype _⟩⟩, ?_⟩
+  ext n
+  apply Subtype.ext
+  have hgn := (Embedding.ext_iff.1 hg) ((PM.comp NP).equivRange n)
+  simp only [Embedding.comp_apply, Equiv.coe_toEmbedding, Equiv.symm_apply_apply,
+    Substructure.coe_subtype, Embedding.equivRange_apply] at hgn
+  simp only [Embedding.comp_apply, Equiv.coe_toEmbedding]
+  erw [Substructure.coe_inclusion, Substructure.coe_inclusion]
+  simp only [Embedding.equivRange_apply, hgn]
+  -- This used to be `simp only [...]` before https://github.com/leanprover/lean4/pull/2644
+  erw [Embedding.comp_apply, Equiv.coe_toEmbedding,
+    Embedding.equivRange_apply]
+  simp
 
 中文:
 定理 IsUltrahomogeneous.amalgamation_age
@@ -825,7 +932,22 @@ theorem IsUltrahomogeneous.amalgamation_age
     ((QM.comp NQ).comp (PM.comp NP).equivRange.symm.toEmbedding)
   let s := (g.toHom.comp PM.toHom).range ⊔ QM.toHom.range
   refine ⟨Bundled.of s,
-    Embedding.comp (Substructure.
+    Embedding.comp (Substructure.inclusion le_sup_left)
+      (g.toEmbedding.comp PM).equivRange.toEmbedding,
+    Embedding.comp (Substructure.inclusion le_sup_right) QM.equivRange.toEmbedding,
+    ⟨(fg_iff_structure_fg _).1 (FG.sup (Pfg.range _) (Qfg.range _)), ⟨Substructure.subtype _⟩⟩, ?_⟩
+  ext n
+  apply Subtype.ext
+  have hgn := (Embedding.ext_iff.1 hg) ((PM.comp NP).equivRange n)
+  simp only [Embedding.comp_apply, Equiv.coe_toEmbedding, Equiv.symm_apply_apply,
+    Substructure.coe_subtype, Embedding.equivRange_apply] at hgn
+  simp only [Embedding.comp_apply, Equiv.coe_toEmbedding]
+  erw [Substructure.coe_inclusion, Substructure.coe_inclusion]
+  simp only [Embedding.equivRange_apply, hgn]
+  -- This used to be `simp only [...]` before https://github.com/leanprover/lean4/pull/2644
+  erw [Embedding.comp_apply, Equiv.coe_toEmbedding,
+    Embedding.equivRange_apply]
+  simp
 
 Depends on / 依赖: Bundled, Bundled.of, Embedding, Embedding.comp, FG.sup, Nfg.range, PM.comp, PM.toHom, Pfg.range, QM.comp, QM.equivRange.toEmbedding, QM.toHom.range, Qfg.range, Substructure, Substructure.inclusion, equivRange, equivRange.symm.toEmbedding, equivRange.toEmbedding, fg_iff_structure_fg, g.toEmbedding.comp
 -/
@@ -915,7 +1037,13 @@ theorem isExtensionPair
   have S_in_age_N : ⟨S, inferInstance⟩ in L.age N := by
     rw [hN.age]; rw [← hM.age]
     exact ⟨(fg_iff_structure_fg S).1 S_FG, ⟨subtype _⟩⟩
-  have nonempty_S_N : Nonempty (
+  have nonempty_S_N : Nonempty (S ↪[L] N) := S_in_age_N.2
+  let ⟨g, g_eq⟩ := hN.ultrahomogeneous.extend_embedding (f.dom.fg_iff_structure_fg.1 f_FG)
+    ((subtype f.cod).comp f.toEquiv.toEmbedding) (inclusion (le_sup_left : _ <= S))
+  refine ⟨⟨⟨S, g.toHom.range, g.equivRange⟩, S_FG⟩,
+    subset_closure.trans (le_sup_right : _ <= S) (mem_singleton m), ⟨le_sup_left, ?_⟩⟩
+  ext
+  simp [S, g_eq]
 
 中文:
 定理 isExtensionPair
@@ -927,7 +1055,13 @@ theorem isExtensionPair
   have S_in_age_N : ⟨S, inferInstance⟩ in L.age N := by
     rw [hN.age]; rw [← hM.age]
     exact ⟨(fg_iff_structure_fg S).1 S_FG, ⟨subtype _⟩⟩
-  have nonempty_S_N : Nonempty (
+  have nonempty_S_N : Nonempty (S ↪[L] N) := S_in_age_N.2
+  let ⟨g, g_eq⟩ := hN.ultrahomogeneous.extend_embedding (f.dom.fg_iff_structure_fg.1 f_FG)
+    ((subtype f.cod).comp f.toEquiv.toEmbedding) (inclusion (le_sup_left : _ <= S))
+  refine ⟨⟨⟨S, g.toHom.range, g.equivRange⟩, S_FG⟩,
+    subset_closure.trans (le_sup_right : _ <= S) (mem_singleton m), ⟨le_sup_left, ?_⟩⟩
+  ext
+  simp [S, g_eq]
 -/
 protected theorem isExtensionPair : L.IsExtensionPair M N := by
   intro ⟨f, f_FG⟩ m
@@ -958,7 +1092,12 @@ theorem nonempty_equiv
     exact ⟨S_fg, ⟨subtype _⟩⟩
   let v : M ≃ₚ[L] N := {
     dom := S
-    cod := emb_S.toHom.ra
+    cod := emb_S.toHom.range
+    toEquiv := emb_S.equivRange
+  }
+  exact ⟨Exists.choose (equiv_between_cg cg_of_countable cg_of_countable
+    ⟨v, ((Substructure.fg_iff_structure_fg _).2 S_fg)⟩ (hM.isExtensionPair hN)
+      (hN.isExtensionPair hM))⟩
 
 中文:
 定理 nonempty_equiv
@@ -971,7 +1110,12 @@ theorem nonempty_equiv
     exact ⟨S_fg, ⟨subtype _⟩⟩
   let v : M ≃ₚ[L] N := {
     dom := S
-    cod := emb_S.toHom.ra
+    cod := emb_S.toHom.range
+    toEquiv := emb_S.equivRange
+  }
+  exact ⟨Exists.choose (equiv_between_cg cg_of_countable cg_of_countable
+    ⟨v, ((Substructure.fg_iff_structure_fg _).2 S_fg)⟩ (hM.isExtensionPair hN)
+      (hN.isExtensionPair hM))⟩
 
 Depends on / 依赖: Exists, Exists.choose, L.Substructure, L.age, S_fg, Substructure, Substructure.fg_bot, Substructure.fg_iff_structure_fg, cg_of_countable, emb_S, emb_S.equivRange, emb_S.toHom.range, equivRange, equiv_between_cg, fg_bot, fg_iff_structure_fg, hM.age, hM.isExtensionPair, hN.age, hN.isExtensionPair
 -/
@@ -1009,7 +1153,11 @@ theorem isFraisseLimit_of_countable_infinite
     classical
     have : Finite S := hS.finite
     have : Infinite { x // x ∉ S } := ((Set.toFinite _).infinite_compl).to_subtype
-    have : Finite f.t
+    have : Finite f.toHom.range := (((Substructure.fg_iff_structure_fg S).1 hS).range _).finite
+    have : Infinite { x // x ∉ f.toHom.range } := ((Set.toFinite _).infinite_compl).to_subtype
+    refine ⟨StrongHomClass.toEquiv (f.equivRange.subtypeCongr nonempty_equiv_of_countable.some), ?_⟩
+    ext x
+    simp [Equiv.subtypeCongr]
 
 中文:
 定理 isFraisseLimit_of_countable_infinite
@@ -1022,7 +1170,11 @@ theorem isFraisseLimit_of_countable_infinite
     classical
     have : Finite S := hS.finite
     have : Infinite { x // x ∉ S } := ((Set.toFinite _).infinite_compl).to_subtype
-    have : Finite f.t
+    have : Finite f.toHom.range := (((Substructure.fg_iff_structure_fg S).1 hS).range _).finite
+    have : Infinite { x // x ∉ f.toHom.range } := ((Set.toFinite _).infinite_compl).to_subtype
+    refine ⟨StrongHomClass.toEquiv (f.equivRange.subtypeCongr nonempty_equiv_of_countable.some), ?_⟩
+    ext x
+    simp [Equiv.subtypeCongr]
 
 Depends on / 依赖: Finite, Infinite, Set.toFinite, StrongHomClass, StrongHomClass.toEquiv, Structure, Structure.fg_iff_finite, Substructure, Substructure.fg_iff_structure_fg, and_iff_left_iff_imp, classical, equivRange, f.equivRange.subtypeCongr, f.toHom.range, fg_iff_finite, fg_iff_structure_fg, finite, hS.finite, infinite_compl, mem_ofPred_eq
 -/

@@ -786,7 +786,62 @@ theorem FiberBundle.exists_trivialization_Icc_subset
   -- If `a < b`, then `[a, b] = ∅`, and the statement is trivial
   rcases lt_or_ge b a with _ | hab
   · exact ⟨ea, by simp [*]⟩
-  /- Let `s` be the set of
+  /- Let `s` be the set of points `x ∈ [a, b]` such that `E` is trivializable over `[a, x]`.
+    We need to show that `b ∈ s`. Let `c = Sup s`. We will show that `c ∈ s` and `c = b`. -/
+  set s : Set B := { x in Icc a b | exists e : Trivialization F (π F E), Icc a x subseteq e.baseSet }
+  have ha : a in s := ⟨left_mem_Icc.2 hab, ea, by simp [hea]⟩
+  have sne : s.Nonempty := ⟨a, ha⟩
+  have hsb : b in upperBounds s := fun x hx => hx.1.2
+  have sbd : BddAbove s := ⟨b, hsb⟩
+  set c := sSup s
+  have hsc : IsLUB s c := isLUB_csSup sne sbd
+  have hc : c in Icc a b := ⟨hsc.1 ha, hsc.2 hsb⟩
+  obtain ⟨-, ec : Trivialization F (π F E), hec : Icc a c subseteq ec.baseSet⟩ : c in s := by
+    rcases hc.1.eq_or_lt with heq | hlt
+    · rwa [← heq]
+    refine ⟨hc, ?_⟩
+    /- In order to show that `c ∈ s`, consider a trivialization `ec` of `proj` over a neighborhood
+      of `c`. Its base set includes `(c', c]` for some `c' ∈ [a, c)`. -/
+    obtain ⟨ec, hc⟩ : exists ec : Trivialization F (π F E), c in ec.baseSet :=
+      ⟨trivializationAt F E c, mem_baseSet_trivializationAt F E c⟩
+    obtain ⟨c', hc', hc'e⟩ : exists c' in Ico a c, Ioc c' c subseteq ec.baseSet :=
+      (mem_nhdsLE_iff_exists_mem_Ico_Ioc_subset hlt).1
+        (mem_nhdsWithin_of_mem_nhds <| IsOpen.mem_nhds ec.open_baseSet hc)
+    /- Since `c' < c = Sup s`, there exists `d ∈ s ∩ (c', c]`. Let `ead` be a trivialization of
+      `proj` over `[a, d]`. Then we can glue `ead` and `ec` into a trivialization over `[a, c]`. -/
+    obtain ⟨d, ⟨hdab, ead, had⟩, hd⟩ : exists d in s, d in Ioc c' c := hsc.exists_between hc'.2
+    refine ⟨ead.piecewiseLe ec d (had ⟨hdab.1, le_rfl⟩) (hc'e hd), subset_ite.2 ?_⟩
+    exact ⟨fun x hx => had ⟨hx.1.1, hx.2⟩, fun x hx => hc'e ⟨hd.1.trans (not_le.1 hx.2), hx.1.2⟩⟩
+  /- So, `c ∈ s`. Let `ec` be a trivialization of `proj` over `[a, c]`. If `c = b`, then we are
+    done. Otherwise we show that `proj` can be trivialized over a larger interval `[a, d]`,
+    `d ∈ (c, b]`, hence `c` is not an upper bound of `s`. -/
+  rcases hc.2.eq_or_lt with heq | hlt
+  · exact ⟨ec, heq ▸ hec⟩
+  rsuffices ⟨d, hdcb, hd⟩ : exists d in Ioc c b, exists e : Trivialization F (π F E), Icc a d subseteq e.baseSet
+  · exact ((hsc.1 ⟨⟨hc.1.trans hdcb.1.le, hdcb.2⟩, hd⟩).not_gt hdcb.1).elim
+  /- Since the base set of `ec` is open, it includes `[c, d)` (hence, `[a, d)`) for some
+    `d ∈ (c, b]`. -/
+  obtain ⟨d, hdcb, hd⟩ : exists d in Ioc c b, Ico c d subseteq ec.baseSet :=
+    (mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset hlt).1
+      (mem_nhdsWithin_of_mem_nhds <| IsOpen.mem_nhds ec.open_baseSet (hec ⟨hc.1, le_rfl⟩))
+  have had : Ico a d subseteq ec.baseSet := Ico_subset_Icc_union_Ico.trans (union_subset hec hd)
+  by_cases he : Disjoint (Iio d) (Ioi c)
+  · /- If `(c, d) = ∅`, then let `ed` be a trivialization of `proj` over a neighborhood of `d`.
+      Then the disjoint union of `ec` restricted to `(-∞, d)` and `ed` restricted to `(c, ∞)` is
+      a trivialization over `[a, d]`. -/
+    obtain ⟨ed, hed⟩ : exists ed : Trivialization F (π F E), d in ed.baseSet :=
+      ⟨trivializationAt F E d, mem_baseSet_trivializationAt F E d⟩
+    refine ⟨d, hdcb,
+      (ec.restrOpen (Iio d) isOpen_Iio).disjointUnion (ed.restrOpen (Ioi c) isOpen_Ioi)
+        (he.mono inter_subset_right inter_subset_right), fun x hx => ?_⟩
+    rcases hx.2.eq_or_lt with (rfl | hxd)
+    exacts [Or.inr ⟨hed, hdcb.1⟩, Or.inl ⟨had ⟨hx.1, hxd⟩, hxd⟩]
+  · /- If `(c, d)` is nonempty, then take `d' ∈ (c, d)`. Since the base set of `ec` includes
+          `[a, d)`, it includes `[a, d'] ⊆ [a, d)` as well. -/
+    rw [disjoint_left] at he
+    push Not at he
+    rcases he with ⟨d', hdd' : d' < d, hd'c⟩
+    exact ⟨d', ⟨hd'c, hdd'.le.trans hdcb.2⟩, ec, (Icc_subset_Ico_right hdd').trans had⟩
 
 中文:
 定理 纤维丛.存在_trivialization_Icc_subset
@@ -797,7 +852,62 @@ theorem FiberBundle.exists_trivialization_Icc_subset
   -- If `a < b`, then `[a, b] = ∅`, and the statement is trivial
   rcases lt_or_ge b a with _ | hab
   · exact ⟨ea, by simp [*]⟩
-  /- Let `s` be the set of
+  /- Let `s` be the set of points `x ∈ [a, b]` such that `E` is trivializable over `[a, x]`.
+    We need to show that `b ∈ s`. Let `c = Sup s`. We will show that `c ∈ s` and `c = b`. -/
+  set s : Set B := { x in Icc a b | exists e : Trivialization F (π F E), Icc a x subseteq e.baseSet }
+  have ha : a in s := ⟨left_mem_Icc.2 hab, ea, by simp [hea]⟩
+  have sne : s.Nonempty := ⟨a, ha⟩
+  have hsb : b in upperBounds s := fun x hx => hx.1.2
+  have sbd : BddAbove s := ⟨b, hsb⟩
+  set c := sSup s
+  have hsc : IsLUB s c := isLUB_csSup sne sbd
+  have hc : c in Icc a b := ⟨hsc.1 ha, hsc.2 hsb⟩
+  obtain ⟨-, ec : Trivialization F (π F E), hec : Icc a c subseteq ec.baseSet⟩ : c in s := by
+    rcases hc.1.eq_or_lt with heq | hlt
+    · rwa [← heq]
+    refine ⟨hc, ?_⟩
+    /- In order to show that `c ∈ s`, consider a trivialization `ec` of `proj` over a neighborhood
+      of `c`. Its base set includes `(c', c]` for some `c' ∈ [a, c)`. -/
+    obtain ⟨ec, hc⟩ : exists ec : Trivialization F (π F E), c in ec.baseSet :=
+      ⟨trivializationAt F E c, mem_baseSet_trivializationAt F E c⟩
+    obtain ⟨c', hc', hc'e⟩ : exists c' in Ico a c, Ioc c' c subseteq ec.baseSet :=
+      (mem_nhdsLE_iff_exists_mem_Ico_Ioc_subset hlt).1
+        (mem_nhdsWithin_of_mem_nhds <| IsOpen.mem_nhds ec.open_baseSet hc)
+    /- Since `c' < c = Sup s`, there exists `d ∈ s ∩ (c', c]`. Let `ead` be a trivialization of
+      `proj` over `[a, d]`. Then we can glue `ead` and `ec` into a trivialization over `[a, c]`. -/
+    obtain ⟨d, ⟨hdab, ead, had⟩, hd⟩ : exists d in s, d in Ioc c' c := hsc.exists_between hc'.2
+    refine ⟨ead.piecewiseLe ec d (had ⟨hdab.1, le_rfl⟩) (hc'e hd), subset_ite.2 ?_⟩
+    exact ⟨fun x hx => had ⟨hx.1.1, hx.2⟩, fun x hx => hc'e ⟨hd.1.trans (not_le.1 hx.2), hx.1.2⟩⟩
+  /- So, `c ∈ s`. Let `ec` be a trivialization of `proj` over `[a, c]`. If `c = b`, then we are
+    done. Otherwise we show that `proj` can be trivialized over a larger interval `[a, d]`,
+    `d ∈ (c, b]`, hence `c` is not an upper bound of `s`. -/
+  rcases hc.2.eq_or_lt with heq | hlt
+  · exact ⟨ec, heq ▸ hec⟩
+  rsuffices ⟨d, hdcb, hd⟩ : exists d in Ioc c b, exists e : Trivialization F (π F E), Icc a d subseteq e.baseSet
+  · exact ((hsc.1 ⟨⟨hc.1.trans hdcb.1.le, hdcb.2⟩, hd⟩).not_gt hdcb.1).elim
+  /- Since the base set of `ec` is open, it includes `[c, d)` (hence, `[a, d)`) for some
+    `d ∈ (c, b]`. -/
+  obtain ⟨d, hdcb, hd⟩ : exists d in Ioc c b, Ico c d subseteq ec.baseSet :=
+    (mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset hlt).1
+      (mem_nhdsWithin_of_mem_nhds <| IsOpen.mem_nhds ec.open_baseSet (hec ⟨hc.1, le_rfl⟩))
+  have had : Ico a d subseteq ec.baseSet := Ico_subset_Icc_union_Ico.trans (union_subset hec hd)
+  by_cases he : Disjoint (Iio d) (Ioi c)
+  · /- If `(c, d) = ∅`, then let `ed` be a trivialization of `proj` over a neighborhood of `d`.
+      Then the disjoint union of `ec` restricted to `(-∞, d)` and `ed` restricted to `(c, ∞)` is
+      a trivialization over `[a, d]`. -/
+    obtain ⟨ed, hed⟩ : exists ed : Trivialization F (π F E), d in ed.baseSet :=
+      ⟨trivializationAt F E d, mem_baseSet_trivializationAt F E d⟩
+    refine ⟨d, hdcb,
+      (ec.restrOpen (Iio d) isOpen_Iio).disjointUnion (ed.restrOpen (Ioi c) isOpen_Ioi)
+        (he.mono inter_subset_right inter_subset_right), fun x hx => ?_⟩
+    rcases hx.2.eq_or_lt with (rfl | hxd)
+    exacts [Or.inr ⟨hed, hdcb.1⟩, Or.inl ⟨had ⟨hx.1, hxd⟩, hxd⟩]
+  · /- If `(c, d)` is nonempty, then take `d' ∈ (c, d)`. Since the base set of `ec` includes
+          `[a, d)`, it includes `[a, d'] ⊆ [a, d)` as well. -/
+    rw [disjoint_left] at he
+    push Not at he
+    rcases he with ⟨d', hdd' : d' < d, hd'c⟩
+    exact ⟨d', ⟨hd'c, hdd'.le.trans hdcb.2⟩, ec, (Icc_subset_Ico_right hdd').trans had⟩
 
 Depends on / 依赖: Trivialization, baseSet, ea.baseSet, mem_baseSet_trivializationAt, trivializationAt
 -/
@@ -1031,7 +1141,25 @@ definition trivChange
   map_source' p hp := by simpa using hp
   map_target' p hp := by simpa using hp
   left_inv' := by
-    rintro ⟨x, v⟩
+    rintro ⟨x, v⟩ hx
+    simp only [prodMk_mem_set_prod_eq, mem_inter_iff, and_true, mem_univ] at hx
+    dsimp only
+    rw [coordChange_comp]; rw [Z.coordChange_self]
+    exacts [hx.1, ⟨⟨hx.1, hx.2⟩, hx.1⟩]
+  right_inv' := by
+    rintro ⟨x, v⟩ hx
+    simp only [prodMk_mem_set_prod_eq, mem_inter_iff, and_true, mem_univ] at hx
+    dsimp only
+    rw [Z.coordChange_comp]; rw [Z.coordChange_self]
+    · exact hx.2
+    · simp [hx]
+  open_source := ((Z.isOpen_baseSet i).inter (Z.isOpen_baseSet j)).prod isOpen_univ
+  open_target := ((Z.isOpen_baseSet i).inter (Z.isOpen_baseSet j)).prod isOpen_univ
+  continuousOn_toFun := continuous_fst.continuousOn.prodMk (Z.continuousOn_coordChange i j)
+  continuousOn_invFun := by
+    simpa [inter_comm] using continuous_fst.continuousOn.prodMk (Z.continuousOn_coordChange j i)
+
+@[simp, mfld_simps]
 
 中文:
 定义 trivChange
@@ -1043,7 +1171,25 @@ definition trivChange
   map_source' p hp := by simpa using hp
   map_target' p hp := by simpa using hp
   left_inv' := by
-    rintro ⟨x, v⟩
+    rintro ⟨x, v⟩ hx
+    simp only [prodMk_mem_set_prod_eq, mem_inter_iff, and_true, mem_univ] at hx
+    dsimp only
+    rw [coordChange_comp]; rw [Z.coordChange_self]
+    exacts [hx.1, ⟨⟨hx.1, hx.2⟩, hx.1⟩]
+  right_inv' := by
+    rintro ⟨x, v⟩ hx
+    simp only [prodMk_mem_set_prod_eq, mem_inter_iff, and_true, mem_univ] at hx
+    dsimp only
+    rw [Z.coordChange_comp]; rw [Z.coordChange_self]
+    · exact hx.2
+    · simp [hx]
+  open_source := ((Z.isOpen_baseSet i).inter (Z.isOpen_baseSet j)).prod isOpen_univ
+  open_target := ((Z.isOpen_baseSet i).inter (Z.isOpen_baseSet j)).prod isOpen_univ
+  continuousOn_toFun := continuous_fst.continuousOn.prodMk (Z.continuousOn_coordChange i j)
+  continuousOn_invFun := by
+    simpa [inter_comm] using continuous_fst.continuousOn.prodMk (Z.continuousOn_coordChange j i)
+
+@[simp, mfld_simps]
 
 Depends on / 依赖: Z.baseSet, baseSet
 -/
@@ -1111,7 +1257,19 @@ definition localTrivAsPartialEquiv
   toFun p := ⟨p.1, Z.coordChange (Z.indexAt p.1) i p.1 p.2⟩
   map_source' p hp := by
     simpa only [Set.mem_preimage, and_true, Set.mem_univ, Set.prodMk_mem_set_prod_eq] using hp
-  ma
+  map_target' p hp := by
+    simpa only [Set.mem_preimage, and_true, Set.mem_univ, Set.mem_prod] using hp
+  left_inv' := by
+    rintro ⟨x, v⟩ hx
+    replace hx : x in Z.baseSet i := hx
+    dsimp only
+    rw [Z.coordChange_comp]; rw [Z.coordChange_self] <;> apply_rules [mem_baseSet_at, mem_inter]
+  right_inv' := by
+    rintro ⟨x, v⟩ hx
+    simp only [prodMk_mem_set_prod_eq, and_true, mem_univ] at hx
+    dsimp only
+    rw [Z.coordChange_comp]; rw [Z.coordChange_self]
+    exacts [hx, ⟨⟨hx, Z.mem_baseSet_at _⟩, hx⟩]
 
 中文:
 定义 localTrivAsPartialEquiv
@@ -1122,7 +1280,19 @@ definition localTrivAsPartialEquiv
   toFun p := ⟨p.1, Z.coordChange (Z.indexAt p.1) i p.1 p.2⟩
   map_source' p hp := by
     simpa only [Set.mem_preimage, and_true, Set.mem_univ, Set.prodMk_mem_set_prod_eq] using hp
-  ma
+  map_target' p hp := by
+    simpa only [Set.mem_preimage, and_true, Set.mem_univ, Set.mem_prod] using hp
+  left_inv' := by
+    rintro ⟨x, v⟩ hx
+    replace hx : x in Z.baseSet i := hx
+    dsimp only
+    rw [Z.coordChange_comp]; rw [Z.coordChange_self] <;> apply_rules [mem_baseSet_at, mem_inter]
+  right_inv' := by
+    rintro ⟨x, v⟩ hx
+    simp only [prodMk_mem_set_prod_eq, and_true, mem_univ] at hx
+    dsimp only
+    rw [Z.coordChange_comp]; rw [Z.coordChange_self]
+    exacts [hx, ⟨⟨hx, Z.mem_baseSet_at _⟩, hx⟩]
 
 Depends on / 依赖: Z.baseSet, Z.proj, baseSet
 -/
@@ -1223,7 +1393,9 @@ theorem localTrivAsPartialEquiv_trans
   · rintro ⟨x, v⟩ hx
     simp only [trivChange, localTrivAsPartialEquiv, PartialEquiv.symm,
       Prod.mk_inj, prodMk_mem_set_prod_eq, PartialEquiv.trans_source, mem_inter_iff,
-      mem_preimage, proj,
+      mem_preimage, proj, mem_univ, (· ∘ ·),
+      PartialEquiv.coe_trans] at hx ⊢
+    simp only [Z.coordChange_comp, hx, mem_inter_iff, and_self_iff, mem_baseSet_at]
 
 中文:
 定理 localTrivAsPartialEquiv_trans
@@ -1236,7 +1408,9 @@ theorem localTrivAsPartialEquiv_trans
   · rintro ⟨x, v⟩ hx
     simp only [trivChange, localTrivAsPartialEquiv, PartialEquiv.symm,
       Prod.mk_inj, prodMk_mem_set_prod_eq, PartialEquiv.trans_source, mem_inter_iff,
-      mem_preimage, proj,
+      mem_preimage, proj, mem_univ, (· ∘ ·),
+      PartialEquiv.coe_trans] at hx ⊢
+    simp only [Z.coordChange_comp, hx, mem_inter_iff, and_self_iff, mem_baseSet_at]
 
 Depends on / 依赖: PartialEquiv, PartialEquiv.coe_trans, PartialEquiv.symm, PartialEquiv.trans_source, Prod.mk_inj, Z.coordChange_comp, and_self_iff, coe_trans, coordChange_comp, localTrivAsPartialEquiv, mem_baseSet_at, mem_inter_iff, mem_localTrivAsPartialEquiv_target, mem_preimage, mem_univ, mfld_simps, mk_inj, prodMk_mem_set_prod_eq, trans_source, trivChange
 -/
@@ -1290,7 +1464,7 @@ theorem open_source'
   refine ⟨i, Z.baseSet i ×ˢ univ, (Z.isOpen_baseSet i).prod isOpen_univ, ?_⟩
   ext p
   simp only [localTrivAsPartialEquiv_apply, prodMk_mem_set_prod_eq, mem_inter_iff, and_self_iff,
-    mem_localT
+    mem_localTrivAsPartialEquiv_source, and_true, mem_univ, mem_preimage]
 
 中文:
 定理 open_source'
@@ -1302,7 +1476,7 @@ theorem open_source'
   refine ⟨i, Z.baseSet i ×ˢ univ, (Z.isOpen_baseSet i).prod isOpen_univ, ?_⟩
   ext p
   simp only [localTrivAsPartialEquiv_apply, prodMk_mem_set_prod_eq, mem_inter_iff, and_self_iff,
-    mem_localT
+    mem_localTrivAsPartialEquiv_source, and_true, mem_univ, mem_preimage]
 
 Depends on / 依赖: GenerateOpen, TopologicalSpace, TopologicalSpace.GenerateOpen.basic, Z.baseSet, Z.isOpen_baseSet, and_self_iff, and_true, baseSet, exists_prop, isOpen_baseSet, isOpen_univ, localTrivAsPartialEquiv_apply, mem_iUnion, mem_inter_iff, mem_localTrivAsPartialEquiv_source, mem_preimage, mem_singleton_iff, mem_univ, prodMk_mem_set_prod_eq
 -/
@@ -1330,7 +1504,29 @@ definition localTriv
   open_source := Z.open_source' i
   open_target := (Z.isOpen_baseSet i).prod isOpen_univ
   continuousOn_toFun := by
-    rw [continuousOn_open_iff (Z.open_s
+    rw [continuousOn_open_iff (Z.open_source' i)]
+    intro s s_open
+    apply TopologicalSpace.GenerateOpen.basic
+    simp only [exists_prop, mem_iUnion, mem_singleton_iff]
+    exact ⟨i, s, s_open, rfl⟩
+  continuousOn_invFun := by
+    refine continuousOn_isOpen_of_generateFrom fun t ht => ?_
+    simp only [exists_prop, mem_iUnion, mem_singleton_iff] at ht
+    obtain ⟨j, s, s_open, ts⟩ : exists j s, IsOpen s ∧
+      t = (localTrivAsPartialEquiv Z j).source inter localTrivAsPartialEquiv Z j ⁻¹' s := ht
+    rw [ts]
+    simp only [preimage_inter]
+    let e := Z.localTrivAsPartialEquiv i
+    let e' := Z.localTrivAsPartialEquiv j
+    let f := e.symm.trans e'
+    have : IsOpen (f.source inter f ⁻¹' s) := by
+      rw [PartialEquiv.EqOnSource.source_inter_preimage_eq (Z.localTrivAsPartialEquiv_trans i j)]
+      exact (continuousOn_open_iff (Z.trivChange i j).open_source).1
+        (Z.trivChange i j).continuousOn _ s_open
+    convert! this using 1
+    dsimp [f, PartialEquiv.trans_source]
+    rw [← preimage_comp]; rw [inter_assoc]
+  toPartialEquiv := Z.localTrivAsPartialEquiv i
 
 中文:
 定义 localTriv
@@ -1345,7 +1541,29 @@ definition localTriv
   open_source := Z.open_source' i
   open_target := (Z.isOpen_baseSet i).prod isOpen_univ
   continuousOn_toFun := by
-    rw [continuousOn_open_iff (Z.open_s
+    rw [continuousOn_open_iff (Z.open_source' i)]
+    intro s s_open
+    apply TopologicalSpace.GenerateOpen.basic
+    simp only [exists_prop, mem_iUnion, mem_singleton_iff]
+    exact ⟨i, s, s_open, rfl⟩
+  continuousOn_invFun := by
+    refine continuousOn_isOpen_of_generateFrom fun t ht => ?_
+    simp only [exists_prop, mem_iUnion, mem_singleton_iff] at ht
+    obtain ⟨j, s, s_open, ts⟩ : exists j s, IsOpen s ∧
+      t = (localTrivAsPartialEquiv Z j).source inter localTrivAsPartialEquiv Z j ⁻¹' s := ht
+    rw [ts]
+    simp only [preimage_inter]
+    let e := Z.localTrivAsPartialEquiv i
+    let e' := Z.localTrivAsPartialEquiv j
+    let f := e.symm.trans e'
+    have : IsOpen (f.source inter f ⁻¹' s) := by
+      rw [PartialEquiv.EqOnSource.source_inter_preimage_eq (Z.localTrivAsPartialEquiv_trans i j)]
+      exact (continuousOn_open_iff (Z.trivChange i j).open_source).1
+        (Z.trivChange i j).continuousOn _ s_open
+    convert! this using 1
+    dsimp [f, PartialEquiv.trans_source]
+    rw [← preimage_comp]; rw [inter_assoc]
+  toPartialEquiv := Z.localTrivAsPartialEquiv i
 
 Depends on / 依赖: Z.baseSet, baseSet
 -/
@@ -1454,7 +1672,13 @@ theorem continuous_const_section
     IsOpen.mem_nhds (Z.isOpen_baseSet (Z.indexAt x)) (Z.mem_baseSet_at x)
   refine ((Z.localTrivAt x).toOpenPartialHomeomorph.continuousAt_iff_continuousAt_comp_left ?_).2 ?_
   · exact A
-  · apply cont
+  · apply continuousAt_id.prodMk
+    simp only [mfld_simps]
+    have : ContinuousOn (fun _ : B => v) (Z.baseSet (Z.indexAt x)) := continuousOn_const
+    refine (this.congr fun y hy => ?_).continuousAt A
+    exact h _ _ _ ⟨mem_baseSet_at _ _, hy⟩
+
+@[simp, mfld_simps]
 
 中文:
 定理 continuous_const_section
@@ -1465,7 +1689,13 @@ theorem continuous_const_section
     IsOpen.mem_nhds (Z.isOpen_baseSet (Z.indexAt x)) (Z.mem_baseSet_at x)
   refine ((Z.localTrivAt x).toOpenPartialHomeomorph.continuousAt_iff_continuousAt_comp_left ?_).2 ?_
   · exact A
-  · apply cont
+  · apply continuousAt_id.prodMk
+    simp only [mfld_simps]
+    have : ContinuousOn (fun _ : B => v) (Z.baseSet (Z.indexAt x)) := continuousOn_const
+    refine (this.congr fun y hy => ?_).continuousAt A
+    exact h _ _ _ ⟨mem_baseSet_at _ _, hy⟩
+
+@[simp, mfld_simps]
 
 Depends on / 依赖: ContinuousOn, IsOpen, IsOpen.mem_nhds, Z.baseSet, Z.indexAt, Z.isOpen_baseSet, Z.localTrivAt, Z.mem_baseSet_at, baseSet, continuousAt, continuousAt_id, continuousAt_id.prodMk, continuousAt_iff_continuousAt_comp_left, continuousOn_const, continuous_iff_continuousAt, indexAt, isOpen_baseSet, localTrivAt, mem_baseSet_at, mem_nhds
 -/
@@ -1834,7 +2064,15 @@ instance fiberBundle
   body: isInducing_iff_nhds.2 fun x => by
     rw [(Z.localTrivAt b).nhds_eq_comap_inf_principal (mk_mem_localTrivAt_source _ _ _)]; rw [comap_inf]; rw [comap_principal]; rw [comap_comap]
     simp only [Function.comp_def, localTrivAt_apply_mk, Trivialization.coe_coe,
-      ← (isEmbedding_prodMkRight b).nhds_
+      ← (isEmbedding_prodMkRight b).nhds_eq_comap]
+    convert_to 𝓝 x = 𝓝 x ⊓ 𝓟 univ
+    · congr
+      exact eq_univ_of_forall (mk_mem_localTrivAt_source Z _)
+    · rw [principal_univ, inf_top_eq]
+  trivializationAtlas' := Set.range Z.localTriv
+  trivializationAt' := Z.localTrivAt
+  mem_baseSet_trivializationAt' := Z.mem_baseSet_at
+  trivialization_mem_atlas' b := ⟨Z.indexAt b, rfl⟩
 
 中文:
 实例 fiberBundle
@@ -1842,7 +2080,15 @@ instance fiberBundle
   定义体: isInducing_iff_nhds.2 fun x => by
     rw [(Z.localTrivAt b).nhds_eq_comap_inf_principal (mk_mem_localTrivAt_source _ _ _)]; rw [comap_inf]; rw [comap_principal]; rw [comap_comap]
     simp only [Function.comp_def, localTrivAt_apply_mk, Trivialization.coe_coe,
-      ← (isEmbedding_prodMkRight b).nhds_
+      ← (isEmbedding_prodMkRight b).nhds_eq_comap]
+    convert_to 𝓝 x = 𝓝 x ⊓ 𝓟 univ
+    · congr
+      exact eq_univ_of_forall (mk_mem_localTrivAt_source Z _)
+    · rw [principal_univ, inf_top_eq]
+  trivializationAtlas' := Set.range Z.localTriv
+  trivializationAt' := Z.localTrivAt
+  mem_baseSet_trivializationAt' := Z.mem_baseSet_at
+  trivialization_mem_atlas' b := ⟨Z.indexAt b, rfl⟩
 
 Depends on / 依赖: Function, Function.comp_def, Set.range, Trivialization, Trivialization.coe_coe, Z.localTr, Z.localTriv, Z.localTrivAt, coe_coe, comap_comap, comap_inf, comap_principal, comp_def, convert_to, eq_univ_of_forall, inf_top_eq, isEmbedding_prodMkRight, isInducing_iff_nhds, localTr, localTriv
 -/
@@ -2062,7 +2308,16 @@ definition trivializationOfMemPretrivializationAtlas
     continuousOn_toFun := by
       refine continuousOn_iff'.mpr fun s hs => ⟨e ⁻¹' s inter e.source,
         isOpen_iSup_iff.mpr fun e' => ?_, by rw [inter_assoc, inter_self]; rfl⟩
-      refine isOpen_iSup_iff.mpr fun he'
+      refine isOpen_iSup_iff.mpr fun he' => ?_
+      rw [isOpen_coinduced]; rw [isOpen_induced_iff]
+      obtain ⟨u, hu1, hu2⟩ := continuousOn_iff'.mp (a.continuous_trivChange _ he _ he') s hs
+      have hu3 := congr_arg (fun s => (fun x : e'.target => (x : B × F)) ⁻¹' s) hu2
+      simp only [Subtype.coe_preimage_self, preimage_inter, univ_inter] at hu3
+      refine ⟨u inter e'.toPartialEquiv.target inter e'.toPartialEquiv.symm ⁻¹' e.source, ?_, by
+        simp only [preimage_inter, inter_univ, Subtype.coe_preimage_self, hu3.symm]; rfl⟩
+      rw [inter_assoc]
+      exact hu1.inter (a.isOpen_target_of_mem_pretrivializationAtlas_inter e e' he')
+    continuousOn_invFun := a.continuous_symm_of_mem_pretrivializationAtlas he }
 
 中文:
 定义 trivializationOfMemPretrivializationAtlas
@@ -2073,7 +2328,16 @@ definition trivializationOfMemPretrivializationAtlas
     continuousOn_toFun := by
       refine continuousOn_iff'.mpr fun s hs => ⟨e ⁻¹' s inter e.source,
         isOpen_iSup_iff.mpr fun e' => ?_, by rw [inter_assoc, inter_self]; rfl⟩
-      refine isOpen_iSup_iff.mpr fun he'
+      refine isOpen_iSup_iff.mpr fun he' => ?_
+      rw [isOpen_coinduced]; rw [isOpen_induced_iff]
+      obtain ⟨u, hu1, hu2⟩ := continuousOn_iff'.mp (a.continuous_trivChange _ he _ he') s hs
+      have hu3 := congr_arg (fun s => (fun x : e'.target => (x : B × F)) ⁻¹' s) hu2
+      simp only [Subtype.coe_preimage_self, preimage_inter, univ_inter] at hu3
+      refine ⟨u inter e'.toPartialEquiv.target inter e'.toPartialEquiv.symm ⁻¹' e.source, ?_, by
+        simp only [preimage_inter, inter_univ, Subtype.coe_preimage_self, hu3.symm]; rfl⟩
+      rw [inter_assoc]
+      exact hu1.inter (a.isOpen_target_of_mem_pretrivializationAtlas_inter e e' he')
+    continuousOn_invFun := a.continuous_symm_of_mem_pretrivializationAtlas he }
 
 Depends on / 依赖: a.continuous_trivChange, a.isOpen_source, a.totalSpaceTopology, congr_arg, continuousOn_iff, continuousOn_toFun, continuous_trivChange, e.source, inter_assoc, inter_self, isOpen_coinduced, isOpen_iSup_iff, isOpen_iSup_iff.mpr, isOpen_induced_iff, isOpen_source, open_source, source, target, totalSpaceTopology
 -/
@@ -2160,7 +2424,7 @@ theorem continuous_totalSpaceMk
   let e := a.trivializationOfMemPretrivializationAtlas (a.pretrivialization_mem_atlas b)
   rw [e.toOpenPartialHomeomorph.continuous_iff_continuous_comp_left
       (a.totalSpaceMk_preimage_source b)]
-  exact continuous_iff_le_induced.2 (a.totalSpaceMk_isInducing b).eq
+  exact continuous_iff_le_induced.2 (a.totalSpaceMk_isInducing b).eq_induced.le
 
 中文:
 定理 continuous_totalSpaceMk
@@ -2170,7 +2434,7 @@ theorem continuous_totalSpaceMk
   let e := a.trivializationOfMemPretrivializationAtlas (a.pretrivialization_mem_atlas b)
   rw [e.toOpenPartialHomeomorph.continuous_iff_continuous_comp_left
       (a.totalSpaceMk_preimage_source b)]
-  exact continuous_iff_le_induced.2 (a.totalSpaceMk_isInducing b).eq
+  exact continuous_iff_le_induced.2 (a.totalSpaceMk_isInducing b).eq_induced.le
 
 Depends on / 依赖: a.pretrivialization_mem_atlas, a.totalSpaceMk_isInducing, a.totalSpaceMk_preimage_source, a.totalSpaceTopology, a.trivializationOfMemPretrivializationAtlas, continuous_iff_continuous_comp_left, continuous_iff_le_induced, e.toOpenPartialHomeomorph.continuous_iff_continuous_comp_left, eq_induced, eq_induced.le, pretrivialization_mem_atlas, toOpenPartialHomeomorph, totalSpaceMk_isInducing, totalSpaceMk_preimage_source, totalSpaceTopology, trivializationOfMemPretrivializationAtlas
 -/
@@ -2193,7 +2457,8 @@ theorem inducing_totalSpaceMk_of_inducing_comp
   rw [← domRestrict_comp_codRestrict (a.mem_pretrivializationAt_source b)] at h
   apply IsInducing.of_codRestrict (a.mem_pretrivializationAt_source b)
   refine h.of_comp ?_ (continuousOn_iff_continuous_domRestrict.mp
-    (a.trivializationOfMemPretrivializationAtlas (
+    (a.trivializationOfMemPretrivializationAtlas (a.pretrivialization_mem_atlas b)).continuousOn)
+  exact (a.continuous_totalSpaceMk b).codRestrict (a.mem_pretrivializationAt_source b)
 
 中文:
 定理 inducing_totalSpaceMk_of_inducing_comp
@@ -2203,7 +2468,8 @@ theorem inducing_totalSpaceMk_of_inducing_comp
   rw [← domRestrict_comp_codRestrict (a.mem_pretrivializationAt_source b)] at h
   apply IsInducing.of_codRestrict (a.mem_pretrivializationAt_source b)
   refine h.of_comp ?_ (continuousOn_iff_continuous_domRestrict.mp
-    (a.trivializationOfMemPretrivializationAtlas (
+    (a.trivializationOfMemPretrivializationAtlas (a.pretrivialization_mem_atlas b)).continuousOn)
+  exact (a.continuous_totalSpaceMk b).codRestrict (a.mem_pretrivializationAt_source b)
 
 Depends on / 依赖: IsInducing, IsInducing.of_codRestrict, a.continuous_totalSpaceMk, a.mem_pretrivializationAt_source, a.pretrivialization_mem_atlas, a.totalSpaceTopology, a.trivializationOfMemPretrivializationAtlas, codRestrict, continuousOn, continuousOn_iff_continuous_domRestrict, continuousOn_iff_continuous_domRestrict.mp, continuous_totalSpaceMk, domRestrict_comp_codRestrict, h.of_comp, mem_pretrivializationAt_source, of_codRestrict, of_comp, pretrivialization_mem_atlas, totalSpaceTopology, trivializationOfMemPretrivializationAtlas
 -/
@@ -2235,7 +2501,11 @@ definition toFiberBundle
       (a.totalSpaceMk_isInducing b)
     trivializationAtlas' :=
       { e | exists (e₀ : _) (he₀ : e₀ in a.pretrivializationAtlas),
-        e = a.trivializationOfMemPretrivializationAtla
+        e = a.trivializationOfMemPretrivializationAtlas he₀ },
+    trivializationAt' := fun x =>
+      a.trivializationOfMemPretrivializationAtlas (a.pretrivialization_mem_atlas x),
+    mem_baseSet_trivializationAt' := a.mem_base_pretrivializationAt
+    trivialization_mem_atlas' := fun x => ⟨_, a.pretrivialization_mem_atlas x, rfl⟩ }
 
 中文:
 定义 toFiberBundle
@@ -2245,7 +2515,11 @@ definition toFiberBundle
       (a.totalSpaceMk_isInducing b)
     trivializationAtlas' :=
       { e | exists (e₀ : _) (he₀ : e₀ in a.pretrivializationAtlas),
-        e = a.trivializationOfMemPretrivializationAtla
+        e = a.trivializationOfMemPretrivializationAtlas he₀ },
+    trivializationAt' := fun x =>
+      a.trivializationOfMemPretrivializationAtlas (a.pretrivialization_mem_atlas x),
+    mem_baseSet_trivializationAt' := a.mem_base_pretrivializationAt
+    trivialization_mem_atlas' := fun x => ⟨_, a.pretrivialization_mem_atlas x, rfl⟩ }
 
 Depends on / 依赖: a.inducing_totalSpaceMk_of_inducing_comp, a.mem_base_pretrivializationAt, a.pretrivializationAtlas, a.pretrivialization_mem_atlas, a.totalSpaceMk_isInducing, a.totalSpaceTopology, a.trivializationOfMemPretrivializationAtlas, inducing_totalSpaceMk_of_inducing_comp, mem_baseSet_trivializationAt, mem_base_pretrivializationAt, pretrivializationAtlas, pretrivialization_mem_atlas, totalSpaceMk_isInducing, totalSpaceTopology, trivializationAt, trivializationAtlas, trivializationOfMemPretrivializationAtlas, trivialization_mem_atlas
 -/
@@ -2305,7 +2579,13 @@ theorem continuousOn_of_comp_right
     a.trivializationOfMemPretrivializationAtlas (a.pretrivialization_mem_atlas z.proj)
   refine (e.continuousAt_of_comp_right ?_
     ((hf z.proj hz).continuousAt (IsOpen.mem_nhds ?_ ?_))).continuousWithinAt
-  · exact
+  · exact a.mem_base_pretrivializationAt z.proj
+  · exact (hs.inter (a.pretrivializationAt z.proj).open_baseSet).prod isOpen_univ
+  refine ⟨?_, mem_univ _⟩
+  rw [e.coe_fst]
+  · exact ⟨hz, a.mem_base_pretrivializationAt z.proj⟩
+  · rw [e.mem_source]
+    exact a.mem_base_pretrivializationAt z.proj
 
 中文:
 定理 continuousOn_of_comp_right
@@ -2317,7 +2597,13 @@ theorem continuousOn_of_comp_right
     a.trivializationOfMemPretrivializationAtlas (a.pretrivialization_mem_atlas z.proj)
   refine (e.continuousAt_of_comp_right ?_
     ((hf z.proj hz).continuousAt (IsOpen.mem_nhds ?_ ?_))).continuousWithinAt
-  · exact
+  · exact a.mem_base_pretrivializationAt z.proj
+  · exact (hs.inter (a.pretrivializationAt z.proj).open_baseSet).prod isOpen_univ
+  refine ⟨?_, mem_univ _⟩
+  rw [e.coe_fst]
+  · exact ⟨hz, a.mem_base_pretrivializationAt z.proj⟩
+  · rw [e.mem_source]
+    exact a.mem_base_pretrivializationAt z.proj
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, Trivialization, a.mem_base_pretrivializationAt, a.pretrivializationAt, a.pretrivialization_mem_atlas, a.totalSpaceTopology, a.trivializationOfMemPretrivializationAtlas, coe_fst, continuousAt, continuousAt_of_comp_right, continuousWithinAt, e.coe_fst, e.continuousAt_of_comp_right, hs.inter, isOpen_univ, mem_base_pretrivializationAt, mem_nhds, mem_univ, open_baseSet
 -/

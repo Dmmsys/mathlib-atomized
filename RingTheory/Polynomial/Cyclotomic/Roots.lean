@@ -52,7 +52,8 @@ theorem isRoot_of_unity_of_root_cyclotomic
   rw [eval_sub]; rw [eval_X_pow]; rw [eval_one] at this
   convert! eq_add_of_sub_eq' this
   convert! (add_zero (M := R) _).symm
-  apply eval_eq_zero_of_dvd_of_e
+  apply eval_eq_zero_of_dvd_of_eval_eq_zero _ h
+  exact Finset.dvd_prod_of_mem _ hi
 
 中文:
 定理 isRoot_of_unity_of_root_cyclotomic
@@ -64,7 +65,8 @@ theorem isRoot_of_unity_of_root_cyclotomic
   rw [eval_sub]; rw [eval_X_pow]; rw [eval_one] at this
   convert! eq_add_of_sub_eq' this
   convert! (add_zero (M := R) _).symm
-  apply eval_eq_zero_of_dvd_of_e
+  apply eval_eq_zero_of_dvd_of_eval_eq_zero _ h
+  exact Finset.dvd_prod_of_mem _ hi
 
 Depends on / 依赖: Finset, Finset.dvd_prod_of_mem, add_zero, congr_arg, convert, dvd_prod_of_mem, eq_add_of_sub_eq, eq_zero_or_pos, eval_X_pow, eval_eq_zero_of_dvd_of_eval_eq_zero, eval_one, eval_sub, n.eq_zero_or_pos, pow_zero, prod_cyclotomic_eq_X_pow_sub_one
 -/
@@ -144,7 +146,26 @@ theorem isRoot_cyclotomic_iff'
   have hμn : μ ^ n = 1 := by
     rw [isRoot_of_unity_iff hnpos _]
     exact ⟨n, n.mem_divisors_self hnpos.ne', hμ⟩
-  by_c
+  by_contra hnμ
+  have ho : 0 < orderOf μ := (isOfFinOrder_iff_pow_eq_one.2 <| ⟨n, hnpos, hμn⟩).orderOf_pos
+  have := pow_orderOf_eq_one μ
+  rw [isRoot_of_unity_iff ho] at this
+  obtain ⟨i, hio, hiμ⟩ := this
+  replace hio := Nat.dvd_of_mem_divisors hio
+  rw [IsPrimitiveRoot.not_iff] at hnμ
+  rw [← orderOf_dvd_iff_pow_eq_one] at hμn
+  have key : i < n := (Nat.le_of_dvd ho hio).trans_lt ((Nat.le_of_dvd hnpos hμn).lt_of_ne hnμ)
+  have key' : i ∣ n := hio.trans hμn
+  rw [← Polynomial.dvd_iff_isRoot] at hμ hiμ
+  have hni : {i, n} subseteq n.divisors := by simpa [Finset.insert_subset_iff, key'] using hnpos.ne'
+  obtain ⟨k, hk⟩ := hiμ
+  obtain ⟨j, hj⟩ := hμ
+  have := prod_cyclotomic_eq_X_pow_sub_one hnpos K
+  rw [← Finset.prod_sdiff hni]; rw [Finset.prod_pair key.ne]; rw [hk]; rw [hj] at this
+  have hn := (X_pow_sub_one_separable_iff.mpr <| NeZero.natCast_ne n K).squarefree
+  rw [← this]; rw [Squarefree] at hn
+  specialize hn (X - C μ) ⟨(∏ x in n.divisors \ {i, n}, cyclotomic x K) * k * j, by ring⟩
+  simp [Polynomial.isUnit_iff_degree_eq_zero] at hn
 
 中文:
 定理 isRoot_cyclotomic_iff'
@@ -156,7 +177,26 @@ theorem isRoot_cyclotomic_iff'
   have hμn : μ ^ n = 1 := by
     rw [isRoot_of_unity_iff hnpos _]
     exact ⟨n, n.mem_divisors_self hnpos.ne', hμ⟩
-  by_c
+  by_contra hnμ
+  have ho : 0 < orderOf μ := (isOfFinOrder_iff_pow_eq_one.2 <| ⟨n, hnpos, hμn⟩).orderOf_pos
+  have := pow_orderOf_eq_one μ
+  rw [isRoot_of_unity_iff ho] at this
+  obtain ⟨i, hio, hiμ⟩ := this
+  replace hio := Nat.dvd_of_mem_divisors hio
+  rw [IsPrimitiveRoot.not_iff] at hnμ
+  rw [← orderOf_dvd_iff_pow_eq_one] at hμn
+  have key : i < n := (Nat.le_of_dvd ho hio).trans_lt ((Nat.le_of_dvd hnpos hμn).lt_of_ne hnμ)
+  have key' : i ∣ n := hio.trans hμn
+  rw [← Polynomial.dvd_iff_isRoot] at hμ hiμ
+  have hni : {i, n} subseteq n.divisors := by simpa [Finset.insert_subset_iff, key'] using hnpos.ne'
+  obtain ⟨k, hk⟩ := hiμ
+  obtain ⟨j, hj⟩ := hμ
+  have := prod_cyclotomic_eq_X_pow_sub_one hnpos K
+  rw [← Finset.prod_sdiff hni]; rw [Finset.prod_pair key.ne]; rw [hk]; rw [hj] at this
+  have hn := (X_pow_sub_one_separable_iff.mpr <| NeZero.natCast_ne n K).squarefree
+  rw [← this]; rw [Squarefree] at hn
+  specialize hn (X - C μ) ⟨(∏ x in n.divisors \ {i, n}, cyclotomic x K) * k * j, by ring⟩
+  simp [Polynomial.isUnit_iff_degree_eq_zero] at hn
 -/
 private theorem isRoot_cyclotomic_iff' {n : Nat} {K : Type*} [Field K] {μ : K} [NeZero (n : K)] :
     IsRoot (cyclotomic n K) μ ↔ IsPrimitiveRoot μ n := by
@@ -230,7 +270,7 @@ theorem roots_cyclotomic_nodup
   rw [mem_roots <| cyclotomic_ne_zero n R]; rw [isRoot_cyclotomic_iff] at hζ
   refine Multiset.nodup_of_le
     (roots.le_of_dvd (X_pow_sub_C_ne_zero (NeZero.pos_of_neZero_natCast R) 1) <|
-   
+      cyclotomic.dvd_X_pow_sub_one n R) hζ.nthRoots_one_nodup
 
 中文:
 定理 roots_cyclotomic_nodup
@@ -242,7 +282,7 @@ theorem roots_cyclotomic_nodup
   rw [mem_roots <| cyclotomic_ne_zero n R]; rw [isRoot_cyclotomic_iff] at hζ
   refine Multiset.nodup_of_le
     (roots.le_of_dvd (X_pow_sub_C_ne_zero (NeZero.pos_of_neZero_natCast R) 1) <|
-   
+      cyclotomic.dvd_X_pow_sub_one n R) hζ.nthRoots_one_nodup
 
 Depends on / 依赖: Multiset, Multiset.nodup_of_le, Multiset.nodup_zero, NeZero, NeZero.pos_of_neZero_natCast, X_pow_sub_C_ne_zero, cyclotomic, cyclotomic.dvd_X_pow_sub_one, cyclotomic_ne_zero, dvd_X_pow_sub_one, empty_or_exists_mem, h.symm, isRoot_cyclotomic_iff, le_of_dvd, mem_roots, nodup_of_le, nodup_zero, nthRoots_one_nodup, pos_of_neZero_natCast, roots.empty_or_exists_mem
 -/
@@ -341,7 +381,17 @@ theorem cyclotomic_injective
     replace hnm := congr_arg natDegree hnm
     rwa [natDegree_one, natDegree_cyclotomic, eq_comm, Nat.totient_eq_zero, eq_comm] at hnm
   · have := NeZero.mk hzero
-    rw [← map_cyclotomic_i
+    rw [← map_cyclotomic_int _ R]; rw [← map_cyclotomic_int _ R] at hnm
+    replace hnm := map_injective (Int.castRingHom R) Int.cast_injective hnm
+    replace hnm := congr_arg (map (Int.castRingHom Complex)) hnm
+    rw [map_cyclotomic_int]; rw [map_cyclotomic_int] at hnm
+    have hprim := Complex.isPrimitiveRoot_exp _ hzero
+    have hroot := isRoot_cyclotomic_iff (R := Complex).2 hprim
+    rw [hnm] at hroot
+    have hmzero : NeZero m := ⟨fun h => by simp [h] at hroot⟩
+    rw [isRoot_cyclotomic_iff (R := Complex)] at hroot
+    replace hprim := hprim.eq_orderOf
+    rwa [← IsPrimitiveRoot.eq_orderOf hroot] at hprim
 
 中文:
 定理 cyclotomic_injective
@@ -355,7 +405,17 @@ theorem cyclotomic_injective
     replace hnm := congr_arg natDegree hnm
     rwa [natDegree_one, natDegree_cyclotomic, eq_comm, Nat.totient_eq_zero, eq_comm] at hnm
   · have := NeZero.mk hzero
-    rw [← map_cyclotomic_i
+    rw [← map_cyclotomic_int _ R]; rw [← map_cyclotomic_int _ R] at hnm
+    replace hnm := map_injective (Int.castRingHom R) Int.cast_injective hnm
+    replace hnm := congr_arg (map (Int.castRingHom Complex)) hnm
+    rw [map_cyclotomic_int]; rw [map_cyclotomic_int] at hnm
+    have hprim := Complex.isPrimitiveRoot_exp _ hzero
+    have hroot := isRoot_cyclotomic_iff (R := Complex).2 hprim
+    rw [hnm] at hroot
+    have hmzero : NeZero m := ⟨fun h => by simp [h] at hroot⟩
+    rw [isRoot_cyclotomic_iff (R := Complex)] at hroot
+    replace hprim := hprim.eq_orderOf
+    rwa [← IsPrimitiveRoot.eq_orderOf hroot] at hprim
 
 Depends on / 依赖: Int.castRingHom, Int.cast_injective, Nat.totient_eq_zero, NeZero, NeZero.mk, castRingHom, cast_injective, congr_arg, cyclotomic_zero, eq_comm, eq_or_ne, map_cyclotomic, map_cyclotomic_int, map_injective, natDegree, natDegree_cyclotomic, natDegree_one, replace, totient_eq_zero
 -/
@@ -555,7 +615,9 @@ theorem cyclotomic.isCoprime_rat
   · exact isCoprime_one_right
   rw [Irreducible.coprime_iff_not_dvd <| cyclotomic.irreducible_rat <| hnzero]
 exact fun hdiv => h cyclotomic_injective
-eq_of_monic_of_associated 
+eq_of_monic_of_associated (cyclotomic.monic n Rat) (cyclotomic.monic m Rat)
+      Irreducible.associated_of_dvd (cyclotomic.irreducible_rat hnzero)
+        (cyclotomic.irreducible_rat hmzero) hdiv
 
 中文:
 定理 cyclotomic.isCoprime_rat
@@ -567,7 +629,9 @@ eq_of_monic_of_associated
   · exact isCoprime_one_right
   rw [Irreducible.coprime_iff_not_dvd <| cyclotomic.irreducible_rat <| hnzero]
 exact fun hdiv => h cyclotomic_injective
-eq_of_monic_of_associated 
+eq_of_monic_of_associated (cyclotomic.monic n Rat) (cyclotomic.monic m Rat)
+      Irreducible.associated_of_dvd (cyclotomic.irreducible_rat hnzero)
+        (cyclotomic.irreducible_rat hmzero) hdiv
 
 Depends on / 依赖: Irreducible, Irreducible.associated_of_dvd, Irreducible.coprime_iff_not_dvd, associated_of_dvd, coprime_iff_not_dvd, cyclotomic, cyclotomic.irreducible_rat, cyclotomic.monic, cyclotomic_injective, eq_of_monic_of_associated, eq_zero_or_pos, hmzero, hnzero, irreducible_rat, isCoprime_one_left, isCoprime_one_right, m.eq_zero_or_pos, n.eq_zero_or_pos
 -/
@@ -606,7 +670,15 @@ lemma sum_eq_zero_iff_forall_eq
   have hP (i : Fin p) : α i = P.coeff i := by simp [P, ← Fin.ext_iff]
   have hP' : P.degree <= ↑(p - 1) :=
     (degree_sum_le ..).trans (Finset.sup_le fun _ _ => by grw [degree_C_mul_X_pow_le]; simp; grind)
-  trans aeval ζ P
+  trans aeval ζ P = 0; · simp [P]
+  rw [← minpoly.dvd_iff]; rw [← cyclotomic_eq_minpoly_rat hζ hp.pos]
+  refine ⟨fun ⟨c, hc⟩ => ?_, fun H => ⟨C (α 0), Polynomial.ext fun i => if h : i < p then ?_ else ?_⟩⟩
+  · rw [hc, degree_mul, degree_cyclotomic, Nat.totient_prime hp] at hP'
+    have : c.degree <= 0 := (WithBot.add_le_add_iff_left (x := ↑(p - 1)) (by simp)).mp (by simpa)
+    obtain ⟨c, rfl⟩ := natDegree_eq_zero.mp (natDegree_eq_zero_iff_degree_le_zero.mpr this)
+    simp [hP, hc, cyclotomic_prime]
+  · lift i to Fin p using h; simp [cyclotomic_prime, ← hP, H i 0]
+  · simp [cyclotomic_prime, P, h, Fin.forall_iff, @forall_comm _ (_ = _), Finset.sum_eq_zero]
 
 中文:
 引理 sum_eq_zero_iff_对任意_eq
@@ -617,7 +689,15 @@ lemma sum_eq_zero_iff_forall_eq
   have hP (i : Fin p) : α i = P.coeff i := by simp [P, ← Fin.ext_iff]
   have hP' : P.degree <= ↑(p - 1) :=
     (degree_sum_le ..).trans (Finset.sup_le fun _ _ => by grw [degree_C_mul_X_pow_le]; simp; grind)
-  trans aeval ζ P
+  trans aeval ζ P = 0; · simp [P]
+  rw [← minpoly.dvd_iff]; rw [← cyclotomic_eq_minpoly_rat hζ hp.pos]
+  refine ⟨fun ⟨c, hc⟩ => ?_, fun H => ⟨C (α 0), Polynomial.ext fun i => if h : i < p then ?_ else ?_⟩⟩
+  · rw [hc, degree_mul, degree_cyclotomic, Nat.totient_prime hp] at hP'
+    have : c.degree <= 0 := (WithBot.add_le_add_iff_left (x := ↑(p - 1)) (by simp)).mp (by simpa)
+    obtain ⟨c, rfl⟩ := natDegree_eq_zero.mp (natDegree_eq_zero_iff_degree_le_zero.mpr this)
+    simp [hP, hc, cyclotomic_prime]
+  · lift i to Fin p using h; simp [cyclotomic_prime, ← hP, H i 0]
+  · simp [cyclotomic_prime, P, h, Fin.forall_iff, @forall_comm _ (_ = _), Finset.sum_eq_zero]
 
 Depends on / 依赖: Fin.ext_iff, Finset, Finset.sup_le, P.coeff, P.degree, Polynomial, Polynomial.ext, cyclotomic_eq_minpoly_rat, degree, degree_, degree_C_mul_X_pow_le, degree_mul, degree_sum_le, dvd_iff, ext_iff, hp.pos, minpoly, minpoly.dvd_iff, p.Prime, sup_le
 -/

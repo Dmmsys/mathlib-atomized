@@ -384,7 +384,9 @@ theorem condDistrib_ae_eq_of_measure_eq_compProd_of_measurable
     exacts [rfl, Measurable.prod hX hY, measurable_fst hs]
   rw [heq]; rw [condDistrib]
   symm
-  refine eq_condKernel_of_measure_eq_compP
+  refine eq_condKernel_of_measure_eq_compProd _ ?_
+  convert! hκ
+  exact heq.symm
 
 中文:
 定理 condDistrib_ae_eq_of_measure_eq_compProd_of_measurable
@@ -395,7 +397,9 @@ theorem condDistrib_ae_eq_of_measure_eq_compProd_of_measurable
     exacts [rfl, Measurable.prod hX hY, measurable_fst hs]
   rw [heq]; rw [condDistrib]
   symm
-  refine eq_condKernel_of_measure_eq_compP
+  refine eq_condKernel_of_measure_eq_compProd _ ?_
+  convert! hκ
+  exact heq.symm
 
 Depends on / 依赖: Measurable, Measurable.prod, Measure, Measure.fst_apply, Measure.map_apply, condDistrib, convert, eq_condKernel_of_measure_eq_compProd, exacts, fst_apply, heq.symm, map_apply, measurable_fst
 -/
@@ -423,7 +427,11 @@ lemma condDistrib_ae_eq_of_measure_eq_compProd
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
   suffices condDistrib (hY.mk Y) (hX.mk X) μ =ᵐ[μ.map (hX.mk X)] κ by
     rwa [Measure.map_congr hX.ae_eq_mk, condDistrib_congr hY.ae_eq_mk hX.ae_eq_mk]
-  refine condDistrib_ae_eq_of_measure_
+  refine condDistrib_ae_eq_of_measure_eq_compProd_of_measurable (μ := μ)
+    hX.measurable_mk hY.measurable_mk ((Eq.trans ?_ hκ).trans ?_)
+  · refine Measure.map_congr ?_
+    filter_upwards [hX.ae_eq_mk, hY.ae_eq_mk] with a haX haY using by rw [haX, haY]
+  · rw [Measure.map_congr hX.ae_eq_mk]
 
 中文:
 引理 condDistrib_ae_eq_of_measure_eq_compProd
@@ -432,7 +440,11 @@ lemma condDistrib_ae_eq_of_measure_eq_compProd
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
   suffices condDistrib (hY.mk Y) (hX.mk X) μ =ᵐ[μ.map (hX.mk X)] κ by
     rwa [Measure.map_congr hX.ae_eq_mk, condDistrib_congr hY.ae_eq_mk hX.ae_eq_mk]
-  refine condDistrib_ae_eq_of_measure_
+  refine condDistrib_ae_eq_of_measure_eq_compProd_of_measurable (μ := μ)
+    hX.measurable_mk hY.measurable_mk ((Eq.trans ?_ hκ).trans ?_)
+  · refine Measure.map_congr ?_
+    filter_upwards [hX.ae_eq_mk, hY.ae_eq_mk] with a haX haY using by rw [haX, haY]
+  · rw [Measure.map_congr hX.ae_eq_mk]
 
 Depends on / 依赖: AEMeasurable, Eq.trans, EventuallyEq, Filter, Filter.EventuallyEq, Measure, Measure.map_congr, Measure.map_of_not_aemeasurable, ae_eq_mk, condDistrib, condDistrib_ae_eq_of_measure_eq_compProd_of_measurable, condDistrib_congr, filter_upwards, hX.ae_eq_mk, hX.measurable_mk, hX.mk, hY.ae_eq_mk, hY.measurable_mk, hY.mk, map_congr
 -/
@@ -485,7 +497,10 @@ lemma condDistrib_comp
   refine condDistrib_ae_eq_of_measure_eq_compProd X (by fun_prop) ?_
   calc μ.map (fun x => (X x, (f ∘ Y) x))
   _ = (μ.map (fun x => (X x, Y x))).map (Prod.map id f) := by
-    rw [AEMeasurabl
+    rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]
+    simp [Function.comp_def]
+  _ = (μ.map X otimesₘ condDistrib Y X μ).map (Prod.map id f) := by rw [compProd_map_condDistrib hY]
+  _ = μ.map X otimesₘ (condDistrib Y X μ).map f := by rw [Measure.compProd_map hf]
 
 中文:
 引理 condDistrib_comp
@@ -496,7 +511,10 @@ lemma condDistrib_comp
   refine condDistrib_ae_eq_of_measure_eq_compProd X (by fun_prop) ?_
   calc μ.map (fun x => (X x, (f ∘ Y) x))
   _ = (μ.map (fun x => (X x, Y x))).map (Prod.map id f) := by
-    rw [AEMeasurabl
+    rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]
+    simp [Function.comp_def]
+  _ = (μ.map X otimesₘ condDistrib Y X μ).map (Prod.map id f) := by rw [compProd_map_condDistrib hY]
+  _ = μ.map X otimesₘ (condDistrib Y X μ).map f := by rw [Measure.compProd_map hf]
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, EventuallyEq, Filter, Filter.EventuallyEq, Function, Function.comp_def, Measure, Measure.map_of_not_aemeasurable, Prod.map, compProd_map_condDistrib, comp_def, condDistrib, condDistrib_ae_eq_of_measure_eq_compProd, fun_prop, map_map_of_aemeasurable, map_of_not_aemeasurable
 -/
@@ -524,7 +542,7 @@ lemma condDistrib_comp_self
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
   refine condDistrib_ae_eq_of_measure_eq_compProd X (by fun_prop) ?_
   rw [Measure.compProd_deterministic]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX]
-  simp [Function.comp_de
+  simp [Function.comp_def]
 
 中文:
 引理 condDistrib_comp_self
@@ -534,7 +552,7 @@ lemma condDistrib_comp_self
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
   refine condDistrib_ae_eq_of_measure_eq_compProd X (by fun_prop) ?_
   rw [Measure.compProd_deterministic]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hX]
-  simp [Function.comp_de
+  simp [Function.comp_def]
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, EventuallyEq, Filter, Filter.EventuallyEq, Function, Function.comp_def, Measure, Measure.compProd_deterministic, Measure.map_of_not_aemeasurable, compProd_deterministic, comp_def, condDistrib_ae_eq_of_measure_eq_compProd, fun_prop, map_map_of_aemeasurable, map_of_not_aemeasurable
 -/
@@ -609,7 +627,7 @@ lemma condDistrib_map
   rw [← AEMeasurable.map_map_of_aemeasurable hX hf]
   refine condDistrib_ae_eq_of_measure_eq_compProd (μ := ν.map f) X hY ?_
   rw [AEMeasurable.map_map_of_aemeasurable hX hf]; rw [compProd_map_condDistrib (by fun_prop)]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hf]
-  simp [Function.
+  simp [Function.comp_def]
 
 中文:
 引理 condDistrib_map
@@ -618,7 +636,7 @@ lemma condDistrib_map
   rw [← AEMeasurable.map_map_of_aemeasurable hX hf]
   refine condDistrib_ae_eq_of_measure_eq_compProd (μ := ν.map f) X hY ?_
   rw [AEMeasurable.map_map_of_aemeasurable hX hf]; rw [compProd_map_condDistrib (by fun_prop)]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) hf]
-  simp [Function.
+  simp [Function.comp_def]
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, Function, Function.comp_def, compProd_map_condDistrib, comp_def, condDistrib_ae_eq_of_measure_eq_compProd, fun_prop, map_map_of_aemeasurable
 -/
@@ -643,6 +661,9 @@ lemma condDistrib_fst_prod
   have h_map := condDistrib_map (X := X) (Y := Y) (f := Prod.fst (α := α) (β := γ))
       (ν := μ.prod ν) (mα := inferInstance) (mβ := inferInstance)
       (by simpa) (by simpa) (by fun_prop)
+  rw [← AEMeasurable.map_map_of_aemeasurable (by simpa) (by fun_prop)] at h_map
+  simp only [Measure.map_fst_prod, measure_univ, one_smul] at h_map
+  exact h_map.symm
 
 中文:
 引理 condDistrib_fst_prod
@@ -653,6 +674,9 @@ lemma condDistrib_fst_prod
   have h_map := condDistrib_map (X := X) (Y := Y) (f := Prod.fst (α := α) (β := γ))
       (ν := μ.prod ν) (mα := inferInstance) (mβ := inferInstance)
       (by simpa) (by simpa) (by fun_prop)
+  rw [← AEMeasurable.map_map_of_aemeasurable (by simpa) (by fun_prop)] at h_map
+  simp only [Measure.map_fst_prod, measure_univ, one_smul] at h_map
+  exact h_map.symm
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, EventuallyEq, Filter, Filter.EventuallyEq, Measure, Measure.map_fst_prod, Measure.map_of_not_aemeasurable, Prod.fst, condDistrib_map, fun_prop, h_map, h_map.symm, map_fst_prod, map_map_of_aemeasurable, map_of_not_aemeasurable, measure_univ, one_smul
 -/
@@ -680,6 +704,9 @@ lemma condDistrib_snd_prod
   have h_map := condDistrib_map (X := X) (Y := Y) (f := Prod.snd (β := α) (α := γ))
       (ν := ν.prod μ) (mα := inferInstance) (mβ := inferInstance)
       (by simpa) (by simpa) (by fun_prop)
+  rw [← AEMeasurable.map_map_of_aemeasurable (by simpa) (by fun_prop)] at h_map
+  simp only [Measure.map_snd_prod, measure_univ, one_smul] at h_map
+  exact h_map.symm
 
 中文:
 引理 condDistrib_snd_prod
@@ -690,6 +717,9 @@ lemma condDistrib_snd_prod
   have h_map := condDistrib_map (X := X) (Y := Y) (f := Prod.snd (β := α) (α := γ))
       (ν := ν.prod μ) (mα := inferInstance) (mβ := inferInstance)
       (by simpa) (by simpa) (by fun_prop)
+  rw [← AEMeasurable.map_map_of_aemeasurable (by simpa) (by fun_prop)] at h_map
+  simp only [Measure.map_snd_prod, measure_univ, one_smul] at h_map
+  exact h_map.symm
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.map_map_of_aemeasurable, EventuallyEq, Filter, Filter.EventuallyEq, Measure, Measure.map_of_not_aemeasurable, Measure.map_snd_prod, Prod.snd, condDistrib_map, fun_prop, h_map, h_map.symm, map_map_of_aemeasurable, map_of_not_aemeasurable, map_snd_prod, measure_univ, one_smul
 -/
@@ -720,7 +750,7 @@ theorem integrable_toReal_condDistrib
     calc
       ∫⁻ a, condDistrib Y X μ (X a) s ∂μ <= ∫⁻ _, 1 ∂μ := lintegral_mono fun a => prob_le_one
       _ = μ univ := lintegral_one
-      _ < ∞ :
+      _ < ∞ := measure_lt_top _ _
 
 中文:
 定理 integrable_to实数_condDistrib
@@ -732,7 +762,7 @@ theorem integrable_toReal_condDistrib
     calc
       ∫⁻ a, condDistrib Y X μ (X a) s ∂μ <= ∫⁻ _, 1 ∂μ := lintegral_mono fun a => prob_le_one
       _ = μ univ := lintegral_one
-      _ < ∞ :
+      _ < ∞ := measure_lt_top _ _
 
 Depends on / 依赖: Kernel, Kernel.measurable_coe, Measurable, Measurable.comp_aemeasurable, comp_aemeasurable, condDistrib, integrable_toReal_of_lintegral_ne_top, lintegral_mono, lintegral_one, measurable_coe, measure_lt_top, ne_of_lt, prob_le_one
 -/
@@ -918,13 +948,13 @@ English:
 theorem setLIntegral_preimage_condDistrib
   statement: (hX : Measurable X) (hY : AEMeasurable Y μ)
   proof: by
-  rw [← lintegral_map (Kernel.measurable_coe _ hs) hX]; rw [condDistrib]; rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.setLIntegral_condKernel_eq_measure_prod ht hs]; rw [Measure.map_apply_of_aemeasurable (hX.aemeasurable.prodMk hY) (ht.prod hs)]; rw [mk_preim
+  rw [← lintegral_map (Kernel.measurable_coe _ hs) hX]; rw [condDistrib]; rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.setLIntegral_condKernel_eq_measure_prod ht hs]; rw [Measure.map_apply_of_aemeasurable (hX.aemeasurable.prodMk hY) (ht.prod hs)]; rw [mk_preimage_prod]
 
 中文:
 定理 setL整数egral_preimage_condDistrib
   结论: (hX : 可测 X) (hY : 几乎处处可测 Y μ)
   证明: by
-  rw [← lintegral_map (Kernel.measurable_coe _ hs) hX]; rw [condDistrib]; rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.setLIntegral_condKernel_eq_measure_prod ht hs]; rw [Measure.map_apply_of_aemeasurable (hX.aemeasurable.prodMk hY) (ht.prod hs)]; rw [mk_preim
+  rw [← lintegral_map (Kernel.measurable_coe _ hs) hX]; rw [condDistrib]; rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.setLIntegral_condKernel_eq_measure_prod ht hs]; rw [Measure.map_apply_of_aemeasurable (hX.aemeasurable.prodMk hY) (ht.prod hs)]; rw [mk_preimage_prod]
 
 Depends on / 依赖: Kernel, Kernel.measurable_coe, Measure, Measure.fst_map_prodMk, Measure.map_apply_of_aemeasurable, Measure.restrict_map, Measure.setLIntegral_condKernel_eq_measure_prod, aemeasurable, condDistrib, hX.aemeasurable.prodMk, ht.prod, lintegral_map, map_apply_of_aemeasurable, measurable_coe, mk_preimage_prod, prodMk, restrict_map, setLIntegral_condKernel_eq_measure_prod
 -/
@@ -970,7 +1000,9 @@ theorem condDistrib_ae_eq_condExp
   · exact fun t _ _ => (integrable_toReal_condDistrib hX.aemeasurable hs).integrableOn
   · intro t ht _
     simp_rw [measureReal_def]
-    rw [integral_toReal ((measurable_condD
+    rw [integral_toReal ((measurable_condDistrib hs).mono hX.comap_le le_rfl).aemeasurable
+      (Eventually.of_forall fun ω => measure_lt_top (condDistrib Y X μ (X ω)) _)]; rw [integral_indicator_const _ (hY hs)]; rw [measureReal_restrict_apply (hY hs)]; rw [smul_eq_mul]; rw [mul_one]; rw [inter_comm]; rw [setLIntegral_condDistrib_of_measurableSet hX hY.aemeasurable hs ht]; rw [measureReal_def]
+  · exact (measurable_condDistrib hs).ennreal_toReal.aestronglyMeasurable
 
 中文:
 定理 condDistrib_ae_eq_condExp
@@ -981,7 +1013,9 @@ theorem condDistrib_ae_eq_condExp
   · exact fun t _ _ => (integrable_toReal_condDistrib hX.aemeasurable hs).integrableOn
   · intro t ht _
     simp_rw [measureReal_def]
-    rw [integral_toReal ((measurable_condD
+    rw [integral_toReal ((measurable_condDistrib hs).mono hX.comap_le le_rfl).aemeasurable
+      (Eventually.of_forall fun ω => measure_lt_top (condDistrib Y X μ (X ω)) _)]; rw [integral_indicator_const _ (hY hs)]; rw [measureReal_restrict_apply (hY hs)]; rw [smul_eq_mul]; rw [mul_one]; rw [inter_comm]; rw [setLIntegral_condDistrib_of_measurableSet hX hY.aemeasurable hs ht]; rw [measureReal_def]
+  · exact (measurable_condDistrib hs).ennreal_toReal.aestronglyMeasurable
 
 Depends on / 依赖: Eventually, Eventually.of_forall, ae_eq_condExp_of_forall_setIntegral_eq, aemeasurable, comap_le, condDistrib, hX.aemeasurable, hX.comap_le, indicator, integrableOn, integrable_const, integrable_toReal_condDistrib, integral_indicator_const, integral_toReal, le_rfl, measurable_condDistrib, measureReal_def, measureReal_restrict_apply, measure_lt_top, of_forall
 -/
@@ -1006,7 +1040,17 @@ theorem condExp_prod_ae_eq_integral_condDistrib'
   have hf_int' : Integrable (fun a => f (X a, Y a)) μ :=
     (integrable_map_measure hf_int.1 (hX.aemeasurable.prodMk hY)).mp hf_int
   refine (ae_eq_condExp_of_forall_setIntegral_eq hX.comap_le hf_int' (fun s _ _ => ?_) ?_ ?_).symm
-  · exact (hf_int.integral_condDistrib hX.aemeasurable hY).integr
+  · exact (hf_int.integral_condDistrib hX.aemeasurable hY).integrableOn
+  · rintro s ⟨t, ht, rfl⟩ _
+    change ∫ a in X ⁻¹' t, ((fun x' => ∫ y, f (x', y) ∂(condDistrib Y X μ) x') ∘ X) a ∂μ =
+      ∫ a in X ⁻¹' t, f (X a, Y a) ∂μ
+    simp only [Function.comp_apply]
+    rw [← integral_map hX.aemeasurable (f := fun x' => ∫ y]; rw [f (x']; rw [y) ∂(condDistrib Y X μ) x')]
+    swap
+    · rw [← Measure.restrict_map hX ht]
+      exact (hf_int.1.integral_condDistrib_map hY).restrict
+    rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [condDistrib]; rw [Measure.setIntegral_condKernel_univ_right ht hf_int.integrableOn]; rw [setIntegral_map (ht.prod MeasurableSet.univ) hf_int.1 (hX.aemeasurable.prodMk hY)]; rw [mk_preimage_prod]; rw [preimage_univ]; rw [inter_univ]
+  · exact aestronglyMeasurable_integral_condDistrib hX.aemeasurable hY hf_int.1
 
 中文:
 定理 condExp_prod_ae_eq_integral_condDistrib'
@@ -1015,7 +1059,17 @@ theorem condExp_prod_ae_eq_integral_condDistrib'
   have hf_int' : Integrable (fun a => f (X a, Y a)) μ :=
     (integrable_map_measure hf_int.1 (hX.aemeasurable.prodMk hY)).mp hf_int
   refine (ae_eq_condExp_of_forall_setIntegral_eq hX.comap_le hf_int' (fun s _ _ => ?_) ?_ ?_).symm
-  · exact (hf_int.integral_condDistrib hX.aemeasurable hY).integr
+  · exact (hf_int.integral_condDistrib hX.aemeasurable hY).integrableOn
+  · rintro s ⟨t, ht, rfl⟩ _
+    change ∫ a in X ⁻¹' t, ((fun x' => ∫ y, f (x', y) ∂(condDistrib Y X μ) x') ∘ X) a ∂μ =
+      ∫ a in X ⁻¹' t, f (X a, Y a) ∂μ
+    simp only [Function.comp_apply]
+    rw [← integral_map hX.aemeasurable (f := fun x' => ∫ y]; rw [f (x']; rw [y) ∂(condDistrib Y X μ) x')]
+    swap
+    · rw [← Measure.restrict_map hX ht]
+      exact (hf_int.1.integral_condDistrib_map hY).restrict
+    rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [condDistrib]; rw [Measure.setIntegral_condKernel_univ_right ht hf_int.integrableOn]; rw [setIntegral_map (ht.prod MeasurableSet.univ) hf_int.1 (hX.aemeasurable.prodMk hY)]; rw [mk_preimage_prod]; rw [preimage_univ]; rw [inter_univ]
+  · exact aestronglyMeasurable_integral_condDistrib hX.aemeasurable hY hf_int.1
 
 Depends on / 依赖: Function, Function.comp_apply, Integrable, ae_eq_condExp_of_forall_setIntegral_eq, aemeasurable, comap_le, comp_apply, condDistrib, hX.aeme, hX.aemeasurable, hX.aemeasurable.prodMk, hX.comap_le, hf_int, hf_int.integral_condDistrib, integrableOn, integrable_map_measure, integral_condDistrib, integral_map, prodMk
 -/
@@ -1148,7 +1202,17 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prodMk
   refine ⟨fun x => hf.mk f x.2, hf.stronglyMeasurable_mk.comp_measurable measurable_snd, ?_⟩
   suffices h : Measure.QuasiMeasurePreserving Prod.snd (μ.map fun ω => (X ω, ω)) μ from
     Measure.QuasiMeasurePreserving.ae_eq h hf.ae_eq_mk
-  refine ⟨measurable_snd, Measure.AbsolutelyContinuous.mk fun
+  refine ⟨measurable_snd, Measure.AbsolutelyContinuous.mk fun s hs hμs => ?_⟩
+  rw [Measure.map_apply measurable_snd hs]
+  by_cases hX : AEMeasurable X μ
+  · rw [Measure.map_apply_of_aemeasurable]
+    · rw [← univ_prod, mk_preimage_prod, preimage_univ, univ_inter, preimage_id']
+      exact hμs
+    · exact hX.prodMk aemeasurable_id
+    · exact measurable_snd hs
+  · rw [Measure.map_of_not_aemeasurable]
+    · simp
+    · contrapose hX; exact measurable_fst.comp_aemeasurable hX
 
 中文:
 定理 _root_.测度论.AEStronglyMeasurable.comp_snd_map_prodMk
@@ -1157,7 +1221,17 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prodMk
   refine ⟨fun x => hf.mk f x.2, hf.stronglyMeasurable_mk.comp_measurable measurable_snd, ?_⟩
   suffices h : Measure.QuasiMeasurePreserving Prod.snd (μ.map fun ω => (X ω, ω)) μ from
     Measure.QuasiMeasurePreserving.ae_eq h hf.ae_eq_mk
-  refine ⟨measurable_snd, Measure.AbsolutelyContinuous.mk fun
+  refine ⟨measurable_snd, Measure.AbsolutelyContinuous.mk fun s hs hμs => ?_⟩
+  rw [Measure.map_apply measurable_snd hs]
+  by_cases hX : AEMeasurable X μ
+  · rw [Measure.map_apply_of_aemeasurable]
+    · rw [← univ_prod, mk_preimage_prod, preimage_univ, univ_inter, preimage_id']
+      exact hμs
+    · exact hX.prodMk aemeasurable_id
+    · exact measurable_snd hs
+  · rw [Measure.map_of_not_aemeasurable]
+    · simp
+    · contrapose hX; exact measurable_fst.comp_aemeasurable hX
 
 Depends on / 依赖: AEMeasurable, AbsolutelyContinuous, Measure, Measure.AbsolutelyContinuous.mk, Measure.QuasiMeasurePreserving, Measure.QuasiMeasurePreserving.ae_eq, Measure.map_apply, Measure.map_apply_of_aemeasurable, Prod.snd, QuasiMeasurePreserving, ae_eq, ae_eq_mk, comp_measurable, hf.ae_eq_mk, hf.mk, hf.stronglyMeasurable_mk.comp_measurable, map_apply, map_apply_of_aemeasurable, measurable_snd, mk_preimage_prod
 -/
@@ -1192,7 +1266,7 @@ theorem _root_.MeasureTheory.Integrable.comp_snd_map_prodMk
     exact hf_int.2
   · rw [Measure.map_of_not_aemeasurable]
     · simp
-    · cont
+    · contrapose hX; exact measurable_fst.comp_aemeasurable hX
 
 中文:
 定理 _root_.测度论.可积.comp_snd_map_prodMk
@@ -1204,7 +1278,7 @@ theorem _root_.MeasureTheory.Integrable.comp_snd_map_prodMk
     exact hf_int.2
   · rw [Measure.map_of_not_aemeasurable]
     · simp
-    · cont
+    · contrapose hX; exact measurable_fst.comp_aemeasurable hX
 
 Depends on / 依赖: AEMeasurable, Measure, Measure.map_of_not_aemeasurable, aemeasurable_id, comp_aemeasurable, comp_snd_map_prodMk, contrapose, hX.prodMk, hasFiniteIntegral_iff_enorm, hf.enorm, hf_int, lintegral_map, map_of_not_aemeasurable, measurable_fst, measurable_fst.comp_aemeasurable, prodMk
 -/

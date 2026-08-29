@@ -332,7 +332,7 @@ definition partialSups.gi
     convert! partialSups_mono h
     exact OrderHom.ext _ _ g.monotone.partialSups_eq.symm
   le_l_u f := le_partialSups f
-  choice_eq f h := OrderHo
+  choice_eq f h := OrderHom.ext _ _ ((le_partialSups f).antisymm h)
 
 中文:
 定义 partialSups.gi
@@ -343,7 +343,7 @@ definition partialSups.gi
     convert! partialSups_mono h
     exact OrderHom.ext _ _ g.monotone.partialSups_eq.symm
   le_l_u f := le_partialSups f
-  choice_eq f h := OrderHo
+  choice_eq f h := OrderHom.ext _ _ ((le_partialSups f).antisymm h)
 
 Depends on / 依赖: OrderHom, OrderHom.ext, antisymm, choice_eq, convert, g.monotone.partialSups_eq.symm, le_l_u, le_partialSups, monotone, partialSups, partialSups_eq, partialSups_mono
 -/
@@ -434,7 +434,9 @@ theorem partialSups_succ
   simp only [mem_Iic, mem_union, mem_singleton]
   constructor
   · exact fun h => (Order.le_succ_iff_eq_or_le.mp h).symm
+  · exact fun h => h.elim (le_trans · <| Order.le_succ _) le_of_eq
 
+@[simp]
 
 中文:
 定理 partialSups_succ
@@ -446,7 +448,9 @@ theorem partialSups_succ
   simp only [mem_Iic, mem_union, mem_singleton]
   constructor
   · exact fun h => (Order.le_succ_iff_eq_or_le.mp h).symm
+  · exact fun h => h.elim (le_trans · <| Order.le_succ _) le_of_eq
 
+@[simp]
 
 Depends on / 依赖: Order.le_succ, Order.le_succ_iff_eq_or_le.mp, Order.succ, _singleton, _union, h.elim, le_of_eq, le_succ, le_succ_iff_eq_or_le, le_trans, mem_Iic, mem_singleton, mem_singleton_self, mem_union, nonempty_Iic, partialSups_apply
 -/
@@ -911,7 +915,7 @@ theorem exists_partialSups_eq
   use j, hj_mem
   apply le_antisymm
   · exact partialSups_le _ _ _ fun k hk => hj_le k hk
-  ·
+  · exact le_partialSups_of_le f hj_mem
 
 中文:
 定理 存在_partialSups_eq
@@ -923,7 +927,7 @@ theorem exists_partialSups_eq
   use j, hj_mem
   apply le_antisymm
   · exact partialSups_le _ _ _ fun k hk => hj_le k hk
-  ·
+  · exact le_partialSups_of_le f hj_mem
 
 Depends on / 依赖: Finset, Finset.Iic, Finset.exists_max_image, Finset.mem_Iic, Finset.mem_Iic.mpr, exists_max_image, hj_le, hj_mem, le_antisymm, le_partialSups_of_le, le_rfl, mem_Iic, partialSups_le
 -/

@@ -64,14 +64,14 @@ theorem norm_sub_sq_eq_norm_sq_add_norm_sq_sub_two_mul_norm_mul_norm_mul_cos_ang
   given: (x y : V)
   proof: by
   rw [show 2 * ‖x‖ * ‖y‖ * Real.cos (angle x y) = 2 * (Real.cos (angle x y) * (‖x‖ * ‖y‖)) by ring]; rw [cos_angle_mul_norm_mul_norm]; rw [← real_inner_self_eq_norm_mul_norm]; rw [←
-    real_inner_self_eq_norm_mul_norm]; rw [← real_inner_self_eq_norm_mul_norm]; rw [real_inner_sub_sub_self]; rw [s
+    real_inner_self_eq_norm_mul_norm]; rw [← real_inner_self_eq_norm_mul_norm]; rw [real_inner_sub_sub_self]; rw [sub_add_eq_add_sub]
 
 中文:
 定理 norm_sub_sq_eq_norm_sq_add_norm_sq_sub_two_mul_norm_mul_norm_mul_cos_angle
   条件: (x y : V)
   证明: by
   rw [show 2 * ‖x‖ * ‖y‖ * Real.cos (angle x y) = 2 * (Real.cos (angle x y) * (‖x‖ * ‖y‖)) by ring]; rw [cos_angle_mul_norm_mul_norm]; rw [← real_inner_self_eq_norm_mul_norm]; rw [←
-    real_inner_self_eq_norm_mul_norm]; rw [← real_inner_self_eq_norm_mul_norm]; rw [real_inner_sub_sub_self]; rw [s
+    real_inner_self_eq_norm_mul_norm]; rw [← real_inner_self_eq_norm_mul_norm]; rw [real_inner_sub_sub_self]; rw [sub_add_eq_add_sub]
 
 Depends on / 依赖: Real.cos, cos_angle_mul_norm_mul_norm, real_inner_self_eq_norm_mul_norm, real_inner_sub_sub_self, sub_add_eq_add_sub
 -/
@@ -94,7 +94,13 @@ theorem sin_angle_mul_norm_eq_sin_angle_mul_norm
   obtain rfl | hxy := eq_or_ne x y
   · simp [angle_self hx]
   have h_sin (x y : V) (hx : x != 0) (hy : y != 0) :
-      Real.sin (angle x y) = √(⟪x, x⟫ * ⟪y, y⟫ - ⟪x, y⟫ * ⟪x, y⟫)
+      Real.sin (angle x y) = √(⟪x, x⟫ * ⟪y, y⟫ - ⟪x, y⟫ * ⟪x, y⟫) / (‖x‖ * ‖y‖) := by
+    simp [field, mul_assoc, sin_angle_mul_norm_mul_norm]
+  rw [h_sin x y hx hy]; rw [h_sin y (x - y) hy (sub_ne_zero_of_ne hxy)]
+  simp only [inner_sub_left, inner_sub_right, real_inner_comm x y]
+  have hsub : x - y != 0 := sub_ne_zero_of_ne hxy
+  field_simp
+  ring_nf
 
 中文:
 定理 sin_angle_mul_norm_eq_sin_angle_mul_norm
@@ -107,7 +113,13 @@ theorem sin_angle_mul_norm_eq_sin_angle_mul_norm
   obtain rfl | hxy := eq_or_ne x y
   · simp [angle_self hx]
   have h_sin (x y : V) (hx : x != 0) (hy : y != 0) :
-      Real.sin (angle x y) = √(⟪x, x⟫ * ⟪y, y⟫ - ⟪x, y⟫ * ⟪x, y⟫)
+      Real.sin (angle x y) = √(⟪x, x⟫ * ⟪y, y⟫ - ⟪x, y⟫ * ⟪x, y⟫) / (‖x‖ * ‖y‖) := by
+    simp [field, mul_assoc, sin_angle_mul_norm_mul_norm]
+  rw [h_sin x y hx hy]; rw [h_sin y (x - y) hy (sub_ne_zero_of_ne hxy)]
+  simp only [inner_sub_left, inner_sub_right, real_inner_comm x y]
+  have hsub : x - y != 0 := sub_ne_zero_of_ne hxy
+  field_simp
+  ring_nf
 
 Depends on / 依赖: Real.sin, angle_neg_right, angle_self, eq_or_ne, h_sin, inner_sub_left, inner_sub_right, mul_assoc, real_inner_comm, sin_angle_mul_norm_mul_norm, sub_ne_zero_of_ne
 -/
@@ -157,14 +169,14 @@ theorem angle_sub_eq_angle_sub_rev_of_norm_eq
   given: {x y : V} (h : ‖x‖ = ‖y‖)
   proof: by
   refine Real.injOn_cos ⟨angle_nonneg _ _, angle_le_pi _ _⟩ ⟨angle_nonneg _ _, angle_le_pi _ _⟩ ?_
-  rw [cos_angle]; rw [cos_angle]; rw [h]; rw [← neg_sub]; rw [norm_neg]; rw [neg_sub]; rw [inner_sub_right]; rw [inner_sub_right]; rw [real_inner_self_eq_norm_mul_norm]; rw [real_inner_self_eq_norm_
+  rw [cos_angle]; rw [cos_angle]; rw [h]; rw [← neg_sub]; rw [norm_neg]; rw [neg_sub]; rw [inner_sub_right]; rw [inner_sub_right]; rw [real_inner_self_eq_norm_mul_norm]; rw [real_inner_self_eq_norm_mul_norm]; rw [h]; rw [real_inner_comm x y]
 
 中文:
 定理 angle_sub_eq_angle_sub_rev_of_norm_eq
   条件: {x y : V} (h : ‖x‖ = ‖y‖)
   证明: by
   refine Real.injOn_cos ⟨angle_nonneg _ _, angle_le_pi _ _⟩ ⟨angle_nonneg _ _, angle_le_pi _ _⟩ ?_
-  rw [cos_angle]; rw [cos_angle]; rw [h]; rw [← neg_sub]; rw [norm_neg]; rw [neg_sub]; rw [inner_sub_right]; rw [inner_sub_right]; rw [real_inner_self_eq_norm_mul_norm]; rw [real_inner_self_eq_norm_
+  rw [cos_angle]; rw [cos_angle]; rw [h]; rw [← neg_sub]; rw [norm_neg]; rw [neg_sub]; rw [inner_sub_right]; rw [inner_sub_right]; rw [real_inner_self_eq_norm_mul_norm]; rw [real_inner_self_eq_norm_mul_norm]; rw [h]; rw [real_inner_comm x y]
 
 Depends on / 依赖: Real.injOn_cos, angle_le_pi, angle_nonneg, cos_angle, injOn_cos, inner_sub_right, neg_sub, norm_neg, real_inner_comm, real_inner_self_eq_norm_mul_norm
 -/
@@ -185,7 +197,23 @@ theorem norm_eq_of_angle_sub_eq_angle_sub_rev_of_angle_ne_pi
   by_cases hxy : x = y
   · rw [hxy]
   · rw [← norm_neg (y - x), neg_sub, mul_comm, mul_comm ‖y‖, div_eq_mul_inv, div_eq_mul_inv,
- 
+      mul_inv_rev, mul_inv_rev, ← mul_assoc, ← mul_assoc] at h
+    replace h :=
+      mul_right_cancel₀ (inv_ne_zero fun hz => hxy (eq_of_sub_eq_zero (norm_eq_zero.1 hz))) h
+    rw [inner_sub_right]; rw [inner_sub_right]; rw [real_inner_comm x y]; rw [real_inner_self_eq_norm_mul_norm]; rw [real_inner_self_eq_norm_mul_norm]; rw [mul_sub_right_distrib]; rw [mul_sub_right_distrib]; rw [mul_self_mul_inv]; rw [mul_self_mul_inv]; rw [sub_eq_sub_iff_sub_eq_sub]; rw [← mul_sub_left_distrib] at h
+    by_cases hx0 : x = 0
+    · rw [hx0, norm_zero, inner_zero_left, zero_mul, zero_sub, neg_eq_zero] at h
+      rw [hx0]; rw [norm_zero]; rw [h]
+    · by_cases hy0 : y = 0
+      · rw [hy0, norm_zero, inner_zero_right, zero_mul, sub_zero] at h
+        rw [hy0]; rw [norm_zero]; rw [h]
+      · rw [inv_sub_inv (fun hz => hx0 (norm_eq_zero.1 hz)) fun hz => hy0 (norm_eq_zero.1 hz), ←
+          neg_sub, ← mul_div_assoc, mul_comm, mul_div_assoc, ← mul_neg_one] at h
+        symm
+        by_contra hyx
+        replace h := (mul_left_cancel₀ (sub_ne_zero_of_ne hyx) h).symm
+        rw [real_inner_div_norm_mul_norm_eq_neg_one_iff]; rw [← angle_eq_pi_iff] at h
+        exact hpi h
 
 中文:
 定理 norm_eq_of_angle_sub_eq_angle_sub_rev_of_angle_ne_pi
@@ -196,7 +224,23 @@ theorem norm_eq_of_angle_sub_eq_angle_sub_rev_of_angle_ne_pi
   by_cases hxy : x = y
   · rw [hxy]
   · rw [← norm_neg (y - x), neg_sub, mul_comm, mul_comm ‖y‖, div_eq_mul_inv, div_eq_mul_inv,
- 
+      mul_inv_rev, mul_inv_rev, ← mul_assoc, ← mul_assoc] at h
+    replace h :=
+      mul_right_cancel₀ (inv_ne_zero fun hz => hxy (eq_of_sub_eq_zero (norm_eq_zero.1 hz))) h
+    rw [inner_sub_right]; rw [inner_sub_right]; rw [real_inner_comm x y]; rw [real_inner_self_eq_norm_mul_norm]; rw [real_inner_self_eq_norm_mul_norm]; rw [mul_sub_right_distrib]; rw [mul_sub_right_distrib]; rw [mul_self_mul_inv]; rw [mul_self_mul_inv]; rw [sub_eq_sub_iff_sub_eq_sub]; rw [← mul_sub_left_distrib] at h
+    by_cases hx0 : x = 0
+    · rw [hx0, norm_zero, inner_zero_left, zero_mul, zero_sub, neg_eq_zero] at h
+      rw [hx0]; rw [norm_zero]; rw [h]
+    · by_cases hy0 : y = 0
+      · rw [hy0, norm_zero, inner_zero_right, zero_mul, sub_zero] at h
+        rw [hy0]; rw [norm_zero]; rw [h]
+      · rw [inv_sub_inv (fun hz => hx0 (norm_eq_zero.1 hz)) fun hz => hy0 (norm_eq_zero.1 hz), ←
+          neg_sub, ← mul_div_assoc, mul_comm, mul_div_assoc, ← mul_neg_one] at h
+        symm
+        by_contra hyx
+        replace h := (mul_left_cancel₀ (sub_ne_zero_of_ne hyx) h).symm
+        rw [real_inner_div_norm_mul_norm_eq_neg_one_iff]; rw [← angle_eq_pi_iff] at h
+        exact hpi h
 
 Depends on / 依赖: Real.arccos_injOn, abs_le, abs_le.mp, abs_real_inner_div_norm_mul_norm_le_one, arccos_injOn, div_eq_mul_inv, eq_of_sub_eq_zero, inner_sub_right, inv_ne_zero, mul_assoc, mul_comm, mul_inv_rev, neg_sub, norm_eq_zero, norm_neg, real_in, replace
 -/
@@ -237,7 +281,10 @@ theorem cos_angle_eq_cos_angle_add_add_angle_add
   · rw [Real.cos_add, cos_angle, cos_angle, cos_angle, sin_angle_add hx (by grind),
       sin_angle_add hy (by grind), mul_comm ⟪y, y⟫ ⟪x, x⟫, real_inner_comm x y, add_comm y x]
     have : x + y != 0 := by grind
-    simp only [field] -- non-
+    simp only [field] -- non-recursive `field_simp`
+    rw [Real.sq_sqrt (sub_nonneg_of_le (real_inner_mul_inner_self_le x y))]
+    simp only [← real_inner_self_eq_norm_sq, inner_add_right, inner_add_left, real_inner_comm]
+    ring
 
 中文:
 定理 cos_angle_eq_cos_angle_add_add_angle_add
@@ -248,7 +295,10 @@ theorem cos_angle_eq_cos_angle_add_add_angle_add
   · rw [Real.cos_add, cos_angle, cos_angle, cos_angle, sin_angle_add hx (by grind),
       sin_angle_add hy (by grind), mul_comm ⟪y, y⟫ ⟪x, x⟫, real_inner_comm x y, add_comm y x]
     have : x + y != 0 := by grind
-    simp only [field] -- non-
+    simp only [field] -- non-recursive `field_simp`
+    rw [Real.sq_sqrt (sub_nonneg_of_le (real_inner_mul_inner_self_le x y))]
+    simp only [← real_inner_self_eq_norm_sq, inner_add_right, inner_add_left, real_inner_comm]
+    ring
 -/
 private theorem cos_angle_eq_cos_angle_add_add_angle_add {x y : V} (hx : x != 0) (hy : y != 0) :
     Real.cos (angle x y) = Real.cos (angle x (x + y) + angle y (y + x)) := by
@@ -275,7 +325,8 @@ theorem sin_angle_eq_sin_angle_add_add_angle_add
       sin_angle_add hy (by grind), sin_angle hx hy, add_comm y x]
     have : x + y != 0 := by grind
     simp only [field] -- non-recursive `field_simp`
-    simp only [←
+    simp only [← real_inner_self_eq_norm_sq, inner_add_right, inner_add_left, real_inner_comm]
+    ring_nf
 
 中文:
 定理 sin_angle_eq_sin_angle_add_add_angle_add
@@ -287,7 +338,8 @@ theorem sin_angle_eq_sin_angle_add_add_angle_add
       sin_angle_add hy (by grind), sin_angle hx hy, add_comm y x]
     have : x + y != 0 := by grind
     simp only [field] -- non-recursive `field_simp`
-    simp only [←
+    simp only [← real_inner_self_eq_norm_sq, inner_add_right, inner_add_left, real_inner_comm]
+    ring_nf
 -/
 private theorem sin_angle_eq_sin_angle_add_add_angle_add {x y : V} (hx : x != 0) (hy : y != 0) :
     Real.sin (angle x y) = Real.sin (angle x (x + y) + angle y (y + x)) := by
@@ -314,7 +366,28 @@ theorem angle_eq_angle_add_add_angle_add
     (sin_angle_eq_sin_angle_add_add_angle_add hx hy)
   rw [add_comm y x] at h
   obtain ⟨_, ⟨n, rfl⟩, h⟩ := (QuotientAddGroup.mk'_eq_mk' _).mp h
-  simp only a
+  simp only at h
+  have : -1 < n := by
+    replace h := h.ge
+    contrapose! h
+    grw [h, neg_smul, one_smul, angle_le_pi, ← angle_nonneg, ← angle_nonneg]
+    linear_combination Real.pi_pos
+  have : n < 1 := by
+    replace h := h.le
+    by_contra! hn
+    grw [← hn, one_smul, ← angle_nonneg x y, zero_add, two_mul] at h
+    have h' := h.trans_eq (add_comm _ _)
+    grw [angle_le_pi] at h' h
+    rw [add_le_add_iff_left]; rw [(angle_le_pi _ _).ge_iff_eq]; rw [angle_comm]; rw [angle_eq_pi_iff] at h' h
+    obtain ⟨hxy, r₁, r₁_pos, hr₁⟩ := h'
+    obtain ⟨-, r₂, r₂_pos, hr₂⟩ := h
+    have : (r₁ + r₂ - 1) • (x + y) = 0 := by
+      rw [sub_smul]; rw [add_smul]; rw [one_smul]; rw [← hr₁]; rw [← hr₂]; rw [sub_eq_zero]
+    cases smul_eq_zero.1 this
+    · linarith
+    · contradiction
+  obtain rfl : n = 0 := by lia
+  simpa using h
 
 中文:
 定理 angle_eq_angle_add_add_angle_add
@@ -327,7 +400,28 @@ theorem angle_eq_angle_add_add_angle_add
     (sin_angle_eq_sin_angle_add_add_angle_add hx hy)
   rw [add_comm y x] at h
   obtain ⟨_, ⟨n, rfl⟩, h⟩ := (QuotientAddGroup.mk'_eq_mk' _).mp h
-  simp only a
+  simp only at h
+  have : -1 < n := by
+    replace h := h.ge
+    contrapose! h
+    grw [h, neg_smul, one_smul, angle_le_pi, ← angle_nonneg, ← angle_nonneg]
+    linear_combination Real.pi_pos
+  have : n < 1 := by
+    replace h := h.le
+    by_contra! hn
+    grw [← hn, one_smul, ← angle_nonneg x y, zero_add, two_mul] at h
+    have h' := h.trans_eq (add_comm _ _)
+    grw [angle_le_pi] at h' h
+    rw [add_le_add_iff_left]; rw [(angle_le_pi _ _).ge_iff_eq]; rw [angle_comm]; rw [angle_eq_pi_iff] at h' h
+    obtain ⟨hxy, r₁, r₁_pos, hr₁⟩ := h'
+    obtain ⟨-, r₂, r₂_pos, hr₂⟩ := h
+    have : (r₁ + r₂ - 1) • (x + y) = 0 := by
+      rw [sub_smul]; rw [add_smul]; rw [one_smul]; rw [← hr₁]; rw [← hr₂]; rw [sub_eq_zero]
+    cases smul_eq_zero.1 this
+    · linarith
+    · contradiction
+  obtain rfl : n = 0 := by lia
+  simpa using h
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.mk, Real.Angle.cos_sin_inj, Real.pi_pos, _eq_mk, add_comm, angle_le_pi, angle_nonneg, contrapose, cos_angle_eq_cos_angle_add_add_angle_add, cos_sin_inj, eq_or_ne, h.ge, h.le, linear_combination, neg_smul, one_smul, pi_pos, replace, sin_angle_eq_sin_angle_add_add_angle_add
 -/
@@ -417,7 +511,15 @@ theorem norm_eq_of_two_zsmul_oangle_sub_eq
   rcases h with h | h
   · rw [← o.angle_eq_iff_oangle_eq_of_sign_eq (o.left_ne_zero_of_oangle_ne_zero h0)
       (sub_ne_zero_of_ne (o.ne_of_oangle_ne_zero h0))
-      (sub_ne_zero_o
+      (sub_ne_zero_of_ne (o.ne_of_oangle_ne_zero h0).symm)
+      (o.right_ne_zero_of_oangle_ne_zero h0) hs, angle_comm (y - x)] at h
+    refine norm_eq_of_angle_sub_eq_angle_sub_rev_of_angle_ne_pi h ?_
+    rw [ne_eq]; rw [← o.oangle_eq_pi_iff_angle_eq_pi]
+    exact hpi
+  · rw [h, Real.Angle.sign_add_pi, SignType.neg_eq_self_iff, oangle_sign_sub_left_swap,
+      o.oangle_rev, Real.Angle.sign_neg, SignType.neg_eq_zero_iff,
+      Real.Angle.sign_eq_zero_iff] at hs
+    simp [h0, hpi] at hs
 
 中文:
 定理 norm_eq_of_two_zsmul_oangle_sub_eq
@@ -428,7 +530,15 @@ theorem norm_eq_of_two_zsmul_oangle_sub_eq
   rcases h with h | h
   · rw [← o.angle_eq_iff_oangle_eq_of_sign_eq (o.left_ne_zero_of_oangle_ne_zero h0)
       (sub_ne_zero_of_ne (o.ne_of_oangle_ne_zero h0))
-      (sub_ne_zero_o
+      (sub_ne_zero_of_ne (o.ne_of_oangle_ne_zero h0).symm)
+      (o.right_ne_zero_of_oangle_ne_zero h0) hs, angle_comm (y - x)] at h
+    refine norm_eq_of_angle_sub_eq_angle_sub_rev_of_angle_ne_pi h ?_
+    rw [ne_eq]; rw [← o.oangle_eq_pi_iff_angle_eq_pi]
+    exact hpi
+  · rw [h, Real.Angle.sign_add_pi, SignType.neg_eq_self_iff, oangle_sign_sub_left_swap,
+      o.oangle_rev, Real.Angle.sign_neg, SignType.neg_eq_zero_iff,
+      Real.Angle.sign_eq_zero_iff] at hs
+    simp [h0, hpi] at hs
 
 Depends on / 依赖: Real.Angle.two_zsmul_eq_iff, angle_comm, angle_eq_iff_oangle_eq_of_sign_eq, left_ne_zero_of_oangle_ne_zero, ne_eq, ne_of_oangle_ne_zero, norm_eq_of_angle_sub_eq_angle_sub_rev_of_angle_ne_pi, o.angle_eq_iff_oangle_eq_of_sign_eq, o.left_ne_zero_of_oangle_ne_zero, o.ne_of_oangle_ne_zero, o.oangle, o.oangle_eq_pi_iff_angle_eq_pi, o.right_ne_zero_of_oangle_ne_zero, oangle, oangle_eq_pi_iff_angle_eq_pi, right_ne_zero_of_oangle_ne_zero, sub_ne_zero_of_ne, two_zsmul_eq_iff
 -/
@@ -480,7 +590,9 @@ theorem dist_sq_eq_dist_sq_add_dist_sq_sub_two_mul_dist_mul_dist_mul_cos_angle
     norm_sub_sq_eq_norm_sq_add_norm_sq_sub_two_mul_norm_mul_norm_mul_cos_angle (p₁ -ᵥ p₂ : V)
       (p₃ -ᵥ p₂ : V)
   · exact (vsub_sub_vsub_cancel_right p₁ p₃ p₂).symm
-  · ex
+  · exact (vsub_sub_vsub_cancel_right p₁ p₃ p₂).symm
+
+alias law_cos := dist_sq_eq_dist_sq_add_dist_sq_sub_two_mul_dist_mul_dist_mul_cos_angle
 
 中文:
 定理 dist_sq_eq_dist_sq_add_dist_sq_sub_two_mul_dist_mul_dist_mul_cos_angle
@@ -492,7 +604,9 @@ theorem dist_sq_eq_dist_sq_add_dist_sq_sub_two_mul_dist_mul_dist_mul_cos_angle
     norm_sub_sq_eq_norm_sq_add_norm_sq_sub_two_mul_norm_mul_norm_mul_cos_angle (p₁ -ᵥ p₂ : V)
       (p₃ -ᵥ p₂ : V)
   · exact (vsub_sub_vsub_cancel_right p₁ p₃ p₂).symm
-  · ex
+  · exact (vsub_sub_vsub_cancel_right p₁ p₃ p₂).symm
+
+alias law_cos := dist_sq_eq_dist_sq_add_dist_sq_sub_two_mul_dist_mul_dist_mul_cos_angle
 
 Depends on / 依赖: convert, dist_eq_norm_vsub, norm_sub_sq_eq_norm_sq_add_norm_sq_sub_two_mul_norm_mul_norm_mul_cos_angle, vsub_sub_vsub_cancel_right
 -/
@@ -519,7 +633,9 @@ theorem sin_angle_mul_dist_eq_sin_angle_mul_dist
   simp only [dist_comm p₂ p₃, angle]
   rw [dist_eq_norm_vsub V p₃ p₂]; rw [dist_eq_norm_vsub V p₃ p₁]; rw [InnerProductGeometry.angle_comm]; rw [sin_angle_mul_norm_eq_sin_angle_mul_norm]; rw [vsub_sub_vsub_cancel_right]; rw [mul_eq_mul_right_iff]
   left
-  rw [InnerProductGeometry.angle_comm]; rw 
+  rw [InnerProductGeometry.angle_comm]; rw [← neg_vsub_eq_vsub_rev p₁ p₂]; rw [angle_neg_right]; rw [Real.sin_pi_sub]
+
+alias law_sin := sin_angle_mul_dist_eq_sin_angle_mul_dist
 
 中文:
 定理 sin_angle_mul_dist_eq_sin_angle_mul_dist
@@ -528,7 +644,9 @@ theorem sin_angle_mul_dist_eq_sin_angle_mul_dist
   simp only [dist_comm p₂ p₃, angle]
   rw [dist_eq_norm_vsub V p₃ p₂]; rw [dist_eq_norm_vsub V p₃ p₁]; rw [InnerProductGeometry.angle_comm]; rw [sin_angle_mul_norm_eq_sin_angle_mul_norm]; rw [vsub_sub_vsub_cancel_right]; rw [mul_eq_mul_right_iff]
   left
-  rw [InnerProductGeometry.angle_comm]; rw 
+  rw [InnerProductGeometry.angle_comm]; rw [← neg_vsub_eq_vsub_rev p₁ p₂]; rw [angle_neg_right]; rw [Real.sin_pi_sub]
+
+alias law_sin := sin_angle_mul_dist_eq_sin_angle_mul_dist
 
 Depends on / 依赖: InnerProductGeometry, InnerProductGeometry.angle_comm, Real.sin_pi_sub, angle_comm, angle_neg_right, dist_comm, dist_eq_norm_vsub, mul_eq_mul_right_iff, neg_vsub_eq_vsub_rev, sin_angle_mul_norm_eq_sin_angle_mul_norm, sin_pi_sub, vsub_sub_vsub_cancel_right
 -/
@@ -636,7 +754,7 @@ theorem dist_eq_of_angle_eq_angle_of_angle_ne_pi
   rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]
   rw [← angle_neg_neg]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev] at hpi
   rw [← vsub_sub_vsub_cancel_left p₃ p₂ p₁]; rw [← vsub_sub_vsub_cancel_left p₂ p₃ p₁] at h
-  exact norm_eq_of_angle_sub_eq_
+  exact norm_eq_of_angle_sub_eq_angle_sub_rev_of_angle_ne_pi h hpi
 
 中文:
 定理 dist_eq_of_angle_eq_angle_of_angle_ne_pi
@@ -646,7 +764,7 @@ theorem dist_eq_of_angle_eq_angle_of_angle_ne_pi
   rw [dist_eq_norm_vsub V p₁ p₂]; rw [dist_eq_norm_vsub V p₁ p₃]
   rw [← angle_neg_neg]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev] at hpi
   rw [← vsub_sub_vsub_cancel_left p₃ p₂ p₁]; rw [← vsub_sub_vsub_cancel_left p₂ p₃ p₁] at h
-  exact norm_eq_of_angle_sub_eq_
+  exact norm_eq_of_angle_sub_eq_angle_sub_rev_of_angle_ne_pi h hpi
 
 Depends on / 依赖: angle_neg_neg, dist_eq_norm_vsub, neg_vsub_eq_vsub_rev, norm_eq_of_angle_sub_eq_angle_sub_rev_of_angle_ne_pi, vsub_sub_vsub_cancel_left
 -/
@@ -672,7 +790,9 @@ theorem dist_eq_of_two_zsmul_oangle_eq
   · rw [dist_eq_norm_vsub']
   · rw [eq_comm, o.oangle_rev, ← o.oangle_neg_neg]
     nth_rw 2 [o.oangle_rev, ← o.oangle_neg_neg]
-    simp_rw [smul_ne
+    simp_rw [smul_neg, neg_inj]
+    simp_rw [oangle] at h
+    convert! h <;> simp
 
 中文:
 定理 dist_eq_of_two_zsmul_oangle_eq
@@ -685,7 +805,9 @@ theorem dist_eq_of_two_zsmul_oangle_eq
   · rw [dist_eq_norm_vsub']
   · rw [eq_comm, o.oangle_rev, ← o.oangle_neg_neg]
     nth_rw 2 [o.oangle_rev, ← o.oangle_neg_neg]
-    simp_rw [smul_ne
+    simp_rw [smul_neg, neg_inj]
+    simp_rw [oangle] at h
+    convert! h <;> simp
 
 Depends on / 依赖: Orientation, Orientation.norm_eq_of_two_zsmul_oangle_sub_eq, convert, dist_eq_norm_vsub, eq_comm, neg_inj, norm_eq_of_two_zsmul_oangle_sub_eq, nth_rw, o.oangle_neg_neg, o.oangle_rev, oangle, oangle_neg_neg, oangle_rev, simp_rw, smul_neg
 -/
@@ -713,7 +835,8 @@ theorem angle_add_angle_add_angle_eq_pi
   rw [add_assoc]; rw [add_comm]; rw [add_comm (∠ p₂ p₃ p₁)]; rw [angle_comm p₂ p₃ p₁]
   unfold angle
   rw [← angle_neg_neg (p₁ -ᵥ p₃)]; rw [← angle_neg_neg (p₁ -ᵥ p₂)]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev]; rw [←
-    vsub_sub_v
+    vsub_sub_vsub_cancel_right p₃ p₂ p₁]; rw [← vsub_sub_vsub_cancel_right p₂ p₃ p₁]
+  exact angle_add_angle_sub_add_angle_sub_eq_pi _ fun he => h (vsub_eq_zero_iff_eq.1 he)
 
 中文:
 定理 angle_add_angle_add_angle_eq_pi
@@ -722,7 +845,8 @@ theorem angle_add_angle_add_angle_eq_pi
   rw [add_assoc]; rw [add_comm]; rw [add_comm (∠ p₂ p₃ p₁)]; rw [angle_comm p₂ p₃ p₁]
   unfold angle
   rw [← angle_neg_neg (p₁ -ᵥ p₃)]; rw [← angle_neg_neg (p₁ -ᵥ p₂)]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev]; rw [neg_vsub_eq_vsub_rev]; rw [←
-    vsub_sub_v
+    vsub_sub_vsub_cancel_right p₃ p₂ p₁]; rw [← vsub_sub_vsub_cancel_right p₂ p₃ p₁]
+  exact angle_add_angle_sub_add_angle_sub_eq_pi _ fun he => h (vsub_eq_zero_iff_eq.1 he)
 
 Depends on / 依赖: add_assoc, add_comm, angle_add_angle_sub_add_angle_sub_eq_pi, angle_comm, angle_neg_neg, neg_vsub_eq_vsub_rev, vsub_eq_zero_iff_eq, vsub_sub_vsub_cancel_right
 -/
@@ -798,7 +922,12 @@ lemma angle_add_of_ne_of_ne
   have ea := angle_add_angle_add_angle_eq_pi c hb
   have eb := angle_add_angle_add_angle_eq_pi p hb
   have ec := angle_add_angle_add_angle_eq_pi p hc.symm
-  replac
+  replace hp : ∠ b p c = π := angle_eq_pi_iff_sbtw.mpr ⟨hp, pb, pc⟩
+  have hp' : ∠ c p b = π := by rwa [angle_comm] at hp
+  rw [angle_comm p b a]; rw [angle_eq_angle_of_angle_eq_pi a hp]; rw [angle_comm a b c] at eb
+  rw [angle_eq_angle_of_angle_eq_pi a hp']; rw [angle_comm c p a] at ec
+  have ep := angle_add_angle_eq_pi_of_angle_eq_pi a hp
+  linarith only [ea, eb, ec, ep]
 
 中文:
 引理 angle_add_of_ne_of_ne
@@ -809,7 +938,12 @@ lemma angle_add_of_ne_of_ne
   have ea := angle_add_angle_add_angle_eq_pi c hb
   have eb := angle_add_angle_add_angle_eq_pi p hb
   have ec := angle_add_angle_add_angle_eq_pi p hc.symm
-  replac
+  replace hp : ∠ b p c = π := angle_eq_pi_iff_sbtw.mpr ⟨hp, pb, pc⟩
+  have hp' : ∠ c p b = π := by rwa [angle_comm] at hp
+  rw [angle_comm p b a]; rw [angle_eq_angle_of_angle_eq_pi a hp]; rw [angle_comm a b c] at eb
+  rw [angle_eq_angle_of_angle_eq_pi a hp']; rw [angle_comm c p a] at ec
+  have ep := angle_add_angle_eq_pi_of_angle_eq_pi a hp
+  linarith only [ea, eb, ec, ep]
 
 Depends on / 依赖: angle_add_angle_add_angle_eq_pi, angle_comm, angle_eq_angle_of_angle_eq_pi, angle_eq_pi_iff_sbtw, angle_eq_pi_iff_sbtw.mpr, angle_self_of_ne, hb.symm, hc.symm, replace
 -/
@@ -872,7 +1006,10 @@ theorem angle_add_angle_eq_of_sbtw_of_sameRay
     rw [hpi]; rw [angle_comm a p b]
     exact angle_add_angle_eq_pi_of_angle_eq_pi b hpi
   obtain ⟨r, hr, hrb⟩ := (exists_pos_left_iff_sameRay (by aesop) (by aesop)).2 hxb
-  have hab : ∠ a p b = ∠ a p x := angle_
+  have hab : ∠ a p b = ∠ a p x := angle_smul_right_of_pos a hr hrb
+  have hbc : ∠ b p c = ∠ x p c := angle_smul_left_of_pos c hr hrb
+  rw [hab]; rw [hbc]
+  exact angle_add_angle_eq_of_sbtw hx
 
 中文:
 定理 angle_add_angle_eq_of_sbtw_of_sameRay
@@ -883,7 +1020,10 @@ theorem angle_add_angle_eq_of_sbtw_of_sameRay
     rw [hpi]; rw [angle_comm a p b]
     exact angle_add_angle_eq_pi_of_angle_eq_pi b hpi
   obtain ⟨r, hr, hrb⟩ := (exists_pos_left_iff_sameRay (by aesop) (by aesop)).2 hxb
-  have hab : ∠ a p b = ∠ a p x := angle_
+  have hab : ∠ a p b = ∠ a p x := angle_smul_right_of_pos a hr hrb
+  have hbc : ∠ b p c = ∠ x p c := angle_smul_left_of_pos c hr hrb
+  rw [hab]; rw [hbc]
+  exact angle_add_angle_eq_of_sbtw hx
 
 Depends on / 依赖: angle_add_angle_eq_of_sbtw, angle_add_angle_eq_pi_of_angle_eq_pi, angle_comm, angle_smul_left_of_pos, angle_smul_right_of_pos, eq_or_ne, exists_pos_left_iff_sameRay, hx.angle
 -/
@@ -937,7 +1077,14 @@ theorem dist_sq_add_dist_sq_eq_two_mul_dist_midpoint_sq_add_half_dist_sq
   · let m := midpoint Real b c
     have : dist b c != 0 := (dist_pos.mpr hbc).ne'
     have hm := dist_sq_mul_dist_add_dist_sq_mul_dist a b c m (angle_midpoint_eq_pi b c hbc)
-    simp only [m, dist_left_midpoint, dist_right_m
+    simp only [m, dist_left_midpoint, dist_right_midpoint, Real.norm_two] at hm
+    calc
+      dist a b ^ 2 + dist a c ^ 2 = 2 / dist b c * (dist a b ^ 2 *
+        ((2 : Real)⁻¹ * dist b c) + dist a c ^ 2 * (2⁻¹ * dist b c)) := by
+        field
+      _ = 2 * (dist a (midpoint Real b c) ^ 2 + (dist b c / 2) ^ 2) := by
+        rw [hm]
+        field
 
 中文:
 定理 dist_sq_add_dist_sq_eq_two_mul_dist_midpoint_sq_add_half_dist_sq
@@ -948,7 +1095,14 @@ theorem dist_sq_add_dist_sq_eq_two_mul_dist_midpoint_sq_add_half_dist_sq
   · let m := midpoint Real b c
     have : dist b c != 0 := (dist_pos.mpr hbc).ne'
     have hm := dist_sq_mul_dist_add_dist_sq_mul_dist a b c m (angle_midpoint_eq_pi b c hbc)
-    simp only [m, dist_left_midpoint, dist_right_m
+    simp only [m, dist_left_midpoint, dist_right_midpoint, Real.norm_two] at hm
+    calc
+      dist a b ^ 2 + dist a c ^ 2 = 2 / dist b c * (dist a b ^ 2 *
+        ((2 : Real)⁻¹ * dist b c) + dist a c ^ 2 * (2⁻¹ * dist b c)) := by
+        field
+      _ = 2 * (dist a (midpoint Real b c) ^ 2 + (dist b c / 2) ^ 2) := by
+        rw [hm]
+        field
 
 Depends on / 依赖: Real.norm_two, angle_midpoint_eq_pi, dist_left_midpoint, dist_pos, dist_pos.mpr, dist_right_midpoint, dist_self, dist_sq_mul_dist_add_dist_sq_mul_dist, midpoint, midpoint_self, norm_two, two_mul
 -/
@@ -979,7 +1133,16 @@ theorem dist_mul_of_eq_angle_of_dist_mul
     dist a' c' ^ 2 =
         dist a' b' ^ 2 + dist c' b' ^ 2 - 2 * dist a' b' * dist c' b' * Real.cos (∠ a' b' c') := by
       simp [pow_two, law_cos a' b' c']
-    _ = r ^ 2 * (dist a b ^ 2 + dist c b ^ 2 - 2 * dist a b * dist c b * Real.cos
+    _ = r ^ 2 * (dist a b ^ 2 + dist c b ^ 2 - 2 * dist a b * dist c b * Real.cos (∠ a b c)) := by
+      rw [h]; rw [hab]; rw [hcb]; ring
+    _ = (r * dist a c) ^ 2 := by simp [pow_two, ← law_cos a b c]; ring
+  by_cases hab₁ : a = b
+  · have hab'₁ : a' = b' := by
+      rw [← dist_eq_zero]; rw [hab]; rw [dist_eq_zero.mpr hab₁]; rw [mul_zero r]
+    rw [hab₁]; rw [hab'₁]; rw [dist_comm b' c']; rw [dist_comm b c]; rw [hcb]
+  · have h1 : 0 <= r * dist a b := by rw [← hab]; exact dist_nonneg
+    have h2 : 0 <= r := nonneg_of_mul_nonneg_left h1 (dist_pos.mpr hab₁)
+    exact (sq_eq_sq₀ dist_nonneg (mul_nonneg h2 dist_nonneg)).mp h'
 
 中文:
 定理 dist_mul_of_eq_angle_of_dist_mul
@@ -989,7 +1152,16 @@ theorem dist_mul_of_eq_angle_of_dist_mul
     dist a' c' ^ 2 =
         dist a' b' ^ 2 + dist c' b' ^ 2 - 2 * dist a' b' * dist c' b' * Real.cos (∠ a' b' c') := by
       simp [pow_two, law_cos a' b' c']
-    _ = r ^ 2 * (dist a b ^ 2 + dist c b ^ 2 - 2 * dist a b * dist c b * Real.cos
+    _ = r ^ 2 * (dist a b ^ 2 + dist c b ^ 2 - 2 * dist a b * dist c b * Real.cos (∠ a b c)) := by
+      rw [h]; rw [hab]; rw [hcb]; ring
+    _ = (r * dist a c) ^ 2 := by simp [pow_two, ← law_cos a b c]; ring
+  by_cases hab₁ : a = b
+  · have hab'₁ : a' = b' := by
+      rw [← dist_eq_zero]; rw [hab]; rw [dist_eq_zero.mpr hab₁]; rw [mul_zero r]
+    rw [hab₁]; rw [hab'₁]; rw [dist_comm b' c']; rw [dist_comm b c]; rw [hcb]
+  · have h1 : 0 <= r * dist a b := by rw [← hab]; exact dist_nonneg
+    have h2 : 0 <= r := nonneg_of_mul_nonneg_left h1 (dist_pos.mpr hab₁)
+    exact (sq_eq_sq₀ dist_nonneg (mul_nonneg h2 dist_nonneg)).mp h'
 
 Depends on / 依赖: Real.cos, dist_eq_zero, dist_eq_zero.mpr, law_cos, pow_two
 -/
@@ -1025,7 +1197,32 @@ theorem dist_lt_of_angle_lt
     apply Real.sin_nonneg_of_mem_Icc
     simp [angle_nonneg, angle_le_pi]
   intro h1
-  by_cases! h2 :
+  by_cases! h2 : ∠ a b c <= π / 2
+  · have h3 : Real.sin (∠ a c b) < Real.sin (∠ a b c) := by
+      exact Real.sin_lt_sin_of_lt_of_le_pi_div_two (by linarith [angle_nonneg a c b]) h2 h1
+    by_contra! w
+    have h4 : Real.sin (∠ a c b) * dist a c < Real.sin (∠ a b c) * dist a b := by
+      exact mul_lt_mul h3 w hac hsinabc
+    linarith
+  · by_contra! w
+    have h3 : Real.sin (∠ a b c) <= Real.sin (∠ a c b) := by
+      by_contra! w1
+      have h4 : Real.sin (∠ a c b) * dist a c < Real.sin (∠ a b c) * dist a b := by
+        exact mul_lt_mul w1 w hac hsinabc
+      linarith
+    rw [← Real.sin_pi_sub (∠ a b c)] at h3
+    have h5 : π - ∠ a b c < π / 2 := by linarith
+    have h6 : π - ∠ a b c <= ∠ a c b := by
+      by_contra! w1
+      have := Real.sin_lt_sin_of_lt_of_le_pi_div_two (by linarith [angle_nonneg a c b]) h5.le w1
+      linarith
+    have h7 := angle_add_angle_add_angle_eq_pi c (ne₁₂_of_not_collinear h).symm
+    rw [angle_comm b c a] at h7
+    have h8 : ∠ c a b > 0 := by
+      rw [angle_comm]
+      rw [show ({a]; rw [b]; rw [c} : Set P) = {b]; rw [a]; rw [c} by exact Set.insert_comm a b {c}] at h
+      exact angle_pos_of_not_collinear h
+    linarith
 
 中文:
 定理 dist_lt_of_angle_lt
@@ -1038,7 +1235,32 @@ theorem dist_lt_of_angle_lt
     apply Real.sin_nonneg_of_mem_Icc
     simp [angle_nonneg, angle_le_pi]
   intro h1
-  by_cases! h2 :
+  by_cases! h2 : ∠ a b c <= π / 2
+  · have h3 : Real.sin (∠ a c b) < Real.sin (∠ a b c) := by
+      exact Real.sin_lt_sin_of_lt_of_le_pi_div_two (by linarith [angle_nonneg a c b]) h2 h1
+    by_contra! w
+    have h4 : Real.sin (∠ a c b) * dist a c < Real.sin (∠ a b c) * dist a b := by
+      exact mul_lt_mul h3 w hac hsinabc
+    linarith
+  · by_contra! w
+    have h3 : Real.sin (∠ a b c) <= Real.sin (∠ a c b) := by
+      by_contra! w1
+      have h4 : Real.sin (∠ a c b) * dist a c < Real.sin (∠ a b c) * dist a b := by
+        exact mul_lt_mul w1 w hac hsinabc
+      linarith
+    rw [← Real.sin_pi_sub (∠ a b c)] at h3
+    have h5 : π - ∠ a b c < π / 2 := by linarith
+    have h6 : π - ∠ a b c <= ∠ a c b := by
+      by_contra! w1
+      have := Real.sin_lt_sin_of_lt_of_le_pi_div_two (by linarith [angle_nonneg a c b]) h5.le w1
+      linarith
+    have h7 := angle_add_angle_add_angle_eq_pi c (ne₁₂_of_not_collinear h).symm
+    rw [angle_comm b c a] at h7
+    have h8 : ∠ c a b > 0 := by
+      rw [angle_comm]
+      rw [show ({a]; rw [b]; rw [c} : Set P) = {b]; rw [a]; rw [c} by exact Set.insert_comm a b {c}] at h
+      exact angle_pos_of_not_collinear h
+    linarith
 
 Depends on / 依赖: Real.sin, Real.sin_lt_sin_of_lt_of_le_pi_div_two, Real.sin_nonneg_of_mem_Icc, angle_comm, angle_le_pi, angle_nonneg, dist_comm, dist_pos, dist_pos.mpr, hsinabc, law_sin, sin_lt_sin_of_lt_of_le_pi_div_two, sin_nonneg_of_mem_Icc
 -/
@@ -1094,7 +1316,12 @@ theorem angle_lt_iff_dist_lt
     rcases w.eq_or_lt with h2 | h3
     · have h4 : dist a b = dist a c := by
         apply dist_eq_of_angle_eq_angle_of_angle_ne_pi h2
-        rw [show ({a]; rw [b]; rw [c} : Set P) = {b]; rw [a
+        rw [show ({a]; rw [b]; rw [c} : Set P) = {b]; rw [a]; rw [c} by exact Set.insert_comm a b {c}] at h
+        linarith [angle_lt_pi_of_not_collinear h]
+      linarith
+    · rw [show ({a, b, c} : Set P) = {a, c, b} by grind] at h
+      have h5 := dist_lt_of_angle_lt h h3
+      linarith
 
 中文:
 定理 angle_lt_iff_dist_lt
@@ -1109,7 +1336,12 @@ theorem angle_lt_iff_dist_lt
     rcases w.eq_or_lt with h2 | h3
     · have h4 : dist a b = dist a c := by
         apply dist_eq_of_angle_eq_angle_of_angle_ne_pi h2
-        rw [show ({a]; rw [b]; rw [c} : Set P) = {b]; rw [a
+        rw [show ({a]; rw [b]; rw [c} : Set P) = {b]; rw [a]; rw [c} by exact Set.insert_comm a b {c}] at h
+        linarith [angle_lt_pi_of_not_collinear h]
+      linarith
+    · rw [show ({a, b, c} : Set P) = {a, c, b} by grind] at h
+      have h5 := dist_lt_of_angle_lt h h3
+      linarith
 
 Depends on / 依赖: Set.insert_comm, angle_lt_pi_of_not_collinear, dist_eq_of_angle_eq_angle_of_angle_ne_pi, dist_lt_of_angle_lt, eq_or_lt, insert_comm, w.eq_or_lt
 -/

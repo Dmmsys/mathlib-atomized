@@ -237,7 +237,11 @@ theorem carmichael_lcm
   apply dvd_antisymm
   · rw [carmichael_eq_exponent h₀.left, carmichael_eq_exponent h₀.right,
 carmichael_eq_exponent lcm_ne_zero h₀.left h₀.right, ← lcm_eq_nat_lcm exponent _,
-      ← exponent_prod, ← exponent_eq_of_mulEquiv
+      ← exponent_prod, ← exponent_eq_of_mulEquiv .prodUnits]
+exact exponent_dvd_of_monoidHom _ Units.map_injective ZMod.castHom_injective _
+· have ha := carmichael_dvd Nat.dvd_lcm_left a b
+have hb := carmichael_dvd Nat.dvd_lcm_right a b
+    exact Nat.lcm_dvd ha hb
 
 中文:
 定理 carmichael_lcm
@@ -248,7 +252,11 @@ carmichael_eq_exponent lcm_ne_zero h₀.left h₀.right, ← lcm_eq_nat_lcm expo
   apply dvd_antisymm
   · rw [carmichael_eq_exponent h₀.left, carmichael_eq_exponent h₀.right,
 carmichael_eq_exponent lcm_ne_zero h₀.left h₀.right, ← lcm_eq_nat_lcm exponent _,
-      ← exponent_prod, ← exponent_eq_of_mulEquiv
+      ← exponent_prod, ← exponent_eq_of_mulEquiv .prodUnits]
+exact exponent_dvd_of_monoidHom _ Units.map_injective ZMod.castHom_injective _
+· have ha := carmichael_dvd Nat.dvd_lcm_left a b
+have hb := carmichael_dvd Nat.dvd_lcm_right a b
+    exact Nat.lcm_dvd ha hb
 
 Depends on / 依赖: Nat.dvd_lcm_left, Nat.dvd_lcm_right, Nat.lcm_dvd, Nat.lcm_eq_zero_iff, Units.map_injective, ZMod.castHom_injective, carmichael_dvd, carmichael_eq_exponent, castHom_injective, dvd_antisymm, dvd_lcm_left, dvd_lcm_right, exponent, exponent_dvd_of_monoidHom, exponent_eq_of_mulEquiv, exponent_prod, lcm_dvd, lcm_eq_nat_lcm, lcm_eq_zero_iff, lcm_ne_zero
 -/
@@ -429,7 +437,13 @@ theorem carmichael_two_pow_of_ne_two
   · grind [carmichael_two_pow_of_le_two]
 .trans dvd_antisymm ?_ ?_ refine carmichael_eq_exponent' _
   · have hcard : Nat.card (ZMod (2 ^ n))ˣ = 2 ^ (n - 1) := by
-      rw [card_eq_fintype_card]; rw [ZMod.card_units_eq_totient]; rw [totient_prime_pow prime_two <| by lia]; r
+      rw [card_eq_fintype_card]; rw [ZMod.card_units_eq_totient]; rw [totient_prime_pow prime_two <| by lia]; rw [Nat.add_one_sub_one]; rw [mul_one]
+.mp hcard ▸ Group.exponent_dvd_nat_card have ⟨k, hk, h⟩ := dvd_prime_pow prime_two
+have := IsCyclic.iff_exponent_eq_card.not.mp .not.mpr hn' ZMod.isCyclic_units_two_pow_iff n
+    exact h ▸ Nat.pow_dvd_pow 2 (by grind)
+· let five : (ZMod (2 ^ n))ˣ := ZMod.unitOfCoprime 5 gcd_pow_right_of_gcd_eq_one rfl
+    rw [← ZMod.orderOf_five (n - 2)]; rw [show n - 2 + 2 = n by lia]; rw [show (5 : ZMod (2 ^ n)) = five by rfl]; rw [orderOf_units]
+    exact order_dvd_exponent five
 
 中文:
 定理 carmichael_two_pow_of_ne_two
@@ -439,7 +453,13 @@ theorem carmichael_two_pow_of_ne_two
   · grind [carmichael_two_pow_of_le_two]
 .trans dvd_antisymm ?_ ?_ refine carmichael_eq_exponent' _
   · have hcard : Nat.card (ZMod (2 ^ n))ˣ = 2 ^ (n - 1) := by
-      rw [card_eq_fintype_card]; rw [ZMod.card_units_eq_totient]; rw [totient_prime_pow prime_two <| by lia]; r
+      rw [card_eq_fintype_card]; rw [ZMod.card_units_eq_totient]; rw [totient_prime_pow prime_two <| by lia]; rw [Nat.add_one_sub_one]; rw [mul_one]
+.mp hcard ▸ Group.exponent_dvd_nat_card have ⟨k, hk, h⟩ := dvd_prime_pow prime_two
+have := IsCyclic.iff_exponent_eq_card.not.mp .not.mpr hn' ZMod.isCyclic_units_two_pow_iff n
+    exact h ▸ Nat.pow_dvd_pow 2 (by grind)
+· let five : (ZMod (2 ^ n))ˣ := ZMod.unitOfCoprime 5 gcd_pow_right_of_gcd_eq_one rfl
+    rw [← ZMod.orderOf_five (n - 2)]; rw [show n - 2 + 2 = n by lia]; rw [show (5 : ZMod (2 ^ n)) = five by rfl]; rw [orderOf_units]
+    exact order_dvd_exponent five
 
 Depends on / 依赖: Group.exponent_dvd_nat_card, IsCyclic, IsCyclic.iff_exponent_eq_card.not.mp, Nat.add_one_sub_one, Nat.card, ZMod.card_units_eq_totient, ZMod.isCyclic_units_two_pow_iff, add_one_sub_one, card_eq_fintype_card, card_units_eq_totient, carmichael_eq_exponent, carmichael_two_pow_of_le_two, dvd_antisymm, dvd_prime_pow, exponent_dvd_nat_card, iff_exponent_eq_card, isCyclic_units_two_pow_iff, mul_one, not.mpr, prime_two
 -/

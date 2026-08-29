@@ -255,7 +255,7 @@ theorem Prime.pow_dvd_of_dvd_mul_left
     obtain ⟨c, rfl⟩ := ih (dvd_trans (pow_dvd_pow p n.le_succ) h')
     rw [pow_succ]
     apply mul_dvd_mul_left _ ((hp.dvd_or_dvd _).resolve_left h)
-    rwa [← mul_dvd_mul_iff_left (pow_ne_zero n hp.ne_zero), ← 
+    rwa [← mul_dvd_mul_iff_left (pow_ne_zero n hp.ne_zero), ← pow_succ, mul_left_comm]
 
 中文:
 定理 素.pow_dvd_of_dvd_mul_left
@@ -269,7 +269,7 @@ theorem Prime.pow_dvd_of_dvd_mul_left
     obtain ⟨c, rfl⟩ := ih (dvd_trans (pow_dvd_pow p n.le_succ) h')
     rw [pow_succ]
     apply mul_dvd_mul_left _ ((hp.dvd_or_dvd _).resolve_left h)
-    rwa [← mul_dvd_mul_iff_left (pow_ne_zero n hp.ne_zero), ← 
+    rwa [← mul_dvd_mul_iff_left (pow_ne_zero n hp.ne_zero), ← pow_succ, mul_left_comm]
 
 Depends on / 依赖: dvd_or_dvd, dvd_trans, hp.dvd_or_dvd, hp.ne_zero, le_succ, mul_dvd_mul_iff_left, mul_dvd_mul_left, mul_left_comm, n.le_succ, ne_zero, one_dvd, pow_dvd_pow, pow_ne_zero, pow_succ, pow_zero, resolve_left
 -/
@@ -321,7 +321,15 @@ theorem Prime.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd
   · exact hp.dvd_of_dvd_pow H
   obtain ⟨x, rfl⟩ := hp.dvd_of_dvd_pow hbdiv
   obtain ⟨y, hy⟩ := hpow
-  -- Then we can div
+  -- Then we can divide out a common factor of `p ^ n` from the equation `hy`.
+  have : a ^ n.succ * x ^ n = p * y := by
+    refine mul_left_cancel₀ (pow_ne_zero n hp.ne_zero) ?_
+    rw [← mul_assoc _ p]; rw [← pow_succ]; rw [← hy]; rw [mul_pow]; rw [← mul_assoc (a ^ n.succ)]; rw [mul_comm _ (p ^ n)]; rw [mul_assoc]
+  -- So `p ∣ a` (and we're done) or `p ∣ x`, which can't be the case since it implies `p^2 ∣ b`.
+  refine hp.dvd_of_dvd_pow ((hp.dvd_or_dvd ⟨_, this⟩).resolve_right fun hdvdx => hb ?_)
+  obtain ⟨z, rfl⟩ := hp.dvd_of_dvd_pow hdvdx
+  rw [pow_two]; rw [← mul_assoc]
+  exact dvd_mul_right _ _
 
 中文:
 定理 素.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd
@@ -332,7 +340,15 @@ theorem Prime.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd
   · exact hp.dvd_of_dvd_pow H
   obtain ⟨x, rfl⟩ := hp.dvd_of_dvd_pow hbdiv
   obtain ⟨y, hy⟩ := hpow
-  -- Then we can div
+  -- Then we can divide out a common factor of `p ^ n` from the equation `hy`.
+  have : a ^ n.succ * x ^ n = p * y := by
+    refine mul_left_cancel₀ (pow_ne_zero n hp.ne_zero) ?_
+    rw [← mul_assoc _ p]; rw [← pow_succ]; rw [← hy]; rw [mul_pow]; rw [← mul_assoc (a ^ n.succ)]; rw [mul_comm _ (p ^ n)]; rw [mul_assoc]
+  -- So `p ∣ a` (and we're done) or `p ∣ x`, which can't be the case since it implies `p^2 ∣ b`.
+  refine hp.dvd_of_dvd_pow ((hp.dvd_or_dvd ⟨_, this⟩).resolve_right fun hdvdx => hb ?_)
+  obtain ⟨z, rfl⟩ := hp.dvd_of_dvd_pow hdvdx
+  rw [pow_two]; rw [← mul_assoc]
+  exact dvd_mul_right _ _
 -/
 theorem Prime.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd {p a b : M}
     {n : Nat} (hp : Prime p) (hpow : p ^ n.succ ∣ a ^ n.succ * b ^ n) (hb : ¬p ^ 2 ∣ b) : p ∣ a := by
@@ -388,7 +404,9 @@ theorem succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
     simpa [mul_comm, pow_add, hx, hy, mul_assoc, mul_left_comm] using hz
   have hp0 : p ^ (k + l) != 0 := pow_ne_zero _ hp.ne_zero
   have hpd : p ∣ x * y := ⟨z, by rwa [mul_right_inj' hp0] at h⟩
-  (hp.dvd_o
+  (hp.dvd_or_dvd hpd).elim
+    (fun ⟨d, hd⟩ => Or.inl ⟨d, by simp [*, pow_succ, mul_comm, mul_left_comm, mul_assoc]⟩)
+    fun ⟨d, hd⟩ => Or.inr ⟨d, by simp [*, pow_succ, mul_comm, mul_left_comm, mul_assoc]⟩
 
 中文:
 定理 succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
@@ -398,7 +416,9 @@ theorem succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
     simpa [mul_comm, pow_add, hx, hy, mul_assoc, mul_left_comm] using hz
   have hp0 : p ^ (k + l) != 0 := pow_ne_zero _ hp.ne_zero
   have hpd : p ∣ x * y := ⟨z, by rwa [mul_right_inj' hp0] at h⟩
-  (hp.dvd_o
+  (hp.dvd_or_dvd hpd).elim
+    (fun ⟨d, hd⟩ => Or.inl ⟨d, by simp [*, pow_succ, mul_comm, mul_left_comm, mul_assoc]⟩)
+    fun ⟨d, hd⟩ => Or.inr ⟨d, by simp [*, pow_succ, mul_comm, mul_left_comm, mul_assoc]⟩
 
 Depends on / 依赖: Or.inl, Or.inr, dvd_or_dvd, hp.dvd_or_dvd, hp.ne_zero, mul_assoc, mul_comm, mul_left_comm, mul_right_inj, ne_zero, pow_add, pow_ne_zero, pow_succ
 -/

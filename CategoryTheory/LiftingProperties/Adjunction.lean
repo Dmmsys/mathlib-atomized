@@ -88,7 +88,13 @@ definition rightAdjointLiftStructEquiv
   invFun l :=
     { l := (adj.homEquiv _ _).symm l.l
       fac_left := by
-        rw [← Adjunction.homEquiv_naturality_lef
+        rw [← Adjunction.homEquiv_naturality_left_symm]; rw [l.fac_left]
+        apply (adj.homEquiv _ _).left_inv
+      fac_right := by
+        rw [← Adjunction.homEquiv_naturality_right_symm]; rw [l.fac_right]
+        apply (adj.homEquiv _ _).left_inv }
+  left_inv := by cat_disch
+  right_inv := by cat_disch
 
 中文:
 定义 rightAdjointLiftStructEquiv
@@ -99,7 +105,13 @@ definition rightAdjointLiftStructEquiv
   invFun l :=
     { l := (adj.homEquiv _ _).symm l.l
       fac_left := by
-        rw [← Adjunction.homEquiv_naturality_lef
+        rw [← Adjunction.homEquiv_naturality_left_symm]; rw [l.fac_left]
+        apply (adj.homEquiv _ _).left_inv
+      fac_right := by
+        rw [← Adjunction.homEquiv_naturality_right_symm]; rw [l.fac_right]
+        apply (adj.homEquiv _ _).left_inv }
+  left_inv := by cat_disch
+  right_inv := by cat_disch
 
 Depends on / 依赖: Adjunction, Adjunction.homEquiv_naturality_left_symm, Adjunction.homEquiv_naturality_right, Adjunction.homEquiv_naturality_right_symm, adj.homEquiv, adj.homEquiv_naturality_left, cat_disch, fac_left, fac_right, homEquiv, homEquiv_naturality_left, homEquiv_naturality_left_symm, homEquiv_naturality_right, homEquiv_naturality_right_symm, invFun, l.fac_left, l.fac_right, left_inv, right_inv
 -/

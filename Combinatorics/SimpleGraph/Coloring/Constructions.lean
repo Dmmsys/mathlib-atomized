@@ -200,7 +200,8 @@ theorem Walk.three_le_chromaticNumber_of_odd_loop
 have h' : G.chromaticNumber <= 2 := Order.le_of_lt_add_one not_le.mp h
   let c : G.Coloring (Fin 2) := (chromaticNumber_le_iff_colorable.mp h').some
   let c' : G.Coloring Bool := recolorOfEquiv G finTwoEquiv c
-  have : ¬c' u ↔ c' u := (c'.odd_length_iff_not_co
+  have : ¬c' u ↔ c' u := (c'.odd_length_iff_not_congr p).mp hOdd
+  simp_all
 
 中文:
 定理 途径.three_le_chromaticNumber_of_odd_loop
@@ -210,7 +211,8 @@ have h' : G.chromaticNumber <= 2 := Order.le_of_lt_add_one not_le.mp h
 have h' : G.chromaticNumber <= 2 := Order.le_of_lt_add_one not_le.mp h
   let c : G.Coloring (Fin 2) := (chromaticNumber_le_iff_colorable.mp h').some
   let c' : G.Coloring Bool := recolorOfEquiv G finTwoEquiv c
-  have : ¬c' u ↔ c' u := (c'.odd_length_iff_not_co
+  have : ¬c' u ↔ c' u := (c'.odd_length_iff_not_congr p).mp hOdd
+  simp_all
 
 Depends on / 依赖: Classical, Classical.by_contradiction, Coloring, G.Coloring, G.chromaticNumber, Order.le_of_lt_add_one, by_contradiction, chromaticNumber, chromaticNumber_le_iff_colorable, chromaticNumber_le_iff_colorable.mp, finTwoEquiv, le_of_lt_add_one, not_le, not_le.mp, odd_length_iff_not_congr, recolorOfEquiv
 -/
@@ -239,7 +241,9 @@ definition cycleGraph.bicoloring_of_even
       simp only [cycleGraph_adj] at hadj
       cases hadj with
       | inl huv | inr huv =>
-        rw [← add_eq_of_eq_su
+        rw [← add_eq_of_eq_sub' huv.symm]; rw [← Fin.even_iff_mod_of_even h]; rw [← Fin.even_iff_mod_of_even h]; rw [Fin.even_add_one_iff_odd]
+        apply Classical.not_iff.mpr
+        simp [Fin.not_odd_iff_even_of_even h, Fin.not_even_iff_odd_of_even h]
 
 中文:
 定义 cycleGraph.bicoloring_of_even
@@ -254,7 +258,9 @@ definition cycleGraph.bicoloring_of_even
       simp only [cycleGraph_adj] at hadj
       cases hadj with
       | inl huv | inr huv =>
-        rw [← add_eq_of_eq_su
+        rw [← add_eq_of_eq_sub' huv.symm]; rw [← Fin.even_iff_mod_of_even h]; rw [← Fin.even_iff_mod_of_even h]; rw [Fin.even_add_one_iff_odd]
+        apply Classical.not_iff.mpr
+        simp [Fin.not_odd_iff_even_of_even h, Fin.not_even_iff_odd_of_even h]
 
 Depends on / 依赖: Classical, Classical.not_iff.mpr, Coloring, Coloring.mk, Fin.even_add_one_iff_odd, Fin.even_iff_mod_of_even, Fin.not_even_iff_odd_of_even, Fin.not_odd_iff_even_of_even, add_eq_of_eq_sub, cycleGraph_adj, decide_eq_decide, even_add_one_iff_odd, even_iff_mod_of_even, huv.symm, ne_eq, not_even_iff_odd_of_even, not_iff, not_odd_iff_even_of_even, u.elim0, u.val
 -/
@@ -323,7 +329,22 @@ definition cycleGraph.tricoloring
     | n + 2 =>
       simp only [cycleGraph_adj] at hadj
       split_ifs with hu hv
-      · simp [Fin.eq_mk_iff_val_eq.mpr hu, Fin.eq_mk_iff_val
+      · simp [Fin.eq_mk_iff_val_eq.mpr hu, Fin.eq_mk_iff_val_eq.mpr hv] at hadj
+      · refine (Fin.ne_of_lt (Fin.mk_lt_of_lt_val (?_))).symm
+        exact v.val.mod_lt Nat.zero_lt_two
+      · refine (Fin.ne_of_lt (Fin.mk_lt_of_lt_val ?_))
+        exact u.val.mod_lt Nat.zero_lt_two
+      · simp only [ne_eq, Fin.ext_iff]
+        have hu' : u.val + (1 : Fin (n + 2)) < n + 2 := by fin_omega
+        have hv' : v.val + (1 : Fin (n + 2)) < n + 2 := by fin_omega
+        cases hadj with
+        | inl huv | inr huv =>
+          rw [← add_eq_of_eq_sub' huv.symm]
+          simp only [Fin.val_add_eq_of_add_lt hv', Fin.val_add_eq_of_add_lt hu', Fin.val_one]
+          rw [show forall x y : Nat]; rw [x % 2 = y % 2 ↔ (Even x ↔ Even y) by simp [Nat.even_iff]; lia,
+            Nat.even_add]
+          simp only [Nat.not_even_one, iff_false, not_iff_self, iff_not_self]
+          exact id
 
 中文:
 定义 cycleGraph.tricoloring
@@ -336,7 +357,22 @@ definition cycleGraph.tricoloring
     | n + 2 =>
       simp only [cycleGraph_adj] at hadj
       split_ifs with hu hv
-      · simp [Fin.eq_mk_iff_val_eq.mpr hu, Fin.eq_mk_iff_val
+      · simp [Fin.eq_mk_iff_val_eq.mpr hu, Fin.eq_mk_iff_val_eq.mpr hv] at hadj
+      · refine (Fin.ne_of_lt (Fin.mk_lt_of_lt_val (?_))).symm
+        exact v.val.mod_lt Nat.zero_lt_two
+      · refine (Fin.ne_of_lt (Fin.mk_lt_of_lt_val ?_))
+        exact u.val.mod_lt Nat.zero_lt_two
+      · simp only [ne_eq, Fin.ext_iff]
+        have hu' : u.val + (1 : Fin (n + 2)) < n + 2 := by fin_omega
+        have hv' : v.val + (1 : Fin (n + 2)) < n + 2 := by fin_omega
+        cases hadj with
+        | inl huv | inr huv =>
+          rw [← add_eq_of_eq_sub' huv.symm]
+          simp only [Fin.val_add_eq_of_add_lt hv', Fin.val_add_eq_of_add_lt hu', Fin.val_one]
+          rw [show forall x y : Nat]; rw [x % 2 = y % 2 ↔ (Even x ↔ Even y) by simp [Nat.even_iff]; lia,
+            Nat.even_add]
+          simp only [Nat.not_even_one, iff_false, not_iff_self, iff_not_self]
+          exact id
 
 Depends on / 依赖: Coloring, Coloring.mk, Fin.eq_mk_iff_val_eq.mpr, Fin.ext_iff, Fin.mk_lt_of_lt_val, Fin.ne_of_lt, Nat.zero_lt_two, cycleGraph_adj, eq_mk_iff_val_eq, ext_iff, mk_lt_of_lt_val, mod_lt, ne_eq, ne_of_lt, split_ifs, u.elim0, u.val, u.val.mod_lt, v.val.mod_lt, zero_lt_two
 -/
@@ -380,7 +416,13 @@ theorem chromaticNumber_cycleGraph_of_odd
       refine Nat.sub_add_cancel (Nat.succ_le_of_lt (Nat.lt_of_le_of_ne h ?_))
       intro h2
       rw [← h2] at hOdd
-      exact (Nat.not_odd_iff.mpr rfl) hOd
+      exact (Nat.not_odd_iff.mpr rfl) hOdd
+    let w : (cycleGraph (n - 3 + 3)).Walk 0 0 := cycleGraph.cycle (n - 3)
+    have hOdd' : Odd w.length := by
+      rw [cycleGraph.length_cycle]; rw [hn3]
+      exact hOdd
+    rw [← hn3]
+    exact Walk.three_le_chromaticNumber_of_odd_loop w hOdd'
 
 中文:
 定理 chromaticNumber_cycleGraph_of_odd
@@ -393,7 +435,13 @@ theorem chromaticNumber_cycleGraph_of_odd
       refine Nat.sub_add_cancel (Nat.succ_le_of_lt (Nat.lt_of_le_of_ne h ?_))
       intro h2
       rw [← h2] at hOdd
-      exact (Nat.not_odd_iff.mpr rfl) hOd
+      exact (Nat.not_odd_iff.mpr rfl) hOdd
+    let w : (cycleGraph (n - 3 + 3)).Walk 0 0 := cycleGraph.cycle (n - 3)
+    have hOdd' : Odd w.length := by
+      rw [cycleGraph.length_cycle]; rw [hn3]
+      exact hOdd
+    rw [← hn3]
+    exact Walk.three_le_chromaticNumber_of_odd_loop w hOdd'
 
 Depends on / 依赖: Nat.lt_of_le_of_ne, Nat.not_odd_iff.mpr, Nat.sub_add_cancel, Nat.succ_le_of_lt, Walk.three_le_chromaticNumber_of_odd_loop, chromaticNumber_le, colorable, cycleGraph, cycleGraph.cycle, cycleGraph.length_cycle, cycleGraph.tricoloring, hc.chromaticNumber_le, le_antisymm, length, length_cycle, lt_of_le_of_ne, not_odd_iff, sub_add_cancel, succ_le_of_lt, three_le_chromaticNumber_of_odd_loop
 -/
@@ -470,7 +518,15 @@ lemma two_colorable_iff_forall_loop_even
   · apply colorable_iff_forall_connectedComponent.2
     intro c
     obtain ⟨_, hv⟩ := c.nonempty_supp
-    use fun a => Fin
+    use fun a => Fin.ofNat 2 (c.connected_toSimpleGraph ⟨_, hv⟩ a).some.length
+    intro a b hab he
+apply h _ (((c.connected_toSimpleGraph ⟨_, hv⟩ a).some.concat hab).append
+                 (c.connected_toSimpleGraph ⟨_, hv⟩ b).some.reverse).map c.toSimpleGraph_hom
+    rw [length_map]; rw [length_append]; rw [length_concat]; rw [length_reverse]; rw [add_right_comm]
+    have : ((Nonempty.some (c.connected_toSimpleGraph ⟨_, hv⟩ a)).length) % 2 =
+        (Nonempty.some (c.connected_toSimpleGraph ⟨_, hv⟩ b)).length % 2 := by
+      simp_rw [← Fin.val_natCast, ← Fin.ofNat_eq_cast, he]
+    exact (Nat.even_iff.mpr (by lia)).add_one
 
 中文:
 引理 two_colorable_iff_对任意_loop_even
@@ -484,7 +540,15 @@ lemma two_colorable_iff_forall_loop_even
   · apply colorable_iff_forall_connectedComponent.2
     intro c
     obtain ⟨_, hv⟩ := c.nonempty_supp
-    use fun a => Fin
+    use fun a => Fin.ofNat 2 (c.connected_toSimpleGraph ⟨_, hv⟩ a).some.length
+    intro a b hab he
+apply h _ (((c.connected_toSimpleGraph ⟨_, hv⟩ a).some.concat hab).append
+                 (c.connected_toSimpleGraph ⟨_, hv⟩ b).some.reverse).map c.toSimpleGraph_hom
+    rw [length_map]; rw [length_append]; rw [length_concat]; rw [length_reverse]; rw [add_right_comm]
+    have : ((Nonempty.some (c.connected_toSimpleGraph ⟨_, hv⟩ a)).length) % 2 =
+        (Nonempty.some (c.connected_toSimpleGraph ⟨_, hv⟩ b)).length % 2 := by
+      simp_rw [← Fin.val_natCast, ← Fin.ofNat_eq_cast, he]
+    exact (Nat.even_iff.mpr (by lia)).add_one
 
 Depends on / 依赖: Fin.ofNat, Nat.not_odd_iff_even, append, c.connected_toSimpleGraph, c.nonempty_supp, c.toSimpleGraph_hom, chromaticNumber_le, colorable_iff_forall_connectedComponent, concat, connected_toSimpleGraph, h.chromaticNumber_le, length, nonempty_supp, not_odd_iff_even, reverse, simp_rw, some.concat, some.length, some.reverse, three_le_chromaticNumber_of_odd_loop
 -/

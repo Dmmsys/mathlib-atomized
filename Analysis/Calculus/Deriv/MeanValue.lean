@@ -89,7 +89,13 @@ theorem exists_ratio_hasDerivAt_eq_ratio_slope
   have hI : h a = h b := by simp only [h]; ring
   let h' x := (g b - g a) * f' x - (f b - f a) * g' x
   have hhh' : forall x in Ioo a b, HasDerivAt h (h' x) x := fun x hx =>
-    ((hff' x hx).const_mul (g b - g a)).sub ((hgg' x hx).const_mul (f b 
+    ((hff' x hx).const_mul (g b - g a)).sub ((hgg' x hx).const_mul (f b - f a))
+  have hhc : ContinuousOn h (Icc a b) :=
+    (continuousOn_const.mul hfc).sub (continuousOn_const.mul hgc)
+  rcases exists_hasDerivAt_eq_zero hab hhc hI hhh' with ⟨c, cmem, hc⟩
+  exact ⟨c, cmem, sub_eq_zero.1 hc⟩
+
+include hab in
 
 中文:
 定理 存在_ratio_hasDerivAt_eq_ratio_slope
@@ -98,7 +104,13 @@ theorem exists_ratio_hasDerivAt_eq_ratio_slope
   have hI : h a = h b := by simp only [h]; ring
   let h' x := (g b - g a) * f' x - (f b - f a) * g' x
   have hhh' : forall x in Ioo a b, HasDerivAt h (h' x) x := fun x hx =>
-    ((hff' x hx).const_mul (g b - g a)).sub ((hgg' x hx).const_mul (f b 
+    ((hff' x hx).const_mul (g b - g a)).sub ((hgg' x hx).const_mul (f b - f a))
+  have hhc : ContinuousOn h (Icc a b) :=
+    (continuousOn_const.mul hfc).sub (continuousOn_const.mul hgc)
+  rcases exists_hasDerivAt_eq_zero hab hhc hI hhh' with ⟨c, cmem, hc⟩
+  exact ⟨c, cmem, sub_eq_zero.1 hc⟩
+
+include hab in
 
 Depends on / 依赖: ContinuousOn, HasDerivAt, const_mul, continuousOn_const, continuousOn_const.mul, exists_hasDerivAt_eq_zero, sub_eq_zero
 -/
@@ -127,7 +139,20 @@ theorem exists_ratio_hasDerivAt_eq_ratio_slope'
     have : Tendsto h (𝓝[>] a) (𝓝 <| (lgb - lga) * lfa - (lfb - lfa) * lga) :=
       (tendsto_const_nhds.mul hfa).sub (tendsto_const_nhds.mul hga)
     convert! this using 2
-    rin
+    ring
+  have hhb : Tendsto h (𝓝[<] b) (𝓝 <| lgb * lfa - lfb * lga) := by
+    have : Tendsto h (𝓝[<] b) (𝓝 <| (lgb - lga) * lfb - (lfb - lfa) * lgb) :=
+      (tendsto_const_nhds.mul hfb).sub (tendsto_const_nhds.mul hgb)
+    convert! this using 2
+    ring
+  let h' x := (lgb - lga) * f' x - (lfb - lfa) * g' x
+  have hhh' : forall x in Ioo a b, HasDerivAt h (h' x) x := by
+    intro x hx
+    exact ((hff' x hx).const_mul _).sub ((hgg' x hx).const_mul _)
+  rcases exists_hasDerivAt_eq_zero' hab hha hhb hhh' with ⟨c, cmem, hc⟩
+  exact ⟨c, cmem, sub_eq_zero.1 hc⟩
+
+include hab hfc hff' in
 
 中文:
 定理 存在_ratio_hasDerivAt_eq_ratio_slope'
@@ -138,7 +163,20 @@ theorem exists_ratio_hasDerivAt_eq_ratio_slope'
     have : Tendsto h (𝓝[>] a) (𝓝 <| (lgb - lga) * lfa - (lfb - lfa) * lga) :=
       (tendsto_const_nhds.mul hfa).sub (tendsto_const_nhds.mul hga)
     convert! this using 2
-    rin
+    ring
+  have hhb : Tendsto h (𝓝[<] b) (𝓝 <| lgb * lfa - lfb * lga) := by
+    have : Tendsto h (𝓝[<] b) (𝓝 <| (lgb - lga) * lfb - (lfb - lfa) * lgb) :=
+      (tendsto_const_nhds.mul hfb).sub (tendsto_const_nhds.mul hgb)
+    convert! this using 2
+    ring
+  let h' x := (lgb - lga) * f' x - (lfb - lfa) * g' x
+  have hhh' : forall x in Ioo a b, HasDerivAt h (h' x) x := by
+    intro x hx
+    exact ((hff' x hx).const_mul _).sub ((hgg' x hx).const_mul _)
+  rcases exists_hasDerivAt_eq_zero' hab hha hhb hhh' with ⟨c, cmem, hc⟩
+  exact ⟨c, cmem, sub_eq_zero.1 hc⟩
+
+include hab hfc hff' in
 
 Depends on / 依赖: Tendsto, convert, tendsto_const_nhds, tendsto_const_nhds.mul
 -/
@@ -179,7 +217,7 @@ theorem exists_hasDerivAt_eq_slope
   use c, cmem
   rwa [mul_one, mul_comm, ← eq_div_iff (sub_ne_zero.2 hab.ne')] at hc
 
-include hab hfc
+include hab hfc hgc hgd hfd in
 
 中文:
 定理 存在_hasDerivAt_eq_slope
@@ -191,7 +229,7 @@ include hab hfc
   use c, cmem
   rwa [mul_one, mul_comm, ← eq_div_iff (sub_ne_zero.2 hab.ne')] at hc
 
-include hab hfc
+include hab hfc hgc hgd hfd in
 
 Depends on / 依赖: continuousOn_id, eq_div_iff, exists_ratio_hasDerivAt_eq_ratio_slope, hab.ne, hasDerivAt_id, mul_comm, mul_one, sub_ne_zero
 -/
@@ -330,7 +368,60 @@ theorem not_differentiableWithinAt_of_deriv_tendsto_atTop_Ioi
     filter_upwards [eventually_mem_nhdsWithin] with x hx
     have : Ioi a in 𝓝 x := by simp [← mem_interior_iff_mem_nhds, hx]
     exact (derivWithin_of_mem_nhds this).symm
-  by_cases hcont_at_a : Continuou
+  by_cases hcont_at_a : ContinuousWithinAt f (Ici a) a
+  case neg =>
+    intro hcontra
+    have := hcontra.continuousWithinAt
+    rw [← ContinuousWithinAt.sdiff_iff this] at hcont_at_a
+    simp at hcont_at_a
+  case pos =>
+    intro hdiff
+    replace hdiff := hdiff.hasDerivWithinAt
+    rw [hasDerivWithinAt_iff_tendsto_slope]; rw [Set.sdiff_singleton_eq_self self_notMem_Ioi] at hdiff
+    have h₀ : forallᶠ b in 𝓝[>] a,
+        forall x in Ioc a b, max (derivWithin f (Ioi a) a + 1) 0 < derivWithin f (Ioi a) x := by
+      rw [(nhdsGT_basis a).eventually_iff]
+      rw [(nhdsGT_basis a).tendsto_left_iff] at hf
+      obtain ⟨b, hab, hb⟩ := hf (Ioi (max (derivWithin f (Ioi a) a + 1) 0)) (Ioi_mem_atTop _)
+      refine ⟨b, hab, fun x hx z hz => ?_⟩
+      simp only [MapsTo, mem_Ioo, mem_Ioi, and_imp] at hb
+exact hb hz.1 hz.2.trans_lt hx.2
+    have h₁ : forallᶠ b in 𝓝[>] a, slope f a b < derivWithin f (Ioi a) a + 1 := by
+      rw [(nhds_basis_Ioo _).tendsto_right_iff] at hdiff
+specialize hdiff ⟨derivWithin f (Ioi a) a - 1, derivWithin f (Ioi a) a + 1⟩ by simp
+      filter_upwards [hdiff] with z hz using hz.2
+    have hcontra : forallᶠ _ in 𝓝[>] a, False := by
+      filter_upwards [h₀, h₁, eventually_mem_nhdsWithin] with b hb hslope (hab : a < b)
+      have hdiff' : DifferentiableOn Real f (Ioc a b) := fun z hz => by
+        refine DifferentiableWithinAt.mono (t := Ioi a) ?_ Ioc_subset_Ioi_self
+have : derivWithin f (Ioi a) z != 0 := ne_of_gt by
+          simp_all only [and_imp, mem_Ioc, max_lt_iff]
+        exact differentiableWithinAt_of_derivWithin_ne_zero this
+      have hcont_Ioc : forall z in Ioc a b, ContinuousWithinAt f (Icc a b) z := by
+        intro z hz''
+        refine (hdiff'.continuousOn z hz'').mono_of_mem_nhdsWithin ?_
+        have hfinal : 𝓝[Ioc a b] z = 𝓝[Icc a b] z := by
+          refine nhdsWithin_eq_nhdsWithin' (s := Ioi a) (Ioi_mem_nhds hz''.1) ?_
+          simp only [Ioc_inter_Ioi, le_refl, sup_of_le_left]
+          ext y
+          exact ⟨fun h => ⟨mem_Icc_of_Ioc h, mem_of_mem_inter_left h⟩, fun ⟨H1, H2⟩ => ⟨H2, H1.2⟩⟩
+        rw [← hfinal]
+        exact self_mem_nhdsWithin
+      have hcont : ContinuousOn f (Icc a b) := by
+        intro z hz
+        by_cases hz' : z = a
+        · rw [hz']
+          exact hcont_at_a.mono Icc_subset_Ici_self
+        · exact hcont_Ioc z ⟨lt_of_le_of_ne hz.1 (Ne.symm hz'), hz.2⟩
+      obtain ⟨x, hx₁, hx₂⟩ :=
+        exists_deriv_eq_slope' f hab hcont (hdiff'.mono (Ioo_subset_Ioc_self))
+      specialize hb x ⟨hx₁.1, le_of_lt hx₁.2⟩
+      replace hx₂ : derivWithin f (Ioi a) x = slope f a b := by
+        have : Ioi a in 𝓝 x := by simp [← mem_interior_iff_mem_nhds, hx₁.1]
+        rwa [derivWithin_of_mem_nhds this]
+      rw [hx₂]; rw [max_lt_iff] at hb
+      linarith
+    simp [Filter.eventually_false_iff_eq_bot, ← notMem_closure_iff_nhdsWithin_eq_bot] at hcontra
 
 中文:
 定理 not_differentiableWithinAt_of_deriv_tendsto_atTop_Ioi
@@ -341,7 +432,60 @@ theorem not_differentiableWithinAt_of_deriv_tendsto_atTop_Ioi
     filter_upwards [eventually_mem_nhdsWithin] with x hx
     have : Ioi a in 𝓝 x := by simp [← mem_interior_iff_mem_nhds, hx]
     exact (derivWithin_of_mem_nhds this).symm
-  by_cases hcont_at_a : Continuou
+  by_cases hcont_at_a : ContinuousWithinAt f (Ici a) a
+  case neg =>
+    intro hcontra
+    have := hcontra.continuousWithinAt
+    rw [← ContinuousWithinAt.sdiff_iff this] at hcont_at_a
+    simp at hcont_at_a
+  case pos =>
+    intro hdiff
+    replace hdiff := hdiff.hasDerivWithinAt
+    rw [hasDerivWithinAt_iff_tendsto_slope]; rw [Set.sdiff_singleton_eq_self self_notMem_Ioi] at hdiff
+    have h₀ : forallᶠ b in 𝓝[>] a,
+        forall x in Ioc a b, max (derivWithin f (Ioi a) a + 1) 0 < derivWithin f (Ioi a) x := by
+      rw [(nhdsGT_basis a).eventually_iff]
+      rw [(nhdsGT_basis a).tendsto_left_iff] at hf
+      obtain ⟨b, hab, hb⟩ := hf (Ioi (max (derivWithin f (Ioi a) a + 1) 0)) (Ioi_mem_atTop _)
+      refine ⟨b, hab, fun x hx z hz => ?_⟩
+      simp only [MapsTo, mem_Ioo, mem_Ioi, and_imp] at hb
+exact hb hz.1 hz.2.trans_lt hx.2
+    have h₁ : forallᶠ b in 𝓝[>] a, slope f a b < derivWithin f (Ioi a) a + 1 := by
+      rw [(nhds_basis_Ioo _).tendsto_right_iff] at hdiff
+specialize hdiff ⟨derivWithin f (Ioi a) a - 1, derivWithin f (Ioi a) a + 1⟩ by simp
+      filter_upwards [hdiff] with z hz using hz.2
+    have hcontra : forallᶠ _ in 𝓝[>] a, False := by
+      filter_upwards [h₀, h₁, eventually_mem_nhdsWithin] with b hb hslope (hab : a < b)
+      have hdiff' : DifferentiableOn Real f (Ioc a b) := fun z hz => by
+        refine DifferentiableWithinAt.mono (t := Ioi a) ?_ Ioc_subset_Ioi_self
+have : derivWithin f (Ioi a) z != 0 := ne_of_gt by
+          simp_all only [and_imp, mem_Ioc, max_lt_iff]
+        exact differentiableWithinAt_of_derivWithin_ne_zero this
+      have hcont_Ioc : forall z in Ioc a b, ContinuousWithinAt f (Icc a b) z := by
+        intro z hz''
+        refine (hdiff'.continuousOn z hz'').mono_of_mem_nhdsWithin ?_
+        have hfinal : 𝓝[Ioc a b] z = 𝓝[Icc a b] z := by
+          refine nhdsWithin_eq_nhdsWithin' (s := Ioi a) (Ioi_mem_nhds hz''.1) ?_
+          simp only [Ioc_inter_Ioi, le_refl, sup_of_le_left]
+          ext y
+          exact ⟨fun h => ⟨mem_Icc_of_Ioc h, mem_of_mem_inter_left h⟩, fun ⟨H1, H2⟩ => ⟨H2, H1.2⟩⟩
+        rw [← hfinal]
+        exact self_mem_nhdsWithin
+      have hcont : ContinuousOn f (Icc a b) := by
+        intro z hz
+        by_cases hz' : z = a
+        · rw [hz']
+          exact hcont_at_a.mono Icc_subset_Ici_self
+        · exact hcont_Ioc z ⟨lt_of_le_of_ne hz.1 (Ne.symm hz'), hz.2⟩
+      obtain ⟨x, hx₁, hx₂⟩ :=
+        exists_deriv_eq_slope' f hab hcont (hdiff'.mono (Ioo_subset_Ioc_self))
+      specialize hb x ⟨hx₁.1, le_of_lt hx₁.2⟩
+      replace hx₂ : derivWithin f (Ioi a) x = slope f a b := by
+        have : Ioi a in 𝓝 x := by simp [← mem_interior_iff_mem_nhds, hx₁.1]
+        rwa [derivWithin_of_mem_nhds this]
+      rw [hx₂]; rw [max_lt_iff] at hb
+      linarith
+    simp [Filter.eventually_false_iff_eq_bot, ← notMem_closure_iff_nhdsWithin_eq_bot] at hcontra
 
 Depends on / 依赖: ContinuousWithinAt, ContinuousWithinAt.sdiff_iff, Tendsto, continuousWithinAt, derivWithin, derivWithin_of_mem_nhds, eventually_mem_nhdsWithin, filter_upwards, hasDerivWithinAt, hcont_at_a, hcontra, hcontra.continuousWithinAt, hdiff.hasDerivWithinAt, hf.congr, mem_interior_iff_mem_nhds, replace, sdiff_iff
 -/
@@ -453,7 +597,27 @@ theorem not_differentiableWithinAt_of_deriv_tendsto_atBot_Iio
     specialize hf (-1) trivial
     rw [(nhdsLT_basis a).eventually_iff] at hf
     rw [EventuallyEq]; rw [(nhdsGT_basis (-a)).eventually_iff]
-    obtain ⟨b, hb₁, h
+    obtain ⟨b, hb₁, hb₂⟩ := hf
+    refine ⟨-b, by linarith, fun x hx => ?_⟩
+    simp only [Pi.neg_apply, Function.comp_apply]
+    suffices deriv f' x = deriv f (-x) * deriv (Neg.neg : Real -> Real) x by simpa using this
+    refine deriv_comp x (differentiableAt_of_deriv_ne_zero ?_) (by fun_prop)
+    rw [mem_Ioo] at hx
+    have h₁ : -x in Ioo b a := ⟨by linarith, by linarith⟩
+    have h₂ : deriv f (-x) <= -1 := hb₂ h₁
+    exact ne_of_lt (by linarith)
+  have hmain : ¬ DifferentiableWithinAt Real f' (Ioi (-a)) (-a) := by
+refine not_differentiableWithinAt_of_deriv_tendsto_atTop_Ioi f' Tendsto.congr' hderiv.symm ?_
+    refine Tendsto.comp (g := -deriv f) ?_ tendsto_neg_nhdsGT_neg
+    exact Tendsto.comp (g := Neg.neg) tendsto_neg_atBot_atTop hf
+  intro h
+  have : DifferentiableWithinAt Real f' (Ioi (-a)) (-a) := by
+    refine DifferentiableWithinAt.comp (g := f) (f := Neg.neg) (t := Iio a) (-a) ?_ ?_ ?_
+    · simp [h]
+    · fun_prop
+    · intro x
+      simp [neg_lt]
+  exact hmain this
 
 中文:
 定理 not_differentiableWithinAt_of_deriv_tendsto_atBot_Iio
@@ -465,7 +629,27 @@ theorem not_differentiableWithinAt_of_deriv_tendsto_atBot_Iio
     specialize hf (-1) trivial
     rw [(nhdsLT_basis a).eventually_iff] at hf
     rw [EventuallyEq]; rw [(nhdsGT_basis (-a)).eventually_iff]
-    obtain ⟨b, hb₁, h
+    obtain ⟨b, hb₁, hb₂⟩ := hf
+    refine ⟨-b, by linarith, fun x hx => ?_⟩
+    simp only [Pi.neg_apply, Function.comp_apply]
+    suffices deriv f' x = deriv f (-x) * deriv (Neg.neg : Real -> Real) x by simpa using this
+    refine deriv_comp x (differentiableAt_of_deriv_ne_zero ?_) (by fun_prop)
+    rw [mem_Ioo] at hx
+    have h₁ : -x in Ioo b a := ⟨by linarith, by linarith⟩
+    have h₂ : deriv f (-x) <= -1 := hb₂ h₁
+    exact ne_of_lt (by linarith)
+  have hmain : ¬ DifferentiableWithinAt Real f' (Ioi (-a)) (-a) := by
+refine not_differentiableWithinAt_of_deriv_tendsto_atTop_Ioi f' Tendsto.congr' hderiv.symm ?_
+    refine Tendsto.comp (g := -deriv f) ?_ tendsto_neg_nhdsGT_neg
+    exact Tendsto.comp (g := Neg.neg) tendsto_neg_atBot_atTop hf
+  intro h
+  have : DifferentiableWithinAt Real f' (Ioi (-a)) (-a) := by
+    refine DifferentiableWithinAt.comp (g := f) (f := Neg.neg) (t := Iio a) (-a) ?_ ?_ ?_
+    · simp [h]
+    · fun_prop
+    · intro x
+      simp [neg_lt]
+  exact hmain this
 
 Depends on / 依赖: EventuallyEq, Function, Function.comp_apply, Neg.neg, Pi.neg_apply, atBot_basis, atBot_basis.tendsto_right_iff, comp_apply, deriv_comp, differentiableAt, eventually_iff, hderiv, neg_apply, nhdsGT_basis, nhdsLT_basis, specialize, tendsto_right_iff
 -/
@@ -546,7 +730,9 @@ theorem Convex.mul_sub_lt_image_sub_of_lt_deriv
   have hxyD' : Ioo x y subseteq interior D :=
     subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hxyD⟩
   obtain ⟨a, a_mem, ha⟩ : exists a in Ioo x y, deriv f a = (f y - f x) / (y - x) :=
-    exists_de
+    exists_deriv_eq_slope f hxy (hf.mono hxyD) (hf'.mono hxyD')
+  have : C < (f y - f x) / (y - x) := ha ▸ hf'_gt _ (hxyD' a_mem)
+  exact (lt_div_iff₀ (sub_pos.2 hxy)).1 this
 
 中文:
 定理 凸.mul_sub_lt_image_sub_of_lt_deriv
@@ -557,7 +743,9 @@ theorem Convex.mul_sub_lt_image_sub_of_lt_deriv
   have hxyD' : Ioo x y subseteq interior D :=
     subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hxyD⟩
   obtain ⟨a, a_mem, ha⟩ : exists a in Ioo x y, deriv f a = (f y - f x) / (y - x) :=
-    exists_de
+    exists_deriv_eq_slope f hxy (hf.mono hxyD) (hf'.mono hxyD')
+  have : C < (f y - f x) / (y - x) := ha ▸ hf'_gt _ (hxyD' a_mem)
+  exact (lt_div_iff₀ (sub_pos.2 hxy)).1 this
 
 Depends on / 依赖: Ioo_subset_Icc_self, Ioo_subset_Icc_self.trans, a_mem, exists_deriv_eq_slope, hD.ordConnected.out, hf.mono, interior, isOpen_Ioo, ordConnected, sub_pos, subset_sUnion_of_mem, subseteq
 -/
@@ -609,7 +797,10 @@ theorem Convex.mul_sub_le_image_sub_of_le_deriv
   have hxyD : Icc x y subseteq D := hD.ordConnected.out hx hy
   have hxyD' : Ioo x y subseteq interior D :=
     subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hxyD⟩
-  obtain
+  obtain ⟨a, a_mem, ha⟩ : exists a in Ioo x y, deriv f a = (f y - f x) / (y - x) :=
+    exists_deriv_eq_slope f hxy' (hf.mono hxyD) (hf'.mono hxyD')
+  have : C <= (f y - f x) / (y - x) := ha ▸ hf'_ge _ (hxyD' a_mem)
+  exact (le_div_iff₀ (sub_pos.2 hxy')).1 this
 
 中文:
 定理 凸.mul_sub_le_image_sub_of_le_deriv
@@ -621,7 +812,10 @@ theorem Convex.mul_sub_le_image_sub_of_le_deriv
   have hxyD : Icc x y subseteq D := hD.ordConnected.out hx hy
   have hxyD' : Ioo x y subseteq interior D :=
     subset_sUnion_of_mem ⟨isOpen_Ioo, Ioo_subset_Icc_self.trans hxyD⟩
-  obtain
+  obtain ⟨a, a_mem, ha⟩ : exists a in Ioo x y, deriv f a = (f y - f x) / (y - x) :=
+    exists_deriv_eq_slope f hxy' (hf.mono hxyD) (hf'.mono hxyD')
+  have : C <= (f y - f x) / (y - x) := ha ▸ hf'_ge _ (hxyD' a_mem)
+  exact (le_div_iff₀ (sub_pos.2 hxy')).1 this
 
 Depends on / 依赖: Ioo_subset_Icc_self, Ioo_subset_Icc_self.trans, a_mem, eq_or_lt_of_le, exists_deriv_eq_slope, hD.ordConnected.out, hf.mono, interior, isOpen_Ioo, le_div_, mul_zero, ordConnected, sub_self, subset_sUnion_of_mem, subseteq
 -/
@@ -1180,7 +1374,19 @@ theorem domain_mvt
   set I := Icc (0 : Real) 1
   have hsub : Ioo (0 : Real) 1 subseteq I := Ioo_subset_Icc_self
   have hmaps : MapsTo g I s := hs.mapsTo_lineMap xs ys
-  -- The one-variable functio
+  -- The one-variable function `f ∘ g` has derivative `f' (g t) (y - x)` at each `t ∈ I`
+  have hfg : forall t in I, HasDerivWithinAt (f ∘ g) (f' (g t) (y - x)) I t := fun t ht =>
+    (hf _ (hmaps ht)).comp_hasDerivWithinAt t AffineMap.hasDerivWithinAt_lineMap hmaps
+  -- apply 1-variable mean value theorem to pullback
+  have hMVT : exists t in Ioo (0 : Real) 1, f' (g t) (y - x) = (f (g 1) - f (g 0)) / (1 - 0) := by
+    refine exists_hasDerivAt_eq_slope (f ∘ g) _ (by simp) ?_ ?_
+    · exact fun t Ht => (hfg t Ht).continuousWithinAt
+    · exact fun t Ht => (hfg t <| hsub Ht).hasDerivAt (Icc_mem_nhds Ht.1 Ht.2)
+  -- reinterpret on domain
+  rcases hMVT with ⟨t, Ht, hMVT'⟩
+  rw [segment_eq_image_lineMap]; rw [exists_mem_image]
+  refine ⟨t, hsub Ht, ?_⟩
+  simpa [g] using hMVT'.symm
 
 中文:
 定理 domain_mvt
@@ -1191,7 +1397,19 @@ theorem domain_mvt
   set I := Icc (0 : Real) 1
   have hsub : Ioo (0 : Real) 1 subseteq I := Ioo_subset_Icc_self
   have hmaps : MapsTo g I s := hs.mapsTo_lineMap xs ys
-  -- The one-variable functio
+  -- The one-variable function `f ∘ g` has derivative `f' (g t) (y - x)` at each `t ∈ I`
+  have hfg : forall t in I, HasDerivWithinAt (f ∘ g) (f' (g t) (y - x)) I t := fun t ht =>
+    (hf _ (hmaps ht)).comp_hasDerivWithinAt t AffineMap.hasDerivWithinAt_lineMap hmaps
+  -- apply 1-variable mean value theorem to pullback
+  have hMVT : exists t in Ioo (0 : Real) 1, f' (g t) (y - x) = (f (g 1) - f (g 0)) / (1 - 0) := by
+    refine exists_hasDerivAt_eq_slope (f ∘ g) _ (by simp) ?_ ?_
+    · exact fun t Ht => (hfg t Ht).continuousWithinAt
+    · exact fun t Ht => (hfg t <| hsub Ht).hasDerivAt (Icc_mem_nhds Ht.1 Ht.2)
+  -- reinterpret on domain
+  rcases hMVT with ⟨t, Ht, hMVT'⟩
+  rw [segment_eq_image_lineMap]; rw [exists_mem_image]
+  refine ⟨t, hsub Ht, ?_⟩
+  simpa [g] using hMVT'.symm
 -/
 theorem domain_mvt {f : E -> Real} {s : Set E} {x y : E} {f' : E -> StrongDual Real E}
     (hf : forall x in s, HasFDerivWithinAt f (f' x) s x) (hs : Convex Real s) (xs : x in s) (ys : y in s) :

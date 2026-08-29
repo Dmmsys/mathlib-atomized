@@ -86,7 +86,26 @@ theorem isIdempotentComplete_iff_hasEqualizer_of_id_and_idempotent
       ⟨Nonempty.intro
           { cone := Fork.ofι i (show i ≫ 𝟙 X = i ≫ p by rw [comp_id, ← h₂, ← assoc, h₁, id_comp])
             isLimit := by
-              apply Fork.I
+              apply Fork.IsLimit.mk'
+              intro s
+              refine ⟨s.ι ≫ e, ?_⟩
+              constructor
+              · simp [h₂, ← Limits.Fork.condition s]
+              · intro m hm
+                rw [Fork.ι_ofι] at hm
+                rw [← hm]
+                simp only [assoc, h₁]
+                exact (comp_id m).symm }⟩
+  · intro h
+    refine ⟨?_⟩
+    intro X p hp
+    have : HasEqualizer (𝟙 X) p := h X p hp
+    refine ⟨equalizer (𝟙 X) p, equalizer.ι (𝟙 X) p,
+      equalizer.lift p (show p ≫ 𝟙 X = p ≫ p by rw [hp, comp_id]), ?_, equalizer.lift_ι _ _⟩
+    ext
+    simp only [assoc, limit.lift_π,
+      Fork.ofι_π_app, id_comp]
+    rw [← equalizer.condition]; rw [comp_id]
 
 中文:
 定理 isIdempotentComplete_iff_hasEqualizer_of_id_and_idempotent
@@ -98,7 +117,26 @@ theorem isIdempotentComplete_iff_hasEqualizer_of_id_and_idempotent
       ⟨Nonempty.intro
           { cone := Fork.ofι i (show i ≫ 𝟙 X = i ≫ p by rw [comp_id, ← h₂, ← assoc, h₁, id_comp])
             isLimit := by
-              apply Fork.I
+              apply Fork.IsLimit.mk'
+              intro s
+              refine ⟨s.ι ≫ e, ?_⟩
+              constructor
+              · simp [h₂, ← Limits.Fork.condition s]
+              · intro m hm
+                rw [Fork.ι_ofι] at hm
+                rw [← hm]
+                simp only [assoc, h₁]
+                exact (comp_id m).symm }⟩
+  · intro h
+    refine ⟨?_⟩
+    intro X p hp
+    have : HasEqualizer (𝟙 X) p := h X p hp
+    refine ⟨equalizer (𝟙 X) p, equalizer.ι (𝟙 X) p,
+      equalizer.lift p (show p ≫ 𝟙 X = p ≫ p by rw [hp, comp_id]), ?_, equalizer.lift_ι _ _⟩
+    ext
+    simp only [assoc, limit.lift_π,
+      Fork.ofι_π_app, id_comp]
+    rw [← equalizer.condition]; rw [comp_id]
 
 Depends on / 依赖: Fork.IsLimit.mk, Fork.of, HasEqualizer, IsIdempotentComplete, IsIdempotentComplete.idempotents_split, IsLimit, Limits, Limits.Fork.condition, Nonempty, Nonempty.intro, comp_id, condition, id_comp, idempotents_split, isLimit
 -/
@@ -168,7 +206,8 @@ theorem isIdempotentComplete_iff_idempotents_have_kernels
     convert! hasKernel_of_hasEqualizer (𝟙 X) (𝟙 X - p)
     rw [sub_sub_cancel]
   · intro h X p hp
-    have : HasKe
+    have : HasKernel (𝟙 _ - p) := h X (𝟙 _ - p) (idem_of_id_sub_idem p hp)
+    apply Preadditive.hasEqualizer_of_hasKernel
 
 中文:
 定理 isIdempotentComplete_iff_idempotents_have_kernels
@@ -181,7 +220,8 @@ theorem isIdempotentComplete_iff_idempotents_have_kernels
     convert! hasKernel_of_hasEqualizer (𝟙 X) (𝟙 X - p)
     rw [sub_sub_cancel]
   · intro h X p hp
-    have : HasKe
+    have : HasKernel (𝟙 _ - p) := h X (𝟙 _ - p) (idem_of_id_sub_idem p hp)
+    apply Preadditive.hasEqualizer_of_hasKernel
 
 Depends on / 依赖: HasEqualizer, HasKernel, Preadditive, Preadditive.hasEqualizer_of_hasKernel, convert, hasEqualizer_of_hasKernel, hasKernel_of_hasEqualizer, idem_of_id_sub_idem, isIdempotentComplete_iff_hasEqualizer_of_id_and_idempotent, sub_sub_cancel
 -/
@@ -286,7 +326,14 @@ theorem Equivalence.isIdempotentComplete
       (by
         slice_rhs 1 2 => rw [φ.hom_inv_id]
         rw [id_comp])]
-  rcases IsIdempotentComplete.idempotents_split (ε.inverse.obj X') (ε.inver
+  rcases IsIdempotentComplete.idempotents_split (ε.inverse.obj X') (ε.inverse.map p)
+      (by rw [← ε.inverse.map_comp, hp]) with
+    ⟨Y, i, e, ⟨h₁, h₂⟩⟩
+  use ε.functor.obj Y, ε.functor.map i, ε.functor.map e
+  constructor
+  · rw [← ε.functor.map_comp, h₁, ε.functor.map_id]
+  · simp only [← ε.functor.map_comp, h₂, Equivalence.fun_inv_map]
+    rfl
 
 中文:
 定理 等价.isIdempotentComplete
@@ -300,7 +347,14 @@ theorem Equivalence.isIdempotentComplete
       (by
         slice_rhs 1 2 => rw [φ.hom_inv_id]
         rw [id_comp])]
-  rcases IsIdempotentComplete.idempotents_split (ε.inverse.obj X') (ε.inver
+  rcases IsIdempotentComplete.idempotents_split (ε.inverse.obj X') (ε.inverse.map p)
+      (by rw [← ε.inverse.map_comp, hp]) with
+    ⟨Y, i, e, ⟨h₁, h₂⟩⟩
+  use ε.functor.obj Y, ε.functor.map i, ε.functor.map e
+  constructor
+  · rw [← ε.functor.map_comp, h₁, ε.functor.map_id]
+  · simp only [← ε.functor.map_comp, h₂, Equivalence.fun_inv_map]
+    rfl
 
 Depends on / 依赖: Equivalen, Functor, Functor.id_obj, IsIdempotentComplete, IsIdempotentComplete.idempotents_split, counitIso, counitIso.symm.app, functor, functor.map, functor.map_comp, functor.map_id, functor.obj, hom_inv_id, id_comp, id_obj, idempotents_split, inverse, inverse.map, inverse.map_comp, inverse.obj
 -/

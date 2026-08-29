@@ -319,7 +319,16 @@ theorem cfcₙHom_comp
       map_mul' := fun _ _ => rfl
       map_zero' := rfl
       map_star' := fun _ => rfl }
-  let φ : C(σₙ R (cfcₙHom ha f),
+  let φ : C(σₙ R (cfcₙHom ha f), R)₀ ->⋆ₙₐ[R] A := (cfcₙHom ha).comp ψ
+  suffices cfcₙHom (cfcₙHom_predicate ha f) = φ from DFunLike.congr_fun this.symm g
+  refine cfcₙHom_eq_of_continuous_of_map_id (cfcₙHom_predicate ha f) φ ?_ ?_
+· refine (cfcₙHom_continuous ha).comp continuous_induced_rng.mpr ?_
+    exact f'.toContinuousMap.continuous_precomp.comp continuous_induced_dom
+  · simp only [φ, ψ, NonUnitalStarAlgHom.comp_apply, NonUnitalStarAlgHom.coe_mk',
+      NonUnitalAlgHom.coe_mk]
+    congr
+    ext x
+    simp [hff']
 
 中文:
 定理 cfcₙHom_comp
@@ -332,7 +341,16 @@ theorem cfcₙHom_comp
       map_mul' := fun _ _ => rfl
       map_zero' := rfl
       map_star' := fun _ => rfl }
-  let φ : C(σₙ R (cfcₙHom ha f),
+  let φ : C(σₙ R (cfcₙHom ha f), R)₀ ->⋆ₙₐ[R] A := (cfcₙHom ha).comp ψ
+  suffices cfcₙHom (cfcₙHom_predicate ha f) = φ from DFunLike.congr_fun this.symm g
+  refine cfcₙHom_eq_of_continuous_of_map_id (cfcₙHom_predicate ha f) φ ?_ ?_
+· refine (cfcₙHom_continuous ha).comp continuous_induced_rng.mpr ?_
+    exact f'.toContinuousMap.continuous_precomp.comp continuous_induced_dom
+  · simp only [φ, ψ, NonUnitalStarAlgHom.comp_apply, NonUnitalStarAlgHom.coe_mk',
+      NonUnitalAlgHom.coe_mk]
+    congr
+    ext x
+    simp [hff']
 
 Depends on / 依赖: ContinuousMapZero, ContinuousMapZero.comp, DFunLike, DFunLike.congr_fun, congr_fun, map_add, map_mul, map_smul, map_star, map_zero, this.symm
 -/
@@ -557,7 +575,11 @@ lemma cfcₙHom_eq_cfcₙ_extend
   have hg : ContinuousOn (Function.extend Subtype.val f g) (σₙ R a) :=
 continuousOn_iff_continuous_domRestrict.mpr h ▸ map_continuous f
   have hg0 : (Function.extend Subtype.val f g) 0 = 0 := by
-    rw [← qu
+    rw [← quasispectrum.coe_zero (R := R) a]; rw [Subtype.val_injective.extend_apply]
+    exact map_zero f
+  generalize Function.extend Subtype.val f g = f' at *
+  rw [cfcₙ_apply ..]
+  congr!
 
 中文:
 引理 cfcₙHom_eq_cfcₙ_extend
@@ -568,7 +590,11 @@ continuousOn_iff_continuous_domRestrict.mpr h ▸ map_continuous f
   have hg : ContinuousOn (Function.extend Subtype.val f g) (σₙ R a) :=
 continuousOn_iff_continuous_domRestrict.mpr h ▸ map_continuous f
   have hg0 : (Function.extend Subtype.val f g) 0 = 0 := by
-    rw [← qu
+    rw [← quasispectrum.coe_zero (R := R) a]; rw [Subtype.val_injective.extend_apply]
+    exact map_zero f
+  generalize Function.extend Subtype.val f g = f' at *
+  rw [cfcₙ_apply ..]
+  congr!
 
 Depends on / 依赖: ContinuousOn, Function, Function.extend, Subtype, Subtype.val, Subtype.val_injective.extend_apply, coe_zero, continuousOn_iff_continuous_domRestrict, continuousOn_iff_continuous_domRestrict.mpr, domRestrict, extend, extend_apply, generalize, map_continuous, map_zero, quasispectrum, quasispectrum.coe_zero, val_injective
 -/
@@ -618,7 +644,7 @@ lemma cfcₙ_apply_mkD
     · rw [cfcₙ_apply f a, mkD_of_continuousOn f_cont f_zero]
     · rw [cfcₙ_apply_of_not_map_zero a f_zero, mkD_of_not_zero, map_zero]
       exact f_zero
-  · rw [cfcₙ_apply_of_not_continuousOn a f_cont, mkD_of_no
+  · rw [cfcₙ_apply_of_not_continuousOn a f_cont, mkD_of_not_continuousOn f_cont, map_zero]
 
 中文:
 引理 cfcₙ_apply_mkD
@@ -628,7 +654,7 @@ lemma cfcₙ_apply_mkD
     · rw [cfcₙ_apply f a, mkD_of_continuousOn f_cont f_zero]
     · rw [cfcₙ_apply_of_not_map_zero a f_zero, mkD_of_not_zero, map_zero]
       exact f_zero
-  · rw [cfcₙ_apply_of_not_continuousOn a f_cont, mkD_of_no
+  · rw [cfcₙ_apply_of_not_continuousOn a f_cont, mkD_of_not_continuousOn f_cont, map_zero]
 
 Depends on / 依赖: ContinuousOn, domRestrict, f_cont, f_zero, map_zero, mkD_of_continuousOn, mkD_of_not_continuousOn, mkD_of_not_zero, quasispectrum
 -/
@@ -673,7 +699,7 @@ lemma cfcₙ_cases
     obtain (h | h | h) := h
     · rwa [cfcₙ_apply_of_not_continuousOn _ h]
     · rwa [cfcₙ_apply_of_not_map_zero _ h]
-    · rwa [cfcₙ_apply_
+    · rwa [cfcₙ_apply_of_not_predicate _ h]
 
 中文:
 引理 cfcₙ_cases
@@ -686,7 +712,7 @@ lemma cfcₙ_cases
     obtain (h | h | h) := h
     · rwa [cfcₙ_apply_of_not_continuousOn _ h]
     · rwa [cfcₙ_apply_of_not_map_zero _ h]
-    · rwa [cfcₙ_apply_
+    · rwa [cfcₙ_apply_of_not_predicate _ h]
 
 Depends on / 依赖: ContinuousOn, not_and_or
 -/
@@ -840,6 +866,11 @@ lemma cfcₙ_congr
     exact Set.domRestrict_eq_iff.mpr hfg
   · simp only [not_and_or] at h
     obtain (ha | hg | h0) := h
+    · simp [cfcₙ_apply_of_not_predicate a ha]
+    · rw [cfcₙ_apply_of_not_continuousOn a hg, cfcₙ_apply_of_not_continuousOn]
+      exact fun hf => hg (hf.congr hfg.symm)
+    · rw [cfcₙ_apply_of_not_map_zero a h0, cfcₙ_apply_of_not_map_zero]
+      exact fun hf => h0 (hfg (quasispectrum.zero_mem R a) ▸ hf)
 
 中文:
 引理 cfcₙ_congr
@@ -852,6 +883,11 @@ lemma cfcₙ_congr
     exact Set.domRestrict_eq_iff.mpr hfg
   · simp only [not_and_or] at h
     obtain (ha | hg | h0) := h
+    · simp [cfcₙ_apply_of_not_predicate a ha]
+    · rw [cfcₙ_apply_of_not_continuousOn a hg, cfcₙ_apply_of_not_continuousOn]
+      exact fun hf => hg (hf.congr hfg.symm)
+    · rw [cfcₙ_apply_of_not_map_zero a h0, cfcₙ_apply_of_not_map_zero]
+      exact fun hf => h0 (hfg (quasispectrum.zero_mem R a) ▸ hf)
 
 Depends on / 依赖: ContinuousOn, Set.domRestrict_eq_iff.mpr, domRestrict_eq_iff, hf.congr, hfg.symm, not_and_or, quasispectrum, quasispectrum.zero_mem, zero_mem
 -/
@@ -1048,7 +1084,11 @@ lemma cfcₙ_sum
       rw [sum_coe_sort s]; rw [hsum]
       exact continuousOn_finsetSum s fun i hi => hf i hi
     rw [← sum_coe_sort s]; rw [← sum_coe_sort s]
-    rw [c
+    rw [cfcₙ_apply_pi _ a ha (fun ⟨i]; rw [hi⟩ => hf i hi)]; rw [← map_sum]; rw [cfcₙ_apply _ a hf']
+    congr 1
+    ext
+    simp
+  · simp [cfcₙ_apply_of_not_predicate a ha]
 
 中文:
 引理 cfcₙ_sum
@@ -1060,7 +1100,11 @@ lemma cfcₙ_sum
       rw [sum_coe_sort s]; rw [hsum]
       exact continuousOn_finsetSum s fun i hi => hf i hi
     rw [← sum_coe_sort s]; rw [← sum_coe_sort s]
-    rw [c
+    rw [cfcₙ_apply_pi _ a ha (fun ⟨i]; rw [hi⟩ => hf i hi)]; rw [← map_sum]; rw [cfcₙ_apply _ a hf']
+    congr 1
+    ext
+    simp
+  · simp [cfcₙ_apply_of_not_predicate a ha]
 
 Depends on / 依赖: ContinuousOn, cfc_cont_tac, cfc_zero_tac, continuousOn_finsetSum, map_sum, s.sum, sum_coe_sort
 -/
@@ -1175,7 +1219,10 @@ lemma cfcₙ_star
   · simp only [not_and_or] at h
     obtain (ha | hf | h0) := h
     · simp [cfcₙ_apply_of_not_predicate a ha]
-    · rw [cfcₙ_apply_of_not_cont
+    · rw [cfcₙ_apply_of_not_continuousOn a hf, cfcₙ_apply_of_not_continuousOn, star_zero]
+exact fun hf_star => hf by simpa using hf_star.star
+    · rw [cfcₙ_apply_of_not_map_zero a h0, cfcₙ_apply_of_not_map_zero, star_zero]
+exact fun hf0 => h0 by simpa using congr(star $(hf0))
 
 中文:
 引理 cfcₙ_star
@@ -1188,7 +1235,10 @@ lemma cfcₙ_star
   · simp only [not_and_or] at h
     obtain (ha | hf | h0) := h
     · simp [cfcₙ_apply_of_not_predicate a ha]
-    · rw [cfcₙ_apply_of_not_cont
+    · rw [cfcₙ_apply_of_not_continuousOn a hf, cfcₙ_apply_of_not_continuousOn, star_zero]
+exact fun hf_star => hf by simpa using hf_star.star
+    · rw [cfcₙ_apply_of_not_map_zero a h0, cfcₙ_apply_of_not_map_zero, star_zero]
+exact fun hf0 => h0 by simpa using congr(star $(hf0))
 
 Depends on / 依赖: ContinuousOn, hf_star, hf_star.star, map_star, not_and_or, star_zero
 -/
@@ -1320,7 +1370,12 @@ have := hg.comp hf (σₙ R a).mapsTo_image f
     rw [cfcₙHom_map_quasispectrum (by exact ha) _]
     ext
     simp
-  rw [cfcₙ_apply ..]; rw [cfcₙ_apply f a]; rw [cfcₙ_apply _ 
+  rw [cfcₙ_apply ..]; rw [cfcₙ_apply f a]; rw [cfcₙ_apply _ _ (by convert! hg) (ha := cfcₙHom_predicate (show p a from ha) _)]; rw [← cfcₙHom_comp _ _]
+  swap
+· exact ⟨.mk _ hf.domRestrict.codRestrict fun x => by rw [sp_eq]; use x.1; simp,
+      Subtype.ext hf0⟩
+  · congr
+  · exact fun _ => rfl
 
 中文:
 引理 cfcₙ_comp
@@ -1333,7 +1388,12 @@ have := hg.comp hf (σₙ R a).mapsTo_image f
     rw [cfcₙHom_map_quasispectrum (by exact ha) _]
     ext
     simp
-  rw [cfcₙ_apply ..]; rw [cfcₙ_apply f a]; rw [cfcₙ_apply _ 
+  rw [cfcₙ_apply ..]; rw [cfcₙ_apply f a]; rw [cfcₙ_apply _ _ (by convert! hg) (ha := cfcₙHom_predicate (show p a from ha) _)]; rw [← cfcₙHom_comp _ _]
+  swap
+· exact ⟨.mk _ hf.domRestrict.codRestrict fun x => by rw [sp_eq]; use x.1; simp,
+      Subtype.ext hf0⟩
+  · congr
+  · exact fun _ => rfl
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.mk, ContinuousOn, cfc_cont_tac, cfc_tac, cfc_zero_tac, convert, domRestrict, hf.domRestrict, hg.comp, mapsTo_image, sp_eq
 -/
@@ -1671,7 +1731,10 @@ lemma cfcₙ_neg
   · simp only [not_and_or] at h
     obtain (ha | hf | h0) := h
     · simp [cfcₙ_apply_of_not_predicate a ha]
-    · rw [cfcₙ_apply_of_not_contin
+    · rw [cfcₙ_apply_of_not_continuousOn a hf, cfcₙ_apply_of_not_continuousOn, neg_zero]
+exact fun hf_neg => hf by simpa using hf_neg.fun_neg
+    · rw [cfcₙ_apply_of_not_map_zero a h0, cfcₙ_apply_of_not_map_zero, neg_zero]
+      exact (h0 <| neg_eq_zero.mp ·)
 
 中文:
 引理 cfcₙ_neg
@@ -1684,7 +1747,10 @@ lemma cfcₙ_neg
   · simp only [not_and_or] at h
     obtain (ha | hf | h0) := h
     · simp [cfcₙ_apply_of_not_predicate a ha]
-    · rw [cfcₙ_apply_of_not_contin
+    · rw [cfcₙ_apply_of_not_continuousOn a hf, cfcₙ_apply_of_not_continuousOn, neg_zero]
+exact fun hf_neg => hf by simpa using hf_neg.fun_neg
+    · rw [cfcₙ_apply_of_not_map_zero a h0, cfcₙ_apply_of_not_map_zero, neg_zero]
+      exact (h0 <| neg_eq_zero.mp ·)
 
 Depends on / 依赖: ContinuousOn, fun_neg, hf_neg, hf_neg.fun_neg, map_neg, neg_eq_zero, neg_eq_zero.mp, neg_zero, not_and_or
 -/
@@ -2247,7 +2313,7 @@ definition cfcₙHom_of_cfcHom
 ⟨_, continuous_inclusion spectrum_subset_quasispectrum R a⟩
   let ψ := ContinuousMap.compStarAlgHom' R R f
 (cfcHom ha (R := R) : C(spectrum R a, R) ->⋆ₙₐ[R] A).comp
-    (ψ : C(σₙ R a,
+    (ψ : C(σₙ R a, R) ->⋆ₙₐ[R] C(spectrum R a, R)).comp e
 
 中文:
 定义 cfcₙHom_of_cfcHom
@@ -2257,7 +2323,7 @@ definition cfcₙHom_of_cfcHom
 ⟨_, continuous_inclusion spectrum_subset_quasispectrum R a⟩
   let ψ := ContinuousMap.compStarAlgHom' R R f
 (cfcHom ha (R := R) : C(spectrum R a, R) ->⋆ₙₐ[R] A).comp
-    (ψ : C(σₙ R a,
+    (ψ : C(σₙ R a, R) ->⋆ₙₐ[R] C(spectrum R a, R)).comp e
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.compStarAlgHom, ContinuousMapZero, ContinuousMapZero.toContinuousMapHom, cfcHom, compStarAlgHom, continuous_inclusion, quasispectrum, spectrum, spectrum_subset_quasispectrum, toContinuousMapHom
 -/
@@ -2343,7 +2409,16 @@ lemma cfcₙHom_of_cfcHom_map_quasispectrum
   ext x
   constructor
   · rintro (⟨x, rfl⟩ | rfl)
-    · exact ⟨⟨x.1, spectrum_subset_quasispectrum R a x.2⟩
+    · exact ⟨⟨x.1, spectrum_subset_quasispectrum R a x.2⟩, rfl⟩
+    · exact ⟨0, map_zero f⟩
+  · rintro ⟨x, rfl⟩
+    have hx := x.2
+    simp_rw [quasispectrum_eq_spectrum_union_zero R a] at hx
+    obtain (hx | hx) := hx
+    · exact Or.inl ⟨⟨x.1, hx⟩, rfl⟩
+    · apply Or.inr
+      push _ in _ at hx ⊢
+      rw [show x = 0 from Subtype.val_injective hx]; rw [map_zero]
 
 中文:
 引理 cfcₙHom_of_cfcHom_map_quasispectrum
@@ -2357,7 +2432,16 @@ lemma cfcₙHom_of_cfcHom_map_quasispectrum
   ext x
   constructor
   · rintro (⟨x, rfl⟩ | rfl)
-    · exact ⟨⟨x.1, spectrum_subset_quasispectrum R a x.2⟩
+    · exact ⟨⟨x.1, spectrum_subset_quasispectrum R a x.2⟩, rfl⟩
+    · exact ⟨0, map_zero f⟩
+  · rintro ⟨x, rfl⟩
+    have hx := x.2
+    simp_rw [quasispectrum_eq_spectrum_union_zero R a] at hx
+    obtain (hx | hx) := hx
+    · exact Or.inl ⟨⟨x.1, hx⟩, rfl⟩
+    · apply Or.inr
+      push _ in _ at hx ⊢
+      rw [show x = 0 from Subtype.val_injective hx]; rw [map_zero]
 
 Depends on / 依赖: NonUnitalStarAlgHom, NonUnitalStarAlgHom.coe_coe, NonUnitalStarAlgHom.comp_apply, Or.inl, Or.inr, cfcHom_map_spectrum, coe_coe, comp_apply, map_zero, quasispectrum_eq_spectrum_union_zero, simp_rw, spectrum_subset_quasispectrum
 -/
@@ -2397,7 +2481,18 @@ lemma isClosedEmbedding_cfcₙHom_of_cfcHom
 refine (cfcHom_isClosedEmbedding ha).comp
     (IsUniformInducing.isUniformEmbedding ⟨?_⟩).isClosedEmbedding
   have := uniformSpace_eq_inf_precomp_of_cover (β := R) f (0 : C(Unit, σₙ R a))
-(map_continu
+(map_continuous f).isProperMap (map_continuous 0).isProperMap by
+      simp only [← Subtype.val_injective.image_injective.eq_iff, f, ContinuousMap.coe_mk,
+        ContinuousMap.coe_zero, range_zero, image_union, image_singleton,
+        quasispectrum.coe_zero, ← range_comp, val_comp_inclusion, image_univ, Subtype.range_coe,
+        quasispectrum_eq_spectrum_union_zero]
+  simp_rw +instances [← isUniformEmbedding_toContinuousMap.comap_uniformity, this,
+    @inf_uniformity _ (.comap _ _) (.comap _ _), uniformity_comap, Filter.comap_inf,
+    Filter.comap_comap]
+refine .symm inf_eq_left.mpr le_top.trans eq_top_iff.mp ?_
+  have : forall U in 𝓤 (C(Unit, R)), (0, 0) in U := fun U hU => refl_mem_uniformity hU
+  convert! Filter.comap_const_of_mem this with ⟨u, v⟩ <;>
+  ext ⟨x, rfl⟩ <;> [exact map_zero u; exact map_zero v]
 
 中文:
 引理 isClosedEmbedding_cfcₙHom_of_cfcHom
@@ -2408,7 +2503,18 @@ refine (cfcHom_isClosedEmbedding ha).comp
 refine (cfcHom_isClosedEmbedding ha).comp
     (IsUniformInducing.isUniformEmbedding ⟨?_⟩).isClosedEmbedding
   have := uniformSpace_eq_inf_precomp_of_cover (β := R) f (0 : C(Unit, σₙ R a))
-(map_continu
+(map_continuous f).isProperMap (map_continuous 0).isProperMap by
+      simp only [← Subtype.val_injective.image_injective.eq_iff, f, ContinuousMap.coe_mk,
+        ContinuousMap.coe_zero, range_zero, image_union, image_singleton,
+        quasispectrum.coe_zero, ← range_comp, val_comp_inclusion, image_univ, Subtype.range_coe,
+        quasispectrum_eq_spectrum_union_zero]
+  simp_rw +instances [← isUniformEmbedding_toContinuousMap.comap_uniformity, this,
+    @inf_uniformity _ (.comap _ _) (.comap _ _), uniformity_comap, Filter.comap_inf,
+    Filter.comap_comap]
+refine .symm inf_eq_left.mpr le_top.trans eq_top_iff.mp ?_
+  have : forall U in 𝓤 (C(Unit, R)), (0, 0) in U := fun U hU => refl_mem_uniformity hU
+  convert! Filter.comap_const_of_mem this with ⟨u, v⟩ <;>
+  ext ⟨x, rfl⟩ <;> [exact map_zero u; exact map_zero v]
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, ContinuousMap.coe_zero, IsUniformInducing, IsUniformInducing.isUniformEmbedding, Subtype, Subtype.val_injective.image_injective.eq_iff, cfcHom_isClosedEmbedding, coe_mk, coe_zero, continuous_inclusion, eq_iff, image_injective, image_singleton, image_union, isClosedEmbedding, isProperMap, isUniformEmbedding, map_continuous, range_zero
 -/
@@ -2445,7 +2551,12 @@ instance ContinuousFunctionalCalculus.toNonUnital
     simp only [← isCompact_iff_compactSpace, quasispectrum_eq_spectrum_union_zero] at h_cpct ⊢
 .union isCompact_singleton exact h_cpct
   exists_cfc_of_predicate _ ha :=
-    ⟨cfcₙH
+    ⟨cfcₙHom_of_cfcHom R ha,
+      continuous_cfcₙHom_of_cfcHom ha,
+      cfcₙHom_of_cfcHom_injective ha,
+      cfcHom_id ha,
+      cfcₙHom_of_cfcHom_map_quasispectrum ha,
+      fun _ => cfcHom_predicate ha _⟩
 
 中文:
 实例 余ntinuousFunctionalCalculus.toNonUnital
@@ -2456,7 +2567,12 @@ instance ContinuousFunctionalCalculus.toNonUnital
     simp only [← isCompact_iff_compactSpace, quasispectrum_eq_spectrum_union_zero] at h_cpct ⊢
 .union isCompact_singleton exact h_cpct
   exists_cfc_of_predicate _ ha :=
-    ⟨cfcₙH
+    ⟨cfcₙHom_of_cfcHom R ha,
+      continuous_cfcₙHom_of_cfcHom ha,
+      cfcₙHom_of_cfcHom_injective ha,
+      cfcHom_id ha,
+      cfcₙHom_of_cfcHom_map_quasispectrum ha,
+      fun _ => cfcHom_predicate ha _⟩
 
 Depends on / 依赖: cfc_predicate_zero
 -/
@@ -2511,7 +2627,8 @@ lemma cfcₙ_eq_cfc
     rw [cfc_apply f a ha hf']; rw [cfcₙ_apply f a hf]; rw [cfcₙHom_eq_cfcₙHom_of_cfcHom]; rw [cfcₙHom_of_cfcHom]
     dsimp only [NonUnitalStarAlgHom.comp_apply,
       NonUnitalStarAlgHom.coe_coe, compStarAlgHom'_apply]
-  
+    congr
+  · simp [cfc_apply_of_not_predicate a ha, cfcₙ_apply_of_not_predicate (R := R) a ha]
 
 中文:
 引理 cfcₙ_eq_cfc
@@ -2522,7 +2639,8 @@ lemma cfcₙ_eq_cfc
     rw [cfc_apply f a ha hf']; rw [cfcₙ_apply f a hf]; rw [cfcₙHom_eq_cfcₙHom_of_cfcHom]; rw [cfcₙHom_of_cfcHom]
     dsimp only [NonUnitalStarAlgHom.comp_apply,
       NonUnitalStarAlgHom.coe_coe, compStarAlgHom'_apply]
-  
+    congr
+  · simp [cfc_apply_of_not_predicate a ha, cfcₙ_apply_of_not_predicate (R := R) a ha]
 
 Depends on / 依赖: NonUnitalStarAlgHom, NonUnitalStarAlgHom.coe_coe, NonUnitalStarAlgHom.comp_apply, _apply, cfc_apply, cfc_apply_of_not_predicate, cfc_cont_tac, cfc_zero_tac, coe_coe, compStarAlgHom, comp_apply, hf.mono, spectrum_subset_quasispectrum
 -/

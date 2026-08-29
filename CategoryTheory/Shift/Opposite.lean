@@ -74,7 +74,9 @@ definition mkShiftCoreOp
     Quiver.Hom.unop_inj ((shiftFunctorAdd_assoc_inv_app m₁ m₂ m₃ X.unop).trans
       (by simp [shiftFunctorAdd']))
   zero_add_hom_app n X :=
-   
+    Quiver.Hom.unop_inj ((shiftFunctorAdd_zero_add_inv_app n X.unop).trans (by simp))
+  add_zero_hom_app n X :=
+    Quiver.Hom.unop_inj ((shiftFunctorAdd_add_zero_inv_app n X.unop).trans (by simp))
 
 中文:
 定义 mkShiftCoreOp
@@ -86,7 +88,9 @@ definition mkShiftCoreOp
     Quiver.Hom.unop_inj ((shiftFunctorAdd_assoc_inv_app m₁ m₂ m₃ X.unop).trans
       (by simp [shiftFunctorAdd']))
   zero_add_hom_app n X :=
-   
+    Quiver.Hom.unop_inj ((shiftFunctorAdd_zero_add_inv_app n X.unop).trans (by simp))
+  add_zero_hom_app n X :=
+    Quiver.Hom.unop_inj ((shiftFunctorAdd_add_zero_inv_app n X.unop).trans (by simp))
 
 Depends on / 依赖: shiftFunctor
 -/
@@ -412,7 +416,15 @@ instance commShiftOp
     ext
     simp only [op_obj, comp_obj, Iso.symm_hom, NatIso.op_inv, NatTrans.op_app,
       CommShift.isoZero_inv_app, op_comp, CommShift.isoZero_hom_app]
-    erw [oppositeShiftFunctorZero_inv_app, oppositeShif
+    erw [oppositeShiftFunctorZero_inv_app, oppositeShiftFunctorZero_hom_app]
+    rfl
+  commShiftIso_add a b := by
+    rw [commShiftIso_add]
+    ext
+    simp only [op_obj, comp_obj, Iso.symm_hom, NatIso.op_inv, NatTrans.op_app,
+      CommShift.isoAdd_inv_app, op_comp, Category.assoc, CommShift.isoAdd_hom_app]
+    erw [oppositeShiftFunctorAdd_inv_app, oppositeShiftFunctorAdd_hom_app]
+    rfl
 
 中文:
 实例 commShiftOp
@@ -423,7 +435,15 @@ instance commShiftOp
     ext
     simp only [op_obj, comp_obj, Iso.symm_hom, NatIso.op_inv, NatTrans.op_app,
       CommShift.isoZero_inv_app, op_comp, CommShift.isoZero_hom_app]
-    erw [oppositeShiftFunctorZero_inv_app, oppositeShif
+    erw [oppositeShiftFunctorZero_inv_app, oppositeShiftFunctorZero_hom_app]
+    rfl
+  commShiftIso_add a b := by
+    rw [commShiftIso_add]
+    ext
+    simp only [op_obj, comp_obj, Iso.symm_hom, NatIso.op_inv, NatTrans.op_app,
+      CommShift.isoAdd_inv_app, op_comp, Category.assoc, CommShift.isoAdd_hom_app]
+    erw [oppositeShiftFunctorAdd_inv_app, oppositeShiftFunctorAdd_hom_app]
+    rfl
 
 Depends on / 依赖: F.commShiftIso, NatIso, NatIso.op, commShiftIso
 -/
@@ -479,7 +499,16 @@ definition commShiftUnop
     ext
     simp only [NatIso.removeOp_hom, Iso.symm_hom, NatTrans.removeOp_app,
       CommShift.isoZero_inv_app, unop_comp, CommShift.isoZero_hom_app]
-    erw [oppositeShiftFunctor
+    erw [oppositeShiftFunctorZero_hom_app, oppositeShiftFunctorZero_inv_app]
+    rfl
+  commShiftIso_add a b := by
+    rw [commShiftIso_add]
+    ext
+    simp only [NatIso.removeOp_hom, Iso.symm_hom, NatTrans.removeOp_app,
+      CommShift.isoAdd_inv_app, unop_comp, Category.assoc,
+      CommShift.isoAdd_hom_app]
+    erw [oppositeShiftFunctorAdd_hom_app, oppositeShiftFunctorAdd_inv_app]
+    rfl
 
 中文:
 定义 commShiftUnop
@@ -489,7 +518,16 @@ definition commShiftUnop
     ext
     simp only [NatIso.removeOp_hom, Iso.symm_hom, NatTrans.removeOp_app,
       CommShift.isoZero_inv_app, unop_comp, CommShift.isoZero_hom_app]
-    erw [oppositeShiftFunctor
+    erw [oppositeShiftFunctorZero_hom_app, oppositeShiftFunctorZero_inv_app]
+    rfl
+  commShiftIso_add a b := by
+    rw [commShiftIso_add]
+    ext
+    simp only [NatIso.removeOp_hom, Iso.symm_hom, NatTrans.removeOp_app,
+      CommShift.isoAdd_inv_app, unop_comp, Category.assoc,
+      CommShift.isoAdd_hom_app]
+    erw [oppositeShiftFunctorAdd_hom_app, oppositeShiftFunctorAdd_inv_app]
+    rfl
 
 Depends on / 依赖: NatIso, NatIso.removeOp, OppositeShift, OppositeShift.functor, commShiftIso, functor, removeOp
 -/
@@ -529,7 +567,8 @@ instance commShift_op
     ext
     rw [← cancel_mono (((OppositeShift.functor A F).commShiftIso _).inv.app _)]; rw [← cancel_epi (((OppositeShift.functor A G).commShiftIso _).inv.app _)]
     simp only [Functor.comp_obj, comp_app, Functor.whiskerRight_app, assoc,
-      Iso.inv_hom_id_app_assoc, Functor.whiskerLeft_app, 
+      Iso.inv_hom_id_app_assoc, Functor.whiskerLeft_app, Iso.hom_inv_id_app, comp_id]
+    exact (op_inj_iff _ _).mpr (NatTrans.shift_app_comm τ _ (unop _))
 
 中文:
 实例 commShift_op
@@ -538,7 +577,8 @@ instance commShift_op
     ext
     rw [← cancel_mono (((OppositeShift.functor A F).commShiftIso _).inv.app _)]; rw [← cancel_epi (((OppositeShift.functor A G).commShiftIso _).inv.app _)]
     simp only [Functor.comp_obj, comp_app, Functor.whiskerRight_app, assoc,
-      Iso.inv_hom_id_app_assoc, Functor.whiskerLeft_app, 
+      Iso.inv_hom_id_app_assoc, Functor.whiskerLeft_app, Iso.hom_inv_id_app, comp_id]
+    exact (op_inj_iff _ _).mpr (NatTrans.shift_app_comm τ _ (unop _))
 
 Depends on / 依赖: Functor, Functor.comp_obj, Functor.whiskerLeft_app, Functor.whiskerRight_app, IndepMatroid, IndepMatroid.matroid, IndepMatroid.ofFoo, Iso.hom_inv_id_app, Iso.inv_hom_id_app_assoc, MyIndep, NatTrans, NatTrans.shift_app_comm, OppositeShift, OppositeShift.functor, cancel_epi, cancel_mono, commShiftIso, comp_app, comp_id, comp_obj
 -/
@@ -680,7 +720,18 @@ definition OppositeShift.adjunction
     OppositeShift.natTrans A adj.counit ≫ (NatTrans.OppositeShift.natIsoComp A G F).hom
   counit := (NatTrans.OppositeShift.natIsoComp A F G).inv ≫
     OppositeShift.natTrans A adj.unit ≫ (NatTrans.OppositeShift.natIsoId C A).inv
-  left_triangle_components
+  left_triangle_components _ := by
+    dsimp [OppositeShift.natTrans, NatTrans.OppositeShift.natIsoComp,
+      NatTrans.OppositeShift.natIsoId, OppositeShift.functor]
+    simp only [comp_id, id_comp, Quiver.Hom.unop_op]
+    rw [← op_comp]; rw [adj.right_triangle_components]
+    rfl
+  right_triangle_components _ := by
+    dsimp [OppositeShift.natTrans, NatTrans.OppositeShift.natIsoComp,
+      NatTrans.OppositeShift.natIsoId, OppositeShift.functor]
+    simp only [comp_id, id_comp, Quiver.Hom.unop_op]
+    rw [← op_comp]; rw [adj.left_triangle_components]
+    rfl
 
 中文:
 定义 OppositeShift.adjunction
@@ -689,7 +740,18 @@ definition OppositeShift.adjunction
     OppositeShift.natTrans A adj.counit ≫ (NatTrans.OppositeShift.natIsoComp A G F).hom
   counit := (NatTrans.OppositeShift.natIsoComp A F G).inv ≫
     OppositeShift.natTrans A adj.unit ≫ (NatTrans.OppositeShift.natIsoId C A).inv
-  left_triangle_components
+  left_triangle_components _ := by
+    dsimp [OppositeShift.natTrans, NatTrans.OppositeShift.natIsoComp,
+      NatTrans.OppositeShift.natIsoId, OppositeShift.functor]
+    simp only [comp_id, id_comp, Quiver.Hom.unop_op]
+    rw [← op_comp]; rw [adj.right_triangle_components]
+    rfl
+  right_triangle_components _ := by
+    dsimp [OppositeShift.natTrans, NatTrans.OppositeShift.natIsoComp,
+      NatTrans.OppositeShift.natIsoId, OppositeShift.functor]
+    simp only [comp_id, id_comp, Quiver.Hom.unop_op]
+    rw [← op_comp]; rw [adj.left_triangle_components]
+    rfl
 
 Depends on / 依赖: NatTrans, NatTrans.OppositeShift.natIsoId, OppositeShift, natIsoId
 -/

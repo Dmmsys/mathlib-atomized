@@ -636,7 +636,13 @@ definition pointedToBipointedFstBipointedToPointedFstAdjunction
           left_inv := fun f => by
             apply Bipointed.Hom.ext
             funext x
-         
+            cases x
+            · exact f.map_snd.symm
+            · rfl }
+      homEquiv_naturality_left_symm := fun f g => by
+        apply Bipointed.Hom.ext
+        funext x
+        cases x <;> rfl }
 
 中文:
 定义 pointedToBipointedFstBipointedToPointedFstAdjunction
@@ -648,7 +654,13 @@ definition pointedToBipointedFstBipointedToPointedFstAdjunction
           left_inv := fun f => by
             apply Bipointed.Hom.ext
             funext x
-         
+            cases x
+            · exact f.map_snd.symm
+            · rfl }
+      homEquiv_naturality_left_symm := fun f g => by
+        apply Bipointed.Hom.ext
+        funext x
+        cases x <;> rfl }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Bipointed, Bipointed.Hom.ext, Option.some, Y.toProd, f.map_fst, f.map_point, f.map_snd.symm, f.toFun, homEquiv, homEquiv_naturality_left_symm, invFun, left_inv, map_fst, map_point, map_snd, mkOfHomEquiv, o.elim, toProd
 -/
@@ -682,7 +694,13 @@ definition pointedToBipointedSndBipointedToPointedSndAdjunction
           left_inv := fun f => by
             apply Bipointed.Hom.ext
             funext x
-         
+            cases x
+            · exact f.map_fst.symm
+            · rfl }
+      homEquiv_naturality_left_symm := fun f g => by
+        apply Bipointed.Hom.ext
+        funext x
+        cases x <;> rfl }
 
 中文:
 定义 pointedToBipointedSndBipointedToPointedSndAdjunction
@@ -694,7 +712,13 @@ definition pointedToBipointedSndBipointedToPointedSndAdjunction
           left_inv := fun f => by
             apply Bipointed.Hom.ext
             funext x
-         
+            cases x
+            · exact f.map_fst.symm
+            · rfl }
+      homEquiv_naturality_left_symm := fun f g => by
+        apply Bipointed.Hom.ext
+        funext x
+        cases x <;> rfl }
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, Bipointed, Bipointed.Hom.ext, Option.some, Y.toProd, f.map_fst.symm, f.map_point, f.map_snd, f.toFun, homEquiv, homEquiv_naturality_left_symm, invFun, left_inv, map_fst, map_point, map_snd, mkOfHomEquiv, o.elim, toProd
 -/

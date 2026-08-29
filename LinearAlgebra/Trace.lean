@@ -91,7 +91,15 @@ theorem traceAux_eq
       Matrix.trace (LinearMap.toMatrix b b f) =
           Matrix.trace (LinearMap.toMatrix b b ((LinearMap.id.comp f).comp LinearMap.id)) := by
         rw [LinearMap.id_comp]; rw [LinearMap.comp_id]
-      _ = Matrix.trace (LinearMap.toMatrix c b LinearMap.id * LinearM
+      _ = Matrix.trace (LinearMap.toMatrix c b LinearMap.id * LinearMap.toMatrix c c f *
+          LinearMap.toMatrix b c LinearMap.id) := by
+        rw [LinearMap.toMatrix_comp _ c]; rw [LinearMap.toMatrix_comp _ c]
+      _ = Matrix.trace (LinearMap.toMatrix c c f * LinearMap.toMatrix b c LinearMap.id *
+          LinearMap.toMatrix c b LinearMap.id) := by
+        rw [Matrix.mul_assoc]; rw [Matrix.trace_mul_comm]
+      _ = Matrix.trace (LinearMap.toMatrix c c ((f.comp LinearMap.id).comp LinearMap.id)) := by
+        rw [LinearMap.toMatrix_comp _ b]; rw [LinearMap.toMatrix_comp _ c]
+      _ = Matrix.trace (LinearMap.toMatrix c c f) := by rw [LinearMap.comp_id, LinearMap.comp_id]
 
 中文:
 定理 traceAux_eq
@@ -101,7 +109,15 @@ theorem traceAux_eq
       Matrix.trace (LinearMap.toMatrix b b f) =
           Matrix.trace (LinearMap.toMatrix b b ((LinearMap.id.comp f).comp LinearMap.id)) := by
         rw [LinearMap.id_comp]; rw [LinearMap.comp_id]
-      _ = Matrix.trace (LinearMap.toMatrix c b LinearMap.id * LinearM
+      _ = Matrix.trace (LinearMap.toMatrix c b LinearMap.id * LinearMap.toMatrix c c f *
+          LinearMap.toMatrix b c LinearMap.id) := by
+        rw [LinearMap.toMatrix_comp _ c]; rw [LinearMap.toMatrix_comp _ c]
+      _ = Matrix.trace (LinearMap.toMatrix c c f * LinearMap.toMatrix b c LinearMap.id *
+          LinearMap.toMatrix c b LinearMap.id) := by
+        rw [Matrix.mul_assoc]; rw [Matrix.trace_mul_comm]
+      _ = Matrix.trace (LinearMap.toMatrix c c ((f.comp LinearMap.id).comp LinearMap.id)) := by
+        rw [LinearMap.toMatrix_comp _ b]; rw [LinearMap.toMatrix_comp _ c]
+      _ = Matrix.trace (LinearMap.toMatrix c c f) := by rw [LinearMap.comp_id, LinearMap.comp_id]
 
 Depends on / 依赖: LinearMap, LinearMap.comp_id, LinearMap.ext, LinearMap.id, LinearMap.id.comp, LinearMap.id_comp, LinearMap.toMatrix, LinearMap.toMatrix_comp, Matrix, Matrix.trace, comp_id, id_comp, toMatrix, toMatrix_comp
 -/
@@ -415,7 +431,10 @@ theorem trace_eq_contract_of_basis
     rintro ⟨i, j⟩
     simp only [Function.comp_apply, Basis.tensorProduct_apply, Basis.coe_dualBasis, coe_comp]
     rw [trace_eq_matrix_trace R b]; rw [toMatrix_dualTensorHom]
-    obtain rfl |
+    obtain rfl | hij := eq_or_ne i j
+    · simp
+    rw [Matrix.trace_single_eq_of_ne j i (1 : R) hij.symm]
+    simp [hij]
 
 中文:
 定理 trace_eq_contract_of_basis
@@ -427,7 +446,10 @@ theorem trace_eq_contract_of_basis
     rintro ⟨i, j⟩
     simp only [Function.comp_apply, Basis.tensorProduct_apply, Basis.coe_dualBasis, coe_comp]
     rw [trace_eq_matrix_trace R b]; rw [toMatrix_dualTensorHom]
-    obtain rfl |
+    obtain rfl | hij := eq_or_ne i j
+    · simp
+    rw [Matrix.trace_single_eq_of_ne j i (1 : R) hij.symm]
+    simp [hij]
 
 Depends on / 依赖: Basis.coe_dualBasis, Basis.dualBasis, Basis.ext, Basis.tensorProduct, Basis.tensorProduct_apply, Function, Function.comp_apply, Matrix, Matrix.trace_single_eq_of_ne, classical, coe_comp, coe_dualBasis, comp_apply, dualBasis, eq_or_ne, hij.symm, nonempty_fintype, tensorProduct, tensorProduct_apply, toMatrix_dualTensorHom
 -/
@@ -702,7 +724,9 @@ theorem trace_tensorProduct
         (show Surjective (dualTensorHom R N N) from (dualTensorHomEquiv R N N).surjective)).1
   ext f m g n
   simp only [AlgebraTensorModule.curry_apply, TensorProduct.curry_apply,
-    coe_
+    coe_restrictScalars, compl₁₂_apply, compr₂_apply, mapBilinear_apply,
+    trace_eq_contract_apply, contractLeft_apply, lsmul_apply, smul_eq_mul,
+    map_dualTensorHom, dualDistrib_apply]
 
 中文:
 定理 trace_tensorProduct
@@ -713,7 +737,9 @@ theorem trace_tensorProduct
         (show Surjective (dualTensorHom R N N) from (dualTensorHomEquiv R N N).surjective)).1
   ext f m g n
   simp only [AlgebraTensorModule.curry_apply, TensorProduct.curry_apply,
-    coe_
+    coe_restrictScalars, compl₁₂_apply, compr₂_apply, mapBilinear_apply,
+    trace_eq_contract_apply, contractLeft_apply, lsmul_apply, smul_eq_mul,
+    map_dualTensorHom, dualDistrib_apply]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.curry_apply, Surjective, TensorProduct, TensorProduct.curry_apply, coe_restrictScalars, contractLeft_apply, curry_apply, dualDistrib_apply, dualTensorHom, dualTensorHomEquiv, lsmul_apply, mapBilinear_apply, map_dualTensorHom, smul_eq_mul, surjective, trace_eq_contract_apply
 -/
@@ -739,7 +765,9 @@ theorem trace_comp_comm
         (show Surjective (dualTensorHom R M N) from (dualTensorHomEquiv R M N).surjective)).1
   ext g m f n
   simp only [AlgebraTensorModule.curry_apply, TensorProduct.curry_apply,
-    coe_
+    coe_restrictScalars, compl₁₂_apply, compr₂_apply, flip_apply, llcomp_apply',
+    comp_dualTensorHom, LinearMapClass.map_smul, trace_eq_contract_apply,
+    contractLeft_apply, smul_eq_mul, mul_comm]
 
 中文:
 定理 trace_comp_comm
@@ -749,7 +777,9 @@ theorem trace_comp_comm
         (show Surjective (dualTensorHom R M N) from (dualTensorHomEquiv R M N).surjective)).1
   ext g m f n
   simp only [AlgebraTensorModule.curry_apply, TensorProduct.curry_apply,
-    coe_
+    coe_restrictScalars, compl₁₂_apply, compr₂_apply, flip_apply, llcomp_apply',
+    comp_dualTensorHom, LinearMapClass.map_smul, trace_eq_contract_apply,
+    contractLeft_apply, smul_eq_mul, mul_comm]
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.curry_apply, LinearMapClass, LinearMapClass.map_smul, Surjective, TensorProduct, TensorProduct.curry_apply, coe_restrictScalars, comp_dualTensorHom, contractLeft_apply, curry_apply, dualTensorHom, dualTensorHomEquiv, flip_apply, llcomp_apply, map_smul, mul_comm, smul_eq_mul, surjective, trace_eq_contract_apply
 -/
@@ -941,7 +971,12 @@ theorem trace_conj'
     have := Module.Finite.of_basis b
     have := (Module.free_def R M).mpr ⟨_, ⟨b⟩⟩
     have := Module.Finite.of_basis (b.map e)
-    have := (Module.free_def R N).mpr ⟨_, ⟨(b.map e).reindex (e.toEqui
+    have := (Module.free_def R N).mpr ⟨_, ⟨(b.map e).reindex (e.toEquiv.image _)⟩⟩
+    rw [e.conj_apply]; rw [trace_comp_comm']; rw [← comp_assoc]; rw [LinearEquiv.comp_coe]; rw [LinearEquiv.self_trans_symm]; rw [LinearEquiv.refl_toLinearMap]; rw [id_comp]
+  · rw [trace, trace, dif_neg hM, dif_neg ?_, zero_apply, zero_apply]
+    rintro ⟨s, ⟨b⟩⟩
+    exact hM ⟨s.image e.symm, ⟨(b.map e.symm).reindex
+      ((e.symm.toEquiv.image s).trans (Equiv.setCongr Finset.coe_image.symm))⟩⟩
 
 中文:
 定理 trace_conj'
@@ -954,7 +989,12 @@ theorem trace_conj'
     have := Module.Finite.of_basis b
     have := (Module.free_def R M).mpr ⟨_, ⟨b⟩⟩
     have := Module.Finite.of_basis (b.map e)
-    have := (Module.free_def R N).mpr ⟨_, ⟨(b.map e).reindex (e.toEqui
+    have := (Module.free_def R N).mpr ⟨_, ⟨(b.map e).reindex (e.toEquiv.image _)⟩⟩
+    rw [e.conj_apply]; rw [trace_comp_comm']; rw [← comp_assoc]; rw [LinearEquiv.comp_coe]; rw [LinearEquiv.self_trans_symm]; rw [LinearEquiv.refl_toLinearMap]; rw [id_comp]
+  · rw [trace, trace, dif_neg hM, dif_neg ?_, zero_apply, zero_apply]
+    rintro ⟨s, ⟨b⟩⟩
+    exact hM ⟨s.image e.symm, ⟨(b.map e.symm).reindex
+      ((e.symm.toEquiv.image s).trans (Equiv.setCongr Finset.coe_image.symm))⟩⟩
 
 Depends on / 依赖: Finite, Finset, LinearEquiv, LinearEquiv.comp_coe, LinearEquiv.refl_toLinearMap, LinearEquiv.self_trans_symm, Module, Module.Finite.of_basis, Module.free_def, Nonempty, b.map, classical, comp_assoc, comp_coe, conj_apply, dif_neg, e.conj_apply, e.toEquiv.image, free_def, id_comp
 -/
@@ -1156,7 +1196,9 @@ lemma trace_comp_eq_mul_of_commute_of_isNilpotent
     rw [← isNilpotent_iff_eq_zero]; rw [← Module.End.mul_eq_comp]
     refine isNilpotent_trace_of_isNilpotent (Commute.isNilpotent_mul_left ?_ hg)
     exact h_comm.sub_right (Algebra.commute_algebraMap_right μ f)
-  have h
+  have hμ : g = algebraMap R _ μ + n := eq_add_of_sub_eq' rfl
+  have : f ∘ₗ algebraMap R _ μ = μ • f := by ext; simp -- TODO Surely exists?
+  rw [hμ]; rw [comp_add]; rw [map_add]; rw [hg]; rw [add_zero]; rw [this]; rw [map_smul]; rw [smul_eq_mul]
 
 中文:
 引理 trace_comp_eq_mul_of_commute_of_isNilpotent
@@ -1167,7 +1209,9 @@ lemma trace_comp_eq_mul_of_commute_of_isNilpotent
     rw [← isNilpotent_iff_eq_zero]; rw [← Module.End.mul_eq_comp]
     refine isNilpotent_trace_of_isNilpotent (Commute.isNilpotent_mul_left ?_ hg)
     exact h_comm.sub_right (Algebra.commute_algebraMap_right μ f)
-  have h
+  have hμ : g = algebraMap R _ μ + n := eq_add_of_sub_eq' rfl
+  have : f ∘ₗ algebraMap R _ μ = μ • f := by ext; simp -- TODO Surely exists?
+  rw [hμ]; rw [comp_add]; rw [map_add]; rw [hg]; rw [add_zero]; rw [this]; rw [map_smul]; rw [smul_eq_mul]
 
 Depends on / 依赖: Algebra, Algebra.commute_algebraMap_right, Commute, Commute.isNilpotent_mul_left, Module, Module.End.mul_eq_comp, Surely, add_zero, algebraMap, commute_algebraMap_right, comp_add, eq_add_of_sub_eq, h_comm, h_comm.sub_right, isNilpotent_iff_eq_zero, isNilpotent_mul_left, isNilpotent_trace_of_isNilpotent, map_add, map_smul, mul_eq_comp
 -/
@@ -1232,7 +1276,15 @@ lemma Module.Free.bijective_algebraMap_of_finrank_eq_one
   have : Free R (Module.End R S) := .of_equiv (dualTensorHomEquiv R S S)
   let f : S ->ₐ[R] (S ->ₗ[R] S) := Algebra.lmul R S
   have h1 : LinearMap.trace R S ∘ₗ f ∘ₗ Algebra.linearMap R S = LinearMap.id := by ext; simp [h]
-  let b : Ba
+  let b : Basis (Unit × Unit) R (End R S) :=
+    .map (.tensorProduct (.dualBasis <| basisUnique Unit h) (basisUnique Unit h))
+      (dualTensorHomEquiv R S S)
+  have h2 : (f ∘ₗ Algebra.linearMap R S) ∘ₗ LinearMap.trace R S = LinearMap.id :=
+    b.ext fun i =>
+      (basisUnique Unit h).ext fun j => (by simp [f, b, Basis.tensorProduct])
+  let eq : R ≃ₗ[R] End R S := .ofLinearMap (f ∘ₗ Algebra.linearMap R S) (.trace R S) h2 h1
+  have hf : Function.Bijective f := ⟨Algebra.lmul_injective, .of_comp eq.surjective⟩
+  exact (Function.Bijective.of_comp_iff' hf _).mp eq.bijective
 
 中文:
 引理 模.自由.bijective_algebraMap_of_finrank_eq_one
@@ -1242,7 +1294,15 @@ lemma Module.Free.bijective_algebraMap_of_finrank_eq_one
   have : Free R (Module.End R S) := .of_equiv (dualTensorHomEquiv R S S)
   let f : S ->ₐ[R] (S ->ₗ[R] S) := Algebra.lmul R S
   have h1 : LinearMap.trace R S ∘ₗ f ∘ₗ Algebra.linearMap R S = LinearMap.id := by ext; simp [h]
-  let b : Ba
+  let b : Basis (Unit × Unit) R (End R S) :=
+    .map (.tensorProduct (.dualBasis <| basisUnique Unit h) (basisUnique Unit h))
+      (dualTensorHomEquiv R S S)
+  have h2 : (f ∘ₗ Algebra.linearMap R S) ∘ₗ LinearMap.trace R S = LinearMap.id :=
+    b.ext fun i =>
+      (basisUnique Unit h).ext fun j => (by simp [f, b, Basis.tensorProduct])
+  let eq : R ≃ₗ[R] End R S := .ofLinearMap (f ∘ₗ Algebra.linearMap R S) (.trace R S) h2 h1
+  have hf : Function.Bijective f := ⟨Algebra.lmul_injective, .of_comp eq.surjective⟩
+  exact (Function.Bijective.of_comp_iff' hf _).mp eq.bijective
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Algebra.lmul, Finite, LinearMa, LinearMap, LinearMap.id, LinearMap.trace, Module, Module.End, Module.Finite, basisUnique, dualBasis, dualTensorHomEquiv, finite_of_finrank_pos, linearMap, of_equiv, tensorProduct
 -/

@@ -111,7 +111,19 @@ lemma fibration_pullbackObjObjπ
   let sq₁₂ := Functor.PushoutObjObj.ofHasPushout (curriedTensor SSet) i Λ[m + 1, k].ι
   rw [← internalHomAdjunction₂.hasLiftingProperty_iff sq₁₂]
   suffices anodyneExtensions sq₁₂.ι from
-  
+    this _ (by rwa [← HomotopicalAlgebra.fibration_iff])
+  intro E B p hp
+  rw [HasLiftingProperty.iff_of_arrow_iso_left
+    (show Arrow.mk sq₁₂.ι ≅ Arrow.mk sq₁₂.flipTensor.ι from
+      Arrow.isoMk (Iso.refl _) (β_ _ _))]
+  let sq₁₃' := Functor.PullbackObjObj.ofHasPullback MonoidalClosed.internalHom Λ[m + 1, k].ι p
+  rw [internalHomAdjunction₂.hasLiftingProperty_iff _ sq₁₃']
+  suffices (MorphismProperty.monomorphisms _).rlp sq₁₃'.π from this _ inferInstance
+  rw [rlp_monomorphisms]
+  rintro _ _ _ ⟨n⟩
+  rw [← internalHomAdjunction₂.hasLiftingProperty_iff
+    (Subcomplex.unionProd.pushoutObjObj.{u} _ _)]; rw [Subcomplex.unionProd.pushoutObjObj_ι]
+  exact prodStdSimplex.anodyneExtensions_unionProd_ι _ _ _ hp
 
 中文:
 引理 fibration_pullbackObjObjπ
@@ -124,7 +136,19 @@ lemma fibration_pullbackObjObjπ
   let sq₁₂ := Functor.PushoutObjObj.ofHasPushout (curriedTensor SSet) i Λ[m + 1, k].ι
   rw [← internalHomAdjunction₂.hasLiftingProperty_iff sq₁₂]
   suffices anodyneExtensions sq₁₂.ι from
-  
+    this _ (by rwa [← HomotopicalAlgebra.fibration_iff])
+  intro E B p hp
+  rw [HasLiftingProperty.iff_of_arrow_iso_left
+    (show Arrow.mk sq₁₂.ι ≅ Arrow.mk sq₁₂.flipTensor.ι from
+      Arrow.isoMk (Iso.refl _) (β_ _ _))]
+  let sq₁₃' := Functor.PullbackObjObj.ofHasPullback MonoidalClosed.internalHom Λ[m + 1, k].ι p
+  rw [internalHomAdjunction₂.hasLiftingProperty_iff _ sq₁₃']
+  suffices (MorphismProperty.monomorphisms _).rlp sq₁₃'.π from this _ inferInstance
+  rw [rlp_monomorphisms]
+  rintro _ _ _ ⟨n⟩
+  rw [← internalHomAdjunction₂.hasLiftingProperty_iff
+    (Subcomplex.unionProd.pushoutObjObj.{u} _ _)]; rw [Subcomplex.unionProd.pushoutObjObj_ι]
+  exact prodStdSimplex.anodyneExtensions_unionProd_ι _ _ _ hp
 
 Depends on / 依赖: Arrow.isoMk, Arrow.mk, Functor, Functor.PushoutObjObj.ofHasPushout, HasLiftingProperty, HasLiftingProperty.iff_of_arrow_iso_left, HomotopicalAlgebra, HomotopicalAlgebra.fibration_iff, Iso.refl, MorphismProperty, MorphismProperty.iSup_iff, PushoutObjObj, anodyneExtensions, curriedTensor, fibration_iff, flipTensor, hasLiftingProperty_iff, iSup_iff, iff_of_arrow_iso_left, ofHasPushout
 -/

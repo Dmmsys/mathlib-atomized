@@ -50,7 +50,66 @@ theorem Set.Countable.isPathConnected_compl_of_one_lt_rank
   -- `b ∈ sᶜ` can be joined to `a`.
   obtain ⟨a, ha⟩ : sᶜ.Nonempty := (hs.dense_compl Real).nonempty
   refine ⟨a, ha, ?_⟩
-
+  intro b hb
+  rcases eq_or_ne a b with rfl | hab
+  · exact JoinedIn.refl ha
+  /- Assume `b ≠ a`. Write `a = c - x` and `b = c + x` for some nonzero `x`. Choose `y` which
+  is linearly independent from `x`. Then the segments joining `a = c - x` to `c + ty` are pairwise
+  disjoint for varying `t` (except for the endpoint `a`) so only countably many of them can
+  intersect `s`. In the same way, there are countably many `t`s for which the segment
+  from `b = c + x` to `c + ty` intersects `s`. Choosing `t` outside of these countable exceptions,
+  one gets a path in the complement of `s` from `a` to `z = c + ty` and then to `b`.
+  -/
+  let c := (2 : Real)⁻¹ • (a + b)
+  let x := (2 : Real)⁻¹ • (b - a)
+  have Ia : c - x = a := by
+    simp only [c, x]
+    module
+  have Ib : c + x = b := by
+    simp only [c, x]
+    module
+  have x_ne_zero : x != 0 := by simpa [x] using sub_ne_zero.2 hab.symm
+  obtain ⟨y, hy⟩ : exists y, LinearIndependent Real ![x, y] :=
+    exists_linearIndependent_pair_of_one_lt_rank h x_ne_zero
+  have A : Set.Countable {t : Real | ([c + x -[Real] c + t • y] inter s).Nonempty} := by
+    apply countable_ofPred_nonempty_of_disjoint _ (fun t => inter_subset_right) hs
+    intro t t' htt'
+    apply disjoint_iff_inter_eq_empty.2
+    have N : {c + x} inter s = ∅ := by
+      simpa only [singleton_inter_eq_empty, mem_compl_iff, Ib] using hb
+    rw [inter_assoc]; rw [inter_comm s]; rw [inter_assoc]; rw [inter_self]; rw [← inter_assoc]; rw [← subset_empty_iff]; rw [← N]
+    apply inter_subset_inter_left
+    apply Eq.subset
+    apply segment_inter_eq_endpoint_of_linearIndependent_of_ne hy htt'.symm
+  have B : Set.Countable {t : Real | ([c - x -[Real] c + t • y] inter s).Nonempty} := by
+    apply countable_ofPred_nonempty_of_disjoint _ (fun t => inter_subset_right) hs
+    intro t t' htt'
+    apply disjoint_iff_inter_eq_empty.2
+    have N : {c - x} inter s = ∅ := by
+      simpa only [singleton_inter_eq_empty, mem_compl_iff, Ia] using ha
+    rw [inter_assoc]; rw [inter_comm s]; rw [inter_assoc]; rw [inter_self]; rw [← inter_assoc]; rw [← subset_empty_iff]; rw [← N]
+    apply inter_subset_inter_left
+    rw [sub_eq_add_neg _ x]
+    apply Eq.subset
+    apply segment_inter_eq_endpoint_of_linearIndependent_of_ne _ htt'.symm
+    convert! hy.units_smul ![-1, 1]
+    simp [← List.ofFn_inj]
+  obtain ⟨t, ht⟩ : Set.Nonempty ({t : Real | ([c + x -[Real] c + t • y] inter s).Nonempty}
+      union {t : Real | ([c - x -[Real] c + t • y] inter s).Nonempty})ᶜ := ((A.union B).dense_compl Real).nonempty
+  let z := c + t • y
+  simp only [compl_union, mem_inter_iff, mem_compl_iff, mem_ofPred_eq, not_nonempty_iff_eq_empty]
+    at ht
+  have JA : JoinedIn sᶜ a z := by
+    apply JoinedIn.of_segment_subset
+    rw [subset_compl_iff_disjoint_right]; rw [disjoint_iff_inter_eq_empty]
+    convert! ht.2
+    exact Ia.symm
+  have JB : JoinedIn sᶜ b z := by
+    apply JoinedIn.of_segment_subset
+    rw [subset_compl_iff_disjoint_right]; rw [disjoint_iff_inter_eq_empty]
+    convert! ht.1
+    exact Ib.symm
+  exact JA.trans JB.symm
 
 中文:
 定理 集合.可数.isPathConnected_compl_of_one_lt_rank
@@ -60,7 +119,66 @@ theorem Set.Countable.isPathConnected_compl_of_one_lt_rank
   -- `b ∈ sᶜ` can be joined to `a`.
   obtain ⟨a, ha⟩ : sᶜ.Nonempty := (hs.dense_compl Real).nonempty
   refine ⟨a, ha, ?_⟩
-
+  intro b hb
+  rcases eq_or_ne a b with rfl | hab
+  · exact JoinedIn.refl ha
+  /- Assume `b ≠ a`. Write `a = c - x` and `b = c + x` for some nonzero `x`. Choose `y` which
+  is linearly independent from `x`. Then the segments joining `a = c - x` to `c + ty` are pairwise
+  disjoint for varying `t` (except for the endpoint `a`) so only countably many of them can
+  intersect `s`. In the same way, there are countably many `t`s for which the segment
+  from `b = c + x` to `c + ty` intersects `s`. Choosing `t` outside of these countable exceptions,
+  one gets a path in the complement of `s` from `a` to `z = c + ty` and then to `b`.
+  -/
+  let c := (2 : Real)⁻¹ • (a + b)
+  let x := (2 : Real)⁻¹ • (b - a)
+  have Ia : c - x = a := by
+    simp only [c, x]
+    module
+  have Ib : c + x = b := by
+    simp only [c, x]
+    module
+  have x_ne_zero : x != 0 := by simpa [x] using sub_ne_zero.2 hab.symm
+  obtain ⟨y, hy⟩ : exists y, LinearIndependent Real ![x, y] :=
+    exists_linearIndependent_pair_of_one_lt_rank h x_ne_zero
+  have A : Set.Countable {t : Real | ([c + x -[Real] c + t • y] inter s).Nonempty} := by
+    apply countable_ofPred_nonempty_of_disjoint _ (fun t => inter_subset_right) hs
+    intro t t' htt'
+    apply disjoint_iff_inter_eq_empty.2
+    have N : {c + x} inter s = ∅ := by
+      simpa only [singleton_inter_eq_empty, mem_compl_iff, Ib] using hb
+    rw [inter_assoc]; rw [inter_comm s]; rw [inter_assoc]; rw [inter_self]; rw [← inter_assoc]; rw [← subset_empty_iff]; rw [← N]
+    apply inter_subset_inter_left
+    apply Eq.subset
+    apply segment_inter_eq_endpoint_of_linearIndependent_of_ne hy htt'.symm
+  have B : Set.Countable {t : Real | ([c - x -[Real] c + t • y] inter s).Nonempty} := by
+    apply countable_ofPred_nonempty_of_disjoint _ (fun t => inter_subset_right) hs
+    intro t t' htt'
+    apply disjoint_iff_inter_eq_empty.2
+    have N : {c - x} inter s = ∅ := by
+      simpa only [singleton_inter_eq_empty, mem_compl_iff, Ia] using ha
+    rw [inter_assoc]; rw [inter_comm s]; rw [inter_assoc]; rw [inter_self]; rw [← inter_assoc]; rw [← subset_empty_iff]; rw [← N]
+    apply inter_subset_inter_left
+    rw [sub_eq_add_neg _ x]
+    apply Eq.subset
+    apply segment_inter_eq_endpoint_of_linearIndependent_of_ne _ htt'.symm
+    convert! hy.units_smul ![-1, 1]
+    simp [← List.ofFn_inj]
+  obtain ⟨t, ht⟩ : Set.Nonempty ({t : Real | ([c + x -[Real] c + t • y] inter s).Nonempty}
+      union {t : Real | ([c - x -[Real] c + t • y] inter s).Nonempty})ᶜ := ((A.union B).dense_compl Real).nonempty
+  let z := c + t • y
+  simp only [compl_union, mem_inter_iff, mem_compl_iff, mem_ofPred_eq, not_nonempty_iff_eq_empty]
+    at ht
+  have JA : JoinedIn sᶜ a z := by
+    apply JoinedIn.of_segment_subset
+    rw [subset_compl_iff_disjoint_right]; rw [disjoint_iff_inter_eq_empty]
+    convert! ht.2
+    exact Ia.symm
+  have JB : JoinedIn sᶜ b z := by
+    apply JoinedIn.of_segment_subset
+    rw [subset_compl_iff_disjoint_right]; rw [disjoint_iff_inter_eq_empty]
+    convert! ht.1
+    exact Ib.symm
+  exact JA.trans JB.symm
 
 Depends on / 依赖: Nontrivial, rank_pos_iff_nontrivial, zero_lt_one, zero_lt_one.trans
 -/
@@ -543,7 +661,28 @@ theorem isPathConnected_sphere
   `y ↦ x + (r * ‖y‖⁻¹) • y`. Since the image under a continuous map of a path connected set
   is path connected, this concludes the proof. -/
   rcases hr.eq_or_lt with rfl | rpos
-  · simpa using isPathConnected_singleton 
+  · simpa using isPathConnected_singleton x
+  let f : E -> E := fun y => x + (r * ‖y‖⁻¹) • y
+  have A : ContinuousOn f {0}ᶜ := by
+    intro y hy
+    apply (continuousAt_const.add _).continuousWithinAt
+    apply (continuousAt_const.mul (ContinuousAt.inv₀ continuousAt_id.norm ?_)).smul continuousAt_id
+    simpa using hy
+  have B : IsPathConnected ({0}ᶜ : Set E) := isPathConnected_compl_singleton_of_one_lt_rank h 0
+  have C : IsPathConnected (f '' {0}ᶜ) := B.image' A
+  have : f '' {0}ᶜ = sphere x r := by
+    apply Subset.antisymm
+    · rintro - ⟨y, hy, rfl⟩
+      have : ‖y‖ != 0 := by simpa using hy
+      simp [f, norm_smul, abs_of_nonneg hr, mul_assoc, inv_mul_cancel₀ this]
+    · intro y hy
+      refine ⟨y - x, ?_, ?_⟩
+      · intro H
+        simp only [mem_singleton_iff, sub_eq_zero] at H
+        simp only [H, mem_sphere_iff_norm, sub_self, norm_zero] at hy
+        exact rpos.ne hy
+      · simp [f, mem_sphere_iff_norm.1 hy, mul_inv_cancel₀ rpos.ne']
+  rwa [this] at C
 
 中文:
 定理 isPathConnected_sphere
@@ -553,7 +692,28 @@ theorem isPathConnected_sphere
   `y ↦ x + (r * ‖y‖⁻¹) • y`. Since the image under a continuous map of a path connected set
   is path connected, this concludes the proof. -/
   rcases hr.eq_or_lt with rfl | rpos
-  · simpa using isPathConnected_singleton 
+  · simpa using isPathConnected_singleton x
+  let f : E -> E := fun y => x + (r * ‖y‖⁻¹) • y
+  have A : ContinuousOn f {0}ᶜ := by
+    intro y hy
+    apply (continuousAt_const.add _).continuousWithinAt
+    apply (continuousAt_const.mul (ContinuousAt.inv₀ continuousAt_id.norm ?_)).smul continuousAt_id
+    simpa using hy
+  have B : IsPathConnected ({0}ᶜ : Set E) := isPathConnected_compl_singleton_of_one_lt_rank h 0
+  have C : IsPathConnected (f '' {0}ᶜ) := B.image' A
+  have : f '' {0}ᶜ = sphere x r := by
+    apply Subset.antisymm
+    · rintro - ⟨y, hy, rfl⟩
+      have : ‖y‖ != 0 := by simpa using hy
+      simp [f, norm_smul, abs_of_nonneg hr, mul_assoc, inv_mul_cancel₀ this]
+    · intro y hy
+      refine ⟨y - x, ?_, ?_⟩
+      · intro H
+        simp only [mem_singleton_iff, sub_eq_zero] at H
+        simp only [H, mem_sphere_iff_norm, sub_self, norm_zero] at hy
+        exact rpos.ne hy
+      · simp [f, mem_sphere_iff_norm.1 hy, mul_inv_cancel₀ rpos.ne']
+  rwa [this] at C
 -/
 theorem isPathConnected_sphere (h : 1 < Module.rank Real E) (x : E) {r : Real} (hr : 0 <= r) :
     IsPathConnected (sphere x r) := by

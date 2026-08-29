@@ -205,7 +205,22 @@ instance Forget₂.createsLimit
     CategoryTheory.reflectsIsomorphisms_forget₂ _ _
   createsLimitOfReflectsIso (K := F) (F := (forget₂ GrpCat.{u} MonCat.{u}))
     fun c' t =>
-      have : Smal
+      have : Small.{u} (Functor.sections ((F ⋙ forget₂ GrpCat MonCat) ⋙ forget MonCat)) := by
+        have : HasLimit (F ⋙ forget₂ GrpCat MonCat) := ⟨_, t⟩
+        apply Concrete.small_sections_of_hasLimit (F ⋙ forget₂ GrpCat MonCat)
+have : Small.{u} (Functor.sections (F ⋙ forget GrpCat)) := inferInstanceAs Small.{u}
+        (Functor.sections ((F ⋙ forget₂ GrpCat MonCat) ⋙ forget MonCat))
+      { liftedCone :=
+          { pt := GrpCat.of (Types.Small.limitCone (F ⋙ forget GrpCat)).pt
+            π :=
+              { app j := ofHom <| MonCat.limitπMonoidHom (F ⋙ forget₂ GrpCat MonCat) j
+naturality i j h := hom_ext congr_arg MonCat.Hom.hom
+                  (MonCat.HasLimits.limitCone
+                        (F ⋙ forget₂ GrpCat MonCat.{u})).π.naturality h } }
+        validLift := by apply IsLimit.uniqueUpToIso (MonCat.HasLimits.limitConeIsLimit.{v, u} _) t
+        makesLimit :=
+         IsLimit.ofFaithful (forget₂ GrpCat MonCat.{u}) (MonCat.HasLimits.limitConeIsLimit _)
+          (fun _ => _) fun _ => rfl }
 
 中文:
 实例 Forget₂.createsLimit
@@ -215,7 +230,22 @@ instance Forget₂.createsLimit
     CategoryTheory.reflectsIsomorphisms_forget₂ _ _
   createsLimitOfReflectsIso (K := F) (F := (forget₂ GrpCat.{u} MonCat.{u}))
     fun c' t =>
-      have : Smal
+      have : Small.{u} (Functor.sections ((F ⋙ forget₂ GrpCat MonCat) ⋙ forget MonCat)) := by
+        have : HasLimit (F ⋙ forget₂ GrpCat MonCat) := ⟨_, t⟩
+        apply Concrete.small_sections_of_hasLimit (F ⋙ forget₂ GrpCat MonCat)
+have : Small.{u} (Functor.sections (F ⋙ forget GrpCat)) := inferInstanceAs Small.{u}
+        (Functor.sections ((F ⋙ forget₂ GrpCat MonCat) ⋙ forget MonCat))
+      { liftedCone :=
+          { pt := GrpCat.of (Types.Small.limitCone (F ⋙ forget GrpCat)).pt
+            π :=
+              { app j := ofHom <| MonCat.limitπMonoidHom (F ⋙ forget₂ GrpCat MonCat) j
+naturality i j h := hom_ext congr_arg MonCat.Hom.hom
+                  (MonCat.HasLimits.limitCone
+                        (F ⋙ forget₂ GrpCat MonCat.{u})).π.naturality h } }
+        validLift := by apply IsLimit.uniqueUpToIso (MonCat.HasLimits.limitConeIsLimit.{v, u} _) t
+        makesLimit :=
+         IsLimit.ofFaithful (forget₂ GrpCat MonCat.{u}) (MonCat.HasLimits.limitConeIsLimit _)
+          (fun _ => _) fun _ => rfl }
 -/
 noncomputable instance Forget₂.createsLimit :
     CreatesLimit F (forget₂ GrpCat.{u} MonCat.{u}) :=
@@ -696,7 +726,20 @@ instance Forget₂.createsLimit
     have : Small.{u} (F ⋙ forget CommGrpCat).sections :=
       Concrete.small_sections_of_hasLimit (F ⋙ forget₂ CommGrpCat GrpCat)
     have : Small.{u} ((F ⋙ forget₂ CommGrpCat GrpCat ⋙ forget₂ GrpCat MonCat) ⋙
-      forget M
+      forget MonCat).sections := this
+    have : Small.{u} ((F ⋙ forget₂ CommGrpCat GrpCat) ⋙ forget GrpCat).sections := this
+    exact
+      { liftedCone :=
+          { pt := CommGrpCat.of (Types.Small.limitCone.{v, u} (F ⋙ forget CommGrpCat)).pt
+            π :=
+              { app j := ofHom <| MonCat.limitπMonoidHom
+                  (F ⋙ forget₂ CommGrpCat GrpCat.{u} ⋙ forget₂ GrpCat MonCat.{u}) j
+naturality i j h := hom_ext congr_arg MonCat.Hom.hom
+                  (MonCat.HasLimits.limitCone _).π.naturality h } }
+        validLift := by apply IsLimit.uniqueUpToIso (GrpCat.limitConeIsLimit _) hc
+        makesLimit :=
+          IsLimit.ofFaithful (forget₂ _ GrpCat.{u} ⋙ forget₂ _ MonCat.{u})
+            (by apply MonCat.HasLimits.limitConeIsLimit _) (fun s => _) fun s => rfl })
 
 中文:
 实例 Forget₂.createsLimit
@@ -706,7 +749,20 @@ instance Forget₂.createsLimit
     have : Small.{u} (F ⋙ forget CommGrpCat).sections :=
       Concrete.small_sections_of_hasLimit (F ⋙ forget₂ CommGrpCat GrpCat)
     have : Small.{u} ((F ⋙ forget₂ CommGrpCat GrpCat ⋙ forget₂ GrpCat MonCat) ⋙
-      forget M
+      forget MonCat).sections := this
+    have : Small.{u} ((F ⋙ forget₂ CommGrpCat GrpCat) ⋙ forget GrpCat).sections := this
+    exact
+      { liftedCone :=
+          { pt := CommGrpCat.of (Types.Small.limitCone.{v, u} (F ⋙ forget CommGrpCat)).pt
+            π :=
+              { app j := ofHom <| MonCat.limitπMonoidHom
+                  (F ⋙ forget₂ CommGrpCat GrpCat.{u} ⋙ forget₂ GrpCat MonCat.{u}) j
+naturality i j h := hom_ext congr_arg MonCat.Hom.hom
+                  (MonCat.HasLimits.limitCone _).π.naturality h } }
+        validLift := by apply IsLimit.uniqueUpToIso (GrpCat.limitConeIsLimit _) hc
+        makesLimit :=
+          IsLimit.ofFaithful (forget₂ _ GrpCat.{u} ⋙ forget₂ _ MonCat.{u})
+            (by apply MonCat.HasLimits.limitConeIsLimit _) (fun s => _) fun s => rfl })
 -/
 noncomputable instance Forget₂.createsLimit :
     CreatesLimit F (forget₂ CommGrpCat GrpCat.{u}) :=
@@ -1280,7 +1336,20 @@ definition kernelIsoKer
       map_add' := fun g g' => by
         refine Subtype.ext ?_
         simp }
-inv := kernel.lift f (
+inv := kernel.lift f (ofHom (AddSubgroup.subtype f.hom.ker)) by ext x; exact x.2
+  hom_inv_id := by
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): it would be nice to do the next two steps by a single `ext`,
+    -- but this will require thinking carefully about the relative priorities of `@[ext]` lemmas.
+    refine equalizer.hom_ext ?_
+    ext
+    simp
+  inv_hom_id := by
+    apply AddCommGrpCat.ext
+    rintro ⟨x, mem⟩
+    refine Subtype.ext ?_
+    apply ConcreteCategory.congr_hom (kernel.lift_ι f _ _)
+
+@[simp]
 
 中文:
 定义 kernelIsoKer
@@ -1293,7 +1362,20 @@ inv := kernel.lift f (
       map_add' := fun g g' => by
         refine Subtype.ext ?_
         simp }
-inv := kernel.lift f (
+inv := kernel.lift f (ofHom (AddSubgroup.subtype f.hom.ker)) by ext x; exact x.2
+  hom_inv_id := by
+    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): it would be nice to do the next two steps by a single `ext`,
+    -- but this will require thinking carefully about the relative priorities of `@[ext]` lemmas.
+    refine equalizer.hom_ext ?_
+    ext
+    simp
+  inv_hom_id := by
+    apply AddCommGrpCat.ext
+    rintro ⟨x, mem⟩
+    refine Subtype.ext ?_
+    apply ConcreteCategory.congr_hom (kernel.lift_ι f _ _)
+
+@[simp]
 -/
 def kernelIsoKer {G H : AddCommGrpCat.{u}} (f : G ⟶ H) :
     kernel f ≅ AddCommGrpCat.of f.hom.ker where

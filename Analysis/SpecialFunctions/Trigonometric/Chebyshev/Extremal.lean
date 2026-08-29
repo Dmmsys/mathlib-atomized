@@ -165,7 +165,10 @@ lemma strictAntiOn_node
   · apply StrictMono.strictMonoOn
     exact StrictMono.mul_const
       (StrictMono.mul_const Nat.strictMono_cast (by positivity)) (by positivity)
-  rw [Fin
+  rw [Finset.mem_coe]; rw [Finset.mem_range_succ_iff] at hx
+  rw [mul_div_assoc]
+  nth_rewrite 2 [← mul_div_cancel₀ π (Nat.cast_ne_zero.mpr hn)]
+  gcongr
 
 中文:
 引理 strictAntiOn_node
@@ -177,7 +180,10 @@ lemma strictAntiOn_node
   · apply StrictMono.strictMonoOn
     exact StrictMono.mul_const
       (StrictMono.mul_const Nat.strictMono_cast (by positivity)) (by positivity)
-  rw [Fin
+  rw [Finset.mem_coe]; rw [Finset.mem_range_succ_iff] at hx
+  rw [mul_div_assoc]
+  nth_rewrite 2 [← mul_div_cancel₀ π (Nat.cast_ne_zero.mpr hn)]
+  gcongr
 
 Depends on / 依赖: Finset, Finset.mem_coe, Finset.mem_range_succ_iff, Nat.cast_ne_zero.mpr, Nat.strictMono_cast, Set.mem_Icc.mpr, StrictMono, StrictMono.mul_const, StrictMono.strictMonoOn, cast_ne_zero, comp_strictMonoOn, eq_or_ne, mem_Icc, mem_coe, mem_range_succ_iff, mul_const, mul_div_assoc, nth_rewrite, strictAntiOn_cos, strictAntiOn_cos.comp_strictMonoOn
 -/
@@ -228,7 +234,14 @@ lemma zero_lt_prod_node_sub_node
   have h₁ : 0 < ∏ j in Finset.range i, ((-1) * (node n i - node n j)) :=
     Finset.prod_pos (fun j hj => mul_pos_of_neg_of_neg neg_one_lt_zero <| sub_neg.mpr <|
     node_lt hi (Finset.mem_range.mp hj))
-  rw [Finset.prod_mul_distrib
+  rw [Finset.prod_mul_distrib]; rw [Finset.prod_const]; rw [Finset.card_range] at h₁
+  have h₂ : 0 < ∏ j in Finset.Ioc i n, (node n i - node n j) :=
+    Finset.prod_pos (fun j hj => sub_pos.mpr <|
+      node_lt (Finset.mem_Ioc.mp hj).2 (Finset.mem_Ioc.mp hj).1)
+  have union : (Finset.range (n + 1)).erase i = (Finset.range i) union Finset.Ioc i n := by grind
+  have disjoint : Disjoint (Finset.range i) (Finset.Ioc i n) := by grind [Finset.disjoint_iff_ne]
+  rw [union]; rw [Finset.prod_union disjoint]; rw [← mul_assoc]
+  exact mul_pos h₁ h₂
 
 中文:
 引理 zero_lt_prod_node_sub_node
@@ -239,7 +252,14 @@ lemma zero_lt_prod_node_sub_node
   have h₁ : 0 < ∏ j in Finset.range i, ((-1) * (node n i - node n j)) :=
     Finset.prod_pos (fun j hj => mul_pos_of_neg_of_neg neg_one_lt_zero <| sub_neg.mpr <|
     node_lt hi (Finset.mem_range.mp hj))
-  rw [Finset.prod_mul_distrib
+  rw [Finset.prod_mul_distrib]; rw [Finset.prod_const]; rw [Finset.card_range] at h₁
+  have h₂ : 0 < ∏ j in Finset.Ioc i n, (node n i - node n j) :=
+    Finset.prod_pos (fun j hj => sub_pos.mpr <|
+      node_lt (Finset.mem_Ioc.mp hj).2 (Finset.mem_Ioc.mp hj).1)
+  have union : (Finset.range (n + 1)).erase i = (Finset.range i) union Finset.Ioc i n := by grind
+  have disjoint : Disjoint (Finset.range i) (Finset.Ioc i n) := by grind [Finset.disjoint_iff_ne]
+  rw [union]; rw [Finset.prod_union disjoint]; rw [← mul_assoc]
+  exact mul_pos h₁ h₂
 
 Depends on / 依赖: Finset, Finset.Ioc, Finset.card_range, Finset.mem_Ioc.mp, Finset.mem_range.mp, Finset.prod_const, Finset.prod_mul_distrib, Finset.prod_pos, Finset.range, Nat.le_zero.mp, card_range, eq_or_ne, le_zero, mem_Ioc, mem_range, mul_pos_of_neg_of_neg, neg_one_lt_zero, node_lt, prod_const, prod_mul_distrib
 -/
@@ -336,7 +356,10 @@ theorem sumNodes_le_sumNodes_T
       negOnePow_mul_negOnePow_mul_cancel.symm
     _ <= 1 * ((-1) ^ i * (c i)) := by
       gcongr
-      · exact (hcnonneg i
+      · exact (hcnonneg i (Finset.mem_Iic.mp hi))
+      · exact (negOnePow_mul_le (hPbnd _ node_mem_Icc))
+    _ = (T Real n).eval (node n i) * (c i) := by
+      rw [eval_T_real_node hi]; rw [one_mul]
 
 中文:
 定理 sumNodes_le_sumNodes_T
@@ -350,7 +373,10 @@ theorem sumNodes_le_sumNodes_T
       negOnePow_mul_negOnePow_mul_cancel.symm
     _ <= 1 * ((-1) ^ i * (c i)) := by
       gcongr
-      · exact (hcnonneg i
+      · exact (hcnonneg i (Finset.mem_Iic.mp hi))
+      · exact (negOnePow_mul_le (hPbnd _ node_mem_Icc))
+    _ = (T Real n).eval (node n i) * (c i) := by
+      rw [eval_T_real_node hi]; rw [one_mul]
 
 Depends on / 依赖: Finset, Finset.mem_Iic.mp, Finset.sum_le_sum, P.eval, eval_T_real_node, hcnonneg, mem_Iic, negOnePow_mul_le, negOnePow_mul_negOnePow_mul_cancel, negOnePow_mul_negOnePow_mul_cancel.symm, node_mem_Icc, one_mul, sumNodes, sum_le_sum
 -/
@@ -382,7 +408,27 @@ theorem sumNodes_eq_sumNodes_T_iff
   rw [sumNodes]; rw [sumNodes] at h
   apply eq_of_degrees_lt_of_eval_finset_eq ((Finset.range (n + 1)).image (node n ·))
   · apply lt_of_le_of_lt hPdeg
-    rw [Nat.cast_lt]; rw [Finset.card_image_of_injOn (strictAntiOn_node n).injOn]; rw [Finset.card_ran
+    rw [Nat.cast_lt]; rw [Finset.card_image_of_injOn (strictAntiOn_node n).injOn]; rw [Finset.card_range]; rw [Nat.lt_succ_iff]
+  · rw [degree_T, Int.natAbs_natCast, Nat.cast_lt,
+      Finset.card_image_of_injOn (strictAntiOn_node n).injOn,
+      Finset.card_range, Nat.lt_succ_iff]
+  replace h := ge_of_eq h
+  contrapose! h
+  obtain ⟨x, hx, hPx⟩ := h
+  obtain ⟨i, hi, hix⟩ := Finset.mem_image.mp hx
+  replace hi := Finset.mem_Iic.mpr (Finset.mem_range_succ_iff.mp hi)
+  suffices ∑ i <= n, ((-1) ^ i * P.eval (node n i)) * ((-1) ^ i * c i) <
+      ∑ i <= n, ((-1) ^ i * (T Real n).eval (node n i)) * ((-1) ^ i * c i) by
+    simpa [negOnePow_mul_negOnePow_mul_cancel]
+  have h_le {i : Nat} (hi : i in Finset.Iic n) :
+    (-1) ^ i * P.eval (node n i) * ((-1) ^ i * c i) <=
+    (-1) ^ i * (T Real n).eval (node n i) * ((-1) ^ i * c i) := by
+    refine mul_le_mul_of_nonneg_right ?_ (le_of_lt (hcpos i (Finset.mem_Iic.mp hi)))
+    rw [eval_T_real_node hi]; rw [← neg_pow']; rw [neg_neg]; rw [one_pow]
+    exact negOnePow_mul_le (hPbnd _ node_mem_Icc)
+  refine Finset.sum_lt_sum (fun i hi => h_le hi) ⟨i, hi, lt_of_le_of_ne (h_le hi) ?_⟩
+  have := ne_of_lt (hcpos i (Finset.mem_Iic.mp hi))
+  grind => ring
 
 中文:
 定理 sumNodes_eq_sumNodes_T_iff
@@ -392,7 +438,27 @@ theorem sumNodes_eq_sumNodes_T_iff
   rw [sumNodes]; rw [sumNodes] at h
   apply eq_of_degrees_lt_of_eval_finset_eq ((Finset.range (n + 1)).image (node n ·))
   · apply lt_of_le_of_lt hPdeg
-    rw [Nat.cast_lt]; rw [Finset.card_image_of_injOn (strictAntiOn_node n).injOn]; rw [Finset.card_ran
+    rw [Nat.cast_lt]; rw [Finset.card_image_of_injOn (strictAntiOn_node n).injOn]; rw [Finset.card_range]; rw [Nat.lt_succ_iff]
+  · rw [degree_T, Int.natAbs_natCast, Nat.cast_lt,
+      Finset.card_image_of_injOn (strictAntiOn_node n).injOn,
+      Finset.card_range, Nat.lt_succ_iff]
+  replace h := ge_of_eq h
+  contrapose! h
+  obtain ⟨x, hx, hPx⟩ := h
+  obtain ⟨i, hi, hix⟩ := Finset.mem_image.mp hx
+  replace hi := Finset.mem_Iic.mpr (Finset.mem_range_succ_iff.mp hi)
+  suffices ∑ i <= n, ((-1) ^ i * P.eval (node n i)) * ((-1) ^ i * c i) <
+      ∑ i <= n, ((-1) ^ i * (T Real n).eval (node n i)) * ((-1) ^ i * c i) by
+    simpa [negOnePow_mul_negOnePow_mul_cancel]
+  have h_le {i : Nat} (hi : i in Finset.Iic n) :
+    (-1) ^ i * P.eval (node n i) * ((-1) ^ i * c i) <=
+    (-1) ^ i * (T Real n).eval (node n i) * ((-1) ^ i * c i) := by
+    refine mul_le_mul_of_nonneg_right ?_ (le_of_lt (hcpos i (Finset.mem_Iic.mp hi)))
+    rw [eval_T_real_node hi]; rw [← neg_pow']; rw [neg_neg]; rw [one_pow]
+    exact negOnePow_mul_le (hPbnd _ node_mem_Icc)
+  refine Finset.sum_lt_sum (fun i hi => h_le hi) ⟨i, hi, lt_of_le_of_ne (h_le hi) ?_⟩
+  have := ne_of_lt (hcpos i (Finset.mem_Iic.mp hi))
+  grind => ring
 
 Depends on / 依赖: Finset, Finset.card_image_of_injOn, Finset.card_range, Finset.range, Int.natAbs_natCast, Nat.cast_lt, Nat.lt_succ_iff, card_image_of_injOn, card_range, cast_lt, contrapose, degree_T, eq_of_degrees_lt_of_eval_finset_eq, ge_of_eq, lt_of_le_of_lt, lt_succ_iff, natAbs_natCast, replace, strictAntiOn_node, sumNodes
 -/
@@ -576,7 +642,8 @@ theorem leadingCoeff_le_of_forall_abs_le_one
     lift P.degree to Nat using degree_ne_bot.mpr hP with d hd
     replace hPdeg : d <= n := (WithBot.coe_le rfl).mp hPdeg
     rw [leadingCoeff]; rw [natDegree_eq_of_degree_eq_some hd.symm]
-    grw [coeff_le_of_forall_abs_le_one (le_of_e
+    grw [coeff_le_of_forall_abs_le_one (le_of_eq hd.symm) hPbnd, hPdeg]
+    norm_num
 
 中文:
 定理 leadingCoeff_le_of_对任意_abs_le_one
@@ -588,7 +655,8 @@ theorem leadingCoeff_le_of_forall_abs_le_one
     lift P.degree to Nat using degree_ne_bot.mpr hP with d hd
     replace hPdeg : d <= n := (WithBot.coe_le rfl).mp hPdeg
     rw [leadingCoeff]; rw [natDegree_eq_of_degree_eq_some hd.symm]
-    grw [coeff_le_of_forall_abs_le_one (le_of_e
+    grw [coeff_le_of_forall_abs_le_one (le_of_eq hd.symm) hPbnd, hPdeg]
+    norm_num
 
 Depends on / 依赖: P.degree, WithBot, WithBot.coe_le, coe_le, coeff_le_of_forall_abs_le_one, degree, degree_ne_bot, degree_ne_bot.mpr, hd.symm, le_of_eq, leadingCoeff, natDegree_eq_of_degree_eq_some, replace
 -/
@@ -644,7 +712,15 @@ theorem leadingCoeff_eq_iff_of_forall_abs_le_one
   suffices hPdeg' : n <= P.degree by
     replace hPdeg' : P.degree = n := eq_of_le_of_ge hPdeg hPdeg'
     rwa [leadingCoeff, natDegree_eq_of_degree_eq_some hPdeg'] at hP
-  lift P.degree to N
+  lift P.degree to Nat with d hd
+  · contrapose! hP
+    rw [degree_eq_bot.mp hP]; rw [leadingCoeff_zero]
+    positivity
+  replace hP := ge_of_eq hP
+  contrapose! hP
+  have : d - 1 < n - 1 := by grind [Nat.cast_withBot, WithBot.coe_le_coe, WithBot.coe_lt_coe]
+  calc P.leadingCoeff <= 2 ^ (d - 1) := leadingCoeff_le_of_forall_abs_le_one (le_of_eq hd.symm) hPbnd
+  _ < 2 ^ (n - 1) := by gcongr; norm_num
 
 中文:
 定理 leadingCoeff_eq_iff_of_对任意_abs_le_one
@@ -655,7 +731,15 @@ theorem leadingCoeff_eq_iff_of_forall_abs_le_one
   suffices hPdeg' : n <= P.degree by
     replace hPdeg' : P.degree = n := eq_of_le_of_ge hPdeg hPdeg'
     rwa [leadingCoeff, natDegree_eq_of_degree_eq_some hPdeg'] at hP
-  lift P.degree to N
+  lift P.degree to Nat with d hd
+  · contrapose! hP
+    rw [degree_eq_bot.mp hP]; rw [leadingCoeff_zero]
+    positivity
+  replace hP := ge_of_eq hP
+  contrapose! hP
+  have : d - 1 < n - 1 := by grind [Nat.cast_withBot, WithBot.coe_le_coe, WithBot.coe_lt_coe]
+  calc P.leadingCoeff <= 2 ^ (d - 1) := leadingCoeff_le_of_forall_abs_le_one (le_of_eq hd.symm) hPbnd
+  _ < 2 ^ (n - 1) := by gcongr; norm_num
 
 Depends on / 依赖: Nat.cast_withBot, P.degree, WithBot, WithBot.coe_l, WithBot.coe_le_coe, cast_withBot, coe_l, coe_le_coe, coeff_eq_iff_of_forall_abs_le_one, contrapose, degree, degree_eq_bot, degree_eq_bot.mp, eq_of_le_of_ge, ge_of_eq, leadingCoeff, leadingCoeff_zero, natDegree_eq_of_degree_eq_some, replace
 -/
@@ -709,7 +793,8 @@ theorem sumNodes_eq_eval_iterate_derivative
   convert!
     (Lagrange.eval_iterate_derivative_eq_sum (strictAntiOn_node n).injOn h₁
         (show k < _ by simp [hk]) x).symm
-  rw [Finset.mul
+  rw [Finset.mul_sum]
+  grind [Nat.range_succ_eq_Iic, Nat.card_Iic]
 
 中文:
 定理 sumNodes_eq_eval_iterate_derivative
@@ -721,7 +806,8 @@ theorem sumNodes_eq_eval_iterate_derivative
   convert!
     (Lagrange.eval_iterate_derivative_eq_sum (strictAntiOn_node n).injOn h₁
         (show k < _ by simp [hk]) x).symm
-  rw [Finset.mul
+  rw [Finset.mul_sum]
+  grind [Nat.range_succ_eq_Iic, Nat.card_Iic]
 -/
 private theorem sumNodes_eq_eval_iterate_derivative {n k : Nat} (hk : k <= n) (x : Real)
     {P : Real[X]} (hP : P.degree <= n) :
@@ -746,7 +832,7 @@ theorem negOnePow_mul_iterateDerivativeC_nonneg
   · rw [← mul_assoc, mul_comm (a := (-1) ^ i), mul_assoc]
 exact le_of_lt mul_pos (Nat.cast_pos.mpr <| Nat.factorial_pos k)
       (negOnePow_mul_leadingCoeffC_pos hi)
-  · exact fun t => Finset.prod_nonneg (f
+  · exact fun t => Finset.prod_nonneg (fun a _ => by grind [show node n a <= 1 from cos_le_one _])
 
 中文:
 定理 negOnePow_mul_iterateDerivativeC_nonneg
@@ -756,7 +842,7 @@ exact le_of_lt mul_pos (Nat.cast_pos.mpr <| Nat.factorial_pos k)
   · rw [← mul_assoc, mul_comm (a := (-1) ^ i), mul_assoc]
 exact le_of_lt mul_pos (Nat.cast_pos.mpr <| Nat.factorial_pos k)
       (negOnePow_mul_leadingCoeffC_pos hi)
-  · exact fun t => Finset.prod_nonneg (f
+  · exact fun t => Finset.prod_nonneg (fun a _ => by grind [show node n a <= 1 from cos_le_one _])
 -/
 private theorem negOnePow_mul_iterateDerivativeC_nonneg
     {n k i : Nat} (hi : i <= n) {x : Real} (hx : 1 <= x) :
@@ -778,7 +864,15 @@ theorem negOnePow_mul_iterateDerivativeC_pos
   refine mul_pos ?_ (Finset.sum_pos' ?_ ?_)
   · rw [← mul_assoc, mul_comm (a := (-1) ^ i), mul_assoc]
     exact mul_pos (Nat.cast_pos.mpr <| Nat.factorial_pos k) (negOnePow_mul_leadingCoeffC_pos hi)
-  · exact fun t _ => Finset.prod_nonneg (fun a _ => by
+  · exact fun t _ => Finset.prod_nonneg (fun a _ => by grind [show node n a <= 1 from cos_le_one _])
+  · have : exists s subseteq (Finset.range (n + 1)).erase i, s.card = n - k ∧ 0 ∉ s := by
+      by_cases 1 <= i ∧ i <= n - k
+      case neg => exact ⟨Finset.Icc 1 (n - k), by grind, by grind [Nat.card_Icc], by simp⟩
+      case pos => exact ⟨(Finset.Icc 1 (n - k + 1)).erase i, by grind, by grind [Nat.card_Icc],
+        by simp⟩
+    obtain ⟨s, hs, hscard, hsn⟩ := this
+    refine ⟨s, by simp [hs, hscard], Finset.prod_pos (fun a ha => ?_)⟩
+    grind [show node n a < 1 by rw [← node_eq_one (n := n)]; exact node_lt (by grind) (by grind)]
 
 中文:
 定理 negOnePow_mul_iterateDerivativeC_pos
@@ -787,7 +881,15 @@ theorem negOnePow_mul_iterateDerivativeC_pos
   refine mul_pos ?_ (Finset.sum_pos' ?_ ?_)
   · rw [← mul_assoc, mul_comm (a := (-1) ^ i), mul_assoc]
     exact mul_pos (Nat.cast_pos.mpr <| Nat.factorial_pos k) (negOnePow_mul_leadingCoeffC_pos hi)
-  · exact fun t _ => Finset.prod_nonneg (fun a _ => by
+  · exact fun t _ => Finset.prod_nonneg (fun a _ => by grind [show node n a <= 1 from cos_le_one _])
+  · have : exists s subseteq (Finset.range (n + 1)).erase i, s.card = n - k ∧ 0 ∉ s := by
+      by_cases 1 <= i ∧ i <= n - k
+      case neg => exact ⟨Finset.Icc 1 (n - k), by grind, by grind [Nat.card_Icc], by simp⟩
+      case pos => exact ⟨(Finset.Icc 1 (n - k + 1)).erase i, by grind, by grind [Nat.card_Icc],
+        by simp⟩
+    obtain ⟨s, hs, hscard, hsn⟩ := this
+    refine ⟨s, by simp [hs, hscard], Finset.prod_pos (fun a ha => ?_)⟩
+    grind [show node n a < 1 by rw [← node_eq_one (n := n)]; exact node_lt (by grind) (by grind)]
 -/
 private theorem negOnePow_mul_iterateDerivativeC_pos
     {n k i : Nat} (hk₁ : 0 < k) (hk₂ : k <= n) (hi : i <= n) {x : Real} (hx : 1 <= x) :
@@ -818,7 +920,8 @@ theorem eval_iterate_derivative_le_of_forall_abs_le_one
       iterate_derivative_eq_zero_of_degree_lt (by simp [hk])]
   convert!
     sumNodes_le_sumNodes_T (fun i hi => negOnePow_mul_iterateDerivativeC_nonneg hi hx) hPbnd using 1
-  · rw [sumNodes_eq_eval_it
+  · rw [sumNodes_eq_eval_iterate_derivative hk x hPdeg]
+  · rw [sumNodes_eq_eval_iterate_derivative hk x (le_of_eq (degree_T Real n))]
 
 中文:
 定理 eval_iterate_derivative_le_of_对任意_abs_le_one
@@ -829,7 +932,8 @@ theorem eval_iterate_derivative_le_of_forall_abs_le_one
       iterate_derivative_eq_zero_of_degree_lt (by simp [hk])]
   convert!
     sumNodes_le_sumNodes_T (fun i hi => negOnePow_mul_iterateDerivativeC_nonneg hi hx) hPbnd using 1
-  · rw [sumNodes_eq_eval_it
+  · rw [sumNodes_eq_eval_iterate_derivative hk x hPdeg]
+  · rw [sumNodes_eq_eval_iterate_derivative hk x (le_of_eq (degree_T Real n))]
 
 Depends on / 依赖: convert, degree_T, iterate_derivative_eq_zero_of_degree_lt, le_of_eq, negOnePow_mul_iterateDerivativeC_nonneg, sumNodes_eq_eval_iterate_derivative, sumNodes_le_sumNodes_T
 -/

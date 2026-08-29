@@ -991,7 +991,8 @@ lemma expGrowthInf_le_of_eventually_le
   · simp only [zero_mul, ← Pi.zero_def, expGrowthInf_zero, bot_le]
   · apply (expGrowthInf_mul_le _ _).trans_eq <;> rw [expGrowthSup_const b_pos.ne' hb]
     · exact zero_add (expGrowthInf v)
-    · exact 
+    · exact .inl zero_ne_bot
+    · exact .inl zero_ne_top
 
 中文:
 引理 expGrowthInf_le_of_eventually_le
@@ -1002,7 +1003,8 @@ lemma expGrowthInf_le_of_eventually_le
   · simp only [zero_mul, ← Pi.zero_def, expGrowthInf_zero, bot_le]
   · apply (expGrowthInf_mul_le _ _).trans_eq <;> rw [expGrowthSup_const b_pos.ne' hb]
     · exact zero_add (expGrowthInf v)
-    · exact 
+    · exact .inl zero_ne_bot
+    · exact .inl zero_ne_top
 
 Depends on / 依赖: Pi.zero_def, b_pos, b_pos.ne, bot_le, eq_zero_or_pos, expGrowthInf, expGrowthInf_eventually_monotone, expGrowthInf_mul_le, expGrowthInf_zero, expGrowthSup_const, trans_eq, zero_add, zero_def, zero_mul, zero_ne_bot, zero_ne_top
 -/
@@ -1030,7 +1032,8 @@ lemma expGrowthSup_le_of_eventually_le
   · simp only [zero_mul, ← Pi.zero_def, expGrowthSup_zero, bot_le]
   · apply (expGrowthSup_mul_le _ _).trans_eq <;> rw [expGrowthSup_const b_pos.ne' hb]
     · exact zero_add (expGrowthSup v)
-    · exact 
+    · exact .inl zero_ne_bot
+    · exact .inl zero_ne_top
 
 中文:
 引理 expGrowthSup_le_of_eventually_le
@@ -1041,7 +1044,8 @@ lemma expGrowthSup_le_of_eventually_le
   · simp only [zero_mul, ← Pi.zero_def, expGrowthSup_zero, bot_le]
   · apply (expGrowthSup_mul_le _ _).trans_eq <;> rw [expGrowthSup_const b_pos.ne' hb]
     · exact zero_add (expGrowthSup v)
-    · exact 
+    · exact .inl zero_ne_bot
+    · exact .inl zero_ne_top
 
 Depends on / 依赖: Pi.zero_def, b_pos, b_pos.ne, bot_le, eq_zero_or_pos, expGrowthSup, expGrowthSup_const, expGrowthSup_eventually_monotone, expGrowthSup_mul_le, expGrowthSup_zero, trans_eq, zero_add, zero_def, zero_mul, zero_ne_bot, zero_ne_top
 -/
@@ -1352,7 +1356,8 @@ lemma expGrowthSup_add
   · refine expGrowthSup_le_of_eventually_le (b := 2) ofNat_ne_top (Eventually.of_forall fun n => ?_)
     rw [Pi.sup_apply u v n]; rw [Pi.add_apply u v n]; rw [two_mul]
     exact add_le_add (le_max_left (u n) (v n)) (le_max_right (u n) (v n))
-  · refin
+  · refine expGrowthSup_monotone fun n => ?_
+    exact sup_le (self_le_add_right (u n) (v n)) (self_le_add_left (v n) (u n))
 
 中文:
 引理 expGrowthSup_add
@@ -1363,7 +1368,8 @@ lemma expGrowthSup_add
   · refine expGrowthSup_le_of_eventually_le (b := 2) ofNat_ne_top (Eventually.of_forall fun n => ?_)
     rw [Pi.sup_apply u v n]; rw [Pi.add_apply u v n]; rw [two_mul]
     exact add_le_add (le_max_left (u n) (v n)) (le_max_right (u n) (v n))
-  · refin
+  · refine expGrowthSup_monotone fun n => ?_
+    exact sup_le (self_le_add_right (u n) (v n)) (self_le_add_left (v n) (u n))
 
 Depends on / 依赖: Eventually, Eventually.of_forall, Pi.add_apply, Pi.sup_apply, add_apply, add_le_add, expGrowthSup_le_of_eventually_le, expGrowthSup_monotone, expGrowthSup_sup, le_antisymm, le_max_left, le_max_right, ofNat_ne_top, of_forall, self_le_add_left, self_le_add_right, sup_apply, sup_le, two_mul
 -/
@@ -1391,7 +1397,7 @@ lemma expGrowthSup_sum
   | empty => rw [Finset.sum_empty, ← Finset.iSup_coe, Finset.coe_empty, iSup_emptyset,
     expGrowthSup_zero]
   | insert a t a_t ha => rw [Finset.sum_insert a_t, expGrowthSup_add, ← Finset.iSup_coe,
-    Finset.coe_insert a t, iSup_insert, F
+    Finset.coe_insert a t, iSup_insert, Finset.iSup_coe, ha]
 
 中文:
 引理 expGrowthSup_sum
@@ -1402,7 +1408,7 @@ lemma expGrowthSup_sum
   | empty => rw [Finset.sum_empty, ← Finset.iSup_coe, Finset.coe_empty, iSup_emptyset,
     expGrowthSup_zero]
   | insert a t a_t ha => rw [Finset.sum_insert a_t, expGrowthSup_add, ← Finset.iSup_coe,
-    Finset.coe_insert a t, iSup_insert, F
+    Finset.coe_insert a t, iSup_insert, Finset.iSup_coe, ha]
 
 Depends on / 依赖: Finset, Finset.coe_empty, Finset.coe_insert, Finset.iSup_coe, Finset.induction_on, Finset.sum_empty, Finset.sum_insert, classical, coe_empty, coe_insert, expGrowthSup_add, expGrowthSup_zero, iSup_coe, iSup_emptyset, iSup_insert, induction_on, insert, sum_empty, sum_insert
 -/

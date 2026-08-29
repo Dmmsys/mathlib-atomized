@@ -293,7 +293,9 @@ theorem le_rank_iff_exists_finset
     intro s
     contrapose! le
     rw [← natCast_add_one_le_iff]; rw [← Nat.cast_add_one] at le
-    have ⟨t, ht⟩ := exists_finset_eq
+    have ⟨t, ht⟩ := exists_finset_eq_card le
+exact ⟨t.map (.subtype _), by simpa using ht.symm, s.2.mono by simp⟩
+mpr := fun ⟨s, card_s, ind_s⟩ => ind_s.cardinal_le_rank'.trans_eq' by simpa using card_s
 
 中文:
 定理 le_rank_iff_存在_finset
@@ -305,7 +307,9 @@ theorem le_rank_iff_exists_finset
     intro s
     contrapose! le
     rw [← natCast_add_one_le_iff]; rw [← Nat.cast_add_one] at le
-    have ⟨t, ht⟩ := exists_finset_eq
+    have ⟨t, ht⟩ := exists_finset_eq_card le
+exact ⟨t.map (.subtype _), by simpa using ht.symm, s.2.mono by simp⟩
+mpr := fun ⟨s, card_s, ind_s⟩ => ind_s.cardinal_le_rank'.trans_eq' by simpa using card_s
 
 Depends on / 依赖: Module, Module.rank, Nat.cast_add_one, bddAbove_of_small, card_s, cardinal_le_rank, cast_add_one, ciSup_le_iff, contrapose, exists_finset_eq_card, ht.symm, ind_s, ind_s.cardinal_le_rank, lt_natCast_add_one_iff, natCast_add_one_le_iff, subtype, t.map, trans_eq
 -/
@@ -665,7 +669,11 @@ theorem CommSemiring.rank_self
   nontriviality R
   rw [le_antisymm_iff]; rw [← not_lt]; rw [← two_le_iff_one_lt]; rw [← Nat.cast_two]; rw [Module.le_rank_iff_exists_linearMap]; rw [Module.one_le_rank_iff]
   refine ⟨fun ⟨f, inj⟩ => ?_, _, (LinearEquiv.refl ..).injective⟩
-have := inj (a₁ := f ![0, 1] • ![1, 0]) (a₂ := f ![1, 0] 
+have := inj (a₁ := f ![0, 1] • ![1, 0]) (a₂ := f ![1, 0] • ![0, 1]) by
+    simp_rw [map_smul, smul_eq_mul]; apply mul_comm
+  have h₁ : f ![0, 1] = 0 := by simpa using congr($this 0)
+  have h₂ : 0 = f ![1, 0] := by simpa using congr($this 1)
+  exact zero_ne_one (α := R) (by simpa using congr($(inj (h₁.trans h₂)) 1))
 
 中文:
 定理 交换半环.rank_self
@@ -675,7 +683,11 @@ have := inj (a₁ := f ![0, 1] • ![1, 0]) (a₂ := f ![1, 0]
   nontriviality R
   rw [le_antisymm_iff]; rw [← not_lt]; rw [← two_le_iff_one_lt]; rw [← Nat.cast_two]; rw [Module.le_rank_iff_exists_linearMap]; rw [Module.one_le_rank_iff]
   refine ⟨fun ⟨f, inj⟩ => ?_, _, (LinearEquiv.refl ..).injective⟩
-have := inj (a₁ := f ![0, 1] • ![1, 0]) (a₂ := f ![1, 0] 
+have := inj (a₁ := f ![0, 1] • ![1, 0]) (a₂ := f ![1, 0] • ![0, 1]) by
+    simp_rw [map_smul, smul_eq_mul]; apply mul_comm
+  have h₁ : f ![0, 1] = 0 := by simpa using congr($this 0)
+  have h₂ : 0 = f ![1, 0] := by simpa using congr($this 1)
+  exact zero_ne_one (α := R) (by simpa using congr($(inj (h₁.trans h₂)) 1))
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.refl, Module, Module.le_rank_iff_exists_linearMap, Module.one_le_rank_iff, Nat.cast_two, cast_two, injective, le_antisymm_iff, le_rank_iff_exists_linearMap, map_smul, mul_comm, nontriviality, not_lt, one_le_rank_iff, simp_rw, smul_eq_mul, two_le_iff_one_lt, zero_ne_one
 -/
@@ -703,7 +715,7 @@ theorem lift_rank_le_of_injective_injective
   exact ciSup_mono_of_forall_exists' bddAbove_of_small fun ⟨s, h⟩ =>
 ⟨⟨j '' s, LinearIndepOn.id_image h.linearIndependent.map_of_injective_injective i j hi
       (fun _ _ => hj <| by rwa [j.map_zero]) hc⟩,
-    lift_mk_le'.mpr ⟨(Equiv.Set.image 
+    lift_mk_le'.mpr ⟨(Equiv.Set.image j s hj).toEmbedding⟩⟩
 
 中文:
 定理 lift_rank_le_of_injective_injective
@@ -713,7 +725,7 @@ theorem lift_rank_le_of_injective_injective
   exact ciSup_mono_of_forall_exists' bddAbove_of_small fun ⟨s, h⟩ =>
 ⟨⟨j '' s, LinearIndepOn.id_image h.linearIndependent.map_of_injective_injective i j hi
       (fun _ _ => hj <| by rwa [j.map_zero]) hc⟩,
-    lift_mk_le'.mpr ⟨(Equiv.Set.image 
+    lift_mk_le'.mpr ⟨(Equiv.Set.image j s hj).toEmbedding⟩⟩
 
 Depends on / 依赖: Equiv.Set.image, LinearIndepOn, LinearIndepOn.id_image, Module, Module.rank, bddAbove_of_small, ciSup_mono_of_forall_exists, h.linearIndependent.map_of_injective_injective, id_image, j.map_zero, lift_iSup, lift_mk_le, linearIndependent, map_of_injective_injective, map_zero, simp_rw, toEmbedding
 -/
@@ -980,7 +992,9 @@ theorem lift_rank_range_le
   swap
   · apply Cardinal.lift_le.mpr
     refine le_ciSup Cardinal.bddAbove_of_small ⟨rangeSplitting f '' s, ?_⟩
-    apply LinearIndependent.of_comp f.rangeRestri
+    apply LinearIndependent.of_comp f.rangeRestrict
+    convert! li.comp (Equiv.Set.rangeSplittingImageEquiv f s) (Equiv.injective _) using 1
+  · exact (Cardinal.lift_mk_eq'.mpr ⟨Equiv.Set.rangeSplittingImageEquiv f s⟩).ge
 
 中文:
 定理 lift_rank_range_le
@@ -995,7 +1009,9 @@ theorem lift_rank_range_le
   swap
   · apply Cardinal.lift_le.mpr
     refine le_ciSup Cardinal.bddAbove_of_small ⟨rangeSplitting f '' s, ?_⟩
-    apply LinearIndependent.of_comp f.rangeRestri
+    apply LinearIndependent.of_comp f.rangeRestrict
+    convert! li.comp (Equiv.Set.rangeSplittingImageEquiv f s) (Equiv.injective _) using 1
+  · exact (Cardinal.lift_mk_eq'.mpr ⟨Equiv.Set.rangeSplittingImageEquiv f s⟩).ge
 
 Depends on / 依赖: Cardinal, Cardinal.bddAbove_of_small, Cardinal.lift_iSup, Cardinal.lift_le.mpr, Cardinal.lift_mk_eq, Equiv.Set.rangeSplittingImageEquiv, Equiv.injective, LinearIndependent, LinearIndependent.of_comp, Module, Module.rank_def, bddAbove_of_small, ciSup_le, convert, f.rangeRestrict, injective, le_ciSup, le_trans, li.comp, lift_iSup
 -/

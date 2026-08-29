@@ -42,7 +42,14 @@ instance :
       μIso _ _ := isoMk (fun _ => Iso.refl _) (fun _ _ _ => tensor_ext fun _ _ => rfl)
       associativity _ _ _ := by
         ext1
-        exact tensor_ext₃' fun m₁ m₂ 
+        exact tensor_ext₃' fun m₁ m₂ m₃ => rfl
+      left_unitality _ := by
+        ext1
+        exact tensor_ext fun m₁ m₂ => rfl
+      right_unitality _ := by
+        ext1
+        exact tensor_ext fun m₁ m₂ => rfl
+    }
 
 中文:
 实例 :
@@ -53,7 +60,14 @@ instance :
       μIso _ _ := isoMk (fun _ => Iso.refl _) (fun _ _ _ => tensor_ext fun _ _ => rfl)
       associativity _ _ _ := by
         ext1
-        exact tensor_ext₃' fun m₁ m₂ 
+        exact tensor_ext₃' fun m₁ m₂ m₃ => rfl
+      left_unitality _ := by
+        ext1
+        exact tensor_ext fun m₁ m₂ => rfl
+      right_unitality _ := by
+        ext1
+        exact tensor_ext fun m₁ m₂ => rfl
+    }
 
 Depends on / 依赖: CoreMonoidal, Functor, Functor.CoreMonoidal.toMonoidal, Iso.refl, toMonoidal
 -/

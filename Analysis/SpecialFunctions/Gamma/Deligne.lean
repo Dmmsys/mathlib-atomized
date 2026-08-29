@@ -276,7 +276,9 @@ lemma differentiable_GammaReal_inv
   refine Differentiable.mul (fun s => .inv ?_ (by simp)) ?_
   · refine ((differentiableAt_id.neg.div_const (2 : Complex)).const_cpow ?_)
     exact Or.inl (ofReal_ne_zero.mpr pi_ne_zero)
-  · exact differentiable_one_div_Gamma.comp (differentiable_id.
+  · exact differentiable_one_div_Gamma.comp (differentiable_id.div_const _)
+
+@[fun_prop]
 
 中文:
 引理 differentiable_Gamma实数_inv
@@ -286,7 +288,9 @@ lemma differentiable_GammaReal_inv
   refine Differentiable.mul (fun s => .inv ?_ (by simp)) ?_
   · refine ((differentiableAt_id.neg.div_const (2 : Complex)).const_cpow ?_)
     exact Or.inl (ofReal_ne_zero.mpr pi_ne_zero)
-  · exact differentiable_one_div_Gamma.comp (differentiable_id.
+  · exact differentiable_one_div_Gamma.comp (differentiable_id.div_const _)
+
+@[fun_prop]
 
 Depends on / 依赖: Differentiable, Differentiable.mul, GammaReal, Or.inl, const_cpow, differentiableAt_id, differentiableAt_id.neg.div_const, differentiable_id, differentiable_id.div_const, differentiable_one_div_Gamma, differentiable_one_div_Gamma.comp, div_const, mul_inv, ofReal_ne_zero, ofReal_ne_zero.mpr, pi_ne_zero
 -/
@@ -335,7 +339,15 @@ lemma GammaReal_residue_zero
     refine tendsto_self_mul_Gamma_nhds_zero.comp ?_
     rw [tendsto_nhdsWithin_iff]; rw [(by simp : 𝓝 (0 : Complex) = 𝓝 (0 / 2))]
     exact ⟨(tendsto_id.div_const _).mono_left nhdsWithin_le_nhds,
-      eventually_
+      eventually_of_mem self_mem_nhdsWithin fun x hx => div_ne_zero hx two_ne_zero⟩
+  have h' : Tendsto (fun s : Complex => 2 * (π : Complex) ^ (-s / 2)) (𝓝[!=] 0) (𝓝 2) := by
+    rw [(by simp : 𝓝 2 = 𝓝 (2 * (π : Complex) ^ (-(0 : Complex) / 2)))]
+    refine Tendsto.mono_left (ContinuousAt.tendsto ?_) nhdsWithin_le_nhds
+    exact continuousAt_const.mul ((continuousAt_const_cpow (ofReal_ne_zero.mpr pi_ne_zero)).comp
+      (by fun_prop))
+  convert! mul_one (2 : Complex) ▸ (h'.mul h) using 2 with z
+  rw [GammaReal]
+  ring_nf
 
 中文:
 引理 Gamma实数_residue_zero
@@ -345,7 +357,15 @@ lemma GammaReal_residue_zero
     refine tendsto_self_mul_Gamma_nhds_zero.comp ?_
     rw [tendsto_nhdsWithin_iff]; rw [(by simp : 𝓝 (0 : Complex) = 𝓝 (0 / 2))]
     exact ⟨(tendsto_id.div_const _).mono_left nhdsWithin_le_nhds,
-      eventually_
+      eventually_of_mem self_mem_nhdsWithin fun x hx => div_ne_zero hx two_ne_zero⟩
+  have h' : Tendsto (fun s : Complex => 2 * (π : Complex) ^ (-s / 2)) (𝓝[!=] 0) (𝓝 2) := by
+    rw [(by simp : 𝓝 2 = 𝓝 (2 * (π : Complex) ^ (-(0 : Complex) / 2)))]
+    refine Tendsto.mono_left (ContinuousAt.tendsto ?_) nhdsWithin_le_nhds
+    exact continuousAt_const.mul ((continuousAt_const_cpow (ofReal_ne_zero.mpr pi_ne_zero)).comp
+      (by fun_prop))
+  convert! mul_one (2 : Complex) ▸ (h'.mul h) using 2 with z
+  rw [GammaReal]
+  ring_nf
 
 Depends on / 依赖: Tendsto, div_const, div_ne_zero, eventually_of_mem, mono_left, nhdsWithin_le_nhds, self_mem_nhdsWithin, tendsto_id, tendsto_id.div_const, tendsto_nhdsWithin_iff, tendsto_self_mul_Gamma_nhds_zero, tendsto_self_mul_Gamma_nhds_zero.comp, two_ne_zero
 -/
@@ -380,7 +400,13 @@ lemma GammaReal_mul_GammaReal_add_one
   calc
   _ = (π ^ (-s / 2) * π ^ (-(s + 1) / 2)) * (Gamma (s / 2) * Gamma (s / 2 + 1 / 2)) := by ring_nf
   _ = 2 ^ (1 - s) * (π ^ (-1 / 2 - s) * π ^ (1 / 2 : Complex)) * Gamma s := by
-    rw [← cpow_add _ _ (ofReal_ne_zero.mpr pi_ne_zero)]; rw [Comple
+    rw [← cpow_add _ _ (ofReal_ne_zero.mpr pi_ne_zero)]; rw [Complex.Gamma_mul_Gamma_add_half]; rw [sqrt_eq_rpow]; rw [ofReal_cpow pi_pos.le]; rw [ofReal_div]; rw [ofReal_one]; rw [ofReal_ofNat]
+    ring_nf
+  _ = 2 * ((2 : Real) ^ (-s) * π ^ (-s)) * Gamma s := by
+    rw [sub_eq_add_neg]; rw [cpow_add _ _ two_ne_zero]; rw [cpow_one]; rw [← cpow_add _ _ (ofReal_ne_zero.mpr pi_ne_zero)]; rw [ofReal_ofNat]
+    ring_nf
+  _ = 2 * (2 * π) ^ (-s) * Gamma s := by
+    rw [← mul_cpow_ofReal_nonneg two_pos.le pi_pos.le]; rw [ofReal_ofNat]
 
 中文:
 引理 Gamma实数_mul_Gamma实数_add_one
@@ -391,7 +417,13 @@ lemma GammaReal_mul_GammaReal_add_one
   calc
   _ = (π ^ (-s / 2) * π ^ (-(s + 1) / 2)) * (Gamma (s / 2) * Gamma (s / 2 + 1 / 2)) := by ring_nf
   _ = 2 ^ (1 - s) * (π ^ (-1 / 2 - s) * π ^ (1 / 2 : Complex)) * Gamma s := by
-    rw [← cpow_add _ _ (ofReal_ne_zero.mpr pi_ne_zero)]; rw [Comple
+    rw [← cpow_add _ _ (ofReal_ne_zero.mpr pi_ne_zero)]; rw [Complex.Gamma_mul_Gamma_add_half]; rw [sqrt_eq_rpow]; rw [ofReal_cpow pi_pos.le]; rw [ofReal_div]; rw [ofReal_one]; rw [ofReal_ofNat]
+    ring_nf
+  _ = 2 * ((2 : Real) ^ (-s) * π ^ (-s)) * Gamma s := by
+    rw [sub_eq_add_neg]; rw [cpow_add _ _ two_ne_zero]; rw [cpow_one]; rw [← cpow_add _ _ (ofReal_ne_zero.mpr pi_ne_zero)]; rw [ofReal_ofNat]
+    ring_nf
+  _ = 2 * (2 * π) ^ (-s) * Gamma s := by
+    rw [← mul_cpow_ofReal_nonneg two_pos.le pi_pos.le]; rw [ofReal_ofNat]
 
 Depends on / 依赖: Complex.Gamma_mul_Gamma_add_half, GammaComplex_def, GammaReal_def, Gamma_mul_Gamma_add_half, cpow_add, ofReal_cpow, ofReal_div, ofReal_ne_zero, ofReal_ne_zero.mpr, ofReal_ofNat, ofReal_one, pi_ne_zero, pi_pos, pi_pos.le, ring_nf, sqrt_eq_rpow, sub_eq_add_neg
 -/
@@ -420,7 +452,13 @@ lemma GammaReal_one_sub_mul_GammaReal_one_add
     simp only [GammaReal_def]
     ring_nf
   _ = (π ^ ((s - 1) / 2) * π ^ ((-1 - s) / 2) * π ^ (1 : Complex)) / sin (π / 2 - π * s / 2) := by
-    r
+    rw [Complex.Gamma_mul_Gamma_one_sub]; rw [cpow_one]
+    ring_nf
+  _ = _ := by
+    simp_rw [← cpow_add _ _ (ofReal_ne_zero.mpr pi_ne_zero),
+      Complex.sin_pi_div_two_sub]
+    ring_nf
+    rw [cpow_zero]; rw [one_mul]
 
 中文:
 引理 Gamma实数_one_sub_mul_Gamma实数_one_add
@@ -431,7 +469,13 @@ lemma GammaReal_one_sub_mul_GammaReal_one_add
     simp only [GammaReal_def]
     ring_nf
   _ = (π ^ ((s - 1) / 2) * π ^ ((-1 - s) / 2) * π ^ (1 : Complex)) / sin (π / 2 - π * s / 2) := by
-    r
+    rw [Complex.Gamma_mul_Gamma_one_sub]; rw [cpow_one]
+    ring_nf
+  _ = _ := by
+    simp_rw [← cpow_add _ _ (ofReal_ne_zero.mpr pi_ne_zero),
+      Complex.sin_pi_div_two_sub]
+    ring_nf
+    rw [cpow_zero]; rw [one_mul]
 
 Depends on / 依赖: Complex.Gamma_mul_Gamma_one_sub, Complex.sin_pi_div_two_sub, GammaReal, GammaReal_def, Gamma_mul_Gamma_one_sub, cpow_add, cpow_one, cpow_zero, ofReal_ne_zero, ofReal_ne_zero.mpr, one_mul, pi_ne_zero, ring_nf, simp_rw, sin_pi_div_two_sub
 -/
@@ -463,7 +507,10 @@ lemma GammaReal_div_GammaReal_one_sub
       sub_eq_add_neg, ← neg_add]
   calc GammaReal s / GammaReal (1 - s)
   _ = (GammaReal s * GammaReal (s + 1)) / (GammaReal (1 - s) * GammaReal (1 + s)) := by
-    rw [add_comm 1 s]; 
+    rw [add_comm 1 s]; rw [mul_comm (GammaReal (1 - s)) (GammaReal (s + 1))]; rw [← div_div]; rw [mul_div_cancel_right₀ _ this]
+  _ = (2 * (2 * π) ^ (-s) * Gamma s) / ((cos (π * s / 2))⁻¹) := by
+    rw [GammaReal_one_sub_mul_GammaReal_one_add]; rw [GammaReal_mul_GammaReal_add_one]; rw [GammaComplex_def]
+  _ = _ := by rw [GammaComplex_def, div_eq_mul_inv, inv_inv]
 
 中文:
 引理 Gamma实数_div_Gamma实数_one_sub
@@ -474,7 +521,10 @@ lemma GammaReal_div_GammaReal_one_sub
       sub_eq_add_neg, ← neg_add]
   calc GammaReal s / GammaReal (1 - s)
   _ = (GammaReal s * GammaReal (s + 1)) / (GammaReal (1 - s) * GammaReal (1 + s)) := by
-    rw [add_comm 1 s]; 
+    rw [add_comm 1 s]; rw [mul_comm (GammaReal (1 - s)) (GammaReal (s + 1))]; rw [← div_div]; rw [mul_div_cancel_right₀ _ this]
+  _ = (2 * (2 * π) ^ (-s) * Gamma s) / ((cos (π * s / 2))⁻¹) := by
+    rw [GammaReal_one_sub_mul_GammaReal_one_add]; rw [GammaReal_mul_GammaReal_add_one]; rw [GammaComplex_def]
+  _ = _ := by rw [GammaComplex_def, div_eq_mul_inv, inv_inv]
 
 Depends on / 依赖: GammaReal, GammaReal_eq_zero_iff, GammaReal_one_sub_mul_GammaReal_one_add, add_comm, div_div, eq_sub_iff_add_eq, mul_comm, neg_add, not_exists, sub_eq_add_neg
 -/
@@ -506,7 +556,7 @@ lemma inv_GammaReal_one_sub
     intro n h
     specialize hs (2 * n + 1)
     simp_all
-  rw [← GammaReal_div_GammaReal_one_sub 
+  rw [← GammaReal_div_GammaReal_one_sub h2]; rw [← div_eq_mul_inv]; rw [div_right_comm]; rw [div_self h1]; rw [one_div]
 
 中文:
 引理 inv_Gamma实数_one_sub
@@ -521,7 +571,7 @@ lemma inv_GammaReal_one_sub
     intro n h
     specialize hs (2 * n + 1)
     simp_all
-  rw [← GammaReal_div_GammaReal_one_sub 
+  rw [← GammaReal_div_GammaReal_one_sub h2]; rw [← div_eq_mul_inv]; rw [div_right_comm]; rw [div_self h1]; rw [one_div]
 
 Depends on / 依赖: GammaReal, GammaReal_div_GammaReal_one_sub, GammaReal_eq_zero_iff, div_eq_mul_inv, div_right_comm, div_self, not_exists, one_div, specialize
 -/
@@ -549,7 +599,21 @@ lemma inv_GammaReal_two_sub
   · rw [h, (by ring : 2 - 1 = (1 : Complex)), GammaReal_one, GammaReal,
     neg_div, (by simp : (1 + 1) / 2 = (1 : Complex)), Complex.Gamma_one, GammaComplex_one,
     mul_one, Complex.sin_pi_div_two, mul_one, cpow_neg_one, mul_one, inv_inv,
-    div_mul_cancel₀ _ (ofReal_ne_ze
+    div_mul_cancel₀ _ (ofReal_ne_zero.mpr pi_ne_zero), inv_one]
+  rw [← Ne]; rw [← sub_ne_zero] at h
+  have h' (n : Nat) : s - 1 != -n := by
+    rcases n with - | m
+    · rwa [Nat.cast_zero, neg_zero]
+    · rw [Ne, sub_eq_iff_eq_add]
+      convert! hs m using 2
+      push_cast
+      ring
+  rw [(by ring : 2 - s = 1 - (s - 1))]; rw [inv_GammaReal_one_sub h']; rw [(by rw [sub_add_cancel] : GammaComplex s = GammaComplex (s - 1 + 1)), GammaComplex_add_one h,
+    (by ring : s + 1 = (s - 1) + 2), GammaReal_add_two h, mul_sub, sub_div, mul_one,
+      Complex.cos_sub_pi_div_two]
+  simp_rw [mul_div_assoc, mul_inv]
+  generalize (GammaReal (s - 1))⁻¹ = A
+  field
 
 中文:
 引理 inv_Gamma实数_two_sub
@@ -559,7 +623,21 @@ lemma inv_GammaReal_two_sub
   · rw [h, (by ring : 2 - 1 = (1 : Complex)), GammaReal_one, GammaReal,
     neg_div, (by simp : (1 + 1) / 2 = (1 : Complex)), Complex.Gamma_one, GammaComplex_one,
     mul_one, Complex.sin_pi_div_two, mul_one, cpow_neg_one, mul_one, inv_inv,
-    div_mul_cancel₀ _ (ofReal_ne_ze
+    div_mul_cancel₀ _ (ofReal_ne_zero.mpr pi_ne_zero), inv_one]
+  rw [← Ne]; rw [← sub_ne_zero] at h
+  have h' (n : Nat) : s - 1 != -n := by
+    rcases n with - | m
+    · rwa [Nat.cast_zero, neg_zero]
+    · rw [Ne, sub_eq_iff_eq_add]
+      convert! hs m using 2
+      push_cast
+      ring
+  rw [(by ring : 2 - s = 1 - (s - 1))]; rw [inv_GammaReal_one_sub h']; rw [(by rw [sub_add_cancel] : GammaComplex s = GammaComplex (s - 1 + 1)), GammaComplex_add_one h,
+    (by ring : s + 1 = (s - 1) + 2), GammaReal_add_two h, mul_sub, sub_div, mul_one,
+      Complex.cos_sub_pi_div_two]
+  simp_rw [mul_div_assoc, mul_inv]
+  generalize (GammaReal (s - 1))⁻¹ = A
+  field
 
 Depends on / 依赖: Complex.Gamma_one, Complex.sin_pi_div_two, GammaComplex_one, GammaReal, GammaReal_one, Gamma_one, Nat.cast_zero, cast_zero, convert, cpow_neg_one, inv_inv, inv_one, mul_one, neg_div, neg_zero, ofReal_ne_zero, ofReal_ne_zero.mpr, pi_ne_zero, sin_pi_div_two, sub_eq_iff_eq_add
 -/

@@ -97,7 +97,46 @@ theorem exists_forall_closed_ball_dist_add_le_two_sub
   obtain ⟨δ, hδ, h⟩ := exists_forall_sphere_dist_add_le_two_sub E hε'
   set δ' := min (1 / 2) (min (ε / 3) <| δ / 3)
 refine ⟨δ', lt_min one_half_pos lt_min hε' (div_pos hδ zero_lt_three), fun x hx y hy hxy => ?_⟩
-  obtain hx' | hx' := le_or_gt ‖x
+  obtain hx' | hx' := le_or_gt ‖x‖ (1 - δ')
+  · rw [← one_add_one_eq_two]
+    exact (norm_add_le_of_le hx' hy).trans (sub_add_eq_add_sub _ _ _).le
+  obtain hy' | hy' := le_or_gt ‖y‖ (1 - δ')
+  · rw [← one_add_one_eq_two]
+    exact (norm_add_le_of_le hx hy').trans (add_sub_assoc _ _ _).ge
+  have hδ' : 0 < 1 - δ' := sub_pos_of_lt (min_lt_of_left_lt one_half_lt_one)
+  have h₁ : forall z : E, 1 - δ' < ‖z‖ -> ‖‖z‖⁻¹ • z‖ = 1 := by
+    rintro z hz
+    rw [norm_smul_of_nonneg (inv_nonneg.2 <| norm_nonneg _)]; rw [inv_mul_cancel₀ (hδ'.trans hz).ne']
+  have h₂ : forall z : E, ‖z‖ <= 1 -> 1 - δ' <= ‖z‖ -> ‖‖z‖⁻¹ • z - z‖ <= δ' := by
+    rintro z hz hδz
+    nth_rw 3 [← one_smul Real z]
+    rwa [← sub_smul,
+      norm_smul_of_nonneg (sub_nonneg_of_le <| (one_le_inv₀ (hδ'.trans_le hδz)).2 hz),
+      sub_mul, inv_mul_cancel₀ (hδ'.trans_le hδz).ne', one_mul, sub_le_comm]
+  set x' := ‖x‖⁻¹ • x
+  set y' := ‖y‖⁻¹ • y
+  have hxy' : ε / 3 <= ‖x' - y'‖ :=
+    calc
+      ε / 3 = ε - (ε / 3 + ε / 3) := by ring
+      _ <= ‖x - y‖ - (‖x' - x‖ + ‖y' - y‖) := by
+        gcongr
+· exact (h₂ _ hx hx'.le).trans min_le_of_right_le min_le_left _ _
+· exact (h₂ _ hy hy'.le).trans min_le_of_right_le min_le_left _ _
+      _ <= _ := by
+        have : forall x' y', x - y = x' - y' + (x - x') + (y' - y) := fun _ _ => by abel
+        rw [sub_le_iff_le_add]; rw [norm_sub_rev _ x]; rw [← add_assoc]; rw [this]
+        exact norm_add₃_le
+  calc
+    ‖x + y‖ <= ‖x' + y'‖ + ‖x' - x‖ + ‖y' - y‖ := by
+      have : forall x' y', x + y = x' + y' + (x - x') + (y - y') := fun _ _ => by abel
+      rw [norm_sub_rev]; rw [norm_sub_rev y']; rw [this]
+      exact norm_add₃_le
+    _ <= 2 - δ + δ' + δ' := by
+      gcongr
+      exacts [h (h₁ _ hx') (h₁ _ hy') hxy', h₂ _ hx hx'.le, h₂ _ hy hy'.le]
+    _ <= 2 - δ' := by
+      suffices δ' <= δ / 3 by linarith
+exact min_le_of_right_le min_le_right _ _
 
 中文:
 定理 存在_对任意_closed_ball_dist_add_le_two_sub
@@ -107,7 +146,46 @@ refine ⟨δ', lt_min one_half_pos lt_min hε' (div_pos hδ zero_lt_three), fun 
   obtain ⟨δ, hδ, h⟩ := exists_forall_sphere_dist_add_le_two_sub E hε'
   set δ' := min (1 / 2) (min (ε / 3) <| δ / 3)
 refine ⟨δ', lt_min one_half_pos lt_min hε' (div_pos hδ zero_lt_three), fun x hx y hy hxy => ?_⟩
-  obtain hx' | hx' := le_or_gt ‖x
+  obtain hx' | hx' := le_or_gt ‖x‖ (1 - δ')
+  · rw [← one_add_one_eq_two]
+    exact (norm_add_le_of_le hx' hy).trans (sub_add_eq_add_sub _ _ _).le
+  obtain hy' | hy' := le_or_gt ‖y‖ (1 - δ')
+  · rw [← one_add_one_eq_two]
+    exact (norm_add_le_of_le hx hy').trans (add_sub_assoc _ _ _).ge
+  have hδ' : 0 < 1 - δ' := sub_pos_of_lt (min_lt_of_left_lt one_half_lt_one)
+  have h₁ : forall z : E, 1 - δ' < ‖z‖ -> ‖‖z‖⁻¹ • z‖ = 1 := by
+    rintro z hz
+    rw [norm_smul_of_nonneg (inv_nonneg.2 <| norm_nonneg _)]; rw [inv_mul_cancel₀ (hδ'.trans hz).ne']
+  have h₂ : forall z : E, ‖z‖ <= 1 -> 1 - δ' <= ‖z‖ -> ‖‖z‖⁻¹ • z - z‖ <= δ' := by
+    rintro z hz hδz
+    nth_rw 3 [← one_smul Real z]
+    rwa [← sub_smul,
+      norm_smul_of_nonneg (sub_nonneg_of_le <| (one_le_inv₀ (hδ'.trans_le hδz)).2 hz),
+      sub_mul, inv_mul_cancel₀ (hδ'.trans_le hδz).ne', one_mul, sub_le_comm]
+  set x' := ‖x‖⁻¹ • x
+  set y' := ‖y‖⁻¹ • y
+  have hxy' : ε / 3 <= ‖x' - y'‖ :=
+    calc
+      ε / 3 = ε - (ε / 3 + ε / 3) := by ring
+      _ <= ‖x - y‖ - (‖x' - x‖ + ‖y' - y‖) := by
+        gcongr
+· exact (h₂ _ hx hx'.le).trans min_le_of_right_le min_le_left _ _
+· exact (h₂ _ hy hy'.le).trans min_le_of_right_le min_le_left _ _
+      _ <= _ := by
+        have : forall x' y', x - y = x' - y' + (x - x') + (y' - y) := fun _ _ => by abel
+        rw [sub_le_iff_le_add]; rw [norm_sub_rev _ x]; rw [← add_assoc]; rw [this]
+        exact norm_add₃_le
+  calc
+    ‖x + y‖ <= ‖x' + y'‖ + ‖x' - x‖ + ‖y' - y‖ := by
+      have : forall x' y', x + y = x' + y' + (x - x') + (y - y') := fun _ _ => by abel
+      rw [norm_sub_rev]; rw [norm_sub_rev y']; rw [this]
+      exact norm_add₃_le
+    _ <= 2 - δ + δ' + δ' := by
+      gcongr
+      exacts [h (h₁ _ hx') (h₁ _ hy') hxy', h₂ _ hx hx'.le, h₂ _ hy hy'.le]
+    _ <= 2 - δ' := by
+      suffices δ' <= δ / 3 by linarith
+exact min_le_of_right_le min_le_right _ _
 
 Depends on / 依赖: div_pos, exists_forall_sphere_dist_add_le_two_sub, le_or_gt, lt_min, norm_add_le_of_le, one_add_one_eq_two, one_half_pos, sub_add_eq_add_sub, zero_lt_three
 -/
@@ -169,7 +247,12 @@ theorem exists_forall_closed_ball_dist_add_le_two_mul_sub
   · exact ⟨1, one_pos, fun x hx y hy h => (hε.not_ge <|
 h.trans (norm_sub_le _ _).trans add_nonpos (hx.trans hr) (hy.trans hr)).elim⟩
   obtain ⟨δ, hδ, h⟩ := exists_forall_closed_ball_dist_add_le_two_sub E (div_pos hε hr)
-  refine ⟨δ * r, mul_pos hδ hr, fun x hx y 
+  refine ⟨δ * r, mul_pos hδ hr, fun x hx y hy hxy => ?_⟩
+  rw [← div_le_one hr]; rw [div_eq_inv_mul]; rw [← norm_smul_of_nonneg (inv_nonneg.2 hr.le)] at hx hy
+  have := h hx hy
+  simp_rw [← smul_add, ← smul_sub, norm_smul_of_nonneg (inv_nonneg.2 hr.le), ← div_eq_inv_mul,
+    div_le_div_iff_of_pos_right hr, div_le_iff₀ hr, sub_mul] at this
+  exact this hxy
 
 中文:
 定理 存在_对任意_closed_ball_dist_add_le_two_mul_sub
@@ -179,7 +262,12 @@ h.trans (norm_sub_le _ _).trans add_nonpos (hx.trans hr) (hy.trans hr)).elim⟩
   · exact ⟨1, one_pos, fun x hx y hy h => (hε.not_ge <|
 h.trans (norm_sub_le _ _).trans add_nonpos (hx.trans hr) (hy.trans hr)).elim⟩
   obtain ⟨δ, hδ, h⟩ := exists_forall_closed_ball_dist_add_le_two_sub E (div_pos hε hr)
-  refine ⟨δ * r, mul_pos hδ hr, fun x hx y 
+  refine ⟨δ * r, mul_pos hδ hr, fun x hx y hy hxy => ?_⟩
+  rw [← div_le_one hr]; rw [div_eq_inv_mul]; rw [← norm_smul_of_nonneg (inv_nonneg.2 hr.le)] at hx hy
+  have := h hx hy
+  simp_rw [← smul_add, ← smul_sub, norm_smul_of_nonneg (inv_nonneg.2 hr.le), ← div_eq_inv_mul,
+    div_le_div_iff_of_pos_right hr, div_le_iff₀ hr, sub_mul] at this
+  exact this hxy
 
 Depends on / 依赖: add_nonpos, div_eq_inv_mul, div_le_one, div_pos, exists_forall_closed_ball_dist_add_le_two_sub, h.trans, hr.le, hx.trans, hy.trans, inv_nonneg, le_or_gt, mul_pos, norm_smul_of_nonneg, norm_sub_le, not_ge, one_pos, simp_rw, smul_add, smul_sub
 -/

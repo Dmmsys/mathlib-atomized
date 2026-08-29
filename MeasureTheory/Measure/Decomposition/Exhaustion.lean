@@ -170,7 +170,27 @@ lemma exists_isSigmaFiniteSet_measure_ge
   by_cases! hC_lt : 1 / n < ⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s
   · have h_lt_top : ⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s < ∞ := by
       refine (?_ : ⨆ (s) (_ : MeasurableSet s)
-        (_ : SigmaFinite (μ.restrict s)), ν s <= ν Set.univ)
+        (_ : SigmaFinite (μ.restrict s)), ν s <= ν Set.univ).trans_lt (measure_lt_top _ _)
+      refine iSup_le (fun s => ?_)
+      exact iSup_le (fun _ => iSup_le (fun _ => measure_mono (Set.subset_univ s)))
+    obtain ⟨t, ht⟩ := exists_lt_of_lt_ciSup
+      (ENNReal.sub_lt_self h_lt_top.ne hC_lt.ne_bot (by simp) :
+          (⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s) - 1 / n
+        < ⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s)
+    have ht_meas : MeasurableSet t := by
+      by_contra h_notMem
+      simp only [h_notMem] at ht
+      simp at ht
+    have ht_mem : SigmaFinite (μ.restrict t) := by
+      by_contra h_notMem
+      simp only [h_notMem] at ht
+      simp at ht
+    refine ⟨t, ht_meas, ht_mem, ?_⟩
+    simp only [ht_meas, ht_mem, iSup_true] at ht
+    exact ht.le
+  · refine ⟨∅, MeasurableSet.empty, by rw [Measure.restrict_empty]; infer_instance, ?_⟩
+    rw [tsub_eq_zero_of_le hC_lt]
+    exact zero_le
 
 中文:
 引理 存在_isSigmaFiniteSet_measure_ge
@@ -179,7 +199,27 @@ lemma exists_isSigmaFiniteSet_measure_ge
   by_cases! hC_lt : 1 / n < ⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s
   · have h_lt_top : ⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s < ∞ := by
       refine (?_ : ⨆ (s) (_ : MeasurableSet s)
-        (_ : SigmaFinite (μ.restrict s)), ν s <= ν Set.univ)
+        (_ : SigmaFinite (μ.restrict s)), ν s <= ν Set.univ).trans_lt (measure_lt_top _ _)
+      refine iSup_le (fun s => ?_)
+      exact iSup_le (fun _ => iSup_le (fun _ => measure_mono (Set.subset_univ s)))
+    obtain ⟨t, ht⟩ := exists_lt_of_lt_ciSup
+      (ENNReal.sub_lt_self h_lt_top.ne hC_lt.ne_bot (by simp) :
+          (⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s) - 1 / n
+        < ⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s)
+    have ht_meas : MeasurableSet t := by
+      by_contra h_notMem
+      simp only [h_notMem] at ht
+      simp at ht
+    have ht_mem : SigmaFinite (μ.restrict t) := by
+      by_contra h_notMem
+      simp only [h_notMem] at ht
+      simp at ht
+    refine ⟨t, ht_meas, ht_mem, ?_⟩
+    simp only [ht_meas, ht_mem, iSup_true] at ht
+    exact ht.le
+  · refine ⟨∅, MeasurableSet.empty, by rw [Measure.restrict_empty]; infer_instance, ?_⟩
+    rw [tsub_eq_zero_of_le hC_lt]
+    exact zero_le
 
 Depends on / 依赖: ENNReal, ENNReal.sub_lt_self, MeasurableSet, Set.subset_univ, Set.univ, SigmaFinite, exists_lt_of_lt_ciSup, hC_lt, hC_lt.ne, h_lt_top, h_lt_top.ne, iSup_le, measure_lt_top, measure_mono, restrict, sub_lt_self, subset_univ, trans_lt
 -/
@@ -330,7 +370,9 @@ lemma tendsto_measure_sigmaFiniteSetGE
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le ?_
     tendsto_const_nhds (measure_sigmaFiniteSetGE_ge μ ν) (measure_sigmaFiniteSetGE_le μ ν)
   nth_rewrite 2 [← tsub_zero (⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s)]
-  refine ENNReal.Tendsto.sub tendsto_const_nhds ?_ (Or
+  refine ENNReal.Tendsto.sub tendsto_const_nhds ?_ (Or.inr ENNReal.zero_ne_top)
+  simp only [one_div]
+  exact ENNReal.tendsto_inv_nat_nhds_zero
 
 中文:
 引理 tendsto_measure_sigmaFiniteSetGE
@@ -339,7 +381,9 @@ lemma tendsto_measure_sigmaFiniteSetGE
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le ?_
     tendsto_const_nhds (measure_sigmaFiniteSetGE_ge μ ν) (measure_sigmaFiniteSetGE_le μ ν)
   nth_rewrite 2 [← tsub_zero (⨆ (s) (_ : MeasurableSet s) (_ : SigmaFinite (μ.restrict s)), ν s)]
-  refine ENNReal.Tendsto.sub tendsto_const_nhds ?_ (Or
+  refine ENNReal.Tendsto.sub tendsto_const_nhds ?_ (Or.inr ENNReal.zero_ne_top)
+  simp only [one_div]
+  exact ENNReal.tendsto_inv_nat_nhds_zero
 
 Depends on / 依赖: ENNReal, ENNReal.Tendsto.sub, ENNReal.tendsto_inv_nat_nhds_zero, ENNReal.zero_ne_top, MeasurableSet, Or.inr, SigmaFinite, Tendsto, measure_sigmaFiniteSetGE_ge, measure_sigmaFiniteSetGE_le, nth_rewrite, one_div, restrict, tendsto_const_nhds, tendsto_inv_nat_nhds_zero, tendsto_of_tendsto_of_tendsto_of_le_of_le, tsub_zero, zero_ne_top
 -/
@@ -402,7 +446,31 @@ lemma sigmaFinite_restrict_sigmaFiniteSetWRT'
   have := sigmaFinite_restrict_sigmaFiniteSetGE μ ν
   let f : Nat × Nat -> Set α := fun p : Nat × Nat => (μ.sigmaFiniteSetWRT' ν)ᶜ
     union (spanningSets (μ.restrict (μ.sigmaFiniteSetGE ν p.1)) p.2 inter (μ.sigmaFiniteSetGE ν p.1))
-  suffices (μ.restrict (μ.sigmaFiniteSetWRT' ν)).FiniteSpanningS
+  suffices (μ.restrict (μ.sigmaFiniteSetWRT' ν)).FiniteSpanningSetsIn (Set.range f) from
+    this.sigmaFinite
+  let e : Nat ≃ Nat × Nat := Nat.pairEquiv.symm
+  refine ⟨fun n => f (e n), fun _ => by simp, fun n => ?_, ?_⟩
+  · simp only [Nat.pairEquiv_symm_apply, measure_union_lt_top_iff, f, e]
+    rw [Measure.restrict_apply' measurableSet_sigmaFiniteSetWRT']; rw [Set.compl_inter_self]; rw [Measure.restrict_apply' measurableSet_sigmaFiniteSetWRT']
+    simp only [measure_empty, ENNReal.zero_lt_top, true_and]
+    refine (measure_mono Set.inter_subset_left).trans_lt ?_
+    rw [← Measure.restrict_apply' (measurableSet_sigmaFiniteSetGE _)]
+    exact measure_spanningSets_lt_top _ _
+  · simp only [Nat.pairEquiv_symm_apply, f, e]
+    rw [← Set.union_iUnion]
+    suffices ⋃ n, (spanningSets (μ.restrict (μ.sigmaFiniteSetGE ν (Nat.unpair n).1)) n.unpair.2
+        inter μ.sigmaFiniteSetGE ν n.unpair.1) = μ.sigmaFiniteSetWRT' ν by
+      rw [this]; rw [Set.compl_union_self]
+    calc ⋃ n, (spanningSets (μ.restrict (μ.sigmaFiniteSetGE ν (Nat.unpair n).1)) n.unpair.2
+        inter μ.sigmaFiniteSetGE ν n.unpair.1)
+      = ⋃ n, ⋃ m, (spanningSets (μ.restrict (μ.sigmaFiniteSetGE ν n)) m
+            inter μ.sigmaFiniteSetGE ν n) :=
+          Set.iUnion_unpair (fun n m => spanningSets (μ.restrict (μ.sigmaFiniteSetGE ν n)) m
+            inter μ.sigmaFiniteSetGE ν n)
+    _ = ⋃ n, μ.sigmaFiniteSetGE ν n := by
+        refine Set.iUnion_congr (fun n => ?_)
+        rw [← Set.iUnion_inter]; rw [iUnion_spanningSets]; rw [Set.univ_inter]
+    _ = μ.sigmaFiniteSetWRT' ν := rfl
 
 中文:
 引理 sigmaFinite_restrict_sigmaFiniteSetWRT'
@@ -411,7 +479,31 @@ lemma sigmaFinite_restrict_sigmaFiniteSetWRT'
   have := sigmaFinite_restrict_sigmaFiniteSetGE μ ν
   let f : Nat × Nat -> Set α := fun p : Nat × Nat => (μ.sigmaFiniteSetWRT' ν)ᶜ
     union (spanningSets (μ.restrict (μ.sigmaFiniteSetGE ν p.1)) p.2 inter (μ.sigmaFiniteSetGE ν p.1))
-  suffices (μ.restrict (μ.sigmaFiniteSetWRT' ν)).FiniteSpanningS
+  suffices (μ.restrict (μ.sigmaFiniteSetWRT' ν)).FiniteSpanningSetsIn (Set.range f) from
+    this.sigmaFinite
+  let e : Nat ≃ Nat × Nat := Nat.pairEquiv.symm
+  refine ⟨fun n => f (e n), fun _ => by simp, fun n => ?_, ?_⟩
+  · simp only [Nat.pairEquiv_symm_apply, measure_union_lt_top_iff, f, e]
+    rw [Measure.restrict_apply' measurableSet_sigmaFiniteSetWRT']; rw [Set.compl_inter_self]; rw [Measure.restrict_apply' measurableSet_sigmaFiniteSetWRT']
+    simp only [measure_empty, ENNReal.zero_lt_top, true_and]
+    refine (measure_mono Set.inter_subset_left).trans_lt ?_
+    rw [← Measure.restrict_apply' (measurableSet_sigmaFiniteSetGE _)]
+    exact measure_spanningSets_lt_top _ _
+  · simp only [Nat.pairEquiv_symm_apply, f, e]
+    rw [← Set.union_iUnion]
+    suffices ⋃ n, (spanningSets (μ.restrict (μ.sigmaFiniteSetGE ν (Nat.unpair n).1)) n.unpair.2
+        inter μ.sigmaFiniteSetGE ν n.unpair.1) = μ.sigmaFiniteSetWRT' ν by
+      rw [this]; rw [Set.compl_union_self]
+    calc ⋃ n, (spanningSets (μ.restrict (μ.sigmaFiniteSetGE ν (Nat.unpair n).1)) n.unpair.2
+        inter μ.sigmaFiniteSetGE ν n.unpair.1)
+      = ⋃ n, ⋃ m, (spanningSets (μ.restrict (μ.sigmaFiniteSetGE ν n)) m
+            inter μ.sigmaFiniteSetGE ν n) :=
+          Set.iUnion_unpair (fun n m => spanningSets (μ.restrict (μ.sigmaFiniteSetGE ν n)) m
+            inter μ.sigmaFiniteSetGE ν n)
+    _ = ⋃ n, μ.sigmaFiniteSetGE ν n := by
+        refine Set.iUnion_congr (fun n => ?_)
+        rw [← Set.iUnion_inter]; rw [iUnion_spanningSets]; rw [Set.univ_inter]
+    _ = μ.sigmaFiniteSetWRT' ν := rfl
 
 Depends on / 依赖: FiniteSpanningSetsIn, Nat.pairEquiv.symm, Nat.pairEquiv_symm_apply, Set.range, measure_union_lt_top_i, pairEquiv, pairEquiv_symm_apply, restrict, sigmaFinite, sigmaFiniteSetGE, sigmaFiniteSetWRT, sigmaFinite_restrict_sigmaFiniteSetGE, spanningSets, this.sigmaFinite
 -/
@@ -458,7 +550,8 @@ lemma measure_sigmaFiniteSetWRT'
       (sigmaFinite_restrict_sigmaFiniteSetWRT' μ ν)).trans ?_
     exact le_iSup₂ (f := fun s _ => ⨆ (_ : SigmaFinite (μ.restrict s)), ν s) (μ.sigmaFiniteSetWRT' ν)
       measurableSet_sigmaFiniteSetWRT'
-  · exact le_of_tendsto' (tendsto_me
+  · exact le_of_tendsto' (tendsto_measure_sigmaFiniteSetGE μ ν)
+      (fun _ => measure_mono (Set.subset_iUnion _ _))
 
 中文:
 引理 measure_sigmaFiniteSetWRT'
@@ -469,7 +562,8 @@ lemma measure_sigmaFiniteSetWRT'
       (sigmaFinite_restrict_sigmaFiniteSetWRT' μ ν)).trans ?_
     exact le_iSup₂ (f := fun s _ => ⨆ (_ : SigmaFinite (μ.restrict s)), ν s) (μ.sigmaFiniteSetWRT' ν)
       measurableSet_sigmaFiniteSetWRT'
-  · exact le_of_tendsto' (tendsto_me
+  · exact le_of_tendsto' (tendsto_measure_sigmaFiniteSetGE μ ν)
+      (fun _ => measure_mono (Set.subset_iUnion _ _))
 
 Depends on / 依赖: Set.subset_iUnion, SigmaFinite, le_antisymm, le_iSup, le_of_tendsto, measurableSet_sigmaFiniteSetWRT, measure_mono, restrict, sigmaFiniteSetWRT, sigmaFinite_restrict_sigmaFiniteSetWRT, subset_iUnion, tendsto_measure_sigmaFiniteSetGE
 -/
@@ -498,7 +592,17 @@ lemma measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'_of_measurableSet
   intro hsσ
   have h_lt : ν (μ.sigmaFiniteSetWRT' ν) < ν (μ.sigmaFiniteSetWRT' ν union s) := by
     rw [measure_union _ hs]
-    · exact ENNReal.lt_add_right 
+    · exact ENNReal.lt_add_right (measure_ne_top _ _) hνs
+    · exact disjoint_compl_right.mono_right hs_subset
+  have h_le : ν (μ.sigmaFiniteSetWRT' ν union s) <= ν (μ.sigmaFiniteSetWRT' ν) := by
+    conv_rhs => rw [measure_sigmaFiniteSetWRT']
+    refine (le_iSup
+      (f := fun (_ : SigmaFinite (μ.restrict (μ.sigmaFiniteSetWRT' ν union s))) => _) ?_).trans ?_
+    · have := sigmaFinite_restrict_sigmaFiniteSetWRT' μ ν
+      infer_instance
+    · exact le_iSup₂ (f := fun s _ => ⨆ (_ : SigmaFinite (μ.restrict _)), ν s)
+        (μ.sigmaFiniteSetWRT' ν union s) (measurableSet_sigmaFiniteSetWRT'.union hs)
+  exact h_lt.not_ge h_le
 
 中文:
 引理 measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'_of_measurableSet
@@ -511,7 +615,17 @@ lemma measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'_of_measurableSet
   intro hsσ
   have h_lt : ν (μ.sigmaFiniteSetWRT' ν) < ν (μ.sigmaFiniteSetWRT' ν union s) := by
     rw [measure_union _ hs]
-    · exact ENNReal.lt_add_right 
+    · exact ENNReal.lt_add_right (measure_ne_top _ _) hνs
+    · exact disjoint_compl_right.mono_right hs_subset
+  have h_le : ν (μ.sigmaFiniteSetWRT' ν union s) <= ν (μ.sigmaFiniteSetWRT' ν) := by
+    conv_rhs => rw [measure_sigmaFiniteSetWRT']
+    refine (le_iSup
+      (f := fun (_ : SigmaFinite (μ.restrict (μ.sigmaFiniteSetWRT' ν union s))) => _) ?_).trans ?_
+    · have := sigmaFinite_restrict_sigmaFiniteSetWRT' μ ν
+      infer_instance
+    · exact le_iSup₂ (f := fun s _ => ⨆ (_ : SigmaFinite (μ.restrict _)), ν s)
+        (μ.sigmaFiniteSetWRT' ν union s) (measurableSet_sigmaFiniteSetWRT'.union hs)
+  exact h_lt.not_ge h_le
 
 Depends on / 依赖: ENNReal, ENNReal.lt_add_right, Ne.lt_top, SigmaFinite, conv_rhs, disjoint_compl_right, disjoint_compl_right.mono_right, h_le, h_lt, h_lt_top, hs_subset, le_iSup, lt_add_right, lt_top, measure_ne_top, measure_sigmaFiniteSetWRT, measure_union, mono_right, restrict, sigmaFiniteSetWRT
 -/
@@ -550,7 +664,12 @@ lemma measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'
     intro t hts ht
     suffices μ (t inter (μ.sigmaFiniteSetWRT' ν)ᶜ) = ∞ from
       measure_mono_top Set.inter_subset_left this
-    have hs_su
+    have hs_subset_t : s subseteq t inter (μ.sigmaFiniteSetWRT' ν)ᶜ := Set.subset_inter hts hs_subset
+    exact this (t inter (μ.sigmaFiniteSetWRT' ν)ᶜ) Set.inter_subset_right hs_subset_t
+      (ht.inter measurableSet_sigmaFiniteSetWRT'.compl)
+  intro t ht_subset hst ht
+  refine measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'_of_measurableSet ht ht_subset ?_
+  exact fun hνt => hνs (measure_mono_null hst hνt)
 
 中文:
 引理 measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'
@@ -562,7 +681,12 @@ lemma measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'
     intro t hts ht
     suffices μ (t inter (μ.sigmaFiniteSetWRT' ν)ᶜ) = ∞ from
       measure_mono_top Set.inter_subset_left this
-    have hs_su
+    have hs_subset_t : s subseteq t inter (μ.sigmaFiniteSetWRT' ν)ᶜ := Set.subset_inter hts hs_subset
+    exact this (t inter (μ.sigmaFiniteSetWRT' ν)ᶜ) Set.inter_subset_right hs_subset_t
+      (ht.inter measurableSet_sigmaFiniteSetWRT'.compl)
+  intro t ht_subset hst ht
+  refine measure_eq_top_of_subset_compl_sigmaFiniteSetWRT'_of_measurableSet ht ht_subset ?_
+  exact fun hνt => hνs (measure_mono_null hst hνt)
 -/
 lemma measure_eq_top_of_subset_compl_sigmaFiniteSetWRT' [IsFiniteMeasure ν]
     (hs_subset : s subseteq (μ.sigmaFiniteSetWRT' ν)ᶜ) (hνs : ν s != 0) :
@@ -595,7 +719,11 @@ lemma measure_eq_top_of_subset_compl_sigmaFiniteSetWRT
   have h : exists s : Set α, MeasurableSet s ∧ SigmaFinite (μ.restrict s)
       ∧ (forall t subseteq sᶜ, ν t != 0 -> μ t = ∞) := by
     refine ⟨μ.sigmaFiniteSetWRT' ν', measurableSet_sigmaFiniteSetWRT',
-      sigmaFinite_r
+      sigmaFinite_restrict_sigmaFiniteSetWRT' _ _,
+      fun t ht_subset hνt => measure_eq_top_of_subset_compl_sigmaFiniteSetWRT' ht_subset ?_⟩
+    exact fun hν't => hνt (hνν' hν't)
+  rw [Measure.sigmaFiniteSetWRT]; rw [dif_pos h] at hs_subset
+  exact h.choose_spec.2.2 s hs_subset hνs
 
 中文:
 引理 measure_eq_top_of_subset_compl_sigmaFiniteSetWRT
@@ -605,7 +733,11 @@ lemma measure_eq_top_of_subset_compl_sigmaFiniteSetWRT
   have h : exists s : Set α, MeasurableSet s ∧ SigmaFinite (μ.restrict s)
       ∧ (forall t subseteq sᶜ, ν t != 0 -> μ t = ∞) := by
     refine ⟨μ.sigmaFiniteSetWRT' ν', measurableSet_sigmaFiniteSetWRT',
-      sigmaFinite_r
+      sigmaFinite_restrict_sigmaFiniteSetWRT' _ _,
+      fun t ht_subset hνt => measure_eq_top_of_subset_compl_sigmaFiniteSetWRT' ht_subset ?_⟩
+    exact fun hν't => hνt (hνν' hν't)
+  rw [Measure.sigmaFiniteSetWRT]; rw [dif_pos h] at hs_subset
+  exact h.choose_spec.2.2 s hs_subset hνs
 
 Depends on / 依赖: MeasurableSet, Measure, Measure.sigmaFiniteSetWRT, SigmaFinite, dif_pos, exists_isFiniteMeasure_absolutelyContinuous, hs_subset, ht_subset, measurableSet_sigmaFiniteSetWRT, measure_eq_top_of_subset_compl_sigmaFiniteSetWRT, restrict, sigmaFiniteSetWRT, sigmaFinite_restrict_sigmaFiniteSetWRT, subseteq
 -/
@@ -634,7 +766,8 @@ lemma restrict_compl_sigmaFiniteSetWRT
   by_cases hνs : ν (s inter (μ.sigmaFiniteSetWRT ν)ᶜ) = 0
   · rw [hνs, mul_zero]
     exact hμν hνs
-  · rw [EN
+  · rw [ENNReal.top_mul hνs, measure_eq_top_of_subset_compl_sigmaFiniteSetWRT
+      Set.inter_subset_right hνs]
 
 中文:
 引理 restrict_compl_sigmaFiniteSetWRT
@@ -645,7 +778,8 @@ lemma restrict_compl_sigmaFiniteSetWRT
   by_cases hνs : ν (s inter (μ.sigmaFiniteSetWRT ν)ᶜ) = 0
   · rw [hνs, mul_zero]
     exact hμν hνs
-  · rw [EN
+  · rw [ENNReal.top_mul hνs, measure_eq_top_of_subset_compl_sigmaFiniteSetWRT
+      Set.inter_subset_right hνs]
 
 Depends on / 依赖: ENNReal, ENNReal.top_mul, Measure, Measure.restrict_apply, Measure.smul_apply, Set.inter_subset_right, inter_subset_right, measurableSet_sigmaFiniteSetWRT, measurableSet_sigmaFiniteSetWRT.compl, measure_eq_top_of_subset_compl_sigmaFiniteSetWRT, mul_zero, restrict_apply, sigmaFiniteSetWRT, smul_apply, smul_eq_mul, top_mul
 -/
@@ -674,7 +808,14 @@ lemma measure_compl_sigmaFiniteSetWRT
   by_contra h0
   refine ENNReal.top_ne_zero ?_
   rw [← h h0]; rw [← Measure.iSup_restrict_spanningSets]
-  simp_rw [Measure.restrict_apply' (measurableSet
+  simp_rw [Measure.restrict_apply' (measurableSet_spanningSets μ _), ENNReal.iSup_eq_zero]
+  intro i
+  by_contra h_ne_zero
+  have h_zero_top := measure_eq_top_of_subset_compl_sigmaFiniteSetWRT
+    (Set.inter_subset_left : (μ.sigmaFiniteSetWRT ν)ᶜ inter spanningSets μ i subseteq _) ?_
+  swap; · exact fun h => h_ne_zero (hμν h)
+  refine absurd h_zero_top (ne_of_lt ?_)
+  exact (measure_mono Set.inter_subset_right).trans_lt (measure_spanningSets_lt_top μ i)
 
 中文:
 引理 measure_compl_sigmaFiniteSetWRT
@@ -685,7 +826,14 @@ lemma measure_compl_sigmaFiniteSetWRT
   by_contra h0
   refine ENNReal.top_ne_zero ?_
   rw [← h h0]; rw [← Measure.iSup_restrict_spanningSets]
-  simp_rw [Measure.restrict_apply' (measurableSet
+  simp_rw [Measure.restrict_apply' (measurableSet_spanningSets μ _), ENNReal.iSup_eq_zero]
+  intro i
+  by_contra h_ne_zero
+  have h_zero_top := measure_eq_top_of_subset_compl_sigmaFiniteSetWRT
+    (Set.inter_subset_left : (μ.sigmaFiniteSetWRT ν)ᶜ inter spanningSets μ i subseteq _) ?_
+  swap; · exact fun h => h_ne_zero (hμν h)
+  refine absurd h_zero_top (ne_of_lt ?_)
+  exact (measure_mono Set.inter_subset_right).trans_lt (measure_spanningSets_lt_top μ i)
 
 Depends on / 依赖: ENNReal, ENNReal.iSup_eq_zero, ENNReal.top_ne_zero, Measure, Measure.iSup_restrict_spanningSets, Measure.restrict_apply, Set.inter_subset_left, h_ne_zero, h_zero_top, iSup_eq_zero, iSup_restrict_spanningSets, inter_subset_left, measurableSet_spanningSets, measure_eq_top_of_subset_compl_sigmaFiniteSetWRT, restrict_apply, sigmaFiniteSetWRT, simp_rw, spanningSets, subset_rfl, top_ne_zero
 -/

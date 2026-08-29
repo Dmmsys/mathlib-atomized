@@ -64,7 +64,8 @@ definition algNormOfAlgEquiv
   add_le' x y := by simp [map_add σ, map_add_le_add]
   neg' x := by simp [map_neg σ, map_neg_eq_map]
   mul_le' x y := by simp [map_mul σ, map_mul_le_mul]
-  s
+  smul' x y := by simp [map_smul σ, map_smul_eq_mul]
+  eq_zero_of_map_eq_zero' x hx := EmbeddingLike.map_eq_zero_iff.mp (eq_zero_of_map_eq_zero _ hx)
 
 中文:
 定义 algNormOfAlgEquiv
@@ -75,7 +76,8 @@ definition algNormOfAlgEquiv
   add_le' x y := by simp [map_add σ, map_add_le_add]
   neg' x := by simp [map_neg σ, map_neg_eq_map]
   mul_le' x y := by simp [map_mul σ, map_mul_le_mul]
-  s
+  smul' x y := by simp [map_smul σ, map_smul_eq_mul]
+  eq_zero_of_map_eq_zero' x hx := EmbeddingLike.map_eq_zero_iff.mp (eq_zero_of_map_eq_zero _ hx)
 
 Depends on / 依赖: Classical, Classical.choose, exists_nonarchimedean_pow_mul_seminorm_of_finiteDimensional
 -/
@@ -211,7 +213,20 @@ definition invariantExtension
   map_zero' := by simp only [map_zero, ciSup_const]
   add_le' x y := ciSup_le fun σ => le_trans (map_add_le_add (algNormOfAlgEquiv σ) x y)
     (add_le_add (Finite.le_ciSup_of_le σ le_rfl) (Finite.le_ciSup_of_le σ le_rfl))
-  neg' x := by simp only [map_
+  neg' x := by simp only [map_neg_eq_map]
+  mul_le' x y := ciSup_le fun σ => le_trans (map_mul_le_mul (algNormOfAlgEquiv σ) x y)
+    (mul_le_mul (Finite.le_ciSup_of_le σ le_rfl)
+      (Finite.le_ciSup_of_le σ le_rfl) (apply_nonneg _ _)
+      (Finite.le_ciSup_of_le σ (apply_nonneg _ _)))
+  eq_zero_of_map_eq_zero' x := by
+    contrapose!
+    exact fun hx => ne_of_gt (lt_of_lt_of_le (map_pos_of_ne_zero _ hx)
+      (Finite.le_ciSup (fun σ => (algNormOfAlgEquiv σ) x) AlgEquiv.refl))
+  smul' r x := by
+    simp only [AlgebraNormClass.map_smul_eq_mul,
+      Real.mul_iSup_of_nonneg (norm_nonneg _)]
+
+@[simp]
 
 中文:
 定义 invariantExtension
@@ -220,7 +235,20 @@ definition invariantExtension
   map_zero' := by simp only [map_zero, ciSup_const]
   add_le' x y := ciSup_le fun σ => le_trans (map_add_le_add (algNormOfAlgEquiv σ) x y)
     (add_le_add (Finite.le_ciSup_of_le σ le_rfl) (Finite.le_ciSup_of_le σ le_rfl))
-  neg' x := by simp only [map_
+  neg' x := by simp only [map_neg_eq_map]
+  mul_le' x y := ciSup_le fun σ => le_trans (map_mul_le_mul (algNormOfAlgEquiv σ) x y)
+    (mul_le_mul (Finite.le_ciSup_of_le σ le_rfl)
+      (Finite.le_ciSup_of_le σ le_rfl) (apply_nonneg _ _)
+      (Finite.le_ciSup_of_le σ (apply_nonneg _ _)))
+  eq_zero_of_map_eq_zero' x := by
+    contrapose!
+    exact fun hx => ne_of_gt (lt_of_lt_of_le (map_pos_of_ne_zero _ hx)
+      (Finite.le_ciSup (fun σ => (algNormOfAlgEquiv σ) x) AlgEquiv.refl))
+  smul' r x := by
+    simp only [AlgebraNormClass.map_smul_eq_mul,
+      Real.mul_iSup_of_nonneg (norm_nonneg _)]
+
+@[simp]
 
 Depends on / 依赖: algNormOfAlgEquiv
 -/

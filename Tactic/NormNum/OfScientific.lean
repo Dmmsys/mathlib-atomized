@@ -74,7 +74,20 @@ guard ← withNewMCtxDepth isDefEq f q(OfScientific.ofScientific (α := $α))
 haveI' : e =Q OfScientific.ofScientific m b exp := ⟨⟩
   match b with
   | ~q(true) =>
-    let rme ← derive (q(NN
+    let rme ← derive (q(NNRat.divNat $m (10 ^ $exp)) : Q($α))
+    let some ⟨q, n, d, p⟩ := rme.toNNRat' dα | failure
+    return .isNNRat dα q n d q(isNNRat_ofScientific_of_true $p)
+  | ~q(false) =>
+    let ⟨nm, pm⟩ ← deriveNat m q(AddCommMonoidWithOne.toAddMonoidWithOne)
+    let ⟨ne, pe⟩ ← deriveNat exp q(AddCommMonoidWithOne.toAddMonoidWithOne)
+    have pm : Q(IsNat $m $nm) := pm
+    have pe : Q(IsNat $exp $ne) := pe
+    let m' := nm.natLit!
+    let exp' := ne.natLit!
+    let n' := Nat.mul m' (Nat.pow (10 : Nat) exp')
+    have n : Q(Nat) := mkRawNatLit n'
+haveI : n =Q Nat.mul nm ((10 : Nat) ^ $ne) := ⟨⟩
+    return .isNat _ n q(isNat_ofScientific_of_false $pm $pe (.refl $n))
 
 中文:
 定义 evalOfScientific
@@ -86,7 +99,20 @@ guard ← withNewMCtxDepth isDefEq f q(OfScientific.ofScientific (α := $α))
 haveI' : e =Q OfScientific.ofScientific m b exp := ⟨⟩
   match b with
   | ~q(true) =>
-    let rme ← derive (q(NN
+    let rme ← derive (q(NNRat.divNat $m (10 ^ $exp)) : Q($α))
+    let some ⟨q, n, d, p⟩ := rme.toNNRat' dα | failure
+    return .isNNRat dα q n d q(isNNRat_ofScientific_of_true $p)
+  | ~q(false) =>
+    let ⟨nm, pm⟩ ← deriveNat m q(AddCommMonoidWithOne.toAddMonoidWithOne)
+    let ⟨ne, pe⟩ ← deriveNat exp q(AddCommMonoidWithOne.toAddMonoidWithOne)
+    have pm : Q(IsNat $m $nm) := pm
+    have pe : Q(IsNat $exp $ne) := pe
+    let m' := nm.natLit!
+    let exp' := ne.natLit!
+    let n' := Nat.mul m' (Nat.pow (10 : Nat) exp')
+    have n : Q(Nat) := mkRawNatLit n'
+haveI : n =Q Nat.mul nm ((10 : Nat) ^ $ne) := ⟨⟩
+    return .isNat _ n q(isNat_ofScientific_of_false $pm $pe (.refl $n))
 -/
 @[norm_num OfScientific.ofScientific _ _ _] def evalOfScientific :
     NormNumExt where eval {u α} e := do

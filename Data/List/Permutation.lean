@@ -356,7 +356,12 @@ theorem mem_permutationsAux2
   constructor
   · rintro (rfl | ⟨l₁, l₂, l0, rfl, rfl⟩)
     · exact ⟨[], y :: ys, by simp⟩
-    
+    · exact ⟨y :: l₁, l₂, l0, by simp⟩
+  · rintro ⟨_ | ⟨y', l₁⟩, l₂, l0, ye, rfl⟩
+    · simp [ye]
+    · simp only [cons_append] at ye
+      rcases ye with ⟨rfl, rfl⟩
+      exact Or.inr ⟨l₁, l₂, l0, by simp⟩
 
 中文:
 定理 mem_permutationsAux2
@@ -369,7 +374,12 @@ theorem mem_permutationsAux2
   constructor
   · rintro (rfl | ⟨l₁, l₂, l0, rfl, rfl⟩)
     · exact ⟨[], y :: ys, by simp⟩
-    
+    · exact ⟨y :: l₁, l₂, l0, by simp⟩
+  · rintro ⟨_ | ⟨y', l₁⟩, l₂, l0, ye, rfl⟩
+    · simp [ye]
+    · simp only [cons_append] at ye
+      rcases ye with ⟨rfl, rfl⟩
+      exact Or.inr ⟨l₁, l₂, l0, by simp⟩
 
 Depends on / 依赖: Or.inr, cons_append, contextual, generalizing, mem_cons, permutationsAux2_snd_cons
 -/
@@ -472,7 +482,11 @@ theorem mem_foldr_permutationsAux2
     (exists a : List α,
         a in L ∧ exists l₁ l₂ : List α, ¬l₂ = nil ∧ a = l₁ ++ l₂ ∧ l' = l₁ ++ t :: (l₂ ++ ts)) ↔
       exists l₁ l₂ : List α, ¬l₂ = nil ∧ l₁ ++ l₂ in L ∧ l' = l₁ ++ t :: (l₂ ++ ts) :=
-    ⟨fun ⟨_, aL, l₁, l₂, l0, e, h⟩ => ⟨l₁, l₂, l0, e ▸ aL, h⟩, fun ⟨l₁, l₂, l0, 
+    ⟨fun ⟨_, aL, l₁, l₂, l0, e, h⟩ => ⟨l₁, l₂, l0, e ▸ aL, h⟩, fun ⟨l₁, l₂, l0, aL, h⟩ =>
+      ⟨_, aL, l₁, l₂, l0, rfl, h⟩⟩
+  rw [foldr_permutationsAux2]
+  simp only [mem_permutationsAux2', ← this, or_comm, and_left_comm, mem_append, mem_flatMap,
+    append_assoc, cons_append]
 
 中文:
 定理 mem_foldr_permutationsAux2
@@ -482,7 +496,11 @@ theorem mem_foldr_permutationsAux2
     (exists a : List α,
         a in L ∧ exists l₁ l₂ : List α, ¬l₂ = nil ∧ a = l₁ ++ l₂ ∧ l' = l₁ ++ t :: (l₂ ++ ts)) ↔
       exists l₁ l₂ : List α, ¬l₂ = nil ∧ l₁ ++ l₂ in L ∧ l' = l₁ ++ t :: (l₂ ++ ts) :=
-    ⟨fun ⟨_, aL, l₁, l₂, l0, e, h⟩ => ⟨l₁, l₂, l0, e ▸ aL, h⟩, fun ⟨l₁, l₂, l0, 
+    ⟨fun ⟨_, aL, l₁, l₂, l0, e, h⟩ => ⟨l₁, l₂, l0, e ▸ aL, h⟩, fun ⟨l₁, l₂, l0, aL, h⟩ =>
+      ⟨_, aL, l₁, l₂, l0, rfl, h⟩⟩
+  rw [foldr_permutationsAux2]
+  simp only [mem_permutationsAux2', ← this, or_comm, and_left_comm, mem_append, mem_flatMap,
+    append_assoc, cons_append]
 
 Depends on / 依赖: and_left_comm, append_assoc, cons_append, foldr_permutationsAux2, mem_append, mem_flatMap, mem_permutationsAux2, or_comm
 -/
@@ -534,7 +552,9 @@ theorem length_foldr_permutationsAux2'
   | cons l L ih =>
     have sum_map : (map length L).sum = n * length L := ih fun l m => H l (mem_cons_of_mem _ m)
     have length_l : length l = n := H _ mem_cons_self
-    simp [
+    simp [sum_map, length_l, Nat.add_comm, mul_succ]
+
+@[simp]
 
 中文:
 定理 length_foldr_permutationsAux2'
@@ -546,7 +566,9 @@ theorem length_foldr_permutationsAux2'
   | cons l L ih =>
     have sum_map : (map length L).sum = n * length L := ih fun l m => H l (mem_cons_of_mem _ m)
     have length_l : length l = n := H _ mem_cons_self
-    simp [
+    simp [sum_map, length_l, Nat.add_comm, mul_succ]
+
+@[simp]
 
 Depends on / 依赖: Nat.add_comm, add_comm, length, length_foldr_permutationsAux2, length_l, mem_cons_of_mem, mem_cons_self, mul_succ, sum_map
 -/
@@ -729,7 +751,8 @@ theorem permutationsAux_append
   congr 2
   funext _
   rw [map_permutationsAux2]
-  simp +singlePass only [← permutationsAux2_co
+  simp +singlePass only [← permutationsAux2_comp_append]
+  simp only [id, append_assoc]
 
 中文:
 定理 permutationsAux_append
@@ -741,7 +764,8 @@ theorem permutationsAux_append
   congr 2
   funext _
   rw [map_permutationsAux2]
-  simp +singlePass only [← permutationsAux2_co
+  simp +singlePass only [← permutationsAux2_comp_append]
+  simp only [id, append_assoc]
 
 Depends on / 依赖: append_assoc, cons_append, foldr_permutationsAux2, generalizing, map_append, map_flatMap, map_permutationsAux2, permutationsAux2_comp_append, permutationsAux_cons, reverse_cons, singlePass
 -/
@@ -789,7 +813,13 @@ theorem perm_of_mem_permutationsAux
   introv IH1 IH2 m
   rw [permutationsAux_cons]; rw [permutations]; rw [mem_foldr_permutationsAux2] at m
   rcases m with (m | ⟨l₁, l₂, m, _, rfl⟩)
-  · exact (IH1 _ m).trans perm_m
+  · exact (IH1 _ m).trans perm_middle
+  · have p : l₁ ++ l₂ ~ is := by
+      simp only [mem_cons] at m
+      rcases m with e | m
+      · simp [e]
+      exact is.append_nil ▸ IH2 _ m
+    exact ((perm_middle.trans (p.cons _)).append_right _).trans (perm_append_comm.cons _)
 
 中文:
 定理 perm_of_mem_permutationsAux
@@ -799,7 +829,13 @@ theorem perm_of_mem_permutationsAux
   introv IH1 IH2 m
   rw [permutationsAux_cons]; rw [permutations]; rw [mem_foldr_permutationsAux2] at m
   rcases m with (m | ⟨l₁, l₂, m, _, rfl⟩)
-  · exact (IH1 _ m).trans perm_m
+  · exact (IH1 _ m).trans perm_middle
+  · have p : l₁ ++ l₂ ~ is := by
+      simp only [mem_cons] at m
+      rcases m with e | m
+      · simp [e]
+      exact is.append_nil ▸ IH2 _ m
+    exact ((perm_middle.trans (p.cons _)).append_right _).trans (perm_append_comm.cons _)
 
 Depends on / 依赖: append_nil, append_right, introv, is.append_nil, mem_cons, mem_foldr_permutationsAux2, p.cons, perm_append_comm, perm_append_comm.cons, perm_middle, perm_middle.trans, permutations, permutationsAux, permutationsAux.rec, permutationsAux_cons
 -/
@@ -851,7 +887,7 @@ theorem length_permutationsAux
   intro t ts is IH1 IH2
   have IH2 : length (permutationsAux is nil) + 1 = is.length ! := by simpa using IH2
   simp only [List.length_cons, factorial, Nat.mul_comm, add_eq] at IH1
-  rw [permutationsAux_cons]; rw [length_foldr_permutationsAux2' _ _ _ _ _ f
+  rw [permutationsAux_cons]; rw [length_foldr_permutationsAux2' _ _ _ _ _ fun l m => (perm_of_mem_permutations m).length_eq]; rw [permutations]; rw [length]; rw [length]; rw [IH2]; rw [Nat.succ_add]; rw [Nat.factorial_succ]; rw [Nat.mul_comm (_ + 1)]; rw [← Nat.succ_eq_add_one]; rw [← IH1]; rw [Nat.add_comm (_ * _)]; rw [Nat.add_assoc]; rw [Nat.mul_succ]; rw [Nat.mul_comm]
 
 中文:
 定理 length_permutationsAux
@@ -860,7 +896,7 @@ theorem length_permutationsAux
   intro t ts is IH1 IH2
   have IH2 : length (permutationsAux is nil) + 1 = is.length ! := by simpa using IH2
   simp only [List.length_cons, factorial, Nat.mul_comm, add_eq] at IH1
-  rw [permutationsAux_cons]; rw [length_foldr_permutationsAux2' _ _ _ _ _ f
+  rw [permutationsAux_cons]; rw [length_foldr_permutationsAux2' _ _ _ _ _ fun l m => (perm_of_mem_permutations m).length_eq]; rw [permutations]; rw [length]; rw [length]; rw [IH2]; rw [Nat.succ_add]; rw [Nat.factorial_succ]; rw [Nat.mul_comm (_ + 1)]; rw [← Nat.succ_eq_add_one]; rw [← IH1]; rw [Nat.add_comm (_ * _)]; rw [Nat.add_assoc]; rw [Nat.mul_succ]; rw [Nat.mul_comm]
 
 Depends on / 依赖: List.length_cons, Nat.factorial_succ, Nat.mul_comm, Nat.succ_add, Nat.succ_eq_add_one, add_eq, factorial, factorial_succ, is.length, length, length_cons, length_eq, length_foldr_permutationsAux2, mul_comm, perm_of_mem_permutations, permutations, permutationsAux, permutationsAux.rec, permutationsAux_cons, succ_add
 -/
@@ -922,7 +958,18 @@ theorem mem_permutationsAux_of_perm
   refine permutationsAux.rec (by simp) ?_
   intro t ts is IH1 IH2 l p
   rw [permutationsAux_cons]; rw [mem_foldr_permutationsAux2]
-  rcases IH1 _ (p.trans perm_mid
+  rcases IH1 _ (p.trans perm_middle) with (⟨is', p', e⟩ | m)
+  · clear p
+    subst e
+    rcases append_of_mem (p'.symm.subset mem_cons_self) with ⟨l₁, l₂, e⟩
+    subst is'
+    have p := (perm_middle.symm.trans p').cons_inv
+    rcases l₂ with - | ⟨a, l₂'⟩
+    · exact Or.inl ⟨l₁, by simpa using p⟩
+    · exact Or.inr (Or.inr ⟨l₁, a :: l₂', mem_permutations_of_perm_lemma (IH2 _) p, by simp⟩)
+  · exact Or.inr (Or.inl m)
+
+@[simp]
 
 中文:
 定理 mem_permutationsAux_of_perm
@@ -932,7 +979,18 @@ theorem mem_permutationsAux_of_perm
   refine permutationsAux.rec (by simp) ?_
   intro t ts is IH1 IH2 l p
   rw [permutationsAux_cons]; rw [mem_foldr_permutationsAux2]
-  rcases IH1 _ (p.trans perm_mid
+  rcases IH1 _ (p.trans perm_middle) with (⟨is', p', e⟩ | m)
+  · clear p
+    subst e
+    rcases append_of_mem (p'.symm.subset mem_cons_self) with ⟨l₁, l₂, e⟩
+    subst is'
+    have p := (perm_middle.symm.trans p').cons_inv
+    rcases l₂ with - | ⟨a, l₂'⟩
+    · exact Or.inl ⟨l₁, by simpa using p⟩
+    · exact Or.inr (Or.inr ⟨l₁, a :: l₂', mem_permutations_of_perm_lemma (IH2 _) p, by simp⟩)
+  · exact Or.inr (Or.inl m)
+
+@[simp]
 
 Depends on / 依赖: Or.inl, append_of_mem, cons_inv, mem_cons_self, mem_foldr_permutationsAux2, p.trans, perm_middle, perm_middle.symm.trans, permutationsAux, permutationsAux.rec, permutationsAux_cons, subset, symm.subset
 -/
@@ -1036,7 +1094,18 @@ theorem perm_permutations'Aux_comm
   have :
     forall a b,
       (map (cons c) (permutations'Aux a l)).flatMap (permutations'Aux b) ~
-        map (con
+        map (cons b ∘ cons c) (permutations'Aux a l) ++
+          map (cons c) ((permutations'Aux a l).flatMap (permutations'Aux b)) := by
+    intro a' b'
+    simp only [flatMap_map, permutations'Aux]
+    change (permutations'Aux _ l).flatMap (fun a => ([b' :: c :: a] ++
+      map (cons c) (permutations'Aux _ a))) ~ _
+    refine (flatMap_append_perm _ (fun x => [b' :: c :: x]) _).symm.trans ?_
+    rw [← map_eq_flatMap]; rw [← map_flatMap]
+    exact Perm.refl _
+  refine (((this _ _).append_left _).trans ?_).trans ((this _ _).append_left _).symm
+  rw [← append_assoc]; rw [← append_assoc]
+  exact perm_append_comm.append (ih.map _)
 
 中文:
 定理 perm_permutations'Aux_comm
@@ -1050,7 +1119,18 @@ theorem perm_permutations'Aux_comm
   have :
     forall a b,
       (map (cons c) (permutations'Aux a l)).flatMap (permutations'Aux b) ~
-        map (con
+        map (cons b ∘ cons c) (permutations'Aux a l) ++
+          map (cons c) ((permutations'Aux a l).flatMap (permutations'Aux b)) := by
+    intro a' b'
+    simp only [flatMap_map, permutations'Aux]
+    change (permutations'Aux _ l).flatMap (fun a => ([b' :: c :: a] ++
+      map (cons c) (permutations'Aux _ a))) ~ _
+    refine (flatMap_append_perm _ (fun x => [b' :: c :: x]) _).symm.trans ?_
+    rw [← map_eq_flatMap]; rw [← map_flatMap]
+    exact Perm.refl _
+  refine (((this _ _).append_left _).trans ?_).trans ((this _ _).append_left _).symm
+  rw [← append_assoc]; rw [← append_assoc]
+  exact perm_append_comm.append (ih.map _)
 
 Depends on / 依赖: Perm.swap, cons_append, flatMap, flatMap_cons, flatMap_map, map_cons, map_map, permutations
 -/
@@ -1138,7 +1218,21 @@ theorem permutations_perm_permutations'
   obtain ⟨n, h⟩ : exists n, length ts < n := ⟨_, Nat.lt_succ_self _⟩
   induction n generalizing ts with | zero => cases h | succ n IH => ?_
   refine List.reverseRecOn ts (fun _ => ?_) (fun ts t _ h => ?_) h; · simp [permutations]
-  rw [← concat_eq_append]; rw [length_concat]; rw [Nat.succ_lt_succ
+  rw [← concat_eq_append]; rw [length_concat]; rw [Nat.succ_lt_succ_iff] at h
+  have IH₂ := (IH ts.reverse (by rwa [length_reverse])).trans (reverse_perm _).permutations'
+  simp only [permutations_append, foldr_permutationsAux2, permutationsAux_nil,
+    permutationsAux_cons, append_nil]
+  refine
+    (perm_append_comm.trans ((IH₂.flatMap_right _).append ((IH _ h).map _))).trans
+      (Perm.trans ?_ perm_append_comm.permutations')
+  rw [map_eq_flatMap]; rw [singleton_append]; rw [permutations']
+  refine (flatMap_append_perm _ _ _).trans ?_
+  refine Perm.of_eq ?_
+  congr
+  funext _
+  rw [permutations'Aux_eq_permutationsAux2]; rw [permutationsAux2_append]
+
+@[simp]
 
 中文:
 定理 permutations_perm_permutations'
@@ -1148,7 +1242,21 @@ theorem permutations_perm_permutations'
   obtain ⟨n, h⟩ : exists n, length ts < n := ⟨_, Nat.lt_succ_self _⟩
   induction n generalizing ts with | zero => cases h | succ n IH => ?_
   refine List.reverseRecOn ts (fun _ => ?_) (fun ts t _ h => ?_) h; · simp [permutations]
-  rw [← concat_eq_append]; rw [length_concat]; rw [Nat.succ_lt_succ
+  rw [← concat_eq_append]; rw [length_concat]; rw [Nat.succ_lt_succ_iff] at h
+  have IH₂ := (IH ts.reverse (by rwa [length_reverse])).trans (reverse_perm _).permutations'
+  simp only [permutations_append, foldr_permutationsAux2, permutationsAux_nil,
+    permutationsAux_cons, append_nil]
+  refine
+    (perm_append_comm.trans ((IH₂.flatMap_right _).append ((IH _ h).map _))).trans
+      (Perm.trans ?_ perm_append_comm.permutations')
+  rw [map_eq_flatMap]; rw [singleton_append]; rw [permutations']
+  refine (flatMap_append_perm _ _ _).trans ?_
+  refine Perm.of_eq ?_
+  congr
+  funext _
+  rw [permutations'Aux_eq_permutationsAux2]; rw [permutationsAux2_append]
+
+@[simp]
 
 Depends on / 依赖: List.reverseRecOn, Nat.lt_succ_self, Nat.succ_lt_succ_iff, append_, concat_eq_append, foldr_permutationsAux2, generalizing, length, length_concat, length_reverse, lt_succ_self, permutations, permutationsAux_cons, permutationsAux_nil, permutations_append, reverse, reverseRecOn, reverse_perm, succ_lt_succ_iff, ts.reverse
 -/
@@ -1375,7 +1483,10 @@ theorem count_permutations'Aux_self
     · subst hx
       simpa [takeWhile, Nat.succ_inj, DecEq_eq] using IH _
     · rw [takeWhile]
-      simp only [mem_map, cons.injEq, Ne.s
+      simp only [mem_map, cons.injEq, Ne.symm hx, false_and, and_false, exists_false,
+        not_false_iff, count_eq_zero_of_not_mem, Nat.zero_add, hx, decide_false, length_nil]
+
+@[simp]
 
 中文:
 定理 count_permutations'Aux_self
@@ -1389,7 +1500,10 @@ theorem count_permutations'Aux_self
     · subst hx
       simpa [takeWhile, Nat.succ_inj, DecEq_eq] using IH _
     · rw [takeWhile]
-      simp only [mem_map, cons.injEq, Ne.s
+      simp only [mem_map, cons.injEq, Ne.symm hx, false_and, and_false, exists_false,
+        not_false_iff, count_eq_zero_of_not_mem, Nat.zero_add, hx, decide_false, length_nil]
+
+@[simp]
 
 Depends on / 依赖: DecEq_eq, Nat.succ_inj, Nat.zero_add, Ne.symm, and_false, cons.injEq, count_cons_self, count_eq_zero_of_not_mem, decide_false, exists_false, false_and, generalizing, length_nil, mem_map, not_false_iff, permutations, succ_inj, takeWhile, zero_add
 -/
@@ -1527,7 +1641,12 @@ theorem nodup_permutations'Aux_iff
   rw [nodup_iff_injective_get] at h
   apply k.succ_ne_self.symm
   have kl : k < (permutations'Aux x s).length := by simpa [Nat.lt_succ_iff] using hk.le
-  have k1l : k + 1 < (permutations'Aux x s
+  have k1l : k + 1 < (permutations'Aux x s).length := by simpa using hk
+  rw [← @Fin.mk.inj_iff _ _ _ kl k1l]; apply h
+  rw [get_permutations'Aux]; rw [get_permutations'Aux]
+  have hl : length (s.insertIdx k x) = length (s.insertIdx (k + 1) x) := by
+    rw [length_insertIdx_of_le_length hk.le]; rw [length_insertIdx_of_le_length (Nat.succ_le_of_lt hk)]
+  exact ext_get hl fun n hn hn' => by grind
 
 中文:
 定理 nodup_permutations'Aux_iff
@@ -1539,7 +1658,12 @@ theorem nodup_permutations'Aux_iff
   rw [nodup_iff_injective_get] at h
   apply k.succ_ne_self.symm
   have kl : k < (permutations'Aux x s).length := by simpa [Nat.lt_succ_iff] using hk.le
-  have k1l : k + 1 < (permutations'Aux x s
+  have k1l : k + 1 < (permutations'Aux x s).length := by simpa using hk
+  rw [← @Fin.mk.inj_iff _ _ _ kl k1l]; apply h
+  rw [get_permutations'Aux]; rw [get_permutations'Aux]
+  have hl : length (s.insertIdx k x) = length (s.insertIdx (k + 1) x) := by
+    rw [length_insertIdx_of_le_length hk.le]; rw [length_insertIdx_of_le_length (Nat.succ_le_of_lt hk)]
+  exact ext_get hl fun n hn hn' => by grind
 -/
 theorem nodup_permutations'Aux_iff {s : List α} {x : α} : Nodup (permutations'Aux x s) ↔ x ∉ s := by
   refine ⟨fun h H => ?_, nodup_permutations'Aux_of_notMem _ _⟩
@@ -1572,7 +1696,32 @@ theorem nodup_permutations
     · intro ys hy
       rw [mem_permutations'] at hy
       rw [nodup_permutations'Aux_iff]; rw [hy.mem_iff]
-      exact f
+      exact fun H => h x H rfl
+    · refine IH.pairwise_of_forall_ne fun as ha bs hb H => ?_
+      rw [Function.onFun]; rw [disjoint_iff_ne]
+      rintro a ha' b hb' rfl
+      obtain ⟨⟨n, hn⟩, hn'⟩ := get_of_mem ha'
+      obtain ⟨⟨m, hm⟩, hm'⟩ := get_of_mem hb'
+      rw [mem_permutations'] at ha hb
+      have hl : as.length = bs.length := (ha.trans hb.symm).length_eq
+      simp only [Nat.lt_succ_iff, length_permutations'Aux] at hn hm
+      rw [get_permutations'Aux] at hn' hm'
+      have hx : (as.insertIdx n x)[m]'(by
+          rwa [length_insertIdx_of_le_length hn, Nat.lt_succ_iff, hl]) = x := by
+        simp [hn', ← hm']
+      have hx' : (bs.insertIdx m x)[n]'(by
+          rwa [length_insertIdx_of_le_length hm, Nat.lt_succ_iff, ← hl]) = x := by
+        simp [hm', ← hn']
+      rcases lt_trichotomy n m with (ht | ht | ht)
+      · suffices x in bs by exact h x (hb.subset this) rfl
+        rw [← hx']; rw [getElem_insertIdx_of_lt ht]
+        exact getElem_mem _
+      · simp only [ht] at hm' hn'
+        rw [← hm'] at hn'
+        exact H (insertIdx_injective _ _ hn')
+      · suffices x in as by exact h x (ha.subset this) rfl
+        rw [← hx]; rw [getElem_insertIdx_of_lt ht]
+        exact getElem_mem _
 
 中文:
 定理 nodup_permutations
@@ -1589,7 +1738,32 @@ theorem nodup_permutations
     · intro ys hy
       rw [mem_permutations'] at hy
       rw [nodup_permutations'Aux_iff]; rw [hy.mem_iff]
-      exact f
+      exact fun H => h x H rfl
+    · refine IH.pairwise_of_forall_ne fun as ha bs hb H => ?_
+      rw [Function.onFun]; rw [disjoint_iff_ne]
+      rintro a ha' b hb' rfl
+      obtain ⟨⟨n, hn⟩, hn'⟩ := get_of_mem ha'
+      obtain ⟨⟨m, hm⟩, hm'⟩ := get_of_mem hb'
+      rw [mem_permutations'] at ha hb
+      have hl : as.length = bs.length := (ha.trans hb.symm).length_eq
+      simp only [Nat.lt_succ_iff, length_permutations'Aux] at hn hm
+      rw [get_permutations'Aux] at hn' hm'
+      have hx : (as.insertIdx n x)[m]'(by
+          rwa [length_insertIdx_of_le_length hn, Nat.lt_succ_iff, hl]) = x := by
+        simp [hn', ← hm']
+      have hx' : (bs.insertIdx m x)[n]'(by
+          rwa [length_insertIdx_of_le_length hm, Nat.lt_succ_iff, ← hl]) = x := by
+        simp [hm', ← hn']
+      rcases lt_trichotomy n m with (ht | ht | ht)
+      · suffices x in bs by exact h x (hb.subset this) rfl
+        rw [← hx']; rw [getElem_insertIdx_of_lt ht]
+        exact getElem_mem _
+      · simp only [ht] at hm' hn'
+        rw [← hm'] at hn'
+        exact H (insertIdx_injective _ _ hn')
+      · suffices x in as by exact h x (ha.subset this) rfl
+        rw [← hx]; rw [getElem_insertIdx_of_lt ht]
+        exact getElem_mem _
 
 Depends on / 依赖: Aux_iff, Function, Function.onFun, IH.pairwise_of_forall_ne, disjoint_iff_ne, get_of_mem, hy.mem_iff, mem_iff, mem_permutations, nodup_flatMap, nodup_iff, nodup_permutations, pairwise_of_forall_ne, permutations, permutations_perm_permutations
 -/
@@ -1672,7 +1846,9 @@ theorem nodup_permutations_iff
   rw [duplicate_iff_sublist] at hs
   obtain ⟨l, ht⟩ := List.Sublist.exists_perm_append hs
   rw [List.Perm.nodup_iff (List.Perm.permutations ht)]; rw [← exists_duplicate_iff_not_nodup]
-  use x 
+  use x :: x :: l
+  rw [List.duplicate_iff_sublist]; rw [← permutations_take_two]
+  exact take_sublist 2 _
 
 中文:
 定理 nodup_permutations_iff
@@ -1686,7 +1862,9 @@ theorem nodup_permutations_iff
   rw [duplicate_iff_sublist] at hs
   obtain ⟨l, ht⟩ := List.Sublist.exists_perm_append hs
   rw [List.Perm.nodup_iff (List.Perm.permutations ht)]; rw [← exists_duplicate_iff_not_nodup]
-  use x 
+  use x :: x :: l
+  rw [List.duplicate_iff_sublist]; rw [← permutations_take_two]
+  exact take_sublist 2 _
 
 Depends on / 依赖: List.Perm.nodup_iff, List.Perm.permutations, List.Sublist.exists_perm_append, List.duplicate_iff_sublist, Sublist, contrapose, duplicate_iff_sublist, exists_duplicate_iff_not_nodup, exists_perm_append, nodup_iff, nodup_permutations, permutations, permutations_take_two, take_sublist
 -/

@@ -247,7 +247,19 @@ definition lift
           simp [f.prop])
   invFun F :=
     ⟨F.toLinearMap.comp (ι Q), fun m => by
-      rw [LinearMap.comp_apply
+      rw [LinearMap.comp_apply]; rw [AlgHom.toLinearMap_apply]; rw [comp_ι_sq_scalar]⟩
+  left_inv f := by
+    ext x
+    dsimp
+    exact (RingCon.liftₐ_mk _ _ _ _).trans (TensorAlgebra.lift_ι_apply _ x)
+  right_inv F :=
+RingCon.Quotient.hom_extₐ
+TensorAlgebra.hom_ext
+        LinearMap.ext fun x => by
+          dsimp
+          exact (RingCon.liftₐ_mk _ _ _ _).trans (TensorAlgebra.lift_ι_apply _ _)
+
+@[simp]
 
 中文:
 定义 lift
@@ -260,7 +272,19 @@ definition lift
           simp [f.prop])
   invFun F :=
     ⟨F.toLinearMap.comp (ι Q), fun m => by
-      rw [LinearMap.comp_apply
+      rw [LinearMap.comp_apply]; rw [AlgHom.toLinearMap_apply]; rw [comp_ι_sq_scalar]⟩
+  left_inv f := by
+    ext x
+    dsimp
+    exact (RingCon.liftₐ_mk _ _ _ _).trans (TensorAlgebra.lift_ι_apply _ x)
+  right_inv F :=
+RingCon.Quotient.hom_extₐ
+TensorAlgebra.hom_ext
+        LinearMap.ext fun x => by
+          dsimp
+          exact (RingCon.liftₐ_mk _ _ _ _).trans (TensorAlgebra.lift_ι_apply _ _)
+
+@[simp]
 
 Depends on / 依赖: AlgHom, AlgHom.toLinearMap_apply, CliffordAlgebra, CliffordAlgebra.ringCon, F.toLinearMap.comp, LinearMap, LinearMap.comp_apply, LinearMap.ext, Quotient, RingCon, RingCon.Quotient.hom_ext, RingCon.lift, RingCon.ringConGen_le, TensorAlgebra, TensorAlgebra.hom_ext, TensorAlgebra.lift, TensorAlgebra.lift_, comp_apply, f.prop, hom_ext
 -/
@@ -440,7 +464,22 @@ theorem induction
       mul_mem' := @mul
       add_mem' := @add
       algebraMap_mem' := algebraMap }
-  let of : { f : M ->ₗ[R] s // forall m, f m * f m = A
+  let of : { f : M ->ₗ[R] s // forall m, f m * f m = Algebra.algebraMap _ _ (Q m) } :=
+    ⟨(CliffordAlgebra.ι Q).codRestrict (Subalgebra.toSubmodule s) ι,
+fun m => Subtype.ext ι_sq_scalar Q m⟩
+  -- the mapping through the subalgebra is the identity
+  have of_id : s.val.comp (lift Q of) = AlgHom.id R (CliffordAlgebra Q) := by
+    ext x
+    simpa [of, -LinearMap.codRestrict_apply]
+      -- This `@[simp]` lemma applies to `coeSort s.subModule`, but the goal contains
+      -- a plain `coeSort s`. So we remove it from the `simp` arguments, and add it to
+      -- the term that `simpa` will simplify before applying.
+      using LinearMap.codRestrict_apply s.toSubmodule (CliffordAlgebra.ι Q) x (h := ι)
+  -- finding a proof is finding an element of the subalgebra
+  rw [← AlgHom.id_apply (R := R) a]; rw [← of_id]
+  exact (lift Q of a).prop
+
+@[simp]
 
 中文:
 定理 induction
@@ -452,7 +491,22 @@ theorem induction
       mul_mem' := @mul
       add_mem' := @add
       algebraMap_mem' := algebraMap }
-  let of : { f : M ->ₗ[R] s // forall m, f m * f m = A
+  let of : { f : M ->ₗ[R] s // forall m, f m * f m = Algebra.algebraMap _ _ (Q m) } :=
+    ⟨(CliffordAlgebra.ι Q).codRestrict (Subalgebra.toSubmodule s) ι,
+fun m => Subtype.ext ι_sq_scalar Q m⟩
+  -- the mapping through the subalgebra is the identity
+  have of_id : s.val.comp (lift Q of) = AlgHom.id R (CliffordAlgebra Q) := by
+    ext x
+    simpa [of, -LinearMap.codRestrict_apply]
+      -- This `@[simp]` lemma applies to `coeSort s.subModule`, but the goal contains
+      -- a plain `coeSort s`. So we remove it from the `simp` arguments, and add it to
+      -- the term that `simpa` will simplify before applying.
+      using LinearMap.codRestrict_apply s.toSubmodule (CliffordAlgebra.ι Q) x (h := ι)
+  -- finding a proof is finding an element of the subalgebra
+  rw [← AlgHom.id_apply (R := R) a]; rw [← of_id]
+  exact (lift Q of a).prop
+
+@[simp]
 -/
 theorem induction {C : CliffordAlgebra Q -> Prop}
     (algebraMap : forall r, C (algebraMap R (CliffordAlgebra Q) r)) (ι : forall x, C (ι Q x))
@@ -555,7 +609,8 @@ theorem mul_add_swap_eq_polar_of_forall_mul_self_eq
       rw [f.map_add]; rw [mul_add]; rw [add_mul]; rw [add_mul]; abel
     _ = algebraMap R _ (Q (a + b)) - algebraMap R _ (Q a) - algebraMap R _ (Q b) := by
       rw [hf]; rw [hf]; rw [hf]
-    _ = algebraMap R _ (Q (
+    _ = algebraMap R _ (Q (a + b) - Q a - Q b) := by rw [← map_sub, ← map_sub]
+    _ = algebraMap R _ (QuadraticMap.polar Q a b) := rfl
 
 中文:
 定理 mul_add_swap_eq_polar_of_对任意_mul_self_eq
@@ -565,7 +620,8 @@ theorem mul_add_swap_eq_polar_of_forall_mul_self_eq
       rw [f.map_add]; rw [mul_add]; rw [add_mul]; rw [add_mul]; abel
     _ = algebraMap R _ (Q (a + b)) - algebraMap R _ (Q a) - algebraMap R _ (Q b) := by
       rw [hf]; rw [hf]; rw [hf]
-    _ = algebraMap R _ (Q (
+    _ = algebraMap R _ (Q (a + b) - Q a - Q b) := by rw [← map_sub, ← map_sub]
+    _ = algebraMap R _ (QuadraticMap.polar Q a b) := rfl
 
 Depends on / 依赖: QuadraticMap, QuadraticMap.polar, add_mul, algebraMap, f.map_add, map_add, map_sub, mul_add
 -/
@@ -591,7 +647,7 @@ theorem forall_mul_self_eq_iff
   refine ⟨mul_add_swap_eq_polar_of_forall_mul_self_eq _, fun h x => ?_⟩
   change forall x y : M, f x * f y + f y * f x = algebraMap R A (QuadraticMap.polar Q x y) at h
   apply h2.mul_left_cancel
-  rw [two_mul]; rw [two_mul]; rw [h x x]; rw [QuadraticMap.polar_self]; r
+  rw [two_mul]; rw [two_mul]; rw [h x x]; rw [QuadraticMap.polar_self]; rw [two_smul]; rw [map_add]
 
 中文:
 定理 对任意_mul_self_eq_iff
@@ -601,7 +657,7 @@ theorem forall_mul_self_eq_iff
   refine ⟨mul_add_swap_eq_polar_of_forall_mul_self_eq _, fun h x => ?_⟩
   change forall x y : M, f x * f y + f y * f x = algebraMap R A (QuadraticMap.polar Q x y) at h
   apply h2.mul_left_cancel
-  rw [two_mul]; rw [two_mul]; rw [h x x]; rw [QuadraticMap.polar_self]; r
+  rw [two_mul]; rw [two_mul]; rw [h x x]; rw [QuadraticMap.polar_self]; rw [two_smul]; rw [map_add]
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, QuadraticMap, QuadraticMap.polar, QuadraticMap.polar_self, algebraMap, ext_iff, h2.mul_left_cancel, map_add, mul_add_swap_eq_polar_of_forall_mul_self_eq, mul_left_cancel, polar_self, simp_rw, two_mul, two_smul
 -/
@@ -1021,7 +1077,7 @@ lemma map_surjective
     (fun r => ⟨algebraMap R (CliffordAlgebra Q₁) r, by simp only [AlgHom.commutes]⟩)
     (fun y => let ⟨x, hx⟩ := hf y; ⟨CliffordAlgebra.ι Q₁ x, by simp only [map_apply_ι, hx]⟩)
     (fun _ _ ⟨x, hx⟩ ⟨y, hy⟩ => ⟨x * y, by simp only [map_mul, hx, hy]⟩)
-    (fun _ _ ⟨x, hx⟩ ⟨y
+    (fun _ _ ⟨x, hx⟩ ⟨y, hy⟩ => ⟨x + y, by simp only [map_add, hx, hy]⟩)
 
 中文:
 引理 map_surjective
@@ -1030,7 +1086,7 @@ lemma map_surjective
     (fun r => ⟨algebraMap R (CliffordAlgebra Q₁) r, by simp only [AlgHom.commutes]⟩)
     (fun y => let ⟨x, hx⟩ := hf y; ⟨CliffordAlgebra.ι Q₁ x, by simp only [map_apply_ι, hx]⟩)
     (fun _ _ ⟨x, hx⟩ ⟨y, hy⟩ => ⟨x * y, by simp only [map_mul, hx, hy]⟩)
-    (fun _ _ ⟨x, hx⟩ ⟨y
+    (fun _ _ ⟨x, hx⟩ ⟨y, hy⟩ => ⟨x + y, by simp only [map_add, hx, hy]⟩)
 
 Depends on / 依赖: AlgHom, AlgHom.commutes, CliffordAlgebra, CliffordAlgebra.induction, algebraMap, commutes, map_add, map_mul
 -/
@@ -1059,7 +1115,9 @@ definition equivOfIsometry
     ((map_comp_map _ _).trans <| by
       convert! map_id Q₁ using 2
       ext m
-      exact e.toLinearEquiv.s
+      exact e.toLinearEquiv.symm_apply_apply m)
+
+@[simp]
 
 中文:
 定义 equivOfIsometry
@@ -1072,7 +1130,9 @@ definition equivOfIsometry
     ((map_comp_map _ _).trans <| by
       convert! map_id Q₁ using 2
       ext m
-      exact e.toLinearEquiv.s
+      exact e.toLinearEquiv.symm_apply_apply m)
+
+@[simp]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, apply_symm_apply, convert, e.symm.toIsometry, e.toIsometry, e.toLinearEquiv.apply_symm_apply, e.toLinearEquiv.symm_apply_apply, map_comp_map, map_id, ofAlgHom, symm_apply_apply, toIsometry, toLinearEquiv
 -/

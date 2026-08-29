@@ -66,7 +66,11 @@ lemma smul_mem_closure_star_mul
   | mem r hr =>
   induction ha using AddSubmonoid.closure_induction with
   | zero => simp
-  | add a₁ a₂ _ _ ha₁ ha₂ => simpa [smul_add] using add_mem ha₁ h
+  | add a₁ a₂ _ _ ha₁ ha₂ => simpa [smul_add] using add_mem ha₁ ha₂
+  | mem a ha =>
+  obtain ⟨r, rfl⟩ := hr
+  obtain ⟨a, rfl⟩ := ha
+  exact AddSubmonoid.subset_closure ⟨r • a, by simp [star_smul, smul_mul_smul_comm]⟩
 
 中文:
 引理 smul_mem_closure_star_mul
@@ -78,7 +82,11 @@ lemma smul_mem_closure_star_mul
   | mem r hr =>
   induction ha using AddSubmonoid.closure_induction with
   | zero => simp
-  | add a₁ a₂ _ _ ha₁ ha₂ => simpa [smul_add] using add_mem ha₁ h
+  | add a₁ a₂ _ _ ha₁ ha₂ => simpa [smul_add] using add_mem ha₁ ha₂
+  | mem a ha =>
+  obtain ⟨r, rfl⟩ := hr
+  obtain ⟨a, rfl⟩ := ha
+  exact AddSubmonoid.subset_closure ⟨r • a, by simp [star_smul, smul_mul_smul_comm]⟩
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure_induction, AddSubmonoid.subset_closure, add_mem, add_smul, closure_induction, smul_add, smul_mul_smul_comm, star_smul, subset_closure
 -/
@@ -179,7 +187,11 @@ lemma of_le_iff
     · rintro ⟨p, hp, hpxy⟩
       revert x y hpxy
       refine AddSubmonoid.closure_induction ?_ (fun x y h => add_zero x ▸ h.ge) ?_ hp
-      · rintro _ ⟨s, r
+      · rintro _ ⟨s, rfl⟩ x y rfl
+        exact (h_le_iff _ _).mpr ⟨s, rfl⟩
+      · rintro _ _ _ _ ha hb x y rfl
+        rw [← add_assoc]
+        exact (ha _ _ rfl).trans (hb _ _ rfl)
 
 中文:
 引理 of_le_iff
@@ -192,7 +204,11 @@ lemma of_le_iff
     · rintro ⟨p, hp, hpxy⟩
       revert x y hpxy
       refine AddSubmonoid.closure_induction ?_ (fun x y h => add_zero x ▸ h.ge) ?_ hp
-      · rintro _ ⟨s, r
+      · rintro _ ⟨s, rfl⟩ x y rfl
+        exact (h_le_iff _ _).mpr ⟨s, rfl⟩
+      · rintro _ _ _ _ ha hb x y rfl
+        rw [← add_assoc]
+        exact (ha _ _ rfl).trans (hb _ _ rfl)
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure_induction, AddSubmonoid.subset_closure, add_assoc, add_zero, closure_induction, h.ge, h_le_iff, revert, subset_closure
 -/
@@ -370,7 +386,9 @@ lemma IsSelfAdjoint.of_ge
   rintro - ⟨s, rfl⟩
   simp
 
-@[deprecated (since := "2026-06-12")] alias IsSelfAdjoint.mono
+@[deprecated (since := "2026-06-12")] alias IsSelfAdjoint.mono := IsSelfAdjoint.of_ge
+
+@[aesop 10% apply, grind ←]
 
 中文:
 引理 IsSelfAdjoint.of_ge
@@ -385,7 +403,9 @@ lemma IsSelfAdjoint.of_ge
   rintro - ⟨s, rfl⟩
   simp
 
-@[deprecated (since := "2026-06-12")] alias IsSelfAdjoint.mono
+@[deprecated (since := "2026-06-12")] alias IsSelfAdjoint.mono := IsSelfAdjoint.of_ge
+
+@[aesop 10% apply, grind ←]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.eqOn_closureM, IsSelfAdjoint, StarOrderedRing, StarOrderedRing.le_iff, eqOn_closureM, hx.star_eq, le_iff, starAddEquiv, star_add, star_eq
 -/
@@ -562,7 +582,12 @@ theorem star_left_conjugate_nonneg
   · obtain ⟨x, rfl⟩ := hx
     convert! star_mul_self_nonneg (x * c) using 1
     rw [star_mul]; rw [← mul_assoc]; rw [mul_assoc _ _ c]
-  · 
+  · calc
+      0 <= star c * x * c + 0 := by rw [add_zero]; exact hx
+      _ <= star c * x * c + star c * y * c := by gcongr
+      _ <= _ := by rw [mul_add, add_mul]
+
+@[aesop safe apply]
 
 中文:
 定理 star_left_conjugate_nonneg
@@ -575,7 +600,12 @@ theorem star_left_conjugate_nonneg
   · obtain ⟨x, rfl⟩ := hx
     convert! star_mul_self_nonneg (x * c) using 1
     rw [star_mul]; rw [← mul_assoc]; rw [mul_assoc _ _ c]
-  · 
+  · calc
+      0 <= star c * x * c + 0 := by rw [add_zero]; exact hx
+      _ <= star c * x * c + star c * y * c := by gcongr
+      _ <= _ := by rw [mul_add, add_mul]
+
+@[aesop safe apply]
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure_induction, StarOrderedRing, StarOrderedRing.nonneg_iff, add_mul, add_zero, closure_induction, convert, mul_add, mul_assoc, mul_zero, nonneg_iff, star_mul, star_mul_self_nonneg, zero_mul
 -/
@@ -765,7 +795,11 @@ lemma star_le_star_iff
   rw [StarOrderedRing.le_iff] at h ⊢
   obtain ⟨d, hd, rfl⟩ := h
   refine ⟨starAddEquiv d, ?_, star_add _ _⟩
-refine AddMonoidHom.mclosure_preimage_le _ _ AddS
+refine AddMonoidHom.mclosure_preimage_le _ _ AddSubmonoid.closure_mono ?_ hd
+  rintro - ⟨s, rfl⟩
+  exact ⟨s, by simp⟩
+
+@[simp]
 
 中文:
 引理 star_le_star_iff
@@ -778,7 +812,11 @@ refine AddMonoidHom.mclosure_preimage_le _ _ AddS
   rw [StarOrderedRing.le_iff] at h ⊢
   obtain ⟨d, hd, rfl⟩ := h
   refine ⟨starAddEquiv d, ?_, star_add _ _⟩
-refine AddMonoidHom.mclosure_preimage_le _ _ AddS
+refine AddMonoidHom.mclosure_preimage_le _ _ AddSubmonoid.closure_mono ?_ hd
+  rintro - ⟨s, rfl⟩
+  exact ⟨s, by simp⟩
+
+@[simp]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mclosure_preimage_le, AddSubmonoid, AddSubmonoid.closure_mono, StarOrderedRing, StarOrderedRing.le_iff, closure_mono, le_iff, mclosure_preimage_le, starAddEquiv, star_add, star_star
 -/
@@ -1359,7 +1397,8 @@ instance [NonUnitalSemiring
     rw [← unop_le_unop]; rw [StarOrderedRing.le_iff]; rw [op_surjective.exists]; rw [← (AddSubmonoid.closure _).comap_map_eq_of_injective opAddEquiv.injective]
     congr! with p
     · simp [AddMonoidHom.map_mclosure, ← range_comp', Function.comp_def,
-        ← (star_involutive.surjective.comp op_
+        ← (star_involutive.surjective.comp op_surjective).range_comp]
+    · simp [← op_inj (α := R)]
 
 中文:
 实例 [非幺半环
@@ -1368,7 +1407,8 @@ instance [NonUnitalSemiring
     rw [← unop_le_unop]; rw [StarOrderedRing.le_iff]; rw [op_surjective.exists]; rw [← (AddSubmonoid.closure _).comap_map_eq_of_injective opAddEquiv.injective]
     congr! with p
     · simp [AddMonoidHom.map_mclosure, ← range_comp', Function.comp_def,
-        ← (star_involutive.surjective.comp op_
+        ← (star_involutive.surjective.comp op_surjective).range_comp]
+    · simp [← op_inj (α := R)]
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.map_mclosure, AddSubmonoid, AddSubmonoid.closure, Function, Function.comp_def, StarOrderedRing, StarOrderedRing.le_iff, closure, comap_map_eq_of_injective, comp_def, injective, le_iff, map_mclosure, opAddEquiv, opAddEquiv.injective, op_inj, op_surjective, op_surjective.exists, range_comp
 -/
@@ -1402,7 +1442,9 @@ instance :
     exact ⟨r • a, smul_mem_closure_star_mul hr ha, smul_add ..⟩
   smul_le_smul_of_nonneg_right a ha r s hrs := by
     rw [StarOrderedRing.nonneg_iff] at ha
-    rw [StarOrderedRing.le_
+    rw [StarOrderedRing.le_iff] at hrs ⊢
+    obtain ⟨r, hr, rfl⟩ := hrs
+    exact ⟨r • a, smul_mem_closure_star_mul hr ha, add_smul ..⟩
 
 中文:
 实例 :
@@ -1414,7 +1456,9 @@ instance :
     exact ⟨r • a, smul_mem_closure_star_mul hr ha, smul_add ..⟩
   smul_le_smul_of_nonneg_right a ha r s hrs := by
     rw [StarOrderedRing.nonneg_iff] at ha
-    rw [StarOrderedRing.le_
+    rw [StarOrderedRing.le_iff] at hrs ⊢
+    obtain ⟨r, hr, rfl⟩ := hrs
+    exact ⟨r • a, smul_mem_closure_star_mul hr ha, add_smul ..⟩
 
 Depends on / 依赖: StarOrderedRing, StarOrderedRing.le_iff, StarOrderedRing.nonneg_iff, add_smul, le_iff, nonneg_iff, smul_add, smul_le_smul_of_nonneg_right, smul_mem_closure_star_mul
 -/

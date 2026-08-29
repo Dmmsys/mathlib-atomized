@@ -111,7 +111,8 @@ theorem neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq
   proof: by
   rcases exists_succAbove_eq hij with ⟨i, rfl⟩
   obtain ⟨m, rfl⟩ : exists m, m + 1 = n := by simp [i.pos]
-  rw [← (i.predAbove j).insertNth_self_removeNth (removeNth _ _)]; rw [← removeNth_removeNth_eq_swap]; rw [removeNth]; rw [succAbove_succAbove_predAbove]; rw [map_insertNth]; rw [← neg_one_po
+  rw [← (i.predAbove j).insertNth_self_removeNth (removeNth _ _)]; rw [← removeNth_removeNth_eq_swap]; rw [removeNth]; rw [succAbove_succAbove_predAbove]; rw [map_insertNth]; rw [← neg_one_pow_smul_map_insertNth]; rw [insertNth_removeNth]; rw [update_eq_self_iff.2]; rw [smul_smul]; rw [← pow_add]; rw [neg_one_pow_succAbove_add_predAbove]; rw [neg_smul]; rw [pow_add]; rw [mul_smul]; rw [smul_smul (_ ^ i.val)]; rw [← sq]; rw [← pow_mul]; rw [pow_mul']; rw [neg_one_pow_two]; rw [one_pow]; rw [one_smul]; rw [neg_add_cancel]
+  exact hvij.symm
 
 中文:
 定理 neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq
@@ -119,7 +120,8 @@ theorem neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq
   证明: by
   rcases exists_succAbove_eq hij with ⟨i, rfl⟩
   obtain ⟨m, rfl⟩ : exists m, m + 1 = n := by simp [i.pos]
-  rw [← (i.predAbove j).insertNth_self_removeNth (removeNth _ _)]; rw [← removeNth_removeNth_eq_swap]; rw [removeNth]; rw [succAbove_succAbove_predAbove]; rw [map_insertNth]; rw [← neg_one_po
+  rw [← (i.predAbove j).insertNth_self_removeNth (removeNth _ _)]; rw [← removeNth_removeNth_eq_swap]; rw [removeNth]; rw [succAbove_succAbove_predAbove]; rw [map_insertNth]; rw [← neg_one_pow_smul_map_insertNth]; rw [insertNth_removeNth]; rw [update_eq_self_iff.2]; rw [smul_smul]; rw [← pow_add]; rw [neg_one_pow_succAbove_add_predAbove]; rw [neg_smul]; rw [pow_add]; rw [mul_smul]; rw [smul_smul (_ ^ i.val)]; rw [← sq]; rw [← pow_mul]; rw [pow_mul']; rw [neg_one_pow_two]; rw [one_pow]; rw [one_smul]; rw [neg_add_cancel]
+  exact hvij.symm
 
 Depends on / 依赖: exists_succAbove_eq, i.pos, i.predAbove, insertNth_removeNth, insertNth_self_removeNth, map_insertNth, mul_smul, neg_one_pow_smul_map_insertNth, neg_one_pow_succAbove_add_predAbove, neg_smul, pow_add, predAbove, removeNth, removeNth_removeNth_eq_swap, smul_smu, smul_smul, succAbove_succAbove_predAbove, update_eq_self_iff
 -/
@@ -142,7 +144,13 @@ definition alternatizeUncurryFin
     intro v i j hvij hij
     suffices ∑ k : Fin (n + 1), (-1) ^ (k : Nat) • f (v k) (k.removeNth v) = 0 by simpa
     calc
-      _ = (-1) ^ (i : Nat) • f (v i) (i.removeNth v) + (-1) ^ (j
+      _ = (-1) ^ (i : Nat) • f (v i) (i.removeNth v) + (-1) ^ (j : Nat) • f (v j) (j.removeNth v) := by
+        refine Fintype.sum_eq_add _ _ hij fun k ⟨hki, hkj⟩ => ?_
+        rcases exists_succAbove_eq hki.symm with ⟨i, rfl⟩
+        rcases exists_succAbove_eq hkj.symm with ⟨j, rfl⟩
+        rw [(f (v k)).map_eq_zero_of_eq _ hvij (ne_of_apply_ne _ hij)]; rw [smul_zero]
+      _ = 0 := by
+        rw [hvij]; rw [neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq] <;> assumption
 
 中文:
 定义 alternatizeUncurryFin
@@ -152,7 +160,13 @@ definition alternatizeUncurryFin
     intro v i j hvij hij
     suffices ∑ k : Fin (n + 1), (-1) ^ (k : Nat) • f (v k) (k.removeNth v) = 0 by simpa
     calc
-      _ = (-1) ^ (i : Nat) • f (v i) (i.removeNth v) + (-1) ^ (j
+      _ = (-1) ^ (i : Nat) • f (v i) (i.removeNth v) + (-1) ^ (j : Nat) • f (v j) (j.removeNth v) := by
+        refine Fintype.sum_eq_add _ _ hij fun k ⟨hki, hkj⟩ => ?_
+        rcases exists_succAbove_eq hki.symm with ⟨i, rfl⟩
+        rcases exists_succAbove_eq hkj.symm with ⟨j, rfl⟩
+        rw [(f (v k)).map_eq_zero_of_eq _ hvij (ne_of_apply_ne _ hij)]; rw [smul_zero]
+      _ = 0 := by
+        rw [hvij]; rw [neg_one_pow_smul_map_removeNth_add_eq_zero_of_eq] <;> assumption
 
 Depends on / 依赖: Fintype, Fintype.sum_eq_add, LinearMap, LinearMap.uncurryMid, exists_succAbove_eq, hki.symm, hkj.symm, i.removeNth, j.removeNth, k.removeNth, map_eq_ze, map_eq_zero_of_eq, removeNth, sum_eq_add, toMultilinearMapLM, uncurryMid
 -/
@@ -314,7 +328,16 @@ theorem alternatizeUncurryFin_alternatizeUncurryFinLM_comp_apply
     alternatizeUncurryFinLM_apply, Finset.smul_sum, sum_sum_eq_sum_triangle_add, val_castSucc,
     val_succ]
   refine Fintype.sum_congr _ _ fun i => Finset.sum_congr rfl fun j hj => ?_
-  rw [Finset.mem_Ici] a
+  rw [Finset.mem_Ici] at hj
+  have H₁ : i.castSucc.removeNth v j = v j.succ := by
+    simp [Fin.removeNth_apply, Fin.succAbove_of_le_castSucc, hj]
+  have H₂ : j.succ.removeNth v i = v i.castSucc := by
+    simp [Fin.removeNth_apply, Fin.succAbove_of_castSucc_lt, hj]
+  simp only [pow_add, mul_smul, pow_one, neg_one_smul, smul_neg, smul_sub, ← sub_eq_add_neg,
+    smul_comm ((-1 : Int) ^ (j : Nat)), H₁, H₂]
+  congr 4
+  rw [removeNth_removeNth_eq_swap]
+  simp [Fin.predAbove, hj, Fin.succAbove]
 
 中文:
 定理 alternatizeUncurryFin_alternatizeUncurryFinLM_comp_apply
@@ -323,7 +346,16 @@ theorem alternatizeUncurryFin_alternatizeUncurryFinLM_comp_apply
     alternatizeUncurryFinLM_apply, Finset.smul_sum, sum_sum_eq_sum_triangle_add, val_castSucc,
     val_succ]
   refine Fintype.sum_congr _ _ fun i => Finset.sum_congr rfl fun j hj => ?_
-  rw [Finset.mem_Ici] a
+  rw [Finset.mem_Ici] at hj
+  have H₁ : i.castSucc.removeNth v j = v j.succ := by
+    simp [Fin.removeNth_apply, Fin.succAbove_of_le_castSucc, hj]
+  have H₂ : j.succ.removeNth v i = v i.castSucc := by
+    simp [Fin.removeNth_apply, Fin.succAbove_of_castSucc_lt, hj]
+  simp only [pow_add, mul_smul, pow_one, neg_one_smul, smul_neg, smul_sub, ← sub_eq_add_neg,
+    smul_comm ((-1 : Int) ^ (j : Nat)), H₁, H₂]
+  congr 4
+  rw [removeNth_removeNth_eq_swap]
+  simp [Fin.predAbove, hj, Fin.succAbove]
 
 Depends on / 依赖: Fin.removeNth_apply, Fin.succAbove_of_, Fin.succAbove_of_le_castSucc, Finset, Finset.mem_Ici, Finset.smul_sum, Finset.sum_congr, Fintype, Fintype.sum_congr, Int.reduceNeg, LinearMap, LinearMap.coe_comp, alternatizeUncurryFinLM_apply, alternatizeUncurryFin_apply, castSucc, coe_comp, comp_apply, i.castSucc, i.castSucc.removeNth, j.succ
 -/

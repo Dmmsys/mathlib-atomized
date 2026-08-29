@@ -829,7 +829,7 @@ theorem toOrderedSub
     · rw [not_le] at h
       constructor <;> intro h'
       · simpa using add_le_add h' h.le
-      · exact 
+      · exact zero_le
 
 中文:
 定理 toOrderedSub
@@ -845,7 +845,7 @@ theorem toOrderedSub
     · rw [not_le] at h
       constructor <;> intro h'
       · simpa using add_le_add h' h.le
-      · exact 
+      · exact zero_le
 
 Depends on / 依赖: add_comm, add_le_add, add_le_add_iff_right, choose_spec, conv_rhs, exists_add_of_le, h.le, not_le, split_ifs, zero_le
 -/

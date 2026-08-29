@@ -226,7 +226,13 @@ lemma ContMDiffWithinAt.inner_bundle
     exact hv.1
   simp only [hg]
   have : ContMDiffWithinAt IM (IB.prod 𝓘(Real)) n
-      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m) (g (b 
+      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m) (g (b m) (v m) (w m))) s x := by
+    apply ContMDiffWithinAt.clm_bundle_apply₂ (F₁ := F) (F₂ := F)
+    · exact ContMDiffAt.comp_contMDiffWithinAt x g_smooth.contMDiffAt hb
+    · exact hv
+    · exact hw
+  simp only [contMDiffWithinAt_totalSpace] at this
+  exact this.2
 
 中文:
 引理 ContMDiffWithinAt.inner_bundle
@@ -237,7 +243,13 @@ lemma ContMDiffWithinAt.inner_bundle
     exact hv.1
   simp only [hg]
   have : ContMDiffWithinAt IM (IB.prod 𝓘(Real)) n
-      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m) (g (b 
+      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m) (g (b m) (v m) (w m))) s x := by
+    apply ContMDiffWithinAt.clm_bundle_apply₂ (F₁ := F) (F₂ := F)
+    · exact ContMDiffAt.comp_contMDiffWithinAt x g_smooth.contMDiffAt hb
+    · exact hv
+    · exact hw
+  simp only [contMDiffWithinAt_totalSpace] at this
+  exact this.2
 
 Depends on / 依赖: Bundle, Bundle.Trivial, CMDiffAt, ContMDiffAt, ContMDiffAt.comp_contMDiffWithinAt, ContMDiffWithinAt, ContMDiffWithinAt.clm_bundle_apply, IB.prod, TotalSpace, TotalSpace.mk, Trivial, comp_contMDiffWithinAt, contMDiffAt, contMDiffWithinAt_totalSpace, exists_contMDiff, g_smooth, g_smooth.contMDiffAt, h.exists_contMDiff
 -/
@@ -339,7 +351,14 @@ lemma MDifferentiableWithinAt.inner_bundle
     exact hv.1
   simp only [hg]
   have : MDifferentiableWithinAt IM (IB.prod 𝓘(Real))
-      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m)
+      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m) (g (b m) (v m) (w m))) s x := by
+    apply MDifferentiableWithinAt.clm_bundle_apply₂ (F₁ := F) (F₂ := F)
+    · exact MDifferentiableAt.comp_mdifferentiableWithinAt x
+        (g_smooth.mdifferentiableAt one_ne_zero) hb
+    · exact hv
+    · exact hw
+  simp only [mdifferentiableWithinAt_totalSpace] at this
+  exact this.2
 
 中文:
 引理 MDifferentiableWithinAt.inner_bundle
@@ -350,7 +369,14 @@ lemma MDifferentiableWithinAt.inner_bundle
     exact hv.1
   simp only [hg]
   have : MDifferentiableWithinAt IM (IB.prod 𝓘(Real))
-      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m)
+      (fun m => TotalSpace.mk' Real (E := Bundle.Trivial B Real) (b m) (g (b m) (v m) (w m))) s x := by
+    apply MDifferentiableWithinAt.clm_bundle_apply₂ (F₁ := F) (F₂ := F)
+    · exact MDifferentiableAt.comp_mdifferentiableWithinAt x
+        (g_smooth.mdifferentiableAt one_ne_zero) hb
+    · exact hv
+    · exact hw
+  simp only [mdifferentiableWithinAt_totalSpace] at this
+  exact this.2
 
 Depends on / 依赖: Bundle, Bundle.Trivial, IB.prod, MDiffAt, MDifferentiableAt, MDifferentiableAt.comp_mdifferentiableWithinAt, MDifferentiableWithinAt, MDifferentiableWithinAt.clm_bundle_apply, TotalSpace, TotalSpace.mk, Trivial, comp_mdifferentiableWithinAt, exists_contMDiff, g_smooth, g_smooth.mdifferentiableAt, h.exists_contMDiff, mdifferentiableAt, mdifferentiableWithinAt_totalSpace, one_ne_zero
 -/

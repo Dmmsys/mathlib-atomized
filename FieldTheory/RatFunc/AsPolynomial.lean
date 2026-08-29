@@ -654,7 +654,11 @@ theorem eval_add
   · have := Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero f a (denom_add_dvd x y) hxy
     rw [Polynomial.eval₂_mul] at this
     cases mul_eq_zero.mp this <;> contradiction
-  rw [div_add_div _ _ hx hy]; rw [eq_div_iff (mul_
+  rw [div_add_div _ _ hx hy]; rw [eq_div_iff (mul_ne_zero hx hy)]; rw [div_eq_mul_inv]; rw [mul_right_comm]; rw [←
+    div_eq_mul_inv]; rw [div_eq_iff hxy]
+  simp only [← Polynomial.eval₂_mul, ← Polynomial.eval₂_add]
+  congr 1
+  apply num_denom_add
 
 中文:
 定理 eval_add
@@ -665,7 +669,11 @@ theorem eval_add
   · have := Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero f a (denom_add_dvd x y) hxy
     rw [Polynomial.eval₂_mul] at this
     cases mul_eq_zero.mp this <;> contradiction
-  rw [div_add_div _ _ hx hy]; rw [eq_div_iff (mul_
+  rw [div_add_div _ _ hx hy]; rw [eq_div_iff (mul_ne_zero hx hy)]; rw [div_eq_mul_inv]; rw [mul_right_comm]; rw [←
+    div_eq_mul_inv]; rw [div_eq_iff hxy]
+  simp only [← Polynomial.eval₂_mul, ← Polynomial.eval₂_add]
+  congr 1
+  apply num_denom_add
 
 Depends on / 依赖: Polynomial, Polynomial.eval, denom_add_dvd, div_add_div, div_eq_iff, div_eq_mul_inv, eq_div_iff, mul_eq_zero, mul_eq_zero.mp, mul_ne_zero, mul_right_comm, num_denom_add
 -/
@@ -694,7 +702,11 @@ theorem eval_mul
   · have := Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero f a (denom_mul_dvd x y) hxy
     rw [Polynomial.eval₂_mul] at this
     cases mul_eq_zero.mp this <;> contradiction
-  rw [div_mul_div_comm]; rw [eq_div_iff (mul_ne_ze
+  rw [div_mul_div_comm]; rw [eq_div_iff (mul_ne_zero hx hy)]; rw [div_eq_mul_inv]; rw [mul_right_comm]; rw [←
+    div_eq_mul_inv]; rw [div_eq_iff hxy]
+  repeat' rw [← Polynomial.eval₂_mul]
+  congr 1
+  apply num_denom_mul
 
 中文:
 定理 eval_mul
@@ -705,7 +717,11 @@ theorem eval_mul
   · have := Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero f a (denom_mul_dvd x y) hxy
     rw [Polynomial.eval₂_mul] at this
     cases mul_eq_zero.mp this <;> contradiction
-  rw [div_mul_div_comm]; rw [eq_div_iff (mul_ne_ze
+  rw [div_mul_div_comm]; rw [eq_div_iff (mul_ne_zero hx hy)]; rw [div_eq_mul_inv]; rw [mul_right_comm]; rw [←
+    div_eq_mul_inv]; rw [div_eq_iff hxy]
+  repeat' rw [← Polynomial.eval₂_mul]
+  congr 1
+  apply num_denom_mul
 
 Depends on / 依赖: Polynomial, Polynomial.eval, denom_mul_dvd, div_eq_iff, div_eq_mul_inv, div_mul_div_comm, eq_div_iff, mul_eq_zero, mul_eq_zero.mp, mul_ne_zero, mul_right_comm, num_denom_mul, repeat
 -/

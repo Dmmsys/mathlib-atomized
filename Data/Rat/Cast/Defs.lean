@@ -171,7 +171,18 @@ lemma cast_divNat_of_ne_zero
   have hd : (d : α) != 0 := by
     refine fun hd => hb ?_
     have : Rat.divInt a b = _ := congr_arg NNRat.cast e
-    obtain ⟨k, rfl⟩ : d ∣ b := by simpa [Int.natCast_dvd_natCast, this] using Ra
+    obtain ⟨k, rfl⟩ : d ∣ b := by simpa [Int.natCast_dvd_natCast, this] using Rat.den_dvd a b
+    simp [*]
+  have hb' : b != 0 := by rintro rfl; exact hb Nat.cast_zero
+  simp_rw [Rat.mk_eq_divInt, mk_divInt, divNat_inj hb' h] at e
+  rw [cast_def]
+  dsimp
+  rw [Commute.div_eq_div_iff _ hd hb]
+  · norm_cast
+    rw [e]
+  exact b.commute_cast _
+
+@[norm_cast]
 
 中文:
 引理 cast_div自然数_of_ne_zero
@@ -183,7 +194,18 @@ lemma cast_divNat_of_ne_zero
   have hd : (d : α) != 0 := by
     refine fun hd => hb ?_
     have : Rat.divInt a b = _ := congr_arg NNRat.cast e
-    obtain ⟨k, rfl⟩ : d ∣ b := by simpa [Int.natCast_dvd_natCast, this] using Ra
+    obtain ⟨k, rfl⟩ : d ∣ b := by simpa [Int.natCast_dvd_natCast, this] using Rat.den_dvd a b
+    simp [*]
+  have hb' : b != 0 := by rintro rfl; exact hb Nat.cast_zero
+  simp_rw [Rat.mk_eq_divInt, mk_divInt, divNat_inj hb' h] at e
+  rw [cast_def]
+  dsimp
+  rw [Commute.div_eq_div_iff _ hd hb]
+  · norm_cast
+    rw [e]
+  exact b.commute_cast _
+
+@[norm_cast]
 -/
 @[norm_cast] lemma cast_divNat_of_ne_zero (a : Nat) {b : Nat} (hb : (b : α) != 0) :
     divNat a b = (a / b : α) := by
@@ -544,7 +566,16 @@ lemma cast_divInt_of_ne_zero
     intro d0
     have dd := den_dvd a b
     rcases show (d : Int) ∣ b by rwa [e] at dd with ⟨k, ke⟩
-    have : (b : α) = (d : α) * (k : α) := by rw [ke, Int.cast
+    have : (b : α) = (d : α) * (k : α) := by rw [ke, Int.cast_mul, Int.cast_natCast]
+    rw [d0]; rw [zero_mul] at this
+    contradiction
+  rw [mk_eq_divInt] at e
+  have := congr_arg ((↑) : Int -> α)
+    ((divInt_eq_divInt_iff b0' <| ne_of_gt <| Int.natCast_pos.2 h.bot_lt).1 e)
+  rw [Int.cast_mul]; rw [Int.cast_mul]; rw [Int.cast_natCast] at this
+  rw [eq_comm]; rw [cast_def]; rw [div_eq_mul_inv]; rw [eq_div_iff_mul_eq d0]; rw [mul_assoc]; rw [(d.commute_cast _).eq]; rw [← mul_assoc]; rw [this]; rw [mul_assoc]; rw [mul_inv_cancel₀ b0]; rw [mul_one]
+
+@[norm_cast]
 
 中文:
 引理 cast_div整数_of_ne_zero
@@ -559,7 +590,16 @@ lemma cast_divInt_of_ne_zero
     intro d0
     have dd := den_dvd a b
     rcases show (d : Int) ∣ b by rwa [e] at dd with ⟨k, ke⟩
-    have : (b : α) = (d : α) * (k : α) := by rw [ke, Int.cast
+    have : (b : α) = (d : α) * (k : α) := by rw [ke, Int.cast_mul, Int.cast_natCast]
+    rw [d0]; rw [zero_mul] at this
+    contradiction
+  rw [mk_eq_divInt] at e
+  have := congr_arg ((↑) : Int -> α)
+    ((divInt_eq_divInt_iff b0' <| ne_of_gt <| Int.natCast_pos.2 h.bot_lt).1 e)
+  rw [Int.cast_mul]; rw [Int.cast_mul]; rw [Int.cast_natCast] at this
+  rw [eq_comm]; rw [cast_def]; rw [div_eq_mul_inv]; rw [eq_div_iff_mul_eq d0]; rw [mul_assoc]; rw [(d.commute_cast _).eq]; rw [← mul_assoc]; rw [this]; rw [mul_assoc]; rw [mul_inv_cancel₀ b0]; rw [mul_one]
+
+@[norm_cast]
 
 Depends on / 依赖: Int.c, Int.cast_mul, Int.cast_natCast, Int.natCast_pos, bot_lt, cast_mul, cast_natCast, congr_arg, contextual, den_dvd, divInt_eq_divInt_iff, h.bot_lt, mk_eq_divInt, natCast_pos, ne_of_gt, zero_mul
 -/

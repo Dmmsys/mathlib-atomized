@@ -70,7 +70,8 @@ definition isColimit
         (fun i j => (V i j).obj n) :=
       { eq_inf := by simp [h.eq_inf]
         iSup_eq := by simp [← h.iSup_eq] }
-    exact (Multicofork.isColimitMapEquiv _ _).
+    exact (Multicofork.isColimitMapEquiv _ _).2
+      (Types.isColimitOfMulticoequalizerDiagram h'))
 
 中文:
 定义 isColimit
@@ -80,7 +81,8 @@ definition isColimit
         (fun i j => (V i j).obj n) :=
       { eq_inf := by simp [h.eq_inf]
         iSup_eq := by simp [← h.iSup_eq] }
-    exact (Multicofork.isColimitMapEquiv _ _).
+    exact (Multicofork.isColimitMapEquiv _ _).2
+      (Types.isColimitOfMulticoequalizerDiagram h'))
 
 Depends on / 依赖: A.obj, CompleteLattice, CompleteLattice.MulticoequalizerDiagram, MulticoequalizerDiagram, Multicofork, Multicofork.isColimitMapEquiv, Types.isColimitOfMulticoequalizerDiagram, eq_inf, evaluationJointlyReflectsColimits, h.eq_inf, h.iSup_eq, iSup_eq, isColimitMapEquiv, isColimitOfMulticoequalizerDiagram
 -/
@@ -168,7 +170,10 @@ lemma BicartSq.isPushout
           { sup_eq := by
               rw [← sq.sup_eq]
               rfl
-            inf_eq
+            inf_eq := by
+              rw [← sq.inf_eq]
+              rfl }
+        exact (Types.isPushout_of_bicartSq h).isColimit))⟩
 
 中文:
 引理 BicartSq.isPushout
@@ -181,7 +186,10 @@ lemma BicartSq.isPushout
           { sup_eq := by
               rw [← sq.sup_eq]
               rfl
-            inf_eq
+            inf_eq := by
+              rw [← sq.inf_eq]
+              rfl }
+        exact (Types.isPushout_of_bicartSq h).isColimit))⟩
 -/
 lemma BicartSq.isPushout {A₁ A₂ A₃ A₄ : X.Subcomplex} (sq : BicartSq A₁ A₂ A₃ A₄) :
     IsPushout (homOfLE sq.le₁₂) (homOfLE sq.le₁₃)

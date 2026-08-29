@@ -98,7 +98,8 @@ definition rationalCauSeqPkg
     (separation := by infer_instance)
     (isUniformInducing := by
       rw [Rat.uniformSpace_eq]
-      exact Rat.isUniformEmbedding_coe_real.isUni
+      exact Rat.isUniformEmbedding_coe_real.isUniformInducing)
+    (dense := Rat.isDenseEmbedding_coe_real.dense)
 
 中文:
 定义 rationalCauSeqPkg
@@ -111,7 +112,8 @@ definition rationalCauSeqPkg
     (separation := by infer_instance)
     (isUniformInducing := by
       rw [Rat.uniformSpace_eq]
-      exact Rat.isUniformEmbedding_coe_real.isUni
+      exact Rat.isUniformEmbedding_coe_real.isUniformInducing)
+    (dense := Rat.isDenseEmbedding_coe_real.dense)
 
 Depends on / 依赖: AbstractCompletion, AbstractCompletion.mk, Rat.isDenseEmbedding_coe_real.dense, Rat.isUniformEmbedding_coe_real.isUniformInducing, Rat.uniformSpace_eq, complete, infer_instance, isDenseEmbedding_coe_real, isUniformEmbedding_coe_real, isUniformInducing, separation, uniformSpace_eq, uniformStruct
 -/

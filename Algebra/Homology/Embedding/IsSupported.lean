@@ -422,7 +422,8 @@ lemma isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside
     apply IsZero.eq_of_src
     by_cases hn : exists i, e.f i = n
     · obtain ⟨i, rfl⟩ := hn
-      exact h₂.i
+      exact h₂.isZero i
+    · exact K.isZero_X_of_isStrictlySupported e _ (by simpa using hn)
 
 中文:
 引理 isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside
@@ -440,7 +441,8 @@ lemma isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside
     apply IsZero.eq_of_src
     by_cases hn : exists i, e.f i = n
     · obtain ⟨i, rfl⟩ := hn
-      exact h₂.i
+      exact h₂.isZero i
+    · exact K.isZero_X_of_isStrictlySupported e _ (by simpa using hn)
 
 Depends on / 依赖: IsZero, IsZero.eq_of_src, IsZero.iff_id_eq_zero, K.isZero_X_of_isStrictlySupported, all_goals, eq_of_src, iff_id_eq_zero, intros, isZero, isZero_X_of_isStrictlySupported, map_isZero
 -/

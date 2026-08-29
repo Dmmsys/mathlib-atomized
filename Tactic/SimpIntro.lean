@@ -28,7 +28,29 @@ definition simpIntroCore
     | [] => if more then pure (.reducible, mkHole (← getRef) |>.raw, []) else return ← done
     | v::ids => pure (.default, v.raw[0], ids)
   let t ← withTransparency transp g.getType'
-  
+  let n := if var.isIdent then var.getId else `_
+  let withFVar := fun (fvar, g) => g.withContext do
+    Term.addLocalVarInfo var (mkFVar fvar)
+    let ctx : Simp.Context ←
+      if (← Meta.isProp <| ← fvar.getType) then
+        let simpTheorems ← ctx.simpTheorems.addTheorem (.fvar fvar) (.fvar fvar)
+pure ctx.setSimpTheorems simpTheorems
+      else
+        pure ctx
+    simpIntroCore g ctx simprocs discharge? more ids'
+  match t with
+  | .letE .. => withFVar (← g.intro n)
+  | .forallE (body := body) .. =>
+    let (fvar, g) ← g.intro n
+    if body.hasLooseBVars then withFVar (fvar, g) else
+    match (← simpLocalDecl g fvar ctx simprocs discharge?).1 with
+    | none =>
+g.withContext Term.addLocalVarInfo var (mkFVar fvar)
+      return none
+    | some g' => withFVar g'
+  | _ =>
+    if more && ids.isEmpty then done else
+    throwErrorAt var "simp_intro failed to introduce {var}\n{g}"
 
 中文:
 定义 simp整数roCore
@@ -39,7 +61,29 @@ definition simpIntroCore
     | [] => if more then pure (.reducible, mkHole (← getRef) |>.raw, []) else return ← done
     | v::ids => pure (.default, v.raw[0], ids)
   let t ← withTransparency transp g.getType'
-  
+  let n := if var.isIdent then var.getId else `_
+  let withFVar := fun (fvar, g) => g.withContext do
+    Term.addLocalVarInfo var (mkFVar fvar)
+    let ctx : Simp.Context ←
+      if (← Meta.isProp <| ← fvar.getType) then
+        let simpTheorems ← ctx.simpTheorems.addTheorem (.fvar fvar) (.fvar fvar)
+pure ctx.setSimpTheorems simpTheorems
+      else
+        pure ctx
+    simpIntroCore g ctx simprocs discharge? more ids'
+  match t with
+  | .letE .. => withFVar (← g.intro n)
+  | .forallE (body := body) .. =>
+    let (fvar, g) ← g.intro n
+    if body.hasLooseBVars then withFVar (fvar, g) else
+    match (← simpLocalDecl g fvar ctx simprocs discharge?).1 with
+    | none =>
+g.withContext Term.addLocalVarInfo var (mkFVar fvar)
+      return none
+    | some g' => withFVar g'
+  | _ =>
+    if more && ids.isEmpty then done else
+    throwErrorAt var "simp_intro failed to introduce {var}\n{g}"
 -/
 partial def simpIntroCore (g : MVarId) (ctx : Simp.Context) (simprocs : Simp.SimprocsArray := #[])
     (discharge? : Option Simp.Discharge) (more : Bool) (ids : List (TSyntax ``binderIdent)) :

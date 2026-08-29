@@ -425,7 +425,10 @@ theorem order_eq_order
   · refine MvPowerSeries.le_order fun d hd => by
       have : coeff ↑(Finsupp.degree d) φ = 0 := coeff_of_lt_order _ hd
       have eq_aux : d.degree = d () := Finset.sum_eq_single _ (by simp) (by simp)
-      exact (PowerSeries.coeff_def rfl (R := R)) ▸ (eq_aux ▸ this
+      exact (PowerSeries.coeff_def rfl (R := R)) ▸ (eq_aux ▸ this)
+  · refine le_order φ (MvPowerSeries.order φ) fun i hi => by
+      rw [← Finsupp.degree_single () i] at hi
+      exact MvPowerSeries.coeff_of_lt_order hi
 
 中文:
 定理 order_eq_order
@@ -436,7 +439,10 @@ theorem order_eq_order
   · refine MvPowerSeries.le_order fun d hd => by
       have : coeff ↑(Finsupp.degree d) φ = 0 := coeff_of_lt_order _ hd
       have eq_aux : d.degree = d () := Finset.sum_eq_single _ (by simp) (by simp)
-      exact (PowerSeries.coeff_def rfl (R := R)) ▸ (eq_aux ▸ this
+      exact (PowerSeries.coeff_def rfl (R := R)) ▸ (eq_aux ▸ this)
+  · refine le_order φ (MvPowerSeries.order φ) fun i hi => by
+      rw [← Finsupp.degree_single () i] at hi
+      exact MvPowerSeries.coeff_of_lt_order hi
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, Finsupp, Finsupp.degree, Finsupp.degree_single, MvPowerSeries, MvPowerSeries.coeff_of_lt_order, MvPowerSeries.le_order, MvPowerSeries.order, PowerSeries, PowerSeries.coeff_def, coeff_def, coeff_of_lt_order, d.degree, degree, degree_single, eq_aux, eq_of_le_of_ge, le_order, sum_eq_single
 -/
@@ -492,7 +498,7 @@ theorem order_add_of_order_ne.aux
     rw [(coeff _).map_add]; rw [coeff_of_lt_order i H]; rw [add_zero]
     exact (order_eq_nat.1 hi.symm).1
   · intro i hi
-    rw [(co
+    rw [(coeff _).map_add]; rw [coeff_of_lt_order i hi]; rw [coeff_of_lt_order i (lt_trans hi H)]; rw [zero_add]
 
 中文:
 定理 order_add_of_order_ne.aux
@@ -508,7 +514,7 @@ theorem order_add_of_order_ne.aux
     rw [(coeff _).map_add]; rw [coeff_of_lt_order i H]; rw [add_zero]
     exact (order_eq_nat.1 hi.symm).1
   · intro i hi
-    rw [(co
+    rw [(coeff _).map_add]; rw [coeff_of_lt_order i hi]; rw [coeff_of_lt_order i (lt_trans hi H)]; rw [zero_add]
 -/
 private theorem order_add_of_order_ne.aux (φ ψ : R⟦X⟧)
     (H : order φ < order ψ) : order (φ + ψ) <= order φ ⊓ order ψ := by
@@ -609,7 +615,8 @@ theorem le_order_mul
   · rw [coeff_of_lt_order j hj, mul_zero]
   rw [mem_antidiagonal] at hij
   exfalso
-  apply ne_of_lt (lt_of_lt
+  apply ne_of_lt (lt_of_lt_of_le hn <| add_le_add hi hj)
+  rw [← Nat.cast_add]; rw [hij]
 
 中文:
 定理 le_order_mul
@@ -625,7 +632,8 @@ theorem le_order_mul
   · rw [coeff_of_lt_order j hj, mul_zero]
   rw [mem_antidiagonal] at hij
   exfalso
-  apply ne_of_lt (lt_of_lt
+  apply ne_of_lt (lt_of_lt_of_le hn <| add_le_add hi hj)
+  rw [← Nat.cast_add]; rw [hij]
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, Nat.cast_add, add_le_add, cast_add, coeff_mul, coeff_of_lt_order, le_order, lt_of_lt_of_le, mem_antidiagonal, mul_zero, ne_of_lt, sum_eq_zero, zero_mul
 -/
@@ -940,6 +948,7 @@ theorem coeff_mul_prod_one_sub_of_lt_order
     rw [Finset.prod_insert ha]; rw [← mul_assoc]; rw [mul_right_comm]; rw [coeff_mul_one_sub_of_lt_order _ t.1]
     exact ih t.2
 
+@[simp]
 
 中文:
 定理 coeff_mul_prod_one_sub_of_lt_order
@@ -954,6 +963,7 @@ theorem coeff_mul_prod_one_sub_of_lt_order
     rw [Finset.prod_insert ha]; rw [← mul_assoc]; rw [mul_right_comm]; rw [coeff_mul_one_sub_of_lt_order _ t.1]
     exact ih t.2
 
+@[simp]
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert, Finset.prod_insert, classical, coeff_mul_one_sub_of_lt_order, forall_eq_or_imp, induction_on, insert, mem_insert, mul_assoc, mul_right_comm, prod_insert
 -/
@@ -1187,7 +1197,17 @@ theorem order_eq_emultiplicity_X
     apply le_antisymm _
     · apply le_emultiplicity_of_pow_dvd
       apply X_pow_order_dvd
-    
+    · apply Order.le_of_lt_add_one
+      rw [← not_le]; rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← pow_dvd_iff_le_emultiplicity]
+      rintro ⟨ψ, H⟩
+      have := congr_arg (coeff n) H
+      rw [X_pow_mul]; rw [coeff_mul_of_lt_order]; rw [← hn] at this
+      · exact coeff_order hφ this
+      · rw [X_pow_eq, order_monomial]
+        split_ifs
+        · simp
+        · rw [← hn, ENat.natCast_lt_natCast]
+          simp
 
 中文:
 定理 order_eq_emultiplicity_X
@@ -1204,7 +1224,17 @@ theorem order_eq_emultiplicity_X
     apply le_antisymm _
     · apply le_emultiplicity_of_pow_dvd
       apply X_pow_order_dvd
-    
+    · apply Order.le_of_lt_add_one
+      rw [← not_le]; rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← pow_dvd_iff_le_emultiplicity]
+      rintro ⟨ψ, H⟩
+      have := congr_arg (coeff n) H
+      rw [X_pow_mul]; rw [coeff_mul_of_lt_order]; rw [← hn] at this
+      · exact coeff_order hφ this
+      · rw [X_pow_eq, order_monomial]
+        split_ifs
+        · simp
+        · rw [← hn, ENat.natCast_lt_natCast]
+          simp
 
 Depends on / 依赖: Nat.cast_add, Nat.cast_one, Order.le_of_lt_add_one, X_pow_mul, X_pow_order_dvd, cast_add, cast_one, classical, coeff_mul_of_lt_order, congr_arg, eq_comm, eq_or_ne, le_antisymm, le_emultiplicity_of_pow_dvd, le_of_lt_add_one, not_le, order.toNat, pow_dvd_iff_le_emultiplicity
 -/
@@ -1405,7 +1435,13 @@ theorem order_mul
   · rcases h with h | h <;> simp [h]
   · rw [← coe_toNat_order h.1, ← coe_toNat_order h.2, ← ENat.natCast_add]
     apply order_le
-    rw [coeff_mul]; rw [Finset.sum_eq_single_of_mem ⟨φ.order.toNat]; rw [ψ.order.toNat⟩ (by simp
+    rw [coeff_mul]; rw [Finset.sum_eq_single_of_mem ⟨φ.order.toNat]; rw [ψ.order.toNat⟩ (by simp)]
+    · exact mul_ne_zero (coeff_order h.1) (coeff_order h.2)
+    · intro ij hij h
+      rcases trichotomy_of_add_eq_add (mem_antidiagonal.mp hij) with h' | h' | h'
+      · exact False.elim (h (by simp [Prod.ext_iff, h'.1, h'.2]))
+      · rw [coeff_of_lt_order_toNat ij.1 h', zero_mul]
+      · rw [coeff_of_lt_order_toNat ij.2 h', mul_zero]
 
 中文:
 定理 order_mul
@@ -1417,7 +1453,13 @@ theorem order_mul
   · rcases h with h | h <;> simp [h]
   · rw [← coe_toNat_order h.1, ← coe_toNat_order h.2, ← ENat.natCast_add]
     apply order_le
-    rw [coeff_mul]; rw [Finset.sum_eq_single_of_mem ⟨φ.order.toNat]; rw [ψ.order.toNat⟩ (by simp
+    rw [coeff_mul]; rw [Finset.sum_eq_single_of_mem ⟨φ.order.toNat]; rw [ψ.order.toNat⟩ (by simp)]
+    · exact mul_ne_zero (coeff_order h.1) (coeff_order h.2)
+    · intro ij hij h
+      rcases trichotomy_of_add_eq_add (mem_antidiagonal.mp hij) with h' | h' | h'
+      · exact False.elim (h (by simp [Prod.ext_iff, h'.1, h'.2]))
+      · rw [coeff_of_lt_order_toNat ij.1 h', zero_mul]
+      · rw [coeff_of_lt_order_toNat ij.2 h', mul_zero]
 
 Depends on / 依赖: ENat.natCast_add, False.elim, Finset, Finset.sum_eq_single_of_mem, Prod.ext_iff, coe_toNat_order, coeff_mul, coeff_order, ext_iff, le_antisymm, le_order_mul, mem_antidiagonal, mem_antidiagonal.mp, mul_ne_zero, natCast_add, order.toNat, order_le, sum_eq_single_of_mem, trichotomy_of_add_eq_add
 -/
@@ -1447,7 +1489,15 @@ theorem divXPowOrder_mul
   apply X_pow_mul_cancel (k := f.order.toNat + g.order.toNat)
   calc
     _ = X ^ ((f * g).order.toNat) * (f * g).divXPowOrder := by
-        rw [order_mul]; rw [ENat.toNat_add (order_eq_top.not.mpr h.1) (order_eq_top.not.mpr h.2)
+        rw [order_mul]; rw [ENat.toNat_add (order_eq_top.not.mpr h.1) (order_eq_top.not.mpr h.2)]
+    _ = f * g := by
+        simp [X_pow_order_mul_divXPowOrder]
+    _ = (X ^ f.order.toNat * f.divXPowOrder) * (X ^ g.order.toNat * g.divXPowOrder) := by
+        simp [X_pow_order_mul_divXPowOrder]
+    _ = f.divXPowOrder * g.divXPowOrder * X ^ (g.order.toNat + f.order.toNat) := by
+        rw [mul_assoc]; rw [X_pow_mul]; rw [X_pow_mul]; rw [← mul_assoc]; rw [mul_assoc]; rw [← pow_add]
+    _ = X ^ (f.order.toNat + g.order.toNat) * (f.divXPowOrder * g.divXPowOrder) := by
+        rw [X_pow_mul]; rw [add_comm]
 
 中文:
 定理 divXPowOrder_mul
@@ -1458,7 +1508,15 @@ theorem divXPowOrder_mul
   apply X_pow_mul_cancel (k := f.order.toNat + g.order.toNat)
   calc
     _ = X ^ ((f * g).order.toNat) * (f * g).divXPowOrder := by
-        rw [order_mul]; rw [ENat.toNat_add (order_eq_top.not.mpr h.1) (order_eq_top.not.mpr h.2)
+        rw [order_mul]; rw [ENat.toNat_add (order_eq_top.not.mpr h.1) (order_eq_top.not.mpr h.2)]
+    _ = f * g := by
+        simp [X_pow_order_mul_divXPowOrder]
+    _ = (X ^ f.order.toNat * f.divXPowOrder) * (X ^ g.order.toNat * g.divXPowOrder) := by
+        simp [X_pow_order_mul_divXPowOrder]
+    _ = f.divXPowOrder * g.divXPowOrder * X ^ (g.order.toNat + f.order.toNat) := by
+        rw [mul_assoc]; rw [X_pow_mul]; rw [X_pow_mul]; rw [← mul_assoc]; rw [mul_assoc]; rw [← pow_add]
+    _ = X ^ (f.order.toNat + g.order.toNat) * (f.divXPowOrder * g.divXPowOrder) := by
+        rw [X_pow_mul]; rw [add_comm]
 
 Depends on / 依赖: ENat.toNat_add, X_pow_mul_cancel, X_pow_order_mul_divXPowOrder, divXPowOrder, f.divXPowOrder, f.order.toNat, g.divXPowOrder, g.order.toNat, order.toNat, order_eq_top, order_eq_top.not.mpr, order_mul, toNat_add
 -/

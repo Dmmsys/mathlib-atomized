@@ -93,7 +93,7 @@ lemma isIso_unit_iff_isIso_counit
     exact t.adj₂.isIso_counit_of_iso (idAdj.rightAdjointUniq id)
   · intro h
     let adjId : F ⋙ G ⊣ 𝟭 C := adj.ofNatIsoRight (asIso t.adj₂.counit)
-  
+    exact t.adj₁.isIso_unit_of_iso (adjId.leftAdjointUniq id)
 
 中文:
 引理 isIso_unit_iff_isIso_counit
@@ -106,7 +106,7 @@ lemma isIso_unit_iff_isIso_counit
     exact t.adj₂.isIso_counit_of_iso (idAdj.rightAdjointUniq id)
   · intro h
     let adjId : F ⋙ G ⊣ 𝟭 C := adj.ofNatIsoRight (asIso t.adj₂.counit)
-  
+    exact t.adj₁.isIso_unit_of_iso (adjId.leftAdjointUniq id)
 
 Depends on / 依赖: adj.ofNatIsoLeft, adj.ofNatIsoRight, adjId.leftAdjointUniq, counit, idAdj.rightAdjointUniq, isIso_counit_of_iso, isIso_unit_of_iso, leftAdjointUniq, ofNatIsoLeft, ofNatIsoRight, rightAdjointUniq, t.adj
 -/
@@ -136,7 +136,11 @@ definition fullyFaithfulEquiv
     haveI := h.full
     haveI := h.faithful
     haveI : IsIso t.adj₁.unit := by
-      rw [t.isIso_unit_if
+      rw [t.isIso_unit_iff_isIso_counit]
+      infer_instance
+    t.adj₁.fullyFaithfulLOfIsIsoUnit
+  left_inv _ := Subsingleton.elim _ _
+  right_inv _ := Subsingleton.elim _ _
 
 中文:
 定义 fullyFaithfulEquiv
@@ -151,7 +155,11 @@ definition fullyFaithfulEquiv
     haveI := h.full
     haveI := h.faithful
     haveI : IsIso t.adj₁.unit := by
-      rw [t.isIso_unit_if
+      rw [t.isIso_unit_iff_isIso_counit]
+      infer_instance
+    t.adj₁.fullyFaithfulLOfIsIsoUnit
+  left_inv _ := Subsingleton.elim _ _
+  right_inv _ := Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, counit, faithful, fullyFaithfulLOfIsIsoUnit, fullyFaithfulROfIsIsoCounit, h.faithful, h.full, infer_instance, invFun, isIso_unit_iff_isIso_counit, left_inv, right_inv, t.adj, t.isIso_unit_iff_isIso_counit
 -/
@@ -515,7 +523,11 @@ lemma leftToRight_eq_counits
   ext X; dsimp [leftToRight]; simp only [Category.id_comp, Category.comp_id, NatIso.isIso_inv_app]
   rw [IsIso.comp_inv_eq]; rw [Category.assoc]; rw [IsIso.eq_inv_comp]
   refine Eq.trans ?_ (t.adj₁.counit_naturality <| (whiskerRight t.adj₁.unit H).app X)
-  rw [whiskerRight_app _ H]; rw [(asIso (t
+  rw [whiskerRight_app _ H]; rw [(asIso (t.adj₂.counit.app (G.obj _))).eq_comp_inv.2
+      (t.adj₂.counit_naturality (t.adj₁.unit.app X))]; rw [← (asIso _).comp_hom_eq_id.1 t.adj₂.left_triangle_components (F.obj X)]
+  simp
+
+omit [H.Full] [H.Faithful] in
 
 中文:
 引理 leftToRight_eq_counits
@@ -523,7 +535,11 @@ lemma leftToRight_eq_counits
   ext X; dsimp [leftToRight]; simp only [Category.id_comp, Category.comp_id, NatIso.isIso_inv_app]
   rw [IsIso.comp_inv_eq]; rw [Category.assoc]; rw [IsIso.eq_inv_comp]
   refine Eq.trans ?_ (t.adj₁.counit_naturality <| (whiskerRight t.adj₁.unit H).app X)
-  rw [whiskerRight_app _ H]; rw [(asIso (t
+  rw [whiskerRight_app _ H]; rw [(asIso (t.adj₂.counit.app (G.obj _))).eq_comp_inv.2
+      (t.adj₂.counit_naturality (t.adj₁.unit.app X))]; rw [← (asIso _).comp_hom_eq_id.1 t.adj₂.left_triangle_components (F.obj X)]
+  simp
+
+omit [H.Full] [H.Faithful] in
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, Eq.trans, F.obj, G.obj, IsIso.comp_inv_eq, IsIso.eq_inv_comp, NatIso, NatIso.isIso_inv_app, comp_hom_eq_id, comp_id, comp_inv_eq, counit, counit.app, counit_naturality, eq_comp_inv, eq_inv_comp, id_comp
 -/
@@ -552,7 +568,9 @@ lemma leftToRight_app_obj
   refine (((t.adj₂.homEquiv _ _).apply_symm_apply _).symm.trans ?_).symm
   rw [homEquiv_symm_apply]; rw [map_comp]; rw [Category.assoc]; rw [left_triangle_components]; rw [homEquiv_apply]; rw [leftToRight_app]; rw [← H.map_inv]
   congr
-  simpa using IsIso.eq_inv_of_hom_inv_id (t.adj₁.right_triang
+  simpa using IsIso.eq_inv_of_hom_inv_id (t.adj₁.right_triangle_components _)
+
+omit [H.Full] [H.Faithful] in
 
 中文:
 引理 leftToRight_app_obj
@@ -561,7 +579,9 @@ lemma leftToRight_app_obj
   refine (((t.adj₂.homEquiv _ _).apply_symm_apply _).symm.trans ?_).symm
   rw [homEquiv_symm_apply]; rw [map_comp]; rw [Category.assoc]; rw [left_triangle_components]; rw [homEquiv_apply]; rw [leftToRight_app]; rw [← H.map_inv]
   congr
-  simpa using IsIso.eq_inv_of_hom_inv_id (t.adj₁.right_triang
+  simpa using IsIso.eq_inv_of_hom_inv_id (t.adj₁.right_triangle_components _)
+
+omit [H.Full] [H.Faithful] in
 
 Depends on / 依赖: Category, Category.assoc, H.map_inv, IsIso.eq_inv_of_hom_inv_id, apply_symm_apply, eq_inv_of_hom_inv_id, homEquiv, homEquiv_apply, homEquiv_symm_apply, leftToRight_app, left_triangle_components, map_comp, map_inv, right_triangle_components, symm.trans, t.adj
 -/

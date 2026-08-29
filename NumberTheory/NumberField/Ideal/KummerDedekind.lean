@@ -104,14 +104,14 @@ theorem not_dvd_exponent_iff
   given: {p : Nat} [Fact (Nat.Prime p)]
   proof: by
   rw [codisjoint_comm]; rw [← IsCoatom.not_le_iff_codisjoint]; rw [← under_def]; rw [← Ideal.dvd_iff_le]; rw [← Int.ideal_span_absNorm_eq_self (under Int (conductor Int θ))]; rw [Ideal.span_singleton_dvd_span_singleton_iff_dvd]; rw [Int.natCast_dvd_natCast]; rw [exponent]
-exact isMaximal_def.mp I
+exact isMaximal_def.mp Int.ideal_span_isMaximal_of_prime p
 
 中文:
 定理 not_dvd_exponent_iff
   条件: {p : 自然数} [Fact (自然数.素 p)]
   证明: by
   rw [codisjoint_comm]; rw [← IsCoatom.not_le_iff_codisjoint]; rw [← under_def]; rw [← Ideal.dvd_iff_le]; rw [← Int.ideal_span_absNorm_eq_self (under Int (conductor Int θ))]; rw [Ideal.span_singleton_dvd_span_singleton_iff_dvd]; rw [Int.natCast_dvd_natCast]; rw [exponent]
-exact isMaximal_def.mp I
+exact isMaximal_def.mp Int.ideal_span_isMaximal_of_prime p
 
 Depends on / 依赖: Ideal.dvd_iff_le, Ideal.span_singleton_dvd_span_singleton_iff_dvd, Int.ideal_span_absNorm_eq_self, Int.ideal_span_isMaximal_of_prime, Int.natCast_dvd_natCast, IsCoatom, IsCoatom.not_le_iff_codisjoint, codisjoint_comm, conductor, dvd_iff_le, exponent, ideal_span_absNorm_eq_self, ideal_span_isMaximal_of_prime, isMaximal_def, isMaximal_def.mp, natCast_dvd_natCast, not_le_iff_codisjoint, span_singleton_dvd_span_singleton_iff_dvd, under_def
 -/
@@ -151,7 +151,7 @@ definition ZModXQuotSpanEquivQuotSpan
   body: (quotientEquivAlgOfEq Int (by simp [Ideal.map_span, Polynomial.map_map])).toRingEquiv.trans
     ((quotientEquiv _ _ (mapEquiv (Int.quotientSpanNatEquivZMod p)) rfl).symm.trans
       ((quotMapEquivQuotQuotMap (not_dvd_exponent_iff.mp hp).eq_top θ.isIntegral).symm.trans
-        (quotientEquivAlgOfEq I
+        (quotientEquivAlgOfEq Int (by simp [map_span])).toRingEquiv))
 
 中文:
 定义 ZModXQuotSpanEquivQuotSpan
@@ -159,7 +159,7 @@ definition ZModXQuotSpanEquivQuotSpan
   定义体: (quotientEquivAlgOfEq Int (by simp [Ideal.map_span, Polynomial.map_map])).toRingEquiv.trans
     ((quotientEquiv _ _ (mapEquiv (Int.quotientSpanNatEquivZMod p)) rfl).symm.trans
       ((quotMapEquivQuotQuotMap (not_dvd_exponent_iff.mp hp).eq_top θ.isIntegral).symm.trans
-        (quotientEquivAlgOfEq I
+        (quotientEquivAlgOfEq Int (by simp [map_span])).toRingEquiv))
 
 Depends on / 依赖: Ideal.map_span, Int.quotientSpanNatEquivZMod, Polynomial, Polynomial.map_map, eq_top, isIntegral, mapEquiv, map_map, map_span, not_dvd_exponent_iff, not_dvd_exponent_iff.mp, quotMapEquivQuotQuotMap, quotientEquiv, quotientEquivAlgOfEq, quotientSpanNatEquivZMod, symm.trans, toRingEquiv, toRingEquiv.trans
 -/
@@ -182,7 +182,8 @@ theorem ZModXQuotSpanEquivQuotSpan_mk_apply
     RingEquiv.trans_apply, AlgEquiv.coe_ringEquiv, quotientEquivAlgOfEq_mk,
     quotientEquiv_symm_apply, quotientMap_mk, RingHom.coe_coe, mapEquiv_symm_apply,
     Polynomial.map_map, Int.quotientSpanNatEquivZMod_comp_castRingHom]
-exact 
+exact congr_arg (quotientEquivAlgOfEq Int (by simp [map_span]))
+    quotMapEquivQuotQuotMap_symm_apply (not_dvd_exponent_iff.mp hp).eq_top θ.isIntegral Q
 
 中文:
 定理 ZModXQuotSpanEquivQuotSpan_mk_apply
@@ -192,7 +193,8 @@ exact
     RingEquiv.trans_apply, AlgEquiv.coe_ringEquiv, quotientEquivAlgOfEq_mk,
     quotientEquiv_symm_apply, quotientMap_mk, RingHom.coe_coe, mapEquiv_symm_apply,
     Polynomial.map_map, Int.quotientSpanNatEquivZMod_comp_castRingHom]
-exact 
+exact congr_arg (quotientEquivAlgOfEq Int (by simp [map_span]))
+    quotMapEquivQuotQuotMap_symm_apply (not_dvd_exponent_iff.mp hp).eq_top θ.isIntegral Q
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_ringEquiv, Int.quotientSpanNatEquivZMod_comp_castRingHom, Polynomial, Polynomial.map_map, RingEquiv, RingEquiv.trans_apply, RingHom, RingHom.coe_coe, ZModXQuotSpanEquivQuotSpan, algebraMap_int_eq, coe_coe, coe_ringEquiv, congr_arg, eq_top, isIntegral, mapEquiv_symm_apply, map_map, map_span, not_dvd_exponent_iff
 -/
@@ -237,7 +239,17 @@ definition ZModXQuotSpanEquivQuotSpanPair
   have h_eq₁ : span {map (Int.castRingHom (ZMod p)) Q} =
       span {map (Int.castRingHom (ZMod p)) (minpoly Int θ)} ⊔
         span {map (Int.castRingHom (ZMod p)) Q} := by
-    rw [←
+    rw [← span_insert]; rw [span_pair_comm]; rw [span_pair_eq_span_left_iff_dvd.mpr]
+    simp only [Multiset.mem_toFinset] at hQ
+    exact ((Polynomial.mem_normalizedFactors_iff h₀).mp hQ).2.2
+  have h_eq₂ : span {↑p} ⊔ span {(aeval θ) Q} = span {↑p, (aeval θ) Q} := by
+    rw [span_insert]
+((Ideal.quotEquivOfEq h_eq₁).trans (DoubleQuot.quotQuotEquivQuotSup _ _).symm).trans
+    (Ideal.quotientEquiv
+      (Ideal.map (Ideal.Quotient.mk _) (span {(Polynomial.map (Int.castRingHom (ZMod p)) Q)}))
+      (Ideal.map (Ideal.Quotient.mk _) (span {aeval θ Q})) (ZModXQuotSpanEquivQuotSpan hp) (by
+        simp [map_span, ZModXQuotSpanEquivQuotSpan_mk_apply])).trans <|
+    (DoubleQuot.quotQuotEquivQuotSup _ _).trans (Ideal.quotEquivOfEq h_eq₂)
 
 中文:
 定义 ZModXQuotSpanEquivQuotSpanPair
@@ -247,7 +259,17 @@ definition ZModXQuotSpanEquivQuotSpanPair
   have h_eq₁ : span {map (Int.castRingHom (ZMod p)) Q} =
       span {map (Int.castRingHom (ZMod p)) (minpoly Int θ)} ⊔
         span {map (Int.castRingHom (ZMod p)) Q} := by
-    rw [←
+    rw [← span_insert]; rw [span_pair_comm]; rw [span_pair_eq_span_left_iff_dvd.mpr]
+    simp only [Multiset.mem_toFinset] at hQ
+    exact ((Polynomial.mem_normalizedFactors_iff h₀).mp hQ).2.2
+  have h_eq₂ : span {↑p} ⊔ span {(aeval θ) Q} = span {↑p, (aeval θ) Q} := by
+    rw [span_insert]
+((Ideal.quotEquivOfEq h_eq₁).trans (DoubleQuot.quotQuotEquivQuotSup _ _).symm).trans
+    (Ideal.quotientEquiv
+      (Ideal.map (Ideal.Quotient.mk _) (span {(Polynomial.map (Int.castRingHom (ZMod p)) Q)}))
+      (Ideal.map (Ideal.Quotient.mk _) (span {aeval θ Q})) (ZModXQuotSpanEquivQuotSpan hp) (by
+        simp [map_span, ZModXQuotSpanEquivQuotSpan_mk_apply])).trans <|
+    (DoubleQuot.quotQuotEquivQuotSup _ _).trans (Ideal.quotEquivOfEq h_eq₂)
 
 Depends on / 依赖: Int.castRingHom, Multiset, Multiset.mem_toFinset, Polynomial, Polynomial.mem_normalizedFactors_iff, castRingHom, isIntegral, map_monic_ne_zero, mem_normalizedFactors_iff, mem_toFinset, minpoly, minpoly.monic, span_insert, span_pair_comm, span_pair_eq_span_left_iff_dvd, span_pair_eq_span_left_iff_dvd.mpr
 -/
@@ -339,7 +361,8 @@ definition primesOverSpanEquivMonicFactorsMod
   ((Equiv.setCongr (by ext; simp [mem_primesOver_iff_mem_normalizedFactors _ h])).trans
     (normalizedFactorsMapEquivNormalizedFactorsMinPolyMk
     (Int.ideal_span_isMaximal_of_prime p) h
-      (not_dvd_exponent_iff.mp hp).eq_top θ.isIntegral)
+      (not_dvd_exponent_iff.mp hp).eq_top θ.isIntegral)).trans <|
+        (primesOverSpanEquivMonicFactorsModAux _)
 
 中文:
 定义 primesOverSpanEquivMonicFactorsMod
@@ -348,7 +371,8 @@ definition primesOverSpanEquivMonicFactorsMod
   ((Equiv.setCongr (by ext; simp [mem_primesOver_iff_mem_normalizedFactors _ h])).trans
     (normalizedFactorsMapEquivNormalizedFactorsMinPolyMk
     (Int.ideal_span_isMaximal_of_prime p) h
-      (not_dvd_exponent_iff.mp hp).eq_top θ.isIntegral)
+      (not_dvd_exponent_iff.mp hp).eq_top θ.isIntegral)).trans <|
+        (primesOverSpanEquivMonicFactorsModAux _)
 
 Depends on / 依赖: Equiv.setCongr, Int.ideal_span_isMaximal_of_prime, NeZero, NeZero.ne, eq_top, ideal_span_isMaximal_of_prime, isIntegral, mem_primesOver_iff_mem_normalizedFactors, normalizedFactorsMapEquivNormalizedFactorsMinPolyMk, not_dvd_exponent_iff, not_dvd_exponent_iff.mp, primesOverSpanEquivMonicFactorsModAux, setCongr
 -/
@@ -393,7 +417,7 @@ theorem primesOverSpanEquivMonicFactorsMod_symm_apply_eq_span
   proof: by
   simp only [primesOverSpanEquivMonicFactorsMod_symm_apply, Polynomial.map_map,
     Int.quotientSpanNatEquivZMod_comp_castRingHom]
-  rw [normalizedFactorsMapEquivNormalizedFactorsMinPolyMk_symm_apply_eq_span]; rw [span_union]; rw [span_eq]; rw [map_span]; rw [Set.image_singleton]; rw [map_natCast
+  rw [normalizedFactorsMapEquivNormalizedFactorsMinPolyMk_symm_apply_eq_span]; rw [span_union]; rw [span_eq]; rw [map_span]; rw [Set.image_singleton]; rw [map_natCast]; rw [← span_insert]
 
 中文:
 定理 primesOverSpanEquivMonicFactorsMod_symm_apply_eq_span
@@ -401,7 +425,7 @@ theorem primesOverSpanEquivMonicFactorsMod_symm_apply_eq_span
   证明: by
   simp only [primesOverSpanEquivMonicFactorsMod_symm_apply, Polynomial.map_map,
     Int.quotientSpanNatEquivZMod_comp_castRingHom]
-  rw [normalizedFactorsMapEquivNormalizedFactorsMinPolyMk_symm_apply_eq_span]; rw [span_union]; rw [span_eq]; rw [map_span]; rw [Set.image_singleton]; rw [map_natCast
+  rw [normalizedFactorsMapEquivNormalizedFactorsMinPolyMk_symm_apply_eq_span]; rw [span_union]; rw [span_eq]; rw [map_span]; rw [Set.image_singleton]; rw [map_natCast]; rw [← span_insert]
 
 Depends on / 依赖: Int.quotientSpanNatEquivZMod_comp_castRingHom, Polynomial, Polynomial.map_map, Set.image_singleton, image_singleton, map_map, map_natCast, map_span, normalizedFactorsMapEquivNormalizedFactorsMinPolyMk_symm_apply_eq_span, primesOverSpanEquivMonicFactorsMod_symm_apply, quotientSpanNatEquivZMod_comp_castRingHom, span_eq, span_insert, span_union
 -/
@@ -451,7 +475,9 @@ theorem inertiaDeg_primesOverSpanEquivMonicFactorsMod_symm_apply
     rw [← Ideal.primesOverSpanEquivMonicFactorsMod_symm_apply_eq_span hp hQ]
     apply Ideal.primesOver.isMaximal
   have := liesOver_primesOverSpanEquivMonicFactorsMod_symm hp hQ
-  rw [
+  rw [primesOverSpanEquivMonicFactorsMod_symm_apply_eq_span]; rw [inertiaDeg_eq_of_isMaximal (span {(p : Int)})]; rw [← finrank_quotient_span_eq_natDegree]
+  refine Algebra.finrank_eq_of_equiv_equiv (Int.quotientSpanNatEquivZMod p) ?_ (by ext; simp)
+  exact (ZModXQuotSpanEquivQuotSpanPair hp hQ).symm
 
 中文:
 定理 inertiaDeg_primesOverSpanEquivMonicFactorsMod_symm_apply
@@ -462,7 +488,9 @@ theorem inertiaDeg_primesOverSpanEquivMonicFactorsMod_symm_apply
     rw [← Ideal.primesOverSpanEquivMonicFactorsMod_symm_apply_eq_span hp hQ]
     apply Ideal.primesOver.isMaximal
   have := liesOver_primesOverSpanEquivMonicFactorsMod_symm hp hQ
-  rw [
+  rw [primesOverSpanEquivMonicFactorsMod_symm_apply_eq_span]; rw [inertiaDeg_eq_of_isMaximal (span {(p : Int)})]; rw [← finrank_quotient_span_eq_natDegree]
+  refine Algebra.finrank_eq_of_equiv_equiv (Int.quotientSpanNatEquivZMod p) ?_ (by ext; simp)
+  exact (ZModXQuotSpanEquivQuotSpanPair hp hQ).symm
 -/
 theorem inertiaDeg_primesOverSpanEquivMonicFactorsMod_symm_apply (hp : ¬ p ∣ exponent θ)
     {Q : Int[X]} (hQ : Q.map (Int.castRingHom (ZMod p)) in monicFactorsMod θ p) :
@@ -513,7 +541,13 @@ theorem ramificationIdx_primesOverSpanEquivMonicFactorsMod_symm_apply
   proof: by
   rw [ramificationIdx_eq_multiplicity (span {↑p}) _ (map_ne_bot_of_ne_bot (by simp [NeZero.ne p]))]
   · apply multiplicity_eq_of_emultiplicity_eq
-    rw [← emultiplicity_map_eq (mapEquiv (Int.quotientSpanNatEquivZMod p).symm)]; rw [emultiplicity_factors_map_eq_emultiplicity inferInstance (by simp
+    rw [← emultiplicity_map_eq (mapEquiv (Int.quotientSpanNatEquivZMod p).symm)]; rw [emultiplicity_factors_map_eq_emultiplicity inferInstance (by simp [NeZero.ne p])
+      (not_dvd_exponent_iff.mp hp).eq_top θ.isIntegral]
+    · simp only [primesOverSpanEquivMonicFactorsMod_symm_apply,
+        Equiv.apply_symm_apply (normalizedFactorsMapEquivNormalizedFactorsMinPolyMk _ _ _ _),
+        Polynomial.map_map, Int.quotientSpanNatEquivZMod_comp_castRingHom, mapEquiv_apply]
+    · rw [← mem_primesOver_iff_mem_normalizedFactors _ (by simp [NeZero.ne p])]
+      exact ((primesOverSpanEquivMonicFactorsMod hp).symm ⟨_, hQ⟩).coe_prop
 
 中文:
 定理 ramificationIdx_primesOverSpanEquivMonicFactorsMod_symm_apply
@@ -521,7 +555,13 @@ theorem ramificationIdx_primesOverSpanEquivMonicFactorsMod_symm_apply
   证明: by
   rw [ramificationIdx_eq_multiplicity (span {↑p}) _ (map_ne_bot_of_ne_bot (by simp [NeZero.ne p]))]
   · apply multiplicity_eq_of_emultiplicity_eq
-    rw [← emultiplicity_map_eq (mapEquiv (Int.quotientSpanNatEquivZMod p).symm)]; rw [emultiplicity_factors_map_eq_emultiplicity inferInstance (by simp
+    rw [← emultiplicity_map_eq (mapEquiv (Int.quotientSpanNatEquivZMod p).symm)]; rw [emultiplicity_factors_map_eq_emultiplicity inferInstance (by simp [NeZero.ne p])
+      (not_dvd_exponent_iff.mp hp).eq_top θ.isIntegral]
+    · simp only [primesOverSpanEquivMonicFactorsMod_symm_apply,
+        Equiv.apply_symm_apply (normalizedFactorsMapEquivNormalizedFactorsMinPolyMk _ _ _ _),
+        Polynomial.map_map, Int.quotientSpanNatEquivZMod_comp_castRingHom, mapEquiv_apply]
+    · rw [← mem_primesOver_iff_mem_normalizedFactors _ (by simp [NeZero.ne p])]
+      exact ((primesOverSpanEquivMonicFactorsMod hp).symm ⟨_, hQ⟩).coe_prop
 
 Depends on / 依赖: Equiv.apply_symm_apply, Int.quotientSpanNatEquivZMod, NeZero, NeZero.ne, apply_symm_apply, emultiplicity_factors_map_eq_emultiplicity, emultiplicity_map_eq, eq_top, isIntegral, mapEquiv, map_ne_bot_of_ne_bot, multiplicity_eq_of_emultiplicity_eq, normalizedFactorsMapEquivNormalizedFactorsMinPolyMk, not_dvd_exponent_iff, not_dvd_exponent_iff.mp, primesOverSpanEquivMonicFactorsMod_symm_apply, quotientSpanNatEquivZMod, ramificationIdx_eq_multiplicity
 -/

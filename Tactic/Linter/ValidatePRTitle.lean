@@ -34,7 +34,8 @@ definition prTitle
         <* skipString "):" <* ws)
  > (skipString ":" *> ws *> pure none)
     )
-  let main
+  let mainTitle ← manyChars any
+  return (kind, scope, mainTitle)
 
 中文:
 定义 prTitle
@@ -47,7 +48,8 @@ definition prTitle
         <* skipString "):" <* ws)
  > (skipString ":" *> ws *> pure none)
     )
-  let main
+  let mainTitle ← manyChars any
+  return (kind, scope, mainTitle)
 -/
 def prTitle : Parser (String × Option String × String) := do
   let kind ←

@@ -254,7 +254,13 @@ theorem monoidalPreadditive_of_faithful
     whiskerLeft_add := by
       intros
       apply F.map_injective
-     
+      simp only [Functor.Monoidal.map_whiskerLeft, Functor.map_add, Preadditive.comp_add,
+        Preadditive.add_comp, MonoidalPreadditive.whiskerLeft_add]
+    add_whiskerRight := by
+      intros
+      apply F.map_injective
+      simp only [Functor.Monoidal.map_whiskerRight, Functor.map_add, Preadditive.comp_add,
+        Preadditive.add_comp, MonoidalPreadditive.add_whiskerRight] }
 
 中文:
 定理 monoidalPreadditive_of_faithful
@@ -270,7 +276,13 @@ theorem monoidalPreadditive_of_faithful
     whiskerLeft_add := by
       intros
       apply F.map_injective
-     
+      simp only [Functor.Monoidal.map_whiskerLeft, Functor.map_add, Preadditive.comp_add,
+        Preadditive.add_comp, MonoidalPreadditive.whiskerLeft_add]
+    add_whiskerRight := by
+      intros
+      apply F.map_injective
+      simp only [Functor.Monoidal.map_whiskerRight, Functor.map_add, Preadditive.comp_add,
+        Preadditive.add_comp, MonoidalPreadditive.add_whiskerRight] }
 
 Depends on / 依赖: F.map_injective, Functor, Functor.Monoidal.map_whiskerLeft, Functor.Monoidal.map_whiskerRight, Functor.map_add, Monoidal, MonoidalPreadditive, MonoidalPreadditive.whiskerLeft_add, Preadditive, Preadditive.add_comp, Preadditive.comp_add, add_comp, add_whiskerRight, comp_add, intros, map_add, map_injective, map_whiskerLeft, map_whiskerRight, whiskerLeft_add
 -/
@@ -645,7 +657,12 @@ theorem leftDistributor_assoc
   ext
   simp only [Category.comp_id, Category.assoc, eqToHom_refl, Iso.trans_hom, Iso.symm_hom,
     asIso_hom, comp_zero, comp_dite, Preadditive.sum_comp, Preadditive.comp_sum, tensor_sum,
-    id_tensor_comp, tensorIso_hom, leftDistributor_hom, biproduct.map
+    id_tensor_comp, tensorIso_hom, leftDistributor_hom, biproduct.mapIso_hom, biproduct.ι_map,
+    biproduct.ι_π, Finset.sum_dite_irrel, Finset.sum_dite_eq', Finset.sum_const_zero]
+  simp_rw [← id_tensorHom]
+  simp only [← id_tensor_comp, biproduct.ι_π]
+  simp only [id_tensor_comp, tensor_dite, comp_dite]
+  simp
 
 中文:
 定理 leftDistributor_assoc
@@ -656,7 +673,12 @@ theorem leftDistributor_assoc
   ext
   simp only [Category.comp_id, Category.assoc, eqToHom_refl, Iso.trans_hom, Iso.symm_hom,
     asIso_hom, comp_zero, comp_dite, Preadditive.sum_comp, Preadditive.comp_sum, tensor_sum,
-    id_tensor_comp, tensorIso_hom, leftDistributor_hom, biproduct.map
+    id_tensor_comp, tensorIso_hom, leftDistributor_hom, biproduct.mapIso_hom, biproduct.ι_map,
+    biproduct.ι_π, Finset.sum_dite_irrel, Finset.sum_dite_eq', Finset.sum_const_zero]
+  simp_rw [← id_tensorHom]
+  simp only [← id_tensor_comp, biproduct.ι_π]
+  simp only [id_tensor_comp, tensor_dite, comp_dite]
+  simp
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Finset, Finset.sum_const_zero, Finset.sum_dite_eq, Finset.sum_dite_irrel, Iso.symm_hom, Iso.trans_hom, Preadditive, Preadditive.comp_sum, Preadditive.sum_comp, asIso_hom, biproduct, biproduct.mapIso_hom, classical, comp_dite, comp_id, comp_sum, comp_zero
 -/
@@ -915,7 +937,12 @@ theorem rightDistributor_assoc
   ext
   simp only [Category.comp_id, Category.assoc, eqToHom_refl, Iso.symm_hom, Iso.trans_hom,
     asIso_hom, comp_zero, comp_dite, Preadditive.sum_comp, Preadditive.comp_sum, sum_tensor,
-    comp_tensor_id, tensorIso_hom, rightDistributor_hom, biproduct.ma
+    comp_tensor_id, tensorIso_hom, rightDistributor_hom, biproduct.mapIso_hom, biproduct.ι_map,
+    biproduct.ι_π, Finset.sum_dite_irrel, Finset.sum_dite_eq', Finset.sum_const_zero,
+    Finset.mem_univ, if_true]
+  simp_rw [← tensorHom_id]
+  simp only [← comp_tensor_id, biproduct.ι_π, dite_tensor, comp_dite]
+  simp
 
 中文:
 定理 rightDistributor_assoc
@@ -926,7 +953,12 @@ theorem rightDistributor_assoc
   ext
   simp only [Category.comp_id, Category.assoc, eqToHom_refl, Iso.symm_hom, Iso.trans_hom,
     asIso_hom, comp_zero, comp_dite, Preadditive.sum_comp, Preadditive.comp_sum, sum_tensor,
-    comp_tensor_id, tensorIso_hom, rightDistributor_hom, biproduct.ma
+    comp_tensor_id, tensorIso_hom, rightDistributor_hom, biproduct.mapIso_hom, biproduct.ι_map,
+    biproduct.ι_π, Finset.sum_dite_irrel, Finset.sum_dite_eq', Finset.sum_const_zero,
+    Finset.mem_univ, if_true]
+  simp_rw [← tensorHom_id]
+  simp only [← comp_tensor_id, biproduct.ι_π, dite_tensor, comp_dite]
+  simp
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Finset, Finset.mem_univ, Finset.sum_const_zero, Finset.sum_dite_eq, Finset.sum_dite_irrel, Iso.symm_hom, Iso.trans_hom, Preadditive, Preadditive.comp_sum, Preadditive.sum_comp, asIso_hom, biproduct, biproduct.mapIso_hom, classical, comp_dite, comp_id, comp_sum
 -/
@@ -957,7 +989,15 @@ theorem leftDistributor_rightDistributor_assoc
   ext
   simp only [Category.comp_id, Category.assoc, eqToHom_refl, Iso.symm_hom, Iso.trans_hom,
     asIso_hom, comp_zero, comp_dite, Preadditive.sum_comp, Preadditive.comp_sum, sum_tensor,
-    tensor_sum, comp_tensor_id, tensorIso_hom, leftDistributor_hom, r
+    tensor_sum, comp_tensor_id, tensorIso_hom, leftDistributor_hom, rightDistributor_hom,
+    biproduct.mapIso_hom, biproduct.ι_map, biproduct.ι_π, Finset.sum_dite_irrel,
+    Finset.sum_dite_eq', Finset.sum_const_zero, Finset.mem_univ, if_true]
+  simp_rw [← tensorHom_id, ← id_tensorHom]
+  simp only [← comp_tensor_id, ← id_tensor_comp_assoc, Category.assoc, biproduct.ι_π, comp_dite,
+    dite_comp, tensor_dite, dite_tensor]
+  simp
+
+@[ext]
 
 中文:
 定理 leftDistributor_rightDistributor_assoc
@@ -968,7 +1008,15 @@ theorem leftDistributor_rightDistributor_assoc
   ext
   simp only [Category.comp_id, Category.assoc, eqToHom_refl, Iso.symm_hom, Iso.trans_hom,
     asIso_hom, comp_zero, comp_dite, Preadditive.sum_comp, Preadditive.comp_sum, sum_tensor,
-    tensor_sum, comp_tensor_id, tensorIso_hom, leftDistributor_hom, r
+    tensor_sum, comp_tensor_id, tensorIso_hom, leftDistributor_hom, rightDistributor_hom,
+    biproduct.mapIso_hom, biproduct.ι_map, biproduct.ι_π, Finset.sum_dite_irrel,
+    Finset.sum_dite_eq', Finset.sum_const_zero, Finset.mem_univ, if_true]
+  simp_rw [← tensorHom_id, ← id_tensorHom]
+  simp only [← comp_tensor_id, ← id_tensor_comp_assoc, Category.assoc, biproduct.ι_π, comp_dite,
+    dite_comp, tensor_dite, dite_tensor]
+  simp
+
+@[ext]
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Finset, Finset.mem_univ, Finset.sum_const_zero, Finset.sum_dite_eq, Finset.sum_dite_irrel, Iso.symm_hom, Iso.trans_hom, Preadditive, Preadditive.comp_sum, Preadditive.sum_comp, Y.arrow, asIso_hom, biproduct, biproduct.mapIso_hom, classical, comp_dite, comp_id
 -/

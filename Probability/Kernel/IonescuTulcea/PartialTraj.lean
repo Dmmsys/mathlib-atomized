@@ -337,7 +337,8 @@ instance [forall
     | succ k hak =>
       rw [partialTraj_succ_of_le hak]
       have := IsMarkovKernel.map (κ k) (piSingleton k).measurable
-      exact IsMarkovKernel.map _ meas
+      exact IsMarkovKernel.map _ measurable_IicProdIoc
+  · rw [partialTraj_le hba]; infer_instance
 
 中文:
 实例 [对任意
@@ -349,7 +350,8 @@ instance [forall
     | succ k hak =>
       rw [partialTraj_succ_of_le hak]
       have := IsMarkovKernel.map (κ k) (piSingleton k).measurable
-      exact IsMarkovKernel.map _ meas
+      exact IsMarkovKernel.map _ measurable_IicProdIoc
+  · rw [partialTraj_le hba]; infer_instance
 
 Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.map, Nat.le_induction, infer_instance, le_induction, le_total, measurable, measurable_IicProdIoc, partialTraj_le, partialTraj_self, partialTraj_succ_of_le, piSingleton
 -/
@@ -485,7 +487,29 @@ lemma partialTraj_eq_prod
   induction b, hab using Nat.le_induction with
   | base =>
     ext1 x
-    rw [partialTraj_self]; rw [id_map]; rw [map_apply
+    rw [partialTraj_self]; rw [id_map]; rw [map_apply]; rw [prod_apply]; rw [IicProdIoc_self]; rw [← Measure.fst]; rw [Measure.fst_prod]
+    all_goals fun_prop
+  | succ k h hk =>
+    have : (IicProdIoc (X := X) k (k + 1)) ∘ (Prod.map (IicProdIoc a k) id) =
+        (IicProdIoc (h.trans k.le_succ) ∘ (Prod.map id (IocProdIoc a k (k + 1)))) ∘
+        prodAssoc := by
+      ext x i
+      simp only [IicProdIoc_def, MeasurableEquiv.IicProdIoc, MeasurableEquiv.coe_mk,
+        Equiv.coe_fn_mk, Function.comp_apply, Prod.map_fst, Prod.map_snd, id_eq,
+        Nat.succ_eq_add_one, IocProdIoc]
+      split_ifs <;> try rfl
+      lia
+    nth_rw 1 [← partialTraj_comp_partialTraj h k.le_succ, hk, partialTraj_succ_self, comp_map,
+      comap_map_comm, comap_prod, id_comap, ← id_map, map_prod_eq, ← map_comp_right, this,
+      map_comp_right, id_prod_eq, prodAssoc_prod, map_comp_right, ← map_prod_map, map_id,
+      ← map_comp, map_apply_eq_iff_map_symm_apply_eq, fst_prod_comp_id_prod, ← map_comp_right,
+      ← coe_IicProdIoc (h.trans k.le_succ), symm_comp_self, map_id,
+      deterministic_congr IicProdIoc_comp_restrict₂.symm, ← deterministic_comp_deterministic,
+      comp_deterministic_eq_comap, ← comap_prod, ← map_comp, ← comp_map, ← hk,
+      ← partialTraj_comp_partialTraj h k.le_succ, partialTraj_succ_self, map_comp, map_comp,
+      ← map_comp_right, ← id_map, map_prod_eq, ← map_comp_right]
+    · rfl
+    all_goals fun_prop
 
 中文:
 引理 partialTraj_eq_prod
@@ -498,7 +522,29 @@ lemma partialTraj_eq_prod
   induction b, hab using Nat.le_induction with
   | base =>
     ext1 x
-    rw [partialTraj_self]; rw [id_map]; rw [map_apply
+    rw [partialTraj_self]; rw [id_map]; rw [map_apply]; rw [prod_apply]; rw [IicProdIoc_self]; rw [← Measure.fst]; rw [Measure.fst_prod]
+    all_goals fun_prop
+  | succ k h hk =>
+    have : (IicProdIoc (X := X) k (k + 1)) ∘ (Prod.map (IicProdIoc a k) id) =
+        (IicProdIoc (h.trans k.le_succ) ∘ (Prod.map id (IocProdIoc a k (k + 1)))) ∘
+        prodAssoc := by
+      ext x i
+      simp only [IicProdIoc_def, MeasurableEquiv.IicProdIoc, MeasurableEquiv.coe_mk,
+        Equiv.coe_fn_mk, Function.comp_apply, Prod.map_fst, Prod.map_snd, id_eq,
+        Nat.succ_eq_add_one, IocProdIoc]
+      split_ifs <;> try rfl
+      lia
+    nth_rw 1 [← partialTraj_comp_partialTraj h k.le_succ, hk, partialTraj_succ_self, comp_map,
+      comap_map_comm, comap_prod, id_comap, ← id_map, map_prod_eq, ← map_comp_right, this,
+      map_comp_right, id_prod_eq, prodAssoc_prod, map_comp_right, ← map_prod_map, map_id,
+      ← map_comp, map_apply_eq_iff_map_symm_apply_eq, fst_prod_comp_id_prod, ← map_comp_right,
+      ← coe_IicProdIoc (h.trans k.le_succ), symm_comp_self, map_id,
+      deterministic_congr IicProdIoc_comp_restrict₂.symm, ← deterministic_comp_deterministic,
+      comp_deterministic_eq_comap, ← comap_prod, ← map_comp, ← comp_map, ← hk,
+      ← partialTraj_comp_partialTraj h k.le_succ, partialTraj_succ_self, map_comp, map_comp,
+      ← map_comp_right, ← id_map, map_prod_eq, ← map_comp_right]
+    · rfl
+    all_goals fun_prop
 
 Depends on / 依赖: IicProdIoc, IicProdIoc_le, IicProdIoc_self, Measure, Measure.fst, Measure.fst_prod, Nat.le_induction, Prod.map, all_goals, deterministic_map, fst_eq, fst_prod, fun_prop, h.trans, id_map, k.le_succ, le_induction, le_succ, le_total, map_apply
 -/
@@ -551,7 +597,7 @@ lemma map_partialTraj_succ_self
       (piSingleton a).symm ∘ Prod.snd := by
     ext
     simp [_root_.IicProdIoc, piSingleton]
-  rw [partialTraj_succ_self]; rw [← map_comp_right _ (by fun_prop) (by fun_prop)]; rw [hp]; rw [map_co
+  rw [partialTraj_succ_self]; rw [← map_comp_right _ (by fun_prop) (by fun_prop)]; rw [hp]; rw [map_comp_right _ (by fun_prop) (by fun_prop)]; rw [← snd_eq]; rw [snd_prod]; rw [← map_comp_right _ (by fun_prop) (by fun_prop)]; rw [symm_comp_self]; rw [map_id]
 
 中文:
 引理 map_partialTraj_succ_self
@@ -561,7 +607,7 @@ lemma map_partialTraj_succ_self
       (piSingleton a).symm ∘ Prod.snd := by
     ext
     simp [_root_.IicProdIoc, piSingleton]
-  rw [partialTraj_succ_self]; rw [← map_comp_right _ (by fun_prop) (by fun_prop)]; rw [hp]; rw [map_co
+  rw [partialTraj_succ_self]; rw [← map_comp_right _ (by fun_prop) (by fun_prop)]; rw [hp]; rw [map_comp_right _ (by fun_prop) (by fun_prop)]; rw [← snd_eq]; rw [snd_prod]; rw [← map_comp_right _ (by fun_prop) (by fun_prop)]; rw [symm_comp_self]; rw [map_id]
 
 Depends on / 依赖: IicProdIoc, Prod.snd, _root_, _root_.IicProdIoc, fun_prop, le_rfl, map_comp_right, map_id, mem_Iic, partialTraj_succ_self, piSingleton, snd_eq, snd_prod, symm_comp_self
 -/
@@ -583,7 +629,10 @@ lemma partialTraj_succ_map_frestrictLe₂
   obtain hab | hba := le_or_gt a b
   · have := IsMarkovKernel.map (κ b) (piSingleton b).measurable
     rw [partialTraj_succ_eq_comp hab]; rw [map_comp]; rw [partialTraj_succ_self]; rw [← map_comp_right]; rw [frestrictLe₂_comp_IicProdIoc]; rw [← fst_eq]; rw [fst_prod]; rw [id_comp]
-    all_goals f
+    all_goals fun_prop
+  · rw [partialTraj_le (Nat.succ_le_of_lt hba), partialTraj_le hba.le, deterministic_map]
+    · rfl
+    · fun_prop
 
 中文:
 引理 partialTraj_succ_map_frestrictLe₂
@@ -592,7 +641,10 @@ lemma partialTraj_succ_map_frestrictLe₂
   obtain hab | hba := le_or_gt a b
   · have := IsMarkovKernel.map (κ b) (piSingleton b).measurable
     rw [partialTraj_succ_eq_comp hab]; rw [map_comp]; rw [partialTraj_succ_self]; rw [← map_comp_right]; rw [frestrictLe₂_comp_IicProdIoc]; rw [← fst_eq]; rw [fst_prod]; rw [id_comp]
-    all_goals f
+    all_goals fun_prop
+  · rw [partialTraj_le (Nat.succ_le_of_lt hba), partialTraj_le hba.le, deterministic_map]
+    · rfl
+    · fun_prop
 
 Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.map, Nat.succ_le_of_lt, all_goals, deterministic_map, fst_eq, fst_prod, fun_prop, hba.le, id_comp, le_or_gt, map_comp, map_comp_right, measurable, partialTraj_le, partialTraj_succ_eq_comp, partialTraj_succ_self, piSingleton, succ_le_of_lt
 -/
@@ -841,7 +893,11 @@ lemma lmarginalPartialTraj_succ
   · congrm ∫⁻ x, f (fun i => ?_) ∂_
     simp only [updateFinset, mem_Iic, IicProdIoc_def, frestrictLe_apply, piSingleton,
       MeasurableEquiv.coe_mk, update]
-    split_ifs wit
+    split_ifs with h1 h2 h3 <;> try rfl
+    all_goals lia
+  all_goals fun_prop
+
+@[fun_prop]
 
 中文:
 引理 lmarginalPartialTraj_succ
@@ -851,7 +907,11 @@ lemma lmarginalPartialTraj_succ
   · congrm ∫⁻ x, f (fun i => ?_) ∂_
     simp only [updateFinset, mem_Iic, IicProdIoc_def, frestrictLe_apply, piSingleton,
       MeasurableEquiv.coe_mk, update]
-    split_ifs wit
+    split_ifs with h1 h2 h3 <;> try rfl
+    all_goals lia
+  all_goals fun_prop
+
+@[fun_prop]
 
 Depends on / 依赖: IicProdIoc_def, MeasurableEquiv, MeasurableEquiv.coe_mk, all_goals, coe_mk, congrm, frestrictLe_apply, fun_prop, lintegral_id_prod, lintegral_map, lmarginalPartialTraj, mem_Iic, partialTraj_succ_self, piSingleton, split_ifs, update, updateFinset
 -/
@@ -879,7 +939,8 @@ lemma measurable_lmarginalPartialTraj
   let g : ((i : Iic b) -> X i) × (Π n, X n) -> Real>=0∞ := fun c => f (updateFinset c.2 _ c.1)
   let η : Kernel (Π n, X n) (Π i : Iic b, X i) :=
     (partialTraj κ a b).comap (frestrictLe a) (measurable_frestrictLe _)
-  change Measurable fun x₀ => ∫⁻ z : (i : Iic b) 
+  change Measurable fun x₀ => ∫⁻ z : (i : Iic b) -> X i, g (z, x₀) ∂η x₀
+  fun_prop
 
 中文:
 引理 measurable_lmarginalPartialTraj
@@ -889,7 +950,8 @@ lemma measurable_lmarginalPartialTraj
   let g : ((i : Iic b) -> X i) × (Π n, X n) -> Real>=0∞ := fun c => f (updateFinset c.2 _ c.1)
   let η : Kernel (Π n, X n) (Π i : Iic b, X i) :=
     (partialTraj κ a b).comap (frestrictLe a) (measurable_frestrictLe _)
-  change Measurable fun x₀ => ∫⁻ z : (i : Iic b) 
+  change Measurable fun x₀ => ∫⁻ z : (i : Iic b) -> X i, g (z, x₀) ∂η x₀
+  fun_prop
 
 Depends on / 依赖: Kernel, Measurable, frestrictLe, fun_prop, lmarginalPartialTraj, measurable_frestrictLe, partialTraj, updateFinset
 -/
@@ -913,7 +975,11 @@ theorem lmarginalPartialTraj_self
   obtain rfl | hab := eq_or_lt_of_le hab <;> obtain rfl | hbc := eq_or_lt_of_le hbc
   · rw [lmarginalPartialTraj_le κ le_rfl (measurable_lmarginalPartialTraj _ _ hf)]
   · rw [lmarginalPartialTraj_le κ le_rfl (measurable_lmarginalPartialTraj _ _ hf)]
-  · rw [lmarginalPartialTraj_le κ le_r
+  · rw [lmarginalPartialTraj_le κ le_rfl hf]
+  simp_rw [lmarginalPartialTraj, frestrictLe, restrict_updateFinset,
+    updateFinset_updateFinset_of_subset (Iic_subset_Iic.2 hbc.le)]
+  rw [← lintegral_comp]; rw [partialTraj_comp_partialTraj hab.le hbc.le]
+  fun_prop
 
 中文:
 定理 lmarginalPartialTraj_self
@@ -923,7 +989,11 @@ theorem lmarginalPartialTraj_self
   obtain rfl | hab := eq_or_lt_of_le hab <;> obtain rfl | hbc := eq_or_lt_of_le hbc
   · rw [lmarginalPartialTraj_le κ le_rfl (measurable_lmarginalPartialTraj _ _ hf)]
   · rw [lmarginalPartialTraj_le κ le_rfl (measurable_lmarginalPartialTraj _ _ hf)]
-  · rw [lmarginalPartialTraj_le κ le_r
+  · rw [lmarginalPartialTraj_le κ le_rfl hf]
+  simp_rw [lmarginalPartialTraj, frestrictLe, restrict_updateFinset,
+    updateFinset_updateFinset_of_subset (Iic_subset_Iic.2 hbc.le)]
+  rw [← lintegral_comp]; rw [partialTraj_comp_partialTraj hab.le hbc.le]
+  fun_prop
 
 Depends on / 依赖: Iic_subset_Iic, eq_or_lt_of_le, frestrictLe, hab.le, hbc.le, le_rfl, lintegral_comp, lmarginalPartialTraj, lmarginalPartialTraj_le, measurable_lmarginalPartialTraj, partialTraj_comp_partialTraj, restrict_updateFinset, simp_rw, updateFinset_updateFinset_of_subset
 -/
@@ -962,7 +1032,8 @@ theorem lmarginalPartialTraj_of_le
   refine @lintegral_eq_const _ _ _ ?_ _ _ (ae_of_all _ fun y => hf fun i hi => ?_)
   · refine @IsMarkovKernel.isProbabilityMeasure _ _ _ _ _ ?_ _
     exact IsMarkovKernel.map _ (by fun_prop)
-  · simp_all only [coe_Iic, Set.mem_Iic, Function.
+  · simp_all only [coe_Iic, Set.mem_Iic, Function.updateFinset, mem_Ioc, dite_eq_right_iff]
+    lia
 
 中文:
 定理 lmarginalPartialTraj_of_le
@@ -973,7 +1044,8 @@ theorem lmarginalPartialTraj_of_le
   refine @lintegral_eq_const _ _ _ ?_ _ _ (ae_of_all _ fun y => hf fun i hi => ?_)
   · refine @IsMarkovKernel.isProbabilityMeasure _ _ _ _ _ ?_ _
     exact IsMarkovKernel.map _ (by fun_prop)
-  · simp_all only [coe_Iic, Set.mem_Iic, Function.
+  · simp_all only [coe_Iic, Set.mem_Iic, Function.updateFinset, mem_Ioc, dite_eq_right_iff]
+    lia
 
 Depends on / 依赖: Function, Function.updateFinset, IsMarkovKernel, IsMarkovKernel.isProbabilityMeasure, IsMarkovKernel.map, Set.mem_Iic, ae_of_all, coe_Iic, dite_eq_right_iff, fun_prop, isProbabilityMeasure, lintegral_eq_const, lmarginalPartialTraj_eq_lintegral_map, mem_Iic, mem_Ioc, updateFinset
 -/
@@ -1000,7 +1072,7 @@ theorem lmarginalPartialTraj_const_right
   obtain hbc | hcb := le_total b c
   · rw [← lmarginalPartialTraj_self hbc hcd mf, hf.lmarginalPartialTraj_of_le d mf hac]
   · rw [hf.lmarginalPartialTraj_of_le c mf (hac.trans hcb),
-      hf.lmarginalPartialTraj_of_le 
+      hf.lmarginalPartialTraj_of_le d mf (hac.trans hcb)]
 
 中文:
 定理 lmarginalPartialTraj_const_right
@@ -1011,7 +1083,7 @@ theorem lmarginalPartialTraj_const_right
   obtain hbc | hcb := le_total b c
   · rw [← lmarginalPartialTraj_self hbc hcd mf, hf.lmarginalPartialTraj_of_le d mf hac]
   · rw [hf.lmarginalPartialTraj_of_le c mf (hac.trans hcb),
-      hf.lmarginalPartialTraj_of_le 
+      hf.lmarginalPartialTraj_of_le d mf (hac.trans hcb)]
 
 Depends on / 依赖: generalizing, hac.trans, hf.lmarginalPartialTraj_of_le, le_of_not_ge, le_total, lmarginalPartialTraj_of_le, lmarginalPartialTraj_self
 -/
@@ -1037,7 +1109,10 @@ theorem dependsOn_lmarginalPartialTraj
   · rw [Kernel.lmarginalPartialTraj_le κ hba mf]
     exact hf fun i hi => hxy i (Iic_subset_Iic.2 hba hi)
   rw [lmarginalPartialTraj_eq_lintegral_map mf]; rw [lmarginalPartialTraj_eq_lintegral_map mf]
-  congrm ∫⁻ z : _, ?_ ∂(partialTraj κ a b).ma
+  congrm ∫⁻ z : _, ?_ ∂(partialTraj κ a b).map _ (fun i => ?_)
+  · exact hxy i.1 i.2
+  · refine hf.updateFinset _ ?_
+    rwa [← coe_sdiff, Iic_sdiff_Ioc_self_of_le hab]
 
 中文:
 定理 dependsOn_lmarginalPartialTraj
@@ -1048,7 +1123,10 @@ theorem dependsOn_lmarginalPartialTraj
   · rw [Kernel.lmarginalPartialTraj_le κ hba mf]
     exact hf fun i hi => hxy i (Iic_subset_Iic.2 hba hi)
   rw [lmarginalPartialTraj_eq_lintegral_map mf]; rw [lmarginalPartialTraj_eq_lintegral_map mf]
-  congrm ∫⁻ z : _, ?_ ∂(partialTraj κ a b).ma
+  congrm ∫⁻ z : _, ?_ ∂(partialTraj κ a b).map _ (fun i => ?_)
+  · exact hxy i.1 i.2
+  · refine hf.updateFinset _ ?_
+    rwa [← coe_sdiff, Iic_sdiff_Ioc_self_of_le hab]
 
 Depends on / 依赖: Iic_sdiff_Ioc_self_of_le, Iic_subset_Iic, Kernel, Kernel.lmarginalPartialTraj_le, coe_sdiff, congrm, hf.updateFinset, le_total, lmarginalPartialTraj_eq_lintegral_map, lmarginalPartialTraj_le, partialTraj, updateFinset
 -/

@@ -46,7 +46,10 @@ definition aevalEquivField
     (algebraicIndependent_iff_injective_aeval.2 hx)
 (show _ ≃ₐ[F] i.fieldRange from AlgEquiv.ofInjectiveField i).trans
 IntermediateField.equivOfEq
-      IsFractionRing.algHom_fieldRange_eq_of_comp_eq_of_range_eq (g := aeval x)
+      IsFractionRing.algHom_fieldRange_eq_of_comp_eq_of_range_eq (g := aeval x) (f := i)
+        (by ext <;> simp [i]) (Algebra.adjoin_range_eq_range_aeval F x).symm
+
+@[simp]
 
 中文:
 定义 aevalEquivField
@@ -55,7 +58,10 @@ IntermediateField.equivOfEq
     (algebraicIndependent_iff_injective_aeval.2 hx)
 (show _ ≃ₐ[F] i.fieldRange from AlgEquiv.ofInjectiveField i).trans
 IntermediateField.equivOfEq
-      IsFractionRing.algHom_fieldRange_eq_of_comp_eq_of_range_eq (g := aeval x)
+      IsFractionRing.algHom_fieldRange_eq_of_comp_eq_of_range_eq (g := aeval x) (f := i)
+        (by ext <;> simp [i]) (Algebra.adjoin_range_eq_range_aeval F x).symm
+
+@[simp]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjectiveField, Algebra, Algebra.adjoin_range_eq_range_aeval, FractionRing, IntermediateField, IntermediateField.equivOfEq, IsFractionRing, IsFractionRing.algHom_fieldRange_eq_of_comp_eq_of_range_eq, IsFractionRing.liftAlgHom, MvPolynomial, adjoin_range_eq_range_aeval, algHom_fieldRange_eq_of_comp_eq_of_range_eq, algebraicIndependent_iff_injective_aeval, equivOfEq, fieldRange, i.fieldRange, liftAlgHom, ofInjectiveField
 -/

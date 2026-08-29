@@ -224,7 +224,7 @@ instance [CharP
     rcases verschiebung_nonzero hb with ⟨nb, wb, hwb0, rfl⟩
     refine ne_of_apply_ne (fun x => x.coeff (na + nb)) ?_
     rw [iterate_verschiebung_mul_coeff]; rw [zero_coeff]
-    exact mu
+    exact mul_ne_zero (pow_ne_zero _ hwa0) (pow_ne_zero _ hwb0)⟩
 
 中文:
 实例 [特征p
@@ -236,7 +236,7 @@ instance [CharP
     rcases verschiebung_nonzero hb with ⟨nb, wb, hwb0, rfl⟩
     refine ne_of_apply_ne (fun x => x.coeff (na + nb)) ?_
     rw [iterate_verschiebung_mul_coeff]; rw [zero_coeff]
-    exact mu
+    exact mul_ne_zero (pow_ne_zero _ hwa0) (pow_ne_zero _ hwb0)⟩
 
 Depends on / 依赖: contrapose, iterate_verschiebung_mul_coeff, mul_ne_zero, ne_of_apply_ne, pow_ne_zero, verschiebung_nonzero, x.coeff, zero_coeff
 -/

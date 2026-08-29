@@ -168,7 +168,10 @@ theorem weightedTotalDegree_coe
   · simp only [weightedTotalDegree, weightedTotalDegree', Finset.sup_le_iff, WithBot.coe_le_coe]
     intro b
     exact Finset.le_sup
-  · simp only [wei
+  · simp only [weightedTotalDegree]
+    have hm' : weightedTotalDegree' w p <= m := le_of_eq hm.symm
+    rw [← hm]
+    simpa [weightedTotalDegree'] using hm'
 
 中文:
 定理 weightedTotalDegree_coe
@@ -180,7 +183,10 @@ theorem weightedTotalDegree_coe
   · simp only [weightedTotalDegree, weightedTotalDegree', Finset.sup_le_iff, WithBot.coe_le_coe]
     intro b
     exact Finset.le_sup
-  · simp only [wei
+  · simp only [weightedTotalDegree]
+    have hm' : weightedTotalDegree' w p <= m := le_of_eq hm.symm
+    rw [← hm]
+    simpa [weightedTotalDegree'] using hm'
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.sup_le_iff, WithBot, WithBot.coe_le_coe, WithBot.ne_bot_iff_exists, _eq_bot_iff, coe_le_coe, hm.symm, le_antisymm, le_of_eq, le_sup, ne_bot_iff_exists, sup_le_iff, weightedTotalDegree
 -/
@@ -276,6 +282,12 @@ definition weightedHomogeneousSubmodule
   add_mem' {a} {b} ha hb c hc := by
     rw [coeff_add] at hc
     obtain h | h : coeff c a != 0 ∨ coeff c b != 0 := by
+      contrapose! hc
+      simp only [hc, add_zero]
+    · exact ha h
+    · exact hb h
+
+@[simp]
 
 中文:
 定义 weightedHomogeneousSubmodule
@@ -288,6 +300,12 @@ definition weightedHomogeneousSubmodule
   add_mem' {a} {b} ha hb c hc := by
     rw [coeff_add] at hc
     obtain h | h : coeff c a != 0 ∨ coeff c b != 0 := by
+      contrapose! hc
+      simp only [hc, add_zero]
+    · exact ha h
+    · exact hb h
+
+@[simp]
 
 Depends on / 依赖: IsWeightedHomogeneous, x.IsWeightedHomogeneous
 -/
@@ -398,7 +416,8 @@ theorem weightedHomogeneousSubmodule_mul
   have aux : coeff d φ != 0 ∧ coeff e ψ != 0 := by
     contrapose! H
     by_cases h : coeff d φ = 0 <;>
-      simp_all only [Ne, not_false_iff, ze
+      simp_all only [Ne, not_false_iff, zero_mul, mul_zero]
+  rw [← mem_antidiagonal.mp hde]; rw [← hφ aux.1]; rw [← hψ aux.2]; rw [map_add]
 
 中文:
 定理 weightedHomogeneousSubmodule_mul
@@ -412,7 +431,8 @@ theorem weightedHomogeneousSubmodule_mul
   have aux : coeff d φ != 0 ∧ coeff e ψ != 0 := by
     contrapose! H
     by_cases h : coeff d φ = 0 <;>
-      simp_all only [Ne, not_false_iff, ze
+      simp_all only [Ne, not_false_iff, zero_mul, mul_zero]
+  rw [← mem_antidiagonal.mp hde]; rw [← hφ aux.1]; rw [← hψ aux.2]; rw [map_add]
 
 Depends on / 依赖: Finset, Finset.exists_ne_zero_of_sum_ne_zero, Submodule, Submodule.mul_le, classical, coeff_mul, contrapose, exists_ne_zero_of_sum_ne_zero, map_add, mem_antidiagonal, mem_antidiagonal.mp, mul_le, mul_zero, not_false_iff, zero_mul
 -/
@@ -874,7 +894,8 @@ theorem prod
   · intro i s his IH h
     simp only [his, Finset.prod_insert, Finset.sum_insert, not_false_iff]
     apply (h i (Finset.mem_insert_self _ _)).mul (IH _)
-    in
+    intro j hjs
+    exact h j (Finset.mem_insert_of_mem hjs)
 
 中文:
 定理 乘积
@@ -887,7 +908,8 @@ theorem prod
   · intro i s his IH h
     simp only [his, Finset.prod_insert, Finset.sum_insert, not_false_iff]
     apply (h i (Finset.mem_insert_self _ _)).mul (IH _)
-    in
+    intro j hjs
+    exact h j (Finset.mem_insert_of_mem hjs)
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.prod_empty, Finset.prod_insert, Finset.sum_empty, Finset.sum_insert, classical, induction_on, isWeightedHomogeneous_one, mem_insert_of_mem, mem_insert_self, not_false_iff, prod_empty, prod_insert, sum_empty, sum_insert
 -/
@@ -917,7 +939,8 @@ theorem weighted_total_degree
     exact fun d hd => le_of_eq (hφ hd)
   · obtain ⟨d, hd⟩ : exists d, coeff d φ != 0 := exists_coeff_ne_zero h
     simp only [← hφ hd]
-    replace hd := Finsupp.mem_suppor
+    replace hd := Finsupp.mem_support_iff.mpr hd
+    apply Finset.le_sup hd
 
 中文:
 定理 weighted_total_degree
@@ -929,7 +952,8 @@ theorem weighted_total_degree
     exact fun d hd => le_of_eq (hφ hd)
   · obtain ⟨d, hd⟩ : exists d, coeff d φ != 0 := exists_coeff_ne_zero h
     simp only [← hφ hd]
-    replace hd := Finsupp.mem_suppor
+    replace hd := Finsupp.mem_support_iff.mpr hd
+    apply Finset.le_sup hd
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.sup_le_iff, Finsupp, Finsupp.mem_support_iff.mpr, WithBot, WithBot.coe_le_coe, coe_le_coe, exists_coeff_ne_zero, le_antisymm, le_of_eq, le_sup, mem_support_iff, replace, sup_le_iff, weightedTotalDegree
 -/
@@ -956,7 +980,19 @@ lemma induction_on
   let A : Submodule R (MvPolynomial σ R) :=
     { carrier := { p | exists hp, forall a, motive (C a * p) (.C_mul hp _) }
       add_mem' := fun ⟨_, hx⟩ ⟨_, hy⟩ =>
-        ⟨.add ‹_› ‹_›, fun a => by simp [mul_add, add _ _ _ 
+        ⟨.add ‹_› ‹_›, fun a => by simp [mul_add, add _ _ _ _ (hx a) (hy a)]⟩
+      zero_mem' := ⟨isWeightedHomogeneous_zero R w m, by simp [zero]⟩
+      smul_mem' := fun a x ⟨_, hx⟩ => ⟨by simp [Algebra.smul_def, C_mul ‹_› a], fun a => by
+        simp_rw [Algebra.smul_def, algebraMap_eq, ← mul_assoc, ← map_mul]
+        apply hx⟩ }
+  rw [← mem_weightedHomogeneousSubmodule]; rw [weightedHomogeneousSubmodule_eq_finsupp_supported]; rw [AddMonoidAlgebra.supported_eq_span_single] at hp
+  refine (Submodule.span_le (p := A) |>.mpr ?_ hp).2
+  rw [Set.image_subset_iff]
+  intro d hd
+  simp only [MvPolynomial, Submodule.coe_set_mk, AddSubmonoid.coe_set_mk,
+    AddSubsemigroup.coe_set_mk, preimage_ofPred_eq, mem_ofPred_eq, A]
+  refine ⟨isWeightedHomogeneous_monomial w d 1 hd, fun a => ?_⟩
+  simpa only [single_eq_monomial, ← MvPolynomial.C_mul_monomial] using monomial _ (a * 1) hd
 
 中文:
 引理 induction_on
@@ -966,7 +1002,19 @@ lemma induction_on
   let A : Submodule R (MvPolynomial σ R) :=
     { carrier := { p | exists hp, forall a, motive (C a * p) (.C_mul hp _) }
       add_mem' := fun ⟨_, hx⟩ ⟨_, hy⟩ =>
-        ⟨.add ‹_› ‹_›, fun a => by simp [mul_add, add _ _ _ 
+        ⟨.add ‹_› ‹_›, fun a => by simp [mul_add, add _ _ _ _ (hx a) (hy a)]⟩
+      zero_mem' := ⟨isWeightedHomogeneous_zero R w m, by simp [zero]⟩
+      smul_mem' := fun a x ⟨_, hx⟩ => ⟨by simp [Algebra.smul_def, C_mul ‹_› a], fun a => by
+        simp_rw [Algebra.smul_def, algebraMap_eq, ← mul_assoc, ← map_mul]
+        apply hx⟩ }
+  rw [← mem_weightedHomogeneousSubmodule]; rw [weightedHomogeneousSubmodule_eq_finsupp_supported]; rw [AddMonoidAlgebra.supported_eq_span_single] at hp
+  refine (Submodule.span_le (p := A) |>.mpr ?_ hp).2
+  rw [Set.image_subset_iff]
+  intro d hd
+  simp only [MvPolynomial, Submodule.coe_set_mk, AddSubmonoid.coe_set_mk,
+    AddSubsemigroup.coe_set_mk, preimage_ofPred_eq, mem_ofPred_eq, A]
+  refine ⟨isWeightedHomogeneous_monomial w d 1 hd, fun a => ?_⟩
+  simpa only [single_eq_monomial, ← MvPolynomial.C_mul_monomial] using monomial _ (a * 1) hd
 
 Depends on / 依赖: Algebra, Algebra.smul_def, C_mul, MvPolynomial, Submodule, add_mem, algebraMap_eq, carrier, isWeightedHomogeneous_zero, motive, mul_add, mul_assoc, simp_rw, smul_def, smul_mem, zero_mem
 -/
@@ -1298,7 +1346,10 @@ theorem sum_weightedHomogeneousComponent
     rw [if_neg hm'.symm]
   · intro hm
     rw [if_pos rfl]
-    simp only [
+    simp only [Finite.mem_toFinset, mem_support, Ne, Classical.not_not] at hm
+    have := coeff_weightedHomogeneousComponent (w := w) (weight w d) φ d
+    rw [hm]; rw [if_pos rfl]; rw [coeff_zero] at this
+    exact this.symm
 
 中文:
 定理 sum_weightedHomogeneousComponent
@@ -1313,7 +1364,10 @@ theorem sum_weightedHomogeneousComponent
     rw [if_neg hm'.symm]
   · intro hm
     rw [if_pos rfl]
-    simp only [
+    simp only [Finite.mem_toFinset, mem_support, Ne, Classical.not_not] at hm
+    have := coeff_weightedHomogeneousComponent (w := w) (weight w d) φ d
+    rw [hm]; rw [if_pos rfl]; rw [coeff_zero] at this
+    exact this.symm
 
 Depends on / 依赖: Classical, Classical.not_not, Finite, Finite.mem_toFinset, Finset, Finset.sum_eq_single, classical, coeff_sum, coeff_weightedHomogeneousComponent, coeff_zero, finsum_eq_sum, if_neg, if_pos, mem_support, mem_toFinset, not_not, sum_eq_single, this.symm, weight, weightedHomogeneousComponent_finsupp
 -/
@@ -1460,7 +1514,8 @@ theorem weightedHomogeneousComponent_of_mem
   · rw [h zero_coeff]
     simp only [show n = m ↔ m = n from eq_comm]
     split_ifs with h1
-    · rf
+    · rfl
+    · simp only [coeff_zero]
 
 中文:
 定理 weightedHomogeneousComponent_of_mem
@@ -1475,7 +1530,8 @@ theorem weightedHomogeneousComponent_of_mem
   · rw [h zero_coeff]
     simp only [show n = m ↔ m = n from eq_comm]
     split_ifs with h1
-    · rf
+    · rfl
+    · simp only [coeff_zero]
 
 Depends on / 依赖: coeff_weightedHomogeneousComponent, coeff_zero, eq_comm, mem_weightedHomogeneousSubmodule, split_ifs, zero_coeff
 -/
@@ -1628,7 +1684,9 @@ theorem weightedHomogeneousComponent_directSum
   convert! @Finset.sum_eq_single M (MvPolynomial σ R) _ (DFinsupp.support x) _ m _ _
   · rw [IsWeightedHomogeneous.weightedHomogeneousComponent_same (x m).prop]
   · intro n _ hmn
-    exact IsWeightedHomogene
+    exact IsWeightedHomogeneous.weightedHomogeneousComponent_ne m (x n).prop hmn.symm
+  · rw [DFinsupp.notMem_support_iff]
+    intro hm; rw [hm, Submodule.coe_zero, map_zero]
 
 中文:
 定理 weightedHomogeneousComponent_directSum
@@ -1639,7 +1697,9 @@ theorem weightedHomogeneousComponent_directSum
   convert! @Finset.sum_eq_single M (MvPolynomial σ R) _ (DFinsupp.support x) _ m _ _
   · rw [IsWeightedHomogeneous.weightedHomogeneousComponent_same (x m).prop]
   · intro n _ hmn
-    exact IsWeightedHomogene
+    exact IsWeightedHomogeneous.weightedHomogeneousComponent_ne m (x n).prop hmn.symm
+  · rw [DFinsupp.notMem_support_iff]
+    intro hm; rw [hm, Submodule.coe_zero, map_zero]
 
 Depends on / 依赖: DFinsupp, DFinsupp.notMem_support_iff, DFinsupp.sum, DFinsupp.support, DirectSum, DirectSum.coeLinearMap_eq_dfinsuppSum, Finset, Finset.sum_eq_single, IsWeightedHomogeneous, IsWeightedHomogeneous.weightedHomogeneousComponent_ne, IsWeightedHomogeneous.weightedHomogeneousComponent_same, MvPolynomial, Submodule, Submodule.coe_zero, classical, coeLinearMap_eq_dfinsuppSum, coe_zero, convert, hmn.symm, map_sum
 -/
@@ -1680,7 +1740,12 @@ theorem weightedHomogeneousComponent_zero
   rcases Classical.em (d = 0) with (rfl | hd)
   · simp only [coeff_weightedHomogeneousComponent, if_pos, map_zero, coeff_zero_C]
   · rw [coeff_weightedHomogeneousComponent, if_neg, coeff_C, if_neg (Ne.symm hd)]
-    simp only [weight, LinearMap.toAddMonoidHom_coe, Finsupp.line
+    simp only [weight, LinearMap.toAddMonoidHom_coe, Finsupp.linearCombination_apply, Finsupp.sum,
+      sum_eq_zero_iff, Finsupp.mem_support_iff, Ne, smul_eq_zero, not_forall, not_or,
+      and_self_left, exists_prop]
+    simp only [DFunLike.ext_iff, Finsupp.coe_zero, Pi.zero_apply, not_forall] at hd
+    obtain ⟨i, hi⟩ := hd
+    exact ⟨i, hi, hw i⟩
 
 中文:
 定理 weightedHomogeneousComponent_zero
@@ -1691,7 +1756,12 @@ theorem weightedHomogeneousComponent_zero
   rcases Classical.em (d = 0) with (rfl | hd)
   · simp only [coeff_weightedHomogeneousComponent, if_pos, map_zero, coeff_zero_C]
   · rw [coeff_weightedHomogeneousComponent, if_neg, coeff_C, if_neg (Ne.symm hd)]
-    simp only [weight, LinearMap.toAddMonoidHom_coe, Finsupp.line
+    simp only [weight, LinearMap.toAddMonoidHom_coe, Finsupp.linearCombination_apply, Finsupp.sum,
+      sum_eq_zero_iff, Finsupp.mem_support_iff, Ne, smul_eq_zero, not_forall, not_or,
+      and_self_left, exists_prop]
+    simp only [DFunLike.ext_iff, Finsupp.coe_zero, Pi.zero_apply, not_forall] at hd
+    obtain ⟨i, hi⟩ := hd
+    exact ⟨i, hi, hw i⟩
 
 Depends on / 依赖: Classical, Classical.em, DFunLike, DFunLike.ext_iff, Finsupp, Finsupp.coe_zero, Finsupp.linearCombination_apply, Finsupp.mem_support_iff, Finsupp.sum, LinearMap, LinearMap.toAddMonoidHom_coe, Ne.symm, Pi.zero_apply, and_self_left, classical, coe_zero, coeff_C, coeff_weightedHomogeneousComponent, coeff_zero_C, exists_prop
 -/
@@ -1766,6 +1836,8 @@ theorem weightedDegree_eq_zero_iff
   constructor
   · intro hx
     by_contra hx'
+    exact absurd (hw _ _ (hx hx')) hx'
+  · order
 
 中文:
 定理 weightedDegree_eq_zero_iff
@@ -1780,6 +1852,8 @@ theorem weightedDegree_eq_zero_iff
   constructor
   · intro hx
     by_contra hx'
+    exact absurd (hw _ _ (hx hx')) hx'
+  · order
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero_iff, Finsupp, Finsupp.linearCombination, Finsupp.mem_support_iff, Finsupp.sum, LinearMap, LinearMap.coe_smulRight, LinearMap.id_coe, LinearMap.toAddMonoidHom_coe, absurd, coe_lsum, coe_smulRight, forall_congr, id_coe, id_eq, linearCombination, mem_support_iff, sum_eq_zero_iff, toAddMonoidHom_coe
 -/
@@ -1986,7 +2060,17 @@ definition weightedDecomposition
     rw [← DirectSum.sum_support_of (decompose' R w φ)]
     simp only [DirectSum.coeAddMonoidHom_of, map_sum,
       finsum_eq_sum _ (weightedHomogeneousComponent_finsupp φ)]
-    apply Finset.su
+    apply Finset.sum_congr _ (fun m _ => by rw [decompose'_apply])
+    ext m
+    simp only [DFinsupp.mem_support_toFun, ne_eq, Set.Finite.mem_toFinset, Function.mem_support,
+      not_iff_not]
+    conv_lhs => rw [← Subtype.coe_inj]
+    rw [decompose'_apply]; rw [Submodule.coe_zero]
+  right_inv x := by
+    apply DFinsupp.ext
+    intro m
+    rw [← Subtype.coe_inj]; rw [decompose'_apply]
+    exact weightedHomogeneousComponent_directSum R w x m
 
 中文:
 定义 weightedDecomposition
@@ -1998,7 +2082,17 @@ definition weightedDecomposition
     rw [← DirectSum.sum_support_of (decompose' R w φ)]
     simp only [DirectSum.coeAddMonoidHom_of, map_sum,
       finsum_eq_sum _ (weightedHomogeneousComponent_finsupp φ)]
-    apply Finset.su
+    apply Finset.sum_congr _ (fun m _ => by rw [decompose'_apply])
+    ext m
+    simp only [DFinsupp.mem_support_toFun, ne_eq, Set.Finite.mem_toFinset, Function.mem_support,
+      not_iff_not]
+    conv_lhs => rw [← Subtype.coe_inj]
+    rw [decompose'_apply]; rw [Submodule.coe_zero]
+  right_inv x := by
+    apply DFinsupp.ext
+    intro m
+    rw [← Subtype.coe_inj]; rw [decompose'_apply]
+    exact weightedHomogeneousComponent_directSum R w x m
 
 Depends on / 依赖: decompose
 -/

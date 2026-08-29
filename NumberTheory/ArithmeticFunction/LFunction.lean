@@ -69,7 +69,68 @@ definition ofPowerSeries
     ⟨Function.extend (q ^ ·) (f.coeff ·) 0, by simp [Nat.ne_zero_of_lt hq]⟩ else
       algebraMap R (ArithmeticFunction R) f.constantCoeff
   map_zero' := by ext; split_ifs <;> simp [Function.extend]
-  -- note that `ofPowerSeries.map_one'` relies on the junk value `f.constantCoeff`
+  -- note that `ofPowerSeries.map_one'` relies on the junk value `f.constantCoeff`.
+  map_one' := by
+    ext n
+    split_ifs with hq
+    · by_cases hn : exists k, q ^ k = n
+      · obtain ⟨a, rfl⟩ := hn
+        simp [(Nat.pow_right_injective hq).extend_apply, one_apply, hq.ne']
+      · simp [hn, one_apply_ne (fun H => hn ⟨0, H.symm⟩)]
+    · simp
+  map_add' f g := by
+    ext n
+    split_ifs with hq
+    · by_cases h : exists a, q ^ a = n
+      · obtain ⟨a, rfl⟩ := h
+        simp [(Nat.pow_right_injective hq).extend_apply]
+      · simp [h]
+    · by_cases hn : n = 1 <;> simp [hn]
+  map_mul' f g := by
+    ext n
+    split_ifs with hq
+    · simp_rw [mul_apply, coe_mk]
+      by_cases hn : exists a, q ^ a = n
+      · obtain ⟨k, rfl⟩ := hn
+        rw [(Nat.pow_right_injective hq).extend_apply]
+        have hs : (Finset.antidiagonal k).map (.prodMap ⟨fun k => q ^ k, Nat.pow_right_injective hq⟩
+            ⟨fun k => q ^ k, Nat.pow_right_injective hq⟩) subseteq (q ^ k).divisorsAntidiagonal :=
+          Nat.antidiagonal_map_subset_divisorsAntidiagonal_pow hq k
+        rw [PowerSeries.coeff_mul k f g]; rw [← Finset.sum_subset hs]
+        · simp [(Nat.pow_right_injective hq).extend_apply]
+        · intro (a, b) hab h
+          by_cases ha : exists i, q ^ i = a
+          · by_cases hb : exists j, q ^ j = b
+            · obtain ⟨i, rfl⟩ := ha
+              obtain ⟨j, rfl⟩ := hb
+              rw [Nat.mem_divisorsAntidiagonal]; rw [← pow_add]; rw [Nat.pow_right_inj hq] at hab
+              simp_rw [Finset.mem_map, not_exists, not_and, Finset.mem_antidiagonal] at h
+              simpa using h (i, j) hab.1
+            · rwa [mul_comm, Function.extend_apply', Pi.zero_apply, zero_mul]
+          · rwa [Function.extend_apply', Pi.zero_apply, zero_mul]
+      · rw [Function.extend_apply' _ _ _ hn, Pi.zero_apply, Finset.sum_eq_zero]
+        intro (a, b) hk
+        obtain ⟨hab, -⟩ := Nat.mem_divisorsAntidiagonal.mp hk
+        by_cases ha : exists i, q ^ i = a
+        · by_cases hb : exists j, q ^ j = b
+          · obtain ⟨i, rfl⟩ := ha
+            obtain ⟨j, rfl⟩ := hb
+            rw [← pow_add] at hab
+            exact (hn ⟨i + j, hab⟩).elim
+          · rwa [mul_comm, Function.extend_apply', Pi.zero_apply, zero_mul]
+        · rwa [Function.extend_apply', Pi.zero_apply, zero_mul]
+    · simp
+  commutes' x := by
+    ext n
+    split_ifs with hq
+    · simp only [Algebra.algebraMap_eq_smul_one, coe_mk]
+      by_cases hn : exists k, q ^ k = n
+      · obtain ⟨k, rfl⟩ := hn
+        simp [(Nat.pow_right_injective hq).extend_apply, one_apply, hq.ne']
+      · rw [Function.extend_apply' _ _ _ hn, Pi.zero_apply, smul_map, one_apply_ne, smul_zero]
+        contrapose hn
+        exact ⟨0, by simp [hn]⟩
+    · simp
 
 中文:
 定义 ofPowerSeries
@@ -78,7 +139,68 @@ definition ofPowerSeries
     ⟨Function.extend (q ^ ·) (f.coeff ·) 0, by simp [Nat.ne_zero_of_lt hq]⟩ else
       algebraMap R (ArithmeticFunction R) f.constantCoeff
   map_zero' := by ext; split_ifs <;> simp [Function.extend]
-  -- note that `ofPowerSeries.map_one'` relies on the junk value `f.constantCoeff`
+  -- note that `ofPowerSeries.map_one'` relies on the junk value `f.constantCoeff`.
+  map_one' := by
+    ext n
+    split_ifs with hq
+    · by_cases hn : exists k, q ^ k = n
+      · obtain ⟨a, rfl⟩ := hn
+        simp [(Nat.pow_right_injective hq).extend_apply, one_apply, hq.ne']
+      · simp [hn, one_apply_ne (fun H => hn ⟨0, H.symm⟩)]
+    · simp
+  map_add' f g := by
+    ext n
+    split_ifs with hq
+    · by_cases h : exists a, q ^ a = n
+      · obtain ⟨a, rfl⟩ := h
+        simp [(Nat.pow_right_injective hq).extend_apply]
+      · simp [h]
+    · by_cases hn : n = 1 <;> simp [hn]
+  map_mul' f g := by
+    ext n
+    split_ifs with hq
+    · simp_rw [mul_apply, coe_mk]
+      by_cases hn : exists a, q ^ a = n
+      · obtain ⟨k, rfl⟩ := hn
+        rw [(Nat.pow_right_injective hq).extend_apply]
+        have hs : (Finset.antidiagonal k).map (.prodMap ⟨fun k => q ^ k, Nat.pow_right_injective hq⟩
+            ⟨fun k => q ^ k, Nat.pow_right_injective hq⟩) subseteq (q ^ k).divisorsAntidiagonal :=
+          Nat.antidiagonal_map_subset_divisorsAntidiagonal_pow hq k
+        rw [PowerSeries.coeff_mul k f g]; rw [← Finset.sum_subset hs]
+        · simp [(Nat.pow_right_injective hq).extend_apply]
+        · intro (a, b) hab h
+          by_cases ha : exists i, q ^ i = a
+          · by_cases hb : exists j, q ^ j = b
+            · obtain ⟨i, rfl⟩ := ha
+              obtain ⟨j, rfl⟩ := hb
+              rw [Nat.mem_divisorsAntidiagonal]; rw [← pow_add]; rw [Nat.pow_right_inj hq] at hab
+              simp_rw [Finset.mem_map, not_exists, not_and, Finset.mem_antidiagonal] at h
+              simpa using h (i, j) hab.1
+            · rwa [mul_comm, Function.extend_apply', Pi.zero_apply, zero_mul]
+          · rwa [Function.extend_apply', Pi.zero_apply, zero_mul]
+      · rw [Function.extend_apply' _ _ _ hn, Pi.zero_apply, Finset.sum_eq_zero]
+        intro (a, b) hk
+        obtain ⟨hab, -⟩ := Nat.mem_divisorsAntidiagonal.mp hk
+        by_cases ha : exists i, q ^ i = a
+        · by_cases hb : exists j, q ^ j = b
+          · obtain ⟨i, rfl⟩ := ha
+            obtain ⟨j, rfl⟩ := hb
+            rw [← pow_add] at hab
+            exact (hn ⟨i + j, hab⟩).elim
+          · rwa [mul_comm, Function.extend_apply', Pi.zero_apply, zero_mul]
+        · rwa [Function.extend_apply', Pi.zero_apply, zero_mul]
+    · simp
+  commutes' x := by
+    ext n
+    split_ifs with hq
+    · simp only [Algebra.algebraMap_eq_smul_one, coe_mk]
+      by_cases hn : exists k, q ^ k = n
+      · obtain ⟨k, rfl⟩ := hn
+        simp [(Nat.pow_right_injective hq).extend_apply, one_apply, hq.ne']
+      · rw [Function.extend_apply' _ _ _ hn, Pi.zero_apply, smul_map, one_apply_ne, smul_zero]
+        contrapose hn
+        exact ⟨0, by simp [hn]⟩
+    · simp
 -/
 noncomputable def ofPowerSeries (q : Nat) : PowerSeries R ->ₐ[R] ArithmeticFunction R where
   toFun f := if hq : 1 < q then
@@ -261,7 +383,17 @@ theorem ofPowerSeries_pow
       rw [ofPowerSeries_apply_pow hq]; rw [PowerSeries.coeff_subst_X_pow hk]
       split_ifs with hn
       · obtain ⟨j, rfl⟩ := hn
-        rw [pow_mul]; rw [ofPowerSeries_apply_pow (one_lt_pow' hq hk
+        rw [pow_mul]; rw [ofPowerSeries_apply_pow (one_lt_pow' hq hk)]
+        simp [hk]
+      · rw [ofPowerSeries_apply (one_lt_pow' hq hk), Function.extend_apply', Pi.zero_apply]
+        simp_rw [← pow_mul, Nat.pow_right_inj hq, eq_comm, ← dvd_def]
+        exact hn
+    · rwa [ofPowerSeries_apply hq, ofPowerSeries_apply (one_lt_pow' hq hk),
+        Function.extend_apply', Function.extend_apply']
+      contrapose! hn
+      obtain ⟨i, rfl⟩ := hn
+      exact ⟨k * i, pow_mul q k i⟩
+  · simp [ofPowerSeries, hq, hk]
 
 中文:
 定理 ofPowerSeries_pow
@@ -274,7 +406,17 @@ theorem ofPowerSeries_pow
       rw [ofPowerSeries_apply_pow hq]; rw [PowerSeries.coeff_subst_X_pow hk]
       split_ifs with hn
       · obtain ⟨j, rfl⟩ := hn
-        rw [pow_mul]; rw [ofPowerSeries_apply_pow (one_lt_pow' hq hk
+        rw [pow_mul]; rw [ofPowerSeries_apply_pow (one_lt_pow' hq hk)]
+        simp [hk]
+      · rw [ofPowerSeries_apply (one_lt_pow' hq hk), Function.extend_apply', Pi.zero_apply]
+        simp_rw [← pow_mul, Nat.pow_right_inj hq, eq_comm, ← dvd_def]
+        exact hn
+    · rwa [ofPowerSeries_apply hq, ofPowerSeries_apply (one_lt_pow' hq hk),
+        Function.extend_apply', Function.extend_apply']
+      contrapose! hn
+      obtain ⟨i, rfl⟩ := hn
+      exact ⟨k * i, pow_mul q k i⟩
+  · simp [ofPowerSeries, hq, hk]
 
 Depends on / 依赖: Function, Function.extend_apply, Nat.pow_right_inj, Pi.zero_apply, PowerSeries, PowerSeries.coeff_subst_X_pow, coeff_subst_X_pow, dvd_def, eq_comm, extend_apply, ofPowerSeries_apply, ofPowerSeries_apply_pow, one_lt_pow, pow_mul, pow_right_inj, simp_rw, split_ifs, zero_apply
 -/
@@ -314,7 +456,23 @@ theorem isMultiplicative_ofPowerSeries_of_isPrimePow
   · obtain ⟨i, rfl⟩ := hm
     by_cases hn : exists j, p ^ j = n
     · obtain ⟨j, rfl⟩ := hn
-
+      cases i
+      · simp [hk.ne', hf]
+      · cases j
+        · simp [hk.ne', hf]
+        · simp [hp.ne_one] at hmn
+    · simp_rw [ofPowerSeries_apply hp.one_lt]
+      rw [Function.extend_apply']; rw [Function.extend_apply' _ _ _ hn]; rw [Pi.zero_apply]; rw [Pi.zero_apply]; rw [mul_zero]
+      contrapose! hn
+      obtain ⟨j, hj⟩ := hn
+      obtain ⟨v, -, rfl⟩ := (Nat.dvd_prime_pow hp).mp (Dvd.intro_left _ hj.symm)
+      exact ⟨v, rfl⟩
+  · simp_rw [ofPowerSeries_apply hp.one_lt]
+    rw [Function.extend_apply']; rw [Function.extend_apply' _ _ _ hm]; rw [Pi.zero_apply]; rw [Pi.zero_apply]; rw [zero_mul]
+    contrapose! hm
+    obtain ⟨i, hi⟩ := hm
+    obtain ⟨j, -, rfl⟩ := (Nat.dvd_prime_pow hp).mp ⟨n, hi⟩
+    exact ⟨j, rfl⟩
 
 中文:
 定理 isMultiplicative_ofPowerSeries_of_isPrimePow
@@ -327,7 +485,23 @@ theorem isMultiplicative_ofPowerSeries_of_isPrimePow
   · obtain ⟨i, rfl⟩ := hm
     by_cases hn : exists j, p ^ j = n
     · obtain ⟨j, rfl⟩ := hn
-
+      cases i
+      · simp [hk.ne', hf]
+      · cases j
+        · simp [hk.ne', hf]
+        · simp [hp.ne_one] at hmn
+    · simp_rw [ofPowerSeries_apply hp.one_lt]
+      rw [Function.extend_apply']; rw [Function.extend_apply' _ _ _ hn]; rw [Pi.zero_apply]; rw [Pi.zero_apply]; rw [mul_zero]
+      contrapose! hn
+      obtain ⟨j, hj⟩ := hn
+      obtain ⟨v, -, rfl⟩ := (Nat.dvd_prime_pow hp).mp (Dvd.intro_left _ hj.symm)
+      exact ⟨v, rfl⟩
+  · simp_rw [ofPowerSeries_apply hp.one_lt]
+    rw [Function.extend_apply']; rw [Function.extend_apply' _ _ _ hm]; rw [Pi.zero_apply]; rw [Pi.zero_apply]; rw [zero_mul]
+    contrapose! hm
+    obtain ⟨i, hi⟩ := hm
+    obtain ⟨j, -, rfl⟩ := (Nat.dvd_prime_pow hp).mp ⟨n, hi⟩
+    exact ⟨j, rfl⟩
 
 Depends on / 依赖: Function, Function.extend_apply, Nat.prime_iff, Pi.zero_apply, extend_apply, hk.ne, hp.ne_one, hp.one_lt, ne_one, ofPowerSeries_apply, ofPowerSeries_apply_one, ofPowerSeries_pow, one_lt, prime_iff, simp_rw, zero_apply
 -/
@@ -443,7 +617,44 @@ theorem tendsTo_eulerProduct_of_tendsTo
   classical
   suffices Multipliable f from tendsto_iff.mp this.hasProd
   simp_rw [multipliable_iff_cauchySeq_finset, CauchySeq, ← this.cauchy_map_iff,
-    Filter.map_map, cauchy_map_iff', Pi
+    Filter.map_map, cauchy_map_iff', Pi.uniformity, DiscreteUniformity.eq_principal_setRelId,
+    tendsto_iInf, tendsto_comap_iff, tendsto_principal, Function.comp_apply, prod_atTop_atTop_eq,
+    eventually_atTop_prod_self, SetRel.mem_id]
+  intro n
+  replace hf : forall k in Set.Iic n, forallᶠ (x : ι) in cofinite, (f x) k = (1 : ArithmeticFunction R) k :=
+    fun k hk => hf k
+  rw [← eventually_all_finite (Set.finite_Iic n)]; rw [eventually_iff_exists_mem] at hf
+  obtain ⟨s, hs, hs'⟩ := hf
+  let t := (mem_cofinite.mp hs).toFinset
+  refine ⟨t, fun u v hu hv => ?_⟩
+  rw [← Finset.prod_sdiff hu]; rw [← Finset.prod_sdiff hv]
+  replace hu : forall i in u \ t, i in s := by
+    intro i hi
+    rw [Finset.mem_sdiff]; rw [Set.Finite.mem_toFinset]; rw [Set.notMem_compl_iff] at hi
+    exact hi.2
+  replace hv : forall i in v \ t, i in s := by
+    intro i hi
+    rw [Finset.mem_sdiff]; rw [Set.Finite.mem_toFinset]; rw [Set.notMem_compl_iff] at hi
+    exact hi.2
+  suffices forall k <= n, (∏ x in u \ t, f x) k = (∏ x in v \ t, f x) k by
+    rw [mul_apply]; rw [mul_apply]
+    refine Finset.sum_congr rfl fun k hk => ?_
+    rw [this k.1 (Nat.divisor_le (Nat.fst_mem_divisors_of_mem_antidiagonal hk))]
+  suffices forall w, (forall i in w, i in s) -> forall k <= n, (∏ x in w, f x) k = (1 : ArithmeticFunction R) k by
+    intro k hk
+    rw [this (u \ t) hu k hk]; rw [this (v \ t) hv k hk]
+  intro w hw
+  induction w using Finset.induction_on
+  case empty => simp
+  case insert i w hi hw' =>
+    intro k hk
+    rw [← one_mul (1 : ArithmeticFunction R)]; rw [Finset.prod_insert hi]; rw [mul_apply]; rw [mul_apply]
+    refine Finset.sum_congr rfl fun j hj => ?_
+    have h1 := hs' i (hw i (Finset.mem_insert_self i w)) j.1
+      ((Nat.divisor_le (Nat.fst_mem_divisors_of_mem_antidiagonal hj)).trans hk)
+    have h2 := hw' (fun i hi => hw i (Finset.mem_insert_of_mem hi)) j.2
+      ((Nat.divisor_le (Nat.snd_mem_divisors_of_mem_antidiagonal hj)).trans hk)
+    rw [h1]; rw [h2]
 
 中文:
 定理 tendsTo_eulerProduct_of_tendsTo
@@ -454,7 +665,44 @@ theorem tendsTo_eulerProduct_of_tendsTo
   classical
   suffices Multipliable f from tendsto_iff.mp this.hasProd
   simp_rw [multipliable_iff_cauchySeq_finset, CauchySeq, ← this.cauchy_map_iff,
-    Filter.map_map, cauchy_map_iff', Pi
+    Filter.map_map, cauchy_map_iff', Pi.uniformity, DiscreteUniformity.eq_principal_setRelId,
+    tendsto_iInf, tendsto_comap_iff, tendsto_principal, Function.comp_apply, prod_atTop_atTop_eq,
+    eventually_atTop_prod_self, SetRel.mem_id]
+  intro n
+  replace hf : forall k in Set.Iic n, forallᶠ (x : ι) in cofinite, (f x) k = (1 : ArithmeticFunction R) k :=
+    fun k hk => hf k
+  rw [← eventually_all_finite (Set.finite_Iic n)]; rw [eventually_iff_exists_mem] at hf
+  obtain ⟨s, hs, hs'⟩ := hf
+  let t := (mem_cofinite.mp hs).toFinset
+  refine ⟨t, fun u v hu hv => ?_⟩
+  rw [← Finset.prod_sdiff hu]; rw [← Finset.prod_sdiff hv]
+  replace hu : forall i in u \ t, i in s := by
+    intro i hi
+    rw [Finset.mem_sdiff]; rw [Set.Finite.mem_toFinset]; rw [Set.notMem_compl_iff] at hi
+    exact hi.2
+  replace hv : forall i in v \ t, i in s := by
+    intro i hi
+    rw [Finset.mem_sdiff]; rw [Set.Finite.mem_toFinset]; rw [Set.notMem_compl_iff] at hi
+    exact hi.2
+  suffices forall k <= n, (∏ x in u \ t, f x) k = (∏ x in v \ t, f x) k by
+    rw [mul_apply]; rw [mul_apply]
+    refine Finset.sum_congr rfl fun k hk => ?_
+    rw [this k.1 (Nat.divisor_le (Nat.fst_mem_divisors_of_mem_antidiagonal hk))]
+  suffices forall w, (forall i in w, i in s) -> forall k <= n, (∏ x in w, f x) k = (1 : ArithmeticFunction R) k by
+    intro k hk
+    rw [this (u \ t) hu k hk]; rw [this (v \ t) hv k hk]
+  intro w hw
+  induction w using Finset.induction_on
+  case empty => simp
+  case insert i w hi hw' =>
+    intro k hk
+    rw [← one_mul (1 : ArithmeticFunction R)]; rw [Finset.prod_insert hi]; rw [mul_apply]; rw [mul_apply]
+    refine Finset.sum_congr rfl fun j hj => ?_
+    have h1 := hs' i (hw i (Finset.mem_insert_self i w)) j.1
+      ((Nat.divisor_le (Nat.fst_mem_divisors_of_mem_antidiagonal hj)).trans hk)
+    have h2 := hw' (fun i hi => hw i (Finset.mem_insert_of_mem hi)) j.2
+      ((Nat.divisor_le (Nat.snd_mem_divisors_of_mem_antidiagonal hj)).trans hk)
+    rw [h1]; rw [h2]
 
 Depends on / 依赖: ArithmeticFunction, CauchySeq, DiscreteUniformity, DiscreteUniformity.eq_principal_setRelId, Filter, Filter.map_map, Function, Function.comp_apply, IsUniformInducing, Multipliable, Pi.uniformity, SetRel, SetRel.mem_id, UniformSpace, cauchy_map_iff, classical, comp_apply, eq_principal_setRelId, eventually_atTop_prod_self, hasProd
 -/
@@ -518,7 +766,14 @@ theorem isMultiplicative_eulerProduct
     have key := tendsto_iff.mp hf'.hasProd
     refine (forall_and.mp h).imp (fun h => ?_) fun h m n hmn => ?_
     · specialize key 1
-      simp_rw 
+      simp_rw [h] at key
+      rwa [eventually_const, eq_comm] at key
+    · replace h s : (∏ b in s, f b) (m * n) = (∏ b in s, f b) m * (∏ b in s, f b) n := h s hmn
+      have h2 := key (m * n)
+      simp_rw [h] at h2
+      exact eventually_const.mp (EventuallyEq.trans (.symm h2) (.mul (key m) (key n)))
+  · rw [eulerProduct, tprod_eq_one_of_not_multipliable hf']
+    exact isMultiplicative_one
 
 中文:
 定理 isMultiplicative_eulerProduct
@@ -530,7 +785,14 @@ theorem isMultiplicative_eulerProduct
     have key := tendsto_iff.mp hf'.hasProd
     refine (forall_and.mp h).imp (fun h => ?_) fun h m n hmn => ?_
     · specialize key 1
-      simp_rw 
+      simp_rw [h] at key
+      rwa [eventually_const, eq_comm] at key
+    · replace h s : (∏ b in s, f b) (m * n) = (∏ b in s, f b) m * (∏ b in s, f b) n := h s hmn
+      have h2 := key (m * n)
+      simp_rw [h] at h2
+      exact eventually_const.mp (EventuallyEq.trans (.symm h2) (.mul (key m) (key n)))
+  · rw [eulerProduct, tprod_eq_one_of_not_multipliable hf']
+    exact isMultiplicative_one
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.trans, Finset, IsMultiplicative, Multipliable, eq_comm, eventually_const, eventually_const.mp, forall_and, forall_and.mp, hasProd, isMultiplicative_finsetProd, replace, simp_rw, specialize, tendsto_iff, tendsto_iff.mp
 -/
@@ -564,7 +826,10 @@ theorem tendsTo_eulerProduct_ofPowerSeries
   · simp
   · simp [hf]
   · have hqi : 1 < q i := by lia
-    rw [ofPowerSeries_apply hqi]; rw [Function.extend_apply']; rw [Pi.ze
+    rw [ofPowerSeries_apply hqi]; rw [Function.extend_apply']; rw [Pi.zero_apply]; rw [one_apply_ne (by lia)]
+    rintro ⟨k, hk⟩
+    have h : k != 0 := fun h => by simp_all
+    grind [Nat.le_pow h.pos (a := q i)]
 
 中文:
 定理 tendsTo_eulerProduct_ofPowerSeries
@@ -576,7 +841,10 @@ theorem tendsTo_eulerProduct_ofPowerSeries
   · simp
   · simp [hf]
   · have hqi : 1 < q i := by lia
-    rw [ofPowerSeries_apply hqi]; rw [Function.extend_apply']; rw [Pi.ze
+    rw [ofPowerSeries_apply hqi]; rw [Function.extend_apply']; rw [Pi.zero_apply]; rw [one_apply_ne (by lia)]
+    rintro ⟨k, hk⟩
+    have h : k != 0 := fun h => by simp_all
+    grind [Nat.le_pow h.pos (a := q i)]
 
 Depends on / 依赖: Function, Function.extend_apply, Nat.le_pow, Pi.zero_apply, extend_apply, h.pos, le_pow, northcott_iff_tendsto, ofPowerSeries_apply, one_apply_ne, tendsTo_eulerProduct_of_tendsTo, tendsto_atTop, tendsto_atTop.mp, zero_apply
 -/

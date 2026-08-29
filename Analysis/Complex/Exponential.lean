@@ -44,7 +44,11 @@ theorem isCauSeq_norm_exp
   have hn0 : (0 : Real) < n := lt_of_le_of_lt (norm_nonneg _) hn
   IsCauSeq.series_ratio_test n (‖z‖ / n) (div_nonneg (norm_nonneg _) (le_of_lt hn0))
     (by rwa [div_lt_iff₀ hn0, one_mul]) fun m hm => by
-      rw [abs_norm]; rw [abs_norm]; rw [Nat.factorial_succ]; r
+      rw [abs_norm]; rw [abs_norm]; rw [Nat.factorial_succ]; rw [pow_succ']; rw [mul_comm m.succ]; rw [Nat.cast_mul]; rw [← div_div]; rw [mul_div_assoc]; rw [mul_div_right_comm]; rw [Complex.norm_mul]; rw [Complex.norm_div]; rw [norm_natCast]
+      gcongr
+      exact le_trans hm (Nat.le_succ _)
+
+noncomputable section
 
 中文:
 定理 isCauSeq_norm_exp
@@ -53,7 +57,11 @@ theorem isCauSeq_norm_exp
   have hn0 : (0 : Real) < n := lt_of_le_of_lt (norm_nonneg _) hn
   IsCauSeq.series_ratio_test n (‖z‖ / n) (div_nonneg (norm_nonneg _) (le_of_lt hn0))
     (by rwa [div_lt_iff₀ hn0, one_mul]) fun m hm => by
-      rw [abs_norm]; rw [abs_norm]; rw [Nat.factorial_succ]; r
+      rw [abs_norm]; rw [abs_norm]; rw [Nat.factorial_succ]; rw [pow_succ']; rw [mul_comm m.succ]; rw [Nat.cast_mul]; rw [← div_div]; rw [mul_div_assoc]; rw [mul_div_right_comm]; rw [Complex.norm_mul]; rw [Complex.norm_div]; rw [norm_natCast]
+      gcongr
+      exact le_trans hm (Nat.le_succ _)
+
+noncomputable section
 
 Depends on / 依赖: Complex.norm_div, Complex.norm_mul, IsCauSeq, IsCauSeq.series_ratio_test, Nat.cast_mul, Nat.factorial_succ, Nat.le_, abs_norm, cast_mul, div_div, div_nonneg, exists_nat_gt, factorial_succ, le_of_lt, le_trans, lt_of_le_of_lt, m.succ, mul_comm, mul_div_assoc, mul_div_right_comm
 -/
@@ -163,7 +171,8 @@ theorem exp_zero
     | zero => simp
     | succ j ih =>
       rw [← ih (by simp)]
-      simp only [sum_range_succ, pow
+      simp only [sum_range_succ, pow_succ]
+      simp
 
 中文:
 定理 exp_zero
@@ -179,7 +188,8 @@ theorem exp_zero
     | zero => simp
     | succ j ih =>
       rw [← ih (by simp)]
-      simp only [sum_range_succ, pow
+      simp only [sum_range_succ, pow_succ]
+      simp
 
 Depends on / 依赖: absurd, convert, lim_eq_of_equiv_const, not_le_of_gt, pow_succ, sum_range_succ, zero_lt_one
 -/
@@ -210,7 +220,20 @@ theorem exp_add
           (y ^ (i - k) / (i - k).factorial) := by
     intro j
     refine Finset.sum_congr rfl fun m _ => ?_
-    rw [add_pow]; rw [div_eq_mul_inv]; rw [sum_
+    rw [add_pow]; rw [div_eq_mul_inv]; rw [sum_mul]
+    refine Finset.sum_congr rfl fun I hi => ?_
+    have h₁ : (m.choose I : Complex) != 0 :=
+      Nat.cast_ne_zero.2 (pos_iff_ne_zero.1 (Nat.choose_pos (Nat.le_of_lt_succ (mem_range.1 hi))))
+    have h₂ := Nat.choose_mul_factorial_mul_factorial (Nat.le_of_lt_succ <| Finset.mem_range.1 hi)
+    rw [← h₂]; rw [Nat.cast_mul]; rw [Nat.cast_mul]; rw [mul_inv]; rw [mul_inv]
+    simp only [mul_left_comm (m.choose I : Complex), mul_assoc, mul_left_comm (m.choose I : Complex)⁻¹,
+      mul_comm (m.choose I : Complex)]
+    rw [inv_mul_cancel₀ h₁]
+    simp [div_eq_mul_inv, mul_assoc, mul_left_comm]
+  simp_rw [exp, exp', lim_mul_lim]
+  apply (lim_eq_lim_of_equiv _).symm
+  simp only [hj]
+  exact cauchy_product (isCauSeq_norm_exp x) (isCauSeq_exp y)
 
 中文:
 定理 exp_add
@@ -221,7 +244,20 @@ theorem exp_add
           (y ^ (i - k) / (i - k).factorial) := by
     intro j
     refine Finset.sum_congr rfl fun m _ => ?_
-    rw [add_pow]; rw [div_eq_mul_inv]; rw [sum_
+    rw [add_pow]; rw [div_eq_mul_inv]; rw [sum_mul]
+    refine Finset.sum_congr rfl fun I hi => ?_
+    have h₁ : (m.choose I : Complex) != 0 :=
+      Nat.cast_ne_zero.2 (pos_iff_ne_zero.1 (Nat.choose_pos (Nat.le_of_lt_succ (mem_range.1 hi))))
+    have h₂ := Nat.choose_mul_factorial_mul_factorial (Nat.le_of_lt_succ <| Finset.mem_range.1 hi)
+    rw [← h₂]; rw [Nat.cast_mul]; rw [Nat.cast_mul]; rw [mul_inv]; rw [mul_inv]
+    simp only [mul_left_comm (m.choose I : Complex), mul_assoc, mul_left_comm (m.choose I : Complex)⁻¹,
+      mul_comm (m.choose I : Complex)]
+    rw [inv_mul_cancel₀ h₁]
+    simp [div_eq_mul_inv, mul_assoc, mul_left_comm]
+  simp_rw [exp, exp', lim_mul_lim]
+  apply (lim_eq_lim_of_equiv _).symm
+  simp only [hj]
+  exact cauchy_product (isCauSeq_norm_exp x) (isCauSeq_exp y)
 
 Depends on / 依赖: Finset, Finset.sum_congr, Nat.cast_ne_zero, Nat.choose_mul_factorial_mul_factorial, Nat.choose_pos, Nat.le_of_lt_succ, add_pow, cast_ne_zero, choose_mul_factorial_mul_factorial, choose_pos, div_eq_mul_inv, factorial, k.factorial, le_of_lt_succ, m.choose, m.factorial, mem_range, pos_iff_ne_zero, sum_congr, sum_mul
 -/
@@ -746,7 +782,10 @@ nonrec theorem exp_nat_mul (x : Real) (n : Nat) : exp (n * x) = exp x ^ n :=
 
 @[simp]
 nonrec theorem exp_ne_zero : exp x != 0 := fun h =>
-exp_ne_zero x by rw [exp, ← ofReal_inj] at h; simp_
+exp_ne_zero x by rw [exp, ← ofReal_inj] at h; simp_all
+
+nonrec theorem exp_neg : exp (-x) = (exp x)⁻¹ :=
+ofReal_injective by simp [exp_neg]
 
 中文:
 引理 exp_nsmul
@@ -759,7 +798,10 @@ nonrec theorem exp_nat_mul (x : Real) (n : Nat) : exp (n * x) = exp x ^ n :=
 
 @[simp]
 nonrec theorem exp_ne_zero : exp x != 0 := fun h =>
-exp_ne_zero x by rw [exp, ← ofReal_inj] at h; simp_
+exp_ne_zero x by rw [exp, ← ofReal_inj] at h; simp_all
+
+nonrec theorem exp_neg : exp (-x) = (exp x)⁻¹ :=
+ofReal_injective by simp [exp_neg]
 
 Depends on / 依赖: MonoidHom, MonoidHom.map_pow, Multiplicative, expMonoidHom, map_pow
 -/
@@ -811,7 +853,8 @@ theorem sum_le_exp_of_nonneg
       simp only [exp', const_apply, re_sum]
       norm_cast
       refine sum_le_sum_of_subset_of_nonneg (range_mono hj) fun _ _ _ => ?_
-      
+      positivity
+    _ = exp x := by rw [exp, Complex.exp, ← cauSeqRe, lim_re]
 
 中文:
 定理 sum_le_exp_of_nonneg
@@ -823,7 +866,8 @@ theorem sum_le_exp_of_nonneg
       simp only [exp', const_apply, re_sum]
       norm_cast
       refine sum_le_sum_of_subset_of_nonneg (range_mono hj) fun _ _ _ => ?_
-      
+      positivity
+    _ = exp x := by rw [exp, Complex.exp, ← cauSeqRe, lim_re]
 
 Depends on / 依赖: CauSeq, CauSeq.le_of_exists, Complex.exp, cauSeqRe, const_apply, isCauSeq_re, le_lim, le_of_exists, lim_re, range_mono, re_sum, sum_le_sum_of_subset_of_nonneg
 -/
@@ -1382,7 +1426,21 @@ theorem sum_div_factorial_le
         ∑ m in range (j - n), (1 / ((m + n).factorial : α)) := by
         refine sum_nbij' (· - n) (· + n) ?_ ?_ ?_ ?_ ?_ <;>
           simp +contextual [lt_tsub_iff_right, tsub_add_cancel_of_le]
-    _ <= ∑ m in range (j - n), ((n.factor
+    _ <= ∑ m in range (j - n), ((n.factorial : α) * (n.succ : α) ^ m)⁻¹ := by
+      simp_rw [one_div]
+      gcongr
+      rw [← Nat.cast_pow]; rw [← Nat.cast_mul]; rw [Nat.cast_le]; rw [add_comm]
+      exact Nat.factorial_mul_pow_le_factorial
+    _ = (n.factorial : α)⁻¹ * ∑ m in range (j - n), (n.succ : α)⁻¹ ^ m := by
+      simp [← mul_sum, mul_comm, inv_pow]
+    _ = ((n.succ : α) - n.succ * (n.succ : α)⁻¹ ^ (j - n)) / (n.factorial * n) := by
+      have h₁ : (n.succ : α) != 1 :=
+        @Nat.cast_one α _ ▸ mt Nat.cast_inj.1 (mt Nat.succ.inj (pos_iff_ne_zero.1 hn))
+      have h₂ : (n.succ : α) != 0 := by positivity
+      have h₃ : (n.factorial * n : α) != 0 := by positivity
+      have h₄ : (n.succ - 1 : α) = n := by simp
+      rw [geom_sum_inv h₁ h₂]; rw [eq_div_iff_mul_eq h₃]; rw [mul_comm _ (n.factorial * n : α)]; rw [← mul_assoc (n.factorial⁻¹ : α)]; rw [← mul_inv_rev]; rw [h₄]; rw [← mul_assoc (n.factorial * n : α)]; rw [mul_comm (n : α) n.factorial]; rw [mul_inv_cancel₀ h₃]; rw [one_mul]; rw [mul_comm]
+    _ <= n.succ / (n.factorial * n : α) := by gcongr; apply sub_le_self; positivity
 
 中文:
 定理 sum_div_factorial_le
@@ -1392,7 +1450,21 @@ theorem sum_div_factorial_le
         ∑ m in range (j - n), (1 / ((m + n).factorial : α)) := by
         refine sum_nbij' (· - n) (· + n) ?_ ?_ ?_ ?_ ?_ <;>
           simp +contextual [lt_tsub_iff_right, tsub_add_cancel_of_le]
-    _ <= ∑ m in range (j - n), ((n.factor
+    _ <= ∑ m in range (j - n), ((n.factorial : α) * (n.succ : α) ^ m)⁻¹ := by
+      simp_rw [one_div]
+      gcongr
+      rw [← Nat.cast_pow]; rw [← Nat.cast_mul]; rw [Nat.cast_le]; rw [add_comm]
+      exact Nat.factorial_mul_pow_le_factorial
+    _ = (n.factorial : α)⁻¹ * ∑ m in range (j - n), (n.succ : α)⁻¹ ^ m := by
+      simp [← mul_sum, mul_comm, inv_pow]
+    _ = ((n.succ : α) - n.succ * (n.succ : α)⁻¹ ^ (j - n)) / (n.factorial * n) := by
+      have h₁ : (n.succ : α) != 1 :=
+        @Nat.cast_one α _ ▸ mt Nat.cast_inj.1 (mt Nat.succ.inj (pos_iff_ne_zero.1 hn))
+      have h₂ : (n.succ : α) != 0 := by positivity
+      have h₃ : (n.factorial * n : α) != 0 := by positivity
+      have h₄ : (n.succ - 1 : α) = n := by simp
+      rw [geom_sum_inv h₁ h₂]; rw [eq_div_iff_mul_eq h₃]; rw [mul_comm _ (n.factorial * n : α)]; rw [← mul_assoc (n.factorial⁻¹ : α)]; rw [← mul_inv_rev]; rw [h₄]; rw [← mul_assoc (n.factorial * n : α)]; rw [mul_comm (n : α) n.factorial]; rw [mul_inv_cancel₀ h₃]; rw [one_mul]; rw [mul_comm]
+    _ <= n.succ / (n.factorial * n : α) := by gcongr; apply sub_le_self; positivity
 
 Depends on / 依赖: Nat.cast_le, Nat.cast_mul, Nat.cast_pow, Nat.factorial_mul_pow_le_factorial, add_comm, cast_le, cast_mul, cast_pow, contextual, factorial, factorial_mul_pow_le_factorial, lt_tsub_iff_right, m.factorial, n.factorial, n.succ, one_div, simp_rw, sum_nbij, tsub_add_cancel_of_le
 -/
@@ -1431,7 +1503,27 @@ theorem exp_bound
   refine lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
   simp_rw [← sub_eq_add_neg]
   change
-    ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ 
+    ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ m / m.factorial‖ <=
+      ‖x‖ ^ n * ((n.succ : Real) * (n.factorial * n : Real)⁻¹)
+  rw [sum_range_sub_sum_range hj]
+  calc
+    ‖∑ m in range j with n <= m, (x ^ m / m.factorial : Complex)‖
+      = ‖∑ m in range j with n <= m, (x ^ n * (x ^ (m - n) / m.factorial) : Complex)‖ := by
+      refine congr_arg norm (sum_congr rfl fun m hm => ?_)
+      rw [mem_filter]; rw [mem_range] at hm
+      rw [← mul_div_assoc]; rw [← pow_add]; rw [add_tsub_cancel_of_le hm.2]
+    _ <= ∑ m in range j with n <= m, ‖x ^ n * (x ^ (m - n) / m.factorial)‖ :=
+      IsAbsoluteValue.abv_sum norm ..
+    _ <= ∑ m in range j with n <= m, ‖x‖ ^ n * (1 / m.factorial) := by
+      simp_rw [Complex.norm_mul, Complex.norm_pow, Complex.norm_div, norm_natCast]
+      gcongr
+      rw [Complex.norm_pow]
+      exact pow_le_one₀ (norm_nonneg _) hx
+    _ = ‖x‖ ^ n * ∑ m in range j with n <= m, (1 / m.factorial : Real) := by
+      simp [← mul_sum]
+    _ <= ‖x‖ ^ n * (n.succ * (n.factorial * n : Real)⁻¹) := by
+      gcongr
+      exact sum_div_factorial_le _ _ hn
 
 中文:
 定理 exp_bound
@@ -1441,7 +1533,27 @@ theorem exp_bound
   refine lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
   simp_rw [← sub_eq_add_neg]
   change
-    ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ 
+    ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ m / m.factorial‖ <=
+      ‖x‖ ^ n * ((n.succ : Real) * (n.factorial * n : Real)⁻¹)
+  rw [sum_range_sub_sum_range hj]
+  calc
+    ‖∑ m in range j with n <= m, (x ^ m / m.factorial : Complex)‖
+      = ‖∑ m in range j with n <= m, (x ^ n * (x ^ (m - n) / m.factorial) : Complex)‖ := by
+      refine congr_arg norm (sum_congr rfl fun m hm => ?_)
+      rw [mem_filter]; rw [mem_range] at hm
+      rw [← mul_div_assoc]; rw [← pow_add]; rw [add_tsub_cancel_of_le hm.2]
+    _ <= ∑ m in range j with n <= m, ‖x ^ n * (x ^ (m - n) / m.factorial)‖ :=
+      IsAbsoluteValue.abv_sum norm ..
+    _ <= ∑ m in range j with n <= m, ‖x‖ ^ n * (1 / m.factorial) := by
+      simp_rw [Complex.norm_mul, Complex.norm_pow, Complex.norm_div, norm_natCast]
+      gcongr
+      rw [Complex.norm_pow]
+      exact pow_le_one₀ (norm_nonneg _) hx
+    _ = ‖x‖ ^ n * ∑ m in range j with n <= m, (1 / m.factorial : Real) := by
+      simp [← mul_sum]
+    _ <= ‖x‖ ^ n * (n.succ * (n.factorial * n : Real)⁻¹) := by
+      gcongr
+      exact sum_div_factorial_le _ _ hn
 
 Depends on / 依赖: CauSeq, CauSeq.le_of_exists, factorial, le_of_exists, lim_add, lim_const, lim_le, lim_neg, lim_norm, m.factorial, n.factorial, n.succ, simp_rw, sub_eq_add_neg, sum_range_sub_sum_range
 -/
@@ -1484,7 +1596,33 @@ theorem exp_bound'
   rw [← lim_const (abv := norm) (∑ m in range n]; rw [_)]; rw [exp]; rw [sub_eq_add_neg]; rw [← lim_neg]; rw [lim_add]; rw [← lim_norm]
   refine lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
   simp_rw [← sub_eq_add_neg]
-  change ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ m / 
+  change ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ m / m.factorial‖ <=
+    ‖x‖ ^ n / n.factorial * 2
+  let k := j - n
+  have hj : j = n + k := (add_tsub_cancel_of_le hj).symm
+  rw [hj]; rw [sum_range_add_sub_sum_range]
+  calc
+    ‖∑ i in range k, x ^ (n + i) / ((n + i).factorial : Complex)‖ <=
+        ∑ i in range k, ‖x ^ (n + i) / ((n + i).factorial : Complex)‖ :=
+      IsAbsoluteValue.abv_sum _ _ _
+    _ <= ∑ i in range k, ‖x‖ ^ (n + i) / (n + i).factorial := by
+      simp [norm_natCast, Complex.norm_pow]
+    _ <= ∑ i in range k, ‖x‖ ^ (n + i) / ((n.factorial : Real) * (n.succ : Real) ^ i) := ?_
+    _ = ∑ i in range k, ‖x‖ ^ n / n.factorial * (‖x‖ ^ i / (n.succ : Real) ^ i) := ?_
+    _ <= ‖x‖ ^ n / ↑n.factorial * 2 := ?_
+  · gcongr
+    exact mod_cast Nat.factorial_mul_pow_le_factorial
+  · simp only [pow_add, div_eq_inv_mul, mul_inv, mul_left_comm, mul_assoc]
+  · rw [← mul_sum]
+    gcongr
+    simp_rw [← div_pow]
+    rw [geom_sum_eq]; rw [div_le_iff_of_neg]
+    · trans (-1 : Real)
+      · linarith
+      · simp only [neg_le_sub_iff_le_add, div_pow, Nat.cast_succ, le_add_iff_nonneg_left]
+        positivity
+    · linarith
+    · linarith
 
 中文:
 定理 exp_bound'
@@ -1493,7 +1631,33 @@ theorem exp_bound'
   rw [← lim_const (abv := norm) (∑ m in range n]; rw [_)]; rw [exp]; rw [sub_eq_add_neg]; rw [← lim_neg]; rw [lim_add]; rw [← lim_norm]
   refine lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
   simp_rw [← sub_eq_add_neg]
-  change ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ m / 
+  change ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ m / m.factorial‖ <=
+    ‖x‖ ^ n / n.factorial * 2
+  let k := j - n
+  have hj : j = n + k := (add_tsub_cancel_of_le hj).symm
+  rw [hj]; rw [sum_range_add_sub_sum_range]
+  calc
+    ‖∑ i in range k, x ^ (n + i) / ((n + i).factorial : Complex)‖ <=
+        ∑ i in range k, ‖x ^ (n + i) / ((n + i).factorial : Complex)‖ :=
+      IsAbsoluteValue.abv_sum _ _ _
+    _ <= ∑ i in range k, ‖x‖ ^ (n + i) / (n + i).factorial := by
+      simp [norm_natCast, Complex.norm_pow]
+    _ <= ∑ i in range k, ‖x‖ ^ (n + i) / ((n.factorial : Real) * (n.succ : Real) ^ i) := ?_
+    _ = ∑ i in range k, ‖x‖ ^ n / n.factorial * (‖x‖ ^ i / (n.succ : Real) ^ i) := ?_
+    _ <= ‖x‖ ^ n / ↑n.factorial * 2 := ?_
+  · gcongr
+    exact mod_cast Nat.factorial_mul_pow_le_factorial
+  · simp only [pow_add, div_eq_inv_mul, mul_inv, mul_left_comm, mul_assoc]
+  · rw [← mul_sum]
+    gcongr
+    simp_rw [← div_pow]
+    rw [geom_sum_eq]; rw [div_le_iff_of_neg]
+    · trans (-1 : Real)
+      · linarith
+      · simp only [neg_le_sub_iff_le_add, div_pow, Nat.cast_succ, le_add_iff_nonneg_left]
+        positivity
+    · linarith
+    · linarith
 
 Depends on / 依赖: CauSeq, CauSeq.le_of_exists, add_tsub_cancel_of_le, factorial, le_of_exists, lim_add, lim_const, lim_le, lim_neg, lim_norm, m.factorial, n.factorial, simp_rw, sub_eq_add_neg, sum_range_add_sub_sum_range
 -/
@@ -1574,7 +1738,8 @@ theorem norm_exp_sub_one_sub_id_le
       simp [sub_eq_add_neg, sum_range_succ_comm, add_assoc, Nat.factorial]
     _ <= ‖x‖ ^ 2 * ((Nat.succ 2 : Real) * (Nat.factorial 2 * (2 : Nat) : Real)⁻¹) :=
       (exp_bound hx (by decide))
-    _ <= ‖x‖ ^ 2 * 1 := by g
+    _ <= ‖x‖ ^ 2 * 1 := by gcongr; norm_num [Nat.factorial]
+    _ = ‖x‖ ^ 2 := by rw [mul_one]
 
 中文:
 定理 norm_exp_sub_one_sub_id_le
@@ -1585,7 +1750,8 @@ theorem norm_exp_sub_one_sub_id_le
       simp [sub_eq_add_neg, sum_range_succ_comm, add_assoc, Nat.factorial]
     _ <= ‖x‖ ^ 2 * ((Nat.succ 2 : Real) * (Nat.factorial 2 * (2 : Nat) : Real)⁻¹) :=
       (exp_bound hx (by decide))
-    _ <= ‖x‖ ^ 2 * 1 := by g
+    _ <= ‖x‖ ^ 2 * 1 := by gcongr; norm_num [Nat.factorial]
+    _ = ‖x‖ ^ 2 := by rw [mul_one]
 
 Depends on / 依赖: Nat.factorial, Nat.succ, add_assoc, exp_bound, factorial, m.factorial, mul_one, sub_eq_add_neg, sum_range_succ_comm
 -/
@@ -1636,7 +1802,15 @@ lemma norm_exp_sub_sum_le_exp_norm_sub_sum
   rw [← CauSeq.lim_const (abv := norm) (∑ m in range n]; rw [_)]; rw [Complex.exp]; rw [sub_eq_add_neg]; rw [← CauSeq.lim_neg]; rw [CauSeq.lim_add]; rw [← lim_norm]
   refine CauSeq.lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
   simp_rw [← sub_eq_add_neg]
-  calc ‖(∑ m in range j, x ^ m / m.fac
+  calc ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ m / m.factorial‖
+  _ <= (∑ m in range j, ‖x‖ ^ m / m.factorial) - ∑ m in range n, ‖x‖ ^ m / m.factorial := by
+    rw [sum_range_sub_sum_range hj]; rw [sum_range_sub_sum_range hj]
+    refine (IsAbsoluteValue.abv_sum norm ..).trans_eq ?_
+    congr with i
+    simp [Complex.norm_pow, Complex.norm_natCast]
+  _ <= Real.exp ‖x‖ - ∑ m in range n, ‖x‖ ^ m / m.factorial := by
+    gcongr
+    exact Real.sum_le_exp_of_nonneg (norm_nonneg _) _
 
 中文:
 引理 norm_exp_sub_sum_le_exp_norm_sub_sum
@@ -1645,7 +1819,15 @@ lemma norm_exp_sub_sum_le_exp_norm_sub_sum
   rw [← CauSeq.lim_const (abv := norm) (∑ m in range n]; rw [_)]; rw [Complex.exp]; rw [sub_eq_add_neg]; rw [← CauSeq.lim_neg]; rw [CauSeq.lim_add]; rw [← lim_norm]
   refine CauSeq.lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
   simp_rw [← sub_eq_add_neg]
-  calc ‖(∑ m in range j, x ^ m / m.fac
+  calc ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ m / m.factorial‖
+  _ <= (∑ m in range j, ‖x‖ ^ m / m.factorial) - ∑ m in range n, ‖x‖ ^ m / m.factorial := by
+    rw [sum_range_sub_sum_range hj]; rw [sum_range_sub_sum_range hj]
+    refine (IsAbsoluteValue.abv_sum norm ..).trans_eq ?_
+    congr with i
+    simp [Complex.norm_pow, Complex.norm_natCast]
+  _ <= Real.exp ‖x‖ - ∑ m in range n, ‖x‖ ^ m / m.factorial := by
+    gcongr
+    exact Real.sum_le_exp_of_nonneg (norm_nonneg _) _
 
 Depends on / 依赖: CStarModule, CauSeq, CauSeq.le_of_exists, CauSeq.lim_add, CauSeq.lim_const, CauSeq.lim_le, CauSeq.lim_neg, Complex.exp, algebra, factorial, inherits, instance, le_of_exists, lim_add, lim_const, lim_le, lim_neg, lim_norm, m.factorial, simp_rw
 -/
@@ -1696,7 +1878,27 @@ lemma norm_exp_sub_sum_le_norm_mul_exp
   proof: by
   rw [← CauSeq.lim_const (abv := norm) (∑ m in range n]; rw [_)]; rw [Complex.exp]; rw [sub_eq_add_neg]; rw [← CauSeq.lim_neg]; rw [CauSeq.lim_add]; rw [← lim_norm]
   refine CauSeq.lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
-  change ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x
+  change ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ m / m.factorial‖ <= _
+  rw [← sum_Ico_eq_sub _ hj]
+  calc
+    ‖∑ m in Ico n j, (x ^ m / m.factorial : Complex)‖
+      = ‖∑ m in Ico n j, (x ^ n * (x ^ (m - n) / m.factorial) : Complex)‖ := by
+      refine congr_arg norm (sum_congr rfl fun m hm => ?_)
+      rw [mem_Ico] at hm
+      rw [← mul_div_assoc]; rw [← pow_add]; rw [add_tsub_cancel_of_le hm.1]
+    _ <= ∑ m in Ico n j, ‖x ^ n * (x ^ (m - n) / m.factorial)‖ :=
+      IsAbsoluteValue.abv_sum norm ..
+    _ <= ∑ m in Ico n j, ‖x‖ ^ n * (‖x‖ ^ (m - n) / (m - n).factorial) := by
+      simp_rw [Complex.norm_mul, Complex.norm_pow, Complex.norm_div, norm_natCast]
+      gcongr with i hi
+      · rw [Complex.norm_pow]
+      · simp
+    _ = ‖x‖ ^ n * ∑ m in range (j - n), (‖x‖ ^ m / m.factorial) := by
+      simp [← mul_sum, sum_Ico_eq_sum_range]
+    _ <= ‖x‖ ^ n * Real.exp ‖x‖ := by
+      gcongr
+      refine Real.sum_le_exp_of_nonneg ?_ _
+      exact norm_nonneg _
 
 中文:
 引理 norm_exp_sub_sum_le_norm_mul_exp
@@ -1704,7 +1906,27 @@ lemma norm_exp_sub_sum_le_norm_mul_exp
   证明: by
   rw [← CauSeq.lim_const (abv := norm) (∑ m in range n]; rw [_)]; rw [Complex.exp]; rw [sub_eq_add_neg]; rw [← CauSeq.lim_neg]; rw [CauSeq.lim_add]; rw [← lim_norm]
   refine CauSeq.lim_le (CauSeq.le_of_exists ⟨n, fun j hj => ?_⟩)
-  change ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x
+  change ‖(∑ m in range j, x ^ m / m.factorial) - ∑ m in range n, x ^ m / m.factorial‖ <= _
+  rw [← sum_Ico_eq_sub _ hj]
+  calc
+    ‖∑ m in Ico n j, (x ^ m / m.factorial : Complex)‖
+      = ‖∑ m in Ico n j, (x ^ n * (x ^ (m - n) / m.factorial) : Complex)‖ := by
+      refine congr_arg norm (sum_congr rfl fun m hm => ?_)
+      rw [mem_Ico] at hm
+      rw [← mul_div_assoc]; rw [← pow_add]; rw [add_tsub_cancel_of_le hm.1]
+    _ <= ∑ m in Ico n j, ‖x ^ n * (x ^ (m - n) / m.factorial)‖ :=
+      IsAbsoluteValue.abv_sum norm ..
+    _ <= ∑ m in Ico n j, ‖x‖ ^ n * (‖x‖ ^ (m - n) / (m - n).factorial) := by
+      simp_rw [Complex.norm_mul, Complex.norm_pow, Complex.norm_div, norm_natCast]
+      gcongr with i hi
+      · rw [Complex.norm_pow]
+      · simp
+    _ = ‖x‖ ^ n * ∑ m in range (j - n), (‖x‖ ^ m / m.factorial) := by
+      simp [← mul_sum, sum_Ico_eq_sum_range]
+    _ <= ‖x‖ ^ n * Real.exp ‖x‖ := by
+      gcongr
+      refine Real.sum_le_exp_of_nonneg ?_ _
+      exact norm_nonneg _
 
 Depends on / 依赖: CauSeq, CauSeq.le_of_exists, CauSeq.lim_add, CauSeq.lim_const, CauSeq.lim_le, CauSeq.lim_neg, Complex.exp, congr_arg, factorial, le_of_exists, lim_add, lim_const, lim_le, lim_neg, lim_norm, m.factorial, sub_eq_add_neg, sum_Ico_eq_sub
 -/
@@ -1981,7 +2203,7 @@ theorem exp_approx_succ
       using 1
   · simp [mul_add, pow_succ', div_eq_mul_inv, abs_mul, abs_inv, Nat.factorial]
     ac_rfl
-  · simp [div_
+  · simp [div_nonneg, abs_nonneg]
 
 中文:
 定理 exp_approx_succ
@@ -1994,7 +2216,7 @@ theorem exp_approx_succ
       using 1
   · simp [mul_add, pow_succ', div_eq_mul_inv, abs_mul, abs_inv, Nat.factorial]
     ac_rfl
-  · simp [div_
+  · simp [div_nonneg, abs_nonneg]
 
 Depends on / 依赖: Nat.factorial, abs_inv, abs_mul, abs_nonneg, abs_sub_le, convert, div_eq_mul_inv, div_nonneg, expNear_sub, expNear_succ, factorial, le_sub_iff_add_le, mul_add, mul_le_mul_of_nonneg_left, pow_succ
 -/
@@ -2100,7 +2322,13 @@ theorem exp_bound_div_one_sub_of_interval'
     exp x <= _ := exp_bound' h1.le h2.le zero_lt_three
     _ <= 1 + x + x ^ 2 := by
       -- Porting note: was `norm_num [Finset.sum] <;> nlinarith`
-      --
+      -- This proof should be restored after the norm_num plugin for big operators is ported.
+      -- (It may also need the positivity extensions in https://github.com/leanprover-community/mathlib4/pull/3907.)
+      rw [show 3 = 1 + 1 + 1 from rfl]
+      repeat rw [Finset.sum_range_succ]
+      norm_num [Nat.factorial]
+      nlinarith
+    _ < 1 / (1 - x) := by rw [lt_div_iff₀] <;> nlinarith
 
 中文:
 定理 exp_bound_div_one_sub_of_interval'
@@ -2113,7 +2341,13 @@ theorem exp_bound_div_one_sub_of_interval'
     exp x <= _ := exp_bound' h1.le h2.le zero_lt_three
     _ <= 1 + x + x ^ 2 := by
       -- Porting note: was `norm_num [Finset.sum] <;> nlinarith`
-      --
+      -- This proof should be restored after the norm_num plugin for big operators is ported.
+      -- (It may also need the positivity extensions in https://github.com/leanprover-community/mathlib4/pull/3907.)
+      rw [show 3 = 1 + 1 + 1 from rfl]
+      repeat rw [Finset.sum_range_succ]
+      norm_num [Nat.factorial]
+      nlinarith
+    _ < 1 / (1 - x) := by rw [lt_div_iff₀] <;> nlinarith
 
 Depends on / 依赖: exp_bound, h1.le, h2.le, zero_lt_three
 -/
@@ -2285,7 +2519,7 @@ theorem one_sub_div_pow_le_exp_neg
       gcongr
 · exact sub_nonneg.2 div_le_one_of_le₀ ht' n.cast_nonneg
       · exact one_sub_le_exp_neg _
-    _ = rexp (-t) := by rw [← Real.exp_nat_mul, mul_neg, m
+    _ = rexp (-t) := by rw [← Real.exp_nat_mul, mul_neg, mul_comm, div_mul_cancel₀]; positivity
 
 中文:
 定理 one_sub_div_pow_le_exp_neg
@@ -2300,7 +2534,7 @@ theorem one_sub_div_pow_le_exp_neg
       gcongr
 · exact sub_nonneg.2 div_le_one_of_le₀ ht' n.cast_nonneg
       · exact one_sub_le_exp_neg _
-    _ = rexp (-t) := by rw [← Real.exp_nat_mul, mul_neg, m
+    _ = rexp (-t) := by rw [← Real.exp_nat_mul, mul_neg, mul_comm, div_mul_cancel₀]; positivity
 
 Depends on / 依赖: Nat.cast_zero, Real.exp_nat_mul, cast_nonneg, cast_zero, eq_or_ne, exp_nat_mul, mul_comm, mul_neg, n.cast_nonneg, one_sub_le_exp_neg, sub_nonneg
 -/
@@ -2387,7 +2621,9 @@ lemma exp_lt_two_add_div_two_sub
     apply Real.exp_nonneg
   _ < (2 + x) / (2 - x) := by
     rw [lt_div_iff₀ (by linarith)]; rw [← sub_pos]
-    simp only [Finset.sum_r
+    simp only [Finset.sum_range_succ]
+    ring_nf
+    positivity
 
 中文:
 引理 exp_lt_two_add_div_two_sub
@@ -2399,7 +2635,9 @@ lemma exp_lt_two_add_div_two_sub
     apply Real.exp_nonneg
   _ < (2 + x) / (2 - x) := by
     rw [lt_div_iff₀ (by linarith)]; rw [← sub_pos]
-    simp only [Finset.sum_r
+    simp only [Finset.sum_range_succ]
+    ring_nf
+    positivity
 
 Depends on / 依赖: Finset, Finset.sum_range_succ, Real.exp_bound, Real.exp_nat_mul, Real.exp_nonneg, exp_bound, exp_nat_mul, exp_nonneg, ring_nf, sub_pos, sum_range_succ
 -/

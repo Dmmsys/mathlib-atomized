@@ -278,7 +278,8 @@ theorem edist_triangle
     | inr hvw =>
       obtain ⟨p, hp⟩ := exists_walk_of_edist_ne_top huv
       obtain ⟨q, hq⟩ := exists_walk_of_edist_ne_top hvw
-      rw [← hp]; rw [
+      rw [← hp]; rw [← hq]; rw [← Nat.cast_add]; rw [← Walk.length_append]
+      exact edist_le _
 
 中文:
 定理 edist_triangle
@@ -292,7 +293,8 @@ theorem edist_triangle
     | inr hvw =>
       obtain ⟨p, hp⟩ := exists_walk_of_edist_ne_top huv
       obtain ⟨q, hq⟩ := exists_walk_of_edist_ne_top hvw
-      rw [← hp]; rw [
+      rw [← hp]; rw [← hq]; rw [← Nat.cast_add]; rw [← Walk.length_append]
+      exact edist_le _
 -/
 protected theorem edist_triangle : G.edist u w <= G.edist u v + G.edist v w := by
   cases eq_or_ne (G.edist u v) ⊤ with
@@ -463,7 +465,15 @@ lemma edist_eq_two_iff
   · simp +decide [← edist_eq_one_iff_adj, h]
   · obtain ⟨w, hw⟩ := exists_walk_of_edist_eq_coe h
     use w.getVert 1
-    suffices w.getVert 1 in G.commonNeighbors (w.getVert 0
+    suffices w.getVert 1 in G.commonNeighbors (w.getVert 0) (w.getVert w.length) by simpa
+    refine hw ▸ G.mem_commonNeighbors.mp ?_
+    exact ⟨w.adj_getVert_succ (by simp [hw]), (w.adj_getVert_succ (by simp [hw])).symm⟩
+  · obtain ⟨w, hw⟩ := h.2.2
+    rw [mem_commonNeighbors] at hw
+    have := (Walk.cons hw.1 <| .cons hw.2.symm .nil).edist_le
+    simp_all
+  · by_contra
+    simp_all [Order.le_one_iff]
 
 中文:
 引理 edist_eq_two_iff
@@ -474,7 +484,15 @@ lemma edist_eq_two_iff
   · simp +decide [← edist_eq_one_iff_adj, h]
   · obtain ⟨w, hw⟩ := exists_walk_of_edist_eq_coe h
     use w.getVert 1
-    suffices w.getVert 1 in G.commonNeighbors (w.getVert 0
+    suffices w.getVert 1 in G.commonNeighbors (w.getVert 0) (w.getVert w.length) by simpa
+    refine hw ▸ G.mem_commonNeighbors.mp ?_
+    exact ⟨w.adj_getVert_succ (by simp [hw]), (w.adj_getVert_succ (by simp [hw])).symm⟩
+  · obtain ⟨w, hw⟩ := h.2.2
+    rw [mem_commonNeighbors] at hw
+    have := (Walk.cons hw.1 <| .cons hw.2.symm .nil).edist_le
+    simp_all
+  · by_contra
+    simp_all [Order.le_one_iff]
 
 Depends on / 依赖: G.commonNeighbors, G.edist_eq_zero_iff.not, G.mem_commonNeighbors.mp, adj_getVert_succ, commonNeighbors, edist_eq_one_iff_adj, edist_eq_zero_iff, exists_walk_of_edist_eq_coe, getVert, le_antisymm, length, mem_commonNeighbors, w.adj_getVert_succ, w.getVert, w.length
 -/
@@ -508,7 +526,10 @@ lemma two_lt_edist_iff
     use hn, this
     by_contra! hc
     simp [edist_eq_two_iff.mpr ⟨hn, this, hc⟩] at h
-  · rw 
+  · rw [← one_add_one_eq_two]
+refine Order.add_one_le_of_lt lt_of_le_of_ne ?_ ?_
+    <;> grind [Order.one_le_iff_pos, pos_iff_ne_zero, edist_eq_zero_iff, edist_eq_one_iff_adj]
+  · simp_all [edist_eq_two_iff]
 
 中文:
 引理 two_lt_edist_iff
@@ -520,7 +541,10 @@ lemma two_lt_edist_iff
     use hn, this
     by_contra! hc
     simp [edist_eq_two_iff.mpr ⟨hn, this, hc⟩] at h
-  · rw 
+  · rw [← one_add_one_eq_two]
+refine Order.add_one_le_of_lt lt_of_le_of_ne ?_ ?_
+    <;> grind [Order.one_le_iff_pos, pos_iff_ne_zero, edist_eq_zero_iff, edist_eq_one_iff_adj]
+  · simp_all [edist_eq_two_iff]
 
 Depends on / 依赖: G.Adj, Ne.symm, Order.add_one_le_of_lt, Order.one_le_iff_pos, add_one_le_of_lt, edist_eq_one_iff_adj, edist_eq_one_iff_adj.mpr, edist_eq_two_iff, edist_eq_two_iff.mpr, edist_eq_zero_iff, lt_of_le_of_ne, one_add_one_eq_two, one_le_iff_pos, pos_iff_ne_zero
 -/
@@ -1177,7 +1201,9 @@ theorem Adj.diff_dist_adj
   · grind [dist_eq_zero_iff_eq_or_not_reachable, Reachable.trans, Adj.reachable]
   have : G.dist v w = 1 := dist_eq_one_iff_adj.mpr hadj
   have : G.dist w v = 1 := dist_eq_one_iff_adj.mpr hadj.symm
-  have : G.dist u w <= G.dist u v + G.dist v w := hadj.reachable
+  have : G.dist u w <= G.dist u v + G.dist v w := hadj.reachable.dist_triangle_right u
+  have : G.dist u v <= G.dist u w + G.dist w v := huw.dist_triangle_left v
+  lia
 
 中文:
 定理 伴随.diff_dist_adj
@@ -1187,7 +1213,9 @@ theorem Adj.diff_dist_adj
   · grind [dist_eq_zero_iff_eq_or_not_reachable, Reachable.trans, Adj.reachable]
   have : G.dist v w = 1 := dist_eq_one_iff_adj.mpr hadj
   have : G.dist w v = 1 := dist_eq_one_iff_adj.mpr hadj.symm
-  have : G.dist u w <= G.dist u v + G.dist v w := hadj.reachable
+  have : G.dist u w <= G.dist u v + G.dist v w := hadj.reachable.dist_triangle_right u
+  have : G.dist u v <= G.dist u w + G.dist w v := huw.dist_triangle_left v
+  lia
 
 Depends on / 依赖: Adj.reachable, G.Reachable, G.dist, Reachable, Reachable.trans, dist_eq_one_iff_adj, dist_eq_one_iff_adj.mpr, dist_eq_zero_iff_eq_or_not_reachable, dist_triangle_left, dist_triangle_right, hadj.reachable.dist_triangle_right, hadj.symm, huw.dist_triangle_left, reachable
 -/
@@ -1367,7 +1395,8 @@ lemma length_eq_dist_of_subwalk
 .append rv let r := ru.append s
   have : p₁.length = ru.length + p₂.length + rv.length := by simp [h]
   have : r.length = ru.length + s.length + rv.length := by simp [r]
-
+  have := dist_le r
+  lia
 
 中文:
 引理 length_eq_dist_of_subwalk
@@ -1379,7 +1408,8 @@ lemma length_eq_dist_of_subwalk
 .append rv let r := ru.append s
   have : p₁.length = ru.length + p₂.length + rv.length := by simp [h]
   have : r.length = ru.length + s.length + rv.length := by simp [r]
-
+  have := dist_le r
+  lia
 
 Depends on / 依赖: append, dist_le, eq_of_not_lt, exists_path_of_dist, length, r.length, reachable, reachable.exists_path_of_dist, ru.append, ru.length, rv.length, s.length
 -/
@@ -1435,7 +1465,16 @@ lemma Walk.exists_adj_adj_not_adj_ne
       simp only [not_nil_iff_lt_length]; rw [← p.length_tail_add_one hnp] at hp ⊢
       lia)]
     lia
-  have : p.tail.l
+  have : p.tail.length < p.length := by rw [← p.length_tail_add_one hnp]; lia
+  by_cases hv : v = p.getVert 2
+  · have : G.dist v w <= p.tail.tail.length := by
+      simpa [hv, p.getVert_tail] using dist_le p.tail.tail
+    lia
+  by_cases hadj : G.Adj v (p.getVert 2)
+  · have : G.dist v w <= p.tail.tail.length + 1 :=
+dist_le p.tail.tail.cons p.getVert_tail ▸ hadj
+    lia
+  exact ⟨p.adj_snd hnp, p.adj_getVert_succ (hp ▸ hl), hadj, hv⟩
 
 中文:
 引理 途径.存在_adj_adj_not_adj_ne
@@ -1448,7 +1487,16 @@ lemma Walk.exists_adj_adj_not_adj_ne
       simp only [not_nil_iff_lt_length]; rw [← p.length_tail_add_one hnp] at hp ⊢
       lia)]
     lia
-  have : p.tail.l
+  have : p.tail.length < p.length := by rw [← p.length_tail_add_one hnp]; lia
+  by_cases hv : v = p.getVert 2
+  · have : G.dist v w <= p.tail.tail.length := by
+      simpa [hv, p.getVert_tail] using dist_le p.tail.tail
+    lia
+  by_cases hadj : G.Adj v (p.getVert 2)
+  · have : G.dist v w <= p.tail.tail.length + 1 :=
+dist_le p.tail.tail.cons p.getVert_tail ▸ hadj
+    lia
+  exact ⟨p.adj_snd hnp, p.adj_getVert_succ (hp ▸ hl), hadj, hv⟩
 
 Depends on / 依赖: G.Adj, G.dist, Nil.length_eq_zero, dist_le, getVert, getVert_tail, length, length_eq_zero, length_tail_add_one, not_nil_iff_lt_length, p.Nil, p.getVe, p.getVert, p.getVert_tail, p.length, p.length_tail_add_one, p.tail.length, p.tail.length_tail_add_one, p.tail.tail, p.tail.tail.length
 -/

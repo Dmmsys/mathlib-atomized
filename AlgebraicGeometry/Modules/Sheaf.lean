@@ -1203,7 +1203,10 @@ lemma pseudofunctor_associativity
   let e₃ := Functor.isoWhiskerLeft (pullback h) (pullbackComp f g)
   let e₄ := pullbackComp (f ≫ g) h
   change e₁.inv ≫ e₂.inv ≫ (Functor.associator _ _ _).hom ≫ e₃.hom ≫ e₄.hom = _
-  have : e₃.
+  have : e₃.hom ≫ e₄.hom = (Functor.associator _ _ _).inv ≫ e₂.hom ≫ e₁.hom :=
+    congr_arg Iso.hom (SheafOfModules.pullback_assoc.{u}
+      h.toRingCatSheafHom g.toRingCatSheafHom f.toRingCatSheafHom)
+  simp [this]
 
 中文:
 引理 pseudofunctor_associativity
@@ -1213,7 +1216,10 @@ lemma pseudofunctor_associativity
   let e₃ := Functor.isoWhiskerLeft (pullback h) (pullbackComp f g)
   let e₄ := pullbackComp (f ≫ g) h
   change e₁.inv ≫ e₂.inv ≫ (Functor.associator _ _ _).hom ≫ e₃.hom ≫ e₄.hom = _
-  have : e₃.
+  have : e₃.hom ≫ e₄.hom = (Functor.associator _ _ _).inv ≫ e₂.hom ≫ e₁.hom :=
+    congr_arg Iso.hom (SheafOfModules.pullback_assoc.{u}
+      h.toRingCatSheafHom g.toRingCatSheafHom f.toRingCatSheafHom)
+  simp [this]
 
 Depends on / 依赖: Functor, Functor.associator, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, Iso.hom, SheafOfModules, SheafOfModules.pullback_assoc, associator, congr_arg, f.toRingCatSheafHom, g.toRingCatSheafHom, h.toRingCatSheafHom, isoWhiskerLeft, isoWhiskerRight, pullback, pullbackComp, pullback_assoc, toRingCatSheafHom
 -/
@@ -1246,7 +1252,7 @@ lemma pseudofunctor_left_unitality
   change e₁.inv ≫ e₂.hom ≫ e₃.hom = _
   have : e₁.hom = e₂.hom ≫ e₃.hom :=
     congr_arg Iso.hom (SheafOfModules.pullback_id_comp.{u} f.toRingCatSheafHom)
-  simp [←
+  simp [← this]
 
 中文:
 引理 pseudofunctor_left_unitality
@@ -1257,7 +1263,7 @@ lemma pseudofunctor_left_unitality
   change e₁.inv ≫ e₂.hom ≫ e₃.hom = _
   have : e₁.hom = e₂.hom ≫ e₃.hom :=
     congr_arg Iso.hom (SheafOfModules.pullback_id_comp.{u} f.toRingCatSheafHom)
-  simp [←
+  simp [← this]
 
 Depends on / 依赖: Functor, Functor.isoWhiskerRight, Iso.hom, SheafOfModules, SheafOfModules.pullback_id_comp, congr_arg, f.toRingCatSheafHom, isoWhiskerRight, leftUnitor, pullback, pullbackComp, pullbackId, pullback_id_comp, toRingCatSheafHom
 -/
@@ -1287,7 +1293,7 @@ lemma pseudofunctor_right_unitality
   change e₁.inv ≫ e₂.hom ≫ e₃.hom = _
   have : e₁.hom = e₂.hom ≫ e₃.hom :=
     congr_arg Iso.hom (SheafOfModules.pullback_comp_id.{u} f.toRingCatSheafHom)
-  simp [←
+  simp [← this]
 
 中文:
 引理 pseudofunctor_right_unitality
@@ -1298,7 +1304,7 @@ lemma pseudofunctor_right_unitality
   change e₁.inv ≫ e₂.hom ≫ e₃.hom = _
   have : e₁.hom = e₂.hom ≫ e₃.hom :=
     congr_arg Iso.hom (SheafOfModules.pullback_comp_id.{u} f.toRingCatSheafHom)
-  simp [←
+  simp [← this]
 
 Depends on / 依赖: Functor, Functor.isoWhiskerLeft, Iso.hom, SheafOfModules, SheafOfModules.pullback_comp_id, congr_arg, f.toRingCatSheafHom, isoWhiskerLeft, pullback, pullbackComp, pullbackId, pullback_comp_id, rightUnitor, toRingCatSheafHom
 -/
@@ -1337,7 +1343,8 @@ definition pseudofunctor
     (fun f => .mk (pullbackPushforwardAdjunction f.unop).toCat)
     (fun _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackId _))
         (Cat.Hom.isoMk (pushforwardId _).symm))
-    (fun _ _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackCom
+    (fun _ _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackComp _ _).symm)
+        (Cat.Hom.isoMk (pushforwardComp _ _)))
 
 中文:
 定义 pseudofunctor
@@ -1347,7 +1354,8 @@ definition pseudofunctor
     (fun f => .mk (pullbackPushforwardAdjunction f.unop).toCat)
     (fun _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackId _))
         (Cat.Hom.isoMk (pushforwardId _).symm))
-    (fun _ _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackCom
+    (fun _ _ => Adj.iso₂Mk (Cat.Hom.isoMk (pullbackComp _ _).symm)
+        (Cat.Hom.isoMk (pushforwardComp _ _)))
 
 Depends on / 依赖: Adj.iso, Adj.mk, Cat.Hom.isoMk, Cat.of, LocallyDiscrete, LocallyDiscrete.mkPseudofunctor, Modules, X.unop.Modules, f.unop, mkPseudofunctor, pullbackComp, pullbackId, pullbackPushforwardAdjunction, pushforwardComp, pushforwardId
 -/
@@ -1573,7 +1581,14 @@ refine (fullyFaithfulForget _).preimageIso PresheafOfModules.isoMk (fun U => ?_)
       ((forget₂ CommRingCat RingCat ⋙ forget₂ _ Ab).mapIso (f.appIso U.unop)) ?_
     intro (r : Γ(X, U.unop))
     ext (x : Γ(Y, f ''ᵁ U.unop))
-    change r * (f.appIso U.unop).hom x = (f
+    change r * (f.appIso U.unop).hom x = (f.appIso U.unop).hom ((f.appIso U.unop).inv r * x)
+    simp
+  · intro U V g
+    have : Y.presheaf.map (homOfLE (by grw [leOfHom g.unop])).op ≫
+        (f.appIso _).hom = (f.appIso U.unop).hom ≫ X.presheaf.map g := by
+      simp [Hom.appIso_hom']
+    ext x
+    exact congr($(this) x)
 
 中文:
 定义 restrictUnitIso
@@ -1584,7 +1599,14 @@ refine (fullyFaithfulForget _).preimageIso PresheafOfModules.isoMk (fun U => ?_)
       ((forget₂ CommRingCat RingCat ⋙ forget₂ _ Ab).mapIso (f.appIso U.unop)) ?_
     intro (r : Γ(X, U.unop))
     ext (x : Γ(Y, f ''ᵁ U.unop))
-    change r * (f.appIso U.unop).hom x = (f
+    change r * (f.appIso U.unop).hom x = (f.appIso U.unop).hom ((f.appIso U.unop).inv r * x)
+    simp
+  · intro U V g
+    have : Y.presheaf.map (homOfLE (by grw [leOfHom g.unop])).op ≫
+        (f.appIso _).hom = (f.appIso U.unop).hom ≫ X.presheaf.map g := by
+      simp [Hom.appIso_hom']
+    ext x
+    exact congr($(this) x)
 
 Depends on / 依赖: CommRingCat, Hom.appIso_hom, ModuleCat, ModuleCat.isoMk, PresheafOfModules, PresheafOfModules.isoMk, RingCat, U.unop, X.presheaf.map, Y.presheaf.map, appIso, appIso_hom, f.appIso, fullyFaithfulForget, g.unop, homOfLE, leOfHom, mapIso, preimageIso, presheaf
 -/
@@ -1613,7 +1635,9 @@ definition restrictFunctorAdjCounitIso
   body: letI := CategoryTheory.Functor.isContinuous_comp.{u} f.opensFunctor (Opens.map f.base)
     (Opens.grothendieckTopology X) (Opens.grothendieckTopology Y) (Opens.grothendieckTopology X)
   (SheafOfModules.pushforwardComp _ _) ≪≫ pushforwardNatIso _ (NatIso.ofComponents
-      (fun U => eqToIso (f.preima
+      (fun U => eqToIso (f.preimage_image_eq U).symm) fun _ => rfl) ≪≫
+    SheafOfModules.pushforwardCongr (by ext U x; exact
+      congr($(f.appIso_inv_app_presheafMap U.unop) x)) ≪≫ SheafOfModules.pushforwardId _
 
 中文:
 定义 restrictFunctorAdjCounitIso
@@ -1621,7 +1645,9 @@ definition restrictFunctorAdjCounitIso
   定义体: letI := CategoryTheory.Functor.isContinuous_comp.{u} f.opensFunctor (Opens.map f.base)
     (Opens.grothendieckTopology X) (Opens.grothendieckTopology Y) (Opens.grothendieckTopology X)
   (SheafOfModules.pushforwardComp _ _) ≪≫ pushforwardNatIso _ (NatIso.ofComponents
-      (fun U => eqToIso (f.preima
+      (fun U => eqToIso (f.preimage_image_eq U).symm) fun _ => rfl) ≪≫
+    SheafOfModules.pushforwardCongr (by ext U x; exact
+      congr($(f.appIso_inv_app_presheafMap U.unop) x)) ≪≫ SheafOfModules.pushforwardId _
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.isContinuous_comp, Functor, NatIso, NatIso.ofComponents, Opens.grothendieckTopology, Opens.map, SheafOfModules, SheafOfModules.pushforwardComp, SheafOfModules.pushforwardCongr, SheafOfModules.pushforwardId, U.unop, appIso_inv_app_presheafMap, eqToIso, f.appIso_inv_app_presheafMap, f.base, f.opensFunctor, f.preimage_image_eq, grothendieckTopology, isContinuous_comp
 -/
@@ -1645,7 +1671,8 @@ definition restrictAdjunction
   · ext U x
     have : (f.appIso U.unop).inv ≫ f.app _ ≫
       X.presheaf.map (eqToHom (f.preimage_image_eq U.unop).symm).op = 𝟙 _ := by
-    
+      rw [Scheme.Hom.appIso_inv_app_assoc]; rw [← Functor.map_comp]; rw [← X.presheaf.map_id]; rfl
+    exact congr($this x)
 
 中文:
 定义 restrictAdjunction
@@ -1656,7 +1683,8 @@ definition restrictAdjunction
   · ext U x
     have : (f.appIso U.unop).inv ≫ f.app _ ≫
       X.presheaf.map (eqToHom (f.preimage_image_eq U.unop).symm).op = 𝟙 _ := by
-    
+      rw [Scheme.Hom.appIso_inv_app_assoc]; rw [← Functor.map_comp]; rw [← X.presheaf.map_id]; rfl
+    exact congr($this x)
 
 Depends on / 依赖: Functor, Functor.map_comp, Scheme, Scheme.Hom.appIso_inv_app_assoc, U.unop, X.presheaf.map, X.presheaf.map_id, adjunction, appIso, appIso_inv_app_assoc, app_appIso_inv, eqToHom, f.app, f.appIso, f.app_appIso_inv, f.isOpenEmbedding.isOpenMap.adjunction, f.preimage_image_eq, isOpenEmbedding, isOpenMap, map_comp
 -/
@@ -2108,7 +2136,9 @@ definition sheafComposePushforwardComp
   · refine NatIso.ofComponents (fun U => ?_) ?_
     · refine (ModuleCat.restrictScalarsComp'App _ _ _ ?_ _).symm ≪≫
         (ModuleCat.restrictScalarsComp φ.hom ((Scheme.ΓSpecIso S).inv).hom).app _
-      rw [← CommRingCat.hom_co
+      rw [← CommRingCat.hom_comp]; rw [Scheme.ΓSpecIso_inv_naturality]; rw [CommRingCat.hom_comp]
+    · cat_disch
+  · cat_disch
 
 中文:
 定义 sheafComposePushforwardComp
@@ -2118,7 +2148,9 @@ definition sheafComposePushforwardComp
   · refine NatIso.ofComponents (fun U => ?_) ?_
     · refine (ModuleCat.restrictScalarsComp'App _ _ _ ?_ _).symm ≪≫
         (ModuleCat.restrictScalarsComp φ.hom ((Scheme.ΓSpecIso S).inv).hom).app _
-      rw [← CommRingCat.hom_co
+      rw [← CommRingCat.hom_comp]; rw [Scheme.ΓSpecIso_inv_naturality]; rw [CommRingCat.hom_comp]
+    · cat_disch
+  · cat_disch
 
 Depends on / 依赖: CommRingCat, CommRingCat.hom_comp, ModuleCat, ModuleCat.restrictScalarsComp, NatIso, NatIso.ofComponents, ObjectProperty, ObjectProperty.isoMk, Scheme, cat_disch, hom_comp, ofComponents, restrictScalarsComp
 -/
@@ -2175,7 +2207,33 @@ definition overMapCompOverEquiv
 inferInstanceAs
       (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous _
       (Opens.grothendieckTopology U.toScheme)
-  haveI := U.in
+  haveI := U.instIsDenseSubsiteSubtypeMemOverGrothendieckTopologyOverInverseOverEquivalence
+  haveI : (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous
+      (Opens.grothendieckTopology ↥V) (Opens.grothendieckTopology U.toScheme) :=
+inferInstanceAs (X.homOfLE <| leOfHom f).opensFunctor.IsContinuous
+      (Opens.grothendieckTopology V.toScheme) (Opens.grothendieckTopology U.toScheme)
+  haveI : ((Opens.overEquivalence V).symm.functor ⋙ Over.map f).IsContinuous
+      (Opens.grothendieckTopology ↥V) ((Opens.grothendieckTopology X).over U) :=
+    Functor.isContinuous_comp _ _ _ (.over (Opens.grothendieckTopology _) _) _
+  haveI : (Opens.overEquivalence U).symm.functor.IsContinuous (Opens.grothendieckTopology U)
+      ((Opens.grothendieckTopology X).over U) :=
+inferInstanceAs U.overEquivalence.inverse.IsContinuous (Opens.grothendieckTopology U.carrier)
+      ((Opens.grothendieckTopology X).over U)
+  haveI : ((X.homOfLE (leOfHom f)).opensFunctor ⋙
+        (Opens.overEquivalence U).symm.functor).IsContinuous (Opens.grothendieckTopology ↥V)
+      ((Opens.grothendieckTopology ↥X).over U) :=
+    Functor.isContinuous_comp _ _ _ (Opens.grothendieckTopology _) _
+  refine (SheafOfModules.pushforwardComp _ _) ≪≫ ?_ ≪≫ (SheafOfModules.pushforwardComp _ _).symm
+  refine SheafOfModules.pushforwardCongr₂ _ ?_ ?_
+  · refine NatIso.ofComponents (fun W => Over.isoMk (eqToIso ?_) ?_) ?_
+    · suffices U.ι ''ᵁ ((X.homOfLE (leOfHom f)) ''ᵁ W) = V.ι ''ᵁ W by simpa
+      simp [← Scheme.Hom.comp_image]
+    · cat_disch
+    · cat_disch
+  · ext W x
+    suffices X.presheaf.map _ x = ((X.homOfLE <| leOfHom f).appIso _).inv x by simpa
+    rw [Scheme.Hom.appIso_homOfLE_inv]
+    rfl
 
 中文:
 定义 overMapCompOverEquiv
@@ -2186,7 +2244,33 @@ inferInstanceAs
 inferInstanceAs
       (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous _
       (Opens.grothendieckTopology U.toScheme)
-  haveI := U.in
+  haveI := U.instIsDenseSubsiteSubtypeMemOverGrothendieckTopologyOverInverseOverEquivalence
+  haveI : (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous
+      (Opens.grothendieckTopology ↥V) (Opens.grothendieckTopology U.toScheme) :=
+inferInstanceAs (X.homOfLE <| leOfHom f).opensFunctor.IsContinuous
+      (Opens.grothendieckTopology V.toScheme) (Opens.grothendieckTopology U.toScheme)
+  haveI : ((Opens.overEquivalence V).symm.functor ⋙ Over.map f).IsContinuous
+      (Opens.grothendieckTopology ↥V) ((Opens.grothendieckTopology X).over U) :=
+    Functor.isContinuous_comp _ _ _ (.over (Opens.grothendieckTopology _) _) _
+  haveI : (Opens.overEquivalence U).symm.functor.IsContinuous (Opens.grothendieckTopology U)
+      ((Opens.grothendieckTopology X).over U) :=
+inferInstanceAs U.overEquivalence.inverse.IsContinuous (Opens.grothendieckTopology U.carrier)
+      ((Opens.grothendieckTopology X).over U)
+  haveI : ((X.homOfLE (leOfHom f)).opensFunctor ⋙
+        (Opens.overEquivalence U).symm.functor).IsContinuous (Opens.grothendieckTopology ↥V)
+      ((Opens.grothendieckTopology ↥X).over U) :=
+    Functor.isContinuous_comp _ _ _ (Opens.grothendieckTopology _) _
+  refine (SheafOfModules.pushforwardComp _ _) ≪≫ ?_ ≪≫ (SheafOfModules.pushforwardComp _ _).symm
+  refine SheafOfModules.pushforwardCongr₂ _ ?_ ?_
+  · refine NatIso.ofComponents (fun W => Over.isoMk (eqToIso ?_) ?_) ?_
+    · suffices U.ι ''ᵁ ((X.homOfLE (leOfHom f)) ''ᵁ W) = V.ι ''ᵁ W by simpa
+      simp [← Scheme.Hom.comp_image]
+    · cat_disch
+    · cat_disch
+  · ext W x
+    suffices X.presheaf.map _ x = ((X.homOfLE <| leOfHom f).appIso _).inv x by simpa
+    rw [Scheme.Hom.appIso_homOfLE_inv]
+    rfl
 
 Depends on / 依赖: Hom.opensFunctor, IsContinuous, Opens.grothendieckTopology, U.carrier, U.instIsDenseSubsiteSubtypeMemOverGrothendieckTopologyOverInverseOverEquivalence, U.toScheme, V.toScheme, X.homOfLE, carrier, grothendieckTopology, homOfLE, instIsDenseSubsiteSubtypeMemOverGrothendieckTopologyOverInverseOverEquivalence, leOfHom, opensFunctor, toScheme
 -/
@@ -2239,7 +2323,9 @@ definition overFunctorEquiv
   have : ((Opens.overEquivalence U).symm.functor ⋙ Over.forget U).IsContinuous
       (Opens.grothendieckTopology ↥U) (Opens.grothendieckTopology ↥X) :=
     Functor.isContinuous_comp _ _ _ (.over (Opens.grothendieckTopology _) U) _
-  refine SheafOfModules.pushforwardComp _ _ ≪≫ SheafOfModules.push
+  refine SheafOfModules.pushforwardComp _ _ ≪≫ SheafOfModules.pushforwardCongr ?_
+  simp only [CategoryTheory.Functor.map_id, Opposite.op_unop, Opens.ι_appIso, Iso.refl_inv]
+  rfl
 
 中文:
 定义 overFunctorEquiv
@@ -2248,7 +2334,9 @@ definition overFunctorEquiv
   have : ((Opens.overEquivalence U).symm.functor ⋙ Over.forget U).IsContinuous
       (Opens.grothendieckTopology ↥U) (Opens.grothendieckTopology ↥X) :=
     Functor.isContinuous_comp _ _ _ (.over (Opens.grothendieckTopology _) U) _
-  refine SheafOfModules.pushforwardComp _ _ ≪≫ SheafOfModules.push
+  refine SheafOfModules.pushforwardComp _ _ ≪≫ SheafOfModules.pushforwardCongr ?_
+  simp only [CategoryTheory.Functor.map_id, Opposite.op_unop, Opens.ι_appIso, Iso.refl_inv]
+  rfl
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, Functor, Functor.isContinuous_comp, IsContinuous, Iso.refl_inv, Opens.grothendieckTopology, Opens.overEquivalence, Opposite, Opposite.op_unop, Over.forget, SheafOfModules, SheafOfModules.pushforwardComp, SheafOfModules.pushforwardCongr, forget, functor, grothendieckTopology, isContinuous_comp, map_id, op_unop
 -/

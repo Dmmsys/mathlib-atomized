@@ -134,7 +134,8 @@ theorem _root_.Topology.IsClosedEmbedding.polishSpace
   have : SecondCountableTopology α := hf.isEmbedding.secondCountableTopology
   have : CompleteSpace α := by
     rw [completeSpace_iff_isComplete_range hf.isEmbedding.to_isometry.isUniformInducing]
-
+    exact hf.isClosed_range.isComplete
+  infer_instance
 
 中文:
 定理 _root_.拓扑.是闭嵌入.polishSpace
@@ -145,7 +146,8 @@ theorem _root_.Topology.IsClosedEmbedding.polishSpace
   have : SecondCountableTopology α := hf.isEmbedding.secondCountableTopology
   have : CompleteSpace α := by
     rw [completeSpace_iff_isComplete_range hf.isEmbedding.to_isometry.isUniformInducing]
-
+    exact hf.isClosed_range.isComplete
+  infer_instance
 
 Depends on / 依赖: CompleteSpace, MetricSpace, SecondCountableTopology, comapMetricSpace, completeSpace_iff_isComplete_range, hf.isClosed_range.isComplete, hf.isEmbedding.comapMetricSpace, hf.isEmbedding.secondCountableTopology, hf.isEmbedding.to_isometry.isUniformInducing, infer_instance, isClosed_range, isComplete, isEmbedding, isUniformInducing, secondCountableTopology, to_isometry, upgradeIsCompletelyMetrizable
 -/
@@ -247,7 +249,13 @@ theorem iInf
     fun i =>
       letI := t i; haveI := ht i; letI := upgradeIsCompletelyMetrizable α
       ⟨inferInstance, inferInstance, inferInstance, rfl⟩
-    with ⟨u, hcomp, hcount, h
+    with ⟨u, hcomp, hcount, htop⟩
+  rw [← htop]
+  have : @SecondCountableTopology α u.toTopologicalSpace :=
+    htop.symm ▸ secondCountableTopology_iInf fun i => letI := t i; (ht i).toSecondCountableTopology
+  have : @T1Space α u.toTopologicalSpace :=
+    htop.symm ▸ t1Space_antitone (iInf_le _ i₀) (by let := t i₀; have := ht i₀; infer_instance)
+  infer_instance
 
 中文:
 定理 iInf
@@ -258,7 +266,13 @@ theorem iInf
     fun i =>
       letI := t i; haveI := ht i; letI := upgradeIsCompletelyMetrizable α
       ⟨inferInstance, inferInstance, inferInstance, rfl⟩
-    with ⟨u, hcomp, hcount, h
+    with ⟨u, hcomp, hcount, htop⟩
+  rw [← htop]
+  have : @SecondCountableTopology α u.toTopologicalSpace :=
+    htop.symm ▸ secondCountableTopology_iInf fun i => letI := t i; (ht i).toSecondCountableTopology
+  have : @T1Space α u.toTopologicalSpace :=
+    htop.symm ▸ t1Space_antitone (iInf_le _ i₀) (by let := t i₀; have := ht i₀; infer_instance)
+  infer_instance
 -/
 protected theorem iInf {ι : Type*} [Countable ι] {t : ι -> TopologicalSpace α}
     (ht₀ : exists i₀, forall i, t i <= t i₀) (ht : forall i, @PolishSpace α (t i)) : @PolishSpace α (⨅ i, t i) := by
@@ -466,7 +480,25 @@ instance instMetricSpace
   · simp only [dist_eq, dist_self, one_div, sub_self, abs_zero, add_zero]
   · simp only [dist_eq, dist_comm, abs_sub_comm]
   · calc
-      dist x z 
+      dist x z = dist x.1 z.1 + |1 / infDist x.1 sᶜ - 1 / infDist z.1 sᶜ| := rfl
+      _ <= dist x.1 y.1 + dist y.1 z.1 + (|1 / infDist x.1 sᶜ - 1 / infDist y.1 sᶜ| +
+            |1 / infDist y.1 sᶜ - 1 / infDist z.1 sᶜ|) :=
+        add_le_add (dist_triangle _ _ _) (dist_triangle (1 / infDist _ _) _ _)
+      _ = dist x y + dist y z := add_add_add_comm ..
+  · refine ⟨fun h x hx => ?_, fun h => isOpen_iff_mem_nhds.2 fun x hx => ?_⟩
+    · rcases (Metric.isOpen_iff (α := s)).1 h x hx with ⟨ε, ε0, hε⟩
+exact ⟨ε, ε0, fun y hy => hε (dist_comm _ _).trans_lt (dist_val_le_dist _ _).trans_lt hy⟩
+    · rcases h x hx with ⟨ε, ε0, hε⟩
+      simp only [dist_eq, one_div] at hε
+      have : Tendsto (fun y : s => dist x.1 y.1 + |(infDist x.1 sᶜ)⁻¹ - (infDist y.1 sᶜ)⁻¹|)
+          (𝓝 x) (𝓝 (dist x.1 x.1 + |(infDist x.1 sᶜ)⁻¹ - (infDist x.1 sᶜ)⁻¹|)) := by
+        refine (tendsto_const_nhds.dist continuous_subtype_val.continuousAt).add
+          (tendsto_const_nhds.sub <| ?_).abs
+        refine (continuousAt_inv_infDist_pt ?_).comp continuous_subtype_val.continuousAt
+        rw [s.isOpen.isClosed_compl.closure_eq]; rw [mem_compl_iff]; rw [not_not]
+        exact x.2
+      simp only [dist_self, sub_self, abs_zero, zero_add] at this
+      exact mem_of_superset (this <| gt_mem_nhds ε0) hε
 
 中文:
 实例 instMetricSpace
@@ -477,7 +509,25 @@ instance instMetricSpace
   · simp only [dist_eq, dist_self, one_div, sub_self, abs_zero, add_zero]
   · simp only [dist_eq, dist_comm, abs_sub_comm]
   · calc
-      dist x z 
+      dist x z = dist x.1 z.1 + |1 / infDist x.1 sᶜ - 1 / infDist z.1 sᶜ| := rfl
+      _ <= dist x.1 y.1 + dist y.1 z.1 + (|1 / infDist x.1 sᶜ - 1 / infDist y.1 sᶜ| +
+            |1 / infDist y.1 sᶜ - 1 / infDist z.1 sᶜ|) :=
+        add_le_add (dist_triangle _ _ _) (dist_triangle (1 / infDist _ _) _ _)
+      _ = dist x y + dist y z := add_add_add_comm ..
+  · refine ⟨fun h x hx => ?_, fun h => isOpen_iff_mem_nhds.2 fun x hx => ?_⟩
+    · rcases (Metric.isOpen_iff (α := s)).1 h x hx with ⟨ε, ε0, hε⟩
+exact ⟨ε, ε0, fun y hy => hε (dist_comm _ _).trans_lt (dist_val_le_dist _ _).trans_lt hy⟩
+    · rcases h x hx with ⟨ε, ε0, hε⟩
+      simp only [dist_eq, one_div] at hε
+      have : Tendsto (fun y : s => dist x.1 y.1 + |(infDist x.1 sᶜ)⁻¹ - (infDist y.1 sᶜ)⁻¹|)
+          (𝓝 x) (𝓝 (dist x.1 x.1 + |(infDist x.1 sᶜ)⁻¹ - (infDist x.1 sᶜ)⁻¹|)) := by
+        refine (tendsto_const_nhds.dist continuous_subtype_val.continuousAt).add
+          (tendsto_const_nhds.sub <| ?_).abs
+        refine (continuousAt_inv_infDist_pt ?_).comp continuous_subtype_val.continuousAt
+        rw [s.isOpen.isClosed_compl.closure_eq]; rw [mem_compl_iff]; rw [not_not]
+        exact x.2
+      simp only [dist_self, sub_self, abs_zero, zero_add] at this
+      exact mem_of_superset (this <| gt_mem_nhds ε0) hε
 
 Depends on / 依赖: CompleteCopy, MetricSpace, MetricSpace.ofT0PseudoMetricSpace, abs_sub_comm, abs_zero, add_le_add, add_zero, dist_comm, dist_eq, dist_self, dist_triangle, infDist, ofDistTopology, ofT0PseudoMetricSpace, one_div, sub_self
 -/
@@ -517,7 +567,31 @@ instance instCompleteSpace
   refine Metric.complete_of_convergent_controlled_sequences ((1 / 2) ^ ·) (by simp) fun u hu => ?_
   have A : CauchySeq fun n => (u n).1 := by
     refine cauchySeq_of_le_tendsto_0 (fun n : Nat => (1 / 2) ^ n) (fun n m N hNn hNm => ?_) ?_
-    · exact (dist_val_le_dist (u n) (u m)).trans (hu N n m 
+    · exact (dist_val_le_dist (u n) (u m)).trans (hu N n m hNn hNm).le
+    · exact tendsto_pow_atTop_nhds_zero_of_lt_one (by simp) (by norm_num)
+  obtain ⟨x, xlim⟩ : exists x, Tendsto (fun n => (u n).1) atTop (𝓝 x) := cauchySeq_tendsto_of_complete A
+  by_cases xs : x in s
+  · exact ⟨⟨x, xs⟩, tendsto_subtype_rng.2 xlim⟩
+  obtain ⟨C, hC⟩ : exists C, forall n, 1 / infDist (u n).1 sᶜ < C := by
+    refine ⟨(1 / 2) ^ 0 + 1 / infDist (u 0).1 sᶜ, fun n => ?_⟩
+    rw [← sub_lt_iff_lt_add]
+    calc
+      _ <= |1 / infDist (u n).1 sᶜ - 1 / infDist (u 0).1 sᶜ| := le_abs_self _
+      _ = |1 / infDist (u 0).1 sᶜ - 1 / infDist (u n).1 sᶜ| := abs_sub_comm _ _
+      _ <= dist (u 0) (u n) := le_add_of_nonneg_left dist_nonneg
+      _ < (1 / 2) ^ 0 := hu 0 0 n le_rfl n.zero_le
+  have Cpos : 0 < C := lt_of_le_of_lt (div_nonneg zero_le_one infDist_nonneg) (hC 0)
+  have Hmem : forall {y}, y in s ↔ 0 < infDist y sᶜ := fun {y} => by
+    rw [← s.isOpen.isClosed_compl.notMem_iff_infDist_pos ⟨x]; rw [xs⟩]; exact not_not.symm
+  have I : forall n, 1 / C <= infDist (u n).1 sᶜ := fun n => by
+    have : 0 < infDist (u n).1 sᶜ := Hmem.1 (u n).2
+    rw [div_le_iff₀' Cpos]
+    exact (div_le_iff₀ this).1 (hC n).le
+  have I' : 1 / C <= infDist x sᶜ :=
+    have : Tendsto (fun n => infDist (u n).1 sᶜ) atTop (𝓝 (infDist x sᶜ)) :=
+      ((continuous_infDist_pt (sᶜ : Set α)).tendsto x).comp xlim
+    ge_of_tendsto' this I
+  exact absurd (Hmem.2 <| lt_of_lt_of_le (div_pos one_pos Cpos) I') xs
 
 中文:
 实例 instCompleteSpace
@@ -526,7 +600,31 @@ instance instCompleteSpace
   refine Metric.complete_of_convergent_controlled_sequences ((1 / 2) ^ ·) (by simp) fun u hu => ?_
   have A : CauchySeq fun n => (u n).1 := by
     refine cauchySeq_of_le_tendsto_0 (fun n : Nat => (1 / 2) ^ n) (fun n m N hNn hNm => ?_) ?_
-    · exact (dist_val_le_dist (u n) (u m)).trans (hu N n m 
+    · exact (dist_val_le_dist (u n) (u m)).trans (hu N n m hNn hNm).le
+    · exact tendsto_pow_atTop_nhds_zero_of_lt_one (by simp) (by norm_num)
+  obtain ⟨x, xlim⟩ : exists x, Tendsto (fun n => (u n).1) atTop (𝓝 x) := cauchySeq_tendsto_of_complete A
+  by_cases xs : x in s
+  · exact ⟨⟨x, xs⟩, tendsto_subtype_rng.2 xlim⟩
+  obtain ⟨C, hC⟩ : exists C, forall n, 1 / infDist (u n).1 sᶜ < C := by
+    refine ⟨(1 / 2) ^ 0 + 1 / infDist (u 0).1 sᶜ, fun n => ?_⟩
+    rw [← sub_lt_iff_lt_add]
+    calc
+      _ <= |1 / infDist (u n).1 sᶜ - 1 / infDist (u 0).1 sᶜ| := le_abs_self _
+      _ = |1 / infDist (u 0).1 sᶜ - 1 / infDist (u n).1 sᶜ| := abs_sub_comm _ _
+      _ <= dist (u 0) (u n) := le_add_of_nonneg_left dist_nonneg
+      _ < (1 / 2) ^ 0 := hu 0 0 n le_rfl n.zero_le
+  have Cpos : 0 < C := lt_of_le_of_lt (div_nonneg zero_le_one infDist_nonneg) (hC 0)
+  have Hmem : forall {y}, y in s ↔ 0 < infDist y sᶜ := fun {y} => by
+    rw [← s.isOpen.isClosed_compl.notMem_iff_infDist_pos ⟨x]; rw [xs⟩]; exact not_not.symm
+  have I : forall n, 1 / C <= infDist (u n).1 sᶜ := fun n => by
+    have : 0 < infDist (u n).1 sᶜ := Hmem.1 (u n).2
+    rw [div_le_iff₀' Cpos]
+    exact (div_le_iff₀ this).1 (hC n).le
+  have I' : 1 / C <= infDist x sᶜ :=
+    have : Tendsto (fun n => infDist (u n).1 sᶜ) atTop (𝓝 (infDist x sᶜ)) :=
+      ((continuous_infDist_pt (sᶜ : Set α)).tendsto x).comp xlim
+    ge_of_tendsto' this I
+  exact absurd (Hmem.2 <| lt_of_lt_of_le (div_pos one_pos Cpos) I') xs
 
 Depends on / 依赖: CauchySeq, Metric, Metric.complete_of_convergent_controlled_sequences, Tendsto, cauchySeq_of_le_tendsto_0, cauchySeq_tendsto_of_complete, complete_of_convergent_controlled_sequences, dist_val_le_dist, tendsto_pow_atTop_nhds_zero_of_lt_one
 -/
@@ -625,7 +723,18 @@ theorem _root_.IsClosed.isClopenable
     topology in which `s` is both open and closed. -/
   classical
   have : PolishSpace s := hs.polishSpace
-  let 
+  let t : Set α := sᶜ
+  have : PolishSpace t := hs.isOpen_compl.polishSpace
+  let f : s oplus t ≃ α := Equiv.Set.sumCompl s
+  have hle : TopologicalSpace.coinduced f instTopologicalSpaceSum <= ‹_› := by
+    simp only [instTopologicalSpaceSum, coinduced_sup, coinduced_compose, sup_le_iff,
+      ← continuous_iff_coinduced_le]
+    exact ⟨continuous_subtype_val, continuous_subtype_val⟩
+  refine ⟨.coinduced f instTopologicalSpaceSum, hle, ?_, hs.mono hle, ?_⟩
+  · rw [← f.induced_symm]
+    exact f.symm.polishSpace_induced
+  · rw [isOpen_coinduced, isOpen_sum_iff]
+    simp [preimage_preimage, f, t]
 
 中文:
 定理 _root_.是闭集.isClopenable
@@ -636,7 +745,18 @@ theorem _root_.IsClosed.isClopenable
     topology in which `s` is both open and closed. -/
   classical
   have : PolishSpace s := hs.polishSpace
-  let 
+  let t : Set α := sᶜ
+  have : PolishSpace t := hs.isOpen_compl.polishSpace
+  let f : s oplus t ≃ α := Equiv.Set.sumCompl s
+  have hle : TopologicalSpace.coinduced f instTopologicalSpaceSum <= ‹_› := by
+    simp only [instTopologicalSpaceSum, coinduced_sup, coinduced_compose, sup_le_iff,
+      ← continuous_iff_coinduced_le]
+    exact ⟨continuous_subtype_val, continuous_subtype_val⟩
+  refine ⟨.coinduced f instTopologicalSpaceSum, hle, ?_, hs.mono hle, ?_⟩
+  · rw [← f.induced_symm]
+    exact f.symm.polishSpace_induced
+  · rw [isOpen_coinduced, isOpen_sum_iff]
+    simp [preimage_preimage, f, t]
 -/
 theorem _root_.IsClosed.isClopenable [TopologicalSpace α] [PolishSpace α] {s : Set α}
     (hs : IsClosed s) : IsClopenable s := by
@@ -718,7 +838,12 @@ theorem IsClopenable.iUnion
   have A : IsOpen[t'] (⋃ n, s n) := by
     apply isOpen_iUnion
     intro n
-
+    apply t'm n
+    exact m_open n
+  obtain ⟨t'', t''_le, t''_polish, h1, h2⟩ : exists t'' : TopologicalSpace α,
+      t'' <= t' ∧ @PolishSpace α t'' ∧ IsClosed[t''] (⋃ n, s n) ∧ IsOpen[t''] (⋃ n, s n) :=
+    @IsOpen.isClopenable α t' t'_polish _ A
+  exact ⟨t'', t''_le.trans ((t'm 0).trans (mt 0)), t''_polish, h1, h2⟩
 
 中文:
 定理 IsClopenable.iUnion
@@ -731,7 +856,12 @@ theorem IsClopenable.iUnion
   have A : IsOpen[t'] (⋃ n, s n) := by
     apply isOpen_iUnion
     intro n
-
+    apply t'm n
+    exact m_open n
+  obtain ⟨t'', t''_le, t''_polish, h1, h2⟩ : exists t'' : TopologicalSpace α,
+      t'' <= t' ∧ @PolishSpace α t'' ∧ IsClosed[t''] (⋃ n, s n) ∧ IsOpen[t''] (⋃ n, s n) :=
+    @IsOpen.isClopenable α t' t'_polish _ A
+  exact ⟨t'', t''_le.trans ((t'm 0).trans (mt 0)), t''_polish, h1, h2⟩
 
 Depends on / 依赖: IsClosed, IsOpen, IsOpen.isClopenable, PolishSpace, TopologicalSpace, _polish, exists_polishSpace_forall_le, isClopenable, isOpen_iUnion, m_open, m_polish
 -/

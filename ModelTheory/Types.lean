@@ -269,7 +269,10 @@ theorem not_mem_iff
       simp only [model_iff, mem_insert_iff, mem_singleton_iff, forall_eq_or_imp, forall_eq] at h
       exact h.2 h.1
     refine h (p.isMaximal.1.mono ?_)
-    rw [insert_subset_iff]; rw [singl
+    rw [insert_subset_iff]; rw [singleton_subset_iff]
+    exact ⟨ht, hf⟩, (p.mem_or_not_mem φ).resolve_left⟩
+
+@[simp]
 
 中文:
 定理 not_mem_iff
@@ -281,7 +284,10 @@ theorem not_mem_iff
       simp only [model_iff, mem_insert_iff, mem_singleton_iff, forall_eq_or_imp, forall_eq] at h
       exact h.2 h.1
     refine h (p.isMaximal.1.mono ?_)
-    rw [insert_subset_iff]; rw [singl
+    rw [insert_subset_iff]; rw [singleton_subset_iff]
+    exact ⟨ht, hf⟩, (p.mem_or_not_mem φ).resolve_left⟩
+
+@[simp]
 
 Depends on / 依赖: IsSatisfiable, Theory, forall_eq, forall_eq_or_imp, insert_subset_iff, isMaximal, mem_insert_iff, mem_or_not_mem, mem_singleton_iff, model_iff, p.isMaximal, p.mem_or_not_mem, resolve_left, singleton_subset_iff
 -/
@@ -333,7 +339,13 @@ theorem setOfPred_subset_eq_empty_iff
     ⟨fun h =>
       ⟨⟨L[[α]].completeTheory h.some, (subset_union_left (t := S)).trans completeTheory.subset,
           completeTheory.isMaximal L[[α]] h.some⟩,
-        (((L.lhomWithConstants
+        (((L.lhomWithConstants α).onTheory T).subset_union_right).trans completeTheory.subset⟩,
+      ?_⟩
+  rintro ⟨p, hp⟩
+  exact p.isMaximal.1.mono (union_subset p.subset hp)
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_subset_eq_empty_iff := setOfPred_subset_eq_empty_iff
 
 中文:
 定理 setOfPred_subset_eq_empty_iff
@@ -344,7 +356,13 @@ theorem setOfPred_subset_eq_empty_iff
     ⟨fun h =>
       ⟨⟨L[[α]].completeTheory h.some, (subset_union_left (t := S)).trans completeTheory.subset,
           completeTheory.isMaximal L[[α]] h.some⟩,
-        (((L.lhomWithConstants
+        (((L.lhomWithConstants α).onTheory T).subset_union_right).trans completeTheory.subset⟩,
+      ?_⟩
+  rintro ⟨p, hp⟩
+  exact p.isMaximal.1.mono (union_subset p.subset hp)
+
+@[deprecated (since := "2026-07-09")]
+alias setOf_subset_eq_empty_iff := setOfPred_subset_eq_empty_iff
 
 Depends on / 依赖: Classical, Classical.not_not, L.lhomWithConstants, Nonempty, Set.Nonempty, completeTheory, completeTheory.isMaximal, completeTheory.subset, h.some, iff_not_comm, isMaximal, lhomWithConstants, not_nonempty_iff_eq_empty, not_not, onTheory, p.isMaximal, p.subset, subset, subset_union_left, subset_union_right
 -/
@@ -409,7 +427,7 @@ theorem setOfPred_subset_eq_univ_iff
   rintro h _ ⟨φ, h1, rfl⟩
   exact h _ h1
 
-@[deprecated (since := "
+@[deprecated (since := "2026-07-09")] alias setOf_subset_eq_univ_iff := setOfPred_subset_eq_univ_iff
 
 中文:
 定理 setOfPred_subset_eq_univ_iff
@@ -423,7 +441,7 @@ theorem setOfPred_subset_eq_univ_iff
   rintro h _ ⟨φ, h1, rfl⟩
   exact h _ h1
 
-@[deprecated (since := "
+@[deprecated (since := "2026-07-09")] alias setOf_subset_eq_univ_iff := setOfPred_subset_eq_univ_iff
 
 Depends on / 依赖: CompleteType, T.CompleteType, sInter_eq_univ, setOfPred_mem_eq_univ_iff, simp_rw, subset_def, subseteq
 -/
@@ -770,7 +788,10 @@ theorem exists_modelType_is_realized_in
   simp only [CompleteType.mem_typeOf]
   refine
     (@Formula.realize_equivSentence_symm_con _
-      ((M.subtheoryModel p.subset).reduct 
+      ((M.subtheoryModel p.subset).reduct (L.lhomWithConstants α)) _ _ M.struc _ φ).trans
+      (_root_.trans (_root_.trans ?_ (p.isMaximal.isComplete.realize_sentence_iff φ M))
+        (p.isMaximal.mem_iff_models φ).symm)
+  rfl
 
 中文:
 定理 存在_modelType_is_realized_in
@@ -782,7 +803,10 @@ theorem exists_modelType_is_realized_in
   simp only [CompleteType.mem_typeOf]
   refine
     (@Formula.realize_equivSentence_symm_con _
-      ((M.subtheoryModel p.subset).reduct 
+      ((M.subtheoryModel p.subset).reduct (L.lhomWithConstants α)) _ _ M.struc _ φ).trans
+      (_root_.trans (_root_.trans ?_ (p.isMaximal.isComplete.realize_sentence_iff φ M))
+        (p.isMaximal.mem_iff_models φ).symm)
+  rfl
 
 Depends on / 依赖: CompleteType, CompleteType.mem_typeOf, Formula, Formula.realize_equivSentence_symm_con, L.con, L.lhomWithConstants, M.struc, M.subtheoryModel, SetLike, SetLike.ext, _root_, _root_.trans, isComplete, isMaximal, lhomWithConstants, mem_iff_models, mem_typeOf, p.isMaximal, p.isMaximal.isComplete.realize_sentence_iff, p.isMaximal.mem_iff_models
 -/

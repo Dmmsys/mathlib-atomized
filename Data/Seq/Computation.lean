@@ -623,7 +623,13 @@ definition corec
   revert h; generalize Sum.inr b = o
   induction n generalizing o with
   | zero =>
-    change (Corec.f f o).1 = some a' -> (Corec.
+    change (Corec.f f o).1 = some a' -> (Corec.f f (Corec.f f o).2).1 = some a'
+    rcases o with _ | b <;> intro h
+    · exact h
+    unfold Corec.f at *; split <;> simp_all
+  | succ n IH =>
+    rw [Stream'.corec'_eq (Corec.f f) (Corec.f f o).2]; rw [Stream'.corec'_eq (Corec.f f) o]
+    exact IH (Corec.f f o).2
 
 中文:
 定义 corec
@@ -635,7 +641,13 @@ definition corec
   revert h; generalize Sum.inr b = o
   induction n generalizing o with
   | zero =>
-    change (Corec.f f o).1 = some a' -> (Corec.
+    change (Corec.f f o).1 = some a' -> (Corec.f f (Corec.f f o).2).1 = some a'
+    rcases o with _ | b <;> intro h
+    · exact h
+    unfold Corec.f at *; split <;> simp_all
+  | succ n IH =>
+    rw [Stream'.corec'_eq (Corec.f f) (Corec.f f o).2]; rw [Stream'.corec'_eq (Corec.f f) o]
+    exact IH (Corec.f f o).2
 
 Depends on / 依赖: Corec.f, Stream, Sum.inr, generalize, generalizing, revert
 -/
@@ -701,7 +713,13 @@ theorem corec_eq
     dsimp [Corec.f]; rw [Stream'.corec']; rw [Stream'.corec]; rw [Stream'.map]; rw [Stream'.get]; rw [Stream'.iterate]
     match (f b) with
     | Sum.inl x => rfl
-    |
+    | Sum.inr x => rfl]
+  rcases h : f b with a | b'; · rfl
+  dsimp [Corec.f, destruct]
+  apply congr_arg; apply Subtype.ext
+  dsimp [corec, tail]
+  rw [Stream'.corec'_eq]; rw [Stream'.tail_cons]
+  dsimp [Corec.f]; rw [h]
 
 中文:
 定理 corec_eq
@@ -714,7 +732,13 @@ theorem corec_eq
     dsimp [Corec.f]; rw [Stream'.corec']; rw [Stream'.corec]; rw [Stream'.map]; rw [Stream'.get]; rw [Stream'.iterate]
     match (f b) with
     | Sum.inl x => rfl
-    |
+    | Sum.inr x => rfl]
+  rcases h : f b with a | b'; · rfl
+  dsimp [Corec.f, destruct]
+  apply congr_arg; apply Subtype.ext
+  dsimp [corec, tail]
+  rw [Stream'.corec'_eq]; rw [Stream'.tail_cons]
+  dsimp [Corec.f]; rw [h]
 
 Depends on / 依赖: Corec.f, Option.some, Stream, Subtype, Subtype.ext, Sum.inl, Sum.inr, Sum.rec, congr_arg, destruct, iterate, tail_cons
 -/
@@ -791,7 +815,20 @@ theorem eq_of_bisim
     match t₁, t₂, e with
     | _, _, ⟨s, s', rfl, rfl, r⟩ =>
       suffices head s = head s' ∧ R (tail s) (tail s') from
-       
+        And.imp id (fun r => ⟨tail s, tail s', by cases s; rfl, by cases s'; rfl, r⟩) this
+      have h := bisim r; revert r h
+      refine recOn s ?_ ?_ <;> intro r' <;> refine recOn s' ?_ ?_ <;> intro a' r h
+      · constructor <;> dsimp at h
+        · rw [h]
+        · rw [h] at r
+          rw [tail_pure]; rw [tail_pure]; rw [h]
+          assumption
+      · rw [destruct_pure, destruct_think] at h
+        exact False.elim h
+      · rw [destruct_pure, destruct_think] at h
+        exact False.elim h
+      · simp_all
+  · exact ⟨s₁, s₂, rfl, rfl, r⟩
 
 中文:
 定理 eq_of_bisim
@@ -805,7 +842,20 @@ theorem eq_of_bisim
     match t₁, t₂, e with
     | _, _, ⟨s, s', rfl, rfl, r⟩ =>
       suffices head s = head s' ∧ R (tail s) (tail s') from
-       
+        And.imp id (fun r => ⟨tail s, tail s', by cases s; rfl, by cases s'; rfl, r⟩) this
+      have h := bisim r; revert r h
+      refine recOn s ?_ ?_ <;> intro r' <;> refine recOn s' ?_ ?_ <;> intro a' r h
+      · constructor <;> dsimp at h
+        · rw [h]
+        · rw [h] at r
+          rw [tail_pure]; rw [tail_pure]; rw [h]
+          assumption
+      · rw [destruct_pure, destruct_think] at h
+        exact False.elim h
+      · rw [destruct_pure, destruct_think] at h
+        exact False.elim h
+      · simp_all
+  · exact ⟨s₁, s₂, rfl, rfl, r⟩
 
 Depends on / 依赖: And.imp, Computation, IsBisimulation, Stream, Subtype, Subtype.ext, eq_of_bisim, revert
 -/
@@ -1816,7 +1866,10 @@ theorem length_think
   · have : (Option.isSome ((think s).val (length (think s))) : Prop) :=
       Nat.find_spec ((terminates_def _).1 s.think_terminates)
     revert this; rcases length (think s) with - | n <;> intro this
-    · sim
+    · simp [think, Stream'.cons] at this
+    · apply Nat.succ_le_succ
+      apply Nat.find_min'
+      apply this
 
 中文:
 定理 length_think
@@ -1828,7 +1881,10 @@ theorem length_think
   · have : (Option.isSome ((think s).val (length (think s))) : Prop) :=
       Nat.find_spec ((terminates_def _).1 s.think_terminates)
     revert this; rcases length (think s) with - | n <;> intro this
-    · sim
+    · simp [think, Stream'.cons] at this
+    · apply Nat.succ_le_succ
+      apply Nat.find_min'
+      apply this
 
 Depends on / 依赖: Nat.find_min, Nat.find_spec, Nat.succ_le_succ, Option.isSome, Stream, find_min, find_spec, isSome, le_antisymm, length, revert, s.think_terminates, succ_le_succ, terminates_def, think_terminates
 -/
@@ -2003,7 +2059,8 @@ theorem eq_thinkN
     contradiction
   · have := h.len_unique (results_pure _)
     contradiction
-  · rw [IH (results
+  · rw [IH (results_think_iff.1 h)]
+    rfl
 
 中文:
 定理 eq_thinkN
@@ -2019,7 +2076,8 @@ theorem eq_thinkN
     contradiction
   · have := h.len_unique (results_pure _)
     contradiction
-  · rw [IH (results
+  · rw [IH (results_think_iff.1 h)]
+    rfl
 
 Depends on / 依赖: eq_of_pure_mem, generalizing, h.len_unique, h.mem, len_unique, of_results_think, results_pure, results_think_iff
 -/
@@ -2356,7 +2414,13 @@ theorem ret_bind
     match c₁, c₂, h with
     | _, _, Or.inl ⟨rfl, rfl⟩ =>
       simp only [BisimO, bind, Bind.f, corec_eq, rmap, destruct_pure]
-      rcases destruct (f a) with b | cb <;> s
+      rcases destruct (f a) with b | cb <;> simp [Bind.g]
+    | _, c, Or.inr rfl =>
+      simp only [BisimO, Bind.f, corec_eq, rmap]
+      rcases destruct c with b | cb <;> simp [Bind.g]
+  · simp
+
+@[simp]
 
 中文:
 定理 ret_bind
@@ -2369,7 +2433,13 @@ theorem ret_bind
     match c₁, c₂, h with
     | _, _, Or.inl ⟨rfl, rfl⟩ =>
       simp only [BisimO, bind, Bind.f, corec_eq, rmap, destruct_pure]
-      rcases destruct (f a) with b | cb <;> s
+      rcases destruct (f a) with b | cb <;> simp [Bind.g]
+    | _, c, Or.inr rfl =>
+      simp only [BisimO, Bind.f, corec_eq, rmap]
+      rcases destruct c with b | cb <;> simp [Bind.g]
+  · simp
+
+@[simp]
 
 Depends on / 依赖: Bind.f, Bind.g, BisimO, Or.inl, Or.inr, Sum.inr, corec_eq, destruct, destruct_pure, eq_of_bisim
 -/
@@ -2426,7 +2496,11 @@ theorem bind_pure
     | _, c₂, Or.inl (Eq.refl _) => rcases destruct c₂ with b | cb <;> simp
     | _, _, Or.inr ⟨s, rfl, rfl⟩ =>
       induction s using recOn with
-      | pure s =>
+      | pure s => simp
+      | think s => simpa using Or.inr ⟨s, rfl, rfl⟩
+  · exact Or.inr ⟨s, rfl, rfl⟩
+
+@[simp]
 
 中文:
 定理 bind_pure
@@ -2439,7 +2513,11 @@ theorem bind_pure
     | _, c₂, Or.inl (Eq.refl _) => rcases destruct c₂ with b | cb <;> simp
     | _, _, Or.inr ⟨s, rfl, rfl⟩ =>
       induction s using recOn with
-      | pure s =>
+      | pure s => simp
+      | think s => simpa using Or.inr ⟨s, rfl, rfl⟩
+  · exact Or.inr ⟨s, rfl, rfl⟩
+
+@[simp]
 
 Depends on / 依赖: Eq.refl, Or.inl, Or.inr, destruct, eq_of_bisim
 -/
@@ -2496,7 +2574,14 @@ theorem bind_assoc
     match c₁, c₂, h with
     | _, c₂, Or.inl (Eq.refl _) => rcases destruct c₂ with b | cb <;> simp
     | _, _, Or.inr ⟨s, rfl, rfl⟩ =>
-      induction s
+      induction s using recOn with
+      | pure s =>
+        simp only [BisimO, ret_bind]; generalize f s = fs
+        induction fs using recOn with
+        | pure t => rw [ret_bind]; rcases destruct (g t) with b | cb <;> simp
+        | think => simp
+      | think s => simpa [BisimO] using Or.inr ⟨s, rfl, rfl⟩
+  · exact Or.inr ⟨s, rfl, rfl⟩
 
 中文:
 定理 bind_assoc
@@ -2509,7 +2594,14 @@ theorem bind_assoc
     match c₁, c₂, h with
     | _, c₂, Or.inl (Eq.refl _) => rcases destruct c₂ with b | cb <;> simp
     | _, _, Or.inr ⟨s, rfl, rfl⟩ =>
-      induction s
+      induction s using recOn with
+      | pure s =>
+        simp only [BisimO, ret_bind]; generalize f s = fs
+        induction fs using recOn with
+        | pure t => rw [ret_bind]; rcases destruct (g t) with b | cb <;> simp
+        | think => simp
+      | think s => simpa [BisimO] using Or.inr ⟨s, rfl, rfl⟩
+  · exact Or.inr ⟨s, rfl, rfl⟩
 
 Depends on / 依赖: BisimO, Eq.refl, Or.inl, Or.inr, destruct, eq_of_bisim, generalize, ret_bind
 -/
@@ -2549,7 +2641,7 @@ theorem results_bind
     obtain ⟨m', h⟩ := of_results_think h1
     obtain ⟨h1, e⟩ := h
     rw [e]
-    exact results_think (h3 h
+    exact results_think (h3 h1)
 
 中文:
 定理 results_bind
@@ -2566,7 +2658,7 @@ theorem results_bind
     obtain ⟨m', h⟩ := of_results_think h1
     obtain ⟨h1, e⟩ := h
     rw [e]
-    exact results_think (h3 h
+    exact results_think (h3 h1)
 
 Depends on / 依赖: h1.len_unique, h1.mem, len_unique, memRecOn, of_results_think, results_pure, results_think, ret_bind, revert, think_bind
 -/
@@ -2694,7 +2786,11 @@ theorem of_results_bind
   · have := congr_arg head (eq_thinkN h)
     contradiction
   · simp only [ret_bind] at h
-    exact ⟨_, _, n
+    exact ⟨_, _, n + 1, results_pure _, h, rfl⟩
+  · simp only [think_bind, results_think_iff] at h
+    let ⟨a, m, n', h1, h2, e'⟩ := IH h
+    rw [e']
+    exact ⟨a, m.succ, n', results_think h1, h2, rfl⟩
 
 中文:
 定理 of_results_bind
@@ -2707,7 +2803,11 @@ theorem of_results_bind
   · have := congr_arg head (eq_thinkN h)
     contradiction
   · simp only [ret_bind] at h
-    exact ⟨_, _, n
+    exact ⟨_, _, n + 1, results_pure _, h, rfl⟩
+  · simp only [think_bind, results_think_iff] at h
+    let ⟨a, m, n', h1, h2, e'⟩ := IH h
+    rw [e']
+    exact ⟨a, m.succ, n', results_think h1, h2, rfl⟩
 
 Depends on / 依赖: congr_arg, eq_thinkN, generalizing, m.succ, results_pure, results_think, results_think_iff, ret_bind, think_bind
 -/
@@ -3874,7 +3974,7 @@ theorem liftRel_def
       ⟨b, mb, r ma mb⟩,
       fun {_} mb =>
       let ⟨⟨a, ma⟩⟩ := l.2 ⟨⟨_, mb⟩⟩
-      ⟨a, ma, 
+      ⟨a, ma, r ma mb⟩⟩⟩
 
 中文:
 定理 liftRel_def
@@ -3889,7 +3989,7 @@ theorem liftRel_def
       ⟨b, mb, r ma mb⟩,
       fun {_} mb =>
       let ⟨⟨a, ma⟩⟩ := l.2 ⟨⟨_, mb⟩⟩
-      ⟨a, ma, 
+      ⟨a, ma, r ma mb⟩⟩⟩
 
 Depends on / 依赖: h.left, mem_unique, terminates_of_liftRel
 -/
@@ -3923,7 +4023,11 @@ theorem liftRel_bind
     fun {_} dB =>
     let ⟨_, b1, d1⟩ := exists_of_mem_bind dB
     let ⟨_, a2, ab⟩ := r1 b1
-    let ⟨_, r2⟩
+    let ⟨_, r2⟩ := h2 ab
+    let ⟨_, c₂, cd⟩ := r2 d1
+    ⟨_, mem_bind a2 c₂, cd⟩⟩
+
+@[simp]
 
 中文:
 定理 liftRel_bind
@@ -3938,7 +4042,11 @@ theorem liftRel_bind
     fun {_} dB =>
     let ⟨_, b1, d1⟩ := exists_of_mem_bind dB
     let ⟨_, a2, ab⟩ := r1 b1
-    let ⟨_, r2⟩
+    let ⟨_, r2⟩ := h2 ab
+    let ⟨_, c₂, cd⟩ := r2 d1
+    ⟨_, mem_bind a2 c₂, cd⟩⟩
+
+@[simp]
 
 Depends on / 依赖: exists_of_mem_bind, mem_bind
 -/
@@ -4361,7 +4469,9 @@ theorem LiftRelRec.lem
   · simp only [destruct_pure, LiftRelAux.ret_left] at h
     simp [h]
   · simp only [liftRel_think_left]
-    induction cb using r
+    induction cb using recOn with
+    | pure b => simpa using h
+    | think cb => simpa [h] using IH _ h
 
 中文:
 定理 LiftRelRec.lem
@@ -4373,7 +4483,9 @@ theorem LiftRelRec.lem
   · simp only [destruct_pure, LiftRelAux.ret_left] at h
     simp [h]
   · simp only [liftRel_think_left]
-    induction cb using r
+    induction cb using recOn with
+    | pure b => simpa using h
+    | think cb => simpa [h] using IH _ h
 
 Depends on / 依赖: Computation, LiftRel, LiftRelAux, LiftRelAux.ret_left, destruct_pure, liftRel_think_left, memRecOn, ret_left, revert
 -/

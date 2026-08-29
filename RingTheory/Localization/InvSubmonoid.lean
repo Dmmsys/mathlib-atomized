@@ -357,7 +357,8 @@ theorem finiteType_of_monoid_fg
   rw [eq_top_iff]
   rintro x -
   change x in (Subalgebra.toSubmodule (Algebra.adjoin R _ : Subalgebra R S) : Set S)
-  rw [Algebra.adjoin_eq_s
+  rw [Algebra.adjoin_eq_span]; rw [hs]; rw [span_invSubmonoid]
+  trivial
 
 中文:
 定理 finiteType_of_monoid_fg
@@ -371,7 +372,8 @@ theorem finiteType_of_monoid_fg
   rw [eq_top_iff]
   rintro x -
   change x in (Subalgebra.toSubmodule (Algebra.adjoin R _ : Subalgebra R S) : Set S)
-  rw [Algebra.adjoin_eq_s
+  rw [Algebra.adjoin_eq_span]; rw [hs]; rw [span_invSubmonoid]
+  trivial
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_eq_span, Monoid, Monoid.fg_iff_submonoid_fg, Monoid.fg_of_surjective, Subalgebra, Subalgebra.toSubmodule, adjoin, adjoin_eq_span, eq_top_iff, fg_iff_submonoid_fg, fg_of_surjective, span_invSubmonoid, toInvSubmonoid_surjective, toSubmodule
 -/

@@ -76,7 +76,53 @@ definition collect
     We assume most declarations do not contain sorry.
     The `getUsedConstants` function is very efficient compared to `forEachExpr'`,
     since `forEachExpr'` needs to instantiate fvars.
-    Visiting constants first also guaran
+    Visiting constants first also guarantees that we attribute sorries to the first
+    declaration that included it. Recall that `sorry` might appear in the type of a theorem,
+    which leads to the `sorry` appearing directly in any declarations that use it.
+    This is one reason we need the `State.sorries` set as well.
+    The other reason is that we match entire sorry applications,
+    so `forEachExpr'`'s cache won't prevent over-reporting if `sorry` is a function.
+    -/
+    let consts := e.getUsedConstants
+    consts.forM collect
+    if consts.contains ``sorryAx then
+      let visitSorry (e : Expr) : StateT State MetaM Unit := do
+        unless (← get).sorries.contains e do
+          let mut msg := m!"{.ofConstName c} has {e}"
+          if e.isSyntheticSorry then
+            msg := msg ++ " (from error)"
+          try
+            msg := msg ++ " of type" ++ indentExpr (← inferType e)
+          catch _ => pure ()
+          msg ← addMessageContext msg
+          modify fun s =>
+            { s with
+              sorries := s.sorries.insert e
+              sorryMsgs := s.sorryMsgs.push msg }
+      Meta.forEachExpr' e fun e => do
+        if e.isSorry then
+          if let some _ := isLabeledSorry? e then
+visitSorry e.getBoundedAppFn (e.getAppNumArgs - 3)
+          else
+visitSorry e.getBoundedAppFn (e.getAppNumArgs - 2)
+          return false
+        else
+          -- Otherwise continue visiting subexpressions
+          return true
+  let s ← get
+  unless s.visited.contains c do
+    modify fun s => { s with visited := s.visited.insert c }
+    let env ← getEnv
+    match env.checked.get.find? c with
+    | some (.axiomInfo v) => collectExpr v.type
+    | some (.defnInfo v) => collectExpr v.type *> collectExpr v.value
+    | some (.thmInfo v) => collectExpr v.type *> collectExpr v.value
+    | some (.opaqueInfo v) => collectExpr v.type *> collectExpr v.value
+    | some (.quotInfo _) => pure ()
+    | some (.ctorInfo v) => collectExpr v.type
+    | some (.recInfo v) => collectExpr v.type
+    | some (.inductInfo v) => collectExpr v.type *> v.ctors.forM collect
+    | none => pure ()
 
 中文:
 定义 collect
@@ -87,7 +133,53 @@ definition collect
     We assume most declarations do not contain sorry.
     The `getUsedConstants` function is very efficient compared to `forEachExpr'`,
     since `forEachExpr'` needs to instantiate fvars.
-    Visiting constants first also guaran
+    Visiting constants first also guarantees that we attribute sorries to the first
+    declaration that included it. Recall that `sorry` might appear in the type of a theorem,
+    which leads to the `sorry` appearing directly in any declarations that use it.
+    This is one reason we need the `State.sorries` set as well.
+    The other reason is that we match entire sorry applications,
+    so `forEachExpr'`'s cache won't prevent over-reporting if `sorry` is a function.
+    -/
+    let consts := e.getUsedConstants
+    consts.forM collect
+    if consts.contains ``sorryAx then
+      let visitSorry (e : Expr) : StateT State MetaM Unit := do
+        unless (← get).sorries.contains e do
+          let mut msg := m!"{.ofConstName c} has {e}"
+          if e.isSyntheticSorry then
+            msg := msg ++ " (from error)"
+          try
+            msg := msg ++ " of type" ++ indentExpr (← inferType e)
+          catch _ => pure ()
+          msg ← addMessageContext msg
+          modify fun s =>
+            { s with
+              sorries := s.sorries.insert e
+              sorryMsgs := s.sorryMsgs.push msg }
+      Meta.forEachExpr' e fun e => do
+        if e.isSorry then
+          if let some _ := isLabeledSorry? e then
+visitSorry e.getBoundedAppFn (e.getAppNumArgs - 3)
+          else
+visitSorry e.getBoundedAppFn (e.getAppNumArgs - 2)
+          return false
+        else
+          -- Otherwise continue visiting subexpressions
+          return true
+  let s ← get
+  unless s.visited.contains c do
+    modify fun s => { s with visited := s.visited.insert c }
+    let env ← getEnv
+    match env.checked.get.find? c with
+    | some (.axiomInfo v) => collectExpr v.type
+    | some (.defnInfo v) => collectExpr v.type *> collectExpr v.value
+    | some (.thmInfo v) => collectExpr v.type *> collectExpr v.value
+    | some (.opaqueInfo v) => collectExpr v.type *> collectExpr v.value
+    | some (.quotInfo _) => pure ()
+    | some (.ctorInfo v) => collectExpr v.type
+    | some (.recInfo v) => collectExpr v.type
+    | some (.inductInfo v) => collectExpr v.type *> v.ctors.forM collect
+    | none => pure ()
 -/
 partial def collect (c : Name) : StateT State MetaM Unit := do
   let collectExpr (e : Expr) : StateT State MetaM Unit := do
@@ -189,7 +281,13 @@ logInfo MessageData.joinSep msgs.toList "\n"
 elab_rules : command
   | `(#print%$tk1 sorries%$tk2 $idents*) => do
 let mut names ← liftCoreM idents.flatMapM fun id =>
-      retu
+      return (← realizeGlobalConstWithInfos id).toArray
+    if names.isEmpty then
+      names ← (← getEnv).checked.get.constants.map₂.foldlM (init := #[]) fun acc name _ =>
+        return if ← name.isBlackListed then acc else acc.push name
+withRef (mkNullNode #[tk1, tk2]) evalCollectSorries names
+
+@[inherit_doc printSorriesStx]
 
 中文:
 定义 evalCollectSorries
@@ -204,7 +302,13 @@ logInfo MessageData.joinSep msgs.toList "\n"
 elab_rules : command
   | `(#print%$tk1 sorries%$tk2 $idents*) => do
 let mut names ← liftCoreM idents.flatMapM fun id =>
-      retu
+      return (← realizeGlobalConstWithInfos id).toArray
+    if names.isEmpty then
+      names ← (← getEnv).checked.get.constants.map₂.foldlM (init := #[]) fun acc name _ =>
+        return if ← name.isBlackListed then acc else acc.push name
+withRef (mkNullNode #[tk1, tk2]) evalCollectSorries names
+
+@[inherit_doc printSorriesStx]
 -/
 def evalCollectSorries (names : Array Name) : CommandElabM Unit := do
 let msgs ← liftTermElabM collectSorries names

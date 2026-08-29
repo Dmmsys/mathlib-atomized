@@ -586,7 +586,8 @@ theorem smul_assoc
       (fun r hr s hs => smul_assoc r s t ▸ smul_mem_smul hr (smul_mem_smul hs htn))
       fun x y => (add_smul x y t).symm ▸ add_mem)
     (smul_le.2 fun r hr _ hsn => smul_induction_on hsn
-      (fun j hj n hn => (smul_assoc r j
+      (fun j hj n hn => (smul_assoc r j n).symm ▸ smul_mem_smul (smul_mem_smul hr hj) hn)
+      fun m₁ m₂ => (smul_add r m₁ m₂) ▸ add_mem)
 
 中文:
 定理 smul_assoc
@@ -596,7 +597,8 @@ theorem smul_assoc
       (fun r hr s hs => smul_assoc r s t ▸ smul_mem_smul hr (smul_mem_smul hs htn))
       fun x y => (add_smul x y t).symm ▸ add_mem)
     (smul_le.2 fun r hr _ hsn => smul_induction_on hsn
-      (fun j hj n hn => (smul_assoc r j
+      (fun j hj n hn => (smul_assoc r j n).symm ▸ smul_mem_smul (smul_mem_smul hr hj) hn)
+      fun m₁ m₂ => (smul_add r m₁ m₂) ▸ add_mem)
 -/
 protected theorem smul_assoc {B} [Semiring B] [Module R B] [Module A B] [Module B M]
     [IsScalarTower R A B] [IsScalarTower R B M] [IsScalarTower A B M]
@@ -641,7 +643,7 @@ theorem iSup_smul
   proof: le_antisymm (smul_le.mpr fun t ht s hs => iSup_induction _ (motive := (· • s in _)) ht
     (fun i t ht => mem_iSup_of_mem i <| smul_mem_smul ht hs)
     (by simp_rw [zero_smul]; apply zero_mem) fun x y => by simp_rw [add_smul]; apply add_mem)
-    (iSup_le fun i => Submodule.smul_mono_left <| le_iSup 
+    (iSup_le fun i => Submodule.smul_mono_left <| le_iSup _ i)
 
 中文:
 定理 iSup_smul
@@ -649,7 +651,7 @@ theorem iSup_smul
   证明: le_antisymm (smul_le.mpr fun t ht s hs => iSup_induction _ (motive := (· • s in _)) ht
     (fun i t ht => mem_iSup_of_mem i <| smul_mem_smul ht hs)
     (by simp_rw [zero_smul]; apply zero_mem) fun x y => by simp_rw [add_smul]; apply add_mem)
-    (iSup_le fun i => Submodule.smul_mono_left <| le_iSup 
+    (iSup_le fun i => Submodule.smul_mono_left <| le_iSup _ i)
 
 Depends on / 依赖: Submodule, Submodule.smul_mono_left, add_mem, add_smul, iSup_induction, iSup_le, le_antisymm, le_iSup, mem_iSup_of_mem, motive, simp_rw, smul_le, smul_le.mpr, smul_mem_smul, smul_mono_left, zero_mem, zero_smul
 -/
@@ -886,7 +888,7 @@ theorem mul_eq_bot
       N.eq_bot_iff.mpr fun n hn =>
         let ⟨m, hm, ne0⟩ := M.ne_bot_iff.mp M_ne_bot
         Or.resolve_left (mul_eq_zero.mp ((M * N).eq_bot_iff.mp hmn _ (mul_mem_mul hm hn))) ne0,
-    fun h => by obtain rfl | rfl := h; exacts [bot_mul _, mu
+    fun h => by obtain rfl | rfl := h; exacts [bot_mul _, mul_bot _]⟩
 
 中文:
 定理 mul_eq_bot
@@ -896,7 +898,7 @@ theorem mul_eq_bot
       N.eq_bot_iff.mpr fun n hn =>
         let ⟨m, hm, ne0⟩ := M.ne_bot_iff.mp M_ne_bot
         Or.resolve_left (mul_eq_zero.mp ((M * N).eq_bot_iff.mp hmn _ (mul_mem_mul hm hn))) ne0,
-    fun h => by obtain rfl | rfl := h; exacts [bot_mul _, mu
+    fun h => by obtain rfl | rfl := h; exacts [bot_mul _, mul_bot _]⟩
 
 Depends on / 依赖: M.ne_bot_iff.mp, M_ne_bot, N.eq_bot_iff.mpr, Or.resolve_left, bot_mul, eq_bot_iff, eq_bot_iff.mp, exacts, mul_bot, mul_eq_zero, mul_eq_zero.mp, mul_mem_mul, ne_bot_iff, or_iff_not_imp_left, or_iff_not_imp_left.mpr, resolve_left
 -/
@@ -1841,7 +1843,16 @@ theorem map_mul
       apply congr_arg sSup
       ext S
       constructor <;> rintro ⟨y, hy⟩
-      
+      · use ⟨f y, mem_map.mpr ⟨y.1, y.2, rfl⟩⟩
+        refine Eq.trans ?_ hy
+        ext
+        simp
+      · obtain ⟨y', hy', fy_eq⟩ := mem_map.mp y.2
+        use ⟨y', hy'⟩
+        refine Eq.trans ?_ hy
+        rw [f.toLinearMap_apply] at fy_eq
+        ext
+        simp [fy_eq]
 
 中文:
 定理 map_mul
@@ -1854,7 +1865,16 @@ theorem map_mul
       apply congr_arg sSup
       ext S
       constructor <;> rintro ⟨y, hy⟩
-      
+      · use ⟨f y, mem_map.mpr ⟨y.1, y.2, rfl⟩⟩
+        refine Eq.trans ?_ hy
+        ext
+        simp
+      · obtain ⟨y', hy', fy_eq⟩ := mem_map.mp y.2
+        use ⟨y', hy'⟩
+        refine Eq.trans ?_ hy
+        rw [f.toLinearMap_apply] at fy_eq
+        ext
+        simp [fy_eq]
 -/
 protected theorem map_mul {A'} [Semiring A'] [Algebra R A'] (f : A ->ₐ[R] A') :
     map f.toLinearMap (M * N) = map f.toLinearMap M * map f.toLinearMap N :=
@@ -1889,7 +1909,9 @@ theorem map_op_mul
     rw [mem_comap]; rw [map_equiv_eq_comap_symm]; rw [map_equiv_eq_comap_symm]
     change op n * op m in _
     exact mul_mem_mul hn hm
-  · refine mul_le.2 (MulOpposite.rec' fun m hm => MulOpposite.rec' f
+  · refine mul_le.2 (MulOpposite.rec' fun m hm => MulOpposite.rec' fun n hn => ?_)
+    rw [Submodule.mem_map_equiv] at hm hn ⊢
+    exact mul_mem_mul hn hm
 
 中文:
 定理 map_op_mul
@@ -1900,7 +1922,9 @@ theorem map_op_mul
     rw [mem_comap]; rw [map_equiv_eq_comap_symm]; rw [map_equiv_eq_comap_symm]
     change op n * op m in _
     exact mul_mem_mul hn hm
-  · refine mul_le.2 (MulOpposite.rec' fun m hm => MulOpposite.rec' f
+  · refine mul_le.2 (MulOpposite.rec' fun m hm => MulOpposite.rec' fun n hn => ?_)
+    rw [Submodule.mem_map_equiv] at hm hn ⊢
+    exact mul_mem_mul hn hm
 
 Depends on / 依赖: MulOpposite, MulOpposite.rec, Submodule, Submodule.mem_map_equiv, le_antisymm, map_equiv_eq_comap_symm, map_le_iff_le_comap, mem_comap, mem_map_equiv, mul_le, mul_mem_mul, simp_rw
 -/
@@ -1948,7 +1972,7 @@ theorem map_unop_mul
   proof: have : Function.Injective (↑(opLinearEquiv R : A ≃ₗ[R] Aᵐᵒᵖ) : A ->ₗ[R] Aᵐᵒᵖ) :=
     LinearEquiv.injective _
 map_injective_of_injective this by
-    rw [← map_comp]; rw [map_op_mul]; rw [← map_comp]; rw [← map_comp]; rw [LinearEquiv.comp_coe]; rw [LinearEquiv.symm_trans_self]; rw [LinearEquiv.refl_to
+    rw [← map_comp]; rw [map_op_mul]; rw [← map_comp]; rw [← map_comp]; rw [LinearEquiv.comp_coe]; rw [LinearEquiv.symm_trans_self]; rw [LinearEquiv.refl_toLinearMap]; rw [map_id]; rw [map_id]; rw [map_id]
 
 中文:
 定理 map_unop_mul
@@ -1956,7 +1980,7 @@ map_injective_of_injective this by
   证明: have : Function.Injective (↑(opLinearEquiv R : A ≃ₗ[R] Aᵐᵒᵖ) : A ->ₗ[R] Aᵐᵒᵖ) :=
     LinearEquiv.injective _
 map_injective_of_injective this by
-    rw [← map_comp]; rw [map_op_mul]; rw [← map_comp]; rw [← map_comp]; rw [LinearEquiv.comp_coe]; rw [LinearEquiv.symm_trans_self]; rw [LinearEquiv.refl_to
+    rw [← map_comp]; rw [map_op_mul]; rw [← map_comp]; rw [← map_comp]; rw [LinearEquiv.comp_coe]; rw [LinearEquiv.symm_trans_self]; rw [LinearEquiv.refl_toLinearMap]; rw [map_id]; rw [map_id]; rw [map_id]
 
 Depends on / 依赖: Function, Function.Injective, Injective, LinearEquiv, LinearEquiv.comp_coe, LinearEquiv.injective, LinearEquiv.refl_toLinearMap, LinearEquiv.symm_trans_self, comp_coe, injective, map_comp, map_id, map_injective_of_injective, map_op_mul, opLinearEquiv, refl_toLinearMap, symm_trans_self
 -/
@@ -2429,7 +2453,7 @@ theorem pow_induction_on_left'
     revert hx
     simp_rw [pow_succ']
     exact fun hx => Submodule.mul_induction_on' (fun m hm x ih => mem_mul _ hm _ _ _ (n_ih ih))
-      (fun x h
+      (fun x hx y hy Cx Cy => add _ _ _ _ _ Cx Cy) hx
 
 中文:
 定理 pow_induction_on_left'
@@ -2444,7 +2468,7 @@ theorem pow_induction_on_left'
     revert hx
     simp_rw [pow_succ']
     exact fun hx => Submodule.mul_induction_on' (fun m hm x ih => mem_mul _ hm _ _ _ (n_ih ih))
-      (fun x h
+      (fun x hx y hy Cx Cy => add _ _ _ _ _ Cx Cy) hx
 -/
 protected theorem pow_induction_on_left' {C : forall (n : Nat) (x), x in M ^ n -> Prop}
     (algebraMap : forall r : R, C 0 (algebraMap _ _ r) (algebraMap_mem r))
@@ -2482,7 +2506,7 @@ theorem pow_induction_on_right'
     revert hx
     simp_rw [pow_succ]
     exact fun hx => Submodule.mul_induction_on' (fun m hm x ih => mul_mem _ _ hm (n_ih _) _ ih)
-      (fun x hx
+      (fun x hx y hy Cx Cy => add _ _ _ _ _ Cx Cy) hx
 
 中文:
 定理 pow_induction_on_right'
@@ -2497,7 +2521,7 @@ theorem pow_induction_on_right'
     revert hx
     simp_rw [pow_succ]
     exact fun hx => Submodule.mul_induction_on' (fun m hm x ih => mul_mem _ _ hm (n_ih _) _ ih)
-      (fun x hx
+      (fun x hx y hy Cx Cy => add _ _ _ _ _ Cx Cy) hx
 -/
 protected theorem pow_induction_on_right' {C : forall (n : Nat) (x), x in M ^ n -> Prop}
     (algebraMap : forall r : R, C 0 (algebraMap _ _ r) (algebraMap_mem r))
@@ -2634,7 +2658,8 @@ definition equivOpposite
   invFun p := p.unop.comap (↑(opLinearEquiv R : A ≃ₗ[R] Aᵐᵒᵖ).symm : Aᵐᵒᵖ ->ₗ[R] A)
 left_inv _ := SetLike.coe_injective rfl
 right_inv _ := unop_injective SetLike.coe_injective rfl
-  map_add' p q := by simp [comap_equiv_eq_map_symm, ← op_
+  map_add' p q := by simp [comap_equiv_eq_map_symm, ← op_add]
+map_mul' _ _ := congr_arg op comap_op_mul _ _
 
 中文:
 定义 equivOpposite
@@ -2643,7 +2668,8 @@ right_inv _ := unop_injective SetLike.coe_injective rfl
   invFun p := p.unop.comap (↑(opLinearEquiv R : A ≃ₗ[R] Aᵐᵒᵖ).symm : Aᵐᵒᵖ ->ₗ[R] A)
 left_inv _ := SetLike.coe_injective rfl
 right_inv _ := unop_injective SetLike.coe_injective rfl
-  map_add' p q := by simp [comap_equiv_eq_map_symm, ← op_
+  map_add' p q := by simp [comap_equiv_eq_map_symm, ← op_add]
+map_mul' _ _ := congr_arg op comap_op_mul _ _
 
 Depends on / 依赖: Function, Function.Injective.module, Injective, module, opLinearEquiv, p.comap, unsym_add, unsym_injective, unsym_smul, unsym_zero
 -/
@@ -2845,7 +2871,7 @@ theorem span_singleton_eq_one_iff
     have ⟨r', eq⟩ := mem_span_singleton.mp (h ▸ algebraMap_mem 1)
     rw [Algebra.smul_def]; rw [← map_mul]; rw [(FaithfulSMul.algebraMap_injective R A).eq_iff] at eq
     exact ⟨.mkOfMulEqOne _ _ (mul_comm _ r ▸ eq), rfl⟩
-  mpr := 
+  mpr := by rintro ⟨r, rfl⟩; exact span_singleton_algebraMap_of_isUnit r.isUnit
 
 中文:
 定理 span_singleton_eq_one_iff
@@ -2856,7 +2882,7 @@ theorem span_singleton_eq_one_iff
     have ⟨r', eq⟩ := mem_span_singleton.mp (h ▸ algebraMap_mem 1)
     rw [Algebra.smul_def]; rw [← map_mul]; rw [(FaithfulSMul.algebraMap_injective R A).eq_iff] at eq
     exact ⟨.mkOfMulEqOne _ _ (mul_comm _ r ▸ eq), rfl⟩
-  mpr := 
+  mpr := by rintro ⟨r, rfl⟩; exact span_singleton_algebraMap_of_isUnit r.isUnit
 
 Depends on / 依赖: Algebra, Algebra.smul_def, FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, algebraMap_mem, eq_iff, isUnit, map_mul, mem_one, mem_one.mp, mem_span_singleton, mem_span_singleton.mp, mem_span_singleton_self, mkOfMulEqOne, mul_comm, r.isUnit, smul_def, span_singleton_algebraMap_of_isUnit
 -/
@@ -3089,7 +3115,10 @@ instance moduleSet
   mul_smul s t P := by
     simp_rw [HSMul.hSMul, SetSemiring.down_mul, ← mul_assoc, span_mul_span]
   one_smul P := by
-    simp_rw 
+    simp_rw [HSMul.hSMul, SetSemiring.down_one, ← one_eq_span_one_set, one_mul]
+  zero_smul P := by
+    simp_rw [HSMul.hSMul, SetSemiring.down_zero, span_empty, bot_mul, bot_eq_zero]
+  smul_zero _ := mul_bot _
 
 中文:
 实例 moduleSet
@@ -3101,7 +3130,10 @@ instance moduleSet
   mul_smul s t P := by
     simp_rw [HSMul.hSMul, SetSemiring.down_mul, ← mul_assoc, span_mul_span]
   one_smul P := by
-    simp_rw 
+    simp_rw [HSMul.hSMul, SetSemiring.down_one, ← one_eq_span_one_set, one_mul]
+  zero_smul P := by
+    simp_rw [HSMul.hSMul, SetSemiring.down_zero, span_empty, bot_mul, bot_eq_zero]
+  smul_zero _ := mul_bot _
 
 Depends on / 依赖: SetSemiring, SetSemiring.down
 -/
@@ -3200,7 +3232,9 @@ instance :
       add_mem' := fun ha hb y hy => by
         rw [add_mul]
         exact Submodule.add_mem _ (ha _ hy) (hb _ hy)
-      smul_mem' := fun r x hx y hy 
+      smul_mem' := fun r x hx y hy => by
+        rw [Algebra.smul_mul_assoc]
+        exact Submodule.smul_mem _ _ (hx _ hy) }⟩
 
 中文:
 实例 :
@@ -3213,7 +3247,9 @@ instance :
       add_mem' := fun ha hb y hy => by
         rw [add_mul]
         exact Submodule.add_mem _ (ha _ hy) (hb _ hy)
-      smul_mem' := fun r x hx y hy 
+      smul_mem' := fun r x hx y hy => by
+        rw [Algebra.smul_mul_assoc]
+        exact Submodule.smul_mem _ _ (hx _ hy) }⟩
 
 Depends on / 依赖: Algebra, Algebra.smul_mul_assoc, Submodule, Submodule.add_mem, Submodule.smul_mem, Submodule.zero_mem, add_mem, add_mul, carrier, smul_mem, smul_mul_assoc, zero_mem, zero_mul
 -/
@@ -3439,7 +3475,10 @@ theorem map_div
     exact ⟨x * y, hx _ hy, map_mul h x y⟩
   · rintro hx
     refine ⟨h.symm x, fun z hz => ?_, h.apply_symm_apply x⟩
-    obtain ⟨xz, xz_mem, hxz⟩ := hx (h z) ⟨
+    obtain ⟨xz, xz_mem, hxz⟩ := hx (h z) ⟨z, hz, rfl⟩
+    convert! xz_mem
+    apply h.injective
+    rw [map_mul]; rw [h.apply_symm_apply]; rw [hxz]
 
 中文:
 定理 map_div
@@ -3452,7 +3491,10 @@ theorem map_div
     exact ⟨x * y, hx _ hy, map_mul h x y⟩
   · rintro hx
     refine ⟨h.symm x, fun z hz => ?_, h.apply_symm_apply x⟩
-    obtain ⟨xz, xz_mem, hxz⟩ := hx (h z) ⟨
+    obtain ⟨xz, xz_mem, hxz⟩ := hx (h z) ⟨z, hz, rfl⟩
+    convert! xz_mem
+    apply h.injective
+    rw [map_mul]; rw [h.apply_symm_apply]; rw [hxz]
 -/
 protected theorem map_div {B : Type*} [CommSemiring B] [Algebra R B] (I J : Submodule R A)
     (h : A ≃ₐ[R] B) : (I / J).map h.toLinearMap = I.map h.toLinearMap / J.map h.toLinearMap := by
@@ -3484,7 +3526,16 @@ theorem restrictScalars_image_smul_eq
     refine set_smul_inductionOn x x_in ?_ ?_ (fun _ _ _ _ h h' => add_mem h h') (zero_mem _)
     · rintro _ x ⟨r, r_in, rfl⟩ x_in
       rw [algebraMap_smul]
-      exact mem_set
+      exact mem_set_smul_of_mem_mem r_in x_in
+    · intro r y h h'
+obtain ⟨c, c_supp, hc⟩ := (mem_set_smul ..).mp smul_mem _ r h
+      simp only [hc, Finsupp.sum, AddSubmonoidClass.coe_finsetSum, SetLike.val_smul]
+      refine sum_mem fun u u_in => ?_
+      obtain ⟨u, u_in', rfl⟩ := c_supp (Finset.mem_coe.mpr u_in)
+      rw [algebraMap_smul]
+      exact mem_set_smul_of_mem_mem u_in' (coe_mem (c ((algebraMap S R) u)))
+  · rw [restrictScalars_mem, ← algebraMap_smul R r]
+    exact mem_set_smul_of_mem_mem (Set.mem_image_of_mem _ r_in) x_in
 
 中文:
 定理 restrictScalars_image_smul_eq
@@ -3495,7 +3546,16 @@ theorem restrictScalars_image_smul_eq
     refine set_smul_inductionOn x x_in ?_ ?_ (fun _ _ _ _ h h' => add_mem h h') (zero_mem _)
     · rintro _ x ⟨r, r_in, rfl⟩ x_in
       rw [algebraMap_smul]
-      exact mem_set
+      exact mem_set_smul_of_mem_mem r_in x_in
+    · intro r y h h'
+obtain ⟨c, c_supp, hc⟩ := (mem_set_smul ..).mp smul_mem _ r h
+      simp only [hc, Finsupp.sum, AddSubmonoidClass.coe_finsetSum, SetLike.val_smul]
+      refine sum_mem fun u u_in => ?_
+      obtain ⟨u, u_in', rfl⟩ := c_supp (Finset.mem_coe.mpr u_in)
+      rw [algebraMap_smul]
+      exact mem_set_smul_of_mem_mem u_in' (coe_mem (c ((algebraMap S R) u)))
+  · rw [restrictScalars_mem, ← algebraMap_smul R r]
+    exact mem_set_smul_of_mem_mem (Set.mem_image_of_mem _ r_in) x_in
 
 Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.coe_finsetSum, Finsupp, Finsupp.sum, SetLike, SetLike.val_smul, add_mem, algebraMap_smul, c_supp, coe_finsetSum, le_antisymm, mem_set_smul, mem_set_smul_of_mem_mem, r_in, restrictScalars_mem, set_smul_inductionOn, set_smul_le, smul_mem, sum_mem, u_in
 -/

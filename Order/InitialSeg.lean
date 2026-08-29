@@ -665,7 +665,8 @@ theorem eq_or_principal
     · exact hy
     · obtain ⟨z, rfl⟩ := hy
       exact f.mem_range_of_rel h
-  · obtain ⟨z
+  · obtain ⟨z, rfl⟩ := IH y hs
+    cases hy (Set.mem_range_self z)
 
 中文:
 定理 eq_or_principal
@@ -681,7 +682,8 @@ theorem eq_or_principal
     · exact hy
     · obtain ⟨z, rfl⟩ := hy
       exact f.mem_range_of_rel h
-  · obtain ⟨z
+  · obtain ⟨z, rfl⟩ := IH y hs
+    cases hy (Set.mem_range_self z)
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.induction, Set.mem_range_self, f.mem_range_of_rel, mem_range_of_rel, mem_range_self, or_iff_not_imp_right, resolve_left, trichotomous
 -/
@@ -2141,7 +2143,11 @@ definition RelEmbedding.collapse
     obtain ⟨m, hm, hm'⟩ := H.wf.has_min { a | ¬s _ b } ⟨_, asymm h⟩
     use m
     obtain lt | rfl | gt := trichotomous_of s b (collapseF f m)
-    · refine (collapseF_not_lt f m (fun c h => ?_
+    · refine (collapseF_not_lt f m (fun c h => ?_) lt).elim
+      by_contra hn
+      exact hm' _ hn h
+    · rfl
+    · exact (hm gt).elim⟩
 
 中文:
 定义 关系嵌入.collapse
@@ -2151,7 +2157,11 @@ definition RelEmbedding.collapse
     obtain ⟨m, hm, hm'⟩ := H.wf.has_min { a | ¬s _ b } ⟨_, asymm h⟩
     use m
     obtain lt | rfl | gt := trichotomous_of s b (collapseF f m)
-    · refine (collapseF_not_lt f m (fun c h => ?_
+    · refine (collapseF_not_lt f m (fun c h => ?_) lt).elim
+      by_contra hn
+      exact hm' _ hn h
+    · rfl
+    · exact (hm gt).elim⟩
 
 Depends on / 依赖: H.wf.has_min, RelEmbedding, RelEmbedding.isWellOrder, RelEmbedding.ofMonotone, collapseF, collapseF_lt, collapseF_not_lt, has_min, isWellOrder, ofMonotone, trichotomous_of
 -/
@@ -2178,7 +2188,15 @@ definition InitialSeg.total
 | Sum.inl f, Sum.inr g => Sum.inl f.transRelIso g.symm
 | Sum.inr f, Sum.inl g => Sum.inr g.transRelIso f.symm
 | Sum.inr f, Sum.inr g => Sum.inl (f.trans g.symm).toInitialSeg
-| Sum.inl f, Sum.inl g
+| Sum.inl f, Sum.inl g => Classical.choice by
+      obtain h | h | h := trichotomous_of (Sum.Lex r s) f.top g.top
+· exact ⟨Sum.inl (f.codRestrict {x | Sum.Lex r s x g.top}
+          (fun a => _root_.trans (f.lt_top a) h) h).transRelIso g.subrelIso⟩
+      · let f := f.subrelIso
+        rw [h] at f
+exact ⟨Sum.inl (f.symm.trans g.subrelIso).toInitialSeg⟩
+· exact ⟨Sum.inr (g.codRestrict {x | Sum.Lex r s x f.top}
+          (fun a => _root_.trans (g.lt_top a) h) h).transRelIso f.subrelIso⟩
 
 中文:
 定义 初始段.total
@@ -2188,7 +2206,15 @@ definition InitialSeg.total
 | Sum.inl f, Sum.inr g => Sum.inl f.transRelIso g.symm
 | Sum.inr f, Sum.inl g => Sum.inr g.transRelIso f.symm
 | Sum.inr f, Sum.inr g => Sum.inl (f.trans g.symm).toInitialSeg
-| Sum.inl f, Sum.inl g
+| Sum.inl f, Sum.inl g => Classical.choice by
+      obtain h | h | h := trichotomous_of (Sum.Lex r s) f.top g.top
+· exact ⟨Sum.inl (f.codRestrict {x | Sum.Lex r s x g.top}
+          (fun a => _root_.trans (f.lt_top a) h) h).transRelIso g.subrelIso⟩
+      · let f := f.subrelIso
+        rw [h] at f
+exact ⟨Sum.inl (f.symm.trans g.subrelIso).toInitialSeg⟩
+· exact ⟨Sum.inr (g.codRestrict {x | Sum.Lex r s x f.top}
+          (fun a => _root_.trans (g.lt_top a) h) h).transRelIso f.subrelIso⟩
 
 Depends on / 依赖: Classical, Classical.choice, RelEmbedding, RelEmbedding.sumLexInr, Sum.Lex, Sum.inl, Sum.inr, _root_, _root_.trans, choice, codRestrict, collapse, collapse.principalSumRelIso, f.codRestrict, f.lt_top, f.symm, f.top, f.trans, f.transRelIso, g.subr
 -/

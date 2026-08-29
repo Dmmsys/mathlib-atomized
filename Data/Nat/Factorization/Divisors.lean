@@ -30,7 +30,8 @@ theorem coe_divisors_eq_prod_pow_le_factorization
   · have hdvd := dvd_of_mem_divisors h
     have hk := ne_zero_of_dvd_ne_zero hn hdvd
 .mpr hdvd, prod_factorization_pow_eq_self hk⟩ exact ⟨_, factorization_le_iff_dvd hk hn
-  · rw [← h, ← prod_factorization_pow_e
+  · rw [← h, ← prod_factorization_pow_eq_self hn]
+exact prod_dvd_prod_of_subset_of_dvd (support_mono hle) fun p _ => Nat.pow_dvd_pow p hle p
 
 中文:
 定理 coe_divisors_eq_prod_pow_le_factorization
@@ -40,7 +41,8 @@ theorem coe_divisors_eq_prod_pow_le_factorization
   · have hdvd := dvd_of_mem_divisors h
     have hk := ne_zero_of_dvd_ne_zero hn hdvd
 .mpr hdvd, prod_factorization_pow_eq_self hk⟩ exact ⟨_, factorization_le_iff_dvd hk hn
-  · rw [← h, ← prod_factorization_pow_e
+  · rw [← h, ← prod_factorization_pow_eq_self hn]
+exact prod_dvd_prod_of_subset_of_dvd (support_mono hle) fun p _ => Nat.pow_dvd_pow p hle p
 
 Depends on / 依赖: Nat.pow_dvd_pow, Set.ext, dvd_of_mem_divisors, factorization_le_iff_dvd, mem_divisors, mem_divisors.mpr, ne_zero_of_dvd_ne_zero, pow_dvd_pow, prod_dvd_prod_of_subset_of_dvd, prod_factorization_pow_eq_self, support_mono
 -/
@@ -142,7 +144,15 @@ theorem coe_properDivisors_eq_prod_pow_lt_factorization
   · have ⟨hdvd, hlt⟩ := mem_properDivisors.mp h
     have hk := ne_zero_of_dvd_ne_zero hn hdvd
     refine ⟨_, ?_, prod_factorization_pow_eq_self hk⟩
-apply lt_of_le_of_ne .mpr hdvd factorization_le_if
+apply lt_of_le_of_ne .mpr hdvd factorization_le_iff_dvd hk hn
+    exact mt (Nat.eq_of_factorization_eq' hk hn) hlt.ne
+  · have : k ∣ n := by
+      rw [← h]; rw [← prod_factorization_pow_eq_self hn]
+apply prod_dvd_prod_of_subset_of_dvd support_mono hlt.le
+exact fun p _ => Nat.pow_dvd_pow p hlt.le p
+    refine mem_properDivisors.mpr ⟨this, lt_of_le_of_ne (le_of_dvd (Nat.pos_of_ne_zero hn) this) ?_⟩
+    suffices k.factorization = f from (this ▸ hlt.ne <| congrArg _ ·)
+    exact h ▸ factorization_prod_pow_eq_self_of_le_factorization hlt.le
 
 中文:
 定理 coe_properDivisors_eq_prod_pow_lt_factorization
@@ -154,7 +164,15 @@ apply lt_of_le_of_ne .mpr hdvd factorization_le_if
   · have ⟨hdvd, hlt⟩ := mem_properDivisors.mp h
     have hk := ne_zero_of_dvd_ne_zero hn hdvd
     refine ⟨_, ?_, prod_factorization_pow_eq_self hk⟩
-apply lt_of_le_of_ne .mpr hdvd factorization_le_if
+apply lt_of_le_of_ne .mpr hdvd factorization_le_iff_dvd hk hn
+    exact mt (Nat.eq_of_factorization_eq' hk hn) hlt.ne
+  · have : k ∣ n := by
+      rw [← h]; rw [← prod_factorization_pow_eq_self hn]
+apply prod_dvd_prod_of_subset_of_dvd support_mono hlt.le
+exact fun p _ => Nat.pow_dvd_pow p hlt.le p
+    refine mem_properDivisors.mpr ⟨this, lt_of_le_of_ne (le_of_dvd (Nat.pos_of_ne_zero hn) this) ?_⟩
+    suffices k.factorization = f from (this ▸ hlt.ne <| congrArg _ ·)
+    exact h ▸ factorization_prod_pow_eq_self_of_le_factorization hlt.le
 
 Depends on / 依赖: Nat.eq_of_factorization_eq, Nat.po, Set.ext, eq_of_factorization_eq, factorization_le_iff_dvd, hlt.le, hlt.ne, lt_of_le_of_ne, mem_properDivisors, mem_properDivisors.mp, ne_zero_of_dvd_ne_zero, prod_dvd_prod_of_subset_of_dvd, prod_factorization_pow_eq_self, support_mono
 -/

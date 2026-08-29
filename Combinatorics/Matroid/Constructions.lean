@@ -1061,7 +1061,8 @@ theorem uniqueBaseOn_dual_eq
   rw [← uniqueBaseOn_inter_ground_eq]
   refine ext_isBase rfl (fun B (hB : B subseteq E) => ?_)
   rw [dual_isBase_iff]; rw [uniqueBaseOn_isBase_iff inter_subset_right]; rw [uniqueBaseOn_isBase_iff sdiff_subset]; rw [uniqueBaseOn_ground]
-  exact ⟨fun h => by rw [← sdiff_sdiff_cancel_left hB, h, sd
+  exact ⟨fun h => by rw [← sdiff_sdiff_cancel_left hB, h, sdiff_inter_self_eq_sdiff],
+    fun h => by rw [h, inter_comm I]; simp⟩
 
 中文:
 定理 uniqueBaseOn_dual_eq
@@ -1070,7 +1071,8 @@ theorem uniqueBaseOn_dual_eq
   rw [← uniqueBaseOn_inter_ground_eq]
   refine ext_isBase rfl (fun B (hB : B subseteq E) => ?_)
   rw [dual_isBase_iff]; rw [uniqueBaseOn_isBase_iff inter_subset_right]; rw [uniqueBaseOn_isBase_iff sdiff_subset]; rw [uniqueBaseOn_ground]
-  exact ⟨fun h => by rw [← sdiff_sdiff_cancel_left hB, h, sd
+  exact ⟨fun h => by rw [← sdiff_sdiff_cancel_left hB, h, sdiff_inter_self_eq_sdiff],
+    fun h => by rw [h, inter_comm I]; simp⟩
 -/
 @[simp] theorem uniqueBaseOn_dual_eq (I E : Set α) :
     (uniqueBaseOn I E)✶ = uniqueBaseOn (E \ I) E := by

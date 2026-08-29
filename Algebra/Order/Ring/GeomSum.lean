@@ -73,7 +73,10 @@ lemma geom_sum_alternating_of_le_neg_one
     simp only [Nat.even_add_one, geom_sum_succ]
     split_ifs at ih ⊢ with h
     · rw [le_add_iff_nonneg_left]
-     
+      exact mul_nonneg_of_nonpos_of_nonpos hx0 ih
+    · grw [← hx]
+      gcongr
+      simpa only [mul_one] using mul_le_mul_of_nonpos_left ih hx0
 
 中文:
 引理 geom_sum_alternating_of_le_neg_one
@@ -86,7 +89,10 @@ lemma geom_sum_alternating_of_le_neg_one
     simp only [Nat.even_add_one, geom_sum_succ]
     split_ifs at ih ⊢ with h
     · rw [le_add_iff_nonneg_left]
-     
+      exact mul_nonneg_of_nonpos_of_nonpos hx0 ih
+    · grw [← hx]
+      gcongr
+      simpa only [mul_one] using mul_le_mul_of_nonpos_left ih hx0
 
 Depends on / 依赖: Even.zero, Nat.even_add_one, even_add_one, geom_sum_succ, ite_true, le_add_iff_nonneg_left, le_add_of_nonneg_right, le_refl, mul_le_mul_of_nonpos_left, mul_nonneg_of_nonpos_of_nonpos, mul_one, range_zero, split_ifs, sum_empty, zero_le_one
 -/
@@ -123,7 +129,8 @@ lemma geom_sum_pos_and_lt_one
   intro n _ ihn
   rw [geom_sum_succ]; rw [add_lt_iff_neg_right]; rw [← neg_lt_iff_pos_add']; rw [neg_mul_eq_neg_mul]
   exact
-    ⟨mul_lt_one_of_nonneg_of_lt_one_
+    ⟨mul_lt_one_of_nonneg_of_lt_one_left (neg_nonneg.2 hx.le) (neg_lt_iff_pos_add'.2 hx') ihn.2.le,
+      mul_neg_of_neg_of_pos hx ihn.1⟩
 
 中文:
 引理 geom_sum_pos_and_lt_one
@@ -136,7 +143,8 @@ lemma geom_sum_pos_and_lt_one
   intro n _ ihn
   rw [geom_sum_succ]; rw [add_lt_iff_neg_right]; rw [← neg_lt_iff_pos_add']; rw [neg_mul_eq_neg_mul]
   exact
-    ⟨mul_lt_one_of_nonneg_of_lt_one_
+    ⟨mul_lt_one_of_nonneg_of_lt_one_left (neg_nonneg.2 hx.le) (neg_lt_iff_pos_add'.2 hx') ihn.2.le,
+      mul_neg_of_neg_of_pos hx ihn.1⟩
 
 Depends on / 依赖: Nat.le_induction, add_lt_iff_neg_right, geom_sum_succ, geom_sum_two, hx.le, le_induction, mul_lt_one_of_nonneg_of_lt_one_left, mul_neg_of_neg_of_pos, neg_lt_iff_pos_add, neg_mul_eq_neg_mul, neg_nonneg
 -/
@@ -165,7 +173,12 @@ lemma geom_sum_alternating_of_lt_neg_one
   clear hn
   intro n _ ihn
   simp only [Nat.even_add_one, geom_sum_succ]
-  split_ifs at ihn ⊢ wi
+  split_ifs at ihn ⊢ with hn'
+  · rw [lt_add_iff_pos_left]
+    exact mul_pos_of_neg_of_neg hx0 ihn
+  · grw [← hx.le]
+    gcongr
+    simpa only [mul_one] using mul_lt_mul_of_neg_left ihn hx0
 
 中文:
 引理 geom_sum_alternating_of_lt_neg_one
@@ -177,7 +190,12 @@ lemma geom_sum_alternating_of_lt_neg_one
   clear hn
   intro n _ ihn
   simp only [Nat.even_add_one, geom_sum_succ]
-  split_ifs at ihn ⊢ wi
+  split_ifs at ihn ⊢ with hn'
+  · rw [lt_add_iff_pos_left]
+    exact mul_pos_of_neg_of_neg hx0 ihn
+  · grw [← hx.le]
+    gcongr
+    simpa only [mul_one] using mul_lt_mul_of_neg_left ihn hx0
 
 Depends on / 依赖: Nat.even_add_one, Nat.le_induction, even_add_one, even_two, geom_sum_succ, geom_sum_two, hx.le, ite_true, le_add_of_nonneg_right, le_induction, lt_add_iff_pos_left, mul_lt_mul_of_neg_left, mul_one, mul_pos_of_neg_of_neg, split_ifs, trans_lt, zero_le_one
 -/
@@ -253,7 +271,10 @@ lemma Odd.geom_sum_pos
   rw [← Nat.not_even_iff_odd] at h
   rcases lt_trichotomy (x + 1) 0 with (hx | hx | hx)
   · have := geom_sum_alternating_of_lt_neg_one hx k.one_lt_succ_succ
-  
+    simp only [h, if_false] at this
+    exact zero_lt_one.trans this
+  · simp only [eq_neg_of_add_eq_zero_left hx, h, neg_one_geom_sum, if_false, zero_lt_one]
+  · exact geom_sum_pos' hx k.succ.succ_ne_zero
 
 中文:
 引理 Odd.geom_sum_pos
@@ -266,7 +287,10 @@ lemma Odd.geom_sum_pos
   rw [← Nat.not_even_iff_odd] at h
   rcases lt_trichotomy (x + 1) 0 with (hx | hx | hx)
   · have := geom_sum_alternating_of_lt_neg_one hx k.one_lt_succ_succ
-  
+    simp only [h, if_false] at this
+    exact zero_lt_one.trans this
+  · simp only [eq_neg_of_add_eq_zero_left hx, h, neg_one_geom_sum, if_false, zero_lt_one]
+  · exact geom_sum_pos' hx k.succ.succ_ne_zero
 
 Depends on / 依赖: Nat.not_even_iff_odd, Nat.not_odd_zero, eq_neg_of_add_eq_zero_left, geom_sum_alternating_of_lt_neg_one, geom_sum_pos, if_false, k.one_lt_succ_succ, k.succ.succ_ne_zero, lt_trichotomy, neg_one_geom_sum, not_even_iff_odd, not_odd_zero, one_lt_succ_succ, pow_zero, range_one, succ_ne_zero, sum_singleton, zero_add, zero_lt_one, zero_lt_one.trans
 -/
@@ -336,7 +360,10 @@ lemma geom_sum_ne_zero
   rw [Ne]; rw [eq_neg_iff_add_eq_zero]; rw [← Ne] at hx
   obtain h | h := hx.lt_or_gt
   · have := geom_sum_alternating_of_lt_neg_one h n.one_lt_succ_succ
-  
+    split_ifs at this
+    · exact this.ne
+    · exact (zero_lt_one.trans this).ne'
+  · exact (geom_sum_pos' h n.succ.succ_ne_zero).ne'
 
 中文:
 引理 geom_sum_ne_zero
@@ -349,7 +376,10 @@ lemma geom_sum_ne_zero
   rw [Ne]; rw [eq_neg_iff_add_eq_zero]; rw [← Ne] at hx
   obtain h | h := hx.lt_or_gt
   · have := geom_sum_alternating_of_lt_neg_one h n.one_lt_succ_succ
-  
+    split_ifs at this
+    · exact this.ne
+    · exact (zero_lt_one.trans this).ne'
+  · exact (geom_sum_pos' h n.succ.succ_ne_zero).ne'
 
 Depends on / 依赖: eq_neg_iff_add_eq_zero, geom_sum_alternating_of_lt_neg_one, geom_sum_pos, hx.lt_or_gt, lt_or_gt, n.one_lt_succ_succ, n.succ.succ_ne_zero, ne_eq, not_false_eq_true, one_lt_succ_succ, one_ne_zero, pow_zero, range_one, split_ifs, succ_ne_zero, sum_singleton, this.ne, zero_add, zero_lt_one, zero_lt_one.trans
 -/
@@ -414,7 +444,7 @@ lemma geom_sum_neg_iff
   statement: ∑ i in range n, x ^ i < 0 ↔ Even n ∧ x + 1 < 0
   proof: by
   rw [← not_iff_not]; rw [not_lt]; rw [le_iff_lt_or_eq]; rw [eq_comm]; rw [or_congr (geom_sum_pos_iff hn) (geom_sum_eq_zero_iff_neg_one hn)]; rw [← Nat.not_even_iff_odd]; rw [←
-    add_eq_zero_iff_eq_neg]; rw [not_and]; rw [not_lt]; rw [le_iff_lt_or_eq]; rw [eq_comm]; rw [← imp_iff_not_or]; rw [o
+    add_eq_zero_iff_eq_neg]; rw [not_and]; rw [not_lt]; rw [le_iff_lt_or_eq]; rw [eq_comm]; rw [← imp_iff_not_or]; rw [or_comm]; rw [and_comm]; rw [Decidable.and_or_imp]; rw [or_comm]
 
 中文:
 引理 geom_sum_neg_iff
@@ -422,7 +452,7 @@ lemma geom_sum_neg_iff
   结论: ∑ i in range n, x ^ i < 0 ↔ Even n ∧ x + 1 < 0
   证明: by
   rw [← not_iff_not]; rw [not_lt]; rw [le_iff_lt_or_eq]; rw [eq_comm]; rw [or_congr (geom_sum_pos_iff hn) (geom_sum_eq_zero_iff_neg_one hn)]; rw [← Nat.not_even_iff_odd]; rw [←
-    add_eq_zero_iff_eq_neg]; rw [not_and]; rw [not_lt]; rw [le_iff_lt_or_eq]; rw [eq_comm]; rw [← imp_iff_not_or]; rw [o
+    add_eq_zero_iff_eq_neg]; rw [not_and]; rw [not_lt]; rw [le_iff_lt_or_eq]; rw [eq_comm]; rw [← imp_iff_not_or]; rw [or_comm]; rw [and_comm]; rw [Decidable.and_or_imp]; rw [or_comm]
 
 Depends on / 依赖: Decidable, Decidable.and_or_imp, Nat.not_even_iff_odd, add_eq_zero_iff_eq_neg, and_comm, and_or_imp, eq_comm, geom_sum_eq_zero_iff_neg_one, geom_sum_pos_iff, imp_iff_not_or, le_iff_lt_or_eq, not_and, not_even_iff_odd, not_iff_not, not_lt, or_comm, or_congr
 -/
@@ -444,7 +474,11 @@ lemma Nat.pred_mul_geom_sum_le
     ((b - 1) * ∑ i in range n.succ, a / b ^ i) =
     (∑ i in range n, a / b ^ (i + 1) * b) + a * b - ((∑ i in range n, a / b ^ i) + a / b ^ n) := by
       rw [Nat.sub_mul]; rw [mul_comm]; rw [sum_mul]; rw [one_mul]; rw [sum_range_succ']; rw [sum_range_succ]; rw [pow_zero]; rw [Nat.div_one]
-    
+    _ <= (∑ i in range n, a / b ^ i) + a * b - ((∑ i in range n, a / b ^ i) + a / b ^ n) := by
+      gcongr with i hi
+      rw [pow_succ]; rw [← Nat.div_div_eq_div_mul]
+      exact Nat.div_mul_le_self _ _
+    _ = a * b - a / b ^ n := add_tsub_add_eq_tsub_left _ _ _
 
 中文:
 引理 自然数.pred_mul_geom_sum_le
@@ -453,7 +487,11 @@ lemma Nat.pred_mul_geom_sum_le
     ((b - 1) * ∑ i in range n.succ, a / b ^ i) =
     (∑ i in range n, a / b ^ (i + 1) * b) + a * b - ((∑ i in range n, a / b ^ i) + a / b ^ n) := by
       rw [Nat.sub_mul]; rw [mul_comm]; rw [sum_mul]; rw [one_mul]; rw [sum_range_succ']; rw [sum_range_succ]; rw [pow_zero]; rw [Nat.div_one]
-    
+    _ <= (∑ i in range n, a / b ^ i) + a * b - ((∑ i in range n, a / b ^ i) + a / b ^ n) := by
+      gcongr with i hi
+      rw [pow_succ]; rw [← Nat.div_div_eq_div_mul]
+      exact Nat.div_mul_le_self _ _
+    _ = a * b - a / b ^ n := add_tsub_add_eq_tsub_left _ _ _
 
 Depends on / 依赖: Nat.div_div_eq_div_mul, Nat.div_mul_le_self, Nat.div_one, Nat.sub_mul, add_tsub_a, div_div_eq_div_mul, div_mul_le_self, div_one, mul_comm, n.succ, one_mul, pow_succ, pow_zero, sub_mul, sum_mul, sum_range_succ
 -/
@@ -519,7 +557,12 @@ lemma Nat.geom_sum_Ico_le
   calc
     (a + ∑ i in Ico 1 n.succ, a / b ^ i) = a / b ^ 0 + ∑ i in Ico 1 n.succ, a / b ^ i := by
       rw [pow_zero]; rw [Nat.div_one]
-    _ = ∑ i in range n.succ, a / b 
+    _ = ∑ i in range n.succ, a / b ^ i := by
+      rw [range_eq_Ico]; rw [← Finset.insert_Ico_add_one_left_eq_Ico (Nat.succ_pos _)]; rw [sum_insert] <;>
+        simp
+    _ <= a * b / (b - 1) := Nat.geom_sum_le hb a _
+    _ = (a * 1 + a * (b - 1)) / (b - 1) := by rw [← mul_add, add_tsub_cancel_of_le (by lia)]
+    _ = a + a / (b - 1) := by rw [mul_one, Nat.add_mul_div_right _ _ (tsub_pos_of_lt hb), add_comm]
 
 中文:
 引理 自然数.geom_sum_Ico_le
@@ -532,7 +575,12 @@ lemma Nat.geom_sum_Ico_le
   calc
     (a + ∑ i in Ico 1 n.succ, a / b ^ i) = a / b ^ 0 + ∑ i in Ico 1 n.succ, a / b ^ i := by
       rw [pow_zero]; rw [Nat.div_one]
-    _ = ∑ i in range n.succ, a / b 
+    _ = ∑ i in range n.succ, a / b ^ i := by
+      rw [range_eq_Ico]; rw [← Finset.insert_Ico_add_one_left_eq_Ico (Nat.succ_pos _)]; rw [sum_insert] <;>
+        simp
+    _ <= a * b / (b - 1) := Nat.geom_sum_le hb a _
+    _ = (a * 1 + a * (b - 1)) / (b - 1) := by rw [← mul_add, add_tsub_cancel_of_le (by lia)]
+    _ = a + a / (b - 1) := by rw [mul_one, Nat.add_mul_div_right _ _ (tsub_pos_of_lt hb), add_comm]
 
 Depends on / 依赖: Finset, Finset.insert_Ico_add_one_left_eq_Ico, Ico_eq_empty_of_le, Nat.div_one, Nat.geom_sum_le, Nat.succ_pos, Nat.zero_le, add_le_add_iff_left, add_t, div_one, geom_sum_le, insert_Ico_add_one_left_eq_Ico, mul_add, n.succ, pow_zero, range_eq_Ico, succ_pos, sum_empty, sum_insert, zero_le
 -/

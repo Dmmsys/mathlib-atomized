@@ -83,7 +83,8 @@ theorem denomsClearable_C_mul_X_pow
   rw [C_mul_X_pow_eq_monomial]; rw [map_monomial]; rw [← C_mul_X_pow_eq_monomial]; rw [eval_mul]; rw [eval_pow]; rw [eval_C]
   rw [map_mul]; rw [map_mul]; rw [map_pow]; rw [map_pow]; rw [eval_X]; rw [mul_comm]
   rw [← tsub_add_cancel_of_le nN]
-  conv
+  conv_lhs => rw [← mul_one (i a), ← bu]
+  simp [mul_assoc, mul_comm, mul_left_comm, pow_add, mul_pow]
 
 中文:
 定理 denomsClearable_C_mul_X_pow
@@ -93,7 +94,8 @@ theorem denomsClearable_C_mul_X_pow
   rw [C_mul_X_pow_eq_monomial]; rw [map_monomial]; rw [← C_mul_X_pow_eq_monomial]; rw [eval_mul]; rw [eval_pow]; rw [eval_C]
   rw [map_mul]; rw [map_mul]; rw [map_pow]; rw [map_pow]; rw [eval_X]; rw [mul_comm]
   rw [← tsub_add_cancel_of_le nN]
-  conv
+  conv_lhs => rw [← mul_one (i a), ← bu]
+  simp [mul_assoc, mul_comm, mul_left_comm, pow_add, mul_pow]
 
 Depends on / 依赖: C_mul_X_pow_eq_monomial, conv_lhs, eval_C, eval_X, eval_mul, eval_pow, map_monomial, map_mul, map_pow, mul_assoc, mul_comm, mul_left_comm, mul_one, mul_pow, pow_add, tsub_add_cancel_of_le
 -/
@@ -196,7 +198,14 @@ theorem one_le_pow_mul_abs_eval_div
         rw [Int.cast_ne_zero]
         exact b0.ne.symm)
   obtain Fa := congr_arg abs hF
-  rw [eq_one_div_of_mul_eq_one_left bu]; rw [eq_intCast]; r
+  rw [eq_one_div_of_mul_eq_one_left bu]; rw [eq_intCast]; rw [eq_intCast]; rw [abs_mul] at Fa
+  rw [abs_of_pos (pow_pos (Int.cast_pos.mpr b0) _ : 0 < (b : K) ^ _)]; rw [one_div]; rw [eq_intCast] at Fa
+  rw [div_eq_mul_inv]; rw [← Fa]; rw [← Int.cast_abs]; rw [← Int.cast_one]; rw [Int.cast_le]
+  refine Int.le_of_lt_add_one ((lt_add_iff_pos_left 1).mpr (abs_pos.mpr fun F0 => fab ?_))
+  rw [eq_one_div_of_mul_eq_one_left bu]; rw [F0]; rw [one_div]; rw [eq_intCast]; rw [Int.cast_zero]; rw [zero_eq_mul] at hF
+  rcases hF with hF | hF
+  · exact (not_le.mpr b0 (le_of_eq (Int.cast_eq_zero.mp (eq_zero_of_pow_eq_zero hF)))).elim
+  · rwa [div_eq_mul_inv]
 
 中文:
 定理 one_le_pow_mul_abs_eval_div
@@ -209,7 +218,14 @@ theorem one_le_pow_mul_abs_eval_div
         rw [Int.cast_ne_zero]
         exact b0.ne.symm)
   obtain Fa := congr_arg abs hF
-  rw [eq_one_div_of_mul_eq_one_left bu]; rw [eq_intCast]; r
+  rw [eq_one_div_of_mul_eq_one_left bu]; rw [eq_intCast]; rw [eq_intCast]; rw [abs_mul] at Fa
+  rw [abs_of_pos (pow_pos (Int.cast_pos.mpr b0) _ : 0 < (b : K) ^ _)]; rw [one_div]; rw [eq_intCast] at Fa
+  rw [div_eq_mul_inv]; rw [← Fa]; rw [← Int.cast_abs]; rw [← Int.cast_one]; rw [Int.cast_le]
+  refine Int.le_of_lt_add_one ((lt_add_iff_pos_left 1).mpr (abs_pos.mpr fun F0 => fab ?_))
+  rw [eq_one_div_of_mul_eq_one_left bu]; rw [F0]; rw [one_div]; rw [eq_intCast]; rw [Int.cast_zero]; rw [zero_eq_mul] at hF
+  rcases hF with hF | hF
+  · exact (not_le.mpr b0 (le_of_eq (Int.cast_eq_zero.mp (eq_zero_of_pow_eq_zero hF)))).elim
+  · rwa [div_eq_mul_inv]
 
 Depends on / 依赖: Int.cast_abs, Int.cast_le, Int.cast_ne_zero, Int.cast_one, Int.cast_pos.mpr, abs_mul, abs_of_pos, algebraMap, b0.ne.symm, cast_abs, cast_le, cast_ne_zero, cast_one, cast_pos, congr_arg, denomsClearable_natDegree, div_eq_mul_inv, eq_intCast, eq_one_div_of_mul_eq_one_left, one_div
 -/

@@ -130,7 +130,10 @@ nonrec theorem ContinuousWithinAt.inv (hf : ContinuousWithinAt f s x) :
   hf.inv
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
-nonrec theorem ContinuousAt.inv (hf : ContinuousAt f x) : 
+nonrec theorem ContinuousAt.inv (hf : ContinuousAt f x) : ContinuousAt f⁻¹ x :=
+  hf.inv
+
+@[to_fun (attr := to_additive (attr := fun_prop))]
 
 中文:
 定理 连续.inv
@@ -144,7 +147,10 @@ nonrec theorem ContinuousWithinAt.inv (hf : ContinuousWithinAt f s x) :
   hf.inv
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
-nonrec theorem ContinuousAt.inv (hf : ContinuousAt f x) : 
+nonrec theorem ContinuousAt.inv (hf : ContinuousAt f x) : ContinuousAt f⁻¹ x :=
+  hf.inv
+
+@[to_fun (attr := to_additive (attr := fun_prop))]
 
 Depends on / 依赖: continuous_inv, continuous_inv.comp
 -/

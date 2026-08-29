@@ -65,7 +65,9 @@ theorem exact_iff_epi_imageToKernel'
   constructor
   · intro
     exact epi_of_epi_fac this
-  · i
+  · intro
+    rw [← this]
+    apply epi_comp
 
 中文:
 定理 exact_iff_epi_imageToKernel'
@@ -78,7 +80,9 @@ theorem exact_iff_epi_imageToKernel'
   constructor
   · intro
     exact epi_of_epi_fac this
-  · i
+  · intro
+    rw [← this]
+    apply epi_comp
 
 Depends on / 依赖: Category, Category.assoc, S.exact_iff_epi_kernel_lift, S.zero, cancel_mono, epi_comp, epi_of_epi_fac, exact_iff_epi_kernel_lift, factorThruImage, image.fac, imageToKernel, kernel, kernel.lift, kernel.lift_
 -/
@@ -269,7 +273,11 @@ theorem exact_iff_of_forks
   let e₁ := IsLimit.conePointUniqueUpToIso (kernelIsKernel S.g) hg
   let e₂ := IsColimit.coconePointUniqueUpToIso (cokernelIsCokernel S.f) hf
   have : cg.ι ≫ cf.π = e₁.inv ≫ kernel.ι S.g ≫ cokernel.π S.f ≫ e₂.hom := by
-    have eq₁ := IsLimit.conePoi
+    have eq₁ := IsLimit.conePointUniqueUpToIso_inv_comp (kernelIsKernel S.g) hg (.zero)
+    have eq₂ := IsColimit.comp_coconePointUniqueUpToIso_hom (cokernelIsCokernel S.f) hf (.one)
+    dsimp at eq₁ eq₂
+    rw [← eq₁]; rw [← eq₂]; rw [Category.assoc]
+  rw [this]; rw [IsIso.comp_left_eq_zero e₁.inv]; rw [← Category.assoc]; rw [IsIso.comp_right_eq_zero _ e₂.hom]
 
 中文:
 定理 exact_iff_of_forks
@@ -279,7 +287,11 @@ theorem exact_iff_of_forks
   let e₁ := IsLimit.conePointUniqueUpToIso (kernelIsKernel S.g) hg
   let e₂ := IsColimit.coconePointUniqueUpToIso (cokernelIsCokernel S.f) hf
   have : cg.ι ≫ cf.π = e₁.inv ≫ kernel.ι S.g ≫ cokernel.π S.f ≫ e₂.hom := by
-    have eq₁ := IsLimit.conePoi
+    have eq₁ := IsLimit.conePointUniqueUpToIso_inv_comp (kernelIsKernel S.g) hg (.zero)
+    have eq₂ := IsColimit.comp_coconePointUniqueUpToIso_hom (cokernelIsCokernel S.f) hf (.one)
+    dsimp at eq₁ eq₂
+    rw [← eq₁]; rw [← eq₂]; rw [Category.assoc]
+  rw [this]; rw [IsIso.comp_left_eq_zero e₁.inv]; rw [← Category.assoc]; rw [IsIso.comp_right_eq_zero _ e₂.hom]
 
 Depends on / 依赖: Category, Category.assoc, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.comp_coconePointUniqueUpToIso_hom, IsLimit, IsLimit.conePointUniqueUpToIso, IsLimit.conePointUniqueUpToIso_inv_comp, coconePointUniqueUpToIso, cokernel, cokernelIsCokernel, comp_coconePointUniqueUpToIso_hom, conePointUniqueUpToIso, conePointUniqueUpToIso_inv_comp, kernel, kernelIsKernel
 -/
@@ -308,7 +320,7 @@ definition Exact.isLimitImage
   exact KernelFork.IsLimit.ofι _ _
     (fun u hu => kernel.lift (cokernel.π S.f) u
       (by rw [← kernel.lift_ι S.g u hu, Category.assoc, h, comp_zero])) (by simp)
-    (fun _ _ _ hm => by rw [← cancel_mono (Abelian.image.ι S.f), hm, kernel.lift
+    (fun _ _ _ hm => by rw [← cancel_mono (Abelian.image.ι S.f), hm, kernel.lift_ι])
 
 中文:
 定义 正合.isLimitImage
@@ -318,7 +330,7 @@ definition Exact.isLimitImage
   exact KernelFork.IsLimit.ofι _ _
     (fun u hu => kernel.lift (cokernel.π S.f) u
       (by rw [← kernel.lift_ι S.g u hu, Category.assoc, h, comp_zero])) (by simp)
-    (fun _ _ _ hm => by rw [← cancel_mono (Abelian.image.ι S.f), hm, kernel.lift
+    (fun _ _ _ hm => by rw [← cancel_mono (Abelian.image.ι S.f), hm, kernel.lift_ι])
 
 Depends on / 依赖: Abelian, Abelian.image, Category, Category.assoc, IsLimit, KernelFork, KernelFork.IsLimit.of, cancel_mono, cokernel, comp_zero, kernel, kernel.lift, kernel.lift_
 -/
@@ -615,7 +627,9 @@ lemma reflects_exact_of_faithful
     kernel.lift' (F.map S.g) (F.map (kernel.ι S.g))
       (by simp only [← F.map_comp, kernel.condition, CategoryTheory.Functor.map_zero])
   obtain ⟨l, hl⟩ :=
-    coker
+    cokernel.desc' (F.map S.f) (F.map (cokernel.π S.f))
+      (by simp only [← F.map_comp, cokernel.condition, CategoryTheory.Functor.map_zero])
+  rw [F.map_comp]; rw [← hl]; rw [← hk]; rw [Category.assoc]; rw [reassoc_of% hS]; rw [zero_comp]; rw [comp_zero]
 
 中文:
 引理 reflects_exact_of_faithful
@@ -628,7 +642,9 @@ lemma reflects_exact_of_faithful
     kernel.lift' (F.map S.g) (F.map (kernel.ι S.g))
       (by simp only [← F.map_comp, kernel.condition, CategoryTheory.Functor.map_zero])
   obtain ⟨l, hl⟩ :=
-    coker
+    cokernel.desc' (F.map S.f) (F.map (cokernel.π S.f))
+      (by simp only [← F.map_comp, cokernel.condition, CategoryTheory.Functor.map_zero])
+  rw [F.map_comp]; rw [← hl]; rw [← hk]; rw [Category.assoc]; rw [reassoc_of% hS]; rw [zero_comp]; rw [comp_zero]
 
 Depends on / 依赖: Category, Category.assoc, CategoryTheory, CategoryTheory.Functor.map_zero, F.map, F.map_comp, F.zero_of_map_zero, FinCategory, FinCategory.mk, Fintype, Fintype.ofFinite, Functor, ShortComplex, ShortComplex.exact_iff_kernel_, cokernel, cokernel.condition, cokernel.desc, condition, kernel, kernel.condition
 -/
@@ -735,7 +751,17 @@ lemma preservesHomology_of_map_exact
     have : Epi ((ShortComplex.mk _ _ (cokernel.condition f)).map L).g := by
       dsimp
       infer_instance
- 
+    exact (hL (ShortComplex.mk _ _ (cokernel.condition f))
+      (ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel f))).gIsCokernel
+  preservesKernels X Y f := by
+    have := preservesMonomorphisms_of_map_exact _ hL
+    apply preservesLimit_of_preserves_limit_cone (kernelIsKernel f)
+    apply (KernelFork.isLimitMapConeEquiv _ L).2
+    have : Mono ((ShortComplex.mk _ _ (kernel.condition f)).map L).f := by
+      dsimp
+      infer_instance
+    exact (hL (ShortComplex.mk _ _ (kernel.condition f))
+      (ShortComplex.exact_of_f_is_kernel _ (kernelIsKernel f))).fIsKernel
 
 中文:
 引理 preservesHomology_of_map_exact
@@ -747,7 +773,17 @@ lemma preservesHomology_of_map_exact
     have : Epi ((ShortComplex.mk _ _ (cokernel.condition f)).map L).g := by
       dsimp
       infer_instance
- 
+    exact (hL (ShortComplex.mk _ _ (cokernel.condition f))
+      (ShortComplex.exact_of_g_is_cokernel _ (cokernelIsCokernel f))).gIsCokernel
+  preservesKernels X Y f := by
+    have := preservesMonomorphisms_of_map_exact _ hL
+    apply preservesLimit_of_preserves_limit_cone (kernelIsKernel f)
+    apply (KernelFork.isLimitMapConeEquiv _ L).2
+    have : Mono ((ShortComplex.mk _ _ (kernel.condition f)).map L).f := by
+      dsimp
+      infer_instance
+    exact (hL (ShortComplex.mk _ _ (kernel.condition f))
+      (ShortComplex.exact_of_f_is_kernel _ (kernelIsKernel f))).fIsKernel
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.isColimitMapCoconeEquiv, ShortComplex, ShortComplex.exact_of_g_is_cokernel, ShortComplex.mk, cokernel, cokernel.condition, cokernelIsCokernel, condition, exact_of_g_is_cokernel, gIsCokernel, infer_instance, isColimitMapCoconeEquiv, preservesColimit_of_preserves_colimit_cocone, preservesEpimorphisms_of_map_exact, preservesKernels, preservesLimit, preservesMonomorphisms_of_map_exact
 -/
@@ -792,7 +828,10 @@ lemma preservesHomology_of_preservesMonos_and_cokernels
       τ₃ := L.map (Abelian.factorThruCoimage S.g)
       comm₂₃ := by
         dsimp
-        rw [Category.id_comp]; rw [← L.
+        rw [Category.id_comp]; rw [← L.map_comp]; rw [cokernel.π_desc] }
+  apply (ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ).1
+  apply ShortComplex.exact_of_g_is_cokernel
+  exact CokernelCofork.mapIsColimit _ ((S.exact_iff_exact_coimage_π).1 hS).gIsCokernel L
 
 中文:
 引理 preservesHomology_of_preservesMonos_and_cokernels
@@ -806,7 +845,10 @@ lemma preservesHomology_of_preservesMonos_and_cokernels
       τ₃ := L.map (Abelian.factorThruCoimage S.g)
       comm₂₃ := by
         dsimp
-        rw [Category.id_comp]; rw [← L.
+        rw [Category.id_comp]; rw [← L.map_comp]; rw [cokernel.π_desc] }
+  apply (ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ).1
+  apply ShortComplex.exact_of_g_is_cokernel
+  exact CokernelCofork.mapIsColimit _ ((S.exact_iff_exact_coimage_π).1 hS).gIsCokernel L
 
 Depends on / 依赖: Abelian, Abelian.comp_coimage_, Abelian.factorThruCoimage, Category, Category.id_comp, CokernelCofork, CokernelCofork.mapIsColimit, L.map, L.map_comp, S.exact_iff_exact_coimage_, S.map, S.zero, ShortComplex, ShortComplex.exact_iff_of_epi_of_isIso_of_mono, ShortComplex.exact_of_g_is_cokernel, ShortComplex.mk, cokernel, exact_iff_of_epi_of_isIso_of_mono, exact_of_g_is_cokernel, factorThruCoimage
 -/
@@ -843,7 +885,10 @@ lemma preservesHomology_of_preservesEpis_and_kernels
       τ₃ := 𝟙 _
       comm₁₂ := by
         dsimp
-        rw [Category.comp_id]; rw [← L.map_
+        rw [Category.comp_id]; rw [← L.map_comp]; rw [kernel.lift_ι] }
+  apply (ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ).2
+  apply ShortComplex.exact_of_f_is_kernel
+  exact KernelFork.mapIsLimit _ ((S.exact_iff_exact_image_ι).1 hS).fIsKernel L
 
 中文:
 引理 preservesHomology_of_preservesEpis_and_kernels
@@ -857,7 +902,10 @@ lemma preservesHomology_of_preservesEpis_and_kernels
       τ₃ := 𝟙 _
       comm₁₂ := by
         dsimp
-        rw [Category.comp_id]; rw [← L.map_
+        rw [Category.comp_id]; rw [← L.map_comp]; rw [kernel.lift_ι] }
+  apply (ShortComplex.exact_iff_of_epi_of_isIso_of_mono φ).2
+  apply ShortComplex.exact_of_f_is_kernel
+  exact KernelFork.mapIsLimit _ ((S.exact_iff_exact_image_ι).1 hS).fIsKernel L
 
 Depends on / 依赖: Abelian, Abelian.factorThruImage, Abelian.image_, Category, Category.comp_id, KernelFork, KernelFork.mapIsLimit, L.map, L.map_comp, S.exact_iff_exact_image_, S.map, S.zero, ShortComplex, ShortComplex.exact_iff_of_epi_of_isIso_of_mono, ShortComplex.exact_of_f_is_kernel, ShortComplex.mk, comp_id, exact_iff_of_epi_of_isIso_of_mono, exact_of_f_is_kernel, fIsKernel
 -/

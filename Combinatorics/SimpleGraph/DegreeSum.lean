@@ -333,7 +333,13 @@ theorem even_card_odd_degree_vertices
   simp only [ZMod.natCast_self, zero_mul, Nat.cast_mul] at h
   rw [Nat.cast_sum]; rw [← sum_filter_ne_zero] at h
   rw [sum_congr (g := fun _v => (1 : ZMod 2)) rfl] at h
-  · simp only [mul_one, nsmul_eq_mul, sum_
+  · simp only [mul_one, nsmul_eq_mul, sum_const, Ne] at h
+    rw [← ZMod.natCast_eq_zero_iff_even]
+    convert! h
+    exact ZMod.natCast_ne_zero_iff_odd.symm
+  · intro v
+    rw [mem_filter_univ]; rw [Ne]; rw [ZMod.natCast_eq_zero_iff_even]; rw [ZMod.natCast_eq_one_iff_odd]; rw [← Nat.not_even_iff_odd]
+    tauto
 
 中文:
 定理 even_card_odd_degree_vertices
@@ -343,7 +349,13 @@ theorem even_card_odd_degree_vertices
   simp only [ZMod.natCast_self, zero_mul, Nat.cast_mul] at h
   rw [Nat.cast_sum]; rw [← sum_filter_ne_zero] at h
   rw [sum_congr (g := fun _v => (1 : ZMod 2)) rfl] at h
-  · simp only [mul_one, nsmul_eq_mul, sum_
+  · simp only [mul_one, nsmul_eq_mul, sum_const, Ne] at h
+    rw [← ZMod.natCast_eq_zero_iff_even]
+    convert! h
+    exact ZMod.natCast_ne_zero_iff_odd.symm
+  · intro v
+    rw [mem_filter_univ]; rw [Ne]; rw [ZMod.natCast_eq_zero_iff_even]; rw [ZMod.natCast_eq_one_iff_odd]; rw [← Nat.not_even_iff_odd]
+    tauto
 
 Depends on / 依赖: G.sum_degrees_eq_twice_card_edges, Nat.cast_mul, Nat.cast_sum, ZMod.natCast_eq_one_iff_o, ZMod.natCast_eq_zero_iff_even, ZMod.natCast_ne_zero_iff_odd.symm, ZMod.natCast_self, cast_mul, cast_sum, congr_arg, convert, mem_filter_univ, mul_one, natCast_eq_one_iff_o, natCast_eq_zero_iff_even, natCast_ne_zero_iff_odd, natCast_self, nsmul_eq_mul, sum_congr, sum_const
 -/
@@ -376,7 +388,14 @@ theorem odd_card_odd_degree_vertices_ne
       exact h
     rwa [← card_pos, hg, ← two_mul, mul_pos_iff_of_pos_left] at hh
     exact zero_lt_two
-  have hc : (f
+  have hc : (fun w : V => w != v ∧ Odd (G.degree w)) = fun w : V => Odd (G.degree w) ∧ w != v := by
+    ext w
+    rw [and_comm]
+  simp only [hc]
+  rw [← filter_filter]; rw [filter_ne']; rw [card_erase_of_mem]
+· refine ⟨k - 1, tsub_eq_of_eq_add hg.trans ?_⟩
+    lia
+  · rwa [mem_filter_univ]
 
 中文:
 定理 odd_card_odd_degree_vertices_ne
@@ -390,7 +409,14 @@ theorem odd_card_odd_degree_vertices_ne
       exact h
     rwa [← card_pos, hg, ← two_mul, mul_pos_iff_of_pos_left] at hh
     exact zero_lt_two
-  have hc : (f
+  have hc : (fun w : V => w != v ∧ Odd (G.degree w)) = fun w : V => Odd (G.degree w) ∧ w != v := by
+    ext w
+    rw [and_comm]
+  simp only [hc]
+  rw [← filter_filter]; rw [filter_ne']; rw [card_erase_of_mem]
+· refine ⟨k - 1, tsub_eq_of_eq_add hg.trans ?_⟩
+    lia
+  · rwa [mem_filter_univ]
 
 Depends on / 依赖: Finset, Finset.Nonempty, G.degree, G.even_card_odd_degree_vertices, Nonempty, and_comm, card_erase_of_mem, card_pos, degree, even_card_odd_degree_vertices, filter_filter, filter_ne, hg.trans, mem_filter_univ, mul_pos_iff_of_pos_left, tsub_eq_of_eq_add, two_mul, zero_lt_two
 -/

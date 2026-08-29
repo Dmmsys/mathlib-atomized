@@ -91,7 +91,7 @@ definition reassocExprHom
   let w := args[6]!
   w.mvarId!.assignIfDefEq e
   withEnsuringLocalInstance inst.mvarId! do
-    return (← simpType ca
+    return (← simpType categorySimp (mkAppN lem₀ args), #[inst.mvarId!])
 
 中文:
 定义 reassocExprHom
@@ -104,7 +104,7 @@ definition reassocExprHom
   let w := args[6]!
   w.mvarId!.assignIfDefEq e
   withEnsuringLocalInstance inst.mvarId! do
-    return (← simpType ca
+    return (← simpType categorySimp (mkAppN lem₀ args), #[inst.mvarId!])
 -/
 def reassocExprHom (e : Expr) : MetaM (Expr × Array MVarId) := do
   let lem₀ ← mkConstWithFreshMVarLevels ``eq_whisker'
@@ -188,7 +188,7 @@ definition reassocExpr
     let handlers ← reassocImplRef.get
 let (pf, insts) ← handlers.firstM (fun h => h pf) > do
       throwError "`reassoc` can only be used on terms about equality of (iso)morphisms"
-    return (← mkLambdaFVars xs 
+    return (← mkLambdaFVars xs pf, insts)
 
 中文:
 定义 reassocExpr
@@ -199,7 +199,7 @@ let (pf, insts) ← handlers.firstM (fun h => h pf) > do
     let handlers ← reassocImplRef.get
 let (pf, insts) ← handlers.firstM (fun h => h pf) > do
       throwError "`reassoc` can only be used on terms about equality of (iso)morphisms"
-    return (← mkLambdaFVars xs 
+    return (← mkLambdaFVars xs pf, insts)
 -/
 def reassocExpr (pf : Expr) : MetaM (Expr × Array MVarId) := do
   forallTelescopeReducing (← inferType pf) fun xs _ => do
@@ -253,7 +253,18 @@ definition reassocImpl
     unless kind == AttributeKind.global do
       throwAttrMustBeGlobal `reassoc kind
     let toDual := toDual.isSome || (Translate.findTranslation? (← getEnv) ToDual.data src).isSome
-    let tgt := src.appendAfter "_
+    let tgt := src.appendAfter "_assoc"
+    addRelatedDecl src tgt ref optAttr fun value levels => do
+Term.TermElabM.run' Term.withSynthesize do
+        let pf ← reassocExpr' value
+        pure (pf, levels)
+    -- If the original declaration is tagged with `to_dual`,
+    -- then tag the generated declaration with `to_dual none`.
+    if toDual then
+liftCommandElabM Command.elabCommand ←
+        `(command| attribute [to_dual none] $(mkIdent tgt))
+    return tgt
+  | _ => throwUnsupportedSyntax
 
 中文:
 定义 reassocImpl
@@ -263,7 +274,18 @@ definition reassocImpl
     unless kind == AttributeKind.global do
       throwAttrMustBeGlobal `reassoc kind
     let toDual := toDual.isSome || (Translate.findTranslation? (← getEnv) ToDual.data src).isSome
-    let tgt := src.appendAfter "_
+    let tgt := src.appendAfter "_assoc"
+    addRelatedDecl src tgt ref optAttr fun value levels => do
+Term.TermElabM.run' Term.withSynthesize do
+        let pf ← reassocExpr' value
+        pure (pf, levels)
+    -- If the original declaration is tagged with `to_dual`,
+    -- then tag the generated declaration with `to_dual none`.
+    if toDual then
+liftCommandElabM Command.elabCommand ←
+        `(command| attribute [to_dual none] $(mkIdent tgt))
+    return tgt
+  | _ => throwUnsupportedSyntax
 -/
 private def reassocImpl (src : Name) (ref : Syntax) (kind : AttributeKind) : AttrM Name :=
   match ref with

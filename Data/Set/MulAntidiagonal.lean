@@ -316,7 +316,12 @@ theorem finite_of_isPWO
   have h1 : (mulAntidiagonal s t a).PartiallyWellOrderedOn (Prod.fst ⁻¹'o (· <= ·)) :=
     fun f => hs fun n => ⟨_, (mem_mulAntidiagonal.1 (f n).2).1⟩
   have h2 : (mulAntidiagonal s t a).PartiallyWellOrderedOn (Prod.snd ⁻¹'o (· <= ·)) :=
-    fun f => ht fun n => ⟨_, (mem_mulAntidia
+    fun f => ht fun n => ⟨_, (mem_mulAntidiagonal.1 (f n).2).2.1⟩
+  obtain ⟨g, hg⟩ :=
+    h1.exists_monotone_subseq fun n => (h.natEmbedding _ n).2
+  obtain ⟨m, n, mn, h2'⟩ := h2 fun n => h.natEmbedding _ _
+  refine mn.ne (g.injective <| (h.natEmbedding _).injective ?_)
+  exact eq_of_fst_le_fst_of_snd_le_snd _ _ _ (hg _ _ mn.le) h2'
 
 中文:
 定理 finite_of_isPWO
@@ -327,7 +332,12 @@ theorem finite_of_isPWO
   have h1 : (mulAntidiagonal s t a).PartiallyWellOrderedOn (Prod.fst ⁻¹'o (· <= ·)) :=
     fun f => hs fun n => ⟨_, (mem_mulAntidiagonal.1 (f n).2).1⟩
   have h2 : (mulAntidiagonal s t a).PartiallyWellOrderedOn (Prod.snd ⁻¹'o (· <= ·)) :=
-    fun f => ht fun n => ⟨_, (mem_mulAntidia
+    fun f => ht fun n => ⟨_, (mem_mulAntidiagonal.1 (f n).2).2.1⟩
+  obtain ⟨g, hg⟩ :=
+    h1.exists_monotone_subseq fun n => (h.natEmbedding _ n).2
+  obtain ⟨m, n, mn, h2'⟩ := h2 fun n => h.natEmbedding _ _
+  refine mn.ne (g.injective <| (h.natEmbedding _).injective ?_)
+  exact eq_of_fst_le_fst_of_snd_le_snd _ _ _ (hg _ _ mn.le) h2'
 
 Depends on / 依赖: PartiallyWellOrderedOn, Prod.fst, Prod.snd, exists_monotone_subseq, g.injective, h.natEmbedding, h1.exists_monotone_subseq, injective, mem_mulAntidiagonal, mn.ne, mulAntidiagonal, natEmbedding
 -/

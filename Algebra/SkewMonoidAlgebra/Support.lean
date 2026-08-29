@@ -261,7 +261,7 @@ theorem support_single_mul_eq_image
   obtain ⟨y, yf, rfl⟩ : exists a : G, a in f.support ∧ x * a = y := by
     simpa only [Finset.mem_image, exists_prop] using hy
   simp [coeff_mul, mem_support_iff.mp yf, hrx, mem_support_iff, sum_single_index, Ne,
-    zero_m
+    zero_mul, ite_self, sum_zero, lx.eq_iff]
 
 中文:
 定理 support_single_mul_eq_image
@@ -271,7 +271,7 @@ theorem support_single_mul_eq_image
   obtain ⟨y, yf, rfl⟩ : exists a : G, a in f.support ∧ x * a = y := by
     simpa only [Finset.mem_image, exists_prop] using hy
   simp [coeff_mul, mem_support_iff.mp yf, hrx, mem_support_iff, sum_single_index, Ne,
-    zero_m
+    zero_mul, ite_self, sum_zero, lx.eq_iff]
 
 Depends on / 依赖: Finset, Finset.mem_image, coeff_mul, eq_iff, exists_prop, f.support, ite_self, lx.eq_iff, mem_image, mem_support_iff, mem_support_iff.mp, subset_antisymm, sum_single_index, sum_zero, support, support_single_mul_subset, zero_mul
 -/
@@ -295,7 +295,7 @@ theorem support_mul_single_eq_image
   obtain ⟨y, yf, rfl⟩ : exists a : G, a in f.support ∧ a * x = y := by
     simpa only [Finset.mem_image, exists_prop] using hy
   simp [coeff_mul, mem_support_iff.mp yf, hrx, mem_support_iff, sum_single_index, mul_zero,
-    
+    ite_self, rx.eq_iff]
 
 中文:
 定理 support_mul_single_eq_image
@@ -305,7 +305,7 @@ theorem support_mul_single_eq_image
   obtain ⟨y, yf, rfl⟩ : exists a : G, a in f.support ∧ a * x = y := by
     simpa only [Finset.mem_image, exists_prop] using hy
   simp [coeff_mul, mem_support_iff.mp yf, hrx, mem_support_iff, sum_single_index, mul_zero,
-    
+    ite_self, rx.eq_iff]
 
 Depends on / 依赖: Finset, Finset.mem_image, coeff_mul, eq_iff, exists_prop, f.support, ite_self, mem_image, mem_support_iff, mem_support_iff.mp, mul_zero, rx.eq_iff, subset_antisymm, sum_single_index, support, support_mul_single_subset
 -/

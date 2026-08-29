@@ -143,7 +143,18 @@ definition image.lift
       apply injective_of_mono F'.m
       change (F'.e ≫ F'.m) _ = _
       rw [F'.fac]; rw [map_zero]
-      exact (Classical.indefiniteDescription (fun y => f y =
+      exact (Classical.indefiniteDescription (fun y => f y = 0) _).2
+    map_add' := by
+      intro x y
+      have := F'.m_mono
+      apply injective_of_mono F'.m
+      rw [map_add]
+      change (F'.e ≫ F'.m) _ = (F'.e ≫ F'.m) _ + (F'.e ≫ F'.m) _
+      rw [F'.fac]
+      rw [(Classical.indefiniteDescription (fun z => f z = _) _).2]
+      rw [(Classical.indefiniteDescription (fun z => f z = _) _).2]
+      rw [(Classical.indefiniteDescription (fun z => f z = _) _).2]
+      rfl }
 
 中文:
 定义 像.lift
@@ -155,7 +166,18 @@ definition image.lift
       apply injective_of_mono F'.m
       change (F'.e ≫ F'.m) _ = _
       rw [F'.fac]; rw [map_zero]
-      exact (Classical.indefiniteDescription (fun y => f y =
+      exact (Classical.indefiniteDescription (fun y => f y = 0) _).2
+    map_add' := by
+      intro x y
+      have := F'.m_mono
+      apply injective_of_mono F'.m
+      rw [map_add]
+      change (F'.e ≫ F'.m) _ = (F'.e ≫ F'.m) _ + (F'.e ≫ F'.m) _
+      rw [F'.fac]
+      rw [(Classical.indefiniteDescription (fun z => f z = _) _).2]
+      rw [(Classical.indefiniteDescription (fun z => f z = _) _).2]
+      rw [(Classical.indefiniteDescription (fun z => f z = _) _).2]
+      rfl }
 
 Depends on / 依赖: Classical, Classical.indefiniteDescription, indefiniteDescription, injective_of_mono, m_mono, map_add, map_zero
 -/

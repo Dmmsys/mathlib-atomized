@@ -478,7 +478,11 @@ definition pushforwardNatTrans
       ext x
       dsimp
       change (X.val.presheaf.map (G.map i.unop).op ≫ X.val.presheaf.map (α.app V.unop).op) _ =
-        (X.val.presheaf.map (α.app U.unop).op ≫ X.val
+        (X.val.presheaf.map (α.app U.unop).op ≫ X.val.presheaf.map (F.map i.unop).op) _
+      simp only [← CategoryTheory.Functor.map_comp, ← op_comp, α.naturality] }
+  naturality {X Y} f := by
+    ext U x
+    exact congr($(f.val.naturality (α.app U.unop).op) x).symm
 
 中文:
 定义 pushforward自然数Trans
@@ -488,7 +492,11 @@ definition pushforwardNatTrans
       ext x
       dsimp
       change (X.val.presheaf.map (G.map i.unop).op ≫ X.val.presheaf.map (α.app V.unop).op) _ =
-        (X.val.presheaf.map (α.app U.unop).op ≫ X.val
+        (X.val.presheaf.map (α.app U.unop).op ≫ X.val.presheaf.map (F.map i.unop).op) _
+      simp only [← CategoryTheory.Functor.map_comp, ← op_comp, α.naturality] }
+  naturality {X Y} f := by
+    ext U x
+    exact congr($(f.val.naturality (α.app U.unop).op) x).symm
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_comp, F.map, Functor, G.map, ModuleCat, ModuleCat.restrictScalars, U.unop, V.unop, X.val.map, X.val.presheaf.map, f.val.naturality, hom.app, i.unop, map_comp, naturality, op_comp, presheaf, restrictScalars, val.app
 -/
@@ -606,7 +614,15 @@ definition pushforwardNatIso
   hom_inv_id := by
     ext X U x
     suffices X.val.presheaf.map (α.hom.app U.unop).op ≫
-      X.val.presheaf.map (α.inv.app U.unop).op = 𝟙 _ from congr($t
+      X.val.presheaf.map (α.inv.app U.unop).op = 𝟙 _ from congr($this x)
+    simp only [← Functor.map_comp, ← op_comp,
+      Iso.inv_hom_id_app, op_id, CategoryTheory.Functor.map_id]
+  inv_hom_id := by
+    ext X U x
+    suffices X.val.presheaf.map (α.inv.app U.unop).op ≫
+      X.val.presheaf.map (α.hom.app U.unop).op = 𝟙 _ from congr($this x)
+    simp only [← Functor.map_comp, ← op_comp,
+      Iso.hom_inv_id_app, op_id, CategoryTheory.Functor.map_id]
 
 中文:
 定义 pushforward自然数Iso
@@ -617,7 +633,15 @@ definition pushforwardNatIso
   hom_inv_id := by
     ext X U x
     suffices X.val.presheaf.map (α.hom.app U.unop).op ≫
-      X.val.presheaf.map (α.inv.app U.unop).op = 𝟙 _ from congr($t
+      X.val.presheaf.map (α.inv.app U.unop).op = 𝟙 _ from congr($this x)
+    simp only [← Functor.map_comp, ← op_comp,
+      Iso.inv_hom_id_app, op_id, CategoryTheory.Functor.map_id]
+  inv_hom_id := by
+    ext X U x
+    suffices X.val.presheaf.map (α.inv.app U.unop).op ≫
+      X.val.presheaf.map (α.hom.app U.unop).op = 𝟙 _ from congr($this x)
+    simp only [← Functor.map_comp, ← op_comp,
+      Iso.hom_inv_id_app, op_id, CategoryTheory.Functor.map_id]
 
 Depends on / 依赖: pushforwardNatTrans
 -/
@@ -693,7 +717,21 @@ definition pushforwardPushforwardAdj
       (pushforwardCongr (by ext1; simpa)).hom ≫ (pushforwardComp _ _).inv
   counit :=
     letI := CategoryTheory.Functor.isContinuous_comp F G J K J
-    (pushforwardComp _ _)
+    (pushforwardComp _ _).hom ≫ pushforwardNatTrans _ adj.unit ≫
+      (pushforwardCongr (by ext1; simpa)).hom ≫ (pushforwardId _).hom
+  left_triangle_components X := by
+    ext U x
+    change (X.val.presheaf.map (adj.counit.app (F.obj U.unop)).op ≫
+      X.val.presheaf.map (F.map (adj.unit.app U.unop)).op) _ = _
+    dsimp only [id_obj]
+    rw [← Functor.map_comp]; rw [← op_comp]; rw [adj.left_triangle_components]
+    simp
+  right_triangle_components X := by
+    ext U x
+    change (X.val.presheaf.map (G.map (adj.counit.app U.unop)).op ≫
+      X.val.presheaf.map (adj.unit.app (G.obj U.unop)).op) _ = _
+    rw [← Functor.map_comp]; rw [← op_comp]; rw [adj.right_triangle_components]
+    simp
 
 中文:
 定义 pushforwardPushforwardAdj
@@ -703,7 +741,21 @@ definition pushforwardPushforwardAdj
       (pushforwardCongr (by ext1; simpa)).hom ≫ (pushforwardComp _ _).inv
   counit :=
     letI := CategoryTheory.Functor.isContinuous_comp F G J K J
-    (pushforwardComp _ _)
+    (pushforwardComp _ _).hom ≫ pushforwardNatTrans _ adj.unit ≫
+      (pushforwardCongr (by ext1; simpa)).hom ≫ (pushforwardId _).hom
+  left_triangle_components X := by
+    ext U x
+    change (X.val.presheaf.map (adj.counit.app (F.obj U.unop)).op ≫
+      X.val.presheaf.map (F.map (adj.unit.app U.unop)).op) _ = _
+    dsimp only [id_obj]
+    rw [← Functor.map_comp]; rw [← op_comp]; rw [adj.left_triangle_components]
+    simp
+  right_triangle_components X := by
+    ext U x
+    change (X.val.presheaf.map (G.map (adj.counit.app U.unop)).op ≫
+      X.val.presheaf.map (adj.unit.app (G.obj U.unop)).op) _ = _
+    rw [← Functor.map_comp]; rw [← op_comp]; rw [adj.right_triangle_components]
+    simp
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.isContinuous_comp, F.obj, Functor, U.unop, X.val.presh, X.val.presheaf.map, adj.counit, adj.counit.app, adj.unit, counit, isContinuous_comp, left_triangle_components, presheaf, pushforwardComp, pushforwardCongr, pushforwardId, pushforwardNatTrans
 -/
@@ -779,7 +831,17 @@ instance isLeftAdjoint_pushforward_of_isIso
   let shAdj := adj.sheafPushforwardContinuous (E := RingCat.{u}) J K
   let ψ : R ⟶ (F.rightAdjoint.sheafPushforwardContinuous RingCat.{u} K J).obj S :=
     shAdj.unit.app R ≫ (F.rightAdjoint.sheafPushforwardContinuous _ _ _).map (inv φ)
-  refine (SheafOfM
+  refine (SheafOfModules.pushforwardPushforwardAdj adj φ ψ ?_ ?_).isLeftAdjoint
+  · ext U : 2
+    simp [ψ, shAdj]
+  · ext U : 2
+    have := (inv φ).hom.naturality
+    dsimp at this
+    simp only [ObjectProperty.hom_inv, NatIso.isIso_inv_app, sheafPushforwardContinuous_obj_obj_obj,
+      IsIso.eq_inv_comp] at this
+    simp [ψ, shAdj, ← this, ← Functor.map_comp_assoc, ← op_comp]
+
+noncomputable section
 
 中文:
 实例 isLeftAdjoint_pushforward_of_isIso
@@ -789,7 +851,17 @@ instance isLeftAdjoint_pushforward_of_isIso
   let shAdj := adj.sheafPushforwardContinuous (E := RingCat.{u}) J K
   let ψ : R ⟶ (F.rightAdjoint.sheafPushforwardContinuous RingCat.{u} K J).obj S :=
     shAdj.unit.app R ≫ (F.rightAdjoint.sheafPushforwardContinuous _ _ _).map (inv φ)
-  refine (SheafOfM
+  refine (SheafOfModules.pushforwardPushforwardAdj adj φ ψ ?_ ?_).isLeftAdjoint
+  · ext U : 2
+    simp [ψ, shAdj]
+  · ext U : 2
+    have := (inv φ).hom.naturality
+    dsimp at this
+    simp only [ObjectProperty.hom_inv, NatIso.isIso_inv_app, sheafPushforwardContinuous_obj_obj_obj,
+      IsIso.eq_inv_comp] at this
+    simp [ψ, shAdj, ← this, ← Functor.map_comp_assoc, ← op_comp]
+
+noncomputable section
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, F.rightAdjoint.sheafPushforwardContinuous, NatIso, NatIso.isIso_inv_app, ObjectProperty, ObjectProperty.hom_inv, RingCat, SheafOfModules, SheafOfModules.pushforwardPushforwardAdj, adj.sheafPushforwardContinuous, hom.naturality, hom_inv, isIso_inv_app, isLeftAdjoint, naturality, ofIsLeftAdjoint, pushforwardPushforwardAdj, rightAdjoint, shAdj.unit.app
 -/
@@ -964,7 +1036,11 @@ definition pushforwardPushforwardEquivalence
     (pushforwardId _).symm ≪≫ pushforwardNatIso _ eqv.counitIso ≪≫
       pushforwardCongr (by ext1; simpa) ≪≫ (pushforwardComp _ _).symm
   counitIso :=
-   
+    letI := CategoryTheory.Functor.isContinuous_comp eqv.functor eqv.inverse J K J
+    pushforwardComp _ _ ≪≫ pushforwardNatIso _ eqv.unitIso ≪≫
+      pushforwardCongr (by ext1; simpa) ≪≫ pushforwardId _
+  functor_unitIso_comp :=
+    (pushforwardPushforwardAdj eqv.toAdjunction φ ψ H₁ H₂).left_triangle_components
 
 中文:
 定义 pushforwardPushforwardEquivalence
@@ -976,7 +1052,11 @@ definition pushforwardPushforwardEquivalence
     (pushforwardId _).symm ≪≫ pushforwardNatIso _ eqv.counitIso ≪≫
       pushforwardCongr (by ext1; simpa) ≪≫ (pushforwardComp _ _).symm
   counitIso :=
-   
+    letI := CategoryTheory.Functor.isContinuous_comp eqv.functor eqv.inverse J K J
+    pushforwardComp _ _ ≪≫ pushforwardNatIso _ eqv.unitIso ≪≫
+      pushforwardCongr (by ext1; simpa) ≪≫ pushforwardId _
+  functor_unitIso_comp :=
+    (pushforwardPushforwardAdj eqv.toAdjunction φ ψ H₁ H₂).left_triangle_components
 
 Depends on / 依赖: pushforward
 -/
@@ -1044,7 +1124,11 @@ definition pushforwardCompForgetToSheafModuleCat
   · refine NatIso.ofComponents (fun U => ?_) ?_
     · refine (ModuleCat.restrictScalarsComp'App _ _ _ ?_ _).symm ≪≫
         (ModuleCat.restrictScalarsComp _ _).app _
-      rw [← RingCat.hom_comp]; rw [← RingCat.hom_comp]; rw [φ.
+      rw [← RingCat.hom_comp]; rw [← RingCat.hom_comp]; rw [φ.hom.naturality]
+      dsimp
+      rw [hX'.hom_ext (hX'.to (Opposite.op (F.obj (Opposite.unop U)))) _]
+    · cat_disch
+  · cat_disch
 
 中文:
 定义 pushforwardCompForgetToSheafModuleCat
@@ -1053,7 +1137,11 @@ definition pushforwardCompForgetToSheafModuleCat
   · refine NatIso.ofComponents (fun U => ?_) ?_
     · refine (ModuleCat.restrictScalarsComp'App _ _ _ ?_ _).symm ≪≫
         (ModuleCat.restrictScalarsComp _ _).app _
-      rw [← RingCat.hom_comp]; rw [← RingCat.hom_comp]; rw [φ.
+      rw [← RingCat.hom_comp]; rw [← RingCat.hom_comp]; rw [φ.hom.naturality]
+      dsimp
+      rw [hX'.hom_ext (hX'.to (Opposite.op (F.obj (Opposite.unop U)))) _]
+    · cat_disch
+  · cat_disch
 
 Depends on / 依赖: F.obj, ModuleCat, ModuleCat.restrictScalarsComp, NatIso, NatIso.ofComponents, ObjectProperty, ObjectProperty.isoMk, Opposite, Opposite.op, Opposite.unop, RingCat, RingCat.hom_comp, cat_disch, hom.naturality, hom_comp, hom_ext, naturality, ofComponents, restrictScalarsComp
 -/

@@ -239,7 +239,13 @@ definition setDiffEquiv
   let ft : Finset α := Finset.univ.map (Function.Embedding.subtype (· in t))
   have hs (x : α) : x in fs ↔ x in s := by simp [fs]
   have ht (x : α) : x in ft ↔ x in t := by simp [ft]
-  have hst (x : α) : x in
+  have hst (x : α) : x in fs \ ft ↔ x in s \ t := by simp [hs, ht]
+  have hts (x : α) : x in ft \ fs ↔ x in t \ s := by simp [hs, ht]
+  have hc : fs.card = ft.card := by
+    rw [← Fintype.subtype_card fs hs]; rw [← Fintype.subtype_card ft ht]; convert! h
+  replace hc := Finset.card_sdiff_comm hc
+  rw [← Fintype.subtype_card (fs \ ft) hst]; rw [← Fintype.subtype_card (ft \ fs) hts] at hc
+  exact ((Fintype.card_eq (_F := (_)) (_G := (_))).mp hc).some
 
 中文:
 定义 setDiffEquiv
@@ -250,7 +256,13 @@ definition setDiffEquiv
   let ft : Finset α := Finset.univ.map (Function.Embedding.subtype (· in t))
   have hs (x : α) : x in fs ↔ x in s := by simp [fs]
   have ht (x : α) : x in ft ↔ x in t := by simp [ft]
-  have hst (x : α) : x in
+  have hst (x : α) : x in fs \ ft ↔ x in s \ t := by simp [hs, ht]
+  have hts (x : α) : x in ft \ fs ↔ x in t \ s := by simp [hs, ht]
+  have hc : fs.card = ft.card := by
+    rw [← Fintype.subtype_card fs hs]; rw [← Fintype.subtype_card ft ht]; convert! h
+  replace hc := Finset.card_sdiff_comm hc
+  rw [← Fintype.subtype_card (fs \ ft) hst]; rw [← Fintype.subtype_card (ft \ fs) hts] at hc
+  exact ((Fintype.card_eq (_F := (_)) (_G := (_))).mp hc).some
 
 Depends on / 依赖: Embedding, Finset, Finset.univ.map, Fintype, Fintype.subtype_card, Function, Function.Embedding.subtype, classical, fs.card, ft.card, subtype, subtype_card
 -/
@@ -282,7 +294,10 @@ definition toCompl
   letI : Fintype sq := Fintype.ofEquiv sp e
   have h := setDiffEquiv (Fintype.card_congr e)
   have hpc : spᶜ = (sq \ sp) union (sp union sq)ᶜ := by ext; simp; tauto
-  have hqc : sqᶜ = (sp \ sq) union
+  have hqc : sqᶜ = (sp \ sq) union (sp union sq)ᶜ := by ext; simp; tauto
+  let epc := (Equiv.setCongr hpc).trans (Equiv.Set.union (by simp [Set.disjoint_left]; tauto))
+  let eqc := (Equiv.setCongr hqc).trans (Equiv.Set.union (by simp [Set.disjoint_left]; tauto))
+epc.trans .trans (h.symm.sumCongr <| .refl _) eqc.symm
 
 中文:
 定义 toCompl
@@ -293,7 +308,10 @@ definition toCompl
   letI : Fintype sq := Fintype.ofEquiv sp e
   have h := setDiffEquiv (Fintype.card_congr e)
   have hpc : spᶜ = (sq \ sp) union (sp union sq)ᶜ := by ext; simp; tauto
-  have hqc : sqᶜ = (sp \ sq) union
+  have hqc : sqᶜ = (sp \ sq) union (sp union sq)ᶜ := by ext; simp; tauto
+  let epc := (Equiv.setCongr hpc).trans (Equiv.Set.union (by simp [Set.disjoint_left]; tauto))
+  let eqc := (Equiv.setCongr hqc).trans (Equiv.Set.union (by simp [Set.disjoint_left]; tauto))
+epc.trans .trans (h.symm.sumCongr <| .refl _) eqc.symm
 
 Depends on / 依赖: Equiv.Set.union, Equiv.setCongr, Fintype, Fintype.card_congr, Fintype.ofEquiv, Fintype.ofFinite, Set.disjoint_le, Set.disjoint_left, card_congr, disjoint_le, disjoint_left, ofEquiv, ofFinite, setCongr, setDiffEquiv
 -/
@@ -458,7 +476,8 @@ theorem Perm.exists_map_finset_eq
     (fun x : s => (x : β)) (fun x : s => ((s.equivOfCardEq h) x : β))
     Subtype.val_injective (Subtype.val_injective.comp (s.equivOfCardEq h).injective)
   refine ⟨σ, Finset.eq_of_subset_of_card_le (fun b hb => ?_) (by simp [h])⟩
-  obtain ⟨a, ha, rf
+  obtain ⟨a, ha, rfl⟩ := Finset.mem_map.mp hb
+  exact (hσ ⟨a, ha⟩) ▸ ((s.equivOfCardEq h) ⟨a, ha⟩).2
 
 中文:
 定理 置换.存在_map_finset_eq
@@ -467,7 +486,8 @@ theorem Perm.exists_map_finset_eq
     (fun x : s => (x : β)) (fun x : s => ((s.equivOfCardEq h) x : β))
     Subtype.val_injective (Subtype.val_injective.comp (s.equivOfCardEq h).injective)
   refine ⟨σ, Finset.eq_of_subset_of_card_le (fun b hb => ?_) (by simp [h])⟩
-  obtain ⟨a, ha, rf
+  obtain ⟨a, ha, rfl⟩ := Finset.mem_map.mp hb
+  exact (hσ ⟨a, ha⟩) ▸ ((s.equivOfCardEq h) ⟨a, ha⟩).2
 
 Depends on / 依赖: Finset, Finset.eq_of_subset_of_card_le, Finset.mem_map.mp, Perm.exists_extending_pair, Subtype, Subtype.val_injective, Subtype.val_injective.comp, eq_of_subset_of_card_le, equivOfCardEq, exists_extending_pair, injective, mem_map, s.equivOfCardEq, val_injective
 -/

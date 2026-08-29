@@ -146,7 +146,9 @@ lemma etaleLocus_eq_compl_support
   have h₁ := IsLocalizedModule.iso p.asIdeal.primeCompl
     (KaehlerDifferential.map R R A (Localization.AtPrime p.asIdeal))
   have h₂ := IsLocalizedModule.iso p.asIdeal.primeCompl
-    (H1Cotangent.map R R A (Lo
+    (H1Cotangent.map R R A (Localization.AtPrime p.asIdeal))
+  exact (Algebra.formallyEtale_iff _ _).trans
+    (and_congr h₁.subsingleton_congr.symm h₂.subsingleton_congr.symm)
 
 中文:
 引理 etaleLocus_eq_compl_support
@@ -156,7 +158,9 @@ lemma etaleLocus_eq_compl_support
   have h₁ := IsLocalizedModule.iso p.asIdeal.primeCompl
     (KaehlerDifferential.map R R A (Localization.AtPrime p.asIdeal))
   have h₂ := IsLocalizedModule.iso p.asIdeal.primeCompl
-    (H1Cotangent.map R R A (Lo
+    (H1Cotangent.map R R A (Localization.AtPrime p.asIdeal))
+  exact (Algebra.formallyEtale_iff _ _).trans
+    (and_congr h₁.subsingleton_congr.symm h₂.subsingleton_congr.symm)
 
 Depends on / 依赖: Algebra, Algebra.formallyEtale_iff, AtPrime, H1Cotangent, H1Cotangent.map, IsLocalizedModule, IsLocalizedModule.iso, KaehlerDifferential, KaehlerDifferential.map, Localization, Localization.AtPrime, Module, Module.notMem_support_iff, Set.mem_compl_iff, Set.mem_inter_iff, and_congr, asIdeal, formallyEtale_iff, mem_compl_iff, mem_inter_iff
 -/
@@ -178,13 +182,21 @@ English:
 lemma basicOpen_subset_etaleLocus_iff
   given: {f : A}
   proof: by
-  rw [etaleLocus_eq_compl_support]; rw [Set.subset_inter_iff]; rw [Set.subset_compl_comm]; rw [PrimeSpectrum.basicOpen_eq_zeroLocus_compl]; rw [compl_compl]; rw [Set.subset_compl_comm]; rw [compl_compl]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [← LocalizedModule.subsingleton_if
+  rw [etaleLocus_eq_compl_support]; rw [Set.subset_inter_iff]; rw [Set.subset_compl_comm]; rw [PrimeSpectrum.basicOpen_eq_zeroLocus_compl]; rw [compl_compl]; rw [Set.subset_compl_comm]; rw [compl_compl]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [formallyEtale_iff]
+  exact and_congr (IsLocalizedModule.iso (.powers f)
+    (KaehlerDifferential.map R R A (Localization.Away f))).subsingleton_congr
+    (IsLocalizedModule.iso (.powers f)
+      (H1Cotangent.map R R A (Localization.Away f))).subsingleton_congr
 
 中文:
 引理 basicOpen_subset_etaleLocus_iff
   条件: {f : A}
   证明: by
-  rw [etaleLocus_eq_compl_support]; rw [Set.subset_inter_iff]; rw [Set.subset_compl_comm]; rw [PrimeSpectrum.basicOpen_eq_zeroLocus_compl]; rw [compl_compl]; rw [Set.subset_compl_comm]; rw [compl_compl]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [← LocalizedModule.subsingleton_if
+  rw [etaleLocus_eq_compl_support]; rw [Set.subset_inter_iff]; rw [Set.subset_compl_comm]; rw [PrimeSpectrum.basicOpen_eq_zeroLocus_compl]; rw [compl_compl]; rw [Set.subset_compl_comm]; rw [compl_compl]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [formallyEtale_iff]
+  exact and_congr (IsLocalizedModule.iso (.powers f)
+    (KaehlerDifferential.map R R A (Localization.Away f))).subsingleton_congr
+    (IsLocalizedModule.iso (.powers f)
+      (H1Cotangent.map R R A (Localization.Away f))).subsingleton_congr
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.iso, KaehlerDifferential, KaehlerDifferential.map, Localization, Localization.Away, LocalizedModule, LocalizedModule.subsingleton_iff_support_subset, PrimeSpectrum, PrimeSpectrum.basicOpen_eq_zeroLocus_compl, Set.subset_compl_comm, Set.subset_inter_iff, and_congr, basicOpen_eq_zeroLocus_compl, compl_compl, etaleLocus_eq_compl_support, formallyEtale_iff, powers, subset_compl_comm, subset_inter_iff
 -/
@@ -203,12 +215,12 @@ lemma `etaleLocus_eq_univ_iff` / 引理 `etaleLocus_eq_univ_iff`
 English:
 lemma etaleLocus_eq_univ_iff
   proof: by
-  rw [etaleLocus_eq_compl_support]; rw [← Set.compl_union]; rw [compl_eq_comm]; rw [Set.compl_univ]; rw [eq_comm]; rw [← Set.subset_empty_iff]; rw [Set.union_subset_iff]; rw [Set.subset_empty_iff]; rw [Set.subset_empty_iff]; rw [Module.support_eq_empty_iff]; rw [Module.support_eq_empty_iff]; rw [
+  rw [etaleLocus_eq_compl_support]; rw [← Set.compl_union]; rw [compl_eq_comm]; rw [Set.compl_univ]; rw [eq_comm]; rw [← Set.subset_empty_iff]; rw [Set.union_subset_iff]; rw [Set.subset_empty_iff]; rw [Set.subset_empty_iff]; rw [Module.support_eq_empty_iff]; rw [Module.support_eq_empty_iff]; rw [Algebra.formallyEtale_iff]
 
 中文:
 引理 etaleLocus_eq_univ_iff
   证明: by
-  rw [etaleLocus_eq_compl_support]; rw [← Set.compl_union]; rw [compl_eq_comm]; rw [Set.compl_univ]; rw [eq_comm]; rw [← Set.subset_empty_iff]; rw [Set.union_subset_iff]; rw [Set.subset_empty_iff]; rw [Set.subset_empty_iff]; rw [Module.support_eq_empty_iff]; rw [Module.support_eq_empty_iff]; rw [
+  rw [etaleLocus_eq_compl_support]; rw [← Set.compl_union]; rw [compl_eq_comm]; rw [Set.compl_univ]; rw [eq_comm]; rw [← Set.subset_empty_iff]; rw [Set.union_subset_iff]; rw [Set.subset_empty_iff]; rw [Set.subset_empty_iff]; rw [Module.support_eq_empty_iff]; rw [Module.support_eq_empty_iff]; rw [Algebra.formallyEtale_iff]
 
 Depends on / 依赖: Algebra, Algebra.formallyEtale_iff, Module, Module.support_eq_empty_iff, Set.compl_union, Set.compl_univ, Set.subset_empty_iff, Set.union_subset_iff, compl_eq_comm, compl_union, compl_univ, eq_comm, etaleLocus_eq_compl_support, formallyEtale_iff, subset_empty_iff, support_eq_empty_iff, union_subset_iff
 -/

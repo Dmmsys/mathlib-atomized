@@ -273,7 +273,31 @@ theorem LieSubalgebra.isLieAbelian_lieSpan_iff
     let y' : lieSpan R L s := ⟨y, subset_lieSpan hy⟩
     suffices ⁅x', y'⁆ = 0 by simpa [x', y', Subtype.ext_iff] using this
     simp [trivial_lie_zero]
-  · induction hx usi
+  · induction hx using lieSpan_induction with
+    | mem w hw =>
+      induction hy using lieSpan_induction with
+      | mem u hu => simpa [Subtype.ext_iff] using h w hw u hu
+      | zero => simp [Subtype.ext_iff]
+      | add u v _ _ hu hv =>
+        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero, lie_add] at hu hv ⊢
+        simp [hu, hv]
+      | smul t u _ hu =>
+        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu
+        simp [Subtype.ext_iff, hu]
+      | lie u v _ _ hu hv =>
+        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu hv ⊢
+        rw [leibniz_lie]
+        simp [hu, hv]
+    | zero => simp [Subtype.ext_iff]
+    | add u v _ _ hu hv =>
+      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero, add_lie] at hu hv ⊢
+      simp [hu, hv]
+    | smul t u _ hu =>
+      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu
+      simp [Subtype.ext_iff, hu]
+    | lie u v _ _ hu hv =>
+      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu hv ⊢
+      simp [hu, hv]
 
 中文:
 定理 Lie子代数.isLieAbelian_lieSpan_iff
@@ -283,7 +307,31 @@ theorem LieSubalgebra.isLieAbelian_lieSpan_iff
     let y' : lieSpan R L s := ⟨y, subset_lieSpan hy⟩
     suffices ⁅x', y'⁆ = 0 by simpa [x', y', Subtype.ext_iff] using this
     simp [trivial_lie_zero]
-  · induction hx usi
+  · induction hx using lieSpan_induction with
+    | mem w hw =>
+      induction hy using lieSpan_induction with
+      | mem u hu => simpa [Subtype.ext_iff] using h w hw u hu
+      | zero => simp [Subtype.ext_iff]
+      | add u v _ _ hu hv =>
+        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero, lie_add] at hu hv ⊢
+        simp [hu, hv]
+      | smul t u _ hu =>
+        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu
+        simp [Subtype.ext_iff, hu]
+      | lie u v _ _ hu hv =>
+        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu hv ⊢
+        rw [leibniz_lie]
+        simp [hu, hv]
+    | zero => simp [Subtype.ext_iff]
+    | add u v _ _ hu hv =>
+      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero, add_lie] at hu hv ⊢
+      simp [hu, hv]
+    | smul t u _ hu =>
+      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu
+      simp [Subtype.ext_iff, hu]
+    | lie u v _ _ hu hv =>
+      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu hv ⊢
+      simp [hu, hv]
 -/
 @[simp] theorem LieSubalgebra.isLieAbelian_lieSpan_iff
     {R L : Type*} [CommRing R] [LieRing L] [LieAlgebra R L] {s : Set L} :
@@ -804,7 +852,12 @@ definition maxTrivLinearMapEquivLieModuleHom
         have hf : ⁅x, f.val⁆ m = 0 := by rw [f.property x, LinearMap.zero_apply]
         rw [LieHom.lie_apply]; rw [sub_eq_zero]; rw [← LinearMap.toFun_eq_coe] at hf; exact hf.symm }
   map_add' f g := by ext; simp
-  map_smul' F G := by ext; si
+  map_smul' F G := by ext; simp
+  invFun F := ⟨F, fun x => by ext; simp⟩
+  left_inv f := by simp
+  right_inv F := by simp
+
+@[simp]
 
 中文:
 定义 maxTrivLinearMapEquivLieModuleHom
@@ -814,7 +867,12 @@ definition maxTrivLinearMapEquivLieModuleHom
         have hf : ⁅x, f.val⁆ m = 0 := by rw [f.property x, LinearMap.zero_apply]
         rw [LieHom.lie_apply]; rw [sub_eq_zero]; rw [← LinearMap.toFun_eq_coe] at hf; exact hf.symm }
   map_add' f g := by ext; simp
-  map_smul' F G := by ext; si
+  map_smul' F G := by ext; simp
+  invFun F := ⟨F, fun x => by ext; simp⟩
+  left_inv f := by simp
+  right_inv F := by simp
+
+@[simp]
 
 Depends on / 依赖: LieHom, LieHom.lie_apply, LinearMap, LinearMap.toFun_eq_coe, LinearMap.zero_apply, f.property, f.val, hf.symm, invFun, left_inv, lie_apply, map_add, map_lie, map_smul, property, right_inv, sub_eq_zero, toFun_eq_coe, toLinearMap, zero_apply
 -/
@@ -1185,7 +1243,8 @@ theorem LieSubmodule.lie_abelian_iff_lie_self_eq_bot
     ⟨fun h z x y hz =>
       hz.symm.trans
         (((I : LieSubalgebra R L).coe_bracket x y).symm.trans
-          ((coe_zero
+          ((coe_zero_iff_zero _ _).mpr (by apply h.trivial))),
+      fun h => ⟨fun x y => ((I : LieSubalgebra R L).coe_zero_iff_zero _).mp (h _ x y rfl)⟩⟩
 
 中文:
 定理 Lie子模.lie_abelian_iff_lie_self_eq_bot
@@ -1197,7 +1256,8 @@ theorem LieSubmodule.lie_abelian_iff_lie_self_eq_bot
     ⟨fun h z x y hz =>
       hz.symm.trans
         (((I : LieSubalgebra R L).coe_bracket x y).symm.trans
-          ((coe_zero
+          ((coe_zero_iff_zero _ _).mpr (by apply h.trivial))),
+      fun h => ⟨fun x y => ((I : LieSubalgebra R L).coe_zero_iff_zero _).mp (h _ x y rfl)⟩⟩
 
 Depends on / 依赖: LieSubalgebra, LieSubmodule, LieSubmodule.bot_coe, LieSubmodule.lieSpan_le, Set.mem_ofPred_eq, Set.subset_singleton_iff, _root_, _root_.eq_bot_iff, bot_coe, coe_bracket, coe_zero_iff_zero, eq_bot_iff, exists_imp, h.trivial, hz.symm.trans, lieIdeal_oper_eq_span, lieSpan_le, mem_ofPred_eq, subset_singleton_iff, symm.trans
 -/

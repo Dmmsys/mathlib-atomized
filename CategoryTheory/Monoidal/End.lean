@@ -1094,7 +1094,10 @@ definition equivOfTensorIsoUnit
   functor_unitIso_comp X := by
     dsimp
     simp only [μ_naturalityᵣ_assoc, μ_naturalityₗ_assoc, η_app_obj, Category.assoc,
-      obj_μ_inv_app, Functor.map_comp, δ_μ_app_assoc,
+      obj_μ_inv_app, Functor.map_comp, δ_μ_app_assoc, obj_ε_app,
+      unitOfTensorIsoUnit_inv_app]
+    simp only [← NatTrans.comp_app, ← F.map_comp, ← H, inv_hom_whiskerRight_assoc,
+      Iso.inv_hom_id, Functor.map_id, NatTrans.id_app]
 
 中文:
 定义 equivOfTensorIsoUnit
@@ -1106,7 +1109,10 @@ definition equivOfTensorIsoUnit
   functor_unitIso_comp X := by
     dsimp
     simp only [μ_naturalityᵣ_assoc, μ_naturalityₗ_assoc, η_app_obj, Category.assoc,
-      obj_μ_inv_app, Functor.map_comp, δ_μ_app_assoc,
+      obj_μ_inv_app, Functor.map_comp, δ_μ_app_assoc, obj_ε_app,
+      unitOfTensorIsoUnit_inv_app]
+    simp only [← NatTrans.comp_app, ← F.map_comp, ← H, inv_hom_whiskerRight_assoc,
+      Iso.inv_hom_id, Functor.map_id, NatTrans.id_app]
 
 Depends on / 依赖: F.obj
 -/

@@ -604,7 +604,8 @@ theorem sin_angle_mul_norm_mul_norm
   rw [← Real.sqrt_mul' _ (by positivity)]; rw [sq]
   rcases eq_or_ne x 0 with (rfl | hx); · simp
   rcases eq_or_ne y 0 with (rfl | hy); · simp
-  simp only [real_inner_self_eq_norm_mul_no
+  simp only [real_inner_self_eq_norm_mul_norm]
+  field_simp
 
 中文:
 定理 sin_angle_mul_norm_mul_norm
@@ -616,7 +617,8 @@ theorem sin_angle_mul_norm_mul_norm
   rw [← Real.sqrt_mul' _ (by positivity)]; rw [sq]
   rcases eq_or_ne x 0 with (rfl | hx); · simp
   rcases eq_or_ne y 0 with (rfl | hy); · simp
-  simp only [real_inner_self_eq_norm_mul_no
+  simp only [real_inner_self_eq_norm_mul_norm]
+  field_simp
 
 Depends on / 依赖: Real.sin_arccos, Real.sqrt_mul, Real.sqrt_sq, eq_or_ne, mul_nonneg, norm_nonneg, nth_rw, real_inner_self_eq_norm_mul_norm, sin_arccos, sqrt_mul, sqrt_sq
 -/
@@ -960,7 +962,8 @@ theorem norm_sub_eq_add_norm_iff_angle_eq_pi
   obtain ⟨hxy₁, hxy₂⟩ := norm_nonneg (x - y), add_nonneg (norm_nonneg x) (norm_nonneg y)
   rw [← sq_eq_sq₀ hxy₁ hxy₂]; rw [norm_sub_pow_two_real] at h
   calc
-    ⟪x, y⟫ = (‖x‖ ^ 2 + ‖y
+    ⟪x, y⟫ = (‖x‖ ^ 2 + ‖y‖ ^ 2 - (‖x‖ + ‖y‖) ^ 2) / 2 := by linarith
+    _ = -(‖x‖ * ‖y‖) := by ring
 
 中文:
 定理 norm_sub_eq_add_norm_iff_angle_eq_pi
@@ -971,7 +974,8 @@ theorem norm_sub_eq_add_norm_iff_angle_eq_pi
   obtain ⟨hxy₁, hxy₂⟩ := norm_nonneg (x - y), add_nonneg (norm_nonneg x) (norm_nonneg y)
   rw [← sq_eq_sq₀ hxy₁ hxy₂]; rw [norm_sub_pow_two_real] at h
   calc
-    ⟪x, y⟫ = (‖x‖ ^ 2 + ‖y
+    ⟪x, y⟫ = (‖x‖ ^ 2 + ‖y‖ ^ 2 - (‖x‖ + ‖y‖) ^ 2) / 2 := by linarith
+    _ = -(‖x‖ * ‖y‖) := by ring
 
 Depends on / 依赖: add_nonneg, inner_eq_neg_mul_norm_iff_angle_eq_pi, norm_nonneg, norm_sub_eq_add_norm_of_angle_eq_pi, norm_sub_pow_two_real
 -/
@@ -1023,7 +1027,8 @@ theorem norm_sub_eq_abs_sub_norm_iff_angle_eq_zero
     exact sq_abs (‖x‖ - ‖y‖)
   rw [norm_sub_pow_two_real] at h1
   calc
-    ⟪x, y⟫ = ((‖x‖ + ‖y‖) ^ 2 - ‖x‖ ^ 2 - ‖y‖ ^ 2)
+    ⟪x, y⟫ = ((‖x‖ + ‖y‖) ^ 2 - ‖x‖ ^ 2 - ‖y‖ ^ 2) / 2 := by linarith
+    _ = ‖x‖ * ‖y‖ := by ring
 
 中文:
 定理 norm_sub_eq_abs_sub_norm_iff_angle_eq_zero
@@ -1036,7 +1041,8 @@ theorem norm_sub_eq_abs_sub_norm_iff_angle_eq_zero
     exact sq_abs (‖x‖ - ‖y‖)
   rw [norm_sub_pow_two_real] at h1
   calc
-    ⟪x, y⟫ = ((‖x‖ + ‖y‖) ^ 2 - ‖x‖ ^ 2 - ‖y‖ ^ 2)
+    ⟪x, y⟫ = ((‖x‖ + ‖y‖) ^ 2 - ‖x‖ ^ 2 - ‖y‖ ^ 2) / 2 := by linarith
+    _ = ‖x‖ * ‖y‖ := by ring
 
 Depends on / 依赖: inner_eq_mul_norm_iff_angle_eq_zero, norm_sub_eq_abs_sub_norm_of_angle_eq_zero, norm_sub_pow_two_real, sq_abs
 -/

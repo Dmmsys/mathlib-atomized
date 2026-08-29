@@ -296,7 +296,12 @@ instance :
     let e_Ring : X ≃+* Y := { f.1, ((forget TopCat).mapIso i_Top).toEquiv with }
     -- Putting these together we obtain the isomorphism we're after:
     exact
-     
+      ⟨⟨⟨e_Ring.symm, i_Top.inv.hom.2⟩,
+          ⟨by
+            ext x
+            exact e_Ring.left_inv x, by
+            ext x
+            exact e_Ring.right_inv x⟩⟩⟩
 
 中文:
 实例 :
@@ -308,7 +313,12 @@ instance :
     let e_Ring : X ≃+* Y := { f.1, ((forget TopCat).mapIso i_Top).toEquiv with }
     -- Putting these together we obtain the isomorphism we're after:
     exact
-     
+      ⟨⟨⟨e_Ring.symm, i_Top.inv.hom.2⟩,
+          ⟨by
+            ext x
+            exact e_Ring.left_inv x, by
+            ext x
+            exact e_Ring.right_inv x⟩⟩⟩
 -/
 instance : (forget₂ TopCommRingCat.{u} TopCat.{u}).ReflectsIsomorphisms where
   reflects {X Y} f _ := by

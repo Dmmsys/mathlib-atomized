@@ -605,7 +605,14 @@ instance instSemiring
   mul_zero _ := image2_empty_right
   one_mul l := by simp [mul_def, one_def]
   mul_one l := by simp [mul_def, one_def]
-  natCast n
+  natCast n := if n = 0 then 0 else 1
+  natCast_zero := rfl
+  natCast_succ n := by cases n <;> simp [add_def, zero_def]
+  left_distrib _ _ _ := image2_union_right
+  right_distrib _ _ _ := image2_union_left
+  nsmul := nsmulRec
+
+@[simp]
 
 中文:
 实例 instSemiring
@@ -619,7 +626,14 @@ instance instSemiring
   mul_zero _ := image2_empty_right
   one_mul l := by simp [mul_def, one_def]
   mul_one l := by simp [mul_def, one_def]
-  natCast n
+  natCast n := if n = 0 then 0 else 1
+  natCast_zero := rfl
+  natCast_succ n := by cases n <;> simp [add_def, zero_def]
+  left_distrib _ _ _ := image2_union_right
+  right_distrib _ _ _ := image2_union_left
+  nsmul := nsmulRec
+
+@[simp]
 
 Depends on / 依赖: union_assoc
 -/
@@ -748,6 +762,7 @@ lemma mem_kstar_iff_exists_nonempty
     simp only [mem_filter, Bool.not_eq_eq_eq_not, Bool.not_true, isEmpty_eq_false_iff, ne_eq] at hy
     exact ⟨h y hy.1, hy.2⟩
   · rintro ⟨S, hx, h⟩
+    exact ⟨S, hx, fun y hy => (h y hy).1⟩
 
 中文:
 引理 mem_kstar_iff_存在_nonempty
@@ -760,6 +775,7 @@ lemma mem_kstar_iff_exists_nonempty
     simp only [mem_filter, Bool.not_eq_eq_eq_not, Bool.not_true, isEmpty_eq_false_iff, ne_eq] at hy
     exact ⟨h y hy.1, hy.2⟩
   · rintro ⟨S, hx, h⟩
+    exact ⟨S, hx, fun y hy => (h y hy).1⟩
 
 Depends on / 依赖: Bool.not_eq_eq_eq_not, Bool.not_true, List.flatten_filter_not_isEmpty, List.isEmpty, S.filter, filter, flatten_filter_not_isEmpty, isEmpty, isEmpty_eq_false_iff, mem_filter, ne_eq, not_eq_eq_eq_not, not_true
 -/
@@ -1000,7 +1016,8 @@ theorem mem_pow
     · rintro ⟨a, ha, b, ⟨S, rfl, rfl, hS⟩, rfl⟩
       exact ⟨a :: S, rfl, rfl, forall_mem_cons.2 ⟨ha, hS⟩⟩
     · rintro ⟨_ | ⟨a, S⟩, rfl, hn, hS⟩ <;> cases hn
-      rw [for
+      rw [forall_mem_cons] at hS
+      exact ⟨a, hS.1, _, ⟨S, rfl, rfl, hS.2⟩, rfl⟩
 
 中文:
 定理 mem_pow
@@ -1014,7 +1031,8 @@ theorem mem_pow
     · rintro ⟨a, ha, b, ⟨S, rfl, rfl, hS⟩, rfl⟩
       exact ⟨a :: S, rfl, rfl, forall_mem_cons.2 ⟨ha, hS⟩⟩
     · rintro ⟨_ | ⟨a, S⟩, rfl, hn, hS⟩ <;> cases hn
-      rw [for
+      rw [forall_mem_cons] at hS
+      exact ⟨a, hS.1, _, ⟨S, rfl, rfl, hS.2⟩, rfl⟩
 
 Depends on / 依赖: forall_mem_cons, generalizing, mem_mul, pow_succ
 -/
@@ -1183,6 +1201,16 @@ instance :
   kstar_mul_le_kstar a := (one_add_kstar_mul_self_eq_kstar a).le.trans' le_sup_right
   kstar_mul_le_self l m h := by
     rw [kstar_eq_iSup_pow]; rw [iSup_mul]
+    refine iSup_le fun n => ?_
+    induction n with
+    | zero => simp
+    | succ n ih => grw [pow_succ, mul_assoc, h, ih]
+  mul_kstar_le_self l m h := by
+    rw [kstar_eq_iSup_pow]; rw [mul_iSup]
+    refine iSup_le fun n => ?_
+    induction n with
+    | zero => simp
+    | succ n ih => grw [pow_succ, ← mul_assoc m (l ^ n) l, ih, h]
 
 中文:
 实例 :
@@ -1193,6 +1221,16 @@ instance :
   kstar_mul_le_kstar a := (one_add_kstar_mul_self_eq_kstar a).le.trans' le_sup_right
   kstar_mul_le_self l m h := by
     rw [kstar_eq_iSup_pow]; rw [iSup_mul]
+    refine iSup_le fun n => ?_
+    induction n with
+    | zero => simp
+    | succ n ih => grw [pow_succ, mul_assoc, h, ih]
+  mul_kstar_le_self l m h := by
+    rw [kstar_eq_iSup_pow]; rw [mul_iSup]
+    refine iSup_le fun n => ?_
+    induction n with
+    | zero => simp
+    | succ n ih => grw [pow_succ, ← mul_assoc m (l ^ n) l, ih, h]
 -/
 instance : KleeneAlgebra (Language α) where
   __ : OrderBot (Language α) := inferInstance
@@ -1228,7 +1266,22 @@ theorem self_eq_mul_add_iff
       obtain hx | hx := hx
       · obtain ⟨a, ha, b, hb, rfl⟩ := mem_mul.mp hx
         rw [length_append] at ih
-have hal : 0 < a.le
+have hal : 0 < a.length := length_pos_iff.mpr ne_of_mem_of_not_mem ha hm
+        specialize ih b.length (Nat.lt_add_left_iff_pos.mpr hal) hb rfl
+        rw [← one_add_self_mul_kstar_eq_kstar]; rw [one_add_mul]; rw [mul_assoc]
+        right
+        exact ⟨_, ha, _, ih, rfl⟩
+      · exact ⟨[], nil_mem_kstar _, _, ⟨hx, nil_append _⟩⟩
+    · rw [kstar_eq_iSup_pow, iSup_mul, iSup_le_iff]
+      intro i
+      induction i with rw [h]
+      | zero =>
+        rw [pow_zero]; rw [one_mul]; rw [add_comm]
+        exact le_self_add
+      | succ _ ih =>
+        grw [add_comm, pow_add, pow_one, mul_assoc, ih]
+        exact le_self_add
+  mpr h := by rw [h, add_comm, ← mul_assoc, ← one_add_mul, one_add_self_mul_kstar_eq_kstar]
 
 中文:
 定理 self_eq_mul_add_iff
@@ -1243,7 +1296,22 @@ have hal : 0 < a.le
       obtain hx | hx := hx
       · obtain ⟨a, ha, b, hb, rfl⟩ := mem_mul.mp hx
         rw [length_append] at ih
-have hal : 0 < a.le
+have hal : 0 < a.length := length_pos_iff.mpr ne_of_mem_of_not_mem ha hm
+        specialize ih b.length (Nat.lt_add_left_iff_pos.mpr hal) hb rfl
+        rw [← one_add_self_mul_kstar_eq_kstar]; rw [one_add_mul]; rw [mul_assoc]
+        right
+        exact ⟨_, ha, _, ih, rfl⟩
+      · exact ⟨[], nil_mem_kstar _, _, ⟨hx, nil_append _⟩⟩
+    · rw [kstar_eq_iSup_pow, iSup_mul, iSup_le_iff]
+      intro i
+      induction i with rw [h]
+      | zero =>
+        rw [pow_zero]; rw [one_mul]; rw [add_comm]
+        exact le_self_add
+      | succ _ ih =>
+        grw [add_comm, pow_add, pow_one, mul_assoc, ih]
+        exact le_self_add
+  mpr h := by rw [h, add_comm, ← mul_assoc, ← one_add_mul, one_add_self_mul_kstar_eq_kstar]
 
 Depends on / 依赖: Nat.lt_add_left_iff_pos.mpr, Nat.strong_induction_on, a.length, b.length, generalizing, le_antisymm, length, length_append, length_pos_iff, length_pos_iff.mpr, lt_add_left_iff_pos, mem_mul, mem_mul.mp, mul_assoc, ne_of_mem_of_not_mem, nil_mem_ks, one_add_mul, one_add_self_mul_kstar_eq_kstar, specialize, strong_induction_on
 -/

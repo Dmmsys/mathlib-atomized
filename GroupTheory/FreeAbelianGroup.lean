@@ -279,7 +279,10 @@ theorem of_injective
     let f : FreeAbelianGroup α ->+ Int := lift fun z => if x = z then (1 : Int) else 0
 have hfx1 : f (of x) = 1 := (lift_apply_of _ _).trans if_pos rfl
     have hfy1 : f (of y) = 1 := hoxy ▸ hfx1
-have hfy0 : f (of 
+have hfy0 : f (of y) = 0 := (lift_apply_of _ _).trans if_neg hxy
+one_ne_zero hfy1.symm.trans hfy0
+
+@[simp]
 
 中文:
 定理 of_injective
@@ -290,7 +293,10 @@ have hfy0 : f (of
     let f : FreeAbelianGroup α ->+ Int := lift fun z => if x = z then (1 : Int) else 0
 have hfx1 : f (of x) = 1 := (lift_apply_of _ _).trans if_pos rfl
     have hfy1 : f (of y) = 1 := hoxy ▸ hfx1
-have hfy0 : f (of 
+have hfy0 : f (of y) = 0 := (lift_apply_of _ _).trans if_neg hxy
+one_ne_zero hfy1.symm.trans hfy0
+
+@[simp]
 
 Depends on / 依赖: Classical, Classical.by_contradiction, FreeAbelianGroup, by_contradiction, classical, hfy1.symm.trans, if_neg, if_pos, lift_apply_of, one_ne_zero
 -/
@@ -399,7 +405,7 @@ theorem lift_add_apply
   | zero => simp only [(lift _).map_zero, zero_add]
   | of x => simp only [lift_apply_of, Pi.add_apply]
   | neg x => simp only [map_neg, lift_apply_of, Pi.add_apply, neg_add]
-  | add x y hx hy => simp only [(lift _).map_add, hx, hy, add_add_a
+  | add x y hx hy => simp only [(lift _).map_add, hx, hy, add_add_add_comm]
 
 中文:
 定理 lift_add_apply
@@ -409,7 +415,7 @@ theorem lift_add_apply
   | zero => simp only [(lift _).map_zero, zero_add]
   | of x => simp only [lift_apply_of, Pi.add_apply]
   | neg x => simp only [map_neg, lift_apply_of, Pi.add_apply, neg_add]
-  | add x y hx hy => simp only [(lift _).map_add, hx, hy, add_add_a
+  | add x y hx hy => simp only [(lift _).map_add, hx, hy, add_add_add_comm]
 
 Depends on / 依赖: FreeAbelianGroup, FreeAbelianGroup.induction_on, Pi.add_apply, add_add_add_comm, add_apply, induction_on, lift_apply_of, map_add, map_neg, map_zero, neg_add, zero_add
 -/
@@ -1079,7 +1085,9 @@ instance :
     (fun x ih => by rw [FreeAbelianGroup.map_neg, ih])
     fun x y ihx ihy => by rw [FreeAbelianGroup.map_add, ihx, ihy])
   (pure_bind := fun x f => pure_bind f x)
-  (bind_assoc := fun
+  (bind_assoc := fun x f g => FreeAbelianGroup.induction_on' x (by iterate 3 rw [zero_bind])
+    (fun x => by iterate 2 rw [pure_bind]) (fun x ih => by iterate 3 rw [neg_bind] <;> try rw [ih])
+    fun x y ihx ihy => by iterate 3 rw [add_bind] <;> try rw [ihx, ihy])
 
 中文:
 实例 :
@@ -1089,7 +1097,9 @@ instance :
     (fun x ih => by rw [FreeAbelianGroup.map_neg, ih])
     fun x y ihx ihy => by rw [FreeAbelianGroup.map_add, ihx, ihy])
   (pure_bind := fun x f => pure_bind f x)
-  (bind_assoc := fun
+  (bind_assoc := fun x f g => FreeAbelianGroup.induction_on' x (by iterate 3 rw [zero_bind])
+    (fun x => by iterate 2 rw [pure_bind]) (fun x ih => by iterate 3 rw [neg_bind] <;> try rw [ih])
+    fun x y ihx ihy => by iterate 3 rw [add_bind] <;> try rw [ihx, ihy])
 
 Depends on / 依赖: LawfulMonad, LawfulMonad.mk
 -/
@@ -1114,7 +1124,13 @@ instance :
     | pure p =>
       rw [map_pure]; rw [pure_seq]
       induction y using FreeAbelianGroup.induction_on' with
-      | zero => rw [FreeAbelianGroup.map_zero, FreeAbelianGroup
+      | zero => rw [FreeAbelianGroup.map_zero, FreeAbelianGroup.map_zero, zero_seq]
+      | pure q => rw [map_pure, map_pure, pure_seq, map_pure]
+      | neg q ih => rw [FreeAbelianGroup.map_neg, FreeAbelianGroup.map_neg, neg_seq, ih]
+      | add y₁ y₂ ih1 ih2 =>
+        rw [FreeAbelianGroup.map_add]; rw [FreeAbelianGroup.map_add]; rw [add_seq]; rw [ih1]; rw [ih2]
+    | neg p ih => rw [FreeAbelianGroup.map_neg, neg_seq, seq_neg, ih]
+    | add x₁ x₂ ih1 ih2 => rw [FreeAbelianGroup.map_add, add_seq, seq_add, ih1, ih2]
 
 中文:
 实例 :
@@ -1125,7 +1141,13 @@ instance :
     | pure p =>
       rw [map_pure]; rw [pure_seq]
       induction y using FreeAbelianGroup.induction_on' with
-      | zero => rw [FreeAbelianGroup.map_zero, FreeAbelianGroup
+      | zero => rw [FreeAbelianGroup.map_zero, FreeAbelianGroup.map_zero, zero_seq]
+      | pure q => rw [map_pure, map_pure, pure_seq, map_pure]
+      | neg q ih => rw [FreeAbelianGroup.map_neg, FreeAbelianGroup.map_neg, neg_seq, ih]
+      | add y₁ y₂ ih1 ih2 =>
+        rw [FreeAbelianGroup.map_add]; rw [FreeAbelianGroup.map_add]; rw [add_seq]; rw [ih1]; rw [ih2]
+    | neg p ih => rw [FreeAbelianGroup.map_neg, neg_seq, seq_neg, ih]
+    | add x₁ x₂ ih1 ih2 => rw [FreeAbelianGroup.map_add, add_seq, seq_add, ih1, ih2]
 
 Depends on / 依赖: FreeAbelianG, FreeAbelianGroup, FreeAbelianGroup.induction_on, FreeAbelianGroup.map_add, FreeAbelianGroup.map_neg, FreeAbelianGroup.map_zero, induction_on, map_add, map_neg, map_pure, map_zero, neg_seq, pure_seq, seq_zero, zero_seq
 -/
@@ -1514,7 +1536,14 @@ instance nonUnitalRing
       | zero => simp only [mul_zero, zero_mul]
       | of L2 =>
         induction x using FreeAbelianGroup.induction_on with
-      
+        | zero => simp only [zero_mul]
+        | of L1 => rw [of_mul_of, of_mul_of, of_mul_of, of_mul_of, mul_assoc]
+        | neg L1 ih => rw [neg_mul, neg_mul, neg_mul, ih]
+        | add x₁ x₂ ih₁ ih₂ => rw [add_mul, add_mul, add_mul, ih₁, ih₂]
+      | neg L2 ih => rw [neg_mul, mul_neg, mul_neg, neg_mul, ih]
+      | add y₁ y₂ ih₁ ih₂ => rw [add_mul, mul_add, mul_add, add_mul, ih₁, ih₂]
+    | neg L3 ih => rw [mul_neg, mul_neg, mul_neg, ih]
+    | add z₁ z₂ ih₁ ih₂ => rw [mul_add, mul_add, mul_add, ih₁, ih₂]
 
 中文:
 实例 nonUnitalRing
@@ -1527,7 +1556,14 @@ instance nonUnitalRing
       | zero => simp only [mul_zero, zero_mul]
       | of L2 =>
         induction x using FreeAbelianGroup.induction_on with
-      
+        | zero => simp only [zero_mul]
+        | of L1 => rw [of_mul_of, of_mul_of, of_mul_of, of_mul_of, mul_assoc]
+        | neg L1 ih => rw [neg_mul, neg_mul, neg_mul, ih]
+        | add x₁ x₂ ih₁ ih₂ => rw [add_mul, add_mul, add_mul, ih₁, ih₂]
+      | neg L2 ih => rw [neg_mul, mul_neg, mul_neg, neg_mul, ih]
+      | add y₁ y₂ ih₁ ih₂ => rw [add_mul, mul_add, mul_add, add_mul, ih₁, ih₂]
+    | neg L3 ih => rw [mul_neg, mul_neg, mul_neg, ih]
+    | add z₁ z₂ ih₁ ih₂ => rw [mul_add, mul_add, mul_add, ih₁, ih₂]
 
 Depends on / 依赖: FreeAbelianGroup, FreeAbelianGroup.induction_on, add_mul, induction_on, mul_assoc, mul_zero, neg_mul, of_mul_of, zero_mul
 -/
@@ -1567,7 +1603,12 @@ instance ring
     | neg L ih => rw [map_neg, ih]
     | add x1 x2 ih1 ih2 => rw [map_add, ih1, ih2]
   one_mul x := by
-    simp_rw [mul_def, one_
+    simp_rw [mul_def, one_def, lift_apply_of]
+    induction x using FreeAbelianGroup.induction_on with
+    | zero => rfl
+    | of L => rw [lift_apply_of, one_mul]
+    | neg L ih => rw [map_neg, ih]
+    | add x1 x2 ih1 ih2 => rw [map_add, ih1, ih2]
 
 中文:
 实例 ring
@@ -1580,7 +1621,12 @@ instance ring
     | neg L ih => rw [map_neg, ih]
     | add x1 x2 ih1 ih2 => rw [map_add, ih1, ih2]
   one_mul x := by
-    simp_rw [mul_def, one_
+    simp_rw [mul_def, one_def, lift_apply_of]
+    induction x using FreeAbelianGroup.induction_on with
+    | zero => rfl
+    | of L => rw [lift_apply_of, one_mul]
+    | neg L ih => rw [map_neg, ih]
+    | add x1 x2 ih1 ih2 => rw [map_add, ih1, ih2]
 
 Depends on / 依赖: FreeAbelianGroup, FreeAbelianGroup.induction_on, induction_on, lift_apply_of, map_add, map_neg, mul_def, mul_one, one_def, one_mul, simp_rw
 -/
@@ -1659,7 +1705,26 @@ definition liftMonoid
       | zero => simp only [mul_zero, map_zero]
       | of L2 =>
         induction x using FreeAbelianGroup.induction_on with
-       
+        | zero => simp only [zero_mul, map_zero]
+        | of L1 =>
+          simp_rw [of_mul_of, lift_apply_of]
+          exact f.map_mul _ _
+        | neg L1 ih =>
+          simp_rw [neg_mul, map_neg, neg_mul]
+          exact congr_arg Neg.neg ih
+        | add x1 x2 ih1 ih2 => simp only [add_mul, map_add, ih1, ih2]
+      | neg L2 ih => rw [mul_neg, map_neg, map_neg, mul_neg, ih]
+      | add y1 y2 ih1 ih2 => rw [mul_add, map_add, map_add, mul_add, ih1, ih2] }
+  invFun F := MonoidHom.comp (↑F) ofMulHom
+left_inv f := MonoidHom.ext by
+    simp only [RingHom.coe_monoidHom_mk, MonoidHom.coe_comp, MonoidHom.coe_mk, OneHom.coe_mk,
+      ofMulHom_coe, Function.comp_apply, lift_apply_of, forall_const]
+right_inv F := RingHom.coe_addMonoidHom_injective by
+    simp only
+    rw [← lift.apply_symm_apply (↑F : FreeAbelianGroup α ->+ R)]
+    rfl
+
+@[simp]
 
 中文:
 定义 liftMonoid
@@ -1672,7 +1737,26 @@ definition liftMonoid
       | zero => simp only [mul_zero, map_zero]
       | of L2 =>
         induction x using FreeAbelianGroup.induction_on with
-       
+        | zero => simp only [zero_mul, map_zero]
+        | of L1 =>
+          simp_rw [of_mul_of, lift_apply_of]
+          exact f.map_mul _ _
+        | neg L1 ih =>
+          simp_rw [neg_mul, map_neg, neg_mul]
+          exact congr_arg Neg.neg ih
+        | add x1 x2 ih1 ih2 => simp only [add_mul, map_add, ih1, ih2]
+      | neg L2 ih => rw [mul_neg, map_neg, map_neg, mul_neg, ih]
+      | add y1 y2 ih1 ih2 => rw [mul_add, map_add, map_add, mul_add, ih1, ih2] }
+  invFun F := MonoidHom.comp (↑F) ofMulHom
+left_inv f := MonoidHom.ext by
+    simp only [RingHom.coe_monoidHom_mk, MonoidHom.coe_comp, MonoidHom.coe_mk, OneHom.coe_mk,
+      ofMulHom_coe, Function.comp_apply, lift_apply_of, forall_const]
+right_inv F := RingHom.coe_addMonoidHom_injective by
+    simp only
+    rw [← lift.apply_symm_apply (↑F : FreeAbelianGroup α ->+ R)]
+    rfl
+
+@[simp]
 -/
 def liftMonoid : (α ->* R) ≃ (FreeAbelianGroup α ->+* R) where
   toFun f := { lift f with
@@ -1783,7 +1867,12 @@ instance [CommMonoid
       | of t =>
         dsimp only [(· * ·), Mul.mul]
         iterate 4 rw [lift_apply_of]
-     
+        congr 1
+        exact mul_comm _ _
+      | neg t ih => rw [mul_neg, ih, neg_mul_eq_neg_mul]
+      | add y1 y2 ih1 ih2 => rw [mul_add, add_mul, ih1, ih2]
+    | neg s ih => rw [neg_mul, ih, neg_mul_eq_mul_neg]
+    | add x1 x2 ih1 ih2 => rw [add_mul, mul_add, ih1, ih2]
 
 中文:
 实例 [交换幺半群
@@ -1797,7 +1886,12 @@ instance [CommMonoid
       | of t =>
         dsimp only [(· * ·), Mul.mul]
         iterate 4 rw [lift_apply_of]
-     
+        congr 1
+        exact mul_comm _ _
+      | neg t ih => rw [mul_neg, ih, neg_mul_eq_neg_mul]
+      | add y1 y2 ih1 ih2 => rw [mul_add, add_mul, ih1, ih2]
+    | neg s ih => rw [neg_mul, ih, neg_mul_eq_mul_neg]
+    | add x1 x2 ih1 ih2 => rw [add_mul, mul_add, ih1, ih2]
 
 Depends on / 依赖: FreeAbelianGroup, FreeAbelianGroup.induction_on, Mul.mul, add_mul, induction_on, iterate, lift_apply_of, mul_add, mul_comm, mul_neg, neg_mul, neg_mul_eq_mul_neg, neg_mul_eq_neg_mul, zero_mul
 -/
@@ -1830,7 +1924,12 @@ definition uniqueEquiv
     (by simp only [zero_smul, map_zero])
     (Unique.forall_iff.2 <| by simp only [one_smul, lift_apply_of]) (Unique.forall_iff.2 <| by simp)
     fun x y hx hy => by
-      
+      simp only [map_add, add_smul] at *
+      rw [hx]; rw [hy]
+  right_inv n := by
+    rw [map_zsmul]; rw [lift_apply_of]
+    exact zsmul_one n
+  map_add' := map_add _
 
 中文:
 定义 uniqueEquiv
@@ -1841,7 +1940,12 @@ definition uniqueEquiv
     (by simp only [zero_smul, map_zero])
     (Unique.forall_iff.2 <| by simp only [one_smul, lift_apply_of]) (Unique.forall_iff.2 <| by simp)
     fun x y hx hy => by
-      
+      simp only [map_add, add_smul] at *
+      rw [hx]; rw [hy]
+  right_inv n := by
+    rw [map_zsmul]; rw [lift_apply_of]
+    exact zsmul_one n
+  map_add' := map_add _
 
 Depends on / 依赖: FreeAbelianGroup, FreeAbelianGroup.lift
 -/

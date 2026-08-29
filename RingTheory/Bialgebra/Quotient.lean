@@ -126,7 +126,9 @@ instance :
     refine Ideal.Quotient.algHom_ext R (AlgHom.toLinearMap_injective ?_) <;>
     simp only [coassoc_simps, AlgHom.comp_toLinearMap, Algebra.TensorProduct.toLinearMap_map,
       comul_comp_mkₐ, counit_comp_mkₐ]
-  · simp [coassoc_simp
+  · simp [coassoc_simps]
+  · rw [CoassocSimps.map_counit_comp_comul_left]; rfl
+  · rw [CoassocSimps.map_counit_comp_comul_right]; rfl
 
 中文:
 实例 :
@@ -136,7 +138,9 @@ instance :
     refine Ideal.Quotient.algHom_ext R (AlgHom.toLinearMap_injective ?_) <;>
     simp only [coassoc_simps, AlgHom.comp_toLinearMap, Algebra.TensorProduct.toLinearMap_map,
       comul_comp_mkₐ, counit_comp_mkₐ]
-  · simp [coassoc_simp
+  · simp [coassoc_simps]
+  · rw [CoassocSimps.map_counit_comp_comul_left]; rfl
+  · rw [CoassocSimps.map_counit_comp_comul_right]; rfl
 
 Depends on / 依赖: AlgHom, AlgHom.comp_toLinearMap, AlgHom.toLinearMap_injective, Algebra, Algebra.TensorProduct.toLinearMap_map, CoassocSimps, CoassocSimps.map_counit_comp_comul_left, CoassocSimps.map_counit_comp_comul_right, Ideal.Quotient.algHom_ext, Quotient, TensorProduct, algHom_ext, coassoc_simps, comp_toLinearMap, comulAlgHom, counitAlgHom, map_counit_comp_comul_left, map_counit_comp_comul_right, ofAlgHom, toLinearMap_injective
 -/

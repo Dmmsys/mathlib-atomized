@@ -165,7 +165,16 @@ theorem CHSH_inequality_of_comm
     have idem : P * P = 4 * P := CHSH_id T.A₀_inv T.A₁_inv T.B₀_inv T.B₁_inv
     have idem' : P = (1 / 4 : Real) • (P * P) := by
       have h : 4 * P = (4 : Real) • P := by simp [map_ofNat, Algebra.smul_def]
-      rw [i
+      rw [idem]; rw [h]; rw [← mul_smul]
+      simp
+    have sa : star P = P := by
+      dsimp [P]
+      simp only [star_add, star_sub, star_mul, star_ofNat, T.A₀_sa, T.A₁_sa, T.B₀_sa,
+        T.B₁_sa, mul_comm B₀, mul_comm B₁]
+    simpa only [← idem', sa]
+      using smul_nonneg (by simp : (0 : Real) <= 1 / 4) (star_mul_self_nonneg P)
+  apply le_of_sub_nonneg
+  simpa only [sub_add_eq_sub_sub, ← sub_add] using i₁
 
 中文:
 定理 CHSH_inequality_of_comm
@@ -176,7 +185,16 @@ theorem CHSH_inequality_of_comm
     have idem : P * P = 4 * P := CHSH_id T.A₀_inv T.A₁_inv T.B₀_inv T.B₁_inv
     have idem' : P = (1 / 4 : Real) • (P * P) := by
       have h : 4 * P = (4 : Real) • P := by simp [map_ofNat, Algebra.smul_def]
-      rw [i
+      rw [idem]; rw [h]; rw [← mul_smul]
+      simp
+    have sa : star P = P := by
+      dsimp [P]
+      simp only [star_add, star_sub, star_mul, star_ofNat, T.A₀_sa, T.A₁_sa, T.B₀_sa,
+        T.B₁_sa, mul_comm B₀, mul_comm B₁]
+    simpa only [← idem', sa]
+      using smul_nonneg (by simp : (0 : Real) <= 1 / 4) (star_mul_self_nonneg P)
+  apply le_of_sub_nonneg
+  simpa only [sub_add_eq_sub_sub, ← sub_add] using i₁
 
 Depends on / 依赖: Algebra, Algebra.smul_def, CHSH_id, map_ofNat, mul_comm, mul_smul, smul_def, smul_n, star_add, star_mul, star_ofNat, star_sub
 -/
@@ -246,7 +264,34 @@ theorem tsirelson_inequality
   have M : forall (m : Int) (a : Real) (x : R), m • a • x = ((m : Real) * a) • x := fun m a x => by
     rw [← Int.cast_smul_eq_zsmul Real]; rw [← mul_smul]
   let P := (√2)⁻¹ • (A₁ + A₀) - B₀
-  let Q := (√2)⁻
+  let Q := (√2)⁻¹ • (A₁ - A₀) + B₁
+  have w : √2 ^ 3 • (1 : R) - A₀ * B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁ = (√2)⁻¹ • (P ^ 2 + Q ^ 2) := by
+    dsimp [P, Q]
+    -- distribute out all the powers and products appearing on the RHS
+    simp only [sq, sub_mul, mul_sub, add_mul, mul_add, smul_add, smul_sub]
+    -- pull all coefficients out to the front, and combine `√2`s where possible
+    simp only [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, ← mul_smul, sqrt_two_inv_mul_self]
+    -- replace Aᵢ * Aᵢ = 1 and Bᵢ * Bᵢ = 1
+    simp only [← sq, T.A₀_inv, T.A₁_inv, T.B₀_inv, T.B₁_inv]
+    -- move Aᵢ to the left of Bᵢ
+    simp only [← T.A₀B₀_commutes, ← T.A₀B₁_commutes, ← T.A₁B₀_commutes, ← T.A₁B₁_commutes]
+    -- collect terms, simplify coefficients, and collect terms again:
+    abel_nf
+    -- all terms coincide, but the last one. Simplify all other terms
+    simp only [M]
+    simp only [neg_mul, mul_inv_cancel_of_invertible, add_assoc, add_comm,
+      add_left_comm, one_smul, Int.cast_neg, neg_smul, Int.cast_ofNat, ← add_smul]
+    grind
+  have pos : 0 <= (√2)⁻¹ • (P ^ 2 + Q ^ 2) := by
+    have P_sa : star P = P := by
+      simp only [P, star_smul, star_add, star_sub, star_id_of_comm, T.A₀_sa, T.A₁_sa, T.B₀_sa]
+    have Q_sa : star Q = Q := by
+      simp only [Q, star_smul, star_add, star_sub, star_id_of_comm, T.A₀_sa, T.A₁_sa, T.B₁_sa]
+    have P2_nonneg : 0 <= P ^ 2 := by simpa only [P_sa, sq] using star_mul_self_nonneg P
+    have Q2_nonneg : 0 <= Q ^ 2 := by simpa only [Q_sa, sq] using star_mul_self_nonneg Q
+    positivity
+  apply le_of_sub_nonneg
+  simpa only [sub_add_eq_sub_sub, ← sub_add, w, Nat.cast_zero] using pos
 
 中文:
 定理 tsirelson_inequality
@@ -256,7 +301,34 @@ theorem tsirelson_inequality
   have M : forall (m : Int) (a : Real) (x : R), m • a • x = ((m : Real) * a) • x := fun m a x => by
     rw [← Int.cast_smul_eq_zsmul Real]; rw [← mul_smul]
   let P := (√2)⁻¹ • (A₁ + A₀) - B₀
-  let Q := (√2)⁻
+  let Q := (√2)⁻¹ • (A₁ - A₀) + B₁
+  have w : √2 ^ 3 • (1 : R) - A₀ * B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁ = (√2)⁻¹ • (P ^ 2 + Q ^ 2) := by
+    dsimp [P, Q]
+    -- distribute out all the powers and products appearing on the RHS
+    simp only [sq, sub_mul, mul_sub, add_mul, mul_add, smul_add, smul_sub]
+    -- pull all coefficients out to the front, and combine `√2`s where possible
+    simp only [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, ← mul_smul, sqrt_two_inv_mul_self]
+    -- replace Aᵢ * Aᵢ = 1 and Bᵢ * Bᵢ = 1
+    simp only [← sq, T.A₀_inv, T.A₁_inv, T.B₀_inv, T.B₁_inv]
+    -- move Aᵢ to the left of Bᵢ
+    simp only [← T.A₀B₀_commutes, ← T.A₀B₁_commutes, ← T.A₁B₀_commutes, ← T.A₁B₁_commutes]
+    -- collect terms, simplify coefficients, and collect terms again:
+    abel_nf
+    -- all terms coincide, but the last one. Simplify all other terms
+    simp only [M]
+    simp only [neg_mul, mul_inv_cancel_of_invertible, add_assoc, add_comm,
+      add_left_comm, one_smul, Int.cast_neg, neg_smul, Int.cast_ofNat, ← add_smul]
+    grind
+  have pos : 0 <= (√2)⁻¹ • (P ^ 2 + Q ^ 2) := by
+    have P_sa : star P = P := by
+      simp only [P, star_smul, star_add, star_sub, star_id_of_comm, T.A₀_sa, T.A₁_sa, T.B₀_sa]
+    have Q_sa : star Q = Q := by
+      simp only [Q, star_smul, star_add, star_sub, star_id_of_comm, T.A₀_sa, T.A₁_sa, T.B₁_sa]
+    have P2_nonneg : 0 <= P ^ 2 := by simpa only [P_sa, sq] using star_mul_self_nonneg P
+    have Q2_nonneg : 0 <= Q ^ 2 := by simpa only [Q_sa, sq] using star_mul_self_nonneg Q
+    positivity
+  apply le_of_sub_nonneg
+  simpa only [sub_add_eq_sub_sub, ← sub_add, w, Nat.cast_zero] using pos
 -/
 theorem tsirelson_inequality [Ring R] [PartialOrder R] [StarRing R] [StarOrderedRing R]
     [Algebra Real R] [IsOrderedModule Real R] [StarModule Real R]

@@ -626,7 +626,7 @@ instance Cauchy.ring
   Function.Surjective.ring mk Quotient.mk'_surjective rfl rfl
     (fun _ _ => (mk_add _ _).symm) (fun _ _ => (mk_mul _ _).symm) (fun _ => (mk_neg _).symm)
     (fun _ _ => (mk_sub _ _).symm) (fun _ _ => (mk_smul _ _).symm) (fun _ _ => (mk_smul _ _).symm)
-    (fun _ _ => (mk_pow _ _).sy
+    (fun _ _ => (mk_pow _ _).symm) (fun _ => rfl) fun _ => rfl
 
 中文:
 实例 Cauchy.ring
@@ -635,7 +635,7 @@ instance Cauchy.ring
   Function.Surjective.ring mk Quotient.mk'_surjective rfl rfl
     (fun _ _ => (mk_add _ _).symm) (fun _ _ => (mk_mul _ _).symm) (fun _ => (mk_neg _).symm)
     (fun _ _ => (mk_sub _ _).symm) (fun _ _ => (mk_smul _ _).symm) (fun _ _ => (mk_smul _ _).symm)
-    (fun _ _ => (mk_pow _ _).sy
+    (fun _ _ => (mk_pow _ _).symm) (fun _ => rfl) fun _ => rfl
 
 Depends on / 依赖: fast_instance
 -/
@@ -730,7 +730,7 @@ instance Cauchy.commRing
   Function.Surjective.commRing mk Quotient.mk'_surjective rfl rfl
     (fun _ _ => (mk_add _ _).symm) (fun _ _ => (mk_mul _ _).symm) (fun _ => (mk_neg _).symm)
     (fun _ _ => (mk_sub _ _).symm) (fun _ _ => (mk_smul _ _).symm) (fun _ _ => (mk_smul _ _).symm)
-    (fun _ _ => (mk_pow _ _
+    (fun _ _ => (mk_pow _ _).symm) (fun _ => rfl) fun _ => rfl
 
 中文:
 实例 Cauchy.commRing
@@ -739,7 +739,7 @@ instance Cauchy.commRing
   Function.Surjective.commRing mk Quotient.mk'_surjective rfl rfl
     (fun _ _ => (mk_add _ _).symm) (fun _ _ => (mk_mul _ _).symm) (fun _ => (mk_neg _).symm)
     (fun _ _ => (mk_sub _ _).symm) (fun _ _ => (mk_smul _ _).symm) (fun _ _ => (mk_smul _ _).symm)
-    (fun _ _ => (mk_pow _ _
+    (fun _ _ => (mk_pow _ _).symm) (fun _ => rfl) fun _ => rfl
 
 Depends on / 依赖: fast_instance
 -/
@@ -832,7 +832,11 @@ instance :
       · simp [hf, this.1 hf]
       · have hg := mt this.2 hf
         simp only [hf, dite_false, hg]
-        have If : mk (inv f hf) * mk
+        have If : mk (inv f hf) * mk f = 1 := mk_eq.2 (inv_mul_cancel hf)
+        have Ig : mk (inv g hg) * mk g = 1 := mk_eq.2 (inv_mul_cancel hg)
+        have Ig' : mk g * mk (inv g hg) = 1 := mk_eq.2 (mul_inv_cancel hg)
+        rw [mk_eq.2 fg]; rw [← Ig] at If
+        rw [← mul_one (mk (inv f hf))]; rw [← Ig']; rw [← mul_assoc]; rw [If]; rw [mul_assoc]; rw [Ig']; rw [mul_one]⟩
 
 中文:
 实例 :
@@ -844,7 +848,11 @@ instance :
       · simp [hf, this.1 hf]
       · have hg := mt this.2 hf
         simp only [hf, dite_false, hg]
-        have If : mk (inv f hf) * mk
+        have If : mk (inv f hf) * mk f = 1 := mk_eq.2 (inv_mul_cancel hf)
+        have Ig : mk (inv g hg) * mk g = 1 := mk_eq.2 (inv_mul_cancel hg)
+        have Ig' : mk g * mk (inv g hg) = 1 := mk_eq.2 (mul_inv_cancel hg)
+        rw [mk_eq.2 fg]; rw [← Ig] at If
+        rw [← mul_one (mk (inv f hf))]; rw [← Ig']; rw [← mul_assoc]; rw [If]; rw [mul_assoc]; rw [Ig']; rw [mul_one]⟩
 
 Depends on / 依赖: LimZero, Quotient, Quotient.liftOn, dite_false, inv_mul_cancel, liftOn, limZero_congr, mk_eq, mul_inv_cancel, mul_one
 -/
@@ -1068,7 +1076,8 @@ instance Cauchy.divisionRing
   qsmul := (· • ·)
   nnratCast_def q := by simp_rw [← ofRat_nnratCast, NNRat.cast_def, ofRat_div, ofRat_natCast]
   ratCast_def q := by rw [← ofRat_ratCast, Rat.cast_def, ofRat_div, ofRat_natCast, ofRat_intCast]
-nnqs
+nnqsmul_def _ x := Quotient.inductionOn x fun _ => congr_arg mk ext fun _ => NNRat.smul_def _ _
+qsmul_def _ x := Quotient.inductionOn x fun _ => congr_arg mk ext fun _ => Rat.smul_def _ _
 
 中文:
 实例 Cauchy.divisionRing
@@ -1079,7 +1088,8 @@ nnqs
   qsmul := (· • ·)
   nnratCast_def q := by simp_rw [← ofRat_nnratCast, NNRat.cast_def, ofRat_div, ofRat_natCast]
   ratCast_def q := by rw [← ofRat_ratCast, Rat.cast_def, ofRat_div, ofRat_natCast, ofRat_intCast]
-nnqs
+nnqsmul_def _ x := Quotient.inductionOn x fun _ => congr_arg mk ext fun _ => NNRat.smul_def _ _
+qsmul_def _ x := Quotient.inductionOn x fun _ => congr_arg mk ext fun _ => Rat.smul_def _ _
 
 Depends on / 依赖: inv_zero
 -/
@@ -1351,7 +1361,11 @@ theorem lim_mul_lim
           (const abv (lim f) - f) * g + const abv (lim f) * (const abv (lim g) - g) := by
               apply Subtype.ext
               rw [coe_add]
-              
+              simp [sub_mul, mul_sub]
+      rw [h]
+      exact
+        add_limZero (mul_limZero_left _ (Setoid.symm (equiv_lim _)))
+          (mul_limZero_right _ (Setoid.symm (equiv_lim _)))
 
 中文:
 定理 lim_mul_lim
@@ -1364,7 +1378,11 @@ theorem lim_mul_lim
           (const abv (lim f) - f) * g + const abv (lim f) * (const abv (lim g) - g) := by
               apply Subtype.ext
               rw [coe_add]
-              
+              simp [sub_mul, mul_sub]
+      rw [h]
+      exact
+        add_limZero (mul_limZero_left _ (Setoid.symm (equiv_lim _)))
+          (mul_limZero_right _ (Setoid.symm (equiv_lim _)))
 
 Depends on / 依赖: LimZero, Setoid, Setoid.symm, Subtype, Subtype.ext, add_limZero, coe_add, eq_lim_of_const_equiv, equiv_lim, mul_limZero_left, mul_limZero_right, mul_sub, sub_mul
 -/
@@ -1514,7 +1532,24 @@ lim_eq_of_equiv_const
     show LimZero (inv f hf - const abv (lim f)⁻¹) from
       have h₁ : forall (g f : CauSeq β abv) (hf : ¬LimZero f), LimZero (g - f * inv f hf * g) :=
         fun g f hf => by
-          have h₂ : g - f * inv f hf * g = 1
+          have h₂ : g - f * inv f hf * g = 1 * g - f * inv f hf * g := by rw [one_mul g]
+          have h₃ : f * inv f hf * g = (f * inv f hf) * g := by simp [mul_assoc]
+          have h₄ : g - f * inv f hf * g = (1 - f * inv f hf) * g := by rw [h₂, h₃, ← sub_mul]
+          have h₅ : g - f * inv f hf * g = g * (1 - f * inv f hf) := by rw [h₄, mul_comm]
+          have h₆ : g - f * inv f hf * g = g * (1 - inv f hf * f) := by rw [h₅, mul_comm f]
+          rw [h₆]; exact mul_limZero_right _ (Setoid.symm (CauSeq.inv_mul_cancel _))
+      have h₂ :
+        LimZero
+          (inv f hf - const abv (lim f)⁻¹ -
+            (const abv (lim f) - f) * (inv f hf * const abv (lim f)⁻¹)) := by
+              rw [sub_mul]; rw [← sub_add]; rw [sub_sub]; rw [sub_add_eq_sub_sub]; rw [sub_right_comm]; rw [sub_add]
+              change LimZero
+                (inv f hf - const abv (lim f) * (inv f hf * const abv (lim f)⁻¹) -
+                  (const abv (lim f)⁻¹ - f * (inv f hf * const abv (lim f)⁻¹)))
+              exact sub_limZero
+                (by rw [← mul_assoc, mul_right_comm, const_inv hl]; exact h₁ _ _ _)
+                (by rw [← mul_assoc]; exact h₁ _ _ _)
+(limZero_congr h₂).mpr mul_limZero_left _ (Setoid.symm (equiv_lim f))
 
 中文:
 定理 lim_inv
@@ -1525,7 +1560,24 @@ lim_eq_of_equiv_const
     show LimZero (inv f hf - const abv (lim f)⁻¹) from
       have h₁ : forall (g f : CauSeq β abv) (hf : ¬LimZero f), LimZero (g - f * inv f hf * g) :=
         fun g f hf => by
-          have h₂ : g - f * inv f hf * g = 1
+          have h₂ : g - f * inv f hf * g = 1 * g - f * inv f hf * g := by rw [one_mul g]
+          have h₃ : f * inv f hf * g = (f * inv f hf) * g := by simp [mul_assoc]
+          have h₄ : g - f * inv f hf * g = (1 - f * inv f hf) * g := by rw [h₂, h₃, ← sub_mul]
+          have h₅ : g - f * inv f hf * g = g * (1 - f * inv f hf) := by rw [h₄, mul_comm]
+          have h₆ : g - f * inv f hf * g = g * (1 - inv f hf * f) := by rw [h₅, mul_comm f]
+          rw [h₆]; exact mul_limZero_right _ (Setoid.symm (CauSeq.inv_mul_cancel _))
+      have h₂ :
+        LimZero
+          (inv f hf - const abv (lim f)⁻¹ -
+            (const abv (lim f) - f) * (inv f hf * const abv (lim f)⁻¹)) := by
+              rw [sub_mul]; rw [← sub_add]; rw [sub_sub]; rw [sub_add_eq_sub_sub]; rw [sub_right_comm]; rw [sub_add]
+              change LimZero
+                (inv f hf - const abv (lim f) * (inv f hf * const abv (lim f)⁻¹) -
+                  (const abv (lim f)⁻¹ - f * (inv f hf * const abv (lim f)⁻¹)))
+              exact sub_limZero
+                (by rw [← mul_assoc, mul_right_comm, const_inv hl]; exact h₁ _ _ _)
+                (by rw [← mul_assoc]; exact h₁ _ _ _)
+(limZero_congr h₂).mpr mul_limZero_left _ (Setoid.symm (equiv_lim f))
 
 Depends on / 依赖: CauSeq, LimZero, lim_eq_of_equiv_const, lim_eq_zero_iff, mul_assoc, one_mul, sub_mul
 -/

@@ -228,7 +228,9 @@ theorem isSeparatedMap_iff_isClosed_diagonal
     Subtype.forall, Prod.forall, nhds_induced, nhds_prod_eq]
   refine forall₄_congr fun x₁ x₂ _ _ => ⟨fun h => ?_, fun ⟨t, ht, t_sub⟩ => ?_⟩
   · simp_rw [← Filter.disjoint_iff, ← compl_diagonal_mem_prod] at h
-    exact ⟨
+    exact ⟨_, h, subset_rfl⟩
+  · obtain ⟨s₁, h₁, s₂, h₂, s_sub⟩ := mem_prod_iff.mp ht
+    exact ⟨s₁, h₁, s₂, h₂, disjoint_left.2 fun x h₁ h₂ => @t_sub ⟨(x, x), rfl⟩ (s_sub ⟨h₁, h₂⟩) rfl⟩
 
 中文:
 定理 isSeparatedMap_iff_isClosed_diagonal
@@ -238,7 +240,9 @@ theorem isSeparatedMap_iff_isClosed_diagonal
     Subtype.forall, Prod.forall, nhds_induced, nhds_prod_eq]
   refine forall₄_congr fun x₁ x₂ _ _ => ⟨fun h => ?_, fun ⟨t, ht, t_sub⟩ => ?_⟩
   · simp_rw [← Filter.disjoint_iff, ← compl_diagonal_mem_prod] at h
-    exact ⟨
+    exact ⟨_, h, subset_rfl⟩
+  · obtain ⟨s₁, h₁, s₂, h₂, s_sub⟩ := mem_prod_iff.mp ht
+    exact ⟨s₁, h₁, s₂, h₂, disjoint_left.2 fun x h₁ h₂ => @t_sub ⟨(x, x), rfl⟩ (s_sub ⟨h₁, h₂⟩) rfl⟩
 
 Depends on / 依赖: Filter, Filter.disjoint_iff, Prod.forall, Subtype, Subtype.forall, compl_diagonal_mem_prod, disjoint_iff, disjoint_left, isOpen_compl_iff, isOpen_iff_mem_nhds, isSeparatedMap_iff_nhds, mem_prod_iff, mem_prod_iff.mp, nhds_induced, nhds_prod_eq, s_sub, simp_rw, subset_rfl, t_sub
 -/
@@ -452,7 +456,11 @@ theorem isLocallyInjective_iff_isOpen_diagonal
   refine ⟨?_, fun h x => ?_⟩
   · rintro h x x' hx (rfl : x = x')
     obtain ⟨U, hn, hi⟩ := h x
-    exact ⟨_, Filter.prod_mem_prod hn hn, fun {p} hp => hi hp.
+    exact ⟨_, Filter.prod_mem_prod hn hn, fun {p} hp => hi hp.1 hp.2 p.2⟩
+  · obtain ⟨t, ht, t_sub⟩ := h x x rfl rfl
+    obtain ⟨t₁, h₁, t₂, h₂, prod_sub⟩ := Filter.mem_prod_iff.mp ht
+    exact ⟨t₁ inter t₂, Filter.inter_mem h₁ h₂,
+      fun x₁ h₁ x₂ h₂ he => @t_sub ⟨(x₁, x₂), he⟩ (prod_sub ⟨h₁.1, h₂.2⟩)⟩
 
 中文:
 定理 isLocallyInjective_iff_isOpen_diagonal
@@ -463,7 +471,11 @@ theorem isLocallyInjective_iff_isOpen_diagonal
   refine ⟨?_, fun h x => ?_⟩
   · rintro h x x' hx (rfl : x = x')
     obtain ⟨U, hn, hi⟩ := h x
-    exact ⟨_, Filter.prod_mem_prod hn hn, fun {p} hp => hi hp.
+    exact ⟨_, Filter.prod_mem_prod hn hn, fun {p} hp => hi hp.1 hp.2 p.2⟩
+  · obtain ⟨t, ht, t_sub⟩ := h x x rfl rfl
+    obtain ⟨t₁, h₁, t₂, h₂, prod_sub⟩ := Filter.mem_prod_iff.mp ht
+    exact ⟨t₁ inter t₂, Filter.inter_mem h₁ h₂,
+      fun x₁ h₁ x₂ h₂ he => @t_sub ⟨(x₁, x₂), he⟩ (prod_sub ⟨h₁.1, h₂.2⟩)⟩
 
 Depends on / 依赖: Filter, Filter.inter_mem, Filter.mem_comap, Filter.mem_prod_iff.mp, Filter.prod_mem_prod, Prod.forall, Subtype, Subtype.forall, inter_mem, isLocallyInjective_iff_nhds, isOpen_iff_mem_nhds, mem_comap, mem_prod_iff, nhds_induced, nhds_prod_eq, prod_mem_prod, prod_sub, simp_rw, t_sub
 -/

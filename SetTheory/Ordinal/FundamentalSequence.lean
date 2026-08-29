@@ -277,7 +277,8 @@ theorem comp_isNormal
     rw [mem_Iio]; rw [hg.lt_iff_exists_lt ho] at hb
     obtain ⟨c, hc, hc'⟩ := hb
     obtain ⟨_, ⟨d, rfl⟩, hd⟩ := hf.isCofinal_range ⟨c, hc⟩
-    refine ⟨⟨_, hg.st
+    refine ⟨⟨_, hg.strictMono (f d).2⟩, ?_, hc'.le.trans (hg.monotone hd)⟩
+    simp
 
 中文:
 定理 comp_isNormal
@@ -289,7 +290,8 @@ theorem comp_isNormal
     rw [mem_Iio]; rw [hg.lt_iff_exists_lt ho] at hb
     obtain ⟨c, hc, hc'⟩ := hb
     obtain ⟨_, ⟨d, rfl⟩, hd⟩ := hf.isCofinal_range ⟨c, hc⟩
-    refine ⟨⟨_, hg.st
+    refine ⟨⟨_, hg.strictMono (f d).2⟩, ?_, hc'.le.trans (hg.monotone hd)⟩
+    simp
 
 Depends on / 依赖: hf.strictMono, hg.strictMono.comp, strictMono
 -/
@@ -321,7 +323,8 @@ theorem exists_isFundamentalSeq
 let g := (OrderIso.setCongr _ _ (congrArg _ hs'.symm)).trans
     .ofRelIsoLT (enum (α := s) (· < ·))
   refine ⟨fun i => g i, le_rfl, fun _ => by simp, ?_⟩
-  rw [range_comp']; rw [OrderIso.map_isCofinal_iff]; r
+  rw [range_comp']; rw [OrderIso.map_isCofinal_iff]; rw [range_comp']; rw [g.range_eq]
+  simpa
 
 中文:
 定理 存在_isFundamentalSeq
@@ -334,7 +337,8 @@ let g := (OrderIso.setCongr _ _ (congrArg _ hs'.symm)).trans
 let g := (OrderIso.setCongr _ _ (congrArg _ hs'.symm)).trans
     .ofRelIsoLT (enum (α := s) (· < ·))
   refine ⟨fun i => g i, le_rfl, fun _ => by simp, ?_⟩
-  rw [range_comp']; rw [OrderIso.map_isCofinal_iff]; r
+  rw [range_comp']; rw [OrderIso.map_isCofinal_iff]; rw [range_comp']; rw [g.range_eq]
+  simpa
 
 Depends on / 依赖: OrderIso, OrderIso.map_isCofinal_iff, OrderIso.setCongr, ToType, cof_toType, exists_ord_cof_eq, g.range_eq, le_rfl, map_isCofinal_iff, o.ToType, ofRelIsoLT, range_comp, range_eq, setCongr
 -/
@@ -674,7 +678,29 @@ theorem exists_fundamental_sequence
   rcases exists_lsub_cof a with ⟨ι, f, hf, hι⟩
   rcases ord_eq ι with ⟨r, wo, hr⟩
   let r' := Subrel r fun i => forall j, r j i -> f j < f i
-  let hrr' : r' ↪r r := Subrel.relEmbedding
+  let hrr' : r' ↪r r := Subrel.relEmbedding _ _
+  have := hrr'.isWellOrder
+  refine
+    ⟨_, _, hrr'.ordinal_type_le.trans ?_, @fun i j _ h _ => (enum r' ⟨j, h⟩).prop _ ?_,
+      le_antisymm (blsub_le fun i hi => lsub_le_iff.1 hf.le _) ?_⟩
+  · rw [← hι, hr]
+  · change r (hrr'.1 _) (hrr'.1 _)
+    rwa [hrr'.2, @enum_lt_enum _ r']
+  · rw [← hf, lsub_le_iff]
+    intro i
+    suffices h : exists i' hi', f i <= bfamilyOfFamily' r' (fun i => f i) i' hi' by
+      rcases h with ⟨i', hi', hfg⟩
+      exact hfg.trans_lt (lt_blsub _ _ _)
+    by_cases! h : forall j, r j i -> f j < f i
+    · refine ⟨typein r' ⟨i, h⟩, typein_lt_type _ _, ?_⟩
+      rw [bfamilyOfFamily'_typein]
+    · obtain ⟨hji, hij⟩ := wo.wf.min_mem _ h
+      refine ⟨typein r' ⟨_, fun k hkj => lt_of_lt_of_le ?_ hij⟩, typein_lt_type _ _, ?_⟩
+      · by_contra! H
+        exact (wo.wf.not_lt_min {j | r j i ∧ f i <= f j} ⟨IsTrans.trans _ _ _ hkj hji, H⟩) hkj
+      · rwa [bfamilyOfFamily'_typein]
+
+@[deprecated IsFundamentalSeq.comp_isNormal (since := "2026-03-23")]
 
 中文:
 定理 存在_fundamental_sequence
@@ -686,7 +712,29 @@ theorem exists_fundamental_sequence
   rcases exists_lsub_cof a with ⟨ι, f, hf, hι⟩
   rcases ord_eq ι with ⟨r, wo, hr⟩
   let r' := Subrel r fun i => forall j, r j i -> f j < f i
-  let hrr' : r' ↪r r := Subrel.relEmbedding
+  let hrr' : r' ↪r r := Subrel.relEmbedding _ _
+  have := hrr'.isWellOrder
+  refine
+    ⟨_, _, hrr'.ordinal_type_le.trans ?_, @fun i j _ h _ => (enum r' ⟨j, h⟩).prop _ ?_,
+      le_antisymm (blsub_le fun i hi => lsub_le_iff.1 hf.le _) ?_⟩
+  · rw [← hι, hr]
+  · change r (hrr'.1 _) (hrr'.1 _)
+    rwa [hrr'.2, @enum_lt_enum _ r']
+  · rw [← hf, lsub_le_iff]
+    intro i
+    suffices h : exists i' hi', f i <= bfamilyOfFamily' r' (fun i => f i) i' hi' by
+      rcases h with ⟨i', hi', hfg⟩
+      exact hfg.trans_lt (lt_blsub _ _ _)
+    by_cases! h : forall j, r j i -> f j < f i
+    · refine ⟨typein r' ⟨i, h⟩, typein_lt_type _ _, ?_⟩
+      rw [bfamilyOfFamily'_typein]
+    · obtain ⟨hji, hij⟩ := wo.wf.min_mem _ h
+      refine ⟨typein r' ⟨_, fun k hkj => lt_of_lt_of_le ?_ hij⟩, typein_lt_type _ _, ?_⟩
+      · by_contra! H
+        exact (wo.wf.not_lt_min {j | r j i ∧ f i <= f j} ⟨IsTrans.trans _ _ _ hkj hji, H⟩) hkj
+      · rwa [bfamilyOfFamily'_typein]
+
+@[deprecated IsFundamentalSeq.comp_isNormal (since := "2026-03-23")]
 
 Depends on / 依赖: IsFundamentalSequence, Subrel, Subrel.relEmbedding, blsub_le, exists_lsub_cof, hf.le, hf.ord_cof, isWellOrder, le_antisymm, lsub_le_iff, ord_cof, ord_eq, ordinal_type_le, ordinal_type_le.trans, relEmbedding
 -/

@@ -122,7 +122,20 @@ lemma HasGaussNorm.hasMvGaussNorm
       Set.range fun t => v ((MvPowerSeries.coeff t) f) * t.prod fun _ x2 => c ^ x2 by
     simpa only [MvPowerSeries.HasGaussNorm, ← this]
   refine Set.ext (fun _ => ?_)
-  simp only [Set.mem_range, Finsupp.prod_pow, Finset.univ_un
+  simp only [Set.mem_range, Finsupp.prod_pow, Finset.univ_unique, PUnit.default_eq_unit,
+    Finset.prod_singleton]
+  constructor
+  · intro h
+    obtain ⟨y, hy⟩ := h
+    use (Finsupp.uniqueEquiv ()).symm y
+    simpa [coeff] using hy
+  · intro h
+    obtain ⟨y, hy⟩ := h
+    use Finsupp.uniqueEquiv () y
+    simpa [coeff, show (Finsupp.single () (y PUnit.unit)) = y by grind]
+
+@[deprecated (since := "2026-05-06")]
+alias HasGaussNorm.HasMvGaussNorm := HasGaussNorm.hasMvGaussNorm
 
 中文:
 引理 HasGaussNorm.hasMvGaussNorm
@@ -132,7 +145,20 @@ lemma HasGaussNorm.hasMvGaussNorm
       Set.range fun t => v ((MvPowerSeries.coeff t) f) * t.prod fun _ x2 => c ^ x2 by
     simpa only [MvPowerSeries.HasGaussNorm, ← this]
   refine Set.ext (fun _ => ?_)
-  simp only [Set.mem_range, Finsupp.prod_pow, Finset.univ_un
+  simp only [Set.mem_range, Finsupp.prod_pow, Finset.univ_unique, PUnit.default_eq_unit,
+    Finset.prod_singleton]
+  constructor
+  · intro h
+    obtain ⟨y, hy⟩ := h
+    use (Finsupp.uniqueEquiv ()).symm y
+    simpa [coeff] using hy
+  · intro h
+    obtain ⟨y, hy⟩ := h
+    use Finsupp.uniqueEquiv () y
+    simpa [coeff, show (Finsupp.single () (y PUnit.unit)) = y by grind]
+
+@[deprecated (since := "2026-05-06")]
+alias HasGaussNorm.HasMvGaussNorm := HasGaussNorm.hasMvGaussNorm
 
 Depends on / 依赖: Finset, Finset.prod_singleton, Finset.univ_unique, Finsupp, Finsupp.prod_pow, Finsupp.uniqueEquiv, HasGaussNorm, MvPowerSeries, MvPowerSeries.HasGaussNorm, MvPowerSeries.coeff, PUnit.default_eq_unit, Set.ext, Set.mem_range, Set.range, default_eq_unit, mem_range, prod_pow, prod_singleton, t.prod, uniqueEquiv
 -/

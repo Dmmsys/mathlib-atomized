@@ -319,7 +319,11 @@ lemma comp_mem_paths_iff
     | cons q' f h' =>
       rw [Path.comp_cons] at h
       exact ⟨h' h.1, h.2⟩
-  · induct
+  · induction q with
+    | nil => exact hp
+    | cons q q' h => exact ⟨h ⟨hp, hq.1⟩ hq.1, hq.2⟩
+
+@[simp]
 
 中文:
 引理 comp_mem_paths_iff
@@ -336,7 +340,11 @@ lemma comp_mem_paths_iff
     | cons q' f h' =>
       rw [Path.comp_cons] at h
       exact ⟨h' h.1, h.2⟩
-  · induct
+  · induction q with
+    | nil => exact hp
+    | cons q q' h => exact ⟨h ⟨hp, hq.1⟩ hq.1, hq.2⟩
+
+@[simp]
 
 Depends on / 依赖: Path.comp_cons, comp_cons
 -/

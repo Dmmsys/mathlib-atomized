@@ -165,7 +165,7 @@ definition continuousLocal
       dsimp at w
       rw [continuous_iff_continuousAt] at w
       specialize w ⟨x, m⟩
-      simpa using (Opens.isOpenEmbeddin
+      simpa using (Opens.isOpenEmbedding_of_le i.le).continuousAt_iff.1 w }
 
 中文:
 定义 continuousLocal
@@ -179,7 +179,7 @@ definition continuousLocal
       dsimp at w
       rw [continuous_iff_continuousAt] at w
       specialize w ⟨x, m⟩
-      simpa using (Opens.isOpenEmbeddin
+      simpa using (Opens.isOpenEmbedding_of_le i.le).continuousAt_iff.1 w }
 
 Depends on / 依赖: Opens.isOpenEmbedding_of_le, continuousAt_iff, continuousPrelocal, continuous_iff_continuousAt, i.le, isOpenEmbedding_of_le, locality, specialize
 -/
@@ -300,7 +300,10 @@ definition PrelocalPredicate.sheafify
     exact ⟨V ⊓ V', ⟨x.2, m'⟩, V.infLELeft _, P.res (V.infLERight V') _ p⟩
   locality {U} f w x := by
     specialize w x
-  
+    rcases w with ⟨V, m, i, p⟩
+    specialize p ⟨x.1, m⟩
+    rcases p with ⟨V', m', i', p'⟩
+    exact ⟨V', m', i' ≫ i, p'⟩
 
 中文:
 定义 PrelocalPredicate.sheafify
@@ -312,7 +315,10 @@ definition PrelocalPredicate.sheafify
     exact ⟨V ⊓ V', ⟨x.2, m'⟩, V.infLELeft _, P.res (V.infLERight V') _ p⟩
   locality {U} f w x := by
     specialize w x
-  
+    rcases w with ⟨V, m, i, p⟩
+    specialize p ⟨x.1, m⟩
+    rcases p with ⟨V', m', i', p'⟩
+    exact ⟨V', m', i' ≫ i, p'⟩
 
 Depends on / 依赖: P.pred
 -/
@@ -528,7 +534,33 @@ theorem isSheaf
     -- We show the sheaf condition in terms of unique gluing.
     -- First we obtain a family of sections for the underlying sheaf of functions,
     -- by forgetting that the predicate holds
-    let sf' (i : ι) : (presheafToTyp
+    let sf' (i : ι) : (presheafToTypes X T).obj (op (U i)) := (sf i).val
+    -- Since our original family is compatible, this one is as well
+    have sf'_comp : (presheafToTypes X T).IsCompatible U sf' := fun i j =>
+      congr_arg Subtype.val (sf_comp i j)
+    -- So, we can obtain a unique gluing
+    obtain ⟨gl, gl_spec, gl_uniq⟩ := (sheafToTypes X T).existsUnique_gluing U sf'
+      -- `by exact` to help Lean infer the `ConcreteCategory` instance
+      (by exact sf'_comp)
+    refine ⟨⟨gl, ?_⟩, ?_, ?_⟩
+    · -- Our first goal is to show that this chosen gluing satisfies the
+      -- predicate. Of course, we use locality of the predicate.
+      apply P.locality
+      rintro ⟨x, mem⟩
+      -- Once we're at a particular point `x`, we can select some open set `x ∈ U i`.
+      choose i hi using Opens.mem_iSup.mp mem
+      -- We claim that the predicate holds in `U i`
+      use U i, hi, Opens.leSupr U i
+      -- This follows, since our original family `sf` satisfies the predicate
+      convert! (sf i).property using 1
+      exact gl_spec i
+    -- It remains to show that the chosen lift is really a gluing for the subsheaf and
+    -- that it is unique. Both of which follow immediately from the corresponding facts
+    -- in the sheaf of functions without the local predicate.
+    · exact fun i => Subtype.ext (gl_spec i)
+    · intro gl' hgl'
+      refine Subtype.ext ?_
+      exact gl_uniq gl'.1 fun i => congr_arg Subtype.val (hgl' i)
 
 中文:
 定理 isSheaf
@@ -538,7 +570,33 @@ theorem isSheaf
     -- We show the sheaf condition in terms of unique gluing.
     -- First we obtain a family of sections for the underlying sheaf of functions,
     -- by forgetting that the predicate holds
-    let sf' (i : ι) : (presheafToTyp
+    let sf' (i : ι) : (presheafToTypes X T).obj (op (U i)) := (sf i).val
+    -- Since our original family is compatible, this one is as well
+    have sf'_comp : (presheafToTypes X T).IsCompatible U sf' := fun i j =>
+      congr_arg Subtype.val (sf_comp i j)
+    -- So, we can obtain a unique gluing
+    obtain ⟨gl, gl_spec, gl_uniq⟩ := (sheafToTypes X T).existsUnique_gluing U sf'
+      -- `by exact` to help Lean infer the `ConcreteCategory` instance
+      (by exact sf'_comp)
+    refine ⟨⟨gl, ?_⟩, ?_, ?_⟩
+    · -- Our first goal is to show that this chosen gluing satisfies the
+      -- predicate. Of course, we use locality of the predicate.
+      apply P.locality
+      rintro ⟨x, mem⟩
+      -- Once we're at a particular point `x`, we can select some open set `x ∈ U i`.
+      choose i hi using Opens.mem_iSup.mp mem
+      -- We claim that the predicate holds in `U i`
+      use U i, hi, Opens.leSupr U i
+      -- This follows, since our original family `sf` satisfies the predicate
+      convert! (sf i).property using 1
+      exact gl_spec i
+    -- It remains to show that the chosen lift is really a gluing for the subsheaf and
+    -- that it is unique. Both of which follow immediately from the corresponding facts
+    -- in the sheaf of functions without the local predicate.
+    · exact fun i => Subtype.ext (gl_spec i)
+    · intro gl' hgl'
+      refine Subtype.ext ?_
+      exact gl_uniq gl'.1 fun i => congr_arg Subtype.val (hgl' i)
 
 Depends on / 依赖: Presheaf, Presheaf.isSheaf_of_isSheafUniqueGluing_types, isSheaf_of_isSheafUniqueGluing_types, sf_comp
 -/
@@ -729,7 +787,26 @@ theorem stalkToFiber_injective
   let Q :
     exists (W : (OpenNhds x)ᵒᵖ) (s : forall w : (unop W).1, T w) (hW : P.pred s),
       tU = (subsheafToTypes P).presheaf.germ _ x (unop W).2 ⟨s, hW⟩ ∧
-        tV = (subsheafToTypes P).presheaf.germ _ x (u
+        tV = (subsheafToTypes P).presheaf.germ _ x (unop W).2 ⟨s, hW⟩ :=
+    ?_
+  · choose W s hW e using Q
+    exact e.1.trans e.2.symm
+  -- Then use induction to pick particular representatives of `tU tV : stalk x`
+  dsimp at tU tV h
+  obtain ⟨U, ⟨fU, hU⟩, rfl⟩ := jointly_surjective' tU
+  obtain ⟨V, ⟨fV, hV⟩, rfl⟩ := jointly_surjective' tV
+  -- Decompose everything into its constituent parts:
+  simp only [Functor.whiskeringLeft_obj_obj, Functor.comp_obj, Functor.op_obj,
+    subpresheafToTypes_obj, stalkToFiber_ι] at h
+  specialize w (unop U) (unop V) fU hU fV hV h
+  rcases w with ⟨W, iU, iV, w⟩
+  -- and put it back together again in the correct order.
+  refine ⟨op W, fun w => fU (iU w : (unop U).1), P.res ?_ _ hU, ?_⟩
+  · rcases W with ⟨W, m⟩
+    exact iU
+  · exact ⟨colimit_sound iU.op (Subtype.ext rfl), colimit_sound iV.op (Subtype.ext (funext w).symm)⟩
+
+universe u
 
 中文:
 定理 stalkToFiber_injective
@@ -739,7 +816,26 @@ theorem stalkToFiber_injective
   let Q :
     exists (W : (OpenNhds x)ᵒᵖ) (s : forall w : (unop W).1, T w) (hW : P.pred s),
       tU = (subsheafToTypes P).presheaf.germ _ x (unop W).2 ⟨s, hW⟩ ∧
-        tV = (subsheafToTypes P).presheaf.germ _ x (u
+        tV = (subsheafToTypes P).presheaf.germ _ x (unop W).2 ⟨s, hW⟩ :=
+    ?_
+  · choose W s hW e using Q
+    exact e.1.trans e.2.symm
+  -- Then use induction to pick particular representatives of `tU tV : stalk x`
+  dsimp at tU tV h
+  obtain ⟨U, ⟨fU, hU⟩, rfl⟩ := jointly_surjective' tU
+  obtain ⟨V, ⟨fV, hV⟩, rfl⟩ := jointly_surjective' tV
+  -- Decompose everything into its constituent parts:
+  simp only [Functor.whiskeringLeft_obj_obj, Functor.comp_obj, Functor.op_obj,
+    subpresheafToTypes_obj, stalkToFiber_ι] at h
+  specialize w (unop U) (unop V) fU hU fV hV h
+  rcases w with ⟨W, iU, iV, w⟩
+  -- and put it back together again in the correct order.
+  refine ⟨op W, fun w => fU (iU w : (unop U).1), P.res ?_ _ hU, ?_⟩
+  · rcases W with ⟨W, m⟩
+    exact iU
+  · exact ⟨colimit_sound iU.op (Subtype.ext rfl), colimit_sound iV.op (Subtype.ext (funext w).symm)⟩
+
+universe u
 -/
 theorem stalkToFiber_injective (P : LocalPredicate T) (x : X)
     (w :

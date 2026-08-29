@@ -418,7 +418,9 @@ theorem laplacianWithin_eq_iteratedDerivWithin_real
   simp only [laplacianWithin_eq_iteratedFDerivWithin_orthonormalBasis f hs he
         (OrthonormalBasis.singleton (Fin 1) Real),
     Finset.univ_unique, Fin.default_eq_zero, Fin.isValue, OrthonormalBasis.singleton_apply,
-    Finset.sum_const, Finset.card_singleton, one_smul, iteratedDerivWithin_e
+    Finset.sum_const, Finset.card_singleton, one_smul, iteratedDerivWithin_eq_iteratedFDerivWithin]
+  congr with i
+  fin_cases i <;> simp
 
 中文:
 定理 laplacianWithin_eq_iteratedDerivWithin_real
@@ -427,7 +429,9 @@ theorem laplacianWithin_eq_iteratedDerivWithin_real
   simp only [laplacianWithin_eq_iteratedFDerivWithin_orthonormalBasis f hs he
         (OrthonormalBasis.singleton (Fin 1) Real),
     Finset.univ_unique, Fin.default_eq_zero, Fin.isValue, OrthonormalBasis.singleton_apply,
-    Finset.sum_const, Finset.card_singleton, one_smul, iteratedDerivWithin_e
+    Finset.sum_const, Finset.card_singleton, one_smul, iteratedDerivWithin_eq_iteratedFDerivWithin]
+  congr with i
+  fin_cases i <;> simp
 
 Depends on / 依赖: Fin.default_eq_zero, Fin.isValue, Finset, Finset.card_singleton, Finset.sum_const, Finset.univ_unique, OrthonormalBasis, OrthonormalBasis.singleton, OrthonormalBasis.singleton_apply, card_singleton, default_eq_zero, fin_cases, isValue, iteratedDerivWithin_eq_iteratedFDerivWithin, laplacianWithin_eq_iteratedFDerivWithin_orthonormalBasis, one_smul, singleton, singleton_apply, sum_const, univ_unique
 -/

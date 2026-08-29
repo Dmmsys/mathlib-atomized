@@ -210,7 +210,15 @@ instance :
     · dsimp [comp, id]
       rw [← NatIso.naturality_2 ((Cat.Hom.toNatIso <| eqToIso (F.map_id Y.base)) ≪≫
         (eqToIso Cat.Hom.id_toFunctor)) f.fiber]
-     
+      simp
+  id_comp f := by ext <;> simp [comp, id]
+  assoc f g h := by
+    ext
+    · simp [comp]
+    · simp [comp, ← NatIso.naturality_2 (Cat.Hom.toNatIso (eqToIso (F.map_comp g.base h.base)) ≪≫
+        (eqToIso (Cat.Hom.comp_toFunctor _ _))) f.fiber]
+
+@[simp]
 
 中文:
 实例 :
@@ -224,7 +232,15 @@ instance :
     · dsimp [comp, id]
       rw [← NatIso.naturality_2 ((Cat.Hom.toNatIso <| eqToIso (F.map_id Y.base)) ≪≫
         (eqToIso Cat.Hom.id_toFunctor)) f.fiber]
-     
+      simp
+  id_comp f := by ext <;> simp [comp, id]
+  assoc f g h := by
+    ext
+    · simp [comp]
+    · simp [comp, ← NatIso.naturality_2 (Cat.Hom.toNatIso (eqToIso (F.map_comp g.base h.base)) ≪≫
+        (eqToIso (Cat.Hom.comp_toFunctor _ _))) f.fiber]
+
+@[simp]
 
 Depends on / 依赖: Grothendieck, Grothendieck.Hom
 -/
@@ -484,7 +500,10 @@ definition isoMk
     rw [← Cat.Hom.comp_obj]; rw [← F.map_comp]; rw [e₁.hom_inv_id]; rw [F.map_id]; rw [Cat.Hom.id_obj])⟩
   hom_inv_id := Grothendieck.ext _ _ (by simp) (by simp)
   inv_hom_id := Grothendieck.ext _ _ (by simp) (by
-  
+    have := Functor.congr_hom congr($((F.mapIso e₁).inv_hom_id).toFunctor) e₂.inv
+    simp_all)
+
+#adaptation_note
 
 中文:
 定义 isoMk
@@ -494,7 +513,10 @@ definition isoMk
     rw [← Cat.Hom.comp_obj]; rw [← F.map_comp]; rw [e₁.hom_inv_id]; rw [F.map_id]; rw [Cat.Hom.id_obj])⟩
   hom_inv_id := Grothendieck.ext _ _ (by simp) (by simp)
   inv_hom_id := Grothendieck.ext _ _ (by simp) (by
-  
+    have := Functor.congr_hom congr($((F.mapIso e₁).inv_hom_id).toFunctor) e₂.inv
+    simp_all)
+
+#adaptation_note
 -/
 def isoMk {X Y : Grothendieck F} (e₁ : X.base ≅ Y.base)
     (e₂ : (F.map e₁.hom).toFunctor.obj X.fiber ≅ Y.fiber) :
@@ -583,7 +605,12 @@ definition map
   { base := f.base
     fiber := (eqToHom (α.naturality f.base).symm).toNatTrans.app X.fiber ≫
       (α.app Y.base).toFunctor.map f.fiber }
-  -- map_id X := by simp only [id_base, id_fiber, eqToHom_map, eqToHom_tran
+  -- map_id X := by simp only [id_base, id_fiber, eqToHom_map, eqToHom_trans]; rfl
+  map_comp {X Y Z} f g := by
+    apply Grothendieck.ext _ _ (by simp)
+    simp only [comp_fiber, map_comp, ← Cat.Hom.comp_map,
+      Functor.congr_hom congr($(α.naturality g.base).toFunctor) f.fiber]
+    simp
 
 中文:
 定义 map
@@ -594,7 +621,12 @@ definition map
   { base := f.base
     fiber := (eqToHom (α.naturality f.base).symm).toNatTrans.app X.fiber ≫
       (α.app Y.base).toFunctor.map f.fiber }
-  -- map_id X := by simp only [id_base, id_fiber, eqToHom_map, eqToHom_tran
+  -- map_id X := by simp only [id_base, id_fiber, eqToHom_map, eqToHom_trans]; rfl
+  map_comp {X Y Z} f g := by
+    apply Grothendieck.ext _ _ (by simp)
+    simp only [comp_fiber, map_comp, ← Cat.Hom.comp_map,
+      Functor.congr_hom congr($(α.naturality g.base).toFunctor) f.fiber]
+    simp
 
 Depends on / 依赖: X.base, X.fiber, Y.base, eqToHom, f.base, f.fiber, naturality, toFunctor, toFunctor.map, toFunctor.obj, toNatTrans, toNatTrans.app
 -/
@@ -745,7 +777,7 @@ theorem map_comp_eq
   · intro X Y f
     simp only [map_map, map_obj_base, map_obj_fiber, NatTrans.comp_app, Cat.Hom.comp_toFunctor,
       comp_obj, Cat.Hom₂.eqToHom_toNatTrans, eqToHom_app, Functor.comp_map, eqToHom_refl, map_comp,
-      eqToHom_map, eqToHom_trans_assoc, Cate
+      eqToHom_map, eqToHom_trans_assoc, Category.comp_id, Category.id_comp]
 
 中文:
 定理 map_comp_eq
@@ -757,7 +789,7 @@ theorem map_comp_eq
   · intro X Y f
     simp only [map_map, map_obj_base, map_obj_fiber, NatTrans.comp_app, Cat.Hom.comp_toFunctor,
       comp_obj, Cat.Hom₂.eqToHom_toNatTrans, eqToHom_app, Functor.comp_map, eqToHom_refl, map_comp,
-      eqToHom_map, eqToHom_trans_assoc, Cate
+      eqToHom_map, eqToHom_trans_assoc, Category.comp_id, Category.id_comp]
 
 Depends on / 依赖: Cat.Hom, Cat.Hom.comp_toFunctor, Category, Category.comp_id, Category.id_comp, Functor, Functor.comp_map, Functor.ext, NatTrans, NatTrans.comp_app, comp_app, comp_id, comp_map, comp_obj, comp_toFunctor, eqToHom_app, eqToHom_map, eqToHom_refl, eqToHom_toNatTrans, eqToHom_trans_assoc
 -/
@@ -896,7 +928,20 @@ definition mapWhiskerRightAsSmallFunctor
       fapply Grothendieck.ext
       · simp [compAsSmallFunctorEquivalenceInverse]
       · simp only [compAsSmallFunctorEquivalence_functor, compAsSmallFunctorEquivalence_inverse,
-        comp_obj, compAsSmallFunctorEquivalenceInverse_obj
+        comp_obj, compAsSmallFunctorEquivalenceInverse_obj_base, map_obj_base,
+        compAsSmallFunctorEquivalenceFunctor_obj_base, Cat.asSmallFunctor_obj, Cat.of_α,
+        Iso.refl_hom, Functor.comp_map, comp_base, id_base,
+        compAsSmallFunctorEquivalenceInverse_map_base, map_map_base,
+        compAsSmallFunctorEquivalenceFunctor_map_base, Cat.asSmallFunctor_map, toCatHom_toFunctor,
+        map_obj_fiber, whiskerRight_app, AsSmall.down_obj, AsSmall.up_obj_down,
+        compAsSmallFunctorEquivalenceInverse_obj_fiber,
+        compAsSmallFunctorEquivalenceFunctor_obj_fiber, comp_fiber, map_map_fiber, AsSmall.down_map,
+        down_comp, eqToHom_down, AsSmall.up_map_down, map_comp, eqToHom_map, id_fiber,
+        Category.assoc, eqToHom_trans_assoc, compAsSmallFunctorEquivalenceInverse_map_fiber,
+        compAsSmallFunctorEquivalenceFunctor_map_fiber, eqToHom_comp_iff, comp_eqToHom_iff]
+        simp only [conj_eqToHom_iff_heq']
+        rw [G.map_id]
+        simp)
 
 中文:
 定义 mapWhiskerRightAsSmallFunctor
@@ -907,7 +952,20 @@ definition mapWhiskerRightAsSmallFunctor
       fapply Grothendieck.ext
       · simp [compAsSmallFunctorEquivalenceInverse]
       · simp only [compAsSmallFunctorEquivalence_functor, compAsSmallFunctorEquivalence_inverse,
-        comp_obj, compAsSmallFunctorEquivalenceInverse_obj
+        comp_obj, compAsSmallFunctorEquivalenceInverse_obj_base, map_obj_base,
+        compAsSmallFunctorEquivalenceFunctor_obj_base, Cat.asSmallFunctor_obj, Cat.of_α,
+        Iso.refl_hom, Functor.comp_map, comp_base, id_base,
+        compAsSmallFunctorEquivalenceInverse_map_base, map_map_base,
+        compAsSmallFunctorEquivalenceFunctor_map_base, Cat.asSmallFunctor_map, toCatHom_toFunctor,
+        map_obj_fiber, whiskerRight_app, AsSmall.down_obj, AsSmall.up_obj_down,
+        compAsSmallFunctorEquivalenceInverse_obj_fiber,
+        compAsSmallFunctorEquivalenceFunctor_obj_fiber, comp_fiber, map_map_fiber, AsSmall.down_map,
+        down_comp, eqToHom_down, AsSmall.up_map_down, map_comp, eqToHom_map, id_fiber,
+        Category.assoc, eqToHom_trans_assoc, compAsSmallFunctorEquivalenceInverse_map_fiber,
+        compAsSmallFunctorEquivalenceFunctor_map_fiber, eqToHom_comp_iff, comp_eqToHom_iff]
+        simp only [conj_eqToHom_iff_heq']
+        rw [G.map_id]
+        simp)
 
 Depends on / 依赖: Cat.asSmallFunctor_obj, Cat.of_, Functor, Functor.comp_map, Grothendieck, Grothendieck.ext, Iso.refl, Iso.refl_hom, NatIso, NatIso.ofComponents, asSmallFunctor_obj, compAsSmallFunctorE, compAsSmallFunctorEquivalenceFunctor_obj_base, compAsSmallFunctorEquivalenceInverse, compAsSmallFunctorEquivalenceInverse_map_base, compAsSmallFunctorEquivalenceInverse_obj_base, compAsSmallFunctorEquivalence_functor, compAsSmallFunctorEquivalence_inverse, comp_base, comp_map
 -/
@@ -952,7 +1010,8 @@ definition functor
     ext
     exact Grothendieck.map_id_eq (F := F)
   map_comp α β := by
-    simp
+    simp [Grothendieck.map_comp_eq α β]
+    rfl
 
 中文:
 定义 functor
@@ -964,7 +1023,8 @@ definition functor
     ext
     exact Grothendieck.map_id_eq (F := F)
   map_comp α β := by
-    simp
+    simp [Grothendieck.map_comp_eq α β]
+    rfl
 -/
 def functor {E : Cat.{v, u}} : (E ⥤ Cat.{v, u}) ⥤ Over (T := Cat.{v, u}) E where
   obj F := Over.mk (X := E) (Y := Cat.of (Grothendieck F)) (Grothendieck.forget F).toCatHom
@@ -1045,7 +1105,20 @@ definition grothendieckTypeToCat
         dsimp at *
         simp
         rfl)
-  counitIso :
+  counitIso :=
+    NatIso.ofComponents
+      (fun X => by
+        cases X
+        exact Iso.refl _)
+      (by
+        rintro ⟨⟩ ⟨⟩ ⟨f, e⟩
+        dsimp at *
+        simp
+        rfl)
+  functor_unitIso_comp := by
+    rintro ⟨_, ⟨⟩⟩
+    simp
+    rfl
 
 中文:
 定义 grothendieckTypeToCat
@@ -1062,7 +1135,20 @@ definition grothendieckTypeToCat
         dsimp at *
         simp
         rfl)
-  counitIso :
+  counitIso :=
+    NatIso.ofComponents
+      (fun X => by
+        cases X
+        exact Iso.refl _)
+      (by
+        rintro ⟨⟩ ⟨⟩ ⟨f, e⟩
+        dsimp at *
+        simp
+        rfl)
+  functor_unitIso_comp := by
+    rintro ⟨_, ⟨⟩⟩
+    simp
+    rfl
 
 Depends on / 依赖: grothendieckTypeToCatFunctor
 -/
@@ -1285,7 +1371,17 @@ definition preEquivalence
     calc
       _ = map (𝟙 _) := map_id_eq.symm
       _ = map _ := ?_
-      _ = map _ ⋙ ma
+      _ = map _ ⋙ map _ := map_comp_eq _ _
+    congr; ext X
+    simp only [Functor.comp_obj, Functor.comp_map, ← Functor.map_comp, Functor.id_obj,
+      Functor.map_id, NatTrans.comp_app, NatTrans.id_app, whiskerLeft_app, whiskerRight_app,
+      Equivalence.counitInv_functor_comp]
+.symm counitIso := preNatIso F G.counitIso.symm
+  functor_unitIso_comp := by
+    intro X
+    simp only [preInv, Grothendieck.preUnitIso, pre_id,
+      Iso.trans_hom, eqToIso.hom, eqToHom_app, eqToHom_refl, isoWhiskerLeft_hom, NatTrans.comp_app]
+    fapply Grothendieck.ext <;> simp [preNatIso, transportIso]
 
 中文:
 定义 preEquivalence
@@ -1299,7 +1395,17 @@ definition preEquivalence
     calc
       _ = map (𝟙 _) := map_id_eq.symm
       _ = map _ := ?_
-      _ = map _ ⋙ ma
+      _ = map _ ⋙ map _ := map_comp_eq _ _
+    congr; ext X
+    simp only [Functor.comp_obj, Functor.comp_map, ← Functor.map_comp, Functor.id_obj,
+      Functor.map_id, NatTrans.comp_app, NatTrans.id_app, whiskerLeft_app, whiskerRight_app,
+      Equivalence.counitInv_functor_comp]
+.symm counitIso := preNatIso F G.counitIso.symm
+  functor_unitIso_comp := by
+    intro X
+    simp only [preInv, Grothendieck.preUnitIso, pre_id,
+      Iso.trans_hom, eqToIso.hom, eqToHom_app, eqToHom_refl, isoWhiskerLeft_hom, NatTrans.comp_app]
+    fapply Grothendieck.ext <;> simp [preNatIso, transportIso]
 
 Depends on / 依赖: G.functor, functor
 -/
@@ -1375,7 +1481,8 @@ definition ι
     simp only [comp_base, ← Category.assoc, eqToHom_trans, comp_fiber, Functor.map_comp,
       eqToHom_map]
     congr 1
- 
+    simp only [eqToHom_comp_iff, Category.assoc, eqToHom_trans_assoc]
+    apply Functor.congr_hom congr($(F.map_id _).toFunctor).symm
 
 中文:
 定义 ι
@@ -1391,7 +1498,8 @@ definition ι
     simp only [comp_base, ← Category.assoc, eqToHom_trans, comp_fiber, Functor.map_comp,
       eqToHom_map]
     congr 1
- 
+    simp only [eqToHom_comp_iff, Category.assoc, eqToHom_trans_assoc]
+    apply Functor.congr_hom congr($(F.map_id _).toFunctor).symm
 -/
 def ι (c : C) : F.obj c ⥤ Grothendieck F where
   obj d := ⟨c, d⟩

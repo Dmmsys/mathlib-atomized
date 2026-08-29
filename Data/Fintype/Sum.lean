@@ -284,7 +284,20 @@ theorem Finset.exists_equiv_extend_of_card_eq
       use e
       simp
     | insert a s has H => ?_
-    have hfst' : Finset.image f s subseteq t := (Finset.image_mono _ (s.su
+    have hfst' : Finset.image f s subseteq t := (Finset.image_mono _ (s.subset_insert a)).trans hfst
+    have hfs' : Set.InjOn f s := hfs.mono (s.subset_insert a)
+    obtain ⟨g', hg'⟩ := H hfst' hfs'
+    have hfat : f a in t := hfst (mem_image_of_mem _ (s.mem_insert_self a))
+    use g'.trans (Equiv.swap (⟨f a, hfat⟩ : t) (g' a))
+    simp_rw [mem_insert]
+    rintro i (rfl | hi)
+    · simp
+    rw [Equiv.trans_apply]; rw [Equiv.swap_apply_of_ne_of_ne]; rw [hg' _ hi]
+    · exact
+        ne_of_apply_ne Subtype.val
+          (ne_of_eq_of_ne (hg' _ hi) <|
+hfs.ne (subset_insert _ _ hi) (mem_insert_self _ _) ne_of_mem_of_not_mem hi has)
+    · exact g'.injective.ne (ne_of_mem_of_not_mem hi has)
 
 中文:
 定理 有限集.存在_equiv_extend_of_card_eq
@@ -297,7 +310,20 @@ theorem Finset.exists_equiv_extend_of_card_eq
       use e
       simp
     | insert a s has H => ?_
-    have hfst' : Finset.image f s subseteq t := (Finset.image_mono _ (s.su
+    have hfst' : Finset.image f s subseteq t := (Finset.image_mono _ (s.subset_insert a)).trans hfst
+    have hfs' : Set.InjOn f s := hfs.mono (s.subset_insert a)
+    obtain ⟨g', hg'⟩ := H hfst' hfs'
+    have hfat : f a in t := hfst (mem_image_of_mem _ (s.mem_insert_self a))
+    use g'.trans (Equiv.swap (⟨f a, hfat⟩ : t) (g' a))
+    simp_rw [mem_insert]
+    rintro i (rfl | hi)
+    · simp
+    rw [Equiv.trans_apply]; rw [Equiv.swap_apply_of_ne_of_ne]; rw [hg' _ hi]
+    · exact
+        ne_of_apply_ne Subtype.val
+          (ne_of_eq_of_ne (hg' _ hi) <|
+hfs.ne (subset_insert _ _ hi) (mem_insert_self _ _) ne_of_mem_of_not_mem hi has)
+    · exact g'.injective.ne (ne_of_mem_of_not_mem hi has)
 
 Depends on / 依赖: Equiv.swap, Finset, Finset.image, Finset.image_mono, Finset.induction, Fintype, Fintype.card_coe, Fintype.card_eq, Nonempty, Set.InjOn, card_coe, card_eq, classical, generalizing, hfs.mono, image_mono, insert, mem_image_of_mem, mem_insert_self, s.mem_insert_self
 -/
@@ -338,7 +364,9 @@ theorem Set.MapsTo.exists_equiv_extend_of_card_eq
     have hfst' : s'.image f subseteq t := by simpa [s', ← Finset.coe_subset] using! hfst
     have hfs' : Set.InjOn f s' := by simpa [s'] using! hfs
     obtain ⟨g, hg⟩ := Finset.exists_equiv_extend_of_card_eq hαt hfst' hfs'
-    refine ⟨g, fun i hi =>
+    refine ⟨g, fun i hi => ?_⟩
+    apply hg
+    simpa [s'] using! hi
 
 中文:
 定理 集合.映射到.存在_equiv_extend_of_card_eq
@@ -349,7 +377,9 @@ theorem Set.MapsTo.exists_equiv_extend_of_card_eq
     have hfst' : s'.image f subseteq t := by simpa [s', ← Finset.coe_subset] using! hfst
     have hfs' : Set.InjOn f s' := by simpa [s'] using! hfs
     obtain ⟨g, hg⟩ := Finset.exists_equiv_extend_of_card_eq hαt hfst' hfs'
-    refine ⟨g, fun i hi =>
+    refine ⟨g, fun i hi => ?_⟩
+    apply hg
+    simpa [s'] using! hi
 
 Depends on / 依赖: Finset, Finset.coe_subset, Finset.exists_equiv_extend_of_card_eq, Set.InjOn, classical, coe_subset, exists_equiv_extend_of_card_eq, s.toFinset, subseteq, toFinset
 -/

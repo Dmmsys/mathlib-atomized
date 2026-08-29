@@ -235,7 +235,61 @@ definition induced
         suffices (Induced.add F s i 0 n).hom =
           eqToHom (by rw [zero_add]; rfl) ≫ whiskerRight (Induced.zero F s i).inv (s n) by
           intro X
-          simp
+          simpa using NatTrans.congr_app this X
+        apply ((whiskeringLeft C D D).obj F).map_injective
+        ext X
+        have eq := dcongr_arg (fun a => (i a).hom.app X) (zero_add n)
+        dsimp
+        simp only [Induced.add_hom_app_obj, eq, shiftFunctorAdd_zero_add_hom_app,
+          Functor.map_comp, eqToHom_map, Category.assoc, eqToHom_trans_assoc,
+          eqToHom_refl, Category.id_comp, eqToHom_app, Induced.zero_inv_app_obj]
+        erw [← NatTrans.naturality_assoc, Iso.hom_inv_id_app_assoc]
+        rfl
+      add_zero_hom_app := fun n => by
+        suffices (Induced.add F s i n 0).hom =
+            eqToHom (by rw [add_zero]; rfl) ≫ whiskerLeft (s n) (Induced.zero F s i).inv by
+          intro X
+          simpa using NatTrans.congr_app this X
+        apply ((whiskeringLeft C D D).obj F).map_injective
+        ext X
+        dsimp
+        erw [Induced.add_hom_app_obj, dcongr_arg (fun a => (i a).hom.app X) (add_zero n),
+          ← cancel_mono ((s 0).map ((i n).hom.app X)), Category.assoc,
+          Category.assoc, Category.assoc, Category.assoc, Category.assoc,
+          Category.assoc, ← (s 0).map_comp, Iso.inv_hom_id_app, Functor.map_id, Category.comp_id,
+          ← NatTrans.naturality, Induced.zero_inv_app_obj,
+          shiftFunctorAdd_add_zero_hom_app]
+        simp [eqToHom_map, eqToHom_app]
+      assoc_hom_app := fun m₁ m₂ m₃ => by
+        suffices (Induced.add F s i (m₁ + m₂) m₃).hom ≫
+            whiskerRight (Induced.add F s i m₁ m₂).hom (s m₃) =
+            eqToHom (by rw [add_assoc]) ≫ (Induced.add F s i m₁ (m₂ + m₃)).hom ≫
+              whiskerLeft (s m₁) (Induced.add F s i m₂ m₃).hom by
+          intro X
+          simpa using NatTrans.congr_app this X
+        apply ((whiskeringLeft C D D).obj F).map_injective
+        ext X
+        dsimp
+        have eq := F.congr_map (shiftFunctorAdd'_assoc_hom_app
+          m₁ m₂ m₃ _ _ (m₁ + m₂ + m₃) rfl rfl rfl X)
+        simp only [shiftFunctorAdd'_eq_shiftFunctorAdd] at eq
+        simp only [Functor.comp_obj, Functor.map_comp, shiftFunctorAdd',
+          Iso.trans_hom, eqToIso.hom, NatTrans.comp_app, eqToHom_app,
+          Category.assoc] at eq
+        rw [← cancel_mono ((s m₃).map ((s m₂).map ((i m₁).hom.app X)))]
+        simp only [Induced.add_hom_app_obj, Category.assoc, Functor.map_comp]
+        slice_lhs 4 5 =>
+          erw [← Functor.map_comp, Iso.inv_hom_id_app, Functor.map_id]
+        erw [Category.id_comp]
+        slice_lhs 6 7 =>
+          erw [← Functor.map_comp, ← Functor.map_comp, Iso.inv_hom_id_app,
+            (s m₂).map_id, (s m₃).map_id]
+        erw [Category.comp_id, ← NatTrans.naturality_assoc, reassoc_of% eq,
+          dcongr_arg (fun a => (i a).hom.app X) (add_assoc m₁ m₂ m₃).symm]
+        simp only [Functor.comp_obj, eqToHom_map, eqToHom_app, NatTrans.naturality_assoc,
+          Induced.add_hom_app_obj, Functor.comp_map, Category.assoc, Iso.inv_hom_id_app_assoc,
+          eqToHom_trans_assoc, eqToHom_refl, Category.id_comp, Category.comp_id,
+          ← Functor.map_comp, Iso.inv_hom_id_app, Functor.map_id] }
 
 中文:
 定义 induced
@@ -248,7 +302,61 @@ definition induced
         suffices (Induced.add F s i 0 n).hom =
           eqToHom (by rw [zero_add]; rfl) ≫ whiskerRight (Induced.zero F s i).inv (s n) by
           intro X
-          simp
+          simpa using NatTrans.congr_app this X
+        apply ((whiskeringLeft C D D).obj F).map_injective
+        ext X
+        have eq := dcongr_arg (fun a => (i a).hom.app X) (zero_add n)
+        dsimp
+        simp only [Induced.add_hom_app_obj, eq, shiftFunctorAdd_zero_add_hom_app,
+          Functor.map_comp, eqToHom_map, Category.assoc, eqToHom_trans_assoc,
+          eqToHom_refl, Category.id_comp, eqToHom_app, Induced.zero_inv_app_obj]
+        erw [← NatTrans.naturality_assoc, Iso.hom_inv_id_app_assoc]
+        rfl
+      add_zero_hom_app := fun n => by
+        suffices (Induced.add F s i n 0).hom =
+            eqToHom (by rw [add_zero]; rfl) ≫ whiskerLeft (s n) (Induced.zero F s i).inv by
+          intro X
+          simpa using NatTrans.congr_app this X
+        apply ((whiskeringLeft C D D).obj F).map_injective
+        ext X
+        dsimp
+        erw [Induced.add_hom_app_obj, dcongr_arg (fun a => (i a).hom.app X) (add_zero n),
+          ← cancel_mono ((s 0).map ((i n).hom.app X)), Category.assoc,
+          Category.assoc, Category.assoc, Category.assoc, Category.assoc,
+          Category.assoc, ← (s 0).map_comp, Iso.inv_hom_id_app, Functor.map_id, Category.comp_id,
+          ← NatTrans.naturality, Induced.zero_inv_app_obj,
+          shiftFunctorAdd_add_zero_hom_app]
+        simp [eqToHom_map, eqToHom_app]
+      assoc_hom_app := fun m₁ m₂ m₃ => by
+        suffices (Induced.add F s i (m₁ + m₂) m₃).hom ≫
+            whiskerRight (Induced.add F s i m₁ m₂).hom (s m₃) =
+            eqToHom (by rw [add_assoc]) ≫ (Induced.add F s i m₁ (m₂ + m₃)).hom ≫
+              whiskerLeft (s m₁) (Induced.add F s i m₂ m₃).hom by
+          intro X
+          simpa using NatTrans.congr_app this X
+        apply ((whiskeringLeft C D D).obj F).map_injective
+        ext X
+        dsimp
+        have eq := F.congr_map (shiftFunctorAdd'_assoc_hom_app
+          m₁ m₂ m₃ _ _ (m₁ + m₂ + m₃) rfl rfl rfl X)
+        simp only [shiftFunctorAdd'_eq_shiftFunctorAdd] at eq
+        simp only [Functor.comp_obj, Functor.map_comp, shiftFunctorAdd',
+          Iso.trans_hom, eqToIso.hom, NatTrans.comp_app, eqToHom_app,
+          Category.assoc] at eq
+        rw [← cancel_mono ((s m₃).map ((s m₂).map ((i m₁).hom.app X)))]
+        simp only [Induced.add_hom_app_obj, Category.assoc, Functor.map_comp]
+        slice_lhs 4 5 =>
+          erw [← Functor.map_comp, Iso.inv_hom_id_app, Functor.map_id]
+        erw [Category.id_comp]
+        slice_lhs 6 7 =>
+          erw [← Functor.map_comp, ← Functor.map_comp, Iso.inv_hom_id_app,
+            (s m₂).map_id, (s m₃).map_id]
+        erw [Category.comp_id, ← NatTrans.naturality_assoc, reassoc_of% eq,
+          dcongr_arg (fun a => (i a).hom.app X) (add_assoc m₁ m₂ m₃).symm]
+        simp only [Functor.comp_obj, eqToHom_map, eqToHom_app, NatTrans.naturality_assoc,
+          Induced.add_hom_app_obj, Functor.comp_map, Category.assoc, Iso.inv_hom_id_app_assoc,
+          eqToHom_trans_assoc, eqToHom_refl, Category.id_comp, Category.comp_id,
+          ← Functor.map_comp, Iso.inv_hom_id_app, Functor.map_id] }
 
 Depends on / 依赖: Functor, Functor.map_comp, Induced, Induced.add, Induced.add_hom_app_obj, Induced.zero, NatTrans, NatTrans.congr_app, add_hom_app_obj, congr_app, dcongr_arg, eqToHom, eqToHom_m, hasShiftMk, hom.app, map_comp, map_injective, shiftFunctorAdd_zero_add_hom_app, whiskerRight, whiskeringLeft
 -/
@@ -419,7 +527,7 @@ lemma shiftFunctorAdd_hom_app_obj_of_induced
         F.map ((shiftFunctorAdd C a b).hom.app X) ≫
         (i b).inv.app ((shiftFunctor C a).obj X) ≫
         (s b).map ((i a).inv.app X) := by
-  simp only [ShiftMkCore.shiftFunctorAdd_eq, HasShif
+  simp only [ShiftMkCore.shiftFunctorAdd_eq, HasShift.Induced.add_hom_app_obj]
 
 中文:
 引理 shiftFunctorAdd_hom_app_obj_of_induced
@@ -430,7 +538,7 @@ lemma shiftFunctorAdd_hom_app_obj_of_induced
         F.map ((shiftFunctorAdd C a b).hom.app X) ≫
         (i b).inv.app ((shiftFunctor C a).obj X) ≫
         (s b).map ((i a).inv.app X) := by
-  simp only [ShiftMkCore.shiftFunctorAdd_eq, HasShif
+  simp only [ShiftMkCore.shiftFunctorAdd_eq, HasShift.Induced.add_hom_app_obj]
 
 Depends on / 依赖: HasShift, HasShift.induced, induced
 -/
@@ -457,7 +565,7 @@ lemma shiftFunctorAdd_inv_app_obj_of_induced
       (i b).hom.app ((shiftFunctor C a).obj X) ≫
       F.map ((shiftFunctorAdd C a b).inv.app X) ≫
       (i (a + b)).inv.app X := by
-  simp only [ShiftMkCore.shiftFunctorAdd_eq, HasShift.Indu
+  simp only [ShiftMkCore.shiftFunctorAdd_eq, HasShift.Induced.add_inv_app_obj]
 
 中文:
 引理 shiftFunctorAdd_inv_app_obj_of_induced
@@ -468,7 +576,7 @@ lemma shiftFunctorAdd_inv_app_obj_of_induced
       (i b).hom.app ((shiftFunctor C a).obj X) ≫
       F.map ((shiftFunctorAdd C a b).inv.app X) ≫
       (i (a + b)).inv.app X := by
-  simp only [ShiftMkCore.shiftFunctorAdd_eq, HasShift.Indu
+  simp only [ShiftMkCore.shiftFunctorAdd_eq, HasShift.Induced.add_inv_app_obj]
 
 Depends on / 依赖: HasShift, HasShift.induced, induced
 -/
@@ -504,7 +612,15 @@ definition Functor.CommShift.ofInduced
         ext X
         dsimp
         simp only [isoZero_hom_app, shiftFunctorZero_inv_app_obj_of_induced,
-          ← F.map_comp_assoc, I
+          ← F.map_comp_assoc, Iso.hom_inv_id_app, F.map_id, Category.id_comp]
+      commShiftIso_add := fun a b => by
+        ext X
+        dsimp
+        simp only [isoAdd_hom_app, Iso.symm_hom, shiftFunctorAdd_inv_app_obj_of_induced,
+          shiftFunctor_of_induced]
+        rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id_app]
+        dsimp
+        rw [Functor.map_id]; rw [Category.id_comp]; rw [Iso.inv_hom_id_app_assoc]; rw [← F.map_comp_assoc]; rw [Iso.hom_inv_id_app]; rw [F.map_id]; rw [Category.id_comp] }
 
 中文:
 定义 函子.交换Shift.ofInduced
@@ -518,7 +634,15 @@ definition Functor.CommShift.ofInduced
         ext X
         dsimp
         simp only [isoZero_hom_app, shiftFunctorZero_inv_app_obj_of_induced,
-          ← F.map_comp_assoc, I
+          ← F.map_comp_assoc, Iso.hom_inv_id_app, F.map_id, Category.id_comp]
+      commShiftIso_add := fun a b => by
+        ext X
+        dsimp
+        simp only [isoAdd_hom_app, Iso.symm_hom, shiftFunctorAdd_inv_app_obj_of_induced,
+          shiftFunctor_of_induced]
+        rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id_app]
+        dsimp
+        rw [Functor.map_id]; rw [Category.id_comp]; rw [Iso.inv_hom_id_app_assoc]; rw [← F.map_comp_assoc]; rw [Iso.hom_inv_id_app]; rw [F.map_id]; rw [Category.id_comp] }
 
 Depends on / 依赖: HasShift, HasShift.induced, induced
 -/

@@ -439,7 +439,7 @@ theorem _root_.Submodule.IsPrincipal.contentIdeal_le_span_iff_dvd
       rwa [← span_singleton_le_span_singleton]
      _ ∣ p := h_prin.contentIdeal_generator_dvd
   · rw [← contentIdeal_C r]
-    exact fun h => conte
+    exact fun h => contentIdeal_le_contentIdeal_of_dvd h
 
 中文:
 定理 _root_.子模.是Principal.contentIdeal_le_span_iff_dvd
@@ -453,7 +453,7 @@ theorem _root_.Submodule.IsPrincipal.contentIdeal_le_span_iff_dvd
       rwa [← span_singleton_le_span_singleton]
      _ ∣ p := h_prin.contentIdeal_generator_dvd
   · rw [← contentIdeal_C r]
-    exact fun h => conte
+    exact fun h => contentIdeal_le_contentIdeal_of_dvd h
 
 Depends on / 依赖: _root_, _root_.map_dvd, contentIdeal, contentIdeal_C, contentIdeal_generator_dvd, contentIdeal_le_contentIdeal_of_dvd, generator, h_prin, h_prin.contentIdeal_generator_dvd, h_prin.generator, map_dvd, p.contentIdeal.span_singleton_generator, span_singleton_generator, span_singleton_le_span_singleton
 -/

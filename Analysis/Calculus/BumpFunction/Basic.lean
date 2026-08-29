@@ -540,7 +540,8 @@ theorem _root_.ContDiffWithinAt.contDiffBump
     ((f x).rOut / (f x).rIn, (f x).rIn⁻¹ • (g x - c x))) s x
   refine (((someContDiffBumpBase E).smooth.contDiffAt ?_).of_le
     (mod_cast le_top)).comp_contDiffWithinAt x ?_
-  · exact prod_mem_nhds (Ioi_mem_n
+  · exact prod_mem_nhds (Ioi_mem_nhds (f x).one_lt_rOut_div_rIn) univ_mem
+  · exact (hR.div hr (f x).rIn_pos.ne').prodMk ((hr.inv (f x).rIn_pos.ne').smul (hg.sub hc))
 
 中文:
 定理 _root_.ContDiffWithinAt.contDiffBump
@@ -550,7 +551,8 @@ theorem _root_.ContDiffWithinAt.contDiffBump
     ((f x).rOut / (f x).rIn, (f x).rIn⁻¹ • (g x - c x))) s x
   refine (((someContDiffBumpBase E).smooth.contDiffAt ?_).of_le
     (mod_cast le_top)).comp_contDiffWithinAt x ?_
-  · exact prod_mem_nhds (Ioi_mem_n
+  · exact prod_mem_nhds (Ioi_mem_nhds (f x).one_lt_rOut_div_rIn) univ_mem
+  · exact (hR.div hr (f x).rIn_pos.ne').prodMk ((hr.inv (f x).rIn_pos.ne').smul (hg.sub hc))
 -/
 protected theorem _root_.ContDiffWithinAt.contDiffBump {c g : X -> E} {s : Set X}
     {f : forall x, ContDiffBump (c x)} {x : X} (hc : ContDiffWithinAt Real n c s x)

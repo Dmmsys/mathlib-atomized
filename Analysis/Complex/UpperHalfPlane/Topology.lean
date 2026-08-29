@@ -331,7 +331,7 @@ instance instContinuousGLSMul
     · split_ifs
       exacts [continuous_id, continuous_conj]
     · refine .div ?_ ?_ (fun x => denom_ne_zero g x) <;>
-      exact (continuous_
+      exact (continuous_const.mul continuous_coe).add continuous_const
 
 中文:
 实例 instContinuousGLSMul
@@ -343,7 +343,7 @@ instance instContinuousGLSMul
     · split_ifs
       exacts [continuous_id, continuous_conj]
     · refine .div ?_ ?_ (fun x => denom_ne_zero g x) <;>
-      exact (continuous_
+      exact (continuous_const.mul continuous_coe).add continuous_const
 
 Depends on / 依赖: Function, Function.comp_def, UpperHalfPlane, UpperHalfPlane.coe, UpperHalfPlane.coe_smul, coe_smul, comp_def, continuous_coe, continuous_conj, continuous_const, continuous_const.mul, continuous_id, continuous_induced_rng, denom_ne_zero, exacts, simp_rw, split_ifs
 -/
@@ -476,7 +476,7 @@ lemma subset_verticalStrip_of_isCompact
   · exact ⟨1, 1, Real.zero_lt_one, empty_subset _⟩
   obtain ⟨u, _, hu⟩ := hK.exists_isMaxOn hne (_root_.continuous_abs.comp continuous_re).continuousOn
   obtain ⟨v, _, hv⟩ := hK.exists_isMinOn hne continuous_im.continuousOn
-  exact ⟨|re u|, im v, v.i
+  exact ⟨|re u|, im v, v.im_pos, fun k hk => ⟨isMaxOn_iff.mp hu _ hk, isMinOn_iff.mp hv _ hk⟩⟩
 
 中文:
 引理 subset_verticalStrip_of_isCompact
@@ -486,7 +486,7 @@ lemma subset_verticalStrip_of_isCompact
   · exact ⟨1, 1, Real.zero_lt_one, empty_subset _⟩
   obtain ⟨u, _, hu⟩ := hK.exists_isMaxOn hne (_root_.continuous_abs.comp continuous_re).continuousOn
   obtain ⟨v, _, hv⟩ := hK.exists_isMinOn hne continuous_im.continuousOn
-  exact ⟨|re u|, im v, v.i
+  exact ⟨|re u|, im v, v.im_pos, fun k hk => ⟨isMaxOn_iff.mp hu _ hk, isMinOn_iff.mp hv _ hk⟩⟩
 
 Depends on / 依赖: K.eq_empty_or_nonempty, Real.zero_lt_one, _root_, _root_.continuous_abs.comp, continuousOn, continuous_abs, continuous_im, continuous_im.continuousOn, continuous_re, empty_subset, eq_empty_or_nonempty, exists_isMaxOn, exists_isMinOn, hK.exists_isMaxOn, hK.exists_isMinOn, im_pos, isMaxOn_iff, isMaxOn_iff.mp, isMinOn_iff, isMinOn_iff.mp
 -/
@@ -513,7 +513,11 @@ theorem ModularGroup_T_zpow_mem_verticalStrip
     simp only [n, mul_neg, vadd_re, neg_mul]
   norm_cast at *
   rw [h]; rw [add_comm]
-  simp only [neg_mul, Int.cast_
+  simp only [neg_mul, Int.cast_neg, Int.cast_mul, Int.cast_natCast]
+  have hnn : (0 : Real) < (N : Real) := by norm_cast at *
+  have h2 : z.re + -(N * n) = z.re - n * N := by ring
+  rw [h2]; rw [abs_eq_self.2 (Int.sub_floor_div_mul_nonneg (z.re : Real) hnn)]
+  apply (Int.sub_floor_div_mul_lt (z.re : Real) hnn).le
 
 中文:
 定理 ModularGroup_T_zpow_mem_verticalStrip
@@ -527,7 +531,11 @@ theorem ModularGroup_T_zpow_mem_verticalStrip
     simp only [n, mul_neg, vadd_re, neg_mul]
   norm_cast at *
   rw [h]; rw [add_comm]
-  simp only [neg_mul, Int.cast_
+  simp only [neg_mul, Int.cast_neg, Int.cast_mul, Int.cast_natCast]
+  have hnn : (0 : Real) < (N : Real) := by norm_cast at *
+  have h2 : z.re + -(N * n) = z.re - n * N := by ring
+  rw [h2]; rw [abs_eq_self.2 (Int.sub_floor_div_mul_nonneg (z.re : Real) hnn)]
+  apply (Int.sub_floor_div_mul_lt (z.re : Real) hnn).le
 
 Depends on / 依赖: Int.cast_mul, Int.cast_natCast, Int.cast_neg, Int.floor, Int.sub_floor_div_mul_nonneg, abs_eq_self, add_comm, cast_mul, cast_natCast, cast_neg, modular_T_zpow_smul, mul_neg, neg_mul, sub_floor_div_mul_nonneg, vadd_re, z.re
 -/
@@ -885,7 +893,20 @@ lemma isOpenMap_norm
   obtain ⟨ε, hεpos, hεs⟩ := hs
   refine ⟨ε, hεpos, subset_trans (fun r hr => ?_) hs'⟩
   have hr' : 0 <= r := by
-    by
+    by_contra! hr'
+    rw [mem_ball_iff_norm]; rw [Real.norm_eq_abs]; rw [abs_lt] at hr
+    have : ‖(τ : Complex)‖ < ε := by linarith
+    have : 0 in Metric.ball (τ : Complex) ε := by rwa [mem_ball_iff_norm', sub_zero]
+    simpa [UpperHalfPlane.ne_zero] using hεs this
+  have : r / ‖(τ : Complex)‖ * (τ : Complex) in Metric.ball (τ : Complex) ε := by
+    rwa [mem_ball_iff_norm,
+      show r / ‖(τ : Complex)‖ * (τ : Complex) - τ = ↑(r / ‖(τ : Complex)‖ - 1) * (τ : Complex) by simp; ring,
+      norm_mul, norm_real, ← norm_norm (τ : Complex), ← norm_mul, sub_mul, norm_norm, one_mul,
+      div_mul_cancel₀ _ (by simpa using τ.ne_zero), ← mem_ball_iff_norm]
+  obtain ⟨ξ, hξs, hξτ⟩ := Set.mem_of_mem_of_subset this hεs
+  use ξ, hξs
+  simp_rw [hξτ, norm_mul, norm_div, norm_real, norm_norm]
+  rw [div_mul_cancel₀ _ (by simpa using τ.ne_zero)]; rw [Real.norm_of_nonneg hr']
 
 中文:
 引理 isOpenMap_norm
@@ -897,7 +918,20 @@ lemma isOpenMap_norm
   obtain ⟨ε, hεpos, hεs⟩ := hs
   refine ⟨ε, hεpos, subset_trans (fun r hr => ?_) hs'⟩
   have hr' : 0 <= r := by
-    by
+    by_contra! hr'
+    rw [mem_ball_iff_norm]; rw [Real.norm_eq_abs]; rw [abs_lt] at hr
+    have : ‖(τ : Complex)‖ < ε := by linarith
+    have : 0 in Metric.ball (τ : Complex) ε := by rwa [mem_ball_iff_norm', sub_zero]
+    simpa [UpperHalfPlane.ne_zero] using hεs this
+  have : r / ‖(τ : Complex)‖ * (τ : Complex) in Metric.ball (τ : Complex) ε := by
+    rwa [mem_ball_iff_norm,
+      show r / ‖(τ : Complex)‖ * (τ : Complex) - τ = ↑(r / ‖(τ : Complex)‖ - 1) * (τ : Complex) by simp; ring,
+      norm_mul, norm_real, ← norm_norm (τ : Complex), ← norm_mul, sub_mul, norm_norm, one_mul,
+      div_mul_cancel₀ _ (by simpa using τ.ne_zero), ← mem_ball_iff_norm]
+  obtain ⟨ξ, hξs, hξτ⟩ := Set.mem_of_mem_of_subset this hεs
+  use ξ, hξs
+  simp_rw [hξτ, norm_mul, norm_div, norm_real, norm_norm]
+  rw [div_mul_cancel₀ _ (by simpa using τ.ne_zero)]; rw [Real.norm_of_nonneg hr']
 
 Depends on / 依赖: Filter, Filter.mem_map_iff_exists_image.mp, Metric, Metric.ball, Metric.mem_nhds_iff, Real.norm_eq_abs, UpperHal, abs_lt, image_mem_nhds, isOpenEmbedding_coe, isOpenEmbedding_coe.image_mem_nhds, mem_ball_iff_norm, mem_map_iff_exists_image, mem_nhds_iff, norm_eq_abs, of_nhds_le, simp_rw, sub_zero, subset_trans
 -/

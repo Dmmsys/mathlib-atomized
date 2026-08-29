@@ -241,7 +241,7 @@ lemma exactAt_map_chainComplex_succ
     (ComplexShape.prev_eq' _ (by dsimp; lia)) (by simp)]; rw [ShortComplex.exact_iff_epi_kernel_lift]
   convert! epi_comp (ι.map (Λ.chainComplexXIso X n).hom) (Λ.π.app _)
   rw [← cancel_mono (kernel.ι _)]; rw [kernel.lift_ι]
-  simp [map_ch
+  simp [map_chainComplex_d]
 
 中文:
 引理 exactAt_map_chainComplex_succ
@@ -251,7 +251,7 @@ lemma exactAt_map_chainComplex_succ
     (ComplexShape.prev_eq' _ (by dsimp; lia)) (by simp)]; rw [ShortComplex.exact_iff_epi_kernel_lift]
   convert! epi_comp (ι.map (Λ.chainComplexXIso X n).hom) (Λ.π.app _)
   rw [← cancel_mono (kernel.ι _)]; rw [kernel.lift_ι]
-  simp [map_ch
+  simp [map_chainComplex_d]
 
 Depends on / 依赖: ComplexShape, ComplexShape.prev_eq, HomologicalComplex, HomologicalComplex.exactAt_iff, ShortComplex, ShortComplex.exact_iff_epi_kernel_lift, cancel_mono, chainComplexXIso, convert, epi_comp, exactAt_iff, exact_iff_epi_kernel_lift, kernel, kernel.lift_, map_chainComplex_d, prev_eq
 -/
@@ -279,7 +279,16 @@ definition chainComplexMap
       (Λ.chainComplexXOneIso Y).inv)
     (ι.map_injective (by
         dsimp
-   
+        simp only [Category.assoc, Functor.map_comp, map_chainComplex_d_1_0]
+        simp only [← ι.map_comp, ← ι.map_comp_assoc]
+        simp))
+    (fun n p =>
+      ⟨(Λ.chainComplexXIso X n).hom ≫ (Λ.F.map
+        (kernel.map _ _ (ι.map p.2.1) (ι.map p.1) (by
+          rw [← ι.map_comp]; rw [← ι.map_comp]; rw [p.2.2]))) ≫ (Λ.chainComplexXIso Y n).inv,
+            ι.map_injective (by simp [map_chainComplex_d])⟩)
+
+@[simp]
 
 中文:
 定义 chainComplexMap
@@ -291,7 +300,16 @@ definition chainComplexMap
       (Λ.chainComplexXOneIso Y).inv)
     (ι.map_injective (by
         dsimp
-   
+        simp only [Category.assoc, Functor.map_comp, map_chainComplex_d_1_0]
+        simp only [← ι.map_comp, ← ι.map_comp_assoc]
+        simp))
+    (fun n p =>
+      ⟨(Λ.chainComplexXIso X n).hom ≫ (Λ.F.map
+        (kernel.map _ _ (ι.map p.2.1) (ι.map p.1) (by
+          rw [← ι.map_comp]; rw [← ι.map_comp]; rw [p.2.2]))) ≫ (Λ.chainComplexXIso Y n).inv,
+            ι.map_injective (by simp [map_chainComplex_d])⟩)
+
+@[simp]
 
 Depends on / 依赖: Category, Category.assoc, ChainComplex, ChainComplex.mkHom, F.map, Functor, Functor.map_comp, chainComplexXIso, chainComplexXOneIso, chainComplexXZeroIso, kernel, kernel.map, map_chainComplex_d_1_0, map_com, map_comp, map_comp_assoc, map_injective, naturality
 -/
@@ -460,7 +478,7 @@ lemma chainComplexMap_comp
       simp only [chainComplexMap_f_succ_succ, assoc, Iso.cancel_iso_hom_left,
         Iso.inv_hom_id_assoc, ← Λ.F.map_comp_assoc, Iso.cancel_iso_inv_right_assoc]
       congr 1
-      cat_di
+      cat_disch
 
 中文:
 引理 chainComplexMap_comp
@@ -475,7 +493,7 @@ lemma chainComplexMap_comp
       simp only [chainComplexMap_f_succ_succ, assoc, Iso.cancel_iso_hom_left,
         Iso.inv_hom_id_assoc, ← Λ.F.map_comp_assoc, Iso.cancel_iso_inv_right_assoc]
       congr 1
-      cat_di
+      cat_disch
 
 Depends on / 依赖: F.map_comp_assoc, Iso.cancel_iso_hom_left, Iso.cancel_iso_inv_right_assoc, Iso.inv_hom_id_assoc, all_goals, cancel_iso_hom_left, cancel_iso_inv_right_assoc, cat_disch, chainComplexMap_f_succ_succ, inv_hom_id_assoc, map_comp_assoc
 -/

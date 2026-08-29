@@ -40,7 +40,10 @@ lemma TendstoUniformlyOn.eventually_forall_lt
   simp only [tendstoUniformlyOn_iff_tendsto, uniformity_eq_comap_neg_add_nhds_zero,
     tendsto_iff_eventually, eventually_comap, Prod.forall] at *
   conv at hf => enter [2]; rw [eventually_iff_exists_mem]
-  have hf2 := hf (fun x => -x.1 + x.2 < -u + v) ⟨_, (isOpen_gt' (-u + v)).mem_nhds (by simp
+  have hf2 := hf (fun x => -x.1 + x.2 < -u + v) ⟨_, (isOpen_gt' (-u + v)).mem_nhds (by simp [huv]),
+    fun y hy a b hab => (hab.symm ▸ hy :)⟩
+  filter_upwards [eventually_prod_principal_iff.mp hf2] with i hi x hx
+  simpa using add_lt_add_of_le_of_lt (hg x hx) (hi x hx)
 
 中文:
 引理 TendstoUniformlyOn.eventually_对任意_lt
@@ -49,7 +52,10 @@ lemma TendstoUniformlyOn.eventually_forall_lt
   simp only [tendstoUniformlyOn_iff_tendsto, uniformity_eq_comap_neg_add_nhds_zero,
     tendsto_iff_eventually, eventually_comap, Prod.forall] at *
   conv at hf => enter [2]; rw [eventually_iff_exists_mem]
-  have hf2 := hf (fun x => -x.1 + x.2 < -u + v) ⟨_, (isOpen_gt' (-u + v)).mem_nhds (by simp
+  have hf2 := hf (fun x => -x.1 + x.2 < -u + v) ⟨_, (isOpen_gt' (-u + v)).mem_nhds (by simp [huv]),
+    fun y hy a b hab => (hab.symm ▸ hy :)⟩
+  filter_upwards [eventually_prod_principal_iff.mp hf2] with i hi x hx
+  simpa using add_lt_add_of_le_of_lt (hg x hx) (hi x hx)
 
 Depends on / 依赖: Prod.forall, add_lt_add_of_le_of_lt, eventually_comap, eventually_iff_exists_mem, eventually_prod_principal_iff, eventually_prod_principal_iff.mp, filter_upwards, hab.symm, isOpen_gt, mem_nhds, tendstoUniformlyOn_iff_tendsto, tendsto_iff_eventually, uniformity_eq_comap_neg_add_nhds_zero
 -/

@@ -136,7 +136,8 @@ theorem Perm.inter_append
     by_cases h₂ : x in t₂
     · simp only [*, inter_cons_of_notMem, false_or, mem_append, inter_cons_of_mem,
         not_false_iff]
-      exact perm_cons_append_cons _ 
+      exact perm_cons_append_cons _ l_ih
+    · simp [*]
 
 中文:
 定理 置换.inter_append
@@ -151,7 +152,8 @@ theorem Perm.inter_append
     by_cases h₂ : x in t₂
     · simp only [*, inter_cons_of_notMem, false_or, mem_append, inter_cons_of_mem,
         not_false_iff]
-      exact perm_cons_append_cons _ 
+      exact perm_cons_append_cons _ l_ih
+    · simp [*]
 
 Depends on / 依赖: false_or, inter_cons_of_mem, inter_cons_of_notMem, l_ih, mem_append, not_false_iff, perm_cons_append_cons
 -/
@@ -208,7 +210,10 @@ theorem Perm.drop_inter
       rw [take_reverse]; rw [h₀]; rw [reverse_reverse]
     rw [h₁]
     apply (reverse_perm _).trans
-    rw [inter_
+    rw [inter_reverse]
+    apply Perm.take_inter _ _ h'
+    apply (reverse_perm _).trans; assumption
+  · grind [drop_eq_nil_of_le]
 
 中文:
 定理 置换.drop_inter
@@ -221,7 +226,10 @@ theorem Perm.drop_inter
       rw [take_reverse]; rw [h₀]; rw [reverse_reverse]
     rw [h₁]
     apply (reverse_perm _).trans
-    rw [inter_
+    rw [inter_reverse]
+    apply Perm.take_inter _ _ h'
+    apply (reverse_perm _).trans; assumption
+  · grind [drop_eq_nil_of_le]
 
 Depends on / 依赖: Nat.sub_sub_self, Perm.take_inter, drop_eq_nil_of_le, inter_reverse, length, reverse, reverse_perm, reverse_reverse, sub_sub_self, take_inter, take_reverse, xs.drop, xs.length, xs.reverse.take
 -/

@@ -33,7 +33,14 @@ lemma IsCompact.measure_eq_biInf_integral_hasCompactSupport
     · exact Eventually.of_forall f_nonneg
     · exact fun x hx => by simp [fk hx]
   · apply le_of_forall_gt (fun r hr => ?_)
-    simp
+    simp only [iInf_lt_iff, exists_prop]
+    obtain ⟨U, kU, U_open, mu_U⟩ : exists U, k subseteq U ∧ IsOpen U ∧ μ U < r :=
+      hk.exists_isOpen_lt_of_lt r hr
+    obtain ⟨⟨f, f_cont⟩, fk, fU, f_comp, f_range⟩ : exists (f : C(X, Real)), EqOn f 1 k ∧ EqOn f 0 Uᶜ
+        ∧ HasCompactSupport f ∧ forall (x : X), f x in Icc 0 1 := exists_continuous_one_zero_of_isCompact
+      hk U_open.isClosed_compl (disjoint_compl_right_iff_subset.mpr kU)
+    refine ⟨f, f_cont, f_comp, fk, fun x => (f_range x).1, ?_⟩
+    exact (integral_le_measure (fun x _hx => (f_range x).2) (fun x hx => (fU hx).le)).trans_lt mu_U
 
 中文:
 引理 是紧集.measure_eq_biInf_integral_hasCompactSupport
@@ -45,7 +52,14 @@ lemma IsCompact.measure_eq_biInf_integral_hasCompactSupport
     · exact Eventually.of_forall f_nonneg
     · exact fun x hx => by simp [fk hx]
   · apply le_of_forall_gt (fun r hr => ?_)
-    simp
+    simp only [iInf_lt_iff, exists_prop]
+    obtain ⟨U, kU, U_open, mu_U⟩ : exists U, k subseteq U ∧ IsOpen U ∧ μ U < r :=
+      hk.exists_isOpen_lt_of_lt r hr
+    obtain ⟨⟨f, f_cont⟩, fk, fU, f_comp, f_range⟩ : exists (f : C(X, Real)), EqOn f 1 k ∧ EqOn f 0 Uᶜ
+        ∧ HasCompactSupport f ∧ forall (x : X), f x in Icc 0 1 := exists_continuous_one_zero_of_isCompact
+      hk U_open.isClosed_compl (disjoint_compl_right_iff_subset.mpr kU)
+    refine ⟨f, f_cont, f_comp, fk, fun x => (f_range x).1, ?_⟩
+    exact (integral_le_measure (fun x _hx => (f_range x).2) (fun x hx => (fU hx).le)).trans_lt mu_U
 
 Depends on / 依赖: Eventually, Eventually.of_forall, IsOpen, U_open, exists_isOpen_lt_of_lt, exists_prop, f_comp, f_cont, f_cont.integrable_of_hasCompactSupport, f_nonneg, f_range, hk.exists_isOpen_lt_of_lt, iInf_lt_iff, integrable_of_hasCompactSupport, le_antisymm, le_iInf_iff, le_of_forall_gt, measure_le_integral, mu_U, of_forall
 -/
@@ -83,7 +97,21 @@ lemma IsOpen.measure_eq_biSup_integral_continuous
     simp only [lt_iSup_iff, exists_prop]
     obtain ⟨K, KU, K_comp, hK⟩ : exists K subseteq U, IsCompact K ∧ r < μ K :=
       MeasurableSet.exists_lt_isCompact_of_ne_top hU.measurableSet (by simp) hr
-    obtain ⟨⟨f, f_cont⟩, fU, fK, f
+    obtain ⟨⟨f, f_cont⟩, fU, fK, f_range⟩ : exists (f : C(X, Real)), EqOn f 0 Uᶜ ∧ EqOn f 1 K
+        ∧ forall (x : X), f x in Icc 0 1 := exists_continuous_zero_one_of_isClosed
+      hU.isClosed_compl K_comp.isClosed (disjoint_compl_left_iff_subset.mpr KU)
+    refine ⟨f, f_cont, fU, fun x => (f_range x).1, fun x => (f_range x).2, ?_⟩
+    apply hK.trans_le
+    apply Integrable.measure_le_integral
+    · apply Integrable.of_mem_Icc 0 1 f_cont.aemeasurable
+      filter_upwards [] with x using f_range x
+    · filter_upwards [] with x using (f_range x).1
+    · intro x hx
+      apply Eq.ge
+      exact fK hx
+  · simp only [iSup_le_iff]
+    intro f f_cont fU f_nonneg f_le
+    exact integral_le_measure (fun x hx => f_le x) (fun x hx => le_of_eq (fU hx))
 
 中文:
 引理 是开集.measure_eq_biSup_integral_continuous
@@ -93,7 +121,21 @@ lemma IsOpen.measure_eq_biSup_integral_continuous
     simp only [lt_iSup_iff, exists_prop]
     obtain ⟨K, KU, K_comp, hK⟩ : exists K subseteq U, IsCompact K ∧ r < μ K :=
       MeasurableSet.exists_lt_isCompact_of_ne_top hU.measurableSet (by simp) hr
-    obtain ⟨⟨f, f_cont⟩, fU, fK, f
+    obtain ⟨⟨f, f_cont⟩, fU, fK, f_range⟩ : exists (f : C(X, Real)), EqOn f 0 Uᶜ ∧ EqOn f 1 K
+        ∧ forall (x : X), f x in Icc 0 1 := exists_continuous_zero_one_of_isClosed
+      hU.isClosed_compl K_comp.isClosed (disjoint_compl_left_iff_subset.mpr KU)
+    refine ⟨f, f_cont, fU, fun x => (f_range x).1, fun x => (f_range x).2, ?_⟩
+    apply hK.trans_le
+    apply Integrable.measure_le_integral
+    · apply Integrable.of_mem_Icc 0 1 f_cont.aemeasurable
+      filter_upwards [] with x using f_range x
+    · filter_upwards [] with x using (f_range x).1
+    · intro x hx
+      apply Eq.ge
+      exact fK hx
+  · simp only [iSup_le_iff]
+    intro f f_cont fU f_nonneg f_le
+    exact integral_le_measure (fun x hx => f_le x) (fun x hx => le_of_eq (fU hx))
 
 Depends on / 依赖: IsCompact, K_comp, K_comp.isClosed, MeasurableSet, MeasurableSet.exists_lt_isCompact_of_ne_top, disjoint_compl_left_iff_subset, disjoint_compl_left_iff_subset.mpr, exists_continuous_zero_one_of_isClosed, exists_lt_isCompact_of_ne_top, exists_prop, f_cont, f_range, hU.isClosed_compl, hU.measurableSet, isClosed, isClosed_compl, le_antisymm, le_of_forall_lt, lt_iSup_iff, measurableSet
 -/

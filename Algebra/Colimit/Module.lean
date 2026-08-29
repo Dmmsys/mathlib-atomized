@@ -271,7 +271,8 @@ theorem exists_of
         fun p q ⟨i, x, ihx⟩ ⟨j, y, ihy⟩ =>
         let ⟨k, hik, hjk⟩ := exists_ge_ge i j
         ⟨k, f i k hik x + f j k hjk y, by
-      
+          rw [map_add]; rw [of_f]; rw [of_f]; rw [ihx]; rw [ihy]
+          rfl ⟩
 
 中文:
 定理 存在_of
@@ -282,7 +283,8 @@ theorem exists_of
         fun p q ⟨i, x, ihx⟩ ⟨j, y, ihy⟩ =>
         let ⟨k, hik, hjk⟩ := exists_ge_ge i j
         ⟨k, f i k hik x + f j k hjk y, by
-      
+          rw [map_add]; rw [of_f]; rw [of_f]; rw [ihx]; rw [ihy]
+          rfl ⟩
 
 Depends on / 依赖: DirectSum, DirectSum.induction_on, Nonempty, Nonempty.elim, Quotient, Quotient.inductionOn, exists_ge_ge, inductionOn, induction_on, infer_instance, map_add, map_zero, of_f
 -/
@@ -1247,7 +1249,9 @@ definition congr
     (map (fun i => (e i).symm) fun i j h => DFunLike.ext _ _ fun x => by
       have eq1 := DFunLike.congr_fun (he i j h) ((e i).symm x)
       simp only [AddMonoidHom.coe_comp, AddEquiv.coe_toAddMonoidHom, Function.comp_apply,
-        AddMonoidHom.coe_coe, AddEq
+        AddMonoidHom.coe_coe, AddEquiv.apply_symm_apply] at eq1 ⊢
+      simp [← eq1])
+    (by simp [map_comp]) (by simp [map_comp])
 
 中文:
 定义 congr
@@ -1256,7 +1260,9 @@ definition congr
     (map (fun i => (e i).symm) fun i j h => DFunLike.ext _ _ fun x => by
       have eq1 := DFunLike.congr_fun (he i j h) ((e i).symm x)
       simp only [AddMonoidHom.coe_comp, AddEquiv.coe_toAddMonoidHom, Function.comp_apply,
-        AddMonoidHom.coe_coe, AddEq
+        AddMonoidHom.coe_coe, AddEquiv.apply_symm_apply] at eq1 ⊢
+      simp [← eq1])
+    (by simp [map_comp]) (by simp [map_comp])
 
 Depends on / 依赖: AddEquiv, AddEquiv.apply_symm_apply, AddEquiv.coe_toAddMonoidHom, AddMonoidHom, AddMonoidHom.coe_coe, AddMonoidHom.coe_comp, AddMonoidHom.toAddEquiv, DFunLike, DFunLike.congr_fun, DFunLike.ext, Function, Function.comp_apply, apply_symm_apply, coe_coe, coe_comp, coe_toAddMonoidHom, comp_apply, congr_fun, map_comp, toAddEquiv
 -/

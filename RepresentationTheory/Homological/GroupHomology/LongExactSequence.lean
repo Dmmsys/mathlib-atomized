@@ -51,7 +51,11 @@ lemma map_chainsFunctor_shortExact
     exact := by
       have : LinearMap.range X.f.hom.toLinearMap = LinearMap.ker X.g.hom.toLinearMap :=
         (hX.exact.map (forget₂ (Rep k G) (ModuleCat k))).moduleCat_range_eq_ker
-      simp [moduleCat_exact_
+      simp [moduleCat_exact_iff_range_eq_ker, ker_mapRange,
+        range_mapRange_linearMap X.f.hom.toLinearMap (LinearMap.ker_eq_bot.2 <|
+        (Rep.mono_iff_injective X.f).1 hX.mono_f), this]
+    mono_f := chainsMap_id_f_map_mono X.f i
+    epi_g := letI := hX.epi_g; chainsMap_id_f_map_epi X.g i }
 
 中文:
 引理 map_chainsFunctor_shortExact
@@ -60,7 +64,11 @@ lemma map_chainsFunctor_shortExact
     exact := by
       have : LinearMap.range X.f.hom.toLinearMap = LinearMap.ker X.g.hom.toLinearMap :=
         (hX.exact.map (forget₂ (Rep k G) (ModuleCat k))).moduleCat_range_eq_ker
-      simp [moduleCat_exact_
+      simp [moduleCat_exact_iff_range_eq_ker, ker_mapRange,
+        range_mapRange_linearMap X.f.hom.toLinearMap (LinearMap.ker_eq_bot.2 <|
+        (Rep.mono_iff_injective X.f).1 hX.mono_f), this]
+    mono_f := chainsMap_id_f_map_mono X.f i
+    epi_g := letI := hX.epi_g; chainsMap_id_f_map_epi X.g i }
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.shortExact_of_degreewise_shortExact, LinearMap, LinearMap.ker, LinearMap.ker_eq_bot, LinearMap.range, ModuleCat, Rep.mono_iff_injective, X.f.hom.toLinearMap, X.g.hom.toLinearMap, chains, chainsMap_id_f_map_mono, epi_g, hX.epi_g, hX.exact.map, hX.mono_f, ker_eq_bot, ker_mapRange, moduleCat_exact_iff_range_eq_ker, moduleCat_range_eq_ker
 -/
@@ -337,7 +345,10 @@ theorem δ₀_apply
     ← cyclesMk₀_eq X.X₁, ← cyclesMk₁_eq X.X₃]
   using! δ_apply hX (i := 1) (j := 0) rfl ((chainsIso₁ X.X₃).inv z.1) (by
     rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₀_comp_inv]; simp)
-    
+    ((chainsIso₁ X.X₂).inv y) (Finsupp.ext fun _ => by simp [chainsIso₁, ← hy])
+    ((chainsIso₀ X.X₁).inv x) (Finsupp.ext fun _ => by
+      conv_rhs => rw [← LinearMap.comp_apply, ← ModuleCat.hom_comp, eq_d₁₀_comp_inv]
+      simp [chainsIso₀, ← hx])
 
 中文:
 定理 δ₀_apply
@@ -346,7 +357,10 @@ theorem δ₀_apply
     ← cyclesMk₀_eq X.X₁, ← cyclesMk₁_eq X.X₃]
   using! δ_apply hX (i := 1) (j := 0) rfl ((chainsIso₁ X.X₃).inv z.1) (by
     rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₁₀_comp_inv]; simp)
-    
+    ((chainsIso₁ X.X₂).inv y) (Finsupp.ext fun _ => by simp [chainsIso₁, ← hy])
+    ((chainsIso₀ X.X₁).inv x) (Finsupp.ext fun _ => by
+      conv_rhs => rw [← LinearMap.comp_apply, ← ModuleCat.hom_comp, eq_d₁₀_comp_inv]
+      simp [chainsIso₀, ← hx])
 
 Depends on / 依赖: Finsupp, Finsupp.ext, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.comp_apply, ModuleCat, ModuleCat.hom_comp, coe_comp, comp_apply, conv_rhs, hom_comp
 -/
@@ -403,7 +417,10 @@ theorem δ₁_apply
     ← cyclesMk₂_eq X.X₃, ← cyclesMk₁_eq X.X₁]
   using! δ_apply hX (i := 2) (j := 1) rfl ((chainsIso₂ X.X₃).inv z.1) (by
     rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₂₁_comp_inv]; simp)
-    
+    ((chainsIso₂ X.X₂).inv y) (Finsupp.ext fun _ => by simp [chainsIso₂, ← hy])
+    ((chainsIso₁ X.X₁).inv x) (Finsupp.ext fun _ => by
+    conv_rhs => rw [← LinearMap.comp_apply, ← ModuleCat.hom_comp, eq_d₂₁_comp_inv]
+    simp [← hx, chainsIso₁])
 
 中文:
 定理 δ₁_apply
@@ -412,7 +429,10 @@ theorem δ₁_apply
     ← cyclesMk₂_eq X.X₃, ← cyclesMk₁_eq X.X₁]
   using! δ_apply hX (i := 2) (j := 1) rfl ((chainsIso₂ X.X₃).inv z.1) (by
     rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [eq_d₂₁_comp_inv]; simp)
-    
+    ((chainsIso₂ X.X₂).inv y) (Finsupp.ext fun _ => by simp [chainsIso₂, ← hy])
+    ((chainsIso₁ X.X₁).inv x) (Finsupp.ext fun _ => by
+    conv_rhs => rw [← LinearMap.comp_apply, ← ModuleCat.hom_comp, eq_d₂₁_comp_inv]
+    simp [← hx, chainsIso₁])
 
 Depends on / 依赖: Finsupp, Finsupp.ext, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.comp_apply, ModuleCat, ModuleCat.hom_comp, coe_comp, comp_apply, conv_rhs, hom_comp
 -/

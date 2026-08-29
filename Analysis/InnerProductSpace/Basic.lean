@@ -1608,7 +1608,9 @@ theorem linearIndependent_of_ne_zero_of_inner_eq_zero
     convert! Finset.sum_eq_single (M := 𝕜) i ?_ ?_
     · rw [inner_smul_right]
     · intro j _hj hji
-      rw [inner_smul_right]; rw [ho hji.symm]; rw [mul
+      rw [inner_smul_right]; rw [ho hji.symm]; rw [mul_zero]
+    · exact fun h => False.elim (h hi)
+  simpa [hg, hz] using h'
 
 中文:
 定理 linearIndependent_of_ne_zero_of_inner_eq_zero
@@ -1622,7 +1624,9 @@ theorem linearIndependent_of_ne_zero_of_inner_eq_zero
     convert! Finset.sum_eq_single (M := 𝕜) i ?_ ?_
     · rw [inner_smul_right]
     · intro j _hj hji
-      rw [inner_smul_right]; rw [ho hji.symm]; rw [mul
+      rw [inner_smul_right]; rw [ho hji.symm]; rw [mul_zero]
+    · exact fun h => False.elim (h hi)
+  simpa [hg, hz] using h'
 
 Depends on / 依赖: False.elim, Finset, Finset.sum_eq_single, convert, hji.symm, inner_smul_right, inner_sum, linearIndependent_iff, mul_zero, sum_eq_single
 -/
@@ -2738,7 +2742,9 @@ theorem inner_sum_smul_sum_smul_of_sum_eq_zero
   simp_rw [sum_inner, inner_sum, real_inner_smul_left, real_inner_smul_right,
     real_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two, ← div_sub_div_same,
     add_div, mul_sub_left_distrib, left_distrib, Finset.sum_sub_distrib,
-    Finset.sum_add_distrib, ← Finset.mul_sum,
+    Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.sum_mul, h₁, h₂, zero_mul,
+    mul_zero, Finset.sum_const_zero, zero_add, zero_sub, Finset.mul_sum, neg_div,
+    Finset.sum_div, mul_div_assoc, mul_assoc]
 
 中文:
 定理 inner_sum_smul_sum_smul_of_sum_eq_zero
@@ -2747,7 +2753,9 @@ theorem inner_sum_smul_sum_smul_of_sum_eq_zero
   simp_rw [sum_inner, inner_sum, real_inner_smul_left, real_inner_smul_right,
     real_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two, ← div_sub_div_same,
     add_div, mul_sub_left_distrib, left_distrib, Finset.sum_sub_distrib,
-    Finset.sum_add_distrib, ← Finset.mul_sum,
+    Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.sum_mul, h₁, h₂, zero_mul,
+    mul_zero, Finset.sum_const_zero, zero_add, zero_sub, Finset.mul_sum, neg_div,
+    Finset.sum_div, mul_div_assoc, mul_assoc]
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_add_distrib, Finset.sum_const_zero, Finset.sum_div, Finset.sum_mul, Finset.sum_sub_distrib, add_div, div_sub_div_same, inner_sum, left_distrib, mul_assoc, mul_div_assoc, mul_sub_left_distrib, mul_sum, mul_zero, neg_div, real_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two, real_inner_smul_left, real_inner_smul_right
 -/
@@ -2787,7 +2795,11 @@ theorem dist_div_norm_sq_smul
       rw [dist_eq_norm]; rw [sqrt_sq (norm_nonneg _)]
     _ = √((R ^ 2 / (‖x‖ * ‖y‖)) ^ 2 * ‖x - y‖ ^ 2) :=
 congr_arg (√·) by
-        simp [field, sq, norm_sub_mul_self_real, norm_smu
+        simp [field, sq, norm_sub_mul_self_real, norm_smul, real_inner_smul_left, inner_smul_right,
+          Real.norm_of_nonneg (mul_self_nonneg _), -mul_eq_mul_left_iff]
+        ring
+    _ = R ^ 2 / (‖x‖ * ‖y‖) * dist x y := by
+      rw [sqrt_mul]; rw [sqrt_sq]; rw [sqrt_sq]; rw [dist_eq_norm] <;> positivity
 
 中文:
 定理 dist_div_norm_sq_smul
@@ -2798,7 +2810,11 @@ congr_arg (√·) by
       rw [dist_eq_norm]; rw [sqrt_sq (norm_nonneg _)]
     _ = √((R ^ 2 / (‖x‖ * ‖y‖)) ^ 2 * ‖x - y‖ ^ 2) :=
 congr_arg (√·) by
-        simp [field, sq, norm_sub_mul_self_real, norm_smu
+        simp [field, sq, norm_sub_mul_self_real, norm_smul, real_inner_smul_left, inner_smul_right,
+          Real.norm_of_nonneg (mul_self_nonneg _), -mul_eq_mul_left_iff]
+        ring
+    _ = R ^ 2 / (‖x‖ * ‖y‖) * dist x y := by
+      rw [sqrt_mul]; rw [sqrt_sq]; rw [sqrt_sq]; rw [dist_eq_norm] <;> positivity
 
 Depends on / 依赖: Real.norm_of_nonneg, congr_arg, dist_eq_norm, inner_smul_right, mul_eq_mul_left_iff, mul_self_nonneg, norm_nonneg, norm_of_nonneg, norm_smul, norm_sub_mul_self_real, real_inner_smul_left, sqrt_mul, sqrt_sq
 -/
@@ -2826,7 +2842,7 @@ theorem norm_inner_div_norm_mul_norm_eq_one_of_ne_zero_of_ne_zero_mul
   have hx' : ‖x‖ != 0 := by simp [hx]
   have hr' : ‖r‖ != 0 := by simp [hr]
   rw [inner_smul_right]; rw [norm_mul]; rw [← inner_self_re_eq_norm]; rw [inner_self_eq_norm_mul_norm]; rw [norm_smul]
-  rw [← mul_assoc]; rw [← div_div]; rw [mul_div_cancel_right₀ _ hx']; rw [← div_div]; rw [mul_comm]; r
+  rw [← mul_assoc]; rw [← div_div]; rw [mul_div_cancel_right₀ _ hx']; rw [← div_div]; rw [mul_comm]; rw [mul_div_cancel_right₀ _ hr']; rw [div_self hx']
 
 中文:
 定理 norm_inner_div_norm_mul_norm_eq_one_of_ne_zero_of_ne_zero_mul
@@ -2835,7 +2851,7 @@ theorem norm_inner_div_norm_mul_norm_eq_one_of_ne_zero_of_ne_zero_mul
   have hx' : ‖x‖ != 0 := by simp [hx]
   have hr' : ‖r‖ != 0 := by simp [hr]
   rw [inner_smul_right]; rw [norm_mul]; rw [← inner_self_re_eq_norm]; rw [inner_self_eq_norm_mul_norm]; rw [norm_smul]
-  rw [← mul_assoc]; rw [← div_div]; rw [mul_div_cancel_right₀ _ hx']; rw [← div_div]; rw [mul_comm]; r
+  rw [← mul_assoc]; rw [← div_div]; rw [mul_div_cancel_right₀ _ hx']; rw [← div_div]; rw [mul_comm]; rw [mul_div_cancel_right₀ _ hr']; rw [div_self hx']
 
 Depends on / 依赖: div_div, div_self, inner_self_eq_norm_mul_norm, inner_self_re_eq_norm, inner_smul_right, mul_assoc, mul_comm, norm_mul, norm_smul
 -/
@@ -2926,7 +2942,19 @@ theorem norm_inner_eq_norm_tfae
     have : ‖x‖ ^ 2 != 0 := pow_ne_zero _ (norm_ne_zero_iff.2 hx₀)
     rw [← sq_eq_sq₀]; rw [mul_pow]; rw [← mul_right_inj' this]; rw [eq_comm]; rw [← sub_eq_zero]; rw [← mul_sub] at h <;>
       try positivity
-    sim
+    simp only [@norm_sq_eq_re_inner 𝕜] at h
+    let : InnerProductSpace.Core 𝕜 E := InnerProductSpace.toCore
+    erw [← InnerProductSpace.Core.cauchy_schwarz_aux (𝕜 := 𝕜) (F := E)] at h
+    rw [InnerProductSpace.Core.normSq_eq_zero]; rw [sub_eq_zero] at h
+    rw [div_eq_inv_mul]; rw [mul_smul]; rw [h]; rw [inv_smul_smul₀]
+    rwa [inner_self_ne_zero]
+  tfae_have 2 -> 3 := fun h => h.imp_right fun h' => ⟨_, h'⟩
+  tfae_have 3 -> 1 := by
+    rintro (rfl | ⟨r, rfl⟩) <;>
+    simp [inner_smul_right, norm_smul, inner_self_eq_norm_sq_to_K,
+      sq, mul_left_comm]
+  tfae_have 3 ↔ 4 := by simp only [Submodule.mem_span_singleton, eq_comm]
+  tfae_finish
 
 中文:
 定理 norm_inner_eq_norm_tfae
@@ -2937,7 +2965,19 @@ theorem norm_inner_eq_norm_tfae
     have : ‖x‖ ^ 2 != 0 := pow_ne_zero _ (norm_ne_zero_iff.2 hx₀)
     rw [← sq_eq_sq₀]; rw [mul_pow]; rw [← mul_right_inj' this]; rw [eq_comm]; rw [← sub_eq_zero]; rw [← mul_sub] at h <;>
       try positivity
-    sim
+    simp only [@norm_sq_eq_re_inner 𝕜] at h
+    let : InnerProductSpace.Core 𝕜 E := InnerProductSpace.toCore
+    erw [← InnerProductSpace.Core.cauchy_schwarz_aux (𝕜 := 𝕜) (F := E)] at h
+    rw [InnerProductSpace.Core.normSq_eq_zero]; rw [sub_eq_zero] at h
+    rw [div_eq_inv_mul]; rw [mul_smul]; rw [h]; rw [inv_smul_smul₀]
+    rwa [inner_self_ne_zero]
+  tfae_have 2 -> 3 := fun h => h.imp_right fun h' => ⟨_, h'⟩
+  tfae_have 3 -> 1 := by
+    rintro (rfl | ⟨r, rfl⟩) <;>
+    simp [inner_smul_right, norm_smul, inner_self_eq_norm_sq_to_K,
+      sq, mul_left_comm]
+  tfae_have 3 ↔ 4 := by simp only [Submodule.mem_span_singleton, eq_comm]
+  tfae_finish
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.Core, InnerProductSpace.Core.cauchy_schwarz_aux, InnerProductSpace.Core.normSq_eq_zero, InnerProductSpace.toCore, cauchy_schwarz_aux, eq_comm, mul_pow, mul_right_inj, mul_sub, normSq_eq_zero, norm_ne_zero_iff, norm_sq_eq_re_inner, or_iff_not_imp_left, pow_ne_zero, sub_e, sub_eq_zero, tfae_have, toCore
 -/
@@ -2977,7 +3017,7 @@ theorem norm_inner_eq_norm_iff
     _ ↔ exists r : 𝕜, y = r • x := or_iff_right hx₀
     _ ↔ exists r : 𝕜, r != 0 ∧ y = r • x :=
 ⟨fun ⟨r, h⟩ => ⟨r, fun hr₀ => hy₀ h.symm ▸ smul_eq_zero.2 Or.inl hr₀, h⟩,
-        fun ⟨r, _
+        fun ⟨r, _hr₀, h⟩ => ⟨r, h⟩⟩
 
 中文:
 定理 norm_inner_eq_norm_iff
@@ -2988,7 +3028,7 @@ theorem norm_inner_eq_norm_iff
     _ ↔ exists r : 𝕜, y = r • x := or_iff_right hx₀
     _ ↔ exists r : 𝕜, r != 0 ∧ y = r • x :=
 ⟨fun ⟨r, h⟩ => ⟨r, fun hr₀ => hy₀ h.symm ▸ smul_eq_zero.2 Or.inl hr₀, h⟩,
-        fun ⟨r, _
+        fun ⟨r, _hr₀, h⟩ => ⟨r, h⟩⟩
 
 Depends on / 依赖: Or.inl, h.symm, norm_inner_eq_norm_tfae, or_iff_right, smul_eq_zero
 -/
@@ -3016,7 +3056,8 @@ theorem norm_inner_div_norm_mul_norm_eq_one_iff
 refine ⟨hx₀, (norm_inner_eq_norm_iff hx₀ hy₀).1 eq_of_div_eq_one ?_⟩
     simpa using h
   · rintro ⟨hx, ⟨r, ⟨hr, rfl⟩⟩⟩
-    simp only [norm_div, norm_mul, norm_ofReal
+    simp only [norm_div, norm_mul, norm_ofReal, abs_norm]
+    exact norm_inner_div_norm_mul_norm_eq_one_of_ne_zero_of_ne_zero_mul hx hr
 
 中文:
 定理 norm_inner_div_norm_mul_norm_eq_one_iff
@@ -3029,7 +3070,8 @@ refine ⟨hx₀, (norm_inner_eq_norm_iff hx₀ hy₀).1 eq_of_div_eq_one ?_⟩
 refine ⟨hx₀, (norm_inner_eq_norm_iff hx₀ hy₀).1 eq_of_div_eq_one ?_⟩
     simpa using h
   · rintro ⟨hx, ⟨r, ⟨hr, rfl⟩⟩⟩
-    simp only [norm_div, norm_mul, norm_ofReal
+    simp only [norm_div, norm_mul, norm_ofReal, abs_norm]
+    exact norm_inner_div_norm_mul_norm_eq_one_of_ne_zero_of_ne_zero_mul hx hr
 
 Depends on / 依赖: abs_norm, eq_of_div_eq_one, norm_div, norm_inner_div_norm_mul_norm_eq_one_of_ne_zero_of_ne_zero_mul, norm_inner_eq_norm_iff, norm_mul, norm_ofReal
 -/
@@ -3077,7 +3119,9 @@ theorem inner_eq_norm_mul_iff_div
   · have : x = 0 ∨ y = (⟪x, y⟫ / ⟪x, x⟫ : 𝕜) • x :=
       ((norm_inner_eq_norm_tfae 𝕜 x y).out 0 1).1 (by simp [h])
     rw [this.resolve_left h₀]; rw [h]
-    simp [norm_smul, mul_div_can
+    simp [norm_smul, mul_div_cancel_right₀ _ h₀']
+  · conv_lhs => rw [← h, inner_smul_right, inner_self_eq_norm_sq_to_K]
+    field
 
 中文:
 定理 inner_eq_norm_mul_iff_div
@@ -3089,7 +3133,9 @@ theorem inner_eq_norm_mul_iff_div
   · have : x = 0 ∨ y = (⟪x, y⟫ / ⟪x, x⟫ : 𝕜) • x :=
       ((norm_inner_eq_norm_tfae 𝕜 x y).out 0 1).1 (by simp [h])
     rw [this.resolve_left h₀]; rw [h]
-    simp [norm_smul, mul_div_can
+    simp [norm_smul, mul_div_cancel_right₀ _ h₀']
+  · conv_lhs => rw [← h, inner_smul_right, inner_self_eq_norm_sq_to_K]
+    field
 
 Depends on / 依赖: conv_lhs, inner_self_eq_norm_sq_to_K, inner_smul_right, norm_inner_eq_norm_tfae, norm_ne_zero_iff, norm_smul, ofReal_eq_zero, resolve_left, this.resolve_left
 -/
@@ -3168,7 +3214,8 @@ theorem real_inner_div_norm_mul_norm_eq_one_iff
     have hy₀ : y != 0 := fun h₀ => by simp [h₀] at h
     refine ⟨hx₀, ‖y‖ / ‖x‖, div_pos (norm_pos_iff.2 hy₀) (norm_pos_iff.2 hx₀), ?_⟩
     exact ((inner_eq_norm_mul_iff_div hx₀).1 (eq_of_div_eq_one h)).symm
-  · rintro
+  · rintro ⟨hx, ⟨r, ⟨hr, rfl⟩⟩⟩
+    exact real_inner_div_norm_mul_norm_eq_one_of_ne_zero_of_pos_mul hx hr
 
 中文:
 定理 real_inner_div_norm_mul_norm_eq_one_iff
@@ -3180,7 +3227,8 @@ theorem real_inner_div_norm_mul_norm_eq_one_iff
     have hy₀ : y != 0 := fun h₀ => by simp [h₀] at h
     refine ⟨hx₀, ‖y‖ / ‖x‖, div_pos (norm_pos_iff.2 hy₀) (norm_pos_iff.2 hx₀), ?_⟩
     exact ((inner_eq_norm_mul_iff_div hx₀).1 (eq_of_div_eq_one h)).symm
-  · rintro
+  · rintro ⟨hx, ⟨r, ⟨hr, rfl⟩⟩⟩
+    exact real_inner_div_norm_mul_norm_eq_one_of_ne_zero_of_pos_mul hx hr
 
 Depends on / 依赖: div_pos, eq_of_div_eq_one, inner_eq_norm_mul_iff_div, norm_pos_iff, real_inner_div_norm_mul_norm_eq_one_of_ne_zero_of_pos_mul
 -/
@@ -3467,7 +3515,8 @@ abbreviation InnerProductSpace.induced
   { inner x y := inner 𝕜 (f x) (f y)
     add_left x y z := by rw [map_add, inner_add_left]
     smul_left x y r := by rw [map_smul, inner_smul_left]
- 
+    norm_sq_eq_re_inner x := norm_sq_eq_re_inner (f x)
+    conj_inner_symm x y := inner_conj_symm (f x) (f y) }
 
 中文:
 缩写 内积空间.induced
@@ -3479,7 +3528,8 @@ abbreviation InnerProductSpace.induced
   { inner x y := inner 𝕜 (f x) (f y)
     add_left x y z := by rw [map_add, inner_add_left]
     smul_left x y r := by rw [map_smul, inner_smul_left]
- 
+    norm_sq_eq_re_inner x := norm_sq_eq_re_inner (f x)
+    conj_inner_symm x y := inner_conj_symm (f x) (f y) }
 
 Depends on / 依赖: SeminormedAddCommGroup, SeminormedAddCommGroup.induced, induced
 -/
@@ -3531,7 +3581,9 @@ instance RCLike.innerProductSpace
   norm_sq_eq_re_inner x := by rw [star_def, mul_conj, ← ofReal_pow, ofReal_re]
   conj_inner_symm x y := by rw [star_def, map_mul, starRingEnd_self_apply, mul_comm]
   add_left x y z := by rw [star_def, map_add, mul_add]
-  smul_left x y z := by rw [star_def, smul_eq_mul, map_mul, mul_left_c
+  smul_left x y z := by rw [star_def, smul_eq_mul, map_mul, mul_left_comm]
+
+@[simp]
 
 中文:
 实例 RCLike.innerProductSpace
@@ -3540,7 +3592,9 @@ instance RCLike.innerProductSpace
   norm_sq_eq_re_inner x := by rw [star_def, mul_conj, ← ofReal_pow, ofReal_re]
   conj_inner_symm x y := by rw [star_def, map_mul, starRingEnd_self_apply, mul_comm]
   add_left x y z := by rw [star_def, map_add, mul_add]
-  smul_left x y z := by rw [star_def, smul_eq_mul, map_mul, mul_left_c
+  smul_left x y z := by rw [star_def, smul_eq_mul, map_mul, mul_left_comm]
+
+@[simp]
 -/
 instance RCLike.innerProductSpace : InnerProductSpace 𝕜 𝕜 where
   inner x y := y * star x
@@ -3630,7 +3684,11 @@ abbreviation InnerProductSpace.rclikeToReal
     conj_inner_symm := fun _ _ => inner_re_symm _ _
     add_left := fun x y z => by
       simp +instances only [Inner.rclikeToReal, inner_add_left, map_add]
-    smul_left := fun x y
+    smul_left := fun x y r => by
+      let := NormedSpace.restrictScalars Real 𝕜 E
+      have : r • x = (r : 𝕜) • x := rfl
+      simp +instances only [Inner.rclikeToReal, this, conj_trivial, inner_smul_left, conj_ofReal,
+        re_ofReal_mul] }
 
 中文:
 缩写 内积空间.rclikeTo实数
@@ -3641,7 +3699,11 @@ abbreviation InnerProductSpace.rclikeToReal
     conj_inner_symm := fun _ _ => inner_re_symm _ _
     add_left := fun x y z => by
       simp +instances only [Inner.rclikeToReal, inner_add_left, map_add]
-    smul_left := fun x y
+    smul_left := fun x y r => by
+      let := NormedSpace.restrictScalars Real 𝕜 E
+      have : r • x = (r : 𝕜) • x := rfl
+      simp +instances only [Inner.rclikeToReal, this, conj_trivial, inner_smul_left, conj_ofReal,
+        re_ofReal_mul] }
 
 Depends on / 依赖: Inner.rclikeToReal, NormedSpace, NormedSpace.restrictScalars, add_left, conj_inner_symm, conj_ofReal, conj_trivial, inner_add_left, inner_re_symm, inner_smul_left, instances, map_add, norm_sq_eq_re_inner, rclikeToReal, re_ofReal_mul, restrictScalars, smul_left
 -/
@@ -3776,7 +3838,8 @@ instance RCLike.toInnerProductSpaceReal
     show re (_ * _) = re (_ * _) + re (_ * _) by
       simp only [star_def, map_add, mul_re, conj_re, conj_im]; ring
   smul_left x y r :=
-    show re (_ * _) = _ * re (_ 
+    show re (_ * _) = _ * re (_ * _) by
+      simp only [star_def, mul_re, conj_re, conj_im, conj_trivial, smul_re, smul_im]; ring
 
 中文:
 实例 RCLike.toInnerProductSpace实数
@@ -3788,7 +3851,8 @@ instance RCLike.toInnerProductSpaceReal
     show re (_ * _) = re (_ * _) + re (_ * _) by
       simp only [star_def, map_add, mul_re, conj_re, conj_im]; ring
   smul_left x y r :=
-    show re (_ * _) = _ * re (_ 
+    show re (_ * _) = _ * re (_ * _) by
+      simp only [star_def, mul_re, conj_re, conj_im, conj_trivial, smul_re, smul_im]; ring
 
 Depends on / 依赖: Inner.rclikeToReal, rclikeToReal
 -/

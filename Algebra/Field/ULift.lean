@@ -172,7 +172,8 @@ instance divisionRing
 nnqsmul_def _ _ := congrArg up DivisionSemiring.nnqsmul_def _ _
 nnratCast_def _ := congrArg up DivisionSemiring.nnratCast_def _
   qsmul q x := up (DivisionRing.qsmul q x.down)
-qsmul_def _ _ := congrArg up DivisionRing
+qsmul_def _ _ := congrArg up DivisionRing.qsmul_def _ _
+ratCast_def _ := congrArg up DivisionRing.ratCast_def _
 
 中文:
 实例 divisionRing
@@ -183,7 +184,8 @@ qsmul_def _ _ := congrArg up DivisionRing
 nnqsmul_def _ _ := congrArg up DivisionSemiring.nnqsmul_def _ _
 nnratCast_def _ := congrArg up DivisionSemiring.nnratCast_def _
   qsmul q x := up (DivisionRing.qsmul q x.down)
-qsmul_def _ _ := congrArg up DivisionRing
+qsmul_def _ _ := congrArg up DivisionRing.qsmul_def _ _
+ratCast_def _ := congrArg up DivisionRing.ratCast_def _
 -/
 instance divisionRing [DivisionRing α] : DivisionRing (ULift α) where
   toRing := ring

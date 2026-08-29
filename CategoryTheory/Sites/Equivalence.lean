@@ -139,6 +139,7 @@ lemma isDenseSubsite_functor_of_isCocontinuous
     · intro H
       refine K.superset_covering ?_
         (e.inverse.cover_lift K J (J.pullback_stable (e.unitInv.app X) H))
+      exact fun Y f (H : S _) => ⟨_, _, e.counitInv.app Y, H, by simp⟩
 
 中文:
 引理 isDenseSubsite_functor_of_isCocontinuous
@@ -150,6 +151,7 @@ lemma isDenseSubsite_functor_of_isCocontinuous
     · intro H
       refine K.superset_covering ?_
         (e.inverse.cover_lift K J (J.pullback_stable (e.unitInv.app X) H))
+      exact fun Y f (H : S _) => ⟨_, _, e.counitInv.app Y, H, by simp⟩
 
 Depends on / 依赖: J.pullback_stable, J.superset_covering, K.superset_covering, Sieve.fullyFaithfulFunctorGaloisCoinsertion, counitInv, cover_lift, e.counitInv.app, e.functor, e.functor.cover_lift, e.inverse.cover_lift, e.unitInv.app, fullyFaithfulFunctorGaloisCoinsertion, functor, inverse, pullback_stable, superset_covering, u_l_eq, unitInv
 -/
@@ -485,7 +487,8 @@ theorem hasSheafCompose
       apply HasSheafCompose.isSheaf
       exact e.inverse.op_comp_isSheaf K J ⟨P, hP⟩
     replace hP' : Presheaf.IsSheaf J (e.functor.op ⋙ e.inverse.op ⋙ P ⋙ F) :=
-      e.functor.op_comp_
+      e.functor.op_comp_isSheaf _ _ ⟨_, hP'⟩
+    exact (Presheaf.isSheaf_of_iso_iff ((isoWhiskerRight e.op.unitIso.symm (P ⋙ F)))).mp hP'
 
 中文:
 定理 hasSheafCompose
@@ -496,7 +499,8 @@ theorem hasSheafCompose
       apply HasSheafCompose.isSheaf
       exact e.inverse.op_comp_isSheaf K J ⟨P, hP⟩
     replace hP' : Presheaf.IsSheaf J (e.functor.op ⋙ e.inverse.op ⋙ P ⋙ F) :=
-      e.functor.op_comp_
+      e.functor.op_comp_isSheaf _ _ ⟨_, hP'⟩
+    exact (Presheaf.isSheaf_of_iso_iff ((isoWhiskerRight e.op.unitIso.symm (P ⋙ F)))).mp hP'
 
 Depends on / 依赖: HasSheafCompose, HasSheafCompose.isSheaf, IsSheaf, Presheaf, Presheaf.IsSheaf, Presheaf.isSheaf_of_iso_iff, e.functor.op, e.functor.op_comp_isSheaf, e.inverse.op, e.inverse.op_comp_isSheaf, e.op.unitIso.symm, functor, inverse, isSheaf, isSheaf_of_iso_iff, isoWhiskerRight, op_comp_isSheaf, replace, unitIso
 -/
@@ -671,7 +675,29 @@ lemma W_inverseImage_whiskeringLeft
     ObjectProperty.isLocal (· in Set.range (sheafToPresheaf J A ⋙
       ((whiskeringLeft Dᵒᵖ Cᵒᵖ A).obj G.op)).obj) := by
     rw [W_eq_isLocal_range_sheafToPresheaf_obj]; rw [← ObjectProperty.isoClosure_isLocal]
-    conv_rhs => rw [← ObjectProperty.isoClosur
+    conv_rhs => rw [← ObjectProperty.isoClosure_isLocal]
+    apply congr_arg
+    ext P
+    constructor
+    · rintro ⟨_, ⟨R, rfl⟩, ⟨e⟩⟩
+      exact ⟨_, ⟨_, rfl⟩, ⟨e.trans ((sheafToPresheaf _ _).mapIso
+        ((G.sheafPushforwardContinuous A K J).objObjPreimageIso R).symm)⟩⟩
+    · rintro ⟨_, ⟨R, rfl⟩, ⟨e⟩⟩
+      exact ⟨G.op ⋙ R.obj, ⟨(G.sheafPushforwardContinuous A K J).obj R, rfl⟩, ⟨e⟩⟩
+  have h₂ : forall (R : Sheaf J A),
+    Function.Bijective (fun (g : G.op ⋙ Q ⟶ G.op ⋙ R.obj) => whiskerLeft G.op f ≫ g) ↔
+      Function.Bijective (fun (g : Q ⟶ R.obj) => f ≫ g) := fun R => by
+    rw [← Function.Bijective.of_comp_iff _
+      (Functor.whiskerLeft_obj_map_bijective_of_isCoverDense J G Q R.obj R.property)]
+    exact Function.Bijective.of_comp_iff'
+      (Functor.whiskerLeft_obj_map_bijective_of_isCoverDense J G P R.obj R.property)
+        (fun g => f ≫ g)
+  rw [h₁]; rw [J.W_eq_isLocal_range_sheafToPresheaf_obj]; rw [MorphismProperty.inverseImage_iff]
+  constructor
+  · rintro h _ ⟨R, rfl⟩
+    exact (h₂ R).1 (h _ ⟨R, rfl⟩)
+  · rintro h _ ⟨R, rfl⟩
+    exact (h₂ R).2 (h _ ⟨R, rfl⟩)
 
 中文:
 引理 W_inverseImage_whiskeringLeft
@@ -681,7 +707,29 @@ lemma W_inverseImage_whiskeringLeft
     ObjectProperty.isLocal (· in Set.range (sheafToPresheaf J A ⋙
       ((whiskeringLeft Dᵒᵖ Cᵒᵖ A).obj G.op)).obj) := by
     rw [W_eq_isLocal_range_sheafToPresheaf_obj]; rw [← ObjectProperty.isoClosure_isLocal]
-    conv_rhs => rw [← ObjectProperty.isoClosur
+    conv_rhs => rw [← ObjectProperty.isoClosure_isLocal]
+    apply congr_arg
+    ext P
+    constructor
+    · rintro ⟨_, ⟨R, rfl⟩, ⟨e⟩⟩
+      exact ⟨_, ⟨_, rfl⟩, ⟨e.trans ((sheafToPresheaf _ _).mapIso
+        ((G.sheafPushforwardContinuous A K J).objObjPreimageIso R).symm)⟩⟩
+    · rintro ⟨_, ⟨R, rfl⟩, ⟨e⟩⟩
+      exact ⟨G.op ⋙ R.obj, ⟨(G.sheafPushforwardContinuous A K J).obj R, rfl⟩, ⟨e⟩⟩
+  have h₂ : forall (R : Sheaf J A),
+    Function.Bijective (fun (g : G.op ⋙ Q ⟶ G.op ⋙ R.obj) => whiskerLeft G.op f ≫ g) ↔
+      Function.Bijective (fun (g : Q ⟶ R.obj) => f ≫ g) := fun R => by
+    rw [← Function.Bijective.of_comp_iff _
+      (Functor.whiskerLeft_obj_map_bijective_of_isCoverDense J G Q R.obj R.property)]
+    exact Function.Bijective.of_comp_iff'
+      (Functor.whiskerLeft_obj_map_bijective_of_isCoverDense J G P R.obj R.property)
+        (fun g => f ≫ g)
+  rw [h₁]; rw [J.W_eq_isLocal_range_sheafToPresheaf_obj]; rw [MorphismProperty.inverseImage_iff]
+  constructor
+  · rintro h _ ⟨R, rfl⟩
+    exact (h₂ R).1 (h _ ⟨R, rfl⟩)
+  · rintro h _ ⟨R, rfl⟩
+    exact (h₂ R).2 (h _ ⟨R, rfl⟩)
 
 Depends on / 依赖: G.op, G.sheafPushforwardContinuous, ObjectProperty, ObjectProperty.isLocal, ObjectProperty.isoClosure_isLocal, Set.range, W_eq_isLocal_range_sheafToPresheaf_obj, congr_arg, conv_rhs, e.trans, isLocal, isoClosure_isLocal, mapIso, objObjPreimageIso, sheafPushforwardContinuous, sheafToPresheaf, whiskeringLeft
 -/
@@ -752,7 +800,8 @@ lemma PreservesSheafification.transport
     have := K.W_of_preservesSheafification F (whiskerLeft G.op f) hf
     rw [whiskerRight_left] at this
 have := K.W.of_postcomp (W' := MorphismProperty.isomorphisms _) _ _ (Iso.isIso_inv _)
-      K.W.of_precomp (W' := MorphismProperty.isomorp
+      K.W.of_precomp (W' := MorphismProperty.isomorphisms _) _ _ (Iso.isIso_hom _) this
+    rwa [K.W_whiskerLeft_iff (G := G) (J := J) (f := whiskerRight f F)] at this
 
 中文:
 引理 保持层化.transport
@@ -761,7 +810,8 @@ have := K.W.of_postcomp (W' := MorphismProperty.isomorphisms _) _ _ (Iso.isIso_i
     have := K.W_of_preservesSheafification F (whiskerLeft G.op f) hf
     rw [whiskerRight_left] at this
 have := K.W.of_postcomp (W' := MorphismProperty.isomorphisms _) _ _ (Iso.isIso_inv _)
-      K.W.of_precomp (W' := MorphismProperty.isomorp
+      K.W.of_precomp (W' := MorphismProperty.isomorphisms _) _ _ (Iso.isIso_hom _) this
+    rwa [K.W_whiskerLeft_iff (G := G) (J := J) (f := whiskerRight f F)] at this
 
 Depends on / 依赖: G.op, Iso.isIso_hom, Iso.isIso_inv, J.W_whiskerLeft_iff, K.W.of_postcomp, K.W.of_precomp, K.W_of_preservesSheafification, K.W_whiskerLeft_iff, MorphismProperty, MorphismProperty.isomorphisms, W_of_preservesSheafification, W_whiskerLeft_iff, isIso_hom, isIso_inv, isomorphisms, of_postcomp, of_precomp, whiskerLeft, whiskerRight, whiskerRight_left
 -/

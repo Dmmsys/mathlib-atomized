@@ -89,7 +89,7 @@ lemma SummableLocallyUniformlyOn.of_locally_bounded_eventually
   rw [hasSumLocallyUniformlyOn_iff_tendstoLocallyUniformlyOn]; rw [tendstoLocallyUniformlyOn_iff_forall_isCompact hs]
   intro K hK hKc
   obtain ⟨u, hu1, hu2⟩ := hu K hK hKc
-  exact tendstoUniformlyOn_tsum_of_c
+  exact tendstoUniformlyOn_tsum_of_cofinite_eventually hu1 hu2
 
 中文:
 引理 SummableLocallyUniformlyOn.of_locally_bounded_eventually
@@ -99,7 +99,7 @@ lemma SummableLocallyUniformlyOn.of_locally_bounded_eventually
   rw [hasSumLocallyUniformlyOn_iff_tendstoLocallyUniformlyOn]; rw [tendstoLocallyUniformlyOn_iff_forall_isCompact hs]
   intro K hK hKc
   obtain ⟨u, hu1, hu2⟩ := hu K hK hKc
-  exact tendstoUniformlyOn_tsum_of_c
+  exact tendstoUniformlyOn_tsum_of_cofinite_eventually hu1 hu2
 
 Depends on / 依赖: HasSumLocallyUniformlyOn, HasSumLocallyUniformlyOn.summableLocallyUniformlyOn, hasSumLocallyUniformlyOn_iff_tendstoLocallyUniformlyOn, summableLocallyUniformlyOn, tendstoLocallyUniformlyOn_iff_forall_isCompact, tendstoUniformlyOn_tsum_of_cofinite_eventually
 -/
@@ -161,7 +161,12 @@ theorem derivWithin_tsum
   apply HasDerivAt.hasDerivWithinAt
   apply hasDerivAt_of_tendstoLocallyUniformlyOn hs _ _ (fun y hy => (hf y hy).hasSum) hx
     (f' := fun n : Finset ι => fun a => ∑ i in n, derivWithin (fun z => f i z) s a)
-  · obtain ⟨g, hg⟩ :=
+  · obtain ⟨g, hg⟩ := h
+    apply (hasSumLocallyUniformlyOn_iff_tendstoLocallyUniformlyOn.mp hg).congr_right
+    exact fun _ hb => (hg.tsum_eqOn hb).symm
+  · filter_upwards with t r hr using HasDerivAt.fun_sum
+      (fun q hq => ((hf2 q r hr).differentiableWithinAt.hasDerivWithinAt.hasDerivAt)
+      (hs.mem_nhds hr))
 
 中文:
 定理 derivWithin_tsum
@@ -171,7 +176,12 @@ theorem derivWithin_tsum
   apply HasDerivAt.hasDerivWithinAt
   apply hasDerivAt_of_tendstoLocallyUniformlyOn hs _ _ (fun y hy => (hf y hy).hasSum) hx
     (f' := fun n : Finset ι => fun a => ∑ i in n, derivWithin (fun z => f i z) s a)
-  · obtain ⟨g, hg⟩ :=
+  · obtain ⟨g, hg⟩ := h
+    apply (hasSumLocallyUniformlyOn_iff_tendstoLocallyUniformlyOn.mp hg).congr_right
+    exact fun _ hb => (hg.tsum_eqOn hb).symm
+  · filter_upwards with t r hr using HasDerivAt.fun_sum
+      (fun q hq => ((hf2 q r hr).differentiableWithinAt.hasDerivWithinAt.hasDerivAt)
+      (hs.mem_nhds hr))
 
 Depends on / 依赖: Finset, HasDerivAt, HasDerivAt.fun_sum, HasDerivAt.hasDerivWithinAt, HasDerivWithinAt, HasDerivWithinAt.derivWithin, congr_right, derivWithin, differ, filter_upwards, fun_sum, hasDerivAt_of_tendstoLocallyUniformlyOn, hasDerivWithinAt, hasSum, hasSumLocallyUniformlyOn_iff_tendstoLocallyUniformlyOn, hasSumLocallyUniformlyOn_iff_tendstoLocallyUniformlyOn.mp, hg.tsum_eqOn, hs.uniqueDiffWithinAt, tsum_eqOn, uniqueDiffWithinAt
 -/
@@ -204,7 +214,14 @@ theorem iteratedDerivWithin_tsum
     simp_rw [iteratedDerivWithin_succ]
     rw [← derivWithin_tsum hs hx _ _ (fun n r hr => hf2 n m r (by lia) hr)]
     · exact derivWithin_congr (fun t ht => hm ht (fun k hk1 hkm => h k hk1 (by lia))
-          (fun k r e hr he =>
+          (fun k r e hr he => hf2 k r e (by lia) he)) (hm hx (fun k hk1 hkm => h k hk1 (by lia))
+          (fun k r e hr he => hf2 k r e (by lia) he))
+    · intro r hr
+      by_cases hm2 : m = 0
+      · simp [hm2, hsum r hr]
+      · exact ((h m (by lia) (by lia)).summable hr).congr (fun _ => by simp)
+    · exact SummableLocallyUniformlyOn_congr
+        (fun _ _ ht => by rw [iteratedDerivWithin_succ]) (h (m + 1) (by lia) (by lia))
 
 中文:
 定理 iteratedDerivWithin_tsum
@@ -216,7 +233,14 @@ theorem iteratedDerivWithin_tsum
     simp_rw [iteratedDerivWithin_succ]
     rw [← derivWithin_tsum hs hx _ _ (fun n r hr => hf2 n m r (by lia) hr)]
     · exact derivWithin_congr (fun t ht => hm ht (fun k hk1 hkm => h k hk1 (by lia))
-          (fun k r e hr he =>
+          (fun k r e hr he => hf2 k r e (by lia) he)) (hm hx (fun k hk1 hkm => h k hk1 (by lia))
+          (fun k r e hr he => hf2 k r e (by lia) he))
+    · intro r hr
+      by_cases hm2 : m = 0
+      · simp [hm2, hsum r hr]
+      · exact ((h m (by lia) (by lia)).summable hr).congr (fun _ => by simp)
+    · exact SummableLocallyUniformlyOn_congr
+        (fun _ _ ht => by rw [iteratedDerivWithin_succ]) (h (m + 1) (by lia) (by lia))
 
 Depends on / 依赖: derivWithin_congr, derivWithin_tsum, generalizing, iteratedDerivWithin_succ, simp_rw, summable
 -/

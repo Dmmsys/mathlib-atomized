@@ -879,7 +879,14 @@ theorem hasBasis_nhds_of_ne_top'
     exact nhds_bot_basis_Iic
   · refine (nhds_basis_Ioo' ⟨_, x0⟩ ⟨_, xt.lt_top⟩).to_hasBasis ?_ fun ε ε0 => ?_
     · rintro ⟨a, b⟩ ⟨ha, hb⟩
-      rcases exists_between (tsub_pos_
+      rcases exists_between (tsub_pos_of_lt ha) with ⟨ε, ε0, hε⟩
+      rcases lt_iff_exists_add_pos_lt.1 hb with ⟨δ, δ0, hδ⟩
+      refine ⟨min ε δ, (lt_min ε0 (coe_pos.2 δ0)).ne', Icc_subset_Ioo ?_ ?_⟩
+      · exact lt_tsub_comm.2 ((min_le_left _ _).trans_lt hε)
+      · grw [min_le_right]
+        exact hδ
+    · exact ⟨(x - ε, x + ε), ⟨ENNReal.sub_lt_self xt x0.ne' ε0,
+        lt_add_right xt ε0⟩, Ioo_subset_Icc_self⟩
 
 中文:
 定理 hasBasis_nhds_of_ne_top'
@@ -890,7 +897,14 @@ theorem hasBasis_nhds_of_ne_top'
     exact nhds_bot_basis_Iic
   · refine (nhds_basis_Ioo' ⟨_, x0⟩ ⟨_, xt.lt_top⟩).to_hasBasis ?_ fun ε ε0 => ?_
     · rintro ⟨a, b⟩ ⟨ha, hb⟩
-      rcases exists_between (tsub_pos_
+      rcases exists_between (tsub_pos_of_lt ha) with ⟨ε, ε0, hε⟩
+      rcases lt_iff_exists_add_pos_lt.1 hb with ⟨δ, δ0, hδ⟩
+      refine ⟨min ε δ, (lt_min ε0 (coe_pos.2 δ0)).ne', Icc_subset_Ioo ?_ ?_⟩
+      · exact lt_tsub_comm.2 ((min_le_left _ _).trans_lt hε)
+      · grw [min_le_right]
+        exact hδ
+    · exact ⟨(x - ε, x + ε), ⟨ENNReal.sub_lt_self xt x0.ne' ε0,
+        lt_add_right xt ε0⟩, Ioo_subset_Icc_self⟩
 
 Depends on / 依赖: Icc_bot, Icc_subset_Ioo, bot_eq_zero, bot_lt_iff_ne_bot, coe_pos, eq_zero_or_pos, exists_between, lt_iff_exists_add_pos_lt, lt_min, lt_top, lt_tsub_comm, min_le, min_le_left, nhds_basis_Ioo, nhds_bot_basis_Iic, simp_rw, to_hasBasis, trans_lt, tsub_pos_of_lt, xt.lt_top
 -/
@@ -1061,7 +1075,9 @@ theorem tendsto_const_sub_nhds_zero_iff
     rw [tsub_le_iff_right] at hn ⊢
     rwa [add_comm]
   · filter_upwards [h ε hε] with n hn
-    h
+    have hN_left := hn.1
+    rw [tsub_le_iff_right] at hN_left ⊢
+    rwa [add_comm]
 
 中文:
 定理 tendsto_const_sub_nhds_zero_iff
@@ -1074,7 +1090,9 @@ theorem tendsto_const_sub_nhds_zero_iff
     rw [tsub_le_iff_right] at hn ⊢
     rwa [add_comm]
   · filter_upwards [h ε hε] with n hn
-    h
+    have hN_left := hn.1
+    rw [tsub_le_iff_right] at hN_left ⊢
+    rwa [add_comm]
 
 Depends on / 依赖: ENNReal, ENNReal.tendsto_nhds, ENNReal.tendsto_nhds_zero, add_comm, filter_upwards, hN_left, le_add_right, le_rfl, tendsto_nhds, tendsto_nhds_zero, tsub_le_iff_right
 -/
@@ -1176,7 +1194,13 @@ theorem tendsto_atTop_zero_iff_lt_of_antitone
       (lt_min_iff.mpr ⟨zero_lt_one, (ENNReal.div_pos_iff.mpr ⟨hε.ne', by finiteness⟩)⟩)
     · refine ⟨n, hn.trans_lt ?_⟩
       by_cases hε_top : ε = ∞
-      · simp [hε_to
+      · simp [hε_top]
+      refine (min_le_right _ _).trans_lt ?_
+      rw [ENNReal.div_lt_iff (Or.inr hε.ne') (Or.inr hε_top)]
+      conv_lhs => rw [← mul_one ε]
+      gcongr; simp
+  · obtain ⟨n, hn⟩ := h ε hε
+    exact ⟨n, hn.le⟩
 
 中文:
 定理 tendsto_atTop_zero_iff_lt_of_antitone
@@ -1188,7 +1212,13 @@ theorem tendsto_atTop_zero_iff_lt_of_antitone
       (lt_min_iff.mpr ⟨zero_lt_one, (ENNReal.div_pos_iff.mpr ⟨hε.ne', by finiteness⟩)⟩)
     · refine ⟨n, hn.trans_lt ?_⟩
       by_cases hε_top : ε = ∞
-      · simp [hε_to
+      · simp [hε_top]
+      refine (min_le_right _ _).trans_lt ?_
+      rw [ENNReal.div_lt_iff (Or.inr hε.ne') (Or.inr hε_top)]
+      conv_lhs => rw [← mul_one ε]
+      gcongr; simp
+  · obtain ⟨n, hn⟩ := h ε hε
+    exact ⟨n, hn.le⟩
 
 Depends on / 依赖: ENNReal, ENNReal.div_lt_iff, ENNReal.div_pos_iff.mpr, ENNReal.tendsto_atTop_zero_iff_le_of_antitone, Or.inr, conv_lhs, div_lt_iff, div_pos_iff, finiteness, hn.le, hn.trans_lt, lt_min_iff, lt_min_iff.mpr, min_le_right, mul_one, tendsto_atTop_zero_iff_le_of_antitone, trans_lt, zero_lt_one
 -/
@@ -1273,7 +1303,21 @@ theorem tendsto_mul
       Tendsto (fun p : Real>=0∞ × Real>=0∞ => p.1 * p.2) (𝓝 (∞, b)) (𝓝 ∞) := fun b hb => by
     refine tendsto_nhds_top_iff_nnreal.2 fun n => ?_
     rcases lt_iff_exists_nnreal_btwn.1 (pos_iff_ne_zero.2 hb) with ⟨ε, hε, hεb⟩
-    have : forallᶠ c : Real>=
+    have : forallᶠ c : Real>=0∞ × Real>=0∞ in 𝓝 (∞, b), ↑n / ↑ε < c.1 ∧ ↑ε < c.2 :=
+      (lt_mem_nhds <| div_lt_top coe_ne_top hε.ne').prod_nhds (lt_mem_nhds hεb)
+    refine this.mono fun c hc => ?_
+    exact (ENNReal.div_mul_cancel hε.ne' coe_ne_top).symm.trans_lt (mul_lt_mul hc.1 hc.2)
+  induction a with
+  | top => simp only [ne_eq, or_false, not_true_eq_false] at hb; simp [ht b hb, top_mul hb]
+  | coe a =>
+    induction b with
+    | top =>
+      simp only [ne_eq, or_false, not_true_eq_false] at ha
+      simpa [Function.comp_def, mul_comm, mul_top ha]
+        using (ht a ha).comp (continuous_swap.tendsto (ofNNReal a, ∞))
+    | coe b =>
+      simp only [nhds_coe_coe, ← coe_mul, tendsto_coe, tendsto_map'_iff, Function.comp_def,
+        tendsto_mul]
 
 中文:
 定理 tendsto_mul
@@ -1283,7 +1327,21 @@ theorem tendsto_mul
       Tendsto (fun p : Real>=0∞ × Real>=0∞ => p.1 * p.2) (𝓝 (∞, b)) (𝓝 ∞) := fun b hb => by
     refine tendsto_nhds_top_iff_nnreal.2 fun n => ?_
     rcases lt_iff_exists_nnreal_btwn.1 (pos_iff_ne_zero.2 hb) with ⟨ε, hε, hεb⟩
-    have : forallᶠ c : Real>=
+    have : forallᶠ c : Real>=0∞ × Real>=0∞ in 𝓝 (∞, b), ↑n / ↑ε < c.1 ∧ ↑ε < c.2 :=
+      (lt_mem_nhds <| div_lt_top coe_ne_top hε.ne').prod_nhds (lt_mem_nhds hεb)
+    refine this.mono fun c hc => ?_
+    exact (ENNReal.div_mul_cancel hε.ne' coe_ne_top).symm.trans_lt (mul_lt_mul hc.1 hc.2)
+  induction a with
+  | top => simp only [ne_eq, or_false, not_true_eq_false] at hb; simp [ht b hb, top_mul hb]
+  | coe a =>
+    induction b with
+    | top =>
+      simp only [ne_eq, or_false, not_true_eq_false] at ha
+      simpa [Function.comp_def, mul_comm, mul_top ha]
+        using (ht a ha).comp (continuous_swap.tendsto (ofNNReal a, ∞))
+    | coe b =>
+      simp only [nhds_coe_coe, ← coe_mul, tendsto_coe, tendsto_map'_iff, Function.comp_def,
+        tendsto_mul]
 -/
 protected theorem tendsto_mul (ha : a != 0 ∨ b != ∞) (hb : b != 0 ∨ a != ∞) :
     Tendsto (fun p : Real>=0∞ × Real>=0∞ => p.1 * p.2) (𝓝 (a, b)) (𝓝 (a * b)) := by
@@ -1425,7 +1483,12 @@ theorem tendsto_finsetProd_of_ne_top
     apply Tendsto.mul (h _ (Finset.mem_insert_self _ _))
     · right
       exact prod_ne_top fun i hi => h' _ (Finset.mem_insert_of_mem hi)
+    · exact IH (fun i hi => h _ (Finset.mem_insert_of_mem hi)) fun i hi =>
+        h' _ (Finset.mem_insert_of_mem hi)
+    · exact Or.inr (h' _ (Finset.mem_insert_self _ _))
 
+@[deprecated (since := "2026-04-08")]
+alias tendsto_finset_prod_of_ne_top := tendsto_finsetProd_of_ne_top
 
 中文:
 定理 tendsto_finsetProd_of_ne_top
@@ -1439,7 +1502,12 @@ theorem tendsto_finsetProd_of_ne_top
     apply Tendsto.mul (h _ (Finset.mem_insert_self _ _))
     · right
       exact prod_ne_top fun i hi => h' _ (Finset.mem_insert_of_mem hi)
+    · exact IH (fun i hi => h _ (Finset.mem_insert_of_mem hi)) fun i hi =>
+        h' _ (Finset.mem_insert_of_mem hi)
+    · exact Or.inr (h' _ (Finset.mem_insert_self _ _))
 
+@[deprecated (since := "2026-04-08")]
+alias tendsto_finset_prod_of_ne_top := tendsto_finsetProd_of_ne_top
 
 Depends on / 依赖: Finset, Finset.induction, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.prod_insert, Or.inr, Tendsto, Tendsto.mul, classical, insert, mem_insert_of_mem, mem_insert_self, prod_insert, prod_ne_top, tendsto_const_nhds
 -/
@@ -1583,7 +1651,10 @@ theorem continuous_pow
     intro x
     refine ENNReal.Tendsto.mul (IH.tendsto _) ?_ tendsto_id ?_ <;> by_cases H : x = 0
     · simp only [H, zero_ne_top, Ne, or_true, not_false_iff]
-    · 
+    · exact Or.inl fun h => H (eq_zero_of_pow_eq_zero h)
+    · simp only [H, pow_eq_top_iff, zero_ne_top, false_or, not_true, Ne,
+        not_false_iff, false_and]
+    · simp only [H, true_or, Ne, not_false_iff]
 
 中文:
 定理 continuous_pow
@@ -1597,7 +1668,10 @@ theorem continuous_pow
     intro x
     refine ENNReal.Tendsto.mul (IH.tendsto _) ?_ tendsto_id ?_ <;> by_cases H : x = 0
     · simp only [H, zero_ne_top, Ne, or_true, not_false_iff]
-    · 
+    · exact Or.inl fun h => H (eq_zero_of_pow_eq_zero h)
+    · simp only [H, pow_eq_top_iff, zero_ne_top, false_or, not_true, Ne,
+        not_false_iff, false_and]
+    · simp only [H, true_or, Ne, not_false_iff]
 -/
 protected theorem continuous_pow (n : Nat) : Continuous fun a : Real>=0∞ => a ^ n := by
   induction n with
@@ -1732,7 +1806,7 @@ theorem continuous_sub_right
   · rw [show (fun x => x - a) = (fun p : Real>=0∞ × Real>=0∞ => p.fst - p.snd) ∘ fun x => ⟨x, a⟩ by rfl]
     apply continuousOn_sub.comp_continuous (by fun_prop)
     intro x
-    simp only [a_infty, Ne, mem_ofPred_
+    simp only [a_infty, Ne, mem_ofPred_eq, Prod.mk_inj, and_false, not_false_iff]
 
 中文:
 定理 continuous_sub_right
@@ -1744,7 +1818,7 @@ theorem continuous_sub_right
   · rw [show (fun x => x - a) = (fun p : Real>=0∞ × Real>=0∞ => p.fst - p.snd) ∘ fun x => ⟨x, a⟩ by rfl]
     apply continuousOn_sub.comp_continuous (by fun_prop)
     intro x
-    simp only [a_infty, Ne, mem_ofPred_
+    simp only [a_infty, Ne, mem_ofPred_eq, Prod.mk_inj, and_false, not_false_iff]
 
 Depends on / 依赖: Prod.mk_inj, a_infty, and_false, comp_continuous, continuousOn_sub, continuousOn_sub.comp_continuous, continuous_const, fun_prop, mem_ofPred_eq, mk_inj, not_false_iff, p.fst, p.snd, tsub_eq_zero_of_le
 -/
@@ -2068,7 +2142,18 @@ theorem exists_upcrossings_of_not_bounded_under
     obtain ⟨q, hq⟩ := exists_rat_gt R
     refine ⟨q, q + 1, (lt_add_iff_pos_right _).2 zero_lt_one, ?_, ?_⟩
     · refine fun hcon => hR ?_
-      filter
+      filter_upwards [hcon] with x hx using not_lt.2 (lt_of_lt_of_le hq (not_lt.1 hx)).le
+    · simp only [IsBoundedUnder, IsBounded, eventually_map, not_exists] at hbdd
+      refine fun hcon => hbdd ↑(q + 1) ?_
+      filter_upwards [hcon] with x hx using not_lt.1 hx
+  · obtain ⟨R, hR⟩ := exists_frequently_lt_of_liminf_ne_top' hf
+    obtain ⟨q, hq⟩ := exists_rat_lt R
+    refine ⟨q - 1, q, (sub_lt_self_iff _).2 zero_lt_one, ?_, ?_⟩
+    · simp only [IsBoundedUnder, IsBounded, eventually_map, not_exists] at hbdd
+      refine fun hcon => hbdd ↑(q - 1) ?_
+      filter_upwards [hcon] with x hx using not_lt.1 hx
+    · refine fun hcon => hR ?_
+      filter_upwards [hcon] with x hx using not_lt.2 ((not_lt.1 hx).trans hq.le)
 
 中文:
 定理 存在_upcrossings_of_not_bounded_under
@@ -2080,7 +2165,18 @@ theorem exists_upcrossings_of_not_bounded_under
     obtain ⟨q, hq⟩ := exists_rat_gt R
     refine ⟨q, q + 1, (lt_add_iff_pos_right _).2 zero_lt_one, ?_, ?_⟩
     · refine fun hcon => hR ?_
-      filter
+      filter_upwards [hcon] with x hx using not_lt.2 (lt_of_lt_of_le hq (not_lt.1 hx)).le
+    · simp only [IsBoundedUnder, IsBounded, eventually_map, not_exists] at hbdd
+      refine fun hcon => hbdd ↑(q + 1) ?_
+      filter_upwards [hcon] with x hx using not_lt.1 hx
+  · obtain ⟨R, hR⟩ := exists_frequently_lt_of_liminf_ne_top' hf
+    obtain ⟨q, hq⟩ := exists_rat_lt R
+    refine ⟨q - 1, q, (sub_lt_self_iff _).2 zero_lt_one, ?_, ?_⟩
+    · simp only [IsBoundedUnder, IsBounded, eventually_map, not_exists] at hbdd
+      refine fun hcon => hbdd ↑(q - 1) ?_
+      filter_upwards [hcon] with x hx using not_lt.1 hx
+    · refine fun hcon => hR ?_
+      filter_upwards [hcon] with x hx using not_lt.2 ((not_lt.1 hx).trans hq.le)
 
 Depends on / 依赖: IsBounded, IsBoundedUnder, eventually_map, exists_frequently_lt_of_liminf_ne_top, exists_rat_gt, filter_upwards, isBoundedUnder_le_abs, lt_add_iff_pos_right, lt_of_lt_of_le, not_and_or, not_exists, not_lt, zero_lt_one
 -/
@@ -2282,7 +2378,19 @@ theorem EMetric.cauchySeq_iff_le_tendsto_0
     /- `s` is Cauchy sequence. Let `b n` be the diameter of the set `s '' Set.Ici n`. -/
     refine ⟨fun N => Metric.ediam (s '' Ici N), fun n m N hn hm => ?_, ?_⟩
     -- Prove that it bounds the distances of points in the Cauchy sequence
-   
+    · exact Metric.edist_le_ediam_of_mem (mem_image_of_mem _ hn) (mem_image_of_mem _ hm)
+    -- Prove that it tends to `0`, by using the Cauchy property of `s`
+    · refine ENNReal.tendsto_nhds_zero.2 fun ε ε0 => ?_
+      rcases hs ε ε0 with ⟨N, hN⟩
+      refine (eventually_ge_atTop N).mono fun n hn => Metric.ediam_le ?_
+      rintro _ ⟨k, hk, rfl⟩ _ ⟨l, hl, rfl⟩
+      exact (hN _ (hn.trans hk) _ (hn.trans hl)).le
+  · rintro ⟨b, ⟨b_bound, b_lim⟩⟩ ε εpos
+    have : forallᶠ n in atTop, b n < ε := b_lim.eventually (gt_mem_nhds εpos)
+    rcases this.exists with ⟨N, hN⟩
+    refine ⟨N, fun m hm n hn => ?_⟩
+    calc edist (s m) (s n) <= b N := b_bound m n N hm hn
+    _ < ε := hN
 
 中文:
 定理 EMetric.cauchySeq_iff_le_tendsto_0
@@ -2293,7 +2401,19 @@ theorem EMetric.cauchySeq_iff_le_tendsto_0
     /- `s` is Cauchy sequence. Let `b n` be the diameter of the set `s '' Set.Ici n`. -/
     refine ⟨fun N => Metric.ediam (s '' Ici N), fun n m N hn hm => ?_, ?_⟩
     -- Prove that it bounds the distances of points in the Cauchy sequence
-   
+    · exact Metric.edist_le_ediam_of_mem (mem_image_of_mem _ hn) (mem_image_of_mem _ hm)
+    -- Prove that it tends to `0`, by using the Cauchy property of `s`
+    · refine ENNReal.tendsto_nhds_zero.2 fun ε ε0 => ?_
+      rcases hs ε ε0 with ⟨N, hN⟩
+      refine (eventually_ge_atTop N).mono fun n hn => Metric.ediam_le ?_
+      rintro _ ⟨k, hk, rfl⟩ _ ⟨l, hl, rfl⟩
+      exact (hN _ (hn.trans hk) _ (hn.trans hl)).le
+  · rintro ⟨b, ⟨b_bound, b_lim⟩⟩ ε εpos
+    have : forallᶠ n in atTop, b n < ε := b_lim.eventually (gt_mem_nhds εpos)
+    rcases this.exists with ⟨N, hN⟩
+    refine ⟨N, fun m hm n hn => ?_⟩
+    calc edist (s m) (s n) <= b N := b_bound m n N hm hn
+    _ < ε := hN
 
 Depends on / 依赖: EMetric, EMetric.cauchySeq_iff.trans, cauchySeq_iff
 -/
@@ -2330,7 +2450,8 @@ theorem continuous_of_le_add_edist
   rcases ENNReal.exists_nnreal_pos_mul_lt hC ε0.ne' with ⟨δ, δ0, hδ⟩
   rw [mul_comm] at hδ
   filter_upwards [Metric.closedEBall_mem_nhds x (ENNReal.coe_pos.2 δ0)] with y hy
-refine ⟨tsub_le_iff_right.2 (h x 
+refine ⟨tsub_le_iff_right.2 (h x y).trans ?_, (h y x).trans ?_⟩ <;> grw [← hδ.le] <;> gcongr
+  exacts [Metric.mem_closedEBall'.1 hy, Metric.mem_closedEBall.1 hy]
 
 中文:
 定理 continuous_of_le_add_edist
@@ -2340,7 +2461,8 @@ refine ⟨tsub_le_iff_right.2 (h x
   rcases ENNReal.exists_nnreal_pos_mul_lt hC ε0.ne' with ⟨δ, δ0, hδ⟩
   rw [mul_comm] at hδ
   filter_upwards [Metric.closedEBall_mem_nhds x (ENNReal.coe_pos.2 δ0)] with y hy
-refine ⟨tsub_le_iff_right.2 (h x 
+refine ⟨tsub_le_iff_right.2 (h x y).trans ?_, (h y x).trans ?_⟩ <;> grw [← hδ.le] <;> gcongr
+  exacts [Metric.mem_closedEBall'.1 hy, Metric.mem_closedEBall.1 hy]
 
 Depends on / 依赖: ENNReal, ENNReal.coe_pos, ENNReal.exists_nnreal_pos_mul_lt, ENNReal.tendsto_nhds_of_Icc, Metric, Metric.closedEBall_mem_nhds, Metric.mem_closedEBall, closedEBall_mem_nhds, coe_pos, continuous_iff_continuousAt, exacts, exists_nnreal_pos_mul_lt, filter_upwards, mem_closedEBall, mul_comm, tendsto_nhds_of_Icc, tsub_le_iff_right
 -/
@@ -2365,7 +2487,11 @@ theorem continuous_edist
   calc
     edist x y <= edist x x' + edist x' y' + edist y' y := edist_triangle4 _ _ _ _
     _ = edist x' y' + (edist x x' + edist y y') := by rw [edist_comm y y']; abel
-    _ <= edist x' y' + (edist (x, y) (x', y') + edist
+    _ <= edist x' y' + (edist (x, y) (x', y') + edist (x, y) (x', y')) := by
+      gcongr <;> apply_rules [le_max_left, le_max_right]
+    _ = edist x' y' + 2 * edist (x, y) (x', y') := by rw [← mul_two, mul_comm]
+
+@[continuity, fun_prop]
 
 中文:
 定理 continuous_edist
@@ -2376,7 +2502,11 @@ theorem continuous_edist
   calc
     edist x y <= edist x x' + edist x' y' + edist y' y := edist_triangle4 _ _ _ _
     _ = edist x' y' + (edist x x' + edist y y') := by rw [edist_comm y y']; abel
-    _ <= edist x' y' + (edist (x, y) (x', y') + edist
+    _ <= edist x' y' + (edist (x, y) (x', y') + edist (x, y) (x', y')) := by
+      gcongr <;> apply_rules [le_max_left, le_max_right]
+    _ = edist x' y' + 2 * edist (x, y) (x', y') := by rw [← mul_two, mul_comm]
+
+@[continuity, fun_prop]
 
 Depends on / 依赖: apply_rules, continuous_of_le_add_edist, edist_comm, edist_triangle4, le_max_left, le_max_right, mul_comm, mul_two
 -/
@@ -2476,7 +2606,9 @@ theorem Metric.ediam_closure
     map_mem_closure₂ continuous_edist hx hy fun x hx y hy => edist_le_ediam_of_mem hx hy
   rwa [closure_Iic] at this
 
-@[deprecated (since := "2026-01-04")] alias EMetri
+@[deprecated (since := "2026-01-04")] alias EMetric.diam_closure := Metric.ediam_closure
+
+@[simp]
 
 中文:
 定理 Metric.ediam_closure
@@ -2488,7 +2620,9 @@ theorem Metric.ediam_closure
     map_mem_closure₂ continuous_edist hx hy fun x hx y hy => edist_le_ediam_of_mem hx hy
   rwa [closure_Iic] at this
 
-@[deprecated (since := "2026-01-04")] alias EMetri
+@[deprecated (since := "2026-01-04")] alias EMetric.diam_closure := Metric.ediam_closure
+
+@[simp]
 
 Depends on / 依赖: closure, closure_Iic, continuous_edist, ediam_le, ediam_mono, edist_le_ediam_of_mem, le_antisymm, subset_closure
 -/
@@ -2531,7 +2665,7 @@ theorem isClosed_setOfPred_lipschitzOnWith
   exacts [.edist (continuous_apply x) (continuous_apply y), continuous_const]
 
 @[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_lipschitzOnWith := isClosed_set
+alias isClosed_setOf_lipschitzOnWith := isClosed_setOfPred_lipschitzOnWith
 
 中文:
 定理 isClosed_setOfPred_lipschitzOnWith
@@ -2542,7 +2676,7 @@ alias isClosed_setOf_lipschitzOnWith := isClosed_set
   exacts [.edist (continuous_apply x) (continuous_apply y), continuous_const]
 
 @[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_lipschitzOnWith := isClosed_set
+alias isClosed_setOf_lipschitzOnWith := isClosed_setOfPred_lipschitzOnWith
 
 Depends on / 依赖: LipschitzOnWith, continuous_apply, continuous_const, exacts, isClosed_biInter, isClosed_le, ofPred_forall
 -/
@@ -2647,7 +2781,10 @@ theorem ediam_eq
   refine le_antisymm (Metric.ediam_le_of_forall_dist_le fun x hx y hy => ?_) ?_
   · exact Real.dist_le_of_mem_Icc (h.subset_Icc_sInf_sSup hx) (h.subset_Icc_sInf_sSup hy)
   · apply ENNReal.ofReal_le_of_le_toReal
-    rw [← Metric.diam]; rw [
+    rw [← Metric.diam]; rw [← Metric.diam_closure]
+    calc sSup s - sInf s <= dist (sSup s) (sInf s) := le_abs_self _
+    _ <= Metric.diam (closure s) := dist_le_diam_of_mem h.closure (csSup_mem_closure hne h.bddAbove)
+        (csInf_mem_closure hne h.bddBelow)
 
 中文:
 定理 ediam_eq
@@ -2658,7 +2795,10 @@ theorem ediam_eq
   refine le_antisymm (Metric.ediam_le_of_forall_dist_le fun x hx y hy => ?_) ?_
   · exact Real.dist_le_of_mem_Icc (h.subset_Icc_sInf_sSup hx) (h.subset_Icc_sInf_sSup hy)
   · apply ENNReal.ofReal_le_of_le_toReal
-    rw [← Metric.diam]; rw [
+    rw [← Metric.diam]; rw [← Metric.diam_closure]
+    calc sSup s - sInf s <= dist (sSup s) (sInf s) := le_abs_self _
+    _ <= Metric.diam (closure s) := dist_le_diam_of_mem h.closure (csSup_mem_closure hne h.bddAbove)
+        (csInf_mem_closure hne h.bddBelow)
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_le_of_le_toReal, Metric, Metric.diam, Metric.diam_closure, Metric.ediam_le_of_forall_dist_le, Real.dist_le_of_mem_Icc, bddAbove, closure, csInf_mem_closure, csSup_mem_closure, diam_closure, dist_le_diam_of_mem, dist_le_of_mem_Icc, ediam_le_of_forall_dist_le, eq_empty_or_nonempty, h.bddAbove, h.bddBe, h.closure, h.subset_Icc_sInf_sSup
 -/
@@ -3294,7 +3434,16 @@ lemma liminf_toReal_eq
     exact hi.1.trans hi.2
   have aux : forallᶠ i in f, (u i).toReal = ENNReal.truncateToReal b (u i) := by
     filter_upwards [le_b] with i i_le_b
-   
+    simp only [truncateToReal_eq_toReal b_ne_top i_le_b]
+  have aux' : (f.liminf u).toReal = ENNReal.truncateToReal b (f.liminf u) := by
+    rw [truncateToReal_eq_toReal b_ne_top liminf_le]
+  simp_rw [liminf_congr aux, aux']
+  have key := Monotone.map_liminf_of_continuousAt (F := f) (monotone_truncateToReal b_ne_top) u
+          (continuous_truncateToReal b_ne_top).continuousAt
+          (IsBoundedUnder.isCoboundedUnder_ge ⟨b, by simpa only [eventually_map] using le_b⟩)
+          ⟨0, Eventually.of_forall (by simp)⟩
+  rw [key]
+  rfl
 
 中文:
 引理 liminf_to实数_eq
@@ -3307,7 +3456,16 @@ lemma liminf_toReal_eq
     exact hi.1.trans hi.2
   have aux : forallᶠ i in f, (u i).toReal = ENNReal.truncateToReal b (u i) := by
     filter_upwards [le_b] with i i_le_b
-   
+    simp only [truncateToReal_eq_toReal b_ne_top i_le_b]
+  have aux' : (f.liminf u).toReal = ENNReal.truncateToReal b (f.liminf u) := by
+    rw [truncateToReal_eq_toReal b_ne_top liminf_le]
+  simp_rw [liminf_congr aux, aux']
+  have key := Monotone.map_liminf_of_continuousAt (F := f) (monotone_truncateToReal b_ne_top) u
+          (continuous_truncateToReal b_ne_top).continuousAt
+          (IsBoundedUnder.isCoboundedUnder_ge ⟨b, by simpa only [eventually_map] using le_b⟩)
+          ⟨0, Eventually.of_forall (by simp)⟩
+  rw [key]
+  rfl
 
 Depends on / 依赖: ENNReal, ENNReal.truncateToReal, Eventually, Eventually.and, b_ne_top, f.liminf, filter_upwards, i_le_b, le_b, liminf, liminf_congr, liminf_le, liminf_le_of_le, simp_rw, toReal, truncateToReal, truncateToReal_eq_toReal
 -/
@@ -3342,7 +3500,16 @@ lemma limsup_toReal_eq
     filter_upwards [le_b] with i i_le_b
     simp only [truncateToReal_eq_toReal b_ne_top i_le_b]
   have aux' : (f.limsup u).toReal = ENNReal.truncateToReal b (f.limsup u) := by
-    rw [truncateToReal_eq_toReal b_ne_t
+    rw [truncateToReal_eq_toReal b_ne_top (limsup_le_of_le ⟨0]; rw [by simp⟩ le_b)]
+  simp_rw [limsup_congr aux, aux']
+  have key := Monotone.map_limsup_of_continuousAt (F := f) (monotone_truncateToReal b_ne_top) u
+          (continuous_truncateToReal b_ne_top).continuousAt
+          ⟨b, by simpa only [eventually_map] using le_b⟩
+          (IsBoundedUnder.isCoboundedUnder_le ⟨0, Eventually.of_forall (by simp)⟩)
+  rw [key]
+  rfl
+
+@[simp, norm_cast]
 
 中文:
 引理 limsup_to实数_eq
@@ -3352,7 +3519,16 @@ lemma limsup_toReal_eq
     filter_upwards [le_b] with i i_le_b
     simp only [truncateToReal_eq_toReal b_ne_top i_le_b]
   have aux' : (f.limsup u).toReal = ENNReal.truncateToReal b (f.limsup u) := by
-    rw [truncateToReal_eq_toReal b_ne_t
+    rw [truncateToReal_eq_toReal b_ne_top (limsup_le_of_le ⟨0]; rw [by simp⟩ le_b)]
+  simp_rw [limsup_congr aux, aux']
+  have key := Monotone.map_limsup_of_continuousAt (F := f) (monotone_truncateToReal b_ne_top) u
+          (continuous_truncateToReal b_ne_top).continuousAt
+          ⟨b, by simpa only [eventually_map] using le_b⟩
+          (IsBoundedUnder.isCoboundedUnder_le ⟨0, Eventually.of_forall (by simp)⟩)
+  rw [key]
+  rfl
+
+@[simp, norm_cast]
 
 Depends on / 依赖: ENNReal, ENNReal.truncateToReal, Monotone, Monotone.map_limsup_of_continuousAt, b_ne_top, continu, continuous_truncateToReal, f.limsup, filter_upwards, i_le_b, le_b, limsup, limsup_congr, limsup_le_of_le, map_limsup_of_continuousAt, monotone_truncateToReal, simp_rw, toReal, truncateToReal, truncateToReal_eq_toReal
 -/
@@ -3444,7 +3620,8 @@ refine le_antisymm ?_ liminf_le_liminf .of_forall by simp
   rintro a hab
   filter_upwards [hb, ENNReal.tendsto_nhds_zero.1 hg _ <| lt_min (tsub_pos_of_lt hab) one_pos]
     with i hfg hg
-exact ENNReal.le_of_
+exact ENNReal.le_of_add_le_add_right (hg.trans_lt <| by simp).ne
+    (add_le_of_le_tsub_left_of_le hab.le <| hg.trans <| min_le_left ..).trans hfg
 
 中文:
 定理 liminf_add_of_right_tendsto_zero
@@ -3456,7 +3633,8 @@ refine le_antisymm ?_ liminf_le_liminf .of_forall by simp
   rintro a hab
   filter_upwards [hb, ENNReal.tendsto_nhds_zero.1 hg _ <| lt_min (tsub_pos_of_lt hab) one_pos]
     with i hfg hg
-exact ENNReal.le_of_
+exact ENNReal.le_of_add_le_add_right (hg.trans_lt <| by simp).ne
+    (add_le_of_le_tsub_left_of_le hab.le <| hg.trans <| min_le_left ..).trans hfg
 
 Depends on / 依赖: ENNReal, ENNReal.le_of_add_le_add_right, ENNReal.tendsto_nhds_zero, Filter, Filter.le_liminf_iff, add_le_of_le_tsub_left_of_le, filter_upwards, hab.le, hg.trans, hg.trans_lt, isBoundedDefault, le_antisymm, le_liminf_iff, le_of_add_le_add_right, liminf_le_liminf, liminf_le_of_le, lt_min, min_le_left, of_forall, one_pos
 -/
@@ -3505,7 +3683,8 @@ refine le_antisymm ?_ limsup_le_limsup .of_forall by simp
   rintro a hba
   filter_upwards [hb, ENNReal.tendsto_nhds_zero.1 hg _ <| tsub_pos_of_lt hba] with i hf hg
   calc f i + g i
-    _ <= b + g i := by gc
+    _ <= b + g i := by gcongr
+    _ <= a := add_le_of_le_tsub_left_of_le hba.le hg
 
 中文:
 定理 limsup_add_of_right_tendsto_zero
@@ -3517,7 +3696,8 @@ refine le_antisymm ?_ limsup_le_limsup .of_forall by simp
   rintro a hba
   filter_upwards [hb, ENNReal.tendsto_nhds_zero.1 hg _ <| tsub_pos_of_lt hba] with i hf hg
   calc f i + g i
-    _ <= b + g i := by gc
+    _ <= b + g i := by gcongr
+    _ <= a := add_le_of_le_tsub_left_of_le hba.le hg
 
 Depends on / 依赖: ENNReal, ENNReal.tendsto_nhds_zero, Filter, Filter.limsup_le_iff, add_le_of_le_tsub_left_of_le, filter_upwards, hba.le, isBoundedDefault, le_antisymm, le_limsup_of_le, limsup_le_iff, limsup_le_limsup, of_forall, tendsto_nhds_zero, tsub_pos_of_lt
 -/
@@ -3567,7 +3747,15 @@ lemma Dense.lipschitzWith_extend
   have : IsClosed {p : α × α | edist (hs.extend f p.1) (hs.extend f p.2) <= K * edist p.1 p.2} := by
     have : Continuous (hs.extend f) := (hs.uniformContinuous_extend hf.uniformContinuous).continuous
     apply isClosed_le (by fun_prop)
-    exact (ENNReal.continuous_const_mul (by simp)).comp (by
+    exact (ENNReal.continuous_const_mul (by simp)).comp (by fun_prop)
+  have : Dense {p : α × α | edist (hs.extend f p.1) (hs.extend f p.2) <= K * edist p.1 p.2} := by
+    apply (hs.prod hs).mono
+    rintro ⟨x, y⟩ ⟨hx, hy⟩
+    have Ax : hs.extend f x = f ⟨x, hx⟩ := hs.extend_eq hf.continuous ⟨x, hx⟩
+    have Ay : hs.extend f y = f ⟨y, hy⟩ := hs.extend_eq hf.continuous ⟨y, hy⟩
+    simp only [Set.mem_ofPred_eq, Ax, Ay]
+    exact hf ⟨x, hx⟩ ⟨y, hy⟩
+  simpa only [Dense, IsClosed.closure_eq, Set.mem_ofPred_eq, Prod.forall] using! this
 
 中文:
 引理 稠密.lipschitzWith_extend
@@ -3576,7 +3764,15 @@ lemma Dense.lipschitzWith_extend
   have : IsClosed {p : α × α | edist (hs.extend f p.1) (hs.extend f p.2) <= K * edist p.1 p.2} := by
     have : Continuous (hs.extend f) := (hs.uniformContinuous_extend hf.uniformContinuous).continuous
     apply isClosed_le (by fun_prop)
-    exact (ENNReal.continuous_const_mul (by simp)).comp (by
+    exact (ENNReal.continuous_const_mul (by simp)).comp (by fun_prop)
+  have : Dense {p : α × α | edist (hs.extend f p.1) (hs.extend f p.2) <= K * edist p.1 p.2} := by
+    apply (hs.prod hs).mono
+    rintro ⟨x, y⟩ ⟨hx, hy⟩
+    have Ax : hs.extend f x = f ⟨x, hx⟩ := hs.extend_eq hf.continuous ⟨x, hx⟩
+    have Ay : hs.extend f y = f ⟨y, hy⟩ := hs.extend_eq hf.continuous ⟨y, hy⟩
+    simp only [Set.mem_ofPred_eq, Ax, Ay]
+    exact hf ⟨x, hx⟩ ⟨y, hy⟩
+  simpa only [Dense, IsClosed.closure_eq, Set.mem_ofPred_eq, Prod.forall] using! this
 
 Depends on / 依赖: Continuous, ENNReal, ENNReal.continuous_const_mul, IsClosed, continuous, continuous_const_mul, extend, extend_eq, fun_prop, hf.conti, hf.uniformContinuous, hs.extend, hs.extend_eq, hs.prod, hs.uniformContinuous_extend, isClosed_le, uniformContinuous, uniformContinuous_extend
 -/

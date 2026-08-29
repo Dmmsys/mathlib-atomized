@@ -48,7 +48,7 @@ theorem IsPrimitiveRoot.not_coprime_norm_of_mk_eq_one
   have : Fact (p.Prime) := ⟨hp⟩
 refine hp.not_dvd_one h₁ ▸ Nat.dvd_gcd h₂ ?_
 exact hζ.prime_dvd_of_dvd_norm_sub_one hn
-    Int.dvd_trans (Int.natCast_dvd_natCast.mpr 
+    Int.dvd_trans (Int.natCast_dvd_natCast.mpr h₂) (absNorm_dvd_norm_of_mem h)
 
 中文:
 定理 是PrimitiveRoot.not_coprime_norm_of_mk_eq_one
@@ -60,7 +60,7 @@ exact hζ.prime_dvd_of_dvd_norm_sub_one hn
   have : Fact (p.Prime) := ⟨hp⟩
 refine hp.not_dvd_one h₁ ▸ Nat.dvd_gcd h₂ ?_
 exact hζ.prime_dvd_of_dvd_norm_sub_one hn
-    Int.dvd_trans (Int.natCast_dvd_natCast.mpr 
+    Int.dvd_trans (Int.natCast_dvd_natCast.mpr h₂) (absNorm_dvd_norm_of_mem h)
 
 Depends on / 依赖: Ideal.Quotient.mk, NeZero, NeZero.of_gt, Quotient, of_gt, toInteger
 -/
@@ -172,7 +172,10 @@ theorem Ideal.rootsOfUnityMapQuot_injective
   intro ht'
   let μ : K := ζ.val
   have hμ : IsPrimitiveRoot μ t :=
-    (IsPrimitiveRoot.coe_units_if
+    (IsPrimitiveRoot.coe_units_iff.mpr hζ).map_of_injective RingOfIntegers.coe_injective
+  rw [Units.ext_iff]; rw [rootsOfUnityMapQuot_apply]; rw [Units.val_one] at h
+  refine hμ.not_coprime_norm_of_mk_eq_one hI₁ ht' h ?_
+  exact Nat.dvd_one.mp (hI₂ ▸ Nat.gcd_dvd_gcd_of_dvd_right (absNorm I) ht)
 
 中文:
 定理 理想.rootsOfUnityMapQuot_injective
@@ -185,7 +188,10 @@ theorem Ideal.rootsOfUnityMapQuot_injective
   intro ht'
   let μ : K := ζ.val
   have hμ : IsPrimitiveRoot μ t :=
-    (IsPrimitiveRoot.coe_units_if
+    (IsPrimitiveRoot.coe_units_iff.mpr hζ).map_of_injective RingOfIntegers.coe_injective
+  rw [Units.ext_iff]; rw [rootsOfUnityMapQuot_apply]; rw [Units.val_one] at h
+  refine hμ.not_coprime_norm_of_mk_eq_one hI₁ ht' h ?_
+  exact Nat.dvd_one.mp (hI₂ ▸ Nat.gcd_dvd_gcd_of_dvd_right (absNorm I) ht)
 
 Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.coe_units_iff.mpr, Nat.dvd_one.mp, Nat.gcd, RingOfIntegers, RingOfIntegers.coe_injective, Units.ext_iff, Units.val_one, coe_injective, coe_units_iff, dvd_one, ext_iff, injective_iff_map_eq_one, isPrimitiveRoot_of_mem_rootsOfUnity, map_of_injective, not_coprime_norm_of_mk_eq_one, rootsOfUnityMapQuot_apply, val_one
 -/

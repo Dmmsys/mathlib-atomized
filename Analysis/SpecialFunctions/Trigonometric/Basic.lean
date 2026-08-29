@@ -2602,7 +2602,8 @@ theorem sin_eq_zero_iff
         (sub_nonpos.1 <|
           le_of_not_gt fun h₃ =>
             (sin_pos_of_pos_of_lt_pi h₃ (Int.sub_floor_div_mul_lt _ pi_pos)).ne
-              (by simp [sub_eq_add_neg, sin_add, h, sin_int_mul_p
+              (by simp [sub_eq_add_neg, sin_add, h, sin_int_mul_pi]))⟩,
+    fun ⟨_, hn⟩ => hn ▸ sin_int_mul_pi _⟩
 
 中文:
 定理 sin_eq_zero_iff
@@ -2614,7 +2615,8 @@ theorem sin_eq_zero_iff
         (sub_nonpos.1 <|
           le_of_not_gt fun h₃ =>
             (sin_pos_of_pos_of_lt_pi h₃ (Int.sub_floor_div_mul_lt _ pi_pos)).ne
-              (by simp [sub_eq_add_neg, sin_add, h, sin_int_mul_p
+              (by simp [sub_eq_add_neg, sin_add, h, sin_int_mul_pi]))⟩,
+    fun ⟨_, hn⟩ => hn ▸ sin_int_mul_pi _⟩
 
 Depends on / 依赖: Int.sub_floor_div_mul_lt, Int.sub_floor_div_mul_nonneg, le_antisymm, le_of_not_gt, pi_pos, sin_add, sin_int_mul_pi, sin_pos_of_pos_of_lt_pi, sub_eq_add_neg, sub_floor_div_mul_lt, sub_floor_div_mul_nonneg, sub_nonneg, sub_nonpos
 -/
@@ -2708,7 +2710,11 @@ theorem cos_eq_one_iff
         (fun hn0 => by
           rwa [← mul_assoc, ← @Int.cast_two Real, ← Int.cast_mul,
             Int.ediv_mul_cancel (Int.dvd_iff_emod_eq_zero.2 hn0)])
-    
+        fun hn1 => by
+        rw [← Int.emod_add_mul_ediv n 2]; rw [hn1]; rw [Int.cast_add]; rw [Int.cast_one]; rw [add_mul]; rw [one_mul]; rw [add_comm]; rw [mul_comm (2 : Int)]; rw [Int.cast_mul]; rw [mul_assoc]; rw [Int.cast_two] at hn
+        rw [← hn]; rw [cos_int_mul_two_pi_add_pi] at h
+        exact absurd h (by norm_num)⟩,
+    fun ⟨_, hn⟩ => hn ▸ cos_int_mul_two_pi _⟩
 
 中文:
 定理 cos_eq_one_iff
@@ -2721,7 +2727,11 @@ theorem cos_eq_one_iff
         (fun hn0 => by
           rwa [← mul_assoc, ← @Int.cast_two Real, ← Int.cast_mul,
             Int.ediv_mul_cancel (Int.dvd_iff_emod_eq_zero.2 hn0)])
-    
+        fun hn1 => by
+        rw [← Int.emod_add_mul_ediv n 2]; rw [hn1]; rw [Int.cast_add]; rw [Int.cast_one]; rw [add_mul]; rw [one_mul]; rw [add_comm]; rw [mul_comm (2 : Int)]; rw [Int.cast_mul]; rw [mul_assoc]; rw [Int.cast_two] at hn
+        rw [← hn]; rw [cos_int_mul_two_pi_add_pi] at h
+        exact absurd h (by norm_num)⟩,
+    fun ⟨_, hn⟩ => hn ▸ cos_int_mul_two_pi _⟩
 
 Depends on / 依赖: Int.cast_add, Int.cast_mul, Int.cast_one, Int.cast_two, Int.dvd_iff_emod_eq_zero, Int.ediv_mul_cancel, Int.emod_add_mul_ediv, Int.emod_two_eq_zero_or_one, Or.inl, add_comm, add_mul, cast_add, cast_mul, cast_one, cast_two, cos_int_mu, dvd_iff_emod_eq_zero, ediv_mul_cancel, emod_add_mul_ediv, emod_two_eq_zero_or_one
 -/
@@ -2751,7 +2761,7 @@ theorem cos_eq_one_iff_of_lt_of_lt
     rw [neg_lt]; rw [neg_mul_eq_neg_mul]; rw [mul_lt_iff_lt_one_left two_pi_pos] at hx₁
     norm_cast at hx₁ hx₂
     obtain rfl : n = 0 := le_antisymm (by lia) (by lia)
-    simp, fun h => b
+    simp, fun h => by simp [h]⟩
 
 中文:
 定理 cos_eq_one_iff_of_lt_of_lt
@@ -2762,7 +2772,7 @@ theorem cos_eq_one_iff_of_lt_of_lt
     rw [neg_lt]; rw [neg_mul_eq_neg_mul]; rw [mul_lt_iff_lt_one_left two_pi_pos] at hx₁
     norm_cast at hx₁ hx₂
     obtain rfl : n = 0 := le_antisymm (by lia) (by lia)
-    simp, fun h => b
+    simp, fun h => by simp [h]⟩
 
 Depends on / 依赖: cos_eq_one_iff, le_antisymm, mul_lt_iff_lt_one_left, neg_lt, neg_mul_eq_neg_mul, two_pi_pos
 -/
@@ -3408,7 +3418,8 @@ theorem cos_pi_over_two_pow
   proof: one_lt_pow₀ one_lt_two n.succ_ne_zero
     have B : π / 2 ^ (n + 1) < π := div_lt_self pi_pos A
     have C : 0 < π / 2 ^ (n + 1) := by positivity
-    rw [pow_succ]; rw [div_mul_eq_div_div]; rw [cos_half]; rw [cos_pi_over_two_pow n]; rw [sqrtTwoAddSeries]; rw [add_div_eq_mul_add_div]; rw [one_mul]; rw
+    rw [pow_succ]; rw [div_mul_eq_div_div]; rw [cos_half]; rw [cos_pi_over_two_pow n]; rw [sqrtTwoAddSeries]; rw [add_div_eq_mul_add_div]; rw [one_mul]; rw [← div_mul_eq_div_div]; rw [sqrt_div]; rw [sqrt_mul_self] <;>
+      linarith [sqrtTwoAddSeries_nonneg le_rfl n]
 
 中文:
 定理 cos_pi_over_two_pow
@@ -3416,7 +3427,8 @@ theorem cos_pi_over_two_pow
   证明: one_lt_pow₀ one_lt_two n.succ_ne_zero
     have B : π / 2 ^ (n + 1) < π := div_lt_self pi_pos A
     have C : 0 < π / 2 ^ (n + 1) := by positivity
-    rw [pow_succ]; rw [div_mul_eq_div_div]; rw [cos_half]; rw [cos_pi_over_two_pow n]; rw [sqrtTwoAddSeries]; rw [add_div_eq_mul_add_div]; rw [one_mul]; rw
+    rw [pow_succ]; rw [div_mul_eq_div_div]; rw [cos_half]; rw [cos_pi_over_two_pow n]; rw [sqrtTwoAddSeries]; rw [add_div_eq_mul_add_div]; rw [one_mul]; rw [← div_mul_eq_div_div]; rw [sqrt_div]; rw [sqrt_mul_self] <;>
+      linarith [sqrtTwoAddSeries_nonneg le_rfl n]
 
 Depends on / 依赖: n.succ_ne_zero, one_lt_two, succ_ne_zero
 -/
@@ -3500,7 +3512,10 @@ theorem sin_pi_over_two_pow_succ
   · rw [sub_nonneg]
     exact (sqrtTwoAddSeries_lt_two _).le
   refine mul_nonneg (sin_nonneg_of_nonneg_of_le_pi ?_ ?_) zero_le_two
-  · po
+  · positivity
+· exact div_le_self pi_pos.le one_le_pow₀ one_le_two
+
+@[simp]
 
 中文:
 定理 sin_pi_over_two_pow_succ
@@ -3511,7 +3526,10 @@ theorem sin_pi_over_two_pow_succ
   · rw [sub_nonneg]
     exact (sqrtTwoAddSeries_lt_two _).le
   refine mul_nonneg (sin_nonneg_of_nonneg_of_le_pi ?_ ?_) zero_le_two
-  · po
+  · positivity
+· exact div_le_self pi_pos.le one_le_pow₀ one_le_two
+
+@[simp]
 
 Depends on / 依赖: div_le_self, eq_comm, eq_div_iff_mul_eq, mul_nonneg, mul_pow, one_le_two, pi_pos, pi_pos.le, sin_nonneg_of_nonneg_of_le_pi, sin_sq_pi_over_two_pow_succ, sqrtTwoAddSeries_lt_two, sqrt_eq_iff_eq_sq, sub_mul, sub_nonneg, two_ne_zero, zero_le_two
 -/
@@ -3794,7 +3812,9 @@ theorem cos_pi_div_three
     linarith [cos_pi, cos_three_mul (π / 3)]
   rcases mul_eq_zero.mp h₁ with h | h
   · linarith [eq_zero_of_pow_eq_zero h]
-  · have : cos π < cos (π / 3) := 
+  · have : cos π < cos (π / 3) := by
+      refine cos_lt_cos_of_nonneg_of_le_pi ?_ le_rfl ?_ <;> linarith [pi_pos]
+    linarith [cos_pi]
 
 中文:
 定理 cos_pi_div_three
@@ -3807,7 +3827,9 @@ theorem cos_pi_div_three
     linarith [cos_pi, cos_three_mul (π / 3)]
   rcases mul_eq_zero.mp h₁ with h | h
   · linarith [eq_zero_of_pow_eq_zero h]
-  · have : cos π < cos (π / 3) := 
+  · have : cos π < cos (π / 3) := by
+      refine cos_lt_cos_of_nonneg_of_le_pi ?_ le_rfl ?_ <;> linarith [pi_pos]
+    linarith [cos_pi]
 
 Depends on / 依赖: cos_lt_cos_of_nonneg_of_le_pi, cos_pi, cos_three_mul, eq_zero_of_pow_eq_zero, le_rfl, mul_eq_zero, mul_eq_zero.mp, pi_pos
 -/
@@ -3962,7 +3984,18 @@ theorem quadratic_root_cos_pi_div_five
     rw [ne_eq]; rw [sin_eq_zero_iff]; rw [hθ]
     push Not
     intro n hn
-    replace hn : n * 5 = 1 := by field_simp at
+    replace hn : n * 5 = 1 := by field_simp at hn; norm_cast at hn
+    lia
+  suffices s * (2 * c) = s * (4 * c ^ 2 - 1) from mul_left_cancel₀ hs this
+  calc s * (2 * c) = 2 * s * c := by rw [← mul_assoc, mul_comm 2]
+                 _ = sin (2 * θ) := by rw [sin_two_mul]
+                 _ = sin (π - 2 * θ) := by rw [sin_pi_sub]
+                 _ = sin (2 * θ + θ) := by congr; linarith
+                 _ = sin (2 * θ) * c + cos (2 * θ) * s := sin_add (2 * θ) θ
+                 _ = 2 * s * c * c + cos (2 * θ) * s := by rw [sin_two_mul]
+                 _ = 2 * s * c * c + (2 * c ^ 2 - 1) * s := by rw [cos_two_mul]
+                 _ = s * (2 * c * c) + s * (2 * c ^ 2 - 1) := by linarith
+                 _ = s * (4 * c ^ 2 - 1) := by linarith
 
 中文:
 定理 quadratic_root_cos_pi_div_five
@@ -3976,7 +4009,18 @@ theorem quadratic_root_cos_pi_div_five
     rw [ne_eq]; rw [sin_eq_zero_iff]; rw [hθ]
     push Not
     intro n hn
-    replace hn : n * 5 = 1 := by field_simp at
+    replace hn : n * 5 = 1 := by field_simp at hn; norm_cast at hn
+    lia
+  suffices s * (2 * c) = s * (4 * c ^ 2 - 1) from mul_left_cancel₀ hs this
+  calc s * (2 * c) = 2 * s * c := by rw [← mul_assoc, mul_comm 2]
+                 _ = sin (2 * θ) := by rw [sin_two_mul]
+                 _ = sin (π - 2 * θ) := by rw [sin_pi_sub]
+                 _ = sin (2 * θ + θ) := by congr; linarith
+                 _ = sin (2 * θ) * c + cos (2 * θ) * s := sin_add (2 * θ) θ
+                 _ = 2 * s * c * c + cos (2 * θ) * s := by rw [sin_two_mul]
+                 _ = 2 * s * c * c + (2 * c ^ 2 - 1) * s := by rw [cos_two_mul]
+                 _ = s * (2 * c * c) + s * (2 * c ^ 2 - 1) := by linarith
+                 _ = s * (4 * c ^ 2 - 1) := by linarith
 -/
 theorem quadratic_root_cos_pi_div_five :
     letI c := cos (π / 5)
@@ -4036,7 +4080,11 @@ theorem cos_pi_div_five
     rw [← sq]; rw [neg_mul]; rw [← sub_eq_add_neg]; rw [← sub_eq_add_neg]
     exact quadratic_root_cos_pi_div_five
   have hd : discrim 4 (-2) (-1) = (2 * √5) * (2 * √5) := by norm_num [discrim, mul_mul_mul_comm]
-  rcases (qua
+  rcases (quadratic_eq_zero_iff (by simp) hd c).mp this with h | h
+  · simp [h]; linarith
+  · absurd (show 0 <= c from cos_nonneg_of_mem_Icc <| by constructor <;> linarith [pi_pos.le])
+    rw [not_le]; rw [h]
+    exact div_neg_of_neg_of_pos (by norm_num [lt_sqrt]) (by positivity)
 
 中文:
 定理 cos_pi_div_five
@@ -4047,7 +4095,11 @@ theorem cos_pi_div_five
     rw [← sq]; rw [neg_mul]; rw [← sub_eq_add_neg]; rw [← sub_eq_add_neg]
     exact quadratic_root_cos_pi_div_five
   have hd : discrim 4 (-2) (-1) = (2 * √5) * (2 * √5) := by norm_num [discrim, mul_mul_mul_comm]
-  rcases (qua
+  rcases (quadratic_eq_zero_iff (by simp) hd c).mp this with h | h
+  · simp [h]; linarith
+  · absurd (show 0 <= c from cos_nonneg_of_mem_Icc <| by constructor <;> linarith [pi_pos.le])
+    rw [not_le]; rw [h]
+    exact div_neg_of_neg_of_pos (by norm_num [lt_sqrt]) (by positivity)
 
 Depends on / 依赖: absurd, cos_nonneg_of_mem_Icc, discrim, div_neg_of_neg_of_pos, mul_mul_mul_comm, neg_mul, not_le, pi_pos, pi_pos.le, quadratic_eq_zero_iff, quadratic_root_cos_pi_div_five, sub_eq_add_neg
 -/
@@ -6476,7 +6528,13 @@ theorem norm_exp_mul_exp_add_exp_neg_le_of_abs_im_le
   simp only [norm_exp, Real.exp_le_exp, re_ofReal_mul, add_re, exp_re, neg_im, Real.cos_neg, ←
     add_mul, mul_assoc, mul_comm (Real.cos b), neg_re, ← Real.cos_abs z.im]
   have : Real.exp |z.re| <= Real.exp z.re + Real.exp (-z.re) :=
-    apply_abs_le_add_of_nonneg (fun x => (Real.exp_pos x).le) 
+    apply_abs_le_add_of_nonneg (fun x => (Real.exp_pos x).le) z.re
+  refine mul_le_mul_of_nonpos_left (mul_le_mul this ?_ ?_ ((Real.exp_pos _).le.trans this)) ha
+  · exact
+      Real.cos_le_cos_of_nonneg_of_le_pi (_root_.abs_nonneg _)
+        (hb.trans <| half_le_self <| Real.pi_pos.le) hz
+  · refine Real.cos_nonneg_of_mem_Icc ⟨?_, hb⟩
+    exact (neg_nonpos.2 <| Real.pi_div_two_pos.le).trans ((_root_.abs_nonneg _).trans hz)
 
 中文:
 定理 norm_exp_mul_exp_add_exp_neg_le_of_abs_im_le
@@ -6485,7 +6543,13 @@ theorem norm_exp_mul_exp_add_exp_neg_le_of_abs_im_le
   simp only [norm_exp, Real.exp_le_exp, re_ofReal_mul, add_re, exp_re, neg_im, Real.cos_neg, ←
     add_mul, mul_assoc, mul_comm (Real.cos b), neg_re, ← Real.cos_abs z.im]
   have : Real.exp |z.re| <= Real.exp z.re + Real.exp (-z.re) :=
-    apply_abs_le_add_of_nonneg (fun x => (Real.exp_pos x).le) 
+    apply_abs_le_add_of_nonneg (fun x => (Real.exp_pos x).le) z.re
+  refine mul_le_mul_of_nonpos_left (mul_le_mul this ?_ ?_ ((Real.exp_pos _).le.trans this)) ha
+  · exact
+      Real.cos_le_cos_of_nonneg_of_le_pi (_root_.abs_nonneg _)
+        (hb.trans <| half_le_self <| Real.pi_pos.le) hz
+  · refine Real.cos_nonneg_of_mem_Icc ⟨?_, hb⟩
+    exact (neg_nonpos.2 <| Real.pi_div_two_pos.le).trans ((_root_.abs_nonneg _).trans hz)
 
 Depends on / 依赖: Real.cos, Real.cos_abs, Real.cos_le_cos_of_nonneg_of_le_pi, Real.cos_neg, Real.exp, Real.exp_le_exp, Real.exp_pos, Real.pi_pos.le, _comp, _root_, _root_.abs_nonneg, abs_nonneg, add_mul, add_re, apply_abs_le_add_of_nonneg, cos_abs, cos_le_cos_of_nonneg_of_le_pi, cos_neg, exp_le_exp, exp_pos
 -/

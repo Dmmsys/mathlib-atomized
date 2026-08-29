@@ -31,7 +31,12 @@ theorem prime_iff_prime_int
   proof: ⟨fun hp =>
     ⟨Int.natCast_ne_zero_iff_pos.2 hp.pos, mt Int.isUnit_iff_natAbs_eq.1 hp.ne_one, fun a b h => by
       rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast]; rw [Int.natAbs_mul]; rw [hp.dvd_mul] at h
-      rwa [← Int.dvd_natAbs, Int.natCast_dvd_natCast, ← Int.dvd_natAbs, Int.natCast_dvd_
+      rwa [← Int.dvd_natAbs, Int.natCast_dvd_natCast, ← Int.dvd_natAbs, Int.natCast_dvd_natCast]⟩,
+    fun hp =>
+    Nat.prime_iff.2
+      ⟨Int.natCast_ne_zero.1 hp.1,
+        (mt Nat.isUnit_iff.1) fun h => by simp [h] at hp, fun a b => by
+        simpa only [Int.natCast_dvd_natCast, (Int.natCast_mul _ _).symm] using hp.2.2 a b⟩⟩
 
 中文:
 定理 prime_iff_prime_int
@@ -40,7 +45,12 @@ theorem prime_iff_prime_int
   证明: ⟨fun hp =>
     ⟨Int.natCast_ne_zero_iff_pos.2 hp.pos, mt Int.isUnit_iff_natAbs_eq.1 hp.ne_one, fun a b h => by
       rw [← Int.dvd_natAbs]; rw [Int.natCast_dvd_natCast]; rw [Int.natAbs_mul]; rw [hp.dvd_mul] at h
-      rwa [← Int.dvd_natAbs, Int.natCast_dvd_natCast, ← Int.dvd_natAbs, Int.natCast_dvd_
+      rwa [← Int.dvd_natAbs, Int.natCast_dvd_natCast, ← Int.dvd_natAbs, Int.natCast_dvd_natCast]⟩,
+    fun hp =>
+    Nat.prime_iff.2
+      ⟨Int.natCast_ne_zero.1 hp.1,
+        (mt Nat.isUnit_iff.1) fun h => by simp [h] at hp, fun a b => by
+        simpa only [Int.natCast_dvd_natCast, (Int.natCast_mul _ _).symm] using hp.2.2 a b⟩⟩
 
 Depends on / 依赖: Int.dvd_natAbs, Int.isUnit_iff_natAbs_eq, Int.natAbs_mul, Int.natCast_dvd_natCast, Int.natCast_mul, Int.natCast_ne_zero, Int.natCast_ne_zero_iff_pos, Nat.isUnit_iff, Nat.prime_iff, dvd_mul, dvd_natAbs, hp.dvd_mul, hp.ne_one, hp.pos, isUnit_iff, isUnit_iff_natAbs_eq, natAbs_mul, natCast_dvd_natCast, natCast_mul, natCast_ne_zero
 -/

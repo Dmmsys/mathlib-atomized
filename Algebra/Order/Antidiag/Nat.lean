@@ -41,7 +41,17 @@ This is `Nat.divisorsAntidiagonal` without a special case for `n = 0`. -/
   let divisorsAntidiagonal (n : Nat+) : Finset (Nat+ × Nat+) :=
     (Nat.divisorsAntidiagonal n).attach.map
       ⟨fun x =>
-        (⟨x.val.1, Nat.pos_of_mem_divisors <| Nat
+        (⟨x.val.1, Nat.pos_of_mem_divisors <| Nat.fst_mem_divisors_of_mem_antidiagonal x.prop⟩,
+⟨x.val.2, Nat.pos_of_mem_divisors Nat.snd_mem_divisors_of_mem_antidiagonal x.prop⟩),
+fun _ _ h => Subtype.ext Prod.ext (congr_arg (·.1.val) h) (congr_arg (·.2.val) h)⟩
+  have mem_divisorsAntidiagonal {n : Nat+} (x : Nat+ × Nat+) :
+    x in divisorsAntidiagonal n ↔ x.1 * x.2 = n := by
+    simp_rw [divisorsAntidiagonal, Finset.mem_map, Finset.mem_attach, Function.Embedding.coeFn_mk,
+      Prod.ext_iff, true_and, ← coe_inj, Subtype.exists]
+    simp
+  { antidiagonal := fun n => divisorsAntidiagonal (Additive.toMul n) |>.map
+      (.prodMap (Additive.ofMul.toEmbedding) (Additive.ofMul.toEmbedding))
+    mem_antidiagonal := by simp [← ofMul_mul, mem_divisorsAntidiagonal] }
 
 中文:
 实例 instHasAntidiagonal
@@ -51,7 +61,17 @@ This is `Nat.divisorsAntidiagonal` without a special case for `n = 0`. -/
   let divisorsAntidiagonal (n : Nat+) : Finset (Nat+ × Nat+) :=
     (Nat.divisorsAntidiagonal n).attach.map
       ⟨fun x =>
-        (⟨x.val.1, Nat.pos_of_mem_divisors <| Nat
+        (⟨x.val.1, Nat.pos_of_mem_divisors <| Nat.fst_mem_divisors_of_mem_antidiagonal x.prop⟩,
+⟨x.val.2, Nat.pos_of_mem_divisors Nat.snd_mem_divisors_of_mem_antidiagonal x.prop⟩),
+fun _ _ h => Subtype.ext Prod.ext (congr_arg (·.1.val) h) (congr_arg (·.2.val) h)⟩
+  have mem_divisorsAntidiagonal {n : Nat+} (x : Nat+ × Nat+) :
+    x in divisorsAntidiagonal n ↔ x.1 * x.2 = n := by
+    simp_rw [divisorsAntidiagonal, Finset.mem_map, Finset.mem_attach, Function.Embedding.coeFn_mk,
+      Prod.ext_iff, true_and, ← coe_inj, Subtype.exists]
+    simp
+  { antidiagonal := fun n => divisorsAntidiagonal (Additive.toMul n) |>.map
+      (.prodMap (Additive.ofMul.toEmbedding) (Additive.ofMul.toEmbedding))
+    mem_antidiagonal := by simp [← ofMul_mul, mem_divisorsAntidiagonal] }
 -/
 instance instHasAntidiagonal : Finset.HasAntidiagonal (Additive Nat+) :=
   /- The set of divisors of a positive natural number.
@@ -118,7 +138,21 @@ theorem mem_finMulAntidiag
   split_ifs with h
   · simp_rw [mem_map, mem_finAntidiagonal, Function.Embedding.arrowCongrRight_apply,
       Function.comp_def, Function.Embedding.trans_apply, Equiv.coe_toEmbedding,
-      Function.Embedding.coeFn_mk, ← Additive.ofMul.symm_apply_eq, Additive.ofMul_symm_eq
+      Function.Embedding.coeFn_mk, ← Additive.ofMul.symm_apply_eq, Additive.ofMul_symm_eq,
+      toMul_sum, (Equiv.piCongrRight fun _ => Additive.ofMul).surjective.exists,
+      Equiv.piCongrRight_apply, Pi.map_apply, toMul_ofMul, ← PNat.coe_inj, PNat.mk_coe,
+      PNat.coe_prod]
+    constructor
+    · rintro ⟨a, ha_mem, rfl⟩
+      exact ⟨ha_mem, h.ne.symm⟩
+    · rintro ⟨rfl, _⟩
+      refine ⟨fun i => ⟨f i, ?_⟩, rfl, funext fun _ => rfl⟩
+      apply Nat.pos_of_ne_zero
+      exact Finset.prod_ne_zero_iff.mp h.ne.symm _ (mem_univ _)
+  · simp only [not_lt, nonpos_iff_eq_zero] at h
+    simp only [h, notMem_empty, ne_eq, not_true_eq_false, and_false]
+
+@[simp]
 
 中文:
 定理 mem_finMulAntidiag
@@ -128,7 +162,21 @@ theorem mem_finMulAntidiag
   split_ifs with h
   · simp_rw [mem_map, mem_finAntidiagonal, Function.Embedding.arrowCongrRight_apply,
       Function.comp_def, Function.Embedding.trans_apply, Equiv.coe_toEmbedding,
-      Function.Embedding.coeFn_mk, ← Additive.ofMul.symm_apply_eq, Additive.ofMul_symm_eq
+      Function.Embedding.coeFn_mk, ← Additive.ofMul.symm_apply_eq, Additive.ofMul_symm_eq,
+      toMul_sum, (Equiv.piCongrRight fun _ => Additive.ofMul).surjective.exists,
+      Equiv.piCongrRight_apply, Pi.map_apply, toMul_ofMul, ← PNat.coe_inj, PNat.mk_coe,
+      PNat.coe_prod]
+    constructor
+    · rintro ⟨a, ha_mem, rfl⟩
+      exact ⟨ha_mem, h.ne.symm⟩
+    · rintro ⟨rfl, _⟩
+      refine ⟨fun i => ⟨f i, ?_⟩, rfl, funext fun _ => rfl⟩
+      apply Nat.pos_of_ne_zero
+      exact Finset.prod_ne_zero_iff.mp h.ne.symm _ (mem_univ _)
+  · simp only [not_lt, nonpos_iff_eq_zero] at h
+    simp only [h, notMem_empty, ne_eq, not_true_eq_false, and_false]
+
+@[simp]
 
 Depends on / 依赖: Additive, Additive.ofMul, Additive.ofMul.symm_apply_eq, Additive.ofMul_symm_eq, Embedding, Equiv.coe_toEmbedding, Equiv.piCongrRight, Equiv.piCongrRight_apply, Function, Function.Embedding.arrowCongrRight_apply, Function.Embedding.coeFn_mk, Function.Embedding.trans_apply, Function.comp_def, LinearOrderedCommGroup, LinearOrderedCommGroup.to_noMaxOrder, NoMaxOrder, Nontrivial, PNat.coe_inj, PNat.coe_prod, PNat.mk_coe
 -/
@@ -305,7 +353,7 @@ theorem finMulAntidiag_eq_piFinset_divisors_filter
     refine ⟨?_, prod_eq_of_mem_finMulAntidiag hf⟩
     exact fun i => ⟨(dvd_of_mem_finMulAntidiag hf i).trans hmn, hn⟩
   · rw [mem_finMulAntidiag]
-    exact fun ⟨_, hprod⟩ => ⟨hprod, ne_zero_
+    exact fun ⟨_, hprod⟩ => ⟨hprod, ne_zero_of_dvd_ne_zero hn hmn⟩
 
 中文:
 定理 finMulAntidiag_eq_piFinset_divisors_filter
@@ -319,7 +367,7 @@ theorem finMulAntidiag_eq_piFinset_divisors_filter
     refine ⟨?_, prod_eq_of_mem_finMulAntidiag hf⟩
     exact fun i => ⟨(dvd_of_mem_finMulAntidiag hf i).trans hmn, hn⟩
   · rw [mem_finMulAntidiag]
-    exact fun ⟨_, hprod⟩ => ⟨hprod, ne_zero_
+    exact fun ⟨_, hprod⟩ => ⟨hprod, ne_zero_of_dvd_ne_zero hn hmn⟩
 
 Depends on / 依赖: Fintype, Fintype.mem_piFinset, dvd_of_mem_finMulAntidiag, mem_divisors, mem_filter, mem_finMulAntidiag, mem_piFinset, ne_eq, ne_zero_of_dvd_ne_zero, prod_eq_of_mem_finMulAntidiag
 -/
@@ -351,7 +399,16 @@ lemma image_apply_finMulAntidiag
   · simp_rw [mem_finMulAntidiag]
     rintro ⟨⟨r, rfl⟩, hn⟩
     have hs : Nontrivial (Fin d) := by
-      rw [Fin.nontrivial_iff_two_le
+      rw [Fin.nontrivial_iff_two_le]
+      obtain rfl | hd' := eq_or_ne d 0
+      · exact i.elim0
+      lia
+    obtain ⟨i', hi_ne⟩ := exists_ne i
+    use fun j => if j = i then k else if j = i' then r else 1
+    simp only [ite_true, and_true]
+    rw [← Finset.mul_prod_erase (h := mem_univ i)]; rw [← Finset.mul_prod_erase (a := i')]
+    · simp_all
+    exact mem_erase.mpr ⟨hi_ne, mem_univ _⟩
 
 中文:
 引理 image_apply_finMulAntidiag
@@ -365,7 +422,16 @@ lemma image_apply_finMulAntidiag
   · simp_rw [mem_finMulAntidiag]
     rintro ⟨⟨r, rfl⟩, hn⟩
     have hs : Nontrivial (Fin d) := by
-      rw [Fin.nontrivial_iff_two_le
+      rw [Fin.nontrivial_iff_two_le]
+      obtain rfl | hd' := eq_or_ne d 0
+      · exact i.elim0
+      lia
+    obtain ⟨i', hi_ne⟩ := exists_ne i
+    use fun j => if j = i then k else if j = i' then r else 1
+    simp only [ite_true, and_true]
+    rw [← Finset.mul_prod_erase (h := mem_univ i)]; rw [← Finset.mul_prod_erase (a := i')]
+    · simp_all
+    exact mem_erase.mpr ⟨hi_ne, mem_univ _⟩
 
 Depends on / 依赖: Fin.nontrivial_iff_two_le, Finset, Finset.mul_prod_erase, Nontrivial, and_true, dvd_of_mem_finMulAntidiag, eq_or_ne, exists_ne, hi_ne, i.elim0, ite_true, mem_divisors, mem_finMulAntidiag, mem_finMulAntidiag.mp, mem_image, mem_univ, mul_prod_erase, ne_eq, nontrivial_iff_two_le, simp_rw
 -/
@@ -429,6 +495,9 @@ lemma finMulAntidiag_existsUnique_prime_dvd
   by_contra hij
   apply Nat.Prime.not_coprime_iff_dvd.mpr ⟨p, hp.1, hi, hj⟩
   apply Nat.coprime_of_squarefree_mul
+  apply hn.squarefree_of_dvd
+  rw [← hf.1]; rw [← Finset.mul_prod_erase _ _ his]; rw [← Finset.mul_prod_erase _ _ (mem_erase.mpr ⟨hij]; rw [mem_univ _⟩)]; rw [← mul_assoc]
+  apply Nat.dvd_mul_right
 
 中文:
 引理 finMulAntidiag_存在Unique_prime_dvd
@@ -442,6 +511,9 @@ lemma finMulAntidiag_existsUnique_prime_dvd
   by_contra hij
   apply Nat.Prime.not_coprime_iff_dvd.mpr ⟨p, hp.1, hi, hj⟩
   apply Nat.coprime_of_squarefree_mul
+  apply hn.squarefree_of_dvd
+  rw [← hf.1]; rw [← Finset.mul_prod_erase _ _ his]; rw [← Finset.mul_prod_erase _ _ (mem_erase.mpr ⟨hij]; rw [mem_univ _⟩)]; rw [← mul_assoc]
+  apply Nat.dvd_mul_right
 
 Depends on / 依赖: Finset, Finset.mul_prod_erase, Nat.Prime.not_coprime_iff_dvd.mpr, Nat.coprime_of_squarefree_mul, Nat.dvd_mul_right, coprime_of_squarefree_mul, dvd_finsetProd_iff, dvd_mul_right, hn.squarefree_of_dvd, mem_erase, mem_erase.mpr, mem_finMulAntidiag, mem_primeFactorsList, mem_univ, mul_assoc, mul_prod_erase, not_coprime_iff_dvd, prime.dvd_finsetProd_iff, squarefree_of_dvd
 -/
@@ -527,7 +599,16 @@ theorem primeFactorsPiBij_inj
   apply ne_of_mem_of_not_mem (s := {x | p ∣ x}) <;> simp_rw [Set.mem_ofPred_eq]
   · rw [Finset.prod_filter]
     convert! Finset.dvd_prod_of_mem _ (mem_attach (n.primeFactors) ⟨p, hp⟩)
-
+    rw [if_pos rfl]
+  · rw [mem_primeFactors] at hp
+    rw [Prime.dvd_finsetProd_iff hp.1.prime]
+    push Not
+    intro q hq
+    rw [Nat.prime_dvd_prime_iff_eq hp.1 (Nat.prime_of_mem_primeFactorsList
+ List.mem_toFinset.mp q.2)]
+    rintro rfl
+    rw [(mem_filter.mp hq).2] at hfg
+    exact hfg rfl
 
 中文:
 定理 primeFactorsPiBij_inj
@@ -541,7 +622,16 @@ theorem primeFactorsPiBij_inj
   apply ne_of_mem_of_not_mem (s := {x | p ∣ x}) <;> simp_rw [Set.mem_ofPred_eq]
   · rw [Finset.prod_filter]
     convert! Finset.dvd_prod_of_mem _ (mem_attach (n.primeFactors) ⟨p, hp⟩)
-
+    rw [if_pos rfl]
+  · rw [mem_primeFactors] at hp
+    rw [Prime.dvd_finsetProd_iff hp.1.prime]
+    push Not
+    intro q hq
+    rw [Nat.prime_dvd_prime_iff_eq hp.1 (Nat.prime_of_mem_primeFactorsList
+ List.mem_toFinset.mp q.2)]
+    rintro rfl
+    rw [(mem_filter.mp hq).2] at hfg
+    exact hfg rfl
 -/
 private theorem primeFactorsPiBij_inj (d n : Nat)
     (f : (p : Nat) -> p in n.primeFactors -> Fin d) (hf : f in pi n.primeFactors fun _ => univ)
@@ -579,7 +669,15 @@ theorem primeFactorsPiBij_surj
   choose f hf hf_unique using existsUnique
   refine ⟨f, ?_, ?_⟩
   · simp only [mem_pi, mem_univ, forall_true_iff]
-  funext
+  funext i
+  have : t i ∣ n := dvd_of_mem_finMulAntidiag ht _
+  trans (∏ p in n.primeFactors.attach, if p.1 ∣ t i then p else 1)
+  · rw [Nat.primeFactorsPiBij, ← prod_filter]
+    congr
+    grind
+  rw [prod_attach (f := fun p => if p ∣ t i then p else 1)]; rw [← Finset.prod_filter]
+  rw [primeFactors_filter_dvd_of_dvd hn.ne_zero this]
+exact prod_primeFactors_of_squarefree hn.squarefree_of_dvd this
 
 中文:
 定理 primeFactorsPiBij_surj
@@ -591,7 +689,15 @@ theorem primeFactorsPiBij_surj
   choose f hf hf_unique using existsUnique
   refine ⟨f, ?_, ?_⟩
   · simp only [mem_pi, mem_univ, forall_true_iff]
-  funext
+  funext i
+  have : t i ∣ n := dvd_of_mem_finMulAntidiag ht _
+  trans (∏ p in n.primeFactors.attach, if p.1 ∣ t i then p else 1)
+  · rw [Nat.primeFactorsPiBij, ← prod_filter]
+    congr
+    grind
+  rw [prod_attach (f := fun p => if p ∣ t i then p else 1)]; rw [← Finset.prod_filter]
+  rw [primeFactors_filter_dvd_of_dvd hn.ne_zero this]
+exact prod_primeFactors_of_squarefree hn.squarefree_of_dvd this
 -/
 private theorem primeFactorsPiBij_surj (d n : Nat) (hn : Squarefree n)
     (t : Fin d -> Nat) (ht : t in finMulAntidiag d n) : exists (g : _)
@@ -715,7 +821,8 @@ theorem f_img
   dsimp only
   rw [lcm_mul_left]; rw [Nat.Coprime.lcm_eq_mul]
   · ring
-  refine co
+  refine coprime_of_squarefree_mul (hn.squarefree_of_dvd ?_)
+  use a 0; rw [← finMulAntidiag_three a ha]; ring
 
 中文:
 定理 f_img
@@ -728,7 +835,8 @@ theorem f_img
   dsimp only
   rw [lcm_mul_left]; rw [Nat.Coprime.lcm_eq_mul]
   · ring
-  refine co
+  refine coprime_of_squarefree_mul (hn.squarefree_of_dvd ?_)
+  use a 0; rw [← finMulAntidiag_three a ha]; ring
 -/
 private theorem f_img {n : Nat} (hn : Squarefree n) (a : Fin 3 -> Nat)
     (ha : a in finMulAntidiag 3 n) :
@@ -755,7 +863,15 @@ theorem f_inj
     rw [finMulAntidiag_three a ha]; rw [hfab1]; rw [finMulAntidiag_three b hb]
   have hab2 : a 2 = b 2 := by
     rw [← mul_right_inj' <| mul_ne_zero (ne_zero_of_mem_finMulAntidiag ha 0)
-      (ne_z
+      (ne_zero_of_mem_finMulAntidiag ha 1)]
+    exact hprods
+  have hab0 : a 0 = b 0 := by
+    rw [hab2] at hfab2
+    exact (mul_left_inj' <| ne_zero_of_mem_finMulAntidiag hb 2).mp hfab2;
+  have hab1 : a 1 = b 1 := by
+    rw [hab0] at hfab1
+    exact (mul_right_inj' <| ne_zero_of_mem_finMulAntidiag hb 0).mp hfab1;
+  funext i; fin_cases i <;> assumption
 
 中文:
 定理 f_inj
@@ -766,7 +882,15 @@ theorem f_inj
     rw [finMulAntidiag_three a ha]; rw [hfab1]; rw [finMulAntidiag_three b hb]
   have hab2 : a 2 = b 2 := by
     rw [← mul_right_inj' <| mul_ne_zero (ne_zero_of_mem_finMulAntidiag ha 0)
-      (ne_z
+      (ne_zero_of_mem_finMulAntidiag ha 1)]
+    exact hprods
+  have hab0 : a 0 = b 0 := by
+    rw [hab2] at hfab2
+    exact (mul_left_inj' <| ne_zero_of_mem_finMulAntidiag hb 2).mp hfab2;
+  have hab1 : a 1 = b 1 := by
+    rw [hab0] at hfab1
+    exact (mul_right_inj' <| ne_zero_of_mem_finMulAntidiag hb 0).mp hfab1;
+  funext i; fin_cases i <;> assumption
 -/
 private theorem f_inj {n : Nat} (a : Fin 3 -> Nat) (ha : a in finMulAntidiag 3 n)
     (b : Fin 3 -> Nat) (hb : b in finMulAntidiag 3 n) (hfab : f a ha = f b hb) :
@@ -802,7 +926,12 @@ theorem f_surj
     refine ⟨?_, hn⟩
     · rw [Fin.prod_univ_three a]
       dsimp only [a, Matrix.cons_val]
- 
+      rw [Nat.mul_div_cancel_left' (Nat.gcd_dvd_left _ _)]; rw [← hb.2]; rw [lcm]; rw [Nat.mul_div_assoc b.fst (Nat.gcd_dvd_right b.fst b.snd)]
+  use a; use ha
+  apply Prod.ext <;> dsimp only [a, Matrix.cons_val]
+    <;> apply Nat.mul_div_cancel'
+  · apply Nat.gcd_dvd_left
+  · apply Nat.gcd_dvd_right
 
 中文:
 定理 f_surj
@@ -817,7 +946,12 @@ theorem f_surj
     refine ⟨?_, hn⟩
     · rw [Fin.prod_univ_three a]
       dsimp only [a, Matrix.cons_val]
- 
+      rw [Nat.mul_div_cancel_left' (Nat.gcd_dvd_left _ _)]; rw [← hb.2]; rw [lcm]; rw [Nat.mul_div_assoc b.fst (Nat.gcd_dvd_right b.fst b.snd)]
+  use a; use ha
+  apply Prod.ext <;> dsimp only [a, Matrix.cons_val]
+    <;> apply Nat.mul_div_cancel'
+  · apply Nat.gcd_dvd_left
+  · apply Nat.gcd_dvd_right
 -/
 private theorem f_surj {n : Nat} (hn : n != 0) (b : Nat × Nat)
     (hb : b in Finset.filter (fun ⟨x, y⟩ => x.lcm y = n) (n.divisors ×ˢ n.divisors)) :

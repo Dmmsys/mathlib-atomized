@@ -51,7 +51,10 @@ definition functor
   map {f f'} φ :=
     CostructuredArrow.homMk
       (StructuredArrow.homMk (φ.unop.right.left.unop)
-        (Quiver.Hom
+        (Quiver.Hom.op_inj (CostructuredArrow.w φ.unop.right))) (by
+          ext
+          exact Quiver.Hom.op_inj
+            ((CostructuredArrow.proj _ _).congr_map (StructuredArrow.w φ.unop)))
 
 中文:
 定义 functor
@@ -62,7 +65,10 @@ definition functor
   map {f f'} φ :=
     CostructuredArrow.homMk
       (StructuredArrow.homMk (φ.unop.right.left.unop)
-        (Quiver.Hom
+        (Quiver.Hom.op_inj (CostructuredArrow.w φ.unop.right))) (by
+          ext
+          exact Quiver.Hom.op_inj
+            ((CostructuredArrow.proj _ _).congr_map (StructuredArrow.w φ.unop)))
 
 Depends on / 依赖: CostructuredArrowDownwards, CostructuredArrowDownwards.mk, f.unop.right.left.unop
 -/
@@ -92,7 +98,11 @@ definition inverse
   map {f f'} φ :=
     (StructuredArrow.homMk
       (CostructuredArrow.homMk (φ.left.right.op)
-        (Quiver.Hom.unop_inj (by exact Struct
+        (Quiver.Hom.unop_inj (by exact StructuredArrow.w φ.left)))
+          (by
+            ext
+            exact Quiver.Hom.unop_inj
+              ((StructuredArrow.proj _ _).congr_map (CostructuredArrow.w φ)))).op
 
 中文:
 定义 inverse
@@ -103,7 +113,11 @@ definition inverse
   map {f f'} φ :=
     (StructuredArrow.homMk
       (CostructuredArrow.homMk (φ.left.right.op)
-        (Quiver.Hom.unop_inj (by exact Struct
+        (Quiver.Hom.unop_inj (by exact StructuredArrow.w φ.left)))
+          (by
+            ext
+            exact Quiver.Hom.unop_inj
+              ((StructuredArrow.proj _ _).congr_map (CostructuredArrow.w φ)))).op
 
 Depends on / 依赖: Opposite, Opposite.op
 -/

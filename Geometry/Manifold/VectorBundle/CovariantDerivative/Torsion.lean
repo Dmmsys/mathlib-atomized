@@ -394,7 +394,7 @@ lemma torsion_eq_zero_iff
     rw [torsion_apply_eq_extend]; rw [h]
     · simp
     · apply mdifferentiableAt_extend
-    · apply mdifferentiabl
+    · apply mdifferentiableAt_extend
 
 中文:
 引理 torsion_eq_zero_iff
@@ -410,7 +410,7 @@ lemma torsion_eq_zero_iff
     rw [torsion_apply_eq_extend]; rw [h]
     · simp
     · apply mdifferentiableAt_extend
-    · apply mdifferentiabl
+    · apply mdifferentiableAt_extend
 
 Depends on / 依赖: cov.torsion_apply, mdifferentiableAt_extend, replace, sub_eq_iff_eq_add, torsion_apply, torsion_apply_eq_extend
 -/

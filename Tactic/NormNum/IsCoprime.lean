@@ -131,7 +131,8 @@ definition evalIntIsCoprime
     have pf' : Q(IsCoprime $x $y) := q(isInt_isCoprime $p $q $pf)
     return .isTrue pf'
   | .inr pf =>
-    have p
+    have pf' : Q(¬ IsCoprime $x $y) := q(isInt_not_isCoprime $p $q $pf)
+    return .isFalse pf'
 
 中文:
 定义 eval整数IsCoprime
@@ -145,7 +146,8 @@ definition evalIntIsCoprime
     have pf' : Q(IsCoprime $x $y) := q(isInt_isCoprime $p $q $pf)
     return .isTrue pf'
   | .inr pf =>
-    have p
+    have pf' : Q(¬ IsCoprime $x $y) := q(isInt_not_isCoprime $p $q $pf)
+    return .isFalse pf'
 -/
 def evalIntIsCoprime : NormNumExt where eval {_ _} e := do
   let .app (.app _ (x : Q(Int))) (y : Q(Int)) ← Meta.whnfR e | failure

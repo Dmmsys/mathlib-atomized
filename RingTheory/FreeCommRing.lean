@@ -263,7 +263,8 @@ theorem induction_on
   proof: have neg : forall x, motive x -> motive (-x) := fun x ih => neg_one_mul x ▸ mul _ _ neg_one ih
   have one : motive 1 := neg_neg (1 : FreeCommRing α) ▸ neg _ neg_one
   FreeAbelianGroup.induction_on z (neg_add_cancel (1 : FreeCommRing α) ▸ add _ _ neg_one one)
-    (fun m => Multiset.induction_on m one
+    (fun m => Multiset.induction_on m one fun a _ ih => mul (FreeCommRing.of a) _ (of a) ih)
+    (fun _ ih => neg _ ih) add
 
 中文:
 定理 induction_on
@@ -271,7 +272,8 @@ theorem induction_on
   证明: have neg : forall x, motive x -> motive (-x) := fun x ih => neg_one_mul x ▸ mul _ _ neg_one ih
   have one : motive 1 := neg_neg (1 : FreeCommRing α) ▸ neg _ neg_one
   FreeAbelianGroup.induction_on z (neg_add_cancel (1 : FreeCommRing α) ▸ add _ _ neg_one one)
-    (fun m => Multiset.induction_on m one
+    (fun m => Multiset.induction_on m one fun a _ ih => mul (FreeCommRing.of a) _ (of a) ih)
+    (fun _ ih => neg _ ih) add
 -/
 protected theorem induction_on {motive : FreeCommRing α -> Prop} (z : FreeCommRing α)
     (neg_one : motive (-1)) (of : forall b, motive (of b))
@@ -303,7 +305,14 @@ definition liftToMultiset
             rfl
           _ = _ := Multiset.prod_add _ _
       map_one' := rfl }
-  invFun F x := F (Multiplic
+  invFun F x := F (Multiplicative.ofAdd ({x} : Multiset α))
+  left_inv f := funext fun x => show (Multiset.map f {x}).prod = _ by simp
+  right_inv F := MonoidHom.ext fun x =>
+    let F' := F.toAdditiveRight
+    let x' := x.toAdd
+    show (Multiset.map (fun a => F' {a}) x').sum = F' x' by
+      rw [← Function.comp_def (fun x => F' x) (fun x => {x})]; rw [← Multiset.map_map]; rw [← AddMonoidHom.map_multiset_sum]
+      exact DFunLike.congr_arg F (Multiset.sum_map_singleton x')
 
 中文:
 定义 liftToMultiset
@@ -316,7 +325,14 @@ definition liftToMultiset
             rfl
           _ = _ := Multiset.prod_add _ _
       map_one' := rfl }
-  invFun F x := F (Multiplic
+  invFun F x := F (Multiplicative.ofAdd ({x} : Multiset α))
+  left_inv f := funext fun x => show (Multiset.map f {x}).prod = _ by simp
+  right_inv F := MonoidHom.ext fun x =>
+    let F' := F.toAdditiveRight
+    let x' := x.toAdd
+    show (Multiset.map (fun a => F' {a}) x').sum = F' x' by
+      rw [← Function.comp_def (fun x => F' x) (fun x => {x})]; rw [← Multiset.map_map]; rw [← AddMonoidHom.map_multiset_sum]
+      exact DFunLike.congr_arg F (Multiset.sum_map_singleton x')
 -/
 private def liftToMultiset : (α -> R) ≃ (Multiplicative (Multiset α) ->* R) where
   toFun f :=
@@ -726,7 +742,32 @@ theorem isSupported_of
   fun hps : IsSupported (of p) s => by
   have := Classical.decPred (· in s)
   have : forall x, IsSupported x s ->
-        exists n : Int, lift (fun a => if a in s then (0 : Int[X]) else Polynomial.X)
+        exists n : Int, lift (fun a => if a in s then (0 : Int[X]) else Polynomial.X) x = n := by
+    intro x hx
+    refine Subring.InClosure.recOn hx ?_ ?_ ?_ ?_
+    · use 1
+      rw [map_one]
+      norm_cast
+    · use -1
+      rw [map_neg]; rw [map_one]; rw [Int.cast_neg]; rw [Int.cast_one]
+    · rintro _ ⟨z, hzs, rfl⟩ _ _
+      use 0
+      rw [map_mul]; rw [lift_of]; rw [if_pos hzs]; rw [zero_mul]
+      norm_cast
+    · rintro x y ⟨q, hq⟩ ⟨r, hr⟩
+      refine ⟨q + r, ?_⟩
+      rw [map_add]; rw [hq]; rw [hr]
+      norm_cast
+  specialize this (of p) hps
+  rw [lift_of] at this
+  split_ifs at this with h
+  · exact h
+  exfalso
+  apply Ne.symm Int.zero_ne_one
+  rcases this with ⟨w, H⟩
+  rw [← Polynomial.C_eq_intCast] at H
+  have : Polynomial.X.coeff 1 = (Polynomial.C ↑w).coeff 1 := by rw [H]; rfl
+  rwa [Polynomial.coeff_C, if_neg (one_ne_zero : 1 != 0), Polynomial.coeff_X, if_pos rfl] at this
 
 中文:
 定理 isSupported_of
@@ -736,7 +777,32 @@ theorem isSupported_of
   fun hps : IsSupported (of p) s => by
   have := Classical.decPred (· in s)
   have : forall x, IsSupported x s ->
-        exists n : Int, lift (fun a => if a in s then (0 : Int[X]) else Polynomial.X)
+        exists n : Int, lift (fun a => if a in s then (0 : Int[X]) else Polynomial.X) x = n := by
+    intro x hx
+    refine Subring.InClosure.recOn hx ?_ ?_ ?_ ?_
+    · use 1
+      rw [map_one]
+      norm_cast
+    · use -1
+      rw [map_neg]; rw [map_one]; rw [Int.cast_neg]; rw [Int.cast_one]
+    · rintro _ ⟨z, hzs, rfl⟩ _ _
+      use 0
+      rw [map_mul]; rw [lift_of]; rw [if_pos hzs]; rw [zero_mul]
+      norm_cast
+    · rintro x y ⟨q, hq⟩ ⟨r, hr⟩
+      refine ⟨q + r, ?_⟩
+      rw [map_add]; rw [hq]; rw [hr]
+      norm_cast
+  specialize this (of p) hps
+  rw [lift_of] at this
+  split_ifs at this with h
+  · exact h
+  exfalso
+  apply Ne.symm Int.zero_ne_one
+  rcases this with ⟨w, H⟩
+  rw [← Polynomial.C_eq_intCast] at H
+  have : Polynomial.X.coeff 1 = (Polynomial.C ↑w).coeff 1 := by rw [H]; rfl
+  rwa [Polynomial.coeff_C, if_neg (one_ne_zero : 1 != 0), Polynomial.coeff_X, if_pos rfl] at this
 
 Depends on / 依赖: Classical, Classical.decPred, InClosure, Int.cast_neg, Int.cast_one, IsSupported, Polynomial, Polynomial.X, Subring, Subring.InClosure.recOn, Subring.subset_closure, cast_neg, cast_one, decPred, map_neg, map_one, subset_closure
 -/
@@ -787,7 +853,7 @@ theorem map_subtype_val_restriction
   · rintro _ ⟨p, hps, rfl⟩ n ih
     rw [map_mul]; rw [restriction_of]; rw [dif_pos hps]; rw [map_mul]; rw [map_of]; rw [ih]
   · intro x y ihx ihy
-    rw [map_add]; rw [map_add]; rw [ihx]; r
+    rw [map_add]; rw [map_add]; rw [ihx]; rw [ihy]
 
 中文:
 定理 map_subtype_val_restriction
@@ -801,7 +867,7 @@ theorem map_subtype_val_restriction
   · rintro _ ⟨p, hps, rfl⟩ n ih
     rw [map_mul]; rw [restriction_of]; rw [dif_pos hps]; rw [map_mul]; rw [map_of]; rw [ih]
   · intro x y ihx ihy
-    rw [map_add]; rw [map_add]; rw [ihx]; r
+    rw [map_add]; rw [map_add]; rw [ihx]; rw [ihy]
 
 Depends on / 依赖: InClosure, Subring, Subring.InClosure.recOn, dif_pos, map_add, map_mul, map_neg, map_of, map_one, restriction_of
 -/
@@ -828,7 +894,12 @@ theorem exists_finite_support
     (fun p => ⟨{p}, Set.finite_singleton p, isSupported_of.2 <| Set.mem_singleton _⟩)
     (fun _ _ ⟨s, hfs, hxs⟩ ⟨t, hft, hxt⟩ =>
       ⟨s union t, hfs.union hft,
-        isSupported_add (isSupported_upwards hxs Set.s
+        isSupported_add (isSupported_upwards hxs Set.subset_union_left)
+          (isSupported_upwards hxt Set.subset_union_right)⟩)
+    fun _ _ ⟨s, hfs, hxs⟩ ⟨t, hft, hxt⟩ =>
+    ⟨s union t, hfs.union hft,
+      isSupported_mul (isSupported_upwards hxs Set.subset_union_left)
+        (isSupported_upwards hxt Set.subset_union_right)⟩
 
 中文:
 定理 存在_finite_support
@@ -838,7 +909,12 @@ theorem exists_finite_support
     (fun p => ⟨{p}, Set.finite_singleton p, isSupported_of.2 <| Set.mem_singleton _⟩)
     (fun _ _ ⟨s, hfs, hxs⟩ ⟨t, hft, hxt⟩ =>
       ⟨s union t, hfs.union hft,
-        isSupported_add (isSupported_upwards hxs Set.s
+        isSupported_add (isSupported_upwards hxs Set.subset_union_left)
+          (isSupported_upwards hxt Set.subset_union_right)⟩)
+    fun _ _ ⟨s, hfs, hxs⟩ ⟨t, hft, hxt⟩ =>
+    ⟨s union t, hfs.union hft,
+      isSupported_mul (isSupported_upwards hxs Set.subset_union_left)
+        (isSupported_upwards hxt Set.subset_union_right)⟩
 
 Depends on / 依赖: FreeCommRing, FreeCommRing.induction_on, Set.finite_empty, Set.finite_singleton, Set.mem_singleton, Set.subset_union_left, Set.subset_union_right, finite_empty, finite_singleton, hfs.union, induction_on, isSupported_add, isSupported_mul, isSupported_neg, isSupported_of, isSupported_one, isSupported_upwards, mem_singleton, subset_union_left, subset_union_right
 -/
@@ -1126,7 +1202,7 @@ theorem coe_surjective
     exact ⟨x + y, (FreeRing.lift _).map_add _ _⟩
   | mul _ _ hx hy =>
     rcases hx with ⟨x, rfl⟩; rcases hy with ⟨y, rfl⟩
-    ex
+    exact ⟨x * y, (FreeRing.lift _).map_mul _ _⟩
 
 中文:
 定理 coe_surjective
@@ -1140,7 +1216,7 @@ theorem coe_surjective
     exact ⟨x + y, (FreeRing.lift _).map_add _ _⟩
   | mul _ _ hx hy =>
     rcases hx with ⟨x, rfl⟩; rcases hy with ⟨y, rfl⟩
-    ex
+    exact ⟨x * y, (FreeRing.lift _).map_mul _ _⟩
 -/
 protected theorem coe_surjective : Surjective ((↑) : FreeRing α -> FreeCommRing α) := fun x => by
   induction x with
@@ -1168,7 +1244,10 @@ theorem coe_eq
   apply FreeAbelianGroup.lift_unique; intro L
   simp only [AddMonoidHom.coe_coe, comp_apply, FreeAbelianGroup.lift_apply_of]
   exact
-    F
+    FreeMonoid.recOn L rfl fun hd tl ih => by
+      rw [(FreeMonoid.lift _).map_mul]; rw [FreeMonoid.lift_eval_of]; rw [ih]
+      conv_lhs => reduce
+      rfl
 
 中文:
 定理 coe_eq
@@ -1181,7 +1260,10 @@ theorem coe_eq
   apply FreeAbelianGroup.lift_unique; intro L
   simp only [AddMonoidHom.coe_coe, comp_apply, FreeAbelianGroup.lift_apply_of]
   exact
-    F
+    FreeMonoid.recOn L rfl fun hd tl ih => by
+      rw [(FreeMonoid.lift _).map_mul]; rw [FreeMonoid.lift_eval_of]; rw [ih]
+      conv_lhs => reduce
+      rfl
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_coe, FreeAbelianGroup, FreeAbelianGroup.liftMonoid_coe, FreeAbelianGroup.lift_apply_of, FreeAbelianGroup.lift_unique, FreeMonoid, FreeMonoid.lift, FreeMonoid.lift_eval_of, FreeMonoid.recOn, FreeRing, FreeRing.lift, Functor, Functor.map, castFreeCommRing, coe_coe, comp_apply, conv_lhs, liftMonoid_coe, lift_apply_of
 -/
@@ -1240,14 +1322,14 @@ instance instCommRing
   signature: [Subsingleton α]
   body: { (inferInstance : Ring (FreeRing α)) with
     mul_comm := fun x y => by
-      rw [← (subsingletonEquivFreeCommRing α).symm_apply_apply (y * x)]; rw [(subsingletonEquivFreeCommRing α).map_mul]; rw [mul_comm]; rw [← (subsingletonEquivFreeCommRing α).map_mul]; rw [(subsingletonEquivFreeCommRing α).sym
+      rw [← (subsingletonEquivFreeCommRing α).symm_apply_apply (y * x)]; rw [(subsingletonEquivFreeCommRing α).map_mul]; rw [mul_comm]; rw [← (subsingletonEquivFreeCommRing α).map_mul]; rw [(subsingletonEquivFreeCommRing α).symm_apply_apply] }
 
 中文:
 实例 instCommRing
   签名: [子单例 α]
   定义体: { (inferInstance : Ring (FreeRing α)) with
     mul_comm := fun x y => by
-      rw [← (subsingletonEquivFreeCommRing α).symm_apply_apply (y * x)]; rw [(subsingletonEquivFreeCommRing α).map_mul]; rw [mul_comm]; rw [← (subsingletonEquivFreeCommRing α).map_mul]; rw [(subsingletonEquivFreeCommRing α).sym
+      rw [← (subsingletonEquivFreeCommRing α).symm_apply_apply (y * x)]; rw [(subsingletonEquivFreeCommRing α).map_mul]; rw [mul_comm]; rw [← (subsingletonEquivFreeCommRing α).map_mul]; rw [(subsingletonEquivFreeCommRing α).symm_apply_apply] }
 
 Depends on / 依赖: FreeRing, map_mul, mul_comm, subsingletonEquivFreeCommRing, symm_apply_apply
 -/

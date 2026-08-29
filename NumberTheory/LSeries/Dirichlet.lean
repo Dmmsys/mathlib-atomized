@@ -418,7 +418,7 @@ lemma modZero_eq_delta
   rcases eq_or_ne n 1 with rfl | hn'
   · simp [delta]
 have : ¬ IsUnit (n : ZMod 0) := fun h => hn' ZMod.eq_one_of_isUnit_natCast h
-  simp_all [χ.map_nonunit this, delt
+  simp_all [χ.map_nonunit this, delta]
 
 中文:
 引理 modZero_eq_delta
@@ -431,7 +431,7 @@ have : ¬ IsUnit (n : ZMod 0) := fun h => hn' ZMod.eq_one_of_isUnit_natCast h
   rcases eq_or_ne n 1 with rfl | hn'
   · simp [delta]
 have : ¬ IsUnit (n : ZMod 0) := fun h => hn' ZMod.eq_one_of_isUnit_natCast h
-  simp_all [χ.map_nonunit this, delt
+  simp_all [χ.map_nonunit this, delta]
 
 Depends on / 依赖: IsUnit, ZMod.eq_one_of_isUnit_natCast, cast_zero, eq_one_of_isUnit_natCast, eq_or_ne, if_false, map_nonunit, not_isUnit_zero, reduceCtorEq, simp_rw
 -/
@@ -500,7 +500,8 @@ lemma not_LSeriesSummable_at_one
   simp only [norm_term_eq, Set.indicator, Set.mem_ofPred_eq]
   split_ifs with h₁ h₂
   · simp [h₂]
-  · simp [h₁, 
+  · simp [h₁, χ.map_one]
+  all_goals positivity
 
 中文:
 引理 not_LSeriesSummable_at_one
@@ -512,7 +513,8 @@ lemma not_LSeriesSummable_at_one
   simp only [norm_term_eq, Set.indicator, Set.mem_ofPred_eq]
   split_ifs with h₁ h₂
   · simp [h₂]
-  · simp [h₁, 
+  · simp [h₁, χ.map_one]
+  all_goals positivity
 
 Depends on / 依赖: Real.not_summable_indicator_one_div_natCast, Set.indicator, Set.indicator_apply_nonneg, Set.mem_ofPred_eq, all_goals, h.norm.of_nonneg_of_le, indicator, indicator_apply_nonneg, map_one, mem_ofPred_eq, norm_term_eq, not_summable_indicator_one_div_natCast, of_nonneg_of_le, split_ifs
 -/
@@ -1149,7 +1151,10 @@ lemma LSeriesSummable_vonMangoldt
     (show abscissaOfAbsConv 1 < s.re by rw [abscissaOfAbsConv_one]; exact_mod_cast hs)
   rw [LSeriesSummable]; rw [← summable_norm_iff] at hf ⊢
   refine hf.of_nonneg_of_le (fun _ => norm_nonneg _) (fun n => norm_term_le s ?_)
-  have hΛ : ‖↗Λ n‖ <= ‖Com
+  have hΛ : ‖↗Λ n‖ <= ‖Complex.log n‖ := by
+    simpa [abs_of_nonneg, vonMangoldt_nonneg, ← natCast_log, Real.log_natCast_nonneg]
+      using vonMangoldt_le_log
+exact hΛ.trans by simp
 
 中文:
 引理 LSeriesSummable_vonMangoldt
@@ -1160,7 +1165,10 @@ lemma LSeriesSummable_vonMangoldt
     (show abscissaOfAbsConv 1 < s.re by rw [abscissaOfAbsConv_one]; exact_mod_cast hs)
   rw [LSeriesSummable]; rw [← summable_norm_iff] at hf ⊢
   refine hf.of_nonneg_of_le (fun _ => norm_nonneg _) (fun n => norm_term_le s ?_)
-  have hΛ : ‖↗Λ n‖ <= ‖Com
+  have hΛ : ‖↗Λ n‖ <= ‖Complex.log n‖ := by
+    simpa [abs_of_nonneg, vonMangoldt_nonneg, ← natCast_log, Real.log_natCast_nonneg]
+      using vonMangoldt_le_log
+exact hΛ.trans by simp
 
 Depends on / 依赖: Complex.log, LSeriesSummable, LSeriesSummable_logMul_of_lt_re, Real.log_natCast_nonneg, abs_of_nonneg, abscissaOfAbsConv, abscissaOfAbsConv_one, hf.of_nonneg_of_le, log_natCast_nonneg, natCast_log, norm_nonneg, norm_term_le, of_nonneg_of_le, s.re, summable_norm_iff, vonMangoldt_le_log, vonMangoldt_nonneg
 -/
@@ -1231,7 +1239,10 @@ lemma LSeries_twist_vonMangoldt_eq
   -- now `N ≠ 0`
   have hχ : LSeriesSummable ↗χ s := (LSeriesSummable_iff hN χ).mpr hs
   have hs' : abscissaOfAbsConv ↗χ < s.re := by
-    rwa [absicssaOfAbsConv_eq_one hN, ← EReal.coe_one, ERea
+    rwa [absicssaOfAbsConv_eq_one hN, ← EReal.coe_one, EReal.coe_lt_coe_iff]
+  have hΛ : LSeriesSummable (↗χ * ↗Λ) s := LSeriesSummable_twist_vonMangoldt χ hs
+  rw [eq_div_iff <| LSeries_ne_zero_of_one_lt_re χ hs]; rw [← LSeries_convolution' hΛ hχ]; rw [convolution_twist_vonMangoldt]; rw [LSeries_deriv hs']; rw [neg_neg]
+  exact LSeries_congr (fun _ => by simp [mul_comm, logMul]) s
 
 中文:
 引理 LSeries_twist_vonMangoldt_eq
@@ -1242,7 +1253,10 @@ lemma LSeries_twist_vonMangoldt_eq
   -- now `N ≠ 0`
   have hχ : LSeriesSummable ↗χ s := (LSeriesSummable_iff hN χ).mpr hs
   have hs' : abscissaOfAbsConv ↗χ < s.re := by
-    rwa [absicssaOfAbsConv_eq_one hN, ← EReal.coe_one, ERea
+    rwa [absicssaOfAbsConv_eq_one hN, ← EReal.coe_one, EReal.coe_lt_coe_iff]
+  have hΛ : LSeriesSummable (↗χ * ↗Λ) s := LSeriesSummable_twist_vonMangoldt χ hs
+  rw [eq_div_iff <| LSeries_ne_zero_of_one_lt_re χ hs]; rw [← LSeries_convolution' hΛ hχ]; rw [convolution_twist_vonMangoldt]; rw [LSeries_deriv hs']; rw [neg_neg]
+  exact LSeries_congr (fun _ => by simp [mul_comm, logMul]) s
 
 Depends on / 依赖: LSeries_delta, delta_mul_eq_smul_delta, eq_or_ne, modZero_eq_delta
 -/
@@ -1302,7 +1316,7 @@ lemma LSeries_vonMangoldt_eq_deriv_riemannZeta_div
     rw [LSeries_vonMangoldt_eq hs]; rw [← LSeries_one_eq_riemannZeta hs]; rw [this]
 refine Filter.EventuallyEq.deriv_eq Filter.eventuallyEq_iff_exists_mem.mpr ?_
   exact ⟨{z | 1 < z.re}, (isOpen_lt continuous_const continuous_re).mem_nhds hs,
-    
+    fun _ => LSeries_one_eq_riemannZeta⟩
 
 中文:
 引理 LSeries_vonMangoldt_eq_deriv_riemannZeta_div
@@ -1312,7 +1326,7 @@ refine Filter.EventuallyEq.deriv_eq Filter.eventuallyEq_iff_exists_mem.mpr ?_
     rw [LSeries_vonMangoldt_eq hs]; rw [← LSeries_one_eq_riemannZeta hs]; rw [this]
 refine Filter.EventuallyEq.deriv_eq Filter.eventuallyEq_iff_exists_mem.mpr ?_
   exact ⟨{z | 1 < z.re}, (isOpen_lt continuous_const continuous_re).mem_nhds hs,
-    
+    fun _ => LSeries_one_eq_riemannZeta⟩
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.deriv_eq, Filter.eventuallyEq_iff_exists_mem.mpr, LSeries_one_eq_riemannZeta, LSeries_vonMangoldt_eq, continuous_const, continuous_re, deriv_eq, eventuallyEq_iff_exists_mem, isOpen_lt, mem_nhds, riemannZeta, z.re
 -/

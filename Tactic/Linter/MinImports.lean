@@ -145,7 +145,63 @@ definition minImportsLinter
       return
     if stx == (← `(command| #import_bumps)) then return
     if stx == (← `(command| set_option $(mkIdent `linter.minImports) true)) then
-
+      logInfo "Try using '#import_bumps', instead of manually setting the linter option: \
+              the linter works best with linear parsing of the file and '#import_bumps' \
+              also sets the `Elab.async` option to `false`."
+      return
+    let env ← getEnv
+    -- the first time `minImportsRef` is read, it has `transClosure = none`;
+    -- in this case, we set it to be the `transClosure` for the file.
+    if (← minImportsRef.get).transClosure.isNone then
+      minImportsRef.modify ({· with transClosure := env.importGraph.transitiveClosure})
+    let impState ← minImportsRef.get
+    let (importsSoFar, oldCumulImps) := (impState.minImports, impState.importSize)
+    -- when the linter reaches the end of the file or `#exit`, it gives a report
+    if #[``Parser.Command.eoi, ``Lean.Parser.Command.exit].contains stx.getKind then
+      let explicitImportsInFile : NameSet :=
+        .ofArray ((env.imports.map (·.module)).filter (!isInitImport ·))
+      let newImps := importsSoFar \ explicitImportsInFile
+      let currentlyUnneededImports := explicitImportsInFile \ importsSoFar
+      -- we read the current file, to do a custom parsing of the imports:
+      -- this is a hack to obtain some `Syntax` information for the `import X` commands
+      let fname ← getFileName
+      let contents ← IO.FS.readFile fname
+      -- `impMods` is the syntax for the modules imported in the current file
+      let (impMods, _) ← Parser.parseHeader (Parser.mkInputContext contents fname)
+      for i in currentlyUnneededImports do
+        match impMods.raw.find? (·.getId == i) with
+          | some impPos => logWarningAt impPos m!"unneeded import '{i}'"
+          | _ => dbg_trace f!"'{i}' not found" -- this should be unreachable
+      -- if the linter found new imports that should be added (likely to *reduce* the dependencies)
+      if !newImps.isEmpty then
+        -- format the imports prepending `import ` to each module name
+        let withImport := (newImps.toArray.qsort Name.lt).map (s!"import {·}")
+        -- log a warning at the first `import`, if there is one.
+        logWarningAt ((impMods.raw.find? (·.isOfKind `import)).getD default)
+          m!"-- missing imports\n{"\n".intercalate withImport.toList}"
+    let id ← getId stx
+    let newImports := (getIrredundantImports env (← getAllImports stx id)).filter (!isInitImport ·)
+    let tot := (newImports.append importsSoFar)
+    let redundant := env.findRedundantImports tot.toArray
+    let currImports := tot \ redundant
+    let currImpArray := currImports.toArray.qsort Name.lt
+    if currImpArray != #[] &&
+       currImpArray != importsSoFar.toArray.qsort Name.lt then
+      let newCumulImps := -- We should always be in the situation where `getD` finds something
+        (importsBelow (impState.transClosure.getD env.importGraph.transitiveClosure) tot).size
+      minImportsRef.modify ({· with minImports := currImports, importSize := newCumulImps})
+      let new := currImpArray.filter (!importsSoFar.contains ·)
+      let redundant := importsSoFar.toArray.filter (!currImports.contains ·)
+      -- to make `test` files more stable, we suppress the exact count of import changes if
+      -- the `linter.minImports.increases` option is `false`
+      let byCount := if getLinterValue linter.minImports.increases (← getLinterOptions) then
+                      m!"by {newCumulImps - oldCumulImps} "
+                    else
+                      m!""
+Linter.logLint linter.minImports stx
+        m!"Imports increased {byCount}to\n{currImpArray}\n\n\
+          New imports: {new}\n" ++
+            if redundant.isEmpty then m!"" else m!"\nNow redundant: {redundant}\n"
 
 中文:
 定义 minImportsLinter
@@ -157,7 +213,63 @@ definition minImportsLinter
       return
     if stx == (← `(command| #import_bumps)) then return
     if stx == (← `(command| set_option $(mkIdent `linter.minImports) true)) then
-
+      logInfo "Try using '#import_bumps', instead of manually setting the linter option: \
+              the linter works best with linear parsing of the file and '#import_bumps' \
+              also sets the `Elab.async` option to `false`."
+      return
+    let env ← getEnv
+    -- the first time `minImportsRef` is read, it has `transClosure = none`;
+    -- in this case, we set it to be the `transClosure` for the file.
+    if (← minImportsRef.get).transClosure.isNone then
+      minImportsRef.modify ({· with transClosure := env.importGraph.transitiveClosure})
+    let impState ← minImportsRef.get
+    let (importsSoFar, oldCumulImps) := (impState.minImports, impState.importSize)
+    -- when the linter reaches the end of the file or `#exit`, it gives a report
+    if #[``Parser.Command.eoi, ``Lean.Parser.Command.exit].contains stx.getKind then
+      let explicitImportsInFile : NameSet :=
+        .ofArray ((env.imports.map (·.module)).filter (!isInitImport ·))
+      let newImps := importsSoFar \ explicitImportsInFile
+      let currentlyUnneededImports := explicitImportsInFile \ importsSoFar
+      -- we read the current file, to do a custom parsing of the imports:
+      -- this is a hack to obtain some `Syntax` information for the `import X` commands
+      let fname ← getFileName
+      let contents ← IO.FS.readFile fname
+      -- `impMods` is the syntax for the modules imported in the current file
+      let (impMods, _) ← Parser.parseHeader (Parser.mkInputContext contents fname)
+      for i in currentlyUnneededImports do
+        match impMods.raw.find? (·.getId == i) with
+          | some impPos => logWarningAt impPos m!"unneeded import '{i}'"
+          | _ => dbg_trace f!"'{i}' not found" -- this should be unreachable
+      -- if the linter found new imports that should be added (likely to *reduce* the dependencies)
+      if !newImps.isEmpty then
+        -- format the imports prepending `import ` to each module name
+        let withImport := (newImps.toArray.qsort Name.lt).map (s!"import {·}")
+        -- log a warning at the first `import`, if there is one.
+        logWarningAt ((impMods.raw.find? (·.isOfKind `import)).getD default)
+          m!"-- missing imports\n{"\n".intercalate withImport.toList}"
+    let id ← getId stx
+    let newImports := (getIrredundantImports env (← getAllImports stx id)).filter (!isInitImport ·)
+    let tot := (newImports.append importsSoFar)
+    let redundant := env.findRedundantImports tot.toArray
+    let currImports := tot \ redundant
+    let currImpArray := currImports.toArray.qsort Name.lt
+    if currImpArray != #[] &&
+       currImpArray != importsSoFar.toArray.qsort Name.lt then
+      let newCumulImps := -- We should always be in the situation where `getD` finds something
+        (importsBelow (impState.transClosure.getD env.importGraph.transitiveClosure) tot).size
+      minImportsRef.modify ({· with minImports := currImports, importSize := newCumulImps})
+      let new := currImpArray.filter (!importsSoFar.contains ·)
+      let redundant := importsSoFar.toArray.filter (!currImports.contains ·)
+      -- to make `test` files more stable, we suppress the exact count of import changes if
+      -- the `linter.minImports.increases` option is `false`
+      let byCount := if getLinterValue linter.minImports.increases (← getLinterOptions) then
+                      m!"by {newCumulImps - oldCumulImps} "
+                    else
+                      m!""
+Linter.logLint linter.minImports stx
+        m!"Imports increased {byCount}to\n{currImpArray}\n\n\
+          New imports: {new}\n" ++
+            if redundant.isEmpty then m!"" else m!"\nNow redundant: {redundant}\n"
 
 Depends on / 依赖: withSetOptionIn
 -/

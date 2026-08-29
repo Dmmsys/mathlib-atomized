@@ -685,7 +685,9 @@ theorem coe_fib_eq'
       convert! this
       rw [Pi.sub_apply]
       ring
- 
+    apply (@fibRec Real _).solSpace.sub_mem
+    · exact Submodule.smul_mem fibRec.solSpace (√5)⁻¹ geom_goldenRatio_isSol_fibRec
+    · exact Submodule.smul_mem fibRec.solSpace (√5)⁻¹ geom_goldenConj_isSol_fibRec
 
 中文:
 定理 coe_fib_eq'
@@ -700,7 +702,9 @@ theorem coe_fib_eq'
       convert! this
       rw [Pi.sub_apply]
       ring
- 
+    apply (@fibRec Real _).solSpace.sub_mem
+    · exact Submodule.smul_mem fibRec.solSpace (√5)⁻¹ geom_goldenRatio_isSol_fibRec
+    · exact Submodule.smul_mem fibRec.solSpace (√5)⁻¹ geom_goldenConj_isSol_fibRec
 
 Depends on / 依赖: IsSolution, LinearRecurrence, LinearRecurrence.IsSolution, Pi.sub_apply, Submodule, Submodule.smul_mem, convert, eq_iff_eqOn_range_order, fibRec, fibRec.eq_iff_eqOn_range_order, fibRec.solSpace, fib_isSol_fibRec, fin_cases, geom_goldenConj_isSol_fibRec, geom_goldenRatio_isSol_fibRec, smul_mem, solSpace, solSpace.sub_mem, sub_apply, sub_mem
 -/
@@ -752,7 +756,8 @@ theorem coe_intFib_eq
   · exact coe_fib_eq n
   · simp only [Int.fib_neg, Int.even_coe_nat, Int.fib_natCast, Int.cast_ite, Int.cast_neg,
       Int.cast_natCast, zpow_neg, zpow_natCast, ← inv_pow, inv_goldenRatio, inv_goldenConj,
-      ← neg_one_mul ψ, ← neg_one_mul φ, mul_po
+      ← neg_one_mul ψ, ← neg_one_mul φ, mul_pow, neg_one_pow_eq_ite]
+    grind [coe_fib_eq]
 
 中文:
 定理 coe_intFib_eq
@@ -763,7 +768,8 @@ theorem coe_intFib_eq
   · exact coe_fib_eq n
   · simp only [Int.fib_neg, Int.even_coe_nat, Int.fib_natCast, Int.cast_ite, Int.cast_neg,
       Int.cast_natCast, zpow_neg, zpow_natCast, ← inv_pow, inv_goldenRatio, inv_goldenConj,
-      ← neg_one_mul ψ, ← neg_one_mul φ, mul_po
+      ← neg_one_mul ψ, ← neg_one_mul φ, mul_pow, neg_one_pow_eq_ite]
+    grind [coe_fib_eq]
 
 Depends on / 依赖: Int.cast_ite, Int.cast_natCast, Int.cast_neg, Int.even_coe_nat, Int.fib_natCast, Int.fib_neg, cast_ite, cast_natCast, cast_neg, coe_fib_eq, eq_nat_or_neg, even_coe_nat, fib_natCast, fib_neg, inv_goldenConj, inv_goldenRatio, inv_pow, mul_pow, n.eq_nat_or_neg, neg_one_mul
 -/
@@ -846,7 +852,8 @@ lemma goldenRatio_mul_fib_succ_add_fib
       _ = φ * (Nat.fib n) + φ ^ 2 * (Nat.fib (n + 1)) := by
         simp only [Nat.fib_add_one (Nat.succ_ne_zero n), Nat.succ_sub_succ_eq_sub,
           Nat.cast_add, goldenRatio_sq, Nat.sub_zero]; ring
-      _ = φ * ((Nat.fib n) + φ *
+      _ = φ * ((Nat.fib n) + φ * (Nat.fib (n + 1))) := by ring
+      _ = φ ^ (n + 2) := by rw [add_comm, ih]; ring
 
 中文:
 引理 goldenRatio_mul_fib_succ_add_fib
@@ -860,7 +867,8 @@ lemma goldenRatio_mul_fib_succ_add_fib
       _ = φ * (Nat.fib n) + φ ^ 2 * (Nat.fib (n + 1)) := by
         simp only [Nat.fib_add_one (Nat.succ_ne_zero n), Nat.succ_sub_succ_eq_sub,
           Nat.cast_add, goldenRatio_sq, Nat.sub_zero]; ring
-      _ = φ * ((Nat.fib n) + φ *
+      _ = φ * ((Nat.fib n) + φ * (Nat.fib (n + 1))) := by ring
+      _ = φ ^ (n + 2) := by rw [add_comm, ih]; ring
 
 Depends on / 依赖: Nat.cast_add, Nat.fib, Nat.fib_add_one, Nat.sub_zero, Nat.succ_ne_zero, Nat.succ_sub_succ_eq_sub, add_comm, cast_add, fib_add_one, goldenRatio_sq, sub_zero, succ_ne_zero, succ_sub_succ_eq_sub
 -/

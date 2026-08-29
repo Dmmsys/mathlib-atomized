@@ -146,7 +146,7 @@ definition isInitialOfNotNonempty
   exact IsInitial.ofUniqueHom (fun _ =>
     { app _ := ↾fun x => isEmptyElim x
       naturality _ _ _ := by ext x; exact isEmptyElim x })
-    (fun _ _ =>
+    (fun _ _ => by ext _ x; exact isEmptyElim x)
 
 中文:
 定义 isInitialOfNotNonempty
@@ -158,7 +158,7 @@ definition isInitialOfNotNonempty
   exact IsInitial.ofUniqueHom (fun _ =>
     { app _ := ↾fun x => isEmptyElim x
       naturality _ _ _ := by ext x; exact isEmptyElim x })
-    (fun _ _ =>
+    (fun _ _ => by ext _ x; exact isEmptyElim x)
 
 Depends on / 依赖: Function, Function.isEmpty, IsEmpty, IsInitial, IsInitial.ofUniqueHom, X.map, X.obj, isEmpty, isEmptyElim, n.unop, naturality, not_nonempty_iff, ofUniqueHom
 -/

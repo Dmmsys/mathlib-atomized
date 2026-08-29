@@ -678,7 +678,7 @@ theorem enoughProjectives_iff
   · exact F.symm.projectivePresentationOfMapProjectivePresentation _
       (Nonempty.some (H.presentation (F.inverse.obj X)))
   · exact F.projectivePresentationOfMapProjectivePresentation X
-      (Nonempty.some (H.presentation (
+      (Nonempty.some (H.presentation (F.functor.obj X)))
 
 中文:
 定理 enoughProjectives_iff
@@ -690,7 +690,7 @@ theorem enoughProjectives_iff
   · exact F.symm.projectivePresentationOfMapProjectivePresentation _
       (Nonempty.some (H.presentation (F.inverse.obj X)))
   · exact F.projectivePresentationOfMapProjectivePresentation X
-      (Nonempty.some (H.presentation (
+      (Nonempty.some (H.presentation (F.functor.obj X)))
 
 Depends on / 依赖: F.functor.obj, F.inverse.obj, F.projectivePresentationOfMapProjectivePresentation, F.symm.projectivePresentationOfMapProjectivePresentation, H.presentation, Nonempty, Nonempty.some, all_goals, functor, inverse, presentation, projectivePresentationOfMapProjectivePresentation
 -/

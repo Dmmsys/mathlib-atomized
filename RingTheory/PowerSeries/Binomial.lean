@@ -226,7 +226,10 @@ lemma rescale_neg_one_invOneSubPow
   | zero =>
     by_cases hn : n = 0 <;> simp [invOneSubPow, Ring.choose_zero_ite, hn]
   | succ d =>
-    simp only [invOneSubPow, coeff_mk, Nat.cast_add, Nat.cast_one, neg
+    simp only [invOneSubPow, coeff_mk, Nat.cast_add, Nat.cast_one, neg_add_rev, Int.reduceNeg,
+      zsmul_eq_mul, mul_one]
+    rw [show (-1 : Int) + -d = -(d + 1) by abel]; rw [Ring.choose_neg]; rw [Nat.choose_symm_add]; rw [Units.smul_def]; rw [show (d : Int) + 1 + n - 1 = d + n by lia]; rw [← Nat.cast_add]; rw [Ring.choose_natCast]
+    norm_cast
 
 中文:
 引理 rescale_neg_one_invOneSubPow
@@ -238,7 +241,10 @@ lemma rescale_neg_one_invOneSubPow
   | zero =>
     by_cases hn : n = 0 <;> simp [invOneSubPow, Ring.choose_zero_ite, hn]
   | succ d =>
-    simp only [invOneSubPow, coeff_mk, Nat.cast_add, Nat.cast_one, neg
+    simp only [invOneSubPow, coeff_mk, Nat.cast_add, Nat.cast_one, neg_add_rev, Int.reduceNeg,
+      zsmul_eq_mul, mul_one]
+    rw [show (-1 : Int) + -d = -(d + 1) by abel]; rw [Ring.choose_neg]; rw [Nat.choose_symm_add]; rw [Units.smul_def]; rw [show (d : Int) + 1 + n - 1 = d + n by lia]; rw [← Nat.cast_add]; rw [Ring.choose_natCast]
+    norm_cast
 
 Depends on / 依赖: Int.cast_negOnePow_natCast, Int.reduceNeg, Nat.cast_add, Nat.cast_one, Nat.choose_symm_add, Ring.choose_neg, Ring.choose_zero_ite, Units.smul_def, binomialSeries_coeff, cast_add, cast_negOnePow_natCast, cast_one, choose_neg, choose_symm_add, choose_zero_ite, coeff_mk, coeff_rescale, invOneSubPow, mul_one, neg_add_rev
 -/

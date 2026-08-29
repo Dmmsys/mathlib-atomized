@@ -121,7 +121,7 @@ lemma exists_radius_le
   simp only [Function.comp_apply, ENNReal.rpow_natCast, Filter.eventually_atTop] at this
   obtain ⟨r, hr⟩ := this
   exact ⟨max r 1, le_max_right r 1,
-    le_trans 
+    le_trans (mod_cast Finset.card_filter_le V _) (hr (max r 1) (le_max_left r 1)).le⟩
 
 中文:
 引理 存在_radius_le
@@ -132,7 +132,7 @@ lemma exists_radius_le
   simp only [Function.comp_apply, ENNReal.rpow_natCast, Filter.eventually_atTop] at this
   obtain ⟨r, hr⟩ := this
   exact ⟨max r 1, le_max_right r 1,
-    le_trans 
+    le_trans (mod_cast Finset.card_filter_le V _) (hr (max r 1) (le_max_left r 1)).le⟩
 
 Depends on / 依赖: ENNReal, ENNReal.rpow_natCast, ENNReal.tendsto_nhds_top_iff_nat, ENNReal.tendsto_rpow_atTop_of_one_lt_base, Filter, Filter.eventually_atTop, Finset, Finset.card_filter_le, Function, Function.comp_apply, card_filter_le, comp_apply, eventually_atTop, le_max_left, le_max_right, le_trans, mod_cast, rpow_natCast, tendsto_natCast_atTop_atTop, tendsto_nhds_top_iff_nat
 -/
@@ -226,7 +226,11 @@ lemma pow_logSizeRadius_le_card_le_logSizeRadius
       Nat.one_le_cast, Finset.one_le_card]
     exact ⟨t, by simpa⟩
   rw [logSizeRadius]; rw [dif_pos ha] at h_one ⊢
-  have : Nat.find (exists_radius_le t V ha c) - 1
+  have : Nat.find (exists_radius_le t V ha c) - 1 < Nat.find (exists_radius_le t V ha c) := by
+    simp
+  have h := Nat.find_min (exists_radius_le t V ha c) this
+  simp only [ENNReal.natCast_sub, Nat.cast_one, not_and, not_le] at h
+  exact (h (by lia)).le
 
 中文:
 引理 pow_logSizeRadius_le_card_le_logSizeRadius
@@ -237,7 +241,11 @@ lemma pow_logSizeRadius_le_card_le_logSizeRadius
       Nat.one_le_cast, Finset.one_le_card]
     exact ⟨t, by simpa⟩
   rw [logSizeRadius]; rw [dif_pos ha] at h_one ⊢
-  have : Nat.find (exists_radius_le t V ha c) - 1
+  have : Nat.find (exists_radius_le t V ha c) - 1 < Nat.find (exists_radius_le t V ha c) := by
+    simp
+  have h := Nat.find_min (exists_radius_le t V ha c) this
+  simp only [ENNReal.natCast_sub, Nat.cast_one, not_and, not_le] at h
+  exact (h (by lia)).le
 
 Depends on / 依赖: ENNReal, ENNReal.natCast_sub, Finset, Finset.one_le_card, Nat.cast_one, Nat.find, Nat.find_min, Nat.one_le_cast, cast_one, dif_pos, exists_radius_le, find_min, h_one, logSizeRadius, natCast_sub, nonpos_iff_eq_zero, not_and, not_le, one_le_card, one_le_cast
 -/
@@ -545,7 +553,9 @@ lemma radius_logSizeBallSeq_le
     exact Nat.find_min' _ ⟨hn, le_trans (by gcongr; apply Finset.filter_subset) hJ_card⟩
   | i + 1 =>
     simp only [radius_logSizeBallSeq_add_one, logSizeRadius, ha, ↓reduceDIte]
-    refine Nat.fin
+    refine Nat.find_min' _ ⟨hn, le_trans ?_ hJ_card⟩
+    gcongr
+    exact (Finset.filter_subset _ _).trans (finset_logSizeBallSeq_subset_logSizeBallSeq_init _ _)
 
 中文:
 引理 radius_logSizeBallSeq_le
@@ -557,7 +567,9 @@ lemma radius_logSizeBallSeq_le
     exact Nat.find_min' _ ⟨hn, le_trans (by gcongr; apply Finset.filter_subset) hJ_card⟩
   | i + 1 =>
     simp only [radius_logSizeBallSeq_add_one, logSizeRadius, ha, ↓reduceDIte]
-    refine Nat.fin
+    refine Nat.find_min' _ ⟨hn, le_trans ?_ hJ_card⟩
+    gcongr
+    exact (Finset.filter_subset _ _).trans (finset_logSizeBallSeq_subset_logSizeBallSeq_init _ _)
 
 Depends on / 依赖: Finset, Finset.filter_subset, Nat.find_min, filter_subset, find_min, finset_logSizeBallSeq_subset_logSizeBallSeq_init, hJ_card, le_trans, logSizeRadius, radius_logSizeBallSeq_add_one, radius_logSizeBallSeq_zero, reduceDIte
 -/
@@ -641,7 +653,8 @@ lemma point_mem_logSizeBallSeq_init
   | succ i ih =>
     by_cases h : (logSizeBallSeq J hJ a c (i + 1)).finset.Nonempty
     · refine Finset.mem_of_subset ?_ (point_mem_finset_logSizeBallSeq hJ (i + 1) h)
-      apply finset_logSizeBallSeq_subset_logSizeBall
+      apply finset_logSizeBallSeq_subset_logSizeBallSeq_init
+    simp [point_logSizeBallSeq_add_one, ih, h]
 
 中文:
 引理 point_mem_logSizeBallSeq_init
@@ -652,7 +665,8 @@ lemma point_mem_logSizeBallSeq_init
   | succ i ih =>
     by_cases h : (logSizeBallSeq J hJ a c (i + 1)).finset.Nonempty
     · refine Finset.mem_of_subset ?_ (point_mem_finset_logSizeBallSeq hJ (i + 1) h)
-      apply finset_logSizeBallSeq_subset_logSizeBall
+      apply finset_logSizeBallSeq_subset_logSizeBallSeq_init
+    simp [point_logSizeBallSeq_add_one, ih, h]
 
 Depends on / 依赖: Finset, Finset.mem_of_subset, Nonempty, finset, finset.Nonempty, finset_logSizeBallSeq_subset_logSizeBallSeq_init, logSizeBallSeq, mem_of_subset, point_logSizeBallSeq_add_one, point_mem_finset_logSizeBallSeq
 -/
@@ -757,7 +771,8 @@ lemma card_finset_logSizeBallSeq_le
     · have := card_finset_logSizeBallSeq_add_one_lt hJ i h
       lia
 apply le_trans Finset.card_le_card (finset_logSizeBallSeq_add_one_subset hJ i)
-    su
+    suffices #(logSizeBallSeq J hJ a c i).finset = 0 by simp [this]
+    rwa [← not_ne_iff, Finset.card_ne_zero.not]
 
 中文:
 引理 card_finset_logSizeBallSeq_le
@@ -770,7 +785,8 @@ apply le_trans Finset.card_le_card (finset_logSizeBallSeq_add_one_subset hJ i)
     · have := card_finset_logSizeBallSeq_add_one_lt hJ i h
       lia
 apply le_trans Finset.card_le_card (finset_logSizeBallSeq_add_one_subset hJ i)
-    su
+    suffices #(logSizeBallSeq J hJ a c i).finset = 0 by simp [this]
+    rwa [← not_ne_iff, Finset.card_ne_zero.not]
 
 Depends on / 依赖: Finset, Finset.card_le_card, Finset.card_ne_zero.not, Nonempty, card_finset_logSizeBallSeq_add_one_lt, card_le_card, card_ne_zero, finset, finset.Nonempty, finset_logSizeBallSeq_add_one_subset, finset_logSizeBallSeq_zero, le_trans, logSizeBallSeq, not_ne_iff
 -/
@@ -821,7 +837,7 @@ lemma disjoint_smallBall_logSizeBallSeq
 · exact Disjoint.symm this hij.symm (ne_iff_lt_iff_le.mpr h).mp hij.symm
   apply Finset.disjoint_of_subset_right
   · exact (Finset.filter_subset _ _).trans (antitone_logSizeBallSeq_add_one_subset hJ h)
-  simp [finset_logSizeBallSeq_add_one, Finset.disjoint_sdiff
+  simp [finset_logSizeBallSeq_add_one, Finset.disjoint_sdiff]
 
 中文:
 引理 disjoint_smallBall_logSizeBallSeq
@@ -831,7 +847,7 @@ lemma disjoint_smallBall_logSizeBallSeq
 · exact Disjoint.symm this hij.symm (ne_iff_lt_iff_le.mpr h).mp hij.symm
   apply Finset.disjoint_of_subset_right
   · exact (Finset.filter_subset _ _).trans (antitone_logSizeBallSeq_add_one_subset hJ h)
-  simp [finset_logSizeBallSeq_add_one, Finset.disjoint_sdiff
+  simp [finset_logSizeBallSeq_add_one, Finset.disjoint_sdiff]
 
 Depends on / 依赖: Disjoint, Disjoint.symm, Finset, Finset.disjoint_of_subset_right, Finset.disjoint_sdiff, Finset.filter_subset, antitone_logSizeBallSeq_add_one_subset, disjoint_of_subset_right, disjoint_sdiff, filter_subset, finset_logSizeBallSeq_add_one, generalizing, hij.symm, ne_iff_lt_iff_le, ne_iff_lt_iff_le.mpr
 -/
@@ -922,7 +938,8 @@ lemma pairSet_subset
   · simp only [pairSetSeq, hJ, ↓reduceDIte]
     apply Finset.product_subset_product
     · exact Finset.singleton_subset_iff.mpr (point_mem_logSizeBallSeq_init hJ _)
-    exact (Finset.filter_sub
+    exact (Finset.filter_subset _ _).trans (finset_logSizeBallSeq_subset_logSizeBallSeq_init _ _)
+  simp [pairSetSeq, hJ]
 
 中文:
 引理 pairSet_subset
@@ -935,7 +952,8 @@ lemma pairSet_subset
   · simp only [pairSetSeq, hJ, ↓reduceDIte]
     apply Finset.product_subset_product
     · exact Finset.singleton_subset_iff.mpr (point_mem_logSizeBallSeq_init hJ _)
-    exact (Finset.filter_sub
+    exact (Finset.filter_subset _ _).trans (finset_logSizeBallSeq_subset_logSizeBallSeq_init _ _)
+  simp [pairSetSeq, hJ]
 
 Depends on / 依赖: Finset, Finset.biUnion_subset_iff_forall_subset, Finset.filter_subset, Finset.product_subset_product, Finset.singleton_subset_iff.mpr, J.Nonempty, Nonempty, biUnion_subset_iff_forall_subset, filter_subset, finset_logSizeBallSeq_subset_logSizeBallSeq_init, pairSet, pairSetSeq, point_mem_logSizeBallSeq_init, product_subset_product, reduceDIte, singleton_subset_iff
 -/
@@ -963,7 +981,9 @@ lemma card_pairSetSeq_le_logSizeRadius_mul
       radius_logSizeBallSeq_zero] using! card_le_logSizeRadius_le_pow_logSizeRadius ha
   | succ i ih =>
     by_cases! h : (logSizeBallSeq J hJ a c (i + 1)).finset.Nonempty
-    · simpa [pa
+    · simpa [pairSetSeq, logSizeBallStruct.ball, h, hJ]
+        using! card_le_logSizeRadius_le_pow_logSizeRadius ha
+    simp [pairSetSeq, logSizeBallStruct.ball, h, hJ]
 
 中文:
 引理 card_pairSetSeq_le_logSizeRadius_mul
@@ -975,7 +995,9 @@ lemma card_pairSetSeq_le_logSizeRadius_mul
       radius_logSizeBallSeq_zero] using! card_le_logSizeRadius_le_pow_logSizeRadius ha
   | succ i ih =>
     by_cases! h : (logSizeBallSeq J hJ a c (i + 1)).finset.Nonempty
-    · simpa [pa
+    · simpa [pairSetSeq, logSizeBallStruct.ball, h, hJ]
+        using! card_le_logSizeRadius_le_pow_logSizeRadius ha
+    simp [pairSetSeq, logSizeBallStruct.ball, h, hJ]
 
 Depends on / 依赖: Nonempty, card_le_logSizeRadius_le_pow_logSizeRadius, finset, finset.Nonempty, finset_logSizeBallSeq_zero, logSizeBallSeq, logSizeBallStruct, logSizeBallStruct.ball, pairSetSeq, radius_logSizeBallSeq_zero
 -/
@@ -1005,7 +1027,10 @@ lemma logSizeRadius_le_card_smallBall
       using! pow_logSizeRadius_le_card_le_logSizeRadius ha (Exists.choose_spec hJ)
   | i + 1 =>
     by_cases! h : (logSizeBallSeq J hJ a c (i + 1)).finset.Nonempty
-    · sim
+    · simpa [h, logSizeBallStruct.smallBall, radius_logSizeBallSeq_add_one] using!
+        pow_logSizeRadius_le_card_le_logSizeRadius ha
+          (point_mem_finset_logSizeBallSeq hJ _ h)
+    simp [h]
 
 中文:
 引理 logSizeRadius_le_card_smallBall
@@ -1017,7 +1042,10 @@ lemma logSizeRadius_le_card_smallBall
       using! pow_logSizeRadius_le_card_le_logSizeRadius ha (Exists.choose_spec hJ)
   | i + 1 =>
     by_cases! h : (logSizeBallSeq J hJ a c (i + 1)).finset.Nonempty
-    · sim
+    · simpa [h, logSizeBallStruct.smallBall, radius_logSizeBallSeq_add_one] using!
+        pow_logSizeRadius_le_card_le_logSizeRadius ha
+          (point_mem_finset_logSizeBallSeq hJ _ h)
+    simp [h]
 
 Depends on / 依赖: Exists, Exists.choose_spec, Nonempty, choose_spec, finset, finset.Nonempty, finset_logSizeBallSeq_zero, logSizeBallSeq, logSizeBallStruct, logSizeBallStruct.smallBall, point_mem_finset_logSizeBallSeq, pow_logSizeRadius_le_card_le_logSizeRadius, radius_logSizeBallSeq_add_one, radius_logSizeBallSeq_zero, smallBall
 -/
@@ -1049,7 +1077,17 @@ lemma card_pairSet_le
   unfold pairSet
   grw [Finset.card_biUnion_le, Nat.cast_sum,
     Finset.sum_le_sum fun i _ => card_pairSetSeq_le_logSizeRadius_mul hJ i ha,
-    Finset.sum_le_sum fun _ _ => mul_le_mul_right (pow_le_pow_right₀ ha.le le_tsub_
+    Finset.sum_le_sum fun _ _ => mul_le_mul_right (pow_le_pow_right₀ ha.le le_tsub_add) _]
+  conv_lhs => enter [2]; ext _; rw [pow_add, pow_one, ← mul_assoc, mul_comm]
+  grw [← Finset.mul_sum]
+  gcongr
+  grw [Finset.sum_le_sum fun i _ => logSizeRadius_le_card_smallBall hJ i ha, ← Nat.cast_sum,
+    ← Finset.card_biUnion fun _ _ _ _ => disjoint_smallBall_logSizeBallSeq hJ]
+  gcongr
+  unfold logSizeBallStruct.smallBall
+  rw [Finset.biUnion_subset_iff_forall_subset]
+  intro i _
+  exact (Finset.filter_subset _ _).trans (finset_logSizeBallSeq_subset_logSizeBallSeq_init _ _)
 
 中文:
 引理 card_pairSet_le
@@ -1061,7 +1099,17 @@ lemma card_pairSet_le
   unfold pairSet
   grw [Finset.card_biUnion_le, Nat.cast_sum,
     Finset.sum_le_sum fun i _ => card_pairSetSeq_le_logSizeRadius_mul hJ i ha,
-    Finset.sum_le_sum fun _ _ => mul_le_mul_right (pow_le_pow_right₀ ha.le le_tsub_
+    Finset.sum_le_sum fun _ _ => mul_le_mul_right (pow_le_pow_right₀ ha.le le_tsub_add) _]
+  conv_lhs => enter [2]; ext _; rw [pow_add, pow_one, ← mul_assoc, mul_comm]
+  grw [← Finset.mul_sum]
+  gcongr
+  grw [Finset.sum_le_sum fun i _ => logSizeRadius_le_card_smallBall hJ i ha, ← Nat.cast_sum,
+    ← Finset.card_biUnion fun _ _ _ _ => disjoint_smallBall_logSizeBallSeq hJ]
+  gcongr
+  unfold logSizeBallStruct.smallBall
+  rw [Finset.biUnion_subset_iff_forall_subset]
+  intro i _
+  exact (Finset.filter_subset _ _).trans (finset_logSizeBallSeq_subset_logSizeBallSeq_init _ _)
 
 Depends on / 依赖: Finset, Finset.car, Finset.card_biUnion_le, Finset.mul_sum, Finset.not_nonempty_iff_eq_empty.mp, Finset.sum_le_sum, J.Nonempty, Nat.cast_sum, Nonempty, card_biUnion_le, card_pairSetSeq_le_logSizeRadius_mul, cast_sum, conv_lhs, ha.le, le_tsub_add, logSizeRadius_le_card_smallBall, mul_assoc, mul_comm, mul_le_mul_right, mul_sum
 -/
@@ -1095,7 +1143,13 @@ lemma edist_le_of_mem_pairSet
   wlog! hn : 1 <= n
   · suffices s = t by simp [this]
     simp only [Nat.lt_one_iff.mp hn, pow_zero, Nat.cast_le_one] at hJ_card
- 
+    have ⟨hs, ht⟩ := Finset.mem_product.mp (pairSet_subset h)
+    exact Finset.card_le_one_iff.mp hJ_card hs ht
+  simp only [pairSetSeq, hJ, ↓reduceDIte, logSizeBallStruct.ball, Finset.product_eq_sprod,
+    Finset.singleton_product, Finset.mem_map, Finset.mem_filter, Function.Embedding.coeFn_mk,
+    Prod.mk.injEq, exists_eq_right_right] at h'
+  obtain ⟨⟨ht, hdist⟩, rfl⟩ := h'
+  grw [hdist, radius_logSizeBallSeq_le hJ ha hn hJ_card i]
 
 中文:
 引理 edist_le_of_mem_pairSet
@@ -1106,7 +1160,13 @@ lemma edist_le_of_mem_pairSet
   wlog! hn : 1 <= n
   · suffices s = t by simp [this]
     simp only [Nat.lt_one_iff.mp hn, pow_zero, Nat.cast_le_one] at hJ_card
- 
+    have ⟨hs, ht⟩ := Finset.mem_product.mp (pairSet_subset h)
+    exact Finset.card_le_one_iff.mp hJ_card hs ht
+  simp only [pairSetSeq, hJ, ↓reduceDIte, logSizeBallStruct.ball, Finset.product_eq_sprod,
+    Finset.singleton_product, Finset.mem_map, Finset.mem_filter, Function.Embedding.coeFn_mk,
+    Prod.mk.injEq, exists_eq_right_right] at h'
+  obtain ⟨⟨ht, hdist⟩, rfl⟩ := h'
+  grw [hdist, radius_logSizeBallSeq_le hJ ha hn hJ_card i]
 
 Depends on / 依赖: Finset, Finset.card_le_one_iff.mp, Finset.card_pos.mp, Finset.mem_product.mp, Finset.product_eq_sprod, Finset.singleton_pro, J.Nonempty, Nat.cast_le_one, Nat.lt_one_iff.mp, Nat.zero_lt_of_lt, Nonempty, card_le_one_iff, card_pos, cast_le_one, hJ_card, logSizeBallStruct, logSizeBallStruct.ball, lt_one_iff, mem_product, pairSet
 -/
@@ -1138,7 +1198,66 @@ lemma iSup_edist_pairSet
   let P (l : Nat) := s in (logSizeBallSeq J hJ a c l).finset ∧ t in (logSizeBallSeq J hJ a c l).finset
   let l := Nat.findGreatest P (#J - 1)
   obtain ⟨hsV, htV⟩ : P l := by
-    apply Na
+    apply Nat.findGreatest_spec zero_le
+    simpa [P, finset_logSizeBallSeq_zero] using ⟨hs, ht⟩
+  wlog h : s ∉ (logSizeBallSeq J hJ a c (l + 1)).finset generalizing s t
+  · have h' : t ∉ (logSizeBallSeq J hJ a c (l + 1)).finset := by
+      have hl : l < #J - 1 := by
+        by_contra hl
+        simp only [not_lt, tsub_le_iff_right] at hl
+        have hlJ : l + 1 = #J := by
+          refine Nat.le_antisymm_iff.mpr ⟨?_, hl⟩
+          dsimp [l]
+          grw [← Nat.sub_add_cancel <| Order.one_le_iff_pos.mpr (Finset.card_pos.mpr hJ),
+            Nat.findGreatest_le]
+          rfl
+        apply h
+        suffices h_emp : (logSizeBallSeq J hJ a c (l + 1)).finset = ∅ from by simp [h_emp]
+        rw [← Finset.card_eq_zero]; rw [← Nat.le_zero]; rw [← Nat.sub_self #J]; rw [hlJ]
+        apply card_finset_logSizeBallSeq_le
+      simp only [Decidable.not_not] at h
+      have hP := Nat.findGreatest_is_greatest (lt_add_one l) (Nat.add_one_le_of_lt hl)
+      simpa [P, h] using hP
+    have hts : edist t s <= c := by rw [edist_comm]; exact hst
+    rw [edist_comm]
+    have hP : P = (fun l =>
+      t in (logSizeBallSeq J hJ a c l).finset ∧ s in (logSizeBallSeq J hJ a c l).finset) := by
+        ext; simp [P, and_comm]
+    simp only [hP, l] at htV hsV h'
+    exact this t ht s hs hts htV hsV h'
+  simp only [finset_logSizeBallSeq_add_one, logSizeBallStruct.smallBall, Finset.mem_sdiff, hsV,
+    Finset.mem_filter, true_and, not_le, not_lt] at h
+  have hsB : s in (logSizeBallSeq J hJ a c l).ball c := by
+    simp only [logSizeBallStruct.ball, Finset.mem_filter, hsV, true_and]
+    grw [h, tsub_le_self]
+  have htB : t in (logSizeBallSeq J hJ a c l).ball c := by
+    simp only [logSizeBallStruct.ball, Finset.mem_filter, htV, true_and]
+    apply le_trans (edist_triangle _ s _)
+    apply le_of_le_of_eq (add_le_add h hst)
+    nth_rw 3 [← one_mul c]
+    rw [← add_mul]
+    congr
+    rw [ENNReal.sub_add_eq_add_sub _ (ENNReal.one_ne_top)]; rw [ENNReal.add_sub_cancel_right (ENNReal.one_ne_top)]
+    rw [← Nat.cast_one]
+    gcongr
+    exact one_le_radius_logSizeBallSeq hJ ha l
+  have hsP : ((logSizeBallSeq J hJ a c l).point, s) in pairSetSeq J a c l := by
+    simp [pairSetSeq, hJ, hsB]
+  have htP : ((logSizeBallSeq J hJ a c l).point, t) in pairSetSeq J a c l := by
+    simp [pairSetSeq, hJ, htB]
+  have sup_bound {x y : T} (hxy : (x, y) in pairSetSeq J a c l) :
+    edist (f x) (f y) <= ⨆ p : pairSet J a c, edist (f p.1.1) (f p.1.2) := by
+    simp only [iSup_subtype]
+    apply le_iSup_of_le (i := (x, y))
+    apply le_iSup_of_le
+    · exact le_rfl
+    refine Finset.mem_biUnion.mpr ⟨l, ?_, hxy⟩
+refine Finset.mem_range.mpr lt_of_le_of_lt (Nat.findGreatest_le (#J - 1)) ?_
+    exact Nat.sub_lt (Finset.card_pos.mpr hJ) zero_lt_one
+  rw [two_mul]
+  apply le_trans (edist_triangle _ (f (logSizeBallSeq J hJ a c l).point) _)
+  rw [edist_comm]
+  apply add_le_add (sup_bound hsP) (sup_bound htP)
 
 中文:
 引理 iSup_edist_pairSet
@@ -1150,7 +1269,66 @@ lemma iSup_edist_pairSet
   let P (l : Nat) := s in (logSizeBallSeq J hJ a c l).finset ∧ t in (logSizeBallSeq J hJ a c l).finset
   let l := Nat.findGreatest P (#J - 1)
   obtain ⟨hsV, htV⟩ : P l := by
-    apply Na
+    apply Nat.findGreatest_spec zero_le
+    simpa [P, finset_logSizeBallSeq_zero] using ⟨hs, ht⟩
+  wlog h : s ∉ (logSizeBallSeq J hJ a c (l + 1)).finset generalizing s t
+  · have h' : t ∉ (logSizeBallSeq J hJ a c (l + 1)).finset := by
+      have hl : l < #J - 1 := by
+        by_contra hl
+        simp only [not_lt, tsub_le_iff_right] at hl
+        have hlJ : l + 1 = #J := by
+          refine Nat.le_antisymm_iff.mpr ⟨?_, hl⟩
+          dsimp [l]
+          grw [← Nat.sub_add_cancel <| Order.one_le_iff_pos.mpr (Finset.card_pos.mpr hJ),
+            Nat.findGreatest_le]
+          rfl
+        apply h
+        suffices h_emp : (logSizeBallSeq J hJ a c (l + 1)).finset = ∅ from by simp [h_emp]
+        rw [← Finset.card_eq_zero]; rw [← Nat.le_zero]; rw [← Nat.sub_self #J]; rw [hlJ]
+        apply card_finset_logSizeBallSeq_le
+      simp only [Decidable.not_not] at h
+      have hP := Nat.findGreatest_is_greatest (lt_add_one l) (Nat.add_one_le_of_lt hl)
+      simpa [P, h] using hP
+    have hts : edist t s <= c := by rw [edist_comm]; exact hst
+    rw [edist_comm]
+    have hP : P = (fun l =>
+      t in (logSizeBallSeq J hJ a c l).finset ∧ s in (logSizeBallSeq J hJ a c l).finset) := by
+        ext; simp [P, and_comm]
+    simp only [hP, l] at htV hsV h'
+    exact this t ht s hs hts htV hsV h'
+  simp only [finset_logSizeBallSeq_add_one, logSizeBallStruct.smallBall, Finset.mem_sdiff, hsV,
+    Finset.mem_filter, true_and, not_le, not_lt] at h
+  have hsB : s in (logSizeBallSeq J hJ a c l).ball c := by
+    simp only [logSizeBallStruct.ball, Finset.mem_filter, hsV, true_and]
+    grw [h, tsub_le_self]
+  have htB : t in (logSizeBallSeq J hJ a c l).ball c := by
+    simp only [logSizeBallStruct.ball, Finset.mem_filter, htV, true_and]
+    apply le_trans (edist_triangle _ s _)
+    apply le_of_le_of_eq (add_le_add h hst)
+    nth_rw 3 [← one_mul c]
+    rw [← add_mul]
+    congr
+    rw [ENNReal.sub_add_eq_add_sub _ (ENNReal.one_ne_top)]; rw [ENNReal.add_sub_cancel_right (ENNReal.one_ne_top)]
+    rw [← Nat.cast_one]
+    gcongr
+    exact one_le_radius_logSizeBallSeq hJ ha l
+  have hsP : ((logSizeBallSeq J hJ a c l).point, s) in pairSetSeq J a c l := by
+    simp [pairSetSeq, hJ, hsB]
+  have htP : ((logSizeBallSeq J hJ a c l).point, t) in pairSetSeq J a c l := by
+    simp [pairSetSeq, hJ, htB]
+  have sup_bound {x y : T} (hxy : (x, y) in pairSetSeq J a c l) :
+    edist (f x) (f y) <= ⨆ p : pairSet J a c, edist (f p.1.1) (f p.1.2) := by
+    simp only [iSup_subtype]
+    apply le_iSup_of_le (i := (x, y))
+    apply le_iSup_of_le
+    · exact le_rfl
+    refine Finset.mem_biUnion.mpr ⟨l, ?_, hxy⟩
+refine Finset.mem_range.mpr lt_of_le_of_lt (Nat.findGreatest_le (#J - 1)) ?_
+    exact Nat.sub_lt (Finset.card_pos.mpr hJ) zero_lt_one
+  rw [two_mul]
+  apply le_trans (edist_triangle _ (f (logSizeBallSeq J hJ a c l).point) _)
+  rw [edist_comm]
+  apply add_le_add (sup_bound hsP) (sup_bound htP)
 
 Depends on / 依赖: J.Nonempty, Nat.findGreatest, Nat.findGreatest_spec, Nonempty, findGreatest, findGreatest_spec, finset, finset_logSizeBallSeq_zero, generalizing, iSup_le_iff, logSizeBallSeq, zero_le
 -/
@@ -1241,7 +1419,14 @@ theorem EMetric.pair_reduction
     obtain ⟨x₀, rfl⟩ : exists x₀, J = {x₀} := by
       rw [← Finset.card_eq_one]
       refine le_antisymm ?_ ?_
-      · suffices (#J : ENN
+      · suffices (#J : ENNReal) <= 1 by norm_cast at this
+        refine hJ_card.trans ?_
+        conv_rhs => rw [← one_pow n]
+        exact ENNReal.pow_le_pow_left ha1
+      · rwa [Finset.one_le_card, ← Finset.nonempty_coe_sort]
+    simp_all
+  · exact ⟨pairSet J a c, pairSet_subset, card_pairSet_le ha1,
+      fun _ _ => edist_le_of_mem_pairSet ha1 hJ_card, iSup_edist_pairSet ha1⟩
 
 中文:
 定理 EMetric.pair_reduction
@@ -1254,7 +1439,14 @@ theorem EMetric.pair_reduction
     obtain ⟨x₀, rfl⟩ : exists x₀, J = {x₀} := by
       rw [← Finset.card_eq_one]
       refine le_antisymm ?_ ?_
-      · suffices (#J : ENN
+      · suffices (#J : ENNReal) <= 1 by norm_cast at this
+        refine hJ_card.trans ?_
+        conv_rhs => rw [← one_pow n]
+        exact ENNReal.pow_le_pow_left ha1
+      · rwa [Finset.one_le_card, ← Finset.nonempty_coe_sort]
+    simp_all
+  · exact ⟨pairSet J a c, pairSet_subset, card_pairSet_le ha1,
+      fun _ _ => edist_le_of_mem_pairSet ha1 hJ_card, iSup_edist_pairSet ha1⟩
 
 Depends on / 依赖: ENNReal, ENNReal.pow_le_pow_left, Finset, Finset.card_eq_one, Finset.isEmpty_coe_sort, Finset.nonempty_coe_sort, Finset.one_le_card, card_eq_one, card_pairSet_le, classical, conv_rhs, hJ_card, hJ_card.trans, isEmpty_coe_sort, isEmpty_or_nonempty, le_antisymm, le_or_gt, nonempty_coe_sort, one_le_card, one_pow
 -/

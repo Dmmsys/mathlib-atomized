@@ -110,7 +110,7 @@ definition quotientSpanCXSubCAlgEquiv
 (DoubleQuot.quotQuotEquivQuotSupₐ R _ _).symm.trans
 (Ideal.quotientEquivAlg _ _ (quotientSpanXSubCAlgEquiv y) rfl).trans
 Ideal.quotientEquivAlgOfEq R by
-          simp only [Ideal.ma
+          simp only [Ideal.map_span, Set.image_singleton]; congr 2; exact eval_C
 
 中文:
 定义 quotientSpanCXSubCAlgEquiv
@@ -120,7 +120,7 @@ Ideal.quotientEquivAlgOfEq R by
 (DoubleQuot.quotQuotEquivQuotSupₐ R _ _).symm.trans
 (Ideal.quotientEquivAlg _ _ (quotientSpanXSubCAlgEquiv y) rfl).trans
 Ideal.quotientEquivAlgOfEq R by
-          simp only [Ideal.ma
+          simp only [Ideal.map_span, Set.image_singleton]; congr 2; exact eval_C
 
 Depends on / 依赖: DoubleQuot, DoubleQuot.quotQuotEquivQuotSup, Ideal.map_span, Ideal.quotientEquivAlg, Ideal.quotientEquivAlgOfEq, Ideal.span, Ideal.span_insert, Set.image_singleton, eval_C, image_singleton, map_span, quotientEquivAlg, quotientEquivAlgOfEq, quotientSpanXSubCAlgEquiv, span_insert, sup_comm, symm.trans
 -/
@@ -228,7 +228,8 @@ theorem eval₂_C_mk_eq_zero
   refine mul_eq_zero_of_left (Polynomial.ext fun m => ?_) (X ^ n)
   rw [RingHom.comp_apply]; rw [coeff_C]
   by_cases h : m = 0
-  · si
+  · simpa [h] using Quotient.eq_zero_iff_mem.2 ((mem_map_C_iff.1 ha) n)
+  · simp [h]
 
 中文:
 定理 eval₂_C_mk_eq_zero
@@ -244,7 +245,8 @@ theorem eval₂_C_mk_eq_zero
   refine mul_eq_zero_of_left (Polynomial.ext fun m => ?_) (X ^ n)
   rw [RingHom.comp_apply]; rw [coeff_C]
   by_cases h : m = 0
-  · si
+  · simpa [h] using Quotient.eq_zero_iff_mem.2 ((mem_map_C_iff.1 ha) n)
+  · simp [h]
 
 Depends on / 依赖: C.comp, Finset, Finset.sum_eq_zero, Polynomial, Polynomial.ext, Quotient, Quotient.eq_zero_iff_mem, Quotient.mk, RingHom, RingHom.comp_apply, coeff_C, comp_apply, eq_zero_iff_mem, mem_map_C_iff, mul_eq_zero_of_left, sum_eq_zero, sum_monomial_eq
 -/
@@ -275,7 +277,30 @@ definition polynomialQuotientEquivQuotientPolynomial
   invFun :=
     Quotient.lift (map C I : Ideal R[X]) (eval₂RingHom (C.comp (Quotient.mk I)) X)
       eval₂_C_mk_eq_zero
-  map_mul' f g := by simp onl
+  map_mul' f g := by simp only [coe_eval₂RingHom, eval₂_mul]
+  map_add' f g := by simp only [eval₂_add, coe_eval₂RingHom]
+  left_inv := by
+    intro f
+    refine Polynomial.induction_on' f ?_ ?_
+    · intro p q hp hq
+      simp only [coe_eval₂RingHom] at hp hq
+      simp only [coe_eval₂RingHom, hp, hq, map_add]
+    · rintro n ⟨x⟩
+      simp only [← smul_X_eq_monomial, C_mul', Quotient.lift_mk, Submodule.Quotient.quot_mk_eq_mk,
+        Quotient.mk_eq_mk, eval₂_X_pow, eval₂_smul, coe_eval₂RingHom, map_pow, eval₂_C,
+        RingHom.coe_comp, map_mul, eval₂_X, Function.comp_apply]
+  right_inv := by
+    rintro ⟨f⟩
+    refine Polynomial.induction_on' f ?_ ?_
+    · intro p q hp hq
+      simp only [Submodule.Quotient.quot_mk_eq_mk, Quotient.mk_eq_mk, map_add, Quotient.lift_mk,
+        coe_eval₂RingHom] at hp hq ⊢
+      rw [hp]; rw [hq]
+    · intro n a
+      simp only [← smul_X_eq_monomial, ← C_mul' a (X ^ n), Quotient.lift_mk,
+        Submodule.Quotient.quot_mk_eq_mk, Quotient.mk_eq_mk,
+        coe_eval₂RingHom, map_pow, eval₂_C, RingHom.coe_comp, map_mul, eval₂_X,
+        Function.comp_apply]
 
 中文:
 定义 polynomialQuotientEquivQuotientPolynomial
@@ -286,7 +311,30 @@ definition polynomialQuotientEquivQuotientPolynomial
   invFun :=
     Quotient.lift (map C I : Ideal R[X]) (eval₂RingHom (C.comp (Quotient.mk I)) X)
       eval₂_C_mk_eq_zero
-  map_mul' f g := by simp onl
+  map_mul' f g := by simp only [coe_eval₂RingHom, eval₂_mul]
+  map_add' f g := by simp only [eval₂_add, coe_eval₂RingHom]
+  left_inv := by
+    intro f
+    refine Polynomial.induction_on' f ?_ ?_
+    · intro p q hp hq
+      simp only [coe_eval₂RingHom] at hp hq
+      simp only [coe_eval₂RingHom, hp, hq, map_add]
+    · rintro n ⟨x⟩
+      simp only [← smul_X_eq_monomial, C_mul', Quotient.lift_mk, Submodule.Quotient.quot_mk_eq_mk,
+        Quotient.mk_eq_mk, eval₂_X_pow, eval₂_smul, coe_eval₂RingHom, map_pow, eval₂_C,
+        RingHom.coe_comp, map_mul, eval₂_X, Function.comp_apply]
+  right_inv := by
+    rintro ⟨f⟩
+    refine Polynomial.induction_on' f ?_ ?_
+    · intro p q hp hq
+      simp only [Submodule.Quotient.quot_mk_eq_mk, Quotient.mk_eq_mk, map_add, Quotient.lift_mk,
+        coe_eval₂RingHom] at hp hq ⊢
+      rw [hp]; rw [hq]
+    · intro n a
+      simp only [← smul_X_eq_monomial, ← C_mul' a (X ^ n), Quotient.lift_mk,
+        Submodule.Quotient.quot_mk_eq_mk, Quotient.mk_eq_mk,
+        coe_eval₂RingHom, map_pow, eval₂_C, RingHom.coe_comp, map_mul, eval₂_X,
+        Function.comp_apply]
 
 Depends on / 依赖: C.comp, Polynomial, Polynomial.induction_on, Quotient, Quotient.lift, Quotient.mk, coe_e, induction_on, invFun, left_inv, map_add, map_mul, quotient_map_C_eq_zero
 -/
@@ -413,7 +461,20 @@ theorem eq_zero_of_polynomial_mem_map_range
   have hi' : RingHom.ker (Polynomial.mapRingHom i) <= I := by
     refine fun f hf => polynomial_mem_ideal_of_coeff_mem_ideal I f fun n => ?_
     rw [mem_comap]; rw [← Quotient.eq_zero_iff_mem]; rw [← RingHom.comp_apply]
-    rw [RingHom.mem_ker]; r
+    rw [RingHom.mem_ker]; rw [coe_mapRingHom] at hf
+    replace hf := congr_arg (fun f : Polynomial _ => f.coeff n) hf
+    simp only [coeff_map, coeff_zero] at hf
+    rwa [Subtype.ext_iff, RingHom.coe_rangeRestrict] at hf
+  obtain ⟨x, hx'⟩ := x
+  obtain ⟨y, rfl⟩ := RingHom.mem_range.1 hx'
+  refine Subtype.ext ?_
+  simp only [RingHom.comp_apply, Quotient.eq_zero_iff_mem, ZeroMemClass.coe_zero]
+  suffices C (i y) in I.map (Polynomial.mapRingHom i) by
+    obtain ⟨f, hf⟩ := mem_image_of_mem_map_of_surjective (Polynomial.mapRingHom i)
+      (Polynomial.map_surjective _ (RingHom.rangeRestrict_surjective ((Quotient.mk I).comp C))) this
+    refine sub_add_cancel (C y) f ▸ I.add_mem (hi' ?_ : C y - f in I) hf.1
+    rw [RingHom.mem_ker]; rw [map_sub]; rw [hf.2]; rw [sub_eq_zero]; rw [coe_mapRingHom]; rw [map_C]
+  exact hx
 
 中文:
 定理 eq_zero_of_polynomial_mem_map_range
@@ -423,7 +484,20 @@ theorem eq_zero_of_polynomial_mem_map_range
   have hi' : RingHom.ker (Polynomial.mapRingHom i) <= I := by
     refine fun f hf => polynomial_mem_ideal_of_coeff_mem_ideal I f fun n => ?_
     rw [mem_comap]; rw [← Quotient.eq_zero_iff_mem]; rw [← RingHom.comp_apply]
-    rw [RingHom.mem_ker]; r
+    rw [RingHom.mem_ker]; rw [coe_mapRingHom] at hf
+    replace hf := congr_arg (fun f : Polynomial _ => f.coeff n) hf
+    simp only [coeff_map, coeff_zero] at hf
+    rwa [Subtype.ext_iff, RingHom.coe_rangeRestrict] at hf
+  obtain ⟨x, hx'⟩ := x
+  obtain ⟨y, rfl⟩ := RingHom.mem_range.1 hx'
+  refine Subtype.ext ?_
+  simp only [RingHom.comp_apply, Quotient.eq_zero_iff_mem, ZeroMemClass.coe_zero]
+  suffices C (i y) in I.map (Polynomial.mapRingHom i) by
+    obtain ⟨f, hf⟩ := mem_image_of_mem_map_of_surjective (Polynomial.mapRingHom i)
+      (Polynomial.map_surjective _ (RingHom.rangeRestrict_surjective ((Quotient.mk I).comp C))) this
+    refine sub_add_cancel (C y) f ▸ I.add_mem (hi' ?_ : C y - f in I) hf.1
+    rw [RingHom.mem_ker]; rw [map_sub]; rw [hf.2]; rw [sub_eq_zero]; rw [coe_mapRingHom]; rw [map_C]
+  exact hx
 
 Depends on / 依赖: Polynomial, Polynomial.mapRingHom, Quotient, Quotient.eq_zero_iff_mem, Quotient.mk, RingHom, RingHom.coe_rangeRestrict, RingHom.comp_apply, RingHom.ker, RingHom.mem_ker, Subtype, Subtype.ext_iff, coe_mapRingHom, coe_rangeRestrict, coeff_map, coeff_zero, comp_apply, congr_arg, eq_zero_iff_mem, ext_iff
 -/
@@ -522,7 +596,8 @@ theorem eval₂_C_mk_eq_zero
   refine mul_eq_zero_of_left ?_ _
   suffices coeff n a in I by
     rw [← @Ideal.mk_ker R _ I]; rw [RingHom.mem_ker] at this
-    simp on
+    simp only [this, C_0]
+  exact mem_map_C_iff.1 ha n
 
 中文:
 定理 eval₂_C_mk_eq_zero
@@ -535,7 +610,8 @@ theorem eval₂_C_mk_eq_zero
   refine mul_eq_zero_of_left ?_ _
   suffices coeff n a in I by
     rw [← @Ideal.mk_ker R _ I]; rw [RingHom.mem_ker] at this
-    simp on
+    simp only [this, C_0]
+  exact mem_map_C_iff.1 ha n
 
 Depends on / 依赖: Finset, Finset.sum_eq_zero, Function, Function.comp_apply, Ideal.mk_ker, RingHom, RingHom.coe_comp, RingHom.mem_ker, as_sum, coe_comp, comp_apply, mem_ker, mem_map_C_iff, mk_ker, mul_eq_zero_of_left, sum_eq_zero
 -/
@@ -569,7 +645,7 @@ lemma quotientEquivQuotientMvPolynomial_rightInverse
       at hp hq ⊢
     rw [hp]; rw [hq]
   · intro p i hp
-    simp only [hp, coe_eval₂Hom, Ideal.Quotient.lift_mk, eval₂_mul
+    simp only [hp, coe_eval₂Hom, Ideal.Quotient.lift_mk, eval₂_mul, map_mul, eval₂_X]
 
 中文:
 引理 quotientEquivQuotientMvPolynomial_rightInverse
@@ -585,7 +661,7 @@ lemma quotientEquivQuotientMvPolynomial_rightInverse
       at hp hq ⊢
     rw [hp]; rw [hq]
   · intro p i hp
-    simp only [hp, coe_eval₂Hom, Ideal.Quotient.lift_mk, eval₂_mul
+    simp only [hp, coe_eval₂Hom, Ideal.Quotient.lift_mk, eval₂_mul, map_mul, eval₂_X]
 
 Depends on / 依赖: Ideal.Quotient.lift_mk, Ideal.Quotient.mk_surjective, MvPolynomial, MvPolynomial.eval, Quotient, induction_on, lift_mk, map_add, map_mul, mk_surjective
 -/
@@ -622,7 +698,13 @@ lemma quotientEquivQuotientMvPolynomial_leftInverse
   · intro r
     rw [Ideal.Quotient.lift_mk]; rw [eval₂Hom_C]; rw [RingHom.comp_apply]; rw [eval₂_C]; rw [Ideal.Quotient.lift_mk]; rw [RingHom.comp_apply]
   · intro p q hp hq
-    rw [Ideal.Quotient.lift_mk] at hp 
+    rw [Ideal.Quotient.lift_mk] at hp hq ⊢
+    simp only [eval₂_add, map_add, coe_eval₂Hom] at hp hq ⊢
+    rw [hp]; rw [hq]
+  · intro p i hp
+    simp only [coe_eval₂Hom, Ideal.Quotient.lift_mk,
+      eval₂_mul, map_mul, eval₂_X] at hp ⊢
+    simp only [hp]
 
 中文:
 引理 quotientEquivQuotientMvPolynomial_leftInverse
@@ -634,7 +716,13 @@ lemma quotientEquivQuotientMvPolynomial_leftInverse
   · intro r
     rw [Ideal.Quotient.lift_mk]; rw [eval₂Hom_C]; rw [RingHom.comp_apply]; rw [eval₂_C]; rw [Ideal.Quotient.lift_mk]; rw [RingHom.comp_apply]
   · intro p q hp hq
-    rw [Ideal.Quotient.lift_mk] at hp 
+    rw [Ideal.Quotient.lift_mk] at hp hq ⊢
+    simp only [eval₂_add, map_add, coe_eval₂Hom] at hp hq ⊢
+    rw [hp]; rw [hq]
+  · intro p i hp
+    simp only [coe_eval₂Hom, Ideal.Quotient.lift_mk,
+      eval₂_mul, map_mul, eval₂_X] at hp ⊢
+    simp only [hp]
 
 Depends on / 依赖: Ideal.Quotient.lift_mk, Ideal.Quotient.mk_surjective, Quotient, RingHom, RingHom.comp_apply, comp_apply, induction_on, lift_mk, map_add, map_mul, mk_surjective
 -/
@@ -671,7 +759,13 @@ definition quotientEquivQuotientMvPolynomial
     { eval₂Hom
       (Ideal.Quotient.lift I ((Ideal.Quotient.mk (Ideal.map C I : Ideal (MvPolynomial σ R))).comp C)
         fun _ hi => quotient_map_C_eq_zero hi)
-      fun i => Ideal.Quotien
+      fun i => Ideal.Quotient.mk (Ideal.map C I : Ideal (MvPolynomial σ R)) (X i) with
+      commutes' := fun r => eval₂Hom_C _ _ (Ideal.Quotient.mk I r) }
+  { e with
+    invFun := Ideal.Quotient.lift (Ideal.map C I : Ideal (MvPolynomial σ R))
+      (eval₂Hom (C.comp (Ideal.Quotient.mk I)) X) fun _ ha => eval₂_C_mk_eq_zero ha
+    left_inv := quotientEquivQuotientMvPolynomial_rightInverse I
+    right_inv := quotientEquivQuotientMvPolynomial_leftInverse I }
 
 中文:
 定义 quotientEquivQuotientMvPolynomial
@@ -681,7 +775,13 @@ definition quotientEquivQuotientMvPolynomial
     { eval₂Hom
       (Ideal.Quotient.lift I ((Ideal.Quotient.mk (Ideal.map C I : Ideal (MvPolynomial σ R))).comp C)
         fun _ hi => quotient_map_C_eq_zero hi)
-      fun i => Ideal.Quotien
+      fun i => Ideal.Quotient.mk (Ideal.map C I : Ideal (MvPolynomial σ R)) (X i) with
+      commutes' := fun r => eval₂Hom_C _ _ (Ideal.Quotient.mk I r) }
+  { e with
+    invFun := Ideal.Quotient.lift (Ideal.map C I : Ideal (MvPolynomial σ R))
+      (eval₂Hom (C.comp (Ideal.Quotient.mk I)) X) fun _ ha => eval₂_C_mk_eq_zero ha
+    left_inv := quotientEquivQuotientMvPolynomial_rightInverse I
+    right_inv := quotientEquivQuotientMvPolynomial_leftInverse I }
 
 Depends on / 依赖: C.comp, Ideal.Q, Ideal.Quotient.lift, Ideal.Quotient.mk, Ideal.map, MvPolynomial, Quotient, commutes, invFun, quotient_map_C_eq_zero
 -/

@@ -203,7 +203,23 @@ definition getFunctionData
       -- revert projection in fn
       if let .proj n i x := fn then
         let some info := getStructureInfo? (← getEnv) n | unreachable!
-  
+        let some projName := info.getProjFn? i | unreachable!
+        let p ← mkAppM projName #[x]
+        fn := p.getAppFn
+        args := p.getAppArgs.map (fun a => {expr:=a}) ++ args
+
+      let mainArgs := args
+.mapIdx (fun i ⟨arg,_⟩ => if arg.containsFVar xId then some i else none)
+.filterMap id
+
+      return {
+        lctx := ← getLCtx
+        insts := ← getLocalInstances
+        fn := fn
+        args := args
+        mainVar := xs[0]!
+        mainArgs := mainArgs
+      }
 
 中文:
 定义 getFunctionData
@@ -221,7 +237,23 @@ definition getFunctionData
       -- revert projection in fn
       if let .proj n i x := fn then
         let some info := getStructureInfo? (← getEnv) n | unreachable!
-  
+        let some projName := info.getProjFn? i | unreachable!
+        let p ← mkAppM projName #[x]
+        fn := p.getAppFn
+        args := p.getAppArgs.map (fun a => {expr:=a}) ++ args
+
+      let mainArgs := args
+.mapIdx (fun i ⟨arg,_⟩ => if arg.containsFVar xId then some i else none)
+.filterMap id
+
+      return {
+        lctx := ← getLCtx
+        insts := ← getLocalInstances
+        fn := fn
+        args := args
+        mainVar := xs[0]!
+        mainArgs := mainArgs
+      }
 -/
 def getFunctionData (f : Expr) : MetaM FunctionData := do
   lambdaTelescope f fun xs b => do
@@ -320,7 +352,16 @@ definition getFunctionData?
     else
       pure false
 
-  let .forallE xName xType _ _ ← instantiateMVars (← inferTy
+  let .forallE xName xType _ _ ← instantiateMVars (← inferType f)
+    | throwError m!"fun_prop bug: function expected, got `{f} : {← inferType f}, \
+                    type ctor {(← inferType f).ctorName}"
+  withLocalDeclD xName xType fun x => do
+headBetaThroughLet let fx' := (← Mor.whnfPred (f.beta #[x]).eta unfold)
+    let f' ← mkLambdaFVars #[x] fx'
+    match fx' with
+    | .letE .. => return .letE f'
+    | .lam .. => return .lam f'
+    | _ => return .data (← getFunctionData f')
 
 中文:
 定义 getFunctionData?
@@ -334,7 +375,16 @@ definition getFunctionData?
     else
       pure false
 
-  let .forallE xName xType _ _ ← instantiateMVars (← inferTy
+  let .forallE xName xType _ _ ← instantiateMVars (← inferType f)
+    | throwError m!"fun_prop bug: function expected, got `{f} : {← inferType f}, \
+                    type ctor {(← inferType f).ctorName}"
+  withLocalDeclD xName xType fun x => do
+headBetaThroughLet let fx' := (← Mor.whnfPred (f.beta #[x]).eta unfold)
+    let f' ← mkLambdaFVars #[x] fx'
+    match fx' with
+    | .letE .. => return .letE f'
+    | .lam .. => return .lam f'
+    | _ => return .data (← getFunctionData f')
 -/
 def getFunctionData? (f : Expr)
     (unfoldPred : Name -> Bool := fun _ => false) :
@@ -434,7 +484,16 @@ definition FunctionData.isMorApplication
       match compare arity f.args.size with
       | .eq => return .exact
       | .lt => return .overApplied
-      | .gt => return .underA
+      | .gt => return .underApplied
+  match h : f.args.size with
+  | 0 => return .none
+  | n + 1 =>
+    if f.args[n].coe.isSome then
+      return .exact
+    else if f.args.any (fun a => a.coe.isSome) then
+      return .overApplied
+    else
+      return .none
 
 中文:
 定义 FunctionData.isMorApplication
@@ -447,7 +506,16 @@ definition FunctionData.isMorApplication
       match compare arity f.args.size with
       | .eq => return .exact
       | .lt => return .overApplied
-      | .gt => return .underA
+      | .gt => return .underApplied
+  match h : f.args.size with
+  | 0 => return .none
+  | n + 1 =>
+    if f.args[n].coe.isSome then
+      return .exact
+    else if f.args.any (fun a => a.coe.isSome) then
+      return .overApplied
+    else
+      return .none
 -/
 def FunctionData.isMorApplication (f : FunctionData) : MetaM MorApplication := do
   if let some name := f.fn.constName? then
@@ -511,7 +579,14 @@ definition FunctionData.peeloffArgDecomposition
       return .failed
 
     if fData.args.size = 1 &&
-       fData.mainVar == fData.
+       fData.mainVar == fData.fn then
+      return .failed
+
+    let gBody' := Mor.mkAppN fData.fn fData.args[:n-1]
+    let gBody' := if let some coe := yₙ.coe then coe.app gBody' else gBody'
+    let g' ← mkLambdaFVars #[x] gBody'
+    let f' := Expr.lam `f (← inferType gBody') (.app (.bvar 0) (yₙ.expr)) default
+    return .comp f' g'
 
 中文:
 定义 FunctionData.peeloffArgDecomposition
@@ -527,7 +602,14 @@ definition FunctionData.peeloffArgDecomposition
       return .failed
 
     if fData.args.size = 1 &&
-       fData.mainVar == fData.
+       fData.mainVar == fData.fn then
+      return .failed
+
+    let gBody' := Mor.mkAppN fData.fn fData.args[:n-1]
+    let gBody' := if let some coe := yₙ.coe then coe.app gBody' else gBody'
+    let g' ← mkLambdaFVars #[x] gBody'
+    let f' := Expr.lam `f (← inferType gBody') (.app (.bvar 0) (yₙ.expr)) default
+    return .comp f' g'
 -/
 def FunctionData.peeloffArgDecomposition (fData : FunctionData) : MetaM DecompositionResult := do
   unless fData.args.size > 0 do return .failed
@@ -568,7 +650,44 @@ definition FunctionData.decomposition
     let mut args := fData.args
 
     if fn.containsFVar xId then
-      return ← fData.peeloffArgDecompositio
+      return ← fData.peeloffArgDecomposition
+
+    -- constant function can't be decomposed
+    if fData.mainArgs.size == 0 then
+      return .failed
+
+    let mut yVals : Array Expr := #[]
+    let mut yVars : Array Expr := #[]
+
+    for argId in fData.mainArgs do
+      let yVal := args[argId]!
+
+      let yVal' := yVal.expr
+      let yId ← withLCtx lctx insts mkFreshFVarId
+      let yType ← withLCtx lctx insts (inferType yVal')
+      if yType.containsFVar fData.mainVar.fvarId! then
+        return .failed
+      lctx := lctx.mkLocalDecl yId (xName.appendAfter (toString argId)) yType
+      let yVar := Expr.fvar yId
+      yVars := yVars.push yVar
+      yVals := yVals.push yVal'
+      args := args.set! argId ⟨yVar, yVal.coe⟩
+
+    let g ← withLCtx lctx insts do
+      mkLambdaFVars #[x] (← mkProdElem yVals)
+    let f ← withLCtx lctx insts do
+      (mkLambdaFVars yVars (Mor.mkAppN fn args))
+      >>=
+      mkUncurryFun yVars.size
+
+    -- check non-triviality
+    let f' ← fData.toExpr
+if ← withReducibleAndInstances isDefEq f' f then
+      return .uncurried
+if ← withReducibleAndInstances isDefEq f' g then
+      return .failed
+
+    return .comp f g
 
 中文:
 定义 FunctionData.decomposition
@@ -586,7 +705,44 @@ definition FunctionData.decomposition
     let mut args := fData.args
 
     if fn.containsFVar xId then
-      return ← fData.peeloffArgDecompositio
+      return ← fData.peeloffArgDecomposition
+
+    -- constant function can't be decomposed
+    if fData.mainArgs.size == 0 then
+      return .failed
+
+    let mut yVals : Array Expr := #[]
+    let mut yVars : Array Expr := #[]
+
+    for argId in fData.mainArgs do
+      let yVal := args[argId]!
+
+      let yVal' := yVal.expr
+      let yId ← withLCtx lctx insts mkFreshFVarId
+      let yType ← withLCtx lctx insts (inferType yVal')
+      if yType.containsFVar fData.mainVar.fvarId! then
+        return .failed
+      lctx := lctx.mkLocalDecl yId (xName.appendAfter (toString argId)) yType
+      let yVar := Expr.fvar yId
+      yVars := yVars.push yVar
+      yVals := yVals.push yVal'
+      args := args.set! argId ⟨yVar, yVal.coe⟩
+
+    let g ← withLCtx lctx insts do
+      mkLambdaFVars #[x] (← mkProdElem yVals)
+    let f ← withLCtx lctx insts do
+      (mkLambdaFVars yVars (Mor.mkAppN fn args))
+      >>=
+      mkUncurryFun yVars.size
+
+    -- check non-triviality
+    let f' ← fData.toExpr
+if ← withReducibleAndInstances isDefEq f' f then
+      return .uncurried
+if ← withReducibleAndInstances isDefEq f' g then
+      return .failed
+
+    return .comp f g
 -/
 def FunctionData.decomposition (fData : FunctionData) : MetaM DecompositionResult := do
 
@@ -657,7 +813,19 @@ definition FunctionData.decompositionOverArgs
   let gxs := args.map (fun i => fData.args[i]!.expr)
 
   try
-    let gx ← mkProdElem gxs -- this can crash if we have depende
+    let gx ← mkProdElem gxs -- this can crash if we have dependent types
+let g ← withLCtx fData.lctx fData.insts mkLambdaFVars #[fData.mainVar] gx
+
+    withLocalDeclD `y (← inferType gx) fun y => do
+
+      let ys ← mkProdSplitElem y gxs.size
+      let args' := (args.zip ys).foldl (init := fData.args)
+          (fun args' (i,y) => args'.set! i { expr := y, coe := args'[i]!.coe })
+
+      let f ← mkLambdaFVars #[y] (Mor.mkAppN fData.fn args')
+      return (f,g)
+  catch _ =>
+    return none
 
 中文:
 定义 FunctionData.decompositionOverArgs
@@ -672,7 +840,19 @@ definition FunctionData.decompositionOverArgs
   let gxs := args.map (fun i => fData.args[i]!.expr)
 
   try
-    let gx ← mkProdElem gxs -- this can crash if we have depende
+    let gx ← mkProdElem gxs -- this can crash if we have dependent types
+let g ← withLCtx fData.lctx fData.insts mkLambdaFVars #[fData.mainVar] gx
+
+    withLocalDeclD `y (← inferType gx) fun y => do
+
+      let ys ← mkProdSplitElem y gxs.size
+      let args' := (args.zip ys).foldl (init := fData.args)
+          (fun args' (i,y) => args'.set! i { expr := y, coe := args'[i]!.coe })
+
+      let f ← mkLambdaFVars #[y] (Mor.mkAppN fData.fn args')
+      return (f,g)
+  catch _ =>
+    return none
 -/
 def FunctionData.decompositionOverArgs (fData : FunctionData) (args : Array Nat) :
     MetaM (Option (Expr × Expr)) := do

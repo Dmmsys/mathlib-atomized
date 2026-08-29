@@ -68,7 +68,9 @@ theorem trans
   proof: by
   rw [Flat.iff_lTensor_injectiveₛ]
   introv
-  rw [← coe_lTensor (A := S)]; rw [← EquivLike.injective_comp (cancelBaseChange R S S _ _)]; rw [← LinearEquiv.coe_coe]; rw [← LinearMap.coe_comp]; rw [lTensor_comp_cancelBaseChange]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp
+  rw [← coe_lTensor (A := S)]; rw [← EquivLike.injective_comp (cancelBaseChange R S S _ _)]; rw [← LinearEquiv.coe_coe]; rw [← LinearMap.coe_comp]; rw [lTensor_comp_cancelBaseChange]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp_injective]
+  iterate 2 apply Flat.lTensor_preserves_injective_linearMap
+  exact Subtype.val_injective
 
 中文:
 定理 trans
@@ -77,7 +79,9 @@ theorem trans
   证明: by
   rw [Flat.iff_lTensor_injectiveₛ]
   introv
-  rw [← coe_lTensor (A := S)]; rw [← EquivLike.injective_comp (cancelBaseChange R S S _ _)]; rw [← LinearEquiv.coe_coe]; rw [← LinearMap.coe_comp]; rw [lTensor_comp_cancelBaseChange]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp
+  rw [← coe_lTensor (A := S)]; rw [← EquivLike.injective_comp (cancelBaseChange R S S _ _)]; rw [← LinearEquiv.coe_coe]; rw [← LinearMap.coe_comp]; rw [lTensor_comp_cancelBaseChange]; rw [LinearMap.coe_comp]; rw [LinearEquiv.coe_coe]; rw [EquivLike.comp_injective]
+  iterate 2 apply Flat.lTensor_preserves_injective_linearMap
+  exact Subtype.val_injective
 
 Depends on / 依赖: EquivLike, EquivLike.comp_injective, EquivLike.injective_comp, Flat.iff_lTensor_injective, Flat.lTensor_preserves_injective_linearMap, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, Subtype, Subtype.val_injective, _of_ne_zero_right, cancelBaseChange, coe_coe, coe_comp, coe_lTensor, comp_injective, injective_comp, introv, iterate
 -/

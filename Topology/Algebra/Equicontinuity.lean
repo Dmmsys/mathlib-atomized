@@ -33,7 +33,9 @@ theorem equicontinuous_of_equicontinuousAt_one
     { toFun := swap ((↑) ∘ F)
       map_one' := by dsimp [UniformFun]; ext; exact map_one _
       map_mul' := fun a b => by dsimp [UniformFun]; ext; exact map_mul _ _ _ }
-  exact conti
+  exact continuous_of_continuousAt_one φ hf
+
+@[to_additive]
 
 中文:
 定理 equicontinuous_of_equicontinuousAt_one
@@ -45,7 +47,9 @@ theorem equicontinuous_of_equicontinuousAt_one
     { toFun := swap ((↑) ∘ F)
       map_one' := by dsimp [UniformFun]; ext; exact map_one _
       map_mul' := fun a b => by dsimp [UniformFun]; ext; exact map_mul _ _ _ }
-  exact conti
+  exact continuous_of_continuousAt_one φ hf
+
+@[to_additive]
 
 Depends on / 依赖: UniformFun, continuous_of_continuousAt_one, equicontinuousAt_iff_continuousAt, equicontinuous_iff_continuous, map_mul, map_one
 -/
@@ -76,6 +80,7 @@ theorem uniformEquicontinuous_of_equicontinuousAt_one
     { toFun := swap ((↑) ∘ F)
       map_one' := by dsimp [UniformFun]; ext; exact map_one _
       map_mul' := fun a b => by dsimp [UniformFun]; ext; exact map_mul _ _ _ }
+  exact uniformContinuous_of_continuousAt_one φ hf
 
 中文:
 定理 uniformEquicontinuous_of_equicontinuousAt_one
@@ -87,6 +92,7 @@ theorem uniformEquicontinuous_of_equicontinuousAt_one
     { toFun := swap ((↑) ∘ F)
       map_one' := by dsimp [UniformFun]; ext; exact map_one _
       map_mul' := fun a b => by dsimp [UniformFun]; ext; exact map_mul _ _ _ }
+  exact uniformContinuous_of_continuousAt_one φ hf
 
 Depends on / 依赖: UniformFun, equicontinuousAt_iff_continuousAt, map_mul, map_one, uniformContinuous_of_continuousAt_one, uniformEquicontinuous_iff_uniformContinuous
 -/

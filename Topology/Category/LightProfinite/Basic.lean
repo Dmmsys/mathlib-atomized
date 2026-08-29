@@ -296,7 +296,13 @@ definition limitCone
         · change SecondCountableTopology ({ u : forall j : J, F.obj j | _ } : Type _)
           apply IsInducing.subtypeVal.secondCountableTopology }
   π :=
-  
+  { app j :=
+      ConcreteCategory.ofHom
+        ((CompHaus.limitCone.{v, u} (F ⋙ lightProfiniteToCompHaus)).π.app j).hom.hom
+    naturality := by
+      intro j k f
+      ext ⟨g, p⟩
+      exact (p f).symm }
 
 中文:
 定义 limitCone
@@ -308,7 +314,13 @@ definition limitCone
         · change SecondCountableTopology ({ u : forall j : J, F.obj j | _ } : Type _)
           apply IsInducing.subtypeVal.secondCountableTopology }
   π :=
-  
+  { app j :=
+      ConcreteCategory.ofHom
+        ((CompHaus.limitCone.{v, u} (F ⋙ lightProfiniteToCompHaus)).π.app j).hom.hom
+    naturality := by
+      intro j k f
+      ext ⟨g, p⟩
+      exact (p f).symm }
 
 Depends on / 依赖: CompHaus, CompHaus.limitCone, ConcreteCategory, ConcreteCategory.ofHom, F.obj, IsInducing, IsInducing.subtypeVal.secondCountableTopology, SecondCountableTopology, hom.hom, infer_instance, lightProfiniteToCompHaus, limitCone, naturality, pt.toTop, secondCountableTopology, subtypeVal
 -/
@@ -342,7 +354,10 @@ definition limitConeIsLimit
       (lightProfiniteToCompHaus.mapCone S)).hom.hom
   uniq S _ h := by
     apply lightProfiniteToCompHaus.map_injective
-    apply (CompHaus.limitConeIsLimit.{v, u} _).uniq (lightProfiniteToCompHaus.map
+    apply (CompHaus.limitConeIsLimit.{v, u} _).uniq (lightProfiniteToCompHaus.mapCone S)
+    intro j
+    simp [← h]
+    rfl
 
 中文:
 定义 limitConeIsLimit
@@ -352,7 +367,10 @@ definition limitConeIsLimit
       (lightProfiniteToCompHaus.mapCone S)).hom.hom
   uniq S _ h := by
     apply lightProfiniteToCompHaus.map_injective
-    apply (CompHaus.limitConeIsLimit.{v, u} _).uniq (lightProfiniteToCompHaus.map
+    apply (CompHaus.limitConeIsLimit.{v, u} _).uniq (lightProfiniteToCompHaus.mapCone S)
+    intro j
+    simp [← h]
+    rfl
 
 Depends on / 依赖: CompHaus, CompHaus.limitConeIsLimit, ConcreteCategory, ConcreteCategory.ofHom, hom.hom, lightProfiniteToCompHaus, lightProfiniteToCompHaus.mapCone, lightProfiniteToCompHaus.map_injective, limitConeIsLimit, mapCone, map_injective
 -/
@@ -544,7 +562,30 @@ theorem epi_iff_surjective
     let C := Set.range f
     have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
     let U := Cᶜ
-    have hyU : y in U :
+    have hyU : y in U := by
+      refine Set.mem_compl ?_
+      rintro ⟨y', hy'⟩
+      exact hy y' hy'
+    have hUy : U in 𝓝 y := hC.compl_mem_nhds hyU
+    obtain ⟨V, hV, hyV, hVU⟩ := isTopologicalBasis_isClopen.mem_nhds_iff.mp hUy
+    classical
+      let Z := of (ULift.{u} <| Fin 2)
+      let g : Y ⟶ Z := CompHausLike.ofHom _
+        ⟨(LocallyConstant.ofIsClopen hV).map ULift.up, LocallyConstant.continuous _⟩
+      let h : Y ⟶ Z := CompHausLike.ofHom _ ⟨fun _ => ⟨1⟩, continuous_const⟩
+      have H : h = g := by
+        rw [← cancel_epi f]
+        ext x
+        dsimp [g, LocallyConstant.ofIsClopen]
+        rw [ContinuousMap.coe_mk]; rw [ContinuousMap.coe_mk]; rw [hom_ofHom]; rw [ContinuousMap.coe_mk]; rw [Function.comp_apply]; rw [if_neg]
+        refine mt (fun α => hVU α) ?_
+        simp [U, C]
+      apply_fun fun e => (e y).down at H
+      dsimp [g, LocallyConstant.ofIsClopen] at H
+      rw [ContinuousMap.coe_mk]; rw [ContinuousMap.coe_mk]; rw [Function.comp_apply]; rw [if_pos hyV] at H
+      exact top_ne_bot H
+  · rw [← CategoryTheory.ofHom_epi_iff_surjective]
+    apply (forget LightProfinite).epi_of_epi_map
 
 中文:
 定理 epi_iff_surjective
@@ -558,7 +599,30 @@ theorem epi_iff_surjective
     let C := Set.range f
     have hC : IsClosed C := (isCompact_range f.hom.hom.continuous).isClosed
     let U := Cᶜ
-    have hyU : y in U :
+    have hyU : y in U := by
+      refine Set.mem_compl ?_
+      rintro ⟨y', hy'⟩
+      exact hy y' hy'
+    have hUy : U in 𝓝 y := hC.compl_mem_nhds hyU
+    obtain ⟨V, hV, hyV, hVU⟩ := isTopologicalBasis_isClopen.mem_nhds_iff.mp hUy
+    classical
+      let Z := of (ULift.{u} <| Fin 2)
+      let g : Y ⟶ Z := CompHausLike.ofHom _
+        ⟨(LocallyConstant.ofIsClopen hV).map ULift.up, LocallyConstant.continuous _⟩
+      let h : Y ⟶ Z := CompHausLike.ofHom _ ⟨fun _ => ⟨1⟩, continuous_const⟩
+      have H : h = g := by
+        rw [← cancel_epi f]
+        ext x
+        dsimp [g, LocallyConstant.ofIsClopen]
+        rw [ContinuousMap.coe_mk]; rw [ContinuousMap.coe_mk]; rw [hom_ofHom]; rw [ContinuousMap.coe_mk]; rw [Function.comp_apply]; rw [if_neg]
+        refine mt (fun α => hVU α) ?_
+        simp [U, C]
+      apply_fun fun e => (e y).down at H
+      dsimp [g, LocallyConstant.ofIsClopen] at H
+      rw [ContinuousMap.coe_mk]; rw [ContinuousMap.coe_mk]; rw [Function.comp_apply]; rw [if_pos hyV] at H
+      exact top_ne_bot H
+  · rw [← CategoryTheory.ofHom_epi_iff_surjective]
+    apply (forget LightProfinite).epi_of_epi_map
 
 Depends on / 依赖: Function, Function.Surjective, IsClosed, Set.mem_compl, Set.range, Surjective, classical, compl_mem_nhds, continuous, contrapose, f.hom.hom.continuous, hC.compl_mem_nhds, isClosed, isCompact_range, isTopologicalBasis_isClopen, isTopologicalBasis_isClopen.mem_nhds_iff.mp, mathlib3, mem_compl, mem_nhds_iff, through
 -/
@@ -792,7 +856,7 @@ definition toLightDiagram
   cone := (Functor.Initial.limitConeComp (IsCofiltered.sequentialFunctor _)
     (lightToProfinite.obj S).lim).cone
   isLimit := (Functor.Initial.limitConeComp (IsCofiltered.sequentialFunctor _)
-    (lightToProfinite.obj S).li
+    (lightToProfinite.obj S).lim).isLimit
 
 中文:
 定义 toLightDiagram
@@ -801,7 +865,7 @@ definition toLightDiagram
   cone := (Functor.Initial.limitConeComp (IsCofiltered.sequentialFunctor _)
     (lightToProfinite.obj S).lim).cone
   isLimit := (Functor.Initial.limitConeComp (IsCofiltered.sequentialFunctor _)
-    (lightToProfinite.obj S).li
+    (lightToProfinite.obj S).lim).isLimit
 
 Depends on / 依赖: IsCofiltered, IsCofiltered.sequentialFunctor, fintypeDiagram, lightToProfinite, lightToProfinite.obj, sequentialFunctor
 -/
@@ -895,7 +959,10 @@ definition LightProfinite.equivDiagram
       intro _ _ f
       dsimp
       apply lightDiagramToProfinite.map_injective
-      apply InducedCat
+      apply InducedCategory.hom_ext
+      simp only [Functor.map_comp, Functor.map_preimage]
+      simp)
+  functor_unitIso_comp _ := by simpa using! lightDiagramToProfinite.preimage_id
 
 中文:
 定义 LightProfinite.equivDiagram
@@ -908,7 +975,10 @@ definition LightProfinite.equivDiagram
       intro _ _ f
       dsimp
       apply lightDiagramToProfinite.map_injective
-      apply InducedCat
+      apply InducedCategory.hom_ext
+      simp only [Functor.map_comp, Functor.map_preimage]
+      simp)
+  functor_unitIso_comp _ := by simpa using! lightDiagramToProfinite.preimage_id
 
 Depends on / 依赖: lightProfiniteToLightDiagram
 -/

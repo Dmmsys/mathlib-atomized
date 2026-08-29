@@ -174,7 +174,48 @@ theorem exists_isLUB
     rcases h with ⟨y, yS, hy⟩
     refine Int.cast_le.1 (hy.trans ?_)
     push_cast
- 
+    gcongr
+    exact (hU yS).trans hk.le
+  choose f hf using fun d : Nat =>
+    Int.exists_greatest_of_bdd (this d) ⟨⌊L * d⌋, L, hL, Int.floor_le _⟩
+  have hf₁ : forall n > 0, exists y in s, ((f n / n : Rat) : Real) <= y := fun n n0 =>
+    let ⟨y, yS, hy⟩ := (hf n).1
+    ⟨y, yS, by simpa using (div_le_iff₀ (Nat.cast_pos.2 n0 : (_ : Real) < _)).2 hy⟩
+  have hf₂ : forall n > 0, forall y in s, (y - ((n : Nat) : Real)⁻¹) < (f n / n : Rat) := by
+    intro n n0 y yS
+    have := (Int.sub_one_lt_floor _).trans_le (Int.cast_le.2 <| (hf n).2 _ ⟨y, yS, Int.floor_le _⟩)
+    simp only [Rat.cast_div, Rat.cast_intCast, Rat.cast_natCast, gt_iff_lt]
+    rwa [lt_div_iff₀ (Nat.cast_pos.2 n0 : (_ : Real) < _), sub_mul, inv_mul_cancel₀]
+    exact (Nat.cast_pos.2 n0).ne'
+  have hg : IsCauSeq abs (fun n => f n / n : Nat -> Rat) := by
+    intro ε ε0
+    suffices forall j >= ⌈ε⁻¹⌉₊, forall k >= ⌈ε⁻¹⌉₊, (f j / j - f k / k : Rat) < ε by
+      refine ⟨_, fun j ij => abs_lt.2 ⟨?_, this _ ij _ le_rfl⟩⟩
+      rw [neg_lt]; rw [neg_sub]
+      exact this _ le_rfl _ ij
+    intro j ij k ik
+    replace ij := le_trans (Nat.le_ceil _) (Nat.cast_le.2 ij)
+    replace ik := le_trans (Nat.le_ceil _) (Nat.cast_le.2 ik)
+    have j0 := Nat.cast_pos.1 ((inv_pos.2 ε0).trans_le ij)
+    have k0 := Nat.cast_pos.1 ((inv_pos.2 ε0).trans_le ik)
+    rcases hf₁ _ j0 with ⟨y, yS, hy⟩
+    refine lt_of_lt_of_le ((Rat.cast_lt (K := Real)).1 ?_) ((inv_le_comm₀ ε0 (Nat.cast_pos.2 k0)).1 ik)
+    simpa using sub_lt_iff_lt_add'.2 (lt_of_le_of_lt hy <| sub_lt_iff_lt_add.1 <| hf₂ _ k0 _ yS)
+  let g : CauSeq Rat abs := ⟨fun n => f n / n, hg⟩
+  refine ⟨mk g, ⟨fun x xS => ?_, fun y h => ?_⟩⟩
+  · refine le_of_forall_lt_imp_le_of_dense fun z xz => ?_
+    obtain ⟨K, hK⟩ := exists_nat_gt (x - z)⁻¹
+    refine le_mk_of_forall_le ⟨K, fun n nK => ?_⟩
+    replace xz := sub_pos.2 xz
+    replace hK := hK.le.trans (Nat.cast_le.2 nK)
+    have n0 : 0 < n := Nat.cast_pos.1 ((inv_pos.2 xz).trans_le hK)
+    refine le_trans ?_ (hf₂ _ n0 _ xS).le
+    rwa [le_sub_comm, inv_le_comm₀ (Nat.cast_pos.2 n0 : (_ : Real) < _) xz]
+  · exact
+      mk_le_of_forall_le
+        ⟨1, fun n n1 =>
+          let ⟨x, xS, hx⟩ := hf₁ _ n1
+          le_trans hx (h xS)⟩
 
 中文:
 定理 存在_isLUB
@@ -188,7 +229,48 @@ theorem exists_isLUB
     rcases h with ⟨y, yS, hy⟩
     refine Int.cast_le.1 (hy.trans ?_)
     push_cast
- 
+    gcongr
+    exact (hU yS).trans hk.le
+  choose f hf using fun d : Nat =>
+    Int.exists_greatest_of_bdd (this d) ⟨⌊L * d⌋, L, hL, Int.floor_le _⟩
+  have hf₁ : forall n > 0, exists y in s, ((f n / n : Rat) : Real) <= y := fun n n0 =>
+    let ⟨y, yS, hy⟩ := (hf n).1
+    ⟨y, yS, by simpa using (div_le_iff₀ (Nat.cast_pos.2 n0 : (_ : Real) < _)).2 hy⟩
+  have hf₂ : forall n > 0, forall y in s, (y - ((n : Nat) : Real)⁻¹) < (f n / n : Rat) := by
+    intro n n0 y yS
+    have := (Int.sub_one_lt_floor _).trans_le (Int.cast_le.2 <| (hf n).2 _ ⟨y, yS, Int.floor_le _⟩)
+    simp only [Rat.cast_div, Rat.cast_intCast, Rat.cast_natCast, gt_iff_lt]
+    rwa [lt_div_iff₀ (Nat.cast_pos.2 n0 : (_ : Real) < _), sub_mul, inv_mul_cancel₀]
+    exact (Nat.cast_pos.2 n0).ne'
+  have hg : IsCauSeq abs (fun n => f n / n : Nat -> Rat) := by
+    intro ε ε0
+    suffices forall j >= ⌈ε⁻¹⌉₊, forall k >= ⌈ε⁻¹⌉₊, (f j / j - f k / k : Rat) < ε by
+      refine ⟨_, fun j ij => abs_lt.2 ⟨?_, this _ ij _ le_rfl⟩⟩
+      rw [neg_lt]; rw [neg_sub]
+      exact this _ le_rfl _ ij
+    intro j ij k ik
+    replace ij := le_trans (Nat.le_ceil _) (Nat.cast_le.2 ij)
+    replace ik := le_trans (Nat.le_ceil _) (Nat.cast_le.2 ik)
+    have j0 := Nat.cast_pos.1 ((inv_pos.2 ε0).trans_le ij)
+    have k0 := Nat.cast_pos.1 ((inv_pos.2 ε0).trans_le ik)
+    rcases hf₁ _ j0 with ⟨y, yS, hy⟩
+    refine lt_of_lt_of_le ((Rat.cast_lt (K := Real)).1 ?_) ((inv_le_comm₀ ε0 (Nat.cast_pos.2 k0)).1 ik)
+    simpa using sub_lt_iff_lt_add'.2 (lt_of_le_of_lt hy <| sub_lt_iff_lt_add.1 <| hf₂ _ k0 _ yS)
+  let g : CauSeq Rat abs := ⟨fun n => f n / n, hg⟩
+  refine ⟨mk g, ⟨fun x xS => ?_, fun y h => ?_⟩⟩
+  · refine le_of_forall_lt_imp_le_of_dense fun z xz => ?_
+    obtain ⟨K, hK⟩ := exists_nat_gt (x - z)⁻¹
+    refine le_mk_of_forall_le ⟨K, fun n nK => ?_⟩
+    replace xz := sub_pos.2 xz
+    replace hK := hK.le.trans (Nat.cast_le.2 nK)
+    have n0 : 0 < n := Nat.cast_pos.1 ((inv_pos.2 xz).trans_le hK)
+    refine le_trans ?_ (hf₂ _ n0 _ xS).le
+    rwa [le_sub_comm, inv_le_comm₀ (Nat.cast_pos.2 n0 : (_ : Real) < _) xz]
+  · exact
+      mk_le_of_forall_le
+        ⟨1, fun n n1 =>
+          let ⟨x, xS, hx⟩ := hf₁ _ n1
+          le_trans hx (h xS)⟩
 
 Depends on / 依赖: BddAbove, Int.cast_le, Int.exists_greatest_of_bdd, Int.floor_le, cast_le, exists_greatest_of_bdd, exists_int_gt, floor_le, hk.le, hy.trans
 -/
@@ -1264,7 +1346,17 @@ theorem cauSeq_converges
   have ub' : forall x, f < const abs x -> forall y in s, y <= x := fun x h y yS =>
 le_of_lt const_lt.1 CauSeq.lt_trans yS h
   have ub : exists x, forall y in s, y <= x := (exists_gt f).imp ub'
-  refine ⟨sSup s, ((
+  refine ⟨sSup s, ((lt_total _ _).resolve_left fun h => ?_).resolve_right fun h => ?_⟩
+  · rcases h with ⟨ε, ε0, i, ih⟩
+    refine (csSup_le lb (ub' _ ?_)).not_gt (sub_lt_self _ (half_pos ε0))
+    refine ⟨_, half_pos ε0, i, fun j ij => ?_⟩
+    rw [sub_apply]; rw [const_apply]; rw [sub_right_comm]; rw [le_sub_iff_add_le]; rw [add_halves]
+    exact ih _ ij
+  · rcases h with ⟨ε, ε0, i, ih⟩
+    refine (le_csSup ub ?_).not_gt ((lt_add_iff_pos_left _).2 (half_pos ε0))
+    refine ⟨_, half_pos ε0, i, fun j ij => ?_⟩
+    rw [sub_apply]; rw [const_apply]; rw [add_comm]; rw [← sub_sub]; rw [le_sub_iff_add_le]; rw [add_halves]
+    exact ih _ ij
 
 中文:
 定理 cauSeq_converges
@@ -1276,7 +1368,17 @@ le_of_lt const_lt.1 CauSeq.lt_trans yS h
   have ub' : forall x, f < const abs x -> forall y in s, y <= x := fun x h y yS =>
 le_of_lt const_lt.1 CauSeq.lt_trans yS h
   have ub : exists x, forall y in s, y <= x := (exists_gt f).imp ub'
-  refine ⟨sSup s, ((
+  refine ⟨sSup s, ((lt_total _ _).resolve_left fun h => ?_).resolve_right fun h => ?_⟩
+  · rcases h with ⟨ε, ε0, i, ih⟩
+    refine (csSup_le lb (ub' _ ?_)).not_gt (sub_lt_self _ (half_pos ε0))
+    refine ⟨_, half_pos ε0, i, fun j ij => ?_⟩
+    rw [sub_apply]; rw [const_apply]; rw [sub_right_comm]; rw [le_sub_iff_add_le]; rw [add_halves]
+    exact ih _ ij
+  · rcases h with ⟨ε, ε0, i, ih⟩
+    refine (le_csSup ub ?_).not_gt ((lt_add_iff_pos_left _).2 (half_pos ε0))
+    refine ⟨_, half_pos ε0, i, fun j ij => ?_⟩
+    rw [sub_apply]; rw [const_apply]; rw [add_comm]; rw [← sub_sub]; rw [le_sub_iff_add_le]; rw [add_halves]
+    exact ih _ ij
 
 Depends on / 依赖: CauSeq, CauSeq.lt_trans, const_lt, csSup_le, exists_gt, exists_lt, half_pos, le_of_lt, lt_total, lt_trans, not_gt, resolve_left, resolve_right, sub_lt_self
 -/
@@ -1333,7 +1435,18 @@ theorem iInf_Ioi_eq_iInf_rat_gt
     obtain ⟨y, hxy, hyr⟩ := exists_rat_btwn r.prop
     refine ciInf_set_le hf (hxy.trans ?_)
     exact_mod_cast hyr
-  · refi
+  · refine le_ciInf fun q => ?_
+    have hq := q.prop
+    rw [mem_Ioi] at hq
+    obtain ⟨y, hxy, hyq⟩ := exists_rat_btwn hq
+    refine (ciInf_le ?_ ?_).trans ?_
+    · refine ⟨hf.some, fun z => ?_⟩
+      rintro ⟨u, rfl⟩
+      suffices hfu : f u in f '' Ioi x from hf.choose_spec hfu
+      exact ⟨u, u.prop, rfl⟩
+    · exact ⟨y, hxy⟩
+    · refine hf_mono (le_trans ?_ hyq.le)
+      norm_cast
 
 中文:
 定理 iInf_Ioi_eq_iInf_rat_gt
@@ -1347,7 +1460,18 @@ theorem iInf_Ioi_eq_iInf_rat_gt
     obtain ⟨y, hxy, hyr⟩ := exists_rat_btwn r.prop
     refine ciInf_set_le hf (hxy.trans ?_)
     exact_mod_cast hyr
-  · refi
+  · refine le_ciInf fun q => ?_
+    have hq := q.prop
+    rw [mem_Ioi] at hq
+    obtain ⟨y, hxy, hyq⟩ := exists_rat_btwn hq
+    refine (ciInf_le ?_ ?_).trans ?_
+    · refine ⟨hf.some, fun z => ?_⟩
+      rintro ⟨u, rfl⟩
+      suffices hfu : f u in f '' Ioi x from hf.choose_spec hfu
+      exact ⟨u, u.prop, rfl⟩
+    · exact ⟨y, hxy⟩
+    · refine hf_mono (le_trans ?_ hyq.le)
+      norm_cast
 
 Depends on / 依赖: IsScalarTower, Nonempty, choose_s, ciInf_le, ciInf_set_le, exists_rat_btwn, exists_rat_gt, hf.choose_s, hf.some, hxy.trans, le_antisymm, le_ciInf, mem_Ioi, q.prop, r.prop
 -/
@@ -1486,7 +1610,18 @@ lemma exists_natCast_add_one_lt_pow_of_one_lt
     intro q hq
     refine (ha q.den (by positivity)).trans ?_
     rw [← le_sub_iff_add_le]; rw [div_le_iff₀ (by positivity)]; rw [sub_mul]; rw [one_mul]
-    norm_cast a
+    norm_cast at hq ⊢
+    rw [← q.num_div_den]; rw [one_lt_div (by positivity)] at hq
+    rw [q.mul_den_eq_num]
+    norm_cast at hq ⊢
+    lia
+  use 2 * k ^ 2
+  calc
+    ((2 * k ^ 2 : Nat) + 1 : Real) <= 2 ^ (2 * k) := mod_cast Nat.two_mul_sq_add_one_le_two_pow_two_mul _
+    _ = (1 / k * k + 1 : Real) ^ (2 * k) := by simp [posk.ne']; norm_num
+    _ <= ((1 / k + 1) ^ k : Real) ^ (2 * k) := by gcongr; exact mul_add_one_le_add_one_pow (by simp) _
+    _ = (1 / k + 1 : Real) ^ (2 * k ^ 2) := by rw [← pow_mul, mul_left_comm, sq]
+    _ < a ^ (2 * k ^ 2) := by gcongr
 
 中文:
 引理 存在_natCast_add_one_lt_pow_of_one_lt
@@ -1499,7 +1634,18 @@ lemma exists_natCast_add_one_lt_pow_of_one_lt
     intro q hq
     refine (ha q.den (by positivity)).trans ?_
     rw [← le_sub_iff_add_le]; rw [div_le_iff₀ (by positivity)]; rw [sub_mul]; rw [one_mul]
-    norm_cast a
+    norm_cast at hq ⊢
+    rw [← q.num_div_den]; rw [one_lt_div (by positivity)] at hq
+    rw [q.mul_den_eq_num]
+    norm_cast at hq ⊢
+    lia
+  use 2 * k ^ 2
+  calc
+    ((2 * k ^ 2 : Nat) + 1 : Real) <= 2 ^ (2 * k) := mod_cast Nat.two_mul_sq_add_one_le_two_pow_two_mul _
+    _ = (1 / k * k + 1 : Real) ^ (2 * k) := by simp [posk.ne']; norm_num
+    _ <= ((1 / k + 1) ^ k : Real) ^ (2 * k) := by gcongr; exact mul_add_one_le_add_one_pow (by simp) _
+    _ = (1 / k + 1 : Real) ^ (2 * k ^ 2) := by rw [← pow_mul, mul_left_comm, sq]
+    _ < a ^ (2 * k ^ 2) := by gcongr
 
 Depends on / 依赖: Nat.two_mul_sq_add_one_le_two_pow_two_, contrapose, le_of_forall_lt_rat_imp_le, le_sub_iff_add_le, mod_cast, mul_den_eq_num, num_div_den, one_lt_div, one_mul, q.den, q.mul_den_eq_num, q.num_div_den, sub_mul, two_mul_sq_add_one_le_two_pow_two_
 -/

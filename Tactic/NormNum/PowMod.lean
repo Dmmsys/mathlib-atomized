@@ -224,7 +224,21 @@ haveI : m =Q 0 := ⟨⟩
       have m' : Q(Nat) := mkRawNatLit (m.natLit! - 1)
       if m'.natLit! = 0 then -- a ^ 0 % 1 = 0
 haveI : m =Q 1 := ⟨⟩
-        ⟨q(nat
+        ⟨q(nat_lit 0), q(natPow_zero_natMod_one)⟩
+      else -- a ^ 0 % m = 1
+        have m'' : Q(Nat) := mkRawNatLit (m'.natLit! - 1)
+haveI : m =Q Nat.succ (Nat.succ $m'') := ⟨⟩
+        ⟨q(nat_lit 1), q(natPow_zero_natMod_succ_succ)⟩
+  else if b.natLit! = 1 then -- a ^ 1 % m = a % m
+    have c : Q(Nat) := mkRawNatLit (a.natLit! % m.natLit!)
+haveI : b =Q 1 := ⟨⟩
+haveI : c =Q Nat.mod a m := ⟨⟩
+    ⟨c, q(natPow_one_natMod)⟩
+  else
+    have c₀ : Q(Nat) := mkRawNatLit (a.natLit! % m.natLit!)
+haveI : c₀ =Q Nat.mod a m := ⟨⟩
+    let ⟨c, p⟩ := go b.natLit!.log2 a m q(nat_lit 1) c₀ b _ .rfl
+    ⟨c, q(($p).run)⟩
 
 中文:
 定义 eval自然数PowMod
@@ -238,7 +252,21 @@ haveI : m =Q 0 := ⟨⟩
       have m' : Q(Nat) := mkRawNatLit (m.natLit! - 1)
       if m'.natLit! = 0 then -- a ^ 0 % 1 = 0
 haveI : m =Q 1 := ⟨⟩
-        ⟨q(nat
+        ⟨q(nat_lit 0), q(natPow_zero_natMod_one)⟩
+      else -- a ^ 0 % m = 1
+        have m'' : Q(Nat) := mkRawNatLit (m'.natLit! - 1)
+haveI : m =Q Nat.succ (Nat.succ $m'') := ⟨⟩
+        ⟨q(nat_lit 1), q(natPow_zero_natMod_succ_succ)⟩
+  else if b.natLit! = 1 then -- a ^ 1 % m = a % m
+    have c : Q(Nat) := mkRawNatLit (a.natLit! % m.natLit!)
+haveI : b =Q 1 := ⟨⟩
+haveI : c =Q Nat.mod a m := ⟨⟩
+    ⟨c, q(natPow_one_natMod)⟩
+  else
+    have c₀ : Q(Nat) := mkRawNatLit (a.natLit! % m.natLit!)
+haveI : c₀ =Q Nat.mod a m := ⟨⟩
+    let ⟨c, p⟩ := go b.natLit!.log2 a m q(nat_lit 1) c₀ b _ .rfl
+    ⟨c, q(($p).run)⟩
 -/
 partial def evalNatPowMod (a b m : Q(Nat)) : (c : Q(Nat)) × Q(Nat.mod (Nat.pow $a $b) $m = $c) :=
   if b.natLit! = 0 then

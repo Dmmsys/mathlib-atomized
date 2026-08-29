@@ -347,7 +347,31 @@ theorem isocrystal_classification
   obtain ⟨x, hx⟩ : exists x : V, x != 0 := exists_ne 0
   have : Φ(p, k) x != 0 := by simpa only [map_zero] using Φ(p, k).injective.ne hx
   obtain ⟨a, ha, hax⟩ : exists a : K(p, k), a != 0 ∧ Φ(p, k) x = a • x := by
-    rw [finrank
+    rw [finrank_eq_one_iff_of_nonzero' x hx] at h_dim
+    obtain ⟨a, ha⟩ := h_dim (Φ(p, k) x)
+    refine ⟨a, ?_, ha.symm⟩
+    intro ha'
+    apply this
+    simp only [← ha, ha', zero_smul]
+  obtain ⟨b, hb, m, hmb⟩ := WittVector.exists_frobenius_solution_fractionRing p ha
+  replace hmb : φ(p, k) b * a = (p : K(p, k)) ^ m * b := by convert! hmb
+  use m
+  let F₀ : StandardOneDimIsocrystal p k m ->ₗ[K(p, k)] V := LinearMap.toSpanSingleton K(p, k) V x
+  let F : StandardOneDimIsocrystal p k m ≃ₗ[K(p, k)] V := by
+    refine LinearEquiv.ofBijective F₀ ⟨?_, ?_⟩
+    · rw [← LinearMap.ker_eq_bot]
+      exact LinearMap.ker_toSpanSingleton K(p, k) hx
+    · rw [← LinearMap.range_eq_top]
+      rw [← (finrank_eq_one_iff_of_nonzero x hx).mp h_dim]
+      rw [LinearMap.span_singleton_eq_range]
+  refine ⟨⟨(LinearEquiv.smulOfNeZero K(p, k) _ _ hb).trans F, fun c => ?_⟩⟩
+  rw [LinearEquiv.trans_apply]; rw [LinearEquiv.trans_apply]; rw [LinearEquiv.smulOfNeZero_apply]; rw [LinearEquiv.smulOfNeZero_apply]; rw [LinearEquiv.map_smul]; rw [LinearEquiv.map_smul]; rw [LinearEquiv.ofBijective_apply]; rw [LinearEquiv.ofBijective_apply]; rw [StandardOneDimIsocrystal.frobenius_apply]
+  unfold StandardOneDimIsocrystal
+  rw [LinearMap.toSpanSingleton_apply K(p]; rw [k) V x c]; rw [LinearMap.toSpanSingleton_apply K(p]; rw [k) V x]
+  simp only [hax, map_smulₛₗ, smul_eq_mul]
+  simp only [← mul_smul]
+  congr 1
+  linear_combination φ(p, k) c * hmb
 
 中文:
 定理 isocrystal_classification
@@ -357,7 +381,31 @@ theorem isocrystal_classification
   obtain ⟨x, hx⟩ : exists x : V, x != 0 := exists_ne 0
   have : Φ(p, k) x != 0 := by simpa only [map_zero] using Φ(p, k).injective.ne hx
   obtain ⟨a, ha, hax⟩ : exists a : K(p, k), a != 0 ∧ Φ(p, k) x = a • x := by
-    rw [finrank
+    rw [finrank_eq_one_iff_of_nonzero' x hx] at h_dim
+    obtain ⟨a, ha⟩ := h_dim (Φ(p, k) x)
+    refine ⟨a, ?_, ha.symm⟩
+    intro ha'
+    apply this
+    simp only [← ha, ha', zero_smul]
+  obtain ⟨b, hb, m, hmb⟩ := WittVector.exists_frobenius_solution_fractionRing p ha
+  replace hmb : φ(p, k) b * a = (p : K(p, k)) ^ m * b := by convert! hmb
+  use m
+  let F₀ : StandardOneDimIsocrystal p k m ->ₗ[K(p, k)] V := LinearMap.toSpanSingleton K(p, k) V x
+  let F : StandardOneDimIsocrystal p k m ≃ₗ[K(p, k)] V := by
+    refine LinearEquiv.ofBijective F₀ ⟨?_, ?_⟩
+    · rw [← LinearMap.ker_eq_bot]
+      exact LinearMap.ker_toSpanSingleton K(p, k) hx
+    · rw [← LinearMap.range_eq_top]
+      rw [← (finrank_eq_one_iff_of_nonzero x hx).mp h_dim]
+      rw [LinearMap.span_singleton_eq_range]
+  refine ⟨⟨(LinearEquiv.smulOfNeZero K(p, k) _ _ hb).trans F, fun c => ?_⟩⟩
+  rw [LinearEquiv.trans_apply]; rw [LinearEquiv.trans_apply]; rw [LinearEquiv.smulOfNeZero_apply]; rw [LinearEquiv.smulOfNeZero_apply]; rw [LinearEquiv.map_smul]; rw [LinearEquiv.map_smul]; rw [LinearEquiv.ofBijective_apply]; rw [LinearEquiv.ofBijective_apply]; rw [StandardOneDimIsocrystal.frobenius_apply]
+  unfold StandardOneDimIsocrystal
+  rw [LinearMap.toSpanSingleton_apply K(p]; rw [k) V x c]; rw [LinearMap.toSpanSingleton_apply K(p]; rw [k) V x]
+  simp only [hax, map_smulₛₗ, smul_eq_mul]
+  simp only [← mul_smul]
+  congr 1
+  linear_combination φ(p, k) c * hmb
 
 Depends on / 依赖: Module, Module.nontrivial_of_finrank_eq_succ, Nontrivial, WittVector, WittVector.exists_frobenius_solut, exists_frobenius_solut, exists_ne, finrank_eq_one_iff_of_nonzero, h_dim, ha.symm, injective, injective.ne, map_zero, nontrivial_of_finrank_eq_succ, zero_smul
 -/

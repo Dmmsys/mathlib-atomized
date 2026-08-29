@@ -37,7 +37,7 @@ definition sheafOfModulesEquivOver
     (U.overPullbackSheafEquivOver.app _).inv (U.sheafRestrictSheafEquivOver.app _).inv rfl ?_
   ext : 2
   simp [overPullbackSheafEquivOver, sheafRestrictSheafEquivOver, eqToHom_map, overEquivalence,
-    IsOp
+    IsOpenMap.functor]
 
 中文:
 定义 sheafOfModulesEquivOver
@@ -47,7 +47,7 @@ definition sheafOfModulesEquivOver
     (U.overPullbackSheafEquivOver.app _).inv (U.sheafRestrictSheafEquivOver.app _).inv rfl ?_
   ext : 2
   simp [overPullbackSheafEquivOver, sheafRestrictSheafEquivOver, eqToHom_map, overEquivalence,
-    IsOp
+    IsOpenMap.functor]
 
 Depends on / 依赖: IsOpenMap, IsOpenMap.functor, SheafOfModules, SheafOfModules.pushforwardPushforwardEquivalence, U.overEquivalence.symm, U.overPullbackSheafEquivOver.app, U.sheafRestrictSheafEquivOver.app, eqToHom_map, functor, overEquivalence, overPullbackSheafEquivOver, pushforwardPushforwardEquivalence, sheafRestrictSheafEquivOver
 -/

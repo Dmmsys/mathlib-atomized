@@ -81,7 +81,14 @@ theorem rice₂
       ⟨fun h =>
         or_iff_not_imp_left.2 fun C0 =>
           Set.eq_univ_of_forall fun cg =>
-            let ⟨cf, fC⟩ := Set.nonempty_iff_ne_empty.2 C
+            let ⟨cf, fC⟩ := Set.nonempty_iff_ne_empty.2 C0
+(hC _).2
+              rice (eval '' C) (h.of_eq hC)
+                (Partrec.nat_iff.1 <| eval_part.comp (const cf) Computable.id)
+                (Partrec.nat_iff.1 <| eval_part.comp (const cg) Computable.id) ((hC _).1 fC),
+        fun h => by {
+          obtain rfl | rfl := h <;> simpa [ComputablePred, Set.mem_empty_iff_false] using
+            Computable.const _}⟩
 
 中文:
 定理 rice₂
@@ -93,7 +100,14 @@ theorem rice₂
       ⟨fun h =>
         or_iff_not_imp_left.2 fun C0 =>
           Set.eq_univ_of_forall fun cg =>
-            let ⟨cf, fC⟩ := Set.nonempty_iff_ne_empty.2 C
+            let ⟨cf, fC⟩ := Set.nonempty_iff_ne_empty.2 C0
+(hC _).2
+              rice (eval '' C) (h.of_eq hC)
+                (Partrec.nat_iff.1 <| eval_part.comp (const cf) Computable.id)
+                (Partrec.nat_iff.1 <| eval_part.comp (const cg) Computable.id) ((hC _).1 fC),
+        fun h => by {
+          obtain rfl | rfl := h <;> simpa [ComputablePred, Set.mem_empty_iff_false] using
+            Computable.const _}⟩
 
 Depends on / 依赖: Computable, Computable.id, ComputablePred, Partrec, Partrec.nat_iff, Set.eq_univ_of_forall, Set.mem, Set.mem_image_of_mem, Set.nonempty_iff_ne_empty, eq_univ_of_forall, eval_part, eval_part.comp, h.of_eq, mem_image_of_mem, nat_iff, nonempty_iff_ne_empty, of_eq, or_iff_not_imp_left
 -/

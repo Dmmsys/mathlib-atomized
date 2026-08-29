@@ -121,7 +121,12 @@ lemma IsQuasiAffine.isBasis_basicOpen
   obtain ⟨_, ⟨_, ⟨r, rfl⟩, rfl⟩, hxr, hrU⟩ := (PrimeSpectrum.isBasis_basic_opens
     (R := Γ(X, ⊤))).exists_subset_of_mem_open (Set.mem_image_of_mem _ hxU) (X.toSpecΓ ''ᵁ U).2
   simp_rw [← toSpecΓ_preimage_basicOpen]
-  refine ⟨_, ⟨r, ?_, rfl
+  refine ⟨_, ⟨r, ?_, rfl⟩, hxr, (Set.preimage_mono hrU).trans_eq
+    (Set.preimage_image_eq _ X.toSpecΓ.isEmbedding.injective)⟩
+  rw [← Hom.isAffineOpen_iff_of_isOpenImmersion X.toSpecΓ]
+  convert! IsAffineOpen.Spec_basicOpen r
+  exact SetLike.coe_injective (Set.image_preimage_eq_of_subset
+    (hrU.trans (Set.image_subset_range _ _)))
 
 中文:
 引理 是QuasiAffine.isBasis_basicOpen
@@ -131,7 +136,12 @@ lemma IsQuasiAffine.isBasis_basicOpen
   obtain ⟨_, ⟨_, ⟨r, rfl⟩, rfl⟩, hxr, hrU⟩ := (PrimeSpectrum.isBasis_basic_opens
     (R := Γ(X, ⊤))).exists_subset_of_mem_open (Set.mem_image_of_mem _ hxU) (X.toSpecΓ ''ᵁ U).2
   simp_rw [← toSpecΓ_preimage_basicOpen]
-  refine ⟨_, ⟨r, ?_, rfl
+  refine ⟨_, ⟨r, ?_, rfl⟩, hxr, (Set.preimage_mono hrU).trans_eq
+    (Set.preimage_image_eq _ X.toSpecΓ.isEmbedding.injective)⟩
+  rw [← Hom.isAffineOpen_iff_of_isOpenImmersion X.toSpecΓ]
+  convert! IsAffineOpen.Spec_basicOpen r
+  exact SetLike.coe_injective (Set.image_preimage_eq_of_subset
+    (hrU.trans (Set.image_subset_range _ _)))
 
 Depends on / 依赖: Hom.isAffineOpen_iff_of_isOpenImmersion, IsAffineOpen, IsAffineOpen.Spec_basicOpen, Opens.isBasis_iff_nbhd.mpr, PrimeSpectrum, PrimeSpectrum.isBasis_basic_opens, Set.mem_image_of_mem, Set.preimage_image_eq, Set.preimage_mono, SetLike, SetLike.co, Spec_basicOpen, X.toSpec, convert, exists_subset_of_mem_open, injective, isAffineOpen_iff_of_isOpenImmersion, isBasis_basic_opens, isBasis_iff_nbhd, isEmbedding
 -/
@@ -160,7 +170,15 @@ lemma IsQuasiAffine.of_forall_exists_mem_basicOpen
     choose r hr hxr using H
     exact .of_isOpenCover (U := (X.basicOpen <| r ·))
       (eq_top_iff.mpr fun _ _ => Opens.mem_iSup.mpr ⟨_, hxr _⟩)
-      (fun _ => isRetrocompact_basicOpen _) (fun x => (hr _).i
+      (fun _ => isRetrocompact_basicOpen _) (fun x => (hr _).isQuasiSeparated)
+  refine IsZariskiLocalAtTarget.of_forall_source_exists_preimage _ fun x => ?_
+  obtain ⟨r, hr, hxr⟩ := H x
+  refine ⟨PrimeSpectrum.basicOpen r, (X.toSpecΓ_preimage_basicOpen r).ge hxr, ?_⟩
+  suffices IsOpenImmersion ((X.basicOpen r).ι ≫ X.toSpecΓ) by
+    convert! this <;> rw [toSpecΓ_preimage_basicOpen]
+  rw [← Opens.toSpecΓ_SpecMap_presheaf_map_top]
+  have := isLocalization_basicOpen_of_qcqs isCompact_univ isQuasiSeparated_univ r
+  exact MorphismProperty.comp_mem _ hr.isoSpec.hom _ inferInstance (.of_isLocalization r)
 
 中文:
 引理 是QuasiAffine.of_对任意_存在_mem_basicOpen
@@ -171,7 +189,15 @@ lemma IsQuasiAffine.of_forall_exists_mem_basicOpen
     choose r hr hxr using H
     exact .of_isOpenCover (U := (X.basicOpen <| r ·))
       (eq_top_iff.mpr fun _ _ => Opens.mem_iSup.mpr ⟨_, hxr _⟩)
-      (fun _ => isRetrocompact_basicOpen _) (fun x => (hr _).i
+      (fun _ => isRetrocompact_basicOpen _) (fun x => (hr _).isQuasiSeparated)
+  refine IsZariskiLocalAtTarget.of_forall_source_exists_preimage _ fun x => ?_
+  obtain ⟨r, hr, hxr⟩ := H x
+  refine ⟨PrimeSpectrum.basicOpen r, (X.toSpecΓ_preimage_basicOpen r).ge hxr, ?_⟩
+  suffices IsOpenImmersion ((X.basicOpen r).ι ≫ X.toSpecΓ) by
+    convert! this <;> rw [toSpecΓ_preimage_basicOpen]
+  rw [← Opens.toSpecΓ_SpecMap_presheaf_map_top]
+  have := isLocalization_basicOpen_of_qcqs isCompact_univ isQuasiSeparated_univ r
+  exact MorphismProperty.comp_mem _ hr.isoSpec.hom _ inferInstance (.of_isLocalization r)
 
 Depends on / 依赖: IsOpenImmersio, IsOpenImmersion, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.of_forall_source_exists_preimage, Opens.mem_iSup.mpr, PrimeSpectrum, PrimeSpectrum.basicOpen, QuasiSeparatedSpace, X.basicOpen, X.toSpec, basicOpen, eq_top_iff, eq_top_iff.mpr, isQuasiSeparated, isRetrocompact_basicOpen, mem_iSup, of_forall_source_exists_preimage, of_isOpenCover
 -/
@@ -206,7 +232,8 @@ lemma IsQuasiAffine.of_isAffineHom
   obtain ⟨_, ⟨_, ⟨r, hr, rfl⟩, rfl⟩, hxr, -⟩ := (IsQuasiAffine.isBasis_basicOpen
     Y).exists_subset_of_mem_open (Set.mem_univ (f x)) isOpen_univ
   refine ⟨f.appTop r, ?_⟩
-  rw [← preimag
+  rw [← preimage_basicOpen_top]
+  exact ⟨hr.preimage _, hxr⟩
 
 中文:
 引理 是QuasiAffine.of_isAffineHom
@@ -218,7 +245,8 @@ lemma IsQuasiAffine.of_isAffineHom
   obtain ⟨_, ⟨_, ⟨r, hr, rfl⟩, rfl⟩, hxr, -⟩ := (IsQuasiAffine.isBasis_basicOpen
     Y).exists_subset_of_mem_open (Set.mem_univ (f x)) isOpen_univ
   refine ⟨f.appTop r, ?_⟩
-  rw [← preimag
+  rw [← preimage_basicOpen_top]
+  exact ⟨hr.preimage _, hxr⟩
 
 Depends on / 依赖: IsQuasiAffine, IsQuasiAffine.isBasis_basicOpen, QuasiCompact, QuasiCompact.compactSpace_of_compactSpace, Set.mem_univ, appTop, compactSpace_of_compactSpace, exists_subset_of_mem_open, f.appTop, hr.preimage, isBasis_basicOpen, isOpen_univ, mem_univ, of_forall_exists_mem_basicOpen, preimage, preimage_basicOpen_top
 -/
@@ -241,7 +269,7 @@ definition openCoverBasicOpenTop
     X.basicOpen i.1) <| top_le_iff.mp fun x _ => by
   obtain ⟨_, ⟨_, ⟨r, hr, rfl⟩, rfl⟩, hxr, -⟩ :=
     (IsQuasiAffine.isBasis_basicOpen X).exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
-  exact Opens.mem_iSu
+  exact Opens.mem_iSup.mpr ⟨⟨r, hr⟩, hxr⟩
 
 中文:
 定义 openCoverBasicOpenTop
@@ -250,7 +278,7 @@ definition openCoverBasicOpenTop
     X.basicOpen i.1) <| top_le_iff.mp fun x _ => by
   obtain ⟨_, ⟨_, ⟨r, hr, rfl⟩, rfl⟩, hxr, -⟩ :=
     (IsQuasiAffine.isBasis_basicOpen X).exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
-  exact Opens.mem_iSu
+  exact Opens.mem_iSup.mpr ⟨⟨r, hr⟩, hxr⟩
 -/
 @[simps! f] def openCoverBasicOpenTop (X : Scheme.{u}) [X.IsQuasiAffine] :
     X.OpenCover :=
@@ -274,7 +302,30 @@ lemma isPullback_toSpecΓ_toSpecΓ
   have (r : Γ(Y, ⊤)) :
       IsPushout f.appTop (Y.presheaf.map (homOfLE le_top).op)
         (X.presheaf.map (homOfLE le_top).op) (f.appLE (Y.basicOpen r)
-          (X.basicOpen (f.appTop r)) (Sc
+          (X.basicOpen (f.appTop r)) (Scheme.preimage_basicOpen_top ..).ge) := by
+    have := isLocalization_basicOpen_of_qcqs isCompact_univ isQuasiSeparated_univ r
+    have := isLocalization_basicOpen_of_qcqs isCompact_univ isQuasiSeparated_univ (f.appTop r)
+    refine CommRingCat.isPushout_of_isLocalization f.appTop.hom (f.appLE (Y.basicOpen r)
+      (X.basicOpen (f.appTop r)) (Scheme.preimage_basicOpen_top ..).ge).hom ?_ (.powers r)
+    change CommRingCat.Hom.hom (Y.presheaf.map _ ≫ f.appLE _ _ _) =
+      CommRingCat.Hom.hom (f.appTop ≫ X.presheaf.map _)
+    rw [f.map_appLE]; rw [Scheme.Hom.appLE]
+  refine isPullback_of_openCover _ _ _ _ Y.openCoverBasicOpenTop fun r => ?_
+  let e : pullback f (Y.basicOpen r.1).ι ≅ Spec Γ(X, X.basicOpen (f.appTop r.1)) :=
+    pullbackRestrictIsoRestrict _ _ ≪≫ X.isoOfEq (Scheme.preimage_basicOpen_top f r.1) ≪≫
+    IsAffineOpen.isoSpec (by rw [← Scheme.preimage_basicOpen_top]; exact r.2.preimage f)
+  refine .of_iso ((this r.1).op.map Scheme.Spec) e.symm r.2.isoSpec.symm (.refl _) (.refl _)
+    ?_ ?_ (by simp) (by simp)
+  · simp only [Iso.symm_hom, Iso.eq_inv_comp, ← Category.assoc, Iso.comp_inv_eq]
+    dsimp [e, Scheme.Cover.pullbackHom, IsAffineOpen.isoSpec_hom, Scheme.Hom.appLE]
+    simp only [homOfLE_leOfHom, Spec.map_comp, Category.assoc,
+      Scheme.Opens.toSpecΓ_SpecMap_presheaf_map_assoc, Scheme.Opens.toSpecΓ_naturality]
+    simp_rw [← Category.assoc]
+    congr 1
+    rw [← cancel_mono (Scheme.Opens.ι _)]
+    simp [pullback.condition]
+  · simp only [Iso.symm_hom, Iso.eq_inv_comp]
+    simp [e, IsAffineOpen.isoSpec_hom]
 
 中文:
 引理 isPullback_toSpecΓ_toSpecΓ
@@ -285,7 +336,30 @@ lemma isPullback_toSpecΓ_toSpecΓ
   have (r : Γ(Y, ⊤)) :
       IsPushout f.appTop (Y.presheaf.map (homOfLE le_top).op)
         (X.presheaf.map (homOfLE le_top).op) (f.appLE (Y.basicOpen r)
-          (X.basicOpen (f.appTop r)) (Sc
+          (X.basicOpen (f.appTop r)) (Scheme.preimage_basicOpen_top ..).ge) := by
+    have := isLocalization_basicOpen_of_qcqs isCompact_univ isQuasiSeparated_univ r
+    have := isLocalization_basicOpen_of_qcqs isCompact_univ isQuasiSeparated_univ (f.appTop r)
+    refine CommRingCat.isPushout_of_isLocalization f.appTop.hom (f.appLE (Y.basicOpen r)
+      (X.basicOpen (f.appTop r)) (Scheme.preimage_basicOpen_top ..).ge).hom ?_ (.powers r)
+    change CommRingCat.Hom.hom (Y.presheaf.map _ ≫ f.appLE _ _ _) =
+      CommRingCat.Hom.hom (f.appTop ≫ X.presheaf.map _)
+    rw [f.map_appLE]; rw [Scheme.Hom.appLE]
+  refine isPullback_of_openCover _ _ _ _ Y.openCoverBasicOpenTop fun r => ?_
+  let e : pullback f (Y.basicOpen r.1).ι ≅ Spec Γ(X, X.basicOpen (f.appTop r.1)) :=
+    pullbackRestrictIsoRestrict _ _ ≪≫ X.isoOfEq (Scheme.preimage_basicOpen_top f r.1) ≪≫
+    IsAffineOpen.isoSpec (by rw [← Scheme.preimage_basicOpen_top]; exact r.2.preimage f)
+  refine .of_iso ((this r.1).op.map Scheme.Spec) e.symm r.2.isoSpec.symm (.refl _) (.refl _)
+    ?_ ?_ (by simp) (by simp)
+  · simp only [Iso.symm_hom, Iso.eq_inv_comp, ← Category.assoc, Iso.comp_inv_eq]
+    dsimp [e, Scheme.Cover.pullbackHom, IsAffineOpen.isoSpec_hom, Scheme.Hom.appLE]
+    simp only [homOfLE_leOfHom, Spec.map_comp, Category.assoc,
+      Scheme.Opens.toSpecΓ_SpecMap_presheaf_map_assoc, Scheme.Opens.toSpecΓ_naturality]
+    simp_rw [← Category.assoc]
+    congr 1
+    rw [← cancel_mono (Scheme.Opens.ι _)]
+    simp [pullback.condition]
+  · simp only [Iso.symm_hom, Iso.eq_inv_comp]
+    simp [e, IsAffineOpen.isoSpec_hom]
 
 Depends on / 依赖: CommRingCa, IsPushout, IsQuasiAffine, QuasiCompact, QuasiCompact.compactSpace_of_compactSpace, Scheme, Scheme.IsQuasiAffine.of_isAffineHom, Scheme.preimage_basicOpen_top, X.basicOpen, X.presheaf.map, Y.basicOpen, Y.presheaf.map, appTop, basicOpen, compactSpace_of_compactSpace, f.appLE, f.appTop, homOfLE, isCompact_univ, isLocalization_basicOpen_of_qcqs
 -/

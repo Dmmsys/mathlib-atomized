@@ -87,7 +87,9 @@ definition directSumEquiv
         apply Finsupp.linearCombination_embDomain }
   invFun t :=
     { var := fun ⟨i, g⟩ => (t i).var g
-      linearCombination_var_relation :=
+      linearCombination_var_relation := fun ⟨i, r⟩ => by
+        rw [← (t i).linearCombination_var_relation r]
+        apply Finsupp.linearCombination_embDomain }
 
 中文:
 定义 directSumEquiv
@@ -99,7 +101,9 @@ definition directSumEquiv
         apply Finsupp.linearCombination_embDomain }
   invFun t :=
     { var := fun ⟨i, g⟩ => (t i).var g
-      linearCombination_var_relation :=
+      linearCombination_var_relation := fun ⟨i, r⟩ => by
+        rw [← (t i).linearCombination_var_relation r]
+        apply Finsupp.linearCombination_embDomain }
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination_embDomain, invFun, linearCombination_embDomain, linearCombination_var_relation, s.linearCombination_var_relation, s.var
 -/

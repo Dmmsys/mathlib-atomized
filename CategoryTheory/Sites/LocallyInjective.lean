@@ -290,7 +290,15 @@ lemma isLocallyInjective_iff_equalizerSieve_mem_imp
     let T : forall ⦃Y : C⦄ ⦃f : Y ⟶ X.unop⦄ (_ : S f), Sieve Y := fun Y f _ =>
       equalizerSieve (F₁.map f.op x) ((F₁.map f.op y))
     refine J.superset_covering ?_ (J.transitive h (Sieve.bind S.1 T) ?_)
-    
+    · rintro Y f ⟨Z, a, g, hg, ha, rfl⟩
+      simpa using! ha
+    · intro Y f hf
+      refine J.superset_covering (Sieve.le_pullback_bind S.1 T _ hf)
+        (equalizerSieve_mem J φ _ _ ?_)
+      rw [NatTrans.naturality_apply]; rw [NatTrans.naturality_apply]
+      exact hf
+  · intro hφ
+    exact ⟨fun {X} x y h => hφ x y (by simp [h])⟩
 
 中文:
 引理 isLocallyInjective_iff_equalizerSieve_mem_imp
@@ -301,7 +309,15 @@ lemma isLocallyInjective_iff_equalizerSieve_mem_imp
     let T : forall ⦃Y : C⦄ ⦃f : Y ⟶ X.unop⦄ (_ : S f), Sieve Y := fun Y f _ =>
       equalizerSieve (F₁.map f.op x) ((F₁.map f.op y))
     refine J.superset_covering ?_ (J.transitive h (Sieve.bind S.1 T) ?_)
-    
+    · rintro Y f ⟨Z, a, g, hg, ha, rfl⟩
+      simpa using! ha
+    · intro Y f hf
+      refine J.superset_covering (Sieve.le_pullback_bind S.1 T _ hf)
+        (equalizerSieve_mem J φ _ _ ?_)
+      rw [NatTrans.naturality_apply]; rw [NatTrans.naturality_apply]
+      exact hf
+  · intro hφ
+    exact ⟨fun {X} x y h => hφ x y (by simp [h])⟩
 
 Depends on / 依赖: J.superset_covering, J.transitive, NatTrans, NatTrans.naturality_apply, Sieve.bind, Sieve.le_pullback_bind, X.unop, equalizerSieve, equalizerSieve_mem, f.op, le_pullback_bind, naturality_apply, superset_covering, transitive
 -/

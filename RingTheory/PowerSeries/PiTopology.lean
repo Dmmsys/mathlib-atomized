@@ -361,7 +361,10 @@ theorem summable_of_tendsto_order_atTop_nhds_top
   simp_rw [ENat.tendsto_nhds_top_iff_natCast_lt, Filter.eventually_atTop] at h
   obtain ⟨i, hi⟩ := h n
 refine summable_of_hasFiniteSupport (Set.finite_Iic i).subset ?_
-  simp_
+  simp_rw [Function.support_subset_iff, Set.mem_Iic]
+  intro k hk
+  contrapose! hk
+exact coeff_of_lt_order _ by simpa using (hi k hk.le)
 
 中文:
 定理 summable_of_tendsto_order_atTop_nhds_top
@@ -374,7 +377,10 @@ refine summable_of_hasFiniteSupport (Set.finite_Iic i).subset ?_
   simp_rw [ENat.tendsto_nhds_top_iff_natCast_lt, Filter.eventually_atTop] at h
   obtain ⟨i, hi⟩ := h n
 refine summable_of_hasFiniteSupport (Set.finite_Iic i).subset ?_
-  simp_
+  simp_rw [Function.support_subset_iff, Set.mem_Iic]
+  intro k hk
+  contrapose! hk
+exact coeff_of_lt_order _ by simpa using (hi k hk.le)
 
 Depends on / 依赖: ENat.tendsto_nhds_top_iff_natCast_lt, Filter, Filter.eventually_atTop, Function, Function.support_subset_iff, Set.finite_Iic, Set.mem_Iic, coeff_of_lt_order, contrapose, eventually_atTop, finite_Iic, hempty, hk.le, isEmpty_or_nonempty, mem_Iic, simp_rw, subset, summable_empty, summable_iff_summable_coeff, summable_of_hasFiniteSupport
 -/
@@ -472,7 +478,14 @@ theorem summable_prod_of_tendsto_order_atTop_nhds_top
   refine (summable_iff_summable_coeff _).mpr fun n => summable_of_hasFiniteSupport ?_
   simp_rw [ENat.tendsto_nhds_top_iff_natCast_lt, eventually_atTop] at h
   obtain ⟨i, hi⟩ := h n
-  apply (Finset.Iio i).powerset.fi
+  apply (Finset.Iio i).powerset.finite_toSet.subset
+  suffices forall s : Finset ι, coeff n (∏ i in s, f i) != 0 -> ↑s subseteq Set.Iio i by simpa
+  intro s hs
+  contrapose hs
+  obtain ⟨x, hxs, hxi⟩ := Set.not_subset.mp hs
+  rw [Set.mem_Iio]; rw [not_lt] at hxi
+refine coeff_of_lt_order _ (hi x hxi).trans_le le_trans ?_ (le_order_prod _ _)
+  apply Finset.single_le_sum (by simp) hxs
 
 中文:
 定理 summable_prod_of_tendsto_order_atTop_nhds_top
@@ -482,7 +495,14 @@ theorem summable_prod_of_tendsto_order_atTop_nhds_top
   refine (summable_iff_summable_coeff _).mpr fun n => summable_of_hasFiniteSupport ?_
   simp_rw [ENat.tendsto_nhds_top_iff_natCast_lt, eventually_atTop] at h
   obtain ⟨i, hi⟩ := h n
-  apply (Finset.Iio i).powerset.fi
+  apply (Finset.Iio i).powerset.finite_toSet.subset
+  suffices forall s : Finset ι, coeff n (∏ i in s, f i) != 0 -> ↑s subseteq Set.Iio i by simpa
+  intro s hs
+  contrapose hs
+  obtain ⟨x, hxs, hxi⟩ := Set.not_subset.mp hs
+  rw [Set.mem_Iio]; rw [not_lt] at hxi
+refine coeff_of_lt_order _ (hi x hxi).trans_le le_trans ?_ (le_order_prod _ _)
+  apply Finset.single_le_sum (by simp) hxs
 
 Depends on / 依赖: ENat.tendsto_nhds_top_iff_natCast_lt, Finset, Finset.Iio, Set.Iio, Set.mem_Iio, Set.not_subset.mp, Summable, Summable.of_finite, contrapose, eventually_atTop, finite_toSet, hempty, isEmpty_or_nonempty, mem_Iio, not_lt, not_subset, of_finite, powerset, powerset.finite_toSet.subset, simp_rw
 -/

@@ -123,7 +123,7 @@ lemma chainClosure_succ_total_aux
     · exact (h hc₃ ih).imp_left fun (h : c₂ = c₃) => h ▸ Subset.rfl
   | union _ ih =>
     refine or_iff_not_imp_left.2 fun hn => sUnion_subset fun a ha => ?_
-exact (ih a ha).resolve
+exact (ih a ha).resolve_left fun h => hn h.trans subset_sUnion_of_mem ha
 
 中文:
 引理 chainClosure_succ_total_aux
@@ -136,7 +136,7 @@ exact (ih a ha).resolve
     · exact (h hc₃ ih).imp_left fun (h : c₂ = c₃) => h ▸ Subset.rfl
   | union _ ih =>
     refine or_iff_not_imp_left.2 fun hn => sUnion_subset fun a ha => ?_
-exact (ih a ha).resolve
+exact (ih a ha).resolve_left fun h => hn h.trans subset_sUnion_of_mem ha
 -/
 private lemma chainClosure_succ_total_aux (hc₁ : ChainClosure r c₁)
     (h : forall ⦃c₃⦄, ChainClosure r c₃ -> c₃ subseteq c₂ -> c₂ = c₃ ∨ SuccChain r c₃ subseteq c₂) :
@@ -165,7 +165,14 @@ lemma chainClosure_succ_total
     · exact h₂.trans subset_succChain
   | union _ ih =>
     apply Or.imp_left h.antisymm'
-    
+    apply by_contradiction
+    simp only [sUnion_subset_iff, not_or, not_forall, exists_prop, and_imp, forall_exists_index]
+    intro c₃ hc₃ h₁ h₂
+    obtain h | h := chainClosure_succ_total_aux hc₁ fun c₄ => ih _ hc₃
+    · exact h₁ (subset_succChain.trans h)
+    obtain h' | h' := ih c₃ hc₃ hc₁ h
+    · exact h₁ h'.subset
+    · exact h₂ (h'.trans <| subset_sUnion_of_mem hc₃)
 
 中文:
 引理 chainClosure_succ_total
@@ -179,7 +186,14 @@ lemma chainClosure_succ_total
     · exact h₂.trans subset_succChain
   | union _ ih =>
     apply Or.imp_left h.antisymm'
-    
+    apply by_contradiction
+    simp only [sUnion_subset_iff, not_or, not_forall, exists_prop, and_imp, forall_exists_index]
+    intro c₃ hc₃ h₁ h₂
+    obtain h | h := chainClosure_succ_total_aux hc₁ fun c₄ => ih _ hc₃
+    · exact h₁ (subset_succChain.trans h)
+    obtain h' | h' := ih c₃ hc₃ hc₁ h
+    · exact h₁ h'.subset
+    · exact h₂ (h'.trans <| subset_sUnion_of_mem hc₃)
 -/
 private lemma chainClosure_succ_total (hc₁ : ChainClosure r c₁) (hc₂ : ChainClosure r c₂)
     (h : c₁ subseteq c₂) : c₂ = c₁ ∨ SuccChain r c₁ subseteq c₂ := by

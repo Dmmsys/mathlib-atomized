@@ -617,7 +617,7 @@ let f (i : a.Type) : mk a := ⟨mk a.Func i, func_mem a i⟩
     rintro ⟨y, hb⟩
     induction y using Quotient.inductionOn
     obtain ⟨i, h⟩ := hb
-    exact ⟨i, Subtype.coe_injective (Quotient.sound h
+    exact ⟨i, Subtype.coe_injective (Quotient.sound h.symm)⟩
 
 中文:
 实例 small_coe
@@ -628,7 +628,7 @@ let f (i : a.Type) : mk a := ⟨mk a.Func i, func_mem a i⟩
     rintro ⟨y, hb⟩
     induction y using Quotient.inductionOn
     obtain ⟨i, h⟩ := hb
-    exact ⟨i, Subtype.coe_injective (Quotient.sound h
+    exact ⟨i, Subtype.coe_injective (Quotient.sound h.symm)⟩
 
 Depends on / 依赖: Function, Function.Surjective, Quotient, Quotient.inductionOn, Quotient.sound, Subtype, Subtype.coe_injective, Surjective, a.Func, a.Type, coe_injective, func_mem, h.symm, inductionOn, small_of_surjective
 -/
@@ -1116,7 +1116,8 @@ definition Insert
         match o with
         | some b =>
           let ⟨a, ha⟩ := βα b
-     
+          ⟨some a, ha⟩
+        | none => ⟨none, uv⟩⟩
 
 中文:
 定义 Insert
@@ -1133,7 +1134,8 @@ definition Insert
         match o with
         | some b =>
           let ⟨a, ha⟩ := βα b
-     
+          ⟨some a, ha⟩
+        | none => ⟨none, uv⟩⟩
 -/
 protected def Insert : ZFSet -> ZFSet -> ZFSet :=
   Quotient.map₂ PSet.insert
@@ -1769,7 +1771,11 @@ definition powerset
           ⟨⟨b, a, pa, ab⟩, ab⟩,
           fun ⟨_, a, pa, ab⟩ => ⟨⟨a, pa⟩, ab⟩⟩,
         fun q =>
-        ⟨{ a | exists b, b
+        ⟨{ a | exists b, b in q ∧ Equiv (A a) (B b) }, fun ⟨_, b, qb, ab⟩ => ⟨⟨b, qb⟩, ab⟩, fun ⟨b, qb⟩ =>
+          let ⟨a, ab⟩ := βα b
+          ⟨⟨a, b, qb, ab⟩, ab⟩⟩⟩
+
+@[simp]
 
 中文:
 定义 powerset
@@ -1782,7 +1788,11 @@ definition powerset
           ⟨⟨b, a, pa, ab⟩, ab⟩,
           fun ⟨_, a, pa, ab⟩ => ⟨⟨a, pa⟩, ab⟩⟩,
         fun q =>
-        ⟨{ a | exists b, b
+        ⟨{ a | exists b, b in q ∧ Equiv (A a) (B b) }, fun ⟨_, b, qb, ab⟩ => ⟨⟨b, qb⟩, ab⟩, fun ⟨b, qb⟩ =>
+          let ⟨a, ab⟩ := βα b
+          ⟨⟨a, b, qb, ab⟩, ab⟩⟩⟩
+
+@[simp]
 
 Depends on / 依赖: PSet.powerset, Quotient, Quotient.map, powerset
 -/
@@ -1834,7 +1844,9 @@ theorem sUnion_lem
     let c : (A a).Type := c
     let ⟨d, hd⟩ := γδ (by rwa [ea] at c)
     use ⟨b, Eq.ndrec d (Eq.symm eb)⟩
-    change PSet.Equiv ((A a).Func c) ((B b).Func (Eq.ndrec d eb.
+    change PSet.Equiv ((A a).Func c) ((B b).Func (Eq.ndrec d eb.symm))
+    match A a, B b, ea, eb, c, d, hd with
+    | _, _, rfl, rfl, _, _, hd => exact hd
 
 中文:
 定理 sUnion_lem
@@ -1847,7 +1859,9 @@ theorem sUnion_lem
     let c : (A a).Type := c
     let ⟨d, hd⟩ := γδ (by rwa [ea] at c)
     use ⟨b, Eq.ndrec d (Eq.symm eb)⟩
-    change PSet.Equiv ((A a).Func c) ((B b).Func (Eq.ndrec d eb.
+    change PSet.Equiv ((A a).Func c) ((B b).Func (Eq.ndrec d eb.symm))
+    match A a, B b, ea, eb, c, d, hd with
+    | _, _, rfl, rfl, _, _, hd => exact hd
 -/
 theorem sUnion_lem {α β : Type u} (A : α -> PSet) (B : β -> PSet) (αβ : forall a, exists b, Equiv (A a) (B b)) :
     forall a, exists b, Equiv ((sUnion ⟨α, A⟩).Func a) ((sUnion ⟨β, B⟩).Func b)
@@ -1878,7 +1892,7 @@ definition sUnion
           fun b hb => ⟨b, PSet.Equiv.symm hb⟩⟩
 
 @[inherit_doc]
-scoped prefix:110 "⋃₀ " => Z
+scoped prefix:110 "⋃₀ " => ZFSet.sUnion
 
 中文:
 定义 集合并集
@@ -1891,7 +1905,7 @@ scoped prefix:110 "⋃₀ " => Z
           fun b hb => ⟨b, PSet.Equiv.symm hb⟩⟩
 
 @[inherit_doc]
-scoped prefix:110 "⋃₀ " => Z
+scoped prefix:110 "⋃₀ " => ZFSet.sUnion
 
 Depends on / 依赖: Exists, Exists.elim, PSet.Equiv.symm, PSet.sUnion, Quotient, Quotient.map, sUnion, sUnion_lem
 -/
@@ -2816,7 +2830,7 @@ definition image
           Iff.trans
               ⟨fun ⟨w, h1, h2⟩ => ⟨w, (Mem.congr_right e).1 h1, h2⟩, fun ⟨w, h1, h2⟩ =>
 ⟨w, (Mem.congr_right e).2 h1, h2⟩⟩
-       
+            (mem_image (fun _ _ => Definable₁.out_equiv _)).symm
 
 中文:
 定义 像
@@ -2829,7 +2843,7 @@ definition image
           Iff.trans
               ⟨fun ⟨w, h1, h2⟩ => ⟨w, (Mem.congr_right e).1 h1, h2⟩, fun ⟨w, h1, h2⟩ =>
 ⟨w, (Mem.congr_right e).2 h1, h2⟩⟩
-       
+            (mem_image (fun _ _ => Definable₁.out_equiv _)).symm
 
 Depends on / 依赖: Iff.trans, Mem.congr_right, Mem.ext, PSet.image, Quotient, Quotient.map, congr_right, mem_image, out_equiv
 -/
@@ -3225,7 +3239,11 @@ obtain rfl : x = x' := And.left by simpa [or_and_left] using (H {x}).1 (Or.inl r
     rintro rfl
     simpa [eq_comm] using H {y, y'}
   have hx := H {x, y}
-  simp_rw [pair_eq_singleton_iff, true_
+  simp_rw [pair_eq_singleton_iff, true_and, or_true, true_iff] at hx
+  refine ⟨rfl, hx.elim he fun hy => Or.elim ?_ he id⟩
+  simpa using ZFSet.ext_iff.1 hy y
+
+@[simp]
 
 中文:
 定理 pair_injective
@@ -3238,7 +3256,11 @@ obtain rfl : x = x' := And.left by simpa [or_and_left] using (H {x}).1 (Or.inl r
     rintro rfl
     simpa [eq_comm] using H {y, y'}
   have hx := H {x, y}
-  simp_rw [pair_eq_singleton_iff, true_
+  simp_rw [pair_eq_singleton_iff, true_and, or_true, true_iff] at hx
+  refine ⟨rfl, hx.elim he fun hy => Or.elim ?_ he id⟩
+  simpa using ZFSet.ext_iff.1 hy y
+
+@[simp]
 
 Depends on / 依赖: And.left, Or.elim, Or.inl, ZFSet.ext_iff, eq_comm, ext_iff, hx.elim, mem_pair, or_and_left, or_true, pair_eq_singleton_iff, simp_rw, true_and, true_iff
 -/

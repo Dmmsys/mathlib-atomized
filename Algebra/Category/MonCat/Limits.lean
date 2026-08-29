@@ -418,7 +418,31 @@ instance forget_createsLimit
   have : Small.{u} (Functor.sections (F ⋙ forget MonCat)) :=
     (Types.hasLimit_iff_small_sections _).mp (HasLimit.mk { cone := c, isLimit := t })
   refine LiftsToLimit.mk (LiftableCone.mk
-    { pt := MonCat.of (Types.Small.limitCone (F ⋙ forget MonC
+    { pt := MonCat.of (Types.Small.limitCone (F ⋙ forget MonCat)).pt,
+      π := NatTrans.mk
+        (fun j => ofHom (limitπMonoidHom F j))
+        (MonCat.HasLimits.limitCone F).π.naturality }
+    (Cone.ext
+      ((Types.isLimitEquivSections t).trans (equivShrink _)).symm.toIso
+      (fun _ => ?_))) ?_
+  · ext
+    simp [Types.isLimitEquivSections]
+    simp [← CategoryTheory.comp_apply]
+    rfl
+  refine IsLimit.ofFaithful (forget MonCat.{u}) (Types.Small.limitConeIsLimit.{v, u} _) ?_ ?_
+  · intro _
+    refine ofHom
+      { toFun := (Types.Small.limitConeIsLimit.{v, u} _).lift ((forget MonCat).mapCone _),
+        map_one' := by simp; rfl, map_mul' := ?_ }
+    · intro x y
+      simp only [Types.Small.limitCone_pt, Functor.comp_obj, Functor.mapCone_pt,
+        Types.Small.limitConeIsLimit_lift, Functor.const_obj_obj, Functor.mapCone_π_app,
+        ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, map_mul]
+      rw [← equivShrink_mul]
+      rfl
+  · exact fun _ => rfl
+
+@[to_additive]
 
 中文:
 实例 forget_createsLimit
@@ -429,7 +453,31 @@ instance forget_createsLimit
   have : Small.{u} (Functor.sections (F ⋙ forget MonCat)) :=
     (Types.hasLimit_iff_small_sections _).mp (HasLimit.mk { cone := c, isLimit := t })
   refine LiftsToLimit.mk (LiftableCone.mk
-    { pt := MonCat.of (Types.Small.limitCone (F ⋙ forget MonC
+    { pt := MonCat.of (Types.Small.limitCone (F ⋙ forget MonCat)).pt,
+      π := NatTrans.mk
+        (fun j => ofHom (limitπMonoidHom F j))
+        (MonCat.HasLimits.limitCone F).π.naturality }
+    (Cone.ext
+      ((Types.isLimitEquivSections t).trans (equivShrink _)).symm.toIso
+      (fun _ => ?_))) ?_
+  · ext
+    simp [Types.isLimitEquivSections]
+    simp [← CategoryTheory.comp_apply]
+    rfl
+  refine IsLimit.ofFaithful (forget MonCat.{u}) (Types.Small.limitConeIsLimit.{v, u} _) ?_ ?_
+  · intro _
+    refine ofHom
+      { toFun := (Types.Small.limitConeIsLimit.{v, u} _).lift ((forget MonCat).mapCone _),
+        map_one' := by simp; rfl, map_mul' := ?_ }
+    · intro x y
+      simp only [Types.Small.limitCone_pt, Functor.comp_obj, Functor.mapCone_pt,
+        Types.Small.limitConeIsLimit_lift, Functor.const_obj_obj, Functor.mapCone_π_app,
+        ConcreteCategory.hom_ofHom, TypeCat.Fun.coe_mk, map_mul]
+      rw [← equivShrink_mul]
+      rfl
+  · exact fun _ => rfl
+
+@[to_additive]
 
 Depends on / 依赖: Cone.ext, Functor, Functor.sections, HasLimit, HasLimit.mk, HasLimits, LiftableCone, LiftableCone.mk, LiftsToLimit, LiftsToLimit.mk, MonCat, MonCat.HasLimits.limitCone, MonCat.of, NatTrans, NatTrans.mk, Types.Small.limitCone, Types.hasLimit_iff_small_sections, Types.isLimitEquivSections, createsLimitOfReflectsIso, equivShrink
 -/
@@ -624,7 +672,13 @@ instance forget₂CreatesLimit
         { pt := CommMonCat.of (Types.Small.limitCone (F ⋙ forget CommMonCat)).pt
           π :=
             { app j := ofHom (MonCat.limitπMonoidHom (F ⋙ forget₂ CommMonCat.{u} MonCat.{u}) j)
-naturality _ _ j := ext fun x => ConcreteCategory.
+naturality _ _ j := ext fun x => ConcreteCategory.congr_hom
+                ((MonCat.HasLimits.limitCone
+                  (F ⋙ forget₂ CommMonCat MonCat.{u})).π.naturality j) x } }
+      validLift := by apply IsLimit.uniqueUpToIso (MonCat.HasLimits.limitConeIsLimit _) t
+      makesLimit :=
+        IsLimit.ofFaithful (forget₂ CommMonCat MonCat.{u})
+          (MonCat.HasLimits.limitConeIsLimit _) (fun _ => _) fun _ => rfl }
 
 中文:
 实例 forget₂CreatesLimit
@@ -634,7 +688,13 @@ naturality _ _ j := ext fun x => ConcreteCategory.
         { pt := CommMonCat.of (Types.Small.limitCone (F ⋙ forget CommMonCat)).pt
           π :=
             { app j := ofHom (MonCat.limitπMonoidHom (F ⋙ forget₂ CommMonCat.{u} MonCat.{u}) j)
-naturality _ _ j := ext fun x => ConcreteCategory.
+naturality _ _ j := ext fun x => ConcreteCategory.congr_hom
+                ((MonCat.HasLimits.limitCone
+                  (F ⋙ forget₂ CommMonCat MonCat.{u})).π.naturality j) x } }
+      validLift := by apply IsLimit.uniqueUpToIso (MonCat.HasLimits.limitConeIsLimit _) t
+      makesLimit :=
+        IsLimit.ofFaithful (forget₂ CommMonCat MonCat.{u})
+          (MonCat.HasLimits.limitConeIsLimit _) (fun _ => _) fun _ => rfl }
 
 Depends on / 依赖: CommMonCat, CommMonCat.of, ConcreteCategory, ConcreteCategory.congr_hom, HasLimits, IsLimit, IsLimit.ofFaithful, IsLimit.uniqueUpToIso, MonCat, MonCat.HasLimits.limitCone, MonCat.HasLimits.limitConeIsLimit, MonCat.limit, Types.Small.limitCone, congr_hom, createsLimitOfReflectsIso, forget, liftedCone, limitCone, limitConeIsLimit, makesLimit
 -/

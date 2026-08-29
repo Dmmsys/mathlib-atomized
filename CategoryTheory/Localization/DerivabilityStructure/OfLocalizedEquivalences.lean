@@ -69,7 +69,20 @@ lemma isLeftDerivabilityStructure_of_isLocalizedEquivalence
     exact ⟨{
       X₁ := L.functor.obj ρ.X₁
       w := iso.inv.app _ ≫ R.functor.map ρ.w ≫ e₂.hom
-      hw := (W₂'.arrow_mk_is
+      hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk (iso.app _) e₂)).1 (R.map _ ρ.hw) }⟩
+  let F := B.localizedFunctor W₁'.Q W₂'.Q
+  let e' := CatCommSq.iso B.functor W₁'.Q W₂'.Q F
+  let iso' : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
+  let : CatCommSq T.functor (L.functor ⋙ W₁'.Q) (R.functor ⋙ W₂'.Q) F :=
+    CatCommSq.vComp (H₂ := B.functor) _ _ _ _ _ _
+  have : (TwoSquare.hComp iso.inv e'.inv).GuitartExact := by
+    convert!
+      T.guitartExact_of_isLeftDerivabilityStructure' (L.functor ⋙ W₁'.Q) (R.functor ⋙ W₂'.Q) F
+        (CatCommSq.iso _ _ _ _)
+    ext
+    simp [e', CatCommSq.iso, iso']
+  rw [B.isLeftDerivabilityStructure_iff W₁'.Q W₂'.Q F e']
+  apply TwoSquare.GuitartExact.of_hComp iso.inv
 
 中文:
 引理 isLeftDerivabilityStructure_of_isLocalizedEquivalence
@@ -80,7 +93,20 @@ lemma isLeftDerivabilityStructure_of_isLocalizedEquivalence
     exact ⟨{
       X₁ := L.functor.obj ρ.X₁
       w := iso.inv.app _ ≫ R.functor.map ρ.w ≫ e₂.hom
-      hw := (W₂'.arrow_mk_is
+      hw := (W₂'.arrow_mk_iso_iff (Arrow.isoMk (iso.app _) e₂)).1 (R.map _ ρ.hw) }⟩
+  let F := B.localizedFunctor W₁'.Q W₂'.Q
+  let e' := CatCommSq.iso B.functor W₁'.Q W₂'.Q F
+  let iso' : CatCommSq T.functor L.functor R.functor B.functor := ⟨iso⟩
+  let : CatCommSq T.functor (L.functor ⋙ W₁'.Q) (R.functor ⋙ W₂'.Q) F :=
+    CatCommSq.vComp (H₂ := B.functor) _ _ _ _ _ _
+  have : (TwoSquare.hComp iso.inv e'.inv).GuitartExact := by
+    convert!
+      T.guitartExact_of_isLeftDerivabilityStructure' (L.functor ⋙ W₁'.Q) (R.functor ⋙ W₂'.Q) F
+        (CatCommSq.iso _ _ _ _)
+    ext
+    simp [e', CatCommSq.iso, iso']
+  rw [B.isLeftDerivabilityStructure_iff W₁'.Q W₂'.Q F e']
+  apply TwoSquare.GuitartExact.of_hComp iso.inv
 
 Depends on / 依赖: Arrow.isoMk, B.HasLeftResolutions, B.functor, B.localizedFunctor, CatCommSq, CatCommSq.iso, Classical, Classical.arbitrary, EssSurj, Functor, Functor.EssSurj.mem_essImage, HasLeftResolutions, L.functor, L.functor.obj, LeftResolution, R.functor, R.functor.map, R.map, T.LeftResolution, T.functor
 -/
@@ -124,7 +150,25 @@ lemma isLeftDerivabilityStructure_iff_of_isLocalizedEquivalence
     exact ⟨{
       X₁ := L.functor.objPreimage ρ.X₁
       w :=
-        R.functor.preima
+        R.functor.preimage (iso.hom.app _ ≫
+          B.functor.map (L.functor.objObjPreimageIso ρ.X₁).hom ≫ ρ.w)
+      hw := by
+        simp only [← R.inverseImage_eq, Functor.comp_obj,
+          MorphismProperty.inverseImage_iff, Functor.map_preimage]
+        refine (W₂'.arrow_mk_iso_iff ?_).2 ρ.hw
+        exact Arrow.isoMk (iso.app _ ≪≫ B.functor.mapIso (L.functor.objObjPreimageIso ρ.X₁))
+          (Iso.refl _) }⟩
+  let F := B.localizedFunctor W₁'.Q W₂'.Q
+  let e' := CatCommSq.iso B.functor W₁'.Q W₂'.Q F
+  let e : T.functor ⋙ R.functor ⋙ W₂'.Q ≅ (L.functor ⋙ W₁'.Q) ⋙ F :=
+    (Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight iso _ ≪≫
+      Functor.associator _ _ _ ≪≫
+      Functor.isoWhiskerLeft _ e' ≪≫ (Functor.associator _ _ _).symm
+  have he' : TwoSquare.GuitartExact e'.inv := inferInstance
+  have : TwoSquare.hComp iso.inv e'.inv = e.inv := by ext; simp [e]
+  rw [T.isLeftDerivabilityStructure_iff (L.functor ⋙ W₁'.Q)
+    (R.functor ⋙ W₂'.Q) F e]; rw [← this]
+  infer_instance
 
 中文:
 引理 isLeftDerivabilityStructure_iff_of_isLocalizedEquivalence
@@ -135,7 +179,25 @@ lemma isLeftDerivabilityStructure_iff_of_isLocalizedEquivalence
     exact ⟨{
       X₁ := L.functor.objPreimage ρ.X₁
       w :=
-        R.functor.preima
+        R.functor.preimage (iso.hom.app _ ≫
+          B.functor.map (L.functor.objObjPreimageIso ρ.X₁).hom ≫ ρ.w)
+      hw := by
+        simp only [← R.inverseImage_eq, Functor.comp_obj,
+          MorphismProperty.inverseImage_iff, Functor.map_preimage]
+        refine (W₂'.arrow_mk_iso_iff ?_).2 ρ.hw
+        exact Arrow.isoMk (iso.app _ ≪≫ B.functor.mapIso (L.functor.objObjPreimageIso ρ.X₁))
+          (Iso.refl _) }⟩
+  let F := B.localizedFunctor W₁'.Q W₂'.Q
+  let e' := CatCommSq.iso B.functor W₁'.Q W₂'.Q F
+  let e : T.functor ⋙ R.functor ⋙ W₂'.Q ≅ (L.functor ⋙ W₁'.Q) ⋙ F :=
+    (Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerRight iso _ ≪≫
+      Functor.associator _ _ _ ≪≫
+      Functor.isoWhiskerLeft _ e' ≪≫ (Functor.associator _ _ _).symm
+  have he' : TwoSquare.GuitartExact e'.inv := inferInstance
+  have : TwoSquare.hComp iso.inv e'.inv = e.inv := by ext; simp [e]
+  rw [T.isLeftDerivabilityStructure_iff (L.functor ⋙ W₁'.Q)
+    (R.functor ⋙ W₂'.Q) F e]; rw [← this]
+  infer_instance
 
 Depends on / 依赖: B.LeftResolution, B.functor.map, Classical, Classical.arbitrary, Functor, Functor.comp_obj, Functor.map_preimage, HasLeftResolutions, L.functor.objObjPreimageIso, L.functor.objPreimage, LeftResolution, MorphismProperty, MorphismProperty.inverseImage_iff, R.functor.obj, R.functor.preimage, R.inverseImage_eq, T.HasLeftResolutions, arbitrary, arrow_mk_iso_iff, comp_obj
 -/
@@ -181,7 +243,7 @@ lemma isRightDerivabilityStructure_of_isLocalizedEquivalence
   let iso' : T.op.functor ⋙ R.op.functor ≅ L.op.functor ⋙ B.op.functor := NatIso.op iso.symm
   have : TwoSquare.GuitartExact iso'.inv :=
     inferInstanceAs (TwoSquare.op iso.hom).GuitartExact
-  exact isLeftDerivabilityStructure_of_isLocalizedEquivalence
+  exact isLeftDerivabilityStructure_of_isLocalizedEquivalence iso'
 
 中文:
 引理 isRightDerivabilityStructure_of_isLocalizedEquivalence
@@ -190,7 +252,7 @@ lemma isRightDerivabilityStructure_of_isLocalizedEquivalence
   let iso' : T.op.functor ⋙ R.op.functor ≅ L.op.functor ⋙ B.op.functor := NatIso.op iso.symm
   have : TwoSquare.GuitartExact iso'.inv :=
     inferInstanceAs (TwoSquare.op iso.hom).GuitartExact
-  exact isLeftDerivabilityStructure_of_isLocalizedEquivalence
+  exact isLeftDerivabilityStructure_of_isLocalizedEquivalence iso'
 
 Depends on / 依赖: B.op.functor, GuitartExact, L.op.functor, NatIso, NatIso.op, R.op.functor, T.op.functor, TwoSquare, TwoSquare.GuitartExact, TwoSquare.op, functor, isLeftDerivabilityStructure_of_isLocalizedEquivalence, isRightDerivabilityStructure_iff_op, iso.hom, iso.symm
 -/
@@ -216,7 +278,7 @@ lemma isRightDerivabilityStructure_iff_of_isLocalizedEquivalence
   let iso' : T.op.functor ⋙ R.op.functor ≅ L.op.functor ⋙ B.op.functor := NatIso.op iso.symm
   have : TwoSquare.GuitartExact iso'.inv :=
     inferInstanceAs (TwoSquare.op iso.hom).GuitartExact
-  exact isLeftDerivabilityStructure_iff_of_isLocalized
+  exact isLeftDerivabilityStructure_iff_of_isLocalizedEquivalence iso'
 
 中文:
 引理 isRightDerivabilityStructure_iff_of_isLocalizedEquivalence
@@ -225,7 +287,7 @@ lemma isRightDerivabilityStructure_iff_of_isLocalizedEquivalence
   let iso' : T.op.functor ⋙ R.op.functor ≅ L.op.functor ⋙ B.op.functor := NatIso.op iso.symm
   have : TwoSquare.GuitartExact iso'.inv :=
     inferInstanceAs (TwoSquare.op iso.hom).GuitartExact
-  exact isLeftDerivabilityStructure_iff_of_isLocalized
+  exact isLeftDerivabilityStructure_iff_of_isLocalizedEquivalence iso'
 
 Depends on / 依赖: B.op.functor, GuitartExact, L.op.functor, NatIso, NatIso.op, R.op.functor, T.op.functor, TwoSquare, TwoSquare.GuitartExact, TwoSquare.op, functor, isLeftDerivabilityStructure_iff_of_isLocalizedEquivalence, isRightDerivabilityStructure_iff_op, iso.hom, iso.symm
 -/
@@ -284,7 +346,14 @@ lemma isLeftDerivabilityStructure_iff_of_equivalences
     let e : B.functor ⋙ R.inv.functor ≅ L.inv.functor ⋙ T.functor :=
       (leftUnitor _).symm ≪≫
         isoWhiskerRight L.functor.asEquivalence.counitIso.symm _ ≪≫
-        associator _ _ _ ≪≫ isoWhiskerLeft _ (associator _ _ _)
+        associator _ _ _ ≪≫ isoWhiskerLeft _ (associator _ _ _).symm ≪≫
+        isoWhiskerLeft _ (isoWhiskerRight iso.symm R.inv.functor) ≪≫
+        isoWhiskerLeft _ (associator _ _ _) ≪≫
+        isoWhiskerLeft _ (isoWhiskerLeft _ R.functor.asEquivalence.unitIso.symm) ≪≫
+        (associator _ _ _).symm ≪≫ rightUnitor _
+    have : W₁.RespectsIso := by rw [← L.inverseImage_eq]; infer_instance
+    have : W₂.RespectsIso := by rw [← R.inverseImage_eq]; infer_instance
+    exact isLeftDerivabilityStructure_of_equivalences e⟩
 
 中文:
 引理 isLeftDerivabilityStructure_iff_of_equivalences
@@ -292,7 +361,14 @@ lemma isLeftDerivabilityStructure_iff_of_equivalences
     let e : B.functor ⋙ R.inv.functor ≅ L.inv.functor ⋙ T.functor :=
       (leftUnitor _).symm ≪≫
         isoWhiskerRight L.functor.asEquivalence.counitIso.symm _ ≪≫
-        associator _ _ _ ≪≫ isoWhiskerLeft _ (associator _ _ _)
+        associator _ _ _ ≪≫ isoWhiskerLeft _ (associator _ _ _).symm ≪≫
+        isoWhiskerLeft _ (isoWhiskerRight iso.symm R.inv.functor) ≪≫
+        isoWhiskerLeft _ (associator _ _ _) ≪≫
+        isoWhiskerLeft _ (isoWhiskerLeft _ R.functor.asEquivalence.unitIso.symm) ≪≫
+        (associator _ _ _).symm ≪≫ rightUnitor _
+    have : W₁.RespectsIso := by rw [← L.inverseImage_eq]; infer_instance
+    have : W₂.RespectsIso := by rw [← R.inverseImage_eq]; infer_instance
+    exact isLeftDerivabilityStructure_of_equivalences e⟩
 
 Depends on / 依赖: B.functor, L.functor.asEquivalence.counitIso.symm, L.inv.functor, R.functor.asEquivalence.unitIso.symm, R.inv.functor, T.functor, asEquivalence, associator, counitIso, functor, isLeftDerivabilityStructure_of_equivalences, iso.symm, isoWhiskerLeft, isoWhiskerRight, leftUnitor, rightUnitor, unitIso
 -/

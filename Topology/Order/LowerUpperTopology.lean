@@ -1260,7 +1260,11 @@ theorem isTopologicalBasis
   · rintro ⟨F, hF, rfl⟩
     refine ⟨(fun a => (Ici a)ᶜ) '' F, ⟨hF.image _, image_subset_iff.2 fun _ _ => ⟨_, rfl⟩⟩, ?_⟩
     simp only [sInter_image]
-  · rintro ⟨F
+  · rintro ⟨F, ⟨hF, hs⟩, rfl⟩
+    have := hF.to_subtype
+    rw [subset_def]; rw [Subtype.forall'] at hs
+    choose f hf using hs
+    exact ⟨_, finite_range f, by simp_rw [biInter_range, hf, sInter_eq_iInter]⟩
 
 中文:
 定理 isTopologicalBasis
@@ -1273,7 +1277,11 @@ theorem isTopologicalBasis
   · rintro ⟨F, hF, rfl⟩
     refine ⟨(fun a => (Ici a)ᶜ) '' F, ⟨hF.image _, image_subset_iff.2 fun _ _ => ⟨_, rfl⟩⟩, ?_⟩
     simp only [sInter_image]
-  · rintro ⟨F
+  · rintro ⟨F, ⟨hF, hs⟩, rfl⟩
+    have := hF.to_subtype
+    rw [subset_def]; rw [Subtype.forall'] at hs
+    choose f hf using hs
+    exact ⟨_, finite_range f, by simp_rw [biInter_range, hf, sInter_eq_iInter]⟩
 -/
 protected theorem isTopologicalBasis : IsTopologicalBasis (lowerBasis α) := by
   convert! isTopologicalBasis_of_subbasis (topology_eq α)
@@ -1401,7 +1409,31 @@ lemma isTopologicalSpace_basis
   constructor
   · intro ⟨a, ha⟩
     use {U}
-
+    constructor
+    · apply subset_trans (singleton_subset_iff.mpr _) (subset_insert _ _)
+      use a
+    · rw [sUnion_singleton]
+  · intro ⟨S, hS1, hS2⟩
+    have hUS : univ ∉ S := by
+      by_contra hUS'
+      apply hU
+      rw [hS2]
+      exact sUnion_eq_univ_iff.mpr (fun a => ⟨univ, hUS', trivial⟩)
+    use sSup {a | (Ici a)ᶜ in S}
+    rw [hS2]; rw [sUnion_eq_compl_sInter_compl]; rw [compl_inj_iff]
+    apply le_antisymm
+    · intro b hb
+      simp only [sInter_image, mem_iInter, mem_compl_iff]
+      intro s hs
+      obtain ⟨a, ha⟩ := (subset_insert_iff_of_notMem hUS).mp hS1 hs
+      subst hS2 ha
+      simp_all only [compl_Ici, mem_Ici, sSup_le_iff, mem_ofPred_eq, mem_Iio, not_lt]
+    · intro b hb
+      rw [mem_Ici]; rw [sSup_le_iff]
+      intro c hc
+      simp only [sInter_image, mem_iInter] at hb
+      rw [← not_lt]; rw [← mem_Iio]; rw [← compl_Ici]
+      exact hb _ hc
 
 中文:
 引理 isTopologicalSpace_basis
@@ -1417,7 +1449,31 @@ lemma isTopologicalSpace_basis
   constructor
   · intro ⟨a, ha⟩
     use {U}
-
+    constructor
+    · apply subset_trans (singleton_subset_iff.mpr _) (subset_insert _ _)
+      use a
+    · rw [sUnion_singleton]
+  · intro ⟨S, hS1, hS2⟩
+    have hUS : univ ∉ S := by
+      by_contra hUS'
+      apply hU
+      rw [hS2]
+      exact sUnion_eq_univ_iff.mpr (fun a => ⟨univ, hUS', trivial⟩)
+    use sSup {a | (Ici a)ᶜ in S}
+    rw [hS2]; rw [sUnion_eq_compl_sInter_compl]; rw [compl_inj_iff]
+    apply le_antisymm
+    · intro b hb
+      simp only [sInter_image, mem_iInter, mem_compl_iff]
+      intro s hs
+      obtain ⟨a, ha⟩ := (subset_insert_iff_of_notMem hUS).mp hS1 hs
+      subst hS2 ha
+      simp_all only [compl_Ici, mem_Ici, sSup_le_iff, mem_ofPred_eq, mem_Iio, not_lt]
+    · intro b hb
+      rw [mem_Ici]; rw [sSup_le_iff]
+      intro c hc
+      simp only [sInter_image, mem_iInter] at hb
+      rw [← not_lt]; rw [← mem_Iio]; rw [← compl_Ici]
+      exact hb _ hc
 
 Depends on / 依赖: IsTopologicalBasis, IsTopologicalBasis.open_eq_sUnion, Or.inr, compl_Ici, convert, isOpen, isOpen_univ, isTopologicalBasis_insert_univ_subbasis, isTopologicalBasis_insert_univ_subbasis.isOpen, open_eq_sUnion, sUnion_eq_univ_iff, sUnion_eq_univ_iff.mp, sUnion_singleton, singleton_subset_iff, singleton_subset_iff.mpr, subset_insert, subset_trans, true_or
 -/
@@ -1815,7 +1871,14 @@ instance instIsLowerProd
       exact (isClosed_Ici.prod isClosed_Ici).isOpen_compl
     rw [(IsLower.isTopologicalBasis.prod
       IsLower.isTopologicalBasis).eq_generateFrom]; rw [le_generateFrom_iff_subset_isOpen]; rw [image2_subset_iff]
-    rintro _
+    rintro _ ⟨s, hs, rfl⟩ _ ⟨t, ht, rfl⟩
+    dsimp
+    simp_rw [coe_upperClosure, compl_iUnion, prod_eq, preimage_iInter, preimage_compl]
+    -- without `let`, `refine` tries to use the product topology and fails
+    let _ : TopologicalSpace (α × β) := lower (α × β)
+    refine (hs.isOpen_biInter fun a _ => ?_).inter (ht.isOpen_biInter fun b _ => ?_)
+    · exact GenerateOpen.basic _ ⟨(a, ⊥), by simp [Ici_prod_eq, prod_univ]⟩
+    · exact GenerateOpen.basic _ ⟨(⊥, b), by simp [Ici_prod_eq, univ_prod]⟩
 
 中文:
 实例 instIsLowerProd
@@ -1826,7 +1889,14 @@ instance instIsLowerProd
       exact (isClosed_Ici.prod isClosed_Ici).isOpen_compl
     rw [(IsLower.isTopologicalBasis.prod
       IsLower.isTopologicalBasis).eq_generateFrom]; rw [le_generateFrom_iff_subset_isOpen]; rw [image2_subset_iff]
-    rintro _
+    rintro _ ⟨s, hs, rfl⟩ _ ⟨t, ht, rfl⟩
+    dsimp
+    simp_rw [coe_upperClosure, compl_iUnion, prod_eq, preimage_iInter, preimage_compl]
+    -- without `let`, `refine` tries to use the product topology and fails
+    let _ : TopologicalSpace (α × β) := lower (α × β)
+    refine (hs.isOpen_biInter fun a _ => ?_).inter (ht.isOpen_biInter fun b _ => ?_)
+    · exact GenerateOpen.basic _ ⟨(a, ⊥), by simp [Ici_prod_eq, prod_univ]⟩
+    · exact GenerateOpen.basic _ ⟨(⊥, b), by simp [Ici_prod_eq, univ_prod]⟩
 
 Depends on / 依赖: IsLower, IsLower.isTopologicalBasis, IsLower.isTopologicalBasis.prod, coe_upperClosure, compl_iUnion, eq_generateFrom, image2_subset_iff, isClosed_Ici, isClosed_Ici.prod, isOpen_compl, isTopologicalBasis, le_antisymm, le_generateFrom, le_generateFrom_iff_subset_isOpen, preimage_compl, preimage_iInter, prod_eq, simp_rw
 -/
@@ -2014,7 +2084,8 @@ instance :
         rw [← Ioi_True]; rw [← Ioi_False] at hs
         rcases hs with (rfl | rfl)
         · use True
-        · use Fa
+        · use False)
+      (by rintro _ ⟨a, rfl⟩; by_cases a <;> aesop (add simp [Ioi, lt_iff_le_not_ge]))
 
 中文:
 实例 :
@@ -2028,7 +2099,8 @@ instance :
         rw [← Ioi_True]; rw [← Ioi_False] at hs
         rcases hs with (rfl | rfl)
         · use True
-        · use Fa
+        · use False)
+      (by rintro _ ⟨a, rfl⟩; by_cases a <;> aesop (add simp [Ioi, lt_iff_le_not_ge]))
 
 Depends on / 依赖: Ioi_False, Ioi_True, Topology, Topology.upper, compl_Iic, generateFrom_insert_empty, le_antisymm, lt_iff_le_not_ge, mem_ofPred_eq, sierpinskiSpace
 -/

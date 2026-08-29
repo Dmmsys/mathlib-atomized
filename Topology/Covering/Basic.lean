@@ -69,7 +69,9 @@ definition fiberHomeomorph
     invFun e := (H ⟨e, by rwa [Set.mem_preimage, (e.2 : f e = x)]⟩).2
     left_inv _ := by simp
 right_inv e := Set.inclusion_injective (Set.preimage_mono (Set.singleton_subset_iff.mpr hxU))
-H.inject
+H.injective Prod.ext (Subtype.ext <| by simpa [hH] using e.2.symm) (by simp)
+    continuous_toFun := by fun_prop
+    continuous_invFun := by fun_prop }
 
 中文:
 定义 fiberHomeomorph
@@ -81,7 +83,9 @@ H.inject
     invFun e := (H ⟨e, by rwa [Set.mem_preimage, (e.2 : f e = x)]⟩).2
     left_inv _ := by simp
 right_inv e := Set.inclusion_injective (Set.preimage_mono (Set.singleton_subset_iff.mpr hxU))
-H.inject
+H.injective Prod.ext (Subtype.ext <| by simpa [hH] using e.2.symm) (by simp)
+    continuous_toFun := by fun_prop
+    continuous_invFun := by fun_prop }
 
 Depends on / 依赖: H.injective, H.symm, Prod.ext, Set.inclusion_injective, Set.mem_preimage, Set.preimage_mono, Set.singleton_subset_iff.mpr, Subtype, Subtype.ext, continuous_invFun, continuous_toFun, fun_prop, inclusion_injective, injective, invFun, left_inv, mem_preimage, preimage_mono, right_inv, singleton_subset_iff
 -/
@@ -129,7 +133,23 @@ definition toTrivialization'
     invFun xi := H.symm (if hx : xi.1 in U then ⟨xi.1, hx⟩ else ⟨x, hxU⟩, xi.2)
     source := f ⁻¹' U
     target := U ×ˢ Set.univ
-    map_sour
+    map_source' e (he : f e in U) := by simp [he]
+    map_target' _ _ := Subtype.coe_prop _
+    left_inv' e (he : f e in U) := by simp [he]
+    right_inv' xi := by rintro ⟨hx, -⟩; simpa [hx] using fun h => (h (H.symm _).2).elim
+    open_source := hfU
+    open_target := hU.prod isOpen_univ
+continuousOn_toFun := continuousOn_iff_continuous_domRestrict.mpr
+      ((continuous_subtype_val.prodMap continuous_id).comp H.continuous).congr
+      fun ⟨e, (he : f e in U)⟩ => by simp [Prod.map, he]
+continuousOn_invFun := continuousOn_iff_continuous_domRestrict.mpr
+      ((continuous_subtype_val.comp H.symm.continuous).comp (by fun_prop :
+        Continuous fun ui => ⟨⟨_, ui.2.1⟩, ui.1.2⟩)).congr fun ⟨⟨x, i⟩, ⟨hx, _⟩⟩ => by simp [hx]
+    baseSet := U
+    open_baseSet := hU
+    source_eq := rfl
+    target_eq := rfl
+    proj_toFun e (he : f e in U) := by simp [he, hH] }
 
 中文:
 定义 toTrivialization'
@@ -141,7 +161,23 @@ definition toTrivialization'
     invFun xi := H.symm (if hx : xi.1 in U then ⟨xi.1, hx⟩ else ⟨x, hxU⟩, xi.2)
     source := f ⁻¹' U
     target := U ×ˢ Set.univ
-    map_sour
+    map_source' e (he : f e in U) := by simp [he]
+    map_target' _ _ := Subtype.coe_prop _
+    left_inv' e (he : f e in U) := by simp [he]
+    right_inv' xi := by rintro ⟨hx, -⟩; simpa [hx] using fun h => (h (H.symm _).2).elim
+    open_source := hfU
+    open_target := hU.prod isOpen_univ
+continuousOn_toFun := continuousOn_iff_continuous_domRestrict.mpr
+      ((continuous_subtype_val.prodMap continuous_id).comp H.continuous).congr
+      fun ⟨e, (he : f e in U)⟩ => by simp [Prod.map, he]
+continuousOn_invFun := continuousOn_iff_continuous_domRestrict.mpr
+      ((continuous_subtype_val.comp H.symm.continuous).comp (by fun_prop :
+        Continuous fun ui => ⟨⟨_, ui.2.1⟩, ui.1.2⟩)).congr fun ⟨⟨x, i⟩, ⟨hx, _⟩⟩ => by simp [hx]
+    baseSet := U
+    open_baseSet := hU
+    source_eq := rfl
+    target_eq := rfl
+    proj_toFun e (he : f e in U) := by simp [he, hH] }
 
 Depends on / 依赖: Classical, Classical.arbitrary, H.symm, Set.univ, Subtype, Subtype.coe_prop, arbitrary, classical, coe_prop, invFun, left_inv, map_source, map_target, open_source, right_inv, source, target
 -/
@@ -309,7 +345,14 @@ theorem of_trivialization
   { toFun e := ⟨⟨f e, e.2⟩, (t e).2⟩
     invFun xi := ⟨t.invFun (xi.1, xi.2), by
       rw [Set.mem_preimage]; rw [← t.mem_source]; exact t.map_target (t.target_eq ▸ ⟨xi.1.2, ⟨⟩⟩)⟩
-left_inv e := Subtype.ext t.symm_apply_mk_proj (t.mem_source.m
+left_inv e := Subtype.ext t.symm_apply_mk_proj (t.mem_source.mpr e.2)
+    right_inv xi := by simp [t.proj_symm_apply', t.apply_symm_apply']
+continuous_toFun := (IsInducing.subtypeVal.prodMap .id).continuous_iff.mpr
+      (continuousOn_iff_continuous_domRestrict.mp <| t.continuousOn_toFun.mono t.source_eq.ge).congr
+      fun e => by simp [t.mk_proj_snd' e.2]
+continuous_invFun := IsInducing.subtypeVal.continuous_iff.mpr
+      t.continuousOn_invFun.comp_continuous (continuous_subtype_val.prodMap continuous_id)
+      fun ⟨x, _⟩ => t.target_eq ▸ ⟨x.2, ⟨⟩⟩ }, fun _ => by simp⟩
 
 中文:
 定理 of_trivialization
@@ -318,7 +361,14 @@ left_inv e := Subtype.ext t.symm_apply_mk_proj (t.mem_source.m
   { toFun e := ⟨⟨f e, e.2⟩, (t e).2⟩
     invFun xi := ⟨t.invFun (xi.1, xi.2), by
       rw [Set.mem_preimage]; rw [← t.mem_source]; exact t.map_target (t.target_eq ▸ ⟨xi.1.2, ⟨⟩⟩)⟩
-left_inv e := Subtype.ext t.symm_apply_mk_proj (t.mem_source.m
+left_inv e := Subtype.ext t.symm_apply_mk_proj (t.mem_source.mpr e.2)
+    right_inv xi := by simp [t.proj_symm_apply', t.apply_symm_apply']
+continuous_toFun := (IsInducing.subtypeVal.prodMap .id).continuous_iff.mpr
+      (continuousOn_iff_continuous_domRestrict.mp <| t.continuousOn_toFun.mono t.source_eq.ge).congr
+      fun e => by simp [t.mk_proj_snd' e.2]
+continuous_invFun := IsInducing.subtypeVal.continuous_iff.mpr
+      t.continuousOn_invFun.comp_continuous (continuous_subtype_val.prodMap continuous_id)
+      fun ⟨x, _⟩ => t.target_eq ▸ ⟨x.2, ⟨⟩⟩ }, fun _ => by simp⟩
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal.prodMap, Set.mem_preimage, Subtype, Subtype.ext, apply_symm_apply, continuousOn_iff_continuous_domRestrict, continuousOn_iff_continuous_domRestrict.mp, continuousOn_t, continuous_iff, continuous_iff.mpr, continuous_toFun, invFun, left_inv, map_target, mem_preimage, mem_source, open_baseSet, open_source, prodMap
 -/
@@ -376,7 +426,8 @@ theorem restrictPreimage
   proof: have ⟨inst, U, hxU, hU, hfU, H, hH⟩ := h
   ⟨inst, Subtype.val ⁻¹' U, hxU, hU.preimage (by fun_prop), hfU.preimage continuous_subtype_val,
     { toFun e := (⟨⟨(H ⟨e, e.2⟩).1, hH _ ▸ e.1.2⟩, by simpa only [hH] using! e.2⟩, (H ⟨e, e.2⟩).2)
-      invFun x := ⟨⟨H.symm (⟨x.1, x.1.2⟩, x.2), by simp [← hH]⟩
+      invFun x := ⟨⟨H.symm (⟨x.1, x.1.2⟩, x.2), by simp [← hH]⟩, by simp [← hH]⟩
+      left_inv _ := by simp, right_inv _ := by simp }, fun _ => by ext; apply hH⟩
 
 中文:
 定理 restrictPreimage
@@ -384,7 +435,8 @@ theorem restrictPreimage
   证明: have ⟨inst, U, hxU, hU, hfU, H, hH⟩ := h
   ⟨inst, Subtype.val ⁻¹' U, hxU, hU.preimage (by fun_prop), hfU.preimage continuous_subtype_val,
     { toFun e := (⟨⟨(H ⟨e, e.2⟩).1, hH _ ▸ e.1.2⟩, by simpa only [hH] using! e.2⟩, (H ⟨e, e.2⟩).2)
-      invFun x := ⟨⟨H.symm (⟨x.1, x.1.2⟩, x.2), by simp [← hH]⟩
+      invFun x := ⟨⟨H.symm (⟨x.1, x.1.2⟩, x.2), by simp [← hH]⟩, by simp [← hH]⟩
+      left_inv _ := by simp, right_inv _ := by simp }, fun _ => by ext; apply hH⟩
 
 Depends on / 依赖: H.symm, Subtype, Subtype.val, continuous_subtype_val, fun_prop, hU.preimage, hfU.preimage, invFun, left_inv, preimage, right_inv
 -/
@@ -405,7 +457,8 @@ theorem subtypeVal_comp
   proof: have ⟨inst, U, hxU, hU, hfU, H, hH⟩ := h
   have : Subtype.val ∘ f ⁻¹' Subtype.val '' U = f ⁻¹' U := by ext; simp
   ⟨inst, Subtype.val '' U, ⟨x, hxU, rfl⟩, hs.isOpenMap_subtype_val _ hU, by rwa [this], .trans
-    (.setCongr this) (H.trans <| .prodCongr (IsEmbedding.subtypeVal.homeomorphImage U) (.ref
+    (.setCongr this) (H.trans <| .prodCongr (IsEmbedding.subtypeVal.homeomorphImage U) (.refl I)),
+    fun _ => congr_arg Subtype.val (hH _)⟩
 
 中文:
 定理 subtypeVal_comp
@@ -413,7 +466,8 @@ theorem subtypeVal_comp
   证明: have ⟨inst, U, hxU, hU, hfU, H, hH⟩ := h
   have : Subtype.val ∘ f ⁻¹' Subtype.val '' U = f ⁻¹' U := by ext; simp
   ⟨inst, Subtype.val '' U, ⟨x, hxU, rfl⟩, hs.isOpenMap_subtype_val _ hU, by rwa [this], .trans
-    (.setCongr this) (H.trans <| .prodCongr (IsEmbedding.subtypeVal.homeomorphImage U) (.ref
+    (.setCongr this) (H.trans <| .prodCongr (IsEmbedding.subtypeVal.homeomorphImage U) (.refl I)),
+    fun _ => congr_arg Subtype.val (hH _)⟩
 
 Depends on / 依赖: H.trans, IsEmbedding, IsEmbedding.subtypeVal.homeomorphImage, Subtype, Subtype.val, congr_arg, homeomorphImage, hs.isOpenMap_subtype_val, isOpenMap_subtype_val, prodCongr, setCongr, subtypeVal
 -/
@@ -435,7 +489,11 @@ theorem comp_subtypeVal
   (isEmpty_or_nonempty I).elim (fun _ => .of_preimage_eq_empty _ ((hs.inter hU).mem_nhds ⟨hx, hxU⟩)
  Set.not_nonempty_iff_eq_empty.mp fun ⟨e, he⟩ => isEmptyElim (H ⟨⟨e, he.1⟩, he.2⟩).2) fun _ =>
   have hUs : U subseteq s := fun y hy => by
-    convert! Set.mem
+    convert! Set.mem_preimage.mp (H.symm (⟨y, hy⟩, Classical.arbitrary I)).1.2; simp [← hH]
+  have : Subtype.val '' (fun e : f ⁻¹' s => f e) ⁻¹' U = f ⁻¹' U := by ext; simpa using @hUs _
+  ⟨inst, U, hxU, hU, this ▸ hfs.isOpenMap_subtype_val _ hfU, .trans (.symm <| .trans
+(IsEmbedding.subtypeVal.homeomorphImage _) .setCongr this) H, fun x => by
+    dsimp; convert! hH ⟨⟨x, hUs x.2⟩, x.2⟩ using 4; rw [Homeomorph.symm_apply_eq]; rfl⟩
 
 中文:
 定理 comp_subtypeVal
@@ -444,7 +502,11 @@ theorem comp_subtypeVal
   (isEmpty_or_nonempty I).elim (fun _ => .of_preimage_eq_empty _ ((hs.inter hU).mem_nhds ⟨hx, hxU⟩)
  Set.not_nonempty_iff_eq_empty.mp fun ⟨e, he⟩ => isEmptyElim (H ⟨⟨e, he.1⟩, he.2⟩).2) fun _ =>
   have hUs : U subseteq s := fun y hy => by
-    convert! Set.mem
+    convert! Set.mem_preimage.mp (H.symm (⟨y, hy⟩, Classical.arbitrary I)).1.2; simp [← hH]
+  have : Subtype.val '' (fun e : f ⁻¹' s => f e) ⁻¹' U = f ⁻¹' U := by ext; simpa using @hUs _
+  ⟨inst, U, hxU, hU, this ▸ hfs.isOpenMap_subtype_val _ hfU, .trans (.symm <| .trans
+(IsEmbedding.subtypeVal.homeomorphImage _) .setCongr this) H, fun x => by
+    dsimp; convert! hH ⟨⟨x, hUs x.2⟩, x.2⟩ using 4; rw [Homeomorph.symm_apply_eq]; rfl⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, H.symm, Set.mem_preimage.mp, Set.not_nonempty_iff_eq_empty.mp, Subtype, Subtype.val, arbitrary, convert, hfs.isOpenMap_subt, hs.inter, isEmptyElim, isEmpty_or_nonempty, isOpenMap_subt, mem_nhds, mem_preimage, not_nonempty_iff_eq_empty, of_preimage_eq_empty, subseteq
 -/
@@ -729,7 +791,22 @@ theorem isLocalHomeomorphOn
   let he := e.mem_source.2 h
   refine
     ⟨e.toOpenPartialHomeomorph.trans
-        { toFun := f
+        { toFun := fun p => p.1
+          invFun := fun p => ⟨p, x, rfl⟩
+          source := e.baseSet ×ˢ ({⟨x, rfl⟩} : Set (f ⁻¹' {f x}))
+          target := e.baseSet
+          open_source :=
+            e.open_baseSet.prod (discreteTopology_iff_isOpen_singleton.1 (hf (f x) hx).1 ⟨x, rfl⟩)
+          open_target := e.open_baseSet
+          map_source' := fun p => And.left
+          map_target' := fun p hp => ⟨hp, rfl⟩
+          left_inv' := fun p hp => Prod.ext rfl hp.2.symm
+          right_inv' := fun p _ => rfl
+          continuousOn_toFun := continuousOn_fst
+          continuousOn_invFun := by fun_prop },
+      ⟨he, by rwa [e.toOpenPartialHomeomorph.symm_symm, e.proj_toFun x he],
+        (hf (f x) hx).toTrivialization_apply⟩,
+      fun p h => (e.proj_toFun p h.1).symm⟩
 
 中文:
 定理 isLocalHomeomorphOn
@@ -742,7 +819,22 @@ theorem isLocalHomeomorphOn
   let he := e.mem_source.2 h
   refine
     ⟨e.toOpenPartialHomeomorph.trans
-        { toFun := f
+        { toFun := fun p => p.1
+          invFun := fun p => ⟨p, x, rfl⟩
+          source := e.baseSet ×ˢ ({⟨x, rfl⟩} : Set (f ⁻¹' {f x}))
+          target := e.baseSet
+          open_source :=
+            e.open_baseSet.prod (discreteTopology_iff_isOpen_singleton.1 (hf (f x) hx).1 ⟨x, rfl⟩)
+          open_target := e.open_baseSet
+          map_source' := fun p => And.left
+          map_target' := fun p hp => ⟨hp, rfl⟩
+          left_inv' := fun p hp => Prod.ext rfl hp.2.symm
+          right_inv' := fun p _ => rfl
+          continuousOn_toFun := continuousOn_fst
+          continuousOn_invFun := by fun_prop },
+      ⟨he, by rwa [e.toOpenPartialHomeomorph.symm_symm, e.proj_toFun x he],
+        (hf (f x) hx).toTrivialization_apply⟩,
+      fun p h => (e.proj_toFun p h.1).symm⟩
 -/
 protected theorem isLocalHomeomorphOn (hf : IsCoveringMapOn f s) :
     IsLocalHomeomorphOn f (f ⁻¹' s) := by
@@ -1149,7 +1241,13 @@ theorem isSeparatedMap
     have := hf.discreteTopology_fiber
     have he₁ := hf.mem_toTrivialization_baseSet
     have he₂ := he₁; simp_rw [he] at he₂; rw [← t.mem_source] at he₁ he₂
-    refine
+    refine ⟨t.source inter (Prod.snd ∘ t) ⁻¹' {(t e₁).2}, t.source inter (Prod.snd ∘ t) ⁻¹' {(t e₂).2},
+      ?_, ?_, ⟨he₁, rfl⟩, ⟨he₂, rfl⟩, Set.disjoint_left.mpr fun x h₁ h₂ => hne (t.injOn he₁ he₂ ?_)⟩
+    iterate 2
+      exact t.continuousOn_toFun.isOpen_inter_preimage t.open_source
+        (continuous_snd.isOpen_preimage _ <| isOpen_discrete _)
+    refine Prod.ext ?_ (h₁.2.symm.trans h₂.2)
+    rwa [t.proj_toFun e₁ he₁, t.proj_toFun e₂ he₂]
 
 中文:
 定理 isSeparatedMap
@@ -1161,7 +1259,13 @@ theorem isSeparatedMap
     have := hf.discreteTopology_fiber
     have he₁ := hf.mem_toTrivialization_baseSet
     have he₂ := he₁; simp_rw [he] at he₂; rw [← t.mem_source] at he₁ he₂
-    refine
+    refine ⟨t.source inter (Prod.snd ∘ t) ⁻¹' {(t e₁).2}, t.source inter (Prod.snd ∘ t) ⁻¹' {(t e₂).2},
+      ?_, ?_, ⟨he₁, rfl⟩, ⟨he₂, rfl⟩, Set.disjoint_left.mpr fun x h₁ h₂ => hne (t.injOn he₁ he₂ ?_)⟩
+    iterate 2
+      exact t.continuousOn_toFun.isOpen_inter_preimage t.open_source
+        (continuous_snd.isOpen_preimage _ <| isOpen_discrete _)
+    refine Prod.ext ?_ (h₁.2.symm.trans h₂.2)
+    rwa [t.proj_toFun e₁ he₁, t.proj_toFun e₂ he₂]
 -/
 protected theorem isSeparatedMap : IsSeparatedMap f :=
   fun e₁ e₂ he hne => by
@@ -1465,7 +1569,48 @@ definition IsOpen.trivializationDiscrete
   classical
   let F : PartialEquiv E (X × ι) :=
   { toFun e := (f e, if he : f e in V then idx e he else Classical.arbitrary ι),
-    in
+    invFun x := if hx : x.1 in V then inv x.2 hx else Classical.arbitrary (X -> E) x.1,
+    source := f ⁻¹' V,
+    target := V ×ˢ Set.univ,
+    map_source' x hx := ⟨hx, ⟨⟩⟩
+    map_target' x hx := by rw [dif_pos hx.1]; apply (f_inv _ hx.1).symm ▸ hx.1,
+    left_inv' e he := by
+      simp_rw [dif_pos (id he : f e in V)]
+      exact inj _ (inv_U _ he) (idx_U e he) (f_inv _ _)
+    right_inv' x hx := by
+      rw [dif_pos hx.1]
+      refine Prod.ext (f_inv _ hx.1) ?_
+      rw [dif_pos ((f_inv _ hx.1).symm ▸ hx.1)]
+      by_contra h; exact (disjoint h).le_bot ⟨idx_U .., inv_U _ _⟩ }
+  have open_preim {W} (hWV : W subseteq V) (open_W : IsOpen W) : IsOpen (f ⁻¹' W) := by
+    convert! isOpen_iUnion (fun i => (open_iff i hWV).mp open_W)
+    rw [← Set.inter_iUnion]; rw [eq_comm]; rw [Set.inter_eq_left]
+    exact (Set.preimage_mono hWV).trans exhaustive'
+  have open_source : IsOpen F.source := open_preim subset_rfl open_V
+  have cont_f : ContinuousOn f F.source := (continuousOn_open_iff open_source).mpr
+    fun W open_W => open_preim Set.inter_subset_left (open_V.inter open_W)
+  refine
+  { toPartialEquiv := F,
+    open_source := open_source,
+    open_target := open_V.prod isOpen_univ,
+continuousOn_toFun := cont_f.prodMk continuousOn_of_forall_continuousAt fun e he =>
+.continuousAt.congr mem_nhds_iff.mpr continuous_const (y := idx e he)
+        ⟨U (idx e he) inter F.source, fun e' he' => ?_, ?_, idx_U e he, he⟩
+    continuousOn_invFun := continuousOn_prod_of_discrete_right.mpr fun i => ?_,
+    baseSet := V,
+    open_baseSet := open_V,
+    source_eq := rfl,
+    target_eq := rfl,
+    proj_toFun _ _ := rfl }
+  · by_contra h; apply (disjoint h).le_bot
+    · dsimp only; rw [dif_pos (by exact he'.2)]; exact ⟨he'.1, idx_U ..⟩
+  · rwa [Set.inter_comm, ← open_iff _ subset_rfl]
+  · simp_rw [F, Set.prodMk_mem_set_prod_eq, Set.mem_univ, and_true]
+    refine (continuousOn_open_iff open_V).mpr fun W open_W => ?_
+    rw [open_iff i Set.inter_subset_left]
+    convert! ((open_iff i subset_rfl).mp open_V).inter open_W using 1
+    refine Set.ext fun e => and_right_comm.trans (and_congr_right fun ⟨hV, hU⟩ => ?_)
+    rw [Set.mem_preimage]; rw [dif_pos hV]; rw [inj i (inv_U i _) hU (f_inv i _)]
 
 中文:
 定义 是开集.trivializationDiscrete
@@ -1478,7 +1623,48 @@ definition IsOpen.trivializationDiscrete
   classical
   let F : PartialEquiv E (X × ι) :=
   { toFun e := (f e, if he : f e in V then idx e he else Classical.arbitrary ι),
-    in
+    invFun x := if hx : x.1 in V then inv x.2 hx else Classical.arbitrary (X -> E) x.1,
+    source := f ⁻¹' V,
+    target := V ×ˢ Set.univ,
+    map_source' x hx := ⟨hx, ⟨⟩⟩
+    map_target' x hx := by rw [dif_pos hx.1]; apply (f_inv _ hx.1).symm ▸ hx.1,
+    left_inv' e he := by
+      simp_rw [dif_pos (id he : f e in V)]
+      exact inj _ (inv_U _ he) (idx_U e he) (f_inv _ _)
+    right_inv' x hx := by
+      rw [dif_pos hx.1]
+      refine Prod.ext (f_inv _ hx.1) ?_
+      rw [dif_pos ((f_inv _ hx.1).symm ▸ hx.1)]
+      by_contra h; exact (disjoint h).le_bot ⟨idx_U .., inv_U _ _⟩ }
+  have open_preim {W} (hWV : W subseteq V) (open_W : IsOpen W) : IsOpen (f ⁻¹' W) := by
+    convert! isOpen_iUnion (fun i => (open_iff i hWV).mp open_W)
+    rw [← Set.inter_iUnion]; rw [eq_comm]; rw [Set.inter_eq_left]
+    exact (Set.preimage_mono hWV).trans exhaustive'
+  have open_source : IsOpen F.source := open_preim subset_rfl open_V
+  have cont_f : ContinuousOn f F.source := (continuousOn_open_iff open_source).mpr
+    fun W open_W => open_preim Set.inter_subset_left (open_V.inter open_W)
+  refine
+  { toPartialEquiv := F,
+    open_source := open_source,
+    open_target := open_V.prod isOpen_univ,
+continuousOn_toFun := cont_f.prodMk continuousOn_of_forall_continuousAt fun e he =>
+.continuousAt.congr mem_nhds_iff.mpr continuous_const (y := idx e he)
+        ⟨U (idx e he) inter F.source, fun e' he' => ?_, ?_, idx_U e he, he⟩
+    continuousOn_invFun := continuousOn_prod_of_discrete_right.mpr fun i => ?_,
+    baseSet := V,
+    open_baseSet := open_V,
+    source_eq := rfl,
+    target_eq := rfl,
+    proj_toFun _ _ := rfl }
+  · by_contra h; apply (disjoint h).le_bot
+    · dsimp only; rw [dif_pos (by exact he'.2)]; exact ⟨he'.1, idx_U ..⟩
+  · rwa [Set.inter_comm, ← open_iff _ subset_rfl]
+  · simp_rw [F, Set.prodMk_mem_set_prod_eq, Set.mem_univ, and_true]
+    refine (continuousOn_open_iff open_V).mpr fun W open_W => ?_
+    rw [open_iff i Set.inter_subset_left]
+    convert! ((open_iff i subset_rfl).mp open_V).inter open_W using 1
+    refine Set.ext fun e => and_right_comm.trans (and_congr_right fun ⟨hV, hU⟩ => ?_)
+    rw [Set.mem_preimage]; rw [dif_pos hV]; rw [inj i (inv_U i _) hU (f_inv i _)]
 -/
 @[simps source target baseSet] noncomputable def IsOpen.trivializationDiscrete [Nonempty (X -> E)]
     {ι} [Nonempty ι] [TopologicalSpace ι] [DiscreteTopology ι] (U : ι -> Set E) (V : Set X)
@@ -1581,7 +1767,41 @@ theorem IsClosedMap.isEvenlyCovered_of_openPartialHomeomorph
   /- for each preimage e of x, choose a homeomorphism φₑ
     from a neighborhood of e to its image -/
   choose φ hφ using fun e : f ⁻¹' {x} => h e e.2
-  -- separately, choose pairwise disjoint neig
+  -- separately, choose pairwise disjoint neighborhoods Vₑ by Hausdorff-ness
+  have ⟨V, hV, disj⟩ := fin.t2_separation
+  -- let Vₑ' be the intersection Vₑ ∩ dom(φₑ)
+  let V' (e : f ⁻¹' {x}) := V e inter (φ e).source
+  have hV' e : IsOpen (V' e) := (hV e).2.inter (φ e).open_source
+  have : ⋃ e, V' e in nhdsSet (f ⁻¹' {x}) :=
+    (isOpen_iUnion hV').mem_nhdsSet.2 fun e he => mem_iUnion_of_mem ⟨e, he⟩ ⟨(hV e).1, (hφ _).1⟩
+  -- since f is a closed map, the union of the Vₑ' contains the preimage of a neighborhood U of x
+  have ⟨W, hWx, hWV⟩ := isClosedMap_iff_comap_nhds_le.mp hf this
+  cases isEmpty_or_nonempty (f ⁻¹' {x})
+  · exact .of_preimage_eq_empty _ hWx (by simpa using hWV)
+  have ⟨U, hUW, hU, hxU⟩ := mem_nhds_iff.mp hWx
+  -- show that the intersection of U with the images of Vₑ' is evenly covered
+  let U' := U inter ⋂ e : f ⁻¹' {x}, f '' (V' e)
+  have : Finite (f ⁻¹' {x}) := fin
+have hU' : IsOpen U' := hU.inter isOpen_iInter_of_finite fun e => by
+    convert! ← (φ e).isOpen_image_of_subset_source (hV' _) inter_subset_right; exact (hφ e).2
+  have hUV e : U' subseteq f '' V' e := inter_subset_right.trans (iInter_subset ..)
+  have : Nonempty E := ⟨Classical.arbitrary (f ⁻¹' {x})⟩
+  refine .of_trivialization (t := hU'.trivializationDiscrete _ _
+    (fun e s hs => ⟨fun h => ?_, fun h => ?_⟩) (fun e => ?_)
+    (fun e => .mono subset_rfl (hUV e) (surjOn_image f _))
+    (pairwise_disjoint_mono disj.subtype fun e => inter_subset_left)
+    ((preimage_mono (inter_subset_left.trans hUW)).trans hWV))
+    ⟨hxU, Set.mem_iInter.mpr fun e => ⟨e, ⟨(hV e).1, (hφ e).1⟩, e.2⟩⟩
+  · convert! ((φ e).isOpen_inter_preimage h).inter (hV e).2 using 1
+    simp_rw [(hφ e).2, V']; ac_rfl
+· have : s subseteq (φ e).target := hs.trans (hUV e).trans by
+      rw [← (φ e).image_source_eq_target]; rw [(hφ e).2]; exact image_mono inter_subset_right
+    rw [← (φ e).isOpen_symm_image_iff_of_subset_target this]; rw [(φ e).symm_image_eq_source_inter_preimage this]; rw [(hφ e).2]; rw [inter_comm]
+    convert! h using 1
+    refine inter_eq_inter_iff_left.mpr ⟨fun e' h => h.2.2, fun e' h => ⟨?_ , h.2⟩⟩
+    have ⟨e'', ⟨_, mem⟩, eq⟩ := mem_iInter.mp (hs h.1).2 e
+    rwa [← (φ e).injOn mem h.2 (by rwa [(hφ e).2])]
+  · convert! ← (φ e).injOn.mono inter_subset_right; exact (hφ e).2
 
 中文:
 定理 是闭映射.isEvenlyCovered_of_openPartialHomeomorph
@@ -1592,7 +1812,41 @@ theorem IsClosedMap.isEvenlyCovered_of_openPartialHomeomorph
   /- for each preimage e of x, choose a homeomorphism φₑ
     from a neighborhood of e to its image -/
   choose φ hφ using fun e : f ⁻¹' {x} => h e e.2
-  -- separately, choose pairwise disjoint neig
+  -- separately, choose pairwise disjoint neighborhoods Vₑ by Hausdorff-ness
+  have ⟨V, hV, disj⟩ := fin.t2_separation
+  -- let Vₑ' be the intersection Vₑ ∩ dom(φₑ)
+  let V' (e : f ⁻¹' {x}) := V e inter (φ e).source
+  have hV' e : IsOpen (V' e) := (hV e).2.inter (φ e).open_source
+  have : ⋃ e, V' e in nhdsSet (f ⁻¹' {x}) :=
+    (isOpen_iUnion hV').mem_nhdsSet.2 fun e he => mem_iUnion_of_mem ⟨e, he⟩ ⟨(hV e).1, (hφ _).1⟩
+  -- since f is a closed map, the union of the Vₑ' contains the preimage of a neighborhood U of x
+  have ⟨W, hWx, hWV⟩ := isClosedMap_iff_comap_nhds_le.mp hf this
+  cases isEmpty_or_nonempty (f ⁻¹' {x})
+  · exact .of_preimage_eq_empty _ hWx (by simpa using hWV)
+  have ⟨U, hUW, hU, hxU⟩ := mem_nhds_iff.mp hWx
+  -- show that the intersection of U with the images of Vₑ' is evenly covered
+  let U' := U inter ⋂ e : f ⁻¹' {x}, f '' (V' e)
+  have : Finite (f ⁻¹' {x}) := fin
+have hU' : IsOpen U' := hU.inter isOpen_iInter_of_finite fun e => by
+    convert! ← (φ e).isOpen_image_of_subset_source (hV' _) inter_subset_right; exact (hφ e).2
+  have hUV e : U' subseteq f '' V' e := inter_subset_right.trans (iInter_subset ..)
+  have : Nonempty E := ⟨Classical.arbitrary (f ⁻¹' {x})⟩
+  refine .of_trivialization (t := hU'.trivializationDiscrete _ _
+    (fun e s hs => ⟨fun h => ?_, fun h => ?_⟩) (fun e => ?_)
+    (fun e => .mono subset_rfl (hUV e) (surjOn_image f _))
+    (pairwise_disjoint_mono disj.subtype fun e => inter_subset_left)
+    ((preimage_mono (inter_subset_left.trans hUW)).trans hWV))
+    ⟨hxU, Set.mem_iInter.mpr fun e => ⟨e, ⟨(hV e).1, (hφ e).1⟩, e.2⟩⟩
+  · convert! ((φ e).isOpen_inter_preimage h).inter (hV e).2 using 1
+    simp_rw [(hφ e).2, V']; ac_rfl
+· have : s subseteq (φ e).target := hs.trans (hUV e).trans by
+      rw [← (φ e).image_source_eq_target]; rw [(hφ e).2]; exact image_mono inter_subset_right
+    rw [← (φ e).isOpen_symm_image_iff_of_subset_target this]; rw [(φ e).symm_image_eq_source_inter_preimage this]; rw [(hφ e).2]; rw [inter_comm]
+    convert! h using 1
+    refine inter_eq_inter_iff_left.mpr ⟨fun e' h => h.2.2, fun e' h => ⟨?_ , h.2⟩⟩
+    have ⟨e'', ⟨_, mem⟩, eq⟩ := mem_iInter.mp (hs h.1).2 e
+    rwa [← (φ e).injOn mem h.2 (by rwa [(hφ e).2])]
+  · convert! ← (φ e).injOn.mono inter_subset_right; exact (hφ e).2
 
 Depends on / 依赖: DiscreteTopology, IsDiscrete, IsDiscrete.of_openPartialHomeomorph, of_openPartialHomeomorph, subset_rfl
 -/
@@ -1766,7 +2020,7 @@ lemma isLocalHomeomorph_iff_isCoveringMap
     exact φ.continuousAt hφ
   rw [isCoveringMap_iff_isCoveringMapOn_univ]
   apply IsCoveringMapOn.of_isLocalHomeomorphOn hf
-  simp
+  simpa [← isLocalHomeomorph_iff_isLocalHomeomorphOn_univ]
 
 中文:
 引理 isLocalHomeomorph_iff_isCoveringMap
@@ -1780,7 +2034,7 @@ lemma isLocalHomeomorph_iff_isCoveringMap
     exact φ.continuousAt hφ
   rw [isCoveringMap_iff_isCoveringMapOn_univ]
   apply IsCoveringMapOn.of_isLocalHomeomorphOn hf
-  simp
+  simpa [← isLocalHomeomorph_iff_isLocalHomeomorphOn_univ]
 
 Depends on / 依赖: Continuous, IsCoveringMap, IsCoveringMap.isLocalHomeomorph, IsCoveringMapOn, IsCoveringMapOn.of_isLocalHomeomorphOn, continuousAt, continuous_iff_continuousAt, isCoveringMap_iff_isCoveringMapOn_univ, isLocalHomeomorph, isLocalHomeomorph_iff_isLocalHomeomorphOn_univ, of_isLocalHomeomorphOn
 -/

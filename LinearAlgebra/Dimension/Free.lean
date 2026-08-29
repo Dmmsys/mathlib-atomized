@@ -45,14 +45,14 @@ theorem lift_rank_mul_lift_rank
   proof: by
   let b := Module.Free.chooseBasis F K
   let c := Module.Free.chooseBasis K A
-  rw [← (Module.rank F K).lift_id]; rw [← b.mk_eq_rank]; rw [← (Module.rank K A).lift_id]; rw [← c.mk_eq_rank]; rw [← lift_umax.{w]; rw [v}]; rw [← (b.smulTower c).mk_eq_rank]; rw [mk_prod]; rw [lift_mul]; rw [lift_lift
+  rw [← (Module.rank F K).lift_id]; rw [← b.mk_eq_rank]; rw [← (Module.rank K A).lift_id]; rw [← c.mk_eq_rank]; rw [← lift_umax.{w]; rw [v}]; rw [← (b.smulTower c).mk_eq_rank]; rw [mk_prod]; rw [lift_mul]; rw [lift_lift]; rw [lift_lift]; rw [lift_lift]; rw [lift_lift]; rw [lift_umax.{v]; rw [w}]
 
 中文:
 定理 lift_rank_mul_lift_rank
   证明: by
   let b := Module.Free.chooseBasis F K
   let c := Module.Free.chooseBasis K A
-  rw [← (Module.rank F K).lift_id]; rw [← b.mk_eq_rank]; rw [← (Module.rank K A).lift_id]; rw [← c.mk_eq_rank]; rw [← lift_umax.{w]; rw [v}]; rw [← (b.smulTower c).mk_eq_rank]; rw [mk_prod]; rw [lift_mul]; rw [lift_lift
+  rw [← (Module.rank F K).lift_id]; rw [← b.mk_eq_rank]; rw [← (Module.rank K A).lift_id]; rw [← c.mk_eq_rank]; rw [← lift_umax.{w]; rw [v}]; rw [← (b.smulTower c).mk_eq_rank]; rw [mk_prod]; rw [lift_mul]; rw [lift_lift]; rw [lift_lift]; rw [lift_lift]; rw [lift_lift]; rw [lift_umax.{v]; rw [w}]
 
 Depends on / 依赖: Module, Module.Free.chooseBasis, Module.rank, b.mk_eq_rank, b.smulTower, c.mk_eq_rank, chooseBasis, lift_id, lift_lift, lift_mul, lift_umax, mk_eq_rank, mk_prod, smulTower
 -/
@@ -248,7 +248,7 @@ theorem exists_linearMap_injective_of_linearIndependent_of_lift_rank_le
   replace cnd := (Cardinal.lift_le.2 B.linearIndependent.cardinal_le_rank).trans cnd
   rw [Cardinal.lift_mk_le'] at cnd
   rcases cnd with ⟨i, hi⟩
-  refine ⟨B.constr Nat (v ∘ i), B.injective_constr_
+  refine ⟨B.constr Nat (v ∘ i), B.injective_constr_of_linearIndependent (hv.comp _ hi)⟩
 
 中文:
 定理 存在_linearMap_injective_of_linearIndependent_of_lift_rank_le
@@ -259,7 +259,7 @@ theorem exists_linearMap_injective_of_linearIndependent_of_lift_rank_le
   replace cnd := (Cardinal.lift_le.2 B.linearIndependent.cardinal_le_rank).trans cnd
   rw [Cardinal.lift_mk_le'] at cnd
   rcases cnd with ⟨i, hi⟩
-  refine ⟨B.constr Nat (v ∘ i), B.injective_constr_
+  refine ⟨B.constr Nat (v ∘ i), B.injective_constr_of_linearIndependent (hv.comp _ hi)⟩
 
 Depends on / 依赖: B.constr, B.injective_constr_of_linearIndependent, B.linearIndependent.cardinal_le_rank, Cardinal, Cardinal.lift_le, Cardinal.lift_mk_le, Module, Module.Free.exists_set, Module.nontrivial, cardinal_le_rank, constr, exists_set, hv.comp, injective_constr_of_linearIndependent, lift_le, lift_mk_le, linearIndependent, nontrivial, nontriviality, replace
 -/
@@ -398,7 +398,8 @@ have : Infinite M := infinite_iff.mpr lift_le.mp le_trans (by simp) h_lt.le
   have h : lift #M = lift #(ChooseBasisIndex R M ->₀ R) := lift_mk_eq'.mpr ⟨(chooseBasis R M).repr⟩
   simp only [mk_finsupp_lift_of_infinite', ← rank_eq_card_chooseBasisIndex, lift_max,
     lift_lift] at h
-  refine lift_i
+  refine lift_inj.mp ((max_eq_iff.mp h.symm).resolve_right <| not_and_of_not_left _ ?_).left
+  exact (lift_umax.{v, u}.symm ▸ h_lt).ne
 
 中文:
 引理 rank_eq_mk_of_infinite_lt
@@ -408,7 +409,8 @@ have : Infinite M := infinite_iff.mpr lift_le.mp le_trans (by simp) h_lt.le
   have h : lift #M = lift #(ChooseBasisIndex R M ->₀ R) := lift_mk_eq'.mpr ⟨(chooseBasis R M).repr⟩
   simp only [mk_finsupp_lift_of_infinite', ← rank_eq_card_chooseBasisIndex, lift_max,
     lift_lift] at h
-  refine lift_i
+  refine lift_inj.mp ((max_eq_iff.mp h.symm).resolve_right <| not_and_of_not_left _ ?_).left
+  exact (lift_umax.{v, u}.symm ▸ h_lt).ne
 
 Depends on / 依赖: ChooseBasisIndex, Infinite, chooseBasis, h.symm, h_lt, h_lt.le, infinite_iff, infinite_iff.mpr, le_trans, lift_inj, lift_inj.mp, lift_le, lift_le.mp, lift_lift, lift_max, lift_mk_eq, lift_umax, max_eq_iff, max_eq_iff.mp, mk_finsupp_lift_of_infinite
 -/
@@ -507,7 +509,7 @@ theorem nonempty_linearEquiv_of_lift_rank_eq
   obtain ⟨⟨β, B'⟩⟩ := Module.Free.exists_basis (R := R) (M := M')
   have : Cardinal.lift.{v', v} #α = Cardinal.lift.{v, v'} #β := by
     rw [B.mk_eq_rank'']; rw [cnd]; rw [B'.mk_eq_rank'']
-  exact (Cardinal.lift_mk_eq.{v, v', 0}.1 th
+  exact (Cardinal.lift_mk_eq.{v, v', 0}.1 this).map (B.equiv B')
 
 中文:
 定理 nonempty_linearEquiv_of_lift_rank_eq
@@ -516,7 +518,7 @@ theorem nonempty_linearEquiv_of_lift_rank_eq
   obtain ⟨⟨β, B'⟩⟩ := Module.Free.exists_basis (R := R) (M := M')
   have : Cardinal.lift.{v', v} #α = Cardinal.lift.{v, v'} #β := by
     rw [B.mk_eq_rank'']; rw [cnd]; rw [B'.mk_eq_rank'']
-  exact (Cardinal.lift_mk_eq.{v, v', 0}.1 th
+  exact (Cardinal.lift_mk_eq.{v, v', 0}.1 this).map (B.equiv B')
 
 Depends on / 依赖: B.equiv, B.mk_eq_rank, Cardinal, Cardinal.lift, Cardinal.lift_mk_eq, Module, Module.Free.exists_basis, exists_basis, lift_mk_eq, mk_eq_rank
 -/
@@ -1077,7 +1079,9 @@ theorem Basis.nonempty_unique_index_of_finrank_eq_one
     Module.finite_of_finrank_pos (Nat.lt_of_sub_eq_succ d1)
   have : Finite ι := Module.Finite.finite_basis b
   have : Fintype ι := Fintype.ofFinite ι
-  rwa [Module.finrank
+  rwa [Module.finrank_eq_card_basis b, Fintype.card_eq_one_iff_nonempty_unique] at d1
+
+@[simp]
 
 中文:
 定理 基.nonempty_unique_index_of_finrank_eq_one
@@ -1088,7 +1092,9 @@ theorem Basis.nonempty_unique_index_of_finrank_eq_one
     Module.finite_of_finrank_pos (Nat.lt_of_sub_eq_succ d1)
   have : Finite ι := Module.Finite.finite_basis b
   have : Fintype ι := Fintype.ofFinite ι
-  rwa [Module.finrank
+  rwa [Module.finrank_eq_card_basis b, Fintype.card_eq_one_iff_nonempty_unique] at d1
+
+@[simp]
 -/
 theorem Basis.nonempty_unique_index_of_finrank_eq_one
     {ι : Type*} (b : Module.Basis ι R M) (d1 : Module.finrank R M = 1) :
@@ -1144,7 +1150,7 @@ theorem _root_.OrzechProperty.bijective_of_surjective_of_finrank_le
   · have := Module.subsingleton R M
     exact ⟨Function.injective_of_subsingleton f, hf⟩
   rcases finrank_le_iff_exists_linearMap.mp h with ⟨_, hi⟩
-  exact OrzechProperty.bijective_of_surjecti
+  exact OrzechProperty.bijective_of_surjective_of_injective _ _ hi hf
 
 中文:
 定理 _root_.OrzechProperty.bijective_of_surjective_of_finrank_le
@@ -1154,7 +1160,7 @@ theorem _root_.OrzechProperty.bijective_of_surjective_of_finrank_le
   · have := Module.subsingleton R M
     exact ⟨Function.injective_of_subsingleton f, hf⟩
   rcases finrank_le_iff_exists_linearMap.mp h with ⟨_, hi⟩
-  exact OrzechProperty.bijective_of_surjecti
+  exact OrzechProperty.bijective_of_surjective_of_injective _ _ hi hf
 
 Depends on / 依赖: subsingleton_or_nontrivial
 -/
@@ -1187,7 +1193,11 @@ theorem _root_.LinearMap.existsUnique_eq_smul_id_of_finrank_eq_one
     intro d hcd
     rw [LinearMap.ext_iff] at hcd
     simpa using (LinearEquiv.congr_arg (e := e.symm) (hcd (e 1))).symm
-  ex
+  ext x
+  have (x : M) : x = (e.symm x) • (e 1) := by simp [← LinearEquiv.map_smul]
+  rw [this x]
+  simp only [hc, map_smul, LinearMap.smul_apply, LinearMap.id_coe, id_eq]
+  rw [← this]
 
 中文:
 定理 _root_.线性映射.存在Unique_eq_smul_id_of_finrank_eq_one
@@ -1200,7 +1210,11 @@ theorem _root_.LinearMap.existsUnique_eq_smul_id_of_finrank_eq_one
     intro d hcd
     rw [LinearMap.ext_iff] at hcd
     simpa using (LinearEquiv.congr_arg (e := e.symm) (hcd (e 1))).symm
-  ex
+  ext x
+  have (x : M) : x = (e.symm x) • (e 1) := by simp [← LinearEquiv.map_smul]
+  rw [this x]
+  simp only [hc, map_smul, LinearMap.smul_apply, LinearMap.id_coe, id_eq]
+  rw [← this]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.congr_arg, LinearEquiv.map_smul, LinearMap, LinearMap.ext_iff, LinearMap.id, LinearMap.id_coe, LinearMap.smul_apply, congr_arg, e.symm, ext_iff, id_coe, id_eq, map_smul, nonempty_linearEquiv_of_finrank_eq_one, smul_apply, true_and
 -/
@@ -1235,7 +1249,7 @@ definition _root_.LinearEquiv.smul_id_of_finrank_eq_one
   invFun u := (u.existsUnique_eq_smul_id_of_finrank_eq_one d1).choose
   left_inv c := by
     simp [← (LinearMap.existsUnique_eq_smul_id_of_finrank_eq_one d1 _).choose_spec.2 c]
-  right_inv 
+  right_inv u := ((u.existsUnique_eq_smul_id_of_finrank_eq_one d1).choose_spec.1).symm
 
 中文:
 定义 _root_.线性等价.smul_id_of_finrank_eq_one
@@ -1246,7 +1260,7 @@ definition _root_.LinearEquiv.smul_id_of_finrank_eq_one
   invFun u := (u.existsUnique_eq_smul_id_of_finrank_eq_one d1).choose
   left_inv c := by
     simp [← (LinearMap.existsUnique_eq_smul_id_of_finrank_eq_one d1 _).choose_spec.2 c]
-  right_inv 
+  right_inv u := ((u.existsUnique_eq_smul_id_of_finrank_eq_one d1).choose_spec.1).symm
 
 Depends on / 依赖: LinearMap, LinearMap.id
 -/

@@ -109,6 +109,7 @@ theorem isCompl_of_proj
     intro x _
     rw [mem_sup']
     refine ⟨f x, ⟨x - f x, ?_⟩, add_sub_cancel _ _⟩
+    rw [mem_ker]; rw [map_sub]; rw [hf]; rw [sub_self]
 
 中文:
 定理 isCompl_of_proj
@@ -124,6 +125,7 @@ theorem isCompl_of_proj
     intro x _
     rw [mem_sup']
     refine ⟨f x, ⟨x - f x, ?_⟩, add_sub_cancel _ _⟩
+    rw [mem_ker]; rw [map_sub]; rw [hf]; rw [sub_self]
 
 Depends on / 依赖: SetLike, SetLike.mem_coe, add_sub_cancel, codisjoint_iff_le_sup, disjoint_iff_inf_le, map_sub, mem_coe, mem_ker, mem_sup, mk_eq_zero, sub_self, zero_mem
 -/
@@ -1740,7 +1742,8 @@ definition ofIsComplProdEquiv
       · exact ofIsCompl_apply_right h x
     right_inv := fun φ => by
       ext x
-      obtain ⟨a, b, hab, _⟩ := existsUnique_add_of_isCompl 
+      obtain ⟨a, b, hab, _⟩ := existsUnique_add_of_isCompl h x
+      rw [← hab]; simp }
 
 中文:
 定义 ofIsComplProdEquiv
@@ -1753,7 +1756,8 @@ definition ofIsComplProdEquiv
       · exact ofIsCompl_apply_right h x
     right_inv := fun φ => by
       ext x
-      obtain ⟨a, b, hab, _⟩ := existsUnique_add_of_isCompl 
+      obtain ⟨a, b, hab, _⟩ := existsUnique_add_of_isCompl h x
+      rw [← hab]; simp }
 
 Depends on / 依赖: domRestrict, existsUnique_add_of_isCompl, invFun, left_inv, ofIsComplProd, ofIsCompl_apply_left, ofIsCompl_apply_right, right_inv
 -/
@@ -1961,7 +1965,8 @@ fun ⟨x, hx⟩ => Subtype.ext by
       obtain ⟨x, rfl⟩ := f.2.2.symm ▸ hx
       exact DFunLike.congr_fun f.2.1 x⟩
   invFun f := ⟨p.subtype ∘ₗ f.1, LinearMap.ext fun x => by simp [f.2], le_antisymm
-    ((range_comp_le_range _ 
+    ((range_comp_le_range _ _).trans_eq p.range_subtype)
+fun x hx => ⟨x, Subtype.ext_iff.1 f.2 ⟨x, hx⟩⟩⟩
 
 中文:
 定义 isIdempotentElemEquiv
@@ -1971,7 +1976,8 @@ fun ⟨x, hx⟩ => Subtype.ext by
       obtain ⟨x, rfl⟩ := f.2.2.symm ▸ hx
       exact DFunLike.congr_fun f.2.1 x⟩
   invFun f := ⟨p.subtype ∘ₗ f.1, LinearMap.ext fun x => by simp [f.2], le_antisymm
-    ((range_comp_le_range _ 
+    ((range_comp_le_range _ _).trans_eq p.range_subtype)
+fun x hx => ⟨x, Subtype.ext_iff.1 f.2 ⟨x, hx⟩⟩⟩
 -/
 @[simps] def isIdempotentElemEquiv :
     { f : Module.End R E // IsIdempotentElem f ∧ range f = p } ≃
@@ -2249,7 +2255,8 @@ theorem eq_conj_prod_map'
   ext x
   · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inl, coprod_apply, coe_subtype,
       map_zero, add_zero, h.map_id x x.2, prodMap_apply, id_apply]
-  · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inr, co
+  · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inr, coprod_apply, map_zero,
+      coe_subtype, zero_add, map_coe_ker, prodMap_apply, zero_apply, add_zero]
 
 中文:
 定理 eq_conj_prod_map'
@@ -2259,7 +2266,8 @@ theorem eq_conj_prod_map'
   ext x
   · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inl, coprod_apply, coe_subtype,
       map_zero, add_zero, h.map_id x x.2, prodMap_apply, id_apply]
-  · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inr, co
+  · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inr, coprod_apply, map_zero,
+      coe_subtype, zero_add, map_coe_ker, prodMap_apply, zero_apply, add_zero]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.eq_comp_toLinearMap_symm, LinearMap, LinearMap.comp_assoc, add_zero, coe_inl, coe_inr, coe_prodEquivOfIsCompl, coe_subtype, comp_apply, comp_assoc, coprod_apply, eq_comp_toLinearMap_symm, h.map_id, id_apply, map_coe_ker, map_id, map_zero, prodMap_apply, zero_add
 -/
@@ -2551,7 +2559,7 @@ lemma IsIdempotentElem.ext_iff
     (ker p).existsUnique_add_of_isCompl hp.isCompl.symm x
   simp [mem_ker.mp, hv, (hk ▸ hv), (mem_range_iff hp).mp, hw, (mem_range_iff hq).mp, (hr ▸ hw)]
 
-alias ⟨_, IsIdempote
+alias ⟨_, IsIdempotentElem.ext⟩ := IsIdempotentElem.ext_iff
 
 中文:
 引理 IsIdempotentElem.ext_iff
@@ -2563,7 +2571,7 @@ alias ⟨_, IsIdempote
     (ker p).existsUnique_add_of_isCompl hp.isCompl.symm x
   simp [mem_ker.mp, hv, (hk ▸ hv), (mem_range_iff hp).mp, hw, (mem_range_iff hq).mp, (hr ▸ hw)]
 
-alias ⟨_, IsIdempote
+alias ⟨_, IsIdempotentElem.ext⟩ := IsIdempotentElem.ext_iff
 
 Depends on / 依赖: existsUnique_add_of_isCompl, hp.isCompl.symm, isCompl, mem_ker, mem_ker.mp, mem_range_iff
 -/
@@ -2839,7 +2847,8 @@ theorem commute_iff_of_isUnit
   simp_rw [← GeneralLinearGroup.generalLinearEquiv_to_linearMap, le_antisymm_iff,
     ← Module.End.mem_invtSubmodule_iff_map_le, ← Module.End.mem_invtSubmodule_symm_iff_le_map,
     and_and_and_comm (c := (ker f in _)), ← hf.commute_iff,
-    GeneralLinea
+    GeneralLinearGroup.generalLinearEquiv_to_linearMap, iff_self_and]
+  exact Commute.units_inv_right
 
 中文:
 定理 commute_iff_of_isUnit
@@ -2849,7 +2858,8 @@ theorem commute_iff_of_isUnit
   simp_rw [← GeneralLinearGroup.generalLinearEquiv_to_linearMap, le_antisymm_iff,
     ← Module.End.mem_invtSubmodule_iff_map_le, ← Module.End.mem_invtSubmodule_symm_iff_le_map,
     and_and_and_comm (c := (ker f in _)), ← hf.commute_iff,
-    GeneralLinea
+    GeneralLinearGroup.generalLinearEquiv_to_linearMap, iff_self_and]
+  exact Commute.units_inv_right
 
 Depends on / 依赖: Commute, Commute.units_inv_right, GeneralLinearGroup, GeneralLinearGroup.generalLinearEquiv_to_linearMap, Module, Module.End.mem_invtSubmodule_iff_map_le, Module.End.mem_invtSubmodule_symm_iff_le_map, and_and_and_comm, commute_iff, generalLinearEquiv_to_linearMap, hf.commute_iff, iff_self_and, le_antisymm_iff, mem_invtSubmodule_iff_map_le, mem_invtSubmodule_symm_iff_le_map, simp_rw, units_inv_right
 -/

@@ -605,7 +605,9 @@ lemma mulIndicator_iUnion_apply
     refine le_antisymm ?_ (iSup_le fun i => mulIndicator_le_self' (fun x _ => h1 ▸ bot_le) x)
     rcases hx with ⟨i, hi⟩
     exact le_iSup_of_le i (ge_of_eq <| mulIndicator_of_mem hi _)
-  · rw [mulIndicator_of
+  · rw [mulIndicator_of_notMem hx]
+    simp only [mem_iUnion, not_exists] at hx
+    simp [hx, ← h1]
 
 中文:
 引理 mulIndicator_iUnion_apply
@@ -617,7 +619,9 @@ lemma mulIndicator_iUnion_apply
     refine le_antisymm ?_ (iSup_le fun i => mulIndicator_le_self' (fun x _ => h1 ▸ bot_le) x)
     rcases hx with ⟨i, hi⟩
     exact le_iSup_of_le i (ge_of_eq <| mulIndicator_of_mem hi _)
-  · rw [mulIndicator_of
+  · rw [mulIndicator_of_notMem hx]
+    simp only [mem_iUnion, not_exists] at hx
+    simp [hx, ← h1]
 
 Depends on / 依赖: bot_le, ge_of_eq, iSup_le, le_antisymm, le_iSup_of_le, mem_iUnion, mulIndicator_le_self, mulIndicator_of_mem, mulIndicator_of_notMem, not_exists
 -/
@@ -649,7 +653,9 @@ lemma mulIndicator_iInter_apply
     simp only [mem_iInter, not_forall] at hx
     rcases hx with ⟨j, hj⟩
     refine le_antisymm (by simp only [← h1, le_iInf_iff, bot_le, forall_const]) ?_
-    simpa [mulIndicator_of_notMem hj] using (iInf_le (fun i => (
+    simpa [mulIndicator_of_notMem hj] using (iInf_le (fun i => (s i).mulIndicator f) j) x
+
+@[to_additive]
 
 中文:
 引理 mulIndicator_i整数er_apply
@@ -661,7 +667,9 @@ lemma mulIndicator_iInter_apply
     simp only [mem_iInter, not_forall] at hx
     rcases hx with ⟨j, hj⟩
     refine le_antisymm (by simp only [← h1, le_iInf_iff, bot_le, forall_const]) ?_
-    simpa [mulIndicator_of_notMem hj] using (iInf_le (fun i => (
+    simpa [mulIndicator_of_notMem hj] using (iInf_le (fun i => (s i).mulIndicator f) j) x
+
+@[to_additive]
 
 Depends on / 依赖: bot_le, forall_const, iInf_le, le_antisymm, le_iInf_iff, mem_iInter, mulIndicator, mulIndicator_of_notMem, not_forall
 -/
@@ -689,7 +697,13 @@ lemma iSup_mulIndicator
     intro; simp [← h1]
   by_cases ha : a in ⋃ i, s i
   · obtain ⟨i, hi⟩ : exists i, a in s i := by simpa using ha
-    rw [mulIndicator_of_mem ha]; rw [iSup_apply]; rw [iSup_
+    rw [mulIndicator_of_mem ha]; rw [iSup_apply]; rw [iSup_apply]
+    refine iSup_le fun j => ?_
+    obtain ⟨k, hik, hjk⟩ := exists_ge_ge i j
+refine le_iSup_of_le k (hf hjk _).trans_eq ?_
+    rw [mulIndicator_of_mem (hs hik hi)]
+  · rw [mulIndicator_of_notMem ha, ← h1]
+    exact bot_le
 
 中文:
 引理 iSup_mulIndicator
@@ -701,7 +715,13 @@ lemma iSup_mulIndicator
     intro; simp [← h1]
   by_cases ha : a in ⋃ i, s i
   · obtain ⟨i, hi⟩ : exists i, a in s i := by simpa using ha
-    rw [mulIndicator_of_mem ha]; rw [iSup_apply]; rw [iSup_
+    rw [mulIndicator_of_mem ha]; rw [iSup_apply]; rw [iSup_apply]
+    refine iSup_le fun j => ?_
+    obtain ⟨k, hik, hjk⟩ := exists_ge_ge i j
+refine le_iSup_of_le k (hf hjk _).trans_eq ?_
+    rw [mulIndicator_of_mem (hs hik hi)]
+  · rw [mulIndicator_of_notMem ha, ← h1]
+    exact bot_le
 
 Depends on / 依赖: bot_le, exists_ge_ge, iSup_apply, iSup_le, iSup_le_iff, le_antisymm_iff, le_iSup, le_iSup_of_le, mulIndicator_of_mem, mulIndicator_of_notMem, subset_iUnion, trans_eq
 -/

@@ -197,7 +197,7 @@ let cfg ← IO.ofExcept
     unsafe env.evalConstCheck Config opts ``Config e.declName
   -- This next line can return `none` in the file where the option is declared:
   let opt := (unsafe env.evalConst (Lean.Option Bool) opts e.optionName).toOption
-  return { cfg with 
+  return { cfg with opt }
 
 中文:
 定义 Entry.import
@@ -208,7 +208,7 @@ let cfg ← IO.ofExcept
     unsafe env.evalConstCheck Config opts ``Config e.declName
   -- This next line can return `none` in the file where the option is declared:
   let opt := (unsafe env.evalConst (Lean.Option Bool) opts e.optionName).toOption
-  return { cfg with 
+  return { cfg with opt }
 -/
 def Entry.import (e : Entry) : ImportM Pass := do
   let { env, opts, .. } ← read
@@ -289,7 +289,44 @@ definition findTacticSeqs
   let state ← get
   let ctxInfo := { env := state.env, fileMap := ctx.fileMap, ngen := state.ngen }
   let out ← tree.visitM (m := CommandElabM) (ctx? := some ctxInfo)
-    (fun _ _ _ => pure true) -- As
+    (fun _ _ _ => pure true) -- Assumption: a tactic can occur as a child of any piece of syntax.
+    (fun ctx i _c cs => do
+      let relevantChildren := (cs.filterMap id).toArray
+      let childTactics := relevantChildren.filterMap Prod.fst
+      let childSequences := (relevantChildren.map Prod.snd).flatten
+      let stx := i.stx
+      -- Tactic sequencing operators: collect all the child tactics into a new sequence.
+      -- This must happen regardless of source info, as `have h := by ...` creates tacticSeq
+      -- nodes with synthetic source info.
+      if stx.getKind in [``Lean.Parser.Tactic.tacticSeq, ``Lean.Parser.Tactic.tacticSeq1Indented,
+          ``Lean.Parser.Term.byTactic] then
+        return (none, if childTactics.isEmpty then
+            childSequences
+          else
+            childSequences.push childTactics)
+      if let some (.original _ _ _ _) := stx.getHeadInfo? then
+        -- Punctuation: skip this.
+        if stx.getKind in [`«;», `Lean.cdotTk, `«]», nullKind, `«by»] then
+          return (none, childSequences)
+        -- Tactic modifiers: return the children unmodified.
+        if stx.getKind in [``Lean.Parser.Tactic.withAnnotateState] then
+          return (childTactics[0]?, childSequences)
+
+        -- Remaining options: plain pieces of syntax.
+        -- We discard `childTactics` here, because those are either already picked up by a
+        -- sequencing operator, or come from macros.
+        if let .ofTacticInfo i := i then
+          let childSequences :=
+            -- This tactic accepts the failure of its children.
+            if stx.getKind in [``Lean.Parser.Tactic.tacticTry_, ``Lean.Parser.Tactic.anyGoals] then
+              childSequences.map (·.map fun i => { i with mayFail := true })
+            else
+              childSequences
+          return (some ⟨ctx, i, false⟩, childSequences)
+        return (none, childSequences)
+      else
+        return (none, childSequences))
+  return (out.map Prod.snd).getD #[]
 
 中文:
 定义 findTacticSeqs
@@ -300,7 +337,44 @@ definition findTacticSeqs
   let state ← get
   let ctxInfo := { env := state.env, fileMap := ctx.fileMap, ngen := state.ngen }
   let out ← tree.visitM (m := CommandElabM) (ctx? := some ctxInfo)
-    (fun _ _ _ => pure true) -- As
+    (fun _ _ _ => pure true) -- Assumption: a tactic can occur as a child of any piece of syntax.
+    (fun ctx i _c cs => do
+      let relevantChildren := (cs.filterMap id).toArray
+      let childTactics := relevantChildren.filterMap Prod.fst
+      let childSequences := (relevantChildren.map Prod.snd).flatten
+      let stx := i.stx
+      -- Tactic sequencing operators: collect all the child tactics into a new sequence.
+      -- This must happen regardless of source info, as `have h := by ...` creates tacticSeq
+      -- nodes with synthetic source info.
+      if stx.getKind in [``Lean.Parser.Tactic.tacticSeq, ``Lean.Parser.Tactic.tacticSeq1Indented,
+          ``Lean.Parser.Term.byTactic] then
+        return (none, if childTactics.isEmpty then
+            childSequences
+          else
+            childSequences.push childTactics)
+      if let some (.original _ _ _ _) := stx.getHeadInfo? then
+        -- Punctuation: skip this.
+        if stx.getKind in [`«;», `Lean.cdotTk, `«]», nullKind, `«by»] then
+          return (none, childSequences)
+        -- Tactic modifiers: return the children unmodified.
+        if stx.getKind in [``Lean.Parser.Tactic.withAnnotateState] then
+          return (childTactics[0]?, childSequences)
+
+        -- Remaining options: plain pieces of syntax.
+        -- We discard `childTactics` here, because those are either already picked up by a
+        -- sequencing operator, or come from macros.
+        if let .ofTacticInfo i := i then
+          let childSequences :=
+            -- This tactic accepts the failure of its children.
+            if stx.getKind in [``Lean.Parser.Tactic.tacticTry_, ``Lean.Parser.Tactic.anyGoals] then
+              childSequences.map (·.map fun i => { i with mayFail := true })
+            else
+              childSequences
+          return (some ⟨ctx, i, false⟩, childSequences)
+        return (none, childSequences)
+      else
+        return (none, childSequences))
+  return (out.map Prod.snd).getD #[]
 -/
 def findTacticSeqs (tree : InfoTree) : CommandElabM (Array (Array TacticNode)) := do
   -- Turn the CommandElabM into a surrounding context for traversing the tree.
@@ -361,7 +435,9 @@ definition runPasses
   if enabledConfigs.isEmpty then
     return
   for i in trees do
-    for 
+    for seq in (← findTacticSeqs i) do
+      for config in enabledConfigs do
+        config.run seq
 
 中文:
 定义 runPasses
@@ -374,7 +450,9 @@ definition runPasses
   if enabledConfigs.isEmpty then
     return
   for i in trees do
-    for 
+    for seq in (← findTacticSeqs i) do
+      for config in enabledConfigs do
+        config.run seq
 -/
 def runPasses (configs : Array Pass) (trees : PersistentArray InfoTree) : CommandElabM Unit := do
   let opts ← getLinterOptions
@@ -523,7 +601,18 @@ definition testTacticSeq
   carry position info. We set the ref here to ensure we log messages on the correct range. -/
   withRef (mkNullNode tacticSeq) do
     let stx ← `(tactic| $tacticSeq;*)
-    -- TODO: support more than 1 g
+    -- TODO: support more than 1 goal. Probably by requiring all tests to succeed in a row
+    if let [goal] := i.tacI.goalsBefore then
+let (oldGoals, oldHeartbeats) ← withHeartbeats
+        try
+          i.runTacticCode goal stx
+        catch e =>
+          if !i.mayFail then
+            logWarning m!"original tactic '{stx}' failed: {e.toMessageData}"
+          return [goal]
+let (new, newHeartbeats) ← withHeartbeats config.test i.ctxI i.tacI ctx goal
+      if let some msg ← config.tell stx oldGoals oldHeartbeats new newHeartbeats then
+        logWarning msg
 
 中文:
 定义 testTacticSeq
@@ -533,7 +622,18 @@ definition testTacticSeq
   carry position info. We set the ref here to ensure we log messages on the correct range. -/
   withRef (mkNullNode tacticSeq) do
     let stx ← `(tactic| $tacticSeq;*)
-    -- TODO: support more than 1 g
+    -- TODO: support more than 1 goal. Probably by requiring all tests to succeed in a row
+    if let [goal] := i.tacI.goalsBefore then
+let (oldGoals, oldHeartbeats) ← withHeartbeats
+        try
+          i.runTacticCode goal stx
+        catch e =>
+          if !i.mayFail then
+            logWarning m!"original tactic '{stx}' failed: {e.toMessageData}"
+          return [goal]
+let (new, newHeartbeats) ← withHeartbeats config.test i.ctxI i.tacI ctx goal
+      if let some msg ← config.tell stx oldGoals oldHeartbeats new newHeartbeats then
+        logWarning msg
 -/
 def testTacticSeq (config : ComplexConfig) (tacticSeq : Array (TSyntax `tactic))
     (i : TacticNode) (ctx : config.ctx) :
@@ -572,7 +672,23 @@ definition runPass
     tacticSeq := tacticSeq.push stx
     match config.trigger acc stx with
     | .continue ctx =>
-    
+      acc := ctx
+    | .skip =>
+      acc := none
+      tacticSeq := #[]
+      firstInfo := none
+    | .accept ctx =>
+      if let some i := firstInfo then
+        testTacticSeq config tacticSeq i ctx
+      else
+        logWarningAt stx m!"internal error in tactic analysis: accepted an empty sequence."
+      acc := none
+  -- Insert a `done` at the end so we can handle a final `.continue` at the end.
+  match config.trigger acc (← `(tactic| done)) with
+  | .accept ctx =>
+    if let some i := firstInfo then
+      testTacticSeq config tacticSeq i ctx
+  | _ => pure ()
 
 中文:
 定义 runPass
@@ -588,7 +704,23 @@ definition runPass
     tacticSeq := tacticSeq.push stx
     match config.trigger acc stx with
     | .continue ctx =>
-    
+      acc := ctx
+    | .skip =>
+      acc := none
+      tacticSeq := #[]
+      firstInfo := none
+    | .accept ctx =>
+      if let some i := firstInfo then
+        testTacticSeq config tacticSeq i ctx
+      else
+        logWarningAt stx m!"internal error in tactic analysis: accepted an empty sequence."
+      acc := none
+  -- Insert a `done` at the end so we can handle a final `.continue` at the end.
+  match config.trigger acc (← `(tactic| done)) with
+  | .accept ctx =>
+    if let some i := firstInfo then
+      testTacticSeq config tacticSeq i ctx
+  | _ => pure ()
 -/
 def runPass (config : ComplexConfig) (seq : Array TacticNode) :
     CommandElabM Unit := do

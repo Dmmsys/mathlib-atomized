@@ -683,7 +683,8 @@ lemma ext_cochain_to_iff
     replace h₁ := Cochain.congr_v h₁ p (q + 1) (by lia)
     replace h₂ := Cochain.congr_v h₂ p q hpq
     simp only [Cochain.comp_v _ _ _ p q (q + 1) hpq rfl] at h₁
-    simp only [Cochain
+    simp only [Cochain.comp_zero_cochain_v] at h₂
+    exact ⟨h₁, h₂⟩
 
 中文:
 引理 ext_cochain_to_iff
@@ -698,7 +699,8 @@ lemma ext_cochain_to_iff
     replace h₁ := Cochain.congr_v h₁ p (q + 1) (by lia)
     replace h₂ := Cochain.congr_v h₂ p q hpq
     simp only [Cochain.comp_v _ _ _ p q (q + 1) hpq rfl] at h₁
-    simp only [Cochain
+    simp only [Cochain.comp_zero_cochain_v] at h₂
+    exact ⟨h₁, h₂⟩
 
 Depends on / 依赖: Cochain, Cochain.comp_v, Cochain.comp_zero_cochain_v, Cochain.congr_v, comp_v, comp_zero_cochain_v, congr_v, ext_to_iff, replace
 -/
@@ -734,7 +736,8 @@ lemma ext_cochain_from_iff
     replace h₁ := Cochain.congr_v h₁ (p + 1) q (by lia)
     replace h₂ := Cochain.congr_v h₂ p q (by lia)
     simp only [Cochain.comp_v (inl φ) _ _ (p + 1) p q (by lia) hpq] at h₁
-    
+    simp only [Cochain.zero_cochain_comp_v, Cochain.ofHom_v] at h₂
+    exact ⟨h₁, h₂⟩
 
 中文:
 引理 ext_cochain_from_iff
@@ -749,7 +752,8 @@ lemma ext_cochain_from_iff
     replace h₁ := Cochain.congr_v h₁ (p + 1) q (by lia)
     replace h₂ := Cochain.congr_v h₂ p q (by lia)
     simp only [Cochain.comp_v (inl φ) _ _ (p + 1) p q (by lia) hpq] at h₁
-    
+    simp only [Cochain.zero_cochain_comp_v, Cochain.ofHom_v] at h₂
+    exact ⟨h₁, h₂⟩
 
 Depends on / 依赖: Cochain, Cochain.comp_v, Cochain.congr_v, Cochain.ofHom_v, Cochain.zero_cochain_comp_v, comp_v, congr_v, ext_from_iff, ofHom_v, replace, zero_cochain_comp_v
 -/
@@ -1184,7 +1188,9 @@ lemma δ_descCochain
   simp only [δ_add, Cochain.comp_add, δ_comp (fst φ).1 α _ 2 n n' hn' (by lia) (by lia),
     Cocycle.δ_eq_zero, Cochain.zero_comp, smul_zero, add_zero,
     δ_comp (snd φ) β (zero_add n) 1 n' n' hn' (zero_add 1) hn', δ_snd, Cochain.neg_comp,
-    smul_neg, Cochain.comp_as
+    smul_neg, Cochain.comp_assoc_of_second_is_zero_cochain, Cochain.comp_units_smul, ← hn',
+    Int.negOnePow_succ, Units.neg_smul, Cochain.comp_neg]
+  abel
 
 中文:
 引理 δ_descCochain
@@ -1194,7 +1200,9 @@ lemma δ_descCochain
   simp only [δ_add, Cochain.comp_add, δ_comp (fst φ).1 α _ 2 n n' hn' (by lia) (by lia),
     Cocycle.δ_eq_zero, Cochain.zero_comp, smul_zero, add_zero,
     δ_comp (snd φ) β (zero_add n) 1 n' n' hn' (zero_add 1) hn', δ_snd, Cochain.neg_comp,
-    smul_neg, Cochain.comp_as
+    smul_neg, Cochain.comp_assoc_of_second_is_zero_cochain, Cochain.comp_units_smul, ← hn',
+    Int.negOnePow_succ, Units.neg_smul, Cochain.comp_neg]
+  abel
 
 Depends on / 依赖: Cochain, Cochain.comp_add, Cochain.comp_assoc_of_second_is_zero_cochain, Cochain.comp_neg, Cochain.comp_units_smul, Cochain.neg_comp, Cochain.zero_comp, Cocycle, Int.negOnePow_succ, Units.neg_smul, add_zero, comp_add, comp_assoc_of_second_is_zero_cochain, comp_neg, comp_units_smul, descCochain, negOnePow_succ, neg_comp, neg_smul, smul_neg
 -/
@@ -1567,7 +1575,8 @@ lemma δ_liftCochain
     δ_comp_zero_cochain _ _ _ h, δ_inl, Cochain.ofHom_comp,
     Int.negOnePow_neg, Int.negOnePow_one, Units.neg_smul, one_smul,
     δ_ofHom, Cochain.comp_zero, zero_add, Cochain.add_comp,
-    Cochai
+    Cochain.comp_assoc_of_second_is_zero_cochain]
+  abel
 
 中文:
 引理 δ_liftCochain
@@ -1578,7 +1587,8 @@ lemma δ_liftCochain
     δ_comp_zero_cochain _ _ _ h, δ_inl, Cochain.ofHom_comp,
     Int.negOnePow_neg, Int.negOnePow_one, Units.neg_smul, one_smul,
     δ_ofHom, Cochain.comp_zero, zero_add, Cochain.add_comp,
-    Cochai
+    Cochain.comp_assoc_of_second_is_zero_cochain]
+  abel
 
 Depends on / 依赖: Cochain, Cochain.add_comp, Cochain.comp_assoc_of_second_is_zero_cochain, Cochain.comp_zero, Cochain.ofHom_comp, Int.negOnePow_neg, Int.negOnePow_one, Units.neg_smul, add_comp, comp_assoc_of_second_is_zero_cochain, comp_zero, liftCochain, negOnePow_neg, negOnePow_one, neg_add_cancel, neg_smul, ofHom_comp, one_smul, zero_add
 -/
@@ -1926,7 +1936,22 @@ definition mapHomologicalComplexXIso'
       (inl ((H.mapHomologicalComplex (ComplexShape.up Int)).map φ)).v m n (by lia) +
       H.map ((snd φ).v n n (add_zero n)) ≫
         (inr ((H.mapHomologicalComplex (ComplexShape.up Int)).map φ)).f n
-  inv := (fst ((H.mapHomologicalComplex (ComplexShape.up Int)).
+  inv := (fst ((H.mapHomologicalComplex (ComplexShape.up Int)).map φ)).1.v n m (by lia) ≫
+      H.map ((inl φ).v m n (by lia)) +
+      (snd ((H.mapHomologicalComplex (ComplexShape.up Int)).map φ)).v n n (add_zero n) ≫
+        H.map ((inr φ).f n)
+  hom_inv_id := by
+    simp only [Functor.mapHomologicalComplex_obj_X, comp_add, add_comp, assoc,
+      inl_v_fst_v_assoc, inr_f_fst_v_assoc, zero_comp, comp_zero, add_zero,
+      inl_v_snd_v_assoc, inr_f_snd_v_assoc, zero_add, ← Functor.map_comp, ← Functor.map_add]
+    rw [← H.map_id]
+    congr 1
+    simp [ext_from_iff _ _ _ hnm]
+  inv_hom_id := by
+    simp only [Functor.mapHomologicalComplex_obj_X, comp_add, add_comp, assoc,
+      ← H.map_comp_assoc, inl_v_fst_v, CategoryTheory.Functor.map_id, id_comp, inr_f_fst_v,
+      inl_v_snd_v, inr_f_snd_v]
+    simp [ext_from_iff _ _ _ hnm]
 
 中文:
 定义 mapHomologicalComplexXIso'
@@ -1935,7 +1960,22 @@ definition mapHomologicalComplexXIso'
       (inl ((H.mapHomologicalComplex (ComplexShape.up Int)).map φ)).v m n (by lia) +
       H.map ((snd φ).v n n (add_zero n)) ≫
         (inr ((H.mapHomologicalComplex (ComplexShape.up Int)).map φ)).f n
-  inv := (fst ((H.mapHomologicalComplex (ComplexShape.up Int)).
+  inv := (fst ((H.mapHomologicalComplex (ComplexShape.up Int)).map φ)).1.v n m (by lia) ≫
+      H.map ((inl φ).v m n (by lia)) +
+      (snd ((H.mapHomologicalComplex (ComplexShape.up Int)).map φ)).v n n (add_zero n) ≫
+        H.map ((inr φ).f n)
+  hom_inv_id := by
+    simp only [Functor.mapHomologicalComplex_obj_X, comp_add, add_comp, assoc,
+      inl_v_fst_v_assoc, inr_f_fst_v_assoc, zero_comp, comp_zero, add_zero,
+      inl_v_snd_v_assoc, inr_f_snd_v_assoc, zero_add, ← Functor.map_comp, ← Functor.map_add]
+    rw [← H.map_id]
+    congr 1
+    simp [ext_from_iff _ _ _ hnm]
+  inv_hom_id := by
+    simp only [Functor.mapHomologicalComplex_obj_X, comp_add, add_comp, assoc,
+      ← H.map_comp_assoc, inl_v_fst_v, CategoryTheory.Functor.map_id, id_comp, inr_f_fst_v,
+      inl_v_snd_v, inr_f_snd_v]
+    simp [ext_from_iff _ _ _ hnm]
 
 Depends on / 依赖: H.map
 -/
@@ -2017,7 +2057,18 @@ definition mapHomologicalComplexIso
     rintro n _ rfl
     rw [ext_to_iff _ _ (n + 2) (by lia)]; rw [assoc]; rw [assoc]; rw [d_fst_v _ _ _ _ rfl]; rw [assoc]; rw [assoc]; rw [d_snd_v _ _ _ rfl]
     simp only [mapHomologicalComplexXIso_eq φ H n (n + 1) rfl,
-    
+      mapHomologicalComplexXIso_eq φ H (n + 1) (n + 2) (by lia),
+      mapHomologicalComplexXIso'_hom, mapHomologicalComplexXIso'_hom]
+    constructor
+    · dsimp
+      simp only [Functor.mapHomologicalComplex_obj_X, comp_neg, add_comp, assoc, inl_v_fst_v_assoc,
+        inr_f_fst_v_assoc, zero_comp, comp_zero, add_zero, inl_v_fst_v, comp_id, inr_f_fst_v,
+        ← H.map_comp, d_fst_v φ n (n + 1) (n + 2) rfl (by lia), Functor.map_neg]
+    · dsimp
+      simp only [comp_add, add_comp, assoc, inl_v_fst_v_assoc, inr_f_fst_v_assoc,
+        Functor.mapHomologicalComplex_obj_X, zero_comp, comp_zero, add_zero, inl_v_snd_v_assoc,
+        inr_f_snd_v_assoc, zero_add, inl_v_snd_v, inr_f_snd_v, comp_id, ← H.map_comp,
+        d_snd_v φ n (n + 1) rfl, Functor.map_add])
 
 中文:
 定义 mapHomologicalComplexIso
@@ -2026,7 +2077,18 @@ definition mapHomologicalComplexIso
     rintro n _ rfl
     rw [ext_to_iff _ _ (n + 2) (by lia)]; rw [assoc]; rw [assoc]; rw [d_fst_v _ _ _ _ rfl]; rw [assoc]; rw [assoc]; rw [d_snd_v _ _ _ rfl]
     simp only [mapHomologicalComplexXIso_eq φ H n (n + 1) rfl,
-    
+      mapHomologicalComplexXIso_eq φ H (n + 1) (n + 2) (by lia),
+      mapHomologicalComplexXIso'_hom, mapHomologicalComplexXIso'_hom]
+    constructor
+    · dsimp
+      simp only [Functor.mapHomologicalComplex_obj_X, comp_neg, add_comp, assoc, inl_v_fst_v_assoc,
+        inr_f_fst_v_assoc, zero_comp, comp_zero, add_zero, inl_v_fst_v, comp_id, inr_f_fst_v,
+        ← H.map_comp, d_fst_v φ n (n + 1) (n + 2) rfl (by lia), Functor.map_neg]
+    · dsimp
+      simp only [comp_add, add_comp, assoc, inl_v_fst_v_assoc, inr_f_fst_v_assoc,
+        Functor.mapHomologicalComplex_obj_X, zero_comp, comp_zero, add_zero, inl_v_snd_v_assoc,
+        inr_f_snd_v_assoc, zero_add, inl_v_snd_v, inr_f_snd_v, comp_id, ← H.map_comp,
+        d_snd_v φ n (n + 1) rfl, Functor.map_add])
 
 Depends on / 依赖: Functor, Functor.mapHomologicalComplex_obj_X, HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, _hom, add_comp, comp_neg, d_fst_v, d_snd_v, ext_to_iff, isoOfComponents, mapHomologicalComplexXIso, mapHomologicalComplexXIso_eq, mapHomologicalComplex_obj_X
 -/
@@ -2062,7 +2124,8 @@ lemma map_inr
   dsimp [mapHomologicalComplexIso]
   simp only [mapHomologicalComplexXIso_eq φ H n (n + 1) rfl, mappingCone.ext_to_iff _ _ _ rfl,
     Functor.mapHomologicalComplex_obj_X, mapHomologicalComplexXIso'_hom, comp_add,
-    add_comp, assoc, inl_v_fst_v, comp_id, inr_f_fst_v, comp_zero, add_zero,
+    add_comp, assoc, inl_v_fst_v, comp_id, inr_f_fst_v, comp_zero, add_zero, inl_v_snd_v,
+    inr_f_snd_v, zero_add, ← H.map_comp, H.map_zero, H.map_id, and_self]
 
 中文:
 引理 map_inr
@@ -2071,7 +2134,8 @@ lemma map_inr
   dsimp [mapHomologicalComplexIso]
   simp only [mapHomologicalComplexXIso_eq φ H n (n + 1) rfl, mappingCone.ext_to_iff _ _ _ rfl,
     Functor.mapHomologicalComplex_obj_X, mapHomologicalComplexXIso'_hom, comp_add,
-    add_comp, assoc, inl_v_fst_v, comp_id, inr_f_fst_v, comp_zero, add_zero,
+    add_comp, assoc, inl_v_fst_v, comp_id, inr_f_fst_v, comp_zero, add_zero, inl_v_snd_v,
+    inr_f_snd_v, zero_add, ← H.map_comp, H.map_zero, H.map_id, and_self]
 
 Depends on / 依赖: Functor, Functor.mapHomologicalComplex_obj_X, H.map_comp, H.map_id, H.map_zero, _hom, add_comp, add_zero, and_self, comp_add, comp_id, comp_zero, ext_to_iff, inl_v_fst_v, inl_v_snd_v, inr_f_fst_v, inr_f_snd_v, mapHomologicalComplexIso, mapHomologicalComplexXIso, mapHomologicalComplexXIso_eq
 -/

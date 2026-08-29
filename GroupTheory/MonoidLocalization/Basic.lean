@@ -243,7 +243,17 @@ definition r'
       iseqv := ⟨fun a => ⟨1, rfl⟩, fun ⟨c, hc⟩ => ⟨c, hc.symm⟩, ?_⟩
       mul' := ?_ }
   · rintro a b c ⟨t₁, ht₁⟩ ⟨t₂, ht₂⟩
-    
+    use t₂ * t₁ * b.2
+    simp only [Submonoid.coe_mul]
+    calc
+      (t₂ * t₁ * b.2 : M) * (c.2 * a.1) = t₂ * c.2 * (t₁ * (b.2 * a.1)) := by ac_rfl
+      _ = t₁ * a.2 * (t₂ * (c.2 * b.1)) := by rw [ht₁]; ac_rfl
+      _ = t₂ * t₁ * b.2 * (a.2 * c.1) := by rw [ht₂]; ac_rfl
+  · rintro a b c d ⟨t₁, ht₁⟩ ⟨t₂, ht₂⟩
+    use t₂ * t₁
+    calc
+      (t₂ * t₁ : M) * (b.2 * d.2 * (a.1 * c.1)) = t₂ * (d.2 * c.1) * (t₁ * (b.2 * a.1)) := by ac_rfl
+      _ = (t₂ * t₁ : M) * (a.2 * c.2 * (b.1 * d.1)) := by rw [ht₁, ht₂]; ac_rfl
 
 中文:
 定义 r'
@@ -255,7 +265,17 @@ definition r'
       iseqv := ⟨fun a => ⟨1, rfl⟩, fun ⟨c, hc⟩ => ⟨c, hc.symm⟩, ?_⟩
       mul' := ?_ }
   · rintro a b c ⟨t₁, ht₁⟩ ⟨t₂, ht₂⟩
-    
+    use t₂ * t₁ * b.2
+    simp only [Submonoid.coe_mul]
+    calc
+      (t₂ * t₁ * b.2 : M) * (c.2 * a.1) = t₂ * c.2 * (t₁ * (b.2 * a.1)) := by ac_rfl
+      _ = t₁ * a.2 * (t₂ * (c.2 * b.1)) := by rw [ht₁]; ac_rfl
+      _ = t₂ * t₁ * b.2 * (a.2 * c.1) := by rw [ht₂]; ac_rfl
+  · rintro a b c d ⟨t₁, ht₁⟩ ⟨t₂, ht₂⟩
+    use t₂ * t₁
+    calc
+      (t₂ * t₁ : M) * (b.2 * d.2 * (a.1 * c.1)) = t₂ * (d.2 * c.1) * (t₁ * (b.2 * a.1)) := by ac_rfl
+      _ = (t₂ * t₁ : M) * (a.2 * c.2 * (b.1 * d.1)) := by rw [ht₁, ht₂]; ac_rfl
 -/
 def r' : Con (M × S) := by
   -- note we multiply by `c` on the left so that we can later generalize to `•`
@@ -294,7 +314,8 @@ theorem r_eq_r'
       rw [← one_mul (p]; rw [q)]; rw [← one_mul (x]; rw [y)]
       refine b.trans (b.mul (H (t * y)) (b.refl _)) ?_
       convert! b.symm (b.mul (H (t * q)) (b.refl (x, y))) using 1
-      dsimp only [Prod.mk_
+      dsimp only [Prod.mk_mul_mk, Submonoid.coe_mul] at ht ⊢
+      simp_rw [mul_assoc, ht, mul_comm y q]
 
 中文:
 定理 r_eq_r'
@@ -304,7 +325,8 @@ theorem r_eq_r'
       rw [← one_mul (p]; rw [q)]; rw [← one_mul (x]; rw [y)]
       refine b.trans (b.mul (H (t * y)) (b.refl _)) ?_
       convert! b.symm (b.mul (H (t * q)) (b.refl (x, y))) using 1
-      dsimp only [Prod.mk_
+      dsimp only [Prod.mk_mul_mk, Submonoid.coe_mul] at ht ⊢
+      simp_rw [mul_assoc, ht, mul_comm y q]
 
 Depends on / 依赖: Prod.mk_mul_mk, Submonoid, Submonoid.coe_mul, b.mul, b.refl, b.symm, b.trans, coe_mul, convert, le_antisymm, le_sInf, mk_mul_mk, mul_assoc, mul_comm, one_mul, sInf_le, simp_rw
 -/
@@ -361,7 +383,7 @@ theorem r_iff_oreEqv_r
   · rintro ⟨u, hu, e⟩
     exact ⟨_, mul_mem hu x.2.2, u * y.2, by rw [mul_assoc, mul_assoc, ← e], mul_right_comm _ _ _⟩
   · rintro ⟨u, hu, v, e₁, e₂⟩
-    ex
+    exact ⟨u, hu, by rw [← mul_assoc, e₂, mul_right_comm, ← e₁, mul_assoc, mul_comm y.1]⟩
 
 中文:
 定理 r_iff_oreEqv_r
@@ -374,7 +396,7 @@ theorem r_iff_oreEqv_r
   · rintro ⟨u, hu, e⟩
     exact ⟨_, mul_mem hu x.2.2, u * y.2, by rw [mul_assoc, mul_assoc, ← e], mul_right_comm _ _ _⟩
   · rintro ⟨u, hu, v, e₁, e₂⟩
-    ex
+    exact ⟨u, hu, by rw [← mul_assoc, e₂, mul_right_comm, ← e₁, mul_assoc, mul_comm y.1]⟩
 
 Depends on / 依赖: OreLocalization, OreLocalization.oreEqv, Submonoid, Submonoid.mk_smul, Subtype, Subtype.exists, exists_prop, instances, mk_smul, mul_assoc, mul_comm, mul_mem, mul_right_comm, oreEqv, r_iff_exists, smul_eq_mul
 -/
@@ -1706,7 +1728,7 @@ lemma mk'_mul
   rw [mul_mul_mul_comm (f x₁)]; rw [mul_left_comm]; rw [mul_mul_mul_comm (f y₁)]
   simp
 
-@[to_
+@[to_additive]
 
 中文:
 引理 mk'_mul
@@ -1719,7 +1741,7 @@ lemma mk'_mul
   rw [mul_mul_mul_comm (f x₁)]; rw [mul_left_comm]; rw [mul_mul_mul_comm (f y₁)]
   simp
 
-@[to_
+@[to_additive]
 -/
 lemma mk'_mul (x₁ x₂ : M) (y₁ y₂ : S) : f.mk' (x₁ * x₂) (y₁ * y₂) = f.mk' x₁ y₁ * f.mk' x₂ y₂ := by
   refine (mul_inv_left f.map_units _ _ _).2 ?_
@@ -1907,7 +1929,9 @@ theorem mk'_eq_iff_eq
   proof: by
     rw [map_mul f]; rw [map_mul f]; rw [f.mk'_eq_iff_eq_mul.1 H]; rw [← mul_assoc]; rw [mk'_spec']; rw [mul_comm (f x₂)]
   mpr H := by
-    rw [mk'_eq_iff_eq_mul]; rw [mk']; rw [mul_assoc]; rw [mul_comm _ (f y₁)]; rw [← mul_assoc]; rw [← map_mul f]; rw [mul_comm x₂]; rw [← H]; rw [← mul_comm x₁]; 
+    rw [mk'_eq_iff_eq_mul]; rw [mk']; rw [mul_assoc]; rw [mul_comm _ (f y₁)]; rw [← mul_assoc]; rw [← map_mul f]; rw [mul_comm x₂]; rw [← H]; rw [← mul_comm x₁]; rw [map_mul f]; rw [mul_inv_right f.map_units]; rw [toMonoidHom_apply]
+
+@[to_additive]
 
 中文:
 定理 mk'_eq_iff_eq
@@ -1915,7 +1939,9 @@ theorem mk'_eq_iff_eq
   证明: by
     rw [map_mul f]; rw [map_mul f]; rw [f.mk'_eq_iff_eq_mul.1 H]; rw [← mul_assoc]; rw [mk'_spec']; rw [mul_comm (f x₂)]
   mpr H := by
-    rw [mk'_eq_iff_eq_mul]; rw [mk']; rw [mul_assoc]; rw [mul_comm _ (f y₁)]; rw [← mul_assoc]; rw [← map_mul f]; rw [mul_comm x₂]; rw [← H]; rw [← mul_comm x₁]; 
+    rw [mk'_eq_iff_eq_mul]; rw [mk']; rw [mul_assoc]; rw [mul_comm _ (f y₁)]; rw [← mul_assoc]; rw [← map_mul f]; rw [mul_comm x₂]; rw [← H]; rw [← mul_comm x₁]; rw [map_mul f]; rw [mul_inv_right f.map_units]; rw [toMonoidHom_apply]
+
+@[to_additive]
 -/
 theorem mk'_eq_iff_eq {x₁ x₂} {y₁ y₂ : S} :
     f.mk' x₁ y₁ = f.mk' x₂ y₂ ↔ f (y₂ * x₁) = f (y₁ * x₂) where
@@ -2416,7 +2442,10 @@ definition monoidOf
     { map_units y :=
         isUnit_iff_exists_inv.2 ⟨mk 1 y, by rw [mk_mul, mul_one, one_mul, mk_self]⟩
       surj z := induction_on z fun x =>
-       
+        ⟨x, by rw [mk_mul, mul_comm x.fst, ← mk_mul, mk_self, one_mul]⟩
+exists_of_eq := Iff.mp mk_eq_mk_iff.trans r_iff_exists.trans by simp } }
+
+@[to_additive]
 
 中文:
 定义 monoidOf
@@ -2428,7 +2457,10 @@ definition monoidOf
     { map_units y :=
         isUnit_iff_exists_inv.2 ⟨mk 1 y, by rw [mk_mul, mul_one, one_mul, mk_self]⟩
       surj z := induction_on z fun x =>
-       
+        ⟨x, by rw [mk_mul, mul_comm x.fst, ← mk_mul, mk_self, one_mul]⟩
+exists_of_eq := Iff.mp mk_eq_mk_iff.trans r_iff_exists.trans by simp } }
+
+@[to_additive]
 
 Depends on / 依赖: Iff.mp, MonoidHom, MonoidHom.inl, exists_of_eq, induction_on, isLocalizationMap, isUnit_iff_exists_inv, map_mul, map_units, mk_eq_mk_iff, mk_eq_mk_iff.trans, mk_mul, mk_self, mul_comm, mul_one, one_mul, r_iff_exists, r_iff_exists.trans, x.fst
 -/
@@ -2478,7 +2510,9 @@ theorem mk_eq_monoidOf_mk'_apply
       dsimp
       rw [← mk_one_eq_monoidOf_mk]; rw [← mk_one_eq_monoidOf_mk]; rw [mk_mul x y y 1]; rw [mul_comm y 1]
       conv => rhs; rw [← mul_one 1]; rw [← mul_one x]
-      exact mk_eq_mk_iff.2 (Con.s
+      exact mk_eq_mk_iff.2 (Con.symm _ <| (Localization.r S).mul (Con.refl _ (x, 1)) <| one_rel _)
+
+@[to_additive]
 
 中文:
 定理 mk_eq_monoidOf_mk'_apply
@@ -2489,7 +2523,9 @@ theorem mk_eq_monoidOf_mk'_apply
       dsimp
       rw [← mk_one_eq_monoidOf_mk]; rw [← mk_one_eq_monoidOf_mk]; rw [mk_mul x y y 1]; rw [mul_comm y 1]
       conv => rhs; rw [← mul_one 1]; rw [← mul_one x]
-      exact mk_eq_mk_iff.2 (Con.s
+      exact mk_eq_mk_iff.2 (Con.symm _ <| (Localization.r S).mul (Con.refl _ (x, 1)) <| one_rel _)
+
+@[to_additive]
 
 Depends on / 依赖: Con.refl, Con.symm, Localization, Localization.r, LocalizationMap, Submonoid, Submonoid.LocalizationMap.mul_inv_right, map_units, mk_eq_mk_iff, mk_mul, mk_one_eq_monoidOf_mk, monoidOf, mul_comm, mul_inv_right, mul_one, one_rel
 -/
@@ -2588,7 +2624,9 @@ instance instIsMulTorsionFree
       exists_prop] at hab ⊢
     obtain ⟨c, hc, hab⟩ := hab
     refine ⟨c, hc, pow_left_injective hn ?_⟩
-    obta
+    obtain _ | n := n
+    · simp
+    · simp [mul_pow, pow_succ c, mul_assoc, hab]
 
 中文:
 实例 instIsMulTorsionFree
@@ -2600,7 +2638,9 @@ instance instIsMulTorsionFree
       exists_prop] at hab ⊢
     obtain ⟨c, hc, hab⟩ := hab
     refine ⟨c, hc, pow_left_injective hn ?_⟩
-    obta
+    obtain _ | n := n
+    · simp
+    · simp [mul_pow, pow_succ c, mul_assoc, hab]
 
 Depends on / 依赖: SubmonoidClass, SubmonoidClass.coe_pow, Subtype, Subtype.exists, coe_pow, exists_prop, mk_eq_mk_iff, mk_pow, mul_assoc, mul_pow, pow_left_injective, pow_succ, r_iff_exists
 -/
@@ -2749,7 +2789,12 @@ theorem Submonoid.isLocalizationMap_iff_bijective
       exact mul_left_cancel eq
     · have ⟨x, eq⟩ := h.surj m
       use x.1 / x.2
-      rw [div_eq_mul_inv]; rw [map_mul]; rw [← eq]; rw [mul_assoc]; rw [← map_mul]; rw [mul_inv_cancel]; rw [h.map_one]; rw [mul_on
+      rw [div_eq_mul_inv]; rw [map_mul]; rw [← eq]; rw [mul_assoc]; rw [← map_mul]; rw [mul_inv_cancel]; rw [h.map_one]; rw [mul_one]
+  mpr h := let e : G ≃* M := ⟨Equiv.ofBijective f h, map_mul f⟩
+  { map_units _ := (Group.isUnit _).map e
+    surj m := have ⟨g, eq⟩ := h.2 m
+⟨⟨g, 1⟩, congr(m * $e.map_one).trans (mul_one _).trans eq.symm⟩
+    exists_of_eq eq := by simp [h.1 eq] }
 
 中文:
 定理 子幺半群.isLocalizationMap_iff_bijective
@@ -2760,7 +2805,12 @@ theorem Submonoid.isLocalizationMap_iff_bijective
       exact mul_left_cancel eq
     · have ⟨x, eq⟩ := h.surj m
       use x.1 / x.2
-      rw [div_eq_mul_inv]; rw [map_mul]; rw [← eq]; rw [mul_assoc]; rw [← map_mul]; rw [mul_inv_cancel]; rw [h.map_one]; rw [mul_on
+      rw [div_eq_mul_inv]; rw [map_mul]; rw [← eq]; rw [mul_assoc]; rw [← map_mul]; rw [mul_inv_cancel]; rw [h.map_one]; rw [mul_one]
+  mpr h := let e : G ≃* M := ⟨Equiv.ofBijective f h, map_mul f⟩
+  { map_units _ := (Group.isUnit _).map e
+    surj m := have ⟨g, eq⟩ := h.2 m
+⟨⟨g, 1⟩, congr(m * $e.map_one).trans (mul_one _).trans eq.symm⟩
+    exists_of_eq eq := by simp [h.1 eq] }
 -/
 @[to_additive] theorem Submonoid.isLocalizationMap_iff_bijective {S : Submonoid G}
     [FunLike F G M] [MulHomClass F G M] {f : F} :
@@ -2829,7 +2879,8 @@ theorem AddSubmonoid.isLocalizationMap_nat_int
     obtain ⟨z, rfl | rfl⟩ := z.eq_nat_or_neg
     · exact ⟨z, 0, zero_mem _, by lia⟩
     have ⟨n, hnS, hn0⟩ := S.bot_or_exists_ne_zero.resolve_left hS
-have key : z < n * (z / n + 1) := Nat.lt_mul_div_succ _ Nat.pos_of_ne_zero
+have key : z < n * (z / n + 1) := Nat.lt_mul_div_succ _ Nat.pos_of_ne_zero hn0
+    exact ⟨(z / n + 1) * n - z, (z / n + 1) * n, nsmul_mem hnS _, by lia⟩
 
 中文:
 定理 加法子幺半群.isLocalizationMap_nat_int
@@ -2838,7 +2889,8 @@ have key : z < n * (z / n + 1) := Nat.lt_mul_div_succ _ Nat.pos_of_ne_zero
     obtain ⟨z, rfl | rfl⟩ := z.eq_nat_or_neg
     · exact ⟨z, 0, zero_mem _, by lia⟩
     have ⟨n, hnS, hn0⟩ := S.bot_or_exists_ne_zero.resolve_left hS
-have key : z < n * (z / n + 1) := Nat.lt_mul_div_succ _ Nat.pos_of_ne_zero
+have key : z < n * (z / n + 1) := Nat.lt_mul_div_succ _ Nat.pos_of_ne_zero hn0
+    exact ⟨(z / n + 1) * n - z, (z / n + 1) * n, nsmul_mem hnS _, by lia⟩
 
 Depends on / 依赖: Int.natCast_inj.mp, Nat.lt_mul_div_succ, Nat.pos_of_ne_zero, S.bot_or_exists_ne_zero.resolve_left, S.isLocalizationMap_of_addGroup, bot_or_exists_ne_zero, eq_nat_or_neg, isLocalizationMap_of_addGroup, lt_mul_div_succ, natCast_inj, nsmul_mem, pos_of_ne_zero, resolve_left, z.eq_nat_or_neg, zero_mem
 -/
@@ -2931,7 +2983,10 @@ theorem map_isRegular
   rw [← (f.map_units (ms₁.2 * ms₂.2)).mul_left_inj]; rw [Submonoid.coe_mul]
   replace eq := congr($eq * f (ms₁.2 * ms₂.2))
   simp_rw [mul_assoc] at eq
-  rw [map_mu
+  rw [map_mul]; rw [← mul_assoc n₁]; rw [eq₁]; rw [← mul_assoc n₂]; rw [mul_right_comm n₂]; rw [eq₂] at eq ⊢
+  simp_rw [← map_mul, eq_iff_exists] at eq ⊢
+  simp_rw [mul_left_comm _ m] at eq
+  exact eq.imp fun _ => (hm.1 ·)
 
 中文:
 定理 map_isRegular
@@ -2943,7 +2998,10 @@ theorem map_isRegular
   rw [← (f.map_units (ms₁.2 * ms₂.2)).mul_left_inj]; rw [Submonoid.coe_mul]
   replace eq := congr($eq * f (ms₁.2 * ms₂.2))
   simp_rw [mul_assoc] at eq
-  rw [map_mu
+  rw [map_mul]; rw [← mul_assoc n₁]; rw [eq₁]; rw [← mul_assoc n₂]; rw [mul_right_comm n₂]; rw [eq₂] at eq ⊢
+  simp_rw [← map_mul, eq_iff_exists] at eq ⊢
+  simp_rw [mul_left_comm _ m] at eq
+  exact eq.imp fun _ => (hm.1 ·)
 -/
 @[to_additive] theorem map_isRegular (f : LocalizationMap S N) {m : M}
     (hm : IsRegular m) : IsRegular (f m) := by

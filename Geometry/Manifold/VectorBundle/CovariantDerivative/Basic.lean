@@ -220,7 +220,23 @@ lemma congr_of_eqOn
   -- Observe that `ψ • σ = ψ • σ'` as dependent functions.
   have H (x' : M) : ((ψ : M -> 𝕜) • σ) x' = ((ψ : M -> 𝕜) • σ') x' := by
     dsimp [ψ]
-    
+    split_ifs with hx's
+    · simpa using hσσ' _ hx's
+    · simp
+  have hψ' : HasMFDerivAt I 𝓘(𝕜) ψ x 0 := by
+    have : HasMFDerivAt I 𝓘(𝕜, 𝕜) (fun (_x : M) => (1 : 𝕜)) x 0 := hasMFDerivAt_const ..
+    refine this.congr_of_eventuallyEq ?_
+    apply Filter.eventuallyEq_of_mem hxs
+    intro t ht
+    simp [ψ, ht]
+  have := hcov.leibniz hσ hψ'.mdifferentiableAt
+  -- Then, it's a chain of (dependent) equalities.
+  calc cov σ x
+    _ = cov ((ψ : M -> 𝕜) • σ) x := by
+      simp [hcov.leibniz hσ hψ'.mdifferentiableAt, hψx, mvfderiv, hψ'.mfderiv]
+    _ = cov ((ψ : M -> 𝕜) • σ') x := by rw [funext H]
+    _ = cov σ' x := by
+      simp [hcov.leibniz hσ' hψ'.mdifferentiableAt, hψx, mvfderiv, hψ'.mfderiv]
 
 中文:
 引理 congr_of_eqOn
@@ -232,7 +248,23 @@ lemma congr_of_eqOn
   -- Observe that `ψ • σ = ψ • σ'` as dependent functions.
   have H (x' : M) : ((ψ : M -> 𝕜) • σ) x' = ((ψ : M -> 𝕜) • σ') x' := by
     dsimp [ψ]
-    
+    split_ifs with hx's
+    · simpa using hσσ' _ hx's
+    · simp
+  have hψ' : HasMFDerivAt I 𝓘(𝕜) ψ x 0 := by
+    have : HasMFDerivAt I 𝓘(𝕜, 𝕜) (fun (_x : M) => (1 : 𝕜)) x 0 := hasMFDerivAt_const ..
+    refine this.congr_of_eventuallyEq ?_
+    apply Filter.eventuallyEq_of_mem hxs
+    intro t ht
+    simp [ψ, ht]
+  have := hcov.leibniz hσ hψ'.mdifferentiableAt
+  -- Then, it's a chain of (dependent) equalities.
+  calc cov σ x
+    _ = cov ((ψ : M -> 𝕜) • σ) x := by
+      simp [hcov.leibniz hσ hψ'.mdifferentiableAt, hψx, mvfderiv, hψ'.mfderiv]
+    _ = cov ((ψ : M -> 𝕜) • σ') x := by rw [funext H]
+    _ = cov σ' x := by
+      simp [hcov.leibniz hσ' hψ'.mdifferentiableAt, hψx, mvfderiv, hψ'.mfderiv]
 
 Depends on / 依赖: classical, mem_of_mem_nhds
 -/
@@ -456,7 +488,12 @@ lemma finite_affine_combination
     calc ∑ i in s, f i x • cov i (g • σ) x
       _ = ∑ i in s, (g x • f i x • cov i σ x + f i x • (d% g x).smulRight (σ x)) := by
           congr! 1 with i hi
-     
+          rw [(h i).leibniz hσ hg]
+          simp [mvfderiv]
+          module
+      _ = g x • ∑ i in s, f i x • cov i σ x + (∑ i in s, f i) x • (d% g x).smulRight (σ x) := by
+          rw [Finset.sum_add_distrib]; rw [Finset.smul_sum]; rw [Finset.sum_apply]; rw [Finset.sum_smul]
+      _ = g x • ∑ i in s, f i x • cov i σ x + (d% g x).smulRight (σ x) := by rw [hf]; simp
 
 中文:
 引理 finite_affine_combination
@@ -470,7 +507,12 @@ lemma finite_affine_combination
     calc ∑ i in s, f i x • cov i (g • σ) x
       _ = ∑ i in s, (g x • f i x • cov i σ x + f i x • (d% g x).smulRight (σ x)) := by
           congr! 1 with i hi
-     
+          rw [(h i).leibniz hσ hg]
+          simp [mvfderiv]
+          module
+      _ = g x • ∑ i in s, f i x • cov i σ x + (∑ i in s, f i) x • (d% g x).smulRight (σ x) := by
+          rw [Finset.sum_add_distrib]; rw [Finset.smul_sum]; rw [Finset.sum_apply]; rw [Finset.sum_smul]
+      _ = g x • ∑ i in s, f i x • cov i σ x + (d% g x).smulRight (σ x) := by rw [hf]; simp
 
 Depends on / 依赖: Finset, Finset.smul_sum, Finset.sum_add_distrib, Finset.sum_apply, Finset.sum_smul, leibniz, module, mvfderiv, smulRight, smul_add, smul_sum, sum_add_distrib, sum_apply, sum_smul
 -/

@@ -126,7 +126,9 @@ theorem lawfulFunctor
   -- Although it can be found by unification, Lean prefers to synthesize instances and
   -- then check that they are defeq to the instance found by unification.
   let _inst := Equiv.functor eqv
-  { map_const := fun 
+  { map_const := fun {_ _} => rfl
+    id_map := Equiv.id_map eqv
+    comp_map := Equiv.comp_map eqv }
 
 中文:
 定理 lawfulFunctor
@@ -135,7 +137,9 @@ theorem lawfulFunctor
   -- Although it can be found by unification, Lean prefers to synthesize instances and
   -- then check that they are defeq to the instance found by unification.
   let _inst := Equiv.functor eqv
-  { map_const := fun 
+  { map_const := fun {_ _} => rfl
+    id_map := Equiv.id_map eqv
+    comp_map := Equiv.comp_map eqv }
 -/
 protected theorem lawfulFunctor : @LawfulFunctor _ (Equiv.functor eqv) :=
   -- Add the instance to the local context (since `Equiv.functor` is not an instance).

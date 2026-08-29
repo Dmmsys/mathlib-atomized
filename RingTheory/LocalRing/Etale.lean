@@ -71,7 +71,24 @@ refine eq_top_iff.mpr Submodule.le_of_le_smul_of_le_jacobson_bot
       (Module.finite_def.mp inferInstance) (IsLocalRing.maximalIdeal_le_jacobson ⊥)
       (?_ : ⊤ <= (adjoin R {β}).toSubmodule ⊔ maximalIdeal R • ⊤)
     intro s _
-    rw [adjoin_singleton_eq_range_aeval];
+    rw [adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top] at hβ
+    obtain ⟨p, hp⟩ := hβ (residue S s)
+    obtain ⟨q, rfl⟩ := Polynomial.map_surjective _ residue_surjective p
+    rw [Ideal.smul_top_eq_map]
+    refine Submodule.mem_sup.mpr ⟨aeval β q, ?_, s - aeval β q, ?_, by ring⟩
+    · rw [adjoin_singleton_eq_range_aeval]; exact ⟨q, rfl⟩
+    · rw [Algebra.FormallyUnramified.map_maximalIdeal, Submodule.restrictScalars_mem,
+        ← Ideal.Quotient.eq]
+      -- def eq abuse since IsLocalRing.residue needs to be an abbrev
+      rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl] at hp
+      exact hp.symm
+  · intro hβ_gen
+    rw [Algebra.adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top] at *
+    intro x
+    obtain ⟨s, rfl⟩ := residue_surjective (R := S) x
+    obtain ⟨p, rfl⟩ := hβ_gen s
+    exact ⟨p.map (residue R), by
+      rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl p β]⟩
 
 中文:
 引理 adjoin_residue_eq_top_iff_adjoin_eq_top
@@ -83,7 +100,24 @@ refine eq_top_iff.mpr Submodule.le_of_le_smul_of_le_jacobson_bot
       (Module.finite_def.mp inferInstance) (IsLocalRing.maximalIdeal_le_jacobson ⊥)
       (?_ : ⊤ <= (adjoin R {β}).toSubmodule ⊔ maximalIdeal R • ⊤)
     intro s _
-    rw [adjoin_singleton_eq_range_aeval];
+    rw [adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top] at hβ
+    obtain ⟨p, hp⟩ := hβ (residue S s)
+    obtain ⟨q, rfl⟩ := Polynomial.map_surjective _ residue_surjective p
+    rw [Ideal.smul_top_eq_map]
+    refine Submodule.mem_sup.mpr ⟨aeval β q, ?_, s - aeval β q, ?_, by ring⟩
+    · rw [adjoin_singleton_eq_range_aeval]; exact ⟨q, rfl⟩
+    · rw [Algebra.FormallyUnramified.map_maximalIdeal, Submodule.restrictScalars_mem,
+        ← Ideal.Quotient.eq]
+      -- def eq abuse since IsLocalRing.residue needs to be an abbrev
+      rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl] at hp
+      exact hp.symm
+  · intro hβ_gen
+    rw [Algebra.adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top] at *
+    intro x
+    obtain ⟨s, rfl⟩ := residue_surjective (R := S) x
+    obtain ⟨p, rfl⟩ := hβ_gen s
+    exact ⟨p.map (residue R), by
+      rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl p β]⟩
 
 Depends on / 依赖: AlgHom, AlgHom.range_eq_top, Ideal.smul_top_eq_map, IsLocalRing, IsLocalRing.maximalIdeal_le_jacobson, Module, Module.finite_def.mp, Polynomial, Polynomial.map_surjective, Submodule, Submodule.le_of_le_smul_of_le_jacobson_bot, Submodule.mem_sup.mpr, adjoin, adjoin_singleton_eq_range_aeval, eq_top_iff, eq_top_iff.mpr, finite_def, le_of_le_smul_of_le_jacobson_bot, map_surjective, maximalIdeal
 -/
@@ -124,7 +158,7 @@ theorem exists_adjoin_eq_top
   obtain ⟨β₀, hβ₀⟩ := Field.exists_primitive_element (ResidueField R) (ResidueField S)
   obtain ⟨β, hβ⟩ := residue_surjective (R := S) β₀
 .mp ?_⟩ refine ⟨β, adjoin_residue_eq_top_iff_adjoin_eq_top β
-  rw [hβ]; rw [← IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.of_finit
+  rw [hβ]; rw [← IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.of_finite _ _)]; rw [hβ₀]; rw [IntermediateField.top_toSubalgebra]
 
 中文:
 定理 存在_adjoin_eq_top
@@ -133,7 +167,7 @@ theorem exists_adjoin_eq_top
   obtain ⟨β₀, hβ₀⟩ := Field.exists_primitive_element (ResidueField R) (ResidueField S)
   obtain ⟨β, hβ⟩ := residue_surjective (R := S) β₀
 .mp ?_⟩ refine ⟨β, adjoin_residue_eq_top_iff_adjoin_eq_top β
-  rw [hβ]; rw [← IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.of_finit
+  rw [hβ]; rw [← IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.of_finite _ _)]; rw [hβ₀]; rw [IntermediateField.top_toSubalgebra]
 
 Depends on / 依赖: Field.exists_primitive_element, IntermediateField, IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic, IntermediateField.top_toSubalgebra, IsAlgebraic, IsAlgebraic.of_finite, ResidueField, adjoin_residue_eq_top_iff_adjoin_eq_top, adjoin_simple_toSubalgebra_of_isAlgebraic, exists_primitive_element, of_finite, residue_surjective, top_toSubalgebra
 -/
@@ -156,7 +190,11 @@ lemma finrank_eq_finrank_residueField
       Algebra.FormallyUnramified.map_maximalIdeal (R := R) (S := S)).toAddEquiv
     ?_
   · rw [← finrank_quotient_map (R := R) (S := S)]
-    exact e.
+    exact e.finrank_eq -- again IsLocalRing.residue should be abbrev
+  · intro r x
+    obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective r
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    simp only [RingEquiv.toAddEquiv_eq_coe]; rfl
 
 中文:
 引理 finrank_eq_finrank_residueField
@@ -167,7 +205,11 @@ lemma finrank_eq_finrank_residueField
       Algebra.FormallyUnramified.map_maximalIdeal (R := R) (S := S)).toAddEquiv
     ?_
   · rw [← finrank_quotient_map (R := R) (S := S)]
-    exact e.
+    exact e.finrank_eq -- again IsLocalRing.residue should be abbrev
+  · intro r x
+    obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective r
+    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
+    simp only [RingEquiv.toAddEquiv_eq_coe]; rfl
 
 Depends on / 依赖: AddEquiv, AddEquiv.toLinearEquiv, Algebra, Algebra.FormallyUnramified.map_maximalIdeal, FormallyUnramified, Ideal.Quotient.mk_surjective, Ideal.quotEquivOfEq, IsLocalRing, IsLocalRing.residue, Module, Module.Free, Module.free_of_flat_of_isLocalRing, Quotient, RingEquiv, RingEquiv.toAddEquiv_eq_coe, abbrev, e.finrank_eq, finrank_eq, finrank_quotient_map, free_of_flat_of_isLocalRing
 -/
@@ -197,7 +239,11 @@ have h := minpoly.monic Algebra.IsIntegral.isIntegral (R := R) β
   refine eq_of_monic_of_dvd_of_natDegree_le
     (minpoly.monic <| Algebra.IsIntegral.isIntegral <| residue S β)
     (h.map _) (minpoly.dvd (ResidueField R) (residue S β) ?_) ?_
-  · 
+  · rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl]
+    simp
+  · have : Module.Free R S := Module.free_of_flat_of_isLocalRing
+    have hβ₀ := (adjoin_residue_eq_top_iff_adjoin_eq_top β).mpr hadj
+    rw [h.natDegree_map _]; rw [← (IsAdjoinRootMonic.mkOfAdjoinEqTop' hadj).finrank]; rw [finrank_eq_finrank_residueField]; rw [(IsAdjoinRootMonic.mkOfAdjoinEqTop' hβ₀).finrank]
 
 中文:
 引理 minpoly_map_residue
@@ -208,7 +254,11 @@ have h := minpoly.monic Algebra.IsIntegral.isIntegral (R := R) β
   refine eq_of_monic_of_dvd_of_natDegree_le
     (minpoly.monic <| Algebra.IsIntegral.isIntegral <| residue S β)
     (h.map _) (minpoly.dvd (ResidueField R) (residue S β) ?_) ?_
-  · 
+  · rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl]
+    simp
+  · have : Module.Free R S := Module.free_of_flat_of_isLocalRing
+    have hβ₀ := (adjoin_residue_eq_top_iff_adjoin_eq_top β).mpr hadj
+    rw [h.natDegree_map _]; rw [← (IsAdjoinRootMonic.mkOfAdjoinEqTop' hadj).finrank]; rw [finrank_eq_finrank_residueField]; rw [(IsAdjoinRootMonic.mkOfAdjoinEqTop' hβ₀).finrank]
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, isIntegral, minpoly, minpoly.monic
 -/

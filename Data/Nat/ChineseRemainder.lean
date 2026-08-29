@@ -46,6 +46,9 @@ lemma modEq_list_prod_iff
     simp only [List.prod_cons, ← modEq_and_modEq_iff_modEq_mul this, ih (List.Pairwise.of_cons co),
       List.length_cons]
     constructor
+    · rintro ⟨h0, hs⟩ i
+      cases i using Fin.cases <;> simp_all
+    · intro h; exact ⟨h 0, fun i => h i.succ⟩
 
 中文:
 引理 modEq_list_prod_iff
@@ -58,6 +61,9 @@ lemma modEq_list_prod_iff
     simp only [List.prod_cons, ← modEq_and_modEq_iff_modEq_mul this, ih (List.Pairwise.of_cons co),
       List.length_cons]
     constructor
+    · rintro ⟨h0, hs⟩ i
+      cases i using Fin.cases <;> simp_all
+    · intro h; exact ⟨h 0, fun i => h i.succ⟩
 
 Depends on / 依赖: Coprime, Fin.cases, List.Pairwise.of_cons, List.length_cons, List.pairwise_cons.mp, List.prod_cons, Pairwise, coprime_list_prod_right_iff, coprime_list_prod_right_iff.mpr, i.succ, l.prod, length_cons, modEq_and_modEq_iff_modEq_mul, modEq_one, of_cons, pairwise_cons, prod_cons
 -/
@@ -88,7 +94,8 @@ lemma modEq_list_map_prod_iff
       simp only [coprime_list_prod_right_iff, List.mem_map, forall_exists_index, and_imp,
         forall_apply_eq_imp_iff₂]
       intro j hj
-      exact (List.pairwise_cons.mp co).1 j h
+      exact (List.pairwise_cons.mp co).1 j hj
+    simp [← modEq_and_modEq_iff_modEq_mul this, ih (List.Pairwise.of_cons co)]
 
 中文:
 引理 modEq_list_map_prod_iff
@@ -101,7 +108,8 @@ lemma modEq_list_map_prod_iff
       simp only [coprime_list_prod_right_iff, List.mem_map, forall_exists_index, and_imp,
         forall_apply_eq_imp_iff₂]
       intro j hj
-      exact (List.pairwise_cons.mp co).1 j h
+      exact (List.pairwise_cons.mp co).1 j hj
+    simp [← modEq_and_modEq_iff_modEq_mul this, ih (List.Pairwise.of_cons co)]
 
 Depends on / 依赖: Coprime, List.Pairwise.of_cons, List.mem_map, List.pairwise_cons.mp, Pairwise, and_imp, coprime_list_prod_right_iff, forall_exists_index, l.map, mem_map, modEq_and_modEq_iff_modEq_mul, modEq_one, of_cons, pairwise_cons
 -/
@@ -134,7 +142,9 @@ definition chineseRemainderOfList
     have ih := chineseRemainderOfList l co.of_cons
     have k := chineseRemainder this (a i) ih
     use k
-    
+    simp only [List.mem_cons, forall_eq_or_imp, k.prop.1, true_and]
+    intro j hj
+    exact ((modEq_list_map_prod_iff co.of_cons).mp k.prop.2 j hj).trans (ih.prop j hj)
 
 中文:
 定义 chineseRemainderOfList
@@ -147,7 +157,9 @@ definition chineseRemainderOfList
     have ih := chineseRemainderOfList l co.of_cons
     have k := chineseRemainder this (a i) ih
     use k
-    
+    simp only [List.mem_cons, forall_eq_or_imp, k.prop.1, true_and]
+    intro j hj
+    exact ((modEq_list_map_prod_iff co.of_cons).mp k.prop.2 j hj).trans (ih.prop j hj)
 
 Depends on / 依赖: List.mem_cons, List.mem_map, List.pairwise_cons.mp, and_imp, chineseRemainder, chineseRemainderOfList, co.of_cons, coprime_list_prod_right_iff, forall_eq_or_imp, forall_exists_index, ih.prop, k.prop, mem_cons, mem_map, modEq_list_map_prod_iff, of_cons, pairwise_cons, true_and
 -/
@@ -195,7 +207,13 @@ theorem chineseRemainderOfList_lt_prod
     have : Coprime (s i) (l.map s).prod := by
       simp only [coprime_list_prod_right_iff, List.mem_map, forall_exists_index, and_imp,
         forall_apply_eq_imp_iff₂]
-      intr
+      intro j hj
+      exact (List.pairwise_cons.mp co).1 j hj
+    refine chineseRemainder_lt_mul this (a i) (chineseRemainderOfList a s l co.of_cons)
+      (hs i List.mem_cons_self) ?_
+    simp only [ne_eq, List.prod_eq_zero_iff, List.mem_map, not_exists, not_and]
+    intro j hj
+    exact hs j (List.mem_cons_of_mem _ hj)
 
 中文:
 定理 chineseRemainderOfList_lt_prod
@@ -208,7 +226,13 @@ theorem chineseRemainderOfList_lt_prod
     have : Coprime (s i) (l.map s).prod := by
       simp only [coprime_list_prod_right_iff, List.mem_map, forall_exists_index, and_imp,
         forall_apply_eq_imp_iff₂]
-      intr
+      intro j hj
+      exact (List.pairwise_cons.mp co).1 j hj
+    refine chineseRemainder_lt_mul this (a i) (chineseRemainderOfList a s l co.of_cons)
+      (hs i List.mem_cons_self) ?_
+    simp only [ne_eq, List.prod_eq_zero_iff, List.mem_map, not_exists, not_and]
+    intro j hj
+    exact hs j (List.mem_cons_of_mem _ hj)
 
 Depends on / 依赖: Coprime, List.map_cons, List.mem_cons_self, List.mem_map, List.pairwise_cons.mp, List.prod_cons, List.prod_eq_zero_iff, and_imp, chineseRemainderOfList, chineseRemainder_lt_mul, co.of_cons, coprime_list_prod_right_iff, forall_exists_index, l.map, map_cons, mem_cons_self, mem_map, ne_eq, not_and, not_exists
 -/
@@ -243,7 +267,11 @@ theorem chineseRemainderOfList_modEq_unique
     simp only [List.map_cons, List.prod_cons, chineseRemainderOfList]
     have : Coprime (s i) (l.map s).prod := by
       simp only [coprime_list_prod_right_iff, List.mem_map, forall_exists_index, and_imp,
-        forall_apply_eq_i
+        forall_apply_eq_imp_iff₂]
+      intro j hj
+      exact (List.pairwise_cons.mp co).1 j hj
+    exact chineseRemainder_modEq_unique this
+      (hz i List.mem_cons_self) (ih co.of_cons (fun j hj => hz j (List.mem_cons_of_mem _ hj)))
 
 中文:
 定理 chineseRemainderOfList_modEq_unique
@@ -255,7 +283,11 @@ theorem chineseRemainderOfList_modEq_unique
     simp only [List.map_cons, List.prod_cons, chineseRemainderOfList]
     have : Coprime (s i) (l.map s).prod := by
       simp only [coprime_list_prod_right_iff, List.mem_map, forall_exists_index, and_imp,
-        forall_apply_eq_i
+        forall_apply_eq_imp_iff₂]
+      intro j hj
+      exact (List.pairwise_cons.mp co).1 j hj
+    exact chineseRemainder_modEq_unique this
+      (hz i List.mem_cons_self) (ih co.of_cons (fun j hj => hz j (List.mem_cons_of_mem _ hj)))
 
 Depends on / 依赖: Coprime, List.map_cons, List.mem_cons_of_mem, List.mem_cons_self, List.mem_map, List.pairwise_cons.mp, List.prod_cons, and_imp, chineseRemainderOfList, chineseRemainder_modEq_unique, co.of_cons, coprime_list_prod_right_iff, forall_exists_index, l.map, map_cons, mem_cons_of_mem, mem_cons_self, mem_map, modEq_one, of_cons
 -/
@@ -285,7 +317,10 @@ theorem chineseRemainderOfList_perm
   have hlp : (l.map s).prod = (l'.map s).prod := List.Perm.prod_eq (List.Perm.map s hl)
   exact (chineseRemainderOfList_modEq_unique a s l co (z := z)
     (fun i hi => z.prop i (hl.symm.mem_iff.mpr hi))).symm.eq_of_lt_of_lt
-  
+      (chineseRemainderOfList_lt_prod _ _ _ _ hs)
+      (by rw [hlp]
+          exact chineseRemainderOfList_lt_prod _ _ _ _
+            (by simpa [List.Perm.mem_iff hl.symm] using hs))
 
 中文:
 定理 chineseRemainderOfList_perm
@@ -295,7 +330,10 @@ theorem chineseRemainderOfList_perm
   have hlp : (l.map s).prod = (l'.map s).prod := List.Perm.prod_eq (List.Perm.map s hl)
   exact (chineseRemainderOfList_modEq_unique a s l co (z := z)
     (fun i hi => z.prop i (hl.symm.mem_iff.mpr hi))).symm.eq_of_lt_of_lt
-  
+      (chineseRemainderOfList_lt_prod _ _ _ _ hs)
+      (by rw [hlp]
+          exact chineseRemainderOfList_lt_prod _ _ _ _
+            (by simpa [List.Perm.mem_iff hl.symm] using hs))
 
 Depends on / 依赖: List.Perm.map, List.Perm.mem_iff, List.Perm.prod_eq, chineseRemainderOfList, chineseRemainderOfList_lt_prod, chineseRemainderOfList_modEq_unique, co.perm, coprime_comm, coprime_comm.mpr, eq_of_lt_of_lt, hl.symm, hl.symm.mem_iff.mpr, l.map, mem_iff, prod_eq, symm.eq_of_lt_of_lt, z.prop
 -/
@@ -325,7 +363,18 @@ definition chineseRemainderOfMultiset
       funext fun nod' : l'.Nodup =>
       have nod : l.Nodup := pp.symm.nodup_iff.mp nod'
       funext fun hs' : forall i in l', s i != 0 =>
-      h
+      have hs : forall i in l, s i != 0 := by simpa [List.Perm.mem_iff pp] using hs'
+      funext fun co' : Set.Pairwise {x | x in l'} (Coprime on s) =>
+      have co : Set.Pairwise {x | x in l} (Coprime on s) := by simpa [List.Perm.mem_iff pp] using co'
+      have lco : l.Pairwise (Coprime on s) := List.Nodup.pairwise_of_forall_ne nod co
+      have : forall {m' e nod'' hs'' co''}, @Eq.ndrec (Multiset ι) l
+        (fun m => m.Nodup -> (forall i in m, s i != 0) ->
+          Set.Pairwise {x | x in m} (Coprime on s) -> { k // forall i in m, k ≡ a i [MOD s i] })
+        (fun nod _ co => chineseRemainderOfList a s l (List.Nodup.pairwise_of_forall_ne nod co))
+          m' e nod'' hs'' co'' =
+        (chineseRemainderOfList a s l lco : Nat) := by
+          rintro _ rfl _ _ _; rfl
+by ext; exact this.trans chineseRemainderOfList_perm a s pp hs lco)
 
 中文:
 定义 chineseRemainderOfMultiset
@@ -337,7 +386,18 @@ definition chineseRemainderOfMultiset
       funext fun nod' : l'.Nodup =>
       have nod : l.Nodup := pp.symm.nodup_iff.mp nod'
       funext fun hs' : forall i in l', s i != 0 =>
-      h
+      have hs : forall i in l, s i != 0 := by simpa [List.Perm.mem_iff pp] using hs'
+      funext fun co' : Set.Pairwise {x | x in l'} (Coprime on s) =>
+      have co : Set.Pairwise {x | x in l} (Coprime on s) := by simpa [List.Perm.mem_iff pp] using co'
+      have lco : l.Pairwise (Coprime on s) := List.Nodup.pairwise_of_forall_ne nod co
+      have : forall {m' e nod'' hs'' co''}, @Eq.ndrec (Multiset ι) l
+        (fun m => m.Nodup -> (forall i in m, s i != 0) ->
+          Set.Pairwise {x | x in m} (Coprime on s) -> { k // forall i in m, k ≡ a i [MOD s i] })
+        (fun nod _ co => chineseRemainderOfList a s l (List.Nodup.pairwise_of_forall_ne nod co))
+          m' e nod'' hs'' co'' =
+        (chineseRemainderOfList a s l lco : Nat) := by
+          rintro _ rfl _ _ _; rfl
+by ext; exact this.trans chineseRemainderOfList_perm a s pp hs lco)
 
 Depends on / 依赖: Coprime, List.Nodup.pairwise_of_forall_ne, List.Perm.mem_iff, Pairwise, Quotient, Quotient.recOn, Set.Pairwise, chineseRemainderOfList, l.Nodup, l.Perm, mem_iff, nodup_iff, pairwise_of_forall_ne, pp.symm.nodup_iff.mp
 -/

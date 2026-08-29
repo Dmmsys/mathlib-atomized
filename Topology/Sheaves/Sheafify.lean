@@ -216,7 +216,18 @@ theorem stalkToFiber_injective
   dsimp at wUx; rw [wUx] at e; clear wUx
   have wVx := wV ⟨x, mV⟩
   dsimp at wVx; rw [wVx] at e; clear wVx
-  rcase
+  rcases F.germ_eq x mU mV gU gV e with ⟨W, mW, iU', iV', (e' : F.map iU'.op gU = F.map iV'.op gV)⟩
+  use ⟨W ⊓ (U' ⊓ V'), ⟨mW, mU, mV⟩⟩
+  refine ⟨?_, ?_, ?_⟩
+  · change W ⊓ (U' ⊓ V') ⟶ U.val
+    exact Opens.infLERight _ _ ≫ Opens.infLELeft _ _ ≫ iU
+  · change W ⊓ (U' ⊓ V') ⟶ V.val
+    exact Opens.infLERight _ _ ≫ Opens.infLERight _ _ ≫ iV
+  · intro w
+    specialize wU ⟨w.1, w.2.2.1⟩
+    specialize wV ⟨w.1, w.2.2.2⟩
+refine wU.trans .trans ?_ wV.symm
+    rw [← F.germ_res iU' w w.2.1]; rw [← F.germ_res iV' w w.2.1]; rw [CategoryTheory.types_comp_apply]; rw [CategoryTheory.types_comp_apply]; rw [e']
 
 中文:
 定理 stalkToFiber_injective
@@ -231,7 +242,18 @@ theorem stalkToFiber_injective
   dsimp at wUx; rw [wUx] at e; clear wUx
   have wVx := wV ⟨x, mV⟩
   dsimp at wVx; rw [wVx] at e; clear wVx
-  rcase
+  rcases F.germ_eq x mU mV gU gV e with ⟨W, mW, iU', iV', (e' : F.map iU'.op gU = F.map iV'.op gV)⟩
+  use ⟨W ⊓ (U' ⊓ V'), ⟨mW, mU, mV⟩⟩
+  refine ⟨?_, ?_, ?_⟩
+  · change W ⊓ (U' ⊓ V') ⟶ U.val
+    exact Opens.infLERight _ _ ≫ Opens.infLELeft _ _ ≫ iU
+  · change W ⊓ (U' ⊓ V') ⟶ V.val
+    exact Opens.infLERight _ _ ≫ Opens.infLERight _ _ ≫ iV
+  · intro w
+    specialize wU ⟨w.1, w.2.2.1⟩
+    specialize wV ⟨w.1, w.2.2.2⟩
+refine wU.trans .trans ?_ wV.symm
+    rw [← F.germ_res iU' w w.2.1]; rw [← F.germ_res iV' w w.2.1]; rw [CategoryTheory.types_comp_apply]; rw [CategoryTheory.types_comp_apply]; rw [e']
 
 Depends on / 依赖: F.germ_eq, F.map, Opens.infLE, Opens.infLERight, TopCat, TopCat.stalkToFiber_injective, U.val, germ_eq, infLERight, stalkToFiber_injective
 -/

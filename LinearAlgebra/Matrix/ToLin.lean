@@ -221,7 +221,7 @@ definition vecMulVecBilin
   map_add' _ _ := LinearMap.ext fun _ => add_vecMulVec _ _ _
   map_smul' _ _ := LinearMap.ext fun _ => smul_vecMulVec _ _ _
 
-example {A} [Semiring A] := (vecMulVecBilin A Aᵐᵒᵖ : (m -> A
+example {A} [Semiring A] := (vecMulVecBilin A Aᵐᵒᵖ : (m -> A) ->ₗ[_] (n -> A) ->ₗ[_] _)
 
 中文:
 定义 vecMulVecBilin
@@ -232,7 +232,7 @@ example {A} [Semiring A] := (vecMulVecBilin A Aᵐᵒᵖ : (m -> A
   map_add' _ _ := LinearMap.ext fun _ => add_vecMulVec _ _ _
   map_smul' _ _ := LinearMap.ext fun _ => smul_vecMulVec _ _ _
 
-example {A} [Semiring A] := (vecMulVecBilin A Aᵐᵒᵖ : (m -> A
+example {A} [Semiring A] := (vecMulVecBilin A Aᵐᵒᵖ : (m -> A) ->ₗ[_] (n -> A) ->ₗ[_] _)
 
 Depends on / 依赖: LinearMap, LinearMap.ext, add_vecMulVec, map_add, map_smul, smul_vecMulVec, vecMulVec, vecMulVec_add, vecMulVec_smul
 -/
@@ -262,7 +262,7 @@ definition dotProductBilin
   map_add' _ _ := LinearMap.ext fun _ => add_dotProduct _ _ _
   map_smul' _ _ := LinearMap.ext fun _ => smul_dotProduct _ _ _
 
-example {A} [Semiring A] [Fintype m] := (dotProductBili
+example {A} [Semiring A] [Fintype m] := (dotProductBilin A Aᵐᵒᵖ : (m -> A) ->ₗ[_] _ ->ₗ[_] _)
 
 中文:
 定义 dotProductBilin
@@ -273,7 +273,7 @@ example {A} [Semiring A] [Fintype m] := (dotProductBili
   map_add' _ _ := LinearMap.ext fun _ => add_dotProduct _ _ _
   map_smul' _ _ := LinearMap.ext fun _ => smul_dotProduct _ _ _
 
-example {A} [Semiring A] [Fintype m] := (dotProductBili
+example {A} [Semiring A] [Fintype m] := (dotProductBilin A Aᵐᵒᵖ : (m -> A) ->ₗ[_] _ ->ₗ[_] _)
 
 Depends on / 依赖: LinearMap, LinearMap.ext, add_dotProduct, dotProduct, dotProduct_add, dotProduct_smul, map_add, map_smul, smul_dotProduct
 -/
@@ -357,7 +357,9 @@ theorem range_vecMulLinear
   simp_rw [range_eq_map, ← iSup_range_single, Submodule.map_iSup, range_eq_map, ←
     Ideal.span_singleton_one, Ideal.span, Submodule.map_span, image_image, image_singleton,
     Matrix.vecMulLinear_apply, iSup_span, range_eq_iUnion, iUnion_singleton_eq_range,
-    Linear
+    LinearMap.single, LinearMap.coe_mk, AddHom.coe_mk, row_def]
+  unfold vecMul
+  simp_rw [single_dotProduct, one_mul]
 
 中文:
 定理 range_vecMulLinear
@@ -367,7 +369,9 @@ theorem range_vecMulLinear
   simp_rw [range_eq_map, ← iSup_range_single, Submodule.map_iSup, range_eq_map, ←
     Ideal.span_singleton_one, Ideal.span, Submodule.map_span, image_image, image_singleton,
     Matrix.vecMulLinear_apply, iSup_span, range_eq_iUnion, iUnion_singleton_eq_range,
-    Linear
+    LinearMap.single, LinearMap.coe_mk, AddHom.coe_mk, row_def]
+  unfold vecMul
+  simp_rw [single_dotProduct, one_mul]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, Classical, Classical.decEq, Ideal.span, Ideal.span_singleton_one, LinearMap, LinearMap.coe_mk, LinearMap.single, Matrix, Matrix.vecMulLinear_apply, Submodule, Submodule.map_iSup, Submodule.map_span, coe_mk, iSup_range_single, iSup_span, iUnion_singleton_eq_range, image_image, image_singleton
 -/
@@ -453,7 +457,9 @@ definition LinearMap.toMatrixRight'
   map_add' f g := by
     ext i j
     simp only [Pi.add_apply, LinearMap.add_apply, Matrix.add_apply]
-  map_smul' c f
+  map_smul' c f := by
+    ext i j
+    simp only [Pi.smul_apply, LinearMap.smul_apply, RingHom.id_apply, Matrix.smul_apply]
 
 中文:
 定义 线性映射.toMatrixRight'
@@ -470,7 +476,9 @@ definition LinearMap.toMatrixRight'
   map_add' f g := by
     ext i j
     simp only [Pi.add_apply, LinearMap.add_apply, Matrix.add_apply]
-  map_smul' c f
+  map_smul' c f := by
+    ext i j
+    simp only [Pi.smul_apply, LinearMap.smul_apply, RingHom.id_apply, Matrix.smul_apply]
 
 Depends on / 依赖: single
 -/
@@ -647,7 +655,7 @@ definition Matrix.toLinearEquivRight'OfInv
     left_inv := fun x => by
       rw [← Matrix.toLinearMapRight'_mul_apply]; rw [hM'M]; rw [Matrix.toLinearMapRight'_one]; rw [id_apply]
     right_inv := fun x => by
-      rw [← 
+      rw [← Matrix.toLinearMapRight'_mul_apply]; rw [hMM']; rw [Matrix.toLinearMapRight'_one]; rw [id_apply] }
 
 中文:
 定义 矩阵.toLinearEquivRight'OfInv
@@ -658,7 +666,7 @@ definition Matrix.toLinearEquivRight'OfInv
     left_inv := fun x => by
       rw [← Matrix.toLinearMapRight'_mul_apply]; rw [hM'M]; rw [Matrix.toLinearMapRight'_one]; rw [id_apply]
     right_inv := fun x => by
-      rw [← 
+      rw [← Matrix.toLinearMapRight'_mul_apply]; rw [hMM']; rw [Matrix.toLinearMapRight'_one]; rw [id_apply] }
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrixRight, Matrix, Matrix.toLinearMapRight, _mul_apply, _one, id_apply, invFun, left_inv, right_inv, toLinearMapRight, toMatrixRight
 -/
@@ -1031,7 +1039,14 @@ definition LinearMap.toMatrix'
   left_inv f := by
     apply (Pi.basisFun R n).ext
     intro j; ext i
-    simp only [Pi.basisFun_apply, Matrix.mulVec_s
+    simp only [Pi.basisFun_apply, Matrix.mulVec_single_one, col_apply,
+      Matrix.mulVecLin_apply, of_apply]
+  map_add' f g := by
+    ext i j
+    simp only [Pi.add_apply, LinearMap.add_apply, of_apply, Matrix.add_apply]
+  map_smul' c f := by
+    ext i j
+    simp only [Pi.smul_apply, LinearMap.smul_apply, RingHom.id_apply, of_apply, Matrix.smul_apply]
 
 中文:
 定义 线性映射.toMatrix'
@@ -1044,7 +1059,14 @@ definition LinearMap.toMatrix'
   left_inv f := by
     apply (Pi.basisFun R n).ext
     intro j; ext i
-    simp only [Pi.basisFun_apply, Matrix.mulVec_s
+    simp only [Pi.basisFun_apply, Matrix.mulVec_single_one, col_apply,
+      Matrix.mulVecLin_apply, of_apply]
+  map_add' f g := by
+    ext i j
+    simp only [Pi.add_apply, LinearMap.add_apply, of_apply, Matrix.add_apply]
+  map_smul' c f := by
+    ext i j
+    simp only [Pi.smul_apply, LinearMap.smul_apply, RingHom.id_apply, of_apply, Matrix.smul_apply]
 -/
 def LinearMap.toMatrix' : ((n -> R) ->ₗ[R] m -> R) ≃ₗ[R] Matrix m n R where
   toFun f := of fun i j => f (Pi.single j 1) i
@@ -2531,7 +2553,8 @@ theorem Matrix.toLin_self
   · intro i' _ i'_ne
     rw [Finsupp.single_eq_of_ne i'_ne]; rw [mul_zero]
   · intros
-    have :
+    have := Finset.mem_univ i
+    contradiction
 
 中文:
 定理 矩阵.toLin_self
@@ -2542,7 +2565,8 @@ theorem Matrix.toLin_self
   · intro i' _ i'_ne
     rw [Finsupp.single_eq_of_ne i'_ne]; rw [mul_zero]
   · intros
-    have :
+    have := Finset.mem_univ i
+    contradiction
 
 Depends on / 依赖: Basis.repr_self, Finset, Finset.mem_univ, Finset.sum_congr, Finset.sum_eq_single, Finsupp, Finsupp.single_eq_of_ne, Finsupp.single_eq_same, Matrix, Matrix.mulVec, Matrix.toLin_apply, dotProduct, intros, mem_univ, mulVec, mul_one, mul_zero, repr_self, single_eq_of_ne, single_eq_same
 -/
@@ -2759,7 +2783,7 @@ definition Matrix.toLinOfInv
     invFun := Matrix.toLin v₂ v₁ M'
     left_inv := fun x => by rw [← Matrix.toLin_mul_apply, hM'M, Matrix.toLin_one, id_apply]
     right_inv := fun x => by
-      rw [← Matrix.toLin_mul_apply]; rw [hMM']; rw [Matrix.toLin_one]; rw [id_app
+      rw [← Matrix.toLin_mul_apply]; rw [hMM']; rw [Matrix.toLin_one]; rw [id_apply] }
 
 中文:
 定义 矩阵.toLinOfInv
@@ -2769,7 +2793,7 @@ definition Matrix.toLinOfInv
     invFun := Matrix.toLin v₂ v₁ M'
     left_inv := fun x => by rw [← Matrix.toLin_mul_apply, hM'M, Matrix.toLin_one, id_apply]
     right_inv := fun x => by
-      rw [← Matrix.toLin_mul_apply]; rw [hMM']; rw [Matrix.toLin_one]; rw [id_app
+      rw [← Matrix.toLin_mul_apply]; rw [hMM']; rw [Matrix.toLin_one]; rw [id_apply] }
 
 Depends on / 依赖: Matrix, Matrix.toLin, Matrix.toLin_mul_apply, Matrix.toLin_one, id_apply, invFun, left_inv, right_inv, toLin_mul_apply, toLin_one
 -/
@@ -3387,7 +3411,8 @@ definition leftMulMatrix
   map_mul' x y := by
     rw [map_mul]; rw [LinearMap.toMatrix_mul]
   commutes' r := by
-   
+    ext
+    rw [lmul_algebraMap]; rw [toMatrix_lsmul]; rw [algebraMap_eq_diagonal]; rw [Pi.algebraMap_def]; rw [Algebra.algebraMap_self_apply]
 
 中文:
 定义 leftMulMatrix
@@ -3402,7 +3427,8 @@ definition leftMulMatrix
   map_mul' x y := by
     rw [map_mul]; rw [LinearMap.toMatrix_mul]
   commutes' r := by
-   
+    ext
+    rw [lmul_algebraMap]; rw [toMatrix_lsmul]; rw [algebraMap_eq_diagonal]; rw [Pi.algebraMap_def]; rw [Algebra.algebraMap_self_apply]
 
 Depends on / 依赖: Algebra, Algebra.lmul, LinearMap, LinearMap.toMatrix, toMatrix
 -/
@@ -3980,7 +4006,20 @@ definition endVecRingEquivMatrixEnd
   invFun m :=
   { toFun := fun x i => ∑ j, m i j (x j)
     map_add' := by intros; ext; simp [Finset.sum_add_distrib]
-    map_smul' := by intros; ext; simp
+    map_smul' := by intros; ext; simp [Finset.smul_sum] }
+  left_inv f := by
+    ext i x j
+    simp only [LinearMap.coe_mk, AddHom.coe_mk, coe_comp, coe_single, Function.comp_apply]
+    rw [← Fintype.sum_apply]; rw [← map_sum]
+    exact congr_arg₂ _ (by aesop) rfl
+  right_inv m := by ext; simp [Pi.single_apply, apply_ite]
+  map_mul' f g := by
+    ext
+    simp only [Module.End.mul_apply, LinearMap.coe_mk, AddHom.coe_mk, Matrix.mul_apply,
+      LinearMap.coe_sum, Finset.sum_apply]
+    rw [← Fintype.sum_apply]; rw [← map_sum]
+    exact congr_arg₂ _ (by aesop) rfl
+  map_add' f g := by ext; simp
 
 中文:
 定义 endVecRingEquivMatrixEnd
@@ -3991,7 +4030,20 @@ definition endVecRingEquivMatrixEnd
   invFun m :=
   { toFun := fun x i => ∑ j, m i j (x j)
     map_add' := by intros; ext; simp [Finset.sum_add_distrib]
-    map_smul' := by intros; ext; simp
+    map_smul' := by intros; ext; simp [Finset.smul_sum] }
+  left_inv f := by
+    ext i x j
+    simp only [LinearMap.coe_mk, AddHom.coe_mk, coe_comp, coe_single, Function.comp_apply]
+    rw [← Fintype.sum_apply]; rw [← map_sum]
+    exact congr_arg₂ _ (by aesop) rfl
+  right_inv m := by ext; simp [Pi.single_apply, apply_ite]
+  map_mul' f g := by
+    ext
+    simp only [Module.End.mul_apply, LinearMap.coe_mk, AddHom.coe_mk, Matrix.mul_apply,
+      LinearMap.coe_sum, Finset.sum_apply]
+    rw [← Fintype.sum_apply]; rw [← map_sum]
+    exact congr_arg₂ _ (by aesop) rfl
+  map_add' f g := by ext; simp
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, Finset, Finset.smul_sum, Finset.sum_add_distrib, Fintype, Fintype.sum_apply, Function, Function.comp_apply, LinearMap, LinearMap.coe_mk, Pi.single, Pi.single_add, Pi.single_smul, coe_comp, coe_mk, coe_single, comp_apply, intros, invFun
 -/
@@ -4040,7 +4092,9 @@ definition endVecAlgEquivMatrixEnd
     ext
     simp only [endVecRingEquivMatrixEnd, RingEquiv.toEquiv_eq_coe, Module.algebraMap_end_eq_smul_id,
       Equiv.toFun_as_coe, EquivLike.coe_coe, RingEquiv.coe_mk, Equiv.coe_fn_mk,
-      LinearMap.smul_apply, id_coe, id_eq, Pi.smul_apply, Pi
+      LinearMap.smul_apply, id_coe, id_eq, Pi.smul_apply, Pi.single_apply, smul_ite, smul_zero,
+      LinearMap.coe_mk, AddHom.coe_mk, algebraMap_matrix_apply]
+    split_ifs <;> rfl
 
 中文:
 定义 endVecAlgEquivMatrixEnd
@@ -4050,7 +4104,9 @@ definition endVecAlgEquivMatrixEnd
     ext
     simp only [endVecRingEquivMatrixEnd, RingEquiv.toEquiv_eq_coe, Module.algebraMap_end_eq_smul_id,
       Equiv.toFun_as_coe, EquivLike.coe_coe, RingEquiv.coe_mk, Equiv.coe_fn_mk,
-      LinearMap.smul_apply, id_coe, id_eq, Pi.smul_apply, Pi
+      LinearMap.smul_apply, id_coe, id_eq, Pi.smul_apply, Pi.single_apply, smul_ite, smul_zero,
+      LinearMap.coe_mk, AddHom.coe_mk, algebraMap_matrix_apply]
+    split_ifs <;> rfl
 
 Depends on / 依赖: endVecRingEquivMatrixEnd
 -/
@@ -4149,7 +4205,9 @@ theorem isStablyFiniteRing_iff_injective_of_surjective
   refine ⟨fun h n f surj => ?_, fun h n f g eq => ?_⟩
   · have ⟨g, eq⟩ := Module.projective_lifting_property _ .id surj
     exact injective_of_comp_eq_id _ _ (h _ eq)
-  · have surj := surjective_of_com
+  · have surj := surjective_of_comp_eq_id _ _ eq
+    have := (LinearEquiv.ofBijective f ⟨h _ _ surj, surj⟩).symm_comp
+    rwa [← left_inv_eq_right_inv this eq]
 
 中文:
 定理 isStablyFiniteRing_iff_injective_of_surjective
@@ -4158,7 +4216,9 @@ theorem isStablyFiniteRing_iff_injective_of_surjective
   refine ⟨fun h n f surj => ?_, fun h n f g eq => ?_⟩
   · have ⟨g, eq⟩ := Module.projective_lifting_property _ .id surj
     exact injective_of_comp_eq_id _ _ (h _ eq)
-  · have surj := surjective_of_com
+  · have surj := surjective_of_comp_eq_id _ _ eq
+    have := (LinearEquiv.ofBijective f ⟨h _ _ surj, surj⟩).symm_comp
+    rwa [← left_inv_eq_right_inv this eq]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, Module, Module.projective_lifting_property, injective_of_comp_eq_id, isDedekindFiniteMonoid_iff, isStablyFiniteRing_iff_isDedekindFiniteMonoid_moduleEnd, left_inv_eq_right_inv, ofBijective, projective_lifting_property, simp_rw, surjective_of_comp_eq_id, symm_comp
 -/

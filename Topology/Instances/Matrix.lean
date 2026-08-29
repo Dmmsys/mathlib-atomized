@@ -1155,7 +1155,7 @@ theorem isClosed_setOfPred_blockTriangular
   exact isClosed_eq (continuous_id.matrix_elem i j) continuous_const
 
 @[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_blockTriangular := isClosed_setO
+alias isClosed_setOf_blockTriangular := isClosed_setOfPred_blockTriangular
 
 中文:
 定理 isClosed_setOfPred_blockTriangular
@@ -1166,7 +1166,7 @@ alias isClosed_setOf_blockTriangular := isClosed_setO
   exact isClosed_eq (continuous_id.matrix_elem i j) continuous_const
 
 @[deprecated (since := "2026-07-09")]
-alias isClosed_setOf_blockTriangular := isClosed_setO
+alias isClosed_setOf_blockTriangular := isClosed_setOfPred_blockTriangular
 
 Depends on / 依赖: BlockTriangular, Set.ofPred_forall, continuous_const, continuous_id, continuous_id.matrix_elem, isClosed_eq, isClosed_iInter, matrix_elem, ofPred_forall
 -/

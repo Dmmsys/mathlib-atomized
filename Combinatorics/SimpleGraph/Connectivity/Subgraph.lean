@@ -313,7 +313,7 @@ lemma connected_sup
   exists ⟨u, Or.inl hu⟩
   rintro ⟨v, (hv | hv)⟩
   · exact Reachable.map (Subgraph.inclusion (le_sup_left : H <= H ⊔ K)) (hH ⟨u, hu⟩ ⟨v, hv⟩)
-  · exact Reachable.map (Subgraph.inclusion (le_sup_r
+  · exact Reachable.map (Subgraph.inclusion (le_sup_right : K <= H ⊔ K)) (hK ⟨u, hu'⟩ ⟨v, hv⟩)
 
 中文:
 引理 connected_sup
@@ -324,7 +324,7 @@ lemma connected_sup
   exists ⟨u, Or.inl hu⟩
   rintro ⟨v, (hv | hv)⟩
   · exact Reachable.map (Subgraph.inclusion (le_sup_left : H <= H ⊔ K)) (hH ⟨u, hu⟩ ⟨v, hv⟩)
-  · exact Reachable.map (Subgraph.inclusion (le_sup_r
+  · exact Reachable.map (Subgraph.inclusion (le_sup_right : K <= H ⊔ K)) (hK ⟨u, hu'⟩ ⟨v, hv⟩)
 
 Depends on / 依赖: Or.inl, Reachable, Reachable.map, Subgraph, Subgraph.connected_iff, Subgraph.inclusion, connected_iff, connected_iff_exists_forall_reachable, inclusion, le_sup_left, le_sup_right
 -/
@@ -553,7 +553,9 @@ theorem maximal_subgraph_connected_iff
   · have ⟨v, hv⟩ := hconn.nonempty
     suffices G' <= (G.connectedComponentMk v).toSubgraph from
       ⟨G.connectedComponentMk v, le_antisymm (h (connected_toSubgraph _) this) this⟩
-exact le_trans Subgraph.le_induce_top_verts Subgraph.induce_mono_
+exact le_trans Subgraph.le_induce_top_verts Subgraph.induce_mono_right fun u hu =>
+ConnectedComponent.sound .map G'.hom hconn.coe.preconnected ⟨u, hu⟩ ⟨v, hv⟩
+  · exact h ▸ maximal_connected_toSubgraph _
 
 中文:
 定理 maximal_subgraph_connected_iff
@@ -563,7 +565,9 @@ exact le_trans Subgraph.le_induce_top_verts Subgraph.induce_mono_
   · have ⟨v, hv⟩ := hconn.nonempty
     suffices G' <= (G.connectedComponentMk v).toSubgraph from
       ⟨G.connectedComponentMk v, le_antisymm (h (connected_toSubgraph _) this) this⟩
-exact le_trans Subgraph.le_induce_top_verts Subgraph.induce_mono_
+exact le_trans Subgraph.le_induce_top_verts Subgraph.induce_mono_right fun u hu =>
+ConnectedComponent.sound .map G'.hom hconn.coe.preconnected ⟨u, hu⟩ ⟨v, hv⟩
+  · exact h ▸ maximal_connected_toSubgraph _
 
 Depends on / 依赖: ConnectedComponent, ConnectedComponent.sound, G.connectedComponentMk, Subgraph, Subgraph.induce_mono_right, Subgraph.le_induce_top_verts, connectedComponentMk, connected_toSubgraph, hconn.coe.preconnected, hconn.nonempty, induce_mono_right, le_antisymm, le_induce_top_verts, le_trans, maximal_connected_toSubgraph, nonempty, preconnected, toSubgraph
 -/
@@ -964,7 +968,7 @@ theorem finite_neighborSet_toSubgraph
     rw [Walk.toSubgraph]; rw [Subgraph.neighborSet_sup]
     refine Set.Finite.union ?_ ih
     refine Set.Finite.subset ?_ (neighborSet_subgraphOfAdj_subset ha)
-   
+    apply Set.toFinite
 
 中文:
 定理 finite_neighborSet_toSubgraph
@@ -979,7 +983,7 @@ theorem finite_neighborSet_toSubgraph
     rw [Walk.toSubgraph]; rw [Subgraph.neighborSet_sup]
     refine Set.Finite.union ?_ ih
     refine Set.Finite.subset ?_ (neighborSet_subgraphOfAdj_subset ha)
-   
+    apply Set.toFinite
 
 Depends on / 依赖: Finite, Set.Finite.subset, Set.Finite.union, Set.toFinite, Subgraph, Subgraph.neighborSet_sup, Walk.toSubgraph, neighborSet_singletonSubgraph, neighborSet_subgraphOfAdj_subset, neighborSet_sup, subset, toFinite, toSubgraph
 -/
@@ -1033,7 +1037,7 @@ theorem toSubgraph_adj_getVert
     · simp only [Walk.toSubgraph, getVert_cons_succ, Subgraph.sup_adj, subgraphOfAdj_adj, Sym2.eq,
         Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk]
       right
-      exact ih (Nat.succ_lt_su
+      exact ih (Nat.succ_lt_succ_iff.mp hi)
 
 中文:
 定理 toSubgraph_adj_getVert
@@ -1047,7 +1051,7 @@ theorem toSubgraph_adj_getVert
     · simp only [Walk.toSubgraph, getVert_cons_succ, Subgraph.sup_adj, subgraphOfAdj_adj, Sym2.eq,
         Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk]
       right
-      exact ih (Nat.succ_lt_su
+      exact ih (Nat.succ_lt_succ_iff.mp hi)
 
 Depends on / 依赖: Nat.succ_lt_succ_iff.mp, Prod.mk.injEq, Prod.swap_prod_mk, Subgraph, Subgraph.sup_adj, Sym2.eq, Sym2.rel_iff, Walk.toSubgraph, generalizing, getVert_cons_succ, rel_iff, subgraphOfAdj_adj, succ_lt_succ_iff, sup_adj, swap_prod_mk, toSubgraph
 -/
@@ -1183,7 +1187,8 @@ theorem toSubgraph_le_iff
 refine ⟨fun hw e he => Subgraph.edgeSet_mono hw w.mem_edges_toSubgraph.mpr he, fun hw => ?_⟩
 refine ⟨fun v' hv' => ?_, fun u' v' hadj => hw w.mem_edges_toSubgraph.mp (hadj : s(_, _) in _)⟩
   rw [mem_verts_toSubgraph]; rw [mem_support_iff_exists_mem_edges_of_not_nil hnil] at hv'
-  have ⟨e, he, hv'
+  have ⟨e, he, hv'e⟩ := hv'
+  exact G'.mem_verts_of_mem_edge (hw he) hv'e
 
 中文:
 定理 toSubgraph_le_iff
@@ -1192,7 +1197,8 @@ refine ⟨fun v' hv' => ?_, fun u' v' hadj => hw w.mem_edges_toSubgraph.mp (hadj
 refine ⟨fun hw e he => Subgraph.edgeSet_mono hw w.mem_edges_toSubgraph.mpr he, fun hw => ?_⟩
 refine ⟨fun v' hv' => ?_, fun u' v' hadj => hw w.mem_edges_toSubgraph.mp (hadj : s(_, _) in _)⟩
   rw [mem_verts_toSubgraph]; rw [mem_support_iff_exists_mem_edges_of_not_nil hnil] at hv'
-  have ⟨e, he, hv'
+  have ⟨e, he, hv'e⟩ := hv'
+  exact G'.mem_verts_of_mem_edge (hw he) hv'e
 
 Depends on / 依赖: Subgraph, Subgraph.edgeSet_mono, edgeSet_mono, mem_edges_toSubgraph, mem_support_iff_exists_mem_edges_of_not_nil, mem_verts_of_mem_edge, mem_verts_toSubgraph, w.mem_edges_toSubgraph.mp, w.mem_edges_toSubgraph.mpr
 -/
@@ -1421,7 +1427,11 @@ lemma neighborSet_toSubgraph_internal
   ext v
   simp_all only [ne_eq, Subgraph.mem_neighborSet, Set.mem_insert_iff, Set.mem_singleton_iff,
     SimpleGraph.Walk.toSubgraph_adj_iff, Sym2.eq, Sym2.rel_iff', Prod.mk.injEq,
-    
+    Prod.swap_prod_mk]
+  refine ⟨?_, by aesop⟩
+  rintro ⟨i', ⟨hl, _⟩ | ⟨_, hl⟩⟩ <;>
+    apply hp.getVert_injOn (by rw [Set.mem_ofPred_eq]; lia)
+      (by rw [Set.mem_ofPred_eq]; lia) at hl <;> aesop
 
 中文:
 引理 neighborSet_toSubgraph_internal
@@ -1432,7 +1442,11 @@ lemma neighborSet_toSubgraph_internal
   ext v
   simp_all only [ne_eq, Subgraph.mem_neighborSet, Set.mem_insert_iff, Set.mem_singleton_iff,
     SimpleGraph.Walk.toSubgraph_adj_iff, Sym2.eq, Sym2.rel_iff', Prod.mk.injEq,
-    
+    Prod.swap_prod_mk]
+  refine ⟨?_, by aesop⟩
+  rintro ⟨i', ⟨hl, _⟩ | ⟨_, hl⟩⟩ <;>
+    apply hp.getVert_injOn (by rw [Set.mem_ofPred_eq]; lia)
+      (by rw [Set.mem_ofPred_eq]; lia) at hl <;> aesop
 
 Depends on / 依赖: Prod.mk.injEq, Prod.swap_prod_mk, Set.mem_insert_iff, Set.mem_ofPred_eq, Set.mem_singleton_iff, SimpleGraph, SimpleGraph.Walk.toSubgraph_adj_iff, Subgraph, Subgraph.mem_neighborSet, Sym2.eq, Sym2.rel_iff, getVert_injOn, hp.getVert_injOn, length, mem_insert_iff, mem_neighborSet, mem_ofPred_eq, mem_singleton_iff, ne_eq, p.length
 -/
@@ -1499,7 +1513,12 @@ lemma snd_of_toSubgraph_adj
   rcases hi.1 with ⟨hl1, rfl⟩ | ⟨hr1, hr2⟩
   · have : i = 0 := by
       apply hp.getVert_injOn (by rw [Set.mem_ofPred]; lia) (by rw [Set.mem_ofPred]; lia)
-      rw [p.getVer
+      rw [p.getVert_zero]; rw [hl1]
+    simp [this]
+  · have : i + 1 = 0 := by
+      apply hp.getVert_injOn (by rw [Set.mem_ofPred]; lia) (by rw [Set.mem_ofPred]; lia)
+      rw [p.getVert_zero]; rw [hr2]
+    contradiction
 
 中文:
 引理 snd_of_toSubgraph_adj
@@ -1510,7 +1529,12 @@ lemma snd_of_toSubgraph_adj
   rcases hi.1 with ⟨hl1, rfl⟩ | ⟨hr1, hr2⟩
   · have : i = 0 := by
       apply hp.getVert_injOn (by rw [Set.mem_ofPred]; lia) (by rw [Set.mem_ofPred]; lia)
-      rw [p.getVer
+      rw [p.getVert_zero]; rw [hl1]
+    simp [this]
+  · have : i + 1 = 0 := by
+      apply hp.getVert_injOn (by rw [Set.mem_ofPred]; lia) (by rw [Set.mem_ofPred]; lia)
+      rw [p.getVert_zero]; rw [hr2]
+    contradiction
 
 Depends on / 依赖: Prod.mk.injEq, Prod.swap_prod_mk, Set.mem_ofPred, Sym2.eq, Sym2.rel_iff, getVert_injOn, getVert_zero, hp.getVert_injOn, mem_ofPred, p.getVert_zero, p.toSubgraph_adj_iff.mp, rel_iff, swap_prod_mk, toSubgraph_adj_iff
 -/
@@ -1577,7 +1601,15 @@ lemma neighborSet_toSubgraph_internal
   ext v
   simp_all only [ne_eq, Subgraph.mem_neighborSet, Set.mem_insert_iff, Set.mem_singleton_iff,
     SimpleGraph.Walk.toSubgraph_adj_iff, Sym2.eq, Sym2.rel_iff', Prod.mk.injEq,
-    
+    Prod.swap_prod_mk]
+  refine ⟨?_, by aesop⟩
+  rintro ⟨i', ⟨hl1, hl2⟩ | ⟨hr1, hr2⟩⟩
+  · apply hpc.getVert_injOn' (by rw [Set.mem_ofPred_eq]; lia)
+      (by rw [Set.mem_ofPred_eq]; lia) at hl1
+    simp_all
+  · apply hpc.getVert_injOn (by rw [Set.mem_ofPred_eq]; lia)
+      (by rw [Set.mem_ofPred_eq]; lia) at hr2
+    aesop
 
 中文:
 引理 neighborSet_toSubgraph_internal
@@ -1588,7 +1620,15 @@ lemma neighborSet_toSubgraph_internal
   ext v
   simp_all only [ne_eq, Subgraph.mem_neighborSet, Set.mem_insert_iff, Set.mem_singleton_iff,
     SimpleGraph.Walk.toSubgraph_adj_iff, Sym2.eq, Sym2.rel_iff', Prod.mk.injEq,
-    
+    Prod.swap_prod_mk]
+  refine ⟨?_, by aesop⟩
+  rintro ⟨i', ⟨hl1, hl2⟩ | ⟨hr1, hr2⟩⟩
+  · apply hpc.getVert_injOn' (by rw [Set.mem_ofPred_eq]; lia)
+      (by rw [Set.mem_ofPred_eq]; lia) at hl1
+    simp_all
+  · apply hpc.getVert_injOn (by rw [Set.mem_ofPred_eq]; lia)
+      (by rw [Set.mem_ofPred_eq]; lia) at hr2
+    aesop
 
 Depends on / 依赖: Prod.mk.injEq, Prod.swap_prod_mk, Set.mem_insert_iff, Set.mem_ofPred_eq, Set.mem_singleton_iff, SimpleGraph, SimpleGraph.Walk.toSubgraph_adj_iff, Subgraph, Subgraph.mem_neighborSet, Sym2.eq, Sym2.rel_iff, getVert_injOn, hpc.getVert_injOn, length, mem_insert_iff, mem_neighborSet, mem_ofPred_eq, mem_singleton_iff, ne_eq, p.length
 -/
@@ -1623,7 +1663,8 @@ lemma ncard_neighborSet_toSubgraph_eq_two
   · have huv : u = v := by aesop
     rw [← huv]; rw [hpc.neighborSet_toSubgraph_endpoint]
     exact Set.ncard_pair hpc.snd_ne_penultimate
-  rw [← hi.1]; rw [hpc.neighbo
+  rw [← hi.1]; rw [hpc.neighborSet_toSubgraph_internal he.1 (by lia)]
+  exact Set.ncard_pair (hpc.getVert_sub_one_ne_getVert_add_one (by lia))
 
 中文:
 引理 ncard_neighborSet_toSubgraph_eq_two
@@ -1635,7 +1676,8 @@ lemma ncard_neighborSet_toSubgraph_eq_two
   · have huv : u = v := by aesop
     rw [← huv]; rw [hpc.neighborSet_toSubgraph_endpoint]
     exact Set.ncard_pair hpc.snd_ne_penultimate
-  rw [← hi.1]; rw [hpc.neighbo
+  rw [← hi.1]; rw [hpc.neighborSet_toSubgraph_internal he.1 (by lia)]
+  exact Set.ncard_pair (hpc.getVert_sub_one_ne_getVert_add_one (by lia))
 
 Depends on / 依赖: Set.ncard_pair, SimpleGraph, SimpleGraph.Walk.mem_support_iff_exists_getVert, getVert_sub_one_ne_getVert_add_one, hpc.getVert_sub_one_ne_getVert_add_one, hpc.neighborSet_toSubgraph_endpoint, hpc.neighborSet_toSubgraph_internal, hpc.snd_ne_penultimate, length, mem_support_iff_exists_getVert, ncard_pair, neighborSet_toSubgraph_endpoint, neighborSet_toSubgraph_internal, p.length, snd_ne_penultimate
 -/
@@ -1664,7 +1706,7 @@ lemma exists_isCycle_snd_verts_eq
   · exact ⟨p, ⟨h, hl.symm, rfl⟩⟩
   · use p.reverse
     rw [penultimate]; rw [← getVert_reverse] at hr
-    exact ⟨h.reverse, hr.symm, by rw [toSubgraph_r
+    exact ⟨h.reverse, hr.symm, by rw [toSubgraph_reverse _]⟩
 
 中文:
 引理 存在_isCycle_snd_verts_eq
@@ -1677,7 +1719,7 @@ lemma exists_isCycle_snd_verts_eq
   · exact ⟨p, ⟨h, hl.symm, rfl⟩⟩
   · use p.reverse
     rw [penultimate]; rw [← getVert_reverse] at hr
-    exact ⟨h.reverse, hr.symm, by rw [toSubgraph_r
+    exact ⟨h.reverse, hr.symm, by rw [toSubgraph_reverse _]⟩
 
 Depends on / 依赖: getVert_reverse, h.neighborSet_toSubgraph_endpoint, h.reverse, hl.symm, hr.symm, neighborSet, neighborSet_toSubgraph_endpoint, p.reverse, p.toSubgraph.neighborSet, penultimate, reverse, toSubgraph, toSubgraph_reverse
 -/
@@ -1709,7 +1751,18 @@ lemma exists_mem_support_mem_erase_mem_support_takeUntil_eq_empty
   induction hp : p.length + #s using Nat.strong_induction_on generalizing s v with | _ n ih
   simp only [Finset.Nonempty, mem_filter] at h
   obtain ⟨x, hxs, hx⟩ := h
-  obtain h | h := Finset.eq_empty_or_nonempty {t in s.erase x | t in (p.takeUntil x hx).support
+  obtain h | h := Finset.eq_empty_or_nonempty {t in s.erase x | t in (p.takeUntil x hx).support}
+  · use x, hxs, hx, h.le
+  have : (p.takeUntil x hx).length + #(s.erase x) < n := by
+    rw [← card_erase_add_one hxs] at hp
+    have := p.length_takeUntil_le_length hx
+    lia
+  obtain ⟨y, hys, hyp, h⟩ := ih _ this (s.erase x) h rfl
+  use y, mem_of_mem_erase hys, support_takeUntil_subset_support p hx hyp
+  rwa [takeUntil_takeUntil, erase_right_comm, filter_erase, erase_eq_of_notMem] at h
+  simp only [mem_filter, mem_erase, ne_eq, not_and, and_imp]
+  rintro hxy -
+  exact notMem_support_takeUntil_support_takeUntil_subset (Ne.symm hxy) hx hyp
 
 中文:
 引理 存在_mem_support_mem_erase_mem_support_takeUntil_eq_empty
@@ -1719,7 +1772,18 @@ lemma exists_mem_support_mem_erase_mem_support_takeUntil_eq_empty
   induction hp : p.length + #s using Nat.strong_induction_on generalizing s v with | _ n ih
   simp only [Finset.Nonempty, mem_filter] at h
   obtain ⟨x, hxs, hx⟩ := h
-  obtain h | h := Finset.eq_empty_or_nonempty {t in s.erase x | t in (p.takeUntil x hx).support
+  obtain h | h := Finset.eq_empty_or_nonempty {t in s.erase x | t in (p.takeUntil x hx).support}
+  · use x, hxs, hx, h.le
+  have : (p.takeUntil x hx).length + #(s.erase x) < n := by
+    rw [← card_erase_add_one hxs] at hp
+    have := p.length_takeUntil_le_length hx
+    lia
+  obtain ⟨y, hys, hyp, h⟩ := ih _ this (s.erase x) h rfl
+  use y, mem_of_mem_erase hys, support_takeUntil_subset_support p hx hyp
+  rwa [takeUntil_takeUntil, erase_right_comm, filter_erase, erase_eq_of_notMem] at h
+  simp only [mem_filter, mem_erase, ne_eq, not_and, and_imp]
+  rintro hxy -
+  exact notMem_support_takeUntil_support_takeUntil_subset (Ne.symm hxy) hx hyp
 
 Depends on / 依赖: Finset, Finset.Nonempty, Finset.eq_empty_or_nonempty, Finset.subset_empty, Nat.strong_induction_on, Nonempty, card_erase_add_one, eq_empty_or_nonempty, generalizing, h.le, length, length_takeUntil_le_length, mem_filter, p.length, p.length_takeUntil_le_length, p.takeUntil, s.erase, strong_induction_on, subset_empty, support
 -/
@@ -1754,7 +1818,7 @@ lemma exists_mem_support_forall_mem_support_imp_eq
   use x, hxs, hx
   suffices {t in s | t in (p.takeUntil x hx).support} subseteq {x} by simpa [Finset.subset_iff] using this
   rwa [Finset.filter_erase, ← Finset.subset_empty, ← Finset.subset_insert_iff,
-
+    LawfulSingleton.insert_empty_eq] at h
 
 中文:
 引理 存在_mem_support_对任意_mem_support_imp_eq
@@ -1764,7 +1828,7 @@ lemma exists_mem_support_forall_mem_support_imp_eq
   use x, hxs, hx
   suffices {t in s | t in (p.takeUntil x hx).support} subseteq {x} by simpa [Finset.subset_iff] using this
   rwa [Finset.filter_erase, ← Finset.subset_empty, ← Finset.subset_insert_iff,
-
+    LawfulSingleton.insert_empty_eq] at h
 
 Depends on / 依赖: Finset, Finset.filter_erase, Finset.subset_empty, Finset.subset_iff, Finset.subset_insert_iff, LawfulSingleton, LawfulSingleton.insert_empty_eq, exists_mem_support_mem_erase_mem_support_takeUntil_eq_empty, filter_erase, insert_empty_eq, p.exists_mem_support_mem_erase_mem_support_takeUntil_eq_empty, p.takeUntil, subset_empty, subset_iff, subset_insert_iff, subseteq, support, takeUntil
 -/
@@ -1888,6 +1952,7 @@ lemma preconnected_iff_forall_exists_walk_subgraph
     rintro ⟨u, hu⟩ ⟨v, hv⟩
     obtain ⟨p, h⟩ := hw hu hv
     exact Reachable.map (Subgraph.inclusion h)
+      (p.toSubgraph_connected ⟨_, p.start_mem_verts_toSubgraph⟩ ⟨_, p.end_mem_verts_toSubgraph⟩)
 
 中文:
 引理 preconnected_iff_对任意_存在_walk_subgraph
@@ -1903,6 +1968,7 @@ lemma preconnected_iff_forall_exists_walk_subgraph
     rintro ⟨u, hu⟩ ⟨v, hv⟩
     obtain ⟨p, h⟩ := hw hu hv
     exact Reachable.map (Subgraph.inclusion h)
+      (p.toSubgraph_connected ⟨_, p.start_mem_verts_toSubgraph⟩ ⟨_, p.end_mem_verts_toSubgraph⟩)
 
 Depends on / 依赖: Reachable, Reachable.map, Subgraph, Subgraph.hom, Subgraph.inclusion, Subgraph.preconnected_iff, coeSubgraph_le, end_mem_verts_toSubgraph, inclusion, p.end_mem_verts_toSubgraph, p.map, p.start_mem_verts_toSubgraph, p.toSubgraph_connected, preconnected_iff, start_mem_verts_toSubgraph, toSubgraph_connected
 -/
@@ -2104,7 +2170,11 @@ lemma connected_induce_union
   apply (Subgraph.connected_induce_top_sup sconn tconn hv hw ha).mono
   · simp only [sup_le_iff, Subgraph.le_induce_union_left,
       Subgraph.le_induce_union_right, and_true, ← Subgraph.subgraphOfAdj_eq_induce ha]
-    appl
+    apply subgraphOfAdj_le_of_adj
+    simp [hv, hw, ha]
+  · simp only [Subgraph.verts_sup, Subgraph.induce_verts]
+    rw [Set.union_assoc]
+    simp [Set.insert_subset_iff, Set.singleton_subset_iff, hv, hw]
 
 中文:
 引理 connected_induce_union
@@ -2115,7 +2185,11 @@ lemma connected_induce_union
   apply (Subgraph.connected_induce_top_sup sconn tconn hv hw ha).mono
   · simp only [sup_le_iff, Subgraph.le_induce_union_left,
       Subgraph.le_induce_union_right, and_true, ← Subgraph.subgraphOfAdj_eq_induce ha]
-    appl
+    apply subgraphOfAdj_le_of_adj
+    simp [hv, hw, ha]
+  · simp only [Subgraph.verts_sup, Subgraph.induce_verts]
+    rw [Set.union_assoc]
+    simp [Set.insert_subset_iff, Set.singleton_subset_iff, hv, hw]
 
 Depends on / 依赖: Set.insert_subset_iff, Set.singleton_subset_iff, Set.union_assoc, Subgraph, Subgraph.connected_induce_top_sup, Subgraph.induce_verts, Subgraph.le_induce_union_left, Subgraph.le_induce_union_right, Subgraph.subgraphOfAdj_eq_induce, Subgraph.verts_sup, and_true, connected_induce_iff, connected_induce_top_sup, induce_verts, insert_subset_iff, le_induce_union_left, le_induce_union_right, preconnected_induce_iff, singleton_subset_iff, subgraphOfAdj_eq_induce
 -/
@@ -2181,7 +2255,9 @@ lemma induce_sUnion_connected_of_pairwise_not_disjoint
   rintro w hw
   simp only [Set.mem_sUnion] at hw
   obtain ⟨t, tS, wt⟩ := hw
-  refine ⟨s union t, Set.union_subset (Set.subset_sUnion_of_mem sS) (Set.subset_sUnion_o
+  refine ⟨s union t, Set.union_subset (Set.subset_sUnion_of_mem sS) (Set.subset_sUnion_of_mem tS),
+          Or.inl vs, Or.inr wt,
+          induce_union_connected (Sc sS).preconnected (Sc tS).preconnected (Snd sS tS) _ _⟩
 
 中文:
 引理 induce_sUnion_connected_of_pairwise_not_disjoint
@@ -2193,7 +2269,9 @@ lemma induce_sUnion_connected_of_pairwise_not_disjoint
   rintro w hw
   simp only [Set.mem_sUnion] at hw
   obtain ⟨t, tS, wt⟩ := hw
-  refine ⟨s union t, Set.union_subset (Set.subset_sUnion_of_mem sS) (Set.subset_sUnion_o
+  refine ⟨s union t, Set.union_subset (Set.subset_sUnion_of_mem sS) (Set.subset_sUnion_of_mem tS),
+          Or.inl vs, Or.inr wt,
+          induce_union_connected (Sc sS).preconnected (Sc tS).preconnected (Snd sS tS) _ _⟩
 
 Depends on / 依赖: G.induce_connected_of_patches, Or.inl, Or.inr, Set.mem_sUnion, Set.subset_sUnion_of_mem, Set.union_subset, induce_connected_of_patches, induce_union_connected, mem_sUnion, nonempty, preconnected, subset_sUnion_of_mem, union_subset
 -/
@@ -2224,7 +2302,17 @@ lemma extend_finset_to_connected
   · simp only [Finset.mem_biUnion, List.mem_toFinset]
     exact ⟨v, vt, Walk.end_mem_support _⟩
   · apply G.induce_connected_of_patches u
-    · simp only [Finset.coe_biUnion, Fin
+    · simp only [Finset.coe_biUnion, Finset.mem_coe, List.coe_toFinset, Set.mem_iUnion,
+                 Set.mem_ofPred_eq, Walk.start_mem_support, exists_prop, and_true]
+      exact ⟨u, ut⟩
+    intro v hv
+    simp only [Finset.mem_coe, Finset.mem_biUnion, List.mem_toFinset] at hv
+    obtain ⟨w, wt, hw⟩ := hv
+    refine ⟨{x | x in (Gpc u w).some.support}, ?_, ?_⟩
+    · simp only [Finset.coe_biUnion, Finset.mem_coe, List.coe_toFinset]
+      exact fun x xw => Set.mem_iUnion₂.mpr ⟨w, wt, xw⟩
+    · simp only [Set.mem_ofPred_eq, Walk.start_mem_support, exists_true_left]
+      refine ⟨hw, Walk.connected_induce_support _ _ _⟩
 
 中文:
 引理 extend_finset_to_connected
@@ -2236,7 +2324,17 @@ lemma extend_finset_to_connected
   · simp only [Finset.mem_biUnion, List.mem_toFinset]
     exact ⟨v, vt, Walk.end_mem_support _⟩
   · apply G.induce_connected_of_patches u
-    · simp only [Finset.coe_biUnion, Fin
+    · simp only [Finset.coe_biUnion, Finset.mem_coe, List.coe_toFinset, Set.mem_iUnion,
+                 Set.mem_ofPred_eq, Walk.start_mem_support, exists_prop, and_true]
+      exact ⟨u, ut⟩
+    intro v hv
+    simp only [Finset.mem_coe, Finset.mem_biUnion, List.mem_toFinset] at hv
+    obtain ⟨w, wt, hw⟩ := hv
+    refine ⟨{x | x in (Gpc u w).some.support}, ?_, ?_⟩
+    · simp only [Finset.coe_biUnion, Finset.mem_coe, List.coe_toFinset]
+      exact fun x xw => Set.mem_iUnion₂.mpr ⟨w, wt, xw⟩
+    · simp only [Set.mem_ofPred_eq, Walk.start_mem_support, exists_true_left]
+      refine ⟨hw, Walk.connected_induce_support _ _ _⟩
 
 Depends on / 依赖: Finset, Finset.coe_biUnion, Finset.mem_biUnion, Finset.mem_coe, G.induce_connected_of_patches, List.coe_toFinset, List.mem_toFinset, Set.mem_iUnion, Set.mem_ofPred_eq, Walk.end_mem_support, Walk.start_mem_support, and_true, biUnion, classical, coe_biUnion, coe_toFinset, end_mem_support, exists_prop, induce_connected_of_patches, mem_biUnion
 -/

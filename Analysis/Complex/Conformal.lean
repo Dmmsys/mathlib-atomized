@@ -95,7 +95,13 @@ theorem isConformalMap_complex_linear
   refine ⟨‖map 1‖, minor₁, ⟨‖map 1‖⁻¹ • ((map : Complex ->ₗ[Complex] E) : Complex ->ₗ[Real] E), ?_⟩, ?_⟩
   · intro x
     simp only [LinearMap.smul_apply]
-    have : x = x • (1 : C
+    have : x = x • (1 : Complex) := by rw [smul_eq_mul, mul_one]
+    nth_rw 1 [this]
+    rw [LinearMap.coe_restrictScalars]
+    simp only [map.coe_coe, map.map_smul, norm_smul, norm_inv, norm_norm]
+    field
+  · ext1
+    simp [minor₁]
 
 中文:
 定理 isConformalMap_complex_linear
@@ -106,7 +112,13 @@ theorem isConformalMap_complex_linear
   refine ⟨‖map 1‖, minor₁, ⟨‖map 1‖⁻¹ • ((map : Complex ->ₗ[Complex] E) : Complex ->ₗ[Real] E), ?_⟩, ?_⟩
   · intro x
     simp only [LinearMap.smul_apply]
-    have : x = x • (1 : C
+    have : x = x • (1 : Complex) := by rw [smul_eq_mul, mul_one]
+    nth_rw 1 [this]
+    rw [LinearMap.coe_restrictScalars]
+    simp only [map.coe_coe, map.map_smul, norm_smul, norm_inv, norm_norm]
+    field
+  · ext1
+    simp [minor₁]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.ext_ring_iff, LinearMap, LinearMap.coe_restrictScalars, LinearMap.smul_apply, coe_coe, coe_restrictScalars, ext_ring_iff, map.coe_coe, map.map_smul, map_smul, mul_one, nonzero, norm_eq_zero, norm_inv, norm_norm, norm_smul, nth_rw, smul_apply, smul_eq_mul
 -/
@@ -164,7 +176,12 @@ theorem IsConformalMap.is_complex_or_conj_linear
     ⟨li.toLinearIsometryEquiv rfl, by ext1; rfl⟩
   rcases linear_isometry_complex li with ⟨a, rfl | rfl⟩
   -- let rot := c • (a : ℂ) • ContinuousLinearMap.id ℂ ℂ,
-  · refine O
+  · refine Or.inl ⟨c • (a : Complex) • ContinuousLinearMap.id Complex Complex, ?_⟩
+    ext1
+    simp
+  · refine Or.inr ⟨c • (a : Complex) • ContinuousLinearMap.id Complex Complex, ?_⟩
+    ext1
+    simp
 
 中文:
 定理 IsConformalMap.is_complex_or_conj_linear
@@ -175,7 +192,12 @@ theorem IsConformalMap.is_complex_or_conj_linear
     ⟨li.toLinearIsometryEquiv rfl, by ext1; rfl⟩
   rcases linear_isometry_complex li with ⟨a, rfl | rfl⟩
   -- let rot := c • (a : ℂ) • ContinuousLinearMap.id ℂ ℂ,
-  · refine O
+  · refine Or.inl ⟨c • (a : Complex) • ContinuousLinearMap.id Complex Complex, ?_⟩
+    ext1
+    simp
+  · refine Or.inr ⟨c • (a : Complex) • ContinuousLinearMap.id Complex Complex, ?_⟩
+    ext1
+    simp
 
 Depends on / 依赖: li.toLinearIsometryEquiv, linear_isometry_complex, toLinearIsometry, toLinearIsometryEquiv
 -/
@@ -207,6 +229,13 @@ theorem isConformalMap_iff_is_complex_or_conj_linear
       contrapose h₂ with w
       simp only [w, restrictScalars_zero]
     · have minor₁ : g = map.restrictScalars Real ∘L ↑conjCLE := by
+        ext1
+        simp only [hmap, ContinuousLinearEquiv.coe_coe, comp_apply, conjCLE_apply,
+          starRingEnd_self_apply]
+      rw [minor₁] at h₂ ⊢
+      refine isConformalMap_complex_linear_conj ?_
+      contrapose h₂ with w
+      simp only [w, restrictScalars_zero, zero_comp]
 
 中文:
 定理 isConformalMap_iff_is_complex_or_conj_linear
@@ -218,6 +247,13 @@ theorem isConformalMap_iff_is_complex_or_conj_linear
       contrapose h₂ with w
       simp only [w, restrictScalars_zero]
     · have minor₁ : g = map.restrictScalars Real ∘L ↑conjCLE := by
+        ext1
+        simp only [hmap, ContinuousLinearEquiv.coe_coe, comp_apply, conjCLE_apply,
+          starRingEnd_self_apply]
+      rw [minor₁] at h₂ ⊢
+      refine isConformalMap_complex_linear_conj ?_
+      contrapose h₂ with w
+      simp only [w, restrictScalars_zero, zero_comp]
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.coe_coe, coe_coe, comp_apply, conjCLE, conjCLE_apply, contrapose, h.is_complex_or_conj_linear, h.ne_zero, isConformalMap_complex_linear, isConformalMap_complex_linear_conj, is_complex_or_conj_linear, map.restrictScalars, ne_zero, restrictScalars, restrictScalars_zero, starRingEnd_self_apply
 -/
@@ -289,7 +325,11 @@ theorem conformalAt_iff_differentiableAt_or_differentiableAt_comp_conj
   have h_diff := h.imp_symm fderiv_zero_of_not_differentiableAt
   apply or_congr
   · rw [differentiableAt_iff_restrictScalars Real h_diff]
-  rw [← conj_conj z] at h_di
+  rw [← conj_conj z] at h_diff
+  rw [differentiableAt_iff_restrictScalars Real (h_diff.comp _ conjCLE.differentiableAt)]
+  refine exists_congr fun g => rfl.congr ?_
+  have : fderiv Real conj (conj z) = _ := conjCLE.fderiv
+  simp [fderiv_comp _ h_diff conjCLE.differentiableAt, this]
 
 中文:
 定理 conformalAt_iff_differentiableAt_or_differentiableAt_comp_conj
@@ -302,7 +342,11 @@ theorem conformalAt_iff_differentiableAt_or_differentiableAt_comp_conj
   have h_diff := h.imp_symm fderiv_zero_of_not_differentiableAt
   apply or_congr
   · rw [differentiableAt_iff_restrictScalars Real h_diff]
-  rw [← conj_conj z] at h_di
+  rw [← conj_conj z] at h_diff
+  rw [differentiableAt_iff_restrictScalars Real (h_diff.comp _ conjCLE.differentiableAt)]
+  refine exists_congr fun g => rfl.congr ?_
+  have : fderiv Real conj (conj z) = _ := conjCLE.fderiv
+  simp [fderiv_comp _ h_diff conjCLE.differentiableAt, this]
 
 Depends on / 依赖: and_congr_left, conformalAt_iff_isConformalMap_fderiv, conjCLE, conjCLE.differentiableAt, conjCLE.fderiv, conj_conj, differentiableAt, differentiableAt_iff_restrictScalars, exists_congr, fderiv, fderiv_comp, fderiv_zero_of_not_differentiableAt, h.imp_symm, h_diff, h_diff.comp, imp_symm, isConformalMap_iff_is_complex_or_conj_linear, or_congr, rfl.congr
 -/
@@ -346,7 +390,15 @@ lemma real_linearMap_map_smul_complex
   rw [← re_add_im a]; rw [← re_add_im b]; rw [← smul_eq_mul _ I]; rw [← smul_eq_mul _ I]
   have t₀ : ((a.im : Complex) • I) • (b.re : Complex) = (↑(a.im * b.re) : Complex) • I := by
     simp only [smul_eq_mul, ofReal_mul, ← mul_assoc, mul_comm _ I]
-  have t₁ : ((a.im : Complex) • I) • (b.im : Com
+  have t₁ : ((a.im : Complex) • I) • (b.im : Complex) • I = (↑(- a.im * b.im) : Complex) • (1 : Complex) := by
+    simp [mul_mul_mul_comm _ I]
+  simp only [add_smul, smul_add, ℓ.map_add, t₀, t₁]
+  repeat rw [Complex.coe_smul, ℓ.map_smul]
+  have t₂ {r : Real} : ℓ (r : Complex) = r • ℓ (1 : Complex) := by simp [← ℓ.map_smul]
+  simp only [t₂, h]
+  match_scalars
+  simp [mul_mul_mul_comm _ I]
+  ring
 
 中文:
 引理 real_linearMap_map_smul_complex
@@ -355,7 +407,15 @@ lemma real_linearMap_map_smul_complex
   rw [← re_add_im a]; rw [← re_add_im b]; rw [← smul_eq_mul _ I]; rw [← smul_eq_mul _ I]
   have t₀ : ((a.im : Complex) • I) • (b.re : Complex) = (↑(a.im * b.re) : Complex) • I := by
     simp only [smul_eq_mul, ofReal_mul, ← mul_assoc, mul_comm _ I]
-  have t₁ : ((a.im : Complex) • I) • (b.im : Com
+  have t₁ : ((a.im : Complex) • I) • (b.im : Complex) • I = (↑(- a.im * b.im) : Complex) • (1 : Complex) := by
+    simp [mul_mul_mul_comm _ I]
+  simp only [add_smul, smul_add, ℓ.map_add, t₀, t₁]
+  repeat rw [Complex.coe_smul, ℓ.map_smul]
+  have t₂ {r : Real} : ℓ (r : Complex) = r • ℓ (1 : Complex) := by simp [← ℓ.map_smul]
+  simp only [t₂, h]
+  match_scalars
+  simp [mul_mul_mul_comm _ I]
+  ring
 
 Depends on / 依赖: Complex.coe_smul, a.im, add_smul, b.im, b.re, coe_smul, map_add, map_smul, mul_assoc, mul_comm, mul_mul_mul_comm, ofReal_mul, re_add_im, repeat, smul_add, smul_eq_mul
 -/
@@ -467,7 +527,9 @@ theorem differentiableWithinAt_complex_iff_differentiableWithinAt_real
   · simp only [← h.restrictScalars_fderivWithin Real hs, ContinuousLinearMap.coe_restrictScalars']
     rw [(by simp : I = I • 1)]; rw [(fderivWithin Complex f s x).map_smul]
     simp
-  · apply (differentiableWithinAt_iff_restric
+  · apply (differentiableWithinAt_iff_restrictScalars Real h₁ hs).2
+    use (fderivWithin Real f s x).complexOfReal h₂
+    rfl
 
 中文:
 定理 differentiableWithinAt_complex_iff_differentiableWithinAt_real
@@ -476,7 +538,9 @@ theorem differentiableWithinAt_complex_iff_differentiableWithinAt_real
   · simp only [← h.restrictScalars_fderivWithin Real hs, ContinuousLinearMap.coe_restrictScalars']
     rw [(by simp : I = I • 1)]; rw [(fderivWithin Complex f s x).map_smul]
     simp
-  · apply (differentiableWithinAt_iff_restric
+  · apply (differentiableWithinAt_iff_restrictScalars Real h₁ hs).2
+    use (fderivWithin Real f s x).complexOfReal h₂
+    rfl
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_restrictScalars, coe_restrictScalars, complexOfReal, differentiableWithinAt_iff_restrictScalars, fderivWithin, h.restrictScalars, h.restrictScalars_fderivWithin, map_smul, restrictScalars, restrictScalars_fderivWithin
 -/

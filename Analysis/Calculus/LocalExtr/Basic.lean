@@ -103,7 +103,7 @@ theorem mem_posTangentConeAt_of_frequently_mem
   rw [← NNReal.coe_zero]; rw [← NNReal.map_coe_nhdsGT]; rw [frequently_map]; rw [frequently_iff_neBot] at h
   apply mem_tangentConeAt_of_add_smul_mem (l := 𝓝[>] (0 : Real>=0) ⊓ 𝓟 {t | x + (t : Real) • y in s})
 · exact tendsto_id'.mpr inf_le_left.trans nhdsGT_le_nhdsNE _
-  · simp [eventually_inf_p
+  · simp [eventually_inf_principal, NNReal.smul_def]
 
 中文:
 定理 mem_posTangentConeAt_of_frequently_mem
@@ -112,7 +112,7 @@ theorem mem_posTangentConeAt_of_frequently_mem
   rw [← NNReal.coe_zero]; rw [← NNReal.map_coe_nhdsGT]; rw [frequently_map]; rw [frequently_iff_neBot] at h
   apply mem_tangentConeAt_of_add_smul_mem (l := 𝓝[>] (0 : Real>=0) ⊓ 𝓟 {t | x + (t : Real) • y in s})
 · exact tendsto_id'.mpr inf_le_left.trans nhdsGT_le_nhdsNE _
-  · simp [eventually_inf_p
+  · simp [eventually_inf_principal, NNReal.smul_def]
 
 Depends on / 依赖: NNReal, NNReal.coe_zero, NNReal.map_coe_nhdsGT, NNReal.smul_def, coe_zero, eventually_inf_principal, frequently_iff_neBot, frequently_map, inf_le_left, inf_le_left.trans, map_coe_nhdsGT, mem_tangentConeAt_of_add_smul_mem, nhdsGT_le_nhdsNE, smul_def, tendsto_id
 -/
@@ -195,7 +195,10 @@ theorem IsLocalMaxOn.hasFDerivWithinAt_nonpos
   suffices forallᶠ n in l, c n • (f (a + d n) - f a) <= 0 from
     le_of_tendsto (hf.lim hd₀ hd hcd) this
   replace hd : Tendsto (fun n => a + d n) l (𝓝[s] (a + 0)) :=
-    tendsto_nhdsWithin_iff.2 ⟨tendsto_const_nhds.
+    tendsto_nhdsWithin_iff.2 ⟨tendsto_const_nhds.add hd₀, hd⟩
+  rw [add_zero] at hd
+.mono fun n hn => ?_ refine hd.eventually h
+  exact mul_nonpos_of_nonneg_of_nonpos (c n).coe_nonneg (sub_nonpos.2 hn)
 
 中文:
 定理 IsLocalMaxOn.hasFDerivWithinAt_nonpos
@@ -205,7 +208,10 @@ theorem IsLocalMaxOn.hasFDerivWithinAt_nonpos
   suffices forallᶠ n in l, c n • (f (a + d n) - f a) <= 0 from
     le_of_tendsto (hf.lim hd₀ hd hcd) this
   replace hd : Tendsto (fun n => a + d n) l (𝓝[s] (a + 0)) :=
-    tendsto_nhdsWithin_iff.2 ⟨tendsto_const_nhds.
+    tendsto_nhdsWithin_iff.2 ⟨tendsto_const_nhds.add hd₀, hd⟩
+  rw [add_zero] at hd
+.mono fun n hn => ?_ refine hd.eventually h
+  exact mul_nonpos_of_nonneg_of_nonpos (c n).coe_nonneg (sub_nonpos.2 hn)
 
 Depends on / 依赖: Tendsto, add_zero, coe_nonneg, eventually, exists_fun_of_mem_tangentConeAt, hd.eventually, hf.lim, le_of_tendsto, mul_nonpos_of_nonneg_of_nonpos, replace, sub_nonpos, tendsto_const_nhds, tendsto_const_nhds.add, tendsto_nhdsWithin_iff
 -/
@@ -574,7 +580,13 @@ lemma one_mem_posTangentConeAt_iff_mem_closure
     have : Tendsto (a + d ·) l (𝓝 a) := by
       simpa only [add_zero] using tendsto_const_nhds.add hd₀
     apply mem_closure_of_tendsto this
-    filter_upwards [hcd.eventually_const_lt one_
+    filter_upwards [hcd.eventually_const_lt one_pos, hd] with n hcdn hdn
+    refine ⟨?_, hdn⟩
+    simpa using pos_of_mul_pos_right hcdn
+  · intro h
+    apply mem_posTangentConeAt_of_frequently_mem
+    rw [mem_closure_iff_frequently]; rw [← map_add_left_nhds_zero]; rw [frequently_map] at h
+    simpa [nhdsWithin, frequently_inf_principal] using h
 
 中文:
 引理 one_mem_posTangentConeAt_iff_mem_closure
@@ -585,7 +597,13 @@ lemma one_mem_posTangentConeAt_iff_mem_closure
     have : Tendsto (a + d ·) l (𝓝 a) := by
       simpa only [add_zero] using tendsto_const_nhds.add hd₀
     apply mem_closure_of_tendsto this
-    filter_upwards [hcd.eventually_const_lt one_
+    filter_upwards [hcd.eventually_const_lt one_pos, hd] with n hcdn hdn
+    refine ⟨?_, hdn⟩
+    simpa using pos_of_mul_pos_right hcdn
+  · intro h
+    apply mem_posTangentConeAt_of_frequently_mem
+    rw [mem_closure_iff_frequently]; rw [← map_add_left_nhds_zero]; rw [frequently_map] at h
+    simpa [nhdsWithin, frequently_inf_principal] using h
 
 Depends on / 依赖: Tendsto, add_zero, eventually_const_lt, exists_fun_of_mem_tangentConeAt, filter_upwards, frequently_map, hcd.eventually_const_lt, map_add_left_nhds_zero, mem_closure_iff_frequently, mem_closure_of_tendsto, mem_posTangentConeAt_of_frequently_mem, one_pos, pos_of_mul_pos_right, tendsto_const_nhds, tendsto_const_nhds.add
 -/

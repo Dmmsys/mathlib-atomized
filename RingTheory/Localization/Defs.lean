@@ -1157,7 +1157,11 @@ lemma isRegular_mk'
   have (n : M) (x y : R) : n * x = n * y ↔ x = y := (hM _ n.2).1.eq_iff
   simp +contextual only [← isLeftRegular_iff_isRegular, IsLeftRegular, Function.Injective,
     (mk'_surjective M).forall, ← mk'_mul, Prod.forall, Subtype.forall, IsLocalization.eq,
-    Submonoid.coe_mul, this, exists_const, m
+    Submonoid.coe_mul, this, exists_const, mul_assoc]
+  simp_rw [← mul_left_comm r]
+  exact ⟨fun h a b => by simpa using h a 1 M.one_mem b 1 M.one_mem, fun h ha s hs b t ht => @h _ _⟩
+
+include M in
 
 中文:
 引理 isRegular_mk'
@@ -1166,7 +1170,11 @@ lemma isRegular_mk'
   have (n : M) (x y : R) : n * x = n * y ↔ x = y := (hM _ n.2).1.eq_iff
   simp +contextual only [← isLeftRegular_iff_isRegular, IsLeftRegular, Function.Injective,
     (mk'_surjective M).forall, ← mk'_mul, Prod.forall, Subtype.forall, IsLocalization.eq,
-    Submonoid.coe_mul, this, exists_const, m
+    Submonoid.coe_mul, this, exists_const, mul_assoc]
+  simp_rw [← mul_left_comm r]
+  exact ⟨fun h a b => by simpa using h a 1 M.one_mem b 1 M.one_mem, fun h ha s hs b t ht => @h _ _⟩
+
+include M in
 -/
 @[simp] lemma isRegular_mk' (hM : forall m in M, IsRegular m) {r : R} {m : M} :
     IsRegular (IsLocalization.mk' S r m) ↔ IsRegular r := by
@@ -1641,7 +1649,8 @@ theorem mk'_add
     Eq.symm
       (by
         rw [mul_comm (_ + _)]; rw [mul_add]; rw [mul_mk'_eq_mk'_of_mul]; rw [mk'_add_eq_iff_add_mul_eq_mul]; rw [mul_comm (_ * _)]; rw [← mul_assoc]; rw [add_comm]; rw [← map_mul]; rw [mul_mk'_eq_mk'_of_mul]; rw [mk'_add_eq_iff_add_mul_eq_mul]
-        simp o
+        simp only [map_add, Submonoid.coe_mul, map_mul]
+        ring)
 
 中文:
 定理 mk'_add
@@ -1650,7 +1659,8 @@ theorem mk'_add
     Eq.symm
       (by
         rw [mul_comm (_ + _)]; rw [mul_add]; rw [mul_mk'_eq_mk'_of_mul]; rw [mk'_add_eq_iff_add_mul_eq_mul]; rw [mul_comm (_ * _)]; rw [← mul_assoc]; rw [add_comm]; rw [← map_mul]; rw [mul_mk'_eq_mk'_of_mul]; rw [mk'_add_eq_iff_add_mul_eq_mul]
-        simp o
+        simp only [map_add, Submonoid.coe_mul, map_mul]
+        ring)
 -/
 theorem mk'_add (x₁ x₂ : R) (y₁ y₂ : M) :
     mk' S (x₁ * y₂ + x₂ * y₁) (y₁ * y₂) = mk' S x₁ y₁ + mk' S x₂ y₂ :=
@@ -1670,14 +1680,14 @@ theorem mul_add_inv_left
   given: {g : R ->+* P} (h : forall y : M, IsUnit (g y)) (y : M) (w z₁ z₂ : P)
   proof: by
   rw [mul_comm]; rw [← one_mul z₁]; rw [← Units.inv_mul (IsUnit.liftRight (g.toMonoidHom.domRestrict M) h y)]; rw [mul_assoc]; rw [← mul_add]; rw [Units.inv_mul_eq_iff_eq_mul]; rw [Units.inv_mul_cancel_left]; rw [IsUnit.coe_liftRight]
-  simp [RingHom.toMonoidHom_eq_coe, MonoidHom.domRestrict_appl
+  simp [RingHom.toMonoidHom_eq_coe, MonoidHom.domRestrict_apply]
 
 中文:
 定理 mul_add_inv_left
   条件: {g : R ->+* P} (h : 对任意 y : M, 是单位 (g y)) (y : M) (w z₁ z₂ : P)
   证明: by
   rw [mul_comm]; rw [← one_mul z₁]; rw [← Units.inv_mul (IsUnit.liftRight (g.toMonoidHom.domRestrict M) h y)]; rw [mul_assoc]; rw [← mul_add]; rw [Units.inv_mul_eq_iff_eq_mul]; rw [Units.inv_mul_cancel_left]; rw [IsUnit.coe_liftRight]
-  simp [RingHom.toMonoidHom_eq_coe, MonoidHom.domRestrict_appl
+  simp [RingHom.toMonoidHom_eq_coe, MonoidHom.domRestrict_apply]
 
 Depends on / 依赖: IsUnit, IsUnit.coe_liftRight, IsUnit.liftRight, MonoidHom, MonoidHom.domRestrict_apply, RingHom, RingHom.toMonoidHom_eq_coe, Units.inv_mul, Units.inv_mul_cancel_left, Units.inv_mul_eq_iff_eq_mul, coe_liftRight, domRestrict, domRestrict_apply, g.toMonoidHom.domRestrict, inv_mul, inv_mul_cancel_left, inv_mul_eq_iff_eq_mul, liftRight, mul_add, mul_assoc
 -/
@@ -1724,7 +1734,13 @@ definition lift
     map_add' := by
       intro x y
       dsimp
-      rw [(toLocalizationMap M S).lift₀_def]; rw [(toLocalizationMap M S).lift_spec]; rw [mul_add]; rw [mul_comm]; rw [eq_comm]; rw [lift_spec_mul_add]; rw [add_comm]; rw [mul_comm]; rw [mul_
+      rw [(toLocalizationMap M S).lift₀_def]; rw [(toLocalizationMap M S).lift_spec]; rw [mul_add]; rw [mul_comm]; rw [eq_comm]; rw [lift_spec_mul_add]; rw [add_comm]; rw [mul_comm]; rw [mul_assoc]; rw [mul_comm]; rw [mul_assoc]; rw [lift_spec_mul_add]
+      simp_rw [← mul_assoc]
+      change g _ * g _ * g _ + g _ * g _ * g _ = g _ * g _ * g _
+      simp_rw [← map_mul g, ← map_add g]
+      apply eq_of_eq (S := S) hg
+      simp only [sec_spec', toLocalizationMap_sec, map_add, map_mul]
+      ring }
 
 中文:
 定义 lift
@@ -1733,7 +1749,13 @@ definition lift
     map_add' := by
       intro x y
       dsimp
-      rw [(toLocalizationMap M S).lift₀_def]; rw [(toLocalizationMap M S).lift_spec]; rw [mul_add]; rw [mul_comm]; rw [eq_comm]; rw [lift_spec_mul_add]; rw [add_comm]; rw [mul_comm]; rw [mul_
+      rw [(toLocalizationMap M S).lift₀_def]; rw [(toLocalizationMap M S).lift_spec]; rw [mul_add]; rw [mul_comm]; rw [eq_comm]; rw [lift_spec_mul_add]; rw [add_comm]; rw [mul_comm]; rw [mul_assoc]; rw [mul_comm]; rw [mul_assoc]; rw [lift_spec_mul_add]
+      simp_rw [← mul_assoc]
+      change g _ * g _ * g _ + g _ * g _ * g _ = g _ * g _ * g _
+      simp_rw [← map_mul g, ← map_add g]
+      apply eq_of_eq (S := S) hg
+      simp only [sec_spec', toLocalizationMap_sec, map_add, map_mul]
+      ring }
 
 Depends on / 依赖: add_comm, eq_comm, eq_of_eq, g.toMonoidWithZeroHom, lift_spec, lift_spec_mul_add, map_add, map_mul, mul_add, mul_assoc, mul_comm, sec_sp, simp_rw, toLocalizationMap, toMonoidWithZeroHom
 -/
@@ -2338,7 +2360,13 @@ definition ringEquivOfRingEquiv
     apply h.symm_apply_apply
   { map Q (h : R ->+* P) (M.le_comap_of_map_le (le_of_eq H)) with
     toFun := map Q (h : R ->+* P) (M.le_comap_of_map_le (le_of_eq H))
-    invFun := map 
+    invFun := map S (h.symm : P ->+* R) (T.le_comap_of_map_le (le_of_eq H'))
+    left_inv := fun x => by
+      rw [map_map]; rw [map_unique _ (RingHom.id _)]; rw [RingHom.id_apply]
+      simp
+    right_inv := fun x => by
+      rw [map_map]; rw [map_unique _ (RingHom.id _)]; rw [RingHom.id_apply]
+      simp }
 
 中文:
 定义 ringEquivOfRingEquiv
@@ -2350,7 +2378,13 @@ definition ringEquivOfRingEquiv
     apply h.symm_apply_apply
   { map Q (h : R ->+* P) (M.le_comap_of_map_le (le_of_eq H)) with
     toFun := map Q (h : R ->+* P) (M.le_comap_of_map_le (le_of_eq H))
-    invFun := map 
+    invFun := map S (h.symm : P ->+* R) (T.le_comap_of_map_le (le_of_eq H'))
+    left_inv := fun x => by
+      rw [map_map]; rw [map_unique _ (RingHom.id _)]; rw [RingHom.id_apply]
+      simp
+    right_inv := fun x => by
+      rw [map_map]; rw [map_unique _ (RingHom.id _)]; rw [RingHom.id_apply]
+      simp }
 
 Depends on / 依赖: M.le_comap_of_map_le, M.map_id, RingHom, RingHom.id, RingHom.id_apply, Submonoid, Submonoid.map_map, T.le_comap_of_map_le, T.map, h.symm, h.symm.toMonoidHom, h.symm_apply_apply, id_apply, invFun, le_comap_of_map_le, le_of_eq, left_inv, map_id, map_map, map_unique
 -/
@@ -2518,7 +2552,16 @@ theorem isLocalization_of_base_ringEquiv
   constructor; constructor
   · rintro ⟨_, ⟨y, hy, rfl⟩⟩
     convert! IsLocalization.map_units S ⟨y, hy⟩
-    dsimp only [RingHom.algebraMap
+    dsimp only [RingHom.algebraMap_toAlgebra, RingHom.comp_apply]
+    exact congr_arg _ (h.symm_apply_apply _)
+  · intro y
+    obtain ⟨⟨x, s⟩, e⟩ := IsLocalization.surj M y
+    refine ⟨⟨h x, _, _, s.prop, rfl⟩, ?_⟩
+    dsimp only [RingHom.algebraMap_toAlgebra, RingHom.comp_apply] at e ⊢
+    convert! e <;> exact h.symm_apply_apply _
+  · intro x y
+    rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.comp_apply]; rw [RingHom.comp_apply]; rw [IsLocalization.eq_iff_exists M S]
+    simp [← h.toEquiv.apply_eq_iff_eq]
 
 中文:
 定理 isLocalization_of_base_ringEquiv
@@ -2529,7 +2572,16 @@ theorem isLocalization_of_base_ringEquiv
   constructor; constructor
   · rintro ⟨_, ⟨y, hy, rfl⟩⟩
     convert! IsLocalization.map_units S ⟨y, hy⟩
-    dsimp only [RingHom.algebraMap
+    dsimp only [RingHom.algebraMap_toAlgebra, RingHom.comp_apply]
+    exact congr_arg _ (h.symm_apply_apply _)
+  · intro y
+    obtain ⟨⟨x, s⟩, e⟩ := IsLocalization.surj M y
+    refine ⟨⟨h x, _, _, s.prop, rfl⟩, ?_⟩
+    dsimp only [RingHom.algebraMap_toAlgebra, RingHom.comp_apply] at e ⊢
+    convert! e <;> exact h.symm_apply_apply _
+  · intro x y
+    rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.comp_apply]; rw [RingHom.comp_apply]; rw [IsLocalization.eq_iff_exists M S]
+    simp [← h.toEquiv.apply_eq_iff_eq]
 
 Depends on / 依赖: algebraMap, h.symm.toRingHom, toAlgebra, toRingHom
 -/
@@ -2562,7 +2614,15 @@ theorem isLocalization_iff_of_base_ringEquiv
   let : Algebra P S := ((algebraMap R S).comp h.symm.toRingHom).toAlgebra
   refine ⟨fun _ => isLocalization_of_base_ringEquiv M S h, ?_⟩
   intro (H : IsLocalization (Submonoid.map (h : R ≃* P) M) S)
-  convert! 
+  convert! isLocalization_of_base_ringEquiv (Submonoid.map (h : R ≃* P) M) S h.symm
+  · rw [← Submonoid.map_coe_toMulEquiv, RingEquiv.coe_toMulEquiv_symm, ←
+      Submonoid.comap_equiv_eq_map_symm, Submonoid.comap_map_eq_of_injective]
+    exact h.toEquiv.injective
+  rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.comp_assoc]
+  simp only [RingHom.comp_id, RingEquiv.symm_symm, RingEquiv.symm_toRingHom_comp_toRingHom]
+  apply Algebra.algebra_ext
+  intro r
+  rw [RingHom.algebraMap_toAlgebra]
 
 中文:
 定理 isLocalization_iff_of_base_ringEquiv
@@ -2572,7 +2632,15 @@ theorem isLocalization_iff_of_base_ringEquiv
   let : Algebra P S := ((algebraMap R S).comp h.symm.toRingHom).toAlgebra
   refine ⟨fun _ => isLocalization_of_base_ringEquiv M S h, ?_⟩
   intro (H : IsLocalization (Submonoid.map (h : R ≃* P) M) S)
-  convert! 
+  convert! isLocalization_of_base_ringEquiv (Submonoid.map (h : R ≃* P) M) S h.symm
+  · rw [← Submonoid.map_coe_toMulEquiv, RingEquiv.coe_toMulEquiv_symm, ←
+      Submonoid.comap_equiv_eq_map_symm, Submonoid.comap_map_eq_of_injective]
+    exact h.toEquiv.injective
+  rw [RingHom.algebraMap_toAlgebra]; rw [RingHom.comp_assoc]
+  simp only [RingHom.comp_id, RingEquiv.symm_symm, RingEquiv.symm_toRingHom_comp_toRingHom]
+  apply Algebra.algebra_ext
+  intro r
+  rw [RingHom.algebraMap_toAlgebra]
 
 Depends on / 依赖: algebraMap, h.symm.toRingHom, toAlgebra, toRingHom
 -/

@@ -684,7 +684,9 @@ lemma LinearIndependent.sum_smul_of_nondegenerate
   rw [Finset.sum_comm] at hw
   simp_rw [← Finset.sum_smul] at hw
 replace hv : w ᵥ* A = 0 := funext hv _ hw
-  replace hv (w' 
+  replace hv (w' : ι -> R) : w ⬝ᵥ A *ᵥ w' = 0 := by
+    simpa [Matrix.dotProduct_mulVec] using congr_arg (fun x => dotProduct x w') hv
+  exact hA.eq_zero_of_ortho hv
 
 中文:
 引理 LinearIndependent.sum_smul_of_nondegenerate
@@ -697,7 +699,9 @@ replace hv : w ᵥ* A = 0 := funext hv _ hw
   rw [Finset.sum_comm] at hw
   simp_rw [← Finset.sum_smul] at hw
 replace hv : w ᵥ* A = 0 := funext hv _ hw
-  replace hv (w' 
+  replace hv (w' : ι -> R) : w ⬝ᵥ A *ᵥ w' = 0 := by
+    simpa [Matrix.dotProduct_mulVec] using congr_arg (fun x => dotProduct x w') hv
+  exact hA.eq_zero_of_ortho hv
 
 Depends on / 依赖: Finset, Finset.smul_sum, Finset.sum_comm, Finset.sum_smul, Fintype, Fintype.linearIndependent_iff, Fintype.ofFinite, Matrix, Matrix.dotProduct_mulVec, congr_arg, dotProduct, dotProduct_mulVec, eq_zero_of_ortho, hA.eq_zero_of_ortho, linearIndependent_iff, ofFinite, replace, simp_rw, smul_assoc, smul_sum
 -/

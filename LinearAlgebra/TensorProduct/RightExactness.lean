@@ -439,7 +439,17 @@ definition lTensor.inverse_of_rightInverse
   body: TensorProduct.lift LinearMap.flip {
     toFun := fun p => Submodule.mkQ _ ∘ₗ ((TensorProduct.mk R _ _).flip (h p))
 map_add' := fun p p' => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
-      change q otimesₜ[R] (h (p + p')) - (q otimesₜ[R] (h p) + q otimesₜ[R] (h p')) in range (lTensor Q f
+      change q otimesₜ[R] (h (p + p')) - (q otimesₜ[R] (h p) + q otimesₜ[R] (h p')) in range (lTensor Q f)
+      rw [← TensorProduct.tmul_add]; rw [← TensorProduct.tmul_sub]
+      apply le_comap_range_lTensor f
+      rw [exact_iff] at hfg
+      simp only [← hfg, mem_ker, map_sub, map_add, hgh _, sub_self]
+map_smul' := fun r p => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
+      change q otimesₜ[R] (h (r • p)) - r • q otimesₜ[R] (h p) in range (lTensor Q f)
+      rw [← TensorProduct.tmul_smul]; rw [← TensorProduct.tmul_sub]
+      apply le_comap_range_lTensor f
+      rw [exact_iff] at hfg
+      simp only [← hfg, mem_ker, map_sub, map_smul, hgh _, sub_self] }
 
 中文:
 定义 lTensor.inverse_of_rightInverse
@@ -447,7 +457,17 @@ map_add' := fun p p' => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
   定义体: TensorProduct.lift LinearMap.flip {
     toFun := fun p => Submodule.mkQ _ ∘ₗ ((TensorProduct.mk R _ _).flip (h p))
 map_add' := fun p p' => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
-      change q otimesₜ[R] (h (p + p')) - (q otimesₜ[R] (h p) + q otimesₜ[R] (h p')) in range (lTensor Q f
+      change q otimesₜ[R] (h (p + p')) - (q otimesₜ[R] (h p) + q otimesₜ[R] (h p')) in range (lTensor Q f)
+      rw [← TensorProduct.tmul_add]; rw [← TensorProduct.tmul_sub]
+      apply le_comap_range_lTensor f
+      rw [exact_iff] at hfg
+      simp only [← hfg, mem_ker, map_sub, map_add, hgh _, sub_self]
+map_smul' := fun r p => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
+      change q otimesₜ[R] (h (r • p)) - r • q otimesₜ[R] (h p) in range (lTensor Q f)
+      rw [← TensorProduct.tmul_smul]; rw [← TensorProduct.tmul_sub]
+      apply le_comap_range_lTensor f
+      rw [exact_iff] at hfg
+      simp only [← hfg, mem_ker, map_sub, map_smul, hgh _, sub_self] }
 
 Depends on / 依赖: LinearMa, LinearMap, LinearMap.ext, LinearMap.flip, Quotient, Submodule, Submodule.Quotient.eq, Submodule.mkQ, TensorProduct, TensorProduct.lift, TensorProduct.mk, TensorProduct.tmul_add, TensorProduct.tmul_sub, exact_iff, lTensor, le_comap_range_lTensor, map_add, map_smul, map_sub, mem_ker
 -/
@@ -482,7 +502,9 @@ lemma lTensor.inverse_of_rightInverse_apply
   intro n q
   suffices Submodule.Quotient.mk (n otimesₜ[R] h (g q)) = Submodule.Quotient.mk (n otimesₜ[R] q) by
     simpa
-  rw [Submodule.Quotient.eq]; rw [← 
+  rw [Submodule.Quotient.eq]; rw [← TensorProduct.tmul_sub]
+  apply le_comap_range_lTensor f n
+  rw [← hfg]; rw [mem_ker]; rw [map_sub]; rw [sub_eq_zero]; rw [hgh]
 
 中文:
 引理 lTensor.inverse_of_rightInverse_apply
@@ -494,7 +516,9 @@ lemma lTensor.inverse_of_rightInverse_apply
   intro n q
   suffices Submodule.Quotient.mk (n otimesₜ[R] h (g q)) = Submodule.Quotient.mk (n otimesₜ[R] q) by
     simpa
-  rw [Submodule.Quotient.eq]; rw [← 
+  rw [Submodule.Quotient.eq]; rw [← TensorProduct.tmul_sub]
+  apply le_comap_range_lTensor f n
+  rw [← hfg]; rw [mem_ker]; rw [map_sub]; rw [sub_eq_zero]; rw [hgh]
 
 Depends on / 依赖: LinearMap, LinearMap.comp_apply, LinearMap.congr_fun, LinearMap.range, Quotient, Submodule, Submodule.Quotient.eq, Submodule.Quotient.mk, Submodule.mkQ_apply, TensorProduct, TensorProduct.ext, TensorProduct.tmul_sub, comp_apply, congr_fun, exact_iff, lTensor, le_comap_range_lTensor, map_sub, mem_ker, mkQ_apply
 -/
@@ -623,7 +647,12 @@ definition lTensor.linearEquiv_of_rightInverse
   left_inv := fun y => by
     simp only [lTensor.toFun, AddHom.toFun_eq_coe, coe_toAddHom]
     obtain ⟨y, rfl⟩ := Submodule.mkQ_surjective _ y
-    simp only [Submodule.mkQ_apply, Submodule.liftQ_apply, lTens
+    simp only [Submodule.mkQ_apply, Submodule.liftQ_apply, lTensor.inverse_of_rightInverse_apply]
+  right_inv := fun z => by
+    simp only [AddHom.toFun_eq_coe, coe_toAddHom]
+    obtain ⟨y, rfl⟩ := lTensor_surjective Q (hgh.surjective) z
+    rw [lTensor.inverse_of_rightInverse_apply]
+    simp only [lTensor.toFun, Submodule.liftQ_apply] }
 
 中文:
 定义 lTensor.linearEquiv_of_rightInverse
@@ -634,7 +663,12 @@ definition lTensor.linearEquiv_of_rightInverse
   left_inv := fun y => by
     simp only [lTensor.toFun, AddHom.toFun_eq_coe, coe_toAddHom]
     obtain ⟨y, rfl⟩ := Submodule.mkQ_surjective _ y
-    simp only [Submodule.mkQ_apply, Submodule.liftQ_apply, lTens
+    simp only [Submodule.mkQ_apply, Submodule.liftQ_apply, lTensor.inverse_of_rightInverse_apply]
+  right_inv := fun z => by
+    simp only [AddHom.toFun_eq_coe, coe_toAddHom]
+    obtain ⟨y, rfl⟩ := lTensor_surjective Q (hgh.surjective) z
+    rw [lTensor.inverse_of_rightInverse_apply]
+    simp only [lTensor.toFun, Submodule.liftQ_apply] }
 -/
 def lTensor.linearEquiv_of_rightInverse {h : P -> N} (hgh : Function.RightInverse h g) :
     ((Q otimes[R] N) ⧸ (LinearMap.range (lTensor Q f))) ≃ₗ[R] (Q otimes[R] P) := {
@@ -763,7 +797,16 @@ definition rTensor.inverse_of_rightInverse
     toFun := fun p => Submodule.mkQ _ ∘ₗ TensorProduct.mk R _ _ (h p)
 map_add' := fun p p' => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
       change h (p + p') otimesₜ[R] q - (h p otimesₜ[R] q + h p' otimesₜ[R] q) in range (rTensor Q f)
-      rw [← TensorProduct.ad
+      rw [← TensorProduct.add_tmul]; rw [← TensorProduct.sub_tmul]
+      apply le_comap_range_rTensor f
+      rw [exact_iff] at hfg
+      simp only [← hfg, mem_ker, map_sub, map_add, hgh _, sub_self]
+map_smul' := fun r p => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
+      change h (r • p) otimesₜ[R] q - r • h p otimesₜ[R] q in range (rTensor Q f)
+      rw [TensorProduct.smul_tmul']; rw [← TensorProduct.sub_tmul]
+      apply le_comap_range_rTensor f
+      rw [exact_iff] at hfg
+      simp only [← hfg, mem_ker, map_sub, map_smul, hgh _, sub_self] }
 
 中文:
 定义 rTensor.inverse_of_rightInverse
@@ -772,7 +815,16 @@ map_add' := fun p p' => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
     toFun := fun p => Submodule.mkQ _ ∘ₗ TensorProduct.mk R _ _ (h p)
 map_add' := fun p p' => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
       change h (p + p') otimesₜ[R] q - (h p otimesₜ[R] q + h p' otimesₜ[R] q) in range (rTensor Q f)
-      rw [← TensorProduct.ad
+      rw [← TensorProduct.add_tmul]; rw [← TensorProduct.sub_tmul]
+      apply le_comap_range_rTensor f
+      rw [exact_iff] at hfg
+      simp only [← hfg, mem_ker, map_sub, map_add, hgh _, sub_self]
+map_smul' := fun r p => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
+      change h (r • p) otimesₜ[R] q - r • h p otimesₜ[R] q in range (rTensor Q f)
+      rw [TensorProduct.smul_tmul']; rw [← TensorProduct.sub_tmul]
+      apply le_comap_range_rTensor f
+      rw [exact_iff] at hfg
+      simp only [← hfg, mem_ker, map_sub, map_smul, hgh _, sub_self] }
 
 Depends on / 依赖: LinearMap, LinearMap.ext, Quotient, Submodule, Submodule.Quot, Submodule.Quotient.eq, Submodule.mkQ, TensorProduct, TensorProduct.add_tmul, TensorProduct.lift, TensorProduct.mk, TensorProduct.sub_tmul, add_tmul, exact_iff, le_comap_range_rTensor, map_add, map_smul, map_sub, mem_ker, rTensor
 -/
@@ -806,7 +858,9 @@ lemma rTensor.inverse_of_rightInverse_apply
   apply TensorProduct.ext'
   intro n q
   suffices Submodule.Quotient.mk (h (g n) otimesₜ[R] q) = Submodule.Quotient.mk (n otimesₜ[R] q) by simpa
-  rw [Submodule.Quotient.eq]; rw [← Tens
+  rw [Submodule.Quotient.eq]; rw [← TensorProduct.sub_tmul]
+  apply le_comap_range_rTensor f
+  rw [← hfg]; rw [mem_ker]; rw [map_sub]; rw [sub_eq_zero]; rw [hgh]
 
 中文:
 引理 rTensor.inverse_of_rightInverse_apply
@@ -817,7 +871,9 @@ lemma rTensor.inverse_of_rightInverse_apply
   apply TensorProduct.ext'
   intro n q
   suffices Submodule.Quotient.mk (h (g n) otimesₜ[R] q) = Submodule.Quotient.mk (n otimesₜ[R] q) by simpa
-  rw [Submodule.Quotient.eq]; rw [← Tens
+  rw [Submodule.Quotient.eq]; rw [← TensorProduct.sub_tmul]
+  apply le_comap_range_rTensor f
+  rw [← hfg]; rw [mem_ker]; rw [map_sub]; rw [sub_eq_zero]; rw [hgh]
 
 Depends on / 依赖: LinearMap, LinearMap.comp_apply, LinearMap.congr_fun, LinearMap.range, Quotient, Submodule, Submodule.Quotient.eq, Submodule.Quotient.mk, Submodule.mkQ_apply, TensorProduct, TensorProduct.ext, TensorProduct.sub_tmul, comp_apply, congr_fun, exact_iff, le_comap_range_rTensor, map_sub, mem_ker, mkQ_apply, rTensor
 -/
@@ -945,7 +1001,12 @@ definition rTensor.linearEquiv_of_rightInverse
   left_inv := fun y => by
     simp only [rTensor.toFun, AddHom.toFun_eq_coe, coe_toAddHom]
     obtain ⟨y, rfl⟩ := Submodule.mkQ_surjective _ y
-    simp only [Submodule.mkQ_apply, Submodule.liftQ_apply, rTens
+    simp only [Submodule.mkQ_apply, Submodule.liftQ_apply, rTensor.inverse_of_rightInverse_apply]
+  right_inv := fun z => by
+    simp only [AddHom.toFun_eq_coe, coe_toAddHom]
+    obtain ⟨y, rfl⟩ := rTensor_surjective Q hgh.surjective z
+    rw [rTensor.inverse_of_rightInverse_apply]
+    simp only [rTensor.toFun, Submodule.liftQ_apply] }
 
 中文:
 定义 rTensor.linearEquiv_of_rightInverse
@@ -956,7 +1017,12 @@ definition rTensor.linearEquiv_of_rightInverse
   left_inv := fun y => by
     simp only [rTensor.toFun, AddHom.toFun_eq_coe, coe_toAddHom]
     obtain ⟨y, rfl⟩ := Submodule.mkQ_surjective _ y
-    simp only [Submodule.mkQ_apply, Submodule.liftQ_apply, rTens
+    simp only [Submodule.mkQ_apply, Submodule.liftQ_apply, rTensor.inverse_of_rightInverse_apply]
+  right_inv := fun z => by
+    simp only [AddHom.toFun_eq_coe, coe_toAddHom]
+    obtain ⟨y, rfl⟩ := rTensor_surjective Q hgh.surjective z
+    rw [rTensor.inverse_of_rightInverse_apply]
+    simp only [rTensor.toFun, Submodule.liftQ_apply] }
 -/
 def rTensor.linearEquiv_of_rightInverse {h : P -> N} (hgh : Function.RightInverse h g) :
     ((N otimes[R] Q) ⧸ (range (rTensor Q f))) ≃ₗ[R] (P otimes[R] Q) := {
@@ -1096,7 +1162,9 @@ theorem TensorProduct.map_ker
   rw [← Submodule.comap_map_eq]
   apply congr_arg₂ _ rfl
   rw [range_eq_map]; rw [← Submodule.map_comp]; rw [rTensor_comp_lTensor]; rw [Submodule.map_top]
-  rw [← lTensor_comp_rTensor]; rw [ran
+  rw [← lTensor_comp_rTensor]; rw [range_eq_map]; rw [Submodule.map_comp]; rw [Submodule.map_top]
+  rw [range_eq_top.mpr (rTensor_surjective M' hg)]; rw [Submodule.map_top]
+  rw [Exact.linearMap_ker_eq (lTensor_exact P hfg' hg')]
 
 中文:
 定理 张量积.map_ker
@@ -1107,7 +1175,9 @@ theorem TensorProduct.map_ker
   rw [← Submodule.comap_map_eq]
   apply congr_arg₂ _ rfl
   rw [range_eq_map]; rw [← Submodule.map_comp]; rw [rTensor_comp_lTensor]; rw [Submodule.map_top]
-  rw [← lTensor_comp_rTensor]; rw [ran
+  rw [← lTensor_comp_rTensor]; rw [range_eq_map]; rw [Submodule.map_comp]; rw [Submodule.map_top]
+  rw [range_eq_top.mpr (rTensor_surjective M' hg)]; rw [Submodule.map_top]
+  rw [Exact.linearMap_ker_eq (lTensor_exact P hfg' hg')]
 
 Depends on / 依赖: Exact.linearMap_ker_eq, Submodule, Submodule.comap_map_eq, Submodule.map_comp, Submodule.map_top, comap_map_eq, ker_comp, lTensor_comp_rTensor, lTensor_exact, linearMap_ker_eq, map_comp, map_top, rTensor_comp_lTensor, rTensor_exact, rTensor_surjective, range_eq_map, range_eq_top, range_eq_top.mpr
 -/
@@ -1149,7 +1219,58 @@ lemma Ideal.map_includeLeft_eq
     rw [Ideal.map]; rw [← submodule_span_eq] at hx
     refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
     · intro x
-      simp only [includeLeft_apply, Set.mem_image, SetLike.mem_co
+      simp only [includeLeft_apply, Set.mem_image, SetLike.mem_coe]
+      rintro ⟨y, hy, rfl⟩
+      use ⟨y, hy⟩ otimesₜ[R] 1
+      rfl
+    · use 0
+      simp only [map_zero]
+    · rintro x y - - ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩
+      use x + y
+      simp only [map_add]
+    · rintro a x - ⟨x, hx, rfl⟩
+      induction a with
+      | zero =>
+        use 0
+        simp only [map_zero, smul_eq_mul, zero_mul]
+      | tmul a b =>
+        induction x with
+        | zero =>
+          use 0
+          simp only [map_zero, smul_eq_mul, mul_zero]
+        | tmul x y =>
+          use (a • x) otimesₜ[R] (b * y)
+          simp only [smul_eq_mul]
+          with_unfolding_all rfl
+        | add x y hx hy =>
+          obtain ⟨x', hx'⟩ := hx
+          obtain ⟨y', hy'⟩ := hy
+          use x' + y'
+          simp only [map_add, hx', smul_add, hy']
+      | add a b ha hb =>
+        obtain ⟨x', ha'⟩ := ha
+        obtain ⟨y', hb'⟩ := hb
+        use x' + y'
+        simp only [map_add, ha', add_smul, hb']
+  · rintro x ⟨y, rfl⟩
+    induction y with
+    | zero =>
+        rw [map_zero]
+        apply zero_mem
+    | tmul a b =>
+        simp only [LinearMap.rTensor_tmul, Submodule.coe_subtype]
+        suffices (a : A) otimesₜ[R] b = ((1 : A) otimesₜ[R] b) * ((a : A) otimesₜ[R] (1 : B)) by
+          simp only [Submodule.coe_restrictScalars, SetLike.mem_coe]
+          rw [this]
+          apply Ideal.mul_mem_left
+          -- Note: adding `includeLeft` as a hint fixes a timeout https://github.com/leanprover-community/mathlib4/pull/8386
+          apply Ideal.mem_map_of_mem includeLeft
+          exact Submodule.coe_mem a
+        simp only [Algebra.TensorProduct.tmul_mul_tmul,
+          mul_one, one_mul]
+    | add x y hx hy =>
+        rw [map_add]
+        apply Submodule.add_mem _ hx hy
 
 中文:
 引理 理想.map_includeLeft_eq
@@ -1162,7 +1283,58 @@ lemma Ideal.map_includeLeft_eq
     rw [Ideal.map]; rw [← submodule_span_eq] at hx
     refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
     · intro x
-      simp only [includeLeft_apply, Set.mem_image, SetLike.mem_co
+      simp only [includeLeft_apply, Set.mem_image, SetLike.mem_coe]
+      rintro ⟨y, hy, rfl⟩
+      use ⟨y, hy⟩ otimesₜ[R] 1
+      rfl
+    · use 0
+      simp only [map_zero]
+    · rintro x y - - ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩
+      use x + y
+      simp only [map_add]
+    · rintro a x - ⟨x, hx, rfl⟩
+      induction a with
+      | zero =>
+        use 0
+        simp only [map_zero, smul_eq_mul, zero_mul]
+      | tmul a b =>
+        induction x with
+        | zero =>
+          use 0
+          simp only [map_zero, smul_eq_mul, mul_zero]
+        | tmul x y =>
+          use (a • x) otimesₜ[R] (b * y)
+          simp only [smul_eq_mul]
+          with_unfolding_all rfl
+        | add x y hx hy =>
+          obtain ⟨x', hx'⟩ := hx
+          obtain ⟨y', hy'⟩ := hy
+          use x' + y'
+          simp only [map_add, hx', smul_add, hy']
+      | add a b ha hb =>
+        obtain ⟨x', ha'⟩ := ha
+        obtain ⟨y', hb'⟩ := hb
+        use x' + y'
+        simp only [map_add, ha', add_smul, hb']
+  · rintro x ⟨y, rfl⟩
+    induction y with
+    | zero =>
+        rw [map_zero]
+        apply zero_mem
+    | tmul a b =>
+        simp only [LinearMap.rTensor_tmul, Submodule.coe_subtype]
+        suffices (a : A) otimesₜ[R] b = ((1 : A) otimesₜ[R] b) * ((a : A) otimesₜ[R] (1 : B)) by
+          simp only [Submodule.coe_restrictScalars, SetLike.mem_coe]
+          rw [this]
+          apply Ideal.mul_mem_left
+          -- Note: adding `includeLeft` as a hint fixes a timeout https://github.com/leanprover-community/mathlib4/pull/8386
+          apply Ideal.mem_map_of_mem includeLeft
+          exact Submodule.coe_mem a
+        simp only [Algebra.TensorProduct.tmul_mul_tmul,
+          mul_one, one_mul]
+    | add x y hx hy =>
+        rw [map_add]
+        apply Submodule.add_mem _ hx hy
 
 Depends on / 依赖: Ideal.map, LinearMap, LinearMap.mem_range, Set.mem_image, SetLike, SetLike.coe_set_eq, SetLike.mem_coe, Submodule, Submodule.span_induction, coe_set_eq, includeLeft_apply, le_antisymm, map_add, map_zero, mem_coe, mem_image, mem_range, span_induction, submodule_span_eq
 -/
@@ -1243,7 +1415,58 @@ lemma Ideal.map_includeRight_eq
     rw [Ideal.map]; rw [← submodule_span_eq] at hx
     refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
     · intro x
-      simp only [includeRight_apply, Set.mem_image, SetLike.mem_c
+      simp only [includeRight_apply, Set.mem_image, SetLike.mem_coe]
+      rintro ⟨y, hy, rfl⟩
+      use 1 otimesₜ[R] ⟨y, hy⟩
+      rfl
+    · use 0
+      simp only [map_zero]
+    · rintro x y - - ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩
+      use x + y
+      simp only [map_add]
+    · rintro a x - ⟨x, hx, rfl⟩
+      induction a with
+      | zero =>
+        use 0
+        simp only [map_zero, smul_eq_mul, zero_mul]
+      | tmul a b =>
+        induction x with
+        | zero =>
+          use 0
+          simp only [map_zero, smul_eq_mul, mul_zero]
+        | tmul x y =>
+          use (a * x) otimesₜ[R] (b • y)
+          simp only [LinearMap.lTensor_tmul, Submodule.coe_subtype, smul_eq_mul, tmul_mul_tmul]
+          rfl
+        | add x y hx hy =>
+          obtain ⟨x', hx'⟩ := hx
+          obtain ⟨y', hy'⟩ := hy
+          use x' + y'
+          simp only [map_add, hx', smul_add, hy']
+      | add a b ha hb =>
+        obtain ⟨x', ha'⟩ := ha
+        obtain ⟨y', hb'⟩ := hb
+        use x' + y'
+        simp only [map_add, ha', add_smul, hb']
+  · rintro x ⟨y, rfl⟩
+    induction y with
+    | zero =>
+        rw [map_zero]
+        apply zero_mem
+    | tmul a b =>
+        simp only [LinearMap.lTensor_tmul, Submodule.coe_subtype]
+        suffices a otimesₜ[R] (b : B) = (a otimesₜ[R] (1 : B)) * ((1 : A) otimesₜ[R] (b : B)) by
+          rw [this]
+          simp only [Submodule.coe_restrictScalars, SetLike.mem_coe]
+          apply Ideal.mul_mem_left
+          -- Note: adding `includeRight` as a hint fixes a timeout https://github.com/leanprover-community/mathlib4/pull/8386
+          apply Ideal.mem_map_of_mem includeRight
+          exact Submodule.coe_mem b
+        simp only [Algebra.TensorProduct.tmul_mul_tmul,
+          mul_one, one_mul]
+    | add x y hx hy =>
+        rw [map_add]
+        apply Submodule.add_mem _ hx hy
 
 中文:
 引理 理想.map_includeRight_eq
@@ -1256,7 +1479,58 @@ lemma Ideal.map_includeRight_eq
     rw [Ideal.map]; rw [← submodule_span_eq] at hx
     refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
     · intro x
-      simp only [includeRight_apply, Set.mem_image, SetLike.mem_c
+      simp only [includeRight_apply, Set.mem_image, SetLike.mem_coe]
+      rintro ⟨y, hy, rfl⟩
+      use 1 otimesₜ[R] ⟨y, hy⟩
+      rfl
+    · use 0
+      simp only [map_zero]
+    · rintro x y - - ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩
+      use x + y
+      simp only [map_add]
+    · rintro a x - ⟨x, hx, rfl⟩
+      induction a with
+      | zero =>
+        use 0
+        simp only [map_zero, smul_eq_mul, zero_mul]
+      | tmul a b =>
+        induction x with
+        | zero =>
+          use 0
+          simp only [map_zero, smul_eq_mul, mul_zero]
+        | tmul x y =>
+          use (a * x) otimesₜ[R] (b • y)
+          simp only [LinearMap.lTensor_tmul, Submodule.coe_subtype, smul_eq_mul, tmul_mul_tmul]
+          rfl
+        | add x y hx hy =>
+          obtain ⟨x', hx'⟩ := hx
+          obtain ⟨y', hy'⟩ := hy
+          use x' + y'
+          simp only [map_add, hx', smul_add, hy']
+      | add a b ha hb =>
+        obtain ⟨x', ha'⟩ := ha
+        obtain ⟨y', hb'⟩ := hb
+        use x' + y'
+        simp only [map_add, ha', add_smul, hb']
+  · rintro x ⟨y, rfl⟩
+    induction y with
+    | zero =>
+        rw [map_zero]
+        apply zero_mem
+    | tmul a b =>
+        simp only [LinearMap.lTensor_tmul, Submodule.coe_subtype]
+        suffices a otimesₜ[R] (b : B) = (a otimesₜ[R] (1 : B)) * ((1 : A) otimesₜ[R] (b : B)) by
+          rw [this]
+          simp only [Submodule.coe_restrictScalars, SetLike.mem_coe]
+          apply Ideal.mul_mem_left
+          -- Note: adding `includeRight` as a hint fixes a timeout https://github.com/leanprover-community/mathlib4/pull/8386
+          apply Ideal.mem_map_of_mem includeRight
+          exact Submodule.coe_mem b
+        simp only [Algebra.TensorProduct.tmul_mul_tmul,
+          mul_one, one_mul]
+    | add x y hx hy =>
+        rw [map_add]
+        apply Submodule.add_mem _ hx hy
 
 Depends on / 依赖: Ideal.map, LinearMap, LinearMap.mem_range, Set.mem_image, SetLike, SetLike.coe_set_eq, SetLike.mem_coe, Submodule, Submodule.span_induction, coe_set_eq, includeRight_apply, le_antisymm, map_add, map_zero, mem_coe, mem_image, mem_range, span_induction, submodule_span_eq
 -/
@@ -1370,7 +1644,8 @@ lemma Algebra.TensorProduct.lTensor_ker
   have : (RingHom.ker (map (AlgHom.id R A) g)).restrictScalars R =
     LinearMap.ker (LinearMap.lTensor A (AlgHom.toLinearMap g)) := rfl
   rw [this]; rw [Ideal.map_includeRight_eq]
-  rw [(lTensor_exact A g.toLinearMap.exact_subtype_ker_map hg).linearMap_ke
+  rw [(lTensor_exact A g.toLinearMap.exact_subtype_ker_map hg).linearMap_ker_eq]
+  rfl
 
 中文:
 引理 代数.张量积.lTensor_ker
@@ -1380,7 +1655,8 @@ lemma Algebra.TensorProduct.lTensor_ker
   have : (RingHom.ker (map (AlgHom.id R A) g)).restrictScalars R =
     LinearMap.ker (LinearMap.lTensor A (AlgHom.toLinearMap g)) := rfl
   rw [this]; rw [Ideal.map_includeRight_eq]
-  rw [(lTensor_exact A g.toLinearMap.exact_subtype_ker_map hg).linearMap_ke
+  rw [(lTensor_exact A g.toLinearMap.exact_subtype_ker_map hg).linearMap_ker_eq]
+  rfl
 
 Depends on / 依赖: AlgHom, AlgHom.id, AlgHom.toLinearMap, Ideal.map_includeRight_eq, LinearMap, LinearMap.ker, LinearMap.lTensor, RingHom, RingHom.ker, Submodule, Submodule.restrictScalars_inj, exact_subtype_ker_map, g.toLinearMap.exact_subtype_ker_map, lTensor, lTensor_exact, linearMap_ker_eq, map_includeRight_eq, restrictScalars, restrictScalars_inj, toLinearMap
 -/
@@ -1405,7 +1681,8 @@ lemma Algebra.TensorProduct.rTensor_ker
   have : (RingHom.ker (map f (AlgHom.id R C))).restrictScalars R =
     LinearMap.ker (LinearMap.rTensor C (f.restrictScalars R).toLinearMap) := rfl
   rw [this]; rw [Ideal.map_includeLeft_eq]
-  rw [(rTensor_exact C (f.restrictScalars R).toLinearMap.exact_su
+  rw [(rTensor_exact C (f.restrictScalars R).toLinearMap.exact_subtype_ker_map hf).linearMap_ker_eq]
+  rfl
 
 中文:
 引理 代数.张量积.rTensor_ker
@@ -1415,7 +1692,8 @@ lemma Algebra.TensorProduct.rTensor_ker
   have : (RingHom.ker (map f (AlgHom.id R C))).restrictScalars R =
     LinearMap.ker (LinearMap.rTensor C (f.restrictScalars R).toLinearMap) := rfl
   rw [this]; rw [Ideal.map_includeLeft_eq]
-  rw [(rTensor_exact C (f.restrictScalars R).toLinearMap.exact_su
+  rw [(rTensor_exact C (f.restrictScalars R).toLinearMap.exact_subtype_ker_map hf).linearMap_ker_eq]
+  rfl
 
 Depends on / 依赖: AlgHom, AlgHom.id, Ideal.map_includeLeft_eq, LinearMap, LinearMap.ker, LinearMap.rTensor, RingHom, RingHom.ker, Submodule, Submodule.restrictScalars_inj, exact_subtype_ker_map, f.restrictScalars, linearMap_ker_eq, map_includeLeft_eq, rTensor, rTensor_exact, restrictScalars, restrictScalars_inj, toLinearMap, toLinearMap.exact_subtype_ker_map
 -/
@@ -1459,7 +1737,18 @@ theorem Algebra.TensorProduct.map_ker
   rw [this]
   -- this needs some rewriting to RingHom
   -- TODO: can `RingHom.comap_ker` take an arbitrary `RingHomClass`, rather than just `RingHom`?
-  simp 
+  simp only [AlgHom.ker_coe, AlgHom.comp_toRingHom]
+  rw [← RingHom.comap_ker]
+  simp only [← AlgHom.ker_coe]
+  -- apply one step of exactness
+  rw [← Algebra.TensorProduct.lTensor_ker _ hg]; rw [RingHom.ker_eq_comap_bot (map (AlgHom.id R A) g)]
+  rw [← Ideal.comap_map_of_surjective (map (AlgHom.id R A) g) (LinearMap.lTensor_surjective A hg)]
+  -- apply the other step of exactness
+  rw [Algebra.TensorProduct.rTensor_ker _ hf]
+  apply congr_arg₂ _ rfl
+  simp only [AlgHom.coe_ideal_map, Ideal.map_map]
+  rw [← AlgHom.comp_toRingHom]; rw [Algebra.TensorProduct.map_comp_includeLeft]
+  rfl
 
 中文:
 定理 代数.张量积.map_ker
@@ -1470,7 +1759,18 @@ theorem Algebra.TensorProduct.map_ker
   rw [this]
   -- this needs some rewriting to RingHom
   -- TODO: can `RingHom.comap_ker` take an arbitrary `RingHomClass`, rather than just `RingHom`?
-  simp 
+  simp only [AlgHom.ker_coe, AlgHom.comp_toRingHom]
+  rw [← RingHom.comap_ker]
+  simp only [← AlgHom.ker_coe]
+  -- apply one step of exactness
+  rw [← Algebra.TensorProduct.lTensor_ker _ hg]; rw [RingHom.ker_eq_comap_bot (map (AlgHom.id R A) g)]
+  rw [← Ideal.comap_map_of_surjective (map (AlgHom.id R A) g) (LinearMap.lTensor_surjective A hg)]
+  -- apply the other step of exactness
+  rw [Algebra.TensorProduct.rTensor_ker _ hf]
+  apply congr_arg₂ _ rfl
+  simp only [AlgHom.coe_ideal_map, Ideal.map_map]
+  rw [← AlgHom.comp_toRingHom]; rw [Algebra.TensorProduct.map_comp_includeLeft]
+  rfl
 -/
 theorem Algebra.TensorProduct.map_ker (hf : Function.Surjective f) (hg : Function.Surjective g) :
     RingHom.ker (map f g) =

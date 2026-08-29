@@ -170,7 +170,9 @@ theorem spanFinBasis.span
   ext x
   change LocallyConstant.evalₗ Int x _ = _
   simp only [zsmul_eq_mul, map_finsuppSum, LocallyConstant.evalₗ_apply,
-    LocallyConstant.coe_mul, Pi.mul_a
+    LocallyConstant.coe_mul, Pi.mul_apply, spanFinBasis, LocallyConstant.coe_mk, mul_ite, mul_one,
+    mul_zero, Finsupp.sum_ite_eq, Finsupp.mem_support_iff, ne_eq, ite_not]
+  split_ifs with h <;> [exact h.symm; rfl]
 
 中文:
 定理 spanFinBasis.span
@@ -182,7 +184,9 @@ theorem spanFinBasis.span
   ext x
   change LocallyConstant.evalₗ Int x _ = _
   simp only [zsmul_eq_mul, map_finsuppSum, LocallyConstant.evalₗ_apply,
-    LocallyConstant.coe_mul, Pi.mul_a
+    LocallyConstant.coe_mul, Pi.mul_apply, spanFinBasis, LocallyConstant.coe_mk, mul_ite, mul_one,
+    mul_zero, Finsupp.sum_ite_eq, Finsupp.mem_support_iff, ne_eq, ite_not]
+  split_ifs with h <;> [exact h.symm; rfl]
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.univ, Finsupp, Finsupp.mem_span_range_iff_exists_finsupp, Finsupp.mem_support_iff, Finsupp.onFinset, Finsupp.sum_ite_eq, LocallyConstant, LocallyConstant.coe_mk, LocallyConstant.coe_mul, LocallyConstant.eval, Pi.mul_apply, coe_mk, coe_mul, f.toFun, h.symm, ite_not, map_finsuppSum, mem_span_range_iff_exists_finsupp
 -/
@@ -254,7 +258,8 @@ theorem factors_prod_eq_basis_of_eq
   dsimp
   split_ifs with hh
   · rw [e, LocallyConstant.coe_mk, if_pos hh]
-  · rw [LocallyConstant.sub_apply, e, LocallyConstant
+  · rw [LocallyConstant.sub_apply, e, LocallyConstant.coe_mk, LocallyConstant.coe_mk, if_neg hh]
+    simp only [LocallyConstant.toFun_eq_coe, LocallyConstant.coe_one, Pi.one_apply, sub_zero]
 
 中文:
 定理 factors_prod_eq_basis_of_eq
@@ -267,7 +272,8 @@ theorem factors_prod_eq_basis_of_eq
   dsimp
   split_ifs with hh
   · rw [e, LocallyConstant.coe_mk, if_pos hh]
-  · rw [LocallyConstant.sub_apply, e, LocallyConstant
+  · rw [LocallyConstant.sub_apply, e, LocallyConstant.coe_mk, LocallyConstant.coe_mk, if_neg hh]
+    simp only [LocallyConstant.toFun_eq_coe, LocallyConstant.coe_one, Pi.one_apply, sub_zero]
 
 Depends on / 依赖: List.mem_map, List.prod_eq_one, LocallyConstant, LocallyConstant.coe_mk, LocallyConstant.coe_one, LocallyConstant.evalMonoidHom, LocallyConstant.sub_apply, LocallyConstant.toFun_eq_coe, Pi.one_apply, coe_mk, coe_one, evalMonoidHom, factors, if_neg, if_pos, list_prod_apply, mem_map, one_apply, prod_eq_one, split_ifs
 -/
@@ -359,7 +365,11 @@ theorem factors_prod_eq_basis_of_ne
   obtain ⟨a, ha⟩ : exists a, y.val a != x.val a := by contrapose! h; ext; apply h
   cases hx : x.val a
   · rw [hx, ne_eq, Bool.not_eq_false] at ha
-    refine ⟨1 - (e (π C (· in s)) a), ⟨one_sub_e_mem_of
+    refine ⟨1 - (e (π C (· in s)) a), ⟨one_sub_e_mem_of_false _ _ ha hx, ?_⟩⟩
+    rw [e]; rw [LocallyConstant.evalMonoidHom_apply]; rw [LocallyConstant.sub_apply]; rw [LocallyConstant.coe_one]; rw [Pi.one_apply]; rw [LocallyConstant.coe_mk]; rw [if_pos ha]; rw [sub_self]
+  · refine ⟨e (π C (· in s)) a, ⟨e_mem_of_eq_true _ _ hx, ?_⟩⟩
+    rw [hx] at ha
+    rw [LocallyConstant.evalMonoidHom_apply]; rw [e]; rw [LocallyConstant.coe_mk]; rw [if_neg ha]
 
 中文:
 定理 factors_prod_eq_basis_of_ne
@@ -371,7 +381,11 @@ theorem factors_prod_eq_basis_of_ne
   obtain ⟨a, ha⟩ : exists a, y.val a != x.val a := by contrapose! h; ext; apply h
   cases hx : x.val a
   · rw [hx, ne_eq, Bool.not_eq_false] at ha
-    refine ⟨1 - (e (π C (· in s)) a), ⟨one_sub_e_mem_of
+    refine ⟨1 - (e (π C (· in s)) a), ⟨one_sub_e_mem_of_false _ _ ha hx, ?_⟩⟩
+    rw [e]; rw [LocallyConstant.evalMonoidHom_apply]; rw [LocallyConstant.sub_apply]; rw [LocallyConstant.coe_one]; rw [Pi.one_apply]; rw [LocallyConstant.coe_mk]; rw [if_pos ha]; rw [sub_self]
+  · refine ⟨e (π C (· in s)) a, ⟨e_mem_of_eq_true _ _ hx, ?_⟩⟩
+    rw [hx] at ha
+    rw [LocallyConstant.evalMonoidHom_apply]; rw [e]; rw [LocallyConstant.coe_mk]; rw [if_neg ha]
 
 Depends on / 依赖: Bool.not_eq_false, List.mem_map, List.prod_eq_zero, LocallyConstant, LocallyConstant.coe_mk, LocallyConstant.coe_one, LocallyConstant.evalMonoidHom_apply, LocallyConstant.sub_apply, Pi.one_apply, coe_mk, coe_one, contrapose, evalMonoidHom_apply, if_pos, list_prod_apply, mem_map, ne_eq, not_eq_false, one_apply, one_sub_e_mem_of_false
 -/
@@ -435,7 +449,9 @@ theorem GoodProducts.finsuppSum_mem_span_eval
   apply Submodule.subset_span
   have hmas : m.val <= as := by
     apply hc
-    simpa only [Finset.mem_coe, Finsupp.mem_support_iff
+    simpa only [Finset.mem_coe, Finsupp.mem_support_iff] using hm
+  refine ⟨⟨a :: m.val, ha.cons_of_le m.prop hmas⟩, ⟨List.cons_le_cons a hmas, ?_⟩⟩
+  simp only [Products.eval, List.map, List.prod_cons]
 
 中文:
 定理 GoodProducts.finsuppSum_mem_span_eval
@@ -450,7 +466,9 @@ theorem GoodProducts.finsuppSum_mem_span_eval
   apply Submodule.subset_span
   have hmas : m.val <= as := by
     apply hc
-    simpa only [Finset.mem_coe, Finsupp.mem_support_iff
+    simpa only [Finset.mem_coe, Finsupp.mem_support_iff] using hm
+  refine ⟨⟨a :: m.val, ha.cons_of_le m.prop hmas⟩, ⟨List.cons_le_cons a hmas, ?_⟩⟩
+  simp only [Products.eval, List.map, List.prod_cons]
 
 Depends on / 依赖: Finset, Finset.mem_coe, Finsupp, Finsupp.mem_support_iff, LinearMap, LinearMap.mulLeft, List.cons_le_cons, List.map, List.prod_cons, Products, Products.eval, Submodule, Submodule.finsuppSum_mem, Submodule.smul_mem, Submodule.subset_span, cons_le_cons, cons_of_le, finsuppSum_mem, ha.cons_of_le, m.prop
 -/
@@ -487,7 +505,51 @@ theorem GoodProducts.spanFin
   let l := s.sort (· >= ·)
   dsimp [factors]
   suffices l.SortedGT -> (l.map (fun i => if x.val i = true then e (π C (· in s)) i
-      else (1 - (e (π 
+      else (1 - (e (π C (· in s)) i)))).prod in
+      Submodule.span Int ((Products.eval (π C (· in s))) '' {m | m.val <= l}) from
+    Submodule.span_mono (Set.image_subset_range _ _)
+      (this (Finset.sortedGT_sort _))
+  rw [List.sortedGT_iff_isChain]
+  induction l with
+  | nil =>
+    intro _
+    apply Submodule.subset_span
+    exact ⟨⟨[], List.isChain_nil⟩,⟨Or.inl rfl, rfl⟩⟩
+  | cons a as ih =>
+    rw [List.map_cons]; rw [List.prod_cons]
+    intro ha
+    specialize ih (by rw [List.isChain_cons] at ha; exact ha.2)
+    rw [Finsupp.mem_span_image_iff_linearCombination] at ih
+    simp only [Finsupp.mem_supported, Finsupp.linearCombination_apply] at ih
+    obtain ⟨c, hc, hc'⟩ := ih
+    rw [← hc']; clear hc'
+    have hmap := fun g => map_finsuppSum (LinearMap.mulLeft Int (e (π C (· in s)) a)) c g
+    dsimp at hmap ⊢
+    split_ifs
+    · rw [hmap]
+      exact finsuppSum_mem_span_eval _ _ ha hc
+    · noncomm_ring
+      -- we use `noncomm_ring` even though this is a commutative ring, because we want a weaker
+      -- normalization which preserves multiplication order (i.e. doesn't use commutativity rules)
+      rw [hmap]
+      apply Submodule.add_mem
+      · apply Submodule.finsuppSum_mem
+        intro m hm
+        apply Submodule.smul_mem
+        apply Submodule.subset_span
+        refine ⟨m, ⟨?_, rfl⟩⟩
+        simp only [Set.mem_ofPred_eq]
+        have hmas : m.val <= as :=
+          hc (by simpa only [Finset.mem_coe, Finsupp.mem_support_iff] using hm)
+        refine le_trans hmas ?_
+        cases as with
+        | nil => exact (List.nil_lt_cons a []).le
+        | cons b bs =>
+          apply le_of_lt
+          rw [List.isChain_cons_cons] at ha
+          exact (List.lt_iff_lex_lt _ _).mp (List.Lex.rel ha.1)
+      · apply Submodule.smul_mem
+        exact finsuppSum_mem_span_eval _ _ ha hc
 
 中文:
 定理 GoodProducts.spanFin
@@ -501,7 +563,51 @@ theorem GoodProducts.spanFin
   let l := s.sort (· >= ·)
   dsimp [factors]
   suffices l.SortedGT -> (l.map (fun i => if x.val i = true then e (π C (· in s)) i
-      else (1 - (e (π 
+      else (1 - (e (π C (· in s)) i)))).prod in
+      Submodule.span Int ((Products.eval (π C (· in s))) '' {m | m.val <= l}) from
+    Submodule.span_mono (Set.image_subset_range _ _)
+      (this (Finset.sortedGT_sort _))
+  rw [List.sortedGT_iff_isChain]
+  induction l with
+  | nil =>
+    intro _
+    apply Submodule.subset_span
+    exact ⟨⟨[], List.isChain_nil⟩,⟨Or.inl rfl, rfl⟩⟩
+  | cons a as ih =>
+    rw [List.map_cons]; rw [List.prod_cons]
+    intro ha
+    specialize ih (by rw [List.isChain_cons] at ha; exact ha.2)
+    rw [Finsupp.mem_span_image_iff_linearCombination] at ih
+    simp only [Finsupp.mem_supported, Finsupp.linearCombination_apply] at ih
+    obtain ⟨c, hc, hc'⟩ := ih
+    rw [← hc']; clear hc'
+    have hmap := fun g => map_finsuppSum (LinearMap.mulLeft Int (e (π C (· in s)) a)) c g
+    dsimp at hmap ⊢
+    split_ifs
+    · rw [hmap]
+      exact finsuppSum_mem_span_eval _ _ ha hc
+    · noncomm_ring
+      -- we use `noncomm_ring` even though this is a commutative ring, because we want a weaker
+      -- normalization which preserves multiplication order (i.e. doesn't use commutativity rules)
+      rw [hmap]
+      apply Submodule.add_mem
+      · apply Submodule.finsuppSum_mem
+        intro m hm
+        apply Submodule.smul_mem
+        apply Submodule.subset_span
+        refine ⟨m, ⟨?_, rfl⟩⟩
+        simp only [Set.mem_ofPred_eq]
+        have hmas : m.val <= as :=
+          hc (by simpa only [Finset.mem_coe, Finsupp.mem_support_iff] using hm)
+        refine le_trans hmas ?_
+        cases as with
+        | nil => exact (List.nil_lt_cons a []).le
+        | cons b bs =>
+          apply le_of_lt
+          rw [List.isChain_cons_cons] at ha
+          exact (List.lt_iff_lex_lt _ _).mp (List.Lex.rel ha.1)
+      · apply Submodule.smul_mem
+        exact finsuppSum_mem_span_eval _ _ ha hc
 
 Depends on / 依赖: Finset, Finset.sortedGT_sort, List.sortedGT_iff_isChain, Products, Products.eval, Set.image_subset_range, SortedGT, Submodule, Submodule.span, Submodule.span_le, Submodule.span_mono, factors, factors_prod_eq_basis, image_subset_range, inducti, l.SortedGT, l.map, le_trans, m.val, s.sort
 -/
@@ -607,7 +713,7 @@ theorem GoodProducts.span
 refine Submodule.span_mono ?_ Submodule.apply_mem_span_image_of_mem_span (πJ C K)
     spanFin C K (Submodule.mem_top : f' in ⊤)
   rintro l ⟨y, ⟨m, rfl⟩, rfl⟩
-  exact ⟨m.va
+  exact ⟨m.val, eval_eq_πJ C K m.val m.prop⟩
 
 中文:
 定理 GoodProducts.span
@@ -619,7 +725,7 @@ refine Submodule.span_mono ?_ Submodule.apply_mem_span_image_of_mem_span (πJ C 
 refine Submodule.span_mono ?_ Submodule.apply_mem_span_image_of_mem_span (πJ C K)
     spanFin C K (Submodule.mem_top : f' in ⊤)
   rintro l ⟨y, ⟨m, rfl⟩, rfl⟩
-  exact ⟨m.va
+  exact ⟨m.val, eval_eq_πJ C K m.val m.prop⟩
 
 Depends on / 依赖: Submodule, Submodule.apply_mem_span_image_of_mem_span, Submodule.mem_top, Submodule.span_mono, apply_mem_span_image_of_mem_span, fin_comap_jointlySurjective, m.prop, m.val, mem_top, spanFin, span_iff_products, span_mono
 -/

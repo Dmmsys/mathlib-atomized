@@ -76,7 +76,20 @@ lemma bijective_sectionsPrecomp
     have h₂ := s₂.property X.hom
     dsimp at this h₁ h₂
     rw [← h₁]; rw [this]; rw [h₂]
-  · hav
+  · have h (Y : D) : exists (a : P.obj Y),
+        forall (j : CostructuredArrow F Y), P.map j.hom (t.val j.left) = a := by
+      apply constant_of_preserves_morphisms'
+      intro Z₁ Z₂ φ
+      dsimp
+      rw [← t.property φ.left]
+      dsimp
+      rw [← comp_apply]; rw [← Functor.map_comp]; rw [CostructuredArrow.w]
+    choose val hval using h
+    refine ⟨⟨val, fun {Y₁ Y₂} f => ?_⟩, ?_⟩
+    · let X : CostructuredArrow F Y₁ := Classical.arbitrary _
+      simp [← hval Y₁ X, ← hval Y₂ ((CostructuredArrow.map f).obj X)]
+    · ext X : 2
+      simpa using (hval (F.obj X) (CostructuredArrow.mk (𝟙 _))).symm
 
 中文:
 引理 bijective_sectionsPrecomp
@@ -90,7 +103,20 @@ lemma bijective_sectionsPrecomp
     have h₂ := s₂.property X.hom
     dsimp at this h₁ h₂
     rw [← h₁]; rw [this]; rw [h₂]
-  · hav
+  · have h (Y : D) : exists (a : P.obj Y),
+        forall (j : CostructuredArrow F Y), P.map j.hom (t.val j.left) = a := by
+      apply constant_of_preserves_morphisms'
+      intro Z₁ Z₂ φ
+      dsimp
+      rw [← t.property φ.left]
+      dsimp
+      rw [← comp_apply]; rw [← Functor.map_comp]; rw [CostructuredArrow.w]
+    choose val hval using h
+    refine ⟨⟨val, fun {Y₁ Y₂} f => ?_⟩, ?_⟩
+    · let X : CostructuredArrow F Y₁ := Classical.arbitrary _
+      simp [← hval Y₁ X, ← hval Y₂ ((CostructuredArrow.map f).obj X)]
+    · ext X : 2
+      simpa using (hval (F.obj X) (CostructuredArrow.mk (𝟙 _))).symm
 
 Depends on / 依赖: Classical, Classical.arbitrary, CostructuredArrow, P.map, P.obj, Subtype, Subtype.val, X.hom, X.left, arbitrary, comp_apply, congr_arg, congr_fun, constant_of_preserves_morphisms, j.hom, j.left, property, t.property, t.val
 -/
@@ -177,7 +203,23 @@ lemma bijective_colimitTypePrecomp
       intro Z₁ Z₂ f
       ext x
       dsimp
-      rw [← (F ⋙ P).
+      rw [← (F ⋙ P).ιColimitType_map f.right]; rw [comp_map]
+      simp [← comp_apply, ← Functor.map_comp]
+    choose φ hφ using h
+    let c : P.CoconeTypes :=
+      { pt := (F ⋙ P).ColimitType
+        ι Y := φ Y
+        ι_naturality {Y₁ Y₂} f := by
+          ext
+          have X : StructuredArrow Y₂ F := Classical.arbitrary _
+          rw [← hφ Y₂ X]; rw [← hφ Y₁ ((StructuredArrow.map f).obj X)]
+          simp }
+    refine Function.RightInverse.injective (g := (P.descColimitType c)) (fun x => ?_)
+    obtain ⟨X, x, rfl⟩ := (F ⋙ P).ιColimitType_jointly_surjective x
+    simp [c, ← hφ (F.obj X) (StructuredArrow.mk (𝟙 _))]
+  · obtain ⟨X, x, rfl⟩ := P.ιColimitType_jointly_surjective x
+    let Y : StructuredArrow X F := Classical.arbitrary _
+    exact ⟨(F ⋙ P).ιColimitType Y.right (P.map Y.hom x), by simp⟩
 
 中文:
 引理 bijective_colimitTypePrecomp
@@ -190,7 +232,23 @@ lemma bijective_colimitTypePrecomp
       intro Z₁ Z₂ f
       ext x
       dsimp
-      rw [← (F ⋙ P).
+      rw [← (F ⋙ P).ιColimitType_map f.right]; rw [comp_map]
+      simp [← comp_apply, ← Functor.map_comp]
+    choose φ hφ using h
+    let c : P.CoconeTypes :=
+      { pt := (F ⋙ P).ColimitType
+        ι Y := φ Y
+        ι_naturality {Y₁ Y₂} f := by
+          ext
+          have X : StructuredArrow Y₂ F := Classical.arbitrary _
+          rw [← hφ Y₂ X]; rw [← hφ Y₁ ((StructuredArrow.map f).obj X)]
+          simp }
+    refine Function.RightInverse.injective (g := (P.descColimitType c)) (fun x => ?_)
+    obtain ⟨X, x, rfl⟩ := (F ⋙ P).ιColimitType_jointly_surjective x
+    simp [c, ← hφ (F.obj X) (StructuredArrow.mk (𝟙 _))]
+  · obtain ⟨X, x, rfl⟩ := P.ιColimitType_jointly_surjective x
+    let Y : StructuredArrow X F := Classical.arbitrary _
+    exact ⟨(F ⋙ P).ιColimitType Y.right (P.map Y.hom x), by simp⟩
 
 Depends on / 依赖: CoconeTypes, ColimitType, Functor, Functor.map_comp, P.CoconeTypes, P.map, P.obj, StructuredArrow, comp_apply, comp_map, constant_of_preserves_morphisms, f.right, j.hom, j.right, map_comp
 -/

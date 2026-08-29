@@ -1550,7 +1550,12 @@ theorem prod_subset_prod_iff
   have st : s.Nonempty ∧ t.Nonempty := by rwa [prod_nonempty_iff] at h
   refine ⟨fun H => Or.inl ⟨?_, ?_⟩, ?_⟩
   · have := image_mono (f := Prod.fst) H
-    rwa [fst_image_prod _ st.2, fst_image_prod _ (h.mono H)
+    rwa [fst_image_prod _ st.2, fst_image_prod _ (h.mono H).snd] at this
+  · have := image_mono (f := Prod.snd) H
+    rwa [snd_image_prod st.1, snd_image_prod (h.mono H).fst] at this
+  · intro H
+    simp only [st.1.ne_empty, st.2.ne_empty, or_false] at H
+    exact prod_mono H.1 H.2
 
 中文:
 定理 prod_subset_prod_iff
@@ -1561,7 +1566,12 @@ theorem prod_subset_prod_iff
   have st : s.Nonempty ∧ t.Nonempty := by rwa [prod_nonempty_iff] at h
   refine ⟨fun H => Or.inl ⟨?_, ?_⟩, ?_⟩
   · have := image_mono (f := Prod.fst) H
-    rwa [fst_image_prod _ st.2, fst_image_prod _ (h.mono H)
+    rwa [fst_image_prod _ st.2, fst_image_prod _ (h.mono H).snd] at this
+  · have := image_mono (f := Prod.snd) H
+    rwa [snd_image_prod st.1, snd_image_prod (h.mono H).fst] at this
+  · intro H
+    simp only [st.1.ne_empty, st.2.ne_empty, or_false] at H
+    exact prod_mono H.1 H.2
 
 Depends on / 依赖: Nonempty, Or.inl, Prod.fst, Prod.snd, eq_empty_or_nonempty, fst_image_prod, h.mono, image_mono, ne_empty, or_false, prod_eq_empty_iff, prod_mono, prod_nonempty_iff, s.Nonempty, snd_image_prod, t.Nonempty
 -/
@@ -1662,7 +1672,8 @@ theorem prod_eq_prod_iff_of_nonempty
     have h₁ : (s₁ ×ˢ t₁ : Set _).Nonempty := by rwa [← heq]
     rw [prod_nonempty_iff] at h h₁
     rw [← fst_image_prod s h.2]; rw [← fst_image_prod s₁ h₁.2]; rw [heq]; rw [eq_self_iff_true]; rw [true_and]; rw [←
-      snd_image_prod h.1 t]; rw [← snd_image_prod h₁.1 t
+      snd_image_prod h.1 t]; rw [← snd_image_prod h₁.1 t₁]; rw [heq]
+  · grind
 
 中文:
 定理 prod_eq_prod_iff_of_nonempty
@@ -1673,7 +1684,8 @@ theorem prod_eq_prod_iff_of_nonempty
     have h₁ : (s₁ ×ˢ t₁ : Set _).Nonempty := by rwa [← heq]
     rw [prod_nonempty_iff] at h h₁
     rw [← fst_image_prod s h.2]; rw [← fst_image_prod s₁ h₁.2]; rw [heq]; rw [eq_self_iff_true]; rw [true_and]; rw [←
-      snd_image_prod h.1 t]; rw [← snd_image_prod h₁.1 t
+      snd_image_prod h.1 t]; rw [← snd_image_prod h₁.1 t₁]; rw [heq]
+  · grind
 
 Depends on / 依赖: Equiv.bijective_comp, Equiv.mk, Nonempty, Prod.ext, _def, bijective_comp, comp_bijective, eq_self_iff_true, fst_image_prod, inv_inv, isComplement, isComplement_iff_bijective, mul_inv_rev, prod_nonempty_iff, snd_image_prod, true_and
 -/
@@ -1701,7 +1713,10 @@ theorem prod_eq_prod_iff
     rintro ⟨rfl, rfl⟩
     exact prod_eq_empty_iff.mp h
   rw [prod_eq_prod_iff_of_nonempty h]
-  rw [nonempty_iff_ne_empty]; rw [Ne
+  rw [nonempty_iff_ne_empty]; rw [Ne]; rw [prod_eq_empty_iff] at h
+  simp_rw [h, false_and, or_false]
+
+@[simp]
 
 中文:
 定理 prod_eq_prod_iff
@@ -1713,7 +1728,10 @@ theorem prod_eq_prod_iff
     rintro ⟨rfl, rfl⟩
     exact prod_eq_empty_iff.mp h
   rw [prod_eq_prod_iff_of_nonempty h]
-  rw [nonempty_iff_ne_empty]; rw [Ne
+  rw [nonempty_iff_ne_empty]; rw [Ne]; rw [prod_eq_empty_iff] at h
+  simp_rw [h, false_and, or_false]
+
+@[simp]
 
 Depends on / 依赖: IsComplement, eq_comm, eq_empty_or_nonempty, false_and, nonempty_iff_ne_empty, or_false, or_iff_right_iff_imp, prod_eq_empty_iff, prod_eq_empty_iff.mp, prod_eq_prod_iff_of_nonempty, simp_rw, true_and
 -/
@@ -3553,7 +3571,7 @@ theorem pi_update_of_mem
     (s.pi fun j => t j (update f i a j)) = ({i} union s \ {i}).pi fun j => t j (update f i a j) := by
         rw [union_sdiff_self]; rw [union_eq_self_of_subset_left (singleton_subset_iff.2 hi)]
     _ = { x | x i in t i a } inter (s \ {i}).pi fun j => t j (f j) := by
-        rw [union_pi]; rw [
+        rw [union_pi]; rw [singleton_pi']; rw [update_self]; rw [pi_update_of_notMem]; simp
 
 中文:
 定理 pi_update_of_mem
@@ -3562,7 +3580,7 @@ theorem pi_update_of_mem
     (s.pi fun j => t j (update f i a j)) = ({i} union s \ {i}).pi fun j => t j (update f i a j) := by
         rw [union_sdiff_self]; rw [union_eq_self_of_subset_left (singleton_subset_iff.2 hi)]
     _ = { x | x i in t i a } inter (s \ {i}).pi fun j => t j (f j) := by
-        rw [union_pi]; rw [
+        rw [union_pi]; rw [singleton_pi']; rw [update_self]; rw [pi_update_of_notMem]; simp
 
 Depends on / 依赖: Prod.ext_iff.mp, Subgroup, Subgroup.mul_mem_sup, Subtype, Subtype.ext_iff.mp, codisjoint_iff_le_sup, codisjoint_iff_le_sup.mpr, disjoint_iff_inf_le, disjoint_iff_inf_le.mpr, ext_iff, mul_mem_sup, mul_one, one_mul, pi_update_of_notMem, s.pi, singleton_pi, singleton_subset_iff, union_eq_self_of_subset_left, union_pi, union_sdiff_self
 -/
@@ -3828,7 +3846,8 @@ theorem piMap_image_pi
       exact (hb i hi).imp fun a ⟨hat, hab⟩ => ⟨hab, fun _ => hat⟩
     else
       exact (hf i hi (b i)).imp fun a ha => ⟨ha, (absurd · hi)⟩
-
+  choose a hab hat using this
+  exact ⟨a, hat, funext hab⟩
 
 中文:
 定理 piMap_image_pi
@@ -3840,7 +3859,8 @@ theorem piMap_image_pi
       exact (hb i hi).imp fun a ⟨hat, hab⟩ => ⟨hab, fun _ => hat⟩
     else
       exact (hf i hi (b i)).imp fun a ha => ⟨ha, (absurd · hi)⟩
-
+  choose a hab hat using this
+  exact ⟨a, hat, funext hab⟩
 
 Depends on / 依赖: Subset, Subset.antisymm, absurd, antisymm, piMap_image_pi_subset
 -/
@@ -4710,7 +4730,12 @@ obtain ⟨e₂, he₂⟩ := exists_range_eq_graphOn_univ (f := Equiv.prodComm _ 
     by simp [hf]
   have he₁₂ h i : e₁ h = i ↔ e₂ i = h := by
     rw [Set.ext_iff] at he₁ he₂
-    aesop (add simp [Prod.swap_eq_iff
+    aesop (add simp [Prod.swap_eq_iff_eq_swap])
+  exact ⟨
+  { toFun := e₁
+    invFun := e₂
+    left_inv := fun h => by rw [← he₁₂]
+    right_inv := fun i => by rw [he₁₂] }, he₁⟩
 
 中文:
 引理 存在_equiv_range_eq_graphOn_univ
@@ -4721,7 +4746,12 @@ obtain ⟨e₂, he₂⟩ := exists_range_eq_graphOn_univ (f := Equiv.prodComm _ 
     by simp [hf]
   have he₁₂ h i : e₁ h = i ↔ e₂ i = h := by
     rw [Set.ext_iff] at he₁ he₂
-    aesop (add simp [Prod.swap_eq_iff
+    aesop (add simp [Prod.swap_eq_iff_eq_swap])
+  exact ⟨
+  { toFun := e₁
+    invFun := e₂
+    left_inv := fun h => by rw [← he₁₂]
+    right_inv := fun i => by rw [he₁₂] }, he₁⟩
 
 Depends on / 依赖: Equiv.prodComm, Prod.swap_eq_iff_eq_swap, Set.ext_iff, exists_range_eq_graphOn_univ, ext_iff, invFun, left_inv, prodComm, right_inv, swap_eq_iff_eq_swap
 -/

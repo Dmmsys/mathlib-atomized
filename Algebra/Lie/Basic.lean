@@ -843,7 +843,18 @@ instance LinearMap.instLieRingModule
         simp only [smul_sub, map_smul, lie_smul, RingHom.id_apply] }
   add_lie x y f := by
     ext n
-    simp only [add_lie, coe_mk, AddHom.coe_m
+    simp only [add_lie, coe_mk, AddHom.coe_mk, add_apply, map_add]
+    abel
+  lie_add x f g := by
+    ext n
+    simp only [coe_mk, AddHom.coe_mk, lie_add, add_apply]
+    abel
+  leibniz_lie x y f := by
+    ext n
+    simp only [lie_lie, coe_mk, AddHom.coe_mk, map_sub, add_apply, lie_sub]
+    abel
+
+@[simp]
 
 中文:
 实例 线性映射.instLieRingModule
@@ -856,7 +867,18 @@ instance LinearMap.instLieRingModule
         simp only [smul_sub, map_smul, lie_smul, RingHom.id_apply] }
   add_lie x y f := by
     ext n
-    simp only [add_lie, coe_mk, AddHom.coe_m
+    simp only [add_lie, coe_mk, AddHom.coe_mk, add_apply, map_add]
+    abel
+  lie_add x f g := by
+    ext n
+    simp only [coe_mk, AddHom.coe_mk, lie_add, add_apply]
+    abel
+  leibniz_lie x y f := by
+    ext n
+    simp only [lie_lie, coe_mk, AddHom.coe_mk, map_sub, add_apply, lie_sub]
+    abel
+
+@[simp]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, RingHom, RingHom.id_apply, add_apply, add_lie, coe_mk, id_apply, leibniz_lie, lie_add, lie_lie, lie_smul, lie_sub, map_add, map_smul, map_sub, smul_sub
 -/

@@ -81,7 +81,10 @@ definition iwasawaStructure_two
   is_conj g s := by
     convert! (conj_smul_range_ofSubtype g s).symm
   is_generator := by
-    rw [eq_top_iff]; rw [← Equiv.Perm
+    rw [eq_top_iff]; rw [← Equiv.Perm.closure_isSwap]; rw [Subgroup.closure_le]
+    rintro g ⟨a, b, hab, rfl⟩
+    apply Subgroup.mem_iSup_of_mem ⟨{a, b}, Finset.card_pair hab⟩
+    exact ⟨swap ⟨a, by simp⟩ ⟨b, by simp⟩, Equiv.Perm.ofSubtype_swap_eq _ _⟩
 
 中文:
 定义 iwasawaStructure_two
@@ -93,7 +96,10 @@ definition iwasawaStructure_two
   is_conj g s := by
     convert! (conj_smul_range_ofSubtype g s).symm
   is_generator := by
-    rw [eq_top_iff]; rw [← Equiv.Perm
+    rw [eq_top_iff]; rw [← Equiv.Perm.closure_isSwap]; rw [Subgroup.closure_le]
+    rintro g ⟨a, b, hab, rfl⟩
+    apply Subgroup.mem_iSup_of_mem ⟨{a, b}, Finset.card_pair hab⟩
+    exact ⟨swap ⟨a, by simp⟩ ⟨b, by simp⟩, Equiv.Perm.ofSubtype_swap_eq _ _⟩
 
 Depends on / 依赖: ofSubtype
 -/
@@ -165,7 +171,10 @@ definition iwasawaStructure_three
     infer_instance
   is_conj g s := (conj_smul_range_ofSubtype s g).symm
   is_generator := by
-    rw [eq_top_iff]; rw [← closure_isThreeCycles_eq_top
+    rw [eq_top_iff]; rw [← closure_isThreeCycles_eq_top]; rw [Subgroup.closure_le]
+    intro g hg
+    apply Subgroup.mem_iSup_of_mem ⟨(g : Perm α).support, hg.card_support⟩
+    rw [mem_range_ofSubtype_iff]
 
 中文:
 定义 iwasawaStructure_three
@@ -176,7 +185,10 @@ definition iwasawaStructure_three
     infer_instance
   is_conj g s := (conj_smul_range_ofSubtype s g).symm
   is_generator := by
-    rw [eq_top_iff]; rw [← closure_isThreeCycles_eq_top
+    rw [eq_top_iff]; rw [← closure_isThreeCycles_eq_top]; rw [Subgroup.closure_le]
+    intro g hg
+    apply Subgroup.mem_iSup_of_mem ⟨(g : Perm α).support, hg.card_support⟩
+    rw [mem_range_ofSubtype_iff]
 
 Depends on / 依赖: alternatingGroup, alternatingGroup.ofSubtype, ofSubtype
 -/
@@ -203,7 +215,10 @@ theorem normal_subgroup_eq_bot_or_eq_top_of_card_ne_six
   have : IsPreprimitive (alternatingGroup α) (Set.powersetCard α 3) := by
     refine Set.powersetCard.isPreprimitive_alternatingGroup (by norm_num) ?_ ?_
     · exact lt_of_lt_of_le (by norm_num) hα
-    · si
+    · simpa using hα'
+  rw [eq_top_iff]; rw [← commutator_alternatingGroup_eq_top (by simpa using hα)]
+  apply iwasawaStructure_three.commutator_le
+  exact fixedPoints_ne_univ_of_faithfulSMul (by norm_num) (by grind)
 
 中文:
 定理 normal_subgroup_eq_bot_or_eq_top_of_card_ne_six
@@ -213,7 +228,10 @@ theorem normal_subgroup_eq_bot_or_eq_top_of_card_ne_six
   have : IsPreprimitive (alternatingGroup α) (Set.powersetCard α 3) := by
     refine Set.powersetCard.isPreprimitive_alternatingGroup (by norm_num) ?_ ?_
     · exact lt_of_lt_of_le (by norm_num) hα
-    · si
+    · simpa using hα'
+  rw [eq_top_iff]; rw [← commutator_alternatingGroup_eq_top (by simpa using hα)]
+  apply iwasawaStructure_three.commutator_le
+  exact fixedPoints_ne_univ_of_faithfulSMul (by norm_num) (by grind)
 
 Depends on / 依赖: IsPreprimitive, Set.powersetCard, Set.powersetCard.isPreprimitive_alternatingGroup, Subgroup, Subgroup.nontrivial_iff_ne_bot, alternatingGroup, commutator_alternatingGroup_eq_top, commutator_le, eq_top_iff, fixedPoints_ne_univ_of_faithfulSMul, hab.to_reflTransGen, isPreprimitive_alternatingGroup, iwasawaStructure_three, iwasawaStructure_three.commutator_le, lt_of_lt_of_le, ne_eq, nontrivial_iff_ne_bot, or_iff_not_imp_left, powersetCard, single
 -/
@@ -243,7 +261,10 @@ theorem mem_map_kleinFour_ofSubtype
   · obtain ⟨σ, rfl⟩ := (mem_range_ofSubtype_iff s k).mpr hk
     simp_rw [and_iff_right hk, Subgroup.mem_map, ofSubtype_inj, existsAndEq, and_true,
       ← SetLike.mem_coe, coe_kleinFour_of_card_eq_four hs]
-    
+    simp [cycleType_ofSubtype, coe_ofSubtype, map_eq_one_iff _ Perm.ofSubtype_injective]
+  · simp_rw [hk, false_and, iff_false]
+    contrapose! hk
+    exact (mem_range_ofSubtype_iff s k).mp (Subgroup.map_le_range _ _ hk)
 
 中文:
 定理 mem_map_kleinFour_ofSubtype
@@ -254,7 +275,10 @@ theorem mem_map_kleinFour_ofSubtype
   · obtain ⟨σ, rfl⟩ := (mem_range_ofSubtype_iff s k).mpr hk
     simp_rw [and_iff_right hk, Subgroup.mem_map, ofSubtype_inj, existsAndEq, and_true,
       ← SetLike.mem_coe, coe_kleinFour_of_card_eq_four hs]
-    
+    simp [cycleType_ofSubtype, coe_ofSubtype, map_eq_one_iff _ Perm.ofSubtype_injective]
+  · simp_rw [hk, false_and, iff_false]
+    contrapose! hk
+    exact (mem_range_ofSubtype_iff s k).mp (Subgroup.map_le_range _ _ hk)
 
 Depends on / 依赖: Nat.card, Perm.ofSubtype_injective, SetLike, SetLike.mem_coe, Subgroup, Subgroup.map_le_range, Subgroup.mem_map, and_iff_right, and_true, coe_kleinFour_of_card_eq_four, coe_ofSubtype, contrapose, cycleType_ofSubtype, existsAndEq, false_and, hdb.tail, iff_false, map_eq_one_iff, map_le_range, mem_coe
 -/
@@ -282,7 +306,9 @@ theorem map_kleinFour_conj
   ext ⟨k, hk⟩
   simp_rw [Subgroup.mem_pointwise_smul_iff_inv_smul_mem, mem_map_kleinFour_ofSubtype hs,
     Subgroup.mk_smul, MulAut.smul_def, MulAut.inv_apply, MulAut.conj_symm_apply, Subgroup.coe_mul,
-    Subgroup.coe_inv, ← ConjAct.toConjAct_inv_smul, Equiv.Perm.support_
+    Subgroup.coe_inv, ← ConjAct.toConjAct_inv_smul, Equiv.Perm.support_toConjAct_eq_smul_support,
+    mem_map_kleinFour_ofSubtype (s := g • s) (by simpa), Finset.subset_smul_finset_iff,
+    ConjAct.toConjAct_smul, cycleType_conj, mul_inv_eq_one, mul_eq_left]
 
 中文:
 定理 map_kleinFour_conj
@@ -292,7 +318,9 @@ theorem map_kleinFour_conj
   ext ⟨k, hk⟩
   simp_rw [Subgroup.mem_pointwise_smul_iff_inv_smul_mem, mem_map_kleinFour_ofSubtype hs,
     Subgroup.mk_smul, MulAut.smul_def, MulAut.inv_apply, MulAut.conj_symm_apply, Subgroup.coe_mul,
-    Subgroup.coe_inv, ← ConjAct.toConjAct_inv_smul, Equiv.Perm.support_
+    Subgroup.coe_inv, ← ConjAct.toConjAct_inv_smul, Equiv.Perm.support_toConjAct_eq_smul_support,
+    mem_map_kleinFour_ofSubtype (s := g • s) (by simpa), Finset.subset_smul_finset_iff,
+    ConjAct.toConjAct_smul, cycleType_conj, mul_inv_eq_one, mul_eq_left]
 
 Depends on / 依赖: ConjAct, ConjAct.toConjAct_inv_smul, ConjAct.toConjAct_smul, Equiv.Perm.support_toConjAct_eq_smul_support, Finset, Finset.subset_smul_finset_iff, MulAut, MulAut.conj_symm_apply, MulAut.inv_apply, MulAut.smul_def, Subgroup, Subgroup.coe_inv, Subgroup.coe_mul, Subgroup.mem_pointwise_smul_iff_inv_smul_mem, Subgroup.mk_smul, coe_inv, coe_mul, conj_symm_apply, cycleType_conj, inv_apply
 -/
@@ -319,7 +347,11 @@ definition iwasawaStructure_four
     infer_instance
   is_conj g s := map_kleinFour_conj s.val s.prop g
   is_generator := by
-    rw [eq_top_iff]; rw [← closure_cycleType_eq_two_two_e
+    rw [eq_top_iff]; rw [← closure_cycleType_eq_two_two_eq_top h5]; rw [Subgroup.closure_le]
+    intro g hg
+    simp only [Set.mem_ofPred_eq] at hg
+    apply Subgroup.mem_iSup_of_mem ⟨(g : Perm α).support, by simp [← sum_cycleType, hg]⟩
+    rw [mem_map_kleinFour_ofSubtype] <;> simp [hg, ← sum_cycleType]
 
 中文:
 定义 iwasawaStructure_four
@@ -331,7 +363,11 @@ definition iwasawaStructure_four
     infer_instance
   is_conj g s := map_kleinFour_conj s.val s.prop g
   is_generator := by
-    rw [eq_top_iff]; rw [← closure_cycleType_eq_two_two_e
+    rw [eq_top_iff]; rw [← closure_cycleType_eq_two_two_eq_top h5]; rw [Subgroup.closure_le]
+    intro g hg
+    simp only [Set.mem_ofPred_eq] at hg
+    apply Subgroup.mem_iSup_of_mem ⟨(g : Perm α).support, by simp [← sum_cycleType, hg]⟩
+    rw [mem_map_kleinFour_ofSubtype] <;> simp [hg, ← sum_cycleType]
 
 Depends on / 依赖: kleinFour, ofSubtype
 -/
@@ -360,7 +396,9 @@ theorem normal_subgroup_eq_bot_or_eq_top_of_card_ne_eight
   intro hN
   have : IsPreprimitive (alternatingGroup α) (Set.powersetCard α 4) := by
     apply Set.powersetCard.isPreprimitive_alternatingGroup (by norm_num) <;> grind
-  rw [eq_top_iff]; rw [← commutator_alternatingGr
+  rw [eq_top_iff]; rw [← commutator_alternatingGroup_eq_top hα]
+  apply (iwasawaStructure_four hα).commutator_le
+  exact fixedPoints_ne_univ_of_faithfulSMul (by norm_num) (by grind)
 
 中文:
 定理 normal_subgroup_eq_bot_or_eq_top_of_card_ne_eight
@@ -369,7 +407,9 @@ theorem normal_subgroup_eq_bot_or_eq_top_of_card_ne_eight
   intro hN
   have : IsPreprimitive (alternatingGroup α) (Set.powersetCard α 4) := by
     apply Set.powersetCard.isPreprimitive_alternatingGroup (by norm_num) <;> grind
-  rw [eq_top_iff]; rw [← commutator_alternatingGr
+  rw [eq_top_iff]; rw [← commutator_alternatingGroup_eq_top hα]
+  apply (iwasawaStructure_four hα).commutator_le
+  exact fixedPoints_ne_univ_of_faithfulSMul (by norm_num) (by grind)
 
 Depends on / 依赖: IsPreprimitive, Set.powersetCard, Set.powersetCard.isPreprimitive_alternatingGroup, Subgroup, Subgroup.nontrivial_iff_ne_bot, alternatingGroup, commutator_alternatingGroup_eq_top, commutator_le, eq_top_iff, fixedPoints_ne_univ_of_faithfulSMul, isPreprimitive_alternatingGroup, iwasawaStructure_four, ne_eq, nontrivial_iff_ne_bot, or_iff_not_imp_left, powersetCard
 -/

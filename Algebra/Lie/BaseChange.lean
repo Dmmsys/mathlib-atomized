@@ -160,7 +160,18 @@ theorem bracket_lie_self
     simp only [bracket'_tmul, TensorProduct.tmul_zero, lie_self]
   · intro z₁ z₂ h₁ h₂
     suffices bracket' R A L L z₁ z₂ + bracket' R A L L z₂ z₁ = 0 by
-      rw [map_add]; rw [map_add]; rw [Linear
+      rw [map_add]; rw [map_add]; rw [LinearMap.add_apply]; rw [LinearMap.add_apply]; rw [h₁]; rw [h₂]; rw [zero_add]; rw [add_zero]; rw [add_comm]; rw [this]
+    refine z₁.induction_on ?_ ?_ ?_
+    · simp only [map_zero, add_zero, LinearMap.zero_apply]
+    · intro a₁ l₁; refine z₂.induction_on ?_ ?_ ?_
+      · simp only [map_zero, add_zero, LinearMap.zero_apply]
+      · intro a₂ l₂
+        simp only [← lie_skew l₂ l₁, mul_comm a₁ a₂, TensorProduct.tmul_neg, bracket'_tmul,
+          add_neg_cancel]
+      · intro y₁ y₂ hy₁ hy₂
+        simp only [hy₁, hy₂, add_add_add_comm, add_zero, LinearMap.add_apply, map_add]
+    · intro y₁ y₂ hy₁ hy₂
+      simp only [add_add_add_comm, hy₁, hy₂, add_zero, LinearMap.add_apply, map_add]
 
 中文:
 定理 bracket_lie_self
@@ -174,7 +185,18 @@ theorem bracket_lie_self
     simp only [bracket'_tmul, TensorProduct.tmul_zero, lie_self]
   · intro z₁ z₂ h₁ h₂
     suffices bracket' R A L L z₁ z₂ + bracket' R A L L z₂ z₁ = 0 by
-      rw [map_add]; rw [map_add]; rw [Linear
+      rw [map_add]; rw [map_add]; rw [LinearMap.add_apply]; rw [LinearMap.add_apply]; rw [h₁]; rw [h₂]; rw [zero_add]; rw [add_zero]; rw [add_comm]; rw [this]
+    refine z₁.induction_on ?_ ?_ ?_
+    · simp only [map_zero, add_zero, LinearMap.zero_apply]
+    · intro a₁ l₁; refine z₂.induction_on ?_ ?_ ?_
+      · simp only [map_zero, add_zero, LinearMap.zero_apply]
+      · intro a₂ l₂
+        simp only [← lie_skew l₂ l₁, mul_comm a₁ a₂, TensorProduct.tmul_neg, bracket'_tmul,
+          add_neg_cancel]
+      · intro y₁ y₂ hy₁ hy₂
+        simp only [hy₁, hy₂, add_add_add_comm, add_zero, LinearMap.add_apply, map_add]
+    · intro y₁ y₂ hy₁ hy₂
+      simp only [add_add_add_comm, hy₁, hy₂, add_zero, LinearMap.add_apply, map_add]
 -/
 private theorem bracket_lie_self (x : A otimes[R] L) : ⁅x, x⁆ = 0 := by
   simp only [bracket_def]
@@ -213,7 +235,12 @@ theorem bracket_leibniz_lie
     · simp only [map_zero, add_zero, LinearMap.zero_apply]
     · intro a₂ l₂
       refine z.induction_on ?_ ?_ ?_
-      · simp onl
+      · simp only [map_zero, add_zero]
+      · intro a₃ l₃; simp only [bracket'_tmul]
+        rw [mul_left_comm a₂ a₁ a₃]; rw [mul_assoc]; rw [leibniz_lie]; rw [TensorProduct.tmul_add]
+      · grind
+    · grind [LinearMap.add_apply]
+  · grind [LinearMap.add_apply]
 
 中文:
 定理 bracket_leibniz_lie
@@ -227,7 +254,12 @@ theorem bracket_leibniz_lie
     · simp only [map_zero, add_zero, LinearMap.zero_apply]
     · intro a₂ l₂
       refine z.induction_on ?_ ?_ ?_
-      · simp onl
+      · simp only [map_zero, add_zero]
+      · intro a₃ l₃; simp only [bracket'_tmul]
+        rw [mul_left_comm a₂ a₁ a₃]; rw [mul_assoc]; rw [leibniz_lie]; rw [TensorProduct.tmul_add]
+      · grind
+    · grind [LinearMap.add_apply]
+  · grind [LinearMap.add_apply]
 -/
 private theorem bracket_leibniz_lie (x y : A otimes[R] L) (z : A otimes[R] M) :
     ⁅x, ⁅y, z⁆⁆ = ⁅⁅x, y⁆, z⁆ + ⁅y, ⁅x, z⁆⁆ := by
@@ -369,7 +401,10 @@ definition map
       refine x.induction_on (by simp) ?_ ?_
       · intro _ _
         refine y.induction_on (by simp) (fun _ _ => by simp) (fun _ _ h1 h2 => by simp [h1, h2])
+      · intro _ _
+        refine y.induction_on (by simp) (fun _ _ h => by simp [h]) (by simp_all) }
 
+@[simp]
 
 中文:
 定义 map
@@ -380,7 +415,10 @@ definition map
       refine x.induction_on (by simp) ?_ ?_
       · intro _ _
         refine y.induction_on (by simp) (fun _ _ => by simp) (fun _ _ h1 h2 => by simp [h1, h2])
+      · intro _ _
+        refine y.induction_on (by simp) (fun _ _ h => by simp [h]) (by simp_all) }
 
+@[simp]
 
 Depends on / 依赖: AddHom, AddHom.toFun_eq_coe, LinearMap, LinearMap.coe_toAddHom, TensorProduct, TensorProduct.map, bracket_def, coe_toAddHom, f.toLinearMap, induction_on, map_lie, toFun_eq_coe, toLinearMap, x.induction_on, y.induction_on
 -/
@@ -513,7 +551,16 @@ definition baseChange
       rw [Submodule.mem_carrier]; rw [SetLike.mem_coe] at hm ⊢
       rw [Submodule.baseChange_eq_span] at hm
       obtain ⟨c, rfl⟩ := (Finsupp.mem_span_iff_linearCombination _ _ _).mp hm
-      refine x.induction_on (by simp
+      refine x.induction_on (by simp) (fun a y => ?_) (fun y z hy hz => ?_)
+      · change toEnd A (A otimes[R] L) (A otimes[R] M) _ _ in _
+        simp_rw [Finsupp.linearCombination_apply, Finsupp.sum, map_sum, map_smul, toEnd_apply_apply]
+        refine Submodule.sum_mem _ fun ⟨_, n, hn, h⟩ _ => Submodule.smul_mem _ _ ?_
+        rw [Subtype.coe_mk]; rw [← h]
+        exact Submodule.tmul_mem_baseChange_of_mem _ (N.lie_mem hn)
+      · rw [add_lie]
+        exact ((N : Submodule R M).baseChange A).add_mem hy hz }
+
+@[simp]
 
 中文:
 定义 baseChange
@@ -524,7 +571,16 @@ definition baseChange
       rw [Submodule.mem_carrier]; rw [SetLike.mem_coe] at hm ⊢
       rw [Submodule.baseChange_eq_span] at hm
       obtain ⟨c, rfl⟩ := (Finsupp.mem_span_iff_linearCombination _ _ _).mp hm
-      refine x.induction_on (by simp
+      refine x.induction_on (by simp) (fun a y => ?_) (fun y z hy hz => ?_)
+      · change toEnd A (A otimes[R] L) (A otimes[R] M) _ _ in _
+        simp_rw [Finsupp.linearCombination_apply, Finsupp.sum, map_sum, map_smul, toEnd_apply_apply]
+        refine Submodule.sum_mem _ fun ⟨_, n, hn, h⟩ _ => Submodule.smul_mem _ _ ?_
+        rw [Subtype.coe_mk]; rw [← h]
+        exact Submodule.tmul_mem_baseChange_of_mem _ (N.lie_mem hn)
+      · rw [add_lie]
+        exact ((N : Submodule R M).baseChange A).add_mem hy hz }
+
+@[simp]
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination_apply, Finsupp.mem_span_iff_linearCombination, Finsupp.sum, SetLike, SetLike.mem_coe, Submodule, Submodule.baseChange_eq_span, Submodule.mem_carrier, Submodule.sum_mem, baseChange, baseChange_eq_span, induction_on, lie_mem, linearCombination_apply, map_smul, map_sum, mem_carrier, mem_coe, mem_span_iff_linearCombination
 -/
@@ -669,7 +725,17 @@ lemma lie_baseChange
   proof: by
   set s : Set (A otimes[R] M) := { m | exists x in I, exists n in N, 1 otimesₜ ⁅x, n⁆ = m}
   have : (TensorProduct.mk R A M 1) '' {m | exists x in I, exists n in N, ⁅x, n⁆ = m} = s := by ext; simp [s]
-  rw [← toSubmodule_inj]; rw [coe_baseChange]; rw [lieIdeal_oper_eq_linear_span']; rw [Submodule
+  rw [← toSubmodule_inj]; rw [coe_baseChange]; rw [lieIdeal_oper_eq_linear_span']; rw [Submodule.baseChange_span]; rw [this]; rw [lieIdeal_oper_eq_linear_span']
+  refine le_antisymm (Submodule.span_mono ?_) (Submodule.span_le.mpr ?_)
+  · rintro - ⟨x, hx, m, hm, rfl⟩
+    exact ⟨1 otimesₜ x, tmul_mem_baseChange_of_mem 1 hx,
+           1 otimesₜ m, tmul_mem_baseChange_of_mem 1 hm, by simp⟩
+  · rintro - ⟨x, hx, m, hm, rfl⟩
+    rw [mem_baseChange_iff] at hx hm
+    refine Submodule.span_induction₂ (p := fun x m _ _ => ⁅x, m⁆ in Submodule.span A s)
+      ?_ (by simp) (by simp) ?_ ?_ ?_ ?_ hx hm
+    · rintro - - ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩; exact Submodule.subset_span ⟨x, hx, y, hy, by simp⟩
+    all_goals { intros; simp [add_mem, Submodule.smul_mem, *] }
 
 中文:
 引理 lie_baseChange
@@ -677,7 +743,17 @@ lemma lie_baseChange
   证明: by
   set s : Set (A otimes[R] M) := { m | exists x in I, exists n in N, 1 otimesₜ ⁅x, n⁆ = m}
   have : (TensorProduct.mk R A M 1) '' {m | exists x in I, exists n in N, ⁅x, n⁆ = m} = s := by ext; simp [s]
-  rw [← toSubmodule_inj]; rw [coe_baseChange]; rw [lieIdeal_oper_eq_linear_span']; rw [Submodule
+  rw [← toSubmodule_inj]; rw [coe_baseChange]; rw [lieIdeal_oper_eq_linear_span']; rw [Submodule.baseChange_span]; rw [this]; rw [lieIdeal_oper_eq_linear_span']
+  refine le_antisymm (Submodule.span_mono ?_) (Submodule.span_le.mpr ?_)
+  · rintro - ⟨x, hx, m, hm, rfl⟩
+    exact ⟨1 otimesₜ x, tmul_mem_baseChange_of_mem 1 hx,
+           1 otimesₜ m, tmul_mem_baseChange_of_mem 1 hm, by simp⟩
+  · rintro - ⟨x, hx, m, hm, rfl⟩
+    rw [mem_baseChange_iff] at hx hm
+    refine Submodule.span_induction₂ (p := fun x m _ _ => ⁅x, m⁆ in Submodule.span A s)
+      ?_ (by simp) (by simp) ?_ ?_ ?_ ?_ hx hm
+    · rintro - - ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩; exact Submodule.subset_span ⟨x, hx, y, hy, by simp⟩
+    all_goals { intros; simp [add_mem, Submodule.smul_mem, *] }
 
 Depends on / 依赖: Submodule, Submodule.baseChange_span, Submodule.span_le.mpr, Submodule.span_mono, TensorProduct, TensorProduct.mk, baseChange_span, coe_baseChange, le_antisymm, lieIdeal_oper_eq_linear_span, otimes, span_le, span_mono, tmul_mem_baseChange, toSubmodule_inj
 -/

@@ -554,7 +554,23 @@ mapComp _ _ := Cat.Hom.isoMk mapComp _ _
     · rfl
   map₂_associator := by
     intros
-  
+    dsimp
+    ext X
+    cases X
+    · simp
+    · rfl
+  map₂_left_unitor := by
+    intros
+    ext X
+    cases X
+    · simp
+    · rfl
+  map₂_right_unitor := by
+    intros
+    ext X
+    cases X
+    · simpa using! (refl _)
+    · rfl
 
 中文:
 定义 pseudofunctor
@@ -577,7 +593,23 @@ mapComp _ _ := Cat.Hom.isoMk mapComp _ _
     · rfl
   map₂_associator := by
     intros
-  
+    dsimp
+    ext X
+    cases X
+    · simp
+    · rfl
+  map₂_left_unitor := by
+    intros
+    ext X
+    cases X
+    · simp
+    · rfl
+  map₂_right_unitor := by
+    intros
+    ext X
+    cases X
+    · simpa using! (refl _)
+    · rfl
 
 Depends on / 依赖: prelaxfunctor
 -/
@@ -1141,7 +1173,19 @@ definition equivComma
         (incl ⋙ F)
         (fun x => F.map (starTerminal.from (of x)))
         (fun x y f => by
-          simp 
+          simp only [Functor.comp_obj, Functor.comp_map]
+          rw [← F.map_comp]
+          congr 1)
+        F (Iso.refl _) (Iso.refl _)
+        (fun x => by
+          simp only [Iso.refl_hom, Category.id_comp, Functor.comp_obj,
+            NatTrans.id_app, Category.comp_id]; rfl))
+      (fun {x y} f => by ext t; cases t <;> simp [incl])
+  counitIso := NatIso.ofComponents (fun F => Iso.refl _)
+  functor_unitIso_comp x := by
+    simp only [Functor.id_obj, Functor.comp_obj, liftUnique, lift_obj, NatIso.ofComponents_hom_app,
+      Iso.refl_hom, Category.comp_id]
+    ext <;> rfl
 
 中文:
 定义 equivComma
@@ -1157,7 +1201,19 @@ definition equivComma
         (incl ⋙ F)
         (fun x => F.map (starTerminal.from (of x)))
         (fun x y f => by
-          simp 
+          simp only [Functor.comp_obj, Functor.comp_map]
+          rw [← F.map_comp]
+          congr 1)
+        F (Iso.refl _) (Iso.refl _)
+        (fun x => by
+          simp only [Iso.refl_hom, Category.id_comp, Functor.comp_obj,
+            NatTrans.id_app, Category.comp_id]; rfl))
+      (fun {x y} f => by ext t; cases t <;> simp [incl])
+  counitIso := NatIso.ofComponents (fun F => Iso.refl _)
+  functor_unitIso_comp x := by
+    simp only [Functor.id_obj, Functor.comp_obj, liftUnique, lift_obj, NatIso.ofComponents_hom_app,
+      Iso.refl_hom, Category.comp_id]
+    ext <;> rfl
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, F.map, F.map_comp, Functor, Functor.comp_map, Functor.comp_obj, Iso.refl, Iso.refl_hom, NatIso, NatIso.ofComponents, NatTrans, NatTrans.id_app, comp_id, comp_map, comp_obj, id_app, id_comp, inverse
 -/
@@ -1274,7 +1330,11 @@ definition widePullbackShapeEquivMap
   | some x, none => .term x
   | none, none => .id none
   left_inv f := by apply Subsingleton.allEq
-  right_inv 
+  right_inv f := match x, y with
+  | some x, some y => Subsingleton.allEq _ _
+  | none, some y => by cases f
+  | some x, none
+  | none, none => rfl
 
 中文:
 定义 widePullbackShapeEquivMap
@@ -1289,7 +1349,11 @@ definition widePullbackShapeEquivMap
   | some x, none => .term x
   | none, none => .id none
   left_inv f := by apply Subsingleton.allEq
-  right_inv 
+  right_inv f := match x, y with
+  | some x, some y => Subsingleton.allEq _ _
+  | none, some y => by cases f
+  | some x, none
+  | none, none => rfl
 -/
 private def widePullbackShapeEquivMap {J : Type*} (x y : WidePullbackShape J) :
     (x ⟶ y) ≃ (widePullbackShapeEquivObj x ⟶ widePullbackShapeEquivObj y) where
@@ -1329,7 +1393,7 @@ definition widePullbackShapeEquiv
   inverse.obj := widePullbackShapeEquivObj.symm
   inverse.map f := (widePullbackShapeEquivMap _ _).symm (eqToHom (by simp) ≫ f ≫ eqToHom (by simp))
   unitIso := NatIso.ofComponents fun x => eqToIso (by aesop)
-  counitIso := Nat
+  counitIso := NatIso.ofComponents fun x => eqToIso (by aesop)
 
 中文:
 定义 widePullbackShapeEquiv
@@ -1339,7 +1403,7 @@ definition widePullbackShapeEquiv
   inverse.obj := widePullbackShapeEquivObj.symm
   inverse.map f := (widePullbackShapeEquivMap _ _).symm (eqToHom (by simp) ≫ f ≫ eqToHom (by simp))
   unitIso := NatIso.ofComponents fun x => eqToIso (by aesop)
-  counitIso := Nat
+  counitIso := NatIso.ofComponents fun x => eqToIso (by aesop)
 
 Depends on / 依赖: widePullbackShapeEquivObj
 -/
@@ -1803,7 +1867,22 @@ mapComp _ _ := Cat.Hom.isoMk mapComp _ _
     · rfl
   map₂_associator := by
     intros
-    ex
+    ext X
+    cases X
+    · simp
+    · rfl
+  map₂_left_unitor := by
+    intros
+    ext X
+    cases X
+    · simp
+    · rfl
+  map₂_right_unitor := by
+    intros
+    ext X
+    cases X
+    · simpa using! (refl _)
+    · rfl
 
 中文:
 定义 pseudofunctor
@@ -1826,7 +1905,22 @@ mapComp _ _ := Cat.Hom.isoMk mapComp _ _
     · rfl
   map₂_associator := by
     intros
-    ex
+    ext X
+    cases X
+    · simp
+    · rfl
+  map₂_left_unitor := by
+    intros
+    ext X
+    cases X
+    · simp
+    · rfl
+  map₂_right_unitor := by
+    intros
+    ext X
+    cases X
+    · simpa using! (refl _)
+    · rfl
 
 Depends on / 依赖: prelaxfunctor
 -/
@@ -2064,7 +2158,11 @@ definition liftUnique
       · cases f
         change G.map _ ≫ h.hom.app _ = hG.hom ≫ _
         symm
-        erw [← Iso.eq_inv_comp, ← Cate
+        erw [← Iso.eq_inv_comp, ← Category.assoc, hh]
+        simp
+      · cases f
+        change G.map (𝟙 _) ≫ hG.hom = hG.hom ≫ 𝟙 _
+        simp)
 
 中文:
 定义 liftUnique
@@ -2081,7 +2179,11 @@ definition liftUnique
       · cases f
         change G.map _ ≫ h.hom.app _ = hG.hom ≫ _
         symm
-        erw [← Iso.eq_inv_comp, ← Cate
+        erw [← Iso.eq_inv_comp, ← Category.assoc, hh]
+        simp
+      · cases f
+        change G.map (𝟙 _) ≫ hG.hom = hG.hom ≫ 𝟙 _
+        simp)
 
 Depends on / 依赖: Category, Category.assoc, G.map, Iso.eq_inv_comp, NatIso, NatIso.ofComponents, eq_inv_comp, h.app, h.hom.app, h.hom.naturality, hG.hom, naturality, ofComponents
 -/
@@ -2385,7 +2487,19 @@ definition equivComma
         (incl ⋙ F)
         (fun x => F.map (starInitial.to (of x)))
         (fun x y f => by
-          simp onl
+          simp only [Functor.comp_obj, Functor.comp_map]
+          rw [← F.map_comp]
+          congr 1)
+        F (Iso.refl _) (Iso.refl _)
+        (fun x => by
+          simp only [Iso.refl_symm, Iso.refl_hom, Category.id_comp, Functor.comp_obj,
+            NatTrans.id_app, Category.comp_id]; rfl))
+      (fun {x y} f => by ext t; cases t <;> simp [incl])
+  counitIso := NatIso.ofComponents (fun F => Iso.refl _)
+  functor_unitIso_comp x := by
+    simp only [Functor.id_obj, Functor.comp_obj, liftUnique, lift_obj, NatIso.ofComponents_hom_app,
+      Iso.refl_hom, Category.comp_id]
+    ext <;> rfl
 
 中文:
 定义 equivComma
@@ -2401,7 +2515,19 @@ definition equivComma
         (incl ⋙ F)
         (fun x => F.map (starInitial.to (of x)))
         (fun x y f => by
-          simp onl
+          simp only [Functor.comp_obj, Functor.comp_map]
+          rw [← F.map_comp]
+          congr 1)
+        F (Iso.refl _) (Iso.refl _)
+        (fun x => by
+          simp only [Iso.refl_symm, Iso.refl_hom, Category.id_comp, Functor.comp_obj,
+            NatTrans.id_app, Category.comp_id]; rfl))
+      (fun {x y} f => by ext t; cases t <;> simp [incl])
+  counitIso := NatIso.ofComponents (fun F => Iso.refl _)
+  functor_unitIso_comp x := by
+    simp only [Functor.id_obj, Functor.comp_obj, liftUnique, lift_obj, NatIso.ofComponents_hom_app,
+      Iso.refl_hom, Category.comp_id]
+    ext <;> rfl
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, F.map, F.map_comp, Functor, Functor.comp_map, Functor.comp_obj, Iso.refl, Iso.refl_hom, Iso.refl_symm, NatIso, NatIso.ofComponents, NatTrans, NatTrans.id_app, comp_id, comp_map, comp_obj, id_app, id_comp
 -/
@@ -2454,7 +2580,54 @@ definition WithTerminal.opEquiv
         | op (of x), op (of y), f => (WithTerminal.down f).op
         | op star, op (of _), _ => WithInitial.starInitial.to _
         | op star, op star, _ => 𝟙 _
-      
+      map_id := fun ⟨x⟩ => by cases x <;> rfl
+      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ =>
+        match x, y, z, f, g with
+        | op (of x), op (of y), op (of z), f, g => rfl
+        | _, op (of y), op star, f, g => (g : PEmpty).elim
+        | op (of x), op star, _, f, _ => (f : PEmpty).elim
+        | op star, _, _, f, g => rfl }
+  inverse :=
+    { obj := fun x =>
+      match x with
+| .of x => op .of x.unop
+        | .star => op .star
+      map := fun {x y} f =>
+        match x, y, f with
+        | .of (op x), .of (op y), f => WithInitial.down f
+| .star, .of (op _), _ => op WithTerminal.starTerminal.from _
+        | .star, .star, _ => 𝟙 _
+      map_id := fun x => by cases x <;> rfl
+      map_comp := fun {x y z} f g =>
+        match x, y, z, f, g with
+        | .of (op x), .of (op y), .of (op z), f, g => rfl
+        | _, .of (op y), .star, f, g => (g : PEmpty).elim
+        | .of (op x), .star, _, f, _ => (f : PEmpty).elim
+        | .star, _, _, f, g => by subsingleton }
+  unitIso :=
+    NatIso.ofComponents
+      (fun ⟨x⟩ => match x with
+        | .of x => Iso.refl _
+        | .star => Iso.refl _)
+      (fun {x y} ⟨f⟩ => match x, y, f with
+        | op (of x), op (of y), f => by
+            simp only [Functor.id_obj, Functor.comp_obj,
+              Functor.id_map, Iso.refl_hom, Category.comp_id, Functor.comp_map, Category.id_comp]
+            rfl
+        | op star, op (of _), _ => rfl
+        | op star, op star, _ => rfl)
+  counitIso :=
+    NatIso.ofComponents
+      (fun x => match x with
+        | .of x => Iso.refl _
+        | .star => Iso.refl _)
+  functor_unitIso_comp := fun ⟨x⟩ =>
+    match x with
+    | .of x => by
+        simp only [op_unop, Functor.id_obj, Functor.comp_obj, NatIso.ofComponents_hom_app,
+          Iso.refl_hom, Category.comp_id]
+        rfl
+    | .star => rfl
 
 中文:
 定义 WithTerminal.opEquiv
@@ -2467,7 +2640,54 @@ definition WithTerminal.opEquiv
         | op (of x), op (of y), f => (WithTerminal.down f).op
         | op star, op (of _), _ => WithInitial.starInitial.to _
         | op star, op star, _ => 𝟙 _
-      
+      map_id := fun ⟨x⟩ => by cases x <;> rfl
+      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ =>
+        match x, y, z, f, g with
+        | op (of x), op (of y), op (of z), f, g => rfl
+        | _, op (of y), op star, f, g => (g : PEmpty).elim
+        | op (of x), op star, _, f, _ => (f : PEmpty).elim
+        | op star, _, _, f, g => rfl }
+  inverse :=
+    { obj := fun x =>
+      match x with
+| .of x => op .of x.unop
+        | .star => op .star
+      map := fun {x y} f =>
+        match x, y, f with
+        | .of (op x), .of (op y), f => WithInitial.down f
+| .star, .of (op _), _ => op WithTerminal.starTerminal.from _
+        | .star, .star, _ => 𝟙 _
+      map_id := fun x => by cases x <;> rfl
+      map_comp := fun {x y z} f g =>
+        match x, y, z, f, g with
+        | .of (op x), .of (op y), .of (op z), f, g => rfl
+        | _, .of (op y), .star, f, g => (g : PEmpty).elim
+        | .of (op x), .star, _, f, _ => (f : PEmpty).elim
+        | .star, _, _, f, g => by subsingleton }
+  unitIso :=
+    NatIso.ofComponents
+      (fun ⟨x⟩ => match x with
+        | .of x => Iso.refl _
+        | .star => Iso.refl _)
+      (fun {x y} ⟨f⟩ => match x, y, f with
+        | op (of x), op (of y), f => by
+            simp only [Functor.id_obj, Functor.comp_obj,
+              Functor.id_map, Iso.refl_hom, Category.comp_id, Functor.comp_map, Category.id_comp]
+            rfl
+        | op star, op (of _), _ => rfl
+        | op star, op star, _ => rfl)
+  counitIso :=
+    NatIso.ofComponents
+      (fun x => match x with
+        | .of x => Iso.refl _
+        | .star => Iso.refl _)
+  functor_unitIso_comp := fun ⟨x⟩ =>
+    match x with
+    | .of x => by
+        simp only [op_unop, Functor.id_obj, Functor.comp_obj, NatIso.ofComponents_hom_app,
+          Iso.refl_hom, Category.comp_id]
+        rfl
+    | .star => rfl
 
 Depends on / 依赖: PEmpty, WithInitial, WithInitial.starInitial.to, WithTerminal, WithTerminal.down, map_comp, map_id, starInitial
 -/
@@ -2548,7 +2768,55 @@ definition WithInitial.opEquiv
         match x, y, f with
         | op (of x), op (of y), f => (WithTerminal.down f).op
         | op (of _), op star, _ => WithTerminal.starTerminal.from _
-        | op star, op star, _
+        | op star, op star, _ => 𝟙 _
+      map_id := fun ⟨x⟩ => by cases x <;> rfl
+      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ =>
+        match x, y, z, f, g with
+        | op (of x), op (of y), op (of z), f, g => rfl
+        | _, op star, op (of y), f, g => (g : PEmpty).elim
+        | op star, op (of x), _, f, _ => (f : PEmpty).elim
+        | _, _, op star, f, g => by subsingleton }
+  inverse :=
+    { obj := fun x =>
+        match x with
+| .of x => op .of x.unop
+        | .star => op .star
+      map := fun {x y} f =>
+        match x, y, f with
+        | .of (op x), .of (op y), f => WithInitial.down f
+| .of (op _), .star, _ => op WithInitial.starInitial.to _
+        | .star, .star, _ => 𝟙 _
+      map_id := fun x => by cases x <;> rfl
+      map_comp := fun {x y z} f g =>
+        match x, y, z, f, g with
+        | .of (op x), .of (op y), .of (op z), f, g => rfl
+        | _, .star, .of (op y), f, g => (g : PEmpty).elim
+        | .star, .of (op x), _, f, _ => (f : PEmpty).elim
+        | _, _, .star, f, g => by rfl }
+  unitIso :=
+    NatIso.ofComponents
+      (fun ⟨x⟩ => match x with
+        | .of x => Iso.refl _
+        | .star => Iso.refl _)
+      (fun {x y} f => match x, y, f with
+        | op (of x), op (of y), f => by
+            simp only [Functor.id_obj, Functor.comp_obj,
+              Functor.id_map, Iso.refl_hom, Category.comp_id, Functor.comp_map, Category.id_comp]
+            rfl
+        | op (of _), op star, _ => rfl
+        | _, op star, _ => rfl)
+  counitIso :=
+    NatIso.ofComponents
+      (fun x => match x with
+        | .of x => Iso.refl _
+        | .star => Iso.refl _)
+  functor_unitIso_comp := fun ⟨x⟩ =>
+    match x with
+    | .of x => by
+        simp only [op_unop, Functor.id_obj, Functor.comp_obj, NatIso.ofComponents_hom_app,
+          Iso.refl_hom, Category.comp_id]
+        rfl
+    | .star => rfl
 
 中文:
 定义 WithInitial.opEquiv
@@ -2561,7 +2829,55 @@ definition WithInitial.opEquiv
         match x, y, f with
         | op (of x), op (of y), f => (WithTerminal.down f).op
         | op (of _), op star, _ => WithTerminal.starTerminal.from _
-        | op star, op star, _
+        | op star, op star, _ => 𝟙 _
+      map_id := fun ⟨x⟩ => by cases x <;> rfl
+      map_comp := fun {x y z} ⟨f⟩ ⟨g⟩ =>
+        match x, y, z, f, g with
+        | op (of x), op (of y), op (of z), f, g => rfl
+        | _, op star, op (of y), f, g => (g : PEmpty).elim
+        | op star, op (of x), _, f, _ => (f : PEmpty).elim
+        | _, _, op star, f, g => by subsingleton }
+  inverse :=
+    { obj := fun x =>
+        match x with
+| .of x => op .of x.unop
+        | .star => op .star
+      map := fun {x y} f =>
+        match x, y, f with
+        | .of (op x), .of (op y), f => WithInitial.down f
+| .of (op _), .star, _ => op WithInitial.starInitial.to _
+        | .star, .star, _ => 𝟙 _
+      map_id := fun x => by cases x <;> rfl
+      map_comp := fun {x y z} f g =>
+        match x, y, z, f, g with
+        | .of (op x), .of (op y), .of (op z), f, g => rfl
+        | _, .star, .of (op y), f, g => (g : PEmpty).elim
+        | .star, .of (op x), _, f, _ => (f : PEmpty).elim
+        | _, _, .star, f, g => by rfl }
+  unitIso :=
+    NatIso.ofComponents
+      (fun ⟨x⟩ => match x with
+        | .of x => Iso.refl _
+        | .star => Iso.refl _)
+      (fun {x y} f => match x, y, f with
+        | op (of x), op (of y), f => by
+            simp only [Functor.id_obj, Functor.comp_obj,
+              Functor.id_map, Iso.refl_hom, Category.comp_id, Functor.comp_map, Category.id_comp]
+            rfl
+        | op (of _), op star, _ => rfl
+        | _, op star, _ => rfl)
+  counitIso :=
+    NatIso.ofComponents
+      (fun x => match x with
+        | .of x => Iso.refl _
+        | .star => Iso.refl _)
+  functor_unitIso_comp := fun ⟨x⟩ =>
+    match x with
+    | .of x => by
+        simp only [op_unop, Functor.id_obj, Functor.comp_obj, NatIso.ofComponents_hom_app,
+          Iso.refl_hom, Category.comp_id]
+        rfl
+    | .star => rfl
 
 Depends on / 依赖: PEmpty, WithTerminal, WithTerminal.down, WithTerminal.starTerminal.from, map_comp, map_id, starTerminal
 -/

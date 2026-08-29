@@ -178,7 +178,16 @@ theorem exists_eq_interval_average_of_nullSingletonClass
   have h : a != b := by intro hab; simp [hab] at hμ0
   let s := uIoo a b
   have hs' : s subseteq Ι a b := by intro x hx; rcases hx with ⟨h1, h2⟩; grind
-  have
+  have hs_ev : s =ᵐ[μ] Ι a b := by simpa using! Ioo_ae_eq_Ioc
+  have hμ0' : μ s != 0 := by
+    have hμ : μ s = μ (Ι a b) := by rw [measure_congr hs_ev]
+    rwa [hμ]
+  obtain ⟨c, hc, heq⟩ := exists_eq_setAverage (isConnected_uIoo h) (hf.mono uIoo_subset_uIcc_self)
+    (hint.mono_set hs') (measure_ne_top_of_subset hs' hμfin) hμ0'
+  exact ⟨c, hc, by rwa [← setAverage_congr hs_ev]⟩
+
+@[deprecated (since := "2026-06-09")]
+alias exists_eq_interval_average_of_noAtoms := exists_eq_interval_average_of_nullSingletonClass
 
 中文:
 定理 存在_eq_interval_average_of_nullSingletonClass
@@ -188,7 +197,16 @@ theorem exists_eq_interval_average_of_nullSingletonClass
   have h : a != b := by intro hab; simp [hab] at hμ0
   let s := uIoo a b
   have hs' : s subseteq Ι a b := by intro x hx; rcases hx with ⟨h1, h2⟩; grind
-  have
+  have hs_ev : s =ᵐ[μ] Ι a b := by simpa using! Ioo_ae_eq_Ioc
+  have hμ0' : μ s != 0 := by
+    have hμ : μ s = μ (Ι a b) := by rw [measure_congr hs_ev]
+    rwa [hμ]
+  obtain ⟨c, hc, heq⟩ := exists_eq_setAverage (isConnected_uIoo h) (hf.mono uIoo_subset_uIcc_self)
+    (hint.mono_set hs') (measure_ne_top_of_subset hs' hμfin) hμ0'
+  exact ⟨c, hc, by rwa [← setAverage_congr hs_ev]⟩
+
+@[deprecated (since := "2026-06-09")]
+alias exists_eq_interval_average_of_noAtoms := exists_eq_interval_average_of_nullSingletonClass
 
 Depends on / 依赖: IntegrableOn, Ioo_ae_eq_Ioc, exists_eq_setAverage, hf.integrableOn_of_subset_isCompact, hs_ev, integrableOn_of_subset_isCompact, isCompact_uIcc, isConnected_uIoo, measurableSet_uIoc, measure_congr, subseteq, uIoc_subset_uIcc
 -/

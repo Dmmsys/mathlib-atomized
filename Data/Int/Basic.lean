@@ -75,7 +75,12 @@ lemma strongRec_of_ge
   rw [Int.strongRec]; rw [dif_neg (Int.not_lt.mpr hn)]
   congr; revert ih
   refine n.inductionOn' m (fun _ => ?_) (fun k hmk ih' ih => ?_) (fun k hkm ih' _ => ?_) <;> ext l hl
-  · rw [inductionOn'_self, 
+  · rw [inductionOn'_self, strongRec_of_lt hl]
+  · rw [inductionOn'_add_one hmk]; split_ifs with hlm
+    · rw [strongRec_of_lt hlm]
+    · rw [ih' fun l hl => ih l (Int.lt_trans hl k.lt_succ), ih _ hl]
+  · rw [inductionOn'_sub_one hkm, ih']
+    exact fun l hlk hml => (Int.not_lt.mpr hkm <| Int.lt_of_le_of_lt hml hlk).elim
 
 中文:
 引理 strongRec_of_ge
@@ -84,7 +89,12 @@ lemma strongRec_of_ge
   rw [Int.strongRec]; rw [dif_neg (Int.not_lt.mpr hn)]
   congr; revert ih
   refine n.inductionOn' m (fun _ => ?_) (fun k hmk ih' ih => ?_) (fun k hkm ih' _ => ?_) <;> ext l hl
-  · rw [inductionOn'_self, 
+  · rw [inductionOn'_self, strongRec_of_lt hl]
+  · rw [inductionOn'_add_one hmk]; split_ifs with hlm
+    · rw [strongRec_of_lt hlm]
+    · rw [ih' fun l hl => ih l (Int.lt_trans hl k.lt_succ), ih _ hl]
+  · rw [inductionOn'_sub_one hkm, ih']
+    exact fun l hlk hml => (Int.not_lt.mpr hkm <| Int.lt_of_le_of_lt hml hlk).elim
 
 Depends on / 依赖: Int.lt_trans, Int.not_lt.mpr, Int.strongRec, _add_one, _self, _sub_one, dif_neg, inductionOn, k.lt_succ, lt_succ, lt_trans, m.strongRec, n.inductionOn, not_lt, revert, split_ifs, strongRec, strongRec_of_lt
 -/

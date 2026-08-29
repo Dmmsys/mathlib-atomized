@@ -338,7 +338,7 @@ rightUnitor x := Core.isoMk rightUnitor x.of
 associator x y z := Core.isoMk associator x.of y.of z.of
   whisker_exchange η θ := by
     ext
-   
+    simp [whisker_exchange]
 
 中文:
 实例 :
@@ -350,7 +350,7 @@ rightUnitor x := Core.isoMk rightUnitor x.of
 associator x y z := Core.isoMk associator x.of y.of z.of
   whisker_exchange η θ := by
     ext
-   
+    simp [whisker_exchange]
 
 Depends on / 依赖: CoreHom, CoreHom.iso, CoreHom.mk, whiskerLeftIso, x.of
 -/

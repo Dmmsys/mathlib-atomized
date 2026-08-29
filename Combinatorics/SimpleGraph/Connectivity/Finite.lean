@@ -250,7 +250,11 @@ lemma ConnectedComponent.odd_oddComponents_ncard_subset_supp
   cases nonempty_fintype V
   rw [Nat.card_eq_card_toFinset c'.supp]; rw [← disjiUnion_supp_toFinset_eq_supp_toFinset h]
   simp only [Finset.card_disjiUnion, Set.toFinset_card, Fintype.card_ofFinset]
-  rw [Finset.odd_sum_iff_odd_card_odd]; rw [Nat.card
+  rw [Finset.odd_sum_iff_odd_card_odd]; rw [Nat.card_eq_fintype_card]; rw [Fintype.card_ofFinset]
+  congr! 2
+  ext c
+  simp_rw [Set.toFinset_ofPred, mem_filter, ← Set.ncard_coe_finset, coe_filter,
+    mem_supp_iff, mem_univ, true_and, supp, and_comm]
 
 中文:
 引理 ConnectedComponent.odd_oddComponents_ncard_subset_supp
@@ -261,7 +265,11 @@ lemma ConnectedComponent.odd_oddComponents_ncard_subset_supp
   cases nonempty_fintype V
   rw [Nat.card_eq_card_toFinset c'.supp]; rw [← disjiUnion_supp_toFinset_eq_supp_toFinset h]
   simp only [Finset.card_disjiUnion, Set.toFinset_card, Fintype.card_ofFinset]
-  rw [Finset.odd_sum_iff_odd_card_odd]; rw [Nat.card
+  rw [Finset.odd_sum_iff_odd_card_odd]; rw [Nat.card_eq_fintype_card]; rw [Fintype.card_ofFinset]
+  congr! 2
+  ext c
+  simp_rw [Set.toFinset_ofPred, mem_filter, ← Set.ncard_coe_finset, coe_filter,
+    mem_supp_iff, mem_univ, true_and, supp, and_comm]
 
 Depends on / 依赖: Finset, Finset.card_disjiUnion, Finset.odd_sum_iff_odd_card_odd, Fintype, Fintype.card_ofFinset, Nat.card_coe_set_eq, Nat.card_eq_card_toFinset, Nat.card_eq_fintype_card, Set.ncard_coe_finset, Set.toFinset_card, Set.toFinset_ofPred, and_comm, card_coe_set_eq, card_disjiUnion, card_eq_card_toFinset, card_eq_fintype_card, card_ofFinset, classical, coe_filter, disjiUnion_supp_toFinset_eq_supp_toFinset
 -/
@@ -293,7 +301,9 @@ lemma odd_ncard_oddComponents
   simp only [← (set_fintype_card_eq_univ_iff _).mpr G.iUnion_connectedComponentSupp,
     ← Set.toFinset_card, Set.toFinset_iUnion ConnectedComponent.supp]
   rw [Finset.card_biUnion
-    (fun x _ y _ hxy => Set.disjoint_toFinset
+    (fun x _ y _ hxy => Set.disjoint_toFinset.mpr (pairwise_disjoint_supp_connectedComponent _ hxy))]
+  simp_rw [← Set.ncard_eq_toFinset_card', ← Finset.coe_filter_univ, Set.ncard_coe_finset]
+  exact (Finset.odd_sum_iff_odd_card_odd (fun x : G.ConnectedComponent => x.supp.ncard)).symm
 
 中文:
 引理 odd_ncard_oddComponents
@@ -306,7 +316,9 @@ lemma odd_ncard_oddComponents
   simp only [← (set_fintype_card_eq_univ_iff _).mpr G.iUnion_connectedComponentSupp,
     ← Set.toFinset_card, Set.toFinset_iUnion ConnectedComponent.supp]
   rw [Finset.card_biUnion
-    (fun x _ y _ hxy => Set.disjoint_toFinset
+    (fun x _ y _ hxy => Set.disjoint_toFinset.mpr (pairwise_disjoint_supp_connectedComponent _ hxy))]
+  simp_rw [← Set.ncard_eq_toFinset_card', ← Finset.coe_filter_univ, Set.ncard_coe_finset]
+  exact (Finset.odd_sum_iff_odd_card_odd (fun x : G.ConnectedComponent => x.supp.ncard)).symm
 
 Depends on / 依赖: ConnectedComponent, ConnectedComponent.supp, Finset, Finset.card_biUnion, Finset.coe_filter_univ, Finset.odd_sum_iff_odd_card_odd, G.ConnectedComponent, G.iUnion_connectedComponentSupp, Nat.card_eq_fintype_card, Set.disjoint_toFinset.mpr, Set.ncard_coe_finset, Set.ncard_eq_toFinset_card, Set.toFinset_card, Set.toFinset_iUnion, card_biUnion, card_eq_fintype_card, classical, coe_filter_univ, disjoint_toFinset, iUnion_connectedComponentSupp
 -/
@@ -333,7 +345,14 @@ lemma ncard_oddComponents_mono
       {c' : G.ConnectedComponent | Odd c'.supp.ncard ∧ c'.supp subseteq c.supp}.Nonempty := by
     refine Set.nonempty_of_ncard_ne_zero fun h' => Nat.not_odd_zero ?_
     rw [← h']
-    exact (c.odd_oddComponents_ncard_subset_supp _ h
+    exact (c.odd_oddComponents_ncard_subset_supp _ h).2 hc
+  let f : G'.oddComponents -> G.oddComponents :=
+    fun ⟨c, hc⟩ => ⟨(aux c hc).choose, (aux c hc).choose_spec.1⟩
+  refine Nat.card_le_card_of_injective f fun c c' fcc' => ?_
+  simp only [Subtype.mk.injEq, f] at fcc'
+  exact Subtype.val_injective (ConnectedComponent.eq_of_common_vertex
+    ((fcc' ▸ (aux c.1 c.2).choose_spec.2) (ConnectedComponent.nonempty_supp _).some_mem)
+      ((aux c'.1 c'.2).choose_spec.2 (ConnectedComponent.nonempty_supp _).some_mem))
 
 中文:
 引理 ncard_oddComponents_mono
@@ -343,7 +362,14 @@ lemma ncard_oddComponents_mono
       {c' : G.ConnectedComponent | Odd c'.supp.ncard ∧ c'.supp subseteq c.supp}.Nonempty := by
     refine Set.nonempty_of_ncard_ne_zero fun h' => Nat.not_odd_zero ?_
     rw [← h']
-    exact (c.odd_oddComponents_ncard_subset_supp _ h
+    exact (c.odd_oddComponents_ncard_subset_supp _ h).2 hc
+  let f : G'.oddComponents -> G.oddComponents :=
+    fun ⟨c, hc⟩ => ⟨(aux c hc).choose, (aux c hc).choose_spec.1⟩
+  refine Nat.card_le_card_of_injective f fun c c' fcc' => ?_
+  simp only [Subtype.mk.injEq, f] at fcc'
+  exact Subtype.val_injective (ConnectedComponent.eq_of_common_vertex
+    ((fcc' ▸ (aux c.1 c.2).choose_spec.2) (ConnectedComponent.nonempty_supp _).some_mem)
+      ((aux c'.1 c'.2).choose_spec.2 (ConnectedComponent.nonempty_supp _).some_mem))
 
 Depends on / 依赖: ConnectedComponent, G.ConnectedComponent, G.oddComponents, Nat.card_le_card_of_injective, Nat.not_odd_zero, Nonempty, Set.nonempty_of_ncard_ne_zero, Subtype, Subtype.mk.injEq, c.odd_oddComponents_ncard_subset_supp, c.supp, c.supp.ncard, card_le_card_of_injective, choose_spec, nonempty_of_ncard_ne_zero, not_odd_zero, oddComponents, odd_oddComponents_ncard_subset_supp, subseteq, supp.ncard
 -/

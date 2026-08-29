@@ -97,7 +97,7 @@ theorem surjective_isStableUnderBaseChange
   | tmul x y =>
     obtain ⟨y, rfl⟩ := h y; use y • x; dsimp
     rw [TensorProduct.smul_tmul]; rw [Algebra.algebraMap_eq_smul_one]
-  | add x y ex ey => obtain ⟨⟨x, rfl⟩,
+  | add x y ex ey => obtain ⟨⟨x, rfl⟩, ⟨y, rfl⟩⟩ := ex, ey; exact ⟨x + y, map_add _ x y⟩
 
 中文:
 定理 surjective_isStableUnderBaseChange
@@ -110,7 +110,7 @@ theorem surjective_isStableUnderBaseChange
   | tmul x y =>
     obtain ⟨y, rfl⟩ := h y; use y • x; dsimp
     rw [TensorProduct.smul_tmul]; rw [Algebra.algebraMap_eq_smul_one]
-  | add x y ex ey => obtain ⟨⟨x, rfl⟩,
+  | add x y ex ey => obtain ⟨⟨x, rfl⟩, ⟨y, rfl⟩⟩ := ex, ey; exact ⟨x + y, map_add _ x y⟩
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, IsStableUnderBaseChange, IsStableUnderBaseChange.mk, TensorProduct, TensorProduct.smul_tmul, algebraMap_eq_smul_one, introv, map_add, map_zero, smul_tmul, surjective_respectsIso
 -/
@@ -170,7 +170,12 @@ theorem surjective_ofLocalizationSpan
     (LinearMap.range (Algebra.linearMap R S)) s e
   intro r
   obtain ⟨a, e'⟩ := H r (algebraMap _ _ x)
-  obtain ⟨b, ⟨_, n, rfl⟩, rfl⟩ := IsLoc
+  obtain ⟨b, ⟨_, n, rfl⟩, rfl⟩ := IsLocalization.exists_mk'_eq (Submonoid.powers (r : R)) a
+  rw [Localization.awayMap]; rw [IsLocalization.Away.map]; rw [IsLocalization.map_mk']; rw [eq_comm]; rw [IsLocalization.eq_mk'_iff_mul_eq]; rw [Subtype.coe_mk]; rw [Subtype.coe_mk]; rw [← map_mul] at e'
+  obtain ⟨⟨_, n', rfl⟩, e''⟩ := (IsLocalization.eq_iff_exists (Submonoid.powers (f r)) _).mp e'
+  dsimp only at e''
+  rw [mul_comm x]; rw [← mul_assoc]; rw [← map_pow]; rw [← map_mul]; rw [← map_mul]; rw [← pow_add] at e''
+  exact ⟨n' + n, _, e''.symm⟩
 
 中文:
 定理 surjective_ofLocalizationSpan
@@ -184,7 +189,12 @@ theorem surjective_ofLocalizationSpan
     (LinearMap.range (Algebra.linearMap R S)) s e
   intro r
   obtain ⟨a, e'⟩ := H r (algebraMap _ _ x)
-  obtain ⟨b, ⟨_, n, rfl⟩, rfl⟩ := IsLoc
+  obtain ⟨b, ⟨_, n, rfl⟩, rfl⟩ := IsLocalization.exists_mk'_eq (Submonoid.powers (r : R)) a
+  rw [Localization.awayMap]; rw [IsLocalization.Away.map]; rw [IsLocalization.map_mk']; rw [eq_comm]; rw [IsLocalization.eq_mk'_iff_mul_eq]; rw [Subtype.coe_mk]; rw [Subtype.coe_mk]; rw [← map_mul] at e'
+  obtain ⟨⟨_, n', rfl⟩, e''⟩ := (IsLocalization.eq_iff_exists (Submonoid.powers (f r)) _).mp e'
+  dsimp only at e''
+  rw [mul_comm x]; rw [← mul_assoc]; rw [← map_pow]; rw [← map_mul]; rw [← map_mul]; rw [← pow_add] at e''
+  exact ⟨n' + n, _, e''.symm⟩
 
 Depends on / 依赖: Algebra, Algebra.linearMap, IsLocalization, IsLocalization.Away.map, IsLocalization.eq_mk, IsLocalization.exists_mk, IsLocalization.map_mk, LinearMap, LinearMap.range, Localization, Localization.awayMap, Set.eq_univ_iff_forall, Set.range_eq_univ, Submodule, Submodule.mem_of_span_eq_top_of_smul_pow_mem, Submonoid, Submonoid.powers, Subtype, Subtype.coe_mk, _iff_mul_eq
 -/

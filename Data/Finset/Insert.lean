@@ -978,7 +978,10 @@ instance Nontrivial.instDecidablePred
   Quotient.recOnSubsingleton (motive := fun (s : Multiset α) =>
       (h : s.Nodup) -> Decidable (Finset.Nontrivial ⟨s, h⟩))
     s.val (fun l h => match l with
-      | [] => 
+      | [] => isFalse (by simp)
+      | [_] => isFalse (by simp [SetLike.coe])
+      | a :: b :: _ => isTrue ⟨a, by simp, b, by simp,
+        List.ne_of_not_mem_cons (List.nodup_cons.mp h).left⟩) s.nodup
 
 中文:
 实例 非平凡.instDecidablePred
@@ -991,7 +994,10 @@ instance Nontrivial.instDecidablePred
   Quotient.recOnSubsingleton (motive := fun (s : Multiset α) =>
       (h : s.Nodup) -> Decidable (Finset.Nontrivial ⟨s, h⟩))
     s.val (fun l h => match l with
-      | [] => 
+      | [] => isFalse (by simp)
+      | [_] => isFalse (by simp [SetLike.coe])
+      | a :: b :: _ => isTrue ⟨a, by simp, b, by simp,
+        List.ne_of_not_mem_cons (List.nodup_cons.mp h).left⟩) s.nodup
 -/
 instance Nontrivial.instDecidablePred : DecidablePred (Finset.Nontrivial (α := α)) := fun s =>
   /-

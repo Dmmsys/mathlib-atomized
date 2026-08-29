@@ -292,7 +292,7 @@ definition ici
   isoBot := Iso.refl _
   incl := Functor.whiskerLeft _ c.incl
   isColimit := (Functor.Final.isColimitWhiskerEquiv
-    (Subtype.mono_coe (· in Set.Ici j)).functor _).2 c.isC
+    (Subtype.mono_coe (· in Set.Ici j)).functor _).2 c.isColimit
 
 中文:
 定义 ici
@@ -302,7 +302,7 @@ definition ici
   isoBot := Iso.refl _
   incl := Functor.whiskerLeft _ c.incl
   isColimit := (Functor.Final.isColimitWhiskerEquiv
-    (Subtype.mono_coe (· in Set.Ici j)).functor _).2 c.isC
+    (Subtype.mono_coe (· in Set.Ici j)).functor _).2 c.isColimit
 
 Depends on / 依赖: Set.Ici, Subtype, Subtype.mono_coe, functor, mono_coe
 -/

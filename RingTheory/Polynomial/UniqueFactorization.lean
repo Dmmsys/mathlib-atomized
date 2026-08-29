@@ -165,7 +165,10 @@ definition fintypeSubtypeMonicDvd
   have hy : y != 0 := Associates.mk_ne_zero.mpr hf
   let H := { x : Associates D[X] // x ∣ y }
   let hfin : Fintype H := UniqueFactorizationMonoid.fintypeSubtypeDvd y hy
-  let i : G -> H := fun x => ⟨Associate
+  let i : G -> H := fun x => ⟨Associates.mk x.1, Associates.mk_dvd_mk.2 x.2.2⟩
+  refine Fintype.ofInjective i fun x y heq => ?_
+  rw [Subtype.mk.injEq] at heq ⊢
+  exact eq_of_monic_of_associated x.2.1 y.2.1 (Associates.mk_eq_mk_iff_associated.mp heq)
 
 中文:
 定义 fintypeSubtypeMonicDvd
@@ -176,7 +179,10 @@ definition fintypeSubtypeMonicDvd
   have hy : y != 0 := Associates.mk_ne_zero.mpr hf
   let H := { x : Associates D[X] // x ∣ y }
   let hfin : Fintype H := UniqueFactorizationMonoid.fintypeSubtypeDvd y hy
-  let i : G -> H := fun x => ⟨Associate
+  let i : G -> H := fun x => ⟨Associates.mk x.1, Associates.mk_dvd_mk.2 x.2.2⟩
+  refine Fintype.ofInjective i fun x y heq => ?_
+  rw [Subtype.mk.injEq] at heq ⊢
+  exact eq_of_monic_of_associated x.2.1 y.2.1 (Associates.mk_eq_mk_iff_associated.mp heq)
 
 Depends on / 依赖: Associates, Associates.mk, Associates.mk_dvd_mk, Associates.mk_eq_mk_iff_associated.mp, Associates.mk_ne_zero.mpr, Fintype, Fintype.ofInjective, Subtype, Subtype.mk.injEq, UniqueFactorizationMonoid, UniqueFactorizationMonoid.fintypeSubtypeDvd, eq_of_monic_of_associated, fintypeSubtypeDvd, g.Monic, mk_dvd_mk, mk_eq_mk_iff_associated, mk_ne_zero, ofInjective
 -/
@@ -210,7 +216,8 @@ theorem uniqueFactorizationMonoid_of_fintype
       apply (isEmptyAlgEquiv D (Fin 0)).toMulEquiv.symm.uniqueFactorizationMonoid
       infer_instance
     | succ d hd =>
-      apply (finSuccE
+      apply (finSuccEquiv D d).toMulEquiv.symm.uniqueFactorizationMonoid
+      exact Polynomial.uniqueFactorizationMonoid
 
 中文:
 定理 uniqueFactorizationMonoid_of_fintype
@@ -222,7 +229,8 @@ theorem uniqueFactorizationMonoid_of_fintype
       apply (isEmptyAlgEquiv D (Fin 0)).toMulEquiv.symm.uniqueFactorizationMonoid
       infer_instance
     | succ d hd =>
-      apply (finSuccE
+      apply (finSuccEquiv D d).toMulEquiv.symm.uniqueFactorizationMonoid
+      exact Polynomial.uniqueFactorizationMonoid
 -/
 private theorem uniqueFactorizationMonoid_of_fintype [Finite σ] :
     UniqueFactorizationMonoid (MvPolynomial σ D) :=
@@ -266,7 +274,7 @@ theorem Polynomial.exists_monic_irreducible_factor
   obtain ⟨g, hi, hf⟩ := WfDvdMonoid.exists_irreducible_factor hu hf
 have ha : Associated g (g * C g.leadingCoeff⁻¹) := associated_mul_unit_right _ _
     isUnit_C.2 (leadingCoeff_ne_zero.2 hi.ne_zero).isUnit.inv
-  exact ⟨
+  exact ⟨_, monic_mul_leadingCoeff_inv hi.ne_zero, ha.irreducible hi, ha.dvd_iff_dvd_left.1 hf⟩
 
 中文:
 定理 多项式.存在_monic_irreducible_factor
@@ -277,7 +285,7 @@ have ha : Associated g (g * C g.leadingCoeff⁻¹) := associated_mul_unit_right 
   obtain ⟨g, hi, hf⟩ := WfDvdMonoid.exists_irreducible_factor hu hf
 have ha : Associated g (g * C g.leadingCoeff⁻¹) := associated_mul_unit_right _ _
     isUnit_C.2 (leadingCoeff_ne_zero.2 hi.ne_zero).isUnit.inv
-  exact ⟨
+  exact ⟨_, monic_mul_leadingCoeff_inv hi.ne_zero, ha.irreducible hi, ha.dvd_iff_dvd_left.1 hf⟩
 
 Depends on / 依赖: Associated, WfDvdMonoid, WfDvdMonoid.exists_irreducible_factor, associated_mul_unit_right, dvd_iff_dvd_left, dvd_zero, exists_irreducible_factor, g.leadingCoeff, ha.dvd_iff_dvd_left, ha.irreducible, hi.ne_zero, irreducible, irreducible_X, isUnit, isUnit.inv, isUnit_C, leadingCoeff, leadingCoeff_ne_zero, monic_X, monic_mul_leadingCoeff_inv
 -/

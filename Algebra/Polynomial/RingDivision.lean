@@ -95,7 +95,8 @@ theorem smul_modByMonic
     · exact
       (div_modByMonic_unique (c • (p /ₘ q)) (c • (p %ₘ q)) hq
           ⟨by rw [mul_smul_comm, ← smul_add, modByMonic_add_div],
-            (degree_smul_le _ _).t
+            (degree_smul_le _ _).trans_lt (degree_modByMonic_lt _ hq)⟩).2
+  · simp_rw [modByMonic_eq_of_not_monic _ hq]
 
 中文:
 定理 smul_modByMonic
@@ -108,7 +109,8 @@ theorem smul_modByMonic
     · exact
       (div_modByMonic_unique (c • (p /ₘ q)) (c • (p %ₘ q)) hq
           ⟨by rw [mul_smul_comm, ← smul_add, modByMonic_add_div],
-            (degree_smul_le _ _).t
+            (degree_smul_le _ _).trans_lt (degree_modByMonic_lt _ hq)⟩).2
+  · simp_rw [modByMonic_eq_of_not_monic _ hq]
 
 Depends on / 依赖: degree_modByMonic_lt, degree_smul_le, div_modByMonic_unique, eq_iff_true_of_subsingleton, modByMonic_add_div, modByMonic_eq_of_not_monic, mul_smul_comm, q.Monic, simp_rw, smul_add, subsingleton_or_nontrivial, trans_lt
 -/
@@ -211,7 +213,8 @@ theorem trailingDegree_mul
   by_cases hq : q = 0
   · rw [hq, mul_zero, trailingDegree_zero, add_top]
   · rw [trailingDegree_eq_natTrailingDegree hp, trailingDegree_eq_natTrailingDegree hq,
-    trailingDegree_eq_natTrailingDegree (mul_ne_zero hp hq), 
+    trailingDegree_eq_natTrailingDegree (mul_ne_zero hp hq), natTrailingDegree_mul hp hq]
+    apply WithTop.coe_add
 
 中文:
 定理 trailingDegree_mul
@@ -222,7 +225,8 @@ theorem trailingDegree_mul
   by_cases hq : q = 0
   · rw [hq, mul_zero, trailingDegree_zero, add_top]
   · rw [trailingDegree_eq_natTrailingDegree hp, trailingDegree_eq_natTrailingDegree hq,
-    trailingDegree_eq_natTrailingDegree (mul_ne_zero hp hq), 
+    trailingDegree_eq_natTrailingDegree (mul_ne_zero hp hq), natTrailingDegree_mul hp hq]
+    apply WithTop.coe_add
 
 Depends on / 依赖: WithTop, WithTop.coe_add, add_top, coe_add, mul_ne_zero, mul_zero, natTrailingDegree_mul, top_add, trailingDegree_eq_natTrailingDegree, trailingDegree_zero, zero_mul
 -/
@@ -428,7 +432,9 @@ theorem rootMultiplicity_mul_X_sub_C_pow
   refine le_antisymm ?_ ?_
   · rw [rootMultiplicity_le_iff h2, add_assoc, add_comm n, ← add_assoc, pow_add,
       dvd_cancel_right_mem_nonZeroDivisors (monic_X_sub_C a |>.pow n |>.mem_nonZeroDivisors)]
-    exact pow_rootMultiplicity_not_dvd h 
+    exact pow_rootMultiplicity_not_dvd h a
+  · rw [le_rootMultiplicity_iff h2, pow_add]
+    exact mul_dvd_mul_right (pow_rootMultiplicity_dvd p a) _
 
 中文:
 定理 rootMultiplicity_mul_X_sub_C_pow
@@ -438,7 +444,9 @@ theorem rootMultiplicity_mul_X_sub_C_pow
   refine le_antisymm ?_ ?_
   · rw [rootMultiplicity_le_iff h2, add_assoc, add_comm n, ← add_assoc, pow_add,
       dvd_cancel_right_mem_nonZeroDivisors (monic_X_sub_C a |>.pow n |>.mem_nonZeroDivisors)]
-    exact pow_rootMultiplicity_not_dvd h 
+    exact pow_rootMultiplicity_not_dvd h a
+  · rw [le_rootMultiplicity_iff h2, pow_add]
+    exact mul_dvd_mul_right (pow_rootMultiplicity_dvd p a) _
 
 Depends on / 依赖: add_assoc, add_comm, dvd_cancel_right_mem_nonZeroDivisors, le_antisymm, le_rootMultiplicity_iff, mem_nonZeroDivisors, monic_X_sub_C, mul_dvd_mul_right, mul_left_ne_zero, pow_add, pow_rootMultiplicity_dvd, pow_rootMultiplicity_not_dvd, rootMultiplicity_le_iff
 -/
@@ -537,7 +545,8 @@ theorem rootMultiplicity_comp_C_mul_X_add_C_le
   rw [le_rootMultiplicity_iff hp]
   have h := pow_rootMultiplicity_dvd (p.comp (C a * X + C b)) c
   rw [dvd_comp_C_mul_X_add_C_iff]; rw [pow_comp] at h
-  refine (pow_dvd_pow_of_dvd ((isUnit_C.mpr ha).dvd_mul_left.mp
+  refine (pow_dvd_pow_of_dvd ((isUnit_C.mpr ha).dvd_mul_left.mp (dvd_of_eq ?_)) _).trans h
+  simp [← map_mul, mul_sub, ← mul_assoc, sub_sub, add_comm, mul_add]
 
 中文:
 定理 rootMultiplicity_comp_C_mul_X_add_C_le
@@ -548,7 +557,8 @@ theorem rootMultiplicity_comp_C_mul_X_add_C_le
   rw [le_rootMultiplicity_iff hp]
   have h := pow_rootMultiplicity_dvd (p.comp (C a * X + C b)) c
   rw [dvd_comp_C_mul_X_add_C_iff]; rw [pow_comp] at h
-  refine (pow_dvd_pow_of_dvd ((isUnit_C.mpr ha).dvd_mul_left.mp
+  refine (pow_dvd_pow_of_dvd ((isUnit_C.mpr ha).dvd_mul_left.mp (dvd_of_eq ?_)) _).trans h
+  simp [← map_mul, mul_sub, ← mul_assoc, sub_sub, add_comm, mul_add]
 -/
 private theorem rootMultiplicity_comp_C_mul_X_add_C_le (p : R[X]) (a b c : R) (ha : IsUnit a) :
     (p.comp (C a * X + C b)).rootMultiplicity c <= p.rootMultiplicity (a * c + b) := by
@@ -571,7 +581,7 @@ theorem rootMultiplicity_comp_C_mul_X_add_C
   apply le_antisymm (rootMultiplicity_comp_C_mul_X_add_C_le p a b c ha)
   have := rootMultiplicity_comp_C_mul_X_add_C_le
     (p.comp (C a * X + C b)) ⅟a (- ⅟a * b) (a * c + b) (isUnit_of_invertible ⅟a)
-  simpa [comp_assoc, mul_add, ← mul_assoc, ← map_mul] usi
+  simpa [comp_assoc, mul_add, ← mul_assoc, ← map_mul] using this
 
 中文:
 定理 rootMultiplicity_comp_C_mul_X_add_C
@@ -581,7 +591,7 @@ theorem rootMultiplicity_comp_C_mul_X_add_C
   apply le_antisymm (rootMultiplicity_comp_C_mul_X_add_C_le p a b c ha)
   have := rootMultiplicity_comp_C_mul_X_add_C_le
     (p.comp (C a * X + C b)) ⅟a (- ⅟a * b) (a * c + b) (isUnit_of_invertible ⅟a)
-  simpa [comp_assoc, mul_add, ← mul_assoc, ← map_mul] usi
+  simpa [comp_assoc, mul_add, ← mul_assoc, ← map_mul] using this
 
 Depends on / 依赖: Invertible, comp_assoc, ha.invertible, invertible, isUnit_of_invertible, le_antisymm, map_mul, mul_add, mul_assoc, p.comp, rootMultiplicity_comp_C_mul_X_add_C_le
 -/
@@ -832,7 +842,14 @@ theorem irreducible_of_degree_eq_one_of_isRelPrime_coeff
     · rw [mul_comm] at h
       exact (this g f h H.le).symm
     left
-    rw [h]; rw [degre
+    rw [h]; rw [degree_mul]; rw [Nat.WithBot.add_eq_one_iff] at hp
+    rcases hp with ⟨hf, hg⟩ | ⟨hf, hg⟩; swap
+    · simp [← not_lt, hf, hg] at H
+    replace hf := f.eq_C_of_degree_eq_zero hf
+    rw [hf]
+    apply IsUnit.map C
+    rw [h]; rw [hf]; rw [coeff_C_mul]; rw [coeff_C_mul] at hc
+    apply hc <;> simp
 
 中文:
 定理 irreducible_of_degree_eq_one_of_isRelPrime_coeff
@@ -845,7 +862,14 @@ theorem irreducible_of_degree_eq_one_of_isRelPrime_coeff
     · rw [mul_comm] at h
       exact (this g f h H.le).symm
     left
-    rw [h]; rw [degre
+    rw [h]; rw [degree_mul]; rw [Nat.WithBot.add_eq_one_iff] at hp
+    rcases hp with ⟨hf, hg⟩ | ⟨hf, hg⟩; swap
+    · simp [← not_lt, hf, hg] at H
+    replace hf := f.eq_C_of_degree_eq_zero hf
+    rw [hf]
+    apply IsUnit.map C
+    rw [h]; rw [hf]; rw [coeff_C_mul]; rw [coeff_C_mul] at hc
+    apply hc <;> simp
 
 Depends on / 依赖: H.le, IsUnit, IsUnit.map, Nat.WithBot.add_eq_one_iff, WithBot, add_eq_one_iff, coeff_C_mu, coeff_C_mul, degree, degree_C_le, degree_mul, eq_C_of_degree_eq_zero, f.degree, f.eq_C_of_degree_eq_zero, g.degree, generalizing, isUnit_iff, isUnit_iff.mp, isUnit_or_isUnit, mul_comm
 -/
@@ -988,7 +1012,7 @@ theorem rootMultiplicity_mul
   classical
   have hp : p != 0 := left_ne_zero_of_mul hpq
   have hq : q != 0 := right_ne_zero_of_mul hpq
-  rw [rootMultiplicity_eq_multiplicity (p * q)]; rw [if_neg hpq]; rw [rootMultiplicity_eq_multiplicity p]; rw [if_neg hp]; rw [rootMultiplicity_eq_multiplicity q]; rw [if_neg hq]; rw [multipli
+  rw [rootMultiplicity_eq_multiplicity (p * q)]; rw [if_neg hpq]; rw [rootMultiplicity_eq_multiplicity p]; rw [if_neg hp]; rw [rootMultiplicity_eq_multiplicity q]; rw [if_neg hq]; rw [multiplicity_mul (prime_X_sub_C x) (finiteMultiplicity_X_sub_C _ hpq)]
 
 中文:
 定理 rootMultiplicity_mul
@@ -997,7 +1021,7 @@ theorem rootMultiplicity_mul
   classical
   have hp : p != 0 := left_ne_zero_of_mul hpq
   have hq : q != 0 := right_ne_zero_of_mul hpq
-  rw [rootMultiplicity_eq_multiplicity (p * q)]; rw [if_neg hpq]; rw [rootMultiplicity_eq_multiplicity p]; rw [if_neg hp]; rw [rootMultiplicity_eq_multiplicity q]; rw [if_neg hq]; rw [multipli
+  rw [rootMultiplicity_eq_multiplicity (p * q)]; rw [if_neg hpq]; rw [rootMultiplicity_eq_multiplicity p]; rw [if_neg hp]; rw [rootMultiplicity_eq_multiplicity q]; rw [if_neg hq]; rw [multiplicity_mul (prime_X_sub_C x) (finiteMultiplicity_X_sub_C _ hpq)]
 
 Depends on / 依赖: classical, finiteMultiplicity_X_sub_C, if_neg, left_ne_zero_of_mul, multiplicity_mul, prime_X_sub_C, right_ne_zero_of_mul, rootMultiplicity_eq_multiplicity
 -/
@@ -1020,7 +1044,38 @@ theorem exists_multiset_roots
       let ⟨x, hx⟩ := h
       have hpd : 0 < degree p := degree_pos_of_root hp hx
       have hd0 : p /ₘ (X - C x) != 0 := fun h => by
-        rw [← mul_divByMonic_eq_iff_isRoot.2 hx]; rw [h]; rw [mul_zero] at hp; exac
+        rw [← mul_divByMonic_eq_iff_isRoot.2 hx]; rw [h]; rw [mul_zero] at hp; exact hp rfl
+      have wf : degree (p /ₘ (X - C x)) < degree p :=
+        degree_divByMonic_lt _ _ hp ((degree_X_sub_C x).symm ▸ by decide)
+      let ⟨t, htd, htr⟩ := @exists_multiset_roots _ (p /ₘ (X - C x)) hd0
+      have hdeg : degree (X - C x) <= degree p := by
+        simpa using Nat.WithBot.one_le_iff_zero_lt.mpr hpd
+      have hdiv0 : p /ₘ (X - C x) != 0 :=
+mt (divByMonic_eq_zero_iff (monic_X_sub_C x)).1 not_lt.2 hdeg
+      ⟨x ::ₘ t,
+        calc
+          (card (x ::ₘ t) : WithBot Nat) = Multiset.card t + 1 := by
+            congr
+            exact mod_cast Multiset.card_cons _ _
+          _ <= degree p := by
+            rw [← degree_add_divByMonic (monic_X_sub_C x) hdeg]; rw [degree_X_sub_C]; rw [add_comm]
+            exact add_le_add (le_refl (1 : WithBot Nat)) htd,
+        by
+          intro a
+          conv_rhs => rw [← mul_divByMonic_eq_iff_isRoot.mpr hx]
+          rw [rootMultiplicity_mul (mul_ne_zero (X_sub_C_ne_zero x) hdiv0)]; rw [rootMultiplicity_X_sub_C]; rw [← htr a]
+          split_ifs with ha
+          · rw [ha, count_cons_self, add_comm]
+          · rw [count_cons_of_ne ha, zero_add]⟩
+    else
+      ⟨0, (degree_eq_natDegree hp).symm ▸ WithBot.coe_le_coe.2 (Nat.zero_le _), by
+        intro a
+        rw [count_zero]; rw [rootMultiplicity_eq_zero (not_exists.mp h a)]⟩
+termination_by p => natDegree p
+decreasing_by {
+  apply (Nat.cast_lt (α := WithBot Nat)).mp
+  simp only [degree_eq_natDegree hp, degree_eq_natDegree hd0] at wf
+  assumption}
 
 中文:
 定理 存在_multiset_roots
@@ -1030,7 +1085,38 @@ theorem exists_multiset_roots
       let ⟨x, hx⟩ := h
       have hpd : 0 < degree p := degree_pos_of_root hp hx
       have hd0 : p /ₘ (X - C x) != 0 := fun h => by
-        rw [← mul_divByMonic_eq_iff_isRoot.2 hx]; rw [h]; rw [mul_zero] at hp; exac
+        rw [← mul_divByMonic_eq_iff_isRoot.2 hx]; rw [h]; rw [mul_zero] at hp; exact hp rfl
+      have wf : degree (p /ₘ (X - C x)) < degree p :=
+        degree_divByMonic_lt _ _ hp ((degree_X_sub_C x).symm ▸ by decide)
+      let ⟨t, htd, htr⟩ := @exists_multiset_roots _ (p /ₘ (X - C x)) hd0
+      have hdeg : degree (X - C x) <= degree p := by
+        simpa using Nat.WithBot.one_le_iff_zero_lt.mpr hpd
+      have hdiv0 : p /ₘ (X - C x) != 0 :=
+mt (divByMonic_eq_zero_iff (monic_X_sub_C x)).1 not_lt.2 hdeg
+      ⟨x ::ₘ t,
+        calc
+          (card (x ::ₘ t) : WithBot Nat) = Multiset.card t + 1 := by
+            congr
+            exact mod_cast Multiset.card_cons _ _
+          _ <= degree p := by
+            rw [← degree_add_divByMonic (monic_X_sub_C x) hdeg]; rw [degree_X_sub_C]; rw [add_comm]
+            exact add_le_add (le_refl (1 : WithBot Nat)) htd,
+        by
+          intro a
+          conv_rhs => rw [← mul_divByMonic_eq_iff_isRoot.mpr hx]
+          rw [rootMultiplicity_mul (mul_ne_zero (X_sub_C_ne_zero x) hdiv0)]; rw [rootMultiplicity_X_sub_C]; rw [← htr a]
+          split_ifs with ha
+          · rw [ha, count_cons_self, add_comm]
+          · rw [count_cons_of_ne ha, zero_add]⟩
+    else
+      ⟨0, (degree_eq_natDegree hp).symm ▸ WithBot.coe_le_coe.2 (Nat.zero_le _), by
+        intro a
+        rw [count_zero]; rw [rootMultiplicity_eq_zero (not_exists.mp h a)]⟩
+termination_by p => natDegree p
+decreasing_by {
+  apply (Nat.cast_lt (α := WithBot Nat)).mp
+  simp only [degree_eq_natDegree hp, degree_eq_natDegree hd0] at wf
+  assumption}
 
 Depends on / 依赖: Classical, Classical.propDecidable, IsRoot, propDecidable
 -/

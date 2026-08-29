@@ -73,7 +73,12 @@ lemma surjective_of_surjective_of_surjective_of_injective
 obtain ⟨a, rfl⟩ : y in Set.range f₂ := (hf₂ _).mp by
     simpa [hy, hg₂.apply_apply_eq_one, map_eq_one_iff _ hi₄] using (DFunLike.congr_fun hc₃ y).symm
 obtain ⟨b, hb⟩ : x / i₂ a in Set.range g₁ := (hg₁ _).mp by
-    simp [← hy, show g₂ (i₂ a) = i₃ (f₂ a) by
+    simp [← hy, show g₂ (i₂ a) = i₃ (f₂ a) by simpa using DFunLike.congr_fun hc₂ a]
+  obtain ⟨o, rfl⟩ := hi₁ b
+  use f₁ o * a
+  simp [← show g₁ (i₁ o) = i₂ (f₁ o) by simpa using DFunLike.congr_fun hc₁ o, hb]
+
+include hf₁ hg₁ hc₁ hc₂ in
 
 中文:
 引理 surjective_of_surjective_of_surjective_of_injective
@@ -84,7 +89,12 @@ obtain ⟨b, hb⟩ : x / i₂ a in Set.range g₁ := (hg₁ _).mp by
 obtain ⟨a, rfl⟩ : y in Set.range f₂ := (hf₂ _).mp by
     simpa [hy, hg₂.apply_apply_eq_one, map_eq_one_iff _ hi₄] using (DFunLike.congr_fun hc₃ y).symm
 obtain ⟨b, hb⟩ : x / i₂ a in Set.range g₁ := (hg₁ _).mp by
-    simp [← hy, show g₂ (i₂ a) = i₃ (f₂ a) by
+    simp [← hy, show g₂ (i₂ a) = i₃ (f₂ a) by simpa using DFunLike.congr_fun hc₂ a]
+  obtain ⟨o, rfl⟩ := hi₁ b
+  use f₁ o * a
+  simp [← show g₁ (i₁ o) = i₂ (f₁ o) by simpa using DFunLike.congr_fun hc₁ o, hb]
+
+include hf₁ hg₁ hc₁ hc₂ in
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, Set.range, apply_apply_eq_one, congr_fun, map_eq_one_iff
 -/
@@ -119,7 +129,9 @@ lemma surjective_of_surjective_of_injective_of_left_exact
   refine surjective_of_surjective_of_surjective_of_injective (1 : Unit ->* M₁) f₁ f₂ (1 : Unit ->* N₁)
     g₁ g₂ 1 i₁ i₂ i₃ (by simp) hc₁ hc₂ hf₁ (fun y => ?_) hg₁ (fun | .unit => ⟨0, rfl⟩) hi₂ hi₃
   simp only [Set.mem_range, one_apply, exists_const]
-  exact ⟨fun h => (hg₀ ((map_one _).trans h.sy
+  exact ⟨fun h => (hg₀ ((map_one _).trans h.symm)), fun h => h ▸ (map_one _)⟩
+
+include hf₁ hf₂ hg₁ hc₁ hc₂ hc₃ in
 
 中文:
 引理 surjective_of_surjective_of_injective_of_left_exact
@@ -128,7 +140,9 @@ lemma surjective_of_surjective_of_injective_of_left_exact
   refine surjective_of_surjective_of_surjective_of_injective (1 : Unit ->* M₁) f₁ f₂ (1 : Unit ->* N₁)
     g₁ g₂ 1 i₁ i₂ i₃ (by simp) hc₁ hc₂ hf₁ (fun y => ?_) hg₁ (fun | .unit => ⟨0, rfl⟩) hi₂ hi₃
   simp only [Set.mem_range, one_apply, exists_const]
-  exact ⟨fun h => (hg₀ ((map_one _).trans h.sy
+  exact ⟨fun h => (hg₀ ((map_one _).trans h.symm)), fun h => h ▸ (map_one _)⟩
+
+include hf₁ hf₂ hg₁ hc₁ hc₂ hc₃ in
 
 Depends on / 依赖: Set.mem_range, exists_const, h.symm, map_one, mem_range, one_apply, surjective_of_surjective_of_surjective_of_injective
 -/
@@ -157,7 +171,14 @@ obtain ⟨x, rfl⟩ := (hf₂ m).mp by
     suffices h : i₄ (f₃ m) = 1 by rwa [map_eq_one_iff _ hi₄] at h
     simp [← show g₃ (i₃ m) = i₄ (f₃ m) by simpa using DFunLike.congr_fun hc₃ m, hm]
 obtain ⟨y, hy⟩ := (hg₁ _).mp by
-    rwa [show g₂ (i₂ x) = i₃ (f₂ x) b
+    rwa [show g₂ (i₂ x) = i₃ (f₂ x) by simpa using DFunLike.congr_fun hc₂ x]
+  obtain ⟨a, rfl⟩ := hi₁ y
+  rw [show g₁ (i₁ a) = i₂ (f₁ a) by simpa using DFunLike.congr_fun hc₁ a] at hy
+  apply hi₂ at hy
+  subst hy
+  rw [hf₁.apply_apply_eq_one]
+
+include hf₁ hg₁ hc₁ hc₂ in
 
 中文:
 引理 injective_of_surjective_of_injective_of_injective
@@ -169,7 +190,14 @@ obtain ⟨x, rfl⟩ := (hf₂ m).mp by
     suffices h : i₄ (f₃ m) = 1 by rwa [map_eq_one_iff _ hi₄] at h
     simp [← show g₃ (i₃ m) = i₄ (f₃ m) by simpa using DFunLike.congr_fun hc₃ m, hm]
 obtain ⟨y, hy⟩ := (hg₁ _).mp by
-    rwa [show g₂ (i₂ x) = i₃ (f₂ x) b
+    rwa [show g₂ (i₂ x) = i₃ (f₂ x) by simpa using DFunLike.congr_fun hc₂ x]
+  obtain ⟨a, rfl⟩ := hi₁ y
+  rw [show g₁ (i₁ a) = i₂ (f₁ a) by simpa using DFunLike.congr_fun hc₁ a] at hy
+  apply hi₂ at hy
+  subst hy
+  rw [hf₁.apply_apply_eq_one]
+
+include hf₁ hg₁ hc₁ hc₂ in
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, apply_apply_eq_one, congr_fun, injective_iff_map_eq_one, map_eq_one_iff
 -/
@@ -366,7 +394,11 @@ lemma surjective_of_surjective_of_surjective_of_injective
   proof: AddMonoidHom.surjective_of_surjective_of_surjective_of_injective
     f₁.toAddMonoidHom f₂.toAddMonoidHom f₃.toAddMonoidHom g₁.toAddMonoidHom g₂.toAddMonoidHom
     g₃.toAddMonoidHom i₁.toAddMonoidHom i₂.toAddMonoidHom i₃.toAddMonoidHom i₄.toAddMonoidHom
-    (AddMonoidHom.ext fun x => DFunLike.congr_f
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₁ x)
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₂ x)
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₃ x) hf₂ hg₁ hg₂ hi₁ hi₃ hi₄
+
+include hf₁ hg₁ hc₁ hc₂ in
 
 中文:
 引理 surjective_of_surjective_of_surjective_of_injective
@@ -374,7 +406,11 @@ lemma surjective_of_surjective_of_surjective_of_injective
   证明: AddMonoidHom.surjective_of_surjective_of_surjective_of_injective
     f₁.toAddMonoidHom f₂.toAddMonoidHom f₃.toAddMonoidHom g₁.toAddMonoidHom g₂.toAddMonoidHom
     g₃.toAddMonoidHom i₁.toAddMonoidHom i₂.toAddMonoidHom i₃.toAddMonoidHom i₄.toAddMonoidHom
-    (AddMonoidHom.ext fun x => DFunLike.congr_f
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₁ x)
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₂ x)
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₃ x) hf₂ hg₁ hg₂ hi₁ hi₃ hi₄
+
+include hf₁ hg₁ hc₁ hc₂ in
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, AddMonoidHom.surjective_of_surjective_of_surjective_of_injective, DFunLike, DFunLike.congr_fun, congr_fun, surjective_of_surjective_of_surjective_of_injective, toAddMonoidHom
 -/
@@ -400,7 +436,9 @@ lemma surjective_of_surjective_of_injective_of_left_exact
     (0 : Unit ->ₗ[R] N₁) g₁ g₂ 0 i₁ i₂ i₃ (by simp) hc₁ hc₂ hf₁ (fun y => ?_) hg₁
     (fun | .unit => ⟨0, rfl⟩) hi₂ hi₃
   simp only [Set.mem_range, zero_apply, exists_const]
-  exact ⟨fun h => (hg₀ ((map_zero _
+  exact ⟨fun h => (hg₀ ((map_zero _).trans h.symm)), fun h => h ▸ (map_zero _)⟩
+
+include hf₁ hf₂ hg₁ hc₁ hc₂ hc₃ in
 
 中文:
 引理 surjective_of_surjective_of_injective_of_left_exact
@@ -410,7 +448,9 @@ lemma surjective_of_surjective_of_injective_of_left_exact
     (0 : Unit ->ₗ[R] N₁) g₁ g₂ 0 i₁ i₂ i₃ (by simp) hc₁ hc₂ hf₁ (fun y => ?_) hg₁
     (fun | .unit => ⟨0, rfl⟩) hi₂ hi₃
   simp only [Set.mem_range, zero_apply, exists_const]
-  exact ⟨fun h => (hg₀ ((map_zero _
+  exact ⟨fun h => (hg₀ ((map_zero _).trans h.symm)), fun h => h ▸ (map_zero _)⟩
+
+include hf₁ hf₂ hg₁ hc₁ hc₂ hc₃ in
 
 Depends on / 依赖: Set.mem_range, exists_const, h.symm, map_zero, mem_range, surjective_of_surjective_of_surjective_of_injective, zero_apply
 -/
@@ -432,7 +472,11 @@ lemma injective_of_surjective_of_injective_of_injective
   proof: AddMonoidHom.injective_of_surjective_of_injective_of_injective
     f₁.toAddMonoidHom f₂.toAddMonoidHom f₃.toAddMonoidHom g₁.toAddMonoidHom g₂.toAddMonoidHom
     g₃.toAddMonoidHom i₁.toAddMonoidHom i₂.toAddMonoidHom i₃.toAddMonoidHom i₄.toAddMonoidHom
-    (AddMonoidHom.ext fun x => DFunLike.congr_fun
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₁ x)
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₂ x)
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₃ x) hf₁ hf₂ hg₁ hi₁ hi₂ hi₄
+
+include hf₁ hg₁ hc₁ hc₂ in
 
 中文:
 引理 injective_of_surjective_of_injective_of_injective
@@ -440,7 +484,11 @@ lemma injective_of_surjective_of_injective_of_injective
   证明: AddMonoidHom.injective_of_surjective_of_injective_of_injective
     f₁.toAddMonoidHom f₂.toAddMonoidHom f₃.toAddMonoidHom g₁.toAddMonoidHom g₂.toAddMonoidHom
     g₃.toAddMonoidHom i₁.toAddMonoidHom i₂.toAddMonoidHom i₃.toAddMonoidHom i₄.toAddMonoidHom
-    (AddMonoidHom.ext fun x => DFunLike.congr_fun
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₁ x)
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₂ x)
+    (AddMonoidHom.ext fun x => DFunLike.congr_fun hc₃ x) hf₁ hf₂ hg₁ hi₁ hi₂ hi₄
+
+include hf₁ hg₁ hc₁ hc₂ in
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, AddMonoidHom.injective_of_surjective_of_injective_of_injective, DFunLike, DFunLike.congr_fun, congr_fun, injective_of_surjective_of_injective_of_injective, toAddMonoidHom
 -/

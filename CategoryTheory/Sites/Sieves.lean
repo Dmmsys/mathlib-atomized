@@ -2038,7 +2038,7 @@ theorem uncurry_bind
     rw [Sigma.ext_iff] at h
     obtain ⟨rfl, h⟩ := h
     rw [heq_iff_eq] at h; subst h
-    
+    exact ⟨_, _, _, _, hg, rfl⟩
 
 中文:
 定理 uncurry_bind
@@ -2051,7 +2051,7 @@ theorem uncurry_bind
     rw [Sigma.ext_iff] at h
     obtain ⟨rfl, h⟩ := h
     rw [heq_iff_eq] at h; subst h
-    
+    exact ⟨_, _, _, _, hg, rfl⟩
 -/
 @[simp] theorem uncurry_bind (t : ⦃Y : C⦄ -> (f : Y ⟶ X) -> s f -> Presieve Y) :
     (s.bind t).uncurry = ⋃ i in s.uncurry,
@@ -2322,7 +2322,23 @@ instance :
   bot :=
     { arrows := ⊥
       downward_closed := False.elim }
-  s
+  sup := Sieve.union
+  inf := Sieve.inter
+  sSup := Sieve.sup
+  sInf := Sieve.inf
+  isLUB_sSup _ := ⟨fun S hS _ _ hf => ⟨S, hS, hf⟩, fun _ ha _ _ ⟨b, hb, hf⟩ => ha hb _ hf⟩
+  isGLB_sInf _ := ⟨fun S hS _ _ h => h _ hS, fun _ hS _ _ hf _ hR => hS hR _ hf⟩
+  le_sup_left _ _ _ _ := Or.inl
+  le_sup_right _ _ _ _ := Or.inr
+  sup_le _ _ _ h₁ h₂ _ f := by
+    rintro (hf | hf)
+    · exact h₁ _ hf
+    · exact h₂ _ hf
+  inf_le_left _ _ _ _ := And.left
+  inf_le_right _ _ _ _ := And.right
+  le_inf _ _ _ p q _ _ z := ⟨p _ z, q _ z⟩
+  le_top _ _ _ _ := trivial
+  bot_le _ _ _ := False.elim
 
 中文:
 实例 :
@@ -2337,7 +2353,23 @@ instance :
   bot :=
     { arrows := ⊥
       downward_closed := False.elim }
-  s
+  sup := Sieve.union
+  inf := Sieve.inter
+  sSup := Sieve.sup
+  sInf := Sieve.inf
+  isLUB_sSup _ := ⟨fun S hS _ _ hf => ⟨S, hS, hf⟩, fun _ ha _ _ ⟨b, hb, hf⟩ => ha hb _ hf⟩
+  isGLB_sInf _ := ⟨fun S hS _ _ h => h _ hS, fun _ hS _ _ hf _ hR => hS hR _ hf⟩
+  le_sup_left _ _ _ _ := Or.inl
+  le_sup_right _ _ _ _ := Or.inr
+  sup_le _ _ _ h₁ h₂ _ f := by
+    rintro (hf | hf)
+    · exact h₁ _ hf
+    · exact h₂ _ hf
+  inf_le_left _ _ _ _ := And.left
+  inf_le_right _ _ _ _ := And.right
+  le_inf _ _ _ p q _ _ z := ⟨p _ z, q _ z⟩
+  le_top _ _ _ _ := trivial
+  bot_le _ _ _ := False.elim
 -/
 instance : CompleteLattice (Sieve X) where
   le S R := forall ⦃Y⦄ (f : Y ⟶ X), S f -> R f
@@ -4065,7 +4097,9 @@ theorem pullbackArrows_comm
     have := R.hasPullback f hg
     rw [Sieve.pullback_apply]; rw [assoc]; rw [← pullback.condition]; rw [← assoc]
     exact Sieve.downward_closed _ (by exact Sieve.le_generate R W _ hg) (h ≫ pullback.fst g f)
-  · rintro ⟨W, h, k, hk, c
+  · rintro ⟨W, h, k, hk, comm⟩
+    have := R.hasPullback f hk
+    exact ⟨_, _, _, Presieve.pullbackArrows.mk _ _ hk, pullback.lift_snd _ _ comm⟩
 
 中文:
 定理 pullbackArrows_comm
@@ -4077,7 +4111,9 @@ theorem pullbackArrows_comm
     have := R.hasPullback f hg
     rw [Sieve.pullback_apply]; rw [assoc]; rw [← pullback.condition]; rw [← assoc]
     exact Sieve.downward_closed _ (by exact Sieve.le_generate R W _ hg) (h ≫ pullback.fst g f)
-  · rintro ⟨W, h, k, hk, c
+  · rintro ⟨W, h, k, hk, comm⟩
+    have := R.hasPullback f hk
+    exact ⟨_, _, _, Presieve.pullbackArrows.mk _ _ hk, pullback.lift_snd _ _ comm⟩
 
 Depends on / 依赖: Presieve, Presieve.pullbackArrows.mk, R.hasPullback, Sieve.downward_closed, Sieve.le_generate, Sieve.pullback_apply, condition, downward_closed, hasPullback, le_generate, lift_snd, pullback, pullback.condition, pullback.fst, pullback.lift_snd, pullbackArrows, pullback_apply
 -/
@@ -5670,7 +5706,8 @@ definition shrinkFunctorUliftFunctorIso
       dsimp
       ext
       dsimp [Equiv.subtypeEquiv_apply]
-      rw [shrinkYonedaObjObj
+      rw [shrinkYonedaObjObjEquiv_obj_map]; rw [shrinkYonedaObjObjEquiv_symm_comp]
+      simp
 
 中文:
 定义 shrinkFunctorUliftFunctorIso
@@ -5684,7 +5721,8 @@ definition shrinkFunctorUliftFunctorIso
       dsimp
       ext
       dsimp [Equiv.subtypeEquiv_apply]
-      rw [shrinkYonedaObjObj
+      rw [shrinkYonedaObjObjEquiv_obj_map]; rw [shrinkYonedaObjObjEquiv_symm_comp]
+      simp
 
 Depends on / 依赖: Equiv.subtypeEquiv, Equiv.subtypeEquiv_apply, Equiv.toIso, Equiv.ulift, NatIso, NatIso.ofComponents, ofComponents, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm, shrinkYonedaObjObjEquiv.trans, shrinkYonedaObjObjEquiv_obj_map, shrinkYonedaObjObjEquiv_symm_comp, subtypeEquiv, subtypeEquiv_apply
 -/

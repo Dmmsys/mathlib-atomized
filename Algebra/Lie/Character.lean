@@ -112,7 +112,12 @@ theorem lieCharacter_apply_of_mem_derived
     LieSubmodule.mem_toSubmodule]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span] at h
   induction h using Submodule.span_induction with
   | mem y h =>
-    simp only [Subtype.exists, LieSubmodule.mem_t
+    simp only [Subtype.exists, LieSubmodule.mem_top, exists_const, Set.mem_ofPred_eq] at h
+    obtain ⟨z, w, rfl⟩ := h
+    exact lieCharacter_apply_lie ..
+  | zero => exact map_zero _
+  | add y z _ _ hy hz => rw [map_add, hy, hz, add_zero]
+  | smul t y _ hy => rw [map_smul, hy, smul_zero]
 
 中文:
 定理 lieCharacter_apply_of_mem_derived
@@ -122,7 +127,12 @@ theorem lieCharacter_apply_of_mem_derived
     LieSubmodule.mem_toSubmodule]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span] at h
   induction h using Submodule.span_induction with
   | mem y h =>
-    simp only [Subtype.exists, LieSubmodule.mem_t
+    simp only [Subtype.exists, LieSubmodule.mem_top, exists_const, Set.mem_ofPred_eq] at h
+    obtain ⟨z, w, rfl⟩ := h
+    exact lieCharacter_apply_lie ..
+  | zero => exact map_zero _
+  | add y z _ _ hy hz => rw [map_add, hy, hz, add_zero]
+  | smul t y _ hy => rw [map_smul, hy, smul_zero]
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.mem_toSubmodule, LieSubmodule.mem_top, Set.mem_ofPred_eq, Submodule, Submodule.span_induction, Subtype, Subtype.exists, add_zero, derivedSeriesOfIdeal_succ, derivedSeriesOfIdeal_zero, derivedSeries_def, exists_const, lieCharacter_apply_lie, lieIdeal_oper_eq_linear_span, map_add, map_smul, map_zero, mem_ofPred_eq
 -/

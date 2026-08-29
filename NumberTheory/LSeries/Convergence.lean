@@ -206,7 +206,7 @@ refine le_of_eq sInf_eq_bot.mpr fun y hy => ?_
     cases y with
     | bot => simp at hy
 | coe y => exact ⟨_, ⟨_, h _ EReal.bot_lt_coe _, rfl⟩, mod_cast sub_one_lt y⟩
-| top
+| top => exact ⟨_, ⟨_, h _ EReal.bot_lt_coe 0, rfl⟩, EReal.zero_lt_top⟩
 
 中文:
 引理 LSeries.abscissaOfAbsConv_le_of_对任意_lt_LSeriesSummable'
@@ -220,7 +220,7 @@ refine le_of_eq sInf_eq_bot.mpr fun y hy => ?_
     cases y with
     | bot => simp at hy
 | coe y => exact ⟨_, ⟨_, h _ EReal.bot_lt_coe _, rfl⟩, mod_cast sub_one_lt y⟩
-| top
+| top => exact ⟨_, ⟨_, h _ EReal.bot_lt_coe 0, rfl⟩, EReal.zero_lt_top⟩
 
 Depends on / 依赖: EReal.bot_lt_coe, EReal.zero_lt_top, abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable, bot_lt_coe, le_of_eq, le_top, mod_cast, sInf_eq_bot, sInf_eq_bot.mpr, sub_one_lt, zero_lt_top
 -/
@@ -359,7 +359,10 @@ lemma LSeries.summable_real_of_abscissaOfAbsConv_lt
     ext n
     simp [term_def, apply_ite ((↑) : Real -> Complex), ofReal_cpow n.cast_nonneg]
   have := LSeriesSummable_of_abscissaOfAbsConv_lt_re (ofReal_re x ▸ h)
-  simp only [LSeriesSummable, aux, summable_of
+  simp only [LSeriesSummable, aux, summable_ofReal] at this
+  refine this.congr_cofinite ?_
+  filter_upwards [(Set.finite_singleton 0).compl_mem_cofinite] with n hn
+    using if_neg (by simpa using hn)
 
 中文:
 引理 LSeries.summable_real_of_abscissaOfAbsConv_lt
@@ -369,7 +372,10 @@ lemma LSeries.summable_real_of_abscissaOfAbsConv_lt
     ext n
     simp [term_def, apply_ite ((↑) : Real -> Complex), ofReal_cpow n.cast_nonneg]
   have := LSeriesSummable_of_abscissaOfAbsConv_lt_re (ofReal_re x ▸ h)
-  simp only [LSeriesSummable, aux, summable_of
+  simp only [LSeriesSummable, aux, summable_ofReal] at this
+  refine this.congr_cofinite ?_
+  filter_upwards [(Set.finite_singleton 0).compl_mem_cofinite] with n hn
+    using if_neg (by simpa using hn)
 
 Depends on / 依赖: LSeriesSummable, LSeriesSummable_of_abscissaOfAbsConv_lt_re, Set.finite_singleton, apply_ite, cast_nonneg, compl_mem_cofinite, congr_cofinite, filter_upwards, finite_singleton, if_neg, n.cast_nonneg, ofReal_cpow, ofReal_re, summable_ofReal, term_def, this.congr_cofinite
 -/

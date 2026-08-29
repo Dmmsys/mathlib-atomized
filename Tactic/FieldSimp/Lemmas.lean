@@ -1597,7 +1597,8 @@ definition Sign.mul
     assumeInstancesCommute
     pure ⟨.minus i, q(neg_mul $y₁ $y₂)⟩
   | .minus _, .minus _ =>
-    assume
+    assumeInstancesCommute
+    pure ⟨.plus, q(neg_mul_neg $y₁ $y₂)⟩
 
 中文:
 定义 Sign.mul
@@ -1612,7 +1613,8 @@ definition Sign.mul
     assumeInstancesCommute
     pure ⟨.minus i, q(neg_mul $y₁ $y₂)⟩
   | .minus _, .minus _ =>
-    assume
+    assumeInstancesCommute
+    pure ⟨.plus, q(neg_mul_neg $y₁ $y₂)⟩
 -/
 def Sign.mul (iM : Q(CommGroupWithZero $M)) (y₁ y₂ : Q($M)) (g₁ g₂ : Sign M) :
     MetaM (Σ (G : Sign M), Q($(g₁.expr y₁) * $(g₂.expr y₂) = $(G.expr q($y₁ * $y₂)))) := do
@@ -1675,7 +1677,8 @@ definition Sign.div
     assumeInstancesCommute
     pure ⟨.minus i, q(neg_div $y₂ $y₁)⟩
   | .minus _, .minus _ =>
-   
+    assumeInstancesCommute
+    pure ⟨.plus, q(neg_div_neg_eq $y₁ $y₂)⟩
 
 中文:
 定义 Sign.div
@@ -1690,7 +1693,8 @@ definition Sign.div
     assumeInstancesCommute
     pure ⟨.minus i, q(neg_div $y₂ $y₁)⟩
   | .minus _, .minus _ =>
-   
+    assumeInstancesCommute
+    pure ⟨.plus, q(neg_div_neg_eq $y₁ $y₂)⟩
 -/
 def Sign.div (iM : Q(CommGroupWithZero $M)) (y₁ y₂ : Q($M)) (g₁ g₂ : Sign M) :
     MetaM (Σ (G : Sign M), Q($(g₁.expr y₁) / $(g₂.expr y₂) = $(G.expr q($y₁ / $y₂)))) := do
@@ -1753,7 +1757,7 @@ definition Sign.pow
       pure ⟨.plus, q(Even.neg_pow $pf_s $y)⟩
     else
       let pf_s ← mkDecideProofQ q(Odd $s)
-      pure ⟨.minus i, q(Odd.
+      pure ⟨.minus i, q(Odd.neg_pow $pf_s $y)⟩
 
 中文:
 定义 Sign.pow
@@ -1768,7 +1772,7 @@ definition Sign.pow
       pure ⟨.plus, q(Even.neg_pow $pf_s $y)⟩
     else
       let pf_s ← mkDecideProofQ q(Odd $s)
-      pure ⟨.minus i, q(Odd.
+      pure ⟨.minus i, q(Odd.neg_pow $pf_s $y)⟩
 -/
 def Sign.pow (iM : Q(CommGroupWithZero $M)) (y : Q($M)) (g : Sign M) (s : Nat) :
     MetaM (Σ (G : Sign M), Q($(g.expr y) ^ $s = $(G.expr q($y ^ $s)))) := do
@@ -1799,7 +1803,7 @@ definition Sign.zpow
       pure ⟨.plus, q(Even.neg_zpow $pf_s $y)⟩
     else
       let pf_s ← mkDecideProofQ q(Odd $s)
-      pure ⟨.minus i, q(Odd
+      pure ⟨.minus i, q(Odd.neg_zpow $pf_s $y)⟩
 
 中文:
 定义 Sign.zpow
@@ -1814,7 +1818,7 @@ definition Sign.zpow
       pure ⟨.plus, q(Even.neg_zpow $pf_s $y)⟩
     else
       let pf_s ← mkDecideProofQ q(Odd $s)
-      pure ⟨.minus i, q(Odd
+      pure ⟨.minus i, q(Odd.neg_zpow $pf_s $y)⟩
 -/
 def Sign.zpow (iM : Q(CommGroupWithZero $M)) (y : Q($M)) (g : Sign M) (s : Int) :
     MetaM (Σ (G : Sign M), Q($(g.expr y) ^ $s = $(G.expr q($y ^ $s)))) := do

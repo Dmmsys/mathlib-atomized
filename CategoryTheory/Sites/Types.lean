@@ -138,7 +138,7 @@ theorem Presieve.isSheaf_yoneda'
       convert!
         ConcreteCategory.congr_hom (hx (𝟙 _) (↾fun _ => z) (hs <| f z) h rfl) PUnit.unit using 1,
       fun f hf => ConcreteCategory.hom_ext _ _ fun y => by
-        
+        convert! ConcreteCategory.congr_hom (hf _ (hs y)) PUnit.unit⟩
 
 中文:
 定理 Presieve.isSheaf_yoneda'
@@ -149,7 +149,7 @@ theorem Presieve.isSheaf_yoneda'
       convert!
         ConcreteCategory.congr_hom (hx (𝟙 _) (↾fun _ => z) (hs <| f z) h rfl) PUnit.unit using 1,
       fun f hf => ConcreteCategory.hom_ext _ _ fun y => by
-        
+        convert! ConcreteCategory.congr_hom (hf _ (hs y)) PUnit.unit⟩
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, ConcreteCategory.hom_ext, PUnit.unit, congr_hom, convert, hom_ext
 -/
@@ -264,7 +264,11 @@ definition typesGlue
     (fun _ g hg => S.map (↾fun _ => PUnit.unit).op <| f <| g <| Classical.choose hg)
     fun β γ δ g₁ g₂ f₁ f₂ hf₁ hf₂ h =>
     (hs.isSheafFor _ (generate_discretePresieve_mem δ)).isSeparatedFor.ext fun ε g ⟨x, _⟩ => by
-      have : f₁ (
+      have : f₁ (Classical.choose hf₁) = f₂ (Classical.choose hf₂) :=
+        Classical.choose_spec hf₁ (g₁ <| g x) ▸
+          Classical.choose_spec hf₂ (g₂ <| g x) ▸ ConcreteCategory.congr_hom h _
+      simp_rw [← comp_apply, ← Functor.map_comp, this, ← op_comp]
+      rfl
 
 中文:
 定义 typesGlue
@@ -273,7 +277,11 @@ definition typesGlue
     (fun _ g hg => S.map (↾fun _ => PUnit.unit).op <| f <| g <| Classical.choose hg)
     fun β γ δ g₁ g₂ f₁ f₂ hf₁ hf₂ h =>
     (hs.isSheafFor _ (generate_discretePresieve_mem δ)).isSeparatedFor.ext fun ε g ⟨x, _⟩ => by
-      have : f₁ (
+      have : f₁ (Classical.choose hf₁) = f₂ (Classical.choose hf₂) :=
+        Classical.choose_spec hf₁ (g₁ <| g x) ▸
+          Classical.choose_spec hf₂ (g₂ <| g x) ▸ ConcreteCategory.congr_hom h _
+      simp_rw [← comp_apply, ← Functor.map_comp, this, ← op_comp]
+      rfl
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, ConcreteCategory, ConcreteCategory.congr_hom, Functor, Functor.map_comp, PUnit.unit, S.map, amalgamate, choose_spec, comp_apply, congr_hom, generate_discretePresieve_mem, hs.isSheafFor, isSeparatedFor, isSeparatedFor.ext, isSheafFor, map_comp, simp_rw
 -/
@@ -333,7 +341,7 @@ theorem typesGlue_eval
     ← Functor.map_comp, ← op_comp]
   congr
   ext x
-  exact congr_arg f (Cla
+  exact congr_arg f (Classical.choose_spec hf x).symm
 
 中文:
 定理 typesGlue_eval
@@ -347,7 +355,7 @@ theorem typesGlue_eval
     ← Functor.map_comp, ← op_comp]
   congr
   ext x
-  exact congr_arg f (Cla
+  exact congr_arg f (Classical.choose_spec hf x).symm
 
 Depends on / 依赖: Classical, Classical.choose_spec, ConcreteCategory, ConcreteCategory.hom_ofHom, Functor, Functor.map_comp, IsSheafFor, IsSheafFor.valid_glue, TypeCat, TypeCat.Fun.coe_mk, choose_spec, coe_mk, comp_apply, congr_arg, generate_discretePresieve_mem, hom_ofHom, hs.isSheafFor, isSeparatedFor, isSeparatedFor.ext, isSheafFor
 -/
@@ -518,7 +526,16 @@ definition typeEquiv
           inv := ↾fun f => f.hom PUnit.unit })
       fun _ => rfl
 counitIso := Iso.symm
-      NatIso.ofCompone
+      NatIso.ofComponents (fun S => equivYoneda' S) (fun {S₁ S₂} f => by
+        ext ⟨α⟩ s
+        dsimp at s ⊢
+        ext x
+        exact eval_app S₁ S₂ f α s x)
+  functor_unitIso_comp X := by
+    ext1
+    apply yonedaEquiv.injective
+    dsimp [yoneda', yonedaEquiv, equivYoneda, evalEquiv]
+    simpa using! typesGlue_eval (S := yoneda.obj X) (𝟙 X)
 
 中文:
 定义 typeEquiv
@@ -531,7 +548,16 @@ counitIso := Iso.symm
           inv := ↾fun f => f.hom PUnit.unit })
       fun _ => rfl
 counitIso := Iso.symm
-      NatIso.ofCompone
+      NatIso.ofComponents (fun S => equivYoneda' S) (fun {S₁ S₂} f => by
+        ext ⟨α⟩ s
+        dsimp at s ⊢
+        ext x
+        exact eval_app S₁ S₂ f α s x)
+  functor_unitIso_comp X := by
+    ext1
+    apply yonedaEquiv.injective
+    dsimp [yoneda', yonedaEquiv, equivYoneda, evalEquiv]
+    simpa using! typesGlue_eval (S := yoneda.obj X) (𝟙 X)
 
 Depends on / 依赖: yoneda
 -/
@@ -586,7 +612,13 @@ theorem typesGrothendieckTopology_eq_canonical
   ext S
   refine ⟨fun hs x => ?_, fun hs β f => Presieve.isSheaf_yoneda' _ fun y => hs (f y)⟩
   by_contra hsx
-  have : (↾fun _ => ULift.up 
+  have : (↾fun _ => ULift.up true) = ↾fun _ => ULift.up false :=
+    (hs PUnit (↾fun _ => x)).isSeparatedFor.ext
+      fun β f hf => by
+        dsimp
+        ext y
+exact hsx.elim S.2 hf (↾fun _ => y)
+  simp [ConcreteCategory.hom_ext_iff] at this
 
 中文:
 定理 typesGrothendieckTopology_eq_canonical
@@ -597,7 +629,13 @@ theorem typesGrothendieckTopology_eq_canonical
   ext S
   refine ⟨fun hs x => ?_, fun hs β f => Presieve.isSheaf_yoneda' _ fun y => hs (f y)⟩
   by_contra hsx
-  have : (↾fun _ => ULift.up 
+  have : (↾fun _ => ULift.up true) = ↾fun _ => ULift.up false :=
+    (hs PUnit (↾fun _ => x)).isSeparatedFor.ext
+      fun β f hf => by
+        dsimp
+        ext y
+exact hsx.elim S.2 hf (↾fun _ => y)
+  simp [ConcreteCategory.hom_ext_iff] at this
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext_iff, GrothendieckTopology, GrothendieckTopology.ext, Presieve, Presieve.isSheaf_yoneda, ULift.up, hom_ext_iff, hsx.elim, isSeparatedFor, isSeparatedFor.ext, isSheaf_yoneda, le_antisymm, le_canonical, sInf_le, typesGrothendieckTopology, typesGrothendieckTopology.le_canonical, yoneda, yoneda.obj
 -/

@@ -39,7 +39,12 @@ lemma sum_le_sum_Ioc
       grind
     _ = ∑ x in r inter s, x + #(r \ s) • (c - #s) := by
       rw [inter_comm]; rw [card_sdiff_comm]
-      rw 
+      rw [Int.card_Ioc]; rw [sub_sub_cancel]; rw [Int.toNat_natCast]
+    _ <= _ := by
+      rw [← sum_inter_add_sum_sdiff r s _]
+      gcongr
+      refine card_nsmul_le_sum _ _ _ fun x mx => ?_
+      rw [mem_sdiff]; rw [mem_Ioc] at mx; exact mx.1.1.le
 
 中文:
 引理 sum_le_sum_Ioc
@@ -54,7 +59,12 @@ lemma sum_le_sum_Ioc
       grind
     _ = ∑ x in r inter s, x + #(r \ s) • (c - #s) := by
       rw [inter_comm]; rw [card_sdiff_comm]
-      rw 
+      rw [Int.card_Ioc]; rw [sub_sub_cancel]; rw [Int.toNat_natCast]
+    _ <= _ := by
+      rw [← sum_inter_add_sum_sdiff r s _]
+      gcongr
+      refine card_nsmul_le_sum _ _ _ fun x mx => ?_
+      rw [mem_sdiff]; rw [mem_Ioc] at mx; exact mx.1.1.le
 
 Depends on / 依赖: Int.card_Ioc, Int.toNat_natCast, card_Ioc, card_nsmul_le_sum, card_sdiff_comm, inter_comm, mem_Ioc, mem_sdiff, sub_sub_cancel, sum_inter_add_sum_sdiff, sum_le_card_nsmul, toNat_natCast
 -/
@@ -89,7 +99,7 @@ lemma sum_le_sum_range
   · intro x mx y my (h : c - x = c - y); lia
   · intro x mx; simp_rw [coe_range, Set.mem_image, Set.mem_Iio]
     rw [mem_coe]; rw [mem_Ioc] at mx
-    use (c - x
+    use (c - x).toNat; grind
 
 中文:
 引理 sum_le_sum_range
@@ -101,7 +111,7 @@ lemma sum_le_sum_range
   · intro x mx y my (h : c - x = c - y); lia
   · intro x mx; simp_rw [coe_range, Set.mem_image, Set.mem_Iio]
     rw [mem_coe]; rw [mem_Ioc] at mx
-    use (c - x
+    use (c - x).toNat; grind
 
 Depends on / 依赖: Set.mem_Iio, Set.mem_image, coe_range, convert, mem_Iio, mem_Ioc, mem_coe, mem_image, mem_range, simp_rw, sum_le_sum_Ioc, sum_nbij
 -/
@@ -128,7 +138,11 @@ lemma sum_Ico_le_sum
       grw [← sum_inter_add_sum_sdiff r s, ← sum_le_card_nsmul _ _ _ fun x mx => ?_]
       rw [mem_sdiff]; rw [mem_Ico] at mx; exact mx.1.2.le
     _ = ∑ x in s inter r, x + #(s \ r) • (c + #s) := by
-      rw 
+      rw [inter_comm]; rw [card_sdiff_comm]
+      rw [Int.card_Ico]; rw [add_sub_cancel_left]; rw [Int.toNat_natCast]
+    _ <= _ := by
+      grw [← sum_inter_add_sum_sdiff s r, card_nsmul_le_sum _ _ _ fun x mx => ?_]
+      grind
 
 中文:
 引理 sum_Ico_le_sum
@@ -140,7 +154,11 @@ lemma sum_Ico_le_sum
       grw [← sum_inter_add_sum_sdiff r s, ← sum_le_card_nsmul _ _ _ fun x mx => ?_]
       rw [mem_sdiff]; rw [mem_Ico] at mx; exact mx.1.2.le
     _ = ∑ x in s inter r, x + #(s \ r) • (c + #s) := by
-      rw 
+      rw [inter_comm]; rw [card_sdiff_comm]
+      rw [Int.card_Ico]; rw [add_sub_cancel_left]; rw [Int.toNat_natCast]
+    _ <= _ := by
+      grw [← sum_inter_add_sum_sdiff s r, card_nsmul_le_sum _ _ _ fun x mx => ?_]
+      grind
 
 Depends on / 依赖: Int.card_Ico, Int.toNat_natCast, add_sub_cancel_left, card_Ico, card_nsmul_le_sum, card_sdiff_comm, inter_comm, mem_Ico, mem_sdiff, sum_inter_add_sum_sdiff, sum_le_card_nsmul, toNat_natCast
 -/
@@ -171,7 +189,7 @@ lemma sum_range_le_sum
   · intro x mx y my (h : c + x = c + y); lia
   · intro x mx; simp_rw [coe_range, Set.mem_image, Set.mem_Iio]
     rw [mem_coe]; rw [mem_Ico] at mx
-    use (x - c
+    use (x - c).toNat; grind
 
 中文:
 引理 sum_range_le_sum
@@ -183,7 +201,7 @@ lemma sum_range_le_sum
   · intro x mx y my (h : c + x = c + y); lia
   · intro x mx; simp_rw [coe_range, Set.mem_image, Set.mem_Iio]
     rw [mem_coe]; rw [mem_Ico] at mx
-    use (x - c
+    use (x - c).toNat; grind
 
 Depends on / 依赖: Set.mem_Iio, Set.mem_image, coe_range, convert, mem_Ico, mem_Iio, mem_coe, mem_image, mem_range, simp_rw, sum_Ico_le_sum, sum_nbij
 -/

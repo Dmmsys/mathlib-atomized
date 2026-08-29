@@ -68,7 +68,9 @@ lemma rot_coprime
   have hCw : IsUnit (C w) := hw.isUnit_C
   rw [← IsCoprime.pow_iff hp.bot_lt hq.bot_lt]; rw [← isCoprime_mul_units_left hCu hCv] at hab
   rw [add_eq_zero_iff_neg_eq] at heq
-  rw [← IsCoprime.pow_iff hq.bot_lt hr.bot
+  rw [← IsCoprime.pow_iff hq.bot_lt hr.bot_lt]; rw [← isCoprime_mul_units_left hCv hCw]; rw [← heq]; rw [IsCoprime.neg_right_iff]
+  convert! IsCoprime.add_mul_left_right hab.symm 1 using 2
+  rw [mul_one]
 
 中文:
 引理 rot_coprime
@@ -78,7 +80,9 @@ lemma rot_coprime
   have hCw : IsUnit (C w) := hw.isUnit_C
   rw [← IsCoprime.pow_iff hp.bot_lt hq.bot_lt]; rw [← isCoprime_mul_units_left hCu hCv] at hab
   rw [add_eq_zero_iff_neg_eq] at heq
-  rw [← IsCoprime.pow_iff hq.bot_lt hr.bot
+  rw [← IsCoprime.pow_iff hq.bot_lt hr.bot_lt]; rw [← isCoprime_mul_units_left hCv hCw]; rw [← heq]; rw [IsCoprime.neg_right_iff]
+  convert! IsCoprime.add_mul_left_right hab.symm 1 using 2
+  rw [mul_one]
 -/
 private lemma rot_coprime
     {p q r : Nat} {a b c : k[X]} {u v w : k}
@@ -107,7 +111,8 @@ lemma ineq_pqr_contradiction
     _ <= (a + b + c) * (q * r) + (a + b + c) * (r * p) + (a + b + c) * (p * q) := by
       rw [Nat.succ_le_iff]
       gcongr
- 
+    _ = (q * r + r * p + p * q) * (a + b + c) := by ring
+    _ <= _ := by gcongr
 
 中文:
 引理 ineq_pqr_contradiction
@@ -119,7 +124,8 @@ lemma ineq_pqr_contradiction
     _ <= (a + b + c) * (q * r) + (a + b + c) * (r * p) + (a + b + c) * (p * q) := by
       rw [Nat.succ_le_iff]
       gcongr
- 
+    _ = (q * r + r * p + p * q) * (a + b + c) := by ring
+    _ <= _ := by gcongr
 -/
 private lemma ineq_pqr_contradiction {p q r a b c : Nat}
     (hp : p != 0) (hq : q != 0) (hr : r != 0)
@@ -149,7 +155,46 @@ theorem Polynomial.flt_catalan_deriv
   have hCv := C_ne_zero.mpr hv
   have hCw := C_ne_zero.mpr hw
   have hap := pow_ne_zero p ha
-  hav
+  have hbq := pow_ne_zero q hb
+  have hcr := pow_ne_zero r hc
+  have habp : IsCoprime (C u * a ^ p) (C v * b ^ q) := by
+    rw [isCoprime_mul_units_left hu.isUnit_C hv.isUnit_C]; exact hab.pow
+  have hbcp : IsCoprime (C v * b ^ q) (C w * c ^ r) := by
+    rw [isCoprime_mul_units_left hv.isUnit_C hw.isUnit_C]; exact hbc.pow
+  have hcap : IsCoprime (C w * c ^ r) (C u * a ^ p) := by
+    rw [isCoprime_mul_units_left hw.isUnit_C hu.isUnit_C]; exact hca.pow
+  have habcp := hcap.symm.mul_left hbcp
+  -- Use Mason-Stothers theorem
+  classical
+  rcases Polynomial.abc
+      (mul_ne_zero hCu hap) (mul_ne_zero hCv hbq) (mul_ne_zero hCw hcr)
+      habp heq with nd_lt | dr0
+  · simp_rw [radical_mul habcp.isRelPrime, radical_mul habp.isRelPrime,
+      radical_mul_of_isUnit_left hu.isUnit_C,
+      radical_mul_of_isUnit_left hv.isUnit_C,
+      radical_mul_of_isUnit_left hw.isUnit_C,
+      radical_pow a hp, radical_pow b hq, radical_pow c hr,
+      natDegree_mul hCu hap,
+      natDegree_mul hCv hbq,
+      natDegree_mul hCw hcr,
+      natDegree_C, natDegree_pow, zero_add,
+      ← radical_mul hab.isRelPrime,
+      ← radical_mul (hca.symm.mul_left hbc).isRelPrime] at nd_lt
+    obtain ⟨hpa', hqb', hrc'⟩ := nd_lt
+    have hpa := hpa'.trans natDegree_radical_le
+    have hqb := hqb'.trans natDegree_radical_le
+    have hrc := hrc'.trans natDegree_radical_le
+    rw [natDegree_mul (mul_ne_zero ha hb) hc]; rw [natDegree_mul ha hb]; rw [Nat.add_one_le_iff] at hpa hqb hrc
+    exfalso
+    exact (ineq_pqr_contradiction hp hq hr hineq hpa hqb hrc)
+  · rw [derivative_C_mul, derivative_C_mul, derivative_C_mul,
+      mul_eq_zero_iff_left (C_ne_zero.mpr hu),
+      mul_eq_zero_iff_left (C_ne_zero.mpr hv),
+      mul_eq_zero_iff_left (C_ne_zero.mpr hw),
+      derivative_pow_eq_zero chp,
+      derivative_pow_eq_zero chq,
+      derivative_pow_eq_zero chr] at dr0
+    exact dr0
 
 中文:
 定理 多项式.flt_catalan_deriv
@@ -161,7 +206,46 @@ theorem Polynomial.flt_catalan_deriv
   have hCv := C_ne_zero.mpr hv
   have hCw := C_ne_zero.mpr hw
   have hap := pow_ne_zero p ha
-  hav
+  have hbq := pow_ne_zero q hb
+  have hcr := pow_ne_zero r hc
+  have habp : IsCoprime (C u * a ^ p) (C v * b ^ q) := by
+    rw [isCoprime_mul_units_left hu.isUnit_C hv.isUnit_C]; exact hab.pow
+  have hbcp : IsCoprime (C v * b ^ q) (C w * c ^ r) := by
+    rw [isCoprime_mul_units_left hv.isUnit_C hw.isUnit_C]; exact hbc.pow
+  have hcap : IsCoprime (C w * c ^ r) (C u * a ^ p) := by
+    rw [isCoprime_mul_units_left hw.isUnit_C hu.isUnit_C]; exact hca.pow
+  have habcp := hcap.symm.mul_left hbcp
+  -- Use Mason-Stothers theorem
+  classical
+  rcases Polynomial.abc
+      (mul_ne_zero hCu hap) (mul_ne_zero hCv hbq) (mul_ne_zero hCw hcr)
+      habp heq with nd_lt | dr0
+  · simp_rw [radical_mul habcp.isRelPrime, radical_mul habp.isRelPrime,
+      radical_mul_of_isUnit_left hu.isUnit_C,
+      radical_mul_of_isUnit_left hv.isUnit_C,
+      radical_mul_of_isUnit_left hw.isUnit_C,
+      radical_pow a hp, radical_pow b hq, radical_pow c hr,
+      natDegree_mul hCu hap,
+      natDegree_mul hCv hbq,
+      natDegree_mul hCw hcr,
+      natDegree_C, natDegree_pow, zero_add,
+      ← radical_mul hab.isRelPrime,
+      ← radical_mul (hca.symm.mul_left hbc).isRelPrime] at nd_lt
+    obtain ⟨hpa', hqb', hrc'⟩ := nd_lt
+    have hpa := hpa'.trans natDegree_radical_le
+    have hqb := hqb'.trans natDegree_radical_le
+    have hrc := hrc'.trans natDegree_radical_le
+    rw [natDegree_mul (mul_ne_zero ha hb) hc]; rw [natDegree_mul ha hb]; rw [Nat.add_one_le_iff] at hpa hqb hrc
+    exfalso
+    exact (ineq_pqr_contradiction hp hq hr hineq hpa hqb hrc)
+  · rw [derivative_C_mul, derivative_C_mul, derivative_C_mul,
+      mul_eq_zero_iff_left (C_ne_zero.mpr hu),
+      mul_eq_zero_iff_left (C_ne_zero.mpr hv),
+      mul_eq_zero_iff_left (C_ne_zero.mpr hw),
+      derivative_pow_eq_zero chp,
+      derivative_pow_eq_zero chq,
+      derivative_pow_eq_zero chr] at dr0
+    exact dr0
 -/
 private theorem Polynomial.flt_catalan_deriv
     {p q r : Nat} (hp : p != 0) (hq : q != 0) (hr : r != 0)
@@ -272,7 +356,39 @@ theorem Polynomial.flt_catalan_aux
       apply charZero_of_inj_zero
       intro n
       rw [ringChar.spec]; rw [ch0]
-      e
+      exact zero_dvd_iff.mp
+    rw [eq_C_of_derivative_eq_zero da]
+    exact natDegree_C _
+  -- characteristic p > 0
+  · generalize eq_d : a.natDegree = d
+    -- set up infinite descent
+    -- strong induct on `d := a.natDegree`
+    induction d
+      using Nat.case_strong_induction_on
+      generalizing a b c ha hb hc hab heq with
+    | hz => rfl
+    | hi d ih_d => -- have derivatives of `a, b, c` zero
+      obtain ⟨ad, bd, cd⟩ := flt_catalan_deriv
+        hp hq hr hineq chp chq chr ha hb hc hab hu hv hw heq
+      -- find contracts `ca, cb, cc` so that `a(k) = ca(k^ch)`
+      obtain ⟨ca, ca_nz, eq_a, eq_deg_a⟩ := find_contract ha ad chn0
+      obtain ⟨cb, cb_nz, eq_b, eq_deg_b⟩ := find_contract hb bd chn0
+      obtain ⟨cc, cc_nz, eq_c, eq_deg_c⟩ := find_contract hc cd chn0
+      set ch := ringChar k
+      suffices hca : ca.natDegree = 0 by
+        rw [← eq_d]; rw [eq_deg_a]; rw [hca]; rw [zero_mul]
+      by_contra hnca; apply hnca
+      apply ih_d _ _ _ ca_nz cb_nz cc_nz <;> clear ih_d <;> try rfl
+      · apply (isCoprime_expand chn0).mp
+        rwa [← eq_a, ← eq_b]
+      · have _ : ch != 1 := CharP.ringChar_ne_one
+        have hch2 : 2 <= ch := by lia
+        rw [← add_le_add_iff_right 1]; rw [← eq_d]; rw [eq_deg_a]
+        grw [← hch2]
+        lia
+      · rw [eq_a, eq_b, eq_c, ← expand_C ch u, ← expand_C ch v, ← expand_C ch w] at heq
+        simp_rw [← map_pow, ← map_mul, ← map_add] at heq
+        rwa [Polynomial.expand_eq_zero (zero_lt_iff.mpr chn0)] at heq
 
 中文:
 定理 多项式.flt_catalan_aux
@@ -285,7 +401,39 @@ theorem Polynomial.flt_catalan_aux
       apply charZero_of_inj_zero
       intro n
       rw [ringChar.spec]; rw [ch0]
-      e
+      exact zero_dvd_iff.mp
+    rw [eq_C_of_derivative_eq_zero da]
+    exact natDegree_C _
+  -- characteristic p > 0
+  · generalize eq_d : a.natDegree = d
+    -- set up infinite descent
+    -- strong induct on `d := a.natDegree`
+    induction d
+      using Nat.case_strong_induction_on
+      generalizing a b c ha hb hc hab heq with
+    | hz => rfl
+    | hi d ih_d => -- have derivatives of `a, b, c` zero
+      obtain ⟨ad, bd, cd⟩ := flt_catalan_deriv
+        hp hq hr hineq chp chq chr ha hb hc hab hu hv hw heq
+      -- find contracts `ca, cb, cc` so that `a(k) = ca(k^ch)`
+      obtain ⟨ca, ca_nz, eq_a, eq_deg_a⟩ := find_contract ha ad chn0
+      obtain ⟨cb, cb_nz, eq_b, eq_deg_b⟩ := find_contract hb bd chn0
+      obtain ⟨cc, cc_nz, eq_c, eq_deg_c⟩ := find_contract hc cd chn0
+      set ch := ringChar k
+      suffices hca : ca.natDegree = 0 by
+        rw [← eq_d]; rw [eq_deg_a]; rw [hca]; rw [zero_mul]
+      by_contra hnca; apply hnca
+      apply ih_d _ _ _ ca_nz cb_nz cc_nz <;> clear ih_d <;> try rfl
+      · apply (isCoprime_expand chn0).mp
+        rwa [← eq_a, ← eq_b]
+      · have _ : ch != 1 := CharP.ringChar_ne_one
+        have hch2 : 2 <= ch := by lia
+        rw [← add_le_add_iff_right 1]; rw [← eq_d]; rw [eq_deg_a]
+        grw [← hch2]
+        lia
+      · rw [eq_a, eq_b, eq_c, ← expand_C ch u, ← expand_C ch v, ← expand_C ch w] at heq
+        simp_rw [← map_pow, ← map_mul, ← map_add] at heq
+        rwa [Polynomial.expand_eq_zero (zero_lt_iff.mpr chn0)] at heq
 -/
 private theorem Polynomial.flt_catalan_aux
     {p q r : Nat} {a b c : k[X]} {u v w : k}
@@ -350,7 +498,15 @@ theorem Polynomial.flt_catalan
   have heq' : C v * b ^ q + C w * c ^ r + C u * a ^ p = 0 := by
     rwa [add_rotate] at heq
   have hca : IsCoprime c a := by
-    apply rot_coprime heq' hbc <;>
+    apply rot_coprime heq' hbc <;> assumption
+  refine ⟨?_, ?_, ?_⟩
+  · apply flt_catalan_aux heq <;> assumption
+  · rw [add_rotate] at heq hineq
+    rw [mul_rotate] at hineq
+    apply flt_catalan_aux heq <;> assumption
+  · rw [← add_rotate] at heq hineq
+    rw [← mul_rotate] at hineq
+    apply flt_catalan_aux heq <;> assumption
 
 中文:
 定理 多项式.flt_catalan
@@ -361,7 +517,15 @@ theorem Polynomial.flt_catalan
   have heq' : C v * b ^ q + C w * c ^ r + C u * a ^ p = 0 := by
     rwa [add_rotate] at heq
   have hca : IsCoprime c a := by
-    apply rot_coprime heq' hbc <;>
+    apply rot_coprime heq' hbc <;> assumption
+  refine ⟨?_, ?_, ?_⟩
+  · apply flt_catalan_aux heq <;> assumption
+  · rw [add_rotate] at heq hineq
+    rw [mul_rotate] at hineq
+    apply flt_catalan_aux heq <;> assumption
+  · rw [← add_rotate] at heq hineq
+    rw [← mul_rotate] at hineq
+    apply flt_catalan_aux heq <;> assumption
 -/
 theorem Polynomial.flt_catalan
     {p q r : Nat} (hp : p != 0) (hq : q != 0) (hr : r != 0)
@@ -397,7 +561,12 @@ theorem Polynomial.flt
   rw [← sub_eq_zero]; rw [← one_mul (a ^ n)]; rw [← one_mul (b ^ n)]; rw [← one_mul (c ^ n)]; rw [sub_eq_add_neg]; rw [← neg_mul] at heq
   have hone : (1 : k[X]) = C 1 := by rfl
   have hneg_one : (-1 : k[X]) = C (-1) := by simp only [map_neg, map_one]
-  simp_rw [
+  simp_rw [hneg_one, hone] at heq
+  apply flt_catalan hn'.ne' hn'.ne' hn'.ne' _
+    chn chn chn ha hb hc hab one_ne_zero one_ne_zero (neg_ne_zero.mpr one_ne_zero) heq
+  have eq_lhs : n * n + n * n + n * n = 3 * n * n := by ring
+  rw [eq_lhs]; rw [mul_assoc]; rw [mul_assoc]
+  exact Nat.mul_le_mul_right (n * n) hn
 
 中文:
 定理 多项式.flt
@@ -406,7 +575,12 @@ theorem Polynomial.flt
   rw [← sub_eq_zero]; rw [← one_mul (a ^ n)]; rw [← one_mul (b ^ n)]; rw [← one_mul (c ^ n)]; rw [sub_eq_add_neg]; rw [← neg_mul] at heq
   have hone : (1 : k[X]) = C 1 := by rfl
   have hneg_one : (-1 : k[X]) = C (-1) := by simp only [map_neg, map_one]
-  simp_rw [
+  simp_rw [hneg_one, hone] at heq
+  apply flt_catalan hn'.ne' hn'.ne' hn'.ne' _
+    chn chn chn ha hb hc hab one_ne_zero one_ne_zero (neg_ne_zero.mpr one_ne_zero) heq
+  have eq_lhs : n * n + n * n + n * n = 3 * n * n := by ring
+  rw [eq_lhs]; rw [mul_assoc]; rw [mul_assoc]
+  exact Nat.mul_le_mul_right (n * n) hn
 
 Depends on / 依赖: eq_lhs, flt_catalan, hneg_one, map_neg, map_one, neg_mul, neg_ne_zero, neg_ne_zero.mpr, one_mul, one_ne_zero, simp_rw, sub_eq_add_neg, sub_eq_zero
 -/
@@ -441,7 +615,28 @@ theorem fermatLastTheoremWith'_polynomial
   set d := gcd a b
   have hd : d != 0 := gcd_ne_zero_of_left ha
   rw [eq_a]; rw [eq_b]; rw [mul_pow]; rw [mul_pow]; rw [← mul_add] at heq
-  obtain 
+  obtain ⟨c', eq_c⟩ : exists c', c = d * c' :=
+    (IsIntegrallyClosed.pow_dvd_pow_iff (by lia)).mp ⟨_, heq.symm⟩
+  rw [eq_a]; rw [mul_ne_zero_iff] at ha
+  rw [eq_b]; rw [mul_ne_zero_iff] at hb
+  rw [eq_c]; rw [mul_ne_zero_iff] at hc
+  rw [mul_comm] at eq_a eq_b eq_c
+  refine ⟨d, a', b', c', ⟨eq_a, eq_b, eq_c⟩, ?_⟩
+  rw [eq_c]; rw [mul_pow]; rw [mul_comm]; rw [mul_left_inj' (pow_ne_zero n hd)] at heq
+  suffices goal : a'.natDegree = 0 ∧ b'.natDegree = 0 ∧ c'.natDegree = 0 by
+    simp only [natDegree_eq_zero] at goal
+    obtain ⟨⟨ca', ha'⟩, ⟨cb', hb'⟩, ⟨cc', hc'⟩⟩ := goal
+    rw [← ha']; rw [← hb']; rw [← hc']
+    rw [← ha']; rw [C_ne_zero] at ha
+    rw [← hb']; rw [C_ne_zero] at hb
+    rw [← hc']; rw [C_ne_zero] at hc
+    exact ⟨ha.right.isUnit_C, hb.right.isUnit_C, hc.right.isUnit_C⟩
+  apply flt hn chn ha.right hb.right hc.right _ heq
+  convert! isCoprime_div_gcd_div_gcd _
+  · exact EuclideanDomain.eq_div_of_mul_eq_left ha.left eq_a.symm
+  · exact EuclideanDomain.eq_div_of_mul_eq_left ha.left eq_b.symm
+  · rw [eq_b]
+    exact mul_ne_zero hb.right hb.left
 
 中文:
 定理 fermatLastTheoremWith'_polynomial
@@ -455,7 +650,28 @@ theorem fermatLastTheoremWith'_polynomial
   set d := gcd a b
   have hd : d != 0 := gcd_ne_zero_of_left ha
   rw [eq_a]; rw [eq_b]; rw [mul_pow]; rw [mul_pow]; rw [← mul_add] at heq
-  obtain 
+  obtain ⟨c', eq_c⟩ : exists c', c = d * c' :=
+    (IsIntegrallyClosed.pow_dvd_pow_iff (by lia)).mp ⟨_, heq.symm⟩
+  rw [eq_a]; rw [mul_ne_zero_iff] at ha
+  rw [eq_b]; rw [mul_ne_zero_iff] at hb
+  rw [eq_c]; rw [mul_ne_zero_iff] at hc
+  rw [mul_comm] at eq_a eq_b eq_c
+  refine ⟨d, a', b', c', ⟨eq_a, eq_b, eq_c⟩, ?_⟩
+  rw [eq_c]; rw [mul_pow]; rw [mul_comm]; rw [mul_left_inj' (pow_ne_zero n hd)] at heq
+  suffices goal : a'.natDegree = 0 ∧ b'.natDegree = 0 ∧ c'.natDegree = 0 by
+    simp only [natDegree_eq_zero] at goal
+    obtain ⟨⟨ca', ha'⟩, ⟨cb', hb'⟩, ⟨cc', hc'⟩⟩ := goal
+    rw [← ha']; rw [← hb']; rw [← hc']
+    rw [← ha']; rw [C_ne_zero] at ha
+    rw [← hb']; rw [C_ne_zero] at hb
+    rw [← hc']; rw [C_ne_zero] at hc
+    exact ⟨ha.right.isUnit_C, hb.right.isUnit_C, hc.right.isUnit_C⟩
+  apply flt hn chn ha.right hb.right hc.right _ heq
+  convert! isCoprime_div_gcd_div_gcd _
+  · exact EuclideanDomain.eq_div_of_mul_eq_left ha.left eq_a.symm
+  · exact EuclideanDomain.eq_div_of_mul_eq_left ha.left eq_b.symm
+  · rw [eq_b]
+    exact mul_ne_zero hb.right hb.left
 -/
 theorem fermatLastTheoremWith'_polynomial {n : Nat} (hn : 3 <= n) (chn : (n : k) != 0) :
     FermatLastTheoremWith' k[X] n := by

@@ -370,7 +370,9 @@ lemma addSubmonoid_smul_sup
     · rintro x (hx | hx)
       exacts [le_sup_left (a := M • N) (smul_mem_smul hm hx),
         le_sup_right (a := M • N) (smul_mem_smul hm hx)]
-    · appl
+    · apply (smul_zero (A := A) m).symm ▸ (M • N ⊔ M • P).zero_mem
+    · intro _ _ _ _ h1 h2; rw [smul_add]; exact add_mem h1 h2)
+  (sup_le (smul_le_smul_right le_sup_left) <| smul_le_smul_right le_sup_right)
 
 中文:
 引理 addSubmonoid_smul_sup
@@ -380,7 +382,9 @@ lemma addSubmonoid_smul_sup
     · rintro x (hx | hx)
       exacts [le_sup_left (a := M • N) (smul_mem_smul hm hx),
         le_sup_right (a := M • N) (smul_mem_smul hm hx)]
-    · appl
+    · apply (smul_zero (A := A) m).symm ▸ (M • N ⊔ M • P).zero_mem
+    · intro _ _ _ _ h1 h2; rw [smul_add]; exact add_mem h1 h2)
+  (sup_le (smul_le_smul_right le_sup_left) <| smul_le_smul_right le_sup_right)
 
 Depends on / 依赖: add_mem, closure_induction, exacts, le_antisymm, le_sup_left, le_sup_right, motive, smul_add, smul_le, smul_le.mpr, smul_le_smul_right, smul_mem_smul, smul_zero, sup_eq_closure, sup_le, zero_mem
 -/
@@ -527,7 +531,11 @@ lemma closure_mul_closure
     refine (closure_le.2 fun a' ha' => ?_) ha
     change b in (closure (S * T)).comap (AddMonoidHom.mulLeft a')
     refine (closure_le.2 fun b' hb' => ?_) hb
-    chang
+    change a' * b' in closure (S * T)
+    exact subset_closure (Set.mul_mem_mul ha' hb')
+  · rw [closure_le]
+    rintro _ ⟨a, ha, b, hb, rfl⟩
+    exact mul_mem_mul (subset_closure ha) (subset_closure hb)
 
 中文:
 引理 closure_mul_closure
@@ -540,7 +548,11 @@ lemma closure_mul_closure
     refine (closure_le.2 fun a' ha' => ?_) ha
     change b in (closure (S * T)).comap (AddMonoidHom.mulLeft a')
     refine (closure_le.2 fun b' hb' => ?_) hb
-    chang
+    change a' * b' in closure (S * T)
+    exact subset_closure (Set.mul_mem_mul ha' hb')
+  · rw [closure_le]
+    rintro _ ⟨a, ha, b, hb, rfl⟩
+    exact mul_mem_mul (subset_closure ha) (subset_closure hb)
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulLeft, AddMonoidHom.mulRight_apply, AddSubmonoid, AddSubmonoid.mem_comap, Set.mul_mem_mul, closure, closure_le, le_antisymm, mem_comap, mulLeft, mulRight_apply, mul_le, mul_mem_mul, subset_closure
 -/
@@ -833,7 +845,13 @@ definition hasDistribNeg
     · exact mul_mem_mul hm hn
     · exact mul_mem_mul (neg_mem_neg.2 hm) hn
   mul_neg x y := by
-    refine le_anti
+    refine le_antisymm (mul_le.2 fun m hm n hn => ?_)
+      ((AddSubmonoid.neg_le _ _).2 <| mul_le.2 fun m hm n hn => ?_) <;>
+        simp only [AddSubmonoid.mem_neg, ← mul_neg] at *
+    · exact mul_mem_mul hm hn
+    · exact mul_mem_mul hm (neg_mem_neg.2 hn)
+
+scoped[Pointwise] attribute [instance] AddSubmonoid.hasDistribNeg
 
 中文:
 定义 hasDistribNeg
@@ -845,7 +863,13 @@ definition hasDistribNeg
     · exact mul_mem_mul hm hn
     · exact mul_mem_mul (neg_mem_neg.2 hm) hn
   mul_neg x y := by
-    refine le_anti
+    refine le_antisymm (mul_le.2 fun m hm n hn => ?_)
+      ((AddSubmonoid.neg_le _ _).2 <| mul_le.2 fun m hm n hn => ?_) <;>
+        simp only [AddSubmonoid.mem_neg, ← mul_neg] at *
+    · exact mul_mem_mul hm hn
+    · exact mul_mem_mul hm (neg_mem_neg.2 hn)
+
+scoped[Pointwise] attribute [instance] AddSubmonoid.hasDistribNeg
 -/
 protected def hasDistribNeg : HasDistribNeg (AddSubmonoid R) where
   neg_mul x y := by
@@ -913,7 +937,10 @@ definition semigroup
         (fun m hm n hn => mul_assoc m n p ▸ mul_mem_mul hm <| mul_mem_mul hn hp)
         fun x y => (add_mul x y p).symm ▸ add_mem)
       (mul_le.2 fun m hm _np hnp => AddSubmonoid.mul_induction_on hnp
-        (fun n h
+        (fun n hn p hp => mul_assoc m n p ▸ mul_mem_mul (mul_mem_mul hm hn) hp)
+        fun x y => (mul_add m x y) ▸ add_mem)
+
+scoped[Pointwise] attribute [instance] AddSubmonoid.semigroup
 
 中文:
 定义 semigroup
@@ -923,7 +950,10 @@ definition semigroup
         (fun m hm n hn => mul_assoc m n p ▸ mul_mem_mul hm <| mul_mem_mul hn hp)
         fun x y => (add_mul x y p).symm ▸ add_mem)
       (mul_le.2 fun m hm _np hnp => AddSubmonoid.mul_induction_on hnp
-        (fun n h
+        (fun n hn p hp => mul_assoc m n p ▸ mul_mem_mul (mul_mem_mul hm hn) hp)
+        fun x y => (mul_add m x y) ▸ add_mem)
+
+scoped[Pointwise] attribute [instance] AddSubmonoid.semigroup
 -/
 protected def semigroup : Semigroup (AddSubmonoid R) where
   mul_assoc _M _N _P :=

@@ -355,7 +355,7 @@ definition skeletonEquivalence
     (fun X => InducedCategory.isoMk (Nonempty.some <| Quotient.mk_out X.out).symm)
     (fun f => InducedCategory.hom_ext (Iso.inv_hom_id_assoc _ _).symm)
   counitIso := NatIso.ofComponents fromSkeletonToSkeletonIso
-  fu
+  functor_unitIso_comp _ := Iso.inv_hom_id _
 
 中文:
 定义 skeletonEquivalence
@@ -366,7 +366,7 @@ definition skeletonEquivalence
     (fun X => InducedCategory.isoMk (Nonempty.some <| Quotient.mk_out X.out).symm)
     (fun f => InducedCategory.hom_ext (Iso.inv_hom_id_assoc _ _).symm)
   counitIso := NatIso.ofComponents fromSkeletonToSkeletonIso
-  fu
+  functor_unitIso_comp _ := Iso.inv_hom_id _
 -/
 @[simps] noncomputable def skeletonEquivalence : Skeleton C ≌ C where
   functor := fromSkeleton C
@@ -789,7 +789,11 @@ instance ThinSkeleton.preorder
           exact
             propext
               ⟨Nonempty.map fun f => i₁.inv ≫ f ≫ i₂.hom,
-                Nonempty.map fun f => i₁.hom ≫ f ≫ i₂.i
+                Nonempty.map fun f => i₁.hom ≫ f ≫ i₂.inv⟩)
+  le_refl := by
+    refine Quotient.ind fun a => ?_
+    exact ⟨𝟙 _⟩
+  le_trans a b c := Quotient.inductionOn₃ a b c fun _ _ _ => Nonempty.map2 (· ≫ ·)
 
 中文:
 实例 ThinSkeleton.preorder
@@ -801,7 +805,11 @@ instance ThinSkeleton.preorder
           exact
             propext
               ⟨Nonempty.map fun f => i₁.inv ≫ f ≫ i₂.hom,
-                Nonempty.map fun f => i₁.hom ≫ f ≫ i₂.i
+                Nonempty.map fun f => i₁.hom ≫ f ≫ i₂.inv⟩)
+  le_refl := by
+    refine Quotient.ind fun a => ?_
+    exact ⟨𝟙 _⟩
+  le_trans a b c := Quotient.inductionOn₃ a b c fun _ _ _ => Nonempty.map2 (· ≫ ·)
 
 Depends on / 依赖: Nonempty, Nonempty.map, Nonempty.map2, Quotient, Quotient.ind, Quotient.inductionOn, Quotient.lift, isIsomorphicSetoid, le_refl, le_trans, propext
 -/
@@ -986,7 +994,7 @@ definition map₂Functor
       map := fun {y₁} {y₂} => @Quotient.recOnSubsingleton C (isIsomorphicSetoid C)
         (fun x => (y₁ ⟶ y₂) -> (map₂ObjMap F x y₁ ⟶ map₂ObjMap F x y₂)) _ x fun X
           => Quotient.recOnSubsingleton₂ y₁ y₂ fun _ _ hY =>
-            homOfLE (hY.le
+            homOfLE (hY.le.elim fun g => ⟨(F.obj X).map g⟩) }
 
 中文:
 定义 map₂Functor
@@ -996,7 +1004,7 @@ definition map₂Functor
       map := fun {y₁} {y₂} => @Quotient.recOnSubsingleton C (isIsomorphicSetoid C)
         (fun x => (y₁ ⟶ y₂) -> (map₂ObjMap F x y₁ ⟶ map₂ObjMap F x y₂)) _ x fun X
           => Quotient.recOnSubsingleton₂ y₁ y₂ fun _ _ hY =>
-            homOfLE (hY.le
+            homOfLE (hY.le.elim fun g => ⟨(F.obj X).map g⟩) }
 
 Depends on / 依赖: F.obj, Quotient, Quotient.recOnSubsingleton, hY.le.elim, homOfLE, isIsomorphicSetoid, recOnSubsingleton
 -/
@@ -1018,7 +1026,7 @@ definition map₂NatTrans
   @Quotient.recOnSubsingleton₂ C C (isIsomorphicSetoid C) (isIsomorphicSetoid C)
     (fun x x' : ThinSkeleton C => (x ⟶ x') -> (map₂Functor F x ⟶ map₂Functor F x')) _ x₁ x₂
     (fun X₁ X₂ f => { app := fun y =>
-      Quotient.recOnSubsingleton y fun Y => homOfLE (f.le.elim fun f' =>
+      Quotient.recOnSubsingleton y fun Y => homOfLE (f.le.elim fun f' => ⟨(F.map f').app Y⟩) })
 
 中文:
 定义 map₂自然数Trans
@@ -1027,7 +1035,7 @@ definition map₂NatTrans
   @Quotient.recOnSubsingleton₂ C C (isIsomorphicSetoid C) (isIsomorphicSetoid C)
     (fun x x' : ThinSkeleton C => (x ⟶ x') -> (map₂Functor F x ⟶ map₂Functor F x')) _ x₁ x₂
     (fun X₁ X₂ f => { app := fun y =>
-      Quotient.recOnSubsingleton y fun Y => homOfLE (f.le.elim fun f' =>
+      Quotient.recOnSubsingleton y fun Y => homOfLE (f.le.elim fun f' => ⟨(F.map f').app Y⟩) })
 -/
 def map₂NatTrans (F : C ⥤ D ⥤ E) : {x₁ x₂ : ThinSkeleton C} -> (x₁ ⟶ x₂) ->
     (map₂Functor F x₁ ⟶ map₂Functor F x₂) := fun {x₁} {x₂} =>
@@ -1402,7 +1410,7 @@ definition lowerAdjunction
   counit :=
     { app := fun X => by
         letI := isIsomorphicSetoid D
-        exact Qu
+        exact Quotient.recOnSubsingleton X fun x => homOfLE ⟨h.counit.app x⟩ }
 
 中文:
 定义 lowerAdjunction
@@ -1414,7 +1422,7 @@ definition lowerAdjunction
   counit :=
     { app := fun X => by
         letI := isIsomorphicSetoid D
-        exact Qu
+        exact Quotient.recOnSubsingleton X fun x => homOfLE ⟨h.counit.app x⟩ }
 
 Depends on / 依赖: Quotient, Quotient.recOnSubsingleton, h.unit.app, homOfLE, isIsomorphicSetoid, recOnSubsingleton
 -/

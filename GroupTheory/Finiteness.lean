@@ -124,7 +124,7 @@ theorem Submonoid.fg_iff_add_fg
     fun h =>
     let ⟨T, hT, hf⟩ := (AddSubmonoid.fg_iff _).1 h
     (Submonoid.fg_iff _).mpr
-      ⟨Additive.ofMul ⁻¹' T, by s
+      ⟨Additive.ofMul ⁻¹' T, by simp [← AddSubmonoid.toSubmonoid'_closure, hT], hf⟩⟩
 
 中文:
 定理 子幺半群.fg_iff_add_fg
@@ -137,7 +137,7 @@ theorem Submonoid.fg_iff_add_fg
     fun h =>
     let ⟨T, hT, hf⟩ := (AddSubmonoid.fg_iff _).1 h
     (Submonoid.fg_iff _).mpr
-      ⟨Additive.ofMul ⁻¹' T, by s
+      ⟨Additive.ofMul ⁻¹' T, by simp [← AddSubmonoid.toSubmonoid'_closure, hT], hf⟩⟩
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.fg_iff, AddSubmonoid.toSubmonoid, Additive, Additive.ofMul, Additive.toMul, Submonoid, Submonoid.fg_iff, Submonoid.toAddSubmonoid_closure, _closure, fg_iff, toAddSubmonoid_closure, toSubmonoid
 -/
@@ -422,7 +422,7 @@ theorem Submonoid.FG.pi
   choose s hs using hP
   refine ⟨Finset.univ.biUnion fun i => (s i).image (MonoidHom.mulSingle M i), ?_⟩
   simp_rw [Finset.coe_biUnion, Finset.coe_univ, Set.biUnion_univ, closure_iUnion, Finset.coe_image,
-    ← MonoidHom.map_mclosure, hs, iSup_map_mulSingl
+    ← MonoidHom.map_mclosure, hs, iSup_map_mulSingle]
 
 中文:
 定理 子幺半群.FG.pi
@@ -434,7 +434,7 @@ theorem Submonoid.FG.pi
   choose s hs using hP
   refine ⟨Finset.univ.biUnion fun i => (s i).image (MonoidHom.mulSingle M i), ?_⟩
   simp_rw [Finset.coe_biUnion, Finset.coe_univ, Set.biUnion_univ, closure_iUnion, Finset.coe_image,
-    ← MonoidHom.map_mclosure, hs, iSup_map_mulSingl
+    ← MonoidHom.map_mclosure, hs, iSup_map_mulSingle]
 
 Depends on / 依赖: Finset, Finset.coe_biUnion, Finset.coe_image, Finset.coe_univ, Finset.univ.biUnion, Fintype, Fintype.ofFinite, MonoidHom, MonoidHom.map_mclosure, MonoidHom.mulSingle, Set.biUnion_univ, biUnion, biUnion_univ, classical, closure_iUnion, coe_biUnion, coe_image, coe_univ, iSup_map_mulSingle, map_mclosure
 -/
@@ -708,7 +708,10 @@ theorem Submonoid.FG.map_injective
   apply Submonoid.map_injective_of_injective he
   rw [← hs]; rw [MonoidHom.map_mclosure e]; rw [Finset.coe_preimage]
   congr
-  rw [Set.image_preimage_eq_iff]; rw [← MonoidHom.coe_mrange e]; rw [← Submonoid.closure_le]; rw [hs]; rw [MonoidHom.mrang
+  rw [Set.image_preimage_eq_iff]; rw [← MonoidHom.coe_mrange e]; rw [← Submonoid.closure_le]; rw [hs]; rw [MonoidHom.mrange_eq_map e]
+  exact Submonoid.monotone_map le_top
+
+@[to_additive (attr := simp)]
 
 中文:
 定理 子幺半群.FG.map_injective
@@ -719,7 +722,10 @@ theorem Submonoid.FG.map_injective
   apply Submonoid.map_injective_of_injective he
   rw [← hs]; rw [MonoidHom.map_mclosure e]; rw [Finset.coe_preimage]
   congr
-  rw [Set.image_preimage_eq_iff]; rw [← MonoidHom.coe_mrange e]; rw [← Submonoid.closure_le]; rw [hs]; rw [MonoidHom.mrang
+  rw [Set.image_preimage_eq_iff]; rw [← MonoidHom.coe_mrange e]; rw [← Submonoid.closure_le]; rw [hs]; rw [MonoidHom.mrange_eq_map e]
+  exact Submonoid.monotone_map le_top
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: Finset, Finset.coe_preimage, MonoidHom, MonoidHom.coe_mrange, MonoidHom.map_mclosure, MonoidHom.mrange_eq_map, Set.image_preimage_eq_iff, Submonoid, Submonoid.closure_le, Submonoid.map_injective_of_injective, Submonoid.monotone_map, closure_le, coe_mrange, coe_preimage, he.injOn, image_preimage_eq_iff, le_top, map_injective_of_injective, map_mclosure, monotone_map
 -/
@@ -840,7 +846,7 @@ theorem Monoid.fg_iff_exists_freeMonoid_hom_surjective
   · rwa [← MonoidHom.mrange_eq_top, ← Submonoid.closure_eq_mrange]
   · rintro ⟨S, hfin : Finite S, φ, hφ⟩
     refine fg_iff.mpr ⟨φ '' Set.range FreeMonoid.of, ?_, Set.toFinite _⟩
-    simp [← MonoidHom.map_mclosure,
+    simp [← MonoidHom.map_mclosure, hφ, FreeMonoid.closure_range_of, ← MonoidHom.mrange_eq_map]
 
 中文:
 定理 幺半群.fg_iff_存在_freeMonoid_hom_surjective
@@ -849,7 +855,7 @@ theorem Monoid.fg_iff_exists_freeMonoid_hom_surjective
   · rwa [← MonoidHom.mrange_eq_top, ← Submonoid.closure_eq_mrange]
   · rintro ⟨S, hfin : Finite S, φ, hφ⟩
     refine fg_iff.mpr ⟨φ '' Set.range FreeMonoid.of, ?_, Set.toFinite _⟩
-    simp [← MonoidHom.map_mclosure,
+    simp [← MonoidHom.map_mclosure, hφ, FreeMonoid.closure_range_of, ← MonoidHom.mrange_eq_map]
 
 Depends on / 依赖: Finite, FreeMonoid, FreeMonoid.closure_range_of, FreeMonoid.lift, FreeMonoid.of, MonoidHom, MonoidHom.map_mclosure, MonoidHom.mrange_eq_map, MonoidHom.mrange_eq_top, S.finite_toSet, Set.range, Set.toFinite, Submonoid, Submonoid.closure_eq_mrange, Subtype, Subtype.val, closure_eq_mrange, closure_range_of, fg_iff, fg_iff.mpr
 -/
@@ -878,7 +884,9 @@ theorem Monoid.fg_iff_exists_freeGroup_hom_surjective_finite
     exact ⟨Fin n, inferInstance, φ.comp (FreeMonoid.freeMonoidCongr e).symm,
       hφ.comp (FreeMonoid.freeMonoidCongr e).symm.surjective⟩
   · intro ⟨α, _, φ, hφ⟩
- 
+    exact Monoid.fg_of_surjective _ hφ
+
+@[to_additive]
 
 中文:
 定理 幺半群.fg_iff_存在_freeGroup_hom_surjective_finite
@@ -890,7 +898,9 @@ theorem Monoid.fg_iff_exists_freeGroup_hom_surjective_finite
     exact ⟨Fin n, inferInstance, φ.comp (FreeMonoid.freeMonoidCongr e).symm,
       hφ.comp (FreeMonoid.freeMonoidCongr e).symm.surjective⟩
   · intro ⟨α, _, φ, hφ⟩
- 
+    exact Monoid.fg_of_surjective _ hφ
+
+@[to_additive]
 
 Depends on / 依赖: FreeMonoid, FreeMonoid.freeMonoidCongr, Monoid, Monoid.fg_of_surjective, exists_equiv_fin, fg_iff_exists_freeMonoid_hom_surjective, fg_of_surjective, freeMonoidCongr, hS.exists_equiv_fin, surjective, symm.surjective
 -/
@@ -1078,7 +1088,9 @@ theorem Subgroup.fg_iff_submonoid_fg
   · rintro ⟨S, hS⟩
     refine ⟨S, le_antisymm ?_ ?_⟩
     · rw [Subgroup.closure_le, ← Subgroup.coe_toSubmonoid, ← hS]
- 
+      exact Submonoid.subset_closure
+    · rw [← Subgroup.toSubmonoid_le, ← hS, Submonoid.closure_le]
+      exact Subgroup.subset_closure
 
 中文:
 定理 子群.fg_iff_submonoid_fg
@@ -1093,7 +1105,9 @@ theorem Subgroup.fg_iff_submonoid_fg
   · rintro ⟨S, hS⟩
     refine ⟨S, le_antisymm ?_ ?_⟩
     · rw [Subgroup.closure_le, ← Subgroup.coe_toSubmonoid, ← hS]
- 
+      exact Submonoid.subset_closure
+    · rw [← Subgroup.toSubmonoid_le, ← hS, Submonoid.closure_le]
+      exact Subgroup.subset_closure
 
 Depends on / 依赖: S.finite_toSet.inv, S.finite_toSet.union, Subgroup, Subgroup.closure_le, Subgroup.closure_toSubmonoid, Subgroup.coe_toSubmonoid, Subgroup.subset_closure, Subgroup.toSubmonoid_le, Submonoid, Submonoid.closure_le, Submonoid.fg_iff, Submonoid.subset_closure, closure_le, closure_toSubmonoid, coe_toSubmonoid, fg_iff, finite_toSet, le_antisymm, subset_closure, toSubmonoid_le
 -/
@@ -1729,7 +1743,9 @@ theorem Group.fg_iff_exists_freeGroup_hom_surjective_finite
     exact ⟨Fin n, inferInstance, φ.comp (FreeGroup.freeGroupCongr e).symm,
       hφ.comp (FreeGroup.freeGroupCongr e).symm.surjective⟩
   · intro ⟨α, _, φ, hφ⟩
-    ex
+    exact Group.fg_of_surjective hφ
+
+@[to_additive]
 
 中文:
 定理 群.fg_iff_存在_freeGroup_hom_surjective_finite
@@ -1741,7 +1757,9 @@ theorem Group.fg_iff_exists_freeGroup_hom_surjective_finite
     exact ⟨Fin n, inferInstance, φ.comp (FreeGroup.freeGroupCongr e).symm,
       hφ.comp (FreeGroup.freeGroupCongr e).symm.surjective⟩
   · intro ⟨α, _, φ, hφ⟩
-    ex
+    exact Group.fg_of_surjective hφ
+
+@[to_additive]
 
 Depends on / 依赖: FreeGroup, FreeGroup.freeGroupCongr, Group.fg_of_surjective, exists_equiv_fin, fg_iff_exists_freeGroup_hom_surjective, fg_of_surjective, freeGroupCongr, hS.exists_equiv_fin, surjective, symm.surjective
 -/
@@ -2038,7 +2056,24 @@ theorem Submonoid.fg_of_divisive
   constructor
   · intro hx
     rw [← P.closure_eq]
-    exact closure_mono ((
+    exact closure_mono ((setOfPred_minimal_subset _).trans fun _ => And.left) hx
+  · intro hx₁
+    by_cases hx₂ : x = 1
+    · simp [hx₂]
+    refine hpwo.wellFoundedOn.induction ⟨hx₁, hx₂⟩ fun y ⟨hy₁, hy₂⟩ ih => ?_
+    simp only [Set.mem_ofPred_eq, and_imp] at ih
+    by_cases hy₃ : Minimal (· in { x | x in P ∧ x != 1 }) y
+    · exact mem_closure_of_mem hy₃
+    rcases exists_lt_of_not_minimal ⟨hy₁, hy₂⟩ hy₃ with ⟨z, hz₁, hz₂, hz₃⟩
+    rcases exists_mul_of_le hz₁.le with ⟨y, rfl⟩
+    apply mul_mem
+    · exact ih _ hz₂ hz₃ hz₁.le hz₁.not_ge
+    apply ih
+    · exact hP _ hz₂ _ hy₁
+    · exact (one_lt_of_lt_mul_right hz₁).ne.symm
+    · exact le_mul_self
+    · rw [mul_le_iff_le_one_left']
+      exact (one_lt_of_ne_one hz₃).not_ge
 
 中文:
 定理 子幺半群.fg_of_divisive
@@ -2052,7 +2087,24 @@ theorem Submonoid.fg_of_divisive
   constructor
   · intro hx
     rw [← P.closure_eq]
-    exact closure_mono ((
+    exact closure_mono ((setOfPred_minimal_subset _).trans fun _ => And.left) hx
+  · intro hx₁
+    by_cases hx₂ : x = 1
+    · simp [hx₂]
+    refine hpwo.wellFoundedOn.induction ⟨hx₁, hx₂⟩ fun y ⟨hy₁, hy₂⟩ ih => ?_
+    simp only [Set.mem_ofPred_eq, and_imp] at ih
+    by_cases hy₃ : Minimal (· in { x | x in P ∧ x != 1 }) y
+    · exact mem_closure_of_mem hy₃
+    rcases exists_lt_of_not_minimal ⟨hy₁, hy₂⟩ hy₃ with ⟨z, hz₁, hz₂, hz₃⟩
+    rcases exists_mul_of_le hz₁.le with ⟨y, rfl⟩
+    apply mul_mem
+    · exact ih _ hz₂ hz₃ hz₁.le hz₁.not_ge
+    apply ih
+    · exact hP _ hz₂ _ hy₁
+    · exact (one_lt_of_lt_mul_right hz₁).ne.symm
+    · exact le_mul_self
+    · rw [mul_le_iff_le_one_left']
+      exact (one_lt_of_ne_one hz₃).not_ge
 
 Depends on / 依赖: And.left, P.closure_eq, Set.isPWO_of_wellQuasiOrderedLE, Set.mem_ofPred_eq, and_imp, by_c, closure_eq, closure_mono, fg_iff, finite_of_partiallyWellOrderedOn, hpwo.mono, hpwo.wellFoundedOn.induction, isPWO_of_wellQuasiOrderedLE, mem_ofPred_eq, setOfPred_minimal_antichain, setOfPred_minimal_subset, wellFoundedOn
 -/

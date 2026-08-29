@@ -365,7 +365,7 @@ lemma of_associated
     simp [mul_pow, ← mul_assoc, hn]
   · obtain ⟨n, hn⟩ := exists_of_eq r hab
     use n
-    rw [mul_pow]; rw [mul_c
+    rw [mul_pow]; rw [mul_comm (r ^ n)]; rw [mul_assoc]; rw [mul_assoc]; rw [hn]
 
 中文:
 引理 of_associated
@@ -379,7 +379,7 @@ lemma of_associated
     simp [mul_pow, ← mul_assoc, hn]
   · obtain ⟨n, hn⟩ := exists_of_eq r hab
     use n
-    rw [mul_pow]; rw [mul_c
+    rw [mul_pow]; rw [mul_comm (r ^ n)]; rw [mul_assoc]; rw [mul_assoc]; rw [hn]
 
 Depends on / 依赖: IsUnit, IsUnit.map, algebraMap_isUnit, exists_of_eq, isUnit, mul_assoc, mul_comm, mul_pow, u.isUnit
 -/
@@ -713,7 +713,9 @@ lemma map_injective_iff
   trans forall a n, f r ^ n * f a = 0 -> exists m, r ^ m * a = 0
   · simp [(IsLocalization.mk'_surjective (.powers r)).forall, Submonoid.mem_powers_iff,
       IsLocalization.Away.map, IsLocalization.map_mk', IsLocalization.mk'_eq_zero_iff]
-  · refine ⟨fun H x hx =
+  · refine ⟨fun H x hx => H x 0 (by simpa), fun H a n ha => ?_⟩
+    obtain ⟨m, hm⟩ := H (r ^ n * a) (by simpa)
+    exact ⟨m + n, by simp [pow_add, mul_assoc, *]⟩
 
 中文:
 引理 map_injective_iff
@@ -723,7 +725,9 @@ lemma map_injective_iff
   trans forall a n, f r ^ n * f a = 0 -> exists m, r ^ m * a = 0
   · simp [(IsLocalization.mk'_surjective (.powers r)).forall, Submonoid.mem_powers_iff,
       IsLocalization.Away.map, IsLocalization.map_mk', IsLocalization.mk'_eq_zero_iff]
-  · refine ⟨fun H x hx =
+  · refine ⟨fun H x hx => H x 0 (by simpa), fun H a n ha => ?_⟩
+    obtain ⟨m, hm⟩ := H (r ^ n * a) (by simpa)
+    exact ⟨m + n, by simp [pow_add, mul_assoc, *]⟩
 
 Depends on / 依赖: IsLocalization, IsLocalization.Away.map, IsLocalization.map_mk, IsLocalization.mk, Submonoid, Submonoid.mem_powers_iff, _eq_zero_iff, _surjective, injective_iff_map_eq_zero, map_mk, mem_powers_iff, mul_assoc, pow_add, powers
 -/
@@ -749,7 +753,11 @@ lemma map_surjective_iff
   trans forall a n, exists b m k, f (r ^ (k + n) * b) = f r ^ (k + m) * a
   · simp [Function.Surjective, (IsLocalization.mk'_surjective (.powers (f r))).forall, ← map_pow,
       (IsLocalization.mk'_surjective (.powers r)).exists, Submonoid.mem_powers_iff, pow_add,
-      IsLocalization.Away.map, I
+      IsLocalization.Away.map, IsLocalization.map_mk', ← mul_assoc,
+      IsLocalization.mk'_eq_iff_eq, ← map_mul, IsLocalization.eq_iff_exists (.powers (f r))]
+  · refine ⟨fun H x => ⟨_, _, (H x 0).choose_spec.choose_spec.choose_spec⟩, fun H a n => ?_⟩
+    obtain ⟨b, m, e⟩ := H a
+    exact ⟨b, n + m, 0, by simp [e, pow_add]; ring_nf⟩
 
 中文:
 引理 map_surjective_iff
@@ -758,7 +766,11 @@ lemma map_surjective_iff
   trans forall a n, exists b m k, f (r ^ (k + n) * b) = f r ^ (k + m) * a
   · simp [Function.Surjective, (IsLocalization.mk'_surjective (.powers (f r))).forall, ← map_pow,
       (IsLocalization.mk'_surjective (.powers r)).exists, Submonoid.mem_powers_iff, pow_add,
-      IsLocalization.Away.map, I
+      IsLocalization.Away.map, IsLocalization.map_mk', ← mul_assoc,
+      IsLocalization.mk'_eq_iff_eq, ← map_mul, IsLocalization.eq_iff_exists (.powers (f r))]
+  · refine ⟨fun H x => ⟨_, _, (H x 0).choose_spec.choose_spec.choose_spec⟩, fun H a n => ?_⟩
+    obtain ⟨b, m, e⟩ := H a
+    exact ⟨b, n + m, 0, by simp [e, pow_add]; ring_nf⟩
 
 Depends on / 依赖: Function, Function.Surjective, IsLocalization, IsLocalization.Away.map, IsLocalization.eq_iff_exists, IsLocalization.map_mk, IsLocalization.mk, Submonoid, Submonoid.mem_powers_iff, Surjective, _eq_iff_eq, _surjective, choose_spec, choose_spec.choose_spec.choose_spec, eq_iff_exists, map_mk, map_mul, map_pow, mem_powers_iff, mul_assoc
 -/
@@ -901,7 +913,19 @@ lemma mul
     exact ⟨algebraMap_isUnit _, IsUnit.map _ (algebraMap_isUnit x)⟩
   · obtain ⟨m, p, hpq⟩ := surj (algebraMap R S y) z
     obtain ⟨n, a, hab⟩ := surj x p
-    use m + n, 
+    use m + n, a * x ^ m * y ^ n
+    simp only [mul_pow, pow_add, map_pow, map_mul, ← mul_assoc, hpq,
+      IsScalarTower.algebraMap_apply R S T, ← hab]
+    ring
+  · repeat rw [IsScalarTower.algebraMap_apply R S T] at h
+    obtain ⟨n, hn⟩ := exists_of_eq (algebraMap R S y) h
+    simp only [← map_pow, ← map_mul, ← map_mul] at hn
+    obtain ⟨m, hm⟩ := exists_of_eq x hn
+    use n + m
+    convert_to y ^ m * x ^ n * (x ^ m * (y ^ n * a)) = y ^ m * x ^ n * (x ^ m * (y ^ n * b))
+    · ring
+    · ring
+    · rw [hm]
 
 中文:
 引理 mul
@@ -912,7 +936,19 @@ lemma mul
     exact ⟨algebraMap_isUnit _, IsUnit.map _ (algebraMap_isUnit x)⟩
   · obtain ⟨m, p, hpq⟩ := surj (algebraMap R S y) z
     obtain ⟨n, a, hab⟩ := surj x p
-    use m + n, 
+    use m + n, a * x ^ m * y ^ n
+    simp only [mul_pow, pow_add, map_pow, map_mul, ← mul_assoc, hpq,
+      IsScalarTower.algebraMap_apply R S T, ← hab]
+    ring
+  · repeat rw [IsScalarTower.algebraMap_apply R S T] at h
+    obtain ⟨n, hn⟩ := exists_of_eq (algebraMap R S y) h
+    simp only [← map_pow, ← map_mul, ← map_mul] at hn
+    obtain ⟨m, hm⟩ := exists_of_eq x hn
+    use n + m
+    convert_to y ^ m * x ^ n * (x ^ m * (y ^ n * a)) = y ^ m * x ^ n * (x ^ m * (y ^ n * b))
+    · ring
+    · ring
+    · rw [hm]
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_apply, IsUnit, IsUnit.map, IsUnit.mul_iff, algebraMap, algebraMap_apply, algebraMap_isUnit, exists_of_e, map_mul, map_pow, mul_assoc, mul_iff, mul_pow, pow_add, repeat
 -/
@@ -1181,7 +1217,10 @@ lemma Away.algebraMap_surjective_of_isIdempotentElem
   suffices exists a k, e ^ k * (a * e ^ n) = e ^ k * x by
     simpa [IsLocalization.eq_mk'_iff_mul_eq, ← map_pow, ← map_mul,
       IsLocalization.eq_iff_exists (.powers e), Submonoid.mem_powers_iff]
-  refine ⟨x
+  refine ⟨x, 1, ?_⟩
+  trans e ^ (n + 1) * x
+  · ring
+  · rw [he.pow_succ_eq]; ring
 
 中文:
 引理 Away.algebraMap_surjective_of_isIdempotentElem
@@ -1191,7 +1230,10 @@ lemma Away.algebraMap_surjective_of_isIdempotentElem
   suffices exists a k, e ^ k * (a * e ^ n) = e ^ k * x by
     simpa [IsLocalization.eq_mk'_iff_mul_eq, ← map_pow, ← map_mul,
       IsLocalization.eq_iff_exists (.powers e), Submonoid.mem_powers_iff]
-  refine ⟨x
+  refine ⟨x, 1, ?_⟩
+  trans e ^ (n + 1) * x
+  · ring
+  · rw [he.pow_succ_eq]; ring
 
 Depends on / 依赖: IsLocalization, IsLocalization.eq_iff_exists, IsLocalization.eq_mk, IsLocalization.exists_mk, Submonoid, Submonoid.mem_powers_iff, _iff_mul_eq, eq_iff_exists, eq_mk, exists_mk, he.pow_succ_eq, map_mul, map_pow, mem_powers_iff, pow_succ_eq, powers
 -/
@@ -1388,7 +1430,7 @@ lemma Away.of_surjective_of_isScalarTower
   · rwa [← IsScalarTower.algebraMap_apply]
   · rw [← (RingHom.ker (algebraMap S T)).map_comap_of_surjective _ h₂, ← map_pow,
       ← Ideal.map_pointwise_smul, RingHom.comap_ker, ← IsScalarTower.algebraMap_eq]
-    rwa [RingHom.ker_eq_comap_bot (algebraMap R S
+    rwa [RingHom.ker_eq_comap_bot (algebraMap R S), ← Ideal.map_le_iff_le_comap] at hn
 
 中文:
 引理 Away.of_surjective_of_isScalarTower
@@ -1398,7 +1440,7 @@ lemma Away.of_surjective_of_isScalarTower
   · rwa [← IsScalarTower.algebraMap_apply]
   · rw [← (RingHom.ker (algebraMap S T)).map_comap_of_surjective _ h₂, ← map_pow,
       ← Ideal.map_pointwise_smul, RingHom.comap_ker, ← IsScalarTower.algebraMap_eq]
-    rwa [RingHom.ker_eq_comap_bot (algebraMap R S
+    rwa [RingHom.ker_eq_comap_bot (algebraMap R S), ← Ideal.map_le_iff_le_comap] at hn
 
 Depends on / 依赖: Away.of_surjective, Ideal.map_le_iff_le_comap, Ideal.map_pointwise_smul, IsScalarTower, IsScalarTower.algebraMap_apply, IsScalarTower.algebraMap_eq, RingHom, RingHom.comap_ker, RingHom.ker, RingHom.ker_eq_comap_bot, algebraMap, algebraMap_apply, algebraMap_eq, comap_ker, ker_eq_comap_bot, map_comap_of_surjective, map_le_iff_le_comap, map_pointwise_smul, map_pow, of_surjective
 -/
@@ -1641,7 +1683,13 @@ lemma awayMap_awayMap_surjective
   suffices forall (s : S) (n : Nat), exists c l m k, f (a ^ (k + n) * c) =
       f (a ^ (k + l) * b ^ m) * s by
     simpa [Function.Surjective, (IsLocalization.mk'_surjective (.powers (f a))).forall, ← map_pow,
-      (IsLocalization.mk'_surjective (.powers a))
+      (IsLocalization.mk'_surjective (.powers a)).exists, Submonoid.mem_powers_iff, pow_add,
+      Localization.awayMap, IsLocalization.Away.map, IsLocalization.map_mk', ← mul_assoc,
+      IsLocalization.mk'_eq_iff_eq, ← map_mul, IsLocalization.eq_iff_exists (.powers (f a)),
+      IsLocalization.mul_mk'_eq_mk'_of_mul]
+  intro s n
+  obtain ⟨c, m, e⟩ := H s
+  exact ⟨c, n + m, m, 0, by simp [e, pow_add]; ring⟩
 
 中文:
 引理 awayMap_awayMap_surjective
@@ -1651,7 +1699,13 @@ lemma awayMap_awayMap_surjective
   suffices forall (s : S) (n : Nat), exists c l m k, f (a ^ (k + n) * c) =
       f (a ^ (k + l) * b ^ m) * s by
     simpa [Function.Surjective, (IsLocalization.mk'_surjective (.powers (f a))).forall, ← map_pow,
-      (IsLocalization.mk'_surjective (.powers a))
+      (IsLocalization.mk'_surjective (.powers a)).exists, Submonoid.mem_powers_iff, pow_add,
+      Localization.awayMap, IsLocalization.Away.map, IsLocalization.map_mk', ← mul_assoc,
+      IsLocalization.mk'_eq_iff_eq, ← map_mul, IsLocalization.eq_iff_exists (.powers (f a)),
+      IsLocalization.mul_mk'_eq_mk'_of_mul]
+  intro s n
+  obtain ⟨c, m, e⟩ := H s
+  exact ⟨c, n + m, m, 0, by simp [e, pow_add]; ring⟩
 
 Depends on / 依赖: Function, Function.Surjective, IsLocalization, IsLocalization.Away.map, IsLocalization.eq_iff_exists, IsLocalization.map_mk, IsLocalization.mk, Localization, Localization.awayMap, Submonoid, Submonoid.mem_powers_iff, Surjective, _eq_iff_eq, _surjective, awayMap, awayMap_surjective_iff, eq_iff_exists, map_mk, map_mul, map_pow
 -/
@@ -1703,7 +1757,8 @@ theorem algebraMap_injective_of_span_eq_top
   by_contra ne
   have ⟨r, hrs, disj⟩ := Ideal.exists_disjoint_powers_of_span_eq_top s span_eq _ ne
   let r : s := ⟨r, hrs⟩
-  have ⟨⟨_, n, rfl⟩, eq⟩ := (IsLocalization.eq_iff_exists (
+  have ⟨⟨_, n, rfl⟩, eq⟩ := (IsLocalization.eq_iff_exists (.powers r.1) _).mp (congr_fun eq r)
+  exact Set.disjoint_left.mp disj eq ⟨n, rfl⟩
 
 中文:
 定理 algebraMap_injective_of_span_eq_top
@@ -1713,7 +1768,8 @@ theorem algebraMap_injective_of_span_eq_top
   by_contra ne
   have ⟨r, hrs, disj⟩ := Ideal.exists_disjoint_powers_of_span_eq_top s span_eq _ ne
   let r : s := ⟨r, hrs⟩
-  have ⟨⟨_, n, rfl⟩, eq⟩ := (IsLocalization.eq_iff_exists (
+  have ⟨⟨_, n, rfl⟩, eq⟩ := (IsLocalization.eq_iff_exists (.powers r.1) _).mp (congr_fun eq r)
+  exact Set.disjoint_left.mp disj eq ⟨n, rfl⟩
 
 Depends on / 依赖: Ideal.eq_top_iff_one, Ideal.exists_disjoint_powers_of_span_eq_top, IsLocalization, IsLocalization.eq_iff_exists, Module, Module.eqIdeal, Set.disjoint_left.mp, congr_fun, disjoint_left, eqIdeal, eq_iff_exists, eq_top_iff_one, exists_disjoint_powers_of_span_eq_top, powers, span_eq
 -/
@@ -1737,7 +1793,44 @@ theorem existsUnique_algebraMap_eq_of_span_eq_top
   wlog finset_eq : exists t : Finset R, t = s generalizing s
   · have ⟨t, hts, mem⟩ := Submodule.mem_span_finite_of_mem_span mem
     have ⟨r, eq, uniq⟩ := this t (fun a => f ⟨a, hts a.2⟩)
-      (fun a b => h ⟨a, hts a.2⟩ ⟨b, hts b.2
+      (fun a b => h ⟨a, hts a.2⟩ ⟨b, hts b.2⟩) mem ⟨_, rfl⟩
+    refine ⟨r, fun a => ?_, fun _ eq => uniq _ fun a => eq ⟨a, hts a.2⟩⟩
+    replace hts := Set.insert_subset a.2 hts
+    classical
+    have ⟨r', eq, _⟩ := this ({a.1} union t) (fun a => f ⟨a, hts a.2⟩) (fun a b =>
+      h ⟨a, hts a.2⟩ ⟨b, hts b.2⟩) (Ideal.span_mono (fun _ => .inr) mem) ⟨{a.1} union t, by simp⟩
+    exact (congr_arg _ (uniq _ fun b => eq ⟨b, .inr b.2⟩).symm).trans (eq ⟨a, .inl rfl⟩)
+  have span_eq := (Ideal.eq_top_iff_one _).mpr mem
+  refine existsUnique_of_exists_of_unique ?_ fun x y hx hy =>
+    algebraMap_injective_of_span_eq_top s span_eq (funext fun a => (hx a).trans (hy a).symm)
+  obtain ⟨s, rfl⟩ := finset_eq
+  choose n r eq using fun a => Away.surj a.1 (f a)
+  let N := s.attach.sup n
+  let r a := a ^ (N - n a) * r a
+  have eq a : f a * algebraMap R _ (a ^ N) = algebraMap R _ (r a) := by
+    rw [map_mul]; rw [← eq]; rw [mul_left_comm]; rw [← map_pow]; rw [← map_mul]; rw [← pow_add]; rw [Nat.sub_add_cancel (Finset.le_sup <| s.mem_attach a)]
+  have eq2 a b : exists N', (a * b) ^ N' * (r a * b ^ N) = (a * b) ^ N' * (r b * a ^ N) :=
+Away.exists_of_eq (S := Away (a * b : R)) _ by
+      simp_rw [map_mul, ← Away.awayToAwayRight_eq (S := Away a.1) a.1 b (r a),
+        ← Away.awayToAwayLeft_eq (S := Away b.1) b.1 a (r b), ← eq, map_mul,
+        Away.awayToAwayRight_eq, Away.awayToAwayLeft_eq, h, mul_assoc, ← map_mul, mul_comm]
+  choose N' hN' using eq2
+  let N' := (s ×ˢ s).attach.sup fun a => N'
+    ⟨_, (Finset.mem_product.mp a.2).1⟩ ⟨_, (Finset.mem_product.mp a.2).2⟩
+  have eq2 a b : (a * b) ^ N' * (r a * b ^ N) = (a * b) ^ N' * (r b * a ^ N) := by
+    dsimp only [N']; rw [← Nat.sub_add_cancel (Finset.le_sup <| (Finset.mem_attach _ ⟨⟨a, b⟩,
+      Finset.mk_mem_product a.2 b.2⟩)), pow_add, mul_assoc, hN', ← mul_assoc]
+  let N := N' + N
+  let r a := a ^ N' * r a
+  have eq a : f a * algebraMap R _ (a ^ N) = algebraMap R _ (r a) := by
+    rw [map_mul]; rw [← eq]; rw [mul_left_comm]; rw [← map_mul]; rw [← pow_add]
+  have eq2 a b : r a * b ^ N = r b * a ^ N := by
+    rw [pow_add]; rw [mul_mul_mul_comm]; rw [← mul_pow]; rw [eq2]; rw [mul_comm a.1]; rw [mul_pow]; rw [mul_mul_mul_comm]; rw [← pow_add]
+have ⟨c, eq1⟩ := (Submodule.mem_span_range_iff_exists_fun _).mp
+(Ideal.eq_top_iff_one _).mp (Set.image_eq_range _ _ ▸ Ideal.span_pow_eq_top _ span_eq N)
+  refine ⟨∑ b, c b * r b, fun a => ((Away.algebraMap_isUnit a.1).pow N).mul_left_inj.mp ?_⟩
+  simp_rw [← map_pow, eq, ← map_mul, Finset.sum_mul, mul_assoc, eq2 _ a, mul_left_comm (c _),
+    ← Finset.mul_sum, ← smul_eq_mul (a := c _), eq1, mul_one]
 
 中文:
 定理 存在Unique_algebraMap_eq_of_span_eq_top
@@ -1747,7 +1840,44 @@ theorem existsUnique_algebraMap_eq_of_span_eq_top
   wlog finset_eq : exists t : Finset R, t = s generalizing s
   · have ⟨t, hts, mem⟩ := Submodule.mem_span_finite_of_mem_span mem
     have ⟨r, eq, uniq⟩ := this t (fun a => f ⟨a, hts a.2⟩)
-      (fun a b => h ⟨a, hts a.2⟩ ⟨b, hts b.2
+      (fun a b => h ⟨a, hts a.2⟩ ⟨b, hts b.2⟩) mem ⟨_, rfl⟩
+    refine ⟨r, fun a => ?_, fun _ eq => uniq _ fun a => eq ⟨a, hts a.2⟩⟩
+    replace hts := Set.insert_subset a.2 hts
+    classical
+    have ⟨r', eq, _⟩ := this ({a.1} union t) (fun a => f ⟨a, hts a.2⟩) (fun a b =>
+      h ⟨a, hts a.2⟩ ⟨b, hts b.2⟩) (Ideal.span_mono (fun _ => .inr) mem) ⟨{a.1} union t, by simp⟩
+    exact (congr_arg _ (uniq _ fun b => eq ⟨b, .inr b.2⟩).symm).trans (eq ⟨a, .inl rfl⟩)
+  have span_eq := (Ideal.eq_top_iff_one _).mpr mem
+  refine existsUnique_of_exists_of_unique ?_ fun x y hx hy =>
+    algebraMap_injective_of_span_eq_top s span_eq (funext fun a => (hx a).trans (hy a).symm)
+  obtain ⟨s, rfl⟩ := finset_eq
+  choose n r eq using fun a => Away.surj a.1 (f a)
+  let N := s.attach.sup n
+  let r a := a ^ (N - n a) * r a
+  have eq a : f a * algebraMap R _ (a ^ N) = algebraMap R _ (r a) := by
+    rw [map_mul]; rw [← eq]; rw [mul_left_comm]; rw [← map_pow]; rw [← map_mul]; rw [← pow_add]; rw [Nat.sub_add_cancel (Finset.le_sup <| s.mem_attach a)]
+  have eq2 a b : exists N', (a * b) ^ N' * (r a * b ^ N) = (a * b) ^ N' * (r b * a ^ N) :=
+Away.exists_of_eq (S := Away (a * b : R)) _ by
+      simp_rw [map_mul, ← Away.awayToAwayRight_eq (S := Away a.1) a.1 b (r a),
+        ← Away.awayToAwayLeft_eq (S := Away b.1) b.1 a (r b), ← eq, map_mul,
+        Away.awayToAwayRight_eq, Away.awayToAwayLeft_eq, h, mul_assoc, ← map_mul, mul_comm]
+  choose N' hN' using eq2
+  let N' := (s ×ˢ s).attach.sup fun a => N'
+    ⟨_, (Finset.mem_product.mp a.2).1⟩ ⟨_, (Finset.mem_product.mp a.2).2⟩
+  have eq2 a b : (a * b) ^ N' * (r a * b ^ N) = (a * b) ^ N' * (r b * a ^ N) := by
+    dsimp only [N']; rw [← Nat.sub_add_cancel (Finset.le_sup <| (Finset.mem_attach _ ⟨⟨a, b⟩,
+      Finset.mk_mem_product a.2 b.2⟩)), pow_add, mul_assoc, hN', ← mul_assoc]
+  let N := N' + N
+  let r a := a ^ N' * r a
+  have eq a : f a * algebraMap R _ (a ^ N) = algebraMap R _ (r a) := by
+    rw [map_mul]; rw [← eq]; rw [mul_left_comm]; rw [← map_mul]; rw [← pow_add]
+  have eq2 a b : r a * b ^ N = r b * a ^ N := by
+    rw [pow_add]; rw [mul_mul_mul_comm]; rw [← mul_pow]; rw [eq2]; rw [mul_comm a.1]; rw [mul_pow]; rw [mul_mul_mul_comm]; rw [← pow_add]
+have ⟨c, eq1⟩ := (Submodule.mem_span_range_iff_exists_fun _).mp
+(Ideal.eq_top_iff_one _).mp (Set.image_eq_range _ _ ▸ Ideal.span_pow_eq_top _ span_eq N)
+  refine ⟨∑ b, c b * r b, fun a => ((Away.algebraMap_isUnit a.1).pow N).mul_left_inj.mp ?_⟩
+  simp_rw [← map_pow, eq, ← map_mul, Finset.sum_mul, mul_assoc, eq2 _ a, mul_left_comm (c _),
+    ← Finset.mul_sum, ← smul_eq_mul (a := c _), eq1, mul_one]
 
 Depends on / 依赖: Away.awayToAwayLeft, awayToAwayLeft
 -/
@@ -2007,7 +2137,9 @@ theorem selfZPow_sub_natCast
   · rw [IsLocalization.eq_mk'_iff_mul_eq, Submonoid.pow_apply, Subtype.coe_mk, ← Int.ofNat_sub h,
       selfZPow_natCast, ← map_pow, ← map_mul, ← pow_add, Nat.sub_add_cancel h]
   · rw [← neg_sub, ← Int.ofNat_sub h.le, selfZPow_neg_natCast, IsLocalization.mk'_eq_iff_eq]
-    
+    simp [Submonoid.pow_apply, ← pow_add, Nat.sub_add_cancel h.le]
+
+@[simp]
 
 中文:
 定理 selfZPow_sub_natCast
@@ -2017,7 +2149,9 @@ theorem selfZPow_sub_natCast
   · rw [IsLocalization.eq_mk'_iff_mul_eq, Submonoid.pow_apply, Subtype.coe_mk, ← Int.ofNat_sub h,
       selfZPow_natCast, ← map_pow, ← map_mul, ← pow_add, Nat.sub_add_cancel h]
   · rw [← neg_sub, ← Int.ofNat_sub h.le, selfZPow_neg_natCast, IsLocalization.mk'_eq_iff_eq]
-    
+    simp [Submonoid.pow_apply, ← pow_add, Nat.sub_add_cancel h.le]
+
+@[simp]
 
 Depends on / 依赖: Int.ofNat_sub, IsLocalization, IsLocalization.eq_mk, IsLocalization.mk, Nat.sub_add_cancel, Submonoid, Submonoid.pow_apply, Subtype, Subtype.coe_mk, _eq_iff_eq, _iff_mul_eq, coe_mk, eq_mk, h.le, map_mul, map_pow, neg_sub, ofNat_sub, pow_add, pow_apply
 -/
@@ -2042,7 +2176,16 @@ theorem selfZPow_add
   · rw [selfZPow_of_nonneg _ _ hn, selfZPow_of_nonneg _ _ hm,
       selfZPow_of_nonneg _ _ (add_nonneg hn hm), Int.natAbs_add_of_nonneg hn hm, pow_add]
   · have : n + m = n.natAbs - m.natAbs := by
-      rw [Int.natAbs_of_nonn
+      rw [Int.natAbs_of_nonneg hn]; rw [Int.ofNat_natAbs_of_nonpos hm.le]; rw [sub_neg_eq_add]
+    rw [selfZPow_of_nonneg _ _ hn]; rw [selfZPow_of_neg _ _ hm]; rw [this]; rw [selfZPow_sub_natCast]; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [map_pow]
+  · have : n + m = m.natAbs - n.natAbs := by
+      rw [Int.natAbs_of_nonneg hm]; rw [Int.ofNat_natAbs_of_nonpos hn.le]; rw [sub_neg_eq_add]; rw [add_comm]
+    rw [selfZPow_of_nonneg _ _ hm]; rw [selfZPow_of_neg _ _ hn]; rw [this]; rw [selfZPow_sub_natCast]; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [map_pow]; rw [mul_comm]
+  · rw [selfZPow_of_neg _ _ hn, selfZPow_of_neg _ _ hm, selfZPow_of_neg _ _ (add_neg hn hm),
+      Int.natAbs_add_of_nonpos hn.le hm.le, ← mk'_mul, one_mul]
+    congr
+    ext
+    simp [pow_add]
 
 中文:
 定理 selfZPow_add
@@ -2053,7 +2196,16 @@ theorem selfZPow_add
   · rw [selfZPow_of_nonneg _ _ hn, selfZPow_of_nonneg _ _ hm,
       selfZPow_of_nonneg _ _ (add_nonneg hn hm), Int.natAbs_add_of_nonneg hn hm, pow_add]
   · have : n + m = n.natAbs - m.natAbs := by
-      rw [Int.natAbs_of_nonn
+      rw [Int.natAbs_of_nonneg hn]; rw [Int.ofNat_natAbs_of_nonpos hm.le]; rw [sub_neg_eq_add]
+    rw [selfZPow_of_nonneg _ _ hn]; rw [selfZPow_of_neg _ _ hm]; rw [this]; rw [selfZPow_sub_natCast]; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [map_pow]
+  · have : n + m = m.natAbs - n.natAbs := by
+      rw [Int.natAbs_of_nonneg hm]; rw [Int.ofNat_natAbs_of_nonpos hn.le]; rw [sub_neg_eq_add]; rw [add_comm]
+    rw [selfZPow_of_nonneg _ _ hm]; rw [selfZPow_of_neg _ _ hn]; rw [this]; rw [selfZPow_sub_natCast]; rw [IsLocalization.mk'_eq_mul_mk'_one]; rw [map_pow]; rw [mul_comm]
+  · rw [selfZPow_of_neg _ _ hn, selfZPow_of_neg _ _ hm, selfZPow_of_neg _ _ (add_neg hn hm),
+      Int.natAbs_add_of_nonpos hn.le hm.le, ← mk'_mul, one_mul]
+    congr
+    ext
+    simp [pow_add]
 
 Depends on / 依赖: Int.natAbs_add_of_nonneg, Int.natAbs_of_nonneg, Int.ofNat_natAbs_of_nonpos, IsLocalization, IsLocalization.mk, _eq_mul_mk, _one, add_nonneg, hm.le, le_or_gt, m.natAbs, map_pow, n.natAbs, natAbs, natAbs_add_of_nonneg, natAbs_of_nonneg, ofNat_natAbs_of_nonpos, pow_add, selfZPow_of_neg, selfZPow_of_nonneg
 -/
@@ -2087,7 +2239,10 @@ theorem selfZPow_mul_neg
       Submonoid.pow_apply, IsLocalization.mk'_spec, map_one]
     apply nonneg_of_neg_nonpos
     rwa [neg_neg]
-  · rw [selfZPow_of_nonneg x B hd.le, selfZPow_of_nonpos, ← map_pow, Int.natAbs_n
+  · rw [selfZPow_of_nonneg x B hd.le, selfZPow_of_nonpos, ← map_pow, Int.natAbs_neg,
+      Submonoid.pow_apply, IsLocalization.mk'_spec'_mk, map_one]
+    refine nonpos_of_neg_nonneg (le_of_lt ?_)
+    rwa [neg_neg]
 
 中文:
 定理 selfZPow_mul_neg
@@ -2099,7 +2254,10 @@ theorem selfZPow_mul_neg
       Submonoid.pow_apply, IsLocalization.mk'_spec, map_one]
     apply nonneg_of_neg_nonpos
     rwa [neg_neg]
-  · rw [selfZPow_of_nonneg x B hd.le, selfZPow_of_nonpos, ← map_pow, Int.natAbs_n
+  · rw [selfZPow_of_nonneg x B hd.le, selfZPow_of_nonpos, ← map_pow, Int.natAbs_neg,
+      Submonoid.pow_apply, IsLocalization.mk'_spec'_mk, map_one]
+    refine nonpos_of_neg_nonneg (le_of_lt ?_)
+    rwa [neg_neg]
 
 Depends on / 依赖: Int.natAbs_neg, IsLocalization, IsLocalization.mk, Submonoid, Submonoid.pow_apply, _spec, hd.le, le_of_lt, map_one, map_pow, natAbs_neg, neg_neg, nonneg_of_neg_nonpos, nonpos_of_neg_nonneg, pow_apply, selfZPow_of_nonneg, selfZPow_of_nonpos
 -/
@@ -2149,7 +2307,8 @@ theorem selfZPow_pow_sub
     have := congr_arg (fun s : B => s * selfZPow x B d) h
     rwa [mul_assoc, mul_assoc, selfZPow_neg_mul, mul_one, mul_comm b _] at this
   · intro h
-    have := congr
+    have := congr_arg (fun s : B => s * selfZPow x B (-d)) h
+    rwa [mul_comm _ b, mul_assoc b _ _, selfZPow_mul_neg, mul_one] at this
 
 中文:
 定理 selfZPow_pow_sub
@@ -2161,7 +2320,8 @@ theorem selfZPow_pow_sub
     have := congr_arg (fun s : B => s * selfZPow x B d) h
     rwa [mul_assoc, mul_assoc, selfZPow_neg_mul, mul_one, mul_comm b _] at this
   · intro h
-    have := congr
+    have := congr_arg (fun s : B => s * selfZPow x B (-d)) h
+    rwa [mul_comm _ b, mul_assoc b _ _, selfZPow_mul_neg, mul_one] at this
 
 Depends on / 依赖: congr_arg, mul_assoc, mul_comm, mul_one, selfZPow, selfZPow_add, selfZPow_mul_neg, selfZPow_neg_mul, sub_eq_add_neg
 -/
@@ -2193,7 +2353,19 @@ theorem exists_reduced_fraction'
     have := isDomain_of_le_nonZeroDivisors B
       (powers_le_nonZeroDivisors_of_noZeroDivisors hx.ne_zero)
     simp only [← hy, map_pow] at H
-    apply ((in
+    apply ((injective_iff_map_eq_zero' (algebraMap R B)).mp _ a₀).mpr.mt
+    · rw [← H]
+      apply mul_ne_zero hb (pow_ne_zero _ _)
+      exact
+        IsLocalization.to_map_ne_zero_of_mem_nonZeroDivisors B
+          (powers_le_nonZeroDivisors_of_noZeroDivisors hx.ne_zero)
+          (mem_nonZeroDivisors_iff_ne_zero.mpr hx.ne_zero)
+    · exact IsLocalization.injective B (powers_le_nonZeroDivisors_of_noZeroDivisors hx.ne_zero)
+  simp only [← hy] at H
+  obtain ⟨m, a, hyp1, hyp2⟩ := WfDvdMonoid.max_power_factor ha₀ hx
+  refine ⟨a, m - d, ?_⟩
+  rw [← mk'_one (M := Submonoid.powers x) B]; rw [selfZPow_pow_sub]; rw [selfZPow_natCast]; rw [selfZPow_natCast]; rw [← map_pow _ _ d]; rw [mul_comm _ b]; rw [H]; rw [hyp2]; rw [map_mul]; rw [map_pow _ _ m]
+  exact ⟨hyp1, congr_arg _ (IsLocalization.mk'_one _ _)⟩
 
 中文:
 定理 存在_reduced_fraction'
@@ -2205,7 +2377,19 @@ theorem exists_reduced_fraction'
     have := isDomain_of_le_nonZeroDivisors B
       (powers_le_nonZeroDivisors_of_noZeroDivisors hx.ne_zero)
     simp only [← hy, map_pow] at H
-    apply ((in
+    apply ((injective_iff_map_eq_zero' (algebraMap R B)).mp _ a₀).mpr.mt
+    · rw [← H]
+      apply mul_ne_zero hb (pow_ne_zero _ _)
+      exact
+        IsLocalization.to_map_ne_zero_of_mem_nonZeroDivisors B
+          (powers_le_nonZeroDivisors_of_noZeroDivisors hx.ne_zero)
+          (mem_nonZeroDivisors_iff_ne_zero.mpr hx.ne_zero)
+    · exact IsLocalization.injective B (powers_le_nonZeroDivisors_of_noZeroDivisors hx.ne_zero)
+  simp only [← hy] at H
+  obtain ⟨m, a, hyp1, hyp2⟩ := WfDvdMonoid.max_power_factor ha₀ hx
+  refine ⟨a, m - d, ?_⟩
+  rw [← mk'_one (M := Submonoid.powers x) B]; rw [selfZPow_pow_sub]; rw [selfZPow_natCast]; rw [selfZPow_natCast]; rw [← map_pow _ _ d]; rw [mul_comm _ b]; rw [H]; rw [hyp2]; rw [map_mul]; rw [map_pow _ _ m]
+  exact ⟨hyp1, congr_arg _ (IsLocalization.mk'_one _ _)⟩
 
 Depends on / 依赖: IsLocalization, IsLocalization.to_map_ne_zero_of_mem_nonZeroDivisors, Submonoid, Submonoid.mem_powers_iff, Submonoid.powers, algebraMap, hx.ne_zer, hx.ne_zero, injective_iff_map_eq_zero, isDomain_of_le_nonZeroDivisors, map_pow, mem_powers_iff, mpr.mt, mul_ne_zero, ne_zer, ne_zero, pow_ne_zero, powers, powers_le_nonZeroDivisors_of_noZeroDivisors, to_map_ne_zero_of_mem_nonZeroDivisors
 -/

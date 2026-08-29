@@ -485,7 +485,35 @@ abbreviation ofChosenFiniteProducts
     whiskerLeft X {_ _} g := tensorHom ℬ (𝟙 X) g
     whiskerRight {_ _} f Y := tensorHom ℬ f (𝟙 Y)
     associator := BinaryFan.associatorOfLimitCone ℬ
-    leftUnitor X := Binary
+    leftUnitor X := BinaryFan.leftUnitor 𝒯.isLimit (ℬ 𝒯.cone.pt X).isLimit
+    rightUnitor X := BinaryFan.rightUnitor 𝒯.isLimit (ℬ X 𝒯.cone.pt).isLimit
+  }
+  {
+  toMonoidalCategory := .ofTensorHom
+    (id_tensorHom_id := id_tensorHom_id ℬ)
+    (tensorHom_comp_tensorHom := tensorHom_comp_tensorHom ℬ)
+    (pentagon := pentagon ℬ)
+    (triangle := triangle 𝒯 ℬ)
+    (leftUnitor_naturality := leftUnitor_naturality 𝒯 ℬ)
+    (rightUnitor_naturality := rightUnitor_naturality 𝒯 ℬ)
+    (associator_naturality := associator_naturality ℬ)
+  isTerminalTensorUnit :=
+    .ofUniqueHom (𝒯.isLimit.lift <| asEmptyCone ·) fun _ _ => 𝒯.isLimit.hom_ext (by simp)
+  fst X Y := BinaryFan.fst (ℬ X Y).cone
+  snd X Y := BinaryFan.snd (ℬ X Y).cone
+  tensorProductIsBinaryProduct X Y := BinaryFan.IsLimit.mk _
+    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).1)
+    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.1)
+    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.2)
+    (fun f g m hf hg =>
+      BinaryFan.IsLimit.hom_ext (ℬ X Y).isLimit (by simpa using hf) (by simpa using hg))
+  fst_def X Y := (((ℬ X 𝒯.cone.pt).isLimit.fac
+    (BinaryFan.mk _ _) ⟨.left⟩).trans (Category.comp_id _)).symm
+  snd_def X Y := (((ℬ 𝒯.cone.pt Y).isLimit.fac
+    (BinaryFan.mk _ _) ⟨.right⟩).trans (Category.comp_id _)).symm
+  }
+
+omit 𝒯 in
 
 中文:
 缩写 ofChosenFiniteProducts
@@ -497,7 +525,35 @@ abbreviation ofChosenFiniteProducts
     whiskerLeft X {_ _} g := tensorHom ℬ (𝟙 X) g
     whiskerRight {_ _} f Y := tensorHom ℬ f (𝟙 Y)
     associator := BinaryFan.associatorOfLimitCone ℬ
-    leftUnitor X := Binary
+    leftUnitor X := BinaryFan.leftUnitor 𝒯.isLimit (ℬ 𝒯.cone.pt X).isLimit
+    rightUnitor X := BinaryFan.rightUnitor 𝒯.isLimit (ℬ X 𝒯.cone.pt).isLimit
+  }
+  {
+  toMonoidalCategory := .ofTensorHom
+    (id_tensorHom_id := id_tensorHom_id ℬ)
+    (tensorHom_comp_tensorHom := tensorHom_comp_tensorHom ℬ)
+    (pentagon := pentagon ℬ)
+    (triangle := triangle 𝒯 ℬ)
+    (leftUnitor_naturality := leftUnitor_naturality 𝒯 ℬ)
+    (rightUnitor_naturality := rightUnitor_naturality 𝒯 ℬ)
+    (associator_naturality := associator_naturality ℬ)
+  isTerminalTensorUnit :=
+    .ofUniqueHom (𝒯.isLimit.lift <| asEmptyCone ·) fun _ _ => 𝒯.isLimit.hom_ext (by simp)
+  fst X Y := BinaryFan.fst (ℬ X Y).cone
+  snd X Y := BinaryFan.snd (ℬ X Y).cone
+  tensorProductIsBinaryProduct X Y := BinaryFan.IsLimit.mk _
+    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).1)
+    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.1)
+    (fun f g => (BinaryFan.IsLimit.lift' (ℬ X Y).isLimit f g).2.2)
+    (fun f g m hf hg =>
+      BinaryFan.IsLimit.hom_ext (ℬ X Y).isLimit (by simpa using hf) (by simpa using hg))
+  fst_def X Y := (((ℬ X 𝒯.cone.pt).isLimit.fac
+    (BinaryFan.mk _ _) ⟨.left⟩).trans (Category.comp_id _)).symm
+  snd_def X Y := (((ℬ 𝒯.cone.pt Y).isLimit.fac
+    (BinaryFan.mk _ _) ⟨.right⟩).trans (Category.comp_id _)).symm
+  }
+
+omit 𝒯 in
 
 Depends on / 依赖: BinaryFan, BinaryFan.associatorOfLimitCone, BinaryFan.leftUnitor, BinaryFan.rightUnitor, Functor, Functor.isContinuous_of_coverPreserving, J.over, MonoidalCategoryStruct, Over.star, associator, associatorOfLimitCone, compatiblePreservingOfFlat, cone.pt, coverPreserving_over_star, id_tensorHom_id, isContinuous_of_coverPreserving, isLimit, leftUnitor, ofTensorHom, rightUnitor
 -/
@@ -2435,7 +2491,7 @@ definition prodComparisonNatTrans
     apply hom_ext <;>
     simp only [Functor.comp_obj, curriedTensor_obj_obj,
       Functor.comp_map, curriedTensor_obj_map, Category.assoc, prodComparison_fst, whiskerLeft_fst,
-      prodComparison_snd, prodComparison_snd_assoc, whiskerLeft_snd, ← F.map
+      prodComparison_snd, prodComparison_snd_assoc, whiskerLeft_snd, ← F.map_comp]
 
 中文:
 定义 prodComparison自然数Trans
@@ -2445,7 +2501,7 @@ definition prodComparisonNatTrans
     apply hom_ext <;>
     simp only [Functor.comp_obj, curriedTensor_obj_obj,
       Functor.comp_map, curriedTensor_obj_map, Category.assoc, prodComparison_fst, whiskerLeft_fst,
-      prodComparison_snd, prodComparison_snd_assoc, whiskerLeft_snd, ← F.map
+      prodComparison_snd, prodComparison_snd_assoc, whiskerLeft_snd, ← F.map_comp]
 
 Depends on / 依赖: prodComparison
 -/
@@ -2787,7 +2843,11 @@ lemma preservesLimit_pair_of_isIso_prodComparison
   refine IsLimit.equivOfNatIsoOfIso (pairComp A B F) _
     ((BinaryFan.mk (fst (F.obj A) (F.obj B)) (snd _ _)).extend (prodComparison F A B))
 .invFun (BinaryFan.ext (by exact Iso.refl _) ?_ ?_)
-      (IsLimit.extend
+      (IsLimit.extendIso _ (tensorProductIsBinaryProduct (F.obj A) (F.obj B)))
+  · dsimp only [BinaryFan.fst]
+    simp [pairComp]
+  · dsimp only [BinaryFan.snd]
+    simp [pairComp]
 
 中文:
 引理 preservesLimit_pair_of_isIso_prodComparison
@@ -2797,7 +2857,11 @@ lemma preservesLimit_pair_of_isIso_prodComparison
   refine IsLimit.equivOfNatIsoOfIso (pairComp A B F) _
     ((BinaryFan.mk (fst (F.obj A) (F.obj B)) (snd _ _)).extend (prodComparison F A B))
 .invFun (BinaryFan.ext (by exact Iso.refl _) ?_ ?_)
-      (IsLimit.extend
+      (IsLimit.extendIso _ (tensorProductIsBinaryProduct (F.obj A) (F.obj B)))
+  · dsimp only [BinaryFan.fst]
+    simp [pairComp]
+  · dsimp only [BinaryFan.snd]
+    simp [pairComp]
 
 Depends on / 依赖: BinaryFan, BinaryFan.ext, BinaryFan.fst, BinaryFan.mk, BinaryFan.snd, F.obj, IsLimit, IsLimit.equivOfNatIsoOfIso, IsLimit.extendIso, Iso.refl, equivOfNatIsoOfIso, extend, extendIso, invFun, mem_toPrecoverage_iff, pairComp, preservesLimit_of_preserves_limit_cone, prodComparison, tensorProductIsBinaryProduct
 -/
@@ -2895,7 +2959,14 @@ instance fullSubcategory
       (fun X Y hX hY => P.prop_of_isLimit (tensorProductIsBinaryProduct X Y)
         (by rintro (_ | _) <;> assumption))
   isTerminalTensorUnit := .ofUniqueHom (fun X => ObjectProperty.homMk (toUnit X.1))
-   
+    fun _ _ => by ext; apply toUnit_unique
+  fst X Y := ObjectProperty.homMk (fst X.1 Y.1)
+  snd X Y := ObjectProperty.homMk (snd X.1 Y.1)
+  tensorProductIsBinaryProduct X Y :=
+    BinaryFan.IsLimit.mk _ (fun f g => ObjectProperty.homMk (lift f.hom g.hom))
+      (by aesop_cat) (by aesop_cat) (by aesop_cat)
+  fst_def X Y := by ext; exact fst_def X.1 Y.1
+  snd_def X Y := by ext; exact snd_def X.1 Y.1
 
 中文:
 实例 fullSubcategory
@@ -2904,7 +2975,14 @@ instance fullSubcategory
       (fun X Y hX hY => P.prop_of_isLimit (tensorProductIsBinaryProduct X Y)
         (by rintro (_ | _) <;> assumption))
   isTerminalTensorUnit := .ofUniqueHom (fun X => ObjectProperty.homMk (toUnit X.1))
-   
+    fun _ _ => by ext; apply toUnit_unique
+  fst X Y := ObjectProperty.homMk (fst X.1 Y.1)
+  snd X Y := ObjectProperty.homMk (snd X.1 Y.1)
+  tensorProductIsBinaryProduct X Y :=
+    BinaryFan.IsLimit.mk _ (fun f g => ObjectProperty.homMk (lift f.hom g.hom))
+      (by aesop_cat) (by aesop_cat) (by aesop_cat)
+  fst_def X Y := by ext; exact fst_def X.1 Y.1
+  snd_def X Y := by ext; exact snd_def X.1 Y.1
 
 Depends on / 依赖: MonoidalCategory, MonoidalCategory.fullSubcategory, fullSubcategory
 -/
@@ -3113,7 +3191,10 @@ definition ofChosenFiniteProducts
   δ_natural_left f X := by ext <;> simp [← Functor.map_comp]
   δ_natural_right X g := by ext <;> simp [← Functor.map_comp]
   oplax_associativity _ _ _ := by ext <;> simp [← Functor.map_comp]
-  oplax_left_unitality _ := by ext; simp [← Functor.map_
+  oplax_left_unitality _ := by ext; simp [← Functor.map_comp]
+  oplax_right_unitality _ := by ext; simp [← Functor.map_comp]
+
+omit [F.OplaxMonoidal] in
 
 中文:
 定义 ofChosenFiniteProducts
@@ -3123,7 +3204,10 @@ definition ofChosenFiniteProducts
   δ_natural_left f X := by ext <;> simp [← Functor.map_comp]
   δ_natural_right X g := by ext <;> simp [← Functor.map_comp]
   oplax_associativity _ _ _ := by ext <;> simp [← Functor.map_comp]
-  oplax_left_unitality _ := by ext; simp [← Functor.map_
+  oplax_left_unitality _ := by ext; simp [← Functor.map_comp]
+  oplax_right_unitality _ := by ext; simp [← Functor.map_comp]
+
+omit [F.OplaxMonoidal] in
 
 Depends on / 依赖: terminalComparison
 -/
@@ -3392,7 +3476,10 @@ instance [F.Monoidal]
     δ_of_cartesianMonoidalCategory F A B ▸ inferInstance
   have : IsIso (CartesianMonoidalCategory.terminalComparison F) :=
     η_of_cartesianMonoidalCategory F ▸ inferInstance
-  have := preservesLimitsOfShape_discrete_walkin
+  have := preservesLimitsOfShape_discrete_walkingPair_of_isIso_prodComparison F
+  have := preservesLimit_empty_of_isIso_terminalComparison F
+  have := Limits.preservesLimitsOfShape_pempty_of_preservesTerminal F
+  .of_preserves_binary_and_terminal _
 
 中文:
 实例 [F.幺半群]
@@ -3401,7 +3488,10 @@ instance [F.Monoidal]
     δ_of_cartesianMonoidalCategory F A B ▸ inferInstance
   have : IsIso (CartesianMonoidalCategory.terminalComparison F) :=
     η_of_cartesianMonoidalCategory F ▸ inferInstance
-  have := preservesLimitsOfShape_discrete_walkin
+  have := preservesLimitsOfShape_discrete_walkingPair_of_isIso_prodComparison F
+  have := preservesLimit_empty_of_isIso_terminalComparison F
+  have := Limits.preservesLimitsOfShape_pempty_of_preservesTerminal F
+  .of_preserves_binary_and_terminal _
 
 Depends on / 依赖: CartesianMonoidalCategory, CartesianMonoidalCategory.prodComparison, CartesianMonoidalCategory.terminalComparison, IsLimit, IsLimit.mapConeEquiv, J.uliftYoneda.mapCocone, J.uliftYonedaOpCompCoyoneda, Limits, Limits.preservesLimitsOfShape_pempty_of_preservesTerminal, X.obj, c.op, coyoneda, coyoneda.mapCone, evaluation, evaluationJointlyReflectsLimits, hc.op, isColimitOfOp, isLimitOfPreserves, isLimitOfReflects, isoWhiskerRight
 -/

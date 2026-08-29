@@ -41,7 +41,9 @@ definition colon
     (Set.add_smul_subset _ _ _).trans ((Set.add_subset_add ha hb).trans_eq (by simp))
   zero_mem' := (Set.zero_smul_set_subset S).trans (by simp)
   smul_mem' r := by
-    simp only [Set.mem_ofPred_eq, smul_eq_mul, mul_smul, Set.smul_set_subset_
+    simp only [Set.mem_ofPred_eq, smul_eq_mul, mul_smul, Set.smul_set_subset_iff]
+    intro x hx y hy
+    exact N.smul_mem _ (hx hy)
 
 中文:
 定义 colon
@@ -51,7 +53,9 @@ definition colon
     (Set.add_smul_subset _ _ _).trans ((Set.add_subset_add ha hb).trans_eq (by simp))
   zero_mem' := (Set.zero_smul_set_subset S).trans (by simp)
   smul_mem' r := by
-    simp only [Set.mem_ofPred_eq, smul_eq_mul, mul_smul, Set.smul_set_subset_
+    simp only [Set.mem_ofPred_eq, smul_eq_mul, mul_smul, Set.smul_set_subset_iff]
+    intro x hx y hy
+    exact N.smul_mem _ (hx hy)
 
 Depends on / 依赖: SecondCountableTopology, SecondCountableTopology.to_firstCountableTopology, subseteq, to_firstCountableTopology
 -/
@@ -724,7 +728,7 @@ theorem annihilator_quotient
   ext r
   have htop : (⊤ : Submodule R (M ⧸ N)) = (⊤ : Submodule R M).map N.mkQ := by
     simpa [map_top] using (LinearMap.range_eq_top.mpr (mkQ_surjective N)).symm
-  rw [← annihilator_top (R := R) (M := M ⧸ N)]; rw [htop]; rw [annihilator_map_mkQ_eq_colon (N := N) (P := ⊤)]; rw [Submodule.top_co
+  rw [← annihilator_top (R := R) (M := M ⧸ N)]; rw [htop]; rw [annihilator_map_mkQ_eq_colon (N := N) (P := ⊤)]; rw [Submodule.top_coe]
 
 中文:
 定理 annihilator_quotient
@@ -733,7 +737,7 @@ theorem annihilator_quotient
   ext r
   have htop : (⊤ : Submodule R (M ⧸ N)) = (⊤ : Submodule R M).map N.mkQ := by
     simpa [map_top] using (LinearMap.range_eq_top.mpr (mkQ_surjective N)).symm
-  rw [← annihilator_top (R := R) (M := M ⧸ N)]; rw [htop]; rw [annihilator_map_mkQ_eq_colon (N := N) (P := ⊤)]; rw [Submodule.top_co
+  rw [← annihilator_top (R := R) (M := M ⧸ N)]; rw [htop]; rw [annihilator_map_mkQ_eq_colon (N := N) (P := ⊤)]; rw [Submodule.top_coe]
 
 Depends on / 依赖: LinearMap, LinearMap.range_eq_top.mpr, N.mkQ, Submodule, Submodule.top_coe, annihilator_map_mkQ_eq_colon, annihilator_top, map_top, mkQ_surjective, range_eq_top, top_coe
 -/

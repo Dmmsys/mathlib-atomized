@@ -56,7 +56,27 @@ definition mapBifunctorHomologicalComplexObj
       (fun i₁ i₂ i₂' => (F.obj (K₁.X i₁)).map (K₂.d i₂ i₂'))
       (fun i₁ i₁' h₁ i₂ => by
         dsimp
-        rw [K₁.shape _ _ h₁];
+        rw [K₁.shape _ _ h₁]; rw [Functor.map_zero]; rw [zero_app])
+      (fun i₁ i₂ i₂' h₂ => by
+        dsimp
+        rw [K₂.shape _ _ h₂]; rw [Functor.map_zero])
+      (fun i₁ i₁' i₁'' i₂ => by
+        dsimp
+        rw [← NatTrans.comp_app]; rw [← Functor.map_comp]; rw [HomologicalComplex.d_comp_d]; rw [Functor.map_zero]; rw [zero_app])
+      (fun i₁ i₂ i₂' i₂'' => by
+        dsimp
+        rw [← Functor.map_comp]; rw [HomologicalComplex.d_comp_d]; rw [Functor.map_zero])
+      (fun i₁ i₁' i₂ i₂' => by
+        dsimp
+        rw [NatTrans.naturality])
+  map {K₂ K₂' φ} := HomologicalComplex₂.homMk
+      (((GradedObject.mapBifunctor F I₁ I₂).obj K₁.X).map φ.f)
+        (by dsimp; intros; rw [NatTrans.naturality]) (by
+          dsimp
+          intros
+          simp only [← Functor.map_comp, φ.comm])
+  map_id K₂ := by dsimp; ext; dsimp; rw [Functor.map_id]
+  map_comp f g := by dsimp; ext; dsimp; rw [Functor.map_comp]
 
 中文:
 定义 mapBifunctorHomologicalComplexObj
@@ -67,7 +87,27 @@ definition mapBifunctorHomologicalComplexObj
       (fun i₁ i₂ i₂' => (F.obj (K₁.X i₁)).map (K₂.d i₂ i₂'))
       (fun i₁ i₁' h₁ i₂ => by
         dsimp
-        rw [K₁.shape _ _ h₁];
+        rw [K₁.shape _ _ h₁]; rw [Functor.map_zero]; rw [zero_app])
+      (fun i₁ i₂ i₂' h₂ => by
+        dsimp
+        rw [K₂.shape _ _ h₂]; rw [Functor.map_zero])
+      (fun i₁ i₁' i₁'' i₂ => by
+        dsimp
+        rw [← NatTrans.comp_app]; rw [← Functor.map_comp]; rw [HomologicalComplex.d_comp_d]; rw [Functor.map_zero]; rw [zero_app])
+      (fun i₁ i₂ i₂' i₂'' => by
+        dsimp
+        rw [← Functor.map_comp]; rw [HomologicalComplex.d_comp_d]; rw [Functor.map_zero])
+      (fun i₁ i₁' i₂ i₂' => by
+        dsimp
+        rw [NatTrans.naturality])
+  map {K₂ K₂' φ} := HomologicalComplex₂.homMk
+      (((GradedObject.mapBifunctor F I₁ I₂).obj K₁.X).map φ.f)
+        (by dsimp; intros; rw [NatTrans.naturality]) (by
+          dsimp
+          intros
+          simp only [← Functor.map_comp, φ.comm])
+  map_id K₂ := by dsimp; ext; dsimp; rw [Functor.map_id]
+  map_comp f g := by dsimp; ext; dsimp; rw [Functor.map_comp]
 
 Depends on / 依赖: ofGradedObject
 -/

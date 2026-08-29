@@ -34,7 +34,7 @@ lemma LipschitzWith.cauchySeq_comp
   · exact fun n => mul_nonneg (by positivity) (b_nonneg n)
   · exact fun n m N hn hm => hf.dist_le_mul_of_le (hb n m N hn hm)
   · rw [← mul_zero (K : Real)]
- 
+    exact blim.const_mul _
 
 中文:
 引理 LipschitzWith.cauchySeq_comp
@@ -45,7 +45,7 @@ lemma LipschitzWith.cauchySeq_comp
   · exact fun n => mul_nonneg (by positivity) (b_nonneg n)
   · exact fun n m N hn hm => hf.dist_le_mul_of_le (hb n m N hn hm)
   · rw [← mul_zero (K : Real)]
- 
+    exact blim.const_mul _
 
 Depends on / 依赖: b_nonneg, blim.const_mul, cauchySeq_iff_le_tendsto_0, const_mul, dist_le_mul_of_le, hf.dist_le_mul_of_le, mul_nonneg, mul_zero
 -/
@@ -71,7 +71,10 @@ lemma LipschitzOnWith.cauchySeq_comp
   · exact fun n => mul_nonneg (by positivity) (b_nonneg n)
   · intro n m N hn hm
     have A n : u n in s := h'u (mem_range_self _)
-    apply (hf.dist_le_mul _
+    apply (hf.dist_le_mul _ (A n) _ (A m)).trans
+    exact mul_le_mul_of_nonneg_left (hb n m N hn hm) K.2
+  · rw [← mul_zero (K : Real)]
+    exact blim.const_mul _
 
 中文:
 引理 LipschitzOnWith.cauchySeq_comp
@@ -82,7 +85,10 @@ lemma LipschitzOnWith.cauchySeq_comp
   · exact fun n => mul_nonneg (by positivity) (b_nonneg n)
   · intro n m N hn hm
     have A n : u n in s := h'u (mem_range_self _)
-    apply (hf.dist_le_mul _
+    apply (hf.dist_le_mul _ (A n) _ (A m)).trans
+    exact mul_le_mul_of_nonneg_left (hb n m N hn hm) K.2
+  · rw [← mul_zero (K : Real)]
+    exact blim.const_mul _
 
 Depends on / 依赖: b_nonneg, blim.const_mul, cauchySeq_iff_le_tendsto_0, const_mul, dist_le_mul, hf.dist_le_mul, mem_range_self, mul_le_mul_of_nonneg_left, mul_nonneg, mul_zero
 -/
@@ -110,7 +116,7 @@ theorem continuousAt_of_locally_lipschitz
   refine tendsto_iff_dist_tendsto_zero.2 (squeeze_zero' (Eventually.of_forall fun _ => dist_nonneg)
     (mem_of_superset (ball_mem_nhds _ hr) h) ?_)
   -- Then show that `K * dist y x` tends to zero as `y → x`
-  exact Con
+  exact Continuous.tendsto' (by fun_prop) x 0 (by simp)
 
 中文:
 定理 continuousAt_of_locally_lipschitz
@@ -120,7 +126,7 @@ theorem continuousAt_of_locally_lipschitz
   refine tendsto_iff_dist_tendsto_zero.2 (squeeze_zero' (Eventually.of_forall fun _ => dist_nonneg)
     (mem_of_superset (ball_mem_nhds _ hr) h) ?_)
   -- Then show that `K * dist y x` tends to zero as `y → x`
-  exact Con
+  exact Continuous.tendsto' (by fun_prop) x 0 (by simp)
 -/
 theorem continuousAt_of_locally_lipschitz {f : α -> β} {x : α} {r : Real} (hr : 0 < r) (K : Real)
     (h : forall y, dist y x < r -> dist (f y) (f x) <= K * dist y x) : ContinuousAt f x := by
@@ -140,7 +146,58 @@ lemma LocallyLipschitzOn.exists_lipschitzOnWith_of_compact
   /- `f` being locally Lipschitz on `s` means that it is continuous and that it is Lipschitz on a
   ball of some radius `ε x hx` within `s` with Lipschitz bound `K x hx` around every `x ∈ s`. -/
   have hf' := hf.continuousOn
-  replace hf : forall x in s, exists ε > 0, exists K, LipschitzOnWith K 
+  replace hf : forall x in s, exists ε > 0, exists K, LipschitzOnWith K f (ball x ε inter s) := fun x hx => by
+    let ⟨K, t, ht, hf⟩ := hf hx
+    let ⟨ε, hε, hε'⟩ := Metric.mem_nhdsWithin_iff.1 ht
+    exact ⟨ε, hε, K, hf.mono hε'⟩
+  choose ε hε K hf using hf
+  /- We also have constants `K' x hx` for all `x ∈ s` such that `edist (f x) (f y) ≤ K' * edist x y`
+  for all `y ∈ s` outside of `ball x (ε x hx)`, by continuity of
+  `fun y ↦ dist (f x) (f y) / dist x y` on the compact set `s.diff (ball x (ε x hx))`. -/
+  have (x) (hx : x in s) : exists K' : Real>=0, forall y in s.diff (ball x (ε x hx)),
+      edist (f x) (f y) <= K' * edist x y := by
+    let ⟨K', hK'⟩ := (hs.diff isOpen_ball).bddAbove_image
+(f := fun y => dist (f x) (f y) / dist x y) .div (.mono (by fun_prop) s.sdiff_subset)
+        (by fun_prop) fun y hy => ((hε x hx).trans_le <| not_lt.1 <| dist_comm x y ▸ hy.2).ne'
+    refine ⟨.mk (K' ⊔ 0) le_sup_right, fun y hy => ?_⟩
+    simp_rw [edist_nndist, ← ENNReal.coe_mul, ENNReal.coe_le_coe]
+    refine (div_le_iff₀ ?_).1 ?_
+· exact NNReal.coe_pos.1 coe_nndist x y ▸
+        ((hε x hx).trans_le <| not_lt.1 <| dist_comm x y ▸ hy.2)
+    · simp [← NNReal.coe_le_coe, (mem_upperBounds.1 hK') _ <| mem_image_of_mem _ hy]
+  choose K' hK' using this
+  /- By compactness of `s`, there exists some finite set `t` such that the balls of radius
+  `ε x hx / 2` around all `x ∈ t` cover `s`. -/
+  obtain ⟨t, ht⟩ := hs.elim_nhdsWithin_subcover' (fun x hx => s inter ball x (ε x hx / 2))
+    (fun x hx => inter_mem_nhdsWithin s <| ball_mem_nhds x <| half_pos <| hε x hx)
+  /- For every `z ∈ t` we can show that `f` satisfies the Lipschitz condition with bound
+  `K z hz + 2 * K' z hz` for all points `x ∈ s ∩ ball z (ε z hz / 2)` and `y ∈ s`, so `f` is
+  Lipschitz on `s` with the supremum of these bounds over all `z ∈ t` as its bound. -/
+  use t.sup fun i => K _ i.2 + 2 * K' _ i.2
+  intro x hx y hy
+let ⟨z, hz, hx'⟩ := mem_iUnion₂.1 ht hx
+  by_cases hy' : y in ball z.1 (ε _ z.2)
+  · /- For `y ∈ ball z (ε z hz)` this follows from `f` being Lipschitz with bound `K z hz`
+    on `ball z (ε z hz)`. -/
+refine (hf _ z.2 ⟨hx'.2.trans <| half_lt_self <| hε _ z.2, hx⟩ ⟨hy', hy⟩).trans
+      mul_le_mul_of_nonneg_right ?_ zero_le
+exact ENNReal.coe_le_coe.2 t.le_sup_of_le hz le_self_add
+  · /- For `y ∉ ball z (ε z hz)` this follows by using the triangle inequality, bounding
+    the distances from `f z` to `f x` and `f y` using the bounds `K z hz` and `K' z hz`, and then
+    using the triangle inequality again for `edist z y ≤ edist x z + edist x y ≤ 2 * edist x y`. -/
+    calc edist (f x) (f y)
+      _ <= edist (f z) (f x) + edist (f z) (f y) := edist_triangle_left _ _ _
+      _ <= (K _ z.2) * edist z.1 x + edist (f z) (f y) := add_le_add_left
+        (hf _ z.2 ⟨mem_ball_self <| hε _ z.2, z.2⟩ ⟨hx'.2.trans <| half_lt_self <| hε _ z.2, hx⟩) _
+      _ <= (K _ z.2) * edist z.1 x + (K' _ z.2) * edist z.1 y :=
+        add_le_add_right (hK' _ z.2 _ ⟨hy, hy'⟩) _
+      _ <= (K _ z.2) * edist z.1 x + (K' _ z.2) * (edist x z.1 + edist x y) := by
+        gcongr; exact edist_triangle_left z.1 y x
+      _ <= (K _ z.2) * edist x y + (K' _ z.2) * (edist x y + edist x y) := by
+        simp_rw [edist_dist, dist_comm _ x]
+        gcongr <;> linarith [mem_ball.1 hx'.2, (not_lt (α := Real)).1 hy', dist_triangle_left y z x]
+      _ = ↑(K _ z.2 + 2 * K' _ z.2) * edist x y := by push_cast; ring
+      _ <= _ := by gcongr; exact .trans (by rfl) (t.le_sup hz)
 
 中文:
 引理 LocallyLipschitzOn.存在_lipschitzOnWith_of_compact
@@ -149,7 +206,58 @@ lemma LocallyLipschitzOn.exists_lipschitzOnWith_of_compact
   /- `f` being locally Lipschitz on `s` means that it is continuous and that it is Lipschitz on a
   ball of some radius `ε x hx` within `s` with Lipschitz bound `K x hx` around every `x ∈ s`. -/
   have hf' := hf.continuousOn
-  replace hf : forall x in s, exists ε > 0, exists K, LipschitzOnWith K 
+  replace hf : forall x in s, exists ε > 0, exists K, LipschitzOnWith K f (ball x ε inter s) := fun x hx => by
+    let ⟨K, t, ht, hf⟩ := hf hx
+    let ⟨ε, hε, hε'⟩ := Metric.mem_nhdsWithin_iff.1 ht
+    exact ⟨ε, hε, K, hf.mono hε'⟩
+  choose ε hε K hf using hf
+  /- We also have constants `K' x hx` for all `x ∈ s` such that `edist (f x) (f y) ≤ K' * edist x y`
+  for all `y ∈ s` outside of `ball x (ε x hx)`, by continuity of
+  `fun y ↦ dist (f x) (f y) / dist x y` on the compact set `s.diff (ball x (ε x hx))`. -/
+  have (x) (hx : x in s) : exists K' : Real>=0, forall y in s.diff (ball x (ε x hx)),
+      edist (f x) (f y) <= K' * edist x y := by
+    let ⟨K', hK'⟩ := (hs.diff isOpen_ball).bddAbove_image
+(f := fun y => dist (f x) (f y) / dist x y) .div (.mono (by fun_prop) s.sdiff_subset)
+        (by fun_prop) fun y hy => ((hε x hx).trans_le <| not_lt.1 <| dist_comm x y ▸ hy.2).ne'
+    refine ⟨.mk (K' ⊔ 0) le_sup_right, fun y hy => ?_⟩
+    simp_rw [edist_nndist, ← ENNReal.coe_mul, ENNReal.coe_le_coe]
+    refine (div_le_iff₀ ?_).1 ?_
+· exact NNReal.coe_pos.1 coe_nndist x y ▸
+        ((hε x hx).trans_le <| not_lt.1 <| dist_comm x y ▸ hy.2)
+    · simp [← NNReal.coe_le_coe, (mem_upperBounds.1 hK') _ <| mem_image_of_mem _ hy]
+  choose K' hK' using this
+  /- By compactness of `s`, there exists some finite set `t` such that the balls of radius
+  `ε x hx / 2` around all `x ∈ t` cover `s`. -/
+  obtain ⟨t, ht⟩ := hs.elim_nhdsWithin_subcover' (fun x hx => s inter ball x (ε x hx / 2))
+    (fun x hx => inter_mem_nhdsWithin s <| ball_mem_nhds x <| half_pos <| hε x hx)
+  /- For every `z ∈ t` we can show that `f` satisfies the Lipschitz condition with bound
+  `K z hz + 2 * K' z hz` for all points `x ∈ s ∩ ball z (ε z hz / 2)` and `y ∈ s`, so `f` is
+  Lipschitz on `s` with the supremum of these bounds over all `z ∈ t` as its bound. -/
+  use t.sup fun i => K _ i.2 + 2 * K' _ i.2
+  intro x hx y hy
+let ⟨z, hz, hx'⟩ := mem_iUnion₂.1 ht hx
+  by_cases hy' : y in ball z.1 (ε _ z.2)
+  · /- For `y ∈ ball z (ε z hz)` this follows from `f` being Lipschitz with bound `K z hz`
+    on `ball z (ε z hz)`. -/
+refine (hf _ z.2 ⟨hx'.2.trans <| half_lt_self <| hε _ z.2, hx⟩ ⟨hy', hy⟩).trans
+      mul_le_mul_of_nonneg_right ?_ zero_le
+exact ENNReal.coe_le_coe.2 t.le_sup_of_le hz le_self_add
+  · /- For `y ∉ ball z (ε z hz)` this follows by using the triangle inequality, bounding
+    the distances from `f z` to `f x` and `f y` using the bounds `K z hz` and `K' z hz`, and then
+    using the triangle inequality again for `edist z y ≤ edist x z + edist x y ≤ 2 * edist x y`. -/
+    calc edist (f x) (f y)
+      _ <= edist (f z) (f x) + edist (f z) (f y) := edist_triangle_left _ _ _
+      _ <= (K _ z.2) * edist z.1 x + edist (f z) (f y) := add_le_add_left
+        (hf _ z.2 ⟨mem_ball_self <| hε _ z.2, z.2⟩ ⟨hx'.2.trans <| half_lt_self <| hε _ z.2, hx⟩) _
+      _ <= (K _ z.2) * edist z.1 x + (K' _ z.2) * edist z.1 y :=
+        add_le_add_right (hK' _ z.2 _ ⟨hy, hy'⟩) _
+      _ <= (K _ z.2) * edist z.1 x + (K' _ z.2) * (edist x z.1 + edist x y) := by
+        gcongr; exact edist_triangle_left z.1 y x
+      _ <= (K _ z.2) * edist x y + (K' _ z.2) * (edist x y + edist x y) := by
+        simp_rw [edist_dist, dist_comm _ x]
+        gcongr <;> linarith [mem_ball.1 hx'.2, (not_lt (α := Real)).1 hy', dist_triangle_left y z x]
+      _ = ↑(K _ z.2 + 2 * K' _ z.2) * edist x y := by push_cast; ring
+      _ <= _ := by gcongr; exact .trans (by rfl) (t.le_sup hz)
 -/
 lemma LocallyLipschitzOn.exists_lipschitzOnWith_of_compact {f : α -> β} {s : Set α}
     (hs : IsCompact s) (hf : LocallyLipschitzOn s f) : exists K, LipschitzOnWith K f s := by

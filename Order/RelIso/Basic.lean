@@ -1834,6 +1834,10 @@ definition ofMonotone
   · apply Std.Trichotomous.trichotomous (r := r) a b
     · exact fun h => irrefl (r := s) (f a) (by simpa [e] using H _ _ h)
     · exact fun h => irrefl (r := s) (f b) (by simpa [e] using H _ _ h)
+  · refine Not.imp_symm (Std.Trichotomous.trichotomous a b · fun h' => asymm (H _ _ h') h) ?_
+    exact (irrefl _ <| · ▸ h)
+
+@[simp]
 
 中文:
 定义 ofMonotone
@@ -1844,6 +1848,10 @@ definition ofMonotone
   · apply Std.Trichotomous.trichotomous (r := r) a b
     · exact fun h => irrefl (r := s) (f a) (by simpa [e] using H _ _ h)
     · exact fun h => irrefl (r := s) (f b) (by simpa [e] using H _ _ h)
+  · refine Not.imp_symm (Std.Trichotomous.trichotomous a b · fun h' => asymm (H _ _ h') h) ?_
+    exact (irrefl _ <| · ▸ h)
+
+@[simp]
 
 Depends on / 依赖: Not.imp_symm, Std.Asymm.irrefl, Std.Trichotomous.trichotomous, Trichotomous, imp_symm, irrefl, trichotomous
 -/

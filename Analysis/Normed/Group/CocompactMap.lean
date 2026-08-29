@@ -43,7 +43,9 @@ theorem CocompactMapClass.norm_le
   rcases closedBall_compl_subset_of_mem_cocompact h 0 with ⟨r, hr⟩
   use r
   intro x hx
-  suffices x in f ⁻¹' (Metric.closedBall 0 ε)ᶜ by si
+  suffices x in f ⁻¹' (Metric.closedBall 0 ε)ᶜ by simp_all
+  apply hr
+  simp [hx]
 
 中文:
 定理 余compact映射类.norm_le
@@ -55,7 +57,9 @@ theorem CocompactMapClass.norm_le
   rcases closedBall_compl_subset_of_mem_cocompact h 0 with ⟨r, hr⟩
   use r
   intro x hx
-  suffices x in f ⁻¹' (Metric.closedBall 0 ε)ᶜ by si
+  suffices x in f ⁻¹' (Metric.closedBall 0 ε)ᶜ by simp_all
+  apply hr
+  simp [hx]
 
 Depends on / 依赖: Metric, Metric.closedBall, closedBall, closedBall_compl_subset_of_mem_cocompact, cocompact_tendsto, mem_cocompact_of_closedBall_compl_subset, rfl.subset, specialize, subset, tendsto_def
 -/
@@ -87,7 +91,7 @@ theorem Filter.tendsto_cocompact_cocompact_of_norm
   intro x hx
   simp only [Set.mem_compl_iff, Metric.mem_closedBall, dist_zero_right, not_le] at hx
   apply hε
-  
+  simp [hr x hx]
 
 中文:
 定理 滤子.tendsto_cocompact_cocompact_of_norm
@@ -102,7 +106,7 @@ theorem Filter.tendsto_cocompact_cocompact_of_norm
   intro x hx
   simp only [Set.mem_compl_iff, Metric.mem_closedBall, dist_zero_right, not_le] at hx
   apply hε
-  
+  simp [hr x hx]
 
 Depends on / 依赖: Metric, Metric.mem_closedBall, Set.mem_compl_iff, closedBall_compl_subset_of_mem_cocompact, dist_zero_right, mem_closedBall, mem_cocompact_of_closedBall_compl_subset, mem_compl_iff, not_le, tendsto_def
 -/

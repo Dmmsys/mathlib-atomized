@@ -37,7 +37,39 @@ finsetIco a b := (Finset.range (b - a).toNat).map Nat.castEmbedding.trans addLef
   finsetIoc a b :=
 (Finset.range (b - a).toNat).map Nat.castEmbedding.trans addLeftEmbedding (a + 1)
   finsetIoo a b :=
-(Finset
+(Finset.range (b - a - 1).toNat).map Nat.castEmbedding.trans addLeftEmbedding (a + 1)
+  finset_mem_Icc a b x := by
+    simp_rw [mem_map, mem_range, Function.Embedding.trans_apply, Nat.castEmbedding_apply,
+      addLeftEmbedding_apply]
+    constructor
+    · lia
+    · intro
+      use (x - a).toNat
+      lia
+  finset_mem_Ico a b x := by
+    simp_rw [mem_map, mem_range, Function.Embedding.trans_apply, Nat.castEmbedding_apply,
+      addLeftEmbedding_apply]
+    constructor
+    · lia
+    · intro
+      use (x - a).toNat
+      lia
+  finset_mem_Ioc a b x := by
+    simp_rw [mem_map, mem_range, Function.Embedding.trans_apply, Nat.castEmbedding_apply,
+      addLeftEmbedding_apply]
+    constructor
+    · lia
+    · intro
+      use (x - (a + 1)).toNat
+      lia
+  finset_mem_Ioo a b x := by
+    simp_rw [mem_map, mem_range, Function.Embedding.trans_apply, Nat.castEmbedding_apply,
+      addLeftEmbedding_apply]
+    constructor
+    · lia
+    · intro
+      use (x - (a + 1)).toNat
+      lia
 
 中文:
 实例 instLocallyFiniteOrder
@@ -47,7 +79,39 @@ finsetIco a b := (Finset.range (b - a).toNat).map Nat.castEmbedding.trans addLef
   finsetIoc a b :=
 (Finset.range (b - a).toNat).map Nat.castEmbedding.trans addLeftEmbedding (a + 1)
   finsetIoo a b :=
-(Finset
+(Finset.range (b - a - 1).toNat).map Nat.castEmbedding.trans addLeftEmbedding (a + 1)
+  finset_mem_Icc a b x := by
+    simp_rw [mem_map, mem_range, Function.Embedding.trans_apply, Nat.castEmbedding_apply,
+      addLeftEmbedding_apply]
+    constructor
+    · lia
+    · intro
+      use (x - a).toNat
+      lia
+  finset_mem_Ico a b x := by
+    simp_rw [mem_map, mem_range, Function.Embedding.trans_apply, Nat.castEmbedding_apply,
+      addLeftEmbedding_apply]
+    constructor
+    · lia
+    · intro
+      use (x - a).toNat
+      lia
+  finset_mem_Ioc a b x := by
+    simp_rw [mem_map, mem_range, Function.Embedding.trans_apply, Nat.castEmbedding_apply,
+      addLeftEmbedding_apply]
+    constructor
+    · lia
+    · intro
+      use (x - (a + 1)).toNat
+      lia
+  finset_mem_Ioo a b x := by
+    simp_rw [mem_map, mem_range, Function.Embedding.trans_apply, Nat.castEmbedding_apply,
+      addLeftEmbedding_apply]
+    constructor
+    · lia
+    · intro
+      use (x - (a + 1)).toNat
+      lia
 
 Depends on / 依赖: Embedding, Finset, Finset.range, Function, Function.Embedding.trans_apply, Nat.castEmbedding.trans, Nat.castEmbedding_apply, addLeftEmbed, addLeftEmbedding, castEmbedding, castEmbedding_apply, finsetIco, finsetIoc, finsetIoo, finset_mem_Icc, mem_map, mem_range, simp_rw, trans_apply
 -/
@@ -499,7 +563,22 @@ theorem image_Ico_emod
   rintro ⟨hi₀, hia⟩
   have hn := Int.emod_add_mul_ediv n a
   obtain hi | hi := lt_or_ge i (n % a)
-  · refine ⟨i + a * 
+  · refine ⟨i + a * (n / a + 1), ⟨?_, ?_⟩, ?_⟩
+    · calc
+        n = 0 + n % a + a * (n / a) := by simp [hn]
+        _ <= i + a + a * (n / a) := by gcongr; exact (Int.emod_lt_of_pos n ha).le
+        _ = i + a * (n / a + 1) := by grind
+    · calc
+        i + a * (n / a + 1) < n % a + a * (n / a + 1) := by gcongr
+        _ = n + a := by rw [mul_add, mul_one, ← add_assoc, hn]
+    · rw [Int.add_mul_emod_self_left, Int.emod_eq_of_lt hi₀ hia]
+  · refine ⟨i + a * (n / a), ⟨?_, ?_⟩, ?_⟩
+    · exact hn.symm.le.trans (add_le_add_left hi _)
+    · rw [add_comm n a]
+      refine add_lt_add_of_lt_of_le hia (le_trans ?_ hn.le)
+      simp only [le_add_iff_nonneg_left]
+      exact Int.emod_nonneg n (ne_of_gt ha)
+    · rw [Int.add_mul_emod_self_left, Int.emod_eq_of_lt hi₀ hia]
 
 中文:
 定理 image_Ico_emod
@@ -516,7 +595,22 @@ theorem image_Ico_emod
   rintro ⟨hi₀, hia⟩
   have hn := Int.emod_add_mul_ediv n a
   obtain hi | hi := lt_or_ge i (n % a)
-  · refine ⟨i + a * 
+  · refine ⟨i + a * (n / a + 1), ⟨?_, ?_⟩, ?_⟩
+    · calc
+        n = 0 + n % a + a * (n / a) := by simp [hn]
+        _ <= i + a + a * (n / a) := by gcongr; exact (Int.emod_lt_of_pos n ha).le
+        _ = i + a * (n / a + 1) := by grind
+    · calc
+        i + a * (n / a + 1) < n % a + a * (n / a + 1) := by gcongr
+        _ = n + a := by rw [mul_add, mul_one, ← add_assoc, hn]
+    · rw [Int.add_mul_emod_self_left, Int.emod_eq_of_lt hi₀ hia]
+  · refine ⟨i + a * (n / a), ⟨?_, ?_⟩, ?_⟩
+    · exact hn.symm.le.trans (add_le_add_left hi _)
+    · rw [add_comm n a]
+      refine add_lt_add_of_lt_of_le hia (le_trans ?_ hn.le)
+      simp only [le_add_iff_nonneg_left]
+      exact Int.emod_nonneg n (ne_of_gt ha)
+    · rw [Int.add_mul_emod_self_left, Int.emod_eq_of_lt hi₀ hia]
 
 Depends on / 依赖: Int.emod_add_mul_ediv, Int.emod_lt_of_pos, emod_add_mul_ediv, emod_lt_of_pos, emod_nonneg, eq_or_lt_of_le, ha.ne, lt_or_ge, mem_Ico, mem_image
 -/

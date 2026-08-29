@@ -225,7 +225,13 @@ theorem basisSets_intersect
     rcases p.basisSets_iff.mp hV with ⟨t, r₂, hr₂, hV⟩
     use ((s union t).sup p).ball 0 (min r₁ r₂)
     refine ⟨p.basisSets_mem (s union t) (lt_min_iff.mpr ⟨hr₁, hr₂⟩), ?_⟩
-    rw [hU]; rw [hV]; rw [ball_finset_sup_eq_iInter _ _
+    rw [hU]; rw [hV]; rw [ball_finset_sup_eq_iInter _ _ _ (lt_min_iff.mpr ⟨hr₁]; rw [hr₂⟩)]; rw [ball_finset_sup_eq_iInter _ _ _ hr₁]; rw [ball_finset_sup_eq_iInter _ _ _ hr₂]
+    exact
+      Set.subset_inter
+        (Set.iInter₂_mono' fun i hi =>
+⟨i, Finset.subset_union_left hi, ball_mono min_le_left _ _⟩)
+        (Set.iInter₂_mono' fun i hi =>
+⟨i, Finset.subset_union_right hi, ball_mono min_le_right _ _⟩)
 
 中文:
 定理 basisSets_intersect
@@ -236,7 +242,13 @@ theorem basisSets_intersect
     rcases p.basisSets_iff.mp hV with ⟨t, r₂, hr₂, hV⟩
     use ((s union t).sup p).ball 0 (min r₁ r₂)
     refine ⟨p.basisSets_mem (s union t) (lt_min_iff.mpr ⟨hr₁, hr₂⟩), ?_⟩
-    rw [hU]; rw [hV]; rw [ball_finset_sup_eq_iInter _ _
+    rw [hU]; rw [hV]; rw [ball_finset_sup_eq_iInter _ _ _ (lt_min_iff.mpr ⟨hr₁]; rw [hr₂⟩)]; rw [ball_finset_sup_eq_iInter _ _ _ hr₁]; rw [ball_finset_sup_eq_iInter _ _ _ hr₂]
+    exact
+      Set.subset_inter
+        (Set.iInter₂_mono' fun i hi =>
+⟨i, Finset.subset_union_left hi, ball_mono min_le_left _ _⟩)
+        (Set.iInter₂_mono' fun i hi =>
+⟨i, Finset.subset_union_right hi, ball_mono min_le_right _ _⟩)
 
 Depends on / 依赖: Finset, Finset.subset_union_left, Set.iInter, Set.subset_inter, ball_finset_sup_eq_iInter, ball_mono, basisSets_iff, basisSets_mem, classical, lt_min_iff, lt_min_iff.mpr, min_, p.basisSets_iff.mp, p.basisSets_mem, subset_inter, subset_union_left
 -/
@@ -378,7 +390,8 @@ theorem basisSets_smul_right
   · simp_rw [(lt_div_iff₀ h).symm]
     rw [← _root_.ball_zero_eq]
     exact Metric.ball_mem_nhds 0 (div_pos hr h)
-  simp_rw
+  simp_rw [le_antisymm h (apply_nonneg _ v), mul_zero, hr]
+  exact IsOpen.mem_nhds isOpen_univ (mem_univ 0)
 
 中文:
 定理 basisSets_smul_right
@@ -391,7 +404,8 @@ theorem basisSets_smul_right
   · simp_rw [(lt_div_iff₀ h).symm]
     rw [← _root_.ball_zero_eq]
     exact Metric.ball_mem_nhds 0 (div_pos hr h)
-  simp_rw
+  simp_rw [le_antisymm h (apply_nonneg _ v), mul_zero, hr]
+  exact IsOpen.mem_nhds isOpen_univ (mem_univ 0)
 
 Depends on / 依赖: Filter, Filter.eventually_iff, IsOpen, IsOpen.mem_nhds, Metric, Metric.ball_mem_nhds, _root_, _root_.ball_zero_eq, apply_nonneg, ball_mem_nhds, ball_zero_eq, basisSets_iff, div_pos, eventually_iff, isOpen_univ, le_antisymm, map_smul_eq_mul, mem_ball_zero, mem_nhds, mem_univ
 -/
@@ -418,7 +432,7 @@ theorem basisSets_smul
   refine ⟨Metric.ball 0 √r, Metric.ball_mem_nhds 0 (Real.sqrt_pos.mpr hr), ?_⟩
   refine ⟨(s.sup p).ball 0 √r, p.basisSets_mem s (Real.sqrt_pos.mpr hr), ?_⟩
   refine Set.Subset.trans (ball_smul_ball (s.sup p) √r √r) ?_
-  rw [hU]; rw [Real.mul_self
+  rw [hU]; rw [Real.mul_self_sqrt (le_of_lt hr)]
 
 中文:
 定理 basisSets_smul
@@ -428,7 +442,7 @@ theorem basisSets_smul
   refine ⟨Metric.ball 0 √r, Metric.ball_mem_nhds 0 (Real.sqrt_pos.mpr hr), ?_⟩
   refine ⟨(s.sup p).ball 0 √r, p.basisSets_mem s (Real.sqrt_pos.mpr hr), ?_⟩
   refine Set.Subset.trans (ball_smul_ball (s.sup p) √r √r) ?_
-  rw [hU]; rw [Real.mul_self
+  rw [hU]; rw [Real.mul_self_sqrt (le_of_lt hr)]
 
 Depends on / 依赖: Metric, Metric.ball, Metric.ball_mem_nhds, Real.mul_self_sqrt, Real.sqrt_pos.mpr, Set.Subset.trans, Subset, ball_mem_nhds, ball_smul_ball, basisSets_iff, basisSets_mem, le_of_lt, mul_self_sqrt, p.basisSets_iff.mp, p.basisSets_mem, s.sup, sqrt_pos
 -/
@@ -455,7 +469,9 @@ theorem basisSets_smul_left
   · rw [(s.sup p).smul_ball_preimage 0 r x h, smul_zero]
     use (s.sup p).ball 0 (r / ‖x‖)
     exact ⟨p.basisSets_mem s (div_pos hr (norm_pos_iff.mpr h)), Subset.rfl⟩
-  refine ⟨(s.sup p).ball 0 r, p.basisSets_mem 
+  refine ⟨(s.sup p).ball 0 r, p.basisSets_mem s hr, ?_⟩
+  simp only [not_ne_iff.mp h, Set.subset_def, mem_ball_zero, hr, mem_univ, map_zero, imp_true_iff,
+    preimage_const_of_mem, zero_smul]
 
 中文:
 定理 basisSets_smul_left
@@ -467,7 +483,9 @@ theorem basisSets_smul_left
   · rw [(s.sup p).smul_ball_preimage 0 r x h, smul_zero]
     use (s.sup p).ball 0 (r / ‖x‖)
     exact ⟨p.basisSets_mem s (div_pos hr (norm_pos_iff.mpr h)), Subset.rfl⟩
-  refine ⟨(s.sup p).ball 0 r, p.basisSets_mem 
+  refine ⟨(s.sup p).ball 0 r, p.basisSets_mem s hr, ?_⟩
+  simp only [not_ne_iff.mp h, Set.subset_def, mem_ball_zero, hr, mem_univ, map_zero, imp_true_iff,
+    preimage_const_of_mem, zero_smul]
 
 Depends on / 依赖: Set.subset_def, Subset, Subset.rfl, basisSets_iff, basisSets_mem, div_pos, imp_true_iff, map_zero, mem_ball_zero, mem_univ, norm_pos_iff, norm_pos_iff.mpr, not_ne_iff, not_ne_iff.mp, p.basisSets_iff.mp, p.basisSets_mem, preimage_const_of_mem, s.sup, smul_ball_preimage, smul_zero
 -/
@@ -522,7 +540,15 @@ theorem filter_eq_iInf
     refine ⟨(p i).ball 0 ε, ?_, ?_⟩
     · rw [← (Finset.sup_singleton : _ = p i)]
       exact p.basisSets_mem {i} hε
-    · rw [id,
+    · rw [id, (p i).ball_zero_eq_preimage_ball]
+  · rw [p.moduleFilterBasis.toFilterBasis.hasBasis.ge_iff]
+    rintro U (hU : U in p.basisSets)
+    rcases p.basisSets_iff.mp hU with ⟨s, r, hr, rfl⟩
+    rw [id]; rw [Seminorm.ball_finset_sup_eq_iInter _ _ _ hr]; rw [s.iInter_mem_sets]
+    exact fun i _ =>
+      Filter.mem_iInf_of_mem i
+        ⟨Metric.ball 0 r, Metric.ball_mem_nhds 0 hr,
+          Eq.subset (p i).ball_zero_eq_preimage_ball.symm⟩
 
 中文:
 定理 filter_eq_iInf
@@ -535,7 +561,15 @@ theorem filter_eq_iInf
     refine ⟨(p i).ball 0 ε, ?_, ?_⟩
     · rw [← (Finset.sup_singleton : _ = p i)]
       exact p.basisSets_mem {i} hε
-    · rw [id,
+    · rw [id, (p i).ball_zero_eq_preimage_ball]
+  · rw [p.moduleFilterBasis.toFilterBasis.hasBasis.ge_iff]
+    rintro U (hU : U in p.basisSets)
+    rcases p.basisSets_iff.mp hU with ⟨s, r, hr, rfl⟩
+    rw [id]; rw [Seminorm.ball_finset_sup_eq_iInter _ _ _ hr]; rw [s.iInter_mem_sets]
+    exact fun i _ =>
+      Filter.mem_iInf_of_mem i
+        ⟨Metric.ball 0 r, Metric.ball_mem_nhds 0 hr,
+          Eq.subset (p i).ball_zero_eq_preimage_ball.symm⟩
 
 Depends on / 依赖: Finset, Finset.sup_singleton, Metric, Metric.nhds_basis_ball.comap, Seminorm, Seminorm.ball_finset_sup_eq_iInter, ball_finset_sup_eq_iInter, ball_zero_eq_preimage_ball, basisSets, basisSets_iff, basisSets_mem, ge_iff, hasBasis, le_antisymm, le_basis_iff, le_iInf, moduleFilterBasis, nhds_basis_ball, p.basisSets, p.basisSets_iff.mp
 -/
@@ -737,7 +771,12 @@ theorem isBounded_sup
   use s'.card • s'.sup fC, Finset.biUnion s' fₛ
   have hs : forall i : ι', i in s' -> (q i).comp f <= s'.sup fC • (Finset.biUnion s' fₛ).sup p := by
     intro i hi
- 
+    refine (hf i).trans (IsOrderedSMul.smul_le_smul (Finset.le_sup hi) ?_)
+    exact Finset.sup_mono (Finset.subset_biUnion_of_mem fₛ hi)
+  refine (comp_mono f (finset_sup_le_sum q s')).trans ?_
+  simp_rw [← pullback_apply, map_sum, pullback_apply]
+  refine (Finset.sum_le_sum hs).trans ?_
+  rw [Finset.sum_const]; rw [smul_assoc]
 
 中文:
 定理 isBounded_sup
@@ -750,7 +789,12 @@ theorem isBounded_sup
   use s'.card • s'.sup fC, Finset.biUnion s' fₛ
   have hs : forall i : ι', i in s' -> (q i).comp f <= s'.sup fC • (Finset.biUnion s' fₛ).sup p := by
     intro i hi
- 
+    refine (hf i).trans (IsOrderedSMul.smul_le_smul (Finset.le_sup hi) ?_)
+    exact Finset.sup_mono (Finset.subset_biUnion_of_mem fₛ hi)
+  refine (comp_mono f (finset_sup_le_sum q s')).trans ?_
+  simp_rw [← pullback_apply, map_sum, pullback_apply]
+  refine (Finset.sum_le_sum hs).trans ?_
+  rw [Finset.sum_const]; rw [smul_assoc]
 
 Depends on / 依赖: Finset, Finset.biUnion, Finset.le_sup, Finset.subset_biUnion_of_mem, Finset.sup_mono, IsOrderedSMul, IsOrderedSMul.smul_le_smul, Seminorm, Seminorm.bot_eq_zero, biUnion, bot_eq_zero, classical, comp_mono, eq_empty_or_nonempty, finset_sup_le_sum, le_sup, map_s, pullback_apply, simp_rw, smul_le_smul
 -/
@@ -970,7 +1014,9 @@ theorem WithSeminorms.hasBasis_ball
   convert! hp.hasBasis_zero_ball.map (x + ·) using 1
   ext sr : 1
   -- Porting note: extra type ascriptions needed on `0`
-  have : (sr.fst.sup p).ball (x +ᵥ (0 : E)) sr.snd = x +ᵥ (sr.fst.sup p).ball 0 sr.s
+  have : (sr.fst.sup p).ball (x +ᵥ (0 : E)) sr.snd = x +ᵥ (sr.fst.sup p).ball 0 sr.snd :=
+    Eq.symm (Seminorm.vadd_ball (sr.fst.sup p))
+  rwa [vadd_eq_add, add_zero] at this
 
 中文:
 定理 WithSeminorms.hasBasis_ball
@@ -981,7 +1027,9 @@ theorem WithSeminorms.hasBasis_ball
   convert! hp.hasBasis_zero_ball.map (x + ·) using 1
   ext sr : 1
   -- Porting note: extra type ascriptions needed on `0`
-  have : (sr.fst.sup p).ball (x +ᵥ (0 : E)) sr.snd = x +ᵥ (sr.fst.sup p).ball 0 sr.s
+  have : (sr.fst.sup p).ball (x +ᵥ (0 : E)) sr.snd = x +ᵥ (sr.fst.sup p).ball 0 sr.snd :=
+    Eq.symm (Seminorm.vadd_ball (sr.fst.sup p))
+  rwa [vadd_eq_add, add_zero] at this
 
 Depends on / 依赖: IsTopologicalAddGroup, convert, hasBasis_zero_ball, hp.hasBasis_zero_ball.map, hp.topologicalAddGroup, map_add_left_nhds_zero, topologicalAddGroup
 -/
@@ -1055,7 +1103,7 @@ theorem WithSeminorms.T1_of_separating
   rintro x (hx : x != 0)
   obtain ⟨i, pi_nonzero⟩ := h x hx
   refine ⟨{i}, p i x, by positivity, subset_compl_singleton_iff.mpr ?_⟩
-  rw [Finset.sup_singleton]; rw 
+  rw [Finset.sup_singleton]; rw [mem_ball]; rw [zero_sub]; rw [map_neg_eq_map]; rw [not_lt]
 
 中文:
 定理 WithSeminorms.T1_of_separating
@@ -1067,7 +1115,7 @@ theorem WithSeminorms.T1_of_separating
   rintro x (hx : x != 0)
   obtain ⟨i, pi_nonzero⟩ := h x hx
   refine ⟨{i}, p i x, by positivity, subset_compl_singleton_iff.mpr ?_⟩
-  rw [Finset.sup_singleton]; rw 
+  rw [Finset.sup_singleton]; rw [mem_ball]; rw [zero_sub]; rw [map_neg_eq_map]; rw [not_lt]
 
 Depends on / 依赖: Finset, Finset.sup_singleton, IsTopologicalAddGroup, IsTopologicalAddGroup.t1Space, hp.isOpen_iff_mem_balls, hp.topologicalAddGroup, isOpen_compl_iff, isOpen_iff_mem_balls, map_neg_eq_map, mem_ball, not_lt, pi_nonzero, subset_compl_singleton_iff, subset_compl_singleton_iff.mpr, sup_singleton, t1Space, topologicalAddGroup, zero_sub
 -/
@@ -1392,7 +1440,10 @@ theorem WithSeminorms.toPolynormableSpace
     refine le_antisymm ?_ ?_
     · simp_rw [le_iInf_iff, ← tendsto_iff_comap]
       intro ⟨p, hp⟩
-      exact hp.tendsto' 0 0 (map_
+      exact hp.tendsto' 0 0 (map_zero _)
+    · simp_rw [hp, le_iInf_iff]
+      intro i
+      exact iInf_le (ι := {p : Seminorm 𝕜 E // Continuous p}) _ ⟨p i, hp' i⟩
 
 中文:
 定理 WithSeminorms.toPolynormableSpace
@@ -1404,7 +1455,10 @@ theorem WithSeminorms.toPolynormableSpace
     refine le_antisymm ?_ ?_
     · simp_rw [le_iInf_iff, ← tendsto_iff_comap]
       intro ⟨p, hp⟩
-      exact hp.tendsto' 0 0 (map_
+      exact hp.tendsto' 0 0 (map_zero _)
+    · simp_rw [hp, le_iInf_iff]
+      intro i
+      exact iInf_le (ι := {p : Seminorm 𝕜 E // Continuous p}) _ ⟨p i, hp' i⟩
 
 Depends on / 依赖: Continuous, Seminorm, SeminormFamily, SeminormFamily.withSeminorms_iff_nhds_eq_iInf, continuous_seminorm, hp.continuous_seminorm, hp.tendsto, hp.topologicalAddGroup, iInf_le, le_antisymm, le_iInf_iff, map_zero, simp_rw, tendsto, tendsto_iff_comap, topologicalAddGroup, withSeminorms_iff_nhds_eq_iInf
 -/
@@ -1519,7 +1573,18 @@ theorem WithSeminorms.isVonNBounded_iff_finset_seminorm_bounded
     rcases h.exists_pos with ⟨r, hr, h⟩
     obtain ⟨a, ha⟩ := NormedField.exists_lt_norm 𝕜 r
     specialize h a (le_of_lt ha)
-    rw [Semi
+    rw [Seminorm.smul_ball_zero (norm_pos_iff.1 <| hr.trans ha)]; rw [mul_one] at h
+    refine ⟨‖a‖, lt_trans hr ha, ?_⟩
+    intro x hx
+    specialize h hx
+    exact (Finset.sup I p).mem_ball_zero.mp h
+  intro h s' hs'
+  rcases p.basisSets_iff.mp hs' with ⟨I, r, hr, hs'⟩
+  rw [id]; rw [hs']
+  rcases h I with ⟨r', _, h'⟩
+  simp_rw [← (I.sup p).mem_ball_zero] at h'
+  refine Absorbs.mono_right ?_ h'
+  exact (Finset.sup I p).ball_zero_absorbs_ball_zero hr
 
 中文:
 定理 WithSeminorms.isVonNBounded_iff_finset_seminorm_bounded
@@ -1533,7 +1598,18 @@ theorem WithSeminorms.isVonNBounded_iff_finset_seminorm_bounded
     rcases h.exists_pos with ⟨r, hr, h⟩
     obtain ⟨a, ha⟩ := NormedField.exists_lt_norm 𝕜 r
     specialize h a (le_of_lt ha)
-    rw [Semi
+    rw [Seminorm.smul_ball_zero (norm_pos_iff.1 <| hr.trans ha)]; rw [mul_one] at h
+    refine ⟨‖a‖, lt_trans hr ha, ?_⟩
+    intro x hx
+    specialize h hx
+    exact (Finset.sup I p).mem_ball_zero.mp h
+  intro h s' hs'
+  rcases p.basisSets_iff.mp hs' with ⟨I, r, hr, hs'⟩
+  rw [id]; rw [hs']
+  rcases h I with ⟨r', _, h'⟩
+  simp_rw [← (I.sup p).mem_ball_zero] at h'
+  refine Absorbs.mono_right ?_ h'
+  exact (Finset.sup I p).ball_zero_absorbs_ball_zero hr
 
 Depends on / 依赖: Finset, Finset.sup, I.sup, NormedField, NormedField.exists_lt_norm, Seminorm, Seminorm.smul_ball_zero, basisSets_iff, basisSets_mem, exists_lt_norm, exists_pos, h.exists_pos, hasBasis, hp.hasBasis.isVonNBounded_iff, hr.trans, isVonNBounded_iff, le_of_lt, lt_trans, mem_ball_zero, mem_ball_zero.mp
 -/
@@ -1600,7 +1676,13 @@ theorem WithSeminorms.isVonNBounded_iff_seminorm_bounded
   · choose r hr h using hi
     have h' : 0 < I.sup' hI r := by
       rcases hI with ⟨i, hi⟩
-      exact lt_of_lt_of_le (hr 
+      exact lt_of_lt_of_le (hr i) (Finset.le_sup' r hi)
+    refine ⟨I.sup' hI r, h', fun x hx => finset_sup_apply_lt h' fun i hi => ?_⟩
+    refine lt_of_lt_of_le (h i x hx) ?_
+    simp only [Finset.le_sup'_iff]
+    exact ⟨i, hi, (Eq.refl _).le⟩
+  simp only [hI, Finset.sup_empty, coe_bot, Pi.zero_apply]
+  exact ⟨1, zero_lt_one, fun _ _ => zero_lt_one⟩
 
 中文:
 定理 WithSeminorms.isVonNBounded_iff_seminorm_bounded
@@ -1616,7 +1698,13 @@ theorem WithSeminorms.isVonNBounded_iff_seminorm_bounded
   · choose r hr h using hi
     have h' : 0 < I.sup' hI r := by
       rcases hI with ⟨i, hi⟩
-      exact lt_of_lt_of_le (hr 
+      exact lt_of_lt_of_le (hr i) (Finset.le_sup' r hi)
+    refine ⟨I.sup' hI r, h', fun x hx => finset_sup_apply_lt h' fun i hi => ?_⟩
+    refine lt_of_lt_of_le (h i x hx) ?_
+    simp only [Finset.le_sup'_iff]
+    exact ⟨i, hi, (Eq.refl _).le⟩
+  simp only [hI, Finset.sup_empty, coe_bot, Pi.zero_apply]
+  exact ⟨1, zero_lt_one, fun _ _ => zero_lt_one⟩
 
 Depends on / 依赖: Eq.refl, Finset, Finset.le_sup, Finset.sup_empty, Finset.sup_singleton, I.Nonempty, I.sup, Nonempty, _iff, coe_b, convert, finset_sup_apply_lt, hp.isVonNBounded_iff_finset_seminorm_bounded, isVonNBounded_iff_finset_seminorm_bounded, le_sup, lt_of_lt_of_le, sup_empty, sup_singleton
 -/
@@ -1718,7 +1806,52 @@ theorem withSeminorms_iff_mem_nhds_isVonNBounded
   we need to see that the neighborhoods of zero for the initial topology and for `p` coincide. -/
   refine ⟨fun h => ⟨?_, ?_⟩, ?_⟩
   · apply (h.mem_nhds_iff _ _).2
-    exact ⟨Finset.univ, 1, zero_lt_
+    exact ⟨Finset.univ, 1, zero_lt_one, by simp⟩
+  · apply h.isVonNBounded_iff_seminorm_bounded.2 (fun i => ?_)
+    exact ⟨1, zero_lt_one, by simp⟩
+  rintro ⟨h, h'⟩
+  apply SeminormFamily.withSeminorms_of_nhds
+  ext s
+  refine ⟨fun hs => ?_, fun hs => ?_⟩
+  · /- Show that a neighborhood `s` of zero for the topology is a neighborhood for `p`, by using the
+    boundedness of `p.ball 0 1`: this ensures that, for some nonzero `c`, we have
+    `p.ball 0 1 ⊆ c • s`, and therefore `p.ball 0 (‖c‖⁻¹) ⊆ s`. -/
+    obtain ⟨c, hc, c_ne⟩ : exists (c : 𝕜), p.ball 0 1 subseteq c • s ∧ c != 0 :=
+      ((h' hs).and (eventually_ne_cobounded 0)).exists
+    have : p.ball 0 (‖c⁻¹‖) subseteq s := by
+      have : c • p.ball 0 (‖c⁻¹‖) subseteq c • s := by
+        simpa [smul_ball_zero c_ne, ← norm_mul, c_ne] using hc
+      rwa [smul_set_subset_smul_set_iff₀ c_ne] at this
+    grw [← this]
+    apply FilterBasis.mem_filter_of_mem
+    change p.ball 0 (‖c⁻¹‖) in SeminormFamily.basisSets (fun (i : Fin 1) => p)
+    apply SeminormFamily.basisSets_singleton_mem _ 0
+    simpa using c_ne
+  · /- Show that a neighborhood `s` for `p` is a neighborhood for the topology, by using the
+    fact that `p.ball 0 1` is a neighborhood of `0`. Indeed, `s` contains a ball `p.ball 0 r`,
+    which contains `c • p.ball 0 1` for some nonzero `c`. The latter set is a neighborhood of zero
+    for the topology thanks to the topological vector space assumption. -/
+    rcases (FilterBasis.mem_filter_iff _).1 hs with ⟨t, ht, ts⟩
+    grw [← ts]
+    rcases (SeminormFamily.basisSets_iff _).1 ht with ⟨w, r, r_pos, hw⟩
+    rcases eq_or_ne w ∅ with rfl | w_ne
+    · simp only [ball, Finset.sup_empty, sub_zero, coe_bot, Pi.zero_apply, r_pos, ofPred_true] at hw
+      simp [hw]
+    have : t = p.ball 0 r := by
+      have : w = Finset.univ := by
+        rcases Finset.nonempty_of_ne_empty w_ne with ⟨i, hi⟩
+        ext j
+        simp only [Subsingleton.elim j i, hi, Finset.mem_univ]
+      simpa only [this, Finset.univ_unique, Fin.default_eq_zero, Fin.isValue,
+        Finset.sup_singleton] using hw
+    rw [this]
+    obtain ⟨c, c_pos, hc⟩ : exists (c : 𝕜), 0 < ‖c‖ ∧ ‖c‖ < r := exists_norm_lt 𝕜 r_pos
+    have c_ne : c != 0 := (by simpa using c_pos)
+    have : c • p.ball 0 1 subseteq p.ball 0 r := by
+      rw [smul_ball_zero c_ne]
+      exact ball_mono (by simpa using hc.le)
+    grw [← this]
+    simpa using smul_mem_nhds_smul₀ c_ne h
 
 中文:
 定理 withSeminorms_iff_mem_nhds_isVonNBounded
@@ -1728,7 +1861,52 @@ theorem withSeminorms_iff_mem_nhds_isVonNBounded
   we need to see that the neighborhoods of zero for the initial topology and for `p` coincide. -/
   refine ⟨fun h => ⟨?_, ?_⟩, ?_⟩
   · apply (h.mem_nhds_iff _ _).2
-    exact ⟨Finset.univ, 1, zero_lt_
+    exact ⟨Finset.univ, 1, zero_lt_one, by simp⟩
+  · apply h.isVonNBounded_iff_seminorm_bounded.2 (fun i => ?_)
+    exact ⟨1, zero_lt_one, by simp⟩
+  rintro ⟨h, h'⟩
+  apply SeminormFamily.withSeminorms_of_nhds
+  ext s
+  refine ⟨fun hs => ?_, fun hs => ?_⟩
+  · /- Show that a neighborhood `s` of zero for the topology is a neighborhood for `p`, by using the
+    boundedness of `p.ball 0 1`: this ensures that, for some nonzero `c`, we have
+    `p.ball 0 1 ⊆ c • s`, and therefore `p.ball 0 (‖c‖⁻¹) ⊆ s`. -/
+    obtain ⟨c, hc, c_ne⟩ : exists (c : 𝕜), p.ball 0 1 subseteq c • s ∧ c != 0 :=
+      ((h' hs).and (eventually_ne_cobounded 0)).exists
+    have : p.ball 0 (‖c⁻¹‖) subseteq s := by
+      have : c • p.ball 0 (‖c⁻¹‖) subseteq c • s := by
+        simpa [smul_ball_zero c_ne, ← norm_mul, c_ne] using hc
+      rwa [smul_set_subset_smul_set_iff₀ c_ne] at this
+    grw [← this]
+    apply FilterBasis.mem_filter_of_mem
+    change p.ball 0 (‖c⁻¹‖) in SeminormFamily.basisSets (fun (i : Fin 1) => p)
+    apply SeminormFamily.basisSets_singleton_mem _ 0
+    simpa using c_ne
+  · /- Show that a neighborhood `s` for `p` is a neighborhood for the topology, by using the
+    fact that `p.ball 0 1` is a neighborhood of `0`. Indeed, `s` contains a ball `p.ball 0 r`,
+    which contains `c • p.ball 0 1` for some nonzero `c`. The latter set is a neighborhood of zero
+    for the topology thanks to the topological vector space assumption. -/
+    rcases (FilterBasis.mem_filter_iff _).1 hs with ⟨t, ht, ts⟩
+    grw [← ts]
+    rcases (SeminormFamily.basisSets_iff _).1 ht with ⟨w, r, r_pos, hw⟩
+    rcases eq_or_ne w ∅ with rfl | w_ne
+    · simp only [ball, Finset.sup_empty, sub_zero, coe_bot, Pi.zero_apply, r_pos, ofPred_true] at hw
+      simp [hw]
+    have : t = p.ball 0 r := by
+      have : w = Finset.univ := by
+        rcases Finset.nonempty_of_ne_empty w_ne with ⟨i, hi⟩
+        ext j
+        simp only [Subsingleton.elim j i, hi, Finset.mem_univ]
+      simpa only [this, Finset.univ_unique, Fin.default_eq_zero, Fin.isValue,
+        Finset.sup_singleton] using hw
+    rw [this]
+    obtain ⟨c, c_pos, hc⟩ : exists (c : 𝕜), 0 < ‖c‖ ∧ ‖c‖ < r := exists_norm_lt 𝕜 r_pos
+    have c_ne : c != 0 := (by simpa using c_pos)
+    have : c • p.ball 0 1 subseteq p.ball 0 r := by
+      rw [smul_ball_zero c_ne]
+      exact ball_mono (by simpa using hc.le)
+    grw [← this]
+    simpa using smul_mem_nhds_smul₀ c_ne h
 -/
 theorem withSeminorms_iff_mem_nhds_isVonNBounded [IsTopologicalAddGroup E]
     [ContinuousConstSMul 𝕜 E] {p : Seminorm 𝕜 E} :
@@ -1810,7 +1988,10 @@ theorem continuous_of_continuous_comp
     Filter.tendsto_comap_iff]
   intro i
   convert! (hf i).continuousAt.tendsto
-  exact (map_ze
+  exact (map_zero _).symm
+
+@[deprecated (since := "2026-03-09")]
+alias _root_.Seminorm.continuous_of_continuous_comp := continuous_of_continuous_comp
 
 中文:
 定理 continuous_of_continuous_comp
@@ -1822,7 +2003,10 @@ theorem continuous_of_continuous_comp
     Filter.tendsto_comap_iff]
   intro i
   convert! (hf i).continuousAt.tendsto
-  exact (map_ze
+  exact (map_zero _).symm
+
+@[deprecated (since := "2026-03-09")]
+alias _root_.Seminorm.continuous_of_continuous_comp := continuous_of_continuous_comp
 
 Depends on / 依赖: ContinuousAt, Filter, Filter.tendsto_comap_iff, Filter.tendsto_iInf, IsTopologicalAddGroup, continuousAt, continuousAt.tendsto, continuous_of_continuousAt_zero, convert, f.map_zero, hq.topologicalAddGroup, map_zero, q.withSeminorms_iff_nhds_eq_iInf.mp, simp_rw, tendsto, tendsto_comap_iff, tendsto_iInf, topologicalAddGroup, withSeminorms_iff_nhds_eq_iInf
 -/
@@ -1883,7 +2067,8 @@ theorem continuous_of_isBounded
   exact continuous_of_le
     (continuous_finsetSup fun i _ => (hp.continuous_seminorm i).const_smul C) hC
 
-@[deprecated (
+@[deprecated (since := "2026-03-09")]
+alias _root_.Seminorm.continuous_from_bounded := continuous_of_isBounded
 
 中文:
 定理 continuous_of_isBounded
@@ -1896,7 +2081,8 @@ theorem continuous_of_isBounded
   exact continuous_of_le
     (continuous_finsetSup fun i _ => (hp.continuous_seminorm i).const_smul C) hC
 
-@[deprecated (
+@[deprecated (since := "2026-03-09")]
+alias _root_.Seminorm.continuous_from_bounded := continuous_of_isBounded
 
 Depends on / 依赖: IsTopologicalAddGroup, const_smul, continuous_finsetSup, continuous_of_continuous_comp, continuous_of_le, continuous_seminorm, finset_sup_smul, hp.continuous_seminorm, hp.topologicalAddGroup, topologicalAddGroup
 -/
@@ -2039,7 +2225,32 @@ theorem equicontinuous_TFAE
   -- We start by reducing to the case where the target is a seminormed space
   rw [q.withSeminorms_iff_uniformSpace_eq_iInf.mp hq]; rw [uniformEquicontinuous_iInf_rng]; rw [equicontinuous_iInf_rng]; rw [equicontinuousAt_iInf_rng]
   refine forall_tfae [_, _, _, _, _] fun i => ?_
-  let _ : Seminorm
+  let _ : SeminormedAddCommGroup F := (q i).toSeminormedAddCommGroup
+  clear u hu hq
+  -- Now we can prove the equivalence in this setting
+  simp only [List.map]
+  tfae_have 1 -> 3 := uniformEquicontinuous_of_equicontinuousAt_zero f
+  tfae_have 3 -> 2 := UniformEquicontinuous.equicontinuous
+  tfae_have 2 -> 1 := fun H => H 0
+  tfae_have 3 -> 5
+  | H => by
+    have : forallᶠ x in 𝓝 0, forall k, q i (f k x) <= 1 := by
+      filter_upwards [Metric.equicontinuousAt_iff_right.mp (H.equicontinuous 0) 1 one_pos]
+        with x hx k
+      simpa using! (hx k).le
+    have bdd : BddAbove (range fun k => (q i).comp (f k)) :=
+      Seminorm.bddAbove_of_absorbent (absorbent_nhds_zero this)
+        (fun x hx => ⟨1, forall_mem_range.mpr hx⟩)
+    rw [← Seminorm.coe_iSup_eq bdd]
+    refine ⟨bdd, Seminorm.continuous' (r := 1) ?_⟩
+    filter_upwards [this] with x hx
+    simpa only [closedBall_iSup bdd _ one_pos, mem_iInter, mem_closedBall_zero] using! hx
+  tfae_have 5 -> 4 := fun H => ⟨⨆ k, (q i).comp (f k), Seminorm.coe_iSup_eq H.1 ▸ H.2, le_ciSup H.1⟩
+  tfae_have 4 -> 1 -- This would work over any `NormedField`
+  | ⟨p, hp, hfp⟩ =>
+Metric.equicontinuousAt_of_continuity_modulus p (map_zero p ▸ hp.tendsto 0) _
+      Eventually.of_forall fun x k => by simpa using! hfp k x
+  tfae_finish
 
 中文:
 定理 equicontinuous_TFAE
@@ -2048,7 +2259,32 @@ theorem equicontinuous_TFAE
   -- We start by reducing to the case where the target is a seminormed space
   rw [q.withSeminorms_iff_uniformSpace_eq_iInf.mp hq]; rw [uniformEquicontinuous_iInf_rng]; rw [equicontinuous_iInf_rng]; rw [equicontinuousAt_iInf_rng]
   refine forall_tfae [_, _, _, _, _] fun i => ?_
-  let _ : Seminorm
+  let _ : SeminormedAddCommGroup F := (q i).toSeminormedAddCommGroup
+  clear u hu hq
+  -- Now we can prove the equivalence in this setting
+  simp only [List.map]
+  tfae_have 1 -> 3 := uniformEquicontinuous_of_equicontinuousAt_zero f
+  tfae_have 3 -> 2 := UniformEquicontinuous.equicontinuous
+  tfae_have 2 -> 1 := fun H => H 0
+  tfae_have 3 -> 5
+  | H => by
+    have : forallᶠ x in 𝓝 0, forall k, q i (f k x) <= 1 := by
+      filter_upwards [Metric.equicontinuousAt_iff_right.mp (H.equicontinuous 0) 1 one_pos]
+        with x hx k
+      simpa using! (hx k).le
+    have bdd : BddAbove (range fun k => (q i).comp (f k)) :=
+      Seminorm.bddAbove_of_absorbent (absorbent_nhds_zero this)
+        (fun x hx => ⟨1, forall_mem_range.mpr hx⟩)
+    rw [← Seminorm.coe_iSup_eq bdd]
+    refine ⟨bdd, Seminorm.continuous' (r := 1) ?_⟩
+    filter_upwards [this] with x hx
+    simpa only [closedBall_iSup bdd _ one_pos, mem_iInter, mem_closedBall_zero] using! hx
+  tfae_have 5 -> 4 := fun H => ⟨⨆ k, (q i).comp (f k), Seminorm.coe_iSup_eq H.1 ▸ H.2, le_ciSup H.1⟩
+  tfae_have 4 -> 1 -- This would work over any `NormedField`
+  | ⟨p, hp, hfp⟩ =>
+Metric.equicontinuousAt_of_continuity_modulus p (map_zero p ▸ hp.tendsto 0) _
+      Eventually.of_forall fun x k => by simpa using! hfp k x
+  tfae_finish
 -/
 protected theorem equicontinuous_TFAE {κ : Type*}
     {q : SeminormFamily 𝕜₂ F ι'} [UniformSpace E] [IsUniformAddGroup E] [u : UniformSpace F]
@@ -2346,7 +2582,13 @@ lemma bound_of_continuous_normedSpace
     with ⟨ε, ε_pos, hε⟩
   rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
   have : 0 < ‖c‖ / ε := by positivity
-  refine ⟨‖c‖ / ε, this, fu
+  refine ⟨‖c‖ / ε, this, fun x => ?_⟩
+  by_cases hx : ‖x‖ = 0
+  · rw [hx, mul_zero]
+    exact le_of_eq (map_eq_zero_of_norm_eq_zero q hq hx)
+  · refine (normSeminorm 𝕜 F).bound_of_shell q ε_pos hc (fun x hle hlt => ?_) hx
+    refine (le_of_lt <| show q x < _ from hε hlt).trans ?_
+    rwa [← div_le_iff₀' this, one_div_div]
 
 中文:
 引理 bound_of_continuous_normedSpace
@@ -2357,7 +2599,13 @@ lemma bound_of_continuous_normedSpace
     with ⟨ε, ε_pos, hε⟩
   rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
   have : 0 < ‖c‖ / ε := by positivity
-  refine ⟨‖c‖ / ε, this, fu
+  refine ⟨‖c‖ / ε, this, fun x => ?_⟩
+  by_cases hx : ‖x‖ = 0
+  · rw [hx, mul_zero]
+    exact le_of_eq (map_eq_zero_of_norm_eq_zero q hq hx)
+  · refine (normSeminorm 𝕜 F).bound_of_shell q ε_pos hc (fun x hle hlt => ?_) hx
+    refine (le_of_lt <| show q x < _ from hε hlt).trans ?_
+    rwa [← div_le_iff₀' this, one_div_div]
 
 Depends on / 依赖: Iio_mem_nhds, NormedAddGroup, NormedAddGroup.nhds_zero_basis_norm_lt.mem_iff.mp, NormedField, NormedField.exists_one_lt_norm, Tendsto, bound_of_shell, exists_one_lt_norm, hq.tendsto, le_of_eq, le_of_lt, map_eq_zero_of_norm_eq_zero, map_zero, mem_iff, mul_zero, nhds_zero_basis_norm_lt, normSeminorm, one_pos, tendsto
 -/
@@ -2387,7 +2635,22 @@ lemma bound_of_continuous
   -- such that `hε : (s.sup p).ball 0 ε ⊆ q.ball 0 1`.
   rcases hp.hasBasis.mem_iff.mp (ball_mem_nhds hq one_pos) with ⟨V, hV, hε⟩
   rcases p.basisSets_iff.mp hV with ⟨s, ε, ε_pos, rfl⟩
-  -- Now forget that `E` already had a topo
+  -- Now forget that `E` already had a topology and view it as the (semi)normed space
+  -- `(E, s.sup p)`.
+  clear hp hq t
+  let _ : SeminormedAddCommGroup E := (s.sup p).toSeminormedAddCommGroup
+  let _ : NormedSpace 𝕜 E := { norm_smul_le := fun a b => le_of_eq (map_smul_eq_mul (s.sup p) a b) }
+  -- The inclusion `hε` tells us exactly that `q` is *still* continuous for this new topology
+  have : Continuous q := by
+    apply Seminorm.continuous (r := 1) (mem_of_superset (Metric.ball_mem_nhds _ ε_pos) ?_)
+    rw [← ball_eq_metric]
+    exact hε
+  -- Hence we can conclude by applying `bound_of_continuous_normedSpace`.
+  rcases bound_of_continuous_normedSpace q this with ⟨C, C_pos, hC⟩
+  exact ⟨s, ⟨C, C_pos.le⟩, fun H => C_pos.ne.symm (congr_arg NNReal.toReal H), hC⟩
+  -- Note that the key ingredient for this proof is that, by scaling arguments hidden in
+  -- `Seminorm.continuous`, we only have to look at the `q`-ball of radius one, and the `s` we get
+  -- from that will automatically work for all other radii.
 
 中文:
 引理 bound_of_continuous
@@ -2397,7 +2660,22 @@ lemma bound_of_continuous
   -- such that `hε : (s.sup p).ball 0 ε ⊆ q.ball 0 1`.
   rcases hp.hasBasis.mem_iff.mp (ball_mem_nhds hq one_pos) with ⟨V, hV, hε⟩
   rcases p.basisSets_iff.mp hV with ⟨s, ε, ε_pos, rfl⟩
-  -- Now forget that `E` already had a topo
+  -- Now forget that `E` already had a topology and view it as the (semi)normed space
+  -- `(E, s.sup p)`.
+  clear hp hq t
+  let _ : SeminormedAddCommGroup E := (s.sup p).toSeminormedAddCommGroup
+  let _ : NormedSpace 𝕜 E := { norm_smul_le := fun a b => le_of_eq (map_smul_eq_mul (s.sup p) a b) }
+  -- The inclusion `hε` tells us exactly that `q` is *still* continuous for this new topology
+  have : Continuous q := by
+    apply Seminorm.continuous (r := 1) (mem_of_superset (Metric.ball_mem_nhds _ ε_pos) ?_)
+    rw [← ball_eq_metric]
+    exact hε
+  -- Hence we can conclude by applying `bound_of_continuous_normedSpace`.
+  rcases bound_of_continuous_normedSpace q this with ⟨C, C_pos, hC⟩
+  exact ⟨s, ⟨C, C_pos.le⟩, fun H => C_pos.ne.symm (congr_arg NNReal.toReal H), hC⟩
+  -- Note that the key ingredient for this proof is that, by scaling arguments hidden in
+  -- `Seminorm.continuous`, we only have to look at the `q`-ball of radius one, and the `s` we get
+  -- from that will automatically work for all other radii.
 -/
 lemma bound_of_continuous [t : TopologicalSpace E] (hp : WithSeminorms p)
     (q : Seminorm 𝕜 E) (hq : Continuous q) :
@@ -2447,7 +2725,9 @@ theorem WithSeminorms.toLocallyConvexSpace
     exact FilterBasis.hasBasis _
   · intro s hs
     change s in Set.iUnion _ at hs
-    simp_rw [Set.mem_iUnion, Set.mem_singleton_iff] 
+    simp_rw [Set.mem_iUnion, Set.mem_singleton_iff] at hs
+    rcases hs with ⟨I, r, _, rfl⟩
+    exact convex_ball _ _ _
 
 中文:
 定理 WithSeminorms.toLocallyConvexSpace
@@ -2459,7 +2739,9 @@ theorem WithSeminorms.toLocallyConvexSpace
     exact FilterBasis.hasBasis _
   · intro s hs
     change s in Set.iUnion _ at hs
-    simp_rw [Set.mem_iUnion, Set.mem_singleton_iff] 
+    simp_rw [Set.mem_iUnion, Set.mem_singleton_iff] at hs
+    rcases hs with ⟨I, r, _, rfl⟩
+    exact convex_ball _ _ _
 
 Depends on / 依赖: AddGroupFilterBasis, AddGroupFilterBasis.N_zero, AddGroupFilterBasis.nhds_eq, FilterBasis, FilterBasis.hasBasis, N_zero, Set.iUnion, Set.mem_iUnion, Set.mem_singleton_iff, basisSets, convex_ball, hasBasis, hp.topologicalAddGroup, iUnion, mem_iUnion, mem_singleton_iff, nhds_eq, ofBasisZero, p.basisSets, simp_rw
 -/
@@ -2629,7 +2911,9 @@ theorem LinearMap.withSeminorms_induced
   have := hq.topologicalAddGroup
   let _ : TopologicalSpace E := induced f inferInstance
   have : IsTopologicalAddGroup E := topologicalAddGroup_induced f
-  rw [(q.comp f).withSeminorms_iff_nhds_eq_iInf]; rw [nhds_induced]; rw [map_zero]; rw [q.withSeminorms_iff_nhds_eq_iInf.mp hq]; rw [Filter.co
+  rw [(q.comp f).withSeminorms_iff_nhds_eq_iInf]; rw [nhds_induced]; rw [map_zero]; rw [q.withSeminorms_iff_nhds_eq_iInf.mp hq]; rw [Filter.comap_iInf]
+  refine iInf_congr fun i => ?_
+  exact Filter.comap_comap
 
 中文:
 定理 线性映射.withSeminorms_induced
@@ -2638,7 +2922,9 @@ theorem LinearMap.withSeminorms_induced
   have := hq.topologicalAddGroup
   let _ : TopologicalSpace E := induced f inferInstance
   have : IsTopologicalAddGroup E := topologicalAddGroup_induced f
-  rw [(q.comp f).withSeminorms_iff_nhds_eq_iInf]; rw [nhds_induced]; rw [map_zero]; rw [q.withSeminorms_iff_nhds_eq_iInf.mp hq]; rw [Filter.co
+  rw [(q.comp f).withSeminorms_iff_nhds_eq_iInf]; rw [nhds_induced]; rw [map_zero]; rw [q.withSeminorms_iff_nhds_eq_iInf.mp hq]; rw [Filter.comap_iInf]
+  refine iInf_congr fun i => ?_
+  exact Filter.comap_comap
 
 Depends on / 依赖: Filter, Filter.comap_comap, Filter.comap_iInf, IsTopologicalAddGroup, TopologicalSpace, comap_comap, comap_iInf, hq.topologicalAddGroup, iInf_congr, induced, map_zero, nhds_induced, q.comp, q.withSeminorms_iff_nhds_eq_iInf.mp, topologicalAddGroup, topologicalAddGroup_induced, withSeminorms_iff_nhds_eq_iInf
 -/
@@ -2831,7 +3117,9 @@ theorem withSeminorms_iInf
   have : forall i, @IsTopologicalAddGroup E (t i) _ :=
     fun i => @WithSeminorms.topologicalAddGroup _ _ _ _ _ _ (t i) _ (hp i)
   have : @IsTopologicalAddGroup E (⨅ i, t i) _ := topologicalAddGroup_iInf inferInstance
-  simp_rw [@SeminormFamily.withSeminorms_iff_topologicalSpace_eq_iInf _ _ _ _ 
+  simp_rw [@SeminormFamily.withSeminorms_iff_topologicalSpace_eq_iInf _ _ _ _ _ _ _ (_)] at hp ⊢
+  rw [iInf_sigma]
+  exact iInf_congr hp
 
 中文:
 定理 withSeminorms_iInf
@@ -2840,7 +3128,9 @@ theorem withSeminorms_iInf
   have : forall i, @IsTopologicalAddGroup E (t i) _ :=
     fun i => @WithSeminorms.topologicalAddGroup _ _ _ _ _ _ (t i) _ (hp i)
   have : @IsTopologicalAddGroup E (⨅ i, t i) _ := topologicalAddGroup_iInf inferInstance
-  simp_rw [@SeminormFamily.withSeminorms_iff_topologicalSpace_eq_iInf _ _ _ _ 
+  simp_rw [@SeminormFamily.withSeminorms_iff_topologicalSpace_eq_iInf _ _ _ _ _ _ _ (_)] at hp ⊢
+  rw [iInf_sigma]
+  exact iInf_congr hp
 -/
 theorem withSeminorms_iInf {κ : ι -> Type*}
     {p : (i : ι) -> SeminormFamily 𝕜 E (κ i)} {t : ι -> TopologicalSpace E}
@@ -2975,7 +3265,9 @@ theorem WithSeminorms.firstCountableTopology
   have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
   have : (𝓝 (0 : E)).IsCountablyGenerated := by
     rw [p.withSeminorms_iff_nhds_eq_iInf.mp hp]
-    exact Filter.iInf.isCountabl
+    exact Filter.iInf.isCountablyGenerated _
+  have : (uniformity E).IsCountablyGenerated := IsUniformAddGroup.uniformity_countably_generated
+  exact UniformSpace.firstCountableTopology E
 
 中文:
 定理 WithSeminorms.firstCountableTopology
@@ -2986,7 +3278,9 @@ theorem WithSeminorms.firstCountableTopology
   have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
   have : (𝓝 (0 : E)).IsCountablyGenerated := by
     rw [p.withSeminorms_iff_nhds_eq_iInf.mp hp]
-    exact Filter.iInf.isCountabl
+    exact Filter.iInf.isCountablyGenerated _
+  have : (uniformity E).IsCountablyGenerated := IsUniformAddGroup.uniformity_countably_generated
+  exact UniformSpace.firstCountableTopology E
 
 Depends on / 依赖: Filter, Filter.iInf.isCountablyGenerated, IsCountablyGenerated, IsTopologicalAddGroup, IsTopologicalAddGroup.rightUniformSpace, IsUniformAddGroup, IsUniformAddGroup.uniformity_countably_generated, UniformSpace, UniformSpace.firstCountableTopology, firstCountableTopology, hp.topologicalAddGroup, isCountablyGenerated, isUniformAddGroup_of_addCommGroup, p.withSeminorms_iff_nhds_eq_iInf.mp, rightUniformSpace, topologicalAddGroup, uniformity, uniformity_countably_generated, withSeminorms_iff_nhds_eq_iInf
 -/

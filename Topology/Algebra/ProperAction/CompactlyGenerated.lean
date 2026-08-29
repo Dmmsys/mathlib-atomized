@@ -78,7 +78,22 @@ lemma MulAction.properSMul_iff_isCompact_setOfPred_inter_nonempty
   -- First reduce to the case `K = U × V`.
   let U := Prod.fst '' K
   let V := Prod.snd '' K
-  have hU : IsCompact U := hK.image continu
+  have hU : IsCompact U := hK.image continuous_fst
+  have hV : IsCompact V := hK.image continuous_snd
+  suffices IsCompact ((fun (gx : G × X) => (gx.1 • gx.2, gx.2)) ⁻¹' (U ×ˢ V)) by
+    apply this.of_isClosed_subset (hK.isClosed.preimage <| by fun_prop)
+    exact Set.preimage_mono Set.subset_fst_image_prod_snd_image
+  apply ((h hV hU).prod hV).of_isClosed_subset
+  · exact (hU.prod hV).isClosed.preimage (by fun_prop)
+  · exact fun ⟨g, x⟩ ⟨hgx, hgx'⟩ => ⟨⟨g • x, smul_mem_smul_set hgx', hgx⟩, hgx'⟩
+
+@[deprecated (since := "2026-07-09")]
+alias MulAction.properSMul_iff_isCompact_setOf_inter_nonempty :=
+  MulAction.properSMul_iff_isCompact_setOfPred_inter_nonempty
+
+@[deprecated (since := "2026-07-09")]
+alias AddAction.properVAdd_iff_isCompact_setOf_inter_nonempty :=
+  AddAction.properVAdd_iff_isCompact_setOfPred_inter_nonempty
 
 中文:
 引理 乘法作用.properSMul_iff_isCompact_setOfPred_inter_nonempty
@@ -89,7 +104,22 @@ lemma MulAction.properSMul_iff_isCompact_setOfPred_inter_nonempty
   -- First reduce to the case `K = U × V`.
   let U := Prod.fst '' K
   let V := Prod.snd '' K
-  have hU : IsCompact U := hK.image continu
+  have hU : IsCompact U := hK.image continuous_fst
+  have hV : IsCompact V := hK.image continuous_snd
+  suffices IsCompact ((fun (gx : G × X) => (gx.1 • gx.2, gx.2)) ⁻¹' (U ×ˢ V)) by
+    apply this.of_isClosed_subset (hK.isClosed.preimage <| by fun_prop)
+    exact Set.preimage_mono Set.subset_fst_image_prod_snd_image
+  apply ((h hV hU).prod hV).of_isClosed_subset
+  · exact (hU.prod hV).isClosed.preimage (by fun_prop)
+  · exact fun ⟨g, x⟩ ⟨hgx, hgx'⟩ => ⟨⟨g • x, smul_mem_smul_set hgx', hgx⟩, hgx'⟩
+
+@[deprecated (since := "2026-07-09")]
+alias MulAction.properSMul_iff_isCompact_setOf_inter_nonempty :=
+  MulAction.properSMul_iff_isCompact_setOfPred_inter_nonempty
+
+@[deprecated (since := "2026-07-09")]
+alias AddAction.properVAdd_iff_isCompact_setOf_inter_nonempty :=
+  AddAction.properVAdd_iff_isCompact_setOfPred_inter_nonempty
 
 Depends on / 依赖: ProperSMul, ProperSMul.isCompact_setOfPred_inter_nonempty, fun_prop, isCompact_setOfPred_inter_nonempty, isProperMap_iff_isCompact_preimage, isProperMap_iff_isCompact_preimage.mpr
 -/

@@ -2021,7 +2021,22 @@ lemma coeff_mul_antidiag
   let F (p : M × M) : R := if p.1 * p.2 = m then x.coeff p.1 * y.coeff p.2 else 0
   calc
     (x * y).coeff m = ∑ m₁ in x.coeff.support, ∑ m₂ in y.coeff.support, F (m₁, m₂) := coeff_mul ..
-    _ = ∑ p in x.coeff.support ×ˢ y.coeff.support with p.1 * p.2 = m, x.coeff p.1 * y.coeff p.2 :
+    _ = ∑ p in x.coeff.support ×ˢ y.coeff.support with p.1 * p.2 = m, x.coeff p.1 * y.coeff p.2 := by
+      rw [Finset.sum_filter]; rw [Finset.sum_product]
+    _ = ∑ p in s with p.1 in x.coeff.support ∧ p.2 in y.coeff.support, x.coeff p.1 * y.coeff p.2 := by
+      congr! 1; ext; simp only [mem_filter, mem_product, hs, and_comm]
+    _ = ∑ p in s, x.coeff p.1 * y.coeff p.2 :=
+      sum_subset (filter_subset _ _) fun p hps hp => by
+        simp only [mem_filter, mem_support_iff, not_and, Classical.not_not] at hp ⊢
+        by_cases h1 : x.coeff p.1 = 0
+        · rw [h1, zero_mul]
+        · rw [hp hps h1, mul_zero]
+
+@[to_additive (attr := deprecated coeff_mul_antidiag (since := "2026-06-18")) (dont_translate := R)
+  mul_apply_antidiagonal]
+alias mul_apply_antidiagonal := coeff_mul_antidiag
+
+@[to_additive (attr := simp) (dont_translate := R) single_mul_single]
 
 中文:
 引理 coeff_mul_antidiag
@@ -2031,7 +2046,22 @@ lemma coeff_mul_antidiag
   let F (p : M × M) : R := if p.1 * p.2 = m then x.coeff p.1 * y.coeff p.2 else 0
   calc
     (x * y).coeff m = ∑ m₁ in x.coeff.support, ∑ m₂ in y.coeff.support, F (m₁, m₂) := coeff_mul ..
-    _ = ∑ p in x.coeff.support ×ˢ y.coeff.support with p.1 * p.2 = m, x.coeff p.1 * y.coeff p.2 :
+    _ = ∑ p in x.coeff.support ×ˢ y.coeff.support with p.1 * p.2 = m, x.coeff p.1 * y.coeff p.2 := by
+      rw [Finset.sum_filter]; rw [Finset.sum_product]
+    _ = ∑ p in s with p.1 in x.coeff.support ∧ p.2 in y.coeff.support, x.coeff p.1 * y.coeff p.2 := by
+      congr! 1; ext; simp only [mem_filter, mem_product, hs, and_comm]
+    _ = ∑ p in s, x.coeff p.1 * y.coeff p.2 :=
+      sum_subset (filter_subset _ _) fun p hps hp => by
+        simp only [mem_filter, mem_support_iff, not_and, Classical.not_not] at hp ⊢
+        by_cases h1 : x.coeff p.1 = 0
+        · rw [h1, zero_mul]
+        · rw [hp hps h1, mul_zero]
+
+@[to_additive (attr := deprecated coeff_mul_antidiag (since := "2026-06-18")) (dont_translate := R)
+  mul_apply_antidiagonal]
+alias mul_apply_antidiagonal := coeff_mul_antidiag
+
+@[to_additive (attr := simp) (dont_translate := R) single_mul_single]
 
 Depends on / 依赖: Finset, Finset.sum_filter, Finset.sum_product, and_com, classical, coeff_mul, mem_filter, mem_product, sum_filter, sum_product, support, x.coeff, x.coeff.support, y.coeff, y.coeff.support
 -/
@@ -2146,6 +2176,8 @@ lemma coeff_mul_single_eq_coeff_mul
     _ = x.coeff.sum fun m' r' => if m' = m₂ then r' * r else 0 := by gcongr; simp [*]
     _ = x.coeff m₂ * r := by simp +contextual [Finsupp.sum_eq_single m₂]
 
+@[deprecated (since := "2026-06-18")] alias mul_single_apply_aux := coeff_mul_single_eq_coeff_mul
+
 中文:
 引理 coeff_mul_single_eq_coeff_mul
   条件: (m₂ : M) (H : 对任意 m' in x.coeff.support, m' * m = m₁ ↔ m' = m₂)
@@ -2156,6 +2188,8 @@ lemma coeff_mul_single_eq_coeff_mul
     _ = x.coeff.sum fun m' r' => if m' * m = m₁ then r' * r else 0 := by simp [coeff_mul]
     _ = x.coeff.sum fun m' r' => if m' = m₂ then r' * r else 0 := by gcongr; simp [*]
     _ = x.coeff m₂ * r := by simp +contextual [Finsupp.sum_eq_single m₂]
+
+@[deprecated (since := "2026-06-18")] alias mul_single_apply_aux := coeff_mul_single_eq_coeff_mul
 
 Depends on / 依赖: Finsupp, Finsupp.sum_eq_single, classical, coeff_mul, contextual, single, sum_eq_single, x.coeff, x.coeff.sum
 -/
@@ -2186,6 +2220,10 @@ lemma coeff_single_mul_eq_mul_coeff
     _ = x.coeff.sum fun m' r' => if m' = m₂ then r * r' else 0 := by gcongr; simp [*]
     _ = r * x.coeff m₂ := by simp +contextual [Finsupp.sum_eq_single m₂]
 
+@[deprecated (since := "2026-06-18")] alias single_mul_apply_aux := coeff_single_mul_eq_mul_coeff
+
+@[to_additive (attr := simp) (dont_translate := R) coeff_mul_single_of_forall_add_ne]
+
 中文:
 引理 coeff_single_mul_eq_mul_coeff
   条件: (m₂ : M) (H : 对任意 m' in x.coeff.support, m * m' = m₁ ↔ m' = m₂)
@@ -2196,6 +2234,10 @@ lemma coeff_single_mul_eq_mul_coeff
     _ = x.coeff.sum fun m' r' => if m * m' = m₁ then r * r' else 0 := by simp [coeff_mul]
     _ = x.coeff.sum fun m' r' => if m' = m₂ then r * r' else 0 := by gcongr; simp [*]
     _ = r * x.coeff m₂ := by simp +contextual [Finsupp.sum_eq_single m₂]
+
+@[deprecated (since := "2026-06-18")] alias single_mul_apply_aux := coeff_single_mul_eq_mul_coeff
+
+@[to_additive (attr := simp) (dont_translate := R) coeff_mul_single_of_forall_add_ne]
 
 Depends on / 依赖: Finsupp, Finsupp.sum_eq_single, classical, coeff_mul, contextual, single, sum_eq_single, x.coeff, x.coeff.sum
 -/

@@ -35,7 +35,22 @@ theorem Transcendental.linearIndependent_sub_inv
   have hnz (a : F) : x - algebraMap F E a != 0 := fun h =>
 X_sub_C_ne_zero a H (.X - .C a) (by simp [h])
   let b := s.prod fun j => x - algebraMap F E j
-  have h1 : forall i in s, m i • (b * (x - al
+  have h1 : forall i in s, m i • (b * (x - algebraMap F E i)⁻¹) =
+      m i • (s.erase i).prod fun j => x - algebraMap F E j := fun i hi => by
+    simp_rw [b, ← s.prod_erase_mul _ hi, mul_inv_cancel_right₀ (hnz i)]
+  replace hm := congr(b * $(hm))
+  simp_rw [mul_zero, Finset.mul_sum, mul_smul_comm, Finset.sum_congr rfl h1] at hm
+  let p : Polynomial F := s.sum fun i => .C (m i) * (s.erase i).prod fun j => .X - .C j
+  replace hm := congr(Polynomial.aeval i $(H p (by simp_rw [← hm, p, map_sum, map_mul, map_prod,
+    map_sub, aeval_X, aeval_C, Algebra.smul_def])))
+  have h2 : forall j in s.erase i, m j * ((s.erase j).prod fun x => i - x) = 0 := fun j hj => by
+    have := Finset.mem_erase_of_ne_of_mem (Finset.ne_of_mem_erase hj).symm hi
+    simp_rw [← (s.erase j).prod_erase_mul _ this, sub_self, mul_zero]
+  simp_rw [map_zero, p, map_sum, map_mul, map_prod, map_sub, aeval_X,
+    aeval_C, Algebra.algebraMap_self_apply, ← s.sum_erase_add _ hi,
+    Finset.sum_eq_zero h2, zero_add] at hm
+  exact eq_zero_of_ne_zero_of_mul_right_eq_zero (Finset.prod_ne_zero_iff.2 fun j hj =>
+    sub_ne_zero.2 (Finset.ne_of_mem_erase hj).symm) hm
 
 中文:
 定理 超越.linearIndependent_sub_inv
@@ -46,7 +61,22 @@ X_sub_C_ne_zero a H (.X - .C a) (by simp [h])
   have hnz (a : F) : x - algebraMap F E a != 0 := fun h =>
 X_sub_C_ne_zero a H (.X - .C a) (by simp [h])
   let b := s.prod fun j => x - algebraMap F E j
-  have h1 : forall i in s, m i • (b * (x - al
+  have h1 : forall i in s, m i • (b * (x - algebraMap F E i)⁻¹) =
+      m i • (s.erase i).prod fun j => x - algebraMap F E j := fun i hi => by
+    simp_rw [b, ← s.prod_erase_mul _ hi, mul_inv_cancel_right₀ (hnz i)]
+  replace hm := congr(b * $(hm))
+  simp_rw [mul_zero, Finset.mul_sum, mul_smul_comm, Finset.sum_congr rfl h1] at hm
+  let p : Polynomial F := s.sum fun i => .C (m i) * (s.erase i).prod fun j => .X - .C j
+  replace hm := congr(Polynomial.aeval i $(H p (by simp_rw [← hm, p, map_sum, map_mul, map_prod,
+    map_sub, aeval_X, aeval_C, Algebra.smul_def])))
+  have h2 : forall j in s.erase i, m j * ((s.erase j).prod fun x => i - x) = 0 := fun j hj => by
+    have := Finset.mem_erase_of_ne_of_mem (Finset.ne_of_mem_erase hj).symm hi
+    simp_rw [← (s.erase j).prod_erase_mul _ this, sub_self, mul_zero]
+  simp_rw [map_zero, p, map_sum, map_mul, map_prod, map_sub, aeval_X,
+    aeval_C, Algebra.algebraMap_self_apply, ← s.sum_erase_add _ hi,
+    Finset.sum_eq_zero h2, zero_add] at hm
+  exact eq_zero_of_ne_zero_of_mul_right_eq_zero (Finset.prod_ne_zero_iff.2 fun j hj =>
+    sub_ne_zero.2 (Finset.ne_of_mem_erase hj).symm) hm
 
 Depends on / 依赖: X_sub_C_ne_zero, algebraMap, classical, linearIndependent_iff, mul_zero, prod_erase_mul, replace, s.erase, s.prod, s.prod_erase_mul, simp_rw, transcendental_iff
 -/

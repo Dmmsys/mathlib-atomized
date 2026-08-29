@@ -126,7 +126,16 @@ theorem symm_gen
   have h₁ : map Prod.swap ((𝓤 α).lift' gen) = (𝓤 α).lift' f := by
     delta gen
     simp [f, map_lift'_eq, monotone_ofPred, Filter.monotone_mem, Function.comp_def,
-      i
+      image_swap_eq_preimage_swap]
+  have h₂ : (𝓤 α).lift' f <= (𝓤 α).lift' gen :=
+    uniformity_lift_le_swap
+      (monotone_principal.comp
+        (monotone_ofPred fun p => @Filter.monotone_mem _ (p.2.val ×ˢ p.1.val)))
+      (by
+        have h := fun p : CauchyFilter α × CauchyFilter α => @Filter.prod_comm _ _ p.2.val p.1.val
+        simp only [Function.comp, h, mem_map, f]
+        exact le_rfl)
+  exact h₁.trans_le h₂
 
 中文:
 定理 symm_gen
@@ -137,7 +146,16 @@ theorem symm_gen
   have h₁ : map Prod.swap ((𝓤 α).lift' gen) = (𝓤 α).lift' f := by
     delta gen
     simp [f, map_lift'_eq, monotone_ofPred, Filter.monotone_mem, Function.comp_def,
-      i
+      image_swap_eq_preimage_swap]
+  have h₂ : (𝓤 α).lift' f <= (𝓤 α).lift' gen :=
+    uniformity_lift_le_swap
+      (monotone_principal.comp
+        (monotone_ofPred fun p => @Filter.monotone_mem _ (p.2.val ×ˢ p.1.val)))
+      (by
+        have h := fun p : CauchyFilter α × CauchyFilter α => @Filter.prod_comm _ _ p.2.val p.1.val
+        simp only [Function.comp, h, mem_map, f]
+        exact le_rfl)
+  exact h₁.trans_le h₂
 -/
 private theorem symm_gen : map Prod.swap ((𝓤 α).lift' gen) <= (𝓤 α).lift' gen := by
   let f := fun s : SetRel α α =>
@@ -167,7 +185,10 @@ theorem subset_gen_relComp
   let ⟨t₁, (ht₁ : t₁ in f.val), t₂, (ht₂ : t₂ in h.val), (h₁ : t₁ ×ˢ t₂ subseteq s)⟩ := mem_prod_iff.mp h₁
   let ⟨t₃, (ht₃ : t₃ in h.val), t₄, (ht₄ : t₄ in g.val), (h₂ : t₃ ×ˢ t₄ subseteq t)⟩ := mem_prod_iff.mp h₂
   have : t₂ inter t₃ in h.val := inter_mem ht₂ ht₃
-  let ⟨x,
+  let ⟨x, xt₂, xt₃⟩ := h.property.left.nonempty_of_mem this
+  (f.val ×ˢ g.val).sets_of_superset (prod_mem_prod ht₁ ht₄)
+    fun ⟨a, b⟩ ⟨(ha : a in t₁), (hb : b in t₄)⟩ =>
+    ⟨x, h₁ (show (a, x) in t₁ ×ˢ t₂ from ⟨ha, xt₂⟩), h₂ (show (x, b) in t₃ ×ˢ t₄ from ⟨xt₃, hb⟩)⟩
 
 中文:
 定理 subset_gen_relComp
@@ -177,7 +198,10 @@ theorem subset_gen_relComp
   let ⟨t₁, (ht₁ : t₁ in f.val), t₂, (ht₂ : t₂ in h.val), (h₁ : t₁ ×ˢ t₂ subseteq s)⟩ := mem_prod_iff.mp h₁
   let ⟨t₃, (ht₃ : t₃ in h.val), t₄, (ht₄ : t₄ in g.val), (h₂ : t₃ ×ˢ t₄ subseteq t)⟩ := mem_prod_iff.mp h₂
   have : t₂ inter t₃ in h.val := inter_mem ht₂ ht₃
-  let ⟨x,
+  let ⟨x, xt₂, xt₃⟩ := h.property.left.nonempty_of_mem this
+  (f.val ×ˢ g.val).sets_of_superset (prod_mem_prod ht₁ ht₄)
+    fun ⟨a, b⟩ ⟨(ha : a in t₁), (hb : b in t₄)⟩ =>
+    ⟨x, h₁ (show (a, x) in t₁ ×ˢ t₂ from ⟨ha, xt₂⟩), h₂ (show (x, b) in t₃ ×ˢ t₄ from ⟨xt₃, hb⟩)⟩
 -/
 private theorem subset_gen_relComp {s t : SetRel α α} : gen s ○ gen t subseteq gen (s ○ t) :=
   fun ⟨f, g⟩ ⟨h, h₁, h₂⟩ =>
@@ -202,7 +226,11 @@ theorem comp_gen
       · exact monotone_gen
       · exact monotone_id.relComp monotone_id
 _ <= (𝓤 α).lift' fun s => gen s ○ s := lift'_mono' fun _ _hs => subset_gen_relComp
-    _ = ((𝓤 
+    _ = ((𝓤 α).lift' fun s : SetRel α α => s ○ s).lift' gen := by
+      rw [lift'_lift'_assoc]
+      · exact monotone_id.relComp monotone_id
+      · exact monotone_gen
+    _ <= (𝓤 α).lift' gen := lift'_mono comp_le_uniformity le_rfl
 
 中文:
 定理 comp_gen
@@ -214,7 +242,11 @@ _ <= (𝓤 α).lift' fun s => gen s ○ s := lift'_mono' fun _ _hs => subset_gen
       · exact monotone_gen
       · exact monotone_id.relComp monotone_id
 _ <= (𝓤 α).lift' fun s => gen s ○ s := lift'_mono' fun _ _hs => subset_gen_relComp
-    _ = ((𝓤 
+    _ = ((𝓤 α).lift' fun s : SetRel α α => s ○ s).lift' gen := by
+      rw [lift'_lift'_assoc]
+      · exact monotone_id.relComp monotone_id
+      · exact monotone_gen
+    _ <= (𝓤 α).lift' gen := lift'_mono comp_le_uniformity le_rfl
 -/
 private theorem comp_gen : ((𝓤 α).lift' gen).lift' (fun s => s ○ s) <= (𝓤 α).lift' gen :=
   calc
@@ -354,7 +386,10 @@ theorem isUniformInducing_pureCauchy
         Set.ext fun ⟨a₁, a₂⟩ => by simp [preimage, gen, pureCauchy]
     calc
       comap (fun x : α × α => (pureCauchy x.fst, pureCauchy x.snd)) ((𝓤 α).lift' gen) =
-          (𝓤 α).lift' ((pr
+          (𝓤 α).lift' ((preimage fun x : α × α => (pureCauchy x.fst, pureCauchy x.snd)) ∘ gen) :=
+        comap_lift'_eq
+      _ = 𝓤 α := by simp [this]
+      ⟩
 
 中文:
 定理 isUniformInducing_pureCauchy
@@ -364,7 +399,10 @@ theorem isUniformInducing_pureCauchy
         Set.ext fun ⟨a₁, a₂⟩ => by simp [preimage, gen, pureCauchy]
     calc
       comap (fun x : α × α => (pureCauchy x.fst, pureCauchy x.snd)) ((𝓤 α).lift' gen) =
-          (𝓤 α).lift' ((pr
+          (𝓤 α).lift' ((preimage fun x : α × α => (pureCauchy x.fst, pureCauchy x.snd)) ∘ gen) :=
+        comap_lift'_eq
+      _ = 𝓤 α := by simp [this]
+      ⟩
 
 Depends on / 依赖: Set.ext, comap_lift, preimage, pureCauchy, x.fst, x.snd
 -/
@@ -410,7 +448,23 @@ theorem denseRange_pureCauchy
   have h_ex : forall s in 𝓤 (CauchyFilter α), exists y : α, (f, pureCauchy y) in s := fun s hs =>
     let ⟨t'', ht''₁, (ht''₂ : gen t'' subseteq s)⟩ := (mem_lift'_sets monotone_gen).mp hs
     let ⟨t', ht'₁, ht'₂⟩ := comp_mem_uniformity_sets ht''₁
-    have : t' in f.val ×ˢ f.val := f.prop
+    have : t' in f.val ×ˢ f.val := f.property.right ht'₁
+    let ⟨t, ht, (h : t ×ˢ t subseteq t')⟩ := mem_prod_same_iff.mp this
+    let ⟨x, (hx : x in t)⟩ := f.property.left.nonempty_of_mem ht
+    have : t'' in f.val ×ˢ pure x :=
+      mem_prod_iff.mpr
+⟨t, ht, { y : α | (x, y) in t' }, h mk_mem_prod hx hx,
+          fun ⟨a, b⟩ ⟨(h₁ : a in t), (h₂ : (x, b) in t')⟩ =>
+ht'₂ SetRel.prodMk_mem_comp (@h (a, x) ⟨h₁, hx⟩) h₂⟩
+⟨x, ht''₂ by dsimp [gen]; exact this⟩
+  simp only [closure_eq_cluster_pts, ClusterPt, nhds_eq_uniformity, lift'_inf_principal_eq,
+    Set.inter_comm _ (range pureCauchy), mem_ofPred_eq]
+  refine (lift'_neBot_iff ?_).mpr (fun s hs => ?_)
+  · exact monotone_const.inter monotone_preimage
+  · let ⟨y, hy⟩ := h_ex s hs
+    have : pureCauchy y in range pureCauchy inter { y : CauchyFilter α | (f, y) in s } :=
+      ⟨mem_range_self y, hy⟩
+    exact ⟨_, this⟩
 
 中文:
 定理 denseRange_pureCauchy
@@ -419,7 +473,23 @@ theorem denseRange_pureCauchy
   have h_ex : forall s in 𝓤 (CauchyFilter α), exists y : α, (f, pureCauchy y) in s := fun s hs =>
     let ⟨t'', ht''₁, (ht''₂ : gen t'' subseteq s)⟩ := (mem_lift'_sets monotone_gen).mp hs
     let ⟨t', ht'₁, ht'₂⟩ := comp_mem_uniformity_sets ht''₁
-    have : t' in f.val ×ˢ f.val := f.prop
+    have : t' in f.val ×ˢ f.val := f.property.right ht'₁
+    let ⟨t, ht, (h : t ×ˢ t subseteq t')⟩ := mem_prod_same_iff.mp this
+    let ⟨x, (hx : x in t)⟩ := f.property.left.nonempty_of_mem ht
+    have : t'' in f.val ×ˢ pure x :=
+      mem_prod_iff.mpr
+⟨t, ht, { y : α | (x, y) in t' }, h mk_mem_prod hx hx,
+          fun ⟨a, b⟩ ⟨(h₁ : a in t), (h₂ : (x, b) in t')⟩ =>
+ht'₂ SetRel.prodMk_mem_comp (@h (a, x) ⟨h₁, hx⟩) h₂⟩
+⟨x, ht''₂ by dsimp [gen]; exact this⟩
+  simp only [closure_eq_cluster_pts, ClusterPt, nhds_eq_uniformity, lift'_inf_principal_eq,
+    Set.inter_comm _ (range pureCauchy), mem_ofPred_eq]
+  refine (lift'_neBot_iff ?_).mpr (fun s hs => ?_)
+  · exact monotone_const.inter monotone_preimage
+  · let ⟨y, hy⟩ := h_ex s hs
+    have : pureCauchy y in range pureCauchy inter { y : CauchyFilter α | (f, y) in s } :=
+      ⟨mem_range_self y, hy⟩
+    exact ⟨_, this⟩
 
 Depends on / 依赖: CauchyFilter, _sets, comp_mem_uniformity_sets, f.property.left.nonempty_of_mem, f.property.right, f.val, h_ex, mem_lift, mem_prod_iff, mem_prod_iff.mpr, mem_prod_same_iff, mem_prod_same_iff.mp, monotone_gen, nonempty_of_mem, property, pureCauchy, subseteq
 -/
@@ -525,7 +595,12 @@ instance :
     let f' : CauchyFilter α := ⟨f, hf⟩
     have : map pureCauchy f <= (𝓤 <| CauchyFilter α).lift' (preimage (Prod.mk f')) :=
       le_lift'.2 fun _ hs =>
-        let ⟨t, ht₁, ht₂⟩ := (mem_lift'_sets monotone_gen).
+        let ⟨t, ht₁, ht₂⟩ := (mem_lift'_sets monotone_gen).mp hs
+        let ⟨t', ht', (h : t' ×ˢ t' subseteq t)⟩ := mem_prod_same_iff.mp (hf.right ht₁)
+        have : t' subseteq { y : α | (f', pureCauchy y) in gen t } := fun x hx =>
+          (f ×ˢ pure x).sets_of_superset (prod_mem_prod ht' hx) h
+f.sets_of_superset ht' Subset.trans this (preimage_mono ht₂)
+    ⟨f', by simpa [nhds_eq_uniformity]⟩
 
 中文:
 实例 :
@@ -534,7 +609,12 @@ instance :
     let f' : CauchyFilter α := ⟨f, hf⟩
     have : map pureCauchy f <= (𝓤 <| CauchyFilter α).lift' (preimage (Prod.mk f')) :=
       le_lift'.2 fun _ hs =>
-        let ⟨t, ht₁, ht₂⟩ := (mem_lift'_sets monotone_gen).
+        let ⟨t, ht₁, ht₂⟩ := (mem_lift'_sets monotone_gen).mp hs
+        let ⟨t', ht', (h : t' ×ˢ t' subseteq t)⟩ := mem_prod_same_iff.mp (hf.right ht₁)
+        have : t' subseteq { y : α | (f', pureCauchy y) in gen t } := fun x hx =>
+          (f ×ˢ pure x).sets_of_superset (prod_mem_prod ht' hx) h
+f.sets_of_superset ht' Subset.trans this (preimage_mono ht₂)
+    ⟨f', by simpa [nhds_eq_uniformity]⟩
 
 Depends on / 依赖: CauchyFilter, Prod.mk, _sets, completeSpace_extension, denseRange_pureCauchy, f.sets, hf.right, isUniformInducing_pureCauchy, le_lift, mem_lift, mem_prod_same_iff, mem_prod_same_iff.mp, monotone_gen, preimage, prod_mem_prod, pureCauchy, sets_of_superset, subseteq
 -/
@@ -1846,7 +1926,13 @@ definition completionSeparationQuotientEquiv
   refine ⟨Completion.extension (lift' ((↑) : α -> Completion α)),
     Completion.map SeparationQuotient.mk, fun a => ?_, fun a => ?_⟩
   · refine induction_on a (isClosed_eq (continuous_map.comp continuous_extension) continuous_id) ?_
-    refine SeparationQuotient.surjective_mk.forall.2 fun a => ?
+    refine SeparationQuotient.surjective_mk.forall.2 fun a => ?_
+    rw [extension_coe (uniformContinuous_lift' _)]; rw [lift'_mk (uniformContinuous_coe α)]; rw [map_coe uniformContinuous_mk]
+  · refine induction_on a
+      (isClosed_eq (continuous_extension.comp continuous_map) continuous_id) fun a => ?_
+    rw [map_coe uniformContinuous_mk]; rw [extension_coe (uniformContinuous_lift' _)]; rw [lift'_mk (uniformContinuous_coe _)]
+
+@[fun_prop]
 
 中文:
 定义 completionSeparationQuotientEquiv
@@ -1855,7 +1941,13 @@ definition completionSeparationQuotientEquiv
   refine ⟨Completion.extension (lift' ((↑) : α -> Completion α)),
     Completion.map SeparationQuotient.mk, fun a => ?_, fun a => ?_⟩
   · refine induction_on a (isClosed_eq (continuous_map.comp continuous_extension) continuous_id) ?_
-    refine SeparationQuotient.surjective_mk.forall.2 fun a => ?
+    refine SeparationQuotient.surjective_mk.forall.2 fun a => ?_
+    rw [extension_coe (uniformContinuous_lift' _)]; rw [lift'_mk (uniformContinuous_coe α)]; rw [map_coe uniformContinuous_mk]
+  · refine induction_on a
+      (isClosed_eq (continuous_extension.comp continuous_map) continuous_id) fun a => ?_
+    rw [map_coe uniformContinuous_mk]; rw [extension_coe (uniformContinuous_lift' _)]; rw [lift'_mk (uniformContinuous_coe _)]
+
+@[fun_prop]
 
 Depends on / 依赖: Completion, Completion.extension, Completion.map, SeparationQuotient, SeparationQuotient.mk, SeparationQuotient.surjective_mk.forall, continu, continuous_extension, continuous_extension.comp, continuous_id, continuous_map, continuous_map.comp, extension, extension_coe, induction_on, isClosed_eq, map_coe, surjective_mk, uniformContinuous_coe, uniformContinuous_lift
 -/

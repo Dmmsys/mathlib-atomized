@@ -120,7 +120,10 @@ lemma quarters_mem_preCantorSet
     apply And.intro
     · -- goal: 1 / 4 ∈ preCantorSet (n + 1)
       -- follows by the inductive hypothesis, since 3 / 4 ∈ preCantorSet n
-      exact Or.inl ⟨3 / 4, ih.2,
+      exact Or.inl ⟨3 / 4, ih.2, by norm_num⟩
+    · -- goal: 3 / 4 ∈ preCantorSet (n + 1)
+      -- follows by the inductive hypothesis, since 1 / 4 ∈ preCantorSet n
+      exact Or.inr ⟨1 / 4, ih.1, by norm_num⟩
 
 中文:
 引理 quarters_mem_preCantorSet
@@ -135,7 +138,10 @@ lemma quarters_mem_preCantorSet
     apply And.intro
     · -- goal: 1 / 4 ∈ preCantorSet (n + 1)
       -- follows by the inductive hypothesis, since 3 / 4 ∈ preCantorSet n
-      exact Or.inl ⟨3 / 4, ih.2,
+      exact Or.inl ⟨3 / 4, ih.2, by norm_num⟩
+    · -- goal: 3 / 4 ∈ preCantorSet (n + 1)
+      -- follows by the inductive hypothesis, since 1 / 4 ∈ preCantorSet n
+      exact Or.inr ⟨1 / 4, ih.1, by norm_num⟩
 
 Depends on / 依赖: And.intro, preCantorSet, preCantorSet_zero
 -/
@@ -320,7 +326,10 @@ theorem cantorSet_eq_union_halves
   · exact mulRight_bijective₀ 3⁻¹ (by simp)
   simp_rw [← Function.comp_def,
     ← Set.iInter_union_of_antitone
-      (Set.monotone
+      (Set.monotone_image.comp_antitone preCantorSet_antitone)
+      (Set.monotone_image.comp_antitone preCantorSet_antitone),
+    Function.comp_def, ← preCantorSet_succ]
+  exact (preCantorSet_antitone.iInter_nat_add _).symm
 
 中文:
 定理 cantorSet_eq_union_halves
@@ -332,7 +341,10 @@ theorem cantorSet_eq_union_halves
   · exact mulRight_bijective₀ 3⁻¹ (by simp)
   simp_rw [← Function.comp_def,
     ← Set.iInter_union_of_antitone
-      (Set.monotone
+      (Set.monotone_image.comp_antitone preCantorSet_antitone)
+      (Set.monotone_image.comp_antitone preCantorSet_antitone),
+    Function.comp_def, ← preCantorSet_succ]
+  exact (preCantorSet_antitone.iInter_nat_add _).symm
 
 Depends on / 依赖: AddGroup, AddGroup.addLeft_bijective, Function, Function.comp_def, Set.iInter_union_of_antitone, Set.image_iInter, Set.monotone_image.comp_antitone, addLeft_bijective, cantorSet, comp_antitone, comp_def, iInter_nat_add, iInter_union_of_antitone, image_iInter, monotone_image, preCantorSet_antitone, preCantorSet_antitone.iInter_nat_add, preCantorSet_succ, rotate_left, simp_rw
 -/
@@ -366,6 +378,7 @@ lemma isClosed_preCantorSet
   | succ n ih =>
     refine IsClosed.union ?_ ?_
     · simpa [f, div_eq_inv_mul] using f.isClosedEmbedding.isClosed_iff_image_isClosed.mp ih
+    · simpa [g, f, div_eq_inv_mul] using g.isClosedEmbedding.isClosed_iff_image_isClosed.mp ih
 
 中文:
 引理 isClosed_preCantorSet
@@ -379,6 +392,7 @@ lemma isClosed_preCantorSet
   | succ n ih =>
     refine IsClosed.union ?_ ?_
     · simpa [f, div_eq_inv_mul] using f.isClosedEmbedding.isClosed_iff_image_isClosed.mp ih
+    · simpa [g, f, div_eq_inv_mul] using g.isClosedEmbedding.isClosed_iff_image_isClosed.mp ih
 
 Depends on / 依赖: Homeomorph, Homeomorph.addLeft, Homeomorph.mulLeft, IsClosed, IsClosed.union, addLeft, div_eq_inv_mul, f.isClosedEmbedding.isClosed_iff_image_isClosed.mp, g.isClosedEmbedding.isClosed_iff_image_isClosed.mp, isClosedEmbedding, isClosed_Icc, isClosed_iff_image_isClosed
 -/
@@ -451,7 +465,13 @@ theorem ofDigits_zero_two_sequence_mem_cantorSet
     exact ⟨ofDigits_nonneg a, ofDigits_le_one a⟩
   | succ i ih =>
     simp only [preCantorSet, Set.mem_union, Set.mem_image, ← exists_or]
-    use ofDigits
+    use ofDigits (fun i => a (i + 1))
+    have : (ofDigits fun i => a (i + 1)) in preCantorSet i := ih (by solve_by_elim)
+    simp only [this, ofDigits_eq_sum_add_ofDigits a 1, Finset.range_one, ofDigitsTerm,
+      Nat.cast_ofNat, Finset.sum_singleton, zero_add, pow_one, true_and, field]
+    specialize h 0
+    generalize a 0 = x at h
+    fin_cases x <;> simp at ⊢ h
 
 中文:
 定理 ofDigits_zero_two_sequence_mem_cantorSet
@@ -465,7 +485,13 @@ theorem ofDigits_zero_two_sequence_mem_cantorSet
     exact ⟨ofDigits_nonneg a, ofDigits_le_one a⟩
   | succ i ih =>
     simp only [preCantorSet, Set.mem_union, Set.mem_image, ← exists_or]
-    use ofDigits
+    use ofDigits (fun i => a (i + 1))
+    have : (ofDigits fun i => a (i + 1)) in preCantorSet i := ih (by solve_by_elim)
+    simp only [this, ofDigits_eq_sum_add_ofDigits a 1, Finset.range_one, ofDigitsTerm,
+      Nat.cast_ofNat, Finset.sum_singleton, zero_add, pow_one, true_and, field]
+    specialize h 0
+    generalize a 0 = x at h
+    fin_cases x <;> simp at ⊢ h
 
 Depends on / 依赖: Finset, Finset.range_one, Finset.sum_singleton, Nat.cast_ofNat, Set.mem_Icc, Set.mem_iInter, Set.mem_image, Set.mem_union, cantorSet, cast_ofNat, exists_or, generalizing, mem_Icc, mem_iInter, mem_image, mem_union, ofDigits, ofDigitsTerm, ofDigits_eq_sum_add_ofDigits, ofDigits_le_one
 -/
@@ -502,7 +528,25 @@ theorem ofDigits_zero_two_sequence_unique
   generalize n0 = n1 at h1 h2
   clear h n0
   wlog h3 : a n1 = 0 ∧ b n1 = 2 generalizing a b
-  · 
+  · exact this hb ha h.symm (fun n hn => (h1 n hn).symm) h2.symm (by grind)
+  obtain ⟨h3, h4⟩ := h3
+  clear h2
+  have : ∑ x in Finset.range n1, ofDigitsTerm a x = ∑ x in Finset.range n1, ofDigitsTerm b x := by
+    apply Finset.sum_congr rfl
+    grind [ofDigitsTerm]
+  rw [ofDigits_eq_sum_add_ofDigits a (n1 + 1)]; rw [ofDigits_eq_sum_add_ofDigits b (n1 + 1)]; rw [Finset.sum_range_succ]; rw [Finset.sum_range_succ]; rw [this] at h
+  replace h : ofDigitsTerm a n1 + (3⁻¹ ^ n1 * ofDigits fun i => a (1 + n1 + i)) * (1 / 3) =
+      (3⁻¹ ^ n1 * ofDigits fun i => b (1 + n1 + i)) * (1 / 3) + ofDigitsTerm b n1 := by
+    ring_nf at h
+    linarith
+  simp only [ofDigitsTerm, h3, Fin.isValue, Fin.coe_ofNat_eq_mod, Nat.zero_mod, CharP.cast_eq_zero,
+    Nat.cast_ofNat, pow_succ, mul_inv_rev, zero_mul, inv_pow, one_div, zero_add, h4,
+    Nat.mod_succ] at h
+  replace h : (ofDigits fun i => a (1 + n1 + i)) * 3⁻¹ =
+      (ofDigits fun i => b (1 + n1 + i)) * 3⁻¹ + 2 * 3⁻¹ := by
+    rw [← mul_right_inj' (show ((3 : Real) ^ n1)⁻¹ != 0 by positivity)]
+    linarith
+  linarith [ofDigits_nonneg (fun i => b (1 + n1 + i)), ofDigits_le_one (fun i => a (1 + n1 + i))]
 
 中文:
 定理 ofDigits_zero_two_sequence_unique
@@ -516,7 +560,25 @@ theorem ofDigits_zero_two_sequence_unique
   generalize n0 = n1 at h1 h2
   clear h n0
   wlog h3 : a n1 = 0 ∧ b n1 = 2 generalizing a b
-  · 
+  · exact this hb ha h.symm (fun n hn => (h1 n hn).symm) h2.symm (by grind)
+  obtain ⟨h3, h4⟩ := h3
+  clear h2
+  have : ∑ x in Finset.range n1, ofDigitsTerm a x = ∑ x in Finset.range n1, ofDigitsTerm b x := by
+    apply Finset.sum_congr rfl
+    grind [ofDigitsTerm]
+  rw [ofDigits_eq_sum_add_ofDigits a (n1 + 1)]; rw [ofDigits_eq_sum_add_ofDigits b (n1 + 1)]; rw [Finset.sum_range_succ]; rw [Finset.sum_range_succ]; rw [this] at h
+  replace h : ofDigitsTerm a n1 + (3⁻¹ ^ n1 * ofDigits fun i => a (1 + n1 + i)) * (1 / 3) =
+      (3⁻¹ ^ n1 * ofDigits fun i => b (1 + n1 + i)) * (1 / 3) + ofDigitsTerm b n1 := by
+    ring_nf at h
+    linarith
+  simp only [ofDigitsTerm, h3, Fin.isValue, Fin.coe_ofNat_eq_mod, Nat.zero_mod, CharP.cast_eq_zero,
+    Nat.cast_ofNat, pow_succ, mul_inv_rev, zero_mul, inv_pow, one_div, zero_add, h4,
+    Nat.mod_succ] at h
+  replace h : (ofDigits fun i => a (1 + n1 + i)) * 3⁻¹ =
+      (ofDigits fun i => b (1 + n1 + i)) * 3⁻¹ + 2 * 3⁻¹ := by
+    rw [← mul_right_inj' (show ((3 : Real) ^ n1)⁻¹ != 0 by positivity)]
+    linarith
+  linarith [ofDigits_nonneg (fun i => b (1 + n1 + i)), ofDigits_le_one (fun i => a (1 + n1 + i))]
 
 Depends on / 依赖: Finset, Finset.range, Finset.sum_c, Function, Function.ne_iff, Nat.find, Nat.find_min, Nat.find_spec, find_min, find_spec, generalize, generalizing, h.symm, h2.symm, ne_iff, ofDigitsTerm, sum_c
 -/
@@ -855,7 +917,8 @@ theorem le_ofDigits_cantorToTernary_sum
   rw [cantorSequence_eq_self_sub_sum_cantorToTernary x n] at h_mem
   apply cantorSet_subset_unitInterval at h_mem
   simp only [Set.mem_Icc] at h_mem
-  rw [← mul_le_mul_iff_left₀ (show 0 < (3 : Real) ^ n by positivity)]; rw [sub_mul]; rw [inv_pow];
+  rw [← mul_le_mul_iff_left₀ (show 0 < (3 : Real) ^ n by positivity)]; rw [sub_mul]; rw [inv_pow]; rw [inv_mul_cancel₀ (by simp)]
+  linarith!
 
 中文:
 定理 le_ofDigits_cantorToTernary_sum
@@ -865,7 +928,8 @@ theorem le_ofDigits_cantorToTernary_sum
   rw [cantorSequence_eq_self_sub_sum_cantorToTernary x n] at h_mem
   apply cantorSet_subset_unitInterval at h_mem
   simp only [Set.mem_Icc] at h_mem
-  rw [← mul_le_mul_iff_left₀ (show 0 < (3 : Real) ^ n by positivity)]; rw [sub_mul]; rw [inv_pow];
+  rw [← mul_le_mul_iff_left₀ (show 0 < (3 : Real) ^ n by positivity)]; rw [sub_mul]; rw [inv_pow]; rw [inv_mul_cancel₀ (by simp)]
+  linarith!
 
 Depends on / 依赖: Set.mem_Icc, cantorSequence_eq_self_sub_sum_cantorToTernary, cantorSequence_mem_cantorSet, cantorSet_subset_unitInterval, h_mem, inv_pow, mem_Icc, sub_mul
 -/
@@ -891,7 +955,13 @@ theorem ofDigits_cantorToTernary
   swap
   · simpa only [norm_of_nonneg ofDigitsTerm_nonneg] using summable_ofDigitsTerm
   apply tendsto_of_tendsto_of_tendsto_of_le_of_le (g := fun n => x - (3⁻¹ : Real) ^ n) (h := fun _ => x)
-  · rw [← ten
+  · rw [← tendsto_sub_nhds_zero_iff]
+    simp only [sub_sub_cancel_left]
+    rw [show 0 = -(0 : Real) by simp]
+    exact (tendsto_pow_atTop_nhds_zero_of_abs_lt_one (by norm_num)).neg
+  · exact tendsto_const_nhds
+  · exact fun _ => le_ofDigits_cantorToTernary_sum hx
+  · exact fun _ => ofDigits_cantorToTernary_sum_le hx
 
 中文:
 定理 ofDigits_cantorToTernary
@@ -903,7 +973,13 @@ theorem ofDigits_cantorToTernary
   swap
   · simpa only [norm_of_nonneg ofDigitsTerm_nonneg] using summable_ofDigitsTerm
   apply tendsto_of_tendsto_of_tendsto_of_le_of_le (g := fun n => x - (3⁻¹ : Real) ^ n) (h := fun _ => x)
-  · rw [← ten
+  · rw [← tendsto_sub_nhds_zero_iff]
+    simp only [sub_sub_cancel_left]
+    rw [show 0 = -(0 : Real) by simp]
+    exact (tendsto_pow_atTop_nhds_zero_of_abs_lt_one (by norm_num)).neg
+  · exact tendsto_const_nhds
+  · exact fun _ => le_ofDigits_cantorToTernary_sum hx
+  · exact fun _ => ofDigits_cantorToTernary_sum_le hx
 
 Depends on / 依赖: HasSum, HasSum.tsum_eq, hasSum_iff_tendsto_nat_of_summable_norm, le_ofDigits_, norm_of_nonneg, ofDigits, ofDigitsTerm_nonneg, sub_sub_cancel_left, summable_ofDigitsTerm, tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le, tendsto_pow_atTop_nhds_zero_of_abs_lt_one, tendsto_sub_nhds_zero_iff, tsum_eq
 -/
@@ -980,6 +1056,16 @@ definition cantorSetEquivNatToBool
     exact ofDigits_cantorToTernary hx
   right_inv := by
     intro y
+    simp only [Fin.isValue]
+    set x := @ofDigits 3 (fun i => cond (y i) 2 0)
+    have := ofDigits_cantorToTernary (ofDigits_bool_to_fin_three_mem_cantorSet y)
+    apply ofDigits_zero_two_sequence_unique at this
+    rotate_left
+    · exact fun n => cantorToTernary_ne_one
+    · grind
+    ext n
+    apply congrFun (a := n) at this
+    grind [cantorToTernary, Stream'.get_map]
 
 中文:
 定义 cantorSetEquiv自然数To布尔
@@ -993,6 +1079,16 @@ definition cantorSetEquivNatToBool
     exact ofDigits_cantorToTernary hx
   right_inv := by
     intro y
+    simp only [Fin.isValue]
+    set x := @ofDigits 3 (fun i => cond (y i) 2 0)
+    have := ofDigits_cantorToTernary (ofDigits_bool_to_fin_three_mem_cantorSet y)
+    apply ofDigits_zero_two_sequence_unique at this
+    rotate_left
+    · exact fun n => cantorToTernary_ne_one
+    · grind
+    ext n
+    apply congrFun (a := n) at this
+    grind [cantorToTernary, Stream'.get_map]
 
 Depends on / 依赖: cantorToBinary
 -/

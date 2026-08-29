@@ -1442,7 +1442,8 @@ theorem isUnit_iff_isUnit_apply_one
     refine ⟨⟨f.val 1, f⁻¹.val 1, ?_, ?_⟩, rfl⟩
     · rw [← ArithmeticFunction.mul_apply_one, Units.mul_inv, one_one]
     · rw [← ArithmeticFunction.mul_apply_one, Units.inv_mul, one_one]
-  · suffices Invertible (f 1) -> Invertible f by simpa using Nonempty.map th
+  · suffices Invertible (f 1) -> Invertible f by simpa using Nonempty.map this
+    exact fun hf => ⟨_, dirichletInverse_mul_self f hf, self_mul_dirichletInverse f hf⟩
 
 中文:
 定理 isUnit_iff_isUnit_apply_one
@@ -1453,7 +1454,8 @@ theorem isUnit_iff_isUnit_apply_one
     refine ⟨⟨f.val 1, f⁻¹.val 1, ?_, ?_⟩, rfl⟩
     · rw [← ArithmeticFunction.mul_apply_one, Units.mul_inv, one_one]
     · rw [← ArithmeticFunction.mul_apply_one, Units.inv_mul, one_one]
-  · suffices Invertible (f 1) -> Invertible f by simpa using Nonempty.map th
+  · suffices Invertible (f 1) -> Invertible f by simpa using Nonempty.map this
+    exact fun hf => ⟨_, dirichletInverse_mul_self f hf, self_mul_dirichletInverse f hf⟩
 
 Depends on / 依赖: ArithmeticFunction, ArithmeticFunction.mul_apply_one, Invertible, Nonempty, Nonempty.map, Units.inv_mul, Units.mul_inv, dirichletInverse_mul_self, f.val, inv_mul, mul_apply_one, mul_inv, one_one, self_mul_dirichletInverse
 -/
@@ -1551,7 +1553,7 @@ theorem map_prod
     | insert _ _ has ih =>
       rw [coe_insert]; rw [Set.pairwise_insert_of_symm] at hs
       rw [prod_insert has]; rw [prod_insert has]; rw [hf.map_mul_of_coprime]; rw [ih hs.1]
-      exact Coprime.prod_right fu
+      exact Coprime.prod_right fun i hi => hs.2 _ hi (hi.ne_of_notMem has).symm
 
 中文:
 定理 map_prod
@@ -1563,7 +1565,7 @@ theorem map_prod
     | insert _ _ has ih =>
       rw [coe_insert]; rw [Set.pairwise_insert_of_symm] at hs
       rw [prod_insert has]; rw [prod_insert has]; rw [hf.map_mul_of_coprime]; rw [ih hs.1]
-      exact Coprime.prod_right fu
+      exact Coprime.prod_right fun i hi => hs.2 _ hi (hi.ne_of_notMem has).symm
 
 Depends on / 依赖: Coprime, Coprime.prod_right, Finset, Finset.induction_on, Set.pairwise_insert_of_symm, classical, coe_insert, hf.map_mul_of_coprime, hi.ne_of_notMem, induction_on, insert, map_mul_of_coprime, ne_of_notMem, pairwise_insert_of_symm, prod_insert, prod_right
 -/
@@ -1731,7 +1733,45 @@ theorem mul
   apply sum_nbij fun ((i, j), k, l) => (i * k, j * l)
   · rintro ⟨⟨a1, a2⟩, ⟨b1, b2⟩⟩ h
     simp only [mem_divisorsAntidiagonal, Ne, mem_product] at h
-    rcases h with ⟨⟨rfl
+    rcases h with ⟨⟨rfl, ha⟩, ⟨rfl, hb⟩⟩
+    simp only [mem_divisorsAntidiagonal, mul_eq_zero, Ne]
+    constructor
+    · ring
+    rw [mul_eq_zero] at *
+    exact not_or_intro ha hb
+  · simp only [Set.InjOn, mem_coe, mem_divisorsAntidiagonal, mem_product, Prod.mk_inj]
+    rintro ⟨⟨a1, a2⟩, ⟨b1, b2⟩⟩ ⟨⟨rfl, ha⟩, ⟨rfl, hb⟩⟩ ⟨⟨c1, c2⟩, ⟨d1, d2⟩⟩ hcd h
+    ext
+    · trans gcd (a1 * a2) (a1 * b1)
+      · rw [gcd_mul_left, cop.coprime_mul_left.coprime_mul_right_right.gcd_eq_one, mul_one]
+      · rw [← hcd.1.1, ← hcd.2.1] at cop
+        rw [← hcd.1.1]; rw [h.1]; rw [gcd_mul_left]; rw [cop.coprime_mul_left.coprime_mul_right_right.gcd_eq_one]; rw [mul_one]
+    · trans gcd (a1 * a2) (a2 * b2)
+      · rw [mul_comm, gcd_mul_left, cop.coprime_mul_right.coprime_mul_left_right.gcd_eq_one,
+          mul_one]
+      · rw [← hcd.1.1, ← hcd.2.1] at cop
+        rw [← hcd.1.1]; rw [h.2]; rw [mul_comm]; rw [gcd_mul_left]; rw [cop.coprime_mul_right.coprime_mul_left_right.gcd_eq_one]; rw [mul_one]
+    · trans gcd (b1 * b2) (a1 * b1)
+      · rw [mul_comm, gcd_mul_right, cop.coprime_mul_right.coprime_mul_left_right.symm.gcd_eq_one,
+          one_mul]
+      · rw [← hcd.1.1, ← hcd.2.1] at cop
+        rw [← hcd.2.1]; rw [h.1]; rw [mul_comm c1 d1]; rw [gcd_mul_left]; rw [cop.coprime_mul_right.coprime_mul_left_right.symm.gcd_eq_one]; rw [mul_one]
+    · trans gcd (b1 * b2) (a2 * b2)
+      · rw [gcd_mul_right, cop.coprime_mul_left.coprime_mul_right_right.symm.gcd_eq_one, one_mul]
+      · rw [← hcd.1.1, ← hcd.2.1] at cop
+        rw [← hcd.2.1]; rw [h.2]; rw [gcd_mul_right]; rw [cop.coprime_mul_left.coprime_mul_right_right.symm.gcd_eq_one]; rw [one_mul]
+  · simp only [Set.SurjOn, Set.subset_def, mem_coe, mem_divisorsAntidiagonal, mem_product,
+      Set.mem_image]
+    rintro ⟨b1, b2⟩ h
+    use ((b1.gcd m, b2.gcd m), (b1.gcd n, b2.gcd n))
+    rw [← cop.gcd_mul _]; rw [← cop.gcd_mul _]; rw [← h.1]; rw [gcd_mul_gcd_of_coprime_of_mul_eq_mul cop h.1]; rw [gcd_mul_gcd_of_coprime_of_mul_eq_mul cop.symm _]
+    · rw [Ne, mul_eq_zero, not_or] at h
+      simp [h.2.1, h.2.2]
+    rw [mul_comm n m]; rw [h.1]
+  · simp only [mem_divisorsAntidiagonal, mem_product]
+    rintro ⟨⟨a1, a2⟩, ⟨b1, b2⟩⟩ ⟨⟨rfl, ha⟩, ⟨rfl, hb⟩⟩
+    rw [hf.map_mul_of_coprime cop.coprime_mul_right.coprime_mul_right_right]; rw [hg.map_mul_of_coprime cop.coprime_mul_left.coprime_mul_left_right]
+    ring
 
 中文:
 定理 mul
@@ -1745,7 +1785,45 @@ theorem mul
   apply sum_nbij fun ((i, j), k, l) => (i * k, j * l)
   · rintro ⟨⟨a1, a2⟩, ⟨b1, b2⟩⟩ h
     simp only [mem_divisorsAntidiagonal, Ne, mem_product] at h
-    rcases h with ⟨⟨rfl
+    rcases h with ⟨⟨rfl, ha⟩, ⟨rfl, hb⟩⟩
+    simp only [mem_divisorsAntidiagonal, mul_eq_zero, Ne]
+    constructor
+    · ring
+    rw [mul_eq_zero] at *
+    exact not_or_intro ha hb
+  · simp only [Set.InjOn, mem_coe, mem_divisorsAntidiagonal, mem_product, Prod.mk_inj]
+    rintro ⟨⟨a1, a2⟩, ⟨b1, b2⟩⟩ ⟨⟨rfl, ha⟩, ⟨rfl, hb⟩⟩ ⟨⟨c1, c2⟩, ⟨d1, d2⟩⟩ hcd h
+    ext
+    · trans gcd (a1 * a2) (a1 * b1)
+      · rw [gcd_mul_left, cop.coprime_mul_left.coprime_mul_right_right.gcd_eq_one, mul_one]
+      · rw [← hcd.1.1, ← hcd.2.1] at cop
+        rw [← hcd.1.1]; rw [h.1]; rw [gcd_mul_left]; rw [cop.coprime_mul_left.coprime_mul_right_right.gcd_eq_one]; rw [mul_one]
+    · trans gcd (a1 * a2) (a2 * b2)
+      · rw [mul_comm, gcd_mul_left, cop.coprime_mul_right.coprime_mul_left_right.gcd_eq_one,
+          mul_one]
+      · rw [← hcd.1.1, ← hcd.2.1] at cop
+        rw [← hcd.1.1]; rw [h.2]; rw [mul_comm]; rw [gcd_mul_left]; rw [cop.coprime_mul_right.coprime_mul_left_right.gcd_eq_one]; rw [mul_one]
+    · trans gcd (b1 * b2) (a1 * b1)
+      · rw [mul_comm, gcd_mul_right, cop.coprime_mul_right.coprime_mul_left_right.symm.gcd_eq_one,
+          one_mul]
+      · rw [← hcd.1.1, ← hcd.2.1] at cop
+        rw [← hcd.2.1]; rw [h.1]; rw [mul_comm c1 d1]; rw [gcd_mul_left]; rw [cop.coprime_mul_right.coprime_mul_left_right.symm.gcd_eq_one]; rw [mul_one]
+    · trans gcd (b1 * b2) (a2 * b2)
+      · rw [gcd_mul_right, cop.coprime_mul_left.coprime_mul_right_right.symm.gcd_eq_one, one_mul]
+      · rw [← hcd.1.1, ← hcd.2.1] at cop
+        rw [← hcd.2.1]; rw [h.2]; rw [gcd_mul_right]; rw [cop.coprime_mul_left.coprime_mul_right_right.symm.gcd_eq_one]; rw [one_mul]
+  · simp only [Set.SurjOn, Set.subset_def, mem_coe, mem_divisorsAntidiagonal, mem_product,
+      Set.mem_image]
+    rintro ⟨b1, b2⟩ h
+    use ((b1.gcd m, b2.gcd m), (b1.gcd n, b2.gcd n))
+    rw [← cop.gcd_mul _]; rw [← cop.gcd_mul _]; rw [← h.1]; rw [gcd_mul_gcd_of_coprime_of_mul_eq_mul cop h.1]; rw [gcd_mul_gcd_of_coprime_of_mul_eq_mul cop.symm _]
+    · rw [Ne, mul_eq_zero, not_or] at h
+      simp [h.2.1, h.2.2]
+    rw [mul_comm n m]; rw [h.1]
+  · simp only [mem_divisorsAntidiagonal, mem_product]
+    rintro ⟨⟨a1, a2⟩, ⟨b1, b2⟩⟩ ⟨⟨rfl, ha⟩, ⟨rfl, hb⟩⟩
+    rw [hf.map_mul_of_coprime cop.coprime_mul_right.coprime_mul_right_right]; rw [hg.map_mul_of_coprime cop.coprime_mul_left.coprime_mul_left_right]
+    ring
 
 Depends on / 依赖: Prod.mk_inj, Set.InjOn, mem_coe, mem_divisorsAntidiagonal, mem_product, mk_inj, mul_apply, mul_eq_zero, not_or_intro, sum_mul_sum, sum_nbij, sum_product
 -/
@@ -1908,7 +1986,24 @@ theorem lcm_apply_mul_gcd_apply
   by_cases hy : y = 0
   · simp only [hy, f.map_zero, mul_zero, lcm_zero_right, gcd_zero_right, zero_mul]
   have hgcd_ne_zero : x.gcd y != 0 := gcd_ne_zero_left hx
-  have hlcm_ne_zero : x.lcm y != 0 := lcm
+  have hlcm_ne_zero : x.lcm y != 0 := lcm_ne_zero hx hy
+  have hfi_zero : forall {i}, f (i ^ 0) = 1 := by
+    intro i; rw [pow_zero, hf.1]
+  iterate 4 rw [hf.multiplicative_factorization f (by assumption),
+    Finsupp.prod_of_support_subset _ _ _ (fun _ _ => hfi_zero)
+      (s := (x.primeFactors union y.primeFactors))]
+  · rw [← prod_mul_distrib, ← prod_mul_distrib]
+    apply prod_congr rfl
+    intro p _
+    rcases Nat.le_or_le (x.factorization p) (y.factorization p) with h | h <;>
+      simp only [factorization_lcm hx hy, Finsupp.sup_apply, h, sup_of_le_right,
+        sup_of_le_left, inf_of_le_right, factorization_gcd hx hy, Finsupp.inf_apply,
+        inf_of_le_left, mul_comm]
+  · apply subset_union_right
+  · apply subset_union_left
+  · rw [factorization_gcd hx hy, Finsupp.support_inf]
+    apply inter_subset_union
+  · simp [factorization_lcm hx hy]
 
 中文:
 定理 lcm_apply_mul_gcd_apply
@@ -1919,7 +2014,24 @@ theorem lcm_apply_mul_gcd_apply
   by_cases hy : y = 0
   · simp only [hy, f.map_zero, mul_zero, lcm_zero_right, gcd_zero_right, zero_mul]
   have hgcd_ne_zero : x.gcd y != 0 := gcd_ne_zero_left hx
-  have hlcm_ne_zero : x.lcm y != 0 := lcm
+  have hlcm_ne_zero : x.lcm y != 0 := lcm_ne_zero hx hy
+  have hfi_zero : forall {i}, f (i ^ 0) = 1 := by
+    intro i; rw [pow_zero, hf.1]
+  iterate 4 rw [hf.multiplicative_factorization f (by assumption),
+    Finsupp.prod_of_support_subset _ _ _ (fun _ _ => hfi_zero)
+      (s := (x.primeFactors union y.primeFactors))]
+  · rw [← prod_mul_distrib, ← prod_mul_distrib]
+    apply prod_congr rfl
+    intro p _
+    rcases Nat.le_or_le (x.factorization p) (y.factorization p) with h | h <;>
+      simp only [factorization_lcm hx hy, Finsupp.sup_apply, h, sup_of_le_right,
+        sup_of_le_left, inf_of_le_right, factorization_gcd hx hy, Finsupp.inf_apply,
+        inf_of_le_left, mul_comm]
+  · apply subset_union_right
+  · apply subset_union_left
+  · rw [factorization_gcd hx hy, Finsupp.support_inf]
+    apply inter_subset_union
+  · simp [factorization_lcm hx hy]
 
 Depends on / 依赖: Finsupp, Finsupp.prod_of_support_subset, f.map_zero, gcd_ne_zero_left, gcd_zero_left, gcd_zero_right, hf.multiplicative_factorization, hfi_ze, hfi_zero, hgcd_ne_zero, hlcm_ne_zero, iterate, lcm_ne_zero, lcm_zero_left, lcm_zero_right, map_zero, mul_zero, multiplicative_factorization, pow_zero, prod_of_support_subset
 -/

@@ -42,7 +42,8 @@ theorem coe_iSup_of_directed
       algebraMap_mem' := fun _ => Set.mem_iUnion.2
         ⟨Classical.arbitrary ι, Subalgebra.algebraMap_mem _ _⟩ }
   have : iSup K = s := le_antisymm
-    (iSup_le fun i => le_iSup (fun i => (
+    (iSup_le fun i => le_iSup (fun i => (K i : Set A)) i) (Set.iUnion_subset fun _ => le_iSup K _)
+  simp [this, s]
 
 中文:
 定理 coe_iSup_of_directed
@@ -54,7 +55,8 @@ theorem coe_iSup_of_directed
       algebraMap_mem' := fun _ => Set.mem_iUnion.2
         ⟨Classical.arbitrary ι, Subalgebra.algebraMap_mem _ _⟩ }
   have : iSup K = s := le_antisymm
-    (iSup_le fun i => le_iSup (fun i => (
+    (iSup_le fun i => le_iSup (fun i => (K i : Set A)) i) (Set.iUnion_subset fun _ => le_iSup K _)
+  simp [this, s]
 
 Depends on / 依赖: Classical, Classical.arbitrary, Set.iUnion_subset, Set.mem_iUnion, Subalgebra, Subalgebra.algebraMap_mem, Subsemiring, Subsemiring.coe_iSup_of_directed, Subsemiring.copy, algebraMap_mem, arbitrary, coe_iSup_of_directed, iSup_le, iUnion_subset, le_antisymm, le_iSup, mem_iUnion
 -/
@@ -128,7 +130,29 @@ definition iSupLift
     rcases dir i j with ⟨k, hik, hjk⟩
     simp [hf i k hik, hf j k hjk]
   let liftSup : ((iSup K : Subalgebra R A)) ->ₐ[R] B :=
-    { 
+    { toFun :=
+        Set.iUnionLift (fun i => ↑(K i)) (fun i x => f i x) compat
+          ((iSup K : Subalgebra R A) : Set A)
+          (le_of_eq <| coe_iSup_of_directed (K := K) dir)
+      map_one' := by
+        dsimp
+        exact Set.iUnionLift_const _ (fun i : ι => (1 : K i)) (fun _ => rfl) _ (by simp)
+      map_zero' := by
+        dsimp
+        exact Set.iUnionLift_const _ (fun i : ι => (0 : K i)) (fun _ => rfl) _ (by simp)
+      map_mul' := by
+        dsimp
+        apply Set.iUnionLift_binary (coe_iSup_of_directed (K := K) dir) dir _ (fun _ => (· * ·))
+        all_goals simp
+      map_add' := by
+        dsimp
+        apply Set.iUnionLift_binary (coe_iSup_of_directed (K := K) dir) dir _ (fun _ => (· + ·))
+        all_goals simp
+      commutes' := fun r => by
+        dsimp
+        exact
+          Set.iUnionLift_const _ (fun i : ι => algebraMap R (K i) r) (fun _ => rfl) _ (by simp) }
+  exact liftSup.comp (inclusion hT)
 
 中文:
 定义 iSupLift
@@ -141,7 +165,29 @@ definition iSupLift
     rcases dir i j with ⟨k, hik, hjk⟩
     simp [hf i k hik, hf j k hjk]
   let liftSup : ((iSup K : Subalgebra R A)) ->ₐ[R] B :=
-    { 
+    { toFun :=
+        Set.iUnionLift (fun i => ↑(K i)) (fun i x => f i x) compat
+          ((iSup K : Subalgebra R A) : Set A)
+          (le_of_eq <| coe_iSup_of_directed (K := K) dir)
+      map_one' := by
+        dsimp
+        exact Set.iUnionLift_const _ (fun i : ι => (1 : K i)) (fun _ => rfl) _ (by simp)
+      map_zero' := by
+        dsimp
+        exact Set.iUnionLift_const _ (fun i : ι => (0 : K i)) (fun _ => rfl) _ (by simp)
+      map_mul' := by
+        dsimp
+        apply Set.iUnionLift_binary (coe_iSup_of_directed (K := K) dir) dir _ (fun _ => (· * ·))
+        all_goals simp
+      map_add' := by
+        dsimp
+        apply Set.iUnionLift_binary (coe_iSup_of_directed (K := K) dir) dir _ (fun _ => (· + ·))
+        all_goals simp
+      commutes' := fun r => by
+        dsimp
+        exact
+          Set.iUnionLift_const _ (fun i : ι => algebraMap R (K i) r) (fun _ => rfl) _ (by simp) }
+  exact liftSup.comp (inclusion hT)
 
 Depends on / 依赖: Set.iUnionLift, Set.iUnionLift_const, Subalgebra, coe_iSup_of_directed, compat, iUnionLift, iUnionLift_const, le_of_eq, liftSup, map_one, toNonUnitalRingHomClass
 -/

@@ -89,7 +89,8 @@ theorem eventually_isUnit_of_isUnit
   exact ⟨Classical.skolem.symm.1 ⟨b, hb⟩, by filter_upwards [x.2, b.2] using
     fun i hx hb => ⟨hx, ⟨b i, hb⟩, by simp_all [← SetLike.coe_eq_coe]⟩⟩
 
-@[deprecated 
+@[deprecated (since := "2026-04-06")]
+alias eventualy_isUnit_of_isUnit := eventually_isUnit_of_isUnit
 
 中文:
 定理 eventually_isUnit_of_isUnit
@@ -101,7 +102,8 @@ theorem eventually_isUnit_of_isUnit
   exact ⟨Classical.skolem.symm.1 ⟨b, hb⟩, by filter_upwards [x.2, b.2] using
     fun i hx hb => ⟨hx, ⟨b i, hb⟩, by simp_all [← SetLike.coe_eq_coe]⟩⟩
 
-@[deprecated 
+@[deprecated (since := "2026-04-06")]
+alias eventualy_isUnit_of_isUnit := eventually_isUnit_of_isUnit
 
 Depends on / 依赖: Classical, Classical.skolem.symm, RestrictedProduct, RestrictedProduct.ext_iff, SetLike, SetLike.coe_eq_coe, coe_eq_coe, ext_iff, filter_upwards, forall_and, isUnit_iff_exists, skolem
 -/

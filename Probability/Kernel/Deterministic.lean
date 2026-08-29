@@ -183,6 +183,15 @@ DFunLike.congr_fun have := DFunLike.congr_fun κ.parallelComp_self_comp_copy a
     rw [parallelComp_comp_copy]; rw [prod_apply_prod]; rw [copy_comp_apply_prod]; rw [inter_self] at this
     · by_cases hκ : κ a s = 0
       · simp [hκ]
+· exact Or.inr (ENNReal.mul_eq_left hκ (by simp)).mp this
+    all_goals exact hs
+  · intro _
+    refine ⟨?_⟩
+    ext : 1
+    rw [parallelComp_comp_copy]; rw [prod_apply]
+    refine Measure.prod_eq fun s t hs ht => ?_
+    rw [copy_comp_apply_prod _ _ hs ht]
+    exact measure_inter_eq_prod hs ht
 
 中文:
 引理 isDeterministic_iff_isZeroOneMeasure
@@ -196,6 +205,15 @@ DFunLike.congr_fun have := DFunLike.congr_fun κ.parallelComp_self_comp_copy a
     rw [parallelComp_comp_copy]; rw [prod_apply_prod]; rw [copy_comp_apply_prod]; rw [inter_self] at this
     · by_cases hκ : κ a s = 0
       · simp [hκ]
+· exact Or.inr (ENNReal.mul_eq_left hκ (by simp)).mp this
+    all_goals exact hs
+  · intro _
+    refine ⟨?_⟩
+    ext : 1
+    rw [parallelComp_comp_copy]; rw [prod_apply]
+    refine Measure.prod_eq fun s t hs ht => ?_
+    rw [copy_comp_apply_prod _ _ hs ht]
+    exact measure_inter_eq_prod hs ht
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, ENNReal, ENNReal.mul_eq_left, Measure, Measure.prod_eq, Or.inr, all_goals, congr_fun, copy_comp_apply_prod, inter_self, mul_eq_left, parallelComp_comp_copy, parallelComp_self_comp_copy, prod_apply, prod_apply_prod, prod_eq
 -/
@@ -236,7 +254,11 @@ theorem IsDeterministic.exists_eq_deterministic
       simp only [preimage, mem_singleton_iff]
       simp_rw [hf, Measure.dirac_apply' _ hs]
       ext x
-      exact (indicator_eq_one_iff_mem ENNReal).sy
+      exact (indicator_eq_one_iff_mem ENNReal).symm
+    rw [this]
+exact κ.measurable_coe hs measurableSet_singleton 1
+  · ext a : 1
+    exact hf a
 
 中文:
 定理 是确定性.存在_eq_deterministic
@@ -249,7 +271,11 @@ theorem IsDeterministic.exists_eq_deterministic
       simp only [preimage, mem_singleton_iff]
       simp_rw [hf, Measure.dirac_apply' _ hs]
       ext x
-      exact (indicator_eq_one_iff_mem ENNReal).sy
+      exact (indicator_eq_one_iff_mem ENNReal).symm
+    rw [this]
+exact κ.measurable_coe hs measurableSet_singleton 1
+  · ext a : 1
+    exact hf a
 
 Depends on / 依赖: ENNReal, Measure, Measure.dirac_apply, dirac_apply, exists_eq_dirac, indicator_eq_one_iff_mem, measurableSet_singleton, measurable_coe, mem_singleton_iff, preimage, simp_rw
 -/
@@ -282,7 +308,49 @@ lemma comp_parallelComp_comp_copy
   refine Measure.prod_eq fun s t hs ht => ?_
   rw [comp_apply' _ _ _ (hs.prod ht)]
   simp_rw [prod_apply_prod, Kernel.id_apply, Measure.dirac_apply' _ ht]
-  have (b : β) : (η b) s * t.indicator 1 b = t.indicator (fun b => η b s) b
+  have (b : β) : (η b) s * t.indicator 1 b = t.indicator (fun b => η b s) b := by
+    simp only [indicator]
+    split_ifs
+    all_goals simp_all
+  simp_rw [this]
+  rw [lintegral_indicator ht]
+  rcases ((η ∘ₖ κ) a).zero_one s with (h₀ | h₁)
+  · rw [h₀, zero_mul, setLIntegral_eq_zero_iff ht <| η.measurable_coe hs]
+    rw [comp_apply' _ _ _ hs]; rw [lintegral_eq_zero_iff <| η.measurable_coe hs] at h₀
+    filter_upwards [h₀] with x hx _ using hx
+  · /- In Example 11.25 of [gritz2020], the case where `((η ∘ₖ κ) a) s = 1` is not explicitly
+    treated. We prove it here by using the fact that the hypothesis implies that
+    `((η ∘ₖ κ) a) sᶜ = 0`, and thus that the integral of `1 - (η b) s` over `κ a` is zero. -/
+    rw [h₁]; rw [one_mul]
+    have integral_le_kernel : ∫⁻ b in t, (η b) s ∂κ a <= κ a t := by
+      calc
+      _ <= ∫⁻ a in t, 1 ∂κ a := by
+        refine lintegral_mono ?_
+        intro b
+        rw [← measure_univ (μ := η b)]
+        exact measure_mono (by simp)
+      _ = κ a t := by rw [setLIntegral_one]
+refine le_antisymm integral_le_kernel tsub_eq_zero_iff_le.mp ?_
+    rw [← nonpos_iff_eq_zero]
+    calc
+    _ = ∫⁻ b in t, 1 ∂κ a - ∫⁻ b in t, (η b) s ∂κ a := by
+      rw [setLIntegral_one]
+    _ = ∫⁻ b in t, 1 - (η b) s ∂κ a := by
+      rw [lintegral_sub]
+      · exact η.measurable_coe hs
+      · exact ne_top_of_le_ne_top (by simp) integral_le_kernel
+      · refine ae_of_all _ fun b => ?_
+        rw [← measure_univ (μ := η b)]
+        exact measure_mono (by simp)
+    _ <= ∫⁻ b, 1 - (η b) s ∂κ a := setLIntegral_le_lintegral _ _
+    _ = ∫⁻ x, (η x) sᶜ ∂κ a := by
+        congr with x
+        rw [measure_compl hs (by simp)]
+        simp
+    _ = (η ∘ₖ κ) a sᶜ := by
+        rw [η.comp_apply' _ _ hs.compl]
+    _ = 0 := by
+      rw [measure_compl hs (by simp)]; rw [measure_univ h₁]; rw [h₁]; rw [tsub_self]
 
 中文:
 引理 comp_parallelComp_comp_copy
@@ -294,7 +362,49 @@ lemma comp_parallelComp_comp_copy
   refine Measure.prod_eq fun s t hs ht => ?_
   rw [comp_apply' _ _ _ (hs.prod ht)]
   simp_rw [prod_apply_prod, Kernel.id_apply, Measure.dirac_apply' _ ht]
-  have (b : β) : (η b) s * t.indicator 1 b = t.indicator (fun b => η b s) b
+  have (b : β) : (η b) s * t.indicator 1 b = t.indicator (fun b => η b s) b := by
+    simp only [indicator]
+    split_ifs
+    all_goals simp_all
+  simp_rw [this]
+  rw [lintegral_indicator ht]
+  rcases ((η ∘ₖ κ) a).zero_one s with (h₀ | h₁)
+  · rw [h₀, zero_mul, setLIntegral_eq_zero_iff ht <| η.measurable_coe hs]
+    rw [comp_apply' _ _ _ hs]; rw [lintegral_eq_zero_iff <| η.measurable_coe hs] at h₀
+    filter_upwards [h₀] with x hx _ using hx
+  · /- In Example 11.25 of [gritz2020], the case where `((η ∘ₖ κ) a) s = 1` is not explicitly
+    treated. We prove it here by using the fact that the hypothesis implies that
+    `((η ∘ₖ κ) a) sᶜ = 0`, and thus that the integral of `1 - (η b) s` over `κ a` is zero. -/
+    rw [h₁]; rw [one_mul]
+    have integral_le_kernel : ∫⁻ b in t, (η b) s ∂κ a <= κ a t := by
+      calc
+      _ <= ∫⁻ a in t, 1 ∂κ a := by
+        refine lintegral_mono ?_
+        intro b
+        rw [← measure_univ (μ := η b)]
+        exact measure_mono (by simp)
+      _ = κ a t := by rw [setLIntegral_one]
+refine le_antisymm integral_le_kernel tsub_eq_zero_iff_le.mp ?_
+    rw [← nonpos_iff_eq_zero]
+    calc
+    _ = ∫⁻ b in t, 1 ∂κ a - ∫⁻ b in t, (η b) s ∂κ a := by
+      rw [setLIntegral_one]
+    _ = ∫⁻ b in t, 1 - (η b) s ∂κ a := by
+      rw [lintegral_sub]
+      · exact η.measurable_coe hs
+      · exact ne_top_of_le_ne_top (by simp) integral_le_kernel
+      · refine ae_of_all _ fun b => ?_
+        rw [← measure_univ (μ := η b)]
+        exact measure_mono (by simp)
+    _ <= ∫⁻ b, 1 - (η b) s ∂κ a := setLIntegral_le_lintegral _ _
+    _ = ∫⁻ x, (η x) sᶜ ∂κ a := by
+        congr with x
+        rw [measure_compl hs (by simp)]
+        simp
+    _ = (η ∘ₖ κ) a sᶜ := by
+        rw [η.comp_apply' _ _ hs.compl]
+    _ = 0 := by
+      rw [measure_compl hs (by simp)]; rw [measure_univ h₁]; rw [h₁]; rw [tsub_self]
 
 Depends on / 依赖: Kernel, Kernel.id_apply, Measure, Measure.dirac_apply, Measure.prod_eq, all_goals, comp_apply, dirac_apply, hs.prod, id_apply, indicator, lintegral_indicator, measurable_coe, parallelComp_comp_copy, prod_apply, prod_apply_prod, prod_eq, setLIntegral_eq_zero_iff, simp_rw, split_ifs
 -/

@@ -300,7 +300,12 @@ have : e' =Q ($lit).rawCast := ⟨⟩
   /- In the following cases, Qq needs help identifying the `0` in the produced type with the `0`
   in the expected type, which arise from different instances. -/
   | .isNegNat rα lit p =>
-    pure ⟨_,
+    pure ⟨_, (ExProd.mkNegNat sα rα lit.natLit!).2.toSum, (q(cast_neg $p) : Expr)⟩
+  | .isNNRat dsα q n d p =>
+    pure ⟨_, (ExProd.mkNNRat sα dsα q n d q(IsNNRat.den_nz $p)).2.toSum, (q(cast_nnrat $p) : Expr)⟩
+  | .isNegNNRat dα q n d p =>
+    pure ⟨_, (ExProd.mkNegNNRat sα dα q n d q(IsRat.den_nz $p)).2.toSum, (q(cast_rat $p) : Expr)⟩
+  | _ => none
 
 中文:
 定义 evalCast
@@ -311,7 +316,12 @@ have : e' =Q ($lit).rawCast := ⟨⟩
   /- In the following cases, Qq needs help identifying the `0` in the produced type with the `0`
   in the expected type, which arise from different instances. -/
   | .isNegNat rα lit p =>
-    pure ⟨_,
+    pure ⟨_, (ExProd.mkNegNat sα rα lit.natLit!).2.toSum, (q(cast_neg $p) : Expr)⟩
+  | .isNNRat dsα q n d p =>
+    pure ⟨_, (ExProd.mkNNRat sα dsα q n d q(IsNNRat.den_nz $p)).2.toSum, (q(cast_nnrat $p) : Expr)⟩
+  | .isNegNNRat dα q n d p =>
+    pure ⟨_, (ExProd.mkNegNNRat sα dα q n d q(IsRat.den_nz $p)).2.toSum, (q(cast_rat $p) : Expr)⟩
+  | _ => none
 
 Depends on / 依赖: ExProd, ExProd.mkNat, lit.natLit, natLit
 -/
@@ -468,7 +478,9 @@ have : a =Q Nat.rawCast n := ⟨⟩
     pure ⟨q(Nat.rawCast $n), .const ⟨c, hc⟩, q(natCast_nat (R := $α) $n)⟩
   | .mul (e := a₂) va₁ va₂ va₃ => do
     let ⟨_, vb₁, pb₁⟩ ← ExBase.evalNatCast va₁
-    let ⟨_, vb₃, pb₃⟩ ← ExProd.evalNatCas
+    let ⟨_, vb₃, pb₃⟩ ← ExProd.evalNatCast va₃
+    assumeInstancesCommute
+    pure ⟨_, .mul vb₁ va₂ vb₃, q(natCast_mul $a₂ $pb₁ $pb₃)⟩
 
 中文:
 定义 ExProd.eval自然数Cast
@@ -480,7 +492,9 @@ have : a =Q Nat.rawCast n := ⟨⟩
     pure ⟨q(Nat.rawCast $n), .const ⟨c, hc⟩, q(natCast_nat (R := $α) $n)⟩
   | .mul (e := a₂) va₁ va₂ va₃ => do
     let ⟨_, vb₁, pb₁⟩ ← ExBase.evalNatCast va₁
-    let ⟨_, vb₃, pb₃⟩ ← ExProd.evalNatCas
+    let ⟨_, vb₃, pb₃⟩ ← ExProd.evalNatCast va₃
+    assumeInstancesCommute
+    pure ⟨_, .mul vb₁ va₂ vb₃, q(natCast_mul $a₂ $pb₁ $pb₃)⟩
 -/
 partial def ExProd.evalNatCast {a : Q(Nat)} (va : ExProd sβ a) : AtomM (Result (ExProd sα) q($a)) :=
   match va with
@@ -688,7 +702,13 @@ definition ExProd.evalIntCast
     | ~q(Nat.rawCast $m) =>
       pure ⟨q(Nat.rawCast $m), .const ⟨c, hc⟩, q(natCast_int (R := $α) $m)⟩
     | ~q(Int.rawCast (Int.negOfNat $m)) =>
-      pure ⟨q(Int.rawCast (Int.negOfNat $m)), .const ⟨c, hc⟩, q(intCast_negOfNat_Int (R := $α) $m
+      pure ⟨q(Int.rawCast (Int.negOfNat $m)), .const ⟨c, hc⟩, q(intCast_negOfNat_Int (R := $α) $m)⟩
+  | .mul (e := a₂) (x := x) (b := b) va₁ va₂ va₃ => do
+have : a =Q x ^ a₂ * b := ⟨⟩
+    let ⟨_, vb₁, pb₁⟩ ← ExBase.evalIntCast rα va₁
+    let ⟨_, vb₃, pb₃⟩ ← ExProd.evalIntCast rα va₃
+    assumeInstancesCommute
+    pure ⟨_, .mul vb₁ va₂ vb₃, (q(intCast_mul $a₂ $pb₁ $pb₃))⟩
 
 中文:
 定义 ExProd.eval整数Cast
@@ -699,7 +719,13 @@ definition ExProd.evalIntCast
     | ~q(Nat.rawCast $m) =>
       pure ⟨q(Nat.rawCast $m), .const ⟨c, hc⟩, q(natCast_int (R := $α) $m)⟩
     | ~q(Int.rawCast (Int.negOfNat $m)) =>
-      pure ⟨q(Int.rawCast (Int.negOfNat $m)), .const ⟨c, hc⟩, q(intCast_negOfNat_Int (R := $α) $m
+      pure ⟨q(Int.rawCast (Int.negOfNat $m)), .const ⟨c, hc⟩, q(intCast_negOfNat_Int (R := $α) $m)⟩
+  | .mul (e := a₂) (x := x) (b := b) va₁ va₂ va₃ => do
+have : a =Q x ^ a₂ * b := ⟨⟩
+    let ⟨_, vb₁, pb₁⟩ ← ExBase.evalIntCast rα va₁
+    let ⟨_, vb₃, pb₃⟩ ← ExProd.evalIntCast rα va₃
+    assumeInstancesCommute
+    pure ⟨_, .mul vb₁ va₂ vb₃, (q(intCast_mul $a₂ $pb₁ $pb₃))⟩
 
 Depends on / 依赖: ExBase, ExBase.evalIntCast, ExProd, ExProd.evalIntCast, Int.negOfNat, Int.rawCast, Nat.rawCast, assumeInstancesCommute, evalIntCast, intCast_negOfNat_Int, natCast_int, negOfNat, rawCast
 -/
@@ -1017,7 +1043,18 @@ have : α =Q β := ⟨⟩
 have : sα =Q sβ := ⟨⟩
     let ⟨b, vb⟩ := (ExSum.cast (u := v) (v := u) (sα := sβ) (sβ := sα) vx)
 have : b =Q x' := ⟨⟩
-   
+    assumeInstancesCommute
+    return ⟨_, vb, q(smul_eq_mul $px)⟩
+  match v, β, sβ, cα.rα with
+  | 0, ~q(Nat), ~q(inferInstance), _ =>
+    let ⟨y, vy, py⟩ ← ExSum.evalNatCast sα sβ vx
+    assumeInstancesCommute
+    return ⟨y, vy, q(Nat.smul_eq_mul $py $px)⟩
+  | 0, ~q(Int), ~q(inferInstance), some rα =>
+    let ⟨y, vy, py⟩ ← ExSum.evalIntCast sα sβ rα vx
+    assumeInstancesCommute
+    return ⟨y, vy, q(Int.smul_eq_mul $py $px)⟩
+  | _ => failure
 
 中文:
 定义 cast
@@ -1031,7 +1068,18 @@ have : α =Q β := ⟨⟩
 have : sα =Q sβ := ⟨⟩
     let ⟨b, vb⟩ := (ExSum.cast (u := v) (v := u) (sα := sβ) (sβ := sα) vx)
 have : b =Q x' := ⟨⟩
-   
+    assumeInstancesCommute
+    return ⟨_, vb, q(smul_eq_mul $px)⟩
+  match v, β, sβ, cα.rα with
+  | 0, ~q(Nat), ~q(inferInstance), _ =>
+    let ⟨y, vy, py⟩ ← ExSum.evalNatCast sα sβ vx
+    assumeInstancesCommute
+    return ⟨y, vy, q(Nat.smul_eq_mul $py $px)⟩
+  | 0, ~q(Int), ~q(inferInstance), some rα =>
+    let ⟨y, vy, py⟩ ← ExSum.evalIntCast sα sβ rα vx
+    assumeInstancesCommute
+    return ⟨y, vy, q(Int.smul_eq_mul $py $px)⟩
+  | _ => failure
 -/
 partial def cast {u : Lean.Level} {α : Q(Type u)} (sα : Q(CommSemiring $α)) (cα : Common.Cache sα)
     (v : Lean.Level) (β : Q(Type v)) (sβ : Q(CommSemiring $β)) (_smul : Q(SMul $β $α))
@@ -1104,7 +1152,9 @@ definition pow
     | none => OptionT.fail
     | some res =>
 have : b =Q lit := ⟨⟩
-     
+      let ⟨_, vc, pc⟩ ← RatCoeff.ofResult res
+      return ⟨_, vc, q($pc)⟩
+  | _ => OptionT.fail
 
 中文:
 定义 pow
@@ -1119,7 +1169,9 @@ have : b =Q lit := ⟨⟩
     | none => OptionT.fail
     | some res =>
 have : b =Q lit := ⟨⟩
-     
+      let ⟨_, vc, pc⟩ ← RatCoeff.ofResult res
+      return ⟨_, vc, q($pc)⟩
+  | _ => OptionT.fail
 -/
 partial def pow {u : Lean.Level} {α : Q(Type u)} (sα : Q(CommSemiring $α))
     {a : Q($α)} {b : Q(Nat)} (za : RatCoeff a)
@@ -1423,7 +1475,24 @@ definition proveEq
   let v ← try u.dec catch _ => throwError "not a type{indentExpr α}"
   have α : Q(Type v) := α
   let sα ←
-try Except.ok < 
+try Except.ok < > synthInstanceQ q(CommSemiring $α)
+    catch e => pure (.error e)
+  have e₁ : Q($α) := e₁; have e₂ : Q($α) := e₂
+  let eq ← match sα with
+  | .ok sα => ringCore sα e₁ e₂
+  | .error e =>
+    let β ← mkFreshExprMVarQ q(Type v)
+    let e₁' ← mkFreshExprMVarQ q($β)
+    let e₂' ← mkFreshExprMVarQ q($β)
+    let (sβ, (pf : Q($e₁' = $e₂' -> $e₁ = $e₂))) ← try
+      let _l ← synthInstanceQ q(CSLift $α $β)
+      let sβ ← synthInstanceQ q(CommSemiring $β)
+      let _ ← synthInstanceQ q(CSLiftVal $e₁ $e₁')
+      let _ ← synthInstanceQ q(CSLiftVal $e₂ $e₂')
+      pure (sβ, q(of_lift (a := $e₁) (b := $e₂)))
+    catch _ => throw e
+    pure q($pf $(← ringCore sβ e₁' e₂'))
+  g.assign eq
 
 中文:
 定义 proveEq
@@ -1435,7 +1504,24 @@ try Except.ok <
   let v ← try u.dec catch _ => throwError "not a type{indentExpr α}"
   have α : Q(Type v) := α
   let sα ←
-try Except.ok < 
+try Except.ok < > synthInstanceQ q(CommSemiring $α)
+    catch e => pure (.error e)
+  have e₁ : Q($α) := e₁; have e₂ : Q($α) := e₂
+  let eq ← match sα with
+  | .ok sα => ringCore sα e₁ e₂
+  | .error e =>
+    let β ← mkFreshExprMVarQ q(Type v)
+    let e₁' ← mkFreshExprMVarQ q($β)
+    let e₂' ← mkFreshExprMVarQ q($β)
+    let (sβ, (pf : Q($e₁' = $e₂' -> $e₁ = $e₂))) ← try
+      let _l ← synthInstanceQ q(CSLift $α $β)
+      let sβ ← synthInstanceQ q(CommSemiring $β)
+      let _ ← synthInstanceQ q(CSLiftVal $e₁ $e₁')
+      let _ ← synthInstanceQ q(CSLiftVal $e₂ $e₂')
+      pure (sβ, q(of_lift (a := $e₁) (b := $e₂)))
+    catch _ => throw e
+    pure q($pf $(← ringCore sβ e₁' e₂'))
+  g.assign eq
 -/
 def proveEq (g : MVarId) : AtomM Unit := do
   let some (α, e₁, e₂) := (← whnfR <|← instantiateMVars <|← g.getType).eq?

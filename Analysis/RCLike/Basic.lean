@@ -1622,7 +1622,10 @@ theorem is_real_TFAE
   | h => by
     conv_rhs => rw [← re_add_im z, h, ofReal_zero, zero_mul, add_zero]
   tfae_have 3 -> 2 := fun h => ⟨_, h⟩
-  tfae_ha
+  tfae_have 2 -> 1 := fun ⟨r, hr⟩ => hr ▸ conj_ofReal _
+  tfae_have 1 -> 5 := fun _ => by rwa [isSelfAdjoint_iff]
+  tfae_have 5 -> 1 := fun hz => by rwa [isSelfAdjoint_iff] at hz
+  tfae_finish
 
 中文:
 定理 is_real_TFAE
@@ -1635,7 +1638,10 @@ theorem is_real_TFAE
   | h => by
     conv_rhs => rw [← re_add_im z, h, ofReal_zero, zero_mul, add_zero]
   tfae_have 3 -> 2 := fun h => ⟨_, h⟩
-  tfae_ha
+  tfae_have 2 -> 1 := fun ⟨r, hr⟩ => hr ▸ conj_ofReal _
+  tfae_have 1 -> 5 := fun _ => by rwa [isSelfAdjoint_iff]
+  tfae_have 5 -> 1 := fun hz => by rwa [isSelfAdjoint_iff] at hz
+  tfae_finish
 
 Depends on / 依赖: add_zero, conj_ofReal, conv_rhs, im_eq_conj_sub, isSelfAdjoint_iff, mul_zero, ofReal_inj, ofReal_zero, re_add_im, sub_self, tfae_finish, tfae_have, zero_div, zero_mul
 -/
@@ -4079,7 +4085,15 @@ instance Real.instRCLike
     simp only [add_zero, mul_zero, Algebra.algebraMap_self, RingHom.id_apply, AddMonoidHom.id_apply]
   ofReal_re_ax _ := rfl
   ofReal_im_ax _ := rfl
-  mul_re_ax z w
+  mul_re_ax z w := by simp only [sub_zero, mul_zero, AddMonoidHom.zero_apply, AddMonoidHom.id_apply]
+  mul_im_ax z w := by simp only [add_zero, zero_mul, mul_zero, AddMonoidHom.zero_apply]
+  conj_re_ax z := by simp only [starRingEnd_apply, star_id_of_comm]
+  conj_im_ax _ := by simp only [neg_zero, AddMonoidHom.zero_apply]
+  conj_I_ax := by simp only [map_zero, neg_zero]
+  norm_sq_eq_def_ax z := by simp only [sq, Real.norm_eq_abs, ← abs_mul, abs_mul_self z, add_zero,
+    mul_zero, AddMonoidHom.zero_apply, AddMonoidHom.id_apply]
+  mul_im_I_ax _ := by simp only [mul_zero, AddMonoidHom.zero_apply]
+  le_iff_re_im := (and_iff_left rfl).symm
 
 中文:
 实例 实数.instRCLike
@@ -4093,7 +4107,15 @@ instance Real.instRCLike
     simp only [add_zero, mul_zero, Algebra.algebraMap_self, RingHom.id_apply, AddMonoidHom.id_apply]
   ofReal_re_ax _ := rfl
   ofReal_im_ax _ := rfl
-  mul_re_ax z w
+  mul_re_ax z w := by simp only [sub_zero, mul_zero, AddMonoidHom.zero_apply, AddMonoidHom.id_apply]
+  mul_im_ax z w := by simp only [add_zero, zero_mul, mul_zero, AddMonoidHom.zero_apply]
+  conj_re_ax z := by simp only [starRingEnd_apply, star_id_of_comm]
+  conj_im_ax _ := by simp only [neg_zero, AddMonoidHom.zero_apply]
+  conj_I_ax := by simp only [map_zero, neg_zero]
+  norm_sq_eq_def_ax z := by simp only [sq, Real.norm_eq_abs, ← abs_mul, abs_mul_self z, add_zero,
+    mul_zero, AddMonoidHom.zero_apply, AddMonoidHom.id_apply]
+  mul_im_I_ax _ := by simp only [mul_zero, AddMonoidHom.zero_apply]
+  le_iff_re_im := (and_iff_left rfl).symm
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.id
 -/
@@ -4780,7 +4802,11 @@ lemma toStarOrderedRing
       simpa [map_add, add_le_add_iff_left, add_right_inj] using hxy)
     (h_nonneg_iff := fun x => by
       rw [nonneg_iff]
-      refine ⟨fun h => ⟨√(re x), by simp [ext_iff (K := K), h.1, h.2]⟩, ?
+      refine ⟨fun h => ⟨√(re x), by simp [ext_iff (K := K), h.1, h.2]⟩, ?_⟩
+      rintro ⟨s, rfl⟩
+      simp [mul_comm, mul_self_nonneg, add_nonneg])
+
+scoped[ComplexOrder] attribute [instance] RCLike.toStarOrderedRing
 
 中文:
 引理 toStarOrderedRing
@@ -4791,7 +4817,11 @@ lemma toStarOrderedRing
       simpa [map_add, add_le_add_iff_left, add_right_inj] using hxy)
     (h_nonneg_iff := fun x => by
       rw [nonneg_iff]
-      refine ⟨fun h => ⟨√(re x), by simp [ext_iff (K := K), h.1, h.2]⟩, ?
+      refine ⟨fun h => ⟨√(re x), by simp [ext_iff (K := K), h.1, h.2]⟩, ?_⟩
+      rintro ⟨s, rfl⟩
+      simp [mul_comm, mul_self_nonneg, add_nonneg])
+
+scoped[ComplexOrder] attribute [instance] RCLike.toStarOrderedRing
 
 Depends on / 依赖: RCLike, RCLike.le_iff_re_im, StarOrderedRing, StarOrderedRing.of_nonneg_iff, add_le_add_iff_left, add_nonneg, add_right_inj, ext_iff, h_add, h_nonneg_iff, le_iff_re_im, map_add, mul_comm, mul_self_nonneg, nonneg_iff, of_nonneg_iff
 -/
@@ -4898,7 +4928,12 @@ lemma toPosMulReflectLT
     rw [RCLike.le_iff_re_im]; rw [map_zero]; rw [map_zero]; rw [eq_comm] at hx
     obtain ⟨r, rfl⟩ := ((is_real_TFAE x).out 3 1).1 hx.2
     simp only [RCLike.lt_iff_re_im (K := K), mul_re, ofReal_re, ofReal_im, zero_mul, sub_zero,
-      mul_im, add_zero, 
+      mul_im, add_zero, mul_eq_mul_left_iff] at hyz ⊢
+refine ⟨lt_of_mul_lt_mul_of_nonneg_left hyz.1 by simpa using hx, hyz.2.resolve_right ?_⟩
+    rintro rfl
+    simp at hyz
+
+scoped[ComplexOrder] attribute [instance] RCLike.toPosMulReflectLT
 
 中文:
 引理 toPosMulReflectLT
@@ -4909,7 +4944,12 @@ lemma toPosMulReflectLT
     rw [RCLike.le_iff_re_im]; rw [map_zero]; rw [map_zero]; rw [eq_comm] at hx
     obtain ⟨r, rfl⟩ := ((is_real_TFAE x).out 3 1).1 hx.2
     simp only [RCLike.lt_iff_re_im (K := K), mul_re, ofReal_re, ofReal_im, zero_mul, sub_zero,
-      mul_im, add_zero, 
+      mul_im, add_zero, mul_eq_mul_left_iff] at hyz ⊢
+refine ⟨lt_of_mul_lt_mul_of_nonneg_left hyz.1 by simpa using hx, hyz.2.resolve_right ?_⟩
+    rintro rfl
+    simp at hyz
+
+scoped[ComplexOrder] attribute [instance] RCLike.toPosMulReflectLT
 
 Depends on / 依赖: RCLike, RCLike.le_iff_re_im, RCLike.lt_iff_re_im, add_zero, eq_comm, is_real_TFAE, le_iff_re_im, lt_iff_re_im, lt_of_mul_lt_mul_of_nonneg_left, map_zero, mul_eq_mul_left_iff, mul_im, mul_re, ofReal_im, ofReal_re, resolve_right, sub_zero, zero_mul
 -/
@@ -4939,7 +4979,7 @@ theorem toIsStrictOrderedModule
     obtain ⟨hare, haim⟩ := RCLike.lt_iff_re_im.1 ha
     simp_all [RCLike.lt_iff_re_im (K := K), smul_re, smul_im]
 
-scoped[ComplexOrder] attribute [instance] RCLike.toIs
+scoped[ComplexOrder] attribute [instance] RCLike.toIsStrictOrderedModule
 
 中文:
 定理 toIsStrictOrderedModule
@@ -4950,7 +4990,7 @@ scoped[ComplexOrder] attribute [instance] RCLike.toIs
     obtain ⟨hare, haim⟩ := RCLike.lt_iff_re_im.1 ha
     simp_all [RCLike.lt_iff_re_im (K := K), smul_re, smul_im]
 
-scoped[ComplexOrder] attribute [instance] RCLike.toIs
+scoped[ComplexOrder] attribute [instance] RCLike.toIsStrictOrderedModule
 
 Depends on / 依赖: RCLike, RCLike.lt_iff_re_im, hr.ne, lt_iff_re_im, smul_im, smul_lt_smul_of_pos_right, smul_re
 -/
@@ -4974,7 +5014,9 @@ theorem ofReal_mul_pos_iff
   obtain hx | hx | hx := lt_trichotomy x 0
   · simp only [mul_pos_iff, not_lt_of_gt hx, false_and, hx, true_and, false_or, mul_eq_zero, hx.ne,
       or_false]
-  · simp only [hx, zero_mul, lt_self_iff_false, false_and, 
+  · simp only [hx, zero_mul, lt_self_iff_false, false_and, false_or]
+  · simp only [mul_pos_iff, hx, true_and, not_lt_of_gt hx, false_and, or_false, mul_eq_zero,
+      hx.ne', false_or]
 
 中文:
 定理 of实数_mul_pos_iff
@@ -4984,7 +5026,9 @@ theorem ofReal_mul_pos_iff
   obtain hx | hx | hx := lt_trichotomy x 0
   · simp only [mul_pos_iff, not_lt_of_gt hx, false_and, hx, true_and, false_or, mul_eq_zero, hx.ne,
       or_false]
-  · simp only [hx, zero_mul, lt_self_iff_false, false_and, 
+  · simp only [hx, zero_mul, lt_self_iff_false, false_and, false_or]
+  · simp only [mul_pos_iff, hx, true_and, not_lt_of_gt hx, false_and, or_false, mul_eq_zero,
+      hx.ne', false_or]
 
 Depends on / 依赖: false_and, false_or, hx.ne, im_ofReal_mul, lt_self_iff_false, lt_trichotomy, mul_eq_zero, mul_pos_iff, neg_iff, not_lt_of_gt, or_false, pos_iff, re_ofReal_mul, true_and, zero_mul
 -/
@@ -5031,7 +5075,12 @@ lemma instPosMulReflectLE
     #adaptation_note /-- 2025-03-29 need beta reduce for https://github.com/leanprover/lean4/issues/7717 -/
     beta_reduce at h
     rw [← ha2]; rw [← sub_nonneg]; rw [← mul_sub]; rw [le_iff_lt_or_eq] at h
-    rcases 
+    rcases h with h | h
+    · rw [ofReal_mul_pos_iff] at h
+exact le_of_lt h.rec (False.elim <| not_lt_of_gt ·.1 ha1) (·.2)
+    · exact ((mul_eq_zero_iff_left <| ofReal_ne_zero.mpr ha1.ne').mp h.symm).ge
+
+scoped[ComplexOrder] attribute [instance] RCLike.instPosMulReflectLE
 
 中文:
 引理 instPosMulReflectLE
@@ -5042,7 +5091,12 @@ lemma instPosMulReflectLE
     #adaptation_note /-- 2025-03-29 need beta reduce for https://github.com/leanprover/lean4/issues/7717 -/
     beta_reduce at h
     rw [← ha2]; rw [← sub_nonneg]; rw [← mul_sub]; rw [le_iff_lt_or_eq] at h
-    rcases 
+    rcases h with h | h
+    · rw [ofReal_mul_pos_iff] at h
+exact le_of_lt h.rec (False.elim <| not_lt_of_gt ·.1 ha1) (·.2)
+    · exact ((mul_eq_zero_iff_left <| ofReal_ne_zero.mpr ha1.ne').mp h.symm).ge
+
+scoped[ComplexOrder] attribute [instance] RCLike.instPosMulReflectLE
 
 Depends on / 依赖: False.elim, adaptation_note, beta_reduce, github, github.com, h.rec, h.symm, ha1.ne, issues, le_iff_lt_or_eq, le_of_lt, leanprover, mul_eq_zero_iff_left, mul_sub, not_lt_of_gt, ofReal_mul_pos_iff, ofReal_ne_zero, ofReal_ne_zero.mpr, pos_iff_exists_ofReal, pos_iff_exists_ofReal.mp
 -/
@@ -6183,7 +6237,7 @@ lemma norm_le_im_iff_eq_I_mul_norm
   · have : (I : K) != 0 := fun _ => by simp_all
     rw [← mul_right_inj' (neg_ne_zero.mpr this)]
     convert! norm_le_re_iff_eq_norm (z := -I * z) using 2
-    all_goals simp [neg_mul, ← mul_assoc, I_mul_I_of_nonzero th
+    all_goals simp [neg_mul, ← mul_assoc, I_mul_I_of_nonzero this, norm_I_of_ne_zero this]
 
 中文:
 引理 norm_le_im_iff_eq_I_mul_norm
@@ -6194,7 +6248,7 @@ lemma norm_le_im_iff_eq_I_mul_norm
   · have : (I : K) != 0 := fun _ => by simp_all
     rw [← mul_right_inj' (neg_ne_zero.mpr this)]
     convert! norm_le_re_iff_eq_norm (z := -I * z) using 2
-    all_goals simp [neg_mul, ← mul_assoc, I_mul_I_of_nonzero th
+    all_goals simp [neg_mul, ← mul_assoc, I_mul_I_of_nonzero this, norm_I_of_ne_zero this]
 
 Depends on / 依赖: I_eq_zero_or_im_I_eq_one, I_mul_I_of_nonzero, all_goals, convert, im_eq_zero, mul_assoc, mul_right_inj, neg_mul, neg_ne_zero, neg_ne_zero.mpr, norm_I_of_ne_zero, norm_le_re_iff_eq_norm
 -/
@@ -6315,7 +6369,37 @@ definition RCLike.copy_of_normedField
   lt_norm_lt := by subst h''; exact h.lt_norm_lt
   -- star fields
   star := (@StarMul.toInvolutiveStar _ (_) (@StarRing.toStarMul _ (_) h.toStarRing)).star
-  star_involutive := by 
+  star_involutive := by subst h''; exact h.star_involutive
+  star_mul := by subst h''; exact h.star_mul
+  star_add := by subst h''; exact h.star_add
+  -- algebra fields
+  smul := (@Algebra.toSMul _ _ _ (_) (@NormedAlgebra.toAlgebra _ _ _ (_) h.toNormedAlgebra)).smul
+  algebraMap :=
+  { toFun := @Algebra.algebraMap _ _ _ (_) (@NormedAlgebra.toAlgebra _ _ _ (_) h.toNormedAlgebra)
+    map_one' := by subst h''; exact h.algebraMap.map_one'
+    map_mul' := by subst h''; exact h.algebraMap.map_mul'
+    map_zero' := by subst h''; exact h.algebraMap.map_zero'
+    map_add' := by subst h''; exact h.algebraMap.map_add' }
+  commutes' := by subst h''; exact h.commutes'
+  smul_def' := by subst h''; exact h.smul_def'
+  norm_smul_le := by subst h''; exact h.norm_smul_le
+  -- RCLike fields
+  re := by subst h''; exact h.re
+  im := by subst h''; exact h.im
+  I := h.I
+  I_re_ax := by subst h''; exact h.I_re_ax
+  I_mul_I_ax := by subst h''; exact h.I_mul_I_ax
+  re_add_im_ax := by subst h''; exact h.re_add_im_ax
+  ofReal_re_ax := by subst h''; exact h.ofReal_re_ax
+  ofReal_im_ax := by subst h''; exact h.ofReal_im_ax
+  mul_re_ax := by subst h''; exact h.mul_re_ax
+  mul_im_ax := by subst h''; exact h.mul_im_ax
+  conj_re_ax := by subst h''; exact h.conj_re_ax
+  conj_im_ax := by subst h''; exact h.conj_im_ax
+  conj_I_ax := by subst h''; exact h.conj_I_ax
+  norm_sq_eq_def_ax := by subst h''; exact h.norm_sq_eq_def_ax
+  mul_im_I_ax := by subst h''; exact h.mul_im_I_ax
+  le_iff_re_im := by subst h''; exact h.le_iff_re_im
 
 中文:
 定义 RCLike.copy_of_normedField
@@ -6327,7 +6411,37 @@ definition RCLike.copy_of_normedField
   lt_norm_lt := by subst h''; exact h.lt_norm_lt
   -- star fields
   star := (@StarMul.toInvolutiveStar _ (_) (@StarRing.toStarMul _ (_) h.toStarRing)).star
-  star_involutive := by 
+  star_involutive := by subst h''; exact h.star_involutive
+  star_mul := by subst h''; exact h.star_mul
+  star_add := by subst h''; exact h.star_add
+  -- algebra fields
+  smul := (@Algebra.toSMul _ _ _ (_) (@NormedAlgebra.toAlgebra _ _ _ (_) h.toNormedAlgebra)).smul
+  algebraMap :=
+  { toFun := @Algebra.algebraMap _ _ _ (_) (@NormedAlgebra.toAlgebra _ _ _ (_) h.toNormedAlgebra)
+    map_one' := by subst h''; exact h.algebraMap.map_one'
+    map_mul' := by subst h''; exact h.algebraMap.map_mul'
+    map_zero' := by subst h''; exact h.algebraMap.map_zero'
+    map_add' := by subst h''; exact h.algebraMap.map_add' }
+  commutes' := by subst h''; exact h.commutes'
+  smul_def' := by subst h''; exact h.smul_def'
+  norm_smul_le := by subst h''; exact h.norm_smul_le
+  -- RCLike fields
+  re := by subst h''; exact h.re
+  im := by subst h''; exact h.im
+  I := h.I
+  I_re_ax := by subst h''; exact h.I_re_ax
+  I_mul_I_ax := by subst h''; exact h.I_mul_I_ax
+  re_add_im_ax := by subst h''; exact h.re_add_im_ax
+  ofReal_re_ax := by subst h''; exact h.ofReal_re_ax
+  ofReal_im_ax := by subst h''; exact h.ofReal_im_ax
+  mul_re_ax := by subst h''; exact h.mul_re_ax
+  mul_im_ax := by subst h''; exact h.mul_im_ax
+  conj_re_ax := by subst h''; exact h.conj_re_ax
+  conj_im_ax := by subst h''; exact h.conj_im_ax
+  conj_I_ax := by subst h''; exact h.conj_I_ax
+  norm_sq_eq_def_ax := by subst h''; exact h.norm_sq_eq_def_ax
+  mul_im_I_ax := by subst h''; exact h.mul_im_I_ax
+  le_iff_re_im := by subst h''; exact h.le_iff_re_im
 -/
 noncomputable def RCLike.copy_of_normedField {𝕜 : Type*} (h : RCLike 𝕜) (hk : NormedField 𝕜)
     (h'' : hk = h.toNormedField) : RCLike 𝕜 where

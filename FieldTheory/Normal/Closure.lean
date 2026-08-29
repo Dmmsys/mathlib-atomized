@@ -170,13 +170,13 @@ English:
 lemma normalClosure_le_iSup_adjoin
   proof: iSup_le fun f _ ⟨x, hx⟩ => le_iSup (α := IntermediateField F L) _ x
 IntermediateField.subset_adjoin F _ by
-      rw [mem_rootSet_of_ne (minpoly.ne_zero (Algebra.IsIntegral.isIntegral x))]; rw [← hx]; rw [AlgHom.toRingHom_eq_coe]; rw [AlgHom.coe_toRingHom]; rw [aeval_algHom_apply]; rw [minpoly.aeval]
+      rw [mem_rootSet_of_ne (minpoly.ne_zero (Algebra.IsIntegral.isIntegral x))]; rw [← hx]; rw [AlgHom.toRingHom_eq_coe]; rw [AlgHom.coe_toRingHom]; rw [aeval_algHom_apply]; rw [minpoly.aeval]; rw [map_zero]
 
 中文:
 引理 normalClosure_le_iSup_adjoin
   证明: iSup_le fun f _ ⟨x, hx⟩ => le_iSup (α := IntermediateField F L) _ x
 IntermediateField.subset_adjoin F _ by
-      rw [mem_rootSet_of_ne (minpoly.ne_zero (Algebra.IsIntegral.isIntegral x))]; rw [← hx]; rw [AlgHom.toRingHom_eq_coe]; rw [AlgHom.coe_toRingHom]; rw [aeval_algHom_apply]; rw [minpoly.aeval]
+      rw [mem_rootSet_of_ne (minpoly.ne_zero (Algebra.IsIntegral.isIntegral x))]; rw [← hx]; rw [AlgHom.toRingHom_eq_coe]; rw [AlgHom.coe_toRingHom]; rw [aeval_algHom_apply]; rw [minpoly.aeval]; rw [map_zero]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, AlgHom.toRingHom_eq_coe, Algebra, Algebra.IsIntegral.isIntegral, IntermediateField, IntermediateField.subset_adjoin, IsIntegral, aeval_algHom_apply, coe_toRingHom, iSup_le, isIntegral, le_iSup, map_zero, mem_rootSet_of_ne, minpoly, minpoly.aeval, minpoly.ne_zero, ne_zero, subset_adjoin
 -/
@@ -198,7 +198,7 @@ lemma normalClosure_eq_iSup_adjoin_of_splits
     iSup_le fun x => IntermediateField.adjoin_le_iff.mpr fun _ hy =>
       let ⟨φ, hφ⟩ := IntermediateField.exists_algHom_of_splits_of_aeval
         (fun x => ⟨Algebra.IsIntegral.isIntegral x, splits x⟩) (mem_rootSet.mp hy).2
-      le_iSup AlgHom.fieldRange φ ⟨x
+      le_iSup AlgHom.fieldRange φ ⟨x, hφ⟩
 
 中文:
 引理 normalClosure_eq_iSup_adjoin_of_splits
@@ -206,7 +206,7 @@ lemma normalClosure_eq_iSup_adjoin_of_splits
     iSup_le fun x => IntermediateField.adjoin_le_iff.mpr fun _ hy =>
       let ⟨φ, hφ⟩ := IntermediateField.exists_algHom_of_splits_of_aeval
         (fun x => ⟨Algebra.IsIntegral.isIntegral x, splits x⟩) (mem_rootSet.mp hy).2
-      le_iSup AlgHom.fieldRange φ ⟨x
+      le_iSup AlgHom.fieldRange φ ⟨x, hφ⟩
 
 Depends on / 依赖: AlgHom, AlgHom.fieldRange, Algebra, Algebra.IsIntegral.isIntegral, IntermediateField, IntermediateField.adjoin_le_iff.mpr, IntermediateField.exists_algHom_of_splits_of_aeval, IsIntegral, adjoin_le_iff, antisymm, exists_algHom_of_splits_of_aeval, fieldRange, iSup_le, isIntegral, le_iSup, mem_rootSet, mem_rootSet.mp, normalClosure_le_iSup_adjoin, normalClosure_le_iSup_adjoin.antisymm, splits
 -/
@@ -257,7 +257,11 @@ lemma isNormalClosure_normalClosure
     exact fun x => splits_of_splits (splits x) ((IntermediateField.subset_adjoin F _).trans <|
 SetLike.coe_subset_coe.mpr by apply le_iSup _ x)
   simp_rw [normalClosure, ← top_le_iff]
-.mp ?_ refine fun 
+.mp ?_ refine fun x _ => ((⨆ f : K ->ₐ[F] L, f.fieldRange).val).injective.mem_set_image
+  rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [coe_val]; rw [← IntermediateField.coe_val]; rw [← IntermediateField.coe_map]; rw [IntermediateField.map_iSup]
+  refine (iSup_le fun f => ?_ : normalClosure F K L <= _) x.2
+  refine le_iSup_of_le (f.codRestrict _ fun x => f.fieldRange_le_normalClosure ⟨x, rfl⟩) ?_
+  rw [AlgHom.map_fieldRange]; rw [val]; rw [AlgHom.val_comp_codRestrict]
 
 中文:
 引理 isNormalClosure_normalClosure
@@ -268,7 +272,11 @@ SetLike.coe_subset_coe.mpr by apply le_iSup _ x)
     exact fun x => splits_of_splits (splits x) ((IntermediateField.subset_adjoin F _).trans <|
 SetLike.coe_subset_coe.mpr by apply le_iSup _ x)
   simp_rw [normalClosure, ← top_le_iff]
-.mp ?_ refine fun 
+.mp ?_ refine fun x _ => ((⨆ f : K ->ₐ[F] L, f.fieldRange).val).injective.mem_set_image
+  rw [AlgHom.toRingHom_eq_coe]; rw [RingHom.coe_coe]; rw [coe_val]; rw [← IntermediateField.coe_val]; rw [← IntermediateField.coe_map]; rw [IntermediateField.map_iSup]
+  refine (iSup_le fun f => ?_ : normalClosure F K L <= _) x.2
+  refine le_iSup_of_le (f.codRestrict _ fun x => f.fieldRange_le_normalClosure ⟨x, rfl⟩) ?_
+  rw [AlgHom.map_fieldRange]; rw [val]; rw [AlgHom.val_comp_codRestrict]
 
 Depends on / 依赖: AlgHom, AlgHom.toRingHom_eq_coe, IntermediateField, IntermediateField.coe_map, IntermediateField.coe_val, IntermediateField.subset_adjoin, RingHom, RingHom.coe_coe, SetLike, SetLike.coe_subset_coe.mpr, coe_coe, coe_map, coe_subset_coe, coe_val, f.fieldRange, fieldRange, injective, injective.mem_set_image, isNormalClosure_iff, le_iSup
 -/
@@ -298,7 +306,9 @@ refine Nonempty.some nonempty_algHom_of_adjoin_splits
     (fun x hx => ⟨isAlgebraic_iff_isIntegral.mp ((h.normal).isAlgebraic x), ?_⟩) this
   obtain ⟨y, hx⟩ := Set.mem_iUnion.mp hx
   by_cases iy : IsIntegral F y
-  · exact (splits y).of_dvd (map
+  · exact (splits y).of_dvd (map_ne_zero (minpoly.ne_zero iy))
+      ((map_dvd_map' _).mpr (minpoly.dvd F x (mem_rootSet.mp hx).2))
+  · simp [minpoly.eq_zero iy] at hx
 
 中文:
 定义 是正规闭包.lift
@@ -309,7 +319,9 @@ refine Nonempty.some nonempty_algHom_of_adjoin_splits
     (fun x hx => ⟨isAlgebraic_iff_isIntegral.mp ((h.normal).isAlgebraic x), ?_⟩) this
   obtain ⟨y, hx⟩ := Set.mem_iUnion.mp hx
   by_cases iy : IsIntegral F y
-  · exact (splits y).of_dvd (map
+  · exact (splits y).of_dvd (map_ne_zero (minpoly.ne_zero iy))
+      ((map_dvd_map' _).mpr (minpoly.dvd F x (mem_rootSet.mp hx).2))
+  · simp [minpoly.eq_zero iy] at hx
 
 Depends on / 依赖: IsIntegral, Nonempty, Nonempty.some, Set.mem_iUnion.mp, adjoin_rootSet, eq_zero, gc.l_iSup, h.adjoin_rootSet, h.normal, isAlgebraic, isAlgebraic_iff_isIntegral, isAlgebraic_iff_isIntegral.mp, l_iSup, map_dvd_map, map_ne_zero, mem_iUnion, mem_rootSet, mem_rootSet.mp, minpoly, minpoly.dvd
 -/
@@ -628,7 +640,16 @@ Nonempty.some by
       rw [← gc.l_iSup]
       refine nonempty_algHom_adjoin_of_splits fun x hx => ?_
       obtain ⟨y, hx⟩ := Set.mem_iUnion.mp hx
-      refine ⟨isAlgebraic_iff_isIntegral.mp (isAlgebraic_of_mem_root
+      refine ⟨isAlgebraic_iff_isIntegral.mp (isAlgebraic_of_mem_rootSet hx), ?_⟩
+      by_cases iy : IsIntegral F y
+      · exact (h y).of_dvd (map_ne_zero (minpoly.ne_zero iy))
+          ((map_dvd_map' _).mpr (minpoly.dvd F x (mem_rootSet.mp hx).2))
+      · simp [minpoly.eq_zero iy] at hx
+  let φ' := (φ.comp <| inclusion normalClosure_le_iSup_adjoin)
+  { toFun := φ'.comp ∘ (normalClosure.algHomEquiv F K L').symm
+inj' := fun _ _ h => (normalClosure.algHomEquiv F K L').symm.injective by
+      rw [DFunLike.ext'_iff] at h ⊢
+      exact φ'.injective.comp_left h }
 
 中文:
 定义 代数.是代数.algHomEmbeddingOfSplits
@@ -638,7 +659,16 @@ Nonempty.some by
       rw [← gc.l_iSup]
       refine nonempty_algHom_adjoin_of_splits fun x hx => ?_
       obtain ⟨y, hx⟩ := Set.mem_iUnion.mp hx
-      refine ⟨isAlgebraic_iff_isIntegral.mp (isAlgebraic_of_mem_root
+      refine ⟨isAlgebraic_iff_isIntegral.mp (isAlgebraic_of_mem_rootSet hx), ?_⟩
+      by_cases iy : IsIntegral F y
+      · exact (h y).of_dvd (map_ne_zero (minpoly.ne_zero iy))
+          ((map_dvd_map' _).mpr (minpoly.dvd F x (mem_rootSet.mp hx).2))
+      · simp [minpoly.eq_zero iy] at hx
+  let φ' := (φ.comp <| inclusion normalClosure_le_iSup_adjoin)
+  { toFun := φ'.comp ∘ (normalClosure.algHomEquiv F K L').symm
+inj' := fun _ _ h => (normalClosure.algHomEquiv F K L').symm.injective by
+      rw [DFunLike.ext'_iff] at h ⊢
+      exact φ'.injective.comp_left h }
 
 Depends on / 依赖: IntermediateField, IntermediateField.adjoin, IsIntegral, Nonempty, Nonempty.some, Set.mem_iUnion.mp, adjoin, eq_zero, gc.l_iSup, inclusio, isAlgebraic_iff_isIntegral, isAlgebraic_iff_isIntegral.mp, isAlgebraic_of_mem_rootSet, l_iSup, map_dvd_map, map_ne_zero, mem_iUnion, mem_rootSet, mem_rootSet.mp, minpoly
 -/

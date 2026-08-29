@@ -42,7 +42,27 @@ lemma Module.FinitePresentation.exists_basis_localizedModule_powers
   have : Module.FinitePresentation R (I ->₀ R) := Module.finitePresentation_of_projective _ _
   obtain ⟨r, hr, e, he⟩ := Module.FinitePresentation.exists_lift_equiv_of_isLocalizedModule S f
     (Finsupp.mapRange.linearMap (Algebra.linearMap R Rₛ)) (b.repr.restrictScalars R)
-  let e' := IsLocalize
+  let e' := IsLocalizedModule.iso (.powers r) (Finsupp.mapRange.linearMap (α := I)
+    (Algebra.linearMap R (Localization (.powers r))))
+  refine ⟨r, hr, .ofRepr (e ≪≫ₗ ?_), ?_⟩
+  · exact
+    { __ := e',
+      toLinearMap := e'.extendScalarsOfIsLocalization (.powers r) (Localization (.powers r)) }
+  · intro i
+    have : e'.symm _ = _ := LinearMap.congr_fun (IsLocalizedModule.iso_symm_comp (.powers r)
+      (Finsupp.mapRange.linearMap (Algebra.linearMap R (Localization (.powers r)))))
+      (Finsupp.single i 1)
+    simp only [Finsupp.mapRange.linearMap_apply, Finsupp.mapRange_single, Algebra.linearMap_apply,
+      map_one, LocalizedModule.mkLinearMap_apply] at this
+    change LocalizedModule.lift _ _ _ (e.symm (e'.symm _)) = _
+    replace he := LinearMap.congr_fun he (e.symm (e'.symm (Finsupp.single i 1)))
+    simp only [LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearEquiv.coe_coe,
+      Function.comp_apply, LinearEquiv.apply_symm_apply, LinearEquiv.restrictScalars_apply] at he
+    apply b.repr.injective
+    rw [← he]; rw [Basis.repr_self]; rw [this]; rw [LocalizedModule.lift_mk]
+    simp
+
+include f in
 
 中文:
 引理 模.有限呈现.存在_basis_localizedModule_powers
@@ -50,7 +70,27 @@ lemma Module.FinitePresentation.exists_basis_localizedModule_powers
   have : Module.FinitePresentation R (I ->₀ R) := Module.finitePresentation_of_projective _ _
   obtain ⟨r, hr, e, he⟩ := Module.FinitePresentation.exists_lift_equiv_of_isLocalizedModule S f
     (Finsupp.mapRange.linearMap (Algebra.linearMap R Rₛ)) (b.repr.restrictScalars R)
-  let e' := IsLocalize
+  let e' := IsLocalizedModule.iso (.powers r) (Finsupp.mapRange.linearMap (α := I)
+    (Algebra.linearMap R (Localization (.powers r))))
+  refine ⟨r, hr, .ofRepr (e ≪≫ₗ ?_), ?_⟩
+  · exact
+    { __ := e',
+      toLinearMap := e'.extendScalarsOfIsLocalization (.powers r) (Localization (.powers r)) }
+  · intro i
+    have : e'.symm _ = _ := LinearMap.congr_fun (IsLocalizedModule.iso_symm_comp (.powers r)
+      (Finsupp.mapRange.linearMap (Algebra.linearMap R (Localization (.powers r)))))
+      (Finsupp.single i 1)
+    simp only [Finsupp.mapRange.linearMap_apply, Finsupp.mapRange_single, Algebra.linearMap_apply,
+      map_one, LocalizedModule.mkLinearMap_apply] at this
+    change LocalizedModule.lift _ _ _ (e.symm (e'.symm _)) = _
+    replace he := LinearMap.congr_fun he (e.symm (e'.symm (Finsupp.single i 1)))
+    simp only [LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearEquiv.coe_coe,
+      Function.comp_apply, LinearEquiv.apply_symm_apply, LinearEquiv.restrictScalars_apply] at he
+    apply b.repr.injective
+    rw [← he]; rw [Basis.repr_self]; rw [this]; rw [LocalizedModule.lift_mk]
+    simp
+
+include f in
 
 Depends on / 依赖: Algebra, Algebra.linearMap, FinitePresentation, Finsupp, Finsupp.mapRange.linearMap, IsLocalizedModule, IsLocalizedModule.iso, Localization, Module, Module.FinitePresentation, Module.FinitePresentation.exists_lift_equiv_of_isLocalizedModule, Module.finitePresentation_of_projective, b.repr.restrictScalars, exists_lift_equiv_of_isLocalizedModule, extendScalarsOfIsLocal, finitePresentation_of_projective, linearMap, mapRange, ofRepr, powers
 -/
@@ -96,7 +136,10 @@ lemma Module.FinitePresentation.exists_free_localizedModule_powers
   let b : Basis I Rₛ M' := Module.Free.chooseBasis Rₛ M'
   have : Module.Finite Rₛ M' := Module.Finite.of_isLocalizedModule S (Rₚ := Rₛ) f
   obtain ⟨r, hr, b', _⟩ := Module.FinitePresentation.exists_basis_localizedModule_powers S f Rₛ b
-  have := (sho
+  have := (show Localization (.powers r) ->+* Rₛ from IsLocalization.map (M := .powers r) (T := S) _
+    (RingHom.id _) (Submonoid.powers_le.mpr hr)).domain_nontrivial
+  refine ⟨r, hr, .of_basis b', ?_⟩
+  rw [Module.finrank_eq_nat_card_basis b]; rw [Module.finrank_eq_nat_card_basis b']
 
 中文:
 引理 模.有限呈现.存在_free_localizedModule_powers
@@ -105,7 +148,10 @@ lemma Module.FinitePresentation.exists_free_localizedModule_powers
   let b : Basis I Rₛ M' := Module.Free.chooseBasis Rₛ M'
   have : Module.Finite Rₛ M' := Module.Finite.of_isLocalizedModule S (Rₚ := Rₛ) f
   obtain ⟨r, hr, b', _⟩ := Module.FinitePresentation.exists_basis_localizedModule_powers S f Rₛ b
-  have := (sho
+  have := (show Localization (.powers r) ->+* Rₛ from IsLocalization.map (M := .powers r) (T := S) _
+    (RingHom.id _) (Submonoid.powers_le.mpr hr)).domain_nontrivial
+  refine ⟨r, hr, .of_basis b', ?_⟩
+  rw [Module.finrank_eq_nat_card_basis b]; rw [Module.finrank_eq_nat_card_basis b']
 
 Depends on / 依赖: ChooseBasisIndex, Finite, FinitePresentation, IsLocalization, IsLocalization.map, Localization, Module, Module.Finite, Module.Finite.of_isLocalizedModule, Module.FinitePresentation.exists_basis_localizedModule_powers, Module.Free.ChooseBasisIndex, Module.Free.chooseBasis, Module.finrank_eq_nat_c, RingHom, RingHom.id, Submonoid, Submonoid.powers_le.mpr, chooseBasis, domain_nontrivial, exists_basis_localizedModule_powers
 -/

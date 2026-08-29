@@ -30,7 +30,9 @@ definition setOption
     | _ => match val.isNatLit? with
 | some num => pure DataValue.ofNat num
       | none => match val.isStrLit? with
-| some str => pure DataValue.ofString 
+| some str => pure DataValue.ofString str
+        | none => throwError "unsupported option value {val}"
+pure opts.insert name.getId val
 
 中文:
 定义 setOption
@@ -42,7 +44,9 @@ definition setOption
     | _ => match val.isNatLit? with
 | some num => pure DataValue.ofNat num
       | none => match val.isStrLit? with
-| some str => pure DataValue.ofString 
+| some str => pure DataValue.ofString str
+        | none => throwError "unsupported option value {val}"
+pure opts.insert name.getId val
 -/
 private def setOption {m : Type -> Type} [Monad m] [MonadError m]
     (name val : Syntax) (opts : Options) : m Options := do

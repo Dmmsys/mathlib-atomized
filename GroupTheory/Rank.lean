@@ -318,7 +318,12 @@ lemma rank_closure_finset_le_card
     rw [Finset.coe_preimage]
     exact closure_preimage_eq_top (s : Set G)
   apply (rank_le ht).trans
-  suffices H : Set.InjOn Sub
+  suffices H : Set.InjOn Subtype.val (t : Set (closure (s : Set G))) by
+    rw [← Finset.card_image_of_injOn H]; rw [Finset.image_preimage]
+    apply Finset.card_filter_le
+  apply Subtype.coe_injective.injOn
+
+@[to_additive]
 
 中文:
 引理 rank_closure_finset_le_card
@@ -331,7 +336,12 @@ lemma rank_closure_finset_le_card
     rw [Finset.coe_preimage]
     exact closure_preimage_eq_top (s : Set G)
   apply (rank_le ht).trans
-  suffices H : Set.InjOn Sub
+  suffices H : Set.InjOn Subtype.val (t : Set (closure (s : Set G))) by
+    rw [← Finset.card_image_of_injOn H]; rw [Finset.image_preimage]
+    apply Finset.card_filter_le
+  apply Subtype.coe_injective.injOn
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.card_filter_le, Finset.card_image_of_injOn, Finset.coe_preimage, Finset.image_preimage, Set.InjOn, Subtype, Subtype.coe_injective.injOn, Subtype.val, card_filter_le, card_image_of_injOn, classical, closure, closure_preimage_eq_top, coe_injective, coe_preimage, image_preimage, preimage, rank_le, s.preimage
 -/

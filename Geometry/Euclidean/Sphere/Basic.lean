@@ -1458,7 +1458,9 @@ theorem Cospherical.subtype_val_iff
     let c' : S := orthogonalProjection S c
     refine ⟨c', dist p₀ c', fun p hp => ?_⟩
     have hp_dist : dist (p : P) c = r := by grind
- 
+    have hp₀_dist : dist (p₀ : P) c = r := by grind
+    have hpp₀ : dist (p : P) (c : P) = dist (p₀ : P) (c : P) := hp_dist.trans hp₀_dist.symm
+    exact (dist_eq_iff_dist_orthogonalProjection_eq (s := S) (p₃ := c) p.2 p₀.2).1 hpp₀
 
 中文:
 定理 Cospherical.subtype_val_iff
@@ -1471,7 +1473,9 @@ theorem Cospherical.subtype_val_iff
     let c' : S := orthogonalProjection S c
     refine ⟨c', dist p₀ c', fun p hp => ?_⟩
     have hp_dist : dist (p : P) c = r := by grind
- 
+    have hp₀_dist : dist (p₀ : P) c = r := by grind
+    have hpp₀ : dist (p : P) (c : P) = dist (p₀ : P) (c : P) := hp_dist.trans hp₀_dist.symm
+    exact (dist_eq_iff_dist_orthogonalProjection_eq (s := S) (p₃ := c) p.2 p₀.2).1 hpp₀
 
 Depends on / 依赖: Cospherical, Cospherical.subtype_val, _dist.symm, cospherical_empty, dist_eq_iff_dist_orthogonalProjection_eq, eq_empty_or_nonempty, hp_dist, hp_dist.trans, orthogonalProjection, ps.eq_empty_or_nonempty, subtype_val
 -/
@@ -1532,7 +1536,31 @@ theorem Cospherical.affineIndependent
   have hv0 : v != 0 := by
     intro h
     have he : p 1 = p 0 := by simpa [h] using hv 1
-    exact (by decide : (1 : 
+    exact (by decide : (1 : Fin 3) != 0) (hpi he)
+  rcases hs with ⟨c, r, hs⟩
+  have hs' := fun i => hs (p i) (Set.mem_of_mem_of_subset (Set.mem_range_self _) hps)
+  choose f hf using hv
+  have hsd : forall i, dist (f i • v +ᵥ p 0) c = r := by
+    intro i
+    rw [← hf]
+    exact hs' i
+  have hf0 : f 0 = 0 := by
+    have hf0' := hf 0
+    rw [eq_comm]; rw [← @vsub_eq_zero_iff_eq V]; rw [vadd_vsub]; rw [smul_eq_zero] at hf0'
+    simpa [hv0] using hf0'
+  have hfi : Function.Injective f := by
+    intro i j h
+    have hi := hf i
+    rw [h]; rw [← hf j] at hi
+    exact hpi hi
+  simp_rw [← hsd 0, hf0, zero_smul, zero_vadd, dist_smul_vadd_eq_dist (p 0) c hv0] at hsd
+  have hfn0 : forall i, i != 0 -> f i != 0 := fun i => (hfi.ne_iff' hf0).2
+  have hfn0' : forall i, i != 0 -> f i = -2 * ⟪v, p 0 -ᵥ c⟫ / ⟪v, v⟫ := by
+    intro i hi
+    have hsdi := hsd i
+    simpa [hfn0, hi] using hsdi
+  have hf12 : f 1 = f 2 := by rw [hfn0' 1 (by decide), hfn0' 2 (by decide)]
+  exact (by decide : (1 : Fin 3) != 2) (hfi hf12)
 
 中文:
 定理 Cospherical.affineIndependent
@@ -1546,7 +1574,31 @@ theorem Cospherical.affineIndependent
   have hv0 : v != 0 := by
     intro h
     have he : p 1 = p 0 := by simpa [h] using hv 1
-    exact (by decide : (1 : 
+    exact (by decide : (1 : Fin 3) != 0) (hpi he)
+  rcases hs with ⟨c, r, hs⟩
+  have hs' := fun i => hs (p i) (Set.mem_of_mem_of_subset (Set.mem_range_self _) hps)
+  choose f hf using hv
+  have hsd : forall i, dist (f i • v +ᵥ p 0) c = r := by
+    intro i
+    rw [← hf]
+    exact hs' i
+  have hf0 : f 0 = 0 := by
+    have hf0' := hf 0
+    rw [eq_comm]; rw [← @vsub_eq_zero_iff_eq V]; rw [vadd_vsub]; rw [smul_eq_zero] at hf0'
+    simpa [hv0] using hf0'
+  have hfi : Function.Injective f := by
+    intro i j h
+    have hi := hf i
+    rw [h]; rw [← hf j] at hi
+    exact hpi hi
+  simp_rw [← hsd 0, hf0, zero_smul, zero_vadd, dist_smul_vadd_eq_dist (p 0) c hv0] at hsd
+  have hfn0 : forall i, i != 0 -> f i != 0 := fun i => (hfi.ne_iff' hf0).2
+  have hfn0' : forall i, i != 0 -> f i = -2 * ⟪v, p 0 -ᵥ c⟫ / ⟪v, v⟫ := by
+    intro i hi
+    have hsdi := hsd i
+    simpa [hfn0, hi] using hsdi
+  have hf12 : f 1 = f 2 := by rw [hfn0' 1 (by decide), hfn0' 2 (by decide)]
+  exact (by decide : (1 : Fin 3) != 2) (hfi hf12)
 
 Depends on / 依赖: Set.forall_mem_range, Set.mem_of_mem_of_subset, Set.mem_range_self, affineIndependent_iff_not_collinear, collinear_iff_of_mem, forall_mem_range, mem_of_mem_of_subset, mem_range_self
 -/
@@ -1704,7 +1756,23 @@ theorem Sphere.dist_center_lt_radius_of_sbtw
 have ht₀' : 0 < t := lt_of_le_of_ne ht₀ fun h => hne₁ by
     rw [← hpt]; rw [← h]; rw [AffineMap.lineMap_apply_zero]
 have ht₁' : t < 1 := lt_of_le_of_ne ht₁ fun h => hne₂ by
-    rw [← hpt]; rw [h]; rw [AffineMap.lineMap_apply_o
+    rw [← hpt]; rw [h]; rw [AffineMap.lineMap_apply_one]
+  set u := p₁ -ᵥ o; set v := p₂ -ᵥ o
+  have hu : ‖u‖ = s.radius := norm_vsub_center_eq_radius hp₁
+  have hv : ‖v‖ = s.radius := norm_vsub_center_eq_radius hp₂
+have huv : u != v := fun h => hne₁ by
+    rw [← hpt]; rw [vsub_left_cancel h]; rw [AffineMap.lineMap_same]; rw [AffineMap.const_apply]
+  have hpo : p -ᵥ o = (1 - t) • u + t • v := by
+    rw [show p = (AffineMap.lineMap p₁ p₂) t from hpt.symm]; rw [AffineMap.lineMap_apply]; rw [vadd_vsub_assoc]; rw [show (p₂ -ᵥ p₁ : V) = v - u from
+      (vsub_sub_vsub_cancel_right p₂ p₁ o).symm]
+    module
+  rw [dist_comm]; rw [dist_eq_norm_vsub]; rw [hpo]
+  have hmem := (strictConvex_closedBall Real (0 : V) s.radius)
+    (by simp [Metric.mem_closedBall, hu]) (by simp [Metric.mem_closedBall, hv])
+    huv (sub_pos.mpr ht₁') ht₀' (sub_add_cancel 1 t)
+  rwa [interior_closedBall _ (fun h : s.radius = 0 => huv <|
+      (norm_eq_zero.mp (hu.trans h)).trans (norm_eq_zero.mp (hv.trans h)).symm),
+    Metric.mem_ball, dist_zero_right] at hmem
 
 中文:
 定理 球面.dist_center_lt_radius_of_sbtw
@@ -1715,7 +1783,23 @@ have ht₁' : t < 1 := lt_of_le_of_ne ht₁ fun h => hne₂ by
 have ht₀' : 0 < t := lt_of_le_of_ne ht₀ fun h => hne₁ by
     rw [← hpt]; rw [← h]; rw [AffineMap.lineMap_apply_zero]
 have ht₁' : t < 1 := lt_of_le_of_ne ht₁ fun h => hne₂ by
-    rw [← hpt]; rw [h]; rw [AffineMap.lineMap_apply_o
+    rw [← hpt]; rw [h]; rw [AffineMap.lineMap_apply_one]
+  set u := p₁ -ᵥ o; set v := p₂ -ᵥ o
+  have hu : ‖u‖ = s.radius := norm_vsub_center_eq_radius hp₁
+  have hv : ‖v‖ = s.radius := norm_vsub_center_eq_radius hp₂
+have huv : u != v := fun h => hne₁ by
+    rw [← hpt]; rw [vsub_left_cancel h]; rw [AffineMap.lineMap_same]; rw [AffineMap.const_apply]
+  have hpo : p -ᵥ o = (1 - t) • u + t • v := by
+    rw [show p = (AffineMap.lineMap p₁ p₂) t from hpt.symm]; rw [AffineMap.lineMap_apply]; rw [vadd_vsub_assoc]; rw [show (p₂ -ᵥ p₁ : V) = v - u from
+      (vsub_sub_vsub_cancel_right p₂ p₁ o).symm]
+    module
+  rw [dist_comm]; rw [dist_eq_norm_vsub]; rw [hpo]
+  have hmem := (strictConvex_closedBall Real (0 : V) s.radius)
+    (by simp [Metric.mem_closedBall, hu]) (by simp [Metric.mem_closedBall, hv])
+    huv (sub_pos.mpr ht₁') ht₀' (sub_add_cancel 1 t)
+  rwa [interior_closedBall _ (fun h : s.radius = 0 => huv <|
+      (norm_eq_zero.mp (hu.trans h)).trans (norm_eq_zero.mp (hv.trans h)).symm),
+    Metric.mem_ball, dist_zero_right] at hmem
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap_apply_one, AffineMap.lineMap_apply_zero, center, lineMap_apply_one, lineMap_apply_zero, lt_of_le_of_ne, norm_vsub_center_eq_radius, radius, s.center, s.radius
 -/
@@ -1826,7 +1910,22 @@ theorem inner_pos_or_eq_of_dist_le_radius
   rw [mem_sphere] at hp₁
   rw [← vsub_sub_vsub_cancel_right p₁ p₂ s.center]; rw [inner_sub_left]; rw [real_inner_self_eq_norm_mul_norm]; rw [sub_pos]
   refine lt_of_le_of_ne
-    ((real_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_right
+    ((real_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_right ?_ (norm_nonneg _))) ?_
+  · rwa [← dist_eq_norm_vsub, ← dist_eq_norm_vsub, hp₁]
+  · rcases hp₂.lt_or_eq with (hp₂' | hp₂')
+    · refine ((real_inner_le_norm _ _).trans_lt (mul_lt_mul_of_pos_right ?_ ?_)).ne
+      · rwa [← hp₁, @dist_eq_norm_vsub V, @dist_eq_norm_vsub V] at hp₂'
+      · rw [norm_pos_iff, vsub_ne_zero]
+        rintro rfl
+        rw [← hp₁] at hp₂'
+        refine (dist_nonneg.not_gt : ¬dist p₂ s.center < 0) ?_
+        simpa using hp₂'
+    · rw [← hp₁, @dist_eq_norm_vsub V, @dist_eq_norm_vsub V] at hp₂'
+      nth_rw 1 [← hp₂']
+      rw [Ne]; rw [inner_eq_norm_mul_iff_real]; rw [hp₂']; rw [← sub_eq_zero]; rw [← smul_sub]; rw [vsub_sub_vsub_cancel_right]; rw [← Ne]; rw [smul_ne_zero_iff]; rw [vsub_ne_zero]; rw [and_iff_left (Ne.symm h)]; rw [norm_ne_zero_iff]; rw [vsub_ne_zero]
+      rintro rfl
+      refine h (Eq.symm ?_)
+      simpa using hp₂'
 
 中文:
 定理 inner_pos_or_eq_of_dist_le_radius
@@ -1837,7 +1936,22 @@ theorem inner_pos_or_eq_of_dist_le_radius
   rw [mem_sphere] at hp₁
   rw [← vsub_sub_vsub_cancel_right p₁ p₂ s.center]; rw [inner_sub_left]; rw [real_inner_self_eq_norm_mul_norm]; rw [sub_pos]
   refine lt_of_le_of_ne
-    ((real_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_right
+    ((real_inner_le_norm _ _).trans (mul_le_mul_of_nonneg_right ?_ (norm_nonneg _))) ?_
+  · rwa [← dist_eq_norm_vsub, ← dist_eq_norm_vsub, hp₁]
+  · rcases hp₂.lt_or_eq with (hp₂' | hp₂')
+    · refine ((real_inner_le_norm _ _).trans_lt (mul_lt_mul_of_pos_right ?_ ?_)).ne
+      · rwa [← hp₁, @dist_eq_norm_vsub V, @dist_eq_norm_vsub V] at hp₂'
+      · rw [norm_pos_iff, vsub_ne_zero]
+        rintro rfl
+        rw [← hp₁] at hp₂'
+        refine (dist_nonneg.not_gt : ¬dist p₂ s.center < 0) ?_
+        simpa using hp₂'
+    · rw [← hp₁, @dist_eq_norm_vsub V, @dist_eq_norm_vsub V] at hp₂'
+      nth_rw 1 [← hp₂']
+      rw [Ne]; rw [inner_eq_norm_mul_iff_real]; rw [hp₂']; rw [← sub_eq_zero]; rw [← smul_sub]; rw [vsub_sub_vsub_cancel_right]; rw [← Ne]; rw [smul_ne_zero_iff]; rw [vsub_ne_zero]; rw [and_iff_left (Ne.symm h)]; rw [norm_ne_zero_iff]; rw [vsub_ne_zero]
+      rintro rfl
+      refine h (Eq.symm ?_)
+      simpa using hp₂'
 
 Depends on / 依赖: Or.inl, Or.inr, center, dist_eq_norm_vsub, inner_sub_left, lt_of_le_of_ne, lt_or_eq, mem_sphere, mul_le_mul_of_nonneg_right, mul_lt_mul_of_pos_right, norm_nonneg, real_inner_le_norm, real_inner_self_eq_norm_mul_norm, s.center, sub_pos, trans_lt, vsub_sub_vsub_cancel_right
 -/
@@ -1933,7 +2047,9 @@ theorem inner_vsub_center_vsub_pos
   have hp₂' : ‖p₂ -ᵥ s.center‖ = s.radius := norm_vsub_center_eq_radius hp₂
   have hd : ‖p₂ -ᵥ s.center‖ ^ 2 =
       ‖p₂ -ᵥ p₁‖ ^ 2 + 2 * ⟪p₂ -ᵥ p₁, p₁ -ᵥ s.center⟫ + ‖p₁ -ᵥ s.center‖ ^ 2 := by
-    rw [← vsub_add_vsub_can
+    rw [← vsub_add_vsub_cancel p₂ p₁ s.center]; rw [norm_add_sq_real]
+  rw [hp₂']; rw [hp₁']; rw [← neg_vsub_eq_vsub_rev s.center p₁]; rw [inner_neg_right] at hd
+  nlinarith [sq_pos_of_pos (norm_pos_iff.mpr (vsub_ne_zero.mpr hp₁p₂.symm))]
 
 中文:
 定理 inner_vsub_center_vsub_pos
@@ -1943,7 +2059,9 @@ theorem inner_vsub_center_vsub_pos
   have hp₂' : ‖p₂ -ᵥ s.center‖ = s.radius := norm_vsub_center_eq_radius hp₂
   have hd : ‖p₂ -ᵥ s.center‖ ^ 2 =
       ‖p₂ -ᵥ p₁‖ ^ 2 + 2 * ⟪p₂ -ᵥ p₁, p₁ -ᵥ s.center⟫ + ‖p₁ -ᵥ s.center‖ ^ 2 := by
-    rw [← vsub_add_vsub_can
+    rw [← vsub_add_vsub_cancel p₂ p₁ s.center]; rw [norm_add_sq_real]
+  rw [hp₂']; rw [hp₁']; rw [← neg_vsub_eq_vsub_rev s.center p₁]; rw [inner_neg_right] at hd
+  nlinarith [sq_pos_of_pos (norm_pos_iff.mpr (vsub_ne_zero.mpr hp₁p₂.symm))]
 
 Depends on / 依赖: center, inner_neg_right, neg_vsub_eq_vsub_rev, norm_add_sq_real, norm_pos_iff, norm_pos_iff.mpr, norm_vsub_center_eq_radius, radius, s.center, s.radius, sq_pos_of_pos, vsub_add_vsub_cancel, vsub_ne_zero, vsub_ne_zero.mpr
 -/
@@ -2011,7 +2129,9 @@ lemma isDiameter_iff_mem_and_mem_and_dist
   refine ⟨fun h => ⟨h.left_mem, h.right_mem, h.dist_left_right⟩, fun ⟨h₁, h₂, hr⟩ => ⟨h₁, ?_⟩⟩
   rw [midpoint_eq_iff]; rw [AffineEquiv.pointReflection_apply]; rw [eq_comm]; rw [eq_vadd_iff_vsub_eq]
   apply eq_of_norm_eq_of_norm_add_eq
-  · simp_rw [← dist_eq_norm_vsub, mem_sphere'.1 h₁, mem_sphere
+  · simp_rw [← dist_eq_norm_vsub, mem_sphere'.1 h₁, mem_sphere.1 h₂]
+  · simp_rw [vsub_add_vsub_cancel, ← dist_eq_norm_vsub, mem_sphere'.1 h₁, mem_sphere.1 h₂]
+    rw [dist_comm]; rw [hr]; rw [two_mul]
 
 中文:
 引理 isDiameter_iff_mem_and_mem_and_dist
@@ -2019,7 +2139,9 @@ lemma isDiameter_iff_mem_and_mem_and_dist
   refine ⟨fun h => ⟨h.left_mem, h.right_mem, h.dist_left_right⟩, fun ⟨h₁, h₂, hr⟩ => ⟨h₁, ?_⟩⟩
   rw [midpoint_eq_iff]; rw [AffineEquiv.pointReflection_apply]; rw [eq_comm]; rw [eq_vadd_iff_vsub_eq]
   apply eq_of_norm_eq_of_norm_add_eq
-  · simp_rw [← dist_eq_norm_vsub, mem_sphere'.1 h₁, mem_sphere
+  · simp_rw [← dist_eq_norm_vsub, mem_sphere'.1 h₁, mem_sphere.1 h₂]
+  · simp_rw [vsub_add_vsub_cancel, ← dist_eq_norm_vsub, mem_sphere'.1 h₁, mem_sphere.1 h₂]
+    rw [dist_comm]; rw [hr]; rw [two_mul]
 
 Depends on / 依赖: AffineEquiv, AffineEquiv.pointReflection_apply, dist_comm, dist_eq_norm_vsub, dist_left_right, eq_comm, eq_of_norm_eq_of_norm_add_eq, eq_vadd_iff_vsub_eq, h.dist_left_right, h.left_mem, h.right_mem, left_mem, mem_sphere, midpoint_eq_iff, pointReflection_apply, right_mem, simp_rw, two_mul, vsub_add_vsub_cancel
 -/
@@ -2071,7 +2193,9 @@ theorem center_mem_affineSpan_pair_iff_isDiameter
   · simp [isDiameter_iff_left_mem_and_midpoint_eq_center, hp₁, eq_comm]
   · rw [isDiameter_iff_mem_and_mem_and_wbtw]
     refine ⟨fun h => ⟨hp₁, hp₂, ?_⟩, fun h => h.2.2.mem_affineSpan⟩
-    refine wbtw_of_collinear_of_dist_center_le_radius ?_ hp₁ ?_ hp₂ hp₁
+    refine wbtw_of_collinear_of_dist_center_le_radius ?_ hp₁ ?_ hp₂ hp₁p₂
+    · rw [Set.insert_comm]; exact collinear_insert_of_mem_affineSpan_pair h
+    · simpa using radius_nonneg_of_mem hp₁
 
 中文:
 定理 center_mem_affineSpan_pair_iff_isDiameter
@@ -2081,7 +2205,9 @@ theorem center_mem_affineSpan_pair_iff_isDiameter
   · simp [isDiameter_iff_left_mem_and_midpoint_eq_center, hp₁, eq_comm]
   · rw [isDiameter_iff_mem_and_mem_and_wbtw]
     refine ⟨fun h => ⟨hp₁, hp₂, ?_⟩, fun h => h.2.2.mem_affineSpan⟩
-    refine wbtw_of_collinear_of_dist_center_le_radius ?_ hp₁ ?_ hp₂ hp₁
+    refine wbtw_of_collinear_of_dist_center_le_radius ?_ hp₁ ?_ hp₂ hp₁p₂
+    · rw [Set.insert_comm]; exact collinear_insert_of_mem_affineSpan_pair h
+    · simpa using radius_nonneg_of_mem hp₁
 
 Depends on / 依赖: Set.insert_comm, collinear_insert_of_mem_affineSpan_pair, eq_comm, eq_or_ne, insert_comm, isDiameter_iff_left_mem_and_midpoint_eq_center, isDiameter_iff_mem_and_mem_and_wbtw, mem_affineSpan, radius_nonneg_of_mem, wbtw_of_collinear_of_dist_center_le_radius
 -/

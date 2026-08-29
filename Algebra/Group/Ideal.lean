@@ -233,7 +233,11 @@ theorem coe_closure
 · exact .inr mul_mem_mul (mem_univ _) hy
 · simpa [← mul_assoc] using .inr mul_mem_mul (mem_univ _) hz }
   suffices closure s = I by rw [this]; rfl
-  refine (closure_l
+  refine (closure_le.2 fun x => Or.inl).antisymm fun x hx => hx.elim mem_closure_of_mem ?_
+  rintro ⟨y, -, z, hz, rfl⟩
+  exact SemigroupIdeal.mul_mem _ _ (mem_closure_of_mem hz)
+
+@[to_additive, inherit_doc coe_closure]
 
 中文:
 定理 coe_closure
@@ -246,7 +250,11 @@ theorem coe_closure
 · exact .inr mul_mem_mul (mem_univ _) hy
 · simpa [← mul_assoc] using .inr mul_mem_mul (mem_univ _) hz }
   suffices closure s = I by rw [this]; rfl
-  refine (closure_l
+  refine (closure_le.2 fun x => Or.inl).antisymm fun x hx => hx.elim mem_closure_of_mem ?_
+  rintro ⟨y, -, z, hz, rfl⟩
+  exact SemigroupIdeal.mul_mem _ _ (mem_closure_of_mem hz)
+
+@[to_additive, inherit_doc coe_closure]
 
 Depends on / 依赖: Or.inl, SemigroupIdeal, SemigroupIdeal.mul_mem, antisymm, carrier, closure, closure_le, hx.elim, mem_closure_of_mem, mem_univ, mul_assoc, mul_mem, mul_mem_mul, smul_mem
 -/

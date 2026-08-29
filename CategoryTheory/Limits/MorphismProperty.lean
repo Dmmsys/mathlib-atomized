@@ -233,7 +233,7 @@ instance CostructuredArrow.closedUnderLimitsOfShape_discrete_empty
     let t : IsTerminal X := (ObjectProperty.limitsOfShape_isEmpty_iff _ _ _ |>.mp p).some
     let e : X ≅ CostructuredArrow.mk (𝟙 (L.obj Y)) := t.uniqueUpToIso CostructuredArrow.mkIdTerminal
     simpa [MorphismProperty.costructuredArrowObj_iff,
-      P.costructuredArrow_iso_iff e] 
+      P.costructuredArrow_iso_iff e] using P.id_mem (L.obj Y)
 
 中文:
 实例 CostructuredArrow.closedUnderLimitsOfShape_discrete_empty
@@ -243,7 +243,7 @@ instance CostructuredArrow.closedUnderLimitsOfShape_discrete_empty
     let t : IsTerminal X := (ObjectProperty.limitsOfShape_isEmpty_iff _ _ _ |>.mp p).some
     let e : X ≅ CostructuredArrow.mk (𝟙 (L.obj Y)) := t.uniqueUpToIso CostructuredArrow.mkIdTerminal
     simpa [MorphismProperty.costructuredArrowObj_iff,
-      P.costructuredArrow_iso_iff e] 
+      P.costructuredArrow_iso_iff e] using P.id_mem (L.obj Y)
 
 Depends on / 依赖: Discrete, IsClosedUnderLimitsOfShape, L.obj, PEmpty
 -/
@@ -271,7 +271,10 @@ lemma CostructuredArrow.isClosedUnderColimitsOfShape
       isColimitOfPreserves _ d.isColimit
     have heq : Y.hom = hd.desc { pt := X, ι := { app j := (d.diag.obj j).hom } } := by
       refine hd.hom_ext fun j => ?_
-      simp only [IsColim
+      simp only [IsColimit.fac]
+      simp
+    rw [P.costructuredArrowObj_iff]; rw [heq]; rw [← hd.coconePointUniqueUpToIso_hom_desc (hc _)]; rw [P.cancel_left_of_respectsIso]
+    exact H _ _ d.prop_diag_obj
 
 中文:
 引理 CostructuredArrow.isClosedUnderColimitsOfShape
@@ -282,7 +285,10 @@ lemma CostructuredArrow.isClosedUnderColimitsOfShape
       isColimitOfPreserves _ d.isColimit
     have heq : Y.hom = hd.desc { pt := X, ι := { app j := (d.diag.obj j).hom } } := by
       refine hd.hom_ext fun j => ?_
-      simp only [IsColim
+      simp only [IsColimit.fac]
+      simp
+    rw [P.costructuredArrowObj_iff]; rw [heq]; rw [← hd.coconePointUniqueUpToIso_hom_desc (hc _)]; rw [P.cancel_left_of_respectsIso]
+    exact H _ _ d.prop_diag_obj
 
 Depends on / 依赖: IsClosedUnderColimitsOfShape
 -/
@@ -317,7 +323,12 @@ lemma CostructuredArrow.closedUnderLimitsOfShape_walkingCospan
         (L.map (pres.diag.map WalkingCospan.Hom.inl).left)
           (L.map (pres.diag.map WalkingCospan.Hom.inr).left) :=
 IsPullback.of_isLimit_cone isLimitOfPreserves
-        (Cat
+        (CategoryTheory.CostructuredArrow.toOver L X ⋙ CategoryTheory.Over.forget X) pres.isLimit
+    rw [MorphismProperty.costructuredArrowObj_iff]
+    rw [show Y.hom = L.map (pres.π.app .left).left ≫ (pres.diag.obj .left).hom by simp]
+    apply P.comp_mem _ _ (P.of_isPullback h.flip ?_) (hpres _)
+    exact P.of_postcomp _ (pres.diag.obj WalkingCospan.one).hom (hpres .one)
+      (by simpa using hpres .right)
 
 中文:
 引理 CostructuredArrow.closedUnderLimitsOfShape_walkingCospan
@@ -328,7 +339,12 @@ IsPullback.of_isLimit_cone isLimitOfPreserves
         (L.map (pres.diag.map WalkingCospan.Hom.inl).left)
           (L.map (pres.diag.map WalkingCospan.Hom.inr).left) :=
 IsPullback.of_isLimit_cone isLimitOfPreserves
-        (Cat
+        (CategoryTheory.CostructuredArrow.toOver L X ⋙ CategoryTheory.Over.forget X) pres.isLimit
+    rw [MorphismProperty.costructuredArrowObj_iff]
+    rw [show Y.hom = L.map (pres.π.app .left).left ≫ (pres.diag.obj .left).hom by simp]
+    apply P.comp_mem _ _ (P.of_isPullback h.flip ?_) (hpres _)
+    exact P.of_postcomp _ (pres.diag.obj WalkingCospan.one).hom (hpres .one)
+      (by simpa using hpres .right)
 
 Depends on / 依赖: IsClosedUnderLimitsOfShape, WalkingCospan
 -/
@@ -419,7 +435,7 @@ instance :
       (CostructuredArrow.toOver P L X ⋙ Over.forget P ⊤ X) :=
 inferInstanceAs PreservesLimitsOfShape WalkingCospan
       CostructuredArrow.forget P ⊤ L X ⋙ CategoryTheory.CostructuredArrow.toOver L X
-  preservesLimitsOfShape_of_reflects_of_preserves _ (Ove
+  preservesLimitsOfShape_of_reflects_of_preserves _ (Over.forget _ _ X)
 
 中文:
 实例 :
@@ -428,7 +444,7 @@ inferInstanceAs PreservesLimitsOfShape WalkingCospan
       (CostructuredArrow.toOver P L X ⋙ Over.forget P ⊤ X) :=
 inferInstanceAs PreservesLimitsOfShape WalkingCospan
       CostructuredArrow.forget P ⊤ L X ⋙ CategoryTheory.CostructuredArrow.toOver L X
-  preservesLimitsOfShape_of_reflects_of_preserves _ (Ove
+  preservesLimitsOfShape_of_reflects_of_preserves _ (Over.forget _ _ X)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.CostructuredArrow.toOver, CostructuredArrow, CostructuredArrow.forget, CostructuredArrow.toOver, Over.forget, PreservesLimitsOfShape, WalkingCospan, forget, preservesLimitsOfShape_of_reflects_of_preserves, toOver
 -/
@@ -458,7 +474,7 @@ instance StructuredArrow.closedUnderColimitsOfShape_discrete_empty
     let t : IsInitial X := (ObjectProperty.colimitsOfShape_isEmpty_iff _ _ _ |>.mp p).some
     let e : X ≅ StructuredArrow.mk (𝟙 (L.obj Y)) := t.uniqueUpToIso StructuredArrow.mkIdInitial
     simpa [MorphismProperty.structuredArrowObj_iff,
-      P.structuredArrow_iso_iff e] using P.
+      P.structuredArrow_iso_iff e] using P.id_mem (L.obj Y)
 
 中文:
 实例 结构化箭头.closedUnderColimitsOfShape_discrete_empty
@@ -468,7 +484,7 @@ instance StructuredArrow.closedUnderColimitsOfShape_discrete_empty
     let t : IsInitial X := (ObjectProperty.colimitsOfShape_isEmpty_iff _ _ _ |>.mp p).some
     let e : X ≅ StructuredArrow.mk (𝟙 (L.obj Y)) := t.uniqueUpToIso StructuredArrow.mkIdInitial
     simpa [MorphismProperty.structuredArrowObj_iff,
-      P.structuredArrow_iso_iff e] using P.
+      P.structuredArrow_iso_iff e] using P.id_mem (L.obj Y)
 
 Depends on / 依赖: Discrete, IsClosedUnderColimitsOfShape, L.obj, PEmpty
 -/
@@ -497,7 +513,9 @@ lemma StructuredArrow.isClosedUnderLimitsOfShape
     have heq : Y.hom = hd.lift { pt := X, π := { app j := (d.diag.obj j).hom } } := by
       refine hd.hom_ext fun j => ?_
       simp only [IsLimit.fac]
-      
+      simp
+    rw [P.structuredArrowObj_iff]; rw [heq]; rw [← (hc _).lift_comp_conePointUniqueUpToIso_hom hd]; rw [P.cancel_right_of_respectsIso]
+    exact H _ _ d.prop_diag_obj
 
 中文:
 引理 结构化箭头.isClosedUnderLimitsOfShape
@@ -509,7 +527,9 @@ lemma StructuredArrow.isClosedUnderLimitsOfShape
     have heq : Y.hom = hd.lift { pt := X, π := { app j := (d.diag.obj j).hom } } := by
       refine hd.hom_ext fun j => ?_
       simp only [IsLimit.fac]
-      
+      simp
+    rw [P.structuredArrowObj_iff]; rw [heq]; rw [← (hc _).lift_comp_conePointUniqueUpToIso_hom hd]; rw [P.cancel_right_of_respectsIso]
+    exact H _ _ d.prop_diag_obj
 
 Depends on / 依赖: IsClosedUnderLimitsOfShape
 -/
@@ -611,7 +631,7 @@ instance Under.closedUnderColimitsOfShape_pushout
   body: by
   rw [ObjectProperty.isClosedUnderColimitsOfShape_iff_op]; rw [←
     ObjectProperty.isClosedUnderLimitsOfShape_inverseImage_iff _ _ (Over.opEquivOpUnder _)]; rw [MorphismProperty.inverseImage_op_underObj]; rw [ObjectProperty.isClosedUnderLimitsOfShape_iff_of_equivalence _ walkingSpanOpEquiv]
-  in
+  infer_instance
 
 中文:
 实例 Under.closedUnderColimitsOfShape_pushout
@@ -619,7 +639,7 @@ instance Under.closedUnderColimitsOfShape_pushout
   定义体: by
   rw [ObjectProperty.isClosedUnderColimitsOfShape_iff_op]; rw [←
     ObjectProperty.isClosedUnderLimitsOfShape_inverseImage_iff _ _ (Over.opEquivOpUnder _)]; rw [MorphismProperty.inverseImage_op_underObj]; rw [ObjectProperty.isClosedUnderLimitsOfShape_iff_of_equivalence _ walkingSpanOpEquiv]
-  in
+  infer_instance
 
 Depends on / 依赖: IsClosedUnderColimitsOfShape, MorphismProperty, MorphismProperty.inverseImage_op_underObj, ObjectProperty, ObjectProperty.isClosedUnderColimitsOfShape_iff_op, ObjectProperty.isClosedUnderLimitsOfShape_iff_of_equivalence, ObjectProperty.isClosedUnderLimitsOfShape_inverseImage_iff, Over.opEquivOpUnder, WalkingSpan, infer_instance, inverseImage_op_underObj, isClosedUnderColimitsOfShape_iff_op, isClosedUnderLimitsOfShape_iff_of_equivalence, isClosedUnderLimitsOfShape_inverseImage_iff, opEquivOpUnder, walkingSpanOpEquiv
 -/

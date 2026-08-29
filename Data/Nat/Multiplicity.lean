@@ -65,7 +65,17 @@ theorem emultiplicity_eq_card_pow_dvd
 congr_arg _
 congr_arg card
           Finset.ext fun i => by
-            simp only [mem_Ico, Na
+            simp only [mem_Ico, Nat.lt_succ_iff,
+              fin.pow_dvd_iff_le_multiplicity, mem_filter,
+              and_assoc, and_congr_right_iff, iff_and_self]
+            intro hi h
+            rw [← fin.pow_dvd_iff_le_multiplicity] at h
+            rcases m with - | m
+            · rw [zero_pow, zero_dvd_iff] at h
+              exacts [(hn.ne' h).elim, one_le_iff_ne_zero.1 hi]
+            refine LE.le.trans_lt ?_ hb
+            exact le_log_of_pow_le (one_lt_iff_ne_zero_and_ne_one.2 ⟨m.succ_ne_zero, hm⟩)
+                (le_of_dvd hn h)
 
 中文:
 定理 emultiplicity_eq_card_pow_dvd
@@ -78,7 +88,17 @@ congr_arg card
 congr_arg _
 congr_arg card
           Finset.ext fun i => by
-            simp only [mem_Ico, Na
+            simp only [mem_Ico, Nat.lt_succ_iff,
+              fin.pow_dvd_iff_le_multiplicity, mem_filter,
+              and_assoc, and_congr_right_iff, iff_and_self]
+            intro hi h
+            rw [← fin.pow_dvd_iff_le_multiplicity] at h
+            rcases m with - | m
+            · rw [zero_pow, zero_dvd_iff] at h
+              exacts [(hn.ne' h).elim, one_le_iff_ne_zero.1 hi]
+            refine LE.le.trans_lt ?_ hb
+            exact le_log_of_pow_le (one_lt_iff_ne_zero_and_ne_one.2 ⟨m.succ_ne_zero, hm⟩)
+                (le_of_dvd hn h)
 
 Depends on / 依赖: Finset, Finset.ext, Nat.finiteMultiplicity_iff, Nat.lt_succ_iff, and_assoc, and_congr_right_iff, congr_arg, emultiplicity, emultiplicity_eq_multiplicity, exacts, fin.emultiplicity_eq_multiplicity, fin.pow_dvd_iff_le_multiplicity, finiteMultiplicity_iff, hn.ne, iff_and_self, lt_succ_iff, mem_Ico, mem_filter, multiplicity, pow_dvd_iff_le_multiplicity
 -/
@@ -214,7 +234,12 @@ theorem emultiplicity_factorial
         rw [factorial_succ]; rw [hp.emultiplicity_mul]; rw [add_comm]
       _ = (∑ i in Ico 1 b, n / p ^ i : Nat) + #{i in Ico 1 b | p ^ i ∣ n + 1} := by
         rw [emultiplicity_factorial hp ((log_mono_right <| le_succ _).trans_lt hb)]; rw [←
-          emultiplicity_eq_card_pow_dvd hp.ne_one (s
+          emultiplicity_eq_card_pow_dvd hp.ne_one (succ_pos _) hb]
+      _ = (∑ i in Ico 1 b, (n / p ^ i + if p ^ i ∣ n + 1 then 1 else 0) : Nat) := by
+        rw [sum_add_distrib]; rw [sum_boole]
+        simp
+      _ = (∑ i in Ico 1 b, (n + 1) / p ^ i : Nat) :=
+congr_arg _ Finset.sum_congr rfl fun _ _ => Nat.succ_div.symm
 
 中文:
 定理 emultiplicity_factorial
@@ -223,7 +248,12 @@ theorem emultiplicity_factorial
         rw [factorial_succ]; rw [hp.emultiplicity_mul]; rw [add_comm]
       _ = (∑ i in Ico 1 b, n / p ^ i : Nat) + #{i in Ico 1 b | p ^ i ∣ n + 1} := by
         rw [emultiplicity_factorial hp ((log_mono_right <| le_succ _).trans_lt hb)]; rw [←
-          emultiplicity_eq_card_pow_dvd hp.ne_one (s
+          emultiplicity_eq_card_pow_dvd hp.ne_one (succ_pos _) hb]
+      _ = (∑ i in Ico 1 b, (n / p ^ i + if p ^ i ∣ n + 1 then 1 else 0) : Nat) := by
+        rw [sum_add_distrib]; rw [sum_boole]
+        simp
+      _ = (∑ i in Ico 1 b, (n + 1) / p ^ i : Nat) :=
+congr_arg _ Finset.sum_congr rfl fun _ _ => Nat.succ_div.symm
 
 Depends on / 依赖: Finset, Finset.sum_congr, Nat.s, add_comm, congr_arg, emultiplicity_eq_card_pow_dvd, emultiplicity_factorial, emultiplicity_mul, factorial_succ, hp.emultiplicity_mul, hp.ne_one, le_succ, log_mono_right, ne_one, succ_pos, sum_add_distrib, sum_boole, sum_congr, trans_lt
 -/
@@ -288,7 +318,18 @@ theorem emultiplicity_factorial_mul_succ
   have h2 : p * n + 1 <= p * (n + 1) := by linarith
   have h3 : p * n + 1 <= p * (n + 1) + 1 := by lia
   have hm : emultiplicity p (p * n)! != ⊤ := by
-    rw [Ne]; rw [emultiplicity_eq_top]; r
+    rw [Ne]; rw [emultiplicity_eq_top]; rw [Classical.not_not]; rw [Nat.finiteMultiplicity_iff]
+    exact ⟨hp.ne_one, factorial_pos _⟩
+  revert hm
+  have h4 : forall m in Ico (p * n + 1) (p * (n + 1)), emultiplicity p m = 0 := by
+    intro m hm
+    rw [emultiplicity_eq_zero]; rw [not_dvd_iff_lt_mul_succ _ hp.pos]
+    rw [mem_Ico] at hm
+    exact ⟨n, lt_of_succ_le hm.1, hm.2⟩
+  simp_rw [← prod_Ico_id_eq_factorial, Finset.emultiplicity_prod hp', ← sum_Ico_consecutive _ h1 h3,
+    add_assoc]
+  intro h
+  rw [WithTop.add_left_inj h]; rw [sum_Ico_succ_top h2]; rw [hp.emultiplicity_mul]; rw [hp.emultiplicity_self]; rw [sum_congr rfl h4]; rw [sum_const_zero]; rw [zero_add]; rw [add_comm 1]
 
 中文:
 定理 emultiplicity_factorial_mul_succ
@@ -300,7 +341,18 @@ theorem emultiplicity_factorial_mul_succ
   have h2 : p * n + 1 <= p * (n + 1) := by linarith
   have h3 : p * n + 1 <= p * (n + 1) + 1 := by lia
   have hm : emultiplicity p (p * n)! != ⊤ := by
-    rw [Ne]; rw [emultiplicity_eq_top]; r
+    rw [Ne]; rw [emultiplicity_eq_top]; rw [Classical.not_not]; rw [Nat.finiteMultiplicity_iff]
+    exact ⟨hp.ne_one, factorial_pos _⟩
+  revert hm
+  have h4 : forall m in Ico (p * n + 1) (p * (n + 1)), emultiplicity p m = 0 := by
+    intro m hm
+    rw [emultiplicity_eq_zero]; rw [not_dvd_iff_lt_mul_succ _ hp.pos]
+    rw [mem_Ico] at hm
+    exact ⟨n, lt_of_succ_le hm.1, hm.2⟩
+  simp_rw [← prod_Ico_id_eq_factorial, Finset.emultiplicity_prod hp', ← sum_Ico_consecutive _ h1 h3,
+    add_assoc]
+  intro h
+  rw [WithTop.add_left_inj h]; rw [sum_Ico_succ_top h2]; rw [hp.emultiplicity_mul]; rw [hp.emultiplicity_self]; rw [sum_congr rfl h4]; rw [sum_const_zero]; rw [zero_add]; rw [add_comm 1]
 
 Depends on / 依赖: Classical, Classical.not_not, Nat.finiteMultiplicity_iff, Nat.le_add_left, emultiplicity, emultiplicity_eq_top, emultiplicity_eq_zer, factorial_pos, finiteMultiplicity_iff, hp.ne_one, hp.prime, hp.two_le, le_add_left, ne_one, not_not, revert, two_le
 -/
@@ -376,7 +428,7 @@ theorem multiplicity_factorial_pow
   induction n with
   | zero => simp [hp.emultiplicity_one]
   | succ n h =>
-    rw [pow_succ']; rw [hp.emultiplicity_factorial_mul]; rw [h]; rw [Finset.sum_r
+    rw [pow_succ']; rw [hp.emultiplicity_factorial_mul]; rw [h]; rw [Finset.sum_range_succ]; rw [ENat.natCast_add]
 
 中文:
 定理 multiplicity_factorial_pow
@@ -387,7 +439,7 @@ theorem multiplicity_factorial_pow
   induction n with
   | zero => simp [hp.emultiplicity_one]
   | succ n h =>
-    rw [pow_succ']; rw [hp.emultiplicity_factorial_mul]; rw [h]; rw [Finset.sum_r
+    rw [pow_succ']; rw [hp.emultiplicity_factorial_mul]; rw [h]; rw [Finset.sum_range_succ]; rw [ENat.natCast_add]
 
 Depends on / 依赖: ENat.natCast_add, ENat.natCast_inj, Finset, Finset.sum_range_succ, Nat.finiteMultiplicity_iff, emultiplicity_eq_multiplicity, emultiplicity_factorial_mul, emultiplicity_one, factorial_pos, finiteMultiplicity_iff, hp.emultiplicity_factorial_mul, hp.emultiplicity_one, hp.ne_one, natCast_add, natCast_inj, ne_one, pow_succ, sum_range_succ
 -/
@@ -459,7 +511,13 @@ theorem emultiplicity_choose'
       emultiplicity p (choose (n + k) k) + emultiplicity p (k ! * n !) =
         #{i in Ico 1 b | p ^ i <= k % p ^ i + n % p ^ i} + emultiplicity p (k ! * n !) := by
     rw [← hp.emultiplicity_mul]; rw [← mul_assoc]
-    have := (add_tsub_cancel_right n k) ▸ choose_mul_factorial_mul_fa
+    have := (add_tsub_cancel_right n k) ▸ choose_mul_factorial_mul_factorial (le_add_left k n)
+    rw [this]; rw [hp.emultiplicity_factorial hnb]; rw [hp.emultiplicity_mul]; rw [hp.emultiplicity_factorial ((log_mono_right (le_add_left k n)).trans_lt hnb)]; rw [hp.emultiplicity_factorial ((log_mono_right (le_add_left n k)).trans_lt
+      (add_comm n k ▸ hnb))]; rw [multiplicity_choose_aux hp (le_add_left k n)]
+    simp [add_comm]
+  refine WithTop.add_right_cancel ?_ h₁
+  apply finiteMultiplicity_iff_emultiplicity_ne_top.1
+  exact Nat.finiteMultiplicity_iff.2 ⟨hp.ne_one, mul_pos (factorial_pos k) (factorial_pos n)⟩
 
 中文:
 定理 emultiplicity_choose'
@@ -469,7 +527,13 @@ theorem emultiplicity_choose'
       emultiplicity p (choose (n + k) k) + emultiplicity p (k ! * n !) =
         #{i in Ico 1 b | p ^ i <= k % p ^ i + n % p ^ i} + emultiplicity p (k ! * n !) := by
     rw [← hp.emultiplicity_mul]; rw [← mul_assoc]
-    have := (add_tsub_cancel_right n k) ▸ choose_mul_factorial_mul_fa
+    have := (add_tsub_cancel_right n k) ▸ choose_mul_factorial_mul_factorial (le_add_left k n)
+    rw [this]; rw [hp.emultiplicity_factorial hnb]; rw [hp.emultiplicity_mul]; rw [hp.emultiplicity_factorial ((log_mono_right (le_add_left k n)).trans_lt hnb)]; rw [hp.emultiplicity_factorial ((log_mono_right (le_add_left n k)).trans_lt
+      (add_comm n k ▸ hnb))]; rw [multiplicity_choose_aux hp (le_add_left k n)]
+    simp [add_comm]
+  refine WithTop.add_right_cancel ?_ h₁
+  apply finiteMultiplicity_iff_emultiplicity_ne_top.1
+  exact Nat.finiteMultiplicity_iff.2 ⟨hp.ne_one, mul_pos (factorial_pos k) (factorial_pos n)⟩
 
 Depends on / 依赖: add_tsub_cancel_right, choose_mul_factorial_mul_factorial, emultiplicity, emultiplicity_factorial, emultiplicity_mul, hp.emultiplicity_factorial, hp.emultiplicity_mul, le_add_left, log_mon, log_mono_right, mul_assoc, trans_lt
 -/
@@ -553,7 +617,14 @@ theorem emultiplicity_choose_prime_pow_add_emultiplicity
           {i in Ico 1 n.succ | p ^ i ∣ k} := by
         simp +contextual [disjoint_right, *, dvd_iff_mod_eq_zero,
           Nat.mod_lt _ (pow_pos hp.pos _)]
-      rw [emultiplicity_
+      rw [emultiplicity_choose hp hkn (lt_succ_self _)]; rw [emultiplicity_eq_card_pow_dvd (ne_of_gt hp.one_lt) hk0.bot_lt
+          (lt_succ_of_le (log_mono_right hkn))]; rw [← Nat.cast_add]
+      apply WithTop.coe_mono
+      rw [log_pow hp.one_lt]; rw [← card_union_of_disjoint hdisj]; rw [filter_union_right]
+      have filter_le_Ico := (Ico 1 n.succ).card_filter_le
+        fun x => p ^ x <= k % p ^ x + (p ^ n - k) % p ^ x ∨ p ^ x ∣ k
+      rwa [card_Ico 1 n.succ] at filter_le_Ico)
+    (by rw [← hp.emultiplicity_pow_self]; exact emultiplicity_le_emultiplicity_choose_add hp _ _)
 
 中文:
 定理 emultiplicity_choose_prime_pow_add_emultiplicity
@@ -565,7 +636,14 @@ theorem emultiplicity_choose_prime_pow_add_emultiplicity
           {i in Ico 1 n.succ | p ^ i ∣ k} := by
         simp +contextual [disjoint_right, *, dvd_iff_mod_eq_zero,
           Nat.mod_lt _ (pow_pos hp.pos _)]
-      rw [emultiplicity_
+      rw [emultiplicity_choose hp hkn (lt_succ_self _)]; rw [emultiplicity_eq_card_pow_dvd (ne_of_gt hp.one_lt) hk0.bot_lt
+          (lt_succ_of_le (log_mono_right hkn))]; rw [← Nat.cast_add]
+      apply WithTop.coe_mono
+      rw [log_pow hp.one_lt]; rw [← card_union_of_disjoint hdisj]; rw [filter_union_right]
+      have filter_le_Ico := (Ico 1 n.succ).card_filter_le
+        fun x => p ^ x <= k % p ^ x + (p ^ n - k) % p ^ x ∨ p ^ x ∣ k
+      rwa [card_Ico 1 n.succ] at filter_le_Ico)
+    (by rw [← hp.emultiplicity_pow_self]; exact emultiplicity_le_emultiplicity_choose_add hp _ _)
 
 Depends on / 依赖: Disjoint, Nat.cast_add, Nat.mod_lt, WithTop, WithTop.coe_mono, bot_lt, card_union_of_disjoint, cast_add, coe_mono, contextual, disjoint_right, dvd_iff_mod_eq_zero, emultiplicity_choose, emultiplicity_eq_card_pow_dvd, filter, hk0.bot_lt, hp.one_lt, hp.pos, le_antisymm, log_mono_right
 -/
@@ -597,7 +675,7 @@ theorem emultiplicity_choose_prime_pow
   push_cast
   rw [← emultiplicity_choose_prime_pow_add_emultiplicity hp hkn hk0]; rw [(finiteMultiplicity_iff.2 ⟨hp.ne_one]; rw [Nat.pos_of_ne_zero hk0⟩).emultiplicity_eq_multiplicity]; rw [(finiteMultiplicity_iff.2 ⟨hp.ne_one]; rw [choose_pos hkn⟩).emultiplicity_eq_multiplicity]
   norm_cast
-  rw
+  rw [Nat.add_sub_cancel_right]
 
 中文:
 定理 emultiplicity_choose_prime_pow
@@ -606,7 +684,7 @@ theorem emultiplicity_choose_prime_pow
   push_cast
   rw [← emultiplicity_choose_prime_pow_add_emultiplicity hp hkn hk0]; rw [(finiteMultiplicity_iff.2 ⟨hp.ne_one]; rw [Nat.pos_of_ne_zero hk0⟩).emultiplicity_eq_multiplicity]; rw [(finiteMultiplicity_iff.2 ⟨hp.ne_one]; rw [choose_pos hkn⟩).emultiplicity_eq_multiplicity]
   norm_cast
-  rw
+  rw [Nat.add_sub_cancel_right]
 
 Depends on / 依赖: Nat.add_sub_cancel_right, Nat.pos_of_ne_zero, add_sub_cancel_right, choose_pos, emultiplicity_choose_prime_pow_add_emultiplicity, emultiplicity_eq_multiplicity, finiteMultiplicity_iff, hp.ne_one, ne_one, pos_of_ne_zero
 -/
@@ -696,7 +774,22 @@ theorem emultiplicity_two_factorial_lt
     · subst hn
       simp only [ne_eq, bit_eq_zero_iff, true_and, Bool.not_eq_false] at h
       simp only [bit, h, cond_true, mul_zero, zero_add, factorial_one]
-     
+      rw [Prime.emultiplicity_one]
+      · exact zero_lt_one
+      · decide
+    have : emultiplicity 2 (2 * n)! < (2 * n : Nat) := by
+      rw [prime_two.emultiplicity_factorial_mul]
+      rw [two_mul]
+      push_cast
+      apply WithTop.add_lt_add_right _ (ih hn)
+      exact Ne.symm nofun
+    cases b
+    · simpa
+    · suffices emultiplicity 2 (2 * n + 1) + emultiplicity 2 (2 * n)! < ↑(2 * n) + 1 by
+        simpa [emultiplicity_mul, h2, prime_two, bit, factorial]
+      rw [emultiplicity_eq_zero.2 (two_not_dvd_two_mul_add_one n)]; rw [zero_add]
+      refine this.trans ?_
+      exact mod_cast lt_succ_self _
 
 中文:
 定理 emultiplicity_two_factorial_lt
@@ -710,7 +803,22 @@ theorem emultiplicity_two_factorial_lt
     · subst hn
       simp only [ne_eq, bit_eq_zero_iff, true_and, Bool.not_eq_false] at h
       simp only [bit, h, cond_true, mul_zero, zero_add, factorial_one]
-     
+      rw [Prime.emultiplicity_one]
+      · exact zero_lt_one
+      · decide
+    have : emultiplicity 2 (2 * n)! < (2 * n : Nat) := by
+      rw [prime_two.emultiplicity_factorial_mul]
+      rw [two_mul]
+      push_cast
+      apply WithTop.add_lt_add_right _ (ih hn)
+      exact Ne.symm nofun
+    cases b
+    · simpa
+    · suffices emultiplicity 2 (2 * n + 1) + emultiplicity 2 (2 * n)! < ↑(2 * n) + 1 by
+        simpa [emultiplicity_mul, h2, prime_two, bit, factorial]
+      rw [emultiplicity_eq_zero.2 (two_not_dvd_two_mul_add_one n)]; rw [zero_add]
+      refine this.trans ?_
+      exact mod_cast lt_succ_self _
 
 Depends on / 依赖: Bool.not_eq_false, False.elim, Ne.sym, Prime.emultiplicity_one, WithTop, WithTop.add_lt_add_right, add_lt_add_right, binaryRec, bit_eq_zero_iff, cond_true, emultiplicity, emultiplicity_factorial_mul, emultiplicity_one, factorial_one, mul_zero, ne_eq, not_eq_false, prime_two, prime_two.emultiplicity_factorial_mul, prime_two.prime
 -/

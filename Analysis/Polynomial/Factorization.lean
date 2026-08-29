@@ -38,7 +38,8 @@ exists_monic_irreducible_factor f not_isUnit_of_natDegree_pos f
       by grind [IsMonicOfDegree.natDegree_eq]
   rw [hf₂]; rw [add_comm] at hf
   have hf₁ : IsMonicOfDegree f₁ 1 :=
-⟨natDegree_eq_of_degree_eq_some IsAlgClosed.degree_eq_one_of_irreducible F hf₁i,
+⟨natDegree_eq_of_degree_eq_some IsAlgClosed.degree_eq_one_of_irreducible F hf₁i, hf₁m⟩
+  exact ⟨f₁, f₂, hf₁, hf₁.of_mul_left hf, hf₂⟩
 
 中文:
 引理 eq_isMonicOfDegree_one_mul_isMonicOfDegree
@@ -49,7 +50,8 @@ exists_monic_irreducible_factor f not_isUnit_of_natDegree_pos f
       by grind [IsMonicOfDegree.natDegree_eq]
   rw [hf₂]; rw [add_comm] at hf
   have hf₁ : IsMonicOfDegree f₁ 1 :=
-⟨natDegree_eq_of_degree_eq_some IsAlgClosed.degree_eq_one_of_irreducible F hf₁i,
+⟨natDegree_eq_of_degree_eq_some IsAlgClosed.degree_eq_one_of_irreducible F hf₁i, hf₁m⟩
+  exact ⟨f₁, f₂, hf₁, hf₁.of_mul_left hf, hf₂⟩
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.degree_eq_one_of_irreducible, IsMonicOfDegree, IsMonicOfDegree.natDegree_eq, add_comm, degree_eq_one_of_irreducible, exists_monic_irreducible_factor, natDegree_eq, natDegree_eq_of_degree_eq_some, not_isUnit_of_natDegree_pos, of_mul_left
 -/
@@ -77,7 +79,8 @@ exists_monic_irreducible_factor f not_isUnit_of_natDegree_pos f
       by grind [IsMonicOfDegree.natDegree_eq]
   refine ⟨f₁, f₂, ?_, hf₂⟩
   have help {P : Nat -> Prop} {m : Nat} (hm₀ : 0 < m) (hm₂ : m <= 2) (h : P m) : P 1 ∨ P 2 := by
-    interval_cases m <;> ta
+    interval_cases m <;> tauto
+exact help hirr.natDegree_pos hirr.natDegree_le_two IsMonicOfDegree.mk rfl hm
 
 中文:
 引理 eq_isMonicOfDegree_one_or_two_mul
@@ -88,7 +91,8 @@ exists_monic_irreducible_factor f not_isUnit_of_natDegree_pos f
       by grind [IsMonicOfDegree.natDegree_eq]
   refine ⟨f₁, f₂, ?_, hf₂⟩
   have help {P : Nat -> Prop} {m : Nat} (hm₀ : 0 < m) (hm₂ : m <= 2) (h : P m) : P 1 ∨ P 2 := by
-    interval_cases m <;> ta
+    interval_cases m <;> tauto
+exact help hirr.natDegree_pos hirr.natDegree_le_two IsMonicOfDegree.mk rfl hm
 
 Depends on / 依赖: IsMonicOfDegree, IsMonicOfDegree.mk, IsMonicOfDegree.natDegree_eq, exists_monic_irreducible_factor, hirr.natDegree_le_two, hirr.natDegree_pos, interval_cases, natDegree_eq, natDegree_le_two, natDegree_pos, not_isUnit_of_natDegree_pos
 -/
@@ -116,7 +120,10 @@ lemma eq_isMonicOfDegree_two_mul_isMonicOfDegree
 · have hg₂ := of_mul_left hd₁ (show 2 + n = 1 + (n + 1) by lia) ▸ hf
     obtain ⟨p₁, p₂, hp₁ | hp₂, h'⟩ := hg₂.eq_isMonicOfDegree_one_or_two_mul
     · rw [h', ← mul_assoc] at h hf
-      exac
+      exact ⟨g₁ * p₁, p₂, hd₁.mul hp₁, (hd₁.mul hp₁).of_mul_left hf, h⟩
+    · rw [h', mul_left_comm] at h hf
+      exact ⟨p₁, g₁ * p₂, hp₂, of_mul_left hp₂ hf, h⟩
+  · exact ⟨g₁, g₂, hd₂, of_mul_left hd₂ hf, h⟩
 
 中文:
 引理 eq_isMonicOfDegree_two_mul_isMonicOfDegree
@@ -127,7 +134,10 @@ lemma eq_isMonicOfDegree_two_mul_isMonicOfDegree
 · have hg₂ := of_mul_left hd₁ (show 2 + n = 1 + (n + 1) by lia) ▸ hf
     obtain ⟨p₁, p₂, hp₁ | hp₂, h'⟩ := hg₂.eq_isMonicOfDegree_one_or_two_mul
     · rw [h', ← mul_assoc] at h hf
-      exac
+      exact ⟨g₁ * p₁, p₂, hd₁.mul hp₁, (hd₁.mul hp₁).of_mul_left hf, h⟩
+    · rw [h', mul_left_comm] at h hf
+      exact ⟨p₁, g₁ * p₂, hp₂, of_mul_left hp₂ hf, h⟩
+  · exact ⟨g₁, g₂, hd₂, of_mul_left hd₂ hf, h⟩
 
 Depends on / 依赖: add_comm, all_goals, eq_isMonicOfDegree_one_or_two_mul, hf.eq_isMonicOfDegree_one_or_two_mul, mul_assoc, mul_left_comm, of_mul_left
 -/

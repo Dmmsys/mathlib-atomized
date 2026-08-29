@@ -273,6 +273,7 @@ definition reduce
   decreasing_by
     next a h =>
     zify
+    exact reduce_aux h
 
 中文:
 定义 reduce
@@ -287,6 +288,7 @@ definition reduce
   decreasing_by
     next a h =>
     zify
+    exact reduce_aux h
 -/
 def reduce : Δ m -> Δ m := fun A =>
   if (A.1 1 0) = 0 then
@@ -451,7 +453,12 @@ suffices |A.1 i j| <= |m| from Finset.mem_Icc.mpr abs_le.mp this
   have h1 : 0 < |A.1 1 1| := (abs_nonneg _).trans_lt h11
   have h2 : 0 < |A.1 0 0| := abs_pos.mpr h00.ne'
   fin_cases i <;> fin_cases j
-  · simpa only [← abs_mul, A_c_eq_zero h10] using! (le_mul_if
+  · simpa only [← abs_mul, A_c_eq_zero h10] using! (le_mul_iff_one_le_right h2).mpr h1
+  · simpa only [← abs_mul, A_c_eq_zero h10] using! h11.le.trans (le_mul_of_one_le_left h1.le h2)
+  · simp_all
+  · simpa only [← abs_mul, A_c_eq_zero h10] using! (le_mul_iff_one_le_left h1).mpr h2
+
+@[simp]
 
 中文:
 引理 reps_entries_le_m'
@@ -462,7 +469,12 @@ suffices |A.1 i j| <= |m| from Finset.mem_Icc.mpr abs_le.mp this
   have h1 : 0 < |A.1 1 1| := (abs_nonneg _).trans_lt h11
   have h2 : 0 < |A.1 0 0| := abs_pos.mpr h00.ne'
   fin_cases i <;> fin_cases j
-  · simpa only [← abs_mul, A_c_eq_zero h10] using! (le_mul_if
+  · simpa only [← abs_mul, A_c_eq_zero h10] using! (le_mul_iff_one_le_right h2).mpr h1
+  · simpa only [← abs_mul, A_c_eq_zero h10] using! h11.le.trans (le_mul_of_one_le_left h1.le h2)
+  · simp_all
+  · simpa only [← abs_mul, A_c_eq_zero h10] using! (le_mul_iff_one_le_left h1).mpr h2
+
+@[simp]
 
 Depends on / 依赖: A_c_eq_zero, Finset, Finset.mem_Icc.mpr, abs_le, abs_le.mp, abs_mul, abs_nonneg, abs_pos, abs_pos.mpr, fin_cases, h00.ne, h1.le, h11.le.trans, le_mul_iff_one_le_left, le_mul_iff_one_le_right, le_mul_of_one_le_left, mem_Icc, trans_lt
 -/
@@ -613,7 +625,33 @@ lemma reduce_mem_reps
     by_cases h1 : 0 < A.1 0 0
     · simp only [reduce_of_pos h h1]
       have h2 := Int.emod_def (A.1 0 1) (A.1 1 1)
-      have h4 := Int.ediv_mul_le 
+      have h4 := Int.ediv_mul_le (A.1 0 1) hd
+      set n : Int := A.1 0 1 / A.1 1 1
+      have h3 := Int.emod_lt_abs (A.1 0 1) hd
+      rw [← abs_eq_self.mpr <| Int.emod_nonneg _ hd] at h3
+      simp only [smul_def, coe_T_zpow]
+      suffices A.1 1 0 = 0 ∧ n * A.1 1 0 < A.1 0 0 ∧
+          n * A.1 1 1 <= A.1 0 1 ∧ |A.1 0 1 + -(n * A.1 1 1)| < |A.1 1 1| by
+        simpa only [reps, Fin.isValue, cons_mul, Nat.succ_eq_add_one, Nat.reduceAdd, empty_mul,
+          Equiv.symm_apply_apply, Set.mem_ofPred_eq, of_apply, cons_val', vecMul, cons_dotProduct,
+          vecHead, one_mul, vecTail, Function.comp_apply, Fin.succ_zero_eq_one, neg_mul,
+          dotProduct_of_isEmpty, add_zero, zero_mul, zero_add, empty_val', cons_val_fin_one,
+          cons_val_one, cons_val_zero, lt_add_neg_iff_add_lt, le_add_neg_iff_add_le]
+      simp_all only [mul_comm n, zero_mul, ← sub_eq_add_neg, ← h2,
+        Fin.isValue, and_true]
+    · simp only [reps, Fin.isValue, reduce_of_not_pos h h1, Int.ediv_neg, neg_neg, smul_def, ←
+        mul_assoc, S_mul_S_eq, neg_mul, one_mul, coe_T_zpow, mul_neg, cons_mul, Nat.succ_eq_add_one,
+        Nat.reduceAdd, empty_mul, Equiv.symm_apply_apply, neg_of, neg_cons, neg_empty,
+        Set.mem_ofPred_eq, of_apply, cons_val', Pi.neg_apply, vecMul, cons_dotProduct, vecHead,
+        vecTail, Function.comp_apply, Fin.succ_zero_eq_one, h, mul_zero, dotProduct_of_isEmpty,
+        add_zero, zero_mul, neg_zero, empty_val', cons_val_fin_one, cons_val_one, cons_val_zero,
+        lt_neg, neg_add_rev, zero_add, le_add_neg_iff_add_le, ← le_neg, abs_neg, true_and]
+      refine ⟨?_, Int.ediv_mul_le _ hd, ?_⟩
+      · simp only [Int.lt_iff_le_and_ne]
+        exact ⟨not_lt.mp h1, A_a_ne_zero h hm⟩
+      · rw [mul_comm, add_comm, ← Int.sub_eq_add_neg, ← Int.emod_def,
+abs_eq_self.mpr Int.emod_nonneg _ hd]
+        exact Int.emod_lt_abs _ hd
 
 中文:
 引理 reduce_mem_reps
@@ -627,7 +665,33 @@ lemma reduce_mem_reps
     by_cases h1 : 0 < A.1 0 0
     · simp only [reduce_of_pos h h1]
       have h2 := Int.emod_def (A.1 0 1) (A.1 1 1)
-      have h4 := Int.ediv_mul_le 
+      have h4 := Int.ediv_mul_le (A.1 0 1) hd
+      set n : Int := A.1 0 1 / A.1 1 1
+      have h3 := Int.emod_lt_abs (A.1 0 1) hd
+      rw [← abs_eq_self.mpr <| Int.emod_nonneg _ hd] at h3
+      simp only [smul_def, coe_T_zpow]
+      suffices A.1 1 0 = 0 ∧ n * A.1 1 0 < A.1 0 0 ∧
+          n * A.1 1 1 <= A.1 0 1 ∧ |A.1 0 1 + -(n * A.1 1 1)| < |A.1 1 1| by
+        simpa only [reps, Fin.isValue, cons_mul, Nat.succ_eq_add_one, Nat.reduceAdd, empty_mul,
+          Equiv.symm_apply_apply, Set.mem_ofPred_eq, of_apply, cons_val', vecMul, cons_dotProduct,
+          vecHead, one_mul, vecTail, Function.comp_apply, Fin.succ_zero_eq_one, neg_mul,
+          dotProduct_of_isEmpty, add_zero, zero_mul, zero_add, empty_val', cons_val_fin_one,
+          cons_val_one, cons_val_zero, lt_add_neg_iff_add_lt, le_add_neg_iff_add_le]
+      simp_all only [mul_comm n, zero_mul, ← sub_eq_add_neg, ← h2,
+        Fin.isValue, and_true]
+    · simp only [reps, Fin.isValue, reduce_of_not_pos h h1, Int.ediv_neg, neg_neg, smul_def, ←
+        mul_assoc, S_mul_S_eq, neg_mul, one_mul, coe_T_zpow, mul_neg, cons_mul, Nat.succ_eq_add_one,
+        Nat.reduceAdd, empty_mul, Equiv.symm_apply_apply, neg_of, neg_cons, neg_empty,
+        Set.mem_ofPred_eq, of_apply, cons_val', Pi.neg_apply, vecMul, cons_dotProduct, vecHead,
+        vecTail, Function.comp_apply, Fin.succ_zero_eq_one, h, mul_zero, dotProduct_of_isEmpty,
+        add_zero, zero_mul, neg_zero, empty_val', cons_val_fin_one, cons_val_one, cons_val_zero,
+        lt_neg, neg_add_rev, zero_add, le_add_neg_iff_add_le, ← le_neg, abs_neg, true_and]
+      refine ⟨?_, Int.ediv_mul_le _ hd, ?_⟩
+      · simp only [Int.lt_iff_le_and_ne]
+        exact ⟨not_lt.mp h1, A_a_ne_zero h hm⟩
+      · rw [mul_comm, add_comm, ← Int.sub_eq_add_neg, ← Int.emod_def,
+abs_eq_self.mpr Int.emod_nonneg _ hd]
+        exact Int.emod_lt_abs _ hd
 
 Depends on / 依赖: A_d_ne_zero, Int.ediv_mul_le, Int.emod_def, Int.emod_lt_abs, Int.emod_nonneg, abs_eq_self, abs_eq_self.mpr, coe_T_zpow, ediv_mul_le, emod_def, emod_lt_abs, emod_nonneg, reduce_of_pos, reduce_rec, reduce_reduceStep, smul_def
 -/
@@ -740,7 +804,9 @@ lemma prop_red_T_pow
     simpa only [add_comm (n : Int), zpow_add _ 1, ← smul_eq_mul, zpow_one, smul_assoc,
       prop_red_T hS hT]
   | pred m hm =>
-    rwa [sub_eq_neg_add, zpow_add, zpow_neg_one, ← prop_red_T hS hT, mul_smul
+    rwa [sub_eq_neg_add, zpow_add, zpow_neg_one, ← prop_red_T hS hT, mul_smul, smul_inv_smul]
+
+@[elab_as_elim]
 
 中文:
 引理 prop_red_T_pow
@@ -753,7 +819,9 @@ lemma prop_red_T_pow
     simpa only [add_comm (n : Int), zpow_add _ 1, ← smul_eq_mul, zpow_one, smul_assoc,
       prop_red_T hS hT]
   | pred m hm =>
-    rwa [sub_eq_neg_add, zpow_add, zpow_neg_one, ← prop_red_T hS hT, mul_smul
+    rwa [sub_eq_neg_add, zpow_add, zpow_neg_one, ← prop_red_T hS hT, mul_smul, smul_inv_smul]
+
+@[elab_as_elim]
 -/
 private lemma prop_red_T_pow (hS : forall B, C B -> C (S • B)) (hT : forall B, C B -> C (T • B)) :
      forall B (n : Int), C (T ^ n • B) ↔ C B := by
@@ -781,7 +849,11 @@ theorem induction_on
   apply reduce_rec
   · intro A h
     by_cases h1 : 0 < A.1 0 0
-    · simp only [reduce_of_pos h h1, prop_red_T_
+    · simp only [reduce_of_pos h h1, prop_red_T_pow hS hT, imp_self]
+    · simp only [reduce_of_not_pos h h1, prop_red_T_pow hS hT, prop_red_S hS, imp_self]
+  intro A hc ih hA
+  rw [← reduce_reduceStep hc] at hA
+  simpa only [reduceStep, prop_red_S hS, prop_red_T_pow hS hT] using ih hA
 
 中文:
 定理 induction_on
@@ -794,7 +866,11 @@ theorem induction_on
   apply reduce_rec
   · intro A h
     by_cases h1 : 0 < A.1 0 0
-    · simp only [reduce_of_pos h h1, prop_red_T_
+    · simp only [reduce_of_pos h h1, prop_red_T_pow hS hT, imp_self]
+    · simp only [reduce_of_not_pos h h1, prop_red_T_pow hS hT, prop_red_S hS, imp_self]
+  intro A hc ih hA
+  rw [← reduce_reduceStep hc] at hA
+  simpa only [reduceStep, prop_red_S hS, prop_red_T_pow hS hT] using ih hA
 
 Depends on / 依赖: h_reduce, imp_self, prop_red_S, prop_red_T_pow, reduceStep, reduce_mem_reps, reduce_of_not_pos, reduce_of_pos, reduce_rec, reduce_reduceStep
 -/
@@ -867,7 +943,7 @@ lemma SpecialLinearGroup.SL2Z_generators
   | hS B hb =>
     exact mul_mem (subset_closure (Set.mem_insert S {T})) hb
   | hT B hb =>
-    exact mul_mem (subset_closure (Set.mem_insert_
+    exact mul_mem (subset_closure (Set.mem_insert_of_mem S rfl)) hb
 
 中文:
 引理 SpecialLinearGroup.SL2Z_generators
@@ -882,7 +958,7 @@ lemma SpecialLinearGroup.SL2Z_generators
   | hS B hb =>
     exact mul_mem (subset_closure (Set.mem_insert S {T})) hb
   | hT B hb =>
-    exact mul_mem (subset_closure (Set.mem_insert_
+    exact mul_mem (subset_closure (Set.mem_insert_of_mem S rfl)) hb
 
 Depends on / 依赖: Set.mem_insert, Set.mem_insert_of_mem, eq_top_iff, induction_on, mem_insert, mem_insert_of_mem, mul_mem, one_mem, one_ne_zero, reps_one_id, subset_closure
 -/

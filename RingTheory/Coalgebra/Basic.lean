@@ -822,7 +822,7 @@ theorem comul_comp_fst
   · rw [comp_assoc, fst_comp_inl, comp_id, comp_assoc, comul_comp_inl, ← comp_assoc,
       ← TensorProduct.map_comp, fst_comp_inl, TensorProduct.map_id, id_comp]
   · rw [comp_assoc, fst_comp_inr, comp_zero, comp_assoc, comul_comp_inr, ← comp_assoc,
-      ← TensorProduct.map_comp, fst_co
+      ← TensorProduct.map_comp, fst_comp_inr, TensorProduct.map_zero_left, zero_comp]
 
 中文:
 定理 comul_comp_fst
@@ -831,7 +831,7 @@ theorem comul_comp_fst
   · rw [comp_assoc, fst_comp_inl, comp_id, comp_assoc, comul_comp_inl, ← comp_assoc,
       ← TensorProduct.map_comp, fst_comp_inl, TensorProduct.map_id, id_comp]
   · rw [comp_assoc, fst_comp_inr, comp_zero, comp_assoc, comul_comp_inr, ← comp_assoc,
-      ← TensorProduct.map_comp, fst_co
+      ← TensorProduct.map_comp, fst_comp_inr, TensorProduct.map_zero_left, zero_comp]
 
 Depends on / 依赖: TensorProduct, TensorProduct.map_comp, TensorProduct.map_id, TensorProduct.map_zero_left, comp_assoc, comp_id, comp_zero, comul_comp_inl, comul_comp_inr, fst_comp_inl, fst_comp_inr, id_comp, map_comp, map_id, map_zero_left, zero_comp
 -/
@@ -853,7 +853,7 @@ theorem comul_comp_snd
   · rw [comp_assoc, snd_comp_inl, comp_zero, comp_assoc, comul_comp_inl, ← comp_assoc,
       ← TensorProduct.map_comp, snd_comp_inl, TensorProduct.map_zero_left, zero_comp]
   · rw [comp_assoc, snd_comp_inr, comp_id, comp_assoc, comul_comp_inr, ← comp_assoc,
-      ← TensorProduct.map_com
+      ← TensorProduct.map_comp, snd_comp_inr, TensorProduct.map_id, id_comp]
 
 中文:
 定理 comul_comp_snd
@@ -862,7 +862,7 @@ theorem comul_comp_snd
   · rw [comp_assoc, snd_comp_inl, comp_zero, comp_assoc, comul_comp_inl, ← comp_assoc,
       ← TensorProduct.map_comp, snd_comp_inl, TensorProduct.map_zero_left, zero_comp]
   · rw [comp_assoc, snd_comp_inr, comp_id, comp_assoc, comul_comp_inr, ← comp_assoc,
-      ← TensorProduct.map_com
+      ← TensorProduct.map_comp, snd_comp_inr, TensorProduct.map_id, id_comp]
 
 Depends on / 依赖: TensorProduct, TensorProduct.map_comp, TensorProduct.map_id, TensorProduct.map_zero_left, comp_assoc, comp_id, comp_zero, comul_comp_inl, comul_comp_inr, id_comp, map_comp, map_id, map_zero_left, snd_comp_inl, snd_comp_inr, zero_comp
 -/
@@ -915,7 +915,24 @@ instance instCoalgebra
     · rw [comp_assoc, comul_comp_inl, ← comp_assoc, rTensor_comp_map, counit_comp_inl,
         ← lTensor_comp_rTensor, comp_assoc, rTensor_counit_comp_comul, lTensor_comp_mk]
     · rw [comp_assoc, comul_comp_inr, ← comp_assoc, rTensor_comp_map, counit_comp_inr,
-        ← lTensor_comp_
+        ← lTensor_comp_rTensor, comp_assoc, rTensor_counit_comp_comul, lTensor_comp_mk]
+  lTensor_counit_comp_comul := by
+    ext : 1
+    · rw [comp_assoc, comul_comp_inl, ← comp_assoc, lTensor_comp_map, counit_comp_inl,
+        ← rTensor_comp_lTensor, comp_assoc, lTensor_counit_comp_comul, rTensor_comp_flip_mk]
+    · rw [comp_assoc, comul_comp_inr, ← comp_assoc, lTensor_comp_map, counit_comp_inr,
+        ← rTensor_comp_lTensor, comp_assoc, lTensor_counit_comp_comul, rTensor_comp_flip_mk]
+  coassoc := by
+    dsimp +instances only [instCoalgebraStruct]
+    ext x : 2 <;> dsimp only [comp_apply, LinearEquiv.coe_coe, coe_inl, coe_inr, coprod_apply]
+    · simp only [map_zero, add_zero]
+      simp_rw [← comp_apply, ← comp_assoc, rTensor_comp_map, lTensor_comp_map, coprod_inl,
+        ← map_comp_rTensor, ← map_comp_lTensor, comp_assoc, ← coassoc, ← comp_assoc,
+        TensorProduct.map_map_comp_assoc_eq, comp_apply, LinearEquiv.coe_coe]
+    · simp only [map_zero, zero_add]
+      simp_rw [← comp_apply, ← comp_assoc, rTensor_comp_map, lTensor_comp_map, coprod_inr,
+        ← map_comp_rTensor, ← map_comp_lTensor, comp_assoc, ← coassoc, ← comp_assoc,
+        TensorProduct.map_map_comp_assoc_eq, comp_apply, LinearEquiv.coe_coe]
 
 中文:
 实例 instCoalgebra
@@ -925,7 +942,24 @@ instance instCoalgebra
     · rw [comp_assoc, comul_comp_inl, ← comp_assoc, rTensor_comp_map, counit_comp_inl,
         ← lTensor_comp_rTensor, comp_assoc, rTensor_counit_comp_comul, lTensor_comp_mk]
     · rw [comp_assoc, comul_comp_inr, ← comp_assoc, rTensor_comp_map, counit_comp_inr,
-        ← lTensor_comp_
+        ← lTensor_comp_rTensor, comp_assoc, rTensor_counit_comp_comul, lTensor_comp_mk]
+  lTensor_counit_comp_comul := by
+    ext : 1
+    · rw [comp_assoc, comul_comp_inl, ← comp_assoc, lTensor_comp_map, counit_comp_inl,
+        ← rTensor_comp_lTensor, comp_assoc, lTensor_counit_comp_comul, rTensor_comp_flip_mk]
+    · rw [comp_assoc, comul_comp_inr, ← comp_assoc, lTensor_comp_map, counit_comp_inr,
+        ← rTensor_comp_lTensor, comp_assoc, lTensor_counit_comp_comul, rTensor_comp_flip_mk]
+  coassoc := by
+    dsimp +instances only [instCoalgebraStruct]
+    ext x : 2 <;> dsimp only [comp_apply, LinearEquiv.coe_coe, coe_inl, coe_inr, coprod_apply]
+    · simp only [map_zero, add_zero]
+      simp_rw [← comp_apply, ← comp_assoc, rTensor_comp_map, lTensor_comp_map, coprod_inl,
+        ← map_comp_rTensor, ← map_comp_lTensor, comp_assoc, ← coassoc, ← comp_assoc,
+        TensorProduct.map_map_comp_assoc_eq, comp_apply, LinearEquiv.coe_coe]
+    · simp only [map_zero, zero_add]
+      simp_rw [← comp_apply, ← comp_assoc, rTensor_comp_map, lTensor_comp_map, coprod_inr,
+        ← map_comp_rTensor, ← map_comp_lTensor, comp_assoc, ← coassoc, ← comp_assoc,
+        TensorProduct.map_map_comp_assoc_eq, comp_apply, LinearEquiv.coe_coe]
 
 Depends on / 依赖: comp_assoc, comul_comp_inl, comul_comp_inr, counit_comp_inl, counit_comp_inr, lTensor_comp_map, lTensor_comp_mk, lTensor_comp_rTensor, lTensor_counit_comp_comul, rTensor_comp_lTensor, rTensor_comp_map, rTensor_counit_comp_comul
 -/
@@ -1137,7 +1171,13 @@ instance instCoalgebra
     rw [comp_assoc]; rw [comul_comp_lsingle]; rw [← comp_assoc]; rw [rTensor_comp_map]; rw [counit_comp_lsingle]; rw [← lTensor_comp_rTensor]; rw [comp_assoc]; rw [rTensor_counit_comp_comul]; rw [lTensor_comp_mk]
   lTensor_counit_comp_comul := by
     ext : 1
-    rw [comp_assoc]; rw [c
+    rw [comp_assoc]; rw [comul_comp_lsingle]; rw [← comp_assoc]; rw [lTensor_comp_map]; rw [counit_comp_lsingle]; rw [← rTensor_comp_lTensor]; rw [comp_assoc]; rw [lTensor_counit_comp_comul]; rw [rTensor_comp_flip_mk]
+  coassoc := by
+    ext i : 1
+    simp_rw [comp_assoc, comul_comp_lsingle, ← comp_assoc, lTensor_comp_map, comul_comp_lsingle,
+      comp_assoc, ← comp_assoc comul, rTensor_comp_map, comul_comp_lsingle, ← map_comp_rTensor,
+      ← map_comp_lTensor, comp_assoc, ← coassoc, ← comp_assoc comul, ← comp_assoc,
+        TensorProduct.map_map_comp_assoc_eq]
 
 中文:
 实例 instCoalgebra
@@ -1147,7 +1187,13 @@ instance instCoalgebra
     rw [comp_assoc]; rw [comul_comp_lsingle]; rw [← comp_assoc]; rw [rTensor_comp_map]; rw [counit_comp_lsingle]; rw [← lTensor_comp_rTensor]; rw [comp_assoc]; rw [rTensor_counit_comp_comul]; rw [lTensor_comp_mk]
   lTensor_counit_comp_comul := by
     ext : 1
-    rw [comp_assoc]; rw [c
+    rw [comp_assoc]; rw [comul_comp_lsingle]; rw [← comp_assoc]; rw [lTensor_comp_map]; rw [counit_comp_lsingle]; rw [← rTensor_comp_lTensor]; rw [comp_assoc]; rw [lTensor_counit_comp_comul]; rw [rTensor_comp_flip_mk]
+  coassoc := by
+    ext i : 1
+    simp_rw [comp_assoc, comul_comp_lsingle, ← comp_assoc, lTensor_comp_map, comul_comp_lsingle,
+      comp_assoc, ← comp_assoc comul, rTensor_comp_map, comul_comp_lsingle, ← map_comp_rTensor,
+      ← map_comp_lTensor, comp_assoc, ← coassoc, ← comp_assoc comul, ← comp_assoc,
+        TensorProduct.map_map_comp_assoc_eq]
 
 Depends on / 依赖: coassoc, comp_assoc, comul_comp_lsingle, counit_comp_lsingle, lTensor_comp_map, lTensor_comp_mk, lTensor_comp_rTensor, lTensor_counit_comp_comul, rTensor_comp_flip_mk, rTensor_comp_lTensor, rTensor_comp_map, rTensor_counit_comp_comul
 -/
@@ -1344,7 +1390,13 @@ instance instCoalgebra
     rw [comp_assoc]; rw [comul_comp_lsingle]; rw [← comp_assoc]; rw [rTensor_comp_map]; rw [counit_comp_lsingle]; rw [← lTensor_comp_rTensor]; rw [comp_assoc]; rw [rTensor_counit_comp_comul]; rw [lTensor_comp_mk]
   lTensor_counit_comp_comul := by
     ext : 1
-    rw [comp_assoc]; rw [c
+    rw [comp_assoc]; rw [comul_comp_lsingle]; rw [← comp_assoc]; rw [lTensor_comp_map]; rw [counit_comp_lsingle]; rw [← rTensor_comp_lTensor]; rw [comp_assoc]; rw [lTensor_counit_comp_comul]; rw [rTensor_comp_flip_mk]
+  coassoc := by
+    ext i : 1
+    simp_rw [comp_assoc, comul_comp_lsingle, ← comp_assoc, lTensor_comp_map, comul_comp_lsingle,
+      comp_assoc, ← comp_assoc comul, rTensor_comp_map, comul_comp_lsingle, ← map_comp_rTensor,
+      ← map_comp_lTensor, comp_assoc, ← coassoc, ← comp_assoc comul, ← comp_assoc,
+        TensorProduct.map_map_comp_assoc_eq]
 
 中文:
 实例 instCoalgebra
@@ -1354,7 +1406,13 @@ instance instCoalgebra
     rw [comp_assoc]; rw [comul_comp_lsingle]; rw [← comp_assoc]; rw [rTensor_comp_map]; rw [counit_comp_lsingle]; rw [← lTensor_comp_rTensor]; rw [comp_assoc]; rw [rTensor_counit_comp_comul]; rw [lTensor_comp_mk]
   lTensor_counit_comp_comul := by
     ext : 1
-    rw [comp_assoc]; rw [c
+    rw [comp_assoc]; rw [comul_comp_lsingle]; rw [← comp_assoc]; rw [lTensor_comp_map]; rw [counit_comp_lsingle]; rw [← rTensor_comp_lTensor]; rw [comp_assoc]; rw [lTensor_counit_comp_comul]; rw [rTensor_comp_flip_mk]
+  coassoc := by
+    ext i : 1
+    simp_rw [comp_assoc, comul_comp_lsingle, ← comp_assoc, lTensor_comp_map, comul_comp_lsingle,
+      comp_assoc, ← comp_assoc comul, rTensor_comp_map, comul_comp_lsingle, ← map_comp_rTensor,
+      ← map_comp_lTensor, comp_assoc, ← coassoc, ← comp_assoc comul, ← comp_assoc,
+        TensorProduct.map_map_comp_assoc_eq]
 
 Depends on / 依赖: coassoc, comp_assoc, comul_comp_lsingle, counit_comp_lsingle, lTensor_comp_map, lTensor_comp_mk, lTensor_comp_rTensor, lTensor_counit_comp_comul, rTensor_comp_flip_mk, rTensor_comp_lTensor, rTensor_comp_map, rTensor_counit_comp_comul
 -/
@@ -1711,7 +1769,13 @@ instance instCoalgebra
     rw [comp_assoc]; rw [comul_comp_single]; rw [← comp_assoc]; rw [rTensor_comp_map]; rw [counit_comp_single]; rw [← lTensor_comp_rTensor]; rw [comp_assoc]; rw [rTensor_counit_comp_comul]; rw [lTensor_comp_mk]
   lTensor_counit_comp_comul := by
     ext : 1
-    rw [comp_assoc]; rw [com
+    rw [comp_assoc]; rw [comul_comp_single]; rw [← comp_assoc]; rw [lTensor_comp_map]; rw [counit_comp_single]; rw [← rTensor_comp_lTensor]; rw [comp_assoc]; rw [lTensor_counit_comp_comul]; rw [rTensor_comp_flip_mk]
+  coassoc := by
+    ext : 1
+    simp_rw [comp_assoc, comul_comp_single, ← comp_assoc, lTensor_comp_map, comul_comp_single,
+      comp_assoc, ← comp_assoc comul, rTensor_comp_map, comul_comp_single, ← map_comp_rTensor,
+      ← map_comp_lTensor, comp_assoc, ← coassoc, ← comp_assoc comul, ← comp_assoc,
+      map_map_comp_assoc_eq]
 
 中文:
 实例 instCoalgebra
@@ -1721,7 +1785,13 @@ instance instCoalgebra
     rw [comp_assoc]; rw [comul_comp_single]; rw [← comp_assoc]; rw [rTensor_comp_map]; rw [counit_comp_single]; rw [← lTensor_comp_rTensor]; rw [comp_assoc]; rw [rTensor_counit_comp_comul]; rw [lTensor_comp_mk]
   lTensor_counit_comp_comul := by
     ext : 1
-    rw [comp_assoc]; rw [com
+    rw [comp_assoc]; rw [comul_comp_single]; rw [← comp_assoc]; rw [lTensor_comp_map]; rw [counit_comp_single]; rw [← rTensor_comp_lTensor]; rw [comp_assoc]; rw [lTensor_counit_comp_comul]; rw [rTensor_comp_flip_mk]
+  coassoc := by
+    ext : 1
+    simp_rw [comp_assoc, comul_comp_single, ← comp_assoc, lTensor_comp_map, comul_comp_single,
+      comp_assoc, ← comp_assoc comul, rTensor_comp_map, comul_comp_single, ← map_comp_rTensor,
+      ← map_comp_lTensor, comp_assoc, ← coassoc, ← comp_assoc comul, ← comp_assoc,
+      map_map_comp_assoc_eq]
 
 Depends on / 依赖: coassoc, comp_assoc, comul_comp_single, counit_comp_single, lTensor_comp_map, lTensor_comp_mk, lTensor_comp_rTensor, lTensor_counit_comp_comul, rTensor_comp_flip_mk, rTensor_comp_lTensor, rTensor_comp_map, rTensor_counit_comp_comul, simp_rw
 -/
@@ -1777,7 +1847,7 @@ abbreviation coalgebraStruct
   { comul :=
       TensorProduct.map (e.linearEquiv R).symm.toLinearMap (e.linearEquiv R).symm.toLinearMap ∘ₗ
         comul ∘ₗ (e.linearEquiv R).toLinearMap
-    counit := counit ∘ₗ (e.lin
+    counit := counit ∘ₗ (e.linearEquiv R).toLinearMap }
 
 中文:
 缩写 coalgebraStruct
@@ -1790,7 +1860,7 @@ abbreviation coalgebraStruct
   { comul :=
       TensorProduct.map (e.linearEquiv R).symm.toLinearMap (e.linearEquiv R).symm.toLinearMap ∘ₗ
         comul ∘ₗ (e.linearEquiv R).toLinearMap
-    counit := counit ∘ₗ (e.lin
+    counit := counit ∘ₗ (e.linearEquiv R).toLinearMap }
 
 Depends on / 依赖: addCommMonoid, e.addCommMonoid
 -/
@@ -1821,7 +1891,23 @@ abbreviation coalgebra
     rTensor_counit_comp_comul := by
       ext
       apply (TensorProduct.map_bijective (f := .id) Function.bijective_id
-        (e.linearEquiv R).bijective).inject
+        (e.linearEquiv R).bijective).injective
+      simpa +instances [coalgebraStruct, LinearMap.comp_assoc, TensorProduct.map_map,
+        LinearMap.rTensor] using! Coalgebra.rTensor_counit_comul _
+    lTensor_counit_comp_comul := by
+      ext
+      apply (TensorProduct.map_bijective (g := .id) (e.linearEquiv R).bijective
+        Function.bijective_id).injective
+      simpa +instances [coalgebraStruct, LinearMap.comp_assoc, TensorProduct.map_map,
+        LinearMap.lTensor] using! Coalgebra.lTensor_counit_comul _
+    coassoc := by
+      ext
+      apply (TensorProduct.map_bijective (e.linearEquiv R).bijective <|
+        TensorProduct.map_bijective (e.linearEquiv R).bijective
+        (e.linearEquiv R).bijective).injective
+      simp +instances [coalgebraStruct, e.tensorProductAssoc_def R, TensorProduct.congr,
+        ← LinearMap.comp_assoc, TensorProduct.map_map, ← TensorProduct.map_comp]
+      simpa [LinearMap.comp_assoc, -coassoc_apply] using! coassoc_apply (R := R) (A := B) _ }
 
 中文:
 缩写 coalgebra
@@ -1835,7 +1921,23 @@ abbreviation coalgebra
     rTensor_counit_comp_comul := by
       ext
       apply (TensorProduct.map_bijective (f := .id) Function.bijective_id
-        (e.linearEquiv R).bijective).inject
+        (e.linearEquiv R).bijective).injective
+      simpa +instances [coalgebraStruct, LinearMap.comp_assoc, TensorProduct.map_map,
+        LinearMap.rTensor] using! Coalgebra.rTensor_counit_comul _
+    lTensor_counit_comp_comul := by
+      ext
+      apply (TensorProduct.map_bijective (g := .id) (e.linearEquiv R).bijective
+        Function.bijective_id).injective
+      simpa +instances [coalgebraStruct, LinearMap.comp_assoc, TensorProduct.map_map,
+        LinearMap.lTensor] using! Coalgebra.lTensor_counit_comul _
+    coassoc := by
+      ext
+      apply (TensorProduct.map_bijective (e.linearEquiv R).bijective <|
+        TensorProduct.map_bijective (e.linearEquiv R).bijective
+        (e.linearEquiv R).bijective).injective
+      simp +instances [coalgebraStruct, e.tensorProductAssoc_def R, TensorProduct.congr,
+        ← LinearMap.comp_assoc, TensorProduct.map_map, ← TensorProduct.map_comp]
+      simpa [LinearMap.comp_assoc, -coassoc_apply] using! coassoc_apply (R := R) (A := B) _ }
 
 Depends on / 依赖: addCommMonoid, e.addCommMonoid
 -/

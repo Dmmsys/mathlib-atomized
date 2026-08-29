@@ -134,7 +134,30 @@ definition toValued
       refine ⟨?_, ?_⟩
       · rintro ⟨ε, hε, h⟩
         rcases RankLeOne.exists_val_lt (valuation (K := K)) with H | H
-        · use Units
+        · use Units.mk0 (valuation.restrict 1) (by simp)
+          intro x hx
+          simp only [Units.val_mk0, mem_ofPred_eq, map_one] at hx
+          by_cases hx0 : x = 0
+          · exact h (hx0 ▸ Metric.mem_ball_self hε)
+          · exfalso
+            rw [← (valuation (K := K)).restrict.zero_iff]; rw [← ne_eq]; rw [← isUnit_iff_ne_zero] at hx0
+            apply not_le.mpr hx
+            apply le_of_eq
+            rw [eq_comm]
+            simpa only [Units.ext_iff, hx0.unit_spec, Units.val_one,
+              Submonoid.mk_eq_one] using! H.elim hx0.unit 1
+        · obtain ⟨x, hx, hxy⟩ := H (γ := ⟨ε, le_of_lt hε⟩) (pos_iff_ne_zero.mp hε)
+          use Units.mk0 (valuation.restrict x) (by simp [Valuation.restrict_def, hx])
+          intro y hy
+          apply h
+          simp only [Metric.mem_ball, dist_zero_right]
+          simp only [Units.val_mk0, mem_ofPred_eq, restrict_lt_iff, ← NNReal.coe_lt_coe] at hy
+          apply lt_trans hy
+          simpa [RankLeOne.hom', valuation.restrict_def] using! hxy
+      · rintro ⟨ε, hε⟩
+        refine ⟨(embedding ε.1 : Real>=0), ?_, fun x hx => hε ?_⟩
+· exact NNReal.coe_pos.mpr embedding_strictMono.lt_iff_lt.mpr ε.zero_lt
+        · simpa [restrict_lt_iff_lt_embedding] using! (mem_ball_zero_iff.mp hx) }
 
 中文:
 定义 toValued
@@ -147,7 +170,30 @@ definition toValued
       refine ⟨?_, ?_⟩
       · rintro ⟨ε, hε, h⟩
         rcases RankLeOne.exists_val_lt (valuation (K := K)) with H | H
-        · use Units
+        · use Units.mk0 (valuation.restrict 1) (by simp)
+          intro x hx
+          simp only [Units.val_mk0, mem_ofPred_eq, map_one] at hx
+          by_cases hx0 : x = 0
+          · exact h (hx0 ▸ Metric.mem_ball_self hε)
+          · exfalso
+            rw [← (valuation (K := K)).restrict.zero_iff]; rw [← ne_eq]; rw [← isUnit_iff_ne_zero] at hx0
+            apply not_le.mpr hx
+            apply le_of_eq
+            rw [eq_comm]
+            simpa only [Units.ext_iff, hx0.unit_spec, Units.val_one,
+              Submonoid.mk_eq_one] using! H.elim hx0.unit 1
+        · obtain ⟨x, hx, hxy⟩ := H (γ := ⟨ε, le_of_lt hε⟩) (pos_iff_ne_zero.mp hε)
+          use Units.mk0 (valuation.restrict x) (by simp [Valuation.restrict_def, hx])
+          intro y hy
+          apply h
+          simp only [Metric.mem_ball, dist_zero_right]
+          simp only [Units.val_mk0, mem_ofPred_eq, restrict_lt_iff, ← NNReal.coe_lt_coe] at hy
+          apply lt_trans hy
+          simpa [RankLeOne.hom', valuation.restrict_def] using! hxy
+      · rintro ⟨ε, hε⟩
+        refine ⟨(embedding ε.1 : Real>=0), ?_, fun x hx => hε ?_⟩
+· exact NNReal.coe_pos.mpr embedding_strictMono.lt_iff_lt.mpr ε.zero_lt
+        · simpa [restrict_lt_iff_lt_embedding] using! (mem_ball_zero_iff.mp hx) }
 
 Depends on / 依赖: IsUniformAddGroup, Metric, Metric.mem_ball_self, Metric.mem_nhds_iff, RankLeOne, RankLeOne.exists_val_lt, Units.mk0, Units.val_mk0, exists_val_lt, hK.toUniformSpace, is_topological_valuation, map_one, mem_ball_self, mem_nhds_iff, mem_ofPred_eq, ne_eq, restrict, restrict.zero_iff, toUniformSpace, val_mk0
 -/
@@ -351,7 +397,49 @@ definition toNormedField
     dist := fun x y => val.v.norm (x - y)
     dist_self := fun x => by
       simp only [sub_self, Valuation.norm, Valuation.map_zero, hv.hom.map_zero, NNReal.coe_zero]
-    dist_comm := fun x y => by simp only [Valuation.norm]; rw [← neg_sub, Va
+    dist_comm := fun x y => by simp only [Valuation.norm]; rw [← neg_sub, Valuation.map_neg]
+    dist_triangle := fun x y z => by
+      simp only [← sub_add_sub_cancel x y z]
+      exact le_trans (val.v.norm_add_le _ _)
+        (max_le_add_of_nonneg (val.v.norm_nonneg _) (val.v.norm_nonneg _))
+    eq_of_dist_eq_zero := fun hxy => eq_of_sub_eq_zero (val.v.norm_eq_zero hxy)
+    dist_eq := fun x y => by
+      simp only [Valuation.norm]
+      rw [← v.restrict.map_neg]; rw [neg_sub]; rw [sub_eq_add_neg]; rw [add_comm]
+    norm_mul := fun x y => by simp only [Valuation.norm, ← NNReal.coe_mul, map_mul]
+    toUniformSpace := Valued.toUniformSpace
+    uniformity_dist := by
+      have : Nonempty { ε : Real // ε > 0 } := nonempty_Ioi_subtype
+      ext U
+      rw [hasBasis_iff.mp (Valued.hasBasis_uniformity L Γ₀)]; rw [iInf_subtype']; rw [mem_iInf_of_directed]
+      · simp only [true_and, mem_principal, Subtype.exists, gt_iff_lt, exists_prop]
+        refine ⟨fun ⟨ε, hε⟩ => ?_, fun ⟨r, hr_pos, hr⟩ => ?_⟩
+        · set δ : Real>=0 := hv.hom _ ε with hδ
+          have hδ_pos : 0 < δ := by
+            rw [hδ]; rw [← map_zero hv.hom]
+            exact hv.strictMono _ (Units.zero_lt ε)
+          use δ, hδ_pos
+          apply subset_trans _ hε
+          intro x hx
+          simp only [mem_ofPred_eq, Valuation.norm, hδ, NNReal.coe_lt_coe] at hx
+          rw [mem_ofPred]; rw [← neg_sub]; rw [Valuation.map_neg]
+          exact (RankOne.strictMono Valued.v).lt_iff_lt.mp hx
+        · have : Nontrivial Γ₀ˣ := (nontrivial_iff_exists_ne (1 : Γ₀ˣ)).mpr
+            ⟨RankOne.unit val.v, RankOne.unit_ne_one val.v⟩
+          obtain ⟨u, hu⟩ := Real.exists_lt_of_strictMono hv.strictMono hr_pos
+          use u
+          apply subset_trans _ hr
+          intro x hx
+          simp only [Valuation.norm, mem_ofPred_eq]
+          apply lt_trans _ hu
+          rw [NNReal.coe_lt_coe]; rw [← neg_sub]; rw [Valuation.map_neg]
+          exact (RankOne.strictMono Valued.v).lt_iff_lt.mpr hx
+      · simp only [Directed]
+        intro x y
+        use min x y
+        simp only [le_principal_iff, mem_principal, ofPred_subset_ofPred, Prod.forall]
+        exact ⟨fun a b hab => lt_of_lt_of_le hab (min_le_left _ _), fun a b hab =>
+            lt_of_lt_of_le hab (min_le_right _ _)⟩ }
 
 中文:
 定义 toNormedField
@@ -361,7 +449,49 @@ definition toNormedField
     dist := fun x y => val.v.norm (x - y)
     dist_self := fun x => by
       simp only [sub_self, Valuation.norm, Valuation.map_zero, hv.hom.map_zero, NNReal.coe_zero]
-    dist_comm := fun x y => by simp only [Valuation.norm]; rw [← neg_sub, Va
+    dist_comm := fun x y => by simp only [Valuation.norm]; rw [← neg_sub, Valuation.map_neg]
+    dist_triangle := fun x y z => by
+      simp only [← sub_add_sub_cancel x y z]
+      exact le_trans (val.v.norm_add_le _ _)
+        (max_le_add_of_nonneg (val.v.norm_nonneg _) (val.v.norm_nonneg _))
+    eq_of_dist_eq_zero := fun hxy => eq_of_sub_eq_zero (val.v.norm_eq_zero hxy)
+    dist_eq := fun x y => by
+      simp only [Valuation.norm]
+      rw [← v.restrict.map_neg]; rw [neg_sub]; rw [sub_eq_add_neg]; rw [add_comm]
+    norm_mul := fun x y => by simp only [Valuation.norm, ← NNReal.coe_mul, map_mul]
+    toUniformSpace := Valued.toUniformSpace
+    uniformity_dist := by
+      have : Nonempty { ε : Real // ε > 0 } := nonempty_Ioi_subtype
+      ext U
+      rw [hasBasis_iff.mp (Valued.hasBasis_uniformity L Γ₀)]; rw [iInf_subtype']; rw [mem_iInf_of_directed]
+      · simp only [true_and, mem_principal, Subtype.exists, gt_iff_lt, exists_prop]
+        refine ⟨fun ⟨ε, hε⟩ => ?_, fun ⟨r, hr_pos, hr⟩ => ?_⟩
+        · set δ : Real>=0 := hv.hom _ ε with hδ
+          have hδ_pos : 0 < δ := by
+            rw [hδ]; rw [← map_zero hv.hom]
+            exact hv.strictMono _ (Units.zero_lt ε)
+          use δ, hδ_pos
+          apply subset_trans _ hε
+          intro x hx
+          simp only [mem_ofPred_eq, Valuation.norm, hδ, NNReal.coe_lt_coe] at hx
+          rw [mem_ofPred]; rw [← neg_sub]; rw [Valuation.map_neg]
+          exact (RankOne.strictMono Valued.v).lt_iff_lt.mp hx
+        · have : Nontrivial Γ₀ˣ := (nontrivial_iff_exists_ne (1 : Γ₀ˣ)).mpr
+            ⟨RankOne.unit val.v, RankOne.unit_ne_one val.v⟩
+          obtain ⟨u, hu⟩ := Real.exists_lt_of_strictMono hv.strictMono hr_pos
+          use u
+          apply subset_trans _ hr
+          intro x hx
+          simp only [Valuation.norm, mem_ofPred_eq]
+          apply lt_trans _ hu
+          rw [NNReal.coe_lt_coe]; rw [← neg_sub]; rw [Valuation.map_neg]
+          exact (RankOne.strictMono Valued.v).lt_iff_lt.mpr hx
+      · simp only [Directed]
+        intro x y
+        use min x y
+        simp only [le_principal_iff, mem_principal, ofPred_subset_ofPred, Prod.forall]
+        exact ⟨fun a b hab => lt_of_lt_of_le hab (min_le_left _ _), fun a b hab =>
+            lt_of_lt_of_le hab (min_le_right _ _)⟩ }
 
 Depends on / 依赖: NNReal, NNReal.coe_zero, Valuation, Valuation.map_neg, Valuation.map_zero, Valuation.norm, coe_zero, dist_comm, dist_self, dist_triangle, eq_of_dist_eq_zero, hv.hom.map_zero, le_trans, map_neg, map_zero, max_le_add_of_nonneg, neg_sub, norm_add_le, norm_nonneg, sub_add_sub_cancel
 -/
@@ -721,7 +851,13 @@ definition toNontriviallyNormedField
     rcases Valuation.val_le_one_or_val_inv_le_one val.v x with h | h
     · use x⁻¹
       simp only [toNormedField.one_lt_norm_iff, map_inv₀, one_lt_inv₀ (zero_lt_iff.mpr hx.1),
-          lt_of_le_
+          lt_of_le_of_ne h hx.2]
+    · use x
+      simp only [map_inv₀, inv_le_one₀ <| zero_lt_iff.mpr hx.1] at h
+      simp only [toNormedField.one_lt_norm_iff, lt_of_le_of_ne h hx.2.symm]
+}
+
+scoped[Valued] attribute [instance] Valued.toNontriviallyNormedField
 
 中文:
 定义 toNontriviallyNormedField
@@ -733,7 +869,13 @@ definition toNontriviallyNormedField
     rcases Valuation.val_le_one_or_val_inv_le_one val.v x with h | h
     · use x⁻¹
       simp only [toNormedField.one_lt_norm_iff, map_inv₀, one_lt_inv₀ (zero_lt_iff.mpr hx.1),
-          lt_of_le_
+          lt_of_le_of_ne h hx.2]
+    · use x
+      simp only [map_inv₀, inv_le_one₀ <| zero_lt_iff.mpr hx.1] at h
+      simp only [toNormedField.one_lt_norm_iff, lt_of_le_of_ne h hx.2.symm]
+}
+
+scoped[Valued] attribute [instance] Valued.toNontriviallyNormedField
 -/
 def toNontriviallyNormedField : NontriviallyNormedField L := {
   val.toNormedField with

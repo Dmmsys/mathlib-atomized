@@ -1146,7 +1146,7 @@ theorem op_smul_inter_nonempty_iff
     have : MulOpposite.op (a⁻¹ * b) = x := congr_arg MulOpposite.op H
     exact ⟨b, mem_inter (mem_smul_set.mpr ⟨a, ha, by simp [← this]⟩) hb⟩
 
-@
+@[to_additive (attr := simp)]
 
 中文:
 定理 op_smul_inter_nonempty_iff
@@ -1160,7 +1160,7 @@ theorem op_smul_inter_nonempty_iff
     have : MulOpposite.op (a⁻¹ * b) = x := congr_arg MulOpposite.op H
     exact ⟨b, mem_inter (mem_smul_set.mpr ⟨a, ha, by simp [← this]⟩) hb⟩
 
-@
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: MulOpposite, MulOpposite.op, congr_arg, mem_inter, mem_smul_set, mem_smul_set.mp, mem_smul_set.mpr
 -/
@@ -1214,7 +1214,7 @@ alias iUnion_smul_eq_setOf_exists := iUnion_smul_eq_ofPred_exists
 @[deprecated (since := "2026-07-09")]
 alias iUnion_vadd_eq_setOf_exists := iUnion_vadd_eq_ofPred_exists
 
-@[to_additiv
+@[to_additive (attr := simp)]
 
 中文:
 定理 iUnion_smul_eq_ofPred_存在
@@ -1229,7 +1229,7 @@ alias iUnion_smul_eq_setOf_exists := iUnion_smul_eq_ofPred_exists
 @[deprecated (since := "2026-07-09")]
 alias iUnion_vadd_eq_setOf_exists := iUnion_vadd_eq_ofPred_exists
 
-@[to_additiv
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: iUnion_inv_smul, iUnion_ofPred, preimage, preimage_smul, simp_rw
 -/
@@ -1414,7 +1414,7 @@ lemma exists_smul_inter_smul_subset_smul_inv_mul_inter_inv_mul
   calc
     a • s inter b • t subseteq (z • s⁻¹) * s inter ((z • t⁻¹) * t) := by
       gcongr <;> apply smul_set_subset_mul <;> simpa
-    _ = z • ((s⁻¹ * s) inter (t⁻¹ * t)) := by
+    _ = z • ((s⁻¹ * s) inter (t⁻¹ * t)) := by simp_rw [Set.smul_set_inter, smul_mul_assoc]
 
 中文:
 引理 存在_smul_inter_smul_subset_smul_inv_mul_inter_inv_mul
@@ -1426,7 +1426,7 @@ lemma exists_smul_inter_smul_subset_smul_inv_mul_inter_inv_mul
   calc
     a • s inter b • t subseteq (z • s⁻¹) * s inter ((z • t⁻¹) * t) := by
       gcongr <;> apply smul_set_subset_mul <;> simpa
-    _ = z • ((s⁻¹ * s) inter (t⁻¹ * t)) := by
+    _ = z • ((s⁻¹ * s) inter (t⁻¹ * t)) := by simp_rw [Set.smul_set_inter, smul_mul_assoc]
 
 Depends on / 依赖: Set.smul_set_inter, eq_empty_or_nonempty, simp_rw, smul_mul_assoc, smul_set_inter, smul_set_subset_mul, subseteq
 -/

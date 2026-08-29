@@ -927,7 +927,12 @@ theorem degree_add_eq_of_leadingCoeff_add_ne_zero
     | Or.inr (Or.inl HEq) =>
       le_of_not_gt fun hlt : max (degree p) (degree q) > degree (p + q) =>
 h
-          s
+          show leadingCoeff p + leadingCoeff q = 0 by
+            rw [HEq]; rw [max_self] at hlt
+            rw [leadingCoeff]; rw [leadingCoeff]; rw [natDegree_eq_of_degree_eq HEq]; rw [← coeff_add]
+            exact coeff_natDegree_eq_zero_of_degree_lt hlt
+    | Or.inr (Or.inr hlt) => by
+      rw [degree_add_eq_left_of_degree_lt hlt]; rw [max_eq_left_of_lt hlt]
 
 中文:
 定理 degree_add_eq_of_leadingCoeff_add_ne_zero
@@ -939,7 +944,12 @@ h
     | Or.inr (Or.inl HEq) =>
       le_of_not_gt fun hlt : max (degree p) (degree q) > degree (p + q) =>
 h
-          s
+          show leadingCoeff p + leadingCoeff q = 0 by
+            rw [HEq]; rw [max_self] at hlt
+            rw [leadingCoeff]; rw [leadingCoeff]; rw [natDegree_eq_of_degree_eq HEq]; rw [← coeff_add]
+            exact coeff_natDegree_eq_zero_of_degree_lt hlt
+    | Or.inr (Or.inr hlt) => by
+      rw [degree_add_eq_left_of_degree_lt hlt]; rw [max_eq_left_of_lt hlt]
 
 Depends on / 依赖: Or.inl, Or.inr, coeff_add, coeff_natDegree_eq_zero_of_degree_lt, degree, degree_add_eq_right_of_degree_lt, degree_add_le, le_antisymm, le_of_not_gt, leadingCoeff, lt_trichotomy, max_eq_right_of_lt, max_self, natDegree_eq_of_degree_eq
 -/
@@ -1193,7 +1203,26 @@ theorem coeff_mul_degree_add_degree
       coeff_mul _ _ _
     _ = coeff p (natDegree p) * coeff q (natDegree q) := by
       refine Finset.sum_eq_single (natDegree p, natDegree q) ?_ ?_
-      · rint
+      · rintro ⟨i, j⟩ h₁ h₂
+        rw [mem_antidiagonal] at h₁
+        by_cases H : natDegree p < i
+        · rw [coeff_eq_zero_of_degree_lt
+              (lt_of_le_of_lt degree_le_natDegree (WithBot.coe_lt_coe.2 H)),
+            zero_mul]
+        · rw [not_lt_iff_eq_or_lt] at H
+          rcases H with H | H
+          · simp_all
+          · suffices natDegree q < j by
+              rw [coeff_eq_zero_of_degree_lt
+                  (lt_of_le_of_lt degree_le_natDegree (WithBot.coe_lt_coe.2 this))]; rw [mul_zero]
+            by_contra! H'
+            exact
+              ne_of_lt (Nat.lt_of_lt_of_le (Nat.add_lt_add_right H j) (Nat.add_le_add_left H' _))
+                h₁
+      · intro H
+        exfalso
+        apply H
+        rw [mem_antidiagonal]
 
 中文:
 定理 coeff_mul_degree_add_degree
@@ -1204,7 +1233,26 @@ theorem coeff_mul_degree_add_degree
       coeff_mul _ _ _
     _ = coeff p (natDegree p) * coeff q (natDegree q) := by
       refine Finset.sum_eq_single (natDegree p, natDegree q) ?_ ?_
-      · rint
+      · rintro ⟨i, j⟩ h₁ h₂
+        rw [mem_antidiagonal] at h₁
+        by_cases H : natDegree p < i
+        · rw [coeff_eq_zero_of_degree_lt
+              (lt_of_le_of_lt degree_le_natDegree (WithBot.coe_lt_coe.2 H)),
+            zero_mul]
+        · rw [not_lt_iff_eq_or_lt] at H
+          rcases H with H | H
+          · simp_all
+          · suffices natDegree q < j by
+              rw [coeff_eq_zero_of_degree_lt
+                  (lt_of_le_of_lt degree_le_natDegree (WithBot.coe_lt_coe.2 this))]; rw [mul_zero]
+            by_contra! H'
+            exact
+              ne_of_lt (Nat.lt_of_lt_of_le (Nat.add_lt_add_right H j) (Nat.add_le_add_left H' _))
+                h₁
+      · intro H
+        exfalso
+        apply H
+        rw [mem_antidiagonal]
 
 Depends on / 依赖: Finset, Finset.sum_eq_single, WithBot, WithBot.coe_lt_coe, antidiagonal, coe_lt_coe, coeff_eq_zero_of_degree_lt, coeff_mul, degree_le_natDegree, lt_of_le_of_lt, mem_antidiagonal, natDegree, not_lt_iff_eq_or_lt, sum_eq_single, zero_mul
 -/
@@ -1248,7 +1296,8 @@ theorem degree_mul'
   le_antisymm (degree_mul_le _ _)
     (by
       rw [degree_eq_natDegree hp]; rw [degree_eq_natDegree hq]
-   
+      refine le_degree_of_ne_zero (n := natDegree p + natDegree q) ?_
+      rwa [coeff_mul_degree_add_degree])
 
 中文:
 定理 degree_mul'
@@ -1258,7 +1307,8 @@ theorem degree_mul'
   le_antisymm (degree_mul_le _ _)
     (by
       rw [degree_eq_natDegree hp]; rw [degree_eq_natDegree hq]
-   
+      refine le_degree_of_ne_zero (n := natDegree p + natDegree q) ?_
+      rwa [coeff_mul_degree_add_degree])
 
 Depends on / 依赖: coeff_mul_degree_add_degree, degree_eq_natDegree, degree_mul_le, le_antisymm, le_degree_of_ne_zero, leadingCoeff_zero, mul_zero, natDegree, zero_mul
 -/
@@ -1440,7 +1490,8 @@ theorem natDegree_pow'
       have h1 := h
       rw [← leadingCoeff_pow' h1]; rw [hpn0]; rw [leadingCoeff_zero] at h; exact h rfl
 Option.some_inj.1
-    
+      show (natDegree (p ^ n) : WithBot Nat) = (n * natDegree p : Nat) by
+        rw [← degree_eq_natDegree hpn]; rw [degree_pow' h]; rw [degree_eq_natDegree hp0]; simp
 
 中文:
 定理 natDegree_pow'
@@ -1454,7 +1505,8 @@ Option.some_inj.1
       have h1 := h
       rw [← leadingCoeff_pow' h1]; rw [hpn0]; rw [leadingCoeff_zero] at h; exact h rfl
 Option.some_inj.1
-    
+      show (natDegree (p ^ n) : WithBot Nat) = (n * natDegree p : Nat) by
+        rw [← degree_eq_natDegree hpn]; rw [degree_pow' h]; rw [degree_eq_natDegree hp0]; simp
 
 Depends on / 依赖: Classical, Classical.decEq, Option.some_inj, WithBot, degree_eq_natDegree, degree_pow, leadingCoeff_pow, leadingCoeff_zero, natDegree, some_inj, zero_pow
 -/
@@ -1512,7 +1564,7 @@ theorem leadingCoeff_mul_monic
       rw [H]; rw [leadingCoeff_eq_zero.1 H]; rw [zero_mul]; rw [leadingCoeff_zero])
     fun H : leadingCoeff p != 0 => by
       rw [leadingCoeff_mul']; rw [hq.leadingCoeff]; rw [mul_one]
-      rwa [hq.leadingCoeff, m
+      rwa [hq.leadingCoeff, mul_one]
 
 中文:
 定理 leadingCoeff_mul_monic
@@ -1523,7 +1575,7 @@ theorem leadingCoeff_mul_monic
       rw [H]; rw [leadingCoeff_eq_zero.1 H]; rw [zero_mul]; rw [leadingCoeff_zero])
     fun H : leadingCoeff p != 0 => by
       rw [leadingCoeff_mul']; rw [hq.leadingCoeff]; rw [mul_one]
-      rwa [hq.leadingCoeff, m
+      rwa [hq.leadingCoeff, mul_one]
 
 Depends on / 依赖: Classical, Classical.decEq, Decidable, Decidable.byCases, byCases, hq.leadingCoeff, leadingCoeff, leadingCoeff_eq_zero, leadingCoeff_mul, leadingCoeff_zero, mul_one, zero_mul
 -/
@@ -1768,7 +1820,15 @@ theorem coeff_pow_mul_natDegree
       by_cases hp2 : p ^ i = 0
       · rw [hp2, zero_mul, coeff_zero]
       · apply coeff_eq_zero_of_natDegree_lt
-        hav
+        have h1 : (p ^ i).natDegree < i * p.natDegree := by
+          refine lt_of_le_of_ne natDegree_pow_le fun h => hp2 ?_
+          rw [← h]; rw [hp1] at hi
+          exact leadingCoeff_eq_zero.mp hi
+        calc
+          (p ^ i * p).natDegree <= (p ^ i).natDegree + p.natDegree := natDegree_mul_le
+          _ < i * p.natDegree + p.natDegree := by gcongr
+    · rw [← natDegree_pow' hp1, ← leadingCoeff_pow' hp1]
+      exact coeff_mul_degree_add_degree _ _
 
 中文:
 定理 coeff_pow_mul_natDegree
@@ -1783,7 +1843,15 @@ theorem coeff_pow_mul_natDegree
       by_cases hp2 : p ^ i = 0
       · rw [hp2, zero_mul, coeff_zero]
       · apply coeff_eq_zero_of_natDegree_lt
-        hav
+        have h1 : (p ^ i).natDegree < i * p.natDegree := by
+          refine lt_of_le_of_ne natDegree_pow_le fun h => hp2 ?_
+          rw [← h]; rw [hp1] at hi
+          exact leadingCoeff_eq_zero.mp hi
+        calc
+          (p ^ i * p).natDegree <= (p ^ i).natDegree + p.natDegree := natDegree_mul_le
+          _ < i * p.natDegree + p.natDegree := by gcongr
+    · rw [← natDegree_pow' hp1, ← leadingCoeff_pow' hp1]
+      exact coeff_mul_degree_add_degree _ _
 
 Depends on / 依赖: Nat.succ_mul, coeff_eq_zero_of_natDegree_lt, coeff_zero, leadingCoeff, leadingCoeff_eq_zero, leadingCoeff_eq_zero.mp, lt_of_le_of_ne, natDegree, natDegree_mul_le, natDegree_pow_le, p.leadingCoeff, p.natDegree, pow_succ, succ_mul, zero_mul
 -/
@@ -1821,7 +1889,10 @@ theorem coeff_mul_add_eq_of_natDegree_le
   obtain h | hdf' := lt_or_ge df df'
   · rw [coeff_eq_zero_of_natDegree_lt (hdf.trans_lt h), zero_mul]
   obtain h | hdg' := lt_or_ge dg dg'
-  · rw [coeff_eq_zero_of_natDegree_lt
+  · rw [coeff_eq_zero_of_natDegree_lt (hdg.trans_lt h), mul_zero]
+  obtain ⟨rfl, rfl⟩ :=
+    (add_eq_add_iff_eq_and_eq hdf' hdg').mp (mem_antidiagonal.1 hmem)
+  exact (hne rfl).elim
 
 中文:
 定理 coeff_mul_add_eq_of_natDegree_le
@@ -1833,7 +1904,10 @@ theorem coeff_mul_add_eq_of_natDegree_le
   obtain h | hdf' := lt_or_ge df df'
   · rw [coeff_eq_zero_of_natDegree_lt (hdf.trans_lt h), zero_mul]
   obtain h | hdg' := lt_or_ge dg dg'
-  · rw [coeff_eq_zero_of_natDegree_lt
+  · rw [coeff_eq_zero_of_natDegree_lt (hdg.trans_lt h), mul_zero]
+  obtain ⟨rfl, rfl⟩ :=
+    (add_eq_add_iff_eq_and_eq hdf' hdg').mp (mem_antidiagonal.1 hmem)
+  exact (hne rfl).elim
 
 Depends on / 依赖: Finset, Finset.sum_eq_single_of_mem, add_eq_add_iff_eq_and_eq, coeff_eq_zero_of_natDegree_lt, coeff_mul, hdf.trans_lt, hdg.trans_lt, lt_or_ge, mem_antidiagonal, mul_zero, sum_eq_single_of_mem, trans_lt, zero_mul
 -/
@@ -2428,7 +2502,7 @@ theorem leadingCoeff_sub_of_degree_eq
   replace h : degree p = degree (-q) := by rwa [q.degree_neg]
   replace hlc : leadingCoeff p + leadingCoeff (-q) != 0 := by
     rwa [← sub_ne_zero, sub_eq_add_neg, ← q.leadingCoeff_neg] at hlc
-  rw [sub_eq_add_neg]; rw [leadingCoeff_add_of_degree_eq h hlc]; rw [leadingCoeff_neg]; rw [sub_eq_add_n
+  rw [sub_eq_add_neg]; rw [leadingCoeff_add_of_degree_eq h hlc]; rw [leadingCoeff_neg]; rw [sub_eq_add_neg]
 
 中文:
 定理 leadingCoeff_sub_of_degree_eq
@@ -2437,7 +2511,7 @@ theorem leadingCoeff_sub_of_degree_eq
   replace h : degree p = degree (-q) := by rwa [q.degree_neg]
   replace hlc : leadingCoeff p + leadingCoeff (-q) != 0 := by
     rwa [← sub_ne_zero, sub_eq_add_neg, ← q.leadingCoeff_neg] at hlc
-  rw [sub_eq_add_neg]; rw [leadingCoeff_add_of_degree_eq h hlc]; rw [leadingCoeff_neg]; rw [sub_eq_add_n
+  rw [sub_eq_add_neg]; rw [leadingCoeff_add_of_degree_eq h hlc]; rw [leadingCoeff_neg]; rw [sub_eq_add_neg]
 
 Depends on / 依赖: classical, degree, degree_neg, leadingCoeff, leadingCoeff_add_of_degree_eq, leadingCoeff_neg, q.degree_neg, q.leadingCoeff_neg, replace, sub_eq_add_neg, sub_ne_zero
 -/

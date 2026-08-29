@@ -41,7 +41,10 @@ theorem mk_smul
   simp_rw [mk_eq_mk, abs_smul]
   refine ⟨⟨m, ?_⟩, ⟨n, ?_⟩⟩
   · rw [← smul_assoc]
-    exact le_smul_of_one_le_l
+    exact le_smul_of_one_le_left (by simp) hm
+  · have : n • |a| = (n • (1 : K)) • |a| := by rw [smul_assoc, one_smul]
+    rw [this]
+    exact smul_le_smul_of_nonneg_right hn (by simp)
 
 中文:
 定理 mk_smul
@@ -54,7 +57,10 @@ theorem mk_smul
   simp_rw [mk_eq_mk, abs_smul]
   refine ⟨⟨m, ?_⟩, ⟨n, ?_⟩⟩
   · rw [← smul_assoc]
-    exact le_smul_of_one_le_l
+    exact le_smul_of_one_le_left (by simp) hm
+  · have : n • |a| = (n • (1 : K)) • |a| := by rw [smul_assoc, one_smul]
+    rw [this]
+    exact smul_le_smul_of_nonneg_right hn (by simp)
 
 Depends on / 依赖: Archimedean, Archimedean.arch, Nontrivial, abs_smul, le_smul_of_one_le_left, mk_eq_mk, nontrivial_iff, nontrivial_iff.mpr, one_smul, simp_rw, smul_assoc, smul_le_smul_of_nonneg_right
 -/

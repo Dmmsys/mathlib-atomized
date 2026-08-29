@@ -303,6 +303,13 @@ definition IicProdIoc
     ext i
     · simp [mem_Iic.1 i.2]
     · simp [not_le.2 (mem_Ioc.1 i.2).1]
+  right_inv := fun x => funext fun i => by
+    by_cases hi : i.1 <= a <;> simp [hi]
+  measurable_toFun := by
+    refine measurable_pi_lambda _ (fun x => ?_)
+    by_cases h : x <= a
+    · simpa [h] using measurable_fst.eval
+    · simpa [h] using measurable_snd.eval
 
 中文:
 定义 IicProdIoc
@@ -314,6 +321,13 @@ definition IicProdIoc
     ext i
     · simp [mem_Iic.1 i.2]
     · simp [not_le.2 (mem_Ioc.1 i.2).1]
+  right_inv := fun x => funext fun i => by
+    by_cases hi : i.1 <= a <;> simp [hi]
+  measurable_toFun := by
+    refine measurable_pi_lambda _ (fun x => ?_)
+    by_cases h : x <= a
+    · simpa [h] using measurable_fst.eval
+    · simpa [h] using measurable_snd.eval
 
 Depends on / 依赖: mem_Iic
 -/
@@ -385,7 +399,11 @@ definition IicProdIoi
     · simp [mem_Iic.1 i.2]
     · simp [not_le.2 <| Set.mem_Ioi.1 i.2]
   right_inv := fun x => by simp
-  measura
+  measurable_toFun := by
+    refine measurable_pi_lambda _ (fun i => ?_)
+    by_cases hi : i <= a <;> simp only [Equiv.coe_fn_mk, hi, ↓reduceDIte]
+    · exact measurable_fst.eval
+    · exact measurable_snd.eval
 
 中文:
 定义 IicProdIoi
@@ -399,7 +417,11 @@ definition IicProdIoi
     · simp [mem_Iic.1 i.2]
     · simp [not_le.2 <| Set.mem_Ioi.1 i.2]
   right_inv := fun x => by simp
-  measura
+  measurable_toFun := by
+    refine measurable_pi_lambda _ (fun i => ?_)
+    by_cases hi : i <= a <;> simp only [Equiv.coe_fn_mk, hi, ↓reduceDIte]
+    · exact measurable_fst.eval
+    · exact measurable_snd.eval
 -/
 def IicProdIoi (a : ι) :
     ((Π i : Iic a, X i) × (Π i : Set.Ioi a, X i)) ≃ᵐ (Π n, X n) where
@@ -439,7 +461,8 @@ definition MeasurableEquiv.piSingleton
   right_inv := fun x => funext fun i => by cases Nat.mem_Ioc_succ' i; rfl
   measurable_toFun := by
     simp_rw [eqRec_eq_cast]
-    refine measurable_pi_lambda _ (fun i => (Measura
+    refine measurable_pi_lambda _ (fun i => (MeasurableEquiv.cast _ ?_).measurable)
+    cases Nat.mem_Ioc_succ' i; rfl
 
 中文:
 定义 可测等价.piSingleton
@@ -450,7 +473,8 @@ definition MeasurableEquiv.piSingleton
   right_inv := fun x => funext fun i => by cases Nat.mem_Ioc_succ' i; rfl
   measurable_toFun := by
     simp_rw [eqRec_eq_cast]
-    refine measurable_pi_lambda _ (fun i => (Measura
+    refine measurable_pi_lambda _ (fun i => (MeasurableEquiv.cast _ ?_).measurable)
+    cases Nat.mem_Ioc_succ' i; rfl
 
 Depends on / 依赖: Nat.mem_Ioc_succ, mem_Ioc_succ
 -/
@@ -516,7 +540,12 @@ lemma _root_.IicProdIoc_preimage
     Subtype.forall, mem_Iic, Set.mem_prod, frestrictLe₂_apply, restrict₂, mem_Ioc]
   refine ⟨fun h => ⟨fun i hi => ?_, fun i ⟨hi1, hi2⟩ => ?_⟩, fun ⟨h1, h2⟩ i hi => ?_⟩
   · convert! h i (hi.trans hab)
- 
+    rw [dif_pos hi]
+  · convert! h i hi2
+    rw [dif_neg (not_le.2 hi1)]
+  · split_ifs with hi3
+    · exact h1 i hi3
+    · exact h2 i ⟨not_le.1 hi3, hi⟩
 
 中文:
 引理 _root_.IicProdIoc_preimage
@@ -527,7 +556,12 @@ lemma _root_.IicProdIoc_preimage
     Subtype.forall, mem_Iic, Set.mem_prod, frestrictLe₂_apply, restrict₂, mem_Ioc]
   refine ⟨fun h => ⟨fun i hi => ?_, fun i ⟨hi1, hi2⟩ => ?_⟩, fun ⟨h1, h2⟩ i hi => ?_⟩
   · convert! h i (hi.trans hab)
- 
+    rw [dif_pos hi]
+  · convert! h i hi2
+    rw [dif_neg (not_le.2 hi1)]
+  · split_ifs with hi3
+    · exact h1 i hi3
+    · exact h2 i ⟨not_le.1 hi3, hi⟩
 -/
 lemma _root_.IicProdIoc_preimage {a b : ι} (hab : a <= b) (s : (i : Iic b) -> Set (X i)) :
     IicProdIoc a b ⁻¹' (Set.univ.pi s) =

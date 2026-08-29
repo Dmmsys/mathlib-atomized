@@ -61,7 +61,24 @@ theorem exists_countable_upperSemicontinuous_isGLB
 .isOpen_preimage d have U_open {f} (hf : f in 𝓕) (d : E) : IsOpen (U f d) := h𝓕_cont f hf
   have (d : E) : {x | s x < d} = ⋃ f : 𝓕, U f d := by
     ext x
-  
+    simp [U, isGLB_lt_iff (h𝓕 x)]
+  have (d : E) : exists A subseteq 𝓕, A.Countable ∧ {x | s x < d} = ⋃ f in A, U f d := by
+    simp_rw [this d]
+    rcases eq_open_union_countable (fun f : 𝓕 => U f d) (fun f => U_open f.2 d) with ⟨t, t_count, ht⟩
+    use (↑) '' t, image_val_subset, t_count.image _
+    rw [← ht]; rw [biUnion_image]
+  choose A A_sub A_count hA using this
+  set 𝓕' := ⋃ d in D, A d
+  have 𝓕'_sub : 𝓕' subseteq 𝓕 := iUnion₂_subset fun d _ => A_sub d
+  use 𝓕', 𝓕'_sub, D_count.biUnion fun d _ => A_count d
+  refine fun x => ⟨lowerBounds_mono_set (image_mono 𝓕'_sub) (h𝓕 x).1, fun e he => ?_⟩
+  by_contra! H
+  rcases D_dense.exists_between H with ⟨d, d_mem, hd⟩
+  obtain ⟨f, f_mem, hf⟩ : exists f in A d, f x < d := by
+    have : x in {y | s y < d} := hd.1
+    simpa only [hA d, mem_iUnion₂, exists_prop, U, mem_ofPred_eq] using this
+  suffices e < e by simpa
+.trans hd.2 exact (he (mem_image_of_mem _ (mem_iUnion₂_of_mem d_mem f_mem))).trans_lt hf
 
 中文:
 定理 存在_countable_upperSemicontinuous_isGLB
@@ -73,7 +90,24 @@ theorem exists_countable_upperSemicontinuous_isGLB
 .isOpen_preimage d have U_open {f} (hf : f in 𝓕) (d : E) : IsOpen (U f d) := h𝓕_cont f hf
   have (d : E) : {x | s x < d} = ⋃ f : 𝓕, U f d := by
     ext x
-  
+    simp [U, isGLB_lt_iff (h𝓕 x)]
+  have (d : E) : exists A subseteq 𝓕, A.Countable ∧ {x | s x < d} = ⋃ f in A, U f d := by
+    simp_rw [this d]
+    rcases eq_open_union_countable (fun f : 𝓕 => U f d) (fun f => U_open f.2 d) with ⟨t, t_count, ht⟩
+    use (↑) '' t, image_val_subset, t_count.image _
+    rw [← ht]; rw [biUnion_image]
+  choose A A_sub A_count hA using this
+  set 𝓕' := ⋃ d in D, A d
+  have 𝓕'_sub : 𝓕' subseteq 𝓕 := iUnion₂_subset fun d _ => A_sub d
+  use 𝓕', 𝓕'_sub, D_count.biUnion fun d _ => A_count d
+  refine fun x => ⟨lowerBounds_mono_set (image_mono 𝓕'_sub) (h𝓕 x).1, fun e he => ?_⟩
+  by_contra! H
+  rcases D_dense.exists_between H with ⟨d, d_mem, hd⟩
+  obtain ⟨f, f_mem, hf⟩ : exists f in A d, f x < d := by
+    have : x in {y | s y < d} := hd.1
+    simpa only [hA d, mem_iUnion₂, exists_prop, U, mem_ofPred_eq] using this
+  suffices e < e by simpa
+.trans hd.2 exact (he (mem_image_of_mem _ (mem_iUnion₂_of_mem d_mem f_mem))).trans_lt hf
 
 Depends on / 依赖: A.Countable, Countable, D_count, D_dense, IsOpen, U_open, eq_open_union_countable, exists_countable_dense, isGLB_lt_iff, isGLB_pi, isOpen_preimage, simp_rw, subseteq
 -/

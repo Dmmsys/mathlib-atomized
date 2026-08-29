@@ -322,7 +322,7 @@ lemma induction_on
     suffices forall n : Nat, motive (-n) from this (i + 1)
     intro n; induction n with
     | zero => simp [zero]
-    | succ n ih => simpa [natCast_succ, Int.neg_add, I
+    | succ n ih => simpa [natCast_succ, Int.neg_add, Int.sub_eq_add_neg] using pred _ ih
 
 中文:
 引理 induction_on
@@ -337,7 +337,7 @@ lemma induction_on
     suffices forall n : Nat, motive (-n) from this (i + 1)
     intro n; induction n with
     | zero => simp [zero]
-    | succ n ih => simpa [natCast_succ, Int.neg_add, I
+    | succ n ih => simpa [natCast_succ, Int.neg_add, Int.sub_eq_add_neg] using pred _ ih
 -/
 @[elab_as_elim, induction_eliminator] protected lemma induction_on {motive : Int -> Prop} (i : Int)
     (zero : motive 0) (succ : forall i : Nat, motive i -> motive (i + 1))

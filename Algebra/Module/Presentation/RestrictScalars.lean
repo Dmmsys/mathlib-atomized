@@ -74,7 +74,14 @@ definition restrictScalars
       · simp
       · intro r b w _ _ hw
         refine Submodule.add_mem _ ?_ hw
-
+        obtain ⟨β, rfl⟩ := presB.surjective_π b
+        apply Finsupp.induction (motive := fun β => Finsupp.single r (presB.π β) in _)
+        · simp
+        · intro g a f _ _ hf
+          rw [map_add]; rw [Finsupp.single_add]
+          refine Submodule.add_mem _ ?_ hf
+          rw [← Finsupp.smul_single_one]; rw [← Finsupp.smul_single_one]; rw [map_smul]; rw [Relations.Solution.π_single]; rw [smul_assoc]
+          exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨⟨g, r⟩, rfl⟩))
 
 中文:
 定义 restrictScalars
@@ -88,7 +95,14 @@ definition restrictScalars
       · simp
       · intro r b w _ _ hw
         refine Submodule.add_mem _ ?_ hw
-
+        obtain ⟨β, rfl⟩ := presB.surjective_π b
+        apply Finsupp.induction (motive := fun β => Finsupp.single r (presB.π β) in _)
+        · simp
+        · intro g a f _ _ hf
+          rw [map_add]; rw [Finsupp.single_add]
+          refine Submodule.add_mem _ ?_ hf
+          rw [← Finsupp.smul_single_one]; rw [← Finsupp.smul_single_one]; rw [map_smul]; rw [Relations.Solution.π_single]; rw [smul_assoc]
+          exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨⟨g, r⟩, rfl⟩))
 
 Depends on / 依赖: Finsupp, Finsupp.induction, Finsupp.single, Finsupp.single_add, Finsupp.smul_single_one, LinearMap, LinearMap.restrictScalars, Submodule, Submodule.add_mem, Submodule.mem_top, add_mem, finsupp, iff_true, map_add, mem_top, motive, ofExact, presB.finsupp, presB.surjective_, presM.G
 -/

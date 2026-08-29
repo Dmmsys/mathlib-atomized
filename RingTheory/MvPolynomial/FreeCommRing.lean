@@ -71,7 +71,16 @@ definition mvPolynomialSupportLEEquiv
       { toFun := fun m => if hm : m in monoms i then p ⟨i, ⟨m, hm⟩⟩ else 0
         support := {m in monoms i | exists hm : m in monoms i, p ⟨i, ⟨m, hm⟩⟩ != 0},
         mem_support_toFun := by simp },
-      fun i => Finset.
+      fun i => Finset.filter_subset _ _⟩,
+    left_inv := fun p => by
+      ext i m
+      simp only [coeff, ne_eq, exists_prop, dite_eq_ite, Finsupp.coe_mk, ite_eq_left_iff]
+      intro hm
+      have : m ∉ (p.1 i).support := fun h => hm (p.2 i h)
+      simpa [coeff, eq_comm, MvPolynomial.mem_support_iff] using this
+    right_inv := fun p => by ext; simp [coeff] }
+
+@[simp]
 
 中文:
 定义 mvPolynomialSupportLEEquiv
@@ -80,7 +89,16 @@ definition mvPolynomialSupportLEEquiv
       { toFun := fun m => if hm : m in monoms i then p ⟨i, ⟨m, hm⟩⟩ else 0
         support := {m in monoms i | exists hm : m in monoms i, p ⟨i, ⟨m, hm⟩⟩ != 0},
         mem_support_toFun := by simp },
-      fun i => Finset.
+      fun i => Finset.filter_subset _ _⟩,
+    left_inv := fun p => by
+      ext i m
+      simp only [coeff, ne_eq, exists_prop, dite_eq_ite, Finsupp.coe_mk, ite_eq_left_iff]
+      intro hm
+      have : m ∉ (p.1 i).support := fun h => hm (p.2 i h)
+      simpa [coeff, eq_comm, MvPolynomial.mem_support_iff] using this
+    right_inv := fun p => by ext; simp [coeff] }
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.filter_subset, Finsupp, Finsupp.coe_mk, MvPolynomial, coe_mk, dite_eq_ite, eq_comm, exists_prop, filter_subset, invFun, ite_eq_left_iff, left_inv, mem_support_toFun, monoms, ne_eq, ofCoeff, support
 -/
@@ -142,7 +160,9 @@ theorem lift_genericPolyMap
   conv_rhs => rw [← Finset.sum_attach]
   refine Finset.sum_congr rfl ?_
   intro m _
-  si
+  simp only [Finsupp.prod, map_prod, map_pow, lift_of, Subtype.coe_eta, Finset.coe_mem,
+    exists_prop, true_and, dite_eq_ite, ite_true, ite_not]
+  split_ifs with h0 <;> simp_all
 
 中文:
 定理 lift_genericPolyMap
@@ -154,7 +174,9 @@ theorem lift_genericPolyMap
   conv_rhs => rw [← Finset.sum_attach]
   refine Finset.sum_congr rfl ?_
   intro m _
-  si
+  simp only [Finsupp.prod, map_prod, map_pow, lift_of, Subtype.coe_eta, Finset.coe_mem,
+    exists_prop, true_and, dite_eq_ite, ite_true, ite_not]
+  split_ifs with h0 <;> simp_all
 
 Depends on / 依赖: Equiv.coe_fn_symm_mk, Finset, Finset.coe_mem, Finset.sum_attach, Finset.sum_congr, Finset.sum_filter, Finsupp, Finsupp.coe_mk, Finsupp.prod, Function, Function.comp, MvPolynomial, MvPolynomial.eval_eq, Subtype, Subtype.coe_eta, coe_eta, coe_fn_symm_mk, coe_mem, coe_mk, conv_rhs
 -/

@@ -126,7 +126,8 @@ theorem exists_isChain_of_le_chainHeight
       contrapose! h
 refine iSup_lt_iff.mpr ⟨n - 1, ?_, fun m => ENat.le_sub_one_of_lt h m.1 m.2.1 m.2.2⟩
       exact_mod_cast Nat.sub_one_lt h'
-    obtain ⟨u, h
+    obtain ⟨u, hu₁, hu₂⟩ := exists_subset_encard_eq ht₃
+    exact ⟨u, hu₁.trans ht₁, hu₂, ht₂.mono hu₁⟩
 
 中文:
 定理 存在_isChain_of_le_chainHeight
@@ -138,7 +139,8 @@ refine iSup_lt_iff.mpr ⟨n - 1, ?_, fun m => ENat.le_sub_one_of_lt h m.1 m.2.1 
       contrapose! h
 refine iSup_lt_iff.mpr ⟨n - 1, ?_, fun m => ENat.le_sub_one_of_lt h m.1 m.2.1 m.2.2⟩
       exact_mod_cast Nat.sub_one_lt h'
-    obtain ⟨u, h
+    obtain ⟨u, hu₁, hu₂⟩ := exists_subset_encard_eq ht₃
+    exact ⟨u, hu₁.trans ht₁, hu₂, ht₂.mono hu₁⟩
 
 Depends on / 依赖: ENat.le_sub_one_of_lt, IsChain, Nat.sub_one_lt, contrapose, encard, exists_subset_encard_eq, iSup_lt_iff, iSup_lt_iff.mpr, le_sub_one_of_lt, sub_one_lt, subseteq, t.encard
 -/
@@ -299,7 +301,7 @@ theorem chainHeight_eq_top_iff
   rw [← hn]; rw [he]
   exact_mod_cast lt_add_one _
 
-@[si
+@[simp]
 
 中文:
 定理 chainHeight_eq_top_iff
@@ -311,7 +313,7 @@ theorem chainHeight_eq_top_iff
   rw [← hn]; rw [he]
   exact_mod_cast lt_add_one _
 
-@[si
+@[simp]
 
 Depends on / 依赖: ENat.ne_top_iff_exists.mp, contrapose, exists_isChain_of_le_chainHeight, h.symm, le_top, le_top.trans_eq, lt_add_one, ne_top_iff_exists, not_isChain_of_chainHeight_lt_encard, trans_eq
 -/
@@ -526,7 +528,11 @@ theorem chainHeight_eq_of_relEmbedding
   refine eq_of_forall_natCast_le_iff fun n => ⟨fun hn => ?_, fun hn => ?_⟩
   · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
     rw [← ha₂]; rw [← Set.encard_preimage_of_injective_subset_range e.injective (by grind)]
-exact encard_le_chainHeight_of_isChain _ _ (preimage_subset
+exact encard_le_chainHeight_of_isChain _ _ (preimage_subset ha₁ e.injective.injOn)
+      ha₃.preimage_relEmbedding e
+  · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
+    rw [← ha₂]; rw [← e.injective.encard_image]
+exact encard_le_chainHeight_of_isChain _ _ (by grind) ha₃.image e
 
 中文:
 定理 chainHeight_eq_of_relEmbedding
@@ -535,7 +541,11 @@ exact encard_le_chainHeight_of_isChain _ _ (preimage_subset
   refine eq_of_forall_natCast_le_iff fun n => ⟨fun hn => ?_, fun hn => ?_⟩
   · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
     rw [← ha₂]; rw [← Set.encard_preimage_of_injective_subset_range e.injective (by grind)]
-exact encard_le_chainHeight_of_isChain _ _ (preimage_subset
+exact encard_le_chainHeight_of_isChain _ _ (preimage_subset ha₁ e.injective.injOn)
+      ha₃.preimage_relEmbedding e
+  · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
+    rw [← ha₂]; rw [← e.injective.encard_image]
+exact encard_le_chainHeight_of_isChain _ _ (by grind) ha₃.image e
 
 Depends on / 依赖: Set.encard_preimage_of_injective_subset_range, e.injective, e.injective.encard_image, e.injective.injOn, encard_image, encard_le_chainHeight_of_isChain, encard_preimage_of_injective_subset_range, eq_of_forall_natCast_le_iff, exists_isChain_of_le_chainHeight, injective, preimage_relEmbedding, preimage_subset
 -/

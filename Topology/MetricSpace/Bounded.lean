@@ -190,7 +190,8 @@ theorem eq_countable_union_of_isBounded_of_isOpen
   · exact ⟨fun i => ∅, monotone_const, by simp_all⟩
   refine ⟨fun i => U inter ball x i, fun i j hij => ?_, ?_, fun i => ⟨?_, hU.inter isOpen_ball⟩⟩
   · exact inter_subset_inter_right _ (ball_subset_ball (Nat.cast_le.2 hij))
-  · simp [← inter_iUnion
+  · simp [← inter_iUnion]
+  · exact isBounded_ball.subset inter_subset_right
 
 中文:
 定理 eq_countable_union_of_isBounded_of_isOpen
@@ -200,7 +201,8 @@ theorem eq_countable_union_of_isBounded_of_isOpen
   · exact ⟨fun i => ∅, monotone_const, by simp_all⟩
   refine ⟨fun i => U inter ball x i, fun i j hij => ?_, ?_, fun i => ⟨?_, hU.inter isOpen_ball⟩⟩
   · exact inter_subset_inter_right _ (ball_subset_ball (Nat.cast_le.2 hij))
-  · simp [← inter_iUnion
+  · simp [← inter_iUnion]
+  · exact isBounded_ball.subset inter_subset_right
 
 Depends on / 依赖: Nat.cast_le, U.eq_empty_or_nonempty, ball_subset_ball, cast_le, eq_empty_or_nonempty, hU.inter, inter_iUnion, inter_subset_inter_right, inter_subset_right, isBounded_ball, isBounded_ball.subset, isOpen_ball, monotone_const, subset
 -/
@@ -1149,7 +1151,10 @@ theorem exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWit
     rw [disjoint_assoc]; rw [inf_comm]; rw [hk.disjoint_nhdsSet_left]
 exact fun x hx => disjoint_left_comm.2
       tendsto_comap.disjoint (disjoint_cobounded_nhds _) (hf x hx)
-  rcases ((((hasBasis_nhdsSet _).inf_principal _)).disjoint_
+  rcases ((((hasBasis_nhdsSet _).inf_principal _)).disjoint_iff ((basis_sets _).comap _)).1 this
+    with ⟨U, ⟨hUo, hkU⟩, t, ht, hd⟩
+  refine ⟨U, hkU, hUo, (isBounded_compl_iff.2 ht).subset ?_⟩
+  rwa [image_subset_iff, preimage_compl, subset_compl_iff_disjoint_right]
 
 中文:
 定理 存在_isOpen_isBounded_image_inter_of_isCompact_of_对任意_continuousWithinAt
@@ -1158,7 +1163,10 @@ exact fun x hx => disjoint_left_comm.2
     rw [disjoint_assoc]; rw [inf_comm]; rw [hk.disjoint_nhdsSet_left]
 exact fun x hx => disjoint_left_comm.2
       tendsto_comap.disjoint (disjoint_cobounded_nhds _) (hf x hx)
-  rcases ((((hasBasis_nhdsSet _).inf_principal _)).disjoint_
+  rcases ((((hasBasis_nhdsSet _).inf_principal _)).disjoint_iff ((basis_sets _).comap _)).1 this
+    with ⟨U, ⟨hUo, hkU⟩, t, ht, hd⟩
+  refine ⟨U, hkU, hUo, (isBounded_compl_iff.2 ht).subset ?_⟩
+  rwa [image_subset_iff, preimage_compl, subset_compl_iff_disjoint_right]
 
 Depends on / 依赖: Disjoint, basis_sets, cobounded, disjoint, disjoint_assoc, disjoint_cobounded_nhds, disjoint_iff, disjoint_left_comm, disjoint_nhdsSet_left, hasBasis_nhdsSet, hk.disjoint_nhdsSet_left, image_subset_iff, inf_comm, inf_principal, isBounded_compl_iff, preimage_compl, subset, subset_compl_iff_disjoint_right, tendsto_comap, tendsto_comap.disjoint
 -/
@@ -2156,7 +2164,14 @@ theorem _root_.IsComplete.nonempty_iInter_of_nonempty_biInter
     exact hx n hn
   have : CauchySeq u := by
     apply cauchySeq_of_le_tendsto_0 _ _ h'
-    intro m n N hm 
+    intro m n N hm hn
+    exact dist_le_diam_of_mem (h's N) (I _ _ hm) (I _ _ hn)
+  obtain ⟨x, -, xlim⟩ : exists x in s 0, Tendsto (fun n : Nat => u n) atTop (𝓝 x) :=
+    cauchySeq_tendsto_of_isComplete h0 (fun n => I 0 n zero_le) this
+  refine ⟨x, mem_iInter.2 fun n => ?_⟩
+  apply (hs n).mem_of_tendsto xlim
+  filter_upwards [Ici_mem_atTop n] with p hp
+  exact I n p hp
 
 中文:
 定理 _root_.是完备.nonempty_i整数er_of_nonempty_bi整数er
@@ -2171,7 +2186,14 @@ theorem _root_.IsComplete.nonempty_iInter_of_nonempty_biInter
     exact hx n hn
   have : CauchySeq u := by
     apply cauchySeq_of_le_tendsto_0 _ _ h'
-    intro m n N hm 
+    intro m n N hm hn
+    exact dist_le_diam_of_mem (h's N) (I _ _ hm) (I _ _ hn)
+  obtain ⟨x, -, xlim⟩ : exists x in s 0, Tendsto (fun n : Nat => u n) atTop (𝓝 x) :=
+    cauchySeq_tendsto_of_isComplete h0 (fun n => I 0 n zero_le) this
+  refine ⟨x, mem_iInter.2 fun n => ?_⟩
+  apply (hs n).mem_of_tendsto xlim
+  filter_upwards [Ici_mem_atTop n] with p hp
+  exact I n p hp
 
 Depends on / 依赖: CauchySeq, Tendsto, cauchySeq_of_le_tendsto_0, cauchySeq_tendsto_of_isComplete, choose_spec, dist_le_diam_of_mem, mem_iInter, mem_of_subset_of_mem, zero_le
 -/
@@ -2422,7 +2444,8 @@ theorem exists_forall_le_of_isBounded
   have hU : {x : β | f x₀ < f x} in Filter.cocompact β := by
     refine Filter.mem_cocompact'.mpr ⟨_, ?_, fun ⦃_⦄ a => a⟩
     simp only [Set.compl_ofPred, not_lt]
-    exact Metric.isCompact_of_isClosed_isBounded (isClosed_le (by fun_prop) (by fun_prop))
+    exact Metric.isCompact_of_isClosed_isBounded (isClosed_le (by fun_prop) (by fun_prop)) h
+  filter_upwards [hU] with x hx using hx.le
 
 中文:
 定理 存在_对任意_le_of_isBounded
@@ -2432,7 +2455,8 @@ theorem exists_forall_le_of_isBounded
   have hU : {x : β | f x₀ < f x} in Filter.cocompact β := by
     refine Filter.mem_cocompact'.mpr ⟨_, ?_, fun ⦃_⦄ a => a⟩
     simp only [Set.compl_ofPred, not_lt]
-    exact Metric.isCompact_of_isClosed_isBounded (isClosed_le (by fun_prop) (by fun_prop))
+    exact Metric.isCompact_of_isClosed_isBounded (isClosed_le (by fun_prop) (by fun_prop)) h
+  filter_upwards [hU] with x hx using hx.le
 
 Depends on / 依赖: Filter, Filter.cocompact, Filter.mem_cocompact, Metric, Metric.isCompact_of_isClosed_isBounded, Set.compl_ofPred, cocompact, compl_ofPred, exists_forall_le, filter_upwards, fun_prop, hf.exists_forall_le, hx.le, isClosed_le, isCompact_of_isClosed_isBounded, mem_cocompact, not_lt
 -/

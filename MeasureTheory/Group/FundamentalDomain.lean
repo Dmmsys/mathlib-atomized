@@ -201,7 +201,15 @@ theorem mk_of_measure_univ_le
     aedisjoint
     ae_covers := by
       replace h_meas : forall g : G, NullMeasurableSet (g • s) μ := fun g => by
-        rw [← 
+        rw [← inv_inv g]; rw [← preimage_smul]; exact h_meas.preimage (h_qmp g⁻¹)
+      have h_meas' : NullMeasurableSet {a | exists g : G, g • a in s} μ := by
+        rw [← iUnion_smul_eq_ofPred_exists]; exact .iUnion h_meas
+      rw [ae_iff_measure_eq h_meas']; rw [← iUnion_smul_eq_ofPred_exists]
+      refine le_antisymm (measure_mono <| subset_univ _) ?_
+      rw [measure_iUnion₀ aedisjoint h_meas]
+      exact h_measure_univ_le }
+
+@[to_additive]
 
 中文:
 定理 mk_of_measure_univ_le
@@ -212,7 +220,15 @@ theorem mk_of_measure_univ_le
     aedisjoint
     ae_covers := by
       replace h_meas : forall g : G, NullMeasurableSet (g • s) μ := fun g => by
-        rw [← 
+        rw [← inv_inv g]; rw [← preimage_smul]; exact h_meas.preimage (h_qmp g⁻¹)
+      have h_meas' : NullMeasurableSet {a | exists g : G, g • a in s} μ := by
+        rw [← iUnion_smul_eq_ofPred_exists]; exact .iUnion h_meas
+      rw [ae_iff_measure_eq h_meas']; rw [← iUnion_smul_eq_ofPred_exists]
+      refine le_antisymm (measure_mono <| subset_univ _) ?_
+      rw [measure_iUnion₀ aedisjoint h_meas]
+      exact h_measure_univ_le }
+
+@[to_additive]
 
 Depends on / 依赖: AEDisjoint, NullMeasurableSet, Pairwise, ae_covers, ae_iff_measure_eq, aedisjoint, h_ae_disjoint, h_meas, h_meas.preimage, h_qmp, iUnion, iUnion_smul_eq_ofPred_exists, inv_inv, nullMeasurableSet, pairwise_aedisjoint_of_aedisjoint_forall_ne_one, preimage, preimage_smul, replace
 -/
@@ -337,7 +353,11 @@ theorem preimage_of_equiv
     lift e to G ≃ H using he
     have : (e.symm a⁻¹)⁻¹ != (e.symm b⁻¹)⁻¹ := by simp [hab]
     have := (h.aedisjoint this).preimage hf
-    simp onl
+    simp only [Semiconj] at hef
+    simpa only [onFun, ← preimage_smul_inv, preimage_preimage, ← hef, e.apply_symm_apply, inv_inv]
+      using this
+
+@[to_additive]
 
 中文:
 定理 preimage_of_equiv
@@ -348,7 +368,11 @@ theorem preimage_of_equiv
     lift e to G ≃ H using he
     have : (e.symm a⁻¹)⁻¹ != (e.symm b⁻¹)⁻¹ := by simp [hab]
     have := (h.aedisjoint this).preimage hf
-    simp onl
+    simp only [Semiconj] at hef
+    simpa only [onFun, ← preimage_smul_inv, preimage_preimage, ← hef, e.apply_symm_apply, inv_inv]
+      using this
+
+@[to_additive]
 
 Depends on / 依赖: h.nullMeasurableSet.preimage, nullMeasurableSet, preimage
 -/
@@ -646,7 +670,7 @@ theorem lintegral_eq_tsum'
     ∫⁻ x, f x ∂μ = ∑' g : G, ∫⁻ x in g • s, f x ∂μ := h.lintegral_eq_tsum f
     _ = ∑' g : G, ∫⁻ x in g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
 _ = ∑' g : G, ∫⁻ x in s, f (g⁻¹ • x) ∂μ := tsum_congr fun g => Eq.symm
-      (measurePreserving_smul g⁻¹ μ).setLIntegral_comp_emb (measurableEm
+      (measurePreserving_smul g⁻¹ μ).setLIntegral_comp_emb (measurableEmbedding_const_smul _) _ _
 
 中文:
 定理 lintegral_eq_tsum'
@@ -655,7 +679,7 @@ _ = ∑' g : G, ∫⁻ x in s, f (g⁻¹ • x) ∂μ := tsum_congr fun g => Eq.
     ∫⁻ x, f x ∂μ = ∑' g : G, ∫⁻ x in g • s, f x ∂μ := h.lintegral_eq_tsum f
     _ = ∑' g : G, ∫⁻ x in g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
 _ = ∑' g : G, ∫⁻ x in s, f (g⁻¹ • x) ∂μ := tsum_congr fun g => Eq.symm
-      (measurePreserving_smul g⁻¹ μ).setLIntegral_comp_emb (measurableEm
+      (measurePreserving_smul g⁻¹ μ).setLIntegral_comp_emb (measurableEmbedding_const_smul _) _ _
 
 Depends on / 依赖: Eq.symm, Equiv.inv, h.lintegral_eq_tsum, lintegral_eq_tsum, measurableEmbedding_const_smul, measurePreserving_smul, setLIntegral_comp_emb, tsum_congr, tsum_eq
 -/
@@ -732,7 +756,10 @@ theorem setLIntegral_eq_tsum'
     ∫⁻ x in t, f x ∂μ = ∑' g : G, ∫⁻ x in t inter g • s, f x ∂μ := h.setLIntegral_eq_tsum f t
     _ = ∑' g : G, ∫⁻ x in t inter g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
     _ = ∑' g : G, ∫⁻ x in g⁻¹ • (g • t inter s), f x ∂μ := by simp only [smul_set_inter, inv_smul_smul]
-_ = ∑' g : G,
+_ = ∑' g : G, ∫⁻ x in g • t inter s, f (g⁻¹ • x) ∂μ := tsum_congr fun g => Eq.symm
+      (measurePreserving_smul g⁻¹ μ).setLIntegral_comp_emb (measurableEmbedding_const_smul _) _ _
+
+@[to_additive]
 
 中文:
 定理 setL整数egral_eq_tsum'
@@ -741,7 +768,10 @@ _ = ∑' g : G,
     ∫⁻ x in t, f x ∂μ = ∑' g : G, ∫⁻ x in t inter g • s, f x ∂μ := h.setLIntegral_eq_tsum f t
     _ = ∑' g : G, ∫⁻ x in t inter g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
     _ = ∑' g : G, ∫⁻ x in g⁻¹ • (g • t inter s), f x ∂μ := by simp only [smul_set_inter, inv_smul_smul]
-_ = ∑' g : G,
+_ = ∑' g : G, ∫⁻ x in g • t inter s, f (g⁻¹ • x) ∂μ := tsum_congr fun g => Eq.symm
+      (measurePreserving_smul g⁻¹ μ).setLIntegral_comp_emb (measurableEmbedding_const_smul _) _ _
+
+@[to_additive]
 
 Depends on / 依赖: Eq.symm, Equiv.inv, h.setLIntegral_eq_tsum, inv_smul_smul, measurableEmbedding_const_smul, measurePreserving_smul, setLIntegral_comp_emb, setLIntegral_eq_tsum, smul_set_inter, tsum_congr, tsum_eq
 -/
@@ -878,7 +908,9 @@ theorem measure_eq_card_smul_of_smul_ae_eq_self
   replace ht : forall g : G, (g • t inter s : Set α) =ᵐ[μ] (t inter s : Set α) := fun g =>
     ae_eq_set_inter (ht g) (ae_eq_refl s)
   simp_rw [measure_congr (ht _), tsum_fintype, Finset.sum_const, Nat.card_eq_fintype_card,
-    Fin
+    Finset.card_univ]
+
+@[to_additive]
 
 中文:
 定理 measure_eq_card_smul_of_smul_ae_eq_self
@@ -889,7 +921,9 @@ theorem measure_eq_card_smul_of_smul_ae_eq_self
   replace ht : forall g : G, (g • t inter s : Set α) =ᵐ[μ] (t inter s : Set α) := fun g =>
     ae_eq_set_inter (ht g) (ae_eq_refl s)
   simp_rw [measure_congr (ht _), tsum_fintype, Finset.sum_const, Nat.card_eq_fintype_card,
-    Fin
+    Finset.card_univ]
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.card_univ, Finset.sum_const, Fintype, Fintype.ofFinite, Nat.card_eq_fintype_card, ae_eq_refl, ae_eq_set_inter, card_eq_fintype_card, card_univ, h.measure_eq_tsum, measure_congr, measure_eq_tsum, ofFinite, replace, simp_rw, sum_const, tsum_fintype
 -/
@@ -946,7 +980,7 @@ theorem measure_set_eq
     refine hs.setLIntegral_eq ht (Set.indicator A fun _ => 1) fun g x => ?_
     convert! (Set.indicator_comp_right (g • · : α -> α) (g := fun _ => (1 : Real>=0∞))).symm
     rw [hA g]
-  simpa [Measure.restrict_apply hA₀, 
+  simpa [Measure.restrict_apply hA₀, lintegral_indicator hA₀] using this
 
 中文:
 定理 measure_set_eq
@@ -956,7 +990,7 @@ theorem measure_set_eq
     refine hs.setLIntegral_eq ht (Set.indicator A fun _ => 1) fun g x => ?_
     convert! (Set.indicator_comp_right (g • · : α -> α) (g := fun _ => (1 : Real>=0∞))).symm
     rw [hA g]
-  simpa [Measure.restrict_apply hA₀, 
+  simpa [Measure.restrict_apply hA₀, lintegral_indicator hA₀] using this
 
 Depends on / 依赖: A.indicator, Measure, Measure.restrict_apply, Set.indicator, Set.indicator_comp_right, convert, hs.setLIntegral_eq, indicator, indicator_comp_right, lintegral_indicator, restrict_apply, setLIntegral_eq
 -/
@@ -1006,7 +1040,22 @@ theorem aestronglyMeasurable_on_iff
         AEStronglyMeasurable f (Measure.sum fun g : G => μ.restrict (g • t inter s)) := by
       simp only [← ht.restrict_restrict,
         ht.sum_restrict_of_ac restrict_le_self.absolutelyContinuous]
-    _ ↔ forall g : G, AEStronglyMeasurable f (μ.re
+    _ ↔ forall g : G, AEStronglyMeasurable f (μ.restrict (g • (g⁻¹ • s inter t))) := by
+      simp only [smul_set_inter, inter_comm, smul_inv_smul, aestronglyMeasurable_sum_measure_iff]
+    _ ↔ forall g : G, AEStronglyMeasurable f (μ.restrict (g⁻¹ • (g⁻¹⁻¹ • s inter t))) :=
+      inv_surjective.forall
+    _ ↔ forall g : G, AEStronglyMeasurable f (μ.restrict (g⁻¹ • (g • s inter t))) := by simp only [inv_inv]
+    _ ↔ forall g : G, AEStronglyMeasurable f (μ.restrict (g • s inter t)) := by
+      refine forall_congr' fun g => ?_
+      have he : MeasurableEmbedding (g⁻¹ • · : α -> α) := measurableEmbedding_const_smul _
+      rw [← image_smul]; rw [← ((measurePreserving_smul g⁻¹ μ).restrict_image_emb he
+        _).aestronglyMeasurable_comp_iff he]
+      simp only [Function.comp_def, hf]
+    _ ↔ AEStronglyMeasurable f (μ.restrict t) := by
+      simp only [← aestronglyMeasurable_sum_measure_iff, ← hs.restrict_restrict,
+        hs.sum_restrict_of_ac restrict_le_self.absolutelyContinuous]
+
+@[to_additive]
 
 中文:
 定理 aestronglyMeasurable_on_iff
@@ -1016,7 +1065,22 @@ theorem aestronglyMeasurable_on_iff
         AEStronglyMeasurable f (Measure.sum fun g : G => μ.restrict (g • t inter s)) := by
       simp only [← ht.restrict_restrict,
         ht.sum_restrict_of_ac restrict_le_self.absolutelyContinuous]
-    _ ↔ forall g : G, AEStronglyMeasurable f (μ.re
+    _ ↔ forall g : G, AEStronglyMeasurable f (μ.restrict (g • (g⁻¹ • s inter t))) := by
+      simp only [smul_set_inter, inter_comm, smul_inv_smul, aestronglyMeasurable_sum_measure_iff]
+    _ ↔ forall g : G, AEStronglyMeasurable f (μ.restrict (g⁻¹ • (g⁻¹⁻¹ • s inter t))) :=
+      inv_surjective.forall
+    _ ↔ forall g : G, AEStronglyMeasurable f (μ.restrict (g⁻¹ • (g • s inter t))) := by simp only [inv_inv]
+    _ ↔ forall g : G, AEStronglyMeasurable f (μ.restrict (g • s inter t)) := by
+      refine forall_congr' fun g => ?_
+      have he : MeasurableEmbedding (g⁻¹ • · : α -> α) := measurableEmbedding_const_smul _
+      rw [← image_smul]; rw [← ((measurePreserving_smul g⁻¹ μ).restrict_image_emb he
+        _).aestronglyMeasurable_comp_iff he]
+      simp only [Function.comp_def, hf]
+    _ ↔ AEStronglyMeasurable f (μ.restrict t) := by
+      simp only [← aestronglyMeasurable_sum_measure_iff, ← hs.restrict_restrict,
+        hs.sum_restrict_of_ac restrict_le_self.absolutelyContinuous]
+
+@[to_additive]
 -/
 protected theorem aestronglyMeasurable_on_iff {β : Type*} [TopologicalSpace β]
     [PseudoMetrizableSpace β] (hs : IsFundamentalDomain G s μ) (ht : IsFundamentalDomain G t μ)
@@ -1160,7 +1224,7 @@ theorem integral_eq_tsum'
     ∫ x, f x ∂μ = ∑' g : G, ∫ x in g • s, f x ∂μ := h.integral_eq_tsum f hf
     _ = ∑' g : G, ∫ x in g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
     _ = ∑' g : G, ∫ x in s, f (g⁻¹ • x) ∂μ := tsum_congr fun g =>
-      (measurePreserving_smul g⁻¹ μ).setIntegral_image_emb (measurableEmbeddin
+      (measurePreserving_smul g⁻¹ μ).setIntegral_image_emb (measurableEmbedding_const_smul _) _ _
 
 中文:
 定理 integral_eq_tsum'
@@ -1169,7 +1233,7 @@ theorem integral_eq_tsum'
     ∫ x, f x ∂μ = ∑' g : G, ∫ x in g • s, f x ∂μ := h.integral_eq_tsum f hf
     _ = ∑' g : G, ∫ x in g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
     _ = ∑' g : G, ∫ x in s, f (g⁻¹ • x) ∂μ := tsum_congr fun g =>
-      (measurePreserving_smul g⁻¹ μ).setIntegral_image_emb (measurableEmbeddin
+      (measurePreserving_smul g⁻¹ μ).setIntegral_image_emb (measurableEmbedding_const_smul _) _ _
 
 Depends on / 依赖: Equiv.inv, h.integral_eq_tsum, integral_eq_tsum, measurableEmbedding_const_smul, measurePreserving_smul, setIntegral_image_emb, tsum_congr, tsum_eq
 -/
@@ -1249,7 +1313,11 @@ theorem setIntegral_eq_tsum'
     ∫ x in t, f x ∂μ = ∑' g : G, ∫ x in t inter g • s, f x ∂μ := h.setIntegral_eq_tsum hf
     _ = ∑' g : G, ∫ x in t inter g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
     _ = ∑' g : G, ∫ x in g⁻¹ • (g • t inter s), f x ∂μ := by simp only [smul_set_inter, inv_smul_smul]
-    _ = ∑' g : G, ∫
+    _ = ∑' g : G, ∫ x in g • t inter s, f (g⁻¹ • x) ∂μ :=
+      tsum_congr fun g =>
+        (measurePreserving_smul g⁻¹ μ).setIntegral_image_emb (measurableEmbedding_const_smul _) _ _
+
+@[to_additive]
 
 中文:
 定理 set整数egral_eq_tsum'
@@ -1258,7 +1326,11 @@ theorem setIntegral_eq_tsum'
     ∫ x in t, f x ∂μ = ∑' g : G, ∫ x in t inter g • s, f x ∂μ := h.setIntegral_eq_tsum hf
     _ = ∑' g : G, ∫ x in t inter g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
     _ = ∑' g : G, ∫ x in g⁻¹ • (g • t inter s), f x ∂μ := by simp only [smul_set_inter, inv_smul_smul]
-    _ = ∑' g : G, ∫
+    _ = ∑' g : G, ∫ x in g • t inter s, f (g⁻¹ • x) ∂μ :=
+      tsum_congr fun g =>
+        (measurePreserving_smul g⁻¹ μ).setIntegral_image_emb (measurableEmbedding_const_smul _) _ _
+
+@[to_additive]
 
 Depends on / 依赖: Equiv.inv, h.setIntegral_eq_tsum, inv_smul_smul, measurableEmbedding_const_smul, measurePreserving_smul, setIntegral_eq_tsum, setIntegral_image_emb, smul_set_inter, tsum_congr, tsum_eq
 -/
@@ -1284,7 +1356,10 @@ theorem setIntegral_eq
   · have hft : IntegrableOn f t μ := by rwa [ht.integrableOn_iff hs hf]
     calc
       ∫ x in s, f x ∂μ = ∑' g : G, ∫ x in s inter g • t, f x ∂μ := ht.setIntegral_eq_tsum hfs
-      _ = ∑' g : G, ∫ x in g • t inter s, f (g⁻¹ • x) ∂μ := by simp only [hf, inter_co
+      _ = ∑' g : G, ∫ x in g • t inter s, f (g⁻¹ • x) ∂μ := by simp only [hf, inter_comm]
+      _ = ∫ x in t, f x ∂μ := (hs.setIntegral_eq_tsum' hft).symm
+  · rw [integral_undef hfs, integral_undef]
+    rwa [hs.integrableOn_iff ht hf] at hfs
 
 中文:
 定理 set整数egral_eq
@@ -1294,7 +1369,10 @@ theorem setIntegral_eq
   · have hft : IntegrableOn f t μ := by rwa [ht.integrableOn_iff hs hf]
     calc
       ∫ x in s, f x ∂μ = ∑' g : G, ∫ x in s inter g • t, f x ∂μ := ht.setIntegral_eq_tsum hfs
-      _ = ∑' g : G, ∫ x in g • t inter s, f (g⁻¹ • x) ∂μ := by simp only [hf, inter_co
+      _ = ∑' g : G, ∫ x in g • t inter s, f (g⁻¹ • x) ∂μ := by simp only [hf, inter_comm]
+      _ = ∫ x in t, f x ∂μ := (hs.setIntegral_eq_tsum' hft).symm
+  · rw [integral_undef hfs, integral_undef]
+    rwa [hs.integrableOn_iff ht hf] at hfs
 -/
 protected theorem setIntegral_eq (hs : IsFundamentalDomain G s μ) (ht : IsFundamentalDomain G t μ)
     {f : α -> E} (hf : forall (g : G) (x), f (g • x) = f x) : ∫ x in s, f x ∂μ = ∫ x in t, f x ∂μ := by
@@ -1364,7 +1442,8 @@ theorem exists_ne_one_smul_eq
   refine (Disjoint.inf_left _ ?_).inf_right _
   rw [Set.disjoint_left]
   rintro _ ⟨x, hx, rfl⟩ ⟨y, hy, hxy : g₂ • y = g₁ • x⟩
-  refine ht x hx y hy (g₂⁻¹ * g₁) (mt i
+  refine ht x hx y hy (g₂⁻¹ * g₁) (mt inv_mul_eq_one.1 hne.symm) ?_
+  rw [mul_smul]; rw [← hxy]; rw [inv_smul_smul]
 
 中文:
 定理 存在_ne_one_smul_eq
@@ -1376,7 +1455,8 @@ theorem exists_ne_one_smul_eq
   refine (Disjoint.inf_left _ ?_).inf_right _
   rw [Set.disjoint_left]
   rintro _ ⟨x, hx, rfl⟩ ⟨y, hy, hxy : g₂ • y = g₁ • x⟩
-  refine ht x hx y hy (g₂⁻¹ * g₁) (mt i
+  refine ht x hx y hy (g₂⁻¹ * g₁) (mt inv_mul_eq_one.1 hne.symm) ?_
+  rw [mul_smul]; rw [← hxy]; rw [inv_smul_smul]
 
 Depends on / 依赖: Disjoint, Disjoint.inf_left, Function, Function.onFun, Pairwise, Pairwise.aedisjoint, Set.disjoint_left, aedisjoint, contrapose, disjoint_left, hne.symm, hs.measure_le_of_pairwise_disjoint, inf_left, inf_right, inv_mul_eq_one, inv_smul_smul, measure_le_of_pairwise_disjoint, mul_smul
 -/
@@ -1409,7 +1489,11 @@ theorem essSup_measure_restrict
   refine sInf_le_sInf ?_
   rintro a (ha : (μ.restrict s) {x : α | a < f x} = 0)
   rw [Measure.restrict_apply₀' hs.nullMeasurableSet] at ha
-  refine measure_zero_
+  refine measure_zero_of_invariant hs _ ?_ ha
+  intro γ
+  ext x
+  rw [mem_smul_set_iff_inv_smul_mem]
+  simp only [mem_ofPred_eq, hf γ⁻¹ x]
 
 中文:
 定理 essSup_measure_restrict
@@ -1420,7 +1504,11 @@ theorem essSup_measure_restrict
   refine sInf_le_sInf ?_
   rintro a (ha : (μ.restrict s) {x : α | a < f x} = 0)
   rw [Measure.restrict_apply₀' hs.nullMeasurableSet] at ha
-  refine measure_zero_
+  refine measure_zero_of_invariant hs _ ?_ ha
+  intro γ
+  ext x
+  rw [mem_smul_set_iff_inv_smul_mem]
+  simp only [mem_ofPred_eq, hf γ⁻¹ x]
 
 Depends on / 依赖: Measure, Measure.restrict_apply, Measure.restrict_le_self, essSup_eq_sInf, essSup_mono_measure, hs.nullMeasurableSet, le_antisymm, measure_zero_of_invariant, mem_ofPred_eq, mem_smul_set_iff_inv_smul_mem, nullMeasurableSet, restrict, restrict_le_self, sInf_le_sInf
 -/
@@ -1894,7 +1982,15 @@ theorem fundamentalInterior
       ofPred_mem_eq, ← compl_iUnion]
     have :
       ((⋃ g : G, g⁻¹ • s) \ ⋃ g : G, g⁻¹ • fundamentalFrontier G s) subseteq
-        ⋃ g : G, g⁻¹ • f
+        ⋃ g : G, g⁻¹ • fundamentalInterior G s := by
+      simp_rw [sdiff_subset_iff, ← iUnion_union_distrib, ← smul_set_union (α := G) (β := α),
+        fundamentalFrontier_union_fundamentalInterior]; rfl
+    refine eq_bot_mono (μ.mono <| compl_subset_compl.2 this) ?_
+    simp only [iUnion_inv_smul, compl_sdiff, ENNReal.bot_eq_zero,
+      @iUnion_smul_eq_ofPred_exists _ _ _ _ s]
+    exact measure_union_null
+      (measure_iUnion_null fun _ => measure_smul_null hs.measure_fundamentalFrontier _) hs.ae_covers
+  aedisjoint := (pairwise_disjoint_fundamentalInterior _ _).mono fun _ _ => Disjoint.aedisjoint
 
 中文:
 定理 fundamental整数erior
@@ -1905,7 +2001,15 @@ theorem fundamentalInterior
       ofPred_mem_eq, ← compl_iUnion]
     have :
       ((⋃ g : G, g⁻¹ • s) \ ⋃ g : G, g⁻¹ • fundamentalFrontier G s) subseteq
-        ⋃ g : G, g⁻¹ • f
+        ⋃ g : G, g⁻¹ • fundamentalInterior G s := by
+      simp_rw [sdiff_subset_iff, ← iUnion_union_distrib, ← smul_set_union (α := G) (β := α),
+        fundamentalFrontier_union_fundamentalInterior]; rfl
+    refine eq_bot_mono (μ.mono <| compl_subset_compl.2 this) ?_
+    simp only [iUnion_inv_smul, compl_sdiff, ENNReal.bot_eq_zero,
+      @iUnion_smul_eq_ofPred_exists _ _ _ _ s]
+    exact measure_union_null
+      (measure_iUnion_null fun _ => measure_smul_null hs.measure_fundamentalFrontier _) hs.ae_covers
+  aedisjoint := (pairwise_disjoint_fundamentalInterior _ _).mono fun _ _ => Disjoint.aedisjoint
 -/
 protected theorem fundamentalInterior : IsFundamentalDomain G (fundamentalInterior G s) μ where
   nullMeasurableSet := hs.nullMeasurableSet.fundamentalInterior _ _
@@ -1978,7 +2082,10 @@ lemma IsFundamentalDomain.quotientMeasure_eq
   · exact measurableSet_quotient.mp meas_U
   · intro g
     ext x
-    have : Quotient.mk α_mod_G (g
+    have : Quotient.mk α_mod_G (g • x) = Quotient.mk α_mod_G x := by
+      apply Quotient.sound
+      use g
+    simp only [mem_preimage, this]
 
 中文:
 引理 是FundamentalDomain.quotientMeasure_eq
@@ -1990,7 +2097,10 @@ lemma IsFundamentalDomain.quotientMeasure_eq
   · exact measurableSet_quotient.mp meas_U
   · intro g
     ext x
-    have : Quotient.mk α_mod_G (g
+    have : Quotient.mk α_mod_G (g • x) = Quotient.mk α_mod_G x := by
+      apply Quotient.sound
+      use g
+    simp only [mem_preimage, this]
 
 Depends on / 依赖: IsFundamentalDomain, MeasureTheory, MeasureTheory.IsFundamentalDomain.measure_set_eq, Quotient, Quotient.mk, Quotient.sound, fund_dom_s, fund_dom_t, meas_U, measurableSet_quotient, measurableSet_quotient.mp, measure_map_restrict_apply, measure_set_eq, mem_preimage
 -/
@@ -2444,7 +2554,17 @@ lemma QuotientMeasureEqMeasurePreimage.sigmaFiniteQuotient
   simp only [mem_ofPred_eq] at hA_meas
   refine ⟨⟨fun n => π '' (A n), by simp, fun n => ?_, ?_⟩⟩
   · obtain ⟨s, fund_dom_s⟩ := i'
-    have : π ⁻¹' π '' (A n) = _ := MulAction.quotient_preimage_image_
+    have : π ⁻¹' π '' (A n) = _ := MulAction.quotient_preimage_image_eq_union_mul (A n) (G := G)
+    have measπAn : MeasurableSet (π '' A n) := by
+      rw [measurableSet_quotient]; rw [Quotient.mk''_eq_mk]; rw [this]
+      apply MeasurableSet.iUnion
+      exact fun g => MeasurableSet.const_smul (hA_meas n) g
+    rw [fund_dom_s.projection_respects_measure_apply (μ := μ) measπAn]; rw [this]; rw [iUnion_inter]
+    refine lt_of_le_of_lt ?_ (hA n)
+    rw [fund_dom_s.measure_eq_tsum (A n)]
+    exact measure_iUnion_le _
+  · rw [← image_iUnion, hA']
+    refine image_univ_of_surjective (by convert! Quotient.mk'_surjective)
 
 中文:
 引理 QuotientMeasureEqMeasurePreimage.sigmaFiniteQuotient
@@ -2454,7 +2574,17 @@ lemma QuotientMeasureEqMeasurePreimage.sigmaFiniteQuotient
   simp only [mem_ofPred_eq] at hA_meas
   refine ⟨⟨fun n => π '' (A n), by simp, fun n => ?_, ?_⟩⟩
   · obtain ⟨s, fund_dom_s⟩ := i'
-    have : π ⁻¹' π '' (A n) = _ := MulAction.quotient_preimage_image_
+    have : π ⁻¹' π '' (A n) = _ := MulAction.quotient_preimage_image_eq_union_mul (A n) (G := G)
+    have measπAn : MeasurableSet (π '' A n) := by
+      rw [measurableSet_quotient]; rw [Quotient.mk''_eq_mk]; rw [this]
+      apply MeasurableSet.iUnion
+      exact fun g => MeasurableSet.const_smul (hA_meas n) g
+    rw [fund_dom_s.projection_respects_measure_apply (μ := μ) measπAn]; rw [this]; rw [iUnion_inter]
+    refine lt_of_le_of_lt ?_ (hA n)
+    rw [fund_dom_s.measure_eq_tsum (A n)]
+    exact measure_iUnion_le _
+  · rw [← image_iUnion, hA']
+    refine image_univ_of_surjective (by convert! Quotient.mk'_surjective)
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.const_smul, MeasurableSet.iUnion, Measure, Measure.toFiniteSpanningSetsIn, MulAction, MulAction.quotient_preimage_image_eq_union_mul, Quotient, Quotient.mk, _eq_mk, const_smul, fund_dom_s, hA_meas, iUnion, measurableSet_quotient, mem_ofPred_eq, quotient_preimage_image_eq_union_mul, sigmaFinite_iff, toFiniteSpanningSetsIn
 -/
@@ -2537,7 +2667,7 @@ theorem QuotientMeasureEqMeasurePreimage.covolume_ne_top
     have H : μ univ < ∞ := IsFiniteMeasure.measure_univ_lt_top
     rw [h𝓕.projection_respects_measure_apply (μ := μ) MeasurableSet.univ] at H
     simpa [h𝓕.covolume_eq_volume ν] using H
-  · simp 
+  · simp [covolume, hasFun]
 
 中文:
 定理 QuotientMeasureEqMeasurePreimage.covolume_ne_top
@@ -2547,7 +2677,7 @@ theorem QuotientMeasureEqMeasurePreimage.covolume_ne_top
     have H : μ univ < ∞ := IsFiniteMeasure.measure_univ_lt_top
     rw [h𝓕.projection_respects_measure_apply (μ := μ) MeasurableSet.univ] at H
     simpa [h𝓕.covolume_eq_volume ν] using H
-  · simp 
+  · simp [covolume, hasFun]
 
 Depends on / 依赖: ExistsIsFundamentalDomain, HasFundamentalDomain, IsFiniteMeasure, IsFiniteMeasure.measure_univ_lt_top, MeasurableSet, MeasurableSet.univ, covolume, covolume_eq_volume, hasFun, hasFun.ExistsIsFundamentalDomain, measure_univ_lt_top, projection_respects_measure_apply
 -/

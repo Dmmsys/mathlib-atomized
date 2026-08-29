@@ -94,7 +94,12 @@ one_smul _ := Additive.toMul.injective pow_one _
 mul_smul z₁ z₂ au := Additive.toMul.injective by
     dsimp only [ZMod.smul_units_def, toMul_nsmul]
     rw [← pow_mul]; rw [ZMod.val_mul]; rw [← Int.units_pow_eq_pow_mod_two]; rw [mul_comm]
-smul_zero _ := Additive.toMul.injectiv
+smul_zero _ := Additive.toMul.injective one_pow _
+smul_add _ _ _ := Additive.toMul.injective mul_pow _ _ _
+add_smul z₁ z₂ au := Additive.toMul.injective by
+    dsimp only [ZMod.smul_units_def, toMul_nsmul, toMul_add]
+    rw [← pow_add]; rw [ZMod.val_add]; rw [← Int.units_pow_eq_pow_mod_two]
+zero_smul au := Additive.toMul.injective pow_zero au.toMul
 
 中文:
 实例 :
@@ -104,7 +109,12 @@ one_smul _ := Additive.toMul.injective pow_one _
 mul_smul z₁ z₂ au := Additive.toMul.injective by
     dsimp only [ZMod.smul_units_def, toMul_nsmul]
     rw [← pow_mul]; rw [ZMod.val_mul]; rw [← Int.units_pow_eq_pow_mod_two]; rw [mul_comm]
-smul_zero _ := Additive.toMul.injectiv
+smul_zero _ := Additive.toMul.injective one_pow _
+smul_add _ _ _ := Additive.toMul.injective mul_pow _ _ _
+add_smul z₁ z₂ au := Additive.toMul.injective by
+    dsimp only [ZMod.smul_units_def, toMul_nsmul, toMul_add]
+    rw [← pow_add]; rw [ZMod.val_add]; rw [← Int.units_pow_eq_pow_mod_two]
+zero_smul au := Additive.toMul.injective pow_zero au.toMul
 
 Depends on / 依赖: au.toMul, z.val
 -/

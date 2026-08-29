@@ -54,7 +54,56 @@ definition dualIndepMatroid
   indep_subset := by
     rintro I J ⟨hJE, B, hB, hJB⟩ hIJ
     exact ⟨hIJ.trans hJE, ⟨B, hB, disjoint_of_subset_left hIJ hJB⟩⟩
-  indep_au
+  indep_aug := by
+    rintro I X ⟨hIE, B, hB, hIB⟩ hI_not_max hX_max
+    have hXE := hX_max.1.1
+    have hB' := (isBase_compl_iff_maximal_disjoint_isBase hXE).mpr hX_max
+    set B' := M.E \ X with hX
+    have hI := (not_iff_not.mpr (isBase_compl_iff_maximal_disjoint_isBase)).mpr hI_not_max
+    obtain ⟨B'', hB'', hB''₁, hB''₂⟩ := (hB'.indep.sdiff I).exists_isBase_subset_union_isBase hB
+    rw [← compl_subset_compl]; rw [← hIB.sdiff_eq_right]; rw [← union_sdiff_distrib]; rw [sdiff_eq]; rw [compl_inter]; rw [compl_compl]; rw [union_subset_iff]; rw [compl_subset_compl] at hB''₂
+    have hssu := (subset_inter (hB''₂.2) hIE).ssubset_of_ne
+      (by { rintro rfl; apply hI; convert! hB''; simp [hB''.subset_ground] })
+    obtain ⟨e, ⟨(heB'' : e ∉ _), heE⟩, heI⟩ := exists_of_ssubset hssu
+    use e
+    simp_rw [mem_sdiff, insert_subset_iff, and_iff_left heI, and_iff_right heE, and_iff_right hIE]
+    refine ⟨by_contra (fun heX => heB'' (hB''₁ ⟨?_, heI⟩)), ⟨B'', hB'', ?_⟩⟩
+    · rw [hX]; exact ⟨heE, heX⟩
+    rw [← union_singleton]; rw [disjoint_union_left]; rw [disjoint_singleton_left]; rw [and_iff_left heB'']
+    exact disjoint_of_subset_left hB''₂.2 disjoint_compl_left
+  indep_maximal := by
+    rintro X - I' ⟨hI'E, B, hB, hI'B⟩ hI'X
+    obtain ⟨I, hI⟩ := M.exists_isBasis (M.E \ X)
+    obtain ⟨B', hB', hIB', hB'IB⟩ := hI.indep.exists_isBase_subset_union_isBase hB
+    obtain rfl : I = B' \ X := hI.eq_of_subset_indep (hB'.indep.sdiff _)
+      (subset_sdiff.2 ⟨hIB', (subset_sdiff.1 hI.subset).2⟩)
+      (sdiff_subset_sdiff_left hB'.subset_ground)
+    simp_rw [maximal_subset_iff']
+    refine ⟨(X \ B') inter M.E, ?_, ⟨⟨inter_subset_right, ?_⟩, ?_⟩, ?_⟩
+    · rw [subset_inter_iff, and_iff_left hI'E, subset_sdiff, and_iff_right hI'X]
+exact Disjoint.mono_right hB'IB disjoint_union_right.2
+        ⟨disjoint_sdiff_right.mono_left hI'X, hI'B⟩
+    · exact ⟨B', hB', (disjoint_sdiff_left (t := X)).mono_left inter_subset_left⟩
+    · exact inter_subset_left.trans sdiff_subset
+    simp only [subset_inter_iff, subset_sdiff, and_imp, forall_exists_index]
+    refine fun J hJE B'' hB'' hdj hJX hXJ => ⟨⟨hJX, ?_⟩, hJE⟩
+    have hI' : (B'' inter X) union (B' \ X) subseteq B' := by
+      rw [union_subset_iff]; rw [and_iff_left sdiff_subset]; rw [← union_sdiff_cancel hJX]; rw [inter_union_distrib_left]; rw [hdj.symm.inter_eq]; rw [empty_union]; rw [sdiff_eq]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [sdiff_subset_comm]; rw [sdiff_eq]; rw [inter_assoc]; rw [← sdiff_eq]; rw [inter_comm]
+      exact subset_trans (inter_subset_inter_right _ hB''.subset_ground) hXJ
+    obtain ⟨B₁, hB₁, hI'B₁, hB₁I⟩ := (hB'.indep.subset hI').exists_isBase_subset_union_isBase hB''
+    rw [union_comm]; rw [← union_assoc]; rw [union_eq_self_of_subset_right inter_subset_left] at hB₁I
+    obtain rfl : B₁ = B' := by
+      refine hB₁.eq_of_subset_indep hB'.indep (fun e he => ?_)
+      refine (hB₁I he).elim (fun heB'' => ?_) (fun h => h.1)
+      refine (em (e in X)).elim (fun heX => hI' (Or.inl ⟨heB'', heX⟩)) (fun heX => hIB' ?_)
+      refine hI.mem_of_insert_indep ⟨hB₁.subset_ground he, heX⟩ ?_
+      exact hB₁.indep.subset (insert_subset he (subset_union_right.trans hI'B₁))
+    by_contra hdj'
+    obtain ⟨e, heJ, heB'⟩ := not_disjoint_iff.mp hdj'
+    obtain (heB'' | ⟨-, heX⟩) := hB₁I heB'
+    · exact hdj.ne_of_mem heJ heB'' rfl
+    exact heX (hJX heJ)
+  subset_ground := by tauto
 
 中文:
 定义 dualIndepMatroid
@@ -65,7 +114,56 @@ definition dualIndepMatroid
   indep_subset := by
     rintro I J ⟨hJE, B, hB, hJB⟩ hIJ
     exact ⟨hIJ.trans hJE, ⟨B, hB, disjoint_of_subset_left hIJ hJB⟩⟩
-  indep_au
+  indep_aug := by
+    rintro I X ⟨hIE, B, hB, hIB⟩ hI_not_max hX_max
+    have hXE := hX_max.1.1
+    have hB' := (isBase_compl_iff_maximal_disjoint_isBase hXE).mpr hX_max
+    set B' := M.E \ X with hX
+    have hI := (not_iff_not.mpr (isBase_compl_iff_maximal_disjoint_isBase)).mpr hI_not_max
+    obtain ⟨B'', hB'', hB''₁, hB''₂⟩ := (hB'.indep.sdiff I).exists_isBase_subset_union_isBase hB
+    rw [← compl_subset_compl]; rw [← hIB.sdiff_eq_right]; rw [← union_sdiff_distrib]; rw [sdiff_eq]; rw [compl_inter]; rw [compl_compl]; rw [union_subset_iff]; rw [compl_subset_compl] at hB''₂
+    have hssu := (subset_inter (hB''₂.2) hIE).ssubset_of_ne
+      (by { rintro rfl; apply hI; convert! hB''; simp [hB''.subset_ground] })
+    obtain ⟨e, ⟨(heB'' : e ∉ _), heE⟩, heI⟩ := exists_of_ssubset hssu
+    use e
+    simp_rw [mem_sdiff, insert_subset_iff, and_iff_left heI, and_iff_right heE, and_iff_right hIE]
+    refine ⟨by_contra (fun heX => heB'' (hB''₁ ⟨?_, heI⟩)), ⟨B'', hB'', ?_⟩⟩
+    · rw [hX]; exact ⟨heE, heX⟩
+    rw [← union_singleton]; rw [disjoint_union_left]; rw [disjoint_singleton_left]; rw [and_iff_left heB'']
+    exact disjoint_of_subset_left hB''₂.2 disjoint_compl_left
+  indep_maximal := by
+    rintro X - I' ⟨hI'E, B, hB, hI'B⟩ hI'X
+    obtain ⟨I, hI⟩ := M.exists_isBasis (M.E \ X)
+    obtain ⟨B', hB', hIB', hB'IB⟩ := hI.indep.exists_isBase_subset_union_isBase hB
+    obtain rfl : I = B' \ X := hI.eq_of_subset_indep (hB'.indep.sdiff _)
+      (subset_sdiff.2 ⟨hIB', (subset_sdiff.1 hI.subset).2⟩)
+      (sdiff_subset_sdiff_left hB'.subset_ground)
+    simp_rw [maximal_subset_iff']
+    refine ⟨(X \ B') inter M.E, ?_, ⟨⟨inter_subset_right, ?_⟩, ?_⟩, ?_⟩
+    · rw [subset_inter_iff, and_iff_left hI'E, subset_sdiff, and_iff_right hI'X]
+exact Disjoint.mono_right hB'IB disjoint_union_right.2
+        ⟨disjoint_sdiff_right.mono_left hI'X, hI'B⟩
+    · exact ⟨B', hB', (disjoint_sdiff_left (t := X)).mono_left inter_subset_left⟩
+    · exact inter_subset_left.trans sdiff_subset
+    simp only [subset_inter_iff, subset_sdiff, and_imp, forall_exists_index]
+    refine fun J hJE B'' hB'' hdj hJX hXJ => ⟨⟨hJX, ?_⟩, hJE⟩
+    have hI' : (B'' inter X) union (B' \ X) subseteq B' := by
+      rw [union_subset_iff]; rw [and_iff_left sdiff_subset]; rw [← union_sdiff_cancel hJX]; rw [inter_union_distrib_left]; rw [hdj.symm.inter_eq]; rw [empty_union]; rw [sdiff_eq]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [sdiff_subset_comm]; rw [sdiff_eq]; rw [inter_assoc]; rw [← sdiff_eq]; rw [inter_comm]
+      exact subset_trans (inter_subset_inter_right _ hB''.subset_ground) hXJ
+    obtain ⟨B₁, hB₁, hI'B₁, hB₁I⟩ := (hB'.indep.subset hI').exists_isBase_subset_union_isBase hB''
+    rw [union_comm]; rw [← union_assoc]; rw [union_eq_self_of_subset_right inter_subset_left] at hB₁I
+    obtain rfl : B₁ = B' := by
+      refine hB₁.eq_of_subset_indep hB'.indep (fun e he => ?_)
+      refine (hB₁I he).elim (fun heB'' => ?_) (fun h => h.1)
+      refine (em (e in X)).elim (fun heX => hI' (Or.inl ⟨heB'', heX⟩)) (fun heX => hIB' ?_)
+      refine hI.mem_of_insert_indep ⟨hB₁.subset_ground he, heX⟩ ?_
+      exact hB₁.indep.subset (insert_subset he (subset_union_right.trans hI'B₁))
+    by_contra hdj'
+    obtain ⟨e, heJ, heB'⟩ := not_disjoint_iff.mp hdj'
+    obtain (heB'' | ⟨-, heX⟩) := hB₁I heB'
+    · exact hdj.ne_of_mem heJ heB'' rfl
+    exact heX (hJX heJ)
+  subset_ground := by tauto
 -/
 @[simps] def dualIndepMatroid (M : Matroid α) : IndepMatroid α where
   E := M.E
@@ -318,7 +416,7 @@ theorem setOfPred_dual_isBase_eq
     fun ⟨B', hB', h⟩ => ⟨?_,h.symm.trans_subset sdiff_subset⟩⟩
   rwa [← h, sdiff_sdiff_cancel_left hB'.subset_ground]
 
-@[deprecated (since := "2026-07-09")] alias setOf_dual_
+@[deprecated (since := "2026-07-09")] alias setOf_dual_isBase_eq := setOfPred_dual_isBase_eq
 
 中文:
 定理 setOfPred_dual_isBase_eq
@@ -330,7 +428,7 @@ theorem setOfPred_dual_isBase_eq
     fun ⟨B', hB', h⟩ => ⟨?_,h.symm.trans_subset sdiff_subset⟩⟩
   rwa [← h, sdiff_sdiff_cancel_left hB'.subset_ground]
 
-@[deprecated (since := "2026-07-09")] alias setOf_dual_
+@[deprecated (since := "2026-07-09")] alias setOf_dual_isBase_eq := setOfPred_dual_isBase_eq
 
 Depends on / 依赖: dual_isBase_iff, h.symm.trans_subset, mem_image, mem_ofPred_eq, sdiff_sdiff_cancel_left, sdiff_subset, subset_ground, trans_subset
 -/
@@ -512,7 +610,16 @@ theorem IsBase.compl_inter_isBasis_of_inter_isBasis
   · rw [dual_indep_iff_exists]
     exact ⟨B, hB, disjoint_of_subset_left inter_subset_left disjoint_sdiff_left⟩
   simp only [sdiff_inter_self_eq_sdiff, mem_sdiff, not_and, not_not, imp_iff_right he.1.1] at he
-  simp_rw
+  simp_rw [dual_dep_iff_forall, insert_subset_iff, and_iff_right he.1.1,
+    and_iff_left (inter_subset_left.trans sdiff_subset)]
+  refine fun B' hB' => by_contra (fun hem => ?_)
+  rw [nonempty_iff_ne_empty]; rw [not_ne_iff]; rw [← union_singleton]; rw [sdiff_inter_sdiff]; rw [union_inter_distrib_right]; rw [union_empty_iff]; rw [singleton_inter_eq_empty]; rw [sdiff_eq]; rw [inter_right_comm]; rw [inter_eq_self_of_subset_right hB'.subset_ground]; rw [← sdiff_eq]; rw [sdiff_eq_empty] at hem
+  obtain ⟨f, hfb, hBf⟩ := hB.exchange hB' ⟨he.2, hem.2⟩
+  have hi : M.Indep (insert f (B inter X)) := by
+    refine hBf.indep.subset (insert_subset_insert ?_)
+    simp_rw [subset_sdiff, and_iff_right inter_subset_left, disjoint_singleton_right,
+      mem_inter_iff, iff_false_intro he.1.2, and_false, not_false_iff]
+  exact hfb.2 (hBX.mem_of_insert_indep (Or.elim (hem.1 hfb.1) (False.elim ∘ hfb.2) id) hi).1
 
 中文:
 定理 IsBase.compl_inter_isBasis_of_inter_isBasis
@@ -522,7 +629,16 @@ theorem IsBase.compl_inter_isBasis_of_inter_isBasis
   · rw [dual_indep_iff_exists]
     exact ⟨B, hB, disjoint_of_subset_left inter_subset_left disjoint_sdiff_left⟩
   simp only [sdiff_inter_self_eq_sdiff, mem_sdiff, not_and, not_not, imp_iff_right he.1.1] at he
-  simp_rw
+  simp_rw [dual_dep_iff_forall, insert_subset_iff, and_iff_right he.1.1,
+    and_iff_left (inter_subset_left.trans sdiff_subset)]
+  refine fun B' hB' => by_contra (fun hem => ?_)
+  rw [nonempty_iff_ne_empty]; rw [not_ne_iff]; rw [← union_singleton]; rw [sdiff_inter_sdiff]; rw [union_inter_distrib_right]; rw [union_empty_iff]; rw [singleton_inter_eq_empty]; rw [sdiff_eq]; rw [inter_right_comm]; rw [inter_eq_self_of_subset_right hB'.subset_ground]; rw [← sdiff_eq]; rw [sdiff_eq_empty] at hem
+  obtain ⟨f, hfb, hBf⟩ := hB.exchange hB' ⟨he.2, hem.2⟩
+  have hi : M.Indep (insert f (B inter X)) := by
+    refine hBf.indep.subset (insert_subset_insert ?_)
+    simp_rw [subset_sdiff, and_iff_right inter_subset_left, disjoint_singleton_right,
+      mem_inter_iff, iff_false_intro he.1.2, and_false, not_false_iff]
+  exact hfb.2 (hBX.mem_of_insert_indep (Or.elim (hem.1 hfb.1) (False.elim ∘ hfb.2) id) hi).1
 
 Depends on / 依赖: Indep.isBasis_of_forall_insert, and_iff_left, and_iff_right, disjoint_of_subset_left, disjoint_sdiff_left, dual_dep_iff_forall, dual_indep_iff_exists, imp_iff_right, insert_subset_iff, inter_subset_left, inter_subset_left.trans, inter_subset_right, isBasis_of_forall_insert, mem_sdiff, nonempty_iff_ne_empty, not_and, not_ne_iff, not_not, sdiff_inter_self_eq_sdiff, sdiff_subset
 -/

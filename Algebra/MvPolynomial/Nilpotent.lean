@@ -37,7 +37,15 @@ theorem isNilpotent_iff_of_fintype
   -- Note: including `Fintype.ofFinite σ` in the entire context interferes with the `rw` below.
   refine have := Fintype.ofFinite σ; Fintype.induction_empty_option ?_ ?_ ?_ σ P
   · intro α β _ e h₁ P
-    rw [← IsNilpotent.map_iff (rename_injective _ e.symm.injective)]; rw [h₁]; rw [(F
+    rw [← IsNilpotent.map_iff (rename_injective _ e.symm.injective)]; rw [h₁]; rw [(Finsupp.equivCongrLeft e).forall_congr_left]
+    simp [Finsupp.equivMapDomain_eq_mapDomain, coeff_rename_mapDomain _ e.symm.injective]
+  · simp [Unique.forall_iff, ← IsNilpotent.map_iff (isEmptyRingEquiv R PEmpty).injective,
+      -isEmptyRingEquiv_apply, isEmptyRingEquiv_eq_coeff_zero]
+  · intro α _ H P
+    obtain ⟨P, rfl⟩ := (optionEquivLeft _ _).symm.surjective P
+    simp [IsNilpotent.map_iff (optionEquivLeft _ _).symm.injective,
+      Polynomial.isNilpotent_iff, H, Finsupp.optionEquiv.forall_congr_left,
+      ← optionEquivLeft_coeff_some_coeff_none, Finsupp.coe_update]
 
 中文:
 定理 isNilpotent_iff_of_fintype
@@ -47,7 +55,15 @@ theorem isNilpotent_iff_of_fintype
   -- Note: including `Fintype.ofFinite σ` in the entire context interferes with the `rw` below.
   refine have := Fintype.ofFinite σ; Fintype.induction_empty_option ?_ ?_ ?_ σ P
   · intro α β _ e h₁ P
-    rw [← IsNilpotent.map_iff (rename_injective _ e.symm.injective)]; rw [h₁]; rw [(F
+    rw [← IsNilpotent.map_iff (rename_injective _ e.symm.injective)]; rw [h₁]; rw [(Finsupp.equivCongrLeft e).forall_congr_left]
+    simp [Finsupp.equivMapDomain_eq_mapDomain, coeff_rename_mapDomain _ e.symm.injective]
+  · simp [Unique.forall_iff, ← IsNilpotent.map_iff (isEmptyRingEquiv R PEmpty).injective,
+      -isEmptyRingEquiv_apply, isEmptyRingEquiv_eq_coeff_zero]
+  · intro α _ H P
+    obtain ⟨P, rfl⟩ := (optionEquivLeft _ _).symm.surjective P
+    simp [IsNilpotent.map_iff (optionEquivLeft _ _).symm.injective,
+      Polynomial.isNilpotent_iff, H, Finsupp.optionEquiv.forall_congr_left,
+      ← optionEquivLeft_coeff_some_coeff_none, Finsupp.coe_update]
 -/
 private theorem isNilpotent_iff_of_fintype [Finite σ] :
     IsNilpotent P ↔ forall i, IsNilpotent (P.coeff i) := by
@@ -76,7 +92,9 @@ theorem isNilpotent_iff
   rw [IsNilpotent.map_iff (rename_injective _ hf)]; rw [MvPolynomial.isNilpotent_iff_of_fintype]
   lift f to Fin n ↪ σ using hf
   refine ⟨fun H i => ?_, fun H i => by simpa using H (i.embDomain f)⟩
-  by_cases H : i in Set.range (Finsupp.embDomain
+  by_cases H : i in Set.range (Finsupp.embDomain f)
+  · aesop
+  · rw [coeff_rename_eq_zero] <;> aesop (add simp Finsupp.embDomain_eq_mapDomain)
 
 中文:
 定理 isNilpotent_iff
@@ -86,7 +104,9 @@ theorem isNilpotent_iff
   rw [IsNilpotent.map_iff (rename_injective _ hf)]; rw [MvPolynomial.isNilpotent_iff_of_fintype]
   lift f to Fin n ↪ σ using hf
   refine ⟨fun H i => ?_, fun H i => by simpa using H (i.embDomain f)⟩
-  by_cases H : i in Set.range (Finsupp.embDomain
+  by_cases H : i in Set.range (Finsupp.embDomain f)
+  · aesop
+  · rw [coeff_rename_eq_zero] <;> aesop (add simp Finsupp.embDomain_eq_mapDomain)
 
 Depends on / 依赖: Finsupp, Finsupp.embDomain, Finsupp.embDomain_eq_mapDomain, IsNilpotent, IsNilpotent.map_iff, MvPolynomial, MvPolynomial.isNilpotent_iff_of_fintype, P.exists_fin_rename, Set.range, coeff_rename_eq_zero, embDomain, embDomain_eq_mapDomain, exists_fin_rename, i.embDomain, isNilpotent_iff_of_fintype, map_iff, rename_injective
 -/
@@ -131,7 +151,15 @@ theorem isUnit_iff
   · intro n hn
     obtain ⟨i, hi⟩ : exists i, n i != 0 := by simpa [Finsupp.ext_iff] using hn
     let e := (optionEquivLeft _ _).symm.trans (renameEquiv R (Equiv.optionSubtypeNe i))
-    have H := (Polynomial.coeff_isUni
+    have H := (Polynomial.coeff_isUnit_isNilpotent_of_isUnit (H.map e.symm)).2 (n i) hi
+    simp only [ne_eq, isNilpotent_iff] at H
+    convert! ← H (n.equivMapDomain (Equiv.optionSubtypeNe i).symm).some
+    refine (optionEquivLeft_coeff_some_coeff_none _ _ _ _).trans ?_
+    simp [Finsupp.equivMapDomain_eq_mapDomain,
+      coeff_rename_mapDomain _ (Equiv.optionSubtypeNe i).symm.injective]
+  · have : IsNilpotent (P - C (P.coeff 0)) := by
+      simp +contextual [isNilpotent_iff, apply_ite, eq_comm, h₂]
+    simpa using this.isUnit_add_right_of_commute (h₁.map C) (.all _ _)
 
 中文:
 定理 isUnit_iff
@@ -142,7 +170,15 @@ theorem isUnit_iff
   · intro n hn
     obtain ⟨i, hi⟩ : exists i, n i != 0 := by simpa [Finsupp.ext_iff] using hn
     let e := (optionEquivLeft _ _).symm.trans (renameEquiv R (Equiv.optionSubtypeNe i))
-    have H := (Polynomial.coeff_isUni
+    have H := (Polynomial.coeff_isUnit_isNilpotent_of_isUnit (H.map e.symm)).2 (n i) hi
+    simp only [ne_eq, isNilpotent_iff] at H
+    convert! ← H (n.equivMapDomain (Equiv.optionSubtypeNe i).symm).some
+    refine (optionEquivLeft_coeff_some_coeff_none _ _ _ _).trans ?_
+    simp [Finsupp.equivMapDomain_eq_mapDomain,
+      coeff_rename_mapDomain _ (Equiv.optionSubtypeNe i).symm.injective]
+  · have : IsNilpotent (P - C (P.coeff 0)) := by
+      simp +contextual [isNilpotent_iff, apply_ite, eq_comm, h₂]
+    simpa using this.isUnit_add_right_of_commute (h₁.map C) (.all _ _)
 
 Depends on / 依赖: Equiv.optionSubtypeNe, Finsupp, Finsupp.ext_iff, H.map, Polynomial, Polynomial.coeff_isUnit_isNilpotent_of_isUnit, classical, coeff_isUnit_isNilpotent_of_isUnit, constantCoeff, convert, e.symm, equivMapDomain, ext_iff, isNilpotent_iff, n.equivMapDomain, ne_eq, optionEquivLeft, optionEquivLeft_coeff_some_coeff_none, optionSubtypeNe, renameEquiv
 -/

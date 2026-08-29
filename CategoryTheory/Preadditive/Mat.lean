@@ -177,7 +177,9 @@ instance :
     apply DMatrix.ext
     intros
     simp_rw [Hom.comp, sum_comp, comp_sum, Category.assoc]
-    
+    rw [Finset.sum_comm]
+
+@[ext]
 
 中文:
 实例 :
@@ -195,7 +197,9 @@ instance :
     apply DMatrix.ext
     intros
     simp_rw [Hom.comp, sum_comp, comp_sum, Category.assoc]
-    
+    rw [Finset.sum_comm]
+
+@[ext]
 -/
 instance : Category.{v₁} (Mat_ C) where
   Hom := Hom
@@ -424,7 +428,64 @@ instance hasFiniteBiproducts
             π := fun j x y => by
               refine if h : x.1 = j then ?_ else 0
               refine if h' : @Eq.ndrec (Fin n) x.1 (fun j => (f j).ι) x.2 _ h = y then ?_ else 0
-    
+              apply eqToHom
+              subst h h'
+              rfl
+            -- Notice we were careful not to use `subst` until we had a goal in `Prop`.
+            ι := fun j x y => by
+              refine if h : y.1 = j then ?_ else 0
+              refine if h' : @Eq.ndrec _ y.1 (fun j => (f j).ι) y.2 _ h = x then ?_ else 0
+              apply eqToHom
+              subst h h'
+              rfl
+            ι_π := fun j j' => by
+              ext x y
+              dsimp
+              simp_rw [dite_comp, comp_dite]
+              simp only [ite_self, dite_eq_ite, Limits.comp_zero, Limits.zero_comp,
+                eqToHom_trans]
+              rw [← Finset.univ_sigma_univ]; rw [Finset.sum_sigma]
+              dsimp +instances
+              simp only [if_true, Finset.sum_dite_irrel, Finset.mem_univ,
+                Finset.sum_const_zero, Finset.sum_dite_eq']
+              split_ifs with h h'
+              · subst h h'
+                simp only [CategoryTheory.eqToHom_refl, CategoryTheory.Mat_.id_apply_self]
+              · subst h
+                rw [eqToHom_refl]; rw [id_apply_of_ne _ _ _ h']
+              · rfl }
+          (by
+            dsimp
+            ext1 ⟨i, j⟩
+            rintro ⟨i', j'⟩
+            rw [Finset.sum_apply]; rw [Finset.sum_apply]
+            dsimp
+            rw [Finset.sum_eq_single i]; rotate_left
+            · intro b _ hb
+              apply Finset.sum_eq_zero
+              intro x _
+              rw [dif_neg hb.symm]; rw [zero_comp]
+            · intro hi
+              simp at hi
+            rw [Finset.sum_eq_single j]; rotate_left
+            · intro b _ hb
+              rw [dif_pos rfl]; rw [dif_neg]; rw [zero_comp]
+              simp only
+              tauto
+            · intro hj
+              simp at hj
+            simp only [eqToHom_refl, dite_eq_ite, ite_true, Category.id_comp,
+              Sigma.mk.inj_iff, id_def]
+            by_cases h : i' = i
+            · subst h
+              rw [dif_pos rfl]
+              simp only [heq_eq_eq, true_and]
+              by_cases h : j' = j
+              · subst h
+                simp
+              · rw [dif_neg h, dif_neg (Ne.symm h)]
+            · rw [dif_neg h, dif_neg]
+              tauto) }
 
 中文:
 实例 hasFiniteBiproducts
@@ -435,7 +496,64 @@ instance hasFiniteBiproducts
             π := fun j x y => by
               refine if h : x.1 = j then ?_ else 0
               refine if h' : @Eq.ndrec (Fin n) x.1 (fun j => (f j).ι) x.2 _ h = y then ?_ else 0
-    
+              apply eqToHom
+              subst h h'
+              rfl
+            -- Notice we were careful not to use `subst` until we had a goal in `Prop`.
+            ι := fun j x y => by
+              refine if h : y.1 = j then ?_ else 0
+              refine if h' : @Eq.ndrec _ y.1 (fun j => (f j).ι) y.2 _ h = x then ?_ else 0
+              apply eqToHom
+              subst h h'
+              rfl
+            ι_π := fun j j' => by
+              ext x y
+              dsimp
+              simp_rw [dite_comp, comp_dite]
+              simp only [ite_self, dite_eq_ite, Limits.comp_zero, Limits.zero_comp,
+                eqToHom_trans]
+              rw [← Finset.univ_sigma_univ]; rw [Finset.sum_sigma]
+              dsimp +instances
+              simp only [if_true, Finset.sum_dite_irrel, Finset.mem_univ,
+                Finset.sum_const_zero, Finset.sum_dite_eq']
+              split_ifs with h h'
+              · subst h h'
+                simp only [CategoryTheory.eqToHom_refl, CategoryTheory.Mat_.id_apply_self]
+              · subst h
+                rw [eqToHom_refl]; rw [id_apply_of_ne _ _ _ h']
+              · rfl }
+          (by
+            dsimp
+            ext1 ⟨i, j⟩
+            rintro ⟨i', j'⟩
+            rw [Finset.sum_apply]; rw [Finset.sum_apply]
+            dsimp
+            rw [Finset.sum_eq_single i]; rotate_left
+            · intro b _ hb
+              apply Finset.sum_eq_zero
+              intro x _
+              rw [dif_neg hb.symm]; rw [zero_comp]
+            · intro hi
+              simp at hi
+            rw [Finset.sum_eq_single j]; rotate_left
+            · intro b _ hb
+              rw [dif_pos rfl]; rw [dif_neg]; rw [zero_comp]
+              simp only
+              tauto
+            · intro hj
+              simp at hj
+            simp only [eqToHom_refl, dite_eq_ite, ite_true, Category.id_comp,
+              Sigma.mk.inj_iff, id_def]
+            by_cases h : i' = i
+            · subst h
+              rw [dif_pos rfl]
+              simp only [heq_eq_eq, true_and]
+              by_cases h : j' = j
+              · subst h
+                simp
+              · rw [dif_neg h, dif_neg (Ne.symm h)]
+            · rw [dif_neg h, dif_neg]
+              tauto) }
 
 Depends on / 依赖: Eq.ndrec, eqToHom, hasBiproduct_of_total, has_biproduct
 -/
@@ -732,7 +850,27 @@ definition isoBiproductEmbedding
     simp only [biproduct.lift_desc]
     funext i j
     dsimp [id_def]
-    rw [Finset.sum_apply]; rw [Finset.sum_ap
+    rw [Finset.sum_apply]; rw [Finset.sum_apply]; rw [Finset.sum_eq_single i]; rotate_left
+    · intro b _ hb
+      dsimp
+      rw [Fintype.univ_ofSubsingleton]; rw [Finset.sum_singleton]; rw [dif_neg hb.symm]; rw [zero_comp]
+    · intro h
+      simp at h
+    simp
+  inv_hom_id := by
+    apply biproduct.hom_ext
+    intro i
+    apply biproduct.hom_ext'
+    intro j
+    simp only [Category.id_comp, Category.assoc, biproduct.lift_π, biproduct.ι_desc_assoc,
+      biproduct.ι_π]
+    ext ⟨⟩ ⟨⟩
+    simp only [embedding, comp_apply, comp_dite, dite_comp, comp_zero, zero_comp,
+      Finset.sum_dite_eq', Finset.mem_univ, ite_true, eqToHom_refl, Category.comp_id]
+    split_ifs with h
+    · subst h
+      simp
+    · rfl
 
 中文:
 定义 isoBiproductEmbedding
@@ -743,7 +881,27 @@ definition isoBiproductEmbedding
     simp only [biproduct.lift_desc]
     funext i j
     dsimp [id_def]
-    rw [Finset.sum_apply]; rw [Finset.sum_ap
+    rw [Finset.sum_apply]; rw [Finset.sum_apply]; rw [Finset.sum_eq_single i]; rotate_left
+    · intro b _ hb
+      dsimp
+      rw [Fintype.univ_ofSubsingleton]; rw [Finset.sum_singleton]; rw [dif_neg hb.symm]; rw [zero_comp]
+    · intro h
+      simp at h
+    simp
+  inv_hom_id := by
+    apply biproduct.hom_ext
+    intro i
+    apply biproduct.hom_ext'
+    intro j
+    simp only [Category.id_comp, Category.assoc, biproduct.lift_π, biproduct.ι_desc_assoc,
+      biproduct.ι_π]
+    ext ⟨⟩ ⟨⟩
+    simp only [embedding, comp_apply, comp_dite, dite_comp, comp_zero, zero_comp,
+      Finset.sum_dite_eq', Finset.mem_univ, ite_true, eqToHom_refl, Category.comp_id]
+    split_ifs with h
+    · subst h
+      simp
+    · rfl
 
 Depends on / 依赖: biproduct, biproduct.lift, congr_arg, eqToHom
 -/
@@ -882,7 +1040,13 @@ theorem additiveObjIsoBiproduct_naturality
     biproduct.lift_π, biproduct.matrix_π,
     ← cancel_epi (additiveObjIsoBiproduct F M).inv, Iso.inv_hom_id_assoc]
   ext j : 1
-  simp only [ι_additiveObjIsoBiproduct_inv_assoc, isoBipro
+  simp only [ι_additiveObjIsoBiproduct_inv_assoc, isoBiproductEmbedding_inv,
+    biproduct.ι_desc, ← F.map_comp]
+  congr 1
+  funext ⟨⟩ ⟨⟩
+  simp [comp_apply, dite_comp, comp_dite]
+
+@[reassoc]
 
 中文:
 定理 additiveObjIsoBiproduct_naturality
@@ -894,7 +1058,13 @@ theorem additiveObjIsoBiproduct_naturality
     biproduct.lift_π, biproduct.matrix_π,
     ← cancel_epi (additiveObjIsoBiproduct F M).inv, Iso.inv_hom_id_assoc]
   ext j : 1
-  simp only [ι_additiveObjIsoBiproduct_inv_assoc, isoBipro
+  simp only [ι_additiveObjIsoBiproduct_inv_assoc, isoBiproductEmbedding_inv,
+    biproduct.ι_desc, ← F.map_comp]
+  congr 1
+  funext ⟨⟩ ⟨⟩
+  simp [comp_apply, dite_comp, comp_dite]
+
+@[reassoc]
 
 Depends on / 依赖: Category, Category.assoc, F.map_comp, Iso.inv_hom_id_assoc, additiveObjIsoBiproduct, biproduct, biproduct.lift_, biproduct.matrix_, cancel_epi, classical, comp_apply, comp_dite, dite_comp, inv_hom_id_assoc, isoBiproductEmbedding_hom, isoBiproductEmbedding_inv, map_comp
 -/
@@ -1042,7 +1212,17 @@ definition liftUnique
           (biproduct.mapIso fun i => (embeddingLiftIso F).symm.app (M.X i)) ≪≫
             (additiveObjIsoBiproduct (lift F) M).symm)
     fun f => by
-      dsimp only [Iso.tran
+      dsimp only [Iso.trans_hom, Iso.symm_hom, biproduct.mapIso_hom]
+      simp only [additiveObjIsoBiproduct_naturality_assoc]
+      simp only [biproduct.matrix_map_assoc, Category.assoc]
+      simp only [additiveObjIsoBiproduct_naturality']
+      simp only [biproduct.map_matrix_assoc]
+      congr 3
+      ext j k
+      apply biproduct.hom_ext
+      rintro ⟨⟩
+      dsimp
+      simpa using α.hom.naturality (f j k)
 
 中文:
 定义 liftUnique
@@ -1054,7 +1234,17 @@ definition liftUnique
           (biproduct.mapIso fun i => (embeddingLiftIso F).symm.app (M.X i)) ≪≫
             (additiveObjIsoBiproduct (lift F) M).symm)
     fun f => by
-      dsimp only [Iso.tran
+      dsimp only [Iso.trans_hom, Iso.symm_hom, biproduct.mapIso_hom]
+      simp only [additiveObjIsoBiproduct_naturality_assoc]
+      simp only [biproduct.matrix_map_assoc, Category.assoc]
+      simp only [additiveObjIsoBiproduct_naturality']
+      simp only [biproduct.map_matrix_assoc]
+      congr 3
+      ext j k
+      apply biproduct.hom_ext
+      rintro ⟨⟩
+      dsimp
+      simpa using α.hom.naturality (f j k)
 
 Depends on / 依赖: Category, Category.assoc, Iso.symm_hom, Iso.trans_hom, NatIso, NatIso.ofComponents, additiveObjIsoBiproduct, additiveObjIsoBiproduct_naturality, additiveObjIsoBiproduct_naturality_assoc, biproduct, biproduct.mapIso, biproduct.mapIso_hom, biproduct.map_matrix_assoc, biproduct.matrix_map_assoc, embeddingLiftIso, mapIso, mapIso_hom, map_matrix_assoc, matrix_map_assoc, ofComponents
 -/
@@ -1428,7 +1618,7 @@ definition equivalenceSingleObjInverse
     -- Porting note: this proof was automatic in mathlib3
     ext
     simp only [Mat_.comp_apply, comp_apply]
-    convert! Finset.unop_sum
+    convert! Finset.unop_sum _ _
 
 中文:
 定义 equivalenceSingleObjInverse
@@ -1443,7 +1633,7 @@ definition equivalenceSingleObjInverse
     -- Porting note: this proof was automatic in mathlib3
     ext
     simp only [Mat_.comp_apply, comp_apply]
-    convert! Finset.unop_sum
+    convert! Finset.unop_sum _ _
 
 Depends on / 依赖: FintypeCat, FintypeCat.of
 -/

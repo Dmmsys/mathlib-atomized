@@ -118,7 +118,8 @@ lemma list_ind
     induction List.Pi.head q using Quotient.ind with | _ a
     refine @list_ind _ (fun q => C (List.Pi.cons _ _ ⟦a⟧ q)) ?_ (List.Pi.tail q)
     intro as
-    rw [List.Pi.cons_map a as (f
+    rw [List.Pi.cons_map a as (fun i => Quotient.mk (S i))]
+    exact f _
 
 中文:
 引理 list_ind
@@ -130,7 +131,8 @@ lemma list_ind
     induction List.Pi.head q using Quotient.ind with | _ a
     refine @list_ind _ (fun q => C (List.Pi.cons _ _ ⟦a⟧ q)) ?_ (List.Pi.tail q)
     intro as
-    rw [List.Pi.cons_map a as (f
+    rw [List.Pi.cons_map a as (fun i => Quotient.mk (S i))]
+    exact f _
 
 Depends on / 依赖: List.Pi.cons, List.Pi.cons_eta, List.Pi.cons_map, List.Pi.head, List.Pi.tail, Quotient, Quotient.ind, Quotient.mk, congr_arg, cons_eta, cons_map, list_ind
 -/
@@ -170,7 +172,7 @@ lemma ind_fintype_pi
       forall (_ : forall a : forall i in m, α i, C (⟦a · ·⟧)) (q : forall i in m, Quotient (S i)), C q := by
     induction m using Quotient.ind
     exact list_ind
-  exact this (fun q => C (q · (Finset.mem_univ _))) (fun _ => 
+  exact this (fun q => C (q · (Finset.mem_univ _))) (fun _ => f _) (fun i _ => q i)
 
 中文:
 引理 ind_fintype_pi
@@ -180,7 +182,7 @@ lemma ind_fintype_pi
       forall (_ : forall a : forall i in m, α i, C (⟦a · ·⟧)) (q : forall i in m, Quotient (S i)), C q := by
     induction m using Quotient.ind
     exact list_ind
-  exact this (fun q => C (q · (Finset.mem_univ _))) (fun _ => 
+  exact this (fun q => C (q · (Finset.mem_univ _))) (fun _ => f _) (fun i _ => q i)
 
 Depends on / 依赖: Finset, Finset.mem_univ, Multiset, Quotient, Quotient.ind, list_ind, mem_univ
 -/
@@ -225,7 +227,10 @@ definition finChoice
     (fun s : Multiset ι => forall i, i in s) (fun i => Iff.rfl) (fun _ _ => Iff.rfl) ⟨_, Finset.mem_univ⟩
   refine e.liftOn
     (fun l => (listChoice fun i _ => q i).map (fun a i => a i (l.2 i)) ?_) ?_
-  · e
+  · exact fun _ _ h i => h i _
+  intro _ _ _
+  refine ind_fintype_pi (fun a => ?_) q
+  simp_rw [listChoice_mk, Quotient.map_mk]
 
 中文:
 定义 finChoice
@@ -235,7 +240,10 @@ definition finChoice
     (fun s : Multiset ι => forall i, i in s) (fun i => Iff.rfl) (fun _ _ => Iff.rfl) ⟨_, Finset.mem_univ⟩
   refine e.liftOn
     (fun l => (listChoice fun i _ => q i).map (fun a i => a i (l.2 i)) ?_) ?_
-  · e
+  · exact fun _ _ h i => h i _
+  intro _ _ _
+  refine ind_fintype_pi (fun a => ?_) q
+  simp_rw [listChoice_mk, Quotient.map_mk]
 
 Depends on / 依赖: Equiv.subtypeQuotientEquivQuotientSubtype, Finset, Finset.mem_univ, Iff.rfl, Multiset, Quotient, Quotient.map_mk, e.liftOn, ind_fintype_pi, liftOn, listChoice, listChoice_mk, map_mk, mem_univ, simp_rw, subtypeQuotientEquivQuotientSubtype
 -/

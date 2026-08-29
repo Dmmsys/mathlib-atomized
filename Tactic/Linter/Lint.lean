@@ -97,7 +97,25 @@ definition dupNamespace
     let mut aliases := #[]
     if let some exp := stx.find? (·.isOfKind `Lean.Parser.Command.export) then
       aliases ← getAliasSyntax exp
-    for id in (← getNamesFrom (stx.getPos?.getD default)) ++ al
+    for id in (← getNamesFrom (stx.getPos?.getD default)) ++ aliases do
+      let declName := id.getId
+      -- We intentionally *do* lint deprecated declarations:
+      -- this is important since people can forget to add a `_root_` when adding deprecations.
+      if declName.hasMacroScopes || isPrivateName declName then continue
+      let nm := declName.components
+      -- Collect distinct components which appear more than once.
+let duplicated := List.eraseDups nm.filter (fun comp => nm.count comp > 1)
+      match duplicated with
+      | [] => continue
+      | [ns] =>
+        Linter.logLint linter.dupNamespace id
+          m!"The namespace `{ns}` is duplicated in the declaration \
+          `{.ofConstName (fullNames := true) declName}`."
+      | dup =>
+        let ns := MessageData.andList (duplicated.map (m!"`{·}`"))
+        Linter.logLint linter.dupNamespace id
+          m!"The namespaces {ns} are duplicated in the declaration \
+          `{.ofConstName (fullNames := true) declName}`."
 
 中文:
 定义 dupNamespace
@@ -107,7 +125,25 @@ definition dupNamespace
     let mut aliases := #[]
     if let some exp := stx.find? (·.isOfKind `Lean.Parser.Command.export) then
       aliases ← getAliasSyntax exp
-    for id in (← getNamesFrom (stx.getPos?.getD default)) ++ al
+    for id in (← getNamesFrom (stx.getPos?.getD default)) ++ aliases do
+      let declName := id.getId
+      -- We intentionally *do* lint deprecated declarations:
+      -- this is important since people can forget to add a `_root_` when adding deprecations.
+      if declName.hasMacroScopes || isPrivateName declName then continue
+      let nm := declName.components
+      -- Collect distinct components which appear more than once.
+let duplicated := List.eraseDups nm.filter (fun comp => nm.count comp > 1)
+      match duplicated with
+      | [] => continue
+      | [ns] =>
+        Linter.logLint linter.dupNamespace id
+          m!"The namespace `{ns}` is duplicated in the declaration \
+          `{.ofConstName (fullNames := true) declName}`."
+      | dup =>
+        let ns := MessageData.andList (duplicated.map (m!"`{·}`"))
+        Linter.logLint linter.dupNamespace id
+          m!"The namespaces {ns} are duplicated in the declaration \
+          `{.ofConstName (fullNames := true) declName}`."
 
 Depends on / 依赖: withSetOptionIn
 -/

@@ -394,7 +394,8 @@ lemma IsStable.locally
   refine fun X hX τ hτ => ⟨hX.localSeq, hX.isLocalizingSequence_localSeq, fun n => ?_⟩
   simp_rw [← stoppedProcess_indicator_comm', Set.indicator_indicator, Set.inter_comm,
     ← Set.indicator_indicator, stoppedProcess_stoppedProcess, inf_comm,
-    stoppedProcess_indicator_comm', ← stoppedProcess
+    stoppedProcess_indicator_comm', ← stoppedProcess_stoppedProcess]
+  exact hp _ (hX.stoppedProcess_localSeq n) τ hτ
 
 中文:
 引理 IsStable.locally
@@ -403,7 +404,8 @@ lemma IsStable.locally
   refine fun X hX τ hτ => ⟨hX.localSeq, hX.isLocalizingSequence_localSeq, fun n => ?_⟩
   simp_rw [← stoppedProcess_indicator_comm', Set.indicator_indicator, Set.inter_comm,
     ← Set.indicator_indicator, stoppedProcess_stoppedProcess, inf_comm,
-    stoppedProcess_indicator_comm', ← stoppedProcess
+    stoppedProcess_indicator_comm', ← stoppedProcess_stoppedProcess]
+  exact hp _ (hX.stoppedProcess_localSeq n) τ hτ
 
 Depends on / 依赖: Set.indicator_indicator, Set.inter_comm, hX.isLocalizingSequence_localSeq, hX.localSeq, hX.stoppedProcess_localSeq, indicator_indicator, inf_comm, inter_comm, isLocalizingSequence_localSeq, localSeq, simp_rw, stoppedProcess_indicator_comm, stoppedProcess_localSeq, stoppedProcess_stoppedProcess
 -/
@@ -426,7 +428,20 @@ lemma IsStable.locally_and_iff
     ⟨_, hpX.isLocalizingSequence_localSeq.min hqX.isLocalizingSequence_localSeq, fun n => ?_⟩⟩
   suffices forall (p q : (ι -> Ω -> E) -> Prop) (hp : IsStable 𝓕 p) (hq : IsStable 𝓕 q)
       (hpX : Locally p 𝓕 X P) (hqX : Locally q 𝓕 X P),
-      p (stoppe
+      p (stoppedProcess (fun i => {ω | ⊥ < (hpX.localSeq ⊓ hqX.localSeq) n ω}.indicator (X i))
+      ((hpX.localSeq ⊓ hqX.localSeq) n)) by
+    refine ⟨this p q hp hq hpX hqX, ?_⟩
+    simp_rw [inf_comm hpX.localSeq]
+    exact this q p hq hp hqX hpX
+  intro p q hp hq hpX hqX
+  convert!
+hp _ (hpX.stoppedProcess_localSeq n) _
+      hqX.isLocalizingSequence_localSeq.isStoppingTime n using 1
+  ext i ω
+  simp_rw [stoppedProcess_indicator_comm, Pi.inf_apply, lt_inf_iff, inf_comm (hpX.localSeq n)]
+  rw [← stoppedProcess_stoppedProcess]; rw [← stoppedProcess_indicator_comm]; rw [Set.ofPred_and]; rw [Set.inter_comm]
+  simp_rw [← Set.indicator_indicator]
+  rfl
 
 中文:
 引理 IsStable.locally_and_iff
@@ -436,7 +451,20 @@ lemma IsStable.locally_and_iff
     ⟨_, hpX.isLocalizingSequence_localSeq.min hqX.isLocalizingSequence_localSeq, fun n => ?_⟩⟩
   suffices forall (p q : (ι -> Ω -> E) -> Prop) (hp : IsStable 𝓕 p) (hq : IsStable 𝓕 q)
       (hpX : Locally p 𝓕 X P) (hqX : Locally q 𝓕 X P),
-      p (stoppe
+      p (stoppedProcess (fun i => {ω | ⊥ < (hpX.localSeq ⊓ hqX.localSeq) n ω}.indicator (X i))
+      ((hpX.localSeq ⊓ hqX.localSeq) n)) by
+    refine ⟨this p q hp hq hpX hqX, ?_⟩
+    simp_rw [inf_comm hpX.localSeq]
+    exact this q p hq hp hqX hpX
+  intro p q hp hq hpX hqX
+  convert!
+hp _ (hpX.stoppedProcess_localSeq n) _
+      hqX.isLocalizingSequence_localSeq.isStoppingTime n using 1
+  ext i ω
+  simp_rw [stoppedProcess_indicator_comm, Pi.inf_apply, lt_inf_iff, inf_comm (hpX.localSeq n)]
+  rw [← stoppedProcess_stoppedProcess]; rw [← stoppedProcess_indicator_comm]; rw [Set.ofPred_and]; rw [Set.inter_comm]
+  simp_rw [← Set.indicator_indicator]
+  rfl
 
 Depends on / 依赖: IsStable, Locally, Locally.of_and, hpX.isLocalizingSequence_localSeq.min, hpX.localSeq, hqX.isLocalizingSequence_localSeq, hqX.localSeq, indicator, inf_comm, isLocalizingSequence_localSeq, localSeq, of_and, simp_rw, stoppedProcess
 -/
@@ -479,7 +507,11 @@ mono := ae_of_all _ fun ω n m hnm => iInf_le_iInf_of_subset fun k hk => hnm.tra
   tendsto_top := by
     filter_upwards [hτ.tendsto_top] with ω hω
     replace hω := hω.liminf_eq
-    rw [liminf_eq_iSup_iInf_
+    rw [liminf_eq_iSup_iInf_of_nat] at hω
+    rw [← hω]
+    refine tendsto_atTop_iSup fun n m hnm => ?_
+    simp [iInf_le_iff]
+    grind
 
 中文:
 引理 是PreLocalizingSequence.isLocalizingSequence_biInf
@@ -489,7 +521,11 @@ mono := ae_of_all _ fun ω n m hnm => iInf_le_iInf_of_subset fun k hk => hnm.tra
   tendsto_top := by
     filter_upwards [hτ.tendsto_top] with ω hω
     replace hω := hω.liminf_eq
-    rw [liminf_eq_iSup_iInf_
+    rw [liminf_eq_iSup_iInf_of_nat] at hω
+    rw [← hω]
+    refine tendsto_atTop_iSup fun n m hnm => ?_
+    simp [iInf_le_iff]
+    grind
 
 Depends on / 依赖: IsStoppingTime, IsStoppingTime.biInf, Set.to_countable, to_countable
 -/
@@ -519,7 +555,11 @@ lemma IsStable.locally_of_isPreLocalizingSequence
   rw [stoppedProcess_indicator_comm']; rw [← stoppedProcess_stoppedProcess_of_le_right
     (τ := fun ω => τ n ω) (fun _ => (iInf_le _ n).trans <| iInf_le _ le_rfl)]; rw [← stoppedProcess_indicator_comm']
   convert!
-hp _ (hpτ n) (fun ω => ⨅ 
+hp _ (hpτ n) (fun ω => ⨅ j >= n, τ j ω) hτ.isLocalizingSequence_biInf.isStoppingTime n using 2
+  ext i ω
+  rw [stoppedProcess_indicator_comm']; rw [Set.indicator_indicator]
+  congr with ω
+exact ⟨fun h => ⟨h, lt_of_lt_of_le h (iInf_le _ n).trans (iInf_le _ le_rfl)⟩, fun h => h.1⟩
 
 中文:
 引理 IsStable.locally_of_isPreLocalizingSequence
@@ -528,7 +568,11 @@ hp _ (hpτ n) (fun ω => ⨅
   rw [stoppedProcess_indicator_comm']; rw [← stoppedProcess_stoppedProcess_of_le_right
     (τ := fun ω => τ n ω) (fun _ => (iInf_le _ n).trans <| iInf_le _ le_rfl)]; rw [← stoppedProcess_indicator_comm']
   convert!
-hp _ (hpτ n) (fun ω => ⨅ 
+hp _ (hpτ n) (fun ω => ⨅ j >= n, τ j ω) hτ.isLocalizingSequence_biInf.isStoppingTime n using 2
+  ext i ω
+  rw [stoppedProcess_indicator_comm']; rw [Set.indicator_indicator]
+  congr with ω
+exact ⟨fun h => ⟨h, lt_of_lt_of_le h (iInf_le _ n).trans (iInf_le _ le_rfl)⟩, fun h => h.1⟩
 
 Depends on / 依赖: Set.indicator_indicator, convert, iInf_le, indicator_indicator, isLocalizingSequence_biInf, isLocalizingSequence_biInf.isStoppingTime, isStoppingTime, le_rfl, lt_of_lt_of_le, stoppedProcess_indicator_comm, stoppedProcess_stoppedProcess_of_le_right
 -/
@@ -562,7 +606,27 @@ lemma isPreLocalizingSequence_of_isLocalizingSequence_aux'
   by_contra! hn
   suffices (1 / 2) ^ n <= P (⋂ k : Nat, {ω | σ n k ω < min (τ n ω) (T n)}) by
 refine (by simp : ¬ (1 / 2 : Real>=0∞) ^ n <= 0) this.trans nonpos_iff_eq_zero.2 ?_
-    rw [measure_e
+    rw [measure_eq_zero_iff_ae_notMem]
+    filter_upwards [(hσ n).tendsto_top] with ω hTop hmem
+    simp_rw [WithTop.tendsto_nhds_top_iff, eventually_atTop] at hTop
+    simp only [Set.mem_iInter, Set.mem_ofPred_eq] at hmem
+    obtain ⟨N, hN⟩ := hTop (T n)
+    specialize hN N le_rfl
+    specialize hmem N
+    grind
+  rw [measure_iInter_of_ae_antitone]; rw [le_iInf_iff]
+  · exact fun k => (hn k).le
+  · filter_upwards [(hσ n).mono] with ω hω
+    intros i j hij
+    specialize hω hij
+    simp [Set.ofPred] at *
+    grind
+  · refine fun i => .nullMeasurableSet ?_
+    simp_rw [lt_inf_iff, Set.ofPred_and]
+    exact MeasurableSet.inter
+      (measurableSet_lt ((hσ n).isStoppingTime i).measurable' (hτ.isStoppingTime n).measurable')
+ measurableSet_lt ((hσ n).isStoppingTime i).measurable' measurable_const
+  · exact ⟨0, measure_ne_top P _⟩
 
 中文:
 引理 isPreLocalizingSequence_of_isLocalizingSequence_aux'
@@ -572,7 +636,27 @@ refine (by simp : ¬ (1 / 2 : Real>=0∞) ^ n <= 0) this.trans nonpos_iff_eq_zer
   by_contra! hn
   suffices (1 / 2) ^ n <= P (⋂ k : Nat, {ω | σ n k ω < min (τ n ω) (T n)}) by
 refine (by simp : ¬ (1 / 2 : Real>=0∞) ^ n <= 0) this.trans nonpos_iff_eq_zero.2 ?_
-    rw [measure_e
+    rw [measure_eq_zero_iff_ae_notMem]
+    filter_upwards [(hσ n).tendsto_top] with ω hTop hmem
+    simp_rw [WithTop.tendsto_nhds_top_iff, eventually_atTop] at hTop
+    simp only [Set.mem_iInter, Set.mem_ofPred_eq] at hmem
+    obtain ⟨N, hN⟩ := hTop (T n)
+    specialize hN N le_rfl
+    specialize hmem N
+    grind
+  rw [measure_iInter_of_ae_antitone]; rw [le_iInf_iff]
+  · exact fun k => (hn k).le
+  · filter_upwards [(hσ n).mono] with ω hω
+    intros i j hij
+    specialize hω hij
+    simp [Set.ofPred] at *
+    grind
+  · refine fun i => .nullMeasurableSet ?_
+    simp_rw [lt_inf_iff, Set.ofPred_and]
+    exact MeasurableSet.inter
+      (measurableSet_lt ((hσ n).isStoppingTime i).measurable' (hτ.isStoppingTime n).measurable')
+ measurableSet_lt ((hσ n).isStoppingTime i).measurable' measurable_const
+  · exact ⟨0, measure_ne_top P _⟩
 -/
 private lemma isPreLocalizingSequence_of_isLocalizingSequence_aux'
     {τ : Nat -> Ω -> WithTop ι} {σ : Nat -> Nat -> Ω -> WithTop ι}
@@ -667,7 +751,9 @@ lemma isPreLocalizingSequence_of_isLocalizingSequence_aux
   refine ⟨mkStrictMonoAux nk, T, mkStrictMonoAux_strictMono nk, hT,
     fun n => le_trans (EventuallyLE.measure_le ?_) (hnk n)⟩
   filter_upwards [(hσ n).mono] with ω hω
-  specialize hω (le_mk
+  specialize hω (le_mkStrictMonoAux nk n)
+  simp [Set.ofPred]
+  grind
 
 中文:
 引理 isPreLocalizingSequence_of_isLocalizingSequence_aux
@@ -677,7 +763,9 @@ lemma isPreLocalizingSequence_of_isLocalizingSequence_aux
   refine ⟨mkStrictMonoAux nk, T, mkStrictMonoAux_strictMono nk, hT,
     fun n => le_trans (EventuallyLE.measure_le ?_) (hnk n)⟩
   filter_upwards [(hσ n).mono] with ω hω
-  specialize hω (le_mk
+  specialize hω (le_mkStrictMonoAux nk n)
+  simp [Set.ofPred]
+  grind
 -/
 private lemma isPreLocalizingSequence_of_isLocalizingSequence_aux
     {τ : Nat -> Ω -> WithTop ι} {σ : Nat -> Nat -> Ω -> WithTop ι}
@@ -702,7 +790,11 @@ lemma IsLocalizingSequence.isPrelocalizingSequence_inf_extraction
   obtain ⟨nk, T, hnk, hT, hP⟩ := isPreLocalizingSequence_of_isLocalizingSequence_aux hτ hσ
   refine ⟨nk, hnk, fun n => (hτ.isStoppingTime n).min ((hσ _).isStoppingTime _), ?_⟩
   have : ∑' n, P {ω | σ n (nk n) ω < min (τ n ω) (T n)} < ∞ :=
-    lt_of_le_of_lt (ENNReal.summable.tsum_mono ENNReal.sum
+    lt_of_le_of_lt (ENNReal.summable.tsum_mono ENNReal.summable hP)
+      (tsum_geometric_lt_top.2 <| by simp)
+  filter_upwards [ae_eventually_notMem this.ne, hτ.tendsto_top] with ω hω hωτ
+exact hωτ.min tendsto_of_tendsto_of_tendsto_of_le_of_le'
+    (hωτ.min <| WithTop.tendsto_coe_atTop.comp hT) tendsto_const_nhds (by grind) (by simp)
 
 中文:
 引理 是LocalizingSequence.isPrelocalizingSequence_inf_extraction
@@ -710,7 +802,11 @@ lemma IsLocalizingSequence.isPrelocalizingSequence_inf_extraction
   obtain ⟨nk, T, hnk, hT, hP⟩ := isPreLocalizingSequence_of_isLocalizingSequence_aux hτ hσ
   refine ⟨nk, hnk, fun n => (hτ.isStoppingTime n).min ((hσ _).isStoppingTime _), ?_⟩
   have : ∑' n, P {ω | σ n (nk n) ω < min (τ n ω) (T n)} < ∞ :=
-    lt_of_le_of_lt (ENNReal.summable.tsum_mono ENNReal.sum
+    lt_of_le_of_lt (ENNReal.summable.tsum_mono ENNReal.summable hP)
+      (tsum_geometric_lt_top.2 <| by simp)
+  filter_upwards [ae_eventually_notMem this.ne, hτ.tendsto_top] with ω hω hωτ
+exact hωτ.min tendsto_of_tendsto_of_tendsto_of_le_of_le'
+    (hωτ.min <| WithTop.tendsto_coe_atTop.comp hT) tendsto_const_nhds (by grind) (by simp)
 
 Depends on / 依赖: ENNReal, ENNReal.summable, ENNReal.summable.tsum_mono, WithTop, WithTop.tendsto_co, ae_eventually_notMem, filter_upwards, isPreLocalizingSequence_of_isLocalizingSequence_aux, isStoppingTime, lt_of_le_of_lt, summable, tendsto_co, tendsto_of_tendsto_of_tendsto_of_le_of_le, tendsto_top, this.ne, tsum_geometric_lt_top, tsum_mono
 -/
@@ -744,7 +840,15 @@ fun n => .of_prop hL.stoppedProcess_localSeq n⟩⟩
   choose τ hτ₁ hτ₂ using hL.stoppedProcess_localSeq
   obtain ⟨nk, hnk, hpre⟩ :=
     hL.isLocalizingSequence_localSeq.isPrelocalizingSequence_inf_extraction hτ₁
-refine
+refine locally_of_isPreLocalizingSequence hp hpre fun n => ?_
+  convert! hτ₂ n (nk n) using 1 with
+  ext i ω
+  rw [stoppedProcess_indicator_comm']; rw [stoppedProcess_indicator_comm']; rw [stoppedProcess_stoppedProcess]; rw [stoppedProcess_indicator_comm']
+  simp only [lt_inf_iff, Set.indicator_indicator]
+  congr 1
+  · ext; grind
+  · simp_rw [inf_comm]
+    rfl
 
 中文:
 引理 IsStable.locally_locally_iff
@@ -755,7 +859,15 @@ fun n => .of_prop hL.stoppedProcess_localSeq n⟩⟩
   choose τ hτ₁ hτ₂ using hL.stoppedProcess_localSeq
   obtain ⟨nk, hnk, hpre⟩ :=
     hL.isLocalizingSequence_localSeq.isPrelocalizingSequence_inf_extraction hτ₁
-refine
+refine locally_of_isPreLocalizingSequence hp hpre fun n => ?_
+  convert! hτ₂ n (nk n) using 1 with
+  ext i ω
+  rw [stoppedProcess_indicator_comm']; rw [stoppedProcess_indicator_comm']; rw [stoppedProcess_stoppedProcess]; rw [stoppedProcess_indicator_comm']
+  simp only [lt_inf_iff, Set.indicator_indicator]
+  congr 1
+  · ext; grind
+  · simp_rw [inf_comm]
+    rfl
 
 Depends on / 依赖: convert, hL.isLocalizingSequence_localSeq, hL.isLocalizingSequence_localSeq.isPrelocalizingSequence_inf_extraction, hL.localSeq, hL.stoppedProcess_localSeq, isLocalizingSequence_localSeq, isPrelocalizingSequence_inf_extraction, localSeq, locally_of_isPreLocalizingSequence, of_prop, stoppedProcess_indicator_comm, stoppedProcess_localSeq, stoppedProcess_stoppedProcess
 -/

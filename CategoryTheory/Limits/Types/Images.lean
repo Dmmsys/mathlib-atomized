@@ -294,7 +294,9 @@ lemma surjective_π_app_zero_of_surjective_map_aux
   | @step p h ih =>
     rw [← ih]
     have h' : m <= p := h
-    erw [CategoryTheory.Functor.map_comp (f := (homOfLE (Nat.l
+    erw [CategoryTheory.Functor.map_comp (f := (homOfLE (Nat.le_succ p)).op) (g := (homOfLE h').op),
+      comp_apply, (hF p _).choose_spec]
+    rfl
 
 中文:
 引理 surjective_π_app_zero_of_surjective_map_aux
@@ -308,7 +310,9 @@ lemma surjective_π_app_zero_of_surjective_map_aux
   | @step p h ih =>
     rw [← ih]
     have h' : m <= p := h
-    erw [CategoryTheory.Functor.map_comp (f := (homOfLE (Nat.l
+    erw [CategoryTheory.Functor.map_comp (f := (homOfLE (Nat.le_succ p)).op) (g := (homOfLE h').op),
+      comp_apply, (hF p _).choose_spec]
+    rfl
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_comp, CategoryTheory.Functor.map_id, Functor, Nat.le_succ, choose_spec, comp_apply, homOfLE, id_apply, le_succ, map_comp, map_id, preimage
 -/
@@ -340,7 +344,7 @@ lemma surjective_π_app_zero_of_surjective_map
   apply Function.Surjective.comp
   · exact surjective_π_app_zero_of_surjective_map_aux hF
   · rw [← epi_iff_surjective]
-    infer_insta
+    infer_instance
 
 中文:
 引理 surjective_π_app_zero_of_surjective_map
@@ -351,7 +355,7 @@ lemma surjective_π_app_zero_of_surjective_map
   apply Function.Surjective.comp
   · exact surjective_π_app_zero_of_surjective_map_aux hF
   · rw [← epi_iff_surjective]
-    infer_insta
+    infer_instance
 
 Depends on / 依赖: Function, Function.Surjective.comp, Surjective, conePointUniqueUpToIso, epi_iff_surjective, hc.conePointUniqueUpToIso, i.hom, infer_instance, limitCone, limitConeIsLimit, types_comp
 -/

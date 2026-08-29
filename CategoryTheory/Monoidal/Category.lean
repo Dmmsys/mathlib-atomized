@@ -312,7 +312,7 @@ abbreviation ofTensorHom
   whiskerLeft_id := by intros; simp [← id_tensorHom, ← id_tensorHom_id]
   id_whiskerRight := by intros; simp [← tensorHom_id, id_tensorHom_id]
   pentagon := by intros; simp [← id_tensorHom, ← tensorHom_id, pentagon]
-  triangl
+  triangle := by intros; simp [← id_tensorHom, ← tensorHom_id, triangle]
 
 中文:
 缩写 ofTensorHom
@@ -321,7 +321,7 @@ abbreviation ofTensorHom
   whiskerLeft_id := by intros; simp [← id_tensorHom, ← id_tensorHom_id]
   id_whiskerRight := by intros; simp [← tensorHom_id, id_tensorHom_id]
   pentagon := by intros; simp [← id_tensorHom, ← tensorHom_id, pentagon]
-  triangl
+  triangle := by intros; simp [← id_tensorHom, ← tensorHom_id, triangle]
 
 Depends on / 依赖: associator_naturality, cat_disch, id_tensorHom, tensorHom, tensorHom_comp_tensorHom, tensorHom_id, whiskerLeft, whiskerRight
 -/
@@ -2178,7 +2178,7 @@ theorem leftUnitor_whiskerRight
       cancel_epi ((α_ _ _ _).hom ▷ _)]; rw [pentagon_assoc]; rw [triangle]; rw [← associator_naturality_middle]; rw [←
       comp_whiskerRight_assoc]; rw [triangle]; rw [associator_naturality_left]
 
-@[reassoc
+@[reassoc, simp]
 
 中文:
 定理 leftUnitor_whiskerRight
@@ -2188,7 +2188,7 @@ theorem leftUnitor_whiskerRight
       cancel_epi ((α_ _ _ _).hom ▷ _)]; rw [pentagon_assoc]; rw [triangle]; rw [← associator_naturality_middle]; rw [←
       comp_whiskerRight_assoc]; rw [triangle]; rw [associator_naturality_left]
 
-@[reassoc
+@[reassoc, simp]
 
 Depends on / 依赖: associator_naturality_left, associator_naturality_middle, cancel_epi, comp_whiskerRight_assoc, pentagon_assoc, triangle, whiskerLeft_comp, whiskerLeft_iff
 -/
@@ -2232,7 +2232,9 @@ theorem whiskerLeft_rightUnitor
   proof: by
   rw [← whiskerRight_iff]; rw [comp_whiskerRight]; rw [← cancel_epi (α_ _ _ _).inv]; rw [←
       cancel_epi (X ◁ (α_ _ _ _).inv)]; rw [pentagon_inv_assoc]; rw [triangle_assoc_comp_right]; rw [←
-      associator_inv_naturality_middle]; rw [← whiskerLeft_comp_assoc]; rw [triangle_assoc_comp_right];
+      associator_inv_naturality_middle]; rw [← whiskerLeft_comp_assoc]; rw [triangle_assoc_comp_right]; rw [associator_inv_naturality_right]
+
+@[reassoc, simp]
 
 中文:
 定理 whiskerLeft_rightUnitor
@@ -2240,7 +2242,9 @@ theorem whiskerLeft_rightUnitor
   证明: by
   rw [← whiskerRight_iff]; rw [comp_whiskerRight]; rw [← cancel_epi (α_ _ _ _).inv]; rw [←
       cancel_epi (X ◁ (α_ _ _ _).inv)]; rw [pentagon_inv_assoc]; rw [triangle_assoc_comp_right]; rw [←
-      associator_inv_naturality_middle]; rw [← whiskerLeft_comp_assoc]; rw [triangle_assoc_comp_right];
+      associator_inv_naturality_middle]; rw [← whiskerLeft_comp_assoc]; rw [triangle_assoc_comp_right]; rw [associator_inv_naturality_right]
+
+@[reassoc, simp]
 
 Depends on / 依赖: associator_inv_naturality_middle, associator_inv_naturality_right, cancel_epi, comp_whiskerRight, pentagon_inv_assoc, triangle_assoc_comp_right, whiskerLeft_comp_assoc, whiskerRight_iff
 -/
@@ -3388,7 +3392,9 @@ instance prodMonoidal
   whiskerRight f X := whiskerRight f.1 X.1 ×ₘ whiskerRight f.2 X.2
   tensorHom_def := by simp [tensorHom_def]
   tensorUnit := (𝟙_ C₁, 𝟙_ C₂)
-  
+  associator X Y Z := (α_ X.1 Y.1 Z.1).prod (α_ X.2 Y.2 Z.2)
+  leftUnitor := fun ⟨X₁, X₂⟩ => (fun_ X₁).prod (fun_ X₂)
+  rightUnitor := fun ⟨X₁, X₂⟩ => (ρ_ X₁).prod (ρ_ X₂)
 
 中文:
 实例 prodMonoidal
@@ -3399,7 +3405,9 @@ instance prodMonoidal
   whiskerRight f X := whiskerRight f.1 X.1 ×ₘ whiskerRight f.2 X.2
   tensorHom_def := by simp [tensorHom_def]
   tensorUnit := (𝟙_ C₁, 𝟙_ C₂)
-  
+  associator X Y Z := (α_ X.1 Y.1 Z.1).prod (α_ X.2 Y.2 Z.2)
+  leftUnitor := fun ⟨X₁, X₂⟩ => (fun_ X₁).prod (fun_ X₂)
+  rightUnitor := fun ⟨X₁, X₂⟩ => (ρ_ X₁).prod (ρ_ X₂)
 
 Depends on / 依赖: otimes
 -/
@@ -3514,7 +3522,9 @@ abbreviation MonoidalCategory.fullSubcategory
   tensorHom f g := homMk (f.hom otimesₘ g.hom)
   tensorUnit := ⟨𝟙_ C, tensorUnit⟩
   associator X Y Z := P.fullyFaithfulι.preimageIso (α_ X.1 Y.1 Z.1)
-  leftUnitor X 
+  leftUnitor X := P.fullyFaithfulι.preimageIso (fun_ X.1)
+  rightUnitor X := P.fullyFaithfulι.preimageIso (ρ_ X.1)
+  tensorHom_def _ _ := by ext; apply tensorHom_def
 
 中文:
 缩写 幺半群范畴.fullSubcategory
@@ -3524,7 +3534,9 @@ abbreviation MonoidalCategory.fullSubcategory
   tensorHom f g := homMk (f.hom otimesₘ g.hom)
   tensorUnit := ⟨𝟙_ C, tensorUnit⟩
   associator X Y Z := P.fullyFaithfulι.preimageIso (α_ X.1 Y.1 Z.1)
-  leftUnitor X 
+  leftUnitor X := P.fullyFaithfulι.preimageIso (fun_ X.1)
+  rightUnitor X := P.fullyFaithfulι.preimageIso (ρ_ X.1)
+  tensorHom_def _ _ := by ext; apply tensorHom_def
 
 Depends on / 依赖: otimes, tensorObj
 -/

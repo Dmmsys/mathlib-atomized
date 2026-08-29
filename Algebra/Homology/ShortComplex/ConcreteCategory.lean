@@ -326,7 +326,7 @@ lemma i_cyclesMk
   -- have to simplify it.
   have := abCyclesIso_inv_apply_iCycles (S.map (forget₂ C Ab)) ⟨x₂, hx₂⟩
   simp only [map_X₂, map_X₃, map_g] at this
-  rw [← ConcreteCategory.comp_apply]; rw [S.mapCyclesIso
+  rw [← ConcreteCategory.comp_apply]; rw [S.mapCyclesIso_hom_iCycles (forget₂ C Ab)]; rw [this]
 
 中文:
 引理 i_cyclesMk
@@ -337,7 +337,7 @@ lemma i_cyclesMk
   -- have to simplify it.
   have := abCyclesIso_inv_apply_iCycles (S.map (forget₂ C Ab)) ⟨x₂, hx₂⟩
   simp only [map_X₂, map_X₃, map_g] at this
-  rw [← ConcreteCategory.comp_apply]; rw [S.mapCyclesIso
+  rw [← ConcreteCategory.comp_apply]; rw [S.mapCyclesIso_hom_iCycles (forget₂ C Ab)]; rw [this]
 
 Depends on / 依赖: cyclesMk
 -/
@@ -382,6 +382,17 @@ lemma δ_apply
     have : forget₂ C Ab ⋙ forget Ab = forget C := HasForget₂.forget_comp
     simpa only [← this] using comp_preservesFiniteLimits _ _
   have eq := CategoryTheory.congr_fun (D.snd_δ)
+    (Limits.Concrete.pullbackMk D.L₁.g D.v₀₁.τ₃ x₂ x₃ h₂)
+  have eq₁ := Concrete.pullbackMk_fst D.L₁.g D.v₀₁.τ₃ x₂ x₃ h₂
+  have eq₂ := Concrete.pullbackMk_snd D.L₁.g D.v₀₁.τ₃ x₂ x₃ h₂
+  rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply] at eq
+  rw [eq₂] at eq
+  refine eq.trans (CategoryTheory.congr_arg (D.v₂₃.τ₁) ?_)
+  apply (Preadditive.mono_iff_injective' D.L₂.f).1 inferInstance
+  rw [← ConcreteCategory.comp_apply]; rw [φ₁_L₂_f]
+  dsimp [φ₂]
+  rw [ConcreteCategory.comp_apply]; rw [eq₁]
+  exact h₁.symm
 
 中文:
 引理 δ_apply
@@ -392,6 +403,17 @@ lemma δ_apply
     have : forget₂ C Ab ⋙ forget Ab = forget C := HasForget₂.forget_comp
     simpa only [← this] using comp_preservesFiniteLimits _ _
   have eq := CategoryTheory.congr_fun (D.snd_δ)
+    (Limits.Concrete.pullbackMk D.L₁.g D.v₀₁.τ₃ x₂ x₃ h₂)
+  have eq₁ := Concrete.pullbackMk_fst D.L₁.g D.v₀₁.τ₃ x₂ x₃ h₂
+  have eq₂ := Concrete.pullbackMk_snd D.L₁.g D.v₀₁.τ₃ x₂ x₃ h₂
+  rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply] at eq
+  rw [eq₂] at eq
+  refine eq.trans (CategoryTheory.congr_arg (D.v₂₃.τ₁) ?_)
+  apply (Preadditive.mono_iff_injective' D.L₂.f).1 inferInstance
+  rw [← ConcreteCategory.comp_apply]; rw [φ₁_L₂_f]
+  dsimp [φ₂]
+  rw [ConcreteCategory.comp_apply]; rw [eq₁]
+  exact h₁.symm
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.congr_fun, Concrete, Concrete.pullbackMk_fst, Concrete.pullbackMk_snd, ConcreteCategory, ConcreteCategory.comp_apply, D.snd_, Limits, Limits.Concrete.pullbackMk, PreservesFiniteLimits, comp_apply, comp_preservesFiniteLimits, congr_fun, forget, forget_comp, preservesFiniteLimits_of_preservesHomology, pullbackMk, pullbackMk_fst, pullbackMk_snd
 -/
@@ -426,6 +448,11 @@ lemma δ_apply'
   apply (ofHom_mono_iff_injective (e.hom.app _)).1 inferInstance
   refine ((ConcreteCategory.congr_hom (e.hom.naturality D.δ) x₃).trans ?_).trans
     (ConcreteCategory.congr_hom (e.hom.naturality D.v₂₃.τ₁).symm x₁)
+  exact D.δ_apply _ _ _
+    (((ConcreteCategory.congr_hom (e.hom.naturality D.L₁.g) x₂).symm.trans (by simp_all)).trans
+      (ConcreteCategory.congr_hom (e.hom.naturality D.v₀₁.τ₃) x₃))
+    (((ConcreteCategory.congr_hom (e.hom.naturality D.L₂.f) x₁).symm.trans (by simp_all)).trans
+      (ConcreteCategory.congr_hom (e.hom.naturality D.v₁₂.τ₂) x₂))
 
 中文:
 引理 δ_apply'
@@ -435,6 +462,11 @@ lemma δ_apply'
   apply (ofHom_mono_iff_injective (e.hom.app _)).1 inferInstance
   refine ((ConcreteCategory.congr_hom (e.hom.naturality D.δ) x₃).trans ?_).trans
     (ConcreteCategory.congr_hom (e.hom.naturality D.v₂₃.τ₁).symm x₁)
+  exact D.δ_apply _ _ _
+    (((ConcreteCategory.congr_hom (e.hom.naturality D.L₁.g) x₂).symm.trans (by simp_all)).trans
+      (ConcreteCategory.congr_hom (e.hom.naturality D.v₀₁.τ₃) x₃))
+    (((ConcreteCategory.congr_hom (e.hom.naturality D.L₂.f) x₁).symm.trans (by simp_all)).trans
+      (ConcreteCategory.congr_hom (e.hom.naturality D.v₁₂.τ₂) x₂))
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, e.hom.app, e.hom.naturality, eqToIso, forget, forget_comp, naturality, ofHom_mono_iff_injective, symm.trans
 -/

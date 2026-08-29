@@ -569,7 +569,9 @@ lemma pullSub_append
       simp [pullSub, List.take_add]
     · constructor <;> intro ⟨h, _⟩ <;>
         [skip; replace h := by simpa [List.take_take] using h.take x.length] <;>
-cases hp List.prefix_iff_eq_tak
+cases hp List.prefix_iff_eq_take.mpr (h.eq_of_length (by simpa)).symm
+  · rw [mem_pullSub_short hl, mem_pullSub_short (by simp), mem_pullSub_short (by simp; lia)]
+    simpa using fun _ => (z.isPrefix_append_of_length hl).symm
 
 中文:
 引理 pullSub_append
@@ -581,7 +583,9 @@ cases hp List.prefix_iff_eq_tak
       simp [pullSub, List.take_add]
     · constructor <;> intro ⟨h, _⟩ <;>
         [skip; replace h := by simpa [List.take_take] using h.take x.length] <;>
-cases hp List.prefix_iff_eq_tak
+cases hp List.prefix_iff_eq_take.mpr (h.eq_of_length (by simpa)).symm
+  · rw [mem_pullSub_short hl, mem_pullSub_short (by simp), mem_pullSub_short (by simp; lia)]
+    simpa using fun _ => (z.isPrefix_append_of_length hl).symm
 -/
 @[simp] lemma pullSub_append : pullSub (pullSub T y) x = pullSub T (x ++ y) := by
   ext z; rcases le_total x.length z.length with hl | hl

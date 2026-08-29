@@ -66,7 +66,42 @@ theorem MvPolynomial.sum_eval_eq_zero
     _ = ∑ d in f.support, ∑ x : σ -> K, f.coeff d * ∏ i, x i ^ d i := sum_comm
     _ = 0 := sum_eq_zero ?_
   intro d hd
-  obtain ⟨i, h
+  obtain ⟨i, hi⟩ : exists i, d i < q - 1 := f.exists_degree_lt (q - 1) h hd
+  calc
+    (∑ x : σ -> K, f.coeff d * ∏ i, x i ^ d i) = f.coeff d * ∑ x : σ -> K, ∏ i, x i ^ d i :=
+      (mul_sum ..).symm
+    _ = 0 := (mul_eq_zero.mpr ∘ Or.inr) ?_
+  calc
+    (∑ x : σ -> K, ∏ i, x i ^ d i) =
+        ∑ x₀ : { j // j != i } -> K, ∑ x : { x : σ -> K // x ∘ (↑) = x₀ }, ∏ j, (x : σ -> K) j ^ d j :=
+      (Fintype.sum_fiberwise _ _).symm
+    _ = 0 := Fintype.sum_eq_zero _ ?_
+  intro x₀
+  let e : K ≃ { x // x ∘ ((↑) : _ -> σ) = x₀ } := (Equiv.subtypeEquivCodomain _).symm
+  calc
+    (∑ x : { x : σ -> K // x ∘ (↑) = x₀ }, ∏ j, (x : σ -> K) j ^ d j) =
+        ∑ a : K, ∏ j : σ, (e a : σ -> K) j ^ d j := (e.sum_comp _).symm
+    _ = ∑ a : K, (∏ j, x₀ j ^ d j) * a ^ d i := Fintype.sum_congr _ _ ?_
+    _ = (∏ j, x₀ j ^ d j) * ∑ a : K, a ^ d i := by rw [mul_sum]
+    _ = 0 := by rw [sum_pow_lt_card_sub_one K _ hi, mul_zero]
+  intro a
+  let e' : { j // j = i } oplus { j // j != i } ≃ σ := Equiv.sumCompl _
+  let : Unique { j // j = i } :=
+    { default := ⟨i, rfl⟩
+      uniq := fun ⟨j, h⟩ => Subtype.val_injective h }
+  calc
+    (∏ j : σ, (e a : σ -> K) j ^ d j) =
+        (e a : σ -> K) i ^ d i * ∏ j : { j // j != i }, (e a : σ -> K) j ^ d j := by
+      rw [← e'.prod_comp]; rw [Fintype.prod_sum_type]; rw [univ_unique]; rw [prod_singleton]; rfl
+    _ = a ^ d i * ∏ j : { j // j != i }, (e a : σ -> K) j ^ d j := by
+      rw [Equiv.subtypeEquivCodomain_symm_apply_eq]
+    _ = a ^ d i * ∏ j, x₀ j ^ d j := congr_arg _ (Fintype.prod_congr _ _ ?_)
+    -- see below
+    _ = (∏ j, x₀ j ^ d j) * a ^ d i := mul_comm _ _
+  -- the remaining step of the calculation above
+  rintro ⟨j, hj⟩
+  change (e a : σ -> K) j ^ d j = x₀ ⟨j, hj⟩ ^ d j
+  rw [Equiv.subtypeEquivCodomain_symm_apply_ne]
 
 中文:
 定理 多元多项式.sum_eval_eq_zero
@@ -79,7 +114,42 @@ theorem MvPolynomial.sum_eval_eq_zero
     _ = ∑ d in f.support, ∑ x : σ -> K, f.coeff d * ∏ i, x i ^ d i := sum_comm
     _ = 0 := sum_eq_zero ?_
   intro d hd
-  obtain ⟨i, h
+  obtain ⟨i, hi⟩ : exists i, d i < q - 1 := f.exists_degree_lt (q - 1) h hd
+  calc
+    (∑ x : σ -> K, f.coeff d * ∏ i, x i ^ d i) = f.coeff d * ∑ x : σ -> K, ∏ i, x i ^ d i :=
+      (mul_sum ..).symm
+    _ = 0 := (mul_eq_zero.mpr ∘ Or.inr) ?_
+  calc
+    (∑ x : σ -> K, ∏ i, x i ^ d i) =
+        ∑ x₀ : { j // j != i } -> K, ∑ x : { x : σ -> K // x ∘ (↑) = x₀ }, ∏ j, (x : σ -> K) j ^ d j :=
+      (Fintype.sum_fiberwise _ _).symm
+    _ = 0 := Fintype.sum_eq_zero _ ?_
+  intro x₀
+  let e : K ≃ { x // x ∘ ((↑) : _ -> σ) = x₀ } := (Equiv.subtypeEquivCodomain _).symm
+  calc
+    (∑ x : { x : σ -> K // x ∘ (↑) = x₀ }, ∏ j, (x : σ -> K) j ^ d j) =
+        ∑ a : K, ∏ j : σ, (e a : σ -> K) j ^ d j := (e.sum_comp _).symm
+    _ = ∑ a : K, (∏ j, x₀ j ^ d j) * a ^ d i := Fintype.sum_congr _ _ ?_
+    _ = (∏ j, x₀ j ^ d j) * ∑ a : K, a ^ d i := by rw [mul_sum]
+    _ = 0 := by rw [sum_pow_lt_card_sub_one K _ hi, mul_zero]
+  intro a
+  let e' : { j // j = i } oplus { j // j != i } ≃ σ := Equiv.sumCompl _
+  let : Unique { j // j = i } :=
+    { default := ⟨i, rfl⟩
+      uniq := fun ⟨j, h⟩ => Subtype.val_injective h }
+  calc
+    (∏ j : σ, (e a : σ -> K) j ^ d j) =
+        (e a : σ -> K) i ^ d i * ∏ j : { j // j != i }, (e a : σ -> K) j ^ d j := by
+      rw [← e'.prod_comp]; rw [Fintype.prod_sum_type]; rw [univ_unique]; rw [prod_singleton]; rfl
+    _ = a ^ d i * ∏ j : { j // j != i }, (e a : σ -> K) j ^ d j := by
+      rw [Equiv.subtypeEquivCodomain_symm_apply_eq]
+    _ = a ^ d i * ∏ j, x₀ j ^ d j := congr_arg _ (Fintype.prod_congr _ _ ?_)
+    -- see below
+    _ = (∏ j, x₀ j ^ d j) * a ^ d i := mul_comm _ _
+  -- the remaining step of the calculation above
+  rintro ⟨j, hj⟩
+  change (e a : σ -> K) j ^ d j = x₀ ⟨j, hj⟩ ^ d j
+  rw [Equiv.subtypeEquivCodomain_symm_apply_ne]
 
 Depends on / 依赖: Classical, Classical.decEq, DecidableEq, Or.inr, eval_eq, exists_degree_lt, f.coeff, f.exists_degree_lt, f.support, mul_eq_zero, mul_eq_zero.mpr, mul_sum, sum_comm, sum_eq_zero, support
 -/
@@ -141,7 +211,52 @@ theorem char_dvd_card_solutions_of_sum_lt
   have hq : 0 < q - 1 := by rw [← Fintype.card_units, Fintype.card_pos_iff]; exact ⟨1⟩
   let S : Finset (σ -> K) := {x | forall i in s, eval x (f i) = 0}
   have hS (x : σ -> K) : x in S ↔ forall i in s, eval x (f i) = 0 := by simp [S]
-  /- The polynomial `F = ∏ i ∈ s, (1 - (f i)^(q - 1))` has the
+  /- The polynomial `F = ∏ i ∈ s, (1 - (f i)^(q - 1))` has the nice property
+    that it takes the value `1` on elements of `{x : σ → K // ∀ i ∈ s, (f i).eval x = 0}`
+    while it is `0` outside that locus.
+    Hence the sum of its values is equal to the cardinality of
+    `{x : σ → K // ∀ i ∈ s, (f i).eval x = 0}` modulo `p`. -/
+  let F : MvPolynomial σ K := ∏ i in s, (1 - f i ^ (q - 1))
+  have hF : forall x, eval x F = if x in S then 1 else 0 := by
+    intro x
+    calc
+      eval x F = ∏ i in s, eval x (1 - f i ^ (q - 1)) := eval_prod s _ x
+      _ = if x in S then 1 else 0 := ?_
+    simp only [(eval x).map_sub, (eval x).map_pow, (eval x).map_one]
+    split_ifs with hx
+    · apply Finset.prod_eq_one
+      intro i hi
+      rw [hS] at hx
+      rw [hx i hi]; rw [zero_pow hq.ne']; rw [sub_zero]
+    · obtain ⟨i, hi, hx⟩ : exists i in s, eval x (f i) != 0 := by
+        simpa [hS, not_forall, Classical.not_imp] using hx
+      apply Finset.prod_eq_zero hi
+      rw [pow_card_sub_one_eq_one (eval x (f i)) hx]; rw [sub_self]
+  -- In particular, we can now show:
+  have key : ∑ x, eval x F = Fintype.card { x : σ -> K // forall i in s, eval x (f i) = 0 } := by
+    rw [Fintype.card_of_subtype S hS]; rw [card_eq_sum_ones]; rw [Nat.cast_sum]; rw [Nat.cast_one]; rw [←
+      Fintype.sum_extend_by_zero S]; rw [sum_congr rfl fun x _ => hF x]
+  -- With these preparations under our belt, we will approach the main goal.
+  change p ∣ Fintype.card { x // forall i : ι, i in s -> eval x (f i) = 0 }
+  rw [← CharP.cast_eq_zero_iff K]; rw [← key]
+  change (∑ x, eval x F) = 0
+  -- We are now ready to apply the main machine, proven before.
+  apply F.sum_eval_eq_zero
+  -- It remains to verify the crucial assumption of this machine
+  show F.totalDegree < (q - 1) * Fintype.card σ
+  calc
+    F.totalDegree <= ∑ i in s, (1 - f i ^ (q - 1)).totalDegree := totalDegree_finsetProd s _
+    _ <= ∑ i in s, (q - 1) * (f i).totalDegree := sum_le_sum fun i _ => ?_
+    -- see ↓
+    _ = (q - 1) * ∑ i in s, (f i).totalDegree := (mul_sum ..).symm
+    _ < (q - 1) * Fintype.card σ := by gcongr
+  -- Now we prove the remaining step from the preceding calculation
+  change (1 - f i ^ (q - 1)).totalDegree <= (q - 1) * (f i).totalDegree
+  calc
+    (1 - f i ^ (q - 1)).totalDegree <=
+        max (1 : MvPolynomial σ K).totalDegree (f i ^ (q - 1)).totalDegree := totalDegree_sub _ _
+    _ <= (f i ^ (q - 1)).totalDegree := by simp
+    _ <= (q - 1) * (f i).totalDegree := totalDegree_pow _ _
 
 中文:
 定理 char_dvd_card_solutions_of_sum_lt
@@ -150,7 +265,52 @@ theorem char_dvd_card_solutions_of_sum_lt
   have hq : 0 < q - 1 := by rw [← Fintype.card_units, Fintype.card_pos_iff]; exact ⟨1⟩
   let S : Finset (σ -> K) := {x | forall i in s, eval x (f i) = 0}
   have hS (x : σ -> K) : x in S ↔ forall i in s, eval x (f i) = 0 := by simp [S]
-  /- The polynomial `F = ∏ i ∈ s, (1 - (f i)^(q - 1))` has the
+  /- The polynomial `F = ∏ i ∈ s, (1 - (f i)^(q - 1))` has the nice property
+    that it takes the value `1` on elements of `{x : σ → K // ∀ i ∈ s, (f i).eval x = 0}`
+    while it is `0` outside that locus.
+    Hence the sum of its values is equal to the cardinality of
+    `{x : σ → K // ∀ i ∈ s, (f i).eval x = 0}` modulo `p`. -/
+  let F : MvPolynomial σ K := ∏ i in s, (1 - f i ^ (q - 1))
+  have hF : forall x, eval x F = if x in S then 1 else 0 := by
+    intro x
+    calc
+      eval x F = ∏ i in s, eval x (1 - f i ^ (q - 1)) := eval_prod s _ x
+      _ = if x in S then 1 else 0 := ?_
+    simp only [(eval x).map_sub, (eval x).map_pow, (eval x).map_one]
+    split_ifs with hx
+    · apply Finset.prod_eq_one
+      intro i hi
+      rw [hS] at hx
+      rw [hx i hi]; rw [zero_pow hq.ne']; rw [sub_zero]
+    · obtain ⟨i, hi, hx⟩ : exists i in s, eval x (f i) != 0 := by
+        simpa [hS, not_forall, Classical.not_imp] using hx
+      apply Finset.prod_eq_zero hi
+      rw [pow_card_sub_one_eq_one (eval x (f i)) hx]; rw [sub_self]
+  -- In particular, we can now show:
+  have key : ∑ x, eval x F = Fintype.card { x : σ -> K // forall i in s, eval x (f i) = 0 } := by
+    rw [Fintype.card_of_subtype S hS]; rw [card_eq_sum_ones]; rw [Nat.cast_sum]; rw [Nat.cast_one]; rw [←
+      Fintype.sum_extend_by_zero S]; rw [sum_congr rfl fun x _ => hF x]
+  -- With these preparations under our belt, we will approach the main goal.
+  change p ∣ Fintype.card { x // forall i : ι, i in s -> eval x (f i) = 0 }
+  rw [← CharP.cast_eq_zero_iff K]; rw [← key]
+  change (∑ x, eval x F) = 0
+  -- We are now ready to apply the main machine, proven before.
+  apply F.sum_eval_eq_zero
+  -- It remains to verify the crucial assumption of this machine
+  show F.totalDegree < (q - 1) * Fintype.card σ
+  calc
+    F.totalDegree <= ∑ i in s, (1 - f i ^ (q - 1)).totalDegree := totalDegree_finsetProd s _
+    _ <= ∑ i in s, (q - 1) * (f i).totalDegree := sum_le_sum fun i _ => ?_
+    -- see ↓
+    _ = (q - 1) * ∑ i in s, (f i).totalDegree := (mul_sum ..).symm
+    _ < (q - 1) * Fintype.card σ := by gcongr
+  -- Now we prove the remaining step from the preceding calculation
+  change (1 - f i ^ (q - 1)).totalDegree <= (q - 1) * (f i).totalDegree
+  calc
+    (1 - f i ^ (q - 1)).totalDegree <=
+        max (1 : MvPolynomial σ K).totalDegree (f i ^ (q - 1)).totalDegree := totalDegree_sub _ _
+    _ <= (f i ^ (q - 1)).totalDegree := by simp
+    _ <= (q - 1) * (f i).totalDegree := totalDegree_pow _ _
 
 Depends on / 依赖: Finset, Fintype, Fintype.card_pos_iff, Fintype.card_units, card_pos_iff, card_units
 -/

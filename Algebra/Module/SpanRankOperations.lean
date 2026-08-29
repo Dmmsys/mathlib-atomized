@@ -143,7 +143,15 @@ lemma TensorProduct.spanFinrank_top_eq_of_residueField
   let : Module.Finite R N := Module.Finite.iff_fg.mpr fg
   apply (TensorProduct.spanFinrank_top_le_of_fg N fg).antisymm
   obtain ⟨s, hs₁, hs₂⟩ := (⊤ : Submodule 𝓀 (𝓀 otimes[R] N)).exists_span_set_card_eq_spanRank
-  have hs₃ : s.Finite := Cardinal.mk_lt_aleph0_iff.mp (by simpa [hs₁] using Module.F
+  have hs₃ : s.Finite := Cardinal.mk_lt_aleph0_iff.mp (by simpa [hs₁] using Module.Finite.fg_top)
+  let t := Function.surjInv (mk_surjective R N 𝓀 residue_surjective) '' s
+  have ht₁ : mk R 𝓀 N 1 '' t = s := by rw [← Set.image_comp, Function.comp_surjInv, s.image_id]
+  have ht₂ : span R t = ⊤ := by
+    rwa [← restrictScalars_eq_top_iff R, restrictScalars_span _ _ (by exact residue_surjective),
+      ← ht₁, ← map_span, map_tensorProduct_mk_eq_top] at hs₂
+  grw [← N.spanFinrank_top, ← ht₂, spanFinrank_span_le_ncard_of_finite (hs₃.image _), spanFinrank,
+    ← hs₁, Set.ncard_image_le hs₃]
+  rfl
 
 中文:
 引理 张量积.spanFinrank_top_eq_of_residueField
@@ -152,7 +160,15 @@ lemma TensorProduct.spanFinrank_top_eq_of_residueField
   let : Module.Finite R N := Module.Finite.iff_fg.mpr fg
   apply (TensorProduct.spanFinrank_top_le_of_fg N fg).antisymm
   obtain ⟨s, hs₁, hs₂⟩ := (⊤ : Submodule 𝓀 (𝓀 otimes[R] N)).exists_span_set_card_eq_spanRank
-  have hs₃ : s.Finite := Cardinal.mk_lt_aleph0_iff.mp (by simpa [hs₁] using Module.F
+  have hs₃ : s.Finite := Cardinal.mk_lt_aleph0_iff.mp (by simpa [hs₁] using Module.Finite.fg_top)
+  let t := Function.surjInv (mk_surjective R N 𝓀 residue_surjective) '' s
+  have ht₁ : mk R 𝓀 N 1 '' t = s := by rw [← Set.image_comp, Function.comp_surjInv, s.image_id]
+  have ht₂ : span R t = ⊤ := by
+    rwa [← restrictScalars_eq_top_iff R, restrictScalars_span _ _ (by exact residue_surjective),
+      ← ht₁, ← map_span, map_tensorProduct_mk_eq_top] at hs₂
+  grw [← N.spanFinrank_top, ← ht₂, spanFinrank_span_le_ncard_of_finite (hs₃.image _), spanFinrank,
+    ← hs₁, Set.ncard_image_le hs₃]
+  rfl
 
 Depends on / 依赖: Cardinal, Cardinal.mk_lt_aleph0_iff.mp, Finite, Function, Function.comp_surjInv, Function.surjInv, Module, Module.Finite, Module.Finite.fg_top, Module.Finite.iff_fg.mpr, Set.image_comp, Submodule, TensorProduct, TensorProduct.spanFinrank_top_le_of_fg, antisymm, comp_surjInv, exists_span_set_card_eq_spanRank, fg_top, iff_fg, image_comp
 -/
@@ -185,7 +201,10 @@ lemma spanFinrank_eq_finrank_quotient
     inferInstanceAs (Module (R ⧸ maximalIdeal R) _)
   let : IsScalarTower R 𝓀 (N ⧸ maximalIdeal R • (⊤ : Submodule R N)) :=
     inferInstanceAs (IsScalarTower R (R ⧸ maximalIdeal R) _)
-  rw [← spanFinrank_top_eq_of_residueField N fg];
+  rw [← spanFinrank_top_eq_of_residueField N fg]; rw [← Module.finrank_eq_spanFinrank_of_free]
+  let e : 𝓀 otimes[R] N ≃ₗ[𝓀] N ⧸ (maximalIdeal R) • (⊤ : Submodule R N) :=
+    (quotTensorEquivQuotSMul N (maximalIdeal R)).extendScalarsOfSurjective residue_surjective
+  exact e.finrank_eq
 
 中文:
 引理 spanFinrank_eq_finrank_quotient
@@ -195,7 +214,10 @@ lemma spanFinrank_eq_finrank_quotient
     inferInstanceAs (Module (R ⧸ maximalIdeal R) _)
   let : IsScalarTower R 𝓀 (N ⧸ maximalIdeal R • (⊤ : Submodule R N)) :=
     inferInstanceAs (IsScalarTower R (R ⧸ maximalIdeal R) _)
-  rw [← spanFinrank_top_eq_of_residueField N fg];
+  rw [← spanFinrank_top_eq_of_residueField N fg]; rw [← Module.finrank_eq_spanFinrank_of_free]
+  let e : 𝓀 otimes[R] N ≃ₗ[𝓀] N ⧸ (maximalIdeal R) • (⊤ : Submodule R N) :=
+    (quotTensorEquivQuotSMul N (maximalIdeal R)).extendScalarsOfSurjective residue_surjective
+  exact e.finrank_eq
 
 Depends on / 依赖: IsScalarTower, Module, Module.finrank_eq_spanFinrank_of_free, Submodule, extendScalarsOfSurjective, finrank_eq_spanFinrank_of_free, maximalIdeal, otimes, quotTensorEquivQuotSMul, residue_surjective, spanFinrank_top_eq_of_residueField
 -/

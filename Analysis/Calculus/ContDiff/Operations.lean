@@ -69,6 +69,15 @@ theorem hasFTaylorSeriesUpToOn_pi
     ContinuousMultilinearMap.piₗᵢ _ _
   refine ⟨fun h i => ?_, fun h => ⟨fun x hx => ?_, ?_, ?_⟩⟩
   · exact h.continuousLinearMap_comp (pr i)
+  · ext1 i
+    exact (h i).zero_eq x hx
+  · intro m hm x hx
+exact (L m).hasFDerivAt.comp_hasFDerivWithinAt x
+      hasFDerivWithinAt_pi.2 fun i => (h i).fderivWithin m hm x hx
+  · intro m hm
+exact (L m).continuous.comp_continuousOn continuousOn_pi.2 fun i => (h i).cont m hm
+
+@[simp]
 
 中文:
 定理 hasFTaylorSeriesUpToOn_pi
@@ -79,6 +88,15 @@ theorem hasFTaylorSeriesUpToOn_pi
     ContinuousMultilinearMap.piₗᵢ _ _
   refine ⟨fun h i => ?_, fun h => ⟨fun x hx => ?_, ?_, ?_⟩⟩
   · exact h.continuousLinearMap_comp (pr i)
+  · ext1 i
+    exact (h i).zero_eq x hx
+  · intro m hm x hx
+exact (L m).hasFDerivAt.comp_hasFDerivWithinAt x
+      hasFDerivWithinAt_pi.2 fun i => (h i).fderivWithin m hm x hx
+  · intro m hm
+exact (L m).continuous.comp_continuousOn continuousOn_pi.2 fun i => (h i).cont m hm
+
+@[simp]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.proj, ContinuousMultilinearMap, ContinuousMultilinearMap.pi, comp_continuo, comp_hasFDerivWithinAt, continuous, continuous.comp_continuo, continuousLinearMap_comp, fderivWithin, h.continuousLinearMap_comp, hasFDerivAt, hasFDerivAt.comp_hasFDerivWithinAt, hasFDerivWithinAt_pi, zero_eq
 -/
@@ -136,7 +154,17 @@ theorem contDiffWithinAt_pi
   | ω =>
     choose u hux p hp h'p using h
     refine ⟨⋂ i, u i, Filter.iInter_mem.2 hux, _,
-hasFTaylorSeriesUpToOn_pi.2 fun i => (hp i).mono iInter_subset _ _,
+hasFTaylorSeriesUpToOn_pi.2 fun i => (hp i).mono iInter_subset _ _, fun m => ?_⟩
+    set L : (forall i, E [×m]->L[𝕜] F' i) ≃ₗᵢ[𝕜] E [×m]->L[𝕜] forall i, F' i :=
+      ContinuousMultilinearMap.piₗᵢ _ _
+    change AnalyticOn 𝕜 (fun x => L (fun i => p i x m)) (⋂ i, u i)
+    apply (L.analyticOnNhd univ).comp_analyticOn ?_ (mapsTo_univ _ _)
+    exact AnalyticOn.pi (fun i => (h'p i m).mono (iInter_subset _ _))
+  | (n : Nat∞) =>
+    intro m hm
+    choose u hux p hp using fun i => h i m hm
+    exact ⟨⋂ i, u i, Filter.iInter_mem.2 hux, _,
+hasFTaylorSeriesUpToOn_pi.2 fun i => (hp i).mono iInter_subset _ _⟩
 
 中文:
 定理 contDiffWithinAt_pi
@@ -147,7 +175,17 @@ hasFTaylorSeriesUpToOn_pi.2 fun i => (hp i).mono iInter_subset _ _,
   | ω =>
     choose u hux p hp h'p using h
     refine ⟨⋂ i, u i, Filter.iInter_mem.2 hux, _,
-hasFTaylorSeriesUpToOn_pi.2 fun i => (hp i).mono iInter_subset _ _,
+hasFTaylorSeriesUpToOn_pi.2 fun i => (hp i).mono iInter_subset _ _, fun m => ?_⟩
+    set L : (forall i, E [×m]->L[𝕜] F' i) ≃ₗᵢ[𝕜] E [×m]->L[𝕜] forall i, F' i :=
+      ContinuousMultilinearMap.piₗᵢ _ _
+    change AnalyticOn 𝕜 (fun x => L (fun i => p i x m)) (⋂ i, u i)
+    apply (L.analyticOnNhd univ).comp_analyticOn ?_ (mapsTo_univ _ _)
+    exact AnalyticOn.pi (fun i => (h'p i m).mono (iInter_subset _ _))
+  | (n : Nat∞) =>
+    intro m hm
+    choose u hux p hp using fun i => h i m hm
+    exact ⟨⋂ i, u i, Filter.iInter_mem.2 hux, _,
+hasFTaylorSeriesUpToOn_pi.2 fun i => (hp i).mono iInter_subset _ _⟩
 
 Depends on / 依赖: AnalyticOn, ContinuousLinearMap, ContinuousLinearMap.proj, ContinuousMultilinearMap, ContinuousMultilinearMap.pi, Filter, Filter.iInter_mem, L.analyticOnNhd, analyticOnNhd, continuousLinearMap_comp, h.continuousLinearMap_comp, hasFTaylorSeriesUpToOn_pi, iInter_mem, iInter_subset
 -/
@@ -606,7 +644,16 @@ theorem iteratedFDerivWithin_add_apply
   have := (hf.eventually (by simp)).and (hg.eventually (by simp))
   obtain ⟨t, ht, hxt, h⟩ := mem_nhdsWithin.mp this
   have hft : ContDiffOn 𝕜 i f (s inter t) := fun a ha => (h (by simp_all)).1.mono inter_subset_left
-  have hgt : ContDiffOn 𝕜 i g (s inter t) := fun a ha => (h (by simp_all)).2.mon
+  have hgt : ContDiffOn 𝕜 i g (s inter t) := fun a ha => (h (by simp_all)).2.mono inter_subset_left
+  have hut : UniqueDiffOn 𝕜 (s inter t) := hu.inter ht
+  have H : ↑(s inter t) =ᶠ[𝓝 x] s :=
+    inter_eventuallyEq_left.mpr (eventually_of_mem (ht.mem_nhds hxt) (fun _ h _ => h))
+  rw [← iteratedFDerivWithin_congr_set H]; rw [← iteratedFDerivWithin_congr_set H]; rw [← iteratedFDerivWithin_congr_set H]
+  exact .symm (((hft.ftaylorSeriesWithin hut).add
+      (hgt.ftaylorSeriesWithin hut)).eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl hut ⟨hx, hxt⟩)
+
+@[deprecated (since := "2026-02-13")]
+alias iteratedFDerivWithin_add_apply' := fun_iteratedFDerivWithin_add_apply
 
 中文:
 定理 iteratedFDerivWithin_add_apply
@@ -615,7 +662,16 @@ theorem iteratedFDerivWithin_add_apply
   have := (hf.eventually (by simp)).and (hg.eventually (by simp))
   obtain ⟨t, ht, hxt, h⟩ := mem_nhdsWithin.mp this
   have hft : ContDiffOn 𝕜 i f (s inter t) := fun a ha => (h (by simp_all)).1.mono inter_subset_left
-  have hgt : ContDiffOn 𝕜 i g (s inter t) := fun a ha => (h (by simp_all)).2.mon
+  have hgt : ContDiffOn 𝕜 i g (s inter t) := fun a ha => (h (by simp_all)).2.mono inter_subset_left
+  have hut : UniqueDiffOn 𝕜 (s inter t) := hu.inter ht
+  have H : ↑(s inter t) =ᶠ[𝓝 x] s :=
+    inter_eventuallyEq_left.mpr (eventually_of_mem (ht.mem_nhds hxt) (fun _ h _ => h))
+  rw [← iteratedFDerivWithin_congr_set H]; rw [← iteratedFDerivWithin_congr_set H]; rw [← iteratedFDerivWithin_congr_set H]
+  exact .symm (((hft.ftaylorSeriesWithin hut).add
+      (hgt.ftaylorSeriesWithin hut)).eq_iteratedFDerivWithin_of_uniqueDiffOn le_rfl hut ⟨hx, hxt⟩)
+
+@[deprecated (since := "2026-02-13")]
+alias iteratedFDerivWithin_add_apply' := fun_iteratedFDerivWithin_add_apply
 -/
 @[to_fun] theorem iteratedFDerivWithin_add_apply {f g : E -> F} (hf : ContDiffWithinAt 𝕜 i f s x)
     (hg : ContDiffWithinAt 𝕜 i g s x) (hu : UniqueDiffOn 𝕜 s) (hx : x in s) :
@@ -811,7 +867,12 @@ theorem iteratedFDerivWithin_neg_apply
       iteratedFDerivWithin 𝕜 (i + 1) (-f) s x h =
           fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 i (-f) s) s x (h 0) (Fin.tail h) :=
         iteratedFDerivWithin_succ_apply_left _
-      _ = fderivWithin 𝕜 (-itera
+      _ = fderivWithin 𝕜 (-iteratedFDerivWithin 𝕜 i f s) s x (h 0) (Fin.tail h) := by
+        rw [fderivWithin_congr' (@hi) hx]; rw [Pi.neg_def]
+      _ = -(fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 i f s) s) x (h 0) (Fin.tail h) := by
+        rw [fderivWithin_neg (hu x hx)]; rw [neg_apply]; rw [neg_apply]
+      _ = -(iteratedFDerivWithin 𝕜 (i + 1) f s) x h := by
+        rw [iteratedFDerivWithin_succ_apply_left]
 
 中文:
 定理 iteratedFDerivWithin_neg_apply
@@ -824,7 +885,12 @@ theorem iteratedFDerivWithin_neg_apply
       iteratedFDerivWithin 𝕜 (i + 1) (-f) s x h =
           fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 i (-f) s) s x (h 0) (Fin.tail h) :=
         iteratedFDerivWithin_succ_apply_left _
-      _ = fderivWithin 𝕜 (-itera
+      _ = fderivWithin 𝕜 (-iteratedFDerivWithin 𝕜 i f s) s x (h 0) (Fin.tail h) := by
+        rw [fderivWithin_congr' (@hi) hx]; rw [Pi.neg_def]
+      _ = -(fderivWithin 𝕜 (iteratedFDerivWithin 𝕜 i f s) s) x (h 0) (Fin.tail h) := by
+        rw [fderivWithin_neg (hu x hx)]; rw [neg_apply]; rw [neg_apply]
+      _ = -(iteratedFDerivWithin 𝕜 (i + 1) f s) x h := by
+        rw [iteratedFDerivWithin_succ_apply_left]
 
 Depends on / 依赖: Fin.tail, Pi.neg_def, fderivWithin, fderivWithin_congr, fderivWithin_neg, generalizing, iteratedFDerivWithin, iteratedFDerivWithin_succ_apply_left, neg_apply, neg_def
 -/
@@ -1179,7 +1245,7 @@ theorem iteratedFDerivWithin_sum_apply
   | cons a u ha IH =>
     simp only [Finset.mem_cons, forall_eq_or_imp] at h
     simp only [Finset.sum_cons]
-    rw [fun_iteratedFDerivWithin_add_apply h.1 (
+    rw [fun_iteratedFDerivWithin_add_apply h.1 (ContDiffWithinAt.sum h.2) hs hx]; rw [IH h.2]
 
 中文:
 定理 iteratedFDerivWithin_sum_apply
@@ -1191,7 +1257,7 @@ theorem iteratedFDerivWithin_sum_apply
   | cons a u ha IH =>
     simp only [Finset.mem_cons, forall_eq_or_imp] at h
     simp only [Finset.sum_cons]
-    rw [fun_iteratedFDerivWithin_add_apply h.1 (
+    rw [fun_iteratedFDerivWithin_add_apply h.1 (ContDiffWithinAt.sum h.2) hs hx]; rw [IH h.2]
 
 Depends on / 依赖: ContDiffWithinAt, ContDiffWithinAt.sum, Finset, Finset.cons_induction, Finset.mem_cons, Finset.sum_cons, cons_induction, forall_eq_or_imp, fun_iteratedFDerivWithin_add_apply, mem_cons, sum_cons
 -/
@@ -2229,7 +2295,13 @@ theorem iteratedFDeriv_comp_const_smul
     ext v
     rw [iteratedFDeriv_succ_eq_comp_left]; rw [iteratedFDeriv_succ_eq_comp_left]
     simp only [Nat.succ_eq_add_one, Nat.cast_add, Nat.cast_one, self_le_add_right, hf.of_le, hi,
-      comp_apply, continuousMultilinearCurryLeftEqu
+      comp_apply, continuousMultilinearCurryLeftEquiv_symm_apply, smul_apply]
+    rw [fderiv_fun_const_smul]; rw [fderiv_comp_smul]; rw [smul_smul]; rw [← pow_succ]
+    · simp
+    rw [← Function.comp_def (g := (a • ·))]
+    apply DifferentiableAt.comp
+    · exact hf.contDiffAt.differentiableAt_iteratedFDeriv (Nat.cast_lt.2 i.lt_succ_self)
+    · exact differentiableAt_id.const_smul _
 
 中文:
 定理 iteratedFDeriv_comp_const_smul
@@ -2241,7 +2313,13 @@ theorem iteratedFDeriv_comp_const_smul
     ext v
     rw [iteratedFDeriv_succ_eq_comp_left]; rw [iteratedFDeriv_succ_eq_comp_left]
     simp only [Nat.succ_eq_add_one, Nat.cast_add, Nat.cast_one, self_le_add_right, hf.of_le, hi,
-      comp_apply, continuousMultilinearCurryLeftEqu
+      comp_apply, continuousMultilinearCurryLeftEquiv_symm_apply, smul_apply]
+    rw [fderiv_fun_const_smul]; rw [fderiv_comp_smul]; rw [smul_smul]; rw [← pow_succ]
+    · simp
+    rw [← Function.comp_def (g := (a • ·))]
+    apply DifferentiableAt.comp
+    · exact hf.contDiffAt.differentiableAt_iteratedFDeriv (Nat.cast_lt.2 i.lt_succ_self)
+    · exact differentiableAt_id.const_smul _
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.comp, Function, Function.comp_def, Nat.cast_add, Nat.cast_one, Nat.succ_eq_add_one, cast_add, cast_one, comp_apply, comp_def, contDiffAt, continuousMultilinearCurryLeftEquiv_symm_apply, differentiableAt_, fderiv_comp_smul, fderiv_fun_const_smul, hf.contDiffAt.differentiableAt_, hf.of_le, iteratedFDeriv_succ_eq_comp_left, of_le
 -/
@@ -2768,7 +2846,15 @@ theorem contDiffAt_map_inverse
   -- ring `E →L[𝕜] E`
   let O₁ : (E ->L[𝕜] E) -> F ->L[𝕜] E := fun f => f.comp (e.symm : F ->L[𝕜] E)
   let O₂ : (E ->L[𝕜] F) -> E ->L[𝕜] E := fun f => (e.symm : F ->L[𝕜] E).comp f
-
+  have : ContinuousLinearMap.inverse = O₁ ∘ Ring.inverse ∘ O₂ := funext (inverse_eq_ringInverse e)
+  rw [this]
+  -- `O₁` and `O₂` are `ContDiff`,
+  -- so we reduce to proving that `Ring.inverse` is `ContDiff`
+  have h₁ : ContDiff 𝕜 n O₁ := contDiff_id.clm_comp contDiff_const
+  have h₂ : ContDiff 𝕜 n O₂ := contDiff_const.clm_comp contDiff_id
+  refine h₁.contDiffAt.comp _ (ContDiffAt.comp _ ?_ h₂.contDiffAt)
+  convert! contDiffAt_ringInverse 𝕜 (1 : (E ->L[𝕜] E)ˣ)
+  simp [O₂, one_def]
 
 中文:
 定理 contDiffAt_map_inverse
@@ -2779,7 +2865,15 @@ theorem contDiffAt_map_inverse
   -- ring `E →L[𝕜] E`
   let O₁ : (E ->L[𝕜] E) -> F ->L[𝕜] E := fun f => f.comp (e.symm : F ->L[𝕜] E)
   let O₂ : (E ->L[𝕜] F) -> E ->L[𝕜] E := fun f => (e.symm : F ->L[𝕜] E).comp f
-
+  have : ContinuousLinearMap.inverse = O₁ ∘ Ring.inverse ∘ O₂ := funext (inverse_eq_ringInverse e)
+  rw [this]
+  -- `O₁` and `O₂` are `ContDiff`,
+  -- so we reduce to proving that `Ring.inverse` is `ContDiff`
+  have h₁ : ContDiff 𝕜 n O₁ := contDiff_id.clm_comp contDiff_const
+  have h₂ : ContDiff 𝕜 n O₂ := contDiff_const.clm_comp contDiff_id
+  refine h₁.contDiffAt.comp _ (ContDiffAt.comp _ ?_ h₂.contDiffAt)
+  convert! contDiffAt_ringInverse 𝕜 (1 : (E ->L[𝕜] E)ˣ)
+  simp [O₂, one_def]
 
 Depends on / 依赖: nontriviality
 -/
@@ -2846,7 +2940,45 @@ theorem OpenPartialHomeomorph.contDiffAt_symm
     induction n using ENat.nat_induction with
     | zero =>
       apply contDiffAt_zero.2
-      exact ⟨f.target, IsOpen.mem_n
+      exact ⟨f.target, IsOpen.mem_nhds f.open_target ha, f.continuousOn_invFun⟩
+    | succ n IH =>
+      obtain ⟨f', ⟨u, hu, hff'⟩, hf'⟩ := contDiffAt_succ_iff_hasFDerivAt.mp hf
+      apply contDiffAt_succ_iff_hasFDerivAt.2
+      -- For showing `n.succ` times continuous differentiability (the main inductive step), it
+      -- suffices to produce the derivative and show that it is `n` times continuously
+      -- differentiable
+      have eq_f₀' : f' (f.symm a) = f₀' := (hff' (f.symm a) (mem_of_mem_nhds hu)).unique hf₀'
+      -- This follows by a bootstrapping formula expressing the derivative as a
+      -- function of `f` itself
+      refine ⟨inverse ∘ f' ∘ f.symm, ?_, ?_⟩
+      · -- We first check that the derivative of `f` is that formula
+        have h_nhds : { y : E | exists e : E ≃L[𝕜] F, ↑e = f' y } in 𝓝 (f.symm a) := by
+          have hf₀' := f₀'.nhds
+          rw [← eq_f₀'] at hf₀'
+          exact hf'.continuousAt.preimage_mem_nhds hf₀'
+        obtain ⟨t, htu, ht, htf⟩ := mem_nhds_iff.mp (Filter.inter_mem hu h_nhds)
+        use f.target inter f.symm ⁻¹' t
+        refine ⟨IsOpen.mem_nhds ?_ ?_, ?_⟩
+        · exact f.isOpen_inter_preimage_symm ht
+        · exact mem_inter ha (mem_preimage.mpr htf)
+        intro x hx
+        obtain ⟨hxu, e, he⟩ := htu hx.2
+        have h_deriv : HasFDerivAt f (e : E ->L[𝕜] F) (f.symm x) := by
+          rw [he]
+          exact hff' (f.symm x) hxu
+        convert! f.hasFDerivAt_symm hx.1 h_deriv
+        simp [← he]
+      · -- Then we check that the formula, being a composition of `ContDiff` pieces, is
+        -- itself `ContDiff`
+        have h_deriv₁ : ContDiffAt 𝕜 n inverse (f' (f.symm a)) := by
+          rw [eq_f₀']
+          exact contDiffAt_map_inverse _
+        have h_deriv₂ : ContDiffAt 𝕜 n f.symm a := by
+          refine IH (hf.of_le ?_)
+          norm_cast
+          exact Nat.le_succ n
+        exact (h_deriv₁.comp _ hf').comp _ h_deriv₂
+    | top Itop => exact contDiffAt_infty.mpr fun n => Itop n (contDiffAt_infty.mp hf n)
 
 中文:
 定理 OpenPartialHomeomorph.contDiffAt_symm
@@ -2861,7 +2993,45 @@ theorem OpenPartialHomeomorph.contDiffAt_symm
     induction n using ENat.nat_induction with
     | zero =>
       apply contDiffAt_zero.2
-      exact ⟨f.target, IsOpen.mem_n
+      exact ⟨f.target, IsOpen.mem_nhds f.open_target ha, f.continuousOn_invFun⟩
+    | succ n IH =>
+      obtain ⟨f', ⟨u, hu, hff'⟩, hf'⟩ := contDiffAt_succ_iff_hasFDerivAt.mp hf
+      apply contDiffAt_succ_iff_hasFDerivAt.2
+      -- For showing `n.succ` times continuous differentiability (the main inductive step), it
+      -- suffices to produce the derivative and show that it is `n` times continuously
+      -- differentiable
+      have eq_f₀' : f' (f.symm a) = f₀' := (hff' (f.symm a) (mem_of_mem_nhds hu)).unique hf₀'
+      -- This follows by a bootstrapping formula expressing the derivative as a
+      -- function of `f` itself
+      refine ⟨inverse ∘ f' ∘ f.symm, ?_, ?_⟩
+      · -- We first check that the derivative of `f` is that formula
+        have h_nhds : { y : E | exists e : E ≃L[𝕜] F, ↑e = f' y } in 𝓝 (f.symm a) := by
+          have hf₀' := f₀'.nhds
+          rw [← eq_f₀'] at hf₀'
+          exact hf'.continuousAt.preimage_mem_nhds hf₀'
+        obtain ⟨t, htu, ht, htf⟩ := mem_nhds_iff.mp (Filter.inter_mem hu h_nhds)
+        use f.target inter f.symm ⁻¹' t
+        refine ⟨IsOpen.mem_nhds ?_ ?_, ?_⟩
+        · exact f.isOpen_inter_preimage_symm ht
+        · exact mem_inter ha (mem_preimage.mpr htf)
+        intro x hx
+        obtain ⟨hxu, e, he⟩ := htu hx.2
+        have h_deriv : HasFDerivAt f (e : E ->L[𝕜] F) (f.symm x) := by
+          rw [he]
+          exact hff' (f.symm x) hxu
+        convert! f.hasFDerivAt_symm hx.1 h_deriv
+        simp [← he]
+      · -- Then we check that the formula, being a composition of `ContDiff` pieces, is
+        -- itself `ContDiff`
+        have h_deriv₁ : ContDiffAt 𝕜 n inverse (f' (f.symm a)) := by
+          rw [eq_f₀']
+          exact contDiffAt_map_inverse _
+        have h_deriv₂ : ContDiffAt 𝕜 n f.symm a := by
+          refine IH (hf.of_le ?_)
+          norm_cast
+          exact Nat.le_succ n
+        exact (h_deriv₁.comp _ hf').comp _ h_deriv₂
+    | top Itop => exact contDiffAt_infty.mpr fun n => Itop n (contDiffAt_infty.mp hf n)
 
 Depends on / 依赖: AnalyticAt, AnalyticAt.contDiffAt, analyticAt, analyticAt_symm, contDiffAt, f.analyticAt_symm, fderiv, hf.analyticAt
 -/
@@ -3006,7 +3176,8 @@ definition restrContDiff
       {y | ContDiffAt 𝕜 n f.symm y ∧ ContDiffAt 𝕜 n f (f.symm y)} := fun x hx => by
     simp [hx, and_comm]
 H.restr isOpen_iff_mem_nhds.2 fun _ ⟨hxs, hxf, hxf'⟩ =>
-inter_mem (f.open_source.mem_nhds hxs) (hxf.eventually hn).an
+inter_mem (f.open_source.mem_nhds hxs) (hxf.eventually hn).and
+    f.continuousAt hxs (hxf'.eventually hn)
 
 中文:
 定义 restrContDiff
@@ -3015,7 +3186,8 @@ inter_mem (f.open_source.mem_nhds hxs) (hxf.eventually hn).an
       {y | ContDiffAt 𝕜 n f.symm y ∧ ContDiffAt 𝕜 n f (f.symm y)} := fun x hx => by
     simp [hx, and_comm]
 H.restr isOpen_iff_mem_nhds.2 fun _ ⟨hxs, hxf, hxf'⟩ =>
-inter_mem (f.open_source.mem_nhds hxs) (hxf.eventually hn).an
+inter_mem (f.open_source.mem_nhds hxs) (hxf.eventually hn).and
+    f.continuousAt hxs (hxf'.eventually hn)
 
 Depends on / 依赖: ContDiffAt, H.restr, IsImage, and_comm, continuousAt, eventually, f.IsImage, f.continuousAt, f.open_source.mem_nhds, f.symm, hxf.eventually, inter_mem, isOpen_iff_mem_nhds, mem_nhds, open_source
 -/
@@ -3132,7 +3304,12 @@ theorem ContDiffWithinAt.restrict_scalars
     obtain ⟨u, u_mem, p', hp', Hp'⟩ := h
     refine ⟨u, u_mem, _, hp'.restrictScalars _, fun i => ?_⟩
     change AnalyticOn 𝕜 (fun x => ContinuousMultilinearMap.restrictScalarsLinear 𝕜 (p' x i)) u
-    apply AnalyticOnNhd.comp_analyticOn _ (Hp' i).restrictScalars (Set.mapsT
+    apply AnalyticOnNhd.comp_analyticOn _ (Hp' i).restrictScalars (Set.mapsTo_univ _ _)
+    exact ContinuousLinearMap.analyticOnNhd _ _
+  | (n : Nat∞) =>
+    intro m hm
+    rcases h m hm with ⟨u, u_mem, p', hp'⟩
+    exact ⟨u, u_mem, _, hp'.restrictScalars _⟩
 
 中文:
 定理 ContDiffWithinAt.restrict_scalars
@@ -3143,7 +3320,12 @@ theorem ContDiffWithinAt.restrict_scalars
     obtain ⟨u, u_mem, p', hp', Hp'⟩ := h
     refine ⟨u, u_mem, _, hp'.restrictScalars _, fun i => ?_⟩
     change AnalyticOn 𝕜 (fun x => ContinuousMultilinearMap.restrictScalarsLinear 𝕜 (p' x i)) u
-    apply AnalyticOnNhd.comp_analyticOn _ (Hp' i).restrictScalars (Set.mapsT
+    apply AnalyticOnNhd.comp_analyticOn _ (Hp' i).restrictScalars (Set.mapsTo_univ _ _)
+    exact ContinuousLinearMap.analyticOnNhd _ _
+  | (n : Nat∞) =>
+    intro m hm
+    rcases h m hm with ⟨u, u_mem, p', hp'⟩
+    exact ⟨u, u_mem, _, hp'.restrictScalars _⟩
 
 Depends on / 依赖: AnalyticOn, AnalyticOnNhd, AnalyticOnNhd.comp_analyticOn, ContinuousLinearMap, ContinuousLinearMap.analyticOnNhd, ContinuousMultilinearMap, ContinuousMultilinearMap.restrictScalarsLinear, Set.mapsTo_univ, analyticOnNhd, comp_analyticOn, mapsTo_univ, restrictScalars, restrictScalarsLinear, u_mem
 -/

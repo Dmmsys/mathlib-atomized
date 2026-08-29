@@ -128,7 +128,9 @@ theorem integrable_measureT
   replace hf : ContinuousOn f (Set.uIcc (-1) 1) := by rwa [Set.uIcc_of_lt (by norm_num)]
   have := intervalIntegrable_sqrt_one_sub_sq_inv.continuousOn_mul hf
   rw [intervalIntegrable_iff]; rw [Set.uIoc_of_le (by norm_num)] at this
-  rw [measureT]; rw [restrict_withDensity (by measurability)]; rw 
+  rw [measureT]; rw [restrict_withDensity (by measurability)]; rw [integrable_withDensity_iff (by fun_prop) (by simp)]
+  unfold IntegrableOn at this
+  convert! this
 
 中文:
 定理 integrable_measureT
@@ -137,7 +139,9 @@ theorem integrable_measureT
   replace hf : ContinuousOn f (Set.uIcc (-1) 1) := by rwa [Set.uIcc_of_lt (by norm_num)]
   have := intervalIntegrable_sqrt_one_sub_sq_inv.continuousOn_mul hf
   rw [intervalIntegrable_iff]; rw [Set.uIoc_of_le (by norm_num)] at this
-  rw [measureT]; rw [restrict_withDensity (by measurability)]; rw 
+  rw [measureT]; rw [restrict_withDensity (by measurability)]; rw [integrable_withDensity_iff (by fun_prop) (by simp)]
+  unfold IntegrableOn at this
+  convert! this
 
 Depends on / 依赖: ContinuousOn, IntegrableOn, Set.uIcc, Set.uIcc_of_lt, Set.uIoc_of_le, continuousOn_mul, convert, fun_prop, integrable_withDensity_iff, intervalIntegrable_iff, intervalIntegrable_sqrt_one_sub_sq_inv, intervalIntegrable_sqrt_one_sub_sq_inv.continuousOn_mul, measurability, measureT, replace, restrict_withDensity, uIcc_of_lt, uIoc_of_le
 -/
@@ -163,7 +167,16 @@ theorem integral_measureT_eq_integral_cos
     rw [integral_symm]; rw [← intervalIntegral.integral_neg]
     simp
   _ = ∫ θ in (arccos 1)..(arccos (-1)), f (cos θ) := by
-    rw [← integral_comp_mul_deriv_of_d
+    rw [← integral_comp_mul_deriv_of_deriv_nonpos (f' := fun x => -(1 / √(1 - x ^ 2)))]
+    · simp_rw [Function.comp_apply]
+exact integral_congr fun x hx => by simp [cos_arccos (x := x) (by aesop) (by aesop)]
+    · fun_prop
+    · exact fun x hx => (hasDerivAt_arccos (by aesop) (by aesop))
+    · simp
+  _ = ∫ θ in 0..π, f (cos θ) := by simp
+
+@[deprecated (since := "2026-03-19")]
+alias integral_measureT_eq_integral_cos_of_continuous := integral_measureT_eq_integral_cos
 
 中文:
 定理 integral_measureT_eq_integral_cos
@@ -174,7 +187,16 @@ theorem integral_measureT_eq_integral_cos
     rw [integral_symm]; rw [← intervalIntegral.integral_neg]
     simp
   _ = ∫ θ in (arccos 1)..(arccos (-1)), f (cos θ) := by
-    rw [← integral_comp_mul_deriv_of_d
+    rw [← integral_comp_mul_deriv_of_deriv_nonpos (f' := fun x => -(1 / √(1 - x ^ 2)))]
+    · simp_rw [Function.comp_apply]
+exact integral_congr fun x hx => by simp [cos_arccos (x := x) (by aesop) (by aesop)]
+    · fun_prop
+    · exact fun x hx => (hasDerivAt_arccos (by aesop) (by aesop))
+    · simp
+  _ = ∫ θ in 0..π, f (cos θ) := by simp
+
+@[deprecated (since := "2026-03-19")]
+alias integral_measureT_eq_integral_cos_of_continuous := integral_measureT_eq_integral_cos
 -/
 theorem integral_measureT_eq_integral_cos {f : Real -> Real} :
     ∫ x, f x ∂measureT = ∫ θ in 0..π, f (cos θ) := calc
@@ -226,7 +248,14 @@ theorem integral_eval_T_real_measureT_of_ne_zero
     simp_rw [T_real_cos]
     rwa [integral_comp_mul_left _ (Int.cast_ne_zero.mpr hn), smul_eq_zero_iff_right (by aesop),
       mul_zero]
-  trans ∫ θ in 0..n 
+  trans ∫ θ in 0..n * π, (deriv sin) θ
+· refine integral_congr fun x hx => (congrFun deriv_sin x).symm
+  by_cases! 0 <= n
+  case pos => rw [integral_deriv_of_contDiffOn_Icc contDiff_sin.contDiffOn (by positivity)]; simp
+  case neg hn =>
+    rw [integral_symm]; rw [integral_deriv_of_contDiffOn_Icc contDiff_sin.contDiffOn]
+    · simp
+    exact mul_nonpos_of_nonpos_of_nonneg (Int.cast_nonpos.mpr <| le_of_lt hn) pi_nonneg
 
 中文:
 定理 integral_eval_T_real_measureT_of_ne_zero
@@ -238,7 +267,14 @@ theorem integral_eval_T_real_measureT_of_ne_zero
     simp_rw [T_real_cos]
     rwa [integral_comp_mul_left _ (Int.cast_ne_zero.mpr hn), smul_eq_zero_iff_right (by aesop),
       mul_zero]
-  trans ∫ θ in 0..n 
+  trans ∫ θ in 0..n * π, (deriv sin) θ
+· refine integral_congr fun x hx => (congrFun deriv_sin x).symm
+  by_cases! 0 <= n
+  case pos => rw [integral_deriv_of_contDiffOn_Icc contDiff_sin.contDiffOn (by positivity)]; simp
+  case neg hn =>
+    rw [integral_symm]; rw [integral_deriv_of_contDiffOn_Icc contDiff_sin.contDiffOn]
+    · simp
+    exact mul_nonpos_of_nonpos_of_nonneg (Int.cast_nonpos.mpr <| le_of_lt hn) pi_nonneg
 
 Depends on / 依赖: Int.cast_ne_zero.mpr, T_real_cos, cast_ne_zero, contDiffOn, contDiff_sin, contDiff_sin.contDiffOn, deriv_sin, integral_, integral_comp_mul_left, integral_congr, integral_deriv_of_contDiffOn_Icc, integral_measureT_eq_integral_cos, mul_zero, simp_rw, smul_eq_zero_iff_right
 -/
@@ -272,7 +308,9 @@ theorem integral_eval_T_real_mul_eval_T_real_measureT
     simp_rw [eval_mul, eval_ofNat, mul_assoc] at this
     rw [MeasureTheory.integral_const_mul] at this
     grind
-  simp_rw [T_mul_T, eva
+  simp_rw [T_mul_T, eval_add]
+  rw [MeasureTheory.integral_add
+    (integrable_measureT (by fun_prop)) (integrable_measureT (by fun_prop))]
 
 中文:
 定理 integral_eval_T_real_mul_eval_T_real_measureT
@@ -284,7 +322,9 @@ theorem integral_eval_T_real_mul_eval_T_real_measureT
     simp_rw [eval_mul, eval_ofNat, mul_assoc] at this
     rw [MeasureTheory.integral_const_mul] at this
     grind
-  simp_rw [T_mul_T, eva
+  simp_rw [T_mul_T, eval_add]
+  rw [MeasureTheory.integral_add
+    (integrable_measureT (by fun_prop)) (integrable_measureT (by fun_prop))]
 
 Depends on / 依赖: F.map, F.map_id, MeasureTheory, MeasureTheory.integral_add, MeasureTheory.integral_const_mul, T_mul_T, eval_add, eval_mul, eval_ofNat, fun_prop, integrable_measureT, integral_add, integral_const_mul, map_id, measureT, mul_assoc, simp_rw
 -/

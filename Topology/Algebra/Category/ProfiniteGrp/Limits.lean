@@ -139,7 +139,15 @@ lemma toLimitFun_continuous
   dsimp only [Functor.comp_obj, CompHausLike.coe_of, Functor.comp_map,
     CompHausLike.toCompHausLike_map, CompHausLike.compHausLikeToTop_map, Set.mem_ofPred_eq,
     toLimitFun, MonoidHom.coe_mk, OneHom.coe_mk, Function.comp_apply]
- 
+  apply Continuous.mk
+  intro s _
+  rw [← (Set.biUnion_preimage_singleton QuotientGroup.mk s)]
+  refine isOpen_iUnion (fun i => isOpen_iUnion (fun _ => ?_))
+  convert! IsOpen.leftCoset H.toOpenSubgroup.isOpen' (Quotient.out i)
+  ext x
+  simp only [Set.mem_preimage, Set.mem_singleton_iff]
+  nth_rw 1 [← QuotientGroup.out_eq' i, eq_comm, QuotientGroup.eq]
+  exact Iff.symm (Set.mem_smul_set_iff_inv_smul_mem)
 
 中文:
 引理 toLimitFun_continuous
@@ -151,7 +159,15 @@ lemma toLimitFun_continuous
   dsimp only [Functor.comp_obj, CompHausLike.coe_of, Functor.comp_map,
     CompHausLike.toCompHausLike_map, CompHausLike.compHausLikeToTop_map, Set.mem_ofPred_eq,
     toLimitFun, MonoidHom.coe_mk, OneHom.coe_mk, Function.comp_apply]
- 
+  apply Continuous.mk
+  intro s _
+  rw [← (Set.biUnion_preimage_singleton QuotientGroup.mk s)]
+  refine isOpen_iUnion (fun i => isOpen_iUnion (fun _ => ?_))
+  convert! IsOpen.leftCoset H.toOpenSubgroup.isOpen' (Quotient.out i)
+  ext x
+  simp only [Set.mem_preimage, Set.mem_singleton_iff]
+  nth_rw 1 [← QuotientGroup.out_eq' i, eq_comm, QuotientGroup.eq]
+  exact Iff.symm (Set.mem_smul_set_iff_inv_smul_mem)
 
 Depends on / 依赖: CompHausLike, CompHausLike.coe_of, CompHausLike.compHausLikeToTop_map, CompHausLike.toCompHausLike_map, Continuous, Continuous.mk, Function, Function.comp_apply, Functor, Functor.comp_map, Functor.comp_obj, H.toOpenSubgroup.isOpen, IsOpen, IsOpen.leftCoset, MonoidHom, MonoidHom.coe_mk, OneHom, OneHom.coe_mk, Quotient, Quotient.out
 -/
@@ -209,7 +225,22 @@ theorem denseRange_toLimit
   simp_rw [← hsv, Set.mem_preimage] at uDefaultSpec
   rcases (isOpen_pi_iff.mp hsO) _ uDefaultSpec with ⟨J, fJ, hJ1, hJ2⟩
   let M := iInf (fun (j : J) => j.1.1.1)
-  have hM : M.Normal := Subgroup.normal_iInf_nor
+  have hM : M.Normal := Subgroup.normal_iInf_normal fun j => j.1.isNormal'
+  have hMOpen : IsOpen (M : Set P) := by
+    rw [Subgroup.coe_iInf]
+    exact isOpen_iInter_of_finite fun i => i.1.1.isOpen'
+  let m : OpenNormalSubgroup P := { M with isOpen' := hMOpen }
+  rcases QuotientGroup.mk'_surjective M (spc m) with ⟨origin, horigin⟩
+  use (toLimit P) origin
+  refine ⟨?_, origin, rfl⟩
+  rw [← hsv]
+  apply hJ2
+  intro a a_in_J
+  let M_to_Na : m ⟶ a := (iInf_le (fun (j : J) => j.1.1.1) ⟨a, a_in_J⟩).hom
+  rw [← (P.toLimit origin).property M_to_Na]
+  change (P.toFiniteQuotientFunctor.map M_to_Na) (QuotientGroup.mk' M origin) in _
+  rw [horigin]
+  exact Set.mem_of_eq_of_mem (hspc M_to_Na) (hJ1 a a_in_J).2
 
 中文:
 定理 denseRange_toLimit
@@ -221,7 +252,22 @@ theorem denseRange_toLimit
   simp_rw [← hsv, Set.mem_preimage] at uDefaultSpec
   rcases (isOpen_pi_iff.mp hsO) _ uDefaultSpec with ⟨J, fJ, hJ1, hJ2⟩
   let M := iInf (fun (j : J) => j.1.1.1)
-  have hM : M.Normal := Subgroup.normal_iInf_nor
+  have hM : M.Normal := Subgroup.normal_iInf_normal fun j => j.1.isNormal'
+  have hMOpen : IsOpen (M : Set P) := by
+    rw [Subgroup.coe_iInf]
+    exact isOpen_iInter_of_finite fun i => i.1.1.isOpen'
+  let m : OpenNormalSubgroup P := { M with isOpen' := hMOpen }
+  rcases QuotientGroup.mk'_surjective M (spc m) with ⟨origin, horigin⟩
+  use (toLimit P) origin
+  refine ⟨?_, origin, rfl⟩
+  rw [← hsv]
+  apply hJ2
+  intro a a_in_J
+  let M_to_Na : m ⟶ a := (iInf_le (fun (j : J) => j.1.1.1) ⟨a, a_in_J⟩).hom
+  rw [← (P.toLimit origin).property M_to_Na]
+  change (P.toFiniteQuotientFunctor.map M_to_Na) (QuotientGroup.mk' M origin) in _
+  rw [horigin]
+  exact Set.mem_of_eq_of_mem (hspc M_to_Na) (hJ1 a a_in_J).2
 
 Depends on / 依赖: IsOpen, M.Normal, Normal, OpenNormalSubgroup, Set.mem_preimage, Subgroup, Subgroup.coe_iInf, Subgroup.normal_iInf_normal, coe_iInf, dense_iff_inter_open, dense_iff_inter_open.mpr, hMOpen, isNormal, isOpen, isOpen_iInter_of_finite, isOpen_pi_iff, isOpen_pi_iff.mp, mem_preimage, normal_iInf_normal, simp_rw
 -/
@@ -294,7 +340,8 @@ theorem toLimit_injective
   intro x h
   by_contra xne1
   rcases exist_openNormalSubgroup_sub_open_nhds_of_one (isOpen_compl_singleton)
-    (Set.mem_compl_singleton_iff.mpr fun a => xne1 a.symm) with ⟨
+    (Set.mem_compl_singleton_iff.mpr fun a => xne1 a.symm) with ⟨H, hH⟩
+  exact hH ((QuotientGroup.eq_one_iff x).mp (congrFun (Subtype.val_inj.mpr h) H)) rfl
 
 中文:
 定理 toLimit_injective
@@ -306,7 +353,8 @@ theorem toLimit_injective
   intro x h
   by_contra xne1
   rcases exist_openNormalSubgroup_sub_open_nhds_of_one (isOpen_compl_singleton)
-    (Set.mem_compl_singleton_iff.mpr fun a => xne1 a.symm) with ⟨
+    (Set.mem_compl_singleton_iff.mpr fun a => xne1 a.symm) with ⟨H, hH⟩
+  exact hH ((QuotientGroup.eq_one_iff x).mp (congrFun (Subtype.val_inj.mpr h) H)) rfl
 
 Depends on / 依赖: Function, Function.Injective, Injective, MonoidHom, MonoidHom.ker_eq_bot_iff, QuotientGroup, QuotientGroup.eq_one_iff, Set.mem_compl_singleton_iff.mpr, Subgroup, Subgroup.eq_bot_iff_forall, Subtype, Subtype.val_inj.mpr, a.symm, eq_bot_iff_forall, eq_one_iff, exist_openNormalSubgroup_sub_open_nhds_of_one, hom.toMonoidHom, isOpen_compl_singleton, ker_eq_bot_iff, mem_compl_singleton_iff
 -/

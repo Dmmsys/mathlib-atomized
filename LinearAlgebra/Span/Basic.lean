@@ -271,7 +271,13 @@ lemma linearMap_eq_iff_of_eq_span
     intro x hx
     induction hx using span_induction with
     | mem x hx => exact h ⟨x, hx⟩
-    | zero => erw [map_zer
+    | zero => erw [map_zero, map_zero]
+    | add x y hx hy hx' hy' =>
+        erw [f.map_add ⟨x, hx⟩ ⟨y, hy⟩, g.map_add ⟨x, hx⟩ ⟨y, hy⟩]
+        rw [hx']; rw [hy']
+    | smul a x hx hx' =>
+        erw [f.map_smul a ⟨x, hx⟩, g.map_smul a ⟨x, hx⟩]
+        rw [hx']
 
 中文:
 引理 linearMap_eq_iff_of_eq_span
@@ -288,7 +294,13 @@ lemma linearMap_eq_iff_of_eq_span
     intro x hx
     induction hx using span_induction with
     | mem x hx => exact h ⟨x, hx⟩
-    | zero => erw [map_zer
+    | zero => erw [map_zero, map_zero]
+    | add x y hx hy hx' hy' =>
+        erw [f.map_add ⟨x, hx⟩ ⟨y, hy⟩, g.map_add ⟨x, hx⟩ ⟨y, hy⟩]
+        rw [hx']; rw [hy']
+    | smul a x hx hx' =>
+        erw [f.map_smul a ⟨x, hx⟩, g.map_smul a ⟨x, hx⟩]
+        rw [hx']
 
 Depends on / 依赖: f.map_add, f.map_smul, g.map_add, g.map_smul, map_add, map_smul, map_zero, span_induction
 -/
@@ -628,7 +640,12 @@ lemma span_range_inclusion_eq_top
     rw [this]; rw [q.map_subtype_top]
   rw [map_span]
   suffices q.subtype '' ((LinearMap.range (inclusion h₁)) : Set <| q.restrictScalars R) = p by
-    refine this ▸ le_antisy
+    refine this ▸ le_antisymm ?_ h₂
+    simpa using span_mono (R := S) h₁
+  ext x
+  simpa [range_inclusion] using fun hx => h₁ hx
+
+@[simp]
 
 中文:
 引理 span_range_inclusion_eq_top
@@ -639,7 +656,12 @@ lemma span_range_inclusion_eq_top
     rw [this]; rw [q.map_subtype_top]
   rw [map_span]
   suffices q.subtype '' ((LinearMap.range (inclusion h₁)) : Set <| q.restrictScalars R) = p by
-    refine this ▸ le_antisy
+    refine this ▸ le_antisymm ?_ h₂
+    simpa using span_mono (R := S) h₁
+  ext x
+  simpa [range_inclusion] using fun hx => h₁ hx
+
+@[simp]
 
 Depends on / 依赖: LinearMap, LinearMap.range, inclusion, injective_subtype, le_antisymm, map_injective_of_injective, map_span, map_subtype_top, q.injective_subtype, q.map_subtype_top, q.restrictScalars, q.subtype, range_inclusion, restrictScalars, span_mono, subtype
 -/
@@ -691,7 +713,12 @@ theorem span_singleton_eq_span_singleton
     · apply smul_left_injective R hy
       simpa only [mul_smul, one_smul]
     · rw [← hb] at hy
+      apply smul_left_injective R (smul_ne_zero_iff.1 hy).2
+      simp only [mul_smul, one_smul, hb]
+  · rintro ⟨u, rfl⟩
+    exact (span_singleton_group_smul_eq _ _ _).symm
 
+@[simp]
 
 中文:
 定理 span_singleton_eq_span_singleton
@@ -705,7 +732,12 @@ theorem span_singleton_eq_span_singleton
     · apply smul_left_injective R hy
       simpa only [mul_smul, one_smul]
     · rw [← hb] at hy
+      apply smul_left_injective R (smul_ne_zero_iff.1 hy).2
+      simp only [mul_smul, one_smul, hb]
+  · rintro ⟨u, rfl⟩
+    exact (span_singleton_group_smul_eq _ _ _).symm
 
+@[simp]
 
 Depends on / 依赖: eq_or_ne, le_antisymm_iff, mem_span_singleton, mul_smul, one_smul, smul_left_injective, smul_ne_zero_iff, span_singleton_group_smul_eq, span_singleton_le_iff_mem
 -/
@@ -975,7 +1007,19 @@ theorem iSup_toAddSubmonoid
   simp_rw [iSup_eq_span, AddSubmonoid.iSup_eq_closure, mem_toAddSubmonoid, coe_toAddSubmonoid]
   intro hx
   refine Submodule.span_induction (fun x hx => ?_) ?_ (fun x y _ _ hx hy => ?_)
-    (fun r x _ hx => ?
+    (fun r x _ hx => ?_) hx
+  · exact AddSubmonoid.subset_closure hx
+  · exact AddSubmonoid.zero_mem _
+  · exact AddSubmonoid.add_mem _ hx hy
+  · refine AddSubmonoid.closure_induction ?_ ?_ ?_ hx
+    · rintro x ⟨_, ⟨i, rfl⟩, hix : x in p i⟩
+      apply AddSubmonoid.subset_closure (Set.mem_iUnion.mpr ⟨i, _⟩)
+      exact smul_mem _ r hix
+    · rw [smul_zero]
+      exact AddSubmonoid.zero_mem _
+    · intro x y _ _ hx hy
+      rw [smul_add]
+      exact AddSubmonoid.add_mem _ hx hy
 
 中文:
 定理 iSup_toAddSubmonoid
@@ -985,7 +1029,19 @@ theorem iSup_toAddSubmonoid
   simp_rw [iSup_eq_span, AddSubmonoid.iSup_eq_closure, mem_toAddSubmonoid, coe_toAddSubmonoid]
   intro hx
   refine Submodule.span_induction (fun x hx => ?_) ?_ (fun x y _ _ hx hy => ?_)
-    (fun r x _ hx => ?
+    (fun r x _ hx => ?_) hx
+  · exact AddSubmonoid.subset_closure hx
+  · exact AddSubmonoid.zero_mem _
+  · exact AddSubmonoid.add_mem _ hx hy
+  · refine AddSubmonoid.closure_induction ?_ ?_ ?_ hx
+    · rintro x ⟨_, ⟨i, rfl⟩, hix : x in p i⟩
+      apply AddSubmonoid.subset_closure (Set.mem_iUnion.mpr ⟨i, _⟩)
+      exact smul_mem _ r hix
+    · rw [smul_zero]
+      exact AddSubmonoid.zero_mem _
+    · intro x y _ _ hx hy
+      rw [smul_add]
+      exact AddSubmonoid.add_mem _ hx hy
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.add_mem, AddSubmonoid.closure_induction, AddSubmonoid.iSup_eq_closure, AddSubmonoid.subset_closure, AddSubmonoid.zero_mem, Submodule, Submodule.span_induction, add_mem, closure_induction, coe_toAddSubmonoid, iSup_eq_closure, iSup_eq_span, iSup_le, le_antisymm, le_iSup, mem_toAddSubmonoid, simp_rw, span_induction, subset_closure
 -/
@@ -1053,7 +1109,7 @@ theorem iSup_induction'
   · exact ⟨_, mem _ _ hx⟩
   · exact ⟨_, zero⟩
   · rintro ⟨_, Cx⟩ ⟨_, Cy⟩
-    exact ⟨_, a
+    exact ⟨_, add _ _ _ _ Cx Cy⟩
 
 中文:
 定理 iSup_induction'
@@ -1065,7 +1121,7 @@ theorem iSup_induction'
   · exact ⟨_, mem _ _ hx⟩
   · exact ⟨_, zero⟩
   · rintro ⟨_, Cx⟩ ⟨_, Cy⟩
-    exact ⟨_, a
+    exact ⟨_, add _ _ _ _ Cx Cy⟩
 
 Depends on / 依赖: Exists, Exists.elim, iSup_induction, motive
 -/
@@ -1092,7 +1148,7 @@ theorem singleton_span_isCompactElement
   intro d hemp hdir hsup
   have : x in (sSup d) := (SetLike.le_def.mp hsup) (mem_span_singleton_self x)
   obtain ⟨y, ⟨hyd, hxy⟩⟩ := (mem_sSup_of_directed hemp hdir).mp this
-  exact ⟨y, ⟨hyd, by simpa only [span_le, singleton_subse
+  exact ⟨y, ⟨hyd, by simpa only [span_le, singleton_subset_iff] ⟩⟩
 
 中文:
 定理 singleton_span_isCompactElement
@@ -1102,7 +1158,7 @@ theorem singleton_span_isCompactElement
   intro d hemp hdir hsup
   have : x in (sSup d) := (SetLike.le_def.mp hsup) (mem_span_singleton_self x)
   obtain ⟨y, ⟨hyd, hxy⟩⟩ := (mem_sSup_of_directed hemp hdir).mp this
-  exact ⟨y, ⟨hyd, by simpa only [span_le, singleton_subse
+  exact ⟨y, ⟨hyd, by simpa only [span_le, singleton_subset_iff] ⟩⟩
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.isCompactElement_iff_le_of_directed_sSup_le, SetLike, SetLike.le_def.mp, isCompactElement_iff_le_of_directed_sSup_le, le_def, mem_sSup_of_directed, mem_span_singleton_self, singleton_subset_iff, span_le
 -/
@@ -1389,7 +1445,7 @@ theorem prod_sup_prod
   simp only [SetLike.le_def, mem_prod, and_imp, Prod.forall]; intro xx yy hxx hyy
   rcases mem_sup.1 hxx with ⟨x, hx, x', hx', rfl⟩
   rcases mem_sup.1 hyy with ⟨y, hy, y', hy', rfl⟩
-  ex
+  exact mem_sup.2 ⟨(x, y), ⟨hx, hy⟩, (x', y'), ⟨hx', hy'⟩, rfl⟩
 
 中文:
 定理 prod_sup_prod
@@ -1400,7 +1456,7 @@ theorem prod_sup_prod
   simp only [SetLike.le_def, mem_prod, and_imp, Prod.forall]; intro xx yy hxx hyy
   rcases mem_sup.1 hxx with ⟨x, hx, x', hx', rfl⟩
   rcases mem_sup.1 hyy with ⟨y, hy, y', hy', rfl⟩
-  ex
+  exact mem_sup.2 ⟨(x, y), ⟨hx, hy⟩, (x', y'), ⟨hx', hy'⟩, rfl⟩
 
 Depends on / 依赖: Prod.forall, SetLike, SetLike.le_def, and_imp, le_antisymm, le_def, le_sup_left, le_sup_right, mem_prod, mem_sup, prod_mono, sup_le
 -/
@@ -1425,7 +1481,10 @@ lemma _root_.LinearMap.BilinMap.apply_apply_mem_of_mem_span
   | zero_right u hu => simp
   | add_left u₁ u₂ v hu₁ hu₂ hv huv₁ huv₂ => simpa using add_mem huv₁ huv₂
   | add_right u v₁ v₂ hu hv₁ hv₂ huv₁ huv₂ => simpa using add_mem huv₁ huv₂
- 
+  | smul_left t u v hu hv huv => simpa using Submodule.smul_mem _ _ huv
+  | smul_right t u v hu hv huv => simpa using Submodule.smul_mem _ _ huv
+
+@[simp]
 
 中文:
 引理 _root_.线性映射.BilinMap.apply_apply_mem_of_mem_span
@@ -1437,7 +1496,10 @@ lemma _root_.LinearMap.BilinMap.apply_apply_mem_of_mem_span
   | zero_right u hu => simp
   | add_left u₁ u₂ v hu₁ hu₂ hv huv₁ huv₂ => simpa using add_mem huv₁ huv₂
   | add_right u v₁ v₂ hu hv₁ hv₂ huv₁ huv₂ => simpa using add_mem huv₁ huv₂
- 
+  | smul_left t u v hu hv huv => simpa using Submodule.smul_mem _ _ huv
+  | smul_right t u v hu hv huv => simpa using Submodule.smul_mem _ _ huv
+
+@[simp]
 
 Depends on / 依赖: Submodule, Submodule.smul_mem, add_left, add_mem, add_right, mem_mem, smul_left, smul_mem, smul_right, zero_left, zero_right
 -/
@@ -1468,7 +1530,11 @@ lemma biSup_comap_subtype_eq_top
   suffices x in (⨆ i in s, (p i).comap (⨆ i in s, p i).subtype).map (⨆ i in s, (p i)).subtype by
     obtain ⟨y, hy, rfl⟩ := Submodule.mem_map.mp this
     exact hy
-  suffices forall i in s, (comap (⨆ i in s, p i).subtype (p i)).map (⨆ i in s, p i).subtyp
+  suffices forall i in s, (comap (⨆ i in s, p i).subtype (p i)).map (⨆ i in s, p i).subtype = p i by
+    simpa only [map_iSup, biSup_congr this]
+  intro i hi
+  rw [map_comap_eq]; rw [range_subtype]; rw [inf_eq_right]
+  exact le_biSup p hi
 
 中文:
 引理 biSup_comap_subtype_eq_top
@@ -1478,7 +1544,11 @@ lemma biSup_comap_subtype_eq_top
   suffices x in (⨆ i in s, (p i).comap (⨆ i in s, p i).subtype).map (⨆ i in s, (p i)).subtype by
     obtain ⟨y, hy, rfl⟩ := Submodule.mem_map.mp this
     exact hy
-  suffices forall i in s, (comap (⨆ i in s, p i).subtype (p i)).map (⨆ i in s, p i).subtyp
+  suffices forall i in s, (comap (⨆ i in s, p i).subtype (p i)).map (⨆ i in s, p i).subtype = p i by
+    simpa only [map_iSup, biSup_congr this]
+  intro i hi
+  rw [map_comap_eq]; rw [range_subtype]; rw [inf_eq_right]
+  exact le_biSup p hi
 
 Depends on / 依赖: Submodule, Submodule.mem_map.mp, biSup_congr, eq_top_iff, eq_top_iff.mpr, inf_eq_right, le_biSup, map_comap_eq, map_iSup, mem_map, range_subtype, subtype
 -/
@@ -1633,7 +1703,8 @@ lemma sup_inf_assoc_of_le_of_neg_le
     rw [← add_right_inj]; rw [neg_add_cancel_left] at hyzx
     simpa [hyzx] using p.add_mem (neg_le.mp hnsp hy) hx
   · rintro ⟨y, hy, z, ⟨hz, hz'⟩, hyzx⟩
-    refine ⟨⟨y,
+    refine ⟨⟨y, hy, z, hz, hyzx⟩, ?_⟩
+    simpa [← hyzx] using p.add_mem (hsp hy) hz'
 
 中文:
 引理 sup_inf_assoc_of_le_of_neg_le
@@ -1646,7 +1717,8 @@ lemma sup_inf_assoc_of_le_of_neg_le
     rw [← add_right_inj]; rw [neg_add_cancel_left] at hyzx
     simpa [hyzx] using p.add_mem (neg_le.mp hnsp hy) hx
   · rintro ⟨y, hy, z, ⟨hz, hz'⟩, hyzx⟩
-    refine ⟨⟨y,
+    refine ⟨⟨y, hy, z, hz, hyzx⟩, ?_⟩
+    simpa [← hyzx] using p.add_mem (hsp hy) hz'
 
 Depends on / 依赖: add_mem, add_right_inj, mem_inf, mem_sup, neg_add_cancel_left, neg_le, neg_le.mp, p.add_mem
 -/
@@ -2019,7 +2091,7 @@ theorem isCoatom_comap_iff
   rw [IsCoatom]; rw [IsCoatom]; rw [← comap_top f]; rw [this.ne_iff]
   refine and_congr_right fun _ =>
     ⟨fun h m hm => this (h _ <| comap_strictMono_of_surjective hf hm), fun h m hm => ?_⟩
-  rw [← h _ (lt_map_of_comap_lt_of_surjective hf hm)]; rw [com
+  rw [← h _ (lt_map_of_comap_lt_of_surjective hf hm)]; rw [comap_map_eq_self ((comap_mono bot_le).trans hm.le)]
 
 中文:
 定理 isCoatom_comap_iff
@@ -2029,7 +2101,7 @@ theorem isCoatom_comap_iff
   rw [IsCoatom]; rw [IsCoatom]; rw [← comap_top f]; rw [this.ne_iff]
   refine and_congr_right fun _ =>
     ⟨fun h m hm => this (h _ <| comap_strictMono_of_surjective hf hm), fun h m hm => ?_⟩
-  rw [← h _ (lt_map_of_comap_lt_of_surjective hf hm)]; rw [com
+  rw [← h _ (lt_map_of_comap_lt_of_surjective hf hm)]; rw [comap_map_eq_self ((comap_mono bot_le).trans hm.le)]
 
 Depends on / 依赖: IsCoatom, and_congr_right, bot_le, comap_injective_of_surjective, comap_map_eq_self, comap_mono, comap_strictMono_of_surjective, comap_top, hm.le, lt_map_of_comap_lt_of_surjective, ne_iff, this.ne_iff
 -/
@@ -2095,7 +2167,9 @@ lemma comap_covBy_of_surjective
   intro N h₁ h₂
   refine h.2 (lt_map_of_comap_lt_of_surjective hf h₁) ?_
   rwa [← comap_lt_comap_iff_of_surjective hf, comap_map_eq, sup_eq_left.mpr]
-  refine (LinearMap.ker_le_comap (f : M ->ₛₗ[τ₁₂] 
+  refine (LinearMap.ker_le_comap (f : M ->ₛₗ[τ₁₂] M₂)).trans h₁.le
+
+@[deprecated map_eq_range_iff (since := "2026-07-01")]
 
 中文:
 引理 comap_covBy_of_surjective
@@ -2105,7 +2179,9 @@ lemma comap_covBy_of_surjective
   intro N h₁ h₂
   refine h.2 (lt_map_of_comap_lt_of_surjective hf h₁) ?_
   rwa [← comap_lt_comap_iff_of_surjective hf, comap_map_eq, sup_eq_left.mpr]
-  refine (LinearMap.ker_le_comap (f : M ->ₛₗ[τ₁₂] 
+  refine (LinearMap.ker_le_comap (f : M ->ₛₗ[τ₁₂] M₂)).trans h₁.le
+
+@[deprecated map_eq_range_iff (since := "2026-07-01")]
 
 Depends on / 依赖: LinearMap, LinearMap.ker_le_comap, comap_injective_of_surjective, comap_lt_comap_iff_of_surjective, comap_map_eq, comap_mono, ker_le_comap, lt_map_of_comap_lt_of_surjective, lt_of_le_of_ne, sup_eq_left, sup_eq_left.mpr
 -/
@@ -2172,7 +2248,7 @@ lemma biSup_comap_eq_top_of_surjective
   suffices (⨆ i in s, (p i).comap f) ⊔ LinearMap.ker f = ⊤ by
     rw [← this]; rw [left_eq_sup]; exact le_trans f.ker_le_comap (le_biSup (fun i => (p i).comap f) hk)
   rw [iSup_subtype'] at hp ⊢
-  rw [← comap_map_eq]; rw [map_iSup_comap_of_surjective hf]; rw [hp]; rw [comap
+  rw [← comap_map_eq]; rw [map_iSup_comap_of_surjective hf]; rw [hp]; rw [comap_top]
 
 中文:
 引理 biSup_comap_eq_top_of_surjective
@@ -2182,7 +2258,7 @@ lemma biSup_comap_eq_top_of_surjective
   suffices (⨆ i in s, (p i).comap f) ⊔ LinearMap.ker f = ⊤ by
     rw [← this]; rw [left_eq_sup]; exact le_trans f.ker_le_comap (le_biSup (fun i => (p i).comap f) hk)
   rw [iSup_subtype'] at hp ⊢
-  rw [← comap_map_eq]; rw [map_iSup_comap_of_surjective hf]; rw [hp]; rw [comap
+  rw [← comap_map_eq]; rw [map_iSup_comap_of_surjective hf]; rw [hp]; rw [comap_top]
 
 Depends on / 依赖: LinearMap, LinearMap.ker, comap_map_eq, comap_top, f.ker_le_comap, iSup_subtype, ker_le_comap, le_biSup, le_trans, left_eq_sup, map_iSup_comap_of_surjective
 -/
@@ -2339,7 +2415,10 @@ theorem wcovBy_span_singleton_sup
   obtain ⟨c, z, hz, rfl⟩ : exists c : K, exists z in s, c • x + z = y := by
     simpa [mem_sup, mem_span_singleton] using hqp.le hyq
   rcases eq_or_ne c 0 with rfl | hc
-  · simp [hz] at hy
+  · simp [hz] at hyp
+  · have : x in q := by
+      rwa [q.add_mem_iff_left (hpq.le hz), q.smul_mem_iff hc] at hyq
+    simp [hpq.le, this]
 
 中文:
 定理 wcovBy_span_singleton_sup
@@ -2351,7 +2430,10 @@ theorem wcovBy_span_singleton_sup
   obtain ⟨c, z, hz, rfl⟩ : exists c : K, exists z in s, c • x + z = y := by
     simpa [mem_sup, mem_span_singleton] using hqp.le hyq
   rcases eq_or_ne c 0 with rfl | hc
-  · simp [hz] at hy
+  · simp [hz] at hyp
+  · have : x in q := by
+      rwa [q.add_mem_iff_left (hpq.le hz), q.smul_mem_iff hc] at hyq
+    simp [hpq.le, this]
 
 Depends on / 依赖: SetLike, SetLike.exists_of_lt, add_mem_iff_left, eq_or_ne, exists_of_lt, hpq.le, hqp.le, hqp.not_ge, le_sup_right, mem_span_singleton, mem_sup, not_ge, q.add_mem_iff_left, q.smul_mem_iff, smul_mem_iff
 -/

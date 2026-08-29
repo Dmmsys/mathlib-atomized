@@ -171,7 +171,7 @@ instance :
         conv_lhs => rw [← Subtype.range_val (s := s), ← Set.range_comp]
         rfl
       simp only [this, iSup_apply, Ideal.map_iSup, map_ideal_basicOpen, implies_true] }
-  isLUB_sS
+  isLUB_sSup _ := .of_image (f := ideal) le_def (isLUB_sSup _)
 
 中文:
 实例 :
@@ -182,7 +182,7 @@ instance :
         conv_lhs => rw [← Subtype.range_val (s := s), ← Set.range_comp]
         rfl
       simp only [this, iSup_apply, Ideal.map_iSup, map_ideal_basicOpen, implies_true] }
-  isLUB_sS
+  isLUB_sSup _ := .of_image (f := ideal) le_def (isLUB_sSup _)
 
 Depends on / 依赖: Ideal.map_iSup, Set.range_comp, Subtype, Subtype.range_val, conv_lhs, iSup_apply, implies_true, isLUB_sSup, le_def, map_iSup, map_ideal_basicOpen, of_image, range_comp, range_val
 -/
@@ -428,7 +428,18 @@ instance :
       have : (X.presheaf.map (homOfLE (X.basicOpen_le f)).op).hom = algebraMap _ _ := rfl
       have inst := U.2.isLocalization_basicOpen f
       rw [← I.map_ideal_basicOpen U f]; rw [← J.map_ideal_basicOpen U f]; rw [this]
- 
+      ext x
+      obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq (.powers f) x
+      simp only [IsLocalization.mk'_mem_map_algebraMap_iff, Submonoid.mem_powers_iff, Ideal.mem_inf,
+        exists_exists_eq_and]
+      refine ⟨fun ⟨n, h₁, h₂⟩ => ⟨⟨n, h₁⟩, ⟨n, h₂⟩⟩, ?_⟩
+      rintro ⟨⟨n₁, h₁⟩, ⟨n₂, h₂⟩⟩
+      refine ⟨n₁ + n₂, ?_, ?_⟩
+      · rw [add_comm, pow_add, mul_assoc]; exact Ideal.mul_mem_left _ _ h₁
+      · rw [pow_add, mul_assoc]; exact Ideal.mul_mem_left _ _ h₂ }
+  inf_le_left I J U := inf_le_left
+  inf_le_right I J U := inf_le_right
+  le_inf I J K hIJ hIK U := le_inf (hIJ U) (hIK U)
 
 中文:
 实例 :
@@ -439,7 +450,18 @@ instance :
       have : (X.presheaf.map (homOfLE (X.basicOpen_le f)).op).hom = algebraMap _ _ := rfl
       have inst := U.2.isLocalization_basicOpen f
       rw [← I.map_ideal_basicOpen U f]; rw [← J.map_ideal_basicOpen U f]; rw [this]
- 
+      ext x
+      obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq (.powers f) x
+      simp only [IsLocalization.mk'_mem_map_algebraMap_iff, Submonoid.mem_powers_iff, Ideal.mem_inf,
+        exists_exists_eq_and]
+      refine ⟨fun ⟨n, h₁, h₂⟩ => ⟨⟨n, h₁⟩, ⟨n, h₂⟩⟩, ?_⟩
+      rintro ⟨⟨n₁, h₁⟩, ⟨n₂, h₂⟩⟩
+      refine ⟨n₁ + n₂, ?_, ?_⟩
+      · rw [add_comm, pow_add, mul_assoc]; exact Ideal.mul_mem_left _ _ h₁
+      · rw [pow_add, mul_assoc]; exact Ideal.mul_mem_left _ _ h₂ }
+  inf_le_left I J U := inf_le_left
+  inf_le_right I J U := inf_le_right
+  le_inf I J K hIJ hIK U := le_inf (hIJ U) (hIK U)
 
 Depends on / 依赖: I.ideal, I.map_ideal_basicOpen, Ideal.mem_inf, IsLocalization, IsLocalization.exists_mk, IsLocalization.mk, J.ideal, J.map_ideal_basicOpen, Submonoid, Submonoid.mem_powers_iff, X.basicOpen_le, X.presheaf.map, _mem_map_algebraMap_iff, algebraMap, basicOpen_le, exists_exists_eq_and, exists_mk, homOfLE, isLocalization_basicOpen, map_ideal_basicOpen
 -/
@@ -722,7 +744,10 @@ lemma map_ideal
   obtain ⟨f, g, hfg, hxf⟩ := exists_basicOpen_le_affine_inter U.2 V.2 x ⟨hxU, h hxU⟩
   have := I.map_ideal_basicOpen_of_eq (V := X.affineBasicOpen g) f (Subtype.ext hfg.symm)
   rw [← I.map_ideal_basicOpen] at this
-  apply_fun Ideal.map (X.presheaf.germ (X.ba
+  apply_fun Ideal.map (X.presheaf.germ (X.basicOpen g) x (hfg ▸ hxf)).hom at this
+  simp only [Ideal.map_map, ← CommRingCat.hom_comp, affineBasicOpen_coe, X.presheaf.germ_res]
+    at this ⊢
+  simp only [homOfLE_leOfHom, TopCat.Presheaf.germ_res', this]
 
 中文:
 引理 map_ideal
@@ -733,7 +758,10 @@ lemma map_ideal
   obtain ⟨f, g, hfg, hxf⟩ := exists_basicOpen_le_affine_inter U.2 V.2 x ⟨hxU, h hxU⟩
   have := I.map_ideal_basicOpen_of_eq (V := X.affineBasicOpen g) f (Subtype.ext hfg.symm)
   rw [← I.map_ideal_basicOpen] at this
-  apply_fun Ideal.map (X.presheaf.germ (X.ba
+  apply_fun Ideal.map (X.presheaf.germ (X.basicOpen g) x (hfg ▸ hxf)).hom at this
+  simp only [Ideal.map_map, ← CommRingCat.hom_comp, affineBasicOpen_coe, X.presheaf.germ_res]
+    at this ⊢
+  simp only [homOfLE_leOfHom, TopCat.Presheaf.germ_res', this]
 
 Depends on / 依赖: CommRingCat, CommRingCat.hom_comp, I.map_ideal_basicOpen, I.map_ideal_basicOpen_of_eq, Ideal.map, Ideal.map_map, Presheaf, Subtype, Subtype.ext, TopCat, TopCat.Presheaf.germ_res, X.affineBasicOpen, X.basicOpen, X.presheaf.germ, X.presheaf.germ_res, affineBasicOpen, affineBasicOpen_coe, apply_fun, basicOpen, exists_basicOpen_le_affine_inter
 -/
@@ -801,7 +829,23 @@ lemma le_of_iSup_eq_top
       X.basicOpen r = X.basicOpen rU ∧ x.1 in X.basicOpen r := by
     intro ⟨x, hxV⟩
     obtain ⟨i, hi⟩ := TopologicalSpace.Opens.mem_iSup.mp (hU.ge (Set.mem_univ x))
-    exact ⟨i, exists_basicOpen_le_affine_inter
+    exact ⟨i, exists_basicOpen_le_affine_inter V.2 (U i).2 _ ⟨hxV, hi⟩⟩
+  choose i r rU e hxr using this
+  have : Ideal.span (Set.range r) = ⊤ := by
+    rw [← V.2.self_le_iSup_basicOpen_iff]
+    exact fun x hxV => TopologicalSpace.Opens.mem_iSup.mpr ⟨⟨_, _, rfl⟩, hxr ⟨x, hxV⟩⟩
+  have inst := V.2.isLocalization_basicOpen
+  refine Submodule.le_of_isLocalized_span _ this (fun i => Γ(X, X.basicOpen i.1))
+    (fun i => Algebra.linearMap Γ(X, V.1) Γ(X, X.basicOpen i.1)) ?_
+  rintro ⟨_, j, rfl⟩
+  simp only [← Submodule.restrictScalars_localized' Γ(X, X.basicOpen (r j)),
+    Ideal.localized'_eq_map, RingHom.algebraMap_toAlgebra]
+  erw [I.map_ideal (U := ⟨_, V.2.basicOpen _⟩) (X.basicOpen_le (r j)),
+    J.map_ideal (U := ⟨_, V.2.basicOpen _⟩) (X.basicOpen_le (r j))]
+  delta algebra_section_section_basicOpen
+  rw! [e]
+  rw [← I.map_ideal (V := (U _)) (X.basicOpen_le _)]; rw [← J.map_ideal (V := (U _)) (X.basicOpen_le _)]
+  exact Ideal.map_mono (f := (X.presheaf.map (homOfLE (X.basicOpen_le (rU j))).op).hom) (H (i j))
 
 中文:
 引理 le_of_iSup_eq_top
@@ -812,7 +856,23 @@ lemma le_of_iSup_eq_top
       X.basicOpen r = X.basicOpen rU ∧ x.1 in X.basicOpen r := by
     intro ⟨x, hxV⟩
     obtain ⟨i, hi⟩ := TopologicalSpace.Opens.mem_iSup.mp (hU.ge (Set.mem_univ x))
-    exact ⟨i, exists_basicOpen_le_affine_inter
+    exact ⟨i, exists_basicOpen_le_affine_inter V.2 (U i).2 _ ⟨hxV, hi⟩⟩
+  choose i r rU e hxr using this
+  have : Ideal.span (Set.range r) = ⊤ := by
+    rw [← V.2.self_le_iSup_basicOpen_iff]
+    exact fun x hxV => TopologicalSpace.Opens.mem_iSup.mpr ⟨⟨_, _, rfl⟩, hxr ⟨x, hxV⟩⟩
+  have inst := V.2.isLocalization_basicOpen
+  refine Submodule.le_of_isLocalized_span _ this (fun i => Γ(X, X.basicOpen i.1))
+    (fun i => Algebra.linearMap Γ(X, V.1) Γ(X, X.basicOpen i.1)) ?_
+  rintro ⟨_, j, rfl⟩
+  simp only [← Submodule.restrictScalars_localized' Γ(X, X.basicOpen (r j)),
+    Ideal.localized'_eq_map, RingHom.algebraMap_toAlgebra]
+  erw [I.map_ideal (U := ⟨_, V.2.basicOpen _⟩) (X.basicOpen_le (r j)),
+    J.map_ideal (U := ⟨_, V.2.basicOpen _⟩) (X.basicOpen_le (r j))]
+  delta algebra_section_section_basicOpen
+  rw! [e]
+  rw [← I.map_ideal (V := (U _)) (X.basicOpen_le _)]; rw [← J.map_ideal (V := (U _)) (X.basicOpen_le _)]
+  exact Ideal.map_mono (f := (X.presheaf.map (homOfLE (X.basicOpen_le (rU j))).op).hom) (H (i j))
 
 Depends on / 依赖: Ideal.span, Set.mem_univ, Set.range, TopologicalSpace, TopologicalSpace.Opens.mem_iSup.mp, TopologicalSpace.Opens.mem_iSup.mpr, X.basicOpen, basicOpen, exists_basicOpen_le_affine_inter, hU.ge, mem_iSup, mem_univ, self_le_iSup_basicOpen_iff
 -/
@@ -919,7 +979,17 @@ lemma zeroLocus_inter_subset_supportSet
   rintro x ⟨⟨hx, hxU⟩, hxV⟩
   simp only [Scheme.mem_zeroLocus_iff, SetLike.mem_coe] at hx ⊢
   intro s hfU hxs
-  obtain ⟨f, g, hfg, hxf⟩
+  obtain ⟨f, g, hfg, hxf⟩ := exists_basicOpen_le_affine_inter U.2 V.2 x ⟨hxU, hxV⟩
+  have inst := U.2.isLocalization_basicOpen f
+  have := (I.map_ideal (U := X.affineBasicOpen f) (hfg.trans_le (X.basicOpen_le g))).le
+    (Ideal.mem_map_of_mem _ hfU)
+  rw [← I.map_ideal_basicOpen] at this
+  obtain ⟨⟨s', ⟨_, n, rfl⟩⟩, hs'⟩ :=
+    (IsLocalization.mem_map_algebraMap_iff (.powers f) Γ(X, X.basicOpen f)).mp this
+  apply_fun (x in X.basicOpen ·) at hs'
+  refine hx s' s'.2 ?_
+  cases n <;>
+    simpa [RingHom.algebraMap_toAlgebra, ← hfg, hxf, hxs, Scheme.basicOpen_pow] using hs'
 
 中文:
 引理 zeroLocus_inter_subset_supportSet
@@ -931,7 +1001,17 @@ lemma zeroLocus_inter_subset_supportSet
   rintro x ⟨⟨hx, hxU⟩, hxV⟩
   simp only [Scheme.mem_zeroLocus_iff, SetLike.mem_coe] at hx ⊢
   intro s hfU hxs
-  obtain ⟨f, g, hfg, hxf⟩
+  obtain ⟨f, g, hfg, hxf⟩ := exists_basicOpen_le_affine_inter U.2 V.2 x ⟨hxU, hxV⟩
+  have inst := U.2.isLocalization_basicOpen f
+  have := (I.map_ideal (U := X.affineBasicOpen f) (hfg.trans_le (X.basicOpen_le g))).le
+    (Ideal.mem_map_of_mem _ hfU)
+  rw [← I.map_ideal_basicOpen] at this
+  obtain ⟨⟨s', ⟨_, n, rfl⟩⟩, hs'⟩ :=
+    (IsLocalization.mem_map_algebraMap_iff (.powers f) Γ(X, X.basicOpen f)).mp this
+  apply_fun (x in X.basicOpen ·) at hs'
+  refine hx s' s'.2 ?_
+  cases n <;>
+    simpa [RingHom.algebraMap_toAlgebra, ← hfg, hxf, hxs, Scheme.basicOpen_pow] using hs'
 
 Depends on / 依赖: I.ideal, I.map_ideal, I.supportSet, I.supportSet_eq_iInter_zeroLocus, Scheme, Scheme.mem_zeroLocus_iff, Set.subset_iInter, SetLike, SetLike.mem_coe, X.affineBasicOpen, X.codisjoint_zeroLocus, affineBasicOpen, codisjoint_zeroLocus, exists_basicOpen_le_affine_inter, hfg.trans_le, isLocalization_basicOpen, left_le_of_le_inf_right, map_ideal, mem_coe, mem_zeroLocus_iff
 -/
@@ -1020,7 +1100,7 @@ lemma isClosed_supportSet
   refine ⟨(X.zeroLocus (U := U.1) (I.ideal U))ᶜ, (X.zeroLocus_isClosed _).isOpen_compl, ?_⟩
   simp only [Set.preimage_compl, compl_inj_iff]
   apply Subtype.val_injective.image_injective
-  simp [Set
+  simp [Set.image_preimage_eq_inter_range, I.supportSet_inter]
 
 中文:
 引理 isClosed_supportSet
@@ -1032,7 +1112,7 @@ lemma isClosed_supportSet
   refine ⟨(X.zeroLocus (U := U.1) (I.ideal U))ᶜ, (X.zeroLocus_isClosed _).isOpen_compl, ?_⟩
   simp only [Set.preimage_compl, compl_inj_iff]
   apply Subtype.val_injective.image_injective
-  simp [Set
+  simp [Set.image_preimage_eq_inter_range, I.supportSet_inter]
 
 Depends on / 依赖: I.ideal, I.supportSet_inter, IsOpenCover, Set.image_preimage_eq_inter_range, Set.preimage_compl, Subtype, Subtype.val_injective.image_injective, TopologicalSpace, TopologicalSpace.IsOpenCover.isClosed_iff_coe_preimage, X.zeroLocus, X.zeroLocus_isClosed, compl_inj_iff, iSup_affineOpens_eq_top, image_injective, image_preimage_eq_inter_range, isClosed_iff_coe_preimage, isOpen_compl, preimage_compl, supportSet_inter, val_injective
 -/
@@ -1192,6 +1272,11 @@ definition mkOfMemSupportIff
     change supportSet = I'.supportSet
     ext x
     obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
+      X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
+    exact (supportSet_inter ⟨U, hU⟩ x hxU).trans
+      (I'.mem_support_iff_of_mem (U := ⟨U, hU⟩) hxU).symm
+
+@[simp]
 
 中文:
 定义 mkOfMemSupportIff
@@ -1203,6 +1288,11 @@ definition mkOfMemSupportIff
     change supportSet = I'.supportSet
     ext x
     obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
+      X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
+    exact (supportSet_inter ⟨U, hU⟩ x hxU).trans
+      (I'.mem_support_iff_of_mem (U := ⟨U, hU⟩) hxU).symm
+
+@[simp]
 -/
 def mkOfMemSupportIff
     (ideal : forall U : X.affineOpens, Ideal Γ(X, U))
@@ -1300,7 +1390,7 @@ lemma support_eq_bot_iff
   have := (U.2.fromSpec_image_zeroLocus _).trans_subset
     ((zeroLocus_inter_subset_supportSet I U).trans H.le)
   simp only [Set.subset_empty_iff, Set.image_eq_empty, Closeds.coe_bot] at this
-  simp [PrimeSpectrum.zeroLocus_empty
+  simp [PrimeSpectrum.zeroLocus_empty_iff_eq_top.mp this]
 
 中文:
 引理 support_eq_bot_iff
@@ -1310,7 +1400,7 @@ lemma support_eq_bot_iff
   have := (U.2.fromSpec_image_zeroLocus _).trans_subset
     ((zeroLocus_inter_subset_supportSet I U).trans H.le)
   simp only [Set.subset_empty_iff, Set.image_eq_empty, Closeds.coe_bot] at this
-  simp [PrimeSpectrum.zeroLocus_empty
+  simp [PrimeSpectrum.zeroLocus_empty_iff_eq_top.mp this]
 
 Depends on / 依赖: Closeds, Closeds.coe_bot, H.le, PrimeSpectrum, PrimeSpectrum.zeroLocus_empty_iff_eq_top.mp, Set.image_eq_empty, Set.subset_empty_iff, coe_bot, contextual, fromSpec_image_zeroLocus, image_eq_empty, subset_empty_iff, top_le_iff, top_le_iff.mp, trans_subset, zeroLocus_empty_iff_eq_top, zeroLocus_inter_subset_supportSet
 -/
@@ -1610,7 +1700,11 @@ instance :
   one_mul := top_mul
   mul_one := mul_top
   nsmul := nsmulRec
- 
+  left_distrib := mul_inf
+  right_distrib := inf_mul
+  npow n I := I ^ n
+  npow_zero _ := by ext; simp [show (1 : X.IdealSheafData) = ⊤ from rfl]
+  npow_succ _ _ := by ext; rfl
 
 中文:
 实例 :
@@ -1626,7 +1720,11 @@ instance :
   one_mul := top_mul
   mul_one := mul_top
   nsmul := nsmulRec
- 
+  left_distrib := mul_inf
+  right_distrib := inf_mul
+  npow n I := I ^ n
+  npow_zero _ := by ext; simp [show (1 : X.IdealSheafData) = ⊤ from rfl]
+  npow_succ _ _ := by ext; rfl
 
 Depends on / 依赖: sup_assoc
 -/
@@ -1721,7 +1819,8 @@ definition ofIdealTop
     (fun U f => by rw [Ideal.map_map, ← CommRingCat.hom_comp, ← Functor.map_comp]; rfl)
     (X.zeroLocus (U := ⊤) I)
     (fun U x hxU => by
-      simp only [Ideal.map, zeroLocus_span, zeroLocus_map, Set.mem_union, Set.me
+      simp only [Ideal.map, zeroLocus_span, zeroLocus_map, Set.mem_union, Set.mem_compl_iff,
+        SetLike.mem_coe, hxU, not_true_eq_false, iff_self_or, IsEmpty.forall_iff])
 
 中文:
 定义 ofIdealTop
@@ -1731,7 +1830,8 @@ definition ofIdealTop
     (fun U f => by rw [Ideal.map_map, ← CommRingCat.hom_comp, ← Functor.map_comp]; rfl)
     (X.zeroLocus (U := ⊤) I)
     (fun U x hxU => by
-      simp only [Ideal.map, zeroLocus_span, zeroLocus_map, Set.mem_union, Set.me
+      simp only [Ideal.map, zeroLocus_span, zeroLocus_map, Set.mem_union, Set.mem_compl_iff,
+        SetLike.mem_coe, hxU, not_true_eq_false, iff_self_or, IsEmpty.forall_iff])
 
 Depends on / 依赖: CommRingCat, CommRingCat.hom_comp, Functor, Functor.map_comp, I.map, Ideal.map, Ideal.map_map, IsEmpty, IsEmpty.forall_iff, Set.mem_compl_iff, Set.mem_union, SetLike, SetLike.mem_coe, X.presheaf.map, X.zeroLocus, forall_iff, homOfLE, hom_comp, iff_self_or, le_top
 -/
@@ -1888,7 +1988,13 @@ definition radical
     letI : Algebra Γ(X, U) Γ(X, X.affineBasicOpen f) :=
       (X.presheaf.map (homOfLE (X.basicOpen_le f)).op).hom.toAlgebra
     have : IsLocalization.Away f Γ(X, X.basicOpen f) := U.2.isLocalization_of_eq_basicOpen _ _ rfl
-    (IsLoca
+    (IsLocalization.map_radical (.powers f) Γ(X, X.basicOpen f) (I.ideal U)).trans
+      congr($(I.map_ideal_basicOpen U f).radical))
+  I.supportSet
+  (fun U x hx => by
+    simp only [mem_supportSet_iff_of_mem hx, AlgebraicGeometry.Scheme.zeroLocus_radical])
+
+@[simp]
 
 中文:
 定义 radical
@@ -1899,7 +2005,13 @@ definition radical
     letI : Algebra Γ(X, U) Γ(X, X.affineBasicOpen f) :=
       (X.presheaf.map (homOfLE (X.basicOpen_le f)).op).hom.toAlgebra
     have : IsLocalization.Away f Γ(X, X.basicOpen f) := U.2.isLocalization_of_eq_basicOpen _ _ rfl
-    (IsLoca
+    (IsLocalization.map_radical (.powers f) Γ(X, X.basicOpen f) (I.ideal U)).trans
+      congr($(I.map_ideal_basicOpen U f).radical))
+  I.supportSet
+  (fun U x hx => by
+    simp only [mem_supportSet_iff_of_mem hx, AlgebraicGeometry.Scheme.zeroLocus_radical])
+
+@[simp]
 
 Depends on / 依赖: Algebra, AlgebraicGeometry, AlgebraicGeometry.Scheme.zeroLocu, I.ideal, I.map_ideal_basicOpen, I.supportSet, IsLocalization, IsLocalization.Away, IsLocalization.map_radical, Scheme, X.affineBasicOpen, X.basicOpen, X.basicOpen_le, X.presheaf.map, affineBasicOpen, basicOpen, basicOpen_le, hom.toAlgebra, homOfLE, isLocalization_of_eq_basicOpen
 -/
@@ -2169,7 +2281,10 @@ lemma le_support_iff_le_vanishingIdeal
   trans forall U : X.affineOpens, (Z : Set X) inter U subseteq I.support inter U
   · refine ⟨fun H U x hx => ⟨H hx.1, hx.2⟩, fun H x hx => ?_⟩
     obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
-      X.isBasis
+      X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
+    exact (H ⟨U, hU⟩ ⟨hx, hxU⟩).1
+  refine forall_congr' fun U => ?_
+  rw [coe_support_inter]; rw [← Set.image_subset_image_iff U.2.fromSpec.isOpenEmbedding.injective]; rw [Set.image_preimage_eq_inter_range]; rw [IsAffineOpen.fromSpec_image_zeroLocus]; rw [IsAffineOpen.range_fromSpec]
 
 中文:
 引理 le_support_iff_le_vanishingIdeal
@@ -2179,7 +2294,10 @@ lemma le_support_iff_le_vanishingIdeal
   trans forall U : X.affineOpens, (Z : Set X) inter U subseteq I.support inter U
   · refine ⟨fun H U x hx => ⟨H hx.1, hx.2⟩, fun H x hx => ?_⟩
     obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
-      X.isBasis
+      X.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
+    exact (H ⟨U, hU⟩ ⟨hx, hxU⟩).1
+  refine forall_congr' fun U => ?_
+  rw [coe_support_inter]; rw [← Set.image_subset_image_iff U.2.fromSpec.isOpenEmbedding.injective]; rw [Set.image_preimage_eq_inter_range]; rw [IsAffineOpen.fromSpec_image_zeroLocus]; rw [IsAffineOpen.range_fromSpec]
 
 Depends on / 依赖: I.support, PrimeSpectrum, PrimeSpectrum.subset_zeroLocus_iff_le_vanishingIdeal, Set.image_subset_image_iff, Set.mem_univ, X.affineOpens, X.isBasis_affineOpens.exists_subset_of_mem_open, affineOpens, coe_support_inter, exists_subset_of_mem_open, forall_congr, fromSpec, fromSpec.isOpenEmbedding, image_subset_image_iff, isBasis_affineOpens, isOpenEmbedding, isOpen_univ, le_def, mem_univ, subset_zeroLocus_iff_le_vanishingIdeal
 -/
@@ -2508,7 +2626,27 @@ lemma Hom.ker_apply
   intro U s
   apply le_antisymm
   · refine Ideal.map_le_iff_le_comap.mpr fun x hx => ?_
-    simp_rw [RingHom.comap_ker, ← CommRingCat.hom_comp, Scheme.affineBasicOpen_coe, f
+    simp_rw [RingHom.comap_ker, ← CommRingCat.hom_comp, Scheme.affineBasicOpen_coe, f.naturality,
+      CommRingCat.hom_comp, ← RingHom.comap_ker]
+    exact Ideal.ker_le_comap _ hx
+  · intro x hx
+    have := U.2.isLocalization_basicOpen s
+    obtain ⟨x, ⟨_, n, rfl⟩, rfl⟩ := IsLocalization.exists_mk'_eq (.powers s) x
+    refine (IsLocalization.mk'_mem_map_algebraMap_iff _ _ _ _ _).mpr ?_
+    suffices exists (V : X.Opens) (hV : V = X.basicOpen ((f.app U).hom s)),
+        letI := hV.trans_le (X.basicOpen_le _); ((f.app U).hom x |_ V) = 0 by
+      obtain ⟨_, rfl, H⟩ := this
+      obtain ⟨n, hn⟩ := exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isCompact
+        X (U := f ⁻¹ᵁ U) (QuasiCompact.isCompact_preimage (f := f) _ U.1.2 U.2.isCompact)
+        (f.app U x) (f.app U s) H
+      exact ⟨_, ⟨n, rfl⟩, by simpa using hn⟩
+    refine ⟨f ⁻¹ᵁ Y.basicOpen s, by simp, ?_⟩
+    replace hx : (Y.presheaf.map (homOfLE (Y.basicOpen_le s)).op ≫ f.app _).hom x = 0 := by
+      trans (f.app (Y.basicOpen s)).hom (algebraMap Γ(Y, U) _ x)
+      · simp [-NatTrans.naturality, RingHom.algebraMap_toAlgebra]
+      · simp only [Scheme.affineBasicOpen_coe, RingHom.mem_ker] at hx
+        rw [← IsLocalization.mk'_spec' (M := .powers s)]; rw [map_mul]; rw [hx]; rw [mul_zero]
+    rwa [f.naturality] at hx
 
 中文:
 引理 态射.ker_apply
@@ -2519,7 +2657,27 @@ lemma Hom.ker_apply
   intro U s
   apply le_antisymm
   · refine Ideal.map_le_iff_le_comap.mpr fun x hx => ?_
-    simp_rw [RingHom.comap_ker, ← CommRingCat.hom_comp, Scheme.affineBasicOpen_coe, f
+    simp_rw [RingHom.comap_ker, ← CommRingCat.hom_comp, Scheme.affineBasicOpen_coe, f.naturality,
+      CommRingCat.hom_comp, ← RingHom.comap_ker]
+    exact Ideal.ker_le_comap _ hx
+  · intro x hx
+    have := U.2.isLocalization_basicOpen s
+    obtain ⟨x, ⟨_, n, rfl⟩, rfl⟩ := IsLocalization.exists_mk'_eq (.powers s) x
+    refine (IsLocalization.mk'_mem_map_algebraMap_iff _ _ _ _ _).mpr ?_
+    suffices exists (V : X.Opens) (hV : V = X.basicOpen ((f.app U).hom s)),
+        letI := hV.trans_le (X.basicOpen_le _); ((f.app U).hom x |_ V) = 0 by
+      obtain ⟨_, rfl, H⟩ := this
+      obtain ⟨n, hn⟩ := exists_pow_mul_eq_zero_of_res_basicOpen_eq_zero_of_isCompact
+        X (U := f ⁻¹ᵁ U) (QuasiCompact.isCompact_preimage (f := f) _ U.1.2 U.2.isCompact)
+        (f.app U x) (f.app U s) H
+      exact ⟨_, ⟨n, rfl⟩, by simpa using hn⟩
+    refine ⟨f ⁻¹ᵁ Y.basicOpen s, by simp, ?_⟩
+    replace hx : (Y.presheaf.map (homOfLE (Y.basicOpen_le s)).op ≫ f.app _).hom x = 0 := by
+      trans (f.app (Y.basicOpen s)).hom (algebraMap Γ(Y, U) _ x)
+      · simp [-NatTrans.naturality, RingHom.algebraMap_toAlgebra]
+      · simp only [Scheme.affineBasicOpen_coe, RingHom.mem_ker] at hx
+        rw [← IsLocalization.mk'_spec' (M := .powers s)]; rw [map_mul]; rw [hx]; rw [mul_zero]
+    rwa [f.naturality] at hx
 
 Depends on / 依赖: CommRingCat, CommRingCat.hom_comp, Ideal.ker_le_comap, Ideal.map_le_iff_le_comap.mpr, IdealSheafData, IsLocalization, IsLocalization.exists_mk, RingHom, RingHom.comap_ker, RingHom.ker, Scheme, Scheme.affineBasicOpen_coe, affineBasicOpen_coe, comap_ker, exists_mk, f.app, f.naturality, hom_comp, isLocalization_basicOpen, ker_le_comap
 -/
@@ -2701,7 +2859,9 @@ lemma Hom.range_subset_ker_support
   refine ((coe_support_inter f.ker ⟨U, hU⟩).ge ⟨?_, hxU⟩).1
   simp only [Scheme.mem_zeroLocus_iff, SetLike.mem_coe]
   intro s hs hxs
-  have : x in f ⁻¹ᵁ Y
+  have : x in f ⁻¹ᵁ Y.basicOpen s := hxs
+  rwa [Scheme.preimage_basicOpen, RingHom.mem_ker.mp (f.ideal_ker_le _ hs),
+    Scheme.basicOpen_zero] at this
 
 中文:
 引理 态射.range_subset_ker_support
@@ -2713,7 +2873,9 @@ lemma Hom.range_subset_ker_support
   refine ((coe_support_inter f.ker ⟨U, hU⟩).ge ⟨?_, hxU⟩).1
   simp only [Scheme.mem_zeroLocus_iff, SetLike.mem_coe]
   intro s hs hxs
-  have : x in f ⁻¹ᵁ Y
+  have : x in f ⁻¹ᵁ Y.basicOpen s := hxs
+  rwa [Scheme.preimage_basicOpen, RingHom.mem_ker.mp (f.ideal_ker_le _ hs),
+    Scheme.basicOpen_zero] at this
 
 Depends on / 依赖: RingHom, RingHom.mem_ker.mp, Scheme, Scheme.basicOpen_zero, Scheme.mem_zeroLocus_iff, Scheme.preimage_basicOpen, Set.mem_univ, SetLike, SetLike.mem_coe, Y.basicOpen, Y.isBasis_affineOpens.exists_subset_of_mem_open, basicOpen, basicOpen_zero, coe_support_inter, exists_subset_of_mem_open, f.ideal_ker_le, f.ker, ideal_ker_le, isBasis_affineOpens, isOpen_univ
 -/
@@ -2763,7 +2925,13 @@ lemma Hom.iInf_ker_openCover_map_comp_apply
   rintro x hxU
   obtain ⟨i, x, rfl⟩ := 𝒰.exists_eq x
   simp only [homOfLE_leOfHom, map_zero, exists_and_left]
-  refine ⟨𝒰.f i ''ᵁ 𝒰.f i ⁻¹ᵁ f 
+  refine ⟨𝒰.f i ''ᵁ 𝒰.f i ⁻¹ᵁ f ⁻¹ᵁ U.1, ⟨_, hxU, rfl⟩,
+    Set.image_preimage_subset (𝒰.f i) (f ⁻¹ᵁ U), ?_⟩
+  apply ((𝒰.f i).appIso _).commRingCatIsoToRingEquiv.injective
+  rw [map_zero]; rw [← RingEquiv.coe_toRingHom]; rw [Iso.commRingCatIsoToRingEquiv_toRingHom]; rw [Scheme.Hom.appIso_hom']
+  simp only [homOfLE_leOfHom, Scheme.Hom.app_eq_appLE, ← RingHom.comp_apply,
+    ← CommRingCat.hom_comp, Scheme.Hom.appLE_map, Scheme.Hom.appLE_comp_appLE]
+  simpa [Scheme.Hom.appLE] using! ideal_ker_le _ _ (Ideal.mem_iInf.mp hs i)
 
 中文:
 引理 态射.iInf_ker_openCover_map_comp_apply
@@ -2775,7 +2943,13 @@ lemma Hom.iInf_ker_openCover_map_comp_apply
   rintro x hxU
   obtain ⟨i, x, rfl⟩ := 𝒰.exists_eq x
   simp only [homOfLE_leOfHom, map_zero, exists_and_left]
-  refine ⟨𝒰.f i ''ᵁ 𝒰.f i ⁻¹ᵁ f 
+  refine ⟨𝒰.f i ''ᵁ 𝒰.f i ⁻¹ᵁ f ⁻¹ᵁ U.1, ⟨_, hxU, rfl⟩,
+    Set.image_preimage_subset (𝒰.f i) (f ⁻¹ᵁ U), ?_⟩
+  apply ((𝒰.f i).appIso _).commRingCatIsoToRingEquiv.injective
+  rw [map_zero]; rw [← RingEquiv.coe_toRingHom]; rw [Iso.commRingCatIsoToRingEquiv_toRingHom]; rw [Scheme.Hom.appIso_hom']
+  simp only [homOfLE_leOfHom, Scheme.Hom.app_eq_appLE, ← RingHom.comp_apply,
+    ← CommRingCat.hom_comp, Scheme.Hom.appLE_map, Scheme.Hom.appLE_comp_appLE]
+  simpa [Scheme.Hom.appLE] using! ideal_ker_le _ _ (Ideal.mem_iInf.mp hs i)
 
 Depends on / 依赖: Hom.ker_apply, IsSheaf, Iso.commRingCatIsoToRingEquiv_t, RingEquiv, RingEquiv.coe_toRingHom, RingHom, RingHom.mem_ker, Set.image_preimage_subset, X.IsSheaf.section_ext, appIso, coe_toRingHom, commRingCatIsoToRingEquiv, commRingCatIsoToRingEquiv.injective, commRingCatIsoToRingEquiv_t, exists_and_left, exists_eq, homOfLE_leOfHom, image_preimage_subset, injective, ker_apply
 -/
@@ -2840,7 +3014,11 @@ lemma Hom.iUnion_support_ker_openCover_map_comp
       (⋃ i, (𝒰.f i ≫ f).ker.support) inter U = (f.ker.support inter U : Set Y) by
     ext x
     obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
-      Y.isBasis
+      Y.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
+    simpa [hxU] using congr(x in $(this ⟨U, hU⟩))
+  intro U
+  simp only [Set.iUnion_inter, coe_support_inter, ← f.iInf_ker_openCover_map_comp_apply 𝒰,
+    Scheme.zeroLocus_iInf_of_nonempty]
 
 中文:
 引理 态射.iUnion_support_ker_openCover_map_comp
@@ -2852,7 +3030,11 @@ lemma Hom.iUnion_support_ker_openCover_map_comp
       (⋃ i, (𝒰.f i ≫ f).ker.support) inter U = (f.ker.support inter U : Set Y) by
     ext x
     obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ :=
-      Y.isBasis
+      Y.isBasis_affineOpens.exists_subset_of_mem_open (Set.mem_univ x) isOpen_univ
+    simpa [hxU] using congr(x in $(this ⟨U, hU⟩))
+  intro U
+  simp only [Set.iUnion_inter, coe_support_inter, ← f.iInf_ker_openCover_map_comp_apply 𝒰,
+    Scheme.zeroLocus_iInf_of_nonempty]
 
 Depends on / 依赖: Function, Function.isEmpty, IsEmpty, Scheme, Scheme.zeroLocus_iI, Set.iUnion_inter, Set.mem_univ, Y.affineOpens, Y.isBasis_affineOpens.exists_subset_of_mem_open, affineOpens, coe_support_inter, exists_subset_of_mem_open, f.iInf_ker_openCover_map_comp_apply, f.ker.support, iInf_ker_openCover_map_comp_apply, iUnion_inter, isBasis_affineOpens, isEmpty, isEmpty_or_nonempty, isOpen_univ
 -/
@@ -2915,7 +3097,15 @@ lemma ker_ideal_of_isPullback_of_isOpenImmersion
   ext x
   have : iU ''ᵁ f' ⁻¹ᵁ W = f ⁻¹ᵁ iV ''ᵁ W :=
     IsOpenImmersion.image_preimage_eq_preimage_image_of_isPullback H W
-  let e : Γ(X, 
+  let e : Γ(X, f ⁻¹ᵁ iV ''ᵁ W) ≅ Γ(U, f' ⁻¹ᵁ W) :=
+    X.presheaf.mapIso (eqToIso this).op ≪≫ iU.appIso _
+  have : (iV.appIso W).inv ≫ f.app _ = f'.app W ≫ e.inv := by
+    rw [Iso.inv_comp_eq]; rw [← Category.assoc]; rw [Iso.eq_comp_inv]
+    simp only [Scheme.Hom.app_eq_appLE, Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, eqToIso.hom,
+      eqToHom_op, Scheme.Hom.appIso_hom', Scheme.Hom.map_appLE, e, Scheme.Hom.appLE_comp_appLE, H.w]
+  simp only [Scheme.Hom.ker_apply, RingHom.mem_ker, Ideal.mem_comap, ← RingHom.comp_apply,
+    ← CommRingCat.hom_comp, this]
+  simpa using (map_eq_zero_iff _ (ConcreteCategory.bijective_of_isIso e.inv).1).symm
 
 中文:
 引理 ker_ideal_of_isPullback_of_isOpenImmersion
@@ -2926,7 +3116,15 @@ lemma ker_ideal_of_isPullback_of_isOpenImmersion
   ext x
   have : iU ''ᵁ f' ⁻¹ᵁ W = f ⁻¹ᵁ iV ''ᵁ W :=
     IsOpenImmersion.image_preimage_eq_preimage_image_of_isPullback H W
-  let e : Γ(X, 
+  let e : Γ(X, f ⁻¹ᵁ iV ''ᵁ W) ≅ Γ(U, f' ⁻¹ᵁ W) :=
+    X.presheaf.mapIso (eqToIso this).op ≪≫ iU.appIso _
+  have : (iV.appIso W).inv ≫ f.app _ = f'.app W ≫ e.inv := by
+    rw [Iso.inv_comp_eq]; rw [← Category.assoc]; rw [Iso.eq_comp_inv]
+    simp only [Scheme.Hom.app_eq_appLE, Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, eqToIso.hom,
+      eqToHom_op, Scheme.Hom.appIso_hom', Scheme.Hom.map_appLE, e, Scheme.Hom.appLE_comp_appLE, H.w]
+  simp only [Scheme.Hom.ker_apply, RingHom.mem_ker, Ideal.mem_comap, ← RingHom.comp_apply,
+    ← CommRingCat.hom_comp, this]
+  simpa using (map_eq_zero_iff _ (ConcreteCategory.bijective_of_isIso e.inv).1).symm
 
 Depends on / 依赖: Category, Category.assoc, H.flip, IsOpenImmersion, IsOpenImmersion.image_preimage_eq_preimage_image_of_isPullback, Iso.eq_comp_inv, Iso.inv_comp_eq, MorphismProperty, MorphismProperty.of_isPullback, QuasiCompact, X.presheaf.mapIso, appIso, e.inv, eqToIso, eq_comp_inv, f.app, iU.appIso, iV.appIso, image_preimage_eq_preimage_image_of_isPullback, inv_comp_eq
 -/
@@ -2965,7 +3163,35 @@ lemma Hom.support_ker
       obtain ⟨i, x, rfl⟩ := 𝒰.exists_eq x
       have inst : QuasiCompact (𝒰.pullbackHom f i) :=
         MorphismProperty.pullback_snd _ _ inferInstance
-      have := this (𝒰.pullbackHom f i) ⟨
+      have := this (𝒰.pullbackHom f i) ⟨_, rfl⟩
+        ((coe_support_inter _ ⟨⊤, isAffineOpen_top _⟩).ge ⟨?_, Set.mem_univ x⟩).1
+      · have := image_closure_subset_closure_image (f := 𝒰.f i)
+          (𝒰.f i).continuous (Set.mem_image_of_mem _ this)
+        rw [← Set.range_comp]; rw [← TopCat.coe_comp]; rw [← Scheme.Hom.comp_base]; rw [𝒰.pullbackHom_map] at this
+        exact closure_mono (Set.range_comp_subset_range _ _) this
+      · rw [← (𝒰.f i).isOpenEmbedding.injective.mem_set_image, Scheme.image_zeroLocus,
+          ker_ideal_of_isPullback_of_isOpenImmersion f (𝒰.pullbackHom f i)
+            ((𝒰.pullback₁ f).f i) (𝒰.f i),
+          Ideal.coe_comap, Set.image_preimage_eq]
+        · exact ⟨((coe_support_inter _ _).le ⟨hx, by simp⟩).1, ⟨_, rfl⟩⟩
+        · exact (ConcreteCategory.bijective_of_isIso ((𝒰.f i).appIso ⊤).inv).2
+        · exact (IsPullback.of_hasPullback _ _).flip
+    obtain ⟨S, rfl⟩ := hY
+    wlog hX : exists R, X = Spec R generalizing X S
+    · intro x hx
+      have inst : CompactSpace X := HasAffineProperty.iff_of_isAffine.mp ‹QuasiCompact f›
+      let 𝒰 := X.affineCover.finiteSubcover
+      obtain ⟨_, ⟨i, rfl⟩, hx⟩ := (f.iUnion_support_ker_openCover_map_comp 𝒰).ge hx
+      have inst : QuasiCompact (𝒰.f i ≫ f) := HasAffineProperty.iff_of_isAffine.mpr
+        (inferInstanceAs <| CompactSpace (Spec _))
+      exact closure_mono (Set.range_comp_subset_range _ _) (this S (𝒰.f i ≫ f) ⟨_, rfl⟩ hx)
+    obtain ⟨R, rfl⟩ := hX
+    obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+    rw [ker_of_isAffine]; rw [coe_support_ofIdealTop]; rw [Spec_zeroLocus]; rw [← Ideal.coe_comap]; rw [RingHom.comap_ker]; rw [← PrimeSpectrum.closure_range_comap]; rw [← CommRingCat.hom_comp]; rw [← Scheme.ΓSpecIso_inv_naturality]
+    simp only [CommRingCat.hom_comp, PrimeSpectrum.comap_comp]
+    exact closure_mono (Set.range_comp_subset_range _ (Spec.map φ))
+  · rw [(support _).isClosed.closure_subset_iff]
+    exact f.range_subset_ker_support
 
 中文:
 引理 态射.support_ker
@@ -2978,7 +3204,35 @@ lemma Hom.support_ker
       obtain ⟨i, x, rfl⟩ := 𝒰.exists_eq x
       have inst : QuasiCompact (𝒰.pullbackHom f i) :=
         MorphismProperty.pullback_snd _ _ inferInstance
-      have := this (𝒰.pullbackHom f i) ⟨
+      have := this (𝒰.pullbackHom f i) ⟨_, rfl⟩
+        ((coe_support_inter _ ⟨⊤, isAffineOpen_top _⟩).ge ⟨?_, Set.mem_univ x⟩).1
+      · have := image_closure_subset_closure_image (f := 𝒰.f i)
+          (𝒰.f i).continuous (Set.mem_image_of_mem _ this)
+        rw [← Set.range_comp]; rw [← TopCat.coe_comp]; rw [← Scheme.Hom.comp_base]; rw [𝒰.pullbackHom_map] at this
+        exact closure_mono (Set.range_comp_subset_range _ _) this
+      · rw [← (𝒰.f i).isOpenEmbedding.injective.mem_set_image, Scheme.image_zeroLocus,
+          ker_ideal_of_isPullback_of_isOpenImmersion f (𝒰.pullbackHom f i)
+            ((𝒰.pullback₁ f).f i) (𝒰.f i),
+          Ideal.coe_comap, Set.image_preimage_eq]
+        · exact ⟨((coe_support_inter _ _).le ⟨hx, by simp⟩).1, ⟨_, rfl⟩⟩
+        · exact (ConcreteCategory.bijective_of_isIso ((𝒰.f i).appIso ⊤).inv).2
+        · exact (IsPullback.of_hasPullback _ _).flip
+    obtain ⟨S, rfl⟩ := hY
+    wlog hX : exists R, X = Spec R generalizing X S
+    · intro x hx
+      have inst : CompactSpace X := HasAffineProperty.iff_of_isAffine.mp ‹QuasiCompact f›
+      let 𝒰 := X.affineCover.finiteSubcover
+      obtain ⟨_, ⟨i, rfl⟩, hx⟩ := (f.iUnion_support_ker_openCover_map_comp 𝒰).ge hx
+      have inst : QuasiCompact (𝒰.f i ≫ f) := HasAffineProperty.iff_of_isAffine.mpr
+        (inferInstanceAs <| CompactSpace (Spec _))
+      exact closure_mono (Set.range_comp_subset_range _ _) (this S (𝒰.f i ≫ f) ⟨_, rfl⟩ hx)
+    obtain ⟨R, rfl⟩ := hX
+    obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+    rw [ker_of_isAffine]; rw [coe_support_ofIdealTop]; rw [Spec_zeroLocus]; rw [← Ideal.coe_comap]; rw [RingHom.comap_ker]; rw [← PrimeSpectrum.closure_range_comap]; rw [← CommRingCat.hom_comp]; rw [← Scheme.ΓSpecIso_inv_naturality]
+    simp only [CommRingCat.hom_comp, PrimeSpectrum.comap_comp]
+    exact closure_mono (Set.range_comp_subset_range _ (Spec.map φ))
+  · rw [(support _).isClosed.closure_subset_iff]
+    exact f.range_subset_ker_support
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, QuasiCompact, Set.mem_image_of_mem, Set.mem_univ, Set.range_comp, TopCat, TopCat.coe_comp, Y.affineCover, affineCover, coe_comp, coe_support_inter, continuous, exists_eq, image_closure_subset_closure_image, isAffineOpen_top, mem_image_of_mem, mem_univ, pullbackHom, pullback_snd
 -/

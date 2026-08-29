@@ -127,7 +127,9 @@ theorem union
   -- hence is also full; similarly for `t`.
   [have hx := hs x h; have hx := ht x h] <;>
   rw [← Set.univ_subset_iff]; rw [← hx] <;>
-  apply convexHull_mono
+  apply convexHull_mono <;>
+  apply connectedComponentIn_mono <;>
+  [apply subset_union_left; apply subset_union_right]
 
 中文:
 定理 union
@@ -140,7 +142,9 @@ theorem union
   -- hence is also full; similarly for `t`.
   [have hx := hs x h; have hx := ht x h] <;>
   rw [← Set.univ_subset_iff]; rw [← hx] <;>
-  apply convexHull_mono
+  apply convexHull_mono <;>
+  apply connectedComponentIn_mono <;>
+  [apply subset_union_left; apply subset_union_right]
 -/
 theorem union {s t : Set F} (hs : AmpleSet s) (ht : AmpleSet t) : AmpleSet (s union t) := by
   intro x hx
@@ -166,7 +170,8 @@ theorem image
     _ = (convexHull Real) (L '' (connectedComponentIn s x)) :=
 .symm congrArg _ L.toHomeomorph.image_connectedComponentIn hx
     _ = L '' (convexHull Real (connectedComponentIn s x)) :=
-.symm L.toAffineMa
+.symm L.toAffineMap.image_convexHull _
+    _ = univ := by rw [h x hx, image_univ, L.surjective.range_eq]
 
 中文:
 定理 像
@@ -176,7 +181,8 @@ theorem image
     _ = (convexHull Real) (L '' (connectedComponentIn s x)) :=
 .symm congrArg _ L.toHomeomorph.image_connectedComponentIn hx
     _ = L '' (convexHull Real (connectedComponentIn s x)) :=
-.symm L.toAffineMa
+.symm L.toAffineMap.image_convexHull _
+    _ = univ := by rw [h x hx, image_univ, L.surjective.range_eq]
 
 Depends on / 依赖: forall_mem_image, forall_mem_image.mpr
 -/
@@ -309,7 +315,9 @@ theorem of_one_lt_codim
       rw [← not_forall]; rw [← Submodule.eq_top_iff']
       rintro rfl
       simp at hcodim
-    refine segment_subset_con
+    refine segment_subset_convexHull ?_ ?_ (mem_segment_sub_add y z) <;>
+      simpa [sub_eq_add_neg, Submodule.add_mem_iff_right _ h]
+  · exact subset_convexHull Real (Eᶜ : Set F) h
 
 中文:
 定理 of_one_lt_codim
@@ -322,7 +330,9 @@ theorem of_one_lt_codim
       rw [← not_forall]; rw [← Submodule.eq_top_iff']
       rintro rfl
       simp at hcodim
-    refine segment_subset_con
+    refine segment_subset_convexHull ?_ ?_ (mem_segment_sub_add y z) <;>
+      simpa [sub_eq_add_neg, Submodule.add_mem_iff_right _ h]
+  · exact subset_convexHull Real (Eᶜ : Set F) h
 
 Depends on / 依赖: E.connectedComponentIn_eq_self_of_one_lt_codim, Submodule, Submodule.add_mem_iff_right, Submodule.eq_top_iff, add_mem_iff_right, connectedComponentIn_eq_self_of_one_lt_codim, eq_top_iff, eq_univ_iff_forall, hcodim, mem_segment_sub_add, not_forall, segment_subset_convexHull, sub_eq_add_neg, subset_convexHull
 -/

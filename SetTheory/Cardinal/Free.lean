@@ -265,7 +265,16 @@ theorem mk_freeGroup
     simp only [mk_list_eq_max_mk_aleph0, mk_prod, lift_uzero, mk_fintype, Fintype.card_bool,
       Nat.cast_ofNat, lift_ofNat]
     obtain hα | hα := lt_or_ge #α ℵ₀
-    · simp only [hα.le,
+    · simp only [hα.le, max_eq_right, max_eq_right_iff]
+      exact (mul_lt_aleph0 hα natCast_lt_aleph0).le
+    · rw [max_eq_left hα, max_eq_left (hα.trans <| Cardinal.le_mul_right two_ne_zero),
+        Cardinal.mul_eq_left hα _ (by simp)]
+      exact natCast_le_aleph0.trans hα
+  · apply max_le
+    · exact mk_le_of_injective FreeGroup.of_injective
+    · simp
+
+@[simp]
 
 中文:
 定理 mk_freeGroup
@@ -278,7 +287,16 @@ theorem mk_freeGroup
     simp only [mk_list_eq_max_mk_aleph0, mk_prod, lift_uzero, mk_fintype, Fintype.card_bool,
       Nat.cast_ofNat, lift_ofNat]
     obtain hα | hα := lt_or_ge #α ℵ₀
-    · simp only [hα.le,
+    · simp only [hα.le, max_eq_right, max_eq_right_iff]
+      exact (mul_lt_aleph0 hα natCast_lt_aleph0).le
+    · rw [max_eq_left hα, max_eq_left (hα.trans <| Cardinal.le_mul_right two_ne_zero),
+        Cardinal.mul_eq_left hα _ (by simp)]
+      exact natCast_le_aleph0.trans hα
+  · apply max_le
+    · exact mk_le_of_injective FreeGroup.of_injective
+    · simp
+
+@[simp]
 
 Depends on / 依赖: Cardinal, Cardinal.le_mul_right, Cardinal.mul_eq_left, Fintype, Fintype.card_bool, FreeGroup, FreeGroup.toWord_injective, Nat.cast_ofNat, card_bool, cast_ofNat, classical, le_antisymm, le_mul_right, lift_ofNat, lift_uzero, lt_or_ge, max_eq_left, max_eq_right, max_eq_right_iff, mk_fintype
 -/
@@ -391,7 +409,10 @@ instance nonempty_commRing
     classical
     obtain ⟨e⟩ := Fintype.truncEquivFin α
     exact ⟨open scoped Fin.CommRing in e.commRing⟩
-  · have ⟨e⟩ : Nonempty (α ≃ FreeCommRing α) := by simp [← Cardi
+  · have ⟨e⟩ : Nonempty (α ≃ FreeCommRing α) := by simp [← Cardinal.eq]
+    exact ⟨e.commRing⟩
+
+@[simp]
 
 中文:
 实例 nonempty_commRing
@@ -403,7 +424,10 @@ instance nonempty_commRing
     classical
     obtain ⟨e⟩ := Fintype.truncEquivFin α
     exact ⟨open scoped Fin.CommRing in e.commRing⟩
-  · have ⟨e⟩ : Nonempty (α ≃ FreeCommRing α) := by simp [← Cardi
+  · have ⟨e⟩ : Nonempty (α ≃ FreeCommRing α) := by simp [← Cardinal.eq]
+    exact ⟨e.commRing⟩
+
+@[simp]
 
 Depends on / 依赖: Cardinal, Cardinal.eq, CommRing, Fin.CommRing, Fintype, Fintype.card, Fintype.truncEquivFin, FreeCommRing, NeZero, Nonempty, classical, commRing, e.commRing, finite_or_infinite, nonempty_fintype, scoped, truncEquivFin
 -/

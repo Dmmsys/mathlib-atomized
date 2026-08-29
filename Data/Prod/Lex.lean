@@ -699,7 +699,13 @@ instance instLinearOrder
   compare_eq_compareOfLessAndEq := fun a b => by
     have : DecidableLT (α ×ₗ β) := Prod.Lex.decidable _ _
     have : Std.LawfulBEqOrd (α ×ₗ β) := ⟨by
- 
+      simp [compare_def, compareLex, compareOn, Ordering.then_eq_eq]⟩
+    have : Std.LawfulLTOrd (α ×ₗ β) := ⟨by
+      simp [compare_def, compareLex, compareOn, Ordering.then_eq_lt, toLex_lt_toLex,
+        compare_lt_iff_lt]⟩
+    convert! Std.LawfulLTCmp.eq_compareOfLessAndEq (cmp := compare) a b
+
+@[to_dual]
 
 中文:
 实例 instLinearOrder
@@ -711,7 +717,13 @@ instance instLinearOrder
   compare_eq_compareOfLessAndEq := fun a b => by
     have : DecidableLT (α ×ₗ β) := Prod.Lex.decidable _ _
     have : Std.LawfulBEqOrd (α ×ₗ β) := ⟨by
- 
+      simp [compare_def, compareLex, compareOn, Ordering.then_eq_eq]⟩
+    have : Std.LawfulLTOrd (α ×ₗ β) := ⟨by
+      simp [compare_def, compareLex, compareOn, Ordering.then_eq_lt, toLex_lt_toLex,
+        compare_lt_iff_lt]⟩
+    convert! Std.LawfulLTCmp.eq_compareOfLessAndEq (cmp := compare) a b
+
+@[to_dual]
 
 Depends on / 依赖: Prod.Lex, total_of
 -/
@@ -812,7 +824,10 @@ instance [Preorder
       use toLex (y.1, v)
       simp [Prod.Lex.toLex_lt_toLex, h, hv]
     · obtain ⟨v, htv, hvu⟩ := DenselyOrdered.dense x.2 y.2 h.2
-      use 
+      use toLex (x.1, v)
+      simp [Prod.Lex.toLex_lt_toLex, h.1, htv, hvu]
+
+@[to_dual existing]
 
 中文:
 实例 [预序
@@ -826,7 +841,10 @@ instance [Preorder
       use toLex (y.1, v)
       simp [Prod.Lex.toLex_lt_toLex, h, hv]
     · obtain ⟨v, htv, hvu⟩ := DenselyOrdered.dense x.2 y.2 h.2
-      use 
+      use toLex (x.1, v)
+      simp [Prod.Lex.toLex_lt_toLex, h.1, htv, hvu]
+
+@[to_dual existing]
 
 Depends on / 依赖: DenselyOrdered, DenselyOrdered.dense, Prod.Lex.toLex_lt_toLex, exists_lt, toLex_lt_toLex
 -/
@@ -860,7 +878,10 @@ instance [Preorder
       use toLex (x.1, v)
       simp [Prod.Lex.toLex_lt_toLex, h, hv]
     · obtain ⟨v, htv, hvu⟩ := DenselyOrdered.dense x.2 y.2 h.2
-      use 
+      use toLex (x.1, v)
+      simp [Prod.Lex.toLex_lt_toLex, h.1, htv, hvu]
+
+@[to_dual]
 
 中文:
 实例 [预序
@@ -874,7 +895,10 @@ instance [Preorder
       use toLex (x.1, v)
       simp [Prod.Lex.toLex_lt_toLex, h, hv]
     · obtain ⟨v, htv, hvu⟩ := DenselyOrdered.dense x.2 y.2 h.2
-      use 
+      use toLex (x.1, v)
+      simp [Prod.Lex.toLex_lt_toLex, h.1, htv, hvu]
+
+@[to_dual]
 
 Depends on / 依赖: DenselyOrdered, DenselyOrdered.dense, Prod.Lex.toLex_lt_toLex, exists_gt, toLex_lt_toLex
 -/

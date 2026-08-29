@@ -361,7 +361,7 @@ lemma strongInnerAnodyneExtensions_ι_iff
       obtain ⟨_, P₁, _, P₂⟩ := hA
       exact ⟨_, P₁, inferInstance, ⟨P₂, by simp⟩⟩
     exact ⟨P, ⟨inferInstance, inferInstance⟩⟩,
-  fun ⟨P, ⟨_, _⟩⟩ => P.strong
+  fun ⟨P, ⟨_, _⟩⟩ => P.strongInnerAnodyneExtensions⟩
 
 中文:
 引理 strongInnerAnodyneExtensions_ι_iff
@@ -372,7 +372,7 @@ lemma strongInnerAnodyneExtensions_ι_iff
       obtain ⟨_, P₁, _, P₂⟩ := hA
       exact ⟨_, P₁, inferInstance, ⟨P₂, by simp⟩⟩
     exact ⟨P, ⟨inferInstance, inferInstance⟩⟩,
-  fun ⟨P, ⟨_, _⟩⟩ => P.strong
+  fun ⟨P, ⟨_, _⟩⟩ => P.strongInnerAnodyneExtensions⟩
 
 Depends on / 依赖: B.Pairing, IsInner, IsRegular, P.IsInner, P.IsRegular, P.strongInnerAnodyneExtensions, Pairing, Subcomplex, X.Subcomplex, strongInnerAnodyneExtensions
 -/
@@ -396,7 +396,12 @@ lemma Subcomplex.Pairing.innerAnodyneExtensions
     ⟨P.rankFunction.relativeCellComplex.toTransfiniteCompositionOfShape, fun j hj => by
       refine (?_ : (_ : MorphismProperty _) <= _ ) _
         (P.rankFunction.relativeCellComplex.attachCells j hj).pushouts_coproducts
-      simp only [pushouts_le_iff, cop
+      simp only [pushouts_le_iff, coproducts_le_iff]
+      rintro _ _ _ ⟨c⟩
+      have h0 := Fin.pos_iff_ne_zero.mpr (IsInner.ne_zero c.s rfl)
+      have hn := Fin.lt_last_iff_ne_last.mpr (IsInner.ne_last c.s rfl)
+      have : NeZero c.dim := ⟨by grind⟩
+      exact .horn_ι h0 hn⟩
 
 中文:
 引理 子复形.Pairing.innerAnodyneExtensions
@@ -405,7 +410,12 @@ lemma Subcomplex.Pairing.innerAnodyneExtensions
     ⟨P.rankFunction.relativeCellComplex.toTransfiniteCompositionOfShape, fun j hj => by
       refine (?_ : (_ : MorphismProperty _) <= _ ) _
         (P.rankFunction.relativeCellComplex.attachCells j hj).pushouts_coproducts
-      simp only [pushouts_le_iff, cop
+      simp only [pushouts_le_iff, coproducts_le_iff]
+      rintro _ _ _ ⟨c⟩
+      have h0 := Fin.pos_iff_ne_zero.mpr (IsInner.ne_zero c.s rfl)
+      have hn := Fin.lt_last_iff_ne_last.mpr (IsInner.ne_last c.s rfl)
+      have : NeZero c.dim := ⟨by grind⟩
+      exact .horn_ι h0 hn⟩
 
 Depends on / 依赖: Fin.lt_last_iff_ne_last.mpr, Fin.pos_iff_ne_zero.mpr, IsInner, IsInner.ne_last, IsInner.ne_zero, MorphismProperty, NeZero, P.rankFunction.relativeCellComplex.attachCells, P.rankFunction.relativeCellComplex.toTransfiniteCompositionOfShape, attachCells, c.dim, coproducts_le_iff, lt_last_iff_ne_last, ne_last, ne_zero, pos_iff_ne_zero, pushouts_coproducts, pushouts_le_iff, rankFunction, relativeCellComplex
 -/
@@ -435,7 +445,8 @@ instance :
     simp [Subcomplex.range_comp, Subcomplex.range_eq_top e, Subcomplex.image_top]
   postcomp e _ f hf := by
     obtain ⟨_, P, hP, hP'⟩ := hf
-    refine ⟨inferInstance, P.ofIso (asIso
+    refine ⟨inferInstance, P.ofIso (asIso e).symm ?_, inferInstance, inferInstance⟩
+    simp [Subcomplex.preimage_inv, Subcomplex.range_comp]
 
 中文:
 实例 :
@@ -446,7 +457,8 @@ instance :
     simp [Subcomplex.range_comp, Subcomplex.range_eq_top e, Subcomplex.image_top]
   postcomp e _ f hf := by
     obtain ⟨_, P, hP, hP'⟩ := hf
-    refine ⟨inferInstance, P.ofIso (asIso
+    refine ⟨inferInstance, P.ofIso (asIso e).symm ?_, inferInstance, inferInstance⟩
+    simp [Subcomplex.preimage_inv, Subcomplex.range_comp]
 
 Depends on / 依赖: Iso.refl, P.ofIso, Subcomplex, Subcomplex.image_top, Subcomplex.preimage_inv, Subcomplex.range_comp, Subcomplex.range_eq_top, image_top, postcomp, preimage_inv, range_comp, range_eq_top
 -/

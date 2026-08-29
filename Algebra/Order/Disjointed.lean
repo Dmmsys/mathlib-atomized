@@ -65,7 +65,9 @@ lemma partialSups_add_one_eq_sup_disjointed
         apply Order.le_succ
       exact le_antisymm (hi h) h
     simp only [this, left_eq_sup, ge_iff_le, disjointed, sdiff_le_iff]
-    apply le_trans (le_partialSups _ _) le_su
+    apply le_trans (le_partialSups _ _) le_sup_right
+  · rw [← Order.succ_eq_add_one, disjointed_succ _ hi]
+    simp
 
 中文:
 引理 partialSups_add_one_eq_sup_disjointed
@@ -78,7 +80,9 @@ lemma partialSups_add_one_eq_sup_disjointed
         apply Order.le_succ
       exact le_antisymm (hi h) h
     simp only [this, left_eq_sup, ge_iff_le, disjointed, sdiff_le_iff]
-    apply le_trans (le_partialSups _ _) le_su
+    apply le_trans (le_partialSups _ _) le_sup_right
+  · rw [← Order.succ_eq_add_one, disjointed_succ _ hi]
+    simp
 
 Depends on / 依赖: Order.le_succ, Order.succ_eq_add_one, disjointed, disjointed_succ, ge_iff_le, le_antisymm, le_partialSups, le_succ, le_sup_right, le_trans, left_eq_sup, sdiff_le_iff, succ_eq_add_one
 -/

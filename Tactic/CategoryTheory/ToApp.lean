@@ -45,7 +45,9 @@ definition catAppSimp
     ``Cat.Hom.comp_toFunctor, ``Functor.comp_obj, ``Cat.Hom.comp_obj, ``Cat.whiskerLeft_app,
     ``Cat.whiskerRight_app, ``Cat.Hom₂.id_app, ``Cat.Hom₂.comp_app, ``Cat.eqToHom_app,
     ``Cat.leftUnitor_hom_app, ``Cat.leftUnitor_inv_app, ``Cat.rightUnitor_hom_app,
-    ``Cat.rightUnitor
+    ``Cat.rightUnitor_inv_app, ``Cat.associator_hom_app, ``Cat.associator_inv_app, ``eqToHom_refl,
+    ``Category.comp_id, ``Category.id_comp] e
+    (config := { decide := false })
 
 中文:
 定义 catAppSimp
@@ -54,7 +56,9 @@ definition catAppSimp
     ``Cat.Hom.comp_toFunctor, ``Functor.comp_obj, ``Cat.Hom.comp_obj, ``Cat.whiskerLeft_app,
     ``Cat.whiskerRight_app, ``Cat.Hom₂.id_app, ``Cat.Hom₂.comp_app, ``Cat.eqToHom_app,
     ``Cat.leftUnitor_hom_app, ``Cat.leftUnitor_inv_app, ``Cat.rightUnitor_hom_app,
-    ``Cat.rightUnitor
+    ``Cat.rightUnitor_inv_app, ``Cat.associator_hom_app, ``Cat.associator_inv_app, ``eqToHom_refl,
+    ``Category.comp_id, ``Category.id_comp] e
+    (config := { decide := false })
 
 Depends on / 依赖: Cat.Hom, Cat.Hom.comp_obj, Cat.Hom.comp_toFunctor, Cat.associator_hom_app, Cat.associator_inv_app, Cat.eqToHom_app, Cat.leftUnitor_hom_app, Cat.leftUnitor_inv_app, Cat.rightUnitor_hom_app, Cat.rightUnitor_inv_app, Cat.whiskerLeft_app, Cat.whiskerRight_app, Category, Category.comp_id, Category.id_comp, Functor, Functor.comp_obj, associator_hom_app, associator_inv_app, comp_app
 -/
@@ -80,7 +84,41 @@ definition toCatExpr
     match conclusion.getAppFnArgs with
     | (`Eq, #[_, η, _]) =>
       match (← inferType η).getAppFnArgs with
-  
+      | (`Quiver.Hom, #[_, _, f, _]) =>
+        match (← inferType f).getAppFnArgs with
+        | (`Quiver.Hom, #[_, _, a, _]) => inferType a
+        | _ => throwError "The conclusion {conclusion} is not an equality of 2-morphisms!"
+      | _ => throwError "The conclusion {conclusion} is not an equality of 2-morphisms!"
+    | _ => throwError "The conclusion {conclusion} is not an equality!"
+  -- Create level metavariables to be used for `Cat.{v, u}`
+  let u ← mkFreshLevelMVar
+  let v ← mkFreshLevelMVar
+  -- Assign `B` to `Cat.{v, u}`
+  let _ ← isDefEq B (.const ``Cat [v, u])
+  -- Assign the right bicategory instance to `Cat.{v, u}`
+  let some inst ← args.findM? fun x => do
+      return (← inferType x).getAppFnArgs == (`CategoryTheory.Bicategory, #[B])
+    | throwError "Cannot find the argument for the bicategory instance of the bicategory in which \
+      the equality is taking place."
+  let _ ← isDefEq inst (.const ``CategoryTheory.Cat.bicategory [v, u])
+  -- Construct the new expression
+  let value := mkAppN e args
+  let rec
+  /-- Recursive function which applies `mkLambdaFVars` stepwise
+  (so that each step can have different binderinfos) -/
+    apprec (i : Nat) (e : Expr) : MetaM Expr := do
+      if h : i < args.size then
+        let arg := args[i]
+        let bi := binderInfos[i]!
+        let e' ← apprec (i + 1) e
+        unless arg != B && arg != inst do return e'
+        mkLambdaFVars #[arg] e' (binderInfoForMVars := bi)
+      else
+        return e
+  let value ← apprec 0 value
+  return value
+
+universe v u in
 
 中文:
 定义 toCatExpr
@@ -92,7 +130,41 @@ definition toCatExpr
     match conclusion.getAppFnArgs with
     | (`Eq, #[_, η, _]) =>
       match (← inferType η).getAppFnArgs with
-  
+      | (`Quiver.Hom, #[_, _, f, _]) =>
+        match (← inferType f).getAppFnArgs with
+        | (`Quiver.Hom, #[_, _, a, _]) => inferType a
+        | _ => throwError "The conclusion {conclusion} is not an equality of 2-morphisms!"
+      | _ => throwError "The conclusion {conclusion} is not an equality of 2-morphisms!"
+    | _ => throwError "The conclusion {conclusion} is not an equality!"
+  -- Create level metavariables to be used for `Cat.{v, u}`
+  let u ← mkFreshLevelMVar
+  let v ← mkFreshLevelMVar
+  -- Assign `B` to `Cat.{v, u}`
+  let _ ← isDefEq B (.const ``Cat [v, u])
+  -- Assign the right bicategory instance to `Cat.{v, u}`
+  let some inst ← args.findM? fun x => do
+      return (← inferType x).getAppFnArgs == (`CategoryTheory.Bicategory, #[B])
+    | throwError "Cannot find the argument for the bicategory instance of the bicategory in which \
+      the equality is taking place."
+  let _ ← isDefEq inst (.const ``CategoryTheory.Cat.bicategory [v, u])
+  -- Construct the new expression
+  let value := mkAppN e args
+  let rec
+  /-- Recursive function which applies `mkLambdaFVars` stepwise
+  (so that each step can have different binderinfos) -/
+    apprec (i : Nat) (e : Expr) : MetaM Expr := do
+      if h : i < args.size then
+        let arg := args[i]
+        let bi := binderInfos[i]!
+        let e' ← apprec (i + 1) e
+        unless arg != B && arg != inst do return e'
+        mkLambdaFVars #[arg] e' (binderInfoForMVars := bi)
+      else
+        return e
+  let value ← apprec 0 value
+  return value
+
+universe v u in
 -/
 def toCatExpr (e : Expr) : MetaM Expr := do
   let (args, binderInfos, conclusion) ← forallMetaTelescope (← inferType e)

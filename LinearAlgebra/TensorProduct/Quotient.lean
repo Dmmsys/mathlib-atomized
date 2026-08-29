@@ -59,7 +59,27 @@ definition quotientTensorQuotientEquiv
       ((mk R (M := M) (N := N)).flip.compr₂ (Submodule.mkQ _)) fun x hx => by
       ext y
       simp only [LinearMap.compr₂_apply, LinearMap.flip_apply, mk_apply, Submodule.mkQ_apply,
-        LinearMap.zero_a
+        LinearMap.zero_apply, Submodule.Quotient.mk_eq_zero]
+      exact Submodule.mem_sup_right ⟨y otimesₜ ⟨x, hx⟩, rfl⟩) fun x hx => by
+      ext y
+      simp only [LinearMap.coe_comp, Function.comp_apply, Submodule.mkQ_apply, LinearMap.flip_apply,
+        Submodule.liftQ_apply, LinearMap.compr₂_apply, mk_apply, LinearMap.zero_comp,
+        LinearMap.zero_apply, Submodule.Quotient.mk_eq_zero]
+      exact Submodule.mem_sup_left ⟨⟨x, hx⟩ otimesₜ y, rfl⟩)
+    (Submodule.liftQ _ (map (Submodule.mkQ _) (Submodule.mkQ _)) fun x hx => by
+      rw [Submodule.mem_sup] at hx
+      rcases hx with ⟨_, ⟨a, rfl⟩, _, ⟨b, rfl⟩, rfl⟩
+      simp only [LinearMap.mem_ker, map_add]
+      set f := (map m.mkQ n.mkQ) ∘ₗ (map m.subtype LinearMap.id)
+      set g := (map m.mkQ n.mkQ) ∘ₗ (map LinearMap.id n.subtype)
+      have eq : LinearMap.coprod f g = 0 := by
+        ext x y
+        · simp [f, Submodule.Quotient.mk_eq_zero _ |>.2 x.2]
+        · simp [g, Submodule.Quotient.mk_eq_zero _ |>.2 y.2]
+      exact congr($eq (a, b)))
+    (by ext; simp) (by ext; simp)
+
+@[simp]
 
 中文:
 定义 quotientTensorQuotientEquiv
@@ -69,7 +89,27 @@ definition quotientTensorQuotientEquiv
       ((mk R (M := M) (N := N)).flip.compr₂ (Submodule.mkQ _)) fun x hx => by
       ext y
       simp only [LinearMap.compr₂_apply, LinearMap.flip_apply, mk_apply, Submodule.mkQ_apply,
-        LinearMap.zero_a
+        LinearMap.zero_apply, Submodule.Quotient.mk_eq_zero]
+      exact Submodule.mem_sup_right ⟨y otimesₜ ⟨x, hx⟩, rfl⟩) fun x hx => by
+      ext y
+      simp only [LinearMap.coe_comp, Function.comp_apply, Submodule.mkQ_apply, LinearMap.flip_apply,
+        Submodule.liftQ_apply, LinearMap.compr₂_apply, mk_apply, LinearMap.zero_comp,
+        LinearMap.zero_apply, Submodule.Quotient.mk_eq_zero]
+      exact Submodule.mem_sup_left ⟨⟨x, hx⟩ otimesₜ y, rfl⟩)
+    (Submodule.liftQ _ (map (Submodule.mkQ _) (Submodule.mkQ _)) fun x hx => by
+      rw [Submodule.mem_sup] at hx
+      rcases hx with ⟨_, ⟨a, rfl⟩, _, ⟨b, rfl⟩, rfl⟩
+      simp only [LinearMap.mem_ker, map_add]
+      set f := (map m.mkQ n.mkQ) ∘ₗ (map m.subtype LinearMap.id)
+      set g := (map m.mkQ n.mkQ) ∘ₗ (map LinearMap.id n.subtype)
+      have eq : LinearMap.coprod f g = 0 := by
+        ext x y
+        · simp [f, Submodule.Quotient.mk_eq_zero _ |>.2 x.2]
+        · simp [g, Submodule.Quotient.mk_eq_zero _ |>.2 y.2]
+      exact congr($eq (a, b)))
+    (by ext; simp) (by ext; simp)
+
+@[simp]
 
 Depends on / 依赖: Function, Function.comp_apply, LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.coe_comp, LinearMap.compr, LinearMap.flip, LinearMap.flip_apply, LinearMap.zero_apply, Quotient, Submodule, Submodule.Quotient.mk_eq_zero, Submodule.liftQ, Submodule.liftQ_apply, Submodule.mem_sup_right, Submodule.mkQ, Submodule.mkQ_apply, coe_comp, comp_apply
 -/
@@ -301,7 +341,7 @@ definition quotTensorEquivQuotSMul
   body: quotientTensorEquiv M I ≪≫ₗ
   (Submodule.Quotient.equiv _ _ (TensorProduct.lid R M) <| by
     rw [← LinearMap.range_comp]; rw [← (Submodule.topEquiv.lTensor I).range_comp]; rw [Submodule.smul_eq_map₂]; rw [map₂_eq_range_lift_comp_mapIncl]
-    exact congr_arg _ (TensorProduct.ext' fun _ _ => by simp)
+    exact congr_arg _ (TensorProduct.ext' fun _ _ => by simp))
 
 中文:
 定义 quotTensorEquivQuotSMul
@@ -309,7 +349,7 @@ definition quotTensorEquivQuotSMul
   定义体: quotientTensorEquiv M I ≪≫ₗ
   (Submodule.Quotient.equiv _ _ (TensorProduct.lid R M) <| by
     rw [← LinearMap.range_comp]; rw [← (Submodule.topEquiv.lTensor I).range_comp]; rw [Submodule.smul_eq_map₂]; rw [map₂_eq_range_lift_comp_mapIncl]
-    exact congr_arg _ (TensorProduct.ext' fun _ _ => by simp)
+    exact congr_arg _ (TensorProduct.ext' fun _ _ => by simp))
 
 Depends on / 依赖: LinearMap, LinearMap.range_comp, Quotient, Submodule, Submodule.Quotient.equiv, Submodule.smul_eq_map, Submodule.topEquiv.lTensor, TensorProduct, TensorProduct.ext, TensorProduct.lid, congr_arg, lTensor, quotientTensorEquiv, range_comp, topEquiv
 -/
@@ -647,7 +687,8 @@ definition tensorQuotMapSMulEquivTensorQuot
   body: (tensorQuotEquivQuotSMul (S otimes[R] M) (I.map (algebraMap R S))).symm ≪≫ₗ
     TensorProduct.comm S (S otimes[R] M) _ ≪≫ₗ AlgebraTensorModule.cancelBaseChange R S S _ M ≪≫ₗ
       AlgebraTensorModule.congr (I.qoutMapEquivTensorQout S) (LinearEquiv.refl R M) ≪≫ₗ
-        AlgebraTensorModule.assoc R R 
+        AlgebraTensorModule.assoc R R S S _ M ≪≫ₗ (TensorProduct.comm R _ M).baseChange R S _ _ ≪≫ₗ
+          (tensorQuotEquivQuotSMul M I).baseChange R S _ _
 
 中文:
 定义 tensorQuotMapSMulEquivTensorQuot
@@ -655,7 +696,8 @@ definition tensorQuotMapSMulEquivTensorQuot
   定义体: (tensorQuotEquivQuotSMul (S otimes[R] M) (I.map (algebraMap R S))).symm ≪≫ₗ
     TensorProduct.comm S (S otimes[R] M) _ ≪≫ₗ AlgebraTensorModule.cancelBaseChange R S S _ M ≪≫ₗ
       AlgebraTensorModule.congr (I.qoutMapEquivTensorQout S) (LinearEquiv.refl R M) ≪≫ₗ
-        AlgebraTensorModule.assoc R R 
+        AlgebraTensorModule.assoc R R S S _ M ≪≫ₗ (TensorProduct.comm R _ M).baseChange R S _ _ ≪≫ₗ
+          (tensorQuotEquivQuotSMul M I).baseChange R S _ _
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.assoc, AlgebraTensorModule.cancelBaseChange, AlgebraTensorModule.congr, I.map, I.qoutMapEquivTensorQout, LinearEquiv, LinearEquiv.refl, TensorProduct, TensorProduct.comm, algebraMap, baseChange, cancelBaseChange, otimes, qoutMapEquivTensorQout, tensorQuotEquivQuotSMul
 -/
@@ -693,7 +735,11 @@ definition tensorQuotientEquiv
     | zero => simp
     | add x y hx hy => simp [hx, hy]
     | tmul x y =>
-      obtain ⟨y, rfl⟩ := Submodule.Quotient.
+      obtain ⟨y, rfl⟩ := Submodule.Quotient.mk_surjective _ y
+      rw [smul_tmul']
+      rfl
+
+@[simp]
 
 中文:
 定义 tensorQuotientEquiv
@@ -705,7 +751,11 @@ definition tensorQuotientEquiv
     | zero => simp
     | add x y hx hy => simp [hx, hy]
     | tmul x y =>
-      obtain ⟨y, rfl⟩ := Submodule.Quotient.
+      obtain ⟨y, rfl⟩ := Submodule.Quotient.mk_surjective _ y
+      rw [smul_tmul']
+      rfl
+
+@[simp]
 
 Depends on / 依赖: TensorProduct, TensorProduct.tensorQuotientEquiv, n.restrictScalars, restrictScalars, tensorQuotientEquiv
 -/
@@ -778,7 +828,19 @@ lemma ker_mapOfCompatibleSMul
   · rintro - ⟨a, m, n, rfl⟩
     simp [smul_tmul]
   · let S := Submodule.span A {(a • m) otimesₜ[R] n - m otimesₜ[R] (a • n) | (a : A) (m : M) (n : N)}
-    let F : M otimes[A] N ->ₗ[A] (M otimes[R] N) ⧸ S := TensorPr
+    let F : M otimes[A] N ->ₗ[A] (M otimes[R] N) ⧸ S := TensorProduct.lift ({
+      toFun m := {
+        toFun n := S.mkQ (m otimesₜ[R] n)
+        map_add' _ _ := by simp [tmul_add]
+        map_smul' a n := by
+          rw [Submodule.mkQ_apply]; rw [Submodule.mkQ_apply]; rw [← Submodule.Quotient.mk_smul]; rw [eq_comm]; rw [Submodule.Quotient.eq]; rw [RingHom.id_apply]
+          exact Submodule.subset_span ⟨a, m, n, rfl⟩ }
+      map_add' _ _ := by ext _; simp [add_tmul]
+      map_smul' _ _ := by simp; rfl })
+    have h : F ∘ₗ mapOfCompatibleSMul A R A M N = S.mkQ := by ext; simp [S, F]
+    change (mapOfCompatibleSMul A R A M N).ker <= S
+    rw [← Submodule.ker_mkQ S]; rw [← h]
+    exact (mapOfCompatibleSMul A R A M N).ker_le_ker_comp F
 
 中文:
 引理 ker_mapOfCompatibleSMul
@@ -787,7 +849,19 @@ lemma ker_mapOfCompatibleSMul
   · rintro - ⟨a, m, n, rfl⟩
     simp [smul_tmul]
   · let S := Submodule.span A {(a • m) otimesₜ[R] n - m otimesₜ[R] (a • n) | (a : A) (m : M) (n : N)}
-    let F : M otimes[A] N ->ₗ[A] (M otimes[R] N) ⧸ S := TensorPr
+    let F : M otimes[A] N ->ₗ[A] (M otimes[R] N) ⧸ S := TensorProduct.lift ({
+      toFun m := {
+        toFun n := S.mkQ (m otimesₜ[R] n)
+        map_add' _ _ := by simp [tmul_add]
+        map_smul' a n := by
+          rw [Submodule.mkQ_apply]; rw [Submodule.mkQ_apply]; rw [← Submodule.Quotient.mk_smul]; rw [eq_comm]; rw [Submodule.Quotient.eq]; rw [RingHom.id_apply]
+          exact Submodule.subset_span ⟨a, m, n, rfl⟩ }
+      map_add' _ _ := by ext _; simp [add_tmul]
+      map_smul' _ _ := by simp; rfl })
+    have h : F ∘ₗ mapOfCompatibleSMul A R A M N = S.mkQ := by ext; simp [S, F]
+    change (mapOfCompatibleSMul A R A M N).ker <= S
+    rw [← Submodule.ker_mkQ S]; rw [← h]
+    exact (mapOfCompatibleSMul A R A M N).ker_le_ker_comp F
 
 Depends on / 依赖: Quotient, S.mkQ, Submodule, Submodule.Quotient.mk_smul, Submodule.mkQ_apply, Submodule.span, Submodule.span_eq_of_le, TensorProduct, TensorProduct.lift, eq_comm, mapOfCompatibleSMul, map_add, map_smul, mkQ_apply, mk_smul, otimes, smul_tmul, span_eq_of_le, tmul_add
 -/

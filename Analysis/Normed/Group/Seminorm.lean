@@ -586,7 +586,10 @@ instance :
 
 @[deprecated (since := "2026-07-10")] protected alias _root_.GroupSeminorm.zero_apply :=
   zero_apply
-@
+@[deprecated (since := "2026-07-10")] protected alias _root_.AddGroupSeminorm.zero_apply :=
+  zero_apply
+
+@[to_additive]
 
 中文:
 实例 :
@@ -598,7 +601,10 @@ instance :
 
 @[deprecated (since := "2026-07-10")] protected alias _root_.GroupSeminorm.zero_apply :=
   zero_apply
-@
+@[deprecated (since := "2026-07-10")] protected alias _root_.AddGroupSeminorm.zero_apply :=
+  zero_apply
+
+@[to_additive]
 -/
 instance : IsZeroApply (GroupSeminorm E) E Real where
   zero_apply _ := rfl
@@ -645,7 +651,9 @@ instance :
       mul_le' := fun _ _ =>
 (add_le_add (map_mul_le_add p _ _) <| map_mul_le_add q _ _).trans_eq
           add_add_add_comm _ _ _ _
-      inv' := fun x => by simp_rw [map_inv_e
+      inv' := fun x => by simp_rw [map_inv_eq_map p, map_inv_eq_map q] }⟩
+
+@[to_additive]
 
 中文:
 实例 :
@@ -656,7 +664,9 @@ instance :
       mul_le' := fun _ _ =>
 (add_le_add (map_mul_le_add p _ _) <| map_mul_le_add q _ _).trans_eq
           add_add_add_comm _ _ _ _
-      inv' := fun x => by simp_rw [map_inv_e
+      inv' := fun x => by simp_rw [map_inv_eq_map p, map_inv_eq_map q] }⟩
+
+@[to_additive]
 
 Depends on / 依赖: add_add_add_comm, add_le_add, map_inv_eq_map, map_mul_le_add, map_one, map_one_eq_zero, mul_le, simp_rw, trans_eq, zero_add
 -/
@@ -683,7 +693,8 @@ instance :
 
 @[deprecated (since := "2026-07-10")] protected alias _root_.GroupSeminorm.add_apply :=
   add_apply
-@[depre
+@[deprecated (since := "2026-07-10")] protected alias _root_.AddGroupSeminorm.add_apply :=
+  add_apply
 
 中文:
 实例 :
@@ -695,7 +706,8 @@ instance :
 
 @[deprecated (since := "2026-07-10")] protected alias _root_.GroupSeminorm.add_apply :=
   add_apply
-@[depre
+@[deprecated (since := "2026-07-10")] protected alias _root_.AddGroupSeminorm.add_apply :=
+  add_apply
 -/
 instance : IsAddApply (GroupSeminorm E) E Real where
   add_apply _ _ _ := rfl
@@ -724,7 +736,14 @@ instance :
           · simp
           · have : Nonempty s := hs.to_subtype
             refine ciSup_le fun p => (map_mul_le_add p.1 x y).trans ?_
+            gcongr
+            all_goals
+              apply le_ciSup (f := (DFunLike.coe · _) ∘ Subtype.val) ?_ p
+              simpa [Set.range_comp] using Monotone.map_bddAbove (fun _ _ h' => by exact h' _) h
+        inv' x := by simp }
+    else 0
 
+@[to_additive]
 
 中文:
 实例 :
@@ -737,7 +756,14 @@ instance :
           · simp
           · have : Nonempty s := hs.to_subtype
             refine ciSup_le fun p => (map_mul_le_add p.1 x y).trans ?_
+            gcongr
+            all_goals
+              apply le_ciSup (f := (DFunLike.coe · _) ∘ Subtype.val) ?_ p
+              simpa [Set.range_comp] using Monotone.map_bddAbove (fun _ _ h' => by exact h' _) h
+        inv' x := by simp }
+    else 0
 
+@[to_additive]
 
 Depends on / 依赖: BddAbove, DFunLike, DFunLike.coe, Monotone, Monotone.map_bddAbove, Nonempty, Set.range_comp, Subtype, Subtype.val, all_goals, ciSup_le, eq_empty_or_nonempty, hs.to_subtype, le_ciSup, map_bddAbove, map_mul_le_add, map_one, mul_le, range_comp, to_subtype
 -/
@@ -890,7 +916,10 @@ instance :
         rw [Pi.sup_apply]; rw [← map_one_eq_zero p]; rw [sup_eq_left]; rw [map_one_eq_zero p]; rw [map_one_eq_zero q]
       mul_le' := fun x y =>
         sup_le ((map_mul_le_add p x y).trans <| add_le_add le_sup_left le_sup_left)
-          ((map_
+          ((map_mul_le_add q x y).trans <| add_le_add le_sup_right le_sup_right)
+      inv' := fun x => by rw [Pi.sup_apply, Pi.sup_apply, map_inv_eq_map p, map_inv_eq_map q] }⟩
+
+@[to_additive (attr := simp, norm_cast)]
 
 中文:
 实例 :
@@ -901,7 +930,10 @@ instance :
         rw [Pi.sup_apply]; rw [← map_one_eq_zero p]; rw [sup_eq_left]; rw [map_one_eq_zero p]; rw [map_one_eq_zero q]
       mul_le' := fun x y =>
         sup_le ((map_mul_le_add p x y).trans <| add_le_add le_sup_left le_sup_left)
-          ((map_
+          ((map_mul_le_add q x y).trans <| add_le_add le_sup_right le_sup_right)
+      inv' := fun x => by rw [Pi.sup_apply, Pi.sup_apply, map_inv_eq_map p, map_inv_eq_map q] }⟩
+
+@[to_additive (attr := simp, norm_cast)]
 
 Depends on / 依赖: Pi.sup_apply, add_le_add, le_sup_left, le_sup_right, map_inv_eq_map, map_mul_le_add, map_one, map_one_eq_zero, mul_le, sup_apply, sup_eq_left, sup_le
 -/
@@ -1257,7 +1289,15 @@ instance :
           (fun _ => by positivity) fun r hr =>
           ⟨1, by rwa [div_one, map_one_eq_zero p, map_one_eq_zero q, add_zero]⟩
       mul_le' := fun x y =>
-        le_ciInf_
+        le_ciInf_add_ciInf fun u v => by
+          refine ciInf_le_of_le mul_bddBelow_range_add (u * v) ?_
+          rw [mul_div_mul_comm]; rw [add_add_add_comm]
+          exact add_le_add (map_mul_le_add p _ _) (map_mul_le_add q _ _)
+      inv' := fun x =>
+(inv_surjective.iInf_comp _).symm.trans by
+          simp_rw [map_inv_eq_map p, ← inv_div', map_inv_eq_map q] }⟩
+
+@[to_additive (attr := simp)]
 
 中文:
 实例 :
@@ -1269,7 +1309,15 @@ instance :
           (fun _ => by positivity) fun r hr =>
           ⟨1, by rwa [div_one, map_one_eq_zero p, map_one_eq_zero q, add_zero]⟩
       mul_le' := fun x y =>
-        le_ciInf_
+        le_ciInf_add_ciInf fun u v => by
+          refine ciInf_le_of_le mul_bddBelow_range_add (u * v) ?_
+          rw [mul_div_mul_comm]; rw [add_add_add_comm]
+          exact add_le_add (map_mul_le_add p _ _) (map_mul_le_add q _ _)
+      inv' := fun x =>
+(inv_surjective.iInf_comp _).symm.trans by
+          simp_rw [map_inv_eq_map p, ← inv_div', map_inv_eq_map q] }⟩
+
+@[to_additive (attr := simp)]
 
 Depends on / 依赖: add_add_add_comm, add_le_add, add_zero, ciInf_eq_of_forall_ge_of_forall_gt_exists_lt, ciInf_le_of_le, div_one, iInf_comp, inv_surjective, inv_surjective.iInf_comp, le_ciInf_add_ciInf, map_mul_le_add, map_one, map_one_eq_zero, mul_bddBelow_range_add, mul_div_mul_comm, mul_le, symm.trans
 -/
@@ -1323,7 +1371,9 @@ instance :
 ciInf_le_of_le mul_bddBelow_range_add x by rw [div_self', map_one_eq_zero q, add_zero]
     inf_le_right := fun p q x =>
 ciInf_le_of_le mul_bddBelow_range_add (1 : E) by
-        simpa only [div_one x, map_one_eq_ze
+        simpa only [div_one x, map_one_eq_zero p, zero_add (q x)] using le_rfl
+    le_inf := fun a _ _ hb hc _ =>
+le_ciInf fun _ => (le_map_add_map_div a _ _).trans add_le_add (hb _) (hc _) }
 
 中文:
 实例 :
@@ -1334,7 +1384,9 @@ ciInf_le_of_le mul_bddBelow_range_add (1 : E) by
 ciInf_le_of_le mul_bddBelow_range_add x by rw [div_self', map_one_eq_zero q, add_zero]
     inf_le_right := fun p q x =>
 ciInf_le_of_le mul_bddBelow_range_add (1 : E) by
-        simpa only [div_one x, map_one_eq_ze
+        simpa only [div_one x, map_one_eq_zero p, zero_add (q x)] using le_rfl
+    le_inf := fun a _ _ hb hc _ =>
+le_ciInf fun _ => (le_map_add_map_div a _ _).trans add_le_add (hb _) (hc _) }
 
 Depends on / 依赖: GroupSeminorm, GroupSeminorm.semilatticeSup, add_le_add, add_zero, ciInf_le_of_le, div_one, div_self, inf_le_left, inf_le_right, le_ciInf, le_inf, le_map_add_map_div, le_rfl, map_one_eq_zero, mul_bddBelow_range_add, semilatticeSup, zero_add
 -/
@@ -1372,7 +1424,9 @@ instance toOne
         · rw [if_pos hx, hx, zero_add, zero_add]
         · rw [if_neg hx]
           refine le_add_of_le_of_nonneg ?_ ?_ <;> split_ifs <;> norm_num
-      neg' := fun x 
+      neg' := fun x => by simp_rw [neg_eq_zero] }⟩
+
+@[simp]
 
 中文:
 实例 toOne
@@ -1384,7 +1438,9 @@ instance toOne
         · rw [if_pos hx, hx, zero_add, zero_add]
         · rw [if_neg hx]
           refine le_add_of_le_of_nonneg ?_ ?_ <;> split_ifs <;> norm_num
-      neg' := fun x 
+      neg' := fun x => by simp_rw [neg_eq_zero] }⟩
+
+@[simp]
 
 Depends on / 依赖: add_le, if_neg, if_pos, le_add_of_le_of_nonneg, map_zero, neg_eq_zero, simp_rw, split_ifs, zero_add
 -/
@@ -1428,7 +1484,10 @@ instance toSMul
       map_zero' := by
         simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, map_zero, mul_zero]
       add_le' := fun _ _ => by
-        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, ← mul_add
+        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, ← mul_add]
+        gcongr
+        apply map_add_le_add
+      neg' := fun x => by simp_rw [map_neg_eq_map] }⟩
 
 中文:
 实例 toSMul
@@ -1438,7 +1497,10 @@ instance toSMul
       map_zero' := by
         simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, map_zero, mul_zero]
       add_le' := fun _ _ => by
-        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, ← mul_add
+        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, ← mul_add]
+        gcongr
+        apply map_add_le_add
+      neg' := fun x => by simp_rw [map_neg_eq_map] }⟩
 
 Depends on / 依赖: NNReal, NNReal.smul_def, add_le, map_add_le_add, map_neg_eq_map, map_zero, mul_add, mul_zero, simp_rw, smul_def, smul_eq_mul, smul_one_smul
 -/
@@ -1833,7 +1895,13 @@ instance :
           obtain (rfl | hs) := eq_empty_or_nonempty s
           · simp
           · have : Nonempty s := hs.to_subtype
-            refine ciSup_le fun p => (map_add_le_max p.1 x y).tran
+            refine ciSup_le fun p => (map_add_le_max p.1 x y).trans ?_
+            gcongr
+            all_goals
+              apply le_ciSup (f := (DFunLike.coe · _) ∘ Subtype.val) ?_ p
+              simpa [Set.range_comp] using Monotone.map_bddAbove (fun _ _ h' => by exact h' _) h
+        neg' := by simp }
+    else 0
 
 中文:
 实例 :
@@ -1845,7 +1913,13 @@ instance :
           obtain (rfl | hs) := eq_empty_or_nonempty s
           · simp
           · have : Nonempty s := hs.to_subtype
-            refine ciSup_le fun p => (map_add_le_max p.1 x y).tran
+            refine ciSup_le fun p => (map_add_le_max p.1 x y).trans ?_
+            gcongr
+            all_goals
+              apply le_ciSup (f := (DFunLike.coe · _) ∘ Subtype.val) ?_ p
+              simpa [Set.range_comp] using Monotone.map_bddAbove (fun _ _ h' => by exact h' _) h
+        neg' := by simp }
+    else 0
 
 Depends on / 依赖: BddAbove, DFunLike, DFunLike.coe, Monotone, Monotone.map_bddAbove, Nonempty, Set.range_comp, Subtype, Subtype.val, add_le_max, all_goals, ciSup_le, eq_empty_or_nonempty, hs.to_subtype, le_ciSup, map_add_le_max, map_bddAbove, map_zero, range_comp, to_subtype
 -/
@@ -1976,7 +2050,10 @@ instance :
       map_zero' := by rw [Pi.sup_apply, ← map_zero p, sup_eq_left, map_zero p, map_zero q]
       add_le_max' := fun x y =>
         sup_le ((map_add_le_max p x y).trans <| max_le_max le_sup_left le_sup_left)
-          ((map_add_le_max q x y).trans <| max_le_max le_sup
+          ((map_add_le_max q x y).trans <| max_le_max le_sup_right le_sup_right)
+      neg' := fun x => by simp_rw [Pi.sup_apply, map_neg_eq_map p, map_neg_eq_map q]}⟩
+
+@[simp, norm_cast]
 
 中文:
 实例 :
@@ -1986,7 +2063,10 @@ instance :
       map_zero' := by rw [Pi.sup_apply, ← map_zero p, sup_eq_left, map_zero p, map_zero q]
       add_le_max' := fun x y =>
         sup_le ((map_add_le_max p x y).trans <| max_le_max le_sup_left le_sup_left)
-          ((map_add_le_max q x y).trans <| max_le_max le_sup
+          ((map_add_le_max q x y).trans <| max_le_max le_sup_right le_sup_right)
+      neg' := fun x => by simp_rw [Pi.sup_apply, map_neg_eq_map p, map_neg_eq_map q]}⟩
+
+@[simp, norm_cast]
 
 Depends on / 依赖: Pi.sup_apply, add_le_max, le_sup_left, le_sup_right, map_add_le_max, map_neg_eq_map, map_zero, max_le_max, simp_rw, sup_apply, sup_eq_left, sup_le
 -/
@@ -2110,7 +2190,9 @@ instance toOne
         · rw [if_pos hx, hx, one_mul, zero_add]
         · rw [if_neg hx]
           refine le_add_of_le_of_nonneg ?_ ?_ <;> split_ifs <;> norm_num
-      inv' := fun x =>
+      inv' := fun x => by simp_rw [inv_eq_one] }⟩
+
+@[simp]
 
 中文:
 实例 toOne
@@ -2122,7 +2204,9 @@ instance toOne
         · rw [if_pos hx, hx, one_mul, zero_add]
         · rw [if_neg hx]
           refine le_add_of_le_of_nonneg ?_ ?_ <;> split_ifs <;> norm_num
-      inv' := fun x =>
+      inv' := fun x => by simp_rw [inv_eq_one] }⟩
+
+@[simp]
 
 Depends on / 依赖: if_neg, if_pos, inv_eq_one, le_add_of_le_of_nonneg, map_one, mul_le, one_mul, simp_rw, split_ifs, zero_add
 -/
@@ -2167,7 +2251,10 @@ instance :
         simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, map_one_eq_zero p,
           mul_zero]
       mul_le' := fun _ _ => by
-        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul
+        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, ← mul_add]
+        gcongr
+        apply map_mul_le_add
+      inv' := fun x => by simp_rw [map_inv_eq_map p] }⟩
 
 中文:
 实例 :
@@ -2178,7 +2265,10 @@ instance :
         simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, map_one_eq_zero p,
           mul_zero]
       mul_le' := fun _ _ => by
-        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul
+        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, ← mul_add]
+        gcongr
+        apply map_mul_le_add
+      inv' := fun x => by simp_rw [map_inv_eq_map p] }⟩
 
 Depends on / 依赖: NNReal, NNReal.smul_def, map_inv_eq_map, map_mul_le_add, map_one, map_one_eq_zero, mul_add, mul_le, mul_zero, simp_rw, smul_def, smul_eq_mul, smul_one_smul
 -/
@@ -2307,7 +2397,9 @@ instance [DecidableEq
           exact le_max_of_le_right (le_refl _)
         · simp_rw [if_neg hx]
           split_ifs <;> simp
-      neg' :=
+      neg' := fun x => by simp_rw [neg_eq_zero] }⟩
+
+@[simp]
 
 中文:
 实例 [DecidableEq
@@ -2320,7 +2412,9 @@ instance [DecidableEq
           exact le_max_of_le_right (le_refl _)
         · simp_rw [if_neg hx]
           split_ifs <;> simp
-      neg' :=
+      neg' := fun x => by simp_rw [neg_eq_zero] }⟩
+
+@[simp]
 
 Depends on / 依赖: add_le_max, if_neg, if_pos, le_max_of_le_right, le_refl, map_zero, neg_eq_zero, simp_rw, split_ifs, zero_add
 -/
@@ -2365,7 +2459,11 @@ instance :
         simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, map_zero p,
           mul_zero]
       add_le_max' := fun x y => by
-        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_e
+        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, ←
+          mul_max_of_nonneg _ _ NNReal.zero_le_coe]
+        gcongr
+        apply map_add_le_max
+      neg' := fun x => by simp_rw [map_neg_eq_map p] }⟩
 
 中文:
 实例 :
@@ -2376,7 +2474,11 @@ instance :
         simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, map_zero p,
           mul_zero]
       add_le_max' := fun x y => by
-        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_e
+        simp only [← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def, smul_eq_mul, ←
+          mul_max_of_nonneg _ _ NNReal.zero_le_coe]
+        gcongr
+        apply map_add_le_max
+      neg' := fun x => by simp_rw [map_neg_eq_map p] }⟩
 
 Depends on / 依赖: NNReal, NNReal.smul_def, NNReal.zero_le_coe, add_le_max, map_add_le_max, map_neg_eq_map, map_zero, mul_max_of_nonneg, mul_zero, simp_rw, smul_def, smul_eq_mul, smul_one_smul, zero_le_coe
 -/
@@ -2739,7 +2841,7 @@ instance :
 @[deprecated (since := "2026-07-10")] alias _root_.AddGroupNorm.coe_add := FunLike.coe_add
 
 @[deprecated (since := "2026-07-10")] protected alias _root_.GroupNorm.add_apply := add_apply
-@[deprecated (since :
+@[deprecated (since := "2026-07-10")] protected alias _root_.AddGroupNorm.add_apply := add_apply
 
 中文:
 实例 :
@@ -2750,7 +2852,7 @@ instance :
 @[deprecated (since := "2026-07-10")] alias _root_.AddGroupNorm.coe_add := FunLike.coe_add
 
 @[deprecated (since := "2026-07-10")] protected alias _root_.GroupNorm.add_apply := add_apply
-@[deprecated (since :
+@[deprecated (since := "2026-07-10")] protected alias _root_.AddGroupNorm.add_apply := add_apply
 -/
 instance : IsAddApply (GroupNorm E) E Real where
   add_apply _ _ _ := rfl

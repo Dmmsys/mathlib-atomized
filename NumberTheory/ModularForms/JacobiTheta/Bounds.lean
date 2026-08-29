@@ -217,7 +217,21 @@ lemma summable_f_nat
   have : Summable fun n : Nat => n ^ k * exp (-π * (n + a) ^ 2 * t) := by
     refine (((summable_pow_mul_jacobiTheta₂_term_bound (|a| * t) ht k).mul_right
       (rexp (-π * a ^ 2 * t))).comp_injective Nat.cast_injective).of_norm_bounded (fun n => ?_)
-    simp_rw [mul_assoc, Function.comp_apply, ←
+    simp_rw [mul_assoc, Function.comp_apply, ← Real.exp_add, norm_mul, norm_pow, Int.cast_abs,
+      Int.cast_natCast, norm_eq_abs, Nat.abs_cast, abs_exp]
+    gcongr
+    rw [← sub_nonneg]
+    rw [show -π * (t * n ^ 2 - 2 * (|a| * (t * n))) + -π * (a ^ 2 * t) - -π * ((n + a) ^ 2 * t)
+         = π * t * n * (|a| + a) * 2 by ring]
+    refine mul_nonneg (mul_nonneg (by positivity) ?_) two_pos.le
+    rw [← neg_le_iff_add_nonneg]
+    apply neg_le_abs
+  apply (this.mul_left (2 ^ k)).of_norm_bounded_eventually_nat
+  simp_rw [← mul_assoc, f_nat, norm_mul, norm_eq_abs, abs_exp,
+    mul_le_mul_iff_of_pos_right (exp_pos _), ← mul_pow, abs_pow, two_mul]
+  filter_upwards [eventually_ge_atTop (Nat.ceil |a|)] with n hn
+  gcongr
+  exact (abs_add_le ..).trans (add_le_add (Nat.abs_cast _).le (Nat.ceil_le.mp hn))
 
 中文:
 引理 summable_f_nat
@@ -227,7 +241,21 @@ lemma summable_f_nat
   have : Summable fun n : Nat => n ^ k * exp (-π * (n + a) ^ 2 * t) := by
     refine (((summable_pow_mul_jacobiTheta₂_term_bound (|a| * t) ht k).mul_right
       (rexp (-π * a ^ 2 * t))).comp_injective Nat.cast_injective).of_norm_bounded (fun n => ?_)
-    simp_rw [mul_assoc, Function.comp_apply, ←
+    simp_rw [mul_assoc, Function.comp_apply, ← Real.exp_add, norm_mul, norm_pow, Int.cast_abs,
+      Int.cast_natCast, norm_eq_abs, Nat.abs_cast, abs_exp]
+    gcongr
+    rw [← sub_nonneg]
+    rw [show -π * (t * n ^ 2 - 2 * (|a| * (t * n))) + -π * (a ^ 2 * t) - -π * ((n + a) ^ 2 * t)
+         = π * t * n * (|a| + a) * 2 by ring]
+    refine mul_nonneg (mul_nonneg (by positivity) ?_) two_pos.le
+    rw [← neg_le_iff_add_nonneg]
+    apply neg_le_abs
+  apply (this.mul_left (2 ^ k)).of_norm_bounded_eventually_nat
+  simp_rw [← mul_assoc, f_nat, norm_mul, norm_eq_abs, abs_exp,
+    mul_le_mul_iff_of_pos_right (exp_pos _), ← mul_pow, abs_pow, two_mul]
+  filter_upwards [eventually_ge_atTop (Nat.ceil |a|)] with n hn
+  gcongr
+  exact (abs_add_le ..).trans (add_le_add (Nat.abs_cast _).le (Nat.ceil_le.mp hn))
 
 Depends on / 依赖: Function, Function.comp_apply, Int.cast_abs, Int.cast_natCast, Nat.abs_cast, Nat.cast_injective, Real.exp_add, Summable, abs_cast, abs_exp, cast_abs, cast_injective, cast_natCast, comp_apply, comp_injective, exp_add, mul_assoc, mul_right, norm_eq_abs, norm_mul
 -/
@@ -300,7 +328,8 @@ lemma F_nat_zero_zero_sub_le
   convert! F_nat_zero_le zero_le_one ht using 2
   · rw [F_nat, (summable_f_nat 0 0 ht).tsum_eq_zero_add, f_nat, Nat.cast_zero, add_zero, pow_zero,
       one_mul, pow_two, mul_zero, mul_zero, zero_mul, exp_zero, add_comm, add_sub_cancel_right]
-    simp_rw [F_nat, f_nat, Nat.cast_add, Nat.cast_one,
+    simp_rw [F_nat, f_nat, Nat.cast_add, Nat.cast_one, add_zero]
+  · rw [one_pow, mul_one]
 
 中文:
 引理 F_nat_zero_zero_sub_le
@@ -309,7 +338,8 @@ lemma F_nat_zero_zero_sub_le
   convert! F_nat_zero_le zero_le_one ht using 2
   · rw [F_nat, (summable_f_nat 0 0 ht).tsum_eq_zero_add, f_nat, Nat.cast_zero, add_zero, pow_zero,
       one_mul, pow_two, mul_zero, mul_zero, zero_mul, exp_zero, add_comm, add_sub_cancel_right]
-    simp_rw [F_nat, f_nat, Nat.cast_add, Nat.cast_one,
+    simp_rw [F_nat, f_nat, Nat.cast_add, Nat.cast_one, add_zero]
+  · rw [one_pow, mul_one]
 
 Depends on / 依赖: F_nat, F_nat_zero_le, Nat.cast_add, Nat.cast_one, Nat.cast_zero, add_comm, add_sub_cancel_right, add_zero, cast_add, cast_one, cast_zero, convert, exp_zero, f_nat, mul_one, mul_zero, one_mul, one_pow, pow_two, pow_zero
 -/
@@ -336,7 +366,14 @@ lemma isBigO_atTop_F_nat_zero_sub
       filter_upwards [eventually_gt_atTop 0] with t ht
       exact F_nat_zero_zero_sub_le ht
     refine ⟨_, pi_pos, this.trans ?_⟩
-    sim
+    simpa using! (isBigO_refl (fun t => rexp (-π * t)) _).mul isBigO_one_aux
+  · simp_rw [sub_zero]
+    have : (fun t => F_nat 0 a t) =O[atTop] fun t => rexp (-π * a ^ 2 * t) / (1 - rexp (-π * t)) := by
+      apply Eventually.isBigO
+      filter_upwards [eventually_gt_atTop 0] with t ht
+      exact F_nat_zero_le ha ht
+    refine ⟨π * a ^ 2, mul_pos pi_pos (sq_pos_of_ne_zero h), this.trans ?_⟩
+    simpa only [neg_mul π (a ^ 2), mul_one] using! (isBigO_refl _ _).mul isBigO_one_aux
 
 中文:
 引理 isBigO_atTop_F_nat_zero_sub
@@ -350,7 +387,14 @@ lemma isBigO_atTop_F_nat_zero_sub
       filter_upwards [eventually_gt_atTop 0] with t ht
       exact F_nat_zero_zero_sub_le ht
     refine ⟨_, pi_pos, this.trans ?_⟩
-    sim
+    simpa using! (isBigO_refl (fun t => rexp (-π * t)) _).mul isBigO_one_aux
+  · simp_rw [sub_zero]
+    have : (fun t => F_nat 0 a t) =O[atTop] fun t => rexp (-π * a ^ 2 * t) / (1 - rexp (-π * t)) := by
+      apply Eventually.isBigO
+      filter_upwards [eventually_gt_atTop 0] with t ht
+      exact F_nat_zero_le ha ht
+    refine ⟨π * a ^ 2, mul_pos pi_pos (sq_pos_of_ne_zero h), this.trans ?_⟩
+    simpa only [neg_mul π (a ^ 2), mul_one] using! (isBigO_refl _ _).mul isBigO_one_aux
 
 Depends on / 依赖: Eventually, Eventually.isBigO, F_nat, F_nat_zero_zero_sub_le, eventually_gt_atTop, filter_upwards, isBigO, isBigO_one_aux, isBigO_refl, pi_pos, simp_rw, split_ifs, sub_zero, this.trans
 -/
@@ -390,7 +434,15 @@ lemma F_nat_one_le
   apply HasSum.add
   · have h0' : ‖rexp (-π * t)‖ < 1 := by
       simpa only [norm_eq_abs, abs_exp] using exp_lt_aux ht
-    convert! (hasSum_coe_mul_geometric_of_norm_lt_one h0').mul_left (exp (-π * 
+    convert! (hasSum_coe_mul_geometric_of_norm_lt_one h0').mul_left (exp (-π * a ^ 2 * t)) using 1
+    · ext1 n
+      rw [mul_comm (exp _)]; rw [← Real.exp_nat_mul]; rw [mul_assoc (n : Real)]; rw [← Real.exp_add]
+      ring_nf
+    · rw [mul_add, add_mul, mul_one, exp_add, mul_div_assoc]
+  · convert! (hasSum_geometric_of_lt_one (exp_pos _).le <| exp_lt_aux ht).mul_left _ using 1
+    ext1 n
+    rw [← Real.exp_nat_mul]; rw [mul_assoc _ (exp _)]; rw [← Real.exp_add]
+    ring_nf
 
 中文:
 引理 F_nat_one_le
@@ -402,7 +454,15 @@ lemma F_nat_one_le
   apply HasSum.add
   · have h0' : ‖rexp (-π * t)‖ < 1 := by
       simpa only [norm_eq_abs, abs_exp] using exp_lt_aux ht
-    convert! (hasSum_coe_mul_geometric_of_norm_lt_one h0').mul_left (exp (-π * 
+    convert! (hasSum_coe_mul_geometric_of_norm_lt_one h0').mul_left (exp (-π * a ^ 2 * t)) using 1
+    · ext1 n
+      rw [mul_comm (exp _)]; rw [← Real.exp_nat_mul]; rw [mul_assoc (n : Real)]; rw [← Real.exp_add]
+      ring_nf
+    · rw [mul_add, add_mul, mul_one, exp_add, mul_div_assoc]
+  · convert! (hasSum_geometric_of_lt_one (exp_pos _).le <| exp_lt_aux ht).mul_left _ using 1
+    ext1 n
+    rw [← Real.exp_nat_mul]; rw [mul_assoc _ (exp _)]; rw [← Real.exp_add]
+    ring_nf
 
 Depends on / 依赖: HasSum, HasSum.add, Real.exp_add, Real.exp_nat_mul, abs_exp, add_mul, convert, exp_add, exp_lt_aux, exp_nat_mul, f_le_g_nat, g_nat, hasSum_coe_mul_geometric_of_norm_lt_one, hasSum_geometric_of, mul_add, mul_assoc, mul_comm, mul_div_assoc, mul_left, mul_one
 -/
@@ -437,7 +497,22 @@ lemma isBigO_atTop_F_nat_one
       + a * rexp (-π * a ^ 2 * t) / (1 - rexp (-π * t))) =O[atTop] fun t => exp (-p * t) by
     let ⟨p, hp, hp'⟩ := this
     refine ⟨p, hp, (Eventually.isBigO ?_).trans hp'⟩
-    filter_upwards [eventually
+    filter_upwards [eventually_gt_atTop 0] with t ht
+    exact F_nat_one_le ha ht
+  have aux' : IsBigO atTop (fun t : Real => ((1 - rexp (-π * t)) ^ 2)⁻¹) (fun _ => (1 : Real)) := by
+    simpa only [inv_pow, one_pow] using! isBigO_one_aux.pow 2
+  rcases eq_or_lt_of_le ha with rfl | ha'
+  · exact ⟨_, pi_pos, by simpa only [zero_pow two_ne_zero, zero_add, mul_one, zero_mul, zero_div,
+      add_zero] using! (isBigO_refl _ _).mul aux'⟩
+· refine ⟨π * a ^ 2, mul_pos pi_pos pow_pos ha' _, IsBigO.add ?_ ?_⟩
+    · conv_rhs => enter [t]; rw [← mul_one (rexp _)]
+      refine (Eventually.isBigO ?_).mul aux'
+      filter_upwards [eventually_gt_atTop 0] with t ht
+      rw [norm_of_nonneg (exp_pos _).le]; rw [exp_le_exp]
+      nlinarith [pi_pos]
+    · simp_rw [mul_div_assoc, ← neg_mul]
+      apply IsBigO.const_mul_left
+      simpa only [mul_one] using! (isBigO_refl _ _).mul isBigO_one_aux
 
 中文:
 引理 isBigO_atTop_F_nat_one
@@ -448,7 +523,22 @@ lemma isBigO_atTop_F_nat_one
       + a * rexp (-π * a ^ 2 * t) / (1 - rexp (-π * t))) =O[atTop] fun t => exp (-p * t) by
     let ⟨p, hp, hp'⟩ := this
     refine ⟨p, hp, (Eventually.isBigO ?_).trans hp'⟩
-    filter_upwards [eventually
+    filter_upwards [eventually_gt_atTop 0] with t ht
+    exact F_nat_one_le ha ht
+  have aux' : IsBigO atTop (fun t : Real => ((1 - rexp (-π * t)) ^ 2)⁻¹) (fun _ => (1 : Real)) := by
+    simpa only [inv_pow, one_pow] using! isBigO_one_aux.pow 2
+  rcases eq_or_lt_of_le ha with rfl | ha'
+  · exact ⟨_, pi_pos, by simpa only [zero_pow two_ne_zero, zero_add, mul_one, zero_mul, zero_div,
+      add_zero] using! (isBigO_refl _ _).mul aux'⟩
+· refine ⟨π * a ^ 2, mul_pos pi_pos pow_pos ha' _, IsBigO.add ?_ ?_⟩
+    · conv_rhs => enter [t]; rw [← mul_one (rexp _)]
+      refine (Eventually.isBigO ?_).mul aux'
+      filter_upwards [eventually_gt_atTop 0] with t ht
+      rw [norm_of_nonneg (exp_pos _).le]; rw [exp_le_exp]
+      nlinarith [pi_pos]
+    · simp_rw [mul_div_assoc, ← neg_mul]
+      apply IsBigO.const_mul_left
+      simpa only [mul_one] using! (isBigO_refl _ _).mul isBigO_one_aux
 
 Depends on / 依赖: Eventually, Eventually.isBigO, F_nat_one_le, IsBigO, eq_or_lt, eventually_gt_atTop, filter_upwards, inv_pow, isBigO, isBigO_one_aux, isBigO_one_aux.pow, one_pow
 -/
@@ -555,7 +645,10 @@ lemma summable_f_int
       (summable_f_nat k (1 - a) ht).hasSum).summable.norm
   intro n
   rcases n with - | m
-  · simp on
+  · simp only [f_int, f_nat, Int.ofNat_eq_natCast, Int.cast_natCast, norm_mul, norm_eq_abs, abs_pow,
+      abs_abs]
+  · simp only [f_int, f_nat, Int.cast_negSucc, norm_mul, norm_eq_abs, abs_pow, abs_abs,
+      (by { push_cast; ring } : -↑(m + 1) + a = -(m + (1 - a))), abs_neg, neg_sq]
 
 中文:
 引理 summable_f_int
@@ -568,7 +661,10 @@ lemma summable_f_int
       (summable_f_nat k (1 - a) ht).hasSum).summable.norm
   intro n
   rcases n with - | m
-  · simp on
+  · simp only [f_int, f_nat, Int.ofNat_eq_natCast, Int.cast_natCast, norm_mul, norm_eq_abs, abs_pow,
+      abs_abs]
+  · simp only [f_int, f_nat, Int.cast_negSucc, norm_mul, norm_eq_abs, abs_pow, abs_abs,
+      (by { push_cast; ring } : -↑(m + 1) + a = -(m + (1 - a))), abs_neg, neg_sq]
 
 Depends on / 依赖: HasSum, HasSum.int_rec, Int.cast_natCast, Int.cast_negSucc, Int.ofNat_eq_natCast, Int.rec, Summable, Summable.of_norm, abs_abs, abs_pow, cast_natCast, cast_negSucc, f_int, f_nat, hasSum, int_rec, norm_eq_abs, norm_mul, ofNat_eq_natCast, of_norm
 -/
@@ -662,7 +758,16 @@ lemma isBigO_atTop_F_int_zero_sub
   obtain ⟨p, hp, hp'⟩ := isBigO_atTop_F_nat_zero_sub ha.1
   obtain ⟨q, hq, hq'⟩ := isBigO_atTop_F_nat_zero_sub (sub_nonneg.mpr ha.2.le)
   simp_rw [AddCircle.coe_eq_zero_iff_of_mem_Ico ha]
-  simp_rw [eq_false_intro (by linarith [ha.2] : 1 - a != 0), if_false, 
+  simp_rw [eq_false_intro (by linarith [ha.2] : 1 - a != 0), if_false, sub_zero] at hq'
+  refine ⟨_, lt_min hp hq, ?_⟩
+  have : (fun t => F_int 0 a t - (if a = 0 then 1 else 0)) =ᶠ[atTop]
+      fun t => (F_nat 0 a t - (if a = 0 then 1 else 0)) + F_nat 0 (1 - a) t := by
+    filter_upwards [eventually_gt_atTop 0] with t ht
+    rw [F_int_eq_of_mem_Icc 0 (Ico_subset_Icc_self ha) ht]
+    ring
+  refine this.isBigO.trans ((hp'.trans ?_).add (hq'.trans ?_)) <;>
+  apply isBigO_exp_neg_mul_of_le
+  exacts [min_le_left .., min_le_right ..]
 
 中文:
 引理 isBigO_atTop_F_int_zero_sub
@@ -673,7 +778,16 @@ lemma isBigO_atTop_F_int_zero_sub
   obtain ⟨p, hp, hp'⟩ := isBigO_atTop_F_nat_zero_sub ha.1
   obtain ⟨q, hq, hq'⟩ := isBigO_atTop_F_nat_zero_sub (sub_nonneg.mpr ha.2.le)
   simp_rw [AddCircle.coe_eq_zero_iff_of_mem_Ico ha]
-  simp_rw [eq_false_intro (by linarith [ha.2] : 1 - a != 0), if_false, 
+  simp_rw [eq_false_intro (by linarith [ha.2] : 1 - a != 0), if_false, sub_zero] at hq'
+  refine ⟨_, lt_min hp hq, ?_⟩
+  have : (fun t => F_int 0 a t - (if a = 0 then 1 else 0)) =ᶠ[atTop]
+      fun t => (F_nat 0 a t - (if a = 0 then 1 else 0)) + F_nat 0 (1 - a) t := by
+    filter_upwards [eventually_gt_atTop 0] with t ht
+    rw [F_int_eq_of_mem_Icc 0 (Ico_subset_Icc_self ha) ht]
+    ring
+  refine this.isBigO.trans ((hp'.trans ?_).add (hq'.trans ?_)) <;>
+  apply isBigO_exp_neg_mul_of_le
+  exacts [min_le_left .., min_le_right ..]
 
 Depends on / 依赖: AddCircle, AddCircle.coe_eq_zero_iff_of_mem_Ico, F_int, F_nat, a.eq_coe_Ico, coe_eq_zero_iff_of_mem_Ico, eq_coe_Ico, eq_false_intro, filter_upwards, if_false, isBigO_atTop_F_nat_zero_sub, lt_min, simp_rw, sub_nonneg, sub_nonneg.mpr, sub_zero
 -/
@@ -707,7 +821,11 @@ lemma isBigO_atTop_F_int_one
   obtain ⟨q, hq, hq'⟩ := isBigO_atTop_F_nat_one (sub_nonneg.mpr ha.2.le)
   refine ⟨_, lt_min hp hq, ?_⟩
   have : F_int 1 a =ᶠ[atTop] fun t => F_nat 1 a t + F_nat 1 (1 - a) t := by
-    filter_upwards [eventu
+    filter_upwards [eventually_gt_atTop 0] with t ht
+    exact F_int_eq_of_mem_Icc 1 (Ico_subset_Icc_self ha) ht
+  refine this.isBigO.trans ((hp'.trans ?_).add (hq'.trans ?_)) <;>
+  apply isBigO_exp_neg_mul_of_le
+  exacts [min_le_left .., min_le_right ..]
 
 中文:
 引理 isBigO_atTop_F_int_one
@@ -719,7 +837,11 @@ lemma isBigO_atTop_F_int_one
   obtain ⟨q, hq, hq'⟩ := isBigO_atTop_F_nat_one (sub_nonneg.mpr ha.2.le)
   refine ⟨_, lt_min hp hq, ?_⟩
   have : F_int 1 a =ᶠ[atTop] fun t => F_nat 1 a t + F_nat 1 (1 - a) t := by
-    filter_upwards [eventu
+    filter_upwards [eventually_gt_atTop 0] with t ht
+    exact F_int_eq_of_mem_Icc 1 (Ico_subset_Icc_self ha) ht
+  refine this.isBigO.trans ((hp'.trans ?_).add (hq'.trans ?_)) <;>
+  apply isBigO_exp_neg_mul_of_le
+  exacts [min_le_left .., min_le_right ..]
 
 Depends on / 依赖: F_int, F_int_eq_of_mem_Icc, F_nat, Ico_subset_Icc_self, a.eq_coe_Ico, eq_coe_Ico, eventually_gt_atTop, exacts, filter_upwards, isBigO, isBigO_atTop_F_nat_one, isBigO_exp_neg_mul_of_le, lt_min, min_le_left, min_le_righ, sub_nonneg, sub_nonneg.mpr, this.isBigO.trans
 -/

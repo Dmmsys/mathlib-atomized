@@ -29,7 +29,11 @@ theorem tendsto_fib_succ_div_fib_atTop
     simp only [coe_fib_eq, pow_succ, div_pow]
     field
 have h₂ := tendsto_pow_atTop_nhds_zero_of_abs_lt_one (r := ψ / φ) by
-    rw [abs_div]; rw [div_lt_one <| by positivity]; rw [abs_of_pos goldenRatio_
+    rw [abs_div]; rw [div_lt_one <| by positivity]; rw [abs_of_pos goldenRatio_pos]; rw [abs_lt]
+    ring_nf
+    bound
+  rw [show φ = (φ - ψ * 0) / (1 - 0) by ring]; rw [funext h₁]
+.div (const_sub _ h₂) by simp exact const_sub _ (const_mul _ h₂)
 
 中文:
 定理 tendsto_fib_succ_div_fib_atTop
@@ -38,7 +42,11 @@ have h₂ := tendsto_pow_atTop_nhds_zero_of_abs_lt_one (r := ψ / φ) by
     simp only [coe_fib_eq, pow_succ, div_pow]
     field
 have h₂ := tendsto_pow_atTop_nhds_zero_of_abs_lt_one (r := ψ / φ) by
-    rw [abs_div]; rw [div_lt_one <| by positivity]; rw [abs_of_pos goldenRatio_
+    rw [abs_div]; rw [div_lt_one <| by positivity]; rw [abs_of_pos goldenRatio_pos]; rw [abs_lt]
+    ring_nf
+    bound
+  rw [show φ = (φ - ψ * 0) / (1 - 0) by ring]; rw [funext h₁]
+.div (const_sub _ h₂) by simp exact const_sub _ (const_mul _ h₂)
 
 Depends on / 依赖: abs_div, abs_lt, abs_of_pos, coe_fib_eq, const_mul, const_sub, div_lt_one, div_pow, goldenRatio_pos, pow_succ, ring_nf, tendsto_pow_atTop_nhds_zero_of_abs_lt_one
 -/

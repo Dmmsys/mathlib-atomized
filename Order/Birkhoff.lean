@@ -504,7 +504,17 @@ definition OrderIso.lowerSetSupIrred
       invFun := fun s => (s : Set {a : α // SupIrred a}).toFinset.sup (↑)
       left_inv := fun a => by
         refine le_antisymm (Finset.sup_le fun b => Set.mem_toFinset.1) ?_
-        obtain ⟨s, rfl, hs⟩ :=
+        obtain ⟨s, rfl, hs⟩ := exists_supIrred_decomposition a
+        exact Finset.sup_le fun i hi =>
+          le_sup_of_le (b := ⟨i, hs hi⟩) (Set.mem_toFinset.2 <| le_sup (f := id) hi) le_rfl
+      right_inv := fun s => by
+        ext a
+        dsimp
+        refine ⟨fun ha => ?_, fun ha => ?_⟩
+        · obtain ⟨i, hi, ha⟩ := a.2.supPrime.le_finset_sup.1 ha
+          exact s.lower ha (Set.mem_toFinset.1 hi)
+        · exact le_sup (Set.mem_toFinset.2 ha) }
+(fun _ _ hbc _ => le_trans' hbc) fun _ _ hst => Finset.sup_mono Set.toFinset_mono hst
 
 中文:
 定义 OrderIso.lowerSetSupIrred
@@ -514,7 +524,17 @@ definition OrderIso.lowerSetSupIrred
       invFun := fun s => (s : Set {a : α // SupIrred a}).toFinset.sup (↑)
       left_inv := fun a => by
         refine le_antisymm (Finset.sup_le fun b => Set.mem_toFinset.1) ?_
-        obtain ⟨s, rfl, hs⟩ :=
+        obtain ⟨s, rfl, hs⟩ := exists_supIrred_decomposition a
+        exact Finset.sup_le fun i hi =>
+          le_sup_of_le (b := ⟨i, hs hi⟩) (Set.mem_toFinset.2 <| le_sup (f := id) hi) le_rfl
+      right_inv := fun s => by
+        ext a
+        dsimp
+        refine ⟨fun ha => ?_, fun ha => ?_⟩
+        · obtain ⟨i, hi, ha⟩ := a.2.supPrime.le_finset_sup.1 ha
+          exact s.lower ha (Set.mem_toFinset.1 hi)
+        · exact le_sup (Set.mem_toFinset.2 ha) }
+(fun _ _ hbc _ => le_trans' hbc) fun _ _ hst => Finset.sup_mono Set.toFinset_mono hst
 
 Depends on / 依赖: Equiv.toOrderIso, Finset, Finset.sup_le, Set.mem_toFinset, SupIrred, exists_supIrred_decomposition, hba.trans, invFun, le_antisymm, le_rfl, le_sup, le_sup_of_le, left_inv, mem_toFinset, right_inv, sup_le, toFinset, toFinset.sup, toOrderIso
 -/

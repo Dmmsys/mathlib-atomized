@@ -539,7 +539,10 @@ theorem isFractional_span_iff
           exact isInteger_zero)
         (fun x y _ _ hx hy => by
           rw [smul_add]
-          exact isIntege
+          exact isInteger_add hx hy)
+        fun s x _ hx => by
+        rw [smul_comm]
+        exact isInteger_smul hx⟩⟩
 
 中文:
 定理 isFractional_span_iff
@@ -552,7 +555,10 @@ theorem isFractional_span_iff
           exact isInteger_zero)
         (fun x y _ _ hx hy => by
           rw [smul_add]
-          exact isIntege
+          exact isInteger_add hx hy)
+        fun s x _ hx => by
+        rw [smul_comm]
+        exact isInteger_smul hx⟩⟩
 
 Depends on / 依赖: a_mem, isInteger_add, isInteger_smul, isInteger_zero, smul_add, smul_comm, smul_zero, span_induction, subset_span
 -/
@@ -987,7 +993,9 @@ theorem exists_ne_zero_mem_isInteger
   obtain ⟨z, ⟨x, hx⟩⟩ := exists_integer_multiple R⁰ y
   refine ⟨x, ?_, ?_⟩
   · rw [Ne, ← @IsFractionRing.to_map_eq_zero_iff R _ K, hx, Algebra.smul_def]
-  
+    exact mul_ne_zero (IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors z.2) y_ne_zero
+  · rw [hx]
+    exact smul_mem _ _ y_mem
 
 中文:
 定理 存在_ne_zero_mem_is整数eger
@@ -999,7 +1007,9 @@ theorem exists_ne_zero_mem_isInteger
   obtain ⟨z, ⟨x, hx⟩⟩ := exists_integer_multiple R⁰ y
   refine ⟨x, ?_, ?_⟩
   · rw [Ne, ← @IsFractionRing.to_map_eq_zero_iff R _ K, hx, Algebra.smul_def]
-  
+    exact mul_ne_zero (IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors z.2) y_ne_zero
+  · rw [hx]
+    exact smul_mem _ _ y_mem
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsFractionRing, IsFractionRing.to_map_eq_zero_iff, IsFractionRing.to_map_ne_zero_of_mem_nonZeroDivisors, SetLike, SetLike.exists_of_lt, bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mpr, exists_integer_multiple, exists_of_lt, mul_ne_zero, smul_def, smul_mem, to_map_eq_zero_iff, to_map_ne_zero_of_mem_nonZeroDivisors, y_mem, y_ne_zero, y_notMem
 -/
@@ -1315,7 +1325,16 @@ theorem _root_.IsFractional.div_of_nonzero
     · apply (nonZeroDivisors R₁).mul_mem haI (mem_nonZeroDivisors_iff_ne_zero.mpr _)
       intro y'_eq_zero
       have : algebraMap R₁ K aJ * y = 0 := by
-
+        rw [← Algebra.smul_def]; rw [← hy']; rw [y'_eq_zero]; rw [map_zero]
+      have y_zero :=
+        (mul_eq_zero.mp this).resolve_left
+          (mt ((injective_iff_map_eq_zero (algebraMap R₁ K)).1 (IsFractionRing.injective _ _) _)
+            (mem_nonZeroDivisors_iff_ne_zero.mp haJ))
+      apply notMem_zero
+      simpa
+    intro b hb
+    convert! hI _ (hb _ (Submodule.smul_mem _ aJ mem_J)) using 1
+    rw [← hy']; rw [mul_comm b]; rw [← Algebra.smul_def]; rw [mul_smul]
 
 中文:
 定理 _root_.IsFractional.div_of_nonzero
@@ -1327,7 +1346,16 @@ theorem _root_.IsFractional.div_of_nonzero
     · apply (nonZeroDivisors R₁).mul_mem haI (mem_nonZeroDivisors_iff_ne_zero.mpr _)
       intro y'_eq_zero
       have : algebraMap R₁ K aJ * y = 0 := by
-
+        rw [← Algebra.smul_def]; rw [← hy']; rw [y'_eq_zero]; rw [map_zero]
+      have y_zero :=
+        (mul_eq_zero.mp this).resolve_left
+          (mt ((injective_iff_map_eq_zero (algebraMap R₁ K)).1 (IsFractionRing.injective _ _) _)
+            (mem_nonZeroDivisors_iff_ne_zero.mp haJ))
+      apply notMem_zero
+      simpa
+    intro b hb
+    convert! hI _ (hb _ (Submodule.smul_mem _ aJ mem_J)) using 1
+    rw [← hy']; rw [mul_comm b]; rw [← Algebra.smul_def]; rw [mul_smul]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsFractionRing, IsFractionRing.injective, SetLike, SetLike.exists_of_lt, _eq_zero, algebraMap, bot_lt_iff_ne_bot, bot_lt_iff_ne_bot.mpr, exists_of_lt, injective, injective_iff_map_eq_zero, map_zero, mem_J, mem_nonZeroDivisors_if, mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero.mpr, mul_eq_zero, mul_eq_zero.mp
 -/
@@ -1616,7 +1644,8 @@ theorem div_one
   · simpa using mem_div_iff_forall_mul_mem.mp h 1 ((algebraMap R₁ K).map_one ▸ coe_mem_one R₁⁰ 1)
   · apply mem_div_iff_forall_mul_mem.mpr
     rintro y ⟨y', _, rfl⟩
-    convert! Submodule.smul_mem _ y' h 
+    convert! Submodule.smul_mem _ y' h using 1
+    rw [mul_comm]; rw [Algebra.linearMap_apply]; rw [← Algebra.smul_def]
 
 中文:
 定理 div_one
@@ -1629,7 +1658,8 @@ theorem div_one
   · simpa using mem_div_iff_forall_mul_mem.mp h 1 ((algebraMap R₁ K).map_one ▸ coe_mem_one R₁⁰ 1)
   · apply mem_div_iff_forall_mul_mem.mpr
     rintro y ⟨y', _, rfl⟩
-    convert! Submodule.smul_mem _ y' h 
+    convert! Submodule.smul_mem _ y' h using 1
+    rw [mul_comm]; rw [Algebra.linearMap_apply]; rw [← Algebra.smul_def]
 
 Depends on / 依赖: Algebra, Algebra.linearMap_apply, Algebra.smul_def, FractionalIdeal, Submodule, Submodule.smul_mem, algebraMap, coe_mem_one, convert, div_of_ne_zero, linearMap_apply, map_one, mem_div_iff_forall_mul_mem, mem_div_iff_forall_mul_mem.mp, mem_div_iff_forall_mul_mem.mpr, mul_comm, one_ne_zero, smul_def, smul_mem
 -/
@@ -1657,7 +1687,13 @@ congr_arg Units.inv @Units.ext _ _ (Units.mkOfMulEqOne _ _ h) (Units.mkOfMulEqOn
   · apply mul_le.mpr _
     intro x hx y hy
     rw [mul_comm]
-    exact (mem_div_iff_of_ne_zero h
+    exact (mem_div_iff_of_ne_zero hI).mp hy x hx
+  rw [← h]
+  gcongr
+  apply (le_div_iff_of_ne_zero hI).mpr _
+  intro y hy x hx
+  rw [mul_comm]
+  exact mul_mem_mul hy hx
 
 中文:
 定理 eq_one_div_of_mul_eq_one_right
@@ -1670,7 +1706,13 @@ congr_arg Units.inv @Units.ext _ _ (Units.mkOfMulEqOne _ _ h) (Units.mkOfMulEqOn
   · apply mul_le.mpr _
     intro x hx y hy
     rw [mul_comm]
-    exact (mem_div_iff_of_ne_zero h
+    exact (mem_div_iff_of_ne_zero hI).mp hy x hx
+  rw [← h]
+  gcongr
+  apply (le_div_iff_of_ne_zero hI).mpr _
+  intro y hy x hx
+  rw [mul_comm]
+  exact mul_mem_mul hy hx
 
 Depends on / 依赖: Units.ext, Units.inv, Units.mkOfMulEqOne, congr_arg, le_antisymm, le_div_iff_of_ne_zero, mem_div_iff_of_ne_zero, mkOfMulEqOne, mul_comm, mul_le, mul_le.mpr, mul_mem_mul, ne_zero_of_mul_eq_one
 -/
@@ -1786,7 +1828,9 @@ theorem eq_zero_or_one
     refine ⟨n / d, ?_⟩
     rw [map_div₀]; rw [IsFractionRing.mk'_eq_div]
   · rintro ⟨x, rfl⟩
-    obtain ⟨y,
+    obtain ⟨y, y_ne, y_mem⟩ := exists_ne_zero_mem_isInteger hI
+    rw [← div_mul_cancel₀ x y_ne]; rw [map_mul]; rw [← Algebra.smul_def]
+    exact smul_mem (M := L) I (x / y) y_mem
 
 中文:
 定理 eq_zero_or_one
@@ -1803,7 +1847,9 @@ theorem eq_zero_or_one
     refine ⟨n / d, ?_⟩
     rw [map_div₀]; rw [IsFractionRing.mk'_eq_div]
   · rintro ⟨x, rfl⟩
-    obtain ⟨y,
+    obtain ⟨y, y_ne, y_mem⟩ := exists_ne_zero_mem_isInteger hI
+    rw [← div_mul_cancel₀ x y_ne]; rw [map_mul]; rw [← Algebra.smul_def]
+    exact smul_mem (M := L) I (x / y) y_mem
 
 Depends on / 依赖: Algebra, Algebra.smul_def, IsFractionRing, IsFractionRing.mk, IsLocalization, IsLocalization.exists_mk, SetLike, SetLike.ext_iff, _eq_div, exists_mk, exists_ne_zero_mem_isInteger, ext_iff, map_mul, mem_one_iff, or_iff_not_imp_left, simp_rw, smul_def, smul_mem, x_mem, y_mem
 -/
@@ -1869,7 +1915,12 @@ definition spanFinset
       exact ha' i hi
     · rw [smul_zero]
       exact IsLocalization.isInteger_zero
-    · intr
+    · intro x y _ _ hx hy
+      rw [smul_add]
+      exact IsLocalization.isInteger_add hx hy
+    · intro c x _ hx
+      rw [smul_comm]
+      exact IsLocalization.isInteger_smul hx⟩
 
 中文:
 定义 spanFinset
@@ -1881,7 +1932,12 @@ definition spanFinset
       exact ha' i hi
     · rw [smul_zero]
       exact IsLocalization.isInteger_zero
-    · intr
+    · intro x y _ _ hx hy
+      rw [smul_add]
+      exact IsLocalization.isInteger_add hx hy
+    · intro c x _ hx
+      rw [smul_comm]
+      exact IsLocalization.isInteger_smul hx⟩
 
 Depends on / 依赖: IsLocalization, IsLocalization.exist_integer_multiples, IsLocalization.isInteger_add, IsLocalization.isInteger_smul, IsLocalization.isInteger_zero, Submodule, Submodule.span, Submodule.span_induction, exist_integer_multiples, isInteger_add, isInteger_smul, isInteger_zero, smul_add, smul_comm, smul_zero, span_induction
 -/
@@ -2085,7 +2141,7 @@ theorem den_mul_self_eq_num'
   convert! I.den_mul_self_eq_num using 1
   ext
   rw [mem_smul_pointwise_iff_exists]; rw [mem_smul_pointwise_iff_exists]
-  simp [smul_eq_mul
+  simp [smul_eq_mul, Algebra.smul_def, Submonoid.smul_def]
 
 中文:
 定理 den_mul_self_eq_num'
@@ -2097,7 +2153,7 @@ theorem den_mul_self_eq_num'
   convert! I.den_mul_self_eq_num using 1
   ext
   rw [mem_smul_pointwise_iff_exists]; rw [mem_smul_pointwise_iff_exists]
-  simp [smul_eq_mul
+  simp [smul_eq_mul, Algebra.smul_def, Submonoid.smul_def]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, I.den_mul_self_eq_num, Submodule, Submodule.span_singleton_mul, Submonoid, Submonoid.smul_def, coeToSubmodule_injective, coe_mul, coe_spanSingleton, convert, den_mul_self_eq_num, mem_smul_pointwise_iff_exists, smul_def, smul_eq_mul, span_singleton_mul
 -/
@@ -2397,7 +2453,8 @@ theorem coeIdeal_span_singleton
     use x'
     rw [smul_eq_mul]; rw [map_mul]; rw [Algebra.smul_def]
   · rintro ⟨y', rfl⟩
-    refine ⟨y' * x, Submo
+    refine ⟨y' * x, Submodule.mem_span_singleton.mpr ⟨y', rfl⟩, ?_⟩
+    rw [map_mul]; rw [Algebra.smul_def]
 
 中文:
 定理 coeIdeal_span_singleton
@@ -2411,7 +2468,8 @@ theorem coeIdeal_span_singleton
     use x'
     rw [smul_eq_mul]; rw [map_mul]; rw [Algebra.smul_def]
   · rintro ⟨y', rfl⟩
-    refine ⟨y' * x, Submo
+    refine ⟨y' * x, Submodule.mem_span_singleton.mpr ⟨y', rfl⟩, ?_⟩
+    rw [map_mul]; rw [Algebra.smul_def]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Iff.trans, Submodule, Submodule.mem_span_singleton.mp, Submodule.mem_span_singleton.mpr, map_mul, mem_coeIdeal, mem_spanSingleton, mem_span_singleton, smul_def, smul_eq_mul
 -/
@@ -2445,7 +2503,11 @@ theorem canonicalEquiv_spanSingleton
     obtain ⟨z, rfl⟩ := (mem_spanSingleton _).mp hx'
     use z
     rw [IsLocalization.map_smul]; rw [RingHom.id_apply]
-  · rw [mem_canonical
+  · rw [mem_canonicalEquiv_apply]
+    obtain ⟨z, rfl⟩ := (mem_spanSingleton _).mp h
+    use z • x
+    use (mem_spanSingleton _).mpr ⟨z, rfl⟩
+    simp [IsLocalization.map_smul]
 
 中文:
 定理 canonicalEquiv_spanSingleton
@@ -2459,7 +2521,11 @@ theorem canonicalEquiv_spanSingleton
     obtain ⟨z, rfl⟩ := (mem_spanSingleton _).mp hx'
     use z
     rw [IsLocalization.map_smul]; rw [RingHom.id_apply]
-  · rw [mem_canonical
+  · rw [mem_canonicalEquiv_apply]
+    obtain ⟨z, rfl⟩ := (mem_spanSingleton _).mp h
+    use z • x
+    use (mem_spanSingleton _).mpr ⟨z, rfl⟩
+    simp [IsLocalization.map_smul]
 
 Depends on / 依赖: IsLocalization, IsLocalization.map_smul, RingHom, RingHom.id_apply, SetLike, SetLike.ext_iff.mpr, ext_iff, id_apply, map_smul, mem_canonicalEquiv_apply, mem_spanSingleton
 -/
@@ -2497,7 +2563,10 @@ theorem mem_singleton_mul
       obtain ⟨a, ha⟩ := (mem_spanSingleton S).mp hx'
       use a • y', Submodule.smul_mem (I : Submodule R P) a hy'
       rw [← ha]; rw [Algebra.mul_smul_comm]; rw [Algebra.smul_mul_assoc]
-    
+    · rintro _ _ ⟨y, hy, rfl⟩ ⟨y', hy', rfl⟩
+      exact ⟨y + y', Submodule.add_mem (I : Submodule R P) hy hy', (mul_add _ _ _).symm⟩
+  · rintro ⟨y', hy', rfl⟩
+    exact mul_mem_mul ((mem_spanSingleton S).mpr ⟨1, one_smul _ _⟩) hy'
 
 中文:
 定理 mem_singleton_mul
@@ -2510,7 +2579,10 @@ theorem mem_singleton_mul
       obtain ⟨a, ha⟩ := (mem_spanSingleton S).mp hx'
       use a • y', Submodule.smul_mem (I : Submodule R P) a hy'
       rw [← ha]; rw [Algebra.mul_smul_comm]; rw [Algebra.smul_mul_assoc]
-    
+    · rintro _ _ ⟨y, hy, rfl⟩ ⟨y', hy', rfl⟩
+      exact ⟨y + y', Submodule.add_mem (I : Submodule R P) hy hy', (mul_add _ _ _).symm⟩
+  · rintro ⟨y', hy', rfl⟩
+    exact mul_mem_mul ((mem_spanSingleton S).mpr ⟨1, one_smul _ _⟩) hy'
 
 Depends on / 依赖: Algebra, Algebra.mul_smul_comm, Algebra.smul_mul_assoc, FractionalIdeal, FractionalIdeal.mul_induction_on, Submodule, Submodule.add_mem, Submodule.smul_mem, add_mem, mem_spanSingleton, mul_add, mul_induction_on, mul_mem_mul, mul_smul_comm, one_smul, smul_mem, smul_mul_assoc
 -/
@@ -2541,7 +2613,12 @@ theorem mk'_mul_coeIdeal_eq_coeIdeal
         spanSingleton R₁⁰ (algebraMap R₁ K y) =
       1 := by
     rw [spanSingleton_mul_spanSingleton]; rw [mul_comm]; rw [← IsLocalization.mk'_eq_mul_mk'_one]; rw [IsLocalization.mk'_self]; rw [spanSingleton_one]
-  let y' :
+  let y' : (FractionalIdeal R₁⁰ K)ˣ := Units.mkOfMulEqOne _ _ this
+  have coe_y' : ↑y' = spanSingleton R₁⁰ (IsLocalization.mk' K (1 : R₁) ⟨y, hy⟩) := rfl
+  refine Iff.trans ?_ (y'.mul_right_inj.trans coeIdeal_inj)
+  rw [coe_y']; rw [coeIdeal_mul]; rw [coeIdeal_span_singleton]; rw [coeIdeal_mul]; rw [coeIdeal_span_singleton]; rw [←
+    mul_assoc]; rw [spanSingleton_mul_spanSingleton]; rw [← mul_assoc]; rw [spanSingleton_mul_spanSingleton]; rw [mul_comm (mk' _ _ _)]; rw [← IsLocalization.mk'_eq_mul_mk'_one]; rw [mul_comm (mk' _ _ _)]; rw [←
+    IsLocalization.mk'_eq_mul_mk'_one]; rw [IsLocalization.mk'_self]; rw [spanSingleton_one]; rw [one_mul]
 
 中文:
 定理 mk'_mul_coeIdeal_eq_coeIdeal
@@ -2552,7 +2629,12 @@ theorem mk'_mul_coeIdeal_eq_coeIdeal
         spanSingleton R₁⁰ (algebraMap R₁ K y) =
       1 := by
     rw [spanSingleton_mul_spanSingleton]; rw [mul_comm]; rw [← IsLocalization.mk'_eq_mul_mk'_one]; rw [IsLocalization.mk'_self]; rw [spanSingleton_one]
-  let y' :
+  let y' : (FractionalIdeal R₁⁰ K)ˣ := Units.mkOfMulEqOne _ _ this
+  have coe_y' : ↑y' = spanSingleton R₁⁰ (IsLocalization.mk' K (1 : R₁) ⟨y, hy⟩) := rfl
+  refine Iff.trans ?_ (y'.mul_right_inj.trans coeIdeal_inj)
+  rw [coe_y']; rw [coeIdeal_mul]; rw [coeIdeal_span_singleton]; rw [coeIdeal_mul]; rw [coeIdeal_span_singleton]; rw [←
+    mul_assoc]; rw [spanSingleton_mul_spanSingleton]; rw [← mul_assoc]; rw [spanSingleton_mul_spanSingleton]; rw [mul_comm (mk' _ _ _)]; rw [← IsLocalization.mk'_eq_mul_mk'_one]; rw [mul_comm (mk' _ _ _)]; rw [←
+    IsLocalization.mk'_eq_mul_mk'_one]; rw [IsLocalization.mk'_self]; rw [spanSingleton_one]; rw [one_mul]
 
 Depends on / 依赖: FractionalIdeal, Iff.trans, IsLocalization, IsLocalization.mk, Units.mkOfMulEqOne, _eq_mul_mk, _one, _self, algebraMap, coeIdeal_, coeIdeal_inj, coe_y, mkOfMulEqOne, mul_comm, mul_right_inj, mul_right_inj.trans, spanSingleton, spanSingleton_mul_spanSingleton, spanSingleton_one
 -/
@@ -2639,7 +2721,13 @@ theorem div_spanSingleton
   have h_spand : spanSingleton R₁⁰ d != 0 := mt spanSingleton_eq_zero_iff.mp hd
   apply le_antisymm
   · intro x hx
-    rw [← mem_coe]; rw [coe_div h_spand]; rw [Submodule.mem_div_iff_fo
+    rw [← mem_coe]; rw [coe_div h_spand]; rw [Submodule.mem_div_iff_forall_mul_mem] at hx
+    specialize hx d (mem_spanSingleton_self R₁⁰ d)
+    have h_xd : x = d⁻¹ * (x * d) := by field
+    rw [← mem_coe]; rw [coe_mul]; rw [one_div_spanSingleton]; rw [h_xd]
+    exact Submodule.mul_mem_mul (mem_spanSingleton_self R₁⁰ _) hx
+  · rw [le_div_iff_mul_le h_spand, mul_assoc, mul_left_comm, one_div_spanSingleton,
+      spanSingleton_mul_spanSingleton, inv_mul_cancel₀ hd, spanSingleton_one, mul_one]
 
 中文:
 定理 div_spanSingleton
@@ -2651,7 +2739,13 @@ theorem div_spanSingleton
   have h_spand : spanSingleton R₁⁰ d != 0 := mt spanSingleton_eq_zero_iff.mp hd
   apply le_antisymm
   · intro x hx
-    rw [← mem_coe]; rw [coe_div h_spand]; rw [Submodule.mem_div_iff_fo
+    rw [← mem_coe]; rw [coe_div h_spand]; rw [Submodule.mem_div_iff_forall_mul_mem] at hx
+    specialize hx d (mem_spanSingleton_self R₁⁰ d)
+    have h_xd : x = d⁻¹ * (x * d) := by field
+    rw [← mem_coe]; rw [coe_mul]; rw [one_div_spanSingleton]; rw [h_xd]
+    exact Submodule.mul_mem_mul (mem_spanSingleton_self R₁⁰ _) hx
+  · rw [le_div_iff_mul_le h_spand, mul_assoc, mul_left_comm, one_div_spanSingleton,
+      spanSingleton_mul_spanSingleton, inv_mul_cancel₀ hd, spanSingleton_one, mul_one]
 
 Depends on / 依赖: Submodule, Submodule.mem_div_iff_forall_mul_mem, Submodule.mul_mem_mul, coe_div, coe_mul, div_zero, h_spand, h_xd, le_antisymm, mem_coe, mem_div_iff_forall_mul_mem, mem_spanSi, mem_spanSingleton_self, mul_mem_mul, one_div_spanSingleton, spanSingleton, spanSingleton_eq_zero_iff, spanSingleton_eq_zero_iff.mp, spanSingleton_zero, specialize
 -/
@@ -2684,7 +2778,19 @@ theorem exists_eq_spanSingleton_mul
     mt IsFractionRing.to_map_eq_zero_iff.mp nonzero
   refine
     ⟨a_inv,
-      Submodule.comap (Algebra.linearMap R₁ K) ↑(spanSingleton
+      Submodule.comap (Algebra.linearMap R₁ K) ↑(spanSingleton R₁⁰ (algebraMap R₁ K a_inv) * I),
+      nonzero, ext fun x => Iff.trans ⟨?_, ?_⟩ mem_singleton_mul.symm⟩
+  · intro hx
+    obtain ⟨x', hx'⟩ := ha x hx
+    rw [Algebra.smul_def] at hx'
+    refine ⟨algebraMap R₁ K x', (mem_coeIdeal _).mpr ⟨x', mem_singleton_mul.mpr ?_, rfl⟩, ?_⟩
+    · exact ⟨x, hx, hx'⟩
+    · rw [hx', ← mul_assoc, inv_mul_cancel₀ map_a_nonzero, one_mul]
+  · rintro ⟨y, hy, rfl⟩
+    obtain ⟨x', hx', rfl⟩ := (mem_coeIdeal _).mp hy
+    obtain ⟨y', hy', hx'⟩ := mem_singleton_mul.mp hx'
+    rw [Algebra.linearMap_apply] at hx'
+    rwa [hx', ← mul_assoc, inv_mul_cancel₀ map_a_nonzero, one_mul]
 
 中文:
 定理 存在_eq_spanSingleton_mul
@@ -2696,7 +2802,19 @@ theorem exists_eq_spanSingleton_mul
     mt IsFractionRing.to_map_eq_zero_iff.mp nonzero
   refine
     ⟨a_inv,
-      Submodule.comap (Algebra.linearMap R₁ K) ↑(spanSingleton
+      Submodule.comap (Algebra.linearMap R₁ K) ↑(spanSingleton R₁⁰ (algebraMap R₁ K a_inv) * I),
+      nonzero, ext fun x => Iff.trans ⟨?_, ?_⟩ mem_singleton_mul.symm⟩
+  · intro hx
+    obtain ⟨x', hx'⟩ := ha x hx
+    rw [Algebra.smul_def] at hx'
+    refine ⟨algebraMap R₁ K x', (mem_coeIdeal _).mpr ⟨x', mem_singleton_mul.mpr ?_, rfl⟩, ?_⟩
+    · exact ⟨x, hx, hx'⟩
+    · rw [hx', ← mul_assoc, inv_mul_cancel₀ map_a_nonzero, one_mul]
+  · rintro ⟨y, hy, rfl⟩
+    obtain ⟨x', hx', rfl⟩ := (mem_coeIdeal _).mp hy
+    obtain ⟨y', hy', hx'⟩ := mem_singleton_mul.mp hx'
+    rw [Algebra.linearMap_apply] at hx'
+    rwa [hx', ← mul_assoc, inv_mul_cancel₀ map_a_nonzero, one_mul]
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Algebra.smul_def, I.isFractional, Iff.trans, IsFractionRing, IsFractionRing.to_map_eq_zero_iff.mp, Submodule, Submodule.comap, a_inv, algebraMap, isFractional, linearMap, map_a_nonzero, mem_coeIdeal, mem_nonZeroDivisors_iff_ne_zero, mem_nonZeroDivisors_iff_ne_zero.mp, mem_singleton_mul, mem_singleton_mul.symm, nonzero
 -/
@@ -2789,7 +2907,8 @@ instance isPrincipal
   suffices I = spanSingleton R⁰ ((algebraMap R K a)⁻¹ * algebraMap R K (generator aI)) by
     rw [spanSingleton] at this
     exact congr_arg Subtype.val this
-  conv_lhs => rw [ha, ←
+  conv_lhs => rw [ha, ← span_singleton_generator aI]
+  rw [Ideal.submodule_span_eq]; rw [coeIdeal_span_singleton (generator aI)]; rw [spanSingleton_mul_spanSingleton]
 
 中文:
 实例 isPrincipal
@@ -2800,7 +2919,8 @@ instance isPrincipal
   suffices I = spanSingleton R⁰ ((algebraMap R K a)⁻¹ * algebraMap R K (generator aI)) by
     rw [spanSingleton] at this
     exact congr_arg Subtype.val this
-  conv_lhs => rw [ha, ←
+  conv_lhs => rw [ha, ← span_singleton_generator aI]
+  rw [Ideal.submodule_span_eq]; rw [coeIdeal_span_singleton (generator aI)]; rw [spanSingleton_mul_spanSingleton]
 
 Depends on / 依赖: Ideal.submodule_span_eq, Subtype, Subtype.val, algebraMap, coeIdeal_span_singleton, congr_arg, conv_lhs, exists_eq_spanSingleton_mul, generator, spanSingleton, spanSingleton_mul_spanSingleton, span_singleton_generator, submodule_span_eq
 -/
@@ -3048,7 +3168,14 @@ theorem isNoetherian_spanSingleton_inv_to_map_mul
     exact isNoetherian_zero
   have h_gx : algebraMap R₁ K x != 0 :=
     mt ((injective_iff_map_eq_zero (algebraMap R₁ K)).mp (IsFractionRing.injective _ _) x) hx
-  have h_spanx : spanSingleton R₁⁰ (alg
+  have h_spanx : spanSingleton R₁⁰ (algebraMap R₁ K x) != 0 := spanSingleton_ne_zero_iff.mpr h_gx
+  rw [isNoetherian_iff] at hI ⊢
+  intro J hJ
+  rw [← div_spanSingleton]; rw [le_div_iff_mul_le h_spanx] at hJ
+  obtain ⟨s, hs⟩ := hI _ hJ
+  use s * {(algebraMap R₁ K x)⁻¹}
+  rw [Finset.coe_mul]; rw [Finset.coe_singleton]; rw [← span_mul_span]; rw [hs]; rw [← coe_spanSingleton R₁⁰]; rw [←
+    coe_mul]; rw [mul_assoc]; rw [spanSingleton_mul_spanSingleton]; rw [mul_inv_cancel₀ h_gx]; rw [spanSingleton_one]; rw [mul_one]
 
 中文:
 定理 isNoetherian_spanSingleton_inv_to_map_mul
@@ -3060,7 +3187,14 @@ theorem isNoetherian_spanSingleton_inv_to_map_mul
     exact isNoetherian_zero
   have h_gx : algebraMap R₁ K x != 0 :=
     mt ((injective_iff_map_eq_zero (algebraMap R₁ K)).mp (IsFractionRing.injective _ _) x) hx
-  have h_spanx : spanSingleton R₁⁰ (alg
+  have h_spanx : spanSingleton R₁⁰ (algebraMap R₁ K x) != 0 := spanSingleton_ne_zero_iff.mpr h_gx
+  rw [isNoetherian_iff] at hI ⊢
+  intro J hJ
+  rw [← div_spanSingleton]; rw [le_div_iff_mul_le h_spanx] at hJ
+  obtain ⟨s, hs⟩ := hI _ hJ
+  use s * {(algebraMap R₁ K x)⁻¹}
+  rw [Finset.coe_mul]; rw [Finset.coe_singleton]; rw [← span_mul_span]; rw [hs]; rw [← coe_spanSingleton R₁⁰]; rw [←
+    coe_mul]; rw [mul_assoc]; rw [spanSingleton_mul_spanSingleton]; rw [mul_inv_cancel₀ h_gx]; rw [spanSingleton_one]; rw [mul_one]
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.injective, algebraMap, classical, div_spanSingleton, h_gx, h_spanx, injective, injective_iff_map_eq_zero, inv_zero, isNoetherian_iff, isNoetherian_zero, le_div_iff_mul_le, map_zero, spanSingleton, spanSingleton_ne_zero_iff, spanSingleton_ne_zero_iff.mpr, spanSingleton_zero, zero_mul
 -/
@@ -3224,7 +3358,12 @@ theorem _root_.IsFractional.mapEquiv
   refine ⟨by simp [hr0], ?_⟩
   intro x hx
   specialize hr x hx
-  simp only [IsLocalization.IsInteger, Rin
+  simp only [IsLocalization.IsInteger, RingHom.mem_rangeS] at hr ⊢
+  obtain ⟨r', hr'⟩ := hr
+  use f r'
+  simp only [semilinearEquivOfRingEquiv, RingEquiv.toEquiv_eq_coe, Equiv.toFun_as_coe,
+    EquivLike.coe_coe, Equiv.invFun_as_coe, LinearMap.coe_mk, AddHom.coe_mk]
+  rw [Algebra.smul_def]; rw [← ringEquivOfRingEquiv_algebraMap f (K := K) (L := L) r]; rw [← map_mul]; rw [← Algebra.smul_def]; rw [← hr']; rw [ringEquivOfRingEquiv_algebraMap]
 
 中文:
 定理 _root_.IsFractional.mapEquiv
@@ -3237,7 +3376,12 @@ theorem _root_.IsFractional.mapEquiv
   refine ⟨by simp [hr0], ?_⟩
   intro x hx
   specialize hr x hx
-  simp only [IsLocalization.IsInteger, Rin
+  simp only [IsLocalization.IsInteger, RingHom.mem_rangeS] at hr ⊢
+  obtain ⟨r', hr'⟩ := hr
+  use f r'
+  simp only [semilinearEquivOfRingEquiv, RingEquiv.toEquiv_eq_coe, Equiv.toFun_as_coe,
+    EquivLike.coe_coe, Equiv.invFun_as_coe, LinearMap.coe_mk, AddHom.coe_mk]
+  rw [Algebra.smul_def]; rw [← ringEquivOfRingEquiv_algebraMap f (K := K) (L := L) r]; rw [← map_mul]; rw [← Algebra.smul_def]; rw [← hr']; rw [ringEquivOfRingEquiv_algebraMap]
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, Equiv.invFun_as_coe, Equiv.toFun_as_coe, EquivLike, EquivLike.coe_coe, IsFractional, IsInteger, IsLocalization, IsLocalization.IsInteger, LinearMap, LinearMap.coe_mk, RingEquiv, RingEquiv.toEquiv_eq_coe, RingHom, RingHom.mem_rangeS, Submodule, Submodule.mem_map, and_imp, coe_coe
 -/
@@ -3272,7 +3416,23 @@ definition ringEquivOfRingEquiv
     invFun J := ⟨J.val.map (semilinearEquivOfRingEquiv _ _ f.symm).toLinearMap,
       IsFractional.mapEquiv L K f.symm J.prop⟩
     map_add' I J := by ext x; simp [← mem_coe]
-  
+    map_mul' I J := by
+      simp only [FractionalIdeal.coe_ext_iff, val_eq_coe, coe_mul, coe_mk]
+      apply le_antisymm <;> simp only [map_le_iff_le_comap, Submodule.mul_le, mem_coe, mem_comap,
+          semilinearEquivOfRingEquiv_apply, map_mul, mem_map_equiv,
+          semilinearEquivOfRingEquiv_symm_apply, LinearEquiv.coe_coe]
+      · exact fun m hm n hn => Submodule.mul_mem_mul (mem_map_of_mem hm) (mem_map_of_mem hn)
+      · exact fun m hm n hn => Submodule.mul_mem_mul hm hn
+    left_inv I := by
+      simp only [RingEquiv.symm_symm, val_eq_coe, ← Submodule.map_comp, LinearEquiv.comp_coe,
+        coe_ext_iff, coe_mk]
+      convert! Submodule.map_id _
+      ext; simp [semilinearEquivOfRingEquiv, IsLocalization.map_map]
+    right_inv I := by
+      simp only [RingEquiv.symm_symm, val_eq_coe, ← Submodule.map_comp, LinearEquiv.comp_coe,
+        coe_ext_iff, coe_mk]
+      convert! Submodule.map_id _
+      ext; simp [semilinearEquivOfRingEquiv, IsLocalization.map_map]}
 
 中文:
 定义 ringEquivOfRingEquiv
@@ -3282,7 +3442,23 @@ definition ringEquivOfRingEquiv
     invFun J := ⟨J.val.map (semilinearEquivOfRingEquiv _ _ f.symm).toLinearMap,
       IsFractional.mapEquiv L K f.symm J.prop⟩
     map_add' I J := by ext x; simp [← mem_coe]
-  
+    map_mul' I J := by
+      simp only [FractionalIdeal.coe_ext_iff, val_eq_coe, coe_mul, coe_mk]
+      apply le_antisymm <;> simp only [map_le_iff_le_comap, Submodule.mul_le, mem_coe, mem_comap,
+          semilinearEquivOfRingEquiv_apply, map_mul, mem_map_equiv,
+          semilinearEquivOfRingEquiv_symm_apply, LinearEquiv.coe_coe]
+      · exact fun m hm n hn => Submodule.mul_mem_mul (mem_map_of_mem hm) (mem_map_of_mem hn)
+      · exact fun m hm n hn => Submodule.mul_mem_mul hm hn
+    left_inv I := by
+      simp only [RingEquiv.symm_symm, val_eq_coe, ← Submodule.map_comp, LinearEquiv.comp_coe,
+        coe_ext_iff, coe_mk]
+      convert! Submodule.map_id _
+      ext; simp [semilinearEquivOfRingEquiv, IsLocalization.map_map]
+    right_inv I := by
+      simp only [RingEquiv.symm_symm, val_eq_coe, ← Submodule.map_comp, LinearEquiv.comp_coe,
+        coe_ext_iff, coe_mk]
+      convert! Submodule.map_id _
+      ext; simp [semilinearEquivOfRingEquiv, IsLocalization.map_map]}
 
 Depends on / 依赖: FractionalIdeal, FractionalIdeal.coe_ext_iff, I.prop, I.val, IsFractional, IsFractional.mapEquiv, J.prop, J.val.map, Submodule, Submodule.map, Submodule.mul_le, coe_ext_iff, coe_mk, coe_mul, f.symm, invFun, le_antisymm, mapEquiv, map_add, map_le_iff_le_comap
 -/
@@ -3360,7 +3536,7 @@ lemma ringEquivOfRingEquiv_trans
   ext1 I
   simp only [ringEquivOfRingEquiv, RingEquiv.coe_ringHom_trans, Function.comp_apply,
     semilinearEquivOfRingEquiv_comp K L f M, LinearEquiv.coe_trans,
-    Submodule.map_comp, RingEquiv.coe_mk, Equiv.coe_fn_mk, 
+    Submodule.map_comp, RingEquiv.coe_mk, Equiv.coe_fn_mk, RingEquiv.coe_trans]
 
 中文:
 引理 ringEquivOfRingEquiv_trans
@@ -3370,7 +3546,7 @@ lemma ringEquivOfRingEquiv_trans
   ext1 I
   simp only [ringEquivOfRingEquiv, RingEquiv.coe_ringHom_trans, Function.comp_apply,
     semilinearEquivOfRingEquiv_comp K L f M, LinearEquiv.coe_trans,
-    Submodule.map_comp, RingEquiv.coe_mk, Equiv.coe_fn_mk, 
+    Submodule.map_comp, RingEquiv.coe_mk, Equiv.coe_fn_mk, RingEquiv.coe_trans]
 
 Depends on / 依赖: Equiv.coe_fn_mk, Function, Function.comp_apply, LinearEquiv, LinearEquiv.coe_trans, RingEquiv, RingEquiv.coe_mk, RingEquiv.coe_ringHom_trans, RingEquiv.coe_trans, RingHomCompTriple, Submodule, Submodule.map_comp, coe_fn_mk, coe_mk, coe_ringHom_trans, coe_trans, comp_apply, f.trans, map_comp, ringEquivOfRingEquiv
 -/
@@ -3450,7 +3626,15 @@ lemma ringEquivOfRingEquiv_spanSingleton
   rw [SetLike.ext_iff]
   intro y
   simp only [← FractionalIdeal.mem_coe, coe_mk, mem_map_equiv, coe_spanSingleton,
-    Submodule
+    Submodule.mem_span_singleton, (semilinearEquivOfRingEquiv K L f).eq_symm_apply]
+  constructor
+  · rintro ⟨r, rfl⟩
+    use f r
+    exact .symm (map_smulₛₗ _ r x)
+  · rintro ⟨s, rfl⟩
+    use f.symm s
+    simp only [Algebra.smul_def, semilinearEquivOfRingEquiv_apply, map_mul, map_eq, RingHom.coe_coe,
+      IsFractionRing.ringEquivOfRingEquiv_apply, RingEquiv.apply_symm_apply]
 
 中文:
 引理 ringEquivOfRingEquiv_spanSingleton
@@ -3461,7 +3645,15 @@ lemma ringEquivOfRingEquiv_spanSingleton
   rw [SetLike.ext_iff]
   intro y
   simp only [← FractionalIdeal.mem_coe, coe_mk, mem_map_equiv, coe_spanSingleton,
-    Submodule
+    Submodule.mem_span_singleton, (semilinearEquivOfRingEquiv K L f).eq_symm_apply]
+  constructor
+  · rintro ⟨r, rfl⟩
+    use f r
+    exact .symm (map_smulₛₗ _ r x)
+  · rintro ⟨s, rfl⟩
+    use f.symm s
+    simp only [Algebra.smul_def, semilinearEquivOfRingEquiv_apply, map_mul, map_eq, RingHom.coe_coe,
+      IsFractionRing.ringEquivOfRingEquiv_apply, RingEquiv.apply_symm_apply]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, Equiv.coe_fn_mk, FractionalIdeal, FractionalIdeal.mem_coe, IsFractionRing, IsFractionRing.ringEquivOfRingEquiv_apply, RingEquiv, RingEquiv.coe_mk, RingEquiv.symm_symm, SetLike, SetLike.ext_iff, Submodule, Submodule.mem_span_singleton, coe_fn_mk, coe_mk, coe_spanSingleton, eq_symm_apply, ext_iff, f.symm
 -/

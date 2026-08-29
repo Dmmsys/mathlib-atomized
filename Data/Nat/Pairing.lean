@@ -91,7 +91,7 @@ theorem pair_unpair
   · simp [s, pair, h, sm]
   · have hl : n - s * s - s <= s := Nat.sub_le_iff_le_add.2
       (Nat.sub_le_iff_le_add'.2 <| by rw [← Nat.add_assoc]; apply sqrt_le_add)
-   
+    simp [s, pair, hl.not_gt, Nat.add_assoc, Nat.add_sub_cancel' (le_of_not_gt h), sm]
 
 中文:
 定理 pair_unpair
@@ -104,7 +104,7 @@ theorem pair_unpair
   · simp [s, pair, h, sm]
   · have hl : n - s * s - s <= s := Nat.sub_le_iff_le_add.2
       (Nat.sub_le_iff_le_add'.2 <| by rw [← Nat.add_assoc]; apply sqrt_le_add)
-   
+    simp [s, pair, hl.not_gt, Nat.add_assoc, Nat.add_sub_cancel' (le_of_not_gt h), sm]
 
 Depends on / 依赖: Nat.add_assoc, Nat.add_sub_cancel, Nat.sub_le_iff_le_add, add_assoc, add_sub_cancel, hl.not_gt, le_of_not_gt, not_gt, split_ifs, sqrt_le, sqrt_le_add, sub_le_iff_le_add, unpair
 -/
@@ -157,7 +157,10 @@ theorem unpair_pair
     have be : sqrt (b * b + a) = b := sqrt_add_eq _ (le_trans (le_of_lt h) (Nat.le_add_left _ _))
     simp [unpair, be, Nat.add_sub_cancel_left, h]
   · show unpair (a * a + a + b) = (a, b)
-    have ae : sqrt (a * a + (a + 
+    have ae : sqrt (a * a + (a + b)) = a := by
+      rw [sqrt_add_eq]
+      exact Nat.add_le_add_left (le_of_not_gt h) _
+    simp [unpair, ae, Nat.add_assoc, Nat.add_sub_cancel_left]
 
 中文:
 定理 unpair_pair
@@ -169,7 +172,10 @@ theorem unpair_pair
     have be : sqrt (b * b + a) = b := sqrt_add_eq _ (le_trans (le_of_lt h) (Nat.le_add_left _ _))
     simp [unpair, be, Nat.add_sub_cancel_left, h]
   · show unpair (a * a + a + b) = (a, b)
-    have ae : sqrt (a * a + (a + 
+    have ae : sqrt (a * a + (a + b)) = a := by
+      rw [sqrt_add_eq]
+      exact Nat.add_le_add_left (le_of_not_gt h) _
+    simp [unpair, ae, Nat.add_assoc, Nat.add_sub_cancel_left]
 
 Depends on / 依赖: Nat.add_assoc, Nat.add_le_add_left, Nat.add_sub_cancel_left, Nat.le_add_left, add_assoc, add_le_add_left, add_sub_cancel_left, le_add_left, le_of_lt, le_of_not_gt, le_trans, split_ifs, sqrt_add_eq, unpair
 -/
@@ -415,7 +421,10 @@ theorem pair_lt_pair_left
     · exact Nat.mul_self_le_mul_self (not_lt.mp h₂)
     · exact Nat.lt_add_right _ h
   · simp at h₁
-    simp o
+    simp only [not_lt_of_gt (lt_of_le_of_lt h₁ h), ite_false]
+    apply add_lt_add
+    · exact Nat.mul_self_lt_mul_self h
+    · apply Nat.add_lt_add_right; assumption
 
 中文:
 定理 pair_lt_pair_left
@@ -430,7 +439,10 @@ theorem pair_lt_pair_left
     · exact Nat.mul_self_le_mul_self (not_lt.mp h₂)
     · exact Nat.lt_add_right _ h
   · simp at h₁
-    simp o
+    simp only [not_lt_of_gt (lt_of_le_of_lt h₁ h), ite_false]
+    apply add_lt_add
+    · exact Nat.mul_self_lt_mul_self h
+    · apply Nat.add_lt_add_right; assumption
 
 Depends on / 依赖: Nat.add_assoc, Nat.add_lt_add_of_le_of_lt, Nat.add_lt_add_right, Nat.lt_add_right, Nat.mul_self_le_mul_self, Nat.mul_self_lt_mul_self, add_assoc, add_lt_add, add_lt_add_of_le_of_lt, add_lt_add_right, ite_false, lt_add_right, lt_of_le_of_lt, mul_self_le_mul_self, mul_self_lt_mul_self, not_lt, not_lt.mp, not_lt_of_gt, reduceIte
 -/
@@ -461,7 +473,9 @@ theorem pair_lt_pair_right
   · simp only [pair, h₁, ↓reduceIte, Nat.add_assoc]
     by_cases h₂ : a < b₂; swap; · simp [h₂, h]
     simp only [h₂, ↓reduceIte]
-    rw [Nat.add_comm]; rw [Nat.add_comm _ a]; rw [Nat.add_ass
+    rw [Nat.add_comm]; rw [Nat.add_comm _ a]; rw [Nat.add_assoc]; rw [Nat.add_lt_add_iff_left]
+    rwa [Nat.add_comm, ← sqrt_lt, sqrt_add_eq]
+    exact le_trans (not_lt.mp h₁) (Nat.le_add_left _ _)
 
 中文:
 定理 pair_lt_pair_right
@@ -473,7 +487,9 @@ theorem pair_lt_pair_right
   · simp only [pair, h₁, ↓reduceIte, Nat.add_assoc]
     by_cases h₂ : a < b₂; swap; · simp [h₂, h]
     simp only [h₂, ↓reduceIte]
-    rw [Nat.add_comm]; rw [Nat.add_comm _ a]; rw [Nat.add_ass
+    rw [Nat.add_comm]; rw [Nat.add_comm _ a]; rw [Nat.add_assoc]; rw [Nat.add_lt_add_iff_left]
+    rwa [Nat.add_comm, ← sqrt_lt, sqrt_add_eq]
+    exact le_trans (not_lt.mp h₁) (Nat.le_add_left _ _)
 
 Depends on / 依赖: Nat.add_assoc, Nat.add_comm, Nat.add_lt_add_iff_left, Nat.le_add_left, add_assoc, add_comm, add_lt_add_iff_left, le_add_left, le_trans, lt_trans, mul_self_lt_mul_self, not_lt, not_lt.mp, reduceIte, sqrt_add_eq, sqrt_lt
 -/

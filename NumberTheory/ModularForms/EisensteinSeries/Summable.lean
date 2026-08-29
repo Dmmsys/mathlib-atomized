@@ -273,7 +273,9 @@ lemma r1_aux_bound
   have H1 : (c * z.re + d) ^ 2 + (c * z.im) ^ 2 =
     c ^ 2 * (z.re ^ 2 + z.im ^ 2) + d * 2 * c * z.re + d ^ 2 := by ring
   have H2 : (c ^ 2 * (z.re ^ 2 + z.im ^ 2) + d * 2 * c * z.re + d ^ 2) * (z.re ^ 2 + z.im ^ 2)
-    - z.im ^ 2 = (c * (z.re ^ 2 + z.im ^ 2) + d * z.re) ^ 2 + (d ^ 2 - 1) * z.im
+    - z.im ^ 2 = (c * (z.re ^ 2 + z.im ^ 2) + d * z.re) ^ 2 + (d ^ 2 - 1) * z.im ^ 2 := by ring
+  rw [r1]; rw [H1]; rw [div_le_iff₀ (by positivity)]; rw [← sub_nonneg]; rw [H2]
+  exact add_nonneg (sq_nonneg _) (mul_nonneg (sub_nonneg.mpr hd) (sq_nonneg _))
 
 中文:
 引理 r1_aux_bound
@@ -282,7 +284,9 @@ lemma r1_aux_bound
   have H1 : (c * z.re + d) ^ 2 + (c * z.im) ^ 2 =
     c ^ 2 * (z.re ^ 2 + z.im ^ 2) + d * 2 * c * z.re + d ^ 2 := by ring
   have H2 : (c ^ 2 * (z.re ^ 2 + z.im ^ 2) + d * 2 * c * z.re + d ^ 2) * (z.re ^ 2 + z.im ^ 2)
-    - z.im ^ 2 = (c * (z.re ^ 2 + z.im ^ 2) + d * z.re) ^ 2 + (d ^ 2 - 1) * z.im
+    - z.im ^ 2 = (c * (z.re ^ 2 + z.im ^ 2) + d * z.re) ^ 2 + (d ^ 2 - 1) * z.im ^ 2 := by ring
+  rw [r1]; rw [H1]; rw [div_le_iff₀ (by positivity)]; rw [← sub_nonneg]; rw [H2]
+  exact add_nonneg (sq_nonneg _) (mul_nonneg (sub_nonneg.mpr hd) (sq_nonneg _))
 
 Depends on / 依赖: add_nonneg, mul_nonneg, sq_nonneg, sub_nonneg, sub_nonneg.mpr, z.im, z.re
 -/
@@ -380,7 +384,8 @@ lemma auxbound1
   have H1 : z.im <= √((c * z.re + d) ^ 2 + (c * z).im ^ 2) := by
     rw [Real.le_sqrt' hz]; rw [im_ofReal_mul]; rw [mul_pow]
 exact (le_mul_of_one_le_left (sq_nonneg _) hc).trans le_add_of_nonneg_left (sq_nonneg _)
-  simpa only [r, norm_def, normSq_apply, add_re, re_ofReal_
+  simpa only [r, norm_def, normSq_apply, add_re, re_ofReal_mul, coe_re, ← pow_two, add_im, mul_im,
+    coe_im, ofReal_im, zero_mul, add_zero, min_le_iff] using! Or.inl H1
 
 中文:
 引理 auxbound1
@@ -391,7 +396,8 @@ exact (le_mul_of_one_le_left (sq_nonneg _) hc).trans le_add_of_nonneg_left (sq_n
   have H1 : z.im <= √((c * z.re + d) ^ 2 + (c * z).im ^ 2) := by
     rw [Real.le_sqrt' hz]; rw [im_ofReal_mul]; rw [mul_pow]
 exact (le_mul_of_one_le_left (sq_nonneg _) hc).trans le_add_of_nonneg_left (sq_nonneg _)
-  simpa only [r, norm_def, normSq_apply, add_re, re_ofReal_
+  simpa only [r, norm_def, normSq_apply, add_re, re_ofReal_mul, coe_re, ← pow_two, add_im, mul_im,
+    coe_im, ofReal_im, zero_mul, add_zero, min_le_iff] using! Or.inl H1
 
 Depends on / 依赖: Or.inl, Real.le_sqrt, add_im, add_re, add_zero, coe_im, coe_re, im_ofReal_mul, le_add_of_nonneg_left, le_mul_of_one_le_left, le_sqrt, min_le_iff, mul_im, mul_pow, normSq_apply, norm_def, ofReal_im, pow_two, re_ofReal_mul, sq_nonneg
 -/
@@ -414,7 +420,7 @@ lemma auxbound2
   have H1 : √(r1 z) <= √((c * z.re + d) ^ 2 + (c * z.im) ^ 2) :=
     (Real.sqrt_le_sqrt_iff (by positivity)).mpr (r1_aux_bound _ _ hd)
   simpa only [r, norm_def, normSq_apply, add_re, re_ofReal_mul, coe_re, ofReal_re, ← pow_two,
-    add_im, im_ofReal_mul, coe_im, ofReal_im, add_zero, min_le_iff] 
+    add_im, im_ofReal_mul, coe_im, ofReal_im, add_zero, min_le_iff] using Or.inr H1
 
 中文:
 引理 auxbound2
@@ -424,7 +430,7 @@ lemma auxbound2
   have H1 : √(r1 z) <= √((c * z.re + d) ^ 2 + (c * z.im) ^ 2) :=
     (Real.sqrt_le_sqrt_iff (by positivity)).mpr (r1_aux_bound _ _ hd)
   simpa only [r, norm_def, normSq_apply, add_re, re_ofReal_mul, coe_re, ofReal_re, ← pow_two,
-    add_im, im_ofReal_mul, coe_im, ofReal_im, add_zero, min_le_iff] 
+    add_im, im_ofReal_mul, coe_im, ofReal_im, add_zero, min_le_iff] using Or.inr H1
 
 Depends on / 依赖: Or.inr, Real.sqrt_le_sqrt_iff, add_im, add_re, add_zero, coe_im, coe_re, im_ofReal_mul, min_le_iff, normSq_apply, norm_def, ofReal_im, ofReal_re, pow_two, r1_aux_bound, re_ofReal_mul, sqrt_le_sqrt_iff, z.im, z.re
 -/
@@ -444,7 +450,14 @@ lemma div_max_sq_ge_one
   refine (max_choice (x 0).natAbs (x 1).natAbs).imp (fun H0 => ?_) (fun H1 => ?_)
   · have : x 0 != 0 := by
       rwa [← norm_ne_zero_iff, norm_eq_max_natAbs, H0, Nat.cast_ne_zero, Int.natAbs_ne_zero] at hx
-    simp only [norm_eq_max_natAbs, H0, Nat.cast_natAbs, Int.cast_abs, div_pow, sq_abs, ne_
+    simp only [norm_eq_max_natAbs, H0, Nat.cast_natAbs, Int.cast_abs, div_pow, sq_abs, ne_eq,
+      OfNat.ofNat_ne_zero, not_false_eq_true, pow_eq_zero_iff, Int.cast_eq_zero, this, div_self,
+      le_refl]
+  · have : x 1 != 0 := by
+      rwa [← norm_ne_zero_iff, norm_eq_max_natAbs, H1, Nat.cast_ne_zero, Int.natAbs_ne_zero] at hx
+    simp only [norm_eq_max_natAbs, H1, Nat.cast_natAbs, Int.cast_abs, div_pow, sq_abs, ne_eq,
+      OfNat.ofNat_ne_zero, not_false_eq_true, pow_eq_zero_iff, Int.cast_eq_zero, this, div_self,
+      le_refl]
 
 中文:
 引理 div_max_sq_ge_one
@@ -453,7 +466,14 @@ lemma div_max_sq_ge_one
   refine (max_choice (x 0).natAbs (x 1).natAbs).imp (fun H0 => ?_) (fun H1 => ?_)
   · have : x 0 != 0 := by
       rwa [← norm_ne_zero_iff, norm_eq_max_natAbs, H0, Nat.cast_ne_zero, Int.natAbs_ne_zero] at hx
-    simp only [norm_eq_max_natAbs, H0, Nat.cast_natAbs, Int.cast_abs, div_pow, sq_abs, ne_
+    simp only [norm_eq_max_natAbs, H0, Nat.cast_natAbs, Int.cast_abs, div_pow, sq_abs, ne_eq,
+      OfNat.ofNat_ne_zero, not_false_eq_true, pow_eq_zero_iff, Int.cast_eq_zero, this, div_self,
+      le_refl]
+  · have : x 1 != 0 := by
+      rwa [← norm_ne_zero_iff, norm_eq_max_natAbs, H1, Nat.cast_ne_zero, Int.natAbs_ne_zero] at hx
+    simp only [norm_eq_max_natAbs, H1, Nat.cast_natAbs, Int.cast_abs, div_pow, sq_abs, ne_eq,
+      OfNat.ofNat_ne_zero, not_false_eq_true, pow_eq_zero_iff, Int.cast_eq_zero, this, div_self,
+      le_refl]
 
 Depends on / 依赖: Int.cast_abs, Int.cast_eq_zero, Int.natAbs_ne_zero, Nat.cast_natAbs, Nat.cast_ne_zero, OfNat.ofNat_ne_zero, cast_abs, cast_eq_zero, cast_natAbs, cast_ne_zero, div_pow, div_self, le_refl, max_choice, natAbs, natAbs_ne_zero, ne_eq, norm_eq_max_natAbs, norm_ne_zero_iff, not_false_eq_true
 -/
@@ -482,7 +502,11 @@ lemma r_mul_max_le
   have hn0 : ‖x‖ != 0 := by rwa [norm_ne_zero_iff]
   have h11 : x 0 * (z : Complex) + x 1 = (x 0 / ‖x‖ * z + x 1 / ‖x‖) * ‖x‖ := by
     rw [div_mul_eq_mul_div]; rw [← add_div]; rw [div_mul_cancel₀ _ (mod_cast hn0)]
-  rw [norm_eq_max_natAbs]; rw [h11]; rw [norm_mul]; rw [norm_real]; rw [norm_norm]
+  rw [norm_eq_max_natAbs]; rw [h11]; rw [norm_mul]; rw [norm_real]; rw [norm_norm]; rw [norm_eq_max_natAbs]
+  gcongr
+  · rcases div_max_sq_ge_one x hx with H1 | H2
+    · simpa only [norm_eq_max_natAbs, ofReal_div, ofReal_intCast] using auxbound1 z (x 1 / ‖x‖) H1
+    · simpa only [norm_eq_max_natAbs, ofReal_div, ofReal_intCast] using auxbound2 z (x 0 / ‖x‖) H2
 
 中文:
 引理 r_mul_max_le
@@ -492,7 +516,11 @@ lemma r_mul_max_le
   have hn0 : ‖x‖ != 0 := by rwa [norm_ne_zero_iff]
   have h11 : x 0 * (z : Complex) + x 1 = (x 0 / ‖x‖ * z + x 1 / ‖x‖) * ‖x‖ := by
     rw [div_mul_eq_mul_div]; rw [← add_div]; rw [div_mul_cancel₀ _ (mod_cast hn0)]
-  rw [norm_eq_max_natAbs]; rw [h11]; rw [norm_mul]; rw [norm_real]; rw [norm_norm]
+  rw [norm_eq_max_natAbs]; rw [h11]; rw [norm_mul]; rw [norm_real]; rw [norm_norm]; rw [norm_eq_max_natAbs]
+  gcongr
+  · rcases div_max_sq_ge_one x hx with H1 | H2
+    · simpa only [norm_eq_max_natAbs, ofReal_div, ofReal_intCast] using auxbound1 z (x 1 / ‖x‖) H1
+    · simpa only [norm_eq_max_natAbs, ofReal_div, ofReal_intCast] using auxbound2 z (x 0 / ‖x‖) H2
 
 Depends on / 依赖: add_div, auxbound1, div_max_sq_ge_one, div_mul_eq_mul_div, mod_cast, norm_eq_max_natAbs, norm_mul, norm_ne_zero_iff, norm_norm, norm_real, ofReal_div, ofReal_intCast
 -/
@@ -519,7 +547,8 @@ lemma summand_bound
     · rw [h, Real.rpow_zero, Real.rpow_zero, one_mul]
     · rw [Real.zero_rpow h, mul_zero]
   · rw [← Real.mul_rpow (r_pos _).le (norm_nonneg _)]
-    exact Real.rpow_le_rp
+    exact Real.rpow_le_rpow_of_nonpos (mul_pos (r_pos _) (norm_pos_iff.mpr hx)) (r_mul_max_le z hx)
+      (neg_nonpos.mpr hk)
 
 中文:
 引理 summand_bound
@@ -531,7 +560,8 @@ lemma summand_bound
     · rw [h, Real.rpow_zero, Real.rpow_zero, one_mul]
     · rw [Real.zero_rpow h, mul_zero]
   · rw [← Real.mul_rpow (r_pos _).le (norm_nonneg _)]
-    exact Real.rpow_le_rp
+    exact Real.rpow_le_rpow_of_nonpos (mul_pos (r_pos _) (norm_pos_iff.mpr hx)) (r_mul_max_le z hx)
+      (neg_nonpos.mpr hk)
 
 Depends on / 依赖: Int.cast_zero, Pi.zero_apply, Real.mul_rpow, Real.rpow_le_rpow_of_nonpos, Real.rpow_zero, Real.zero_rpow, add_zero, cast_zero, mul_pos, mul_rpow, mul_zero, neg_nonpos, neg_nonpos.mpr, norm_nonneg, norm_pos_iff, norm_pos_iff.mpr, norm_zero, one_mul, r_mul_max_le, r_pos
 -/
@@ -757,7 +787,16 @@ lemma summable_one_div_norm_rpow
   rw [← (finTwoArrowEquiv _).symm.summable_iff]; rw [summable_partition _ Int.existsUnique_mem_box]
   · simp only [finTwoArrowEquiv_symm_apply, Function.comp_def]
     refine ⟨fun n => (hasSum_fintype (β := box (α := Int × Int) n) _).summable, ?_⟩
-    suffices Summable fun n : Nat => ∑' (_ : box (
+    suffices Summable fun n : Nat => ∑' (_ : box (α := Int × Int) n), (n : Real) ^ (-k) by
+      refine this.congr fun n => tsum_congr fun p => ?_
+      simp only [← Int.mem_box.mp p.2, Nat.cast_max, norm_eq_max_natAbs, Matrix.cons_val_zero,
+        Matrix.cons_val_one]
+    simp only [tsum_fintype, univ_eq_attach, sum_const, card_attach, nsmul_eq_mul]
+    apply ((Real.summable_nat_rpow.mpr (by linarith : 1 - k < -1)).mul_left
+      8).of_norm_bounded_eventually_nat
+    filter_upwards [Filter.eventually_gt_atTop 0] with n hn
+    rw [Int.card_box hn.ne']; rw [Real.norm_of_nonneg (by positivity)]; rw [sub_eq_add_neg]; rw [Real.rpow_add (Nat.cast_pos.mpr hn)]; rw [Real.rpow_one]; rw [Nat.cast_mul]; rw [Nat.cast_ofNat]; rw [mul_assoc]
+  · exact fun n => Real.rpow_nonneg (norm_nonneg _) _
 
 中文:
 引理 summable_one_div_norm_rpow
@@ -766,7 +805,16 @@ lemma summable_one_div_norm_rpow
   rw [← (finTwoArrowEquiv _).symm.summable_iff]; rw [summable_partition _ Int.existsUnique_mem_box]
   · simp only [finTwoArrowEquiv_symm_apply, Function.comp_def]
     refine ⟨fun n => (hasSum_fintype (β := box (α := Int × Int) n) _).summable, ?_⟩
-    suffices Summable fun n : Nat => ∑' (_ : box (
+    suffices Summable fun n : Nat => ∑' (_ : box (α := Int × Int) n), (n : Real) ^ (-k) by
+      refine this.congr fun n => tsum_congr fun p => ?_
+      simp only [← Int.mem_box.mp p.2, Nat.cast_max, norm_eq_max_natAbs, Matrix.cons_val_zero,
+        Matrix.cons_val_one]
+    simp only [tsum_fintype, univ_eq_attach, sum_const, card_attach, nsmul_eq_mul]
+    apply ((Real.summable_nat_rpow.mpr (by linarith : 1 - k < -1)).mul_left
+      8).of_norm_bounded_eventually_nat
+    filter_upwards [Filter.eventually_gt_atTop 0] with n hn
+    rw [Int.card_box hn.ne']; rw [Real.norm_of_nonneg (by positivity)]; rw [sub_eq_add_neg]; rw [Real.rpow_add (Nat.cast_pos.mpr hn)]; rw [Real.rpow_one]; rw [Nat.cast_mul]; rw [Nat.cast_ofNat]; rw [mul_assoc]
+  · exact fun n => Real.rpow_nonneg (norm_nonneg _) _
 
 Depends on / 依赖: Function, Function.comp_def, Int.existsUnique_mem_box, Int.mem_box.mp, Matrix, Matrix.cons_val_one, Matrix.cons_val_zero, Nat.cast_max, Summable, cast_max, comp_def, cons_val_one, cons_val_zero, existsUnique_mem_box, finTwoArrowEquiv, finTwoArrowEquiv_symm_apply, hasSum_fintype, mem_box, norm_eq_max_natAbs, summable
 -/
@@ -963,7 +1011,8 @@ lemma aux_isBigO_linear
   use ‖r ⟨⟨|z.re|, z.im⟩, z.2⟩‖⁻¹
   filter_upwards with m
   apply le_trans (by simpa [Real.rpow_neg_one, add_assoc] using
-    summand_bound_of_mem_verticalStrip zero_le_one ![m 0 + a, m 1
+    summand_bound_of_mem_verticalStrip zero_le_one ![m 0 + a, m 1 + b] z.2 h0)
+  simp [abs_of_pos (r_pos _)]
 
 中文:
 引理 aux_isBigO_linear
@@ -974,7 +1023,8 @@ lemma aux_isBigO_linear
   use ‖r ⟨⟨|z.re|, z.im⟩, z.2⟩‖⁻¹
   filter_upwards with m
   apply le_trans (by simpa [Real.rpow_neg_one, add_assoc] using
-    summand_bound_of_mem_verticalStrip zero_le_one ![m 0 + a, m 1
+    summand_bound_of_mem_verticalStrip zero_le_one ![m 0 + a, m 1 + b] z.2 h0)
+  simp [abs_of_pos (r_pos _)]
 -/
 private lemma aux_isBigO_linear (z : ℍ) (a b : Int) :
     (fun (m : Fin 2 -> Int) => ((m 0 + a : Complex) * z + m 1 + b)⁻¹) =O[cofinite]

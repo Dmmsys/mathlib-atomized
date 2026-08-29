@@ -530,7 +530,13 @@ lemma exists_smul_eq_of_comap_eq
   | inl h =>
     obtain ⟨σ, hσ⟩ := ComplexEmbedding.exists_comp_symm_eq_of_comp_eq w.embedding w'.embedding h
     use σ
-    rw [← mk_embedding w]; rw [← mk_embedding w']; rw [smul_mk]
+    rw [← mk_embedding w]; rw [← mk_embedding w']; rw [smul_mk]; rw [hσ]
+  | inr h =>
+    obtain ⟨σ, hσ⟩ := ComplexEmbedding.exists_comp_symm_eq_of_comp_eq
+      ((starRingEnd Complex).comp (embedding w)) w'.embedding h
+    use σ
+    rw [← mk_embedding w]; rw [← mk_embedding w']; rw [smul_mk]; rw [mk_eq_iff]
+    exact Or.inr hσ
 
 中文:
 引理 存在_smul_eq_of_comap_eq
@@ -541,7 +547,13 @@ lemma exists_smul_eq_of_comap_eq
   | inl h =>
     obtain ⟨σ, hσ⟩ := ComplexEmbedding.exists_comp_symm_eq_of_comp_eq w.embedding w'.embedding h
     use σ
-    rw [← mk_embedding w]; rw [← mk_embedding w']; rw [smul_mk]
+    rw [← mk_embedding w]; rw [← mk_embedding w']; rw [smul_mk]; rw [hσ]
+  | inr h =>
+    obtain ⟨σ, hσ⟩ := ComplexEmbedding.exists_comp_symm_eq_of_comp_eq
+      ((starRingEnd Complex).comp (embedding w)) w'.embedding h
+    use σ
+    rw [← mk_embedding w]; rw [← mk_embedding w']; rw [smul_mk]; rw [mk_eq_iff]
+    exact Or.inr hσ
 
 Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.exists_comp_symm_eq_of_comp_eq, comap_mk, embedding, exists_comp_symm_eq_of_comp_eq, mk_embedding, mk_eq_iff, smul_mk, starRingEnd, w.embedding
 -/
@@ -844,7 +856,7 @@ lemma not_isUnramified_iff
   split_ifs with h₁ h₂ h₂ <;>
     simp only [not_true_eq_false, false_iff, and_self, forall_true_left, IsEmpty.forall_iff,
       not_and, OfNat.one_ne_ofNat, not_false_eq_true, true_iff, OfNat.ofNat_ne_one, h₁, h₂]
-  exact
+  exact h₁ (h₂.comap _)
 
 中文:
 引理 not_isUnramified_iff
@@ -853,7 +865,7 @@ lemma not_isUnramified_iff
   split_ifs with h₁ h₂ h₂ <;>
     simp only [not_true_eq_false, false_iff, and_self, forall_true_left, IsEmpty.forall_iff,
       not_and, OfNat.one_ne_ofNat, not_false_eq_true, true_iff, OfNat.ofNat_ne_one, h₁, h₂]
-  exact
+  exact h₁ (h₂.comap _)
 
 Depends on / 依赖: IsEmpty, IsEmpty.forall_iff, IsUnramified, OfNat.ofNat_ne_one, OfNat.one_ne_ofNat, and_self, false_iff, forall_iff, forall_true_left, not_and, not_false_eq_true, not_isReal_iff_isComplex, not_true_eq_false, ofNat_ne_one, one_ne_ofNat, split_ifs, true_iff
 -/
@@ -1071,7 +1083,10 @@ theorem isRamified_mk_iff_isMixed
   · rcases embedding_mk_eq φ with (hl | hr)
     · exact hl ▸ h.isMixed_embedding
     · rw [← star_star φ]; simpa [← congrArg conjugate hr] using h.isMixed_conjugate_embedding
-  · rw [isRamified_iff, isComplex_iff, comap_mk, isReal_iff, embedding_mk_eq_of_isReal
+  · rw [isRamified_iff, isComplex_iff, comap_mk, isReal_iff, embedding_mk_eq_of_isReal h.1]
+    exact ⟨by rcases embedding_mk_eq φ with (_ | _) <;> aesop, h.1⟩
+
+alias ⟨_, _root_.NumberField.ComplexEmbedding.IsMixed.mk_isRamified⟩ := isRamified_mk_iff_isMixed
 
 中文:
 定理 isRamified_mk_iff_isMixed
@@ -1081,7 +1096,10 @@ theorem isRamified_mk_iff_isMixed
   · rcases embedding_mk_eq φ with (hl | hr)
     · exact hl ▸ h.isMixed_embedding
     · rw [← star_star φ]; simpa [← congrArg conjugate hr] using h.isMixed_conjugate_embedding
-  · rw [isRamified_iff, isComplex_iff, comap_mk, isReal_iff, embedding_mk_eq_of_isReal
+  · rw [isRamified_iff, isComplex_iff, comap_mk, isReal_iff, embedding_mk_eq_of_isReal h.1]
+    exact ⟨by rcases embedding_mk_eq φ with (_ | _) <;> aesop, h.1⟩
+
+alias ⟨_, _root_.NumberField.ComplexEmbedding.IsMixed.mk_isRamified⟩ := isRamified_mk_iff_isMixed
 
 Depends on / 依赖: comap_mk, conjugate, embedding_mk_eq, embedding_mk_eq_of_isReal, h.isMixed_conjugate_embedding, h.isMixed_embedding, isComplex_iff, isMixed_conjugate_embedding, isMixed_embedding, isRamified_iff, isReal_iff, star_star
 -/
@@ -1162,7 +1180,12 @@ theorem isUnramified_mk_iff_isUnmixed
     · exact hl ▸ h.isUnmixed
     · rw [← star_star φ]; simpa [← congrArg conjugate hr] using h.isUnmixed_conjugate
   · rw [isUnramified_iff, isReal_iff]
-    by_cases hv : ComplexEmbedding.IsReal (φ.comp (algebraMap k 
+    by_cases hv : ComplexEmbedding.IsReal (φ.comp (algebraMap k K))
+· exact .inl by simp [embedding_mk_eq_of_isReal, h hv]
+· exact .inr by simpa using (isReal_mk_iff.not.2 hv)
+
+alias ⟨_, _root_.NumberField.ComplexEmbedding.IsUnmixed.mk_isUnramified⟩ :=
+  isUnramified_mk_iff_isUnmixed
 
 中文:
 定理 isUnramified_mk_iff_isUnmixed
@@ -1173,7 +1196,12 @@ theorem isUnramified_mk_iff_isUnmixed
     · exact hl ▸ h.isUnmixed
     · rw [← star_star φ]; simpa [← congrArg conjugate hr] using h.isUnmixed_conjugate
   · rw [isUnramified_iff, isReal_iff]
-    by_cases hv : ComplexEmbedding.IsReal (φ.comp (algebraMap k 
+    by_cases hv : ComplexEmbedding.IsReal (φ.comp (algebraMap k K))
+· exact .inl by simp [embedding_mk_eq_of_isReal, h hv]
+· exact .inr by simpa using (isReal_mk_iff.not.2 hv)
+
+alias ⟨_, _root_.NumberField.ComplexEmbedding.IsUnmixed.mk_isUnramified⟩ :=
+  isUnramified_mk_iff_isUnmixed
 
 Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.IsReal, IsReal, algebraMap, conjugate, embedding_mk_eq, embedding_mk_eq_of_isReal, h.isUnmixed, h.isUnmixed_conjugate, isReal_iff, isReal_mk_iff, isReal_mk_iff.not, isUnmixed, isUnmixed_conjugate, isUnramified_iff, star_star
 -/
@@ -1246,7 +1274,16 @@ lemma isUnramified_mk_iff_forall_isConj
   by_contra hφ
   rw [not_isUnramified_iff] at hφ
   rw [comap_mk]; rw [isReal_mk_iff]; rw [← not_isReal_iff_isComplex]; rw [isReal_mk_iff]; rw [← ComplexEmbedding.isConj_one_iff (k := k)] at hφ
-  let := (φ.comp (algebraMap k K))
+  let := (φ.comp (algebraMap k K)).toAlgebra
+  let := φ.toAlgebra
+  have : IsScalarTower k K Complex := IsScalarTower.of_algebraMap_eq' rfl
+  let φ' : K ->ₐ[k] Complex := { star φ with
+    commutes' := fun r => by simpa using! RingHom.congr_fun hφ.2 r }
+  have : ComplexEmbedding.IsConj φ (AlgHom.restrictNormal' φ' K) :=
+    (RingHom.ext <| AlgHom.restrictNormal_commutes φ' K).symm
+  exact hφ.1 (H _ this ▸ this)
+
+local notation "Stab" => MulAction.stabilizer Gal(K/k)
 
 中文:
 引理 isUnramified_mk_iff_对任意_isConj
@@ -1257,7 +1294,16 @@ lemma isUnramified_mk_iff_forall_isConj
   by_contra hφ
   rw [not_isUnramified_iff] at hφ
   rw [comap_mk]; rw [isReal_mk_iff]; rw [← not_isReal_iff_isComplex]; rw [isReal_mk_iff]; rw [← ComplexEmbedding.isConj_one_iff (k := k)] at hφ
-  let := (φ.comp (algebraMap k K))
+  let := (φ.comp (algebraMap k K)).toAlgebra
+  let := φ.toAlgebra
+  have : IsScalarTower k K Complex := IsScalarTower.of_algebraMap_eq' rfl
+  let φ' : K ->ₐ[k] Complex := { star φ with
+    commutes' := fun r => by simpa using! RingHom.congr_fun hφ.2 r }
+  have : ComplexEmbedding.IsConj φ (AlgHom.restrictNormal' φ' K) :=
+    (RingHom.ext <| AlgHom.restrictNormal_commutes φ' K).symm
+  exact hφ.1 (H _ this ▸ this)
+
+local notation "Stab" => MulAction.stabilizer Gal(K/k)
 
 Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.isConj_one_iff, IsScalarTower, IsScalarTower.of_algebraMap_eq, RingHom, RingHom.congr_fun, algebraMap, comap_mk, commutes, congr_fun, isConj_one_iff, isReal_mk_iff, isUnramified_mk_iff, isUnramified_mk_iff.mp, not_isReal_iff_isComplex, not_isUnramified_iff, of_algebraMap_eq, toAlgebra
 -/
@@ -1290,7 +1336,7 @@ lemma mem_stabilizer_mk_iff
   rw [← ComplexEmbedding.isConj_symm]; rw [ComplexEmbedding.conjugate]; rw [star_eq_iff_star_eq]
   refine or_congr ⟨fun H => ?_, fun H => H ▸ rfl⟩ Iff.rfl
   exact congr_arg AlgEquiv.symm
-    (AlgEquiv.ext (g := AlgEquiv.refl) fun x =>
+    (AlgEquiv.ext (g := AlgEquiv.refl) fun x => φ.injective (RingHom.congr_fun H x))
 
 中文:
 引理 mem_stabilizer_mk_iff
@@ -1300,7 +1346,7 @@ lemma mem_stabilizer_mk_iff
   rw [← ComplexEmbedding.isConj_symm]; rw [ComplexEmbedding.conjugate]; rw [star_eq_iff_star_eq]
   refine or_congr ⟨fun H => ?_, fun H => H ▸ rfl⟩ Iff.rfl
   exact congr_arg AlgEquiv.symm
-    (AlgEquiv.ext (g := AlgEquiv.refl) fun x =>
+    (AlgEquiv.ext (g := AlgEquiv.refl) fun x => φ.injective (RingHom.congr_fun H x))
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ext, AlgEquiv.refl, AlgEquiv.symm, ComplexEmbedding, ComplexEmbedding.conjugate, ComplexEmbedding.isConj_symm, Iff.rfl, MulAction, MulAction.mem_stabilizer_iff, RingHom, RingHom.congr_fun, congr_arg, congr_fun, conjugate, injective, isConj_symm, mem_stabilizer_iff, mk_eq_iff, or_congr
 -/
@@ -1380,7 +1426,9 @@ lemma nat_card_stabilizer_eq_one_or_two
   · left
     trans Nat.card ({1} : Set Gal(K/k))
     · congr with x
-      simp only [SetLike.m
+      simp only [SetLike.mem_coe, mem_stabilizer_mk_iff, Set.mem_singleton_iff, or_iff_left_iff_imp,
+        h x, IsEmpty.forall_iff]
+    · simp
 
 中文:
 引理 nat_card_stabilizer_eq_one_or_two
@@ -1394,7 +1442,9 @@ lemma nat_card_stabilizer_eq_one_or_two
   · left
     trans Nat.card ({1} : Set Gal(K/k))
     · congr with x
-      simp only [SetLike.m
+      simp only [SetLike.mem_coe, mem_stabilizer_mk_iff, Set.mem_singleton_iff, or_iff_left_iff_imp,
+        h x, IsEmpty.forall_iff]
+    · simp
 
 Depends on / 依赖: ComplexEmbedding, ComplexEmbedding.IsConj, IsConj, IsEmpty, IsEmpty.forall_iff, Nat.card, Set.mem_singleton_iff, SetLike, SetLike.coe_sort_coe, SetLike.mem_coe, classical, coe_sort_coe, coe_stabilizer_mk, embedding, forall_iff, mem_coe, mem_singleton_iff, mem_stabilizer_mk_iff, mk_embedding, or_iff_left_iff_imp
 -/
@@ -1785,7 +1835,17 @@ lemma card_isUnramified
     (t := {w : InfinitePlace k | w.IsUnramifiedIn K})]; rw [← smul_eq_mul]; rw [← sum_const]
   · refine sum_congr rfl (fun w hw => ?_)
     obtain ⟨w, rfl⟩ := comap_surjective (K := K) w
-
+    rw [mem_filter_univ] at hw
+    trans #(MulAction.orbit Gal(K/k) w).toFinset
+    · congr; ext w'
+      rw [mem_filter]; rw [mem_filter_univ]; rw [Set.mem_toFinset]; rw [mem_orbit_iff]; rw [@eq_comm _ (comap w' _)]; rw [and_iff_right_iff_imp]
+      intro e; rwa [← isUnramifiedIn_comap, ← e]
+    · rw [Nat.card_eq_fintype_card,
+        ← MulAction.card_orbit_mul_card_stabilizer_eq_card_group _ w,
+        ← Nat.card_eq_fintype_card (α := Stab w), card_stabilizer, if_pos,
+        mul_one, Set.toFinset_card]
+      rwa [← isUnramifiedIn_comap]
+  · simp [Set.MapsTo, isUnramifiedIn_comap]
 
 中文:
 引理 card_isUnramified
@@ -1795,7 +1855,17 @@ lemma card_isUnramified
     (t := {w : InfinitePlace k | w.IsUnramifiedIn K})]; rw [← smul_eq_mul]; rw [← sum_const]
   · refine sum_congr rfl (fun w hw => ?_)
     obtain ⟨w, rfl⟩ := comap_surjective (K := K) w
-
+    rw [mem_filter_univ] at hw
+    trans #(MulAction.orbit Gal(K/k) w).toFinset
+    · congr; ext w'
+      rw [mem_filter]; rw [mem_filter_univ]; rw [Set.mem_toFinset]; rw [mem_orbit_iff]; rw [@eq_comm _ (comap w' _)]; rw [and_iff_right_iff_imp]
+      intro e; rwa [← isUnramifiedIn_comap, ← e]
+    · rw [Nat.card_eq_fintype_card,
+        ← MulAction.card_orbit_mul_card_stabilizer_eq_card_group _ w,
+        ← Nat.card_eq_fintype_card (α := Stab w), card_stabilizer, if_pos,
+        mul_one, Set.toFinset_card]
+      rwa [← isUnramifiedIn_comap]
+  · simp [Set.MapsTo, isUnramifiedIn_comap]
 
 Depends on / 依赖: Finset, Finset.card_eq_sum_card_fiberwise, InfinitePlace, IsGalois, IsGalois.card_aut_eq_finrank, IsUnramifiedIn, MulAction, MulAction.orbit, Set.mem_toFinset, algebraMap, and_iff_, card_aut_eq_finrank, card_eq_sum_card_fiberwise, comap_surjective, eq_comm, mem_filter, mem_filter_univ, mem_orbit_iff, mem_toFinset, smul_eq_mul
 -/
@@ -1830,7 +1900,18 @@ lemma card_isUnramified_compl
   rw [← IsGalois.card_aut_eq_finrank]; rw [Finset.card_eq_sum_card_fiberwise (f := (comap · (algebraMap k K)))
     (t := ({w : InfinitePlace k | w.IsUnramifiedIn K} : Finset _)ᶜ)]; rw [← smul_eq_mul]; rw [← sum_const]
   · refine sum_congr rfl (fun w hw => ?_)
-    obtain ⟨w, rfl⟩ := comap_surjecti
+    obtain ⟨w, rfl⟩ := comap_surjective (K := K) w
+    rw [compl_filter]; rw [mem_filter_univ] at hw
+    trans Finset.card (MulAction.orbit Gal(K/k) w).toFinset
+    · congr; ext w'
+      rw [mem_filter]; rw [compl_filter]; rw [mem_filter_univ]; rw [@eq_comm _ (comap w' _)]; rw [Set.mem_toFinset]; rw [mem_orbit_iff]; rw [and_iff_right_iff_imp]
+      intro e; rwa [← isUnramifiedIn_comap, ← e]
+    · rw [Nat.card_eq_fintype_card,
+        ← MulAction.card_orbit_mul_card_stabilizer_eq_card_group _ w,
+        ← Nat.card_eq_fintype_card (α := Stab w), InfinitePlace.card_stabilizer, if_neg,
+        Nat.mul_div_cancel _ zero_lt_two, Set.toFinset_card]
+      rwa [← isUnramifiedIn_comap]
+  · simp [Set.MapsTo, isUnramifiedIn_comap]
 
 中文:
 引理 card_isUnramified_compl
@@ -1839,7 +1920,18 @@ lemma card_isUnramified_compl
   rw [← IsGalois.card_aut_eq_finrank]; rw [Finset.card_eq_sum_card_fiberwise (f := (comap · (algebraMap k K)))
     (t := ({w : InfinitePlace k | w.IsUnramifiedIn K} : Finset _)ᶜ)]; rw [← smul_eq_mul]; rw [← sum_const]
   · refine sum_congr rfl (fun w hw => ?_)
-    obtain ⟨w, rfl⟩ := comap_surjecti
+    obtain ⟨w, rfl⟩ := comap_surjective (K := K) w
+    rw [compl_filter]; rw [mem_filter_univ] at hw
+    trans Finset.card (MulAction.orbit Gal(K/k) w).toFinset
+    · congr; ext w'
+      rw [mem_filter]; rw [compl_filter]; rw [mem_filter_univ]; rw [@eq_comm _ (comap w' _)]; rw [Set.mem_toFinset]; rw [mem_orbit_iff]; rw [and_iff_right_iff_imp]
+      intro e; rwa [← isUnramifiedIn_comap, ← e]
+    · rw [Nat.card_eq_fintype_card,
+        ← MulAction.card_orbit_mul_card_stabilizer_eq_card_group _ w,
+        ← Nat.card_eq_fintype_card (α := Stab w), InfinitePlace.card_stabilizer, if_neg,
+        Nat.mul_div_cancel _ zero_lt_two, Set.toFinset_card]
+      rwa [← isUnramifiedIn_comap]
+  · simp [Set.MapsTo, isUnramifiedIn_comap]
 
 Depends on / 依赖: Finset, Finset.card, Finset.card_eq_sum_card_fiberwise, InfinitePlace, IsGalois, IsGalois.card_aut_eq_finrank, IsUnramifiedIn, MulAction, MulAction.orbit, algebraMap, card_aut_eq_finrank, card_eq_sum_card_fiberwise, comap_surjective, compl_filter, eq_comm, mem_filter, mem_filter_univ, smul_eq_mul, sum_congr, sum_const
 -/
@@ -2088,7 +2180,7 @@ lemma IsUnramifiedAtInfinitePlaces.card_infinitePlace
   rw [InfinitePlace.card_eq_card_isUnramifiedIn (k := k) (K := K)]; rw [Finset.filter_true_of_mem]; rw [Finset.card_univ]; rw [Finset.card_eq_zero.mpr]; rw [zero_mul]; rw [add_zero]
   · exact Finset.compl_univ
   simp only [Finset.mem_univ, forall_true_left]
-  exact InfinitePlace.isUnr
+  exact InfinitePlace.isUnramifiedIn K
 
 中文:
 引理 是UnramifiedAtInfinitePlaces.card_infinitePlace
@@ -2098,7 +2190,7 @@ lemma IsUnramifiedAtInfinitePlaces.card_infinitePlace
   rw [InfinitePlace.card_eq_card_isUnramifiedIn (k := k) (K := K)]; rw [Finset.filter_true_of_mem]; rw [Finset.card_univ]; rw [Finset.card_eq_zero.mpr]; rw [zero_mul]; rw [add_zero]
   · exact Finset.compl_univ
   simp only [Finset.mem_univ, forall_true_left]
-  exact InfinitePlace.isUnr
+  exact InfinitePlace.isUnramifiedIn K
 
 Depends on / 依赖: Finset, Finset.card_eq_zero.mpr, Finset.card_univ, Finset.compl_univ, Finset.filter_true_of_mem, Finset.mem_univ, InfinitePlace, InfinitePlace.card_eq_card_isUnramifiedIn, InfinitePlace.isUnramifiedIn, add_zero, card_eq_card_isUnramifiedIn, card_eq_zero, card_univ, classical, compl_univ, filter_true_of_mem, forall_true_left, isUnramifiedIn, mem_univ, zero_mul
 -/
@@ -2528,14 +2620,16 @@ theorem bijOn_sumElim_conjugate
   proof: ⟨.sumElim embedding_mem_mixedEmbeddingsOver conjugate_embedding_mem_mixedEmbeddingsOver,
     (embedding_injective L).injOn.sumElim (star_injective.comp (embedding_injective L)).injOn
       (fun _ _ _ h => h.2.ne_conjugate), fun ψ h => by cases embedding_mk_eq ψ with
-        | inl hl => simpa using .
+        | inl hl => simpa using .inl ⟨mk ψ, mk_mem_ramifiedPlacesOver h, hl⟩
+        | inr hr => simpa using .inr ⟨mk ψ, mk_mem_ramifiedPlacesOver h, by aesop⟩⟩
 
 中文:
 定理 bijOn_sumElim_conjugate
   证明: ⟨.sumElim embedding_mem_mixedEmbeddingsOver conjugate_embedding_mem_mixedEmbeddingsOver,
     (embedding_injective L).injOn.sumElim (star_injective.comp (embedding_injective L)).injOn
       (fun _ _ _ h => h.2.ne_conjugate), fun ψ h => by cases embedding_mk_eq ψ with
-        | inl hl => simpa using .
+        | inl hl => simpa using .inl ⟨mk ψ, mk_mem_ramifiedPlacesOver h, hl⟩
+        | inr hr => simpa using .inr ⟨mk ψ, mk_mem_ramifiedPlacesOver h, by aesop⟩⟩
 
 Depends on / 依赖: conjugate_embedding_mem_mixedEmbeddingsOver, embedding_injective, embedding_mem_mixedEmbeddingsOver, embedding_mk_eq, injOn.sumElim, mk_mem_ramifiedPlacesOver, ne_conjugate, star_injective, star_injective.comp, sumElim
 -/
@@ -2634,7 +2728,7 @@ theorem mapsTo_embeddingConjugateIte
   · simpa [embeddingConjugateIte_pos h] using ⟨h, hw.isUnmixed⟩
   · simpa [embeddingConjugateIte_neg h] using
       ⟨⟨(LiesOver.embedding_comp_eq_or_conjugate_embedding_comp_eq w v).resolve_left
-        (liesOver_
+        (liesOver_iff.not.1 h)⟩, hw.isUnmixed_conjugate⟩
 
 中文:
 定理 mapsTo_embeddingConjugateIte
@@ -2645,7 +2739,7 @@ theorem mapsTo_embeddingConjugateIte
   · simpa [embeddingConjugateIte_pos h] using ⟨h, hw.isUnmixed⟩
   · simpa [embeddingConjugateIte_neg h] using
       ⟨⟨(LiesOver.embedding_comp_eq_or_conjugate_embedding_comp_eq w v).resolve_left
-        (liesOver_
+        (liesOver_iff.not.1 h)⟩, hw.isUnmixed_conjugate⟩
 -/
 private theorem mapsTo_embeddingConjugateIte : (unramifiedPlacesOver L v).MapsTo
     (embeddingConjugateIte v) (unmixedEmbeddingsOver L v.embedding) := by
@@ -2740,7 +2834,11 @@ theorem unramifedPlacesOver_ncard_add_eq_finrank
   proof: by
   classical
   let : Algebra K Complex := v.embedding.toAlgebra
-  rw [← AlgHom.card K L Complex]; rw [ramifiedPlacesOver_ncard]; rw [unramifiedPlacesOver_ncard]; rw [← Set.ncard_union_eq (disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOver L v.embedding)]; rw [union_unmixedEmbeddingsOver_mixedEmbed
+  rw [← AlgHom.card K L Complex]; rw [ramifiedPlacesOver_ncard]; rw [unramifiedPlacesOver_ncard]; rw [← Set.ncard_union_eq (disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOver L v.embedding)]; rw [union_unmixedEmbeddingsOver_mixedEmbeddingsOver]; rw [Set.ncard_eq_toFinset_card]
+  apply (card_nbij AlgHom.toRingHom (fun σ _ => by simpa using ⟨by aesop⟩)
+    AlgHom.coe_ringHom_injective.injOn (fun ψ hψ => ?_)).symm
+  simp only [Set.Finite.toFinset_ofPred, coe_filter, mem_univ, true_and, Set.mem_ofPred_eq] at hψ
+  exact ⟨⟨ψ, fun _ => by simp [RingHom.algebraMap_toAlgebra, ← hψ.over]⟩, by simp⟩
 
 中文:
 定理 unramifedPlacesOver_ncard_add_eq_finrank
@@ -2748,7 +2846,11 @@ theorem unramifedPlacesOver_ncard_add_eq_finrank
   证明: by
   classical
   let : Algebra K Complex := v.embedding.toAlgebra
-  rw [← AlgHom.card K L Complex]; rw [ramifiedPlacesOver_ncard]; rw [unramifiedPlacesOver_ncard]; rw [← Set.ncard_union_eq (disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOver L v.embedding)]; rw [union_unmixedEmbeddingsOver_mixedEmbed
+  rw [← AlgHom.card K L Complex]; rw [ramifiedPlacesOver_ncard]; rw [unramifiedPlacesOver_ncard]; rw [← Set.ncard_union_eq (disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOver L v.embedding)]; rw [union_unmixedEmbeddingsOver_mixedEmbeddingsOver]; rw [Set.ncard_eq_toFinset_card]
+  apply (card_nbij AlgHom.toRingHom (fun σ _ => by simpa using ⟨by aesop⟩)
+    AlgHom.coe_ringHom_injective.injOn (fun ψ hψ => ?_)).symm
+  simp only [Set.Finite.toFinset_ofPred, coe_filter, mem_univ, true_and, Set.mem_ofPred_eq] at hψ
+  exact ⟨⟨ψ, fun _ => by simp [RingHom.algebraMap_toAlgebra, ← hψ.over]⟩, by simp⟩
 
 Depends on / 依赖: AlgHom, AlgHom.card, AlgHom.coe_ringHom_injective.injOn, AlgHom.toRingHom, Algebra, Finite, Set.Finite.toFinset_, Set.ncard_eq_toFinset_card, Set.ncard_union_eq, card_nbij, classical, coe_ringHom_injective, disjoint_unmixedEmbeddingsOver_mixedEmbeddingsOver, embedding, ncard_eq_toFinset_card, ncard_union_eq, ramifiedPlacesOver_ncard, toAlgebra, toFinset_, toRingHom
 -/

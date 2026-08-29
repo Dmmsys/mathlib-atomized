@@ -38,7 +38,8 @@ theorem exist_openNormalSubgroup_sub_clopen_nhds_of_one
   rcases exist_openSubgroup_sub_clopen_nhds_of_one WClopen einW with ⟨H, hH⟩
   have : Subgroup.FiniteIndex H.toSubgroup := H.finiteIndex_of_finite_quotient
   use { toSubgroup := Subgroup.normalCore H
-        isOpen' := Subgroup.isOpen_of_isClosed_of_finiteIndex _ (H.normalCore_isClosed H.isClosed
+        isOpen' := Subgroup.isOpen_of_isClosed_of_finiteIndex _ (H.normalCore_isClosed H.isClosed) }
+  exact fun _ b => hH (H.normalCore_le b)
 
 中文:
 定理 exist_openNormalSubgroup_sub_clopen_nhds_of_one
@@ -47,7 +48,8 @@ theorem exist_openNormalSubgroup_sub_clopen_nhds_of_one
   rcases exist_openSubgroup_sub_clopen_nhds_of_one WClopen einW with ⟨H, hH⟩
   have : Subgroup.FiniteIndex H.toSubgroup := H.finiteIndex_of_finite_quotient
   use { toSubgroup := Subgroup.normalCore H
-        isOpen' := Subgroup.isOpen_of_isClosed_of_finiteIndex _ (H.normalCore_isClosed H.isClosed
+        isOpen' := Subgroup.isOpen_of_isClosed_of_finiteIndex _ (H.normalCore_isClosed H.isClosed) }
+  exact fun _ b => hH (H.normalCore_le b)
 
 Depends on / 依赖: FiniteIndex, H.finiteIndex_of_finite_quotient, H.isClosed, H.normalCore_isClosed, H.normalCore_le, H.toSubgroup, Subgroup, Subgroup.FiniteIndex, Subgroup.isOpen_of_isClosed_of_finiteIndex, Subgroup.normalCore, WClopen, exist_openSubgroup_sub_clopen_nhds_of_one, finiteIndex_of_finite_quotient, isClosed, isOpen, isOpen_of_isClosed_of_finiteIndex, normalCore, normalCore_isClosed, normalCore_le, toSubgroup
 -/
@@ -121,7 +123,18 @@ theorem closedSubgroup_eq_sInf_open
     have UOpen : IsOpen U :=
       ((Homeomorph.mulLeft g).isClosedMap _ H.isClosed').isOpen_compl
     have einU : 1 in U := by
-      refine Set.mem_compl (fun ⟨l, hl, (hgl : g
+      refine Set.mem_compl (fun ⟨l, hl, (hgl : g * l = 1)⟩ => ?_)
+      rw [← inv_eq_iff_mul_eq_one] at hgl
+exact hg_not inv_mem_iff.mp (hgl ▸ hl)
+    obtain ⟨N, hN⟩ := exist_openNormalSubgroup_sub_open_nhds_of_one UOpen einU
+    let NH : Subgroup G := N ⊔ H
+    have hg_not' : g ∉ NH := by
+      by_contra hg'
+      rcases Subgroup.mem_sup_of_normal_left.mp hg' with ⟨y, hy, z, hz, hyz⟩
+      rw [← eq_mul_inv_iff_mul_eq] at hyz
+exact hN (hyz ▸ hy) mem_leftCoset g (inv_mem_iff.mpr hz)
+exact hg_not'
+      Subgroup.mem_sInf.mp hg _ ⟨Subgroup.isOpen_mono le_sup_left N.isOpen, le_sup_right⟩
 
 中文:
 定理 closedSubgroup_eq_sInf_open
@@ -135,7 +148,18 @@ theorem closedSubgroup_eq_sInf_open
     have UOpen : IsOpen U :=
       ((Homeomorph.mulLeft g).isClosedMap _ H.isClosed').isOpen_compl
     have einU : 1 in U := by
-      refine Set.mem_compl (fun ⟨l, hl, (hgl : g
+      refine Set.mem_compl (fun ⟨l, hl, (hgl : g * l = 1)⟩ => ?_)
+      rw [← inv_eq_iff_mul_eq_one] at hgl
+exact hg_not inv_mem_iff.mp (hgl ▸ hl)
+    obtain ⟨N, hN⟩ := exist_openNormalSubgroup_sub_open_nhds_of_one UOpen einU
+    let NH : Subgroup G := N ⊔ H
+    have hg_not' : g ∉ NH := by
+      by_contra hg'
+      rcases Subgroup.mem_sup_of_normal_left.mp hg' with ⟨y, hy, z, hz, hyz⟩
+      rw [← eq_mul_inv_iff_mul_eq] at hyz
+exact hN (hyz ▸ hy) mem_leftCoset g (inv_mem_iff.mpr hz)
+exact hg_not'
+      Subgroup.mem_sInf.mp hg _ ⟨Subgroup.isOpen_mono le_sup_left N.isOpen, le_sup_right⟩
 
 Depends on / 依赖: H.isClosed, Homeomorph, Homeomorph.mulLeft, IsOpen, Set.mem_compl, Subgroup, exist_openNormalSubgroup_sub_open_nhds_of_one, hg_not, inv_eq_iff_mul_eq_one, inv_mem_iff, inv_mem_iff.mp, isClosed, isClosedMap, isOpen_compl, le_antisymm, le_sInf, mem_compl, mulLeft
 -/

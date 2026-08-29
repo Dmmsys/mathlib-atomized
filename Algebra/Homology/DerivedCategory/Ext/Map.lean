@@ -65,7 +65,12 @@ lemma DerivedCategory.map_triangleOfSESδ
   proof: by
   have := CochainComplex.mappingCone.quasiIso_descShortComplex hS
   rw [← cancel_epi (F.mapDerivedCategory.map
-    (Q.map (CochainComplex.mappingCone.descShortComplex S)))]; rw [← Functor.map_comp]; rw [descShortComplex_triangleOfSESδ]; rw [F.mapDerivedCategoryFactors_hom_naturality_assoc]; rw [←
+    (Q.map (CochainComplex.mappingCone.descShortComplex S)))]; rw [← Functor.map_comp]; rw [descShortComplex_triangleOfSESδ]; rw [F.mapDerivedCategoryFactors_hom_naturality_assoc]; rw [← CochainComplex.mappingCone.mapHomologicalComplexIso_hom_descShortComplex]; rw [Functor.map_comp_assoc]; rw [descShortComplex_triangleOfSESδ_assoc]
+  dsimp
+  rw [← Functor.map_comp_assoc]
+  rw [← CochainComplex.mappingCone.map_δ]; rw [Functor.map_comp_assoc]; rw [← F.mapDerivedCategoryFactors_hom_naturality_assoc]; rw [Functor.map_comp]
+  simp [NatTrans.shift_app, Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_comp_inv_app,
+    ← Functor.map_comp_assoc]
 
 中文:
 引理 导出范畴.map_triangleOfSESδ
@@ -73,7 +78,12 @@ lemma DerivedCategory.map_triangleOfSESδ
   证明: by
   have := CochainComplex.mappingCone.quasiIso_descShortComplex hS
   rw [← cancel_epi (F.mapDerivedCategory.map
-    (Q.map (CochainComplex.mappingCone.descShortComplex S)))]; rw [← Functor.map_comp]; rw [descShortComplex_triangleOfSESδ]; rw [F.mapDerivedCategoryFactors_hom_naturality_assoc]; rw [←
+    (Q.map (CochainComplex.mappingCone.descShortComplex S)))]; rw [← Functor.map_comp]; rw [descShortComplex_triangleOfSESδ]; rw [F.mapDerivedCategoryFactors_hom_naturality_assoc]; rw [← CochainComplex.mappingCone.mapHomologicalComplexIso_hom_descShortComplex]; rw [Functor.map_comp_assoc]; rw [descShortComplex_triangleOfSESδ_assoc]
+  dsimp
+  rw [← Functor.map_comp_assoc]
+  rw [← CochainComplex.mappingCone.map_δ]; rw [Functor.map_comp_assoc]; rw [← F.mapDerivedCategoryFactors_hom_naturality_assoc]; rw [Functor.map_comp]
+  simp [NatTrans.shift_app, Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_comp_inv_app,
+    ← Functor.map_comp_assoc]
 
 Depends on / 依赖: CochainComplex, CochainComplex.map, CochainComplex.mappingCone.descShortComplex, CochainComplex.mappingCone.mapHomologicalComplexIso_hom_descShortComplex, CochainComplex.mappingCone.quasiIso_descShortComplex, F.mapDerivedCategory.map, F.mapDerivedCategoryFactors_hom_naturality_assoc, Functor, Functor.map_comp, Functor.map_comp_assoc, Q.map, cancel_epi, descShortComplex, mapDerivedCategory, mapDerivedCategoryFactors_hom_naturality_assoc, mapHomologicalComplexIso_hom_descShortComplex, map_comp, map_comp_assoc, mappingCone, quasiIso_descShortComplex
 -/
@@ -105,7 +115,13 @@ lemma ShortComplex.ShortExact.mapShiftedHom_singleδ'
   simp only [Functor.map_comp, Category.assoc, Functor.commShiftIso_hom_naturality,
     DerivedCategory.map_triangleOfSESδ, singleFunctorsPostcompQIso_hom_hom,
     singleFunctorsPostcompQIso_inv_hom]
-  generalize_proofs _ _ _ _ _ _ h1 _ _ 
+  generalize_proofs _ _ _ _ _ _ h1 _ _ h2
+  dsimp [CochainComplex.singleFunctors]
+  rw [Functor.map_id]; rw [Category.id_comp]; rw [Functor.mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_app_assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Functor.map_id]; rw [Functor.map_id]; rw [Category.id_comp]; rw [← Functor.map_comp]; rw [F.mapDerivedCategoryFactors_inv_app_mapDerivedCategorySingleFunctor_hom_app]; rw [dsimp% triangleOfSESδ_naturality h1 h2
+      (S.mapNatTrans (F.mapCochainComplexSingleFunctor 0).hom)]; rw [← Functor.map_comp_assoc]
+  simp
+
+#adaptation_note
 
 中文:
 引理 短复形.短正合.mapShiftedHom_singleδ'
@@ -114,7 +130,13 @@ lemma ShortComplex.ShortExact.mapShiftedHom_singleδ'
   simp only [Functor.map_comp, Category.assoc, Functor.commShiftIso_hom_naturality,
     DerivedCategory.map_triangleOfSESδ, singleFunctorsPostcompQIso_hom_hom,
     singleFunctorsPostcompQIso_inv_hom]
-  generalize_proofs _ _ _ _ _ _ h1 _ _ 
+  generalize_proofs _ _ _ _ _ _ h1 _ _ h2
+  dsimp [CochainComplex.singleFunctors]
+  rw [Functor.map_id]; rw [Category.id_comp]; rw [Functor.mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_app_assoc]; rw [Iso.inv_hom_id_app_assoc]; rw [Functor.map_id]; rw [Functor.map_id]; rw [Category.id_comp]; rw [← Functor.map_comp]; rw [F.mapDerivedCategoryFactors_inv_app_mapDerivedCategorySingleFunctor_hom_app]; rw [dsimp% triangleOfSESδ_naturality h1 h2
+      (S.mapNatTrans (F.mapCochainComplexSingleFunctor 0).hom)]; rw [← Functor.map_comp_assoc]
+  simp
+
+#adaptation_note
 
 Depends on / 依赖: Category, Category.assoc, Category.id_comp, CochainComplex, CochainComplex.singleFunctors, DerivedCategory, DerivedCategory.map_triangleOfSES, Functor, Functor.commShiftIso_hom_naturality, Functor.mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_app_assoc, Functor.map_comp, Functor.map_id, Iso.inv_hom_id_app_assoc, ShiftedHom, ShiftedHom.map, ShortComplex, ShortComplex.ShortExact.single, ShortExact, commShiftIso_hom_naturality, generalize_proofs
 -/
@@ -227,7 +249,13 @@ lemma Abelian.Ext.mapExactFunctor_hom
     ((F.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism
       (ComplexShape.up Int)).equiv_smallShiftedHomMap DerivedCategory.Q DerivedCategory.Q
         ((F.mapCochainComplexSingleFunctor 0).app X) ((F.mapCochainComplexSingleFunctor 0).app Y)
-        
+          F.mapDerivedCategory F.mapDerivedCategoryFactors.symm e)
+  rw [this]; rw [← ShiftedHom.comp_mk₀ _ 0 rfl]; rw [← ShiftedHom.mk₀_comp 0 rfl]
+  congr 2
+  · simp [← F.mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_app_assoc,
+      CochainComplex.singleFunctor, CochainComplex.singleFunctors]
+  · simp [CochainComplex.singleFunctor, CochainComplex.singleFunctors,
+      ← Functor.mapDerivedCategoryFactors_inv_app_mapDerivedCategorySingleFunctor_hom_app]
 
 中文:
 引理 交换.Ext.mapExactFunctor_hom
@@ -236,7 +264,13 @@ lemma Abelian.Ext.mapExactFunctor_hom
     ((F.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism
       (ComplexShape.up Int)).equiv_smallShiftedHomMap DerivedCategory.Q DerivedCategory.Q
         ((F.mapCochainComplexSingleFunctor 0).app X) ((F.mapCochainComplexSingleFunctor 0).app Y)
-        
+          F.mapDerivedCategory F.mapDerivedCategoryFactors.symm e)
+  rw [this]; rw [← ShiftedHom.comp_mk₀ _ 0 rfl]; rw [← ShiftedHom.mk₀_comp 0 rfl]
+  congr 2
+  · simp [← F.mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_app_assoc,
+      CochainComplex.singleFunctor, CochainComplex.singleFunctors]
+  · simp [CochainComplex.singleFunctor, CochainComplex.singleFunctors,
+      ← Functor.mapDerivedCategoryFactors_inv_app_mapDerivedCategorySingleFunctor_hom_app]
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, DerivedCategory, DerivedCategory.Q, F.mapCochainComplexSingleFunctor, F.mapDerivedCategory, F.mapDerivedCategoryFactors.symm, F.mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_a, F.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism, ShiftedHom, ShiftedHom.comp_mk, ShiftedHom.mk, e.mapExactFunctor, equiv_smallShiftedHomMap, mapCochainComplexSingleFunctor, mapDerivedCategory, mapDerivedCategoryFactors, mapDerivedCategorySingleFunctor_inv_app_mapDerivedCategoryFactors_hom_a, mapExactFunctor, mapHomologicalComplexUpToQuasiIsoLocalizerMorphism
 -/
@@ -484,7 +518,8 @@ lemma mapExactFunctor_mk₀
     ((F.mapCochainComplexSingleFunctor 0).app X) ((F.mapCochainComplexSingleFunctor 0).app Y)
     (0 : Int) rfl]
   congr
-  simpa only [Functor.mapHomologicalComplexUpTo
+  simpa only [Functor.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism_functor,
+    Functor.mapCochainComplexSingleFunctor, Iso.app_inv, Iso.app_hom] using! NatIso.naturality_1 _ f
 
 中文:
 引理 mapExactFunctor_mk₀
@@ -495,7 +530,8 @@ lemma mapExactFunctor_mk₀
     ((F.mapCochainComplexSingleFunctor 0).app X) ((F.mapCochainComplexSingleFunctor 0).app Y)
     (0 : Int) rfl]
   congr
-  simpa only [Functor.mapHomologicalComplexUpTo
+  simpa only [Functor.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism_functor,
+    Functor.mapCochainComplexSingleFunctor, Iso.app_inv, Iso.app_hom] using! NatIso.naturality_1 _ f
 
 Depends on / 依赖: Ext.mapExactFunctor, F.mapCochainComplexSingleFunctor, F.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism, Functor, Functor.mapCochainComplexSingleFunctor, Functor.mapHomologicalComplexUpToQuasiIsoLocalizerMorphism_functor, Iso.app_hom, Iso.app_inv, NatIso, NatIso.naturality_1, app_hom, app_inv, mapCochainComplexSingleFunctor, mapExactFunctor, mapHomologicalComplexUpToQuasiIsoLocalizerMorphism, mapHomologicalComplexUpToQuasiIsoLocalizerMorphism_functor, naturality_1
 -/

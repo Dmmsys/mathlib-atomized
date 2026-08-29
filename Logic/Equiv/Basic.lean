@@ -330,7 +330,10 @@ Subtype.val_injective
         · rw [← hx]; rfl
         · rfl
   right_inv x :=
-    funext fun ⟨a, 
+    funext fun ⟨a, h⟩ =>
+      show dite (p a) _ _ = _ by
+        dsimp only
+        rw [dif_neg h]
 
 中文:
 定义 subtypePreimage
@@ -345,7 +348,10 @@ Subtype.val_injective
         · rw [← hx]; rfl
         · rfl
   right_inv x :=
-    funext fun ⟨a, 
+    funext fun ⟨a, h⟩ =>
+      show dite (p a) _ _ = _ by
+        dsimp only
+        rw [dif_neg h]
 -/
 def subtypePreimage : { x : α -> β // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } -> β) where
   toFun (x : { x : α -> β // x ∘ Subtype.val = x₀ }) a := (x : α -> β) a
@@ -623,7 +629,8 @@ definition sigmaNatSucc
     @Sigma.casesOn Nat f (fun _ => f 0 oplus Σ n, f (n + 1)) x fun n =>
       @Nat.casesOn (fun i => f i -> f 0 oplus Σ n : Nat, f (n + 1)) n (fun x : f 0 => Sum.inl x)
         fun (n : Nat) (x : f n.succ) => Sum.inr ⟨n, x⟩,
-    Sum.elim (Sigma.mk 0) (Sigma.map Nat.succ fun _ => id), by ri
+    Sum.elim (Sigma.mk 0) (Sigma.map Nat.succ fun _ => id), by rintro ⟨n | n, x⟩ <;> rfl, by
+    rintro (x | ⟨n, x⟩) <;> rfl⟩
 
 中文:
 定义 sigma自然数Succ
@@ -632,7 +639,8 @@ definition sigmaNatSucc
     @Sigma.casesOn Nat f (fun _ => f 0 oplus Σ n, f (n + 1)) x fun n =>
       @Nat.casesOn (fun i => f i -> f 0 oplus Σ n : Nat, f (n + 1)) n (fun x : f 0 => Sum.inl x)
         fun (n : Nat) (x : f n.succ) => Sum.inr ⟨n, x⟩,
-    Sum.elim (Sigma.mk 0) (Sigma.map Nat.succ fun _ => id), by ri
+    Sum.elim (Sigma.mk 0) (Sigma.map Nat.succ fun _ => id), by rintro ⟨n | n, x⟩ <;> rfl, by
+    rintro (x | ⟨n, x⟩) <;> rfl⟩
 
 Depends on / 依赖: Nat.casesOn, Nat.succ, Sigma.casesOn, Sigma.map, Sigma.mk, Sum.elim, Sum.inl, Sum.inr, casesOn, n.succ
 -/
@@ -1197,7 +1205,11 @@ definition sigmaSubtypeFiberEquivSubtype
           apply sigmaCongrRight
           intro y
           apply Equiv.symm
-          refine (subtypeSubtypeEquivSubtypeExists _ _).trans (subtypeEquivRight ?_
+          refine (subtypeSubtypeEquivSubtypeExists _ _).trans (subtypeEquivRight ?_)
+          intro x
+          exact ⟨fun ⟨hp, h'⟩ => congr_arg Subtype.val h', fun h' => ⟨(h x).2 (h'.symm ▸ y.2),
+            Subtype.ext h'⟩⟩ }
+    _ ≃ Subtype p := sigmaFiberEquiv fun x : Subtype p => (⟨f x, (h x).1 x.property⟩ : Subtype q)
 
 中文:
 定义 sigmaSubtypeFiberEquivSubtype
@@ -1208,7 +1220,11 @@ definition sigmaSubtypeFiberEquivSubtype
           apply sigmaCongrRight
           intro y
           apply Equiv.symm
-          refine (subtypeSubtypeEquivSubtypeExists _ _).trans (subtypeEquivRight ?_
+          refine (subtypeSubtypeEquivSubtypeExists _ _).trans (subtypeEquivRight ?_)
+          intro x
+          exact ⟨fun ⟨hp, h'⟩ => congr_arg Subtype.val h', fun h' => ⟨(h x).2 (h'.symm ▸ y.2),
+            Subtype.ext h'⟩⟩ }
+    _ ≃ Subtype p := sigmaFiberEquiv fun x : Subtype p => (⟨f x, (h x).1 x.property⟩ : Subtype q)
 
 Depends on / 依赖: Equiv.symm, Subtype, Subtype.ext, Subtype.mk, Subtype.val, congr_arg, property, sigmaCongrRight, sigmaFiberEquiv, subtypeEquivRight, subtypeSubtypeEquivSubtypeExists, x.property
 -/
@@ -1410,7 +1426,8 @@ definition sigmaSigmaSubtype
   _ ≃ _ := subtypeEquiv (p := fun ⟨a, b, c⟩ => p ⟨a, b⟩) (q := (p ·.1))
     (sigmaAssoc γ).symm fun s => by simp [sigmaAssoc]
   _ ≃ _ := subtypeSigmaEquiv _ _
-  _ ≃ _ := uniqueSigma (fun ab => γ (Sigma.fst <| Subtype.val ab) (Sigma.snd <| Subt
+  _ ≃ _ := uniqueSigma (fun ab => γ (Sigma.fst <| Subtype.val ab) (Sigma.snd <| Subtype.val ab))
+_ ≃ γ a b := Equiv.cast by rw [← show ⟨⟨a, b⟩, h⟩ = uniq.default from uniq.uniq _]
 
 中文:
 定义 sigmaSigmaSubtype
@@ -1419,7 +1436,8 @@ definition sigmaSigmaSubtype
   _ ≃ _ := subtypeEquiv (p := fun ⟨a, b, c⟩ => p ⟨a, b⟩) (q := (p ·.1))
     (sigmaAssoc γ).symm fun s => by simp [sigmaAssoc]
   _ ≃ _ := subtypeSigmaEquiv _ _
-  _ ≃ _ := uniqueSigma (fun ab => γ (Sigma.fst <| Subtype.val ab) (Sigma.snd <| Subt
+  _ ≃ _ := uniqueSigma (fun ab => γ (Sigma.fst <| Subtype.val ab) (Sigma.snd <| Subtype.val ab))
+_ ≃ γ a b := Equiv.cast by rw [← show ⟨⟨a, b⟩, h⟩ = uniq.default from uniq.uniq _]
 
 Depends on / 依赖: Equiv.cast, Fin.sum_univ_eq_sum_range, Sigma.fst, Sigma.snd, Subtype, Subtype.val, _def, bernoulli, sigmaAssoc, subtypeEquiv, subtypeSigmaEquiv, sum_univ_eq_sum_range, uniq.default, uniq.uniq, uniqueSigma
 -/
@@ -1558,7 +1576,9 @@ definition subtypeEquivCodomain
         @Equiv.unique _ _
           (show Unique { x' // x' = x } from {
             default := ⟨x, rfl⟩, uniq := fun ⟨_, h⟩ => Subtype.val_injective h })
-          (subtypeEquivRight fun _ => not_n
+          (subtypeEquivRight fun _ => not_not)
+
+@[simp]
 
 中文:
 定义 subtypeEquivCodomain
@@ -1569,7 +1589,9 @@ definition subtypeEquivCodomain
         @Equiv.unique _ _
           (show Unique { x' // x' = x } from {
             default := ⟨x, rfl⟩, uniq := fun ⟨_, h⟩ => Subtype.val_injective h })
-          (subtypeEquivRight fun _ => not_n
+          (subtypeEquivRight fun _ => not_not)
+
+@[simp]
 
 Depends on / 依赖: Equiv.unique, Subtype, Subtype.val_injective, Unique, _def, bernoulli, funUnique, not_not, subtypeEquivRight, subtypePreimage, sum_range_succ, sum_range_zero, unique, val_injective
 -/
@@ -1899,7 +1921,14 @@ definition subtypeQuotientEquivQuotientSubtype
       a.2
   invFun a :=
     Quotient.liftOn a (fun a => (⟨⟦a.1⟧, (hp₂ _).1 a.2⟩ : { x // p₂ x })) fun _ _ hab =>
-      Subty
+      Subtype.ext (Quotient.sound ((h _ _).1 hab))
+  left_inv a := by
+    obtain ⟨a, ha⟩ := a
+    induction a using Quotient.inductionOn
+    rfl
+  right_inv a := by induction a using Quotient.inductionOn; rfl
+
+@[simp]
 
 中文:
 定义 subtypeQuotientEquivQuotientSubtype
@@ -1910,7 +1939,14 @@ definition subtypeQuotientEquivQuotientSubtype
       a.2
   invFun a :=
     Quotient.liftOn a (fun a => (⟨⟦a.1⟧, (hp₂ _).1 a.2⟩ : { x // p₂ x })) fun _ _ hab =>
-      Subty
+      Subtype.ext (Quotient.sound ((h _ _).1 hab))
+  left_inv a := by
+    obtain ⟨a, ha⟩ := a
+    induction a using Quotient.inductionOn
+    rfl
+  right_inv a := by induction a using Quotient.inductionOn; rfl
+
+@[simp]
 
 Depends on / 依赖: Quotient, Quotient.hrecOn, Quotient.inductionOn, Quotient.liftOn, Quotient.sound, Subtype, Subtype.ext, heq_of_eq, hfunext, hrecOn, inductionOn, invFun, left_inv, liftOn, right_inv
 -/
@@ -2580,6 +2616,8 @@ lemma image_swap_of_mem_of_notMem
       · rw [swap_apply_left]; exact ⟨.inl rfl, (ne_of_mem_of_not_mem hi hj).symm⟩
       · rw [swap_apply_of_ne_of_ne ne (ne_of_mem_of_not_mem ha hj)]; exact ⟨.inr ha, ne⟩
     · rintro ⟨rfl | has, hai⟩
+      · exact ⟨i, hi, swap_apply_left ..⟩
+      · exact ⟨a, has, swap_apply_of_ne_of_ne hai (ne_of_mem_of_not_mem has hj)⟩
 
 中文:
 引理 image_swap_of_mem_of_notMem
@@ -2591,6 +2629,8 @@ lemma image_swap_of_mem_of_notMem
       · rw [swap_apply_left]; exact ⟨.inl rfl, (ne_of_mem_of_not_mem hi hj).symm⟩
       · rw [swap_apply_of_ne_of_ne ne (ne_of_mem_of_not_mem ha hj)]; exact ⟨.inr ha, ne⟩
     · rintro ⟨rfl | has, hai⟩
+      · exact ⟨i, hi, swap_apply_left ..⟩
+      · exact ⟨a, has, swap_apply_of_ne_of_ne hai (ne_of_mem_of_not_mem has hj)⟩
 
 Depends on / 依赖: Set.ext, eq_or_ne, ne_of_mem_of_not_mem, swap_apply_left, swap_apply_of_ne_of_ne
 -/

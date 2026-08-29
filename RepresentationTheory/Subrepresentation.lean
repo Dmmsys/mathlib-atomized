@@ -350,7 +350,9 @@ definition asSubmodule
     | add x y hx hy => rw [add_smul]; exact σ.toSubmodule.add_mem' hx hy
     | single g a =>
       rw [Representation.single_smul]
-      exact σ.toSubmodule.smul_mem' a (σ.
+      exact σ.toSubmodule.smul_mem' a (σ.apply_mem_toSubmodule g hv)
+
+@[simp]
 
 中文:
 定义 asSubmodule
@@ -362,7 +364,9 @@ definition asSubmodule
     | add x y hx hy => rw [add_smul]; exact σ.toSubmodule.add_mem' hx hy
     | single g a =>
       rw [Representation.single_smul]
-      exact σ.toSubmodule.smul_mem' a (σ.
+      exact σ.toSubmodule.smul_mem' a (σ.apply_mem_toSubmodule g hv)
+
+@[simp]
 
 Depends on / 依赖: toSubmodule
 -/
@@ -406,7 +410,11 @@ definition asSubmodule'
     | zero => rw [zero_smul]; exact σ.toSubmodule.zero_mem'
     | add x y hx hy => rw [add_smul]; exact σ.toSubmodule.add_mem' hx hy
     | single g a =>
-      rw [← mul_one a]; rw [← smul_eq_mul]; rw [← 
+      rw [← mul_one a]; rw [← smul_eq_mul]; rw [← MonoidAlgebra.smul_single]; rw [Algebra.smul_def]; rw [mul_smul]
+exact σ.toSubmodule.smul_mem' ((algebraMap A A) a) by
+        simpa [Representation.ofModule, RestrictScalars.lsmul] using! σ.apply_mem_toSubmodule g hm
+
+@[simp]
 
 中文:
 定义 asSubmodule'
@@ -417,7 +425,11 @@ definition asSubmodule'
     | zero => rw [zero_smul]; exact σ.toSubmodule.zero_mem'
     | add x y hx hy => rw [add_smul]; exact σ.toSubmodule.add_mem' hx hy
     | single g a =>
-      rw [← mul_one a]; rw [← smul_eq_mul]; rw [← 
+      rw [← mul_one a]; rw [← smul_eq_mul]; rw [← MonoidAlgebra.smul_single]; rw [Algebra.smul_def]; rw [mul_smul]
+exact σ.toSubmodule.smul_mem' ((algebraMap A A) a) by
+        simpa [Representation.ofModule, RestrictScalars.lsmul] using! σ.apply_mem_toSubmodule g hm
+
+@[simp]
 -/
 def asSubmodule' (σ : Subrepresentation (Representation.ofModule (k := A) (G := G) M)) :
     Submodule A[G] M where
@@ -512,7 +524,10 @@ definition ofSubmodule'
     let _ : Module A[G] W := ρ.instModuleMonoidAlgebraAsModule
     have h : (MonoidAlgebra.single g (1 : A)) • w in N :=
       Submodule.smul_of_tower_mem N _ hw
-    rw [Repr
+    rw [Representation.single_smul]; rw [one_smul] at h
+    exact h
+
+@[simp]
 
 中文:
 定义 ofSubmodule'
@@ -523,7 +538,10 @@ definition ofSubmodule'
     let _ : Module A[G] W := ρ.instModuleMonoidAlgebraAsModule
     have h : (MonoidAlgebra.single g (1 : A)) • w in N :=
       Submodule.smul_of_tower_mem N _ hw
-    rw [Repr
+    rw [Representation.single_smul]; rw [one_smul] at h
+    exact h
+
+@[simp]
 -/
 def ofSubmodule' (N : Submodule A[G] ρ.asModule) : Subrepresentation ρ where
   toSubmodule := { N with

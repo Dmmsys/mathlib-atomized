@@ -185,7 +185,7 @@ theorem isCountablyCompact_iff_seq_clusterPt
     exact ⟨a, ha, hxa.clusterPt.mono hx⟩
 
 alias ⟨IsCountablyCompact.seq_clusterPt,
-  IsCountablyCompact.of_seq_clusterPt⟩ := isCountably
+  IsCountablyCompact.of_seq_clusterPt⟩ := isCountablyCompact_iff_seq_clusterPt
 
 中文:
 定理 isCountablyCompact_iff_seq_clusterPt
@@ -196,7 +196,7 @@ alias ⟨IsCountablyCompact.seq_clusterPt,
     exact ⟨a, ha, hxa.clusterPt.mono hx⟩
 
 alias ⟨IsCountablyCompact.seq_clusterPt,
-  IsCountablyCompact.of_seq_clusterPt⟩ := isCountably
+  IsCountablyCompact.of_seq_clusterPt⟩ := isCountablyCompact_iff_seq_clusterPt
 
 Depends on / 依赖: tendsto_principal, tendsto_principal.mpr
 -/
@@ -224,7 +224,13 @@ theorem IsCountablyCompact.elim_directed_cover
 fun i j => (hdU i j).imp fun _ ⟨hi, hj⟩ => ⟨principal_mono.mpr sdiff_subset_sdiff_right hi,
 principal_mono.mpr sdiff_subset_sdiff_right hj⟩
   have : NeBot (⨅ i, 𝓟 (A \ U i)) :=
-    iInf_neBot_of_directed' hdir fun i => (sdiff_
+    iInf_neBot_of_directed' hdir fun i => (sdiff_nonempty.mpr (h i)).principal_neBot
+  have hle : (⨅ i, 𝓟 (A \ U i)) <= 𝓟 A :=
+iInf_le_of_le ‹Nonempty ι›.some principal_mono.mpr sdiff_subset
+  rcases hA hle with ⟨a, ha, hac⟩
+  rcases mem_iUnion.mp (hAU ha) with ⟨k, hk⟩
+  exact closure_minimal (fun _ hx => hx.2) (hUo k).isClosed_compl
+    (hac.mono (iInf_le _ k)).mem_closure hk
 
 中文:
 定理 IsCountablyCompact.elim_directed_cover
@@ -235,7 +241,13 @@ principal_mono.mpr sdiff_subset_sdiff_right hj⟩
 fun i j => (hdU i j).imp fun _ ⟨hi, hj⟩ => ⟨principal_mono.mpr sdiff_subset_sdiff_right hi,
 principal_mono.mpr sdiff_subset_sdiff_right hj⟩
   have : NeBot (⨅ i, 𝓟 (A \ U i)) :=
-    iInf_neBot_of_directed' hdir fun i => (sdiff_
+    iInf_neBot_of_directed' hdir fun i => (sdiff_nonempty.mpr (h i)).principal_neBot
+  have hle : (⨅ i, 𝓟 (A \ U i)) <= 𝓟 A :=
+iInf_le_of_le ‹Nonempty ι›.some principal_mono.mpr sdiff_subset
+  rcases hA hle with ⟨a, ha, hac⟩
+  rcases mem_iUnion.mp (hAU ha) with ⟨k, hk⟩
+  exact closure_minimal (fun _ hx => hx.2) (hUo k).isClosed_compl
+    (hac.mono (iInf_le _ k)).mem_closure hk
 
 Depends on / 依赖: Directed, Nonempty, iInf_le_of_le, iInf_neBot_of_directed, mem_iUnion, mem_iUnion.mp, principal_mono, principal_mono.mpr, principal_neBot, sdiff_nonempty, sdiff_nonempty.mpr, sdiff_subset, sdiff_subset_sdiff_right
 -/
@@ -293,6 +305,14 @@ theorem isCountablyCompact_iff_countable_open_cover
     let V : Nat -> Set E := fun n => (closure (x '' Ici n))ᶜ
     have hVmono : Monotone V := fun _ _ hmn =>
 compl_subset_compl.2 closure_mono image_mono Ici_subset_Ici.2 hmn
+    simp only [mapClusterPt_atTop_iff_forall_mem_closure, not_forall] at hac
+    have hAV : A subseteq ⋃ n, V n := fun a haA => mem_iUnion.2 (hac a haA)
+    obtain ⟨t, ht⟩ := h V (fun _ => isClosed_closure.isOpen_compl) hAV
+    obtain ⟨N, hN⟩ := eventually_atTop.mp hx
+    let m := max N (t.sup id)
+    obtain ⟨j, hjt, hjV⟩ := mem_iUnion₂.mp (ht (hN m (le_max_left _ _)))
+    have hxmV : x m in V m := hVmono ((Finset.le_sup hjt).trans (le_max_right _ _)) hjV
+    exact hxmV (subset_closure ⟨m, mem_Ici.mpr le_rfl, rfl⟩)
 
 中文:
 定理 isCountablyCompact_iff_countable_open_cover
@@ -303,6 +323,14 @@ compl_subset_compl.2 closure_mono image_mono Ici_subset_Ici.2 hmn
     let V : Nat -> Set E := fun n => (closure (x '' Ici n))ᶜ
     have hVmono : Monotone V := fun _ _ hmn =>
 compl_subset_compl.2 closure_mono image_mono Ici_subset_Ici.2 hmn
+    simp only [mapClusterPt_atTop_iff_forall_mem_closure, not_forall] at hac
+    have hAV : A subseteq ⋃ n, V n := fun a haA => mem_iUnion.2 (hac a haA)
+    obtain ⟨t, ht⟩ := h V (fun _ => isClosed_closure.isOpen_compl) hAV
+    obtain ⟨N, hN⟩ := eventually_atTop.mp hx
+    let m := max N (t.sup id)
+    obtain ⟨j, hjt, hjV⟩ := mem_iUnion₂.mp (ht (hN m (le_max_left _ _)))
+    have hxmV : x m in V m := hVmono ((Finset.le_sup hjt).trans (le_max_right _ _)) hjV
+    exact hxmV (subset_closure ⟨m, mem_Ici.mpr le_rfl, rfl⟩)
 
 Depends on / 依赖: elim_finite_subcover, hA.elim_finite_subcover
 -/
@@ -337,7 +365,9 @@ theorem IsCountablyCompact.elim_finite_subcover_image
   simp only [Subtype.forall', biUnion_eq_iUnion] at hUo hAU
   replace hb := hb.to_subtype
   obtain ⟨d, hd⟩ := hA.elim_finite_subcover hUo hAU
-  refine ⟨Subtype.val '' (d : Set b)
+  refine ⟨Subtype.val '' (d : Set b), ?_, d.finite_toSet.image _, ?_⟩
+  · simp
+  · rwa [biUnion_image]
 
 中文:
 定理 IsCountablyCompact.elim_finite_subcover_image
@@ -348,7 +378,9 @@ theorem IsCountablyCompact.elim_finite_subcover_image
   simp only [Subtype.forall', biUnion_eq_iUnion] at hUo hAU
   replace hb := hb.to_subtype
   obtain ⟨d, hd⟩ := hA.elim_finite_subcover hUo hAU
-  refine ⟨Subtype.val '' (d : Set b)
+  refine ⟨Subtype.val '' (d : Set b), ?_, d.finite_toSet.image _, ?_⟩
+  · simp
+  · rwa [biUnion_image]
 
 Depends on / 依赖: Subtype, Subtype.forall, Subtype.val, biUnion_eq_iUnion, biUnion_image, d.finite_toSet.image, elim_finite_subcover, finite_toSet, hA.elim_finite_subcover, hb.to_subtype, i.prop, replace, to_subtype
 -/
@@ -455,7 +487,7 @@ theorem IsCountablyCompact.image
     comap_inf_principal_neBot_of_image_mem hl_nebot (le_principal_iff.mp hle)
   obtain ⟨x, hxA, hx⟩ := hA (f := l.comap f ⊓ 𝓟 A) inf_le_right
   have := (hx.mono inf_le_left).neBot
-  exact ⟨f x, mem_image_of_mem f hxA, (hf.continu
+  exact ⟨f x, mem_image_of_mem f hxA, (hf.continuousAt.inf tendsto_comap).neBot⟩
 
 中文:
 定理 IsCountablyCompact.像
@@ -466,7 +498,7 @@ theorem IsCountablyCompact.image
     comap_inf_principal_neBot_of_image_mem hl_nebot (le_principal_iff.mp hle)
   obtain ⟨x, hxA, hx⟩ := hA (f := l.comap f ⊓ 𝓟 A) inf_le_right
   have := (hx.mono inf_le_left).neBot
-  exact ⟨f x, mem_image_of_mem f hxA, (hf.continu
+  exact ⟨f x, mem_image_of_mem f hxA, (hf.continuousAt.inf tendsto_comap).neBot⟩
 
 Depends on / 依赖: comap_inf_principal_neBot_of_image_mem, continuousAt, hf.continuousAt.inf, hl_count, hl_nebot, hx.mono, inf_le_left, inf_le_right, l.comap, le_principal_iff, le_principal_iff.mp, mem_image_of_mem, tendsto_comap
 -/
@@ -650,7 +682,9 @@ theorem Topology.IsInducing.isSeqCompact_iff
     suffices f ∘ y ∘ φ = x ∘ φ from this ▸ (hf.continuous.tendsto a).comp hφ.2
     grind
   mpr hA x hx := by
-    obtain ⟨fa, hfa, ⟨φ, hφ⟩⟩ := hA (fun n => mem_image_
+    obtain ⟨fa, hfa, ⟨φ, hφ⟩⟩ := hA (fun n => mem_image_of_mem f (hx n))
+    choose a ha using hfa
+    exact ⟨a, ha.1, φ, hφ.1, hf.tendsto_nhds_iff.2 (ha.2 ▸ hφ.2)⟩
 
 中文:
 定理 拓扑.是Inducing.isSeqCompact_iff
@@ -662,7 +696,9 @@ theorem Topology.IsInducing.isSeqCompact_iff
     suffices f ∘ y ∘ φ = x ∘ φ from this ▸ (hf.continuous.tendsto a).comp hφ.2
     grind
   mpr hA x hx := by
-    obtain ⟨fa, hfa, ⟨φ, hφ⟩⟩ := hA (fun n => mem_image_
+    obtain ⟨fa, hfa, ⟨φ, hφ⟩⟩ := hA (fun n => mem_image_of_mem f (hx n))
+    choose a ha using hfa
+    exact ⟨a, ha.1, φ, hφ.1, hf.tendsto_nhds_iff.2 (ha.2 ▸ hφ.2)⟩
 
 Depends on / 依赖: continuous, hf.continuous.tendsto, hf.tendsto_nhds_iff, mem_image_of_mem, tendsto, tendsto_nhds_iff
 -/
@@ -840,7 +876,10 @@ theorem IsCountablyCompact.exists_accPt_of_infinite
   have hx_inj : Function.Injective x := Subtype.val_injective.comp f.injective
   obtain ⟨a, haA, hac⟩ :=
     IsCountablyCompact.seq_clusterPt hA x (Eventually.of_forall (fun n => hBA (f n).2))
-refine ⟨a, haA, accPt_iff_clusterPt.2 ClusterPt
+refine ⟨a, haA, accPt_iff_clusterPt.2 ClusterPt.mono hac le_inf ?_ ?_⟩
+· exact tendsto_principal.mpr Nat.cofinite_eq_atTop ▸
+      ((Set.finite_singleton a).preimage hx_inj.injOn).compl_mem_cofinite
+· exact tendsto_principal.mpr Eventually.of_forall fun n => (f n).2
 
 中文:
 定理 IsCountablyCompact.存在_accPt_of_infinite
@@ -850,7 +889,10 @@ refine ⟨a, haA, accPt_iff_clusterPt.2 ClusterPt
   have hx_inj : Function.Injective x := Subtype.val_injective.comp f.injective
   obtain ⟨a, haA, hac⟩ :=
     IsCountablyCompact.seq_clusterPt hA x (Eventually.of_forall (fun n => hBA (f n).2))
-refine ⟨a, haA, accPt_iff_clusterPt.2 ClusterPt
+refine ⟨a, haA, accPt_iff_clusterPt.2 ClusterPt.mono hac le_inf ?_ ?_⟩
+· exact tendsto_principal.mpr Nat.cofinite_eq_atTop ▸
+      ((Set.finite_singleton a).preimage hx_inj.injOn).compl_mem_cofinite
+· exact tendsto_principal.mpr Eventually.of_forall fun n => (f n).2
 
 Depends on / 依赖: ClusterPt, ClusterPt.mono, Eventually, Eventually.of_forall, Function, Function.Injective, Injective, IsCountablyCompact, IsCountablyCompact.seq_clusterPt, Nat.cofinite_eq_atTop, Set.finite_singleton, Subtype, Subtype.val_injective.comp, accPt_iff_clusterPt, cofinite_eq_atTop, compl_mem_cofinite, f.injective, finite_singleton, hB.natEmbedding, hx_inj
 -/
@@ -879,7 +921,16 @@ theorem isCountablyCompact_iff_infinite_subset_has_accPt
     rw [← Nat.cofinite_eq_atTop] at hx ⊢
     by_cases! hfin : (Set.range x).Finite
     · -- Case 1: Finite range
-      suffices exists a in range x inter A, MapClusterPt a cofinite x by aes
+      suffices exists a in range x inter A, MapClusterPt a cofinite x by aesop
+.isCompact.exists_mapClusterPt_of_frequently exact hfin.inter_of_left A
+        hx.frequently.mp (by simp)
+    · -- Case 2: Infinite range
+obtain ⟨a, haA, hacc⟩ := h (Set.range x inter A) inter_subset_right by
+        rw [eventually_iff]; rw [mem_cofinite]; rw [compl_ofPred] at hx
+        exact hfin.inter_of_finite_sdiff (hx.image x |>.subset (by grind))
+      refine ⟨a, haA, ?_⟩
+      simp_rw [mapClusterPt_iff_frequently, frequently_cofinite_iff_infinite]
+.of_image x .mono (by grind) exact fun s hs => Infinite.of_accPt (hacc.nhds_inter hs)
 
 中文:
 定理 isCountablyCompact_iff_infinite_subset_has_accPt
@@ -890,7 +941,16 @@ theorem isCountablyCompact_iff_infinite_subset_has_accPt
     rw [← Nat.cofinite_eq_atTop] at hx ⊢
     by_cases! hfin : (Set.range x).Finite
     · -- Case 1: Finite range
-      suffices exists a in range x inter A, MapClusterPt a cofinite x by aes
+      suffices exists a in range x inter A, MapClusterPt a cofinite x by aesop
+.isCompact.exists_mapClusterPt_of_frequently exact hfin.inter_of_left A
+        hx.frequently.mp (by simp)
+    · -- Case 2: Infinite range
+obtain ⟨a, haA, hacc⟩ := h (Set.range x inter A) inter_subset_right by
+        rw [eventually_iff]; rw [mem_cofinite]; rw [compl_ofPred] at hx
+        exact hfin.inter_of_finite_sdiff (hx.image x |>.subset (by grind))
+      refine ⟨a, haA, ?_⟩
+      simp_rw [mapClusterPt_iff_frequently, frequently_cofinite_iff_infinite]
+.of_image x .mono (by grind) exact fun s hs => Infinite.of_accPt (hacc.nhds_inter hs)
 
 Depends on / 依赖: exists_accPt_of_infinite, hA.exists_accPt_of_infinite
 -/
@@ -926,7 +986,8 @@ theorem IsLindelof.isCompact
     obtain ⟨t, ht⟩ := isCountablyCompact_iff_countable_open_cover.1 hA (U ∘ f)
       (fun n => hUo (f n)) hf
     classical
-    exact ⟨t.image f, b
+    exact ⟨t.image f, by simp_all⟩
+  · exact ⟨∅, by simp_all⟩
 
 中文:
 定理 IsLindelof.isCompact
@@ -938,7 +999,8 @@ theorem IsLindelof.isCompact
     obtain ⟨t, ht⟩ := isCountablyCompact_iff_countable_open_cover.1 hA (U ∘ f)
       (fun n => hUo (f n)) hf
     classical
-    exact ⟨t.image f, b
+    exact ⟨t.image f, by simp_all⟩
+  · exact ⟨∅, by simp_all⟩
 
 Depends on / 依赖: Nonempty, classical, hl.indexed_countable_subcover, indexed_countable_subcover, isCompact_of_finite_subcover, isCountablyCompact_iff_countable_open_cover, t.image
 -/
@@ -1011,7 +1073,10 @@ theorem IsCountablyCompact.union
   intro U hUo hAU
   obtain ⟨t₁, ht₁, hA_sub⟩ : exists (t₁ : Set Nat), t₁.Finite ∧ A subseteq ⋃ k in t₁, U k :=
     hA U hUo (subset_union_left.trans hAU)
-  obtain ⟨t₂, ht₂, hB_sub⟩ : exists (t₂ : Set Nat), t₂.Finite ∧ B subseteq ⋃ k i
+  obtain ⟨t₂, ht₂, hB_sub⟩ : exists (t₂ : Set Nat), t₂.Finite ∧ B subseteq ⋃ k in t₂, U k :=
+    hB U hUo (subset_union_right.trans hAU)
+  have h : (⋃ k in t₁, U k) union (⋃ k in t₂, U k) = ⋃ k in (t₁ union t₂), U k := by ext; aesop
+  exact ⟨t₁ union t₂, ht₁.union ht₂, h ▸ union_subset_union hA_sub hB_sub⟩
 
 中文:
 定理 IsCountablyCompact.union
@@ -1021,7 +1086,10 @@ theorem IsCountablyCompact.union
   intro U hUo hAU
   obtain ⟨t₁, ht₁, hA_sub⟩ : exists (t₁ : Set Nat), t₁.Finite ∧ A subseteq ⋃ k in t₁, U k :=
     hA U hUo (subset_union_left.trans hAU)
-  obtain ⟨t₂, ht₂, hB_sub⟩ : exists (t₂ : Set Nat), t₂.Finite ∧ B subseteq ⋃ k i
+  obtain ⟨t₂, ht₂, hB_sub⟩ : exists (t₂ : Set Nat), t₂.Finite ∧ B subseteq ⋃ k in t₂, U k :=
+    hB U hUo (subset_union_right.trans hAU)
+  have h : (⋃ k in t₁, U k) union (⋃ k in t₂, U k) = ⋃ k in (t₁ union t₂), U k := by ext; aesop
+  exact ⟨t₁ union t₂, ht₁.union ht₂, h ▸ union_subset_union hA_sub hB_sub⟩
 
 Depends on / 依赖: Finite, hA_sub, hB_sub, isCountablyCompact_iff_countable_open_cover, subset_union_left, subset_union_left.trans, subset_union_right, subset_union_right.trans, subseteq, union_subset_union
 -/

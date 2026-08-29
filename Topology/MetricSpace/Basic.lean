@@ -467,7 +467,7 @@ theorem secondCountable_of_countable_discretization
   refine ⟨range Finv, ⟨countable_range _, fun x => ?_⟩⟩
   let x' := Finv ⟨F x, mem_range_self _⟩
   have : F x' = F x := apply_rangeSplitting F _
-  exact ⟨x', mem_range_se
+  exact ⟨x', mem_range_self _, hF _ _ this.symm⟩
 
 中文:
 定理 secondCountable_of_countable_discretization
@@ -479,7 +479,7 @@ theorem secondCountable_of_countable_discretization
   refine ⟨range Finv, ⟨countable_range _, fun x => ?_⟩⟩
   let x' := Finv ⟨F x, mem_range_self _⟩
   have : F x' = F x := apply_rangeSplitting F _
-  exact ⟨x', mem_range_se
+  exact ⟨x', mem_range_self _, hF _ _ this.symm⟩
 
 Depends on / 依赖: apply_rangeSplitting, countable_range, mem_range_self, rangeSplitting, secondCountable_of_almost_dense_set, this.symm
 -/

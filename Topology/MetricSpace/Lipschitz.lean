@@ -1115,7 +1115,33 @@ theorem LipschitzOnWith.extend_real
   /- An extension is given by `g y = Inf {f x + K * dist y x | x ∈ s}`. Taking `x = y`, one has
     `g y ≤ f y` for `y ∈ s`, and the other inequality holds because `f` is `K`-Lipschitz, so that it
     cannot counterbalance the growth of `K * dist y x`. One readily checks from the formula that
-   
+    the extended function is also `K`-Lipschitz. -/
+  rcases eq_empty_or_nonempty s with (rfl | hs)
+  · exact ⟨fun _ => 0, (LipschitzWith.const _).weaken zero_le, eqOn_empty _ _⟩
+  have : Nonempty s := by simp only [hs, nonempty_coe_sort]
+  let g := fun y : α => iInf fun x : s => f x + K * dist y x
+  have B : forall y : α, BddBelow (range fun x : s => f x + K * dist y x) := fun y => by
+    rcases hs with ⟨z, hz⟩
+    refine ⟨f z - K * dist y z, ?_⟩
+    rintro w ⟨t, rfl⟩
+    dsimp
+    rw [sub_le_iff_le_add]; rw [add_assoc]; rw [← mul_add]; rw [add_comm (dist y t)]
+    calc
+      f z <= f t + K * dist z t := hf.le_add_mul hz t.2
+      _ <= f t + K * (dist y z + dist y t) := by gcongr; apply dist_triangle_left
+  have E : EqOn f g s := fun x hx => by
+    refine le_antisymm (le_ciInf fun y => hf.le_add_mul hx y.2) ?_
+    simpa only [add_zero, Subtype.coe_mk, mul_zero, dist_self] using ciInf_le (B x) ⟨x, hx⟩
+  refine ⟨g, LipschitzWith.of_le_add_mul K fun x y => ?_, E⟩
+  rw [← sub_le_iff_le_add]
+  refine le_ciInf fun z => ?_
+  rw [sub_le_iff_le_add]
+  calc
+    g x <= f z + K * dist x z := ciInf_le (B x) _
+    _ <= f z + K * dist y z + K * dist x y := by
+      rw [add_assoc]; rw [← mul_add]; rw [add_comm (dist y z)]
+      gcongr
+      apply dist_triangle
 
 中文:
 定理 LipschitzOnWith.extend_real
@@ -1124,7 +1150,33 @@ theorem LipschitzOnWith.extend_real
   /- An extension is given by `g y = Inf {f x + K * dist y x | x ∈ s}`. Taking `x = y`, one has
     `g y ≤ f y` for `y ∈ s`, and the other inequality holds because `f` is `K`-Lipschitz, so that it
     cannot counterbalance the growth of `K * dist y x`. One readily checks from the formula that
-   
+    the extended function is also `K`-Lipschitz. -/
+  rcases eq_empty_or_nonempty s with (rfl | hs)
+  · exact ⟨fun _ => 0, (LipschitzWith.const _).weaken zero_le, eqOn_empty _ _⟩
+  have : Nonempty s := by simp only [hs, nonempty_coe_sort]
+  let g := fun y : α => iInf fun x : s => f x + K * dist y x
+  have B : forall y : α, BddBelow (range fun x : s => f x + K * dist y x) := fun y => by
+    rcases hs with ⟨z, hz⟩
+    refine ⟨f z - K * dist y z, ?_⟩
+    rintro w ⟨t, rfl⟩
+    dsimp
+    rw [sub_le_iff_le_add]; rw [add_assoc]; rw [← mul_add]; rw [add_comm (dist y t)]
+    calc
+      f z <= f t + K * dist z t := hf.le_add_mul hz t.2
+      _ <= f t + K * (dist y z + dist y t) := by gcongr; apply dist_triangle_left
+  have E : EqOn f g s := fun x hx => by
+    refine le_antisymm (le_ciInf fun y => hf.le_add_mul hx y.2) ?_
+    simpa only [add_zero, Subtype.coe_mk, mul_zero, dist_self] using ciInf_le (B x) ⟨x, hx⟩
+  refine ⟨g, LipschitzWith.of_le_add_mul K fun x y => ?_, E⟩
+  rw [← sub_le_iff_le_add]
+  refine le_ciInf fun z => ?_
+  rw [sub_le_iff_le_add]
+  calc
+    g x <= f z + K * dist x z := ciInf_le (B x) _
+    _ <= f z + K * dist y z + K * dist x y := by
+      rw [add_assoc]; rw [← mul_add]; rw [add_comm (dist y z)]
+      gcongr
+      apply dist_triangle
 -/
 theorem LipschitzOnWith.extend_real {f : α -> Real} {s : Set α} {K : Real>=0} (hf : LipschitzOnWith K f s) :
     exists g : α -> Real, LipschitzWith K g ∧ EqOn f g s := by
@@ -1170,7 +1222,12 @@ theorem LipschitzOnWith.extend_pi
     have : LipschitzOnWith K (fun x : α => f x i) s :=
       LipschitzOnWith.of_dist_le_mul fun x hx y hy =>
         (dist_le_pi_dist _ _ i).trans (hf.dist_le_mul x hx y hy)
-    exact this.extend
+    exact this.extend_real
+  choose g hg using this
+  refine ⟨fun x i => g i x, LipschitzWith.of_dist_le_mul fun x y => ?_, fun x hx => ?_⟩
+  · exact (dist_pi_le_iff (mul_nonneg K.2 dist_nonneg)).2 fun i => (hg i).1.dist_le_mul x y
+  · ext1 i
+    exact (hg i).2 hx
 
 中文:
 定理 LipschitzOnWith.extend_pi
@@ -1180,7 +1237,12 @@ theorem LipschitzOnWith.extend_pi
     have : LipschitzOnWith K (fun x : α => f x i) s :=
       LipschitzOnWith.of_dist_le_mul fun x hx y hy =>
         (dist_le_pi_dist _ _ i).trans (hf.dist_le_mul x hx y hy)
-    exact this.extend
+    exact this.extend_real
+  choose g hg using this
+  refine ⟨fun x i => g i x, LipschitzWith.of_dist_le_mul fun x y => ?_, fun x hx => ?_⟩
+  · exact (dist_pi_le_iff (mul_nonneg K.2 dist_nonneg)).2 fun i => (hg i).1.dist_le_mul x y
+  · ext1 i
+    exact (hg i).2 hx
 
 Depends on / 依赖: LipschitzOnWith, LipschitzOnWith.of_dist_le_mul, LipschitzWith, LipschitzWith.of_dist_le_mul, dist_le_mul, dist_le_pi_dist, dist_nonneg, dist_pi_le_iff, extend_real, hf.dist_le_mul, mul_nonneg, of_dist_le_mul, this.extend_real
 -/

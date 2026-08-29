@@ -229,7 +229,9 @@ lemma coneπApp_eq
   obtain ⟨s, γ, δ, h₁, h₂⟩ := IsCofiltered.bowtie
     (IsCofiltered.minToRight i₀ j) β (IsCofiltered.minToLeft i₀ j) α
   dsimp [coneπApp]
-  rw [← cancel_epi ((h.isoMap α ⟨𝟙 _⟩).hom)]; rw [isoMap_hom]; rw [isoMap_hom_inv_id_assoc]; rw [← cancel_epi (h.isoMap δ ⟨α⟩).hom]; rw [isoMap_hom]; rw [← F.m
+  rw [← cancel_epi ((h.isoMap α ⟨𝟙 _⟩).hom)]; rw [isoMap_hom]; rw [isoMap_hom_inv_id_assoc]; rw [← cancel_epi (h.isoMap δ ⟨α⟩).hom]; rw [isoMap_hom]; rw [← F.map_comp δ β]; rw [← h₁]; rw [F.map_comp]; rw [← F.map_comp_assoc]; rw [← h₂]; rw [F.map_comp_assoc]; rw [isoMap_hom_inv_id_assoc]
+
+@[simp]
 
 中文:
 引理 coneπApp_eq
@@ -238,7 +240,9 @@ lemma coneπApp_eq
   obtain ⟨s, γ, δ, h₁, h₂⟩ := IsCofiltered.bowtie
     (IsCofiltered.minToRight i₀ j) β (IsCofiltered.minToLeft i₀ j) α
   dsimp [coneπApp]
-  rw [← cancel_epi ((h.isoMap α ⟨𝟙 _⟩).hom)]; rw [isoMap_hom]; rw [isoMap_hom_inv_id_assoc]; rw [← cancel_epi (h.isoMap δ ⟨α⟩).hom]; rw [isoMap_hom]; rw [← F.m
+  rw [← cancel_epi ((h.isoMap α ⟨𝟙 _⟩).hom)]; rw [isoMap_hom]; rw [isoMap_hom_inv_id_assoc]; rw [← cancel_epi (h.isoMap δ ⟨α⟩).hom]; rw [isoMap_hom]; rw [← F.map_comp δ β]; rw [← h₁]; rw [F.map_comp]; rw [← F.map_comp_assoc]; rw [← h₂]; rw [F.map_comp_assoc]; rw [isoMap_hom_inv_id_assoc]
+
+@[simp]
 
 Depends on / 依赖: F.map_comp, F.map_comp_assoc, IsCofiltered, IsCofiltered.bowtie, IsCofiltered.minToLeft, IsCofiltered.minToRight, bowtie, cancel_epi, h.isoMap, isoMap, isoMap_hom, isoMap_hom_inv_id_assoc, map_comp, map_comp_assoc, minToLeft, minToRight
 -/
@@ -289,7 +293,7 @@ definition cone
         let i := IsCofiltered.min i₀ j
         let α : i ⟶ i₀ := IsCofiltered.minToLeft _ _
         let β : i ⟶ j := IsCofiltered.minToRight _ _
-        rw [h.coneπApp_eq j _ α β]; rw [ass
+        rw [h.coneπApp_eq j _ α β]; rw [assoc]; rw [h.coneπApp_eq j' _ α (β ≫ φ)]; rw [map_comp] }
 
 中文:
 定义 cone
@@ -303,7 +307,7 @@ definition cone
         let i := IsCofiltered.min i₀ j
         let α : i ⟶ i₀ := IsCofiltered.minToLeft _ _
         let β : i ⟶ j := IsCofiltered.minToRight _ _
-        rw [h.coneπApp_eq j _ α β]; rw [ass
+        rw [h.coneπApp_eq j _ α β]; rw [assoc]; rw [h.coneπApp_eq j' _ α (β ≫ φ)]; rw [map_comp] }
 
 Depends on / 依赖: F.obj
 -/
@@ -429,7 +433,7 @@ definition isLimitOfIsIso
     let α : i ⟶ i₀ := IsCofiltered.minToLeft _ _
     let β : i ⟶ j := IsCofiltered.minToRight _ _
     dsimp
-    rw [IsIso.eq_inv_comp]; rw [← c.w α]; rw [← c.w β]; rw [
+    rw [IsIso.eq_inv_comp]; rw [← c.w α]; rw [← c.w β]; rw [h.coneπApp_eq j _ α β]; rw [assoc]; rw [isoMap_hom_inv_id_assoc])
 
 中文:
 定义 isLimitOfIsIso
@@ -440,7 +444,7 @@ definition isLimitOfIsIso
     let α : i ⟶ i₀ := IsCofiltered.minToLeft _ _
     let β : i ⟶ j := IsCofiltered.minToRight _ _
     dsimp
-    rw [IsIso.eq_inv_comp]; rw [← c.w α]; rw [← c.w β]; rw [
+    rw [IsIso.eq_inv_comp]; rw [← c.w α]; rw [← c.w β]; rw [h.coneπApp_eq j _ α β]; rw [assoc]; rw [isoMap_hom_inv_id_assoc])
 
 Depends on / 依赖: Cone.ext, IsCofiltered, IsCofiltered.min, IsCofiltered.minToLeft, IsCofiltered.minToRight, IsIso.eq_inv_comp, IsLimit, IsLimit.ofIsoLimit, eq_inv_comp, h.cone, h.isLimitCone, isLimitCone, isoMap_hom_inv_id_assoc, minToLeft, minToRight, ofIsoLimit
 -/
@@ -616,7 +620,9 @@ lemma coconeιApp_eq
   obtain ⟨s, γ, δ, h₁, h₂⟩ := IsFiltered.bowtie
     (IsFiltered.leftToMax i₀ j) β (IsFiltered.rightToMax i₀ j) α
   dsimp [coconeιApp]
-  rw [← cancel_mono ((h.isoMap β ⟨𝟙 _⟩).hom)]; rw [assoc]; rw [assoc]; rw [isoMap_hom]; rw [isoMap_inv_hom_id]; rw [comp_id]; rw [← cancel_mono (h.isoMap δ ⟨β⟩).ho
+  rw [← cancel_mono ((h.isoMap β ⟨𝟙 _⟩).hom)]; rw [assoc]; rw [assoc]; rw [isoMap_hom]; rw [isoMap_inv_hom_id]; rw [comp_id]; rw [← cancel_mono (h.isoMap δ ⟨β⟩).hom]; rw [isoMap_hom]; rw [assoc]; rw [assoc]; rw [← F.map_comp α δ]; rw [← h₂]; rw [F.map_comp]; rw [← F.map_comp β δ]; rw [← h₁]; rw [F.map_comp]; rw [isoMap_inv_hom_id_assoc]
+
+@[simp]
 
 中文:
 引理 coconeιApp_eq
@@ -625,7 +631,9 @@ lemma coconeιApp_eq
   obtain ⟨s, γ, δ, h₁, h₂⟩ := IsFiltered.bowtie
     (IsFiltered.leftToMax i₀ j) β (IsFiltered.rightToMax i₀ j) α
   dsimp [coconeιApp]
-  rw [← cancel_mono ((h.isoMap β ⟨𝟙 _⟩).hom)]; rw [assoc]; rw [assoc]; rw [isoMap_hom]; rw [isoMap_inv_hom_id]; rw [comp_id]; rw [← cancel_mono (h.isoMap δ ⟨β⟩).ho
+  rw [← cancel_mono ((h.isoMap β ⟨𝟙 _⟩).hom)]; rw [assoc]; rw [assoc]; rw [isoMap_hom]; rw [isoMap_inv_hom_id]; rw [comp_id]; rw [← cancel_mono (h.isoMap δ ⟨β⟩).hom]; rw [isoMap_hom]; rw [assoc]; rw [assoc]; rw [← F.map_comp α δ]; rw [← h₂]; rw [F.map_comp]; rw [← F.map_comp β δ]; rw [← h₁]; rw [F.map_comp]; rw [isoMap_inv_hom_id_assoc]
+
+@[simp]
 
 Depends on / 依赖: F.map_comp, IsFiltered, IsFiltered.bowtie, IsFiltered.leftToMax, IsFiltered.rightToMax, bowtie, cancel_mono, comp_id, h.isoMap, isoMap, isoMap_hom, isoMap_inv_hom_id, isoMap_inv_hom_id_assoc, leftToMax, map_comp, rightToMax
 -/
@@ -676,7 +684,7 @@ definition cocone
         let i := IsFiltered.max i₀ j'
         let α : i₀ ⟶ i := IsFiltered.leftToMax _ _
         let β : j' ⟶ i := IsFiltered.rightToMax _ _
-        rw [h.coconeιApp_eq j' _ β α]; rw [h.
+        rw [h.coconeιApp_eq j' _ β α]; rw [h.coconeιApp_eq j _ (φ ≫ β) α]; rw [map_comp]; rw [assoc] }
 
 中文:
 定义 cocone
@@ -690,7 +698,7 @@ definition cocone
         let i := IsFiltered.max i₀ j'
         let α : i₀ ⟶ i := IsFiltered.leftToMax _ _
         let β : j' ⟶ i := IsFiltered.rightToMax _ _
-        rw [h.coconeιApp_eq j' _ β α]; rw [h.
+        rw [h.coconeιApp_eq j' _ β α]; rw [h.coconeιApp_eq j _ (φ ≫ β) α]; rw [map_comp]; rw [assoc] }
 
 Depends on / 依赖: F.obj
 -/
@@ -814,7 +822,7 @@ definition isColimitOfIsIso
     let α : i₀ ⟶ i := IsFiltered.leftToMax _ _
     let β : j ⟶ i := IsFiltered.rightToMax _ _
     dsimp
-    rw [← c.w α]; rw [← c.w β]; rw [h.coconeιApp_eq j _ β α];
+    rw [← c.w α]; rw [← c.w β]; rw [h.coconeιApp_eq j _ β α]; rw [assoc]; rw [isoMap_inv_hom_id_assoc])
 
 中文:
 定义 isColimitOfIsIso
@@ -825,7 +833,7 @@ definition isColimitOfIsIso
     let α : i₀ ⟶ i := IsFiltered.leftToMax _ _
     let β : j ⟶ i := IsFiltered.rightToMax _ _
     dsimp
-    rw [← c.w α]; rw [← c.w β]; rw [h.coconeιApp_eq j _ β α];
+    rw [← c.w α]; rw [← c.w β]; rw [h.coconeιApp_eq j _ β α]; rw [assoc]; rw [isoMap_inv_hom_id_assoc])
 
 Depends on / 依赖: Cocone, Cocone.ext, IsColimit, IsColimit.ofIsoColimit, IsFiltered, IsFiltered.leftToMax, IsFiltered.max, IsFiltered.rightToMax, h.cocone, h.isColimitCocone, isColimitCocone, isoMap_inv_hom_id_assoc, leftToMax, ofIsoColimit, rightToMax
 -/

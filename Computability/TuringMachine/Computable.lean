@@ -287,7 +287,8 @@ definition haltList
 
 @[deprecated (since := "2026-03-06")] protected alias EvalsTo :=
   StateTransition.EvalsTo
-@[deprecated (since := "2026-03-06")] protected 
+@[deprecated (since := "2026-03-06")] protected alias EvalsToInTime :=
+  StateTransition.EvalsToInTime
 
 中文:
 定义 haltList
@@ -300,7 +301,8 @@ definition haltList
 
 @[deprecated (since := "2026-03-06")] protected alias EvalsTo :=
   StateTransition.EvalsTo
-@[deprecated (since := "2026-03-06")] protected 
+@[deprecated (since := "2026-03-06")] protected alias EvalsToInTime :=
+  StateTransition.EvalsToInTime
 
 Depends on / 依赖: Option.none
 -/

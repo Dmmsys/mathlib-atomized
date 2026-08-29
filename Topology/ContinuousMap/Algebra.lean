@@ -1060,7 +1060,8 @@ instance [LocallyCompactSpace
     have h1 : Continuous fun x : (C(α, β) × C(α, β)) × α => x.fst.fst x.snd :=
       continuous_eval.comp (continuous_fst.prodMap continuous_id)
     have h2 : Continuous fun x : (C(α, β) × C(α, β)) × α => x.fst.snd x.snd :=
-      continuous_eval.c
+      continuous_eval.comp (continuous_snd.prodMap continuous_id)
+    exact h1.mul h2⟩
 
 中文:
 实例 [局部紧空间
@@ -1070,7 +1071,8 @@ instance [LocallyCompactSpace
     have h1 : Continuous fun x : (C(α, β) × C(α, β)) × α => x.fst.fst x.snd :=
       continuous_eval.comp (continuous_fst.prodMap continuous_id)
     have h2 : Continuous fun x : (C(α, β) × C(α, β)) × α => x.fst.snd x.snd :=
-      continuous_eval.c
+      continuous_eval.comp (continuous_snd.prodMap continuous_id)
+    exact h1.mul h2⟩
 
 Depends on / 依赖: Continuous, continuous_eval, continuous_eval.comp, continuous_fst, continuous_fst.prodMap, continuous_id, continuous_of_continuous_uncurry, continuous_snd, continuous_snd.prodMap, h1.mul, prodMap, x.fst.fst, x.fst.snd, x.snd
 -/
@@ -1280,6 +1282,18 @@ instance [CommGroup
     rintro ⟨f, g⟩
     rw [ContinuousAt]; rw [tendsto_iff_forall_isCompact_tendstoUniformlyOn]; rw [nhds_prod_eq]
     exact fun K hK =>
+      uniformContinuous_mul.comp_tendstoUniformlyOn
+        ((tendsto_iff_forall_isCompact_tendstoUniformlyOn.mp Filter.tendsto_id K hK).prodMk
+          (tendsto_iff_forall_isCompact_tendstoUniformlyOn.mp Filter.tendsto_id K hK))
+  continuous_inv := by
+    let : UniformSpace β := IsTopologicalGroup.rightUniformSpace β
+    have : IsUniformGroup β := isUniformGroup_of_commGroup
+    rw [continuous_iff_continuousAt]
+    intro f
+    rw [ContinuousAt]; rw [tendsto_iff_forall_isCompact_tendstoUniformlyOn]
+    exact fun K hK =>
+      uniformContinuous_inv.comp_tendstoUniformlyOn
+        (tendsto_iff_forall_isCompact_tendstoUniformlyOn.mp Filter.tendsto_id K hK)
 
 中文:
 实例 [交换群
@@ -1291,6 +1305,18 @@ instance [CommGroup
     rintro ⟨f, g⟩
     rw [ContinuousAt]; rw [tendsto_iff_forall_isCompact_tendstoUniformlyOn]; rw [nhds_prod_eq]
     exact fun K hK =>
+      uniformContinuous_mul.comp_tendstoUniformlyOn
+        ((tendsto_iff_forall_isCompact_tendstoUniformlyOn.mp Filter.tendsto_id K hK).prodMk
+          (tendsto_iff_forall_isCompact_tendstoUniformlyOn.mp Filter.tendsto_id K hK))
+  continuous_inv := by
+    let : UniformSpace β := IsTopologicalGroup.rightUniformSpace β
+    have : IsUniformGroup β := isUniformGroup_of_commGroup
+    rw [continuous_iff_continuousAt]
+    intro f
+    rw [ContinuousAt]; rw [tendsto_iff_forall_isCompact_tendstoUniformlyOn]
+    exact fun K hK =>
+      uniformContinuous_inv.comp_tendstoUniformlyOn
+        (tendsto_iff_forall_isCompact_tendstoUniformlyOn.mp Filter.tendsto_id K hK)
 
 Depends on / 依赖: ContinuousAt, Filter, Filter.tendsto_id, IsTopologicalGroup, IsTopologicalGroup.rightUniformSpace, IsUniformGroup, UniformSpace, comp_tendstoUniformlyOn, continuous_iff_continuousAt, continuous_inv, isUniformGroup_of_commGroup, nhds_prod_eq, prodMk, rightUniformSpace, tendsto_id, tendsto_iff_forall_isCompact_tendstoUniformlyOn, tendsto_iff_forall_isCompact_tendstoUniformlyOn.mp, uniformContinuous_mul, uniformContinuous_mul.comp_tendstoUniformlyOn
 -/
@@ -2131,7 +2157,9 @@ definition ContinuousMap.C
   map_one' := by ext _; exact (algebraMap R A).map_one
   map_mul' c₁ c₂ := by ext _; exact (algebraMap R A).map_mul _ _
   map_zero' := by ext _; exact (algebraMap R A).map_zero
-  map_add' c₁ c₂ := by ext _; exact (algebraMap R A).map_a
+  map_add' c₁ c₂ := by ext _; exact (algebraMap R A).map_add _ _
+
+@[simp]
 
 中文:
 定义 连续映射.C
@@ -2140,7 +2168,9 @@ definition ContinuousMap.C
   map_one' := by ext _; exact (algebraMap R A).map_one
   map_mul' c₁ c₂ := by ext _; exact (algebraMap R A).map_mul _ _
   map_zero' := by ext _; exact (algebraMap R A).map_zero
-  map_add' c₁ c₂ := by ext _; exact (algebraMap R A).map_a
+  map_add' c₁ c₂ := by ext _; exact (algebraMap R A).map_add _ _
+
+@[simp]
 
 Depends on / 依赖: algebraMap, continuous_const
 -/
@@ -2411,7 +2441,10 @@ theorem Subalgebra.SeparatesPoints.strongly
   let a := v x
   let b := v y
   let f' : s :=
-    ((b - a) * (f x - f y)⁻¹) • (algebraMap _ s 
+    ((b - a) * (f x - f y)⁻¹) • (algebraMap _ s (f x) - (⟨f, hf⟩ : s)) + algebraMap _ s a
+  refine ⟨f', f'.prop, ?_, ?_⟩
+  · simp [a, b, f']
+  · simp [a, b, f', inv_mul_cancel_right₀ hxy]
 
 中文:
 定理 子代数.SeparatesPoints.strongly
@@ -2425,7 +2458,10 @@ theorem Subalgebra.SeparatesPoints.strongly
   let a := v x
   let b := v y
   let f' : s :=
-    ((b - a) * (f x - f y)⁻¹) • (algebraMap _ s 
+    ((b - a) * (f x - f y)⁻¹) • (algebraMap _ s (f x) - (⟨f, hf⟩ : s)) + algebraMap _ s a
+  refine ⟨f', f'.prop, ?_, ?_⟩
+  · simp [a, b, f']
+  · simp [a, b, f', inv_mul_cancel_right₀ hxy]
 
 Depends on / 依赖: algebraMap, mul_one, replace, sub_ne_zero_of_ne
 -/
@@ -2461,6 +2497,10 @@ instance ContinuousMap.subsingleton_subalgebra
       have h : f = algebraMap R C(α, R) (f default) := by
         ext x'
         simp only [mul_one, smul_eq_mul, algebraMap_apply]
+        congr
+        simp [eq_iff_true_of_subsingleton]
+      rw [h]
+      simp only [Subalgebra.algebraMap_mem]⟩
 
 中文:
 实例 连续映射.subsingleton_subalgebra
@@ -2474,6 +2514,10 @@ instance ContinuousMap.subsingleton_subalgebra
       have h : f = algebraMap R C(α, R) (f default) := by
         ext x'
         simp only [mul_one, smul_eq_mul, algebraMap_apply]
+        congr
+        simp [eq_iff_true_of_subsingleton]
+      rw [h]
+      simp only [Subalgebra.algebraMap_mem]⟩
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.subsingleton, Subalgebra, Subalgebra.algebraMap_mem, Subsingleton, algebraMap, algebraMap_apply, algebraMap_mem, coe_injective, eq_iff_true_of_subsingleton, inhabit, isEmpty_or_nonempty, mul_one, smul_eq_mul, subsingleton
 -/
@@ -2575,7 +2619,7 @@ instance module'
   mul_smul c₁ c₂ f := by ext x; exact mul_smul (c₁ x) (c₂ x) (f x)
   one_smul f := by ext x; exact one_smul R (f x)
   zero_smul f := by ext x; exact zero_smul _ _
-  smul_zero r := by ext x; 
+  smul_zero r := by ext x; exact smul_zero _
 
 中文:
 实例 module'
@@ -2585,7 +2629,7 @@ instance module'
   mul_smul c₁ c₂ f := by ext x; exact mul_smul (c₁ x) (c₂ x) (f x)
   one_smul f := by ext x; exact one_smul R (f x)
   zero_smul f := by ext x; exact zero_smul _ _
-  smul_zero r := by ext x; 
+  smul_zero r := by ext x; exact smul_zero _
 
 Depends on / 依赖: add_smul, mul_smul, one_smul, smul_add, smul_zero, zero_smul
 -/

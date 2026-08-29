@@ -486,7 +486,8 @@ lemma HasSubst.eventually_coeff_pow_eq_zero
     coeff_of_lt_order _ ?_
   obtain ⟨m, rfl⟩ := le_iff_exists_add.mp (Set.mem_Ici.mp hm)
   grw [pow_add, ← order_mul_ge, pow_mul, ← le_order_pow_of_constantCoeff_eq_zero _
-    (by r
+    (by rwa [map_pow]), ← _root_.le_add_right le_rfl, Nat.cast_lt]
+  lia
 
 中文:
 引理 有Subst.eventually_coeff_pow_eq_zero
@@ -497,7 +498,8 @@ lemma HasSubst.eventually_coeff_pow_eq_zero
     coeff_of_lt_order _ ?_
   obtain ⟨m, rfl⟩ := le_iff_exists_add.mp (Set.mem_Ici.mp hm)
   grw [pow_add, ← order_mul_ge, pow_mul, ← le_order_pow_of_constantCoeff_eq_zero _
-    (by r
+    (by rwa [map_pow]), ← _root_.le_add_right le_rfl, Nat.cast_lt]
+  lia
 
 Depends on / 依赖: Filter, Filter.Ici_mem_atTop, Filter.eventually_of_mem, Ici_mem_atTop, Nat.cast_lt, Set.mem_Ici.mp, _root_, _root_.le_add_right, cast_lt, coeff_of_lt_order, eventually_of_mem, le_add_right, le_iff_exists_add, le_iff_exists_add.mp, le_order_pow_of_constantCoeff_eq_zero, le_rfl, map_pow, mem_Ici, order_mul_ge, pow_add
 -/
@@ -942,7 +944,14 @@ theorem coeff_subst_X_pow
     intro j hj
     rw [← pow_mul]; rw [coeff_X_pow]; rw [if_neg]; rw [smul_zero]
     contrapose hj
-    rw [hj]; rw [Nat.mul_di
+    rw [hj]; rw [Nat.mul_div_cancel_left j hk.pos]
+  · rw [coeff_subst' (.X_pow hk), finsum_eq_zero_of_forall_eq_zero]
+    intro j
+    rw [← pow_mul]; rw [coeff_X_pow]; rw [if_neg]; rw [smul_zero]
+    contrapose h
+    use j
+
+@[simp]
 
 中文:
 定理 coeff_subst_X_pow
@@ -954,7 +963,14 @@ theorem coeff_subst_X_pow
     intro j hj
     rw [← pow_mul]; rw [coeff_X_pow]; rw [if_neg]; rw [smul_zero]
     contrapose hj
-    rw [hj]; rw [Nat.mul_di
+    rw [hj]; rw [Nat.mul_div_cancel_left j hk.pos]
+  · rw [coeff_subst' (.X_pow hk), finsum_eq_zero_of_forall_eq_zero]
+    intro j
+    rw [← pow_mul]; rw [coeff_X_pow]; rw [if_neg]; rw [smul_zero]
+    contrapose h
+    use j
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Nat.mul_div_cancel, Nat.mul_div_cancel_left, X_pow, algebraMap_eq_smul_one, coeff_X_pow, coeff_X_pow_self, coeff_subst, contrapose, finsum_eq_single, finsum_eq_zero_of_forall_eq_zero, hk.pos, if_neg, mul_div_cancel, mul_div_cancel_left, pow_mul, smul_zero, split_ifs
 -/
@@ -1271,7 +1287,8 @@ theorem le_weightedOrder_subst
   simp only [ne_eq, Function.comp_const, le_iInf_iff]
   intro i hi
   trans i () * MvPowerSeries.weightedOrder w a
-  · exact mul_le_mul_left (f.order_le (i ()) (by delta PowerSeries.coeff; convert! hi; a
+  · exact mul_le_mul_left (f.order_le (i ()) (by delta PowerSeries.coeff; convert! hi; aesop)) _
+  · simp [Finsupp.weight_apply, Finsupp.sum_fintype]
 
 中文:
 定理 le_weightedOrder_subst
@@ -1281,7 +1298,8 @@ theorem le_weightedOrder_subst
   simp only [ne_eq, Function.comp_const, le_iInf_iff]
   intro i hi
   trans i () * MvPowerSeries.weightedOrder w a
-  · exact mul_le_mul_left (f.order_le (i ()) (by delta PowerSeries.coeff; convert! hi; a
+  · exact mul_le_mul_left (f.order_le (i ()) (by delta PowerSeries.coeff; convert! hi; aesop)) _
+  · simp [Finsupp.weight_apply, Finsupp.sum_fintype]
 
 Depends on / 依赖: Finsupp, Finsupp.sum_fintype, Finsupp.weight_apply, Function, Function.comp_const, MvPowerSeries, MvPowerSeries.le_weightedOrder_subst, MvPowerSeries.weightedOrder, PowerSeries, PowerSeries.coeff, PowerSeries.hasSubst_iff.mp, comp_const, convert, f.order_le, hasSubst_iff, le_iInf_iff, le_weightedOrder_subst, mul_le_mul_left, ne_eq, order_le
 -/
@@ -1620,7 +1638,11 @@ lemma subst_rescale_of_degree_eq_one
     rw [← MvPowerSeries.coeff_zero_eq_constantCoeff_apply]; rw [MvPowerSeries.coeff_apply]
     have : (p 0 != 0) -> (0 : σ ->₀ Nat).degree = 1 := hp_lin 0
     grind
-  rw [rescale_eq_subst]; rw [MvPowerSeries.rescale
+  rw [rescale_eq_subst]; rw [MvPowerSeries.rescale_eq_subst]; rw [subst_comp_subst_apply (HasSubst.smul_X' a) hp]
+  nth_rewrite 3 [subst]
+  rw [MvPowerSeries.subst_comp_subst_apply hp.const (MvPowerSeries.HasSubst.smul_X _)]; rw [MvPowerSeries.ext_iff]
+  intro _
+  rw [subst_smul hp]; rw [← Polynomial.coe_X]; rw [subst_coe hp]; rw [Polynomial.aeval_X]; rw [← MvPowerSeries.rescale_eq_subst]; rw [MvPowerSeries.rescale_homogeneous_eq_smul hp_lin]; rw [subst]; rw [pow_one]
 
 中文:
 引理 subst_rescale_of_degree_eq_one
@@ -1631,7 +1653,11 @@ lemma subst_rescale_of_degree_eq_one
     rw [← MvPowerSeries.coeff_zero_eq_constantCoeff_apply]; rw [MvPowerSeries.coeff_apply]
     have : (p 0 != 0) -> (0 : σ ->₀ Nat).degree = 1 := hp_lin 0
     grind
-  rw [rescale_eq_subst]; rw [MvPowerSeries.rescale
+  rw [rescale_eq_subst]; rw [MvPowerSeries.rescale_eq_subst]; rw [subst_comp_subst_apply (HasSubst.smul_X' a) hp]
+  nth_rewrite 3 [subst]
+  rw [MvPowerSeries.subst_comp_subst_apply hp.const (MvPowerSeries.HasSubst.smul_X _)]; rw [MvPowerSeries.ext_iff]
+  intro _
+  rw [subst_smul hp]; rw [← Polynomial.coe_X]; rw [subst_coe hp]; rw [Polynomial.aeval_X]; rw [← MvPowerSeries.rescale_eq_subst]; rw [MvPowerSeries.rescale_homogeneous_eq_smul hp_lin]; rw [subst]; rw [pow_one]
 
 Depends on / 依赖: HasSubst, HasSubst.of_constantCoeff_zero, HasSubst.smul_X, InducedCategory, InducedCategory.homMk, MvPowerSeries, MvPowerSeries.HasSubst.smul_X, MvPowerSeries.coeff_apply, MvPowerSeries.coeff_zero_eq_constantCoeff_apply, MvPowerSeries.ext_iff, MvPowerSeries.rescale_eq_subst, MvPowerSeries.subst_comp_subst_apply, PowerSeries, PowerSeries.HasSubst, coeff_apply, coeff_zero_eq_constantCoeff_apply, degree, ext_iff, f.hom, hp.const
 -/
@@ -1720,7 +1746,48 @@ lemma coeff_subst_sum_C_substInvFun_mul_X_pow_sub_X
   · rw [map_sub, coeff_subst']
     · rw [finsum_eq_single (a := 1)]
       · simp [substInvFun]
-      · rintro (_ | _ | _) _ 
+      · rintro (_ | _ | _) _ <;> simp_all [substInvFun, mul_pow, coeff_mul_X_pow']
+    · simp [HasSubst, X, substInvFun]
+  · rw [Fin.sum_univ_castSucc]
+    simp only [Fin.val_castSucc, Fin.val_last, map_sub, substInvFun]
+    generalize hB : ∑ i : Fin (n + 2), C (substInvFun P i) * X ^ i.1 = B
+    have hB' : B.constantCoeff = 0 := by simp [← hB, zero_pow_eq, substInvFun]
+    simp only [neg_mul, map_neg, map_mul, coeff_X, Nat.add_eq_right, Nat.add_eq_zero_iff,
+      one_ne_zero, and_false, ↓reduceIte, sub_zero]
+    rw [coeff_subst']
+    · simp only [smul_eq_mul, ← map_mul]
+      generalize hk : ⅟(P.coeff 1) * coeff (n + 1 + 1) (subst B P) = k
+      trans ∑ᶠ d, P.coeff d * (coeff (n + 1 + 1) (B ^ d) - if d = 1 then k else 0)
+      · refine finsum_congr fun i => ?_
+        · congr 1
+          obtain (_ | _ | i) := i
+          · simp
+          · simp [← sub_eq_add_neg]
+          · simp only [add_assoc, Nat.reduceAdd]
+            rw [add_comm B]; rw [add_pow]; rw [map_sum]; rw [Finset.sum_eq_single (a := 0)]
+            · simp
+            · rintro (_ | _ | j) hj hj'
+              · simp at hj'
+              · simp [mul_comm (C k), hB', mul_assoc, coeff_X_pow_mul']
+              · rw [← neg_mul, mul_pow, ← pow_mul, mul_comm (_ ^ _)]
+                simp [mul_assoc, coeff_X_pow_mul']
+            · simp
+      · simp_rw [mul_sub]
+        rw [finsum_sub_distrib]
+        · simp only [mul_ite, mul_zero]
+          nth_rw 2 [finsum_eq_single (a := 1)]
+          · simp only [↓reduceIte, ← hk, mul_invOf_cancel_left', sub_eq_zero]
+            rw [coeff_subst']
+            · rfl
+            · simp [HasSubst, ← PowerSeries.constantCoeff.eq_def, hB']
+          · simp +contextual
+        · refine .subset (Set.finite_Iio (n + 3)) fun i => ?_
+          obtain ⟨B, rfl⟩ : X ∣ B := by rwa [X_dvd_iff]
+          simp +contextual [mul_pow, coeff_X_pow_mul', Nat.lt_succ_iff]
+        · exact .subset (Set.finite_singleton 1) (fun _ => by simp +contextual)
+    · simp [HasSubst, ← PowerSeries.constantCoeff.eq_def, hB']
+
+include hP in
 
 中文:
 引理 coeff_subst_sum_C_substInvFun_mul_X_pow_sub_X
@@ -1733,7 +1800,48 @@ lemma coeff_subst_sum_C_substInvFun_mul_X_pow_sub_X
   · rw [map_sub, coeff_subst']
     · rw [finsum_eq_single (a := 1)]
       · simp [substInvFun]
-      · rintro (_ | _ | _) _ 
+      · rintro (_ | _ | _) _ <;> simp_all [substInvFun, mul_pow, coeff_mul_X_pow']
+    · simp [HasSubst, X, substInvFun]
+  · rw [Fin.sum_univ_castSucc]
+    simp only [Fin.val_castSucc, Fin.val_last, map_sub, substInvFun]
+    generalize hB : ∑ i : Fin (n + 2), C (substInvFun P i) * X ^ i.1 = B
+    have hB' : B.constantCoeff = 0 := by simp [← hB, zero_pow_eq, substInvFun]
+    simp only [neg_mul, map_neg, map_mul, coeff_X, Nat.add_eq_right, Nat.add_eq_zero_iff,
+      one_ne_zero, and_false, ↓reduceIte, sub_zero]
+    rw [coeff_subst']
+    · simp only [smul_eq_mul, ← map_mul]
+      generalize hk : ⅟(P.coeff 1) * coeff (n + 1 + 1) (subst B P) = k
+      trans ∑ᶠ d, P.coeff d * (coeff (n + 1 + 1) (B ^ d) - if d = 1 then k else 0)
+      · refine finsum_congr fun i => ?_
+        · congr 1
+          obtain (_ | _ | i) := i
+          · simp
+          · simp [← sub_eq_add_neg]
+          · simp only [add_assoc, Nat.reduceAdd]
+            rw [add_comm B]; rw [add_pow]; rw [map_sum]; rw [Finset.sum_eq_single (a := 0)]
+            · simp
+            · rintro (_ | _ | j) hj hj'
+              · simp at hj'
+              · simp [mul_comm (C k), hB', mul_assoc, coeff_X_pow_mul']
+              · rw [← neg_mul, mul_pow, ← pow_mul, mul_comm (_ ^ _)]
+                simp [mul_assoc, coeff_X_pow_mul']
+            · simp
+      · simp_rw [mul_sub]
+        rw [finsum_sub_distrib]
+        · simp only [mul_ite, mul_zero]
+          nth_rw 2 [finsum_eq_single (a := 1)]
+          · simp only [↓reduceIte, ← hk, mul_invOf_cancel_left', sub_eq_zero]
+            rw [coeff_subst']
+            · rfl
+            · simp [HasSubst, ← PowerSeries.constantCoeff.eq_def, hB']
+          · simp +contextual
+        · refine .subset (Set.finite_Iio (n + 3)) fun i => ?_
+          obtain ⟨B, rfl⟩ : X ∣ B := by rwa [X_dvd_iff]
+          simp +contextual [mul_pow, coeff_X_pow_mul', Nat.lt_succ_iff]
+        · exact .subset (Set.finite_singleton 1) (fun _ => by simp +contextual)
+    · simp [HasSubst, ← PowerSeries.constantCoeff.eq_def, hB']
+
+include hP in
 
 Depends on / 依赖: Fin.sum_univ_castSucc, Fin.val_castSucc, Fin.val_last, HasSubst, LightDiagram, LightDiagram.equivSmall, coeff_mul_X_pow, coeff_subst, contextual, equivSmall, finsum_eq_single, generalize, map_sub, mul_pow, substInvFu, substInvFun, sum_univ_castSucc, val_castSucc, val_last, zero_pow_eq
 -/
@@ -1800,7 +1908,17 @@ lemma subst_substInv_right
   rw [← this]; rw [coeff_subst']; rw [coeff_subst']
   · congr! 3 with m
     generalize hB : (∑ i : Fin (n + 1), C (substInvFun P ↑i) * X ^ i.1) = B
-    have : X ^ (n + 1) ∣ mk (substInv
+    have : X ^ (n + 1) ∣ mk (substInvFun P) - B := by
+      rw [X_pow_dvd_iff]
+      intro m hm
+      simp +contextual [← hB, coeff_X_pow, Finset.sum_eq_single (⟨m, hm⟩ : Fin (n + 1)),
+        Fin.ext_iff, @eq_comm _ m]
+    obtain ⟨Q, hQ⟩ := this.trans (sub_dvd_pow_sub_pow _ _ m)
+    simp [substInv, sub_eq_iff_eq_add.mp hQ, coeff_X_pow_mul']
+  · simp [HasSubst, X, zero_pow_eq, C, substInvFun]
+  · simp [HasSubst, ← constantCoeff.eq_def, substInvFun, substInv]
+
+@[simp]
 
 中文:
 引理 subst_substInv_right
@@ -1811,7 +1929,17 @@ lemma subst_substInv_right
   rw [← this]; rw [coeff_subst']; rw [coeff_subst']
   · congr! 3 with m
     generalize hB : (∑ i : Fin (n + 1), C (substInvFun P ↑i) * X ^ i.1) = B
-    have : X ^ (n + 1) ∣ mk (substInv
+    have : X ^ (n + 1) ∣ mk (substInvFun P) - B := by
+      rw [X_pow_dvd_iff]
+      intro m hm
+      simp +contextual [← hB, coeff_X_pow, Finset.sum_eq_single (⟨m, hm⟩ : Fin (n + 1)),
+        Fin.ext_iff, @eq_comm _ m]
+    obtain ⟨Q, hQ⟩ := this.trans (sub_dvd_pow_sub_pow _ _ m)
+    simp [substInv, sub_eq_iff_eq_add.mp hQ, coeff_X_pow_mul']
+  · simp [HasSubst, X, zero_pow_eq, C, substInvFun]
+  · simp [HasSubst, ← constantCoeff.eq_def, substInvFun, substInv]
+
+@[simp]
 
 Depends on / 依赖: Fin.ext_iff, Finset, Finset.sum_eq_single, X_pow_dvd_iff, coeff_X_pow, coeff_subst, coeff_subst_sum_C_substInvFun_mul_X_pow_sub_X, contextual, eq_comm, ext_iff, generalize, map_sub, sub_dvd_pow_sub_pow, sub_eq_zero, substInvFun, sum_eq_single, this.trans
 -/
@@ -1921,7 +2049,12 @@ lemma subst_substInv_left
   let Q := P.substInv.substInv
   have hQ : HasSubst Q := HasSubst.substInv P.substInv
   have eq_aux : P.substInv.subst Q = X := subst_substInv_right P.substInv P.constantCoeff_substInv
-  suffices h : Q = P from by simp_rw 
+  suffices h : Q = P from by simp_rw [← h, eq_aux]
+  calc
+    _ = PowerSeries.subst Q (P.subst P.substInv) := by
+      rw [subst_substInv_right _ hP]; rw [subst_X hQ]
+    _ = P := by
+      simp [subst_comp_subst_apply (HasSubst.substInv P) hQ, eq_aux]
 
 中文:
 引理 subst_substInv_left
@@ -1931,7 +2064,12 @@ lemma subst_substInv_left
   let Q := P.substInv.substInv
   have hQ : HasSubst Q := HasSubst.substInv P.substInv
   have eq_aux : P.substInv.subst Q = X := subst_substInv_right P.substInv P.constantCoeff_substInv
-  suffices h : Q = P from by simp_rw 
+  suffices h : Q = P from by simp_rw [← h, eq_aux]
+  calc
+    _ = PowerSeries.subst Q (P.subst P.substInv) := by
+      rw [subst_substInv_right _ hP]; rw [subst_X hQ]
+    _ = P := by
+      simp [subst_comp_subst_apply (HasSubst.substInv P) hQ, eq_aux]
 
 Depends on / 依赖: HasSubst, HasSubst.substInv, Invertible, P.constantCoeff_substInv, P.subst, P.substInv, P.substInv.coeff, P.substInv.subst, P.substInv.substInv, PowerSeries, PowerSeries.subst, constantCoeff_substInv, eq_aux, invertibleInvOf, simp_rw, substInv, subst_X, subst_comp_subst_apply, subst_substInv_right
 -/
@@ -2209,7 +2347,11 @@ lemma coeff_subst_X_zero_add_X_one
     (MvPowerSeries.hasSubst_of_constantCoeff_zero (fun _ => by simp))]
   simp_rw [Finsupp.prod_pow, univ_unique, PUnit.default_eq_unit, prod_singleton,
     smul_eq_mul, ← MvPolynomial.coe_X, ← MvPolynomial.coe_add, ← MvPolynomial.coe_pow,
-  
+    MvPolynomial.coeff_coe]
+  rw [finsum_eq_single _ (single () (e 0 + e 1))]; rw [mul_comm]
+  · simp [MvPolynomial.coeff_add_pow, coeff]
+  · simp only [MvPolynomial.coeff_add_pow, mem_antidiagonal, cast_ite]
+    grind
 
 中文:
 引理 coeff_subst_X_zero_add_X_one
@@ -2219,7 +2361,11 @@ lemma coeff_subst_X_zero_add_X_one
     (MvPowerSeries.hasSubst_of_constantCoeff_zero (fun _ => by simp))]
   simp_rw [Finsupp.prod_pow, univ_unique, PUnit.default_eq_unit, prod_singleton,
     smul_eq_mul, ← MvPolynomial.coe_X, ← MvPolynomial.coe_add, ← MvPolynomial.coe_pow,
-  
+    MvPolynomial.coeff_coe]
+  rw [finsum_eq_single _ (single () (e 0 + e 1))]; rw [mul_comm]
+  · simp [MvPolynomial.coeff_add_pow, coeff]
+  · simp only [MvPolynomial.coeff_add_pow, mem_antidiagonal, cast_ite]
+    grind
 
 Depends on / 依赖: Finsupp, Finsupp.prod_pow, MvPolynomial, MvPolynomial.coe_X, MvPolynomial.coe_add, MvPolynomial.coe_pow, MvPolynomial.coeff_add_pow, MvPolynomial.coeff_coe, MvPowerSeries, MvPowerSeries.coeff_subst, MvPowerSeries.hasSubst_of_constantCoeff_zero, PUnit.default_eq_unit, PowerSeries, PowerSeries.subst, cast_ite, coe_X, coe_add, coe_pow, coeff_add_pow, coeff_coe
 -/
@@ -2248,7 +2394,16 @@ lemma coeff_subst_X_zero_subst_mul_X_one
   · intro b hb hb'
     by_contra hmul_ne_zero
     rcases ne_zero_and_ne_zero_of_mul hmul_ne_zero with ⟨h0, h1⟩
-    simp only [Fin.isValue, coeff_subst_single, ne_eq
+    simp only [Fin.isValue, coeff_subst_single, ne_eq, ite_eq_right_iff,
+      not_forall, exists_prop] at h0 h1
+    apply hb'
+    rw [Prod.ext_iff]; rw [← mem_antidiagonal.mp hb]; rw [h0.1]; rw [h1.1]
+    simp
+  · intro he
+    have he' : single 0 (e 0) + single 1 (e 1) = e := by
+      ext i
+      fin_cases i <;> simp
+    exact absurd (mem_antidiagonal.mpr he') he
 
 中文:
 引理 coeff_subst_X_zero_subst_mul_X_one
@@ -2259,7 +2414,16 @@ lemma coeff_subst_X_zero_subst_mul_X_one
   · intro b hb hb'
     by_contra hmul_ne_zero
     rcases ne_zero_and_ne_zero_of_mul hmul_ne_zero with ⟨h0, h1⟩
-    simp only [Fin.isValue, coeff_subst_single, ne_eq
+    simp only [Fin.isValue, coeff_subst_single, ne_eq, ite_eq_right_iff,
+      not_forall, exists_prop] at h0 h1
+    apply hb'
+    rw [Prod.ext_iff]; rw [← mem_antidiagonal.mp hb]; rw [h0.1]; rw [h1.1]
+    simp
+  · intro he
+    have he' : single 0 (e 0) + single 1 (e 1) = e := by
+      ext i
+      fin_cases i <;> simp
+    exact absurd (mem_antidiagonal.mpr he') he
 
 Depends on / 依赖: Fin.isValue, Finset, Finset.sum_eq_single, MvPowerSeries, MvPowerSeries.coeff_mul, Prod.ext_iff, S.proj_surjective, coeff_mul, coeff_subst_single, epi_iff_surjective, exists_prop, ext_iff, fin_case, hmul_ne_zero, isValue, ite_eq_right_iff, mem_antidiagonal, mem_antidiagonal.mp, ne_eq, ne_zero_and_ne_zero_of_mul
 -/

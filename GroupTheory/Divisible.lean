@@ -405,7 +405,7 @@ definition rootableByIntOfRootableByNat
     cases n
     · rw [Int.ofNat_eq_natCast, Nat.cast_ne_zero] at hn
       simp [RootableBy.root_cancel _ hn]
-    · simp [RootableBy.r
+    · simp [RootableBy.root_cancel _ (Nat.add_one_ne_zero _)]
 
 中文:
 定义 rootableBy整数OfRootableBy自然数
@@ -418,7 +418,7 @@ definition rootableByIntOfRootableByNat
     cases n
     · rw [Int.ofNat_eq_natCast, Nat.cast_ne_zero] at hn
       simp [RootableBy.root_cancel _ hn]
-    · simp [RootableBy.r
+    · simp [RootableBy.root_cancel _ (Nat.add_one_ne_zero _)]
 
 Depends on / 依赖: Int.ofNat_eq_natCast, Nat.add_one_ne_zero, Nat.cast_ne_zero, RootableBy, RootableBy.root, RootableBy.root_cancel, RootableBy.root_zero, add_one_ne_zero, cast_ne_zero, ofNat_eq_natCast, root_cancel, root_zero
 -/

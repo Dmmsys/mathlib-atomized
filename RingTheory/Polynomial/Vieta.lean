@@ -44,7 +44,12 @@ theorem prod_X_add_C_eq_sum_esymm
   classical
     rw [prod_map_add]; rw [antidiagonal_eq_map_powerset]; rw [map_map]; rw [← bind_powerset_len]; rw [map_bind]; rw [sum_bind]; rw [Finset.sum_eq_multiset_sum]; rw [Finset.range_val]; rw [map_congr (Eq.refl _)]
     intro _ _
-    rw [esymm]; rw [← sum_hom']; rw [← sum_map_mul_right]; r
+    rw [esymm]; rw [← sum_hom']; rw [← sum_map_mul_right]; rw [map_congr (Eq.refl _)]
+    intro s ht
+    rw [mem_powersetCard] at ht
+    dsimp
+    rw [prod_hom' s (Polynomial.C : R ->+* R[X])]
+    simp [ht, prod_replicate, map_id', card_sub]
 
 中文:
 定理 prod_X_add_C_eq_sum_esymm
@@ -53,7 +58,12 @@ theorem prod_X_add_C_eq_sum_esymm
   classical
     rw [prod_map_add]; rw [antidiagonal_eq_map_powerset]; rw [map_map]; rw [← bind_powerset_len]; rw [map_bind]; rw [sum_bind]; rw [Finset.sum_eq_multiset_sum]; rw [Finset.range_val]; rw [map_congr (Eq.refl _)]
     intro _ _
-    rw [esymm]; rw [← sum_hom']; rw [← sum_map_mul_right]; r
+    rw [esymm]; rw [← sum_hom']; rw [← sum_map_mul_right]; rw [map_congr (Eq.refl _)]
+    intro s ht
+    rw [mem_powersetCard] at ht
+    dsimp
+    rw [prod_hom' s (Polynomial.C : R ->+* R[X])]
+    simp [ht, prod_replicate, map_id', card_sub]
 
 Depends on / 依赖: Eq.refl, Finset, Finset.range_val, Finset.sum_eq_multiset_sum, Polynomial, Polynomial.C, antidiagonal_eq_map_powerset, bind_powerset_len, card_sub, classical, map_bind, map_congr, map_id, map_map, mem_powersetCard, prod_hom, prod_map_add, prod_replicate, range_val, sum_bind
 -/
@@ -163,7 +173,8 @@ theorem esymm_neg
   intro x hx
   rw [(mem_powersetCard.mp hx).right.symm]; rw [← prod_replicate]; rw [← Multiset.map_const]
   nth_rw 3 [← map_id' x]
-  rw [← prod_map_mul]; rw [map_c
+  rw [← prod_map_mul]; rw [map_congr rfl]; rw [Function.comp_apply]
+  exact fun z _ => neg_one_mul z
 
 中文:
 定理 esymm_neg
@@ -174,7 +185,8 @@ theorem esymm_neg
   intro x hx
   rw [(mem_powersetCard.mp hx).right.symm]; rw [← prod_replicate]; rw [← Multiset.map_const]
   nth_rw 3 [← map_id' x]
-  rw [← prod_map_mul]; rw [map_c
+  rw [← prod_map_mul]; rw [map_congr rfl]; rw [Function.comp_apply]
+  exact fun z _ => neg_one_mul z
 
 Depends on / 依赖: Function, Function.comp_apply, Multiset, Multiset.map_const, Multiset.map_map, Multiset.powersetCard_map, Multiset.sum_map_mul_left, UniformSpace, ValuativeRel, comp_apply, map_congr, map_const, map_id, map_map, mem_powersetCard, mem_powersetCard.mp, neg_one_mul, nth_rw, powersetCard_map, prod_map_mul
 -/
@@ -356,7 +368,8 @@ theorem MvPolynomial.prod_C_add_X_eq_sum_esymm
   have : Fintype.card σ = Multiset.card s := by
     rw [Multiset.card_map]; rw [← Finset.card_univ]; rw [Finset.card_def]
   simp_rw [this, MvPolynomial.esymm_eq_multiset_esymm σ R, Finset.prod_eq_multiset_prod]
-  co
+  convert! Multiset.prod_X_add_C_eq_sum_esymm s
+  simp_rw [s, Multiset.map_map, Function.comp_apply]
 
 中文:
 定理 多元多项式.prod_C_add_X_eq_sum_esymm
@@ -365,7 +378,8 @@ theorem MvPolynomial.prod_C_add_X_eq_sum_esymm
   have : Fintype.card σ = Multiset.card s := by
     rw [Multiset.card_map]; rw [← Finset.card_univ]; rw [Finset.card_def]
   simp_rw [this, MvPolynomial.esymm_eq_multiset_esymm σ R, Finset.prod_eq_multiset_prod]
-  co
+  convert! Multiset.prod_X_add_C_eq_sum_esymm s
+  simp_rw [s, Multiset.map_map, Function.comp_apply]
 
 Depends on / 依赖: Finset, Finset.card_def, Finset.card_univ, Finset.prod_eq_multiset_prod, Finset.univ.val.map, Fintype, Fintype.card, Function, Function.comp_apply, Multiset, Multiset.card, Multiset.card_map, Multiset.map_map, Multiset.prod_X_add_C_eq_sum_esymm, MvPolynomial, MvPolynomial.X, MvPolynomial.esymm_eq_multiset_esymm, Valued, Valued.isTopologicalDivisionRing, card_def
 -/
@@ -391,7 +405,9 @@ theorem MvPolynomial.prod_X_add_C_coeff
   have : Fintype.card σ = Multiset.card s := by
     rw [Multiset.card_map]; rw [← Finset.card_univ]; rw [Finset.card_def]
   rw [this] at h ⊢
-  rw [MvPolynomial.esymm_eq_multiset_esymm σ R]; rw [Finset.prod_eq_multiset_p
+  rw [MvPolynomial.esymm_eq_multiset_esymm σ R]; rw [Finset.prod_eq_multiset_prod]
+  convert! Multiset.prod_X_add_C_coeff s h
+  simp_rw [s, Multiset.map_map, Function.comp_apply]
 
 中文:
 定理 多元多项式.prod_X_add_C_coeff
@@ -401,7 +417,9 @@ theorem MvPolynomial.prod_X_add_C_coeff
   have : Fintype.card σ = Multiset.card s := by
     rw [Multiset.card_map]; rw [← Finset.card_univ]; rw [Finset.card_def]
   rw [this] at h ⊢
-  rw [MvPolynomial.esymm_eq_multiset_esymm σ R]; rw [Finset.prod_eq_multiset_p
+  rw [MvPolynomial.esymm_eq_multiset_esymm σ R]; rw [Finset.prod_eq_multiset_prod]
+  convert! Multiset.prod_X_add_C_coeff s h
+  simp_rw [s, Multiset.map_map, Function.comp_apply]
 
 Depends on / 依赖: Finset, Finset.card_def, Finset.card_univ, Finset.prod_eq_multiset_prod, Finset.univ.val.map, Fintype, Fintype.card, Function, Function.comp_apply, IsTopologicalAddGroup, IsTopologicalAddGroup.t2Space_of_zero_sep, Multiset, Multiset.card, Multiset.card_map, Multiset.map_map, Multiset.prod_X_add_C_coeff, MvPolynomial, MvPolynomial.X, MvPolynomial.esymm_eq_multiset_esymm, T0Space
 -/

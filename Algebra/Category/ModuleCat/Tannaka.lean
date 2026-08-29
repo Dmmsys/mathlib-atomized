@@ -39,7 +39,10 @@ definition ringEquivEndForget₂
   right_inv φ := by
     ext M (x : M)
     have w := CategoryTheory.congr_fun
-      (φ.hom.natural
+      (φ.hom.naturality (ModuleCat.ofHom (LinearMap.toSpanSingleton R M x))) (1 : R)
+    exact w.symm.trans (congr_arg (φ.hom.app M) (one_smul R x))
+  map_add' := by cat_disch
+  map_mul' := by cat_disch
 
 中文:
 定义 ringEquivEndForget₂
@@ -52,7 +55,10 @@ definition ringEquivEndForget₂
   right_inv φ := by
     ext M (x : M)
     have w := CategoryTheory.congr_fun
-      (φ.hom.natural
+      (φ.hom.naturality (ModuleCat.ofHom (LinearMap.toSpanSingleton R M x))) (1 : R)
+    exact w.symm.trans (congr_arg (φ.hom.app M) (one_smul R x))
+  map_add' := by cat_disch
+  map_mul' := by cat_disch
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ofHom, CategoryTheory, CategoryTheory.congr_fun, DistribSMul, DistribSMul.toAddMonoidHom, LinearMap, LinearMap.toSpanSingleton, M.carrier, ModuleCat, ModuleCat.of, ModuleCat.ofHom, ObjectProperty, ObjectProperty.homMk, carrier, cat_disch, congr_arg, congr_fun, hom.app, hom.naturality
 -/

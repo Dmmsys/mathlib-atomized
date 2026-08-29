@@ -459,7 +459,7 @@ lemma card_filter_piFinset_eq_of_mem
       rw [← piFinset_update_singleton_eq_filter_piFinset_eq _ _ ha]; rw [Fintype.card_piFinset]
     _ = ∏ j, Function.update (fun j => #(s j)) i 1 j :=
       Fintype.prod_congr _ _ fun j => by obtain rfl | hji := eq_or_ne j i <;> simp [*]
-   
+    _ = _ := by simp [prod_update_of_mem, erase_eq]
 
 中文:
 引理 card_filter_piFinset_eq_of_mem
@@ -470,7 +470,7 @@ lemma card_filter_piFinset_eq_of_mem
       rw [← piFinset_update_singleton_eq_filter_piFinset_eq _ _ ha]; rw [Fintype.card_piFinset]
     _ = ∏ j, Function.update (fun j => #(s j)) i 1 j :=
       Fintype.prod_congr _ _ fun j => by obtain rfl | hji := eq_or_ne j i <;> simp [*]
-   
+    _ = _ := by simp [prod_update_of_mem, erase_eq]
 
 Depends on / 依赖: Fintype, Fintype.card_piFinset, Fintype.prod_congr, Function, Function.update, card_piFinset, eq_or_ne, erase_eq, piFinset_update_singleton_eq_filter_piFinset_eq, prod_congr, prod_update_of_mem, update
 -/
@@ -621,6 +621,9 @@ lemma Finset.card_filter_length_eq_le
           exact Finset.mem_image.mpr ⟨
               (fun j : Fin s => a.get ⟨j.val, by simp [hlen]⟩),
               by simp,
+              List.ext_get (by simp [hlen]) (by simp)⟩
+    _ = Fintype.card α ^ s := by
+          simp [card_image_of_injective univ List.ofFn_injective]
 
 中文:
 引理 有限集.card_filter_length_eq_le
@@ -635,6 +638,9 @@ lemma Finset.card_filter_length_eq_le
           exact Finset.mem_image.mpr ⟨
               (fun j : Fin s => a.get ⟨j.val, by simp [hlen]⟩),
               by simp,
+              List.ext_get (by simp [hlen]) (by simp)⟩
+    _ = Fintype.card α ^ s := by
+          simp [card_image_of_injective univ List.ofFn_injective]
 
 Depends on / 依赖: Finset, Finset.card_le_card, Finset.mem_filter.mp, Finset.mem_image.mpr, Finset.univ.image, Fintype, Fintype.card, List.ext_get, List.ofFn, List.ofFn_injective, a.get, card_image_of_injective, card_le_card, classical, ext_get, j.val, mem_filter, mem_image, ofFn_injective
 -/
@@ -733,7 +739,11 @@ theorem Finset.prod_toFinset_eq_subtype
 nonrec theorem Fintype.prod_dite [Fintype α] {p : α -> Prop} [DecidablePred p] [CommMonoid β]
     (f : forall a, p a -> β) (g : forall a, ¬p a -> β) :
     (∏ a, dite (p a) (f a) (g a)) =
-    (∏ a : { a // p a }, f a a.2) * ∏ a
+    (∏ a : { a // p a }, f a a.2) * ∏ a : { a // ¬p a }, g a a.2 := by
+  simp only [prod_dite]
+  congr 1
+  · exact (Equiv.subtypeEquivRight <| by simp).prod_comp fun x : { x // p x } => f x x.2
+  · exact (Equiv.subtypeEquivRight <| by simp).prod_comp fun x : { x // ¬p x } => g x x.2
 
 中文:
 定理 有限集.prod_toFinset_eq_subtype
@@ -745,7 +755,11 @@ nonrec theorem Fintype.prod_dite [Fintype α] {p : α -> Prop} [DecidablePred p]
 nonrec theorem Fintype.prod_dite [Fintype α] {p : α -> Prop} [DecidablePred p] [CommMonoid β]
     (f : forall a, p a -> β) (g : forall a, ¬p a -> β) :
     (∏ a, dite (p a) (f a) (g a)) =
-    (∏ a : { a // p a }, f a a.2) * ∏ a
+    (∏ a : { a // p a }, f a a.2) * ∏ a : { a // ¬p a }, g a a.2 := by
+  simp only [prod_dite]
+  congr 1
+  · exact (Equiv.subtypeEquivRight <| by simp).prod_comp fun x : { x // p x } => f x x.2
+  · exact (Equiv.subtypeEquivRight <| by simp).prod_comp fun x : { x // ¬p x } => g x x.2
 
 Depends on / 依赖: Finset, Finset.prod_subtype, Set.mem_toFinset, mem_toFinset, prod_subtype, simp_rw
 -/

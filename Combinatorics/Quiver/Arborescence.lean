@@ -100,7 +100,29 @@ definition arborescenceMk
       induction n generalizing b with
       | zero => exact False.elim (Nat.not_lt_zero _ hn)
       | succ n ih =>
-      rcases root_or_arrow b with (⟨⟨⟩⟩ | ⟨
+      rcases root_or_arrow b with (⟨⟨⟩⟩ | ⟨a, ⟨e⟩⟩)
+      · exact ⟨Path.nil⟩
+      · rcases ih a (lt_of_lt_of_le (height_lt e) (Nat.lt_succ_iff.mp hn)) with ⟨p⟩
+        exact ⟨p.cons e⟩), by
+      have height_le : forall {a b}, Path a b -> height a <= height b := by
+        intro a b p
+        induction p with
+        | nil => rfl
+        | cons _ e ih => exact le_of_lt (lt_of_le_of_lt ih (height_lt e))
+      suffices forall p q : Path r b, p = q by
+        intro p
+        apply this
+      intro p q
+      induction p with
+      | nil =>
+        rcases q with _ | ⟨q, f⟩
+        · rfl
+        · exact False.elim (lt_irrefl _ (lt_of_le_of_lt (height_le q) (height_lt f)))
+      | cons p e ih =>
+        rcases q with _ | ⟨q, f⟩
+        · exact False.elim (lt_irrefl _ (lt_of_le_of_lt (height_le p) (height_lt e)))
+        · rcases unique_arrow e f with ⟨⟨⟩, ⟨⟩⟩
+          rw [ih]⟩
 
 中文:
 定义 arborescenceMk
@@ -112,7 +134,29 @@ definition arborescenceMk
       induction n generalizing b with
       | zero => exact False.elim (Nat.not_lt_zero _ hn)
       | succ n ih =>
-      rcases root_or_arrow b with (⟨⟨⟩⟩ | ⟨
+      rcases root_or_arrow b with (⟨⟨⟩⟩ | ⟨a, ⟨e⟩⟩)
+      · exact ⟨Path.nil⟩
+      · rcases ih a (lt_of_lt_of_le (height_lt e) (Nat.lt_succ_iff.mp hn)) with ⟨p⟩
+        exact ⟨p.cons e⟩), by
+      have height_le : forall {a b}, Path a b -> height a <= height b := by
+        intro a b p
+        induction p with
+        | nil => rfl
+        | cons _ e ih => exact le_of_lt (lt_of_le_of_lt ih (height_lt e))
+      suffices forall p q : Path r b, p = q by
+        intro p
+        apply this
+      intro p q
+      induction p with
+      | nil =>
+        rcases q with _ | ⟨q, f⟩
+        · rfl
+        · exact False.elim (lt_irrefl _ (lt_of_le_of_lt (height_le q) (height_lt f)))
+      | cons p e ih =>
+        rcases q with _ | ⟨q, f⟩
+        · exact False.elim (lt_irrefl _ (lt_of_le_of_lt (height_le p) (height_lt e)))
+        · rcases unique_arrow e f with ⟨⟨⟩, ⟨⟩⟩
+          rw [ih]⟩
 -/
 noncomputable def arborescenceMk {V : Type u} [Quiver V] (r : V) (height : V -> Nat)
     (height_lt : forall ⦃a b⦄, (a ⟶ b) -> height a < height b)
@@ -248,7 +292,9 @@ instance geodesicArborescence
       constructor <;> rfl)
     (by
       intro b
-   
+      rcases hp : shortestPath r b with (_ | ⟨p, e⟩)
+      · exact Or.inl rfl
+      · exact Or.inr ⟨_, ⟨⟨e, p, hp⟩⟩⟩)
 
 中文:
 实例 geodesicArborescence
@@ -264,7 +310,9 @@ instance geodesicArborescence
       constructor <;> rfl)
     (by
       intro b
-   
+      rcases hp : shortestPath r b with (_ | ⟨p, e⟩)
+      · exact Or.inl rfl
+      · exact Or.inr ⟨_, ⟨⟨e, p, hp⟩⟩⟩)
 
 Depends on / 依赖: Nat.lt_succ_iff, Or.inl, Or.inr, Path.length_cons, arborescenceMk, h.symm.trans, length, length_cons, lt_succ_iff, shortestPath, shortest_path_spec, simp_rw
 -/

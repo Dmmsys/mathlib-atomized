@@ -322,7 +322,11 @@ lemma isStableUnderBaseChange_comap_jointlySurjectivePrecoverage
     obtain ⟨i, hi⟩ := hf (F.map g x)
     have : HasPullback g (f i) := (h i).hasPullback
     use i
-    have : F.map (p₁ i) = F.map ((h i).isoPullback.hom) ≫
+    have : F.map (p₁ i) = F.map ((h i).isoPullback.hom) ≫ pullbackComparison F g (f i) ≫
+        pullback.fst _ _ := by simp [← Functor.map_comp]
+    rwa [this, types_comp, types_comp, Function.comp_assoc, Set.range_comp,
+Function.Surjective.range_eq (H _ _).comp (surjective_of_epi _), Set.image_univ,
+      Types.range_pullbackFst]
 
 中文:
 引理 isStableUnderBaseChange_comap_jointlySurjectivePrecoverage
@@ -332,7 +336,11 @@ lemma isStableUnderBaseChange_comap_jointlySurjectivePrecoverage
     obtain ⟨i, hi⟩ := hf (F.map g x)
     have : HasPullback g (f i) := (h i).hasPullback
     use i
-    have : F.map (p₁ i) = F.map ((h i).isoPullback.hom) ≫
+    have : F.map (p₁ i) = F.map ((h i).isoPullback.hom) ≫ pullbackComparison F g (f i) ≫
+        pullback.fst _ _ := by simp [← Functor.map_comp]
+    rwa [this, types_comp, types_comp, Function.comp_assoc, Set.range_comp,
+Function.Surjective.range_eq (H _ _).comp (surjective_of_epi _), Set.image_univ,
+      Types.range_pullbackFst]
 
 Depends on / 依赖: F.map, Function, Function.Surjective.range_eq, Function.comp_assoc, Functor, Functor.map_comp, HasPullback, Precoverage, Precoverage.mem_comap_iff, Presieve, Presieve.map_ofArrows, Set.im, Set.range_comp, Surjective, Types.ofArrows_mem_jointlySurjectivePrecoverage_iff, comp_assoc, hasPullback, isoPullback, isoPullback.hom, map_comp
 -/

@@ -481,7 +481,12 @@ refine ⟨fun i => h.subset subset_iUnion _ _, ?_⟩
     have u_inj : Function.Injective u := by
       rintro ⟨i, hi⟩ ⟨j, hj⟩ hij
       ext
-refine hs.eq not_disjoint_iff.2 ⟨u ⟨i, hi⟩, hi.choose_spec, 
+refine hs.eq not_disjoint_iff.2 ⟨u ⟨i, hi⟩, hi.choose_spec, ?_⟩
+      rw [hij]
+      exact hj.choose_spec
+    have : Finite (⋃ i, s i) := h
+    exact .of_injective u u_inj
+  mpr h := h.2.iUnion (fun _ _ => h.1 _) (by simp [not_nonempty_iff_eq_empty])
 
 中文:
 引理 finite_iUnion_iff
@@ -492,7 +497,12 @@ refine ⟨fun i => h.subset subset_iUnion _ _, ?_⟩
     have u_inj : Function.Injective u := by
       rintro ⟨i, hi⟩ ⟨j, hj⟩ hij
       ext
-refine hs.eq not_disjoint_iff.2 ⟨u ⟨i, hi⟩, hi.choose_spec, 
+refine hs.eq not_disjoint_iff.2 ⟨u ⟨i, hi⟩, hi.choose_spec, ?_⟩
+      rw [hij]
+      exact hj.choose_spec
+    have : Finite (⋃ i, s i) := h
+    exact .of_injective u u_inj
+  mpr h := h.2.iUnion (fun _ _ => h.1 _) (by simp [not_nonempty_iff_eq_empty])
 
 Depends on / 依赖: Finite, Function, Function.Injective, Injective, Nonempty, choose_spec, h.subset, hi.choose_spec, hj.choose_spec, hs.eq, iUnion, mem_iUnion, not_disjoint_iff, not_nonempty_iff_eq_empty, of_injective, subset, subset_iUnion, u_inj
 -/
@@ -715,7 +725,9 @@ theorem eq_finite_iUnion_of_finite_subset_iUnion
     constructor
     · intro x_in
       rcases mem_iUnion.mp (hI x_in) with ⟨i, _, ⟨hi, rfl⟩, H⟩
-      exact ⟨⟨i
+      exact ⟨⟨i, hi⟩, ⟨H, x_in⟩⟩
+    · rintro ⟨i, -, H⟩
+      exact H⟩
 
 中文:
 定理 eq_finite_iUnion_of_finite_subset_iUnion
@@ -728,7 +740,9 @@ theorem eq_finite_iUnion_of_finite_subset_iUnion
     constructor
     · intro x_in
       rcases mem_iUnion.mp (hI x_in) with ⟨i, _, ⟨hi, rfl⟩, H⟩
-      exact ⟨⟨i
+      exact ⟨⟨i, hi⟩, ⟨H, x_in⟩⟩
+    · rintro ⟨i, -, H⟩
+      exact H⟩
 
 Depends on / 依赖: finite_subset_iUnion, inter_subset_left, inter_subset_right, mem_iUnion, mem_iUnion.mp, subset, tfin.subset, x_in
 -/
@@ -1000,7 +1014,8 @@ theorem _root_.iSup_iInf_of_antitone
 
 @[deprecated (since := "2026-02-03")] protected alias iSup_iInf_of_monotone := iSup_iInf_of_monotone
 @[deprecated (since := "2026-02-03")] protected alias iSup_iInf_of_antitone := iSup_iInf_of_antitone
-@[deprecated (since := "202
+@[deprecated (since := "2026-02-03")] protected alias iInf_iSup_of_monotone := iInf_iSup_of_monotone
+@[deprecated (since := "2026-02-03")] protected alias iInf_iSup_of_antitone := iInf_iSup_of_antitone
 
 中文:
 定理 _root_.iSup_iInf_of_antitone
@@ -1009,7 +1024,8 @@ theorem _root_.iSup_iInf_of_antitone
 
 @[deprecated (since := "2026-02-03")] protected alias iSup_iInf_of_monotone := iSup_iInf_of_monotone
 @[deprecated (since := "2026-02-03")] protected alias iSup_iInf_of_antitone := iSup_iInf_of_antitone
-@[deprecated (since := "202
+@[deprecated (since := "2026-02-03")] protected alias iInf_iSup_of_monotone := iInf_iSup_of_monotone
+@[deprecated (since := "2026-02-03")] protected alias iInf_iSup_of_antitone := iInf_iSup_of_antitone
 
 Depends on / 依赖: dual_left, iSup_iInf_of_monotone
 -/
@@ -1164,7 +1180,15 @@ theorem _root_.iInf_iSup_eq_of_finite
   suffices forall {ι : Type v} {κ : ι -> Type w} [Finite ι] (f : Π a, κ a -> α),
       ⨅ a, ⨆ b, f a b = ⨆ g : (Π a, κ a), ⨅ a, f a (g a) by
     simpa [← Equiv.plift.symm.iInf_comp, ← Equiv.plift.symm.iSup_comp,
-        ← (Equiv.plift.piCongr fun a => @Equiv.plift (κ a.down)).symm.iSup_comp] usin
+        ← (Equiv.plift.piCongr fun a => @Equiv.plift (κ a.down)).symm.iSup_comp] using!
+      this (κ := fun a => PLift (κ a.down)) fun (a : PLift ι) b => f a.down b.down
+  intro ι κ _ f
+  induction ι using Finite.induction_empty_option with
+  | of_equiv e h => simp [← e.iInf_comp, ← e.piCongrLeft κ |>.iSup_comp, h]
+  | h_empty => simp [iInf_of_empty, iSup_const]
+  | h_option h =>
+    simp only [iInf_option, h, ← (Equiv.piOptionEquivProd (β := κ)).symm.iSup_comp,
+      Equiv.piOptionEquivProd_symm_apply, iSup_prod, ← inf_iSup_eq, ← iSup_inf_eq]
 
 中文:
 定理 _root_.iInf_iSup_eq_of_finite
@@ -1173,7 +1197,15 @@ theorem _root_.iInf_iSup_eq_of_finite
   suffices forall {ι : Type v} {κ : ι -> Type w} [Finite ι] (f : Π a, κ a -> α),
       ⨅ a, ⨆ b, f a b = ⨆ g : (Π a, κ a), ⨅ a, f a (g a) by
     simpa [← Equiv.plift.symm.iInf_comp, ← Equiv.plift.symm.iSup_comp,
-        ← (Equiv.plift.piCongr fun a => @Equiv.plift (κ a.down)).symm.iSup_comp] usin
+        ← (Equiv.plift.piCongr fun a => @Equiv.plift (κ a.down)).symm.iSup_comp] using!
+      this (κ := fun a => PLift (κ a.down)) fun (a : PLift ι) b => f a.down b.down
+  intro ι κ _ f
+  induction ι using Finite.induction_empty_option with
+  | of_equiv e h => simp [← e.iInf_comp, ← e.piCongrLeft κ |>.iSup_comp, h]
+  | h_empty => simp [iInf_of_empty, iSup_const]
+  | h_option h =>
+    simp only [iInf_option, h, ← (Equiv.piOptionEquivProd (β := κ)).symm.iSup_comp,
+      Equiv.piOptionEquivProd_symm_apply, iSup_prod, ← inf_iSup_eq, ← iSup_inf_eq]
 
 Depends on / 依赖: Equiv.plift, Equiv.plift.piCongr, Equiv.plift.symm.iInf_comp, Equiv.plift.symm.iSup_comp, Finite, Finite.induction_empty_option, a.down, b.down, e.iInf_comp, e.piCongrLeft, iInf_comp, iSup_comp, induction_empty_option, of_equiv, piCongr, piCongrLeft, symm.iSup_comp
 -/
@@ -1222,7 +1254,13 @@ theorem Finite.biInf_iSup_eq
   suffices h : forall {κ : ι -> Type w} [Nonempty (Π a, κ a)] (f : Π a, κ a -> α),
       ⨅ a in s, ⨆ b, f a b = ⨆ g : (Π a, κ a), ⨅ a in s, f a (g a) by
     have : Nonempty (Π a, PLift (κ a)) := (Equiv.piCongrRight fun _ => Equiv.plift).nonempty
-    simpa [← Equiv.plift.symm.iSup_comp
+    simpa [← Equiv.plift.symm.iSup_comp, ← (Equiv.piCongrRight fun _ => Equiv.plift).symm.iSup_comp]
+      using h (κ := fun a => PLift (κ a)) fun a b => f a b.down
+  intro κ _ f
+  have := hs.to_subtype
+  have : Nonempty (Π a : { a // a ∉ s }, κ ↑a) := ‹Nonempty (Π a, κ a)›.map fun f a => f a
+  simp [← iInf_subtype'', iInf_iSup_eq_of_finite (ι := s),
+.symm.iSup_comp, iSup_prod, iSup_const] ← Equiv.piEquivPiSubtypeProd (· in s) _
 
 中文:
 定理 有限.biInf_iSup_eq
@@ -1232,7 +1270,13 @@ theorem Finite.biInf_iSup_eq
   suffices h : forall {κ : ι -> Type w} [Nonempty (Π a, κ a)] (f : Π a, κ a -> α),
       ⨅ a in s, ⨆ b, f a b = ⨆ g : (Π a, κ a), ⨅ a in s, f a (g a) by
     have : Nonempty (Π a, PLift (κ a)) := (Equiv.piCongrRight fun _ => Equiv.plift).nonempty
-    simpa [← Equiv.plift.symm.iSup_comp
+    simpa [← Equiv.plift.symm.iSup_comp, ← (Equiv.piCongrRight fun _ => Equiv.plift).symm.iSup_comp]
+      using h (κ := fun a => PLift (κ a)) fun a b => f a b.down
+  intro κ _ f
+  have := hs.to_subtype
+  have : Nonempty (Π a : { a // a ∉ s }, κ ↑a) := ‹Nonempty (Π a, κ a)›.map fun f a => f a
+  simp [← iInf_subtype'', iInf_iSup_eq_of_finite (ι := s),
+.symm.iSup_comp, iSup_prod, iSup_const] ← Equiv.piEquivPiSubtypeProd (· in s) _
 
 Depends on / 依赖: Equiv.piCongrRight, Equiv.plift, Equiv.plift.symm.iSup_comp, Nonempty, b.down, classical, hs.to_subtype, iSup_comp, nonempty, piCongrRight, symm.iSup_comp, to_subtype
 -/

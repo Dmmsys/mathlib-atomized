@@ -86,7 +86,13 @@ lemma LocalSubring.map_maximalIdeal_eq_top_of_isMax
   obtain ⟨M, h_is_max, h_incl⟩ := Ideal.exists_le_maximal _ h_is_not_top
   let fSₘ : LocalSubring K := LocalSubring.ofPrime S M
   have h_RleSₘ : R <= fSₘ := by
-    refine ⟨hS.le.trans (LocalSubring.le_of
+    refine ⟨hS.le.trans (LocalSubring.le_ofPrime ..), ((local_hom_TFAE _).out 2 0).mp ?_⟩
+    conv_rhs => rw [← IsLocalization.AtPrime.map_eq_maximalIdeal M]
+    refine .trans ?_ (Ideal.map_mono h_incl)
+    rw [Ideal.map_map]; rfl
+  exact (hR.eq_of_le h_RleSₘ ▸ hS).not_ge (LocalSubring.le_ofPrime ..)
+
+@[stacks 00IC]
 
 中文:
 引理 Local子环.map_maximalIdeal_eq_top_of_isMax
@@ -97,7 +103,13 @@ lemma LocalSubring.map_maximalIdeal_eq_top_of_isMax
   obtain ⟨M, h_is_max, h_incl⟩ := Ideal.exists_le_maximal _ h_is_not_top
   let fSₘ : LocalSubring K := LocalSubring.ofPrime S M
   have h_RleSₘ : R <= fSₘ := by
-    refine ⟨hS.le.trans (LocalSubring.le_of
+    refine ⟨hS.le.trans (LocalSubring.le_ofPrime ..), ((local_hom_TFAE _).out 2 0).mp ?_⟩
+    conv_rhs => rw [← IsLocalization.AtPrime.map_eq_maximalIdeal M]
+    refine .trans ?_ (Ideal.map_mono h_incl)
+    rw [Ideal.map_map]; rfl
+  exact (hR.eq_of_le h_RleSₘ ▸ hS).not_ge (LocalSubring.le_ofPrime ..)
+
+@[stacks 00IC]
 
 Depends on / 依赖: AtPrime, Ideal.exists_le_maximal, Ideal.map_map, Ideal.map_mono, IsLocalization, IsLocalization.AtPrime.map_eq_maximalIdeal, LocalSubring, LocalSubring.le_ofPrime, LocalSubring.ofPrime, R.toSubring, Subring, Subring.inclusion, conv_rhs, eq_of_le, exists_le_maximal, hR.eq_of_le, hS.le, hS.le.trans, h_incl, h_is_max
 -/
@@ -128,7 +140,16 @@ lemma LocalSubring.mem_of_isMax_of_isIntegral
   have : Algebra.IsIntegral R.toSubring S := Algebra.IsIntegral.adjoin (by simpa)
   obtain ⟨Q : Ideal S.toSubring, hQ, e⟩ := Ideal.exists_ideal_over_maximal_of_isIntegral
     (S := S) (maximalIdeal R.toSubring) (le_maximalIdeal (by simp))
-  have : R = .ofPrime S.toSubrin
+  have : R = .ofPrime S.toSubring Q := by
+    have hRS : R.toSubring <= S.toSubring := fun r hr => algebraMap_mem S ⟨r, hr⟩
+    refine hR.eq_of_le ⟨hRS.trans (LocalSubring.le_ofPrime _ _), ((local_hom_TFAE _).out 2 0).mp ?_⟩
+    conv_rhs => rw [← IsLocalization.AtPrime.map_eq_maximalIdeal Q]
+    refine .trans ?_ (Ideal.map_mono <| Ideal.map_le_iff_le_comap.mpr e.ge)
+    rw [Ideal.map_map]; rfl
+  rw [this]
+  exact LocalSubring.le_ofPrime _ _ (self_mem_adjoin_singleton _ _)
+
+@[stacks 052K]
 
 中文:
 引理 Local子环.mem_of_isMax_of_is整数egral
@@ -138,7 +159,16 @@ lemma LocalSubring.mem_of_isMax_of_isIntegral
   have : Algebra.IsIntegral R.toSubring S := Algebra.IsIntegral.adjoin (by simpa)
   obtain ⟨Q : Ideal S.toSubring, hQ, e⟩ := Ideal.exists_ideal_over_maximal_of_isIntegral
     (S := S) (maximalIdeal R.toSubring) (le_maximalIdeal (by simp))
-  have : R = .ofPrime S.toSubrin
+  have : R = .ofPrime S.toSubring Q := by
+    have hRS : R.toSubring <= S.toSubring := fun r hr => algebraMap_mem S ⟨r, hr⟩
+    refine hR.eq_of_le ⟨hRS.trans (LocalSubring.le_ofPrime _ _), ((local_hom_TFAE _).out 2 0).mp ?_⟩
+    conv_rhs => rw [← IsLocalization.AtPrime.map_eq_maximalIdeal Q]
+    refine .trans ?_ (Ideal.map_mono <| Ideal.map_le_iff_le_comap.mpr e.ge)
+    rw [Ideal.map_map]; rfl
+  rw [this]
+  exact LocalSubring.le_ofPrime _ _ (self_mem_adjoin_singleton _ _)
+
+@[stacks 052K]
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral, Algebra.IsIntegral.adjoin, Ideal.exists_ideal_over_maximal_of_isIntegral, IsIntegral, IsLocaliz, LocalSubring, LocalSubring.le_ofPrime, R.toSubring, S.toSubring, adjoin, algebraMap_mem, conv_rhs, eq_of_le, exists_ideal_over_maximal_of_isIntegral, hR.eq_of_le, hRS.trans, le_maximalIdeal, le_ofPrime, local_hom_TFAE
 -/
@@ -170,7 +200,10 @@ lemma ValuationSubring.isMax_toLocalSubring
   by_contra h'
   have hx0 : x != 0 := by rintro rfl; exact h' R.zero_mem
   have : IsUnit (Subring.inclusion hS.1 ⟨x⁻¹, h⟩) :=
-    isUnit_iff_exists_inv.mpr ⟨⟨x, hx⟩, Subtype.ext (in
+    isUnit_iff_exists_inv.mpr ⟨⟨x, hx⟩, Subtype.ext (inv_mul_cancel₀ hx0)⟩
+  obtain ⟨x', hx'⟩ := isUnit_iff_exists_inv.mp (hS.2.1 _ this)
+  have : x' = x := by simpa [Subtype.ext_iff, inv_mul_eq_iff_eq_mul₀ hx0] using hx'
+  exact h' (this ▸ x'.2)
 
 中文:
 引理 赋值子环.isMax_toLocalSubring
@@ -181,7 +214,10 @@ lemma ValuationSubring.isMax_toLocalSubring
   by_contra h'
   have hx0 : x != 0 := by rintro rfl; exact h' R.zero_mem
   have : IsUnit (Subring.inclusion hS.1 ⟨x⁻¹, h⟩) :=
-    isUnit_iff_exists_inv.mpr ⟨⟨x, hx⟩, Subtype.ext (in
+    isUnit_iff_exists_inv.mpr ⟨⟨x, hx⟩, Subtype.ext (inv_mul_cancel₀ hx0)⟩
+  obtain ⟨x', hx'⟩ := isUnit_iff_exists_inv.mp (hS.2.1 _ this)
+  have : x' = x := by simpa [Subtype.ext_iff, inv_mul_eq_iff_eq_mul₀ hx0] using hx'
+  exact h' (this ▸ x'.2)
 
 Depends on / 依赖: IsUnit, LocalSubring, LocalSubring.toSubring_injective, R.zero_mem, Subring, Subring.inclusion, Subtype, Subtype.ext, Subtype.ext_iff, antisymm, ext_iff, inclusion, isUnit_iff_exists_inv, isUnit_iff_exists_inv.mp, isUnit_iff_exists_inv.mpr, toSubring_injective, zero_mem
 -/
@@ -212,7 +248,13 @@ lemma LocalSubring.exists_valuationRing_of_isMax
   have hx0 : x != 0 := fun e => hx (e ▸ zero_mem _)
   let := invertibleOfNonzero hx0
   let S := R.toSubring[x]
-  hav
+  have : R.toSubring < S.toSubring := SetLike.lt_iff_le_and_exists.mpr
+    ⟨fun r hr => algebraMap_mem S ⟨r, hr⟩, ⟨x, self_mem_adjoin_singleton _ _, hx⟩⟩
+  have ⟨p, hp, hpx⟩ := exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top x _
+    (maximalIdeal.isMaximal R.toSubring).ne_top
+    (top_unique <| (map_maximalIdeal_eq_top_of_isMax hR this).ge.trans le_self_add)
+  have H : IsUnit p.leadingCoeff := of_not_not fun h => by simpa using sub_mem h hp
+  exact ⟨.C H.unit⁻¹.1 * p, by simp [Polynomial.Monic], by simpa using .inr hpx⟩
 
 中文:
 引理 Local子环.存在_valuationRing_of_isMax
@@ -224,7 +266,13 @@ lemma LocalSubring.exists_valuationRing_of_isMax
   have hx0 : x != 0 := fun e => hx (e ▸ zero_mem _)
   let := invertibleOfNonzero hx0
   let S := R.toSubring[x]
-  hav
+  have : R.toSubring < S.toSubring := SetLike.lt_iff_le_and_exists.mpr
+    ⟨fun r hr => algebraMap_mem S ⟨r, hr⟩, ⟨x, self_mem_adjoin_singleton _ _, hx⟩⟩
+  have ⟨p, hp, hpx⟩ := exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top x _
+    (maximalIdeal.isMaximal R.toSubring).ne_top
+    (top_unique <| (map_maximalIdeal_eq_top_of_isMax hR this).ge.trans le_self_add)
+  have H : IsUnit p.leadingCoeff := of_not_not fun h => by simpa using sub_mem h hp
+  exact ⟨.C H.unit⁻¹.1 * p, by simp [Polynomial.Monic], by simpa using .inr hpx⟩
 
 Depends on / 依赖: R.toSubring, S.toSubring, SetLike, SetLike.lt_iff_le_and_exists.mpr, algebraMap_mem, exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_, invertibleOfNonzero, lt_iff_le_and_exists, mem_of_isMax_of_isIntegral, or_iff_not_imp_left, or_iff_not_imp_left.mpr, self_mem_adjoin_singleton, toSubring, zero_mem
 -/
@@ -282,7 +330,23 @@ lemma LocalSubring.exists_le_valuationSubring
   refine zorn_le_nonempty_Ici₀ _ ?_ _ le_rfl
   intro s hs H y hys
   have inst : Nonempty s := ⟨⟨y, hys⟩⟩
-  have hdir := H.directed.mono_comp _ Loca
+  have hdir := H.directed.mono_comp _ LocalSubring.toSubring_mono
+  refine ⟨@LocalSubring.mk _ _ (⨆ i : s, i.1.toSubring) ⟨?_⟩, ?_⟩
+  · intro ⟨a, ha⟩ ⟨b, hb⟩ e
+    obtain ⟨A, haA : a in A.1.toSubring⟩ := (Subring.mem_iSup_of_directed hdir).mp ha
+    obtain ⟨B, hbB : b in B.1.toSubring⟩ := (Subring.mem_iSup_of_directed hdir).mp hb
+    obtain ⟨C, hCA, hCB⟩ := hdir A B
+    refine (C.1.2.2 (a := ⟨a, hCA haA⟩) (b := ⟨b, hCB hbB⟩) (Subtype.ext congr(($e).1))).imp ?_ ?_
+    · exact fun h => h.map (Subring.inclusion (le_iSup (fun i : s => i.1.toSubring) C))
+    · exact fun h => h.map (Subring.inclusion (le_iSup (fun i : s => i.1.toSubring) C))
+  · intro A hA
+    refine ⟨le_iSup (fun i : s => i.1.toSubring) ⟨A, hA⟩, ⟨?_⟩⟩
+    rintro ⟨a, haA⟩ h
+    obtain ⟨⟨b, hb⟩, e⟩ := isUnit_iff_exists_inv.mp h
+    obtain ⟨B, hbB : b in B.1.toSubring⟩ := (Subring.mem_iSup_of_directed hdir).mp hb
+    obtain ⟨C, hCA, hCB⟩ := H.directed ⟨A, hA⟩ B
+    apply hCA.2.1
+    exact isUnit_iff_exists_inv.mpr ⟨⟨b, hCB.1 hbB⟩, Subtype.ext congr(($e).1)⟩
 
 中文:
 引理 Local子环.存在_le_valuationSubring
@@ -295,7 +359,23 @@ lemma LocalSubring.exists_le_valuationSubring
   refine zorn_le_nonempty_Ici₀ _ ?_ _ le_rfl
   intro s hs H y hys
   have inst : Nonempty s := ⟨⟨y, hys⟩⟩
-  have hdir := H.directed.mono_comp _ Loca
+  have hdir := H.directed.mono_comp _ LocalSubring.toSubring_mono
+  refine ⟨@LocalSubring.mk _ _ (⨆ i : s, i.1.toSubring) ⟨?_⟩, ?_⟩
+  · intro ⟨a, ha⟩ ⟨b, hb⟩ e
+    obtain ⟨A, haA : a in A.1.toSubring⟩ := (Subring.mem_iSup_of_directed hdir).mp ha
+    obtain ⟨B, hbB : b in B.1.toSubring⟩ := (Subring.mem_iSup_of_directed hdir).mp hb
+    obtain ⟨C, hCA, hCB⟩ := hdir A B
+    refine (C.1.2.2 (a := ⟨a, hCA haA⟩) (b := ⟨b, hCB hbB⟩) (Subtype.ext congr(($e).1))).imp ?_ ?_
+    · exact fun h => h.map (Subring.inclusion (le_iSup (fun i : s => i.1.toSubring) C))
+    · exact fun h => h.map (Subring.inclusion (le_iSup (fun i : s => i.1.toSubring) C))
+  · intro A hA
+    refine ⟨le_iSup (fun i : s => i.1.toSubring) ⟨A, hA⟩, ⟨?_⟩⟩
+    rintro ⟨a, haA⟩ h
+    obtain ⟨⟨b, hb⟩, e⟩ := isUnit_iff_exists_inv.mp h
+    obtain ⟨B, hbB : b in B.1.toSubring⟩ := (Subring.mem_iSup_of_directed hdir).mp hb
+    obtain ⟨C, hCA, hCB⟩ := H.directed ⟨A, hA⟩ B
+    apply hCA.2.1
+    exact isUnit_iff_exists_inv.mpr ⟨⟨b, hCB.1 hbB⟩, Subtype.ext congr(($e).1)⟩
 
 Depends on / 依赖: B.exists_valuationRing_of_isMax, H.directed.mono_comp, LocalSubring, LocalSubring.mk, LocalSubring.toSubring_mono, Nonempty, Subring, Subring.mem_iSup_of_directed, directed, exists_valuationRing_of_isMax, le_rfl, mem_iSup_of_directed, mono_comp, toSubring, toSubring_mono
 -/
@@ -338,7 +418,10 @@ lemma Ideal.image_subset_nonunits_valuationSubring
   refine ⟨V, (LocalSubring.le_ofPrime ..).trans hV.1, ?_⟩
   rw [← V.image_maximalIdeal]
   refine .trans ?_ (Set.image_mono <| ((local_hom_TFAE _).out 0 2).mp hV.2)
-  rw [← IsLocali
+  rw [← IsLocalization.AtPrime.map_eq_maximalIdeal M]; rw [map_map]
+  refine .trans ?_ (Set.image_mono <| map_mono le)
+  rintro _ ⟨a, ha, rfl⟩
+  exact ⟨_, mem_map_of_mem _ ha, rfl⟩
 
 中文:
 引理 理想.image_subset_nonunits_valuationSubring
@@ -349,7 +432,10 @@ lemma Ideal.image_subset_nonunits_valuationSubring
   refine ⟨V, (LocalSubring.le_ofPrime ..).trans hV.1, ?_⟩
   rw [← V.image_maximalIdeal]
   refine .trans ?_ (Set.image_mono <| ((local_hom_TFAE _).out 0 2).mp hV.2)
-  rw [← IsLocali
+  rw [← IsLocalization.AtPrime.map_eq_maximalIdeal M]; rw [map_map]
+  refine .trans ?_ (Set.image_mono <| map_mono le)
+  rintro _ ⟨a, ha, rfl⟩
+  exact ⟨_, mem_map_of_mem _ ha, rfl⟩
 
 Depends on / 依赖: AtPrime, I.exists_le_maximal, IsLocalization, IsLocalization.AtPrime.map_eq_maximalIdeal, LocalSubring, LocalSubring.le_ofPrime, LocalSubring.ofPrime, Set.image_mono, V.image_maximalIdeal, exists_le_maximal, exists_le_valuationSubring, image_maximalIdeal, image_mono, le_ofPrime, local_hom_TFAE, map_eq_maximalIdeal, map_map, map_mono, mem_map_of_mem, ofPrime
 -/
@@ -378,7 +464,12 @@ lemma Subring.exists_le_valuationSubring_of_isIntegrallyClosedIn
   let B := R[x⁻¹]
   let xinv : B.toSubring := ⟨x⁻¹, subset_adjoin rfl⟩
 have : Ideal.span {xinv} != ⊤ := fun eq => hxR
-    have ⟨p, hp, hpx⟩ := exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span
+    have ⟨p, hp, hpx⟩ := exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top _
+      (⊥ : Ideal R) bot_ne_top (top_unique <| eq.ge.trans le_add_self)
+    (Subring.isIntegrallyClosedIn_iff).mp ‹_› ⟨p, by simpa [Monic, sub_eq_zero] using hp, hpx⟩
+  have ⟨V, hV⟩ := Ideal.image_subset_nonunits_valuationSubring _ this
+  exact ⟨V, fun r hr => hV.1 (B.algebraMap_mem ⟨r, hr⟩),
+    (V.inv_mem_nonunits_iff.mp <| hV.2 ⟨_, Ideal.subset_span rfl, rfl⟩).resolve_left hx0⟩
 
 中文:
 引理 子环.存在_le_valuationSubring_of_is整数egrallyClosedIn
@@ -389,7 +480,12 @@ have : Ideal.span {xinv} != ⊤ := fun eq => hxR
   let B := R[x⁻¹]
   let xinv : B.toSubring := ⟨x⁻¹, subset_adjoin rfl⟩
 have : Ideal.span {xinv} != ⊤ := fun eq => hxR
-    have ⟨p, hp, hpx⟩ := exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span
+    have ⟨p, hp, hpx⟩ := exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top _
+      (⊥ : Ideal R) bot_ne_top (top_unique <| eq.ge.trans le_add_self)
+    (Subring.isIntegrallyClosedIn_iff).mp ‹_› ⟨p, by simpa [Monic, sub_eq_zero] using hp, hpx⟩
+  have ⟨V, hV⟩ := Ideal.image_subset_nonunits_valuationSubring _ this
+  exact ⟨V, fun r hr => hV.1 (B.algebraMap_mem ⟨r, hr⟩),
+    (V.inv_mem_nonunits_iff.mp <| hV.2 ⟨_, Ideal.subset_span rfl, rfl⟩).resolve_left hx0⟩
 -/
 @[stacks 090P "part (1)"] lemma Subring.exists_le_valuationSubring_of_isIntegrallyClosedIn
     {x : K} {R : Subring K} (hxR : x ∉ R) [IsIntegrallyClosedIn R K] :
@@ -421,7 +517,18 @@ lemma LocalSubring.exists_le_valuationSubring_of_isIntegrallyClosedIn
   let B := R.toSubring[x⁻¹]
   let xinv : B.toSubring := ⟨x⁻¹, subset_adjoin rfl⟩
 have : (maximalIdeal R.toSubring).map (algebraMap _ B) + .span {xinv} != ⊤ := fun eq => hxR
-    have ⟨p, h
+    have ⟨p, hp, hpx⟩ := exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top _ _
+      (maximalIdeal.isMaximal R.toSubring).ne_top eq
+    have H : IsUnit p.leadingCoeff := of_not_not fun h => by simpa using sub_mem h hp
+    (Subring.isIntegrallyClosedIn_iff).mp ‹_›
+      ⟨.C H.unit⁻¹.1 * p, by simp [Polynomial.Monic], by simpa using .inr hpx⟩
+  have ⟨V, hV⟩ := Ideal.image_subset_nonunits_valuationSubring (A := B.toSubring) _ this
+  refine ⟨V, ⟨fun r hr => hV.1 (B.algebraMap_mem ⟨r, hr⟩),
+    ((local_hom_TFAE _).out 3 0).mp fun r hr => ?_⟩, (V.inv_mem_nonunits_iff.mp <|
+      hV.2 ⟨_, le_add_self (α := Ideal B) (Ideal.subset_span rfl), rfl⟩).resolve_left hx0⟩
+  rw [← V.image_maximalIdeal] at hV
+  obtain ⟨⟨r, _⟩, hr, rfl⟩ := hV.2 ⟨_, le_self_add (α := Ideal B) (Ideal.mem_map_of_mem _ hr), rfl⟩
+  exact hr
 
 中文:
 引理 Local子环.存在_le_valuationSubring_of_is整数egrallyClosedIn
@@ -432,7 +539,18 @@ have : (maximalIdeal R.toSubring).map (algebraMap _ B) + .span {xinv} != ⊤ := 
   let B := R.toSubring[x⁻¹]
   let xinv : B.toSubring := ⟨x⁻¹, subset_adjoin rfl⟩
 have : (maximalIdeal R.toSubring).map (algebraMap _ B) + .span {xinv} != ⊤ := fun eq => hxR
-    have ⟨p, h
+    have ⟨p, hp, hpx⟩ := exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span_eq_top _ _
+      (maximalIdeal.isMaximal R.toSubring).ne_top eq
+    have H : IsUnit p.leadingCoeff := of_not_not fun h => by simpa using sub_mem h hp
+    (Subring.isIntegrallyClosedIn_iff).mp ‹_›
+      ⟨.C H.unit⁻¹.1 * p, by simp [Polynomial.Monic], by simpa using .inr hpx⟩
+  have ⟨V, hV⟩ := Ideal.image_subset_nonunits_valuationSubring (A := B.toSubring) _ this
+  refine ⟨V, ⟨fun r hr => hV.1 (B.algebraMap_mem ⟨r, hr⟩),
+    ((local_hom_TFAE _).out 3 0).mp fun r hr => ?_⟩, (V.inv_mem_nonunits_iff.mp <|
+      hV.2 ⟨_, le_add_self (α := Ideal B) (Ideal.subset_span rfl), rfl⟩).resolve_left hx0⟩
+  rw [← V.image_maximalIdeal] at hV
+  obtain ⟨⟨r, _⟩, hr, rfl⟩ := hV.2 ⟨_, le_self_add (α := Ideal B) (Ideal.mem_map_of_mem _ hr), rfl⟩
+  exact hr
 -/
 @[stacks 090P "part (2)"] lemma LocalSubring.exists_le_valuationSubring_of_isIntegrallyClosedIn
     {x : K} {R : LocalSubring K} (hxR : x ∉ R.toSubring) [IsIntegrallyClosedIn R.toSubring K] :
@@ -557,7 +675,18 @@ lemma bijective_rangeRestrict_comp_of_valuationRing
   · let V : ValuationSubring K :=
       ⟨(algebraMap R K).range, ValuationRing.isInteger_or_isInteger R⟩
     suffices LocalSubring.range g <= V.toLocalSubring by
-      rintro ⟨_, x,
+      rintro ⟨_, x, rfl⟩
+      obtain ⟨y, hy⟩ := this.1 ⟨x, rfl⟩
+      exact ⟨y, Subtype.ext (by simpa [← h] using hy)⟩
+    apply V.isMax_toLocalSubring
+    have H : (algebraMap R K).range <= g.range := fun x ⟨a, ha⟩ => ⟨f a, by simp [← ha, ← h]⟩
+    refine ⟨H, ⟨?_⟩⟩
+    rintro ⟨_, a, rfl⟩ (ha : IsUnit (M := g.range) ⟨algebraMap R K a, _⟩)
+    suffices IsUnit a from this.map (algebraMap R K).rangeRestrict
+    apply IsUnit.of_map f
+    apply (IsLocalHom.of_surjective g.rangeRestrict g.rangeRestrict_surjective).1
+    convert! ha
+    simp [← h]
 
 中文:
 引理 bijective_rangeRestrict_comp_of_valuationRing
@@ -568,7 +697,18 @@ lemma bijective_rangeRestrict_comp_of_valuationRing
   · let V : ValuationSubring K :=
       ⟨(algebraMap R K).range, ValuationRing.isInteger_or_isInteger R⟩
     suffices LocalSubring.range g <= V.toLocalSubring by
-      rintro ⟨_, x,
+      rintro ⟨_, x, rfl⟩
+      obtain ⟨y, hy⟩ := this.1 ⟨x, rfl⟩
+      exact ⟨y, Subtype.ext (by simpa [← h] using hy)⟩
+    apply V.isMax_toLocalSubring
+    have H : (algebraMap R K).range <= g.range := fun x ⟨a, ha⟩ => ⟨f a, by simp [← ha, ← h]⟩
+    refine ⟨H, ⟨?_⟩⟩
+    rintro ⟨_, a, rfl⟩ (ha : IsUnit (M := g.range) ⟨algebraMap R K a, _⟩)
+    suffices IsUnit a from this.map (algebraMap R K).rangeRestrict
+    apply IsUnit.of_map f
+    apply (IsLocalHom.of_surjective g.rangeRestrict g.rangeRestrict_surjective).1
+    convert! ha
+    simp [← h]
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.injective, LocalSubring, LocalSubring.range, Subtype, Subtype.ext, Subtype.val, V.isMax_toLocalSubring, V.toLocalSubring, ValuationRing, ValuationRing.isInteger_or_isInteger, ValuationSubring, algebraMap, convert, g.range, injective, isInteger_or_isInteger, isMax_toLocalSubring, of_comp, toLocalSubring
 -/

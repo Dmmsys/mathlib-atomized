@@ -191,7 +191,11 @@ theorem intDegree_mul
   norm_cast
   rw [← Polynomial.natDegree_mul x.denom_ne_zero y.denom_ne_zero]; rw [←
     Polynomial.natDegree_mul (RatFunc.num_ne_zero (mul_ne_zero hx hy))
-      (mul_ne_zero x.denom_ne_zero y.denom_
+      (mul_ne_zero x.denom_ne_zero y.denom_ne_zero)]; rw [← Polynomial.natDegree_mul (RatFunc.num_ne_zero hx) (RatFunc.num_ne_zero hy)]; rw [←
+    Polynomial.natDegree_mul (mul_ne_zero (RatFunc.num_ne_zero hx) (RatFunc.num_ne_zero hy))
+      (x * y).denom_ne_zero]; rw [RatFunc.num_denom_mul]
+
+@[simp]
 
 中文:
 定理 intDegree_mul
@@ -201,7 +205,11 @@ theorem intDegree_mul
   norm_cast
   rw [← Polynomial.natDegree_mul x.denom_ne_zero y.denom_ne_zero]; rw [←
     Polynomial.natDegree_mul (RatFunc.num_ne_zero (mul_ne_zero hx hy))
-      (mul_ne_zero x.denom_ne_zero y.denom_
+      (mul_ne_zero x.denom_ne_zero y.denom_ne_zero)]; rw [← Polynomial.natDegree_mul (RatFunc.num_ne_zero hx) (RatFunc.num_ne_zero hy)]; rw [←
+    Polynomial.natDegree_mul (mul_ne_zero (RatFunc.num_ne_zero hx) (RatFunc.num_ne_zero hy))
+      (x * y).denom_ne_zero]; rw [RatFunc.num_denom_mul]
+
+@[simp]
 
 Depends on / 依赖: Polynomial, Polynomial.natDegree_mul, RatFunc, RatFunc.num_ne_zero, add_sub, denom_ne_zero, intDegree, mul_ne_zero, natDegree_mul, num_ne_zero, sub_add, sub_eq_sub_iff_add_eq_add, sub_sub, sub_sub_eq_add_sub, x.denom_ne_zero, y.denom_ne_zero
 -/
@@ -366,7 +374,9 @@ theorem intDegree_add_le
   · simp [hx]
   rw [intDegree_add hxy]; rw [←
     natDegree_num_mul_right_sub_natDegree_denom_mul_left_eq_intDegree hx y.denom_ne_zero]; rw [mul_comm y.denom]; rw [←
-    natDegree_num_mul_right_sub_natDegree_denom_mul_left_eq_intDegree hy x.denom_ne_zero]; rw [le_max_iff]; r
+    natDegree_num_mul_right_sub_natDegree_denom_mul_left_eq_intDegree hy x.denom_ne_zero]; rw [le_max_iff]; rw [sub_le_sub_iff_right]; rw [Int.ofNat_le]; rw [sub_le_sub_iff_right]; rw [Int.ofNat_le]; rw [←
+    le_max_iff]; rw [mul_comm y.num]
+  exact natDegree_add_le _ _
 
 中文:
 定理 intDegree_add_le
@@ -376,7 +386,9 @@ theorem intDegree_add_le
   · simp [hx]
   rw [intDegree_add hxy]; rw [←
     natDegree_num_mul_right_sub_natDegree_denom_mul_left_eq_intDegree hx y.denom_ne_zero]; rw [mul_comm y.denom]; rw [←
-    natDegree_num_mul_right_sub_natDegree_denom_mul_left_eq_intDegree hy x.denom_ne_zero]; rw [le_max_iff]; r
+    natDegree_num_mul_right_sub_natDegree_denom_mul_left_eq_intDegree hy x.denom_ne_zero]; rw [le_max_iff]; rw [sub_le_sub_iff_right]; rw [Int.ofNat_le]; rw [sub_le_sub_iff_right]; rw [Int.ofNat_le]; rw [←
+    le_max_iff]; rw [mul_comm y.num]
+  exact natDegree_add_le _ _
 
 Depends on / 依赖: Int.ofNat_le, denom_ne_zero, intDegree_add, le_max_iff, mul_comm, natDegree_add_le, natDegree_num_mul_right_sub_natDegree_denom_mul_left_eq_intDegree, ofNat_le, sub_le_sub_iff_right, x.denom_ne_zero, y.denom, y.denom_ne_zero, y.num
 -/

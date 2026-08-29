@@ -63,7 +63,12 @@ lemma epiWithInjectiveKernel_iff
     exact ⟨_, inferInstance, _, S.zero,
       ⟨ShortComplex.Splitting.ofExactOfRetraction S
         (S.exact_of_f_is_kernel (kernelIsKernel g)) (Injective.factorThru (𝟙 _) (kernel.ι g))
-        (by simp [S]) inf
+        (by simp [S]) inferInstance⟩⟩
+  · rintro ⟨I, _, f, w, ⟨σ⟩⟩
+    have : IsSplitEpi g := ⟨σ.s, σ.s_g⟩
+    let e : I ≅ kernel g :=
+      IsLimit.conePointUniqueUpToIso σ.shortExact.fIsKernel (limit.isLimit _)
+    exact ⟨inferInstance, Injective.of_iso e inferInstance⟩
 
 中文:
 引理 epiWithInjectiveKernel_iff
@@ -75,7 +80,12 @@ lemma epiWithInjectiveKernel_iff
     exact ⟨_, inferInstance, _, S.zero,
       ⟨ShortComplex.Splitting.ofExactOfRetraction S
         (S.exact_of_f_is_kernel (kernelIsKernel g)) (Injective.factorThru (𝟙 _) (kernel.ι g))
-        (by simp [S]) inf
+        (by simp [S]) inferInstance⟩⟩
+  · rintro ⟨I, _, f, w, ⟨σ⟩⟩
+    have : IsSplitEpi g := ⟨σ.s, σ.s_g⟩
+    let e : I ≅ kernel g :=
+      IsLimit.conePointUniqueUpToIso σ.shortExact.fIsKernel (limit.isLimit _)
+    exact ⟨inferInstance, Injective.of_iso e inferInstance⟩
 
 Depends on / 依赖: Injective, Injective.factorThru, Injective.of_iso, IsLimit, IsLimit.conePointUniqueUpToIso, IsSplitEpi, S.exact_of_f_is_kernel, S.zero, ShortComplex, ShortComplex.Splitting.ofExactOfRetraction, ShortComplex.mk, Splitting, conePointUniqueUpToIso, exact_of_f_is_kernel, fIsKernel, factorThru, isLimit, kernel, kernelIsKernel, limit.isLimit
 -/
@@ -165,7 +175,27 @@ instance :
     obtain ⟨I₂, _, f₂, w₂, ⟨σ₂⟩⟩ := hg₂
     refine ⟨I₁ ⊞ I₂, inferInstance, biprod.fst ≫ f₁ + biprod.snd ≫ f₂ ≫ σ₁.s, ?_, ⟨?_⟩⟩
     · ext
-  
+      · simp [reassoc_of% w₁]
+      · simp [reassoc_of% σ₁.s_g, w₂]
+    · exact
+        { r := σ₁.r ≫ biprod.inl + g₁ ≫ σ₂.r ≫ biprod.inr
+          s := σ₂.s ≫ σ₁.s
+          f_r := by
+            ext
+            · simp [σ₁.f_r]
+            · simp [reassoc_of% w₁]
+            · simp
+            · simp [reassoc_of% σ₁.s_g, σ₂.f_r]
+          s_g := by simp [reassoc_of% σ₁.s_g, σ₂.s_g]
+          id := by
+            dsimp
+            have h := g₁ ≫= σ₂.id =≫ σ₁.s
+            simp only [add_comp, assoc, comp_add, id_comp] at h
+            rw [← σ₁.id]; rw [← h]
+            simp only [comp_add, add_comp, assoc, BinaryBicone.inl_fst_assoc,
+              BinaryBicone.inr_fst_assoc, zero_comp, comp_zero, add_zero,
+              BinaryBicone.inl_snd_assoc, BinaryBicone.inr_snd_assoc, zero_add]
+            abel }
 
 中文:
 实例 :
@@ -177,7 +207,27 @@ instance :
     obtain ⟨I₂, _, f₂, w₂, ⟨σ₂⟩⟩ := hg₂
     refine ⟨I₁ ⊞ I₂, inferInstance, biprod.fst ≫ f₁ + biprod.snd ≫ f₂ ≫ σ₁.s, ?_, ⟨?_⟩⟩
     · ext
-  
+      · simp [reassoc_of% w₁]
+      · simp [reassoc_of% σ₁.s_g, w₂]
+    · exact
+        { r := σ₁.r ≫ biprod.inl + g₁ ≫ σ₂.r ≫ biprod.inr
+          s := σ₂.s ≫ σ₁.s
+          f_r := by
+            ext
+            · simp [σ₁.f_r]
+            · simp [reassoc_of% w₁]
+            · simp
+            · simp [reassoc_of% σ₁.s_g, σ₂.f_r]
+          s_g := by simp [reassoc_of% σ₁.s_g, σ₂.s_g]
+          id := by
+            dsimp
+            have h := g₁ ≫= σ₂.id =≫ σ₁.s
+            simp only [add_comp, assoc, comp_add, id_comp] at h
+            rw [← σ₁.id]; rw [← h]
+            simp only [comp_add, add_comp, assoc, BinaryBicone.inl_fst_assoc,
+              BinaryBicone.inr_fst_assoc, zero_comp, comp_zero, add_zero,
+              BinaryBicone.inl_snd_assoc, BinaryBicone.inr_snd_assoc, zero_add]
+            abel }
 
 Depends on / 依赖: epiWithInjectiveKernel_of_iso
 -/
@@ -224,7 +274,9 @@ instance :
       (MorphismProperty.epimorphisms C).of_retract r (.infer_property _)
     let r' : Retract (kernel f') (kernel f) :=
       { i := kernel.map _ _ r.i.left r.i.right (Arrow.w r.i).symm
-        r := kernel.map _ _ r.r.left r.r.right (Arrow.
+        r := kernel.map _ _ r.r.left r.r.right (Arrow.w r.r).symm
+        retract := by ext; simp }
+    exact ⟨inferInstance, r'.injective⟩
 
 中文:
 实例 :
@@ -235,7 +287,9 @@ instance :
       (MorphismProperty.epimorphisms C).of_retract r (.infer_property _)
     let r' : Retract (kernel f') (kernel f) :=
       { i := kernel.map _ _ r.i.left r.i.right (Arrow.w r.i).symm
-        r := kernel.map _ _ r.r.left r.r.right (Arrow.
+        r := kernel.map _ _ r.r.left r.r.right (Arrow.w r.r).symm
+        retract := by ext; simp }
+    exact ⟨inferInstance, r'.injective⟩
 
 Depends on / 依赖: IsStableUnderRetracts
 -/
@@ -261,7 +315,10 @@ lemma epiWithInjectiveKernel.hasLiftingProperty
   obtain ⟨I, _, s, hs, ⟨σ⟩⟩ := hp
   have hI : (MorphismProperty.monomorphisms C).rlp (0 : I ⟶ 0) :=
     fun _ _ _ _ => Injective.hasLiftingProperty_of_isZero _ _ (isZero_zero C)
- 
+  refine MorphismProperty.of_isPullback (f' := σ.r) (f := 0) ⟨by simp, ⟨?_⟩⟩ hI
+  refine PullbackCone.IsLimit.mk _ (fun t => t.fst ≫ s + t.snd ≫ σ.s)
+    (fun t => by simp [dsimp% σ.f_r]) (fun t => by simp [hs, dsimp% σ.s_g]) (fun t m hm₁ hm₂ => ?_)
+  simp [← hm₁, ← hm₂, ← Preadditive.comp_add, dsimp% σ.id]
 
 中文:
 引理 epiWithInjectiveKernel.hasLiftingProperty
@@ -271,7 +328,10 @@ lemma epiWithInjectiveKernel.hasLiftingProperty
   obtain ⟨I, _, s, hs, ⟨σ⟩⟩ := hp
   have hI : (MorphismProperty.monomorphisms C).rlp (0 : I ⟶ 0) :=
     fun _ _ _ _ => Injective.hasLiftingProperty_of_isZero _ _ (isZero_zero C)
- 
+  refine MorphismProperty.of_isPullback (f' := σ.r) (f := 0) ⟨by simp, ⟨?_⟩⟩ hI
+  refine PullbackCone.IsLimit.mk _ (fun t => t.fst ≫ s + t.snd ≫ σ.s)
+    (fun t => by simp [dsimp% σ.f_r]) (fun t => by simp [hs, dsimp% σ.s_g]) (fun t m hm₁ hm₂ => ?_)
+  simp [← hm₁, ← hm₂, ← Preadditive.comp_add, dsimp% σ.id]
 
 Depends on / 依赖: Injective, Injective.hasLiftingProperty_of_isZero, IsLimit, MorphismProperty, MorphismProperty.monomorphisms, MorphismProperty.of_isPullback, PullbackCone, PullbackCone.IsLimit.mk, epiWithInjectiveKernel_iff, hasLiftingProperty_of_isZero, isZero_zero, monomorphisms, of_isPullback, t.fst, t.snd
 -/

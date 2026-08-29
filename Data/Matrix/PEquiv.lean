@@ -440,7 +440,7 @@ theorem toMatrix_injective
     · use gi
       simp
   · use fi
-    si
+    simp [hf.symm, Ne.symm hi]
 
 中文:
 定理 toMatrix_injective
@@ -457,7 +457,7 @@ theorem toMatrix_injective
     · use gi
       simp
   · use fi
-    si
+    simp [hf.symm, Ne.symm hi]
 
 Depends on / 依赖: Matrix, Matrix.ext_iff.symm, Ne.symm, PEquiv, PEquiv.ext_iff, exists_imp, ext_iff, hf.symm, not_forall, not_imp_not, toMatrix_apply
 -/

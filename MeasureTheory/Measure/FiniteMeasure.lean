@@ -1308,7 +1308,12 @@ theorem measurable_fun_prod
       a.1.toMeasure u * a.2.toMeasure v :=
     Measurable.mul
       ((Measure.measurable_coe Hu).comp (measurable_subtype_coe.comp measurable_fst))
-      ((Measure.me
+      ((Measure.measurable_coe Hv).comp (measurable_subtype_coe.comp measurable_snd))
+  apply Measurable.measure_of_isPiSystem generateFrom_prod.symm isPiSystem_prod _
+  · simp_rw [← Set.univ_prod_univ, Measure.prod_prod, Heval MeasurableSet.univ MeasurableSet.univ]
+  simp only [mem_image2, mem_ofPred_eq, forall_exists_index, and_imp]
+  intro _ _ Hu _ Hv Heq
+  simp_rw [← Heq, Measure.prod_prod, Heval Hu Hv]
 
 中文:
 定理 measurable_fun_prod
@@ -1319,7 +1324,12 @@ theorem measurable_fun_prod
       a.1.toMeasure u * a.2.toMeasure v :=
     Measurable.mul
       ((Measure.measurable_coe Hu).comp (measurable_subtype_coe.comp measurable_fst))
-      ((Measure.me
+      ((Measure.measurable_coe Hv).comp (measurable_subtype_coe.comp measurable_snd))
+  apply Measurable.measure_of_isPiSystem generateFrom_prod.symm isPiSystem_prod _
+  · simp_rw [← Set.univ_prod_univ, Measure.prod_prod, Heval MeasurableSet.univ MeasurableSet.univ]
+  simp only [mem_image2, mem_ofPred_eq, forall_exists_index, and_imp]
+  intro _ _ Hu _ Hv Heq
+  simp_rw [← Heq, Measure.prod_prod, Heval Hu Hv]
 
 Depends on / 依赖: FiniteMeasure, Measurable, Measurable.measure_of_isPiSystem, Measurable.mul, MeasurableSet, MeasurableSet.univ, Measure, Measure.measurable_coe, Measure.prod_prod, Set.univ_prod_univ, generateFrom_prod, generateFrom_prod.symm, isPiSystem_prod, measurable_coe, measurable_fst, measurable_snd, measurable_subtype_coe, measurable_subtype_coe.comp, measure_of_isPiSystem, prod_prod
 -/
@@ -1402,7 +1412,8 @@ theorem ext_of_forall_integral_eq
   apply (ENNReal.toReal_eq_toReal_iff' (lintegral_lt_top_of_nnreal μ f).ne
       (lintegral_lt_top_of_nnreal ν f).ne).mp
   rw [toReal_lintegral_coe_eq_integral f μ]; rw [toReal_lintegral_coe_eq_integral f ν]
-  exact h ⟨⟨fun x => (f x).toReal, Continuou
+  exact h ⟨⟨fun x => (f x).toReal, Continuous.comp' NNReal.continuous_coe f.continuous⟩,
+      f.map_bounded'⟩
 
 中文:
 定理 ext_of_对任意_integral_eq
@@ -1413,7 +1424,8 @@ theorem ext_of_forall_integral_eq
   apply (ENNReal.toReal_eq_toReal_iff' (lintegral_lt_top_of_nnreal μ f).ne
       (lintegral_lt_top_of_nnreal ν f).ne).mp
   rw [toReal_lintegral_coe_eq_integral f μ]; rw [toReal_lintegral_coe_eq_integral f ν]
-  exact h ⟨⟨fun x => (f x).toReal, Continuou
+  exact h ⟨⟨fun x => (f x).toReal, Continuous.comp' NNReal.continuous_coe f.continuous⟩,
+      f.map_bounded'⟩
 
 Depends on / 依赖: Continuous, Continuous.comp, ENNReal, ENNReal.toReal_eq_toReal_iff, I.lower, IsMaximal, IsMaximal.isPrime, IsMaximal.maximal_proper, IsPrime, NNReal, NNReal.continuous_coe, Set.eq_univ_iff_forall.mp, Set.univ, coe_sup_eq, continuous, continuous_coe, contrapose, eq_univ_iff_forall, ext_of_forall_lintegral_eq, f.continuous
 -/
@@ -1696,7 +1708,7 @@ theorem testAgainstNN_smul
     ENNReal.coe_smul]
   simp_rw [← smul_one_smul Real>=0∞ c (f _ : Real>=0∞), ← smul_one_smul Real>=0∞ c (lintegral _ _ : Real>=0∞),
     smul_eq_mul]
-  exact lintegral_const_mul (c • (1 : Real>=0∞)) f.measur
+  exact lintegral_const_mul (c • (1 : Real>=0∞)) f.measurable_coe_ennreal_comp
 
 中文:
 定理 testAgainstNN_smul
@@ -1706,7 +1718,7 @@ theorem testAgainstNN_smul
     ENNReal.coe_smul]
   simp_rw [← smul_one_smul Real>=0∞ c (f _ : Real>=0∞), ← smul_one_smul Real>=0∞ c (lintegral _ _ : Real>=0∞),
     smul_eq_mul]
-  exact lintegral_const_mul (c • (1 : Real>=0∞)) f.measur
+  exact lintegral_const_mul (c • (1 : Real>=0∞)) f.measurable_coe_ennreal_comp
 
 Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.coe_smul, ENNReal, ENNReal.coe_inj, ENNReal.coe_smul, coe_inj, coe_smul, f.measurable_coe_ennreal_comp, lintegral, lintegral_const_mul, measurable_coe_ennreal_comp, simp_rw, smul_eq_mul, smul_one_smul, testAgainstNN_coe_eq
 -/
@@ -1730,7 +1742,15 @@ theorem testAgainstNN_lipschitz_estimate
     BoundedContinuousFunction.coe_add, const_apply, ENNReal.coe_add, Pi.add_apply,
     coe_nnreal_ennreal_nndist, testAgainstNN_coe_eq]
   apply lintegral_mono
-  have le_dist : forall ω, dist (f ω) (g ω) 
+  have le_dist : forall ω, dist (f ω) (g ω) <= nndist f g := BoundedContinuousFunction.dist_coe_le_dist
+  intro ω
+  have le' : f ω <= g ω + nndist f g := by
+    calc f ω
+     _ <= g ω + nndist (f ω) (g ω) := NNReal.le_add_nndist (f ω) (g ω)
+     _ <= g ω + nndist f g := (add_le_add_iff_left (g ω)).mpr (le_dist ω)
+  have le : (f ω : Real>=0∞) <= (g ω : Real>=0∞) + nndist f g := by
+    simpa only [← ENNReal.coe_add] using (by exact_mod_cast le')
+  rwa [coe_nnreal_ennreal_nndist] at le
 
 中文:
 定理 testAgainstNN_lipschitz_estimate
@@ -1740,7 +1760,15 @@ theorem testAgainstNN_lipschitz_estimate
     BoundedContinuousFunction.coe_add, const_apply, ENNReal.coe_add, Pi.add_apply,
     coe_nnreal_ennreal_nndist, testAgainstNN_coe_eq]
   apply lintegral_mono
-  have le_dist : forall ω, dist (f ω) (g ω) 
+  have le_dist : forall ω, dist (f ω) (g ω) <= nndist f g := BoundedContinuousFunction.dist_coe_le_dist
+  intro ω
+  have le' : f ω <= g ω + nndist f g := by
+    calc f ω
+     _ <= g ω + nndist (f ω) (g ω) := NNReal.le_add_nndist (f ω) (g ω)
+     _ <= g ω + nndist f g := (add_le_add_iff_left (g ω)).mpr (le_dist ω)
+  have le : (f ω : Real>=0∞) <= (g ω : Real>=0∞) + nndist f g := by
+    simpa only [← ENNReal.coe_add] using (by exact_mod_cast le')
+  rwa [coe_nnreal_ennreal_nndist] at le
 
 Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.coe_add, BoundedContinuousFunction.dist_coe_le_dist, ENNReal, ENNReal.coe_add, ENNReal.coe_le_coe, NNReal, NNReal.le_add_nndist, Pi.add_apply, add_, add_apply, coe_add, coe_le_coe, coe_nnreal_ennreal_nndist, const_apply, dist_coe_le_dist, le_add_nndist, le_dist, lintegral_mono, nndist
 -/
@@ -1775,7 +1803,12 @@ theorem testAgainstNN_lipschitz
   constructor
   · have key := μ.testAgainstNN_lipschitz_estimate f₂ f₁
     rw [mul_comm] at key
-    suffices ↑(μ
+    suffices ↑(μ.testAgainstNN f₂) <= ↑(μ.testAgainstNN f₁) + ↑μ.mass * dist f₁ f₂ by linarith
+    simpa [nndist_comm] using NNReal.coe_mono key
+  · have key := μ.testAgainstNN_lipschitz_estimate f₁ f₂
+    rw [mul_comm] at key
+    suffices ↑(μ.testAgainstNN f₁) <= ↑(μ.testAgainstNN f₂) + ↑μ.mass * dist f₁ f₂ by linarith
+    simpa using NNReal.coe_mono key
 
 中文:
 定理 testAgainstNN_lipschitz
@@ -1789,7 +1822,12 @@ theorem testAgainstNN_lipschitz
   constructor
   · have key := μ.testAgainstNN_lipschitz_estimate f₂ f₁
     rw [mul_comm] at key
-    suffices ↑(μ
+    suffices ↑(μ.testAgainstNN f₂) <= ↑(μ.testAgainstNN f₁) + ↑μ.mass * dist f₁ f₂ by linarith
+    simpa [nndist_comm] using NNReal.coe_mono key
+  · have key := μ.testAgainstNN_lipschitz_estimate f₁ f₂
+    rw [mul_comm] at key
+    suffices ↑(μ.testAgainstNN f₁) <= ↑(μ.testAgainstNN f₂) + ↑μ.mass * dist f₁ f₂ by linarith
+    simpa using NNReal.coe_mono key
 
 Depends on / 依赖: NNReal, NNReal.coe_mono, NNReal.dist_eq, abs_le, abs_le.mpr, coe_mono, dist_eq, lipschitzWith_iff_dist_le_mul, mul_comm, nndist_comm, testAgains, testAgainstNN, testAgainstNN_lipschitz_estimate
 -/
@@ -2058,7 +2096,11 @@ theorem tendsto_zero_testAgainstNN_of_tendsto_zero_mass
   have obs := fun i => (μs i).testAgainstNN_lipschitz_estimate f 0
   simp_rw [testAgainstNN_zero, zero_add] at obs
   simp_rw [show forall i, dist ((μs i).testAgainstNN f) 0 = (μs i).testAgainstNN f by
-      simp only [dist_nndist, NNReal.nndist_zero_eq_va
+      simp only [dist_nndist, NNReal.nndist_zero_eq_val', imp_true_iff]]
+  apply squeeze_zero (fun i => NNReal.coe_nonneg _) obs
+  have lim_pair : Tendsto (fun i => (⟨nndist f 0, (μs i).mass⟩ : Real × Real)) F (𝓝 ⟨nndist f 0, 0⟩) :=
+    (Prod.tendsto_iff _ _).mpr ⟨tendsto_const_nhds, (NNReal.continuous_coe.tendsto 0).comp mass_lim⟩
+  simpa using! tendsto_mul.comp lim_pair
 
 中文:
 定理 tendsto_zero_testAgainstNN_of_tendsto_zero_mass
@@ -2068,7 +2110,11 @@ theorem tendsto_zero_testAgainstNN_of_tendsto_zero_mass
   have obs := fun i => (μs i).testAgainstNN_lipschitz_estimate f 0
   simp_rw [testAgainstNN_zero, zero_add] at obs
   simp_rw [show forall i, dist ((μs i).testAgainstNN f) 0 = (μs i).testAgainstNN f by
-      simp only [dist_nndist, NNReal.nndist_zero_eq_va
+      simp only [dist_nndist, NNReal.nndist_zero_eq_val', imp_true_iff]]
+  apply squeeze_zero (fun i => NNReal.coe_nonneg _) obs
+  have lim_pair : Tendsto (fun i => (⟨nndist f 0, (μs i).mass⟩ : Real × Real)) F (𝓝 ⟨nndist f 0, 0⟩) :=
+    (Prod.tendsto_iff _ _).mpr ⟨tendsto_const_nhds, (NNReal.continuous_coe.tendsto 0).comp mass_lim⟩
+  simpa using! tendsto_mul.comp lim_pair
 
 Depends on / 依赖: NNReal, NNReal.coe_nonneg, NNReal.nndist_zero_eq_val, Prod.tendsto_iff, Tendsto, coe_nonneg, dist_nndist, imp_true_iff, lim_pair, nndist, nndist_zero_eq_val, simp_rw, squeeze_zero, tendsto_con, tendsto_iff, tendsto_iff_dist_tendsto_zero, tendsto_iff_dist_tendsto_zero.mpr, testAgainstNN, testAgainstNN_lipschitz_estimate, testAgainstNN_zero
 -/
@@ -2366,7 +2412,18 @@ theorem tendsto_of_forall_integral_tendsto
   apply (ENNReal.tendsto_toReal_iff (fi := F)
       (fun i => (f.lintegral_lt_top_of_nnreal (μs i)).ne) (f.lintegral_lt_top_of_nnreal μ).ne).mp
   have lip : LipschitzWith 1 ((↑) : Real>=0 -> Real) := NNReal.isometry_coe.lipschitz
-  set f₀
+  set f₀ := BoundedContinuousFunction.comp _ lip f with _def_f₀
+  have f₀_eq : ⇑f₀ = ((↑) : Real>=0 -> Real) ∘ ⇑f := rfl
+  have f₀_nn : 0 <= ⇑f₀ := fun _ => by
+    simp only [f₀_eq, Pi.zero_apply, Function.comp_apply, NNReal.zero_le_coe]
+  have f₀_ae_nn : 0 <=ᵐ[(μ : Measure Ω)] ⇑f₀ := .of_forall f₀_nn
+  have f₀_ae_nns : forall i, 0 <=ᵐ[(μs i : Measure Ω)] ⇑f₀ := fun i => .of_forall f₀_nn
+  have aux :=
+    integral_eq_lintegral_of_nonneg_ae f₀_ae_nn f₀.continuous.measurable.aestronglyMeasurable
+  have auxs := fun i =>
+    integral_eq_lintegral_of_nonneg_ae (f₀_ae_nns i) f₀.continuous.measurable.aestronglyMeasurable
+  simp_rw [f₀_eq, Function.comp_apply, ENNReal.ofReal_coe_nnreal] at aux auxs
+  simpa only [← aux, ← auxs] using! h f₀
 
 中文:
 定理 tendsto_of_对任意_integral_tendsto
@@ -2377,7 +2434,18 @@ theorem tendsto_of_forall_integral_tendsto
   apply (ENNReal.tendsto_toReal_iff (fi := F)
       (fun i => (f.lintegral_lt_top_of_nnreal (μs i)).ne) (f.lintegral_lt_top_of_nnreal μ).ne).mp
   have lip : LipschitzWith 1 ((↑) : Real>=0 -> Real) := NNReal.isometry_coe.lipschitz
-  set f₀
+  set f₀ := BoundedContinuousFunction.comp _ lip f with _def_f₀
+  have f₀_eq : ⇑f₀ = ((↑) : Real>=0 -> Real) ∘ ⇑f := rfl
+  have f₀_nn : 0 <= ⇑f₀ := fun _ => by
+    simp only [f₀_eq, Pi.zero_apply, Function.comp_apply, NNReal.zero_le_coe]
+  have f₀_ae_nn : 0 <=ᵐ[(μ : Measure Ω)] ⇑f₀ := .of_forall f₀_nn
+  have f₀_ae_nns : forall i, 0 <=ᵐ[(μs i : Measure Ω)] ⇑f₀ := fun i => .of_forall f₀_nn
+  have aux :=
+    integral_eq_lintegral_of_nonneg_ae f₀_ae_nn f₀.continuous.measurable.aestronglyMeasurable
+  have auxs := fun i =>
+    integral_eq_lintegral_of_nonneg_ae (f₀_ae_nns i) f₀.continuous.measurable.aestronglyMeasurable
+  simp_rw [f₀_eq, Function.comp_apply, ENNReal.ofReal_coe_nnreal] at aux auxs
+  simpa only [← aux, ← auxs] using! h f₀
 
 Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.comp, ENNReal, ENNReal.tendsto_toReal_iff, Function, Function.comp_apply, LipschitzWith, NNReal, NNReal.isometry_coe.lipschitz, NNReal.zero_le, Pi.zero_apply, comp_apply, f.lintegral_lt_top_of_nnreal, isometry_coe, lintegral_lt_top_of_nnreal, lipschitz, tendsto_iff_forall_lintegral_tendsto, tendsto_iff_forall_lintegral_tendsto.mpr, tendsto_toReal_iff, zero_apply
 -/
@@ -2417,7 +2485,15 @@ theorem tendsto_iff_forall_integral_tendsto
   simp_rw [BoundedContinuousFunction.integral_eq_integral_nnrealPart_sub]
   set f_pos := f.nnrealPart with _def_f_pos
   set f_neg := (-f).nnrealPart with _def_f_neg
-  have tends_pos := (ENNRe
+  have tends_pos := (ENNReal.tendsto_toReal (f_pos.lintegral_lt_top_of_nnreal μ).ne).comp (h f_pos)
+  have tends_neg := (ENNReal.tendsto_toReal (f_neg.lintegral_lt_top_of_nnreal μ).ne).comp (h f_neg)
+  have aux :
+    forall g : Ω ->ᵇ Real>=0,
+      (ENNReal.toReal ∘ fun i : γ => ∫⁻ x : Ω, ↑(g x) ∂(μs i : Measure Ω)) =
+        fun i : γ => (∫⁻ x : Ω, ↑(g x) ∂(μs i : Measure Ω)).toReal :=
+    fun _ => rfl
+  simp_rw [aux, BoundedContinuousFunction.toReal_lintegral_coe_eq_integral] at tends_pos tends_neg
+  exact Tendsto.sub tends_pos tends_neg
 
 中文:
 定理 tendsto_iff_对任意_integral_tendsto
@@ -2429,7 +2505,15 @@ theorem tendsto_iff_forall_integral_tendsto
   simp_rw [BoundedContinuousFunction.integral_eq_integral_nnrealPart_sub]
   set f_pos := f.nnrealPart with _def_f_pos
   set f_neg := (-f).nnrealPart with _def_f_neg
-  have tends_pos := (ENNRe
+  have tends_pos := (ENNReal.tendsto_toReal (f_pos.lintegral_lt_top_of_nnreal μ).ne).comp (h f_pos)
+  have tends_neg := (ENNReal.tendsto_toReal (f_neg.lintegral_lt_top_of_nnreal μ).ne).comp (h f_neg)
+  have aux :
+    forall g : Ω ->ᵇ Real>=0,
+      (ENNReal.toReal ∘ fun i : γ => ∫⁻ x : Ω, ↑(g x) ∂(μs i : Measure Ω)) =
+        fun i : γ => (∫⁻ x : Ω, ↑(g x) ∂(μs i : Measure Ω)).toReal :=
+    fun _ => rfl
+  simp_rw [aux, BoundedContinuousFunction.toReal_lintegral_coe_eq_integral] at tends_pos tends_neg
+  exact Tendsto.sub tends_pos tends_neg
 
 Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.integral_eq_integral_nnrealPart_sub, ENNReal, ENNReal.tendsto_toReal, _def_f_neg, _def_f_pos, f.nnrealPart, f_neg, f_neg.lintegral_lt_top_of_nnreal, f_pos, f_pos.lintegral_lt_top_of_nnreal, integral_eq_integral_nnrealPart_sub, lintegral_lt_top_of_nnreal, nnrealPart, simp_rw, tends_neg, tends_pos, tendsto_iff_forall_lintegral_tendsto, tendsto_of_forall_integral_tendsto, tendsto_toReal
 -/
@@ -2467,7 +2551,14 @@ theorem tendsto_iff_forall_integral_rclike_tendsto
   · rw [← integral_re_add_im (integrable μ f)]
     simp_rw [← integral_re_add_im (integrable (μs _) f)]
     refine Tendsto.add ?_ ?_
-    · exact (RCLike.continuous_ofReal.tendsto _).comp (h (f.comp RCLike.re RCLike
+    · exact (RCLike.continuous_ofReal.tendsto _).comp (h (f.comp RCLike.re RCLike.lipschitzWith_re))
+    · exact (Tendsto.comp (RCLike.continuous_ofReal.tendsto _)
+        (h (f.comp RCLike.im RCLike.lipschitzWith_im))).mul_const _
+  · specialize h ((RCLike.ofRealAm (K := 𝕜)).compLeftContinuousBounded Real
+      RCLike.lipschitzWith_ofReal f)
+    simp only [AlgHom.compLeftContinuousBounded_apply_apply, RCLike.ofRealAm_coe,
+      integral_ofReal] at h
+    exact tendsto_ofReal_iff'.mp h
 
 中文:
 定理 tendsto_iff_对任意_integral_rclike_tendsto
@@ -2478,7 +2569,14 @@ theorem tendsto_iff_forall_integral_rclike_tendsto
   · rw [← integral_re_add_im (integrable μ f)]
     simp_rw [← integral_re_add_im (integrable (μs _) f)]
     refine Tendsto.add ?_ ?_
-    · exact (RCLike.continuous_ofReal.tendsto _).comp (h (f.comp RCLike.re RCLike
+    · exact (RCLike.continuous_ofReal.tendsto _).comp (h (f.comp RCLike.re RCLike.lipschitzWith_re))
+    · exact (Tendsto.comp (RCLike.continuous_ofReal.tendsto _)
+        (h (f.comp RCLike.im RCLike.lipschitzWith_im))).mul_const _
+  · specialize h ((RCLike.ofRealAm (K := 𝕜)).compLeftContinuousBounded Real
+      RCLike.lipschitzWith_ofReal f)
+    simp only [AlgHom.compLeftContinuousBounded_apply_apply, RCLike.ofRealAm_coe,
+      integral_ofReal] at h
+    exact tendsto_ofReal_iff'.mp h
 
 Depends on / 依赖: RCLike, RCLike.continuous_ofReal.tendsto, RCLike.im, RCLike.lipschitzWith_im, RCLike.lipschitzWith_re, RCLike.ofRealAm, RCLike.re, Tendsto, Tendsto.add, Tendsto.comp, compLeftContinuousBounded, continuous_ofReal, f.comp, integrable, integral_re_add_im, lipschitzWith_im, lipschitzWith_re, mul_const, ofRealAm, simp_rw
 -/
@@ -2513,7 +2611,12 @@ instance :
   have A : Tendsto (fun (i : FiniteMeasure Ω × FiniteMeasure Ω) => ∫⁻ x, g x ∂i.1) (𝓝 p)
       (𝓝 (∫⁻ x, g x ∂p.1)) := by
     rw [nhds_prod_eq]
-    exact (tendsto_iff_forall_lintegr
+    exact (tendsto_iff_forall_lintegral_tendsto.1 tendsto_id g).comp tendsto_fst
+  have B : Tendsto (fun (i : FiniteMeasure Ω × FiniteMeasure Ω) => ∫⁻ x, g x ∂i.2) (𝓝 p)
+      (𝓝 (∫⁻ x, g x ∂p.2)) := by
+    rw [nhds_prod_eq]
+    exact (tendsto_iff_forall_lintegral_tendsto.1 tendsto_id g).comp tendsto_snd
+  convert! A.add B with q <;> simp
 
 中文:
 实例 :
@@ -2524,7 +2627,12 @@ instance :
   have A : Tendsto (fun (i : FiniteMeasure Ω × FiniteMeasure Ω) => ∫⁻ x, g x ∂i.1) (𝓝 p)
       (𝓝 (∫⁻ x, g x ∂p.1)) := by
     rw [nhds_prod_eq]
-    exact (tendsto_iff_forall_lintegr
+    exact (tendsto_iff_forall_lintegral_tendsto.1 tendsto_id g).comp tendsto_fst
+  have B : Tendsto (fun (i : FiniteMeasure Ω × FiniteMeasure Ω) => ∫⁻ x, g x ∂i.2) (𝓝 p)
+      (𝓝 (∫⁻ x, g x ∂p.2)) := by
+    rw [nhds_prod_eq]
+    exact (tendsto_iff_forall_lintegral_tendsto.1 tendsto_id g).comp tendsto_snd
+  convert! A.add B with q <;> simp
 
 Depends on / 依赖: FiniteMeasure, Tendsto, continuous_iff_continuousAt, nhds_prod_eq, tendsto_fst, tendsto_id, tendsto_iff_forall_lintegral_tendsto
 -/
@@ -2553,7 +2661,11 @@ instance :
   have A : Tendsto (fun (i : Real>=0 × FiniteMeasure Ω) => i.1) (𝓝 p) (𝓝 (p.1)) := by
     rw [nhds_prod_eq]
     exact tendsto_fst
-  have B : Tendsto (fun (i : Real>=0 × FiniteMeasure
+  have B : Tendsto (fun (i : Real>=0 × FiniteMeasure Ω) => ∫ x, g x ∂i.2) (𝓝 p)
+      (𝓝 (∫ x, g x ∂p.2)) := by
+    rw [nhds_prod_eq]
+    exact (tendsto_iff_forall_integral_tendsto.1 tendsto_id g).comp tendsto_snd
+  convert! A.smul B with q <;> simp
 
 中文:
 实例 :
@@ -2564,7 +2676,11 @@ instance :
   have A : Tendsto (fun (i : Real>=0 × FiniteMeasure Ω) => i.1) (𝓝 p) (𝓝 (p.1)) := by
     rw [nhds_prod_eq]
     exact tendsto_fst
-  have B : Tendsto (fun (i : Real>=0 × FiniteMeasure
+  have B : Tendsto (fun (i : Real>=0 × FiniteMeasure Ω) => ∫ x, g x ∂i.2) (𝓝 p)
+      (𝓝 (∫ x, g x ∂p.2)) := by
+    rw [nhds_prod_eq]
+    exact (tendsto_iff_forall_integral_tendsto.1 tendsto_id g).comp tendsto_snd
+  convert! A.smul B with q <;> simp
 
 Depends on / 依赖: A.smul, FiniteMeasure, Tendsto, continuous_iff_continuousAt, convert, nhds_prod_eq, tendsto_fst, tendsto_id, tendsto_iff_forall_integral_tendsto, tendsto_snd
 -/
@@ -2838,7 +2954,23 @@ lemma _root_.Topology.IsClosedEmbedding.continuousOn_comap_finiteMeasure
   intro g
   obtain ⟨g', -, hg'⟩ : exists g' : Ω' ->ᵇ Real, ‖g'‖ = ‖g‖ ∧ g' ∘ f = g :=
     exists_extension_norm_eq_of_isClosedEmbedding g hf
-  have A x : g x = g' (f x) := by change (⇑g) x = (⇑g' ∘ f) x; simp
+  have A x : g x = g' (f x) := by change (⇑g) x = (⇑g' ∘ f) x; simp only [hg']
+  simp only [comap, toMeasure_mk, A, ← MeasurableEmbedding.integral_map hf.measurableEmbedding,
+    MeasurableEmbedding.map_comap hf.measurableEmbedding]
+  have B {ν : FiniteMeasure Ω'} (hν : ν (range f)ᶜ = 0) :
+      ∫ y in range f, g' y ∂ν = ∫ y, g' y ∂ν := by
+    congr
+    simp only [null_iff_toMeasure_null] at hν
+    exact Measure.restrict_eq_self_of_ae_mem hν
+  rw [B hμ]
+  have : Tendsto (fun (ν : FiniteMeasure Ω') => ∫ y, g' y ∂ν) (𝓝[{μ | μ (range f)ᶜ = 0}] μ)
+      (𝓝 (∫ (y : Ω'), g' y ∂μ)) := by
+    rw [nhdsWithin]
+    have A : Tendsto (fun (ν : FiniteMeasure Ω') => ∫ y, g' y ∂ν) (𝓝 μ) (𝓝 (∫ (y : Ω'), g' y ∂μ)) :=
+      tendsto_iff_forall_integral_tendsto.1 tendsto_id _
+    exact Tendsto.mono_left A inf_le_left
+  apply Tendsto.congr' _ this
+  filter_upwards [self_mem_nhdsWithin] with ν hν using (B hν).symm
 
 中文:
 引理 _root_.拓扑.是闭嵌入.continuousOn_comap_finiteMeasure
@@ -2850,7 +2982,23 @@ lemma _root_.Topology.IsClosedEmbedding.continuousOn_comap_finiteMeasure
   intro g
   obtain ⟨g', -, hg'⟩ : exists g' : Ω' ->ᵇ Real, ‖g'‖ = ‖g‖ ∧ g' ∘ f = g :=
     exists_extension_norm_eq_of_isClosedEmbedding g hf
-  have A x : g x = g' (f x) := by change (⇑g) x = (⇑g' ∘ f) x; simp
+  have A x : g x = g' (f x) := by change (⇑g) x = (⇑g' ∘ f) x; simp only [hg']
+  simp only [comap, toMeasure_mk, A, ← MeasurableEmbedding.integral_map hf.measurableEmbedding,
+    MeasurableEmbedding.map_comap hf.measurableEmbedding]
+  have B {ν : FiniteMeasure Ω'} (hν : ν (range f)ᶜ = 0) :
+      ∫ y in range f, g' y ∂ν = ∫ y, g' y ∂ν := by
+    congr
+    simp only [null_iff_toMeasure_null] at hν
+    exact Measure.restrict_eq_self_of_ae_mem hν
+  rw [B hμ]
+  have : Tendsto (fun (ν : FiniteMeasure Ω') => ∫ y, g' y ∂ν) (𝓝[{μ | μ (range f)ᶜ = 0}] μ)
+      (𝓝 (∫ (y : Ω'), g' y ∂μ)) := by
+    rw [nhdsWithin]
+    have A : Tendsto (fun (ν : FiniteMeasure Ω') => ∫ y, g' y ∂ν) (𝓝 μ) (𝓝 (∫ (y : Ω'), g' y ∂μ)) :=
+      tendsto_iff_forall_integral_tendsto.1 tendsto_id _
+    exact Tendsto.mono_left A inf_le_left
+  apply Tendsto.congr' _ this
+  filter_upwards [self_mem_nhdsWithin] with ν hν using (B hν).symm
 
 Depends on / 依赖: ContinuousWithinAt, FiniteMeasure, MeasurableEmbedding, MeasurableEmbedding.integral_map, MeasurableEmbedding.map_comap, exists_extension_norm_eq_of_isClosedEmbedding, hf.measurableEmbedding, integral_map, map_comap, measurableEmbedding, tendsto_iff_forall_integral_tendsto, toMeasure_mk
 -/
@@ -3060,7 +3208,7 @@ lemma mass_map_le
   by_cases hf : AEMeasurable f μ
   · rw [Measure.map_apply_of_aemeasurable hf MeasurableSet.univ]
     exact measure_mono (subset_univ _)
-  · simp [Measure.map_of_not_aemeasurab
+  · simp [Measure.map_of_not_aemeasurable hf]
 
 中文:
 引理 mass_map_le
@@ -3072,7 +3220,7 @@ lemma mass_map_le
   by_cases hf : AEMeasurable f μ
   · rw [Measure.map_apply_of_aemeasurable hf MeasurableSet.univ]
     exact measure_mono (subset_univ _)
-  · simp [Measure.map_of_not_aemeasurab
+  · simp [Measure.map_of_not_aemeasurable hf]
 
 Depends on / 依赖: AEMeasurable, ENNReal, ENNReal.toNNReal_le_toNNReal, MeasurableSet, MeasurableSet.univ, Measure, Measure.map_apply_of_aemeasurable, Measure.map_of_not_aemeasurable, coeFn_def, map_apply_of_aemeasurable, map_of_not_aemeasurable, measure_mono, measure_ne_top, ne_eq, not_false_eq_true, subset_univ, toMeasure_map, toNNReal_le_toNNReal
 -/
@@ -3099,7 +3247,7 @@ lemma tendsto_map_of_tendsto_of_continuous
   convert! lim (g.compContinuous ⟨f, f_cont⟩) <;>
   · simp only [map, compContinuous_apply, ContinuousMap.coe_mk]
     refine lintegral_map ?_ f_cont.measurable
-    exact (ENNReal.continuous_coe.comp g.continuous).measura
+    exact (ENNReal.continuous_coe.comp g.continuous).measurable
 
 中文:
 引理 tendsto_map_of_tendsto_of_continuous
@@ -3110,7 +3258,7 @@ lemma tendsto_map_of_tendsto_of_continuous
   convert! lim (g.compContinuous ⟨f, f_cont⟩) <;>
   · simp only [map, compContinuous_apply, ContinuousMap.coe_mk]
     refine lintegral_map ?_ f_cont.measurable
-    exact (ENNReal.continuous_coe.comp g.continuous).measura
+    exact (ENNReal.continuous_coe.comp g.continuous).measurable
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, ENNReal, ENNReal.continuous_coe.comp, FiniteMeasure, FiniteMeasure.tendsto_iff_forall_lintegral_tendsto, coe_mk, compContinuous, compContinuous_apply, continuous, continuous_coe, convert, f_cont, f_cont.measurable, g.compContinuous, g.continuous, lintegral_map, measurable, tendsto_iff_forall_lintegral_tendsto
 -/
@@ -3188,7 +3336,35 @@ lemma Topology.IsClosedEmbedding.isEmbedding_map_finiteMeasure
   let B : FiniteMeasure Ω ≃ₜ M :=
   { toFun μ := by
       refine ⟨μ.map f, ?_⟩
-      simp only [null_iff_toMeasure_null, mem_ofPred_eq, toMeasure_map, 
+      simp only [null_iff_toMeasure_null, mem_ofPred_eq, toMeasure_map, M]
+      rw [Measure.map_apply hf.continuous.measurable hf.isClosed_range.isOpen_compl.measurableSet]
+      simp
+    invFun := M.domRestrict (fun μ => μ.comap f)
+    continuous_toFun := by fun_prop
+    continuous_invFun := by
+      rw [← continuousOn_iff_continuous_domRestrict]
+      exact hf.continuousOn_comap_finiteMeasure
+    left_inv μ := by
+      ext s hs
+      simp only [Set.domRestrict_apply, toMeasure_comap, toMeasure_map]
+      rw [Measure.comap_apply]; rw [Measure.map_apply]; rw [preimage_image_eq]
+      · exact hf.injective
+      · exact hf.continuous.measurable
+      · exact hf.measurableEmbedding.measurableSet_image' hs
+      · exact hf.injective
+      · exact fun t ht => hf.measurableEmbedding.measurableSet_image' ht
+      · exact hs
+    right_inv μ := by
+      ext s hs
+      simp only [Set.domRestrict_apply, toMeasure_map]
+      rw [Measure.map_apply hf.continuous.measurable hs]
+      simp only [toMeasure_comap]
+      rw [Measure.comap_apply _ hf.injective]; rw [image_preimage_eq_inter_range]
+      · rw [← Measure.restrict_apply hs, Measure.restrict_eq_self_of_ae_mem]
+        exact (null_iff_toMeasure_null (↑μ) (range f)ᶜ).mp (by exact μ.2)
+      · exact fun t ht => hf.measurableEmbedding.measurableSet_image' ht
+      · exact hf.continuous.measurable hs }
+  exact A.comp B.isEmbedding
 
 中文:
 引理 拓扑.是闭嵌入.isEmbedding_map_finiteMeasure
@@ -3199,7 +3375,35 @@ lemma Topology.IsClosedEmbedding.isEmbedding_map_finiteMeasure
   let B : FiniteMeasure Ω ≃ₜ M :=
   { toFun μ := by
       refine ⟨μ.map f, ?_⟩
-      simp only [null_iff_toMeasure_null, mem_ofPred_eq, toMeasure_map, 
+      simp only [null_iff_toMeasure_null, mem_ofPred_eq, toMeasure_map, M]
+      rw [Measure.map_apply hf.continuous.measurable hf.isClosed_range.isOpen_compl.measurableSet]
+      simp
+    invFun := M.domRestrict (fun μ => μ.comap f)
+    continuous_toFun := by fun_prop
+    continuous_invFun := by
+      rw [← continuousOn_iff_continuous_domRestrict]
+      exact hf.continuousOn_comap_finiteMeasure
+    left_inv μ := by
+      ext s hs
+      simp only [Set.domRestrict_apply, toMeasure_comap, toMeasure_map]
+      rw [Measure.comap_apply]; rw [Measure.map_apply]; rw [preimage_image_eq]
+      · exact hf.injective
+      · exact hf.continuous.measurable
+      · exact hf.measurableEmbedding.measurableSet_image' hs
+      · exact hf.injective
+      · exact fun t ht => hf.measurableEmbedding.measurableSet_image' ht
+      · exact hs
+    right_inv μ := by
+      ext s hs
+      simp only [Set.domRestrict_apply, toMeasure_map]
+      rw [Measure.map_apply hf.continuous.measurable hs]
+      simp only [toMeasure_comap]
+      rw [Measure.comap_apply _ hf.injective]; rw [image_preimage_eq_inter_range]
+      · rw [← Measure.restrict_apply hs, Measure.restrict_eq_self_of_ae_mem]
+        exact (null_iff_toMeasure_null (↑μ) (range f)ᶜ).mp (by exact μ.2)
+      · exact fun t ht => hf.measurableEmbedding.measurableSet_image' ht
+      · exact hf.continuous.measurable hs }
+  exact A.comp B.isEmbedding
 
 Depends on / 依赖: FiniteMeasure, IsEmbedding, IsEmbedding.subtypeVal, IsStrictTotalOrder, M.domRestrict, Measure, Measure.map_apply, Subtype, Subtype.val, continuous, continuousOn, continuous_invFun, continuous_toFun, domRestrict, fun_prop, hf.continuous.measurable, hf.isClosed_range.isOpen_compl.measurableSet, invFun, isClosed_range, isOpen_compl
 -/

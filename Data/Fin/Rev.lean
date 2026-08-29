@@ -359,7 +359,7 @@ lemma succAbove_rev_left
   · rw [succAbove_of_succ_le _ _ h,
       succAbove_of_le_castSucc _ _ (rev_succ _ ▸ (le_rev_iff.mpr h)), rev_succ, rev_rev]
   · rw [succAbove_of_le_castSucc _ _ h,
-      succAbove_of_succ_le _ _ (rev_castSucc _ ▸ (rev_le_iff.mpr h)), rev_castSuc
+      succAbove_of_succ_le _ _ (rev_castSucc _ ▸ (rev_le_iff.mpr h)), rev_castSucc, rev_rev]
 
 中文:
 引理 succAbove_rev_left
@@ -369,7 +369,7 @@ lemma succAbove_rev_left
   · rw [succAbove_of_succ_le _ _ h,
       succAbove_of_le_castSucc _ _ (rev_succ _ ▸ (le_rev_iff.mpr h)), rev_succ, rev_rev]
   · rw [succAbove_of_le_castSucc _ _ h,
-      succAbove_of_succ_le _ _ (rev_castSucc _ ▸ (rev_le_iff.mpr h)), rev_castSuc
+      succAbove_of_succ_le _ _ (rev_castSucc _ ▸ (rev_le_iff.mpr h)), rev_castSucc, rev_rev]
 
 Depends on / 依赖: le_rev_iff, le_rev_iff.mpr, rev_castSucc, rev_le_iff, rev_le_iff.mpr, rev_rev, rev_succ, succAbove_of_le_castSucc, succAbove_of_succ_le, succ_le_or_le_castSucc
 -/
@@ -431,7 +431,7 @@ lemma predAbove_rev_left
   · rw [predAbove_of_succ_le _ _ h, rev_pred,
       predAbove_of_le_castSucc _ _ (rev_succ _ ▸ (le_rev_iff.mpr h)), castPred_inj, rev_rev]
   · rw [predAbove_of_le_castSucc _ _ h, rev_castPred,
-      predAbove_of_succ_le _ _ (rev_castSucc _ ▸ (rev
+      predAbove_of_succ_le _ _ (rev_castSucc _ ▸ (rev_le_iff.mpr h)), pred_inj, rev_rev]
 
 中文:
 引理 predAbove_rev_left
@@ -441,7 +441,7 @@ lemma predAbove_rev_left
   · rw [predAbove_of_succ_le _ _ h, rev_pred,
       predAbove_of_le_castSucc _ _ (rev_succ _ ▸ (le_rev_iff.mpr h)), castPred_inj, rev_rev]
   · rw [predAbove_of_le_castSucc _ _ h, rev_castPred,
-      predAbove_of_succ_le _ _ (rev_castSucc _ ▸ (rev
+      predAbove_of_succ_le _ _ (rev_castSucc _ ▸ (rev_le_iff.mpr h)), pred_inj, rev_rev]
 
 Depends on / 依赖: castPred_inj, le_rev_iff, le_rev_iff.mpr, predAbove_of_le_castSucc, predAbove_of_succ_le, pred_inj, rev_castPred, rev_castSucc, rev_le_iff, rev_le_iff.mpr, rev_pred, rev_rev, rev_succ, succ_le_or_le_castSucc
 -/

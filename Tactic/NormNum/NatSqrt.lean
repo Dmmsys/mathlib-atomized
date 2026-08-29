@@ -77,7 +77,9 @@ definition proveNatSqrt
     let y := Nat.sqrt x
     have ey : Q(Nat) := mkRawNatLit y
     have er : Q(Nat) := mkRawNatLit (x - y * y)
-    have hr : Q($ey 
+    have hr : Q($ey * $ey + $er = $ex) := (q(Eq.refl $ex) : Expr)
+    have hle : Q(Nat.ble $er (2 * $ey)) := (q(Eq.refl true) : Expr)
+    ⟨ey, q(nat_sqrt_helper $hr $hle)⟩
 
 中文:
 定义 prove自然数Sqrt
@@ -89,7 +91,9 @@ definition proveNatSqrt
     let y := Nat.sqrt x
     have ey : Q(Nat) := mkRawNatLit y
     have er : Q(Nat) := mkRawNatLit (x - y * y)
-    have hr : Q($ey 
+    have hr : Q($ey * $ey + $er = $ex) := (q(Eq.refl $ex) : Expr)
+    have hle : Q(Nat.ble $er (2 * $ey)) := (q(Eq.refl true) : Expr)
+    ⟨ey, q(nat_sqrt_helper $hr $hle)⟩
 
 Depends on / 依赖: Eq.refl, Nat.ble, Nat.sqrt, Nat.sqrt_one, Nat.sqrt_zero, ex.natLit, mkRawNatLit, natLit, nat_lit, nat_sqrt_helper, sqrt_one, sqrt_zero
 -/

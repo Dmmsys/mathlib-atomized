@@ -101,7 +101,8 @@ definition binaryCofanIsColimit
     (fun f g => by ext1; exact lift_comp_includeRight _ _ fun _ _ => .all _ _)
     (fun f g m hm₁ hm₂ => by
       ext1
-      refine l
+      refine liftEquiv.symm_apply_eq (y := ⟨⟨_, _⟩, fun _ _ => .all _ _⟩).mp ?_
+      exact Subtype.ext (Prod.ext congr(($hm₁).hom) congr(($hm₂).hom)))
 
 中文:
 定义 binaryCofanIsColimit
@@ -112,7 +113,8 @@ definition binaryCofanIsColimit
     (fun f g => by ext1; exact lift_comp_includeRight _ _ fun _ _ => .all _ _)
     (fun f g m hm₁ hm₂ => by
       ext1
-      refine l
+      refine liftEquiv.symm_apply_eq (y := ⟨⟨_, _⟩, fun _ _ => .all _ _⟩).mp ?_
+      exact Subtype.ext (Prod.ext congr(($hm₁).hom) congr(($hm₂).hom)))
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.mk, IsColimit, Prod.ext, Subtype, Subtype.ext, f.hom, g.hom, liftEquiv, liftEquiv.symm_apply_eq, lift_comp_includeLeft, lift_comp_includeRight, symm_apply_eq
 -/
@@ -158,7 +160,7 @@ instance :
   tensorUnit := .of R R
   associator _ _ _ := isoMk (assoc R R R _ _ _)
   leftUnitor _ := isoMk (lid R _)
-  rightUnitor _ := isoMk 
+  rightUnitor _ := isoMk (rid R R _)
 
 中文:
 实例 :
@@ -170,7 +172,7 @@ instance :
   tensorUnit := .of R R
   associator _ _ _ := isoMk (assoc R R R _ _ _)
   leftUnitor _ := isoMk (lid R _)
-  rightUnitor _ := isoMk 
+  rightUnitor _ := isoMk (rid R R _)
 
 Depends on / 依赖: otimes
 -/
@@ -373,7 +375,7 @@ instance :
   snd := _
 tensorProductIsBinaryProduct S T := BinaryCofan.IsColimit.op binaryCofanIsColimit S.unop T.unop
   fst_def S T := by ext x; change x otimesₜ 1 = x otimesₜ algebraMap R T.unop 1; simp
-  snd_def S T := by ext x; change 1 otimesₜ x = algebraMap R S
+  snd_def S T := by ext x; change 1 otimesₜ x = algebraMap R S.unop 1 otimesₜ x; simp
 
 中文:
 实例 :
@@ -383,7 +385,7 @@ tensorProductIsBinaryProduct S T := BinaryCofan.IsColimit.op binaryCofanIsColimi
   snd := _
 tensorProductIsBinaryProduct S T := BinaryCofan.IsColimit.op binaryCofanIsColimit S.unop T.unop
   fst_def S T := by ext x; change x otimesₜ 1 = x otimesₜ algebraMap R T.unop 1; simp
-  snd_def S T := by ext x; change 1 otimesₜ x = algebraMap R S
+  snd_def S T := by ext x; change 1 otimesₜ x = algebraMap R S.unop 1 otimesₜ x; simp
 
 Depends on / 依赖: isInitialSelf, terminalOpOfInitial
 -/

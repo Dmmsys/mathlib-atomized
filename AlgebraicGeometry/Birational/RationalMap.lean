@@ -553,7 +553,12 @@ lemma fromSpecStalkOfMem_restrict
   have e : ⟨x, hU' hx⟩ = X.homOfLE hU' ⟨x, hx⟩ := by
     rw [Scheme.homOfLE_base]
     rfl
-  rw [Category.assoc]; rw [← SpecMap_stalkMap_fromSpecStalk_assoc]; rw [← SpecMap_stalkSpecializes_fromSpecStalk (Inseparable.of_e
+  rw [Category.assoc]; rw [← SpecMap_stalkMap_fromSpecStalk_assoc]; rw [← SpecMap_stalkSpecializes_fromSpecStalk (Inseparable.of_eq e).specializes]; rw [← TopCat.Presheaf.stalkCongr_inv _ (Inseparable.of_eq e)]
+  simp only [← Category.assoc, ← Spec.map_comp]
+  congr 3
+  rw [Iso.eq_inv_comp]; rw [← Category.assoc]; rw [IsIso.comp_inv_eq]; rw [IsIso.eq_inv_comp]; rw [Hom.stalkMap_congr_hom _ _ (X.homOfLE_ι hU').symm]
+  simp only [TopCat.Presheaf.stalkCongr_hom]
+  rw [← Hom.stalkSpecializes_stalkMap_assoc]; rw [Hom.stalkMap_comp]
 
 中文:
 引理 fromSpecStalkOfMem_restrict
@@ -563,7 +568,12 @@ lemma fromSpecStalkOfMem_restrict
   have e : ⟨x, hU' hx⟩ = X.homOfLE hU' ⟨x, hx⟩ := by
     rw [Scheme.homOfLE_base]
     rfl
-  rw [Category.assoc]; rw [← SpecMap_stalkMap_fromSpecStalk_assoc]; rw [← SpecMap_stalkSpecializes_fromSpecStalk (Inseparable.of_e
+  rw [Category.assoc]; rw [← SpecMap_stalkMap_fromSpecStalk_assoc]; rw [← SpecMap_stalkSpecializes_fromSpecStalk (Inseparable.of_eq e).specializes]; rw [← TopCat.Presheaf.stalkCongr_inv _ (Inseparable.of_eq e)]
+  simp only [← Category.assoc, ← Spec.map_comp]
+  congr 3
+  rw [Iso.eq_inv_comp]; rw [← Category.assoc]; rw [IsIso.comp_inv_eq]; rw [IsIso.eq_inv_comp]; rw [Hom.stalkMap_congr_hom _ _ (X.homOfLE_ι hU').symm]
+  simp only [TopCat.Presheaf.stalkCongr_hom]
+  rw [← Hom.stalkSpecializes_stalkMap_assoc]; rw [Hom.stalkMap_comp]
 
 Depends on / 依赖: Category, Category.assoc, Inseparable, Inseparable.of_eq, IsIso.comp_inv_eq, Iso.eq_inv_comp, Presheaf, Scheme, Scheme.Opens.fromSpecStalkOfMem, Scheme.homOfLE_base, Spec.map_comp, SpecMap_stalkMap_fromSpecStalk_assoc, SpecMap_stalkSpecializes_fromSpecStalk, TopCat, TopCat.Presheaf.stalkCongr_inv, X.homOfLE, comp_inv_eq, eq_inv_comp, fromSpecStalkOfMem, homOfLE
 -/
@@ -862,7 +872,8 @@ lemma equiv.trans
     inf_le_right.trans hW₂r, ?_⟩
   dsimp at e₁ e₂
   simp only [restrict_domain, restrict_hom, ← X.homOfLE_homOfLE (U := W₁ ⊓ W₂) inf_le_left hW₁l,
-    Category
+    Category.assoc, e₁, ← X.homOfLE_homOfLE (U := W₁ ⊓ W₂) inf_le_right hW₂r, ← e₂]
+  simp only [homOfLE_homOfLE_assoc]
 
 中文:
 引理 equiv.trans
@@ -874,7 +885,8 @@ lemma equiv.trans
     inf_le_right.trans hW₂r, ?_⟩
   dsimp at e₁ e₂
   simp only [restrict_domain, restrict_hom, ← X.homOfLE_homOfLE (U := W₁ ⊓ W₂) inf_le_left hW₁l,
-    Category
+    Category.assoc, e₁, ← X.homOfLE_homOfLE (U := W₁ ⊓ W₂) inf_le_right hW₂r, ← e₂]
+  simp only [homOfLE_homOfLE_assoc]
 
 Depends on / 依赖: Category, Category.assoc, X.homOfLE_homOfLE, homOfLE_homOfLE, homOfLE_homOfLE_assoc, inf_le_left, inf_le_left.trans, inf_le_right, inf_le_right.trans, inter_of_isOpen_left, restrict_domain, restrict_hom
 -/
@@ -962,7 +974,20 @@ lemma equiv_of_fromSpecStalkOfMem_eq
     f.dense_domain.inter_of_isOpen_left g.dense_domain f.domain.2
   have := (isGermInjectiveAt_iff_of_isOpenImmersion (f := (f.domain ⊓ g.domain).ι)
     (x := ⟨x, hxf, hxg⟩)).mp ‹_›
-  have := spread_out_unique_of_isGermInjective' (X := (f.d
+  have := spread_out_unique_of_isGermInjective' (X := (f.domain ⊓ g.domain).toScheme)
+    (X.homOfLE inf_le_left ≫ f.hom) (X.homOfLE inf_le_right ≫ g.hom) (x := ⟨x, hxf, hxg⟩) ?_
+  · obtain ⟨U, hxU, e⟩ := this
+    refine ⟨(f.domain ⊓ g.domain).ι ''ᵁ U, ((f.domain ⊓ g.domain).ι ''ᵁ U).2.dense
+      ⟨_, ⟨_, hxU, rfl⟩⟩,
+      ((Set.image_subset_range _ _).trans_eq (Subtype.range_val)).trans inf_le_left,
+      ((Set.image_subset_range _ _).trans_eq (Subtype.range_val)).trans inf_le_right, ?_⟩
+    rw [← cancel_epi (Scheme.Hom.isoImage _ _).hom]
+    simp only [restrict_hom, ← Category.assoc] at e ⊢
+    convert! e using 2 <;> rw [← cancel_mono (Scheme.Opens.ι _)] <;> simp
+  · rw [← f.fromSpecStalkOfMem_restrict hdense inf_le_left ⟨hxf, hxg⟩,
+      ← g.fromSpecStalkOfMem_restrict hdense inf_le_right ⟨hxf, hxg⟩] at H
+    simpa only [fromSpecStalkOfMem, restrict_domain, Opens.fromSpecStalkOfMem, Spec.map_inv,
+      restrict_hom, Category.assoc, IsIso.eq_inv_comp, IsIso.hom_inv_id_assoc] using H
 
 中文:
 引理 equiv_of_fromSpecStalkOfMem_eq
@@ -972,7 +997,20 @@ lemma equiv_of_fromSpecStalkOfMem_eq
     f.dense_domain.inter_of_isOpen_left g.dense_domain f.domain.2
   have := (isGermInjectiveAt_iff_of_isOpenImmersion (f := (f.domain ⊓ g.domain).ι)
     (x := ⟨x, hxf, hxg⟩)).mp ‹_›
-  have := spread_out_unique_of_isGermInjective' (X := (f.d
+  have := spread_out_unique_of_isGermInjective' (X := (f.domain ⊓ g.domain).toScheme)
+    (X.homOfLE inf_le_left ≫ f.hom) (X.homOfLE inf_le_right ≫ g.hom) (x := ⟨x, hxf, hxg⟩) ?_
+  · obtain ⟨U, hxU, e⟩ := this
+    refine ⟨(f.domain ⊓ g.domain).ι ''ᵁ U, ((f.domain ⊓ g.domain).ι ''ᵁ U).2.dense
+      ⟨_, ⟨_, hxU, rfl⟩⟩,
+      ((Set.image_subset_range _ _).trans_eq (Subtype.range_val)).trans inf_le_left,
+      ((Set.image_subset_range _ _).trans_eq (Subtype.range_val)).trans inf_le_right, ?_⟩
+    rw [← cancel_epi (Scheme.Hom.isoImage _ _).hom]
+    simp only [restrict_hom, ← Category.assoc] at e ⊢
+    convert! e using 2 <;> rw [← cancel_mono (Scheme.Opens.ι _)] <;> simp
+  · rw [← f.fromSpecStalkOfMem_restrict hdense inf_le_left ⟨hxf, hxg⟩,
+      ← g.fromSpecStalkOfMem_restrict hdense inf_le_right ⟨hxf, hxg⟩] at H
+    simpa only [fromSpecStalkOfMem, restrict_domain, Opens.fromSpecStalkOfMem, Spec.map_inv,
+      restrict_hom, Category.assoc, IsIso.eq_inv_comp, IsIso.hom_inv_id_assoc] using H
 
 Depends on / 依赖: X.homOfLE, dense_domain, domain, f.dense_domain.inter_of_isOpen_left, f.domain, f.hom, g.dense_domain, g.domain, g.hom, hdense, homOfLE, inf_le_left, inf_le_right, inter_of_isOpen_left, isGermInjectiveAt_iff_of_isOpenImmersion, spread_out_unique_of_isGermInjective, toScheme
 -/
@@ -1011,7 +1049,7 @@ lemma equiv_iff_of_isSeparated_of_le
   have : IsDominant (X.homOfLE (inf_le_left : W ⊓ V <= W)) :=
     Opens.isDominant_homOfLE (hW.inter_of_isOpen_left hV W.2) _
   apply ext_of_isDominant_of_isSeparated' S (X.homOfLE (inf_le_left : W ⊓ V <= W))
-  simpa using congr(
+  simpa using congr(X.homOfLE (inf_le_right : W ⊓ V <= V) ≫ $e)
 
 中文:
 引理 equiv_iff_of_isSeparated_of_le
@@ -1021,7 +1059,7 @@ lemma equiv_iff_of_isSeparated_of_le
   have : IsDominant (X.homOfLE (inf_le_left : W ⊓ V <= W)) :=
     Opens.isDominant_homOfLE (hW.inter_of_isOpen_left hV W.2) _
   apply ext_of_isDominant_of_isSeparated' S (X.homOfLE (inf_le_left : W ⊓ V <= W))
-  simpa using congr(
+  simpa using congr(X.homOfLE (inf_le_right : W ⊓ V <= V) ≫ $e)
 
 Depends on / 依赖: domain, f.domain, f.equiv, g.domain
 -/
@@ -1550,7 +1588,9 @@ lemma RationalMap.isOver_iff
     obtain ⟨g, hg, e⟩ := f.exists_partialMap_over S
     rw [← e]; rw [Hom.toRationalMap]; rw [← compHom_toRationalMap]; rw [PartialMap.isOver_iff_eq_restrict.mp hg]; rw [PartialMap.restrict_toRationalMap]
   · intro e
-    obtain ⟨f, rfl⟩ := PartialMap.toRationalMap_surjec
+    obtain ⟨f, rfl⟩ := PartialMap.toRationalMap_surjective f
+    obtain ⟨U, hU, hUl, hUr, e⟩ := PartialMap.toRationalMap_eq_iff.mp e
+    exact ⟨⟨f.restrict U hU hUl, by simpa using! e, by simp⟩⟩
 
 中文:
 引理 RationalMap.isOver_iff
@@ -1561,7 +1601,9 @@ lemma RationalMap.isOver_iff
     obtain ⟨g, hg, e⟩ := f.exists_partialMap_over S
     rw [← e]; rw [Hom.toRationalMap]; rw [← compHom_toRationalMap]; rw [PartialMap.isOver_iff_eq_restrict.mp hg]; rw [PartialMap.restrict_toRationalMap]
   · intro e
-    obtain ⟨f, rfl⟩ := PartialMap.toRationalMap_surjec
+    obtain ⟨f, rfl⟩ := PartialMap.toRationalMap_surjective f
+    obtain ⟨U, hU, hUl, hUr, e⟩ := PartialMap.toRationalMap_eq_iff.mp e
+    exact ⟨⟨f.restrict U hU hUl, by simpa using! e, by simp⟩⟩
 
 Depends on / 依赖: Hom.toRationalMap, PartialMap, PartialMap.isOver_iff_eq_restrict.mp, PartialMap.restrict_toRationalMap, PartialMap.toRationalMap_eq_iff.mp, PartialMap.toRationalMap_surjective, compHom_toRationalMap, exists_partialMap_over, f.exists_partialMap_over, f.restrict, isOver_iff_eq_restrict, restrict, restrict_toRationalMap, toRationalMap, toRationalMap_eq_iff, toRationalMap_surjective
 -/
@@ -1769,7 +1811,11 @@ definition RationalMap.equivFunctionField
   invFun f := ⟨f.1.fromFunctionField, by
     obtain ⟨f, hf⟩ := f
     obtain ⟨f, rfl⟩ := f.exists_rep
-    simpa [fromFunctionField_toRati
+    simpa [fromFunctionField_toRationalMap] using! congr(RationalMap.fromFunctionField $hf)⟩
+  left_inv f := Subtype.ext (RationalMap.fromFunctionField_ofFunctionField _ _ _ _)
+  right_inv f := Subtype.ext (RationalMap.eq_of_fromFunctionField_eq
+      (ofFunctionField sX sY f.1.fromFunctionField _) f
+      (RationalMap.fromFunctionField_ofFunctionField _ _ _ _))
 
 中文:
 定义 RationalMap.equivFunctionField
@@ -1779,7 +1825,11 @@ definition RationalMap.equivFunctionField
   invFun f := ⟨f.1.fromFunctionField, by
     obtain ⟨f, hf⟩ := f
     obtain ⟨f, rfl⟩ := f.exists_rep
-    simpa [fromFunctionField_toRati
+    simpa [fromFunctionField_toRationalMap] using! congr(RationalMap.fromFunctionField $hf)⟩
+  left_inv f := Subtype.ext (RationalMap.fromFunctionField_ofFunctionField _ _ _ _)
+  right_inv f := Subtype.ext (RationalMap.eq_of_fromFunctionField_eq
+      (ofFunctionField sX sY f.1.fromFunctionField _) f
+      (RationalMap.fromFunctionField_ofFunctionField _ _ _ _))
 
 Depends on / 依赖: PartialMap, PartialMap.toRationalMap_eq_iff.mpr, ofFunctionField, toRationalMap_eq_iff
 -/
@@ -1925,7 +1975,7 @@ definition RationalMap.openCoverDomain
     rw [presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ?_, inferInstance⟩
     use ⟨_, (TopologicalSpace.Opens.mem_sSup.mp x.2).choose_spec.1⟩
-    exact ⟨⟨x.1, (Topological
+    exact ⟨⟨x.1, (TopologicalSpace.Opens.mem_sSup.mp x.2).choose_spec.2⟩, Subtype.ext (by simp)⟩
 
 中文:
 定义 RationalMap.openCoverDomain
@@ -1937,7 +1987,7 @@ definition RationalMap.openCoverDomain
     rw [presieve₀_mem_precoverage_iff]
     refine ⟨fun x => ?_, inferInstance⟩
     use ⟨_, (TopologicalSpace.Opens.mem_sSup.mp x.2).choose_spec.1⟩
-    exact ⟨⟨x.1, (Topological
+    exact ⟨⟨x.1, (TopologicalSpace.Opens.mem_sSup.mp x.2).choose_spec.2⟩, Subtype.ext (by simp)⟩
 
 Depends on / 依赖: PartialMap, PartialMap.domain, domain, g.toRationalMap, toRationalMap
 -/
@@ -1967,7 +2017,16 @@ definition RationalMap.toPartialMap
   intro x y
   let g (x : f.openCoverDomain.I₀) := x.2.choose
   have hg₁ (x) : (g x).toRationalMap = f := x.2.choose_spec.1
-  have hg₂ (x) : (g x).domain = x.1 
+  have hg₂ (x) : (g x).domain = x.1 := x.2.choose_spec.2
+  refine (cancel_epi (isPullback_opens_inf_le (le_sSup x.2) (le_sSup y.2)).isoPullback.hom).mp ?_
+  simp only [openCoverDomain, IsPullback.isoPullback_hom_fst_assoc,
+    IsPullback.isoPullback_hom_snd_assoc]
+  change _ ≫ _ ≫ (g x).hom = _ ≫ _ ≫ (g y).hom
+  simp_rw [← cancel_epi (X.isoOfEq congr($(hg₂ x) ⊓ $(hg₂ y))).hom, ← Category.assoc]
+  convert! (PartialMap.equiv_iff_of_isSeparated (S := ⊤_ _) (f := g x) (g := g y)).mp ?_ using 1
+  · dsimp; congr 1; simp [g, ← cancel_mono (Opens.ι _)]
+  · dsimp; congr 1; simp [g, ← cancel_mono (Opens.ι _)]
+  · rw [← PartialMap.toRationalMap_eq_iff, hg₁, hg₁]
 
 中文:
 定义 RationalMap.toPartialMap
@@ -1978,7 +2037,16 @@ definition RationalMap.toPartialMap
   intro x y
   let g (x : f.openCoverDomain.I₀) := x.2.choose
   have hg₁ (x) : (g x).toRationalMap = f := x.2.choose_spec.1
-  have hg₂ (x) : (g x).domain = x.1 
+  have hg₂ (x) : (g x).domain = x.1 := x.2.choose_spec.2
+  refine (cancel_epi (isPullback_opens_inf_le (le_sSup x.2) (le_sSup y.2)).isoPullback.hom).mp ?_
+  simp only [openCoverDomain, IsPullback.isoPullback_hom_fst_assoc,
+    IsPullback.isoPullback_hom_snd_assoc]
+  change _ ≫ _ ≫ (g x).hom = _ ≫ _ ≫ (g y).hom
+  simp_rw [← cancel_epi (X.isoOfEq congr($(hg₂ x) ⊓ $(hg₂ y))).hom, ← Category.assoc]
+  convert! (PartialMap.equiv_iff_of_isSeparated (S := ⊤_ _) (f := g x) (g := g y)).mp ?_ using 1
+  · dsimp; congr 1; simp [g, ← cancel_mono (Opens.ι _)]
+  · dsimp; congr 1; simp [g, ← cancel_mono (Opens.ι _)]
+  · rw [← PartialMap.toRationalMap_eq_iff, hg₁, hg₁]
 
 Depends on / 依赖: IsPullback, IsPullback.isoPullback_hom_fst_assoc, IsPullback.isoPullback_hom_snd_, X.isoOfEq, cancel_epi, choose.hom, choose_spec, dense_domain, domain, f.dense_domain, f.domain, f.openCoverDomain.I, f.openCoverDomain.glueMorphisms, glueMorphisms, isPullback_opens_inf_le, isoOfEq, isoPullback, isoPullback.hom, isoPullback_hom_fst_assoc, isoPullback_hom_snd_
 -/
@@ -2012,7 +2080,7 @@ lemma PartialMap.toPartialMap_toRationalMap_restrict
   generalize_proofs _ _ H _
   have : H.choose = f := (equiv_iff_of_domain_eq_of_isSeparated (S := ⊤_ _) H.choose_spec.2).mp
     (toRationalMap_eq_iff.mp H.choose_spec.1)
-  e
+  exact ((ext_iff _ _).mp this.symm).choose_spec.symm
 
 中文:
 引理 Partial映射.toPartialMap_toRationalMap_restrict
@@ -2023,7 +2091,7 @@ lemma PartialMap.toPartialMap_toRationalMap_restrict
   generalize_proofs _ _ H _
   have : H.choose = f := (equiv_iff_of_domain_eq_of_isSeparated (S := ⊤_ _) H.choose_spec.2).mp
     (toRationalMap_eq_iff.mp H.choose_spec.1)
-  e
+  exact ((ext_iff _ _).mp this.symm).choose_spec.symm
 
 Depends on / 依赖: H.choose, H.choose_spec, RationalMap, RationalMap.toPartialMap, choose_spec, choose_spec.symm, equiv_iff_of_domain_eq_of_isSeparated, ext_iff, f.toRationalMap.openCoverDomain, generalize_proofs, openCoverDomain, this.symm, toPartialMap, toRationalMap, toRationalMap_eq_iff, toRationalMap_eq_iff.mp
 -/

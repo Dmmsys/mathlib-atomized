@@ -57,7 +57,17 @@ definition shiftFunctor
       shape := fun i j hij => by
         rw [K.shape]; rw [smul_zero]
         intro hij'
-        apply 
+        apply hij
+        dsimp at hij' ⊢
+        lia }
+  map φ :=
+    { f := fun _ => φ.f _
+      comm' := by
+        intros
+        dsimp
+        simp only [Linear.comp_units_smul, Hom.comm, Linear.units_smul_comp] }
+  map_id := by intros; rfl
+  map_comp := by intros; rfl
 
 中文:
 定义 shiftFunctor
@@ -70,7 +80,17 @@ definition shiftFunctor
       shape := fun i j hij => by
         rw [K.shape]; rw [smul_zero]
         intro hij'
-        apply 
+        apply hij
+        dsimp at hij' ⊢
+        lia }
+  map φ :=
+    { f := fun _ => φ.f _
+      comm' := by
+        intros
+        dsimp
+        simp only [Linear.comp_units_smul, Hom.comm, Linear.units_smul_comp] }
+  map_id := by intros; rfl
+  map_comp := by intros; rfl
 
 Depends on / 依赖: Hom.comm, K.shape, Linear, Linear.comp_units_smul, Linear.units_smul_comp, comp_units_smul, d_comp_d, intros, map_comp, map_id, n.negOnePow, negOnePow, smul_zero, units_smul_comp
 -/
@@ -176,7 +196,8 @@ definition shiftFunctorAdd'
       subst h
       dsimp
       simp only [add_comm n₁ n₂, Int.negOnePow_add, Linear.units_smul_comp,
-        Linear.comp_units_smul, d_comp_XIsoOfEq_hom, smul_smul, XIsoOfEq_ho
+        Linear.comp_units_smul, d_comp_XIsoOfEq_hom, smul_smul, XIsoOfEq_hom_comp_d]))
+    (by intros; ext; simp)
 
 中文:
 定义 shiftFunctorAdd'
@@ -187,7 +208,8 @@ definition shiftFunctorAdd'
       subst h
       dsimp
       simp only [add_comm n₁ n₂, Int.negOnePow_add, Linear.units_smul_comp,
-        Linear.comp_units_smul, d_comp_XIsoOfEq_hom, smul_smul, XIsoOfEq_ho
+        Linear.comp_units_smul, d_comp_XIsoOfEq_hom, smul_smul, XIsoOfEq_hom_comp_d]))
+    (by intros; ext; simp)
 
 Depends on / 依赖: Hom.isoOfComponents, Int.negOnePow_add, K.shiftFunctorObjXIso, Linear, Linear.comp_units_smul, Linear.units_smul_comp, NatIso, NatIso.ofComponents, XIsoOfEq_hom_comp_d, add_comm, comp_units_smul, d_comp_XIsoOfEq_hom, intros, isoOfComponents, negOnePow_add, ofComponents, shiftFunctorObjXIso, smul_smul, units_smul_comp
 -/
@@ -632,7 +654,14 @@ instance commShiftMapCochainComplex
     dsimp
     simp only [CochainComplex.shiftFunctorZero_inv_app_f, CochainComplex.shiftFunctorZero_hom_app_f,
        HomologicalComplex.XIsoOfEq, eqToIso, eqToHom_map, eqToHom_trans, eqToHom_refl]
-  com
+  commShiftIso_add := fun a b => by
+    ext
+    rw [CommShift.isoAdd_hom_app]
+    dsimp
+    rw [id_comp]; rw [id_comp]
+    simp only [CochainComplex.shiftFunctorAdd_hom_app_f,
+      CochainComplex.shiftFunctorAdd_inv_app_f, HomologicalComplex.XIsoOfEq, eqToIso,
+      eqToHom_map, eqToHom_trans, eqToHom_refl]
 
 中文:
 实例 commShiftMapCochainComplex
@@ -644,7 +673,14 @@ instance commShiftMapCochainComplex
     dsimp
     simp only [CochainComplex.shiftFunctorZero_inv_app_f, CochainComplex.shiftFunctorZero_hom_app_f,
        HomologicalComplex.XIsoOfEq, eqToIso, eqToHom_map, eqToHom_trans, eqToHom_refl]
-  com
+  commShiftIso_add := fun a b => by
+    ext
+    rw [CommShift.isoAdd_hom_app]
+    dsimp
+    rw [id_comp]; rw [id_comp]
+    simp only [CochainComplex.shiftFunctorAdd_hom_app_f,
+      CochainComplex.shiftFunctorAdd_inv_app_f, HomologicalComplex.XIsoOfEq, eqToIso,
+      eqToHom_map, eqToHom_trans, eqToHom_refl]
 
 Depends on / 依赖: F.mapCochainComplexShiftIso, mapCochainComplexShiftIso
 -/
@@ -754,7 +790,12 @@ definition shift
     lia
   comm := fun i => by
     rw [dNext_eq _ (show (ComplexShape.up Int).Rel i (i + 1) by simp)]; rw [prevD_eq _ (show (ComplexShape.up Int).Rel (i - 1) i by simp)]
-    dsi
+    dsimp
+    simpa only [Linear.units_smul_comp, Linear.comp_units_smul, smul_smul,
+      Int.units_mul_self, one_smul,
+      dNext_eq _ (show (ComplexShape.up Int).Rel (i + n) (i + 1 + n) by dsimp; lia),
+      prevD_eq _ (show (ComplexShape.up Int).Rel (i - 1 + n) (i + n) by dsimp; lia)]
+        using h.comm (i + n)
 
 中文:
 定义 shift
@@ -768,7 +809,12 @@ definition shift
     lia
   comm := fun i => by
     rw [dNext_eq _ (show (ComplexShape.up Int).Rel i (i + 1) by simp)]; rw [prevD_eq _ (show (ComplexShape.up Int).Rel (i - 1) i by simp)]
-    dsi
+    dsimp
+    simpa only [Linear.units_smul_comp, Linear.comp_units_smul, smul_smul,
+      Int.units_mul_self, one_smul,
+      dNext_eq _ (show (ComplexShape.up Int).Rel (i + n) (i + 1 + n) by dsimp; lia),
+      prevD_eq _ (show (ComplexShape.up Int).Rel (i - 1 + n) (i + n) by dsimp; lia)]
+        using h.comm (i + n)
 
 Depends on / 依赖: h.hom, n.negOnePow, negOnePow
 -/

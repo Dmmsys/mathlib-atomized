@@ -105,7 +105,7 @@ lemma exp_eq_normedSpace_exp
   simp_rw [← map_exp _ h, cfc_apply exp a ha]
   congr 1
   ext
-  simp 
+  simp [exp_continuousMap_eq]
 
 中文:
 引理 exp_eq_normedSpace_exp
@@ -118,7 +118,7 @@ lemma exp_eq_normedSpace_exp
   simp_rw [← map_exp _ h, cfc_apply exp a ha]
   congr 1
   ext
-  simp 
+  simp [exp_continuousMap_eq]
 
 Depends on / 依赖: Algebra, ContinuousOn, cfcHom_continuous, cfc_apply, cfc_id, cfc_tac, continuousOn, conv_rhs, exp_continuous, exp_continuous.continuousOn, exp_continuousMap_eq, map_exp, nondep, restrictScalars, simp_rw, spectrum
 -/
@@ -390,7 +390,9 @@ lemma log_pow
   have ha₂' : ContinuousOn Real.log (spectrum Real a) := by fun_prop
   have ha₂'' : ContinuousOn Real.log ((· ^ n) '' spectrum Real a) := by fun_prop (disch := aesop)
   rw [log]; rw [← cfc_pow_id (R := Real) a n ha₁]; rw [← cfc_comp' Real.log (· ^ n) a ha₂'']; rw [log]
-  simp_rw [Real.log_pow, ← 
+  simp_rw [Real.log_pow, ← Nat.cast_smul_eq_nsmul Real n, cfc_const_mul (n : Real) Real.log a ha₂']
+
+@[grind =]
 
 中文:
 引理 log_pow
@@ -399,7 +401,9 @@ lemma log_pow
   have ha₂' : ContinuousOn Real.log (spectrum Real a) := by fun_prop
   have ha₂'' : ContinuousOn Real.log ((· ^ n) '' spectrum Real a) := by fun_prop (disch := aesop)
   rw [log]; rw [← cfc_pow_id (R := Real) a n ha₁]; rw [← cfc_comp' Real.log (· ^ n) a ha₂'']; rw [log]
-  simp_rw [Real.log_pow, ← 
+  simp_rw [Real.log_pow, ← Nat.cast_smul_eq_nsmul Real n, cfc_const_mul (n : Real) Real.log a ha₂']
+
+@[grind =]
 
 Depends on / 依赖: ContinuousOn, Nat.cast_smul_eq_nsmul, Real.log, Real.log_pow, cast_smul_eq_nsmul, cfc_comp, cfc_const_mul, cfc_pow_id, cfc_tac, fun_prop, log_pow, simp_rw, spectrum
 -/

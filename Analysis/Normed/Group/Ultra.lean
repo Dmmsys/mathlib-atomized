@@ -536,7 +536,8 @@ definition ball_openSubgroup
     simp only [Metric.mem_ball, dist_eq_norm_inv_mul', inv_one, one_mul] at hx hy ⊢
     exact (norm_mul_le_max x y).trans_lt (max_lt hx hy)
   one_mem' := Metric.mem_ball_self hr
-  inv_mem' := by simp only [Metric.mem_ball, dist_one_right, norm_inv
+  inv_mem' := by simp only [Metric.mem_ball, dist_one_right, norm_inv', imp_self, implies_true]
+  isOpen' := Metric.isOpen_ball
 
 中文:
 定义 ball_openSubgroup
@@ -546,7 +547,8 @@ definition ball_openSubgroup
     simp only [Metric.mem_ball, dist_eq_norm_inv_mul', inv_one, one_mul] at hx hy ⊢
     exact (norm_mul_le_max x y).trans_lt (max_lt hx hy)
   one_mem' := Metric.mem_ball_self hr
-  inv_mem' := by simp only [Metric.mem_ball, dist_one_right, norm_inv
+  inv_mem' := by simp only [Metric.mem_ball, dist_one_right, norm_inv', imp_self, implies_true]
+  isOpen' := Metric.isOpen_ball
 
 Depends on / 依赖: Metric, Metric.ball
 -/
@@ -575,7 +577,8 @@ definition closedBall_openSubgroup
     simp only [Metric.mem_closedBall, dist_eq_norm_inv_mul', inv_one, one_mul] at hx hy ⊢
     exact (norm_mul_le_max x y).trans (max_le hx hy)
   one_mem' := Metric.mem_closedBall_self hr.le
-  inv_mem' := by simp only [mem_closedBall, dist_on
+  inv_mem' := by simp only [mem_closedBall, dist_one_right, norm_inv', imp_self, implies_true]
+  isOpen' := IsUltrametricDist.isOpen_closedBall _ hr.ne'
 
 中文:
 定义 closedBall_openSubgroup
@@ -585,7 +588,8 @@ definition closedBall_openSubgroup
     simp only [Metric.mem_closedBall, dist_eq_norm_inv_mul', inv_one, one_mul] at hx hy ⊢
     exact (norm_mul_le_max x y).trans (max_le hx hy)
   one_mem' := Metric.mem_closedBall_self hr.le
-  inv_mem' := by simp only [mem_closedBall, dist_on
+  inv_mem' := by simp only [mem_closedBall, dist_one_right, norm_inv', imp_self, implies_true]
+  isOpen' := IsUltrametricDist.isOpen_closedBall _ hr.ne'
 
 Depends on / 依赖: Metric, Metric.closedBall, closedBall
 -/
@@ -649,7 +653,10 @@ lemma _root_.Finset.Nonempty.norm_prod_le_sup'_norm
   | singleton j => simp only [Finset.mem_singleton, Finset.prod_singleton, exists_eq_left, le_refl]
   | cons j t hj _ IH =>
       simp only [Finset.prod_cons, Finset.mem_cons, exists_eq_or_imp]
-      refine 
+      refine (le_total ‖∏ i in t, f i‖ ‖f j‖).imp ?_ ?_ <;> intro h
+      · exact (norm_mul_le_max _ _).trans (max_eq_left h).le
+· exact ⟨_, IH.choose_spec.left, (norm_mul_le_max _ _).trans
+          ((max_eq_right h).le.trans IH.choose_spec.right)⟩
 
 中文:
 引理 _root_.有限集.非空.norm_prod_le_sup'_norm
@@ -660,7 +667,10 @@ lemma _root_.Finset.Nonempty.norm_prod_le_sup'_norm
   | singleton j => simp only [Finset.mem_singleton, Finset.prod_singleton, exists_eq_left, le_refl]
   | cons j t hj _ IH =>
       simp only [Finset.prod_cons, Finset.mem_cons, exists_eq_or_imp]
-      refine 
+      refine (le_total ‖∏ i in t, f i‖ ‖f j‖).imp ?_ ?_ <;> intro h
+      · exact (norm_mul_le_max _ _).trans (max_eq_left h).le
+· exact ⟨_, IH.choose_spec.left, (norm_mul_le_max _ _).trans
+          ((max_eq_right h).le.trans IH.choose_spec.right)⟩
 
 Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Finset.le_sup, Finset.mem_cons, Finset.mem_singleton, Finset.prod_cons, Finset.prod_singleton, IH.choose_spec.left, IH.choose_spec.right, Nonempty, _iff, choose_spec, cons_induction, exists_eq_left, exists_eq_or_imp, le.trans, le_refl, le_sup, le_total, max_eq_left
 -/
@@ -808,7 +818,8 @@ theorem exists_norm_finsetProd_le_of_nonempty
 @[deprecated (since := "2026-04-08")]
 alias exists_norm_finset_sum_le_of_nonempty := exists_norm_finsetSum_le_of_nonempty
 
-@[to_additive existing, deprecated (since := "2026-04
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias exists_norm_finset_prod_le_of_nonempty := exists_norm_finsetProd_le_of_nonempty
 
 中文:
 定理 存在_norm_finsetProd_le_of_nonempty
@@ -819,7 +830,8 @@ alias exists_norm_finset_sum_le_of_nonempty := exists_norm_finsetSum_le_of_nonem
 @[deprecated (since := "2026-04-08")]
 alias exists_norm_finset_sum_le_of_nonempty := exists_norm_finsetSum_le_of_nonempty
 
-@[to_additive existing, deprecated (since := "2026-04
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias exists_norm_finset_prod_le_of_nonempty := exists_norm_finsetProd_le_of_nonempty
 
 Depends on / 依赖: _norm, exists_mem_eq_sup, ht.norm_prod_le_sup, le_of_eq, norm_prod_le_sup, t.exists_mem_eq_sup
 -/
@@ -853,7 +865,8 @@ exact (fun ⟨i, h, h'⟩ => ⟨i, fun _ => h, h'⟩) exists_norm_finsetProd_le_
 
 @[deprecated (since := "2026-04-08")] alias exists_norm_finset_sum_le := exists_norm_finsetSum_le
 
-@[to_additive existing, deprecated (since := "2026-04
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias exists_norm_finset_prod_le := exists_norm_finsetProd_le
 
 中文:
 定理 存在_norm_finsetProd_le
@@ -865,7 +878,8 @@ exact (fun ⟨i, h, h'⟩ => ⟨i, fun _ => h, h'⟩) exists_norm_finsetProd_le_
 
 @[deprecated (since := "2026-04-08")] alias exists_norm_finset_sum_le := exists_norm_finsetSum_le
 
-@[to_additive existing, deprecated (since := "2026-04
+@[to_additive existing, deprecated (since := "2026-04-08")]
+alias exists_norm_finset_prod_le := exists_norm_finsetProd_le
 
 Depends on / 依赖: eq_empty_or_nonempty, exists_norm_finsetProd_le_of_nonempty, t.eq_empty_or_nonempty
 -/
@@ -901,7 +915,15 @@ theorem exists_norm_multiset_prod_le
       by_cases! hMa : ‖f M‖ <= ‖f a‖
       · refine ⟨a, by simp, ?_⟩
         · rw [Multiset.map_cons, Multiset.prod_cons]
-          exact le_trans (norm_mul_le_max _ _) 
+          exact le_trans (norm_mul_le_max _ _) (max_le (le_refl _) (le_trans hM hMa))
+      · rcases eq_or_ne t 0 with rfl | ht
+        · exact ⟨a, by simp, by simp⟩
+        · refine ⟨M, ?_, ?_⟩
+          · simp [hMs ht]
+          rw [Multiset.map_cons]; rw [Multiset.prod_cons]
+          exact le_trans (norm_mul_le_max _ _) (max_le hMa.le hM)
+
+@[to_additive]
 
 中文:
 定理 存在_norm_multiset_prod_le
@@ -915,7 +937,15 @@ theorem exists_norm_multiset_prod_le
       by_cases! hMa : ‖f M‖ <= ‖f a‖
       · refine ⟨a, by simp, ?_⟩
         · rw [Multiset.map_cons, Multiset.prod_cons]
-          exact le_trans (norm_mul_le_max _ _) 
+          exact le_trans (norm_mul_le_max _ _) (max_le (le_refl _) (le_trans hM hMa))
+      · rcases eq_or_ne t 0 with rfl | ht
+        · exact ⟨a, by simp, by simp⟩
+        · refine ⟨M, ?_, ?_⟩
+          · simp [hMs ht]
+          rw [Multiset.map_cons]; rw [Multiset.prod_cons]
+          exact le_trans (norm_mul_le_max _ _) (max_le hMa.le hM)
+
+@[to_additive]
 
 Depends on / 依赖: Multiset, Multiset.induction_on, Multiset.map_cons, Multiset.prod_cons, eq_or_ne, hMa.le, induction_on, inhabit, le_refl, le_trans, map_cons, max_le, norm_mul_le_max, prod_cons
 -/
@@ -951,7 +981,18 @@ lemma norm_tprod_le
     simp only [tprod_empty, norm_one', Real.iSup_of_isEmpty, le_refl]
   by_cases h : Multipliable f; swap
   · -- Silly case #2 : the product is divergent
-    rw [tprod_eq_one_of_not_multipliable h]; rw [nor
+    rw [tprod_eq_one_of_not_multipliable h]; rw [norm_one']
+    by_cases h_bd : BddAbove (Set.range fun i => ‖f i‖)
+    · exact le_ciSup_of_le h_bd hι.some (norm_nonneg' _)
+    · rw [Real.iSup_of_not_bddAbove h_bd]
+  -- now the interesting case
+  have h_bd : BddAbove (Set.range fun i => ‖f i‖) :=
+    h.tendsto_cofinite_one.norm'.bddAbove_range_of_cofinite
+  refine le_of_tendsto' h.hasProd.norm' (fun s => norm_prod_le_of_forall_le_of_nonneg ?_ ?_)
+  · exact le_ciSup_of_le h_bd hι.some (norm_nonneg' _)
+  · exact fun i _ => le_ciSup h_bd i
+
+@[to_additive]
 
 中文:
 引理 norm_tprod_le
@@ -963,7 +1004,18 @@ lemma norm_tprod_le
     simp only [tprod_empty, norm_one', Real.iSup_of_isEmpty, le_refl]
   by_cases h : Multipliable f; swap
   · -- Silly case #2 : the product is divergent
-    rw [tprod_eq_one_of_not_multipliable h]; rw [nor
+    rw [tprod_eq_one_of_not_multipliable h]; rw [norm_one']
+    by_cases h_bd : BddAbove (Set.range fun i => ‖f i‖)
+    · exact le_ciSup_of_le h_bd hι.some (norm_nonneg' _)
+    · rw [Real.iSup_of_not_bddAbove h_bd]
+  -- now the interesting case
+  have h_bd : BddAbove (Set.range fun i => ‖f i‖) :=
+    h.tendsto_cofinite_one.norm'.bddAbove_range_of_cofinite
+  refine le_of_tendsto' h.hasProd.norm' (fun s => norm_prod_le_of_forall_le_of_nonneg ?_ ?_)
+  · exact le_ciSup_of_le h_bd hι.some (norm_nonneg' _)
+  · exact fun i _ => le_ciSup h_bd i
+
+@[to_additive]
 
 Depends on / 依赖: BddAbove, Multipliable, Real.iSup_of_isEmpty, Real.iSup_of_not_bddAbove, Set.range, divergent, h_bd, iSup_of_isEmpty, iSup_of_not_bddAbove, isEmpty_or_nonempty, le_ciSup_of_le, le_refl, norm_nonneg, norm_one, product, tprod_empty, tprod_eq_one_of_not_multipliable
 -/
@@ -1107,7 +1159,12 @@ lemma nnnorm_prod_eq_sup_of_pairwise_ne
     · simp
     specialize IH (hs.mono (by simp))
     obtain ⟨j, hj, hj'⟩ : exists j in s, ‖∏ i in s, f i‖₊ = ‖f j‖₊ := by
-      simpa [IH] using s.exists_mem_eq_
+      simpa [IH] using s.exists_mem_eq_sup hs' _
+    suffices ‖f a‖₊ != ‖∏ x in s, f x‖₊ by simp [← IH, nnnorm_mul_eq_max_of_nnnorm_ne_nnnorm this]
+    rw [hj']
+    apply hs <;> grind
+
+@[to_additive]
 
 中文:
 引理 nnnorm_prod_eq_sup_of_pairwise_ne
@@ -1120,7 +1177,12 @@ lemma nnnorm_prod_eq_sup_of_pairwise_ne
     · simp
     specialize IH (hs.mono (by simp))
     obtain ⟨j, hj, hj'⟩ : exists j in s, ‖∏ i in s, f i‖₊ = ‖f j‖₊ := by
-      simpa [IH] using s.exists_mem_eq_
+      simpa [IH] using s.exists_mem_eq_sup hs' _
+    suffices ‖f a‖₊ != ‖∏ x in s, f x‖₊ by simp [← IH, nnnorm_mul_eq_max_of_nnnorm_ne_nnnorm this]
+    rw [hj']
+    apply hs <;> grind
+
+@[to_additive]
 
 Depends on / 依赖: Finset, Finset.cons_induction, cons_induction, eq_empty_or_nonempty, exists_mem_eq_sup, hs.mono, nnnorm_mul_eq_max_of_nnnorm_ne_nnnorm, s.eq_empty_or_nonempty, s.exists_mem_eq_sup, specialize
 -/

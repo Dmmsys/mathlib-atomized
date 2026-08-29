@@ -38,7 +38,13 @@ definition opAlgEquiv
     TensorProduct.AlgebraTensorModule.congr
       (opLinearEquiv S).symm (opLinearEquiv R).symm ≪≫ₗ opLinearEquiv S
   letI e₂ : A otimes[R] B ≃ₗ[S] (Aᵐᵒᵖ otimes[R] Bᵐᵒᵖ)ᵐᵒᵖ :=
-    TensorProduct.AlgebraTensorModule.congr (opLinearEquiv S) (opL
+    TensorProduct.AlgebraTensorModule.congr (opLinearEquiv S) (opLinearEquiv R) ≪≫ₗ opLinearEquiv S
+  AlgEquiv.ofAlgHom
+    (algHomOfLinearMapTensorProduct e₁.toLinearMap
+      (fun a₁ a₂ b₁ b₂ => unop_injective (by with_unfolding_all rfl)) (unop_injective rfl))
+    (AlgHom.opComm <| algHomOfLinearMapTensorProduct e₂.toLinearMap
+      (fun a₁ a₂ b₁ b₂ => unop_injective (by with_unfolding_all rfl)) (unop_injective rfl))
+    (AlgHom.op.symm.injective <| by ext <;> rfl) (by ext <;> rfl)
 
 中文:
 定义 opAlgEquiv
@@ -47,7 +53,13 @@ definition opAlgEquiv
     TensorProduct.AlgebraTensorModule.congr
       (opLinearEquiv S).symm (opLinearEquiv R).symm ≪≫ₗ opLinearEquiv S
   letI e₂ : A otimes[R] B ≃ₗ[S] (Aᵐᵒᵖ otimes[R] Bᵐᵒᵖ)ᵐᵒᵖ :=
-    TensorProduct.AlgebraTensorModule.congr (opLinearEquiv S) (opL
+    TensorProduct.AlgebraTensorModule.congr (opLinearEquiv S) (opLinearEquiv R) ≪≫ₗ opLinearEquiv S
+  AlgEquiv.ofAlgHom
+    (algHomOfLinearMapTensorProduct e₁.toLinearMap
+      (fun a₁ a₂ b₁ b₂ => unop_injective (by with_unfolding_all rfl)) (unop_injective rfl))
+    (AlgHom.opComm <| algHomOfLinearMapTensorProduct e₂.toLinearMap
+      (fun a₁ a₂ b₁ b₂ => unop_injective (by with_unfolding_all rfl)) (unop_injective rfl))
+    (AlgHom.op.symm.injective <| by ext <;> rfl) (by ext <;> rfl)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, AlgHom, AlgHom.opComm, AlgebraTensorModule, TensorProduct, TensorProduct.AlgebraTensorModule.congr, algHomOfLinea, algHomOfLinearMapTensorProduct, ofAlgHom, opComm, opLinearEquiv, otimes, toLinearMap, unop_injective, with_unfolding_all
 -/

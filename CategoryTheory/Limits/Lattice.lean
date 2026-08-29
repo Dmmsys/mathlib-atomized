@@ -184,6 +184,7 @@ theorem finite_coproduct_eq_finset_sup
           (finiteColimitCocone (Discrete.functor f)).isColimit).to_eq
   change Finset.univ.sup (f ∘ discreteEquiv.toEmbedding) = Fintype.elems.sup f
   simp only [← Finset.sup_map, Finset.univ_map_equiv_to_embedding]
+  rfl
 
 中文:
 定理 finite_coproduct_eq_finset_sup
@@ -195,6 +196,7 @@ theorem finite_coproduct_eq_finset_sup
           (finiteColimitCocone (Discrete.functor f)).isColimit).to_eq
   change Finset.univ.sup (f ∘ discreteEquiv.toEmbedding) = Fintype.elems.sup f
   simp only [← Finset.sup_map, Finset.univ_map_equiv_to_embedding]
+  rfl
 
 Depends on / 依赖: Discrete, Discrete.functor, Finset, Finset.sup_map, Finset.univ.sup, Finset.univ_map_equiv_to_embedding, Fintype, Fintype.elems.sup, IsColimit, IsColimit.coconePointUniqueUpToIso, coconePointUniqueUpToIso, colimit, colimit.isColimit, discreteEquiv, discreteEquiv.toEmbedding, finiteColimitCocone, functor, isColimit, sup_map, toEmbedding
 -/

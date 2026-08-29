@@ -231,7 +231,11 @@ lemma inertiaDeg'_comap_eq
     rw [← comap_coe e]; rw [comap_comap]; rw [← e.toAlgHom_toRingHom]; rw [AlgHom.comp_algebraMap]
   by_cases h : P.LiesOver p
   · rw [inertiaDeg'_algebraMap, inertiaDeg'_algebraMap]
-    exact (Quotient.algEq
+    exact (Quotient.algEquivOfEqComap p e rfl).toLinearEquiv.finrank_eq
+  · rw [inertiaDeg', dif_neg (fun eq => h ⟨(he.mp eq).symm⟩)]
+    rw [inertiaDeg']; rw [dif_neg (fun eq => h ⟨eq.symm⟩)]
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg_comap_eq := inertiaDeg'_comap_eq
 
 中文:
 引理 inertiaDeg'_comap_eq
@@ -241,7 +245,11 @@ lemma inertiaDeg'_comap_eq
     rw [← comap_coe e]; rw [comap_comap]; rw [← e.toAlgHom_toRingHom]; rw [AlgHom.comp_algebraMap]
   by_cases h : P.LiesOver p
   · rw [inertiaDeg'_algebraMap, inertiaDeg'_algebraMap]
-    exact (Quotient.algEq
+    exact (Quotient.algEquivOfEqComap p e rfl).toLinearEquiv.finrank_eq
+  · rw [inertiaDeg', dif_neg (fun eq => h ⟨(he.mp eq).symm⟩)]
+    rw [inertiaDeg']; rw [dif_neg (fun eq => h ⟨eq.symm⟩)]
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg_comap_eq := inertiaDeg'_comap_eq
 -/
 lemma inertiaDeg'_comap_eq (e : S ≃ₐ[R] S₁) (P : Ideal S₁) :
     inertiaDeg' p (P.comap e) = inertiaDeg' p P := by
@@ -297,7 +305,7 @@ theorem inertiaDeg'_bot
     ((quotEquivOfEq hP).trans (RingEquiv.quotientBot S)).symm]
   rfl
 
-@[deprecated (since := "2026-07-03")] al
+@[deprecated (since := "2026-07-03")] alias inertiaDeg_bot := inertiaDeg'_bot
 
 中文:
 定理 inertiaDeg'_bot
@@ -309,7 +317,7 @@ theorem inertiaDeg'_bot
     ((quotEquivOfEq hP).trans (RingEquiv.quotientBot S)).symm]
   rfl
 
-@[deprecated (since := "2026-07-03")] al
+@[deprecated (since := "2026-07-03")] alias inertiaDeg_bot := inertiaDeg'_bot
 -/
 theorem inertiaDeg'_bot [Nontrivial R] [IsDomain S] [Algebra.IsIntegral R S]
     [hP : P.LiesOver (⊥ : Ideal R)] :
@@ -334,7 +342,9 @@ theorem inertiaDeg'_le_inertiaDeg'
 have : IsScalarTower (R ⧸ p) (S ⧸ P) (T ⧸ Q) := IsScalarTower.of_algebraMap_eq by
     rintro ⟨x⟩
     simp [Submodule.Quotient.quot_mk_eq_mk, IsScalarTower.algebraMap_apply R (S ⧸ P) (T ⧸ Q)]
- 
+  exact finrank_top_le_finrank_of_isScalarTower ..
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg_le_inertiaDeg := inertiaDeg'_le_inertiaDeg'
 
 中文:
 定理 inertiaDeg'_le_inertiaDeg'
@@ -345,7 +355,9 @@ have : IsScalarTower (R ⧸ p) (S ⧸ P) (T ⧸ Q) := IsScalarTower.of_algebraMa
 have : IsScalarTower (R ⧸ p) (S ⧸ P) (T ⧸ Q) := IsScalarTower.of_algebraMap_eq by
     rintro ⟨x⟩
     simp [Submodule.Quotient.quot_mk_eq_mk, IsScalarTower.algebraMap_apply R (S ⧸ P) (T ⧸ Q)]
- 
+  exact finrank_top_le_finrank_of_isScalarTower ..
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg_le_inertiaDeg := inertiaDeg'_le_inertiaDeg'
 -/
 theorem inertiaDeg'_le_inertiaDeg' {T : Type*} [CommRing T] [Algebra R T] [Algebra S T]
     [IsScalarTower R S T] [Module.Finite R T] (Q : Ideal T) [P.LiesOver p] [Q.LiesOver P]
@@ -460,7 +472,13 @@ theorem inertiaDeg'_algebra_tower
   have h₃ := (LiesOver.trans I P p).over
   simp only [inertiaDeg', dif_pos h₁.symm, dif_pos h₂.symm, dif_pos h₃.symm]
   let : Algebra (R ⧸ p) (S ⧸ P) := Ideal.Quotient.algebraQuotientOfLEComap h₁.le
-  let : Algebra (S ⧸ P) (T ⧸ I) := Ideal.Quoti
+  let : Algebra (S ⧸ P) (T ⧸ I) := Ideal.Quotient.algebraQuotientOfLEComap h₂.le
+  let : Algebra (R ⧸ p) (T ⧸ I) := Ideal.Quotient.algebraQuotientOfLEComap h₃.le
+let : IsScalarTower (R ⧸ p) (S ⧸ P) (T ⧸ I) := IsScalarTower.of_algebraMap_eq by
+    rintro ⟨x⟩; exact congr_arg _ (IsScalarTower.algebraMap_apply R S T x)
+  exact (finrank_mul_finrank (R ⧸ p) (S ⧸ P) (T ⧸ I)).symm
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg_algebra_tower := inertiaDeg'_algebra_tower
 
 中文:
 定理 inertiaDeg'_algebra_tower
@@ -471,7 +489,13 @@ theorem inertiaDeg'_algebra_tower
   have h₃ := (LiesOver.trans I P p).over
   simp only [inertiaDeg', dif_pos h₁.symm, dif_pos h₂.symm, dif_pos h₃.symm]
   let : Algebra (R ⧸ p) (S ⧸ P) := Ideal.Quotient.algebraQuotientOfLEComap h₁.le
-  let : Algebra (S ⧸ P) (T ⧸ I) := Ideal.Quoti
+  let : Algebra (S ⧸ P) (T ⧸ I) := Ideal.Quotient.algebraQuotientOfLEComap h₂.le
+  let : Algebra (R ⧸ p) (T ⧸ I) := Ideal.Quotient.algebraQuotientOfLEComap h₃.le
+let : IsScalarTower (R ⧸ p) (S ⧸ P) (T ⧸ I) := IsScalarTower.of_algebraMap_eq by
+    rintro ⟨x⟩; exact congr_arg _ (IsScalarTower.algebraMap_apply R S T x)
+  exact (finrank_mul_finrank (R ⧸ p) (S ⧸ P) (T ⧸ I)).symm
+
+@[deprecated (since := "2026-07-03")] alias inertiaDeg_algebra_tower := inertiaDeg'_algebra_tower
 -/
 theorem inertiaDeg'_algebra_tower (p : Ideal R) (P : Ideal S) (I : Ideal T) [p.IsMaximal]
     [P.IsMaximal] [P.LiesOver p] [I.LiesOver P] : inertiaDeg' p I =

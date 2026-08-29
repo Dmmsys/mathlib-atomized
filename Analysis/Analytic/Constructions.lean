@@ -1043,7 +1043,21 @@ lemma FormalMultilinearSeries.radius_prod_eq_min
     all_goals
       apply FormalMultilinearSeries.le_radius_of_isBigO
       refine (isBigO_of_le _ fun n => ?_).trans this.isBigO
- 
+      rw [norm_mul]; rw [norm_norm]; rw [norm_mul]; rw [norm_norm]
+      refine mul_le_mul_of_nonneg_right ?_ (norm_nonneg _)
+      rw [FormalMultilinearSeries.prod]; rw [ContinuousMultilinearMap.opNorm_prod]
+    · apply le_max_left
+    · apply le_max_right
+  · refine ENNReal.le_of_forall_nnreal_lt fun r hr => ?_
+    rw [lt_min_iff] at hr
+    have := ((p.isLittleO_one_of_lt_radius hr.1).add
+      (q.isLittleO_one_of_lt_radius hr.2)).isBigO
+    refine (p.prod q).le_radius_of_isBigO ((isBigO_of_le _ fun n => ?_).trans this)
+    rw [norm_mul]; rw [norm_norm]; rw [← add_mul]; rw [norm_mul]
+    refine mul_le_mul_of_nonneg_right ?_ (norm_nonneg _)
+    rw [FormalMultilinearSeries.prod]; rw [ContinuousMultilinearMap.opNorm_prod]
+    refine (max_le_add_of_nonneg (norm_nonneg _) (norm_nonneg _)).trans ?_
+    apply Real.le_norm_self
 
 中文:
 引理 FormalMultilinearSeries.radius_prod_eq_min
@@ -1056,7 +1070,21 @@ lemma FormalMultilinearSeries.radius_prod_eq_min
     all_goals
       apply FormalMultilinearSeries.le_radius_of_isBigO
       refine (isBigO_of_le _ fun n => ?_).trans this.isBigO
- 
+      rw [norm_mul]; rw [norm_norm]; rw [norm_mul]; rw [norm_norm]
+      refine mul_le_mul_of_nonneg_right ?_ (norm_nonneg _)
+      rw [FormalMultilinearSeries.prod]; rw [ContinuousMultilinearMap.opNorm_prod]
+    · apply le_max_left
+    · apply le_max_right
+  · refine ENNReal.le_of_forall_nnreal_lt fun r hr => ?_
+    rw [lt_min_iff] at hr
+    have := ((p.isLittleO_one_of_lt_radius hr.1).add
+      (q.isLittleO_one_of_lt_radius hr.2)).isBigO
+    refine (p.prod q).le_radius_of_isBigO ((isBigO_of_le _ fun n => ?_).trans this)
+    rw [norm_mul]; rw [norm_norm]; rw [← add_mul]; rw [norm_mul]
+    refine mul_le_mul_of_nonneg_right ?_ (norm_nonneg _)
+    rw [FormalMultilinearSeries.prod]; rw [ContinuousMultilinearMap.opNorm_prod]
+    refine (max_le_add_of_nonneg (norm_nonneg _) (norm_nonneg _)).trans ?_
+    apply Real.le_norm_self
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.opNorm_prod, ENNReal, ENNReal.le_of_forall_nnreal_lt, FormalMultilinearSeries, FormalMultilinearSeries.le_radius_of_isBigO, FormalMultilinearSeries.prod, all_goals, isBigO, isBigO_of_le, isLittleO_one_of_lt_radius, le_antisymm, le_max_left, le_max_right, le_min_iff, le_of_forall_nnreal_lt, le_radius_of_isBigO, mul_le_mul_of_nonneg_right, norm_mul, norm_nonneg
 -/
@@ -1101,7 +1129,8 @@ lemma HasFPowerSeriesWithinOnBall.prod
     intro y h'y hy
     simp_rw [FormalMultilinearSeries.prod, ContinuousMultilinearMap.prod_apply]
     refine (hf.hasSum h'y ?_).prodMk (hg.hasSum h'y ?_)
-    · exact Metric.mem_e
+    · exact Metric.mem_eball.mpr (lt_of_lt_of_le hy (min_le_left _ _))
+    · exact Metric.mem_eball.mpr (lt_of_lt_of_le hy (min_le_right _ _))
 
 中文:
 引理 有FPowerSeriesWithinOnBall.乘积
@@ -1114,7 +1143,8 @@ lemma HasFPowerSeriesWithinOnBall.prod
     intro y h'y hy
     simp_rw [FormalMultilinearSeries.prod, ContinuousMultilinearMap.prod_apply]
     refine (hf.hasSum h'y ?_).prodMk (hg.hasSum h'y ?_)
-    · exact Metric.mem_e
+    · exact Metric.mem_eball.mpr (lt_of_lt_of_le hy (min_le_left _ _))
+    · exact Metric.mem_eball.mpr (lt_of_lt_of_le hy (min_le_right _ _))
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.prod_apply, FormalMultilinearSeries, FormalMultilinearSeries.prod, Metric, Metric.mem_eball.mpr, hasSum, hf.hasSum, hf.r_le, hf.r_pos, hg.hasSum, hg.r_le, hg.r_pos, lt_min, lt_of_lt_of_le, mem_eball, min_le_left, min_le_min, min_le_right, p.radius_prod_eq_min
 -/
@@ -1604,7 +1634,7 @@ lemma FormalMultilinearSeries.radius_pi_le
   apply le_trans _ (hC n)
   gcongr
   rw [pi]; rw [ContinuousMultilinearMap.opNorm_pi]
-  exact 
+  exact norm_le_pi_norm (fun i => p i n) i
 
 中文:
 引理 FormalMultilinearSeries.radius_pi_le
@@ -1616,7 +1646,7 @@ lemma FormalMultilinearSeries.radius_pi_le
   apply le_trans _ (hC n)
   gcongr
   rw [pi]; rw [ContinuousMultilinearMap.opNorm_pi]
-  exact 
+  exact norm_le_pi_norm (fun i => p i n) i
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.opNorm_pi, le_of_forall_nnreal_lt, le_radius_of_bound, le_trans, norm_le_pi_norm, norm_mul_pow_le_of_lt_radius, opNorm_pi
 -/
@@ -1642,7 +1672,15 @@ lemma FormalMultilinearSeries.le_radius_pi
     norm_mul_pow_le_of_lt_radius _ (hr'.trans_le (h i))
   choose C C_pos hC using I
   obtain ⟨D, D_nonneg, hD⟩ : exists D >= 0, forall i, C i <= D :=
-    ⟨∑ i, C i, Finset.sum_
+    ⟨∑ i, C i, Finset.sum_nonneg (fun i _ => (C_pos i).le),
+      fun i => Finset.single_le_sum (fun j _ => (C_pos j).le) (Finset.mem_univ _)⟩
+  apply le_radius_of_bound _ D (fun n => ?_)
+  rcases le_or_gt ((r' : Real) ^ n) 0 with hr' | hr'
+  · exact le_trans (mul_nonpos_of_nonneg_of_nonpos (by positivity) hr') D_nonneg
+  · simp only [pi]
+    rw [← le_div_iff₀ hr']; rw [ContinuousMultilinearMap.opNorm_pi]; rw [pi_norm_le_iff_of_nonneg (by positivity)]
+    intro i
+    exact (le_div_iff₀ hr').2 ((hC i n).trans (hD i))
 
 中文:
 引理 FormalMultilinearSeries.le_radius_pi
@@ -1653,7 +1691,15 @@ lemma FormalMultilinearSeries.le_radius_pi
     norm_mul_pow_le_of_lt_radius _ (hr'.trans_le (h i))
   choose C C_pos hC using I
   obtain ⟨D, D_nonneg, hD⟩ : exists D >= 0, forall i, C i <= D :=
-    ⟨∑ i, C i, Finset.sum_
+    ⟨∑ i, C i, Finset.sum_nonneg (fun i _ => (C_pos i).le),
+      fun i => Finset.single_le_sum (fun j _ => (C_pos j).le) (Finset.mem_univ _)⟩
+  apply le_radius_of_bound _ D (fun n => ?_)
+  rcases le_or_gt ((r' : Real) ^ n) 0 with hr' | hr'
+  · exact le_trans (mul_nonpos_of_nonneg_of_nonpos (by positivity) hr') D_nonneg
+  · simp only [pi]
+    rw [← le_div_iff₀ hr']; rw [ContinuousMultilinearMap.opNorm_pi]; rw [pi_norm_le_iff_of_nonneg (by positivity)]
+    intro i
+    exact (le_div_iff₀ hr').2 ((hC i n).trans (hD i))
 
 Depends on / 依赖: C_pos, D_nonneg, Finset, Finset.mem_univ, Finset.single_le_sum, Finset.sum_nonneg, le_of_forall_nnreal_lt, le_or_gt, le_radius_of_bound, mem_univ, norm_mul_pow_le_of_lt_radius, single_le_sum, sum_nonneg, trans_le
 -/
@@ -2511,7 +2557,13 @@ theorem HasFPowerSeriesWithinOnBall.compContinuousLinearMap
   r_pos := by
     simp only [ENNReal.div_pos_iff, ne_eq, enorm_ne_top, not_false_eq_true, and_true]
     exact pos_iff_ne_zero.mp hf.r_pos
-  hasSum hy1 hy2 := 
+  hasSum hy1 hy2 := by
+    convert! hf.hasSum _ _
+    · simp
+    · simp only [Set.mem_insert_iff, add_eq_left, Set.mem_preimage, map_add] at hy1 ⊢
+      rcases hy1 with (hy1 | hy1) <;> simp [hy1]
+    · simp only [Metric.eball, edist_zero_right, Set.mem_ofPred_eq] at hy2 ⊢
+      exact lt_of_le_of_lt (ContinuousLinearMap.le_opENorm _ _) (mul_lt_of_lt_div' hy2)
 
 中文:
 定理 有FPowerSeriesWithinOnBall.compContinuousLinearMap
@@ -2524,7 +2576,13 @@ theorem HasFPowerSeriesWithinOnBall.compContinuousLinearMap
   r_pos := by
     simp only [ENNReal.div_pos_iff, ne_eq, enorm_ne_top, not_false_eq_true, and_true]
     exact pos_iff_ne_zero.mp hf.r_pos
-  hasSum hy1 hy2 := 
+  hasSum hy1 hy2 := by
+    convert! hf.hasSum _ _
+    · simp
+    · simp only [Set.mem_insert_iff, add_eq_left, Set.mem_preimage, map_add] at hy1 ⊢
+      rcases hy1 with (hy1 | hy1) <;> simp [hy1]
+    · simp only [Metric.eball, edist_zero_right, Set.mem_ofPred_eq] at hy2 ⊢
+      exact lt_of_le_of_lt (ContinuousLinearMap.le_opENorm _ _) (mul_lt_of_lt_div' hy2)
 
 Depends on / 依赖: ENNReal, ENNReal.div_pos_iff, Metric, Metric.eball, Set.mem_insert_iff, Set.mem_ofPred_eq, Set.mem_preimage, add_eq_left, and_true, convert, div_le_radius_compContinuousLinearMap, div_pos_iff, edist_zero_right, enorm_ne_top, hasSum, hf.hasSum, hf.r_le, hf.r_pos, lt_of_l, map_add
 -/
@@ -3034,7 +3092,11 @@ lemma hasFPowerSeriesOnBall_inverse_one_sub
   · intro y hy
     simp only [Metric.mem_eball, edist_dist, dist_zero_right, ofReal_lt_one] at hy
     simp only [zero_add, NormedRing.inverse_one_sub _ hy, Units.oneSub, Units.inv_mk,
-      formalMultili
+      formalMultilinearSeries_geometric, ContinuousMultilinearMap.mkPiAlgebraFin_apply,
+      List.ofFn_const, List.prod_replicate]
+    exact (summable_geometric_of_norm_lt_one hy).hasSum
+
+@[fun_prop]
 
 中文:
 引理 hasFPowerSeriesOnBall_inverse_one_sub
@@ -3046,7 +3108,11 @@ lemma hasFPowerSeriesOnBall_inverse_one_sub
   · intro y hy
     simp only [Metric.mem_eball, edist_dist, dist_zero_right, ofReal_lt_one] at hy
     simp only [zero_add, NormedRing.inverse_one_sub _ hy, Units.oneSub, Units.inv_mk,
-      formalMultili
+      formalMultilinearSeries_geometric, ContinuousMultilinearMap.mkPiAlgebraFin_apply,
+      List.ofFn_const, List.prod_replicate]
+    exact (summable_geometric_of_norm_lt_one hy).hasSum
+
+@[fun_prop]
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.mkPiAlgebraFin_apply, List.ofFn_const, List.prod_replicate, Metric, Metric.mem_eball, NormedRing, NormedRing.inverse_one_sub, Units.inv_mk, Units.oneSub, dist_zero_right, edist_dist, formalMultilinearSeries_geometric, hasSum, inv_mk, inverse_one_sub, mem_eball, mkPiAlgebraFin_apply, ofFn_const, ofReal_lt_one
 -/
@@ -3227,7 +3293,12 @@ lemma hasFPowerSeriesOnBall_inverse_one_add
   convert_to HasFPowerSeriesOnBall ((fun x => Ring.inverse (1 - x)) ∘ (-ContinuousLinearMap.id 𝕜 A))
     ((formalMultilinearSeries_geometric 𝕜 A).compContinuousLinearMap (-ContinuousLinearMap.id 𝕜 A))
     0 1
-  · ext;
+  · ext; simp
+  convert HasFPowerSeriesOnBall.compContinuousLinearMap _ (r := 1)
+  · simp [← ofReal_norm]
+  · simpa using (hasFPowerSeriesOnBall_inverse_one_sub 𝕜 A)
+
+@[fun_prop]
 
 中文:
 引理 hasFPowerSeriesOnBall_inverse_one_add
@@ -3237,7 +3308,12 @@ lemma hasFPowerSeriesOnBall_inverse_one_add
   convert_to HasFPowerSeriesOnBall ((fun x => Ring.inverse (1 - x)) ∘ (-ContinuousLinearMap.id 𝕜 A))
     ((formalMultilinearSeries_geometric 𝕜 A).compContinuousLinearMap (-ContinuousLinearMap.id 𝕜 A))
     0 1
-  · ext;
+  · ext; simp
+  convert HasFPowerSeriesOnBall.compContinuousLinearMap _ (r := 1)
+  · simp [← ofReal_norm]
+  · simpa using (hasFPowerSeriesOnBall_inverse_one_sub 𝕜 A)
+
+@[fun_prop]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.id, HasFPowerSeriesOnBall, HasFPowerSeriesOnBall.compContinuousLinearMap, Ring.inverse, alternatingGeometricSeries_eq_formalMultilinearSeries_geometric_comp_neg, compContinuousLinearMap, convert, convert_to, formalMultilinearSeries_geometric, hasFPowerSeriesOnBall_inverse_one_sub, inverse, ofReal_norm
 -/
@@ -3291,7 +3367,26 @@ lemma analyticAt_inverse
     let f2 : A -> A := fun b => (1 - b)⁻¹ʳ
     let f3 : A -> A := fun c => 1 - z.inv * c
     have feq : forallᶠ y in 𝓝 (z : A), (f1 ∘ f2 ∘ f3) y = y⁻¹ʳ := by
- 
+      have : Metric.ball (z : A) (‖(↑z⁻¹ : A)‖⁻¹) in 𝓝 (z : A) := by
+        apply Metric.ball_mem_nhds
+        simp
+      filter_upwards [this] with y hy
+      simp only [Metric.mem_ball, dist_eq_norm] at hy
+      have : y = Units.ofNearby z y hy := rfl
+      rw [this]; rw [Eq.comm]
+      simp only [Ring.inverse_unit, Function.comp_apply]
+      simp only [Units.ofNearby, Units.add, mul_sub, Units.inv_mul, neg_sub, add_sub_cancel,
+        mul_inv_rev, Units.val_mul, Units.val_inv_copy, Units.inv_eq_val_inv, Units.val_copy,
+        _root_.sub_sub_cancel, Units.mul_left_inj, f1, f2, f3]
+      rw [← Ring.inverse_unit]
+      congr
+      simp
+    apply AnalyticAt.congr _ feq
+    apply (analyticAt_id.mul analyticAt_const).comp
+    apply AnalyticAt.comp
+    · simp only [Units.inv_eq_val_inv, Units.inv_mul, sub_self, f2, f3]
+      exact analyticAt_inverse_one_sub 𝕜 A
+    · exact analyticAt_const.sub (analyticAt_const.mul analyticAt_id)
 
 中文:
 引理 analyticAt_inverse
@@ -3303,7 +3398,26 @@ lemma analyticAt_inverse
     let f2 : A -> A := fun b => (1 - b)⁻¹ʳ
     let f3 : A -> A := fun c => 1 - z.inv * c
     have feq : forallᶠ y in 𝓝 (z : A), (f1 ∘ f2 ∘ f3) y = y⁻¹ʳ := by
- 
+      have : Metric.ball (z : A) (‖(↑z⁻¹ : A)‖⁻¹) in 𝓝 (z : A) := by
+        apply Metric.ball_mem_nhds
+        simp
+      filter_upwards [this] with y hy
+      simp only [Metric.mem_ball, dist_eq_norm] at hy
+      have : y = Units.ofNearby z y hy := rfl
+      rw [this]; rw [Eq.comm]
+      simp only [Ring.inverse_unit, Function.comp_apply]
+      simp only [Units.ofNearby, Units.add, mul_sub, Units.inv_mul, neg_sub, add_sub_cancel,
+        mul_inv_rev, Units.val_mul, Units.val_inv_copy, Units.inv_eq_val_inv, Units.val_copy,
+        _root_.sub_sub_cancel, Units.mul_left_inj, f1, f2, f3]
+      rw [← Ring.inverse_unit]
+      congr
+      simp
+    apply AnalyticAt.congr _ feq
+    apply (analyticAt_id.mul analyticAt_const).comp
+    apply AnalyticAt.comp
+    · simp only [Units.inv_eq_val_inv, Units.inv_mul, sub_self, f2, f3]
+      exact analyticAt_inverse_one_sub 𝕜 A
+    · exact analyticAt_const.sub (analyticAt_const.mul analyticAt_id)
 
 Depends on / 依赖: Metric, Metric.ball, Metric.ball_mem_nhds, Metric.mem_ball, Units.ofNearby, analyticAt_const, ball_mem_nhds, convert, dist_eq_norm, filter_upwards, mem_ball, ofNearby, subsingleton_or_nontrivial, z.inv
 -/
@@ -3718,7 +3832,8 @@ theorem analyticAt_iff_analytic_fun_smul
     · exact (h₁f.inv h₂f).fun_smul hprod
     · filter_upwards [h₁f.continuousAt.preimage_mem_nhds (compl_singleton_mem_nhds_iff.2 h₂f)]
       intro y hy
-      rw [Set.preima
+      rw [Set.preimage_compl]; rw [Set.mem_compl_iff]; rw [Set.mem_preimage]; rw [Set.mem_singleton_iff] at hy
+      simp [hy]
 
 中文:
 定理 analyticAt_iff_analytic_fun_smul
@@ -3731,7 +3846,8 @@ theorem analyticAt_iff_analytic_fun_smul
     · exact (h₁f.inv h₂f).fun_smul hprod
     · filter_upwards [h₁f.continuousAt.preimage_mem_nhds (compl_singleton_mem_nhds_iff.2 h₂f)]
       intro y hy
-      rw [Set.preima
+      rw [Set.preimage_compl]; rw [Set.mem_compl_iff]; rw [Set.mem_preimage]; rw [Set.mem_singleton_iff] at hy
+      simp [hy]
 
 Depends on / 依赖: Set.mem_compl_iff, Set.mem_preimage, Set.mem_singleton_iff, Set.preimage_compl, analyticAt_congr, compl_singleton_mem_nhds_iff, continuousAt, f.continuousAt.preimage_mem_nhds, f.inv, f.smul, filter_upwards, fun_smul, mem_compl_iff, mem_preimage, mem_singleton_iff, preimage_compl, preimage_mem_nhds, smul_assoc
 -/
@@ -4267,7 +4383,7 @@ theorem HasFPowerSeriesWithinOnBall.unshift
     apply HasSum.zero_add
     simp only [FormalMultilinearSeries.unshift, Nat.succ_eq_add_one,
       continuousMultilinearCurryRightEquiv_symm_apply', add_sub_cancel_left]
-    e
+    exact (ContinuousLinearMap.apply 𝕜 F y).hasSum (hf.hasSum hy h'y)
 
 中文:
 定理 有FPowerSeriesWithinOnBall.unshift
@@ -4281,7 +4397,7 @@ theorem HasFPowerSeriesWithinOnBall.unshift
     apply HasSum.zero_add
     simp only [FormalMultilinearSeries.unshift, Nat.succ_eq_add_one,
       continuousMultilinearCurryRightEquiv_symm_apply', add_sub_cancel_left]
-    e
+    exact (ContinuousLinearMap.apply 𝕜 F y).hasSum (hf.hasSum hy h'y)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.apply, FormalMultilinearSeries, FormalMultilinearSeries.radius_unshift, FormalMultilinearSeries.unshift, HasSum, HasSum.zero_add, Nat.succ_eq_add_one, add_sub_cancel_left, continuousMultilinearCurryRightEquiv_symm_apply, hasSum, hf.hasSum, hf.r_le, hf.r_pos, r_le, r_pos, radius_unshift, succ_eq_add_one, unshift, zero_add
 -/
@@ -4313,7 +4429,7 @@ theorem HasFPowerSeriesOnBall.unshift
     apply HasSum.zero_add
     simp only [FormalMultilinearSeries.unshift, Nat.succ_eq_add_one,
       continuousMultilinearCurryRightEquiv_symm_apply', add_sub_cancel_left]
-    exact
+    exact (ContinuousLinearMap.apply 𝕜 F y).hasSum (hf.hasSum hy)
 
 中文:
 定理 有FPowerSeriesOnBall.unshift
@@ -4327,7 +4443,7 @@ theorem HasFPowerSeriesOnBall.unshift
     apply HasSum.zero_add
     simp only [FormalMultilinearSeries.unshift, Nat.succ_eq_add_one,
       continuousMultilinearCurryRightEquiv_symm_apply', add_sub_cancel_left]
-    exact
+    exact (ContinuousLinearMap.apply 𝕜 F y).hasSum (hf.hasSum hy)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.apply, FormalMultilinearSeries, FormalMultilinearSeries.radius_unshift, FormalMultilinearSeries.unshift, HasSum, HasSum.zero_add, Nat.succ_eq_add_one, add_sub_cancel_left, continuousMultilinearCurryRightEquiv_symm_apply, hasSum, hf.hasSum, hf.r_le, hf.r_pos, r_le, r_pos, radius_unshift, succ_eq_add_one, unshift, zero_add
 -/

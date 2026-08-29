@@ -87,7 +87,10 @@ definition mkHeader
     | DefinitionSafety.safe => ""
   let m := if isProtected (← getEnv) id then m ++ "protected " else m
   let (m, id) := match privateToUserName? id with
-    | so
+    | some id => (m ++ "private ", id)
+    | none => (m, id)
+  let m := m ++ kind ++ " " ++ id ++ levelParamsToMessageData levelParams ++ " : " ++ type
+  pure m
 
 中文:
 定义 mkHeader
@@ -100,7 +103,10 @@ definition mkHeader
     | DefinitionSafety.safe => ""
   let m := if isProtected (← getEnv) id then m ++ "protected " else m
   let (m, id) := match privateToUserName? id with
-    | so
+    | some id => (m ++ "private ", id)
+    | none => (m, id)
+  let m := m ++ kind ++ " " ++ id ++ levelParamsToMessageData levelParams ++ " : " ++ type
+  pure m
 -/
 private def mkHeader (kind : String) (id : Name) (levelParams : List Name) (type : Expr)
     (safety : DefinitionSafety) : CoreM MessageData := do
@@ -229,7 +235,11 @@ definition diffExtension
     -- allow for diffing async extensions by bumping mode to sync
     asyncMode := .sync
   let oldSt := ext.toEnvExtension.getState (asyncMode := asyncMode) old
-  let newSt := ext.toEnvExtension.getSt
+  let newSt := ext.toEnvExtension.getState (asyncMode := asyncMode) new
+  if ptrAddrUnsafe oldSt == ptrAddrUnsafe newSt then return none
+  let oldEntries := (ext.exportEntriesFn (← getEnv) oldSt.state).private
+  let newEntries := (ext.exportEntriesFn (← getEnv) newSt.state).private
+  pure m!"-- {ext.name} extension: {(newEntries.size - oldEntries.size : Int)} new entries"
 
 中文:
 定义 diffExtension
@@ -240,7 +250,11 @@ definition diffExtension
     -- allow for diffing async extensions by bumping mode to sync
     asyncMode := .sync
   let oldSt := ext.toEnvExtension.getState (asyncMode := asyncMode) old
-  let newSt := ext.toEnvExtension.getSt
+  let newSt := ext.toEnvExtension.getState (asyncMode := asyncMode) new
+  if ptrAddrUnsafe oldSt == ptrAddrUnsafe newSt then return none
+  let oldEntries := (ext.exportEntriesFn (← getEnv) oldSt.state).private
+  let newEntries := (ext.exportEntriesFn (← getEnv) newSt.state).private
+  pure m!"-- {ext.name} extension: {(newEntries.size - oldEntries.size : Int)} new entries"
 
 Depends on / 依赖: unsafe
 -/
@@ -275,7 +289,9 @@ definition whatsNew
     if let some diff ← diffExtension old new ext then
       diffs := diffs.push diff
 
-  
+  if diffs.isEmpty then return "no new constants"
+
+pure MessageData.joinSep diffs.toList "\n\n"
 
 中文:
 定义 whatsNew
@@ -291,7 +307,9 @@ definition whatsNew
     if let some diff ← diffExtension old new ext then
       diffs := diffs.push diff
 
-  
+  if diffs.isEmpty then return "no new constants"
+
+pure MessageData.joinSep diffs.toList "\n\n"
 -/
 def whatsNew (old new : Environment) : CoreM MessageData := do
   let mut diffs := #[]

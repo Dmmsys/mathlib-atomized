@@ -108,7 +108,20 @@ theorem StronglyMeasurable.integral_kernel
   borelize E
   have : TopologicalSpace.SeparableSpace (range f union {0} : Set E) :=
     hf.separableSpace_range_union_singleton
-  let s : Nat -> SimpleFunc β E := SimpleFunc.approxOn _ hf.measurable (range f 
+  let s : Nat -> SimpleFunc β E := SimpleFunc.approxOn _ hf.measurable (range f union {0}) 0 (by simp)
+  let f' n : α -> E := {x | Integrable f (κ x)}.indicator fun x => (s n).integral (κ x)
+  refine stronglyMeasurable_of_tendsto (f := f') atTop (fun n => ?_) ?_
+  · refine StronglyMeasurable.indicator ?_ (measurableSet_integrable hf)
+    simp_rw [SimpleFunc.integral_eq]
+    refine Finset.stronglyMeasurable_fun_sum _ fun _ _ => ?_
+    refine (Measurable.ennreal_toReal ?_).stronglyMeasurable.smul_const _
+    exact κ.measurable_coe ((s n).measurableSet_fiber _)
+  · rw [tendsto_pi_nhds]; intro x
+    by_cases hfx : Integrable f (κ x)
+    · simp only [mem_ofPred_eq, hfx, indicator_of_mem, f']
+      apply tendsto_integral_approxOn_of_measurable_of_range_subset _ hfx
+      exact subset_rfl
+    · simp [f', hfx, integral_undef]
 
 中文:
 定理 StronglyMeasurable.integral_kernel
@@ -120,7 +133,20 @@ theorem StronglyMeasurable.integral_kernel
   borelize E
   have : TopologicalSpace.SeparableSpace (range f union {0} : Set E) :=
     hf.separableSpace_range_union_singleton
-  let s : Nat -> SimpleFunc β E := SimpleFunc.approxOn _ hf.measurable (range f 
+  let s : Nat -> SimpleFunc β E := SimpleFunc.approxOn _ hf.measurable (range f union {0}) 0 (by simp)
+  let f' n : α -> E := {x | Integrable f (κ x)}.indicator fun x => (s n).integral (κ x)
+  refine stronglyMeasurable_of_tendsto (f := f') atTop (fun n => ?_) ?_
+  · refine StronglyMeasurable.indicator ?_ (measurableSet_integrable hf)
+    simp_rw [SimpleFunc.integral_eq]
+    refine Finset.stronglyMeasurable_fun_sum _ fun _ _ => ?_
+    refine (Measurable.ennreal_toReal ?_).stronglyMeasurable.smul_const _
+    exact κ.measurable_coe ((s n).measurableSet_fiber _)
+  · rw [tendsto_pi_nhds]; intro x
+    by_cases hfx : Integrable f (κ x)
+    · simp only [mem_ofPred_eq, hfx, indicator_of_mem, f']
+      apply tendsto_integral_approxOn_of_measurable_of_range_subset _ hfx
+      exact subset_rfl
+    · simp [f', hfx, integral_undef]
 
 Depends on / 依赖: CompleteSpace, Integrable, SeparableSpace, SimpleFunc, SimpleFunc.approxOn, StronglyMeasurable, StronglyMeasurable.indicat, TopologicalSpace, TopologicalSpace.SeparableSpace, approxOn, borelize, hf.measurable, hf.separableSpace_range_union_singleton, indicat, indicator, integral, measurable, separableSpace_range_union_singleton, stronglyMeasurable_const, stronglyMeasurable_of_tendsto
 -/
@@ -162,7 +188,43 @@ theorem StronglyMeasurable.integral_kernel_prod_right
   have : TopologicalSpace.SeparableSpace (range (uncurry f) union {0} : Set E) :=
     hf.separableSpace_range_union_singleton
   let s : Nat -> SimpleFunc (α × β) E :=
-    SimpleFunc.ap
+    SimpleFunc.approxOn _ hf.measurable (range (uncurry f) union {0}) 0 (by simp)
+  let s' : Nat -> α -> SimpleFunc β E := fun n x => (s n).comp (Prod.mk x) measurable_prodMk_left
+  let f' : Nat -> α -> E := fun n =>
+    {x | Integrable (f x) (κ x)}.indicator fun x => (s' n x).integral (κ x)
+  have hf' : forall n, StronglyMeasurable (f' n) := by
+    intro n; refine StronglyMeasurable.indicator ?_ (measurableSet_kernel_integrable hf)
+    have : forall x, ((s' n x).range.filter fun x => x != 0) subseteq (s n).range := by
+      intro
+      exact Finset.Subset.trans (Finset.filter_subset _ _) (SimpleFunc.range_comp_subset_range _ _)
+    simp only [SimpleFunc.integral_eq_sum_of_subset (this _)]
+    refine Finset.stronglyMeasurable_fun_sum _ fun x _ => ?_
+    refine (Measurable.ennreal_toReal ?_).stronglyMeasurable.smul_const _
+    simp only [s', SimpleFunc.coe_comp, preimage_comp]
+    apply Kernel.measurable_kernel_prodMk_left
+    exact (s n).measurableSet_fiber x
+  have h2f' : Tendsto f' atTop (𝓝 fun x : α => ∫ y : β, f x y ∂κ x) := by
+    rw [tendsto_pi_nhds]; intro x
+    by_cases hfx : Integrable (f x) (κ x)
+    · have (n : _) : Integrable (s' n x) (κ x) := by
+        apply (hfx.norm.add hfx.norm).mono' (s' n x).aestronglyMeasurable
+        filter_upwards with y
+        simp_rw [s', SimpleFunc.coe_comp]; exact SimpleFunc.norm_approxOn_zero_le _ _ (x, y) n
+      simp only [f', hfx, SimpleFunc.integral_eq_integral _ (this _), indicator_of_mem,
+        mem_ofPred_eq]
+      refine
+        tendsto_integral_of_dominated_convergence (fun y => ‖f x y‖ + ‖f x y‖)
+          (fun n => (s' n x).aestronglyMeasurable) (hfx.norm.add hfx.norm) ?_ ?_
+      · -- Porting note: was
+        -- exact fun n => Eventually.of_forall fun y =>
+        -- SimpleFunc.norm_approxOn_zero_le _ _ (x, y) n
+        exact fun n => Eventually.of_forall fun y =>
+          SimpleFunc.norm_approxOn_zero_le hf.measurable (by simp) (x, y) n
+      · refine Eventually.of_forall fun y => SimpleFunc.tendsto_approxOn hf.measurable (by simp) ?_
+        apply subset_closure
+        simp [-uncurry_apply_pair]
+    · simp [f', hfx, integral_undef]
+  exact stronglyMeasurable_of_tendsto _ hf' h2f'
 
 中文:
 定理 StronglyMeasurable.integral_kernel_prod_right
@@ -176,7 +238,43 @@ theorem StronglyMeasurable.integral_kernel_prod_right
   have : TopologicalSpace.SeparableSpace (range (uncurry f) union {0} : Set E) :=
     hf.separableSpace_range_union_singleton
   let s : Nat -> SimpleFunc (α × β) E :=
-    SimpleFunc.ap
+    SimpleFunc.approxOn _ hf.measurable (range (uncurry f) union {0}) 0 (by simp)
+  let s' : Nat -> α -> SimpleFunc β E := fun n x => (s n).comp (Prod.mk x) measurable_prodMk_left
+  let f' : Nat -> α -> E := fun n =>
+    {x | Integrable (f x) (κ x)}.indicator fun x => (s' n x).integral (κ x)
+  have hf' : forall n, StronglyMeasurable (f' n) := by
+    intro n; refine StronglyMeasurable.indicator ?_ (measurableSet_kernel_integrable hf)
+    have : forall x, ((s' n x).range.filter fun x => x != 0) subseteq (s n).range := by
+      intro
+      exact Finset.Subset.trans (Finset.filter_subset _ _) (SimpleFunc.range_comp_subset_range _ _)
+    simp only [SimpleFunc.integral_eq_sum_of_subset (this _)]
+    refine Finset.stronglyMeasurable_fun_sum _ fun x _ => ?_
+    refine (Measurable.ennreal_toReal ?_).stronglyMeasurable.smul_const _
+    simp only [s', SimpleFunc.coe_comp, preimage_comp]
+    apply Kernel.measurable_kernel_prodMk_left
+    exact (s n).measurableSet_fiber x
+  have h2f' : Tendsto f' atTop (𝓝 fun x : α => ∫ y : β, f x y ∂κ x) := by
+    rw [tendsto_pi_nhds]; intro x
+    by_cases hfx : Integrable (f x) (κ x)
+    · have (n : _) : Integrable (s' n x) (κ x) := by
+        apply (hfx.norm.add hfx.norm).mono' (s' n x).aestronglyMeasurable
+        filter_upwards with y
+        simp_rw [s', SimpleFunc.coe_comp]; exact SimpleFunc.norm_approxOn_zero_le _ _ (x, y) n
+      simp only [f', hfx, SimpleFunc.integral_eq_integral _ (this _), indicator_of_mem,
+        mem_ofPred_eq]
+      refine
+        tendsto_integral_of_dominated_convergence (fun y => ‖f x y‖ + ‖f x y‖)
+          (fun n => (s' n x).aestronglyMeasurable) (hfx.norm.add hfx.norm) ?_ ?_
+      · -- Porting note: was
+        -- exact fun n => Eventually.of_forall fun y =>
+        -- SimpleFunc.norm_approxOn_zero_le _ _ (x, y) n
+        exact fun n => Eventually.of_forall fun y =>
+          SimpleFunc.norm_approxOn_zero_le hf.measurable (by simp) (x, y) n
+      · refine Eventually.of_forall fun y => SimpleFunc.tendsto_approxOn hf.measurable (by simp) ?_
+        apply subset_closure
+        simp [-uncurry_apply_pair]
+    · simp [f', hfx, integral_undef]
+  exact stronglyMeasurable_of_tendsto _ hf' h2f'
 
 Depends on / 依赖: CompleteSpace, Integrable, Prod.mk, SeparableSpace, SimpleFunc, SimpleFunc.approxOn, TopologicalSpace, TopologicalSpace.SeparableSpace, approxOn, borelize, classical, hf.measurable, hf.separableSpace_range_union_singleton, integral, measurable, measurable_prodMk_left, separableSpace_range_union_singleton, stronglyMeasurable_const, uncurry
 -/
@@ -265,7 +363,8 @@ theorem StronglyMeasurable.integral_kernel_prod_right''
       ((fun x => ∫ y, (fun u : (α × β) × γ => f (u.1.2, u.2)) (x, y) ∂η x) ∘ fun x => (a, x))
   apply StronglyMeasurable.comp_measurable _ (measurable_prodMk_left (m := mα))
   · have := MeasureTheory.StronglyMeasurable.integral_kernel_prod_right' (κ := η)
-      (hf
+      (hf.comp_measurable (measurable_fst.snd.prodMk measurable_snd))
+    simpa using this
 
 中文:
 定理 StronglyMeasurable.integral_kernel_prod_right''
@@ -276,7 +375,8 @@ theorem StronglyMeasurable.integral_kernel_prod_right''
       ((fun x => ∫ y, (fun u : (α × β) × γ => f (u.1.2, u.2)) (x, y) ∂η x) ∘ fun x => (a, x))
   apply StronglyMeasurable.comp_measurable _ (measurable_prodMk_left (m := mα))
   · have := MeasureTheory.StronglyMeasurable.integral_kernel_prod_right' (κ := η)
-      (hf
+      (hf.comp_measurable (measurable_fst.snd.prodMk measurable_snd))
+    simpa using this
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.StronglyMeasurable.integral_kernel_prod_right, StronglyMeasurable, StronglyMeasurable.comp_measurable, comp_measurable, hf.comp_measurable, integral_kernel_prod_right, measurable_fst, measurable_fst.snd.prodMk, measurable_prodMk_left, measurable_snd, prodMk
 -/
@@ -344,7 +444,8 @@ theorem StronglyMeasurable.integral_kernel_prod_left''
       ((fun y => ∫ x, (fun u : γ × α × β => f (u.1, u.2.2)) (x, y) ∂η y) ∘ fun x => (a, x))
   apply StronglyMeasurable.comp_measurable _ (measurable_prodMk_left (m := mα))
   · have := MeasureTheory.StronglyMeasurable.integral_kernel_prod_left' (κ := η)
-      (hf.co
+      (hf.comp_measurable (measurable_fst.prodMk measurable_snd.snd))
+    simpa using this
 
 中文:
 定理 StronglyMeasurable.integral_kernel_prod_left''
@@ -355,7 +456,8 @@ theorem StronglyMeasurable.integral_kernel_prod_left''
       ((fun y => ∫ x, (fun u : γ × α × β => f (u.1, u.2.2)) (x, y) ∂η y) ∘ fun x => (a, x))
   apply StronglyMeasurable.comp_measurable _ (measurable_prodMk_left (m := mα))
   · have := MeasureTheory.StronglyMeasurable.integral_kernel_prod_left' (κ := η)
-      (hf.co
+      (hf.comp_measurable (measurable_fst.prodMk measurable_snd.snd))
+    simpa using this
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.StronglyMeasurable.integral_kernel_prod_left, StronglyMeasurable, StronglyMeasurable.comp_measurable, comp_measurable, hf.comp_measurable, integral_kernel_prod_left, measurable_fst, measurable_fst.prodMk, measurable_prodMk_left, measurable_snd, measurable_snd.snd, prodMk
 -/

@@ -156,14 +156,16 @@ theorem volume_preserving_equiv_pi
   statement: MeasurePreserving measurableEquivPi
   proof: by
   convert! (measurableEquivPi.symm.measurable.measurePreserving volume).symm
-  rw [← addHaarMeasure_eq_volume_pi]; rw [← Basis.parallelepiped_basisFun]; rw [← Basis.addHaar]; rw [measurableEquivPi]; rw [Homeomorph.toMeasurableEquiv_symm_coe]; rw [ContinuousLinearEquiv.coe_symm_toHomeomorph]; rw [
+  rw [← addHaarMeasure_eq_volume_pi]; rw [← Basis.parallelepiped_basisFun]; rw [← Basis.addHaar]; rw [measurableEquivPi]; rw [Homeomorph.toMeasurableEquiv_symm_coe]; rw [ContinuousLinearEquiv.coe_symm_toHomeomorph]; rw [Basis.map_addHaar]; rw [eq_comm]
+  exact (Basis.addHaar_eq_iff _ _).mpr Complex.orthonormalBasisOneI.volume_parallelepiped
 
 中文:
 定理 volume_preserving_equiv_pi
   结论: 保测 measurableEquivPi
   证明: by
   convert! (measurableEquivPi.symm.measurable.measurePreserving volume).symm
-  rw [← addHaarMeasure_eq_volume_pi]; rw [← Basis.parallelepiped_basisFun]; rw [← Basis.addHaar]; rw [measurableEquivPi]; rw [Homeomorph.toMeasurableEquiv_symm_coe]; rw [ContinuousLinearEquiv.coe_symm_toHomeomorph]; rw [
+  rw [← addHaarMeasure_eq_volume_pi]; rw [← Basis.parallelepiped_basisFun]; rw [← Basis.addHaar]; rw [measurableEquivPi]; rw [Homeomorph.toMeasurableEquiv_symm_coe]; rw [ContinuousLinearEquiv.coe_symm_toHomeomorph]; rw [Basis.map_addHaar]; rw [eq_comm]
+  exact (Basis.addHaar_eq_iff _ _).mpr Complex.orthonormalBasisOneI.volume_parallelepiped
 
 Depends on / 依赖: Basis.addHaar, Basis.addHaar_eq_iff, Basis.map_addHaar, Basis.parallelepiped_basisFun, Complex.orthonormalBasisOneI.volume_parallelepiped, ContinuousLinearEquiv, ContinuousLinearEquiv.coe_symm_toHomeomorph, Homeomorph, Homeomorph.toMeasurableEquiv_symm_coe, addHaar, addHaarMeasure_eq_volume_pi, addHaar_eq_iff, coe_symm_toHomeomorph, convert, eq_comm, map_addHaar, measurable, measurableEquivPi, measurableEquivPi.symm.measurable.measurePreserving, measurePreserving
 -/

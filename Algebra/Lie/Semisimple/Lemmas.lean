@@ -49,7 +49,24 @@ lemma hasCentralRadical_and_of_isIrreducible_of_isFaithful
   obtain ⟨χ, hχ⟩ : exists χ : Module.Dual k (radical k L), Nontrivial (weightSpace M χ) :=
     exists_nontrivial_weightSpace_of_isSolvable k (radical k L) M
   let N : LieSubmodule k L M := weightSpaceOfIsLieTower k M χ
-  replace hχ : Nontrivial N := 
+  replace hχ : Nontrivial N := hχ
+  replace hχ : N = ⊤ := N.eq_top_of_isIrreducible k L M
+  replace hχ (x : L) (hx : x in radical k L) : toEnd k _ M x = χ ⟨x, hx⟩ • LinearMap.id := by
+    ext m
+    have hm : forall (y : L) (hy : y in radical k L), ⁅y, m⁆ = χ ⟨y, hy⟩ • m := by
+      simpa [N, weightSpaceOfIsLieTower, mem_weightSpace] using (hχ ▸ mem_top _ : m in N)
+    simpa using hm x hx
+  have aux : radical k L = center k L := by
+    refine le_antisymm (fun x hx => (mem_maxTrivSubmodule k L L x).mpr ?_) (center_le_radical k L)
+    intro y
+    simp [← toEnd_eq_zero_iff (R := k) (L := L) (M := M), LieHom.map_lie, hχ _ hx, lie_smul,
+      (toEnd k L M y).commute_id_right.lie_eq]
+  refine ⟨⟨aux⟩, fun x => ⟨fun hx => ?_, fun hx => (mem_maxTrivSubmodule k L L x).mpr fun y => ?_⟩⟩
+  · rw [← aux] at hx
+    exact Submodule.mem_span_singleton.mpr ⟨χ ⟨x, hx⟩, (hχ x hx).symm⟩
+  · obtain ⟨t, ht⟩ := Submodule.mem_span_singleton.mp hx
+    simp [← toEnd_eq_zero_iff (R := k) (L := L) (M := M), LieHom.map_lie, ← ht, lie_smul,
+      (toEnd k L M y).commute_id_right.lie_eq]
 
 中文:
 引理 hasCentralRadical_and_of_isIrreducible_of_isFaithful
@@ -58,7 +75,24 @@ lemma hasCentralRadical_and_of_isIrreducible_of_isFaithful
   obtain ⟨χ, hχ⟩ : exists χ : Module.Dual k (radical k L), Nontrivial (weightSpace M χ) :=
     exists_nontrivial_weightSpace_of_isSolvable k (radical k L) M
   let N : LieSubmodule k L M := weightSpaceOfIsLieTower k M χ
-  replace hχ : Nontrivial N := 
+  replace hχ : Nontrivial N := hχ
+  replace hχ : N = ⊤ := N.eq_top_of_isIrreducible k L M
+  replace hχ (x : L) (hx : x in radical k L) : toEnd k _ M x = χ ⟨x, hx⟩ • LinearMap.id := by
+    ext m
+    have hm : forall (y : L) (hy : y in radical k L), ⁅y, m⁆ = χ ⟨y, hy⟩ • m := by
+      simpa [N, weightSpaceOfIsLieTower, mem_weightSpace] using (hχ ▸ mem_top _ : m in N)
+    simpa using hm x hx
+  have aux : radical k L = center k L := by
+    refine le_antisymm (fun x hx => (mem_maxTrivSubmodule k L L x).mpr ?_) (center_le_radical k L)
+    intro y
+    simp [← toEnd_eq_zero_iff (R := k) (L := L) (M := M), LieHom.map_lie, hχ _ hx, lie_smul,
+      (toEnd k L M y).commute_id_right.lie_eq]
+  refine ⟨⟨aux⟩, fun x => ⟨fun hx => ?_, fun hx => (mem_maxTrivSubmodule k L L x).mpr fun y => ?_⟩⟩
+  · rw [← aux] at hx
+    exact Submodule.mem_span_singleton.mpr ⟨χ ⟨x, hx⟩, (hχ x hx).symm⟩
+  · obtain ⟨t, ht⟩ := Submodule.mem_span_singleton.mp hx
+    simp [← toEnd_eq_zero_iff (R := k) (L := L) (M := M), LieHom.map_lie, ← ht, lie_smul,
+      (toEnd k L M y).commute_id_right.lie_eq]
 
 Depends on / 依赖: LieSubmodule, LinearMap, LinearMap.id, Module, Module.Dual, N.eq_top_of_isIrreducible, Nontrivial, eq_top_of_isIrreducible, exists_nontrivial_weightSpace_of_isSolvable, nontrivial_of_isIrreducible, radical, replace, weightSpace, weightSpaceOfIsLieTower
 -/
@@ -97,7 +131,11 @@ theorem hasTrivialRadical_of_isIrreducible_of_isFaithful
   obtain ⟨_i, h'⟩ := hasCentralRadical_and_of_isIrreducible_of_isFaithful k L M
   rw [hasTrivialRadical_iff]; rw [(hasCentralRadical_iff k L).mp inferInstance]; rw [LieSubmodule.eq_bot_iff]
   intro x hx
-  
+  specialize h x
+  rw [h' x] at hx
+  obtain ⟨t, ht⟩ := Submodule.mem_span_singleton.mp hx
+  suffices t = 0 by simp [← toEnd_eq_zero_iff (R := k) (L := L) (M := M), ← ht, this]
+  simpa [this, ← ht] using h
 
 中文:
 定理 hasTrivialRadical_of_isIrreducible_of_isFaithful
@@ -106,7 +144,11 @@ theorem hasTrivialRadical_of_isIrreducible_of_isFaithful
   obtain ⟨_i, h'⟩ := hasCentralRadical_and_of_isIrreducible_of_isFaithful k L M
   rw [hasTrivialRadical_iff]; rw [(hasCentralRadical_iff k L).mp inferInstance]; rw [LieSubmodule.eq_bot_iff]
   intro x hx
-  
+  specialize h x
+  rw [h' x] at hx
+  obtain ⟨t, ht⟩ := Submodule.mem_span_singleton.mp hx
+  suffices t = 0 by simp [← toEnd_eq_zero_iff (R := k) (L := L) (M := M), ← ht, this]
+  simpa [this, ← ht] using h
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.eq_bot_iff, Submodule, Submodule.mem_span_singleton.mp, eq_bot_iff, finrank, finrank_pos_iff, finrank_pos_iff.mpr, hasCentralRadical_and_of_isIrreducible_of_isFaithful, hasCentralRadical_iff, hasTrivialRadical_iff, mem_span_singleton, nontrivial_of_isIrreducible, specialize, toEnd_eq_zero_iff
 -/

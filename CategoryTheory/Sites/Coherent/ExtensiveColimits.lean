@@ -45,7 +45,9 @@ lemma isSheaf_pointwiseColimit
   apply +allowSynthFailures comp_preservesFiniteProducts
   have : forall (i : J), PreservesFiniteProducts ((G ⋙ sheafToPresheaf _ A).obj i) := fun i => by
     rw [← Presheaf.isSheaf_iff_preservesFiniteProducts]
-
+    exact (G.obj i).property
+  exact ⟨fun _ => preservesLimitsOfShape_of_evaluation _ _ fun d =>
+    inferInstanceAs (PreservesLimitsOfShape _ ((G ⋙ sheafToPresheaf _ _).obj d))⟩
 
 中文:
 引理 isSheaf_pointwiseColimit
@@ -56,7 +58,9 @@ lemma isSheaf_pointwiseColimit
   apply +allowSynthFailures comp_preservesFiniteProducts
   have : forall (i : J), PreservesFiniteProducts ((G ⋙ sheafToPresheaf _ A).obj i) := fun i => by
     rw [← Presheaf.isSheaf_iff_preservesFiniteProducts]
-
+    exact (G.obj i).property
+  exact ⟨fun _ => preservesLimitsOfShape_of_evaluation _ _ fun d =>
+    inferInstanceAs (PreservesLimitsOfShape _ ((G ⋙ sheafToPresheaf _ _).obj d))⟩
 -/
 lemma isSheaf_pointwiseColimit [PreservesFiniteProducts (colim (J := J) (C := A))]
     (G : J ⥤ Sheaf (extensiveTopology C) A) :
@@ -103,7 +107,8 @@ instance [PreservesFiniteProducts
     refine createsColimitOfIsSheaf _ (fun c hc => ?_)
     let i : c.pt ≅ (G ⋙ sheafToPresheaf _ _).flip ⋙ colim :=
       hc.coconePointUniqueUpToIso (pointwiseIsColimit _)
-    rw [Presheaf.isSheaf_of_iso_if
+    rw [Presheaf.isSheaf_of_iso_iff i]
+    exact isSheaf_pointwiseColimit _
 
 中文:
 实例 [保持FiniteProducts
@@ -113,7 +118,8 @@ instance [PreservesFiniteProducts
     refine createsColimitOfIsSheaf _ (fun c hc => ?_)
     let i : c.pt ≅ (G ⋙ sheafToPresheaf _ _).flip ⋙ colim :=
       hc.coconePointUniqueUpToIso (pointwiseIsColimit _)
-    rw [Presheaf.isSheaf_of_iso_if
+    rw [Presheaf.isSheaf_of_iso_iff i]
+    exact isSheaf_pointwiseColimit _
 -/
 instance [PreservesFiniteProducts (colim (J := J) (C := A))] :
     PreservesColimitsOfShape J (sheafToPresheaf (extensiveTopology C) A) where

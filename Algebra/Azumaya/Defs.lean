@@ -63,7 +63,9 @@ definition AlgHom.mulLeftRight
     smul_assoc := fun r ab a => by
       change TensorProduct.Algebra.moduleAux _ _ = _ • TensorProduct.Algebra.moduleAux _ _
       simp }
-  Algebra.lsmul R (A := A otimes[R] Aᵐᵒᵖ) R
+  Algebra.lsmul R (A := A otimes[R] Aᵐᵒᵖ) R A
+
+@[simp]
 
 中文:
 定义 代数态射.mulLeftRight
@@ -73,7 +75,9 @@ definition AlgHom.mulLeftRight
     smul_assoc := fun r ab a => by
       change TensorProduct.Algebra.moduleAux _ _ = _ • TensorProduct.Algebra.moduleAux _ _
       simp }
-  Algebra.lsmul R (A := A otimes[R] Aᵐᵒᵖ) R
+  Algebra.lsmul R (A := A otimes[R] Aᵐᵒᵖ) R A
+
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.lsmul, IsScalarTower, Module, TensorProduct, TensorProduct.Algebra.module, TensorProduct.Algebra.moduleAux, module, moduleAux, otimes, smul_assoc
 -/

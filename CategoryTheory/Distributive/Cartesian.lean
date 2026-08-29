@@ -107,7 +107,8 @@ instance monoCoprod
       let ι := coprod.inl (X := A) (Y := B)
       have : Mono (Z ◁ ι) := SplitMono.mono
         { retraction := (∂L Z A B).inv ≫ coprod.desc (𝟙 _) (fst Z B ≫ lift (𝟙 Z) f) }
-      have : lift (𝟙 Z) f = lift (𝟙 Z) g := by rw 
+      have : lift (𝟙 Z) f = lift (𝟙 Z) g := by rw [← cancel_mono (Z ◁ ι)]; aesop
+      simpa only [lift_snd] using this =≫ snd _ _⟩⟩
 
 中文:
 实例 monoCoprod
@@ -117,7 +118,8 @@ instance monoCoprod
       let ι := coprod.inl (X := A) (Y := B)
       have : Mono (Z ◁ ι) := SplitMono.mono
         { retraction := (∂L Z A B).inv ≫ coprod.desc (𝟙 _) (fst Z B ≫ lift (𝟙 Z) f) }
-      have : lift (𝟙 Z) f = lift (𝟙 Z) g := by rw 
+      have : lift (𝟙 Z) f = lift (𝟙 Z) g := by rw [← cancel_mono (Z ◁ ι)]; aesop
+      simpa only [lift_snd] using this =≫ snd _ _⟩⟩
 
 Depends on / 依赖: MonoCoprod, MonoCoprod.mk, SplitMono, SplitMono.mono, cancel_mono, coprod, coprod.desc, coprod.inl, coprodIsCoprod, lift_snd, retraction
 -/

@@ -51,7 +51,18 @@ definition reesAlgebra
     rw [coeff_one]
     split_ifs with h
     · subst h
-      
+      simp
+    · simp
+  add_mem' hf hg i := by
+    rw [coeff_add]
+    exact Ideal.add_mem _ (hf i) (hg i)
+  zero_mem' _ := Ideal.zero_mem _
+  algebraMap_mem' r i := by
+    rw [algebraMap_apply]; rw [coeff_C]
+    split_ifs with h
+    · subst h
+      simp
+    · simp
 
 中文:
 定义 reesAlgebra
@@ -67,7 +78,18 @@ definition reesAlgebra
     rw [coeff_one]
     split_ifs with h
     · subst h
-      
+      simp
+    · simp
+  add_mem' hf hg i := by
+    rw [coeff_add]
+    exact Ideal.add_mem _ (hf i) (hg i)
+  zero_mem' _ := Ideal.zero_mem _
+  algebraMap_mem' r i := by
+    rw [algebraMap_apply]; rw [coeff_C]
+    split_ifs with h
+    · subst h
+      simp
+    · simp
 
 Depends on / 依赖: f.coeff
 -/
@@ -184,7 +206,10 @@ theorem monomial_mem_adjoin_monomial
     refine Submodule.smul_induction_on hr ?_ ?_
     · intro r hr s hs
       rw [add_comm n 1]; rw [smul_eq_mul]; rw [← monomial_mul_monomial]
-      exact Subalgebra.mul_mem 
+      exact Subalgebra.mul_mem _ (Algebra.subset_adjoin (Set.mem_image_of_mem _ hr)) (hn hs)
+    · intro x y hx hy
+      rw [map_add]
+      exact Subalgebra.add_mem _ hx hy
 
 中文:
 定理 monomial_mem_adjoin_monomial
@@ -197,7 +222,10 @@ theorem monomial_mem_adjoin_monomial
     refine Submodule.smul_induction_on hr ?_ ?_
     · intro r hr s hs
       rw [add_comm n 1]; rw [smul_eq_mul]; rw [← monomial_mul_monomial]
-      exact Subalgebra.mul_mem 
+      exact Subalgebra.mul_mem _ (Algebra.subset_adjoin (Set.mem_image_of_mem _ hr)) (hn hs)
+    · intro x y hx hy
+      rw [map_add]
+      exact Subalgebra.add_mem _ hx hy
 
 Depends on / 依赖: Algebra, Algebra.subset_adjoin, Set.mem_image_of_mem, Subalgebra, Subalgebra.add_mem, Subalgebra.algebraMap_mem, Subalgebra.mul_mem, Submodule, Submodule.smul_induction_on, add_comm, add_mem, algebraMap_mem, generalizing, map_add, mem_image_of_mem, monomial_mul_monomial, mul_mem, pow_succ, smul_eq_mul, smul_induction_on
 -/
@@ -277,7 +305,7 @@ theorem reesAlgebra.fg
       _ =
         Algebra.adjoin R
           (Submodule.map (monomial 1 : R ->ₗ[R] R[X]) (Submodule.span R ↑s) : Set R[X])
-    rw [Submodule.
+    rw [Submodule.map_span]; rw [Algebra.adjoin_span]
 
 中文:
 定理 reesAlgebra.fg
@@ -293,7 +321,7 @@ theorem reesAlgebra.fg
       _ =
         Algebra.adjoin R
           (Submodule.map (monomial 1 : R ->ₗ[R] R[X]) (Submodule.span R ↑s) : Set R[X])
-    rw [Submodule.
+    rw [Submodule.map_span]; rw [Algebra.adjoin_span]
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_span, Finset, Finset.coe_image, Submodule, Submodule.map, Submodule.map_span, Submodule.span, adjoin, adjoin_monomial_eq_reesAlgebra, adjoin_span, classical, coe_image, map_span, monomial, s.image
 -/

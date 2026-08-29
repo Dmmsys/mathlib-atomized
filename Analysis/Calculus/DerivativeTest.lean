@@ -747,7 +747,7 @@ obtain ⟨c, hc⟩ := (nhdsGT_basis b).eventually_iff.mp hd₁.and h₁
   exact isLocalMax_of_deriv_Ioo ha.1 hc.1 h
     (fun _ hx => (ha.2 hx).1.differentiableWithinAt)
     (fun _ hx => (hc.2 hx).1.differentiableWithinAt)
-    (fun _ hx => (h
+    (fun _ hx => (ha.2 hx).2) (fun x hx => (hc.2 hx).2)
 
 中文:
 引理 isLocalMax_of_deriv'
@@ -758,7 +758,7 @@ obtain ⟨c, hc⟩ := (nhdsGT_basis b).eventually_iff.mp hd₁.and h₁
   exact isLocalMax_of_deriv_Ioo ha.1 hc.1 h
     (fun _ hx => (ha.2 hx).1.differentiableWithinAt)
     (fun _ hx => (hc.2 hx).1.differentiableWithinAt)
-    (fun _ hx => (h
+    (fun _ hx => (ha.2 hx).2) (fun x hx => (hc.2 hx).2)
 
 Depends on / 依赖: differentiableWithinAt, eventually_iff, eventually_iff.mp, isLocalMax_of_deriv_Ioo, nhdsGT_basis, nhdsLT_basis
 -/
@@ -785,7 +785,7 @@ obtain ⟨c, hc⟩ := (nhdsGT_basis b).eventually_iff.mp hd₁.and h₁
   exact isLocalMin_of_deriv_Ioo ha.1 hc.1 h
     (fun _ hx => (ha.2 hx).1.differentiableWithinAt)
     (fun _ hx => (hc.2 hx).1.differentiableWithinAt)
-    (fun _ hx => (h
+    (fun _ hx => (ha.2 hx).2) (fun x hx => (hc.2 hx).2)
 
 中文:
 引理 isLocalMin_of_deriv'
@@ -796,7 +796,7 @@ obtain ⟨c, hc⟩ := (nhdsGT_basis b).eventually_iff.mp hd₁.and h₁
   exact isLocalMin_of_deriv_Ioo ha.1 hc.1 h
     (fun _ hx => (ha.2 hx).1.differentiableWithinAt)
     (fun _ hx => (hc.2 hx).1.differentiableWithinAt)
-    (fun _ hx => (h
+    (fun _ hx => (ha.2 hx).2) (fun x hx => (hc.2 hx).2)
 
 Depends on / 依赖: differentiableWithinAt, eventually_iff, eventually_iff.mp, isLocalMin_of_deriv_Ioo, nhdsGT_basis, nhdsLT_basis
 -/
@@ -872,6 +872,10 @@ lemma eventually_nhdsWithin_sign_eq_of_deriv_pos
     (differentiableAt_of_deriv_ne_zero <| ne_of_gt hf).hasDerivAt
   filter_upwards [(h_tendsto.eventually <| eventually_gt_nhds hf),
     self_mem_nhdsWithin] with x hx₀ hx₁
+  rw [mem_compl_iff]; rw [mem_singleton_iff]; rw [← Ne.eq_def] at hx₁
+  obtain (hx' | hx') := hx₁.lt_or_gt
+  · rw [sign_neg (neg_of_slope_pos hx' hx₀ hx), sign_neg (sub_neg.mpr hx')]
+  · rw [sign_pos (pos_of_slope_pos hx' hx₀ hx), sign_pos (sub_pos.mpr hx')]
 
 中文:
 引理 eventually_nhdsWithin_sign_eq_of_deriv_pos
@@ -883,6 +887,10 @@ lemma eventually_nhdsWithin_sign_eq_of_deriv_pos
     (differentiableAt_of_deriv_ne_zero <| ne_of_gt hf).hasDerivAt
   filter_upwards [(h_tendsto.eventually <| eventually_gt_nhds hf),
     self_mem_nhdsWithin] with x hx₀ hx₁
+  rw [mem_compl_iff]; rw [mem_singleton_iff]; rw [← Ne.eq_def] at hx₁
+  obtain (hx' | hx') := hx₁.lt_or_gt
+  · rw [sign_neg (neg_of_slope_pos hx' hx₀ hx), sign_neg (sub_neg.mpr hx')]
+  · rw [sign_pos (pos_of_slope_pos hx' hx₀ hx), sign_pos (sub_pos.mpr hx')]
 
 Depends on / 依赖: Ne.eq_def, differentiableAt_of_deriv_ne_zero, eq_def, eventually, eventually_gt_nhds, eventually_sup, filter_upwards, h_tendsto, h_tendsto.eventually, hasDerivAt, hasDerivAt_iff_tendsto_slope, hasDerivAt_iff_tendsto_slope.mp, lt_or_gt, mem_compl_iff, mem_singleton_iff, ne_of_gt, neg_of_slope_pos, nhdsNE_sup_pure, pos_of_slope_pos, self_mem_nhdsWithin
 -/
@@ -1037,7 +1045,8 @@ theorem isLocalMax_of_sign_deriv
   have hg := deriv_neg_right_of_sign_deriv hf
   replace hf := (nhdsLT_sup_nhdsGT x₀) ▸
     eventually_sup.mpr ⟨hl.mono fun x hx => hx.ne', hg.mono fun x hx => hx.ne⟩
-  exact isLocalMax_of_deriv h (hf.mono fun x hx => differentiableAt_of_deriv_ne_zero h
+  exact isLocalMax_of_deriv h (hf.mono fun x hx => differentiableAt_of_deriv_ne_zero hx)
+    (hl.mono fun _ => le_of_lt) (hg.mono fun _ => le_of_lt)
 
 中文:
 定理 isLocalMax_of_sign_deriv
@@ -1047,7 +1056,8 @@ theorem isLocalMax_of_sign_deriv
   have hg := deriv_neg_right_of_sign_deriv hf
   replace hf := (nhdsLT_sup_nhdsGT x₀) ▸
     eventually_sup.mpr ⟨hl.mono fun x hx => hx.ne', hg.mono fun x hx => hx.ne⟩
-  exact isLocalMax_of_deriv h (hf.mono fun x hx => differentiableAt_of_deriv_ne_zero h
+  exact isLocalMax_of_deriv h (hf.mono fun x hx => differentiableAt_of_deriv_ne_zero hx)
+    (hl.mono fun _ => le_of_lt) (hg.mono fun _ => le_of_lt)
 
 Depends on / 依赖: deriv_neg_right_of_sign_deriv, deriv_pos_left_of_sign_deriv, differentiableAt_of_deriv_ne_zero, eventually_sup, eventually_sup.mpr, hf.mono, hg.mono, hl.mono, hx.ne, isLocalMax_of_deriv, le_of_lt, nhdsLT_sup_nhdsGT, replace
 -/

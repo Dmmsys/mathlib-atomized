@@ -92,7 +92,19 @@ theorem separatingLeft_dualProd
   let h_d := e.symm.toLinearMap.comp (dualProd R M)
   refine (Function.Injective.of_comp_iff e.symm.injective
     (dualProd R M)).symm.trans ?_
-  rw [
+  rw [← LinearEquiv.coe_toLinearMap]; rw [← coe_comp]
+  change Function.Injective h_d ↔ _
+  have : h_d = prodMap id (Module.Dual.eval R M) := by
+    refine ext fun x => Prod.ext ?_ ?_
+    · ext
+      dsimp [e, h_d, Module.Dual.eval, LinearEquiv.prodComm]
+      simp
+    · ext
+      dsimp [e, h_d, Module.Dual.eval, LinearEquiv.prodComm]
+      simp
+  rw [this]; rw [coe_prodMap]
+  refine Prod.map_injective.trans ?_
+  exact and_iff_right Function.injective_id
 
 中文:
 定理 separatingLeft_dualProd
@@ -102,7 +114,19 @@ theorem separatingLeft_dualProd
   let h_d := e.symm.toLinearMap.comp (dualProd R M)
   refine (Function.Injective.of_comp_iff e.symm.injective
     (dualProd R M)).symm.trans ?_
-  rw [
+  rw [← LinearEquiv.coe_toLinearMap]; rw [← coe_comp]
+  change Function.Injective h_d ↔ _
+  have : h_d = prodMap id (Module.Dual.eval R M) := by
+    refine ext fun x => Prod.ext ?_ ?_
+    · ext
+      dsimp [e, h_d, Module.Dual.eval, LinearEquiv.prodComm]
+      simp
+    · ext
+      dsimp [e, h_d, Module.Dual.eval, LinearEquiv.prodComm]
+      simp
+  rw [this]; rw [coe_prodMap]
+  refine Prod.map_injective.trans ?_
+  exact and_iff_right Function.injective_id
 
 Depends on / 依赖: Function, Function.Injective, Function.Injective.of_comp_iff, Injective, LinearEquiv, LinearEquiv.coe_toLinearMap, LinearEquiv.prodComm, Module, Module.Dual, Module.Dual.eval, Module.dualProdDualEquivDual, Prod.ext, coe_comp, coe_toLinearMap, dualProd, dualProdDualEquivDual, e.symm.injective, e.symm.toLinearMap.comp, injective, ker_eq_bot
 -/
@@ -151,7 +175,10 @@ definition dualProd
     rw [Prod.smul_fst]; rw [Prod.smul_snd]; rw [LinearMap.smul_apply]; rw [map_smul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_assoc]
   exists_companion' :=
     ⟨LinearMap.dualProd R M, fun p q => by
-      rw [LinearMap.dualProd_apply_apply]; rw [P
+      rw [LinearMap.dualProd_apply_apply]; rw [Prod.fst_add]; rw [Prod.snd_add]; rw [LinearMap.add_apply]; rw [map_add]; rw [map_add]; rw [add_right_comm _ (q.1 q.2)]; rw [add_comm (q.1 p.2) (p.1 q.2)]; rw [← add_assoc]; rw [←
+        add_assoc]⟩
+
+@[simp]
 
 中文:
 定义 dualProd
@@ -161,7 +188,10 @@ definition dualProd
     rw [Prod.smul_fst]; rw [Prod.smul_snd]; rw [LinearMap.smul_apply]; rw [map_smul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_assoc]
   exists_companion' :=
     ⟨LinearMap.dualProd R M, fun p q => by
-      rw [LinearMap.dualProd_apply_apply]; rw [P
+      rw [LinearMap.dualProd_apply_apply]; rw [Prod.fst_add]; rw [Prod.snd_add]; rw [LinearMap.add_apply]; rw [map_add]; rw [map_add]; rw [add_right_comm _ (q.1 q.2)]; rw [add_comm (q.1 p.2) (p.1 q.2)]; rw [← add_assoc]; rw [←
+        add_assoc]⟩
+
+@[simp]
 -/
 def dualProd : QuadraticForm R (Module.Dual R M × M) where
   toFun p := p.1 p.2
@@ -271,7 +301,16 @@ definition toDualProd
     (LinearMap.fst _ _ _ - LinearMap.snd _ _ _)
   map_app' x := by
     dsimp only [QuadraticMap.associated, QuadraticMap.associatedHom]
-    dsimp only [LinearMap.smul_apply, LinearMap.coe_mk, AddHo
+    dsimp only [LinearMap.smul_apply, LinearMap.coe_mk, AddHom.coe_mk, AddHom.toFun_eq_coe,
+      LinearMap.coe_toAddHom, LinearMap.prod_apply, Function.prod_apply, LinearMap.add_apply,
+      LinearMap.coe_comp, Function.comp_apply, LinearMap.fst_apply, LinearMap.snd_apply,
+      LinearMap.sub_apply, dualProd_apply, polarBilin_apply_apply, QuadraticMap.prod_apply]
+    simp only [neg_apply, polar_sub_right, polar_self, nsmul_eq_mul, Nat.cast_ofNat,
+      polar_comm _ x.1 x.2, smul_sub, Module.End.smul_def, sub_add_sub_cancel,
+      ← sub_eq_add_neg (Q x.1) (Q x.2)]
+    rw [← map_sub (⅟2 : Module.End R R)]; rw [← mul_sub]; rw [← Module.End.smul_def]
+    simp only [Module.End.smul_def, half_moduleEnd_apply_eq_half_smul, smul_eq_mul,
+      invOf_mul_cancel_left']
 
 中文:
 定义 toDualProd
@@ -281,7 +320,16 @@ definition toDualProd
     (LinearMap.fst _ _ _ - LinearMap.snd _ _ _)
   map_app' x := by
     dsimp only [QuadraticMap.associated, QuadraticMap.associatedHom]
-    dsimp only [LinearMap.smul_apply, LinearMap.coe_mk, AddHo
+    dsimp only [LinearMap.smul_apply, LinearMap.coe_mk, AddHom.coe_mk, AddHom.toFun_eq_coe,
+      LinearMap.coe_toAddHom, LinearMap.prod_apply, Function.prod_apply, LinearMap.add_apply,
+      LinearMap.coe_comp, Function.comp_apply, LinearMap.fst_apply, LinearMap.snd_apply,
+      LinearMap.sub_apply, dualProd_apply, polarBilin_apply_apply, QuadraticMap.prod_apply]
+    simp only [neg_apply, polar_sub_right, polar_self, nsmul_eq_mul, Nat.cast_ofNat,
+      polar_comm _ x.1 x.2, smul_sub, Module.End.smul_def, sub_add_sub_cancel,
+      ← sub_eq_add_neg (Q x.1) (Q x.2)]
+    rw [← map_sub (⅟2 : Module.End R R)]; rw [← mul_sub]; rw [← Module.End.smul_def]
+    simp only [Module.End.smul_def, half_moduleEnd_apply_eq_half_smul, smul_eq_mul,
+      invOf_mul_cancel_left']
 
 Depends on / 依赖: LinearMap, LinearMap.prod
 -/
@@ -324,7 +372,25 @@ lemma LinearMap.BilinForm.linearIndependent_of_pairwise_le_zero
   replace hc : x = y := by
     classical
     simp_rw [hx, hy, neg_smul, Finset.sum_neg_distrib, ← add_eq_zero_iff_eq_neg]
-    rw [← hc];
+    rw [← hc]; rw [← Finset.sum_union]; rw [Finset.sum_subset]
+    · grind only [= Finset.subset_iff, = Finset.mem_union, = Finset.mem_filter]
+    · simp +contextual [eq_comm (a := (0 : R))]
+    · grind only [Finset.disjoint_filter]
+  have hx₀ : x = 0 := by
+    suffices B x y <= 0 by simpa [hc, ← hB.le_zero_iff, B.toQuadraticMap_apply]
+    suffices 0 <= ∑ x in s with c x < 0, ∑ i in s with 0 < c i, c x * (c i * (B (v i)) (v x)) by
+      simpa [hx, hy, map_neg, Finset.mul_sum]
+    refine Finset.sum_nonneg fun i hi => Finset.sum_nonneg fun j hj => ?_
+    grind [Pairwise, mul_nonneg_iff, mul_nonpos_iff]
+  have H (c : ι -> R) (h : ∑ i in s with 0 < c i, c i • v i = 0) (i : ι) (hi : i in s) : c i <= 0 := by
+    have : ∑ i in s with 0 < c i, c i * f (v i) = 0 := by simpa using (congr(f $h))
+    rw [Finset.sum_eq_zero_iff_of_nonneg (by grind [mul_nonneg])] at this
+    by_contra! hi'
+    have : 0 < c i * f (v i) := mul_pos hi' (hp i)
+    grind
+  replace hx (i : ι) (hi : i in s) : c i <= 0 := H _ (by grind) i hi
+  replace hy (i : ι) (hi : i in s) : -c i <= 0 := H (-c ·) (by grind) i hi
+  grind
 
 中文:
 引理 线性映射.BilinForm.linearIndependent_of_pairwise_le_zero
@@ -336,7 +402,25 @@ lemma LinearMap.BilinForm.linearIndependent_of_pairwise_le_zero
   replace hc : x = y := by
     classical
     simp_rw [hx, hy, neg_smul, Finset.sum_neg_distrib, ← add_eq_zero_iff_eq_neg]
-    rw [← hc];
+    rw [← hc]; rw [← Finset.sum_union]; rw [Finset.sum_subset]
+    · grind only [= Finset.subset_iff, = Finset.mem_union, = Finset.mem_filter]
+    · simp +contextual [eq_comm (a := (0 : R))]
+    · grind only [Finset.disjoint_filter]
+  have hx₀ : x = 0 := by
+    suffices B x y <= 0 by simpa [hc, ← hB.le_zero_iff, B.toQuadraticMap_apply]
+    suffices 0 <= ∑ x in s with c x < 0, ∑ i in s with 0 < c i, c x * (c i * (B (v i)) (v x)) by
+      simpa [hx, hy, map_neg, Finset.mul_sum]
+    refine Finset.sum_nonneg fun i hi => Finset.sum_nonneg fun j hj => ?_
+    grind [Pairwise, mul_nonneg_iff, mul_nonpos_iff]
+  have H (c : ι -> R) (h : ∑ i in s with 0 < c i, c i • v i = 0) (i : ι) (hi : i in s) : c i <= 0 := by
+    have : ∑ i in s with 0 < c i, c i * f (v i) = 0 := by simpa using (congr(f $h))
+    rw [Finset.sum_eq_zero_iff_of_nonneg (by grind [mul_nonneg])] at this
+    by_contra! hi'
+    have : 0 < c i * f (v i) := mul_pos hi' (hp i)
+    grind
+  replace hx (i : ι) (hi : i in s) : c i <= 0 := H _ (by grind) i hi
+  replace hy (i : ι) (hi : i in s) : -c i <= 0 := H (-c ·) (by grind) i hi
+  grind
 
 Depends on / 依赖: Finset, Finset.disjoint_filter, Finset.mem_filter, Finset.mem_union, Finset.subset_iff, Finset.sum_neg_distrib, Finset.sum_subset, Finset.sum_union, add_eq_zero_iff_eq_neg, classical, contextual, disjoint_filter, eq_comm, linearIndependent_iff, mem_filter, mem_union, neg_smul, replace, simp_rw, subset_iff
 -/

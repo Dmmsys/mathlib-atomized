@@ -101,7 +101,7 @@ instance DivisionRing.hasRankNullity
   exists_set_linearIndependent V _ _ := by
     let b := Module.Free.chooseBasis K V
     refine ⟨range b, ?_, b.linearIndependent.linearIndepOn_id⟩
-    rw [← lift_injective.eq_iff]; rw [mk_range_eq_of_injective b.injective]; rw [Module.Free.rank_eq_card_chooseBa
+    rw [← lift_injective.eq_iff]; rw [mk_range_eq_of_injective b.injective]; rw [Module.Free.rank_eq_card_chooseBasisIndex]
 
 中文:
 实例 除环.hasRankNullity
@@ -110,7 +110,7 @@ instance DivisionRing.hasRankNullity
   exists_set_linearIndependent V _ _ := by
     let b := Module.Free.chooseBasis K V
     refine ⟨range b, ?_, b.linearIndependent.linearIndepOn_id⟩
-    rw [← lift_injective.eq_iff]; rw [mk_range_eq_of_injective b.injective]; rw [Module.Free.rank_eq_card_chooseBa
+    rw [← lift_injective.eq_iff]; rw [mk_range_eq_of_injective b.injective]; rw [Module.Free.rank_eq_card_chooseBasisIndex]
 
 Depends on / 依赖: rank_quotient_add_rank_of_divisionRing
 -/
@@ -144,7 +144,17 @@ theorem rank_add_rank_split
   apply LinearEquiv.rank_eq
   let L : V₁ ->ₗ[K] ker (coprod db eb) :=
 LinearMap.codRestrict _ (prod cd (-ce)) by
-      si
+      simpa [add_eq_zero_iff_eq_neg] using LinearMap.ext_iff.1 eq
+  refine LinearEquiv.ofBijective L ⟨?_, ?_⟩
+  · rw [← ker_eq_bot, ker_codRestrict, ker_prod, hgd, bot_inf_eq]
+  · rw [← range_eq_top, eq_top_iff, LinearMap.range_codRestrict, ← map_le_iff_le_comap,
+      Submodule.map_top, range_subtype]
+    rintro ⟨d, e⟩
+    have h := eq₂ d (-e)
+    simp only [add_eq_zero_iff_eq_neg, LinearMap.prod_apply, mem_ker,
+      Prod.mk_inj, coprod_apply, map_neg, neg_apply, LinearMap.mem_range,
+      Function.prod_apply] at h ⊢
+    grind
 
 中文:
 定理 rank_add_rank_split
@@ -159,7 +169,17 @@ LinearMap.codRestrict _ (prod cd (-ce)) by
   apply LinearEquiv.rank_eq
   let L : V₁ ->ₗ[K] ker (coprod db eb) :=
 LinearMap.codRestrict _ (prod cd (-ce)) by
-      si
+      simpa [add_eq_zero_iff_eq_neg] using LinearMap.ext_iff.1 eq
+  refine LinearEquiv.ofBijective L ⟨?_, ?_⟩
+  · rw [← ker_eq_bot, ker_codRestrict, ker_prod, hgd, bot_inf_eq]
+  · rw [← range_eq_top, eq_top_iff, LinearMap.range_codRestrict, ← map_le_iff_le_comap,
+      Submodule.map_top, range_subtype]
+    rintro ⟨d, e⟩
+    have h := eq₂ d (-e)
+    simp only [add_eq_zero_iff_eq_neg, LinearMap.prod_apply, mem_ker,
+      Prod.mk_inj, coprod_apply, map_neg, neg_apply, LinearMap.mem_range,
+      Function.prod_apply] at h ⊢
+    grind
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, LinearEquiv.rank_eq, LinearMap, LinearMap.codRestrict, LinearMap.ext_iff, LinearMap.range_codRestrict, Surjective, add_eq_zero_iff_eq_neg, bot_inf_eq, codRestrict, coprod, eq_top_iff, ext_iff, ker_codRestrict, ker_eq_bot, ker_prod, ofBijective, range_codRestrict, range_coprod
 -/

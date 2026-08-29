@@ -80,7 +80,12 @@ theorem rat_mul_continuous_lemma
   have εK := div_pos (half_pos ε0) K0
   refine ⟨_, εK, fun {a₁ a₂ b₁ b₂} ha₁ hb₂ h₁ h₂ => ?_⟩
   replace ha₁ := lt_of_lt_of_le ha₁ (le_trans (le_max_left _ K₂) (le_max_right 1 _))
-  replace hb₂ := lt_of_lt_of_l
+  replace hb₂ := lt_of_lt_of_le hb₂ (le_trans (le_max_right K₁ _) (le_max_right 1 _))
+  set M := max 1 (max K₁ K₂)
+  suffices abv ((a₁ - b₁) * b₂ + a₁ * (a₂ - b₂)) < ε by
+    simpa [sub_eq_add_neg, mul_add, add_mul, add_left_comm] using this
+  grw [abv_add abv, abv_mul abv, abv_mul abv, h₁.le, h₂.le, ha₁, hb₂, mul_comm M,
+    div_mul_cancel₀ _ (ne_of_gt K0), add_halves]
 
 中文:
 定理 rat_mul_continuous_lemma
@@ -90,7 +95,12 @@ theorem rat_mul_continuous_lemma
   have εK := div_pos (half_pos ε0) K0
   refine ⟨_, εK, fun {a₁ a₂ b₁ b₂} ha₁ hb₂ h₁ h₂ => ?_⟩
   replace ha₁ := lt_of_lt_of_le ha₁ (le_trans (le_max_left _ K₂) (le_max_right 1 _))
-  replace hb₂ := lt_of_lt_of_l
+  replace hb₂ := lt_of_lt_of_le hb₂ (le_trans (le_max_right K₁ _) (le_max_right 1 _))
+  set M := max 1 (max K₁ K₂)
+  suffices abv ((a₁ - b₁) * b₂ + a₁ * (a₂ - b₂)) < ε by
+    simpa [sub_eq_add_neg, mul_add, add_mul, add_left_comm] using this
+  grw [abv_add abv, abv_mul abv, abv_mul abv, h₁.le, h₂.le, ha₁, hb₂, mul_comm M,
+    div_mul_cancel₀ _ (ne_of_gt K0), add_halves]
 
 Depends on / 依赖: add_left_comm, add_mul, div_pos, half_pos, le_max_left, le_max_right, le_trans, lt_of_lt_of_le, mul_add, replace, sub_eq_add_neg, zero_lt_one
 -/
@@ -119,7 +129,8 @@ theorem rat_inv_continuous_lemma
   have a0 := K0.trans_le ha
   have b0 := K0.trans_le hb
   rw [inv_sub_inv' ((abv_pos abv).1 a0) ((abv_pos abv).1 b0)]; rw [abv_mul abv]; rw [abv_mul abv]; rw [abv_inv abv]; rw [abv_inv abv]; rw [abv_sub abv]
-  grw [← ha, mu
+  grw [← ha, mul_assoc, ← hb, h]
+  simp [K0.ne']
 
 中文:
 定理 rat_inv_continuous_lemma
@@ -129,7 +140,8 @@ theorem rat_inv_continuous_lemma
   have a0 := K0.trans_le ha
   have b0 := K0.trans_le hb
   rw [inv_sub_inv' ((abv_pos abv).1 a0) ((abv_pos abv).1 b0)]; rw [abv_mul abv]; rw [abv_mul abv]; rw [abv_inv abv]; rw [abv_inv abv]; rw [abv_sub abv]
-  grw [← ha, mu
+  grw [← ha, mul_assoc, ← hb, h]
+  simp [K0.ne']
 
 Depends on / 依赖: K0.ne, K0.trans_le, abv_inv, abv_mul, abv_pos, abv_sub, inv_sub_inv, mul_assoc, mul_pos, trans_le
 -/
@@ -236,7 +248,11 @@ lemma bounded
     refine Nat.rec (by simp [hR]) ?_
     rintro i hi j (rfl | hj)
     · simp [R]
-    · exact (hi j hj).tra
+    · exact (hi j hj).trans (le_max_left _ _)
+  refine ⟨R i + 1, fun j => ?_⟩
+  obtain hji | hij := le_total j i
+  · exact (this i _ hji).trans_lt (lt_add_one _)
+· simpa using (abv_add abv _ _).trans_lt add_lt_add_of_le_of_lt (this i _ le_rfl) (h _ hij)
 
 中文:
 引理 bounded
@@ -249,7 +265,11 @@ lemma bounded
     refine Nat.rec (by simp [hR]) ?_
     rintro i hi j (rfl | hj)
     · simp [R]
-    · exact (hi j hj).tra
+    · exact (hi j hj).trans (le_max_left _ _)
+  refine ⟨R i + 1, fun j => ?_⟩
+  obtain hji | hij := le_total j i
+  · exact (this i _ hji).trans_lt (lt_add_one _)
+· simpa using (abv_add abv _ _).trans_lt add_lt_add_of_le_of_lt (this i _ le_rfl) (h _ hij)
 
 Depends on / 依赖: Nat.rec, abv_add, add_lt_add_of_le_of_lt, i.succ, le_max_left, le_rfl, le_total, lt_add_one, trans_lt, zero_lt_one
 -/
@@ -1852,7 +1872,7 @@ theorem abv_pos_of_not_limZero
   rcases nk _ (half_pos ε0) i with ⟨j, ij, hj⟩
   refine ⟨j, fun k jk => ?_⟩
   have := lt_of_le_of_lt (abv_add abv _ _) (add_lt_add (hi j ij k jk) hj)
- 
+  rwa [sub_add_cancel, add_halves] at this
 
 中文:
 定理 abv_pos_of_not_limZero
@@ -1865,7 +1885,7 @@ theorem abv_pos_of_not_limZero
   rcases nk _ (half_pos ε0) i with ⟨j, ij, hj⟩
   refine ⟨j, fun k jk => ?_⟩
   have := lt_of_le_of_lt (abv_add abv _ _) (add_lt_add (hi j ij k jk) hj)
- 
+  rwa [sub_add_cancel, add_halves] at this
 
 Depends on / 依赖: abv_add, add_halves, add_lt_add, f.cauchy, half_pos, lt_of_le_of_lt, not_and, not_exists, not_forall, not_le, sub_add_cancel
 -/
@@ -1890,7 +1910,8 @@ theorem of_near
     ⟨i, fun j ij => by
       obtain ⟨h₁, h₂⟩ := hi _ le_rfl; rw [abv_sub abv] at h₁
       have := lt_of_le_of_lt (abv_add abv _ _) (add_lt_add (hi _ ij).1 h₁)
-      have := lt_of_le_of_lt (abv_add abv _ _) (add_lt_add th
+      have := lt_of_le_of_lt (abv_add abv _ _) (add_lt_add this (h₂ _ ij))
+      rwa [add_halves, add_halves, add_right_comm, sub_add_sub_cancel, sub_add_sub_cancel] at this⟩
 
 中文:
 定理 of_near
@@ -1899,7 +1920,8 @@ theorem of_near
     ⟨i, fun j ij => by
       obtain ⟨h₁, h₂⟩ := hi _ le_rfl; rw [abv_sub abv] at h₁
       have := lt_of_le_of_lt (abv_add abv _ _) (add_lt_add (hi _ ij).1 h₁)
-      have := lt_of_le_of_lt (abv_add abv _ _) (add_lt_add th
+      have := lt_of_le_of_lt (abv_add abv _ _) (add_lt_add this (h₂ _ ij))
+      rwa [add_halves, add_halves, add_right_comm, sub_add_sub_cancel, sub_add_sub_cancel] at this⟩
 
 Depends on / 依赖: exists_forall_ge_and, g.cauchy, half_pos
 -/
@@ -2005,7 +2027,17 @@ theorem mul_not_equiv_zero
   have hf' : ¬LimZero f := by simpa using show ¬LimZero (f - 0) from hf
   have hg' : ¬LimZero g := by simpa using show ¬LimZero (g - 0) from hg
   rcases abv_pos_of_not_limZero hf' with ⟨a1, ha1, N1, hN1⟩
-  rcases abv_pos
+  rcases abv_pos_of_not_limZero hg' with ⟨a2, ha2, N2, hN2⟩
+  have : 0 < a1 * a2 := mul_pos ha1 ha2
+  obtain ⟨N, hN⟩ := hlz _ this
+  let i := max N (max N1 N2)
+  have hN' := hN i (le_max_left _ _)
+  have hN1' := hN1 i (le_trans (le_max_left _ _) (le_max_right _ _))
+  have hN1' := hN2 i (le_trans (le_max_right _ _) (le_max_right _ _))
+  apply not_le_of_gt hN'
+  change _ <= abv (_ * _)
+  rw [abv_mul abv]
+  gcongr
 
 中文:
 定理 mul_not_equiv_zero
@@ -2016,7 +2048,17 @@ theorem mul_not_equiv_zero
   have hf' : ¬LimZero f := by simpa using show ¬LimZero (f - 0) from hf
   have hg' : ¬LimZero g := by simpa using show ¬LimZero (g - 0) from hg
   rcases abv_pos_of_not_limZero hf' with ⟨a1, ha1, N1, hN1⟩
-  rcases abv_pos
+  rcases abv_pos_of_not_limZero hg' with ⟨a2, ha2, N2, hN2⟩
+  have : 0 < a1 * a2 := mul_pos ha1 ha2
+  obtain ⟨N, hN⟩ := hlz _ this
+  let i := max N (max N1 N2)
+  have hN' := hN i (le_max_left _ _)
+  have hN1' := hN1 i (le_trans (le_max_left _ _) (le_max_right _ _))
+  have hN1' := hN2 i (le_trans (le_max_right _ _) (le_max_right _ _))
+  apply not_le_of_gt hN'
+  change _ <= abv (_ * _)
+  rw [abv_mul abv]
+  gcongr
 
 Depends on / 依赖: LimZero, abv_pos_of_not_limZero, le_max_, le_max_left, le_trans, mul_pos
 -/
@@ -2152,7 +2194,9 @@ theorem one_not_equiv_zero
     le_of_not_gt fun h2 : 0 < abv 1 =>
 (Exists.elim (this _ h2)) fun i hi => lt_irrefl (abv 1) by simpa using hi _ le_rfl
   have h2 : 0 <= abv 1 := abv_nonneg abv _
-  have : abv 1 = 0 := le_a
+  have : abv 1 = 0 := le_antisymm h1 h2
+  have : (1 : β) = 0 := (abv_eq_zero abv).mp this
+  absurd this one_ne_zero
 
 中文:
 定理 one_not_equiv_zero
@@ -2163,7 +2207,9 @@ theorem one_not_equiv_zero
     le_of_not_gt fun h2 : 0 < abv 1 =>
 (Exists.elim (this _ h2)) fun i hi => lt_irrefl (abv 1) by simpa using hi _ le_rfl
   have h2 : 0 <= abv 1 := abv_nonneg abv _
-  have : abv 1 = 0 := le_a
+  have : abv 1 = 0 := le_antisymm h1 h2
+  have : (1 : β) = 0 := (abv_eq_zero abv).mp this
+  absurd this one_ne_zero
 -/
 theorem one_not_equiv_zero : ¬const abv 1 ≈ const abv 0 := fun h =>
   have : forall ε > 0, exists i, forall k, i <= k -> abv (1 - 0) < ε := h
@@ -2519,7 +2565,17 @@ theorem trichotomy
   rcases exists_forall_ge_and hK (f.cauchy₃ K0) with ⟨i, hi⟩
   refine (le_total 0 (f i)).imp ?_ ?_ <;>
     refine fun h => ⟨K, K0, i, fun j ij => ?_⟩ <;>
-    have
+    have := (hi _ ij).1 <;>
+    obtain ⟨h₁, h₂⟩ := hi _ le_rfl
+  · rwa [abs_of_nonneg] at this
+    rw [abs_of_nonneg h] at h₁
+    exact
+      (le_add_iff_nonneg_right _).1
+        (le_trans h₁ <| neg_le_sub_iff_le_add'.1 <| le_of_lt (abs_lt.1 <| h₂ _ ij).1)
+  · rwa [abs_of_nonpos] at this
+    rw [abs_of_nonpos h] at h₁
+    rw [← sub_le_sub_iff_right]; rw [zero_sub]
+    exact le_trans (le_of_lt (abs_lt.1 <| h₂ _ ij).2) h₁
 
 中文:
 定理 trichotomy
@@ -2533,7 +2589,17 @@ theorem trichotomy
   rcases exists_forall_ge_and hK (f.cauchy₃ K0) with ⟨i, hi⟩
   refine (le_total 0 (f i)).imp ?_ ?_ <;>
     refine fun h => ⟨K, K0, i, fun j ij => ?_⟩ <;>
-    have
+    have := (hi _ ij).1 <;>
+    obtain ⟨h₁, h₂⟩ := hi _ le_rfl
+  · rwa [abs_of_nonneg] at this
+    rw [abs_of_nonneg h] at h₁
+    exact
+      (le_add_iff_nonneg_right _).1
+        (le_trans h₁ <| neg_le_sub_iff_le_add'.1 <| le_of_lt (abs_lt.1 <| h₂ _ ij).1)
+  · rwa [abs_of_nonpos] at this
+    rw [abs_of_nonpos h] at h₁
+    rw [← sub_le_sub_iff_right]; rw [zero_sub]
+    exact le_trans (le_of_lt (abs_lt.1 <| h₂ _ ij).2) h₁
 
 Depends on / 依赖: Classical, Classical.em, LimZero, abs_lt, abs_of_nonneg, abv_pos_of_not_limZero, exists_forall_ge_and, f.cauchy, false_or, le_add_iff_nonneg_right, le_of_lt, le_rfl, le_total, le_trans, neg_le_sub_iff_le_add
 -/
@@ -2736,7 +2802,10 @@ instance :
 | Or.inl fg, Or.inl gh => Or.inl lt_trans fg gh
 | Or.inl fg, Or.inr gh => Or.inl lt_of_lt_of_eq fg gh
 | Or.inr fg, Or.inl gh => Or.inl lt_of_eq_of_lt fg gh
-| Or.inr fg, Or.inr gh =
+| Or.inr fg, Or.inr gh => Or.inr Setoid.trans fg gh
+  lt_iff_le_not_ge _ _ :=
+    ⟨fun h => ⟨Or.inl h, not_or_intro (mt (lt_trans h) lt_irrefl) (not_limZero_of_pos h)⟩,
+      fun ⟨h₁, h₂⟩ => h₁.resolve_right (mt (fun h => Or.inr (Setoid.symm h)) h₂)⟩
 
 中文:
 实例 :
@@ -2749,7 +2818,10 @@ instance :
 | Or.inl fg, Or.inl gh => Or.inl lt_trans fg gh
 | Or.inl fg, Or.inr gh => Or.inl lt_of_lt_of_eq fg gh
 | Or.inr fg, Or.inl gh => Or.inl lt_of_eq_of_lt fg gh
-| Or.inr fg, Or.inr gh =
+| Or.inr fg, Or.inr gh => Or.inr Setoid.trans fg gh
+  lt_iff_le_not_ge _ _ :=
+    ⟨fun h => ⟨Or.inl h, not_or_intro (mt (lt_trans h) lt_irrefl) (not_limZero_of_pos h)⟩,
+      fun ⟨h₁, h₂⟩ => h₁.resolve_right (mt (fun h => Or.inr (Setoid.symm h)) h₂)⟩
 -/
 instance : Preorder (CauSeq α abs) where
   lt := (· < ·)
@@ -3388,6 +3460,7 @@ theorem sup_eq_right
     rw [sub_nonpos]; rw [← sub_nonneg]
     exact ε0.le.trans (h _ hj)
   · refine Setoid.trans (sup_equiv_sup h (Setoid.refl _)) ?_
+    rw [CauSeq.sup_idem]
 
 中文:
 定理 sup_eq_right
@@ -3403,6 +3476,7 @@ theorem sup_eq_right
     rw [sub_nonpos]; rw [← sub_nonneg]
     exact ε0.le.trans (h _ hj)
   · refine Setoid.trans (sup_equiv_sup h (Setoid.refl _)) ?_
+    rw [CauSeq.sup_idem]
 -/
 protected theorem sup_eq_right {a b : CauSeq α abs} (h : a <= b) : a ⊔ b ≈ b := by
   obtain ⟨ε, ε0 : _ < _, i, h⟩ | h := h
@@ -3587,7 +3661,8 @@ theorem sup_le
       refine le_of_le_of_eq (Or.inr ?_) hb
       exact CauSeq.sup_eq_right ha
   · replace hb := le_of_le_of_eq hb (Setoid.symm ha)
-    refine le_of_le
+    refine le_of_le_of_eq (Or.inr ?_) ha
+    exact CauSeq.sup_eq_left hb
 
 中文:
 定理 sup_le
@@ -3601,7 +3676,8 @@ theorem sup_le
       refine le_of_le_of_eq (Or.inr ?_) hb
       exact CauSeq.sup_eq_right ha
   · replace hb := le_of_le_of_eq hb (Setoid.symm ha)
-    refine le_of_le
+    refine le_of_le_of_eq (Or.inr ?_) ha
+    exact CauSeq.sup_eq_left hb
 -/
 protected theorem sup_le {a b c : CauSeq α abs} (ha : a <= c) (hb : b <= c) : a ⊔ b <= c := by
   obtain ha | ha := ha
@@ -3629,7 +3705,8 @@ theorem le_inf
       refine le_of_eq_of_le hc (Or.inr ?_)
       exact Setoid.symm (CauSeq.inf_eq_right hb)
   · replace hc := le_of_eq_of_le (Setoid.symm hb) hc
-    r
+    refine le_of_eq_of_le hb (Or.inr ?_)
+    exact Setoid.symm (CauSeq.inf_eq_left hc)
 
 中文:
 定理 le_inf
@@ -3643,7 +3720,8 @@ theorem le_inf
       refine le_of_eq_of_le hc (Or.inr ?_)
       exact Setoid.symm (CauSeq.inf_eq_right hb)
   · replace hc := le_of_eq_of_le (Setoid.symm hb) hc
-    r
+    refine le_of_eq_of_le hb (Or.inr ?_)
+    exact Setoid.symm (CauSeq.inf_eq_left hc)
 -/
 protected theorem le_inf {a b c : CauSeq α abs} (hb : a <= b) (hc : a <= c) : a <= b ⊓ c := by
   obtain hb | hb := hb

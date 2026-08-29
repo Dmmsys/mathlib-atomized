@@ -150,7 +150,11 @@ definition map
       (objIso F X ⟨i₁, h₂⟩).hom ≫ F.map (homOfLE h₂) ≫ τ ≫
         (objSuccIso hj F X).inv ≫ eqToHom (by
           congr
-          exact le_antisymm (Order.suc
+          exact le_antisymm (Order.succ_le_of_lt (not_le.1 h₁)) hi₂)
+    else
+      eqToHom (by
+        congr
+        rw [le_antisymm hi₂ (Order.succ_le_of_lt (not_le.1 h₁))]; rw [le_antisymm (hi.trans hi₂) (Order.succ_le_of_lt (not_le.1 h₂))])
 
 中文:
 定义 map
@@ -162,7 +166,11 @@ definition map
       (objIso F X ⟨i₁, h₂⟩).hom ≫ F.map (homOfLE h₂) ≫ τ ≫
         (objSuccIso hj F X).inv ≫ eqToHom (by
           congr
-          exact le_antisymm (Order.suc
+          exact le_antisymm (Order.succ_le_of_lt (not_le.1 h₁)) hi₂)
+    else
+      eqToHom (by
+        congr
+        rw [le_antisymm hi₂ (Order.succ_le_of_lt (not_le.1 h₁))]; rw [le_antisymm (hi.trans hi₂) (Order.succ_le_of_lt (not_le.1 h₂))])
 
 Depends on / 依赖: F.map, Order.succ_le_of_lt, eqToHom, hi.trans, homOfLE, le_antisymm, not_le, objIso, objSuccIso, succ_le_of_lt
 -/
@@ -281,6 +289,12 @@ lemma map_comp
       map_eq hj F τ i₁ i₃ _ h₁, assoc, assoc, Iso.inv_hom_id_assoc, ← Functor.map_comp_assoc,
       homOfLE_comp]
   · obtain rfl : i₃ = Order.succ j := le_antisymm h (Order.succ_le_of_lt (not_le.1 h₁))
+    obtain h₂ | rfl := h₂₃.lt_or_eq
+    · rw [Order.lt_succ_iff_of_not_isMax hj] at h₂
+      rw [map_eq hj F τ i₁ i₂ _ h₂]
+      dsimp [map]
+      rw [dif_neg h₁]; rw [dif_pos (h₁₂.trans h₂)]; rw [dif_neg h₁]; rw [dif_pos h₂]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [comp_id]; rw [← Functor.map_comp_assoc]; rw [homOfLE_comp]
+    · rw [map_id, comp_id]
 
 中文:
 引理 map_comp
@@ -291,6 +305,12 @@ lemma map_comp
       map_eq hj F τ i₁ i₃ _ h₁, assoc, assoc, Iso.inv_hom_id_assoc, ← Functor.map_comp_assoc,
       homOfLE_comp]
   · obtain rfl : i₃ = Order.succ j := le_antisymm h (Order.succ_le_of_lt (not_le.1 h₁))
+    obtain h₂ | rfl := h₂₃.lt_or_eq
+    · rw [Order.lt_succ_iff_of_not_isMax hj] at h₂
+      rw [map_eq hj F τ i₁ i₂ _ h₂]
+      dsimp [map]
+      rw [dif_neg h₁]; rw [dif_pos (h₁₂.trans h₂)]; rw [dif_neg h₁]; rw [dif_pos h₂]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id_assoc]; rw [comp_id]; rw [← Functor.map_comp_assoc]; rw [homOfLE_comp]
+    · rw [map_id, comp_id]
 
 Depends on / 依赖: Functor, Functor.map_comp_assoc, Iso.inv_hom_id_assoc, Order.lt_succ_iff_of_not_isMax, Order.succ, Order.succ_le_of_lt, dif_neg, dif_pos, homOfLE_comp, inv_hom_id_assoc, le_antisymm, lt_or_eq, lt_succ_iff_of_not_isMax, map_comp_assoc, map_eq, not_le, succ_le_of_lt
 -/

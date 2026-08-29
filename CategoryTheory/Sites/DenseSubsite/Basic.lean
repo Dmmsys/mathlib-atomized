@@ -279,7 +279,8 @@ theorem functorPullback_pushforward_covering
   rintro W _ ⟨Z, iWZ, iZY, rfl⟩
   rw [Sieve.pullback_comp]; apply K.pullback_stable; clear W iWZ
   apply K.superset_covering ?_ (G.functorPushforward_imageSieve_mem _ (iZY ≫ iYX))
-  rintro W _
+  rintro W _ ⟨V, iVZ, iWV, ⟨iVX, e⟩, rfl⟩
+  exact ⟨_, iVX, iWV, by simpa [e] using T.1.downward_closed hiYX (G.map iVZ ≫ iZY), by simp [e]⟩
 
 中文:
 定理 functorPullback_pushforward_covering
@@ -290,7 +291,8 @@ theorem functorPullback_pushforward_covering
   rintro W _ ⟨Z, iWZ, iZY, rfl⟩
   rw [Sieve.pullback_comp]; apply K.pullback_stable; clear W iWZ
   apply K.superset_covering ?_ (G.functorPushforward_imageSieve_mem _ (iZY ≫ iYX))
-  rintro W _
+  rintro W _ ⟨V, iVZ, iWV, ⟨iVX, e⟩, rfl⟩
+  exact ⟨_, iVX, iWV, by simpa [e] using T.1.downward_closed hiYX (G.map iVZ ≫ iZY), by simp [e]⟩
 
 Depends on / 依赖: G.functorPushforward_imageSieve_mem, G.is_cover_of_isCoverDense, G.map, K.pullback_stable, K.superset_covering, K.transitive, Sieve.pullback_comp, downward_closed, functorPushforward_imageSieve_mem, is_cover_of_isCoverDense, pullback_comp, pullback_stable, superset_covering, transitive
 -/
@@ -387,7 +389,7 @@ theorem naturality_apply
   refine IsLocallyFull.ext G _ i fun V iVX iVY e => ?_
   simp only [← Functor.map_comp_apply, ← op_comp, ← e, this]
 
-#adapt
+#adaptation_note
 
 中文:
 定理 naturality_apply
@@ -399,7 +401,7 @@ theorem naturality_apply
   refine IsLocallyFull.ext G _ i fun V iVX iVY e => ?_
   simp only [← Functor.map_comp_apply, ← op_comp, ← e, this]
 
-#adapt
+#adaptation_note
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, Functor, Functor.map_comp_apply, G.map, IsLocallyFull, IsLocallyFull.ext, congr_hom, i.op, map_comp_apply, naturality, op_comp
 -/
@@ -516,7 +518,16 @@ theorem pushforwardFamily_compatible
       (iZW₂ : Z ⟶ G.obj W₂), iZW₁ ≫ iWX₁ = iZW₂ ≫ iWX₂ ->
       ℱ'.1.map iZW₁.op (α.app _ (ℱ.map iWX₁.op x)) = ℱ'.1.map iZW₂.op (α.app _ (ℱ.map iWX₂.op x)) by
     rintro Y₁ Y₂ Z iZY₁ iZY₂ f₁ f₂ h₁ h₂ e
- 
+    simp only [pushforwardFamily, ← Functor.map_comp_apply, ← op_comp]
+    generalize Nonempty.some h₁ = l₁
+    generalize Nonempty.some h₂ = l₂
+    obtain ⟨W₁, iYW₁, iWX₁, rfl⟩ := l₁
+    obtain ⟨W₂, iYW₂, iWX₂, rfl⟩ := l₂
+    exact this _ _ _ _ (by simpa only [Category.assoc] using e)
+  introv e
+  refine ext G _ _ fun V iVZ => ?_
+  simp only [← op_comp, ← Functor.map_comp_apply, naturality_apply,
+    Category.assoc, e]
 
 中文:
 定理 pushforwardFamily_compatible
@@ -526,7 +537,16 @@ theorem pushforwardFamily_compatible
       (iZW₂ : Z ⟶ G.obj W₂), iZW₁ ≫ iWX₁ = iZW₂ ≫ iWX₂ ->
       ℱ'.1.map iZW₁.op (α.app _ (ℱ.map iWX₁.op x)) = ℱ'.1.map iZW₂.op (α.app _ (ℱ.map iWX₂.op x)) by
     rintro Y₁ Y₂ Z iZY₁ iZY₂ f₁ f₂ h₁ h₂ e
- 
+    simp only [pushforwardFamily, ← Functor.map_comp_apply, ← op_comp]
+    generalize Nonempty.some h₁ = l₁
+    generalize Nonempty.some h₂ = l₂
+    obtain ⟨W₁, iYW₁, iWX₁, rfl⟩ := l₁
+    obtain ⟨W₂, iYW₂, iWX₂, rfl⟩ := l₂
+    exact this _ _ _ _ (by simpa only [Category.assoc] using e)
+  introv e
+  refine ext G _ _ fun V iVZ => ?_
+  simp only [← op_comp, ← Functor.map_comp_apply, naturality_apply,
+    Category.assoc, e]
 
 Depends on / 依赖: Functor, Functor.map_comp_apply, G.obj, Nonempty, Nonempty.some, generalize, map_comp_apply, op_comp, pushforwardFamily
 -/
@@ -823,7 +843,16 @@ definition sheafCoyonedaHom
     symm
     apply sheaf_eq_amalgamation
     · apply G.is_cover_of_isCoverDense
-    -- Porting note: the 
+    -- Porting note: the following line closes a goal which didn't exist before reenableeta
+    · exact pushforwardFamily_compatible (homOver α Y.unop) (f.unop ≫ x)
+    intro Y' f' hf'
+    dsimp
+    simp only [Category.assoc]
+    congr 1
+    conv_lhs => rw [← hf'.some.fac]
+    simp only [← Category.assoc, op_comp, Functor.map_comp]
+    congr 1
+    exact (appHom_restrict (homOver α (unop X)) hf'.some.map.op x).trans (by simp)
 
 中文:
 定义 sheafCoyonedaHom
@@ -837,7 +866,16 @@ definition sheafCoyonedaHom
     symm
     apply sheaf_eq_amalgamation
     · apply G.is_cover_of_isCoverDense
-    -- Porting note: the 
+    -- Porting note: the following line closes a goal which didn't exist before reenableeta
+    · exact pushforwardFamily_compatible (homOver α Y.unop) (f.unop ≫ x)
+    intro Y' f' hf'
+    dsimp
+    simp only [Category.assoc]
+    congr 1
+    conv_lhs => rw [← hf'.some.fac]
+    simp only [← Category.assoc, op_comp, Functor.map_comp]
+    congr 1
+    exact (appHom_restrict (homOver α (unop X)) hf'.some.map.op x).trans (by simp)
 
 Depends on / 依赖: homOver, presheafHom
 -/
@@ -942,7 +980,10 @@ definition presheafIso
     use (sheafYonedaHom i.inv).app X
     constructor <;> ext x : 2 <;>
       simp only [sheafHom, NatTrans.comp_app, NatTrans.id_app, Functor.map_preimage]
-    · exact ((Types.p
+    · exact ((Types.presheafIso (isoOver i (unop x))).app X).hom_inv_id
+    · exact ((Types.presheafIso (isoOver i (unop x))).app X).inv_hom_id
+  haveI : IsIso (sheafHom i.hom) := by apply NatIso.isIso_of_isIso_app
+  apply asIso (sheafHom i.hom)
 
 中文:
 定义 presheafIso
@@ -954,7 +995,10 @@ definition presheafIso
     use (sheafYonedaHom i.inv).app X
     constructor <;> ext x : 2 <;>
       simp only [sheafHom, NatTrans.comp_app, NatTrans.id_app, Functor.map_preimage]
-    · exact ((Types.p
+    · exact ((Types.presheafIso (isoOver i (unop x))).app X).hom_inv_id
+    · exact ((Types.presheafIso (isoOver i (unop x))).app X).inv_hom_id
+  haveI : IsIso (sheafHom i.hom) := by apply NatIso.isIso_of_isIso_app
+  apply asIso (sheafHom i.hom)
 
 Depends on / 依赖: Functor, Functor.map_preimage, NatIso, NatIso.isIso_of_isIso_app, NatTrans, NatTrans.comp_app, NatTrans.id_app, Types.presheafIso, comp_app, hom_inv_id, i.hom, i.inv, id_app, inv_hom_id, isIso_iff_of_reflects_iso, isIso_of_isIso_app, isoOver, map_preimage, presheafIso, sheafHom
 -/
@@ -1012,7 +1056,19 @@ theorem sheafHom_restrict_eq
   symm
   change (show (ℱ'.obj ⋙ coyoneda.obj (op (unop U))).obj (op (G.obj (unop X))) from _) = _
   apply sheaf_eq_amalgamation ℱ' (G.is_cover_of_isCoverDense _ _)
-  -- Por
+  -- Porting note: next line was not needed in mathlib3
+  · exact (pushforwardFamily_compatible _ _)
+  intro Y f hf
+  conv_lhs => rw [← hf.some.fac]
+  dsimp
+  simp only [Functor.map_comp, ← Category.assoc]
+  congr 1
+  simp only [Category.assoc]
+  congr 1
+  simpa using naturality_apply (G := G) (ℱ := ℱ ⋙ coyoneda.obj (op <| (G.op ⋙ ℱ).obj X))
+    (ℱ' := ⟨_, Presheaf.isSheaf_comp_of_isSheaf K ℱ'.obj
+      (coyoneda.obj (op ((G.op ⋙ ℱ).obj X))) ℱ'.property⟩)
+    (whiskerRight α (coyoneda.obj _)) hf.some.map (𝟙 _)
 
 中文:
 定理 sheafHom_restrict_eq
@@ -1026,7 +1082,19 @@ theorem sheafHom_restrict_eq
   symm
   change (show (ℱ'.obj ⋙ coyoneda.obj (op (unop U))).obj (op (G.obj (unop X))) from _) = _
   apply sheaf_eq_amalgamation ℱ' (G.is_cover_of_isCoverDense _ _)
-  -- Por
+  -- Porting note: next line was not needed in mathlib3
+  · exact (pushforwardFamily_compatible _ _)
+  intro Y f hf
+  conv_lhs => rw [← hf.some.fac]
+  dsimp
+  simp only [Functor.map_comp, ← Category.assoc]
+  congr 1
+  simp only [Category.assoc]
+  congr 1
+  simpa using naturality_apply (G := G) (ℱ := ℱ ⋙ coyoneda.obj (op <| (G.op ⋙ ℱ).obj X))
+    (ℱ' := ⟨_, Presheaf.isSheaf_comp_of_isSheaf K ℱ'.obj
+      (coyoneda.obj (op ((G.op ⋙ ℱ).obj X))) ℱ'.property⟩)
+    (whiskerRight α (coyoneda.obj _)) hf.some.map (𝟙 _)
 
 Depends on / 依赖: G.is_cover_of_isCoverDense, G.obj, coyoneda, coyoneda.obj, is_cover_of_isCoverDense, map_injective, map_preimage, sheafHom, sheaf_eq_amalgamation, yoneda, yoneda.map_injective, yoneda.map_preimage, yoneda_map_app, yoneda_obj_obj
 -/
@@ -1073,7 +1141,11 @@ theorem sheafHom_eq
   symm
   change (show (ℱ'.obj ⋙ coyoneda.obj (op (unop U))).obj (op (unop X)) from _) = _
   apply sheaf_eq_amalgamation ℱ' (G.is_cover_of_isCoverDense _ _)
-  -- Porting not
+  -- Porting note: next line was not needed in mathlib3
+  · exact (pushforwardFamily_compatible _ _)
+  intro Y f hf
+  conv_lhs => rw [← hf.some.fac]
+  dsimp; simp
 
 中文:
 定理 sheafHom_eq
@@ -1088,7 +1160,11 @@ theorem sheafHom_eq
   symm
   change (show (ℱ'.obj ⋙ coyoneda.obj (op (unop U))).obj (op (unop X)) from _) = _
   apply sheaf_eq_amalgamation ℱ' (G.is_cover_of_isCoverDense _ _)
-  -- Porting not
+  -- Porting note: next line was not needed in mathlib3
+  · exact (pushforwardFamily_compatible _ _)
+  intro Y f hf
+  conv_lhs => rw [← hf.some.fac]
+  dsimp; simp
 
 Depends on / 依赖: G.is_cover_of_isCoverDense, coyoneda, coyoneda.obj, is_cover_of_isCoverDense, map_injective, map_preimage, sheafHom, sheaf_eq_amalgamation, yoneda, yoneda.map_injective, yoneda.map_preimage, yoneda_map_app, yoneda_obj_obj
 -/
@@ -1288,7 +1364,11 @@ lemma compatiblePreserving
   intro W i
   refine IsLocallyFull.ext G _ (i ≫ f₁) fun V₁ iVW iV₁Y₁ e₁ => ?_
   refine IsLocallyFull.ext G _ (G.map iVW ≫ i ≫ f₂) fun V₂ iV₂V₁ iV₂Y₂ e₂ => ?_
-  refine IsLocallyFaithful.ext G _ (iV₂V
+  refine IsLocallyFaithful.ext G _ (iV₂V₁ ≫ iV₁Y₁ ≫ g₁) (iV₂Y₂ ≫ g₂) (by simp [e₁, e₂, eq]) ?_
+  intro V₃ iV₃ e₄
+  simp only [← op_comp, ← Functor.map_comp_apply, ← e₁, ← e₂, ← Functor.map_comp]
+  apply hx
+  simpa using e₄
 
 中文:
 引理 compatiblePreserving
@@ -1301,7 +1381,11 @@ lemma compatiblePreserving
   intro W i
   refine IsLocallyFull.ext G _ (i ≫ f₁) fun V₁ iVW iV₁Y₁ e₁ => ?_
   refine IsLocallyFull.ext G _ (G.map iVW ≫ i ≫ f₂) fun V₂ iV₂V₁ iV₂Y₂ e₂ => ?_
-  refine IsLocallyFaithful.ext G _ (iV₂V
+  refine IsLocallyFaithful.ext G _ (iV₂V₁ ≫ iV₁Y₁ ≫ g₁) (iV₂Y₂ ≫ g₂) (by simp [e₁, e₂, eq]) ?_
+  intro V₃ iV₃ e₄
+  simp only [← op_comp, ← Functor.map_comp_apply, ← e₁, ← e₂, ← Functor.map_comp]
+  apply hx
+  simpa using e₄
 
 Depends on / 依赖: Functor, Functor.IsCoverDense.ext, Functor.map_comp, Functor.map_comp_apply, G.map, IsCoverDense, IsLocallyFaithful, IsLocallyFaithful.ext, IsLocallyFull, IsLocallyFull.ext, map_comp, map_comp_apply, op_comp
 -/
@@ -1691,7 +1775,7 @@ definition mapPreimage
       rintro ⟨W₀, a, ha⟩ ⟨W₀', a', ha'⟩ ⟨T₀, p₁, p₂, fac⟩
       rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← op_comp]
       apply map_eq_of_eq K G
-      rw [Functor.map_co
+      rw [Functor.map_comp]; rw [Functor.map_comp]; rw [ha.choose_spec]; rw [ha'.choose_spec]; rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]; rw [fac])
 
 中文:
 定义 mapPreimage
@@ -1701,7 +1785,7 @@ definition mapPreimage
       rintro ⟨W₀, a, ha⟩ ⟨W₀', a', ha'⟩ ⟨T₀, p₁, p₂, fac⟩
       rw [← Functor.map_comp]; rw [← Functor.map_comp]; rw [← op_comp]; rw [← op_comp]
       apply map_eq_of_eq K G
-      rw [Functor.map_co
+      rw [Functor.map_comp]; rw [Functor.map_comp]; rw [ha.choose_spec]; rw [ha'.choose_spec]; rw [← Functor.map_comp_assoc]; rw [← Functor.map_comp_assoc]; rw [fac])
 
 Depends on / 依赖: F.obj.map, F.property.amalgamate, Functor, Functor.map_comp, Functor.map_comp_assoc, amalgamate, choose_spec, ha.choose.op, ha.choose_spec, imageSieve_mem, map_comp, map_comp_assoc, map_eq_of_eq, op_comp, property
 -/
@@ -1726,7 +1810,9 @@ lemma mapPreimage_map_of_fac
       dsimp at ha ⊢
       rw [Category.assoc]; rw [← Functor.map_comp]; rw [← op_comp]; rw [mapPreimage]
       rw [F.2.amalgamate_map ⟨_]; rw [imageSieve_mem J K G f⟩
-        (f
+        (fun ⟨W₀]; rw [a]; rw [ha⟩ => F.obj.map ha.choose.op) _ ⟨W₀]; rw [a ≫ p]; rw [ha⟩]; rw [← Functor.map_comp]; rw [← op_comp]
+      apply map_eq_of_eq K G
+      rw [ha.choose_spec]; rw [Functor.map_comp_assoc]; rw [Functor.map_comp]; rw [fac])
 
 中文:
 引理 mapPreimage_map_of_fac
@@ -1737,7 +1823,9 @@ lemma mapPreimage_map_of_fac
       dsimp at ha ⊢
       rw [Category.assoc]; rw [← Functor.map_comp]; rw [← op_comp]; rw [mapPreimage]
       rw [F.2.amalgamate_map ⟨_]; rw [imageSieve_mem J K G f⟩
-        (f
+        (fun ⟨W₀]; rw [a]; rw [ha⟩ => F.obj.map ha.choose.op) _ ⟨W₀]; rw [a ≫ p]; rw [ha⟩]; rw [← Functor.map_comp]; rw [← op_comp]
+      apply map_eq_of_eq K G
+      rw [ha.choose_spec]; rw [Functor.map_comp_assoc]; rw [Functor.map_comp]; rw [fac])
 
 Depends on / 依赖: Category, Category.assoc, F.obj.map, F.property, Functor, Functor.map_comp, Functor.map_comp_assoc, IsSheaf, J.pullback_stable, Presheaf, Presheaf.IsSheaf.hom_ext, amalgamate_map, choose_spec, ha.choose.op, ha.choose_spec, hom_ext, imageSieve_mem, mapPreimage, map_comp, map_comp_assoc
 -/
@@ -1844,7 +1932,12 @@ lemma mapPreimage_comp
         ⟨_, J.pullback_stable b (imageSieve_mem J K G g)⟩
       rintro ⟨U₀, c, ⟨d, fac₂⟩⟩
       dsimp
-      simp only [Category.assoc, ← Functor
+      simp only [Category.assoc, ← Functor.map_comp, ← op_comp]
+      rw [mapPreimage_map_of_fac K G F (f ≫ g) (c ≫ a) d]; rw [mapPreimage_map_of_fac K G F f (c ≫ a) (c ≫ b)]; rw [mapPreimage_map_of_fac K G F g (c ≫ b) d]
+      all_goals
+        simp only [Functor.map_comp, Category.assoc, fac₁, fac₂])
+
+@[reassoc]
 
 中文:
 引理 mapPreimage_comp
@@ -1856,7 +1949,12 @@ lemma mapPreimage_comp
         ⟨_, J.pullback_stable b (imageSieve_mem J K G g)⟩
       rintro ⟨U₀, c, ⟨d, fac₂⟩⟩
       dsimp
-      simp only [Category.assoc, ← Functor
+      simp only [Category.assoc, ← Functor.map_comp, ← op_comp]
+      rw [mapPreimage_map_of_fac K G F (f ≫ g) (c ≫ a) d]; rw [mapPreimage_map_of_fac K G F f (c ≫ a) (c ≫ b)]; rw [mapPreimage_map_of_fac K G F g (c ≫ b) d]
+      all_goals
+        simp only [Functor.map_comp, Category.assoc, fac₁, fac₂])
+
+@[reassoc]
 
 Depends on / 依赖: Category, Category.assoc, F.property, Functor, Functor.map_comp, IsSheaf, J.pullback_stable, Presheaf, Presheaf.IsSheaf.hom_ext, all_goals, hom_ext, imageSieve_mem, mapPreimage_map_of_fac, map_comp, op_comp, property, pullback_stable
 -/
@@ -1997,7 +2095,15 @@ lemma sheafifyHomEquivOfIsEquivalence_naturality_left
   let adj₁ := (G.sheafPushforwardContinuous A J K).asEquivalence.symm.toAdjunction
   let adj₂ := sheafificationAdjunction J A
   change IsCoverDense.restrictHomEquivHom (adj₂.homEquiv _ _ (adj₁.homEquiv _ _
-  
+    ((sheafifyOfIsEquivalence J K G A).map f ≫ g))) =
+      f ≫ IsCoverDense.restrictHomEquivHom (adj₂.homEquiv _ _ (adj₁.homEquiv _ _ g))
+  rw [← IsCoverDense.restrictHomEquivHom_naturality_left]
+  congr 2
+  trans adj₂.homEquiv _ _ ((presheafToSheaf J A).map (G.op.whiskerLeft f) ≫
+    (adj₁.homEquiv _ _) g)
+  · congr 1
+    apply adj₁.homEquiv_naturality_left
+  · apply adj₂.homEquiv_naturality_left
 
 中文:
 引理 sheafifyHomEquivOfIsEquivalence_naturality_left
@@ -2007,7 +2113,15 @@ lemma sheafifyHomEquivOfIsEquivalence_naturality_left
   let adj₁ := (G.sheafPushforwardContinuous A J K).asEquivalence.symm.toAdjunction
   let adj₂ := sheafificationAdjunction J A
   change IsCoverDense.restrictHomEquivHom (adj₂.homEquiv _ _ (adj₁.homEquiv _ _
-  
+    ((sheafifyOfIsEquivalence J K G A).map f ≫ g))) =
+      f ≫ IsCoverDense.restrictHomEquivHom (adj₂.homEquiv _ _ (adj₁.homEquiv _ _ g))
+  rw [← IsCoverDense.restrictHomEquivHom_naturality_left]
+  congr 2
+  trans adj₂.homEquiv _ _ ((presheafToSheaf J A).map (G.op.whiskerLeft f) ≫
+    (adj₁.homEquiv _ _) g)
+  · congr 1
+    apply adj₁.homEquiv_naturality_left
+  · apply adj₂.homEquiv_naturality_left
 
 Depends on / 依赖: G.sheafPushforwardContinuous, IsCoverDense, IsCoverDense.restrictHomEquivHom, IsCoverDense.restrictHomEquivHom_naturality_left, IsDenseSubsite, IsDenseSubsite.isCoverDense, IsDenseSubsite.isLocallyFull, asEquivalence, asEquivalence.symm.toAdjunction, homEquiv, isCoverDense, isLocallyFull, restrictHomEquivHom, restrictHomEquivHom_naturality_left, sheafPushforwardContinuous, sheafificationAdjunction, sheafifyOfIsEquivalence, toAdjunction
 -/
@@ -2044,7 +2158,10 @@ lemma sheafifyHomEquivOfIsEquivalence_naturality_right
   have := IsDenseSubsite.isCoverDense J K G
   let adj₁ := (G.sheafPushforwardContinuous A J K).asEquivalence.symm.toAdjunction
   let adj₂ := sheafificationAdjunction J A
-  change IsCoverDense.restrictHomEquivHom (adj₂.homEquiv _ _ (adj₁.homEquiv _ _ (f
+  change IsCoverDense.restrictHomEquivHom (adj₂.homEquiv _ _ (adj₁.homEquiv _ _ (f ≫ g))) =
+    IsCoverDense.restrictHomEquivHom (adj₂.homEquiv _ _ (adj₁.homEquiv _ _ f)) ≫ g.hom
+  rw [adj₁.homEquiv_naturality_right]; rw [adj₂.homEquiv_naturality_right]
+  apply IsCoverDense.restrictHomEquivHom_naturality_right
 
 中文:
 引理 sheafifyHomEquivOfIsEquivalence_naturality_right
@@ -2053,7 +2170,10 @@ lemma sheafifyHomEquivOfIsEquivalence_naturality_right
   have := IsDenseSubsite.isCoverDense J K G
   let adj₁ := (G.sheafPushforwardContinuous A J K).asEquivalence.symm.toAdjunction
   let adj₂ := sheafificationAdjunction J A
-  change IsCoverDense.restrictHomEquivHom (adj₂.homEquiv _ _ (adj₁.homEquiv _ _ (f
+  change IsCoverDense.restrictHomEquivHom (adj₂.homEquiv _ _ (adj₁.homEquiv _ _ (f ≫ g))) =
+    IsCoverDense.restrictHomEquivHom (adj₂.homEquiv _ _ (adj₁.homEquiv _ _ f)) ≫ g.hom
+  rw [adj₁.homEquiv_naturality_right]; rw [adj₂.homEquiv_naturality_right]
+  apply IsCoverDense.restrictHomEquivHom_naturality_right
 
 Depends on / 依赖: G.sheafPushforwardContinuous, IsCoverDense, IsCoverDense.restrictHomEquivHom, IsCoverDense.restrictHomEquivHom_natur, IsDenseSubsite, IsDenseSubsite.isCoverDense, IsDenseSubsite.isLocallyFull, asEquivalence, asEquivalence.symm.toAdjunction, g.hom, homEquiv, homEquiv_naturality_right, isCoverDense, isLocallyFull, restrictHomEquivHom, restrictHomEquivHom_natur, sheafPushforwardContinuous, sheafificationAdjunction, toAdjunction
 -/
@@ -2085,7 +2205,10 @@ definition sheafifyAdjunctionOfIsEquivalence
       homEquiv_naturality_left_symm := fun {P₁ P₂ Q} f g =>
         (sheafifyHomEquivOfIsEquivalence J K G).injective (by
           simp [sheafifyHomEquivOfIsEquivalence_naturality_left _ _ _ f])
-      homEqui
+      homEquiv_naturality_right :=
+        sheafifyHomEquivOfIsEquivalence_naturality_right J K G }
+
+include G K in
 
 中文:
 定义 sheafifyAdjunctionOfIsEquivalence
@@ -2095,7 +2218,10 @@ definition sheafifyAdjunctionOfIsEquivalence
       homEquiv_naturality_left_symm := fun {P₁ P₂ Q} f g =>
         (sheafifyHomEquivOfIsEquivalence J K G).injective (by
           simp [sheafifyHomEquivOfIsEquivalence_naturality_left _ _ _ f])
-      homEqui
+      homEquiv_naturality_right :=
+        sheafifyHomEquivOfIsEquivalence_naturality_right J K G }
+
+include G K in
 
 Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, homEquiv, homEquiv_naturality_left_symm, homEquiv_naturality_right, injective, mkOfHomEquiv, sheafifyHomEquivOfIsEquivalence, sheafifyHomEquivOfIsEquivalence_naturality_left, sheafifyHomEquivOfIsEquivalence_naturality_right
 -/
@@ -2142,7 +2268,7 @@ lemma hasSheafify_of_isEquivalence
     apply comp_preservesFiniteLimits
   have : PreservesFiniteLimits (sheafifyOfIsEquivalence J K G A) := by
     apply comp_preservesFiniteLimits
-  exact HasSheafify.mk' _ _ (sheafifyAdjunctio
+  exact HasSheafify.mk' _ _ (sheafifyAdjunctionOfIsEquivalence J K G A)
 
 中文:
 引理 hasSheafify_of_isEquivalence
@@ -2153,7 +2279,7 @@ lemma hasSheafify_of_isEquivalence
     apply comp_preservesFiniteLimits
   have : PreservesFiniteLimits (sheafifyOfIsEquivalence J K G A) := by
     apply comp_preservesFiniteLimits
-  exact HasSheafify.mk' _ _ (sheafifyAdjunctio
+  exact HasSheafify.mk' _ _ (sheafifyAdjunctionOfIsEquivalence J K G A)
 
 Depends on / 依赖: G.sheafPushforwardContinuous, HasSheafify, HasSheafify.mk, PreservesFiniteLimits, comp_preservesFiniteLimits, presheafToSheaf, sheafPushforwardContinuous, sheafifyAdjunctionOfIsEquivalence, sheafifyOfIsEquivalence
 -/

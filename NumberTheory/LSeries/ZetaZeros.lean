@@ -98,7 +98,9 @@ lemma compl_riemannZetaZeros_mem_codiscrete
     Set.inf_eq_inter, Filter.disjoint_principal_right, mem_codiscrete, compl_compl] at this ⊢
   intro x
   rcases eq_or_ne x 1 with rfl | hx
-  · exact rie
+  · exact riemannZeta_eventually_ne_zero_nhds_one.filter_mono nhdsWithin_le_nhds
+  · exact Filter.mem_of_superset (this x hx)
+      (by grind [riemannZeta_one_ne_zero, mem_riemannZetaZeros])
 
 中文:
 引理 compl_riemannZetaZeros_mem_codiscrete
@@ -108,7 +110,9 @@ lemma compl_riemannZetaZeros_mem_codiscrete
     Set.inf_eq_inter, Filter.disjoint_principal_right, mem_codiscrete, compl_compl] at this ⊢
   intro x
   rcases eq_or_ne x 1 with rfl | hx
-  · exact rie
+  · exact riemannZeta_eventually_ne_zero_nhds_one.filter_mono nhdsWithin_le_nhds
+  · exact Filter.mem_of_superset (this x hx)
+      (by grind [riemannZeta_one_ne_zero, mem_riemannZetaZeros])
 -/
 private lemma compl_riemannZetaZeros_mem_codiscrete :
     riemannZetaZerosᶜ in Filter.codiscrete Complex := by

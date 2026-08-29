@@ -114,7 +114,9 @@ definition quotientByAutTerminalEquivUniqueQuotient
     preservesColimitIso (F ⋙ FintypeCat.incl) J ≪≫
     (Equiv.toIso <| SingleObj.Types.colimitEquivQuotient (J ⋙ F ⋙ FintypeCat.incl))
   apply Equiv.trans
-  · apply (IsTermina
+  · apply (IsTerminal.isTerminalIffObj (F ⋙ FintypeCat.incl) _).trans
+      (isLimitEmptyConeEquiv _ (asEmptyCone _) (asEmptyCone _) e)
+  exact Types.isTerminalEquivUnique _
 
 中文:
 定义 quotientByAutTerminalEquivUniqueQuotient
@@ -124,7 +126,9 @@ definition quotientByAutTerminalEquivUniqueQuotient
     preservesColimitIso (F ⋙ FintypeCat.incl) J ≪≫
     (Equiv.toIso <| SingleObj.Types.colimitEquivQuotient (J ⋙ F ⋙ FintypeCat.incl))
   apply Equiv.trans
-  · apply (IsTermina
+  · apply (IsTerminal.isTerminalIffObj (F ⋙ FintypeCat.incl) _).trans
+      (isLimitEmptyConeEquiv _ (asEmptyCone _) (asEmptyCone _) e)
+  exact Types.isTerminalEquivUnique _
 
 Depends on / 依赖: Aut.toEnd, Equiv.toIso, Equiv.trans, FintypeCat, FintypeCat.incl, IsTerminal, IsTerminal.isTerminalIffObj, SingleObj, SingleObj.Types.colimitEquivQuotient, SingleObj.functor, Types.isTerminalEquivUnique, asEmptyCone, colimit, colimitEquivQuotient, functor, isLimitEmptyConeEquiv, isTerminalEquivUnique, isTerminalIffObj, preservesColimitIso
 -/
@@ -390,7 +394,8 @@ lemma exists_autMap
   · apply evaluation_injective_of_isConnected F A B a
     simp
   · intro τ hτ
-    apply evaluation_a
+    apply evaluation_aut_injective_of_isConnected F B (F.map f a)
+    simpa using ConcreteCategory.congr_hom (F.congr_map hτ) a
 
 中文:
 引理 存在_autMap
@@ -403,7 +408,8 @@ lemma exists_autMap
   · apply evaluation_injective_of_isConnected F A B a
     simp
   · intro τ hτ
-    apply evaluation_a
+    apply evaluation_aut_injective_of_isConnected F B (F.map f a)
+    simpa using ConcreteCategory.congr_hom (F.congr_map hτ) a
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.congr_map, F.map, GaloisCategory, GaloisCategory.getFiberFunctor, congr_hom, congr_map, evaluationEquivOfIsGalois, evaluation_aut_injective_of_isConnected, evaluation_injective_of_isConnected, getFiberFunctor, nonempty_fiber_of_isConnected
 -/
@@ -579,7 +585,8 @@ lemma autMap_surjective_of_isGalois
   obtain ⟨a', ha'⟩ := surjective_of_nonempty_fiber_of_isConnected F f (F.map σ.hom (F.map f a))
   obtain ⟨τ, (hτ : F.map τ.hom a = a')⟩ := MulAction.exists_smul_eq (Aut A) a a'
   use τ
-  apply 
+  apply evaluation_aut_injective_of_isConnected F B (F.map f a)
+  simp [hτ, ha']
 
 中文:
 引理 autMap_surjective_of_isGalois
@@ -591,7 +598,8 @@ lemma autMap_surjective_of_isGalois
   obtain ⟨a', ha'⟩ := surjective_of_nonempty_fiber_of_isConnected F f (F.map σ.hom (F.map f a))
   obtain ⟨τ, (hτ : F.map τ.hom a = a')⟩ := MulAction.exists_smul_eq (Aut A) a a'
   use τ
-  apply 
+  apply evaluation_aut_injective_of_isConnected F B (F.map f a)
+  simp [hτ, ha']
 
 Depends on / 依赖: F.map, GaloisCategory, GaloisCategory.getFiberFunctor, MulAction, MulAction.exists_smul_eq, evaluation_aut_injective_of_isConnected, exists_smul_eq, getFiberFunctor, nonempty_fiber_of_isConnected, surjective_of_nonempty_fiber_of_isConnected
 -/

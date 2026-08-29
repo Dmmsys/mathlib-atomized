@@ -394,7 +394,15 @@ lemma denselyOrdered_iff_denselyOrdered_units_and_nontrivial_units
     exact ⟨Units.mk0 x hx.ne', 1, by simpa [Units.ext_iff] using hx'.ne⟩
   · refine ⟨fun x y h => ?_⟩
     obtain ⟨z, hz⟩ := exists_between (Units.val_lt_val.mpr h)
-    refine ⟨Units.mk0 z (
+    refine ⟨Units.mk0 z (ne_zero_of_lt hz.1), by simp [← Units.val_lt_val, hz]⟩
+  · refine ⟨fun x y h => ?_⟩
+    lift y to αˣ using (ne_zero_of_lt h).isUnit
+    obtain rfl | hx := eq_zero_or_pos x
+    · obtain ⟨z, hz⟩ := exists_one_lt' (α := αˣ)
+exact ⟨(y * z⁻¹ : αˣ), by simp, Units.val_lt_val.mpr by simp [hz]⟩
+    · lift x to αˣ using hx.ne'.isUnit
+      obtain ⟨z, hz, hz'⟩ := H₂.dense x y (Units.val_lt_val.mpr h)
+      exact ⟨z, by simp [hz, hz']⟩
 
 中文:
 引理 denselyOrdered_iff_denselyOrdered_units_and_nontrivial_units
@@ -404,7 +412,15 @@ lemma denselyOrdered_iff_denselyOrdered_units_and_nontrivial_units
     exact ⟨Units.mk0 x hx.ne', 1, by simpa [Units.ext_iff] using hx'.ne⟩
   · refine ⟨fun x y h => ?_⟩
     obtain ⟨z, hz⟩ := exists_between (Units.val_lt_val.mpr h)
-    refine ⟨Units.mk0 z (
+    refine ⟨Units.mk0 z (ne_zero_of_lt hz.1), by simp [← Units.val_lt_val, hz]⟩
+  · refine ⟨fun x y h => ?_⟩
+    lift y to αˣ using (ne_zero_of_lt h).isUnit
+    obtain rfl | hx := eq_zero_or_pos x
+    · obtain ⟨z, hz⟩ := exists_one_lt' (α := αˣ)
+exact ⟨(y * z⁻¹ : αˣ), by simp, Units.val_lt_val.mpr by simp [hz]⟩
+    · lift x to αˣ using hx.ne'.isUnit
+      obtain ⟨z, hz, hz'⟩ := H₂.dense x y (Units.val_lt_val.mpr h)
+      exact ⟨z, by simp [hz, hz']⟩
 
 Depends on / 依赖: Units.ext_iff, Units.mk0, Units.val_lt_val, Units.val_lt_val.mpr, eq_zero_or_pos, exists_between, exists_one_lt, ext_iff, hx.ne, isUnit, ne_zero_of_lt, val_lt_val, zero_lt_one
 -/
@@ -1194,7 +1210,8 @@ lemma addLeftMono
     · rw [← coe_add, coe_le_coe]
       exact le_add_of_nonneg_right (h _)
   · rcases WithZero.coe_le_iff.1 hbc with ⟨c, rfl, hbc'⟩
-    rw [← coe_add]; rw [
+    rw [← coe_add]; rw [← coe_add _ c]; rw [coe_le_coe]
+    gcongr
 
 中文:
 引理 addLeftMono
@@ -1210,7 +1227,8 @@ lemma addLeftMono
     · rw [← coe_add, coe_le_coe]
       exact le_add_of_nonneg_right (h _)
   · rcases WithZero.coe_le_iff.1 hbc with ⟨c, rfl, hbc'⟩
-    rw [← coe_add]; rw [
+    rw [← coe_add]; rw [← coe_add _ c]; rw [coe_le_coe]
+    gcongr
 -/
 protected lemma addLeftMono [AddZeroClass α] [AddLeftMono α]
     (h : forall a : α, 0 <= a) : AddLeftMono (WithZero α) := by

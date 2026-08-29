@@ -137,7 +137,8 @@ lemma rnDeriv_pos'
   refine (absolutelyContinuous_withDensity_rnDeriv hμν).ae_le ?_
   filter_upwards [Measure.rnDeriv_pos (withDensity_absolutelyContinuous μ (ν.rnDeriv μ)),
     (withDensity_absolutelyContinuous μ (ν.rnDeriv μ)).ae_le
-    (Measure.rnDeriv_withDensity μ (Measure.measurable_rnDeriv ν μ))] with x hx h
+    (Measure.rnDeriv_withDensity μ (Measure.measurable_rnDeriv ν μ))] with x hx hx2
+  rwa [← hx2]
 
 中文:
 引理 rnDeriv_pos'
@@ -146,7 +147,8 @@ lemma rnDeriv_pos'
   refine (absolutelyContinuous_withDensity_rnDeriv hμν).ae_le ?_
   filter_upwards [Measure.rnDeriv_pos (withDensity_absolutelyContinuous μ (ν.rnDeriv μ)),
     (withDensity_absolutelyContinuous μ (ν.rnDeriv μ)).ae_le
-    (Measure.rnDeriv_withDensity μ (Measure.measurable_rnDeriv ν μ))] with x hx h
+    (Measure.rnDeriv_withDensity μ (Measure.measurable_rnDeriv ν μ))] with x hx hx2
+  rwa [← hx2]
 
 Depends on / 依赖: Measure, Measure.measurable_rnDeriv, Measure.rnDeriv_pos, Measure.rnDeriv_withDensity, absolutelyContinuous_withDensity_rnDeriv, ae_le, filter_upwards, measurable_rnDeriv, rnDeriv, rnDeriv_pos, rnDeriv_withDensity, withDensity_absolutelyContinuous
 -/
@@ -172,7 +174,9 @@ lemma rnDeriv_withDensity_withDensity_rnDeriv_left
   conv_rhs => rw [μ.haveLebesgueDecomposition_add ν, add_comm, withDensity_add_measure]
   have : SigmaFinite ((μ.singularPart ν).withDensity f) :=
     SigmaFinite.withDensity_of_ne_top (ae_mono (Measure.singularPart_le _ _) hf_ne_top)
-  have : SigmaFinite ((ν.withDensity (μ.rnDeriv ν)).withDensit
+  have : SigmaFinite ((ν.withDensity (μ.rnDeriv ν)).withDensity f) :=
+    SigmaFinite.withDensity_of_ne_top (ae_mono (Measure.withDensity_rnDeriv_le _ _) hf_ne_top)
+  exact (rnDeriv_add_of_mutuallySingular _ _ _ (mutuallySingular_singularPart μ ν).withDensity).symm
 
 中文:
 引理 rnDeriv_withDensity_withDensity_rnDeriv_left
@@ -181,7 +185,9 @@ lemma rnDeriv_withDensity_withDensity_rnDeriv_left
   conv_rhs => rw [μ.haveLebesgueDecomposition_add ν, add_comm, withDensity_add_measure]
   have : SigmaFinite ((μ.singularPart ν).withDensity f) :=
     SigmaFinite.withDensity_of_ne_top (ae_mono (Measure.singularPart_le _ _) hf_ne_top)
-  have : SigmaFinite ((ν.withDensity (μ.rnDeriv ν)).withDensit
+  have : SigmaFinite ((ν.withDensity (μ.rnDeriv ν)).withDensity f) :=
+    SigmaFinite.withDensity_of_ne_top (ae_mono (Measure.withDensity_rnDeriv_le _ _) hf_ne_top)
+  exact (rnDeriv_add_of_mutuallySingular _ _ _ (mutuallySingular_singularPart μ ν).withDensity).symm
 
 Depends on / 依赖: Measure, Measure.singularPart_le, Measure.withDensity_rnDeriv_le, SigmaFinite, SigmaFinite.withDensity_of_ne_top, add_comm, ae_mono, conv_rhs, haveLebesgueDecomposition_add, hf_ne_top, mutuallySingular_singularPart, rnDeriv, rnDeriv_add_of_mutuallySingular, singularPart, singularPart_le, withDensity, withDensity_add_measure, withDensity_of_ne_top, withDensity_rnDeriv_le
 -/
@@ -206,7 +212,8 @@ lemma rnDeriv_withDensity_withDensity_rnDeriv_right
   have hν_ac : ν ≪ ν.withDensity f := withDensity_absolutelyContinuous' hf hf_ne_zero
   refine hν_ac.ae_eq ?_
   have : SigmaFinite (ν.withDensity f) := SigmaFinite.withDensity_of_ne_top hf_ne_top
-  refine (rnDeriv_add_of_mutuallySingu
+  refine (rnDeriv_add_of_mutuallySingular _ _ _ ?_).symm
+  exact ((mutuallySingular_singularPart μ ν).symm.withDensity).symm
 
 中文:
 引理 rnDeriv_withDensity_withDensity_rnDeriv_right
@@ -216,7 +223,8 @@ lemma rnDeriv_withDensity_withDensity_rnDeriv_right
   have hν_ac : ν ≪ ν.withDensity f := withDensity_absolutelyContinuous' hf hf_ne_zero
   refine hν_ac.ae_eq ?_
   have : SigmaFinite (ν.withDensity f) := SigmaFinite.withDensity_of_ne_top hf_ne_top
-  refine (rnDeriv_add_of_mutuallySingu
+  refine (rnDeriv_add_of_mutuallySingular _ _ _ ?_).symm
+  exact ((mutuallySingular_singularPart μ ν).symm.withDensity).symm
 
 Depends on / 依赖: SigmaFinite, SigmaFinite.withDensity_of_ne_top, _ac.ae_eq, add_comm, ae_eq, conv_rhs, haveLebesgueDecomposition_add, hf_ne_top, hf_ne_zero, mutuallySingular_singularPart, rnDeriv_add_of_mutuallySingular, symm.withDensity, withDensity, withDensity_absolutelyContinuous, withDensity_of_ne_top
 -/
@@ -243,7 +251,13 @@ lemma rnDeriv_withDensity_left_of_absolutelyContinuous
   · ext1 s hs
     rw [zero_add]; rw [withDensity_apply _ hs]; rw [withDensity_apply _ hs]
     conv_lhs => rw [← Measure.withDensity_rnDeriv_eq _ _ hμν]
-    r
+    rw [setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable₀ _ _ _ hs]
+    · congr with x
+      rw [mul_comm]
+      simp only [Pi.mul_apply]
+    · refine ae_restrict_of_ae ?_
+      exact Measure.rnDeriv_lt_top _ _
+    · exact (Measure.measurable_rnDeriv _ _).aemeasurable
 
 中文:
 引理 rnDeriv_withDensity_left_of_absolutelyContinuous
@@ -254,7 +268,13 @@ lemma rnDeriv_withDensity_left_of_absolutelyContinuous
   · ext1 s hs
     rw [zero_add]; rw [withDensity_apply _ hs]; rw [withDensity_apply _ hs]
     conv_lhs => rw [← Measure.withDensity_rnDeriv_eq _ _ hμν]
-    r
+    rw [setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable₀ _ _ _ hs]
+    · congr with x
+      rw [mul_comm]
+      simp only [Pi.mul_apply]
+    · refine ae_restrict_of_ae ?_
+      exact Measure.rnDeriv_lt_top _ _
+    · exact (Measure.measurable_rnDeriv _ _).aemeasurable
 
 Depends on / 依赖: Measure, Measure.MutuallySingular.zero_left, Measure.eq_rnDeriv, Measure.measurable, Measure.measurable_rnDeriv, Measure.rnDeriv_lt_top, Measure.withDensity_rnDeriv_eq, MutuallySingular, Pi.mul_apply, ae_restrict_of_ae, aemeasurable, conv_lhs, hf.mul, measurable, measurable_rnDeriv, mul_apply, mul_comm, rnDeriv_lt_top, withDensity_apply, withDensity_rnDeriv_eq
 -/
@@ -286,7 +306,10 @@ lemma rnDeriv_withDensity_left
   have h := rnDeriv_withDensity_left_of_absolutelyContinuous hμ'ν hfν
   have h1 : μ'.rnDeriv ν =ᵐ[ν] μ.rnDeriv ν :=
     Measure.rnDeriv_withDensity _ (Measure.measurable_rnDeriv _ _)
-  have h2 : (
+  have h2 : (μ'.withDensity f).rnDeriv ν =ᵐ[ν] (μ.withDensity f).rnDeriv ν := by
+    exact rnDeriv_withDensity_withDensity_rnDeriv_left μ ν hf_ne_top
+  filter_upwards [h, h1, h2] with x hx hx1 hx2
+  rw [← hx2]; rw [hx]; rw [hx1]
 
 中文:
 引理 rnDeriv_withDensity_left
@@ -297,7 +320,10 @@ lemma rnDeriv_withDensity_left
   have h := rnDeriv_withDensity_left_of_absolutelyContinuous hμ'ν hfν
   have h1 : μ'.rnDeriv ν =ᵐ[ν] μ.rnDeriv ν :=
     Measure.rnDeriv_withDensity _ (Measure.measurable_rnDeriv _ _)
-  have h2 : (
+  have h2 : (μ'.withDensity f).rnDeriv ν =ᵐ[ν] (μ.withDensity f).rnDeriv ν := by
+    exact rnDeriv_withDensity_withDensity_rnDeriv_left μ ν hf_ne_top
+  filter_upwards [h, h1, h2] with x hx hx1 hx2
+  rw [← hx2]; rw [hx]; rw [hx1]
 
 Depends on / 依赖: Measure, Measure.measurable_rnDeriv, Measure.rnDeriv_withDensity, filter_upwards, hf_ne_top, measurable_rnDeriv, rnDeriv, rnDeriv_withDensity, rnDeriv_withDensity_left_of_absolutelyContinuous, rnDeriv_withDensity_withDensity_rnDeriv_left, withDensity, withDensity_absolutelyContinuous
 -/
@@ -324,7 +350,20 @@ lemma rnDeriv_withDensity_right_of_absolutelyContinuous
   have : SigmaFinite (ν.withDensity f) := SigmaFinite.withDensity_of_ne_top hf_ne_top
   refine (withDensity_absolutelyContinuous' hf hf_ne_zero).ae_eq ?_
   refine (Measure.eq_rnDeriv₀ (ν := ν.withDensity f) ?_ Measure.MutuallySingular.zero_left ?_).symm
-  · exact (hf.inv.mono_ac (withDensity_abso
+  · exact (hf.inv.mono_ac (withDensity_absolutelyContinuous _ _)).mul
+      (Measure.measurable_rnDeriv _ _).aemeasurable
+  · ext1 s hs
+    conv_lhs => rw [← Measure.withDensity_rnDeriv_eq _ _ hμν]
+    rw [zero_add]; rw [withDensity_apply _ hs]; rw [withDensity_apply _ hs]
+    rw [setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable₀ _ _ _ hs]
+    · simp only [Pi.mul_apply]
+      have : (fun a => f a * ((f a)⁻¹ * μ.rnDeriv ν a)) =ᵐ[ν] μ.rnDeriv ν := by
+        filter_upwards [hf_ne_zero, hf_ne_top] with x hx1 hx2
+        simp [← mul_assoc, ENNReal.mul_inv_cancel, hx1, hx2]
+      rw [lintegral_congr_ae (ae_restrict_of_ae this)]
+    · refine ae_restrict_of_ae ?_
+      filter_upwards [hf_ne_top] with x hx using hx.lt_top
+    · exact hf.restrict
 
 中文:
 引理 rnDeriv_withDensity_right_of_absolutelyContinuous
@@ -333,7 +372,20 @@ lemma rnDeriv_withDensity_right_of_absolutelyContinuous
   have : SigmaFinite (ν.withDensity f) := SigmaFinite.withDensity_of_ne_top hf_ne_top
   refine (withDensity_absolutelyContinuous' hf hf_ne_zero).ae_eq ?_
   refine (Measure.eq_rnDeriv₀ (ν := ν.withDensity f) ?_ Measure.MutuallySingular.zero_left ?_).symm
-  · exact (hf.inv.mono_ac (withDensity_abso
+  · exact (hf.inv.mono_ac (withDensity_absolutelyContinuous _ _)).mul
+      (Measure.measurable_rnDeriv _ _).aemeasurable
+  · ext1 s hs
+    conv_lhs => rw [← Measure.withDensity_rnDeriv_eq _ _ hμν]
+    rw [zero_add]; rw [withDensity_apply _ hs]; rw [withDensity_apply _ hs]
+    rw [setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable₀ _ _ _ hs]
+    · simp only [Pi.mul_apply]
+      have : (fun a => f a * ((f a)⁻¹ * μ.rnDeriv ν a)) =ᵐ[ν] μ.rnDeriv ν := by
+        filter_upwards [hf_ne_zero, hf_ne_top] with x hx1 hx2
+        simp [← mul_assoc, ENNReal.mul_inv_cancel, hx1, hx2]
+      rw [lintegral_congr_ae (ae_restrict_of_ae this)]
+    · refine ae_restrict_of_ae ?_
+      filter_upwards [hf_ne_top] with x hx using hx.lt_top
+    · exact hf.restrict
 
 Depends on / 依赖: Measure, Measure.MutuallySingular.zero_left, Measure.eq_rnDeriv, Measure.measurable_rnDeriv, Measure.withDensity_rnDeriv_eq, MutuallySingular, SigmaFinite, SigmaFinite.withDensity_of_ne_top, ae_eq, aemeasurable, conv_lhs, hf.inv.mono_ac, hf_ne_top, hf_ne_zero, measurable_rnDeriv, mono_ac, withDensity, withDensity_absolutelyContinuous, withDensity_apply, withDensity_of_ne_top
 -/
@@ -370,7 +422,11 @@ lemma rnDeriv_withDensity_right
   have h₁ : μ'.rnDeriv (ν.withDensity f) =ᵐ[ν] μ.rnDeriv (ν.withDensity f) :=
     rnDeriv_withDensity_withDensity_rnDeriv_right μ ν hf hf_ne_zero hf_ne_top
   have h₂ : μ.rnDeriv ν =ᵐ[ν] μ'.rnDeriv ν :=
-    (Measure.rnDeriv_withDensity _ (Measure.measurable_
+    (Measure.rnDeriv_withDensity _ (Measure.measurable_rnDeriv _ _)).symm
+  have hμ' := rnDeriv_withDensity_right_of_absolutelyContinuous
+    (withDensity_absolutelyContinuous ν (μ.rnDeriv ν)) hf hf_ne_zero hf_ne_top
+  filter_upwards [h₁, h₂, hμ'] with x hx₁ hx₂ hx_eq
+  rw [← hx₁]; rw [hx₂]; rw [hx_eq]
 
 中文:
 引理 rnDeriv_withDensity_right
@@ -380,7 +436,11 @@ lemma rnDeriv_withDensity_right
   have h₁ : μ'.rnDeriv (ν.withDensity f) =ᵐ[ν] μ.rnDeriv (ν.withDensity f) :=
     rnDeriv_withDensity_withDensity_rnDeriv_right μ ν hf hf_ne_zero hf_ne_top
   have h₂ : μ.rnDeriv ν =ᵐ[ν] μ'.rnDeriv ν :=
-    (Measure.rnDeriv_withDensity _ (Measure.measurable_
+    (Measure.rnDeriv_withDensity _ (Measure.measurable_rnDeriv _ _)).symm
+  have hμ' := rnDeriv_withDensity_right_of_absolutelyContinuous
+    (withDensity_absolutelyContinuous ν (μ.rnDeriv ν)) hf hf_ne_zero hf_ne_top
+  filter_upwards [h₁, h₂, hμ'] with x hx₁ hx₂ hx_eq
+  rw [← hx₁]; rw [hx₂]; rw [hx_eq]
 
 Depends on / 依赖: Measure, Measure.measurable_rnDeriv, Measure.rnDeriv_withDensity, filter_upwards, hf_ne_top, hf_ne_zero, hx_eq, measurable_rnDeriv, rnDeriv, rnDeriv_withDensity, rnDeriv_withDensity_right_of_absolutelyContinuous, rnDeriv_withDensity_withDensity_rnDeriv_right, withDensity, withDensity_absolutelyContinuous
 -/
@@ -411,7 +471,17 @@ lemma rnDeriv_eq_zero_of_mutuallySingular
   refine ae_of_ae_restrict_of_ae_restrict_compl t ?_ (by simp [t])
   change μ.rnDeriv ν' =ᵐ[ν.restrict t] 0
   have : μ.rnDeriv ν' =ᵐ[ν.restrict t] (μ.restrict t).rnDeriv ν' := by
-    have h : (μ.restrict t).rnDeriv ν' =ᵐ[
+    have h : (μ.restrict t).rnDeriv ν' =ᵐ[ν] t.indicator (μ.rnDeriv ν') :=
+      hνν'.ae_le (rnDeriv_restrict μ ν' ht)
+    rw [Filter.EventuallyEq]; rw [ae_restrict_iff' ht]
+    filter_upwards [h] with x hx hxt
+    rw [hx]; rw [Set.indicator_of_mem hxt]
+  refine this.trans ?_
+  simp only [t, MutuallySingular.restrict_nullSet]
+  suffices (0 : Measure α).rnDeriv ν' =ᵐ[ν'] 0 by
+    have h_ac' : ν.restrict t ≪ ν' := restrict_le_self.absolutelyContinuous.trans hνν'
+    exact h_ac'.ae_le this
+  exact rnDeriv_zero _
 
 中文:
 引理 rnDeriv_eq_zero_of_mutuallySingular
@@ -422,7 +492,17 @@ lemma rnDeriv_eq_zero_of_mutuallySingular
   refine ae_of_ae_restrict_of_ae_restrict_compl t ?_ (by simp [t])
   change μ.rnDeriv ν' =ᵐ[ν.restrict t] 0
   have : μ.rnDeriv ν' =ᵐ[ν.restrict t] (μ.restrict t).rnDeriv ν' := by
-    have h : (μ.restrict t).rnDeriv ν' =ᵐ[
+    have h : (μ.restrict t).rnDeriv ν' =ᵐ[ν] t.indicator (μ.rnDeriv ν') :=
+      hνν'.ae_le (rnDeriv_restrict μ ν' ht)
+    rw [Filter.EventuallyEq]; rw [ae_restrict_iff' ht]
+    filter_upwards [h] with x hx hxt
+    rw [hx]; rw [Set.indicator_of_mem hxt]
+  refine this.trans ?_
+  simp only [t, MutuallySingular.restrict_nullSet]
+  suffices (0 : Measure α).rnDeriv ν' =ᵐ[ν'] 0 by
+    have h_ac' : ν.restrict t ≪ ν' := restrict_le_self.absolutelyContinuous.trans hνν'
+    exact h_ac'.ae_le this
+  exact rnDeriv_zero _
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq, MeasurableSet, Set.indicator_of_mem, ae_le, ae_of_ae_restrict_of_ae_restrict_compl, ae_restrict_iff, filter_upwards, h.measurableSet_nullSet, h.nullSet, indicator, indicator_of_mem, measurableSet_nullSet, nullSet, restrict, rnDeriv, rnDeriv_restrict, t.indicator, this.trans
 -/
@@ -483,7 +563,10 @@ lemma rnDeriv_add_right_of_absolutelyContinuous_of_mutuallySingular
   refine ae_of_ae_restrict_of_ae_restrict_compl t (by simp [t]) ?_
   change μ.rnDeriv (ν + ν') =ᵐ[ν.restrict tᶜ] μ.rnDeriv ν
   rw [← withDensity_eq_iff_of_sigmaFinite (μ := ν.restrict tᶜ)
-    (Measure.measurable_rnD
+    (Measure.measurable_rnDeriv _ _).aemeasurable (Measure.measurable_rnDeriv _ _).aemeasurable]
+  have : (ν.restrict tᶜ).withDensity (μ.rnDeriv (ν + ν'))
+      = ((ν + ν').restrict tᶜ).withDensity (μ.rnDeriv (ν + ν')) := by simp [t]
+  rw [this]; rw [← restrict_withDensity ht.compl]; rw [← restrict_withDensity ht.compl]; rw [Measure.withDensity_rnDeriv_eq _ _ (hμν.add_right ν')]; rw [Measure.withDensity_rnDeriv_eq _ _ hμν]
 
 中文:
 引理 rnDeriv_add_right_of_absolutelyContinuous_of_mutuallySingular
@@ -494,7 +577,10 @@ lemma rnDeriv_add_right_of_absolutelyContinuous_of_mutuallySingular
   refine ae_of_ae_restrict_of_ae_restrict_compl t (by simp [t]) ?_
   change μ.rnDeriv (ν + ν') =ᵐ[ν.restrict tᶜ] μ.rnDeriv ν
   rw [← withDensity_eq_iff_of_sigmaFinite (μ := ν.restrict tᶜ)
-    (Measure.measurable_rnD
+    (Measure.measurable_rnDeriv _ _).aemeasurable (Measure.measurable_rnDeriv _ _).aemeasurable]
+  have : (ν.restrict tᶜ).withDensity (μ.rnDeriv (ν + ν'))
+      = ((ν + ν').restrict tᶜ).withDensity (μ.rnDeriv (ν + ν')) := by simp [t]
+  rw [this]; rw [← restrict_withDensity ht.compl]; rw [← restrict_withDensity ht.compl]; rw [Measure.withDensity_rnDeriv_eq _ _ (hμν.add_right ν')]; rw [Measure.withDensity_rnDeriv_eq _ _ hμν]
 
 Depends on / 依赖: MeasurableSet, Measure, Measure.measurable_rnDeriv, ae_of_ae_restrict_of_ae_restrict_compl, aemeasurable, measurableSet_nullSet, measurable_rnDeriv, nullSet, restrict, rnDeriv, withDensity, withDensity_eq_iff_of_sigmaFinite
 -/
@@ -523,7 +609,17 @@ lemma rnDeriv_add_right_of_mutuallySingular'
   rw [haveLebesgueDecomposition_add μ ν]
   have h₁ := rnDeriv_add' (μ.singularPart ν) (ν.withDensity (μ.rnDeriv ν)) (ν + ν')
   have h₂ := rnDeriv_add' (μ.singularPart ν) (ν.withDensity (μ.rnDeriv ν)) ν
-  refine (Filter.Event
+  refine (Filter.EventuallyEq.trans (h_ac.ae_le h₁) ?_).trans h₂.symm
+  have h₃ := rnDeriv_add_right_of_absolutelyContinuous_of_mutuallySingular
+    (withDensity_absolutelyContinuous ν (μ.rnDeriv ν)) hνν'
+  have h₄ : (μ.singularPart ν).rnDeriv (ν + ν') =ᵐ[ν] 0 := by
+    refine h_ac.ae_eq ?_
+    simp only [rnDeriv_eq_zero, MutuallySingular.add_right_iff]
+    exact ⟨mutuallySingular_singularPart μ ν, hμν'.singularPart ν⟩
+  have h₅ : (μ.singularPart ν).rnDeriv ν =ᵐ[ν] 0 := rnDeriv_singularPart μ ν
+  filter_upwards [h₃, h₄, h₅] with x hx₃ hx₄ hx₅
+  simp only [Pi.add_apply]
+  rw [hx₃]; rw [hx₄]; rw [hx₅]
 
 中文:
 引理 rnDeriv_add_right_of_mutuallySingular'
@@ -533,7 +629,17 @@ lemma rnDeriv_add_right_of_mutuallySingular'
   rw [haveLebesgueDecomposition_add μ ν]
   have h₁ := rnDeriv_add' (μ.singularPart ν) (ν.withDensity (μ.rnDeriv ν)) (ν + ν')
   have h₂ := rnDeriv_add' (μ.singularPart ν) (ν.withDensity (μ.rnDeriv ν)) ν
-  refine (Filter.Event
+  refine (Filter.EventuallyEq.trans (h_ac.ae_le h₁) ?_).trans h₂.symm
+  have h₃ := rnDeriv_add_right_of_absolutelyContinuous_of_mutuallySingular
+    (withDensity_absolutelyContinuous ν (μ.rnDeriv ν)) hνν'
+  have h₄ : (μ.singularPart ν).rnDeriv (ν + ν') =ᵐ[ν] 0 := by
+    refine h_ac.ae_eq ?_
+    simp only [rnDeriv_eq_zero, MutuallySingular.add_right_iff]
+    exact ⟨mutuallySingular_singularPart μ ν, hμν'.singularPart ν⟩
+  have h₅ : (μ.singularPart ν).rnDeriv ν =ᵐ[ν] 0 := rnDeriv_singularPart μ ν
+  filter_upwards [h₃, h₄, h₅] with x hx₃ hx₄ hx₅
+  simp only [Pi.add_apply]
+  rw [hx₃]; rw [hx₄]; rw [hx₅]
 
 Depends on / 依赖: AbsolutelyContinuous, EventuallyEq, Filter, Filter.EventuallyEq.trans, Measure, Measure.AbsolutelyContinuous.rfl.add_right, add_right, ae_le, h_ac, h_ac.ae_le, haveLebesgueDecomposition_add, rnDeriv, rnDeriv_add, rnDeriv_add_right_of_absolutelyContinuous_of_mutuallySingular, singularPart, withDensity, withDensity_absolutelyContinuous
 -/
@@ -568,7 +674,17 @@ lemma rnDeriv_add_right_of_mutuallySingular
   rw [haveLebesgueDecomposition_add μ ν']
   have h₁ := rnDeriv_add' (μ.singularPart ν') (ν'.withDensity (μ.rnDeriv ν')) (ν + ν')
   have h₂ := rnDeriv_add' (μ.singularPart ν') (ν'.withDensity (μ.rnDeriv ν')) ν
-  refine (Filte
+  refine (Filter.EventuallyEq.trans (h_ac.ae_le h₁) ?_).trans h₂.symm
+  have h₃ := rnDeriv_add_right_of_mutuallySingular' (?_ : μ.singularPart ν' ⟂ₘ ν') hνν'
+  · have h₄ : (ν'.withDensity (rnDeriv μ ν')).rnDeriv (ν + ν') =ᵐ[ν] 0 := by
+      refine rnDeriv_eq_zero_of_mutuallySingular ?_ h_ac
+      exact hνν'.symm.withDensity
+    have h₅ : (ν'.withDensity (rnDeriv μ ν')).rnDeriv ν =ᵐ[ν] 0 := by
+      rw [rnDeriv_eq_zero]
+      exact hνν'.symm.withDensity
+    filter_upwards [h₃, h₄, h₅] with x hx₃ hx₄ hx₅
+    rw [Pi.add_apply]; rw [Pi.add_apply]; rw [hx₃]; rw [hx₄]; rw [hx₅]
+  exact mutuallySingular_singularPart μ ν'
 
 中文:
 引理 rnDeriv_add_right_of_mutuallySingular
@@ -578,7 +694,17 @@ lemma rnDeriv_add_right_of_mutuallySingular
   rw [haveLebesgueDecomposition_add μ ν']
   have h₁ := rnDeriv_add' (μ.singularPart ν') (ν'.withDensity (μ.rnDeriv ν')) (ν + ν')
   have h₂ := rnDeriv_add' (μ.singularPart ν') (ν'.withDensity (μ.rnDeriv ν')) ν
-  refine (Filte
+  refine (Filter.EventuallyEq.trans (h_ac.ae_le h₁) ?_).trans h₂.symm
+  have h₃ := rnDeriv_add_right_of_mutuallySingular' (?_ : μ.singularPart ν' ⟂ₘ ν') hνν'
+  · have h₄ : (ν'.withDensity (rnDeriv μ ν')).rnDeriv (ν + ν') =ᵐ[ν] 0 := by
+      refine rnDeriv_eq_zero_of_mutuallySingular ?_ h_ac
+      exact hνν'.symm.withDensity
+    have h₅ : (ν'.withDensity (rnDeriv μ ν')).rnDeriv ν =ᵐ[ν] 0 := by
+      rw [rnDeriv_eq_zero]
+      exact hνν'.symm.withDensity
+    filter_upwards [h₃, h₄, h₅] with x hx₃ hx₄ hx₅
+    rw [Pi.add_apply]; rw [Pi.add_apply]; rw [hx₃]; rw [hx₄]; rw [hx₅]
+  exact mutuallySingular_singularPart μ ν'
 
 Depends on / 依赖: AbsolutelyContinuous, EventuallyEq, Filter, Filter.EventuallyEq.trans, Measure, Measure.AbsolutelyContinuous.rfl.add_right, add_right, ae_le, h_ac, h_ac.ae_le, haveLebesgueDecomposition_add, rnDeriv, rnDeriv_add, rnDeriv_add_right_of_mutuallySingular, singularPart, withDensity
 -/
@@ -642,7 +768,13 @@ lemma inv_rnDeriv_aux
     calc (μ.rnDeriv ν)⁻¹ =ᵐ[μ] (μ.withDensity (μ.rnDeriv ν)⁻¹).rnDeriv μ :=
           (rnDeriv_withDensity _ (measurable_rnDeriv _ _).inv).symm
     _ = (μ.withDensity (ν.rnDeriv μ)).rnDeriv μ := by rw [this]
-    _ =ᵐ[μ] ν.r
+    _ =ᵐ[μ] ν.rnDeriv μ := rnDeriv_withDensity _ (measurable_rnDeriv _ _)
+  rw [withDensity_rnDeriv_eq _ _ hνμ]; rw [← withDensity_rnDeriv_eq _ _ hμν]
+  conv in ((ν.withDensity (μ.rnDeriv ν)).rnDeriv ν)⁻¹ => rw [withDensity_rnDeriv_eq _ _ hμν]
+  change (ν.withDensity (μ.rnDeriv ν)).withDensity (fun x => (μ.rnDeriv ν x)⁻¹) = ν
+  rw [withDensity_inv_same (measurable_rnDeriv _ _)
+    (by filter_upwards [hνμ.ae_le (rnDeriv_pos hμν)] with x hx using hx.ne')
+    (rnDeriv_ne_top _ _)]
 
 中文:
 引理 inv_rnDeriv_aux
@@ -652,7 +784,13 @@ lemma inv_rnDeriv_aux
     calc (μ.rnDeriv ν)⁻¹ =ᵐ[μ] (μ.withDensity (μ.rnDeriv ν)⁻¹).rnDeriv μ :=
           (rnDeriv_withDensity _ (measurable_rnDeriv _ _).inv).symm
     _ = (μ.withDensity (ν.rnDeriv μ)).rnDeriv μ := by rw [this]
-    _ =ᵐ[μ] ν.r
+    _ =ᵐ[μ] ν.rnDeriv μ := rnDeriv_withDensity _ (measurable_rnDeriv _ _)
+  rw [withDensity_rnDeriv_eq _ _ hνμ]; rw [← withDensity_rnDeriv_eq _ _ hμν]
+  conv in ((ν.withDensity (μ.rnDeriv ν)).rnDeriv ν)⁻¹ => rw [withDensity_rnDeriv_eq _ _ hμν]
+  change (ν.withDensity (μ.rnDeriv ν)).withDensity (fun x => (μ.rnDeriv ν x)⁻¹) = ν
+  rw [withDensity_inv_same (measurable_rnDeriv _ _)
+    (by filter_upwards [hνμ.ae_le (rnDeriv_pos hμν)] with x hx using hx.ne')
+    (rnDeriv_ne_top _ _)]
 
 Depends on / 依赖: measurable_rnDeriv, rnDeriv, rnDeriv_withDensity, withDensity, withDensity_rnDeriv_eq
 -/
@@ -682,7 +820,12 @@ lemma inv_rnDeriv
       ∧ ν.rnDeriv μ =ᵐ[μ] (μ.withDensity (ν.rnDeriv μ)).rnDeriv μ by
     refine (this.1.trans (Filter.EventuallyEq.trans ?_ this.2.symm))
     exact Measure.inv_rnDeriv_aux (absolutelyContinuous_withDensity_rnDeriv hμν)
- 
+      (withDensity_absolutelyContinuous _ _)
+  constructor
+  · filter_upwards [rnDeriv_withDensity_rnDeriv hμν] with x hx
+    simp only [Pi.inv_apply, inv_inj]
+    exact hx.symm
+  · exact (Measure.rnDeriv_withDensity μ (Measure.measurable_rnDeriv ν μ)).symm
 
 中文:
 引理 inv_rnDeriv
@@ -692,7 +835,12 @@ lemma inv_rnDeriv
       ∧ ν.rnDeriv μ =ᵐ[μ] (μ.withDensity (ν.rnDeriv μ)).rnDeriv μ by
     refine (this.1.trans (Filter.EventuallyEq.trans ?_ this.2.symm))
     exact Measure.inv_rnDeriv_aux (absolutelyContinuous_withDensity_rnDeriv hμν)
- 
+      (withDensity_absolutelyContinuous _ _)
+  constructor
+  · filter_upwards [rnDeriv_withDensity_rnDeriv hμν] with x hx
+    simp only [Pi.inv_apply, inv_inj]
+    exact hx.symm
+  · exact (Measure.rnDeriv_withDensity μ (Measure.measurable_rnDeriv ν μ)).symm
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.trans, Measure, Measure.inv_rnDeriv_aux, Measure.measurabl, Measure.rnDeriv_withDensity, Pi.inv_apply, absolutelyContinuous_withDensity_rnDeriv, filter_upwards, hx.symm, inv_apply, inv_inj, inv_rnDeriv_aux, measurabl, rnDeriv, rnDeriv_withDensity, rnDeriv_withDensity_rnDeriv, withDensity, withDensity_absolutelyContinuous
 -/
@@ -743,7 +891,10 @@ lemma ae_rnDeriv_ne_zero_imp_of_ae
   · rw [← ν.haveLebesgueDecomposition_add μ]
     have : forallᵐ x ∂(ν.singularPart μ), μ.rnDeriv ν x = 0 := μ.rnDeriv_eq_zero_ae_singularPart ν
     filter_upwards [this] with x hx h_absurd using absurd hx h_absurd
-  ·
+  · have h_ac : μ.withDensity (ν.rnDeriv μ) ≪ μ := withDensity_absolutelyContinuous _ _
+    rw [← ν.haveLebesgueDecomposition_add μ]
+    suffices forallᵐx ∂μ, μ.rnDeriv ν x != 0 -> p x from h_ac this
+    filter_upwards [h] with _ h _ using h
 
 中文:
 引理 ae_rnDeriv_ne_zero_imp_of_ae
@@ -754,7 +905,10 @@ lemma ae_rnDeriv_ne_zero_imp_of_ae
   · rw [← ν.haveLebesgueDecomposition_add μ]
     have : forallᵐ x ∂(ν.singularPart μ), μ.rnDeriv ν x = 0 := μ.rnDeriv_eq_zero_ae_singularPart ν
     filter_upwards [this] with x hx h_absurd using absurd hx h_absurd
-  ·
+  · have h_ac : μ.withDensity (ν.rnDeriv μ) ≪ μ := withDensity_absolutelyContinuous _ _
+    rw [← ν.haveLebesgueDecomposition_add μ]
+    suffices forallᵐx ∂μ, μ.rnDeriv ν x != 0 -> p x from h_ac this
+    filter_upwards [h] with _ h _ using h
 
 Depends on / 依赖: absurd, ae_add_measure_iff, filter_upwards, h_absurd, h_ac, haveLebesgueDecomposition_add, rnDeriv, rnDeriv_eq_zero_ae_singularPart, singularPart, withDensity, withDensity_absolutelyContinuous
 -/
@@ -972,7 +1126,15 @@ lemma setIntegral_toReal_rnDeriv_le
   have hμt : μ t != ∞ := by rwa [ht, measure_toMeasurable s]
   calc ∫ x in s, (μ.rnDeriv ν x).toReal ∂ν
     <= ∫ x in t, (μ.rnDeriv ν x).toReal ∂ν := by
-        refine setIntegral_mono_set ?_ ?_ (L
+        refine setIntegral_mono_set ?_ ?_ (LE.le.eventuallyLE (subset_toMeasurable _ _))
+        · exact integrableOn_toReal_rnDeriv hμt
+        · exact ae_of_all _ (by simp)
+  _ = (withDensity ν (rnDeriv μ ν)).real t := setIntegral_toReal_rnDeriv_eq_withDensity' ht_m
+  _ <= μ.real t := by
+        simp only [measureReal_def]
+        gcongr
+        apply withDensity_rnDeriv_le
+  _ = μ.real s := by rw [measureReal_def, measureReal_def, measure_toMeasurable s]
 
 中文:
 引理 set整数egral_to实数_rnDeriv_le
@@ -983,7 +1145,15 @@ lemma setIntegral_toReal_rnDeriv_le
   have hμt : μ t != ∞ := by rwa [ht, measure_toMeasurable s]
   calc ∫ x in s, (μ.rnDeriv ν x).toReal ∂ν
     <= ∫ x in t, (μ.rnDeriv ν x).toReal ∂ν := by
-        refine setIntegral_mono_set ?_ ?_ (L
+        refine setIntegral_mono_set ?_ ?_ (LE.le.eventuallyLE (subset_toMeasurable _ _))
+        · exact integrableOn_toReal_rnDeriv hμt
+        · exact ae_of_all _ (by simp)
+  _ = (withDensity ν (rnDeriv μ ν)).real t := setIntegral_toReal_rnDeriv_eq_withDensity' ht_m
+  _ <= μ.real t := by
+        simp only [measureReal_def]
+        gcongr
+        apply withDensity_rnDeriv_le
+  _ = μ.real s := by rw [measureReal_def, measureReal_def, measure_toMeasurable s]
 
 Depends on / 依赖: LE.le.eventuallyLE, MeasurableSet, ae_of_all, eventuallyLE, ht_m, integrableOn_toReal_rnDeriv, measurableSet_toMeasurable, measure_toMeasurable, rnDeriv, setIntegral_mono_set, setIntegral_toReal_rnDeriv_eq_withDensity, subset_toMeasurable, toMeasurable, toReal, withDensity
 -/
@@ -1075,13 +1245,13 @@ English:
 lemma integral_toReal_rnDeriv'
   given: [IsFiniteMeasure μ] [SigmaFinite ν]
   proof: by
-  rw [measureReal_def]; rw [measureReal_def]; rw [← ENNReal.toReal_sub_of_le (μ.singularPart_le ν Set.univ) (measure_ne_top _ _)]; rw [← Measure.sub_apply .univ (Measure.singularPart_le μ ν)]; rw [Measure.measure_sub_singularPart]; rw [← measureReal_def]; rw [← Measure.setIntegral_toReal_rnDeriv_
+  rw [measureReal_def]; rw [measureReal_def]; rw [← ENNReal.toReal_sub_of_le (μ.singularPart_le ν Set.univ) (measure_ne_top _ _)]; rw [← Measure.sub_apply .univ (Measure.singularPart_le μ ν)]; rw [Measure.measure_sub_singularPart]; rw [← measureReal_def]; rw [← Measure.setIntegral_toReal_rnDeriv_eq_withDensity]; rw [setIntegral_univ]
 
 中文:
 引理 integral_to实数_rnDeriv'
   条件: [是有限测度 μ] [σ有限 ν]
   证明: by
-  rw [measureReal_def]; rw [measureReal_def]; rw [← ENNReal.toReal_sub_of_le (μ.singularPart_le ν Set.univ) (measure_ne_top _ _)]; rw [← Measure.sub_apply .univ (Measure.singularPart_le μ ν)]; rw [Measure.measure_sub_singularPart]; rw [← measureReal_def]; rw [← Measure.setIntegral_toReal_rnDeriv_
+  rw [measureReal_def]; rw [measureReal_def]; rw [← ENNReal.toReal_sub_of_le (μ.singularPart_le ν Set.univ) (measure_ne_top _ _)]; rw [← Measure.sub_apply .univ (Measure.singularPart_le μ ν)]; rw [Measure.measure_sub_singularPart]; rw [← measureReal_def]; rw [← Measure.setIntegral_toReal_rnDeriv_eq_withDensity]; rw [setIntegral_univ]
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_sub_of_le, Measure, Measure.measure_sub_singularPart, Measure.setIntegral_toReal_rnDeriv_eq_withDensity, Measure.singularPart_le, Measure.sub_apply, Set.univ, compare, h.compare, measureReal_def, measure_ne_top, measure_sub_singularPart, setIntegral_toReal_rnDeriv_eq_withDensity, setIntegral_univ, singularPart_le, sub_apply, toReal_sub_of_le
 -/
@@ -1132,7 +1302,9 @@ lemma rnDeriv_mul_rnDeriv'
   obtain ⟨h_meas, h_sing, hμν⟩ := Measure.haveLebesgueDecomposition_spec μ ν
   filter_upwards [hνκ <| Measure.rnDeriv_add' (μ.singularPart ν) (ν.withDensity (μ.rnDeriv ν)) κ,
 hνκ Measure.rnDeriv_withDensity_left_of_absolutelyContinuous hνκ h_meas.aemeasurable,
-    Measure.rnDeriv_eq_zero_of_mutua
+    Measure.rnDeriv_eq_zero_of_mutuallySingular h_sing hνκ] with x hx1 hx2 hx3
+  nth_rw 2 [hμν]
+  rw [hx1]; rw [Pi.add_apply]; rw [hx2]; rw [Pi.mul_apply]; rw [hx3]; rw [Pi.zero_apply]; rw [zero_add]
 
 中文:
 引理 rnDeriv_mul_rnDeriv'
@@ -1141,7 +1313,9 @@ hνκ Measure.rnDeriv_withDensity_left_of_absolutelyContinuous hνκ h_meas.aeme
   obtain ⟨h_meas, h_sing, hμν⟩ := Measure.haveLebesgueDecomposition_spec μ ν
   filter_upwards [hνκ <| Measure.rnDeriv_add' (μ.singularPart ν) (ν.withDensity (μ.rnDeriv ν)) κ,
 hνκ Measure.rnDeriv_withDensity_left_of_absolutelyContinuous hνκ h_meas.aemeasurable,
-    Measure.rnDeriv_eq_zero_of_mutua
+    Measure.rnDeriv_eq_zero_of_mutuallySingular h_sing hνκ] with x hx1 hx2 hx3
+  nth_rw 2 [hμν]
+  rw [hx1]; rw [Pi.add_apply]; rw [hx2]; rw [Pi.mul_apply]; rw [hx3]; rw [Pi.zero_apply]; rw [zero_add]
 
 Depends on / 依赖: Measure, Measure.haveLebesgueDecomposition_spec, Measure.rnDeriv_add, Measure.rnDeriv_eq_zero_of_mutuallySingular, Measure.rnDeriv_withDensity_left_of_absolutelyContinuous, Pi.add_apply, Pi.mul_apply, Pi.zero_apply, add_apply, aemeasurable, filter_upwards, h_meas, h_meas.aemeasurable, h_sing, haveLebesgueDecomposition_spec, mul_apply, nth_rw, rnDeriv, rnDeriv_add, rnDeriv_eq_zero_of_mutuallySingular
 -/
@@ -1277,7 +1451,16 @@ lemma rnDeriv_self_add
     (ae_add_measure_iff.mp (μ.rnDeriv_add' ν (μ + ν))).2
   have h_one_add := (ae_add_measure_iff.mp (μ + ν).rnDeriv_self).2
   have : (μ.rnDeriv (μ + ν)) =ᵐ[ν] fun x => 1 - (μ.rnDeriv ν x + 1)⁻¹ := by
-    filter_
+    filter_upwards [h_add, h_one_add, rnDeriv_add_self ν μ] with a h4 h5 h6
+    rw [h5]; rw [Pi.add_apply] at h4
+    nth_rw 1 [h4, h6]
+    simp
+  filter_upwards [this, μ.rnDeriv_lt_top ν] with a ha ha_lt_top
+  rw [ha]; rw [div_eq_mul_inv]
+  refine ENNReal.sub_eq_of_eq_add (by simp) ?_
+  nth_rewrite 2 [← one_mul (μ.rnDeriv ν a + 1)⁻¹]
+  have h := add_mul (μ.rnDeriv ν a) 1 (μ.rnDeriv ν a + 1)⁻¹
+  rwa [ENNReal.mul_inv_cancel (by simp) (by simp [ha_lt_top.ne])] at h
 
 中文:
 引理 rnDeriv_self_add
@@ -1287,7 +1470,16 @@ lemma rnDeriv_self_add
     (ae_add_measure_iff.mp (μ.rnDeriv_add' ν (μ + ν))).2
   have h_one_add := (ae_add_measure_iff.mp (μ + ν).rnDeriv_self).2
   have : (μ.rnDeriv (μ + ν)) =ᵐ[ν] fun x => 1 - (μ.rnDeriv ν x + 1)⁻¹ := by
-    filter_
+    filter_upwards [h_add, h_one_add, rnDeriv_add_self ν μ] with a h4 h5 h6
+    rw [h5]; rw [Pi.add_apply] at h4
+    nth_rw 1 [h4, h6]
+    simp
+  filter_upwards [this, μ.rnDeriv_lt_top ν] with a ha ha_lt_top
+  rw [ha]; rw [div_eq_mul_inv]
+  refine ENNReal.sub_eq_of_eq_add (by simp) ?_
+  nth_rewrite 2 [← one_mul (μ.rnDeriv ν a + 1)⁻¹]
+  have h := add_mul (μ.rnDeriv ν a) 1 (μ.rnDeriv ν a + 1)⁻¹
+  rwa [ENNReal.mul_inv_cancel (by simp) (by simp [ha_lt_top.ne])] at h
 
 Depends on / 依赖: DecidableEq, Pi.add_apply, add_apply, ae_add_measure_iff, ae_add_measure_iff.mp, div_eq_mul_inv, filter_upwards, h_add, h_one_add, ha_lt_top, nth_rw, rnDeriv, rnDeriv_add, rnDeriv_add_self, rnDeriv_lt_top, rnDeriv_self
 -/
@@ -1319,7 +1511,7 @@ lemma rnDeriv_eq_div_rnDeriv_add
       with a ha1 ha2 ha_lt_top
   rw [ha1]; rw [ha2]; rw [ENNReal.div_eq_inv_mul]; rw [inv_inv]; rw [ENNReal.div_eq_inv_mul]; rw [← mul_assoc]; rw [ENNReal.mul_inv_cancel]; rw [one_mul]
   · simp
-  · simp [ha_lt_top.n
+  · simp [ha_lt_top.ne]
 
 中文:
 引理 rnDeriv_eq_div_rnDeriv_add
@@ -1329,7 +1521,7 @@ lemma rnDeriv_eq_div_rnDeriv_add
       with a ha1 ha2 ha_lt_top
   rw [ha1]; rw [ha2]; rw [ENNReal.div_eq_inv_mul]; rw [inv_inv]; rw [ENNReal.div_eq_inv_mul]; rw [← mul_assoc]; rw [ENNReal.mul_inv_cancel]; rw [one_mul]
   · simp
-  · simp [ha_lt_top.n
+  · simp [ha_lt_top.ne]
 
 Depends on / 依赖: ENNReal, ENNReal.div_eq_inv_mul, ENNReal.mul_inv_cancel, div_eq_inv_mul, filter_upwards, ha_lt_top, ha_lt_top.ne, inv_inv, mul_assoc, mul_inv_cancel, one_mul, rnDeriv_add_self, rnDeriv_lt_top, rnDeriv_self_add
 -/
@@ -1352,7 +1544,10 @@ lemma rnDeriv_div_rnDeriv_eq_div_rnDeriv_add
     Measure.rnDeriv_mul_rnDeriv (rfl.absolutelyContinuous.add_right _)
   have h2 : ν.rnDeriv (μ + ν) * (μ + ν).rnDeriv ξ =ᵐ[ξ] ν.rnDeriv ξ :=
     Measure.rnDeriv_mul_rnDeriv (rfl.absolutelyContinuous.add_right' _)
-  have h_ac 
+  have h_ac : μ + ν ≪ ξ := hμ.add_left hν
+  filter_upwards [h_ac h1, h_ac h2, h_ac <| (μ + ν).rnDeriv_lt_top ξ, ν.rnDeriv_lt_top (μ + ν),
+    Measure.rnDeriv_pos h_ac] with a h1 h2 h_lt_top1 h_lt_top2 h_pos
+  rw [← h1]; rw [← h2]; rw [Pi.mul_apply]; rw [Pi.mul_apply]; rw [div_eq_mul_inv]; rw [ENNReal.mul_inv (Or.inr h_lt_top1.ne) (Or.inl h_lt_top2.ne)]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [mul_comm ((μ + ν).rnDeriv ξ a)]; rw [mul_assoc]; rw [ENNReal.inv_mul_cancel h_pos.ne' h_lt_top1.ne]; rw [mul_one]
 
 中文:
 引理 rnDeriv_div_rnDeriv_eq_div_rnDeriv_add
@@ -1362,7 +1557,10 @@ lemma rnDeriv_div_rnDeriv_eq_div_rnDeriv_add
     Measure.rnDeriv_mul_rnDeriv (rfl.absolutelyContinuous.add_right _)
   have h2 : ν.rnDeriv (μ + ν) * (μ + ν).rnDeriv ξ =ᵐ[ξ] ν.rnDeriv ξ :=
     Measure.rnDeriv_mul_rnDeriv (rfl.absolutelyContinuous.add_right' _)
-  have h_ac 
+  have h_ac : μ + ν ≪ ξ := hμ.add_left hν
+  filter_upwards [h_ac h1, h_ac h2, h_ac <| (μ + ν).rnDeriv_lt_top ξ, ν.rnDeriv_lt_top (μ + ν),
+    Measure.rnDeriv_pos h_ac] with a h1 h2 h_lt_top1 h_lt_top2 h_pos
+  rw [← h1]; rw [← h2]; rw [Pi.mul_apply]; rw [Pi.mul_apply]; rw [div_eq_mul_inv]; rw [ENNReal.mul_inv (Or.inr h_lt_top1.ne) (Or.inl h_lt_top2.ne)]; rw [div_eq_mul_inv]; rw [mul_assoc]; rw [mul_comm ((μ + ν).rnDeriv ξ a)]; rw [mul_assoc]; rw [ENNReal.inv_mul_cancel h_pos.ne' h_lt_top1.ne]; rw [mul_one]
 
 Depends on / 依赖: Measure, Measure.rnDeriv_mul_rnDeriv, Measure.rnDeriv_pos, absolutelyContinuous, add_left, add_right, filter_upwards, h_ac, h_lt_top1, h_lt_top2, h_pos, rfl.absolutelyContinuous.add_right, rnDeriv, rnDeriv_lt_top, rnDeriv_mul_rnDeriv, rnDeriv_pos
 -/
@@ -1425,7 +1623,9 @@ lemma _root_.MeasurableEmbedding.rnDeriv_map_aux
   · exact (Measure.measurable_rnDeriv _ _).comp hf.measurable
   · exact Measure.measurable_rnDeriv _ _
   rw [← hf.lintegral_map]; rw [Measure.setLIntegral_rnDeriv hμν]
-  have hs_eq : s = f ⁻¹' f '' s := by rw [hf.inje
+  have hs_eq : s = f ⁻¹' f '' s := by rw [hf.injective.preimage_image]
+  have : SigmaFinite (ν.map f) := hf.sigmaFinite_map
+  rw [hs_eq]; rw [← hf.restrict_map]; rw [Measure.setLIntegral_rnDeriv (hf.absolutelyContinuous_map hμν)]; rw [hf.map_apply]
 
 中文:
 引理 _root_.可测嵌入.rnDeriv_map_aux
@@ -1435,7 +1635,9 @@ lemma _root_.MeasurableEmbedding.rnDeriv_map_aux
   · exact (Measure.measurable_rnDeriv _ _).comp hf.measurable
   · exact Measure.measurable_rnDeriv _ _
   rw [← hf.lintegral_map]; rw [Measure.setLIntegral_rnDeriv hμν]
-  have hs_eq : s = f ⁻¹' f '' s := by rw [hf.inje
+  have hs_eq : s = f ⁻¹' f '' s := by rw [hf.injective.preimage_image]
+  have : SigmaFinite (ν.map f) := hf.sigmaFinite_map
+  rw [hs_eq]; rw [← hf.restrict_map]; rw [Measure.setLIntegral_rnDeriv (hf.absolutelyContinuous_map hμν)]; rw [hf.map_apply]
 
 Depends on / 依赖: Measure, Measure.measurable_rnDeriv, Measure.setLIntegral_rnDeriv, SigmaFinite, absolutelyContinuous_map, ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite, hf.absolutelyContinuous_map, hf.injective.preimage_image, hf.lintegral_map, hf.map_apply, hf.measurable, hf.restrict_map, hf.sigmaFinite_map, hs_eq, injective, lintegral_map, map_apply, measurable, measurable_rnDeriv, preimage_image
 -/
@@ -1461,7 +1663,19 @@ lemma _root_.MeasurableEmbedding.rnDeriv_map
   have : SigmaFinite (map f ν) := hf.sigmaFinite_map
   have : SigmaFinite (map f (μ.singularPart ν)) := hf.sigmaFinite_map
   have : SigmaFinite (map f (ν.withDensity (μ.rnDeriv ν))) := hf.sigmaFinite_map
-  have h_add
+  have h_add := Measure.rnDeriv_add' ((μ.singularPart ν).map f)
+    ((ν.withDensity (μ.rnDeriv ν)).map f) (ν.map f)
+  rw [Filter.EventuallyEq]; rw [hf.ae_map_iff]; rw [← Filter.EventuallyEq] at h_add
+  refine h_add.trans ((Measure.rnDeriv_add' _ _ _).trans ?_).symm
+  refine Filter.EventuallyEq.add ?_ ?_
+  · refine (Measure.rnDeriv_singularPart μ ν).trans ?_
+    symm
+    suffices (fun x => ((μ.singularPart ν).map f).rnDeriv (ν.map f) x) =ᵐ[ν.map f] 0 by
+      rw [Filter.EventuallyEq]; rw [hf.ae_map_iff] at this
+      exact this
+    refine Measure.rnDeriv_eq_zero_of_mutuallySingular ?_ Measure.AbsolutelyContinuous.rfl
+    exact hf.mutuallySingular_map (μ.mutuallySingular_singularPart ν)
+  · exact (hf.rnDeriv_map_aux (withDensity_absolutelyContinuous _ _)).symm
 
 中文:
 引理 _root_.可测嵌入.rnDeriv_map
@@ -1471,7 +1685,19 @@ lemma _root_.MeasurableEmbedding.rnDeriv_map
   have : SigmaFinite (map f ν) := hf.sigmaFinite_map
   have : SigmaFinite (map f (μ.singularPart ν)) := hf.sigmaFinite_map
   have : SigmaFinite (map f (ν.withDensity (μ.rnDeriv ν))) := hf.sigmaFinite_map
-  have h_add
+  have h_add := Measure.rnDeriv_add' ((μ.singularPart ν).map f)
+    ((ν.withDensity (μ.rnDeriv ν)).map f) (ν.map f)
+  rw [Filter.EventuallyEq]; rw [hf.ae_map_iff]; rw [← Filter.EventuallyEq] at h_add
+  refine h_add.trans ((Measure.rnDeriv_add' _ _ _).trans ?_).symm
+  refine Filter.EventuallyEq.add ?_ ?_
+  · refine (Measure.rnDeriv_singularPart μ ν).trans ?_
+    symm
+    suffices (fun x => ((μ.singularPart ν).map f).rnDeriv (ν.map f) x) =ᵐ[ν.map f] 0 by
+      rw [Filter.EventuallyEq]; rw [hf.ae_map_iff] at this
+      exact this
+    refine Measure.rnDeriv_eq_zero_of_mutuallySingular ?_ Measure.AbsolutelyContinuous.rfl
+    exact hf.mutuallySingular_map (μ.mutuallySingular_singularPart ν)
+  · exact (hf.rnDeriv_map_aux (withDensity_absolutelyContinuous _ _)).symm
 
 Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq, Measure, Measure.map_add, Measure.rnDeriv_add, SigmaFinite, ae_map_iff, h_add, h_add.trans, haveLebesgueDecomposition_add, hf.ae_map_iff, hf.measurable, hf.sigmaFinite_map, map_add, measurable, rnDeriv, rnDeriv_add, sigmaFinite_map, singularPart
 -/
@@ -1506,7 +1732,7 @@ lemma _root_.MeasurableEmbedding.map_withDensity_rnDeriv
   ext s hs
   rw [hf.map_apply]; rw [withDensity_apply _ (hf.measurable hs)]; rw [withDensity_apply _ hs]; rw [setLIntegral_map hs (Measure.measurable_rnDeriv _ _) hf.measurable]
   refine setLIntegral_congr_fun_ae (hf.measurable hs) ?_
-  filter_upwards [hf.rnDeriv_map μ ν] with a ha _ using ha.sym
+  filter_upwards [hf.rnDeriv_map μ ν] with a ha _ using ha.symm
 
 中文:
 引理 _root_.可测嵌入.map_withDensity_rnDeriv
@@ -1515,7 +1741,7 @@ lemma _root_.MeasurableEmbedding.map_withDensity_rnDeriv
   ext s hs
   rw [hf.map_apply]; rw [withDensity_apply _ (hf.measurable hs)]; rw [withDensity_apply _ hs]; rw [setLIntegral_map hs (Measure.measurable_rnDeriv _ _) hf.measurable]
   refine setLIntegral_congr_fun_ae (hf.measurable hs) ?_
-  filter_upwards [hf.rnDeriv_map μ ν] with a ha _ using ha.sym
+  filter_upwards [hf.rnDeriv_map μ ν] with a ha _ using ha.symm
 
 Depends on / 依赖: Measure, Measure.measurable_rnDeriv, filter_upwards, ha.symm, hf.map_apply, hf.measurable, hf.rnDeriv_map, map_apply, measurable, measurable_rnDeriv, rnDeriv_map, setLIntegral_congr_fun_ae, setLIntegral_map, withDensity_apply
 -/
@@ -1538,7 +1764,8 @@ lemma _root_.MeasurableEmbedding.singularPart_map
       + (ν.map f).withDensity ((μ.map f).rnDeriv (ν.map f)) := by
     conv_lhs => rw [μ.haveLebesgueDecomposition_add ν]
     rw [Measure.map_add _ _ hf.measurable]; rw [← hf.map_withDensity_rnDeriv μ ν]
-  refine (Measure.eq_singularPart (Measure.m
+  refine (Measure.eq_singularPart (Measure.measurable_rnDeriv _ _) ?_ h_add).symm
+  exact hf.mutuallySingular_map (μ.mutuallySingular_singularPart ν)
 
 中文:
 引理 _root_.可测嵌入.singularPart_map
@@ -1548,7 +1775,8 @@ lemma _root_.MeasurableEmbedding.singularPart_map
       + (ν.map f).withDensity ((μ.map f).rnDeriv (ν.map f)) := by
     conv_lhs => rw [μ.haveLebesgueDecomposition_add ν]
     rw [Measure.map_add _ _ hf.measurable]; rw [← hf.map_withDensity_rnDeriv μ ν]
-  refine (Measure.eq_singularPart (Measure.m
+  refine (Measure.eq_singularPart (Measure.measurable_rnDeriv _ _) ?_ h_add).symm
+  exact hf.mutuallySingular_map (μ.mutuallySingular_singularPart ν)
 
 Depends on / 依赖: Measure, Measure.eq_singularPart, Measure.map_add, Measure.measurable_rnDeriv, conv_lhs, eq_singularPart, h_add, haveLebesgueDecomposition_add, hf.map_withDensity_rnDeriv, hf.measurable, hf.mutuallySingular_map, map_add, map_withDensity_rnDeriv, measurable, measurable_rnDeriv, mutuallySingular_map, mutuallySingular_singularPart, rnDeriv, singularPart, withDensity
 -/

@@ -569,7 +569,10 @@ theorem isClique_map_iff_of_nontrivial
     rw [EmbeddingLike.apply_eq_iff_eq] at hux hvy
     rwa [← hux, ← hvy]
   rw [Set.image_preimage_eq_iff]
-  intr
+  intro x hxt
+  obtain ⟨y, hyt, hyne⟩ := ht.exists_ne x
+  obtain ⟨-, u, v, -, rfl, rfl⟩ := h hyt hxt hyne
+  exact Set.mem_range_self _
 
 中文:
 定理 isClique_map_iff_of_nontrivial
@@ -581,7 +584,10 @@ theorem isClique_map_iff_of_nontrivial
     rw [EmbeddingLike.apply_eq_iff_eq] at hux hvy
     rwa [← hux, ← hvy]
   rw [Set.image_preimage_eq_iff]
-  intr
+  intro x hxt
+  obtain ⟨y, hyt, hyne⟩ := ht.exists_ne x
+  obtain ⟨-, u, v, -, rfl, rfl⟩ := h hyt hxt hyne
+  exact Set.mem_range_self _
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, Set.image_preimage_eq_iff, Set.mem_range_self, apply_eq_iff_eq, exists_ne, hs.map, ht.exists_ne, image_preimage_eq_iff, mem_range_self
 -/
@@ -690,7 +696,7 @@ obtain ⟨s, rfl⟩ := Set.Finite.exists_finset_coe
       (show s.Finite from Set.Finite.of_finite_image (by simp [hst]) f.injective.injOn)
     exact ⟨s,hs, Finset.coe_inj.1 (by simpa)⟩
   rintro ⟨s, hs, rfl⟩
-  si
+  simpa using hs.map (f := f)
 
 中文:
 定理 isClique_map_finset_iff_of_nontrivial
@@ -703,7 +709,7 @@ obtain ⟨s, rfl⟩ := Set.Finite.exists_finset_coe
       (show s.Finite from Set.Finite.of_finite_image (by simp [hst]) f.injective.injOn)
     exact ⟨s,hs, Finset.coe_inj.1 (by simpa)⟩
   rintro ⟨s, hs, rfl⟩
-  si
+  simpa using hs.map (f := f)
 
 Depends on / 依赖: Finite, Finset, Finset.coe_inj, Set.Finite.exists_finset_coe, Set.Finite.of_finite_image, coe_inj, exists_finset_coe, f.injective.injOn, hs.map, injective, isClique_map_iff_of_nontrivial, of_finite_image, s.Finite
 -/
@@ -2018,7 +2024,19 @@ theorem CliqueFree.replaceVertex
     by_cases ms : s in Set.range φ
     · obtain ⟨y, hy⟩ := ms
       have e := @hφ x y
-      simp_rw [hx, hy, adj_comm, not_adj_replace
+      simp_rw [hx, hy, adj_comm, not_adj_replaceVertex_same, top_adj, false_iff, not_ne_iff] at e
+      rwa [← hx, e, hy, replaceVertex_self, not_cliqueFree_iff_top_isContained] at h
+    · unfold replaceVertex at hφ
+      refine Embedding.isContained ⟨φ.setValue x s, fun {a b} => ?_⟩
+      simp only [Embedding.coeFn_mk, Embedding.setValue, not_exists.mp ms, ite_false]
+      rw [apply_ite (G.Adj · _)]; rw [apply_ite (G.Adj _ ·)]; rw [apply_ite (G.Adj _ ·)]
+      convert! @hφ a b <;> simp only [← φ.apply_eq_iff_eq, SimpleGraph.irrefl, hx]
+  · refine Embedding.isContained ⟨φ, ?_⟩
+    simp_rw [Set.mem_range, not_exists, ← ne_eq] at mt
+    conv at hφ => enter [a, b]; rw [G.adj_replaceVertex_iff_of_ne _ (mt a) (mt b)]
+    exact hφ
+
+@[simp]
 
 中文:
 定理 CliqueFree.replaceVertex
@@ -2032,7 +2050,19 @@ theorem CliqueFree.replaceVertex
     by_cases ms : s in Set.range φ
     · obtain ⟨y, hy⟩ := ms
       have e := @hφ x y
-      simp_rw [hx, hy, adj_comm, not_adj_replace
+      simp_rw [hx, hy, adj_comm, not_adj_replaceVertex_same, top_adj, false_iff, not_ne_iff] at e
+      rwa [← hx, e, hy, replaceVertex_self, not_cliqueFree_iff_top_isContained] at h
+    · unfold replaceVertex at hφ
+      refine Embedding.isContained ⟨φ.setValue x s, fun {a b} => ?_⟩
+      simp only [Embedding.coeFn_mk, Embedding.setValue, not_exists.mp ms, ite_false]
+      rw [apply_ite (G.Adj · _)]; rw [apply_ite (G.Adj _ ·)]; rw [apply_ite (G.Adj _ ·)]
+      convert! @hφ a b <;> simp only [← φ.apply_eq_iff_eq, SimpleGraph.irrefl, hx]
+  · refine Embedding.isContained ⟨φ, ?_⟩
+    simp_rw [Set.mem_range, not_exists, ← ne_eq] at mt
+    conv at hφ => enter [a, b]; rw [G.adj_replaceVertex_iff_of_ne _ (mt a) (mt b)]
+    exact hφ
+
+@[simp]
 -/
 protected theorem CliqueFree.replaceVertex [DecidableEq α] (h : G.CliqueFree n) (s t : α) :
     (G.replaceVertex s t).CliqueFree n := by
@@ -2207,7 +2237,8 @@ obtain ⟨t, hc⟩ := not_forall_not.1 h.not_prop_of_gt G.lt_sup_edge _ _ hne hn
   use (t.erase x).erase y, erase_right_comm (a := x) ▸ (notMem_erase _ _), notMem_erase _ _
   have h1 := h.1.mem_of_sup_edge_isNClique hc
   have h2 := h.1.mem_of_sup_edge_isNClique (edge_comm .. ▸ hc)
-  rw [insert_erase 
+  rw [insert_erase <| mem_erase_of_ne_of_mem hne.symm h2]; rw [erase_right_comm]; rw [insert_erase mem_erase_of_ne_of_mem hne h1]
+  exact ⟨(edge_comm .. ▸ hc).erase_of_sup_edge_of_mem h2, hc.erase_of_sup_edge_of_mem h1⟩
 
 中文:
 引理 存在_of_maximal_cliqueFree_not_adj
@@ -2217,7 +2248,8 @@ obtain ⟨t, hc⟩ := not_forall_not.1 h.not_prop_of_gt G.lt_sup_edge _ _ hne hn
   use (t.erase x).erase y, erase_right_comm (a := x) ▸ (notMem_erase _ _), notMem_erase _ _
   have h1 := h.1.mem_of_sup_edge_isNClique hc
   have h2 := h.1.mem_of_sup_edge_isNClique (edge_comm .. ▸ hc)
-  rw [insert_erase 
+  rw [insert_erase <| mem_erase_of_ne_of_mem hne.symm h2]; rw [erase_right_comm]; rw [insert_erase mem_erase_of_ne_of_mem hne h1]
+  exact ⟨(edge_comm .. ▸ hc).erase_of_sup_edge_of_mem h2, hc.erase_of_sup_edge_of_mem h1⟩
 
 Depends on / 依赖: G.lt_sup_edge, edge_comm, erase_of_sup_edge_of_mem, erase_right_comm, h.not_prop_of_gt, hc.erase_of_sup_edge_of_mem, hne.symm, insert_erase, lt_sup_edge, mem_erase_of_ne_of_mem, mem_of_sup_edge_isNClique, notMem_erase, not_forall_not, not_prop_of_gt, t.erase
 -/
@@ -2453,7 +2485,8 @@ theorem cliqueFreeOn_two
     exact Set.insert_subset_iff.2 ⟨ha, Set.singleton_subset_iff.2 hb⟩
   simp only [CliqueFreeOn, isNClique_iff, card_eq_two, not_and, not_exists]
   rintro h t hst ht a b hab rfl
-  simp onl
+  simp only [coe_insert, coe_singleton, Set.insert_subset_iff, Set.singleton_subset_iff] at hst
+  refine h hst.1 hst.2 hab (ht ?_ ?_ hab) <;> simp
 
 中文:
 定理 cliqueFreeOn_two
@@ -2465,7 +2498,8 @@ theorem cliqueFreeOn_two
     exact Set.insert_subset_iff.2 ⟨ha, Set.singleton_subset_iff.2 hb⟩
   simp only [CliqueFreeOn, isNClique_iff, card_eq_two, not_and, not_exists]
   rintro h t hst ht a b hab rfl
-  simp onl
+  simp only [coe_insert, coe_singleton, Set.insert_subset_iff, Set.singleton_subset_iff] at hst
+  refine h hst.1 hst.2 hab (ht ?_ ?_ hab) <;> simp
 
 Depends on / 依赖: CliqueFreeOn, Set.insert_subset_iff, Set.singleton_subset_iff, card_eq_two, card_pair, classical, coe_insert, coe_singleton, hab.ne, insert_subset_iff, isNClique_iff, not_and, not_exists, singleton_subset_iff
 -/
@@ -2759,7 +2793,16 @@ theorem cliqueSet_map
       classical
       rw [map_eq_image]; rw [image_preimage]; rw [filter_true_of_mem]
       rintro a ha
-      obtain ⟨b, hb, hba⟩ := exists_mem_ne (hn.lt_of_le' <| Finset.card_pos.2 ⟨a, ha⟩)
+      obtain ⟨b, hb, hba⟩ := exists_mem_ne (hn.lt_of_le' <| Finset.card_pos.2 ⟨a, ha⟩) a
+      obtain ⟨-, c, _, _, hc, _⟩ := hs ha hb hba.symm
+      exact ⟨c, hc⟩
+    refine ⟨s.preimage f f.injective.injOn, ⟨?_, by rw [← card_map f, hs']⟩, hs'⟩
+    rw [coe_preimage]
+    exact fun a ha b hb hab => map_adj_apply.1 (hs ha hb <| f.injective.ne hab)
+  · rintro ⟨s, hs, rfl⟩
+    exact hs.map
+
+@[simp]
 
 中文:
 定理 cliqueSet_map
@@ -2772,7 +2815,16 @@ theorem cliqueSet_map
       classical
       rw [map_eq_image]; rw [image_preimage]; rw [filter_true_of_mem]
       rintro a ha
-      obtain ⟨b, hb, hba⟩ := exists_mem_ne (hn.lt_of_le' <| Finset.card_pos.2 ⟨a, ha⟩)
+      obtain ⟨b, hb, hba⟩ := exists_mem_ne (hn.lt_of_le' <| Finset.card_pos.2 ⟨a, ha⟩) a
+      obtain ⟨-, c, _, _, hc, _⟩ := hs ha hb hba.symm
+      exact ⟨c, hc⟩
+    refine ⟨s.preimage f f.injective.injOn, ⟨?_, by rw [← card_map f, hs']⟩, hs'⟩
+    rw [coe_preimage]
+    exact fun a ha b hb hab => map_adj_apply.1 (hs ha hb <| f.injective.ne hab)
+  · rintro ⟨s, hs, rfl⟩
+    exact hs.map
+
+@[simp]
 
 Depends on / 依赖: Finset, Finset.card_pos, card_map, card_pos, classical, coe_preimage, exists_mem_ne, f.injective.injOn, f.injective.ne, filter_true_of_mem, hba.symm, hn.lt_of_le, image_preimage, injective, lt_of_le, map_adj_apply, map_eq_image, preimage, s.preimage
 -/
@@ -3030,7 +3082,9 @@ lemma IsMaximumClique.isMaximalClique
       have fint := ofFinite t
       have ne : s != t.toFinset := fun a => by subst a; simp_all[Set.coe_toFinset, not_true_eq_false]
       have hle : #t.toFinset <= #s := M.maximum t.toFinset (by simp [Set.coe_toFinset, ht])
-      have hlt : #s
+      have hlt : #s < #t.toFinset :=
+        card_lt_card (ssubset_of_ne_of_subset ne (Set.subset_toFinset.mpr hsub))
+      exact lt_irrefl _ (lt_of_lt_of_le hlt hle) ⟩
 
 中文:
 引理 是MaximumClique.isMaximalClique
@@ -3041,7 +3095,9 @@ lemma IsMaximumClique.isMaximalClique
       have fint := ofFinite t
       have ne : s != t.toFinset := fun a => by subst a; simp_all[Set.coe_toFinset, not_true_eq_false]
       have hle : #t.toFinset <= #s := M.maximum t.toFinset (by simp [Set.coe_toFinset, ht])
-      have hlt : #s
+      have hlt : #s < #t.toFinset :=
+        card_lt_card (ssubset_of_ne_of_subset ne (Set.subset_toFinset.mpr hsub))
+      exact lt_irrefl _ (lt_of_lt_of_le hlt hle) ⟩
 
 Depends on / 依赖: M.isClique, M.maximum, Set.coe_toFinset, Set.subset_toFinset.mpr, card_lt_card, coe_toFinset, isClique, lt_irrefl, lt_of_lt_of_le, maximum, not_true_eq_false, ofFinite, ssubset_of_ne_of_subset, subset_toFinset, t.toFinset, toFinset
 -/

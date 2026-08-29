@@ -170,7 +170,12 @@ definition whnfPred
       else
         return ← mapLetTelescope f fun _ f' => pure ((coe.app f').app x)
 
-    if (← pred e)
+    if (← pred e) then
+        match (← unfoldDefinition? e) with
+        | some e => whnfPred e pred
+        | none => return e
+    else
+      return e
 
 中文:
 定义 whnfPred
@@ -186,7 +191,12 @@ definition whnfPred
       else
         return ← mapLetTelescope f fun _ f' => pure ((coe.app f').app x)
 
-    if (← pred e)
+    if (← pred e) then
+        match (← unfoldDefinition? e) with
+        | some e => whnfPred e pred
+        | none => return e
+    else
+      return e
 -/
 partial def whnfPred (e : Expr) (pred : Expr -> MetaM Bool) :
     MetaM Expr := do

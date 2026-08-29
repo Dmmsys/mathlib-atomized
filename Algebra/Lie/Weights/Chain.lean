@@ -85,7 +85,9 @@ lemma eventually_genWeightSpace_smul_add_eq_bot
     apply (finite_genWeightSpace_ne_bot R L M).subset
     simp [f]
   intro k l hkl
-  replace hkl : (k : Int) • χ₁ = (l : 
+  replace hkl : (k : Int) • χ₁ = (l : Int) • χ₁ := by
+    simpa only [f, add_left_inj, natCast_zsmul] using hkl
+exact Nat.cast_inj.mp smul_left_injective Int hχ₁ hkl
 
 中文:
 引理 eventually_genWeightSpace_smul_add_eq_bot
@@ -96,7 +98,9 @@ lemma eventually_genWeightSpace_smul_add_eq_bot
     apply (finite_genWeightSpace_ne_bot R L M).subset
     simp [f]
   intro k l hkl
-  replace hkl : (k : Int) • χ₁ = (l : 
+  replace hkl : (k : Int) • χ₁ = (l : Int) • χ₁ := by
+    simpa only [f, add_left_inj, natCast_zsmul] using hkl
+exact Nat.cast_inj.mp smul_left_injective Int hχ₁ hkl
 
 Depends on / 依赖: Filter, Filter.eventually_cofinite, Injective, Nat.cast_inj.mp, Nat.cofinite_eq_atTop, add_left_inj, cast_inj, cofinite_eq_atTop, eventually_cofinite, finite_genWeightSpace_ne_bot, finite_image_iff, natCast_zsmul, replace, smul_left_injective, subset, this.injOn
 -/
@@ -140,7 +144,8 @@ lemma exists₂_genWeightSpace_smul_add_eq_bot
   refine ⟨-(p : Int), by simpa, q, by simpa, ?_, ?_⟩
   · rw [neg_smul, ← smul_neg, natCast_zsmul]
     exact hp
-  · rw [natCast
+  · rw [natCast_zsmul]
+    exact hq
 
 中文:
 引理 存在₂_genWeightSpace_smul_add_eq_bot
@@ -150,7 +155,8 @@ lemma exists₂_genWeightSpace_smul_add_eq_bot
   refine ⟨-(p : Int), by simpa, q, by simpa, ?_, ?_⟩
   · rw [neg_smul, ← smul_neg, natCast_zsmul]
     exact hp
-  · rw [natCast
+  · rw [natCast_zsmul]
+    exact hq
 
 Depends on / 依赖: exists_genWeightSpace_smul_add_eq_bot, natCast_zsmul, neg_ne_zero, neg_ne_zero.mpr, neg_smul, smul_neg
 -/
@@ -293,7 +299,17 @@ lemma lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_right
     obtain ⟨k, hk⟩ := k
     suffices genWeightSpace M ((k + 1) • α + χ) <= genWeightSpaceChain M α χ p q by
       apply this
-      -- was `simpa using! [...]` and very slo
+      -- was `simpa using! [...]` and very slow
+      -- (https://github.com/leanprover-community/mathlib4/issues/19751)
+      simpa only [zsmul_eq_mul, Int.cast_add, Pi.intCast_def, Int.cast_one] using!
+        (rootSpaceWeightSpaceProduct R L H M α (k • α + χ) ((k + 1) • α + χ)
+            (by rw [add_smul]; abel) (⟨x, hx⟩ otimesₜ ⟨z, hz⟩)).property
+    rw [genWeightSpaceChain]
+    rcases eq_or_ne (k + 1) q with rfl | hk'; · simp only [hq, bot_le]
+    replace hk' : k + 1 in Ioo p q := ⟨by linarith [hk.1], lt_of_le_of_ne hk.2 hk'⟩
+    exact le_biSup (fun k => genWeightSpace M (k • α + χ)) hk'
+  | zero => simp
+  | add _ _ _ _ hz₁ hz₂ => rw [lie_add]; exact add_mem hz₁ hz₂
 
 中文:
 引理 lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_right
@@ -305,7 +321,17 @@ lemma lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_right
     obtain ⟨k, hk⟩ := k
     suffices genWeightSpace M ((k + 1) • α + χ) <= genWeightSpaceChain M α χ p q by
       apply this
-      -- was `simpa using! [...]` and very slo
+      -- was `simpa using! [...]` and very slow
+      -- (https://github.com/leanprover-community/mathlib4/issues/19751)
+      simpa only [zsmul_eq_mul, Int.cast_add, Pi.intCast_def, Int.cast_one] using!
+        (rootSpaceWeightSpaceProduct R L H M α (k • α + χ) ((k + 1) • α + χ)
+            (by rw [add_smul]; abel) (⟨x, hx⟩ otimesₜ ⟨z, hz⟩)).property
+    rw [genWeightSpaceChain]
+    rcases eq_or_ne (k + 1) q with rfl | hk'; · simp only [hq, bot_le]
+    replace hk' : k + 1 in Ioo p q := ⟨by linarith [hk.1], lt_of_le_of_ne hk.2 hk'⟩
+    exact le_biSup (fun k => genWeightSpace M (k • α + χ)) hk'
+  | zero => simp
+  | add _ _ _ _ hz₁ hz₂ => rw [lie_add]; exact add_mem hz₁ hz₂
 
 Depends on / 依赖: LieSubmodule, LieSubmodule.iSup_induction, genWeightSpace, genWeightSpaceChain, iSup_induction, iSup_subtype
 -/
@@ -379,7 +405,23 @@ lemma trace_toEnd_genWeightSpaceChain_eq_zero
     obtain ⟨y, hy, z, hz, hyz⟩ := hu
     let f : Module.End R (genWeightSpaceChain M α χ p q) :=
       { toFun := fun ⟨m, hm⟩ => ⟨⁅(y : L), m⁆,
-          lie_mem_genWeightSpaceChain_of_genW
+          lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_right M α χ p q hq hy hm⟩
+        map_add' := fun _ _ => by simp
+        map_smul' := fun t m => by simp }
+    let g : Module.End R (genWeightSpaceChain M α χ p q) :=
+      { toFun := fun ⟨m, hm⟩ => ⟨⁅(z : L), m⁆,
+          lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_left M α χ p q hp hz hm⟩
+        map_add' := fun _ _ => by simp
+        map_smul' := fun t m => by simp }
+    have hfg : toEnd R H _ u = ⁅f, g⁆ := by
+      ext
+      rw [toEnd_apply_apply]; rw [LieSubmodule.coe_bracket]; rw [LieSubalgebra.coe_bracket_of_module]; rw [← hyz]
+      simp only [lie_lie, LieHom.lie_apply, LinearMap.coe_mk, AddHom.coe_mk, Module.End.lie_apply,
+        AddSubgroupClass.coe_sub, f, g]
+    simp [hfg]
+  | zero => simp
+  | add => simp_all
+  | smul => simp_all
 
 中文:
 引理 trace_toEnd_genWeightSpaceChain_eq_zero
@@ -390,7 +432,23 @@ lemma trace_toEnd_genWeightSpaceChain_eq_zero
     obtain ⟨y, hy, z, hz, hyz⟩ := hu
     let f : Module.End R (genWeightSpaceChain M α χ p q) :=
       { toFun := fun ⟨m, hm⟩ => ⟨⁅(y : L), m⁆,
-          lie_mem_genWeightSpaceChain_of_genW
+          lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_right M α χ p q hq hy hm⟩
+        map_add' := fun _ _ => by simp
+        map_smul' := fun t m => by simp }
+    let g : Module.End R (genWeightSpaceChain M α χ p q) :=
+      { toFun := fun ⟨m, hm⟩ => ⟨⁅(z : L), m⁆,
+          lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_left M α χ p q hp hz hm⟩
+        map_add' := fun _ _ => by simp
+        map_smul' := fun t m => by simp }
+    have hfg : toEnd R H _ u = ⁅f, g⁆ := by
+      ext
+      rw [toEnd_apply_apply]; rw [LieSubmodule.coe_bracket]; rw [LieSubalgebra.coe_bracket_of_module]; rw [← hyz]
+      simp only [lie_lie, LieHom.lie_apply, LinearMap.coe_mk, AddHom.coe_mk, Module.End.lie_apply,
+        AddSubgroupClass.coe_sub, f, g]
+    simp [hfg]
+  | zero => simp
+  | add => simp_all
+  | smul => simp_all
 
 Depends on / 依赖: LieAlgebra, LieAlgebra.mem_corootSpace, Module, Module.End, Submodule, Submodule.span_induction, genWeightSpaceChain, lie_mem_genWeightSpaceCh, lie_mem_genWeightSpaceChain_of_genWeightSpace_eq_bot_right, map_add, map_smul, mem_corootSpace, span_induction
 -/
@@ -434,7 +492,32 @@ lemma exists_forall_mem_corootSpace_smul_add_eq_zero
   let a := ∑ i in Finset.Ioo p q, finrank R (genWeightSpace M (i • α + χ)) • i
   let b := ∑ i in Finset.Ioo p q, finrank R (genWeightSpace M (i • α + χ))
   have hb : 0 < b := by
-    replace hχ : Nontrivial (genWe
+    replace hχ : Nontrivial (genWeightSpace M χ) := by rwa [LieSubmodule.nontrivial_iff_ne_bot]
+    refine Finset.sum_pos' (fun _ _ => zero_le) ⟨0, Finset.mem_Ioo.mpr ⟨hp₀, hq₀⟩, ?_⟩
+    rw [zero_smul]; rw [zero_add]
+    exact finrank_pos
+  refine ⟨a, b, Int.natCast_pos.mpr hb, fun x hx => ?_⟩
+  let N : Int -> Submodule R M := fun k => genWeightSpace M (k • α + χ)
+  have h₁ : iSupIndep fun (i : Finset.Ioo p q) => N i := by
+    rw [LieSubmodule.iSupIndep_toSubmodule]
+    refine (iSupIndep_genWeightSpace R H M).comp fun i j hij => ?_
+exact SetCoe.ext smul_left_injective Int hα by rwa [add_left_inj] at hij
+  have h₂ : forall i, MapsTo (toEnd R H M x) ↑(N i) ↑(N i) := fun _ _ => LieSubmodule.lie_mem _
+  have h₃ : genWeightSpaceChain M α χ p q = ⨆ i in Finset.Ioo p q, N i := by
+    simp_rw [N, genWeightSpaceChain_def', LieSubmodule.iSup_toSubmodule]
+  rw [← trace_toEnd_genWeightSpaceChain_eq_zero M α χ p q hp hq hx]; rw [← LieSubmodule.toEnd_restrict_eq_toEnd]
+  -- The lines below illustrate the cost of treating `LieSubmodule` as both a
+  -- `Submodule` and a `LieSubmodule` simultaneously.
+  #adaptation_note /-- 2025-06-18 (https://github.com/leanprover/lean4/issues/8804).
+    The `erw` causes a kernel timeout if there is no `subst`. -/
+  subst a b N
+  erw [LinearMap.trace_eq_sum_trace_restrict_of_eq_biSup _ h₁ h₂ (genWeightSpaceChain M α χ p q) h₃]
+  simp_rw [LieSubmodule.toEnd_restrict_eq_toEnd]
+  convert_to! _ =
+    ∑ k in Finset.Ioo p q, (LinearMap.trace R { x // x in (genWeightSpace M (k • α + χ)) })
+      ((toEnd R { x // x in H } { x // x in genWeightSpace M (k • α + χ) }) x)
+  simp_rw [trace_toEnd_genWeightSpace, Pi.add_apply, Pi.smul_apply, smul_add,
+    ← smul_assoc, Finset.sum_add_distrib, ← Finset.sum_smul, natCast_zsmul]
 
 中文:
 引理 存在_对任意_mem_corootSpace_smul_add_eq_zero
@@ -443,7 +526,32 @@ lemma exists_forall_mem_corootSpace_smul_add_eq_zero
   let a := ∑ i in Finset.Ioo p q, finrank R (genWeightSpace M (i • α + χ)) • i
   let b := ∑ i in Finset.Ioo p q, finrank R (genWeightSpace M (i • α + χ))
   have hb : 0 < b := by
-    replace hχ : Nontrivial (genWe
+    replace hχ : Nontrivial (genWeightSpace M χ) := by rwa [LieSubmodule.nontrivial_iff_ne_bot]
+    refine Finset.sum_pos' (fun _ _ => zero_le) ⟨0, Finset.mem_Ioo.mpr ⟨hp₀, hq₀⟩, ?_⟩
+    rw [zero_smul]; rw [zero_add]
+    exact finrank_pos
+  refine ⟨a, b, Int.natCast_pos.mpr hb, fun x hx => ?_⟩
+  let N : Int -> Submodule R M := fun k => genWeightSpace M (k • α + χ)
+  have h₁ : iSupIndep fun (i : Finset.Ioo p q) => N i := by
+    rw [LieSubmodule.iSupIndep_toSubmodule]
+    refine (iSupIndep_genWeightSpace R H M).comp fun i j hij => ?_
+exact SetCoe.ext smul_left_injective Int hα by rwa [add_left_inj] at hij
+  have h₂ : forall i, MapsTo (toEnd R H M x) ↑(N i) ↑(N i) := fun _ _ => LieSubmodule.lie_mem _
+  have h₃ : genWeightSpaceChain M α χ p q = ⨆ i in Finset.Ioo p q, N i := by
+    simp_rw [N, genWeightSpaceChain_def', LieSubmodule.iSup_toSubmodule]
+  rw [← trace_toEnd_genWeightSpaceChain_eq_zero M α χ p q hp hq hx]; rw [← LieSubmodule.toEnd_restrict_eq_toEnd]
+  -- The lines below illustrate the cost of treating `LieSubmodule` as both a
+  -- `Submodule` and a `LieSubmodule` simultaneously.
+  #adaptation_note /-- 2025-06-18 (https://github.com/leanprover/lean4/issues/8804).
+    The `erw` causes a kernel timeout if there is no `subst`. -/
+  subst a b N
+  erw [LinearMap.trace_eq_sum_trace_restrict_of_eq_biSup _ h₁ h₂ (genWeightSpaceChain M α χ p q) h₃]
+  simp_rw [LieSubmodule.toEnd_restrict_eq_toEnd]
+  convert_to! _ =
+    ∑ k in Finset.Ioo p q, (LinearMap.trace R { x // x in (genWeightSpace M (k • α + χ)) })
+      ((toEnd R { x // x in H } { x // x in genWeightSpace M (k • α + χ) }) x)
+  simp_rw [trace_toEnd_genWeightSpace, Pi.add_apply, Pi.smul_apply, smul_add,
+    ← smul_assoc, Finset.sum_add_distrib, ← Finset.sum_smul, natCast_zsmul]
 
 Depends on / 依赖: Finset, Finset.Ioo, Finset.mem_Ioo.mpr, Finset.sum_pos, Int.n, LieSubmodule, LieSubmodule.nontrivial_iff_ne_bot, Nontrivial, finrank, finrank_pos, genWeightSpace, mem_Ioo, nontrivial_iff_ne_bot, replace, sum_pos, zero_add, zero_le, zero_smul
 -/
@@ -620,6 +728,9 @@ lemma chainTopCoeff_add_one
   rw [zero_lt_iff]
   intro e
   have : genWeightSpace M (0 • α + β : L -> R) = ⊥ := by
+    rw [← e]
+    exact Nat.find_spec (eventually_genWeightSpace_smul_add_eq_bot M α β hα).exists
+  exact β.genWeightSpace_ne_bot _ (by simpa only [zero_smul, zero_add] using this)
 
 中文:
 引理 chainTopCoeff_add_one
@@ -632,6 +743,9 @@ lemma chainTopCoeff_add_one
   rw [zero_lt_iff]
   intro e
   have : genWeightSpace M (0 • α + β : L -> R) = ⊥ := by
+    rw [← e]
+    exact Nat.find_spec (eventually_genWeightSpace_smul_add_eq_bot M α β hα).exists
+  exact β.genWeightSpace_ne_bot _ (by simpa only [zero_smul, zero_add] using this)
 
 Depends on / 依赖: Classical, Classical.propDecidable, propDecidable
 -/
@@ -758,7 +872,8 @@ lemma genWeightSpace_zsmul_add_ne_bot
   · simp only [Int.ofNat_eq_natCast, Nat.cast_le, Nat.cast_smul_eq_nsmul] at hn' ⊢
     exact genWeightSpace_nsmul_add_ne_bot_of_le α β hn'
   · simp only [Int.negSucc_eq, ← Nat.cast_succ, neg_le_neg_iff, Nat.cast_le] at hn ⊢
-    rw [neg_smul]; rw [← smul_neg]; rw [Nat.cast_
+    rw [neg_smul]; rw [← smul_neg]; rw [Nat.cast_smul_eq_nsmul]
+    exact genWeightSpace_nsmul_add_ne_bot_of_le (-α) β hn
 
 中文:
 引理 genWeightSpace_zsmul_add_ne_bot
@@ -768,7 +883,8 @@ lemma genWeightSpace_zsmul_add_ne_bot
   · simp only [Int.ofNat_eq_natCast, Nat.cast_le, Nat.cast_smul_eq_nsmul] at hn' ⊢
     exact genWeightSpace_nsmul_add_ne_bot_of_le α β hn'
   · simp only [Int.negSucc_eq, ← Nat.cast_succ, neg_le_neg_iff, Nat.cast_le] at hn ⊢
-    rw [neg_smul]; rw [← smul_neg]; rw [Nat.cast_
+    rw [neg_smul]; rw [← smul_neg]; rw [Nat.cast_smul_eq_nsmul]
+    exact genWeightSpace_nsmul_add_ne_bot_of_le (-α) β hn
 
 Depends on / 依赖: Int.negSucc_eq, Int.ofNat_eq_natCast, Nat.cast_le, Nat.cast_smul_eq_nsmul, Nat.cast_succ, cast_le, cast_smul_eq_nsmul, cast_succ, genWeightSpace_nsmul_add_ne_bot_of_le, negSucc_eq, neg_le_neg_iff, neg_smul, ofNat_eq_natCast, smul_neg
 -/
@@ -1063,7 +1179,15 @@ lemma LieModule.isNilpotent_toEnd_of_mem_rootSpace
   induction hm using LieSubmodule.iSup_induction' with
   | zero => exact ⟨0, map_zero _⟩
   | mem χ₂ m₂ hm₂ =>
-    obta
+    obtain ⟨n, -, hn⟩ := exists_genWeightSpace_smul_add_eq_bot M χ χ₂ hχ
+    use n
+    have := toEnd_pow_apply_mem hx hm₂ n
+    rwa [hn, LieSubmodule.mem_bot] at this
+  | add m₁ m₂ hm₁ hm₂ hm₁' hm₂' =>
+    obtain ⟨n₁, hn₁⟩ := hm₁'
+    obtain ⟨n₂, hn₂⟩ := hm₂'
+    refine ⟨max n₁ n₂, ?_⟩
+    rw [map_add]; rw [Module.End.pow_map_zero_of_le le_sup_left hn₁]; rw [Module.End.pow_map_zero_of_le le_sup_right hn₂]; rw [add_zero]
 
 中文:
 引理 Lie模.isNilpotent_toEnd_of_mem_rootSpace
@@ -1074,7 +1198,15 @@ lemma LieModule.isNilpotent_toEnd_of_mem_rootSpace
   induction hm using LieSubmodule.iSup_induction' with
   | zero => exact ⟨0, map_zero _⟩
   | mem χ₂ m₂ hm₂ =>
-    obta
+    obtain ⟨n, -, hn⟩ := exists_genWeightSpace_smul_add_eq_bot M χ χ₂ hχ
+    use n
+    have := toEnd_pow_apply_mem hx hm₂ n
+    rwa [hn, LieSubmodule.mem_bot] at this
+  | add m₁ m₂ hm₁ hm₂ hm₁' hm₂' =>
+    obtain ⟨n₁, hn₁⟩ := hm₁'
+    obtain ⟨n₂, hn₂⟩ := hm₂'
+    refine ⟨max n₁ n₂, ?_⟩
+    rw [map_add]; rw [Module.End.pow_map_zero_of_le le_sup_left hn₁]; rw [Module.End.pow_map_zero_of_le le_sup_right hn₂]; rw [add_zero]
 
 Depends on / 依赖: LieModule, LieModule.Weight, LieSubmodule, LieSubmodule.iSup_induction, LieSubmodule.mem_bot, Module, Module.End.isNilpotent_iff_of_finite.mpr, Weight, exists_genWeightSpace_smul_add_eq_bot, genWeightSpace, iSup_genWeightSpace_eq_top, iSup_induction, isNilpotent_iff_of_finite, map_zero, mem_bot, toEnd_pow_apply_mem
 -/

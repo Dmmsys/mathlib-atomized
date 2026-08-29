@@ -533,7 +533,7 @@ theorem differentiableWithinAt_dslope_of_ne
   refine (((differentiableWithinAt_id.sub_const a).inv (sub_ne_zero.2 h)).smul
     (hd.sub_const (f a))).congr_of_eventuallyEq ?_ (dslope_of_ne _ h)
   refine (eqOn_dslope_slope _ _).eventuallyEq_of_mem ?_
-  exact mem_nhdsWithin_of_mem_nhds
+  exact mem_nhdsWithin_of_mem_nhds (isOpen_ne.mem_nhds h)
 
 中文:
 定理 differentiableWithinAt_dslope_of_ne
@@ -543,7 +543,7 @@ theorem differentiableWithinAt_dslope_of_ne
   refine (((differentiableWithinAt_id.sub_const a).inv (sub_ne_zero.2 h)).smul
     (hd.sub_const (f a))).congr_of_eventuallyEq ?_ (dslope_of_ne _ h)
   refine (eqOn_dslope_slope _ _).eventuallyEq_of_mem ?_
-  exact mem_nhdsWithin_of_mem_nhds
+  exact mem_nhdsWithin_of_mem_nhds (isOpen_ne.mem_nhds h)
 
 Depends on / 依赖: DifferentiableWithinAt, DifferentiableWithinAt.of_dslope, congr_of_eventuallyEq, differentiableWithinAt_id, differentiableWithinAt_id.sub_const, dslope_of_ne, eqOn_dslope_slope, eventuallyEq_of_mem, hd.sub_const, isOpen_ne, isOpen_ne.mem_nhds, mem_nhds, mem_nhdsWithin_of_mem_nhds, of_dslope, sub_const, sub_ne_zero
 -/

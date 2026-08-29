@@ -446,7 +446,19 @@ theorem CompleteSpace.iInf
   rcases ht with ⟨t, ht, hut⟩
   -- The diagonal map `(X, ⨅ i, u i) → ∀ i, (X, u i)` is a uniform embedding.
   have : @IsUniformInducing X (ι -> X) (⨅ i, u i) (Pi.uniformSpace (U := u)) (const ι) := by
-    simp_rw [isUniformInducing_iff, iInf_u
+    simp_rw [isUniformInducing_iff, iInf_uniformity, Pi.uniformity, Filter.comap_iInf,
+      Filter.comap_comap, comp_def, const, Prod.eta, comap_id']
+  -- Hence, it suffices to show that its range, the diagonal, is closed in `Π i, (X, u i)`.
+  simp_rw [@completeSpace_iff_isComplete_range _ _ (_) (_) _ this, range_const_eq_diagonal,
+    ofPred_forall]
+  -- The separation of `t` ensures that this is the case in `Π i, (X, t)`, hence the result
+  -- since the topology associated to each `u i` is finer than `t`.
+  have : Pi.topologicalSpace (t₂ := fun i => (u i).toTopologicalSpace) <=
+         Pi.topologicalSpace (t₂ := fun _ => t) :=
+iInf_mono fun i => induced_mono hut i
+refine IsClosed.isComplete .mono ?_ this
+  exact isClosed_iInter fun i => isClosed_iInter fun j =>
+    isClosed_eq (continuous_apply _) (continuous_apply _)
 
 中文:
 定理 完备空间.iInf
@@ -457,7 +469,19 @@ theorem CompleteSpace.iInf
   rcases ht with ⟨t, ht, hut⟩
   -- The diagonal map `(X, ⨅ i, u i) → ∀ i, (X, u i)` is a uniform embedding.
   have : @IsUniformInducing X (ι -> X) (⨅ i, u i) (Pi.uniformSpace (U := u)) (const ι) := by
-    simp_rw [isUniformInducing_iff, iInf_u
+    simp_rw [isUniformInducing_iff, iInf_uniformity, Pi.uniformity, Filter.comap_iInf,
+      Filter.comap_comap, comp_def, const, Prod.eta, comap_id']
+  -- Hence, it suffices to show that its range, the diagonal, is closed in `Π i, (X, u i)`.
+  simp_rw [@completeSpace_iff_isComplete_range _ _ (_) (_) _ this, range_const_eq_diagonal,
+    ofPred_forall]
+  -- The separation of `t` ensures that this is the case in `Π i, (X, t)`, hence the result
+  -- since the topology associated to each `u i` is finer than `t`.
+  have : Pi.topologicalSpace (t₂ := fun i => (u i).toTopologicalSpace) <=
+         Pi.topologicalSpace (t₂ := fun _ => t) :=
+iInf_mono fun i => induced_mono hut i
+refine IsClosed.isComplete .mono ?_ this
+  exact isClosed_iInter fun i => isClosed_iInter fun j =>
+    isClosed_eq (continuous_apply _) (continuous_apply _)
 -/
 protected theorem CompleteSpace.iInf {ι X : Type*} {u : ι -> UniformSpace X}
     (hu : forall i, @CompleteSpace X (u i))

@@ -30,7 +30,10 @@ have h₁ := idealQuotientMk.mp h.mono hJI
   rw [← Commute.mul_neg_geom_sum₂ (.all _ _)]
   refine Ideal.mul_mem_mul h ?_
   have h₂ : (p : R ⧸ I) = 0 := by simpa using Ideal.Quotient.eq_zero_iff_mem.mpr hpI
-  simp only [← Ideal.Quotient.eq_zero_iff_mem, map_sum, map_mul,
+  simp only [← Ideal.Quotient.eq_zero_iff_mem, map_sum, map_mul, map_pow, h₁, ← pow_add]
+  trans ∑ x in Finset.range p, Ideal.Quotient.mk I y ^ (p - 1)
+  · exact Finset.sum_congr rfl fun _ _ => by grind
+  simp [h₂]
 
 中文:
 定理 pow_mul_of_le
@@ -41,7 +44,10 @@ have h₁ := idealQuotientMk.mp h.mono hJI
   rw [← Commute.mul_neg_geom_sum₂ (.all _ _)]
   refine Ideal.mul_mem_mul h ?_
   have h₂ : (p : R ⧸ I) = 0 := by simpa using Ideal.Quotient.eq_zero_iff_mem.mpr hpI
-  simp only [← Ideal.Quotient.eq_zero_iff_mem, map_sum, map_mul,
+  simp only [← Ideal.Quotient.eq_zero_iff_mem, map_sum, map_mul, map_pow, h₁, ← pow_add]
+  trans ∑ x in Finset.range p, Ideal.Quotient.mk I y ^ (p - 1)
+  · exact Finset.sum_congr rfl fun _ _ => by grind
+  simp [h₂]
 
 Depends on / 依赖: Commute, Commute.mul_neg_geom_sum, Finset, Finset.range, Finset.sum_congr, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.eq_zero_iff_mem.mpr, Ideal.Quotient.mk, Ideal.mul_mem_mul, Quotient, SModEq, SModEq.sub_mem, eq_zero_iff_mem, h.mono, idealQuotientMk, idealQuotientMk.mp, map_mul, map_pow, map_sum, mul_mem_mul
 -/

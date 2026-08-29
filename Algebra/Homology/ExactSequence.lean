@@ -842,6 +842,13 @@ lemma exact_iff_δ₀
     · exact Exact.mk (IsComplex.mk (fun i hi => h.toIsComplex.zero (i + 1)))
         (fun i hi => h.exact (i + 1))
   · rintro ⟨h, h₀⟩
+    refine Exact.mk (IsComplex.mk (fun i hi => ?_)) (fun i hi => ?_)
+    · obtain _ | i := i
+      · exact h.toIsComplex.zero 0
+      · exact h₀.toIsComplex.zero i
+    · obtain _ | i := i
+      · exact h.exact 0
+      · exact h₀.exact i
 
 中文:
 引理 exact_iff_δ₀
@@ -857,6 +864,13 @@ lemma exact_iff_δ₀
     · exact Exact.mk (IsComplex.mk (fun i hi => h.toIsComplex.zero (i + 1)))
         (fun i hi => h.exact (i + 1))
   · rintro ⟨h, h₀⟩
+    refine Exact.mk (IsComplex.mk (fun i hi => ?_)) (fun i hi => ?_)
+    · obtain _ | i := i
+      · exact h.toIsComplex.zero 0
+      · exact h₀.toIsComplex.zero i
+    · obtain _ | i := i
+      · exact h.exact 0
+      · exact h₀.exact i
 
 Depends on / 依赖: Exact.mk, IsComplex, IsComplex.mk, h.exact, h.toIsComplex.zero, toIsComplex, toIsComplex.zero
 -/
@@ -941,7 +955,15 @@ lemma exact_iff_δlast
         exact h.toIsComplex.zero n
       exact h.exact n (by lia)
   · rintro ⟨h, h'⟩
-    refine 
+    refine Exact.mk (IsComplex.mk (fun i hi => ?_)) (fun i hi => ?_)
+    · simp only [Nat.add_le_add_iff_right] at hi
+      obtain hi | rfl := hi.lt_or_eq
+      · exact h.toIsComplex.zero i
+      · exact h'.toIsComplex.zero 0
+    · simp only [Nat.add_le_add_iff_right] at hi
+      obtain hi | rfl := hi.lt_or_eq
+      · exact h.exact i
+      · exact h'.exact 0
 
 中文:
 引理 exact_iff_δlast
@@ -957,7 +979,15 @@ lemma exact_iff_δlast
         exact h.toIsComplex.zero n
       exact h.exact n (by lia)
   · rintro ⟨h, h'⟩
-    refine 
+    refine Exact.mk (IsComplex.mk (fun i hi => ?_)) (fun i hi => ?_)
+    · simp only [Nat.add_le_add_iff_right] at hi
+      obtain hi | rfl := hi.lt_or_eq
+      · exact h.toIsComplex.zero i
+      · exact h'.toIsComplex.zero 0
+    · simp only [Nat.add_le_add_iff_right] at hi
+      obtain hi | rfl := hi.lt_or_eq
+      · exact h.exact i
+      · exact h'.exact 0
 
 Depends on / 依赖: Exact.mk, IsComplex, IsComplex.mk, Nat.add_le_add_iff_right, add_le_add_iff_right, h.exact, h.toIsComplex.zero, hi.lt_or_eq, lt_or_eq, toIsComplex, toIsComplex.zero
 -/

@@ -40,7 +40,10 @@ lemma iSup_subcomplexOfSimplex_prod_eq_top
     Set.top_eq_univ, Set.mem_univ, iff_true]
   have hx₁ : x₁ in (⊤ : X₁.Subcomplex).obj _ := by simp
   have hx₂ : x₂ in (⊤ : X₂.Subcomplex).obj _ := by simp
-  simp only [← N.iSup_subcomplex
+  simp only [← N.iSup_subcomplex_eq_top, Subfunctor.iSup_obj, Set.mem_iUnion] at hx₁ hx₂
+  obtain ⟨s₁, hs₁⟩ := hx₁
+  obtain ⟨s₂, hs₂⟩ := hx₂
+  exact ⟨s₁, s₂, hs₁, hs₂⟩
 
 中文:
 引理 iSup_subcomplexOfSimplex_prod_eq_top
@@ -50,7 +53,10 @@ lemma iSup_subcomplexOfSimplex_prod_eq_top
     Set.top_eq_univ, Set.mem_univ, iff_true]
   have hx₁ : x₁ in (⊤ : X₁.Subcomplex).obj _ := by simp
   have hx₂ : x₂ in (⊤ : X₂.Subcomplex).obj _ := by simp
-  simp only [← N.iSup_subcomplex
+  simp only [← N.iSup_subcomplex_eq_top, Subfunctor.iSup_obj, Set.mem_iUnion] at hx₁ hx₂
+  obtain ⟨s₁, hs₁⟩ := hx₁
+  obtain ⟨s₂, hs₂⟩ := hx₂
+  exact ⟨s₁, s₂, hs₁, hs₂⟩
 
 Depends on / 依赖: N.iSup_subcomplex_eq_top, Set.mem_iUnion, Set.mem_univ, Set.top_eq_univ, Subcomplex, Subcomplex.prod_obj, Subfunctor, Subfunctor.iSup_obj, Subfunctor.top_obj, iSup_obj, iSup_subcomplex_eq_top, iff_true, mem_iUnion, mem_univ, prod_obj, top_eq_univ, top_obj
 -/
@@ -100,7 +106,9 @@ lemma hasDimensionLT_prod
   simp only [Subcomplex.ofSimplexProd_eq_range, hasDimensionLT_iSup_iff]
   intro x₁ x₂
   have := X₁.dim_lt_of_nonDegenerate ⟨_, x₁.nonDegenerate⟩ d₁
-  have := X₂.dim_lt_of_nonDegenerate ⟨_, x₂.nonDegenerate⟩ d
+  have := X₂.dim_lt_of_nonDegenerate ⟨_, x₂.nonDegenerate⟩ d₂
+  have := (Δ[x₁.dim] otimes Δ[x₂.dim]).hasDimensionLT_of_le (x₁.dim + x₂.dim + 1) n
+  infer_instance
 
 中文:
 引理 hasDimensionLT_prod
@@ -109,7 +117,9 @@ lemma hasDimensionLT_prod
   simp only [Subcomplex.ofSimplexProd_eq_range, hasDimensionLT_iSup_iff]
   intro x₁ x₂
   have := X₁.dim_lt_of_nonDegenerate ⟨_, x₁.nonDegenerate⟩ d₁
-  have := X₂.dim_lt_of_nonDegenerate ⟨_, x₂.nonDegenerate⟩ d
+  have := X₂.dim_lt_of_nonDegenerate ⟨_, x₂.nonDegenerate⟩ d₂
+  have := (Δ[x₁.dim] otimes Δ[x₂.dim]).hasDimensionLT_of_le (x₁.dim + x₂.dim + 1) n
+  infer_instance
 
 Depends on / 依赖: HasDimensionLT, Subcomplex, Subcomplex.ofSimplexProd_eq_range, dim_lt_of_nonDegenerate, hasDimensionLT_iSup_iff, hasDimensionLT_of_le, hasDimensionLT_subcomplex_top_iff, iSup_subcomplexOfSimplex_prod_eq_top, infer_instance, nonDegenerate, ofSimplexProd_eq_range, otimes
 -/

@@ -171,7 +171,17 @@ theorem modularCyclotomicCharacter.pow_dvd_aux_pow_sub_aux_pow
   obtain ⟨ζ, hζ⟩ := HasEnoughRootsOfUnity.exists_primitiveRoot L (p ^ (k + i))
   have h := hζ.pow (a := p ^ i) (Nat.pos_of_neZero _) (Nat.pow_add' _ _ _)
   have h_unit : (h.isUnit NeZero.out).unit =
-      (hζ.isUnit NeZero.out).unit ^ (p ^ i) := by ext; rf
+      (hζ.isUnit NeZero.out).unit ^ (p ^ i) := by ext; rfl
+  have H₁ := aux_spec g (p ^ (k + i))
+    ⟨_, (hζ.isUnit_unit NeZero.out).mem_rootsOfUnity⟩
+  have H₂ := aux_spec g (p ^ k)
+    ⟨_, (h.isUnit_unit NeZero.out).mem_rootsOfUnity⟩
+  simp only [IsUnit.unit_spec, map_pow] at H₁ H₂
+  rw [H₁]; rw [← Units.val_pow_eq_pow_val]; rw [← Units.ext_iff]; rw [h_unit]; rw [← div_eq_one] at H₂
+  simp only [← zpow_natCast, ← zpow_mul, div_eq_mul_inv, ← zpow_sub] at H₂
+  rw [(hζ.isUnit_unit NeZero.out).zpow_eq_one_iff_dvd]; rw [mul_comm]; rw [← mul_sub] at H₂
+  conv_lhs at H₂ => rw [Nat.pow_add', Nat.cast_mul]
+  rwa [mul_dvd_mul_iff_left (by simp [NeZero.ne p]), Nat.cast_pow] at H₂
 
 中文:
 定理 modularCyclotomicCharacter.pow_dvd_aux_pow_sub_aux_pow
@@ -180,7 +190,17 @@ theorem modularCyclotomicCharacter.pow_dvd_aux_pow_sub_aux_pow
   obtain ⟨ζ, hζ⟩ := HasEnoughRootsOfUnity.exists_primitiveRoot L (p ^ (k + i))
   have h := hζ.pow (a := p ^ i) (Nat.pos_of_neZero _) (Nat.pow_add' _ _ _)
   have h_unit : (h.isUnit NeZero.out).unit =
-      (hζ.isUnit NeZero.out).unit ^ (p ^ i) := by ext; rf
+      (hζ.isUnit NeZero.out).unit ^ (p ^ i) := by ext; rfl
+  have H₁ := aux_spec g (p ^ (k + i))
+    ⟨_, (hζ.isUnit_unit NeZero.out).mem_rootsOfUnity⟩
+  have H₂ := aux_spec g (p ^ k)
+    ⟨_, (h.isUnit_unit NeZero.out).mem_rootsOfUnity⟩
+  simp only [IsUnit.unit_spec, map_pow] at H₁ H₂
+  rw [H₁]; rw [← Units.val_pow_eq_pow_val]; rw [← Units.ext_iff]; rw [h_unit]; rw [← div_eq_one] at H₂
+  simp only [← zpow_natCast, ← zpow_mul, div_eq_mul_inv, ← zpow_sub] at H₂
+  rw [(hζ.isUnit_unit NeZero.out).zpow_eq_one_iff_dvd]; rw [mul_comm]; rw [← mul_sub] at H₂
+  conv_lhs at H₂ => rw [Nat.pow_add', Nat.cast_mul]
+  rwa [mul_dvd_mul_iff_left (by simp [NeZero.ne p]), Nat.cast_pow] at H₂
 
 Depends on / 依赖: HasEnoughRootsOfUnity, HasEnoughRootsOfUnity.exists_primitiveRoot, IsUnit, IsUnit.unit_spec, Nat.pos_of_neZero, Nat.pow_add, NeZero, NeZero.out, aux_spec, exists_add_of_le, exists_primitiveRoot, h.isUnit, h.isUnit_unit, h_unit, isUnit, isUnit_unit, map_pow, mem_rootsOfUnity, pos_of_neZero, pow_add
 -/
@@ -353,7 +373,8 @@ lemma id
   · have := Fact.mk h
     simp [ZMod.val_one]
   · have := Finite.card_le_one_iff_subsingleton.mp h.ge
-    obtain rfl : t = 1 :
+    obtain rfl : t = 1 := Subsingleton.elim t 1
+    simp
 
 中文:
 引理 id
@@ -365,7 +386,8 @@ lemma id
   · have := Fact.mk h
     simp [ZMod.val_one]
   · have := Finite.card_le_one_iff_subsingleton.mp h.ge
-    obtain rfl : t = 1 :
+    obtain rfl : t = 1 := Subsingleton.elim t 1
+    simp
 
 Depends on / 依赖: Fact.mk, Finite, Finite.card_le_one_iff_subsingleton.mp, Nat.card, Nat.card_pos, RingEquiv, RingEquiv.refl, Subsingleton, Subsingleton.elim, ZMod.val_one, card_le_one_iff_subsingleton, card_pos, h.ge, lt_or_eq, rootsOfUnity, this.lt_or_eq, toFun_unique, val_one
 -/
@@ -392,7 +414,8 @@ lemma comp
   rw [toFun_spec]; rw [← Subgroup.coe_pow]; rw [toFun_spec]; rw [mul_comm]; rw [Subgroup.coe_pow]; rw [← pow_mul]; rw [← Subgroup.coe_pow]
   congr 2
   norm_cast
-  simp only [pow_eq_pow_iff_modEq, ← ZMod.natCast_eq
+  simp only [pow_eq_pow_iff_modEq, ← ZMod.natCast_eq_natCast_iff,
+    ZMod.natCast_val, Nat.cast_mul, ZMod.cast_mul (m := orderOf ζ) (orderOf_dvd_natCard _)]
 
 中文:
 引理 comp
@@ -404,7 +427,8 @@ lemma comp
   rw [toFun_spec]; rw [← Subgroup.coe_pow]; rw [toFun_spec]; rw [mul_comm]; rw [Subgroup.coe_pow]; rw [← pow_mul]; rw [← Subgroup.coe_pow]
   congr 2
   norm_cast
-  simp only [pow_eq_pow_iff_modEq, ← ZMod.natCast_eq
+  simp only [pow_eq_pow_iff_modEq, ← ZMod.natCast_eq_natCast_iff,
+    ZMod.natCast_val, Nat.cast_mul, ZMod.cast_mul (m := orderOf ζ) (orderOf_dvd_natCard _)]
 
 Depends on / 依赖: Nat.cast_mul, Subgroup, Subgroup.coe_pow, ZMod.cast_mul, ZMod.natCast_eq_natCast_iff, ZMod.natCast_val, cast_mul, coe_pow, mul_comm, natCast_eq_natCast_iff, natCast_val, orderOf, orderOf_dvd_natCard, pow_eq_pow_iff_modEq, pow_mul, toFun_spec, toFun_unique
 -/
@@ -592,7 +616,9 @@ lemma IsPrimitiveRoot.autToPow_eq_modularCyclotomicCharacter
   apply hμ.pow_inj (ZMod.val_lt _) (ZMod.val_lt _)
   simpa only [autToPow_spec R hμ g, modularCyclotomicCharacter, RingEquiv.toMulEquiv_eq_coe,
     MulEquiv.toMonoidHom_eq_coe, modularCyclotomicCharacter', MonoidHom.coe_comp, MonoidHom.coe_coe,
-    Function.comp_a
+    Function.comp_apply, Units.coe_mapEquiv, MonoidHom.coe_toHomUnits, MonoidHom.coe_mk,
+    OneHom.coe_mk, RingEquiv.coe_toMulEquiv, ZMod.ringEquivCongr_val, AlgEquiv.coe_ringEquiv]
+    using modularCyclotomicCharacter.toFun_spec'' g hμ
 
 中文:
 引理 是PrimitiveRoot.autToPow_eq_modularCyclotomicCharacter
@@ -603,7 +629,9 @@ lemma IsPrimitiveRoot.autToPow_eq_modularCyclotomicCharacter
   apply hμ.pow_inj (ZMod.val_lt _) (ZMod.val_lt _)
   simpa only [autToPow_spec R hμ g, modularCyclotomicCharacter, RingEquiv.toMulEquiv_eq_coe,
     MulEquiv.toMonoidHom_eq_coe, modularCyclotomicCharacter', MonoidHom.coe_comp, MonoidHom.coe_coe,
-    Function.comp_a
+    Function.comp_apply, Units.coe_mapEquiv, MonoidHom.coe_toHomUnits, MonoidHom.coe_mk,
+    OneHom.coe_mk, RingEquiv.coe_toMulEquiv, ZMod.ringEquivCongr_val, AlgEquiv.coe_ringEquiv]
+    using modularCyclotomicCharacter.toFun_spec'' g hμ
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_ringEquiv, Function, Function.comp_apply, MonoidHom, MonoidHom.coe_coe, MonoidHom.coe_comp, MonoidHom.coe_mk, MonoidHom.coe_toHomUnits, MulEquiv, MulEquiv.toMonoidHom_eq_coe, OneHom, OneHom.coe_mk, RingEquiv, RingEquiv.coe_toMulEquiv, RingEquiv.toMulEquiv_eq_coe, Units.coe_mapEquiv, ZMod.ringEquivCongr_val, ZMod.val_injective, ZMod.val_lt
 -/
@@ -637,6 +665,7 @@ definition cyclotomicCharacter.toFun
     haveI _ (i) : HasEnoughRootsOfUnity L (p ^ i) := ⟨H i, rootsOfUnity.isCyclic _ _⟩
     PadicInt.ofIntSeq _ (PadicInt.isCauSeq_padicNorm_of_pow_dvd_sub
       (aux g <| p ^ ·) _ fun i => pow_dvd_aux_pow_sub_aux_pow g p i.le_succ)
+  else 1
 
 中文:
 定义 cyclotomicCharacter.toFun
@@ -645,6 +674,7 @@ definition cyclotomicCharacter.toFun
     haveI _ (i) : HasEnoughRootsOfUnity L (p ^ i) := ⟨H i, rootsOfUnity.isCyclic _ _⟩
     PadicInt.ofIntSeq _ (PadicInt.isCauSeq_padicNorm_of_pow_dvd_sub
       (aux g <| p ^ ·) _ fun i => pow_dvd_aux_pow_sub_aux_pow g p i.le_succ)
+  else 1
 
 Depends on / 依赖: HasEnoughRootsOfUnity, IsPrimitiveRoot, PadicInt, PadicInt.isCauSeq_padicNorm_of_pow_dvd_sub, PadicInt.ofIntSeq, i.le_succ, isCauSeq_padicNorm_of_pow_dvd_sub, isCyclic, le_succ, ofIntSeq, pow_dvd_aux_pow_sub_aux_pow, rootsOfUnity, rootsOfUnity.isCyclic
 -/
@@ -750,7 +780,14 @@ definition cyclotomicCharacter
       by_cases H : forall (i : Nat), exists ζ : L, IsPrimitiveRoot ζ (p ^ i)
       · have _ (i) : HasEnoughRootsOfUnity L (p ^ i) := ⟨H i, rootsOfUnity.isCyclic _ _⟩
         refine PadicInt.ext_of_toZModPow.mp fun n => ?_
-  
+        simp [cyclotomicCharacter.toZModPow_toFun]
+      · simp [cyclotomicCharacter.toFun, dif_neg H]
+    map_mul' f g := by
+      by_cases H : forall (i : Nat), exists ζ : L, IsPrimitiveRoot ζ (p ^ i)
+      · have _ (i) : HasEnoughRootsOfUnity L (p ^ i) := ⟨H i, rootsOfUnity.isCyclic _ _⟩
+        refine PadicInt.ext_of_toZModPow.mp fun n => ?_
+        simp [cyclotomicCharacter.toZModPow_toFun]
+      · simp [cyclotomicCharacter.toFun, dif_neg H] }
 
 中文:
 定义 cyclotomicCharacter
@@ -761,7 +798,14 @@ definition cyclotomicCharacter
       by_cases H : forall (i : Nat), exists ζ : L, IsPrimitiveRoot ζ (p ^ i)
       · have _ (i) : HasEnoughRootsOfUnity L (p ^ i) := ⟨H i, rootsOfUnity.isCyclic _ _⟩
         refine PadicInt.ext_of_toZModPow.mp fun n => ?_
-  
+        simp [cyclotomicCharacter.toZModPow_toFun]
+      · simp [cyclotomicCharacter.toFun, dif_neg H]
+    map_mul' f g := by
+      by_cases H : forall (i : Nat), exists ζ : L, IsPrimitiveRoot ζ (p ^ i)
+      · have _ (i) : HasEnoughRootsOfUnity L (p ^ i) := ⟨H i, rootsOfUnity.isCyclic _ _⟩
+        refine PadicInt.ext_of_toZModPow.mp fun n => ?_
+        simp [cyclotomicCharacter.toZModPow_toFun]
+      · simp [cyclotomicCharacter.toFun, dif_neg H] }
 
 Depends on / 依赖: toHomUnits
 -/
@@ -835,7 +879,27 @@ lemma cyclotomicCharacter.continuous
   · simp only [cyclotomicCharacter, cyclotomicCharacter.toFun, dif_neg H, MonoidHom.coe_comp]
     exact continuous_const (y := 1)
   have _ (i) : HasEnoughRootsOfUnity L (p ^ i) := ⟨H i, rootsOfUnity.isCyclic _ _⟩
-  cho
+  choose ζ hζ using H
+  refine Continuous.of_coeHom_comp ?_
+  apply continuous_of_continuousAt_one
+  rw [ContinuousAt]; rw [map_one]; rw [(galGroupBasis K L).nhds_one_hasBasis.tendsto_iff
+    (Metric.nhds_basis_ball (α := Int_[p]) (x := 1))]
+  intro ε hε
+  obtain ⟨k, hk', hk⟩ : exists k : Nat, k != 0 ∧ p ^ (-k : Int) < ε := by
+    obtain ⟨k, hk⟩ := PadicInt.exists_pow_neg_lt p hε
+    exact ⟨k + 1, by simp, lt_of_le_of_lt (by gcongr <;> simp [‹Fact p.Prime›.1.one_le]) hk⟩
+  refine ⟨_, ⟨_, ⟨(K⟮ζ k⟯), adjoin.finiteDimensional ?_, rfl⟩, rfl⟩, ?_⟩
+  · exact ((hζ k).isIntegral (Nat.pos_of_neZero _)).tower_top
+  · intro σ hσ
+    refine lt_of_le_of_lt ?_ hk
+    dsimp
+    rw [dist_eq_norm]; rw [PadicInt.norm_le_pow_iff_mem_span_pow]; rw [← PadicInt.ker_toZModPow]; rw [RingHom.mem_ker]; rw [map_sub]; rw [map_one]; rw [cyclotomicCharacter.toZModPow]; rw [sub_eq_zero]; rw [eq_comm]
+    apply modularCyclotomicCharacter.unique
+    intro t ht
+    obtain ⟨i, hi, rfl⟩ := ((hζ k).isUnit_unit NeZero.out).eq_pow_of_mem_rootsOfUnity ht
+    rw [ZMod.val_one'']; rw [pow_one]
+    · exact hσ ⟨ζ k ^ i, pow_mem (mem_adjoin_simple_self K (ζ k)) _⟩
+    · exact (one_lt_pow₀ ‹Fact p.Prime›.1.one_lt hk').ne'
 
 中文:
 引理 cyclotomicCharacter.continuous
@@ -845,7 +909,27 @@ lemma cyclotomicCharacter.continuous
   · simp only [cyclotomicCharacter, cyclotomicCharacter.toFun, dif_neg H, MonoidHom.coe_comp]
     exact continuous_const (y := 1)
   have _ (i) : HasEnoughRootsOfUnity L (p ^ i) := ⟨H i, rootsOfUnity.isCyclic _ _⟩
-  cho
+  choose ζ hζ using H
+  refine Continuous.of_coeHom_comp ?_
+  apply continuous_of_continuousAt_one
+  rw [ContinuousAt]; rw [map_one]; rw [(galGroupBasis K L).nhds_one_hasBasis.tendsto_iff
+    (Metric.nhds_basis_ball (α := Int_[p]) (x := 1))]
+  intro ε hε
+  obtain ⟨k, hk', hk⟩ : exists k : Nat, k != 0 ∧ p ^ (-k : Int) < ε := by
+    obtain ⟨k, hk⟩ := PadicInt.exists_pow_neg_lt p hε
+    exact ⟨k + 1, by simp, lt_of_le_of_lt (by gcongr <;> simp [‹Fact p.Prime›.1.one_le]) hk⟩
+  refine ⟨_, ⟨_, ⟨(K⟮ζ k⟯), adjoin.finiteDimensional ?_, rfl⟩, rfl⟩, ?_⟩
+  · exact ((hζ k).isIntegral (Nat.pos_of_neZero _)).tower_top
+  · intro σ hσ
+    refine lt_of_le_of_lt ?_ hk
+    dsimp
+    rw [dist_eq_norm]; rw [PadicInt.norm_le_pow_iff_mem_span_pow]; rw [← PadicInt.ker_toZModPow]; rw [RingHom.mem_ker]; rw [map_sub]; rw [map_one]; rw [cyclotomicCharacter.toZModPow]; rw [sub_eq_zero]; rw [eq_comm]
+    apply modularCyclotomicCharacter.unique
+    intro t ht
+    obtain ⟨i, hi, rfl⟩ := ((hζ k).isUnit_unit NeZero.out).eq_pow_of_mem_rootsOfUnity ht
+    rw [ZMod.val_one'']; rw [pow_one]
+    · exact hσ ⟨ζ k ^ i, pow_mem (mem_adjoin_simple_self K (ζ k)) _⟩
+    · exact (one_lt_pow₀ ‹Fact p.Prime›.1.one_lt hk').ne'
 
 Depends on / 依赖: Continuous, Continuous.of_coeHom_comp, ContinuousAt, HasEnoughRootsOfUnity, Int_, IsPrimitiveRoot, Metric, Metric.nhds_basis_ball, MonoidHom, MonoidHom.coe_comp, coe_comp, continuous_const, continuous_of_continuousAt_one, cyclotomicCharacter, cyclotomicCharacter.toFun, dif_neg, galGroupBasis, isCyclic, map_one, nhds_basis_ball
 -/

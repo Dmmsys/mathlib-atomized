@@ -96,7 +96,9 @@ lemma Cover.overEquiv_generate_toPresieveOver_eq_ofArrows
     exact ⟨𝒰.X k, h.left, 𝒰.f k, ⟨k⟩, congrArg CommaMorphism.left hcomp⟩
   · rintro ⟨U, h, g, ⟨k⟩, hcomp⟩
     have : 𝒰.f k ≫ X.hom = 𝒰.X k ↘ S := comp_over (𝒰.f k) S
-    refine ⟨(𝒰.X k
+    refine ⟨(𝒰.X k).asOver S, Over.homMk h (by simp [← hcomp, this]), (𝒰.f k).asOver S, ⟨k⟩, ?_⟩
+    ext : 1
+    simpa
 
 中文:
 引理 Cover.overEquiv_generate_toPresieveOver_eq_ofArrows
@@ -109,7 +111,9 @@ lemma Cover.overEquiv_generate_toPresieveOver_eq_ofArrows
     exact ⟨𝒰.X k, h.left, 𝒰.f k, ⟨k⟩, congrArg CommaMorphism.left hcomp⟩
   · rintro ⟨U, h, g, ⟨k⟩, hcomp⟩
     have : 𝒰.f k ≫ X.hom = 𝒰.X k ↘ S := comp_over (𝒰.f k) S
-    refine ⟨(𝒰.X k
+    refine ⟨(𝒰.X k).asOver S, Over.homMk h (by simp [← hcomp, this]), (𝒰.f k).asOver S, ⟨k⟩, ?_⟩
+    ext : 1
+    simpa
 
 Depends on / 依赖: CommaMorphism, CommaMorphism.left, Over.homMk, Sieve.generate_apply, Sieve.overEquiv_iff, X.hom, asOver, comp_over, generate_apply, h.left, overEquiv_iff
 -/
@@ -170,7 +174,16 @@ definition overPretopology
   pullbacks := by
     rintro Y X f _ ⟨𝒰, h, rfl⟩
     refine ⟨𝒰.pullbackCoverOver' S f.left, inferInstance, ?_⟩
-    s
+    simpa [Cover.toPresieveOver] using!
+      (Presieve.ofArrows_pullback f (fun i => (𝒰.X i).asOver S) (fun i => (𝒰.f i).asOver S)).symm
+  transitive := by
+    rintro X _ T ⟨𝒰, h, rfl⟩ H
+    choose V h hV using H
+    refine ⟨𝒰.bind (fun j => V ((𝒰.f j).asOver S) ⟨j⟩), inferInstance, ?_⟩
+    convert!
+      Presieve.ofArrows_bind _ (fun j => (𝒰.f j).asOver S) _ (fun Y f H j => ((V f H).X j).asOver S)
+        (fun Y f H j => ((V f H).f j).asOver S)
+    apply hV
 
 中文:
 定义 overPretopology
@@ -180,7 +193,16 @@ definition overPretopology
   pullbacks := by
     rintro Y X f _ ⟨𝒰, h, rfl⟩
     refine ⟨𝒰.pullbackCoverOver' S f.left, inferInstance, ?_⟩
-    s
+    simpa [Cover.toPresieveOver] using!
+      (Presieve.ofArrows_pullback f (fun i => (𝒰.X i).asOver S) (fun i => (𝒰.f i).asOver S)).symm
+  transitive := by
+    rintro X _ T ⟨𝒰, h, rfl⟩ H
+    choose V h hV using H
+    refine ⟨𝒰.bind (fun j => V ((𝒰.f j).asOver S) ⟨j⟩), inferInstance, ?_⟩
+    convert!
+      Presieve.ofArrows_bind _ (fun j => (𝒰.f j).asOver S) _ (fun Y f H j => ((V f H).X j).asOver S)
+        (fun Y f H j => ((V f H).f j).asOver S)
+    apply hV
 
 Depends on / 依赖: Y.left, precoverage, toPresieveOver
 -/
@@ -233,7 +255,14 @@ lemma overGrothendieckTopology_eq_toGrothendieck_overPretopology
     rw [mem_grothendieckTopology_iff] at hR
     let (i : 𝒰.I₀) : (𝒰.X i).Over S := { hom := 𝒰.f i ≫ X.hom }
     let : 𝒰.Over S :=
-      { over := inferI
+      { over := inferInstance
+        isOver_map := fun i => ⟨rfl⟩ }
+    use 𝒰.toPresieveOver, ⟨𝒰, inferInstance, rfl⟩
+    rwa [Cover.toPresieveOver_le_arrows_iff]
+  · rintro ⟨T, ⟨𝒰, h, rfl⟩, hT⟩
+    rw [mem_grothendieckTopology_iff]
+    use 𝒰
+    rwa [Cover.toPresieveOver_le_arrows_iff] at hT
 
 中文:
 引理 overGrothendieckTopology_eq_toGrothendieck_overPretopology
@@ -246,7 +275,14 @@ lemma overGrothendieckTopology_eq_toGrothendieck_overPretopology
     rw [mem_grothendieckTopology_iff] at hR
     let (i : 𝒰.I₀) : (𝒰.X i).Over S := { hom := 𝒰.f i ≫ X.hom }
     let : 𝒰.Over S :=
-      { over := inferI
+      { over := inferInstance
+        isOver_map := fun i => ⟨rfl⟩ }
+    use 𝒰.toPresieveOver, ⟨𝒰, inferInstance, rfl⟩
+    rwa [Cover.toPresieveOver_le_arrows_iff]
+  · rintro ⟨T, ⟨𝒰, h, rfl⟩, hT⟩
+    rw [mem_grothendieckTopology_iff]
+    use 𝒰
+    rwa [Cover.toPresieveOver_le_arrows_iff] at hT
 
 Depends on / 依赖: Cover.toPresieveOver_le_arrow, Cover.toPresieveOver_le_arrows_iff, GrothendieckTopology, GrothendieckTopology.mem_over_iff, X.hom, exists_cover_of_mem_grothendieckTopology, isOver_map, mem_grothendieckTopology_iff, mem_over_iff, toPresieveOver, toPresieveOver_le_arrow, toPresieveOver_le_arrows_iff
 -/
@@ -326,7 +362,8 @@ lemma locallyCoverDense_of_le
     have p : Q (𝒰.X i ↘ S) := by
       rw [← comp_over (𝒰.f i) S]
       exact Q.comp_mem _ _ (hPQ _ <| 𝒰.map_prop i) X.prop
-    use (𝒰.X i).asOverProp S p, MorphismProperty
+    use (𝒰.X i).asOverProp S p, MorphismProperty.Over.homMk (𝒰.f i) (comp_over (𝒰.f i) S), 𝟙 _
+    exact ⟨hle _ _ ⟨i⟩, rfl⟩
 
 中文:
 引理 locallyCoverDense_of_le
@@ -340,7 +377,8 @@ lemma locallyCoverDense_of_le
     have p : Q (𝒰.X i ↘ S) := by
       rw [← comp_over (𝒰.f i) S]
       exact Q.comp_mem _ _ (hPQ _ <| 𝒰.map_prop i) X.prop
-    use (𝒰.X i).asOverProp S p, MorphismProperty
+    use (𝒰.X i).asOverProp S p, MorphismProperty.Over.homMk (𝒰.f i) (comp_over (𝒰.f i) S), 𝟙 _
+    exact ⟨hle _ _ ⟨i⟩, rfl⟩
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Over.homMk, Q.comp_mem, X.prop, asOverProp, comp_mem, comp_over, map_prop, mem_overGrothendieckTopology
 -/
@@ -418,7 +456,23 @@ definition smallPretopology
   has_isos {X Y} f := ⟨coverOfIsIso f.left, inferInstance, fun _ => Y.prop,
     (Presieve.ofArrows_pUnit _).symm⟩
   pullbacks := by
-    rintro Y X f _ ⟨𝒰, h, p, r
+    rintro Y X f _ ⟨𝒰, h, p, rfl⟩
+    refine ⟨𝒰.pullbackCoverOverProp' S f.left (Q := Q) Y.prop X.prop p, inferInstance, ?_, ?_⟩
+    · intro j
+      apply MorphismProperty.Comma.prop
+    · exact (Presieve.ofArrows_pullback f (fun i => ⟨(𝒰.X i).asOver S, p i⟩)
+        (fun i => ⟨(𝒰.f i).asOver S, trivial, trivial⟩)).symm
+  transitive := by
+    rintro X _ T ⟨𝒰, h, p, rfl⟩ H
+    choose V h pV hV using H
+    let 𝒱j (j : 𝒰.I₀) : (Cover (precoverage P) ((𝒰.X j).asOverProp S (p j)).left) :=
+      V ((𝒰.f j).asOverProp S) ⟨j⟩
+    refine ⟨𝒰.bind (fun j => 𝒱j j), inferInstance, fun j => pV _ _ _, ?_⟩
+    convert!
+      Presieve.ofArrows_bind _ (fun j => ((𝒰.f j).asOverProp S)) _
+        (fun Y f H j => ((V f H).X j).asOverProp S (pV _ _ _))
+        (fun Y f H j => ((V f H).f j).asOverProp S)
+    apply hV
 
 中文:
 定义 smallPretopology
@@ -428,7 +482,23 @@ definition smallPretopology
   has_isos {X Y} f := ⟨coverOfIsIso f.left, inferInstance, fun _ => Y.prop,
     (Presieve.ofArrows_pUnit _).symm⟩
   pullbacks := by
-    rintro Y X f _ ⟨𝒰, h, p, r
+    rintro Y X f _ ⟨𝒰, h, p, rfl⟩
+    refine ⟨𝒰.pullbackCoverOverProp' S f.left (Q := Q) Y.prop X.prop p, inferInstance, ?_, ?_⟩
+    · intro j
+      apply MorphismProperty.Comma.prop
+    · exact (Presieve.ofArrows_pullback f (fun i => ⟨(𝒰.X i).asOver S, p i⟩)
+        (fun i => ⟨(𝒰.f i).asOver S, trivial, trivial⟩)).symm
+  transitive := by
+    rintro X _ T ⟨𝒰, h, p, rfl⟩ H
+    choose V h pV hV using H
+    let 𝒱j (j : 𝒰.I₀) : (Cover (precoverage P) ((𝒰.X j).asOverProp S (p j)).left) :=
+      V ((𝒰.f j).asOverProp S) ⟨j⟩
+    refine ⟨𝒰.bind (fun j => 𝒱j j), inferInstance, fun j => pV _ _ _, ?_⟩
+    convert!
+      Presieve.ofArrows_bind _ (fun j => ((𝒰.f j).asOverProp S)) _
+        (fun Y f H j => ((V f H).X j).asOverProp S (pV _ _ _))
+        (fun Y f H j => ((V f H).f j).asOverProp S)
+    apply hV
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Comma.prop, Presieve, Presieve.ofArrows_pUnit, Presieve.ofArrows_pullback, X.prop, Y.left, Y.prop, asOver, coverOfIsIso, f.left, has_isos, ofArrows_pUnit, ofArrows_pullback, precoverage, pullbackCoverOverProp, pullbacks, toPresieveOverProp
 -/
@@ -472,6 +542,25 @@ lemma smallGrothendieckTopology_eq_toGrothendieck_smallPretopology
   simp only [smallGrothendieckTopology, Functor.mem_restrictedTopology_iff,
     mem_overGrothendieckTopology, Pretopology.mem_toGrothendieck]
   constructor
+  · intro ⟨𝒰, h, le⟩
+    have hj (j : 𝒰.I₀) : Q (𝒰.X j ↘ S) := by
+      rw [← comp_over (𝒰.f j)]
+      exact Q.comp_mem _ _ (hPQ _ <| 𝒰.map_prop _) X.prop
+    refine ⟨𝒰.toPresieveOverProp hj, ?_, ?_⟩
+    · use 𝒰, h, hj
+    · rintro - - ⟨i⟩
+      let fi : (𝒰.X i).asOverProp S (hj i) ⟶ X := (𝒰.f i).asOverProp S
+      have : R.functorPushforward _ ((MorphismProperty.Over.forget Q ⊤ S).map fi) := le _ _ ⟨i⟩
+      rwa [Sieve.functorPushforward_apply,
+        Sieve.mem_functorPushforward_iff_of_full_of_faithful] at this
+  · rintro ⟨T, ⟨𝒰, h, p, rfl⟩, le⟩
+    use 𝒰, h
+    rintro - - ⟨i⟩
+    exact ⟨(𝒰.X i).asOverProp S (p i), (𝒰.f i).asOverProp S, 𝟙 _, le _ _ ⟨i⟩, rfl⟩
+
+@[deprecated (since := "2026-05-28")]
+alias smallGrothendieckTopologyOfLE_eq_toGrothendieck_smallPretopology :=
+  smallGrothendieckTopology_eq_toGrothendieck_smallPretopology
 
 中文:
 引理 smallGrothendieckTopology_eq_toGrothendieck_smallPretopology
@@ -483,6 +572,25 @@ lemma smallGrothendieckTopology_eq_toGrothendieck_smallPretopology
   simp only [smallGrothendieckTopology, Functor.mem_restrictedTopology_iff,
     mem_overGrothendieckTopology, Pretopology.mem_toGrothendieck]
   constructor
+  · intro ⟨𝒰, h, le⟩
+    have hj (j : 𝒰.I₀) : Q (𝒰.X j ↘ S) := by
+      rw [← comp_over (𝒰.f j)]
+      exact Q.comp_mem _ _ (hPQ _ <| 𝒰.map_prop _) X.prop
+    refine ⟨𝒰.toPresieveOverProp hj, ?_, ?_⟩
+    · use 𝒰, h, hj
+    · rintro - - ⟨i⟩
+      let fi : (𝒰.X i).asOverProp S (hj i) ⟶ X := (𝒰.f i).asOverProp S
+      have : R.functorPushforward _ ((MorphismProperty.Over.forget Q ⊤ S).map fi) := le _ _ ⟨i⟩
+      rwa [Sieve.functorPushforward_apply,
+        Sieve.mem_functorPushforward_iff_of_full_of_faithful] at this
+  · rintro ⟨T, ⟨𝒰, h, p, rfl⟩, le⟩
+    use 𝒰, h
+    rintro - - ⟨i⟩
+    exact ⟨(𝒰.X i).asOverProp S (p i), (𝒰.f i).asOverProp S, 𝟙 _, le _ _ ⟨i⟩, rfl⟩
+
+@[deprecated (since := "2026-05-28")]
+alias smallGrothendieckTopologyOfLE_eq_toGrothendieck_smallPretopology :=
+  smallGrothendieckTopology_eq_toGrothendieck_smallPretopology
 
 Depends on / 依赖: Functor, Functor.mem_restrictedTopology_iff, LocallyCoverDense, MorphismProperty, MorphismProperty.Over.forget, Pretopology, Pretopology.mem_toGrothendieck, Q.comp_mem, X.prop, comp_mem, comp_over, forget, locallyCoverDense_of_le, map_prop, mem_overGrothendieckTopology, mem_restrictedTopology_iff, mem_toGrothendieck, overGrothendieckTopology, smallGrothendieckTopology, toPresieveOverProp
 -/
@@ -532,7 +640,21 @@ lemma mem_toGrothendieck_smallPretopology
     refine ⟨(𝒰.X (𝒰.idx x)).asOverProp S (p _), (𝒰.f (𝒰.idx x)).asOverProp S, y, hle _ _ ?_,
       𝒰.map_prop _, hy⟩
     use 𝒰.idx x
-  · choose Y f y h
+  · choose Y f y hf hP hy using h
+    let 𝒰 : X.left.Cover (precoverage P) :=
+      { I₀ := X.left,
+        X := fun i => (Y i).left
+        f := fun i => (f i).left
+        mem₀ := by
+          rw [presieve₀_mem_precoverage_iff]
+          refine ⟨fun x => ⟨x, y x, hy x⟩, hP⟩ }
+    let : 𝒰.Over S :=
+      { over := fun i => inferInstance
+        isOver_map := fun i => inferInstance }
+    refine ⟨𝒰.toPresieveOverProp fun i => MorphismProperty.Comma.prop _, ?_, ?_⟩
+    · use 𝒰, inferInstance, fun i => MorphismProperty.Comma.prop _
+    · rintro - - ⟨i⟩
+      exact hf i
 
 中文:
 引理 mem_toGrothendieck_smallPretopology
@@ -546,7 +668,21 @@ lemma mem_toGrothendieck_smallPretopology
     refine ⟨(𝒰.X (𝒰.idx x)).asOverProp S (p _), (𝒰.f (𝒰.idx x)).asOverProp S, y, hle _ _ ?_,
       𝒰.map_prop _, hy⟩
     use 𝒰.idx x
-  · choose Y f y h
+  · choose Y f y hf hP hy using h
+    let 𝒰 : X.left.Cover (precoverage P) :=
+      { I₀ := X.left,
+        X := fun i => (Y i).left
+        f := fun i => (f i).left
+        mem₀ := by
+          rw [presieve₀_mem_precoverage_iff]
+          refine ⟨fun x => ⟨x, y x, hy x⟩, hP⟩ }
+    let : 𝒰.Over S :=
+      { over := fun i => inferInstance
+        isOver_map := fun i => inferInstance }
+    refine ⟨𝒰.toPresieveOverProp fun i => MorphismProperty.Comma.prop _, ?_, ?_⟩
+    · use 𝒰, inferInstance, fun i => MorphismProperty.Comma.prop _
+    · rintro - - ⟨i⟩
+      exact hf i
 
 Depends on / 依赖: Pretopology, Pretopology.mem_toGrothendieck, X.left, X.left.Cover, asOverProp, covers, map_prop, mem_toGrothendieck, precoverage
 -/

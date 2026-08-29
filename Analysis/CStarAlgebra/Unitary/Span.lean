@@ -40,7 +40,14 @@ lemma IsSelfAdjoint.self_add_I_smul_cfcSqrt_sub_sq_mem_unitary
   · simp [Subsingleton.elim (a + I • CFC.sqrt (1 - a ^ 2)) 1, one_mem (unitary A)]
   have key : a + I • CFC.sqrt (1 - a ^ 2) = cfc (fun x : Complex => x.re + I * √(1 - x.re ^ 2)) a := by
     rw [CFC.sqrt_eq_real_sqrt (1 - a ^ 2) ?nonneg]
-    case n
+    case nonneg =>
+      rwa [sub_nonneg, ← CStarAlgebra.norm_le_one_iff_of_nonneg (a ^ 2), sq, ha.norm_mul_self,
+        sq_le_one_iff₀ (by positivity)]
+    rw [cfc_add ..]; rw [cfc_const_mul ..]; rw [← cfc_real_eq_complex (fun x => x) ha]; rw [cfc_id' Real a]; rw [← cfc_real_eq_complex (fun x => √(1 - x ^ 2)) ha]; rw [cfcₙ_eq_cfc]; rw [cfc_comp' (√·) (1 - · ^ 2) a]; rw [cfc_sub ..]; rw [cfc_pow ..]; rw [cfc_const_one ..]; rw [cfc_id' ..]
+  rw [key]; rw [cfc_unitary_iff ..]
+  intro x hx
+  rw [← starRingEnd_apply]; rw [← Complex.normSq_eq_conj_mul_self]; rw [Complex.normSq_ofReal_add_I_mul_sqrt_one_sub]; rw [Complex.ofReal_one]
+.trans ha_norm exact spectrum.norm_le_norm_of_mem (ha.spectrumRestricts.apply_mem hx)
 
 中文:
 引理 IsSelfAdjoint.self_add_I_smul_cfcSqrt_sub_sq_mem_unitary
@@ -50,7 +57,14 @@ lemma IsSelfAdjoint.self_add_I_smul_cfcSqrt_sub_sq_mem_unitary
   · simp [Subsingleton.elim (a + I • CFC.sqrt (1 - a ^ 2)) 1, one_mem (unitary A)]
   have key : a + I • CFC.sqrt (1 - a ^ 2) = cfc (fun x : Complex => x.re + I * √(1 - x.re ^ 2)) a := by
     rw [CFC.sqrt_eq_real_sqrt (1 - a ^ 2) ?nonneg]
-    case n
+    case nonneg =>
+      rwa [sub_nonneg, ← CStarAlgebra.norm_le_one_iff_of_nonneg (a ^ 2), sq, ha.norm_mul_self,
+        sq_le_one_iff₀ (by positivity)]
+    rw [cfc_add ..]; rw [cfc_const_mul ..]; rw [← cfc_real_eq_complex (fun x => x) ha]; rw [cfc_id' Real a]; rw [← cfc_real_eq_complex (fun x => √(1 - x ^ 2)) ha]; rw [cfcₙ_eq_cfc]; rw [cfc_comp' (√·) (1 - · ^ 2) a]; rw [cfc_sub ..]; rw [cfc_pow ..]; rw [cfc_const_one ..]; rw [cfc_id' ..]
+  rw [key]; rw [cfc_unitary_iff ..]
+  intro x hx
+  rw [← starRingEnd_apply]; rw [← Complex.normSq_eq_conj_mul_self]; rw [Complex.normSq_ofReal_add_I_mul_sqrt_one_sub]; rw [Complex.ofReal_one]
+.trans ha_norm exact spectrum.norm_le_norm_of_mem (ha.spectrumRestricts.apply_mem hx)
 
 Depends on / 依赖: CFC.sqrt, CFC.sqrt_eq_real_sqrt, CStarAlgebra, CStarAlgebra.norm_le_one_iff_of_nonneg, Subsingleton, Subsingleton.elim, cfc_add, cfc_const_mul, cfc_real_eq_complex, ha.norm_mul_self, nonneg, norm_le_one_iff_of_nonneg, norm_mul_self, one_mem, sqrt_eq_real_sqrt, sub_nonneg, subsingleton_or_nontrivial, unitary, x.re
 -/
@@ -141,7 +155,12 @@ lemma CStarAlgebra.norm_smul_two_inv_smul_add_four_unitary
   proof: selfAdjoint.unitarySelfAddISMul (ℜ (‖x‖⁻¹ • x))
       (by simpa [norm_smul, inv_mul_le_one₀ (norm_pos_iff.2 hx)] using! realPart.norm_le x)
     let u₂ : unitary A := selfAdjoint.unitarySelfAddISMul (ℑ (‖x‖⁻¹ • x))
-      (by simpa [norm_smul, inv_mul_le_one₀ (norm_pos_iff.2 hx)] using! imaginaryPart.
+      (by simpa [norm_smul, inv_mul_le_one₀ (norm_pos_iff.2 hx)] using! imaginaryPart.norm_le x)
+    x = ‖x‖ • (2⁻¹ : Real) • (u₁ + star u₁ + I • (u₂ + star u₂) : A) := by
+  intro u₁ u₂
+  rw [smul_add]; rw [smul_comm _ I]; rw [Unitary.coe_star]; rw [Unitary.coe_star]; rw [← realPart_apply_coe (u₁ : A)]; rw [← realPart_apply_coe (u₂ : A)]
+  simpa only [u₁, u₂, selfAdjoint.realPart_unitarySelfAddISMul, realPart_add_I_smul_imaginaryPart]
+using! Eq.symm NormedSpace.norm_smul_normalize x
 
 中文:
 引理 CStar代数.norm_smul_two_inv_smul_add_four_unitary
@@ -149,7 +168,12 @@ lemma CStarAlgebra.norm_smul_two_inv_smul_add_four_unitary
   证明: selfAdjoint.unitarySelfAddISMul (ℜ (‖x‖⁻¹ • x))
       (by simpa [norm_smul, inv_mul_le_one₀ (norm_pos_iff.2 hx)] using! realPart.norm_le x)
     let u₂ : unitary A := selfAdjoint.unitarySelfAddISMul (ℑ (‖x‖⁻¹ • x))
-      (by simpa [norm_smul, inv_mul_le_one₀ (norm_pos_iff.2 hx)] using! imaginaryPart.
+      (by simpa [norm_smul, inv_mul_le_one₀ (norm_pos_iff.2 hx)] using! imaginaryPart.norm_le x)
+    x = ‖x‖ • (2⁻¹ : Real) • (u₁ + star u₁ + I • (u₂ + star u₂) : A) := by
+  intro u₁ u₂
+  rw [smul_add]; rw [smul_comm _ I]; rw [Unitary.coe_star]; rw [Unitary.coe_star]; rw [← realPart_apply_coe (u₁ : A)]; rw [← realPart_apply_coe (u₂ : A)]
+  simpa only [u₁, u₂, selfAdjoint.realPart_unitarySelfAddISMul, realPart_add_I_smul_imaginaryPart]
+using! Eq.symm NormedSpace.norm_smul_normalize x
 
 Depends on / 依赖: selfAdjoint, selfAdjoint.unitarySelfAddISMul, unitarySelfAddISMul
 -/
@@ -179,7 +203,14 @@ lemma CStarAlgebra.exists_sum_four_unitary
   · exact ⟨![1, -1, 1, -1], 0, by simp⟩
   · have := norm_smul_two_inv_smul_add_four_unitary x hx
     extract_lets u₁ u₂ at this
-    use ![u₁, star u₁, u₂, star u₂], ![‖x‖ * 2⁻¹, ‖
+    use ![u₁, star u₁, u₂, star u₂], ![‖x‖ * 2⁻¹, ‖x‖ * 2⁻¹, ‖x‖ * 2⁻¹ * I, ‖x‖ * 2⁻¹ * I]
+    constructor
+    · conv_lhs => rw [this]
+      simp [Fin.sum_univ_four, ← Complex.coe_smul]
+      module
+    · intro i
+      fin_cases i
+      all_goals simp [div_eq_mul_inv]
 
 中文:
 引理 CStar代数.存在_sum_four_unitary
@@ -191,7 +222,14 @@ lemma CStarAlgebra.exists_sum_four_unitary
   · exact ⟨![1, -1, 1, -1], 0, by simp⟩
   · have := norm_smul_two_inv_smul_add_four_unitary x hx
     extract_lets u₁ u₂ at this
-    use ![u₁, star u₁, u₂, star u₂], ![‖x‖ * 2⁻¹, ‖
+    use ![u₁, star u₁, u₂, star u₂], ![‖x‖ * 2⁻¹, ‖x‖ * 2⁻¹, ‖x‖ * 2⁻¹ * I, ‖x‖ * 2⁻¹ * I]
+    constructor
+    · conv_lhs => rw [this]
+      simp [Fin.sum_univ_four, ← Complex.coe_smul]
+      module
+    · intro i
+      fin_cases i
+      all_goals simp [div_eq_mul_inv]
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.spectralOrder, CStarAlgebra.spectralOrderedRing, Complex.coe_smul, Fin.sum_univ_four, all_goals, coe_smul, conv_lhs, div_eq_mul_inv, eq_or_ne, extract_lets, fin_cases, module, norm_smul_two_inv_smul_add_four_unitary, spectralOrder, spectralOrderedRing, sum_univ_four
 -/

@@ -69,7 +69,8 @@ theorem ediam_smul₀
     · simp
     simp [zero_smul_set hs, ← Set.singleton_zero]
   · have := (lipschitzWith_smul c⁻¹).ediam_image_le (c • s)
-    rwa [← smul_eq_mul, ← ENNReal.smul_def, Set.imag
+    rwa [← smul_eq_mul, ← ENNReal.smul_def, Set.image_smul, inv_smul_smul₀ hc s, nnnorm_inv,
+      le_inv_smul_iff_of_pos (nnnorm_pos.2 hc)] at this
 
 中文:
 定理 ediam_smul₀
@@ -82,7 +83,8 @@ theorem ediam_smul₀
     · simp
     simp [zero_smul_set hs, ← Set.singleton_zero]
   · have := (lipschitzWith_smul c⁻¹).ediam_image_le (c • s)
-    rwa [← smul_eq_mul, ← ENNReal.smul_def, Set.imag
+    rwa [← smul_eq_mul, ← ENNReal.smul_def, Set.image_smul, inv_smul_smul₀ hc s, nnnorm_inv,
+      le_inv_smul_iff_of_pos (nnnorm_pos.2 hc)] at this
 
 Depends on / 依赖: ENNReal, ENNReal.smul_def, Set.image_smul, Set.singleton_zero, ediam_image_le, ediam_smul_le, eq_empty_or_nonempty, eq_or_ne, image_smul, le_antisymm, le_inv_smul_iff_of_pos, lipschitzWith_smul, nnnorm_inv, nnnorm_pos, s.eq_empty_or_nonempty, singleton_zero, smul_def, smul_eq_mul, zero_smul_set
 -/
@@ -131,7 +133,10 @@ theorem infEDist_smul₀
   trans ⨅ (y) (_ : y in s), ‖c‖₊ • edist x y
   · refine (this.iInf_congr _ fun y => ?_).symm
     simp_rw [smul_mem_smul_set_iff₀ hc, edist_smul₀]
-  · have : (‖c‖₊ : ENN
+  · have : (‖c‖₊ : ENNReal) != 0 := by simp [hc]
+    simp_rw [ENNReal.smul_def, smul_eq_mul, ENNReal.mul_iInf_of_ne this ENNReal.coe_ne_top]
+
+@[deprecated (since := "2026-01-08")] alias infEdist_smul₀ := infEDist_smul₀
 
 中文:
 定理 infEDist_smul₀
@@ -143,7 +148,10 @@ theorem infEDist_smul₀
   trans ⨅ (y) (_ : y in s), ‖c‖₊ • edist x y
   · refine (this.iInf_congr _ fun y => ?_).symm
     simp_rw [smul_mem_smul_set_iff₀ hc, edist_smul₀]
-  · have : (‖c‖₊ : ENN
+  · have : (‖c‖₊ : ENNReal) != 0 := by simp [hc]
+    simp_rw [ENNReal.smul_def, smul_eq_mul, ENNReal.mul_iInf_of_ne this ENNReal.coe_ne_top]
+
+@[deprecated (since := "2026-01-08")] alias infEdist_smul₀ := infEDist_smul₀
 
 Depends on / 依赖: ENNReal, ENNReal.coe_ne_top, ENNReal.mul_iInf_of_ne, ENNReal.smul_def, Function, Function.RightInverse.surjective, Function.Surjective, RightInverse, Surjective, coe_ne_top, iInf_congr, infEDist, mul_iInf_of_ne, simp_rw, smul_def, smul_eq_mul, surjective, this.iInf_congr
 -/
@@ -360,7 +368,21 @@ theorem eventually_singleton_add_smul_subset
   proof: by
   obtain ⟨ε, εpos, hε⟩ : exists ε : Real, 0 < ε ∧ closedBall x ε subseteq u := nhds_basis_closedBall.mem_iff.1 hu
   obtain ⟨R, Rpos, hR⟩ : exists R : Real, 0 < R ∧ s subseteq closedBall 0 R := hs.subset_closedBall_lt 0 0
-  have : Metric.closedBall (0 : 𝕜) (ε / R) in 𝓝 (0 : 𝕜) := closedBall_mem_nh
+  have : Metric.closedBall (0 : 𝕜) (ε / R) in 𝓝 (0 : 𝕜) := closedBall_mem_nhds _ (div_pos εpos Rpos)
+  filter_upwards [this] with r hr
+  simp only [image_add_left, singleton_add]
+  intro y hy
+  obtain ⟨z, zs, hz⟩ : exists z : E, z in s ∧ r • z = -x + y := by simpa [mem_smul_set] using hy
+  have I : ‖r • z‖ <= ε :=
+    calc
+      ‖r • z‖ = ‖r‖ * ‖z‖ := norm_smul _ _
+      _ <= ε / R * R := by
+        gcongr
+        exacts [mem_closedBall_zero_iff.1 hr, mem_closedBall_zero_iff.1 (hR zs)]
+      _ = ε := by field
+  have : y = x + r • z := by simp only [hz, add_neg_cancel_left]
+  apply hε
+  simpa only [this, dist_eq_norm, add_sub_cancel_left, mem_closedBall] using I
 
 中文:
 定理 eventually_singleton_add_smul_subset
@@ -368,7 +390,21 @@ theorem eventually_singleton_add_smul_subset
   证明: by
   obtain ⟨ε, εpos, hε⟩ : exists ε : Real, 0 < ε ∧ closedBall x ε subseteq u := nhds_basis_closedBall.mem_iff.1 hu
   obtain ⟨R, Rpos, hR⟩ : exists R : Real, 0 < R ∧ s subseteq closedBall 0 R := hs.subset_closedBall_lt 0 0
-  have : Metric.closedBall (0 : 𝕜) (ε / R) in 𝓝 (0 : 𝕜) := closedBall_mem_nh
+  have : Metric.closedBall (0 : 𝕜) (ε / R) in 𝓝 (0 : 𝕜) := closedBall_mem_nhds _ (div_pos εpos Rpos)
+  filter_upwards [this] with r hr
+  simp only [image_add_left, singleton_add]
+  intro y hy
+  obtain ⟨z, zs, hz⟩ : exists z : E, z in s ∧ r • z = -x + y := by simpa [mem_smul_set] using hy
+  have I : ‖r • z‖ <= ε :=
+    calc
+      ‖r • z‖ = ‖r‖ * ‖z‖ := norm_smul _ _
+      _ <= ε / R * R := by
+        gcongr
+        exacts [mem_closedBall_zero_iff.1 hr, mem_closedBall_zero_iff.1 (hR zs)]
+      _ = ε := by field
+  have : y = x + r • z := by simp only [hz, add_neg_cancel_left]
+  apply hε
+  simpa only [this, dist_eq_norm, add_sub_cancel_left, mem_closedBall] using I
 
 Depends on / 依赖: Metric, Metric.closedBall, closedBall, closedBall_mem_nhds, div_pos, filter_upwards, hs.subset_closedBall_lt, image_add_left, mem_iff, mem_smul_set, nhds_basis_closedBall, nhds_basis_closedBall.mem_iff, singleton_add, subset_closedBall_lt, subseteq
 -/
@@ -490,7 +526,10 @@ theorem exists_dist_le_le
   refine (exists_dist_eq x z (div_nonneg hε <| add_nonneg hε hδ)
 (div_nonneg hδ <| add_nonneg hε hδ) by
       rw [← add_div]; rw [div_self hεδ.ne']).imp
-    fun 
+    fun y hy => ?_
+  rw [hy.1]; rw [hy.2]; rw [div_mul_comm]; rw [div_mul_comm ε]
+  rw [← div_le_one hεδ] at h
+  exact ⟨mul_le_of_le_one_left hδ h, mul_le_of_le_one_left hε h⟩
 
 中文:
 定理 存在_dist_le_le
@@ -502,7 +541,10 @@ theorem exists_dist_le_le
   refine (exists_dist_eq x z (div_nonneg hε <| add_nonneg hε hδ)
 (div_nonneg hδ <| add_nonneg hε hδ) by
       rw [← add_div]; rw [div_self hεδ.ne']).imp
-    fun 
+    fun y hy => ?_
+  rw [hy.1]; rw [hy.2]; rw [div_mul_comm]; rw [div_mul_comm ε]
+  rw [← div_le_one hεδ] at h
+  exact ⟨mul_le_of_le_one_left hδ h, mul_le_of_le_one_left hε h⟩
 
 Depends on / 依赖: add_div, add_nonneg, add_pos_of_pos_of_nonneg, dist_self, div_le_one, div_mul_comm, div_nonneg, div_self, eq_or_lt, exists_dist_eq, mul_le_of_le_one_left, zero_add
 -/
@@ -532,7 +574,8 @@ theorem exists_dist_le_lt
       rw [← add_div]; rw [div_self (add_pos_of_pos_of_nonneg hε hδ).ne']).imp
     fun y hy => ?_
   rw [hy.1]; rw [hy.2]; rw [div_mul_comm]; rw [div_mul_comm ε]
-  rw [← div_lt_one (add_
+  rw [← div_lt_one (add_pos_of_pos_of_nonneg hε hδ)] at h
+  exact ⟨mul_le_of_le_one_left hδ h.le, mul_lt_of_lt_one_left hε h⟩
 
 中文:
 定理 存在_dist_le_lt
@@ -543,7 +586,8 @@ theorem exists_dist_le_lt
       rw [← add_div]; rw [div_self (add_pos_of_pos_of_nonneg hε hδ).ne']).imp
     fun y hy => ?_
   rw [hy.1]; rw [hy.2]; rw [div_mul_comm]; rw [div_mul_comm ε]
-  rw [← div_lt_one (add_
+  rw [← div_lt_one (add_pos_of_pos_of_nonneg hε hδ)] at h
+  exact ⟨mul_le_of_le_one_left hδ h.le, mul_lt_of_lt_one_left hε h⟩
 
 Depends on / 依赖: add_div, add_nonneg, add_pos_of_pos_of_nonneg, div_lt_one, div_mul_comm, div_nonneg, div_self, exists_dist_eq, h.le, mul_le_of_le_one_left, mul_lt_of_lt_one_left
 -/
@@ -598,7 +642,8 @@ theorem exists_dist_lt_lt
       rw [← add_div]; rw [div_self (add_pos hε hδ).ne']).imp
     fun y hy => ?_
   rw [hy.1]; rw [hy.2]; rw [div_mul_comm]; rw [div_mul_comm ε]
-  rw [← div_lt_one (add_pos hε h
+  rw [← div_lt_one (add_pos hε hδ)] at h
+  exact ⟨mul_lt_of_lt_one_left hδ h, mul_lt_of_lt_one_left hε h⟩
 
 中文:
 定理 存在_dist_lt_lt
@@ -609,7 +654,8 @@ theorem exists_dist_lt_lt
       rw [← add_div]; rw [div_self (add_pos hε hδ).ne']).imp
     fun y hy => ?_
   rw [hy.1]; rw [hy.2]; rw [div_mul_comm]; rw [div_mul_comm ε]
-  rw [← div_lt_one (add_pos hε h
+  rw [← div_lt_one (add_pos hε hδ)] at h
+  exact ⟨mul_lt_of_lt_one_left hδ h, mul_lt_of_lt_one_left hε h⟩
 
 Depends on / 依赖: add_div, add_nonneg, add_pos, div_lt_one, div_mul_comm, div_nonneg, div_self, exists_dist_eq, mul_lt_of_lt_one_left
 -/
@@ -761,7 +807,27 @@ theorem infEDist_thickening
     exact hs
   refine (tsub_le_iff_right.2 infEDist_le_infEDist_thickening_add).antisymm' ?_
   refine le_sub_of_add_le_right ofReal_ne_top ?_
-  refine le_infEDist.2 fun z hz => l
+  refine le_infEDist.2 fun z hz => le_of_forall_gt fun r h => ?_
+  cases r with
+  | top =>
+exact add_lt_top.2 ⟨lt_top_iff_ne_top.2 infEDist_ne_top ⟨z, self_subset_thickening hδ _ hz⟩,
+      ofReal_lt_top⟩
+  | coe r =>
+    have hr : 0 < ↑r - δ := by
+      refine sub_pos_of_lt ?_
+      have := hs.trans_lt ((infEDist_le_edist_of_mem hz).trans_lt h)
+      rw [ofReal_eq_coe_nnreal hδ.le] at this
+      exact mod_cast this
+    rw [edist_lt_coe]; rw [← dist_lt_coe]; rw [← add_sub_cancel δ ↑r] at h
+    obtain ⟨y, hxy, hyz⟩ := exists_dist_lt_lt hr hδ h
+    refine (ENNReal.add_lt_add_right ofReal_ne_top <|
+      infEDist_lt_iff.2 ⟨_, mem_thickening_iff.2 ⟨_, hz, hyz⟩, edist_lt_ofReal.2 hxy⟩).trans_le ?_
+    rw [← ofReal_add hr.le hδ.le]; rw [sub_add_cancel]; rw [ofReal_coe_nnreal]
+
+@[deprecated (since := "2026-01-08")]
+alias infEdist_thickening := infEDist_thickening
+
+@[simp]
 
 中文:
 定理 infEDist_thickening
@@ -772,7 +838,27 @@ theorem infEDist_thickening
     exact hs
   refine (tsub_le_iff_right.2 infEDist_le_infEDist_thickening_add).antisymm' ?_
   refine le_sub_of_add_le_right ofReal_ne_top ?_
-  refine le_infEDist.2 fun z hz => l
+  refine le_infEDist.2 fun z hz => le_of_forall_gt fun r h => ?_
+  cases r with
+  | top =>
+exact add_lt_top.2 ⟨lt_top_iff_ne_top.2 infEDist_ne_top ⟨z, self_subset_thickening hδ _ hz⟩,
+      ofReal_lt_top⟩
+  | coe r =>
+    have hr : 0 < ↑r - δ := by
+      refine sub_pos_of_lt ?_
+      have := hs.trans_lt ((infEDist_le_edist_of_mem hz).trans_lt h)
+      rw [ofReal_eq_coe_nnreal hδ.le] at this
+      exact mod_cast this
+    rw [edist_lt_coe]; rw [← dist_lt_coe]; rw [← add_sub_cancel δ ↑r] at h
+    obtain ⟨y, hxy, hyz⟩ := exists_dist_lt_lt hr hδ h
+    refine (ENNReal.add_lt_add_right ofReal_ne_top <|
+      infEDist_lt_iff.2 ⟨_, mem_thickening_iff.2 ⟨_, hz, hyz⟩, edist_lt_ofReal.2 hxy⟩).trans_le ?_
+    rw [← ofReal_add hr.le hδ.le]; rw [sub_add_cancel]; rw [ofReal_coe_nnreal]
+
+@[deprecated (since := "2026-01-08")]
+alias infEdist_thickening := infEDist_thickening
+
+@[simp]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, add_lt_top, antisymm, hs.le, infEDist, infEDist_le_infEDist_thickening_add, infEDist_ne_top, infEDist_zero_of_mem, le_infEDist, le_of_forall_gt, le_sub_of_add_le_right, lt_or_ge, lt_top_iff_ne_top, ofReal, ofReal_lt_top, ofReal_ne_top, self_subset_thickening, sub_pos_of, tsub_eq_zero_of_le
 -/

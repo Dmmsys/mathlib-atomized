@@ -408,7 +408,7 @@ lemma map_mul_toRightFDRepComp
   have tensor (X Y) : η.hom.hom.app (X otimes Y) = (η.hom.hom.app X otimesₘ η.hom.hom.app Y) :=
     η.hom.isMonoidal.tensor X Y
   rw [tensor] at nat
-  exact ConcreteCategory.congr_hom 
+  exact ConcreteCategory.congr_hom ((CategoryTheory.forget _).congr_map nat) (f otimesₜ[k] g)
 
 中文:
 引理 map_mul_toRightFDRepComp
@@ -419,7 +419,7 @@ lemma map_mul_toRightFDRepComp
   have tensor (X Y) : η.hom.hom.app (X otimes Y) = (η.hom.hom.app X otimesₘ η.hom.hom.app Y) :=
     η.hom.isMonoidal.tensor X Y
   rw [tensor] at nat
-  exact ConcreteCategory.congr_hom 
+  exact ConcreteCategory.congr_hom ((CategoryTheory.forget _).congr_map nat) (f otimesₜ[k] g)
 
 Depends on / 依赖: hom.hom, hom.hom.app, rightFDRep
 -/
@@ -445,7 +445,10 @@ definition algHomOfRightFDRepComp
   refine AlgHom.ofLinearMap α ?_ (map_mul_toRightFDRepComp η)
   suffices α (α_inv 1) = (1 : G -> k) by
     have h := this
-    rwa [← one_mul (α_inv
+    rwa [← one_mul (α_inv 1), map_mul_toRightFDRepComp, h, mul_one] at this
+  have := η.inv_hom_id
+  apply_fun (fun x => (x.hom.app rightFDRep).hom (1 : G -> k)) at this
+  exact this
 
 中文:
 定义 algHomOfRightFDRepComp
@@ -456,7 +459,10 @@ definition algHomOfRightFDRepComp
   refine AlgHom.ofLinearMap α ?_ (map_mul_toRightFDRepComp η)
   suffices α (α_inv 1) = (1 : G -> k) by
     have h := this
-    rwa [← one_mul (α_inv
+    rwa [← one_mul (α_inv 1), map_mul_toRightFDRepComp, h, mul_one] at this
+  have := η.inv_hom_id
+  apply_fun (fun x => (x.hom.app rightFDRep).hom (1 : G -> k)) at this
+  exact this
 
 Depends on / 依赖: AlgHom, AlgHom.ofLinearMap, apply_fun, hom.hom, hom.hom.app, inv.hom.app, inv_hom_id, map_mul_toRightFDRepComp, mul_one, ofLinearMap, one_mul, rightFDRep, x.hom.app
 -/
@@ -645,7 +651,12 @@ lemma toRightFDRepComp_in_rightRegular
   ext t
   have nat := η.hom.hom.naturality (leftRegularFDRepHom t⁻¹)
   calc
-    _ = leftRegular t⁻¹ ((η.hom.hom.ap
+    _ = leftRegular t⁻¹ ((η.hom.hom.app rightFDRep).hom (single u 1)) 1 := by simp
+    _ = (η.hom.hom.app rightFDRep).hom (leftRegular t⁻¹ (single u 1)) 1 :=
+      congrFun congr(($nat.symm).hom (single u 1)) 1
+    _ = evalAlgHom _ _ s (leftRegular t⁻¹ (single u 1)) :=
+      congr($hs (leftRegular t⁻¹ (single u 1)))
+    _ = _ := by by_cases u = t * s <;> simp_all
 
 中文:
 引理 toRightFDRepComp_in_rightRegular
@@ -658,7 +669,12 @@ lemma toRightFDRepComp_in_rightRegular
   ext t
   have nat := η.hom.hom.naturality (leftRegularFDRepHom t⁻¹)
   calc
-    _ = leftRegular t⁻¹ ((η.hom.hom.ap
+    _ = leftRegular t⁻¹ ((η.hom.hom.app rightFDRep).hom (single u 1)) 1 := by simp
+    _ = (η.hom.hom.app rightFDRep).hom (leftRegular t⁻¹ (single u 1)) 1 :=
+      congrFun congr(($nat.symm).hom (single u 1)) 1
+    _ = evalAlgHom _ _ s (leftRegular t⁻¹ (single u 1)) :=
+      congr($hs (leftRegular t⁻¹ (single u 1)))
+    _ = _ := by by_cases u = t * s <;> simp_all
 
 Depends on / 依赖: Fact.out, Fintype, Fintype.card_units, HasEnoughRootsOfUnity, HasEnoughRootsOfUnity.of_card_le, MulEquiv, MulEquiv.subgroupCongr, Nat.Prime.two_le, Nat.card_congr, NeZero, ZMod.rootsOfUnity_eq_top, algHomOfRightFDRepComp, basisFun, card_congr, card_units, classical, eq_piEvalAlgHom, evalAlgHom, forget_obj, hom.hom.app
 -/

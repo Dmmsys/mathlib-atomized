@@ -45,7 +45,9 @@ definition polishPP
 .replace " /-!" "/-! "
     |>.replace "``` " "``` " -- avoid losing an existing space after the triple back-ticks
                               -- as a consequence of the following replacement
-    |>.replace "`` " "`
+    |>.replace "`` " "``" -- weird pp ```#eval ``«Nat»``` pretty-prints as ```#eval `` «Nat»```
+    |>.replace "notation3(" "notation3 ("
+    |>.replace "notation3\"" "notation3 \""
 
 中文:
 定义 polishPP
@@ -55,7 +57,9 @@ definition polishPP
 .replace " /-!" "/-! "
     |>.replace "``` " "``` " -- avoid losing an existing space after the triple back-ticks
                               -- as a consequence of the following replacement
-    |>.replace "`` " "`
+    |>.replace "`` " "``" -- weird pp ```#eval ``«Nat»``` pretty-prints as ```#eval `` «Nat»```
+    |>.replace "notation3(" "notation3 ("
+    |>.replace "notation3\"" "notation3 \""
 
 Depends on / 依赖: existing, filter, intercalate, isEmpty, isWhitespace, losing, replace, s.filter, s.splitToList, splitToList, triple
 -/
@@ -81,7 +85,7 @@ definition polishSource
     (p.push (q.length - txt)).push txt
   let preWS := preWS.eraseIdxIfInBounds 0
   let s := (split.map String.trimAsciiStart).filter (· != "".toSlice)
-  (" ".toSlice
+  (" ".toSlice.intercalate (s.filter (!·.isEmpty)), preWS)
 
 中文:
 定义 polishSource
@@ -92,7 +96,7 @@ definition polishSource
     (p.push (q.length - txt)).push txt
   let preWS := preWS.eraseIdxIfInBounds 0
   let s := (split.map String.trimAsciiStart).filter (· != "".toSlice)
-  (" ".toSlice
+  (" ".toSlice.intercalate (s.filter (!·.isEmpty)), preWS)
 
 Depends on / 依赖: String.trimAsciiStart, eraseIdxIfInBounds, filter, intercalate, isEmpty, length, p.push, preWS.eraseIdxIfInBounds, q.length, q.trimAsciiStart.copy.length, s.filter, s.splitToList, split.foldl, split.map, splitToList, toSlice, toSlice.intercalate, trimAsciiStart
 -/
@@ -253,7 +257,23 @@ definition ppRoundtrip
       return
     let stx := capSyntax stx (stx.getTailPos?.getD default).1
     let origSubstring := stx.getSubstring?.getD default
-    let
+    let (real, lths) := polishSource origSubstring.toString
+    let fmt ← (liftCoreM do PrettyPrinter.ppCategory `command stx <|> (do
+      Linter.logLint linter.ppRoundtrip stx
+        m!"The ppRoundtrip linter had some parsing issues: \
+           feel free to silence it with `set_option linter.ppRoundtrip false in` \
+           and report this error!"
+      return real))
+    let st := polishPP fmt.pretty
+    if st != real then
+      let diff := real.firstDiffPos st
+      let pos := posToShiftedPos lths diff.1 + origSubstring.startPos.1
+      let f := origSubstring.str.drop (pos)
+      let extraLth := (f.takeWhile (· != diff.get st)).copy.length
+      let srcCtxt := zoomString real diff.1 5
+      let ppCtxt := zoomString st diff.1 5
+      Linter.logLint linter.ppRoundtrip (.ofRange ⟨⟨pos⟩, ⟨pos + extraLth + 1⟩⟩)
+        m!"source context\n'{srcCtxt}'\n'{ppCtxt}'\npretty-printed context"
 
 中文:
 定义 ppRoundtrip
@@ -265,7 +285,23 @@ definition ppRoundtrip
       return
     let stx := capSyntax stx (stx.getTailPos?.getD default).1
     let origSubstring := stx.getSubstring?.getD default
-    let
+    let (real, lths) := polishSource origSubstring.toString
+    let fmt ← (liftCoreM do PrettyPrinter.ppCategory `command stx <|> (do
+      Linter.logLint linter.ppRoundtrip stx
+        m!"The ppRoundtrip linter had some parsing issues: \
+           feel free to silence it with `set_option linter.ppRoundtrip false in` \
+           and report this error!"
+      return real))
+    let st := polishPP fmt.pretty
+    if st != real then
+      let diff := real.firstDiffPos st
+      let pos := posToShiftedPos lths diff.1 + origSubstring.startPos.1
+      let f := origSubstring.str.drop (pos)
+      let extraLth := (f.takeWhile (· != diff.get st)).copy.length
+      let srcCtxt := zoomString real diff.1 5
+      let ppCtxt := zoomString st diff.1 5
+      Linter.logLint linter.ppRoundtrip (.ofRange ⟨⟨pos⟩, ⟨pos + extraLth + 1⟩⟩)
+        m!"source context\n'{srcCtxt}'\n'{ppCtxt}'\npretty-printed context"
 
 Depends on / 依赖: withSetOptionIn
 -/

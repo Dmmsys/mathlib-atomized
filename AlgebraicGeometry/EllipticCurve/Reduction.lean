@@ -497,7 +497,38 @@ theorem exists_isIntegral
     l.maximum_of_length_pos (by simp [l₀, l])
   have hlmax_mem : lmax in l :=
     List.maximum_of_length_pos_mem (by simp [l₀, l])
-  have hlmax : forall v in l, v <= lmax := fun 
+  have hlmax : forall v in l, v <= lmax := fun v hv =>
+    List.le_maximum_of_length_pos_of_mem hv (by simp [l₀, l])
+  by_cases hlmax_le_1 : lmax <= 1
+  · use ⟨1, 0, 0, 0⟩
+    apply isIntegral_of_exists_lift R
+    all_goals simpa [← mem_integer_iff, variableChange_def, Valuation.mem_integer_iff]
+      using (hlmax _ (by simp [l₀, l])).trans hlmax_le_1
+  · have hlmax_ge_1 : lmax >= 1 := le_of_not_ge hlmax_le_1
+    have h : exists a : K, valuation R K a = lmax := by
+      let i : Nat := l.idxOf lmax
+      have hi : i < l.length := List.idxOf_lt_length_of_mem hlmax_mem
+      use l₀[i]
+      have hi₁ : (valuation R K) l₀[i] = l[i] := by simp [l]
+      simpa only [hi₁] using (List.getElem_idxOf hi)
+    choose a ha using h
+    have ha₀ : a != 0 := by
+      by_contra ha₀; simp only [ha₀, map_zero] at ha
+      exact (ha ▸ hlmax_le_1) zero_le_one
+    use ⟨Units.mk0 a ha₀, 0, 0, 0⟩
+    apply isIntegral_of_exists_lift R
+    all_goals
+      apply (mem_integer_iff _ _ _).mp
+      simp only [variableChange_def, Units.val_inv_eq_inv_val, Units.val_mk0, mul_zero, add_zero,
+        inv_pow, zero_mul, sub_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow]
+      apply (Valuation.mem_integer_iff _ _).mpr
+      simp only [map_mul, map_inv₀, map_pow, ha]
+      refine inv_mul_le_one_of_le₀ ?_ zero_le
+      refine (hlmax _ (by simp [l₀, l])).trans ?_
+    any_goals
+      apply le_self_pow hlmax_ge_1.le
+      linarith
+    rfl
 
 中文:
 定理 存在_is整数egral
@@ -509,7 +540,38 @@ theorem exists_isIntegral
     l.maximum_of_length_pos (by simp [l₀, l])
   have hlmax_mem : lmax in l :=
     List.maximum_of_length_pos_mem (by simp [l₀, l])
-  have hlmax : forall v in l, v <= lmax := fun 
+  have hlmax : forall v in l, v <= lmax := fun v hv =>
+    List.le_maximum_of_length_pos_of_mem hv (by simp [l₀, l])
+  by_cases hlmax_le_1 : lmax <= 1
+  · use ⟨1, 0, 0, 0⟩
+    apply isIntegral_of_exists_lift R
+    all_goals simpa [← mem_integer_iff, variableChange_def, Valuation.mem_integer_iff]
+      using (hlmax _ (by simp [l₀, l])).trans hlmax_le_1
+  · have hlmax_ge_1 : lmax >= 1 := le_of_not_ge hlmax_le_1
+    have h : exists a : K, valuation R K a = lmax := by
+      let i : Nat := l.idxOf lmax
+      have hi : i < l.length := List.idxOf_lt_length_of_mem hlmax_mem
+      use l₀[i]
+      have hi₁ : (valuation R K) l₀[i] = l[i] := by simp [l]
+      simpa only [hi₁] using (List.getElem_idxOf hi)
+    choose a ha using h
+    have ha₀ : a != 0 := by
+      by_contra ha₀; simp only [ha₀, map_zero] at ha
+      exact (ha ▸ hlmax_le_1) zero_le_one
+    use ⟨Units.mk0 a ha₀, 0, 0, 0⟩
+    apply isIntegral_of_exists_lift R
+    all_goals
+      apply (mem_integer_iff _ _ _).mp
+      simp only [variableChange_def, Units.val_inv_eq_inv_val, Units.val_mk0, mul_zero, add_zero,
+        inv_pow, zero_mul, sub_zero, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow]
+      apply (Valuation.mem_integer_iff _ _).mpr
+      simp only [map_mul, map_inv₀, map_pow, ha]
+      refine inv_mul_le_one_of_le₀ ?_ zero_le
+      refine (hlmax _ (by simp [l₀, l])).trans ?_
+    any_goals
+      apply le_self_pow hlmax_ge_1.le
+      linarith
+    rfl
 
 Depends on / 依赖: List.le_maximum_of_length_pos_of_mem, List.maximum_of_length_pos_mem, Valuation, Valuation.m, ValueGroup, all_goals, hlmax_le_1, hlmax_mem, isIntegral_of_exists_lift, l.maximum_of_length_pos, le_maximum_of_length_pos_of_mem, maximum_of_length_pos, maximum_of_length_pos_mem, mem_integer_iff, valuation, variableChange_def
 -/
@@ -663,7 +725,10 @@ theorem exists_isMinimal
     (exists_isIntegral R W)
   refine ⟨C, ⟨⟨by simp only [one_smul, hC.1], ?_⟩⟩⟩
   intro j hj; rw [← smul_assoc] at hj
-  let
+  let h := hC.2 hj
+  simp_all only [one_smul]
+  rw [← smul_assoc]
+  exact h
 
 中文:
 定理 存在_isMinimal
@@ -675,7 +740,10 @@ theorem exists_isMinimal
     (exists_isIntegral R W)
   refine ⟨C, ⟨⟨by simp only [one_smul, hC.1], ?_⟩⟩⟩
   intro j hj; rw [← smul_assoc] at hj
-  let
+  let h := hC.2 hj
+  simp_all only [one_smul]
+  rw [← smul_assoc]
+  exact h
 
 Depends on / 依赖: IsIntegral, VariableChange, exists_isIntegral, exists_maximalFor_of_wellFoundedGT, one_smul, smul_assoc
 -/
@@ -778,7 +846,12 @@ lemma hasGoodReduction_iff_isElliptic_reduction
   have h :
       ¬(valuation K (maximalIdeal R) (algebraMap R K (integralModel R W).Δ) < 1)
       ↔ (integralModel R W).Δ ∉ IsLocalRing.maximalIdeal R :=
-not_if
+not_iff_not.mpr valuation_lt_one_iff_mem _ _
+  refine ((integralModel_Δ_eq R W ▸ hasGoodReduction_iff _ _).trans ?_).trans h
+  simpa [hW] using (valuation_le_one (R := R) (K := K) _ _).ge_iff_eq.symm
+
+@[deprecated (since := "2026-03-04")] alias isGoodReduction_iff_isElliptic_reduction :=
+  hasGoodReduction_iff_isElliptic_reduction
 
 中文:
 引理 hasGoodReduction_iff_isElliptic_reduction
@@ -789,7 +862,12 @@ not_if
   have h :
       ¬(valuation K (maximalIdeal R) (algebraMap R K (integralModel R W).Δ) < 1)
       ↔ (integralModel R W).Δ ∉ IsLocalRing.maximalIdeal R :=
-not_if
+not_iff_not.mpr valuation_lt_one_iff_mem _ _
+  refine ((integralModel_Δ_eq R W ▸ hasGoodReduction_iff _ _).trans ?_).trans h
+  simpa [hW] using (valuation_le_one (R := R) (K := K) _ _).ge_iff_eq.symm
+
+@[deprecated (since := "2026-03-04")] alias isGoodReduction_iff_isElliptic_reduction :=
+  hasGoodReduction_iff_isElliptic_reduction
 
 Depends on / 依赖: Iff.trans, IsLocalRing, IsLocalRing.maximalIdeal, W.reduction, algebraMap, ge_iff_eq, ge_iff_eq.symm, hasGoodReduction_iff, integralModel, isElliptic_iff, isElliptic_iff.symm, isUnit_iff_ne_zero, maximalIdeal, ne_eq, not_iff_not, not_iff_not.mpr, reduction, residue_eq_zero_iff, valuation, valuation_le_one
 -/

@@ -122,7 +122,7 @@ lemma contMDiffAt_ofComplex
     refine Tendsto.congr' (eventuallyEq_coe_comp_ofComplex hz).symm ?_
     simpa [ofComplex_apply_of_im_pos hz] using! tendsto_id
   · -- smoothness in local chart
-    simpa
+    simpa using! contDiffAt_id.congr_of_eventuallyEq (eventuallyEq_coe_comp_ofComplex hz)
 
 中文:
 引理 contMDiffAt_ofComplex
@@ -136,7 +136,7 @@ lemma contMDiffAt_ofComplex
     refine Tendsto.congr' (eventuallyEq_coe_comp_ofComplex hz).symm ?_
     simpa [ofComplex_apply_of_im_pos hz] using! tendsto_id
   · -- smoothness in local chart
-    simpa
+    simpa using! contDiffAt_id.congr_of_eventuallyEq (eventuallyEq_coe_comp_ofComplex hz)
 
 Depends on / 依赖: ContinuousAt, Tendsto, Tendsto.congr, congr_of_eventuallyEq, contDiffAt_id, contDiffAt_id.congr_of_eventuallyEq, contMDiffAt_iff, continuity, eventuallyEq_coe_comp_ofComplex, nhds_induced, ofComplex_apply_of_im_pos, smoothness, tendsto_comap_iff, tendsto_id
 -/
@@ -488,7 +488,12 @@ lemma eq_zero_of_frequently
   ext w
   convert! this.eqOn_zero_of_preconnected_of_frequently_eq_zero (z₀ := ↑τ) ?_ τ.2 ?_ w.im_pos
   · rw [Function.comp_apply, ofComplex_apply]
-  · exact (Complex.isConnected_of_upperHalfPlane subset_rfl (by 
+  · exact (Complex.isConnected_of_upperHalfPlane subset_rfl (by grind)).isPreconnected
+  · contrapose! hτ
+    rw [eventually_nhdsWithin_iff]; rw [← isOpenEmbedding_coe.map_nhds_eq]; rw [eventually_map] at hτ
+    rw [eventually_nhdsWithin_iff]
+    filter_upwards [hτ] with a ha
+    simpa using ha
 
 中文:
 引理 eq_zero_of_frequently
@@ -499,7 +504,12 @@ lemma eq_zero_of_frequently
   ext w
   convert! this.eqOn_zero_of_preconnected_of_frequently_eq_zero (z₀ := ↑τ) ?_ τ.2 ?_ w.im_pos
   · rw [Function.comp_apply, ofComplex_apply]
-  · exact (Complex.isConnected_of_upperHalfPlane subset_rfl (by 
+  · exact (Complex.isConnected_of_upperHalfPlane subset_rfl (by grind)).isPreconnected
+  · contrapose! hτ
+    rw [eventually_nhdsWithin_iff]; rw [← isOpenEmbedding_coe.map_nhds_eq]; rw [eventually_map] at hτ
+    rw [eventually_nhdsWithin_iff]
+    filter_upwards [hτ] with a ha
+    simpa using ha
 
 Depends on / 依赖: Complex.isConnected_of_upperHalfPlane, Function, Function.comp_apply, analyticOnNhd, comp_apply, contrapose, convert, eqOn_zero_of_preconnected_of_frequently_eq_zero, eventually_map, eventually_nhdsWithin_iff, filter_upwards, hf.analyticOnNhd, im_pos, isConnected_of_upperHalfPlane, isOpenEmbedding_coe, isOpenEmbedding_coe.map_nhds_eq, isOpen_upperHalfPlaneSet, isPreconnected, map_nhds_eq, mdifferentiable_iff
 -/
@@ -550,7 +560,7 @@ lemma prod_eq_zero_iff
   refine ⟨fun h0 => ?_, fun ⟨i, hi, hi'⟩ => Finset.prod_eq_zero hi hi'⟩
 have : existsᶠ τ in 𝓝[!=] I, ∏ i in s, f i τ = 0 := .of_forall by simpa using congrFun h0
   simp only [Finset.prod_eq_zero_iff, Finset.frequently_exists] at this
-  exact this.imp fun i hi => ⟨hi.1, eq_zero_of_frequently (hf i
+  exact this.imp fun i hi => ⟨hi.1, eq_zero_of_frequently (hf i hi.1) hi.2⟩
 
 中文:
 引理 prod_eq_zero_iff
@@ -559,7 +569,7 @@ have : existsᶠ τ in 𝓝[!=] I, ∏ i in s, f i τ = 0 := .of_forall by simpa
   refine ⟨fun h0 => ?_, fun ⟨i, hi, hi'⟩ => Finset.prod_eq_zero hi hi'⟩
 have : existsᶠ τ in 𝓝[!=] I, ∏ i in s, f i τ = 0 := .of_forall by simpa using congrFun h0
   simp only [Finset.prod_eq_zero_iff, Finset.frequently_exists] at this
-  exact this.imp fun i hi => ⟨hi.1, eq_zero_of_frequently (hf i
+  exact this.imp fun i hi => ⟨hi.1, eq_zero_of_frequently (hf i hi.1) hi.2⟩
 
 Depends on / 依赖: Finset, Finset.frequently_exists, Finset.prod_eq_zero, Finset.prod_eq_zero_iff, eq_zero_of_frequently, frequently_exists, of_forall, prod_eq_zero, prod_eq_zero_iff, this.imp
 -/
@@ -645,7 +655,10 @@ lemma hasStrictDerivAt_smul
     rw [← isOpenEmbedding_coe.map_nhds_eq]; rw [eventuallyEq_map]
     simp [Function.comp_def, coe_smul_of_det_pos hg]
   convert!
-    ((hasStrictDerivAt_id (τ : Complex)).const_
+    ((hasStrictDerivAt_id (τ : Complex)).const_mul _ |>.add_const _).div
+      ((hasStrictDerivAt_id (τ : Complex)).const_mul _ |>.add_const _) _ using 2
+  · simp [Matrix.det_fin_two]; ring
+  · apply denom_ne_zero
 
 中文:
 引理 hasStrictDerivAt_smul
@@ -656,7 +669,10 @@ lemma hasStrictDerivAt_smul
     rw [← isOpenEmbedding_coe.map_nhds_eq]; rw [eventuallyEq_map]
     simp [Function.comp_def, coe_smul_of_det_pos hg]
   convert!
-    ((hasStrictDerivAt_id (τ : Complex)).const_
+    ((hasStrictDerivAt_id (τ : Complex)).const_mul _ |>.add_const _).div
+      ((hasStrictDerivAt_id (τ : Complex)).const_mul _ |>.add_const _) _ using 2
+  · simp [Matrix.det_fin_two]; ring
+  · apply denom_ne_zero
 
 Depends on / 依赖: Function, Function.comp_def, HasStrictDerivAt, Matrix, Matrix.det_fin_two, add_const, coe_smul_of_det_pos, comp_def, congr_of_eventuallyEq, const_mul, convert, denom_ne_zero, det_fin_two, eventuallyEq_map, g.val.det, hasStrictDerivAt_id, isOpenEmbedding_coe, isOpenEmbedding_coe.map_nhds_eq, map_nhds_eq, this.congr_of_eventuallyEq
 -/
@@ -860,7 +876,8 @@ lemma det_smulFDeriv
   rcases g.det_ne_zero.lt_or_gt with h | h
   · simp [h.not_gt, ContinuousLinearMap.det, LinearMap.det_restrictScalars,
       Algebra.norm_complex_eq, Complex.normSq_eq_norm_sq, ← pow_mul, sign_neg h, neg_div]
-  · simp [ContinuousLinearMap.det, h, LinearMap.det_restrict
+  · simp [ContinuousLinearMap.det, h, LinearMap.det_restrictScalars,
+      Algebra.norm_complex_eq, Complex.normSq_eq_norm_sq, ← pow_mul]
 
 中文:
 引理 det_smulFDeriv
@@ -870,7 +887,8 @@ lemma det_smulFDeriv
   rcases g.det_ne_zero.lt_or_gt with h | h
   · simp [h.not_gt, ContinuousLinearMap.det, LinearMap.det_restrictScalars,
       Algebra.norm_complex_eq, Complex.normSq_eq_norm_sq, ← pow_mul, sign_neg h, neg_div]
-  · simp [ContinuousLinearMap.det, h, LinearMap.det_restrict
+  · simp [ContinuousLinearMap.det, h, LinearMap.det_restrictScalars,
+      Algebra.norm_complex_eq, Complex.normSq_eq_norm_sq, ← pow_mul]
 
 Depends on / 依赖: Algebra, Algebra.norm_complex_eq, Complex.normSq_eq_norm_sq, ContinuousLinearMap, ContinuousLinearMap.det, LinearMap, LinearMap.det_restrictScalars, det_ne_zero, det_restrictScalars, g.det_ne_zero.lt_or_gt, h.not_gt, lt_or_gt, neg_div, normSq_eq_norm_sq, norm_complex_eq, not_gt, pow_mul, sign_neg, smulFDeriv
 -/
@@ -897,7 +915,8 @@ lemma hasStrictFDerivAt_smul
     · simp [mul_smul, coe_J_smul]
     · ext
       simp
-  have := (hasStrictDerivAt_smul hg τ).hasStrictFDerivAt.re
+  have := (hasStrictDerivAt_smul hg τ).hasStrictFDerivAt.restrictScalars Real
+  simp_all [smulFDeriv, σ]
 
 中文:
 引理 hasStrictFDerivAt_smul
@@ -909,7 +928,8 @@ lemma hasStrictFDerivAt_smul
     · simp [mul_smul, coe_J_smul]
     · ext
       simp
-  have := (hasStrictDerivAt_smul hg τ).hasStrictFDerivAt.re
+  have := (hasStrictDerivAt_smul hg τ).hasStrictFDerivAt.restrictScalars Real
+  simp_all [smulFDeriv, σ]
 
 Depends on / 依赖: Complex.conjCLE.hasStrictFDerivAt.neg.comp, coe_J_smul, conjCLE, convert, g.det.ne_zero.lt_or_gt.resolve_right, g.det.val, generalizing, hasStrictDerivAt_smul, hasStrictFDerivAt, hasStrictFDerivAt.restrictScalars, lt_or_gt, mul_smul, ne_zero, replace, resolve_right, restrictScalars, smulFDeriv
 -/

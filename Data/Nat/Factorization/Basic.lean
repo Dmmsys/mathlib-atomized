@@ -774,7 +774,7 @@ theorem factorization_div
   apply add_left_injective d.factorization
   simp only
   rw [tsub_add_cancel_of_le <| (Nat.factorization_le_iff_dvd hd hn).mpr h]; rw [←
-    Nat.factorization_mul (
+    Nat.factorization_mul (Nat.div_pos (Nat.le_of_dvd hn.bot_lt h) hd.bot_lt).ne' hd]; rw [Nat.div_mul_cancel h]
 
 中文:
 定理 factorization_div
@@ -785,7 +785,7 @@ theorem factorization_div
   apply add_left_injective d.factorization
   simp only
   rw [tsub_add_cancel_of_le <| (Nat.factorization_le_iff_dvd hd hn).mpr h]; rw [←
-    Nat.factorization_mul (
+    Nat.factorization_mul (Nat.div_pos (Nat.le_of_dvd hn.bot_lt h) hd.bot_lt).ne' hd]; rw [Nat.div_mul_cancel h]
 
 Depends on / 依赖: Nat.div_mul_cancel, Nat.div_pos, Nat.factorization_le_iff_dvd, Nat.factorization_mul, Nat.le_of_dvd, add_left_injective, bot_lt, d.factorization, div_mul_cancel, div_pos, eq_or_ne, factorization, factorization_le_iff_dvd, factorization_mul, hd.bot_lt, hn.bot_lt, le_of_dvd, tsub_add_cancel_of_le, tsub_eq_zero_of_le, zero_dvd_iff
 -/
@@ -881,7 +881,7 @@ theorem factorization_ordCompl
   · simp only [Finsupp.erase_same, factorization_eq_zero_iff, not_dvd_ordCompl pp hn]
     simp
   · rw [Finsupp.erase_ne hqp, factorization_div (ordProj_dvd n p)]
-    sim
+    simp [pp.factorization, hqp.symm]
 
 中文:
 定理 factorization_ordCompl
@@ -895,7 +895,7 @@ theorem factorization_ordCompl
   · simp only [Finsupp.erase_same, factorization_eq_zero_iff, not_dvd_ordCompl pp hn]
     simp
   · rw [Finsupp.erase_ne hqp, factorization_div (ordProj_dvd n p)]
-    sim
+    simp [pp.factorization, hqp.symm]
 
 Depends on / 依赖: Finsupp, Finsupp.erase_ne, Finsupp.erase_same, eq_or_ne, erase_ne, erase_same, factorization, factorization_div, factorization_eq_zero_iff, hqp.symm, not_dvd_ordCompl, ordProj_dvd, p.Prime, pp.factorization
 -/
@@ -1136,7 +1136,7 @@ theorem dvd_ordCompl_of_dvd_not_dvd
   if hqp : q = p then
     simp [factorization_eq_zero_iff, hqp, hpd]
   else
-    simp [hqp, (factorization_le_iff
+    simp [hqp, (factorization_le_iff_dvd hd0 hn0).2 hdn q]
 
 中文:
 定理 dvd_ordCompl_of_dvd_not_dvd
@@ -1149,7 +1149,7 @@ theorem dvd_ordCompl_of_dvd_not_dvd
   if hqp : q = p then
     simp [factorization_eq_zero_iff, hqp, hpd]
   else
-    simp [hqp, (factorization_le_iff
+    simp [hqp, (factorization_le_iff_dvd hd0 hn0).2 hdn q]
 
 Depends on / 依赖: factorization_eq_zero_iff, factorization_le_iff_dvd, factorization_ordCompl, ordCompl_pos
 -/
@@ -1225,7 +1225,8 @@ theorem dvd_iff_div_factorization_eq_tsub
   rw [dvd_iff_le_div_mul n d]
   by_contra h2
   obtain ⟨p, hp⟩ := exists_factorization_lt_of_lt (mul_ne_zero h1 hd) (not_le.mp h2)
-  rwa [factorization_mul h1 h
+  rwa [factorization_mul h1 hd, add_apply, ← lt_tsub_iff_right, h, tsub_apply,
+    lt_self_iff_false] at hp
 
 中文:
 定理 dvd_iff_div_factorization_eq_tsub
@@ -1238,7 +1239,8 @@ theorem dvd_iff_div_factorization_eq_tsub
   rw [dvd_iff_le_div_mul n d]
   by_contra h2
   obtain ⟨p, hp⟩ := exists_factorization_lt_of_lt (mul_ne_zero h1 hd) (not_le.mp h2)
-  rwa [factorization_mul h1 h
+  rwa [factorization_mul h1 hd, add_apply, ← lt_tsub_iff_right, h, tsub_apply,
+    lt_self_iff_false] at hp
 
 Depends on / 依赖: add_apply, dvd_iff_le_div_mul, eq_or_lt_of_le, exists_factorization_lt_of_lt, factorization_div, factorization_mul, hd_lt_n, lt_self_iff_false, lt_tsub_iff_right, mul_ne_zero, not_le, not_le.mp, tsub_apply
 -/
@@ -1298,7 +1300,13 @@ theorem ordCompl_dvd_ordCompl_of_dvd
   rcases eq_or_ne a 0 with (rfl | ha0)
   · cases hb0 (zero_dvd_iff.1 hab)
   have ha := (Nat.div_pos (ordProj_le p ha0) (ordProj_pos a p)).ne'
-  have hb := (Nat.div_pos (ordProj_le p hb0) (ordPro
+  have hb := (Nat.div_pos (ordProj_le p hb0) (ordProj_pos b p)).ne'
+  rw [← factorization_le_iff_dvd ha hb]; rw [factorization_ordCompl a p]; rw [factorization_ordCompl b p]
+  intro q
+  rcases eq_or_ne q p with (rfl | hqp)
+  · simp
+  simp_rw [erase_ne hqp]
+  exact (factorization_le_iff_dvd ha0 hb0).2 hab q
 
 中文:
 定理 ordCompl_dvd_ordCompl_of_dvd
@@ -1311,7 +1319,13 @@ theorem ordCompl_dvd_ordCompl_of_dvd
   rcases eq_or_ne a 0 with (rfl | ha0)
   · cases hb0 (zero_dvd_iff.1 hab)
   have ha := (Nat.div_pos (ordProj_le p ha0) (ordProj_pos a p)).ne'
-  have hb := (Nat.div_pos (ordProj_le p hb0) (ordPro
+  have hb := (Nat.div_pos (ordProj_le p hb0) (ordProj_pos b p)).ne'
+  rw [← factorization_le_iff_dvd ha hb]; rw [factorization_ordCompl a p]; rw [factorization_ordCompl b p]
+  intro q
+  rcases eq_or_ne q p with (rfl | hqp)
+  · simp
+  simp_rw [erase_ne hqp]
+  exact (factorization_le_iff_dvd ha0 hb0).2 hab q
 
 Depends on / 依赖: Nat.div_pos, div_pos, eq_or_ne, erase_ne, factorization_, factorization_le_iff_dvd, factorization_ordCompl, ordProj_le, ordProj_pos, p.Prime, simp_rw, zero_dvd_iff
 -/
@@ -1347,7 +1361,8 @@ theorem ordCompl_dvd_ordCompl_iff_dvd
   rw [prime_dvd_prime_iff_eq pa pb]
   by_contra hab
   apply pa.ne_one
-  r
+  rw [← Nat.dvd_one]; rw [← Nat.mul_dvd_mul_iff_left hb0.bot_lt]; rw [mul_one]
+  simpa [Prime.factorization_self pb, Prime.factorization pa, hab] using h b
 
 中文:
 定理 ordCompl_dvd_ordCompl_iff_dvd
@@ -1361,7 +1376,8 @@ theorem ordCompl_dvd_ordCompl_iff_dvd
   rw [prime_dvd_prime_iff_eq pa pb]
   by_contra hab
   apply pa.ne_one
-  r
+  rw [← Nat.dvd_one]; rw [← Nat.mul_dvd_mul_iff_left hb0.bot_lt]; rw [mul_one]
+  simpa [Prime.factorization_self pb, Prime.factorization pa, hab] using h b
 
 Depends on / 依赖: Nat.dvd_one, Nat.mul_dvd_mul_iff_left, Prime.factorization, Prime.factorization_self, a.Prime, b.Prime, bot_lt, dvd_one, eq_or_ne, factorization, factorization_self, hb0.bot_lt, mul_dvd_mul_iff_left, mul_one, ne_one, ordCompl_dvd_ordCompl_of_dvd, pa.ne_one, prime_dvd_prime_iff_eq
 -/
@@ -1391,7 +1407,10 @@ theorem dvd_iff_prime_pow_dvd_dvd
   · simp only [zero_dvd_iff, hn, false_iff, not_forall]
     exact ⟨2, n, prime_two, dvd_zero _, mt (le_of_dvd hn.bot_lt) (n.lt_two_pow_self).not_ge⟩
   refine ⟨fun h p k _ hpkd => dvd_trans hpkd h, ?_⟩
-  rw [← fac
+  rw [← factorization_prime_le_iff_dvd hd hn]
+  intro h p pp
+  simp_rw [← pp.pow_dvd_iff_le_factorization hn]
+  exact h p _ pp (ordProj_dvd _ _)
 
 中文:
 定理 dvd_iff_prime_pow_dvd_dvd
@@ -1403,7 +1422,10 @@ theorem dvd_iff_prime_pow_dvd_dvd
   · simp only [zero_dvd_iff, hn, false_iff, not_forall]
     exact ⟨2, n, prime_two, dvd_zero _, mt (le_of_dvd hn.bot_lt) (n.lt_two_pow_self).not_ge⟩
   refine ⟨fun h p k _ hpkd => dvd_trans hpkd h, ?_⟩
-  rw [← fac
+  rw [← factorization_prime_le_iff_dvd hd hn]
+  intro h p pp
+  simp_rw [← pp.pow_dvd_iff_le_factorization hn]
+  exact h p _ pp (ordProj_dvd _ _)
 
 Depends on / 依赖: bot_lt, dvd_trans, dvd_zero, eq_or_ne, factorization_prime_le_iff_dvd, false_iff, hn.bot_lt, le_of_dvd, lt_two_pow_self, n.lt_two_pow_self, not_forall, not_ge, ordProj_dvd, pow_dvd_iff_le_factorization, pp.pow_dvd_iff_le_factorization, prime_two, simp_rw, zero_dvd_iff
 -/
@@ -1463,7 +1485,13 @@ theorem factorization_gcd
   apply gcd_greatest
   · exact prod_pow_dvd_of_le_factorization inf_le_left
   · exact prod_pow_dvd_of_le_factorization inf_le_right
-  · int
+  · intro e hea heb
+    rcases eq_or_ne e 0 with (rfl | he_pos)
+    · exact absurd (zero_dvd_iff.mp hea) ha_pos
+    apply dvd_prod_pow_of_factorization_le he_pos
+    have hea' := (factorization_le_iff_dvd he_pos ha_pos).mpr hea
+    have heb' := (factorization_le_iff_dvd he_pos hb_pos).mpr heb
+    simp [hea', heb']
 
 中文:
 定理 factorization_gcd
@@ -1474,7 +1502,13 @@ theorem factorization_gcd
   apply gcd_greatest
   · exact prod_pow_dvd_of_le_factorization inf_le_left
   · exact prod_pow_dvd_of_le_factorization inf_le_right
-  · int
+  · intro e hea heb
+    rcases eq_or_ne e 0 with (rfl | he_pos)
+    · exact absurd (zero_dvd_iff.mp hea) ha_pos
+    apply dvd_prod_pow_of_factorization_le he_pos
+    have hea' := (factorization_le_iff_dvd he_pos ha_pos).mpr hea
+    have heb' := (factorization_le_iff_dvd he_pos hb_pos).mpr heb
+    simp [hea', heb']
 
 Depends on / 依赖: a.factorization, absurd, b.factorization, dvd_prod_pow_of_factorization_le, eq_or_ne, factorization, factorization_le_iff_dvd, factorization_prod_pow_eq_self_of_le_factorization, gcd_greatest, ha_pos, he_pos, inf_le_left, inf_le_right, prod_pow_dvd_of_le_factorization, zero_dvd_iff, zero_dvd_iff.mp
 -/
@@ -1505,7 +1539,7 @@ theorem factorization_lcm
   ext1
   exact (min_add_max _ _).symm
 
-@[to_additive sum_primeFactors_gcd_add_sum_p
+@[to_additive sum_primeFactors_gcd_add_sum_primeFactors_mul]
 
 中文:
 定理 factorization_lcm
@@ -1516,7 +1550,7 @@ theorem factorization_lcm
   ext1
   exact (min_add_max _ _).symm
 
-@[to_additive sum_primeFactors_gcd_add_sum_p
+@[to_additive sum_primeFactors_gcd_add_sum_primeFactors_mul]
 
 Depends on / 依赖: a.gcd, add_right_inj, factorization, factorization_gcd, factorization_mul, gcd_eq_zero_iff, gcd_mul_lcm, lcm_ne_zero, min_add_max
 -/
@@ -1699,7 +1733,8 @@ theorem Ico_pow_dvd_eq_Ico_of_lt
   rcases p with - | p
   · rw [zero_pow (by lia), zero_dvd_iff] at h1
     exact (hn h1).elim
-  · rw [← Nat.pow_lt_pow_
+  · rw [← Nat.pow_lt_pow_iff_right (Prime.one_lt pp)]
+    apply lt_of_le_of_lt (le_of_dvd (Nat.zero_lt_of_ne_zero hn) h1) hb
 
 中文:
 定理 Ico_pow_dvd_eq_Ico_of_lt
@@ -1711,7 +1746,8 @@ theorem Ico_pow_dvd_eq_Ico_of_lt
   rcases p with - | p
   · rw [zero_pow (by lia), zero_dvd_iff] at h1
     exact (hn h1).elim
-  · rw [← Nat.pow_lt_pow_
+  · rw [← Nat.pow_lt_pow_iff_right (Prime.one_lt pp)]
+    apply lt_of_le_of_lt (le_of_dvd (Nat.zero_lt_of_ne_zero hn) h1) hb
 
 Depends on / 依赖: Finset, Finset.mem_filter, Nat.pow_lt_pow_iff_right, Nat.zero_lt_of_ne_zero, Prime.one_lt, and_congr_left_iff, and_congr_right_iff, le_of_dvd, lt_of_le_of_lt, lt_of_pow_dvd_right, mem_Ico, mem_filter, one_lt, pow_lt_pow_iff_right, zero_dvd_iff, zero_lt_of_ne_zero, zero_pow
 -/
@@ -1850,7 +1886,11 @@ theorem prod_pow_prime_padicValNat
 · exact fun p hp => Finset.mem_filter.mpr ⟨Finset.mem_range.2 pr.trans_le'
       le_of_mem_primeFactors hp, prime_of_mem_primeFactors hp⟩
   · intro p hp
-    obtain ⟨hp1, hp2⟩ := Finset.mem_sdif
+    obtain ⟨hp1, hp2⟩ := Finset.mem_sdiff.mp hp
+    rw [← factorization_def n (Finset.mem_filter.mp hp1).2]
+    simp [Finsupp.notMem_support_iff.mp hp2]
+  · intro p hp
+    simp [factorization_def n (prime_of_mem_primeFactors hp)]
 
 中文:
 定理 prod_pow_prime_padicVal自然数
@@ -1862,7 +1902,11 @@ theorem prod_pow_prime_padicValNat
 · exact fun p hp => Finset.mem_filter.mpr ⟨Finset.mem_range.2 pr.trans_le'
       le_of_mem_primeFactors hp, prime_of_mem_primeFactors hp⟩
   · intro p hp
-    obtain ⟨hp1, hp2⟩ := Finset.mem_sdif
+    obtain ⟨hp1, hp2⟩ := Finset.mem_sdiff.mp hp
+    rw [← factorization_def n (Finset.mem_filter.mp hp1).2]
+    simp [Finsupp.notMem_support_iff.mp hp2]
+  · intro p hp
+    simp [factorization_def n (prime_of_mem_primeFactors hp)]
 
 Depends on / 依赖: Finset, Finset.mem_filter.mp, Finset.mem_filter.mpr, Finset.mem_range, Finset.mem_sdiff.mp, Finset.prod_subset_one_on_sdiff, Finsupp, Finsupp.notMem_support_iff.mp, eq_comm, factorization_def, le_of_mem_primeFactors, mem_filter, mem_range, mem_sdiff, notMem_support_iff, nth_rw, pr.trans_le, prime_of_mem_primeFactors, prod_factorization_pow_eq_self, prod_subset_one_on_sdiff
 -/
@@ -2167,7 +2211,18 @@ theorem exists_eq_pow_of_exponent_coprime_of_pow_eq_pow
   set c := factors.prod (· ^ ·) with hc
   use c
   suffices ha : a = c ^ n by
-   
+    refine ⟨ha, ?_⟩
+    apply Nat.pow_left_injective hn0
+    simp [← h, ha, Nat.pow_right_comm]
+  apply eq_of_factorization_eq ha0 (by simp [c, factors])
+  intro p
+  have foo (p) (hp : p in factors.support) : Prime p :=
+    prime_of_mem_primeFactors (Finsupp.support_mapRange hp)
+  rw [factorization_pow]; rw [hc]; rw [prod_pow_factorization_eq_self foo]
+  suffices n ∣ a.factorization p by
+    simp [factors, Nat.mul_div_cancel' this]
+  refine hmn.symm.dvd_of_dvd_mul_left ⟨b.factorization p, ?_⟩
+  simpa using congr(factorization $h p)
 
 中文:
 定理 存在_eq_pow_of_exponent_coprime_of_pow_eq_pow
@@ -2185,7 +2240,18 @@ theorem exists_eq_pow_of_exponent_coprime_of_pow_eq_pow
   set c := factors.prod (· ^ ·) with hc
   use c
   suffices ha : a = c ^ n by
-   
+    refine ⟨ha, ?_⟩
+    apply Nat.pow_left_injective hn0
+    simp [← h, ha, Nat.pow_right_comm]
+  apply eq_of_factorization_eq ha0 (by simp [c, factors])
+  intro p
+  have foo (p) (hp : p in factors.support) : Prime p :=
+    prime_of_mem_primeFactors (Finsupp.support_mapRange hp)
+  rw [factorization_pow]; rw [hc]; rw [prod_pow_factorization_eq_self foo]
+  suffices n ∣ a.factorization p by
+    simp [factors, Nat.mul_div_cancel' this]
+  refine hmn.symm.dvd_of_dvd_mul_left ⟨b.factorization p, ?_⟩
+  simpa using congr(factorization $h p)
 
 Depends on / 依赖: Finsupp, Finsupp.supp, Nat.pow_left_injective, Nat.pow_right_comm, Nat.zero_div, a.factorization.mapRange, eq_of_factorization_eq, factorization, factors, factors.prod, factors.support, mapRange, pow_left_injective, pow_right_comm, prime_of_mem_primeFactors, support, zero_div
 -/
@@ -2230,7 +2296,17 @@ theorem exists_eq_pow_of_pow_eq_pow
   have coprime : m'.Coprime n' := by
     rcases hmn with hm | hn
     · exact gcd_div_gcd_div_gcd_of_pos_left (zero_lt_of_ne_zero hm)
-    · exact gcd_div_gcd_div_gcd_of_pos_ri
+    · exact gcd_div_gcd_div_gcd_of_pos_right (zero_lt_of_ne_zero hn)
+  have pow_eq : a ^ m' = b ^ n' := by
+    conv_lhs at h => rw [show m = m' * g from (Nat.div_mul_cancel (gcd_dvd_left m n)).symm]
+    conv_rhs at h => rw [show n = n' * g from (Nat.div_mul_cancel (gcd_dvd_right m n)).symm]
+    rw [pow_mul]; rw [pow_mul] at h
+    have : g != 0 := by
+      rcases hmn with hm | hn
+      · exact gcd_ne_zero_left hm
+      · exact gcd_ne_zero_right hn
+    exact Nat.pow_left_injective this h
+  exact exists_eq_pow_of_exponent_coprime_of_pow_eq_pow coprime pow_eq
 
 中文:
 定理 存在_eq_pow_of_pow_eq_pow
@@ -2241,7 +2317,17 @@ theorem exists_eq_pow_of_pow_eq_pow
   have coprime : m'.Coprime n' := by
     rcases hmn with hm | hn
     · exact gcd_div_gcd_div_gcd_of_pos_left (zero_lt_of_ne_zero hm)
-    · exact gcd_div_gcd_div_gcd_of_pos_ri
+    · exact gcd_div_gcd_div_gcd_of_pos_right (zero_lt_of_ne_zero hn)
+  have pow_eq : a ^ m' = b ^ n' := by
+    conv_lhs at h => rw [show m = m' * g from (Nat.div_mul_cancel (gcd_dvd_left m n)).symm]
+    conv_rhs at h => rw [show n = n' * g from (Nat.div_mul_cancel (gcd_dvd_right m n)).symm]
+    rw [pow_mul]; rw [pow_mul] at h
+    have : g != 0 := by
+      rcases hmn with hm | hn
+      · exact gcd_ne_zero_left hm
+      · exact gcd_ne_zero_right hn
+    exact Nat.pow_left_injective this h
+  exact exists_eq_pow_of_exponent_coprime_of_pow_eq_pow coprime pow_eq
 
 Depends on / 依赖: Coprime, Nat.div_mul_cancel, conv_lhs, conv_rhs, coprime, div_mul_cancel, gcd_d, gcd_div_gcd_div_gcd_of_pos_left, gcd_div_gcd_div_gcd_of_pos_right, gcd_dvd_left, pow_eq, zero_lt_of_ne_zero
 -/

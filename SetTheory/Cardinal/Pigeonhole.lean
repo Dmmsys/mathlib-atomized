@@ -39,7 +39,11 @@ theorem infinite_pigeonhole
     rw [← preimage_univ]; rw [← iUnion_of_singleton]; rw [preimage_iUnion]
     exact
 mk_iUnion_le_sum_mk.trans_lt (sum_le_mk_mul_iSup _).trans_lt
-        mul_lt_of_lt h₁ (h₂.trans_le <| cof_ord_le _) (iSup_lt_of
+        mul_lt_of_lt h₁ (h₂.trans_le <| cof_ord_le _) (iSup_lt_of_lt_cof_ord h₂ h)
+  obtain ⟨x, h⟩ := this
+  refine ⟨x, h.antisymm' ?_⟩
+  rw [le_mk_iff_exists_set]
+  exact ⟨_, rfl⟩
 
 中文:
 定理 infinite_pigeonhole
@@ -51,7 +55,11 @@ mk_iUnion_le_sum_mk.trans_lt (sum_le_mk_mul_iSup _).trans_lt
     rw [← preimage_univ]; rw [← iUnion_of_singleton]; rw [preimage_iUnion]
     exact
 mk_iUnion_le_sum_mk.trans_lt (sum_le_mk_mul_iSup _).trans_lt
-        mul_lt_of_lt h₁ (h₂.trans_le <| cof_ord_le _) (iSup_lt_of
+        mul_lt_of_lt h₁ (h₂.trans_le <| cof_ord_le _) (iSup_lt_of_lt_cof_ord h₂ h)
+  obtain ⟨x, h⟩ := this
+  refine ⟨x, h.antisymm' ?_⟩
+  rw [le_mk_iff_exists_set]
+  exact ⟨_, rfl⟩
 
 Depends on / 依赖: antisymm, cof_ord_le, h.antisymm, iSup_lt_of_lt_cof_ord, iUnion_of_singleton, le_mk_iff_exists_set, mk_iUnion_le_sum_mk, mk_iUnion_le_sum_mk.trans_lt, mk_univ, mk_univ.not_lt, mul_lt_of_lt, not_lt, preimage_iUnion, preimage_univ, sum_le_mk_mul_iSup, trans_le, trans_lt
 -/
@@ -114,7 +122,9 @@ theorem infinite_pigeonhole_set
       ha.trans
         (ge_of_eq <|
           Quotient.sound ⟨Equiv.trans ?_ (Equiv.subtypeSubtypeEquivSubtypeExists _ _).symm⟩)
-    simp
+    simp only [coe_eq_subtype, mem_singleton_iff, mem_preimage, mem_ofPred_eq]
+    rfl
+  rintro x ⟨_, hx'⟩; exact hx'
 
 中文:
 定理 infinite_pigeonhole_set
@@ -128,7 +138,9 @@ theorem infinite_pigeonhole_set
       ha.trans
         (ge_of_eq <|
           Quotient.sound ⟨Equiv.trans ?_ (Equiv.subtypeSubtypeEquivSubtypeExists _ _).symm⟩)
-    simp
+    simp only [coe_eq_subtype, mem_singleton_iff, mem_preimage, mem_ofPred_eq]
+    rfl
+  rintro x ⟨_, hx'⟩; exact hx'
 
 Depends on / 依赖: Equiv.subtypeSubtypeEquivSubtypeExists, Equiv.trans, Quotient, Quotient.sound, coe_eq_subtype, ge_of_eq, ha.trans, infinite_pigeonhole_card, mem_ofPred_eq, mem_preimage, mem_singleton_iff, subtypeSubtypeEquivSubtypeExists
 -/
@@ -159,7 +171,8 @@ theorem infinite_pigeonhole_card_lt
   · obtain ⟨a, ha⟩ := infinite_pigeonhole_card f ℵ₀ hβ le_rfl
       (by rwa [isRegular_aleph0.cof_ord])
     exact ⟨a, ha.trans' (succ_le_of_lt hα)⟩
-  · exact infinite_pigeonhole_card f (succ #α) (succ_le_of_lt h) (hα.trans (le_succ _)
+  · exact infinite_pigeonhole_card f (succ #α) (succ_le_of_lt h) (hα.trans (le_succ _))
+      ((lt_succ _).trans_le (isRegular_succ hα).2.ge)
 
 中文:
 定理 infinite_pigeonhole_card_lt
@@ -170,7 +183,8 @@ theorem infinite_pigeonhole_card_lt
   · obtain ⟨a, ha⟩ := infinite_pigeonhole_card f ℵ₀ hβ le_rfl
       (by rwa [isRegular_aleph0.cof_ord])
     exact ⟨a, ha.trans' (succ_le_of_lt hα)⟩
-  · exact infinite_pigeonhole_card f (succ #α) (succ_le_of_lt h) (hα.trans (le_succ _)
+  · exact infinite_pigeonhole_card f (succ #α) (succ_le_of_lt h) (hα.trans (le_succ _))
+      ((lt_succ _).trans_le (isRegular_succ hα).2.ge)
 
 Depends on / 依赖: cof_ord, ha.trans, infinite_pigeonhole_card, isRegular_aleph0, isRegular_aleph0.cof_ord, isRegular_succ, le_rfl, le_succ, lt_or_ge, lt_succ, simp_rw, succ_le_iff, succ_le_of_lt, trans_le
 -/
@@ -255,7 +269,9 @@ theorem exists_uncountable_fiber
   rcases lt_or_ge #α ℵ₀ with hα | hα
   · exact infinite_pigeonhole_card f ℵ₁ (by simp) aleph0_lt_aleph_one.le
       (by rw [isRegular_aleph_one.cof_ord]; exact hα.trans aleph0_lt_aleph_one)
-  · obtain ⟨a, ha⟩ := infinite_pigeonhole_card_
+  · obtain ⟨a, ha⟩ := infinite_pigeonhole_card_lt f h (aleph0_le_mk β)
+    rw [← Order.succ_le_succ_iff]; rw [succ_aleph0] at hα
+    exact ⟨a, hα.trans (succ_le_of_lt ha)⟩
 
 中文:
 定理 存在_uncountable_fiber
@@ -265,7 +281,9 @@ theorem exists_uncountable_fiber
   rcases lt_or_ge #α ℵ₀ with hα | hα
   · exact infinite_pigeonhole_card f ℵ₁ (by simp) aleph0_lt_aleph_one.le
       (by rw [isRegular_aleph_one.cof_ord]; exact hα.trans aleph0_lt_aleph_one)
-  · obtain ⟨a, ha⟩ := infinite_pigeonhole_card_
+  · obtain ⟨a, ha⟩ := infinite_pigeonhole_card_lt f h (aleph0_le_mk β)
+    rw [← Order.succ_le_succ_iff]; rw [succ_aleph0] at hα
+    exact ⟨a, hα.trans (succ_le_of_lt ha)⟩
 
 Depends on / 依赖: Cardinal, Cardinal.aleph0_lt_mk_iff, Order.succ_le_succ_iff, aleph0_le_mk, aleph0_lt_aleph_one, aleph0_lt_aleph_one.le, aleph0_lt_mk_iff, aleph_one_le_iff, cof_ord, infinite_pigeonhole_card, infinite_pigeonhole_card_lt, isRegular_aleph_one, isRegular_aleph_one.cof_ord, lt_or_ge, simp_rw, succ_aleph0, succ_le_of_lt, succ_le_succ_iff
 -/
@@ -292,7 +310,14 @@ theorem le_range_of_union_finset_eq_univ
   let u' : β -> range f := fun b => ⟨f (u b).choose, by simp⟩
   have v' : forall a, u' ⁻¹' {⟨f a, by simp⟩} <= f a := by
     rintro a p m
-    have m : f (u p).choose
+    have m : f (u p).choose = f a := by simpa [u'] using m
+    rw [← m]
+    apply fun b => (u b).choose_spec
+  obtain ⟨⟨-, ⟨a, rfl⟩⟩, p⟩ := exists_infinite_fiber u' h
+  exact (@Infinite.of_injective _ _ p (inclusion (v' a)) (inclusion_injective _)).false
+
+@[deprecated (since := "2026-01-17")] alias le_range_of_union_finset_eq_top :=
+  le_range_of_union_finset_eq_univ
 
 中文:
 定理 le_range_of_union_finset_eq_univ
@@ -304,7 +329,14 @@ theorem le_range_of_union_finset_eq_univ
   let u' : β -> range f := fun b => ⟨f (u b).choose, by simp⟩
   have v' : forall a, u' ⁻¹' {⟨f a, by simp⟩} <= f a := by
     rintro a p m
-    have m : f (u p).choose
+    have m : f (u p).choose = f a := by simpa [u'] using m
+    rw [← m]
+    apply fun b => (u b).choose_spec
+  obtain ⟨⟨-, ⟨a, rfl⟩⟩, p⟩ := exists_infinite_fiber u' h
+  exact (@Infinite.of_injective _ _ p (inclusion (v' a)) (inclusion_injective _)).false
+
+@[deprecated (since := "2026-01-17")] alias le_range_of_union_finset_eq_top :=
+  le_range_of_union_finset_eq_univ
 
 Depends on / 依赖: Infinite, Infinite.of_injective, Set.mem_univ, choose_spec, exists_infinite_fiber, inclusion, inclusion_injective, mem_univ, not_le, of_injective, w.ge
 -/

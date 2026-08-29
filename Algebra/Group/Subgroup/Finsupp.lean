@@ -35,7 +35,15 @@ theorem exists_finsupp_of_mem_closure_range
     use v + w
     rw [Finsupp.prod_add_index]
     · simp
-    · si
+    · simp [zpow_add]
+  | inv x hx hx' =>
+    obtain ⟨a, rfl⟩ := hx'
+    use -a
+    rw [Finsupp.prod_neg_index]
+    · simp
+    · simp
+
+@[to_additive]
 
 中文:
 定理 存在_finsupp_of_mem_closure_range
@@ -50,7 +58,15 @@ theorem exists_finsupp_of_mem_closure_range
     use v + w
     rw [Finsupp.prod_add_index]
     · simp
-    · si
+    · simp [zpow_add]
+  | inv x hx hx' =>
+    obtain ⟨a, rfl⟩ := hx'
+    use -a
+    rw [Finsupp.prod_neg_index]
+    · simp
+    · simp
+
+@[to_additive]
 
 Depends on / 依赖: And.intro, Finsupp, Finsupp.prod_add_index, Finsupp.prod_neg_index, Finsupp.single, classical, closure_induction, prod_add_index, prod_neg_index, single, zpow_add
 -/

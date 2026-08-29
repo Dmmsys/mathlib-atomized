@@ -102,14 +102,14 @@ theorem toSphere_apply'
   given: {s : Set (sphere (0 : E) 1)} (hs : MeasurableSet s)
   proof: by
   rw [toSphere]; rw [smul_apply]; rw [fst_apply hs]; rw [restrict_apply (measurable_fst hs)]; rw [((MeasurableEmbedding.subtype_coe (measurableSet_singleton _).compl).comp
-      (Homeomorph.measurableEmbedding _)).comap_apply]; rw [image_comp]; rw [Homeomorph.image_symm]; rw [univ_prod]; rw [← Se
+      (Homeomorph.measurableEmbedding _)).comap_apply]; rw [image_comp]; rw [Homeomorph.image_symm]; rw [univ_prod]; rw [← Set.prod_eq]; rw [nsmul_eq_mul]; rw [toSphere_apply_aux]
 
 中文:
 定理 toSphere_apply'
   条件: {s : 集合 (sphere (0 : E) 1)} (hs : 可测集 s)
   证明: by
   rw [toSphere]; rw [smul_apply]; rw [fst_apply hs]; rw [restrict_apply (measurable_fst hs)]; rw [((MeasurableEmbedding.subtype_coe (measurableSet_singleton _).compl).comp
-      (Homeomorph.measurableEmbedding _)).comap_apply]; rw [image_comp]; rw [Homeomorph.image_symm]; rw [univ_prod]; rw [← Se
+      (Homeomorph.measurableEmbedding _)).comap_apply]; rw [image_comp]; rw [Homeomorph.image_symm]; rw [univ_prod]; rw [← Set.prod_eq]; rw [nsmul_eq_mul]; rw [toSphere_apply_aux]
 
 Depends on / 依赖: Homeomorph, Homeomorph.image_symm, Homeomorph.measurableEmbedding, MeasurableEmbedding, MeasurableEmbedding.subtype_coe, Set.prod_eq, comap_apply, fst_apply, image_comp, image_symm, measurableEmbedding, measurableSet_singleton, measurable_fst, nsmul_eq_mul, prod_eq, restrict_apply, smul_apply, subtype_coe, toSphere, toSphere_apply_aux
 -/
@@ -344,14 +344,20 @@ lemma volumeIoiPow_apply_Iio
   given: (n : Nat) (x : Ioi (0 : Real))
   proof: by
   have hr₀ : 0 <= x.1 := le_of_lt x.2
-  rw [volumeIoiPow]; rw [withDensity_apply _ measurableSet_Iio]; rw [setLIntegral_subtype measurableSet_Ioi _ fun a : Real => .ofReal (a ^ n)]; rw [image_subtype_val_Ioi_Iio]; rw [restrict_congr_set Ioo_ae_eq_Ioc]; rw [← ofReal_integral_eq_lintegral_ofReal (i
+  rw [volumeIoiPow]; rw [withDensity_apply _ measurableSet_Iio]; rw [setLIntegral_subtype measurableSet_Ioi _ fun a : Real => .ofReal (a ^ n)]; rw [image_subtype_val_Ioi_Iio]; rw [restrict_congr_set Ioo_ae_eq_Ioc]; rw [← ofReal_integral_eq_lintegral_ofReal (intervalIntegrable_pow _).1]; rw [← integral_of_le hr₀]
+  · simp
+  · filter_upwards [ae_restrict_mem measurableSet_Ioc] with y hy
+    exact pow_nonneg hy.1.le _
 
 中文:
 引理 volumeIoiPow_apply_Iio
   条件: (n : 自然数) (x : 左开右无界区间 (0 : 实数))
   证明: by
   have hr₀ : 0 <= x.1 := le_of_lt x.2
-  rw [volumeIoiPow]; rw [withDensity_apply _ measurableSet_Iio]; rw [setLIntegral_subtype measurableSet_Ioi _ fun a : Real => .ofReal (a ^ n)]; rw [image_subtype_val_Ioi_Iio]; rw [restrict_congr_set Ioo_ae_eq_Ioc]; rw [← ofReal_integral_eq_lintegral_ofReal (i
+  rw [volumeIoiPow]; rw [withDensity_apply _ measurableSet_Iio]; rw [setLIntegral_subtype measurableSet_Ioi _ fun a : Real => .ofReal (a ^ n)]; rw [image_subtype_val_Ioi_Iio]; rw [restrict_congr_set Ioo_ae_eq_Ioc]; rw [← ofReal_integral_eq_lintegral_ofReal (intervalIntegrable_pow _).1]; rw [← integral_of_le hr₀]
+  · simp
+  · filter_upwards [ae_restrict_mem measurableSet_Ioc] with y hy
+    exact pow_nonneg hy.1.le _
 
 Depends on / 依赖: Ioo_ae_eq_Ioc, ae_restrict_mem, filter_upwards, image_subtype_val_Ioi_Iio, integral_of_le, intervalIntegrable_pow, le_of_lt, measurableSet_Iio, measurableSet_Ioc, measurableSet_Ioi, ofReal, ofReal_integral_eq_lintegral_ofReal, pow_nonneg, restrict_congr_set, setLIntegral_subtype, volumeIoiPow, withDensity_apply
 -/
@@ -405,7 +411,12 @@ theorem measurePreserving_homeomorphUnitSphereProd
   refine prod_eq_generateFrom generateFrom_measurableSet
     ((borel_eq_generateFrom_Iio _).symm.trans BorelSpace.measurable_eq.symm)
     isPiSystem_measurableSet isPiSystem_Iio
-    μ.toSphere.toFiniteSpanningSetsIn (f
+    μ.toSphere.toFiniteSpanningSetsIn (finiteSpanningSetsIn_volumeIoiPow_range_Iio _)
+    fun s hs => forall_mem_range.2 fun r => ?_
+  have : Ioo (0 : Real) r = r.1 • Ioo (0 : Real) 1 := by simp [LinearOrderedField.smul_Ioo r.2.out]
+  have hpos : 0 < dim E := Module.finrank_pos
+  rw [(Homeomorph.measurableEmbedding _).map_apply]; rw [toSphere_apply' _ hs]; rw [volumeIoiPow_apply_Iio]; rw [comap_subtype_coe_apply (measurableSet_singleton _).compl]; rw [toSphere_apply_aux]; rw [this]; rw [smul_assoc]; rw [μ.addHaar_smul_of_nonneg r.2.out.le]; rw [Nat.sub_add_cancel hpos]; rw [Nat.cast_pred hpos]; rw [sub_add_cancel]; rw [mul_right_comm]; rw [← ENNReal.ofReal_natCast]; rw [← ENNReal.ofReal_mul]; rw [mul_div_cancel₀]
+  exacts [(Nat.cast_pos.2 hpos).ne', Nat.cast_nonneg _]
 
 中文:
 定理 measurePreserving_homeomorphUnitSphereProd
@@ -415,7 +426,12 @@ theorem measurePreserving_homeomorphUnitSphereProd
   refine prod_eq_generateFrom generateFrom_measurableSet
     ((borel_eq_generateFrom_Iio _).symm.trans BorelSpace.measurable_eq.symm)
     isPiSystem_measurableSet isPiSystem_Iio
-    μ.toSphere.toFiniteSpanningSetsIn (f
+    μ.toSphere.toFiniteSpanningSetsIn (finiteSpanningSetsIn_volumeIoiPow_range_Iio _)
+    fun s hs => forall_mem_range.2 fun r => ?_
+  have : Ioo (0 : Real) r = r.1 • Ioo (0 : Real) 1 := by simp [LinearOrderedField.smul_Ioo r.2.out]
+  have hpos : 0 < dim E := Module.finrank_pos
+  rw [(Homeomorph.measurableEmbedding _).map_apply]; rw [toSphere_apply' _ hs]; rw [volumeIoiPow_apply_Iio]; rw [comap_subtype_coe_apply (measurableSet_singleton _).compl]; rw [toSphere_apply_aux]; rw [this]; rw [smul_assoc]; rw [μ.addHaar_smul_of_nonneg r.2.out.le]; rw [Nat.sub_add_cancel hpos]; rw [Nat.cast_pred hpos]; rw [sub_add_cancel]; rw [mul_right_comm]; rw [← ENNReal.ofReal_natCast]; rw [← ENNReal.ofReal_mul]; rw [mul_div_cancel₀]
+  exacts [(Nat.cast_pos.2 hpos).ne', Nat.cast_nonneg _]
 
 Depends on / 依赖: BorelSpace, BorelSpace.measurable_eq.symm, LinearOrderedField, LinearOrderedField.smul_Ioo, Module, borel_eq_generateFrom_Iio, finiteSpanningSetsIn_volumeIoiPow_range_Iio, forall_mem_range, generateFrom_measurableSet, homeomorphUnitSphereProd, isPiSystem_Iio, isPiSystem_measurableSet, measurable, measurable_eq, nontriviality, prod_eq_generateFrom, smul_Ioo, symm.trans, toFiniteSpanningSetsIn, toSphere
 -/
@@ -449,7 +465,25 @@ lemma ball_subset_sector_of_small_epsilon
     have : 1 - ε / 4 < ε / 4 := by simpa [norm_smul, habs, hx] using hy
     linarith
   have hy₁ : ‖y‖ < 1 := calc
-    ‖y‖ <= dis
+    ‖y‖ <= dist y ((1 - ε / 4) • x) + ‖(1 - ε / 4) • x‖ := by
+      simpa using dist_triangle y ((1 - ε / 4) • x) 0
+    _ < ε / 4 + ‖(1 - ε / 4) • x‖ := by gcongr
+    _ = 1 := by simp [norm_smul, habs, hx]
+  -- Let $u = y / \|y\|$. We show $\|u - x\| < \epsilon$.
+  set u : E := ‖y‖⁻¹ • y
+  have hu₁ : ‖u‖ = 1 := by simp [u, hy₀, norm_smul]
+  refine ⟨‖y‖, ⟨by simpa, hy₁⟩, u, ⟨?_, by simpa⟩, by simp [u, hy₀]⟩
+  rw [mem_ball]
+  have hyx := calc
+    dist y x <= dist y ((1 - ε / 4) • x) + dist ((1 - ε / 4) • x) x := dist_triangle ..
+    _ < ε / 4 + dist ((1 - ε / 4) • x) x := by gcongr
+    _ = ε / 4 + ε / 4 := by simp [sub_smul, norm_smul, hx, abs_of_pos hε]
+    _ = ε / 2 := by ring
+  have huy : dist u y <= dist x y := by
+    have H : u - y = (1 - ‖y‖) • u := by simp [u, hy₀, sub_smul]
+    simpa [dist_eq_norm_sub, H, norm_smul, abs_of_nonneg, hy₁.le, hu₁, hx]
+      using dist_triangle x y 0
+  linarith [dist_triangle u y x, dist_comm x y]
 
 中文:
 引理 ball_subset_sector_of_small_epsilon
@@ -463,7 +497,25 @@ lemma ball_subset_sector_of_small_epsilon
     have : 1 - ε / 4 < ε / 4 := by simpa [norm_smul, habs, hx] using hy
     linarith
   have hy₁ : ‖y‖ < 1 := calc
-    ‖y‖ <= dis
+    ‖y‖ <= dist y ((1 - ε / 4) • x) + ‖(1 - ε / 4) • x‖ := by
+      simpa using dist_triangle y ((1 - ε / 4) • x) 0
+    _ < ε / 4 + ‖(1 - ε / 4) • x‖ := by gcongr
+    _ = 1 := by simp [norm_smul, habs, hx]
+  -- Let $u = y / \|y\|$. We show $\|u - x\| < \epsilon$.
+  set u : E := ‖y‖⁻¹ • y
+  have hu₁ : ‖u‖ = 1 := by simp [u, hy₀, norm_smul]
+  refine ⟨‖y‖, ⟨by simpa, hy₁⟩, u, ⟨?_, by simpa⟩, by simp [u, hy₀]⟩
+  rw [mem_ball]
+  have hyx := calc
+    dist y x <= dist y ((1 - ε / 4) • x) + dist ((1 - ε / 4) • x) x := dist_triangle ..
+    _ < ε / 4 + dist ((1 - ε / 4) • x) x := by gcongr
+    _ = ε / 4 + ε / 4 := by simp [sub_smul, norm_smul, hx, abs_of_pos hε]
+    _ = ε / 2 := by ring
+  have huy : dist u y <= dist x y := by
+    have H : u - y = (1 - ‖y‖) • u := by simp [u, hy₀, sub_smul]
+    simpa [dist_eq_norm_sub, H, norm_smul, abs_of_nonneg, hy₁.le, hu₁, hx]
+      using dist_triangle x y 0
+  linarith [dist_triangle u y x, dist_comm x y]
 -/
 private lemma ball_subset_sector_of_small_epsilon
     {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E]
@@ -568,7 +620,13 @@ theorem toSphereBallBound_mul_measure_unitBall_le_toSphere_ball
         using this (ε := min ε 2) (by simp [hε]) (by simp)
     · gcongr
       simp
-  rw 
+  rw [μ.toSphere_apply' measurableSet_ball]; rw [Subtype.image_ball]; rw [ofPred_mem_eq]
+  grw [← ball_subset_sector_of_small_epsilon] <;> try assumption
+  · have hdim : Module.finrank Real E != 0 := Module.finrank_pos.ne'
+    have : min (ENNReal.ofReal ε) 2 = ENNReal.ofReal ε := by simpa
+    simp (disch := positivity) [μ.addHaar_ball_of_pos (r := ε / 4), ENNReal.ofReal_div_of_pos,
+      toSphereBallBound, mul_assoc, ENNReal.ofNNReal_toNNReal, this, hdim, hε]
+  · simp
 
 中文:
 定理 toSphereBallBound_mul_measure_unitBall_le_toSphere_ball
@@ -581,7 +639,13 @@ theorem toSphereBallBound_mul_measure_unitBall_le_toSphere_ball
         using this (ε := min ε 2) (by simp [hε]) (by simp)
     · gcongr
       simp
-  rw 
+  rw [μ.toSphere_apply' measurableSet_ball]; rw [Subtype.image_ball]; rw [ofPred_mem_eq]
+  grw [← ball_subset_sector_of_small_epsilon] <;> try assumption
+  · have hdim : Module.finrank Real E != 0 := Module.finrank_pos.ne'
+    have : min (ENNReal.ofReal ε) 2 = ENNReal.ofReal ε := by simpa
+    simp (disch := positivity) [μ.addHaar_ball_of_pos (r := ε / 4), ENNReal.ofReal_div_of_pos,
+      toSphereBallBound, mul_assoc, ENNReal.ofNNReal_toNNReal, this, hdim, hε]
+  · simp
 
 Depends on / 依赖: Module, Module.finrank, Module.finrank_pos.ne, Nontrivial, Norm.norm, Real.toNNReal_monotone.map_min, Subtype, Subtype.image_ball, ball_subset_sector_of_small_epsilon, finrank, finrank_pos, generalizing, image_ball, map_min, measurableSet_ball, ne_of_apply_ne, ofPred_mem_eq, toNNReal_monotone, toSphere, toSphereBallBound
 -/
@@ -645,7 +709,14 @@ lemma integrable_fun_norm_addHaar
   have := μ.measurePreserving_homeomorphUnitSphereProd.integrable_comp_emb (g := f ∘ (↑) ∘ Prod.snd)
     (Homeomorph.measurableEmbedding _)
   simp only [comp_def, homeomorphUnitSphereProd_apply_snd_coe] at this
-  rw [← restrict_compl_singleton (μ := μ) 0]; rw [← IntegrableOn]; rw [integrableOn_if
+  rw [← restrict_compl_singleton (μ := μ) 0]; rw [← IntegrableOn]; rw [integrableOn_iff_comap_subtypeVal (by measurability)]; rw [comp_def]; rw [this]; rw [Integrable.comp_snd_iff (β := Ioi 0) (f := (f <| Subtype.val ·))]; rw [integrableOn_iff_comap_subtypeVal]; rw [comp_def]; rw [Measure.volumeIoiPow]; rw [integrable_withDensity_iff_integrable_smul']; rw [integrable_congr]
+  · refine .of_forall ?_
+    rintro ⟨x, hx : 0 < x⟩
+    simp (disch := positivity) [ENNReal.toReal_ofReal]
+  · fun_prop
+  · simp
+  · measurability
+  · simp
 
 中文:
 引理 integrable_fun_norm_addHaar
@@ -654,7 +725,14 @@ lemma integrable_fun_norm_addHaar
   have := μ.measurePreserving_homeomorphUnitSphereProd.integrable_comp_emb (g := f ∘ (↑) ∘ Prod.snd)
     (Homeomorph.measurableEmbedding _)
   simp only [comp_def, homeomorphUnitSphereProd_apply_snd_coe] at this
-  rw [← restrict_compl_singleton (μ := μ) 0]; rw [← IntegrableOn]; rw [integrableOn_if
+  rw [← restrict_compl_singleton (μ := μ) 0]; rw [← IntegrableOn]; rw [integrableOn_iff_comap_subtypeVal (by measurability)]; rw [comp_def]; rw [this]; rw [Integrable.comp_snd_iff (β := Ioi 0) (f := (f <| Subtype.val ·))]; rw [integrableOn_iff_comap_subtypeVal]; rw [comp_def]; rw [Measure.volumeIoiPow]; rw [integrable_withDensity_iff_integrable_smul']; rw [integrable_congr]
+  · refine .of_forall ?_
+    rintro ⟨x, hx : 0 < x⟩
+    simp (disch := positivity) [ENNReal.toReal_ofReal]
+  · fun_prop
+  · simp
+  · measurability
+  · simp
 
 Depends on / 依赖: Homeomorph, Homeomorph.measurableEmbedding, Integrable, Integrable.comp_snd_iff, IntegrableOn, Measure, Measure.volume, Prod.snd, Subtype, Subtype.val, comp_def, comp_snd_iff, homeomorphUnitSphereProd_apply_snd_coe, integrableOn_iff_comap_subtypeVal, integrable_comp_emb, measurability, measurableEmbedding, measurePreserving_homeomorphUnitSphereProd, measurePreserving_homeomorphUnitSphereProd.integrable_comp_emb, restrict_compl_singleton
 -/
@@ -685,7 +763,18 @@ lemma integrableOn_fun_norm_addHaar
       apply integrable_congr
       filter_upwards with x
       simp [indicator]
-    _ ↔ IntegrableOn ((Ioo 0 r).indicator fun y => y ^ (Module.finrank Real E - 1) • f y) (
+    _ ↔ IntegrableOn ((Ioo 0 r).indicator fun y => y ^ (Module.finrank Real E - 1) • f y) (Ioi 0) := by
+      rw [integrable_fun_norm_addHaar μ (f := indicator (Iio r) f)]; rw [integrableOn_congr_fun _ measurableSet_Ioi]
+      intro x (hx : 0 < x)
+      by_cases hxr : x < r <;> simp [hxr, hx]
+    _ ↔ Integrable ((Ioo 0 r).indicator fun y => y ^ (Module.finrank Real E - 1) • f y) := by
+      rw [MeasureTheory.integrableOn_iff_integrable_of_support_subset]
+      intro x hx
+      simp only [support_indicator, mem_inter_iff, mem_Ioo, Function.mem_support, ne_eq,
+        smul_eq_zero, pow_eq_zero_iff', not_or, not_and, Decidable.not_not] at hx
+      refine mem_Ioi.mpr hx.1.1
+    _ ↔ IntegrableOn (fun y => y ^ (Module.finrank Real E - 1) • f y) (Ioo 0 r) volume := by
+      rw [← integrable_indicator_iff measurableSet_Ioo]; rw [← integrableOn_univ]
 
 中文:
 引理 integrableOn_fun_norm_addHaar
@@ -697,7 +786,18 @@ lemma integrableOn_fun_norm_addHaar
       apply integrable_congr
       filter_upwards with x
       simp [indicator]
-    _ ↔ IntegrableOn ((Ioo 0 r).indicator fun y => y ^ (Module.finrank Real E - 1) • f y) (
+    _ ↔ IntegrableOn ((Ioo 0 r).indicator fun y => y ^ (Module.finrank Real E - 1) • f y) (Ioi 0) := by
+      rw [integrable_fun_norm_addHaar μ (f := indicator (Iio r) f)]; rw [integrableOn_congr_fun _ measurableSet_Ioi]
+      intro x (hx : 0 < x)
+      by_cases hxr : x < r <;> simp [hxr, hx]
+    _ ↔ Integrable ((Ioo 0 r).indicator fun y => y ^ (Module.finrank Real E - 1) • f y) := by
+      rw [MeasureTheory.integrableOn_iff_integrable_of_support_subset]
+      intro x hx
+      simp only [support_indicator, mem_inter_iff, mem_Ioo, Function.mem_support, ne_eq,
+        smul_eq_zero, pow_eq_zero_iff', not_or, not_and, Decidable.not_not] at hx
+      refine mem_Ioi.mpr hx.1.1
+    _ ↔ IntegrableOn (fun y => y ^ (Module.finrank Real E - 1) • f y) (Ioo 0 r) volume := by
+      rw [← integrable_indicator_iff measurableSet_Ioo]; rw [← integrableOn_univ]
 
 Depends on / 依赖: Integrable, IntegrableOn, Module, Module.finrank, filter_upwards, finrank, indicator, integrableOn_congr_fun, integrable_congr, integrable_fun_norm_addHaar, integrable_indicator_iff, measurableSet_Ioi, measurableSet_ball
 -/
@@ -733,7 +833,15 @@ lemma integral_fun_norm_addHaar
     ∫ x, f (‖x‖) ∂μ = ∫ x : ({(0)}ᶜ : Set E), f (‖x.1‖) ∂(μ.comap (↑)) := by
       rw [integral_subtype_comap (measurableSet_singleton _).compl fun x => f (‖x‖)]; rw [restrict_compl_singleton]
     _ = ∫ x, f x.2 ∂μ.toSphere.prod (.volumeIoiPow (dim E - 1)) := by
-      simpa using μ.measurePrese
+      simpa using μ.measurePreserving_homeomorphUnitSphereProd.integral_comp
+        (Homeomorph.measurableEmbedding _) (f ∘ Subtype.val ∘ Prod.snd)
+    _ = μ.toSphere.real univ • ∫ x : Ioi (0 : Real), f x ∂.volumeIoiPow (dim E - 1) :=
+      integral_fun_snd (f ∘ Subtype.val)
+    _ = _ := by
+      simp only [Measure.volumeIoiPow, ENNReal.ofReal]
+      rw [integral_withDensity_eq_integral_smul]; rw [μ.toSphere_real_apply_univ]; rw [← nsmul_eq_mul]; rw [smul_assoc]; rw [integral_subtype_comap measurableSet_Ioi fun a => Real.toNNReal (a ^ (dim E - 1)) • f a]; rw [setIntegral_congr_fun measurableSet_Ioi fun x hx => ?_]
+      · rw [NNReal.smul_def, Real.coe_toNNReal _ (pow_nonneg hx.out.le _)]
+      · exact (measurable_subtype_coe.pow_const _).real_toNNReal
 
 中文:
 引理 integral_fun_norm_addHaar
@@ -742,7 +850,15 @@ lemma integral_fun_norm_addHaar
     ∫ x, f (‖x‖) ∂μ = ∫ x : ({(0)}ᶜ : Set E), f (‖x.1‖) ∂(μ.comap (↑)) := by
       rw [integral_subtype_comap (measurableSet_singleton _).compl fun x => f (‖x‖)]; rw [restrict_compl_singleton]
     _ = ∫ x, f x.2 ∂μ.toSphere.prod (.volumeIoiPow (dim E - 1)) := by
-      simpa using μ.measurePrese
+      simpa using μ.measurePreserving_homeomorphUnitSphereProd.integral_comp
+        (Homeomorph.measurableEmbedding _) (f ∘ Subtype.val ∘ Prod.snd)
+    _ = μ.toSphere.real univ • ∫ x : Ioi (0 : Real), f x ∂.volumeIoiPow (dim E - 1) :=
+      integral_fun_snd (f ∘ Subtype.val)
+    _ = _ := by
+      simp only [Measure.volumeIoiPow, ENNReal.ofReal]
+      rw [integral_withDensity_eq_integral_smul]; rw [μ.toSphere_real_apply_univ]; rw [← nsmul_eq_mul]; rw [smul_assoc]; rw [integral_subtype_comap measurableSet_Ioi fun a => Real.toNNReal (a ^ (dim E - 1)) • f a]; rw [setIntegral_congr_fun measurableSet_Ioi fun x hx => ?_]
+      · rw [NNReal.smul_def, Real.coe_toNNReal _ (pow_nonneg hx.out.le _)]
+      · exact (measurable_subtype_coe.pow_const _).real_toNNReal
 
 Depends on / 依赖: Homeomorph, Homeomorph.measurableEmbedding, Prod.snd, Subtyp, Subtype, Subtype.val, integral_comp, integral_fun_snd, integral_subtype_comap, measurableEmbedding, measurableSet_singleton, measurePreserving_homeomorphUnitSphereProd, measurePreserving_homeomorphUnitSphereProd.integral_comp, restrict_compl_singleton, toSphere, toSphere.prod, toSphere.real, volumeIoiPow
 -/

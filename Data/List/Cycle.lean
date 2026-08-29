@@ -287,6 +287,8 @@ theorem nextOr_mem
   · exact hd
   rw [nextOr]
   split_ifs with h
+  · exact hxs' _ (mem_cons_of_mem _ mem_cons_self)
+  · exact ih fun _ h => hxs' _ (mem_cons_of_mem _ h)
 
 中文:
 定理 nextOr_mem
@@ -304,6 +306,8 @@ theorem nextOr_mem
   · exact hd
   rw [nextOr]
   split_ifs with h
+  · exact hxs' _ (mem_cons_of_mem _ mem_cons_self)
+  · exact ih fun _ h => hxs' _ (mem_cons_of_mem _ h)
 
 Depends on / 依赖: mem_cons_of_mem, mem_cons_self, nextOr, revert, split_ifs
 -/
@@ -510,7 +514,10 @@ theorem next_getLast_cons
   suffices k + 1 = l.length by simp [this] at hk
   rcases l with - | ⟨hd, tl⟩
   · simp at hk
-  · rw [nodup_iff_injectiv
+  · rw [nodup_iff_injective_get] at hl
+    rw [length]; rw [Nat.succ_inj]
+exact Fin.val_eq_of_eq @hl ⟨k, Nat.lt_of_succ_lt by simpa using hk⟩
+      ⟨tl.length, by simp⟩ (by grind)
 
 中文:
 定理 next_getLast_cons
@@ -524,7 +531,10 @@ theorem next_getLast_cons
   suffices k + 1 = l.length by simp [this] at hk
   rcases l with - | ⟨hd, tl⟩
   · simp at hk
-  · rw [nodup_iff_injectiv
+  · rw [nodup_iff_injective_get] at hl
+    rw [length]; rw [Nat.succ_inj]
+exact Fin.val_eq_of_eq @hl ⟨k, Nat.lt_of_succ_lt by simpa using hk⟩
+      ⟨tl.length, by simp⟩ (by grind)
 
 Depends on / 依赖: Fin.val_eq_of_eq, Nat.lt_of_succ_lt, Nat.succ_inj, cons_ne_nil, dropLast_append_getLast, getElem_of_mem, l.length, length, lt_of_succ_lt, nextOr_concat, nodup_iff_injective_get, succ_inj, tl.length, val_eq_of_eq
 -/
@@ -759,7 +769,8 @@ theorem prev_mem
       exact mem_cons_of_mem _ (getLast_mem _)
     · rw [prev, dif_neg hx]
       split_ifs with hm
-      · exact mem
+      · exact mem_cons_self
+      · exact mem_cons_of_mem _ (hl _ _)
 
 中文:
 定理 prev_mem
@@ -776,7 +787,8 @@ theorem prev_mem
       exact mem_cons_of_mem _ (getLast_mem _)
     · rw [prev, dif_neg hx]
       split_ifs with hm
-      · exact mem
+      · exact mem_cons_self
+      · exact mem_cons_of_mem _ (hl _ _)
 
 Depends on / 依赖: dif_neg, generalizing, getLast_mem, mem_cons_of_mem, mem_cons_self, prev_cons_cons_eq, split_ifs
 -/
@@ -1265,7 +1277,8 @@ theorem prev_next
   · simp at hn
   · have : (n + 1 + length tl) % (length tl + 1) = n := by
       rw [length_cons] at hn
-      rw [add_assoc]; rw [add_comm 1]; rw [Nat.add_mod_right]
+      rw [add_assoc]; rw [add_comm 1]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt hn]
+    simp only [length_cons, Nat.succ_sub_succ_eq_sub, Nat.sub_zero, this]
 
 中文:
 定理 prev_next
@@ -1277,7 +1290,8 @@ theorem prev_next
   · simp at hn
   · have : (n + 1 + length tl) % (length tl + 1) = n := by
       rw [length_cons] at hn
-      rw [add_assoc]; rw [add_comm 1]; rw [Nat.add_mod_right]
+      rw [add_assoc]; rw [add_comm 1]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt hn]
+    simp only [length_cons, Nat.succ_sub_succ_eq_sub, Nat.sub_zero, this]
 
 Depends on / 依赖: Nat.add_mod_right, Nat.mod_add_mod, Nat.mod_eq_of_lt, Nat.sub_zero, Nat.succ_sub_succ_eq_sub, add_assoc, add_comm, add_mod_right, getElem_of_mem, length, length_cons, mod_add_mod, mod_eq_of_lt, next_getElem, prev_getElem, sub_zero, succ_sub_succ_eq_sub
 -/
@@ -1305,7 +1319,8 @@ theorem next_prev
   · simp at hn
   · have : (n + length tl + 1) % (length tl + 1) = n := by
       rw [length_cons] at hn
-      rw [add_assoc]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_
+      rw [add_assoc]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt hn]
+    simp [this]
 
 中文:
 定理 next_prev
@@ -1317,7 +1332,8 @@ theorem next_prev
   · simp at hn
   · have : (n + length tl + 1) % (length tl + 1) = n := by
       rw [length_cons] at hn
-      rw [add_assoc]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_
+      rw [add_assoc]; rw [Nat.add_mod_right]; rw [Nat.mod_eq_of_lt hn]
+    simp [this]
 
 Depends on / 依赖: Nat.add_mod_right, Nat.mod_add_mod, Nat.mod_eq_of_lt, add_assoc, add_mod_right, getElem_of_mem, length, length_cons, mod_add_mod, mod_eq_of_lt, next_getElem, prev_getElem
 -/
@@ -1344,7 +1360,13 @@ theorem prev_reverse_eq_next
   have key : l.length - 1 - k < l.length := by lia
   rw [← getElem_pmap l.next (fun _ h => h) (by simpa using hk)]
   simp_rw [getElem_eq_getElem_reverse (l := l), pmap_next_eq_rotate_one _ h]
-  rw [← ge
+  rw [← getElem_pmap l.reverse.prev fun _ h => h]
+  · simp_rw [pmap_prev_eq_rotate_length_sub_one _ (nodup_reverse.mpr h), rotate_reverse,
+      length_reverse, Nat.mod_eq_of_lt (Nat.sub_lt lpos Nat.succ_pos'),
+      Nat.sub_sub_self (Nat.succ_le_of_lt lpos)]
+    rw [getElem_eq_getElem_reverse]
+    · simp [Nat.sub_sub_self (Nat.le_sub_one_of_lt hk)]
+  · simpa
 
 中文:
 定理 prev_reverse_eq_next
@@ -1355,7 +1377,13 @@ theorem prev_reverse_eq_next
   have key : l.length - 1 - k < l.length := by lia
   rw [← getElem_pmap l.next (fun _ h => h) (by simpa using hk)]
   simp_rw [getElem_eq_getElem_reverse (l := l), pmap_next_eq_rotate_one _ h]
-  rw [← ge
+  rw [← getElem_pmap l.reverse.prev fun _ h => h]
+  · simp_rw [pmap_prev_eq_rotate_length_sub_one _ (nodup_reverse.mpr h), rotate_reverse,
+      length_reverse, Nat.mod_eq_of_lt (Nat.sub_lt lpos Nat.succ_pos'),
+      Nat.sub_sub_self (Nat.succ_le_of_lt lpos)]
+    rw [getElem_eq_getElem_reverse]
+    · simp [Nat.sub_sub_self (Nat.le_sub_one_of_lt hk)]
+  · simpa
 
 Depends on / 依赖: Nat.mod_eq_of_lt, Nat.sub_lt, Nat.sub_sub_self, Nat.succ_pos, getElem_eq_getElem_reverse, getElem_of_mem, getElem_pmap, k.zero_le.trans_lt, l.length, l.next, l.reverse.prev, length, length_reverse, mod_eq_of_lt, nodup_reverse, nodup_reverse.mpr, pmap_next_eq_rotate_one, pmap_prev_eq_rotate_length_sub_one, reverse, rotate_reverse
 -/
@@ -2201,7 +2229,7 @@ theorem nontrivial_coe_nodup_iff
     simp only [not_or, mem_cons, nodup_cons] at hl
     exact hl.left.left
 
-@[si
+@[simp]
 
 中文:
 定理 nontrivial_coe_nodup_iff
@@ -2217,7 +2245,7 @@ theorem nontrivial_coe_nodup_iff
     simp only [not_or, mem_cons, nodup_cons] at hl
     exact hl.left.left
 
-@[si
+@[simp]
 
 Depends on / 依赖: List.length, Nat.succ_le_succ_iff, Nat.zero_le, Nontrivial, hl.left.left, iff_true, length, mem_coe_iff, mem_cons, nodup_cons, not_or, succ_le_succ_iff, zero_le
 -/
@@ -3045,7 +3073,9 @@ nonrec theorem prev_next (s : Cycle α) : forall (hs : Nodup s) (x : α) (hx : x
   Quotient.inductionOn' s prev_next
 
 @[simp]
-nonrec theorem next_prev (s
+nonrec theorem next_prev (s : Cycle α) : forall (hs : Nodup s) (x : α) (hx : x in s),
+    s.next hs (s.prev hs x hx) (prev_mem s hs x hx) = x :=
+  Quotient.inductionOn' s next_prev
 
 中文:
 定理 prev_mem
@@ -3061,7 +3091,9 @@ nonrec theorem prev_next (s : Cycle α) : forall (hs : Nodup s) (x : α) (hx : x
   Quotient.inductionOn' s prev_next
 
 @[simp]
-nonrec theorem next_prev (s
+nonrec theorem next_prev (s : Cycle α) : forall (hs : Nodup s) (x : α) (hx : x in s),
+    s.next hs (s.prev hs x hx) (prev_mem s hs x hx) = x :=
+  Quotient.inductionOn' s next_prev
 
 Depends on / 依赖: mem_reverse_iff, next_mem, next_reverse_eq_prev
 -/
@@ -3323,7 +3355,12 @@ theorem chain_of_pairwise
   have Hl : forall {b} (_hb : b in l), b in (a :: l : Cycle α) := @fun b hb => by simp [hb]
   rw [Cycle.chain_coe_cons]
   apply Pairwise.isChain
-  rw [pairwi
+  rw [pairwise_cons]
+  exact
+    ⟨fun b hb => by grind,
+      pairwise_append.2
+        ⟨pairwise_of_forall_mem_list fun b hb c hc => hs b (Hl hb) c (Hl hc),
+          pairwise_singleton r a, fun b hb c hc => by grind⟩⟩
 
 中文:
 定理 chain_of_pairwise
@@ -3337,7 +3374,12 @@ theorem chain_of_pairwise
   have Hl : forall {b} (_hb : b in l), b in (a :: l : Cycle α) := @fun b hb => by simp [hb]
   rw [Cycle.chain_coe_cons]
   apply Pairwise.isChain
-  rw [pairwi
+  rw [pairwise_cons]
+  exact
+    ⟨fun b hb => by grind,
+      pairwise_append.2
+        ⟨pairwise_of_forall_mem_list fun b hb c hc => hs b (Hl hb) c (Hl hc),
+          pairwise_singleton r a, fun b hb c hc => by grind⟩⟩
 
 Depends on / 依赖: Cycle.Chain.nil, Cycle.chain_coe_cons, Pairwise, Pairwise.isChain, chain_coe_cons, isChain, pairwise_append, pairwise_cons, pairwise_of_forall_mem_list, pairwise_singleton
 -/
@@ -3371,7 +3413,13 @@ theorem chain_iff_pairwise
     intro hs b hb c hc
     rw [Cycle.chain_coe_cons]; rw [List.isChain_iff_pairwise] at hs
     simp only [pairwise_append, pairwise_cons, mem_append, mem_singleton, List.not_mem_nil,
-      IsEmpty.f
+      IsEmpty.forall_iff, imp_true_iff, Pairwise.nil, forall_eq, true_and] at hs
+    simp only [mem_coe_iff, mem_cons] at hb hc
+    rcases hb with (rfl | hb) <;> rcases hc with (rfl | hc)
+    · exact hs.1 c (Or.inr rfl)
+    · exact hs.1 c (Or.inl hc)
+    · exact hs.2.2 b hb
+    · exact _root_.trans (hs.2.2 b hb) (hs.1 c (Or.inl hc)), Cycle.chain_of_pairwise⟩
 
 中文:
 定理 chain_iff_pairwise
@@ -3384,7 +3432,13 @@ theorem chain_iff_pairwise
     intro hs b hb c hc
     rw [Cycle.chain_coe_cons]; rw [List.isChain_iff_pairwise] at hs
     simp only [pairwise_append, pairwise_cons, mem_append, mem_singleton, List.not_mem_nil,
-      IsEmpty.f
+      IsEmpty.forall_iff, imp_true_iff, Pairwise.nil, forall_eq, true_and] at hs
+    simp only [mem_coe_iff, mem_cons] at hb hc
+    rcases hb with (rfl | hb) <;> rcases hc with (rfl | hc)
+    · exact hs.1 c (Or.inr rfl)
+    · exact hs.1 c (Or.inl hc)
+    · exact hs.2.2 b hb
+    · exact _root_.trans (hs.2.2 b hb) (hs.1 c (Or.inl hc)), Cycle.chain_of_pairwise⟩
 
 Depends on / 依赖: Cycle.chain_coe_cons, IsEmpty, IsEmpty.forall_iff, List.isChain_iff_pairwise, List.not_mem_nil, Or.inl, Or.inr, Pairwise, Pairwise.nil, chain_coe_cons, forall_eq, forall_iff, imp_true_iff, isChain_iff_pairwise, mem_append, mem_coe_iff, mem_cons, mem_singleton, notMem_nil, not_mem_nil
 -/

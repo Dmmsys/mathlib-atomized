@@ -204,7 +204,10 @@ lemma neg'_eq
     ⟨_, (exists_leftFraction L W f).choose_spec, rfl⟩
   rw [MorphismProperty.LeftFraction.map_eq_iff] at hφ
   obtain ⟨Y', t₁, t₂, hst, hft, ht⟩ := hφ
-  h
+  have := inverts L W _ ht
+  rw [← cancel_mono (L.map (φ₀.s ≫ t₁))]
+  nth_rw 1 [L.map_comp]
+  rw [hφ₀]; rw [hst]; rw [LeftFraction.map_comp_map_s_assoc]; rw [L.map_comp]; rw [LeftFraction.map_comp_map_s_assoc]; rw [← L.map_comp]; rw [← L.map_comp]; rw [neg_comp]; rw [neg_comp]; rw [hft]
 
 中文:
 引理 neg'_eq
@@ -216,7 +219,10 @@ lemma neg'_eq
     ⟨_, (exists_leftFraction L W f).choose_spec, rfl⟩
   rw [MorphismProperty.LeftFraction.map_eq_iff] at hφ
   obtain ⟨Y', t₁, t₂, hst, hft, ht⟩ := hφ
-  h
+  have := inverts L W _ ht
+  rw [← cancel_mono (L.map (φ₀.s ≫ t₁))]
+  nth_rw 1 [L.map_comp]
+  rw [hφ₀]; rw [hst]; rw [LeftFraction.map_comp_map_s_assoc]; rw [L.map_comp]; rw [LeftFraction.map_comp_map_s_assoc]; rw [← L.map_comp]; rw [← L.map_comp]; rw [neg_comp]; rw [neg_comp]; rw [hft]
 -/
 lemma neg'_eq (f : L.obj X ⟶ L.obj Y) (φ : W.LeftFraction X Y)
     (hφ : f = φ.map L (inverts L W)) :
@@ -262,7 +268,13 @@ lemma add'_eq
     (_ : f₂ = φ₀.snd.map L (inverts L W)),
     add' W f₁ f₂ = φ₀.add.map L (inverts L W) :=
     ⟨(exists_leftFraction₂ L W f₁ f₂).choose,
-      (exists_leftFraction₂ L W f₁ f₂).choose_spec.1
+      (exists_leftFraction₂ L W f₁ f₂).choose_spec.1,
+      (exists_leftFraction₂ L W f₁ f₂).choose_spec.2, rfl⟩
+  obtain ⟨Z, t₁, t₂, hst, hft, hft', ht⟩ := (LeftFraction₂.map_eq_iff L W φ₀ φ).1 ⟨hφ₁, hφ₂⟩
+  have := inverts L W _ ht
+  rw [hφ₀]; rw [← cancel_mono (L.map (φ₀.s ≫ t₁))]
+  nth_rw 2 [hst]
+  rw [L.map_comp]; rw [L.map_comp]; rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s_assoc]; rw [← L.map_comp]; rw [← L.map_comp]; rw [add_comp]; rw [add_comp]; rw [hft]; rw [hft']
 
 中文:
 引理 add'_eq
@@ -273,7 +285,13 @@ lemma add'_eq
     (_ : f₂ = φ₀.snd.map L (inverts L W)),
     add' W f₁ f₂ = φ₀.add.map L (inverts L W) :=
     ⟨(exists_leftFraction₂ L W f₁ f₂).choose,
-      (exists_leftFraction₂ L W f₁ f₂).choose_spec.1
+      (exists_leftFraction₂ L W f₁ f₂).choose_spec.1,
+      (exists_leftFraction₂ L W f₁ f₂).choose_spec.2, rfl⟩
+  obtain ⟨Z, t₁, t₂, hst, hft, hft', ht⟩ := (LeftFraction₂.map_eq_iff L W φ₀ φ).1 ⟨hφ₁, hφ₂⟩
+  have := inverts L W _ ht
+  rw [hφ₀]; rw [← cancel_mono (L.map (φ₀.s ≫ t₁))]
+  nth_rw 2 [hst]
+  rw [L.map_comp]; rw [L.map_comp]; rw [LeftFraction.map_comp_map_s_assoc]; rw [LeftFraction.map_comp_map_s_assoc]; rw [← L.map_comp]; rw [← L.map_comp]; rw [add_comp]; rw [add_comp]; rw [hft]; rw [hft']
 -/
 lemma add'_eq (f₁ f₂ : L.obj X ⟶ L.obj Y) (φ : W.LeftFraction₂ X Y)
     (hφ₁ : f₁ = φ.fst.map L (inverts L W))
@@ -408,7 +426,10 @@ lemma add'_assoc
   proof: by
   obtain ⟨α, h₁, h₂, h₃⟩ := exists_leftFraction₃ L W f₁ f₂ f₃
   rw [add'_eq W f₁ f₂ α.forgetThd h₁ h₂]; rw [add'_eq W f₂ f₃ α.forgetFst h₂ h₃]; rw [add'_eq W _ _ (LeftFraction₂.mk (α.f + α.f') α.f'' α.s α.hs) rfl h₃]; rw [add'_eq W _ _ (LeftFraction₂.mk α.f (α.f' + α.f'') α.s α.hs) h₁ rfl]
-  dsim
+  dsimp [LeftFraction₂.add]
+  rw [add_assoc]
+
+@[reassoc (attr := simp)]
 
 中文:
 引理 add'_assoc
@@ -416,7 +437,10 @@ lemma add'_assoc
   证明: by
   obtain ⟨α, h₁, h₂, h₃⟩ := exists_leftFraction₃ L W f₁ f₂ f₃
   rw [add'_eq W f₁ f₂ α.forgetThd h₁ h₂]; rw [add'_eq W f₂ f₃ α.forgetFst h₂ h₃]; rw [add'_eq W _ _ (LeftFraction₂.mk (α.f + α.f') α.f'' α.s α.hs) rfl h₃]; rw [add'_eq W _ _ (LeftFraction₂.mk α.f (α.f' + α.f'') α.s α.hs) h₁ rfl]
-  dsim
+  dsimp [LeftFraction₂.add]
+  rw [add_assoc]
+
+@[reassoc (attr := simp)]
 -/
 lemma add'_assoc (f₁ f₂ f₃ : L.obj X ⟶ L.obj Y) :
     add' W (add' W f₁ f₂) f₃ = add' W f₁ (add' W f₂ f₃) := by
@@ -438,7 +462,17 @@ lemma add'_comp
   obtain ⟨γ, hγ⟩ := (RightFraction.mk _ α.hs β.f).exists_leftFraction
   dsimp at hγ
   rw [add'_eq W f₁ f₂ α h₁ h₂]; rw [add'_eq W (f₁ ≫ g) (f₂ ≫ g)
-    (LeftFraction₂.mk (α.f ≫ γ.f) (α.f' ≫ γ.f) (
+    (LeftFraction₂.mk (α.f ≫ γ.f) (α.f' ≫ γ.f) (β.s ≫ γ.s)
+    (W.comp_mem _ _ β.hs γ.hs))]; rotate_left
+  · rw [h₁, hβ]
+    exact LeftFraction.map_comp_map_eq_map _ _ _ hγ _
+  · rw [h₂, hβ]
+    exact LeftFraction.map_comp_map_eq_map _ _ _ hγ _
+  rw [hβ]; rw [LeftFraction.map_comp_map_eq_map _ _ γ hγ]
+  dsimp [LeftFraction₂.add]
+  rw [add_comp]
+
+@[reassoc (attr := simp)]
 
 中文:
 引理 add'_comp
@@ -449,7 +483,17 @@ lemma add'_comp
   obtain ⟨γ, hγ⟩ := (RightFraction.mk _ α.hs β.f).exists_leftFraction
   dsimp at hγ
   rw [add'_eq W f₁ f₂ α h₁ h₂]; rw [add'_eq W (f₁ ≫ g) (f₂ ≫ g)
-    (LeftFraction₂.mk (α.f ≫ γ.f) (α.f' ≫ γ.f) (
+    (LeftFraction₂.mk (α.f ≫ γ.f) (α.f' ≫ γ.f) (β.s ≫ γ.s)
+    (W.comp_mem _ _ β.hs γ.hs))]; rotate_left
+  · rw [h₁, hβ]
+    exact LeftFraction.map_comp_map_eq_map _ _ _ hγ _
+  · rw [h₂, hβ]
+    exact LeftFraction.map_comp_map_eq_map _ _ _ hγ _
+  rw [hβ]; rw [LeftFraction.map_comp_map_eq_map _ _ γ hγ]
+  dsimp [LeftFraction₂.add]
+  rw [add_comp]
+
+@[reassoc (attr := simp)]
 
 Depends on / 依赖: IsCardinalLocallyPresentable, IsCardinalLocallyPresentable.iff_exists_isStrongGenerator, iff_exists_isStrongGenerator, infer_instance, isCardinalPresentable_iff, isStrongGenerator
 -/
@@ -483,7 +527,15 @@ lemma comp_add'
   obtain ⟨γ, hγ₁, hγ₂⟩ := (RightFraction₂.mk _ α.hs β.f β.f').exists_leftFraction₂
   dsimp at hγ₁ hγ₂
   rw [add'_eq W g₁ g₂ β hβ₁ hβ₂]; rw [add'_eq W (f ≫ g₁) (f ≫ g₂)
-    (LeftFraction₂.mk (α.f
+    (LeftFraction₂.mk (α.f ≫ γ.f) (α.f ≫ γ.f') (β.s ≫ γ.s) (W.comp_mem _ _ β.hs γ.hs))
+    (by simpa only [hα]; rw [hβ₁] using! LeftFraction.map_comp_map_eq_map α β.fst γ.fst hγ₁ L)
+    (by simpa only [hα, hβ₂] using! LeftFraction.map_comp_map_eq_map α β.snd γ.snd hγ₂ L),
+    hα, LeftFraction.map_comp_map_eq_map α β.add γ.add
+      (by simp only [add_comp, hγ₁, hγ₂, comp_add])]
+  dsimp [LeftFraction₂.add]
+  rw [comp_add]
+
+@[simp]
 
 中文:
 引理 comp_add'
@@ -494,7 +546,15 @@ lemma comp_add'
   obtain ⟨γ, hγ₁, hγ₂⟩ := (RightFraction₂.mk _ α.hs β.f β.f').exists_leftFraction₂
   dsimp at hγ₁ hγ₂
   rw [add'_eq W g₁ g₂ β hβ₁ hβ₂]; rw [add'_eq W (f ≫ g₁) (f ≫ g₂)
-    (LeftFraction₂.mk (α.f
+    (LeftFraction₂.mk (α.f ≫ γ.f) (α.f ≫ γ.f') (β.s ≫ γ.s) (W.comp_mem _ _ β.hs γ.hs))
+    (by simpa only [hα]; rw [hβ₁] using! LeftFraction.map_comp_map_eq_map α β.fst γ.fst hγ₁ L)
+    (by simpa only [hα, hβ₂] using! LeftFraction.map_comp_map_eq_map α β.snd γ.snd hγ₂ L),
+    hα, LeftFraction.map_comp_map_eq_map α β.add γ.add
+      (by simp only [add_comp, hγ₁, hγ₂, comp_add])]
+  dsimp [LeftFraction₂.add]
+  rw [comp_add]
+
+@[simp]
 
 Depends on / 依赖: IsLocallyPresentable, IsLocallyPresentable.exists_cardinal, LeftFraction, LeftFraction.map_comp_map_eq_m, LeftFraction.map_comp_map_eq_map, W.comp_mem, comp_mem, exists_cardinal, exists_leftFraction, map_comp_map_eq_m, map_comp_map_eq_map
 -/
@@ -557,7 +617,9 @@ definition addCommGroup'
       add_zero := add'_zero _
       add_comm := add'_comm _
       zero_add := zero_add' _
-      neg_add_cancel := neg'_a
+      neg_add_cancel := neg'_add'_self _
+      nsmul := nsmulRec
+      zsmul := zsmulRec }
 
 中文:
 定义 addCommGroup'
@@ -571,7 +633,9 @@ definition addCommGroup'
       add_zero := add'_zero _
       add_comm := add'_comm _
       zero_add := zero_add' _
-      neg_add_cancel := neg'_a
+      neg_add_cancel := neg'_add'_self _
+      nsmul := nsmulRec
+      zsmul := zsmulRec }
 
 Depends on / 依赖: L.map, L.obj, _add, _assoc, _comm, _self, _zero, add_assoc, add_comm, add_zero, h.isCardinalPresentable, isCardinalPresentable, isCardinalPresentable_iff, neg_add_cancel, nsmulRec, zero_add, zsmulRec
 -/
@@ -892,7 +956,13 @@ lemma functor_additive_iff
     suffices forall ⦃X Y : C⦄ (f g : L.obj X ⟶ L.obj Y), G.map (f + g) = G.map f + G.map g by
       refine ⟨fun {X Y f g} => ?_⟩
       have hL := essSurj L W
-      have eq := this ((L.objObjPreimageIso X).hom ≫ f ≫ (L.objObjPreimageIso Y).inv
+      have eq := this ((L.objObjPreimageIso X).hom ≫ f ≫ (L.objObjPreimageIso Y).inv)
+        ((L.objObjPreimageIso X).hom ≫ g ≫ (L.objObjPreimageIso Y).inv)
+      rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [← comp_add]; rw [← comp_add]; rw [← add_comp]; rw [← add_comp]; rw [Functor.map_comp]; rw [Functor.map_comp] at eq
+      rw [← cancel_mono (G.map (L.objObjPreimageIso Y).inv)]; rw [← cancel_epi (G.map (L.objObjPreimageIso X).hom)]; rw [eq]
+    intro X Y f g
+    obtain ⟨φ, rfl, rfl⟩ := exists_leftFraction₂ L W f g
+    rw [← φ.map_add L (inverts L W)]; rw [← cancel_mono (G.map (L.map φ.s))]; rw [← G.map_comp]; rw [add_comp]; rw [← G.map_comp]; rw [← G.map_comp]; rw [LeftFraction.map_comp_map_s]; rw [LeftFraction.map_comp_map_s]; rw [LeftFraction.map_comp_map_s]; rw [← Functor.comp_map]; rw [Functor.map_add]; rw [Functor.comp_map]; rw [Functor.comp_map]
 
 中文:
 引理 functor_additive_iff
@@ -905,7 +975,13 @@ lemma functor_additive_iff
     suffices forall ⦃X Y : C⦄ (f g : L.obj X ⟶ L.obj Y), G.map (f + g) = G.map f + G.map g by
       refine ⟨fun {X Y f g} => ?_⟩
       have hL := essSurj L W
-      have eq := this ((L.objObjPreimageIso X).hom ≫ f ≫ (L.objObjPreimageIso Y).inv
+      have eq := this ((L.objObjPreimageIso X).hom ≫ f ≫ (L.objObjPreimageIso Y).inv)
+        ((L.objObjPreimageIso X).hom ≫ g ≫ (L.objObjPreimageIso Y).inv)
+      rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [Functor.map_comp]; rw [← comp_add]; rw [← comp_add]; rw [← add_comp]; rw [← add_comp]; rw [Functor.map_comp]; rw [Functor.map_comp] at eq
+      rw [← cancel_mono (G.map (L.objObjPreimageIso Y).inv)]; rw [← cancel_epi (G.map (L.objObjPreimageIso X).hom)]; rw [eq]
+    intro X Y f g
+    obtain ⟨φ, rfl, rfl⟩ := exists_leftFraction₂ L W f g
+    rw [← φ.map_add L (inverts L W)]; rw [← cancel_mono (G.map (L.map φ.s))]; rw [← G.map_comp]; rw [add_comp]; rw [← G.map_comp]; rw [← G.map_comp]; rw [LeftFraction.map_comp_map_s]; rw [LeftFraction.map_comp_map_s]; rw [LeftFraction.map_comp_map_s]; rw [← Functor.comp_map]; rw [Functor.map_add]; rw [Functor.comp_map]; rw [Functor.comp_map]
 
 Depends on / 依赖: Functor, Functor.map_comp, G.map, L.obj, L.objObjPreimageIso, add_comp, comp_add, essSurj, infer_instance, map_comp, objObjPreimageIso
 -/

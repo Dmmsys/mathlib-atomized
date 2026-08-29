@@ -81,7 +81,20 @@ theorem fourier_bilin_convolution_eq_integral
     congr
     ext x
     simp_rw [Circle.smul_def, integral_smul]
-  _ = ∫ y, ∫ x, 𝐞 (-inner Real x ξ
+  _ = ∫ y, ∫ x, 𝐞 (-inner Real x ξ) • B (f₁ (x - y)) (f₂ y) := by
+    refine integral_integral_swap ?_
+    have hB := hf₂.convolution_integrand B.flip hf₁
+    refine hB.mono ?_ ?_
+.aestronglyMeasurable.smul · exact continuous_fourierChar.comp (by fun_prop)
+        hB.aestronglyMeasurable
+    · filter_upwards with ⟨x, y⟩ using by simp
+  _ = ∫ y, ∫ x, 𝐞 (-inner Real (y + x) ξ) • B (f₁ x) (f₂ y) := by
+    congr
+    ext y
+    -- Linear change of variables
+    convert! integral_sub_right_eq_self _ y (μ := volume)
+    congr
+    simp
 
 中文:
 定理 fourier_bilin_convolution_eq_integral
@@ -94,7 +107,20 @@ theorem fourier_bilin_convolution_eq_integral
     congr
     ext x
     simp_rw [Circle.smul_def, integral_smul]
-  _ = ∫ y, ∫ x, 𝐞 (-inner Real x ξ
+  _ = ∫ y, ∫ x, 𝐞 (-inner Real x ξ) • B (f₁ (x - y)) (f₂ y) := by
+    refine integral_integral_swap ?_
+    have hB := hf₂.convolution_integrand B.flip hf₁
+    refine hB.mono ?_ ?_
+.aestronglyMeasurable.smul · exact continuous_fourierChar.comp (by fun_prop)
+        hB.aestronglyMeasurable
+    · filter_upwards with ⟨x, y⟩ using by simp
+  _ = ∫ y, ∫ x, 𝐞 (-inner Real (y + x) ξ) • B (f₁ x) (f₂ y) := by
+    congr
+    ext y
+    -- Linear change of variables
+    convert! integral_sub_right_eq_self _ y (μ := volume)
+    congr
+    simp
 -/
 theorem fourier_bilin_convolution_eq_integral (B : F₁ ->L[𝕜] F₂ ->L[𝕜] F₃) {f₁ : E -> F₁} {f₂ : E -> F₂}
     (hf₁ : Integrable f₁) (hf₂ : Integrable f₂) (ξ : E) :
@@ -137,7 +163,14 @@ theorem fourier_bilin_convolution_eq
     fourier_bilin_convolution_eq_integral B hf₁ hf₂ _
   _ = ∫ y, ∫ x, 𝐞 (-inner Real y ξ) • 𝐞 (-inner Real x ξ) • B (f₁ x) (f₂ y) := by
     simp_rw [inner_add_left, neg_add, AddChar.map_add_eq_mul, smul_smul]
-  _ = ∫ y, (∫ x, B (𝐞 (
+  _ = ∫ y, (∫ x, B (𝐞 (-inner Real x ξ) • f₁ x)) (𝐞 (-inner Real y ξ) • f₂ y) := by
+    congr with y
+    have : Integrable (fun x => (𝐞 (-inner Real x ξ) : Complex) • B (f₁ x)) volume := by
+      simpa [Circle.smul_def] using
+        (Real.fourierIntegral_convergent_iff ξ).2 (B.integrable_comp hf₁)
+    simp [Circle.smul_def, MeasureTheory.integral_smul, integral_apply this (f₂ y)]
+  _ = B (∫ x, 𝐞 (-inner Real x ξ) • f₁ x) (∫ y, 𝐞 (-inner Real y ξ) • f₂ y) := by
+    rw [← integral_comp_comm _ (by simpa using hf₂)]; rw [← integral_comp_comm _ (by simpa using hf₁)]
 
 中文:
 定理 fourier_bilin_convolution_eq
@@ -147,7 +180,14 @@ theorem fourier_bilin_convolution_eq
     fourier_bilin_convolution_eq_integral B hf₁ hf₂ _
   _ = ∫ y, ∫ x, 𝐞 (-inner Real y ξ) • 𝐞 (-inner Real x ξ) • B (f₁ x) (f₂ y) := by
     simp_rw [inner_add_left, neg_add, AddChar.map_add_eq_mul, smul_smul]
-  _ = ∫ y, (∫ x, B (𝐞 (
+  _ = ∫ y, (∫ x, B (𝐞 (-inner Real x ξ) • f₁ x)) (𝐞 (-inner Real y ξ) • f₂ y) := by
+    congr with y
+    have : Integrable (fun x => (𝐞 (-inner Real x ξ) : Complex) • B (f₁ x)) volume := by
+      simpa [Circle.smul_def] using
+        (Real.fourierIntegral_convergent_iff ξ).2 (B.integrable_comp hf₁)
+    simp [Circle.smul_def, MeasureTheory.integral_smul, integral_apply this (f₂ y)]
+  _ = B (∫ x, 𝐞 (-inner Real x ξ) • f₁ x) (∫ y, 𝐞 (-inner Real y ξ) • f₂ y) := by
+    rw [← integral_comp_comm _ (by simpa using hf₂)]; rw [← integral_comp_comm _ (by simpa using hf₁)]
 -/
 theorem fourier_bilin_convolution_eq (B : F₁ ->L[Complex] F₂ ->L[Complex] F₃) {f₁ : E -> F₁} {f₂ : E -> F₂}
     (hf₁ : Integrable f₁) (hf₂ : Integrable f₂) (ξ : E) :
@@ -356,7 +396,12 @@ theorem convolution_apply
     rw [fourier_convolution_apply]
   _ = _ := by
     rw [Continuous.fourierInv_fourier_eq]
-    · refine BddAbove.c
+    · refine BddAbove.continuous_convolution_right_of_integrable B ?_ f.integrable g.continuous
+      exact ⟨SchwartzMap.seminorm Real 0 0 g, fun x ⟨y, hy⟩ => hy ▸ norm_le_seminorm Real g y⟩
+    · exact f.integrable.integrable_convolution B g.integrable
+    · have : Integrable (fun ξ => B (𝓕 f ξ) (𝓕 g ξ)) volume := (pairing B (𝓕 f) (𝓕 g)).integrable
+      convert! this
+      rw [← fourier_convolution_apply B f g]; rw [fourier_convolution]; rw [pairing_apply_apply]
 
 中文:
 定理 convolution_apply
@@ -370,7 +415,12 @@ theorem convolution_apply
     rw [fourier_convolution_apply]
   _ = _ := by
     rw [Continuous.fourierInv_fourier_eq]
-    · refine BddAbove.c
+    · refine BddAbove.continuous_convolution_right_of_integrable B ?_ f.integrable g.continuous
+      exact ⟨SchwartzMap.seminorm Real 0 0 g, fun x ⟨y, hy⟩ => hy ▸ norm_le_seminorm Real g y⟩
+    · exact f.integrable.integrable_convolution B g.integrable
+    · have : Integrable (fun ξ => B (𝓕 f ξ) (𝓕 g ξ)) volume := (pairing B (𝓕 f) (𝓕 g)).integrable
+      convert! this
+      rw [← fourier_convolution_apply B f g]; rw [fourier_convolution]; rw [pairing_apply_apply]
 
 Depends on / 依赖: SeminormedCommGroup, SetLike, seminormedCommGroup
 -/

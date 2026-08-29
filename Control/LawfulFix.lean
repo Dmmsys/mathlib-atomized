@@ -137,7 +137,17 @@ theorem mem_iff
     obtain ⟨y, h₁⟩ := h₁
     replace h₁ := approx_mono' f _ _ h₁
     suffices y = b by
-     
+      subst this
+      exact h₁
+    obtain ⟨i, hh⟩ := hh
+    revert h₁; generalize succ (Nat.find h₀) = j; intro h₁
+    wlog case : i <= j
+    · rcases le_total i j with H | H <;> [skip; symm] <;> apply_assumption <;> assumption
+    replace hh := approx_mono f case _ _ hh
+    apply Part.mem_unique h₁ hh
+  · simp only [fix_def' (⇑f) h₀, not_exists, false_iff, notMem_none]
+    simp only [dom_iff_mem, not_exists] at h₀
+    intro; apply h₀
 
 中文:
 定理 mem_iff
@@ -154,7 +164,17 @@ theorem mem_iff
     obtain ⟨y, h₁⟩ := h₁
     replace h₁ := approx_mono' f _ _ h₁
     suffices y = b by
-     
+      subst this
+      exact h₁
+    obtain ⟨i, hh⟩ := hh
+    revert h₁; generalize succ (Nat.find h₀) = j; intro h₁
+    wlog case : i <= j
+    · rcases le_total i j with H | H <;> [skip; symm] <;> apply_assumption <;> assumption
+    replace hh := approx_mono f case _ _ hh
+    apply Part.mem_unique h₁ hh
+  · simp only [fix_def' (⇑f) h₀, not_exists, false_iff, notMem_none]
+    simp only [dom_iff_mem, not_exists] at h₀
+    intro; apply h₀
 
 Depends on / 依赖: Nat.find, Nat.find_spec, Part.fix_def, apply_assumption, approx, approx_mono, classical, dom_iff_mem, find_spec, fix_def, generalize, le_total, replace, revert
 -/
@@ -225,7 +245,7 @@ theorem exists_fix_le_approx
     intro b' h'
     simp only [mem_iff f] at h'
     obtain ⟨i, h'⟩ := h'
-    cases 
+    cases hh _ _ h'
 
 中文:
 定理 存在_fix_le_approx
@@ -243,7 +263,7 @@ theorem exists_fix_le_approx
     intro b' h'
     simp only [mem_iff f] at h'
     obtain ⟨i, h'⟩ := h'
-    cases 
+    cases hh _ _ h'
 
 Depends on / 依赖: Part.mem_unique, approx, approx_le_fix, mem_iff, mem_unique
 -/
@@ -354,7 +374,7 @@ theorem fix_eq_ωSup
   · apply ωSup_le _ _ _
     simp only [Fix.approxChain]
     intro y x
-    
+    apply approx_le_fix f
 
 中文:
 定理 fix_eq_ωSup
@@ -373,7 +393,7 @@ theorem fix_eq_ωSup
   · apply ωSup_le _ _ _
     simp only [Fix.approxChain]
     intro y x
-    
+    apply approx_le_fix f
 
 Depends on / 依赖: Fix.approxChain, approx, approxChain, approx_le_fix, approx_mono, exists_fix_le_approx, i.succ, le_antisymm
 -/

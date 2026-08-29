@@ -302,7 +302,7 @@ definition conjAct
     simp only [map_one, MulEquiv.trans_apply, MulAut.one_apply, MulEquiv.symm_apply_apply]
   map_mul' _ _ := by
     ext _
-    simp only [map_mul, MulE
+    simp only [map_mul, MulEquiv.trans_apply, MulAut.mul_apply, MulEquiv.apply_symm_apply]
 
 中文:
 定义 conjAct
@@ -314,7 +314,7 @@ definition conjAct
     simp only [map_one, MulEquiv.trans_apply, MulAut.one_apply, MulEquiv.symm_apply_apply]
   map_mul' _ _ := by
     ext _
-    simp only [map_mul, MulE
+    simp only [map_mul, MulEquiv.trans_apply, MulAut.mul_apply, MulEquiv.apply_symm_apply]
 
 Depends on / 依赖: MonoidHom, MonoidHom.ofInjective, S.inl_injective, inl_injective, ofInjective
 -/

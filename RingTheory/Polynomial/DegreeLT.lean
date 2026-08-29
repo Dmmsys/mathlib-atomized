@@ -363,7 +363,7 @@ lemma addLinearEquiv_symm_apply
       R[X]) := by
     rw [LinearMap.inl_apply]; rw [LinearMap.inr_apply]; rw [Prod.add_def]; rw [add_zero]; rw [zero_add]
   _ = _ := by
-    rw [map_add]; rw [Submodule.coe_add]; rw [addLinearEquiv_symm_ap
+    rw [map_add]; rw [Submodule.coe_add]; rw [addLinearEquiv_symm_apply_inl]; rw [addLinearEquiv_symm_apply_inr]
 
 中文:
 引理 addLinearEquiv_symm_apply
@@ -373,7 +373,7 @@ lemma addLinearEquiv_symm_apply
       R[X]) := by
     rw [LinearMap.inl_apply]; rw [LinearMap.inr_apply]; rw [Prod.add_def]; rw [add_zero]; rw [zero_add]
   _ = _ := by
-    rw [map_add]; rw [Submodule.coe_add]; rw [addLinearEquiv_symm_ap
+    rw [map_add]; rw [Submodule.coe_add]; rw [addLinearEquiv_symm_apply_inl]; rw [addLinearEquiv_symm_apply_inr]
 -/
 lemma addLinearEquiv_symm_apply (PQ) :
     ((addLinearEquiv R m n).symm PQ : R[X]) = (PQ.1 : R[X]) + (PQ.2 : R[X]) * X ^ (m : Nat) := calc
@@ -609,7 +609,12 @@ theorem det_taylorLinearEquiv_toLinearMap
   rw [← LinearMap.det_toMatrix (degreeLT.basis R n)]; rw [Matrix.det_of_isUpperTriangular]; rw [Fintype.prod_eq_one]
   · intro i
     rw [LinearMap.toMatrix_apply]; rw [degreeLT.basis_repr]; rw [← natDegree_X_pow (R := R) (i : Nat)]
-    change (taylor r (degreeLT.basis R n i)).co
+    change (taylor r (degreeLT.basis R n i)).coeff _ = 1
+    rw [degreeLT.basis_val]; rw [coeff_taylor_natDegree]; rw [leadingCoeff_X_pow]
+  · intro i j hji
+    rw [LinearMap.toMatrix_apply]; rw [LinearEquiv.coe_coe]; rw [degreeLT.basis_repr]
+    change (taylor r (degreeLT.basis R n j)).coeff i = 0
+    rw [degreeLT.basis_val]; rw [coeff_eq_zero_of_degree_lt (by simpa [-taylor_X_pow]; rw [-taylor_pow])]
 
 中文:
 定理 det_taylorLinearEquiv_toLinearMap
@@ -618,7 +623,12 @@ theorem det_taylorLinearEquiv_toLinearMap
   rw [← LinearMap.det_toMatrix (degreeLT.basis R n)]; rw [Matrix.det_of_isUpperTriangular]; rw [Fintype.prod_eq_one]
   · intro i
     rw [LinearMap.toMatrix_apply]; rw [degreeLT.basis_repr]; rw [← natDegree_X_pow (R := R) (i : Nat)]
-    change (taylor r (degreeLT.basis R n i)).co
+    change (taylor r (degreeLT.basis R n i)).coeff _ = 1
+    rw [degreeLT.basis_val]; rw [coeff_taylor_natDegree]; rw [leadingCoeff_X_pow]
+  · intro i j hji
+    rw [LinearMap.toMatrix_apply]; rw [LinearEquiv.coe_coe]; rw [degreeLT.basis_repr]
+    change (taylor r (degreeLT.basis R n j)).coeff i = 0
+    rw [degreeLT.basis_val]; rw [coeff_eq_zero_of_degree_lt (by simpa [-taylor_X_pow]; rw [-taylor_pow])]
 -/
 @[simp] theorem det_taylorLinearEquiv_toLinearMap :
     (taylorLinearEquiv r n).toLinearMap.det = 1 := by

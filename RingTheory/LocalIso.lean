@@ -137,7 +137,24 @@ lemma of_span_range_eq_top
     have : ⟨q, hq⟩ in ⨆ i, PrimeSpectrum.basicOpen (f i) := by simp [h]
     simpa using this
   have : ⟨q, hq⟩ in PrimeSpectrum.basicOpen (f i) := hi
-  rw [← SetLike.mem_coe
+  rw [← SetLike.mem_coe]; rw [← PrimeSpectrum.localization_away_comap_range (T i)] at this
+  obtain ⟨q', hq'⟩ := this
+  obtain ⟨g', hg', h⟩ := exists_notMem_isStandardOpenImmersion (R := R) q'.1
+  obtain ⟨n, g, hg⟩ := IsLocalization.Away.surj (f i) g'
+  refine ⟨g * (f i), ?_, ?_⟩
+  · refine Ideal.IsPrime.mul_notMem hq ?_ hi
+    simp only [PrimeSpectrum.ext_iff, PrimeSpectrum.comap_asIdeal] at hq'
+    rwa [← hq', Ideal.mem_comap, ← hg, Ideal.mul_unit_mem_iff_mem]
+    exact (IsLocalization.Away.algebraMap_isUnit (f i)).pow n
+  · have : IsLocalization.Away g' (Localization.Away (algebraMap S (T i) g)) := by
+      rw [← hg]
+      exact .of_associated
+        (associated_mul_unit_right _ _ ((IsLocalization.Away.algebraMap_isUnit (f i)).pow n)).symm
+    let e₁ : Localization.Away (algebraMap S (T i) g) ≃ₐ[S] Localization.Away (g * f i) :=
+      IsLocalization.algEquiv (.powers (g * f i)) _ _
+    let e₂ : Localization.Away g' ≃ₐ[R] Localization.Away (g * f i) :=
+      ((IsLocalization.algEquiv (.powers g') _ _).restrictScalars R).trans (e₁.restrictScalars R)
+    exact .of_algEquiv e₂
 
 中文:
 引理 of_span_range_eq_top
@@ -149,7 +166,24 @@ lemma of_span_range_eq_top
     have : ⟨q, hq⟩ in ⨆ i, PrimeSpectrum.basicOpen (f i) := by simp [h]
     simpa using this
   have : ⟨q, hq⟩ in PrimeSpectrum.basicOpen (f i) := hi
-  rw [← SetLike.mem_coe
+  rw [← SetLike.mem_coe]; rw [← PrimeSpectrum.localization_away_comap_range (T i)] at this
+  obtain ⟨q', hq'⟩ := this
+  obtain ⟨g', hg', h⟩ := exists_notMem_isStandardOpenImmersion (R := R) q'.1
+  obtain ⟨n, g, hg⟩ := IsLocalization.Away.surj (f i) g'
+  refine ⟨g * (f i), ?_, ?_⟩
+  · refine Ideal.IsPrime.mul_notMem hq ?_ hi
+    simp only [PrimeSpectrum.ext_iff, PrimeSpectrum.comap_asIdeal] at hq'
+    rwa [← hq', Ideal.mem_comap, ← hg, Ideal.mul_unit_mem_iff_mem]
+    exact (IsLocalization.Away.algebraMap_isUnit (f i)).pow n
+  · have : IsLocalization.Away g' (Localization.Away (algebraMap S (T i) g)) := by
+      rw [← hg]
+      exact .of_associated
+        (associated_mul_unit_right _ _ ((IsLocalization.Away.algebraMap_isUnit (f i)).pow n)).symm
+    let e₁ : Localization.Away (algebraMap S (T i) g) ≃ₐ[S] Localization.Away (g * f i) :=
+      IsLocalization.algEquiv (.powers (g * f i)) _ _
+    let e₂ : Localization.Away g' ≃ₐ[R] Localization.Away (g * f i) :=
+      ((IsLocalization.algEquiv (.powers g') _ _).restrictScalars R).trans (e₁.restrictScalars R)
+    exact .of_algEquiv e₂
 
 Depends on / 依赖: IsLocalization, IsLocalization.Away.surj, PrimeSpectrum, PrimeSpectrum.basicOpen, PrimeSpectrum.iSup_basicOpen_eq_top_iff, PrimeSpectrum.localization_away_comap_range, SetLike, SetLike.mem_coe, basicOpen, exists_notMem_isStandardOpenImmersion, iSup_basicOpen_eq_top_iff, localization_away_comap_range, mem_coe
 -/
@@ -221,7 +255,10 @@ lemma pi_of_finite
   have (i : ι) : IsLocalization.Away (Pi.single i (1 : S i)) (S i) := by
     apply IsLocalization.away_of_isIdempotentElem
     · simp [IsIdempotentElem, ← Pi.single_mul_left]
-    · apply RingHom.ker_evalR
+    · apply RingHom.ker_evalRingHom
+    · apply (Pi.evalRingHom S i).surjective
+  apply of_span_range_eq_top (fun i => Pi.single i (1 : S i)) _ fun i => S i
+  exact Ideal.span_single_eq_top _
 
 中文:
 引理 pi_of_finite
@@ -232,7 +269,10 @@ lemma pi_of_finite
   have (i : ι) : IsLocalization.Away (Pi.single i (1 : S i)) (S i) := by
     apply IsLocalization.away_of_isIdempotentElem
     · simp [IsIdempotentElem, ← Pi.single_mul_left]
-    · apply RingHom.ker_evalR
+    · apply RingHom.ker_evalRingHom
+    · apply (Pi.evalRingHom S i).surjective
+  apply of_span_range_eq_top (fun i => Pi.single i (1 : S i)) _ fun i => S i
+  exact Ideal.span_single_eq_top _
 
 Depends on / 依赖: Algebra, Ideal.span_single_eq_top, IsIdempotentElem, IsLocalization, IsLocalization.Away, IsLocalization.away_of_isIdempotentElem, Pi.evalAlgHom, Pi.evalRingHom, Pi.single, Pi.single_mul_left, RingHom, RingHom.ker_evalRingHom, away_of_isIdempotentElem, classical, evalAlgHom, evalRingHom, ker_evalRingHom, of_span_range_eq_top, single, single_mul_left
 -/
@@ -263,7 +303,41 @@ lemma trans
   -- The proof is purely formal given that open immersions are stable under composition.
   let s : Set S := {g : S | IsStandardOpenImmersion R (Localization.Away g)}
   let T' (g : S) := Localization.Away (algebraMap S T g)
-  let (g : S) : Algebra (Localization.Away g) (T' g) := localizationAlgebr
+  let (g : S) : Algebra (Localization.Away g) (T' g) := localizationAlgebra (.powers g) T
+  let T'' (g : S) (x : T) := Localization.Away (algebraMap _ (T' g) x)
+  let t (g : S) : Set T := {x : T | IsStandardOpenImmersion (Localization.Away g) (T'' g x)}
+  let ι : Type _ := Σ i : s, t i.1
+  have (i : ι) : IsStandardOpenImmersion (Localization.Away i.1.1) (T'' i.1 i.2) := i.2.2
+  suffices h : Ideal.span (Set.range fun i : ι => algebraMap S T i.1 * i.2) = ⊤ by
+    have (i : ι) : IsStandardOpenImmersion R (T'' i.1 i.2) :=
+      have : IsScalarTower R (Localization.Away i.1.1) (T' i.1.1) :=
+        IsScalarTower.to₁₃₄ _ S _ _
+      have : IsStandardOpenImmersion (Localization.Away i.1.1) (T'' i.1.1 i.2.1) := i.2.2
+      have : IsStandardOpenImmersion R (Localization.Away i.1.1) := i.1.2
+      .trans _ (Localization.Away i.1.1) _
+    exact .of_span_range_eq_top _ h fun i : ι => T'' i.1 i.2
+  have h1 := congr(Ideal.map (algebraMap S T) $(span_isStandardOpenImmersion_eq_top R S))
+  rw [Ideal.map_top]; rw [Ideal.map_span] at h1
+  nth_rw 1 [_root_.eq_top_iff, ← Ideal.top_mul ⊤, ← h1, ← span_isStandardOpenImmersion_eq_top S T,
+    Ideal.span_mul_span, Ideal.span_le, Set.mul_subset_iff]
+  simp only [Set.mem_image, Set.mem_ofPred_eq, SetLike.mem_coe, forall_exists_index, and_imp,
+    forall_apply_eq_imp_iff₂]
+  intro g hg x hx
+  refine Ideal.subset_span ⟨⟨⟨g, hg⟩, ⟨x, ?_⟩⟩, rfl⟩
+  simp only [Set.mem_ofPred_eq, t]
+  let : Algebra (Localization.Away x) (T'' g x) :=
+    localizationAlgebra (.powers x) (T' g)
+  have : IsScalarTower S (Localization.Away x) (T'' g x) :=
+    IsScalarTower.to₁₃₄ _ T _ _
+  have : IsLocalization (algebraMapSubmonoid (Localization.Away x) (.powers g)) (T'' g x) := by
+    have : algebraMapSubmonoid (Localization.Away x) (.powers g) =
+      algebraMapSubmonoid (Localization.Away x) (.powers (algebraMap S T g)) := by
+        simp [IsScalarTower.algebraMap_apply S T (Localization.Away x)]
+    rw [this]
+    exact .commutes _ (T' g) _ (.powers x) (.powers (algebraMap S T g))
+  have : IsPushout S (Localization.Away x) (Localization.Away g) (T'' g x) :=
+    Algebra.isPushout_of_isLocalization (.powers g) _ _ _
+  exact .of_isPushout S (Localization.Away x) _ _
 
 中文:
 引理 trans
@@ -272,7 +346,41 @@ lemma trans
   -- The proof is purely formal given that open immersions are stable under composition.
   let s : Set S := {g : S | IsStandardOpenImmersion R (Localization.Away g)}
   let T' (g : S) := Localization.Away (algebraMap S T g)
-  let (g : S) : Algebra (Localization.Away g) (T' g) := localizationAlgebr
+  let (g : S) : Algebra (Localization.Away g) (T' g) := localizationAlgebra (.powers g) T
+  let T'' (g : S) (x : T) := Localization.Away (algebraMap _ (T' g) x)
+  let t (g : S) : Set T := {x : T | IsStandardOpenImmersion (Localization.Away g) (T'' g x)}
+  let ι : Type _ := Σ i : s, t i.1
+  have (i : ι) : IsStandardOpenImmersion (Localization.Away i.1.1) (T'' i.1 i.2) := i.2.2
+  suffices h : Ideal.span (Set.range fun i : ι => algebraMap S T i.1 * i.2) = ⊤ by
+    have (i : ι) : IsStandardOpenImmersion R (T'' i.1 i.2) :=
+      have : IsScalarTower R (Localization.Away i.1.1) (T' i.1.1) :=
+        IsScalarTower.to₁₃₄ _ S _ _
+      have : IsStandardOpenImmersion (Localization.Away i.1.1) (T'' i.1.1 i.2.1) := i.2.2
+      have : IsStandardOpenImmersion R (Localization.Away i.1.1) := i.1.2
+      .trans _ (Localization.Away i.1.1) _
+    exact .of_span_range_eq_top _ h fun i : ι => T'' i.1 i.2
+  have h1 := congr(Ideal.map (algebraMap S T) $(span_isStandardOpenImmersion_eq_top R S))
+  rw [Ideal.map_top]; rw [Ideal.map_span] at h1
+  nth_rw 1 [_root_.eq_top_iff, ← Ideal.top_mul ⊤, ← h1, ← span_isStandardOpenImmersion_eq_top S T,
+    Ideal.span_mul_span, Ideal.span_le, Set.mul_subset_iff]
+  simp only [Set.mem_image, Set.mem_ofPred_eq, SetLike.mem_coe, forall_exists_index, and_imp,
+    forall_apply_eq_imp_iff₂]
+  intro g hg x hx
+  refine Ideal.subset_span ⟨⟨⟨g, hg⟩, ⟨x, ?_⟩⟩, rfl⟩
+  simp only [Set.mem_ofPred_eq, t]
+  let : Algebra (Localization.Away x) (T'' g x) :=
+    localizationAlgebra (.powers x) (T' g)
+  have : IsScalarTower S (Localization.Away x) (T'' g x) :=
+    IsScalarTower.to₁₃₄ _ T _ _
+  have : IsLocalization (algebraMapSubmonoid (Localization.Away x) (.powers g)) (T'' g x) := by
+    have : algebraMapSubmonoid (Localization.Away x) (.powers g) =
+      algebraMapSubmonoid (Localization.Away x) (.powers (algebraMap S T g)) := by
+        simp [IsScalarTower.algebraMap_apply S T (Localization.Away x)]
+    rw [this]
+    exact .commutes _ (T' g) _ (.powers x) (.powers (algebraMap S T g))
+  have : IsPushout S (Localization.Away x) (Localization.Away g) (T'' g x) :=
+    Algebra.isPushout_of_isLocalization (.powers g) _ _ _
+  exact .of_isPushout S (Localization.Away x) _ _
 -/
 lemma trans [Algebra S T] [Algebra R T] [IsScalarTower R S T]
     [IsLocalIso R S] [IsLocalIso S T] : IsLocalIso R T := by
@@ -375,7 +483,8 @@ instance [Algebra
   rw [iff_span_isStandardOpenImmersion_eq_top]; rw [_root_.eq_top_iff]; rw [← Ideal.map_top Algebra.TensorProduct.includeRight]; rw [← span_isStandardOpenImmersion_eq_top R S]; rw [Ideal.map_le_iff_le_comap]; rw [Ideal.span_le]
   intro g hg
   apply Ideal.subset_span
-  simp only [Set.mem_ofPred_eq
+  simp only [Set.mem_ofPred_eq] at hg ⊢
+exact .of_algEquiv IsLocalization.Away.tensorProductEquivTMulRight R T g (Localization.Away g)
 
 中文:
 实例 [代数
@@ -384,7 +493,8 @@ instance [Algebra
   rw [iff_span_isStandardOpenImmersion_eq_top]; rw [_root_.eq_top_iff]; rw [← Ideal.map_top Algebra.TensorProduct.includeRight]; rw [← span_isStandardOpenImmersion_eq_top R S]; rw [Ideal.map_le_iff_le_comap]; rw [Ideal.span_le]
   intro g hg
   apply Ideal.subset_span
-  simp only [Set.mem_ofPred_eq
+  simp only [Set.mem_ofPred_eq] at hg ⊢
+exact .of_algEquiv IsLocalization.Away.tensorProductEquivTMulRight R T g (Localization.Away g)
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeRight, Ideal.map_le_iff_le_comap, Ideal.map_top, Ideal.span_le, Ideal.subset_span, IsLocalization, IsLocalization.Away.tensorProductEquivTMulRight, Localization, Localization.Away, Set.mem_ofPred_eq, TensorProduct, _root_, _root_.eq_top_iff, eq_top_iff, iff_span_isStandardOpenImmersion_eq_top, includeRight, map_le_iff_le_comap, map_top, mem_ofPred_eq
 -/

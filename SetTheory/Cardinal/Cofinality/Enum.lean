@@ -488,7 +488,20 @@ theorem isNormal_enum_iff_dirSupClosed
   rw [isNormal_iff]; rw [dirSupClosed_iff_of_linearOrder]
   refine fun hs' => ⟨H, fun a ha b hb => ?_⟩
   have bdd : BddAbove (Subtype.val ∘ enum s hs '' Iio a) := by
-   
+    use enum s hs a
+    simpa [upperBounds] using fun x hx => hx.le
+  have : Nonempty α := ⟨a⟩
+  let := WellFoundedLT.toOrderBot α
+  let := WellFoundedLT.conditionallyCompleteLinearOrderBot α
+  trans sSup ((Subtype.val ∘ enum s hs) '' Iio a)
+  · refine enum_le_of_forall_lt (hs' ?_ ?_ (isLUB_csSup' bdd)) fun b hb => ?_
+    · grind
+    · simpa using ha.ne_bot
+    · obtain ⟨c, hca, hbc⟩ := ha.lt_iff_exists_lt.1 hb
+refine (H hbc).trans_le le_csSup bdd ⟨c, ?_⟩
+      simpa
+  · apply csSup_le'
+    simpa [upperBounds]
 
 中文:
 定理 isNormal_enum_iff_dirSupClosed
@@ -498,7 +511,20 @@ theorem isNormal_enum_iff_dirSupClosed
   rw [isNormal_iff]; rw [dirSupClosed_iff_of_linearOrder]
   refine fun hs' => ⟨H, fun a ha b hb => ?_⟩
   have bdd : BddAbove (Subtype.val ∘ enum s hs '' Iio a) := by
-   
+    use enum s hs a
+    simpa [upperBounds] using fun x hx => hx.le
+  have : Nonempty α := ⟨a⟩
+  let := WellFoundedLT.toOrderBot α
+  let := WellFoundedLT.conditionallyCompleteLinearOrderBot α
+  trans sSup ((Subtype.val ∘ enum s hs) '' Iio a)
+  · refine enum_le_of_forall_lt (hs' ?_ ?_ (isLUB_csSup' bdd)) fun b hb => ?_
+    · grind
+    · simpa using ha.ne_bot
+    · obtain ⟨c, hca, hbc⟩ := ha.lt_iff_exists_lt.1 hb
+refine (H hbc).trans_le le_csSup bdd ⟨c, ?_⟩
+      simpa
+  · apply csSup_le'
+    simpa [upperBounds]
 
 Depends on / 依赖: BddAbove, Nonempty, Subtype, Subtype.strictMono_coe, Subtype.val, WellFoundedLT, WellFoundedLT.conditionallyCompleteLinearOrderBot, WellFoundedLT.toOrderBot, conditionallyCompleteLinearOrderBot, dirSupClosed_iff_of_linearOrder, dirSupClosed_range, he.dirSupClosed_range, hx.le, isNormal_iff, strictMono, strictMono_coe, toOrderBot, upperBounds
 -/

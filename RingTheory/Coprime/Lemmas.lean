@@ -392,7 +392,9 @@ theorem Finset.prod_dvd_of_coprime
     refine IsCoprime.mul_dvd ?_ ?_ ?_
     · refine IsCoprime.prod_right fun i hir => ?_
       exact Hs (by simp) (by simp [hir]) (ne_of_mem_of_not_mem hir har).symm
-
+    · exact Hs1 a (Finset.mem_insert_self a r)
+· refine ih (Hs.mono ?_) fun i hi => Hs1 i Finset.mem_insert_of_mem hi
+      simp only [Finset.coe_insert, Set.subset_insert]
 
 中文:
 定理 有限集.prod_dvd_of_coprime
@@ -405,7 +407,9 @@ theorem Finset.prod_dvd_of_coprime
     refine IsCoprime.mul_dvd ?_ ?_ ?_
     · refine IsCoprime.prod_right fun i hir => ?_
       exact Hs (by simp) (by simp [hir]) (ne_of_mem_of_not_mem hir har).symm
-
+    · exact Hs1 a (Finset.mem_insert_self a r)
+· refine ih (Hs.mono ?_) fun i hi => Hs1 i Finset.mem_insert_of_mem hi
+      simp only [Finset.coe_insert, Set.subset_insert]
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.induction_on, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.prod_insert, Hs.mono, IsCoprime, IsCoprime.mul_dvd, IsCoprime.prod_right, Set.subset_insert, classical, coe_insert, induction_on, insert, mem_insert_of_mem, mem_insert_self, mul_dvd, ne_of_mem_of_not_mem, prod_insert
 -/
@@ -461,7 +465,47 @@ theorem exists_sum_eq_one_iff_pairwise_coprime
     rw [pairwise_cons']
     have mem : forall x in t, a in insert a t \ {x} := fun x hx => by
       rw [mem_sdiff]; rw [mem_singleton]
-      exact
+      exact ⟨mem_insert_self _ _, fun ha => hat (ha ▸ hx)⟩
+    constructor
+    · rintro ⟨μ, hμ⟩
+      rw [sum_cons]; rw [cons_eq_insert]; rw [sdiff_singleton_eq_erase]; rw [erase_insert hat] at hμ
+      refine ⟨ih.mp ⟨Pi.single h.choose (μ a * s h.choose) + μ * fun _ => s a, ?_⟩, fun b hb => ?_⟩
+      · rw [prod_eq_mul_prod_sdiff_singleton_of_mem h.choose_spec, ← mul_assoc, ←
+          @if_pos _ _ h.choose_spec R (_ * _) 0, ← sum_pi_single', ← sum_add_distrib] at hμ
+        rw [← hμ]; rw [sum_congr rfl]
+        intro x hx
+        convert! add_mul (R := R) _ _ _ using 2
+        · by_cases hx : x = h.choose
+          · rw [hx, Pi.single_eq_same, Pi.single_eq_same]
+          · rw [Pi.single_eq_of_ne hx, Pi.single_eq_of_ne hx, zero_mul]
+        · convert! (mul_assoc _ _ _).symm
+          rw [prod_eq_prod_sdiff_singleton_mul (mem x hx)]; rw [mul_comm]; rw [sdiff_sdiff_comm]; rw [sdiff_singleton_eq_erase a]; rw [erase_insert hat]
+      · have : IsCoprime (s b) (s a) :=
+          ⟨μ a * ∏ i in t \ {b}, s i, ∑ i in t, μ i * ∏ j in t \ {i}, s j, ?_⟩
+        · exact ⟨this.symm, this⟩
+        rw [mul_assoc]; rw [← prod_eq_prod_sdiff_singleton_mul hb]; rw [sum_mul]; rw [← hμ]; rw [sum_congr rfl]
+        intro x hx
+        rw [mul_assoc]
+        congr
+        rw [prod_eq_prod_sdiff_singleton_mul (mem x hx) _]
+        congr 2
+        rw [sdiff_sdiff_comm]; rw [sdiff_singleton_eq_erase a]; rw [erase_insert hat]
+    · rintro ⟨hs, Hb⟩
+      obtain ⟨μ, hμ⟩ := ih.mpr hs
+      obtain ⟨u, v, huv⟩ := IsCoprime.prod_left fun b hb => (Hb b hb).right
+      use fun i => if i = a then u else v * μ i
+      have hμ' : (∑ i in t, v * ((μ i * ∏ j in t \ {i}, s j) * s a)) = v * s a := by
+        rw [← mul_sum]; rw [← sum_mul]; rw [hμ]; rw [one_mul]
+      rw [sum_cons]; rw [cons_eq_insert]; rw [sdiff_singleton_eq_erase]; rw [erase_insert hat]
+      simp only [↓reduceIte, ite_mul]
+      rw [← huv]; rw [← hμ']; rw [sum_congr rfl]
+      intro x hx
+      rw [mul_assoc]; rw [if_neg fun ha : x = a => hat (ha.casesOn hx)]
+      rw [mul_assoc]
+      congr
+      rw [prod_eq_prod_sdiff_singleton_mul (mem x hx) _]
+      congr 2
+      rw [sdiff_sdiff_comm]; rw [sdiff_singleton_eq_erase a]; rw [erase_insert hat]
 
 中文:
 定理 存在_sum_eq_one_iff_pairwise_coprime
@@ -474,7 +518,47 @@ theorem exists_sum_eq_one_iff_pairwise_coprime
     rw [pairwise_cons']
     have mem : forall x in t, a in insert a t \ {x} := fun x hx => by
       rw [mem_sdiff]; rw [mem_singleton]
-      exact
+      exact ⟨mem_insert_self _ _, fun ha => hat (ha ▸ hx)⟩
+    constructor
+    · rintro ⟨μ, hμ⟩
+      rw [sum_cons]; rw [cons_eq_insert]; rw [sdiff_singleton_eq_erase]; rw [erase_insert hat] at hμ
+      refine ⟨ih.mp ⟨Pi.single h.choose (μ a * s h.choose) + μ * fun _ => s a, ?_⟩, fun b hb => ?_⟩
+      · rw [prod_eq_mul_prod_sdiff_singleton_of_mem h.choose_spec, ← mul_assoc, ←
+          @if_pos _ _ h.choose_spec R (_ * _) 0, ← sum_pi_single', ← sum_add_distrib] at hμ
+        rw [← hμ]; rw [sum_congr rfl]
+        intro x hx
+        convert! add_mul (R := R) _ _ _ using 2
+        · by_cases hx : x = h.choose
+          · rw [hx, Pi.single_eq_same, Pi.single_eq_same]
+          · rw [Pi.single_eq_of_ne hx, Pi.single_eq_of_ne hx, zero_mul]
+        · convert! (mul_assoc _ _ _).symm
+          rw [prod_eq_prod_sdiff_singleton_mul (mem x hx)]; rw [mul_comm]; rw [sdiff_sdiff_comm]; rw [sdiff_singleton_eq_erase a]; rw [erase_insert hat]
+      · have : IsCoprime (s b) (s a) :=
+          ⟨μ a * ∏ i in t \ {b}, s i, ∑ i in t, μ i * ∏ j in t \ {i}, s j, ?_⟩
+        · exact ⟨this.symm, this⟩
+        rw [mul_assoc]; rw [← prod_eq_prod_sdiff_singleton_mul hb]; rw [sum_mul]; rw [← hμ]; rw [sum_congr rfl]
+        intro x hx
+        rw [mul_assoc]
+        congr
+        rw [prod_eq_prod_sdiff_singleton_mul (mem x hx) _]
+        congr 2
+        rw [sdiff_sdiff_comm]; rw [sdiff_singleton_eq_erase a]; rw [erase_insert hat]
+    · rintro ⟨hs, Hb⟩
+      obtain ⟨μ, hμ⟩ := ih.mpr hs
+      obtain ⟨u, v, huv⟩ := IsCoprime.prod_left fun b hb => (Hb b hb).right
+      use fun i => if i = a then u else v * μ i
+      have hμ' : (∑ i in t, v * ((μ i * ∏ j in t \ {i}, s j) * s a)) = v * s a := by
+        rw [← mul_sum]; rw [← sum_mul]; rw [hμ]; rw [one_mul]
+      rw [sum_cons]; rw [cons_eq_insert]; rw [sdiff_singleton_eq_erase]; rw [erase_insert hat]
+      simp only [↓reduceIte, ite_mul]
+      rw [← huv]; rw [← hμ']; rw [sum_congr rfl]
+      intro x hx
+      rw [mul_assoc]; rw [if_neg fun ha : x = a => hat (ha.casesOn hx)]
+      rw [mul_assoc]
+      congr
+      rw [prod_eq_prod_sdiff_singleton_mul (mem x hx) _]
+      congr 2
+      rw [sdiff_sdiff_comm]; rw [sdiff_singleton_eq_erase a]; rw [erase_insert hat]
 
 Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Function, Function.onFun, Nonempty, Pairwise, Pi.single, cons_eq_insert, cons_induction, erase_insert, exists_apply_eq, h.choose, ih.mp, insert, mem_insert_self, mem_sdiff, mem_singleton, pairwise_cons, sdiff_singleton_eq_erase, single
 -/
@@ -567,7 +651,7 @@ theorem pairwise_coprime_iff_coprime_prod
     exact (hp hj.1 hi hj.2).symm
   · rintro i hi j hj h
     apply IsCoprime.prod_right_iff.mp (hp i hi)
-   
+    exact Finset.mem_sdiff.mpr ⟨hj, fun f => h (Finset.mem_singleton.mp f).symm⟩
 
 中文:
 定理 pairwise_coprime_iff_coprime_prod
@@ -579,7 +663,7 @@ theorem pairwise_coprime_iff_coprime_prod
     exact (hp hj.1 hi hj.2).symm
   · rintro i hi j hj h
     apply IsCoprime.prod_right_iff.mp (hp i hi)
-   
+    exact Finset.mem_sdiff.mpr ⟨hj, fun f => h (Finset.mem_singleton.mp f).symm⟩
 
 Depends on / 依赖: Finset, Finset.mem_sdiff, Finset.mem_sdiff.mpr, Finset.mem_singleton, Finset.mem_singleton.mp, Finset.pairwise_subtype_iff_pairwise_finset, IsCoprime, IsCoprime.prod_right_iff.mp, IsCoprime.prod_right_iff.mpr, mem_sdiff, mem_singleton, pairwise_subtype_iff_pairwise_finset, prod_right_iff
 -/
@@ -889,7 +973,11 @@ theorem Finset.prod_dvd_of_isRelPrime
       have aux1 : a in (↑(insert a r) : Set I) := Finset.mem_insert_self a r
       refine
         (IsRelPrime.prod_right fun i hir =>
-Hs aux1 (Finset.mem_insert
+Hs aux1 (Finset.mem_insert_of_mem hir) by
+                rintro rfl
+                exact har hir).mul_dvd
+          (Hs1 a aux1) (ih (Hs.mono ?_) fun i hi => Hs1 i <| Finset.mem_insert_of_mem hi)
+      simp only [Finset.coe_insert, Set.subset_insert])
 
 中文:
 定理 有限集.prod_dvd_of_isRelPrime
@@ -902,7 +990,11 @@ Hs aux1 (Finset.mem_insert
       have aux1 : a in (↑(insert a r) : Set I) := Finset.mem_insert_self a r
       refine
         (IsRelPrime.prod_right fun i hir =>
-Hs aux1 (Finset.mem_insert
+Hs aux1 (Finset.mem_insert_of_mem hir) by
+                rintro rfl
+                exact har hir).mul_dvd
+          (Hs1 a aux1) (ih (Hs.mono ?_) fun i hi => Hs1 i <| Finset.mem_insert_of_mem hi)
+      simp only [Finset.coe_insert, Set.subset_insert])
 
 Depends on / 依赖: Finset, Finset.coe_insert, Finset.induction_on, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.prod_insert, Hs.mono, IsRelPrime, IsRelPrime.prod_right, Set.subset_insert, classical, coe_insert, induction_on, insert, mem_insert_of_mem, mem_insert_self, mul_dvd, one_dvd, prod_insert, prod_right
 -/
@@ -953,7 +1045,8 @@ theorem pairwise_isRelPrime_iff_isRelPrime_prod
     obtain ⟨hj, ji⟩ := hj
     exact @hp ⟨i, hi⟩ ⟨j, hj⟩ fun h => ji (congrArg Subtype.val h).symm
   · rintro ⟨i, hi⟩ ⟨j, hj⟩ h
-    apply IsRelPrime.prod_right
+    apply IsRelPrime.prod_right_iff.mp (hp i hi)
+    grind
 
 中文:
 定理 pairwise_isRelPrime_iff_isRelPrime_prod
@@ -964,7 +1057,8 @@ theorem pairwise_isRelPrime_iff_isRelPrime_prod
     obtain ⟨hj, ji⟩ := hj
     exact @hp ⟨i, hi⟩ ⟨j, hj⟩ fun h => ji (congrArg Subtype.val h).symm
   · rintro ⟨i, hi⟩ ⟨j, hj⟩ h
-    apply IsRelPrime.prod_right
+    apply IsRelPrime.prod_right_iff.mp (hp i hi)
+    grind
 
 Depends on / 依赖: Finset, Finset.mem_sdiff, Finset.mem_singleton, IsRelPrime, IsRelPrime.prod_right_iff.mp, IsRelPrime.prod_right_iff.mpr, Subtype, Subtype.val, mem_sdiff, mem_singleton, prod_right_iff
 -/

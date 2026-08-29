@@ -353,7 +353,10 @@ lemma of_isGaussianProcess
       { toFun x s := L s (fun t => x ⟨t.1, mem_biUnion.2 ⟨s.1, s.2, t.2⟩⟩)
         map_add' x y := by ext; simp [← Pi.add_def]
         map_smul' c x := by ext; simp [← Pi.smul_def] }
-    have : (fun ω => I.
+    have : (fun ω => I.restrict (Y · ω)) = K ∘ (fun ω => (I.biUnion J).restrict (X · ω)) := by
+      ext; simp [K, hL, Finset.restrict_def]
+    rw [this]
+    exact (hX.hasGaussianLaw _).map _
 
 中文:
 引理 of_isGaussianProcess
@@ -365,7 +368,10 @@ lemma of_isGaussianProcess
       { toFun x s := L s (fun t => x ⟨t.1, mem_biUnion.2 ⟨s.1, s.2, t.2⟩⟩)
         map_add' x y := by ext; simp [← Pi.add_def]
         map_smul' c x := by ext; simp [← Pi.smul_def] }
-    have : (fun ω => I.
+    have : (fun ω => I.restrict (Y · ω)) = K ∘ (fun ω => (I.biUnion J).restrict (X · ω)) := by
+      ext; simp [K, hL, Finset.restrict_def]
+    rw [this]
+    exact (hX.hasGaussianLaw _).map _
 
 Depends on / 依赖: Finset, Finset.restrict_def, I.biUnion, I.restrict, Pi.add_def, Pi.smul_def, add_def, biUnion, classical, hX.hasGaussianLaw, hasGaussianLaw, map_add, map_smul, mem_biUnion, restrict, restrict_def, smul_def
 -/

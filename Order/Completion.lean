@@ -589,7 +589,7 @@ definition factorEmbedding
     simp_rw [le_sSup_iff, sSup_le_iff, forall_mem_image] at h
     intro y hy
     rw [← f.le_iff_le]
-    exact h _ (image_right_subset_upperBou
+    exact h _ (image_right_subset_upperBounds f.monotone _ (mem_image_of_mem _ hy)) hx
 
 中文:
 定义 factorEmbedding
@@ -600,7 +600,7 @@ definition factorEmbedding
     simp_rw [le_sSup_iff, sSup_le_iff, forall_mem_image] at h
     intro y hy
     rw [← f.le_iff_le]
-    exact h _ (image_right_subset_upperBou
+    exact h _ (image_right_subset_upperBounds f.monotone _ (mem_image_of_mem _ hy)) hx
 
 Depends on / 依赖: A.left, f.le_iff_le, f.monotone, forall_mem_image, image_mono, image_right_subset_upperBounds, le_iff_le, le_sSup_iff, lowerBounds_right, mem_image_of_mem, monotone, ofMapLEIff, sSup_le_iff, sSup_le_sSup, simp_rw
 -/

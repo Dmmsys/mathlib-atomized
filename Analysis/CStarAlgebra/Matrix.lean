@@ -61,7 +61,25 @@ theorem entry_norm_bound_of_unitary
       obtain ⟨a, h_a⟩ := h_x
       rw [← h_a.2]
       apply sq_nonneg
-    · rw [Multis
+    · rw [Multiset.mem_map]
+      use j
+      simp only [Finset.mem_univ_val, and_self_iff]
+  -- The L2 norm of a row is a diagonal entry of U * Uᴴ
+  have diag_eq_norm_sum : (U * Uᴴ) i i = (∑ x : n, ‖U i x‖ ^ 2 : Real) := by
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, ← starRingEnd_apply, RCLike.mul_conj]
+    norm_cast
+  -- The L2 norm of a row is a diagonal entry of U * Uᴴ, real part
+  have re_diag_eq_norm_sum : RCLike.re ((U * Uᴴ) i i) = ∑ x : n, ‖U i x‖ ^ 2 := by
+    rw [RCLike.ext_iff] at diag_eq_norm_sum
+    rw [diag_eq_norm_sum.1]
+    norm_cast
+  -- Since U is unitary, the diagonal entries of U * Uᴴ are all 1
+  have mul_eq_one : U * Uᴴ = 1 := Unitary.mul_star_self_of_mem hU
+  have diag_eq_one : RCLike.re ((U * Uᴴ) i i) = 1 := by
+    simp only [mul_eq_one, Matrix.one_apply_eq, RCLike.one_re]
+  -- Putting it all together
+  rw [← sq_le_one_iff₀ (norm_nonneg (U i j))]; rw [← diag_eq_one]; rw [re_diag_eq_norm_sum]
+  exact norm_sum
 
 中文:
 定理 entry_norm_bound_of_unitary
@@ -75,7 +93,25 @@ theorem entry_norm_bound_of_unitary
       obtain ⟨a, h_a⟩ := h_x
       rw [← h_a.2]
       apply sq_nonneg
-    · rw [Multis
+    · rw [Multiset.mem_map]
+      use j
+      simp only [Finset.mem_univ_val, and_self_iff]
+  -- The L2 norm of a row is a diagonal entry of U * Uᴴ
+  have diag_eq_norm_sum : (U * Uᴴ) i i = (∑ x : n, ‖U i x‖ ^ 2 : Real) := by
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, ← starRingEnd_apply, RCLike.mul_conj]
+    norm_cast
+  -- The L2 norm of a row is a diagonal entry of U * Uᴴ, real part
+  have re_diag_eq_norm_sum : RCLike.re ((U * Uᴴ) i i) = ∑ x : n, ‖U i x‖ ^ 2 := by
+    rw [RCLike.ext_iff] at diag_eq_norm_sum
+    rw [diag_eq_norm_sum.1]
+    norm_cast
+  -- Since U is unitary, the diagonal entries of U * Uᴴ are all 1
+  have mul_eq_one : U * Uᴴ = 1 := Unitary.mul_star_self_of_mem hU
+  have diag_eq_one : RCLike.re ((U * Uᴴ) i i) = 1 := by
+    simp only [mul_eq_one, Matrix.one_apply_eq, RCLike.one_re]
+  -- Putting it all together
+  rw [← sq_le_one_iff₀ (norm_nonneg (U i j))]; rw [← diag_eq_one]; rw [re_diag_eq_norm_sum]
+  exact norm_sum
 -/
 theorem entry_norm_bound_of_unitary {U : Matrix n n 𝕜} (hU : U in Matrix.unitaryGroup n 𝕜)
     (i j : n) : ‖U i j‖ <= 1 := by
@@ -246,7 +282,14 @@ lemma inner_toEuclideanCLM
   simp only [toEuclideanCLM, AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearEquiv.coe_coe,
     LinearEquiv.invFun_eq_symm, LinearMap.coe_toContinuousLinearMap_symm, StarAlgEquiv.trans_apply,
     LinearMap.toMatrixOrthonormal_symm_apply, LinearMap.toMatrix_symm, StarAlgEquiv.coe_mk,
-    StarRi
+    StarRingEquiv.coe_mk, RingEquiv.coe_mk, Equiv.coe_fn_mk, LinearMap.coe_toContinuousLinearMap',
+    toLin_apply, mulVec_eq_sum, OrthonormalBasis.coe_toBasis_repr_apply,
+    EuclideanSpace.basisFun_repr, op_smul_eq_smul, Finset.sum_apply, Pi.smul_apply, transpose_apply,
+    smul_eq_mul, OrthonormalBasis.coe_toBasis, EuclideanSpace.basisFun_apply, PiLp.inner_apply,
+    ofLp_sum, ofLp_smul, PiLp.ofLp_single, RCLike.inner_apply, conj_trivial, dotProduct]
+  congr with i
+  rw [mul_comm (x.ofLp i)]
+  simp [Pi.single_apply]
 
 中文:
 引理 inner_toEuclideanCLM
@@ -255,7 +298,14 @@ lemma inner_toEuclideanCLM
   simp only [toEuclideanCLM, AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearEquiv.coe_coe,
     LinearEquiv.invFun_eq_symm, LinearMap.coe_toContinuousLinearMap_symm, StarAlgEquiv.trans_apply,
     LinearMap.toMatrixOrthonormal_symm_apply, LinearMap.toMatrix_symm, StarAlgEquiv.coe_mk,
-    StarRi
+    StarRingEquiv.coe_mk, RingEquiv.coe_mk, Equiv.coe_fn_mk, LinearMap.coe_toContinuousLinearMap',
+    toLin_apply, mulVec_eq_sum, OrthonormalBasis.coe_toBasis_repr_apply,
+    EuclideanSpace.basisFun_repr, op_smul_eq_smul, Finset.sum_apply, Pi.smul_apply, transpose_apply,
+    smul_eq_mul, OrthonormalBasis.coe_toBasis, EuclideanSpace.basisFun_apply, PiLp.inner_apply,
+    ofLp_sum, ofLp_smul, PiLp.ofLp_single, RCLike.inner_apply, conj_trivial, dotProduct]
+  congr with i
+  rw [mul_comm (x.ofLp i)]
+  simp [Pi.single_apply]
 
 Depends on / 依赖: AddHom, AddHom.toFun_eq_coe, Equiv.coe_fn_mk, EuclideanSpace, EuclideanSpace.basisFun_repr, LinearEquiv, LinearEquiv.coe_coe, LinearEquiv.invFun_eq_symm, LinearMap, LinearMap.coe_toAddHom, LinearMap.coe_toContinuousLinearMap, LinearMap.coe_toContinuousLinearMap_symm, LinearMap.toMatrixOrthonormal_symm_apply, LinearMap.toMatrix_symm, OrthonormalBasis, OrthonormalBasis.coe_toBasis_repr_apply, RingEquiv, RingEquiv.coe_mk, StarAlgEquiv, StarAlgEquiv.coe_mk
 -/
@@ -341,7 +391,16 @@ definition instL2OpMetricSpace
   `IsUniformAddGroup.toUniformSpace_eq`. -/
   letI normed_add_comm_group : NormedAddCommGroup (Matrix m n 𝕜) :=
     { l2OpNormedAddCommGroupAux.replaceTopology <|
-        (toEuclideanLin (𝕜 := 𝕜) (m := m)
+        (toEuclideanLin (𝕜 := 𝕜) (m := m) (n := n)).trans toContinuousLinearMap
+.toContinuousLinearEquiv.toHomeomorph.isInducing.eq_induced with
+      norm := l2OpNormedAddCommGroupAux.norm
+      dist_eq := l2OpNormedAddCommGroupAux.dist_eq }
+exact normed_add_comm_group.replaceUniformity by
+    congr
+    rw [← @IsUniformAddGroup.rightUniformSpace_eq _ (Matrix.instUniformSpace m n 𝕜) _ _]
+    rw [@IsUniformAddGroup.rightUniformSpace_eq _ PseudoEMetricSpace.toUniformSpace _ _]
+
+scoped[Matrix.Norms.L2Operator] attribute [instance] Matrix.instL2OpMetricSpace
 
 中文:
 定义 instL2OpMetricSpace
@@ -351,7 +410,16 @@ definition instL2OpMetricSpace
   `IsUniformAddGroup.toUniformSpace_eq`. -/
   letI normed_add_comm_group : NormedAddCommGroup (Matrix m n 𝕜) :=
     { l2OpNormedAddCommGroupAux.replaceTopology <|
-        (toEuclideanLin (𝕜 := 𝕜) (m := m)
+        (toEuclideanLin (𝕜 := 𝕜) (m := m) (n := n)).trans toContinuousLinearMap
+.toContinuousLinearEquiv.toHomeomorph.isInducing.eq_induced with
+      norm := l2OpNormedAddCommGroupAux.norm
+      dist_eq := l2OpNormedAddCommGroupAux.dist_eq }
+exact normed_add_comm_group.replaceUniformity by
+    congr
+    rw [← @IsUniformAddGroup.rightUniformSpace_eq _ (Matrix.instUniformSpace m n 𝕜) _ _]
+    rw [@IsUniformAddGroup.rightUniformSpace_eq _ PseudoEMetricSpace.toUniformSpace _ _]
+
+scoped[Matrix.Norms.L2Operator] attribute [instance] Matrix.instL2OpMetricSpace
 -/
 def instL2OpMetricSpace : MetricSpace (Matrix m n 𝕜) := by
   /- We first replace the topology so that we can automatically replace the uniformity using
@@ -659,7 +727,16 @@ lemma l2_opNorm_diagonal
   refine le_antisymm ?_ ?_
   · refine T.opNorm_le_bound (norm_nonneg _) fun x => ?_
     refine (sq_le_sq₀ (by positivity) (by positivity)).mp ?_
-    simp only [(T x).norm_sq_eq, ofLp_toEuclideanCLM, mulVec_
+    simp only [(T x).norm_sq_eq, ofLp_toEuclideanCLM, mulVec_diagonal, norm_mul, T]
+    calc _ <= _ := Finset.sum_le_sum fun i _ => by grw [mul_pow, norm_le_pi_norm v i]
+      _ = _ := by simp [mul_pow, EuclideanSpace.norm_sq_eq x, Finset.mul_sum]
+  · refine (pi_norm_le_iff_of_nonneg (norm_nonneg T)).mpr fun i => ?_
+    calc _ = ‖T (toLp 2 (Pi.single i (1 : 𝕜)))‖ := by
+          rw [toEuclideanCLM_toLp (diagonal v) (Pi.single i (1 : 𝕜))]
+          simp
+      _ <= _ := by grw [T.le_opNorm]; simp
+
+@[simp]
 
 中文:
 引理 l2_opNorm_diagonal
@@ -671,7 +748,16 @@ lemma l2_opNorm_diagonal
   refine le_antisymm ?_ ?_
   · refine T.opNorm_le_bound (norm_nonneg _) fun x => ?_
     refine (sq_le_sq₀ (by positivity) (by positivity)).mp ?_
-    simp only [(T x).norm_sq_eq, ofLp_toEuclideanCLM, mulVec_
+    simp only [(T x).norm_sq_eq, ofLp_toEuclideanCLM, mulVec_diagonal, norm_mul, T]
+    calc _ <= _ := Finset.sum_le_sum fun i _ => by grw [mul_pow, norm_le_pi_norm v i]
+      _ = _ := by simp [mul_pow, EuclideanSpace.norm_sq_eq x, Finset.mul_sum]
+  · refine (pi_norm_le_iff_of_nonneg (norm_nonneg T)).mpr fun i => ?_
+    calc _ = ‖T (toLp 2 (Pi.single i (1 : 𝕜)))‖ := by
+          rw [toEuclideanCLM_toLp (diagonal v) (Pi.single i (1 : 𝕜))]
+          simp
+      _ <= _ := by grw [T.le_opNorm]; simp
+
+@[simp]
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.norm_sq_eq, Finset, Finset.mul_sum, Finset.sum_le_sum, T.opNorm_le_bound, diagonal, l2_opNorm_toEuclideanCLM, le_antisymm, mulVec_diagonal, mul_pow, mul_sum, norm_le_pi_norm, norm_mul, norm_nonneg, norm_sq_eq, ofLp_toEuclideanCLM, opNorm_le_bound, pi_norm_le_iff_of_nonneg, sum_le_sum
 -/

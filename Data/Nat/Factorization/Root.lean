@@ -243,7 +243,7 @@ lemma pow_dvd_iff_dvd_floorRoot
   · simp
   obtain rfl | ha := eq_or_ne a 0
   · simp [hn]
-  rw [← factorization_le_iff_dvd (pow_ne_zero _ ha) hb]; rw [← factorization_le_iff_dvd ha (floorRoot_ne_zero.2 ⟨hn]; rw [hb⟩)]; rw [factorization_pow]; rw [factor
+  rw [← factorization_le_iff_dvd (pow_ne_zero _ ha) hb]; rw [← factorization_le_iff_dvd ha (floorRoot_ne_zero.2 ⟨hn]; rw [hb⟩)]; rw [factorization_pow]; rw [factorization_floorRoot]; rw [le_floorDiv_iff_smul_le (β := Nat ->₀ Nat) (pos_iff_ne_zero.2 hn)]
 
 中文:
 引理 pow_dvd_iff_dvd_floorRoot
@@ -255,7 +255,7 @@ lemma pow_dvd_iff_dvd_floorRoot
   · simp
   obtain rfl | ha := eq_or_ne a 0
   · simp [hn]
-  rw [← factorization_le_iff_dvd (pow_ne_zero _ ha) hb]; rw [← factorization_le_iff_dvd ha (floorRoot_ne_zero.2 ⟨hn]; rw [hb⟩)]; rw [factorization_pow]; rw [factor
+  rw [← factorization_le_iff_dvd (pow_ne_zero _ ha) hb]; rw [← factorization_le_iff_dvd ha (floorRoot_ne_zero.2 ⟨hn]; rw [hb⟩)]; rw [factorization_pow]; rw [factorization_floorRoot]; rw [le_floorDiv_iff_smul_le (β := Nat ->₀ Nat) (pos_iff_ne_zero.2 hn)]
 
 Depends on / 依赖: eq_or_ne, factorization_floorRoot, factorization_le_iff_dvd, factorization_pow, floorRoot_ne_zero, le_floorDiv_iff_smul_le, pos_iff_ne_zero, pow_ne_zero
 -/
@@ -498,7 +498,7 @@ lemma dvd_pow_iff_ceilRoot_dvd
   · aesop
   obtain rfl | hb := eq_or_ne b 0
   · simp [hn]
-  rw [← factorization_le_iff_dvd ha (pow_ne_zero _ hb)]; rw [← factorization_le_iff_dvd (ceilRoot_ne_zero.2 ⟨hn]; rw [ha⟩) hb]; rw [factorization_pow]; rw [factorization_ceilRoot]; rw [ceilDiv_le_iff_le_sm
+  rw [← factorization_le_iff_dvd ha (pow_ne_zero _ hb)]; rw [← factorization_le_iff_dvd (ceilRoot_ne_zero.2 ⟨hn]; rw [ha⟩) hb]; rw [factorization_pow]; rw [factorization_ceilRoot]; rw [ceilDiv_le_iff_le_smul (β := Nat ->₀ Nat) (pos_iff_ne_zero.2 hn)]
 
 中文:
 引理 dvd_pow_iff_ceilRoot_dvd
@@ -509,7 +509,7 @@ lemma dvd_pow_iff_ceilRoot_dvd
   · aesop
   obtain rfl | hb := eq_or_ne b 0
   · simp [hn]
-  rw [← factorization_le_iff_dvd ha (pow_ne_zero _ hb)]; rw [← factorization_le_iff_dvd (ceilRoot_ne_zero.2 ⟨hn]; rw [ha⟩) hb]; rw [factorization_pow]; rw [factorization_ceilRoot]; rw [ceilDiv_le_iff_le_sm
+  rw [← factorization_le_iff_dvd ha (pow_ne_zero _ hb)]; rw [← factorization_le_iff_dvd (ceilRoot_ne_zero.2 ⟨hn]; rw [ha⟩) hb]; rw [factorization_pow]; rw [factorization_ceilRoot]; rw [ceilDiv_le_iff_le_smul (β := Nat ->₀ Nat) (pos_iff_ne_zero.2 hn)]
 
 Depends on / 依赖: ceilDiv_le_iff_le_smul, ceilRoot_ne_zero, eq_or_ne, factorization_ceilRoot, factorization_le_iff_dvd, factorization_pow, pos_iff_ne_zero, pow_ne_zero
 -/

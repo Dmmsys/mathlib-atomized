@@ -523,7 +523,16 @@ lemma isSymm_iff_basis
     obtain ⟨fx, tx, ix, -, hx⟩ := Submodule.mem_span_iff_exists_finset_subset.1
       (by simp : x in Submodule.span R (Set.range b))
     obtain ⟨fy, ty, iy, -, hy⟩ := Submodule.mem_span_iff_exists_finset_subset.1
-      (by simp : 
+      (by simp : y in Submodule.span R (Set.range b))
+    rw [← hx]; rw [← hy]
+    simp only [map_sum, map_smul, coe_sum, Finset.sum_apply, smul_apply, smul_eq_mul,
+      Finset.mul_sum]
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl (fun b₁ h₁ => Finset.sum_congr rfl fun b₂ h₂ => ?_)
+    rw [mul_left_comm]
+    obtain ⟨i, rfl⟩ := ix h₁
+    obtain ⟨j, rfl⟩ := iy h₂
+    rw [h]
 
 中文:
 引理 isSymm_iff_basis
@@ -534,7 +543,16 @@ lemma isSymm_iff_basis
     obtain ⟨fx, tx, ix, -, hx⟩ := Submodule.mem_span_iff_exists_finset_subset.1
       (by simp : x in Submodule.span R (Set.range b))
     obtain ⟨fy, ty, iy, -, hy⟩ := Submodule.mem_span_iff_exists_finset_subset.1
-      (by simp : 
+      (by simp : y in Submodule.span R (Set.range b))
+    rw [← hx]; rw [← hy]
+    simp only [map_sum, map_smul, coe_sum, Finset.sum_apply, smul_apply, smul_eq_mul,
+      Finset.mul_sum]
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl (fun b₁ h₁ => Finset.sum_congr rfl fun b₂ h₂ => ?_)
+    rw [mul_left_comm]
+    obtain ⟨i, rfl⟩ := ix h₁
+    obtain ⟨j, rfl⟩ := iy h₂
+    rw [h]
 -/
 lemma isSymm_iff_basis {ι : Type*} (b : Basis ι R M) :
     IsSymm B ↔ forall i j, B (b i) (b j) = B (b j) (b i) where

@@ -358,7 +358,7 @@ instance isNoetherian_prod
 Submodule.fg_of_fg_map_of_fg_inf_ker (LinearMap.snd R M N) (noetherian _)
       have : s ⊓ LinearMap.ker (LinearMap.snd R M N) <= LinearMap.range (LinearMap.inl R M N) :=
 fun x ⟨_, hx2⟩ => ⟨x.1, Prod.ext rfl Eq.symm LinearMap.mem_ker.1 hx2⟩
-      Submodule.map_comap_eq_self this ▸ (noether
+      Submodule.map_comap_eq_self this ▸ (noetherian _).map _⟩
 
 中文:
 实例 isNoetherian_prod
@@ -367,7 +367,7 @@ fun x ⟨_, hx2⟩ => ⟨x.1, Prod.ext rfl Eq.symm LinearMap.mem_ker.1 hx2⟩
 Submodule.fg_of_fg_map_of_fg_inf_ker (LinearMap.snd R M N) (noetherian _)
       have : s ⊓ LinearMap.ker (LinearMap.snd R M N) <= LinearMap.range (LinearMap.inl R M N) :=
 fun x ⟨_, hx2⟩ => ⟨x.1, Prod.ext rfl Eq.symm LinearMap.mem_ker.1 hx2⟩
-      Submodule.map_comap_eq_self this ▸ (noether
+      Submodule.map_comap_eq_self this ▸ (noetherian _).map _⟩
 
 Depends on / 依赖: Eq.symm, LinearMap, LinearMap.inl, LinearMap.ker, LinearMap.mem_ker, LinearMap.range, LinearMap.snd, Prod.ext, Submodule, Submodule.fg_of_fg_map_of_fg_inf_ker, Submodule.map_comap_eq_self, fg_of_fg_map_of_fg_inf_ker, map_comap_eq_self, mem_ker, noetherian
 -/
@@ -495,7 +495,10 @@ theorem isNoetherian_of_range_eq_ker
       (Submodule.map ((LinearMap.ker f).liftQ f le_rfl))
       (Submodule.comap ((LinearMap.ker f).liftQ f le_rfl))
       (Submodule.comap g.rangeRestrict) (Submodule.map g.rangeRestrict)
-      (Submodule.gciMapComap <| Line
+      (Submodule.gciMapComap <| LinearMap.ker_eq_bot.mp <| Submodule.ker_liftQ_eq_bot _ _ _ le_rfl)
+      (Submodule.giMapComap g.surjective_rangeRestrict)
+      (by simp [Submodule.map_comap_eq, inf_comm, Submodule.range_liftQ])
+      (by simp [Submodule.comap_map_eq, h])
 
 中文:
 定理 isNoetherian_of_range_eq_ker
@@ -506,7 +509,10 @@ theorem isNoetherian_of_range_eq_ker
       (Submodule.map ((LinearMap.ker f).liftQ f le_rfl))
       (Submodule.comap ((LinearMap.ker f).liftQ f le_rfl))
       (Submodule.comap g.rangeRestrict) (Submodule.map g.rangeRestrict)
-      (Submodule.gciMapComap <| Line
+      (Submodule.gciMapComap <| LinearMap.ker_eq_bot.mp <| Submodule.ker_liftQ_eq_bot _ _ _ le_rfl)
+      (Submodule.giMapComap g.surjective_rangeRestrict)
+      (by simp [Submodule.map_comap_eq, inf_comm, Submodule.range_liftQ])
+      (by simp [Submodule.comap_map_eq, h])
 
 Depends on / 依赖: LinearMap, LinearMap.ker, LinearMap.ker_eq_bot.mp, LinearMap.range, Submodule, Submodule.comap, Submodule.comap_map_eq, Submodule.gciMapComap, Submodule.giMapComap, Submodule.ker_liftQ_eq_bot, Submodule.map, Submodule.map_comap_eq, Submodule.range_liftQ, comap_map_eq, g.rangeRestrict, g.surjective_rangeRestrict, gciMapComap, giMapComap, inf_comm, isNoetherian_mk
 -/
@@ -713,7 +719,7 @@ theorem IsNoetherian.subsingleton_of_injective
     have ⟨g, inj⟩ := LinearMap.exists_finsupp_nat_of_prod_injective inj
 Infinite.not_finite WellFoundedGT.finite_of_iSupIndep
       (g.iSupIndep_map inj (iSupIndep_range_lsingle Nat R P))
-      fun i => (Submodule.ne_bot_iff _).mpr ⟨_, ⟨_, ⟨p, 
+      fun i => (Submodule.ne_bot_iff _).mpr ⟨_, ⟨_, ⟨p, rfl⟩, rfl⟩, by simpa [inj]⟩
 
 中文:
 定理 是Noether.subsingleton_of_injective
@@ -722,7 +728,7 @@ Infinite.not_finite WellFoundedGT.finite_of_iSupIndep
     have ⟨g, inj⟩ := LinearMap.exists_finsupp_nat_of_prod_injective inj
 Infinite.not_finite WellFoundedGT.finite_of_iSupIndep
       (g.iSupIndep_map inj (iSupIndep_range_lsingle Nat R P))
-      fun i => (Submodule.ne_bot_iff _).mpr ⟨_, ⟨_, ⟨p, 
+      fun i => (Submodule.ne_bot_iff _).mpr ⟨_, ⟨_, ⟨p, rfl⟩, rfl⟩, by simpa [inj]⟩
 
 Depends on / 依赖: Infinite, Infinite.not_finite, LinearMap, LinearMap.exists_finsupp_nat_of_prod_injective, Submodule, Submodule.ne_bot_iff, WellFoundedGT, WellFoundedGT.finite_of_iSupIndep, exists_finsupp_nat_of_prod_injective, finite_of_iSupIndep, g.iSupIndep_map, iSupIndep_map, iSupIndep_range_lsingle, ne_bot_iff, not_finite, subsingleton_of_forall_eq
 -/
@@ -767,7 +773,9 @@ theorem IsNoetherian.disjoint_partialSups_eventually_bot
     · cases p
     · apply w
       exact Nat.succ_le_succ_iff.mp p
-  obtain ⟨n, w⟩ := monotone_stabilizes_iff_noetherian.mpr inferIn
+  obtain ⟨n, w⟩ := monotone_stabilizes_iff_noetherian.mpr inferInstance (partialSups f)
+refine ⟨n, fun m p => (h m).eq_bot_of_ge sup_eq_left.mp ?_⟩
+simpa only [partialSups_add_one] using (w (m + 1) <| le_add_right p).symm.trans w m p
 
 中文:
 定理 是Noether.disjoint_partialSups_eventually_bot
@@ -780,7 +788,9 @@ theorem IsNoetherian.disjoint_partialSups_eventually_bot
     · cases p
     · apply w
       exact Nat.succ_le_succ_iff.mp p
-  obtain ⟨n, w⟩ := monotone_stabilizes_iff_noetherian.mpr inferIn
+  obtain ⟨n, w⟩ := monotone_stabilizes_iff_noetherian.mpr inferInstance (partialSups f)
+refine ⟨n, fun m p => (h m).eq_bot_of_ge sup_eq_left.mp ?_⟩
+simpa only [partialSups_add_one] using (w (m + 1) <| le_add_right p).symm.trans w m p
 -/
 theorem IsNoetherian.disjoint_partialSups_eventually_bot
     (f : Nat -> Submodule R M) (h : forall n, Disjoint (partialSups f n) (f (n + 1))) :
@@ -1097,7 +1107,7 @@ theorem Module.exists_finite_presentation
   let f := f'.comp ((Finsupp.mapRange.linearEquiv (Shrink.linearEquiv.{v} R R)).trans
       (Finsupp.linearEquivFunOnFinite R R (Fin m))).1
   use (Fin m ->₀ Shrink.{v, u} R), inferInstance, inferInstance, inferInstance, inferInstance, f
-  s
+  simpa [f] using hf'
 
 中文:
 定理 模.存在_finite_presentation
@@ -1107,7 +1117,7 @@ theorem Module.exists_finite_presentation
   let f := f'.comp ((Finsupp.mapRange.linearEquiv (Shrink.linearEquiv.{v} R R)).trans
       (Finsupp.linearEquivFunOnFinite R R (Fin m))).1
   use (Fin m ->₀ Shrink.{v, u} R), inferInstance, inferInstance, inferInstance, inferInstance, f
-  s
+  simpa [f] using hf'
 
 Depends on / 依赖: Finite, Finsupp, Finsupp.linearEquivFunOnFinite, Finsupp.mapRange.linearEquiv, Module, Module.Finite.exists_fin, Shrink, Shrink.linearEquiv, exists_fin, linearEquiv, linearEquivFunOnFinite, mapRange
 -/

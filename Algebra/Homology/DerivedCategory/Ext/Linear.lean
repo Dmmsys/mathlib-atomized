@@ -68,7 +68,9 @@ lemma smul_eq_comp_mk₀
   ext
   apply ((Equiv.linearEquiv R homEquiv).map_smul r x).trans
   change r • homEquiv x = (x.comp (mk₀ (r • 𝟙 Y)) (add_zero _)).hom
-  rw [comp_hom]; rw [mk₀_hom]; rw [Functor.map_smul]; rw [Functor.map_id]; rw [ShiftedHom.mk₀_smul]; rw [ShiftedHom.comp_smu
+  rw [comp_hom]; rw [mk₀_hom]; rw [Functor.map_smul]; rw [Functor.map_id]; rw [ShiftedHom.mk₀_smul]; rw [ShiftedHom.comp_smul]; rw [ShiftedHom.comp_mk₀_id]
+
+@[simp]
 
 中文:
 引理 smul_eq_comp_mk₀
@@ -78,7 +80,9 @@ lemma smul_eq_comp_mk₀
   ext
   apply ((Equiv.linearEquiv R homEquiv).map_smul r x).trans
   change r • homEquiv x = (x.comp (mk₀ (r • 𝟙 Y)) (add_zero _)).hom
-  rw [comp_hom]; rw [mk₀_hom]; rw [Functor.map_smul]; rw [Functor.map_id]; rw [ShiftedHom.mk₀_smul]; rw [ShiftedHom.comp_smu
+  rw [comp_hom]; rw [mk₀_hom]; rw [Functor.map_smul]; rw [Functor.map_id]; rw [ShiftedHom.mk₀_smul]; rw [ShiftedHom.comp_smul]; rw [ShiftedHom.comp_mk₀_id]
+
+@[simp]
 
 Depends on / 依赖: Equiv.linearEquiv, Functor, Functor.map_id, Functor.map_smul, HasDerivedCategory, HasDerivedCategory.standard, ShiftedHom, ShiftedHom.comp_mk, ShiftedHom.comp_smul, ShiftedHom.mk, add_zero, comp_hom, comp_smul, homEquiv, linearEquiv, map_id, map_smul, standard, x.comp
 -/

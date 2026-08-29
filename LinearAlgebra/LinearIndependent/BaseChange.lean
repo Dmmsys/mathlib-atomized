@@ -35,7 +35,12 @@ lemma LinearIndependent.linearIndependent_algebraMap_comp_aux
   let I : Set (ι' -> K) := hv.linearIndepOn_id.extend (subset_univ _)
   let b : Module.Basis I K (ι' -> K) := .extend hv.linearIndepOn_id
   let b' : Module.Basis I L (ι' -> L) := (b.baseChange L).map (TensorProduct.piScalarRight K L L ι')
-let v' (i :
+let v' (i : ι) : I := ⟨v i, hv.linearIndepOn_id.subset_extend _ mem_range_self i⟩
+  have hv' : b' ∘ v' = fun i => algebraMap K L ∘ v i := by
+    ext; simp [b', b, v', Module.Basis.extend, Algebra.algebraMap_eq_smul_one]
+  have h_inj : Injective v' := fun i j hij => by have : Injective v := hv.injective; aesop
+  rw [← hv']
+  exact b'.linearIndependent.comp _ h_inj
 
 中文:
 引理 LinearIndependent.linearIndependent_algebraMap_comp_aux
@@ -46,7 +51,12 @@ let v' (i :
   let I : Set (ι' -> K) := hv.linearIndepOn_id.extend (subset_univ _)
   let b : Module.Basis I K (ι' -> K) := .extend hv.linearIndepOn_id
   let b' : Module.Basis I L (ι' -> L) := (b.baseChange L).map (TensorProduct.piScalarRight K L L ι')
-let v' (i :
+let v' (i : ι) : I := ⟨v i, hv.linearIndepOn_id.subset_extend _ mem_range_self i⟩
+  have hv' : b' ∘ v' = fun i => algebraMap K L ∘ v i := by
+    ext; simp [b', b, v', Module.Basis.extend, Algebra.algebraMap_eq_smul_one]
+  have h_inj : Injective v' := fun i j hij => by have : Injective v := hv.injective; aesop
+  rw [← hv']
+  exact b'.linearIndependent.comp _ h_inj
 -/
 private lemma LinearIndependent.linearIndependent_algebraMap_comp_aux {K : Type*} (L : Type*)
     [Field K] [Field L] [Algebra K L]
@@ -76,7 +86,24 @@ lemma linearIndependent_algebraMap_comp_iff
   have : IsDomain R := .of_faithfulSMul R S
   set K := FractionRing R
   set L := FractionRing S
-  replace h : LinearIndependent K (Pi.algebraMap ι' R K 
+  replace h : LinearIndependent K (Pi.algebraMap ι' R K ∘ v) := by
+    rw [← LinearIndependent.iff_fractionRing (R := R)]
+    have : Function.Injective (Pi.algebraMap ι' R K) := by
+      rw [← LinearMap.ker_eq_bot]; rw [Submodule.eq_bot_iff]
+      intro v hv; ext i; simpa [Pi.algebraMap] using congr($hv i)
+    rwa [LinearMap.linearIndependent_iff_of_injOn _ this.injOn]
+  let : Algebra K L := FractionRing.liftAlgebra R L
+  suffices LinearIndependent L (Pi.algebraMap ι' R L ∘ v) by
+    rw [← LinearIndependent.iff_fractionRing (R := S)] at this
+    have aux : Pi.algebraMap ι' R L ∘ v = Pi.algebraMap ι' S L ∘ Pi.algebraMap ι' R S ∘ v := by
+      ext; simp [Pi.algebraMap, ← IsScalarTower.algebraMap_apply]
+    rw [aux] at this
+    exact this.of_comp
+  have aux : Pi.algebraMap ι' R L ∘ v = Pi.algebraMap ι' K L ∘ Pi.algebraMap ι' R K ∘ v := by
+    ext; simp [Pi.algebraMap, ← IsScalarTower.algebraMap_apply]
+  rw [aux]
+  replace h := h.linearIndependent_algebraMap_comp_aux L
+  exact h
 
 中文:
 引理 linearIndependent_algebraMap_comp_iff
@@ -87,7 +114,24 @@ lemma linearIndependent_algebraMap_comp_iff
   have : IsDomain R := .of_faithfulSMul R S
   set K := FractionRing R
   set L := FractionRing S
-  replace h : LinearIndependent K (Pi.algebraMap ι' R K 
+  replace h : LinearIndependent K (Pi.algebraMap ι' R K ∘ v) := by
+    rw [← LinearIndependent.iff_fractionRing (R := R)]
+    have : Function.Injective (Pi.algebraMap ι' R K) := by
+      rw [← LinearMap.ker_eq_bot]; rw [Submodule.eq_bot_iff]
+      intro v hv; ext i; simpa [Pi.algebraMap] using congr($hv i)
+    rwa [LinearMap.linearIndependent_iff_of_injOn _ this.injOn]
+  let : Algebra K L := FractionRing.liftAlgebra R L
+  suffices LinearIndependent L (Pi.algebraMap ι' R L ∘ v) by
+    rw [← LinearIndependent.iff_fractionRing (R := S)] at this
+    have aux : Pi.algebraMap ι' R L ∘ v = Pi.algebraMap ι' S L ∘ Pi.algebraMap ι' R S ∘ v := by
+      ext; simp [Pi.algebraMap, ← IsScalarTower.algebraMap_apply]
+    rw [aux] at this
+    exact this.of_comp
+  have aux : Pi.algebraMap ι' R L ∘ v = Pi.algebraMap ι' K L ∘ Pi.algebraMap ι' R K ∘ v := by
+    ext; simp [Pi.algebraMap, ← IsScalarTower.algebraMap_apply]
+  rw [aux]
+  replace h := h.linearIndependent_algebraMap_comp_aux L
+  exact h
 -/
 @[simp] lemma linearIndependent_algebraMap_comp_iff {R S : Type*}
     [CommRing R] [CommRing S] [Algebra R S] [FaithfulSMul R S] [IsDomain S]

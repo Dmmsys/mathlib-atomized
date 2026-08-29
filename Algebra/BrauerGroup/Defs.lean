@@ -168,7 +168,8 @@ lemma trans
   exact ⟨p * n, m * q, by simp_all, by simp_all,
 .symm.trans .symm.trans compAlgEquiv _ _ _ _ ⟨reindexAlgEquiv _ _ finProdFinEquiv
 .trans .trans compAlgEquiv _ _ _ _ iso1.mapMatrix (m := Fin p)
-.trans .symm.trans compAl
+.trans .symm.trans compAlgEquiv _ _ _ _ reindexAlgEquiv K B (.prodComm (Fin p) (Fin m))
+iso2.mapMatrix.trans .trans reindexAlgEquiv _ _ finProdFinEquiv⟩⟩ compAlgEquiv _ _ _ _
 
 中文:
 引理 trans
@@ -179,7 +180,8 @@ lemma trans
   exact ⟨p * n, m * q, by simp_all, by simp_all,
 .symm.trans .symm.trans compAlgEquiv _ _ _ _ ⟨reindexAlgEquiv _ _ finProdFinEquiv
 .trans .trans compAlgEquiv _ _ _ _ iso1.mapMatrix (m := Fin p)
-.trans .symm.trans compAl
+.trans .symm.trans compAlgEquiv _ _ _ _ reindexAlgEquiv K B (.prodComm (Fin p) (Fin m))
+iso2.mapMatrix.trans .trans reindexAlgEquiv _ _ finProdFinEquiv⟩⟩ compAlgEquiv _ _ _ _
 
 Depends on / 依赖: compAlgEquiv, finProdFinEquiv, iso1.mapMatrix, iso2.mapMatrix.trans, mapMatrix, prodComm, reindexAlgEquiv, symm.trans
 -/

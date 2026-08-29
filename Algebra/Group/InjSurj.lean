@@ -462,7 +462,7 @@ abbreviation divInvMonoid
 zpow_zero' := fun x => hf by rw [zpow, zpow_zero, one],
 zpow_succ' := fun n x => hf by rw [zpow, mul, zpow_natCast, pow_succ, zpow, zpow_natCast],
 zpow_neg' := fun n x => hf by rw [zpow, zpow_negSucc, inv, zpow, zpow_natCast],
-div_eq_mul_
+div_eq_mul_inv := fun x y => hf by rw [div, mul, inv, div_eq_mul_inv] }
 
 中文:
 缩写 divInvMonoid
@@ -472,7 +472,7 @@ div_eq_mul_
 zpow_zero' := fun x => hf by rw [zpow, zpow_zero, one],
 zpow_succ' := fun n x => hf by rw [zpow, mul, zpow_natCast, pow_succ, zpow, zpow_natCast],
 zpow_neg' := fun n x => hf by rw [zpow, zpow_negSucc, inv, zpow, zpow_natCast],
-div_eq_mul_
+div_eq_mul_inv := fun x y => hf by rw [div, mul, inv, div_eq_mul_inv] }
 -/
 protected abbrev divInvMonoid [DivInvMonoid M₂] (f : M₁ -> M₂) (hf : Injective f) (one : f 1 = 1)
     (mul : forall x y, f (x * y) = f x * f y) (inv : forall x, f x⁻¹ = (f x)⁻¹)
@@ -835,7 +835,9 @@ abbreviation divInvMonoid
     zpow_zero' := hf.forall.2 fun x => by rw [← zpow, zpow_zero, ← one],
     zpow_succ' := fun n => hf.forall.2 fun x => by
       rw [← zpow]; rw [← zpow]; rw [zpow_natCast]; rw [zpow_natCast]; rw [pow_succ]; rw [← mul],
-    zpow_neg' := 
+    zpow_neg' := fun n => hf.forall.2 fun x => by
+      rw [← zpow]; rw [← zpow]; rw [zpow_negSucc]; rw [zpow_natCast]; rw [inv],
+    div_eq_mul_inv := hf.forall₂.2 fun x y => by rw [← inv, ← mul, ← div, div_eq_mul_inv] }
 
 中文:
 缩写 divInvMonoid
@@ -845,7 +847,9 @@ abbreviation divInvMonoid
     zpow_zero' := hf.forall.2 fun x => by rw [← zpow, zpow_zero, ← one],
     zpow_succ' := fun n => hf.forall.2 fun x => by
       rw [← zpow]; rw [← zpow]; rw [zpow_natCast]; rw [zpow_natCast]; rw [pow_succ]; rw [← mul],
-    zpow_neg' := 
+    zpow_neg' := fun n => hf.forall.2 fun x => by
+      rw [← zpow]; rw [← zpow]; rw [zpow_negSucc]; rw [zpow_natCast]; rw [inv],
+    div_eq_mul_inv := hf.forall₂.2 fun x y => by rw [← inv, ← mul, ← div, div_eq_mul_inv] }
 -/
 protected abbrev divInvMonoid [DivInvMonoid M₁] (f : M₁ -> M₂) (hf : Surjective f) (one : f 1 = 1)
     (mul : forall x y, f (x * y) = f x * f y) (inv : forall x, f x⁻¹ = (f x)⁻¹)

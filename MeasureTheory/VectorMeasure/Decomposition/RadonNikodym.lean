@@ -35,7 +35,15 @@ theorem withDensityᵥ_rnDeriv_eq
   proof: by
   rw [absolutelyContinuous_ennreal_iff]; rw [(_ : μ.toENNRealVectorMeasure.ennrealToMeasure = μ)]; rw [totalVariation_absolutelyContinuous_iff] at h
   · ext1 i hi
-    rw [withDensityᵥ_apply (integrable_rnDeriv _ _) hi]; rw [rnDeriv_def]; rw [integral_sub]; rw [setIntegral_toReal_rnDeriv h.1 i]; r
+    rw [withDensityᵥ_apply (integrable_rnDeriv _ _) hi]; rw [rnDeriv_def]; rw [integral_sub]; rw [setIntegral_toReal_rnDeriv h.1 i]; rw [setIntegral_toReal_rnDeriv h.2 i]
+    · conv_rhs => rw [← s.toSignedMeasure_toJordanDecomposition]
+      rw [JordanDecomposition.toSignedMeasure]; rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_def]; rw [measureReal_def]
+    all_goals
+      refine Integrable.integrableOn ?_
+      refine ⟨?_, hasFiniteIntegral_toReal_of_lintegral_ne_top ?_⟩
+      · apply Measurable.aestronglyMeasurable (by fun_prop)
+      · exact (lintegral_rnDeriv_lt_top _ _).ne
+  · exact equivMeasure.right_inv μ
 
 中文:
 定理 withDensityᵥ_rnDeriv_eq
@@ -43,7 +51,15 @@ theorem withDensityᵥ_rnDeriv_eq
   证明: by
   rw [absolutelyContinuous_ennreal_iff]; rw [(_ : μ.toENNRealVectorMeasure.ennrealToMeasure = μ)]; rw [totalVariation_absolutelyContinuous_iff] at h
   · ext1 i hi
-    rw [withDensityᵥ_apply (integrable_rnDeriv _ _) hi]; rw [rnDeriv_def]; rw [integral_sub]; rw [setIntegral_toReal_rnDeriv h.1 i]; r
+    rw [withDensityᵥ_apply (integrable_rnDeriv _ _) hi]; rw [rnDeriv_def]; rw [integral_sub]; rw [setIntegral_toReal_rnDeriv h.1 i]; rw [setIntegral_toReal_rnDeriv h.2 i]
+    · conv_rhs => rw [← s.toSignedMeasure_toJordanDecomposition]
+      rw [JordanDecomposition.toSignedMeasure]; rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_def]; rw [measureReal_def]
+    all_goals
+      refine Integrable.integrableOn ?_
+      refine ⟨?_, hasFiniteIntegral_toReal_of_lintegral_ne_top ?_⟩
+      · apply Measurable.aestronglyMeasurable (by fun_prop)
+      · exact (lintegral_rnDeriv_lt_top _ _).ne
+  · exact equivMeasure.right_inv μ
 
 Depends on / 依赖: JordanDecomposition, JordanDecomposition.toSignedMeasure, _root_, _root_.sub_apply, absolutelyContinuous_ennreal_iff, cardinal_bInter_mem, conv_rhs, ennrealToMeasure, integrable_rnDeriv, integral_sub, mem_map, rnDeriv_def, s.toSignedMeasure_toJordanDecomposition, sInter_eq_biInter, setIntegral_toReal_rnDeriv, sub_apply, toENNRealVectorMeasure, toENNRealVectorMeasure.ennrealToMeasure, toSignedMeasure, toSignedMeasure_apply_measurable
 -/

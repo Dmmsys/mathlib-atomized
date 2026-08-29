@@ -104,7 +104,7 @@ lemma isSheaf_zariskiTopology_continuousMapPresheaf
   apply Scheme.forgetToTop.op_comp_isSheaf_of_isSheaf _ TopCat.grothendieckTopology
   apply TopCat.uliftFunctor.op_comp_isSheaf_of_isSheaf _ TopCat.grothendieckTopology
   rw [isSheaf_iff_isSheaf_of_type]
-  exact GrothendieckTopo
+  exact GrothendieckTopology.Subcanonical.isSheaf_of_isRepresentable _
 
 中文:
 引理 isSheaf_zariskiTopology_continuousMapPresheaf
@@ -113,7 +113,7 @@ lemma isSheaf_zariskiTopology_continuousMapPresheaf
   apply Scheme.forgetToTop.op_comp_isSheaf_of_isSheaf _ TopCat.grothendieckTopology
   apply TopCat.uliftFunctor.op_comp_isSheaf_of_isSheaf _ TopCat.grothendieckTopology
   rw [isSheaf_iff_isSheaf_of_type]
-  exact GrothendieckTopo
+  exact GrothendieckTopology.Subcanonical.isSheaf_of_isRepresentable _
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.Subcanonical.isSheaf_of_isRepresentable, Presheaf, Presheaf.isSheaf_of_iso_iff, Scheme, Scheme.forgetToTop.op_comp_isSheaf_of_isSheaf, Subcanonical, TopCat, TopCat.grothendieckTopology, TopCat.uliftFunctor.op_comp_isSheaf_of_isSheaf, continuousMapPresheafIsoUlift, forgetToTop, grothendieckTopology, isSheaf_iff_isSheaf_of_type, isSheaf_of_isRepresentable, isSheaf_of_iso_iff, op_comp_isSheaf_of_isSheaf, uliftFunctor
 -/
@@ -137,7 +137,16 @@ lemma isSheaf_fpqcTopology_continuousMapPresheaf
   · rw [← isSheaf_iff_isSheaf_of_type]
     exact isSheaf_zariskiTopology_continuousMapPresheaf _
   · rw [Presieve.isSheafFor_singleton]
-   
+    have : Topology.IsQuotientMap (Spec.map f) := Flat.isQuotientMap_of_surjective _
+    intro (x : C(Spec S, T)) h
+    refine ⟨?_, ?_, ?_⟩
+    · refine Topology.IsQuotientMap.lift this x fun a b hfab => ?_
+      obtain ⟨c, rfl, rfl⟩ := Scheme.Pullback.exists_preimage_pullback a b hfab
+      exact congr($(h (pullback.fst (Spec.map f) (Spec.map f))
+        (pullback.snd _ _) pullback.condition).1 c)
+    · apply Topology.IsQuotientMap.lift_comp
+    · intro y hy
+      rwa [← ContinuousMap.cancel_right (Spec.map f).surjective, Topology.IsQuotientMap.lift_comp]
 
 中文:
 引理 isSheaf_fpqcTopology_continuousMapPresheaf
@@ -147,7 +156,16 @@ lemma isSheaf_fpqcTopology_continuousMapPresheaf
   · rw [← isSheaf_iff_isSheaf_of_type]
     exact isSheaf_zariskiTopology_continuousMapPresheaf _
   · rw [Presieve.isSheafFor_singleton]
-   
+    have : Topology.IsQuotientMap (Spec.map f) := Flat.isQuotientMap_of_surjective _
+    intro (x : C(Spec S, T)) h
+    refine ⟨?_, ?_, ?_⟩
+    · refine Topology.IsQuotientMap.lift this x fun a b hfab => ?_
+      obtain ⟨c, rfl, rfl⟩ := Scheme.Pullback.exists_preimage_pullback a b hfab
+      exact congr($(h (pullback.fst (Spec.map f) (Spec.map f))
+        (pullback.snd _ _) pullback.condition).1 c)
+    · apply Topology.IsQuotientMap.lift_comp
+    · intro y hy
+      rwa [← ContinuousMap.cancel_right (Spec.map f).surjective, Topology.IsQuotientMap.lift_comp]
 
 Depends on / 依赖: Flat.isQuotientMap_of_surjective, IsQuotientMap, Presieve, Presieve.isSheafFor_singleton, Scheme, Scheme.fpqcTopology_eq_propQCTopology, Spec.map, Topology, Topology.IsQuotientMap, Topology.IsQuotientMap.lift, fpqcTopology_eq_propQCTopology, isQuotientMap_of_surjective, isSheafFor_singleton, isSheaf_iff_isSheaf_of_type, isSheaf_type_propQCTopology_iff, isSheaf_zariskiTopology_continuousMapPresheaf
 -/
@@ -181,7 +199,7 @@ definition continuousMapPresheafEquivOfTotallyDisconnectedSpace
   right_inv f := by
     apply ContinuousMap.coe_injective
     dsimp
-    exact (Continuous.connectedComponentsLift_unique _ _ (by 
+    exact (Continuous.connectedComponentsLift_unique _ _ (by simp)).symm
 
 中文:
 定义 continuousMapPresheafEquivOfTotallyDisconnectedSpace
@@ -191,7 +209,7 @@ definition continuousMapPresheafEquivOfTotallyDisconnectedSpace
   right_inv f := by
     apply ContinuousMap.coe_injective
     dsimp
-    exact (Continuous.connectedComponentsLift_unique _ _ (by 
+    exact (Continuous.connectedComponentsLift_unique _ _ (by simp)).symm
 
 Depends on / 依赖: connectedComponentsLift, connectedComponentsLift_continuous, continuous, f.continuous.connectedComponentsLift, f.continuous.connectedComponentsLift_continuous
 -/

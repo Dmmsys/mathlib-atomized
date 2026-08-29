@@ -353,7 +353,8 @@ theorem hasMFDerivAt_id
   have : forallᶠ y in 𝓝[range I] (extChartAt I x) x, (extChartAt I x ∘ (extChartAt I x).symm) y = y := by
     apply Filter.mem_of_superset (extChartAt_target_mem_nhdsWithin x)
     mfld_set_tac
-  apply HasFDerivWithinAt.congr_of_eventuallyEq (hasFDerivWithinAt_id _ _
+  apply HasFDerivWithinAt.congr_of_eventuallyEq (hasFDerivWithinAt_id _ _) this
+  simp only [mfld_simps]
 
 中文:
 定理 hasMFDerivAt_id
@@ -363,7 +364,8 @@ theorem hasMFDerivAt_id
   have : forallᶠ y in 𝓝[range I] (extChartAt I x) x, (extChartAt I x ∘ (extChartAt I x).symm) y = y := by
     apply Filter.mem_of_superset (extChartAt_target_mem_nhdsWithin x)
     mfld_set_tac
-  apply HasFDerivWithinAt.congr_of_eventuallyEq (hasFDerivWithinAt_id _ _
+  apply HasFDerivWithinAt.congr_of_eventuallyEq (hasFDerivWithinAt_id _ _) this
+  simp only [mfld_simps]
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, HasFDerivWithinAt, HasFDerivWithinAt.congr_of_eventuallyEq, congr_of_eventuallyEq, continuousAt_id, extChartAt, extChartAt_target_mem_nhdsWithin, hasFDerivWithinAt_id, mem_of_superset, mfld_set_tac, mfld_simps
 -/
@@ -980,7 +982,15 @@ theorem hasMFDerivAt_fst
     forallᶠ y in 𝓝[range (I.prod I')] extChartAt (I.prod I') x x,
       (extChartAt I x.1 ∘ Prod.fst ∘ (extChartAt (I.prod I') x).symm) y = y.1 := by
     /- porting note: was
-    apply Filter.mem_of_superset (extChartAt_target_mem_nhdsWithin (I.
+    apply Filter.mem_of_superset (extChartAt_target_mem_nhdsWithin (I.prod I') x)
+    mfld_set_tac
+    -/
+    filter_upwards [extChartAt_target_mem_nhdsWithin x] with y hy
+    rw [extChartAt_prod] at hy
+    exact (extChartAt I x.1).right_inv hy.1
+  apply HasFDerivWithinAt.congr_of_eventuallyEq hasFDerivWithinAt_fst this
+  -- Porting note: next line was `simp only [mfld_simps]`
+exact (extChartAt I x.1).right_inv (extChartAt I x.1).map_source (mem_extChartAt_source _)
 
 中文:
 定理 hasMFDerivAt_fst
@@ -991,7 +1001,15 @@ theorem hasMFDerivAt_fst
     forallᶠ y in 𝓝[range (I.prod I')] extChartAt (I.prod I') x x,
       (extChartAt I x.1 ∘ Prod.fst ∘ (extChartAt (I.prod I') x).symm) y = y.1 := by
     /- porting note: was
-    apply Filter.mem_of_superset (extChartAt_target_mem_nhdsWithin (I.
+    apply Filter.mem_of_superset (extChartAt_target_mem_nhdsWithin (I.prod I') x)
+    mfld_set_tac
+    -/
+    filter_upwards [extChartAt_target_mem_nhdsWithin x] with y hy
+    rw [extChartAt_prod] at hy
+    exact (extChartAt I x.1).right_inv hy.1
+  apply HasFDerivWithinAt.congr_of_eventuallyEq hasFDerivWithinAt_fst this
+  -- Porting note: next line was `simp only [mfld_simps]`
+exact (extChartAt I x.1).right_inv (extChartAt I x.1).map_source (mem_extChartAt_source _)
 
 Depends on / 依赖: I.prod, Prod.fst, continuousAt, continuous_fst, continuous_fst.continuousAt, extChartAt
 -/
@@ -1226,7 +1244,15 @@ theorem hasMFDerivAt_snd
     forallᶠ y in 𝓝[range (I.prod I')] extChartAt (I.prod I') x x,
       (extChartAt I' x.2 ∘ Prod.snd ∘ (extChartAt (I.prod I') x).symm) y = y.2 := by
     /- porting note: was
-    apply Filter.mem_of_superset (extChartAt_target_mem_nhdsWithin (I
+    apply Filter.mem_of_superset (extChartAt_target_mem_nhdsWithin (I.prod I') x)
+    mfld_set_tac
+    -/
+    filter_upwards [extChartAt_target_mem_nhdsWithin x] with y hy
+    rw [extChartAt_prod] at hy
+    exact (extChartAt I' x.2).right_inv hy.2
+  apply HasFDerivWithinAt.congr_of_eventuallyEq hasFDerivWithinAt_snd this
+  -- Porting note: the next line was `simp only [mfld_simps]`
+exact (extChartAt I' x.2).right_inv (extChartAt I' x.2).map_source (mem_extChartAt_source _)
 
 中文:
 定理 hasMFDerivAt_snd
@@ -1237,7 +1263,15 @@ theorem hasMFDerivAt_snd
     forallᶠ y in 𝓝[range (I.prod I')] extChartAt (I.prod I') x x,
       (extChartAt I' x.2 ∘ Prod.snd ∘ (extChartAt (I.prod I') x).symm) y = y.2 := by
     /- porting note: was
-    apply Filter.mem_of_superset (extChartAt_target_mem_nhdsWithin (I
+    apply Filter.mem_of_superset (extChartAt_target_mem_nhdsWithin (I.prod I') x)
+    mfld_set_tac
+    -/
+    filter_upwards [extChartAt_target_mem_nhdsWithin x] with y hy
+    rw [extChartAt_prod] at hy
+    exact (extChartAt I' x.2).right_inv hy.2
+  apply HasFDerivWithinAt.congr_of_eventuallyEq hasFDerivWithinAt_snd this
+  -- Porting note: the next line was `simp only [mfld_simps]`
+exact (extChartAt I' x.2).right_inv (extChartAt I' x.2).map_source (mem_extChartAt_source _)
 
 Depends on / 依赖: I.prod, Prod.snd, continuousAt, continuous_snd, continuous_snd.continuousAt, extChartAt
 -/
@@ -1846,7 +1880,14 @@ lemma HasMFDerivWithinAt.prodMap
   have better : ((extChartAt (I.prod I') p).symm ⁻¹' s inter range ↑(I.prod I')) subseteq
       ((extChartAt I p.1).symm ⁻¹' (Prod.fst '' s) inter range I) ×ˢ
         ((extChartAt I' p.2).symm ⁻¹' (Prod.snd '' s) inter range I') := by
-    simp only 
+    simp only [mfld_simps]
+    rw [range_prodMap]; rw [I.toPartialEquiv.prod_symm]; rw [(chartAt H p.1).toPartialEquiv.prod_symm]
+    intro p₀ ⟨hp₀, ⟨hp₁₁, hp₁₂⟩⟩
+    exact ⟨⟨by simp_all; grind, by assumption⟩, ⟨by simp_all; grind, by assumption⟩⟩
+  rw [writtenInExtChartAt_prod]
+  apply HasFDerivWithinAt.mono ?_ better
+  apply HasFDerivWithinAt.prodMap
+  exacts [hf.2.mono (fst_image_prod_subset ..), hg.2.mono (snd_image_prod_subset ..)]
 
 中文:
 引理 HasMFDerivWithinAt.prodMap
@@ -1856,7 +1897,14 @@ lemma HasMFDerivWithinAt.prodMap
   have better : ((extChartAt (I.prod I') p).symm ⁻¹' s inter range ↑(I.prod I')) subseteq
       ((extChartAt I p.1).symm ⁻¹' (Prod.fst '' s) inter range I) ×ˢ
         ((extChartAt I' p.2).symm ⁻¹' (Prod.snd '' s) inter range I') := by
-    simp only 
+    simp only [mfld_simps]
+    rw [range_prodMap]; rw [I.toPartialEquiv.prod_symm]; rw [(chartAt H p.1).toPartialEquiv.prod_symm]
+    intro p₀ ⟨hp₀, ⟨hp₁₁, hp₁₂⟩⟩
+    exact ⟨⟨by simp_all; grind, by assumption⟩, ⟨by simp_all; grind, by assumption⟩⟩
+  rw [writtenInExtChartAt_prod]
+  apply HasFDerivWithinAt.mono ?_ better
+  apply HasFDerivWithinAt.prodMap
+  exacts [hf.2.mono (fst_image_prod_subset ..), hg.2.mono (snd_image_prod_subset ..)]
 
 Depends on / 依赖: I.prod, I.toPartialEquiv.prod_symm, Prod.fst, Prod.snd, better, chartAt, extChartAt, mfld_simps, prodMap, prod_symm, range_prodMap, subseteq, toPartialEquiv, toPartialEquiv.prod_symm
 -/
@@ -2147,7 +2195,11 @@ theorem mfderiv_prod_eq_add
     mfderiv_comp_of_eq hf (mdifferentiableAt_const.prodMk mdifferentiableAt_snd) rfl,
     ← ContinuousLinearMap.comp_add,
     mdifferentiableAt_fst.mfderiv_prod mdifferentiableAt_const,
-    mdifferentiableAt_
+    mdifferentiableAt_const.mfderiv_prod mdifferentiableAt_snd, mfderiv_fst,
+    mfderiv_snd, mfderiv_const, mfderiv_const]
+  symm
+convert! ContinuousLinearMap.comp_id mfderiv% f (p.1, p.2)
+  exact ContinuousLinearMap.coprod_inl_inr
 
 中文:
 定理 mfderiv_prod_eq_add
@@ -2157,7 +2209,11 @@ theorem mfderiv_prod_eq_add
     mfderiv_comp_of_eq hf (mdifferentiableAt_const.prodMk mdifferentiableAt_snd) rfl,
     ← ContinuousLinearMap.comp_add,
     mdifferentiableAt_fst.mfderiv_prod mdifferentiableAt_const,
-    mdifferentiableAt_
+    mdifferentiableAt_const.mfderiv_prod mdifferentiableAt_snd, mfderiv_fst,
+    mfderiv_snd, mfderiv_const, mfderiv_const]
+  symm
+convert! ContinuousLinearMap.comp_id mfderiv% f (p.1, p.2)
+  exact ContinuousLinearMap.coprod_inl_inr
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.comp_add, ContinuousLinearMap.comp_id, ContinuousLinearMap.coprod_inl_inr, comp_add, comp_id, convert, coprod_inl_inr, mdifferentiableAt_const, mdifferentiableAt_const.mfderiv_prod, mdifferentiableAt_const.prodMk, mdifferentiableAt_fst, mdifferentiableAt_fst.mfderiv_prod, mdifferentiableAt_fst.prodMk, mdifferentiableAt_snd, mfderiv, mfderiv_comp_of_eq, mfderiv_const, mfderiv_fst, mfderiv_prod
 -/
@@ -2190,7 +2246,13 @@ theorem mfderiv_prod_eq_add_comp
     · simp only [mfderiv_fst]
       rfl
     · exact hf.comp _ (mdifferentiableAt_id.prodMk mdifferentiableAt_const)
-    · exac
+    · exact mdifferentiableAt_fst
+  · have : (fun z : M × M' => f (p.1, z.2)) = (fun z : M' => f (p.1, z)) ∘ Prod.snd := rfl
+    rw [this]; rw [mfderiv_comp (I' := I')]
+    · simp only [mfderiv_snd]
+      rfl
+    · exact hf.comp _ (mdifferentiableAt_const.prodMk mdifferentiableAt_id)
+    · exact mdifferentiableAt_snd
 
 中文:
 定理 mfderiv_prod_eq_add_comp
@@ -2203,7 +2265,13 @@ theorem mfderiv_prod_eq_add_comp
     · simp only [mfderiv_fst]
       rfl
     · exact hf.comp _ (mdifferentiableAt_id.prodMk mdifferentiableAt_const)
-    · exac
+    · exact mdifferentiableAt_fst
+  · have : (fun z : M × M' => f (p.1, z.2)) = (fun z : M' => f (p.1, z)) ∘ Prod.snd := rfl
+    rw [this]; rw [mfderiv_comp (I' := I')]
+    · simp only [mfderiv_snd]
+      rfl
+    · exact hf.comp _ (mdifferentiableAt_const.prodMk mdifferentiableAt_id)
+    · exact mdifferentiableAt_snd
 
 Depends on / 依赖: Prod.fst, Prod.snd, hf.comp, mdifferentiableAt_const, mdifferentiableAt_const.pr, mdifferentiableAt_fst, mdifferentiableAt_id, mdifferentiableAt_id.prodMk, mfderiv_comp, mfderiv_fst, mfderiv_prod_eq_add, mfderiv_snd, prodMk
 -/
@@ -2272,7 +2340,27 @@ lemma writtenInExtChartAt_sumSwap_eventuallyEq_id
       have : EqOn (writtenInExtChartAt I I (Sum.inl x) (@Sum.swap M M')) id t := by
         intro y hy
         simp only [writtenInExtChartAt, extChartAt, Sum.swap_inl,
-          ChartedSpace.sum_chartAt_in
+          ChartedSpace.sum_chartAt_inl, ChartedSpace.sum_chartAt_inr]
+        dsimp
+        rw [Sum.inr_injective.extend_apply]; rw [(chartAt H x).right_inv (by grind)]
+        exact I.right_inv (by grind)
+      apply Filter.eventually_of_mem ?_ this
+      rw [Filter.inter_mem_iff]
+      refine ⟨I.continuousWithinAt_symm.preimage_mem_nhdsWithin ?_, self_mem_nhdsWithin⟩
+      exact (chartAt H x).open_target.mem_nhds (by simp)
+    | inr x =>
+      let t := I.symm ⁻¹' (chartAt H x).target inter range I
+      have : EqOn (writtenInExtChartAt I I (Sum.inr x) (@Sum.swap M M')) id t := by
+        intro y hy
+        simp only [writtenInExtChartAt, extChartAt, Sum.swap_inr,
+          ChartedSpace.sum_chartAt_inl, ChartedSpace.sum_chartAt_inr]
+        dsimp
+        rw [Sum.inl_injective.extend_apply]; rw [(chartAt H x).right_inv (by grind)]
+        exact I.right_inv (by grind)
+      apply Filter.eventually_of_mem ?_ this
+      rw [Filter.inter_mem_iff]
+      refine ⟨I.continuousWithinAt_symm.preimage_mem_nhdsWithin ?_, self_mem_nhdsWithin⟩
+      exact (chartAt H x).open_target.mem_nhds (by simp)
 
 中文:
 引理 writtenInExtChartAt_sumSwap_eventuallyEq_id
@@ -2283,7 +2371,27 @@ lemma writtenInExtChartAt_sumSwap_eventuallyEq_id
       have : EqOn (writtenInExtChartAt I I (Sum.inl x) (@Sum.swap M M')) id t := by
         intro y hy
         simp only [writtenInExtChartAt, extChartAt, Sum.swap_inl,
-          ChartedSpace.sum_chartAt_in
+          ChartedSpace.sum_chartAt_inl, ChartedSpace.sum_chartAt_inr]
+        dsimp
+        rw [Sum.inr_injective.extend_apply]; rw [(chartAt H x).right_inv (by grind)]
+        exact I.right_inv (by grind)
+      apply Filter.eventually_of_mem ?_ this
+      rw [Filter.inter_mem_iff]
+      refine ⟨I.continuousWithinAt_symm.preimage_mem_nhdsWithin ?_, self_mem_nhdsWithin⟩
+      exact (chartAt H x).open_target.mem_nhds (by simp)
+    | inr x =>
+      let t := I.symm ⁻¹' (chartAt H x).target inter range I
+      have : EqOn (writtenInExtChartAt I I (Sum.inr x) (@Sum.swap M M')) id t := by
+        intro y hy
+        simp only [writtenInExtChartAt, extChartAt, Sum.swap_inr,
+          ChartedSpace.sum_chartAt_inl, ChartedSpace.sum_chartAt_inr]
+        dsimp
+        rw [Sum.inl_injective.extend_apply]; rw [(chartAt H x).right_inv (by grind)]
+        exact I.right_inv (by grind)
+      apply Filter.eventually_of_mem ?_ this
+      rw [Filter.inter_mem_iff]
+      refine ⟨I.continuousWithinAt_symm.preimage_mem_nhdsWithin ?_, self_mem_nhdsWithin⟩
+      exact (chartAt H x).open_target.mem_nhds (by simp)
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.sum_chartAt_inl, ChartedSpace.sum_chartAt_inr, Filter, Filter.eventually_of_mem, Filter.inter_mem_iff, I.continuousWithinAt_symm, I.right_inv, I.symm, Sum.inl, Sum.inr_injective.extend_apply, Sum.swap, Sum.swap_inl, chartAt, continuousWithinAt_symm, eventually_of_mem, extChartAt, extend_apply, inr_injective, inter_mem_iff
 -/
@@ -2409,7 +2517,10 @@ lemma writtenInExtChartAt_sumInl_eventuallyEq_id
     rw [← I.image_eq (chartAt H q).target]
     exact (chartAt H q).extend_image_target_mem_nhds (mem_chart_source H q)
   filter_upwards [hmem] with y hy
-  rcases hy with ⟨hyT, ⟨z, rfl⟩
+  rcases hy with ⟨hyT, ⟨z, rfl⟩⟩
+  simp [writtenInExtChartAt, extChartAt, ChartedSpace.sum_chartAt_inl,
+Sum.inl_injective.extend_apply chartAt H q,
+    (chartAt H q).right_inv (by simpa [Set.mem_preimage, I.left_inv] using hyT)]
 
 中文:
 引理 writtenInExtChartAt_sumInl_eventuallyEq_id
@@ -2419,7 +2530,10 @@ lemma writtenInExtChartAt_sumInl_eventuallyEq_id
     rw [← I.image_eq (chartAt H q).target]
     exact (chartAt H q).extend_image_target_mem_nhds (mem_chart_source H q)
   filter_upwards [hmem] with y hy
-  rcases hy with ⟨hyT, ⟨z, rfl⟩
+  rcases hy with ⟨hyT, ⟨z, rfl⟩⟩
+  simp [writtenInExtChartAt, extChartAt, ChartedSpace.sum_chartAt_inl,
+Sum.inl_injective.extend_apply chartAt H q,
+    (chartAt H q).right_inv (by simpa [Set.mem_preimage, I.left_inv] using hyT)]
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.sum_chartAt_inl, I.image_eq, I.left_inv, I.symm, Set.mem_preimage, Set.range, Sum.inl_injective.extend_apply, chartAt, extChartAt, extend_apply, extend_image_target_mem_nhds, filter_upwards, image_eq, inl_injective, left_inv, mem_chart_source, mem_preimage, right_inv, sum_chartAt_inl
 -/
@@ -2446,7 +2560,10 @@ lemma writtenInExtChartAt_sumInr_eventuallyEq_id
     rw [← I.image_eq (chartAt H q').target]
     exact (chartAt H q').extend_image_target_mem_nhds (mem_chart_source H q')
   filter_upwards [hmem] with y hy
-  rcases hy with ⟨hyT, ⟨z
+  rcases hy with ⟨hyT, ⟨z, rfl⟩⟩
+  simp [writtenInExtChartAt, extChartAt, ChartedSpace.sum_chartAt_inr,
+Sum.inr_injective.extend_apply chartAt H q',
+    (chartAt H q').right_inv (by simpa [Set.mem_preimage, I.left_inv] using hyT)]
 
 中文:
 引理 writtenInExtChartAt_sumInr_eventuallyEq_id
@@ -2456,7 +2573,10 @@ lemma writtenInExtChartAt_sumInr_eventuallyEq_id
     rw [← I.image_eq (chartAt H q').target]
     exact (chartAt H q').extend_image_target_mem_nhds (mem_chart_source H q')
   filter_upwards [hmem] with y hy
-  rcases hy with ⟨hyT, ⟨z
+  rcases hy with ⟨hyT, ⟨z, rfl⟩⟩
+  simp [writtenInExtChartAt, extChartAt, ChartedSpace.sum_chartAt_inr,
+Sum.inr_injective.extend_apply chartAt H q',
+    (chartAt H q').right_inv (by simpa [Set.mem_preimage, I.left_inv] using hyT)]
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.sum_chartAt_inr, I.image_eq, I.left_inv, I.symm, Set.mem_preimage, Set.range, Sum.inr_injective.extend_apply, chartAt, extChartAt, extend_apply, extend_image_target_mem_nhds, filter_upwards, image_eq, inr_injective, left_inv, mem_chart_source, mem_preimage, right_inv, sum_chartAt_inr
 -/
@@ -2482,7 +2602,8 @@ theorem hasMFDerivWithinAt_inl
   have : (writtenInExtChartAt I I q (@Sum.inl M M'))
       =ᶠ[𝓝[(extChartAt I q).symm ⁻¹' s inter Set.range I] (extChartAt I q q)] id :=
     writtenInExtChartAt_sumInl_eventuallyEq_id.filter_mono (nhdsWithin_mono _ (fun _y hy => hy.2))
-  exact (hasFDerivWithinAt_id (ext
+  exact (hasFDerivWithinAt_id (extChartAt I q q) _).congr_of_eventuallyEq this
+    (by simp [writtenInExtChartAt, extChartAt])
 
 中文:
 定理 hasMFDerivWithinAt_inl
@@ -2491,7 +2612,8 @@ theorem hasMFDerivWithinAt_inl
   have : (writtenInExtChartAt I I q (@Sum.inl M M'))
       =ᶠ[𝓝[(extChartAt I q).symm ⁻¹' s inter Set.range I] (extChartAt I q q)] id :=
     writtenInExtChartAt_sumInl_eventuallyEq_id.filter_mono (nhdsWithin_mono _ (fun _y hy => hy.2))
-  exact (hasFDerivWithinAt_id (ext
+  exact (hasFDerivWithinAt_id (extChartAt I q q) _).congr_of_eventuallyEq this
+    (by simp [writtenInExtChartAt, extChartAt])
 
 Depends on / 依赖: Set.range, Sum.inl, congr_of_eventuallyEq, extChartAt, filter_mono, fun_prop, hasFDerivWithinAt_id, nhdsWithin_mono, writtenInExtChartAt, writtenInExtChartAt_sumInl_eventuallyEq_id, writtenInExtChartAt_sumInl_eventuallyEq_id.filter_mono
 -/
@@ -2535,7 +2657,8 @@ theorem hasMFDerivWithinAt_inr
   have : (writtenInExtChartAt I I q' (@Sum.inr M M'))
       =ᶠ[𝓝[(extChartAt I q').symm ⁻¹' t inter Set.range I] (extChartAt I q' q')] id :=
     writtenInExtChartAt_sumInr_eventuallyEq_id.filter_mono (nhdsWithin_mono _ (fun _y hy => hy.2))
-  exact (hasFDerivWithinAt_id 
+  exact (hasFDerivWithinAt_id (extChartAt I q' q') _).congr_of_eventuallyEq this
+    (by simp [writtenInExtChartAt, extChartAt])
 
 中文:
 定理 hasMFDerivWithinAt_inr
@@ -2545,7 +2668,8 @@ theorem hasMFDerivWithinAt_inr
   have : (writtenInExtChartAt I I q' (@Sum.inr M M'))
       =ᶠ[𝓝[(extChartAt I q').symm ⁻¹' t inter Set.range I] (extChartAt I q' q')] id :=
     writtenInExtChartAt_sumInr_eventuallyEq_id.filter_mono (nhdsWithin_mono _ (fun _y hy => hy.2))
-  exact (hasFDerivWithinAt_id 
+  exact (hasFDerivWithinAt_id (extChartAt I q' q') _).congr_of_eventuallyEq this
+    (by simp [writtenInExtChartAt, extChartAt])
 
 Depends on / 依赖: Set.range, Sum.inr, congr_of_eventuallyEq, extChartAt, filter_mono, fun_prop, hasFDerivWithinAt_id, nhdsWithin_mono, writtenInExtChartAt, writtenInExtChartAt_sumInr_eventuallyEq_id, writtenInExtChartAt_sumInr_eventuallyEq_id.filter_mono
 -/
@@ -3732,7 +3856,10 @@ lemma HasMFDerivWithinAt.prod
     rw [t.sum_insert hi]; rw [t.erase_insert hi]; rw [t.prod_insert hi]; rw [add_comm]
     rw [t.forall_mem_insert] at hf
     convert! hf.1.mul (IH hf.2) using 2
-    · simp o
+    · simp only [t.smul_sum, ← mul_smul]
+      refine t.sum_congr rfl (fun j hj => ?_)
+      rw [t.erase_insert_of_ne (by grind)]; rw [Finset.prod_insert (by grind)]
+    · simp
 
 中文:
 引理 HasMFDerivWithinAt.乘积
@@ -3744,7 +3871,10 @@ lemma HasMFDerivWithinAt.prod
     rw [t.sum_insert hi]; rw [t.erase_insert hi]; rw [t.prod_insert hi]; rw [add_comm]
     rw [t.forall_mem_insert] at hf
     convert! hf.1.mul (IH hf.2) using 2
-    · simp o
+    · simp only [t.smul_sum, ← mul_smul]
+      refine t.sum_congr rfl (fun j hj => ?_)
+      rw [t.erase_insert_of_ne (by grind)]; rw [Finset.prod_insert (by grind)]
+    · simp
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.prod_insert, add_comm, convert, erase_insert, erase_insert_of_ne, forall_mem_insert, hasMFDerivWithinAt_const, induction_on, insert, mul_smul, prod_insert, smul_sum, sum_congr, sum_insert, t.erase_insert, t.erase_insert_of_ne, t.forall_mem_insert, t.prod_insert
 -/

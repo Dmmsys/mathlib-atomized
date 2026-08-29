@@ -89,7 +89,19 @@ theorem divRadical_dvd_derivative
     · rw [pow_zero, derivative_one]
       apply dvd_zero
     · case succ i =>
-      rw [← mul_dvd_mul_iff
+      rw [← mul_dvd_mul_iff_left radical_ne_zero]; rw [radical_mul_divRadical]; rw [radical_pow_of_prime hp i.succ_ne_zero]; rw [derivative_pow_succ]; rw [← mul_assoc]
+      apply dvd_mul_of_dvd_left
+      rw [mul_comm]; rw [mul_assoc]
+      apply dvd_mul_of_dvd_right
+      rw [pow_succ]; rw [mul_dvd_mul_iff_left (pow_ne_zero i hp.ne_zero)]; rw [dvd_normalize_iff]
+  · -- If it holds for coprime pair a and b, then it also holds for a * b.
+    case hcp x y hpxy hx hy =>
+    have hc : IsCoprime x y :=
+      EuclideanDomain.isCoprime_of_dvd
+        (fun ⟨hx, hy⟩ => not_isUnit_zero (hpxy (zero_dvd_iff.mpr hx) (zero_dvd_iff.mpr hy)))
+        fun p hp _ hpx hpy => hp (hpxy hpx hpy)
+    rw [divRadical_mul hc]; rw [derivative_mul]
+    exact dvd_add (mul_dvd_mul hx (divRadical_dvd_self y)) (mul_dvd_mul (divRadical_dvd_self x) hy)
 
 中文:
 定理 divRadical_dvd_derivative
@@ -107,7 +119,19 @@ theorem divRadical_dvd_derivative
     · rw [pow_zero, derivative_one]
       apply dvd_zero
     · case succ i =>
-      rw [← mul_dvd_mul_iff
+      rw [← mul_dvd_mul_iff_left radical_ne_zero]; rw [radical_mul_divRadical]; rw [radical_pow_of_prime hp i.succ_ne_zero]; rw [derivative_pow_succ]; rw [← mul_assoc]
+      apply dvd_mul_of_dvd_left
+      rw [mul_comm]; rw [mul_assoc]
+      apply dvd_mul_of_dvd_right
+      rw [pow_succ]; rw [mul_dvd_mul_iff_left (pow_ne_zero i hp.ne_zero)]; rw [dvd_normalize_iff]
+  · -- If it holds for coprime pair a and b, then it also holds for a * b.
+    case hcp x y hpxy hx hy =>
+    have hc : IsCoprime x y :=
+      EuclideanDomain.isCoprime_of_dvd
+        (fun ⟨hx, hy⟩ => not_isUnit_zero (hpxy (zero_dvd_iff.mpr hx) (zero_dvd_iff.mpr hy)))
+        fun p hp _ hpx hpy => hp (hpxy hpx hpy)
+    rw [divRadical_mul hc]; rw [derivative_mul]
+    exact dvd_add (mul_dvd_mul hx (divRadical_dvd_self y)) (mul_dvd_mul (divRadical_dvd_self x) hy)
 
 Depends on / 依赖: derivative_one, derivative_pow_succ, derivative_zero, divRadical_isUnit, dvd_mul_of_dvd_left, dvd_mul_of_dvd_right, dvd_zero, i.succ_ne_zero, induction_on_coprime, mul_assoc, mul_comm, mul_dvd_mul_iff_left, pow_succ, pow_zero, radical_mul_divRadical, radical_ne_zero, radical_pow_of_prime, succ_ne_zero
 -/

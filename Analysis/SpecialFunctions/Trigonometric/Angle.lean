@@ -924,7 +924,7 @@ theorem two_nsmul_eq_pi_iff
   rw [coe_nsmul]; rw [two_nsmul_eq_iff]
   apply iff_of_eq -- `congr` only works on `Eq`, so rewrite from `Iff` to `Eq`.
   congr
-  rw [add_comm]; rw [← coe_add]; rw [← sub_eq_zero]; rw [← coe_su
+  rw [add_comm]; rw [← coe_add]; rw [← sub_eq_zero]; rw [← coe_sub]; rw [neg_div]; rw [sub_neg_eq_add]; rw [add_assoc]; rw [add_halves]; rw [← two_mul]; rw [coe_two_pi]
 
 中文:
 定理 two_nsmul_eq_pi_iff
@@ -936,7 +936,7 @@ theorem two_nsmul_eq_pi_iff
   rw [coe_nsmul]; rw [two_nsmul_eq_iff]
   apply iff_of_eq -- `congr` only works on `Eq`, so rewrite from `Iff` to `Eq`.
   congr
-  rw [add_comm]; rw [← coe_add]; rw [← sub_eq_zero]; rw [← coe_su
+  rw [add_comm]; rw [← coe_add]; rw [← sub_eq_zero]; rw [← coe_sub]; rw [neg_div]; rw [sub_neg_eq_add]; rw [add_assoc]; rw [add_halves]; rw [← two_mul]; rw [coe_two_pi]
 
 Depends on / 依赖: add_assoc, add_comm, add_halves, coe_add, coe_nsmul, coe_sub, coe_two_pi, iff_of_eq, neg_div, nth_rw, rewrite, sub_eq_zero, sub_neg_eq_add, two_mul, two_nsmul, two_nsmul_eq_iff
 -/
@@ -982,7 +982,16 @@ theorem cos_eq_iff_coe_eq_or_eq_neg
     rw [← sub_eq_zero]; rw [cos_sub_cos]; rw [mul_eq_zero]; rw [mul_eq_zero]; rw [neg_eq_zero]; rw [eq_false (two_ne_zero' Real)]; rw [false_or]; rw [sin_eq_zero_iff]; rw [sin_eq_zero_iff] at Hcos
     rcases Hcos with (⟨n, hn⟩ | ⟨n, hn⟩)
     · right
-      rw [eq_div_i
+      rw [eq_div_iff_mul_eq (two_ne_zero' Real)]; rw [← sub_eq_iff_eq_add] at hn
+      rw [← hn]; rw [coe_sub]; rw [eq_neg_iff_add_eq_zero]; rw [sub_add_cancel]; rw [mul_assoc]; rw [intCast_mul_eq_zsmul]; rw [mul_comm]; rw [coe_two_pi]; rw [zsmul_zero]
+    · left
+      rw [eq_div_iff_mul_eq (two_ne_zero' Real)]; rw [eq_sub_iff_add_eq] at hn
+      rw [← hn]; rw [coe_add]; rw [mul_assoc]; rw [intCast_mul_eq_zsmul]; rw [mul_comm]; rw [coe_two_pi]; rw [zsmul_zero]; rw [zero_add]
+  · rw [angle_eq_iff_two_pi_dvd_sub, ← coe_neg, angle_eq_iff_two_pi_dvd_sub]
+    rintro (⟨k, H⟩ | ⟨k, H⟩)
+    · rw [← sub_eq_zero, cos_sub_cos, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' Real),
+        mul_comm π _, sin_int_mul_pi, mul_zero]
+    rw [← sub_eq_zero]; rw [cos_sub_cos]; rw [← sub_neg_eq_add]; rw [H]; rw [mul_assoc 2 π k]; rw [mul_div_cancel_left₀ _ (two_ne_zero' Real)]; rw [mul_comm π _]; rw [sin_int_mul_pi]; rw [mul_zero]; rw [zero_mul]
 
 中文:
 定理 cos_eq_iff_coe_eq_or_eq_neg
@@ -993,7 +1002,16 @@ theorem cos_eq_iff_coe_eq_or_eq_neg
     rw [← sub_eq_zero]; rw [cos_sub_cos]; rw [mul_eq_zero]; rw [mul_eq_zero]; rw [neg_eq_zero]; rw [eq_false (two_ne_zero' Real)]; rw [false_or]; rw [sin_eq_zero_iff]; rw [sin_eq_zero_iff] at Hcos
     rcases Hcos with (⟨n, hn⟩ | ⟨n, hn⟩)
     · right
-      rw [eq_div_i
+      rw [eq_div_iff_mul_eq (two_ne_zero' Real)]; rw [← sub_eq_iff_eq_add] at hn
+      rw [← hn]; rw [coe_sub]; rw [eq_neg_iff_add_eq_zero]; rw [sub_add_cancel]; rw [mul_assoc]; rw [intCast_mul_eq_zsmul]; rw [mul_comm]; rw [coe_two_pi]; rw [zsmul_zero]
+    · left
+      rw [eq_div_iff_mul_eq (two_ne_zero' Real)]; rw [eq_sub_iff_add_eq] at hn
+      rw [← hn]; rw [coe_add]; rw [mul_assoc]; rw [intCast_mul_eq_zsmul]; rw [mul_comm]; rw [coe_two_pi]; rw [zsmul_zero]; rw [zero_add]
+  · rw [angle_eq_iff_two_pi_dvd_sub, ← coe_neg, angle_eq_iff_two_pi_dvd_sub]
+    rintro (⟨k, H⟩ | ⟨k, H⟩)
+    · rw [← sub_eq_zero, cos_sub_cos, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' Real),
+        mul_comm π _, sin_int_mul_pi, mul_zero]
+    rw [← sub_eq_zero]; rw [cos_sub_cos]; rw [← sub_neg_eq_add]; rw [H]; rw [mul_assoc 2 π k]; rw [mul_div_cancel_left₀ _ (two_ne_zero' Real)]; rw [mul_comm π _]; rw [sin_int_mul_pi]; rw [mul_zero]; rw [zero_mul]
 
 Depends on / 依赖: coe_sub, coe_two_pi, cos_sub_cos, eq_div_iff_mul_eq, eq_false, eq_neg_iff_add_eq_zero, false_or, intCast_mul_eq_zsmul, mul_assoc, mul_comm, mul_eq_zero, neg_eq_zero, sin_eq_zero_iff, sub_add_cancel, sub_eq_iff_eq_add, sub_eq_zero, two_ne_zero
 -/
@@ -1030,7 +1048,16 @@ theorem sin_eq_iff_coe_eq_or_add_eq_pi
       rw [coe_sub]; rw [coe_sub] at h
       exact sub_right_inj.1 h
     right
-    rw [coe_sub]; rw [coe_sub]; rw [eq_neg_iff_add_eq_ze
+    rw [coe_sub]; rw [coe_sub]; rw [eq_neg_iff_add_eq_zero]; rw [add_sub]; rw [sub_add_eq_add_sub]; rw [← coe_add]; rw [add_halves]; rw [sub_sub]; rw [sub_eq_zero] at h
+    exact h.symm
+  · rw [angle_eq_iff_two_pi_dvd_sub, ← eq_sub_iff_add_eq, ← coe_sub, angle_eq_iff_two_pi_dvd_sub]
+    rintro (⟨k, H⟩ | ⟨k, H⟩)
+    · rw [← sub_eq_zero, sin_sub_sin, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' Real),
+        mul_comm π _, sin_int_mul_pi, mul_zero, zero_mul]
+    have H' : θ + ψ = 2 * k * π + π := by
+      rwa [← sub_add, sub_add_eq_add_sub, sub_eq_iff_eq_add, mul_assoc, mul_comm π _, ←
+        mul_assoc] at H
+    rw [← sub_eq_zero]; rw [sin_sub_sin]; rw [H']; rw [add_div]; rw [mul_assoc 2 _ π]; rw [mul_div_cancel_left₀ _ (two_ne_zero' Real)]; rw [cos_add_pi_div_two]; rw [sin_int_mul_pi]; rw [neg_zero]; rw [mul_zero]
 
 中文:
 定理 sin_eq_iff_coe_eq_or_add_eq_pi
@@ -1044,7 +1071,16 @@ theorem sin_eq_iff_coe_eq_or_add_eq_pi
       rw [coe_sub]; rw [coe_sub] at h
       exact sub_right_inj.1 h
     right
-    rw [coe_sub]; rw [coe_sub]; rw [eq_neg_iff_add_eq_ze
+    rw [coe_sub]; rw [coe_sub]; rw [eq_neg_iff_add_eq_zero]; rw [add_sub]; rw [sub_add_eq_add_sub]; rw [← coe_add]; rw [add_halves]; rw [sub_sub]; rw [sub_eq_zero] at h
+    exact h.symm
+  · rw [angle_eq_iff_two_pi_dvd_sub, ← eq_sub_iff_add_eq, ← coe_sub, angle_eq_iff_two_pi_dvd_sub]
+    rintro (⟨k, H⟩ | ⟨k, H⟩)
+    · rw [← sub_eq_zero, sin_sub_sin, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' Real),
+        mul_comm π _, sin_int_mul_pi, mul_zero, zero_mul]
+    have H' : θ + ψ = 2 * k * π + π := by
+      rwa [← sub_add, sub_add_eq_add_sub, sub_eq_iff_eq_add, mul_assoc, mul_comm π _, ←
+        mul_assoc] at H
+    rw [← sub_eq_zero]; rw [sin_sub_sin]; rw [H']; rw [add_div]; rw [mul_assoc 2 _ π]; rw [mul_div_cancel_left₀ _ (two_ne_zero' Real)]; rw [cos_add_pi_div_two]; rw [sin_int_mul_pi]; rw [neg_zero]; rw [mul_zero]
 
 Depends on / 依赖: add_halves, add_sub, angle_eq_iff_two_pi_dvd_sub, coe_add, coe_sub, cos_eq_iff_coe_eq_or_eq_neg, cos_eq_iff_coe_eq_or_eq_neg.mp, cos_pi_div_two_sub, eq_neg_iff_add_eq_zero, eq_sub_iff_add_eq, h.symm, sub_add_eq_add_sub, sub_eq_zero, sub_right_inj, sub_sub
 -/
@@ -1081,7 +1117,10 @@ theorem cos_sin_inj
   rcases sin_eq_iff_coe_eq_or_add_eq_pi.mp Hsin with hs | hs; · exact hs
   rw [eq_neg_iff_add_eq_zero]; rw [hs] at hc
   obtain ⟨n, hn⟩ : exists n, n • _ = _ := QuotientAddGroup.leftRel_apply.mp (Quotient.exact' hc)
-  rw [← neg_
+  rw [← neg_one_mul]; rw [add_zero]; rw [← sub_eq_zero]; rw [zsmul_eq_mul]; rw [← mul_assoc]; rw [← sub_mul]; rw [mul_eq_zero]; rw [eq_false (ne_of_gt pi_pos)]; rw [or_false]; rw [sub_neg_eq_add]; rw [← Int.cast_zero]; rw [← Int.cast_one]; rw [← Int.cast_ofNat]; rw [← Int.cast_mul]; rw [← Int.cast_add]; rw [Int.cast_inj] at hn
+  have : (n * 2 + 1) % (2 : Int) = 0 % (2 : Int) := congr_arg (· % (2 : Int)) hn
+  rw [add_comm]; rw [Int.add_mul_emod_self_right] at this
+  exact absurd this one_ne_zero
 
 中文:
 定理 cos_sin_inj
@@ -1092,7 +1131,10 @@ theorem cos_sin_inj
   rcases sin_eq_iff_coe_eq_or_add_eq_pi.mp Hsin with hs | hs; · exact hs
   rw [eq_neg_iff_add_eq_zero]; rw [hs] at hc
   obtain ⟨n, hn⟩ : exists n, n • _ = _ := QuotientAddGroup.leftRel_apply.mp (Quotient.exact' hc)
-  rw [← neg_
+  rw [← neg_one_mul]; rw [add_zero]; rw [← sub_eq_zero]; rw [zsmul_eq_mul]; rw [← mul_assoc]; rw [← sub_mul]; rw [mul_eq_zero]; rw [eq_false (ne_of_gt pi_pos)]; rw [or_false]; rw [sub_neg_eq_add]; rw [← Int.cast_zero]; rw [← Int.cast_one]; rw [← Int.cast_ofNat]; rw [← Int.cast_mul]; rw [← Int.cast_add]; rw [Int.cast_inj] at hn
+  have : (n * 2 + 1) % (2 : Int) = 0 % (2 : Int) := congr_arg (· % (2 : Int)) hn
+  rw [add_comm]; rw [Int.add_mul_emod_self_right] at this
+  exact absurd this one_ne_zero
 
 Depends on / 依赖: Int.cast_zero, Quotient, Quotient.exact, QuotientAddGroup, QuotientAddGroup.leftRel_apply.mp, add_zero, cast_zero, cos_eq_iff_coe_eq_or_eq_neg, cos_eq_iff_coe_eq_or_eq_neg.mp, eq_false, eq_neg_iff_add_eq_zero, leftRel_apply, mul_assoc, mul_eq_zero, ne_of_gt, neg_one_mul, or_false, pi_pos, sin_eq_iff_coe_eq_or_add_eq_pi, sin_eq_iff_coe_eq_or_add_eq_pi.mp
 -/
@@ -2815,7 +2857,7 @@ theorem abs_toReal_neg_coe_eq_self_iff
   refine ⟨fun h => h ▸ ⟨abs_nonneg _, abs_toReal_le_pi _⟩, fun h => ?_⟩
   by_cases hnegpi : θ = π; · simp [hnegpi, Real.pi_pos.le]
   rw [← coe_neg]; rw [toReal_coe_eq_self_iff.2
-      ⟨neg_lt_neg (lt_of_le_of_ne h.2 hnegpi)]; rw [(neg_nonpos.2 h.1).trans Real.pi_pos.le⟩]; rw [abs_neg]; rw [abs_eq
+      ⟨neg_lt_neg (lt_of_le_of_ne h.2 hnegpi)]; rw [(neg_nonpos.2 h.1).trans Real.pi_pos.le⟩]; rw [abs_neg]; rw [abs_eq_self.2 h.1]
 
 中文:
 定理 abs_to实数_neg_coe_eq_self_iff
@@ -2825,7 +2867,7 @@ theorem abs_toReal_neg_coe_eq_self_iff
   refine ⟨fun h => h ▸ ⟨abs_nonneg _, abs_toReal_le_pi _⟩, fun h => ?_⟩
   by_cases hnegpi : θ = π; · simp [hnegpi, Real.pi_pos.le]
   rw [← coe_neg]; rw [toReal_coe_eq_self_iff.2
-      ⟨neg_lt_neg (lt_of_le_of_ne h.2 hnegpi)]; rw [(neg_nonpos.2 h.1).trans Real.pi_pos.le⟩]; rw [abs_neg]; rw [abs_eq
+      ⟨neg_lt_neg (lt_of_le_of_ne h.2 hnegpi)]; rw [(neg_nonpos.2 h.1).trans Real.pi_pos.le⟩]; rw [abs_neg]; rw [abs_eq_self.2 h.1]
 
 Depends on / 依赖: Real.pi_pos.le, abs_eq_self, abs_neg, abs_nonneg, abs_toReal_le_pi, coe_neg, hnegpi, lt_of_le_of_ne, neg_lt_neg, neg_nonpos, pi_pos, toReal_coe_eq_self_iff
 -/
@@ -2932,7 +2974,7 @@ theorem toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff
   proof: by
   rw [← sub_zero (θ : Angle)]; rw [← zsmul_zero k]; rw [← coe_two_pi]; rw [← coe_zsmul]; rw [← coe_sub]; rw [zsmul_eq_mul]; rw [←
     mul_assoc]; rw [mul_comm (k : Real)]; rw [toReal_coe_eq_self_iff]; rw [Set.mem_Ioc]
-  exact ⟨fun h => ⟨by linarith, by linarith⟩, fun h => ⟨by linarith, by linarit
+  exact ⟨fun h => ⟨by linarith, by linarith⟩, fun h => ⟨by linarith, by linarith⟩⟩
 
 中文:
 定理 to实数_coe_eq_self_sub_two_mul_int_mul_pi_iff
@@ -2940,7 +2982,7 @@ theorem toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff
   证明: by
   rw [← sub_zero (θ : Angle)]; rw [← zsmul_zero k]; rw [← coe_two_pi]; rw [← coe_zsmul]; rw [← coe_sub]; rw [zsmul_eq_mul]; rw [←
     mul_assoc]; rw [mul_comm (k : Real)]; rw [toReal_coe_eq_self_iff]; rw [Set.mem_Ioc]
-  exact ⟨fun h => ⟨by linarith, by linarith⟩, fun h => ⟨by linarith, by linarit
+  exact ⟨fun h => ⟨by linarith, by linarith⟩, fun h => ⟨by linarith, by linarith⟩⟩
 
 Depends on / 依赖: Set.mem_Ioc, coe_sub, coe_two_pi, coe_zsmul, mem_Ioc, mul_assoc, mul_comm, sub_zero, toReal_coe_eq_self_iff, zsmul_eq_mul, zsmul_zero
 -/
@@ -3613,7 +3655,9 @@ theorem tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi
   induction ψ using Real.Angle.induction_on
   rw [← smul_add]; rw [← coe_add]; rw [← coe_nsmul]; rw [two_nsmul]; rw [← two_mul]; rw [angle_eq_iff_two_pi_dvd_sub] at h
   rcases h with ⟨k, h⟩
-  rw [sub_eq_iff_eq_add]; rw [← mul_inv_cancel_left₀ two_ne_zer
+  rw [sub_eq_iff_eq_add]; rw [← mul_inv_cancel_left₀ two_ne_zero π]; rw [mul_assoc]; rw [← mul_add]; rw [mul_right_inj' (two_ne_zero' Real)]; rw [← eq_sub_iff_add_eq']; rw [mul_inv_cancel_left₀ two_ne_zero π]; rw [inv_mul_eq_div]; rw [mul_comm] at h
+  rw [tan_coe]; rw [tan_coe]; rw [← tan_pi_div_two_sub]; rw [h]; rw [add_sub_assoc]; rw [add_comm]
+  exact Real.tan_periodic.int_mul _ _
 
 中文:
 定理 tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi
@@ -3623,7 +3667,9 @@ theorem tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi
   induction ψ using Real.Angle.induction_on
   rw [← smul_add]; rw [← coe_add]; rw [← coe_nsmul]; rw [two_nsmul]; rw [← two_mul]; rw [angle_eq_iff_two_pi_dvd_sub] at h
   rcases h with ⟨k, h⟩
-  rw [sub_eq_iff_eq_add]; rw [← mul_inv_cancel_left₀ two_ne_zer
+  rw [sub_eq_iff_eq_add]; rw [← mul_inv_cancel_left₀ two_ne_zero π]; rw [mul_assoc]; rw [← mul_add]; rw [mul_right_inj' (two_ne_zero' Real)]; rw [← eq_sub_iff_add_eq']; rw [mul_inv_cancel_left₀ two_ne_zero π]; rw [inv_mul_eq_div]; rw [mul_comm] at h
+  rw [tan_coe]; rw [tan_coe]; rw [← tan_pi_div_two_sub]; rw [h]; rw [add_sub_assoc]; rw [add_comm]
+  exact Real.tan_periodic.int_mul _ _
 
 Depends on / 依赖: Real.Angle.induction_on, angle_eq_iff_two_pi_dvd_sub, coe_add, coe_nsmul, eq_sub_iff_add_eq, induction_on, inv_mul_eq_div, mul_add, mul_assoc, mul_comm, mul_right_inj, smul_add, sub_eq_iff_eq_add, tan_c, tan_coe, two_mul, two_ne_zero, two_nsmul
 -/
@@ -4480,7 +4526,12 @@ lemma abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq
   rw [← coe_toReal θ]; rw [← coe_toReal ψ]; rw [← coe_add] at h
   suffices |θ.toReal + ψ.toReal| = π by grind [toReal_neg_iff_sign_neg, abs_add_eq_add_abs_iff]
   rw [abs_eq pi_nonneg]
-  rcases angle_eq_iff_t
+  rcases angle_eq_iff_two_pi_dvd_sub.mp h with ⟨k, hk⟩
+  rw [sub_eq_iff_eq_add] at hk
+  have : k in Finset.Icc (-1) 0 :=
+IsStrictOrderedRing.int_mem_Icc_of_mul_mem_Ioo two_pi_pos by grind [toReal_mem_Ioc]
+  fin_cases this
+  all_goals simp at hk; grind
 
 中文:
 引理 abs_to实数_add_abs_to实数_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq
@@ -4491,7 +4542,12 @@ lemma abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq
   rw [← coe_toReal θ]; rw [← coe_toReal ψ]; rw [← coe_add] at h
   suffices |θ.toReal + ψ.toReal| = π by grind [toReal_neg_iff_sign_neg, abs_add_eq_add_abs_iff]
   rw [abs_eq pi_nonneg]
-  rcases angle_eq_iff_t
+  rcases angle_eq_iff_two_pi_dvd_sub.mp h with ⟨k, hk⟩
+  rw [sub_eq_iff_eq_add] at hk
+  have : k in Finset.Icc (-1) 0 :=
+IsStrictOrderedRing.int_mem_Icc_of_mul_mem_Ioo two_pi_pos by grind [toReal_mem_Ioc]
+  fin_cases this
+  all_goals simp at hk; grind
 
 Depends on / 依赖: Finset, Finset.Icc, IsStrictOrderedRing, IsStrictOrderedRing.int_mem_Icc_of_mul_mem_Ioo, abs_add_eq_add_abs_iff, abs_eq, add_eq_zero_iff_eq_neg, add_eq_zero_iff_eq_neg.mp, all_goals, angle_eq_iff_two_pi_dvd_sub, angle_eq_iff_two_pi_dvd_sub.mp, coe_add, coe_toReal, fin_cases, int_mem_Icc_of_mul_mem_Ioo, pi_nonneg, sub_eq_iff_eq_add, toReal, toReal_mem_Ioc, toReal_neg_iff_sign_neg
 -/
@@ -4597,7 +4653,8 @@ lemma toReal_add_eq_toReal_add_toReal
   · obtain (h | h | h) := ψ.sign.trichotomy <;> obtain (h | h | h) := θ.sign.trichotomy
     all_goals grind [add_comm, toReal_add_of_sign_pos_sign_neg, sign_eq_zero_iff]
   · rw [← neg_neg θ.sign, ← sign_neg] at hs
-    have := toReal_add_of_sign_eq_neg_sign (.inr <| by sim
+    have := toReal_add_of_sign_eq_neg_sign (.inr <| by simpa [neg_eq_iff_eq_neg]) hs.symm
+    simpa [toReal_neg_eq_neg_toReal_iff.mpr, hθ, ← sub_eq_add_neg, eq_sub_iff_add_eq', eq_comm]
 
 中文:
 引理 to实数_add_eq_to实数_add_to实数
@@ -4607,7 +4664,8 @@ lemma toReal_add_eq_toReal_add_toReal
   · obtain (h | h | h) := ψ.sign.trichotomy <;> obtain (h | h | h) := θ.sign.trichotomy
     all_goals grind [add_comm, toReal_add_of_sign_pos_sign_neg, sign_eq_zero_iff]
   · rw [← neg_neg θ.sign, ← sign_neg] at hs
-    have := toReal_add_of_sign_eq_neg_sign (.inr <| by sim
+    have := toReal_add_of_sign_eq_neg_sign (.inr <| by simpa [neg_eq_iff_eq_neg]) hs.symm
+    simpa [toReal_neg_eq_neg_toReal_iff.mpr, hθ, ← sub_eq_add_neg, eq_sub_iff_add_eq', eq_comm]
 
 Depends on / 依赖: add_comm, all_goals, eq_comm, eq_sub_iff_add_eq, hs.symm, neg_eq_iff_eq_neg, neg_neg, sign.trichotomy, sign_eq_zero_iff, sign_neg, sub_eq_add_neg, toReal_add_of_sign_eq_neg_sign, toReal_add_of_sign_pos_sign_neg, toReal_neg_eq_neg_toReal_iff, toReal_neg_eq_neg_toReal_iff.mpr, trichotomy
 -/
@@ -4632,7 +4690,14 @@ lemma abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux
   obtain ⟨k, hk⟩ := angle_eq_iff_two_pi_dvd_sub.mp this
   obtain (h | h) : (θ + ψ).toReal <= 0 ∨ θ + ψ = π := by
     have := (θ + ψ).sign.trichotomy
-    grind [sign_eq_zero_iff, t
+    grind [sign_eq_zero_iff, toReal_eq_zero_iff, toReal_neg_iff_sign_neg]
+· obtain rfl : k = -1 := IsStrictOrderedRing.int_eq_of_mul_mem_Ioo two_pi_pos by
+      grind [toReal_mem_Ioc]
+    grind [abs_of_nonpos]
+  · simp_all only [sign_coe_pi, ne_eq, zero_ne_one, not_false_eq_true, toReal_pi, coe_add,
+      coe_toReal, pi_pos, abs_of_pos]
+    obtain rfl : k = 0 := IsStrictOrderedRing.int_eq_of_mul_mem_Ioo two_pi_pos (by grind)
+    grind
 
 中文:
 引理 abs_to实数_add_eq_two_pi_sub_abs_to实数_add_abs_to实数_aux
@@ -4643,7 +4708,14 @@ lemma abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux
   obtain ⟨k, hk⟩ := angle_eq_iff_two_pi_dvd_sub.mp this
   obtain (h | h) : (θ + ψ).toReal <= 0 ∨ θ + ψ = π := by
     have := (θ + ψ).sign.trichotomy
-    grind [sign_eq_zero_iff, t
+    grind [sign_eq_zero_iff, toReal_eq_zero_iff, toReal_neg_iff_sign_neg]
+· obtain rfl : k = -1 := IsStrictOrderedRing.int_eq_of_mul_mem_Ioo two_pi_pos by
+      grind [toReal_mem_Ioc]
+    grind [abs_of_nonpos]
+  · simp_all only [sign_coe_pi, ne_eq, zero_ne_one, not_false_eq_true, toReal_pi, coe_add,
+      coe_toReal, pi_pos, abs_of_pos]
+    obtain rfl : k = 0 := IsStrictOrderedRing.int_eq_of_mul_mem_Ioo two_pi_pos (by grind)
+    grind
 -/
 private lemma abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux {θ ψ : Angle}
     (hθs : θ.sign = 1) (hψs : ψ.sign = 1)
@@ -4673,7 +4745,10 @@ lemma abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal
   · obtain ⟨hθ', hψ'⟩ : (-θ).sign = 1 ∧ (-ψ).sign = 1 := by grind [sign_neg, neg_neg]
     have hsa' : (-θ + -ψ).sign != 1 := by
       rwa [← hθ', ne_comm, ← neg_add, sign_neg, sign_neg, neg_injective.ne_iff]
-    convert! abs_toReal_add_eq_two_pi_sub_abs_toR
+    convert! abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux hθ' hψ' hsa' using 1
+    all_goals simp [-neg_add_rev, ← neg_add, abs_toReal_neg]
+  · grind [sign_eq_zero_iff, coe_pi_add_coe_pi]
+  · exact abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux h (hs ▸ h) (h ▸ hsa.symm)
 
 中文:
 引理 abs_to实数_add_eq_two_pi_sub_abs_to实数_add_abs_to实数
@@ -4683,7 +4758,10 @@ lemma abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal
   · obtain ⟨hθ', hψ'⟩ : (-θ).sign = 1 ∧ (-ψ).sign = 1 := by grind [sign_neg, neg_neg]
     have hsa' : (-θ + -ψ).sign != 1 := by
       rwa [← hθ', ne_comm, ← neg_add, sign_neg, sign_neg, neg_injective.ne_iff]
-    convert! abs_toReal_add_eq_two_pi_sub_abs_toR
+    convert! abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux hθ' hψ' hsa' using 1
+    all_goals simp [-neg_add_rev, ← neg_add, abs_toReal_neg]
+  · grind [sign_eq_zero_iff, coe_pi_add_coe_pi]
+  · exact abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux h (hs ▸ h) (h ▸ hsa.symm)
 
 Depends on / 依赖: abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux, abs_toReal_neg, all_goals, coe_pi_add_coe_pi, convert, ne_comm, ne_iff, neg_add, neg_add_rev, neg_injective, neg_injective.ne_iff, neg_neg, sign.trichotomy, sign_eq_zero_iff, sign_neg, trichotomy
 -/

@@ -218,7 +218,10 @@ lemma CountableSupClosed.singleton
       rintro rfl
       obtain ⟨z, hzs⟩ := hs_ne
       rwa [hs_subset z hzs] at hzs
-    simp_all only [subset_refl, singleton_nonempty, countable_singleton, mem_si
+    simp_all only [subset_refl, singleton_nonempty, countable_singleton, mem_singleton_iff]
+    exact IsLUB.unique hy isLUB_singleton
+
+@[to_dual (attr := simp)]
 
 中文:
 引理 余untableSupClosed.singleton
@@ -231,7 +234,10 @@ lemma CountableSupClosed.singleton
       rintro rfl
       obtain ⟨z, hzs⟩ := hs_ne
       rwa [hs_subset z hzs] at hzs
-    simp_all only [subset_refl, singleton_nonempty, countable_singleton, mem_si
+    simp_all only [subset_refl, singleton_nonempty, countable_singleton, mem_singleton_iff]
+    exact IsLUB.unique hy isLUB_singleton
+
+@[to_dual (attr := simp)]
 -/
 protected lemma CountableSupClosed.singleton [PartialOrder α] {x : α} :
     CountableSupClosed ({x} : Set α) where
@@ -536,7 +542,18 @@ definition countableSupClosure
   (fun s => by
     constructor
     intro A hA hA_ne hAc x hx
-    choose B hB hB_ne hBc hB_lub using 
+    choose B hB hB_ne hBc hB_lub using hA
+    refine ⟨⋃ a : A, B a.2, by simp; grind, ?_, ?_, ?_⟩
+    · obtain ⟨a, ha⟩ := hA_ne
+      simp
+      grind
+    · have : Countable A := Set.countable_coe_iff.mpr hAc
+      exact Set.countable_iUnion fun a => hBc a.2
+    · have : Nonempty A := Set.nonempty_coe_sort.mpr hA_ne
+      rw [← isLUB_iUnion_iff_of_isLUB (u := fun a : A => a.1) (fun a => hB_lub a.2)]
+      simpa)
+  (fun s t (hst : s subseteq t) ht a ⟨A, hAs, hA_ne, hA_c, hA_lub⟩ =>
+    ht.isLUB_mem A (hAs.trans hst) hA_ne hA_c _ hA_lub)
 
 中文:
 定义 countableSupClosure
@@ -548,7 +565,18 @@ definition countableSupClosure
   (fun s => by
     constructor
     intro A hA hA_ne hAc x hx
-    choose B hB hB_ne hBc hB_lub using 
+    choose B hB hB_ne hBc hB_lub using hA
+    refine ⟨⋃ a : A, B a.2, by simp; grind, ?_, ?_, ?_⟩
+    · obtain ⟨a, ha⟩ := hA_ne
+      simp
+      grind
+    · have : Countable A := Set.countable_coe_iff.mpr hAc
+      exact Set.countable_iUnion fun a => hBc a.2
+    · have : Nonempty A := Set.nonempty_coe_sort.mpr hA_ne
+      rw [← isLUB_iUnion_iff_of_isLUB (u := fun a : A => a.1) (fun a => hB_lub a.2)]
+      simpa)
+  (fun s t (hst : s subseteq t) ht a ⟨A, hAs, hA_ne, hA_c, hA_lub⟩ =>
+    ht.isLUB_mem A (hAs.trans hst) hA_ne hA_c _ hA_lub)
 
 Depends on / 依赖: ofPred
 -/
@@ -710,7 +738,10 @@ lemma countableSupClosure_eq_sInter
     simp only [Set.subset_sInter_iff, Set.mem_ofPred_eq, and_imp, Set.mem_sInter]
     intro t ht ht_ne ht_c x hx t' hst' ht'
     exact ht'.isLUB_mem t (ht t' hst' ht') ht_ne ht_c x hx
-  refine le_anti
+  refine le_antisymm (countableSupClosure_min (by grind) (by grind)) (Set.sInter_subset_of_mem ?_)
+  exact ⟨subset_countableSupClosure, countableSupClosed_countableSupClosure⟩
+
+@[to_dual]
 
 中文:
 引理 countableSupClosure_eq_s整数er
@@ -721,7 +752,10 @@ lemma countableSupClosure_eq_sInter
     simp only [Set.subset_sInter_iff, Set.mem_ofPred_eq, and_imp, Set.mem_sInter]
     intro t ht ht_ne ht_c x hx t' hst' ht'
     exact ht'.isLUB_mem t (ht t' hst' ht') ht_ne ht_c x hx
-  refine le_anti
+  refine le_antisymm (countableSupClosure_min (by grind) (by grind)) (Set.sInter_subset_of_mem ?_)
+  exact ⟨subset_countableSupClosure, countableSupClosed_countableSupClosure⟩
+
+@[to_dual]
 
 Depends on / 依赖: CountableSupClosed, Set.mem_ofPred_eq, Set.mem_sInter, Set.sInter_subset_of_mem, Set.subset_sInter_iff, and_imp, countableSupClosed_countableSupClosure, countableSupClosure_min, ht_c, ht_ne, isLUB_mem, le_antisymm, mem_ofPred_eq, mem_sInter, sInter_subset_of_mem, subset_countableSupClosure, subset_sInter_iff, subseteq
 -/
@@ -836,7 +870,10 @@ lemma countableSupClosure_prod
     countableSupClosed_countableSupClosure.prod countableSupClosed_countableSupClosure) <| by
       rintro ⟨a, b⟩ ⟨ha, hb⟩
       simp only [mem_countableSupClosure_iff] at ha hb ⊢
-      obtain 
+      obtain ⟨u, hu, hu_ne, hu_c, hu_lub⟩ := ha
+      obtain ⟨v, hv, hv_ne, hv_c, hv_lub⟩ := hb
+      refine ⟨u ×ˢ v, by grind, by simp [hu_ne, hv_ne], hu_c.prod hv_c, ?_⟩
+      exact IsLUB.prod hu_ne hv_ne hu_lub hv_lub
 
 中文:
 引理 countableSupClosure_prod
@@ -846,7 +883,10 @@ lemma countableSupClosure_prod
     countableSupClosed_countableSupClosure.prod countableSupClosed_countableSupClosure) <| by
       rintro ⟨a, b⟩ ⟨ha, hb⟩
       simp only [mem_countableSupClosure_iff] at ha hb ⊢
-      obtain 
+      obtain ⟨u, hu, hu_ne, hu_c, hu_lub⟩ := ha
+      obtain ⟨v, hv, hv_ne, hv_c, hv_lub⟩ := hb
+      refine ⟨u ×ˢ v, by grind, by simp [hu_ne, hv_ne], hu_c.prod hv_c, ?_⟩
+      exact IsLUB.prod hu_ne hv_ne hu_lub hv_lub
 -/
 @[to_dual (attr := simp)] lemma countableSupClosure_prod [Preorder β]
     (s : Set α) (t : Set β) :
@@ -875,7 +915,12 @@ lemma mem_countableSupClosure_iff_iSup
   have h_csc : CountableSupClosed {a | exists (t : Nat -> α), (forall n, t n in s) ∧ ⨆ n, t n = a} := by
     refine .of_iSup_mem fun A hA => ?_
     choose B hB hB_eq using hA
-    ref
+    refine ⟨fun n => B (Nat.unpair n).1 (Nat.unpair n).2, fun _ => hB _ _, ?_⟩
+    simp [iSup_unpair, ← hB_eq]
+  refine le_antisymm (countableSupClosure_min ?_ h_csc) ?_
+  · exact fun a ha => ⟨fun _ => a, by simp [ha]⟩
+  · rintro _ ⟨u, hus, rfl⟩
+    exact countableSupClosed_countableSupClosure.iSup_mem fun n => subset_countableSupClosure (hus n)
 
 中文:
 引理 mem_countableSupClosure_iff_iSup
@@ -885,7 +930,12 @@ lemma mem_countableSupClosure_iff_iSup
   have h_csc : CountableSupClosed {a | exists (t : Nat -> α), (forall n, t n in s) ∧ ⨆ n, t n = a} := by
     refine .of_iSup_mem fun A hA => ?_
     choose B hB hB_eq using hA
-    ref
+    refine ⟨fun n => B (Nat.unpair n).1 (Nat.unpair n).2, fun _ => hB _ _, ?_⟩
+    simp [iSup_unpair, ← hB_eq]
+  refine le_antisymm (countableSupClosure_min ?_ h_csc) ?_
+  · exact fun a ha => ⟨fun _ => a, by simp [ha]⟩
+  · rintro _ ⟨u, hus, rfl⟩
+    exact countableSupClosed_countableSupClosure.iSup_mem fun n => subset_countableSupClosure (hus n)
 
 Depends on / 依赖: CountableSupClosed, Nat.unpair, countableSupClosure, countableSupClosure_min, hB_eq, h_csc, iSup_unpair, le_antisymm, of_iSup_mem, unpair
 -/
@@ -1028,7 +1078,8 @@ lemma SupClosed.countableInfClosure
   rw [iInf_sup_iInf]
   refine ⟨fun n => t (Nat.unpair n).1 ⊔ u (Nat.unpair n).2, fun n => ?_, ?_⟩
   · simp only
-    exact hs (ht (Nat.unpair n).1) (hu (Nat.unpai
+    exact hs (ht (Nat.unpair n).1) (hu (Nat.unpair n).2)
+  · rw [iInf_unpair (f := (fun n m => t n ⊔ u m)), iInf_prod']
 
 中文:
 引理 SupClosed.countableInfClosure
@@ -1041,7 +1092,8 @@ lemma SupClosed.countableInfClosure
   rw [iInf_sup_iInf]
   refine ⟨fun n => t (Nat.unpair n).1 ⊔ u (Nat.unpair n).2, fun n => ?_, ?_⟩
   · simp only
-    exact hs (ht (Nat.unpair n).1) (hu (Nat.unpai
+    exact hs (ht (Nat.unpair n).1) (hu (Nat.unpair n).2)
+  · rw [iInf_unpair (f := (fun n m => t n ⊔ u m)), iInf_prod']
 -/
 protected lemma SupClosed.countableInfClosure [Order.Coframe α] (hs : SupClosed s) :
     SupClosed (countableInfClosure s) := by

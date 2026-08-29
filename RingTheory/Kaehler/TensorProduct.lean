@@ -286,7 +286,7 @@ instance [Algebra.IsPushout
   change (Algebra.pushoutDesc B (Algebra.lsmul R (A := S) S (S otimes[R] Ω[A⁄R]))
     (Algebra.lsmul R (A := A) _ _) (LinearMap.ext <| smul_comm · ·)
       (algebraMap A B r)) • x = r • x
-  simp only [Algebra.pushoutDesc_right, Module.End.smul_
+  simp only [Algebra.pushoutDesc_right, Module.End.smul_def, Algebra.lsmul_coe]
 
 中文:
 实例 [代数.是推出
@@ -297,7 +297,7 @@ instance [Algebra.IsPushout
   change (Algebra.pushoutDesc B (Algebra.lsmul R (A := S) S (S otimes[R] Ω[A⁄R]))
     (Algebra.lsmul R (A := A) _ _) (LinearMap.ext <| smul_comm · ·)
       (algebraMap A B r)) • x = r • x
-  simp only [Algebra.pushoutDesc_right, Module.End.smul_
+  simp only [Algebra.pushoutDesc_right, Module.End.smul_def, Algebra.lsmul_coe]
 
 Depends on / 依赖: Algebra, Algebra.lsmul, Algebra.lsmul_coe, Algebra.pushoutDesc, Algebra.pushoutDesc_right, IsScalarTower, IsScalarTower.of_algebraMap_smul, LinearMap, LinearMap.ext, Module, Module.End.smul_def, algebraMap, lsmul_coe, of_algebraMap_smul, otimes, pushoutDesc, pushoutDesc_right, smul_comm, smul_def
 -/
@@ -322,7 +322,7 @@ instance [Algebra.IsPushout
   change (Algebra.pushoutDesc B (Algebra.lsmul R (A := S) S (S otimes[R] Ω[A⁄R]))
     (Algebra.lsmul R (A := A) _ _) (LinearMap.ext <| smul_comm · ·)
       (algebraMap S B r)) • x = r • x
-  simp only [Algebra.pushoutDesc_left, Module.End.smul_d
+  simp only [Algebra.pushoutDesc_left, Module.End.smul_def, Algebra.lsmul_coe]
 
 中文:
 实例 [代数.是推出
@@ -333,7 +333,7 @@ instance [Algebra.IsPushout
   change (Algebra.pushoutDesc B (Algebra.lsmul R (A := S) S (S otimes[R] Ω[A⁄R]))
     (Algebra.lsmul R (A := A) _ _) (LinearMap.ext <| smul_comm · ·)
       (algebraMap S B r)) • x = r • x
-  simp only [Algebra.pushoutDesc_left, Module.End.smul_d
+  simp only [Algebra.pushoutDesc_left, Module.End.smul_def, Algebra.lsmul_coe]
 
 Depends on / 依赖: Algebra, Algebra.lsmul, Algebra.lsmul_coe, Algebra.pushoutDesc, Algebra.pushoutDesc_left, IsScalarTower, IsScalarTower.of_algebraMap_smul, LinearMap, LinearMap.ext, Module, Module.End.smul_def, algebraMap, lsmul_coe, of_algebraMap_smul, otimes, pushoutDesc, pushoutDesc_left, smul_comm, smul_def
 -/
@@ -361,7 +361,7 @@ lemma map_liftBaseChange_smul
     induction x
     · simp only [smul_zero, map_zero]
     · simp [smul_comm]
- 
+    · simp only [map_add, smul_add, *]
 
 中文:
 引理 map_liftBaseChange_smul
@@ -375,7 +375,7 @@ lemma map_liftBaseChange_smul
     induction x
     · simp only [smul_zero, map_zero]
     · simp [smul_comm]
- 
+    · simp only [map_add, smul_add, *]
 
 Depends on / 依赖: add_smul, inductionOn, map_add, map_smul, map_zero, smul_add, smul_assoc, smul_comm, smul_zero, zero_smul
 -/
@@ -408,7 +408,24 @@ definition derivationTensorProduct
     dsimp
     rw [Derivation.map_one_eq_zero]; rw [TensorProduct.tmul_zero]
   leibniz' a b := by
-    induction a using h.out.indu
+    induction a using h.out.inductionOn with
+    | zero => rw [map_zero, zero_smul, smul_zero, zero_add, zero_mul, map_zero]
+    | smul x y e =>
+      rw [smul_mul_assoc]; rw [map_smul]; rw [e]; rw [map_smul]; rw [smul_add]; rw [smul_comm x b]; rw [smul_assoc]
+    | add b₁ b₂ e₁ e₂ => simp only [add_mul, add_smul, map_add, e₁, e₂, smul_add, add_add_add_comm]
+    | tmul z =>
+      dsimp
+      induction b using h.out.inductionOn with
+      | zero => rw [map_zero, zero_smul, smul_zero, zero_add, mul_zero, map_zero]
+      | tmul =>
+        simp only [AlgHom.toLinearMap_apply, IsScalarTower.coe_toAlgHom',
+          algebraMap_smul, ← map_mul]
+        rw [← IsScalarTower.toAlgHom_apply R]; rw [← AlgHom.toLinearMap_apply]; rw [h.out.lift_eq]; rw [← IsScalarTower.toAlgHom_apply R]; rw [← AlgHom.toLinearMap_apply]; rw [h.out.lift_eq]; rw [← IsScalarTower.toAlgHom_apply R]; rw [← AlgHom.toLinearMap_apply]; rw [h.out.lift_eq]
+        simp only [LinearMap.coe_comp, Derivation.coeFn_coe, Function.comp_apply,
+          Derivation.leibniz, mk_apply, mulActionBaseChange_smul_tmul, TensorProduct.tmul_add]
+      | smul _ _ e =>
+        rw [mul_comm]; rw [smul_mul_assoc]; rw [map_smul]; rw [mul_comm]; rw [e]; rw [map_smul]; rw [smul_add]; rw [smul_comm]; rw [smul_assoc]
+      | add _ _ e₁ e₂ => simp only [mul_add, add_smul, map_add, e₁, e₂, smul_add, add_add_add_comm]
 
 中文:
 定义 derivationTensorProduct
@@ -420,7 +437,24 @@ definition derivationTensorProduct
     dsimp
     rw [Derivation.map_one_eq_zero]; rw [TensorProduct.tmul_zero]
   leibniz' a b := by
-    induction a using h.out.indu
+    induction a using h.out.inductionOn with
+    | zero => rw [map_zero, zero_smul, smul_zero, zero_add, zero_mul, map_zero]
+    | smul x y e =>
+      rw [smul_mul_assoc]; rw [map_smul]; rw [e]; rw [map_smul]; rw [smul_add]; rw [smul_comm x b]; rw [smul_assoc]
+    | add b₁ b₂ e₁ e₂ => simp only [add_mul, add_smul, map_add, e₁, e₂, smul_add, add_add_add_comm]
+    | tmul z =>
+      dsimp
+      induction b using h.out.inductionOn with
+      | zero => rw [map_zero, zero_smul, smul_zero, zero_add, mul_zero, map_zero]
+      | tmul =>
+        simp only [AlgHom.toLinearMap_apply, IsScalarTower.coe_toAlgHom',
+          algebraMap_smul, ← map_mul]
+        rw [← IsScalarTower.toAlgHom_apply R]; rw [← AlgHom.toLinearMap_apply]; rw [h.out.lift_eq]; rw [← IsScalarTower.toAlgHom_apply R]; rw [← AlgHom.toLinearMap_apply]; rw [h.out.lift_eq]; rw [← IsScalarTower.toAlgHom_apply R]; rw [← AlgHom.toLinearMap_apply]; rw [h.out.lift_eq]
+        simp only [LinearMap.coe_comp, Derivation.coeFn_coe, Function.comp_apply,
+          Derivation.leibniz, mk_apply, mulActionBaseChange_smul_tmul, TensorProduct.tmul_add]
+      | smul _ _ e =>
+        rw [mul_comm]; rw [smul_mul_assoc]; rw [map_smul]; rw [mul_comm]; rw [e]; rw [map_smul]; rw [smul_add]; rw [smul_comm]; rw [smul_assoc]
+      | add _ _ e₁ e₂ => simp only [mul_add, add_smul, map_add, e₁, e₂, smul_add, add_add_add_comm]
 
 Depends on / 依赖: TensorProduct, TensorProduct.mk, h.out.lift, toLinearMap
 -/
@@ -485,7 +519,13 @@ lemma tensorKaehlerEquiv_left_inv
   obtain ⟨y, rfl⟩ := tensorProductTo_surjective _ _ y
   induction y
   · simp only [map_zero, TensorProduct.tmul_zero]
-  · simp only [LinearMap.restrictScalars_comp, Derivation.tensorProductTo_tmul, LinearMap.
+  · simp only [LinearMap.restrictScalars_comp, Derivation.tensorProductTo_tmul, LinearMap.coe_comp,
+      LinearMap.coe_restrictScalars, Function.comp_apply, LinearMap.liftBaseChange_tmul, map_smul,
+      map_D, LinearMap.map_smul_of_tower, Derivation.liftKaehlerDifferential_comp_D,
+      LinearMap.id_coe, id_eq, derivationTensorProduct_algebraMap]
+    rw [smul_comm]; rw [TensorProduct.smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
+    rfl
+  · simp only [map_add, TensorProduct.tmul_add, *]
 
 中文:
 引理 tensorKaehlerEquiv_left_inv
@@ -497,7 +537,13 @@ lemma tensorKaehlerEquiv_left_inv
   obtain ⟨y, rfl⟩ := tensorProductTo_surjective _ _ y
   induction y
   · simp only [map_zero, TensorProduct.tmul_zero]
-  · simp only [LinearMap.restrictScalars_comp, Derivation.tensorProductTo_tmul, LinearMap.
+  · simp only [LinearMap.restrictScalars_comp, Derivation.tensorProductTo_tmul, LinearMap.coe_comp,
+      LinearMap.coe_restrictScalars, Function.comp_apply, LinearMap.liftBaseChange_tmul, map_smul,
+      map_D, LinearMap.map_smul_of_tower, Derivation.liftKaehlerDifferential_comp_D,
+      LinearMap.id_coe, id_eq, derivationTensorProduct_algebraMap]
+    rw [smul_comm]; rw [TensorProduct.smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
+    rfl
+  · simp only [map_add, TensorProduct.tmul_add, *]
 
 Depends on / 依赖: Derivation, Derivation.liftKaehlerDifferential_comp_D, Derivation.tensorProductTo_tmul, Function, Function.comp_apply, LinearMap, LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearMap.id_coe, LinearMap.liftBaseChange_tmul, LinearMap.map_smul_of_tower, LinearMap.restrictScalars_comp, LinearMap.restrictScalars_injective, TensorProduct, TensorProduct.ext, TensorProduct.tmul_zero, coe_comp, coe_restrictScalars, comp_apply, derivat
 -/
@@ -534,7 +580,22 @@ definition tensorKaehlerEquivBase
     obtain ⟨x, rfl⟩ := tensorProductTo_surjective _ _ x
     dsimp
     induction x with
+    | zero => simp
+    | add x y e₁ e₂ => simp only [map_add, e₁, e₂]
+    | tmul x y =>
+      -- We use the specialized version of `map_smul` here for performance.
+      simp only [Derivation.tensorProductTo_tmul, LinearMap.map_smul,
+        Derivation.liftKaehlerDifferential_comp_D, map_liftBaseChange_smul]
+      induction y using h.1.inductionOn
+      · simp only [map_zero, smul_zero]
+      · simp only [AlgHom.toLinearMap_apply, IsScalarTower.coe_toAlgHom',
+          derivationTensorProduct_algebraMap, LinearMap.liftBaseChange_tmul,
+          LinearMap.coe_restrictScalars, map_D, one_smul]
+      · -- We use the specialized version of `map_smul` here for performance.
+        simp only [Derivation.map_smul, LinearMap.map_smul, *, smul_comm x]
+      · simp only [map_add, smul_add, *]
 
+@[simp]
 
 中文:
 定义 tensorKaehlerEquivBase
@@ -546,7 +607,22 @@ definition tensorKaehlerEquivBase
     obtain ⟨x, rfl⟩ := tensorProductTo_surjective _ _ x
     dsimp
     induction x with
+    | zero => simp
+    | add x y e₁ e₂ => simp only [map_add, e₁, e₂]
+    | tmul x y =>
+      -- We use the specialized version of `map_smul` here for performance.
+      simp only [Derivation.tensorProductTo_tmul, LinearMap.map_smul,
+        Derivation.liftKaehlerDifferential_comp_D, map_liftBaseChange_smul]
+      induction y using h.1.inductionOn
+      · simp only [map_zero, smul_zero]
+      · simp only [AlgHom.toLinearMap_apply, IsScalarTower.coe_toAlgHom',
+          derivationTensorProduct_algebraMap, LinearMap.liftBaseChange_tmul,
+          LinearMap.coe_restrictScalars, map_D, one_smul]
+      · -- We use the specialized version of `map_smul` here for performance.
+        simp only [Derivation.map_smul, LinearMap.map_smul, *, smul_comm x]
+      · simp only [map_add, smul_add, *]
 
+@[simp]
 
 Depends on / 依赖: liftBaseChange, restrictScalars
 -/
@@ -612,7 +688,7 @@ lemma isBaseChange
       (IsBaseChange.ofEquiv (tensorKaehlerEquivBase R S A B))
   refine LinearMap.ext fun x => ?_
   simp only [LinearMap.coe_restrictScalars, LinearMap.coe_comp, LinearEquiv.coe_coe,
-    Function.comp_apply, mk_apply, tensorKaehlerEquivBa
+    Function.comp_apply, mk_apply, tensorKaehlerEquivBase_tmul, one_smul]
 
 中文:
 引理 isBaseChange
@@ -623,7 +699,7 @@ lemma isBaseChange
       (IsBaseChange.ofEquiv (tensorKaehlerEquivBase R S A B))
   refine LinearMap.ext fun x => ?_
   simp only [LinearMap.coe_restrictScalars, LinearMap.coe_comp, LinearEquiv.coe_coe,
-    Function.comp_apply, mk_apply, tensorKaehlerEquivBa
+    Function.comp_apply, mk_apply, tensorKaehlerEquivBase_tmul, one_smul]
 
 Depends on / 依赖: Function, Function.comp_apply, IsBaseChange, IsBaseChange.ofEquiv, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, LinearMap.coe_restrictScalars, LinearMap.ext, TensorProduct, TensorProduct.isBaseChange, coe_coe, coe_comp, coe_restrictScalars, comp_apply, convert, isBaseChange, mk_apply, ofEquiv
 -/
@@ -699,7 +775,34 @@ definition tensorKaehlerEquiv
   let e₁ : B otimes[A] Ω[A⁄R] ≃ₗ[A] Ω[A⁄R] otimes[R] S :=
     AlgebraTensorModule.congr (Algebra.IsPushout.equiv R A S B).symm.toLinearEquiv (.refl _ _)
       ≪≫ₗ _root_.TensorProduct.comm _ _ _ ≪≫ₗ AlgebraTensorModule.cancelBaseChange ..
+  let e₂ : B otimes[A] Ω[A⁄R] ≃ₗ[R] Ω[B⁄S] :=
+    e₁.restrictScalars R ≪≫ₗ _root_.TensorProduct.comm _ _ _ ≪≫ₗ
+      (KaehlerDifferential.tensorKaehlerEquivBase R S A B).restrictScalars R
+  refine { __ := e₂, map_smul' := ?_ }
+  intro m x
+  obtain ⟨m, rfl⟩ := (Algebra.IsPushout.equiv R A S B).surjective m
+  dsimp
+  induction m with
+  | zero => simp
+  | add x y _ _ => simp only [add_smul, map_add, *]
+  | tmul a b =>
+  induction x with
+  | zero => simp
+  | add x y _ _ => simp only [smul_add, map_add, *]
+  | tmul x y =>
+  obtain ⟨x, rfl⟩ := (Algebra.IsPushout.equiv R A S B).surjective x
+  induction x with
+  | zero => simp
+  | add x y _ _ => simp only [smul_add, map_add, *, add_tmul]
+  | tmul x z =>
+  suffices b • z • a • x • KaehlerDifferential.map R S A B y =
+      (algebraMap A B a * algebraMap S B b) • z • x • KaehlerDifferential.map R S A B y by
+    simpa [e₂, e₁, smul_tmul', Algebra.IsPushout.equiv_tmul, ← mul_smul,
+      Algebra.IsPushout.equiv_symm_algebraMap_left, Algebra.IsPushout.equiv_symm_algebraMap_right]
+  simp only [← mul_smul, ← @algebraMap_smul S _ B, ← @algebraMap_smul A _ B]
+  ring_nf
 
+@[simp]
 
 中文:
 定义 tensorKaehlerEquiv
@@ -709,7 +812,34 @@ definition tensorKaehlerEquiv
   let e₁ : B otimes[A] Ω[A⁄R] ≃ₗ[A] Ω[A⁄R] otimes[R] S :=
     AlgebraTensorModule.congr (Algebra.IsPushout.equiv R A S B).symm.toLinearEquiv (.refl _ _)
       ≪≫ₗ _root_.TensorProduct.comm _ _ _ ≪≫ₗ AlgebraTensorModule.cancelBaseChange ..
+  let e₂ : B otimes[A] Ω[A⁄R] ≃ₗ[R] Ω[B⁄S] :=
+    e₁.restrictScalars R ≪≫ₗ _root_.TensorProduct.comm _ _ _ ≪≫ₗ
+      (KaehlerDifferential.tensorKaehlerEquivBase R S A B).restrictScalars R
+  refine { __ := e₂, map_smul' := ?_ }
+  intro m x
+  obtain ⟨m, rfl⟩ := (Algebra.IsPushout.equiv R A S B).surjective m
+  dsimp
+  induction m with
+  | zero => simp
+  | add x y _ _ => simp only [add_smul, map_add, *]
+  | tmul a b =>
+  induction x with
+  | zero => simp
+  | add x y _ _ => simp only [smul_add, map_add, *]
+  | tmul x y =>
+  obtain ⟨x, rfl⟩ := (Algebra.IsPushout.equiv R A S B).surjective x
+  induction x with
+  | zero => simp
+  | add x y _ _ => simp only [smul_add, map_add, *, add_tmul]
+  | tmul x z =>
+  suffices b • z • a • x • KaehlerDifferential.map R S A B y =
+      (algebraMap A B a * algebraMap S B b) • z • x • KaehlerDifferential.map R S A B y by
+    simpa [e₂, e₁, smul_tmul', Algebra.IsPushout.equiv_tmul, ← mul_smul,
+      Algebra.IsPushout.equiv_symm_algebraMap_left, Algebra.IsPushout.equiv_symm_algebraMap_right]
+  simp only [← mul_smul, ← @algebraMap_smul S _ B, ← @algebraMap_smul A _ B]
+  ring_nf
 
+@[simp]
 
 Depends on / 依赖: Algebra, Algebra.IsPushout, Algebra.IsPushout.equiv, AlgebraTensorModule, AlgebraTensorModule.cancelBaseChange, AlgebraTensorModule.congr, IsPushout, KaehlerDifferential, KaehlerDifferential.tensorKaehlerEquivBase, TensorProduct, _root_, _root_.TensorProduct.comm, cancelBaseChange, map_smul, otimes, restrictScalars, symm.toLinearEquiv, tensorKaehlerEquivBase, toLinearEquiv
 -/
@@ -761,7 +891,8 @@ lemma tensorKaehlerEquiv_tmul_D
   | add x y _ _ => simp only [map_add, *, add_tmul, add_smul]
   | tmul a' s =>
   trans s • a' • D S B (algebraMap A B a)
-  · simp [tens
+  · simp [tensorKaehlerEquiv]
+  · simp [Algebra.IsPushout.equiv_tmul, mul_smul, smul_comm]
 
 中文:
 引理 tensorKaehlerEquiv_tmul_D
@@ -774,7 +905,8 @@ lemma tensorKaehlerEquiv_tmul_D
   | add x y _ _ => simp only [map_add, *, add_tmul, add_smul]
   | tmul a' s =>
   trans s • a' • D S B (algebraMap A B a)
-  · simp [tens
+  · simp [tensorKaehlerEquiv]
+  · simp [Algebra.IsPushout.equiv_tmul, mul_smul, smul_comm]
 
 Depends on / 依赖: Algebra, Algebra.IsPushout, Algebra.IsPushout.equiv, Algebra.IsPushout.equiv_tmul, IsPushout, add_smul, add_tmul, algebraMap, equiv_tmul, map_add, mul_smul, smul_comm, surjective, tensorKaehlerEquiv
 -/
@@ -802,7 +934,7 @@ lemma tensorKaehlerEquiv_symm_D_tmul
   apply (tensorKaehlerEquiv R S A _).symm_apply_eq.mpr ?_
   simp only [Algebra.TensorProduct.algebraMap_apply, Algebra.algebraMap_self, RingHom.id_apply,
     tensorKaehlerEquiv_tmul_D]
-  rw [show s otimesₜ 1 = algebraMap S (S otimes A) s by simp]; rw [Algebra.TensorProduct.right_algebraMap_apply]
+  rw [show s otimesₜ 1 = algebraMap S (S otimes A) s by simp]; rw [Algebra.TensorProduct.right_algebraMap_apply]; rw [algebraMap_smul]; rw [← Derivation.map_smul]; rw [smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
 
 中文:
 引理 tensorKaehlerEquiv_symm_D_tmul
@@ -811,7 +943,7 @@ lemma tensorKaehlerEquiv_symm_D_tmul
   apply (tensorKaehlerEquiv R S A _).symm_apply_eq.mpr ?_
   simp only [Algebra.TensorProduct.algebraMap_apply, Algebra.algebraMap_self, RingHom.id_apply,
     tensorKaehlerEquiv_tmul_D]
-  rw [show s otimesₜ 1 = algebraMap S (S otimes A) s by simp]; rw [Algebra.TensorProduct.right_algebraMap_apply]
+  rw [show s otimesₜ 1 = algebraMap S (S otimes A) s by simp]; rw [Algebra.TensorProduct.right_algebraMap_apply]; rw [algebraMap_smul]; rw [← Derivation.map_smul]; rw [smul_tmul']; rw [smul_eq_mul]; rw [mul_one]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.algebraMap_apply, Algebra.TensorProduct.right_algebraMap_apply, Algebra.algebraMap_self, Derivation, Derivation.map_smul, RingHom, RingHom.id_apply, TensorProduct, algebraMap, algebraMap_apply, algebraMap_self, algebraMap_smul, id_apply, map_smul, mul_one, otimes, right_algebraMap_apply, smul_eq_mul, smul_tmul
 -/
@@ -834,7 +966,8 @@ lemma tensorKaehlerEquiv_symm_D_tmul'
   apply (tensorKaehlerEquiv R S A _).symm_apply_eq.mpr ?_
   simp only [Algebra.TensorProduct.algebraMap_apply, Algebra.algebraMap_self, RingHom.id_apply,
     tensorKaehlerEquiv_tmul_D]
-  rw [algebraMap_smul]; rw [← Derivation.map_smul]; rw [Algebra.smul_def]; rw [Algebra.TensorProduct.right_algeb
+  rw [algebraMap_smul]; rw [← Derivation.map_smul]; rw [Algebra.smul_def]; rw [Algebra.TensorProduct.right_algebraMap_apply]
+  simp only [Algebra.TensorProduct.tmul_mul_tmul, one_mul, mul_one]
 
 中文:
 引理 tensorKaehlerEquiv_symm_D_tmul'
@@ -843,7 +976,8 @@ lemma tensorKaehlerEquiv_symm_D_tmul'
   apply (tensorKaehlerEquiv R S A _).symm_apply_eq.mpr ?_
   simp only [Algebra.TensorProduct.algebraMap_apply, Algebra.algebraMap_self, RingHom.id_apply,
     tensorKaehlerEquiv_tmul_D]
-  rw [algebraMap_smul]; rw [← Derivation.map_smul]; rw [Algebra.smul_def]; rw [Algebra.TensorProduct.right_algeb
+  rw [algebraMap_smul]; rw [← Derivation.map_smul]; rw [Algebra.smul_def]; rw [Algebra.TensorProduct.right_algebraMap_apply]
+  simp only [Algebra.TensorProduct.tmul_mul_tmul, one_mul, mul_one]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.algebraMap_apply, Algebra.TensorProduct.right_algebraMap_apply, Algebra.TensorProduct.tmul_mul_tmul, Algebra.algebraMap_self, Algebra.smul_def, Derivation, Derivation.map_smul, RingHom, RingHom.id_apply, TensorProduct, algebraMap_apply, algebraMap_self, algebraMap_smul, id_apply, map_smul, mul_one, one_mul, right_algebraMap_apply, smul_def
 -/

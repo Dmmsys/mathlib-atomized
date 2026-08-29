@@ -136,7 +136,7 @@ lemma isZero_stupidTrunc_iff
     rw [isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside _ e]
     constructor
     · infer_instance
-    · exact ⟨fun i => (h.isZero i).of_iso (K.stupid
+    · exact ⟨fun i => (h.isZero i).of_iso (K.stupidTruncXIso e rfl)⟩
 
 中文:
 引理 isZero_stupidTrunc_iff
@@ -148,7 +148,7 @@ lemma isZero_stupidTrunc_iff
     rw [isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside _ e]
     constructor
     · infer_instance
-    · exact ⟨fun i => (h.isZero i).of_iso (K.stupid
+    · exact ⟨fun i => (h.isZero i).of_iso (K.stupidTruncXIso e rfl)⟩
 
 Depends on / 依赖: K.stupidTruncXIso, h.isZero, infer_instance, isZero, isZero_iff_isStrictlySupported_and_isStrictlySupportedOutside, map_isZero, of_iso, stupidTruncXIso
 -/

@@ -33,7 +33,10 @@ lemma cast_injective
     rw [mk_eq_divInt]; rw [mk_eq_divInt] at h ⊢
     rw [cast_divInt_of_ne_zero _ (by simpa)]; rw [cast_divInt_of_ne_zero _ (by simpa)] at h
     norm_cast at h
-    rwa [eq_div_iff_mul_eq d₂a, division_def, mul_assoc, (d₁.ca
+    rwa [eq_div_iff_mul_eq d₂a, division_def, mul_assoc, (d₁.cast_commute (d₂ : α)).inv_left₀.eq,
+      ← mul_assoc, ← division_def, eq_comm, eq_div_iff_mul_eq d₁a, eq_comm, ← Int.cast_natCast d₁,
+      ← Int.cast_mul, ← Int.cast_natCast d₂, ← Int.cast_mul, Int.cast_inj, ← mkRat_eq_iff d₁0 d₂0]
+      at h
 
 中文:
 引理 cast_injective
@@ -43,7 +46,10 @@ lemma cast_injective
     rw [mk_eq_divInt]; rw [mk_eq_divInt] at h ⊢
     rw [cast_divInt_of_ne_zero _ (by simpa)]; rw [cast_divInt_of_ne_zero _ (by simpa)] at h
     norm_cast at h
-    rwa [eq_div_iff_mul_eq d₂a, division_def, mul_assoc, (d₁.ca
+    rwa [eq_div_iff_mul_eq d₂a, division_def, mul_assoc, (d₁.cast_commute (d₂ : α)).inv_left₀.eq,
+      ← mul_assoc, ← division_def, eq_comm, eq_div_iff_mul_eq d₁a, eq_comm, ← Int.cast_natCast d₁,
+      ← Int.cast_mul, ← Int.cast_natCast d₂, ← Int.cast_mul, Int.cast_inj, ← mkRat_eq_iff d₁0 d₂0]
+      at h
 
 Depends on / 依赖: Nat.cast_ne_zero, cast_ne_zero
 -/

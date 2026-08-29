@@ -62,7 +62,70 @@ definition makeFastInstance
   let some className ← isClass? expectedType
     | error trace m!"Can only be used for classes, but type is{indentExpr expectedType}"
   trace[Elab.fast_instance] "class is {className}"
-  if ← isProp ex
+  if ← isProp expectedType then
+    logWarning m!"Provided instance{indentExpr inst}\n\
+      is a proof, which does not need normalization."
+    return inst
+
+  -- Try to synthesize a total replacement for this term:
+  if let .some new ← trySynthInstance expectedType then
+    if root then
+      Linter.logLintIf linter.fast_instance_existing (← getRef) m!"\
+        An instance of `{expectedType}` already exists.\n\
+        Please use `inferInstance` instead of `fast_instance%`"
+if ← withDefault isDefEq inst new then
+      trace[Elab.fast_instance] "replaced with synthesized instance"
+      return new
+    else
+      error trace m!"\
+        Provided instance{indentExpr inst}\n\
+        is not defeq to inferred instance{indentExpr new}"
+  -- Otherwise, try to reduce it to a constructor.
+  else
+    (← whnfI inst).withApp fun f args => do
+    let error' (m : MessageData) : MetaM Expr := do
+      if isStructure (← getEnv) className then
+        error trace m
+      else
+        error trace m!"{m}\n\n\
+          This instance is not a structure and not canonical. \
+          Use a separate 'instance' command to define it."
+    let .const c _ := f
+      | error' m!"\
+          Provided instance does not reduce to a constructor application{indentExpr inst}"
+    let .ctorInfo ci ← getConstInfo c
+      | error' m!"\
+          Provided instance does not reduce to a constructor application{indentExpr inst}\n\
+          Reduces to an application of {c}."
+    let (mvars, bis, cls) ← forallMetaTelescope (← inferType f)
+    unless args.size == mvars.size do
+      -- This is an invalid term.
+      throwError "Incorrect number of arguments for constructor application `{f}`: {args}"
+    -- Unify the parameters
+    unless ← isDefEq expectedType cls do
+      throwError "`{expectedType}` does not unify with the conclusion of `{.ofConstName c}`"
+    -- TODO: use structure eta reduction when possible?
+    for i in ci.numParams...args.size do
+      let bi := bis[i]!
+      let mvarId := mvars[i]!.mvarId!
+      let mvarDecl ← mvarId.getDecl
+      let argExpectedType ← instantiateMVars mvarDecl.type
+      let arg := args[i]!
+      if ← isProp argExpectedType then
+        -- For proofs, create an auxiliary theorem of the expected type.
+if ← withDefault isDefEq argExpectedType (← inferType arg) then
+mvarId.assign ← mkAuxTheorem argExpectedType arg (zetaDelta := true)
+        else
+          throwError "Proof `{arg}` does not have expected type `{argExpectedType}`"
+      -- Recurse into instance arguments of the constructor
+      else if bi.isInstImplicit then
+        let trace' := trace.push (className ++ mvarDecl.userName)
+        mvarId.assign (← makeFastInstance arg argExpectedType (root := false) (trace := trace'))
+      else
+        -- For data fields, make sure that the lambda binders have the right type.
+mvarId.assign ← forallTelescopeReducing argExpectedType fun xs _ => do
+          mkLambdaFVars xs (← whnfI (mkAppN arg xs))
+    return mkAppN f (← mvars.mapM instantiateMVars)
 
 中文:
 定义 makeFastInstance
@@ -72,7 +135,70 @@ definition makeFastInstance
   let some className ← isClass? expectedType
     | error trace m!"Can only be used for classes, but type is{indentExpr expectedType}"
   trace[Elab.fast_instance] "class is {className}"
-  if ← isProp ex
+  if ← isProp expectedType then
+    logWarning m!"Provided instance{indentExpr inst}\n\
+      is a proof, which does not need normalization."
+    return inst
+
+  -- Try to synthesize a total replacement for this term:
+  if let .some new ← trySynthInstance expectedType then
+    if root then
+      Linter.logLintIf linter.fast_instance_existing (← getRef) m!"\
+        An instance of `{expectedType}` already exists.\n\
+        Please use `inferInstance` instead of `fast_instance%`"
+if ← withDefault isDefEq inst new then
+      trace[Elab.fast_instance] "replaced with synthesized instance"
+      return new
+    else
+      error trace m!"\
+        Provided instance{indentExpr inst}\n\
+        is not defeq to inferred instance{indentExpr new}"
+  -- Otherwise, try to reduce it to a constructor.
+  else
+    (← whnfI inst).withApp fun f args => do
+    let error' (m : MessageData) : MetaM Expr := do
+      if isStructure (← getEnv) className then
+        error trace m
+      else
+        error trace m!"{m}\n\n\
+          This instance is not a structure and not canonical. \
+          Use a separate 'instance' command to define it."
+    let .const c _ := f
+      | error' m!"\
+          Provided instance does not reduce to a constructor application{indentExpr inst}"
+    let .ctorInfo ci ← getConstInfo c
+      | error' m!"\
+          Provided instance does not reduce to a constructor application{indentExpr inst}\n\
+          Reduces to an application of {c}."
+    let (mvars, bis, cls) ← forallMetaTelescope (← inferType f)
+    unless args.size == mvars.size do
+      -- This is an invalid term.
+      throwError "Incorrect number of arguments for constructor application `{f}`: {args}"
+    -- Unify the parameters
+    unless ← isDefEq expectedType cls do
+      throwError "`{expectedType}` does not unify with the conclusion of `{.ofConstName c}`"
+    -- TODO: use structure eta reduction when possible?
+    for i in ci.numParams...args.size do
+      let bi := bis[i]!
+      let mvarId := mvars[i]!.mvarId!
+      let mvarDecl ← mvarId.getDecl
+      let argExpectedType ← instantiateMVars mvarDecl.type
+      let arg := args[i]!
+      if ← isProp argExpectedType then
+        -- For proofs, create an auxiliary theorem of the expected type.
+if ← withDefault isDefEq argExpectedType (← inferType arg) then
+mvarId.assign ← mkAuxTheorem argExpectedType arg (zetaDelta := true)
+        else
+          throwError "Proof `{arg}` does not have expected type `{argExpectedType}`"
+      -- Recurse into instance arguments of the constructor
+      else if bi.isInstImplicit then
+        let trace' := trace.push (className ++ mvarDecl.userName)
+        mvarId.assign (← makeFastInstance arg argExpectedType (root := false) (trace := trace'))
+      else
+        -- For data fields, make sure that the lambda binders have the right type.
+mvarId.assign ← forallTelescopeReducing argExpectedType fun xs _ => do
+          mkLambdaFVars xs (← whnfI (mkAppN arg xs))
+    return mkAppN f (← mvars.mapM instantiateMVars)
 -/
 partial def makeFastInstance (inst expectedType : Expr) (root := true) (trace : Array Name := #[]) :
     MetaM Expr := withReducible do

@@ -214,7 +214,8 @@ theorem ack_three
   | succ n IH =>
     rw [ack_succ_succ]; rw [IH]; rw [ack_two]; rw [Nat.succ_add]; rw [Nat.pow_succ 2 (n + 3)]; rw [mul_comm _ 2]; rw [Nat.mul_sub_left_distrib]; rw [← Nat.sub_add_comm]; rw [two_mul 3]; rw [Nat.add_sub_add_right]
     calc 2 * 3
-      _ <= 2 * 2
+      _ <= 2 * 2 ^ 3 := by simp
+      _ <= 2 * 2 ^ (n + 3) := by gcongr <;> lia
 
 中文:
 定理 ack_three
@@ -226,7 +227,8 @@ theorem ack_three
   | succ n IH =>
     rw [ack_succ_succ]; rw [IH]; rw [ack_two]; rw [Nat.succ_add]; rw [Nat.pow_succ 2 (n + 3)]; rw [mul_comm _ 2]; rw [Nat.mul_sub_left_distrib]; rw [← Nat.sub_add_comm]; rw [two_mul 3]; rw [Nat.add_sub_add_right]
     calc 2 * 3
-      _ <= 2 * 2
+      _ <= 2 * 2 ^ 3 := by simp
+      _ <= 2 * 2 ^ (n + 3) := by gcongr <;> lia
 
 Depends on / 依赖: Nat.add_sub_add_right, Nat.mul_sub_left_distrib, Nat.pow_succ, Nat.sub_add_comm, Nat.succ_add, ack_succ_succ, ack_two, add_sub_add_right, mul_comm, mul_sub_left_distrib, pow_succ, sub_add_comm, succ_add, two_mul
 -/
@@ -560,7 +562,10 @@ theorem ack_strict_mono_left'
   | m₁ + 1, m₂ + 1, 0 => fun h => by
     simpa using ack_strict_mono_left' 1 ((add_lt_add_iff_right 1).1 h)
   | m₁ + 1, m₂ + 1, n + 1 => fun h => by
-    rw [ack_succ_succ]; 
+    rw [ack_succ_succ]; rw [ack_succ_succ]
+    exact
+      (ack_strict_mono_left' _ <| (add_lt_add_iff_right 1).1 h).trans
+        (ack_strictMono_right _ <| ack_strict_mono_left' n h)
 
 中文:
 定理 ack_strict_mono_left'
@@ -571,7 +576,10 @@ theorem ack_strict_mono_left'
   | m₁ + 1, m₂ + 1, 0 => fun h => by
     simpa using ack_strict_mono_left' 1 ((add_lt_add_iff_right 1).1 h)
   | m₁ + 1, m₂ + 1, n + 1 => fun h => by
-    rw [ack_succ_succ]; 
+    rw [ack_succ_succ]; rw [ack_succ_succ]
+    exact
+      (ack_strict_mono_left' _ <| (add_lt_add_iff_right 1).1 h).trans
+        (ack_strictMono_right _ <| ack_strict_mono_left' n h)
 -/
 private theorem ack_strict_mono_left' : forall {m₁ m₂} (n), m₁ < m₂ -> ack m₁ n < ack m₂ n
   | m, 0, _ => fun h => (not_lt_zero m h).elim
@@ -864,7 +872,7 @@ theorem ack_ack_lt_ack_max_add_two
     _ < ack (max m n) (ack (max m n + 1) k) :=
 ack_strictMono_right _ ack_strictMono_left k lt_succ_of_le le_max_right m n
     _ = ack (max m n + 1) (k + 1) := (ack_succ_succ _ _).symm
-    _ <= ack (max m n + 2)
+    _ <= ack (max m n + 2) k := ack_succ_right_le_ack_succ_left _ _
 
 中文:
 定理 ack_ack_lt_ack_max_add_two
@@ -875,7 +883,7 @@ ack_strictMono_right _ ack_strictMono_left k lt_succ_of_le le_max_right m n
     _ < ack (max m n) (ack (max m n + 1) k) :=
 ack_strictMono_right _ ack_strictMono_left k lt_succ_of_le le_max_right m n
     _ = ack (max m n + 1) (k + 1) := (ack_succ_succ _ _).symm
-    _ <= ack (max m n + 2)
+    _ <= ack (max m n + 2) k := ack_succ_right_le_ack_succ_left _ _
 
 Depends on / 依赖: ack_mono_left, ack_strictMono_left, ack_strictMono_right, ack_succ_right_le_ack_succ_left, ack_succ_succ, le_max_left, le_max_right, lt_succ_of_le
 -/
@@ -899,7 +907,8 @@ theorem ack_add_one_sq_lt_ack_add_four
 ack_strictMono_right m Nat.pow_lt_pow_left (succ_lt_succ <| lt_ack_right m n) two_ne_zero
 _ <= ack m (ack (m + 3) n) := ack_mono_right m ack_add_one_sq_lt_ack_add_three m n
 _ <= ack (m + 2) (ack (m + 3) n) := ack_mono_left _ by lia
-    _ = 
+    _ = ack (m + 3) (n + 1) := (ack_succ_succ _ n).symm
+    _ <= ack (m + 4) n := ack_succ_right_le_ack_succ_left _ n
 
 中文:
 定理 ack_add_one_sq_lt_ack_add_four
@@ -910,7 +919,8 @@ _ <= ack (m + 2) (ack (m + 3) n) := ack_mono_left _ by lia
 ack_strictMono_right m Nat.pow_lt_pow_left (succ_lt_succ <| lt_ack_right m n) two_ne_zero
 _ <= ack m (ack (m + 3) n) := ack_mono_right m ack_add_one_sq_lt_ack_add_three m n
 _ <= ack (m + 2) (ack (m + 3) n) := ack_mono_left _ by lia
-    _ = 
+    _ = ack (m + 3) (n + 1) := (ack_succ_succ _ n).symm
+    _ <= ack (m + 4) n := ack_succ_right_le_ack_succ_left _ n
 
 Depends on / 依赖: Nat.pow_lt_pow_left, ack_add_one_sq_lt_ack_add_three, ack_mono_left, ack_mono_right, ack_strictMono_right, ack_succ_right_le_ack_succ_left, ack_succ_succ, lt_ack_right, pow_lt_pow_left, succ_lt_succ, two_ne_zero
 -/
@@ -965,7 +975,55 @@ theorem exists_lt_ack_of_nat_primrec
     exact unpair_left_le n
   | right =>
     refine ⟨0, fun n => ?_⟩
-    rw [ac
+    rw [ack_zero]; rw [Nat.lt_succ_iff]
+    exact unpair_right_le n
+  | @pair f g hf hg IHf IHg =>
+    obtain ⟨a, ha⟩ := IHf; obtain ⟨b, hb⟩ := IHg
+    refine ⟨max a b + 3, fun n => ?_⟩
+    calc
+      pair (f n) (g n) < (max (f n) (g n) + 1) ^ 2 := pair_lt_max_add_one_sq ..
+      _ <= (ack (max a b) n + 1) ^ 2 := by rw [max_ack_left]; gcongr; exacts [(ha n).le, (hb n).le]
+      _ <= ack (max a b + 3) n := ack_add_one_sq_lt_ack_add_three ..
+  | comp hf hg IHf IHg =>
+    obtain ⟨a, ha⟩ := IHf; obtain ⟨b, hb⟩ := IHg
+    exact
+      ⟨max a b + 2, fun n =>
+(ha _).trans (ack_strictMono_right a <| hb n).trans ack_ack_lt_ack_max_add_two a b n⟩
+  | @prec f g hf hg IHf IHg =>
+    obtain ⟨a, ha⟩ := IHf; obtain ⟨b, hb⟩ := IHg
+    -- We prove this simpler inequality first.
+    have :
+      forall {m n},
+        rec (f m) (fun y IH => g <| pair m <| pair y IH) n < ack (max a b + 9) (m + n) := by
+      intro m n
+      -- We induct on n.
+      induction n with
+      | zero => -- The base case is easy.
+        apply (ha m).trans (ack_strictMono_left m <| (le_max_left a b).trans_lt _)
+        lia
+      | succ n IH => -- We get rid of the first `pair`.
+        simp only
+        apply (hb _).trans ((ack_pair_lt _ _ _).trans_le _)
+        -- If m is the maximum, we get a very weak inequality.
+        rcases lt_or_ge _ m with h₁ | h₁
+        · rw [max_eq_left h₁.le]
+          gcongr <;> omega
+        rw [max_eq_right h₁]
+        -- We get rid of the second `pair`.
+        apply (ack_pair_lt _ _ _).le.trans
+        -- If n is the maximum, we get a very weak inequality.
+        rcases lt_or_ge _ n with h₂ | h₂
+        · rw [max_eq_left h₂.le, add_assoc]
+          exact
+            ack_le_ack (Nat.add_le_add (le_max_right a b) <| by simp)
+              ((le_succ n).trans <| self_le_add_left _ _)
+        rw [max_eq_right h₂]
+        -- We now use the inductive hypothesis, and some simple algebraic manipulation.
+        apply (ack_strictMono_right _ IH).le.trans
+        rw [add_succ m]; rw [add_succ _ 8]; rw [succ_eq_add_one]; rw [succ_eq_add_one]; rw [ack_succ_succ (_ + 8)]; rw [add_assoc]
+        exact ack_mono_left _ (Nat.add_le_add (le_max_right a b) le_rfl)
+    -- The proof is now simple.
+exact ⟨max a b + 9, fun n => this.trans_le ack_mono_right _ unpair_add_le n⟩
 
 中文:
 定理 存在_lt_ack_of_nat_primrec
@@ -983,7 +1041,55 @@ theorem exists_lt_ack_of_nat_primrec
     exact unpair_left_le n
   | right =>
     refine ⟨0, fun n => ?_⟩
-    rw [ac
+    rw [ack_zero]; rw [Nat.lt_succ_iff]
+    exact unpair_right_le n
+  | @pair f g hf hg IHf IHg =>
+    obtain ⟨a, ha⟩ := IHf; obtain ⟨b, hb⟩ := IHg
+    refine ⟨max a b + 3, fun n => ?_⟩
+    calc
+      pair (f n) (g n) < (max (f n) (g n) + 1) ^ 2 := pair_lt_max_add_one_sq ..
+      _ <= (ack (max a b) n + 1) ^ 2 := by rw [max_ack_left]; gcongr; exacts [(ha n).le, (hb n).le]
+      _ <= ack (max a b + 3) n := ack_add_one_sq_lt_ack_add_three ..
+  | comp hf hg IHf IHg =>
+    obtain ⟨a, ha⟩ := IHf; obtain ⟨b, hb⟩ := IHg
+    exact
+      ⟨max a b + 2, fun n =>
+(ha _).trans (ack_strictMono_right a <| hb n).trans ack_ack_lt_ack_max_add_two a b n⟩
+  | @prec f g hf hg IHf IHg =>
+    obtain ⟨a, ha⟩ := IHf; obtain ⟨b, hb⟩ := IHg
+    -- We prove this simpler inequality first.
+    have :
+      forall {m n},
+        rec (f m) (fun y IH => g <| pair m <| pair y IH) n < ack (max a b + 9) (m + n) := by
+      intro m n
+      -- We induct on n.
+      induction n with
+      | zero => -- The base case is easy.
+        apply (ha m).trans (ack_strictMono_left m <| (le_max_left a b).trans_lt _)
+        lia
+      | succ n IH => -- We get rid of the first `pair`.
+        simp only
+        apply (hb _).trans ((ack_pair_lt _ _ _).trans_le _)
+        -- If m is the maximum, we get a very weak inequality.
+        rcases lt_or_ge _ m with h₁ | h₁
+        · rw [max_eq_left h₁.le]
+          gcongr <;> omega
+        rw [max_eq_right h₁]
+        -- We get rid of the second `pair`.
+        apply (ack_pair_lt _ _ _).le.trans
+        -- If n is the maximum, we get a very weak inequality.
+        rcases lt_or_ge _ n with h₂ | h₂
+        · rw [max_eq_left h₂.le, add_assoc]
+          exact
+            ack_le_ack (Nat.add_le_add (le_max_right a b) <| by simp)
+              ((le_succ n).trans <| self_le_add_left _ _)
+        rw [max_eq_right h₂]
+        -- We now use the inductive hypothesis, and some simple algebraic manipulation.
+        apply (ack_strictMono_right _ IH).le.trans
+        rw [add_succ m]; rw [add_succ _ 8]; rw [succ_eq_add_one]; rw [succ_eq_add_one]; rw [ack_succ_succ (_ + 8)]; rw [add_assoc]
+        exact ack_mono_left _ (Nat.add_le_add (le_max_right a b) le_rfl)
+    -- The proof is now simple.
+exact ⟨max a b + 9, fun n => this.trans_le ack_mono_right _ unpair_add_le n⟩
 
 Depends on / 依赖: Nat.lt_succ_iff, ack_pos, ack_zero, add_lt_ack, lt_succ_iff, pair_lt_max_add_one_sq, succ_eq_one_add, unpair_left_le, unpair_right_le
 -/
@@ -1280,7 +1386,7 @@ theorem _root_.computable₂_ack
   · change Partrec₂ (fun m n => (pappAck m).eval n)
     apply_rules only
       [Code.eval_part.comp₂, Computable.fst, Computable.snd, primrec_pappAck.to_comp.comp]
-  · s
+  · simp
 
 中文:
 定理 _root_.computable₂_ack
@@ -1291,7 +1397,7 @@ theorem _root_.computable₂_ack
   · change Partrec₂ (fun m n => (pappAck m).eval n)
     apply_rules only
       [Code.eval_part.comp₂, Computable.fst, Computable.snd, primrec_pappAck.to_comp.comp]
-  · s
+  · simp
 
 Depends on / 依赖: Code.eval_part.comp, Computable, Computable.fst, Computable.snd, Partrec, _root_, _root_.Partrec.of_eq_tot, apply_rules, eval_part, of_eq_tot, pappAck, primrec_pappAck, primrec_pappAck.to_comp.comp, to_comp
 -/

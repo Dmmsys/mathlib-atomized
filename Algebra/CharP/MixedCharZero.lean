@@ -104,7 +104,19 @@ lemma reduce_to_p_prime
   · intro h q q_pos q_mixedChar
     rcases q_mixedChar.charP_quotient with ⟨I, hI_ne_top, _⟩
     -- Krull's Thm: There exists a prime ideal `P` such that `I ≤ P`
-    rcases Ideal.exists_le_maximal I 
+    rcases Ideal.exists_le_maximal I hI_ne_top with ⟨M, hM_max, h_IM⟩
+    let r := ringChar (R ⧸ M)
+    have r_pos : r != 0 := by
+      have q_zero :=
+        congr_arg (Ideal.Quotient.factor h_IM) (CharP.cast_eq_zero (R ⧸ I) q)
+      simp only [map_natCast, map_zero] at q_zero
+      apply ne_zero_of_dvd_ne_zero (ne_of_gt q_pos)
+      exact (CharP.cast_eq_zero_iff (R ⧸ M) r q).mp q_zero
+    have r_prime : Nat.Prime r :=
+      or_iff_not_imp_right.1 (CharP.char_is_prime_or_zero (R ⧸ M) r) r_pos
+    apply h r r_prime
+    have : CharZero R := q_mixedChar.toCharZero
+    exact ⟨⟨M, hM_max.ne_top, ringChar.of_eq rfl⟩⟩
 
 中文:
 引理 reduce_to_p_prime
@@ -116,7 +128,19 @@ lemma reduce_to_p_prime
   · intro h q q_pos q_mixedChar
     rcases q_mixedChar.charP_quotient with ⟨I, hI_ne_top, _⟩
     -- Krull's Thm: There exists a prime ideal `P` such that `I ≤ P`
-    rcases Ideal.exists_le_maximal I 
+    rcases Ideal.exists_le_maximal I hI_ne_top with ⟨M, hM_max, h_IM⟩
+    let r := ringChar (R ⧸ M)
+    have r_pos : r != 0 := by
+      have q_zero :=
+        congr_arg (Ideal.Quotient.factor h_IM) (CharP.cast_eq_zero (R ⧸ I) q)
+      simp only [map_natCast, map_zero] at q_zero
+      apply ne_zero_of_dvd_ne_zero (ne_of_gt q_pos)
+      exact (CharP.cast_eq_zero_iff (R ⧸ M) r q).mp q_zero
+    have r_prime : Nat.Prime r :=
+      or_iff_not_imp_right.1 (CharP.char_is_prime_or_zero (R ⧸ M) r) r_pos
+    apply h r r_prime
+    have : CharZero R := q_mixedChar.toCharZero
+    exact ⟨⟨M, hM_max.ne_top, ringChar.of_eq rfl⟩⟩
 
 Depends on / 依赖: Nat.Prime.pos, charP_quotient, hI_ne_top, q_mixedChar, q_mixedChar.charP_quotient, q_pos, q_prime
 -/
@@ -158,7 +182,17 @@ lemma reduce_to_maximal_ideal
     constructor
     · exact hM_max
     · cases CharP.exists (R ⧸ M) with
-     
+      | intro r hr =>
+        convert! hr
+        have r_dvd_p : r ∣ p := by
+          rw [← CharP.cast_eq_zero_iff (R ⧸ M) r p]
+          convert! congr_arg (Ideal.Quotient.factor hM_ge) (CharP.cast_eq_zero (R ⧸ I) p)
+        symm
+        apply (Nat.Prime.eq_one_or_self_of_dvd hp r r_dvd_p).resolve_left
+        exact CharP.char_ne_one (R ⧸ M) r
+  · intro ⟨I, hI_max, h_charP⟩
+    use I
+    exact ⟨Ideal.IsMaximal.ne_top hI_max, h_charP⟩
 
 中文:
 引理 reduce_to_maximal_ideal
@@ -173,7 +207,17 @@ lemma reduce_to_maximal_ideal
     constructor
     · exact hM_max
     · cases CharP.exists (R ⧸ M) with
-     
+      | intro r hr =>
+        convert! hr
+        have r_dvd_p : r ∣ p := by
+          rw [← CharP.cast_eq_zero_iff (R ⧸ M) r p]
+          convert! congr_arg (Ideal.Quotient.factor hM_ge) (CharP.cast_eq_zero (R ⧸ I) p)
+        symm
+        apply (Nat.Prime.eq_one_or_self_of_dvd hp r r_dvd_p).resolve_left
+        exact CharP.char_ne_one (R ⧸ M) r
+  · intro ⟨I, hI_max, h_charP⟩
+    use I
+    exact ⟨Ideal.IsMaximal.ne_top hI_max, h_charP⟩
 
 Depends on / 依赖: hI_not_top
 -/
@@ -235,7 +279,8 @@ lemma of_algebraRat
   contrapose! hI
   -- `↑a - ↑b` is a unit contained in `I`, which contradicts `I ≠ ⊤`.
   refine I.eq_top_of_isUnit_mem ?_ (IsUnit.map (algebraMap Rat R) (IsUnit.mk0 (a - b : Rat) ?_))
-  · simpa only [← Ideal.Quotient.eq_zero_iff_mem, map_sub, sub_eq_zer
+  · simpa only [← Ideal.Quotient.eq_zero_iff_mem, map_sub, sub_eq_zero, map_natCast]
+  simpa only [Ne, sub_eq_zero] using (@Nat.cast_injective Rat _ _).ne hI
 
 中文:
 引理 of_algebraRat
@@ -248,7 +293,8 @@ lemma of_algebraRat
   contrapose! hI
   -- `↑a - ↑b` is a unit contained in `I`, which contradicts `I ≠ ⊤`.
   refine I.eq_top_of_isUnit_mem ?_ (IsUnit.map (algebraMap Rat R) (IsUnit.mk0 (a - b : Rat) ?_))
-  · simpa only [← Ideal.Quotient.eq_zero_iff_mem, map_sub, sub_eq_zer
+  · simpa only [← Ideal.Quotient.eq_zero_iff_mem, map_sub, sub_eq_zero, map_natCast]
+  simpa only [Ne, sub_eq_zero] using (@Nat.cast_injective Rat _ _).ne hI
 -/
 private lemma of_algebraRat [Algebra Rat R] : forall I : Ideal R, I != ⊤ -> CharZero (R ⧸ I) := by
   intro I hI
@@ -280,7 +326,13 @@ lemma PNat.isUnit_natCast
   -- So by contrapositive, we should show the quotient does not have characteristic zero.
   apply not_imp_comm.mp (h.elim (Ideal.span {↑n}))
   intro h_char_zero
-  -- In particular, the image of `n`
+  -- In particular, the image of `n` in the quotient should be nonzero.
+  apply h_char_zero.cast_injective.ne n.ne_zero
+  -- But `n` generates the ideal, so its image is clearly zero.
+  rw [← map_natCast (Ideal.Quotient.mk _)]; rw [Nat.cast_zero]; rw [Ideal.Quotient.eq_zero_iff_mem]
+  exact Ideal.subset_span (Set.mem_singleton _)
+
+@[coe]
 
 中文:
 引理 正自然数.isUnit_natCast
@@ -291,7 +343,13 @@ lemma PNat.isUnit_natCast
   -- So by contrapositive, we should show the quotient does not have characteristic zero.
   apply not_imp_comm.mp (h.elim (Ideal.span {↑n}))
   intro h_char_zero
-  -- In particular, the image of `n`
+  -- In particular, the image of `n` in the quotient should be nonzero.
+  apply h_char_zero.cast_injective.ne n.ne_zero
+  -- But `n` generates the ideal, so its image is clearly zero.
+  rw [← map_natCast (Ideal.Quotient.mk _)]; rw [Nat.cast_zero]; rw [Ideal.Quotient.eq_zero_iff_mem]
+  exact Ideal.subset_span (Set.mem_singleton _)
+
+@[coe]
 -/
 private lemma PNat.isUnit_natCast [h : Fact (forall I : Ideal R, I != ⊤ -> CharZero (R ⧸ I))]
     (n : Nat+) : IsUnit (n : R) := by
@@ -418,7 +476,22 @@ definition noncomputable
     map_one' := by simp
     map_mul' := by
       intro a b
-      simp only [← divp_assoc, divp_mul_eq_mul_divp, divp_divp_eq_divp_mul, di
+      simp only [← divp_assoc, divp_mul_eq_mul_divp, divp_divp_eq_divp_mul, divp_eq_iff_mul_eq,
+        pnatCast_eq_natCast, Rat.coe_pnatDen, Units.val_mul]
+      trans (↑((a * b).num * a.den * b.den) : R)
+      · simp_rw [Int.cast_mul, Int.cast_natCast]
+        ring
+      rw [Rat.mul_num_den' a b]
+      simp
+    map_add' := by
+      intro a b
+      simp only [Units.add_divp, pnatCast_eq_natCast, Rat.coe_pnatDen, divp_mul_eq_mul_divp,
+        Units.divp_add, divp_divp_eq_divp_mul, divp_eq_iff_mul_eq, Units.val_mul]
+      trans (↑((a + b).num * a.den * b.den) : R)
+      · simp_rw [Int.cast_mul, Int.cast_natCast]
+        ring
+      rw [Rat.add_num_den' a b]
+      simp }
 
 中文:
 定义 noncomputable
@@ -430,7 +503,22 @@ definition noncomputable
     map_one' := by simp
     map_mul' := by
       intro a b
-      simp only [← divp_assoc, divp_mul_eq_mul_divp, divp_divp_eq_divp_mul, di
+      simp only [← divp_assoc, divp_mul_eq_mul_divp, divp_divp_eq_divp_mul, divp_eq_iff_mul_eq,
+        pnatCast_eq_natCast, Rat.coe_pnatDen, Units.val_mul]
+      trans (↑((a * b).num * a.den * b.den) : R)
+      · simp_rw [Int.cast_mul, Int.cast_natCast]
+        ring
+      rw [Rat.mul_num_den' a b]
+      simp
+    map_add' := by
+      intro a b
+      simp only [Units.add_divp, pnatCast_eq_natCast, Rat.coe_pnatDen, divp_mul_eq_mul_divp,
+        Units.divp_add, divp_divp_eq_divp_mul, divp_eq_iff_mul_eq, Units.val_mul]
+      trans (↑((a + b).num * a.den * b.den) : R)
+      · simp_rw [Int.cast_mul, Int.cast_natCast]
+        ring
+      rw [Rat.add_num_den' a b]
+      simp }
 -/
 private noncomputable def algebraRat (h : forall I : Ideal R, I != ⊤ -> CharZero (R ⧸ I)) :
     Algebra Rat R :=
@@ -475,7 +563,7 @@ lemma of_not_mixedCharZero
     | zero => exact hp
     | succ p =>
       have h_mixed : MixedCharZero R p.succ := ⟨⟨I, ⟨hI_ne_top, hp⟩⟩⟩
-      exact absurd h_mixed (h p.succ p.su
+      exact absurd h_mixed (h p.succ p.succ_pos)
 
 中文:
 引理 of_not_mixedCharZero
@@ -489,7 +577,7 @@ lemma of_not_mixedCharZero
     | zero => exact hp
     | succ p =>
       have h_mixed : MixedCharZero R p.succ := ⟨⟨I, ⟨hI_ne_top, hp⟩⟩⟩
-      exact absurd h_mixed (h p.succ p.su
+      exact absurd h_mixed (h p.succ p.succ_pos)
 -/
 private lemma of_not_mixedCharZero [CharZero R] (h : forall p > 0, ¬MixedCharZero R p) :
     forall I : Ideal R, I != ⊤ -> CharZero (R ⧸ I) := by

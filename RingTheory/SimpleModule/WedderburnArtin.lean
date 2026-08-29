@@ -59,7 +59,11 @@ theorem IsSimpleRing.tfae
   tfae_have 3 -> 1 := fun ⟨I, hI⟩ => by
     have ⟨_, h⟩ := isSimpleRing_iff_isTwoSided_imp.mp ‹IsSimpleRing R›
     simp_rw [← isFullyInvariant_iff_isTwoSided] at h
-    have := isSimpleModule_iff_isA
+    have := isSimpleModule_iff_isAtom.mpr hI
+    obtain eq | eq := h _ (.isotypicComponent R R I)
+    · exact (hI.bot_lt.not_ge <| (le_sSup <| by exact ⟨.refl ..⟩).trans_eq eq).elim
+    exact .congr (.symm <| .trans (.ofEq _ _ eq) Submodule.topEquiv)
+  tfae_finish
 
 中文:
 定理 是单环.tfae
@@ -71,7 +75,11 @@ theorem IsSimpleRing.tfae
   tfae_have 3 -> 1 := fun ⟨I, hI⟩ => by
     have ⟨_, h⟩ := isSimpleRing_iff_isTwoSided_imp.mp ‹IsSimpleRing R›
     simp_rw [← isFullyInvariant_iff_isTwoSided] at h
-    have := isSimpleModule_iff_isA
+    have := isSimpleModule_iff_isAtom.mpr hI
+    obtain eq | eq := h _ (.isotypicComponent R R I)
+    · exact (hI.bot_lt.not_ge <| (le_sSup <| by exact ⟨.refl ..⟩).trans_eq eq).elim
+    exact .congr (.symm <| .trans (.ofEq _ _ eq) Submodule.topEquiv)
+  tfae_finish
 
 Depends on / 依赖: IsAtomic, IsAtomic.exists_atom, IsSimpleRing, Submodule, Submodule.topEquiv, bot_lt, exists_atom, hI.bot_lt.not_ge, isFullyInvariant_iff_isTwoSided, isSimpleModule_iff_isAtom, isSimpleModule_iff_isAtom.mpr, isSimpleRing_iff_isTwoSided_imp, isSimpleRing_iff_isTwoSided_imp.mp, isotypicComponent, le_sSup, not_ge, simp_rw, tfae_finish, tfae_have, topEquiv
 -/
@@ -116,7 +124,8 @@ theorem isSimpleRing_isArtinianRing_iff
   on_goal 1 => have := IsSimpleRing.isSemisimpleRing_iff_isArtinianRing.mpr ‹_›
   all_goals simp_rw [isIsotypic_iff_isFullyInvariant_imp_bot_or_top,
       isFullyInvariant_iff_isTwoSided, isSimpleRing_iff_isTwoSided_imp] at *
-  · exact ⟨this, by rw
+  · exact ⟨this, by rwa [and_comm]⟩
+  · exact ⟨⟨‹_›, ‹_›⟩, inferInstance⟩
 
 中文:
 定理 isSimpleRing_isArtinianRing_iff
@@ -125,7 +134,8 @@ theorem isSimpleRing_isArtinianRing_iff
   on_goal 1 => have := IsSimpleRing.isSemisimpleRing_iff_isArtinianRing.mpr ‹_›
   all_goals simp_rw [isIsotypic_iff_isFullyInvariant_imp_bot_or_top,
       isFullyInvariant_iff_isTwoSided, isSimpleRing_iff_isTwoSided_imp] at *
-  · exact ⟨this, by rw
+  · exact ⟨this, by rwa [and_comm]⟩
+  · exact ⟨⟨‹_›, ‹_›⟩, inferInstance⟩
 
 Depends on / 依赖: IsSimpleRing, IsSimpleRing.isSemisimpleRing_iff_isArtinianRing.mpr, all_goals, and_comm, isFullyInvariant_iff_isTwoSided, isIsotypic_iff_isFullyInvariant_imp_bot_or_top, isSemisimpleRing_iff_isArtinianRing, isSimpleRing_iff_isTwoSided_imp, on_goal, simp_rw
 -/
@@ -313,7 +323,8 @@ theorem exists_end_algEquiv_pi_matrix_end
   choose d pos S _ simple e using fun c : isotypicComponents R M =>
     (IsIsotypic.isotypicComponents c.2).submodule_linearEquiv_fun
 exact ⟨_, _, _, fun _ => simple _, fun _ => pos _, ⟨.trans (endAlgEquiv R₀ R M) .trans
-(.piCongrRight fun c => ((e c).some.conjAlgEquiv R₀).trans (endVecAlgEquivMa
+(.piCongrRight fun c => ((e c).some.conjAlgEquiv R₀).trans (endVecAlgEquivMatrixEnd ..))
+    (.piCongrLeft' R₀ _ (Finite.equivFin _))⟩⟩
 
 中文:
 定理 存在_end_algEquiv_pi_matrix_end
@@ -321,7 +332,8 @@ exact ⟨_, _, _, fun _ => simple _, fun _ => pos _, ⟨.trans (endAlgEquiv R₀
   choose d pos S _ simple e using fun c : isotypicComponents R M =>
     (IsIsotypic.isotypicComponents c.2).submodule_linearEquiv_fun
 exact ⟨_, _, _, fun _ => simple _, fun _ => pos _, ⟨.trans (endAlgEquiv R₀ R M) .trans
-(.piCongrRight fun c => ((e c).some.conjAlgEquiv R₀).trans (endVecAlgEquivMa
+(.piCongrRight fun c => ((e c).some.conjAlgEquiv R₀).trans (endVecAlgEquivMatrixEnd ..))
+    (.piCongrLeft' R₀ _ (Finite.equivFin _))⟩⟩
 
 Depends on / 依赖: Finite, Finite.equivFin, IsIsotypic, IsIsotypic.isotypicComponents, conjAlgEquiv, endAlgEquiv, endVecAlgEquivMatrixEnd, equivFin, isotypicComponents, piCongrLeft, piCongrRight, simple, some.conjAlgEquiv, submodule_linearEquiv_fun
 -/
@@ -489,7 +501,7 @@ theorem exists_algEquiv_pi_matrix_divisionRing_finite
   refine ⟨n, D, d, _, _, fun i => ?_, hd, ⟨e⟩⟩
   let l := Matrix.entryLinearMap R₀ (D i) 0 0 ∘ₗ
     .proj (φ := fun i => Matrix (Fin (d i)) (Fin (d i)) _) i
-  exact .of_sur
+  exact .of_surjective l fun x => ⟨fun j _ _ => Function.update (fun _ => 0) i x j, by simp [l]⟩
 
 中文:
 定理 存在_algEquiv_pi_matrix_divisionRing_finite
@@ -500,7 +512,7 @@ theorem exists_algEquiv_pi_matrix_divisionRing_finite
   refine ⟨n, D, d, _, _, fun i => ?_, hd, ⟨e⟩⟩
   let l := Matrix.entryLinearMap R₀ (D i) 0 0 ∘ₗ
     .proj (φ := fun i => Matrix (Fin (d i)) (Fin (d i)) _) i
-  exact .of_sur
+  exact .of_surjective l fun x => ⟨fun j _ _ => Function.update (fun _ => 0) i x j, by simp [l]⟩
 
 Depends on / 依赖: Finite, Function, Function.update, Matrix, Matrix.entryLinearMap, Module, Module.Finite.equiv, e.toLinearEquiv, entryLinearMap, exists_algEquiv_pi_matrix_divisionRing, of_surjective, toLinearEquiv, update
 -/

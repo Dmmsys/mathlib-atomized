@@ -92,7 +92,10 @@ nonrec theorem ContMDiffAt.prodMk {f : M -> M'} {g : M -> N'} (hf : ContMDiffAt 
     (hg : ContMDiffAt I J' n g x) : ContMDiffAt I (I'.prod J') n (fun x => (f x, g x)) x :=
   hf.prodMk hg
 
-nonrec theorem Co
+nonrec theorem ContMDiffAt.prodMk_space {f : M -> E'} {g : M -> F'}
+    (hf : ContMDiffAt I 𝓘(𝕜, E') n f x) (hg : ContMDiffAt I 𝓘(𝕜, F') n g x) :
+    ContMDiffAt I 𝓘(𝕜, E' × F') n (fun x => (f x, g x)) x :=
+  hf.prodMk_space hg
 
 中文:
 定理 ContMDiffWithinAt.prodMk_space
@@ -105,7 +108,10 @@ nonrec theorem ContMDiffAt.prodMk {f : M -> M'} {g : M -> N'} (hf : ContMDiffAt 
     (hg : ContMDiffAt I J' n g x) : ContMDiffAt I (I'.prod J') n (fun x => (f x, g x)) x :=
   hf.prodMk hg
 
-nonrec theorem Co
+nonrec theorem ContMDiffAt.prodMk_space {f : M -> E'} {g : M -> F'}
+    (hf : ContMDiffAt I 𝓘(𝕜, E') n f x) (hg : ContMDiffAt I 𝓘(𝕜, F') n g x) :
+    ContMDiffAt I 𝓘(𝕜, E' × F') n (fun x => (f x, g x)) x :=
+  hf.prodMk_space hg
 
 Depends on / 依赖: contMDiffWithinAt_iff, prodMk
 -/
@@ -212,7 +218,10 @@ theorem contMDiffWithinAt_fst
     simp only [hy, mfld_simps]
   · simp only [mfld_simps]
   -/
-  rw [cont
+  rw [contMDiffWithinAt_iff']
+  refine ⟨continuousWithinAt_fst, contDiffWithinAt_fst.congr (fun y hy => ?_) ?_⟩
+  · exact (extChartAt I p.1).right_inv ⟨hy.1.1.1, hy.1.2.1⟩
+· exact (extChartAt I p.1).right_inv (extChartAt I p.1).map_source (mem_extChartAt_source _)
 
 中文:
 定理 contMDiffWithinAt_fst
@@ -226,7 +235,10 @@ theorem contMDiffWithinAt_fst
     simp only [hy, mfld_simps]
   · simp only [mfld_simps]
   -/
-  rw [cont
+  rw [contMDiffWithinAt_iff']
+  refine ⟨continuousWithinAt_fst, contDiffWithinAt_fst.congr (fun y hy => ?_) ?_⟩
+  · exact (extChartAt I p.1).right_inv ⟨hy.1.1.1, hy.1.2.1⟩
+· exact (extChartAt I p.1).right_inv (extChartAt I p.1).map_source (mem_extChartAt_source _)
 -/
 theorem contMDiffWithinAt_fst {s : Set (M × N)} {p : M × N} :
     ContMDiffWithinAt (I.prod J) I n Prod.fst s p := by
@@ -373,7 +385,10 @@ theorem contMDiffWithinAt_snd
     simp only [hy, mfld_simps]
   · simp only [mfld_simps]
   -/
-  rw [cont
+  rw [contMDiffWithinAt_iff']
+  refine ⟨continuousWithinAt_snd, contDiffWithinAt_snd.congr (fun y hy => ?_) ?_⟩
+  · exact (extChartAt J p.2).right_inv ⟨hy.1.1.2, hy.1.2.2⟩
+· exact (extChartAt J p.2).right_inv (extChartAt J p.2).map_source (mem_extChartAt_source _)
 
 中文:
 定理 contMDiffWithinAt_snd
@@ -387,7 +402,10 @@ theorem contMDiffWithinAt_snd
     simp only [hy, mfld_simps]
   · simp only [mfld_simps]
   -/
-  rw [cont
+  rw [contMDiffWithinAt_iff']
+  refine ⟨continuousWithinAt_snd, contDiffWithinAt_snd.congr (fun y hy => ?_) ?_⟩
+  · exact (extChartAt J p.2).right_inv ⟨hy.1.1.2, hy.1.2.2⟩
+· exact (extChartAt J p.2).right_inv (extChartAt J p.2).map_source (mem_extChartAt_source _)
 -/
 theorem contMDiffWithinAt_snd {s : Set (M × N)} {p : M × N} :
     ContMDiffWithinAt (I.prod J) J n Prod.snd s p := by
@@ -1256,7 +1274,13 @@ lemma ContMDiff.inl
   -- In extended charts, .inl equals the identity (on the chart sources).
   apply contDiffWithinAt_id.congr_of_eventuallyEq; swap
   · simp [ChartedSpace.sum_chartAt_inl, Sum.inl_injective.extend_apply (chartAt _ x)]
-  set
+  set C := chartAt H x with hC
+  have : I.symm ⁻¹' C.target inter range I in 𝓝[range I] (extChartAt I x) x := by
+    rw [← I.image_eq (chartAt H x).target]
+    exact (chartAt H x).extend_image_target_mem_nhds (mem_chart_source _ x)
+  filter_upwards [this] with y hy
+  simp [extChartAt, sum_chartAt_inl, ← hC, Sum.inl_injective.extend_apply C, C.right_inv hy.1,
+    I.right_inv hy.2]
 
 中文:
 引理 ContMDiff.inl
@@ -1268,7 +1292,13 @@ lemma ContMDiff.inl
   -- In extended charts, .inl equals the identity (on the chart sources).
   apply contDiffWithinAt_id.congr_of_eventuallyEq; swap
   · simp [ChartedSpace.sum_chartAt_inl, Sum.inl_injective.extend_apply (chartAt _ x)]
-  set
+  set C := chartAt H x with hC
+  have : I.symm ⁻¹' C.target inter range I in 𝓝[range I] (extChartAt I x) x := by
+    rw [← I.image_eq (chartAt H x).target]
+    exact (chartAt H x).extend_image_target_mem_nhds (mem_chart_source _ x)
+  filter_upwards [this] with y hy
+  simp [extChartAt, sum_chartAt_inl, ← hC, Sum.inl_injective.extend_apply C, C.right_inv hy.1,
+    I.right_inv hy.2]
 
 Depends on / 依赖: DistribMulAction, Semiring, contMDiffAt_iff, continuousAt, continuous_inl, continuous_inl.continuousAt
 -/
@@ -1301,7 +1331,14 @@ lemma ContMDiff.inr
   apply contDiffWithinAt_id.congr_of_eventuallyEq; swap
   · simp only [mfld_simps, sum_chartAt_inr]
     congr
-    apply Sum.inr_injective.extend_ap
+    apply Sum.inr_injective.extend_apply (chartAt _ x)
+  set C := chartAt H x with hC
+  have : I.symm ⁻¹' (chartAt H x).target inter range I in 𝓝[range I] (extChartAt I x) x := by
+    rw [← I.image_eq (chartAt H x).target]
+    exact (chartAt H x).extend_image_target_mem_nhds (mem_chart_source _ x)
+  filter_upwards [this] with y hy
+  simp [extChartAt, sum_chartAt_inr, ← hC, Sum.inr_injective.extend_apply C, C.right_inv hy.1,
+    I.right_inv hy.2]
 
 中文:
 引理 ContMDiff.inr
@@ -1314,7 +1351,14 @@ lemma ContMDiff.inr
   apply contDiffWithinAt_id.congr_of_eventuallyEq; swap
   · simp only [mfld_simps, sum_chartAt_inr]
     congr
-    apply Sum.inr_injective.extend_ap
+    apply Sum.inr_injective.extend_apply (chartAt _ x)
+  set C := chartAt H x with hC
+  have : I.symm ⁻¹' (chartAt H x).target inter range I in 𝓝[range I] (extChartAt I x) x := by
+    rw [← I.image_eq (chartAt H x).target]
+    exact (chartAt H x).extend_image_target_mem_nhds (mem_chart_source _ x)
+  filter_upwards [this] with y hy
+  simp [extChartAt, sum_chartAt_inr, ← hC, Sum.inr_injective.extend_apply C, C.right_inv hy.1,
+    I.right_inv hy.2]
 
 Depends on / 依赖: Module, Semiring, contMDiffAt_iff, continuousAt, continuous_inr, continuous_inr.continuousAt, instModule
 -/
@@ -1383,7 +1427,33 @@ lemma ContMDiff.sumElim
   | inl x =>
     -- In charts around x : M, the map f ⊔ g looks like f.
     -- This is how they both look like in extended charts.
-    have : ContDiffWithinAt 𝕜 n ((extChar
+    have : ContDiffWithinAt 𝕜 n ((extChartAt J (f x)) ∘ f ∘ (extChartAt I x).symm)
+        (range I) ((extChartAt I (.inl x : M oplus M')) (Sum.inl x)) := by
+      let hf' := hf x
+      rw [contMDiffAt_iff] at hf'
+      simpa using hf'.2
+    apply this.congr_of_eventuallyEq
+    · simp only [extChartAt, Sum.elim_inl, ChartedSpace.sum_chartAt_inl]
+      filter_upwards with a
+      congr
+    · -- They agree at the image of x.
+      simp only [extChartAt, ChartedSpace.sum_chartAt_inl, Sum.elim_inl]
+      congr
+  | inr x =>
+    -- In charts around x : M, the map f ⊔ g looks like g.
+    -- This is how they both look like in extended charts.
+    have : ContDiffWithinAt 𝕜 n ((extChartAt J (g x)) ∘ g ∘ (extChartAt I x).symm)
+        (range I) ((extChartAt I (.inr x : M oplus M')) (Sum.inr x)) := by
+      let hg' := hg x
+      rw [contMDiffAt_iff] at hg'
+      simpa using hg'.2
+    apply this.congr_of_eventuallyEq
+    · simp only [extChartAt, Sum.elim_inr, ChartedSpace.sum_chartAt_inr]
+      filter_upwards with a
+      congr
+    · -- They agree at the image of x.
+      simp only [extChartAt, ChartedSpace.sum_chartAt_inr, Sum.elim_inr]
+      congr
 
 中文:
 引理 ContMDiff.sumElim
@@ -1396,7 +1466,33 @@ lemma ContMDiff.sumElim
   | inl x =>
     -- In charts around x : M, the map f ⊔ g looks like f.
     -- This is how they both look like in extended charts.
-    have : ContDiffWithinAt 𝕜 n ((extChar
+    have : ContDiffWithinAt 𝕜 n ((extChartAt J (f x)) ∘ f ∘ (extChartAt I x).symm)
+        (range I) ((extChartAt I (.inl x : M oplus M')) (Sum.inl x)) := by
+      let hf' := hf x
+      rw [contMDiffAt_iff] at hf'
+      simpa using hf'.2
+    apply this.congr_of_eventuallyEq
+    · simp only [extChartAt, Sum.elim_inl, ChartedSpace.sum_chartAt_inl]
+      filter_upwards with a
+      congr
+    · -- They agree at the image of x.
+      simp only [extChartAt, ChartedSpace.sum_chartAt_inl, Sum.elim_inl]
+      congr
+  | inr x =>
+    -- In charts around x : M, the map f ⊔ g looks like g.
+    -- This is how they both look like in extended charts.
+    have : ContDiffWithinAt 𝕜 n ((extChartAt J (g x)) ∘ g ∘ (extChartAt I x).symm)
+        (range I) ((extChartAt I (.inr x : M oplus M')) (Sum.inr x)) := by
+      let hg' := hg x
+      rw [contMDiffAt_iff] at hg'
+      simpa using hg'.2
+    apply this.congr_of_eventuallyEq
+    · simp only [extChartAt, Sum.elim_inr, ChartedSpace.sum_chartAt_inr]
+      filter_upwards with a
+      congr
+    · -- They agree at the image of x.
+      simp only [extChartAt, ChartedSpace.sum_chartAt_inr, Sum.elim_inr]
+      congr
 
 Depends on / 依赖: Continuous, Continuous.sumElim, contMDiffAt_iff, continuous, continuousAt, hf.continuous, hg.continuous, sumElim
 -/
@@ -1469,7 +1565,10 @@ lemma contMDiff_of_contMDiff_inl
   have : aux ∘ (@Sum.inl N N') ∘ f = f := by ext; simp [aux]
   rw [← this]
   rw [← contMDiffOn_univ] at h ⊢
-  apply (contMDiff_id.sumElim contMDiff_const).contMDiffOn (s := @Sum.inl N N' '
+  apply (contMDiff_id.sumElim contMDiff_const).contMDiffOn (s := @Sum.inl N N' '' univ).comp h
+  intro x _hx
+  rw [mem_preimage]; rw [Function.comp_apply]
+  use f x, trivial
 
 中文:
 引理 contMDiff_of_contMDiff_inl
@@ -1481,7 +1580,10 @@ lemma contMDiff_of_contMDiff_inl
   have : aux ∘ (@Sum.inl N N') ∘ f = f := by ext; simp [aux]
   rw [← this]
   rw [← contMDiffOn_univ] at h ⊢
-  apply (contMDiff_id.sumElim contMDiff_const).contMDiffOn (s := @Sum.inl N N' '
+  apply (contMDiff_id.sumElim contMDiff_const).contMDiffOn (s := @Sum.inl N N' '' univ).comp h
+  intro x _hx
+  rw [mem_preimage]; rw [Function.comp_apply]
+  use f x, trivial
 
 Depends on / 依赖: Function, Function.comp_apply, Sum.elim, Sum.inl, comp_apply, contMDiffOn, contMDiffOn_univ, contMDiff_const, contMDiff_id, contMDiff_id.sumElim, inhabit, inhabited_h, inhabited_h.default, mem_preimage, nontriviality, sumElim
 -/
@@ -1511,7 +1613,10 @@ lemma contMDiff_of_contMDiff_inr
   have : aux ∘ (@Sum.inr N N') ∘ g = g := by ext; simp [aux]
   rw [← this]
   rw [← contMDiffOn_univ] at h ⊢
-  apply ((contMDiff_const.sumElim contMDiff_id).contMDiffOn (s := Sum.inr ''
+  apply ((contMDiff_const.sumElim contMDiff_id).contMDiffOn (s := Sum.inr '' univ)).comp h
+  intro x _hx
+  rw [mem_preimage]; rw [Function.comp_apply]
+  use g x, trivial
 
 中文:
 引理 contMDiff_of_contMDiff_inr
@@ -1523,7 +1628,10 @@ lemma contMDiff_of_contMDiff_inr
   have : aux ∘ (@Sum.inr N N') ∘ g = g := by ext; simp [aux]
   rw [← this]
   rw [← contMDiffOn_univ] at h ⊢
-  apply ((contMDiff_const.sumElim contMDiff_id).contMDiffOn (s := Sum.inr ''
+  apply ((contMDiff_const.sumElim contMDiff_id).contMDiffOn (s := Sum.inr '' univ)).comp h
+  intro x _hx
+  rw [mem_preimage]; rw [Function.comp_apply]
+  use g x, trivial
 
 Depends on / 依赖: Function, Function.comp_apply, Sum.elim, Sum.inr, comp_apply, contMDiffOn, contMDiffOn_univ, contMDiff_const, contMDiff_const.sumElim, contMDiff_id, inhabit, inhabited_h, inhabited_h.default, mem_preimage, nontriviality, sumElim
 -/

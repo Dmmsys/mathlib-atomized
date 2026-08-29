@@ -31,7 +31,11 @@ lemma perfectSpace_of_module
   obtain ⟨c, hc⟩ : exists (c : E), c != 0 := exists_ne 0
   have A : Tendsto (fun (n : Nat) => x + r ^ n • c) atTop (𝓝 (x + (0 : 𝕜) • c)) := by
     apply Tendsto.add tendsto_const_nhds
-    exact (tendsto_pow_atTop_nhd
+    exact (tendsto_pow_atTop_nhds_zero_of_norm_lt_one hr).smul tendsto_const_nhds
+  have B : Tendsto (fun (n : Nat) => x + r ^ n • c) atTop (𝓝[univ \ {x}] x) := by
+    simp only [zero_smul, add_zero] at A
+    simp [tendsto_nhdsWithin_iff, A, hc, norm_pos_iff.mp hr₀]
+  exact accPt_principal_iff_nhdsWithin.mpr ((atTop_neBot.map _).mono B)
 
 中文:
 引理 perfectSpace_of_module
@@ -42,7 +46,11 @@ lemma perfectSpace_of_module
   obtain ⟨c, hc⟩ : exists (c : E), c != 0 := exists_ne 0
   have A : Tendsto (fun (n : Nat) => x + r ^ n • c) atTop (𝓝 (x + (0 : 𝕜) • c)) := by
     apply Tendsto.add tendsto_const_nhds
-    exact (tendsto_pow_atTop_nhd
+    exact (tendsto_pow_atTop_nhds_zero_of_norm_lt_one hr).smul tendsto_const_nhds
+  have B : Tendsto (fun (n : Nat) => x + r ^ n • c) atTop (𝓝[univ \ {x}] x) := by
+    simp only [zero_smul, add_zero] at A
+    simp [tendsto_nhdsWithin_iff, A, hc, norm_pos_iff.mp hr₀]
+  exact accPt_principal_iff_nhdsWithin.mpr ((atTop_neBot.map _).mono B)
 
 Depends on / 依赖: NormedField, NormedField.exists_norm_lt_one, Tendsto, Tendsto.add, add_zero, exists_ne, exists_norm_lt_one, norm_pos_iff, tendsto_const_nhds, tendsto_nhdsWithin_iff, tendsto_pow_atTop_nhds_zero_of_norm_lt_one, zero_smul
 -/

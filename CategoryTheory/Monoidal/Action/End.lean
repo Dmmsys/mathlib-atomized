@@ -108,7 +108,18 @@ instance curriedActionMopMonoidal
     apply (mopEquiv (D ⥤ D)).fullyFaithfulInverse.map_injective
     ext d
     simpa [-associator_actionHom] using
-
+      (IsIso.inv_eq_inv.mpr <| associator_actionHom c₁ c₂ c₃ d).symm =≫
+        (α_ c₁ c₂ c₃).hom ⊵ₗ d
+  oplax_right_unitality x := by
+    apply MonoidalOpposite.hom_ext
+    ext t
+    simpa [-rightUnitor_actionHom] using
+      (ρ_ x).inv ⊵ₗ t ≫= rightUnitor_actionHom x t
+  oplax_left_unitality x := by
+    apply MonoidalOpposite.hom_ext
+    ext t
+    simpa [-leftUnitor_actionHom] using
+      (fun_ x).inv ⊵ₗ t ≫= leftUnitor_actionHom x t
 
 中文:
 实例 curriedActionMopMonoidal
@@ -121,7 +132,18 @@ instance curriedActionMopMonoidal
     apply (mopEquiv (D ⥤ D)).fullyFaithfulInverse.map_injective
     ext d
     simpa [-associator_actionHom] using
-
+      (IsIso.inv_eq_inv.mpr <| associator_actionHom c₁ c₂ c₃ d).symm =≫
+        (α_ c₁ c₂ c₃).hom ⊵ₗ d
+  oplax_right_unitality x := by
+    apply MonoidalOpposite.hom_ext
+    ext t
+    simpa [-rightUnitor_actionHom] using
+      (ρ_ x).inv ⊵ₗ t ≫= rightUnitor_actionHom x t
+  oplax_left_unitality x := by
+    apply MonoidalOpposite.hom_ext
+    ext t
+    simpa [-leftUnitor_actionHom] using
+      (fun_ x).inv ⊵ₗ t ≫= leftUnitor_actionHom x t
 
 Depends on / 依赖: actionUnitNatIso
 -/
@@ -165,7 +187,43 @@ definition actionOfMonoidalFunctorToEndofunctorMop
   actionHomRight c _ _ f := (F.obj c).unmop.map f
 .symm .unmop.app d actionAssocIso c c' d := Functor.Monoidal.μIso F c c'
 .symm .unmop.app d actionUnitIso d := Functor.Monoidal.εIso F
-  actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c
+  actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c₃ c₃'} f g h := by
+have e := congrArg (fun t => t.unmop.app c₃)
+      Functor.OplaxMonoidal.δ_natural F f g
+    dsimp at e
+    simp [reassoc_of% e]
+  whiskerRight_actionHomLeft {x y} c f d := by
+have e := congrArg (fun t => t.unmop.app d)
+      Functor.LaxMonoidal.μ_natural_left F f c
+    dsimp at e
+    simp [e, ← NatTrans.comp_app, ← unmop_comp]
+  whiskerLeft_actionHomLeft c {x y} f d := by
+have e := congrArg (fun t => t.unmop.app d)
+      Functor.LaxMonoidal.μ_natural_right F c f
+    dsimp at e
+    simp [e, ← NatTrans.comp_app, ← unmop_comp]
+  associator_actionHom c₁ c₂ c₃ d := by
+have e := congrArg (fun t => t.unmop.app d)
+      Functor.OplaxMonoidal.associativity F c₁ c₂ c₃
+    dsimp at e
+    simp only [Category.comp_id] at e
+    simp [e]
+  leftUnitor_actionHom c d := by
+    have e := (F.map (fun_ c).hom).unmop.app d ≫=
+      (congrArg (fun t => t.unmop.app d) <|
+        Functor.OplaxMonoidal.left_unitality F c)
+    dsimp at e
+    simp only [Category.comp_id, ← NatTrans.comp_app_assoc, ← unmop_comp,
+      ← F.map_comp_assoc, Iso.hom_inv_id, Functor.map_id, Category.id_comp] at e
+    simp [e]
+  rightUnitor_actionHom c d := by
+    have e := (F.map (ρ_ c).hom).unmop.app d ≫=
+      (congrArg (fun t => t.unmop.app d) <|
+        Functor.OplaxMonoidal.right_unitality F c)
+    dsimp at e
+    simp only [Category.comp_id, ← NatTrans.comp_app_assoc, ← unmop_comp,
+      ← F.map_comp_assoc, Iso.hom_inv_id, Functor.map_id, Category.id_comp] at e
+    simp [e]
 
 中文:
 定义 actionOfMonoidalFunctorToEndofunctorMop
@@ -175,7 +233,43 @@ definition actionOfMonoidalFunctorToEndofunctorMop
   actionHomRight c _ _ f := (F.obj c).unmop.map f
 .symm .unmop.app d actionAssocIso c c' d := Functor.Monoidal.μIso F c c'
 .symm .unmop.app d actionUnitIso d := Functor.Monoidal.εIso F
-  actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c
+  actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c₃ c₃'} f g h := by
+have e := congrArg (fun t => t.unmop.app c₃)
+      Functor.OplaxMonoidal.δ_natural F f g
+    dsimp at e
+    simp [reassoc_of% e]
+  whiskerRight_actionHomLeft {x y} c f d := by
+have e := congrArg (fun t => t.unmop.app d)
+      Functor.LaxMonoidal.μ_natural_left F f c
+    dsimp at e
+    simp [e, ← NatTrans.comp_app, ← unmop_comp]
+  whiskerLeft_actionHomLeft c {x y} f d := by
+have e := congrArg (fun t => t.unmop.app d)
+      Functor.LaxMonoidal.μ_natural_right F c f
+    dsimp at e
+    simp [e, ← NatTrans.comp_app, ← unmop_comp]
+  associator_actionHom c₁ c₂ c₃ d := by
+have e := congrArg (fun t => t.unmop.app d)
+      Functor.OplaxMonoidal.associativity F c₁ c₂ c₃
+    dsimp at e
+    simp only [Category.comp_id] at e
+    simp [e]
+  leftUnitor_actionHom c d := by
+    have e := (F.map (fun_ c).hom).unmop.app d ≫=
+      (congrArg (fun t => t.unmop.app d) <|
+        Functor.OplaxMonoidal.left_unitality F c)
+    dsimp at e
+    simp only [Category.comp_id, ← NatTrans.comp_app_assoc, ← unmop_comp,
+      ← F.map_comp_assoc, Iso.hom_inv_id, Functor.map_id, Category.id_comp] at e
+    simp [e]
+  rightUnitor_actionHom c d := by
+    have e := (F.map (ρ_ c).hom).unmop.app d ≫=
+      (congrArg (fun t => t.unmop.app d) <|
+        Functor.OplaxMonoidal.right_unitality F c)
+    dsimp at e
+    simp only [Category.comp_id, ← NatTrans.comp_app_assoc, ← unmop_comp,
+      ← F.map_comp_assoc, Iso.hom_inv_id, Functor.map_id, Category.id_comp] at e
+    simp [e]
 
 Depends on / 依赖: F.obj, unmop.obj
 -/
@@ -276,7 +370,15 @@ instance curriedActionMonoidal
     ext d
     simpa [-actionHom_associator] using
       (IsIso.inv_eq_inv.mpr <| actionHom_associator c₁ c₂ c₃ d).symm =≫
-      
+        d ⊴ᵣ (α_ c₁ c₂ c₃).hom
+  oplax_right_unitality x := by
+    ext t
+    simpa [-actionHom_rightUnitor] using
+      t ⊴ᵣ (ρ_ x).inv ≫= actionHom_rightUnitor x t
+  oplax_left_unitality x := by
+    ext t
+    simpa [-actionHom_leftUnitor] using
+      t ⊴ᵣ (fun_ x).inv ≫= actionHom_leftUnitor x t
 
 中文:
 实例 curriedActionMonoidal
@@ -289,7 +391,15 @@ instance curriedActionMonoidal
     ext d
     simpa [-actionHom_associator] using
       (IsIso.inv_eq_inv.mpr <| actionHom_associator c₁ c₂ c₃ d).symm =≫
-      
+        d ⊴ᵣ (α_ c₁ c₂ c₃).hom
+  oplax_right_unitality x := by
+    ext t
+    simpa [-actionHom_rightUnitor] using
+      t ⊴ᵣ (ρ_ x).inv ≫= actionHom_rightUnitor x t
+  oplax_left_unitality x := by
+    ext t
+    simpa [-actionHom_leftUnitor] using
+      t ⊴ᵣ (fun_ x).inv ≫= actionHom_leftUnitor x t
 
 Depends on / 依赖: actionUnitNatIso
 -/
@@ -328,7 +438,10 @@ definition actionOfMonoidalFunctorToEndofunctor
 .symm .app d actionAssocIso d c c' := Functor.Monoidal.μIso F c c'
 .symm .app d actionUnitIso d := Functor.Monoidal.εIso F
   actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c₃ c₃'} f g h := by
-have e := c
+have e := congrArg (fun t => t.app c₁)
+      Functor.OplaxMonoidal.δ_natural F g h
+    dsimp at e
+    simp [reassoc_of% e]
 
 中文:
 定义 actionOfMonoidalFunctorToEndofunctor
@@ -339,7 +452,10 @@ have e := c
 .symm .app d actionAssocIso d c c' := Functor.Monoidal.μIso F c c'
 .symm .app d actionUnitIso d := Functor.Monoidal.εIso F
   actionAssocIso_hom_naturality {c₁ c₁' c₂ c₂' c₃ c₃'} f g h := by
-have e := c
+have e := congrArg (fun t => t.app c₁)
+      Functor.OplaxMonoidal.δ_natural F g h
+    dsimp at e
+    simp [reassoc_of% e]
 
 Depends on / 依赖: F.obj
 -/

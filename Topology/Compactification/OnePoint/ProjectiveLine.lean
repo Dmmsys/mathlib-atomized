@@ -187,7 +187,19 @@ definition equivProjectivization
       (fun u : {v : Fin 2 -> K // v != 0} => if u.1 1 = 0 then ∞ else ((u.1 1)⁻¹ * u.1 0)) ?_ p
     rintro ⟨-, hv⟩ ⟨w, hw⟩ t rfl
     have ht : t != 0 := by rintro rfl; simp at hv
-    b
+    by_cases h₀ : w 1 = 0 <;> simp [h₀, ht, mul_assoc]
+  left_inv p := by cases p <;> simp
+  right_inv p := by
+    induction p using ind with | h w hw =>
+    by_cases h₀ : w 1 = 0 <;> simp only [mk_eq_mk_iff', h₀, Projectivization.lift_mk, if_true,
+        if_false, OnePoint.elim_infty, OnePoint.elim_some]
+· have : w 0 != 0 := fun h => hw funext by simp_all
+      use (w 0)⁻¹
+      ext i
+      fin_cases i <;> simp_all
+· exact ⟨(w 1)⁻¹, funext by simp [inv_mul_cancel₀ h₀]⟩
+
+@[simp]
 
 中文:
 定义 equivProjectivization
@@ -198,7 +210,19 @@ definition equivProjectivization
       (fun u : {v : Fin 2 -> K // v != 0} => if u.1 1 = 0 then ∞ else ((u.1 1)⁻¹ * u.1 0)) ?_ p
     rintro ⟨-, hv⟩ ⟨w, hw⟩ t rfl
     have ht : t != 0 := by rintro rfl; simp at hv
-    b
+    by_cases h₀ : w 1 = 0 <;> simp [h₀, ht, mul_assoc]
+  left_inv p := by cases p <;> simp
+  right_inv p := by
+    induction p using ind with | h w hw =>
+    by_cases h₀ : w 1 = 0 <;> simp only [mk_eq_mk_iff', h₀, Projectivization.lift_mk, if_true,
+        if_false, OnePoint.elim_infty, OnePoint.elim_some]
+· have : w 0 != 0 := fun h => hw funext by simp_all
+      use (w 0)⁻¹
+      ext i
+      fin_cases i <;> simp_all
+· exact ⟨(w 1)⁻¹, funext by simp [inv_mul_cancel₀ h₀]⟩
+
+@[simp]
 
 Depends on / 依赖: p.elim
 -/
@@ -467,7 +491,8 @@ lemma fixpointPolynomial_aeval_eq_zero_iff
   · refine ⟨fun hg => (g.det_ne_zero ?_).elim, fun hg => (infty_ne_coe _ hg).elim⟩
     rw [det_fin_two]
     grind
-  · rw [coe
+  · rw [coe_eq_coe, div_eq_iff h]
+    grind
 
 中文:
 引理 fixpointPolynomial_aeval_eq_zero_iff
@@ -479,7 +504,8 @@ lemma fixpointPolynomial_aeval_eq_zero_iff
   · refine ⟨fun hg => (g.det_ne_zero ?_).elim, fun hg => (infty_ne_coe _ hg).elim⟩
     rw [det_fin_two]
     grind
-  · rw [coe
+  · rw [coe_eq_coe, div_eq_iff h]
+    grind
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_self_apply, OnePoint, OnePoint.smul_some_eq_ite, aeval_C, aeval_X, aeval_X_pow, algebraMap_self_apply, coe_eq_coe, det_fin_two, det_ne_zero, div_eq_iff, fixpointPolynomial, g.det_ne_zero, infty_ne_coe, map_add, map_mul, map_sub, smul_some_eq_ite, split_ifs
 -/
@@ -522,7 +548,17 @@ lemma IsParabolic.smul_eq_self_iff
   cases c with
   | infty => by_cases h : g 1 0 = 0 <;> simp [parabolicFixedPoint, smul_infty_eq_ite, h]
   | coe c =>
-    suffices g 1 0 * c ^ 2 + (g 1 1 - g 0 0) * c - g 0 1 = 0 ↔ c = g.parabolicFixed
+    suffices g 1 0 * c ^ 2 + (g 1 1 - g 0 0) * c - g 0 1 = 0 ↔ c = g.parabolicFixedPoint by
+      simpa [← fixpointPolynomial_aeval_eq_zero_iff, fixpointPolynomial]
+    by_cases hc : g 1 0 = 0
+    · have hd : g 1 1 = g 0 0 := by grind
+      suffices g 0 1 != 0 by simpa [parabolicFixedPoint, hc, hd]
+      -- can't have `g 0 1 ≠ 0` since that would force `g` to be scalar
+      refine fun hb => fixpointPolynomial_eq_zero_iff.not.mpr hg ?_
+      simp [fixpointPolynomial, hb, hc, hd]
+    · have : discrim (g 1 0) (g 1 1 - g 0 0) (-g 0 1) = 0 := by rw [discrim]; grind
+      simpa [parabolicFixedPoint, if_neg hc, sq, sub_eq_add_neg]
+        using quadratic_eq_zero_iff_of_discrim_eq_zero hc this c
 
 中文:
 引理 IsParabolic.smul_eq_self_iff
@@ -533,7 +569,17 @@ lemma IsParabolic.smul_eq_self_iff
   cases c with
   | infty => by_cases h : g 1 0 = 0 <;> simp [parabolicFixedPoint, smul_infty_eq_ite, h]
   | coe c =>
-    suffices g 1 0 * c ^ 2 + (g 1 1 - g 0 0) * c - g 0 1 = 0 ↔ c = g.parabolicFixed
+    suffices g 1 0 * c ^ 2 + (g 1 1 - g 0 0) * c - g 0 1 = 0 ↔ c = g.parabolicFixedPoint by
+      simpa [← fixpointPolynomial_aeval_eq_zero_iff, fixpointPolynomial]
+    by_cases hc : g 1 0 = 0
+    · have hd : g 1 1 = g 0 0 := by grind
+      suffices g 0 1 != 0 by simpa [parabolicFixedPoint, hc, hd]
+      -- can't have `g 0 1 ≠ 0` since that would force `g` to be scalar
+      refine fun hb => fixpointPolynomial_eq_zero_iff.not.mpr hg ?_
+      simp [fixpointPolynomial, hb, hc, hd]
+    · have : discrim (g 1 0) (g 1 1 - g 0 0) (-g 0 1) = 0 := by rw [discrim]; grind
+      simpa [parabolicFixedPoint, if_neg hc, sq, sub_eq_add_neg]
+        using quadratic_eq_zero_iff_of_discrim_eq_zero hc this c
 
 Depends on / 依赖: det_fin_two, discr_fin_two, fixpointPolynomial, fixpointPolynomial_aeval_eq_zero_iff, g.parabolicFixedPoint, parabolicFixedPoint, smul_infty_eq_ite, trace_fin_two
 -/
@@ -607,7 +653,16 @@ lemma IsElliptic.smul_ne_self
     rw [this]
     apply sq_nonneg
   | coe c =>
-    refine fun h =>
+    refine fun h => not_le_of_gt hg ?_
+    have : g.val.discr = (2 * g 1 0 * c + (g 1 1 + -g 0 0)) ^ 2 := by
+      replace h : g 1 0 * (c * c) + (g 1 1 + -g 0 0) * c + -g 0 1 = 0 := by
+        simpa [← fixpointPolynomial_aeval_eq_zero_iff, fixpointPolynomial, sq, sub_eq_add_neg]
+          using h
+      simp only [← discrim_eq_sq_of_quadratic_eq_zero h, discr_fin_two, discrim, trace_fin_two,
+        det_fin_two]
+      grind
+    rw [this]
+    apply sq_nonneg
 
 中文:
 引理 是Elliptic.smul_ne_self
@@ -623,7 +678,16 @@ lemma IsElliptic.smul_ne_self
     rw [this]
     apply sq_nonneg
   | coe c =>
-    refine fun h =>
+    refine fun h => not_le_of_gt hg ?_
+    have : g.val.discr = (2 * g 1 0 * c + (g 1 1 + -g 0 0)) ^ 2 := by
+      replace h : g 1 0 * (c * c) + (g 1 1 + -g 0 0) * c + -g 0 1 = 0 := by
+        simpa [← fixpointPolynomial_aeval_eq_zero_iff, fixpointPolynomial, sq, sub_eq_add_neg]
+          using h
+      simp only [← discrim_eq_sq_of_quadratic_eq_zero h, discr_fin_two, discrim, trace_fin_two,
+        det_fin_two]
+      grind
+    rw [this]
+    apply sq_nonneg
 
 Depends on / 依赖: det_fin_two, discr_fin_two, fixpointPolynomial, fixpointPolynomial_aeval_eq_zero_iff, g.val.discr, not_le_of_gt, replace, smul_infty_eq_self_iff, sq_nonneg, sub_eq_add_neg, trace_fin_two
 -/

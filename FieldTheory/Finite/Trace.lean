@@ -79,7 +79,7 @@ theorem algebraMap_trace_eq_sum_pow
   have := ofFinite K
   rw [trace_eq_sum_automorphisms]; rw [Finset.sum_range]
 exact Eq.symm sum_bijective _ (bijective_frobeniusAlgEquivOfAlgebraic_pow K L) _ _
-    fun i => by rw [AlgEquiv.coe_pow, coe_frobeniusAlgEquivOfAlg
+    fun i => by rw [AlgEquiv.coe_pow, coe_frobeniusAlgEquivOfAlgebraic_iterate, card_eq_nat_card]
 
 中文:
 定理 algebraMap_trace_eq_sum_pow
@@ -88,7 +88,7 @@ exact Eq.symm sum_bijective _ (bijective_frobeniusAlgEquivOfAlgebraic_pow K L) _
   have := ofFinite K
   rw [trace_eq_sum_automorphisms]; rw [Finset.sum_range]
 exact Eq.symm sum_bijective _ (bijective_frobeniusAlgEquivOfAlgebraic_pow K L) _ _
-    fun i => by rw [AlgEquiv.coe_pow, coe_frobeniusAlgEquivOfAlg
+    fun i => by rw [AlgEquiv.coe_pow, coe_frobeniusAlgEquivOfAlgebraic_iterate, card_eq_nat_card]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_pow, Eq.symm, FaithfulSMul, FaithfulSMul.algebraMap_injective, Finite, Finite.of_injective, Finset, Finset.sum_range, algebraMap_injective, bijective_frobeniusAlgEquivOfAlgebraic_pow, card_eq_nat_card, coe_frobeniusAlgEquivOfAlgebraic_iterate, coe_pow, ofFinite, of_injective, sum_bijective, sum_range, trace_eq_sum_automorphisms
 -/
@@ -111,7 +111,7 @@ theorem algebraMap_norm_eq_prod_pow
   have := ofFinite K
   rw [Algebra.norm_eq_prod_automorphisms]; rw [Finset.prod_range]
 exact Eq.symm prod_bijective _ (bijective_frobeniusAlgEquivOfAlgebraic_pow K L) _ _
-    fun i => by rw [AlgEquiv.coe_pow, coe_frobeniusAlg
+    fun i => by rw [AlgEquiv.coe_pow, coe_frobeniusAlgEquivOfAlgebraic_iterate, card_eq_nat_card]
 
 中文:
 定理 algebraMap_norm_eq_prod_pow
@@ -120,7 +120,7 @@ exact Eq.symm prod_bijective _ (bijective_frobeniusAlgEquivOfAlgebraic_pow K L) 
   have := ofFinite K
   rw [Algebra.norm_eq_prod_automorphisms]; rw [Finset.prod_range]
 exact Eq.symm prod_bijective _ (bijective_frobeniusAlgEquivOfAlgebraic_pow K L) _ _
-    fun i => by rw [AlgEquiv.coe_pow, coe_frobeniusAlg
+    fun i => by rw [AlgEquiv.coe_pow, coe_frobeniusAlgEquivOfAlgebraic_iterate, card_eq_nat_card]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_pow, Algebra, Algebra.norm_eq_prod_automorphisms, Eq.symm, FaithfulSMul, FaithfulSMul.algebraMap_injective, Finite, Finite.of_injective, Finset, Finset.prod_range, algebraMap_injective, bijective_frobeniusAlgEquivOfAlgebraic_pow, card_eq_nat_card, coe_frobeniusAlgEquivOfAlgebraic_iterate, coe_pow, norm_eq_prod_automorphisms, ofFinite, of_injective, prod_bijective
 -/

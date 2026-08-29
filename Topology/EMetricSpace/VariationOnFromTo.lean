@@ -155,7 +155,7 @@ theorem abs_le_eVariationOn
   · simp only [variationOnFromTo, hab, ↓reduceIte, ENNReal.abs_toReal]
     exact ENNReal.toReal_mono hf (eVariationOn.mono _ inter_subset_left)
   · simp only [variationOnFromTo, hab, ↓reduceIte, abs_neg, ENNReal.abs_toReal]
-    exact ENNReal.toReal_mono hf (eVariationOn.mo
+    exact ENNReal.toReal_mono hf (eVariationOn.mono _ inter_subset_left)
 
 中文:
 定理 abs_le_eVariationOn
@@ -165,7 +165,7 @@ theorem abs_le_eVariationOn
   · simp only [variationOnFromTo, hab, ↓reduceIte, ENNReal.abs_toReal]
     exact ENNReal.toReal_mono hf (eVariationOn.mono _ inter_subset_left)
   · simp only [variationOnFromTo, hab, ↓reduceIte, abs_neg, ENNReal.abs_toReal]
-    exact ENNReal.toReal_mono hf (eVariationOn.mo
+    exact ENNReal.toReal_mono hf (eVariationOn.mono _ inter_subset_left)
 
 Depends on / 依赖: ENNReal, ENNReal.abs_toReal, ENNReal.toReal_mono, abs_neg, abs_toReal, eVariationOn, eVariationOn.mono, inter_subset_left, reduceIte, toReal_mono, variationOnFromTo
 -/
@@ -225,7 +225,7 @@ theorem add
   · rintro x y _xs _ys
     simp only [variationOnFromTo.eq_neg_swap f s y x, add_neg_cancel]
   · rintro x y z xy yz xs ys zs
-    rw [variationOnFromTo.eq_of_le f s xy]; rw [variationOnFromT
+    rw [variationOnFromTo.eq_of_le f s xy]; rw [variationOnFromTo.eq_of_le f s yz]; rw [variationOnFromTo.eq_of_le f s (xy.trans yz)]; rw [← ENNReal.toReal_add (hf x y xs ys) (hf y z ys zs)]; rw [eVariationOn.Icc_add_Icc f xy yz ys]
 
 中文:
 定理 add
@@ -236,7 +236,7 @@ theorem add
   · rintro x y _xs _ys
     simp only [variationOnFromTo.eq_neg_swap f s y x, add_neg_cancel]
   · rintro x y z xy yz xs ys zs
-    rw [variationOnFromTo.eq_of_le f s xy]; rw [variationOnFromT
+    rw [variationOnFromTo.eq_of_le f s xy]; rw [variationOnFromTo.eq_of_le f s yz]; rw [variationOnFromTo.eq_of_le f s (xy.trans yz)]; rw [← ENNReal.toReal_add (hf x y xs ys) (hf y z ys zs)]; rw [eVariationOn.Icc_add_Icc f xy yz ys]
 -/
 protected theorem add {f : α -> E} {s : Set α} (hf : LocallyBoundedVariationOn f s) {a b c : α}
     (ha : a in s) (hb : b in s) (hc : c in s) :
@@ -302,7 +302,8 @@ theorem edist_zero_of_eq_zero
     rw [variationOnFromTo.eq_neg_swap]; rw [h]; rw [neg_zero]
   · rw [← nonpos_iff_eq_zero, ← ENNReal.ofReal_zero, ← h, variationOnFromTo.eq_of_le f s h',
       ENNReal.ofReal_toReal (hf a b ha hb)]
-    apply eVari
+    apply eVariationOn.edist_le
+    exacts [⟨ha, ⟨le_rfl, h'⟩⟩, ⟨hb, ⟨h', le_rfl⟩⟩]
 
 中文:
 定理 edist_zero_of_eq_zero
@@ -314,7 +315,8 @@ theorem edist_zero_of_eq_zero
     rw [variationOnFromTo.eq_neg_swap]; rw [h]; rw [neg_zero]
   · rw [← nonpos_iff_eq_zero, ← ENNReal.ofReal_zero, ← h, variationOnFromTo.eq_of_le f s h',
       ENNReal.ofReal_toReal (hf a b ha hb)]
-    apply eVari
+    apply eVariationOn.edist_le
+    exacts [⟨ha, ⟨le_rfl, h'⟩⟩, ⟨hb, ⟨h', le_rfl⟩⟩]
 -/
 protected theorem edist_zero_of_eq_zero (hf : LocallyBoundedVariationOn f s)
     {a b : α} (ha : a in s) (hb : b in s) (h : variationOnFromTo f s a b = 0) :
@@ -491,7 +493,8 @@ lemma abs_sub_le_sub_of_le
     apply ENNReal.toReal_mono (hf b c bs cs)
     apply eVariationOn.edist_le f
     exacts [⟨bs, le_rfl, bc⟩, ⟨cs, bc, le_rfl⟩]
-  _ = varia
+  _ = variationOnFromTo f s a c - variationOnFromTo f s a b := by
+    rw [← variationOnFromTo.add hf as bs cs]; rw [add_sub_cancel_left]
 
 中文:
 引理 abs_sub_le_sub_of_le
@@ -503,7 +506,8 @@ lemma abs_sub_le_sub_of_le
     apply ENNReal.toReal_mono (hf b c bs cs)
     apply eVariationOn.edist_le f
     exacts [⟨bs, le_rfl, bc⟩, ⟨cs, bc, le_rfl⟩]
-  _ = varia
+  _ = variationOnFromTo f s a c - variationOnFromTo f s a b := by
+    rw [← variationOnFromTo.add hf as bs cs]; rw [add_sub_cancel_left]
 -/
 lemma abs_sub_le_sub_of_le {f : α -> Real} {s : Set α} (hf : LocallyBoundedVariationOn f s)
     {a b c : α} (as : a in s) (bs : b in s) (cs : c in s) (bc : b <= c) :
@@ -528,7 +532,7 @@ theorem add_self_monotoneOn
   suffices f b - f c <= variationOnFromTo f s a c - variationOnFromTo f s a b by simp; linarith
   calc
     f b - f c <= |f c - f b| := by grw [le_abs_self (f b - f c), abs_sub_comm (f b) (f c)]
-    _ <= variationOnFromTo f s a c - variationOnFromTo f s a b := abs_sub_le_sub_
+    _ <= variationOnFromTo f s a c - variationOnFromTo f s a b := abs_sub_le_sub_of_le hf as bs cs bc
 
 中文:
 定理 add_self_monotoneOn
@@ -538,7 +542,7 @@ theorem add_self_monotoneOn
   suffices f b - f c <= variationOnFromTo f s a c - variationOnFromTo f s a b by simp; linarith
   calc
     f b - f c <= |f c - f b| := by grw [le_abs_self (f b - f c), abs_sub_comm (f b) (f c)]
-    _ <= variationOnFromTo f s a c - variationOnFromTo f s a b := abs_sub_le_sub_
+    _ <= variationOnFromTo f s a c - variationOnFromTo f s a b := abs_sub_le_sub_of_le hf as bs cs bc
 -/
 protected theorem add_self_monotoneOn {f : α -> Real} {s : Set α} (hf : LocallyBoundedVariationOn f s)
     {a : α} (as : a in s) : MonotoneOn (variationOnFromTo f s a + f) s := by
@@ -590,7 +594,7 @@ theorem comp_eq_of_monotoneOn
   · rw [variationOnFromTo.eq_of_le _ _ h, variationOnFromTo.eq_of_le _ _ (hφ hx hy h),
       eVariationOn.comp_inter_Icc_eq_of_monotoneOn f φ hφ hx hy]
   · rw [variationOnFromTo.eq_of_ge _ _ h, variationOnFromTo.eq_of_ge _ _ (hφ hy hx h),
-      eVariationOn.comp
+      eVariationOn.comp_inter_Icc_eq_of_monotoneOn f φ hφ hy hx]
 
 中文:
 定理 comp_eq_of_monotoneOn
@@ -600,7 +604,7 @@ theorem comp_eq_of_monotoneOn
   · rw [variationOnFromTo.eq_of_le _ _ h, variationOnFromTo.eq_of_le _ _ (hφ hx hy h),
       eVariationOn.comp_inter_Icc_eq_of_monotoneOn f φ hφ hx hy]
   · rw [variationOnFromTo.eq_of_ge _ _ h, variationOnFromTo.eq_of_ge _ _ (hφ hy hx h),
-      eVariationOn.comp
+      eVariationOn.comp_inter_Icc_eq_of_monotoneOn f φ hφ hy hx]
 -/
 protected theorem comp_eq_of_monotoneOn {β : Type*} [LinearOrder β] (f : α -> E) {t : Set β}
     (φ : β -> α) (hφ : MonotoneOn φ t) {x y : β} (hx : x in t) (hy : y in t) :
@@ -623,7 +627,13 @@ theorem tendsto_left
     apply Tendsto.congr' _ H
     filter_upwards [self_mem_nhdsWithin] with x hx
     rw [variationOnFromTo.sub_left hf ha hb hx.1]
-  
+  apply Tendsto.const_sub
+  suffices H : Tendsto (fun x => (eVariationOn f (s inter Icc x b)).toReal) (𝓝[s inter Iio b] b)
+      (𝓝 (dist (f b) l)) by
+    apply Tendsto.congr' _ H
+    filter_upwards [self_mem_nhdsWithin] with x hx using by simp [variationOnFromTo, hx.2.le]
+  rw [dist_edist]
+  exact (ENNReal.tendsto_toReal (by simp)).comp (hf.tendsto_eVariationOn_Icc_left h'f hb)
 
 中文:
 定理 tendsto_left
@@ -634,7 +644,13 @@ theorem tendsto_left
     apply Tendsto.congr' _ H
     filter_upwards [self_mem_nhdsWithin] with x hx
     rw [variationOnFromTo.sub_left hf ha hb hx.1]
-  
+  apply Tendsto.const_sub
+  suffices H : Tendsto (fun x => (eVariationOn f (s inter Icc x b)).toReal) (𝓝[s inter Iio b] b)
+      (𝓝 (dist (f b) l)) by
+    apply Tendsto.congr' _ H
+    filter_upwards [self_mem_nhdsWithin] with x hx using by simp [variationOnFromTo, hx.2.le]
+  rw [dist_edist]
+  exact (ENNReal.tendsto_toReal (by simp)).comp (hf.tendsto_eVariationOn_Icc_left h'f hb)
 
 Depends on / 依赖: Tendsto, Tendsto.congr, Tendsto.const_sub, const_sub, eVariationOn, filter_upwards, self_mem_nhdsWithin, sub_left, toReal, variationOnFromTo, variationOnFromTo.sub_left
 -/
@@ -668,7 +684,13 @@ theorem tendsto_right
     apply Tendsto.congr' _ H
     filter_upwards [self_mem_nhdsWithin] with x hx
     rw [variationOnFromTo.add hf ha hb hx.1]
-  apply
+  apply Tendsto.const_add
+  suffices H : Tendsto (fun x => (eVariationOn f (s inter Icc b x)).toReal) (𝓝[s inter Ioi b] b)
+      (𝓝 (dist (f b) l)) by
+    apply Tendsto.congr' _ H
+    filter_upwards [self_mem_nhdsWithin] with x hx using by simp [variationOnFromTo, hx.2.le]
+  rw [dist_edist]
+  exact (ENNReal.tendsto_toReal (by simp)).comp (hf.tendsto_eVariationOn_Icc_right h'f hb)
 
 中文:
 定理 tendsto_right
@@ -679,7 +701,13 @@ theorem tendsto_right
     apply Tendsto.congr' _ H
     filter_upwards [self_mem_nhdsWithin] with x hx
     rw [variationOnFromTo.add hf ha hb hx.1]
-  apply
+  apply Tendsto.const_add
+  suffices H : Tendsto (fun x => (eVariationOn f (s inter Icc b x)).toReal) (𝓝[s inter Ioi b] b)
+      (𝓝 (dist (f b) l)) by
+    apply Tendsto.congr' _ H
+    filter_upwards [self_mem_nhdsWithin] with x hx using by simp [variationOnFromTo, hx.2.le]
+  rw [dist_edist]
+  exact (ENNReal.tendsto_toReal (by simp)).comp (hf.tendsto_eVariationOn_Icc_right h'f hb)
 
 Depends on / 依赖: Tendsto, Tendsto.congr, Tendsto.const_add, const_add, eVariationOn, filter_upwards, self_mem_nhdsWithin, toReal, variationOnFromTo, variationOnFromTo.add
 -/
@@ -714,7 +742,9 @@ theorem leftLim_eq
   · simp [leftLim_eq_of_eq_bot _ hb]
   apply leftLim_eq_of_tendsto
   have := variationOnFromTo.tendsto_left (f := f) (l := f.leftLim b) (mem_univ a) (mem_univ b)
-    hf.l
+    hf.locallyBoundedVariationOn
+  simp only [univ_inter] at this
+  exact this (hf.tendsto_leftLim _)
 
 中文:
 定理 leftLim_eq
@@ -726,7 +756,9 @@ theorem leftLim_eq
   · simp [leftLim_eq_of_eq_bot _ hb]
   apply leftLim_eq_of_tendsto
   have := variationOnFromTo.tendsto_left (f := f) (l := f.leftLim b) (mem_univ a) (mem_univ b)
-    hf.l
+    hf.locallyBoundedVariationOn
+  simp only [univ_inter] at this
+  exact this (hf.tendsto_leftLim _)
 
 Depends on / 依赖: OrderTopology, Preorder, Preorder.topology, TopologicalSpace, eq_or_neBot, f.leftLim, hf.locallyBoundedVariationOn, hf.tendsto_leftLim, leftLim, leftLim_eq_of_eq_bot, leftLim_eq_of_tendsto, locallyBoundedVariationOn, mem_univ, tendsto_left, tendsto_leftLim, topology, univ_inter, variationOnFromTo, variationOnFromTo.tendsto_left
 -/
@@ -757,7 +789,9 @@ theorem rightLim_eq
   · simp [rightLim_eq_of_eq_bot _ hb]
   apply rightLim_eq_of_tendsto
   have := variationOnFromTo.tendsto_right (f := f) (l := f.rightLim b) (mem_univ a) (mem_univ b)
-    
+    hf.locallyBoundedVariationOn
+  simp only [univ_inter] at this
+  exact this (hf.tendsto_rightLim _)
 
 中文:
 定理 rightLim_eq
@@ -769,7 +803,9 @@ theorem rightLim_eq
   · simp [rightLim_eq_of_eq_bot _ hb]
   apply rightLim_eq_of_tendsto
   have := variationOnFromTo.tendsto_right (f := f) (l := f.rightLim b) (mem_univ a) (mem_univ b)
-    
+    hf.locallyBoundedVariationOn
+  simp only [univ_inter] at this
+  exact this (hf.tendsto_rightLim _)
 
 Depends on / 依赖: OrderTopology, Preorder, Preorder.topology, TopologicalSpace, eq_or_neBot, f.rightLim, hf.locallyBoundedVariationOn, hf.tendsto_rightLim, locallyBoundedVariationOn, mem_univ, rightLim, rightLim_eq_of_eq_bot, rightLim_eq_of_tendsto, tendsto_right, tendsto_rightLim, topology, univ_inter, variationOnFromTo, variationOnFromTo.tendsto_right
 -/
@@ -799,7 +835,13 @@ theorem _root_.BoundedVariationOn.continuousWithinAt_variationOnFromTo_Ici
     rw [variationOnFromTo.add hf.locallyBoundedVariationOn (mem_univ _) (mem_univ _) (mem_univ _)]
   rw [this]
   apply continuousWithinAt_const.add
-  suffices H : Conti
+  suffices H : ContinuousWithinAt (fun y => (eVariationOn f (univ inter Icc x y)).toReal) (Ici x) x from
+    H.congr_of_mem (fun y hy => by grind [variationOnFromTo]) self_mem_Iic
+  simp only [ContinuousWithinAt, Icc_self]
+  rw [eVariationOn.subsingleton _ (by grind [Set.Subsingleton])]
+  apply (ENNReal.tendsto_toReal ENNReal.zero_ne_top).comp
+  apply Tendsto.mono_left _ (nhdsWithin_mono _ (subset_univ _))
+  exact hf.tendsto_eVariationOn_Icc_zero_right _ (by simpa using hx)
 
 中文:
 定理 _root_.BoundedVariationOn.continuousWithinAt_variationOnFromTo_Ici
@@ -810,7 +852,13 @@ theorem _root_.BoundedVariationOn.continuousWithinAt_variationOnFromTo_Ici
     rw [variationOnFromTo.add hf.locallyBoundedVariationOn (mem_univ _) (mem_univ _) (mem_univ _)]
   rw [this]
   apply continuousWithinAt_const.add
-  suffices H : Conti
+  suffices H : ContinuousWithinAt (fun y => (eVariationOn f (univ inter Icc x y)).toReal) (Ici x) x from
+    H.congr_of_mem (fun y hy => by grind [variationOnFromTo]) self_mem_Iic
+  simp only [ContinuousWithinAt, Icc_self]
+  rw [eVariationOn.subsingleton _ (by grind [Set.Subsingleton])]
+  apply (ENNReal.tendsto_toReal ENNReal.zero_ne_top).comp
+  apply Tendsto.mono_left _ (nhdsWithin_mono _ (subset_univ _))
+  exact hf.tendsto_eVariationOn_Icc_zero_right _ (by simpa using hx)
 
 Depends on / 依赖: ContinuousWithinAt, H.congr_of_mem, Icc_self, congr_of_mem, continuousWithinAt_const, continuousWithinAt_const.add, eVariationOn, eVariationOn.subsingl, hf.locallyBoundedVariationOn, locallyBoundedVariationOn, mem_univ, self_mem_Iic, subsingl, toReal, variationOnFromTo, variationOnFromTo.add
 -/
@@ -864,7 +912,21 @@ theorem LocallyBoundedVariationOn.exists_monotoneOn_sub_monotoneOn'
   · refine ⟨f, 0, subsingleton_empty.monotoneOn _, subsingleton_empty.monotoneOn _,
       (sub_zero f).symm, fun x hx y hy => by simp at hx⟩
   refine ⟨fun x => (variationOnFromTo f s c x + f x) / 2,
-    fun x => (variationOnFromTo f s c x - f x
+    fun x => (variationOnFromTo f s c x - f x) / 2, ?_, ?_, ?_, ?_⟩
+  · intro x hx y hy hxy
+    dsimp
+    gcongr 1
+    simpa using variationOnFromTo.add_self_monotoneOn h cs hx hy hxy
+  · intro x hx y hy hxy
+    dsimp
+    gcongr 1
+    simpa using variationOnFromTo.sub_self_monotoneOn h cs hx hy hxy
+  · ext
+    simp
+    ring
+  · intro x hx y hy
+    rw [← variationOnFromTo.add h hx cs hy]; rw [variationOnFromTo.eq_neg_swap]
+    ring
 
 中文:
 定理 LocallyBoundedVariationOn.存在_monotoneOn_sub_monotoneOn'
@@ -874,7 +936,21 @@ theorem LocallyBoundedVariationOn.exists_monotoneOn_sub_monotoneOn'
   · refine ⟨f, 0, subsingleton_empty.monotoneOn _, subsingleton_empty.monotoneOn _,
       (sub_zero f).symm, fun x hx y hy => by simp at hx⟩
   refine ⟨fun x => (variationOnFromTo f s c x + f x) / 2,
-    fun x => (variationOnFromTo f s c x - f x
+    fun x => (variationOnFromTo f s c x - f x) / 2, ?_, ?_, ?_, ?_⟩
+  · intro x hx y hy hxy
+    dsimp
+    gcongr 1
+    simpa using variationOnFromTo.add_self_monotoneOn h cs hx hy hxy
+  · intro x hx y hy hxy
+    dsimp
+    gcongr 1
+    simpa using variationOnFromTo.sub_self_monotoneOn h cs hx hy hxy
+  · ext
+    simp
+    ring
+  · intro x hx y hy
+    rw [← variationOnFromTo.add h hx cs hy]; rw [variationOnFromTo.eq_neg_swap]
+    ring
 
 Depends on / 依赖: add_self_monotoneOn, eq_empty_or_nonempty, monotoneOn, sub_self_monotoneOn, sub_zero, subsingleton_empty, subsingleton_empty.monotoneOn, variationOnFromTo, variationOnFromTo.add_self_monotoneOn, variationOnFromTo.sub_self_monotoneOn
 -/

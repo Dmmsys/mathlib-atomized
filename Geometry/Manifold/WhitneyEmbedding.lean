@@ -110,7 +110,7 @@ theorem embeddingPiTangent_injOn
   rw [f.apply_ind x hx] at h₂
   rw [← h₂]; rw [f.apply_ind x hx]; rw [one_smul]; rw [one_smul] at h₁
   have := f.mem_extChartAt_source_of_eq_one h₂.symm
-  exact (extChartAt
+  exact (extChartAt I (f.c _)).injOn (f.mem_extChartAt_ind_source x hx) this h₁
 
 中文:
 定理 embeddingPiTangent_injOn
@@ -122,7 +122,7 @@ theorem embeddingPiTangent_injOn
   rw [f.apply_ind x hx] at h₂
   rw [← h₂]; rw [f.apply_ind x hx]; rw [one_smul]; rw [one_smul] at h₁
   have := f.mem_extChartAt_source_of_eq_one h₂.symm
-  exact (extChartAt
+  exact (extChartAt I (f.c _)).injOn (f.mem_extChartAt_ind_source x hx) this h₁
 
 Depends on / 依赖: Prod.mk_inj, apply_ind, embeddingPiTangent_coe, extChartAt, f.apply_ind, f.ind, f.mem_extChartAt_ind_source, f.mem_extChartAt_source_of_eq_one, funext_iff, mem_extChartAt_ind_source, mem_extChartAt_source_of_eq_one, mk_inj, one_smul
 -/
@@ -166,7 +166,12 @@ theorem comp_embeddingPiTangent_mfderiv
       (@ContinuousLinearMap.proj Real _ ι (fun _ => E × Real) _ _ (fun _ => inferInstance) (f.ind x hx))
   have := L.hasMFDerivAt.comp x
     (f.embeddingPiTangent.contMDiff.mdifferentiableAt (by simp)).hasMFDerivAt
-  convert! hasMFDerivAt_
+  convert! hasMFDerivAt_unique this _
+  refine (hasMFDerivAt_extChartAt (f.mem_chartAt_ind_source x hx)).congr_of_eventuallyEq ?_
+  refine (f.eventuallyEq_one x hx).mono fun y hy => ?_
+  simp only [L, embeddingPiTangent_coe, ContinuousLinearMap.coe_comp, (· ∘ ·),
+    ContinuousLinearMap.coe_fst', ContinuousLinearMap.proj_apply]
+  rw [hy]; rw [Pi.one_apply]; rw [one_smul]
 
 中文:
 定理 comp_embeddingPiTangent_mfderiv
@@ -177,7 +182,12 @@ theorem comp_embeddingPiTangent_mfderiv
       (@ContinuousLinearMap.proj Real _ ι (fun _ => E × Real) _ _ (fun _ => inferInstance) (f.ind x hx))
   have := L.hasMFDerivAt.comp x
     (f.embeddingPiTangent.contMDiff.mdifferentiableAt (by simp)).hasMFDerivAt
-  convert! hasMFDerivAt_
+  convert! hasMFDerivAt_unique this _
+  refine (hasMFDerivAt_extChartAt (f.mem_chartAt_ind_source x hx)).congr_of_eventuallyEq ?_
+  refine (f.eventuallyEq_one x hx).mono fun y hy => ?_
+  simp only [L, embeddingPiTangent_coe, ContinuousLinearMap.coe_comp, (· ∘ ·),
+    ContinuousLinearMap.coe_fst', ContinuousLinearMap.proj_apply]
+  rw [hy]; rw [Pi.one_apply]; rw [one_smul]
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_c, ContinuousLinearMap.fst, ContinuousLinearMap.proj, L.hasMFDerivAt.comp, coe_c, congr_of_eventuallyEq, contMDiff, convert, embeddingPiTangent, embeddingPiTangent_coe, eventuallyEq_one, f.embeddingPiTangent.contMDiff.mdifferentiableAt, f.eventuallyEq_one, f.ind, f.mem_chartAt_ind_source, hasMFDerivAt, hasMFDerivAt_extChartAt, hasMFDerivAt_unique, mdifferentiableAt
 -/

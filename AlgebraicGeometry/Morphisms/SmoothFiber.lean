@@ -42,7 +42,27 @@ lemma Smooth.of_smooth_fiberToSpecResidueField
     dsimp [Scheme.Cover.pullbackHom]
     refine this _ (fun y => ?_) ⟨_, rfl⟩
     apply MorphismProperty.of_isPullback
-    · exact isPullback_fiberToSpecResidueField_of_isPull
+    · exact isPullback_fiberToSpecResidueField_of_isPullback (IsPullback.of_hasPullback _ _) _
+    · infer_instance
+  obtain ⟨R, rfl⟩ := h
+  wlog h : exists S, X = Spec S generalizing f X
+  · rw [IsZariskiLocalAtSource.iff_of_openCover (P := @Smooth) X.affineCover]
+    intro i
+    have _ (y) : Smooth (pullback.snd f ((Spec R).fromSpecResidueField y)) :=
+inferInstanceAs Smooth (f.fiberToSpecResidueField y)
+    refine this _ (fun y => ?_) ⟨_, rfl⟩
+    rw [Scheme.Hom.fiberToSpecResidueField]; rw [← pullbackRightPullbackFstIso_inv_snd_snd]
+    infer_instance
+  obtain ⟨S, rfl⟩ := h
+  obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+  simp only [HasRingHomProperty.Spec_iff] at *
+  algebraize [φ.hom]
+  refine Algebra.Smooth.of_formallySmooth_fiber fun p hp => ?_
+  rw [← RingHom.formallySmooth_algebraMap]
+  refine RingHom.Smooth.formallySmooth ?_
+  rw [← CommRingCat.hom_ofHom (algebraMap p.ResidueField (p.Fiber ↑S))]; rw [← HasRingHomProperty.Spec_iff (P := @Smooth)]; rw [← MorphismProperty.arrow_mk_iso_iff (P := @Smooth)
+    (Spec.fiberToSpecResidueFieldIso R S ⟨p]; rw [hp⟩)]
+  exact h ⟨p, hp⟩
 
 中文:
 引理 光滑.of_smooth_fiberToSpecResidueField
@@ -54,7 +74,27 @@ lemma Smooth.of_smooth_fiberToSpecResidueField
     dsimp [Scheme.Cover.pullbackHom]
     refine this _ (fun y => ?_) ⟨_, rfl⟩
     apply MorphismProperty.of_isPullback
-    · exact isPullback_fiberToSpecResidueField_of_isPull
+    · exact isPullback_fiberToSpecResidueField_of_isPullback (IsPullback.of_hasPullback _ _) _
+    · infer_instance
+  obtain ⟨R, rfl⟩ := h
+  wlog h : exists S, X = Spec S generalizing f X
+  · rw [IsZariskiLocalAtSource.iff_of_openCover (P := @Smooth) X.affineCover]
+    intro i
+    have _ (y) : Smooth (pullback.snd f ((Spec R).fromSpecResidueField y)) :=
+inferInstanceAs Smooth (f.fiberToSpecResidueField y)
+    refine this _ (fun y => ?_) ⟨_, rfl⟩
+    rw [Scheme.Hom.fiberToSpecResidueField]; rw [← pullbackRightPullbackFstIso_inv_snd_snd]
+    infer_instance
+  obtain ⟨S, rfl⟩ := h
+  obtain ⟨φ, rfl⟩ := Spec.map_surjective f
+  simp only [HasRingHomProperty.Spec_iff] at *
+  algebraize [φ.hom]
+  refine Algebra.Smooth.of_formallySmooth_fiber fun p hp => ?_
+  rw [← RingHom.formallySmooth_algebraMap]
+  refine RingHom.Smooth.formallySmooth ?_
+  rw [← CommRingCat.hom_ofHom (algebraMap p.ResidueField (p.Fiber ↑S))]; rw [← HasRingHomProperty.Spec_iff (P := @Smooth)]; rw [← MorphismProperty.arrow_mk_iso_iff (P := @Smooth)
+    (Spec.fiberToSpecResidueFieldIso R S ⟨p]; rw [hp⟩)]
+  exact h ⟨p, hp⟩
 
 Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, IsZariskiLocalAtSource, IsZariskiLocalAtSource.iff_of_openCover, IsZariskiLocalAtTarget, IsZariskiLocalAtTarget.iff_of_openCover, MorphismProperty, MorphismProperty.of_isPullback, Scheme, Scheme.Cover.pullbackHom, Smooth, X.affineCover, Y.affineCover, affineCover, generalizing, iff_of_openCover, infer_instance, isPullback_fiberToSpecResidueField_of_isPullback, of_hasPullback, of_isPullback
 -/

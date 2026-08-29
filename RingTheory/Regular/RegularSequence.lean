@@ -387,7 +387,11 @@ lemma _root_.AddHom.map_smul_top_toAddSubgroup_of_surjective
       rw [Ideal.ofList_nil]; rw [bot_smul]; rw [bot_toAddSubgroup]
   | @cons r s _ _ h _ ih =>
     conv => congr <;> rw [Ideal.ofList_cons, sup_smul, sup_toAddSubgroup,
-      ideal_span_singleton_smul, pointwise_smul_toA
+      ideal_span_singleton_smul, pointwise_smul_toAddSubgroup,
+      top_toAddSubgroup, AddSubgroup.pointwise_smul_def]
+    apply DFunLike.ext (f.comp (toAddMonoidEnd R M r))
+      ((toAddMonoidEnd S M₂ s).comp f) at h
+    rw [AddSubgroup.map_sup]; rw [ih]; rw [map_map]; rw [h]; rw [← map_map]; rw [map_top_of_surjective f hf]
 
 中文:
 引理 _root_.加法半群态射.map_smul_top_toAddSubgroup_of_surjective
@@ -398,7 +402,11 @@ lemma _root_.AddHom.map_smul_top_toAddSubgroup_of_surjective
       rw [Ideal.ofList_nil]; rw [bot_smul]; rw [bot_toAddSubgroup]
   | @cons r s _ _ h _ ih =>
     conv => congr <;> rw [Ideal.ofList_cons, sup_smul, sup_toAddSubgroup,
-      ideal_span_singleton_smul, pointwise_smul_toA
+      ideal_span_singleton_smul, pointwise_smul_toAddSubgroup,
+      top_toAddSubgroup, AddSubgroup.pointwise_smul_def]
+    apply DFunLike.ext (f.comp (toAddMonoidEnd R M r))
+      ((toAddMonoidEnd S M₂ s).comp f) at h
+    rw [AddSubgroup.map_sup]; rw [ih]; rw [map_map]; rw [h]; rw [← map_map]; rw [map_top_of_surjective f hf]
 -/
 private lemma _root_.AddHom.map_smul_top_toAddSubgroup_of_surjective
     {f : M ->+ M₂} {as : List R} {bs : List S} (hf : Function.Surjective f)
@@ -429,7 +437,9 @@ lemma _root_.AddEquiv.isWeaklyRegular_congr
       M₂ ⧸ (Ideal.ofList (bs.take i) • ⊤ : Submodule S M₂) :=
 QuotientAddGroup.congr _ _ e
 AddHom.map_smul_top_toAddSubgroup_of_surjective e.surjective
-        List.forall₂_take i
+        List.forall₂_take i h
+  refine (finCongr h.length_eq).forall_congr @fun _ => (e' _).isSMulRegular_congr ?_
+  exact (mkQ_surjective _).forall.mpr fun _ => congrArg (mkQ _) (h.get _ _ _)
 
 中文:
 引理 _root_.加法等价.isWeaklyRegular_congr
@@ -440,7 +450,9 @@ AddHom.map_smul_top_toAddSubgroup_of_surjective e.surjective
       M₂ ⧸ (Ideal.ofList (bs.take i) • ⊤ : Submodule S M₂) :=
 QuotientAddGroup.congr _ _ e
 AddHom.map_smul_top_toAddSubgroup_of_surjective e.surjective
-        List.forall₂_take i
+        List.forall₂_take i h
+  refine (finCongr h.length_eq).forall_congr @fun _ => (e' _).isSMulRegular_congr ?_
+  exact (mkQ_surjective _).forall.mpr fun _ => congrArg (mkQ _) (h.get _ _ _)
 
 Depends on / 依赖: AddHom, AddHom.map_smul_top_toAddSubgroup_of_surjective, Ideal.ofList, List.forall, QuotientAddGroup, QuotientAddGroup.congr, Submodule, as.take, bs.take, e.surjective, finCongr, forall.mpr, forall_congr, h.get, h.length_eq, isSMulRegular_congr, isWeaklyRegular_iff_Fin, length_eq, map_smul_top_toAddSubgroup_of_surjective, mkQ_surjective
 -/
@@ -609,7 +621,8 @@ lemma isWeaklyRegular_cons_iff
   let e i := quotOfListConsSMulTopEquivQuotSMulTopInner M r (rs.take i)
 Iff.trans (isWeaklyRegular_iff_Fin _ _) Iff.trans Fin.forall_iff_succ
 and_congr ((quotEquivOfEqBot _ this).isSMulRegular_congr r)
-      Iff.trans (forall_congr' f
+      Iff.trans (forall_congr' fun i => (e i).isSMulRegular_congr (rs.get i))
+        (isWeaklyRegular_iff_Fin _ _).symm
 
 中文:
 引理 isWeaklyRegular_cons_iff
@@ -618,7 +631,8 @@ and_congr ((quotEquivOfEqBot _ this).isSMulRegular_congr r)
   let e i := quotOfListConsSMulTopEquivQuotSMulTopInner M r (rs.take i)
 Iff.trans (isWeaklyRegular_iff_Fin _ _) Iff.trans Fin.forall_iff_succ
 and_congr ((quotEquivOfEqBot _ this).isSMulRegular_congr r)
-      Iff.trans (forall_congr' f
+      Iff.trans (forall_congr' fun i => (e i).isSMulRegular_congr (rs.get i))
+        (isWeaklyRegular_iff_Fin _ _).symm
 
 Depends on / 依赖: Eq.trans, Fin.forall_iff_succ, Ideal.ofList_nil, Iff.trans, and_congr, bot_smul, forall_congr, forall_iff_succ, isSMulRegular_congr, isWeaklyRegular_iff_Fin, ofList_nil, quotEquivOfEqBot, quotOfListConsSMulTopEquivQuotSMulTopInner, rs.get, rs.take
 -/
@@ -939,7 +953,7 @@ refine Iff.symm Iff.trans (and_iff_right (.nil R M)) ?_
     rw [Ideal.ofList_nil]; rw [bot_smul]
   | cons r rs₁ ih =>
     let e := quotOfListConsSMulTopEquivQuotSMulTopInner M r rs₁
-    rw 
+    rw [List.cons_append]; rw [isWeaklyRegular_cons_iff]; rw [isWeaklyRegular_cons_iff]; rw [ih]; rw [← and_assoc]; rw [← e.isWeaklyRegular_congr rs₂]
 
 中文:
 引理 isWeaklyRegular_append_iff
@@ -952,7 +966,7 @@ refine Iff.symm Iff.trans (and_iff_right (.nil R M)) ?_
     rw [Ideal.ofList_nil]; rw [bot_smul]
   | cons r rs₁ ih =>
     let e := quotOfListConsSMulTopEquivQuotSMulTopInner M r rs₁
-    rw 
+    rw [List.cons_append]; rw [isWeaklyRegular_cons_iff]; rw [isWeaklyRegular_cons_iff]; rw [ih]; rw [← and_assoc]; rw [← e.isWeaklyRegular_congr rs₂]
 
 Depends on / 依赖: Ideal.ofList_nil, Iff.symm, Iff.trans, List.cons_append, and_assoc, and_iff_right, bot_smul, cons_append, e.isWeaklyRegular_congr, generalizing, isWeaklyRegular_congr, isWeaklyRegular_cons_iff, ofList_nil, quotEquivOfEqBot, quotOfListConsSMulTopEquivQuotSMulTopInner
 -/
@@ -1085,7 +1099,9 @@ definition recIterModByRegular
     (fun N _ _ h' =>
       haveI := (nontrivial_iff R).mp (nontrivial_of_ne _ _ h'); nil N)
     (fun r rs' h1 h2 h3 h4 =>
-      have ⟨h5, h6⟩ := (isRegular_cons_iff _ _ _).mp ⟨h2.cons h1, h
+      have ⟨h5, h6⟩ := (isRegular_cons_iff _ _ _).mp ⟨h2.cons h1, h4⟩
+      cons r rs' h5 h6 (h3 h6.top_ne_smul))
+    h.top_ne_smul
 
 中文:
 定义 recIterModByRegular
@@ -1094,7 +1110,9 @@ definition recIterModByRegular
     (fun N _ _ h' =>
       haveI := (nontrivial_iff R).mp (nontrivial_of_ne _ _ h'); nil N)
     (fun r rs' h1 h2 h3 h4 =>
-      have ⟨h5, h6⟩ := (isRegular_cons_iff _ _ _).mp ⟨h2.cons h1, h
+      have ⟨h5, h6⟩ := (isRegular_cons_iff _ _ _).mp ⟨h2.cons h1, h4⟩
+      cons r rs' h5 h6 (h3 h6.top_ne_smul))
+    h.top_ne_smul
 
 Depends on / 依赖: h.toIsWeaklyRegular.recIterModByRegular, h.top_ne_smul, h2.cons, h6.top_ne_smul, isRegular_cons_iff, motive, nontrivial_iff, nontrivial_of_ne, recIterModByRegular, toIsWeaklyRegular, top_ne_smul
 -/
@@ -1148,7 +1166,9 @@ definition recIterModByRegularWithRing
     (fun R _ N _ _ h' =>
       haveI := (nontrivial_iff R).mp (nontrivial_of_ne _ _ h'); nil R N)
     (fun r rs' h1 h2 h3 h4 =>
-      have ⟨h5, h6⟩ := (isRegular_cons_iff' _ _
+      have ⟨h5, h6⟩ := (isRegular_cons_iff' _ _ _).mp ⟨h2.cons' h1, h4⟩
+cons r rs' h5 h6 h3 h6.top_ne_smul)
+    h.top_ne_smul
 
 中文:
 定义 recIterModByRegularWithRing
@@ -1157,7 +1177,9 @@ definition recIterModByRegularWithRing
     (fun R _ N _ _ h' =>
       haveI := (nontrivial_iff R).mp (nontrivial_of_ne _ _ h'); nil R N)
     (fun r rs' h1 h2 h3 h4 =>
-      have ⟨h5, h6⟩ := (isRegular_cons_iff' _ _
+      have ⟨h5, h6⟩ := (isRegular_cons_iff' _ _ _).mp ⟨h2.cons' h1, h4⟩
+cons r rs' h5 h6 h3 h6.top_ne_smul)
+    h.top_ne_smul
 
 Depends on / 依赖: h.toIsWeaklyRegular.recIterModByRegularWithRing, h.top_ne_smul, h2.cons, h6.top_ne_smul, isRegular_cons_iff, motive, nontrivial_iff, nontrivial_of_ne, recIterModByRegularWithRing, toIsWeaklyRegular, top_ne_smul
 -/
@@ -1417,7 +1439,12 @@ any_goals exact quotEquivOfEqBot _
       Eq.trans (congrArg (· • ⊤) Ideal.ofList_nil) (bot_smul ⊤)
     all_goals exact quot_hom_ext _ _ _ fun _ => rfl
   | cons r rs h₄ _ ih =>
-    speciali
+    specialize ih
+      (map_first_exact_on_four_term_exact_of_isSMulRegular_last h₁₂ h₂₃ h₄)
+      (map_exact r h₂₃ h₃) (map_surjective r h₃)
+    have H₁ := quotOfListConsSMulTopEquivQuotSMulTopInner_naturality r rs f₁
+    have H₂ := quotOfListConsSMulTopEquivQuotSMulTopInner_naturality r rs f₂
+    exact (Exact.iff_of_ladder_linearEquiv H₁.symm H₂.symm).mp ih
 
 中文:
 引理 map_first_exact_on_four_term_right_exact_of_isSMulRegular_last
@@ -1429,7 +1456,12 @@ any_goals exact quotEquivOfEqBot _
       Eq.trans (congrArg (· • ⊤) Ideal.ofList_nil) (bot_smul ⊤)
     all_goals exact quot_hom_ext _ _ _ fun _ => rfl
   | cons r rs h₄ _ ih =>
-    speciali
+    specialize ih
+      (map_first_exact_on_four_term_exact_of_isSMulRegular_last h₁₂ h₂₃ h₄)
+      (map_exact r h₂₃ h₃) (map_surjective r h₃)
+    have H₁ := quotOfListConsSMulTopEquivQuotSMulTopInner_naturality r rs f₁
+    have H₂ := quotOfListConsSMulTopEquivQuotSMulTopInner_naturality r rs f₂
+    exact (Exact.iff_of_ladder_linearEquiv H₁.symm H₂.symm).mp ih
 
 Depends on / 依赖: Eq.trans, Exact.iff_of_ladder_linearEquiv, Ideal.ofList_nil, all_goals, any_goals, bot_smul, generalizing, iff_of_ladder_linearEquiv, map_exact, map_first_exact_on_four_term_exact_of_isSMulRegular_last, map_surjective, ofList_nil, quotEquivOfEqBot, quotOfListConsSMulTop, quotOfListConsSMulTopEquivQuotSMulTopInner_naturality, quot_hom_ext, specialize
 -/
@@ -1470,7 +1502,12 @@ lemma IsWeaklyRegular.swap
   obtain ⟨ha, hb⟩ := h1
   rw [← isSMulRegular_iff_torsionBy_eq_bot] at h2
   specialize h2 (le_antisymm ?_ (smul_le_self_of_tower a (torsionBy R M b)))
-· refine le_of_eq_of_le ?_ smul_top_inf_eq_smul_of_isSMulRegular_on_qu
+· refine le_of_eq_of_le ?_ smul_top_inf_eq_smul_of_isSMulRegular_on_quot
+ha.of_injective _ ker_eq_bot.mp ker_liftQ_eq_bot' _ (lsmul R M b) rfl
+    rw [← (isSMulRegular_on_quot_iff_lsmul_comap_eq _ _).mp hb]
+    exact (inf_eq_right.mpr (ker_le_comap _)).symm
+  · rwa [ha.isSMulRegular_on_quot_iff_smul_top_inf_eq_smul, inf_comm, smul_comm,
+      ← h2.isSMulRegular_on_quot_iff_smul_top_inf_eq_smul, and_iff_left hb]
 
 中文:
 引理 是WeaklyRegular.swap
@@ -1480,7 +1517,12 @@ lemma IsWeaklyRegular.swap
   obtain ⟨ha, hb⟩ := h1
   rw [← isSMulRegular_iff_torsionBy_eq_bot] at h2
   specialize h2 (le_antisymm ?_ (smul_le_self_of_tower a (torsionBy R M b)))
-· refine le_of_eq_of_le ?_ smul_top_inf_eq_smul_of_isSMulRegular_on_qu
+· refine le_of_eq_of_le ?_ smul_top_inf_eq_smul_of_isSMulRegular_on_quot
+ha.of_injective _ ker_eq_bot.mp ker_liftQ_eq_bot' _ (lsmul R M b) rfl
+    rw [← (isSMulRegular_on_quot_iff_lsmul_comap_eq _ _).mp hb]
+    exact (inf_eq_right.mpr (ker_le_comap _)).symm
+  · rwa [ha.isSMulRegular_on_quot_iff_smul_top_inf_eq_smul, inf_comm, smul_comm,
+      ← h2.isSMulRegular_on_quot_iff_smul_top_inf_eq_smul, and_iff_left hb]
 
 Depends on / 依赖: Discrete, Discrete.range_functor, Fan.mk_pt, Limits, Limits.Fan.isLimitMapConeEquiv, Preorder, Preorder.isLimitIInf, Preorder.isLimitOfIsGLB, allowSynthFailures, functor_obj_iInf, hf.functor_obj_iInf, homOfLE_leOfHom, isGLB_iInf, isLimitIInf, isLimitMapConeEquiv, isLimitOfIsGLB, mk_pt, preservesLimit_of_preserves_limit_cone, preservesLimitsOfShape_of_discrete, range_functor
 -/
@@ -1513,6 +1555,28 @@ lemma IsWeaklyRegular.prototype_perm
 (H rs').mp (aux [] h'' (.refl rs) (h''.symm.subperm)) (H rs).mpr h
   where aux {rs₁ rs₂} (rs₀ : List R)
     (h₁₂ : rs₁ ~ rs₂) (H₁ : rs₀ ++ rs₁ <+~ rs) (H₃ : rs₀ ++ rs₂ <+~ rs)
+    (h : IsWeaklyRegular (M ⧸ (Ideal.ofList rs₀ • ⊤ : Submodule R M)) rs₁) :
+    IsWeaklyRegular (M ⧸ (Ideal.ofList rs₀ • ⊤ : Submodule R M)) rs₂ := by {
+  induction h₁₂ generalizing rs₀ with
+  | nil => exact .nil R _
+  | cons r _ ih =>
+    let e := quotOfListConsSMulTopEquivQuotSMulTopOuter M r rs₀
+    rw [isWeaklyRegular_cons_iff]; rw [← e.isWeaklyRegular_congr] at h ⊢
+    refine h.imp_right (ih (r :: rs₀) ?_ ?_) <;>
+      exact List.perm_middle.subperm_right.mp ‹_›
+  | swap a b t =>
+    rw [show forall x y z]; rw [x :: y :: z = [x]; rw [y] ++ z from fun _ _ _ => rfl,
+      isWeaklyRegular_append_iff] at h ⊢
+    have : Ideal.ofList [b, a] = Ideal.ofList [a, b] :=
+congrArg Ideal.span Set.ext fun _ => (List.Perm.swap a b []).mem_iff
+    rw [(quotEquivOfEq _ _ (congrArg₂ _ this rfl)).isWeaklyRegular_congr] at h
+    rw [List.append_cons]; rw [List.append_cons]; rw [List.append_assoc _ [b] [a]] at H₁
+    apply (List.sublist_append_left (rs₀ ++ [b, a]) _).subperm.trans at H₁
+    apply List.perm_append_comm.subperm.trans at H₁
+    exact h.imp_left (swap · (h' b a rs₀ H₁))
+  | trans h₁₂ _ ih₁₂ ih₂₃ =>
+    have H₂ := (h₁₂.append_left rs₀).subperm_right.mp H₁
+    exact ih₂₃ rs₀ H₂ H₃ (ih₁₂ rs₀ H₁ H₂ h) }
 
 中文:
 引理 是WeaklyRegular.prototype_perm
@@ -1522,6 +1586,28 @@ lemma IsWeaklyRegular.prototype_perm
 (H rs').mp (aux [] h'' (.refl rs) (h''.symm.subperm)) (H rs).mpr h
   where aux {rs₁ rs₂} (rs₀ : List R)
     (h₁₂ : rs₁ ~ rs₂) (H₁ : rs₀ ++ rs₁ <+~ rs) (H₃ : rs₀ ++ rs₂ <+~ rs)
+    (h : IsWeaklyRegular (M ⧸ (Ideal.ofList rs₀ • ⊤ : Submodule R M)) rs₁) :
+    IsWeaklyRegular (M ⧸ (Ideal.ofList rs₀ • ⊤ : Submodule R M)) rs₂ := by {
+  induction h₁₂ generalizing rs₀ with
+  | nil => exact .nil R _
+  | cons r _ ih =>
+    let e := quotOfListConsSMulTopEquivQuotSMulTopOuter M r rs₀
+    rw [isWeaklyRegular_cons_iff]; rw [← e.isWeaklyRegular_congr] at h ⊢
+    refine h.imp_right (ih (r :: rs₀) ?_ ?_) <;>
+      exact List.perm_middle.subperm_right.mp ‹_›
+  | swap a b t =>
+    rw [show forall x y z]; rw [x :: y :: z = [x]; rw [y] ++ z from fun _ _ _ => rfl,
+      isWeaklyRegular_append_iff] at h ⊢
+    have : Ideal.ofList [b, a] = Ideal.ofList [a, b] :=
+congrArg Ideal.span Set.ext fun _ => (List.Perm.swap a b []).mem_iff
+    rw [(quotEquivOfEq _ _ (congrArg₂ _ this rfl)).isWeaklyRegular_congr] at h
+    rw [List.append_cons]; rw [List.append_cons]; rw [List.append_assoc _ [b] [a]] at H₁
+    apply (List.sublist_append_left (rs₀ ++ [b, a]) _).subperm.trans at H₁
+    apply List.perm_append_comm.subperm.trans at H₁
+    exact h.imp_left (swap · (h' b a rs₀ H₁))
+  | trans h₁₂ _ ih₁₂ ih₂₃ =>
+    have H₂ := (h₁₂.append_left rs₀).subperm_right.mp H₁
+    exact ih₂₃ rs₀ H₂ H₃ (ih₁₂ rs₀ H₁ H₂ h) }
 
 Depends on / 依赖: Ideal.ofList, Submodule, ofList, torsionBy
 -/
@@ -1571,7 +1657,10 @@ lemma IsWeaklyRegular.of_perm_of_subset_jacobson_annihilator
       (Ideal.jacobson_mono
         (le_trans
           -- The named argument `(R := R)` below isn't necessary, but
-          -- typechecking is much slower without 
+          -- typechecking is much slower without it
+          (LinearMap.annihilator_le_of_surjective (R := R) _ (mkQ_surjective _))
+          (LinearMap.annihilator_le_of_injective _ (injective_subtype _)))
+        (h3 r (h.subset List.mem_cons_self)))
 
 中文:
 引理 是WeaklyRegular.of_perm_of_subset_jacobson_annihilator
@@ -1582,7 +1671,10 @@ lemma IsWeaklyRegular.of_perm_of_subset_jacobson_annihilator
       (Ideal.jacobson_mono
         (le_trans
           -- The named argument `(R := R)` below isn't necessary, but
-          -- typechecking is much slower without 
+          -- typechecking is much slower without it
+          (LinearMap.annihilator_le_of_surjective (R := R) _ (mkQ_surjective _))
+          (LinearMap.annihilator_le_of_injective _ (injective_subtype _)))
+        (h3 r (h.subset List.mem_cons_self)))
 
 Depends on / 依赖: Ideal.jacobson_mono, IsNoetherian, IsNoetherian.noetherian, eq_bot_of_eq_pointwise_smul_of_mem_jacobson_annihilator, h1.prototype_perm, jacobson_mono, le_trans, noetherian, prototype_perm
 -/
@@ -1666,7 +1758,8 @@ lemma _root_.IsLocalRing.isRegular_of_perm
   · intro x (h6 : x in { r | r in rs })
     refine IsLocalRing.le_maximalIdeal ?_ (Ideal.subset_span h6)
     exact h4 ∘ Eq.trans (top_smul _).symm ∘ Eq.symm ∘ congrArg (· • ⊤)
-  · refine ne_
+  · refine ne_of_ne_of_eq h4 (congrArg (Ideal.span · • ⊤) ?_)
+    exact Set.ext fun _ => h2.mem_iff
 
 中文:
 引理 _root_.是局部环.isRegular_of_perm
@@ -1677,7 +1770,8 @@ lemma _root_.IsLocalRing.isRegular_of_perm
   · intro x (h6 : x in { r | r in rs })
     refine IsLocalRing.le_maximalIdeal ?_ (Ideal.subset_span h6)
     exact h4 ∘ Eq.trans (top_smul _).symm ∘ Eq.symm ∘ congrArg (· • ⊤)
-  · refine ne_
+  · refine ne_of_ne_of_eq h4 (congrArg (Ideal.span · • ⊤) ?_)
+    exact Set.ext fun _ => h2.mem_iff
 
 Depends on / 依赖: Eq.symm, Eq.trans, Ideal.span, Ideal.subset_span, IsLocalRing, IsLocalRing.isWeaklyRegular_of_perm_of_subset_maximalIdeal, IsLocalRing.le_maximalIdeal, Set.ext, h2.mem_iff, isWeaklyRegular_of_perm_of_subset_maximalIdeal, le_maximalIdeal, mem_iff, ne_of_ne_of_eq, subset_span, top_smul
 -/

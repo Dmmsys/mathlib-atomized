@@ -364,7 +364,7 @@ definition Skeletal.mulEquiv
     invFun := e.inverse.obj
     left_inv X := hC ⟨(e.unitIso.app X).symm⟩
     right_inv X := hD ⟨e.counitIso.app X⟩
-    map_mul' X Y := hD ⟨(Monoidal.μIso e.functor X Y).s
+    map_mul' X Y := hD ⟨(Monoidal.μIso e.functor X Y).symm⟩ }
 
 中文:
 定义 Skeletal.mulEquiv
@@ -377,7 +377,7 @@ definition Skeletal.mulEquiv
     invFun := e.inverse.obj
     left_inv X := hC ⟨(e.unitIso.app X).symm⟩
     right_inv X := hD ⟨e.counitIso.app X⟩
-    map_mul' X Y := hD ⟨(Monoidal.μIso e.functor X Y).s
+    map_mul' X Y := hD ⟨(Monoidal.μIso e.functor X Y).symm⟩ }
 
 Depends on / 依赖: monoidOfSkeletalMonoidal
 -/

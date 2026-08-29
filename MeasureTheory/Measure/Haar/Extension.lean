@@ -145,7 +145,55 @@ definition pushforward
     hasCompactSupport' := by
       obtain ⟨K, hK, hf⟩ := exists_compact_iff_hasCompactSupport.mpr f.hasCompactSupport
       refine exists_compact_iff_hasCompactSupport.mp
-        ⟨ψ '' K, hK.image H.isOpenQuotientMap.continuous, fun x
+        ⟨ψ '' K, hK.image H.isOpenQuotientMap.continuous, fun x hx => ?_⟩
+      suffices forall a : A, f (Function.invFun ψ x * φ a) = 0 by simp [this, pullback_def]
+      refine fun a => hf _ (mt (Set.mem_image_of_mem ψ) ?_)
+      rwa [map_mul, Function.rightInverse_invFun H.isOpenQuotientMap.surjective,
+        H.mulExact.apply_apply_eq_one, mul_one]
+    continuous_toFun := by
+      let := IsTopologicalGroup.rightUniformSpace B
+      simp_rw [← H.isOpenQuotientMap.continuous_comp_iff, Function.comp_def,
+        integral_pullback_invFun_apply, Metric.continuous_iff']
+      intro b ε hε
+      obtain ⟨U₀, hU₀, hb⟩ := exists_compact_mem_nhds b
+      obtain ⟨K, hK, hf₀⟩ := exists_compact_iff_hasCompactSupport.mpr f.hasCompactSupport
+      let S : Set A := φ ⁻¹' (U₀⁻¹ * K)
+      have hSc : IsCompact S := H.isClosedEmbedding.isCompact_preimage (hU₀.inv.mul hK)
+      obtain ⟨δ, hδ0, hδ⟩ : exists δ > 0, ENNReal.ofReal δ * μA S < ENNReal.ofReal ε := by
+        rw [← ENNReal.ofReal_toReal hSc.measure_ne_top]; rw [← measureReal_def]
+        by_cases hS' : μA.real S = 0
+        · simp [hS', hε, exists_gt]
+        · refine ⟨ε / 2 / μA.real S, by positivity, ?_⟩
+          rwa [← ENNReal.ofReal_mul' measureReal_nonneg, ENNReal.ofReal_lt_ofReal_iff hε,
+            div_mul_cancel₀ _ hS', half_lt_self_iff]
+      have hS {x} (hx : x in U₀) {y} (hy : y ∉ S) : H.pullback f x y = 0 := by
+        contrapose! hy
+        exact Set.mem_mul.mpr ⟨x⁻¹, Set.inv_mem_inv.mpr hx, x * φ y,
+          not_imp_comm.mp (hf₀ (x * φ y)) hy, inv_mul_cancel_left x (φ y)⟩
+      have ha := f.hasCompactSupport.uniformContinuous_of_continuous f.continuous
+      rw [uniformContinuous_iff_eventually] at ha
+      obtain ⟨U, hU, hf⟩ := ha _ (Metric.dist_mem_uniformity hδ0)
+      refine Filter.mem_of_superset (Filter.inter_mem
+        (mul_singleton_mem_nhds_of_nhds_one b (inv_mem_nhds_one B hU)) hb) ?_
+      rintro - ⟨⟨t, ht, b, rfl, -, rfl⟩, htb⟩
+      have h (a) (ha : a in S) : edist (H.pullback f (t * b) a) (H.pullback f b a) <= .ofReal δ := by
+        rw [edist_dist]
+        exact ENNReal.ofReal_le_ofReal (@hf ⟨t * b * φ a, b * φ a⟩ (by simpa)).le
+      grw [Set.mem_ofPred_eq, dist_integral_le_lintegral_edist (H.pullback f (t * b)).integrable
+        (H.pullback f b).integrable, ← setLIntegral_eq_of_support_subset]
+      · refine ENNReal.toReal_lt_of_lt_ofReal ((setLIntegral_mono measurable_const h).trans_lt ?_)
+        rwa [lintegral_const, restrict_apply_univ]
+      · intro y hy
+        contrapose hy
+        rw [Function.notMem_support]; rw [hS htb hy]; rw [hS (mem_of_mem_nhds hb) hy]; rw [edist_self] }
+  map_add' f g := by
+    ext c
+    exact integral_add (pullback H f _).integrable (pullback H g _).integrable
+  map_smul' x f := by
+    ext c
+    apply integral_smul
+
+@[to_additive]
 
 中文:
 定义 pushforward
@@ -154,7 +202,55 @@ definition pushforward
     hasCompactSupport' := by
       obtain ⟨K, hK, hf⟩ := exists_compact_iff_hasCompactSupport.mpr f.hasCompactSupport
       refine exists_compact_iff_hasCompactSupport.mp
-        ⟨ψ '' K, hK.image H.isOpenQuotientMap.continuous, fun x
+        ⟨ψ '' K, hK.image H.isOpenQuotientMap.continuous, fun x hx => ?_⟩
+      suffices forall a : A, f (Function.invFun ψ x * φ a) = 0 by simp [this, pullback_def]
+      refine fun a => hf _ (mt (Set.mem_image_of_mem ψ) ?_)
+      rwa [map_mul, Function.rightInverse_invFun H.isOpenQuotientMap.surjective,
+        H.mulExact.apply_apply_eq_one, mul_one]
+    continuous_toFun := by
+      let := IsTopologicalGroup.rightUniformSpace B
+      simp_rw [← H.isOpenQuotientMap.continuous_comp_iff, Function.comp_def,
+        integral_pullback_invFun_apply, Metric.continuous_iff']
+      intro b ε hε
+      obtain ⟨U₀, hU₀, hb⟩ := exists_compact_mem_nhds b
+      obtain ⟨K, hK, hf₀⟩ := exists_compact_iff_hasCompactSupport.mpr f.hasCompactSupport
+      let S : Set A := φ ⁻¹' (U₀⁻¹ * K)
+      have hSc : IsCompact S := H.isClosedEmbedding.isCompact_preimage (hU₀.inv.mul hK)
+      obtain ⟨δ, hδ0, hδ⟩ : exists δ > 0, ENNReal.ofReal δ * μA S < ENNReal.ofReal ε := by
+        rw [← ENNReal.ofReal_toReal hSc.measure_ne_top]; rw [← measureReal_def]
+        by_cases hS' : μA.real S = 0
+        · simp [hS', hε, exists_gt]
+        · refine ⟨ε / 2 / μA.real S, by positivity, ?_⟩
+          rwa [← ENNReal.ofReal_mul' measureReal_nonneg, ENNReal.ofReal_lt_ofReal_iff hε,
+            div_mul_cancel₀ _ hS', half_lt_self_iff]
+      have hS {x} (hx : x in U₀) {y} (hy : y ∉ S) : H.pullback f x y = 0 := by
+        contrapose! hy
+        exact Set.mem_mul.mpr ⟨x⁻¹, Set.inv_mem_inv.mpr hx, x * φ y,
+          not_imp_comm.mp (hf₀ (x * φ y)) hy, inv_mul_cancel_left x (φ y)⟩
+      have ha := f.hasCompactSupport.uniformContinuous_of_continuous f.continuous
+      rw [uniformContinuous_iff_eventually] at ha
+      obtain ⟨U, hU, hf⟩ := ha _ (Metric.dist_mem_uniformity hδ0)
+      refine Filter.mem_of_superset (Filter.inter_mem
+        (mul_singleton_mem_nhds_of_nhds_one b (inv_mem_nhds_one B hU)) hb) ?_
+      rintro - ⟨⟨t, ht, b, rfl, -, rfl⟩, htb⟩
+      have h (a) (ha : a in S) : edist (H.pullback f (t * b) a) (H.pullback f b a) <= .ofReal δ := by
+        rw [edist_dist]
+        exact ENNReal.ofReal_le_ofReal (@hf ⟨t * b * φ a, b * φ a⟩ (by simpa)).le
+      grw [Set.mem_ofPred_eq, dist_integral_le_lintegral_edist (H.pullback f (t * b)).integrable
+        (H.pullback f b).integrable, ← setLIntegral_eq_of_support_subset]
+      · refine ENNReal.toReal_lt_of_lt_ofReal ((setLIntegral_mono measurable_const h).trans_lt ?_)
+        rwa [lintegral_const, restrict_apply_univ]
+      · intro y hy
+        contrapose hy
+        rw [Function.notMem_support]; rw [hS htb hy]; rw [hS (mem_of_mem_nhds hb) hy]; rw [edist_self] }
+  map_add' f g := by
+    ext c
+    exact integral_add (pullback H f _).integrable (pullback H g _).integrable
+  map_smul' x f := by
+    ext c
+    apply integral_smul
+
+@[to_additive]
 
 Depends on / 依赖: Function, Function.invFun, Function.rightInverse_invFun, H.isOpenQuotientMap.continuous, H.isOpenQuotientMap.surjective, Set.mem_image_of_mem, continuous, exists_compact_iff_hasCompactSupport, exists_compact_iff_hasCompactSupport.mp, exists_compact_iff_hasCompactSupport.mpr, f.hasCompactSupport, hK.image, hasCompactSupport, invFun, isOpenQuotientMap, map_mul, mem_image_of_mem, pullback, pullback_def, rightInverse_invFun
 -/
@@ -461,7 +557,36 @@ instance isHaarMeasure_inducedMeasure
       exists_continuousMap_one_of_isCompact_subset_isOpen hK isOpen_univ K.subset_univ
     exact lt_of_le_of_lt (RealRMK.rieszMeasure_le_of_eq_one (f := ⟨f, hf2⟩) _
       (fun x => (hf4 x).1) hK (fun x hx => hf1 hx)) ENNReal.ofReal_lt_top
-  map_mul_left_eq_se
+  map_mul_left_eq_self b := by
+    have : ((inducedMeasure H μA μC).map (b * ·)).Regular := Regular.map (Homeomorph.mulLeft b)
+    refine ext_of_integral_eq_on_compactlySupported fun f => ?_
+    rw [integral_map (by fun_prop) (by fun_prop)]
+    have h (x : B) : f (b * x) = f.comp (Homeomorph.mulLeft b).toCocompactMap x := rfl
+    simp_rw [h, integral_inducedMeasure, integrate_apply]
+    rw [← integral_mul_left_eq_self _ (ψ b)⁻¹]
+    congr with c
+    obtain ⟨b', rfl⟩ := H.isOpenQuotientMap.surjective c
+    rw [← map_inv]; rw [← map_mul]; rw [pushforward_apply_apply]; rw [pushforward_apply_apply]
+    simp [pullback_def, mul_assoc]
+  open_pos U hU := by
+    rintro ⟨b, hb⟩
+    obtain ⟨K, hK, hb, hKU⟩ := exists_compact_subset hU hb
+    obtain ⟨f, hf1, hf2, hf3, hf4⟩ := exists_continuousMap_one_of_isCompact_subset_isOpen hK hU hKU
+    have hf0 : 0 <= H.pushforward μA ⟨f, hf2⟩ := by
+      rw [← map_zero (H.pushforward μA)]
+      apply pushforward_mono
+      exact fun x => (hf4 x).1
+    grw [← pos_iff_ne_zero, inducedMeasure,
+      ← RealRMK.le_rieszMeasure_tsupport_subset (f := ⟨f, hf2⟩) _ hf4 hf3, ENNReal.ofReal_pos]
+    suffices (0 : Real) < pushforward H μA ⟨f, hf2⟩ (ψ b) from
+      (pushforward H μA ⟨f, hf2⟩).continuous.integral_pos_of_hasCompactSupport_nonneg_nonzero
+        (pushforward H μA ⟨f, hf2⟩).hasCompactSupport hf0 this.ne'
+    have : (Function.invFun ψ (ψ b))⁻¹ * b in φ.range := by
+      simp [← H.mulExact.monoidHom_ker_eq, Function.apply_invFun_apply]
+    obtain ⟨a, ha⟩ := this
+    replace ha : f (Function.invFun ψ (ψ b) * φ a) != 0 := by simp [ha, hf1 (interior_subset hb)]
+    exact (pullback H ⟨f, hf2⟩ _).continuous.integral_pos_of_hasCompactSupport_nonneg_nonzero
+      (pullback H ⟨f, hf2⟩ _).hasCompactSupport (fun x => (hf4 _).1) ha
 
 中文:
 实例 isHaarMeasure_inducedMeasure
@@ -471,7 +596,36 @@ instance isHaarMeasure_inducedMeasure
       exists_continuousMap_one_of_isCompact_subset_isOpen hK isOpen_univ K.subset_univ
     exact lt_of_le_of_lt (RealRMK.rieszMeasure_le_of_eq_one (f := ⟨f, hf2⟩) _
       (fun x => (hf4 x).1) hK (fun x hx => hf1 hx)) ENNReal.ofReal_lt_top
-  map_mul_left_eq_se
+  map_mul_left_eq_self b := by
+    have : ((inducedMeasure H μA μC).map (b * ·)).Regular := Regular.map (Homeomorph.mulLeft b)
+    refine ext_of_integral_eq_on_compactlySupported fun f => ?_
+    rw [integral_map (by fun_prop) (by fun_prop)]
+    have h (x : B) : f (b * x) = f.comp (Homeomorph.mulLeft b).toCocompactMap x := rfl
+    simp_rw [h, integral_inducedMeasure, integrate_apply]
+    rw [← integral_mul_left_eq_self _ (ψ b)⁻¹]
+    congr with c
+    obtain ⟨b', rfl⟩ := H.isOpenQuotientMap.surjective c
+    rw [← map_inv]; rw [← map_mul]; rw [pushforward_apply_apply]; rw [pushforward_apply_apply]
+    simp [pullback_def, mul_assoc]
+  open_pos U hU := by
+    rintro ⟨b, hb⟩
+    obtain ⟨K, hK, hb, hKU⟩ := exists_compact_subset hU hb
+    obtain ⟨f, hf1, hf2, hf3, hf4⟩ := exists_continuousMap_one_of_isCompact_subset_isOpen hK hU hKU
+    have hf0 : 0 <= H.pushforward μA ⟨f, hf2⟩ := by
+      rw [← map_zero (H.pushforward μA)]
+      apply pushforward_mono
+      exact fun x => (hf4 x).1
+    grw [← pos_iff_ne_zero, inducedMeasure,
+      ← RealRMK.le_rieszMeasure_tsupport_subset (f := ⟨f, hf2⟩) _ hf4 hf3, ENNReal.ofReal_pos]
+    suffices (0 : Real) < pushforward H μA ⟨f, hf2⟩ (ψ b) from
+      (pushforward H μA ⟨f, hf2⟩).continuous.integral_pos_of_hasCompactSupport_nonneg_nonzero
+        (pushforward H μA ⟨f, hf2⟩).hasCompactSupport hf0 this.ne'
+    have : (Function.invFun ψ (ψ b))⁻¹ * b in φ.range := by
+      simp [← H.mulExact.monoidHom_ker_eq, Function.apply_invFun_apply]
+    obtain ⟨a, ha⟩ := this
+    replace ha : f (Function.invFun ψ (ψ b) * φ a) != 0 := by simp [ha, hf1 (interior_subset hb)]
+    exact (pullback H ⟨f, hf2⟩ _).continuous.integral_pos_of_hasCompactSupport_nonneg_nonzero
+      (pullback H ⟨f, hf2⟩ _).hasCompactSupport (fun x => (hf4 _).1) ha
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_lt_top, Homeomorph, Homeomorph.mulLeft, K.subset_univ, RealRMK, RealRMK.rieszMeasure_le_of_eq_one, Regular, Regular.map, exists_continuousMap_one_of_isCompact_subset_isOpen, ext_of_integral_eq_on_compactlySupported, fun_prop, inducedMeasure, integral_map, isOpen_univ, lt_of_le_of_lt, map_mul_left_eq_self, mulLeft, ofReal_lt_top, rieszMeasure_le_of_eq_one
 -/
@@ -530,7 +684,30 @@ theorem inducedMeasure_lt_of_injOn
   have ho : 0 < μA {1} := (isOpen_discrete {1}).measure_pos _ (Set.singleton_nonempty 1)
   have ht : μA {1} < ⊤ := isCompact_singleton.measure_lt_top
   obtain ⟨K, hKU, hK, h⟩ := Regular.innerRegular hU _ h
-  obtain ⟨f, hf1, hf2, hf3, hf4⟩ := exists_continuousMap_one_of_isCompact_s
+  obtain ⟨f, hf1, hf2, hf3, hf4⟩ := exists_continuousMap_one_of_isCompact_subset_isOpen hK hU hKU
+  replace h : μC Set.univ * μA {1} < ENNReal.ofReal (∫ c : C, pushforward H μA ⟨f, hf2⟩ c ∂μC) :=
+    lt_of_lt_of_le h ((RealRMK.rieszMeasure_le_of_eq_one (f := ⟨f, hf2⟩) _ (fun x => (hf4 x).1)
+      hK (fun x hx => hf1 hx)))
+  obtain ⟨c, hc⟩ : exists c : C, (μA {1}).toReal < pushforward H μA ⟨f, hf2⟩ c := by
+    contrapose! h
+    rcases eq_top_or_lt_top (μC Set.univ) with hC | hC
+    · simp [hC, ENNReal.top_mul ho.ne']
+    · have : IsFiniteMeasure μC := ⟨hC⟩
+      rw [ENNReal.ofReal_le_iff_le_toReal (ENNReal.mul_lt_top hC ht).ne]; rw [ENNReal.toReal_mul]; rw [← Measure.real_def]; rw [← smul_eq_mul]; rw [← integral_const]
+      exact integral_mono (H.pushforward μA ⟨f, hf2⟩).integrable (integrable_const _) h
+  contrapose! hc
+  obtain ⟨b, rfl⟩ := H.isOpenQuotientMap.surjective c
+  simp only [pushforward_apply_apply, pullback_def, CompactlySupportedContinuousMap.coe_mk]
+  rw [← setIntegral_support]
+  have key : (Function.support fun a => f (b * φ a)).Subsingleton := by
+    intro a ha b hb
+    simpa [H.isClosedEmbedding.injective.eq_iff] using hc (hf3 (subset_tsupport _ ha))
+      (hf3 (subset_tsupport _ hb)) (by simp [H.mulExact.apply_apply_eq_one])
+  obtain h | ⟨a, ha⟩ := key.eq_empty_or_singleton
+  · simp [h]
+  · rw [ha, integral_singleton, real_def, haar_singleton, smul_eq_mul, mul_le_iff_le_one_right]
+    · exact (hf4 _).2
+    · exact ENNReal.toReal_pos ho.ne' ht.ne
 
 中文:
 定理 inducedMeasure_lt_of_injOn
@@ -540,7 +717,30 @@ theorem inducedMeasure_lt_of_injOn
   have ho : 0 < μA {1} := (isOpen_discrete {1}).measure_pos _ (Set.singleton_nonempty 1)
   have ht : μA {1} < ⊤ := isCompact_singleton.measure_lt_top
   obtain ⟨K, hKU, hK, h⟩ := Regular.innerRegular hU _ h
-  obtain ⟨f, hf1, hf2, hf3, hf4⟩ := exists_continuousMap_one_of_isCompact_s
+  obtain ⟨f, hf1, hf2, hf3, hf4⟩ := exists_continuousMap_one_of_isCompact_subset_isOpen hK hU hKU
+  replace h : μC Set.univ * μA {1} < ENNReal.ofReal (∫ c : C, pushforward H μA ⟨f, hf2⟩ c ∂μC) :=
+    lt_of_lt_of_le h ((RealRMK.rieszMeasure_le_of_eq_one (f := ⟨f, hf2⟩) _ (fun x => (hf4 x).1)
+      hK (fun x hx => hf1 hx)))
+  obtain ⟨c, hc⟩ : exists c : C, (μA {1}).toReal < pushforward H μA ⟨f, hf2⟩ c := by
+    contrapose! h
+    rcases eq_top_or_lt_top (μC Set.univ) with hC | hC
+    · simp [hC, ENNReal.top_mul ho.ne']
+    · have : IsFiniteMeasure μC := ⟨hC⟩
+      rw [ENNReal.ofReal_le_iff_le_toReal (ENNReal.mul_lt_top hC ht).ne]; rw [ENNReal.toReal_mul]; rw [← Measure.real_def]; rw [← smul_eq_mul]; rw [← integral_const]
+      exact integral_mono (H.pushforward μA ⟨f, hf2⟩).integrable (integrable_const _) h
+  contrapose! hc
+  obtain ⟨b, rfl⟩ := H.isOpenQuotientMap.surjective c
+  simp only [pushforward_apply_apply, pullback_def, CompactlySupportedContinuousMap.coe_mk]
+  rw [← setIntegral_support]
+  have key : (Function.support fun a => f (b * φ a)).Subsingleton := by
+    intro a ha b hb
+    simpa [H.isClosedEmbedding.injective.eq_iff] using hc (hf3 (subset_tsupport _ ha))
+      (hf3 (subset_tsupport _ hb)) (by simp [H.mulExact.apply_apply_eq_one])
+  obtain h | ⟨a, ha⟩ := key.eq_empty_or_singleton
+  · simp [h]
+  · rw [ha, integral_singleton, real_def, haar_singleton, smul_eq_mul, mul_le_iff_le_one_right]
+    · exact (hf4 _).2
+    · exact ENNReal.toReal_pos ho.ne' ht.ne
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, RealRMK, RealRMK.rieszMeasure_le_of_eq_one, Regular, Regular.innerRegular, Set.singleton_nonempty, Set.univ, contrapose, exists_continuousMap_one_of_isCompact_subset_isOpen, innerRegular, isCompact_singleton, isCompact_singleton.measure_lt_top, isOpen_discrete, lt_of_lt_of_le, measure_lt_top, measure_pos, ofReal, pushforward, replace
 -/

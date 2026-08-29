@@ -93,7 +93,7 @@ theorem isPrimitiveRoot_exp_of_isCoprime
     rintro l k hk
     field_simp at hk
     norm_cast at hk
-exact Int.n
+exact Int.natCast_dvd_natCast.mp hi.symm.dvd_of_dvd_mul_right hk ▸ dvd_mul_right ..
 
 中文:
 定理 isPrimitiveRoot_exp_of_isCoprime
@@ -109,7 +109,7 @@ exact Int.n
     rintro l k hk
     field_simp at hk
     norm_cast at hk
-exact Int.n
+exact Int.natCast_dvd_natCast.mp hi.symm.dvd_of_dvd_mul_right hk ▸ dvd_mul_right ..
 
 Depends on / 依赖: Int.natCast_dvd_natCast.mp, IsPrimitiveRoot, IsPrimitiveRoot.iff_def, discharger, dvd_mul_right, dvd_of_dvd_mul_right, exp_eq_one_iff, exp_nat_mul, forall_exists_index, hi.symm.dvd_of_dvd_mul_right, iff_def, mod_cast, natCast_dvd_natCast
 -/
@@ -190,7 +190,9 @@ theorem isPrimitiveRoot_exp_rat_of_even_num
     push_cast
     ring_nf
   · rw [← Int.cast_natCast, ← Rat.divInt_eq_div, ← Rat.mk_eq_divInt (nz := by simp)]
-    apply Nat.Coprime.coprim
+    apply Nat.Coprime.coprime_mul_left (k := 2)
+    convert! q.reduced
+    grind
 
 中文:
 定理 isPrimitiveRoot_exp_rat_of_even_num
@@ -202,7 +204,9 @@ theorem isPrimitiveRoot_exp_rat_of_even_num
     push_cast
     ring_nf
   · rw [← Int.cast_natCast, ← Rat.divInt_eq_div, ← Rat.mk_eq_divInt (nz := by simp)]
-    apply Nat.Coprime.coprim
+    apply Nat.Coprime.coprime_mul_left (k := 2)
+    convert! q.reduced
+    grind
 
 Depends on / 依赖: Coprime, Int.cast_natCast, Int.nsmul_eq_mul, Nat.Coprime.coprime_mul_left, Rat.divInt_eq_div, Rat.mk_eq_divInt, cast_natCast, convert, coprime_mul_left, divInt_eq_div, even_iff_exists_two_nsmul, isPrimitiveRoot_exp_rat, mk_eq_divInt, nsmul_eq_mul, nth_rw, num_div_den, q.den, q.num_div_den, q.reduced, reduced
 -/
@@ -229,7 +233,8 @@ theorem isPrimitiveRoot_exp_rat_of_odd_num
   · push_cast
     ring_nf
   · nth_rw 2 [← q.num_div_den]
-    rw [mul_comm]; rw [div_div]; rw [← Int.cast_ofNat]; rw [← Int.cast_natCast]; rw [← Int.cast_mul]; rw [← Rat.divInt_eq_div]; rw [← Nat.cast_ofNat (R := Int)]; rw [← Nat.cast_mul]; rw [← 
+    rw [mul_comm]; rw [div_div]; rw [← Int.cast_ofNat]; rw [← Int.cast_natCast]; rw [← Int.cast_mul]; rw [← Rat.divInt_eq_div]; rw [← Nat.cast_ofNat (R := Int)]; rw [← Nat.cast_mul]; rw [← Rat.mk_eq_divInt (nz := by simp)
+        (c := Nat.Coprime.mul_right q.reduced h.natAbs.coprime_two_right)]
 
 中文:
 定理 isPrimitiveRoot_exp_rat_of_odd_num
@@ -239,7 +244,8 @@ theorem isPrimitiveRoot_exp_rat_of_odd_num
   · push_cast
     ring_nf
   · nth_rw 2 [← q.num_div_den]
-    rw [mul_comm]; rw [div_div]; rw [← Int.cast_ofNat]; rw [← Int.cast_natCast]; rw [← Int.cast_mul]; rw [← Rat.divInt_eq_div]; rw [← Nat.cast_ofNat (R := Int)]; rw [← Nat.cast_mul]; rw [← 
+    rw [mul_comm]; rw [div_div]; rw [← Int.cast_ofNat]; rw [← Int.cast_natCast]; rw [← Int.cast_mul]; rw [← Rat.divInt_eq_div]; rw [← Nat.cast_ofNat (R := Int)]; rw [← Nat.cast_mul]; rw [← Rat.mk_eq_divInt (nz := by simp)
+        (c := Nat.Coprime.mul_right q.reduced h.natAbs.coprime_two_right)]
 
 Depends on / 依赖: Coprime, Int.cast_mul, Int.cast_natCast, Int.cast_ofNat, Nat.Coprime.mul_right, Nat.cast_mul, Nat.cast_ofNat, Rat.divInt_eq_div, Rat.mk_eq_divInt, cast_mul, cast_natCast, cast_ofNat, convert, coprime_two_right, divInt_eq_div, div_div, h.natAbs.coprime_two_right, isPrimitiveRoot_exp_rat, mk_eq_divInt, mul_comm
 -/
@@ -291,7 +297,10 @@ theorem isPrimitiveRoot_iff
   have : NeZero n := ⟨hn⟩
   obtain ⟨i, hi, rfl⟩ :=
     (isPrimitiveRoot_exp n hn).eq_pow_of_pow_eq_one h.pow_eq_one
-  refine ⟨i, hi, ((isPrimitiv
+  refine ⟨i, hi, ((isPrimitiveRoot_exp n hn).pow_iff_coprime (Nat.pos_of_ne_zero hn) i).mp h, ?_⟩
+  rw [← exp_nat_mul]
+  congr 1
+  ring
 
 中文:
 定理 isPrimitiveRoot_iff
@@ -304,7 +313,10 @@ theorem isPrimitiveRoot_iff
   have : NeZero n := ⟨hn⟩
   obtain ⟨i, hi, rfl⟩ :=
     (isPrimitiveRoot_exp n hn).eq_pow_of_pow_eq_one h.pow_eq_one
-  refine ⟨i, hi, ((isPrimitiv
+  refine ⟨i, hi, ((isPrimitiveRoot_exp n hn).pow_iff_coprime (Nat.pos_of_ne_zero hn) i).mp h, ?_⟩
+  rw [← exp_nat_mul]
+  congr 1
+  ring
 
 Depends on / 依赖: Nat.pos_of_ne_zero, NeZero, eq_pow_of_pow_eq_one, exp_nat_mul, h.pow_eq_one, isPrimitiveRoot_exp, isPrimitiveRoot_exp_of_coprime, mod_cast, pos_of_ne_zero, pow_eq_one, pow_iff_coprime
 -/
@@ -512,7 +524,37 @@ theorem IsPrimitiveRoot.arg
   case isCoprime =>
     replace hin := Nat.isCoprime_iff_coprime.mpr hin
     split_ifs
-    · e
+    · exact hin
+    · convert! hin.add_mul_left_left (-1) using 1
+      rw [mul_neg_one]; rw [sub_eq_add_neg]
+  split_ifs with h₂
+  · convert! Complex.arg_cos_add_sin_mul_I _
+    · push_cast; rfl
+    · push_cast; rfl
+    simp only [Int.cast_natCast, Set.mem_Ioc]
+    refine ⟨(neg_lt_neg Real.pi_pos).trans_le ?_, ?_⟩
+    · rw [neg_zero]
+      positivity
+    refine Eq.trans_le (b := Real.pi * (i * 2 / n)) (by ring) ?_
+    rw [← mul_one n] at h₂
+    exact mul_le_of_le_one_right Real.pi_pos.le
+      ((div_le_iff₀' <| mod_cast pos_of_gt h).mpr <| mod_cast h₂)
+  rw [← Complex.cos_sub_two_pi]; rw [← Complex.sin_sub_two_pi]
+  convert! Complex.arg_cos_add_sin_mul_I _
+  · push_cast
+    rw [← sub_one_mul]; rw [sub_div]; rw [div_self]
+    exact mod_cast hn
+  · push_cast
+    rw [← sub_one_mul]; rw [sub_div]; rw [div_self]
+    exact mod_cast hn
+  simp only [Int.cast_sub, Int.cast_natCast, Set.mem_Ioc]
+  field_simp
+  constructor
+  · push Not at h₂
+    rify at h₂
+    linear_combination h₂
+  · rify at h
+    linear_combination 2 * h + (n : Real) * one_pos (α := Real)
 
 中文:
 定理 是PrimitiveRoot.arg
@@ -525,7 +567,37 @@ theorem IsPrimitiveRoot.arg
   case isCoprime =>
     replace hin := Nat.isCoprime_iff_coprime.mpr hin
     split_ifs
-    · e
+    · exact hin
+    · convert! hin.add_mul_left_left (-1) using 1
+      rw [mul_neg_one]; rw [sub_eq_add_neg]
+  split_ifs with h₂
+  · convert! Complex.arg_cos_add_sin_mul_I _
+    · push_cast; rfl
+    · push_cast; rfl
+    simp only [Int.cast_natCast, Set.mem_Ioc]
+    refine ⟨(neg_lt_neg Real.pi_pos).trans_le ?_, ?_⟩
+    · rw [neg_zero]
+      positivity
+    refine Eq.trans_le (b := Real.pi * (i * 2 / n)) (by ring) ?_
+    rw [← mul_one n] at h₂
+    exact mul_le_of_le_one_right Real.pi_pos.le
+      ((div_le_iff₀' <| mod_cast pos_of_gt h).mpr <| mod_cast h₂)
+  rw [← Complex.cos_sub_two_pi]; rw [← Complex.sin_sub_two_pi]
+  convert! Complex.arg_cos_add_sin_mul_I _
+  · push_cast
+    rw [← sub_one_mul]; rw [sub_div]; rw [div_self]
+    exact mod_cast hn
+  · push_cast
+    rw [← sub_one_mul]; rw [sub_div]; rw [div_self]
+    exact mod_cast hn
+  simp only [Int.cast_sub, Int.cast_natCast, Set.mem_Ioc]
+  field_simp
+  constructor
+  · push Not at h₂
+    rify at h₂
+    linear_combination h₂
+  · rify at h
+    linear_combination 2 * h + (n : Real) * one_pos (α := Real)
 
 Depends on / 依赖: Complex.arg_cos_add_sin_mul_I, Complex.exp_mul_I, Complex.isPrimitiveRoot_iff, Int.cast_natCast, Nat.isCoprime_iff_coprime.mpr, Set.m, add_mul_left_left, arg_cos_add_sin_mul_I, cast_natCast, convert, exp_mul_I, hin.add_mul_left_left, isCoprime, isCoprime_iff_coprime, isPrimitiveRoot_iff, mul_assoc, mul_comm, mul_neg_one, replace, split_ifs
 -/

@@ -3831,7 +3831,7 @@ definition congr
     (eq (e.symm b₁) (e.symm b₂)).2
       ((e.apply_symm_apply b₁).symm ▸ (e.apply_symm_apply b₂).symm ▸ h)
   left_inv := by rintro ⟨a⟩; simp only [Quot.map, Equiv.symm_apply_apply]
-  right_inv := by rintro ⟨a⟩; simp only
+  right_inv := by rintro ⟨a⟩; simp only [Quot.map, Equiv.apply_symm_apply]
 
 中文:
 定义 congr
@@ -3841,7 +3841,7 @@ definition congr
     (eq (e.symm b₁) (e.symm b₂)).2
       ((e.apply_symm_apply b₁).symm ▸ (e.apply_symm_apply b₂).symm ▸ h)
   left_inv := by rintro ⟨a⟩; simp only [Quot.map, Equiv.symm_apply_apply]
-  right_inv := by rintro ⟨a⟩; simp only
+  right_inv := by rintro ⟨a⟩; simp only [Quot.map, Equiv.apply_symm_apply]
 -/
 protected def congr {ra : α -> α -> Prop} {rb : β -> β -> Prop} (e : α ≃ β)
     (eq : forall a₁ a₂, ra a₁ a₂ ↔ rb (e a₁) (e a₂)) : Quot ra ≃ Quot rb where

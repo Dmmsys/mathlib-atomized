@@ -89,7 +89,8 @@ definition imageObjIso
         apply (cancel_mono (PreservesCokernel.iso ((evaluation C D).obj X) α).inv).1
         simp only [Category.assoc, Iso.hom_inv_id]
         dsimp
-    
+        simp only [PreservesCokernel.iso_inv, Category.id_comp, Category.comp_id]
+        exact (π_comp_cokernelComparison _ ((evaluation C D).obj X)).symm)
 
 中文:
 定义 imageObjIso
@@ -100,7 +101,8 @@ definition imageObjIso
         apply (cancel_mono (PreservesCokernel.iso ((evaluation C D).obj X) α).inv).1
         simp only [Category.assoc, Iso.hom_inv_id]
         dsimp
-    
+        simp only [PreservesCokernel.iso_inv, Category.id_comp, Category.comp_id]
+        exact (π_comp_cokernelComparison _ ((evaluation C D).obj X)).symm)
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, Iso.hom_inv_id, Iso.refl, PreservesCokernel, PreservesCokernel.iso, PreservesCokernel.iso_inv, PreservesKernel, PreservesKernel.iso, cancel_mono, comp_id, evaluation, hom_inv_id, id_comp, iso_inv, kernel, kernel.mapIso, mapIso
 -/
@@ -127,7 +129,10 @@ theorem coimageImageComparison_app
   simp only [coimage_image_factorisation, PreservesKernel.iso_hom, Category.assoc,
     kernel.lift_ι, Category.comp_id, PreservesCokernel.iso_inv,
     cokernel.π_desc_assoc, Category.id_comp]
-  erw [kernelComparison_comp_ι _ ((evalu
+  erw [kernelComparison_comp_ι _ ((evaluation C D).obj X)]
+  erw [π_comp_cokernelComparison_assoc _ ((evaluation C D).obj X)]
+  conv_lhs => rw [← coimage_image_factorisation α]
+  rfl
 
 中文:
 定理 coimageImageComparison_app
@@ -138,7 +143,10 @@ theorem coimageImageComparison_app
   simp only [coimage_image_factorisation, PreservesKernel.iso_hom, Category.assoc,
     kernel.lift_ι, Category.comp_id, PreservesCokernel.iso_inv,
     cokernel.π_desc_assoc, Category.id_comp]
-  erw [kernelComparison_comp_ι _ ((evalu
+  erw [kernelComparison_comp_ι _ ((evaluation C D).obj X)]
+  erw [π_comp_cokernelComparison_assoc _ ((evaluation C D).obj X)]
+  conv_lhs => rw [← coimage_image_factorisation α]
+  rfl
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, Category.id_comp, PreservesCokernel, PreservesCokernel.iso_inv, PreservesKernel, PreservesKernel.iso_hom, coimageObjIso, coimage_image_factorisation, cokernel, cokernel.map, comp_id, conv_lhs, evaluation, id_comp, imageObjIso, iso_hom, iso_inv, kernel
 -/

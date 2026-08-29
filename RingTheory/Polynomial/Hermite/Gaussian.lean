@@ -51,7 +51,14 @@ theorem deriv_gaussian_eq_hermite_mul_gaussian
   | succ n ih =>
     replace ih : deriv^[n] _ = _ := _root_.funext ih
     have deriv_gaussian :
-      deriv (fun y => Real.exp (-(y ^ 2 / 2))) x 
+      deriv (fun y => Real.exp (-(y ^ 2 / 2))) x = -x * Real.exp (-(x ^ 2 / 2)) := by
+      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10745): was `simp [mul_comm, ← neg_mul]`
+      rw [deriv_exp (by simp)]
+      simp [mul_comm]
+    rw [Function.iterate_succ_apply']; rw [ih]; rw [deriv_const_mul_field]; rw [deriv_fun_mul]; rw [pow_succ (-1 : Real)]; rw [deriv_gaussian]; rw [hermite_succ]; rw [map_sub]; rw [map_mul]; rw [aeval_X]; rw [Polynomial.deriv_aeval]
+    · ring
+    · apply Polynomial.differentiable_aeval
+    · apply DifferentiableAt.exp; simp -- Porting note: was just `simp`
 
 中文:
 定理 deriv_gaussian_eq_hermite_mul_gaussian
@@ -63,7 +70,14 @@ theorem deriv_gaussian_eq_hermite_mul_gaussian
   | succ n ih =>
     replace ih : deriv^[n] _ = _ := _root_.funext ih
     have deriv_gaussian :
-      deriv (fun y => Real.exp (-(y ^ 2 / 2))) x 
+      deriv (fun y => Real.exp (-(y ^ 2 / 2))) x = -x * Real.exp (-(x ^ 2 / 2)) := by
+      -- Porting note (https://github.com/leanprover-community/mathlib4/issues/10745): was `simp [mul_comm, ← neg_mul]`
+      rw [deriv_exp (by simp)]
+      simp [mul_comm]
+    rw [Function.iterate_succ_apply']; rw [ih]; rw [deriv_const_mul_field]; rw [deriv_fun_mul]; rw [pow_succ (-1 : Real)]; rw [deriv_gaussian]; rw [hermite_succ]; rw [map_sub]; rw [map_mul]; rw [aeval_X]; rw [Polynomial.deriv_aeval]
+    · ring
+    · apply Polynomial.differentiable_aeval
+    · apply DifferentiableAt.exp; simp -- Porting note: was just `simp`
 
 Depends on / 依赖: Function, Function.iterate_zero_apply, Real.exp, _root_, _root_.funext, deriv_gaussian, generalizing, hermite_zero, iterate_zero_apply, map_one, mul_assoc, one_mul, pow_zero, replace
 -/

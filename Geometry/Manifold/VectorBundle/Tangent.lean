@@ -66,7 +66,9 @@ theorem contDiffOn_fderiv_coord_change
   intro x hx
   refine (ContDiffWithinAt.fderivWithin_right ?_ I.uniqueDiffOn le_rfl
  h hx).mono h
-  refine (I.contDiffOn_extendCoordChange 
+  refine (I.contDiffOn_extendCoordChange (subset_maximalAtlas i.2)
+    (subset_maximalAtlas j.2) x hx).mono_of_mem_nhdsWithin ?_
+  exact I.extendCoordChange_source_mem_nhdsWithin hx
 
 中文:
 定理 contDiffOn_fderiv_coord_change
@@ -77,7 +79,9 @@ theorem contDiffOn_fderiv_coord_change
   intro x hx
   refine (ContDiffWithinAt.fderivWithin_right ?_ I.uniqueDiffOn le_rfl
  h hx).mono h
-  refine (I.contDiffOn_extendCoordChange 
+  refine (I.contDiffOn_extendCoordChange (subset_maximalAtlas i.2)
+    (subset_maximalAtlas j.2) x hx).mono_of_mem_nhdsWithin ?_
+  exact I.extendCoordChange_source_mem_nhdsWithin hx
 
 Depends on / 依赖: ContDiffWithinAt, ContDiffWithinAt.fderivWithin_right, I.contDiffOn_extendCoordChange, I.extendCoordChange_source.trans_subset, I.extendCoordChange_source_mem_nhdsWithin, I.uniqueDiffOn, contDiffOn_extendCoordChange, extend, extendCoordChange_source, extendCoordChange_source_mem_nhdsWithin, fderivWithin_right, image_subset_range, le_rfl, mono_of_mem_nhdsWithin, source, subset_maximalAtlas, subseteq, trans_subset, uniqueDiffOn
 -/
@@ -122,7 +126,32 @@ definition tangentBundleCore
   coordChange i j x :=
     fderivWithin 𝕜 (j.1.extend I ∘ (i.1.extend I).symm) (range I) (i.1.extend I x)
   coordChange_self i x hx v := by
-    rw [Filter.EventuallyEq.fderivWithin_eq]; rw [
+    rw [Filter.EventuallyEq.fderivWithin_eq]; rw [fderivWithin_fun_id]; rw [ContinuousLinearMap.id_apply]
+    · exact I.uniqueDiffWithinAt_image
+    · filter_upwards [i.1.extend_target_mem_nhdsWithin hx] with y hy
+      exact (i.1.extend I).right_inv hy
+    · simp_rw [Function.comp_apply, i.1.extend_left_inv hx]
+  continuousOn_coordChange i j := by
+    have : IsManifold I (0 + 1) M := by simpa
+    refine (contDiffOn_fderiv_coord_change (n := 0) i j).continuousOn.comp
+      (i.1.continuousOn_extend.mono ?_) ?_
+    · rw [i.1.extend_source]; exact inter_subset_left
+    exact mapsTo_iff_image_subset.2 (i.1.extend_image_source_inter j.1).subset
+  coordChange_comp := by
+    have : IsManifold I (0 + 1) M := by simpa
+    rintro i j k x ⟨⟨hxi, hxj⟩, hxk⟩ v
+    rw [fderivWithin_fderivWithin]; rw [Filter.EventuallyEq.fderivWithin_eq]
+    · have := i.1.extend_preimage_mem_nhds (I := I) hxi (j.1.extend_source_mem_nhds (I := I) hxj)
+      filter_upwards [nhdsWithin_le_nhds this] with y hy
+      simp_rw [Function.comp_apply, (j.1.extend I).left_inv hy]
+    · simp_rw [Function.comp_apply, i.1.extend_left_inv hxi, j.1.extend_left_inv hxj]
+    · exact (I.contDiffWithinAt_extendCoordChange' (subset_maximalAtlas j.2)
+        (subset_maximalAtlas k.2) hxj hxk).differentiableWithinAt one_ne_zero
+    · exact (I.contDiffWithinAt_extendCoordChange' (subset_maximalAtlas i.2)
+        (subset_maximalAtlas j.2) hxi hxj).differentiableWithinAt one_ne_zero
+    · intro x _; exact mem_range_self _
+    · exact I.uniqueDiffWithinAt_image
+    · rw [Function.comp_apply, i.1.extend_left_inv hxi]
 
 中文:
 定义 tangentBundleCore
@@ -134,7 +163,32 @@ definition tangentBundleCore
   coordChange i j x :=
     fderivWithin 𝕜 (j.1.extend I ∘ (i.1.extend I).symm) (range I) (i.1.extend I x)
   coordChange_self i x hx v := by
-    rw [Filter.EventuallyEq.fderivWithin_eq]; rw [
+    rw [Filter.EventuallyEq.fderivWithin_eq]; rw [fderivWithin_fun_id]; rw [ContinuousLinearMap.id_apply]
+    · exact I.uniqueDiffWithinAt_image
+    · filter_upwards [i.1.extend_target_mem_nhdsWithin hx] with y hy
+      exact (i.1.extend I).right_inv hy
+    · simp_rw [Function.comp_apply, i.1.extend_left_inv hx]
+  continuousOn_coordChange i j := by
+    have : IsManifold I (0 + 1) M := by simpa
+    refine (contDiffOn_fderiv_coord_change (n := 0) i j).continuousOn.comp
+      (i.1.continuousOn_extend.mono ?_) ?_
+    · rw [i.1.extend_source]; exact inter_subset_left
+    exact mapsTo_iff_image_subset.2 (i.1.extend_image_source_inter j.1).subset
+  coordChange_comp := by
+    have : IsManifold I (0 + 1) M := by simpa
+    rintro i j k x ⟨⟨hxi, hxj⟩, hxk⟩ v
+    rw [fderivWithin_fderivWithin]; rw [Filter.EventuallyEq.fderivWithin_eq]
+    · have := i.1.extend_preimage_mem_nhds (I := I) hxi (j.1.extend_source_mem_nhds (I := I) hxj)
+      filter_upwards [nhdsWithin_le_nhds this] with y hy
+      simp_rw [Function.comp_apply, (j.1.extend I).left_inv hy]
+    · simp_rw [Function.comp_apply, i.1.extend_left_inv hxi, j.1.extend_left_inv hxj]
+    · exact (I.contDiffWithinAt_extendCoordChange' (subset_maximalAtlas j.2)
+        (subset_maximalAtlas k.2) hxj hxk).differentiableWithinAt one_ne_zero
+    · exact (I.contDiffWithinAt_extendCoordChange' (subset_maximalAtlas i.2)
+        (subset_maximalAtlas j.2) hxi hxj).differentiableWithinAt one_ne_zero
+    · intro x _; exact mem_range_self _
+    · exact I.uniqueDiffWithinAt_image
+    · rw [Function.comp_apply, i.1.extend_left_inv hxi]
 
 Depends on / 依赖: source
 -/
@@ -332,7 +386,7 @@ lemma hasFDerivWithinAt_tangentCoordChange
   proof: have h' : extChartAt I x z in ((extChartAt I x).symm ≫ (extChartAt I y)).source := by
     rw [PartialEquiv.trans_source'']; rw [PartialEquiv.symm_symm]; rw [PartialEquiv.symm_target]
     exact mem_image_of_mem _ h
-  ((contDiffWithinAt_ext_coord_change y x h').differentiableWithinAt one_ne_zero).hasF
+  ((contDiffWithinAt_ext_coord_change y x h').differentiableWithinAt one_ne_zero).hasFDerivWithinAt
 
 中文:
 引理 hasFDerivWithinAt_tangentCoordChange
@@ -340,7 +394,7 @@ lemma hasFDerivWithinAt_tangentCoordChange
   证明: have h' : extChartAt I x z in ((extChartAt I x).symm ≫ (extChartAt I y)).source := by
     rw [PartialEquiv.trans_source'']; rw [PartialEquiv.symm_symm]; rw [PartialEquiv.symm_target]
     exact mem_image_of_mem _ h
-  ((contDiffWithinAt_ext_coord_change y x h').differentiableWithinAt one_ne_zero).hasF
+  ((contDiffWithinAt_ext_coord_change y x h').differentiableWithinAt one_ne_zero).hasFDerivWithinAt
 
 Depends on / 依赖: PartialEquiv, PartialEquiv.symm_symm, PartialEquiv.symm_target, PartialEquiv.trans_source, contDiffWithinAt_ext_coord_change, differentiableWithinAt, extChartAt, hasFDerivWithinAt, mem_image_of_mem, one_ne_zero, source, symm_symm, symm_target, trans_source
 -/
@@ -858,7 +912,13 @@ lemma tangentBundleCore.isContMDiff
   have : IsManifold I n M := .of_le (n := n + 1) (le_self_add)
   refine ⟨fun i j => ?_⟩
   rw [contMDiffOn_iff_source_of_mem_maximalAtlas (subset_maximalAtlas i.2)]; rw [contMDiffOn_iff_contDiffOn]
-  · refine ((contDiff
+  · refine ((contDiffOn_fderiv_coord_change (I := I) i j).congr fun x hx => ?_).mono ?_
+    · rw [PartialEquiv.trans_source'] at hx
+      simp_rw [Function.comp_apply, tangentBundleCore_coordChange, (i.1.extend I).right_inv hx.1]
+    · exact (i.1.extend_image_source_inter j.1).subset
+  · apply inter_subset_left
+
+omit [IsManifold I 1 M] in
 
 中文:
 引理 tangentBundleCore.isContMDiff
@@ -868,7 +928,13 @@ lemma tangentBundleCore.isContMDiff
   have : IsManifold I n M := .of_le (n := n + 1) (le_self_add)
   refine ⟨fun i j => ?_⟩
   rw [contMDiffOn_iff_source_of_mem_maximalAtlas (subset_maximalAtlas i.2)]; rw [contMDiffOn_iff_contDiffOn]
-  · refine ((contDiff
+  · refine ((contDiffOn_fderiv_coord_change (I := I) i j).congr fun x hx => ?_).mono ?_
+    · rw [PartialEquiv.trans_source'] at hx
+      simp_rw [Function.comp_apply, tangentBundleCore_coordChange, (i.1.extend I).right_inv hx.1]
+    · exact (i.1.extend_image_source_inter j.1).subset
+  · apply inter_subset_left
+
+omit [IsManifold I 1 M] in
 
 Depends on / 依赖: le_add_self, of_le
 -/
@@ -895,7 +961,9 @@ lemma TangentBundle.contMDiffVectorBundle
     ContMDiffVectorBundle n E (TangentSpace I : M -> Type _) I := by
   have : IsManifold I 1 M := .of_le (n := n + 1) le_add_self
   have : (tangentBundleCore I M).IsContMDiff I n := tangentBundleCore.isContMDiff
-  exact (tangentBundleCore I M).instContMDiffVectorBundl
+  exact (tangentBundleCore I M).instContMDiffVectorBundle
+
+omit [IsManifold I 1 M] in
 
 中文:
 引理 切丛.contMDiffVectorBundle
@@ -904,7 +972,9 @@ lemma TangentBundle.contMDiffVectorBundle
     ContMDiffVectorBundle n E (TangentSpace I : M -> Type _) I := by
   have : IsManifold I 1 M := .of_le (n := n + 1) le_add_self
   have : (tangentBundleCore I M).IsContMDiff I n := tangentBundleCore.isContMDiff
-  exact (tangentBundleCore I M).instContMDiffVectorBundl
+  exact (tangentBundleCore I M).instContMDiffVectorBundle
+
+omit [IsManifold I 1 M] in
 
 Depends on / 依赖: le_add_self, of_le
 -/
@@ -1010,7 +1080,7 @@ theorem trivializationAt_model_space_apply
   have : fderivWithin 𝕜 (↑I ∘ ↑I.symm) (range I) (I p.proj) =
       fderivWithin 𝕜 id (range I) (I p.proj) :=
     fderivWithin_congr' (fun y hy => by simp [hy]) (mem_range_self p.proj)
-  simp [this, fderivWithin_id (ModelWithCorners.uniqueDiffWit
+  simp [this, fderivWithin_id (ModelWithCorners.uniqueDiffWithinAt_image I)]
 
 中文:
 定理 trivializationAt_model_space_apply
@@ -1020,7 +1090,7 @@ theorem trivializationAt_model_space_apply
   have : fderivWithin 𝕜 (↑I ∘ ↑I.symm) (range I) (I p.proj) =
       fderivWithin 𝕜 id (range I) (I p.proj) :=
     fderivWithin_congr' (fun y hy => by simp [hy]) (mem_range_self p.proj)
-  simp [this, fderivWithin_id (ModelWithCorners.uniqueDiffWit
+  simp [this, fderivWithin_id (ModelWithCorners.uniqueDiffWithinAt_image I)]
 
 Depends on / 依赖: I.symm, ModelWithCorners, ModelWithCorners.uniqueDiffWithinAt_image, TangentBundle, TangentBundle.trivializationAt_apply, fderivWithin, fderivWithin_congr, fderivWithin_id, mem_range_self, p.proj, trivializationAt_apply, uniqueDiffWithinAt_image
 -/
@@ -1049,7 +1119,12 @@ theorem tangentBundle_model_space_chartAt
   · ext; · rfl
     apply heq_of_eq
     exact (tangentBundleCore I H).coordChange_self (achart _ x.1) x.1 (mem_achart_source H x.1) x.2
-  simp_rw [TangentBundle.chartAt, F
+  simp_rw [TangentBundle.chartAt, FiberBundleCore.localTriv,
+    FiberBundleCore.localTrivAsPartialEquiv, VectorBundleCore.toFiberBundleCore_baseSet,
+    tangentBundleCore_baseSet]
+  simp only [mfld_simps]
+
+@[simp, mfld_simps]
 
 中文:
 定理 tangentBundle_model_space_chartAt
@@ -1061,7 +1136,12 @@ theorem tangentBundle_model_space_chartAt
   · ext; · rfl
     apply heq_of_eq
     exact (tangentBundleCore I H).coordChange_self (achart _ x.1) x.1 (mem_achart_source H x.1) x.2
-  simp_rw [TangentBundle.chartAt, F
+  simp_rw [TangentBundle.chartAt, FiberBundleCore.localTriv,
+    FiberBundleCore.localTrivAsPartialEquiv, VectorBundleCore.toFiberBundleCore_baseSet,
+    tangentBundleCore_baseSet]
+  simp only [mfld_simps]
+
+@[simp, mfld_simps]
 
 Depends on / 依赖: FiberBundleCore, FiberBundleCore.localTriv, FiberBundleCore.localTrivAsPartialEquiv, TangentBundle, TangentBundle.chartAt, VectorBundleCore, VectorBundleCore.toFiberBundleCore_baseSet, achart, chartAt, coordChange_self, heq_of_eq, localTriv, localTrivAsPartialEquiv, mem_achart_source, mfld_simps, simp_rw, tangentBundleCore, tangentBundleCore_baseSet, toFiberBundleCore_baseSet
 -/
@@ -1164,7 +1244,16 @@ definition tangentBundleModelSpaceHomeomorph
         rw [← continuousOn_univ]
         convert! (chartAt (ModelProd H E) p).continuousOn
         simp only [mfld_simps]
-   
+      simpa only [mfld_simps] using this
+    continuous_invFun := by
+      let p : TangentBundle I H := ⟨I.symm (0 : E), (0 : E)⟩
+      have : Continuous (chartAt (ModelProd H E) p).symm := by
+        rw [← continuousOn_univ]
+        convert! (chartAt (ModelProd H E) p).symm.continuousOn
+        simp only [mfld_simps]
+      simpa only [mfld_simps] using this }
+
+@[simp, mfld_simps]
 
 中文:
 定义 tangentBundleModelSpaceHomeomorph
@@ -1176,7 +1265,16 @@ definition tangentBundleModelSpaceHomeomorph
         rw [← continuousOn_univ]
         convert! (chartAt (ModelProd H E) p).continuousOn
         simp only [mfld_simps]
-   
+      simpa only [mfld_simps] using this
+    continuous_invFun := by
+      let p : TangentBundle I H := ⟨I.symm (0 : E), (0 : E)⟩
+      have : Continuous (chartAt (ModelProd H E) p).symm := by
+        rw [← continuousOn_univ]
+        convert! (chartAt (ModelProd H E) p).symm.continuousOn
+        simp only [mfld_simps]
+      simpa only [mfld_simps] using this }
+
+@[simp, mfld_simps]
 
 Depends on / 依赖: Continuous, I.symm, ModelProd, TangentBundle, TotalSpace, TotalSpace.toProd, chartAt, continuousOn, continuousOn_univ, continuous_invFun, continuous_toFun, convert, mfld_simps, symm.conti, toProd
 -/
@@ -1354,7 +1452,8 @@ lemma contMDiffWithinAt_vectorSpace_iff_contDiffWithinAt
       (contMDiff_snd_tangentBundle_modelSpace E 𝓘(𝕜, E)).contMDiffAt.comp_contMDiffWithinAt _ h
   · apply Bundle.contMDiffWithinAt_totalSpace.2
     refine ⟨contMDiffWithinAt_id, ?_⟩
-    convert! h.contMDiffWithinAt wit
+    convert! h.contMDiffWithinAt with y
+    simp
 
 中文:
 引理 contMDiffWithinAt_vectorSpace_iff_contDiffWithinAt
@@ -1364,7 +1463,8 @@ lemma contMDiffWithinAt_vectorSpace_iff_contDiffWithinAt
       (contMDiff_snd_tangentBundle_modelSpace E 𝓘(𝕜, E)).contMDiffAt.comp_contMDiffWithinAt _ h
   · apply Bundle.contMDiffWithinAt_totalSpace.2
     refine ⟨contMDiffWithinAt_id, ?_⟩
-    convert! h.contMDiffWithinAt wit
+    convert! h.contMDiffWithinAt with y
+    simp
 
 Depends on / 依赖: Bundle, Bundle.contMDiffWithinAt_totalSpace, ContMDiffWithinAt, ContMDiffWithinAt.contDiffWithinAt, comp_contMDiffWithinAt, contDiffWithinAt, contMDiffAt, contMDiffAt.comp_contMDiffWithinAt, contMDiffWithinAt, contMDiffWithinAt_id, contMDiffWithinAt_totalSpace, contMDiff_snd_tangentBundle_modelSpace, convert, h.contMDiffWithinAt
 -/

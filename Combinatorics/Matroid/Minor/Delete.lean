@@ -691,14 +691,14 @@ lemma delete_isBasis'_iff
   statement: (M ＼ D).IsBasis' I X ↔ M.IsBasis' I (X \ D)
   proof: by
   rw [isBasis'_iff_isBasis_inter_ground]; rw [delete_isBasis_iff]; rw [delete_ground]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [← isBasis'_iff_isBasis_inter_ground]; rw [and_iff_left_iff_imp]; rw [inter_comm]; rw [← inter_sdiff_assoc]
-  exact fun _ => disjoint_
+  exact fun _ => disjoint_sdiff_left
 
 中文:
 引理 delete_isBasis'_iff
   结论: (M ＼ D).是基' I X ↔ M.是基' I (X \ D)
   证明: by
   rw [isBasis'_iff_isBasis_inter_ground]; rw [delete_isBasis_iff]; rw [delete_ground]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [← isBasis'_iff_isBasis_inter_ground]; rw [and_iff_left_iff_imp]; rw [inter_comm]; rw [← inter_sdiff_assoc]
-  exact fun _ => disjoint_
+  exact fun _ => disjoint_sdiff_left
 
 Depends on / 依赖: _iff_isBasis_inter_ground, and_iff_left_iff_imp, delete_ground, delete_isBasis_iff, disjoint_sdiff_left, inter_assoc, inter_comm, inter_sdiff_assoc, isBasis, sdiff_eq
 -/
@@ -762,7 +762,8 @@ lemma Coindep.delete_isBase_iff
     have hcl := h.isBasis_closure_right
     rw [hD.closure_compl]; rw [isBasis_ground_iff] at hcl
     exact ⟨hcl, hss.2⟩
-  exact h.1.isBasis_ground.isBasis_subset (by simp [s
+  exact h.1.isBasis_ground.isBasis_subset (by simp [subset_sdiff, h.1.subset_ground, h.2])
+    sdiff_subset
 
 中文:
 引理 Coindep.delete_isBase_iff
@@ -775,7 +776,8 @@ lemma Coindep.delete_isBase_iff
     have hcl := h.isBasis_closure_right
     rw [hD.closure_compl]; rw [isBasis_ground_iff] at hcl
     exact ⟨hcl, hss.2⟩
-  exact h.1.isBasis_ground.isBasis_subset (by simp [s
+  exact h.1.isBasis_ground.isBasis_subset (by simp [subset_sdiff, h.1.subset_ground, h.2])
+    sdiff_subset
 
 Depends on / 依赖: Matroid, Matroid.delete_isBase_iff, closure_compl, delete_isBase_iff, h.isBasis_closure_right, h.subset, hD.closure_compl, isBasis_closure_right, isBasis_ground, isBasis_ground.isBasis_subset, isBasis_ground_iff, isBasis_subset, sdiff_subset, subset, subset_ground, subset_sdiff
 -/
@@ -1037,14 +1039,14 @@ lemma delete_closure_eq
   given: (M : Matroid α) (D X : Set α)
   proof: by
   rw [← restrict_compl]; rw [restrict_closure_eq']; rw [sdiff_sdiff_self]; rw [bot_eq_empty]; rw [union_empty]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc X]; rw [← sdiff_eq]; rw [closure_inter_ground]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [inter_eq_left]
-  exact sdiff_subset.trans 
+  exact sdiff_subset.trans (M.closure_subset_ground _)
 
 中文:
 引理 delete_closure_eq
   条件: (M : 拟阵 α) (D X : 集合 α)
   证明: by
   rw [← restrict_compl]; rw [restrict_closure_eq']; rw [sdiff_sdiff_self]; rw [bot_eq_empty]; rw [union_empty]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc X]; rw [← sdiff_eq]; rw [closure_inter_ground]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [inter_eq_left]
-  exact sdiff_subset.trans 
+  exact sdiff_subset.trans (M.closure_subset_ground _)
 
 Depends on / 依赖: M.closure_subset_ground, bot_eq_empty, closure_inter_ground, closure_subset_ground, inter_assoc, inter_comm, inter_eq_left, restrict_closure_eq, restrict_compl, sdiff_eq, sdiff_sdiff_self, sdiff_subset, sdiff_subset.trans, union_empty
 -/

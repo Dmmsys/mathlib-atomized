@@ -148,7 +148,11 @@ definition whiskerLeftIso
     (((tensorLeft W).map_isPushout
       (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).isoPushout ≪≫
       HasColimit.isoOfNatIso (spanExt (α_ W _ _).symm (α_ W _ _).symm (α_ W _ _).symm
-      (associator_inv_naturality_middle W _ _).symm (associator_inv_naturality_rig
+      (associator_inv_naturality_middle W _ _).symm (associator_inv_naturality_right W _ _).symm))
+    (α_ W _ _).symm
+    (((tensorLeft W).map_isPushout
+      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).hom_ext
+        (by simp [← whiskerLeft_comp_assoc]) (by simp [← whiskerLeft_comp_assoc]))
 
 中文:
 定义 whiskerLeftIso
@@ -156,7 +160,11 @@ definition whiskerLeftIso
     (((tensorLeft W).map_isPushout
       (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).isoPushout ≪≫
       HasColimit.isoOfNatIso (spanExt (α_ W _ _).symm (α_ W _ _).symm (α_ W _ _).symm
-      (associator_inv_naturality_middle W _ _).symm (associator_inv_naturality_rig
+      (associator_inv_naturality_middle W _ _).symm (associator_inv_naturality_right W _ _).symm))
+    (α_ W _ _).symm
+    (((tensorLeft W).map_isPushout
+      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).hom_ext
+        (by simp [← whiskerLeft_comp_assoc]) (by simp [← whiskerLeft_comp_assoc]))
 
 Depends on / 依赖: Arrow.isoMk, HasColimit, HasColimit.isoOfNatIso, IsPushout, IsPushout.of_hasPushout, associator_inv_naturality_middle, associator_inv_naturality_right, hom_ext, isoOfNatIso, isoPushout, map_isPushout, of_hasPushout, spanExt, tensorLeft, whiskerLeft_comp_assoc
 -/
@@ -189,7 +197,10 @@ definition whiskerRightIso
       (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).isoPushout ≪≫
       HasColimit.isoOfNatIso (spanExt (α_ _ _ W) (α_ _ _ W) (α_ _ _ W)
       (associator_naturality_left _ _ W).symm (associator_naturality_middle _ _ W).symm))
-    (α
+    (α_ _ _ W)
+    (((tensorRight W).map_isPushout
+      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).hom_ext
+      (by simp [← comp_whiskerRight_assoc]) (by simp [← comp_whiskerRight_assoc]))
 
 中文:
 定义 whiskerRightIso
@@ -198,7 +209,10 @@ definition whiskerRightIso
       (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).isoPushout ≪≫
       HasColimit.isoOfNatIso (spanExt (α_ _ _ W) (α_ _ _ W) (α_ _ _ W)
       (associator_naturality_left _ _ W).symm (associator_naturality_middle _ _ W).symm))
-    (α
+    (α_ _ _ W)
+    (((tensorRight W).map_isPushout
+      (IsPushout.of_hasPushout (X₁.hom ▷ X₂.left) (X₁.left ◁ X₂.hom))).hom_ext
+      (by simp [← comp_whiskerRight_assoc]) (by simp [← comp_whiskerRight_assoc]))
 
 Depends on / 依赖: Arrow.isoMk, HasColimit, HasColimit.isoOfNatIso, IsPushout, IsPushout.of_hasPushout, associator_naturality_left, associator_naturality_middle, comp_whiskerRight_assoc, hom_ext, isoOfNatIso, isoPushout, map_isPushout, of_hasPushout, spanExt, tensorRight
 -/
@@ -238,7 +252,29 @@ definition associator
     · exact pushout.desc ((α_ _ _ _).hom ≫ _ ◁ pushout.inl _ _ ≫ pushout.inl _ _)
         ((whiskerRightIso _ _).hom.left ≫
           pushout.desc (_ ◁ pushout.inr _ _ ≫ pushout.inl _ _) (pushout.inr _ _)
-          (by simp [Limi
+          (by simp [Limits.pushout.associator_naturality_left_condition]))
+        (((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
+          (by simp [Limits.pushout.whiskerLeft_condition_assoc, ← whisker_exchange_assoc,
+            ← comp_whiskerRight_assoc])
+          (by simp [← whisker_exchange_assoc, Limits.pushout.associator_naturality_left_condition,
+            ← comp_whiskerRight_assoc]))
+    · exact pushout.desc ((whiskerLeftIso _ _).hom.left ≫
+          pushout.desc (pushout.inl _ _) ((pushout.inl _ _ ▷ _) ≫ pushout.inr _ _)
+          (by simp [Limits.pushout.associator_inv_naturality_right_condition]))
+        ((α_ _ _ _).inv ≫ (pushout.inr _ _) ▷ _ ≫ pushout.inr _ _)
+        (((tensorLeft _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
+          (by simp [whisker_exchange_assoc,
+            Limits.pushout.associator_inv_naturality_right_condition, ← whiskerLeft_comp_assoc])
+          (by simp [whisker_exchange_assoc, Limits.pushout.condition_whiskerRight_assoc,
+            ← whiskerLeft_comp_assoc]))
+    · apply pushout.hom_ext (by simp)
+      apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext <;> simp
+    · refine pushout.hom_ext ?_ (by simp)
+      apply ((tensorLeft _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext <;> simp
+  · apply pushout.hom_ext (by simp [← MonoidalCategory.whiskerLeft_comp])
+    · apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
+      · simp [← MonoidalCategory.whiskerLeft_comp, ← MonoidalCategory.comp_whiskerRight_assoc]
+      · simp [← MonoidalCategory.comp_whiskerRight_assoc]
 
 中文:
 定义 associator
@@ -248,7 +284,29 @@ definition associator
     · exact pushout.desc ((α_ _ _ _).hom ≫ _ ◁ pushout.inl _ _ ≫ pushout.inl _ _)
         ((whiskerRightIso _ _).hom.left ≫
           pushout.desc (_ ◁ pushout.inr _ _ ≫ pushout.inl _ _) (pushout.inr _ _)
-          (by simp [Limi
+          (by simp [Limits.pushout.associator_naturality_left_condition]))
+        (((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
+          (by simp [Limits.pushout.whiskerLeft_condition_assoc, ← whisker_exchange_assoc,
+            ← comp_whiskerRight_assoc])
+          (by simp [← whisker_exchange_assoc, Limits.pushout.associator_naturality_left_condition,
+            ← comp_whiskerRight_assoc]))
+    · exact pushout.desc ((whiskerLeftIso _ _).hom.left ≫
+          pushout.desc (pushout.inl _ _) ((pushout.inl _ _ ▷ _) ≫ pushout.inr _ _)
+          (by simp [Limits.pushout.associator_inv_naturality_right_condition]))
+        ((α_ _ _ _).inv ≫ (pushout.inr _ _) ▷ _ ≫ pushout.inr _ _)
+        (((tensorLeft _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
+          (by simp [whisker_exchange_assoc,
+            Limits.pushout.associator_inv_naturality_right_condition, ← whiskerLeft_comp_assoc])
+          (by simp [whisker_exchange_assoc, Limits.pushout.condition_whiskerRight_assoc,
+            ← whiskerLeft_comp_assoc]))
+    · apply pushout.hom_ext (by simp)
+      apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext <;> simp
+    · refine pushout.hom_ext ?_ (by simp)
+      apply ((tensorLeft _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext <;> simp
+  · apply pushout.hom_ext (by simp [← MonoidalCategory.whiskerLeft_comp])
+    · apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
+      · simp [← MonoidalCategory.whiskerLeft_comp, ← MonoidalCategory.comp_whiskerRight_assoc]
+      · simp [← MonoidalCategory.comp_whiskerRight_assoc]
 
 Depends on / 依赖: Arrow.isoMk, IsPushout, IsPushout.of_hasPushout, Iso.mk, Limits, Limits.pushout.associator_naturality_left_condition, Limits.pushout.whiskerLeft_condition_assoc, associator_naturality_left_condition, comp_whiskerRight_assoc, hom.left, hom_ext, map_isPushout, of_hasPushout, pushout, pushout.desc, pushout.inl, pushout.inr, tensorRight, whiskerLeft_condition_assoc, whiskerRightIso
 -/
@@ -341,7 +399,8 @@ definition isInitialIso
     isIso_of_isInitial (i.ofIso (zeroMul i).symm) (i.ofIso (zeroMul i).symm) _
   haveI : IsPushout (X.hom ▷ I) (_ ◁ i.to W) ((i.ofIso (zeroMul i).symm).to _) (𝟙 _) :=
     .of_horiz_isIso (sq := ⟨(i.ofIso (zeroMul i).symm).hom_ext ..⟩)
-  Arrow.isoMk' _ _ this.isoPushout.s
+  Arrow.isoMk' _ _ this.isoPushout.symm (Iso.refl _)
+    (pushout.hom_ext ((i.ofIso (zeroMul i).symm).hom_ext ..) (by simp [pushout.inr_desc]))
 
 中文:
 定义 isInitialIso
@@ -350,7 +409,8 @@ definition isInitialIso
     isIso_of_isInitial (i.ofIso (zeroMul i).symm) (i.ofIso (zeroMul i).symm) _
   haveI : IsPushout (X.hom ▷ I) (_ ◁ i.to W) ((i.ofIso (zeroMul i).symm).to _) (𝟙 _) :=
     .of_horiz_isIso (sq := ⟨(i.ofIso (zeroMul i).symm).hom_ext ..⟩)
-  Arrow.isoMk' _ _ this.isoPushout.s
+  Arrow.isoMk' _ _ this.isoPushout.symm (Iso.refl _)
+    (pushout.hom_ext ((i.ofIso (zeroMul i).symm).hom_ext ..) (by simp [pushout.inr_desc]))
 
 Depends on / 依赖: Arrow.isoMk, IsPushout, Iso.refl, X.hom, hom_ext, i.ofIso, i.to, inr_desc, isIso_of_isInitial, isoPushout, of_horiz_isIso, pushout, pushout.hom_ext, pushout.inr_desc, this.isoPushout.symm, zeroMul
 -/
@@ -377,7 +437,8 @@ definition isInitialIso'
     isIso_of_isInitial (i.ofIso (mulZero i).symm) (i.ofIso (mulZero i).symm) _
   haveI : IsPushout (i.to W ▷ _) (I ◁ X.hom) (𝟙 _) ((i.ofIso (mulZero i).symm).to _) :=
     .of_vert_isIso (sq := ⟨(i.ofIso (mulZero i).symm).hom_ext ..⟩)
-  Arrow.isoMk' _ _ this.isoPushout.sy
+  Arrow.isoMk' _ _ this.isoPushout.symm (Iso.refl _)
+    (pushout.hom_ext (by simp [pushout.inl_desc]) ((i.ofIso (mulZero i).symm).hom_ext _ _))
 
 中文:
 定义 isInitialIso'
@@ -386,7 +447,8 @@ definition isInitialIso'
     isIso_of_isInitial (i.ofIso (mulZero i).symm) (i.ofIso (mulZero i).symm) _
   haveI : IsPushout (i.to W ▷ _) (I ◁ X.hom) (𝟙 _) ((i.ofIso (mulZero i).symm).to _) :=
     .of_vert_isIso (sq := ⟨(i.ofIso (mulZero i).symm).hom_ext ..⟩)
-  Arrow.isoMk' _ _ this.isoPushout.sy
+  Arrow.isoMk' _ _ this.isoPushout.symm (Iso.refl _)
+    (pushout.hom_ext (by simp [pushout.inl_desc]) ((i.ofIso (mulZero i).symm).hom_ext _ _))
 
 Depends on / 依赖: Arrow.isoMk, IsPushout, Iso.refl, X.hom, hom_ext, i.ofIso, i.to, inl_desc, isIso_of_isInitial, isoPushout, mulZero, of_vert_isIso, pushout, pushout.hom_ext, pushout.inl_desc, this.isoPushout.symm
 -/
@@ -413,7 +475,7 @@ definition isInitialIsTerminalIso
       (t.uniqueUpToIso CartesianMonoidalCategory.isTerminalTensorUnit) ≪≫ ρ_ X.left)
     (MonoidalCategory.whiskerLeftIso X.right
       (t.uniqueUpToIso CartesianMonoidalCategory.isTerminalTensorUnit) ≪≫ ρ_ X.right)
- 
+    (by simp [← whisker_exchange_assoc])
 
 中文:
 定义 isInitialIsTerminalIso
@@ -423,7 +485,7 @@ definition isInitialIsTerminalIso
       (t.uniqueUpToIso CartesianMonoidalCategory.isTerminalTensorUnit) ≪≫ ρ_ X.left)
     (MonoidalCategory.whiskerLeftIso X.right
       (t.uniqueUpToIso CartesianMonoidalCategory.isTerminalTensorUnit) ≪≫ ρ_ X.right)
- 
+    (by simp [← whisker_exchange_assoc])
 
 Depends on / 依赖: Arrow.isoMk, CartesianMonoidalCategory, CartesianMonoidalCategory.isTerminalTensorUnit, MonoidalCategory, MonoidalCategory.whiskerLeftIso, X.left, X.right, isInitialIso, isTerminalTensorUnit, t.uniqueUpToIso, uniqueUpToIso, whiskerLeftIso, whisker_exchange_assoc
 -/
@@ -481,7 +543,12 @@ definition rightUnitor
   · refine Iso.mk ?_ ((ρ_ X.left).inv ≫ pushout.inr _ _) ?_ ?_
     · refine pushout.desc ?_ (ρ_ X.left).hom ?_
       · exact (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).to _
-      · apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm)
+      · apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
+    · refine pushout.hom_ext ?_ (by simp)
+      apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
+    · simp
+  · refine pushout.hom_ext ?_ (by simp)
+    apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
 
 中文:
 定义 rightUnitor
@@ -491,7 +558,12 @@ definition rightUnitor
   · refine Iso.mk ?_ ((ρ_ X.left).inv ≫ pushout.inr _ _) ?_ ?_
     · refine pushout.desc ?_ (ρ_ X.left).hom ?_
       · exact (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).to _
-      · apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm)
+      · apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
+    · refine pushout.hom_ext ?_ (by simp)
+      apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
+    · simp
+  · refine pushout.hom_ext ?_ (by simp)
+    apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
 
 Depends on / 依赖: Arrow.isoMk, Iso.mk, X.left, X.right, hom_ext, initialIsInitial, initialIsInitial.ofIso, pushout, pushout.desc, pushout.hom_ext, pushout.inr, zeroMul
 -/
@@ -557,7 +629,10 @@ definition isTerminalIso
     isIso_of_isTerminal (IsTerminal.isTerminalObj (ihom _) _ t)
       (IsTerminal.isTerminalObj (ihom _) _ t) _
   haveI : IsPullback (𝟙 _) ((IsTerminal.isTerminalObj (ihom _) _ t).from _)
-      ((ihom X.left).map (t.from W)) ((MonoidalClosed.pre X.
+      ((ihom X.left).map (t.from W)) ((MonoidalClosed.pre X.hom).app T) :=
+    .of_horiz_isIso (sq := ⟨(IsTerminal.isTerminalObj (ihom _) _ t).hom_ext ..⟩)
+  Arrow.isoMk' _ _ (Iso.refl _) this.isoPullback.symm ((this.isoPullback).eq_comp_inv.2
+    (pullback.hom_ext (by simp) ((IsTerminal.isTerminalObj (ihom _) _ t).hom_ext ..)))
 
 中文:
 定义 isTerminalIso
@@ -566,7 +641,10 @@ definition isTerminalIso
     isIso_of_isTerminal (IsTerminal.isTerminalObj (ihom _) _ t)
       (IsTerminal.isTerminalObj (ihom _) _ t) _
   haveI : IsPullback (𝟙 _) ((IsTerminal.isTerminalObj (ihom _) _ t).from _)
-      ((ihom X.left).map (t.from W)) ((MonoidalClosed.pre X.
+      ((ihom X.left).map (t.from W)) ((MonoidalClosed.pre X.hom).app T) :=
+    .of_horiz_isIso (sq := ⟨(IsTerminal.isTerminalObj (ihom _) _ t).hom_ext ..⟩)
+  Arrow.isoMk' _ _ (Iso.refl _) this.isoPullback.symm ((this.isoPullback).eq_comp_inv.2
+    (pullback.hom_ext (by simp) ((IsTerminal.isTerminalObj (ihom _) _ t).hom_ext ..)))
 
 Depends on / 依赖: Arrow.isoMk, IsPullback, IsTerminal, IsTerminal.isTerminalObj, Iso.refl, MonoidalClosed, MonoidalClosed.pre, X.hom, X.left, eq_comp_inv, hom_ext, isIso_of_isTerminal, isTerminalObj, isoPullback, of_horiz_isIso, pullback, pullback.hom_ext, t.from, this.isoPullback, this.isoPullback.symm
 -/
@@ -598,7 +676,10 @@ definition isInitialIso
     isIso_of_isTerminal (isTerminalTensorUnit.ofIso (powZero i).symm)
       (isTerminalTensorUnit.ofIso (powZero i).symm) _
   haveI : IsPullback ((isTerminalTensorUnit.ofIso (powZero i).symm).from _) (𝟙 _)
-      ((ihom I).map X.hom) ((MonoidalClosed.pre (i.to W)
+      ((ihom I).map X.hom) ((MonoidalClosed.pre (i.to W)).app X.right) :=
+    .of_vert_isIso (sq := ⟨(isTerminalTensorUnit.ofIso (powZero i).symm).hom_ext ..⟩)
+  Arrow.isoMk' _ _ (Iso.refl _) this.isoPullback.symm ((this.isoPullback).eq_comp_inv.2
+    (pullback.hom_ext ((isTerminalTensorUnit.ofIso (powZero i).symm).hom_ext ..) (by simp)))
 
 中文:
 定义 isInitialIso
@@ -607,7 +688,10 @@ definition isInitialIso
     isIso_of_isTerminal (isTerminalTensorUnit.ofIso (powZero i).symm)
       (isTerminalTensorUnit.ofIso (powZero i).symm) _
   haveI : IsPullback ((isTerminalTensorUnit.ofIso (powZero i).symm).from _) (𝟙 _)
-      ((ihom I).map X.hom) ((MonoidalClosed.pre (i.to W)
+      ((ihom I).map X.hom) ((MonoidalClosed.pre (i.to W)).app X.right) :=
+    .of_vert_isIso (sq := ⟨(isTerminalTensorUnit.ofIso (powZero i).symm).hom_ext ..⟩)
+  Arrow.isoMk' _ _ (Iso.refl _) this.isoPullback.symm ((this.isoPullback).eq_comp_inv.2
+    (pullback.hom_ext ((isTerminalTensorUnit.ofIso (powZero i).symm).hom_ext ..) (by simp)))
 
 Depends on / 依赖: Arrow.isoMk, IsPullback, Iso.refl, MonoidalClosed, MonoidalClosed.pre, X.hom, X.right, eq_comp_inv, hom_ext, i.to, isIso_of_isTerminal, isTerminalTe, isTerminalTensorUnit, isTerminalTensorUnit.ofIso, isoPullback, of_vert_isIso, powZero, pullback, pullback.hom_ext, this.isoPullback
 -/

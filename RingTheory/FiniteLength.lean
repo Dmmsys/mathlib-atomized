@@ -63,7 +63,8 @@ theorem LinearEquiv.isFiniteLength
     have := e.symm.toEquiv.subsingleton; exact .of_subsingleton
   | @of_simple_quotient M _ _ S _ _ ih =>
     have : IsSimpleModule R (N ⧸ Submodule.map (e : M ->ₗ[R] N) S) :=
-      IsSimpleModule.congr (Submodule.Quotient.equiv S _ e rfl).
+      IsSimpleModule.congr (Submodule.Quotient.equiv S _ e rfl).symm
+    exact .of_simple_quotient (ih <| e.submoduleMap S)
 
 中文:
 定理 线性等价.isFiniteLength
@@ -74,7 +75,8 @@ theorem LinearEquiv.isFiniteLength
     have := e.symm.toEquiv.subsingleton; exact .of_subsingleton
   | @of_simple_quotient M _ _ S _ _ ih =>
     have : IsSimpleModule R (N ⧸ Submodule.map (e : M ->ₗ[R] N) S) :=
-      IsSimpleModule.congr (Submodule.Quotient.equiv S _ e rfl).
+      IsSimpleModule.congr (Submodule.Quotient.equiv S _ e rfl).symm
+    exact .of_simple_quotient (ih <| e.submoduleMap S)
 
 Depends on / 依赖: IsSimpleModule, IsSimpleModule.congr, Quotient, Submodule, Submodule.Quotient.equiv, Submodule.map, e.submoduleMap, e.symm.toEquiv.subsingleton, generalizing, of_simple_quotient, of_subsingleton, submoduleMap, subsingleton, toEquiv
 -/
@@ -125,7 +127,13 @@ theorem isFiniteLength_of_exists_compositionSeries
     intro i
     induction i using Fin.induction with
     | zero => change IsFiniteLength R s.head; rw [s_head]; exact .of_subsingleton
-    |
+    | succ i ih =>
+      let cov := s.step i
+      have := (covBy_iff_quot_is_simple cov.le).mp cov
+      have := ((s i.castSucc).comap (s i.succ).subtype).equivMapOfInjective
+        _ (Submodule.injective_subtype _)
+      rw [Submodule.map_comap_subtype]; rw [inf_of_le_right cov.le] at this
+      exact .of_simple_quotient (this.symm.isFiniteLength ih)
 
 中文:
 定理 isFiniteLength_of_存在_compositionSeries
@@ -136,7 +144,13 @@ theorem isFiniteLength_of_exists_compositionSeries
     intro i
     induction i using Fin.induction with
     | zero => change IsFiniteLength R s.head; rw [s_head]; exact .of_subsingleton
-    |
+    | succ i ih =>
+      let cov := s.step i
+      have := (covBy_iff_quot_is_simple cov.le).mp cov
+      have := ((s i.castSucc).comap (s i.succ).subtype).equivMapOfInjective
+        _ (Submodule.injective_subtype _)
+      rw [Submodule.map_comap_subtype]; rw [inf_of_le_right cov.le] at this
+      exact .of_simple_quotient (this.symm.isFiniteLength ih)
 
 Depends on / 依赖: Fin.induction, Fin.last, IsFiniteLength, Submodule, Submodule.injective_subtype, Submodule.map_comap_subtype, Submodule.topEquiv.isFiniteLength, castSucc, cov.le, covBy_iff_quot_is_simple, equivMapOfInjective, i.castSucc, i.succ, injective_subtype, isFiniteLength, map_comap_subtype, of_subsingleton, s.head, s.step, s_head
 -/
@@ -167,7 +181,8 @@ theorem isFiniteLength_iff_isNoetherian_isArtinian
   ⟨fun h => h.rec (fun {M} _ _ _ => ⟨inferInstance, inferInstance⟩) fun M _ _ {N} _ _ ⟨_, _⟩ =>
     ⟨(isNoetherian_iff_submodule_quotient N).mpr ⟨‹_›, isNoetherian_iff'.mpr inferInstance⟩,
       (isArtinian_iff_submodule_quotient N).mpr ⟨‹_›, inferInstance⟩⟩,
-    fun ⟨_,
+    fun ⟨_, _⟩ => isFiniteLength_of_exists_compositionSeries
+      (exists_compositionSeries_of_isNoetherian_isArtinian R M)⟩
 
 中文:
 定理 isFiniteLength_iff_isNoetherian_isArtinian
@@ -175,7 +190,8 @@ theorem isFiniteLength_iff_isNoetherian_isArtinian
   ⟨fun h => h.rec (fun {M} _ _ _ => ⟨inferInstance, inferInstance⟩) fun M _ _ {N} _ _ ⟨_, _⟩ =>
     ⟨(isNoetherian_iff_submodule_quotient N).mpr ⟨‹_›, isNoetherian_iff'.mpr inferInstance⟩,
       (isArtinian_iff_submodule_quotient N).mpr ⟨‹_›, inferInstance⟩⟩,
-    fun ⟨_,
+    fun ⟨_, _⟩ => isFiniteLength_of_exists_compositionSeries
+      (exists_compositionSeries_of_isNoetherian_isArtinian R M)⟩
 
 Depends on / 依赖: IsSimpleOrder, exists_compositionSeries_of_isNoetherian_isArtinian, h.rec, isArtinian_iff_submodule_quotient, isFiniteLength_of_exists_compositionSeries, isNoetherian_iff, isNoetherian_iff_submodule_quotient, scoped
 -/
@@ -223,7 +239,15 @@ theorem IsSemisimpleModule.finite_tfae
   obtain ⟨s, hs⟩ := IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top R M
   tfae_have 1 ↔ 2 := ⟨fun _ => inferInstance, fun _ => inferInstance⟩
   tfae_have 2 -> 5 := fun _ => ⟨s, WellFoundedGT.finite_of_sSupIndep hs.1, hs⟩
-  tfae_have 3 -> 5
+  tfae_have 3 -> 5 := fun _ => ⟨s, WellFoundedLT.finite_of_sSupIndep hs.1, hs⟩
+  tfae_have 5 -> 4 := fun ⟨s, fin, _, sSup_eq_top, simple⟩ => by
+    rw [← isNoetherian_top_iff]; rw [← Submodule.topEquiv.isArtinian_iff]; rw [← sSup_eq_top]; rw [sSup_eq_iSup]; rw [← iSup_subtype'']
+    rw [SetCoe.forall'] at simple
+    have := fin.to_subtype
+    exact ⟨isNoetherian_iSup, isArtinian_iSup⟩
+  tfae_have 4 -> 2 := And.left
+  tfae_have 4 -> 3 := And.right
+  tfae_finish
 
 中文:
 定理 是半单模.finite_tfae
@@ -233,7 +257,15 @@ theorem IsSemisimpleModule.finite_tfae
   obtain ⟨s, hs⟩ := IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top R M
   tfae_have 1 ↔ 2 := ⟨fun _ => inferInstance, fun _ => inferInstance⟩
   tfae_have 2 -> 5 := fun _ => ⟨s, WellFoundedGT.finite_of_sSupIndep hs.1, hs⟩
-  tfae_have 3 -> 5
+  tfae_have 3 -> 5 := fun _ => ⟨s, WellFoundedLT.finite_of_sSupIndep hs.1, hs⟩
+  tfae_have 5 -> 4 := fun ⟨s, fin, _, sSup_eq_top, simple⟩ => by
+    rw [← isNoetherian_top_iff]; rw [← Submodule.topEquiv.isArtinian_iff]; rw [← sSup_eq_top]; rw [sSup_eq_iSup]; rw [← iSup_subtype'']
+    rw [SetCoe.forall'] at simple
+    have := fin.to_subtype
+    exact ⟨isNoetherian_iSup, isArtinian_iSup⟩
+  tfae_have 4 -> 2 := And.left
+  tfae_have 4 -> 3 := And.right
+  tfae_finish
 
 Depends on / 依赖: IsSemisimpleModule, IsSemisimpleModule.exists_sSupIndep_sSup_simples_eq_top, Submodule, Submodule.topEquiv.isArtinian_iff, WellFoundedGT, WellFoundedGT.finite_of_sSupIndep, WellFoundedLT, WellFoundedLT.finite_of_sSupIndep, exists_sSupIndep_sSup_simples_eq_top, finite_of_sSupIndep, isArtinian_iff, isFiniteLength_iff_isNoetherian_isArtinian, isNoetherian_top_iff, sSup_eq_t, sSup_eq_top, simple, tfae_have, topEquiv
 -/

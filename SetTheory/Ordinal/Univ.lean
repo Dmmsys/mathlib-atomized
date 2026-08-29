@@ -176,7 +176,25 @@ definition liftPrincipalSeg
       rw [← e]
       refine inductionOn a ?_
       intro α r _
-      exact lift_type_lt.{u, u + 1, max (u + 1) v}.2 
+      exact lift_type_lt.{u, u + 1, max (u + 1) v}.2 ⟨typein r⟩
+    · rw [← lift_id (type s)] at h ⊢
+      obtain ⟨f⟩ := lift_type_lt.{_,_,v}.1 h
+      obtain ⟨f, a, hf⟩ := f
+      exists a
+      induction a using inductionOn with | type α r
+      refine lift_type_eq.{u, max (u + 1) v, max (u + 1) v}.2
+        ⟨(RelIso.ofSurjective (RelEmbedding.ofMonotone ?_ ?_) ?_).symm⟩
+      · exact fun b => enum r ⟨f b, (hf _).1 ⟨_, rfl⟩⟩
+      · refine fun a b h => (typein_lt_typein r).1 ?_
+        rw [typein_enum]; rw [typein_enum]
+        exact f.map_rel_iff.2 h
+      · intro a'
+        obtain ⟨b, e⟩ := (hf _).2 (typein_lt_type _ a')
+        exists b
+        simp only [RelEmbedding.ofMonotone_coe]
+        simp [e]⟩
+
+@[simp]
 
 中文:
 定义 liftPrincipalSeg
@@ -188,7 +206,25 @@ definition liftPrincipalSeg
       rw [← e]
       refine inductionOn a ?_
       intro α r _
-      exact lift_type_lt.{u, u + 1, max (u + 1) v}.2 
+      exact lift_type_lt.{u, u + 1, max (u + 1) v}.2 ⟨typein r⟩
+    · rw [← lift_id (type s)] at h ⊢
+      obtain ⟨f⟩ := lift_type_lt.{_,_,v}.1 h
+      obtain ⟨f, a, hf⟩ := f
+      exists a
+      induction a using inductionOn with | type α r
+      refine lift_type_eq.{u, max (u + 1) v, max (u + 1) v}.2
+        ⟨(RelIso.ofSurjective (RelEmbedding.ofMonotone ?_ ?_) ?_).symm⟩
+      · exact fun b => enum r ⟨f b, (hf _).1 ⟨_, rfl⟩⟩
+      · refine fun a b h => (typein_lt_typein r).1 ?_
+        rw [typein_enum]; rw [typein_enum]
+        exact f.map_rel_iff.2 h
+      · intro a'
+        obtain ⟨b, e⟩ := (hf _).2 (typein_lt_type _ a')
+        exists b
+        simp only [RelEmbedding.ofMonotone_coe]
+        simp [e]⟩
+
+@[simp]
 
 Depends on / 依赖: RelIso, RelIso.ofSurjecti, inductionOn, liftInitialSeg, lift_id, lift_type_eq, lift_type_lt, lift_umax, ofSurjecti, typein
 -/
@@ -586,7 +622,7 @@ theorem lt_univ
     obtain ⟨o, e⟩ := Ordinal.liftPrincipalSeg.mem_range_of_rel_top (by simpa)
     have := card_ord c
     rw [← e]; rw [Ordinal.liftPrincipalSeg_coe]; rw [← Ordinal.lift_card] at this
-    exact ⟨_, this.symm⟩, fun ⟨_, e⟩ => e.symm ▸ li
+    exact ⟨_, this.symm⟩, fun ⟨_, e⟩ => e.symm ▸ lift_lt_univ _⟩
 
 中文:
 定理 lt_univ
@@ -598,7 +634,7 @@ theorem lt_univ
     obtain ⟨o, e⟩ := Ordinal.liftPrincipalSeg.mem_range_of_rel_top (by simpa)
     have := card_ord c
     rw [← e]; rw [Ordinal.liftPrincipalSeg_coe]; rw [← Ordinal.lift_card] at this
-    exact ⟨_, this.symm⟩, fun ⟨_, e⟩ => e.symm ▸ li
+    exact ⟨_, this.symm⟩, fun ⟨_, e⟩ => e.symm ▸ lift_lt_univ _⟩
 
 Depends on / 依赖: Ordinal, Ordinal.liftPrincipalSeg.mem_range_of_rel_top, Ordinal.liftPrincipalSeg_coe, Ordinal.lift_card, card_ord, e.symm, liftPrincipalSeg, liftPrincipalSeg_coe, lift_card, lift_lt_univ, mem_range_of_rel_top, ord_lt_ord, ord_univ, this.symm
 -/

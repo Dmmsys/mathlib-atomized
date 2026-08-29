@@ -105,7 +105,16 @@ definition commGrpEquivalenceAux
   · exact ((IsZero.iff_id_eq_zero _).2 (Subsingleton.elim _ _)).eq_of_src _ _
   · simp only [Functor.id_obj,
       mul_def, Iso.refl_hom, Category.comp_id, tensorHom_id, id_whiskerRight, Category.id_comp]
-    apply monoid
+    apply monoidal_hom_ext
+    · simp only [comp_add, lift_fst, lift_snd, add_zero]
+      convert! (MonObj.lift_comp_one_right _ 0).symm
+      · simp
+      · infer_instance
+    · simp only [comp_add, lift_fst, lift_snd, zero_add]
+      convert! (MonObj.lift_comp_one_left 0 _).symm
+      · simp
+      · infer_instance
+  · cat_disch
 
 中文:
 定义 commGrpEquivalenceAux
@@ -115,7 +124,16 @@ definition commGrpEquivalenceAux
   · exact ((IsZero.iff_id_eq_zero _).2 (Subsingleton.elim _ _)).eq_of_src _ _
   · simp only [Functor.id_obj,
       mul_def, Iso.refl_hom, Category.comp_id, tensorHom_id, id_whiskerRight, Category.id_comp]
-    apply monoid
+    apply monoidal_hom_ext
+    · simp only [comp_add, lift_fst, lift_snd, add_zero]
+      convert! (MonObj.lift_comp_one_right _ 0).symm
+      · simp
+      · infer_instance
+    · simp only [comp_add, lift_fst, lift_snd, zero_add]
+      convert! (MonObj.lift_comp_one_left 0 _).symm
+      · simp
+      · infer_instance
+  · cat_disch
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, CommGrp, CommGrp.mkIso, Functor, Functor.id_obj, IsZero, IsZero.iff_id_eq_zero, Iso.refl, Iso.refl_hom, MonObj, MonObj.lift_comp_o, MonObj.lift_comp_one_right, NatIso, NatIso.ofComponents, Subsingleton, Subsingleton.elim, add_zero, comp_add
 -/

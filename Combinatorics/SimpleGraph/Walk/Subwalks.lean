@@ -431,7 +431,14 @@ theorem isSubwalk_iff_support_isInfix
   · grind [support_append, support_append_eq_support_dropLast_append]
   · have : (s.length + p₁.length) <= p₂.length := by grind [_=_ length_support]
 .copy ?_ rfl, ?_⟩ .copy rfl ?_, p₂.drop (s.length + p₁.length) refine ⟨p₂.take s.length
-    ·
+    · simp [p₂.getVert_eq_support_getElem (by lia : s.length <= p₂.length), ← h,
+        List.getElem_zero]
+    · simp [p₂.getVert_eq_support_getElem this, ← h, ← p₁.getVert_eq_support_getElem le_rfl]
+    apply ext_support
+    simp only [← h, support_append, support_copy, support_take,
+      List.take_append, drop_support_eq_support_drop_min, List.tail_drop]
+    rw [Nat.min_eq_left (by grind)]; rw [List.drop_append]; rw [List.drop_append]; rw [List.drop_eq_nil_of_le (by lia)]; rw [List.drop_eq_nil_of_le (by grind)]; rw [← p₁.cons_tail_support]
+    simp +arith [-cons_tail_support]
 
 中文:
 定理 isSubwalk_iff_support_isInfix
@@ -441,7 +448,14 @@ theorem isSubwalk_iff_support_isInfix
   · grind [support_append, support_append_eq_support_dropLast_append]
   · have : (s.length + p₁.length) <= p₂.length := by grind [_=_ length_support]
 .copy ?_ rfl, ?_⟩ .copy rfl ?_, p₂.drop (s.length + p₁.length) refine ⟨p₂.take s.length
-    ·
+    · simp [p₂.getVert_eq_support_getElem (by lia : s.length <= p₂.length), ← h,
+        List.getElem_zero]
+    · simp [p₂.getVert_eq_support_getElem this, ← h, ← p₁.getVert_eq_support_getElem le_rfl]
+    apply ext_support
+    simp only [← h, support_append, support_copy, support_take,
+      List.take_append, drop_support_eq_support_drop_min, List.tail_drop]
+    rw [Nat.min_eq_left (by grind)]; rw [List.drop_append]; rw [List.drop_append]; rw [List.drop_eq_nil_of_le (by lia)]; rw [List.drop_eq_nil_of_le (by grind)]; rw [← p₁.cons_tail_support]
+    simp +arith [-cons_tail_support]
 
 Depends on / 依赖: List.getElem_zero, ext_support, getElem_zero, getVert_eq_support_getElem, le_rfl, length, length_support, s.length, support_append, support_append_eq_support_dropLast_append
 -/
@@ -471,7 +485,15 @@ theorem isSubwalk_iff_darts_isInfix
   refine ⟨fun ⟨k, hk, h⟩ => ⟨k, by grind, fun i hi => ?_⟩,
     fun ⟨k, hk, h⟩ => ⟨k, by grind, fun i hi => ?_⟩⟩
   · rw [getElem?_pos _ _ <| by grind, Option.some_inj]
-    ext <;> grind [fst_darts_getE
+    ext <;> grind [fst_darts_getElem, snd_darts_getElem]
+  · rw [getElem?_pos _ _ <| by grind, Option.some_inj]
+    by_cases hi' : i = p₁.length
+· have := h i - 1
+      grind [not_nil_iff_lt_length, snd_darts_getElem]
+    have := h i
+    grind [fst_darts_getElem]
+
+@[simp]
 
 中文:
 定理 isSubwalk_iff_darts_isInfix
@@ -481,7 +503,15 @@ theorem isSubwalk_iff_darts_isInfix
   refine ⟨fun ⟨k, hk, h⟩ => ⟨k, by grind, fun i hi => ?_⟩,
     fun ⟨k, hk, h⟩ => ⟨k, by grind, fun i hi => ?_⟩⟩
   · rw [getElem?_pos _ _ <| by grind, Option.some_inj]
-    ext <;> grind [fst_darts_getE
+    ext <;> grind [fst_darts_getElem, snd_darts_getElem]
+  · rw [getElem?_pos _ _ <| by grind, Option.some_inj]
+    by_cases hi' : i = p₁.length
+· have := h i - 1
+      grind [not_nil_iff_lt_length, snd_darts_getElem]
+    have := h i
+    grind [fst_darts_getElem]
+
+@[simp]
 
 Depends on / 依赖: List.infix_iff_getElem, Option.some_inj, _pos, fst_darts_getElem, getElem, infix_iff_getElem, isSubwalk_iff_support_isInfix, length, not_nil_iff_lt_length, snd_darts_getElem, some_inj
 -/
@@ -571,7 +601,8 @@ theorem isSubwalk_toWalk_iff_mem_edges
   have ⟨d, hd, h⟩ := h
   rw [Dart.edge]; rw [Sym2.eq]; rw [Sym2.rel_iff'] at h
   refine h.imp (fun h => ?_) (fun h => ?_)
-    <;> convert
+    <;> convert! hd using 2
+    <;> exact h.symm
 
 中文:
 定理 isSubwalk_toWalk_iff_mem_edges
@@ -582,7 +613,8 @@ theorem isSubwalk_toWalk_iff_mem_edges
   have ⟨d, hd, h⟩ := h
   rw [Dart.edge]; rw [Sym2.eq]; rw [Sym2.rel_iff'] at h
   refine h.imp (fun h => ?_) (fun h => ?_)
-    <;> convert
+    <;> convert! hd using 2
+    <;> exact h.symm
 
 Depends on / 依赖: Dart.edge, List.mem_map, Sym2.eq, Sym2.rel_iff, convert, h.imp, h.symm, isSubwalk_toWalk_iff_mem_darts, mem_map, rel_iff
 -/
@@ -607,7 +639,7 @@ theorem infix_support_iff_mem_edges
   · have := h.elim adj_of_infix_support (adj_of_infix_support · |>.symm)
     simpa [← isSubwalk_toWalk_iff_mem_edges this, isSubwalk_iff_support_isInfix]
   · have := (isSubwalk_toWalk_iff_mem_edges <| p.adj_of_mem_edges h).mpr h
-    simpa [isSubwalk_iff_support
+    simpa [isSubwalk_iff_support_isInfix]
 
 中文:
 定理 infix_support_iff_mem_edges
@@ -617,7 +649,7 @@ theorem infix_support_iff_mem_edges
   · have := h.elim adj_of_infix_support (adj_of_infix_support · |>.symm)
     simpa [← isSubwalk_toWalk_iff_mem_edges this, isSubwalk_iff_support_isInfix]
   · have := (isSubwalk_toWalk_iff_mem_edges <| p.adj_of_mem_edges h).mpr h
-    simpa [isSubwalk_iff_support
+    simpa [isSubwalk_iff_support_isInfix]
 
 Depends on / 依赖: adj_of_infix_support, adj_of_mem_edges, h.elim, isSubwalk_iff_support_isInfix, isSubwalk_toWalk_iff_mem_edges, p.adj_of_mem_edges
 -/
@@ -900,7 +932,7 @@ theorem drop_isSubwalk_drop
     clear h ih
     induction k generalizing p u with
     | zero => exact p.drop_zero ▸ (p.isSubwalk_rfl.copy rfl rfl p.getVert_zero.symm rfl).tail
-    | succ _ ih => cases p <;> simp [d
+    | succ _ ih => cases p <;> simp [drop, ih]
 
 中文:
 定理 drop_isSubwalk_drop
@@ -913,7 +945,7 @@ theorem drop_isSubwalk_drop
     clear h ih
     induction k generalizing p u with
     | zero => exact p.drop_zero ▸ (p.isSubwalk_rfl.copy rfl rfl p.getVert_zero.symm rfl).tail
-    | succ _ ih => cases p <;> simp [d
+    | succ _ ih => cases p <;> simp [drop, ih]
 
 Depends on / 依赖: IsSubwalk, IsSubwalk.trans, Nat.le_induction, drop_zero, generalizing, getVert_zero, isSubwalk_rfl, le_induction, p.drop_zero, p.getVert_zero.symm, p.isSubwalk_rfl.copy
 -/

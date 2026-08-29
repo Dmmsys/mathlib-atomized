@@ -189,7 +189,10 @@ lemma multipliable_of_summable_log'
     filter_upwards [hfn] with i hi using by simp [hi]
   have : Multipliable fun i => if 0 < f i then f i else 1 := by
     refine multipliable_of_summable_log (fun i => ?_) this
-    split_ifs with h <;> s
+    split_ifs with h <;> simp [h]
+  refine this.congr_cofinite₀ (fun i => ?_) ?_
+  · split_ifs with h <;> simp [h, ne_of_gt]
+  · filter_upwards [hfn] with i hi using by simp [hi]
 
 中文:
 引理 multipliable_of_summable_log'
@@ -200,7 +203,10 @@ lemma multipliable_of_summable_log'
     filter_upwards [hfn] with i hi using by simp [hi]
   have : Multipliable fun i => if 0 < f i then f i else 1 := by
     refine multipliable_of_summable_log (fun i => ?_) this
-    split_ifs with h <;> s
+    split_ifs with h <;> simp [h]
+  refine this.congr_cofinite₀ (fun i => ?_) ?_
+  · split_ifs with h <;> simp [h, ne_of_gt]
+  · filter_upwards [hfn] with i hi using by simp [hi]
 
 Depends on / 依赖: Multipliable, Summable, congr_cofinite, filter_upwards, hf.congr_cofinite, multipliable_of_summable_log, ne_of_gt, split_ifs, this.congr_cofinite
 -/
@@ -308,7 +314,15 @@ lemma summable_finsetProd_of_summable_nonneg
     (fun s => Finset.prod_nonneg fun i _ => hf i) fun T => ?_
   calc ∑ s in T, ∏ i in s, f i
       <= ∑ s in (T.biUnion id).powerset, ∏ i in s, f i :=
-        Finset.sum_le_sum_of_subset_of_nonneg (fun s hs => Finset.mem_powerset
+        Finset.sum_le_sum_of_subset_of_nonneg (fun s hs => Finset.mem_powerset.mpr
+          (Finset.subset_biUnion_of_mem id hs)) (fun s _ _ => Finset.prod_nonneg fun i _ => hf i)
+    _ = ∏ i in T.biUnion id, (1 + f i) := (Finset.prod_one_add _).symm
+    _ <= Real.exp (∑ i in T.biUnion id, f i) := Real.prod_one_add_le_exp_sum _ hf
+    _ <= Real.exp (∑' i, f i) :=
+        Real.exp_le_exp.mpr (hfs.sum_le_tsum _ fun _ _ => hf _)
+
+@[deprecated (since := "2026-04-08")]
+alias summable_finset_prod_of_summable_nonneg := summable_finsetProd_of_summable_nonneg
 
 中文:
 引理 summable_finsetProd_of_summable_nonneg
@@ -319,7 +333,15 @@ lemma summable_finsetProd_of_summable_nonneg
     (fun s => Finset.prod_nonneg fun i _ => hf i) fun T => ?_
   calc ∑ s in T, ∏ i in s, f i
       <= ∑ s in (T.biUnion id).powerset, ∏ i in s, f i :=
-        Finset.sum_le_sum_of_subset_of_nonneg (fun s hs => Finset.mem_powerset
+        Finset.sum_le_sum_of_subset_of_nonneg (fun s hs => Finset.mem_powerset.mpr
+          (Finset.subset_biUnion_of_mem id hs)) (fun s _ _ => Finset.prod_nonneg fun i _ => hf i)
+    _ = ∏ i in T.biUnion id, (1 + f i) := (Finset.prod_one_add _).symm
+    _ <= Real.exp (∑ i in T.biUnion id, f i) := Real.prod_one_add_le_exp_sum _ hf
+    _ <= Real.exp (∑' i, f i) :=
+        Real.exp_le_exp.mpr (hfs.sum_le_tsum _ fun _ _ => hf _)
+
+@[deprecated (since := "2026-04-08")]
+alias summable_finset_prod_of_summable_nonneg := summable_finsetProd_of_summable_nonneg
 
 Depends on / 依赖: Finset, Finset.mem_powerset.mpr, Finset.prod_nonneg, Finset.prod_one_add, Finset.subset_biUnion_of_mem, Finset.sum_le_sum_of_subset_of_nonneg, Real.exp, Real.prod_one_add_le, T.biUnion, biUnion, classical, mem_powerset, powerset, prod_nonneg, prod_one_add, prod_one_add_le, subset_biUnion_of_mem, sum_le_sum_of_subset_of_nonneg, summable_of_sum_le
 -/
@@ -356,7 +378,7 @@ lemma Multipliable.eventually_bounded_finsetProd
   exact ⟨r₁, hr₁.1, this⟩
 
 @[deprecated (since := "2026-04-08")]
-alias Multipliable.eventually_bounded_finset_prod := Mu
+alias Multipliable.eventually_bounded_finset_prod := Multipliable.eventually_bounded_finsetProd
 
 中文:
 引理 Multipliable.eventually_bounded_finsetProd
@@ -369,7 +391,7 @@ alias Multipliable.eventually_bounded_finset_prod := Mu
   exact ⟨r₁, hr₁.1, this⟩
 
 @[deprecated (since := "2026-04-08")]
-alias Multipliable.eventually_bounded_finset_prod := Mu
+alias Multipliable.eventually_bounded_finset_prod := Multipliable.eventually_bounded_finsetProd
 
 Depends on / 依赖: eventually_atTop, eventually_le_const, exists_gt, hasProd, hv.hasProd.eventually_le_const, max_lt_iff, unconditional
 -/
@@ -425,7 +447,14 @@ lemma Finset.norm_prod_one_add_sub_one_le
   | empty => simp
   | insert x t hx IH =>
     rw [Finset.prod_insert hx]; rw [Finset.sum_insert hx]; rw [Real.exp_add]; rw [show (1 + f x) * ∏ i in t]; rw [(1 + f i) - 1 =
-        (∏ i in t]; rw [(1 + f i) - 1) + f x * ∏ x in t]; rw [(1 + f
+        (∏ i in t]; rw [(1 + f i) - 1) + f x * ∏ x in t]; rw [(1 + f x) by ring]
+    refine (norm_add_le_of_le IH (norm_mul_le _ _)).trans ?_
+    generalize h : Real.exp (∑ i in t, ‖f i‖) = A at ⊢ IH
+    rw [sub_add_eq_add_sub]; rw [sub_le_sub_iff_right]
+    transitivity A + ‖f x‖ * A
+    · grw [norm_le_norm_sub_add (∏ x in t, (1 + f x)) 1, IH, norm_one, sub_add_cancel]
+    rw [← one_add_mul]; rw [add_comm]
+    exact mul_le_mul_of_nonneg_right (Real.add_one_le_exp _) (h ▸ Real.exp_nonneg _)
 
 中文:
 引理 有限集.norm_prod_one_add_sub_one_le
@@ -436,7 +465,14 @@ lemma Finset.norm_prod_one_add_sub_one_le
   | empty => simp
   | insert x t hx IH =>
     rw [Finset.prod_insert hx]; rw [Finset.sum_insert hx]; rw [Real.exp_add]; rw [show (1 + f x) * ∏ i in t]; rw [(1 + f i) - 1 =
-        (∏ i in t]; rw [(1 + f i) - 1) + f x * ∏ x in t]; rw [(1 + f
+        (∏ i in t]; rw [(1 + f i) - 1) + f x * ∏ x in t]; rw [(1 + f x) by ring]
+    refine (norm_add_le_of_le IH (norm_mul_le _ _)).trans ?_
+    generalize h : Real.exp (∑ i in t, ‖f i‖) = A at ⊢ IH
+    rw [sub_add_eq_add_sub]; rw [sub_le_sub_iff_right]
+    transitivity A + ‖f x‖ * A
+    · grw [norm_le_norm_sub_add (∏ x in t, (1 + f x)) 1, IH, norm_one, sub_add_cancel]
+    rw [← one_add_mul]; rw [add_comm]
+    exact mul_le_mul_of_nonneg_right (Real.add_one_le_exp _) (h ▸ Real.exp_nonneg _)
 
 Depends on / 依赖: Finset, Finset.induction_on, Finset.prod_insert, Finset.sum_insert, Real.exp, Real.exp_add, classical, exp_add, generalize, induction_on, insert, norm_add_le_of_le, norm_le_nor, norm_mul_le, prod_insert, sub_add_eq_add_sub, sub_le_sub_iff_right, sum_insert, transitivity
 -/
@@ -467,7 +503,8 @@ lemma prod_vanishing_of_summable_norm
     this.imp fun s hs t ht => (t.norm_prod_one_add_sub_one_le _).trans_lt (hs t ht)
   suffices {x | Real.exp x - 1 < ε} in 𝓝 0 from hf.vanishing this
   let f (x) := Real.exp x - 1
-  have : Set.Iio ε in nhds (f 
+  have : Set.Iio ε in nhds (f 0) := by simpa [f] using Iio_mem_nhds hε
+  exact ContinuousAt.preimage_mem_nhds (by fun_prop) this
 
 中文:
 引理 prod_vanishing_of_summable_norm
@@ -477,7 +514,8 @@ lemma prod_vanishing_of_summable_norm
     this.imp fun s hs t ht => (t.norm_prod_one_add_sub_one_le _).trans_lt (hs t ht)
   suffices {x | Real.exp x - 1 < ε} in 𝓝 0 from hf.vanishing this
   let f (x) := Real.exp x - 1
-  have : Set.Iio ε in nhds (f 
+  have : Set.Iio ε in nhds (f 0) := by simpa [f] using Iio_mem_nhds hε
+  exact ContinuousAt.preimage_mem_nhds (by fun_prop) this
 
 Depends on / 依赖: ContinuousAt, ContinuousAt.preimage_mem_nhds, Disjoint, Iio_mem_nhds, Real.exp, Set.Iio, fun_prop, hf.vanishing, norm_prod_one_add_sub_one_le, preimage_mem_nhds, t.norm_prod_one_add_sub_one_le, this.imp, trans_lt, vanishing
 -/
@@ -502,7 +540,27 @@ lemma multipliable_one_add_of_summable
 refine CompleteSpace.complete Metric.cauchy_iff.mpr ⟨by infer_instance, fun ε hε => ?_⟩
   obtain ⟨r₁, hr₁, s₁, hs₁⟩ :=
     (multipliable_norm_one_add_of_summable_norm hf).eventually_bounded_finsetProd
-  obtain ⟨s₂, hs₂⟩ := prod_vanishing_of_summable_norm hf (show 0 < ε / (2 * r₁) by p
+  obtain ⟨s₂, hs₂⟩ := prod_vanishing_of_summable_norm hf (show 0 < ε / (2 * r₁) by positivity)
+  simp only [unconditional, Filter.mem_map, mem_atTop_sets, Set.mem_preimage]
+  let s := s₁ union s₂
+  -- The idea here is that if `s` is a large enough finset, then the product over `s` is bounded
+  -- by some `r`, and the product over finsets disjoint from `s` is within `ε / (2 * r)` of 1.
+  -- From this it follows that the products over any two finsets containing `s` are within `ε` of
+  -- each other.
+  -- Here `s₁ ⊆ s` guarantees that the product over `s` is bounded, and `s₂ ⊆ s` guarantees that
+  -- the product over terms not in `s` is small.
+  refine ⟨Metric.ball (∏ i in s, (1 + f i)) (ε / 2), ⟨s, fun b hb => ?_⟩, ?_⟩
+  · rw [← union_sdiff_of_subset hb, prod_union sdiff_disjoint.symm,
+      Metric.mem_ball, dist_eq_norm_sub, ← mul_sub_one,
+      show ε / 2 = r₁ * (ε / (2 * r₁)) by field]
+    apply (norm_mul_le _ _).trans_lt
+    refine lt_of_le_of_lt (b := r₁ * ‖∏ x in b \ s, (1 + f x) - 1‖) ?_ ?_
+    · refine mul_le_mul_of_nonneg_right ?_ (norm_nonneg _)
+      exact (Finset.norm_prod_le _ _).trans (hs₁ _ subset_union_left)
+    · refine mul_lt_mul_of_pos_left (hs₂ _ ?_) hr₁
+      simp [s, sdiff_union_distrib, disjoint_iff_inter_eq_empty]
+  · intro x hx y hy
+    exact (dist_triangle_right _ _ (∏ i in s, (1 + f i))).trans_lt (add_halves ε ▸ add_lt_add hx hy)
 
 中文:
 引理 multipliable_one_add_of_summable
@@ -512,7 +570,27 @@ refine CompleteSpace.complete Metric.cauchy_iff.mpr ⟨by infer_instance, fun ε
 refine CompleteSpace.complete Metric.cauchy_iff.mpr ⟨by infer_instance, fun ε hε => ?_⟩
   obtain ⟨r₁, hr₁, s₁, hs₁⟩ :=
     (multipliable_norm_one_add_of_summable_norm hf).eventually_bounded_finsetProd
-  obtain ⟨s₂, hs₂⟩ := prod_vanishing_of_summable_norm hf (show 0 < ε / (2 * r₁) by p
+  obtain ⟨s₂, hs₂⟩ := prod_vanishing_of_summable_norm hf (show 0 < ε / (2 * r₁) by positivity)
+  simp only [unconditional, Filter.mem_map, mem_atTop_sets, Set.mem_preimage]
+  let s := s₁ union s₂
+  -- The idea here is that if `s` is a large enough finset, then the product over `s` is bounded
+  -- by some `r`, and the product over finsets disjoint from `s` is within `ε / (2 * r)` of 1.
+  -- From this it follows that the products over any two finsets containing `s` are within `ε` of
+  -- each other.
+  -- Here `s₁ ⊆ s` guarantees that the product over `s` is bounded, and `s₂ ⊆ s` guarantees that
+  -- the product over terms not in `s` is small.
+  refine ⟨Metric.ball (∏ i in s, (1 + f i)) (ε / 2), ⟨s, fun b hb => ?_⟩, ?_⟩
+  · rw [← union_sdiff_of_subset hb, prod_union sdiff_disjoint.symm,
+      Metric.mem_ball, dist_eq_norm_sub, ← mul_sub_one,
+      show ε / 2 = r₁ * (ε / (2 * r₁)) by field]
+    apply (norm_mul_le _ _).trans_lt
+    refine lt_of_le_of_lt (b := r₁ * ‖∏ x in b \ s, (1 + f x) - 1‖) ?_ ?_
+    · refine mul_le_mul_of_nonneg_right ?_ (norm_nonneg _)
+      exact (Finset.norm_prod_le _ _).trans (hs₁ _ subset_union_left)
+    · refine mul_lt_mul_of_pos_left (hs₂ _ ?_) hr₁
+      simp [s, sdiff_union_distrib, disjoint_iff_inter_eq_empty]
+  · intro x hx y hy
+    exact (dist_triangle_right _ _ (∏ i in s, (1 + f i))).trans_lt (add_halves ε ▸ add_lt_add hx hy)
 
 Depends on / 依赖: CompleteSpace, CompleteSpace.complete, Filter, Filter.mem_map, Metric, Metric.cauchy_iff.mpr, Set.mem_preimage, cauchy_iff, classical, complete, eventually_bounded_finsetProd, infer_instance, mem_atTop_sets, mem_map, mem_preimage, multipliable_norm_one_add_of_summable_norm, prod_vanishing_of_summable_norm, unconditional
 -/
@@ -588,7 +666,7 @@ lemma Summable.summable_log_norm_one_add
   simp only [Real.norm_eq_abs, abs_le]
   constructor
   · simpa using norm_add_le (1 + f i) (-f i)
-  · simpa [add_co
+  · simpa [add_comm] using norm_add_le (f i) 1
 
 中文:
 引理 Summable.summable_log_norm_one_add
@@ -600,7 +678,7 @@ lemma Summable.summable_log_norm_one_add
   simp only [Real.norm_eq_abs, abs_le]
   constructor
   · simpa using norm_add_le (1 + f i) (-f i)
-  · simpa [add_co
+  · simpa [add_comm] using norm_add_le (f i) 1
 
 Depends on / 依赖: Real.norm_eq_abs, Real.summable_log_one_add_of_summable, Summable, abs_le, add_comm, hu.of_nonneg_of_le, norm_add_le, norm_eq_abs, of_nonneg_of_le, of_norm, summable_log_one_add_of_summable
 -/

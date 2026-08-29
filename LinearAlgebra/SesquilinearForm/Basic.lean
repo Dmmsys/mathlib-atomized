@@ -331,7 +331,10 @@ theorem linearIndependent_of_isOrthoᵢ
   have hsum : (s.sum fun j : n => I₁ (w j) • B (v j) (v i)) = I₁ (w i) • B (v i) (v i) := by
     apply Finset.sum_eq_single_of_mem i hi
     intro j _hj hij
-   
+    rw [isOrthoᵢ_def.1 hv₁ _ _ hij]; rw [smul_zero]
+  simp_rw [B.map_sum₂, map_smulₛₗ₂, hsum] at this
+  apply (map_eq_zero I₁).mp
+  exact (smul_eq_zero.mp this).elim _root_.id (hv₂ i · |>.elim)
 
 中文:
 定理 linearIndependent_of_isOrthoᵢ
@@ -343,7 +346,10 @@ theorem linearIndependent_of_isOrthoᵢ
   have hsum : (s.sum fun j : n => I₁ (w j) • B (v j) (v i)) = I₁ (w i) • B (v i) (v i) := by
     apply Finset.sum_eq_single_of_mem i hi
     intro j _hj hij
-   
+    rw [isOrthoᵢ_def.1 hv₁ _ _ hij]; rw [smul_zero]
+  simp_rw [B.map_sum₂, map_smulₛₗ₂, hsum] at this
+  apply (map_eq_zero I₁).mp
+  exact (smul_eq_zero.mp this).elim _root_.id (hv₂ i · |>.elim)
 
 Depends on / 依赖: B.map_sum, Finset, Finset.sum_eq_single_of_mem, _root_, _root_.id, linearIndependent_iff, map_eq_zero, map_zero, s.sum, simp_rw, smul_eq_zero, smul_eq_zero.mp, smul_zero, sum_eq_single_of_mem, zero_apply
 -/
@@ -1455,7 +1461,9 @@ lemma isOrthogonal_of_forall_apply_same
   have := hf (x + y)
   simp only [map_add, LinearMap.add_apply, hf x, hf y, show B y x = B x y from hB.eq y x] at this
   rw [show B (f y) (f x) = B (f x) (f y) from hB.eq (f y) (f x)] at this
-  simp only [add_assoc, add_right_inj] a
+  simp only [add_assoc, add_right_inj] at this
+  simp only [← add_assoc, add_left_inj] at this
+  simpa only [← two_mul] using this
 
 中文:
 引理 isOrthogonal_of_对任意_apply_same
@@ -1466,7 +1474,9 @@ lemma isOrthogonal_of_forall_apply_same
   have := hf (x + y)
   simp only [map_add, LinearMap.add_apply, hf x, hf y, show B y x = B x y from hB.eq y x] at this
   rw [show B (f y) (f x) = B (f x) (f y) from hB.eq (f y) (f x)] at this
-  simp only [add_assoc, add_right_inj] a
+  simp only [add_assoc, add_right_inj] at this
+  simp only [← add_assoc, add_left_inj] at this
+  simpa only [← two_mul] using this
 
 Depends on / 依赖: LinearMap, LinearMap.add_apply, add_apply, add_assoc, add_left_inj, add_right_inj, hB.eq, map_add, two_mul
 -/
@@ -1651,7 +1661,15 @@ theorem isPairSelfAdjoint_equiv
       (F.comp f).compl₁₂ (↑e : M₁ ->ₗ[R] M) (↑e : M₁ ->ₗ[R] M) := by
     ext
     simp only [LinearEquiv.symm_conj_apply, coe_comp, LinearEquiv.coe_coe, compl₁₂_apply,
-      LinearEquiv.apply_symm_apply, Funct
+      LinearEquiv.apply_symm_apply, Function.comp_apply]
+  have hᵣ :
+    (B.compl₁₂ (↑e : M₁ ->ₗ[R] M) (↑e : M₁ ->ₗ[R] M)).compl₂ (e.symm.conj f) =
+      (B.compl₂ f).compl₁₂ (↑e : M₁ ->ₗ[R] M) (↑e : M₁ ->ₗ[R] M) := by
+    ext
+    simp only [LinearEquiv.symm_conj_apply, compl₂_apply, coe_comp, LinearEquiv.coe_coe,
+      compl₁₂_apply, LinearEquiv.apply_symm_apply, Function.comp_apply]
+  have he : Function.Surjective (⇑(↑e : M₁ ->ₗ[R] M) : M₁ -> M) := e.surjective
+  simp_rw [IsPairSelfAdjoint, isAdjointPair_iff_comp_eq_compl₂, hₗ, hᵣ, compl₁₂_inj he he]
 
 中文:
 定理 isPairSelfAdjoint_equiv
@@ -1662,7 +1680,15 @@ theorem isPairSelfAdjoint_equiv
       (F.comp f).compl₁₂ (↑e : M₁ ->ₗ[R] M) (↑e : M₁ ->ₗ[R] M) := by
     ext
     simp only [LinearEquiv.symm_conj_apply, coe_comp, LinearEquiv.coe_coe, compl₁₂_apply,
-      LinearEquiv.apply_symm_apply, Funct
+      LinearEquiv.apply_symm_apply, Function.comp_apply]
+  have hᵣ :
+    (B.compl₁₂ (↑e : M₁ ->ₗ[R] M) (↑e : M₁ ->ₗ[R] M)).compl₂ (e.symm.conj f) =
+      (B.compl₂ f).compl₁₂ (↑e : M₁ ->ₗ[R] M) (↑e : M₁ ->ₗ[R] M) := by
+    ext
+    simp only [LinearEquiv.symm_conj_apply, compl₂_apply, coe_comp, LinearEquiv.coe_coe,
+      compl₁₂_apply, LinearEquiv.apply_symm_apply, Function.comp_apply]
+  have he : Function.Surjective (⇑(↑e : M₁ ->ₗ[R] M) : M₁ -> M) := e.surjective
+  simp_rw [IsPairSelfAdjoint, isAdjointPair_iff_comp_eq_compl₂, hₗ, hᵣ, compl₁₂_inj he he]
 
 Depends on / 依赖: B.compl, F.comp, F.compl, Function, Function.comp_apply, LinearEquiv, LinearEquiv.apply_symm_apply, LinearEquiv.coe_coe, LinearEquiv.symm_conj_apply, apply_symm_apply, coe_coe, coe_comp, comp_apply, e.symm.conj, symm_conj_apply
 -/
@@ -2311,7 +2337,14 @@ lemma IsSymm.nondegenerate_restrict_of_isCompl_ker
   intro ⟨x, hx⟩ hx'
   simp only [Submodule.mk_eq_zero]
   replace hx' : forall y in W, B x y = 0 := by simpa [Subtype.forall] using! hx'
-  repl
+  replace hx' : x in W ⊓ ker B := by
+    refine ⟨hx, ?_⟩
+    ext y
+    obtain ⟨u, hu, v, hv, rfl⟩ : exists u in W, exists v in ker B, u + v = y := by
+      rw [← Submodule.mem_sup]; rw [hW.sup_eq_top]; exact Submodule.mem_top
+    suffices B x u = 0 by rw [mem_ker] at hv; simpa [← hB.eq v, hv]
+    exact hx' u hu
+  simpa [hW.inf_eq_bot] using! hx'
 
 中文:
 引理 是Symm.nondegenerate_restrict_of_isCompl_ker
@@ -2322,7 +2355,14 @@ lemma IsSymm.nondegenerate_restrict_of_isCompl_ker
   intro ⟨x, hx⟩ hx'
   simp only [Submodule.mk_eq_zero]
   replace hx' : forall y in W, B x y = 0 := by simpa [Subtype.forall] using! hx'
-  repl
+  replace hx' : x in W ⊓ ker B := by
+    refine ⟨hx, ?_⟩
+    ext y
+    obtain ⟨u, hu, v, hv, rfl⟩ : exists u in W, exists v in ker B, u + v = y := by
+      rw [← Submodule.mem_sup]; rw [hW.sup_eq_top]; exact Submodule.mem_top
+    suffices B x u = 0 by rw [mem_ker] at hv; simpa [← hB.eq v, hv]
+    exact hx' u hu
+  simpa [hW.inf_eq_bot] using! hx'
 
 Depends on / 依赖: B.domRestrict, IsRefl, LinearMap, LinearMap.IsRefl.nondegenerate_iff_separatingLeft, Submodule, Submodule.mem_sup, Submodule.mem_top, Submodule.mk_eq_zero, Subtype, Subtype.forall, W.subtype, hB.isRefl, hW.sup_eq_top, isRefl, mem_sup, mem_top, mk_eq_zero, nondegenerate_iff_separatingLeft, replace, subtype
 -/
@@ -2364,7 +2404,10 @@ theorem IsOrthoᵢ.not_isOrtho_basis_self_of_separatingLeft
   apply Finset.sum_eq_zero
   rintro j -
   rw [map_smulₛₗ]
-  suffices B (v i) (v j) = 0 by rw [th
+  suffices B (v i) (v j) = 0 by rw [this, smul_zero]
+  obtain rfl | hij := eq_or_ne i j
+  · exact ho
+  · exact h hij
 
 中文:
 定理 IsOrthoᵢ.not_isOrtho_basis_self_of_separatingLeft
@@ -2377,7 +2420,10 @@ theorem IsOrthoᵢ.not_isOrtho_basis_self_of_separatingLeft
   apply Finset.sum_eq_zero
   rintro j -
   rw [map_smulₛₗ]
-  suffices B (v i) (v j) = 0 by rw [th
+  suffices B (v i) (v j) = 0 by rw [this, smul_zero]
+  obtain rfl | hij := eq_or_ne i j
+  · exact ho
+  · exact h hij
 
 Depends on / 依赖: Basis.repr_symm_apply, Finset, Finset.sum_eq_zero, Finsupp, Finsupp.linearCombination_apply, Finsupp.sum, eq_or_ne, linearCombination_apply, map_sum, ne_zero, repr_symm_apply, smul_zero, sum_eq_zero, surjective, v.ne_zero, v.repr.symm.surjective
 -/
@@ -2438,7 +2484,17 @@ theorem IsOrthoᵢ.separatingLeft_of_not_isOrtho_basis_self
   specialize hB (v i)
   simp_rw [Basis.repr_symm_apply, Finsupp.linearCombination_apply, Finsupp.sum, map_sum₂,
            map_smulₛₗ₂] at hB
-  rw [Finset.sum_eq_single
+  rw [Finset.sum_eq_single i] at hB
+  · cases smul_eq_zero.mp hB
+    · assumption
+    · specialize h i
+      contradiction
+  · intro j _hj hij
+    replace hij : B (v j) (v i) = 0 := hO hij
+    rw [hij]; rw [RingHom.id_apply]; rw [smul_zero]
+  · intro hi
+    replace hi : vi i = 0 := Finsupp.notMem_support_iff.mp hi
+    rw [hi]; rw [RingHom.id_apply]; rw [zero_smul]
 
 中文:
 定理 IsOrthoᵢ.separatingLeft_of_not_isOrtho_basis_self
@@ -2452,7 +2508,17 @@ theorem IsOrthoᵢ.separatingLeft_of_not_isOrtho_basis_self
   specialize hB (v i)
   simp_rw [Basis.repr_symm_apply, Finsupp.linearCombination_apply, Finsupp.sum, map_sum₂,
            map_smulₛₗ₂] at hB
-  rw [Finset.sum_eq_single
+  rw [Finset.sum_eq_single i] at hB
+  · cases smul_eq_zero.mp hB
+    · assumption
+    · specialize h i
+      contradiction
+  · intro j _hj hij
+    replace hij : B (v j) (v i) = 0 := hO hij
+    rw [hij]; rw [RingHom.id_apply]; rw [smul_zero]
+  · intro hi
+    replace hi : vi i = 0 := Finsupp.notMem_support_iff.mp hi
+    rw [hi]; rw [RingHom.id_apply]; rw [zero_smul]
 
 Depends on / 依赖: Basis.repr_symm_apply, Finset, Finset.sum_eq_single, Finsupp, Finsupp.linearCombination_apply, Finsupp.sum, Finsupp.zero_apply, LinearEquiv, LinearEquiv.map_eq_zero_iff, RingHom, RingHom.id_apply, id_apply, linearCombination_apply, map_eq_zero_iff, replace, repr_symm_apply, simp_rw, smul_eq_zero, smul_eq_zero.mp, smul_zero
 -/
@@ -2583,7 +2649,16 @@ lemma apply_mul_apply_le_of_forall_zero_le
     exact hs (B x y • x - B x x • y)
   rcases lt_or_ge 0 (B x x) with hx | hx
 · exact sub_nonneg.mp nonneg_of_mul_nonneg_right (aux x y) hx
-  · replace hx : B x x = 0 :=
+  · replace hx : B x x = 0 := le_antisymm hx (hs x)
+    rcases lt_or_ge 0 (B y y) with hy | hy
+    · rw [mul_comm (B x y), mul_comm (B x x)]
+exact sub_nonneg.mp nonneg_of_mul_nonneg_right (aux y x) hy
+    · replace hy : B y y = 0 := le_antisymm hy (hs y)
+      suffices B x y = - B y x by simpa [this, hx, hy] using mul_self_nonneg (B y x)
+      rw [eq_neg_iff_add_eq_zero]
+      apply le_antisymm
+      · simpa [hx, hy, le_neg_iff_add_nonpos_left] using hs (x - y)
+      · simpa [hx, hy] using hs (x + y)
 
 中文:
 引理 apply_mul_apply_le_of_对任意_zero_le
@@ -2594,7 +2669,16 @@ lemma apply_mul_apply_le_of_forall_zero_le
     exact hs (B x y • x - B x x • y)
   rcases lt_or_ge 0 (B x x) with hx | hx
 · exact sub_nonneg.mp nonneg_of_mul_nonneg_right (aux x y) hx
-  · replace hx : B x x = 0 :=
+  · replace hx : B x x = 0 := le_antisymm hx (hs x)
+    rcases lt_or_ge 0 (B y y) with hy | hy
+    · rw [mul_comm (B x y), mul_comm (B x x)]
+exact sub_nonneg.mp nonneg_of_mul_nonneg_right (aux y x) hy
+    · replace hy : B y y = 0 := le_antisymm hy (hs y)
+      suffices B x y = - B y x by simpa [this, hx, hy] using mul_self_nonneg (B y x)
+      rw [eq_neg_iff_add_eq_zero]
+      apply le_antisymm
+      · simpa [hx, hy, le_neg_iff_add_nonpos_left] using hs (x - y)
+      · simpa [hx, hy] using hs (x + y)
 
 Depends on / 依赖: apply_smul_sub_smul_sub_eq, le_antisymm, lt_or_ge, mul_comm, nonneg_of_mul_nonneg_right, replace, sub_nonneg, sub_nonneg.mp
 -/
@@ -2654,7 +2738,10 @@ exact (ne_of_lt (hp ((B x) y • x - (B x) x • y) hc)).symm
       (sub_eq_zero_of_eq he.symm))
   by_contra hL
   by_cases hx : x = 0
-  · simpa [hx] using L
+  · simpa [hx] using LinearIndependent.ne_zero 0 hL
+  · have h := sub_eq_zero.mpr (sub_eq_zero.mp hz).symm
+    rw [sub_eq_add_neg]; rw [← neg_smul]; rw [add_comm] at h
+    exact (Ne.symm (ne_of_lt (hp x hx))) (LinearIndependent.eq_zero_of_pair hL h).2
 
 中文:
 引理 not_linearIndependent_of_apply_mul_apply_eq
@@ -2667,7 +2754,10 @@ exact (ne_of_lt (hp ((B x) y • x - (B x) x • y) hc)).symm
       (sub_eq_zero_of_eq he.symm))
   by_contra hL
   by_cases hx : x = 0
-  · simpa [hx] using L
+  · simpa [hx] using LinearIndependent.ne_zero 0 hL
+  · have h := sub_eq_zero.mpr (sub_eq_zero.mp hz).symm
+    rw [sub_eq_add_neg]; rw [← neg_smul]; rw [add_comm] at h
+    exact (Ne.symm (ne_of_lt (hp x hx))) (LinearIndependent.eq_zero_of_pair hL h).2
 
 Depends on / 依赖: LinearIndependent, LinearIndependent.eq_zero_of_pair, LinearIndependent.ne_zero, Ne.symm, add_comm, apply_smul_sub_smul_sub_eq, eq_zero_of_pair, he.symm, mul_eq_zero_of_right, ne_of_lt, ne_zero, neg_smul, sub_eq_add_neg, sub_eq_zero, sub_eq_zero.mp, sub_eq_zero.mpr, sub_eq_zero_of_eq
 -/
@@ -2788,7 +2878,10 @@ lemma nondegenerate_restrict_iff_disjoint_ker
   rw [IsRefl.nondegenerate_iff_separatingLeft hB']
   intro ⟨x, hx⟩ h
   simp_rw [Subtype.forall, domRestrict₁₂_apply] at h
-  specialize h x 
+  specialize h x hx
+  rw [B.apply_apply_same_eq_zero_iff hs hB] at h
+  have key : x in W ⊓ LinearMap.ker B := ⟨hx, h⟩
+  simpa [hW.eq_bot] using key
 
 中文:
 引理 nondegenerate_restrict_iff_disjoint_ker
@@ -2799,7 +2892,10 @@ lemma nondegenerate_restrict_iff_disjoint_ker
   rw [IsRefl.nondegenerate_iff_separatingLeft hB']
   intro ⟨x, hx⟩ h
   simp_rw [Subtype.forall, domRestrict₁₂_apply] at h
-  specialize h x 
+  specialize h x hx
+  rw [B.apply_apply_same_eq_zero_iff hs hB] at h
+  have key : x in W ⊓ LinearMap.ker B := ⟨hx, h⟩
+  simpa [hW.eq_bot] using key
 
 Depends on / 依赖: B.apply_apply_same_eq_zero_iff, B.domRestrict, IsRefl, IsRefl.nondegenerate_iff_separatingLeft, LinearMap, LinearMap.ker, Subtype, Subtype.forall, W.subtype, apply_apply_same_eq_zero_iff, disjoint_ker_of_nondegenerate_restrict, eq_bot, hB.isRefl, hW.eq_bot, isRefl, nondegenerate_iff_separatingLeft, simp_rw, specialize, subtype
 -/
@@ -2835,7 +2931,19 @@ lemma apply_mul_apply_lt_iff_linearIndependent
     obtain ⟨r, s, hl, h0⟩ := h
     by_cases hr : r = 0; · simp_all
     by_cases hs : s = 0; · simp_all
-    su
+    suffices
+        (B (r • x) (r • x)) * (B (s • y) (s • y)) = (B (r • x) (s • y)) * (B (s • y) (r • x)) by
+      simp only [map_smul, smul_apply, smul_eq_mul] at this
+      rw [show r * (r * (B x) x) * (s * (s * (B y) y)) = (r * r * s * s) * ((B x) x * (B y) y) by
+        ring]; rw [show s * (r * (B x) y) * (r * (s * (B y) x)) = (r * r * s * s) * ((B x) y * (B y) x)
+        by ring] at this
+      have hrs : r * r * s * s != 0 := by simp [hr, hs]
+exact le_of_eq mul_right_injective₀ hrs this
+    simp [show s • y = - r • x by rwa [neg_smul, ← add_eq_zero_iff_eq_neg']]
+  · contrapose!
+    intro h
+    exact not_linearIndependent_of_apply_mul_apply_eq B hp x y (le_antisymm
+      (apply_mul_apply_le_of_forall_zero_le B hle x y) h)
 
 中文:
 引理 apply_mul_apply_lt_iff_linearIndependent
@@ -2850,7 +2958,19 @@ lemma apply_mul_apply_lt_iff_linearIndependent
     obtain ⟨r, s, hl, h0⟩ := h
     by_cases hr : r = 0; · simp_all
     by_cases hs : s = 0; · simp_all
-    su
+    suffices
+        (B (r • x) (r • x)) * (B (s • y) (s • y)) = (B (r • x) (s • y)) * (B (s • y) (r • x)) by
+      simp only [map_smul, smul_apply, smul_eq_mul] at this
+      rw [show r * (r * (B x) x) * (s * (s * (B y) y)) = (r * r * s * s) * ((B x) x * (B y) y) by
+        ring]; rw [show s * (r * (B x) y) * (r * (s * (B y) x)) = (r * r * s * s) * ((B x) y * (B y) x)
+        by ring] at this
+      have hrs : r * r * s * s != 0 := by simp [hr, hs]
+exact le_of_eq mul_right_injective₀ hrs this
+    simp [show s • y = - r • x by rwa [neg_smul, ← add_eq_zero_iff_eq_neg']]
+  · contrapose!
+    intro h
+    exact not_linearIndependent_of_apply_mul_apply_eq B hp x y (le_antisymm
+      (apply_mul_apply_le_of_forall_zero_le B hle x y) h)
 
 Depends on / 依赖: LinearIndependent, LinearIndependent.pair_iff, contrapose, eq_or_ne, le_of_lt, map_smul, pair_iff, smul_apply, smul_eq_mul
 -/

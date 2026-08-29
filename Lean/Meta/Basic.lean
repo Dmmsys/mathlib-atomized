@@ -53,7 +53,14 @@ definition Lean.Meta.forallMetaTelescopeReducingUntilDefEq
   let mut mvs := ms
   let mut bis := bs
   let mut out : Expr := tp
-  while !(← isDef
+  while !(← isDefEq (← inferType mvs.toList.getLast!) t) do
+    let (ms, bs, tp) ← forallMetaTelescopeReducing out (some 1) kind
+    unless ms.size == 1 do
+      throwError m!"Failed to find {← ppExpr t} as the type of a parameter of {← ppExpr e}."
+    mvs := mvs ++ ms
+    bis := bis ++ bs
+    out := tp
+  return (mvs, bis, out)
 
 中文:
 定义 Lean.Meta.对任意MetaTelescopeReducingUntilDefEq
@@ -65,7 +72,14 @@ definition Lean.Meta.forallMetaTelescopeReducingUntilDefEq
   let mut mvs := ms
   let mut bis := bs
   let mut out : Expr := tp
-  while !(← isDef
+  while !(← isDefEq (← inferType mvs.toList.getLast!) t) do
+    let (ms, bs, tp) ← forallMetaTelescopeReducing out (some 1) kind
+    unless ms.size == 1 do
+      throwError m!"Failed to find {← ppExpr t} as the type of a parameter of {← ppExpr e}."
+    mvs := mvs ++ ms
+    bis := bis ++ bs
+    out := tp
+  return (mvs, bis, out)
 
 Depends on / 依赖: MetavarKind, MetavarKind.natural, natural
 -/
@@ -158,7 +172,10 @@ definition Lean.Meta.withEnsuringLocalInstance
         to{indentExpr instE}"
     k
   | _ =>
-    withLetDecl `inst (← inferType instE)
+    withLetDecl `inst (← inferType instE) instE fun inst' => do
+      let (e, v) ← k
+      let e' := (← e.abstractM #[inst']).instantiate1 instE
+      return (e', v)
 
 中文:
 定义 Lean.Meta.withEnsuringLocalInstance
@@ -172,7 +189,10 @@ definition Lean.Meta.withEnsuringLocalInstance
         to{indentExpr instE}"
     k
   | _ =>
-    withLetDecl `inst (← inferType instE)
+    withLetDecl `inst (← inferType instE) instE fun inst' => do
+      let (e, v) ← k
+      let e' := (← e.abstractM #[inst']).instantiate1 instE
+      return (e', v)
 -/
 def Lean.Meta.withEnsuringLocalInstance {α : Type} (inst : MVarId) (k : MetaM (Expr × α)) :
     MetaM (Expr × α) := do

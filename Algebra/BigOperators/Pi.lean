@@ -508,7 +508,23 @@ definition Pi.monoidHomMulEquiv
     ext
     simp only [MonoidHom.finsetProd_apply, MonoidHom.coe_comp, Function.comp_apply,
       evalMonoidHom_apply, MonoidHom.mulSingle_apply, ← map_prod]
-refine congrArg _ funext fun _ =>
+refine congrArg _ funext fun _ => ?_
+    rw [Fintype.prod_apply]
+    exact Fintype.prod_pi_mulSingle ..
+  right_inv φ := by
+    ext i m
+    simp only [MonoidHom.coe_comp, Function.comp_apply, MonoidHom.mulSingle_apply,
+      MonoidHom.finsetProd_apply, evalMonoidHom_apply, ]
+    let φ' i : M i -> M' := ⇑(φ i)
+    conv =>
+      enter [1, 2, j]
+      rw [show φ j = φ' j from rfl]; rw [Pi.apply_mulSingle φ' (fun i => map_one (φ i))]
+    rw [show φ' i = φ i from rfl]
+    exact Fintype.prod_pi_mulSingle' ..
+  map_mul' φ ψ := by
+    ext
+    simp only [MonoidHom.coe_comp, Function.comp_apply, MonoidHom.mulSingle_apply,
+      MonoidHom.mul_apply, mul_apply]
 
 中文:
 定义 依赖函数类型.monoidHomMulEquiv
@@ -519,7 +535,23 @@ refine congrArg _ funext fun _ =>
     ext
     simp only [MonoidHom.finsetProd_apply, MonoidHom.coe_comp, Function.comp_apply,
       evalMonoidHom_apply, MonoidHom.mulSingle_apply, ← map_prod]
-refine congrArg _ funext fun _ =>
+refine congrArg _ funext fun _ => ?_
+    rw [Fintype.prod_apply]
+    exact Fintype.prod_pi_mulSingle ..
+  right_inv φ := by
+    ext i m
+    simp only [MonoidHom.coe_comp, Function.comp_apply, MonoidHom.mulSingle_apply,
+      MonoidHom.finsetProd_apply, evalMonoidHom_apply, ]
+    let φ' i : M i -> M' := ⇑(φ i)
+    conv =>
+      enter [1, 2, j]
+      rw [show φ j = φ' j from rfl]; rw [Pi.apply_mulSingle φ' (fun i => map_one (φ i))]
+    rw [show φ' i = φ i from rfl]
+    exact Fintype.prod_pi_mulSingle' ..
+  map_mul' φ ψ := by
+    ext
+    simp only [MonoidHom.coe_comp, Function.comp_apply, MonoidHom.mulSingle_apply,
+      MonoidHom.mul_apply, mul_apply]
 
 Depends on / 依赖: MonoidHom, MonoidHom.mulSingle, mulSingle
 -/

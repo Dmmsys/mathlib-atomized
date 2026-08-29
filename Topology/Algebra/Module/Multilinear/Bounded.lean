@@ -51,7 +51,36 @@ theorem image_multilinear'
   else
     let _ : NontriviallyNormedField 𝕜 := ⟨by simpa using h₁⟩
     obtain ⟨I, t, ht₀, hft⟩ :
-        exists (I : Finset ι) (t : forall i, Set (E i)), (forall i, t i 
+        exists (I : Finset ι) (t : forall i, Set (E i)), (forall i, t i in 𝓝 0) ∧ Set.pi I t subseteq f ⁻¹' V := by
+      have hfV : f ⁻¹' V in 𝓝 0 := (map_continuous f).tendsto' _ _ f.map_zero hV
+      rwa [nhds_pi, Filter.mem_pi, exists_finite_iff_finset] at hfV
+    have : forall i, exists c : 𝕜, c != 0 ∧ forall c' : 𝕜, ‖c'‖ <= ‖c‖ -> forall x in s, c' • x i in t i := fun i => by
+      rw [isVonNBounded_pi_iff] at hs
+      have := (hs i).tendsto_smallSets_nhds.eventually (mem_lift' (ht₀ i))
+      rcases NormedAddGroup.nhds_zero_basis_norm_lt.eventually_iff.1 this with ⟨r, hr₀, hr⟩
+      rcases NormedField.exists_norm_lt 𝕜 hr₀ with ⟨c, hc₀, hc⟩
+      refine ⟨c, norm_pos_iff.1 hc₀, fun c' hle x hx => ?_⟩
+      exact hr (hle.trans_lt hc) ⟨_, ⟨x, hx, rfl⟩, rfl⟩
+    choose c hc₀ hc using this
+    rw [absorbs_iff_eventually_nhds_zero (mem_of_mem_nhds hV)]; rw [NormedAddGroup.nhds_zero_basis_norm_lt.eventually_iff]
+    have hc₀' : ∏ i in I, c i != 0 := Finset.prod_ne_zero_iff.2 fun i _ => hc₀ i
+    refine ⟨‖∏ i in I, c i‖, norm_pos_iff.2 hc₀', fun a ha => mapsTo_image_iff.2 fun x hx => ?_⟩
+    let ⟨i₀⟩ := ‹Nonempty ι›
+    set y := I.piecewise (fun i => c i • x i) x
+    calc
+      f (update y i₀ ((a / ∏ i in I, c i) • y i₀)) in V := hft fun i hi => by
+        rcases eq_or_ne i i₀ with rfl | hne
+        · simp_rw [update_self, y, I.piecewise_eq_of_mem _ _ hi, smul_smul]
+          refine hc _ _ ?_ _ hx
+          calc
+            ‖(a / ∏ i in I, c i) * c i‖ <= (‖∏ i in I, c i‖ / ‖∏ i in I, c i‖) * ‖c i‖ := by
+              rw [norm_mul]; rw [norm_div]; gcongr; exact ha.out.le
+            _ <= 1 * ‖c i‖ := by gcongr; apply div_self_le_one
+            _ = ‖c i‖ := one_mul _
+        · simp_rw [update_of_ne hne, y, I.piecewise_eq_of_mem _ _ hi]
+          exact hc _ _ le_rfl _ hx
+      _ = a • f x := by
+        rw [f.map_update_smul]; rw [update_eq_self]; rw [f.map_piecewise_smul]; rw [div_eq_mul_inv]; rw [mul_smul]; rw [inv_smul_smul₀ hc₀']
 
 中文:
 定理 image_multilinear'
@@ -63,7 +92,36 @@ theorem image_multilinear'
   else
     let _ : NontriviallyNormedField 𝕜 := ⟨by simpa using h₁⟩
     obtain ⟨I, t, ht₀, hft⟩ :
-        exists (I : Finset ι) (t : forall i, Set (E i)), (forall i, t i 
+        exists (I : Finset ι) (t : forall i, Set (E i)), (forall i, t i in 𝓝 0) ∧ Set.pi I t subseteq f ⁻¹' V := by
+      have hfV : f ⁻¹' V in 𝓝 0 := (map_continuous f).tendsto' _ _ f.map_zero hV
+      rwa [nhds_pi, Filter.mem_pi, exists_finite_iff_finset] at hfV
+    have : forall i, exists c : 𝕜, c != 0 ∧ forall c' : 𝕜, ‖c'‖ <= ‖c‖ -> forall x in s, c' • x i in t i := fun i => by
+      rw [isVonNBounded_pi_iff] at hs
+      have := (hs i).tendsto_smallSets_nhds.eventually (mem_lift' (ht₀ i))
+      rcases NormedAddGroup.nhds_zero_basis_norm_lt.eventually_iff.1 this with ⟨r, hr₀, hr⟩
+      rcases NormedField.exists_norm_lt 𝕜 hr₀ with ⟨c, hc₀, hc⟩
+      refine ⟨c, norm_pos_iff.1 hc₀, fun c' hle x hx => ?_⟩
+      exact hr (hle.trans_lt hc) ⟨_, ⟨x, hx, rfl⟩, rfl⟩
+    choose c hc₀ hc using this
+    rw [absorbs_iff_eventually_nhds_zero (mem_of_mem_nhds hV)]; rw [NormedAddGroup.nhds_zero_basis_norm_lt.eventually_iff]
+    have hc₀' : ∏ i in I, c i != 0 := Finset.prod_ne_zero_iff.2 fun i _ => hc₀ i
+    refine ⟨‖∏ i in I, c i‖, norm_pos_iff.2 hc₀', fun a ha => mapsTo_image_iff.2 fun x hx => ?_⟩
+    let ⟨i₀⟩ := ‹Nonempty ι›
+    set y := I.piecewise (fun i => c i • x i) x
+    calc
+      f (update y i₀ ((a / ∏ i in I, c i) • y i₀)) in V := hft fun i hi => by
+        rcases eq_or_ne i i₀ with rfl | hne
+        · simp_rw [update_self, y, I.piecewise_eq_of_mem _ _ hi, smul_smul]
+          refine hc _ _ ?_ _ hx
+          calc
+            ‖(a / ∏ i in I, c i) * c i‖ <= (‖∏ i in I, c i‖ / ‖∏ i in I, c i‖) * ‖c i‖ := by
+              rw [norm_mul]; rw [norm_div]; gcongr; exact ha.out.le
+            _ <= 1 * ‖c i‖ := by gcongr; apply div_self_le_one
+            _ = ‖c i‖ := one_mul _
+        · simp_rw [update_of_ne hne, y, I.piecewise_eq_of_mem _ _ hi]
+          exact hc _ _ le_rfl _ hx
+      _ = a • f x := by
+        rw [f.map_update_smul]; rw [update_eq_self]; rw [f.map_piecewise_smul]; rw [div_eq_mul_inv]; rw [mul_smul]; rw [inv_smul_smul₀ hc₀']
 
 Depends on / 依赖: Filter, Filter.mem_pi, Finset, NontriviallyNormedField, Set.pi, absorbs_iff_norm, classical, exists_finite_iff_finset, f.map_zero, map_continuous, map_zero, mem_pi, nhds_pi, subseteq, tendsto
 -/

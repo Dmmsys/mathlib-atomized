@@ -133,7 +133,25 @@ theorem RespectsIso.isLocalization_away_iff
     (IsLocalization.algEquiv (Submonoid.powers r) _ _).toRingEquiv
   let e₂ : Localization.Away (f r) ≃+* S' :=
     (IsLocalization.algEquiv (Submonoid.powers (f r)) _ _).toRingEquiv
-  refine (hP.cancel_left_isIso e₁.toCommRingCatIso.hom (CommRingCat.ofHom
+  refine (hP.cancel_left_isIso e₁.toCommRingCatIso.hom (CommRingCat.ofHom _)).symm.trans ?_
+  refine (hP.cancel_right_isIso (CommRingCat.ofHom _) e₂.toCommRingCatIso.hom).symm.trans ?_
+  rw [← eq_iff_iff]
+  congr 1
+  -- Porting note: Here, the proof used to have a huge `simp` involving `[anonymous]`, which didn't
+  -- work out anymore. The issue seemed to be that it couldn't handle a term in which Ring
+  -- homomorphisms were repeatedly casted to the bundled category and back. Here we resolve the
+  -- problem by converting the goal to a more straightforward form.
+  let e := (e₂ : Localization.Away (f r) ->+* S').comp
+      (((IsLocalization.map (Localization.Away (f r)) f
+            (by rintro x ⟨n, rfl⟩; use n; simp : Submonoid.powers r <= Submonoid.comap f
+                (Submonoid.powers (f r)))) : Localization.Away r ->+* Localization.Away (f r)).comp
+                (e₁ : R' ->+* Localization.Away r))
+  suffices e = IsLocalization.Away.map R' S' f r by
+    convert! this
+  apply IsLocalization.ringHom_ext (Submonoid.powers r) _
+  ext1 x
+  dsimp [e, e₁, e₂, IsLocalization.Away.map]
+  simp only [IsLocalization.map_eq, id_apply, RingHomCompTriple.comp_apply]
 
 中文:
 定理 RespectsIso.isLocalization_away_iff
@@ -143,7 +161,25 @@ theorem RespectsIso.isLocalization_away_iff
     (IsLocalization.algEquiv (Submonoid.powers r) _ _).toRingEquiv
   let e₂ : Localization.Away (f r) ≃+* S' :=
     (IsLocalization.algEquiv (Submonoid.powers (f r)) _ _).toRingEquiv
-  refine (hP.cancel_left_isIso e₁.toCommRingCatIso.hom (CommRingCat.ofHom
+  refine (hP.cancel_left_isIso e₁.toCommRingCatIso.hom (CommRingCat.ofHom _)).symm.trans ?_
+  refine (hP.cancel_right_isIso (CommRingCat.ofHom _) e₂.toCommRingCatIso.hom).symm.trans ?_
+  rw [← eq_iff_iff]
+  congr 1
+  -- Porting note: Here, the proof used to have a huge `simp` involving `[anonymous]`, which didn't
+  -- work out anymore. The issue seemed to be that it couldn't handle a term in which Ring
+  -- homomorphisms were repeatedly casted to the bundled category and back. Here we resolve the
+  -- problem by converting the goal to a more straightforward form.
+  let e := (e₂ : Localization.Away (f r) ->+* S').comp
+      (((IsLocalization.map (Localization.Away (f r)) f
+            (by rintro x ⟨n, rfl⟩; use n; simp : Submonoid.powers r <= Submonoid.comap f
+                (Submonoid.powers (f r)))) : Localization.Away r ->+* Localization.Away (f r)).comp
+                (e₁ : R' ->+* Localization.Away r))
+  suffices e = IsLocalization.Away.map R' S' f r by
+    convert! this
+  apply IsLocalization.ringHom_ext (Submonoid.powers r) _
+  ext1 x
+  dsimp [e, e₁, e₂, IsLocalization.Away.map]
+  simp only [IsLocalization.map_eq, id_apply, RingHomCompTriple.comp_apply]
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, IsLocalization, IsLocalization.algEquiv, Localization, Localization.Away, Submonoid, Submonoid.powers, algEquiv, cancel_left_isIso, cancel_right_isIso, eq_iff_iff, hP.cancel_left_isIso, hP.cancel_right_isIso, powers, symm.trans, toCommRingCatIso, toCommRingCatIso.hom, toRingEquiv
 -/
@@ -312,7 +348,7 @@ definition IsStableUnderBaseChange
   body: forall (R S R' S') [CommRing R] [CommRing S] [CommRing R'] [CommRing S'],
     forall [Algebra R S] [Algebra R R'] [Algebra R S'] [Algebra S S'] [Algebra R' S'],
       forall [IsScalarTower R S S'] [IsScalarTower R R' S'],
-        forall [Algebra.IsPushout R S R' S'], P (algebraMap R S) -> P (algebra
+        forall [Algebra.IsPushout R S R' S'], P (algebraMap R S) -> P (algebraMap R' S')
 
 中文:
 定义 是StableUnderBaseChange
@@ -320,7 +356,7 @@ definition IsStableUnderBaseChange
   定义体: forall (R S R' S') [CommRing R] [CommRing S] [CommRing R'] [CommRing S'],
     forall [Algebra R S] [Algebra R R'] [Algebra R S'] [Algebra S S'] [Algebra R' S'],
       forall [IsScalarTower R S S'] [IsScalarTower R R' S'],
-        forall [Algebra.IsPushout R S R' S'], P (algebraMap R S) -> P (algebra
+        forall [Algebra.IsPushout R S R' S'], P (algebraMap R S) -> P (algebraMap R' S')
 
 Depends on / 依赖: Algebra, Algebra.IsPushout, CommRing, IsPushout, IsScalarTower, algebraMap
 -/
@@ -343,7 +379,11 @@ theorem IsStableUnderBaseChange.mk
     (IsScalarTower.toAlgHom R S S')
   have hef (x : _) : e x = f' x := by
     suffices e.toLinearMap.restrictScalars R = f'.toLinearMap from congr($this x)
-    exact ext' fun x y
+    exact ext' fun x y => by simp [e, f', IsBaseChange.equiv_tmul, Algebra.smul_def]
+  have hemul (x y : _) : e (x * y) = e x * e y := by simp_rw [hef, map_mul]
+  convert! h₁.1 _ { e with map_mul' := hemul } (h₂ H)
+  ext x
+  simp [e, h.symm.1.equiv_tmul, Algebra.smul_def]
 
 中文:
 定理 是StableUnderBaseChange.mk
@@ -355,7 +395,11 @@ theorem IsStableUnderBaseChange.mk
     (IsScalarTower.toAlgHom R S S')
   have hef (x : _) : e x = f' x := by
     suffices e.toLinearMap.restrictScalars R = f'.toLinearMap from congr($this x)
-    exact ext' fun x y
+    exact ext' fun x y => by simp [e, f', IsBaseChange.equiv_tmul, Algebra.smul_def]
+  have hemul (x y : _) : e (x * y) = e x * e y := by simp_rw [hef, map_mul]
+  convert! h₁.1 _ { e with map_mul' := hemul } (h₂ H)
+  ext x
+  simp [e, h.symm.1.equiv_tmul, Algebra.smul_def]
 -/
 theorem IsStableUnderBaseChange.mk (h₁ : RespectsIso @P)
     (h₂ : forall ⦃R S T⦄ [CommRing R] [CommRing S] [CommRing T] [Algebra R S] [Algebra R T],
@@ -411,7 +455,9 @@ theorem IsStableUnderBaseChange.pushout_inl
   let := g.hom.toAlgebra
   rw [← show _ = pushout.inl f g from
       colimit.isoColimitCocone_ι_inv ⟨_]; rw [CommRingCat.pushoutCoconeIsColimit R S T⟩ WalkingSpan.left]; rw [CommRingCat.hom_comp]; rw [hP'.cancel_right_isIso]
-  dsimp only [CommRingCat.pushoutCocone_inl, Pu
+  dsimp only [CommRingCat.pushoutCocone_inl, PushoutCocone.ι_app_left]
+  apply hP R T S (S otimes[R] T)
+  exact H
 
 中文:
 定理 是StableUnderBaseChange.pushout_inl
@@ -421,7 +467,9 @@ theorem IsStableUnderBaseChange.pushout_inl
   let := g.hom.toAlgebra
   rw [← show _ = pushout.inl f g from
       colimit.isoColimitCocone_ι_inv ⟨_]; rw [CommRingCat.pushoutCoconeIsColimit R S T⟩ WalkingSpan.left]; rw [CommRingCat.hom_comp]; rw [hP'.cancel_right_isIso]
-  dsimp only [CommRingCat.pushoutCocone_inl, Pu
+  dsimp only [CommRingCat.pushoutCocone_inl, PushoutCocone.ι_app_left]
+  apply hP R T S (S otimes[R] T)
+  exact H
 
 Depends on / 依赖: CommRingCat, CommRingCat.hom_comp, CommRingCat.pushoutCoconeIsColimit, CommRingCat.pushoutCocone_inl, PushoutCocone, WalkingSpan, WalkingSpan.left, cancel_right_isIso, colimit, colimit.isoColimitCocone_, f.hom.toAlgebra, g.hom.toAlgebra, hom_comp, otimes, pushout, pushout.inl, pushoutCoconeIsColimit, pushoutCocone_inl, toAlgebra
 -/
@@ -495,7 +543,11 @@ lemma toMorphismProperty_respectsIso_iff
   · intro X Y Z e f hf
     exact h.left f.hom e.commRingCatIsoToRingEquiv hf
   · intro X Y Z _ _ _ f e hf
-    exact MorphismProperty.Respect
+    exact MorphismProperty.RespectsIso.postcomp (toMorphismProperty P)
+      e.toCommRingCatIso.hom (CommRingCat.ofHom f) hf
+  · intro X Y Z _ _ _ f e
+    exact MorphismProperty.RespectsIso.precomp (toMorphismProperty P)
+      e.toCommRingCatIso.hom (CommRingCat.ofHom f)
 
 中文:
 引理 toMorphismProperty_respectsIso_iff
@@ -506,7 +558,11 @@ lemma toMorphismProperty_respectsIso_iff
   · intro X Y Z e f hf
     exact h.left f.hom e.commRingCatIsoToRingEquiv hf
   · intro X Y Z _ _ _ f e hf
-    exact MorphismProperty.Respect
+    exact MorphismProperty.RespectsIso.postcomp (toMorphismProperty P)
+      e.toCommRingCatIso.hom (CommRingCat.ofHom f) hf
+  · intro X Y Z _ _ _ f e
+    exact MorphismProperty.RespectsIso.precomp (toMorphismProperty P)
+      e.toCommRingCatIso.hom (CommRingCat.ofHom f)
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, MorphismProperty, MorphismProperty.RespectsIso.mk, MorphismProperty.RespectsIso.postcomp, MorphismProperty.RespectsIso.precomp, RespectsIso, commRingCatIsoToRingEquiv, e.commRingCatIsoToRingEquiv, e.toCommRingCatIso.hom, f.hom, h.left, h.right, postcomp, precomp, toCommRingCatIso, toMorphismProperty
 -/
@@ -534,7 +590,10 @@ lemma isStableUnderCobaseChange_toMorphismProperty_iff
       fun h => ⟨fun {R} S R' S' f g f' g' hsq hf => ?_⟩⟩
   · rw [← CommRingCat.isPushout_iff_isPushout] at hsq
     exact h.1 (f := CommRingCat.ofHom (algebraMap R S)) hsq.flip hRS
-  · algebraize [f.hom, g.hom, f'.hom, g'.hom, f'.hom.c
+  · algebraize [f.hom, g.hom, f'.hom, g'.hom, f'.hom.comp g.hom]
+    have : IsScalarTower R S S' := .of_algebraMap_eq fun x => congr($(hsq.1.1).hom x)
+    have : Algebra.IsPushout R S R' S' := (CommRingCat.isPushout_iff_isPushout.mp hsq).symm
+    exact h (R := R) (S := S) _ _ hf
 
 中文:
 引理 isStableUnderCobaseChange_toMorphismProperty_iff
@@ -543,7 +602,10 @@ lemma isStableUnderCobaseChange_toMorphismProperty_iff
       fun h => ⟨fun {R} S R' S' f g f' g' hsq hf => ?_⟩⟩
   · rw [← CommRingCat.isPushout_iff_isPushout] at hsq
     exact h.1 (f := CommRingCat.ofHom (algebraMap R S)) hsq.flip hRS
-  · algebraize [f.hom, g.hom, f'.hom, g'.hom, f'.hom.c
+  · algebraize [f.hom, g.hom, f'.hom, g'.hom, f'.hom.comp g.hom]
+    have : IsScalarTower R S S' := .of_algebraMap_eq fun x => congr($(hsq.1.1).hom x)
+    have : Algebra.IsPushout R S R' S' := (CommRingCat.isPushout_iff_isPushout.mp hsq).symm
+    exact h (R := R) (S := S) _ _ hf
 
 Depends on / 依赖: Algebra, Algebra.IsPushout, CommRingCat, CommRingCat.isPushout_iff_isPushout, CommRingCat.isPushout_iff_isPushout.mp, CommRingCat.ofHom, IsPushout, IsScalarTower, algebraMap, algebraize, f.hom, g.hom, hom.comp, hsq.flip, isPushout_iff_isPushout, of_algebraMap_eq
 -/
@@ -608,7 +670,7 @@ definition CodescendsAlong
   forall [Algebra R S] [Algebra R R'] [Algebra R S'] [Algebra S S'] [Algebra R' S'],
     forall [IsScalarTower R S S'] [IsScalarTower R R' S'],
       forall [Algebra.IsPushout R S R' S'],
-        Q (algebraMap R R') -
+        Q (algebraMap R R') -> P (algebraMap R' S') -> P (algebraMap R S)
 
 中文:
 定义 余descendsAlong
@@ -617,7 +679,7 @@ definition CodescendsAlong
   forall [Algebra R S] [Algebra R R'] [Algebra R S'] [Algebra S S'] [Algebra R' S'],
     forall [IsScalarTower R S S'] [IsScalarTower R R' S'],
       forall [Algebra.IsPushout R S R' S'],
-        Q (algebraMap R R') -
+        Q (algebraMap R R') -> P (algebraMap R' S') -> P (algebraMap R S)
 
 Depends on / 依赖: Algebra, Algebra.IsPushout, CommRing, IsPushout, IsScalarTower, LinearEquiv, LinearEquiv.finTwoArrow, algebraMap, finTwoArrow, smulCommClass, symm.smulCommClass
 -/

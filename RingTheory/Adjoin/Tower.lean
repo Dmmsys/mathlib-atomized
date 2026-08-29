@@ -78,13 +78,15 @@ English:
 theorem adjoin_res_eq_adjoin_res
   statement: (C D E F : Type*) [CommSemiring C] [CommSemiring D]
   proof: by
-  rw [adjoin_restrictScalars C E]; rw [adjoin_restrictScalars C D]; rw [← hS]; rw [← hT]; rw [← Algebra.adjoin_image]; rw [← Algebra.adjoin_image]; rw [← AlgHom.coe_toRingHom]; rw [← AlgHom.coe_toRingHom]; rw [IsScalarTower.coe_toAlgHom]; rw [IsScalarTower.coe_toAlgHom]; rw [← adjoin_union_eq_adj
+  rw [adjoin_restrictScalars C E]; rw [adjoin_restrictScalars C D]; rw [← hS]; rw [← hT]; rw [← Algebra.adjoin_image]; rw [← Algebra.adjoin_image]; rw [← AlgHom.coe_toRingHom]; rw [← AlgHom.coe_toRingHom]; rw [IsScalarTower.coe_toAlgHom]; rw [IsScalarTower.coe_toAlgHom]; rw [← adjoin_union_eq_adjoin_adjoin]; rw [←
+    adjoin_union_eq_adjoin_adjoin]; rw [Set.union_comm]
 
 中文:
 定理 adjoin_res_eq_adjoin_res
   结论: (C D E F : 类型) [交换半环 C] [交换半环 D]
   证明: by
-  rw [adjoin_restrictScalars C E]; rw [adjoin_restrictScalars C D]; rw [← hS]; rw [← hT]; rw [← Algebra.adjoin_image]; rw [← Algebra.adjoin_image]; rw [← AlgHom.coe_toRingHom]; rw [← AlgHom.coe_toRingHom]; rw [IsScalarTower.coe_toAlgHom]; rw [IsScalarTower.coe_toAlgHom]; rw [← adjoin_union_eq_adj
+  rw [adjoin_restrictScalars C E]; rw [adjoin_restrictScalars C D]; rw [← hS]; rw [← hT]; rw [← Algebra.adjoin_image]; rw [← Algebra.adjoin_image]; rw [← AlgHom.coe_toRingHom]; rw [← AlgHom.coe_toRingHom]; rw [IsScalarTower.coe_toAlgHom]; rw [IsScalarTower.coe_toAlgHom]; rw [← adjoin_union_eq_adjoin_adjoin]; rw [←
+    adjoin_union_eq_adjoin_adjoin]; rw [Set.union_comm]
 
 Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, Algebra, Algebra.adjoin_image, IsScalarTower, IsScalarTower.coe_toAlgHom, Set.union_comm, adjoin_image, adjoin_restrictScalars, adjoin_union_eq_adjoin_adjoin, coe_toAlgHom, coe_toRingHom, union_comm
 -/
@@ -112,7 +114,8 @@ theorem Algebra.fg_trans'
   rcases hRS with ⟨s, hs⟩
   rcases hSA with ⟨t, ht⟩
   exact ⟨s.image (algebraMap S A) union t, by
-    rw [Finset.coe_union]; rw [Finset.coe_image]; rw [Algebra.adjoin_algebraMap_image_union_eq_adjoin_adjoin]; rw [hs]; rw [Algebra.adjoin_top]; rw [ht]; rw [Subalgebra.restrictScalars_to
+    rw [Finset.coe_union]; rw [Finset.coe_image]; rw [Algebra.adjoin_algebraMap_image_union_eq_adjoin_adjoin]; rw [hs]; rw [Algebra.adjoin_top]; rw [ht]; rw [Subalgebra.restrictScalars_top]; rw [Subalgebra.restrictScalars_top]
+    ⟩
 
 中文:
 定理 代数.fg_trans'
@@ -122,7 +125,8 @@ theorem Algebra.fg_trans'
   rcases hRS with ⟨s, hs⟩
   rcases hSA with ⟨t, ht⟩
   exact ⟨s.image (algebraMap S A) union t, by
-    rw [Finset.coe_union]; rw [Finset.coe_image]; rw [Algebra.adjoin_algebraMap_image_union_eq_adjoin_adjoin]; rw [hs]; rw [Algebra.adjoin_top]; rw [ht]; rw [Subalgebra.restrictScalars_to
+    rw [Finset.coe_union]; rw [Finset.coe_image]; rw [Algebra.adjoin_algebraMap_image_union_eq_adjoin_adjoin]; rw [hs]; rw [Algebra.adjoin_top]; rw [ht]; rw [Subalgebra.restrictScalars_top]; rw [Subalgebra.restrictScalars_top]
+    ⟩
 
 Depends on / 依赖: Algebra, Algebra.adjoin_algebraMap_image_union_eq_adjoin_adjoin, Algebra.adjoin_top, Finset, Finset.coe_image, Finset.coe_union, Subalgebra, Subalgebra.restrictScalars_top, adjoin_algebraMap_image_union_eq_adjoin_adjoin, adjoin_top, algebraMap, classical, coe_image, coe_union, restrictScalars_top, s.image
 -/
@@ -163,7 +167,40 @@ theorem exists_subalgebra_of_fg
   classical
   let s : Finset B := Finset.image₂ f (x union y * y) y
   have hxy :
-    forall xi in x, xi in span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : 
+    forall xi in x, xi in span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : Finset C) : Set C) :=
+    fun xi hxi =>
+    hf xi ▸
+      sum_mem fun yj hyj =>
+        smul_mem (span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : Finset C) : Set C))
+⟨f xi yj, Algebra.subset_adjoin mem_image₂_of_mem (mem_union_left _ hxi) hyj⟩
+          (subset_span <| mem_insert_of_mem hyj)
+  have hyy :
+    span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : Finset C) : Set C) *
+        span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : Finset C) : Set C) <=
+      span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : Finset C) : Set C) := by
+    rw [span_mul_span]; rw [span_le]; rw [coe_insert]
+    rintro _ ⟨yi, rfl | hyi, yj, rfl | hyj, rfl⟩ <;> dsimp
+    · rw [mul_one]
+      exact subset_span (Set.mem_insert _ _)
+    · rw [one_mul]
+      exact subset_span (Set.mem_insert_of_mem _ hyj)
+    · rw [mul_one]
+      exact subset_span (Set.mem_insert_of_mem _ hyi)
+    · rw [← hf (yi * yj)]
+      exact
+        SetLike.mem_coe.2
+          (sum_mem fun yk hyk =>
+            smul_mem (span (Algebra.adjoin A (↑s : Set B)) (insert 1 ↑y : Set C))
+              ⟨f (yi * yj) yk,
+Algebra.subset_adjoin
+                  mem_image₂_of_mem (mem_union_right _ <| mul_mem_mul hyi hyj) hyk⟩
+              (subset_span <| Set.mem_insert_of_mem _ hyk : yk in _))
+  refine ⟨Algebra.adjoin A (↑s : Set B), Subalgebra.fg_adjoin_finset _, insert 1 y, ?_⟩
+  convert! restrictScalars_injective A (Algebra.adjoin A (s : Set B)) C _
+  rw [restrictScalars_top]; rw [eq_top_iff]; rw [← Algebra.top_toSubmodule]; rw [← hx]; rw [Algebra.adjoin_eq_span]; rw [span_le]
+  refine fun r hr =>
+    Submonoid.closure_induction (fun c hc => hxy c hc) (subset_span <| mem_insert_self _ _)
+      (fun p q _ _ hp hq => hyy <| Submodule.mul_mem_mul hp hq) hr
 
 中文:
 定理 存在_subalgebra_of_fg
@@ -177,7 +214,40 @@ theorem exists_subalgebra_of_fg
   classical
   let s : Finset B := Finset.image₂ f (x union y * y) y
   have hxy :
-    forall xi in x, xi in span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : 
+    forall xi in x, xi in span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : Finset C) : Set C) :=
+    fun xi hxi =>
+    hf xi ▸
+      sum_mem fun yj hyj =>
+        smul_mem (span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : Finset C) : Set C))
+⟨f xi yj, Algebra.subset_adjoin mem_image₂_of_mem (mem_union_left _ hxi) hyj⟩
+          (subset_span <| mem_insert_of_mem hyj)
+  have hyy :
+    span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : Finset C) : Set C) *
+        span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : Finset C) : Set C) <=
+      span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : Finset C) : Set C) := by
+    rw [span_mul_span]; rw [span_le]; rw [coe_insert]
+    rintro _ ⟨yi, rfl | hyi, yj, rfl | hyj, rfl⟩ <;> dsimp
+    · rw [mul_one]
+      exact subset_span (Set.mem_insert _ _)
+    · rw [one_mul]
+      exact subset_span (Set.mem_insert_of_mem _ hyj)
+    · rw [mul_one]
+      exact subset_span (Set.mem_insert_of_mem _ hyi)
+    · rw [← hf (yi * yj)]
+      exact
+        SetLike.mem_coe.2
+          (sum_mem fun yk hyk =>
+            smul_mem (span (Algebra.adjoin A (↑s : Set B)) (insert 1 ↑y : Set C))
+              ⟨f (yi * yj) yk,
+Algebra.subset_adjoin
+                  mem_image₂_of_mem (mem_union_right _ <| mul_mem_mul hyi hyj) hyk⟩
+              (subset_span <| Set.mem_insert_of_mem _ hyk : yk in _))
+  refine ⟨Algebra.adjoin A (↑s : Set B), Subalgebra.fg_adjoin_finset _, insert 1 y, ?_⟩
+  convert! restrictScalars_injective A (Algebra.adjoin A (s : Set B)) C _
+  rw [restrictScalars_top]; rw [eq_top_iff]; rw [← Algebra.top_toSubmodule]; rw [← hx]; rw [Algebra.adjoin_eq_span]; rw [span_le]
+  refine fun r hr =>
+    Submonoid.closure_induction (fun c hc => hxy c hc) (subset_span <| mem_insert_self _ _)
+      (fun p q _ _ hp hq => hyy <| Submodule.mul_mem_mul hp hq) hr
 
 Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.subset_adjoin, Finset, Finset.image, adjoin, classical, eq_top_iff, insert, mem_span_finset, mem_union_left, simp_rw, smul_mem, subset_adjoin, sum_mem
 -/
@@ -250,7 +320,7 @@ Algebra.fg_trans' (B₀.fg_top.2 hAB₀)
 Subalgebra.fg_of_submodule_fg
       have : IsNoetherianRing B₀ := isNoetherianRing_of_fg hAB₀
       have : Module.Finite B₀ C := ⟨hB₀C⟩
-      fg_of_injective (IsScalarTower.toAlgHom B₀ B C).toLinearMap
+      fg_of_injective (IsScalarTower.toAlgHom B₀ B C).toLinearMap hBCi
 
 中文:
 定理 fg_of_fg_of_fg
@@ -260,7 +330,7 @@ Algebra.fg_trans' (B₀.fg_top.2 hAB₀)
 Subalgebra.fg_of_submodule_fg
       have : IsNoetherianRing B₀ := isNoetherianRing_of_fg hAB₀
       have : Module.Finite B₀ C := ⟨hB₀C⟩
-      fg_of_injective (IsScalarTower.toAlgHom B₀ B C).toLinearMap
+      fg_of_injective (IsScalarTower.toAlgHom B₀ B C).toLinearMap hBCi
 
 Depends on / 依赖: Algebra, Algebra.fg_trans, Finite, IsNoetherianRing, IsScalarTower, IsScalarTower.toAlgHom, Module, Module.Finite, Subalgebra, Subalgebra.fg_of_submodule_fg, exists_subalgebra_of_fg, fg_of_injective, fg_of_submodule_fg, fg_top, fg_trans, isNoetherianRing_of_fg, toAlgHom, toLinearMap
 -/

@@ -55,7 +55,18 @@ lemma toReal_rnDeriv_map
     refine Measurable.aemeasurable ?_
     exact measurable_iff_comap_le.mpr le_rfl
   have : SigmaFinite ν := SigmaFinite.of_map _ hg.aemeasurable hσ
-  refine
+  refine ae_eq_condExp_of_forall_setIntegral_eq _ (by fun_prop) ?_ ?_ ?_
+  · rintro _ ⟨t, _, rfl⟩ _
+    exact Integrable.integrableOn (Measure.integrable_toReal_rnDeriv.comp_measurable hg)
+  · rintro _ ⟨t, ht, rfl⟩ _
+    calc ∫ x in g ⁻¹' t, ((μ.map g).rnDeriv (ν.map g) (g x)).toReal ∂ν
+    _ = ∫ y in t, ((μ.map g).rnDeriv (ν.map g) y).toReal ∂(ν.map g) := by
+      rw [setIntegral_map ht _ hg.aemeasurable]
+      exact Measurable.aestronglyMeasurable (by fun_prop)
+    _ = ∫ x in g ⁻¹' t, (μ.rnDeriv ν x).toReal ∂ν := by
+      rw [Measure.setIntegral_toReal_rnDeriv (hμν.map hg)]; rw [Measure.setIntegral_toReal_rnDeriv hμν]; rw [measureReal_def]; rw [Measure.map_apply hg ht]; rw [measureReal_def]
+  · refine (Measurable.ennreal_toReal fun s hs => ?_).aestronglyMeasurable
+    exact ⟨_, Measure.measurable_rnDeriv _ _ hs, rfl⟩
 
 中文:
 引理 to实数_rnDeriv_map
@@ -67,7 +78,18 @@ lemma toReal_rnDeriv_map
     refine Measurable.aemeasurable ?_
     exact measurable_iff_comap_le.mpr le_rfl
   have : SigmaFinite ν := SigmaFinite.of_map _ hg.aemeasurable hσ
-  refine
+  refine ae_eq_condExp_of_forall_setIntegral_eq _ (by fun_prop) ?_ ?_ ?_
+  · rintro _ ⟨t, _, rfl⟩ _
+    exact Integrable.integrableOn (Measure.integrable_toReal_rnDeriv.comp_measurable hg)
+  · rintro _ ⟨t, ht, rfl⟩ _
+    calc ∫ x in g ⁻¹' t, ((μ.map g).rnDeriv (ν.map g) (g x)).toReal ∂ν
+    _ = ∫ y in t, ((μ.map g).rnDeriv (ν.map g) y).toReal ∂(ν.map g) := by
+      rw [setIntegral_map ht _ hg.aemeasurable]
+      exact Measurable.aestronglyMeasurable (by fun_prop)
+    _ = ∫ x in g ⁻¹' t, (μ.rnDeriv ν x).toReal ∂ν := by
+      rw [Measure.setIntegral_toReal_rnDeriv (hμν.map hg)]; rw [Measure.setIntegral_toReal_rnDeriv hμν]; rw [measureReal_def]; rw [Measure.map_apply hg ht]; rw [measureReal_def]
+  · refine (Measurable.ennreal_toReal fun s hs => ?_).aestronglyMeasurable
+    exact ⟨_, Measure.measurable_rnDeriv _ _ hs, rfl⟩
 
 Depends on / 依赖: Integrable, Integrable.integrableOn, Measurable, Measurable.aemeasurable, Measure, Measure.integrable_toReal_rnDeriv.comp_measurable, SigmaFinite, SigmaFinite.of_map, ae_eq_condExp_of_forall_setIntegral_eq, aemeasurable, comap_le, comp_measurable, fun_prop, hg.aemeasurable, hg.comap_le, integrableOn, integrable_toReal_rnDeriv, le_rfl, map_trim_comap, measurable_iff_comap_le
 -/
@@ -104,7 +126,14 @@ lemma rnDeriv_map
   have : SigmaFinite ν := SigmaFinite.of_map _ hg.aemeasurable hσ
   have h_ne_top1 : forallᵐ x ∂ν, (μ.map g).rnDeriv (ν.map g) (g x) != ∞ :=
     ae_of_ae_map hg.aemeasurable (Measure.rnDeriv_ne_top (μ.map g) (ν.map g))
-  have h_ne_top2 : forallᵐ x ∂ν, ν⁻[μ.rnDeriv ν|MeasurableSpace.comap g m𝓨] x 
+  have h_ne_top2 : forallᵐ x ∂ν, ν⁻[μ.rnDeriv ν|MeasurableSpace.comap g m𝓨] x != ∞ := by
+    refine condLExp_ne_top ?_
+    simp [Measure.lintegral_rnDeriv hμν]
+  have h_condExp := toReal_condLExp (m𝓨.comap g) (f := μ.rnDeriv ν) (μ := ν) (by fun_prop) ?_
+  swap; · simp [Measure.lintegral_rnDeriv hμν]
+  filter_upwards [toReal_rnDeriv_map hμν hg, h_condExp, h_ne_top1, h_ne_top2]
+    with x hx h_condExp h_ne_top1 h_ne_top2
+  rwa [← h_condExp, ENNReal.toReal_eq_toReal_iff' h_ne_top1 h_ne_top2] at hx
 
 中文:
 引理 rnDeriv_map
@@ -113,7 +142,14 @@ lemma rnDeriv_map
   have : SigmaFinite ν := SigmaFinite.of_map _ hg.aemeasurable hσ
   have h_ne_top1 : forallᵐ x ∂ν, (μ.map g).rnDeriv (ν.map g) (g x) != ∞ :=
     ae_of_ae_map hg.aemeasurable (Measure.rnDeriv_ne_top (μ.map g) (ν.map g))
-  have h_ne_top2 : forallᵐ x ∂ν, ν⁻[μ.rnDeriv ν|MeasurableSpace.comap g m𝓨] x 
+  have h_ne_top2 : forallᵐ x ∂ν, ν⁻[μ.rnDeriv ν|MeasurableSpace.comap g m𝓨] x != ∞ := by
+    refine condLExp_ne_top ?_
+    simp [Measure.lintegral_rnDeriv hμν]
+  have h_condExp := toReal_condLExp (m𝓨.comap g) (f := μ.rnDeriv ν) (μ := ν) (by fun_prop) ?_
+  swap; · simp [Measure.lintegral_rnDeriv hμν]
+  filter_upwards [toReal_rnDeriv_map hμν hg, h_condExp, h_ne_top1, h_ne_top2]
+    with x hx h_condExp h_ne_top1 h_ne_top2
+  rwa [← h_condExp, ENNReal.toReal_eq_toReal_iff' h_ne_top1 h_ne_top2] at hx
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.comap, Measure, Measure.lintegral_rnDeriv, Measure.rnDeriv_ne_top, SigmaFinite, SigmaFinite.of_map, ae_of_ae_map, aemeasurable, condLExp_ne_top, fun_prop, h_condExp, h_ne_top1, h_ne_top2, hg.aemeasurable, lintegral_rnDeriv, of_map, rnDeriv, rnDeriv_ne_top, toReal_condLExp
 -/

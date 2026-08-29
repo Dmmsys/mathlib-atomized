@@ -328,7 +328,17 @@ definition augmentTruncate
     { f := fun | 0 => 𝟙 _ | _ + 1 => 𝟙 _
       comm' := fun i j => by
         match i with
-          |
+          | 0 | 1 | n + 2 =>
+          rcases j with - | j <;> dsimp [augment, truncate] <;> simp
+    }
+  hom_inv_id := by
+    ext i
+    cases i <;> simp
+  inv_hom_id := by
+    ext i
+    cases i <;> simp
+
+@[simp]
 
 中文:
 定义 augmentTruncate
@@ -343,7 +353,17 @@ definition augmentTruncate
     { f := fun | 0 => 𝟙 _ | _ + 1 => 𝟙 _
       comm' := fun i j => by
         match i with
-          |
+          | 0 | 1 | n + 2 =>
+          rcases j with - | j <;> dsimp [augment, truncate] <;> simp
+    }
+  hom_inv_id := by
+    ext i
+    cases i <;> simp
+  inv_hom_id := by
+    ext i
+    cases i <;> simp
+
+@[simp]
 
 Depends on / 依赖: augment, hom_inv_id, inv_hom_id, truncate
 -/
@@ -555,7 +575,9 @@ definition augment
       · rw [C.shape, comp_zero]
         simp only [ComplexShape.up_Rel, zero_add]
         exact (Nat.one_lt_succ_succ _).ne
-    rca
+    rcases k with (_ | _ | k) <;> rcases j with (_ | _ | j) <;> cases i <;> simp [this]
+
+@[simp]
 
 中文:
 定义 augment
@@ -569,7 +591,9 @@ definition augment
       · rw [C.shape, comp_zero]
         simp only [ComplexShape.up_Rel, zero_add]
         exact (Nat.one_lt_succ_succ _).ne
-    rca
+    rcases k with (_ | _ | k) <;> rcases j with (_ | _ | j) <;> cases i <;> simp [this]
+
+@[simp]
 
 Depends on / 依赖: C.shape, ComplexShape, ComplexShape.up_Rel, Nat.one_lt_succ_succ, comp_zero, d_comp_d, one_lt_succ_succ, up_Rel, zero_add
 -/

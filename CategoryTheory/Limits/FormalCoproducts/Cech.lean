@@ -115,7 +115,15 @@ definition isLimitPowerFan
         ext i
         dsimp
         ext a
-        
+        exact congr_fun (congr_arg FormalCoproduct.Hom.f (hm a)) i
+      ext i
+      · rfl
+      · dsimp
+        ext a
+        specialize hm a
+        rw [hom_ext_iff] at hm
+        obtain ⟨_, hm⟩ := hm
+        simpa using hm i)
 
 中文:
 定义 isLimitPowerFan
@@ -131,7 +139,15 @@ definition isLimitPowerFan
         ext i
         dsimp
         ext a
-        
+        exact congr_fun (congr_arg FormalCoproduct.Hom.f (hm a)) i
+      ext i
+      · rfl
+      · dsimp
+        ext a
+        specialize hm a
+        rw [hom_ext_iff] at hm
+        obtain ⟨_, hm⟩ := hm
+        simpa using hm i)
 
 Depends on / 依赖: Fan.IsLimit.mk, FormalCoproduct, FormalCoproduct.Hom.f, IsLimit, Pi.lift, congr_arg, congr_fun, hom_ext_iff, s.proj, specialize
 -/

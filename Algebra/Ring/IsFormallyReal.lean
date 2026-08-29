@@ -116,6 +116,7 @@ theorem isSumNonzeroSq_iff_isSumSq
       · simpa using IsSumNonzeroSq.sq ne_a
       · exact IsSumNonzeroSq.sq_add ne_a (ih ne_s)
 
+alias ⟨_, IsSumSq.isSumNonzeroSq_of_ne_zero⟩ := isSumNonzeroSq_iff_isSumSq
 
 中文:
 定理 isSumNonzeroSq_iff_isSumSq
@@ -131,6 +132,7 @@ theorem isSumNonzeroSq_iff_isSumSq
       · simpa using IsSumNonzeroSq.sq ne_a
       · exact IsSumNonzeroSq.sq_add ne_a (ih ne_s)
 
+alias ⟨_, IsSumSq.isSumNonzeroSq_of_ne_zero⟩ := isSumNonzeroSq_iff_isSumSq
 
 Depends on / 依赖: IsSumNonzeroSq, IsSumNonzeroSq.isSumSq, isSumSq
 -/
@@ -214,7 +216,8 @@ theorem closure_mul_self
     -- `aesop` times out
     apply add_mem
     · apply AddSubsemigroup.mem_closure_of_mem
-      aeso
+      aesop
+    aesop
 
 中文:
 定理 closure_mul_self
@@ -228,7 +231,8 @@ theorem closure_mul_self
     -- `aesop` times out
     apply add_mem
     · apply AddSubsemigroup.mem_closure_of_mem
-      aeso
+      aesop
+    aesop
 
 Depends on / 依赖: closure_eq_of_le
 -/

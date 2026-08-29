@@ -66,7 +66,13 @@ theorem num_smul_one_lt_den_smul_add
     simpa [mul_comm] using (mul_smul_one_lt_iff v.den_pos).mpr hu
   suffices ((u + v).num * u.den * v.den) • 1 <
       ((u + v).den : Int) • (u.den * v.den : Int) • (x + y) by
-    refine (mul_smul_one_lt_iff (mul_pos u.den_pos v.d
+    refine (mul_smul_one_lt_iff (mul_pos u.den_pos v.den_pos)).mp ?_
+    rwa [Nat.cast_mul, ← mul_assoc, mul_comm _ ((u + v).den : Int), ← smul_eq_mul ((u + v).den : Int),
+      smul_assoc]
+  rw [Rat.add_num_den']; rw [mul_comm]; rw [← smul_smul]
+  rw [smul_lt_smul_iff_of_pos_left (by simpa using (u + v).den_pos)]
+  rw [add_smul]; rw [smul_add]
+  exact add_lt_add hu' ((mul_smul_one_lt_iff u.den_pos).mpr hv)
 
 中文:
 定理 num_smul_one_lt_den_smul_add
@@ -76,7 +82,13 @@ theorem num_smul_one_lt_den_smul_add
     simpa [mul_comm] using (mul_smul_one_lt_iff v.den_pos).mpr hu
   suffices ((u + v).num * u.den * v.den) • 1 <
       ((u + v).den : Int) • (u.den * v.den : Int) • (x + y) by
-    refine (mul_smul_one_lt_iff (mul_pos u.den_pos v.d
+    refine (mul_smul_one_lt_iff (mul_pos u.den_pos v.den_pos)).mp ?_
+    rwa [Nat.cast_mul, ← mul_assoc, mul_comm _ ((u + v).den : Int), ← smul_eq_mul ((u + v).den : Int),
+      smul_assoc]
+  rw [Rat.add_num_den']; rw [mul_comm]; rw [← smul_smul]
+  rw [smul_lt_smul_iff_of_pos_left (by simpa using (u + v).den_pos)]
+  rw [add_smul]; rw [smul_add]
+  exact add_lt_add hu' ((mul_smul_one_lt_iff u.den_pos).mpr hv)
 
 Depends on / 依赖: Nat.cast_mul, Rat.add_num_den, add_num_den, cast_mul, den_pos, mul_assoc, mul_comm, mul_pos, mul_smul_one_lt_iff, smul_assoc, smul_eq_mul, smul_lt_smul_iff_of_pos_left, smul_smul, u.den, u.den_pos, u.num, v.den, v.den_pos
 -/
@@ -153,7 +165,7 @@ theorem mkRat_mem_ratLt
   obtain ⟨m, hm0, hnum, hden⟩ := Rat.mkRat_num_den hden (show mkRat num den = _ by rfl)
   conv in num • 1 => rw [hnum, mul_comm, ← smul_smul, natCast_zsmul]
   conv in den • x => rw [hden, mul_comm, ← smul_smul]
-  exact (smul_lt_smul_iff_of_pos_left (Nat.zero_lt_of_ne_zero hm
+  exact (smul_lt_smul_iff_of_pos_left (Nat.zero_lt_of_ne_zero hm0)).symm
 
 中文:
 定理 mkRat_mem_ratLt
@@ -163,7 +175,7 @@ theorem mkRat_mem_ratLt
   obtain ⟨m, hm0, hnum, hden⟩ := Rat.mkRat_num_den hden (show mkRat num den = _ by rfl)
   conv in num • 1 => rw [hnum, mul_comm, ← smul_smul, natCast_zsmul]
   conv in den • x => rw [hden, mul_comm, ← smul_smul]
-  exact (smul_lt_smul_iff_of_pos_left (Nat.zero_lt_of_ne_zero hm
+  exact (smul_lt_smul_iff_of_pos_left (Nat.zero_lt_of_ne_zero hm0)).symm
 
 Depends on / 依赖: Nat.zero_lt_of_ne_zero, Rat.mkRat_num_den, Set.mem_ofPred, mem_ofPred, mkRat_num_den, mul_comm, natCast_zsmul, smul_lt_smul_iff_of_pos_left, smul_smul, zero_lt_of_ne_zero
 -/
@@ -270,7 +282,9 @@ theorem ratLt_nonempty
     suffices -(n • 1) < x by simpa using this
     exact neg_lt.mpr (lt_of_lt_of_le (by simpa using hneg) hn)
   · exact ⟨Rat.ofInt (-1), by simp⟩
-  · obtain ⟨n, hn⟩ :
+  · obtain ⟨n, hn⟩ := Archimedean.arch 1 hxpos
+    use Rat.mk' 1 (n + 1) (by simp) (by simp)
+simpa using hn.trans_lt (nsmul_lt_nsmul_iff_left hxpos).mpr (by simp)
 
 中文:
 定理 ratLt_nonempty
@@ -283,7 +297,9 @@ theorem ratLt_nonempty
     suffices -(n • 1) < x by simpa using this
     exact neg_lt.mpr (lt_of_lt_of_le (by simpa using hneg) hn)
   · exact ⟨Rat.ofInt (-1), by simp⟩
-  · obtain ⟨n, hn⟩ :
+  · obtain ⟨n, hn⟩ := Archimedean.arch 1 hxpos
+    use Rat.mk' 1 (n + 1) (by simp) (by simp)
+simpa using hn.trans_lt (nsmul_lt_nsmul_iff_left hxpos).mpr (by simp)
 
 Depends on / 依赖: Archimedean, Archimedean.arch, Rat.mk, Rat.ofInt, hn.trans_lt, lt_of_lt_of_le, lt_trichotomy, neg_lt, neg_lt.mpr, nsmul_lt_nsmul_iff_left, trans_lt, zero_lt_one
 -/
@@ -314,7 +330,36 @@ theorem ratLt_add
       such that `u + v = a`.
       In a naive attempt, one can take the denominator `d` of `a`,
       and find the largest `u = p / d < x / 1`.
-      However, `d` could be too "coars
+      However, `d` could be too "coarse", and `v = a - u` could be 1/d too large than `y / 1`.
+      To ensure a large enough denominator, we take `d * k`, where
+      `1 + 1 ≤ k • (d • (x + y) - a.num • 1)`. -/
+    intro h
+    rw [Set.mem_ofPred_eq] at h
+obtain ⟨k, hk⟩ := Archimedean.arch (1 + 1) sub_pos.mpr h
+    have hk0 : k != 0 := by
+      contrapose! hk
+      simp [hk]
+    have hka0 : k * a.den != 0 := mul_ne_zero hk0 a.den_ne_zero
+    obtain ⟨m, ⟨hm1, hm2⟩, _⟩ := existsUnique_add_zsmul_mem_Ico zero_lt_one 0 (k • a.den • x - 1)
+    refine ⟨mkRat m (k * a.den), ?_, mkRat (k * a.num - m) (k * a.den), ?_, ?_⟩
+    · rw [mkRat_mem_ratLt hka0, ← smul_smul]
+      simpa using hm2
+    · have hk' : 1 + (k • a.num • 1 - k • a.den • y) <= k • a.den • x - 1 := by
+        rw [smul_add]; rw [smul_sub]; rw [smul_add]; rw [le_sub_iff_add_le]; rw [← sub_le_iff_le_add] at hk
+        rw [le_sub_iff_add_le]
+        convert! hk using 1
+        abel
+      have : k • a.num • 1 - k • a.den • y < m • 1 :=
+        lt_of_lt_of_le (lt_add_of_pos_left _ zero_lt_one) (by simpa using hk'.trans hm1)
+      rw [mkRat_mem_ratLt hka0]; rw [sub_smul]; rw [sub_lt_comm]; rw [← smul_smul]; rw [← smul_smul]; rw [natCast_zsmul]
+      exact this
+    · rw [Rat.mkRat_add_mkRat_of_den _ _ hka0]
+      rw [add_sub_cancel]; rw [Rat.mkRat_mul_left hk0]; rw [Rat.mkRat_num_den']
+  · -- `u ∈ ratLt 1 x`, `v ∈ ratLt 1 y` → `u + v ∈ ratLt 1 (x + y)`
+    intro ⟨u, hu, v, hv, huv⟩
+    rw [← huv]
+    rw [Set.mem_ofPred_eq] at hu hv ⊢
+    exact num_smul_one_lt_den_smul_add hu hv
 
 中文:
 定理 ratLt_add
@@ -328,7 +373,36 @@ theorem ratLt_add
       such that `u + v = a`.
       In a naive attempt, one can take the denominator `d` of `a`,
       and find the largest `u = p / d < x / 1`.
-      However, `d` could be too "coars
+      However, `d` could be too "coarse", and `v = a - u` could be 1/d too large than `y / 1`.
+      To ensure a large enough denominator, we take `d * k`, where
+      `1 + 1 ≤ k • (d • (x + y) - a.num • 1)`. -/
+    intro h
+    rw [Set.mem_ofPred_eq] at h
+obtain ⟨k, hk⟩ := Archimedean.arch (1 + 1) sub_pos.mpr h
+    have hk0 : k != 0 := by
+      contrapose! hk
+      simp [hk]
+    have hka0 : k * a.den != 0 := mul_ne_zero hk0 a.den_ne_zero
+    obtain ⟨m, ⟨hm1, hm2⟩, _⟩ := existsUnique_add_zsmul_mem_Ico zero_lt_one 0 (k • a.den • x - 1)
+    refine ⟨mkRat m (k * a.den), ?_, mkRat (k * a.num - m) (k * a.den), ?_, ?_⟩
+    · rw [mkRat_mem_ratLt hka0, ← smul_smul]
+      simpa using hm2
+    · have hk' : 1 + (k • a.num • 1 - k • a.den • y) <= k • a.den • x - 1 := by
+        rw [smul_add]; rw [smul_sub]; rw [smul_add]; rw [le_sub_iff_add_le]; rw [← sub_le_iff_le_add] at hk
+        rw [le_sub_iff_add_le]
+        convert! hk using 1
+        abel
+      have : k • a.num • 1 - k • a.den • y < m • 1 :=
+        lt_of_lt_of_le (lt_add_of_pos_left _ zero_lt_one) (by simpa using hk'.trans hm1)
+      rw [mkRat_mem_ratLt hka0]; rw [sub_smul]; rw [sub_lt_comm]; rw [← smul_smul]; rw [← smul_smul]; rw [natCast_zsmul]
+      exact this
+    · rw [Rat.mkRat_add_mkRat_of_den _ _ hka0]
+      rw [add_sub_cancel]; rw [Rat.mkRat_mul_left hk0]; rw [Rat.mkRat_num_den']
+  · -- `u ∈ ratLt 1 x`, `v ∈ ratLt 1 y` → `u + v ∈ ratLt 1 (x + y)`
+    intro ⟨u, hu, v, hv, huv⟩
+    rw [← huv]
+    rw [Set.mem_ofPred_eq] at hu hv ⊢
+    exact num_smul_one_lt_den_smul_add hu hv
 
 Depends on / 依赖: Archimedean, Archimedean.arch, However, Set.mem_add, Set.mem_ofPred_eq, a.num, attempt, coarse, denominator, enough, ensure, largest, mem_add, mem_ofPred_eq
 -/
@@ -442,7 +516,17 @@ theorem embedRealFun_zero
     suffices forall (y : Rat), y.num • (1 : M) < 0 -> y = x -> x <= 0 by simpa using this
     intro y hy hyx
     rw [← hyx]; rw [Rat.cast_nonpos]; rw [← Rat.num_nonpos]
-    exact (neg_of_smul_neg_right 
+    exact (neg_of_smul_neg_right hy zero_le_one).le
+  · rw [le_csSup_iff (ratLt'_bddAbove (0 : M)) (ratLt'_nonempty 0)]
+    intro x
+    rw [mem_upperBounds]
+    suffices (forall (y : Rat), y.num • (1 : M) < 0 -> y <= x) -> 0 <= x by simpa using this
+    intro h
+    have h' (y : Rat) (hy : y < 0) : y <= x := by
+exact h _ (smul_neg_iff_of_neg_left (by simpa using hy)).mpr zero_lt_one
+    contrapose! h'
+    obtain ⟨y, hxy, hy⟩ := exists_rat_btwn h'
+    exact ⟨y, by simpa using hy, hxy⟩
 
 中文:
 定理 embed实数Fun_zero
@@ -455,7 +539,17 @@ theorem embedRealFun_zero
     suffices forall (y : Rat), y.num • (1 : M) < 0 -> y = x -> x <= 0 by simpa using this
     intro y hy hyx
     rw [← hyx]; rw [Rat.cast_nonpos]; rw [← Rat.num_nonpos]
-    exact (neg_of_smul_neg_right 
+    exact (neg_of_smul_neg_right hy zero_le_one).le
+  · rw [le_csSup_iff (ratLt'_bddAbove (0 : M)) (ratLt'_nonempty 0)]
+    intro x
+    rw [mem_upperBounds]
+    suffices (forall (y : Rat), y.num • (1 : M) < 0 -> y <= x) -> 0 <= x by simpa using this
+    intro h
+    have h' (y : Rat) (hy : y < 0) : y <= x := by
+exact h _ (smul_neg_iff_of_neg_left (by simpa using hy)).mpr zero_lt_one
+    contrapose! h'
+    obtain ⟨y, hxy, hy⟩ := exists_rat_btwn h'
+    exact ⟨y, by simpa using hy, hxy⟩
 
 Depends on / 依赖: Rat.cast_nonpos, Rat.num_nonpos, _bddAbove, _nonempty, cast_nonpos, csSup_le, le_antisymm, le_csSup_iff, mem_upperBounds, neg_of_smul_neg_right, num_nonpos, y.num, zero_le_one
 -/
@@ -518,7 +612,9 @@ theorem embedRealFun_strictMono
   apply lt_of_sub_pos
   rw [hy]; rw [embedRealFun_add]; rw [add_sub_cancel_right]
   obtain ⟨n, hn⟩ := Archimedean.arch 1 hyz
-  have : (Rat.mk' 1 (n + 1) (by simp) (by simp) : Real) in ratL
+  have : (Rat.mk' 1 (n + 1) (by simp) (by simp) : Real) in ratLt' (y - x) := by
+simpa using hn.trans_lt nsmul_lt_nsmul_left hyz (show n < n + 1 by simp)
+  exact lt_csSup_of_lt (ratLt'_bddAbove (y - x)) this (by simp [← Rat.num_pos])
 
 中文:
 定理 embed实数Fun_strictMono
@@ -530,7 +626,9 @@ theorem embedRealFun_strictMono
   apply lt_of_sub_pos
   rw [hy]; rw [embedRealFun_add]; rw [add_sub_cancel_right]
   obtain ⟨n, hn⟩ := Archimedean.arch 1 hyz
-  have : (Rat.mk' 1 (n + 1) (by simp) (by simp) : Real) in ratL
+  have : (Rat.mk' 1 (n + 1) (by simp) (by simp) : Real) in ratLt' (y - x) := by
+simpa using hn.trans_lt nsmul_lt_nsmul_left hyz (show n < n + 1 by simp)
+  exact lt_csSup_of_lt (ratLt'_bddAbove (y - x)) this (by simp [← Rat.num_pos])
 
 Depends on / 依赖: Archimedean, Archimedean.arch, Rat.mk, Rat.num_pos, _bddAbove, add_sub_cancel_right, embedRealFun_add, hn.trans_lt, lt_csSup_of_lt, lt_of_sub_pos, nsmul_lt_nsmul_left, num_pos, sub_add_cancel, sub_pos, sub_pos.mpr, trans_lt
 -/
@@ -629,7 +727,19 @@ theorem embedReal_one
     suffices forall (x : Rat), x.num • (1 : M) < (x.den : Int) • (1 : M) -> (x : Real) <= 1 by simpa using this
     intro x hx
     suffices x <= 1 by norm_cast
-    simpa [Rat.le_iff] using ((smul_lt_smul_iff_of_pos_
+    simpa [Rat.le_iff] using ((smul_lt_smul_iff_of_pos_right zero_lt_one).mp hx).le
+  · rw [le_csSup_iff (ratLt'_bddAbove (1 : M)) (ratLt'_nonempty 1)]
+    simp_rw [mem_upperBounds]
+    suffices forall (x : Real), (forall (y : Rat), y.num • (1 : M) < (y.den : Int) • 1 -> y <= x) -> 1 <= x by
+      simpa using this
+    intro x h
+    have h' (y : Rat) (hy : y < 1) : y <= x :=
+      h _ ((smul_lt_smul_iff_of_pos_right zero_lt_one).mpr (by simpa using (Rat.lt_iff _ _).mp hy))
+    contrapose! h'
+    obtain ⟨y, hxy, hy⟩ := exists_rat_btwn h'
+    exact ⟨y, (by norm_cast at hy), hxy⟩
+
+omit [One M] [ZeroLEOneClass M] [NeZero (1 : M)] in
 
 中文:
 定理 embed实数_one
@@ -641,7 +751,19 @@ theorem embedReal_one
     suffices forall (x : Rat), x.num • (1 : M) < (x.den : Int) • (1 : M) -> (x : Real) <= 1 by simpa using this
     intro x hx
     suffices x <= 1 by norm_cast
-    simpa [Rat.le_iff] using ((smul_lt_smul_iff_of_pos_
+    simpa [Rat.le_iff] using ((smul_lt_smul_iff_of_pos_right zero_lt_one).mp hx).le
+  · rw [le_csSup_iff (ratLt'_bddAbove (1 : M)) (ratLt'_nonempty 1)]
+    simp_rw [mem_upperBounds]
+    suffices forall (x : Real), (forall (y : Rat), y.num • (1 : M) < (y.den : Int) • 1 -> y <= x) -> 1 <= x by
+      simpa using this
+    intro x h
+    have h' (y : Rat) (hy : y < 1) : y <= x :=
+      h _ ((smul_lt_smul_iff_of_pos_right zero_lt_one).mpr (by simpa using (Rat.lt_iff _ _).mp hy))
+    contrapose! h'
+    obtain ⟨y, hxy, hy⟩ := exists_rat_btwn h'
+    exact ⟨y, (by norm_cast at hy), hxy⟩
+
+omit [One M] [ZeroLEOneClass M] [NeZero (1 : M)] in
 
 Depends on / 依赖: Rat.le_iff, _bddAbove, _nonempty, csSup_le, embedReal_apply, le_antisymm, le_csSup_iff, le_iff, mem_upperBounds, simp_rw, smul_lt_smul_iff_of_pos_right, x.den, x.num, y.den, y.num, zero_lt_one
 -/
@@ -678,7 +800,7 @@ theorem exists_orderAddMonoidHom_real_injective
     let one : One M := ⟨|a|⟩
     have : ZeroLEOneClass M := ⟨abs_nonneg a⟩
     have : NeZero (1 : M) := ⟨abs_ne_zero.mpr ha⟩
-    exact ⟨embedReal M, embedReal_injective
+    exact ⟨embedReal M, embedReal_injective M⟩
 
 中文:
 定理 存在_orderAddMonoidHom_real_injective
@@ -689,7 +811,7 @@ theorem exists_orderAddMonoidHom_real_injective
     let one : One M := ⟨|a|⟩
     have : ZeroLEOneClass M := ⟨abs_nonneg a⟩
     have : NeZero (1 : M) := ⟨abs_ne_zero.mpr ha⟩
-    exact ⟨embedReal M, embedReal_injective
+    exact ⟨embedReal M, embedReal_injective M⟩
 
 Depends on / 依赖: Function, Function.injective_of_subsingleton, NeZero, ZeroLEOneClass, abs_ne_zero, abs_ne_zero.mpr, abs_nonneg, embedReal, embedReal_injective, exists_ne, injective_of_subsingleton, subsingleton_or_nontrivial
 -/

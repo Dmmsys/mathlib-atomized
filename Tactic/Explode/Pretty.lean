@@ -34,7 +34,10 @@ definition padRight
 
   -- 2. Pad all words in a list with " "
   let pad (md : MessageData) : MetaM MessageData := do
-    let padWidth : Nat := maxLength - (← md.toString
+    let padWidth : Nat := maxLength - (← md.toString).length
+    return md ++ "".pushn ' ' padWidth
+
+  mds.mapM pad
 
 中文:
 定义 padRight
@@ -47,7 +50,10 @@ definition padRight
 
   -- 2. Pad all words in a list with " "
   let pad (md : MessageData) : MetaM MessageData := do
-    let padWidth : Nat := maxLength - (← md.toString
+    let padWidth : Nat := maxLength - (← md.toString).length
+    return md ++ "".pushn ' ' padWidth
+
+  mds.mapM pad
 -/
 def padRight (mds : List MessageData) : MetaM (List MessageData) := do
   -- 1. Find the max length of the word in a list
@@ -76,7 +82,9 @@ definition rowToMessageData
       | Status.lam => s!"│ {pipes}"
       | Status.reg => s!"│ {pipes}"
 
-    let row := m!"{line}│{dep}│ {
+    let row := m!"{line}│{dep}│ {thm} {pipes}{en.type}\n"
+    return (← rowToMessageData lines deps thms es).compose row
+  | _, _, _, _ => return MessageData.nil
 
 中文:
 定义 rowToMessageData
@@ -89,7 +97,9 @@ definition rowToMessageData
       | Status.lam => s!"│ {pipes}"
       | Status.reg => s!"│ {pipes}"
 
-    let row := m!"{line}│{dep}│ {
+    let row := m!"{line}│{dep}│ {thm} {pipes}{en.type}\n"
+    return (← rowToMessageData lines deps thms es).compose row
+  | _, _, _, _ => return MessageData.nil
 
 Depends on / 依赖: List.replicate, String.join, en.depth, replicate
 -/
@@ -121,7 +131,9 @@ let paddedLines ← padRight entries.l.map fun entry => m!"{entry.line!}"
 let paddedDeps ← padRight entries.l.map fun entry =>
 String.intercalate "," entry.deps.map (fun dep => (dep.map toString).getD "_")
   -- ['p ', 'hP ', '∀I ']
-let paddedThms ← padRi
+let paddedThms ← padRight entries.l.map (·.thm)
+
+  rowToMessageData paddedLines paddedDeps paddedThms entries.l
 
 中文:
 定义 entriesToMessageData
@@ -133,7 +145,9 @@ let paddedLines ← padRight entries.l.map fun entry => m!"{entry.line!}"
 let paddedDeps ← padRight entries.l.map fun entry =>
 String.intercalate "," entry.deps.map (fun dep => (dep.map toString).getD "_")
   -- ['p ', 'hP ', '∀I ']
-let paddedThms ← padRi
+let paddedThms ← padRight entries.l.map (·.thm)
+
+  rowToMessageData paddedLines paddedDeps paddedThms entries.l
 -/
 def entriesToMessageData (entries : Entries) : MetaM MessageData := do
   -- ['1', '2', '3']

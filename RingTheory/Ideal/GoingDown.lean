@@ -149,7 +149,22 @@ lemma Ideal.exists_ltSeries_of_hasGoingDown
   | singleton q =>
     use RelSeries.singleton _ ⟨P, inferInstance⟩
     simp only [RelSeries.singleton_length, RelSeries.last_singleton, RelSeries.toList_singleton,
-      List.map_cons, List.map_nil, List.cons.injEq, and_true, true_and
+      List.map_cons, List.map_nil, List.cons.injEq, and_true, true_and]
+    ext : 1
+    simpa using lo.over.symm
+  | cons l q lt ih =>
+    simp only [RelSeries.last_cons] at lo
+    obtain ⟨L, len, last, spec⟩ := ih P
+    have : L.head.asIdeal.LiesOver l.head.asIdeal := by
+      constructor
+      rw [← L.toList_getElem_zero_eq_head]; rw [← l.toList_getElem_zero_eq_head]; rw [Ideal.under_def]
+      have : l.toList[0] = (PrimeSpectrum.comap (algebraMap R S)) L.toList[0] := by
+        rw [List.getElem_map_rev (PrimeSpectrum.comap (algebraMap R S))]; rw [List.getElem_of_eq spec.symm _]
+      rwa [PrimeSpectrum.ext_iff] at this
+    obtain ⟨Q, Qlt, hQ, Qlo⟩ := Ideal.exists_ideal_lt_liesOver_of_lt L.head.asIdeal lt
+    use L.cons ⟨Q, hQ⟩ Qlt
+    simp only [RelSeries.cons_length, add_left_inj, RelSeries.last_cons]
+    exact ⟨len, last, by simpa [spec] using PrimeSpectrum.ext_iff.mpr Qlo.over.symm⟩
 
 中文:
 引理 理想.存在_ltSeries_of_hasGoingDown
@@ -159,7 +174,22 @@ lemma Ideal.exists_ltSeries_of_hasGoingDown
   | singleton q =>
     use RelSeries.singleton _ ⟨P, inferInstance⟩
     simp only [RelSeries.singleton_length, RelSeries.last_singleton, RelSeries.toList_singleton,
-      List.map_cons, List.map_nil, List.cons.injEq, and_true, true_and
+      List.map_cons, List.map_nil, List.cons.injEq, and_true, true_and]
+    ext : 1
+    simpa using lo.over.symm
+  | cons l q lt ih =>
+    simp only [RelSeries.last_cons] at lo
+    obtain ⟨L, len, last, spec⟩ := ih P
+    have : L.head.asIdeal.LiesOver l.head.asIdeal := by
+      constructor
+      rw [← L.toList_getElem_zero_eq_head]; rw [← l.toList_getElem_zero_eq_head]; rw [Ideal.under_def]
+      have : l.toList[0] = (PrimeSpectrum.comap (algebraMap R S)) L.toList[0] := by
+        rw [List.getElem_map_rev (PrimeSpectrum.comap (algebraMap R S))]; rw [List.getElem_of_eq spec.symm _]
+      rwa [PrimeSpectrum.ext_iff] at this
+    obtain ⟨Q, Qlt, hQ, Qlo⟩ := Ideal.exists_ideal_lt_liesOver_of_lt L.head.asIdeal lt
+    use L.cons ⟨Q, hQ⟩ Qlt
+    simp only [RelSeries.cons_length, add_left_inj, RelSeries.last_cons]
+    exact ⟨len, last, by simpa [spec] using PrimeSpectrum.ext_iff.mpr Qlo.over.symm⟩
 
 Depends on / 依赖: L.head.asIdeal.LiesOver, L.toList_getElem_ze, LiesOver, List.cons.injEq, List.map_cons, List.map_nil, RelSeries, RelSeries.inductionOn, RelSeries.last_cons, RelSeries.last_singleton, RelSeries.singleton, RelSeries.singleton_length, RelSeries.toList_singleton, and_true, asIdeal, generalizing, inductionOn, l.head.asIdeal, last_cons, last_singleton
 -/
@@ -208,7 +238,14 @@ lemma iff_generalizingMap_primeSpectrumComap
     rw [← PrimeSpectrum.le_iff_specializes] at hp
     obtain ⟨P, hle, hP, h⟩ := Q.asIdeal.exists_ideal_le_liesOver_of_le (p := p.asIdeal)
       (q := Q.asIdeal.under R) hp
-    refine ⟨⟨P, hP⟩, (PrimeSpectrum.le_iff_specializes
+    refine ⟨⟨P, hP⟩, (PrimeSpectrum.le_iff_specializes _ Q).mp hle, ?_⟩
+    ext : 1
+    exact h.over.symm
+  · have : (⟨p, hp⟩ : PrimeSpectrum R) ⤳ (PrimeSpectrum.comap (algebraMap R S) ⟨Q, hQ⟩) :=
+      (PrimeSpectrum.le_iff_specializes _ _).mp hlt.le
+    obtain ⟨P, hs, heq⟩ := h this
+    refine ⟨P.asIdeal, (PrimeSpectrum.le_iff_specializes _ _).mpr hs, P.2, ⟨?_⟩⟩
+    simpa [PrimeSpectrum.ext_iff] using heq.symm
 
 中文:
 引理 iff_generalizingMap_primeSpectrumComap
@@ -218,7 +255,14 @@ lemma iff_generalizingMap_primeSpectrumComap
     rw [← PrimeSpectrum.le_iff_specializes] at hp
     obtain ⟨P, hle, hP, h⟩ := Q.asIdeal.exists_ideal_le_liesOver_of_le (p := p.asIdeal)
       (q := Q.asIdeal.under R) hp
-    refine ⟨⟨P, hP⟩, (PrimeSpectrum.le_iff_specializes
+    refine ⟨⟨P, hP⟩, (PrimeSpectrum.le_iff_specializes _ Q).mp hle, ?_⟩
+    ext : 1
+    exact h.over.symm
+  · have : (⟨p, hp⟩ : PrimeSpectrum R) ⤳ (PrimeSpectrum.comap (algebraMap R S) ⟨Q, hQ⟩) :=
+      (PrimeSpectrum.le_iff_specializes _ _).mp hlt.le
+    obtain ⟨P, hs, heq⟩ := h this
+    refine ⟨P.asIdeal, (PrimeSpectrum.le_iff_specializes _ _).mpr hs, P.2, ⟨?_⟩⟩
+    simpa [PrimeSpectrum.ext_iff] using heq.symm
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.comap, PrimeSpectrum.le_iff_specializes, Q.asIdeal.exists_ideal_le_liesOver_of_le, Q.asIdeal.under, algebraMap, asIdeal, exists_ideal_le_liesOver_of_le, h.over.symm, hlt.le, le_iff_specializes, p.asIdeal
 -/
@@ -286,7 +330,10 @@ lemma of_comap_localRingHom_surjective
       Ideal.isPrime_map_of_isLocalizationAtPrime (Q.under R) hlt.le
     obtain ⟨⟨Pl, _⟩, hl⟩ := H Q ⟨pl, inferInstance⟩
     refine ⟨Pl.under S, ?_, Ideal.IsPrime.under S Pl, ⟨?_⟩⟩
-    · exact
+    · exact (IsLocalization.AtPrime.orderIsoOfPrime _ Q ⟨Pl, inferInstance⟩).2.2
+    · let := Localization.AtPrime.algebraOfLiesOver (Q.under R) Q
+      replace hl : Pl.under _ = pl := by simpa [PrimeSpectrum.ext_iff] using! hl
+      rw [Ideal.under_under]; rw [← Ideal.under_under (B := (Localization.AtPrime <| Q.under R)) Pl]; rw [hl]; rw [Ideal.under_map_of_isLocalizationAtPrime (Q.under R) hlt.le]
 
 中文:
 引理 of_comap_localRingHom_surjective
@@ -296,7 +343,10 @@ lemma of_comap_localRingHom_surjective
       Ideal.isPrime_map_of_isLocalizationAtPrime (Q.under R) hlt.le
     obtain ⟨⟨Pl, _⟩, hl⟩ := H Q ⟨pl, inferInstance⟩
     refine ⟨Pl.under S, ?_, Ideal.IsPrime.under S Pl, ⟨?_⟩⟩
-    · exact
+    · exact (IsLocalization.AtPrime.orderIsoOfPrime _ Q ⟨Pl, inferInstance⟩).2.2
+    · let := Localization.AtPrime.algebraOfLiesOver (Q.under R) Q
+      replace hl : Pl.under _ = pl := by simpa [PrimeSpectrum.ext_iff] using! hl
+      rw [Ideal.under_under]; rw [← Ideal.under_under (B := (Localization.AtPrime <| Q.under R)) Pl]; rw [hl]; rw [Ideal.under_map_of_isLocalizationAtPrime (Q.under R) hlt.le]
 
 Depends on / 依赖: AtPrime, Ideal.IsPrime.under, Ideal.isPrime_map_of_isLocalizationAtPrime, Ideal.under_und, IsLocalization, IsLocalization.AtPrime.orderIsoOfPrime, IsPrime, Localization, Localization.AtPrime, Localization.AtPrime.algebraOfLiesOver, Pl.under, PrimeSpectrum, PrimeSpectrum.ext_iff, Q.under, algebraMap, algebraOfLiesOver, ext_iff, hlt.le, isPrime_map_of_isLocalizationAtPrime, orderIsoOfPrime
 -/
@@ -329,7 +379,10 @@ instance of_flat
   let := Localization.AtPrime.algebraOfLiesOver (P.under R) P
   have : IsLocalHom (algebraMap (Localization.AtPrime <| P.under R) (Localization.AtPrime P)) := by
     rw [RingHom.algebraMap_toAlgebra]
-    exact Localization.isLocalHom_localRing
+    exact Localization.isLocalHom_localRingHom (P.under R) P (algebraMap R S) Ideal.LiesOver.over
+  have : Module.FaithfullyFlat (Localization.AtPrime (P.under R)) (Localization.AtPrime P) :=
+    Module.FaithfullyFlat.of_flat_of_isLocalHom
+  apply PrimeSpectrum.comap_surjective_of_faithfullyFlat
 
 中文:
 实例 of_flat
@@ -340,7 +393,10 @@ instance of_flat
   let := Localization.AtPrime.algebraOfLiesOver (P.under R) P
   have : IsLocalHom (algebraMap (Localization.AtPrime <| P.under R) (Localization.AtPrime P)) := by
     rw [RingHom.algebraMap_toAlgebra]
-    exact Localization.isLocalHom_localRing
+    exact Localization.isLocalHom_localRingHom (P.under R) P (algebraMap R S) Ideal.LiesOver.over
+  have : Module.FaithfullyFlat (Localization.AtPrime (P.under R)) (Localization.AtPrime P) :=
+    Module.FaithfullyFlat.of_flat_of_isLocalHom
+  apply PrimeSpectrum.comap_surjective_of_faithfullyFlat
 
 Depends on / 依赖: AtPrime, FaithfullyFlat, Ideal.LiesOver.over, IsLocalHom, LiesOver, Localization, Localization.AtPrime, Localization.AtPrime.algebraOfLiesOver, Localization.isLocalHom_localRingHom, Module, Module.FaithfullyFlat, Module.FaithfullyFlat.of_flat_of_isLocalHom, P.under, PrimeSpectrum, PrimeSpectrum.comap, RingHom, RingHom.algebraMap_toAlgebra, algebraMap, algebraMap_toAlgebra, algebraOfLiesOver
 -/

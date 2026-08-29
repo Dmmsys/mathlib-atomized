@@ -403,7 +403,7 @@ definition prodQuotientEquiv
     rcases q with ⟨qa, qb⟩
     induction qa, qb using Quotient.inductionOn₂'
     rfl
-  right_inv q := by in
+  right_inv q := by induction q using Quotient.inductionOn'; rfl
 
 中文:
 定义 prodQuotientEquiv
@@ -414,7 +414,7 @@ definition prodQuotientEquiv
     rcases q with ⟨qa, qb⟩
     induction qa, qb using Quotient.inductionOn₂'
     rfl
-  right_inv q := by in
+  right_inv q := by induction q using Quotient.inductionOn'; rfl
 
 Depends on / 依赖: Quotient, Quotient.liftOn, Quotient.mk, liftOn
 -/
@@ -447,7 +447,11 @@ definition piQuotientEquiv
     simp
   right_inv q := by
     induction q using Quotient.inductionOn'
-    simp only [Quotient.liftOn'_mk'
+    simp only [Quotient.liftOn'_mk'', Quotient.eq'']
+    intro i
+    change Setoid.r _ _
+    rw [← Quotient.eq'']
+    simp
 
 中文:
 定义 piQuotientEquiv
@@ -461,7 +465,11 @@ definition piQuotientEquiv
     simp
   right_inv q := by
     induction q using Quotient.inductionOn'
-    simp only [Quotient.liftOn'_mk'
+    simp only [Quotient.liftOn'_mk'', Quotient.eq'']
+    intro i
+    change Setoid.r _ _
+    rw [← Quotient.eq'']
+    simp
 
 Depends on / 依赖: Quotient, Quotient.mk
 -/
@@ -642,7 +650,12 @@ instance completeLattice
     inf_le_left := fun _ _ _ _ h => h.1
     inf_le_right := fun _ _ _ _ h => h.2
     le_inf := fun _ _ _ h1 h2 _ _ h => ⟨h1 h, h2 h⟩
-    top := ⟨fun _ _ => True, ⟨f
+    top := ⟨fun _ _ => True, ⟨fun _ => trivial, fun h => h, fun h1 _ => h1⟩⟩
+    le_top := fun _ _ _ _ => trivial
+    bot := ⟨(· = ·), ⟨fun _ => rfl, fun h => h.symm, fun h1 h2 => h1.trans h2⟩⟩
+    bot_le := fun r x _ h => h ▸ r.2.1 x }
+
+@[simp, grind =]
 
 中文:
 实例 completeLattice
@@ -653,7 +666,12 @@ instance completeLattice
     inf_le_left := fun _ _ _ _ h => h.1
     inf_le_right := fun _ _ _ _ h => h.2
     le_inf := fun _ _ _ h1 h2 _ _ h => ⟨h1 h, h2 h⟩
-    top := ⟨fun _ _ => True, ⟨f
+    top := ⟨fun _ _ => True, ⟨fun _ => trivial, fun h => h, fun h1 _ => h1⟩⟩
+    le_top := fun _ _ _ _ => trivial
+    bot := ⟨(· = ·), ⟨fun _ => rfl, fun h => h.symm, fun h1 h2 => h1.trans h2⟩⟩
+    bot_le := fun r x _ h => h ▸ r.2.1 x }
+
+@[simp, grind =]
 
 Depends on / 依赖: Min.min, Setoid, bot_le, completeLatticeOfInf, h.symm, h1.trans, inf_le_left, inf_le_right, le_inf, le_top
 -/
@@ -1511,7 +1529,11 @@ theorem coe_map_of_ker_le
   | refl _ => exact .inr rfl
   | symm _ _ _ ih => exact ih.imp (Std.Symm.symm _ _) (Std.Symm.symm _ _)
   | trans _ _ _ _ _ ih1 ih2 =>
-   
+    rcases ih1 with ih1 | rfl
+    · rcases ih2 with ih2 | rfl
+· exact .inl .trans _ _ _ ih1 ih2 r.iseqv.isTrans.map hf
+      · exact .inl ih1
+    · exact ih2
 
 中文:
 定理 coe_map_of_ker_le
@@ -1524,7 +1546,11 @@ theorem coe_map_of_ker_le
   | refl _ => exact .inr rfl
   | symm _ _ _ ih => exact ih.imp (Std.Symm.symm _ _) (Std.Symm.symm _ _)
   | trans _ _ _ _ _ ih1 ih2 =>
-   
+    rcases ih1 with ih1 | rfl
+    · rcases ih2 with ih2 | rfl
+· exact .inl .trans _ _ _ ih1 ih2 r.iseqv.isTrans.map hf
+      · exact .inl ih1
+    · exact ih2
 
 Depends on / 依赖: EqvGen, Relation, Relation.EqvGen.rel, Std.Symm.symm, ih.imp, isTrans, le_antisymm, r.iseqv.isTrans.map, sup_le
 -/
@@ -1858,7 +1884,11 @@ definition quotientQuotientEquivQuotient
 (Quotient.liftOn' w (@Quotient.mk'' _ s)) fun _ _ H => Quotient.sound h H)
       fun x y => Quotient.inductionOn₂' x y fun _ _ H => show @Quot.mk _ _ _ = @Quot.mk _ _ _ from H
   invFun x :=
-    (Quotient.liftOn' x fun w => @Quotient.mk'' _ (ker <| Quot.mapRight h) <| @Qu
+    (Quotient.liftOn' x fun w => @Quotient.mk'' _ (ker <| Quot.mapRight h) <| @Quotient.mk'' _ r w)
+fun _ _ H => Quotient.sound' show @Quot.mk _ _ _ = @Quot.mk _ _ _ from Quotient.sound H
+  left_inv x :=
+    Quotient.inductionOn' x fun y => Quotient.inductionOn' y fun w => by change ⟦_⟧ = _; rfl
+  right_inv x := Quotient.inductionOn' x fun y => by change ⟦_⟧ = _; rfl
 
 中文:
 定义 quotientQuotientEquivQuotient
@@ -1867,7 +1897,11 @@ definition quotientQuotientEquivQuotient
 (Quotient.liftOn' w (@Quotient.mk'' _ s)) fun _ _ H => Quotient.sound h H)
       fun x y => Quotient.inductionOn₂' x y fun _ _ H => show @Quot.mk _ _ _ = @Quot.mk _ _ _ from H
   invFun x :=
-    (Quotient.liftOn' x fun w => @Quotient.mk'' _ (ker <| Quot.mapRight h) <| @Qu
+    (Quotient.liftOn' x fun w => @Quotient.mk'' _ (ker <| Quot.mapRight h) <| @Quotient.mk'' _ r w)
+fun _ _ H => Quotient.sound' show @Quot.mk _ _ _ = @Quot.mk _ _ _ from Quotient.sound H
+  left_inv x :=
+    Quotient.inductionOn' x fun y => Quotient.inductionOn' y fun w => by change ⟦_⟧ = _; rfl
+  right_inv x := Quotient.inductionOn' x fun y => by change ⟦_⟧ = _; rfl
 
 Depends on / 依赖: Quot.mapRight, Quot.mk, Quotient, Quotient.inductionOn, Quotient.liftOn, Quotient.mk, Quotient.sound, inductionOn, invFun, left_inv, liftOn, mapRight
 -/
@@ -1898,7 +1932,11 @@ definition correspondence
       (fun h => s.1.trans' (s.1.trans' (s.1.symm' (s.2 h₁)) h) (s.2 h₂))
       (fun h => s.1.trans' (s.1.trans' (s.2 h₁) h) (s.1.symm' (s.2 h₂))),
     ⟨Quotient.ind s.1.2.1, fun {x y} => Quotient.inductionOn₂ x y fun _ _ => s.1.2.2,
-      fun {
+      fun {x y z} => Quotient.inductionOn₃ x y z fun _ _ _ => s.1.2.3⟩⟩
+  invFun s := ⟨comap Quotient.mk' s, fun x y h => by rw [comap_rel, Quotient.eq'.2 h]⟩
+  right_inv _ := ext fun x y => Quotient.inductionOn₂ x y fun _ _ => Iff.rfl
+  map_rel_iff' :=
+    ⟨fun h x y hs => @h ⟦x⟧ ⟦y⟧ hs, fun h x y => Quotient.inductionOn₂ x y fun _ _ hs => h hs⟩
 
 中文:
 定义 correspondence
@@ -1907,7 +1945,11 @@ definition correspondence
       (fun h => s.1.trans' (s.1.trans' (s.1.symm' (s.2 h₁)) h) (s.2 h₂))
       (fun h => s.1.trans' (s.1.trans' (s.2 h₁) h) (s.1.symm' (s.2 h₂))),
     ⟨Quotient.ind s.1.2.1, fun {x y} => Quotient.inductionOn₂ x y fun _ _ => s.1.2.2,
-      fun {
+      fun {x y z} => Quotient.inductionOn₃ x y z fun _ _ _ => s.1.2.3⟩⟩
+  invFun s := ⟨comap Quotient.mk' s, fun x y h => by rw [comap_rel, Quotient.eq'.2 h]⟩
+  right_inv _ := ext fun x y => Quotient.inductionOn₂ x y fun _ _ => Iff.rfl
+  map_rel_iff' :=
+    ⟨fun h x y hs => @h ⟦x⟧ ⟦y⟧ hs, fun h x y => Quotient.inductionOn₂ x y fun _ _ hs => h hs⟩
 
 Depends on / 依赖: Eq.propIntro, Quotient, Quotient.lift, propIntro
 -/
@@ -1962,7 +2004,7 @@ theorem Quotient.subsingleton_iff
   simp only [_root_.subsingleton_iff, eq_top_iff, Setoid.le_def, Setoid.top_def, Pi.top_apply]
   refine Quotient.mk'_surjective.forall.trans (forall_congr' fun a => ?_)
   refine Quotient.mk'_surjective.forall.trans (forall_congr' fun b => ?_)
-  simp_rw [Prop.top_eq_true, true_implies, Quotient.eq
+  simp_rw [Prop.top_eq_true, true_implies, Quotient.eq']
 
 中文:
 定理 商.subsingleton_iff
@@ -1972,7 +2014,7 @@ theorem Quotient.subsingleton_iff
   simp only [_root_.subsingleton_iff, eq_top_iff, Setoid.le_def, Setoid.top_def, Pi.top_apply]
   refine Quotient.mk'_surjective.forall.trans (forall_congr' fun a => ?_)
   refine Quotient.mk'_surjective.forall.trans (forall_congr' fun b => ?_)
-  simp_rw [Prop.top_eq_true, true_implies, Quotient.eq
+  simp_rw [Prop.top_eq_true, true_implies, Quotient.eq']
 
 Depends on / 依赖: Pi.top_apply, Prop.top_eq_true, Quotient, Quotient.eq, Quotient.mk, Setoid, Setoid.le_def, Setoid.top_def, _root_, _root_.subsingleton_iff, _surjective, _surjective.forall.trans, eq_top_iff, forall_congr, le_def, simp_rw, subsingleton_iff, top_apply, top_def, top_eq_true
 -/

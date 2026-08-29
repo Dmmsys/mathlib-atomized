@@ -223,7 +223,10 @@ theorem spec_of_surjective
     have : (RingHom.toMorphismProperty (fun f => Function.Surjective f)).RespectsIso := by
       rw [← RingHom.toMorphismProperty_respectsIso_iff]
       exact RingHom.surjective_respectsIso
-    apply (MorphismPro
+    apply (MorphismProperty.arrow_mk_iso_iff
+      (RingHom.toMorphismProperty (fun f => Function.Surjective f))
+      (Scheme.arrowStalkMapSpecIso f x)).mpr
+    exact RingHom.surjective_localRingHom_of_surjective f.hom h x.asIdeal
 
 中文:
 定理 spec_of_surjective
@@ -233,7 +236,10 @@ theorem spec_of_surjective
     have : (RingHom.toMorphismProperty (fun f => Function.Surjective f)).RespectsIso := by
       rw [← RingHom.toMorphismProperty_respectsIso_iff]
       exact RingHom.surjective_respectsIso
-    apply (MorphismPro
+    apply (MorphismProperty.arrow_mk_iso_iff
+      (RingHom.toMorphismProperty (fun f => Function.Surjective f))
+      (Scheme.arrowStalkMapSpecIso f x)).mpr
+    exact RingHom.surjective_localRingHom_of_surjective f.hom h x.asIdeal
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.isClosedEmbedding_comap_of_surjective, isClosedEmbedding_comap_of_surjective
 -/
@@ -306,7 +312,12 @@ theorem of_comp_isClosedImmersion
     simp only [Scheme.Hom.comp_base, TopCat.coe_comp] at h
     refine .of_continuous_injective_isClosedMap (Scheme.Hom.continuous f) h.injective.of_comp ?_
     intro Z hZ
-    rw [IsClosedEmbedding.isClosed_iff_image_isClosed g.isClosedEmbedding]; rw [← Set.
+    rw [IsClosedEmbedding.isClosed_iff_image_isClosed g.isClosedEmbedding]; rw [← Set.image_comp]
+    exact h.isClosedMap _ hZ
+  stalkMap_surjective x := by
+    have h := (f ≫ g).stalkMap_surjective x
+    simp_rw [Scheme.Hom.stalkMap_comp] at h
+    exact Function.Surjective.of_comp h
 
 中文:
 定理 of_comp_isClosedImmersion
@@ -316,7 +327,12 @@ theorem of_comp_isClosedImmersion
     simp only [Scheme.Hom.comp_base, TopCat.coe_comp] at h
     refine .of_continuous_injective_isClosedMap (Scheme.Hom.continuous f) h.injective.of_comp ?_
     intro Z hZ
-    rw [IsClosedEmbedding.isClosed_iff_image_isClosed g.isClosedEmbedding]; rw [← Set.
+    rw [IsClosedEmbedding.isClosed_iff_image_isClosed g.isClosedEmbedding]; rw [← Set.image_comp]
+    exact h.isClosedMap _ hZ
+  stalkMap_surjective x := by
+    have h := (f ≫ g).stalkMap_surjective x
+    simp_rw [Scheme.Hom.stalkMap_comp] at h
+    exact Function.Surjective.of_comp h
 
 Depends on / 依赖: Function, Function.Surjective.of_comp, IsClosedEmbedding, IsClosedEmbedding.isClosed_iff_image_isClosed, Scheme, Scheme.Hom.comp_base, Scheme.Hom.continuous, Scheme.Hom.stalkMap_comp, Set.image_comp, Surjective, TopCat, TopCat.coe_comp, coe_comp, comp_base, continuous, g.isClosedEmbedding, h.injective.of_comp, h.isClosedMap, image_comp, injective
 -/
@@ -395,7 +411,15 @@ definition overEquivIdealSheafData
   { obj I := .op <| .mk _ I.subschemeι inferInstance
     map {I J} h := (MorphismProperty.Over.homMk (Scheme.IdealSheafData.inclusion h.le)).op
     map_comp f g := Quiver.Hom.unop_inj (by ext1; simp) }
-  unitIso := NatIso.ofComponen
+  unitIso := NatIso.ofComponents (fun Y =>
+    letI : IsClosedImmersion Y.unop.hom := Y.unop.prop
+    ((MorphismProperty.Over.isoMk (asIso Y.unop.hom.toImage).symm).op)) fun {X Y} f => by
+      apply Quiver.Hom.unop_inj
+      ext1
+      dsimp
+      rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [← cancel_mono (Scheme.IdealSheafData.subschemeι _)]
+      simp
+  counitIso := NatIso.ofComponents (fun I => eqToIso (by simp))
 
 中文:
 定义 overEquivIdealSheafData
@@ -405,7 +429,15 @@ definition overEquivIdealSheafData
   { obj I := .op <| .mk _ I.subschemeι inferInstance
     map {I J} h := (MorphismProperty.Over.homMk (Scheme.IdealSheafData.inclusion h.le)).op
     map_comp f g := Quiver.Hom.unop_inj (by ext1; simp) }
-  unitIso := NatIso.ofComponen
+  unitIso := NatIso.ofComponents (fun Y =>
+    letI : IsClosedImmersion Y.unop.hom := Y.unop.prop
+    ((MorphismProperty.Over.isoMk (asIso Y.unop.hom.toImage).symm).op)) fun {X Y} f => by
+      apply Quiver.Hom.unop_inj
+      ext1
+      dsimp
+      rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [← cancel_mono (Scheme.IdealSheafData.subschemeι _)]
+      simp
+  counitIso := NatIso.ofComponents (fun I => eqToIso (by simp))
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Over.forget, X.kerFunctor, forget, kerFunctor
 -/
@@ -520,7 +552,8 @@ lemma isIso_of_ker_eq
   suffices h : IsIso f'.op by
     rwa [isIso_op_iff, ← isIso_iff_of_reflects_iso _ (MorphismProperty.Over.forget ..),
       ← isIso_iff_of_reflects_iso _ (Over.forget _)] at h
-  rw [← isIso_iff_of_refle
+  rw [← isIso_iff_of_reflects_iso _ (IsClosedImmersion.overEquivIdealSheafData X).functor]
+  simpa [IsClosedImmersion.overEquivIdealSheafData] using ⟨homOfLE h'.le, by simp, by simp⟩
 
 中文:
 引理 isIso_of_ker_eq
@@ -530,7 +563,8 @@ lemma isIso_of_ker_eq
   suffices h : IsIso f'.op by
     rwa [isIso_op_iff, ← isIso_iff_of_reflects_iso _ (MorphismProperty.Over.forget ..),
       ← isIso_iff_of_reflects_iso _ (Over.forget _)] at h
-  rw [← isIso_iff_of_refle
+  rw [← isIso_iff_of_reflects_iso _ (IsClosedImmersion.overEquivIdealSheafData X).functor]
+  simpa [IsClosedImmersion.overEquivIdealSheafData] using ⟨homOfLE h'.le, by simp, by simp⟩
 
 Depends on / 依赖: IsClosedImmersion, IsClosedImmersion.overEquivIdealSheafData, MorphismProperty, MorphismProperty.Over.forget, MorphismProperty.Over.homMk, MorphismProperty.Over.mk, Over.forget, forget, functor, homOfLE, isIso_iff_of_reflects_iso, isIso_op_iff, overEquivIdealSheafData
 -/
@@ -583,7 +617,7 @@ lemma isDominant_of_of_appTop_injective
   have : f.ker = ⊥ := Scheme.IdealSheafData.ext_of_isAffine
     (by simpa [f.ker_apply ⟨⊤, isAffineOpen_top Y⟩, ← RingHom.injective_iff_ker_eq_bot])
   exact ⟨by simpa only [Scheme.Hom.support_ker, Scheme.IdealSheafData.support_bot,
-    Closeds.coe_top, ← dense_iff_closure_eq] using! (congr((↑($th
+    Closeds.coe_top, ← dense_iff_closure_eq] using! (congr((↑($this).support : Set Y)) :)⟩
 
 中文:
 引理 isDominant_of_of_appTop_injective
@@ -592,7 +626,7 @@ lemma isDominant_of_of_appTop_injective
   have : f.ker = ⊥ := Scheme.IdealSheafData.ext_of_isAffine
     (by simpa [f.ker_apply ⟨⊤, isAffineOpen_top Y⟩, ← RingHom.injective_iff_ker_eq_bot])
   exact ⟨by simpa only [Scheme.Hom.support_ker, Scheme.IdealSheafData.support_bot,
-    Closeds.coe_top, ← dense_iff_closure_eq] using! (congr((↑($th
+    Closeds.coe_top, ← dense_iff_closure_eq] using! (congr((↑($this).support : Set Y)) :)⟩
 
 Depends on / 依赖: Closeds, Closeds.coe_top, IdealSheafData, RingHom, RingHom.injective_iff_ker_eq_bot, Scheme, Scheme.Hom.support_ker, Scheme.IdealSheafData.ext_of_isAffine, Scheme.IdealSheafData.support_bot, coe_top, dense_iff_closure_eq, ext_of_isAffine, f.ker, f.ker_apply, injective_iff_ker_eq_bot, isAffineOpen_top, ker_apply, support, support_bot, support_ker
 -/
@@ -640,7 +674,36 @@ lemma stalkMap_injective_of_isOpenMap_of_injective
   let 𝒰 : X.OpenCover := X.affineCover.finiteSubcover
   let res (i : 𝒰.I₀) : Γ(X, ⊤) ⟶ Γ(𝒰.X i, ⊤) := (𝒰.f i).appTop
   refine stalkMap_injective_of_isAffine _ _ (fun (g : Γ(Y, ⊤)) h => ?_)
-  rw [TopCat.Presheaf.Γgerm]; rw [Scheme.Hom.germ_stalkMap_apply] at
+  rw [TopCat.Presheaf.Γgerm]; rw [Scheme.Hom.germ_stalkMap_apply] at h
+  obtain ⟨U, w, (hx : x in U), hg⟩ :=
+    X.toRingedSpace.exists_res_eq_zero_of_germ_eq_zero ⊤ (φ g) ⟨x, trivial⟩ h
+  obtain ⟨_, ⟨s, rfl⟩, hyv, bsle⟩ := Opens.isBasis_iff_nbhd.mp (isBasis_basicOpen Y)
+    (show f x in ⟨f '' U.carrier, hfopen U.carrier U.is_open'⟩ from ⟨x, by simpa⟩)
+  let W (i : 𝒰.I₀) : TopologicalSpace.Opens (𝒰.X i) := (𝒰.X i).basicOpen ((res i) (φ s))
+  have hwle (i : 𝒰.I₀) : W i <= (𝒰.f i) ⁻¹ᵁ U := by
+    change (𝒰.X i).basicOpen ((𝒰.f i ≫ f).appTop s) <= _
+    rw [← Scheme.preimage_basicOpen_top]; rw [Scheme.Hom.comp_base]; rw [Opens.map_comp_obj]
+    refine Scheme.Hom.preimage_mono _
+      (le_trans (f.preimage_mono bsle) (le_of_eq ?_))
+    simp [Set.preimage_image_eq _ hfinj₁]
+  have h0 (i : 𝒰.I₀) : (𝒰.f i).appLE _ (W i) (by simp) (φ g) = 0 := by
+    rw [← Scheme.Hom.appLE_map _ ((Opens.map _).map w).le (homOfLE <| hwle i).op]; rw [← Scheme.Hom.map_appLE _ le_rfl w.op]
+    simp only [CommRingCat.comp_apply]
+    rw [hg]
+    simp only [map_zero]
+  have h1 (i : 𝒰.I₀) : exists n, (res i) (φ (s ^ n * g)) = 0 := by
+    obtain ⟨n, hn⟩ := exists_of_res_zero_of_qcqs_of_top (s := ((res i) (φ s))) (h0 i)
+    exact ⟨n, by rwa [map_mul, map_mul, map_pow, map_pow]⟩
+  have h2 : exists n, forall i, (res i) (φ (s ^ n * g)) = 0 := by
+    choose fn hfn using h1
+    refine ⟨Finset.sup Finset.univ fn, fun i => ?_⟩
+    rw [map_mul]; rw [map_pow]; rw [map_mul]; rw [map_pow]
+    simp only [map_mul, map_pow, map_mul, map_pow] at hfn
+    apply pow_mul_eq_zero_of_le (Finset.le_sup (Finset.mem_univ i)) (hfn i)
+  obtain ⟨n, hn⟩ := h2
+  apply germ_eq_zero_of_pow_mul_eq_zero (U := ⊤) ⟨f x, trivial⟩ hyv
+  rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero] at hfinj₂
+  exact hfinj₂ _ (Scheme.zero_of_zero_cover _ _ hn)
 
 中文:
 引理 stalkMap_injective_of_isOpenMap_of_injective
@@ -650,7 +713,36 @@ lemma stalkMap_injective_of_isOpenMap_of_injective
   let 𝒰 : X.OpenCover := X.affineCover.finiteSubcover
   let res (i : 𝒰.I₀) : Γ(X, ⊤) ⟶ Γ(𝒰.X i, ⊤) := (𝒰.f i).appTop
   refine stalkMap_injective_of_isAffine _ _ (fun (g : Γ(Y, ⊤)) h => ?_)
-  rw [TopCat.Presheaf.Γgerm]; rw [Scheme.Hom.germ_stalkMap_apply] at
+  rw [TopCat.Presheaf.Γgerm]; rw [Scheme.Hom.germ_stalkMap_apply] at h
+  obtain ⟨U, w, (hx : x in U), hg⟩ :=
+    X.toRingedSpace.exists_res_eq_zero_of_germ_eq_zero ⊤ (φ g) ⟨x, trivial⟩ h
+  obtain ⟨_, ⟨s, rfl⟩, hyv, bsle⟩ := Opens.isBasis_iff_nbhd.mp (isBasis_basicOpen Y)
+    (show f x in ⟨f '' U.carrier, hfopen U.carrier U.is_open'⟩ from ⟨x, by simpa⟩)
+  let W (i : 𝒰.I₀) : TopologicalSpace.Opens (𝒰.X i) := (𝒰.X i).basicOpen ((res i) (φ s))
+  have hwle (i : 𝒰.I₀) : W i <= (𝒰.f i) ⁻¹ᵁ U := by
+    change (𝒰.X i).basicOpen ((𝒰.f i ≫ f).appTop s) <= _
+    rw [← Scheme.preimage_basicOpen_top]; rw [Scheme.Hom.comp_base]; rw [Opens.map_comp_obj]
+    refine Scheme.Hom.preimage_mono _
+      (le_trans (f.preimage_mono bsle) (le_of_eq ?_))
+    simp [Set.preimage_image_eq _ hfinj₁]
+  have h0 (i : 𝒰.I₀) : (𝒰.f i).appLE _ (W i) (by simp) (φ g) = 0 := by
+    rw [← Scheme.Hom.appLE_map _ ((Opens.map _).map w).le (homOfLE <| hwle i).op]; rw [← Scheme.Hom.map_appLE _ le_rfl w.op]
+    simp only [CommRingCat.comp_apply]
+    rw [hg]
+    simp only [map_zero]
+  have h1 (i : 𝒰.I₀) : exists n, (res i) (φ (s ^ n * g)) = 0 := by
+    obtain ⟨n, hn⟩ := exists_of_res_zero_of_qcqs_of_top (s := ((res i) (φ s))) (h0 i)
+    exact ⟨n, by rwa [map_mul, map_mul, map_pow, map_pow]⟩
+  have h2 : exists n, forall i, (res i) (φ (s ^ n * g)) = 0 := by
+    choose fn hfn using h1
+    refine ⟨Finset.sup Finset.univ fn, fun i => ?_⟩
+    rw [map_mul]; rw [map_pow]; rw [map_mul]; rw [map_pow]
+    simp only [map_mul, map_pow, map_mul, map_pow] at hfn
+    apply pow_mul_eq_zero_of_le (Finset.le_sup (Finset.mem_univ i)) (hfn i)
+  obtain ⟨n, hn⟩ := h2
+  apply germ_eq_zero_of_pow_mul_eq_zero (U := ⊤) ⟨f x, trivial⟩ hyv
+  rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero] at hfinj₂
+  exact hfinj₂ _ (Scheme.zero_of_zero_cover _ _ hn)
 
 Depends on / 依赖: OpenCover, Opens.isBasis_iff_nbhd.mp, Presheaf, Scheme, Scheme.Hom.germ_stalkMap_apply, TopCat, TopCat.Presheaf, X.OpenCover, X.affineCover.finiteSubcover, X.toRingedSpace.exists_res_eq_zero_of_germ_eq_zero, affineCover, appTop, exists_res_eq_zero_of_germ_eq_zero, f.appTop, finiteSubcover, germ_stalkMap_apply, isBasis_basicOpen, isBasis_iff_nbhd, stalkMap_injective_of_isAffine, toRingedSpace
 -/
@@ -731,7 +823,9 @@ theorem isAffine_surjective_of_isAffine
   refine ⟨isAffine_of_isAffineHom f, ?_⟩
   simp only [← f.toImage_imageι, Scheme.Hom.comp_appTop, CommRingCat.hom_comp, RingHom.coe_comp,
     Scheme.Hom.image, Scheme.Hom.imageι]
-  rw [Scheme.Hom.appTop]; rw [Scheme.Hom.appTop]; rw [f.ker.subschemeι_app ⟨⊤]; rw [isAffineOpen_top Y⟩]; rw [CommRing
+  rw [Scheme.Hom.appTop]; rw [Scheme.Hom.appTop]; rw [f.ker.subschemeι_app ⟨⊤]; rw [isAffineOpen_top Y⟩]; rw [CommRingCat.hom_comp]; rw [RingHom.coe_comp]
+  exact (ConcreteCategory.bijective_of_isIso _).2.comp
+    ((ConcreteCategory.bijective_of_isIso _).2.comp Ideal.Quotient.mk_surjective)
 
 中文:
 定理 isAffine_surjective_of_isAffine
@@ -740,7 +834,9 @@ theorem isAffine_surjective_of_isAffine
   refine ⟨isAffine_of_isAffineHom f, ?_⟩
   simp only [← f.toImage_imageι, Scheme.Hom.comp_appTop, CommRingCat.hom_comp, RingHom.coe_comp,
     Scheme.Hom.image, Scheme.Hom.imageι]
-  rw [Scheme.Hom.appTop]; rw [Scheme.Hom.appTop]; rw [f.ker.subschemeι_app ⟨⊤]; rw [isAffineOpen_top Y⟩]; rw [CommRing
+  rw [Scheme.Hom.appTop]; rw [Scheme.Hom.appTop]; rw [f.ker.subschemeι_app ⟨⊤]; rw [isAffineOpen_top Y⟩]; rw [CommRingCat.hom_comp]; rw [RingHom.coe_comp]
+  exact (ConcreteCategory.bijective_of_isIso _).2.comp
+    ((ConcreteCategory.bijective_of_isIso _).2.comp Ideal.Quotient.mk_surjective)
 
 Depends on / 依赖: CommRingCat, CommRingCat.hom_comp, ConcreteCategory, ConcreteCategory.bijective_of_isIso, Ideal.Quotient.mk_surjective, Quotient, RingHom, RingHom.coe_comp, Scheme, Scheme.Hom.appTop, Scheme.Hom.comp_appTop, Scheme.Hom.image, appTop, bijective_of_isIso, coe_comp, comp_appTop, f.ker.subscheme, f.toImage_image, hom_comp, isAffineOpen_top
 -/
@@ -767,7 +863,16 @@ lemma Spec_iff
     let φ := (Scheme.ΓSpecIso R).inv ≫ f.appTop
     refine ⟨RingHom.ker φ.1, Scheme.isoSpec _ ≪≫ Scheme.Spec.mapIso
         (.op (RingEquiv.ofBijective φ.1.kerLift ?_).toCommRingCatIso), ?_⟩
-    ·
+    · exact ⟨φ.1.kerLift_injective, Ideal.Quotient.lift_surjective_of_surjective _ _
+        (h₂.comp (Scheme.ΓSpecIso R).commRingCatIsoToRingEquiv.symm.surjective)⟩
+    · simp only [Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, Scheme.Spec_map,
+        Quiver.Hom.unop_op, Category.assoc, ← Spec.map_comp]
+      change f = X.isoSpec.hom ≫ Spec.map φ
+      simp only [Scheme.isoSpec, asIso_hom, Spec.map_comp, ← Scheme.toSpecΓ_naturality_assoc,
+        ← SpecMap_ΓSpecIso_hom, φ]
+      simp
+  · rintro ⟨I, e, rfl⟩
+    infer_instance
 
 中文:
 引理 Spec_iff
@@ -779,7 +884,16 @@ lemma Spec_iff
     let φ := (Scheme.ΓSpecIso R).inv ≫ f.appTop
     refine ⟨RingHom.ker φ.1, Scheme.isoSpec _ ≪≫ Scheme.Spec.mapIso
         (.op (RingEquiv.ofBijective φ.1.kerLift ?_).toCommRingCatIso), ?_⟩
-    ·
+    · exact ⟨φ.1.kerLift_injective, Ideal.Quotient.lift_surjective_of_surjective _ _
+        (h₂.comp (Scheme.ΓSpecIso R).commRingCatIsoToRingEquiv.symm.surjective)⟩
+    · simp only [Iso.trans_hom, Functor.mapIso_hom, Iso.op_hom, Scheme.Spec_map,
+        Quiver.Hom.unop_op, Category.assoc, ← Spec.map_comp]
+      change f = X.isoSpec.hom ≫ Spec.map φ
+      simp only [Scheme.isoSpec, asIso_hom, Spec.map_comp, ← Scheme.toSpecΓ_naturality_assoc,
+        ← SpecMap_ΓSpecIso_hom, φ]
+      simp
+  · rintro ⟨I, e, rfl⟩
+    infer_instance
 
 Depends on / 依赖: Functor, Functor.mapIso_hom, Ideal.Quotient.lift_surjective_of_surjective, IsClosedImmersion, IsClosedImmersion.isAffine_surjective_of_isAffine, Iso.op_hom, Iso.trans_hom, Quotient, RingEquiv, RingEquiv.ofBijective, RingHom, RingHom.ker, Scheme, Scheme.Spec.mapIso, Scheme.Spec_map, Scheme.isoSpec, Spec_map, appTop, commRingCatIsoToRingEquiv, commRingCatIsoToRingEquiv.symm.surjective
 -/
@@ -910,7 +1024,8 @@ instance IsClosedImmersion.isStableUnderBaseChange
   have := HasAffineProperty.isLocal_affineProperty @IsClosedImmersion
   apply AffineTargetMorphismProperty.IsStableUnderBaseChange.mk
   intro X Y S _ _ f g ⟨ha, hsurj⟩
-  exact ⟨inferInstance, RingHom.surjective_isStableUnderBaseChange.pullback_fst
+  exact ⟨inferInstance, RingHom.surjective_isStableUnderBaseChange.pullback_fst_appTop _
+    RingHom.surjective_respectsIso f _ hsurj⟩
 
 中文:
 实例 是闭浸入.isStableUnderBaseChange
@@ -920,7 +1035,8 @@ instance IsClosedImmersion.isStableUnderBaseChange
   have := HasAffineProperty.isLocal_affineProperty @IsClosedImmersion
   apply AffineTargetMorphismProperty.IsStableUnderBaseChange.mk
   intro X Y S _ _ f g ⟨ha, hsurj⟩
-  exact ⟨inferInstance, RingHom.surjective_isStableUnderBaseChange.pullback_fst
+  exact ⟨inferInstance, RingHom.surjective_isStableUnderBaseChange.pullback_fst_appTop _
+    RingHom.surjective_respectsIso f _ hsurj⟩
 
 Depends on / 依赖: AffineTargetMorphismProperty, AffineTargetMorphismProperty.IsStableUnderBaseChange.mk, HasAffineProperty, HasAffineProperty.isLocal_affineProperty, HasAffineProperty.isStableUnderBaseChange, IsClosedImmersion, IsStableUnderBaseChange, RingHom, RingHom.surjective_isStableUnderBaseChange.pullback_fst_appTop, RingHom.surjective_respectsIso, isLocal_affineProperty, isStableUnderBaseChange, pullback_fst_appTop, surjective_isStableUnderBaseChange, surjective_respectsIso
 -/

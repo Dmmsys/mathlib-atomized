@@ -1168,7 +1168,13 @@ lemma tensorProductAssoc_def
     letI := eC.module R
     TensorProduct.assoc R A B C = .trans
       (congr (congr (eA.linearEquiv R) (eB.linearEquiv R)) (eC.linearEquiv R)) (.trans
-(TensorProduct.assoc R A'
+(TensorProduct.assoc R A' B' C') congr (eA.linearEquiv R).symm
+        congr (eB.linearEquiv R).symm (eC.linearEquiv R).symm) := by
+  ext x
+  induction x with
+  | zero => simp
+  | add => simp [*]
+  | tmul x a => induction x <;> simp [*, add_tmul]
 
 中文:
 引理 tensorProductAssoc_def
@@ -1181,7 +1187,13 @@ lemma tensorProductAssoc_def
     letI := eC.module R
     TensorProduct.assoc R A B C = .trans
       (congr (congr (eA.linearEquiv R) (eB.linearEquiv R)) (eC.linearEquiv R)) (.trans
-(TensorProduct.assoc R A'
+(TensorProduct.assoc R A' B' C') congr (eA.linearEquiv R).symm
+        congr (eB.linearEquiv R).symm (eC.linearEquiv R).symm) := by
+  ext x
+  induction x with
+  | zero => simp
+  | add => simp [*]
+  | tmul x a => induction x <;> simp [*, add_tmul]
 
 Depends on / 依赖: addCommMonoid, eA.addCommMonoid
 -/

@@ -187,7 +187,7 @@ definition toTemperedDistributionCLM
   map_add' _ _ := by simp
   map_smul' _ _ := by simp
   cont := PointwiseConvergenceCLM.continuous_of_continuous_eval
-fun g => (integralCLM Complex μ).cont.comp pairing_continuous_left (lsmul Complex Com
+fun g => (integralCLM Complex μ).cont.comp pairing_continuous_left (lsmul Complex Complex).flip g
 
 中文:
 定义 toTemperedDistributionCLM
@@ -196,7 +196,7 @@ fun g => (integralCLM Complex μ).cont.comp pairing_continuous_left (lsmul Compl
   map_add' _ _ := by simp
   map_smul' _ _ := by simp
   cont := PointwiseConvergenceCLM.continuous_of_continuous_eval
-fun g => (integralCLM Complex μ).cont.comp pairing_continuous_left (lsmul Complex Com
+fun g => (integralCLM Complex μ).cont.comp pairing_continuous_left (lsmul Complex Complex).flip g
 
 Depends on / 依赖: HasTemperateGrowth, PointwiseConvergenceCLM, PointwiseConvergenceCLM.continuous_of_continuous_eval, cont.comp, continuous_of_continuous_eval, integralCLM, map_add, map_smul, pairing, pairing_continuous_left, toPointwiseConvergenceCLM, volume_tac
 -/
@@ -425,7 +425,11 @@ definition toTemperedDistributionCLM
     apply PointwiseConvergenceCLM.continuous_of_continuous_eval
     intro g
     have : Fact (1 <= (1 - p⁻¹)⁻¹) := by simp [fact_iff]
-    have hpq : ENNReal
+    have hpq : ENNReal.HolderConjugate p (1 - p⁻¹)⁻¹ :=
+      ENNReal.HolderConjugate.inv_one_sub_inv' hp.out
+    exact (((lsmul Complex Complex (E := F)).flip.lpPairing μ p (1 - p⁻¹)⁻¹).flip (g.toLp (1 - p⁻¹)⁻¹ μ)).cont
+
+@[simp]
 
 中文:
 定义 toTemperedDistributionCLM
@@ -437,7 +441,11 @@ definition toTemperedDistributionCLM
     apply PointwiseConvergenceCLM.continuous_of_continuous_eval
     intro g
     have : Fact (1 <= (1 - p⁻¹)⁻¹) := by simp [fact_iff]
-    have hpq : ENNReal
+    have hpq : ENNReal.HolderConjugate p (1 - p⁻¹)⁻¹ :=
+      ENNReal.HolderConjugate.inv_one_sub_inv' hp.out
+    exact (((lsmul Complex Complex (E := F)).flip.lpPairing μ p (1 - p⁻¹)⁻¹).flip (g.toLp (1 - p⁻¹)⁻¹ μ)).cont
+
+@[simp]
 
 Depends on / 依赖: ENNReal, ENNReal.HolderConjugate, ENNReal.HolderConjugate.inv_one_sub_inv, HasTemperateGrowth, HolderConjugate, Lp.toTemperedDistribution, PointwiseConvergenceCLM, PointwiseConvergenceCLM.continuous_of_continuous_eval, continuous_of_continuous_eval, fact_iff, hp.out, inv_one_sub_inv, map_add, map_smul, toTemperedDistribution, volume_tac
 -/
@@ -487,7 +495,11 @@ theorem ker_toTemperedDistributionCLM_eq_bot
   apply ae_eq_zero_of_integral_contDiff_smul_eq_zero
   · exact (Lp.memLp f).locallyIntegrable hp.elim
   · intro g g_smooth g_cpt
-    have hg₁ : HasCompactSupport (Complex.ofRealCLM ∘ g) := g_
+    have hg₁ : HasCompactSupport (Complex.ofRealCLM ∘ g) := g_cpt.comp_left rfl
+    have hg₂ : ContDiff Real ∞ (Complex.ofRealCLM ∘ g) := by fun_prop
+    calc
+      _ = toTemperedDistributionCLM F μ p f (hg₁.toSchwartzMap hg₂) := by simp
+      _ = _ := by simp [hf]
 
 中文:
 定理 ker_toTemperedDistributionCLM_eq_bot
@@ -499,7 +511,11 @@ theorem ker_toTemperedDistributionCLM_eq_bot
   apply ae_eq_zero_of_integral_contDiff_smul_eq_zero
   · exact (Lp.memLp f).locallyIntegrable hp.elim
   · intro g g_smooth g_cpt
-    have hg₁ : HasCompactSupport (Complex.ofRealCLM ∘ g) := g_
+    have hg₁ : HasCompactSupport (Complex.ofRealCLM ∘ g) := g_cpt.comp_left rfl
+    have hg₂ : ContDiff Real ∞ (Complex.ofRealCLM ∘ g) := by fun_prop
+    calc
+      _ = toTemperedDistributionCLM F μ p f (hg₁.toSchwartzMap hg₂) := by simp
+      _ = _ := by simp [hf]
 
 Depends on / 依赖: Complex.ofRealCLM, ContDiff, ContinuousLinearMap, ContinuousLinearMap.coe_coe, HasCompactSupport, LinearMap, LinearMap.ker_eq_bot, Lp.memLp, ae_eq_zero_of_integral_contDiff_smul_eq_zero, coe_coe, comp_left, eq_zero_iff_ae_eq_zero, fun_prop, g_cpt, g_cpt.comp_left, g_smooth, hp.elim, ker_eq_bot, locallyIntegrable, ofRealCLM
 -/
@@ -1475,7 +1491,7 @@ alias fourierTransformInvCLM := FourierTransform.fourierInvCLM
 alias fourierTransformInvCLM_apply := FourierTransform.fourierInvCLM_apply
 
 @[deprecated (since := "2026-01-06")]
-alias fourierTransformInv_apply := fourie
+alias fourierTransformInv_apply := fourierInv_apply
 
 中文:
 定理 fourierInv_apply
@@ -1490,7 +1506,7 @@ alias fourierTransformInvCLM := FourierTransform.fourierInvCLM
 alias fourierTransformInvCLM_apply := FourierTransform.fourierInvCLM_apply
 
 @[deprecated (since := "2026-01-06")]
-alias fourierTransformInv_apply := fourie
+alias fourierTransformInv_apply := fourierInv_apply
 -/
 theorem fourierInv_apply (f : 𝓢'(E, F)) (g : 𝓢(E, Complex)) : 𝓕⁻ f g = f (𝓕⁻ g) := rfl
 
@@ -1587,7 +1603,8 @@ theorem fourierInv_toTemperedDistributionCLM_eq
     rw [fourier_toTemperedDistributionCLM_eq]
   _ = _ := fourierInv_fourier_eq _
 
-@[deprecated (since := "2026-01-14"
+@[deprecated (since := "2026-01-14")]
+alias fourierTransformInv_toTemperedDistributionCLM_eq := fourierInv_toTemperedDistributionCLM_eq
 
 中文:
 定理 fourierInv_toTemperedDistributionCLM_eq
@@ -1599,7 +1616,8 @@ theorem fourierInv_toTemperedDistributionCLM_eq
     rw [fourier_toTemperedDistributionCLM_eq]
   _ = _ := fourierInv_fourier_eq _
 
-@[deprecated (since := "2026-01-14"
+@[deprecated (since := "2026-01-14")]
+alias fourierTransformInv_toTemperedDistributionCLM_eq := fourierInv_toTemperedDistributionCLM_eq
 -/
 theorem fourierInv_toTemperedDistributionCLM_eq (f : 𝓢(E, F)) :
     𝓕⁻ (f : 𝓢'(E, F)) = 𝓕⁻ f := calc

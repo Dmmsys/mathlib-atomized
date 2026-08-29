@@ -64,7 +64,7 @@ theorem tendsto_Icc_vitaliFamily_right
   · intro ε εpos
     filter_upwards [Icc_mem_nhdsGT <| show x < x + ε by linarith] with y hy
     rw [closedBall_eq_Icc]
-    exact Icc_subset_Icc (by 
+    exact Icc_subset_Icc (by linarith) hy.2
 
 中文:
 定理 tendsto_Icc_vitaliFamily_right
@@ -75,7 +75,7 @@ theorem tendsto_Icc_vitaliFamily_right
   · intro ε εpos
     filter_upwards [Icc_mem_nhdsGT <| show x < x + ε by linarith] with y hy
     rw [closedBall_eq_Icc]
-    exact Icc_subset_Icc (by 
+    exact Icc_subset_Icc (by linarith) hy.2
 
 Depends on / 依赖: Icc_mem_nhdsGT, Icc_mem_vitaliFamily_at_right, Icc_subset_Icc, VitaliFamily, VitaliFamily.tendsto_filterAt_iff, closedBall_eq_Icc, filter_upwards, self_mem_nhdsWithin, tendsto_filterAt_iff
 -/
@@ -127,7 +127,7 @@ theorem tendsto_Icc_vitaliFamily_left
   · intro ε εpos
     filter_upwards [Icc_mem_nhdsLT <| show x - ε < x by linarith] with y hy
     rw [closedBall_eq_Icc]
-    exact Icc_subset_Icc hy.1 
+    exact Icc_subset_Icc hy.1 (by linarith)
 
 中文:
 定理 tendsto_Icc_vitaliFamily_left
@@ -138,7 +138,7 @@ theorem tendsto_Icc_vitaliFamily_left
   · intro ε εpos
     filter_upwards [Icc_mem_nhdsLT <| show x - ε < x by linarith] with y hy
     rw [closedBall_eq_Icc]
-    exact Icc_subset_Icc hy.1 
+    exact Icc_subset_Icc hy.1 (by linarith)
 
 Depends on / 依赖: Icc_mem_nhdsLT, Icc_mem_vitaliFamily_at_left, Icc_subset_Icc, VitaliFamily, VitaliFamily.tendsto_filterAt_iff, closedBall_eq_Icc, filter_upwards, self_mem_nhdsWithin, tendsto_filterAt_iff
 -/

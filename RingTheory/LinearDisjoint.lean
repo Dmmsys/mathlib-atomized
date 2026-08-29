@@ -342,7 +342,8 @@ theorem include_range
 change Function.Injective
     Submodule.mulMap (LinearMap.range Algebra.TensorProduct.includeLeft.toLinearMap)
       (LinearMap.range Algebra.TensorProduct.includeRight.toLinearMap)
-  rw [← Algebra.TensorProduct.linearEquivInclud
+  rw [← Algebra.TensorProduct.linearEquivIncludeRange_symm_toLinearMap]
+  exact LinearEquiv.injective _
 
 中文:
 定理 include_range
@@ -352,7 +353,8 @@ change Function.Injective
 change Function.Injective
     Submodule.mulMap (LinearMap.range Algebra.TensorProduct.includeLeft.toLinearMap)
       (LinearMap.range Algebra.TensorProduct.includeRight.toLinearMap)
-  rw [← Algebra.TensorProduct.linearEquivInclud
+  rw [← Algebra.TensorProduct.linearEquivIncludeRange_symm_toLinearMap]
+  exact LinearEquiv.injective _
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeLeft.toLinearMap, Algebra.TensorProduct.includeRight.toLinearMap, Algebra.TensorProduct.linearEquivIncludeRange_symm_toLinearMap, Function, Function.Injective, Injective, LinearDisjoint, LinearEquiv, LinearEquiv.injective, LinearMap, LinearMap.range, Subalgebra, Subalgebra.LinearDisjoint, Submodule, Submodule.linearDisjoint_iff, Submodule.mulMap, TensorProduct, includeLeft, includeRight
 -/
@@ -488,7 +490,7 @@ definition mulMapLeftOfSupEqTop
       rw [restrictScalars_top]; rw [← H']
       exact mulMap_range A B)).trans Subalgebra.topEquiv)
 
-@[sim
+@[simp]
 
 中文:
 定义 mulMapLeftOfSupEqTop
@@ -499,7 +501,7 @@ definition mulMapLeftOfSupEqTop
       rw [restrictScalars_top]; rw [← H']
       exact mulMap_range A B)).trans Subalgebra.topEquiv)
 
-@[sim
+@[simp]
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofInjective, Algebra, Algebra.TensorProduct.productLeftAlgHom, Algebra.ofId, B.val, H.injective, Subalgebra, Subalgebra.equivOfEq, Subalgebra.restrictScalars_injective, Subalgebra.topEquiv, TensorProduct, equivOfEq, injective, mulMap_range, ofInjective, productLeftAlgHom, restrictScalars_injective, restrictScalars_top, topEquiv
 -/
@@ -807,7 +809,19 @@ lemma mulLeftMap_ker_eq_bot_iff_linearIndependent_op
   simp_rw [LinearIndependent, LinearMap.ker_eq_bot]
   let i : (ι ->₀ B) ->ₗ[R] S := Submodule.mulLeftMap (M := toSubmodule A) (toSubmodule B) a
   let j : (ι ->₀ B) ->ₗ[R] S := (MulOpposite.opLinearEquiv _).symm.toLinearMap ∘ₗ
-    (Finsupp.linearCombination B.op (MulOpposite.op ∘ A.val ∘ a)).restr
+    (Finsupp.linearCombination B.op (MulOpposite.op ∘ A.val ∘ a)).restrictScalars R ∘ₗ
+    (Finsupp.mapRange.linearEquiv (linearEquivOp B)).toLinearMap
+  suffices i = j by
+    change Function.Injective i ↔ _
+    simp_rw [this, j, LinearMap.coe_comp, LinearEquiv.coe_coe, EquivLike.comp_injective,
+      EquivLike.injective_comp, LinearMap.coe_restrictScalars]
+  ext
+  simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply, coe_val,
+    Finsupp.mapRange.linearEquiv_toLinearMap, LinearEquiv.coe_coe,
+    MulOpposite.coe_opLinearEquiv_symm, LinearMap.coe_restrictScalars,
+    Finsupp.mapRange.linearMap_apply, Finsupp.mapRange_single, Finsupp.linearCombination_single,
+    MulOpposite.unop_smul, MulOpposite.unop_op, i, j]
+  exact Submodule.mulLeftMap_apply_single _ _ _
 
 中文:
 引理 mulLeftMap_ker_eq_bot_iff_linearIndependent_op
@@ -816,7 +830,19 @@ lemma mulLeftMap_ker_eq_bot_iff_linearIndependent_op
   simp_rw [LinearIndependent, LinearMap.ker_eq_bot]
   let i : (ι ->₀ B) ->ₗ[R] S := Submodule.mulLeftMap (M := toSubmodule A) (toSubmodule B) a
   let j : (ι ->₀ B) ->ₗ[R] S := (MulOpposite.opLinearEquiv _).symm.toLinearMap ∘ₗ
-    (Finsupp.linearCombination B.op (MulOpposite.op ∘ A.val ∘ a)).restr
+    (Finsupp.linearCombination B.op (MulOpposite.op ∘ A.val ∘ a)).restrictScalars R ∘ₗ
+    (Finsupp.mapRange.linearEquiv (linearEquivOp B)).toLinearMap
+  suffices i = j by
+    change Function.Injective i ↔ _
+    simp_rw [this, j, LinearMap.coe_comp, LinearEquiv.coe_coe, EquivLike.comp_injective,
+      EquivLike.injective_comp, LinearMap.coe_restrictScalars]
+  ext
+  simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply, coe_val,
+    Finsupp.mapRange.linearEquiv_toLinearMap, LinearEquiv.coe_coe,
+    MulOpposite.coe_opLinearEquiv_symm, LinearMap.coe_restrictScalars,
+    Finsupp.mapRange.linearMap_apply, Finsupp.mapRange_single, Finsupp.linearCombination_single,
+    MulOpposite.unop_smul, MulOpposite.unop_op, i, j]
+  exact Submodule.mulLeftMap_apply_single _ _ _
 
 Depends on / 依赖: toSubmodule
 -/
@@ -901,7 +927,11 @@ lemma mulRightMap_ker_eq_bot_iff_linearIndependent
   simp_rw [LinearIndependent, LinearMap.ker_eq_bot]
   let i : (ι ->₀ A) ->ₗ[R] S := Submodule.mulRightMap (toSubmodule A) (N := toSubmodule B) b
   let j : (ι ->₀ A) ->ₗ[R] S := (Finsupp.linearCombination A (B.val ∘ b)).restrictScalars R
-  suffices i = j by change Function.Injective i ↔ Function.I
+  suffices i = j by change Function.Injective i ↔ Function.Injective j; rw [this]
+  ext
+  simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply, coe_val,
+    LinearMap.coe_restrictScalars, Finsupp.linearCombination_single, i, j]
+  exact Submodule.mulRightMap_apply_single _ _ _
 
 中文:
 引理 mulRightMap_ker_eq_bot_iff_linearIndependent
@@ -910,7 +940,11 @@ lemma mulRightMap_ker_eq_bot_iff_linearIndependent
   simp_rw [LinearIndependent, LinearMap.ker_eq_bot]
   let i : (ι ->₀ A) ->ₗ[R] S := Submodule.mulRightMap (toSubmodule A) (N := toSubmodule B) b
   let j : (ι ->₀ A) ->ₗ[R] S := (Finsupp.linearCombination A (B.val ∘ b)).restrictScalars R
-  suffices i = j by change Function.Injective i ↔ Function.I
+  suffices i = j by change Function.Injective i ↔ Function.Injective j; rw [this]
+  ext
+  simp only [LinearMap.coe_comp, Function.comp_apply, Finsupp.lsingle_apply, coe_val,
+    LinearMap.coe_restrictScalars, Finsupp.linearCombination_single, i, j]
+  exact Submodule.mulRightMap_apply_single _ _ _
 
 Depends on / 依赖: toSubmodule
 -/
@@ -1195,7 +1229,11 @@ theorem rank_inf_eq_one_of_commute_of_flat_of_inj
   have : Cardinal.lift.{u} (Module.rank R (⊥ : Subalgebra R S)) =
       Cardinal.lift.{v} (Module.rank R R) :=
     lift_rank_range_of_injective (Algebra.linearMap R S) hinj
-  rw [Module
+  rw [Module.rank_self]; rw [Cardinal.lift_one]; rw [Cardinal.lift_eq_one] at this
+  rw [← this]
+  change Module.rank R (toSubmodule (⊥ : Subalgebra R S)) <=
+    Module.rank R (toSubmodule (A ⊓ B))
+  exact Submodule.rank_mono (bot_le : (⊥ : Subalgebra R S) <= A ⊓ B)
 
 中文:
 定理 rank_inf_eq_one_of_commute_of_flat_of_inj
@@ -1206,7 +1244,11 @@ theorem rank_inf_eq_one_of_commute_of_flat_of_inj
   have : Cardinal.lift.{u} (Module.rank R (⊥ : Subalgebra R S)) =
       Cardinal.lift.{v} (Module.rank R R) :=
     lift_rank_range_of_injective (Algebra.linearMap R S) hinj
-  rw [Module
+  rw [Module.rank_self]; rw [Cardinal.lift_one]; rw [Cardinal.lift_eq_one] at this
+  rw [← this]
+  change Module.rank R (toSubmodule (⊥ : Subalgebra R S)) <=
+    Module.rank R (toSubmodule (A ⊓ B))
+  exact Submodule.rank_mono (bot_le : (⊥ : Subalgebra R S) <= A ⊓ B)
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Cardinal, Cardinal.lift, Cardinal.lift_eq_one, Cardinal.lift_one, LinearDisjoint, Module, Module.rank, Module.rank_self, Subalgebra, Submodule, Submodule.LinearDisjoint.rank_inf_le_one_of_commute_of_flat, Submodule.rank_mono, bot_le, le_antisymm, lift_eq_one, lift_one, lift_rank_range_of_injective, linearMap
 -/
@@ -1313,7 +1355,7 @@ theorem trace_algebraMap
   simp_rw [Algebra.trace_eq_matrix_trace (Module.Free.chooseBasis R B),
     Algebra.trace_eq_matrix_trace (H.basisOfBasisRight H' (Module.Free.chooseBasis R B)),
     Matrix.trace, map_sum, leftMulMatrix_basisOfBasisRight_algebraMap, RingHom.mapMatrix_apply,
-    Matrix.diag_apply, Matrix.map_apply
+    Matrix.diag_apply, Matrix.map_apply]
 
 中文:
 定理 trace_algebraMap
@@ -1322,7 +1364,7 @@ theorem trace_algebraMap
   simp_rw [Algebra.trace_eq_matrix_trace (Module.Free.chooseBasis R B),
     Algebra.trace_eq_matrix_trace (H.basisOfBasisRight H' (Module.Free.chooseBasis R B)),
     Matrix.trace, map_sum, leftMulMatrix_basisOfBasisRight_algebraMap, RingHom.mapMatrix_apply,
-    Matrix.diag_apply, Matrix.map_apply
+    Matrix.diag_apply, Matrix.map_apply]
 
 Depends on / 依赖: Algebra, Algebra.trace_eq_matrix_trace, H.basisOfBasisRight, Matrix, Matrix.diag_apply, Matrix.map_apply, Matrix.trace, Module, Module.Free.chooseBasis, RingHom, RingHom.mapMatrix_apply, basisOfBasisRight, chooseBasis, diag_apply, leftMulMatrix_basisOfBasisRight_algebraMap, mapMatrix_apply, map_apply, map_sum, simp_rw, trace_eq_matrix_trace
 -/
@@ -1414,7 +1456,9 @@ theorem exists_field_of_isDomain_of_injective
   ⟨K, inferInstance, inferInstance,
     i.comp Algebra.TensorProduct.includeLeft,
     i.comp Algebra.TensorProduct.includeRight,
-
+    hi.comp (Algebra.TensorProduct.includeLeft_injective hb),
+    hi.comp (Algebra.TensorProduct.includeRight_injective ha), by
+      simpa only [AlgHom.range_comp] using (include_range R A B).map i hi⟩
 
 中文:
 定理 存在_field_of_isDomain_of_injective
@@ -1425,7 +1469,9 @@ theorem exists_field_of_isDomain_of_injective
   ⟨K, inferInstance, inferInstance,
     i.comp Algebra.TensorProduct.includeLeft,
     i.comp Algebra.TensorProduct.includeRight,
-
+    hi.comp (Algebra.TensorProduct.includeLeft_injective hb),
+    hi.comp (Algebra.TensorProduct.includeRight_injective ha), by
+      simpa only [AlgHom.range_comp] using (include_range R A B).map i hi⟩
 
 Depends on / 依赖: AlgHom, AlgHom.range_comp, Algebra, Algebra.TensorProduct.includeLeft, Algebra.TensorProduct.includeLeft_injective, Algebra.TensorProduct.includeRight, Algebra.TensorProduct.includeRight_injective, FractionRing, Function, Function.Injective, Injective, IsFractionRing, IsFractionRing.injective, IsScalarTower, IsScalarTower.toAlgHom, TensorProduct, hi.comp, i.comp, includeLeft, includeLeft_injective
 -/
@@ -1523,7 +1569,44 @@ theorem _root_.Algebra.TensorProduct.not_isField_of_transcendental
   obtain ⟨a, hta⟩ := ‹Algebra.Transcendental R A›
   obtain ⟨b, htb⟩ := ‹Algebra.Transcendental R B›
   have ha : Function.Injective (algebraMap R A) := Algebra.injective_of_transcendental
-  have hb : Function.Injective (algebraMap R B) := Algebra.injective_of_transcende
+  have hb : Function.Injective (algebraMap R B) := Algebra.injective_of_transcendental
+  let fa : A ->ₐ[R] A otimes[R] B := Algebra.TensorProduct.includeLeft
+  let fb : B ->ₐ[R] A otimes[R] B := Algebra.TensorProduct.includeRight
+  have hfa : Function.Injective fa := Algebra.TensorProduct.includeLeft_injective hb
+  have hfb : Function.Injective fb := Algebra.TensorProduct.includeRight_injective ha
+  have := hfa.isDomain fa.toRingHom
+  have := hfb.isDomain fb.toRingHom
+  have := ha.isDomain _
+  have : Module.Flat R (toSubmodule fa.range) :=
+    .of_linearEquiv (AlgEquiv.ofInjective fa hfa).symm.toLinearEquiv
+  have key1 : Module.rank R ↥(fa.range ⊓ fb.range) <= 1 :=
+    (include_range R A B).rank_inf_le_one_of_flat_left
+  let ga : R[X] ->ₐ[R] A := aeval a
+  let gb : R[X] ->ₐ[R] B := aeval b
+  let gab := fa.comp ga
+  replace hta : Function.Injective ga := transcendental_iff_injective.1 hta
+  replace htb : Function.Injective gb := transcendental_iff_injective.1 htb
+  have htab : Function.Injective gab := hfa.comp hta
+  algebraize_only [ga.toRingHom, gb.toRingHom]
+  let f := Algebra.TensorProduct.mapOfCompatibleSMul R[X] R R A B
+  have := Algebra.TensorProduct.nontrivial_of_algebraMap_injective_of_isDomain R[X] A B hta htb
+  have hf : Function.Injective f := RingHom.injective _
+  have key2 : gab.range <= fa.range ⊓ fb.range := by
+    simp_rw [gab, ga, ← aeval_algHom]
+    rw [Algebra.TensorProduct.includeLeft_apply]; rw [← Algebra.adjoin_singleton_eq_range_aeval]
+    simp_rw [Algebra.adjoin_le_iff, Set.singleton_subset_iff, Algebra.coe_inf, Set.mem_inter_iff,
+      AlgHom.coe_range, Set.mem_range]
+    refine ⟨⟨a, by simp [fa]⟩, ⟨b, hf ?_⟩⟩
+    simp_rw [fb, Algebra.TensorProduct.includeRight_apply, f,
+      Algebra.TensorProduct.mapOfCompatibleSMul_tmul]
+    convert! ← (TensorProduct.smul_tmul (R := R[X]) (R' := R[X]) (M := A) (N := B) X 1 1).symm <;>
+      (simp_rw [Algebra.smul_def, mul_one]; exact aeval_X _)
+  have key3 := (Subalgebra.inclusion key2).comp (AlgEquiv.ofInjective gab htab).toAlgHom
+.toLinearMap.lift_rank_le_of_injective
+      ((Subalgebra.inclusion_injective key2).comp (AlgEquiv.injective _))
+  have := lift_uzero.{u} _ ▸ (basisMonomials R).mk_eq_rank.symm
+  simp only [this, mk_eq_aleph0, lift_aleph0, aleph0_le_lift] at key3
+  exact (key3.trans key1).not_gt one_lt_aleph0
 
 中文:
 定理 _root_.代数.张量积.not_isField_of_transcendental
@@ -1532,7 +1615,44 @@ theorem _root_.Algebra.TensorProduct.not_isField_of_transcendental
   obtain ⟨a, hta⟩ := ‹Algebra.Transcendental R A›
   obtain ⟨b, htb⟩ := ‹Algebra.Transcendental R B›
   have ha : Function.Injective (algebraMap R A) := Algebra.injective_of_transcendental
-  have hb : Function.Injective (algebraMap R B) := Algebra.injective_of_transcende
+  have hb : Function.Injective (algebraMap R B) := Algebra.injective_of_transcendental
+  let fa : A ->ₐ[R] A otimes[R] B := Algebra.TensorProduct.includeLeft
+  let fb : B ->ₐ[R] A otimes[R] B := Algebra.TensorProduct.includeRight
+  have hfa : Function.Injective fa := Algebra.TensorProduct.includeLeft_injective hb
+  have hfb : Function.Injective fb := Algebra.TensorProduct.includeRight_injective ha
+  have := hfa.isDomain fa.toRingHom
+  have := hfb.isDomain fb.toRingHom
+  have := ha.isDomain _
+  have : Module.Flat R (toSubmodule fa.range) :=
+    .of_linearEquiv (AlgEquiv.ofInjective fa hfa).symm.toLinearEquiv
+  have key1 : Module.rank R ↥(fa.range ⊓ fb.range) <= 1 :=
+    (include_range R A B).rank_inf_le_one_of_flat_left
+  let ga : R[X] ->ₐ[R] A := aeval a
+  let gb : R[X] ->ₐ[R] B := aeval b
+  let gab := fa.comp ga
+  replace hta : Function.Injective ga := transcendental_iff_injective.1 hta
+  replace htb : Function.Injective gb := transcendental_iff_injective.1 htb
+  have htab : Function.Injective gab := hfa.comp hta
+  algebraize_only [ga.toRingHom, gb.toRingHom]
+  let f := Algebra.TensorProduct.mapOfCompatibleSMul R[X] R R A B
+  have := Algebra.TensorProduct.nontrivial_of_algebraMap_injective_of_isDomain R[X] A B hta htb
+  have hf : Function.Injective f := RingHom.injective _
+  have key2 : gab.range <= fa.range ⊓ fb.range := by
+    simp_rw [gab, ga, ← aeval_algHom]
+    rw [Algebra.TensorProduct.includeLeft_apply]; rw [← Algebra.adjoin_singleton_eq_range_aeval]
+    simp_rw [Algebra.adjoin_le_iff, Set.singleton_subset_iff, Algebra.coe_inf, Set.mem_inter_iff,
+      AlgHom.coe_range, Set.mem_range]
+    refine ⟨⟨a, by simp [fa]⟩, ⟨b, hf ?_⟩⟩
+    simp_rw [fb, Algebra.TensorProduct.includeRight_apply, f,
+      Algebra.TensorProduct.mapOfCompatibleSMul_tmul]
+    convert! ← (TensorProduct.smul_tmul (R := R[X]) (R' := R[X]) (M := A) (N := B) X 1 1).symm <;>
+      (simp_rw [Algebra.smul_def, mul_one]; exact aeval_X _)
+  have key3 := (Subalgebra.inclusion key2).comp (AlgEquiv.ofInjective gab htab).toAlgHom
+.toLinearMap.lift_rank_le_of_injective
+      ((Subalgebra.inclusion_injective key2).comp (AlgEquiv.injective _))
+  have := lift_uzero.{u} _ ▸ (basisMonomials R).mk_eq_rank.symm
+  simp only [this, mk_eq_aleph0, lift_aleph0, aleph0_le_lift] at key3
+  exact (key3.trans key1).not_gt one_lt_aleph0
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.includeL, Algebra.TensorProduct.includeLeft, Algebra.TensorProduct.includeRight, Algebra.Transcendental, Algebra.injective_of_transcendental, Function, Function.Injective, H.toField, Injective, TensorProduct, Transcendental, algebraMap, includeL, includeLeft, includeRight, injective_of_transcendental, otimes, toField
 -/
@@ -1771,7 +1891,13 @@ theorem of_finrank_sup_of_free
   rw [LinearIndependent] at hj
   let j' := Finsupp.linearCombination R j ∘ₗ
     (LinearEquiv.ofFinrankEq (A otimes[R] B) _ (by simp)).toLinearMap
-  replace hj : Function.In
+  replace hj : Function.Injective j' := by simpa [j']
+  have hf : Function.Surjective (mulMap' A B).toLinearMap := mulMap'_surjective A B
+  have := Subalgebra.finite_sup A B
+  rw [linearDisjoint_iff]; rw [Submodule.linearDisjoint_iff]
+  exact Subtype.val_injective.comp (OrzechProperty.injective_of_surjective_of_injective j' _ hj hf)
+
+include H in
 
 中文:
 定理 of_finrank_sup_of_free
@@ -1783,7 +1909,13 @@ theorem of_finrank_sup_of_free
   rw [LinearIndependent] at hj
   let j' := Finsupp.linearCombination R j ∘ₗ
     (LinearEquiv.ofFinrankEq (A otimes[R] B) _ (by simp)).toLinearMap
-  replace hj : Function.In
+  replace hj : Function.Injective j' := by simpa [j']
+  have hf : Function.Surjective (mulMap' A B).toLinearMap := mulMap'_surjective A B
+  have := Subalgebra.finite_sup A B
+  rw [linearDisjoint_iff]; rw [Submodule.linearDisjoint_iff]
+  exact Subtype.val_injective.comp (OrzechProperty.injective_of_surjective_of_injective j' _ hj hf)
+
+include H in
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, Function, Function.Injective, Function.Surjective, H.ge, Injective, LinearEquiv, LinearEquiv.ofFinrankEq, LinearIndependent, Module, Module.finrank_tensorProduct, Subalgebra, Subalgebra.finite_sup, Submodule, Submodule.linearDisjoint_iff, Subtype, Surjective, _surjective, exists_linearIndependent_of_le_finrank
 -/
@@ -1813,7 +1945,10 @@ theorem adjoin_rank_eq_rank_left
   proof: by
   rw [← rank_toSubmodule]; rw [Module.Free.rank_eq_card_chooseBasisIndex R A]; rw [A.adjoin_eq_span_basis B (Module.Free.chooseBasis R A)]
   change Module.rank B (Submodule.span B (Set.range (A.val ∘ Module.Free.chooseBasis R A))) = _
-  have := H.linearIndependent_left_of_flat (Module.Free.choose
+  have := H.linearIndependent_left_of_flat (Module.Free.chooseBasis R A).linearIndependent
+  rw [rank_span this]; rw [Cardinal.mk_range_eq _ this.injective]
+
+include H in
 
 中文:
 定理 adjoin_rank_eq_rank_left
@@ -1821,7 +1956,10 @@ theorem adjoin_rank_eq_rank_left
   证明: by
   rw [← rank_toSubmodule]; rw [Module.Free.rank_eq_card_chooseBasisIndex R A]; rw [A.adjoin_eq_span_basis B (Module.Free.chooseBasis R A)]
   change Module.rank B (Submodule.span B (Set.range (A.val ∘ Module.Free.chooseBasis R A))) = _
-  have := H.linearIndependent_left_of_flat (Module.Free.choose
+  have := H.linearIndependent_left_of_flat (Module.Free.chooseBasis R A).linearIndependent
+  rw [rank_span this]; rw [Cardinal.mk_range_eq _ this.injective]
+
+include H in
 
 Depends on / 依赖: A.adjoin_eq_span_basis, A.val, Cardinal, Cardinal.mk_range_eq, H.linearIndependent_left_of_flat, Module, Module.Free.chooseBasis, Module.Free.rank_eq_card_chooseBasisIndex, Module.rank, Set.range, Submodule, Submodule.span, adjoin_eq_span_basis, chooseBasis, injective, linearIndependent, linearIndependent_left_of_flat, mk_range_eq, rank_eq_card_chooseBasisIndex, rank_span
 -/
@@ -1870,7 +2008,15 @@ theorem of_finrank_coprime_of_free
   · rw [h2, Nat.coprime_zero_right] at H
     rw [eq_bot_of_finrank_one H]
     exact bot_left _
-  have := M
+  have := Module.finite_of_finrank_pos (Nat.pos_of_ne_zero h1)
+  have := Module.finite_of_finrank_pos (Nat.pos_of_ne_zero h2)
+  have := finite_sup A B
+  have : Module.finrank R A <= Module.finrank R ↥(A ⊔ B) :=
+LinearMap.finrank_le_finrank_of_injective
+      Submodule.inclusion_injective (show toSubmodule A <= toSubmodule (A ⊔ B) by simp)
+exact of_finrank_sup_of_free (finrank_sup_le_of_free A B).antisymm
+Nat.le_of_dvd (lt_of_lt_of_le (Nat.pos_of_ne_zero h1) this) H.mul_dvd_of_dvd_of_dvd
+      (finrank_left_dvd_finrank_sup_of_free A B) (finrank_right_dvd_finrank_sup_of_free A B)
 
 中文:
 定理 of_finrank_coprime_of_free
@@ -1885,7 +2031,15 @@ theorem of_finrank_coprime_of_free
   · rw [h2, Nat.coprime_zero_right] at H
     rw [eq_bot_of_finrank_one H]
     exact bot_left _
-  have := M
+  have := Module.finite_of_finrank_pos (Nat.pos_of_ne_zero h1)
+  have := Module.finite_of_finrank_pos (Nat.pos_of_ne_zero h2)
+  have := finite_sup A B
+  have : Module.finrank R A <= Module.finrank R ↥(A ⊔ B) :=
+LinearMap.finrank_le_finrank_of_injective
+      Submodule.inclusion_injective (show toSubmodule A <= toSubmodule (A ⊔ B) by simp)
+exact of_finrank_sup_of_free (finrank_sup_le_of_free A B).antisymm
+Nat.le_of_dvd (lt_of_lt_of_le (Nat.pos_of_ne_zero h1) this) H.mul_dvd_of_dvd_of_dvd
+      (finrank_left_dvd_finrank_sup_of_free A B) (finrank_right_dvd_finrank_sup_of_free A B)
 
 Depends on / 依赖: LinearMap, LinearMap.finrank_le_finrank_of_in, Module, Module.finite_of_finrank_pos, Module.finrank, Nat.coprime_zero_left, Nat.coprime_zero_right, Nat.pos_of_ne_zero, bot_left, bot_right, coprime_zero_left, coprime_zero_right, eq_bot_of_finrank_one, finite_of_finrank_pos, finite_sup, finrank, finrank_le_finrank_of_in, nontriviality, pos_of_ne_zero
 -/
@@ -1925,7 +2079,24 @@ theorem of_linearDisjoint_finite_left
   obtain ⟨M', hM, hf, h⟩ :=
     TensorProduct.exists_finite_submodule_left_of_setFinite' {x, y} (Set.toFinite _)
   obtain ⟨s, hs⟩ : M'.FG := .of_finite
-  have hs' : (s : Set S) subseteq A := by rwa [← hs, Submodule.span_
+  have hs' : (s : Set S) subseteq A := by rwa [← hs, Submodule.span_le] at hM
+  let A' := Algebra.adjoin R (s : Set S)
+  have hf' : Submodule.FG (toSubmodule A') := fg_adjoin_of_finite s.finite_toSet fun x hx =>
+    (isIntegral_algHom_iff A.val Subtype.val_injective).2
+      (Algebra.IsIntegral.isIntegral (R := R) (A := A) ⟨x, hs' hx⟩)
+  replace hf' : Module.Finite R A' := .of_fg hf'
+  have hA : toSubmodule A' <= toSubmodule A := Algebra.adjoin_le_iff.2 hs'
+  replace h : {x, y} subseteq (LinearMap.range (LinearMap.rTensor (toSubmodule B)
+      (Submodule.inclusion hA)) : Set _) := fun _ hx => by
+    have : Submodule.inclusion hM = Submodule.inclusion hA ∘ₗ Submodule.inclusion
+      (show M' <= toSubmodule A' by
+        rw [← hs]; rw [Submodule.span_le]; exact Algebra.adjoin_le_iff.1 (le_refl _)) := rfl
+    rw [this]; rw [LinearMap.rTensor_comp] at h
+    exact LinearMap.range_comp_le_range _ _ (h hx)
+  obtain ⟨x', hx'⟩ := h (show x in {x, y} by simp)
+  obtain ⟨y', hy'⟩ := h (show y in {x, y} by simp)
+  rw [← hx']; rw [← hy']; congr
+  exact (H A' hA).injective (by simp [← Submodule.mulMap_comp_rTensor _ hA, hx', hy', hxy])
 
 中文:
 定理 of_linearDisjoint_finite_left
@@ -1936,7 +2107,24 @@ theorem of_linearDisjoint_finite_left
   obtain ⟨M', hM, hf, h⟩ :=
     TensorProduct.exists_finite_submodule_left_of_setFinite' {x, y} (Set.toFinite _)
   obtain ⟨s, hs⟩ : M'.FG := .of_finite
-  have hs' : (s : Set S) subseteq A := by rwa [← hs, Submodule.span_
+  have hs' : (s : Set S) subseteq A := by rwa [← hs, Submodule.span_le] at hM
+  let A' := Algebra.adjoin R (s : Set S)
+  have hf' : Submodule.FG (toSubmodule A') := fg_adjoin_of_finite s.finite_toSet fun x hx =>
+    (isIntegral_algHom_iff A.val Subtype.val_injective).2
+      (Algebra.IsIntegral.isIntegral (R := R) (A := A) ⟨x, hs' hx⟩)
+  replace hf' : Module.Finite R A' := .of_fg hf'
+  have hA : toSubmodule A' <= toSubmodule A := Algebra.adjoin_le_iff.2 hs'
+  replace h : {x, y} subseteq (LinearMap.range (LinearMap.rTensor (toSubmodule B)
+      (Submodule.inclusion hA)) : Set _) := fun _ hx => by
+    have : Submodule.inclusion hM = Submodule.inclusion hA ∘ₗ Submodule.inclusion
+      (show M' <= toSubmodule A' by
+        rw [← hs]; rw [Submodule.span_le]; exact Algebra.adjoin_le_iff.1 (le_refl _)) := rfl
+    rw [this]; rw [LinearMap.rTensor_comp] at h
+    exact LinearMap.range_comp_le_range _ _ (h hx)
+  obtain ⟨x', hx'⟩ := h (show x in {x, y} by simp)
+  obtain ⟨y', hy'⟩ := h (show y in {x, y} by simp)
+  rw [← hx']; rw [← hy']; congr
+  exact (H A' hA).injective (by simp [← Submodule.mulMap_comp_rTensor _ hA, hx', hy', hxy])
 
 Depends on / 依赖: A.val, Algebra, Algebra.IsIntegral, Algebra.adjoin, IsIntegral, Set.toFinite, Submodule, Submodule.FG, Submodule.linearDisjoint_iff, Submodule.span_le, Subtype, Subtype.val_injective, TensorProduct, TensorProduct.exists_finite_submodule_left_of_setFinite, adjoin, exists_finite_submodule_left_of_setFinite, fg_adjoin_of_finite, finite_toSet, isIntegral_algHom_iff, linearDisjoint_iff
 -/

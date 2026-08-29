@@ -125,7 +125,9 @@ theorem nthRoot.pow_go_le
       grind
     case neg =>
       have : guess <= a / guess ^ (n + 1) := by
-        linarith only [Nat.mul_le_of_le_div _ 
+        linarith only [Nat.mul_le_of_le_div _ _ _ (not_lt.1 h)]
+      replace := Nat.mul_le_of_le_div _ _ _ this
+      grind
 
 中文:
 定理 nthRoot.pow_go_le
@@ -142,7 +144,9 @@ theorem nthRoot.pow_go_le
       grind
     case neg =>
       have : guess <= a / guess ^ (n + 1) := by
-        linarith only [Nat.mul_le_of_le_div _ 
+        linarith only [Nat.mul_le_of_le_div _ _ _ (not_lt.1 h)]
+      replace := Nat.mul_le_of_le_div _ _ _ this
+      grind
 -/
 private theorem nthRoot.pow_go_le (hle : guess <= fuel) (n a : Nat) :
     go n a fuel guess ^ (n + 2) <= a := by
@@ -199,7 +203,18 @@ theorem nthRoot.lt_pow_go_succ_aux0
   rw [Nat.le_div_iff_mul_le (by positivity)]; rw [Nat.mul_comm]; rw [← Nat.add_mul_div_right _ _ (by positivity)]; rw [Nat.le_div_iff_mul_le (by positivity)]
   #adaptation_note /-- Prior to nightly-2026-04-06, this was
   ```
-  have := (Commute.all (b : ℤ) (a - b)).pow_add_mul_le_add_pow_of_sq_non
+  have := (Commute.all (b : ℤ) (a - b)).pow_add_mul_le_add_pow_of_sq_nonneg
+    (by positivity) (sq_nonneg _) (sq_nonneg _) (by grind) (n + 1)
+  grind
+  ```
+  -/
+  zify
+  have h := pow_add_mul_le_add_pow_of_sq_nonneg (a := (b : Int)) (b := (a : Int) - b)
+    (ha := by positivity) (Hsq := by positivity) (Hsq' := by positivity) (H := by omega)
+    (n := n + 1)
+  rw [← sub_nonneg] at h ⊢
+  convert! h using 1
+  rw [pow_succ]; push_cast; ring1
 
 中文:
 定理 nthRoot.lt_pow_go_succ_aux0
@@ -208,7 +223,18 @@ theorem nthRoot.lt_pow_go_succ_aux0
   rw [Nat.le_div_iff_mul_le (by positivity)]; rw [Nat.mul_comm]; rw [← Nat.add_mul_div_right _ _ (by positivity)]; rw [Nat.le_div_iff_mul_le (by positivity)]
   #adaptation_note /-- Prior to nightly-2026-04-06, this was
   ```
-  have := (Commute.all (b : ℤ) (a - b)).pow_add_mul_le_add_pow_of_sq_non
+  have := (Commute.all (b : ℤ) (a - b)).pow_add_mul_le_add_pow_of_sq_nonneg
+    (by positivity) (sq_nonneg _) (sq_nonneg _) (by grind) (n + 1)
+  grind
+  ```
+  -/
+  zify
+  have h := pow_add_mul_le_add_pow_of_sq_nonneg (a := (b : Int)) (b := (a : Int) - b)
+    (ha := by positivity) (Hsq := by positivity) (Hsq' := by positivity) (H := by omega)
+    (n := n + 1)
+  rw [← sub_nonneg] at h ⊢
+  convert! h using 1
+  rw [pow_succ]; push_cast; ring1
 -/
 private theorem nthRoot.lt_pow_go_succ_aux0 (hb : b != 0) :
     a <= ((a ^ (n + 1) / b ^ n) + n * b) / (n + 1) := by
